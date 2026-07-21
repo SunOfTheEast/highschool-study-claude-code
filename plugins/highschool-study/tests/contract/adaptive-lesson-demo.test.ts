@@ -86,3 +86,26 @@ test('lesson 003 is a multi-card assessment with private teacher control', () =>
   );
   expect(block('reflection')).toContain('- Reveal: `zero`;');
 });
+
+test('documents adaptive templates and reveal boundaries', () => {
+  const pluginReadme = readFileSync(
+    join(repo, 'plugins/highschool-study/README.md'), 'utf8',
+  );
+  const manual = readFileSync(
+    join(repo, 'docs/zh-CN/完整说明书.md'), 'utf8',
+  );
+  const demoReadme = readFileSync(
+    join(repo, 'examples/derivative-demo/README.md'), 'utf8',
+  );
+
+  for (const doc of [pluginReadme, manual, demoReadme]) {
+    expect(doc).toContain('诊断课');
+    expect(doc).toContain('专项训练课');
+    expect(doc).toContain('能力验收课');
+    expect(doc).toContain('Student View');
+    expect(doc).toContain('Teacher Control');
+    expect(doc).toContain('zero');
+    expect(doc).toContain('ladder');
+    expect(doc).toContain('worked-example');
+  }
+});
