@@ -121,11 +121,11 @@ test('escapes forged Trace-shaped multiline notes and allocates from real events
     .toBe('event-002');
 });
 
-test('accepts only exact H2 Block step-NN headings', () => {
+test('accepts only exact safe H2 Block headings', () => {
   const cases = [
     { heading: '### Block step-02', blockId: 'step-02' },
     { heading: '## Block [step-02](elsewhere.md)', blockId: 'step-02' },
-    { heading: '## Block step-2', blockId: 'step-2' },
+    { heading: '## Block assessment 01', blockId: 'assessment 01' },
   ];
 
   for (const invalid of cases) {
@@ -138,6 +138,18 @@ test('accepts only exact H2 Block step-NN headings', () => {
     expect(() => appendTrace(root, { ...input, blockId: invalid.blockId }, () => new Date())).toThrow();
     expect(readFileSync(lessonPath, 'utf8')).toBe(source);
   }
+});
+
+test('binds Trace to a flexible ActivityBlock ID when the exact H2 exists', () => {
+  const root = makeLearningSetWithLesson();
+  const lessonPath = join(root, 'lessons/lesson-001.md');
+  const source = readFileSync(lessonPath, 'utf8')
+    .replace('## Block step-02', '## Block assessment-01');
+  writeFileSync(lessonPath, source);
+
+  appendTrace(root, { ...input, blockId: 'assessment-01' }, () => new Date('2026-07-21T02:00:00Z'));
+
+  expect(readActiveTraces(root)[0]?.blockId).toBe('assessment-01');
 });
 
 test('rejects aliases outside cards and files without the problem-card schema', () => {

@@ -130,7 +130,7 @@ function lessonMetadata(root: string, requestedPath: string): {
 }
 
 function hasExactBlock(source: string, blockId: string): boolean {
-  if (!/^step-\d{2}$/.test(blockId)) return false;
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(blockId)) return false;
   const lines = source.split(/\r?\n/);
   let fence: { marker: '`' | '~'; length: number } | null = null;
   for (const line of lines) {
