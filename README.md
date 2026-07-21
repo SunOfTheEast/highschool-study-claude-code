@@ -103,6 +103,7 @@ learning-set/
 ## 文档
 
 - [完整中文说明书](docs/zh-CN/完整说明书.md)
+- [Pi 教学前端中文设计说明](docs/zh-CN/Pi教学前端设计说明.md)
 - [导数学习集试用教程](examples/derivative-demo/README.md)
 - [中文架构设计](docs/design/architecture.zh-CN.md)
 - [English architecture](docs/design/architecture.en.md)
