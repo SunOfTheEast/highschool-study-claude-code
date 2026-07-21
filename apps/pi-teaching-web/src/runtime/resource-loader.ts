@@ -20,6 +20,7 @@ export async function createRoleResourceLoader(
 ) {
   const skillName = role === 'coach' ? 'coach-study' : 'tutor-lesson';
   const skillPath = join(resourceRoot, 'skills', skillName, 'SKILL.md');
+  const deepWorkflowSkillPath = join(resourceRoot, 'skills', 'deep-workflow', 'SKILL.md');
   const roleContext = readFileSync(join(resourceRoot, 'agents', `${role}.md`), 'utf8');
   const persona = resolvePersona(root);
   const loader = new DefaultResourceLoader({
@@ -27,7 +28,7 @@ export async function createRoleResourceLoader(
     agentDir: getAgentDir(),
     eventBus,
     additionalExtensionPaths: [fileURLToPath(import.meta.resolve('pi-subagents'))],
-    additionalSkillPaths: [skillPath],
+    additionalSkillPaths: [skillPath, deepWorkflowSkillPath],
     agentsFilesOverride: (current) => ({
       agentsFiles: [
         ...current.agentsFiles,
