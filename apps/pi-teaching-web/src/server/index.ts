@@ -1,6 +1,7 @@
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createPiSessionFactory } from '../runtime/session-factory';
+import { configureStudySubagentDirectory } from '../runtime/subagent-path';
 import { findPiSessionFile, WorkspaceRegistry } from '../runtime/workspace-registry';
 import { createRequestHandler } from './app';
 import { EventHub } from './event-hub';
@@ -17,6 +18,7 @@ const port = Number.parseInt(
   10,
 );
 const hub = new EventHub();
+configureStudySubagentDirectory();
 const factory = await createPiSessionFactory(root, () => new Date());
 const registry = new WorkspaceRegistry(root, factory, findPiSessionFile);
 const staticRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../../dist');
