@@ -1,8 +1,10 @@
 # Markdown 优先的高中学习插件设计
 
-状态：正式设计已确认；已纳入双向题卡/Trace 搜索与 Plan 级长期记忆压缩
+状态：正式设计已确认；已纳入双向题卡/Trace 搜索、Plan 级长期记忆压缩、学习集概述注入与可切换人设
 
 日期：2026-07-21
+
+实施计划：[学习集概述注入与可切换人设](../superpowers/plans/2026-07-21-learning-set-orientation-personas.zh-CN.md)
 
 ## 一、设计结论
 
@@ -68,6 +70,10 @@ highschool-study-markdown/
 
 ```text
 learning-set/
+├── CLAUDE.md
+├── CLAUDE.local.md          # 可选、仅本地、不提交 Git
+├── .claude/
+│   └── personas/            # 可选的学习集人设扩展或覆盖
 ├── ROADMAP.md
 ├── plans/
 │   ├── fixed-value.md
@@ -84,7 +90,7 @@ learning-set/
 └── materials/
 ```
 
-`learning-set/` 是唯一可变的学习状态边界。插件代码、Agent、Skill、测试和 MCP 实现留在插件包内，不复制到每个学习集。
+`learning-set/` 是唯一可变的学习状态边界。插件代码、Agent、Skill、测试和 MCP 实现留在插件包内，不复制到每个学习集。`CLAUDE.local.md` 只是本机上该学习集的展示偏好，不是学习证据、长期记忆或共享状态。
 
 ## 四、各文件的职责
 
@@ -92,6 +98,7 @@ learning-set/
 
 `ROADMAP.md` 是当前长期学习目标与 Plan 图的唯一 owner，包含：
 
+- 面向学生的简短“学习集概述”：学什么、适合谁、大致包含哪些 Plan、完成后能做什么；
 - Roadmap 的目标和范围；
 - 可观察能力标准及其测试方式；
 - Plan 引用及建议顺序；
@@ -129,7 +136,7 @@ Claude Code Task List 根据 ActivityBlock 生成，只负责界面展示。Task
 
 ### 4.4 `memory/*.md`
 
-`student-profile.md` 只保存学生一侧当前有效、已经确认的稳定学习偏好或约束，例如先独立尝试还是先看示例。`teaching-profile.md` 只保存对 Claude 教师人格与行为当前有效、已经确认的长期要求，例如答错后先追问思路还是直接讲解。同一偏好只能选择一个 owner，不能同时换一种说法写入两个文件。
+`student-profile.md` 只保存学生一侧当前有效、已经确认的稳定学习偏好或约束，例如先独立尝试还是先看示例。`teaching-profile.md` 只保存对 Claude 教师的教学行为、互动方法与稳定气质当前有效、已经确认的长期要求，例如答错后先追问思路还是直接讲解。它不保存“冷静学姐”之类的角色名、自称或口癖；这些属于展示人设。同一长期教学偏好只能选择一个 owner，不能同时换一种说法写入两个文件。
 
 两份画像不是逐 Lesson 自动增长的事件日志。它们只在一个 Plan 完成后，由 `consolidate-plan-memory` 读取该 Plan 的全部课堂记录，生成新增、修改、删除差量，并经学生确认后更新。画像只保存当前有效列表；原始记录和历史仍在 Lesson 与 Git 中。
 
@@ -152,6 +159,21 @@ Claude Code Task List 根据 ActivityBlock 生成，只负责界面展示。Task
 `materials/` 保存视频、PDF、图片和文本材料，以 learning-set 内的相对路径引用。
 
 已有 YAML 题卡和图谱资产可以继续保留。Markdown 是学习状态与记忆的强制格式，不要求仅为了统一扩展名而重写所有源资产。
+
+### 4.6 `CLAUDE.md`、`CLAUDE.local.md` 与人设文件
+
+`learning-set/CLAUDE.md` 是随学习集共享的稳定 Claude Code 指令，只保存：
+
+- 这是一个 Highschool Study 学习集，应通过 `highschool-study:study` 进入；
+- 学习集默认人设 ID；
+- 人设只能影响表达层，不能覆盖教学事实和能力标准；
+- 不得编造不存在的人设、题卡、Trace 或来源。
+
+`learning-set/CLAUDE.local.md` 只保存学生在当前学习集中选定的持久人设，并加入 `.gitignore`。“这节课换一个人设”只在当前 Lesson Session 生效，不写文件；“以后这个学习集都用”才更新该本地文件。
+
+插件的基础人设放在 `skills/enter-learning-set/references/personas/`；学习集可以在 `.claude/personas/` 中新增人设，或用同名文件覆盖插件版。人设文件是普通 Markdown，只描述名称、称呼、语气、鼓励方式和可选世界观，不定义教学结论、题卡选择或评价规则。
+
+Claude Code 会把 `CLAUDE.md` 和 `CLAUDE.local.md` 作为会话上下文而不是强制配置，且 `@` import 会在会话启动时展开并占用上下文。因此不在 `CLAUDE.md` 中 import 全部人设；动态选择交给 Skill，每次只读一份。参见 [Claude Code memory 文档](https://code.claude.com/docs/en/memory)。
 
 ## 五、Markdown 约定
 
@@ -191,11 +213,24 @@ session: claude-session-id-or-null
 - `study-coach` 是唯一面向学生的入口，负责规划、备课、上课、查看进度和更正记录的路由。
 - `lesson-designer` 是备课专用配置，可由 Coach 在内部调用；学生不需要切换 Agent。
 - 教学工作流继续写成 Skill。Skill 只保存工作步骤和提示词，不保存学生事实。
+- `enter-learning-set` 在每次通过 `study` 进入时注入学习集概述与当前人设；它不创建新 Agent。
 - `recall-study-memory` 负责结构、摘要与记忆召回。它使用 Claude Code 原生 `Read`、`Glob`、`Grep` 和必要时的 `Agent`，而不是调用一个固定的上下文编译工具。
 - `consolidate-plan-memory` 只在 Plan 完成后运行，负责生成长期偏好差量、向学生确认，并编辑两份画像。
 - 原生 Dynamic Workflow 是可选升级路径，仅在备课缺少值得并行查找的信息时运行。
 - Workflow 分支的 raw JSON 留在 Claude Code 内。主 Agent 只把实际采用、并带来源链接的结论写入 Lesson Markdown。
 - Task List 展示当前 Lesson 的课堂积木，但不是持久层。
+
+### 6.1 学习集进入与人设解析
+
+`study` 在判断 Roadmap、Plan 或 Lesson 路由之前，先调用 `enter-learning-set`：
+
+1. 读取 `ROADMAP.md` 的“学习集概述”。概述在每次进入时都作为背景上下文，但只在学习集没有任何课堂 Trace，或学生主动询问时对外展开。
+2. 按“当前 Session 临时选择 → `CLAUDE.local.md` 本学习集选择 → `CLAUDE.md` 学习集默认 → 插件默认”解析人设。
+3. 枚举真实存在的本地和插件人设文件，按 ID 精确匹配。学习集同名文件优先；不从学生文本直接拼接路径。
+4. 只读取最终选中的一份人设并交给 `study-coach`。“关闭人设”等价于选择插件内置的中性教师。
+5. 备课 Agent 保持中性。人设只作用于学生可见输出，不进入 `lesson-designer`、`planner-attention.md`、Trace、摘要、长期画像或方法聚合。
+
+首版插件只内置少量模板，例如“中性教师”、“冷静学姐”和“元气同桌”。扩展人设不需要修改 MCP、新增 Agent 或建立人设数据库。
 
 ## 七、召回策略
 
@@ -275,7 +310,7 @@ Plan 进行中，课堂事实只写入 Lesson Trace；同一 Plan 的后续 Less
 5. 向学生展示候选列表，允许自然语言保留、改写或删除；
 6. 只有得到明确确认后，才通过普通 Markdown 编辑合并到两份画像。
 
-学生侧偏好只写入 `student-profile.md`，教师人格或行为要求只写入 `teaching-profile.md`。边界项选择一个 owner，不双写。画像只保留当前有效列表；候选、废弃版本和被拒绝项不常驻。学生在确认阶段提出的反对或修正应记录到最后一次 Plan 复盘对应的 Lesson Block/Trace，成为下一次压缩可见的原始证据。
+学生侧偏好只写入 `student-profile.md`，教师的教学行为、互动方法与稳定气质要求只写入 `teaching-profile.md`；展示人设不进入两份长期画像。边界项选择一个 owner，不双写。画像只保留当前有效列表；候选、废弃版本和被拒绝项不常驻。学生在确认阶段提出的反对或修正应记录到最后一次 Plan 复盘对应的 Lesson Block/Trace，成为下一次压缩可见的原始证据。
 
 Plan 结束后的压缩是差量合并，不是从全部历史重写画像。后续备课和上课完整读取两份短画像；只有需要验证某条偏好时，才沿其来源链接下钻。
 
@@ -335,7 +370,9 @@ Git 可以提供文件历史和回滚，但插件不要求自动提交。系统�
 - 来源链接失效：排除依赖该链接的 memory 结论，并显示损坏链接；
 - frontmatter 格式错误：报告文件并在覆盖前停止；
 - 同一目录中出现重复稳定 ID：报告冲突；
-- 缺少当前 Roadmap、Plan 或 Lesson：由 Coach 引导创建或选择。
+- 缺少当前 Roadmap、Plan 或 Lesson：由 Coach 引导创建或选择；
+- 找不到指定人设：明确告知学生，并回退到学习集默认或插件中性人设；
+- `ROADMAP.md` 缺少学习集概述：从 Roadmap 标题、Goal、Plan Graph 和能力标准组成一句简短说明，不阻塞上课。
 
 不实现 lease、自动重试、分布式事务或就地 schema 升级。
 
@@ -357,6 +394,11 @@ Git 可以提供文件历史和回滚，但插件不要求自动提交。系统�
 - Dynamic Workflow 保持可选，不产生第二套持久化协议。
 - 新插件可以直接从 `highschool-study-markdown/` 安装和运行，不加载旧插件。
 - 新插件启动时不需要 SQLite、migrations 或数据库数据目录。
+- 每次通过 `study` 进入都会读取学习集概述；无课堂 Trace 时主动介绍，已有 Trace 时不重复展开。
+- 人设解析遵循 Session 临时选择、本学习集持久选择、学习集默认、插件默认的固定优先级。
+- 临时切换不改写文件；持久切换只更新被 Git 忽略的 `CLAUDE.local.md`，并在下一个 Lesson Session 继续生效。
+- 学习集人设能新增或覆盖插件人设；每次进入只加载一份最终人设文件。
+- 切换或关闭人设不会改变能力判断、题卡选择、Trace 事实、测试标准或备课结果。
 
 ## 十七、非目标
 
@@ -366,4 +408,5 @@ Git 可以提供文件历史和回滚，但插件不要求自动提交。系统�
 - 任意关系的通用知识图谱；
 - 后台自动运行或离线教学服务；
 - 通用向量数据库、持久化 Trace 反向索引或后台记忆聚合服务；
-- 从已废弃的预发布数据库架构迁移数据。
+- 从已废弃的预发布数据库架构迁移数据；
+- 人设商店、人设数据库、每个人设一个 Agent，或将全部人设常驻注入上下文。

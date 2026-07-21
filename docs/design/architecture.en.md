@@ -1,7 +1,9 @@
 # Markdown-First Highschool Study Plugin Design
 
-Status: formal design approved; includes bidirectional card/Trace search and Plan-gated long-term-memory consolidation
+Status: formal design approved; includes bidirectional card/Trace search, Plan-gated long-term-memory consolidation, learning-set orientation, and selectable presentation personas
 Date: 2026-07-21
+
+Implementation plan: [Learning-set orientation and selectable personas](../superpowers/plans/2026-07-21-learning-set-orientation-personas.en.md)
 
 ## Decision
 
@@ -47,6 +49,10 @@ The four-tool MCP may be implemented in fresh, small TypeScript modules. The res
 
 ```text
 learning-set/
+├── CLAUDE.md
+├── CLAUDE.local.md          # optional, local-only, gitignored
+├── .claude/
+│   └── personas/            # optional learning-set additions and overrides
 ├── ROADMAP.md
 ├── plans/
 │   ├── fixed-value.md
@@ -63,7 +69,7 @@ learning-set/
 └── materials/
 ```
 
-The learning-set root is the only mutable study-state boundary. Plugin code, Skills, Agents, tests, and MCP implementation remain in the plugin package and are not copied into each learning set.
+The learning-set root is the only mutable study-state boundary. Plugin code, Skills, Agents, tests, and MCP implementation remain in the plugin package and are not copied into each learning set. `CLAUDE.local.md` contains only a machine-local presentation preference for this learning set; it is not learning evidence, long-term memory, or shared state.
 
 ## File ownership
 
@@ -71,6 +77,7 @@ The learning-set root is the only mutable study-state boundary. Plugin code, Ski
 
 Owns the active long-term goal and the Plan graph:
 
+- a short student-facing Learning Set Overview: what it teaches, who it is for, the approximate Plan scope, and what the student should be able to do at completion;
 - Roadmap goal and scope;
 - observable capability standard and its tests;
 - ordered Plan references;
@@ -108,7 +115,7 @@ The Claude Code Task List is generated from ActivityBlocks for display only. Tas
 
 ### `memory/*.md`
 
-`student-profile.md` contains only current, confirmed learner-side preferences or constraints, such as whether the student wants to attempt a problem before seeing an example. `teaching-profile.md` contains only current, confirmed standing requirements for the Claude tutor's persona and behavior, such as whether to ask about the student's reasoning before explaining an error. One preference has exactly one owner and is never paraphrased into both files.
+`student-profile.md` contains only current, confirmed learner-side preferences or constraints, such as whether the student wants to attempt a problem before seeing an example. `teaching-profile.md` contains only current, confirmed standing requirements for the Claude tutor's pedagogical behavior, interaction method, and stable demeanor, such as whether to ask about the student's reasoning before explaining an error. It does not contain a presentation character name, self-reference, or verbal tic such as "calm senpai"; those belong to presentation-persona files. One long-term teaching preference has exactly one owner and is never paraphrased into both profile files.
 
 These profiles are not per-Lesson event logs. They change only after `consolidate-plan-memory` reads every classroom record in a completed Plan, proposes an add/revise/delete delta, and the student confirms that delta. The profiles contain only the current effective list; original evidence and history remain in Lessons and Git.
 
@@ -121,6 +128,21 @@ Every long-term preference, including a preference stated explicitly by the stud
 Cards retain the readable StudyForge teaching structure: goal, primary and secondary methods, subroutes, stable card steps, and source material. The graph retains stable, understandable goal/method/structure names without arbitrary prerequisite relationships. Materials contain videos, PDFs, images, or text resources addressed by relative path.
 
 Existing YAML authoring assets may remain YAML. Markdown is mandatory for learning state and memory, not for rewriting every source asset solely for format uniformity.
+
+### `CLAUDE.md`, `CLAUDE.local.md`, and persona files
+
+`learning-set/CLAUDE.md` contains only stable, shared Claude Code instructions for the learning set:
+
+- identify the directory as a Highschool Study learning set entered through `highschool-study:study`;
+- name the learning set's default persona ID;
+- state that a persona changes presentation only and never overrides teaching facts or capability standards;
+- forbid invention of personas, cards, Trace, or sources.
+
+`learning-set/CLAUDE.local.md` contains only the student's persistent persona selection for the current learning set and is gitignored. "Use this persona for this lesson" affects only the current Lesson Session and writes no file. "Use this persona for this learning set from now on" updates the local file.
+
+Built-in personas live under `skills/enter-learning-set/references/personas/`. A learning set may add a persona, or override a built-in persona with a same-named file, under `.claude/personas/`. A persona file is ordinary Markdown that describes only its name, forms of address, voice, encouragement style, and optional fictional framing. It defines no teaching conclusion, card-selection policy, or assessment rule.
+
+Claude Code treats `CLAUDE.md` and `CLAUDE.local.md` as session context rather than enforced configuration, and `@` imports expand into the startup context. The design therefore does not import every persona from `CLAUDE.md`; a Skill resolves the current choice and reads exactly one persona file. See the [Claude Code memory documentation](https://code.claude.com/docs/en/memory).
 
 ## Markdown conventions
 
@@ -160,10 +182,23 @@ The model may use a short alias such as `Q-FREEZE-01` inside one Lesson, but the
 - `study-coach` remains the single student-facing entry and routes planning, preparation, teaching, progress inspection, and correction.
 - `lesson-designer` remains a preparation-specific configuration that the Coach may invoke internally; the student does not switch Agents.
 - Teaching workflows remain Skills. They contain instructions, not learner facts.
+- `enter-learning-set` injects the learning-set overview and current persona every time `study` is entered; it does not create another Agent.
 - `recall-study-memory` performs structural, summary, and memory recall with Claude Code's native `Read`, `Glob`, `Grep`, and, only when useful, `Agent`; it does not call a fixed context-compilation endpoint.
 - `consolidate-plan-memory` runs after a Plan is completed, proposes a long-term preference delta, asks the student to confirm it, and edits the two profile files.
 - Native Dynamic Workflow remains optional. It runs only when preparation lacks material information worth parallel lookup. Raw branch JSON stays in Claude Code; the main Agent writes only an adopted, source-linked conclusion into the relevant Lesson Markdown.
 - The Task List displays the current Lesson blocks and is not a persistence layer.
+
+### Learning-set entry and persona resolution
+
+Before `study` chooses a Roadmap, Plan, or Lesson route, it invokes `enter-learning-set`:
+
+1. Read the Learning Set Overview from `ROADMAP.md`. Keep it as background on every entry, but actively present it only when the learning set contains no classroom Trace or when the student asks for it.
+2. Resolve the persona in this order: current-session temporary choice, current-learning-set choice in `CLAUDE.local.md`, learning-set default in `CLAUDE.md`, plugin default.
+3. Enumerate real local and built-in persona files and match an exact ID. A same-named learning-set file wins; never construct a path directly from student text.
+4. Read exactly the selected persona and pass it to `study-coach`. "Disable personas" selects the built-in neutral tutor.
+5. Keep preparation neutral. Persona instructions affect only student-visible output and never enter `lesson-designer`, `planner-attention.md`, Trace, summaries, long-term profiles, or method aggregation.
+
+The first release ships only a few templates, such as neutral tutor, calm senpai, and energetic classmate. Adding a persona requires no MCP change, additional Agent, or persona database.
 
 ## Recall strategy
 
@@ -238,7 +273,7 @@ During a Plan, classroom facts remain in Lesson Trace entries. Later Lessons in 
 5. show the candidate list and let the student keep, rewrite, or remove items in natural language;
 6. merge the delta into the two Markdown profiles only after explicit confirmation.
 
-Learner-side preferences belong only to `student-profile.md`; tutor persona or behavior requirements belong only to `teaching-profile.md`. Borderline items choose one owner and are never duplicated. Profiles keep only the current effective list, not candidates, rejected items, or retired versions. A student objection or correction during confirmation is recorded in the final Plan-reflection Lesson block/Trace so future consolidation can see it as original evidence.
+Learner-side preferences belong only to `student-profile.md`; requirements for the tutor's pedagogical behavior, interaction method, and stable demeanor belong only to `teaching-profile.md`. Presentation personas enter neither long-term profile. Borderline items choose one owner and are never duplicated. Profiles keep only the current effective list, not candidates, rejected items, or retired versions. A student objection or correction during confirmation is recorded in the final Plan-reflection Lesson block/Trace so future consolidation can see it as original evidence.
 
 The consolidation is a delta merge rather than a rewrite from all historical Plans. Later preparation and teaching read both compact profiles in full, expanding a source only when a preference needs verification.
 
@@ -292,7 +327,9 @@ The plugin fails simply and visibly:
 - missing source link: exclude the dependent memory claim and show the broken link;
 - malformed frontmatter: report the file and stop before overwriting it;
 - duplicate stable ID in the same directory: report the conflict;
-- missing current Roadmap, Plan, or Lesson: route the Coach to create or select one.
+- missing current Roadmap, Plan, or Lesson: route the Coach to create or select one;
+- unknown persona: tell the student and fall back to the learning-set default or the plugin's neutral persona;
+- missing Learning Set Overview: synthesize one short sentence from the Roadmap title, Goal, Plan Graph, and capability standard without blocking the lesson.
 
 There are no leases, retries, distributed transactions, or in-place schema upgrades.
 
@@ -314,6 +351,11 @@ There are no leases, retries, distributed transactions, or in-place schema upgra
 - Native Dynamic Workflow is optional and does not create a second persistence protocol.
 - The new plugin is installable and runnable directly from `highschool-study-markdown/` without loading the old plugin.
 - The new plugin starts without SQLite, migrations, or a database data directory.
+- Every `study` entry reads the Learning Set Overview; an empty-Trace learning set presents it, while a learning set with Trace does not repeat it unprompted.
+- Persona resolution follows the fixed precedence of session choice, local learning-set choice, learning-set default, and plugin default.
+- A temporary switch edits no file; a persistent switch updates only gitignored `CLAUDE.local.md` and remains active in the next Lesson Session.
+- A learning set can add or override a persona, and each entry loads exactly one final persona file.
+- Switching or disabling personas changes no capability judgment, card selection, Trace fact, test standard, or preparation result.
 
 ## Non-goals
 
@@ -323,4 +365,5 @@ There are no leases, retries, distributed transactions, or in-place schema upgra
 - arbitrary knowledge-graph relations;
 - automated background or offline teaching services;
 - a generic vector database, persistent Trace reverse index, or background memory-consolidation service;
-- migration from the discarded pre-release database architecture.
+- migration from the discarded pre-release database architecture;
+- a persona marketplace, persona database, one Agent per persona, or loading all personas permanently into context.

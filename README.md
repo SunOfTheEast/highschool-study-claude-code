@@ -102,6 +102,10 @@ learning-set/
 - [English architecture](docs/design/architecture.en.md)
 - [中文实施计划](docs/design/implementation-plan.zh-CN.md)
 - [English implementation plan](docs/design/implementation-plan.en.md)
+- [学习集概述与可切换人设实施计划](docs/superpowers/plans/2026-07-21-learning-set-orientation-personas.zh-CN.md)
+- [Learning-set orientation and selectable personas plan](docs/superpowers/plans/2026-07-21-learning-set-orientation-personas.en.md)
+- [自适应课堂模板与防剧透设计](docs/superpowers/specs/2026-07-21-adaptive-lesson-templates-and-reveal-policy-design.md)
+- [自适应课堂模板与防剧透实施计划](docs/superpowers/plans/2026-07-21-adaptive-lesson-templates-and-reveal-policy.md)
 - [插件源码说明](plugins/highschool-study/README.md)
 
 Claude Code 官方参考：[发现和安装插件](https://code.claude.com/docs/en/discover-plugins)、[创建和分发 marketplace](https://code.claude.com/docs/en/plugin-marketplaces)。
