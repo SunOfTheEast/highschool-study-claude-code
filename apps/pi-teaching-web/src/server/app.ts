@@ -5,6 +5,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, extname, join } from 'node:path';
 import { resolveInsideRoot } from 'highschool-study-markdown/study-domain';
 import { projectSessionEvent } from '../projection/projector';
+import { projectWorkflow } from '../projection/workflow-projector';
 import type { WorkspaceRegistry } from '../runtime/workspace-registry';
 import type { SessionKey } from '../shared/contracts';
 import { readAbilityProjection, readEvidence } from '../study/ability';
@@ -61,6 +62,13 @@ export function createRequestHandler(deps?: AppDependencies) {
       if (bound.has(key)) return;
       deps.registry.subscribe(key, (event) => {
         for (const projected of projectSessionEvent(key, event)) deps.hub.publish(projected);
+      });
+      deps.registry.subscribeWorkflows(key, (workflow) => {
+        deps.hub.publish({
+          type: 'workflow',
+          sessionKey: key,
+          workflow: projectWorkflow(workflow),
+        });
       });
       bound.add(key);
     };
@@ -137,6 +145,39 @@ export function createRequestHandler(deps?: AppDependencies) {
     const history = /^\/api\/sessions\/([^/]+)\/history$/.exec(url.pathname);
     if (request.method === 'GET' && history) {
       return json(deps.registry.history(decodeURIComponent(history[1]!) as SessionKey));
+    }
+
+    const deep = /^\/api\/sessions\/([^/]+)\/deep$/.exec(url.pathname);
+    if (deep) {
+      const key = decodeURIComponent(deep[1]!) as SessionKey;
+      if (request.method === 'POST') {
+        const input = await request.json() as { enabled: boolean };
+        await deps.registry.setDeepMode(key, input.enabled);
+      } else if (request.method !== 'GET') {
+        return new Response('Method not allowed', { status: 405 });
+      }
+      const enabled = await deps.registry.deepMode(key);
+      const workflows = await deps.registry.workflows(key);
+      bind(key);
+      return json({ enabled, workflows: workflows.map(projectWorkflow) });
+    }
+
+    const workflowAction = /^\/api\/sessions\/([^/]+)\/workflows\/([^/]+)\/(confirm|cancel)$/.exec(
+      url.pathname,
+    );
+    if (request.method === 'POST' && workflowAction) {
+      const key = decodeURIComponent(workflowAction[1]!) as SessionKey;
+      const workflowId = decodeURIComponent(workflowAction[2]!);
+      await deps.registry.workflows(key);
+      bind(key);
+      if (workflowAction[3] === 'confirm') {
+        return json(projectWorkflow(await deps.registry.confirmWorkflow(key, workflowId)));
+      }
+      await deps.registry.cancelWorkflow(key, workflowId);
+      const snapshot = (await deps.registry.workflows(key))
+        .find((workflow) => workflow.id === workflowId);
+      if (!snapshot) return json({ error: 'WORKFLOW_NOT_FOUND' }, 404);
+      return json(projectWorkflow(snapshot));
     }
 
     const messages = /^\/api\/sessions\/([^/]+)\/messages$/.exec(url.pathname);

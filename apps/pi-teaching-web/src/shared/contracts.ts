@@ -124,6 +124,27 @@ export type ChatMessage = {
   complete: boolean;
 };
 
+export type WorkflowTaskView = {
+  id: string;
+  label: string;
+  role: string;
+  dependsOn: string[];
+  status: 'queued' | 'running' | 'completed' | 'failed' | 'blocked' | 'cancelled';
+  sourceCount: number;
+  progress: string;
+};
+
+export type WorkflowView = {
+  id: string;
+  goal: string;
+  mode: 'quick' | 'deep';
+  status: 'proposed' | 'running' | 'completed' | 'partial' | 'failed' | 'cancelled';
+  maxConcurrency: number;
+  tokenLimit: number;
+  timeoutMs: number;
+  tasks: WorkflowTaskView[];
+};
+
 export type StudyViewEvent =
   | { type: 'snapshot'; workspace: PlanWorkspaceSnapshot }
   | { type: 'message'; sessionKey: SessionKey; message: ChatMessage }
@@ -157,4 +178,5 @@ export type StudyViewEvent =
       sources: string[];
     }>;
   }
+  | { type: 'workflow'; sessionKey: SessionKey; workflow: WorkflowView }
   | { type: 'session-error'; sessionKey: SessionKey; message: string };

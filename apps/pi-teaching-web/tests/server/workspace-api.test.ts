@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { createRequestHandler } from '../../src/server/app';
 import { EventHub } from '../../src/server/event-hub';
+import type { WorkflowSnapshot } from '../../src/workflows/contracts';
 
 const learningSet = { title: 'Demo', overview: 'Overview', goal: 'Goal', plans: [] };
 const workspace = {
@@ -34,6 +35,7 @@ test('returns learning-set and Plan snapshots', async () => {
       abandonForReprepare: async () => {},
       history: () => [],
       subscribe: () => () => {},
+      subscribeWorkflows: () => () => {},
     } as never,
   });
   expect(await (await handler(new Request('http://local/api/learning-set')))!.json())
@@ -61,6 +63,7 @@ test('routes a message to the selected Session key', async () => {
       openTutor: async () => ({ sessionId: 'tutor-l1' }),
       history: () => [],
       subscribe: () => () => {},
+      subscribeWorkflows: () => () => {},
     } as never,
   });
   const response = await handler(new Request('http://local/api/sessions/coach%3Ap1/messages', {
@@ -88,6 +91,7 @@ test('uploads classroom images and attaches them to a Session message', async ()
         openTutor: async () => ({ sessionId: 'tutor-l1' }),
         history: () => [],
         subscribe: () => () => {},
+        subscribeWorkflows: () => () => {},
       } as never,
     });
     const form = new FormData();
@@ -136,6 +140,94 @@ test('keeps persona selection scoped to the requested Session', async () => {
     body: JSON.stringify({ id: 'energetic-classmate' }),
   }));
   expect(await changed!.json()).toMatchObject({ id: 'energetic-classmate' });
+});
+
+test('controls deep mode and projects workflow progress without child conclusions', async () => {
+  const calls: unknown[] = [];
+  let enabled = false;
+  let listener = (_snapshot: unknown) => {};
+  let workflow: WorkflowSnapshot = {
+    id: 'wf-1',
+    parentSessionKey: 'coach:p1',
+    goal: '备课检查',
+    mode: 'deep',
+    status: 'proposed',
+    maxConcurrency: 2,
+    tokenLimit: 20_000,
+    timeoutMs: 90_000,
+    createdAt: '2026-07-22T00:00:00Z',
+    updatedAt: '2026-07-22T00:00:00Z',
+    tasks: [{
+      id: 'review',
+      label: '防剧透审查',
+      role: '审查员',
+      instruction: 'private prompt',
+      dependsOn: [],
+      sourceHandles: ['cards/a.yaml'],
+      readRoots: ['cards'],
+      status: 'completed',
+      runId: 'child-run-secret',
+      tokens: 100,
+      durationMs: 20,
+      result: {
+        findings: ['答案是 D'],
+        evidence_refs: ['cards/a.yaml'],
+        recommended_action: '直接说 D',
+        risks: [],
+      },
+      error: null,
+    }],
+  };
+  const hub = new EventHub();
+  const events: unknown[] = [];
+  hub.subscribe((event) => events.push(event));
+  const handler = createRequestHandler({
+    root: '/tmp/demo',
+    authoring: false,
+    hub,
+    registry: {
+      setDeepMode: async (key: string, value: boolean) => {
+        calls.push(['set', key, value]);
+        enabled = value;
+      },
+      deepMode: async () => enabled,
+      workflows: async () => [workflow],
+      confirmWorkflow: async (key: string, id: string) => {
+        calls.push(['confirm', key, id]);
+        workflow = { ...workflow, status: 'completed' };
+        listener(workflow);
+        return workflow;
+      },
+      cancelWorkflow: async () => {},
+      subscribe: () => () => {},
+      subscribeWorkflows: (_key: string, next: (snapshot: unknown) => void) => {
+        listener = next;
+        return () => {};
+      },
+    } as never,
+  });
+
+  const toggled = await handler(new Request('http://local/api/sessions/coach%3Ap1/deep', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ enabled: true }),
+  }));
+  expect(await toggled!.json()).toMatchObject({ enabled: true });
+  const confirmed = await handler(new Request(
+    'http://local/api/sessions/coach%3Ap1/workflows/wf-1/confirm',
+    { method: 'POST' },
+  ));
+  const text = await confirmed!.text();
+  expect(calls).toEqual([
+    ['set', 'coach:p1', true],
+    ['confirm', 'coach:p1', 'wf-1'],
+  ]);
+  expect(text).toContain('分析完成');
+  expect(text).not.toContain('答案是 D');
+  expect(text).not.toContain('直接说 D');
+  expect(text).not.toContain('private prompt');
+  expect(JSON.stringify(events)).not.toContain('child-run-secret');
+  expect(JSON.stringify(events)).not.toContain('答案是 D');
 });
 
 test('serves the built client shell for local browser routes', async () => {
