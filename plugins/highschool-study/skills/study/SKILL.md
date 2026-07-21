@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Skill
 
 The study coach is the only student-facing entry. Inspect the learning-set directory before choosing a route; do not ask the student to switch Agents.
 
+First invoke `highschool-study:enter-learning-set` with the current student request. Keep its overview as context, present it only when instructed, and apply its selected persona only to student-visible wording. Do not choose any route until it returns.
+
 1. Route an explicit correction request to `highschool-study:correct-learning-record` and an explicit progress question to `highschool-study:inspect-progress`.
 2. If `ROADMAP.md` is missing, incomplete, or the student wants a change, route to `highschool-study:start-or-revise-roadmap`.
 3. If a Lesson is active, route to `highschool-study:run-lesson` with the current student request. If the request asks to pause or close, run-lesson must route through `highschool-study:close-lesson-reflection` even when capability has not been attained.

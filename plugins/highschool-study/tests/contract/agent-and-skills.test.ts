@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { parse } from 'yaml';
 
@@ -165,4 +165,42 @@ test('requires paused-Lesson consent and routes pause or close to reflection', (
   expect(close).toContain(
     'An explicit pause or close request is already the student choice',
   );
+});
+
+test('enters the learning set before routing and confines personas to presentation', () => {
+  const enterPath = 'skills/enter-learning-set/SKILL.md';
+  expect(existsSync(join(root, enterPath))).toBe(true);
+  const enter = read(enterPath);
+  const study = read('skills/study/SKILL.md');
+  const coach = read('agents/study-coach.md');
+
+  expect(frontmatter(enter)['user-invocable']).toBe(false);
+  expect(toolList(enter, 'allowed-tools')).toEqual([
+    'Read', 'Glob', 'Grep', 'Write', 'Edit',
+  ]);
+  expectInOrder(study, [
+    'First invoke `highschool-study:enter-learning-set`',
+    'Route an explicit correction request',
+  ]);
+  expectInOrder(enter, [
+    'current Lesson Session',
+    '`learning-set/CLAUDE.local.md`',
+    '`learning-set/CLAUDE.md`',
+    '`neutral-tutor`',
+  ]);
+  expect(enter).toContain('Read exactly one final persona file');
+  expect(enter).toContain('Do not write a temporary choice');
+  expect(enter).toContain('## Highschool Study Presentation');
+  expect(coach).toContain('presentation layer only');
+  expect(coach).toContain('Keep `lesson-designer` persona-neutral');
+
+  for (const id of [
+    'neutral-tutor', 'calm-senpai', 'energetic-classmate',
+  ]) {
+    const persona = read(
+      `skills/enter-learning-set/references/personas/${id}.md`,
+    );
+    expect(persona).toContain(`- ID: \`${id}\``);
+    expect(persona).toContain('Presentation only');
+  }
 });
