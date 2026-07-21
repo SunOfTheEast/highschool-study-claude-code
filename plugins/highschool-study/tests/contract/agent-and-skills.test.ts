@@ -211,3 +211,34 @@ test('enters the learning set before routing and confines personas to presentati
     expect(persona).toContain('Presentation only');
   }
 });
+
+test('ships adaptive classroom templates and one shared reveal policy', () => {
+  const templates = read(
+    'skills/prepare-next-lesson/references/classroom-templates.md',
+  );
+  const reveal = read(
+    'skills/prepare-next-lesson/references/reveal-policy.md',
+  );
+
+  for (const id of [
+    'diagnostic',
+    'concept',
+    'deliberate-practice',
+    'remediation',
+    'assessment',
+    'review',
+  ]) expect(templates).toContain(`## ${id}`);
+
+  expect(templates).toContain('Derive problem-role slots before card search');
+  expect(templates).toContain('Do not stop after the first suitable card');
+  expect(templates).toContain('Default counts are ranges, not quotas');
+  expect(templates).toContain('A video is never decorative');
+
+  for (const mode of ['zero', 'ladder', 'worked-example']) {
+    expect(reveal).toContain(`## ${mode}`);
+  }
+  expect(reveal).toContain('### Student View');
+  expect(reveal).toContain('### Teacher Control');
+  expect(reveal).toContain('one level per student-approved turn');
+  expect(reveal).toContain('method recognition is itself the evidence target');
+});
