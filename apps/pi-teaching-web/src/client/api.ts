@@ -1,5 +1,7 @@
 import type {
+  AbilityProjection,
   ChatMessage,
+  EvidenceView,
   LearningSetSnapshot,
   PlanWorkspaceSnapshot,
   SessionKey,
@@ -14,6 +16,10 @@ async function json<T>(input: RequestInfo | URL, init?: RequestInit): Promise<T>
 
 export const api = {
   learningSet: () => json<LearningSetSnapshot>('/api/learning-set'),
+  abilities: () => json<AbilityProjection>('/api/abilities'),
+  evidence: (source: string) => (
+    json<EvidenceView>(`/api/evidence?source=${encodeURIComponent(source)}`)
+  ),
   workspace: (planId: string) => (
     json<PlanWorkspaceSnapshot>(`/api/workspaces/${encodeURIComponent(planId)}`)
   ),

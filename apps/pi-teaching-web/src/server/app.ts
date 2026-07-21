@@ -7,6 +7,7 @@ import { resolveInsideRoot } from 'highschool-study-markdown/study-domain';
 import { projectSessionEvent } from '../projection/projector';
 import type { WorkspaceRegistry } from '../runtime/workspace-registry';
 import type { SessionKey } from '../shared/contracts';
+import { readAbilityProjection, readEvidence } from '../study/ability';
 import { readLearningSet } from '../study/read-workspace';
 import { readStudentNotebook } from '../study/student-notebook';
 import type { EventHub } from './event-hub';
@@ -58,6 +59,16 @@ export function createRequestHandler(deps?: AppDependencies) {
 
     if (request.method === 'GET' && url.pathname === '/api/learning-set') {
       return json(learningSetReader(deps.root));
+    }
+
+    if (request.method === 'GET' && url.pathname === '/api/abilities') {
+      return json(readAbilityProjection(deps.root));
+    }
+
+    if (request.method === 'GET' && url.pathname === '/api/evidence') {
+      const source = url.searchParams.get('source');
+      if (!source) return json({ error: 'SOURCE_REQUIRED' }, 400);
+      return json(readEvidence(deps.root, source));
     }
 
     const notebook = /^\/api\/lessons\/([^/]+)\/notebook$/.exec(url.pathname);

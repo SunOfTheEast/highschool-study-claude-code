@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import type {
+  AbilityProjection,
+  EvidenceView,
   LearningSetSnapshot,
   LessonNode,
   SessionKey,
@@ -7,7 +9,9 @@ import type {
   StudyViewEvent,
 } from '../shared/contracts';
 import { api } from './api';
+import { AbilityMap } from './components/AbilityMap';
 import { ChatPanel } from './components/ChatPanel';
+import { EvidenceLens } from './components/EvidenceLens';
 import { LearningSetHome } from './components/LearningSetHome';
 import { LessonNotebook } from './components/LessonNotebook';
 import { SessionTree } from './components/SessionTree';
@@ -22,6 +26,8 @@ export function App() {
   const [loading, setLoading] = useState(true);
   const [pageError, setPageError] = useState<string | null>(null);
   const [notebook, setNotebook] = useState<StudentNotebook | null>(null);
+  const [abilities, setAbilities] = useState<AbilityProjection | null>(null);
+  const [evidence, setEvidence] = useState<EvidenceView | null>(null);
 
   useEffect(() => {
     void api.learningSet()
@@ -106,6 +112,25 @@ export function App() {
     return () => { current = false; };
   }, [selectedLesson?.id]);
 
+  useEffect(() => {
+    if (!client.workspace) {
+      setAbilities(null);
+      return;
+    }
+    void api.abilities()
+      .then(setAbilities)
+      .catch(() => setPageError('无法读取方法证据投影。'));
+  }, [client.workspace?.plan.id]);
+
+  const openEvidence = async (source: string) => {
+    setPageError(null);
+    try {
+      setEvidence(await api.evidence(source));
+    } catch {
+      setPageError('这条证据的原始 Trace 已不可用。');
+    }
+  };
+
   const selectSession = async (nextKey: SessionKey) => {
     if (!client.workspace || nextKey === client.selected) return;
     setPageError(null);
@@ -162,6 +187,7 @@ export function App() {
 
   const goHome = () => {
     setClient(initialClientState);
+    setEvidence(null);
     setPageError(null);
   };
 
@@ -241,8 +267,11 @@ export function App() {
           gate={gate}
           onSend={send}
         />
-        <LessonNotebook lesson={selectedLesson} notebook={notebook} />
+        {isCoach
+          ? <AbilityMap value={abilities} onOpen={(source) => void openEvidence(source)} />
+          : <LessonNotebook lesson={selectedLesson} notebook={notebook} />}
       </div>
+      {evidence && <EvidenceLens value={evidence} onClose={() => setEvidence(null)} />}
     </>
   );
 }

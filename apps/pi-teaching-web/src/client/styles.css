@@ -389,6 +389,48 @@ input:focus-visible {
 .authoring-source { margin: 1.5rem .35rem; color: var(--muted); font-size: .68rem; }
 .authoring-source summary { cursor: pointer; }
 .authoring-source pre { max-width: 100%; overflow: auto; padding: .8rem; background: var(--ink); color: var(--paper); font-size: .62rem; }
+.ability-nodes { display: grid; padding-top: .8rem; }
+.ability-nodes > button {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.2rem 1fr auto;
+  gap: .7rem;
+  align-items: center;
+  width: 100%;
+  padding: 1rem .35rem;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.ability-nodes > button:hover { background: rgba(255, 255, 255, .42); }
+.ability-halo { width: 1.05rem; height: 1.05rem; margin-left: .35rem; border: 1px solid var(--amber); border-radius: 50%; box-shadow: 0 0 0 .45rem rgba(184, 108, 40, .09); }
+.ability-nodes button[data-state="steady"] .ability-halo { border-color: var(--green); background: var(--green); box-shadow: 0 0 0 .25rem rgba(86, 107, 88, .12); }
+.ability-nodes button[data-state="unstable"] .ability-halo { animation: breathe 2.1s ease-in-out infinite; }
+.ability-copy { min-width: 0; display: grid; gap: .35rem; }
+.ability-copy small { color: var(--muted); font-size: .58rem; }
+.ability-copy b { overflow-wrap: anywhere; font-family: Georgia, "Noto Serif SC", serif; font-size: .88rem; font-weight: 600; }
+.ability-nodes i { color: #9a9183; font: normal .62rem/1 ui-monospace, monospace; }
+.ability-footnote { margin: 1.3rem .35rem; color: var(--muted); font-size: .62rem; line-height: 1.65; }
+.evidence-lens { position: fixed; z-index: 20; inset: 0; display: flex; justify-content: flex-end; }
+.lens-scrim { position: absolute; inset: 0; width: 100%; border: 0; background: rgba(32, 29, 23, .32); cursor: default; }
+.evidence-lens > article { position: relative; width: min(440px, 92vw); height: 100%; overflow-y: auto; padding: 2rem clamp(1.5rem, 4vw, 2.5rem); background: var(--paper); box-shadow: -18px 0 52px rgba(29, 25, 19, .16); animation: lens-in .28s ease-out both; }
+.evidence-lens header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--ink); }
+.evidence-lens header span { color: var(--amber); font-size: .65rem; font-weight: 750; letter-spacing: .14em; text-transform: uppercase; }
+.evidence-lens header button { border: 0; background: transparent; color: var(--muted); font-size: .7rem; cursor: pointer; }
+.source-anchor { margin: 2rem 0 .6rem; color: var(--muted); font: .62rem/1.5 ui-monospace, monospace; overflow-wrap: anywhere; }
+.evidence-lens h2 { margin: 0 0 1rem; font-family: Georgia, "Noto Serif SC", serif; font-size: 1.65rem; font-weight: 500; }
+.evidence-tags { display: flex; gap: .45rem; }
+.evidence-tags span { padding: .25rem .45rem; background: var(--amber-pale); color: #76502d; font-size: .62rem; }
+.evidence-lens blockquote { margin: 2rem 0; padding: .2rem 0 .2rem 1rem; border-left: 2px solid var(--amber); color: #4b463e; font-family: Georgia, "Noto Serif SC", serif; font-size: 1rem; line-height: 1.75; }
+.evidence-card-meta { padding-top: 1.4rem; border-top: 1px solid var(--line); }
+.evidence-card-meta > small { color: var(--amber); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; }
+.evidence-card-meta h3 { margin: .7rem 0; font-family: Georgia, "Noto Serif SC", serif; font-size: 1rem; font-weight: 500; line-height: 1.55; }
+.evidence-card-meta p { color: var(--muted); font-size: .75rem; }
+.evidence-card-meta ul { margin: 1rem 0 0; padding: 0; list-style: none; }
+.evidence-card-meta li { display: flex; gap: .65rem; padding: .6rem 0; border-top: 1px solid var(--line); font-size: .75rem; }
+.evidence-card-meta li span { width: 3rem; color: var(--muted); font-size: .6rem; }
 .coach-note { margin: 2rem .35rem; color: var(--muted); font-family: Georgia, "Noto Serif SC", serif; line-height: 1.75; }
 .coach-note > span { color: var(--amber); }
 
@@ -422,6 +464,11 @@ input:focus-visible {
 @keyframes breathe {
   0%, 100% { opacity: .45; }
   50% { opacity: 1; }
+}
+
+@keyframes lens-in {
+  from { opacity: 0; transform: translateX(18px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 @media (max-width: 1100px) {

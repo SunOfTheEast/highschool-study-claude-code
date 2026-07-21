@@ -61,6 +61,33 @@ export type StudentNotebook = {
   authoring?: { source: string };
 };
 
+export type AbilityNode = {
+  method: string;
+  state: 'unobserved' | 'unstable' | 'steady';
+  score: number;
+  evidenceCount: number;
+  sources: string[];
+};
+
+export type AbilityProjection = { nodes: AbilityNode[] };
+
+export type EvidenceView = {
+  source: string;
+  trace: {
+    lessonId: string;
+    blockId: string;
+    assessment: string;
+    support: string;
+    note: string;
+  };
+  card: null | {
+    path: string;
+    title: string;
+    goal: string;
+    methods: Array<{ name: string; role: 'primary' | 'secondary' }>;
+  };
+};
+
 export type ChatMessage = {
   id: string;
   role: 'student' | 'coach' | 'tutor';
