@@ -191,6 +191,12 @@ test('enters the learning set before routing and confines personas to presentati
   expect(enter).toContain('Read exactly one final persona file');
   expect(enter).toContain('Do not write a temporary choice');
   expect(enter).toContain('## Highschool Study Presentation');
+  expect(enter).toContain('explicitly asks for the overview');
+  expect(enter).toContain(
+    'If `learning-set/ROADMAP.md` does not exist, return empty overview context and let `study` route to Roadmap creation. Do not block.',
+  );
+  expect(enter).toContain('update only the `Preferred persona` bullet');
+  expect(enter).toContain('preserve every other line');
   expect(coach).toContain('presentation layer only');
   expect(coach).toContain('Keep `lesson-designer` persona-neutral');
 

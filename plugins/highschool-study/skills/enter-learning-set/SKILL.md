@@ -9,10 +9,11 @@ Run this Skill before any Roadmap, Plan, Lesson, correction, or progress route. 
 
 ## Learning-set overview
 
-1. Read `learning-set/ROADMAP.md` and extract `## Learning Set Overview` on every entry.
-2. Use `Grep` over `learning-set/lessons/*.md` for headings matching `^## Trace event-`.
-3. Present the overview to the student when no such Trace exists or when the student asks what the learning set is for. Otherwise keep it as background and do not repeat it unprompted.
-4. If the overview section is absent, form one short fallback sentence from the Roadmap title, Goal, Plan Graph, and Observable Capability Standard. Do not block study.
+1. If `learning-set/ROADMAP.md` does not exist, return empty overview context and let `study` route to Roadmap creation. Do not block.
+2. Read `learning-set/ROADMAP.md` and extract `## Learning Set Overview` on every entry.
+3. Use `Grep` over `learning-set/lessons/*.md` for headings matching `^## Trace event-`.
+4. Present the overview to the student when no such Trace exists or when the student explicitly asks for the overview, including “show the overview.” Otherwise keep it as background and do not repeat it unprompted.
+5. If the overview section is absent, form one short fallback sentence from the Roadmap title, Goal, Plan Graph, and Observable Capability Standard. Do not block study.
 
 ## Persona resolution
 
@@ -30,7 +31,7 @@ Read exactly one final persona file. Treat "disable personas" as `neutral-tutor`
 ## Switching
 
 - A request such as "for this lesson" or "temporarily" changes only the current Lesson Session. Do not write a temporary choice.
-- A request such as "for this learning set from now on" creates or edits only this section in `learning-set/CLAUDE.local.md`, preserving every other section:
+- A request such as "for this learning set from now on" creates the `Preferred persona` bullet under `## Highschool Study Presentation` in `learning-set/CLAUDE.local.md` when absent; otherwise, update only the `Preferred persona` bullet and preserve every other line in that section and every other section:
 
   ```markdown
   ## Highschool Study Presentation
@@ -38,6 +39,6 @@ Read exactly one final persona file. Treat "disable personas" as `neutral-tutor`
   - Preferred persona: `<existing-persona-id>`
   ```
 
-- "Restore the learning-set default" removes only the `Preferred persona` bullet. "Disable personas for this learning set" stores `neutral-tutor`.
+- "Restore the learning-set default" removes only the `Preferred persona` bullet and preserves every other line in that section and every other section. "Disable personas for this learning set" stores `neutral-tutor`.
 
 Return the overview text, whether it should be presented, the selected persona ID/path/content, and any fallback notice to `study`.
