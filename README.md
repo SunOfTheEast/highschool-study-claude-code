@@ -41,7 +41,7 @@ claude mcp list
 ## 试用导数学习集
 
 ```bash
-git clone git@github.com:SunOfTheEast/highschool-study-claude-code.git
+git clone https://github.com/SunOfTheEast/highschool-study-claude-code.git
 cp -R highschool-study-claude-code/examples/derivative-demo ~/derivative-study-demo
 cd ~/derivative-study-demo
 claude
