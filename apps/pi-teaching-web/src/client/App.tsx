@@ -3,6 +3,7 @@ import type {
   AbilityProjection,
   EvidenceView,
   LearningSetSnapshot,
+  LessonReplay,
   LessonNode,
   SessionKey,
   StudentNotebook,
@@ -26,6 +27,7 @@ export function App() {
   const [loading, setLoading] = useState(true);
   const [pageError, setPageError] = useState<string | null>(null);
   const [notebook, setNotebook] = useState<StudentNotebook | null>(null);
+  const [replay, setReplay] = useState<LessonReplay | null>(null);
   const [abilities, setAbilities] = useState<AbilityProjection | null>(null);
   const [evidence, setEvidence] = useState<EvidenceView | null>(null);
 
@@ -104,13 +106,19 @@ export function App() {
   useEffect(() => {
     let current = true;
     setNotebook(null);
+    setReplay(null);
     if (selectedLesson) {
       void api.notebook(selectedLesson.id)
         .then((value) => { if (current) setNotebook(value); })
         .catch(() => { if (current) setPageError('无法读取学生课堂本。'); });
+      if (selectedLesson.status === 'closed' || selectedLesson.status === 'abandoned') {
+        void api.replay(selectedLesson.id)
+          .then((value) => { if (current) setReplay(value); })
+          .catch(() => { if (current) setPageError('无法读取 Lesson 回放。'); });
+      }
     }
     return () => { current = false; };
-  }, [selectedLesson?.id]);
+  }, [selectedLesson]);
 
   useEffect(() => {
     if (!client.workspace) {
@@ -269,7 +277,7 @@ export function App() {
         />
         {isCoach
           ? <AbilityMap value={abilities} onOpen={(source) => void openEvidence(source)} />
-          : <LessonNotebook lesson={selectedLesson} notebook={notebook} />}
+          : <LessonNotebook lesson={selectedLesson} notebook={notebook} replay={replay} />}
       </div>
       {evidence && <EvidenceLens value={evidence} onClose={() => setEvidence(null)} />}
     </>

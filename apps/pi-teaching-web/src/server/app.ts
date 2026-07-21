@@ -9,6 +9,7 @@ import type { WorkspaceRegistry } from '../runtime/workspace-registry';
 import type { SessionKey } from '../shared/contracts';
 import { readAbilityProjection, readEvidence } from '../study/ability';
 import { readLearningSet } from '../study/read-workspace';
+import { buildReplay } from '../study/replay';
 import { readStudentNotebook } from '../study/student-notebook';
 import type { EventHub } from './event-hub';
 
@@ -78,6 +79,14 @@ export function createRequestHandler(deps?: AppDependencies) {
         decodeURIComponent(notebook[1]!),
         deps.authoring,
       ));
+    }
+
+    const replay = /^\/api\/lessons\/([^/]+)\/replay$/.exec(url.pathname);
+    if (request.method === 'GET' && replay) {
+      const lessonId = decodeURIComponent(replay[1]!);
+      const lesson = deps.registry.snapshot().lessons.find((item) => item.id === lessonId);
+      if (!lesson) return json({ error: 'LESSON_NOT_FOUND' }, 404);
+      return json(buildReplay(deps.root, lesson, deps.registry.history(lesson.sessionKey)));
     }
 
     const imageUpload = /^\/api\/lessons\/([^/]+)\/images$/.exec(url.pathname);

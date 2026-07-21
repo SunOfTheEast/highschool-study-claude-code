@@ -3,6 +3,7 @@ import type {
   ChatMessage,
   EvidenceView,
   LearningSetSnapshot,
+  LessonReplay,
   PlanWorkspaceSnapshot,
   SessionKey,
   StudentNotebook,
@@ -28,6 +29,9 @@ export const api = {
   ),
   notebook: (lessonId: string) => (
     json<StudentNotebook>(`/api/lessons/${encodeURIComponent(lessonId)}/notebook`)
+  ),
+  replay: (lessonId: string) => (
+    json<LessonReplay>(`/api/lessons/${encodeURIComponent(lessonId)}/replay`)
   ),
   uploadImage: async (lessonId: string, image: File) => {
     const body = new FormData();

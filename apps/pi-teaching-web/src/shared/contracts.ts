@@ -88,6 +88,30 @@ export type EvidenceView = {
   };
 };
 
+export type RouteChange = {
+  id: string;
+  action: 'insert' | 'skip' | 'move' | 'repeat';
+  blockId: string;
+  before: string | null;
+  after: string | null;
+  reason: string;
+  source: string;
+};
+
+export type ReplayItem = {
+  id: string;
+  kind: 'message' | 'trace' | 'route' | 'image';
+  label: string;
+  detail: string;
+  source: string | null;
+};
+
+export type LessonReplay = {
+  mode: 'full' | 'evidence-only';
+  items: ReplayItem[];
+  route: { initial: string[]; effective: string[] };
+};
+
 export type ChatMessage = {
   id: string;
   role: 'student' | 'coach' | 'tutor';

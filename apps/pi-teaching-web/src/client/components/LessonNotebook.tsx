@@ -1,5 +1,11 @@
-import type { LessonNode, StudentNotebook as StudentNotebookValue } from '../../shared/contracts';
+import type {
+  LessonNode,
+  LessonReplay,
+  StudentNotebook as StudentNotebookValue,
+} from '../../shared/contracts';
 import { MarkdownView } from './MarkdownView';
+import { ReplayTimeline } from './ReplayTimeline';
+import { RouteMap } from './RouteMap';
 import { StudentCard } from './StudentCard';
 
 const statusLabel = {
@@ -12,9 +18,11 @@ const statusLabel = {
 export function LessonNotebook({
   lesson,
   notebook,
+  replay,
 }: {
   lesson: LessonNode | null;
   notebook: StudentNotebookValue | null;
+  replay: LessonReplay | null;
 }) {
   return (
     <aside className="activities lesson-notebook">
@@ -64,6 +72,12 @@ export function LessonNotebook({
               <summary>Authoring source</summary>
               <pre>{notebook.authoring.source}</pre>
             </details>
+          )}
+          {replay && (
+            <>
+              <RouteMap replay={replay} />
+              <ReplayTimeline replay={replay} />
+            </>
           )}
         </>
       )}
