@@ -11,7 +11,15 @@ function block(name: string) {
     `## Block ${name}（[^\\n]+）\\n\\n([\\s\\S]*?)(?=\\n---\\n\\n## Block|\\n## Reflection)`,
   ));
   expect(match).not.toBeNull();
-  return match![1];
+  return match![1]!;
+}
+
+function studentView(name: string) {
+  const match = block(name).match(
+    /^### Student View\n\n([\s\S]*?)(?=\n### Teacher Control)/,
+  );
+  expect(match).not.toBeNull();
+  return match![1]!;
 }
 
 test('lesson 003 is a multi-card assessment with private teacher control', () => {
@@ -35,9 +43,28 @@ test('lesson 003 is a multi-card assessment with private teacher control', () =>
     '- Q-DOMAIN-EX05: ../cards/derivative/mst_p0017_ex05.card.yaml',
   );
 
-  const studentViews = [...lesson.matchAll(
-    /### Student View\n\n([\s\S]*?)(?=\n### Teacher Control)/g,
-  )].map((match) => match[1]).join('\n');
+  const assessmentStudentViews = [
+    studentView('orientation'),
+    studentView('assessment-01'),
+    studentView('assessment-02'),
+  ];
+
+  for (const view of assessmentStudentViews) {
+    for (const capabilityCue of [
+      '定义域',
+      '合法',
+      '正负',
+      '符号',
+      '边界',
+      '端点',
+    ]) expect(view).not.toContain(capabilityCue);
+  }
+
+  const studentViews = [
+    ...assessmentStudentViews,
+    studentView('repair-optional'),
+    studentView('reflection'),
+  ].join('\n');
 
   for (const spoiler of [
     '同除',
@@ -49,8 +76,10 @@ test('lesson 003 is a multi-card assessment with private teacher control', () =>
   ]) expect(studentViews).not.toContain(spoiler);
 
   expect(lesson).toContain('- Reveal: `zero`');
-  expect(lesson).toContain('Q-DOMAIN-EX22 `step_1` and `step_5`');
-  expect(lesson).toContain('Q-DOMAIN-EX16 `step_1` and `step_7`');
+  expect(lesson).toContain('Q-DOMAIN-EX22 `step_2` and `step_5`');
+  expect(lesson).not.toContain('Q-DOMAIN-EX22 `step_1` and `step_5`');
+  expect(lesson).toContain('Q-DOMAIN-EX16 `step_1` and `step_6`');
+  expect(lesson).not.toContain('Q-DOMAIN-EX16 `step_1` and `step_7`');
   expect(lesson).toContain('not independent assessment evidence');
 
   expect(lesson).toContain(
@@ -108,4 +137,15 @@ test('documents adaptive templates and reveal boundaries', () => {
     expect(doc).toContain('ladder');
     expect(doc).toContain('worked-example');
   }
+
+  expect(demoReadme).toContain(
+    'Lesson 003 由 orientation、两道未见验收题、按需插入的可选修复和 reflection 组成。',
+  );
+  expect(demoReadme).toContain('这些 Block 是按依赖组织的课堂积木');
+  expect(demoReadme).toContain(
+    '你可以随时选择是否进入可选修复，并可暂停或结束。',
+  );
+  expect(demoReadme).not.toContain(
+    'Lesson 003 由热身、结构导航、独立练习、互动讨论和可选小测组成。',
+  );
 });

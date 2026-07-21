@@ -42,7 +42,7 @@ status: prepared
 
 ### Student View
 
-本课先做两道不同结构的未见题。每题请先单独写出定义域、恒正或恒负条件，再开始等价变形；两题首次尝试都不提供提示。你可以随时暂停或结束。
+本课有两道不同结构的未见题。请独立作答；两题首次尝试都不提供提示。你可以随时暂停或结束。
 
 ### Teacher Control
 
@@ -57,14 +57,14 @@ status: prepared
 
 ### Student View
 
-请独立完成题卡 `Q-DOMAIN-EX22`。教练只呈现真实题干和选项；请先写出所有合法性与符号条件，再给出完整理由和结论。
+请独立完成题卡 `Q-DOMAIN-EX22`。教练只呈现真实题干和选项；请给出完整的作答过程、理由和结论。
 
 ### Teacher Control
 
 - Role: continuity check for Plan stage `1b`。
 - Evidence target: 定义域是否无提示写全，并在关键变形和开区间边界中被主动使用。
 - Reveal: `zero`。
-- Card evidence: Q-DOMAIN-EX22 `step_1` and `step_5`; inspect the remaining card steps privately only after the student's attempt.
+- Card evidence: Q-DOMAIN-EX22 `step_2` and `step_5`; inspect the remaining card steps privately only after the student's attempt.
 - If help is requested, record the unsupported or incomplete attempt, then offer `repair-optional`. Do not count the supported completion as independent `1b` evidence.
 
 ---
@@ -89,14 +89,14 @@ status: prepared
 
 ### Student View
 
-请独立完成另一张未见题卡 `Q-DOMAIN-EX16`。教练只呈现真实题干和选项；仍然先写合法域和符号条件，再决定如何推进。
+请独立完成另一张未见题卡 `Q-DOMAIN-EX16`。教练只呈现真实题干和选项；请给出完整的作答过程、理由和结论。
 
 ### Teacher Control
 
 - Role: cross-structure transfer; if assessment-01 received any tutor or external support, this is also the fresh unsupported retest whether or not repair-optional ran.
 - Evidence target: 定义域、正量与开区间边界能否迁移到不同外壳，而不是复述上一题路线。
 - Reveal: `zero`.
-- Card evidence: Q-DOMAIN-EX16 `step_1` and `step_7`; inspect the remaining card steps privately only after the student's attempt.
+- Card evidence: Q-DOMAIN-EX16 `step_1` and `step_6`; inspect the remaining card steps privately only after the student's attempt.
 - Do not reuse a hint, intermediate result, or answer from assessment-01.
 
 ---

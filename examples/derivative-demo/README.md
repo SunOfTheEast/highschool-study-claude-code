@@ -50,7 +50,7 @@ claude
 
 ## 4. 上课时会发生什么
 
-Lesson 003 由热身、结构导航、独立练习、互动讨论和可选小测组成。它们是可重排的课堂积木，不是固定流水线。Claude Code Task List 只显示当前步骤；你可以随时要求跳过、换顺序、暂停或结束。
+Lesson 003 由 orientation、两道未见验收题、按需插入的可选修复和 reflection 组成。这些 Block 是按依赖组织的课堂积木，不是固定流水线。Claude Code Task List 只显示当前步骤；你可以随时选择是否进入可选修复，并可暂停或结束。
 
 有证据的课堂活动会通过 `trace_append` 追加到 `learning-set/lessons/lesson-003.md`。读题卡时，该卡过去绑定的 active Trace 会一并返回。
 
