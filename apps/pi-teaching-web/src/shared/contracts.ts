@@ -49,6 +49,18 @@ export type PlanWorkspaceSnapshot = {
   lessons: LessonNode[];
 };
 
+export type StudentProblemCard = {
+  path: string;
+  stem: string;
+  choices: Array<{ label: string; text: string }>;
+};
+
+export type StudentNotebook = {
+  lesson: Omit<LessonNode, 'blocks'> & { blocks: ActivityBlock[] };
+  cards: Record<string, StudentProblemCard>;
+  authoring?: { source: string };
+};
+
 export type ChatMessage = {
   id: string;
   role: 'student' | 'coach' | 'tutor';

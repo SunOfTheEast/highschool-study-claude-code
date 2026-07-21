@@ -1,6 +1,9 @@
-import { useState, type ReactNode } from 'react';
+import { useState, type ChangeEvent, type ReactNode } from 'react';
 import type { ChatMessage, SessionKey } from '../../shared/contracts';
+import { api } from '../api';
 import { MarkdownView } from './MarkdownView';
+
+type ComposerImage = { id: string; name: string; preview: string; path?: string };
 
 export function ChatPanel({
   sessionKey,
@@ -8,6 +11,7 @@ export function ChatPanel({
   work,
   error,
   composerEnabled,
+  lessonId,
   gate,
   onSend,
 }: {
@@ -16,10 +20,48 @@ export function ChatPanel({
   work: string;
   error: string | undefined;
   composerEnabled: boolean;
+  lessonId?: string;
   gate: ReactNode;
-  onSend(text: string): Promise<void>;
+  onSend(text: string, imagePaths: string[]): Promise<void>;
 }) {
   const [text, setText] = useState('');
+  const [images, setImages] = useState<ComposerImage[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [imageError, setImageError] = useState('');
+
+  const selectImages = async (event: ChangeEvent<HTMLInputElement>) => {
+    const files = [...(event.target.files ?? [])];
+    event.target.value = '';
+    if (!lessonId || files.length === 0) return;
+    const pending = files.map((file) => ({
+      id: crypto.randomUUID(),
+      name: file.name,
+      preview: URL.createObjectURL(file),
+      file,
+    }));
+    setImages((current) => [...current, ...pending]);
+    setUploading(true);
+    setImageError('');
+    try {
+      const uploaded = await Promise.all(
+        pending.map(async (item) => ({ id: item.id, ...(await api.uploadImage(lessonId, item.file)) })),
+      );
+      const paths = new Map<string, string>(uploaded.map((item) => [item.id, item.path]));
+      setImages((current) => current.map((item) => {
+        const path = paths.get(item.id);
+        return path ? { ...item, path } : item;
+      }));
+    } catch {
+      setImageError('图片上传失败，请重新选择。');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const clearImages = () => {
+    for (const image of images) URL.revokeObjectURL(image.preview);
+    setImages([]);
+  };
 
   return (
     <section className="chat">
@@ -49,7 +91,7 @@ export function ChatPanel({
 
       <div className="chat-feedback" aria-live="polite">
         {work && <p className="work-status"><span />{work}</p>}
-        {error && <p className="session-error" role="alert">{error}</p>}
+        {(error || imageError) && <p className="session-error" role="alert">{error || imageError}</p>}
       </div>
 
       {composerEnabled && (
@@ -58,9 +100,12 @@ export function ChatPanel({
           onSubmit={(event) => {
             event.preventDefault();
             const value = text.trim();
-            if (!value) return;
-            setText('');
-            void onSend(value);
+            const imagePaths = images.flatMap((image) => image.path ? [image.path] : []);
+            if (uploading || (!value && imagePaths.length === 0)) return;
+            void onSend(value || '请查看我附上的图片。', imagePaths).then(() => {
+              setText('');
+              clearImages();
+            });
           }}
         >
           <textarea
@@ -69,9 +114,32 @@ export function ChatPanel({
             placeholder="写下你的想法或解题过程…"
             rows={3}
           />
+          {images.length > 0 && (
+            <div className="image-previews">
+              {images.map((image) => (
+                <figure key={image.id}>
+                  <img src={image.preview} alt={image.name} />
+                  <figcaption>{image.path ? '已就绪' : '上传中'}</figcaption>
+                </figure>
+              ))}
+            </div>
+          )}
           <div className="composer-footer">
-            <span>支持 Markdown 与 LaTeX</span>
-            <button type="submit">发送 <i aria-hidden="true">↗</i></button>
+            <span className="composer-tools">
+              {lessonId && (
+                <label>
+                  <input
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp"
+                    multiple
+                    onChange={(event) => void selectImages(event)}
+                  />
+                  ＋ 图片
+                </label>
+              )}
+              <small>Markdown · LaTeX</small>
+            </span>
+            <button type="submit" disabled={uploading}>发送 <i aria-hidden="true">↗</i></button>
           </div>
         </form>
       )}

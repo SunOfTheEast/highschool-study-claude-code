@@ -1,9 +1,14 @@
 import type { ImageContent } from '@earendil-works/pi-ai';
 import type { Server } from 'bun';
+import { randomUUID } from 'node:crypto';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, extname } from 'node:path';
+import { resolveInsideRoot } from 'highschool-study-markdown/study-domain';
 import { projectSessionEvent } from '../projection/projector';
 import type { WorkspaceRegistry } from '../runtime/workspace-registry';
 import type { SessionKey } from '../shared/contracts';
 import { readLearningSet } from '../study/read-workspace';
+import { readStudentNotebook } from '../study/student-notebook';
 import type { EventHub } from './event-hub';
 
 export type AppDependencies = {
@@ -15,6 +20,23 @@ export type AppDependencies = {
 };
 
 const json = (value: unknown, status = 200) => Response.json(value, { status });
+
+const imageTypes = {
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.webp': 'image/webp',
+} as const;
+
+function readImageContent(root: string, path: string): ImageContent {
+  const mimeType = imageTypes[extname(path).toLowerCase() as keyof typeof imageTypes];
+  if (!mimeType) throw new Error(`UNSUPPORTED_IMAGE: ${path}`);
+  return {
+    type: 'image',
+    data: readFileSync(resolveInsideRoot(root, path)).toString('base64'),
+    mimeType,
+  };
+}
 
 export function createRequestHandler(deps?: AppDependencies) {
   const bound = new Set<SessionKey>();
@@ -38,6 +60,34 @@ export function createRequestHandler(deps?: AppDependencies) {
       return json(learningSetReader(deps.root));
     }
 
+    const notebook = /^\/api\/lessons\/([^/]+)\/notebook$/.exec(url.pathname);
+    if (request.method === 'GET' && notebook) {
+      return json(readStudentNotebook(
+        deps.root,
+        decodeURIComponent(notebook[1]!),
+        deps.authoring,
+      ));
+    }
+
+    const imageUpload = /^\/api\/lessons\/([^/]+)\/images$/.exec(url.pathname);
+    if (request.method === 'POST' && imageUpload) {
+      const lessonId = decodeURIComponent(imageUpload[1]!);
+      const form = await request.formData();
+      const image = form.get('image');
+      if (!(image instanceof File)) return json({ error: 'IMAGE_REQUIRED' }, 400);
+      const extension = {
+        'image/png': '.png',
+        'image/jpeg': '.jpg',
+        'image/webp': '.webp',
+      }[image.type];
+      if (!extension) return json({ error: 'UNSUPPORTED_IMAGE' }, 415);
+      const path = `materials/classroom/${lessonId}/${randomUUID()}${extension}`;
+      const absolute = resolveInsideRoot(deps.root, path);
+      mkdirSync(dirname(absolute), { recursive: true });
+      writeFileSync(absolute, Buffer.from(await image.arrayBuffer()));
+      return json({ path });
+    }
+
     const workspace = /^\/api\/workspaces\/([^/]+)$/.exec(url.pathname);
     if (request.method === 'GET' && workspace) {
       return json(deps.registry.snapshot(decodeURIComponent(workspace[1]!)));
@@ -51,7 +101,8 @@ export function createRequestHandler(deps?: AppDependencies) {
     const messages = /^\/api\/sessions\/([^/]+)\/messages$/.exec(url.pathname);
     if (request.method === 'POST' && messages) {
       const key = decodeURIComponent(messages[1]!) as SessionKey;
-      const input = await request.json() as { text: string };
+      const input = await request.json() as { text: string; imagePaths?: string[] };
+      const images = (input.imagePaths ?? []).map((path) => readImageContent(deps.root, path));
       const session = key.startsWith('coach:')
         ? await deps.registry.openCoach(key.slice(6))
         : await deps.registry.openTutor(key.slice(6));
@@ -66,7 +117,7 @@ export function createRequestHandler(deps?: AppDependencies) {
           complete: true,
         },
       });
-      void deps.registry.send(key, input.text, [] as ImageContent[]).then(() => {
+      void deps.registry.send(key, input.text, images).then(() => {
         const planId = key.startsWith('coach:')
           ? key.slice(6)
           : deps.registry.snapshot().plan.id;

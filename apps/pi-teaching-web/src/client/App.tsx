@@ -3,12 +3,13 @@ import type {
   LearningSetSnapshot,
   LessonNode,
   SessionKey,
+  StudentNotebook,
   StudyViewEvent,
 } from '../shared/contracts';
 import { api } from './api';
-import { ActivityDrawer } from './components/ActivityDrawer';
 import { ChatPanel } from './components/ChatPanel';
 import { LearningSetHome } from './components/LearningSetHome';
+import { LessonNotebook } from './components/LessonNotebook';
 import { SessionTree } from './components/SessionTree';
 import { initialClientState, reduceClientState } from './state';
 
@@ -20,6 +21,7 @@ export function App() {
   const [connection, setConnection] = useState<ConnectionState>('connecting');
   const [loading, setLoading] = useState(true);
   const [pageError, setPageError] = useState<string | null>(null);
+  const [notebook, setNotebook] = useState<StudentNotebook | null>(null);
 
   useEffect(() => {
     void api.learningSet()
@@ -93,6 +95,17 @@ export function App() {
     return client.workspace.lessons.find((lesson) => lesson.sessionKey === client.selected) ?? null;
   }, [client.selected, client.workspace]);
 
+  useEffect(() => {
+    let current = true;
+    setNotebook(null);
+    if (selectedLesson) {
+      void api.notebook(selectedLesson.id)
+        .then((value) => { if (current) setNotebook(value); })
+        .catch(() => { if (current) setPageError('无法读取学生课堂本。'); });
+    }
+    return () => { current = false; };
+  }, [selectedLesson?.id]);
+
   const selectSession = async (nextKey: SessionKey) => {
     if (!client.workspace || nextKey === client.selected) return;
     setPageError(null);
@@ -138,13 +151,13 @@ export function App() {
     }
   };
 
-  const send = async (text: string) => {
+  const send = async (text: string, imagePaths: string[]) => {
     if (!client.selected) return;
     setClient((current) => ({
       ...current,
       errors: { ...current.errors, [client.selected!]: '' },
     }));
-    await api.message(client.selected, text);
+    await api.message(client.selected, text, imagePaths);
   };
 
   const goHome = () => {
@@ -224,10 +237,11 @@ export function App() {
           work={client.work[selected] ?? ''}
           error={client.errors[selected]}
           composerEnabled={composerEnabled}
+          {...(selectedLesson ? { lessonId: selectedLesson.id } : {})}
           gate={gate}
           onSend={send}
         />
-        <ActivityDrawer lesson={selectedLesson} />
+        <LessonNotebook lesson={selectedLesson} notebook={notebook} />
       </div>
     </>
   );

@@ -1,4 +1,7 @@
 import { expect, test } from 'bun:test';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { join } from 'node:path';
+import { tmpdir } from 'node:os';
 import { createRequestHandler } from '../../src/server/app';
 import { EventHub } from '../../src/server/event-hub';
 
@@ -67,4 +70,48 @@ test('routes a message to the selected Session key', async () => {
   }));
   expect(response!.status).toBe(202);
   expect(sent).toEqual([['coach:p1', '继续学习', []]]);
+});
+
+test('uploads classroom images and attaches them to a Session message', async () => {
+  const root = mkdtempSync(join(tmpdir(), 'studyforge-images-'));
+  const sent: unknown[] = [];
+  try {
+    const handler = createRequestHandler({
+      root,
+      authoring: false,
+      hub: new EventHub(),
+      readLearningSet: () => learningSet,
+      registry: {
+        snapshot: () => workspace,
+        send: async (...args: unknown[]) => { sent.push(args); },
+        openCoach: async () => ({ sessionId: 'coach-p1' }),
+        openTutor: async () => ({ sessionId: 'tutor-l1' }),
+        history: () => [],
+        subscribe: () => () => {},
+      } as never,
+    });
+    const form = new FormData();
+    form.set('image', new File([new Uint8Array([1, 2, 3])], 'work.png', { type: 'image/png' }));
+    const upload = await handler(new Request('http://local/api/lessons/lesson-003/images', {
+      method: 'POST',
+      body: form,
+    }));
+    const { path } = await upload!.json() as { path: string };
+    expect(path).toMatch(/^materials\/classroom\/lesson-003\/.+\.png$/);
+    expect([...readFileSync(join(root, path))]).toEqual([1, 2, 3]);
+
+    const response = await handler(new Request('http://local/api/sessions/coach%3Ap1/messages', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ text: '这是我的草稿', imagePaths: [path] }),
+    }));
+    expect(response!.status).toBe(202);
+    expect(sent).toEqual([[
+      'coach:p1',
+      '这是我的草稿',
+      [{ type: 'image', data: 'AQID', mimeType: 'image/png' }],
+    ]]);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });
