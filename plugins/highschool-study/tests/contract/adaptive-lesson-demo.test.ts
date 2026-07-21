@@ -57,6 +57,11 @@ test('lesson 003 is a multi-card assessment with private teacher control', () =>
     '`assessment-01` precedes `assessment-02`; `repair-optional` may be inserted between them.',
   );
 
+  expect(block('orientation')).toContain(
+    '- Role: capability-standard orientation。',
+  );
+  expect(block('orientation')).toContain('- Reveal: `zero`。');
+
   expect(block('assessment-01')).toContain(
     '- Role: continuity check for Plan stage `1b`。',
   );
@@ -79,4 +84,5 @@ test('lesson 003 is a multi-card assessment with private teacher control', () =>
   expect(block('reflection')).toContain(
     '- Role: evidence summary and student-controlled closure.',
   );
+  expect(block('reflection')).toContain('- Reveal: `zero`;');
 });
