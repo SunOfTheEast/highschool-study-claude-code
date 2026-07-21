@@ -93,7 +93,7 @@ status: prepared
 
 ### Teacher Control
 
-- Role: cross-structure transfer; if repair ran, this is also the fresh unsupported retest.
+- Role: cross-structure transfer; if assessment-01 received any tutor or external support, this is also the fresh unsupported retest whether or not repair-optional ran.
 - Evidence target: 定义域、正量与开区间边界能否迁移到不同外壳，而不是复述上一题路线。
 - Reveal: `zero`.
 - Card evidence: Q-DOMAIN-EX16 `step_1` and `step_7`; inspect the remaining card steps privately only after the student's attempt.
