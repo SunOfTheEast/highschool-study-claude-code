@@ -1,4 +1,5 @@
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { createPiSessionFactory } from '../runtime/session-factory';
 import { findPiSessionFile, WorkspaceRegistry } from '../runtime/workspace-registry';
 import { createRequestHandler } from './app';
@@ -18,12 +19,13 @@ const port = Number.parseInt(
 const hub = new EventHub();
 const factory = await createPiSessionFactory(root, () => new Date());
 const registry = new WorkspaceRegistry(root, factory, findPiSessionFile);
+const staticRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../../dist');
 const clients = new Set<{ send(data: string): void }>();
 hub.subscribe((event) => {
   const data = JSON.stringify(event);
   for (const client of clients) client.send(data);
 });
-const fetch = createRequestHandler({ root, authoring, registry, hub });
+const fetch = createRequestHandler({ root, authoring, registry, hub, staticRoot });
 
 const server = Bun.serve({
   hostname: '127.0.0.1',

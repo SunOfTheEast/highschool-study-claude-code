@@ -40,6 +40,14 @@ status: prepared
 
 ## Block orientation（必做）
 
+### Node State
+
+- Kind: dialogue
+- Required: true
+- Status: pending
+- Depends on:
+- Uses:
+
 ### Student View
 
 本课有两道不同结构的未见题。请独立作答；两题首次尝试都不提供提示。你可以随时暂停或结束。
@@ -54,6 +62,14 @@ status: prepared
 ---
 
 ## Block assessment-01（必做）
+
+### Node State
+
+- Kind: problem
+- Required: true
+- Status: pending
+- Depends on: orientation
+- Uses: Q-DOMAIN-EX22
 
 ### Student View
 
@@ -71,6 +87,14 @@ status: prepared
 
 ## Block repair-optional（可选）
 
+### Node State
+
+- Kind: problem
+- Required: false
+- Status: pending
+- Depends on: assessment-01
+- Uses: Q-DOMAIN-EX05
+
 ### Student View
 
 如果你希望先修复卡点，我们回看已经做过的 `Q-DOMAIN-EX05`：只比较“哪些量必须先保证有意义或为正，以及这些条件后来在哪一步真正被使用”。不把旧题结果当成新验收证据。
@@ -87,6 +111,14 @@ status: prepared
 
 ## Block assessment-02（必做）
 
+### Node State
+
+- Kind: problem
+- Required: true
+- Status: pending
+- Depends on: assessment-01
+- Uses: Q-DOMAIN-EX16
+
 ### Student View
 
 请独立完成另一张未见题卡 `Q-DOMAIN-EX16`。教练只呈现真实题干和选项；请给出完整的作答过程、理由和结论。
@@ -102,6 +134,14 @@ status: prepared
 ---
 
 ## Block reflection（必做）
+
+### Node State
+
+- Kind: reflection
+- Required: true
+- Status: pending
+- Depends on: assessment-02
+- Uses:
 
 ### Student View
 

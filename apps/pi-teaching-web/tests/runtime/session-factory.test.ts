@@ -1,7 +1,25 @@
 import { expect, test } from 'bun:test';
+import { Agent } from '@earendil-works/pi-agent-core';
 import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { roleToolNames } from '../../src/runtime/session-factory';
+
+test('keeps the Pi coding-agent and agent-core constructor contract aligned', () => {
+  const LegacyAgent = Agent as unknown as new (options: {
+    streamFunction: () => never;
+  }) => Agent;
+
+  expect(() => new LegacyAgent({
+    streamFunction: () => { throw new Error('not invoked during construction'); },
+  })).not.toThrow();
+
+  const codingAgentEntry = Bun.resolveSync('@earendil-works/pi-coding-agent', import.meta.dir);
+  const coreEntry = Bun.resolveSync('@earendil-works/pi-agent-core', dirname(codingAgentEntry));
+  const corePackage = JSON.parse(readFileSync(join(dirname(coreEntry), '../package.json'), 'utf8')) as {
+    version: string;
+  };
+  expect(corePackage.version).toBe('0.81.0');
+});
 
 const resources = join(import.meta.dir, '../../resources');
 

@@ -17,7 +17,7 @@ function block(name: string) {
 
 function studentView(name: string) {
   const match = block(name).match(
-    /^### Student View\n\n([\s\S]*?)(?=\n### Teacher Control)/,
+    /^### Student View\n\n([\s\S]*?)(?=\n### Teacher Control)/m,
   );
   expect(match).not.toBeNull();
   return match![1]!;

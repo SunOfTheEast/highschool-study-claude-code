@@ -53,7 +53,7 @@ function nodeState(source: string): {
   dependsOn: string[];
   uses: string[];
 } {
-  const field = (name: string) => new RegExp(`^- ${name}:\\s*(.*?)\\s*$`, 'm').exec(source)?.[1]?.trim();
+  const field = (name: string) => new RegExp(`^- ${name}:[ \\t]*(.*?)[ \\t]*$`, 'm').exec(source)?.[1]?.trim();
   const kind = field('Kind');
   const status = field('Status');
   return {

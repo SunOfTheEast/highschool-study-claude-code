@@ -2,7 +2,7 @@ import type { ImageContent } from '@earendil-works/pi-ai';
 import type { Server } from 'bun';
 import { randomUUID } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { dirname, extname } from 'node:path';
+import { dirname, extname, join } from 'node:path';
 import { resolveInsideRoot } from 'highschool-study-markdown/study-domain';
 import { projectSessionEvent } from '../projection/projector';
 import type { WorkspaceRegistry } from '../runtime/workspace-registry';
@@ -16,6 +16,7 @@ import type { EventHub } from './event-hub';
 export type AppDependencies = {
   root: string;
   authoring: boolean;
+  staticRoot?: string;
   registry: WorkspaceRegistry;
   hub: EventHub;
   readLearningSet?: typeof readLearningSet;
@@ -187,6 +188,16 @@ export function createRequestHandler(deps?: AppDependencies) {
     }
 
     if (url.pathname === '/events' && server?.upgrade(request)) return;
+    if (deps.staticRoot && request.method === 'GET') {
+      const asset = url.pathname.startsWith('/assets/') ? url.pathname.slice(1) : null;
+      const shell = url.pathname === '/'
+        || (!url.pathname.startsWith('/api/') && !url.pathname.includes('.'));
+      const path = asset ?? (shell ? 'index.html' : null);
+      if (path) {
+        const file = Bun.file(join(deps.staticRoot, path));
+        if (await file.exists()) return new Response(file);
+      }
+    }
     return new Response('Not found', { status: 404 });
   };
 }

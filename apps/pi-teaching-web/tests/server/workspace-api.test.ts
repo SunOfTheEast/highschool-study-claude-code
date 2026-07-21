@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { createRequestHandler } from '../../src/server/app';
@@ -136,4 +136,23 @@ test('keeps persona selection scoped to the requested Session', async () => {
     body: JSON.stringify({ id: 'energetic-classmate' }),
   }));
   expect(await changed!.json()).toMatchObject({ id: 'energetic-classmate' });
+});
+
+test('serves the built client shell for local browser routes', async () => {
+  const staticRoot = mkdtempSync(join(tmpdir(), 'studyforge-static-'));
+  try {
+    writeFileSync(join(staticRoot, 'index.html'), '<main>StudyForge shell</main>');
+    const handler = createRequestHandler({
+      root: '/tmp/demo',
+      authoring: false,
+      staticRoot,
+      hub: new EventHub(),
+      registry: {} as never,
+    });
+    const response = await handler(new Request('http://local/plan/domain-integrity'));
+    expect(response!.status).toBe(200);
+    expect(await response!.text()).toContain('StudyForge shell');
+  } finally {
+    rmSync(staticRoot, { recursive: true, force: true });
+  }
 });

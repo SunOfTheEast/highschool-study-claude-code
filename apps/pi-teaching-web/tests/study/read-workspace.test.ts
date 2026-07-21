@@ -21,4 +21,13 @@ test('reads the derivative Roadmap and Plan lesson index', () => {
     'orientation', 'assessment-01', 'repair-optional', 'assessment-02', 'reflection',
   ]);
   expect(workspace.lessons[2]?.blocks[1]?.studentView).toContain('Q-DOMAIN-EX22');
+  expect(workspace.lessons[2]?.blocks.map(({ id, kind, required, dependsOn, uses }) => ({
+    id, kind, required, dependsOn, uses,
+  }))).toEqual([
+    { id: 'orientation', kind: 'dialogue', required: true, dependsOn: [], uses: [] },
+    { id: 'assessment-01', kind: 'problem', required: true, dependsOn: ['orientation'], uses: ['Q-DOMAIN-EX22'] },
+    { id: 'repair-optional', kind: 'problem', required: false, dependsOn: ['assessment-01'], uses: ['Q-DOMAIN-EX05'] },
+    { id: 'assessment-02', kind: 'problem', required: true, dependsOn: ['assessment-01'], uses: ['Q-DOMAIN-EX16'] },
+    { id: 'reflection', kind: 'reflection', required: true, dependsOn: ['assessment-02'], uses: [] },
+  ]);
 });

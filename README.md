@@ -9,6 +9,7 @@
 - 完整的[中文说明书](docs/zh-CN/完整说明书.md)；
 - 含 519 张导数题卡的[公开试用学习集](examples/derivative-demo/README.md)；
 - 已确认的[中英文设计稿与实施计划](docs/design/)。
+- 基于 Pi 的本地教学前端：Plan 级 Coach、Lesson 级 Tutor、结构化课堂本、证据回溯与人设主题。
 
 ## 一分钟安装
 
@@ -62,6 +63,19 @@ claude
 ```
 
 试用集包含全部 519 张迁移题卡和知识图谱，但不包含原教材 PNG、整书文本或旧 StudyForge 快照。公开课堂记录已经去标识化。
+
+## Pi 教学前端
+
+```bash
+cd apps/pi-teaching-web
+bun install
+bun run check
+pi install "$PWD"
+cd ../../examples/derivative-demo
+pi
+```
+
+进入 Pi 后运行 `/study-web`。浏览器会显示一个 Plan 级 Coach 父会话及其 Lesson 级 Tutor 子会话；未开始的 Lesson 只展示无剧透课堂本。完整安装、开发与真实模型 smoke 步骤见 [Pi 教学前端说明](apps/pi-teaching-web/README.md)。
 
 ## 学习集概述与展示人设
 
