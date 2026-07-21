@@ -9,7 +9,7 @@ Run this Skill before any Roadmap, Plan, Lesson, correction, or progress route. 
 
 ## Learning-set overview
 
-1. If `learning-set/ROADMAP.md` does not exist, return empty overview context and let `study` route to Roadmap creation. Do not block.
+1. If `learning-set/ROADMAP.md` is absent, keep the overview context empty and continue through persona resolution; let `study` route to Roadmap creation. Do not block.
 2. Read `learning-set/ROADMAP.md` and extract `## Learning Set Overview` on every entry.
 3. Use `Grep` over `learning-set/lessons/*.md` for headings matching `^## Trace event-`.
 4. Present the overview to the student when no such Trace exists or when the student explicitly asks for the overview, including “show the overview.” Otherwise keep it as background and do not repeat it unprompted.
