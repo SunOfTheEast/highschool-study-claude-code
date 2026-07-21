@@ -24,7 +24,12 @@ export function TaskRail({
         const running = workflow.tasks.filter((task) => task.status === 'running').length;
         const active = workflow.status === 'proposed' || workflow.status === 'running';
         return (
-          <details className="workflow" data-status={workflow.status} open={active} key={workflow.id}>
+          <details
+            className="workflow"
+            data-status={workflow.status}
+            open={active || workflow.status === 'cancelled'}
+            key={workflow.id}
+          >
             <summary className="workflow-summary">
               <span>{workflow.mode === 'quick' ? 'Quick' : 'Deep'}</span>
               <strong>{workflow.goal}</strong>

@@ -163,6 +163,8 @@ Coach 可以动态组合证据检索、学情分析、课堂设计、防剧透�
 
 单个临时任务失败不会拖垮整个工作流。取消时保留已经完成的运行结果，但不会自动修改 Lesson、Trace 或画像。
 
+本地首版不自动续跑中断任务。服务重启后，原先处于 running 的工作流会恢复为终态：已有完成分支时记为 partial，否则记为 failed；未完成任务记为 cancelled。父 Agent 可以根据保留结果重新提出工作流，自动 resume、retry 和 checkpoint migration 留到分发阶段再设计。
+
 ## 记忆如何进入不同 Session
 
 Pi 可以加载 `AGENTS.md` / `CLAUDE.md`、按需 Skills、持久 Session 和自动上下文压缩。前端再使用独立 ResourceLoader，为两个 Agent 提供不同的记忆入口：
