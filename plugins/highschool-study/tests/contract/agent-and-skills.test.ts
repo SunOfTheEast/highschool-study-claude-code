@@ -279,3 +279,23 @@ test('prepares from a template and role slots before searching cards', () => {
     'Never use an external video to solve the target before its first attempt',
   );
 });
+
+test('projects only Student View and enforces reveal modes', () => {
+  const run = read('skills/run-lesson/SKILL.md');
+
+  expectInOrder(run, [
+    'Read the shared `reveal-policy.md`',
+    "project only the current block's `### Student View`",
+    'For `zero`',
+    'For `ladder`',
+    'For `worked-example`',
+    'call `trace_append`',
+  ]);
+  expect(run).toContain('Never dump the whole Lesson');
+  expect(run).toContain('never quote or paraphrase `### Teacher Control`');
+  expect(run).toContain('one level in one student-approved turn');
+  expect(run).toContain('use a different unseen card');
+  expect(run).toContain('Task completion is not capability attainment');
+  expect(toolList(run, 'allowed-tools')).not.toContain('WebSearch');
+  expect(toolList(run, 'allowed-tools')).not.toContain('WebFetch');
+});
