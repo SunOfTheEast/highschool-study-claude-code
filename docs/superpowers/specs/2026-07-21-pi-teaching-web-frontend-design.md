@@ -1,6 +1,6 @@
 # Pi 教学 Web 前端设计
 
-状态：已确认，等待实施计划
+状态：父子 Session 修订已确认，等待文档复核
 
 日期：2026-07-21
 
@@ -15,16 +15,18 @@ Highschool Study 增加一个由 Pi 启动的本地 Web 前端。前端不是通
 本设计只保留两个 Agent：
 
 - Coach Agent：每个 Plan 一个持久 Session，负责方向讨论、课后复盘、进度解释和备课；备课是 Coach 按需加载的 Skill，不再单设 Designer Agent 或 Designer Session。
-- Tutor Agent：每个 Lesson 一个持久 Session，只负责当前 Lesson 的多轮教学、课堂节点推进和 Trace 记录。
+- Tutor Agent：每个正式开始的 Lesson 一个持久 Session，只负责当前 Lesson 的多轮教学、课堂节点推进和 Trace 记录；尚未开始的 Lesson 先作为侧边栏子节点存在。
 
-学生使用同一个聊天界面，前端根据阶段在 Coach Session 和 Tutor Session 之间自动切换。两个 Session 不复制彼此的聊天记录，只通过 learning set 文件交接。
+每个 Plan 在界面中表现为一个会话工作区：Coach Session 是根会话，Plan 的 `Lesson Index` 中每个 Lesson 是一个可进入的 Tutor 子会话。学生在同一个聊天外壳的侧边栏点击 Coach 或 Lesson 即可切换；结束 Lesson 后默认回到 Coach，也可以随时主动返回。这里的“父子”只表示 Plan 归属和导航关系，不表示上下文继承。Coach/Tutor 不复制彼此的聊天记录，只通过 learning set 文件和带来源的摘要交接。
 
 ## 二、目标与非目标
 
 ### 2.1 首版目标
 
 - 从当前 learning set 展示学习集概述、Roadmap、Plan 和继续学习入口。
-- 在一个连续界面中完成 Coach 讨论、备课、无剧透预览、Tutor 上课和课后复盘。
+- 在一个 Plan 会话工作区中完成 Coach 讨论、备课、无剧透预览、Lesson 子会话上课和课后复盘。
+- 从 Plan 侧边栏查看全部 Lesson，并在 Coach 根会话与各 Tutor 子会话之间切换。
+- 支持开课前原地修改 Lesson；Lesson 一旦开始，重新备课必须创建新的 Lesson 子会话并保留旧记录。
 - 使用结构化组件呈现题目、材料、视频、阶段、输入请求、工具状态和课堂节点，避免页面退化成消息瀑布。
 - 使用 `lessons/<lesson-id>.md` 同时保存课前课堂结构和课中实际节点状态。
 - 支持文本、LaTeX、粘贴或上传手写解题图片。
@@ -51,8 +53,9 @@ Highschool Study 增加一个由 Pi 启动的本地 Web 前端。前端不是通
 flowchart LR
     Browser["本地 Web 前端"] <-->|"HTTP + WebSocket"| Server["Study Web 本地服务"]
     Server --> Projector["Study Event Projector"]
-    Server --> Coach["Coach AgentSession\n每个 Plan 一个"]
-    Server --> Tutor["Tutor AgentSession\n每个 Lesson 一个"]
+    Server --> Workspace["Plan Session Workspace"]
+    Workspace --> Coach["Coach 根 AgentSession\n每个 Plan 一个"]
+    Workspace --> Tutor["Tutor 子 AgentSession\n每个 Lesson 一个"]
     Coach --> Skills["召回、备课、复盘 Skills"]
     Tutor --> Teaching["上课、关闭课程 Skills"]
     Coach <--> Files["Markdown learning set"]
@@ -68,12 +71,12 @@ flowchart LR
 
 本地服务承担四项职责：
 
-1. 创建、恢复、暂停和释放 Coach/Tutor `AgentSession`；
-2. 把浏览器输入发送给当前活动 Session；
+1. 从 Plan `Lesson Index` 建立 Coach 根节点和 Lesson 子节点，并创建、恢复、暂停或释放对应 `AgentSession`；
+2. 维护当前选中的会话，把浏览器输入只发送给该 Session；
 3. 把 Pi 事件、Lesson 变化和教学工具结果确定性映射为 `StudyViewEvent`；
 4. 为学生模式和开发者模式生成不同的数据投影。
 
-它不拥有学习数据库，不复制 Roadmap、Plan、Lesson、Trace 或长期记忆。
+它不拥有学习数据库，不复制 Roadmap、Plan、Lesson、Trace 或长期记忆。父子关系由 Plan、Lesson 和 runtime Session 绑定推导，不新增会话树数据库，也不向 Pi transcript 写入另一 Session 的历史。
 
 ## 四、Agent 与 Session 生命周期
 
@@ -87,7 +90,9 @@ Coach 是学生的学习管理入口，职责包括：
 - 搜索真实题卡、读取绑定 Trace，并写出下一份 Lesson；
 - 在 Plan 完成后运行长期记忆聚合和学生确认流程。
 
-Coach Session 以 Plan 为生命周期。Plan frontmatter 可以保存可选的 `coach_session`；Lesson frontmatter 可以保存可选的 `tutor_session`。这两个字段属于 runtime authority，只能由本地服务绑定真实 Pi Session ID，模型不得填写或猜测。标识缺失或失效时，新建对应 Session 并从 Markdown 恢复，不把 Session 当成学习事实。
+Coach Session 以 Plan 为生命周期，也是该 Plan 会话工作区的根节点。Plan frontmatter 可以保存可选的 `coach_session`；Lesson frontmatter 可以保存可选的 `tutor_session`。这两个字段属于 runtime authority，只能由本地服务绑定真实 Pi Session ID，模型不得填写或猜测。标识缺失或失效时，新建对应 Session 并从 Markdown 恢复，不把 Session 当成学习事实。
+
+Plan 的 `Lesson Index` 决定侧边栏 Lesson 子节点的成员和顺序；目标 Lesson frontmatter 的 `status` 决定状态显示，索引行中的说明文字不作为第二份状态。Lesson 的 `plan_id` 用于反向校验归属。服务不持久化额外的 `parent_session_id`。Coach 可以在任何未关闭的 Plan 中继续备课，并向索引追加新的 Lesson。
 
 ### 4.2 备课是 Coach Skill
 
@@ -95,7 +100,7 @@ Coach Session 以 Plan 为生命周期。Plan frontmatter 可以保存可选的 
 
 1. 复盘上一课并与学生确认下一课方向；
 2. 读取备课所需的记忆、题卡、Trace、图谱和材料；
-3. 写入带 ActivityBlock 的 `lesson-xxx.md`；
+3. 新建或修改尚未开课、带 ActivityBlock 的 `lesson-xxx.md`；
 4. 向学生只展示无剧透的课堂结构与安排理由；
 5. 等待学生主动开始课程。
 
@@ -103,7 +108,7 @@ Coach 可以看到备课答案和 Teacher Control，但它不承担课堂教学�
 
 ### 4.3 Tutor Agent
 
-Tutor Session 与一个 Lesson 一一绑定。它：
+Tutor Session 与一个 Lesson 一一绑定，并作为所属 Plan 下的逻辑子会话。Tutor 不继承 Coach transcript。待开始 Lesson 的侧边栏节点可以先于 Session 存在；学生首次点击“开始上课”时，服务才创建并绑定 Tutor Session。它：
 
 - 读取当前 Lesson、两份确认画像和直接来源；
 - 一次只呈现当前 ActivityBlock 的 Student View；
@@ -112,9 +117,42 @@ Tutor Session 与一个 Lesson 一一绑定。它：
 - 在学生请求暂停或结束时立即执行相应流程；
 - 学生确认结束后写入 Reflection 与 Lesson Summary，并关闭 Session。
 
-暂停的 Lesson 保留 Tutor Session。正常关闭的 Tutor runtime 可以释放；Pi Session 文件仍可用于审计和恢复。
+暂停的 Lesson 保留 Tutor Session。正常关闭的 Tutor runtime 可以释放；Pi Session 文件仍可用于审计和恢复。`closed` 或 `abandoned` Lesson 的侧边栏节点只用于查看与回放，不再接收新的课堂消息。
 
-### 4.4 Session 交接
+### 4.4 Plan 会话工作区与导航
+
+一个 Plan 工作区固定包含一个 Coach 根节点，并按 `Lesson Index` 顺序展示全部 Lesson 子节点：
+
+```text
+定义域完整性 Plan
+├── Coach
+├── Lesson 001 · 已完成
+├── Lesson 002 · 已暂停
+├── Lesson 003 · 已中止
+└── Lesson 004 · 待开始
+```
+
+- 点击 Coach：恢复原 Plan Coach Session；若当前 Tutor 正在课堂中，则在当前回复结束后把 Lesson 置为 `paused`，不关闭也不复制 transcript。
+- 点击 `prepared` Lesson：展示无剧透摘要；学生明确开始后才创建或恢复 Tutor Session。
+- 点击 `active` 或 `paused` Lesson：恢复对应 Tutor Session 和课堂节点。
+- 点击 `closed` 或 `abandoned` Lesson：进入只读回放，不重新激活 Tutor。
+- 同一时刻只有当前选中的 Coach 或 Tutor Session 接收学生输入；其他 Session 可以持久存在，但不会后台继续生成。
+
+前端在 Lesson 正常关闭后默认把焦点返回 Coach。除此之外，导航权始终在学生手里，而不是由模型决定切换哪个 Agent。
+
+### 4.5 重新备课
+
+重新备课仍由原 Coach Session 加载同一备课 Skill，不创建 Designer Session，也不更换 Coach：
+
+1. Lesson 仍为 `prepared`，且 Tutor 尚未正式开始时，Coach 可以原地修改同一 `lesson-xxx.md`；侧边栏条目和 Lesson ID 不变。
+2. 一旦学生正式开始 Tutor Session，课前方案、课堂消息、节点状态和 Trace 就形成同一份历史。此后不得用新教案覆盖该 Lesson。
+3. 学生返回 Coach 请求重新备课时，原 Lesson 标记为 `abandoned`，停止接受新的课堂写入；已有 Session、作答、节点和 Trace 全部保留。
+4. Coach 使用新的 Lesson ID 写出重备版本，并把它追加到当前 Plan 的 `Lesson Index`。新条目处于 `prepared`，首次进入时创建新的 Tutor Session。
+5. 新 Lesson 的安全说明以普通 Markdown 链接指出它接替哪一课及重备原因；首版不增加版本表或 `parent_lesson_id` 数据模型。
+
+“正式开始”的边界是服务接受学生的“开始上课”命令，并在调用 Tutor 前把状态从 `prepared` 改为 `active`。只打开无剧透预览不锁定 Lesson，仍可原地修改。
+
+### 4.6 Session 交接
 
 ```mermaid
 sequenceDiagram
@@ -127,7 +165,7 @@ sequenceDiagram
     Coach->>Coach: 加载备课 Skill
     Coach->>Lesson: 写入课堂节点与安全摘要
     Coach-->>Student: 展示无剧透备课摘要
-    Student->>Tutor: 点击开始上课
+    Student->>Tutor: 从侧边栏点击 Lesson 并开始上课
     Tutor->>Lesson: 按节点教学并追加 Trace
     Student->>Tutor: 确认结束课程
     Tutor->>Lesson: 写入课后摘要并关闭
@@ -136,7 +174,7 @@ sequenceDiagram
     Coach-->>Student: 继续复盘
 ```
 
-Tutor 不接收 Coach transcript；Coach 恢复时也不接收 Tutor transcript。交接消息只包含真实 Lesson 路径、状态和“请读取相应摘要”的指令。
+Tutor 不接收 Coach transcript；Coach 恢复时也不接收 Tutor transcript。交接消息只包含真实 Lesson 路径、状态和“请读取相应摘要”的指令。侧边栏可以把这些 Session 排在同一棵树里，但这只是 UI 投影，不会把消息数组合并后发给模型。
 
 ## 五、Pi 的记忆承载方式
 
@@ -241,9 +279,11 @@ Web runtime 另外给 Tutor 注册一个不对外发布的 `classroom_update` �
 
 应用从一个 learning set 目录启动，因此首版不建设多学习集书架或文件管理器。
 
-### 6.2 统一对话页
+### 6.2 Plan 会话页
 
-Coach、备课进度和 Tutor 课堂使用同一页面外壳。顶部状态显示：
+Coach、备课进度和 Tutor 课堂使用同一页面外壳。左侧是当前 Plan 的会话树：Coach 固定为根节点，其下按 `Lesson Index` 展示每个 Lesson 的标题和 `待开始 / 进行中 / 已暂停 / 已完成 / 已中止` 状态。点击节点只改变当前路由和输入目标，不合并 Session 历史。
+
+顶部状态显示：
 
 - 规划中；
 - 备课中；
@@ -252,7 +292,7 @@ Coach、备课进度和 Tutor 课堂使用同一页面外壳。顶部状态显�
 - 已暂停；
 - 复盘中。
 
-学生无需选择 Agent。前端根据状态切换底层 Session，同时保持统一的人设、视觉语言和输入框。
+学生不需要理解 Agent 配置，但可以像切换章节一样选择 Coach 或 Lesson。页面保持统一的人设、视觉语言和输入框；输入框上方始终显示当前接收消息的节点，避免把复盘内容误发给 Tutor 或把课堂作答误发给 Coach。
 
 主区域采用对话流。结构化题目和材料作为消息流中的专用组件呈现；课堂节点抽屉提供可跳转的结构化回看，防止长课变成无法导航的消息瀑布。节点抽屉同时显示当前有效路线；节点插入、跳过、重排或重复时以动画更新，并展示学生安全的变更理由。
 
@@ -346,7 +386,7 @@ Coach、备课进度和 Tutor 课堂使用同一页面外壳。顶部状态显�
 - `Teacher Control`：教学目标、揭示策略、卡片步骤和提示，只供 Coach、Tutor 与开发者视图读取；
 - `Evidence`：只保存 Trace 链接，不复制 Trace 的观察、评价或纵向结论。
 
-Lesson 自身状态继续使用 `prepared | active | paused | closed`。一个 Lesson 最多有一个 `active` Block；关闭的 Lesson 不得保留活动 Block。
+Lesson 自身状态使用 `prepared | active | paused | closed | abandoned`。`abandoned` 表示该课堂在开始后被中止并由新 Lesson 接替；其历史与 Trace 保留，但不能继续写入。一个 Lesson 最多有一个 `active` Block；`closed` 或 `abandoned` Lesson 不得保留活动 Block。
 
 进度百分比、时间线文案、节点摘要和当前导航都由上述事实投影，不写成另一套状态。
 
@@ -413,23 +453,33 @@ Tutor 通过 session-local `classroom_update` 提交动作、真实 Block 别名
 1. Pi 包中的启动命令以当前目录寻找 `learning-set/`；
 2. 本地服务验证必要目录和文件；
 3. 浏览器打开当前学习集首页；
-4. 服务从 Plan 的 Session 标识恢复 Coach，失败时新建并通过 Markdown 召回。
+4. 服务从 Plan 的 Session 标识恢复 Coach，失败时新建并通过 Markdown 召回；
+5. 服务读取 Plan `Lesson Index`，生成 Coach 根节点与 Lesson 子节点，并按最近活动位置选中一个节点。
 
 ### 10.2 备课和开课
 
 1. 学生与 Coach 完成上一课复盘和下一课方向确认；
 2. Coach 加载备课 Skill，并更新备课状态事件；
 3. Coach 写出完整 Lesson；
-4. 服务解析 Lesson，仅向学生返回安全摘要和节点标题；
-5. 学生点击开始上课后，服务创建或恢复该 Lesson 的 Tutor Session；
+4. Coach 把 Lesson 追加到当前 Plan 的 `Lesson Index`；服务解析 Lesson，仅向学生返回安全摘要和节点标题；
+5. 侧边栏出现新的 `prepared` Lesson；学生点击并明确开始上课后，服务创建和绑定该 Lesson 的 Tutor Session；
 6. Tutor 每次只推进一个 ActivityBlock。
 
 ### 10.3 暂停、恢复与关闭
 
-- 暂停：Lesson 写为 `paused`，保留当前节点和 Tutor Session；
-- 恢复：先展示暂停点和剩余节点，学生再次明确选择后才继续；
+- 返回 Coach：当前 Tutor 回合结束后把 Lesson 写为 `paused`，保留当前节点和 Tutor Session；
+- 恢复：学生从侧边栏再次点击该 Lesson，先展示暂停点和剩余节点，明确选择后才继续；
 - 关闭：必须由学生确认，Tutor 写入 Reflection、Lesson Summary 和最终节点状态；
-- 返回：服务恢复原 Coach Session，并要求它从 Lesson 摘要开始复盘。
+- 关闭后返回：服务默认选中原 Coach Session，并要求它从 Lesson 摘要开始复盘；
+- 查看历史：`closed` 和 `abandoned` 子节点进入只读回放，不重新启动 Tutor。
+
+### 10.4 重新备课
+
+1. 学生从当前 Lesson 返回所属 Plan 的 Coach 根会话；
+2. 如果 Lesson 尚未开始，Coach 直接修改原文件，服务重新生成安全预览；
+3. 如果 Lesson 已经开始，服务先把原 Lesson 写为 `abandoned` 并冻结其课堂写入；
+4. Coach 加载备课 Skill，写出使用新 ID 的 Lesson，并在 `Lesson Index` 中追加新条目；
+5. 旧条目继续提供回放，新条目等待学生点击开始，二者不复用 Tutor Session。
 
 ## 十一、技术组成
 
@@ -452,7 +502,7 @@ Tutor 通过 session-local `classroom_update` 提交动作、真实 Block 别名
 
 1. **Pi 没有可用模型或凭据**：显示配置提示，不创建 Session；
 2. **learning set 缺少必要文件**：列出真实缺失项，不猜测或自动生成学习事实；
-3. **Lesson 节点无法解析**：停止开课并返回 Coach 修复，不把完整文件降级展示给学生；
+3. **Lesson 节点无法解析**：停止开课并返回 Coach 修复；尚未开课时原地修复，已经开课时创建新 Lesson，不把完整文件降级展示给学生；
 4. **模型或连接中断**：保留 Lesson、输入草稿和 Session，允许重连后继续；
 5. **没有合适题卡或来源**：展示真实空结果，让 Coach 缩减、替换材料或重新讨论目标，绝不编卡。
 
@@ -468,6 +518,10 @@ Tutor 通过 session-local `classroom_update` 提交动作、真实 Block 别名
 - Coach/Tutor 的 ResourceLoader 只加载各自允许的角色上下文、Skills 和记忆入口；
 - `CLAUDE.local.md` 与选中人设按显式 override 注入，未选择的人设不进入上下文；
 - Coach/Tutor Session 创建、暂停、恢复、关闭和 handoff 正确；
+- Plan 会话树严格按 `Lesson Index` 投影，Coach 为唯一根节点，每个 Lesson 只绑定自己的 Tutor Session；
+- 切换侧边栏节点后，学生输入只进入当前选中的 Session，Coach/Tutor transcript 不互相复制；
+- `prepared` Lesson 重备时保留 ID 并原地更新；接受“开始上课”命令后重备则把旧 Lesson 标记为 `abandoned`、保留 Trace，并创建新 Lesson/Tutor Session；
+- `closed` 与 `abandoned` 子节点只能回放，不能继续追加课堂消息或 Trace；
 - 上传图片能保存到真实相对路径，并作为 Pi image content 发送；
 - 刷新后可由 Session JSONL 与 Markdown 重建课堂界面；
 - 题卡搜索空结果不会产生虚构题目或路径。
@@ -481,18 +535,20 @@ Tutor 通过 session-local `classroom_update` 提交动作、真实 Block 别名
 
 使用仓库中的导数学习集完成一次真实模型流程：
 
-1. 打开学习集并恢复当前 Plan；
+1. 打开学习集并恢复当前 Plan，侧边栏显示 Coach 根节点和已有 Lesson 子节点；
 2. Coach 复盘并加载备课 Skill；
 3. 生成包含多个课堂节点的下一课；
-4. 学生查看无剧透摘要并开始上课；
-5. Tutor 呈现真实题卡，接收文本、LaTeX 和手写图片；
-6. 完成至少一个证据活动并写入 Trace；
-7. 刷新页面，确认节点、消息和证据仍可恢复；
-8. 产生一次带来源的路线调整，并观察路线动画；
-9. 写入 Trace 后观察能力星图变化，并从节点下钻到原始证据；
-10. 学生主动结束，返回原 Coach Session 完成复盘；
-11. 打开课后回放，定位路线改变、手写图片与能力变化；
-12. 切换人设主题，确认教学内容和证据保持不变。
+4. 学生查看无剧透摘要；开课前让 Coach 原地调整一次安排，确认 Lesson ID 和侧边栏条目不变；
+5. 学生点击该 Lesson，确认输入被路由到独立 Tutor Session 并开始上课；
+6. Tutor 呈现真实题卡，接收文本、LaTeX 和手写图片；
+7. 完成至少一个证据活动并写入 Trace；
+8. 返回 Coach 请求重新备课，确认旧 Lesson 变为 `abandoned`、旧证据仍可回放，新 Lesson 使用新 ID 和新 Tutor Session；
+9. 进入新 Lesson，刷新页面，确认侧边栏、节点、消息和证据仍可恢复；
+10. 产生一次带来源的路线调整，并观察路线动画；
+11. 写入 Trace 后观察能力星图变化，并从节点下钻到原始证据；
+12. 学生主动结束，默认返回原 Coach Session 完成复盘；
+13. 打开课后回放，定位路线改变、手写图片与能力变化；
+14. 切换人设主题，确认教学内容和证据保持不变。
 
 ### 13.3 首版成功标准
 
@@ -598,7 +654,7 @@ Roadmap 能力标准
 
 五项功能不增加新的顶级导航：
 
-| 功能 | 学习集首页 | 统一对话页 | 备课本 |
+| 功能 | 学习集首页 | Plan 会话页 | 备课本 |
 |---|---|---|---|
 | 能力星图 | Plan 总览 | 当前局部子图 | 课前/课后对比 |
 | 动态课堂路线 | 最近 Lesson 摘要 | 实时节点抽屉 | 初始/实际路线对照 |
@@ -612,8 +668,8 @@ Roadmap 能力标准
 
 完整设计按依赖关系拆成五个可独立验收的切片，避免同时铺开所有界面：
 
-1. **Pi runtime 与安全投影**：Coach/Tutor Session、ResourceLoader、原生四工具和 Student/Teacher DTO；
-2. **课堂核心界面**：三个页面、结构化事件、Lesson 节点、文本/LaTeX/图片输入和基础恢复；
+1. **Pi runtime 与安全投影**：Plan 父子 Session 工作区、Coach/Tutor ResourceLoader、原生四工具和 Student/Teacher DTO；
+2. **课堂核心界面**：三个页面、Plan 会话侧边栏、结构化事件、Lesson 节点、重备课、文本/LaTeX/图片输入和基础恢复；
 3. **证据可视化**：主次方法聚合、实时能力星图和证据透镜；
 4. **课堂时序**：Route Changes、动态路线和课后学习回放；
 5. **展示层收口**：二次元主题、轻量动画、完整导数学习集 E2E 与演示脚本。
