@@ -38,6 +38,12 @@ export STUDY_LEARNING_SET=/path/to/project/learning-set
 
 不存在 `study_context_get`。召回由原生文件读取与这四个窄工具共同完成。
 
+## Learning Set Overview 与展示人设
+
+没有课堂 Trace 时，`study` 会展示 `ROADMAP.md` 的 Learning Set Overview；已有 Trace 时，只有学生要求才展开这份概述。
+
+学习集可以在 `.claude/personas/<id>.md` 添加专属人设，或用同名文件覆盖内置人设。临时人设选择不写文件；持久选择写入 Git 忽略的 `CLAUDE.local.md`。人设只改变面向学生的表达，绝不改变能力判断、题卡、Trace、测试或备课。
+
 ## 七类召回及顺序
 
 `recall-study-memory` 按以下顺序工作：

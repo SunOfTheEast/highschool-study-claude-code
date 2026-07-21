@@ -63,6 +63,12 @@ claude
 
 试用集包含全部 519 张迁移题卡和知识图谱，但不包含原教材 PNG、整书文本或旧 StudyForge 快照。公开课堂记录已经去标识化。
 
+## 学习集概述与展示人设
+
+没有课堂 Trace 时，`study` 会展示 `ROADMAP.md` 的 Learning Set Overview；已有 Trace 时，只有用户要求才展开这份概述。
+
+学习集可以在 `.claude/personas/<id>.md` 添加专属人设，或用同名文件覆盖内置人设。临时切换不写文件；持久选择写入 Git 忽略的 `CLAUDE.local.md`。人设只改变面向学生的表达，绝不改变能力判断、题卡、Trace、测试或备课。
+
 ## 核心结构
 
 ```text
