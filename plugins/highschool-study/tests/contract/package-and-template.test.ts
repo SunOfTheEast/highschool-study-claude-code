@@ -28,3 +28,29 @@ test('ships a bundled MCP entrypoint for marketplace installs', () => {
   });
   expect(existsSync(join(root, 'dist/mcp-server.js'))).toBe(true);
 });
+
+test('ships the learning-set orientation envelope', () => {
+  for (const path of [
+    'learning-set-template/CLAUDE.md',
+    'learning-set-template/.gitignore',
+    'learning-set-template/.claude/personas/.gitkeep',
+  ]) expect(existsSync(join(root, path))).toBe(true);
+
+  const roadmap = readFileSync(
+    join(root, 'learning-set-template/ROADMAP.md'), 'utf8',
+  );
+  const instructions = readFileSync(
+    join(root, 'learning-set-template/CLAUDE.md'), 'utf8',
+  );
+  const ignore = readFileSync(
+    join(root, 'learning-set-template/.gitignore'), 'utf8',
+  );
+
+  expect(roadmap).toContain('## Learning Set Overview');
+  expect(roadmap).toContain('- What this teaches:');
+  expect(instructions).toContain(
+    '- Default presentation persona: `neutral-tutor`',
+  );
+  expect(instructions).toContain('presentation only');
+  expect(ignore.split(/\r?\n/)).toContain('CLAUDE.local.md');
+});
