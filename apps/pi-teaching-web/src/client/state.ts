@@ -3,6 +3,7 @@ import type {
   PlanWorkspaceSnapshot,
   SessionKey,
   StudyViewEvent,
+  WorkflowView,
 } from '../shared/contracts';
 
 export type ClientState = {
@@ -11,6 +12,8 @@ export type ClientState = {
   messages: Partial<Record<SessionKey, ChatMessage[]>>;
   work: Partial<Record<SessionKey, string>>;
   errors: Partial<Record<SessionKey, string>>;
+  deepMode: Partial<Record<SessionKey, boolean>>;
+  workflows: Partial<Record<SessionKey, WorkflowView[]>>;
 };
 
 export const initialClientState: ClientState = {
@@ -19,6 +22,8 @@ export const initialClientState: ClientState = {
   messages: {},
   work: {},
   errors: {},
+  deepMode: {},
+  workflows: {},
 };
 
 export function reduceClientState(state: ClientState, event: StudyViewEvent): ClientState {
@@ -64,6 +69,20 @@ export function reduceClientState(state: ClientState, event: StudyViewEvent): Cl
       work: {
         ...state.work,
         [event.sessionKey]: event.status === 'running' ? event.label : '',
+      },
+    };
+  }
+  if (event.type === 'workflow') {
+    const current = state.workflows[event.sessionKey] ?? [];
+    return {
+      ...state,
+      workflows: {
+        ...state.workflows,
+        [event.sessionKey]: current.some((workflow) => workflow.id === event.workflow.id)
+          ? current.map((workflow) => (
+            workflow.id === event.workflow.id ? event.workflow : workflow
+          ))
+          : [...current, event.workflow],
       },
     };
   }

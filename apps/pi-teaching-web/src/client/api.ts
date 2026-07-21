@@ -8,6 +8,7 @@ import type {
   PlanWorkspaceSnapshot,
   SessionKey,
   StudentNotebook,
+  WorkflowView,
 } from '../shared/contracts';
 
 async function json<T>(input: RequestInfo | URL, init?: RequestInit): Promise<T> {
@@ -37,6 +38,29 @@ export const api = {
   ),
   history: (key: SessionKey) => (
     json<ChatMessage[]>(`/api/sessions/${encodeURIComponent(key)}/history`)
+  ),
+  deep: (key: SessionKey) => (
+    json<{ enabled: boolean; workflows: WorkflowView[] }>(
+      `/api/sessions/${encodeURIComponent(key)}/deep`,
+    )
+  ),
+  setDeep: (key: SessionKey, enabled: boolean) => (
+    json<{ enabled: boolean; workflows: WorkflowView[] }>(
+      `/api/sessions/${encodeURIComponent(key)}/deep`,
+      {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ enabled }),
+      },
+    )
+  ),
+  workflowAction: (
+    key: SessionKey,
+    id: string,
+    action: 'confirm' | 'cancel',
+  ) => json<WorkflowView>(
+    `/api/sessions/${encodeURIComponent(key)}/workflows/${encodeURIComponent(id)}/${action}`,
+    { method: 'POST' },
   ),
   notebook: (lessonId: string) => (
     json<StudentNotebook>(`/api/lessons/${encodeURIComponent(lessonId)}/notebook`)

@@ -105,6 +105,31 @@ export function App() {
     return client.workspace.lessons.find((lesson) => lesson.sessionKey === client.selected) ?? null;
   }, [client.selected, client.workspace]);
 
+  const workflowSessionOpen = Boolean(
+    client.selected?.startsWith('coach:')
+    || selectedLesson?.status === 'active'
+    || selectedLesson?.status === 'paused',
+  );
+
+  useEffect(() => {
+    let current = true;
+    const selected = client.selected;
+    if (!selected || !workflowSessionOpen) return () => { current = false; };
+    void api.deep(selected)
+      .then((value) => {
+        if (!current) return;
+        setClient((state) => ({
+          ...state,
+          deepMode: { ...state.deepMode, [selected]: value.enabled },
+          workflows: { ...state.workflows, [selected]: value.workflows },
+        }));
+      })
+      .catch(() => {
+        if (current) setPageError('无法读取当前 Session 的深度模式。');
+      });
+    return () => { current = false; };
+  }, [client.selected, workflowSessionOpen]);
+
   useEffect(() => {
     let current = true;
     setNotebook(null);
@@ -216,6 +241,38 @@ export function App() {
     }
   };
 
+  const changeDeepMode = async (enabled: boolean) => {
+    if (!client.selected) return;
+    const selected = client.selected;
+    setPageError(null);
+    try {
+      const value = await api.setDeep(selected, enabled);
+      setClient((current) => ({
+        ...current,
+        deepMode: { ...current.deepMode, [selected]: value.enabled },
+        workflows: { ...current.workflows, [selected]: value.workflows },
+      }));
+    } catch {
+      setPageError('切换深度模式失败。');
+    }
+  };
+
+  const actOnWorkflow = async (id: string, action: 'confirm' | 'cancel') => {
+    if (!client.selected) return;
+    const selected = client.selected;
+    setPageError(null);
+    try {
+      const workflow = await api.workflowAction(selected, id, action);
+      setClient((current) => reduceClientState(current, {
+        type: 'workflow',
+        sessionKey: selected,
+        workflow,
+      }));
+    } catch {
+      setPageError(action === 'confirm' ? '无法启动这个工作流。' : '无法取消这个工作流。');
+    }
+  };
+
   const goHome = () => {
     setClient(initialClientState);
     setEvidence(null);
@@ -296,9 +353,14 @@ export function App() {
           composerEnabled={composerEnabled}
           {...(selectedLesson ? { lessonId: selectedLesson.id } : {})}
           persona={persona}
+          deepMode={client.deepMode[selected] ?? false}
+          workflows={client.workflows[selected] ?? []}
+          workflowControlsEnabled={workflowSessionOpen}
           gate={gate}
           onSend={send}
           onPersona={changePersona}
+          onDeepMode={changeDeepMode}
+          onWorkflowAction={actOnWorkflow}
         />
         {isCoach
           ? <AbilityMap value={abilities} onOpen={(source) => void openEvidence(source)} />

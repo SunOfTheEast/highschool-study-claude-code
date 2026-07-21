@@ -1,7 +1,14 @@
 import { useState, type ChangeEvent, type ReactNode } from 'react';
-import type { ChatMessage, PersonaPresentation, SessionKey } from '../../shared/contracts';
+import type {
+  ChatMessage,
+  PersonaPresentation,
+  SessionKey,
+  WorkflowView,
+} from '../../shared/contracts';
 import { api } from '../api';
+import { DeepModeToggle } from './DeepModeToggle';
 import { MarkdownView } from './MarkdownView';
+import { TaskRail } from './TaskRail';
 
 type ComposerImage = { id: string; name: string; preview: string; path?: string };
 
@@ -13,9 +20,14 @@ export function ChatPanel({
   composerEnabled,
   lessonId,
   persona,
+  deepMode,
+  workflows,
+  workflowControlsEnabled,
   gate,
   onSend,
   onPersona,
+  onDeepMode,
+  onWorkflowAction,
 }: {
   sessionKey: SessionKey;
   messages: ChatMessage[];
@@ -24,9 +36,14 @@ export function ChatPanel({
   composerEnabled: boolean;
   lessonId?: string;
   persona: PersonaPresentation | null;
+  deepMode: boolean;
+  workflows: WorkflowView[];
+  workflowControlsEnabled: boolean;
   gate: ReactNode;
   onSend(text: string, imagePaths: string[]): Promise<void>;
   onPersona(id: string): Promise<void>;
+  onDeepMode(enabled: boolean): Promise<void>;
+  onWorkflowAction(id: string, action: 'confirm' | 'cancel'): Promise<void>;
 }) {
   const [text, setText] = useState('');
   const [images, setImages] = useState<ComposerImage[]>([]);
@@ -72,6 +89,9 @@ export function ChatPanel({
       <header className="chat-header">
         <span>当前输入只发送到</span>
         <strong>{sessionKey}</strong>
+        {workflowControlsEnabled && (
+          <DeepModeToggle enabled={deepMode} onChange={onDeepMode} />
+        )}
         <span className="persona-avatar" aria-hidden="true">
           {persona?.id === 'calm-senpai' ? '静' : persona?.id === 'energetic-classmate' ? '元' : '教'}
         </span>
@@ -90,6 +110,10 @@ export function ChatPanel({
         </label>
         <i className={composerEnabled ? 'live' : ''}>{composerEnabled ? '可对话' : '仅预览'}</i>
       </header>
+
+      {workflowControlsEnabled && (
+        <TaskRail workflows={workflows} onAction={onWorkflowAction} />
+      )}
 
       <div className="timeline">
         {gate}
