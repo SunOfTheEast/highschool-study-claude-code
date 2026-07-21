@@ -1,0 +1,77 @@
+import type {
+  ChatMessage,
+  PlanWorkspaceSnapshot,
+  SessionKey,
+  StudyViewEvent,
+} from '../shared/contracts';
+
+export type ClientState = {
+  workspace: PlanWorkspaceSnapshot | null;
+  selected: SessionKey | null;
+  messages: Partial<Record<SessionKey, ChatMessage[]>>;
+  work: Partial<Record<SessionKey, string>>;
+  errors: Partial<Record<SessionKey, string>>;
+};
+
+export const initialClientState: ClientState = {
+  workspace: null,
+  selected: null,
+  messages: {},
+  work: {},
+  errors: {},
+};
+
+export function reduceClientState(state: ClientState, event: StudyViewEvent): ClientState {
+  if (event.type === 'snapshot') return { ...state, workspace: event.workspace };
+  if (event.type === 'message-delta') {
+    const messages = [...(state.messages[event.sessionKey] ?? [])];
+    const index = messages.findIndex((message) => message.id === event.messageId);
+    if (index < 0) {
+      messages.push({
+        id: event.messageId,
+        role: event.sessionKey.startsWith('coach:') ? 'coach' : 'tutor',
+        text: event.delta,
+        complete: false,
+      });
+    } else {
+      messages[index] = {
+        ...messages[index]!,
+        text: messages[index]!.text + event.delta,
+      };
+    }
+    return {
+      ...state,
+      messages: { ...state.messages, [event.sessionKey]: messages },
+    };
+  }
+  if (event.type === 'message') {
+    const current = state.messages[event.sessionKey] ?? [];
+    return {
+      ...state,
+      messages: {
+        ...state.messages,
+        [event.sessionKey]: current.some((message) => message.id === event.message.id)
+          ? current.map((message) => (
+            message.id === event.message.id ? event.message : message
+          ))
+          : [...current, event.message],
+      },
+    };
+  }
+  if (event.type === 'work-status') {
+    return {
+      ...state,
+      work: {
+        ...state.work,
+        [event.sessionKey]: event.status === 'running' ? event.label : '',
+      },
+    };
+  }
+  if (event.type === 'session-error') {
+    return {
+      ...state,
+      errors: { ...state.errors, [event.sessionKey]: event.message },
+    };
+  }
+  return state;
+}
