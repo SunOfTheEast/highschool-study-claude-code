@@ -48,7 +48,7 @@
 
 ---
 
-### 任务 1：加入课堂模板目录与共享揭示策略
+### Task 1：加入课堂模板目录与共享揭示策略
 
 **文件：**
 
@@ -243,7 +243,7 @@ git commit -m "feat: add adaptive classroom templates"
 
 ---
 
-### 任务 2：让备课先选模板和题目槽位，再检索多张真实卡
+### Task 2：让备课先选模板和题目槽位，再检索多张真实卡
 
 **文件：**
 
@@ -385,7 +385,7 @@ git commit -m "feat: prepare multi-problem adaptive lessons"
 
 ---
 
-### 任务 3：让课堂只投影 Student View 并执行分级揭示
+### Task 3：让课堂只投影 Student View 并执行分级揭示
 
 **文件：**
 
@@ -477,7 +477,7 @@ git commit -m "feat: enforce lesson reveal boundaries"
 
 ---
 
-### 任务 4：把导数 Lesson 003 改成多题、防剧透回归样例
+### Task 4：把导数 Lesson 003 改成多题、防剧透回归样例
 
 **文件：**
 
@@ -714,7 +714,7 @@ git commit -m "test: add multi-card anti-spoiler lesson"
 
 ---
 
-### 任务 5：补充说明并完成两项功能的合并验收
+### Task 5：补充说明并完成两项功能的合并验收
 
 **文件：**
 
