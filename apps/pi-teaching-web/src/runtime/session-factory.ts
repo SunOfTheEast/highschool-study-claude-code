@@ -1,11 +1,17 @@
 import type { ImageContent } from '@earendil-works/pi-ai';
 import {
   createAgentSession,
+  createEventBus,
   ModelRuntime,
   SessionManager,
   type AgentSessionEvent,
   type ToolDefinition,
 } from '@earendil-works/pi-coding-agent';
+import type { SessionKey } from '../shared/contracts';
+import type { WorkflowSnapshot } from '../workflows/contracts';
+import { DeepWorkflowRuntime } from '../workflows/runtime';
+import { WorkflowStore } from '../workflows/store';
+import { createDeepWorkflowTool } from '../workflows/tool';
 import { createClassroomUpdateTool } from './classroom-update';
 import { createRoleResourceLoader, type SessionRole } from './resource-loader';
 import { createStudyTools } from './study-tools';
@@ -17,6 +23,12 @@ export interface StudySession {
   readonly isStreaming: boolean;
   personaId(): string | null;
   setPersona(id: string, content: string): Promise<void>;
+  deepModeEnabled(): boolean;
+  setDeepMode(enabled: boolean): void;
+  workflows(): WorkflowSnapshot[];
+  confirmWorkflow(id: string): Promise<WorkflowSnapshot>;
+  cancelWorkflow(id: string): void;
+  subscribeWorkflows(listener: (snapshot: WorkflowSnapshot) => void): () => void;
   prompt(text: string, images?: ImageContent[]): Promise<void>;
   abort(): Promise<void>;
   subscribe(listener: (event: AgentSessionEvent) => void): () => void;
@@ -30,6 +42,11 @@ export type SessionFactoryInput = {
 };
 
 export type StudySessionFactory = (input: SessionFactoryInput) => Promise<StudySession>;
+
+export function deepModeToolNames(current: string[], enabled: boolean): string[] {
+  const names = current.filter((name) => name !== 'deep_workflow_propose');
+  return enabled ? [...names, 'deep_workflow_propose'] : names;
+}
 
 export function roleToolNames(role: SessionRole): string[] {
   return role === 'coach'
@@ -63,16 +80,26 @@ export async function createPiSessionFactory(
 ): Promise<StudySessionFactory> {
   const modelRuntime = await ModelRuntime.create();
   return async ({ role, ownerId, sessionFile }) => {
+    const eventBus = createEventBus();
     const manager = sessionFile
       ? SessionManager.open(sessionFile, undefined, root)
       : SessionManager.create(root);
     if (!sessionFile) {
       manager.appendSessionInfo(`${role === 'coach' ? 'Coach' : 'Tutor'} · ${ownerId}`);
     }
-    const loader = await createRoleResourceLoader(root, role, ownerId);
+    const sessionKey = `${role}:${ownerId}` as SessionKey;
+    const workflowRuntime = new DeepWorkflowRuntime(
+      sessionKey,
+      root,
+      eventBus,
+      new WorkflowStore(manager),
+      now,
+    );
+    const loader = await createRoleResourceLoader(root, role, ownerId, eventBus);
     const tools: ToolDefinition[] = [
       ...createStudyTools(root, now),
       ...(role === 'tutor' ? [createClassroomUpdateTool(root)] : []),
+      createDeepWorkflowTool(workflowRuntime),
     ];
     const { session } = await createAgentSession({
       cwd: root,
@@ -81,6 +108,26 @@ export async function createPiSessionFactory(
       sessionManager: manager,
       customTools: tools,
       tools: roleToolNames(role),
+    });
+    const applyDeepMode = (enabled: boolean, persist: boolean) => {
+      if (persist) workflowRuntime.setEnabled(enabled);
+      session.setActiveToolsByName(deepModeToolNames(session.getActiveToolNames(), enabled));
+    };
+    applyDeepMode(workflowRuntime.enabled(), false);
+    workflowRuntime.setSynthesisSink(async (workflow) => {
+      await session.sendCustomMessage({
+        customType: 'studyforge.workflow-result.v1',
+        content: JSON.stringify({
+          workflowId: workflow.id,
+          goal: workflow.goal,
+          results: workflow.tasks.filter((task) => task.result).map((task) => ({
+            taskId: task.id,
+            role: task.role,
+            result: task.result,
+          })),
+        }),
+        display: false,
+      }, { triggerTurn: true });
     });
     return {
       get sessionId() {
@@ -108,6 +155,12 @@ export async function createPiSessionFactory(
           display: false,
         }, { triggerTurn: false });
       },
+      deepModeEnabled: () => workflowRuntime.enabled(),
+      setDeepMode: (enabled) => applyDeepMode(enabled, true),
+      workflows: () => workflowRuntime.list(),
+      confirmWorkflow: (id) => workflowRuntime.confirm(id),
+      cancelWorkflow: (id) => workflowRuntime.cancel(id),
+      subscribeWorkflows: (listener) => workflowRuntime.subscribe(listener),
       prompt: (text, images = []) => session.prompt(text, { images }),
       abort: () => session.abort(),
       subscribe: (listener) => session.subscribe(listener),

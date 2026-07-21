@@ -1,7 +1,11 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { DefaultResourceLoader, getAgentDir } from '@earendil-works/pi-coding-agent';
+import {
+  DefaultResourceLoader,
+  getAgentDir,
+  type EventBus,
+} from '@earendil-works/pi-coding-agent';
 import { resolvePersona } from '../study/persona';
 
 export type SessionRole = 'coach' | 'tutor';
@@ -12,6 +16,7 @@ export async function createRoleResourceLoader(
   root: string,
   role: SessionRole,
   ownerId: string,
+  eventBus: EventBus,
 ) {
   const skillName = role === 'coach' ? 'coach-study' : 'tutor-lesson';
   const skillPath = join(resourceRoot, 'skills', skillName, 'SKILL.md');
@@ -20,6 +25,8 @@ export async function createRoleResourceLoader(
   const loader = new DefaultResourceLoader({
     cwd: root,
     agentDir: getAgentDir(),
+    eventBus,
+    additionalExtensionPaths: [fileURLToPath(import.meta.resolve('pi-subagents'))],
     additionalSkillPaths: [skillPath],
     agentsFilesOverride: (current) => ({
       agentsFiles: [

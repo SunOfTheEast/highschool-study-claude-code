@@ -19,6 +19,17 @@ function fixture() {
   return root;
 }
 
+function idleWorkflowMethods() {
+  return {
+    deepModeEnabled: () => false,
+    setDeepMode: () => {},
+    workflows: () => [],
+    confirmWorkflow: async () => { throw new Error('WORKFLOW_NOT_FOUND'); },
+    cancelWorkflow: () => {},
+    subscribeWorkflows: () => () => {},
+  };
+}
+
 test('creates Coach eagerly and Tutor only after start', async () => {
   const created: string[] = [];
   const factory: StudySessionFactory = async ({ role, ownerId }) => {
@@ -30,6 +41,7 @@ test('creates Coach eagerly and Tutor only after start', async () => {
       isStreaming: false,
       personaId: () => null,
       setPersona: async () => {},
+      ...idleWorkflowMethods(),
       prompt: async () => {},
       abort: async () => {},
       subscribe: () => () => {},
@@ -55,6 +67,7 @@ test('abandons an already-started Lesson before asking Coach to reprepare', asyn
     isStreaming: false,
     personaId: () => null,
     setPersona: async () => {},
+    ...idleWorkflowMethods(),
     prompt: async () => {},
     abort: async () => {},
     subscribe: () => () => {},
@@ -78,6 +91,7 @@ test('keeps Coach and Tutor persona overrides independent across reopening', asy
       isStreaming: false,
       personaId: () => selected.get(owner) ?? null,
       setPersona: async (id) => { selected.set(owner, id); },
+      ...idleWorkflowMethods(),
       prompt: async () => {},
       abort: async () => {},
       subscribe: () => () => {},
@@ -98,4 +112,40 @@ test('keeps Coach and Tutor persona overrides independent across reopening', asy
   await reopened.openTutor('lesson-003');
   expect(reopened.personaId('coach:domain-integrity')).toBe('energetic-classmate');
   expect(reopened.personaId('tutor:lesson-003')).toBe('neutral-tutor');
+});
+
+test('keeps deep mode scoped and refuses to open a prepared Tutor', async () => {
+  const root = fixture();
+  const enabled = new Map<string, boolean>();
+  const factory: StudySessionFactory = async ({ role, ownerId }) => {
+    const key = `${role}:${ownerId}`;
+    return {
+      sessionId: `${role}-${ownerId}`,
+      sessionFile: `/tmp/${role}-${ownerId}.jsonl`,
+      messages: [],
+      isStreaming: false,
+      personaId: () => null,
+      setPersona: async () => {},
+      deepModeEnabled: () => enabled.get(key) ?? false,
+      setDeepMode: (value) => { enabled.set(key, value); },
+      workflows: () => [],
+      confirmWorkflow: async () => { throw new Error('WORKFLOW_NOT_FOUND'); },
+      cancelWorkflow: () => {},
+      subscribeWorkflows: () => () => {},
+      prompt: async () => {},
+      abort: async () => {},
+      subscribe: () => () => {},
+      dispose: () => {},
+    };
+  };
+  const registry = new WorkspaceRegistry(root, factory, async () => null);
+  await registry.setDeepMode('coach:domain-integrity', true);
+  expect(await registry.deepMode('coach:domain-integrity')).toBe(true);
+  await expect(registry.setDeepMode('tutor:lesson-003', true)).rejects.toThrow('LESSON_NOT_OPEN');
+
+  await registry.startLesson('lesson-003');
+  await registry.setDeepMode('tutor:lesson-003', true);
+  await registry.setDeepMode('coach:domain-integrity', false);
+  expect(await registry.deepMode('coach:domain-integrity')).toBe(false);
+  expect(await registry.deepMode('tutor:lesson-003')).toBe(true);
 });

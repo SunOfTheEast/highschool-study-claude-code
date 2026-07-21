@@ -1,5 +1,6 @@
 import type { ImageContent } from '@earendil-works/pi-ai';
 import type { ChatMessage, PlanWorkspaceSnapshot, SessionKey } from '../shared/contracts';
+import type { WorkflowSnapshot } from '../workflows/contracts';
 import { readLearningSet, readPlanWorkspace } from '../study/read-workspace';
 import { setFrontmatterField } from '../study/write-workspace';
 import { resolvePersona } from '../study/persona';
@@ -82,10 +83,28 @@ export class WorkspaceRegistry {
   }
 
   async send(key: SessionKey, text: string, images: ImageContent[] = []): Promise<void> {
-    const session = key.startsWith('coach:')
-      ? await this.openCoach(key.slice(6))
-      : await this.openTutor(key.slice(6));
+    const session = await this.openSession(key);
     await session.prompt(text, images);
+  }
+
+  async setDeepMode(key: SessionKey, enabled: boolean): Promise<void> {
+    (await this.openSession(key)).setDeepMode(enabled);
+  }
+
+  async deepMode(key: SessionKey): Promise<boolean> {
+    return (await this.openSession(key)).deepModeEnabled();
+  }
+
+  async workflows(key: SessionKey): Promise<WorkflowSnapshot[]> {
+    return (await this.openSession(key)).workflows();
+  }
+
+  async confirmWorkflow(key: SessionKey, id: string): Promise<WorkflowSnapshot> {
+    return (await this.openSession(key)).confirmWorkflow(id);
+  }
+
+  async cancelWorkflow(key: SessionKey, id: string): Promise<void> {
+    (await this.openSession(key)).cancelWorkflow(id);
   }
 
   async pauseLesson(lessonId: string): Promise<void> {
@@ -173,6 +192,15 @@ export class WorkspaceRegistry {
     return session.subscribe(listener);
   }
 
+  subscribeWorkflows(
+    key: SessionKey,
+    listener: Parameters<StudySession['subscribeWorkflows']>[0],
+  ): () => void {
+    const session = this.sessions.get(key);
+    if (!session) throw new Error(`SESSION_NOT_OPEN: ${key}`);
+    return session.subscribeWorkflows(listener);
+  }
+
   get(key: SessionKey): StudySession | undefined {
     return this.sessions.get(key);
   }
@@ -180,5 +208,11 @@ export class WorkspaceRegistry {
   dispose(): void {
     for (const session of this.sessions.values()) session.dispose();
     this.sessions.clear();
+  }
+
+  private openSession(key: SessionKey): Promise<StudySession> {
+    return key.startsWith('coach:')
+      ? this.openCoach(key.slice(6))
+      : this.openTutor(key.slice(6));
   }
 }

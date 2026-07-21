@@ -2,7 +2,7 @@ import { expect, test } from 'bun:test';
 import { Agent } from '@earendil-works/pi-agent-core';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { roleToolNames } from '../../src/runtime/session-factory';
+import { deepModeToolNames, roleToolNames } from '../../src/runtime/session-factory';
 
 test('keeps the Pi coding-agent and agent-core constructor contract aligned', () => {
   const LegacyAgent = Agent as unknown as new (options: {
@@ -48,4 +48,19 @@ test('keeps Coach and Tutor tool boundaries distinct', () => {
   ]);
   expect(readFileSync(join(resources, 'agents/coach.md'), 'utf8')).toContain('one Plan');
   expect(readFileSync(join(resources, 'agents/tutor.md'), 'utf8')).toContain('one Lesson');
+  for (const role of ['coach', 'tutor'] as const) {
+    expect(roleToolNames(role)).not.toContain('subagent');
+    expect(roleToolNames(role)).not.toContain('deep_workflow_propose');
+  }
+});
+
+test('adds only the workflow proposal tool while deep mode is enabled', () => {
+  const ordinary = ['read', 'card_search'];
+  expect(deepModeToolNames(ordinary, true)).toEqual([
+    'read',
+    'card_search',
+    'deep_workflow_propose',
+  ]);
+  expect(deepModeToolNames([...ordinary, 'deep_workflow_propose'], false)).toEqual(ordinary);
+  expect(deepModeToolNames(ordinary, true)).not.toContain('subagent');
 });
