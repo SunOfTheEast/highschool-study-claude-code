@@ -1,0 +1,168 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0019_ex09
+content_revision_id: mst_p0019_ex09-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0019_ex09.card.yaml
+stem: |-
+  (2024 金凤区三模 T8) 若函数 $f(x)=x^2\ln x+ax$ 存在减区间，则 $a$ 的取值范围为 ( )
+  A. $(\mathrm{e}^{-\frac32},+\infty)$
+  B. $(2\mathrm{e}^{-\frac32},+\infty)$
+  C. $(-\infty,\mathrm{e}^{-\frac32})$
+  D. $(-\infty,2\mathrm{e}^{-\frac32})$
+answer: |-
+  D. $(-\infty,2\mathrm{e}^{-\frac32})$
+
+  函数定义域为 $x>0$。由 $f'(x)=2x\ln x+x+a$，存在减区间等价于 $f'(x)<0$ 对某个 $x>0$ 有解，即 $a<-2x\ln x-x$ 有解。将右端化为 $-\frac{2}{\sqrt e}(\sqrt e x\ln(\sqrt e x))$。令 $u=\sqrt e x$， 因 $u\ln u$ 的最小值为 $-1/e$，右端最大值为 $2e^{-3/2}$，故 $a<2e^{-3/2}$，选 D。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把存在减区间转为导数小于 0 有解。
+      max_score: 1
+    - step_id: step_2
+      description: 分离参数，得到 a 必须小于某个可变上界。
+      max_score: 1
+    - step_id: step_3
+      description: 把右端同构成 $u\ln u$。
+      max_score: 1
+    - step_id: step_4
+      description: 由最大门槛确定开区间。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 参变量分离
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - x ln x 同构
+      - 存在减区间转导数负值有解
+      - 负倍数取最值方向反转
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $-2x(\ln x+1/2)$ 被配成 $-\frac2{\sqrt e}u\ln u$。
+      - 存在性让参数边界来自右端函数的最大值，且端点不取。
+    normalization_moves_used:
+      - 导数负值有解：存在减区间转为 $f'(x)<0$ 有解。
+      - 对数合并：$\ln x+\frac12=\ln(\sqrt e x)$。
+      - 换元：$u=\sqrt e x$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生把“存在减区间”误判成 $f'(x)\le0$ 恒成立，回补导数单调极值基础。
+      - 若学生不会把 $\ln x+\frac12$ 化成 $\ln(\sqrt e x)$，回补指数对数基础。
+      - 若学生在 $-2x\ln(\sqrt e x)$ 化为 $-\frac2{\sqrt e}u\ln u$ 时系数丢失，回补代数恒等变形。
+      - 若学生不知道 $u\ln u$ 在 $u=1/e$ 处取最小值 $-1/e$，回补导数单调极值基础。
+  detail_terms:
+    - x^2 ln x + ax
+    - exists decreasing interval
+    - a<-2xlnx-x
+    - u ln u minimum
+    - 2e^{-3/2}
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0019_ex09
+source_evidence:
+  source_refs:
+    - ref_id: page_0019_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0019/page_0019.md
+      role: problem_start
+      evidence: page_0019 例 9 给出 f(x)=x^2 ln x+ax 存在减区间，求 a 的取值范围，并列出 A-D。
+    - ref_id: page_0019_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0019/page_0019.md
+      role: solution
+      evidence: 同页解析由 f'(x)<0 有解，得 a<-2xln x-x，并同构为 (-2/sqrt(e))·sqrt(e)x ln(sqrt(e)x)，最大值为 2e^{-3/2}，选 D。
+    - ref_id: page_0018_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0018/page_0018.md
+      role: local_context
+      evidence: page_0018 前文六大函数模型包含 x ln x 的极小值结构，是本题同构求最大值的来源。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0019.png
+      inspected: true
+      notes: 核对例 9 题干、选项中的 e^{-3/2} 与 2e^{-3/2}、解析同构式和答案 D。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0018.png
+      inspected: true
+      notes: 核对前页本节函数模型上下文。
+  source_context: 本题用“存在减区间”把参数条件变成导函数小于 0 有解，再求右端函数的上确界。
+  source_influence:
+    - 存在性条件决定不取全区间恒成立，而是求右端可达到的最大门槛。
+    - 同构重点不是 ln x/x，而是把 $-2x(\ln x+1/2)$ 配成负倍数的 $u\ln u$。
+  source_discrepancies: []
+original_problem:
+  stem: (2024 金凤区三模 T8) 若函数 $f(x)=x^2\ln x+ax$ 存在减区间，则 $a$ 的取值范围为 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text: $(\mathrm{e}^{-\frac32},+\infty)$
+    - label: B
+      text: $(2\mathrm{e}^{-\frac32},+\infty)$
+    - label: C
+      text: $(-\infty,\mathrm{e}^{-\frac32})$
+    - label: D
+      text: $(-\infty,2\mathrm{e}^{-\frac32})$
+  answer: D. $(-\infty,2\mathrm{e}^{-\frac32})$
+  fidelity_notes:
+    - 题头、题干和完整解析均在 page_0019。
+    - 源图与 markdown 对 $2\mathrm{e}^{-3/2}$ 和开区间端点一致。
+solution:
+  source_solution_summary: 函数定义域为 $x>0$。由 $f'(x)=2x\ln x+x+a$，存在减区间等价于 $f'(x)<0$ 对某个 $x>0$ 有解，即 $a<-2x\ln x-x$ 有解。将右端化为 $-\frac{2}{\sqrt e}(\sqrt e x\ln(\sqrt e x))$。令 $u=\sqrt e x$， 因 $u\ln u$ 的最小值为 $-1/e$，右端最大值为 $2e^{-3/2}$，故 $a<2e^{-3/2}$，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把存在减区间转为导数小于 0 有解。
+      formula_trace:
+        from: $f(x)=x^2\ln x+ax$
+        to: $f'(x)=2x\ln x+x+a,\quad f'(x)<0\ \text{有解}$
+        operation: 对 $x^2\ln x$ 和 $ax$ 求导，并使用减区间的导数判据。
+        why: 只要某处导数为负，就存在局部减区间。
+      source_ref: page_0019_solution
+    - step_id: step_2
+      statement: 分离参数，得到 a 必须小于某个可变上界。
+      formula_trace:
+        from: $2x\ln x+x+a<0$
+        to: $a<-2x\ln x-x=-2x\left(\ln x+\frac12\right)$
+        operation: 把 a 移到一边，并把 $x$ 合并为 $2x\cdot\frac12$。
+        why: 存在性问题转为求右端函数的最大可取值。
+      source_ref: page_0019_solution
+    - step_id: step_3
+      statement: 把右端同构成 $u\ln u$。
+      formula_trace:
+        from: $-2x\left(\ln x+\frac12\right)$
+        to: $-2x\ln(\sqrt e x)=-\frac2{\sqrt e}\left(\sqrt e x\ln(\sqrt e x)\right)$
+        operation: 用 $\ln x+\frac12=\ln(\sqrt e x)$，再令 $u=\sqrt e x$。
+        why: $u\ln u$ 的最小值是熟悉模型，乘负系数后给出最大值。
+      source_ref: page_0019_solution
+    - step_id: step_4
+      statement: 由最大门槛确定开区间。
+      formula_trace:
+        from: $\min_{u>0}u\ln u=-\frac1e$
+        to: $\max_{x>0}\left[-\frac2{\sqrt e}u\ln u\right]=\frac2{e^{3/2}},\quad a<2e^{-3/2}$
+        operation: 负倍数把最小值转为最大值；存在解要求 a 严格小于该最大值。
+        why: 当 a 等于最大门槛时，导数最小值为 0，不会出现 $f'(x)<0$ 的减区间。
+      source_ref: page_0019_solution
+teaching_card:
+  student_title: 存在减区间：让导数真的小于 0，再找参数门槛
+  what_it_trains: 训练把存在性条件转成导数负值有解，并把含 $\ln x+\frac12$ 的表达式同构到 $u\ln u$ 求临界值。
+  recognition_cues:
+    - 题干说“存在减区间”，不是“恒单调递减”。
+    - 求导后出现 $2x\ln x+x+a$，可以把 a 分离出来。
+    - 表达式 $\ln x+\frac12$ 暗示配成 $\ln(\sqrt e x)$。
+  normalization_moves:
+    - 先写 $f'(x)<0$ 有解。
+    - 把不等式变成 $a<-2x\ln x-x$。
+    - 把右端配成负倍数的 $u\ln u$，注意取最大值时用 $u\ln u$ 的最小值。
+  common_failures:
+    - 把边界写成 $a\le2e^{-3/2}$，忽略等号时没有负导数。
+    - 把 $u\ln u$ 的最小值误记为 $1/e$。
+    - 配系数时漏掉 $1/\sqrt e$，导致边界少一个 $e^{-1/2}$。
+  similar_practice_query: 存在减区间 参数范围 x^2lnx+ax ulnu 最值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0019 图像核对通过；开区间和 $2e^{-3/2}$ 已重点核对。

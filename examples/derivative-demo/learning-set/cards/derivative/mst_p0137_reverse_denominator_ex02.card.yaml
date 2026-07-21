@@ -1,0 +1,244 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0137_reverse_denominator_ex02
+content_revision_id: mst_p0137_reverse_denominator_ex02-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0137_reverse_denominator_ex02.card.yaml
+stem: |-
+  （2023 · 如东县期末 · 多选）定义在 $(0,+\infty)$ 上的函数 $f(x)$ 的导函数为 $f^{\prime}(x)$，且 $(x^2+x)f^{\prime}(x)<(3x+2)f(x)$ 恒成立，则必有（  ）
+  A. $f(3)>20f(1)$
+  B. $f(2)<6f(1)$
+  C. $3f(1)>16f\left(\frac{1}{2}\right)$
+  D. $f(3)<3f(2)$
+answer: |
+  BD
+
+  令
+  \[
+  g(x)=\frac{f(x)}{x^3+x^2},\quad x>0.
+  \]
+  则
+  \[
+  g^{\prime}(x)=
+  \frac{f^{\prime}(x)(x^3+x^2)-f(x)(3x^2+2x)}{(x^3+x^2)^2}.
+  \]
+  由题设
+  \[
+  (x^2+x)f^{\prime}(x)<(3x+2)f(x)
+  \]
+  两边同乘 $x(>0)$ 得
+  \[
+  f^{\prime}(x)(x^3+x^2)-f(x)(3x^2+2x)<0,
+  \]
+  故 $g^{\prime}(x)<0$，即 $g$ 在 $(0,+\infty)$ 单调递减。
+  因而
+  \[
+  g\left(\frac12\right)>g(1)>g(2)>g(3),
+  \]
+  即
+  \[
+  \frac{f(1/2)}{3/8}>\frac{f(1)}{2}>\frac{f(2)}{12}>\frac{f(3)}{36}.
+  \]
+  于是
+  \[
+  f(2)<6f(1),\quad f(3)<3f(2),
+  \]
+  得 B、D 正确。
+  同时由链可得 $f(3)<18f(1)$，故 A 错；
+  且 $3f(1)<16f(1/2)$，故 C 错。
+  所以选 BD。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把题设右侧系数对齐为 $(x^3+x^2)^{\prime}$。
+      max_score: 1
+    - step_id: step_2
+      description: 作商构造并判递减。
+      max_score: 1
+    - step_id: step_3
+      description: 建立 $x=\frac12,1,2,3$ 的分式链。
+      max_score: 1
+    - step_id: step_4
+      description: 直接得到 B 与 D。
+      max_score: 1
+    - step_id: step_5
+      description: 反证 A、C 方向。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 判定多项函数值比较命题真假
+        result: 见 source_solution_summary
+  method:
+    primary: 逆向构造法
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 分母反向锁定
+      - 作商判递减
+      - 固定点分式链
+  structure:
+    primary: 同构结构
+    secondary:
+      - 抽象函数结构
+      - 非齐次结构
+    evidence:
+      - $3x+2$ 与 $(x^2+x)$ 经乘 $x$ 后恰好对应 $(x^3+x^2)^{\prime}$。
+      - 题目本质是把导数不等式转成商函数单调。
+      - 所有选项均是 $\frac12,1,2,3$ 四点比较的代数化。
+    normalization_moves_used:
+      - 同乘 $x$ 凑导数模板。
+      - 构造 $g(x)=\frac{f(x)}{x^3+x^2}$。
+      - 用四点分式链统一判项。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $(3x+2)$ 识别成某分母导数，回补导数运算与几何意义。
+      - 若学生把“$g$ 递减”方向写反，回补导数单调极值基础。
+      - 若学生在同乘化简倍数时丢系数，回补代数恒等变形。
+  detail_terms:
+    - $g(x)=\frac{f(x)}{x^3+x^2}$
+    - $g^{\prime}(x)<0$
+    - $g\left(\frac12\right)>g(1)>g(2)>g(3)$
+    - $3f(1)<16f\left(\frac12\right)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0137_reverse_denominator_ex02
+source_evidence:
+  source_refs:
+    - ref_id: page_0137
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0137/page_0137.md
+      role: problem_start
+      evidence: "page_0137 lines 19-23: 例2题干与A-D选项。"
+    - ref_id: page_0137_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0137/page_0137.md
+      role: solution
+      evidence: "page_0137 line 25: 解析构造 $g(x)=\\frac{f(x)}{x^3+x^2}$，并给出选 BD。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0137.png
+      inspected: true
+      notes: 已核对原图，例2题干、解析、结论完整无缺。
+  source_context: page_0137 顶部先是例1续写，再进入例2新题头；本卡仅覆盖例2。
+  source_influence:
+    - 保留源解构造：$g(x)=\frac{f(x)}{x^3+x^2}$。
+    - 保留单调链：$g(\frac12)>g(1)>g(2)>g(3)$。
+    - 保留对 C 项方向反判：$3f(1)<16f(\frac12)$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 如东县期末 · 多选）定义在 $(0,+\infty)$ 上的函数 $f(x)$ 的导函数为 $f^{\prime}(x)$，且 $(x^2+x)f^{\prime}(x)<(3x+2)f(x)$ 恒成立，则必有（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(3)>20f(1)$
+      text_latex: $f(3)>20f(1)$
+    - label: B
+      text_raw: $f(2)<6f(1)$
+      text_latex: $f(2)<6f(1)$
+    - label: C
+      text_raw: $3f(1)>16f\left(\frac{1}{2}\right)$
+      text_latex: $3f(1)>16f\left(\frac{1}{2}\right)$
+    - label: D
+      text_raw: $f(3)<3f(2)$
+      text_latex: $f(3)<3f(2)$
+  answer: BD
+  fidelity_notes:
+    - 本题题头、解析均在同页完成，不跨页。
+solution:
+  source_solution_summary: |
+    令
+    \[
+    g(x)=\frac{f(x)}{x^3+x^2},\quad x>0.
+    \]
+    则
+    \[
+    g^{\prime}(x)=
+    \frac{f^{\prime}(x)(x^3+x^2)-f(x)(3x^2+2x)}{(x^3+x^2)^2}.
+    \]
+    由题设
+    \[
+    (x^2+x)f^{\prime}(x)<(3x+2)f(x)
+    \]
+    两边同乘 $x(>0)$ 得
+    \[
+    f^{\prime}(x)(x^3+x^2)-f(x)(3x^2+2x)<0,
+    \]
+    故 $g^{\prime}(x)<0$，即 $g$ 在 $(0,+\infty)$ 单调递减。
+    因而
+    \[
+    g\left(\frac12\right)>g(1)>g(2)>g(3),
+    \]
+    即
+    \[
+    \frac{f(1/2)}{3/8}>\frac{f(1)}{2}>\frac{f(2)}{12}>\frac{f(3)}{36}.
+    \]
+    于是
+    \[
+    f(2)<6f(1),\quad f(3)<3f(2),
+    \]
+    得 B、D 正确。
+    同时由链可得 $f(3)<18f(1)$，故 A 错；
+    且 $3f(1)<16f(1/2)$，故 C 错。
+    所以选 BD。
+  key_steps:
+    - step_id: step_1
+      statement: 把题设右侧系数对齐为 $(x^3+x^2)^{\prime}$。
+      formula_trace:
+        from: $(x^2+x)f^{\prime}(x)<(3x+2)f(x)$
+        to: $f^{\prime}(x)(x^3+x^2)-f(x)(3x^2+2x)<0$
+        operation: 两边同乘 $x>0$ 后移项。
+        why: 可直接识别为商函数导数分子。
+      source_ref: page_0137_solution
+    - step_id: step_2
+      statement: 作商构造并判递减。
+      formula_trace:
+        from: $g(x)=\frac{f(x)}{x^3+x^2}$
+        to: $g^{\prime}(x)<0$（$x>0$）
+        operation: 商求导并代入 step_1 的符号结论。
+        why: 建立四点比较链。
+      source_ref: page_0137_solution
+    - step_id: step_3
+      statement: 建立 $x=\frac12,1,2,3$ 的分式链。
+      formula_trace:
+        from: $g(\frac12)>g(1)>g(2)>g(3)$
+        to: $\frac{f(1/2)}{3/8}>\frac{f(1)}{2}>\frac{f(2)}{12}>\frac{f(3)}{36}$
+        operation: 逐点代入 $x^3+x^2$ 的值。
+        why: 统一判定四个选项。
+      source_ref: page_0137_solution
+    - step_id: step_4
+      statement: 直接得到 B 与 D。
+      formula_trace:
+        from: $\frac{f(1)}{2}>\frac{f(2)}{12}>\frac{f(3)}{36}$
+        to: $f(2)<6f(1)$，$f(3)<3f(2)$
+        operation: 同乘正常数。
+        why: 对应 B、D。
+      source_ref: page_0137_solution
+    - step_id: step_5
+      statement: 反证 A、C 方向。
+      formula_trace:
+        from: $\frac{f(1)}{2}>\frac{f(3)}{36}$ 与 $\frac{f(1/2)}{3/8}>\frac{f(1)}{2}$
+        to: $f(3)<18f(1)$，$3f(1)<16f(1/2)$
+        operation: 同乘并比较强弱关系。
+        why: A、C 不成立。
+      source_ref: page_0137_solution
+teaching_card:
+  student_title: 把 $(x^2+x)f^{\prime}$ 反构成 $\frac{f}{x^3+x^2}$ 的递减链
+  what_it_trains: 训练“凑分母导数-作商判单调-分式链判多选”的一体化流程。
+  recognition_cues:
+    - 题设出现 $(x^2+x)f^{\prime}(x)$ 与线性系数 $(3x+2)f(x)$。
+    - 选项全是固定点函数值的倍数比较。
+  normalization_moves:
+    - 先同乘 $x$ 对齐到 $x^3+x^2$。
+    - 作商并判 $g^{\prime}(x)<0$。
+    - 建立 $\frac12\to3$ 的比较链统一判项。
+  common_failures:
+    - 漏掉同乘 $x$ 这一步，直接硬套错误模板。
+    - 把 $g(\frac12)$ 的分母 $3/8$ 算错。
+    - 把 C 项方向抄成“>”而未核对链式结果。
+  similar_practice_query: 分式反构 x^3+x^2 作商递减 四点比较 如东期末
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

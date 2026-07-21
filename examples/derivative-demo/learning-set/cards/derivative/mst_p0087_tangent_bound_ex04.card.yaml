@@ -1,0 +1,175 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0087_tangent_bound_ex04
+content_revision_id: mst_p0087_tangent_bound_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0087_tangent_bound_ex04.card.yaml
+stem: |-
+  （2023 山西晋中名校高二月考 T7）已知过点 $A(a,0)$ 作曲线 $y=x\ln x$ 的切线有且仅有两条，则实数 $a$ 的取值范围为（  ）
+  A. $(0,+\infty)$
+  B. $(1,+\infty)$
+  C. $(\frac1e,+\infty)$
+  D. $(e,+\infty)$
+answer: |-
+  B
+
+  设切点为 $(x_0,x_0\ln x_0)$，其中 $x_0>0$。因为 $(x\ln x)'=\ln x+1$，过 $A(a,0)$ 的切线条件为 $-x_0\ln x_0=(\ln x_0+1)(a-x_0)$，整理得 $a=\frac{x_0}{1+\ln x_0}$。记 $T(x)=\frac{x}{1+\ln x}$。在 $(0,\frac1e)$ 上 $T(x)<0$， 对每个 $a<0$ 只有一个切点；在 $(\frac1e,1)$ 上 $T$ 从 $+\infty$ 降到 1，在 $(1,+\infty)$ 上 $T$ 从 1 增到 $+\infty$。因此 $0<a<1$ 无切线，$a=1$ 只有一条切线， $a>1$ 有两条切线。故选 B。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 设切点并写出过 $A(a,0)$ 的切线条件。
+      max_score: 1
+    - step_id: step_2
+      description: 把切线条数转成参数函数 $T(x)$ 的解数。
+      max_score: 1
+    - step_id: step_3
+      description: 分析 $T(x)$ 的单调性和边界。
+      max_score: 1
+    - step_id: step_4
+      description: 按 $a$ 的位置统计切点个数。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 数形结合
+      - 局部逼近与找点
+    subroute:
+      - 过点切线条数
+      - 切点参数化
+      - 切线参数函数计数
+      - 零点分区
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $a=\frac{x_0}{1+\ln x_0}$ 把过点切线条数变成参数函数解数。
+      - $T^{\prime}(x)=\frac{\ln x}{(1+\ln x)^2}$ 说明 $x=1$ 是正值区两支的共同最低边界。
+      - $a>1$ 时两支各有一个切点。
+    normalization_moves_used:
+      - 设切点 $x_0$，把定点 $A(a,0)$ 代入切线方程。
+      - 把切线条数转化为 $T(x)=a$ 的解数。
+      - 按 $x=1/e$ 和 $x=1$ 分区统计交点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会写 $y=x\ln x$ 的导数和切线，回补导数运算与几何意义。
+      - 若学生不会由切线方程整理出 $a=\frac{x_0}{1+\ln x_0}$，回补代数恒等变形。
+      - 若学生不能处理 $x=1/e$ 处分母为 0 的分区，回补指数对数基础。
+      - 若学生不会由 $T^{\prime}(x)$ 判断解数，回补导数单调极值基础。
+  detail_terms:
+    - $y=x\ln x$
+    - 过点 $A(a,0)$ 作两条切线
+    - $a=\frac{x_0}{1+\ln x_0}$
+    - $x=1/e$ 分界
+    - $a>1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0087_tangent_bound_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0087
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0087/page_0087.md
+      role: problem_start
+      evidence: page_0087 在例 3 答案之后新起头“例 4”，给出过点 $A(a,0)$ 作曲线 $y=x\ln x$ 的切线有且仅有两条、A-D 四个选项、图像示意、 完整解析和答案 B。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0087.png
+      inspected: true
+      notes: 已核对 page_0087 页图：例 4 题头、题干、四个选项、切线条数示意图、 解析和答案 B 均与 markdown 一致。
+  source_context: 本题位于“函数的切线界定”训练中，源解用图像说法按 $a<0$、 $0<a<1$、$a=1$、$a>1$ 分类。本卡保留图像结论，并补出切点参数函数 的解数来支撑边界 $a=1$。
+  source_influence:
+    - 源页的图像分类给出结论：$a>1$ 时有两条切线，$a=1$ 时一条，$0<a<1$ 时没有，$a<0$ 时一条。
+    - 卡片用切点参数 $a=\frac{x_0}{1+\ln x_0}$ 补足源图像分类的代数依据。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 山西晋中名校高二月考 T7）已知过点 $A(a,0)$ 作曲线 $y=x\ln x$ 的切线有且仅有两条，则实数 $a$ 的取值范围为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $(0,+\infty)$
+      text_latex: $(0,+\infty)$
+    - label: B
+      text_raw: $(1,+\infty)$
+      text_latex: $(1,+\infty)$
+    - label: C
+      text_raw: $(\frac1e,+\infty)$
+      text_latex: $\left(\frac1e,+\infty\right)$
+    - label: D
+      text_raw: $(e,+\infty)$
+      text_latex: $(e,+\infty)$
+  answer: B
+  fidelity_notes:
+    - 例 4 是单选题，题干、选项、解析和答案均在 page_0087。
+    - 源图为解析辅助图，展示 $a>1$ 时从 $(a,0)$ 可向 $y=x\ln x$ 作两条切线。
+solution:
+  source_solution_summary: 设切点为 $(x_0,x_0\ln x_0)$，其中 $x_0>0$。因为 $(x\ln x)'=\ln x+1$，过 $A(a,0)$ 的切线条件为 $-x_0\ln x_0=(\ln x_0+1)(a-x_0)$，整理得 $a=\frac{x_0}{1+\ln x_0}$。记 $T(x)=\frac{x}{1+\ln x}$。在 $(0,\frac1e)$ 上 $T(x)<0$， 对每个 $a<0$ 只有一个切点；在 $(\frac1e,1)$ 上 $T$ 从 $+\infty$ 降到 1，在 $(1,+\infty)$ 上 $T$ 从 1 增到 $+\infty$。因此 $0<a<1$ 无切线，$a=1$ 只有一条切线， $a>1$ 有两条切线。故选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 设切点并写出过 $A(a,0)$ 的切线条件。
+      formula_trace:
+        from: |
+          $f(x)=x\ln x,\qquad f'(x_0)=\ln x_0+1$
+        to: |
+          $0-x_0\ln x_0=(\ln x_0+1)(a-x_0)$
+        operation: 用切点 $(x_0,x_0\ln x_0)$ 写切线方程，再代入点 $A(a,0)$。
+        why: 从定点能作几条切线，等价于切点横坐标方程有几个正解。
+      source_ref: page_0087
+    - step_id: step_2
+      statement: 把切线条数转成参数函数 $T(x)$ 的解数。
+      formula_trace:
+        from: |
+          $-x_0\ln x_0=(\ln x_0+1)(a-x_0)$
+        to: |
+          $a=\frac{x_0}{1+\ln x_0}\quad (x_0>0,\ x_0\ne 1/e)$
+        operation: 展开并把含 $a$ 的项单独移到一侧。
+        why: 固定 $a$ 时，切线条数就是水平线 $y=a$ 与 $T(x)=\frac{x}{1+\ln x}$ 的交点数。
+      source_ref: page_0087
+    - step_id: step_3
+      statement: 分析 $T(x)$ 的单调性和边界。
+      formula_trace:
+        from: |
+          $T(x)=\frac{x}{1+\ln x}$
+        to: |
+          $T'(x)=\frac{\ln x}{(1+\ln x)^2}$
+        operation: 对 $T(x)$ 求导。
+        why: 导数符号由 $\ln x$ 决定，且 $x=1/e$ 是竖直间断边界，$x=1$ 是最小交汇边界。
+      source_ref: page_0087
+    - step_id: step_4
+      statement: 按 $a$ 的位置统计切点个数。
+      formula_trace:
+        from: |
+          $T:(0,1/e)\to(-\infty,0),\quad
+          T:(1/e,1]\to[1,+\infty),\quad
+          T:[1,+\infty)\to[1,+\infty)$
+        to: |
+          $a<0$ 一条；$0<a<1$ 零条；$a=1$ 一条；$a>1$ 两条
+        operation: 把水平线 $y=a$ 与三段图像的交点数逐段统计。
+        why: 只有 $a>1$ 时，$x_0$ 在 $(1/e,1)$ 和 $(1,+\infty)$ 各给一个切点。
+      source_ref: page_0087
+teaching_card:
+  student_title: 把过 x 轴点的切线数化成 a 的水平线
+  what_it_trains: 训练学生把从 $A(a,0)$ 引切线的问题转成切点参数函数 $T(x)=\frac{x}{1+\ln x}$ 的解数，并用分区图像判断什么时候有两条。
+  recognition_cues:
+    - 外点在 $x$ 轴上，横坐标是待求参数 $a$。
+    - $y=x\ln x$ 的导数是 $\ln x+1$，会出现 $1+\ln x_0$ 的分母。
+    - 选项都是 $a$ 的区间，说明关键是统计切点个数随 $a$ 的变化。
+  normalization_moves:
+    - 设切点 $x_0>0$，代入 $A(a,0)$。
+    - 整理出 $a=T(x_0)$，把 $a$ 看成水平线高度。
+    - 用 $1/e$ 和 1 把 $T$ 分成负值支、正值下降支、正值上升支。
+  common_failures:
+    - 只看源图直接选 $a>1$，但说不出 $a=1$ 为什么只有一条。
+    - 整理切线条件时把 $a$ 和 $x_0$ 混同。
+    - 漏掉 $x_0=1/e$ 附近的竖直分界，导致误选 $(1/e,+\infty)$。
+    - 把“有且仅有两条”误判成“至少一条”。
+  similar_practice_query: xlnx 过点 A(a,0) 两条切线 切点参数 a=x/(1+lnx)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0087 页图与 markdown 对例 4 的题干、选项、图像、解析和答案 B 一致；无需额外人工决策。

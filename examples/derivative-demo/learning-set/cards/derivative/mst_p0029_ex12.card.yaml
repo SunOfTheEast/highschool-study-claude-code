@@ -1,0 +1,151 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0029_ex12
+content_revision_id: mst_p0029_ex12-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0029_ex12.card.yaml
+stem: |-
+  (2025 广东省广州市三校期中 T8) 已知正实数 $x$, $y$ 满足 $\frac{x}{3}+3y-2=\ln x+\ln y$，则 $x+y=(\quad)$
+  A. $2$
+  B. $\frac{5}{2}$
+  C. $\frac{1}{4}$
+  D. $\frac{10}{3}$
+answer: |-
+  D. $\frac{10}{3}$
+
+  由 $x/3+3y-2=\ln x+\ln y$ 得 $x/3-\ln(x/3)-1+3y-\ln(3y)-1=0$。设 $f(t)=t-\ln t-1$，由切线不等式 $t-1\ge\ln t$ 知 $f(t)\ge0$，等号当且仅当 $t=1$。所以 $f(x/3)+f(3y)=0$ 只能是 $x/3=1$ 且 $3y=1$，即 $x=3,y=1/3$，从而 $x+y=10/3$。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把原方程改写成两个切线函数项的和。
+      max_score: 1
+    - step_id: step_2
+      description: 调用切线函数的非负性。
+      max_score: 1
+    - step_id: step_3
+      description: 让两个同构项分别取等并求值。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - $t-\ln t-1\ge0$
+      - 非负和为零
+      - 对数拆配 $x/3$ 与 $3y$
+  structure:
+    primary: 不等式工具结构
+    secondary:
+      - 同构结构
+      - 指对复合结构
+    evidence:
+      - $x/3-\ln(x/3)-1$ 与 $3y-\ln(3y)-1$ 都是 $f(t)=t-\ln t-1$。
+      - 等式成立依赖两个非负项同时取等。
+    normalization_moves_used:
+      - 把 $\ln x+\ln y$ 改配为 $\ln(x/3)+\ln(3y)$。
+      - 把常数 $-2$ 拆成两个 $-1$。
+      - 用 $t-\ln t-1\ge0$ 锁定 $t=1$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\ln x+\ln y$ 改配成 $\ln(x/3)+\ln(3y)$，回补指数对数基础。
+      - 若学生不知道 $\ln t\le t-1$，回补不等式工具基础。
+      - 若学生不能由两个非负项和为 0 推出分别为 0，回补不等式工具基础。
+  detail_terms:
+    - $x/3+3y-2=\ln x+\ln y$
+    - $f(t)=t-\ln t-1$
+    - $x/3=1$
+    - $3y=1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0029_ex12
+source_evidence:
+  source_refs:
+    - ref_id: page_0029_ex12_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0029/page_0029.md
+      role: problem_start
+      evidence: page_0029 例 12 给出正实数 $x,y$ 满足 $x/3+3y-2=\ln x+\ln y$，求 $x+y$ 的选择题。
+    - ref_id: page_0029_ex12_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0029/page_0029.md
+      role: solution
+      evidence: page_0029 同页解析把原式写成 $f(x/3)+f(3y)=0$，其中 $f(t)=t-\ln t-1\ge0$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0029.png
+      inspected: true
+      notes: 页图核对例 12 题干、A-D 选项和解析；选项 D 为 $10/3$，与 markdown 一致。
+  source_context: 本题用切线函数 $t-\ln t-1\ge0$，把两个正项相加等于 0 转化为分别取等。
+  source_influence:
+    - 题设 $x,y$ 为正实数，保证 $x/3$ 与 $3y$ 都可作为 $f(t)=t-\ln t-1$ 的正输入。
+    - 源解的核心是把常数和对数中的 3 配平，而不是求二元方程的一般解。
+  source_discrepancies: []
+original_problem:
+  stem: (2025 广东省广州市三校期中 T8) 已知正实数 $x$, $y$ 满足 $\frac{x}{3}+3y-2=\ln x+\ln y$，则 $x+y=(\quad)$
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $2$
+      text_latex: $2$
+    - label: B
+      text_raw: $\frac{5}{2}$
+      text_latex: $\frac{5}{2}$
+    - label: C
+      text_raw: $\frac{1}{4}$
+      text_latex: $\frac{1}{4}$
+    - label: D
+      text_raw: $\frac{10}{3}$
+      text_latex: $\frac{10}{3}$
+  answer: D. $\frac{10}{3}$
+  fidelity_notes:
+    - page_0029.png 已核对：选项 C 为 $1/4$，选项 D 为 $10/3$。
+solution:
+  source_solution_summary: 由 $x/3+3y-2=\ln x+\ln y$ 得 $x/3-\ln(x/3)-1+3y-\ln(3y)-1=0$。设 $f(t)=t-\ln t-1$，由切线不等式 $t-1\ge\ln t$ 知 $f(t)\ge0$，等号当且仅当 $t=1$。所以 $f(x/3)+f(3y)=0$ 只能是 $x/3=1$ 且 $3y=1$，即 $x=3,y=1/3$，从而 $x+y=10/3$。
+  key_steps:
+    - step_id: step_1
+      statement: 把原方程改写成两个切线函数项的和。
+      formula_trace:
+        from: $\frac{x}{3}+3y-2=\ln x+\ln y$
+        to: $\frac{x}{3}-\ln\frac{x}{3}-1+3y-\ln(3y)-1=0$
+        operation: 移项后利用 $\ln(x/3)+\ln(3y)=\ln x+\ln y$，把对数分别配到 $x/3$ 与 $3y$。
+        why: 这样每一组都成为 $t-\ln t-1$ 的形式。
+      source_ref: page_0029_ex12_solution
+    - step_id: step_2
+      statement: 调用切线函数的非负性。
+      formula_trace:
+        from: $f(t)=t-\ln t-1$
+        to: $f(t)\geqslant0,\quad t=1\text{ 时取等}$
+        operation: 由 $\ln t\le t-1$ 得 $t-\ln t-1\ge0$。
+        why: 两个非负数之和为 0，只能两个都等于 0。
+      source_ref: page_0029_ex12_solution
+    - step_id: step_3
+      statement: 让两个同构项分别取等并求值。
+      formula_trace:
+        from: $f\left(\frac{x}{3}\right)+f(3y)=0$
+        to: $\frac{x}{3}=1,\quad3y=1\Rightarrow x+y=3+\frac13=\frac{10}{3}$
+        operation: 利用 $f(t)\ge0$ 且等号仅在 $t=1$ 取到。
+        why: 方程没有其他正实数解，故选 D。
+      source_ref: page_0029_ex12_solution
+teaching_card:
+  student_title: 把方程拆成两个 $t-\ln t-1$
+  what_it_trains: 训练在二元对数方程中配出两个非负切线项，再用“非负和为零”直接锁定变量。
+  recognition_cues:
+    - 题干有 $x/3$ 和 $3y$，对数却是 $\ln x+\ln y$。
+    - 常数正好是 $-2$，可以拆成两个 $-1$。
+    - 问 $x+y$ 的确定值，说明方程很可能通过取等条件锁死。
+  normalization_moves:
+    - 把 $\ln x+\ln y$ 改写成 $\ln(x/3)+\ln(3y)$。
+    - 把方程移成 $f(x/3)+f(3y)=0$。
+    - 用 $f(t)\ge0$ 得 $x/3=1$、$3y=1$。
+  common_failures:
+    - 把 $\ln(x/3)+\ln(3y)$ 误以为改变了原式。
+    - 只代选项而没有证明 $x,y$ 被唯一确定。
+    - 忘记 $x,y>0$，没有说明对数与切线函数的定义域。
+  similar_practice_query: x/3 3y ln x ln y t-ln t-1 非负和为零 求值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0029 markdown 与页图；未发现题干或选项差异。

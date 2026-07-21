@@ -1,0 +1,192 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0156_sinh_ln121_compare_ex02
+content_revision_id: mst_p0156_sinh_ln121_compare_ex02-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0156_sinh_ln121_compare_ex02.card.yaml
+stem: |-
+  （2024 · 河南模拟）已知 $a=e^{0.1}-e^{-0.1}$，$b=\ln1.21$，$c=0.2$，则（  ）
+  A. $b<a<c$
+  B. $c<b<a$
+  C. $a<c<b$
+  D. $b<c<a$
+answer: |
+  D
+
+  先比较 $a,c$。源解用
+  \[
+  e^x-e^{-x}-2x\ge0\quad(x\ge0),
+  \]
+  代入 $x=0.1$ 得
+  \[
+  e^{0.1}-e^{-0.1}-0.2>0,
+  \]
+  即 $a>c$。
+  再比较 $c,b$。由
+  \[
+  2x\ge2\ln(1+x),
+  \]
+  代入 $x=0.1$ 得
+  \[
+  0.2=2\times0.1>2\ln1.1=\ln1.21,
+  \]
+  即 $c>b$。故
+  \[
+  b<c<a,
+  \]
+  选 D。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把 $a$ 与 $c=0.2$ 比较。
+      max_score: 1
+    - step_id: step_2
+      description: 把 $b$ 与 $c=0.2$ 比较。
+      max_score: 1
+    - step_id: step_3
+      description: 合并不等式得到顺序。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 局部逼近与找点
+    subroute:
+      - $e^x-e^{-x}\ge2x$
+      - $\ln(1+x)\le x$
+      - 统一锚点 $0.2$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 双曲函数结构
+      - 局部逼近结构
+    evidence:
+      - $a$ 是双曲正弦型差值，$b$ 是对数值，$c$ 是线性常数。
+      - 两条不等式都在 $x=0.1$ 点位落地，最后比较同一数值 $0.2$。
+    normalization_moves_used:
+      - $a-0.2$ 通过 $e^x-e^{-x}-2x$ 比较符号。
+      - $\ln1.21=2\ln1.1$。
+      - $0.2=2\times0.1$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会用 $e^x-e^{-x}\ge2x$，回补指数对数基础。
+      - 若学生不知道 $\ln(1+x)\le x$ 的适用区间，回补函数性质与图像。
+      - 若学生不熟悉对数幂化简，回补代数恒等变形。
+  detail_terms:
+    - $a=e^{0.1}-e^{-0.1}$
+    - $b=\ln1.21$
+    - $c=0.2$
+    - $e^x-e^{-x}-2x\ge0$
+    - $2x\ge2\ln(1+x)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0156_sinh_ln121_compare_ex02
+source_evidence:
+  source_refs:
+    - ref_id: page_0156_ex02_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0156/page_0156.md
+      role: problem_start
+      evidence: 例 2 题干、A-D 选项和完整解析均在 page_0156。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0156.png
+      inspected: true
+      notes: 已核对例 2 题干、选项、解析和答案 D。
+  source_context: 例 2 继续“泰勒展开与数值估算”主题，核心是把三个量改写到同一基准 $0.2$。
+  source_influence:
+    - 保留源解两条不等式：$e^x-e^{-x}\ge2x$ 与 $2x\ge2\ln(1+x)$。
+    - 保留“先证 $a>c$，再证 $c>b$”的双段比较顺序。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 河南模拟）已知 $a=e^{0.1}-e^{-0.1}$，$b=\ln1.21$，$c=0.2$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $b<a<c$
+      text_latex: $b<a<c$
+    - label: B
+      text_raw: $c<b<a$
+      text_latex: $c<b<a$
+    - label: C
+      text_raw: $a<c<b$
+      text_latex: $a<c<b$
+    - label: D
+      text_raw: $b<c<a$
+      text_latex: $b<c<a$
+  answer: D
+  fidelity_notes:
+    - 题干和解析均在 page_0156；无跨页补充。
+    - 源文把 $e^{0.1}-e^{-0.1}-0.2>0$ 作为 $a>c$ 的直接证据。
+solution:
+  source_solution_summary: |
+    先比较 $a,c$。源解用
+    \[
+    e^x-e^{-x}-2x\ge0\quad(x\ge0),
+    \]
+    代入 $x=0.1$ 得
+    \[
+    e^{0.1}-e^{-0.1}-0.2>0,
+    \]
+    即 $a>c$。
+    再比较 $c,b$。由
+    \[
+    2x\ge2\ln(1+x),
+    \]
+    代入 $x=0.1$ 得
+    \[
+    0.2=2\times0.1>2\ln1.1=\ln1.21,
+    \]
+    即 $c>b$。故
+    \[
+    b<c<a,
+    \]
+    选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把 $a$ 与 $c=0.2$ 比较。
+      formula_trace:
+        from: $a=e^{0.1}-e^{-0.1}$
+        to: $a-0.2=e^{0.1}-e^{-0.1}-0.2>0$
+        operation: 应用 $e^x-e^{-x}-2x\ge0\ (x\ge0)$，取 $x=0.1$。
+        why: 先锁定 $a>c$。
+      source_ref: page_0156_ex02_problem
+    - step_id: step_2
+      statement: 把 $b$ 与 $c=0.2$ 比较。
+      formula_trace:
+        from: $b=\ln1.21=\ln(1.1^2)$
+        to: $b=2\ln1.1<0.2=c$
+        operation: 用 $2x\ge2\ln(1+x)$，代入 $x=0.1$。
+        why: 建立 $c>b$。
+      source_ref: page_0156_ex02_problem
+    - step_id: step_3
+      statement: 合并不等式得到顺序。
+      formula_trace:
+        from: $a>c$ 且 $c>b$
+        to: $b<c<a$
+        operation: 传递比较。
+        why: 对应选项 D。
+      source_ref: page_0156_ex02_problem
+teaching_card:
+  student_title: 两条经典不等式，一步锁三数
+  what_it_trains: 训练把不同类型函数值统一到同一个参照常数，再通过不等式方向快速排顺序。
+  recognition_cues:
+    - 题干出现 $e^t-e^{-t}$ 和 $\ln(1+t)$。
+    - 有一个显式常数 $0.2$ 可作为锚点。
+    - 选项是严格全序。
+  normalization_moves:
+    - 先把 $a$ 改写成“与 $0.2$ 的差”。
+    - 把 $b$ 改成 $2\ln1.1$ 后直接和 $0.2$ 对比。
+    - 最后只做传递比较。
+  common_failures:
+    - 只算近似小数，不利用结构不等式。
+    - 把 $\ln1.21$ 错看成 $\ln(1+0.21)$。
+    - 比较出两段后漏写完整顺序。
+  similar_practice_query: e^x-e^-x 与 ln(1+x) 比大小 0.1 0.2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0156 图像与 markdown 对例 2 一致；无待裁定问题。

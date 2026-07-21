@@ -1,0 +1,231 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0136_exp_growth_g_ex30
+content_revision_id: mst_p0136_exp_growth_g_ex30-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0136_exp_growth_g_ex30.card.yaml
+stem: |-
+  （2024 · 重庆月考 · 多选）已知函数 $y=f(x)$ 在 $\mathbf{R}$ 上可导，且 $f(0)=1$，其导函数 $f^{\prime}(x)$ 满足 $(x-1)[f^{\prime}(x)-f(x)]\geqslant0$（当且仅当 $x=1$ 时取等号），对于函数 $g(x)=\frac{f(x)}{e^x}$，下列结论正确的是（  ）
+  A. 函数 $g(x)$ 在 $(-\infty,1)$ 上为减函数
+  B. $x=1$ 是函数 $g(x)$ 的极大值点
+  C. 函数 $g(x)$ 必有 2 个零点
+  D. $e^2f(e)>e^ef(2)$
+answer: |
+  AD
+
+  由
+  \[
+  g(x)=\frac{f(x)}{e^x}
+  \]
+  得
+  \[
+  g^{\prime}(x)=\frac{f^{\prime}(x)-f(x)}{e^x}.
+  \]
+  由题设
+  \[
+  (x-1)\bigl(f^{\prime}(x)-f(x)\bigr)\ge0,\ \text{且仅 }x=1\text{ 取等},
+  \]
+  可知 $x<1$ 时 $f^{\prime}(x)-f(x)<0$，$x>1$ 时 $f^{\prime}(x)-f(x)>0$，故
+  $g^{\prime}(x)<0$（$x<1$），$g^{\prime}(x)>0$（$x>1$）。
+  所以 $g$ 在 $(-\infty,1)$ 递减、在 $(1,+\infty)$ 递增，$x=1$ 为极小值点。
+  因而 A 对、B 错。
+  对 C：由极小值点并不能推出“必有2个零点”，例如当 $g(1)>0$ 时可无零点，故 C 错。
+  对 D：在 $(1,+\infty)$ 上递增且 $2<e$，故
+  \[
+  g(2)<g(e)\Rightarrow \frac{f(2)}{e^2}<\frac{f(e)}{e^e}
+  \Rightarrow e^ef(2)<e^2f(e),
+  \]
+  即 D 对。综上选 AD。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先把题设不等式转译到 $g^{\prime}(x)$。
+      max_score: 1
+    - step_id: step_2
+      description: 用“仅在 $x=1$ 取等号”确定两侧严格单调。
+      max_score: 1
+    - step_id: step_3
+      description: 判定 A、B。
+      max_score: 1
+    - step_id: step_4
+      description: 判定 C：它不是必然命题。
+      max_score: 1
+    - step_id: step_5
+      description: 判定 D：递增区间内比较两点。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 零点/极值点分析
+        target: 判断单调区间与极值点类型
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 零点/极值点分析
+        target: 判断零点个数命题是否必然
+        result: 见 source_solution_summary
+      - part_id: item_3
+        goal: 数值比较
+        target: 完成指数权重下的函数值比较
+        result: 见 source_solution_summary
+  method:
+    primary: 逆向构造法
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 指数商构造
+      - 导数同号判单调
+      - 反例排除“必然有零点”
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 同构结构
+      - 抽象函数结构
+    evidence:
+      - 题设核心是 $f^{\prime}(x)-f(x)$，与 $\left(\frac{f(x)}{e^x}\right)^{\prime}$ 分子同构。
+      - 由 $x-1$ 的符号切分出“左减右增”结构。
+      - D项比较实质是同一函数 $g$ 在 $2,e$ 两点的大小比较。
+    normalization_moves_used:
+      - 作商：$g(x)=\frac{f(x)}{e^x}$。
+      - 把题设转换为 $g^{\prime}(x)$ 符号。
+      - 在递增区间比较 $g(2),g(e)$ 再反代。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $g^{\prime}(x)$ 符号推出“左减右增+极小值点”，回补导数单调极值基础。
+      - 若学生对 $e^2f(e)>e^ef(2)$ 的同乘变形易错，回补代数恒等变形。
+      - 若学生把“可能有2个零点”误当“必有2个零点”，回补函数性质与图像。
+  detail_terms:
+    - $g(x)=\frac{f(x)}{e^x}$
+    - $g^{\prime}(x)=\frac{f^{\prime}(x)-f(x)}{e^x}$
+    - $x=1$ 极小值点
+    - $g(2)<g(e)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0136_exp_growth_g_ex30
+source_evidence:
+  source_refs:
+    - ref_id: page_0136
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0136/page_0136.md
+      role: problem_start
+      evidence: "page_0136 lines 16-21: 例30题干与A-D选项。"
+    - ref_id: page_0136_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0136/page_0136.md
+      role: solution
+      evidence: "page_0136 line 23: 解析给出 $g^{\\prime}(x)$、单调性、选项判定与结论 AD。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0136.png
+      inspected: true
+      notes: 已核对原图，例30题干与解析清晰可读；页首是例29续写，按批次规则仅作上下文。
+  source_context: page_0136 顶部是上一批次例29续写，本卡仅覆盖本页新起例30。
+  source_influence:
+    - 保留源解核心构造：$g(x)=\frac{f(x)}{e^x}$ 与 $g^{\prime}(x)=\frac{f^{\prime}(x)-f(x)}{e^x}$。
+    - 保留“仅在 x=1 取等号”带来的严格号：$x<1$ 时 $g^{\prime}(x)<0$，$x>1$ 时 $g^{\prime}(x)>0$。
+    - D项由 $(1,+\infty)$ 递增与 $2<e$ 得 $g(2)<g(e)$。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 重庆月考 · 多选）已知函数 $y=f(x)$ 在 $\mathbf{R}$ 上可导，且 $f(0)=1$，其导函数 $f^{\prime}(x)$ 满足 $(x-1)[f^{\prime}(x)-f(x)]\geqslant0$（当且仅当 $x=1$ 时取等号），对于函数 $g(x)=\frac{f(x)}{e^x}$，下列结论正确的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 函数 $g(x)$ 在 $(-\infty,1)$ 上为减函数
+      text_latex: 函数 $g(x)$ 在 $(-\infty,1)$ 上为减函数
+    - label: B
+      text_raw: $x=1$ 是函数 $g(x)$ 的极大值点
+      text_latex: $x=1$ 是函数 $g(x)$ 的极大值点
+    - label: C
+      text_raw: 函数 $g(x)$ 必有 2 个零点
+      text_latex: 函数 $g(x)$ 必有 2 个零点
+    - label: D
+      text_raw: $e^2f(e)>e^ef(2)$
+      text_latex: $e^2f(e)>e^ef(2)$
+  answer: AD
+  fidelity_notes:
+    - 源解对 C 项采用反例式否定：若 $g(1)>0$，则函数可无零点。
+solution:
+  source_solution_summary: |
+    由
+    \[
+    g(x)=\frac{f(x)}{e^x}
+    \]
+    得
+    \[
+    g^{\prime}(x)=\frac{f^{\prime}(x)-f(x)}{e^x}.
+    \]
+    由题设
+    \[
+    (x-1)\bigl(f^{\prime}(x)-f(x)\bigr)\ge0,\ \text{且仅 }x=1\text{ 取等},
+    \]
+    可知 $x<1$ 时 $f^{\prime}(x)-f(x)<0$，$x>1$ 时 $f^{\prime}(x)-f(x)>0$，故
+    $g^{\prime}(x)<0$（$x<1$），$g^{\prime}(x)>0$（$x>1$）。
+    所以 $g$ 在 $(-\infty,1)$ 递减、在 $(1,+\infty)$ 递增，$x=1$ 为极小值点。
+    因而 A 对、B 错。
+    对 C：由极小值点并不能推出“必有2个零点”，例如当 $g(1)>0$ 时可无零点，故 C 错。
+    对 D：在 $(1,+\infty)$ 上递增且 $2<e$，故
+    \[
+    g(2)<g(e)\Rightarrow \frac{f(2)}{e^2}<\frac{f(e)}{e^e}
+    \Rightarrow e^ef(2)<e^2f(e),
+    \]
+    即 D 对。综上选 AD。
+  key_steps:
+    - step_id: step_1
+      statement: 先把题设不等式转译到 $g^{\prime}(x)$。
+      formula_trace:
+        from: $g(x)=\frac{f(x)}{e^x}$
+        to: $g^{\prime}(x)=\frac{f^{\prime}(x)-f(x)}{e^x}$
+        operation: 商求导并约去公共因子 $e^x$。
+        why: 把 $(x-1)[f^{\prime}(x)-f(x)]$ 与导数符号直接挂钩。
+      source_ref: page_0136_solution
+    - step_id: step_2
+      statement: 用“仅在 $x=1$ 取等号”确定两侧严格单调。
+      formula_trace:
+        from: $(x-1)[f^{\prime}(x)-f(x)]\ge0$，且仅 $x=1$ 等号
+        to: $x<1\Rightarrow g^{\prime}(x)<0,\ x>1\Rightarrow g^{\prime}(x)>0$
+        operation: 分区间看 $(x-1)$ 的符号。
+        why: 得到 A、B 所需的单调与极值性质。
+      source_ref: page_0136_solution
+    - step_id: step_3
+      statement: 判定 A、B。
+      formula_trace:
+        from: $g^{\prime}(x)<0$（$x<1$），$g^{\prime}(x)>0$（$x>1$）
+        to: A 正确，B 错误（$x=1$ 为极小值点）
+        operation: 由导数符号到函数增减表。
+        why: 直接对应选项描述。
+      source_ref: page_0136_solution
+    - step_id: step_4
+      statement: 判定 C：它不是必然命题。
+      formula_trace:
+        from: $g(1)=\frac{f(1)}{e}$
+        to: 若 $g(1)>0$，则 $g$ 可无零点
+        operation: 利用最小值点可高于 0 的情形构造反例。
+        why: “必有2个零点”被否定。
+      source_ref: page_0136_solution
+    - step_id: step_5
+      statement: 判定 D：递增区间内比较两点。
+      formula_trace:
+        from: $g(2)<g(e)$
+        to: $e^2f(e)>e^ef(2)$
+        operation: 代入 $g(x)=\frac{f(x)}{e^x}$ 并同乘正数。
+        why: 把函数值比较还原成选项里的代数不等式。
+      source_ref: page_0136_solution
+teaching_card:
+  student_title: 先把 $f^{\prime}-f$ 吸收进指数商，再分区间判结论
+  what_it_trains: 训练把“导数与函数差”型条件转成商函数导数符号，再完成单调、极值、零点与数值比较的联动判断。
+  recognition_cues:
+    - 题设出现 $(x-a)\,[f^{\prime}(x)-f(x)]$ 的符号条件。
+    - 给出或暗示指数因子 $e^x$，适合构造 $\frac{f}{e^x}$。
+    - 选项同时覆盖“单调-极值-零点-两点比较”。
+  normalization_moves:
+    - 把题设拆成 $x<1$ 与 $x>1$ 两段符号。
+    - 作 $g=\frac{f}{e^x}$ 并写出 $g^{\prime}$。
+    - 递增区间内先比 $g$，再反代成 $f$ 的不等式。
+  common_failures:
+    - 忽略“仅在 $x=1$ 取等号”，把严格不等式写成非严格。
+    - 把“极小值点”误写成“极大值点”。
+    - 将“可有2个零点”误判成“必有2个零点”。
+  similar_practice_query: 抽象函数 f^{\prime}(x)-f(x) 指数商构造 左减右增 极值点 零点必然性 比较 g(2) 与 g(e)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

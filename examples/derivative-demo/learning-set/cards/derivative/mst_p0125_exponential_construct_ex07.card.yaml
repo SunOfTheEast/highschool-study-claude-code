@@ -1,0 +1,210 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0125_exponential_construct_ex07
+content_revision_id: mst_p0125_exponential_construct_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0125_exponential_construct_ex07.card.yaml
+stem: |-
+  （2024·南关区月考）定义域为 $\mathbf{R}$ 的函数 $f(x)$ 的导函数记作 $f'(x)$，满足 $f'(x)-f(x)>3e^x$，$f(2)=6e^2$，则不等式 $f(x)>3xe^x$ 的解集为（  ）
+  A. $(2,+\infty)$
+  B. $(-\infty,2)$
+  C. $(3,+\infty)$
+  D. $(-\infty,3)$
+answer: |
+  A
+
+  令
+  \[
+  G(x)=\frac{f(x)}{e^x}-3x.
+  \]
+  则
+  \[
+  G'(x)=\frac{f'(x)-f(x)}{e^x}-3>\frac{3e^x}{e^x}-3=0,
+  \]
+  所以 $G(x)$ 在 $\\mathbf{R}$ 上单调递增。又由 $f(2)=6e^2$ 得
+  \[
+  G(2)=\frac{f(2)}{e^2}-3\\cdot2=6-6=0.
+  \]
+  原不等式
+  \[
+  f(x)>3xe^x
+  \]
+  等价于
+  \[
+  \frac{f(x)}{e^x}-3x>0,
+  \]
+  即 $G(x)>G(2)$。由 $G$ 递增得 $x>2$，故解集 $(2,+\\infty)$，选 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 将目标式标准化为“构造函数大于0”。
+      max_score: 1
+    - step_id: step_2
+      description: 利用题设判定 $G$ 递增。
+      max_score: 1
+    - step_id: step_3
+      description: 用已知点值确定比较基准。
+      max_score: 1
+    - step_id: step_4
+      description: 由递增性还原解集。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式求解
+    part_level:
+      - part_id: item_1
+        goal: 不等式求解
+        target: 求指数型不等式解集
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+    subroute:
+      - 指数商函数构造
+      - 定点归零比较
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 指对复合结构
+      - 同构结构
+    evidence:
+      - $\left(\frac{f(x)}{e^x}\right)'=\frac{f'(x)-f(x)}{e^x}$。
+      - $f'(x)-f(x)>3e^x$ 直接给出 $G'(x)>0$。
+      - $f(2)=6e^2$ 给出关键锚点 $G(2)=0$。
+    normalization_moves_used:
+      - 先把目标式除以 $e^x$。
+      - 构造 $G=\frac{f}{e^x}-3x$ 而非只构造 $\frac{f}{e^x}$。
+      - 利用给定点值把“>0”改写为“>G(2)”并解出区间。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会处理 $\frac{f(x)}{e^x}$ 的求导，回补导数运算与几何意义。
+      - 若学生除以 $e^x$ 时对正负不敏感，回补指数对数基础。
+      - 若学生不会从 $G(x)>G(2)$ 转为 $x>2$，回补导数单调极值基础。
+  detail_terms:
+    - $G(x)=\frac{f(x)}{e^x}-3x$
+    - $G'(x)>0$
+    - $G(2)=0$
+    - $(2,+\infty)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0125_exponential_construct_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0125
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0125/page_0125.md
+      role: problem_start
+      evidence: page_0125 下半页给出例7完整题干、A-D选项、解析与答案 A。
+    - ref_id: page_0126
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0126/page_0126.md
+      role: local_context
+      evidence: page_0126 顶部已进入例8，说明例7不跨页。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0125.png
+      inspected: true
+      notes: 已核对页图：例7完整位于 page_0125。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0126.png
+      inspected: true
+      notes: 已核对页图：page_0126 从例8起头，按归属规则不建卡。
+  source_context: 例7以指数商函数比较为核心，且不跨页。
+  source_influence:
+    - 保留源页构造 G(x)=f(x)/e^x-3x。
+    - 保留源页由 f'(x)-f(x)>3e^x 推出 G'(x)>0。
+    - 保留源页利用 f(2)=6e^2 得 G(2)=0，再解 G(x)>G(2)。
+  source_discrepancies: []
+original_problem:
+  stem: （2024·南关区月考）定义域为 $\mathbf{R}$ 的函数 $f(x)$ 的导函数记作 $f'(x)$，满足 $f'(x)-f(x)>3e^x$，$f(2)=6e^2$，则不等式 $f(x)>3xe^x$ 的解集为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $(2,+\infty)$
+      text_latex: $(2,+\infty)$
+    - label: B
+      text_raw: $(-\infty,2)$
+      text_latex: $(-\infty,2)$
+    - label: C
+      text_raw: $(3,+\infty)$
+      text_latex: $(3,+\infty)$
+    - label: D
+      text_raw: $(-\infty,3)$
+      text_latex: $(-\infty,3)$
+  answer: A
+  fidelity_notes:
+    - 导数符号与题干均核对为一阶导数 $f'(x)$。
+solution:
+  source_solution_summary: |
+    令
+    \[
+    G(x)=\frac{f(x)}{e^x}-3x.
+    \]
+    则
+    \[
+    G'(x)=\frac{f'(x)-f(x)}{e^x}-3>\frac{3e^x}{e^x}-3=0,
+    \]
+    所以 $G(x)$ 在 $\\mathbf{R}$ 上单调递增。又由 $f(2)=6e^2$ 得
+    \[
+    G(2)=\frac{f(2)}{e^2}-3\\cdot2=6-6=0.
+    \]
+    原不等式
+    \[
+    f(x)>3xe^x
+    \]
+    等价于
+    \[
+    \frac{f(x)}{e^x}-3x>0,
+    \]
+    即 $G(x)>G(2)$。由 $G$ 递增得 $x>2$，故解集 $(2,+\\infty)$，选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 将目标式标准化为“构造函数大于0”。
+      formula_trace:
+        from: $f(x)>3xe^x$
+        to: $\frac{f(x)}{e^x}-3x>0$
+        operation: 两边除以正数 $e^x$。
+        why: 直接提示构造 $G(x)=\frac{f(x)}{e^x}-3x$。
+      source_ref: page_0125
+    - step_id: step_2
+      statement: 利用题设判定 $G$ 递增。
+      formula_trace:
+        from: $f'(x)-f(x)>3e^x$
+        to: $G'(x)=\frac{f'(x)-f(x)}{e^x}-3>0$
+        operation: 对 $G$ 求导并代入题设。
+        why: 得到全实数范围的单调递增。
+      source_ref: page_0125
+    - step_id: step_3
+      statement: 用已知点值确定比较基准。
+      formula_trace:
+        from: $f(2)=6e^2$
+        to: $G(2)=0$
+        operation: 代入 $x=2$。
+        why: 将目标不等式转成 $G(x)>G(2)$。
+      source_ref: page_0125
+    - step_id: step_4
+      statement: 由递增性还原解集。
+      formula_trace:
+        from: $G(x)>G(2)$
+        to: $x>2$
+        operation: 递增函数值比较等价为自变量比较。
+        why: 对应选项 A。
+      source_ref: page_0125
+teaching_card:
+  student_title: 把 $f(x)>3xe^x$ 化成递增函数过零点
+  what_it_trains: 将指数型不等式转为标准比较函数，再借助给定点值一键求解区间。
+  recognition_cues:
+    - 题设给的是 $f'(x)-f(x)$ 与 $e^x$ 的比较。
+    - 题干额外给 $f(2)$，通常用于构造函数定点。
+  normalization_moves:
+    - 将目标式除以 $e^x$。
+    - 设 $G=\frac{f}{e^x}-3x$ 并判 $G'>0$。
+    - 求 $G(2)$ 并用 $G(x)>G(2)$ 解出 $x>2$。
+  common_failures:
+    - 漏掉构造中的 $-3x$。
+    - 把 $G'(x)$ 误写成 $\frac{f'(x)-f(x)-3}{e^x}$。
+    - 把严格不等式误写成含端点。
+  similar_practice_query: 抽象函数 f'-f>3e^x 指数商函数 不等式解集
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0125 与 page_0126 页图，例7不跨页，page_0126 起头为例8。

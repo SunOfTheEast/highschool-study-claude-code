@@ -1,0 +1,222 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0284_ln_minus_a_xminus1_exp_two_zeros_gap_ex07
+content_revision_id: mst_p0284_ln_minus_a_xminus1_exp_two_zeros_gap_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0284_ln_minus_a_xminus1_exp_two_zeros_gap_ex07.card.yaml
+stem: |-
+  （2019 · 天津）设函数 $f(x)=\ln x-a(x-1)e^x$，其中 $a\in\mathbf{R}$。
+  1. 若 $a\le0$，讨论 $f(x)$ 的单调性。
+  2. 若 $0<a<\frac1e$，证明 $f(x)$ 恰有两个零点。
+  3. 设 $x_0$ 为 $f(x)$ 的极值点，$x_1$ 为 $f(x)$ 的零点，且 $x_1>x_0$，证明：$3x_0-x_1>2$。
+answer: |-
+  当 $a\le0$ 时 $f$ 在 $(0,+\infty)$ 上递增；当 $0<a<1/e$ 时恰有两个零点，且 $3x_0-x_1>2$。
+
+  第(1)问直接求导： $f^\prime(x)=\frac{1-ax^2e^x}{x}$。当 $a\le0$ 时 $f^\prime(x)>0$， 所以 $f$ 在 $(0,+\infty)$ 递增。第(2)(i)问令 $g(x)=1-ax^2e^x$，它在正半轴递减，且 $g(1)=1-ae>0$。 用等效零点分析在 $x=\ln\frac1a$ 处找到 $g<0$，所以导函数唯一零点 $x_0\in(1,\ln\frac1a)$，原函数先增后减。又 $f(1)=0$， $f(x_0)>0$，再把 $f(x)=(x-1)(\frac{\ln x}{x-1}-ae^x)$，在 $x=\ln\frac1a$ 处找负值，得另一个零点 $x_1\in(1,\ln\frac1a)$。第(2)(ii)问由 $f^\prime(x_0)=0$ 得 $a=\frac1{x_0^2e^{x_0}}$，由 $f(x_1)=0$ 得 $a=\frac{\ln x_1}{(x_1-1)e^{x_1}}$。source 的核心不是强行代换， 而是用找点得到 $x_0,x_1$ 都被 $\ln\frac1a$ 控住： 要证 $3x_0-x_1>2$，只需证 $3x_0>2+\ln\frac1a>2+x_1$。代入 $\ln\frac1a=\ln(x_0^2e^{x_0})$ 后化为 $x_0>\ln x_0+1$，由 $x_0>1$ 成立。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 第(1)问：$a\le0$ 时直接判单调。
+      max_score: 1
+    - step_id: step_2
+      description: 先给导函数找零点，也就是找极值点 $x_0$。
+      max_score: 1
+    - step_id: step_3
+      description: 再给原函数找右侧零点 $x_1$。
+      max_score: 1
+    - step_id: step_4
+      description: 把目标距离转成共同上界比较。
+      max_score: 1
+    - step_id: step_5
+      description: 利用极值点方程消去 $a$。
+      max_score: 1
+    - step_id: step_6
+      description: 最后化成基础对数不等式。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 1 问
+        result: $a\le0$ 时 $f$ 在 $(0,+\infty)$ 上递增。
+      - part_id: 2i
+        goal: 零点/极值点分析
+        target: 第 2i 问
+        result: $0<a<\frac1e$ 时 $f$ 恰有两个零点。
+      - part_id: 2ii
+        goal: 不等式证明
+        target: 第 2ii 问
+        result: $3x_0-x_1>2$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 局部逼近与找点
+      - 充分/必要性探路
+      - 对称化与偏移
+    subroute:
+      - 导函数等效零点分析
+      - 原函数零点找点
+      - 极值点右偏
+      - 共同上界 $\ln\frac1a$
+      - 极值点方程消参
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 极值点偏移结构
+      - 非齐次结构
+      - 局部逼近结构
+    evidence:
+      - $\ln x-a(x-1)e^x$
+      - $g(x)=1-ax^2e^x$
+      - $x_0\in(1,\ln\frac1a)$
+      - $x_1\in(1,\ln\frac1a)$
+      - $3x_0-x_1>2$
+      - $x_0>\ln x_0+1$
+    normalization_moves_used:
+      - 先对导函数找点，锁住极值点。
+      - 再对原函数找点，锁住右侧零点。
+      - 用共同上界 $\ln\frac1a$ 代替直接比较 $x_0,x_1$。
+      - 用极值点方程把 $\ln\frac1a$ 改写成 $x_0+2\ln x_0$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求导，回补导数运算与几何意义。
+      - 若学生不理解导函数零点和极值点关系，回补导数单调极值基础。
+      - 若学生不会用 $\ln x<x-1$ 的变形，回补指数对数基础。
+      - 若学生不会由零点方程/极值点方程消参，回补代数恒等变形。
+      - 若学生看不懂右偏图像，回补函数性质与图像。
+  detail_terms:
+    - $\ln x-a(x-1)e^x$
+    - 等效零点分析
+    - 零点找点
+    - $x_0\in(1,\ln\frac1a)$
+    - $x_1\in(1,\ln\frac1a)$
+    - $3x_0-x_1>2$
+    - 极值点右偏
+parts: &a1
+  - part_id: "1"
+    text: 若 $a\le0$，讨论 $f(x)$ 的单调性。
+  - part_id: 2i
+    text: 若 $0<a<\frac1e$，证明 $f(x)$ 恰有两个零点。
+  - part_id: 2ii
+    text: 设 $x_0$ 为 $f(x)$ 的极值点，$x_1$ 为 $f(x)$ 的零点，且 $x_1>x_0$，证明：$3x_0-x_1>2$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0284_ln_minus_a_xminus1_exp_two_zeros_gap_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0284_ex07_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0284/page_0284.md
+      role: problem_start
+      evidence: page_0284 给出例7题头：$f(x)=\ln x-a(x-1)e^x$，$a\le0$ 时讨论单调性；$0<a<1/e$ 时证明两个零点，并证明 $3x_0-x_1>2$。
+    - ref_id: page_0284_ex07_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0284/page_0284.md
+      role: solution
+      evidence: page_0284 完整写出第(1)问、第(2)(i)问和第(2)(ii)问主要证明：先对导函数 $g(x)=1-ax^2e^x$ 找点，再对原函数找点，最后用 $x_0,x_1<\ln\frac1a$ 锁界。
+    - ref_id: page_0285_ex07_note_figure
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0285/page_0285.md
+      role: figure
+      evidence: page_0285 顶部补充：本题最优解是零点找点；也可从极值点右偏图像理解 $2x_0>x_1+1$，随后另起例8。
+    - ref_id: page_0285_ex08_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0285/page_0285.md
+      role: local_context
+      evidence: page_0285 从例8开始是新题，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0284.png
+      inspected: true
+      notes: 已核对页图：page_0284 例7题头与主要解析完整。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0285.png
+      inspected: true
+      notes: 已核对页图：page_0285 顶部为例7注释和右偏图像，随后另起例8。
+  source_context: 本卡处理 page_0284 起头、page_0285 顶部续完的例7；page_0285 例8排除。
+  source_influence:
+    - 保留导数：$f^\prime(x)=\frac{1-ax^2e^x}{x}$。
+    - 保留导函数找点：$x_0\in(1,\ln\frac1a)$。
+    - 保留原函数找点：除 $x=1$ 外，还有 $x_1\in(1,\ln\frac1a)$。
+    - 保留 $x_1>x_0$ 条件下证明 $3x_0-x_1>2$。
+    - 保留 source 的说明：这题本质是零点找点，不是形式代换。
+    - 保留 page_0285 的极值点右偏图像解释。
+  source_discrepancies: []
+original_problem:
+  stem: （2019 · 天津）设函数 $f(x)=\ln x-a(x-1)e^x$，其中 $a\in\mathbf{R}$。
+  parts: *a1
+  choices: []
+  answer: 当 $a\le0$ 时 $f$ 在 $(0,+\infty)$ 上递增；当 $0<a<1/e$ 时恰有两个零点，且 $3x_0-x_1>2$。
+  fidelity_notes:
+    - 无选项。
+    - page_0285 顶部图像是例7的补充说明，不属于例8。
+solution:
+  source_solution_summary: 第(1)问直接求导： $f^\prime(x)=\frac{1-ax^2e^x}{x}$。当 $a\le0$ 时 $f^\prime(x)>0$， 所以 $f$ 在 $(0,+\infty)$ 递增。第(2)(i)问令 $g(x)=1-ax^2e^x$，它在正半轴递减，且 $g(1)=1-ae>0$。 用等效零点分析在 $x=\ln\frac1a$ 处找到 $g<0$，所以导函数唯一零点 $x_0\in(1,\ln\frac1a)$，原函数先增后减。又 $f(1)=0$， $f(x_0)>0$，再把 $f(x)=(x-1)(\frac{\ln x}{x-1}-ae^x)$，在 $x=\ln\frac1a$ 处找负值，得另一个零点 $x_1\in(1,\ln\frac1a)$。第(2)(ii)问由 $f^\prime(x_0)=0$ 得 $a=\frac1{x_0^2e^{x_0}}$，由 $f(x_1)=0$ 得 $a=\frac{\ln x_1}{(x_1-1)e^{x_1}}$。source 的核心不是强行代换， 而是用找点得到 $x_0,x_1$ 都被 $\ln\frac1a$ 控住： 要证 $3x_0-x_1>2$，只需证 $3x_0>2+\ln\frac1a>2+x_1$。代入 $\ln\frac1a=\ln(x_0^2e^{x_0})$ 后化为 $x_0>\ln x_0+1$，由 $x_0>1$ 成立。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问：$a\le0$ 时直接判单调。
+      formula_trace:
+        from: $f(x)=\ln x-a(x-1)e^x$
+        to: $f^\prime(x)=\frac{1-ax^2e^x}{x}>0$
+        operation: 求导并利用 $a\le0$。
+        why: 正半轴上导数恒正，函数递增。
+      source_ref: page_0284_ex07_solution
+    - step_id: step_2
+      statement: 先给导函数找零点，也就是找极值点 $x_0$。
+      formula_trace:
+        from: $g(x)=1-ax^2e^x$
+        to: $g(1)>0,\quad g(\ln\frac1a)<0,\quad x_0\in(1,\ln\frac1a)$
+        operation: 用等效零点分析和取点 $\ln\frac1a$。
+        why: 导函数零点不可直接求，所以先锁定极值点范围。
+      source_ref: page_0284_ex07_solution
+    - step_id: step_3
+      statement: 再给原函数找右侧零点 $x_1$。
+      formula_trace:
+        from: $f(x)=(x-1)(\frac{\ln x}{x-1}-ae^x)$
+        to: $f(1)=0,\quad f(x_0)>0,\quad f(\ln\frac1a)<0,\quad x_1\in(1,\ln\frac1a)$
+        operation: 把 $\ln x$ 和指数项放到同一个括号里做找点。
+        why: 这样证明除 $x=1$ 外，右侧还有且只有一个零点。
+      source_ref: page_0284_ex07_solution
+    - step_id: step_4
+      statement: 把目标距离转成共同上界比较。
+      formula_trace:
+        from: $x_0,x_1\in(1,\ln\frac1a),\quad x_1>x_0$
+        to: 只需证 $3x_0>2+\ln\frac1a>2+x_1$
+        operation: 用 $\ln\frac1a$ 夹住右侧零点。
+        why: 这体现 source 说的“零点找点”，不是单纯代换。
+      source_ref: page_0284_ex07_solution
+    - step_id: step_5
+      statement: 利用极值点方程消去 $a$。
+      formula_trace:
+        from: $f^\prime(x_0)=0$
+        to: $a=\frac1{x_0^2e^{x_0}},\quad \ln\frac1a=2\ln x_0+x_0$
+        operation: 由导函数零点关系解出参数。
+        why: 把共同上界改写成只含 $x_0$ 的不等式。
+      source_ref: page_0284_ex07_solution
+    - step_id: step_6
+      statement: 最后化成基础对数不等式。
+      formula_trace:
+        from: $3x_0>2+2\ln x_0+x_0$
+        to: $x_0>\ln x_0+1$
+        operation: 移项化简。
+        why: $x_0>1$ 时 $x>\ln x+1$ 成立。
+      source_ref: page_0284_ex07_solution
+teaching_card:
+  student_title: 用零点找点证明 $3x_0-x_1>2$
+  what_it_trains: 训练先给导函数找点，再给原函数找点，把极值点和零点都锁进同一个区间，最后用共同上界证明距离不等式。
+  recognition_cues:
+    - 导函数零点不可直接求。
+    - 题目给的是极值点 $x_0$ 和右侧零点 $x_1$ 的距离。
+    - $f(1)=0$ 是一个显零点，另一个零点在 $x_0$ 右侧。
+    - source 明确提醒“本质还是零点找点”。
+  normalization_moves:
+    - 先研究导函数 $g(x)=1-ax^2e^x$。
+    - 用 $x=\ln\frac1a$ 给导函数和原函数都找点。
+    - 把 $x_0,x_1$ 都放进 $(1,\ln\frac1a)$。
+    - 用 $f^\prime(x_0)=0$ 把 $\ln\frac1a$ 换成 $x_0+2\ln x_0$。
+  common_failures:
+    - 直接把两个方程相除，忽略 source 说的找点主线。
+    - 只证明导函数有零点，忘记还要证明原函数第二个零点。
+    - 不知道为什么要比较 $3x_0$ 和 $2+\ln\frac1a$。
+    - 最后不会把 $x_0>\ln x_0+1$ 和 $x_0>1$ 联系起来。
+  similar_practice_query: lnx-a(x-1)e^x 极值点 零点 3x0-x1>2 零点找点
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

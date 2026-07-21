@@ -1,0 +1,198 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0028_ex09
+content_revision_id: mst_p0028_ex09-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0028_ex09.card.yaml
+stem: |-
+  (2023 丹阳月考多选 T12) 函数 $f(x)=e^x-x$, $g(x)=x-\ln x$, 则下列正确的是 (  )
+  A. $f(\ln x)$ 在 $(0,+\infty)$ 上是增函数
+  B. $g(e^x)$ 在 $(0,+\infty)$ 上是增函数
+  C. $\forall x>1$, 不等式 $f(ax)\geqslant f(\ln x^2)$ 恒成立，则正实数 $a$ 的最小值为 $\frac{2}{e}$
+  D. 若 $g(x)=t$ 有两个零点 $x_1$, $x_2$, 则 $x_1+x_2<2$
+answer: |-
+  BC
+
+  A 中 $f(\ln x)=x-\ln x=g(x)$，但 $g$ 在 $(0,1)$ 递减、在 $(1,+\infty)$ 递增，所以 A 错。B 中 $g(e^x)=e^x-x=h(x)$，$h$ 在 $(0,+\infty)$ 递增，所以 B 对。C 中 $x>1$ 时 $ax>0$、$\ln x^2>0$，由 $f'(u)=e^u-1>0$ 得 $f$ 在正区间递增，故 $f(ax)\ge f(\ln x^2)$ 等价推出 $a\ge 2\ln x/x$，其最大值为 $2/e$。D 中由 $x_1-\ln x_1=x_2-\ln x_2$ 得 $(x_2-x_1)/(\ln x_2-\ln x_1)=1$，ALG 不等式给出 $1<(x_1+x_2)/2$，所以 $x_1+x_2>2$，D 错。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 判断 A：把复合函数还原成 $g(x)$。
+      max_score: 1
+    - step_id: step_2
+      description: 判断 B：把 $g(e^x)$ 识别为已知递增模型。
+      max_score: 1
+    - step_id: step_3
+      description: 判断 C：用 $f$ 的正区间单调性把函数值比较转成输入比较。
+      max_score: 1
+    - step_id: step_4
+      description: 继续判断 C：求参数最小值。
+      max_score: 1
+    - step_id: step_5
+      description: 判断 D：把两根关系转成对数平均数。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 抽象函数性质
+        target: A/B：抽象函数性质，判断复合函数单调性。
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 求参数范围
+        target: C：求参数范围，恒成立推出正实数 $a$ 的最小值。
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 数值比较
+        target: D：数值比较，用根关系判断 $x_1+x_2$ 与 2 的大小。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+      - 切线放缩与凹凸性
+    subroute:
+      - $e^x-x$ 与 $x-\ln x$ 复合还原
+      - $\ln x/x$ 最大值
+      - ALG 对数平均数
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $f(\ln x)=g(x)$，$g(e^x)=e^x-x$，都是把复合输入还原到已知单调函数。
+      - $f(ax)\ge f(\ln x^2)$ 在正区间转成 $ax\ge2\ln x$。
+      - $x_1-\ln x_1=x_2-\ln x_2$ 转成对数平均数。
+    normalization_moves_used:
+      - $e^{\ln x}=x$，把 $f(\ln x)$ 化成 $x-\ln x$。
+      - $\ln(e^x)=x$，把 $g(e^x)$ 化成 $e^x-x$。
+      - $\ln x^2=2\ln x$，分离出 $a\ge2\ln x/x$。
+      - 把两根等式移项成 $(x_2-x_1)/(\ln x_2-\ln x_1)=1$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生把 $g(x)$ 误认为在整个 $(0,+\infty)$ 上递增，回补导数单调极值基础。
+      - 若学生不会由 $f(ax)\ge f(\ln x^2)$ 利用单调性推出 $ax\ge\ln x^2$，回补函数性质与图像。
+      - 若学生不知道 $\ln x/x$ 的最大值为 $1/e$，回补导数单调极值基础。
+      - 若学生不能识别对数平均数不等式，回补不等式工具基础。
+  detail_terms:
+    - $f(x)=e^x-x$
+    - $g(x)=x-\ln x$
+    - $f(\ln x)=g(x)$
+    - $g(e^x)=e^x-x$
+    - $2\ln x/x$ 最大值
+    - ALG 对数平均数
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0028_ex09
+source_evidence:
+  source_refs:
+    - ref_id: page_0028_ex09_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0028/page_0028.md
+      role: problem_start
+      evidence: page_0028 例 9 给出 $f(x)=e^x-x$, $g(x)=x-\ln x$，要求判断 A-D 四个命题。
+    - ref_id: page_0028_ex09_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0028/page_0028.md
+      role: solution
+      evidence: page_0028 同页解析分别处理 A-D：A 用 $f(\ln x)=g(x)$，B 用 $g(e^x)=h(x)$，C 化为 $a\ge 2\ln x/x$，D 用 ALG 不等式推出 $x_1+x_2>2$。
+    - ref_id: page_0028_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0028/page_0028.md
+      role: local_context
+      evidence: 例题前列出六大函数中的 $h(x)=x+1/e^x$ 及 $1/x+\ln x$ 的单调性，例 9 解析直接引用这些模型。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0028.png
+      inspected: true
+      notes: 页图核对例 9 题干、A-D 选项、解析和答案 BC；与 markdown 一致。
+  source_context: 本题位于“导数基本技能”中同构函数应用段落，训练把复合输入代回 $e^x-x$、$x-\ln x$ 后识别为已知单调模型。
+  source_influence:
+    - A 的判断必须注意 $g(x)$ 只在 $(1,+\infty)$ 递增，不是在整个 $(0,+\infty)$ 递增。
+    - C 的恒成立条件来自 $f$ 在正区间递增，所以比较函数值可转成比较输入 $ax$ 与 $\ln x^2$。
+    - D 不是直接求两个根，而是由 $x_1-\ln x_1=x_2-\ln x_2$ 转成对数平均数与算术平均数比较。
+  source_discrepancies: []
+original_problem:
+  stem: (2023 丹阳月考多选 T12) 函数 $f(x)=e^x-x$, $g(x)=x-\ln x$, 则下列正确的是 (  )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(\ln x)$ 在 $(0,+\infty)$ 上是增函数
+      text_latex: $f(\ln x)$ 在 $(0,+\infty)$ 上是增函数
+    - label: B
+      text_raw: $g(e^x)$ 在 $(0,+\infty)$ 上是增函数
+      text_latex: $g(e^x)$ 在 $(0,+\infty)$ 上是增函数
+    - label: C
+      text_raw: $\forall x>1$, 不等式 $f(ax)\geqslant f(\ln x^2)$ 恒成立，则正实数 $a$ 的最小值为 $\frac{2}{e}$
+      text_latex: $\forall x>1$, 不等式 $f(ax)\geqslant f(\ln x^2)$ 恒成立，则正实数 $a$ 的最小值为 $\frac{2}{e}$
+    - label: D
+      text_raw: 若 $g(x)=t$ 有两个零点 $x_1$, $x_2$, 则 $x_1+x_2<2$
+      text_latex: 若 $g(x)=t$ 有两个零点 $x_1$, $x_2$, 则 $x_1+x_2<2$
+  answer: BC
+  fidelity_notes:
+    - page_0028.png 已核对：C 中为 $f(\ln x^2)$，D 中为 $g(x)=t$ 有两个零点 $x_1,x_2$。
+solution:
+  source_solution_summary: A 中 $f(\ln x)=x-\ln x=g(x)$，但 $g$ 在 $(0,1)$ 递减、在 $(1,+\infty)$ 递增，所以 A 错。B 中 $g(e^x)=e^x-x=h(x)$，$h$ 在 $(0,+\infty)$ 递增，所以 B 对。C 中 $x>1$ 时 $ax>0$、$\ln x^2>0$，由 $f'(u)=e^u-1>0$ 得 $f$ 在正区间递增，故 $f(ax)\ge f(\ln x^2)$ 等价推出 $a\ge 2\ln x/x$，其最大值为 $2/e$。D 中由 $x_1-\ln x_1=x_2-\ln x_2$ 得 $(x_2-x_1)/(\ln x_2-\ln x_1)=1$，ALG 不等式给出 $1<(x_1+x_2)/2$，所以 $x_1+x_2>2$，D 错。
+  key_steps:
+    - step_id: step_1
+      statement: 判断 A：把复合函数还原成 $g(x)$。
+      formula_trace:
+        from: $f(\ln x)$
+        to: $e^{\ln x}-\ln x=x-\ln x=g(x)$
+        operation: 把 $\ln x$ 代入 $f(u)=e^u-u$，并用 $e^{\ln x}=x$。
+        why: $g(x)=x-\ln x$ 在 $(0,1)$ 递减、在 $(1,+\infty)$ 递增，所以不能说在整个 $(0,+\infty)$ 上递增。
+      source_ref: page_0028_ex09_solution
+    - step_id: step_2
+      statement: 判断 B：把 $g(e^x)$ 识别为已知递增模型。
+      formula_trace:
+        from: $g(e^x)$
+        to: $e^x-\ln(e^x)=e^x-x$
+        operation: 代入 $g(u)=u-\ln u$，并用 $\ln(e^x)=x$。
+        why: 源页把它视为 $h(x)$ 型函数，且在 $(0,+\infty)$ 单调递增。
+      source_ref: page_0028_ex09_solution
+    - step_id: step_3
+      statement: 判断 C：用 $f$ 的正区间单调性把函数值比较转成输入比较。
+      formula_trace:
+        from: $f(ax)\geqslant f(\ln x^2),\quad x>1, a>0
+        to: $ax\geqslant \ln x^2=2\ln x$
+        operation: 由 $ax>0$、$\ln x^2>0$，且 $f'(u)=e^u-1>0$ 在 $u>0$ 恒成立，使用 $f$ 在 $(0,+\infty)$ 上递增。
+        why: 恒成立的函数值不等式被化为参数下界不等式。
+      source_ref: page_0028_ex09_solution
+    - step_id: step_4
+      statement: 继续判断 C：求参数最小值。
+      formula_trace:
+        from: $ax\geqslant2\ln x\quad(x>1)$
+        to: $a\geqslant\left(\frac{2\ln x}{x}\right)_{\max}=\frac2e$
+        operation: 同除以 $x>0$，再用 $\ln x/x$ 在 $x=e$ 处取最大值 $1/e$。
+        why: 对所有 $x>1$ 成立时，$a$ 至少要压住右侧最大值。
+      source_ref: page_0028_ex09_solution
+    - step_id: step_5
+      statement: 判断 D：把两根关系转成对数平均数。
+      formula_trace:
+        from: $x_1-\ln x_1=x_2-\ln x_2$
+        to: $\frac{x_2-x_1}{\ln x_2-\ln x_1}=1<\frac{x_1+x_2}{2}$
+        operation: 移项得 $x_2-x_1=\ln x_2-\ln x_1$，再套用对数平均数小于算术平均数的 ALG 不等式。
+        why: 由 $1<(x_1+x_2)/2$ 得 $x_1+x_2>2$，与选项 D 的 $x_1+x_2<2$ 相反。
+      source_ref: page_0028_ex09_solution
+teaching_card:
+  student_title: 把复合输入还原成六大函数
+  what_it_trains: 训练在多选题中逐项把 $\ln x$、$e^x$、$ax$ 这些输入代回原函数，借已知单调性和平均数不等式快速判定。
+  recognition_cues:
+    - 题干给出两个函数 $e^x-x$ 与 $x-\ln x$，选项又出现 $\ln x$、$e^x$ 作为输入。
+    - 恒成立选项中同时有 $ax$ 和 $\ln x^2$，提示用 $f$ 的递增性比较输入。
+    - 两根满足 $x-\ln x$ 取同一值，提示移项成对数平均数。
+  normalization_moves:
+    - 先把 $f(\ln x)$ 算成 $x-\ln x$，再看它的实际单调区间。
+    - 把 $g(e^x)$ 算成 $e^x-x$，直接调用正区间递增性。
+    - 把 $f(ax)\ge f(\ln x^2)$ 化成 $a\ge2\ln x/x$。
+    - 把 $x_1-\ln x_1=x_2-\ln x_2$ 改写成对数平均数等于 1。
+  common_failures:
+    - 只看 $x-\ln x$ 在 $x>1$ 递增，忘了 A 的定义域是整个 $(0,+\infty)$。
+    - C 中没有先确认 $ax$ 与 $\ln x^2$ 都在 $f$ 的递增区间。
+    - 把 $\max 2\ln x/x$ 算成 $1/e$，漏掉系数 2。
+    - D 中由 $1<(x_1+x_2)/2$ 反推出了错误方向。
+  similar_practice_query: e^x-x x-ln x 复合函数 单调性 恒成立 ln x/x ALG 对数平均数
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0028 markdown 与页图；未发现题干、选项或答案差异。

@@ -1,0 +1,198 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0049_section3_ex08
+content_revision_id: mst_p0049_section3_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0049_section3_ex08.card.yaml
+stem: |-
+  （江西重点中学协作体 2021 届高三联考 T20）已知函数 $f(x)=x-\frac{a}{e^x}-\frac12(\sin x-\cos x)$。
+  (1). 当 $a=0$ 时，判断函数 $f(x)$ 的单调性。
+  (2). 已知 $f(x)\ge1$ 对任意 $x\in\mathbf R$ 恒成立，求 $a$ 的取值范围。
+answer: |-
+  (1) $f(x)$ 在 $\mathbf R$ 上单调递增；(2) $a\in\left(-\infty,-\frac12\right]$。
+
+  当 a=0 时，f'(x)=1-(cos x+sin x)/2 =1-(sqrt2/2)sin(x+pi/4)>0，所以 f 在 R 上递增。 若 f(x)>=1 恒成立，代入 x=0 得 -a+1/2>=1，故 a<=-1/2。 对 a<=-1/2，有 -a/e^x>=1/(2e^x)，只需证明 x-1/2(sin x-cos x)+1/(2e^x)>=1。等价于 e^x(2-2x+sin x-cos x)<=1。令 g 为左侧，则 g'(x)=2e^x(sin x-x)。由 h(x)=sin x-x 单调递减且 h(0)=0， 知 g 在 0 左增、0 右减，最大值 g(0)=1，故充分。 法二直接分离为 a<=(x-1-1/2 sin x+1/2 cos x)e^x，对该右侧求最小值也得 -1/2。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 第 (1) 问用三角合并判断导数恒正。
+      max_score: 1
+    - step_id: step_2
+      description: 用 x=0 取得参数必要条件。
+      max_score: 1
+    - step_id: step_3
+      description: 在 $a\le-1/2$ 下建立充分性的下界。
+      max_score: 1
+    - step_id: step_4
+      description: 把充分性目标变成“指数找基友”的最大值问题。
+      max_score: 1
+    - step_id: step_5
+      description: 证明构造函数的最大值为 1。
+      max_score: 1
+    - step_id: step_6
+      description: 分离参数法给出同一边界。
+      max_score: 1
+    - step_id: step_7
+      description: 求分离后右侧函数的最小值。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 (1) 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 (2) 问
+        result: 见 source_solution_summary
+  method:
+    primary: 参变量分离
+    secondary:
+      - 拟合与夹逼
+      - 切线放缩与凹凸性
+    subroute:
+      - 指数找基友
+      - 特值必要条件
+      - $x-\sin x$ 符号判定
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 指对复合结构
+      - 非对称结构
+    evidence:
+      - $f^{\prime}(x)=1-\frac12(\cos x+\sin x)$
+      - $e^x(2-2x+\sin x-\cos x)\le1$
+      - $g^{\prime}(x)=2e^x(\sin x-x)$
+      - $\left(x-1-\frac12\sin x+\frac12\cos x\right)e^x$
+    normalization_moves_used:
+      - 代入 x=0 获得必要条件。
+      - 用 $a\le-1/2$ 把 $-a/e^x$ 替换为 $1/(2e^x)$。
+      - 同乘 $2e^x$ 构造可求导的“基友”函数。
+      - 分离参数后求右侧函数最小值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\cos x+\sin x$ 合并为 $\sqrt2\sin(x+\pi/4)$，回补三角函数基础。
+      - 若学生没有用 x=0 检查恒成立的必要条件，回补函数三要素与定义域。
+      - 若学生不能由 $a\le-1/2$ 推出 $-a/e^x\ge1/(2e^x)$，回补代数恒等变形。
+      - 若学生不会用 $\sin x-x$ 或 $x-\sin x$ 的符号判断单调性，回补导数单调极值基础。
+  detail_terms:
+    - $a\le-1/2$
+    - $e^x(2-2x+\sin x-\cos x)$
+    - $\sin x-x$
+    - 指数找基友
+parts: &a1
+  - label: (1)
+    text: 当 $a=0$ 时，判断函数 $f(x)$ 的单调性。
+  - label: (2)
+    text: 已知 $f(x)\ge1$ 对任意 $x\in\mathbf R$ 恒成立，求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0049_section3_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0049
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0049/page_0049.md
+      role: problem_start
+      evidence: lines 16-18 give 例 8 题干：f(x)=x-a/e^x-1/2(sin x-cos x)；(1) a=0 判断单调性；(2) f(x)>=1 对任意实数恒成立求 a。
+    - ref_id: page_0049_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0049/page_0049.md
+      role: solution
+      evidence: lines 20-26 give完整解析：a=0 时导数恒正；法一由 x=0 必要条件和指数找基友证明；法二分离参数并求 g 的最小值；答案 (-infty,-1/2]。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0049.png
+      inspected: true
+      notes: 页图已核对：例 8 题干、两种解法和“指数找基友”注意文字与 markdown 一致。
+  source_context: 本题位于 page_0049 中部，题头和完整解析均在 page_0049；下方例 9 是下一张卡。
+  source_influence:
+    - 卡片保留源解法一的必要条件 x=0 与“指数找基友”构造。
+    - 卡片也保留源解法二的参变量分离，作为同一答案的确认路径。
+  source_discrepancies: []
+original_problem:
+  stem: （江西重点中学协作体 2021 届高三联考 T20）已知函数 $f(x)=x-\frac{a}{e^x}-\frac12(\sin x-\cos x)$。
+  parts: *a1
+  choices: []
+  answer: (1) $f(x)$ 在 $\mathbf R$ 上单调递增；(2) $a\in\left(-\infty,-\frac12\right]$。
+  fidelity_notes:
+    - 源页使用 $a/e^x$ 记法；本卡等价保留为 $a e^{-x}$ 型结构理解。
+solution:
+  source_solution_summary: 当 a=0 时，f'(x)=1-(cos x+sin x)/2 =1-(sqrt2/2)sin(x+pi/4)>0，所以 f 在 R 上递增。 若 f(x)>=1 恒成立，代入 x=0 得 -a+1/2>=1，故 a<=-1/2。 对 a<=-1/2，有 -a/e^x>=1/(2e^x)，只需证明 x-1/2(sin x-cos x)+1/(2e^x)>=1。等价于 e^x(2-2x+sin x-cos x)<=1。令 g 为左侧，则 g'(x)=2e^x(sin x-x)。由 h(x)=sin x-x 单调递减且 h(0)=0， 知 g 在 0 左增、0 右减，最大值 g(0)=1，故充分。 法二直接分离为 a<=(x-1-1/2 sin x+1/2 cos x)e^x，对该右侧求最小值也得 -1/2。
+  key_steps:
+    - step_id: step_1
+      statement: 第 (1) 问用三角合并判断导数恒正。
+      formula_trace:
+        from: $f^{\prime}(x)=1-\frac12(\cos x+\sin x)$
+        to: $f^{\prime}(x)=1-\frac{\sqrt2}{2}\sin\left(x+\frac\pi4\right)>0$
+        operation: 把 $\cos x+\sin x$ 合并为 $\sqrt2\sin(x+\pi/4)$。
+        why: $\sqrt2/2<1$，所以导数始终为正。
+      source_ref: page_0049_solution
+    - step_id: step_2
+      statement: 用 x=0 取得参数必要条件。
+      formula_trace:
+        from: $f(0)=-a+\frac12\ge1$
+        to: $a\le-\frac12$
+        operation: 将恒成立不等式代入特值 x=0。
+        why: 任意 x 恒成立必须在 x=0 也成立。
+      source_ref: page_0049_solution
+    - step_id: step_3
+      statement: 在 $a\le-1/2$ 下建立充分性的下界。
+      formula_trace:
+        from: $-\frac{a}{e^x}\ge\frac1{2e^x}$
+        to: $f(x)\ge x-\frac12(\sin x-\cos x)+\frac1{2e^x}$
+        operation: 利用 $e^x>0$ 和 $a\le-1/2$。
+        why: 只要右侧仍不小于 1，就可证明原函数不小于 1。
+      source_ref: page_0049_solution
+    - step_id: step_4
+      statement: 把充分性目标变成“指数找基友”的最大值问题。
+      formula_trace:
+        from: $x-\frac12(\sin x-\cos x)+\frac1{2e^x}\ge1$
+        to: $e^x(2-2x+\sin x-\cos x)\le1$
+        operation: 移项并同乘正数 $2e^x$。
+        why: 构造出的左侧求导后只剩 $\sin x-x$ 的符号。
+      source_ref: page_0049_solution
+    - step_id: step_5
+      statement: 证明构造函数的最大值为 1。
+      formula_trace:
+        from: $g^{\prime}(x)=2e^x(\sin x-x)$
+        to: $g(x)\le g(0)=1$
+        operation: 令 $h(x)=\sin x-x$，由 $h^{\prime}(x)=\cos x-1\le0$ 得 h 在 0 左正、0 右负。
+        why: g 在 $(-\infty,0)$ 增、在 $(0,+\infty)$ 减，所以最大值为 g(0)。
+      source_ref: page_0049_solution
+    - step_id: step_6
+      statement: 分离参数法给出同一边界。
+      formula_trace:
+        from: $f(x)\ge1$
+        to: $a\le \left(x-1-\frac12\sin x+\frac12\cos x\right)e^x$
+        operation: 移项并同乘正数 $e^x$。
+        why: 恒成立等价于 a 不超过右侧函数在 R 上的最小值。
+      source_ref: page_0049_solution
+    - step_id: step_7
+      statement: 求分离后右侧函数的最小值。
+      formula_trace:
+        from: $g(x)=\left(x-1-\frac12\sin x+\frac12\cos x\right)e^x,\quad g^{\prime}(x)=(x-\sin x)e^x$
+        to: $g_{\min}=g(0)=-\frac12$
+        operation: 用 $\varphi(x)=x-\sin x$ 在 0 两侧的符号判定 g 先减后增。
+        why: 所以 $a\le-1/2$ 是必要且充分的统一范围。
+      source_ref: page_0049_solution
+teaching_card:
+  student_title: 先用 x=0 锁边界，再指数找基友
+  what_it_trains: 训练在指数与三角混合恒成立题中，用特值拿必要条件，再构造导数会简化成 $\sin x-x$ 的伴随函数完成充分性。
+  recognition_cues:
+    - 题干要求对任意实数 x 恒成立。
+    - $a/e^x$ 的符号随 a 控制，且 x=0 会把三角项和指数项都简化。
+    - 同乘 $e^x$ 后会出现 $\sin x-x$ 或 $x-\sin x$。
+  normalization_moves:
+    - 先代入 x=0 得 $a\le-1/2$。
+    - 把 $-a/e^x$ 替换成更小边界 $1/(2e^x)$。
+    - 将目标化为 $e^x(2-2x+\sin x-\cos x)\le1$。
+    - 也可直接分离参数，求右侧函数最小值。
+  common_failures:
+    - 只证明 $a\le-1/2$ 必要，漏掉充分性。
+    - 同乘 $e^x$ 后符号方向或常数项算错。
+    - 误以为 $\sin x-x$ 的符号只在局部成立。
+  similar_practice_query: e^x 三角 恒成立 参数范围 指数找基友 sin x - x
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

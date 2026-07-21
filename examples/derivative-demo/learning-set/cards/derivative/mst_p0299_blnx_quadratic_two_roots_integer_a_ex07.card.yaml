@@ -1,0 +1,229 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0299_blnx_quadratic_two_roots_integer_a_ex07
+content_revision_id: mst_p0299_blnx_quadratic_two_roots_integer_a_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0299_blnx_quadratic_two_roots_integer_a_ex07.card.yaml
+stem: |-
+  （2024 · 辽宁一模）已知函数 $f(x)=b\ln x$，$g(x)=x^2+ax$，其中 $a,b$ 为实数，且 $b>0$。
+  1. 当 $a=-1$ 时，$f(x)\leqslant g(x)$ 恒成立，求 $b$。
+  2. 当 $b=2$ 时，函数 $G(x)=f(x)-g(x)$ 有两个不同的零点，求 $a$ 的最大整数值。参考数据：$\ln\frac54\approx0.223$。
+answer: |-
+  第(1)问 $b=1$；第(2)问 $a$ 的最大整数值为 $-1$。
+
+  第(1)问当 $a=-1$ 时，设 $F(x)=f(x)-g(x)=b\ln x-x^2+x$，要求 $F(x)\le0$。 当 $b=1$ 时， $F^\prime(x)=\frac{-(2x+1)(x-1)}{x}$，所以 $F$ 在 $(0,1)$ 上递增、在 $(1,+\infty)$ 上递减， $F(x)\le F(1)=0$。若 $b>1$，$F^\prime=0$ 的正根 $x_2>1$，在 $(1,x_2)$ 上 $F(x)>F(1)=0$；若 $0<b<1$，正根 $x_2<1$，在 $(x_2,1)$ 上 $F(x)>F(1)=0$，均不合题意，所以 $b=1$。第(2)问 $b=2$ 时，$G$ 有两个零点等价于 $a=h(x)=\frac{2\ln x-x^2}{x}$ 有两个不同解。求导得 $h^\prime(x)=\frac{2-x^2-2\ln x}{x^2}$。令 $m(x)=2-x^2-2\ln x$，则 $m$ 在 $(0,+\infty)$ 上递减， 且 $m(1)>0$、$m(\frac54)<0$，所以唯一零点 $x_0\in(1,\frac54)$。由 $m(x_0)=0$ 得 $h_{\max}=h(x_0)=\frac2{x_0}-2x_0\in(-\frac9{10},0)$。 因此最大整数候选为 $-1$。当 $a=-1$ 时，令 $p(x)=2\ln x-x^2+x$，$p$ 先增后减，且 $p(1)=0$、$p(\frac{1+\sqrt{17}}4)>0$、$p(e)<0$， 故有两个不同零点，结论为 $a=-1$。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 第(1)问设差函数。
+      max_score: 1
+    - step_id: step_2
+      description: 验证 $b=1$ 合理。
+      max_score: 1
+    - step_id: step_3
+      description: 排除 $b>1$ 和 $0<b<1$。
+      max_score: 1
+    - step_id: step_4
+      description: 第(2)问分离参数。
+      max_score: 1
+    - step_id: step_5
+      description: 定位 $h$ 的极大点。
+      max_score: 1
+    - step_id: step_6
+      description: 隐点消参估计 $h_{\max}$。
+      max_score: 1
+    - step_id: step_7
+      description: 验证最大整数候选 $a=-1$。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: "1"
+        goal: 求参数范围
+        target: 第 1 问
+        result: $b=1$。
+      - part_id: "2"
+        goal: 零点/极值点分析
+        target: 第 2 问
+        result: $a$ 的最大整数值为 $-1$。
+  method:
+    primary: 参变量分离
+    secondary:
+      - 显隐点探路
+      - 充分/必要性探路
+      - 含参数分类讨论
+    subroute:
+      - 差函数恒成立
+      - 显点 $x=1$ 最大值验证
+      - $a=h(x)$ 水平线交点
+      - 隐点 $m(x_0)=0$ 消参
+      - 验证整数候选 $a=-1$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+      - 局部逼近结构
+    evidence:
+      - $b\ln x$
+      - $x^2+ax$
+      - $F(x)=b\ln x-x^2+x$
+      - $h(x)=\frac{2\ln x-x^2}{x}$
+      - $m(x)=2-x^2-2\ln x$
+      - $p(x)=2\ln x-x^2+x$
+    normalization_moves_used:
+      - 第(1)问先做差函数 $F=f-g$。
+      - 第(2)问把零点方程分离为 $a=h(x)$。
+      - 用 $m(x)$ 管理 $h^\prime$ 的符号。
+      - 用隐点方程消掉 $\ln x_0$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会做差函数，回补代数恒等变形。
+      - 若学生不会恒成立与最大值关系，回补不等式工具基础。
+      - 若学生不会对数求导，回补指数对数基础。
+      - 若学生不会由单峰判断两个零点，回补导数单调极值基础。
+      - 若学生不会理解水平线交点，回补函数性质与图像。
+  detail_terms:
+    - $b\ln x$
+    - $x^2+ax$
+    - $b=1$
+    - $a=\frac{2\ln x-x^2}{x}$
+    - $x_0\in(1,\frac54)$
+    - $h_{\max}\in(-\frac9{10},0)$
+    - $a_{\max,\mathbf Z}=-1$
+parts: &a1
+  - part_id: "1"
+    text: 当 $a=-1$ 时，$f(x)\leqslant g(x)$ 恒成立，求 $b$。
+  - part_id: "2"
+    text: 当 $b=2$ 时，函数 $G(x)=f(x)-g(x)$ 有两个不同的零点，求 $a$ 的最大整数值。参考数据：$\ln\frac54\approx0.223$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0299_blnx_quadratic_two_roots_integer_a_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0299_ex07_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0299/page_0299.md
+      role: problem_start
+      evidence: page_0299 例7题头：$f(x)=b\ln x$，$g(x)=x^2+ax$，$b>0$；两问分别为 $a=-1$ 时恒成立求 $b$，以及 $b=2$ 时两个零点求 $a$ 最大整数值。
+    - ref_id: page_0299_ex07_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0299/page_0299.md
+      role: solution_start
+      evidence: page_0299 完成第(1)问：设 $F=b\ln x-x^2+x$，按 $b=1$、$b>1$、$0<b<1$ 验证，结论 $b=1$；第(2)问开始分离为 $a=\frac{2\ln x-x^2}{x}$。
+    - ref_id: page_0300_ex07_solution_end
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0300/page_0300.md
+      role: solution_end
+      evidence: page_0300 页首续完第(2)问：令 $h(x)=\frac{2\ln x-x^2}{x}$，$m(x)=2-x^2-2\ln x$，由 $x_0\in(1,\frac54)$ 得 $h_{\max}\in(-\frac9{10},0)$，再验证 $a=-1$ 时有两个不同零点。
+    - ref_id: page_0300_section3_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0300/page_0300.md
+      role: local_context
+      evidence: page_0300 中部进入“第三节 隐点效应与极值点不等式证明”和新例1，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0299.png
+      inspected: true
+      notes: 已核对页图：page_0299 包含例7题头、第(1)问解析和第(2)问开头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0300.png
+      inspected: true
+      notes: 已核对页图：page_0300 页首完成例7第(2)问，随后进入第三节新例1。
+  source_context: 本卡处理 page_0299 起头、page_0300 页首续完的例7；page_0300 第三节例1排除。
+  source_influence:
+    - 保留第(1)问设 $F(x)=b\ln x-x^2+x$，目标为 $F(x)\le0$ 恒成立。
+    - 保留 source 的三类验证：$b=1$ 合理，$b>1$ 与 $0<b<1$ 都会在 $x=1$ 附近出现 $F(x)>0$。
+    - 保留第(2)问分离参数：$a=h(x)=\frac{2\ln x-x^2}{x}$。
+    - 保留 $m(x)=2-x^2-2\ln x$ 单调递减，并用参考数据定位 $x_0\in(1,\frac54)$。
+    - 保留隐点消参：$h(x_0)=\frac2{x_0}-2x_0\in(-\frac9{10},0)$。
+    - 保留验证 $a=-1$：设 $p(x)=2\ln x-x^2+x$，由 $p(1)=0$、极大值为正、$p(e)<0$ 得两个不同零点。
+  source_discrepancies:
+    - discrepancy_id: page_0300_ex07_line_start_truncation
+      status: resolved
+      issue: "page_0300 markdown 首行有 `[?unclear: 0] 有两个不同的解`，是上一页第(2)问公式 `(x>0)` 的页首续尾被截断。"
+      resolution: 结合 page_0299 末行和 page_0300 原图，完整语义为方程 $a=\frac{2\ln x-x^2}{x}\ (x>0)$ 有两个不同的解。
+original_problem:
+  stem: （2024 · 辽宁一模）已知函数 $f(x)=b\ln x$，$g(x)=x^2+ax$，其中 $a,b$ 为实数，且 $b>0$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问 $b=1$；第(2)问 $a$ 的最大整数值为 $-1$。
+  fidelity_notes:
+    - 无选项。
+    - 参考数据 $\ln\frac54\approx0.223$ 用于判定 $m(\frac54)<0$。
+solution:
+  source_solution_summary: 第(1)问当 $a=-1$ 时，设 $F(x)=f(x)-g(x)=b\ln x-x^2+x$，要求 $F(x)\le0$。 当 $b=1$ 时， $F^\prime(x)=\frac{-(2x+1)(x-1)}{x}$，所以 $F$ 在 $(0,1)$ 上递增、在 $(1,+\infty)$ 上递减， $F(x)\le F(1)=0$。若 $b>1$，$F^\prime=0$ 的正根 $x_2>1$，在 $(1,x_2)$ 上 $F(x)>F(1)=0$；若 $0<b<1$，正根 $x_2<1$，在 $(x_2,1)$ 上 $F(x)>F(1)=0$，均不合题意，所以 $b=1$。第(2)问 $b=2$ 时，$G$ 有两个零点等价于 $a=h(x)=\frac{2\ln x-x^2}{x}$ 有两个不同解。求导得 $h^\prime(x)=\frac{2-x^2-2\ln x}{x^2}$。令 $m(x)=2-x^2-2\ln x$，则 $m$ 在 $(0,+\infty)$ 上递减， 且 $m(1)>0$、$m(\frac54)<0$，所以唯一零点 $x_0\in(1,\frac54)$。由 $m(x_0)=0$ 得 $h_{\max}=h(x_0)=\frac2{x_0}-2x_0\in(-\frac9{10},0)$。 因此最大整数候选为 $-1$。当 $a=-1$ 时，令 $p(x)=2\ln x-x^2+x$，$p$ 先增后减，且 $p(1)=0$、$p(\frac{1+\sqrt{17}}4)>0$、$p(e)<0$， 故有两个不同零点，结论为 $a=-1$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问设差函数。
+      formula_trace:
+        from: $f(x)\le g(x)$
+        to: $F(x)=b\ln x-x^2+x\le0$
+        operation: 把 $f-g$ 记为 $F$。
+        why: 恒成立问题转成差函数最大值不超过 $0$。
+      source_ref: page_0299_ex07_solution_start
+    - step_id: step_2
+      statement: 验证 $b=1$ 合理。
+      formula_trace:
+        from: $F^\prime(x)=\frac1x-2x+1$
+        to: $F(x)\le F(1)=0$
+        operation: 因式分解导数并判单调。
+        why: $x=1$ 是全局最大点。
+      source_ref: page_0299_ex07_solution_start
+    - step_id: step_3
+      statement: 排除 $b>1$ 和 $0<b<1$。
+      formula_trace:
+        from: $F^\prime(x)=\frac{-2x^2+x+b}{x}$
+        to: $x=1$ 附近存在 $F(x)>0$
+        operation: 按正根 $x_2$ 在 $1$ 的右侧或左侧分类。
+        why: 除 $b=1$ 外，$F$ 会在 $F(1)=0$ 附近抬高，破坏恒成立。
+      source_ref: page_0299_ex07_solution_start
+    - step_id: step_4
+      statement: 第(2)问分离参数。
+      formula_trace:
+        from: $2\ln x-x^2-ax=0$
+        to: $a=h(x)=\frac{2\ln x-x^2}{x}$
+        operation: 除以 $x>0$。
+        why: 两个零点问题转成水平线与 $h$ 的交点个数。
+      source_ref: page_0299_ex07_solution_start
+    - step_id: step_5
+      statement: 定位 $h$ 的极大点。
+      formula_trace:
+        from: $h^\prime(x)=\frac{2-x^2-2\ln x}{x^2}$
+        to: $x_0\in(1,\frac54),\quad 2-x_0^2-2\ln x_0=0$
+        operation: 令 $m(x)=2-x^2-2\ln x$，用单调性和参考数据夹住零点。
+        why: 极大点不可显式求出，但可被夹在窄区间内。
+      source_ref: page_0300_ex07_solution_end
+    - step_id: step_6
+      statement: 隐点消参估计 $h_{\max}$。
+      formula_trace:
+        from: $2=x_0^2+2\ln x_0$
+        to: $h(x_0)=\frac2{x_0}-2x_0\in(-\frac9{10},0)$
+        operation: 把 $2\ln x_0$ 换成 $2-x_0^2$，再利用 $x_0\in(1,\frac54)$。
+        why: 只需知道极大值位于 $-1$ 与 $0$ 之间。
+      source_ref: page_0300_ex07_solution_end
+    - step_id: step_7
+      statement: 验证最大整数候选 $a=-1$。
+      formula_trace:
+        from: $p(x)=2\ln x-x^2+x$
+        to: $p(x)$ 有两个不同零点
+        operation: 研究 $p$ 的单峰性，并用 $p(1)=0$、极大值正、$p(e)<0$ 判定。
+        why: 候选整数必须实际产生两个不同零点。
+      source_ref: page_0300_ex07_solution_end
+teaching_card:
+  student_title: 对数二次交点里的最大整数
+  what_it_trains: 训练把两个函数的交点个数转成参数水平线问题，再用隐点消参确定最大整数。
+  recognition_cues:
+    - 题目给 $f=b\ln x$ 和 $g=x^2+ax$，本质是差函数。
+    - 第(1)问 $x=1$ 是天然显点，因为 $\ln1=0$。
+    - 第(2)问两个零点可以翻译成 $a=h(x)$ 有两个解。
+    - 参考数据 $\ln\frac54$ 是用来夹住隐点 $x_0$ 的。
+  normalization_moves:
+    - 第(1)问不直接猜 $b$，先看差函数是否全局不正。
+    - 第(2)问先求 $h$ 的最高点，再看整数线能否切出两个交点。
+    - 得到候选 $a=-1$ 后必须回到原方程验证两个零点。
+  common_failures:
+    - 把 $F(1)=0$ 当成唯一检查，忘记要验证全局最大。
+    - 分离 $a$ 时忘记 $x>0$。
+    - 求出 $h_{\max}\in(-\frac9{10},0)$ 后误以为最大整数是 $0$。
+    - 只用 $a<h_{\max}$ 找候选，忘记验证 $a=-1$ 真的有两个零点。
+  similar_practice_query: b lnx x^2+ax 两个零点 最大整数 a 参变分离 h(x) 隐点 x0
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

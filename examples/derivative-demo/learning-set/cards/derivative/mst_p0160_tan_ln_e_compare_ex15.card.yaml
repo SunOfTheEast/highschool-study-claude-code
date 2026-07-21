@@ -1,0 +1,267 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0160_tan_ln_e_compare_ex15
+content_revision_id: mst_p0160_tan_ln_e_compare_ex15-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0160_tan_ln_e_compare_ex15.card.yaml
+stem: |-
+  （2023·靖江市期中）已知 $a=\tan\frac1e$，$b=\frac{e-1}{e^2}$，$c=\ln\frac{e}{e-1}$，其中 $e$ 为自然对数的底数，则 $a,b,c$ 的大小关系为（  ）
+  A. $a<b<c$
+  B. $b<a<c$
+  C. $b<c<a$
+  D. $c<b<a$
+answer: |
+  B
+
+  先看 $b,c$。有
+  \[
+  b=\frac{e-1}{e^2}=\frac1e-\frac1{e^2}.
+  \]
+  对
+  \[
+  c=\ln\frac{e}{e-1},
+  \]
+  令 $t=\frac{e}{e-1}>1$，用
+  \[
+  \ln t>\frac{2(t-1)}{t+1}
+  \]
+  得
+  \[
+  c>\frac{2\left(\frac{e}{e-1}-1\right)}{\frac{e}{e-1}+1}
+  =\frac{2}{2e-1}.
+  \]
+  且
+  \[
+  \frac{2}{2e-1}>\frac{e-1}{e^2}=b,
+  \]
+  所以 $c>b$。
+  再看 $a,b$：
+  \[
+  a=\tan\frac1e>\frac1e>\frac1e-\frac1{e^2}=b,
+  \]
+  即 $a>b$。
+  故只需比较 $a,c$。由 $0<\frac1e<\frac\pi6$，应用正切割线上界
+  \[
+  \tan x<\frac{2\sqrt3}{\pi}x\quad \left(0<x<\frac\pi6\right),
+  \]
+  得
+  \[
+  \tan\frac1e<\frac{2\sqrt3}{e\pi}.
+  \]
+  源解继续给出链式比较
+  \[
+  \tan\frac1e<\frac{2\sqrt3}{e\pi}<\frac{2}{2e-1}<c.
+  \]
+  因而 $a<c$。综合可得
+  \[
+  b<a<c,
+  \]
+  选 B。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 用 $\ln$ 下界把 $c$ 压到显式分式之上，并得到 $c>b$。
+      max_score: 1
+    - step_id: step_2
+      description: 用 $\tan x>x$ 直接得到 $a>b$。
+      max_score: 1
+    - step_id: step_3
+      description: 对 $a$ 使用正切割线上界。
+      max_score: 1
+    - step_id: step_4
+      description: 保留源解关键不等式链，推出 $a<c$。
+      max_score: 1
+    - step_id: step_5
+      description: 合并顺序并对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较 $\tan\frac1e$、分式 $\frac{e-1}{e^2}$ 与对数项 $\ln\frac{e}{e-1}$。
+        result: 见 source_solution_summary
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 拟合与夹逼
+      - 同构变形与换元法
+    subroute:
+      - $c$ 先用 $\ln t$ 下界改写成有理阈值
+      - $a$ 先下界脱离 $b$，再用正切割线上界压低
+      - 保留链式桥接：$\frac{2\sqrt3}{e\pi}<\frac{2}{2e-1}$
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $a$ 来自三角函数，$c$ 来自对数函数，比较依赖不同模板的上下界拼接。
+      - 解法核心是把两项分别映射到同一有理阈值链上。
+    normalization_moves_used:
+      - $\ln t>\frac{2(t-1)}{t+1}$。
+      - $\tan x>x$ 与 $\tan x<\frac{2\sqrt3}{\pi}x$（小区间）。
+      - $\tan\frac1e<\frac{2\sqrt3}{e\pi}<\frac{2}{2e-1}<c$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $\ln\frac{e}{e-1}$ 套用有理下界，回补指数对数基础。
+      - 若学生不会在小角区间使用正切割线上界，回补三角函数基础。
+      - 若学生不会把三段不等式拼接成全序，回补不等式工具基础。
+  detail_terms:
+    - $c>\frac{2}{2e-1}>b$
+    - $a>\frac1e>b$
+    - $\tan\frac1e<\frac{2\sqrt3}{e\pi}<\frac{2}{2e-1}<c$
+    - 正切割线放缩
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0160_tan_ln_e_compare_ex15
+source_evidence:
+  source_refs:
+    - ref_id: page_0160_ex15_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0160/page_0160.md
+      role: problem_start
+      evidence: 例15题头与选项在 page_0160：$a=\tan\frac1e,\ b=\frac{e-1}{e^2},\ c=\ln\frac{e}{e-1}$。
+    - ref_id: page_0160_ex15_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0160/page_0160.md
+      role: solution
+      evidence: 例15解析在 page_0160：先证 $c>b$、$a>b$，再用正切割线上界给出 $a<c$，结论选 B。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0160.png
+      inspected: false
+      notes: 本卡按 source markdown 重建，未重新人工核对页图。
+  source_context: 本题位于 page_0160 例15；其后进入“微元法与比大小”讲解，不属于本题步骤。
+  source_influence:
+    - 保留源解先分离出 $c>b$ 与 $a>b$，再只比较 $a,c$ 的推进顺序。
+    - 保留源解对 $c$ 的关键下界：$c>\frac{2}{2e-1}$。
+    - 完整保留源解正切上界链：$\tan\frac1e<\frac{2\sqrt3}{e\pi}<\frac{2}{2e-1}<c$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·靖江市期中）已知 $a=\tan\frac1e$，$b=\frac{e-1}{e^2}$，$c=\ln\frac{e}{e-1}$，其中 $e$ 为自然对数的底数，则 $a,b,c$ 的大小关系为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+    - label: B
+      text_raw: $b<a<c$
+      text_latex: $b<a<c$
+    - label: C
+      text_raw: $b<c<a$
+      text_latex: $b<c<a$
+    - label: D
+      text_raw: $c<b<a$
+      text_latex: $c<b<a$
+  answer: B
+  fidelity_notes:
+    - 源解先得 $c>b$ 与 $a>b$，再经正切上界证明 $a<c$，最终 $b<a<c$。
+solution:
+  source_solution_summary: |
+    先看 $b,c$。有
+    \[
+    b=\frac{e-1}{e^2}=\frac1e-\frac1{e^2}.
+    \]
+    对
+    \[
+    c=\ln\frac{e}{e-1},
+    \]
+    令 $t=\frac{e}{e-1}>1$，用
+    \[
+    \ln t>\frac{2(t-1)}{t+1}
+    \]
+    得
+    \[
+    c>\frac{2\left(\frac{e}{e-1}-1\right)}{\frac{e}{e-1}+1}
+    =\frac{2}{2e-1}.
+    \]
+    且
+    \[
+    \frac{2}{2e-1}>\frac{e-1}{e^2}=b,
+    \]
+    所以 $c>b$。
+    再看 $a,b$：
+    \[
+    a=\tan\frac1e>\frac1e>\frac1e-\frac1{e^2}=b,
+    \]
+    即 $a>b$。
+    故只需比较 $a,c$。由 $0<\frac1e<\frac\pi6$，应用正切割线上界
+    \[
+    \tan x<\frac{2\sqrt3}{\pi}x\quad \left(0<x<\frac\pi6\right),
+    \]
+    得
+    \[
+    \tan\frac1e<\frac{2\sqrt3}{e\pi}.
+    \]
+    源解继续给出链式比较
+    \[
+    \tan\frac1e<\frac{2\sqrt3}{e\pi}<\frac{2}{2e-1}<c.
+    \]
+    因而 $a<c$。综合可得
+    \[
+    b<a<c,
+    \]
+    选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 用 $\ln$ 下界把 $c$ 压到显式分式之上，并得到 $c>b$。
+      formula_trace:
+        from: $c=\ln\frac{e}{e-1}$，$b=\frac{e-1}{e^2}$
+        to: $c>\frac{2}{2e-1}>\frac{e-1}{e^2}=b$
+        operation: 代入 $\ln t>\frac{2(t-1)}{t+1}$（$t=\frac{e}{e-1}$）并与 $b$ 比较。
+        why: 先确定 $c$ 在 $b$ 上方。
+      source_ref: page_0160_ex15_solution
+    - step_id: step_2
+      statement: 用 $\tan x>x$ 直接得到 $a>b$。
+      formula_trace:
+        from: $a=\tan\frac1e$
+        to: $a>\frac1e>\frac1e-\frac1{e^2}=b$
+        operation: 先用正切下界，再代回 $b$ 的改写。
+        why: 把比较目标缩减为只需判 $a,c$。
+      source_ref: page_0160_ex15_solution
+    - step_id: step_3
+      statement: 对 $a$ 使用正切割线上界。
+      formula_trace:
+        from: $0<\frac1e<\frac\pi6$，$\tan x<\frac{2\sqrt3}{\pi}x$
+        to: $a=\tan\frac1e<\frac{2\sqrt3}{e\pi}$
+        operation: 把 $x=\frac1e$ 代入割线上界模板。
+        why: 建立 $a$ 的可比较上界。
+      source_ref: page_0160_ex15_solution
+    - step_id: step_4
+      statement: 保留源解关键不等式链，推出 $a<c$。
+      formula_trace:
+        from: $a<\frac{2\sqrt3}{e\pi}$ 且 $c>\frac{2}{2e-1}$
+        to: $\tan\frac1e<\frac{2\sqrt3}{e\pi}<\frac{2}{2e-1}<c$，故 $a<c$
+        operation: 连接上界与下界，形成完整链式比较。
+        why: 完成本题最关键的跨结构比较。
+      source_ref: page_0160_ex15_solution
+    - step_id: step_5
+      statement: 合并顺序并对应选项。
+      formula_trace:
+        from: $a>b$ 且 $a<c$ 且 $c>b$
+        to: $b<a<c$，选 B
+        operation: 综合三段比较。
+        why: 得到最终答案。
+      source_ref: page_0160_ex15_solution
+teaching_card:
+  student_title: 正切上界链连接对数下界链
+  what_it_trains: 训练三角项与对数项混合比较时的分段策略：先各自压到阈值两侧，再拼成一条严格不等式链。
+  recognition_cues:
+    - 出现 $\tan(\text{小角})$ 与 $\ln\frac{u}{u-1}$ 同题。
+    - 有一项可先改写成 $\frac1e-\frac1{e^2}$。
+    - 解法常先定 $a,b$ 与 $b,c$，最后只判 $a,c$。
+  normalization_moves:
+    - 先把 $b$ 写成差分形式。
+    - 用 $\ln$ 下界构造 $\frac{2}{2e-1}$。
+    - 用正切割线上界保留完整链式比较。
+  common_failures:
+    - 只写 $\tan\frac1e>\frac1e$，却没给 $a$ 的上界，无法判 $a<c$。
+    - 遗漏中间链 $\frac{2\sqrt3}{e\pi}<\frac{2}{2e-1}$。
+    - 把 $c>b$ 与 $a>b$ 合并后误判为 $a>c$。
+  similar_practice_query: tan(1/e) ln(e/(e-1)) 比大小 割线上界
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 已按批次要求保留例15的正切上界具体不等式链。
+    - 本卡未核对 page_0160 页图，按重建 markdown 完成。

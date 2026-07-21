@@ -1,0 +1,203 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0131_log_ratio_construct_ex17
+content_revision_id: mst_p0131_log_ratio_construct_ex17-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0131_log_ratio_construct_ex17.card.yaml
+stem: |-
+  （22-23高二下·贵州·阶段练习）函数 $f(x)$ 的导函数 $f^{\prime}(x)$，对任意 $x\in(0,+\infty)$，$\ln x^{3x}f^{\prime}(x)>3f(x)$，则（  ）
+  A. $2f(e)>f(e^2)$
+  B. $2f(e)=f(e^2)$
+  C. $2f(e)<f(e^2)$
+  D. $2f(e)$ 与 $f(e^2)$ 的大小不确定
+answer: |
+  C
+
+  由
+  \[
+  \ln x^{3x}f^{\prime}(x)>3f(x)
+  \]
+  得
+  \[
+  3x\ln x\,f^{\prime}(x)-3f(x)>0
+  \Rightarrow
+  \ln x\,f^{\prime}(x)-\frac{f(x)}{x}>0.
+  \]
+  令
+  \[
+  F(x)=\frac{f(x)}{\ln x}\quad (x>1),
+  \]
+  则
+  \[
+  F^{\prime}(x)=\frac{f^{\prime}(x)\ln x-\frac{f(x)}{x}}{(\ln x)^2}>0.
+  \]
+  所以 $F$ 在 $(1,+\infty)$ 上递增，故
+  \[
+  F(e)<F(e^2)
+  \Rightarrow
+  \frac{f(e)}{\ln e}<\frac{f(e^2)}{\ln e^2}
+  \Rightarrow
+  f(e)<\frac{f(e^2)}{2}.
+  \]
+  即 $2f(e)<f(e^2)$，选 C。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把题设化为“对数项乘导数减商”的标准形。
+      max_score: 1
+    - step_id: step_2
+      description: 构造 F=f/lnx 并判其递增。
+      max_score: 1
+    - step_id: step_3
+      description: 代入 e 与 e^2 完成目标比较。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较 $2f(e)$ 与 $f(e^2)$
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+    subroute:
+      - 对数基础构造
+      - 作商判单调
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 抽象函数结构
+    evidence:
+      - $\ln x^{3x}$ 展开后出现 $x\ln x$，可同除得到 $\ln x\,f^{\prime}(x)-\frac{f}{x}$。
+      - 该结构与 $\left(\frac{f}{\ln x}\right)^{\prime}$ 分子同构。
+      - 比较点 e 与 e^2 使分母常数化为 1 和 2。
+    normalization_moves_used:
+      - 先把幂对数拆成 $3x\ln x$。
+      - 同除 $3x$ 得标准分子。
+      - 作商 $\frac{f}{\ln x}$ 后比较函数值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会处理 $\ln x^{3x}$，回补指数对数基础。
+      - 若学生在作商求导时分子写错，回补导数运算与几何意义。
+      - 若学生把 $F$ 递增与大小关系写反，回补导数单调极值基础。
+  detail_terms:
+    - $\ln x^{3x}=3x\ln x$
+    - $F(x)=\frac{f(x)}{\ln x}$
+    - $F^{\prime}(x)>0$
+    - $2f(e)<f(e^2)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0131_log_ratio_construct_ex17
+source_evidence:
+  source_refs:
+    - ref_id: page_0131
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0131/page_0131.md
+      role: problem_start
+      evidence: page_0131 上半页给出例17完整题干、A-D选项、解析与答案 C。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0131.png
+      inspected: true
+      notes: 已核对页图：例17完整位于 page_0131。
+  source_context: 例17在 page_0131 单页完成，不跨页。
+  source_influence:
+    - 保留源页先化简 $\ln x^{3x}=3x\ln x$。
+    - 保留源页构造 $F(x)=\frac{f(x)}{\ln x}$（$x>1$）并判 $F^{\prime}(x)>0$。
+    - 保留源页比较 $F(e),F(e^2)$ 得 $2f(e)<f(e^2)$。
+  source_discrepancies: []
+original_problem:
+  stem: （22-23高二下·贵州·阶段练习）函数 $f(x)$ 的导函数 $f^{\prime}(x)$，对任意 $x\in(0,+\infty)$，$\ln x^{3x}f^{\prime}(x)>3f(x)$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $2f(e)>f(e^2)$
+      text_latex: $2f(e)>f(e^2)$
+    - label: B
+      text_raw: $2f(e)=f(e^2)$
+      text_latex: $2f(e)=f(e^2)$
+    - label: C
+      text_raw: $2f(e)<f(e^2)$
+      text_latex: $2f(e)<f(e^2)$
+    - label: D
+      text_raw: $2f(e)$ 与 $f(e^2)$ 的大小不确定
+      text_latex: $2f(e)$ 与 $f(e^2)$ 的大小不确定
+  answer: C
+  fidelity_notes:
+    - 题干中的导数符号为一阶导数 $f^{\prime}(x)$。
+solution:
+  source_solution_summary: |
+    由
+    \[
+    \ln x^{3x}f^{\prime}(x)>3f(x)
+    \]
+    得
+    \[
+    3x\ln x\,f^{\prime}(x)-3f(x)>0
+    \Rightarrow
+    \ln x\,f^{\prime}(x)-\frac{f(x)}{x}>0.
+    \]
+    令
+    \[
+    F(x)=\frac{f(x)}{\ln x}\quad (x>1),
+    \]
+    则
+    \[
+    F^{\prime}(x)=\frac{f^{\prime}(x)\ln x-\frac{f(x)}{x}}{(\ln x)^2}>0.
+    \]
+    所以 $F$ 在 $(1,+\infty)$ 上递增，故
+    \[
+    F(e)<F(e^2)
+    \Rightarrow
+    \frac{f(e)}{\ln e}<\frac{f(e^2)}{\ln e^2}
+    \Rightarrow
+    f(e)<\frac{f(e^2)}{2}.
+    \]
+    即 $2f(e)<f(e^2)$，选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 把题设化为“对数项乘导数减商”的标准形。
+      formula_trace:
+        from: $\ln x^{3x}f^{\prime}(x)>3f(x)$
+        to: $\ln x\,f^{\prime}(x)-\frac{f(x)}{x}>0$
+        operation: 用 $\ln x^{3x}=3x\ln x$ 并同除 $3x$（$x>0$）。
+        why: 对应分式构造导数模板。
+      source_ref: page_0131
+    - step_id: step_2
+      statement: 构造 F=f/lnx 并判其递增。
+      formula_trace:
+        from: $\ln x\,f^{\prime}(x)-\frac{f(x)}{x}>0$
+        to: $F^{\prime}(x)>0$（$F=\frac{f}{\ln x}$）
+        operation: 求导并利用 $(\ln x)^2>0$（$x>1$）。
+        why: 获得可直接比较函数值的单调性。
+      source_ref: page_0131
+    - step_id: step_3
+      statement: 代入 e 与 e^2 完成目标比较。
+      formula_trace:
+        from: $F(e)<F(e^2)$
+        to: $2f(e)<f(e^2)$
+        operation: 代入并用 $\ln e=1,\ln e^2=2$。
+        why: 直接对应选项 C。
+      source_ref: page_0131
+teaching_card:
+  student_title: 把题设化成 $\frac{f}{\ln x}$ 的递增比较
+  what_it_trains: 训练对数幂展开后作商构造，再用两点代入完成数值比较。
+  recognition_cues:
+    - 条件里出现 $\ln x^{3x}$ 与 $f^{\prime}(x)$ 的乘积。
+    - 目标是比较 $f$ 在 e 与 e^2 两点的线性关系。
+  normalization_moves:
+    - 先展开 $\ln x^{3x}$。
+    - 把不等式化成 $\ln x\,f^{\prime}(x)-\frac{f(x)}{x}>0$。
+    - 构造 $F=\frac{f}{\ln x}$ 并用单调性比较 e、e^2。
+  common_failures:
+    - 把 $\ln x^{3x}$ 误写成 $3\ln x$。
+    - 忽略 $x>1$ 的构造定义域限制。
+    - 从 $F(e)<F(e^2)$ 推结论时漏掉分母 2。
+  similar_practice_query: ln x^{3x} 抽象函数 作商 f/lnx 单调 比较 2f(e) 与 f(e^2)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

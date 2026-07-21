@@ -1,0 +1,181 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0036_ex30
+content_revision_id: mst_p0036_ex30-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0036_ex30.card.yaml
+stem: 已知函数 $f(x)=a\ln x-2x(a\neq 0)$，若不等式 $x^a \geqslant 2e^{2x}f(x)+e^{2x}\cos(f(x))$ 对 $x>0$ 恒成立，则实数 $a$ 的取值范围为 ______。
+answer: |
+  $(0,2e]$
+
+  将原式两边同除以 $e^{2x}$，得 $e^{a\ln x-2x}-2f(x)-\cos f(x)\ge0$，即令 $t=f(x)$ 后要有 $g(t)=e^t-2t-\cos t\ge0$。源解分析 $g'(t)=e^t-2+\sin t$，得到 $g(0)=0$，且 $g$ 在正数侧会先下降到负值，所以若要 $g(f(x))\ge0$ 对所有 $x>0$ 成立，只能让 $f(x)\le0$ 恒成立。若 $a<0$，$f(x)$ 的值域为 $\mathbb R$，会取到使 $g<0$ 的值，不合题意。若 $a>0$，$f$ 在 $x=a/2$ 处取最大值 $a\ln(a/2)-a$，要求该最大值不超过 $0$，即 $\ln(a/2)\le1$，得 $0<a\le2e$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把原不等式除去公共指数因子，露出 $f(x)$ 的同构形式。
+      max_score: 1
+    - step_id: step_2
+      description: 设 $t=f(x)$，分析外层函数的非负区域。
+      max_score: 1
+    - step_id: step_3
+      description: 排除 $a<0$。
+      max_score: 1
+    - step_id: step_4
+      description: 对 $a>0$ 求 $f$ 的最大值。
+      max_score: 1
+    - step_id: step_5
+      description: 解最大值不超过零的参数条件。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 数形结合
+    subroute:
+      - 复合嵌套函数
+      - $e^{f(x)}-2f(x)-\\cos f(x)$ 外层同构
+      - 内层值域压到非正区间
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 三角复合结构
+    evidence:
+      - 原不等式除以 $e^{2x}$ 后成为 $g(f(x))\\ge0$，其中 $g(t)=e^t-2t-\\cos t$。
+      - $g(t)$ 在 $t=0$ 处为 $0$，正侧存在负值，迫使 $a\\ln x-2x\\le0$ 恒成立。
+    normalization_moves_used:
+      - $x^a/e^{2x}$ 改写为 $e^{a\\ln x-2x}$。
+      - 令 $t=f(x)$，把恒成立问题分成外层 $g$ 与内层 $f$。
+      - 把 $f(x)\\le0$ 恒成立化为 $f_{\\max}\\le0$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $x^a/e^{2x}$ 化成 $e^{a\\ln x-2x}$，回补指数对数基础。
+      - 若学生不能从 $g(t)$ 图像看出 $t>0$ 附近会使 $g(t)<0$，回补函数性质与图像。
+      - 若学生不会用 $f'(x)=a/x-2$ 求 $a\\ln x-2x$ 的最大值，回补导数单调极值基础。
+  detail_terms:
+    - $g(t)=e^t-2t-\cos t$
+    - $f(x)=a\ln x-2x$
+    - 复合嵌套函数
+    - 恒成立转最大值
+    - $a\ln(a/2)-a\le0$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0036_ex30
+source_evidence:
+  source_refs:
+    - ref_id: page_0036
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md
+      role: problem_start
+      evidence: "line 14: 例 30 题干，给出 $f(x)=a\\\\ln x-2x$ 与恒成立不等式。"
+    - ref_id: page_0036_solution_1
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md
+      role: solution
+      evidence: "lines 16-23: 将不等式同构为 $g(f(x))\\\\ge0$，并借图像分析 $g(t)=e^t-2t-\\\\cos t$。"
+    - ref_id: page_0036_solution_2
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md
+      role: solution
+      evidence: "lines 25-27: 分 $a<0$ 与 $a>0$ 讨论 $f(x)=a\\\\ln x-2x$ 的值域，得到 $0<a\\\\le2e$。"
+    - ref_id: page_0036_marker
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md
+      role: local_context
+      evidence: "lines 51-53: Reconstruction Marker 标出例 30 第二处导数符号应为 $f'(x)>0$。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0036.png
+      inspected: true
+      notes: 已核对原图：例 30 题干、函数图像、答案 $(0,2e]$ 与 markdown 一致；原图中第二处导数条件也印为 $f'(x)<0$，与后文递增结论相冲突。
+  source_context: 本题位于第 1 章“导数基本技能”，承接复合嵌套函数与同构转化：先把原不等式压成关于 $t=f(x)$ 的外层函数 $g(t)$，再要求内层函数值域避开 $g(t)<0$ 的区域。
+  source_influence:
+    - 题目最终求参数 $a$ 的范围，goal 取“求参数范围”。
+    - 源解关键是 $x^a/e^{2x}=e^{a\\ln x-2x}=e^{f(x)}$，把恒成立问题转为 $g(f(x))\\ge0$。
+    - 由于 $g(0)=0$ 且 $g$ 在正侧先降到负值，必须让 $f(x)\\le0$ 恒成立。
+  source_discrepancies:
+    - page_0036 原图与 markdown 均把 $0<x<a/2$ 的条件前写成“由 $f'(x)<0$ 得”；按 $f'(x)=a/x-2$ 应为 $f'(x)>0$。本卡按数学链条修正为增区间判断。
+original_problem:
+  stem: 已知函数 $f(x)=a\ln x-2x(a\neq 0)$，若不等式 $x^a \geqslant 2e^{2x}f(x)+e^{2x}\cos(f(x))$ 对 $x>0$ 恒成立，则实数 $a$ 的取值范围为 ______。
+  parts: *a1
+  choices: []
+  answer: $(0,2e]$
+  fidelity_notes:
+    - 已核对 page_0036 原图，题干中右侧为 $2e^{2x}f(x)+e^{2x}\\cos(f(x))$，条件为对 $x>0$ 恒成立。
+    - 源页图像含 $y=e^t-2t-\\cos t$ 与 $t=a\\ln x-2x$ 两幅示意图；卡片保留其“外层函数有负值区、内层需不取正值”的作用。
+solution:
+  source_solution_summary: |
+    将原式两边同除以 $e^{2x}$，得 $e^{a\ln x-2x}-2f(x)-\cos f(x)\ge0$，即令 $t=f(x)$ 后要有 $g(t)=e^t-2t-\cos t\ge0$。源解分析 $g'(t)=e^t-2+\sin t$，得到 $g(0)=0$，且 $g$ 在正数侧会先下降到负值，所以若要 $g(f(x))\ge0$ 对所有 $x>0$ 成立，只能让 $f(x)\le0$ 恒成立。若 $a<0$，$f(x)$ 的值域为 $\mathbb R$，会取到使 $g<0$ 的值，不合题意。若 $a>0$，$f$ 在 $x=a/2$ 处取最大值 $a\ln(a/2)-a$，要求该最大值不超过 $0$，即 $\ln(a/2)\le1$，得 $0<a\le2e$。
+  key_steps:
+    - step_id: step_1
+      statement: 把原不等式除去公共指数因子，露出 $f(x)$ 的同构形式。
+      formula_trace:
+        from: |
+          $x^a \ge 2e^{2x}f(x)+e^{2x}\cos(f(x))$
+        to: |
+          $e^{a\ln x-2x}-2f(x)-\cos(f(x))\ge0$
+        operation: 两边同除以正数 $e^{2x}$，并把 $x^a/e^{2x}$ 写成 $e^{a\ln x-2x}$。
+        why: 因为 $a\ln x-2x=f(x)$，原式可以变成只含 $f(x)$ 的外层函数。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md:16
+    - step_id: step_2
+      statement: 设 $t=f(x)$，分析外层函数的非负区域。
+      formula_trace:
+        from: |
+          $e^{f(x)}-2f(x)-\cos(f(x))\ge0$
+        to: |
+          $g(t)=e^t-2t-\cos t,\quad g(t)\ge0$
+        operation: 令 $t=f(x)$，用 $g'(t)=e^t-2+\sin t$ 判断 $g$ 先降后升，且 $g(0)=0$。
+        why: 图像和单调性显示 $t>0$ 附近会出现 $g(t)<0$，所以内层 $f(x)$ 不能取正值。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md:16-23
+    - step_id: step_3
+      statement: 排除 $a<0$。
+      formula_trace:
+        from: |
+          $f(x)=a\ln x-2x,\quad a<0$
+        to: |
+          $\lim_{x\to0^+}f(x)=+\infty,\quad \lim_{x\to+\infty}f(x)=-\infty$
+        operation: 利用 $\ln x\to-\infty$ 且 $a<0$，并观察 $-2x$ 在无穷远处占主导。
+        why: $f(x)$ 可取遍包含正数附近的值，会命中 $g(t)<0$ 的区域。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md:25
+    - step_id: step_4
+      statement: 对 $a>0$ 求 $f$ 的最大值。
+      formula_trace:
+        from: |
+          $f'(x)=\frac ax-2$
+        to: |
+          $f$ 在 $(0,a/2)$ 递增，在 $(a/2,+\infty)$ 递减，$f_{\max}=f(a/2)=a\ln\frac a2-a$
+        operation: 由 $f'(x)>0\Leftrightarrow0<x<a/2$，$f'(x)<0\Leftrightarrow x>a/2$ 判断单调性。
+        why: 要让 $f(x)\le0$ 恒成立，只需最大值不超过 $0$。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md:27
+    - step_id: step_5
+      statement: 解最大值不超过零的参数条件。
+      formula_trace:
+        from: |
+          $a\ln\frac a2-a\le0,\quad a>0$
+        to: |
+          $\ln\frac a2\le1\Rightarrow 0<a\le2e$
+        operation: 两边除以正数 $a$，再指数化。
+        why: 得到使 $f(x)\le0$ 恒成立的全部参数。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md:27
+teaching_card:
+  student_title: 把恒成立拆成外层 $g(t)$ 和内层值域
+  what_it_trains: 遇到 $x^a$、$e^{2x}$、$f(x)$ 混在一起的恒成立题，先把指数统一成 $e^{f(x)}$，再看外层函数允许内层 $f(x)$ 取哪些值。
+  recognition_cues:
+    - 题干同时出现 $x^a$ 与 $e^{2x}$，而 $f(x)=a\\ln x-2x$ 正好是指数的幂。
+    - 化简后只剩 $e^{f(x)}-2f(x)-\\cos f(x)$。
+    - 外层函数图像在 $t=0$ 右侧下探到负值，内层必须被压在 $t\\le0$。
+  normalization_moves:
+    - 先除以 $e^{2x}$，不要直接对原式硬求导。
+    - 令 $t=f(x)$，单独分析 $g(t)=e^t-2t-\\cos t$。
+    - 把 $f(x)\\le0$ 恒成立转成 $a>0$ 时的最大值条件。
+  common_failures:
+    - 忘记 $x^a=e^{a\\ln x}$，看不出 $e^{f(x)}$。
+    - 只算 $g(0)=0$，没有注意 $g$ 在正数侧有负值。
+    - 把源解里的导数笔误照抄成 $0<x<a/2$ 时 $f'(x)<0$。
+    - 解 $a\ln(a/2)-a\le0$ 时忘记前提 $a>0$。
+  similar_practice_query: 复合嵌套函数 恒成立 e^{f(x)}-2f(x)-cosf(x) a ln x - 2x
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0036 原图与 markdown 一致；第二处导数方向属于源解内部笔误，已由 $f'(x)=a/x-2$ 和后文单调性修正。
+    - 未把源页图像裁剪为单独媒体路径；本批要求的 source image 已核验并记录。

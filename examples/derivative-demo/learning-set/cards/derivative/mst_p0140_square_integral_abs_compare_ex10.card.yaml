@@ -1,0 +1,183 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0140_square_integral_abs_compare_ex10
+content_revision_id: mst_p0140_square_integral_abs_compare_ex10-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0140_square_integral_abs_compare_ex10.card.yaml
+stem: |-
+  （2023 · 长沙月考）已知函数 $f(x)$ 的定义域为 $\mathbf{R}$，设 $f(x)$ 的导函数是 $f^{\prime}(x)$，且 $f(x)\cdot f^{\prime}(x)+\sin x>0$ 恒成立，则（  ）
+  A. $f\left(\frac{\pi}{2}\right)<f\left(-\frac{\pi}{2}\right)$
+  B. $f\left(\frac{\pi}{2}\right)>f\left(-\frac{\pi}{2}\right)$
+  C. $\left|f\left(\frac{\pi}{2}\right)\right|<\left|f\left(-\frac{\pi}{2}\right)\right|$
+  D. $\left|f\left(\frac{\pi}{2}\right)\right|>\left|f\left(-\frac{\pi}{2}\right)\right|$
+answer: |
+  D
+
+  构造辅助函数 $g(x)=f^2(x)-2\cos x$。由题设
+  $f(x)f^{\prime}(x)+\sin x>0$，得
+  $g^{\prime}(x)=2f(x)f^{\prime}(x)+2\sin x>0$，
+  所以 $g$ 在 $\mathbf{R}$ 上递增。于是
+  $g\!\left(\frac{\pi}{2}\right)>g\!\left(-\frac{\pi}{2}\right)$。
+  又 $\cos\frac{\pi}{2}=\cos\!\left(-\frac{\pi}{2}\right)=0$，
+  所以 $f^2\!\left(\frac{\pi}{2}\right)>f^2\!\left(-\frac{\pi}{2}\right)$，
+  即 $\left|f\!\left(\frac{\pi}{2}\right)\right|>\left|f\!\left(-\frac{\pi}{2}\right)\right|$，
+  选 D。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 构造与题设同型的导数表达式。
+      max_score: 1
+    - step_id: step_2
+      description: 利用单调性比较端点。
+      max_score: 1
+    - step_id: step_3
+      description: 消去三角项，回到 $f$ 的绝对值。
+      max_score: 1
+    - step_id: step_4
+      description: 平方比较转为绝对值比较并确定选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较 $\left|f\left(\frac{\pi}{2}\right)\right|$ 与 $\left|f\left(-\frac{\pi}{2}\right)\right|$。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 数形结合
+    subroute:
+      - 反向构造
+      - 函数性质锁定
+      - 绝对值转平方比较
+  structure:
+    primary: Max/Min 与绝对值结构
+    secondary:
+      - 抽象函数结构
+    evidence:
+      - 题设给出 $f(x)f^{\prime}(x)+\sin x>0$，适合并入导数。
+      - 选项目标是绝对值大小，天然对应平方比较。
+    normalization_moves_used:
+      - 把混合项改写为导数：$f(x)f^{\prime}(x)\to \frac12[f^2(x)]^{\prime}$。
+      - 先比较 $g$ 再比较 $f^2$，最后落到 $|f|$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看不出 $f(x)f^{\prime}(x)$ 的逆向构造，回补导数运算与几何意义。
+      - 若学生从 $a^2>b^2$ 不能正确转成 $|a|>|b|$，回补不等式工具基础。
+      - 若学生不熟悉“导数恒正推出函数递增”，回补导数单调极值基础。
+  detail_terms:
+    - $g(x)=f^2(x)-2\cos x$
+    - $g^{\prime}(x)=2f(x)f^{\prime}(x)+2\sin x$
+    - $\cos\left(\pm\frac{\pi}{2}\right)=0$
+    - $a^2>b^2\iff |a|>|b|$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0140_square_integral_abs_compare_ex10
+source_evidence:
+  source_refs:
+    - ref_id: page_0140_ex10_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0140/page_0140.md
+      role: problem_start
+      evidence: 例 10：已知 $f(x)$ 定义在 $\mathbf{R}$ 上，且 $f(x)\cdot f^{\prime}(x)+\sin x>0$ 恒成立，判断四个关于 $f(\pm\frac{\pi}{2})$ 与其绝对值大小的选项。
+    - ref_id: page_0140_ex10_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0140/page_0140.md
+      role: solution
+      evidence: 解析构造 $g(x)=f^2(x)-2\cos x$，由 $g^{\prime}(x)=2f(x)f^{\prime}(x)+2\sin x>0$ 得 $g$ 递增，进而 $f^2(\frac{\pi}{2})>f^2(-\frac{\pi}{2})$，故选 D。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0140.png
+      inspected: true
+      notes: 已核对 page_0140 中部例 10 的题干、四个选项与完整解析，答案为 D。
+  source_context: page_0140 顶部是例 9 的续解，不属于本卡；例 10 起于本页并在本页结束。
+  source_influence:
+    - 保留源页核心构造：把 $f(x)f^{\prime}(x)+\sin x$ 逆向并入 $[f^2(x)-2\cos x]^{\prime}$。
+    - 保留源页“先比平方再回到绝对值”的判定路径。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 长沙月考）已知函数 $f(x)$ 的定义域为 $\mathbf{R}$，设 $f(x)$ 的导函数是 $f^{\prime}(x)$，且 $f(x)\cdot f^{\prime}(x)+\sin x>0$ 恒成立，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f\left(\frac{\pi}{2}\right)<f\left(-\frac{\pi}{2}\right)$
+      text_latex: $f\left(\frac{\pi}{2}\right)<f\left(-\frac{\pi}{2}\right)$
+    - label: B
+      text_raw: $f\left(\frac{\pi}{2}\right)>f\left(-\frac{\pi}{2}\right)$
+      text_latex: $f\left(\frac{\pi}{2}\right)>f\left(-\frac{\pi}{2}\right)$
+    - label: C
+      text_raw: $\left|f\left(\frac{\pi}{2}\right)\right|<\left|f\left(-\frac{\pi}{2}\right)\right|$
+      text_latex: $\left|f\left(\frac{\pi}{2}\right)\right|<\left|f\left(-\frac{\pi}{2}\right)\right|$
+    - label: D
+      text_raw: $\left|f\left(\frac{\pi}{2}\right)\right|>\left|f\left(-\frac{\pi}{2}\right)\right|$
+      text_latex: $\left|f\left(\frac{\pi}{2}\right)\right|>\left|f\left(-\frac{\pi}{2}\right)\right|$
+  answer: D
+  fidelity_notes:
+    - 源题为单选，结论落在绝对值比较（D）。
+    - 源解未单独判断 $f(\frac{\pi}{2})$ 与 $f(-\frac{\pi}{2})$ 的正负，直接通过平方比较绝对值。
+solution:
+  source_solution_summary: |
+    构造辅助函数 $g(x)=f^2(x)-2\cos x$。由题设
+    $f(x)f^{\prime}(x)+\sin x>0$，得
+    $g^{\prime}(x)=2f(x)f^{\prime}(x)+2\sin x>0$，
+    所以 $g$ 在 $\mathbf{R}$ 上递增。于是
+    $g\!\left(\frac{\pi}{2}\right)>g\!\left(-\frac{\pi}{2}\right)$。
+    又 $\cos\frac{\pi}{2}=\cos\!\left(-\frac{\pi}{2}\right)=0$，
+    所以 $f^2\!\left(\frac{\pi}{2}\right)>f^2\!\left(-\frac{\pi}{2}\right)$，
+    即 $\left|f\!\left(\frac{\pi}{2}\right)\right|>\left|f\!\left(-\frac{\pi}{2}\right)\right|$，
+    选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 构造与题设同型的导数表达式。
+      formula_trace:
+        from: $f(x)f^{\prime}(x)+\sin x>0$
+        to: $g(x)=f^2(x)-2\cos x,\quad g^{\prime}(x)=2f(x)f^{\prime}(x)+2\sin x>0$
+        operation: 把 $f(x)f^{\prime}(x)$ 识别为 $\frac12[f^2(x)]^{\prime}$，把 $\sin x$ 识别为 $(-\cos x)^{\prime}$。
+        why: 构造出全局单调函数后，可直接比较两个点的函数值。
+      source_ref: page_0140_ex10_solution
+    - step_id: step_2
+      statement: 利用单调性比较端点。
+      formula_trace:
+        from: $g^{\prime}(x)>0\ (\forall x\in\mathbf{R})$
+        to: $g\!\left(\frac{\pi}{2}\right)>g\!\left(-\frac{\pi}{2}\right)$
+        operation: 递增函数在较大自变量处取值更大。
+        why: $\frac{\pi}{2}>-\frac{\pi}{2}$。
+      source_ref: page_0140_ex10_solution
+    - step_id: step_3
+      statement: 消去三角项，回到 $f$ 的绝对值。
+      formula_trace:
+        from: $g\!\left(\frac{\pi}{2}\right)>g\!\left(-\frac{\pi}{2}\right)$
+        to: $f^2\!\left(\frac{\pi}{2}\right)>f^2\!\left(-\frac{\pi}{2}\right)$
+        operation: 代入 $\cos(\pm\frac{\pi}{2})=0$。
+        why: 两端三角项相同可抵消，保留平方比较。
+      source_ref: page_0140_ex10_solution
+    - step_id: step_4
+      statement: 平方比较转为绝对值比较并确定选项。
+      formula_trace:
+        from: $f^2\!\left(\frac{\pi}{2}\right)>f^2\!\left(-\frac{\pi}{2}\right)$
+        to: $\left|f\!\left(\frac{\pi}{2}\right)\right|>\left|f\!\left(-\frac{\pi}{2}\right)\right|$
+        operation: 利用 $a^2>b^2\iff |a|>|b|$。
+        why: 选项中与之对应的是 D。
+      source_ref: page_0140_ex10_solution
+teaching_card:
+  student_title: 先造平方函数，再判绝对值
+  what_it_trains: 训练把“函数乘导数 + 三角项”整体识别为导数，并通过单调性稳定完成绝对值比较。
+  recognition_cues:
+    - 题设含 $f(x)f^{\prime}(x)$ 与 $\sin x$ 的和。
+    - 选项只问两点函数值或绝对值大小。
+    - 出现 $\pm\frac{\pi}{2}$，常伴随 $\cos$ 项消去。
+  normalization_moves:
+    - 构造 $g(x)=f^2(x)-2\cos x$。
+    - 由 $g^{\prime}(x)>0$ 先比较 $g(\frac{\pi}{2})$ 与 $g(-\frac{\pi}{2})$。
+    - 利用 $\cos(\pm\frac{\pi}{2})=0$ 化简到 $f^2$。
+    - 最后由平方关系落到绝对值。
+  common_failures:
+    - 直接猜 $f(\frac{\pi}{2})$ 与 $f(-\frac{\pi}{2})$ 的大小，忽略绝对值目标。
+    - 把 $a^2>b^2$ 误判成 $a>b$。
+    - 构造函数时漏掉 $-2\cos x$，导致导数不闭合。
+  similar_practice_query: 抽象函数 乘导逆向构造 绝对值比较 平方函数 单调性
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0140 页图与 markdown：例 10 题干、选项、解析一致，无需用户拍板。

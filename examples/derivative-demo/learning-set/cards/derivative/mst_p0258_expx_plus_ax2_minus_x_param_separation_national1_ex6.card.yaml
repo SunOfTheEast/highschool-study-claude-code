@@ -1,0 +1,220 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0258_expx_plus_ax2_minus_x_param_separation_national1_ex6
+content_revision_id: mst_p0258_expx_plus_ax2_minus_x_param_separation_national1_ex6-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0258_expx_plus_ax2_minus_x_param_separation_national1_ex6.card.yaml
+stem: |-
+  （2020 · 全国 I 卷）已知函数 $f(x)=e^x+ax^2-x$。
+  1. 当 $a=1$ 时，讨论 $f(x)$ 的单调性。
+  2. 当 $x\ge0$ 时，$f(x)\ge\frac12x^3+1$，求 $a$ 的取值范围。
+answer: |-
+  第(1)问：减区间 $(-\infty,0)$，增区间 $(0,+\infty)$。第(2)问：$a\in[\frac{7-e^2}{4},+\infty)$。
+
+  第(1)问当 $a=1$ 时，$f^\prime(x)=e^x+2x-1$， 设 $g=f^\prime$，则 $g^\prime(x)=e^x+2>0$，故 $f^\prime$ 递增；又 $f^\prime(0)=0$，所以 $f$ 在 $(-\infty,0)$ 递减、 在 $(0,+\infty)$ 递增。第(2)问令 $e^x-\frac12x^3+ax^2-x-1\ge0$。当 $x=0$ 时自动成立； 当 $x>0$ 时参变分离得 $a\ge h(x)=-\frac{e^x-\frac12x^3-x-1}{x^2}$。求导整理为 $h^\prime(x)=\frac{(2-x)(e^x-\frac12x^2-x-1)}{x^3}$。 对 $m(x)=e^x-\frac12x^2-x-1$，有 $m^{\prime\prime}(x)=e^x-1>0$，进而 $m(x)>0$。因此 $h$ 在 $(0,2)$ 递增、在 $(2,+\infty)$ 递减，最大值 $h(2)=\frac{7-e^2}{4}$，所以 $a\ge\frac{7-e^2}{4}$。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 第(1)问：判断 $f^\prime$ 的单调性。
+      max_score: 1
+    - step_id: step_2
+      description: 第(1)问：用 $f^\prime(0)=0$ 定单调区间。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问：把不等式改成含参差函数。
+      max_score: 1
+    - step_id: step_4
+      description: 第(2)问：对 $x>0$ 参变分离。
+      max_score: 1
+    - step_id: step_5
+      description: 第(2)问：整理 $h^\prime$。
+      max_score: 1
+    - step_id: step_6
+      description: 第(2)问：证明剩余因子为正。
+      max_score: 1
+    - step_id: step_7
+      description: 第(2)问：取 $h$ 的最大值。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 1 问
+        result: 减区间 $(-\infty,0)$，增区间 $(0,+\infty)$。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $a\ge\frac{7-e^2}{4}$。
+  method:
+    primary: 参变量分离
+    secondary:
+      - 显隐点探路
+      - 切线放缩与凹凸性
+      - 充分/必要性探路
+    subroute:
+      - 端点效应失效
+      - 参变分离
+      - 导中切因式
+      - 辅助函数峰值
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - $e^x+ax^2-x$
+      - $\frac12x^3+1$
+      - $h(x)=-\frac{e^x-\frac12x^3-x-1}{x^2}$
+      - $h^\prime(x)=\frac{(2-x)(e^x-\frac12x^2-x-1)}{x^3}$
+    normalization_moves_used:
+      - 先说明 $x=0$ 自动成立，但不能只靠端点。
+      - 对 $x>0$ 除以 $x^2$ 分离参数。
+      - 把 $h^\prime$ 整理成 $(2-x)m(x)/x^3$。
+      - 用 $e^x$ 的凸性证明 $m(x)>0$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f^\prime$ 判单调区间，回补导数单调极值基础。
+      - 若学生不会参变分离，回补不等式工具基础。
+      - 若学生不会整理 $h^\prime$ 的因式，回补代数恒等变形。
+      - 若学生不会用 $e^x$ 的凸性或切线证明正性，回补指数对数基础。
+  detail_terms:
+    - $e^x+ax^2-x$
+    - $\frac12x^3+1$
+    - 端点效应失效
+    - 参变分离
+    - $x=2$
+    - $\frac{7-e^2}{4}$
+parts: &a1
+  - id: "1"
+    text: 当 $a=1$ 时，讨论 $f(x)$ 的单调性。
+  - id: "2"
+    text: 当 $x\ge0$ 时，$f(x)\ge\frac12x^3+1$，求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0258_expx_plus_ax2_minus_x_param_separation_national1_ex6
+source_evidence:
+  source_refs:
+    - ref_id: page_0258_theory_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0258/page_0258.md
+      role: local_context
+      evidence: page_0258 前半是上一页“端点效应之参变分离”理论续文和图示，不是本卡题头。
+    - ref_id: page_0258_ex6_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0258/page_0258.md
+      role: problem_start
+      evidence: page_0258 给出例6题头：$f(x)=e^x+ax^2-x$；第(1)问 $a=1$ 讨论单调性，第(2)问 $x\ge0$ 时 $f(x)\ge\frac12x^3+1$，求 $a$。
+    - ref_id: page_0258_ex6_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0258/page_0258.md
+      role: solution
+      evidence: page_0258 给出第(1)问完整解析，并说明第(2)问端点效应失效，应分参求解。
+    - ref_id: page_0259_ex6_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0259/page_0259.md
+      role: solution
+      evidence: page_0259 页首延续例6参变分离：$a\ge h(x)$，$h^\prime(x)=\frac{(2-x)(e^x-\frac12x^2-x-1)}{x^3}$，最大值 $h(2)=\frac{7-e^2}{4}$。
+    - ref_id: page_0259_ex7_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0259/page_0259.md
+      role: local_context
+      evidence: page_0259 随后另起例7，说明例6在页首闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0258.png
+      inspected: true
+      notes: 已核对页图：page_0258 上半是理论续文，例6从中下部开始。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0259.png
+      inspected: true
+      notes: 已核对页图：page_0259 页首是例6续解，随后另起例7。
+  source_context: 本卡处理 page_0258 起头并延续至 page_0259 页首的例6；page_0259 例7排除。
+  source_influence:
+    - 保留第(1)问 $a=1$ 时用 $f^\prime(0)=0$ 和 $f^{\prime\prime}>0$ 判先减后增。
+    - 保留第(2)问 source 的判断：端点效应失效，采用参变分离。
+    - 保留 $h^\prime(x)$ 的关键因式 $(2-x)(e^x-\frac12x^2-x-1)$。
+    - 保留 $m(x)=e^x-\frac12x^2-x-1>0$ 用于判定 $h$ 在 $x=2$ 取最大值。
+  source_discrepancies: []
+original_problem:
+  stem: （2020 · 全国 I 卷）已知函数 $f(x)=e^x+ax^2-x$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问：减区间 $(-\infty,0)$，增区间 $(0,+\infty)$。第(2)问：$a\in[\frac{7-e^2}{4},+\infty)$。
+  fidelity_notes:
+    - 无选项。
+    - 第(2)问跨页，最终结论在 page_0259 页首。
+solution:
+  source_solution_summary: 第(1)问当 $a=1$ 时，$f^\prime(x)=e^x+2x-1$， 设 $g=f^\prime$，则 $g^\prime(x)=e^x+2>0$，故 $f^\prime$ 递增；又 $f^\prime(0)=0$，所以 $f$ 在 $(-\infty,0)$ 递减、 在 $(0,+\infty)$ 递增。第(2)问令 $e^x-\frac12x^3+ax^2-x-1\ge0$。当 $x=0$ 时自动成立； 当 $x>0$ 时参变分离得 $a\ge h(x)=-\frac{e^x-\frac12x^3-x-1}{x^2}$。求导整理为 $h^\prime(x)=\frac{(2-x)(e^x-\frac12x^2-x-1)}{x^3}$。 对 $m(x)=e^x-\frac12x^2-x-1$，有 $m^{\prime\prime}(x)=e^x-1>0$，进而 $m(x)>0$。因此 $h$ 在 $(0,2)$ 递增、在 $(2,+\infty)$ 递减，最大值 $h(2)=\frac{7-e^2}{4}$，所以 $a\ge\frac{7-e^2}{4}$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问：判断 $f^\prime$ 的单调性。
+      formula_trace:
+        from: $f^\prime(x)=e^x+2x-1$
+        to: $g^\prime(x)=e^x+2>0$
+        operation: 设 $g=f^\prime$ 并继续求导。
+        why: $f^\prime$ 严格递增，只有一个零点。
+      source_ref: page_0258_ex6_solution_start
+    - step_id: step_2
+      statement: 第(1)问：用 $f^\prime(0)=0$ 定单调区间。
+      formula_trace:
+        from: $f^\prime$ 递增，$f^\prime(0)=0$
+        to: $(-\infty,0)$ 上递减，$(0,+\infty)$ 上递增
+        operation: 按导数零点两侧判号。
+        why: 完成单调性讨论。
+      source_ref: page_0258_ex6_solution_start
+    - step_id: step_3
+      statement: 第(2)问：把不等式改成含参差函数。
+      formula_trace:
+        from: $e^x+ax^2-x\ge\frac12x^3+1$
+        to: $e^x-\frac12x^3+ax^2-x-1\ge0$
+        operation: 移项。
+        why: 准备分离参数 $a$。
+      source_ref: page_0258_ex6_solution_start
+    - step_id: step_4
+      statement: 第(2)问：对 $x>0$ 参变分离。
+      formula_trace:
+        from: $e^x-\frac12x^3+ax^2-x-1\ge0$
+        to: $a\ge h(x)=-\frac{e^x-\frac12x^3-x-1}{x^2}$
+        operation: 除以 $x^2>0$。
+        why: 求 $a$ 的下界转为求 $h$ 的最大值。
+      source_ref: page_0259_ex6_solution_continuation
+    - step_id: step_5
+      statement: 第(2)问：整理 $h^\prime$。
+      formula_trace:
+        from: $h(x)=-\frac{e^x-\frac12x^3-x-1}{x^2}$
+        to: $h^\prime(x)=\frac{(2-x)(e^x-\frac12x^2-x-1)}{x^3}$
+        operation: 求导并按 $(2-x)$ 因式整理。
+        why: 导数符号被拆成 $2-x$ 和一个正函数。
+      source_ref: page_0259_ex6_solution_continuation
+    - step_id: step_6
+      statement: 第(2)问：证明剩余因子为正。
+      formula_trace:
+        from: $m(x)=e^x-\frac12x^2-x-1$
+        to: $x>0$ 时 $m(x)>0$
+        operation: 用 $m^{\prime\prime}(x)=e^x-1>0$ 逐级推出 $m^\prime>0$、$m>0$。
+        why: 这样 $h^\prime$ 的符号只由 $2-x$ 决定。
+      source_ref: page_0259_ex6_solution_continuation
+    - step_id: step_7
+      statement: 第(2)问：取 $h$ 的最大值。
+      formula_trace:
+        from: $h$ 在 $(0,2)$ 递增、在 $(2,+\infty)$ 递减
+        to: $h_{\max}=h(2)=\frac{7-e^2}{4}$
+        operation: 代入峰值点 $x=2$。
+        why: 要让 $a\ge h(x)$ 对所有 $x>0$ 成立，必须且只需 $a$ 不低于最大值。
+      source_ref: page_0259_ex6_solution_continuation
+teaching_card:
+  student_title: 端点不够用时，分离参数找 $h(x)$ 的最高点
+  what_it_trains: 训练端点效应失效后的标准补救：不要卡在 $x=0$，而是对 $x>0$ 分离参数，转成辅助函数最大值。
+  recognition_cues:
+    - 题目在 $x=0$ 自动取等，但 source 明确说端点效应失效。
+    - 参数乘 $x^2$，且区间是 $x\ge0$，适合对 $x>0$ 除以 $x^2$。
+    - 求导后能整理出 $(2-x)(e^x-\frac12x^2-x-1)$。
+  normalization_moves:
+    - 先单独处理 $x=0$，再处理 $x>0$。
+    - 分离出 $a\ge h(x)$ 后，目标是找 $h_{\max}$。
+    - 证明 $m(x)>0$ 后，马上锁定 $x=2$ 是峰值点。
+  common_failures:
+    - 只代 $x=0$，误以为端点已经决定参数。
+    - 参变分离时忘记 $x>0$ 才能除以 $x^2$。
+    - 把需要取 $h$ 的最大值误写成最小值。
+  similar_practice_query: 端点效应失效 参变分离 e^x ax2 x^3 h最大值 x=2 导中切
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

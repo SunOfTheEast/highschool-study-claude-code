@@ -1,0 +1,230 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0286_expx_decay_quadratic_and_xex_sinx_zero_gap_ex10
+content_revision_id: mst_p0286_expx_decay_quadratic_and_xex_sinx_zero_gap_ex10-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0286_expx_decay_quadratic_and_xex_sinx_zero_gap_ex10.card.yaml
+stem: |-
+  （2025 · 安徽月考）已知函数 $f(x)=ae^{-x}-x^2$，$g(x)=xe^x-a\sin x$，其中 $a\in\mathbf R$。
+  1. 若 $a>0$，证明 $f(x)$ 在 $(0,+\infty)$ 上存在唯一的零点。
+  2. 若 $1<a\le e$，设 $x_1$ 为 $f(x)$ 在 $(0,+\infty)$ 上的零点，证明：$g(x)$ 在 $(0,\pi)$ 上有唯一的零点 $x_2$，且 $3x_1-x_2>2$。
+answer: |-
+  $a>0$ 时 $f$ 在正半轴有唯一零点；当 $1<a\le e$ 时，$g$ 在 $(0,\pi)$ 上有唯一零点 $x_2$，且 $3x_1-x_2>2$。
+
+  第(1)问中，$f^\prime(x)=-ae^{-x}-2x<0$，所以 $f$ 在正半轴单调递减。 又 $f(0)=a>0$，且在 $x=\sqrt a$ 处有 $f(\sqrt a)=ae^{-\sqrt a}-a<0$，因此唯一零点存在。第(2)问中， $g^\prime(x)=(x+1)e^x-a\cos x$， $g^{\prime\prime}(x)=(x+2)e^x+a\sin x>0$，所以 $g^\prime$ 在 $(0,\pi)$ 上递增。由 $g^\prime(0)=1-a<0$、 $g^\prime(1)=2e-a\cos1>0$ 得唯一临界点 $x_0\in(0,1)$， $g$ 先减后增，结合 $g(0)=0,g(x_0)<0,g(\pi)>0$ 得唯一零点 $x_2$。再由 $f(x_1)=0$ 得 $a=x_1^2e^{x_1}$。利用 $x>\sin x$，在 $x=\ln a$ 处得 $g(\ln a)>0$，所以 $x_2<\ln a$。因此只要证明 $3x_1\ge 2+\ln a$ 即可。代入 $\ln a=\ln(x_1^2e^{x_1})=2\ln x_1+x_1$，化为 $x_1\ge \ln x_1+1$，这是 $\ln x\le x-1$ 的基本形式；当端点 $a=e$ 时这里取等，但因为 $x_2<\ln a$，最终结论仍是严格的。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 第(1)问：用单调递减和 $x=\sqrt a$ 找点。
+      max_score: 1
+    - step_id: step_2
+      description: 第(2)问先证明 $g$ 的形状是先减后增。
+      max_score: 1
+    - step_id: step_3
+      description: 用 $g^\prime(0)$ 和 $g^\prime(1)$ 找到唯一临界点。
+      max_score: 1
+    - step_id: step_4
+      description: 证明 $g$ 在 $(0,\pi)$ 上确实有唯一零点 $x_2$。
+      max_score: 1
+    - step_id: step_5
+      description: 用 $x=\ln a$ 给 $x_2$ 找上界。
+      max_score: 1
+    - step_id: step_6
+      description: 用 $f(x_1)=0$ 把 $\ln a$ 改写成 $x_1$。
+      max_score: 1
+    - step_id: step_7
+      description: 最后用 $\ln x\le x-1$ 收尾。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 1 问
+        result: $f$ 在 $(0,+\infty)$ 上存在唯一零点。
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 2 问
+        result: $g$ 在 $(0,\pi)$ 上有唯一零点 $x_2$，且 $3x_1-x_2>2$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 局部逼近与找点
+      - 充分/必要性探路
+    subroute:
+      - 正半轴零点找点
+      - 导函数凸性判形状
+      - 三角零点找点
+      - 零点方程消参
+      - 严格性由 $x_2<\ln a$ 提供
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 非齐次结构
+      - 局部逼近结构
+    evidence:
+      - $f(x)=ae^{-x}-x^2$
+      - $g(x)=xe^x-a\sin x$
+      - $a=x_1^2e^{x_1}$
+      - $x_2<\ln a$
+      - $3x_1-x_2>2$
+      - $x>\sin x$
+    normalization_moves_used:
+      - 用 $x=\sqrt a$ 给 $f$ 找负值。
+      - 用二阶导数证明 $g^\prime$ 单调。
+      - 用 $x>\sin x$ 在 $x=\ln a$ 处证明 $g(\ln a)>0$。
+      - 由 $a=x_1^2e^{x_1}$ 把 $\ln a$ 改写成 $2\ln x_1+x_1$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会二阶导控制函数形状，回补导数单调极值基础。
+      - 若学生不会求导，回补导数运算与几何意义。
+      - 若学生不会用 $x>\sin x$，回补三角函数基础。
+      - 若学生不会用 $\ln x\le x-1$，回补指数对数基础。
+      - 若学生不会由零点方程消参，回补代数恒等变形。
+  detail_terms:
+    - $ae^{-x}-x^2$
+    - $xe^x-a\sin x$
+    - $x=\sqrt a$
+    - $g^{\prime\prime}(x)>0$
+    - $x_2<\ln a$
+    - $a=x_1^2e^{x_1}$
+    - $3x_1-x_2>2$
+    - 端点严格性
+parts: &a1
+  - part_id: "1"
+    text: 若 $a>0$，证明 $f(x)$ 在 $(0,+\infty)$ 上存在唯一的零点。
+  - part_id: "2"
+    text: 若 $1<a\le e$，设 $x_1$ 为 $f(x)$ 在 $(0,+\infty)$ 上的零点，证明：$g(x)$ 在 $(0,\pi)$ 上有唯一的零点 $x_2$，且 $3x_1-x_2>2$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0286_expx_decay_quadratic_and_xex_sinx_zero_gap_ex10
+source_evidence:
+  source_refs:
+    - ref_id: page_0286_ex10_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0286/page_0286.md
+      role: problem_start
+      evidence: page_0286 页底给出例10题头：$f(x)=ae^{-x}-x^2$，$g(x)=xe^x-a\sin x$，其中 $a\in\mathbf R$；第(1)问证明 $a>0$ 时 $f$ 在正半轴有唯一零点。
+    - ref_id: page_0287_ex10_problem_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0287/page_0287.md
+      role: problem_continuation
+      evidence: page_0287 顶部续写第(2)问：当 $1<a\le e$，设 $x_1$ 为 $f$ 在正半轴的零点，证明 $g$ 在 $(0,\pi)$ 上有唯一零点 $x_2$，且 $3x_1-x_2>2$。
+    - ref_id: page_0287_ex10_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0287/page_0287.md
+      role: solution
+      evidence: page_0287 完整解析例10：先由 $f$ 单调递减和 $x=\sqrt a$ 找点证明唯一零点；再用 $g^{\prime\prime}>0$ 证明 $g^\prime$ 单调，从而 $g$ 在 $(0,\pi)$ 上有唯一零点；最后由 $a=x_1^2e^{x_1}$ 和 $x_2<\ln a$ 证明 $3x_1-x_2>2$。
+    - ref_id: page_0288_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0288/page_0288.md
+      role: local_context
+      evidence: page_0288 进入第8章隐点探路，并另起例1；本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0286.png
+      inspected: true
+      notes: 已核对页图：page_0286 页底为例10题头和第(1)问起始。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0287.png
+      inspected: true
+      notes: 已核对页图：page_0287 顶部续写例10第(2)问并完整给出解析。
+  source_context: 本卡处理 page_0286 页底起头、page_0287 续完的例10；page_0288 新章节排除。
+  source_influence:
+    - 保留 $f(x)=ae^{-x}-x^2$ 单调递减和 $x=\sqrt a$ 找点。
+    - 保留 $g^\prime(x)=(x+1)e^x-a\cos x$ 与 $g^{\prime\prime}(x)=(x+2)e^x+a\sin x>0$。
+    - 保留 $g^\prime(0)<0,g^\prime(1)>0$，从而 $g$ 先减后增并在 $(0,\pi)$ 有唯一零点 $x_2$。
+    - 保留由 $f(x_1)=0$ 得 $a=x_1^2e^{x_1}$。
+    - 保留用 $x>\sin x$ 和 $x=\ln a$ 得 $x_2<\ln a$。
+    - 保留最终转化：比较 $3x_1$ 与 $2+\ln a=2+2\ln x_1+x_1$。
+  source_discrepancies:
+    - discrepancy_id: page_0287_endpoint_strictness
+      status: resolved
+      issue: source 写“只需证 $3x_1>2+\ln a>2+x_2$”，但当 $a=e$ 时由 $a=x_1^2e^{x_1}$ 得 $x_1=1$，第一段应为等号。
+      resolution: 改读为 $3x_1\ge 2+\ln a$ 且 $2+\ln a>2+x_2$；最终仍推出 $3x_1-x_2>2$。
+original_problem:
+  stem: （2025 · 安徽月考）已知函数 $f(x)=ae^{-x}-x^2$，$g(x)=xe^x-a\sin x$，其中 $a\in\mathbf R$。
+  parts: *a1
+  choices: []
+  answer: $a>0$ 时 $f$ 在正半轴有唯一零点；当 $1<a\le e$ 时，$g$ 在 $(0,\pi)$ 上有唯一零点 $x_2$，且 $3x_1-x_2>2$。
+  fidelity_notes:
+    - 无选项。
+    - 第(2)问在 page_0287 顶部续写，不能只读 page_0286 页底。
+solution:
+  source_solution_summary: 第(1)问中，$f^\prime(x)=-ae^{-x}-2x<0$，所以 $f$ 在正半轴单调递减。 又 $f(0)=a>0$，且在 $x=\sqrt a$ 处有 $f(\sqrt a)=ae^{-\sqrt a}-a<0$，因此唯一零点存在。第(2)问中， $g^\prime(x)=(x+1)e^x-a\cos x$， $g^{\prime\prime}(x)=(x+2)e^x+a\sin x>0$，所以 $g^\prime$ 在 $(0,\pi)$ 上递增。由 $g^\prime(0)=1-a<0$、 $g^\prime(1)=2e-a\cos1>0$ 得唯一临界点 $x_0\in(0,1)$， $g$ 先减后增，结合 $g(0)=0,g(x_0)<0,g(\pi)>0$ 得唯一零点 $x_2$。再由 $f(x_1)=0$ 得 $a=x_1^2e^{x_1}$。利用 $x>\sin x$，在 $x=\ln a$ 处得 $g(\ln a)>0$，所以 $x_2<\ln a$。因此只要证明 $3x_1\ge 2+\ln a$ 即可。代入 $\ln a=\ln(x_1^2e^{x_1})=2\ln x_1+x_1$，化为 $x_1\ge \ln x_1+1$，这是 $\ln x\le x-1$ 的基本形式；当端点 $a=e$ 时这里取等，但因为 $x_2<\ln a$，最终结论仍是严格的。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问：用单调递减和 $x=\sqrt a$ 找点。
+      formula_trace:
+        from: $f(x)=ae^{-x}-x^2$
+        to: $f^\prime(x)<0,\quad f(0)>0,\quad f(\sqrt a)<0$
+        operation: 求导判单调，并用 $\sqrt a$ 取负值。
+        why: 单调性给唯一性，异号给存在性。
+      source_ref: page_0287_ex10_solution
+    - step_id: step_2
+      statement: 第(2)问先证明 $g$ 的形状是先减后增。
+      formula_trace:
+        from: $g(x)=xe^x-a\sin x$
+        to: $g^\prime(x)=(x+1)e^x-a\cos x,\quad g^{\prime\prime}(x)>0$
+        operation: 连续求导，利用 $x\in(0,\pi)$ 与 $a>1$。
+        why: $g^\prime$ 递增后，就能控制 $g$ 只有一个谷底。
+      source_ref: page_0287_ex10_solution
+    - step_id: step_3
+      statement: 用 $g^\prime(0)$ 和 $g^\prime(1)$ 找到唯一临界点。
+      formula_trace:
+        from: $g^\prime(0)=1-a<0,\quad g^\prime(1)=2e-a\cos1>0$
+        to: 唯一 $x_0\in(0,1)$，且 $g$ 在 $(0,x_0)$ 减、在 $(x_0,\pi)$ 增
+        operation: 对导函数找点。
+        why: 这一步证明 $g$ 的零点个数不会超过一个。
+      source_ref: page_0287_ex10_solution
+    - step_id: step_4
+      statement: 证明 $g$ 在 $(0,\pi)$ 上确实有唯一零点 $x_2$。
+      formula_trace:
+        from: $g(0)=0,\quad g(x_0)<0,\quad g(\pi)>0$
+        to: 唯一 $x_2\in(0,\pi)$ 使 $g(x_2)=0$
+        operation: 结合先减后增和端点符号。
+        why: 从形状和符号共同锁定右侧唯一零点。
+      source_ref: page_0287_ex10_solution
+    - step_id: step_5
+      statement: 用 $x=\ln a$ 给 $x_2$ 找上界。
+      formula_trace:
+        from: $x>\sin x,\quad g(x)=xe^x-a\sin x$
+        to: $g(\ln a)>0,\quad x_2<\ln a$
+        operation: 用 $x>\sin x$ 放缩，再取显点 $\ln a$。
+        why: 这样把未知零点 $x_2$ 控在可由 $x_1$ 表达的上界前。
+      source_ref: page_0287_ex10_solution
+    - step_id: step_6
+      statement: 用 $f(x_1)=0$ 把 $\ln a$ 改写成 $x_1$。
+      formula_trace:
+        from: $f(x_1)=0$
+        to: $a=x_1^2e^{x_1},\quad \ln a=2\ln x_1+x_1$
+        operation: 由零点方程消参。
+        why: 把目标 $3x_1-x_2>2$ 化为只含 $x_1$ 的基础不等式。
+      source_ref: page_0287_ex10_solution
+    - step_id: step_7
+      statement: 最后用 $\ln x\le x-1$ 收尾。
+      formula_trace:
+        from: $3x_1\ge 2+\ln a=2+2\ln x_1+x_1$
+        to: $x_1\ge \ln x_1+1$
+        operation: 移项化简。
+        why: 基础对数不等式给出非严格上界；再由 $x_2<\ln a$ 提供最终严格性。
+      source_ref: page_0287_ex10_solution
+teaching_card:
+  student_title: 用 $\ln a$ 控住三角零点
+  what_it_trains: 训练两个函数联动时，先分别确定零点位置，再用第一个函数的零点方程改写参数，最后把第二个零点压到同一个显点前。
+  recognition_cues:
+    - 第一个函数 $f$ 的零点 $x_1$ 给出参数关系 $a=x_1^2e^{x_1}$。
+    - 第二个函数 $g$ 混有 $xe^x$ 和 $\sin x$，需要先证明零点唯一。
+    - 目标是两个不同函数的零点距离 $3x_1-x_2>2$。
+    - $x>\sin x$ 会把 $g(x)$ 压成 $x(e^x-a)$，自然出现 $x=\ln a$。
+  normalization_moves:
+    - 先用单调性和 $x=\sqrt a$ 证明 $f$ 的唯一零点。
+    - 再用 $g^{\prime\prime}>0$ 控制 $g^\prime$，从而控制 $g$ 的形状。
+    - 用 $x=\ln a$ 证明 $x_2<\ln a$。
+    - 用 $f(x_1)=0$ 把 $\ln a$ 换成 $2\ln x_1+x_1$。
+  common_failures:
+    - 只证明 $g$ 有零点，忘了先证明唯一性。
+    - 不知道为什么要在 $g$ 里使用 $x>\sin x$。
+    - 把 $x_2<\ln a$ 和 $a=x_1^2e^{x_1}$ 两条线索割裂开。
+    - 端点 $a=e$ 时误以为必须证明 $3x_1>2+\ln a$ 的严格不等号。
+  similar_practice_query: ae^{-x}-x^2 xe^x-a sin x x1 x2 ln a 3x1-x2>2 零点找点
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

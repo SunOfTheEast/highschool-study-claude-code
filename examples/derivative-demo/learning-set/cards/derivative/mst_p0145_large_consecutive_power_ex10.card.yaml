@@ -1,0 +1,215 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0145_large_consecutive_power_ex10
+content_revision_id: mst_p0145_large_consecutive_power_ex10-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0145_large_consecutive_power_ex10.card.yaml
+stem: |-
+  （2025·湘西二模）已知 $a=2024^{2026}$，$b=2025^{2025}$，$c=2026^{2024}$，则（  ）
+  A. $c>b>a$
+  B. $b>a>c$
+  C. $a>b>c$
+  D. $a>c>b$
+answer: |
+  C
+
+  法一：构造
+  $f(x)=(4050-x)\ln x$，
+  则
+  $f^{\prime}(x)=-\ln x+\frac{4050-x}{x}$。
+  源解指出 $f^{\prime}(x)$ 递减，且
+  $f^{\prime}(2024)=-\ln(2024)+\frac{4050-2024}{2026}<0$，
+  因此在相关区间上 $f$ 递减。
+  所以
+  $f(2024)>f(2025)>f(2026)$，
+  即
+  $2026\ln2024>2025\ln2025>2024\ln2026$，
+  从而 $a>b>c$。
+  法二：
+  $b=(2024+1)^{2025}<2024\cdot2024^{2025}=2024^{2026}=a$，
+  $c=(2025+1)^{2024}<2025\cdot2025^{2024}=2025^{2025}=b$，
+  故 $a>b>c$，选 C。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把顺子幂转成统一函数值。
+      max_score: 1
+    - step_id: step_2
+      description: 判定 $f$ 在相关区间递减。
+      max_score: 1
+    - step_id: step_3
+      description: 还原幂的大小。
+      max_score: 1
+    - step_id: step_4
+      description: 用二项式展开作夹逼复核。
+      max_score: 1
+    - step_id: step_5
+      description: 对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 构造同构函数判相邻大整数幂的顺序。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 数值比较
+        target: 用二项式展开夹逼验证。
+        result: 见 source_solution_summary
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 顺子指数比较
+      - 二项式展开上界
+      - 同构函数 $(4050-x)\ln x$
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 同构结构
+      - 非对称结构
+    evidence:
+      - $2024^{2026},2025^{2025},2026^{2024}$ 是底数递增、指数递减且底指和固定的顺子幂结构。
+      - 既可统一成 $(4050-x)\ln x$，也可相邻展开夹逼。
+    normalization_moves_used:
+      - 把三项写成 $\ln(k^{4050-k})$。
+      - 将 $2025,2026$ 看作前一数加1。
+      - 用展开上界证明后一项小于前一项。
+  fallback:
+    only_if_trace_shows:
+      - 若学生无法从导数符号推出递减，回补导数单调极值基础。
+      - 若学生不会把幂比较转成对数函数值比较，回补指数对数基础。
+      - 若学生二项式展开夹逼漏项或估计方向错，回补代数恒等变形。
+  detail_terms:
+    - 底数递增、指数递减
+    - 底指和固定
+    - $(4050-x)\ln x$
+    - $(2024+1)^{2025}<2024^{2026}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0145_large_consecutive_power_ex10
+source_evidence:
+  source_refs:
+    - ref_id: page_0145_ex10_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0145/page_0145.md
+      role: problem_start
+      evidence: 例10题干：$a=2024^{2026}$，$b=2025^{2025}$，$c=2026^{2024}$，判断三者大小。
+    - ref_id: page_0145_ex10_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0145/page_0145.md
+      role: solution
+      evidence: 源解析给出法一 $f(x)=(4050-x)\ln x$ 单调递减，法二用二项式展开逐级夹逼。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0145.png
+      inspected: false
+      notes: 本卡由 source markdown 补齐；未重新人工查看原图。
+  source_context: 例10承接例8的“顺子指数/二项式展开比大小”，数值规模扩大到2024、2025、2026。
+  source_influence:
+    - 保留源解法一：构造 $(4050-x)\ln x$ 并在相邻大整数上判递减。
+    - 保留源解法二：用 $(2024+1)^{2025}<2024\cdot2024^{2025}$ 与 $(2025+1)^{2024}<2025\cdot2025^{2024}$。
+    - 最终结论为 $a>b>c$，选 C。
+  source_discrepancies:
+    - source markdown 中 $f^{\prime}(2024)$ 的分式分母写作 2026；由 $f^{\prime}(x)=-\ln x+\frac{4050-x}{x}$ 代入应为分母 2024。本卡保留源结论并按导数公式理解。
+original_problem:
+  stem: （2025·湘西二模）已知 $a=2024^{2026}$，$b=2025^{2025}$，$c=2026^{2024}$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $c>b>a$
+      text_latex: $c>b>a$
+    - label: B
+      text_raw: $b>a>c$
+      text_latex: $b>a>c$
+    - label: C
+      text_raw: $a>b>c$
+      text_latex: $a>b>c$
+    - label: D
+      text_raw: $a>c>b$
+      text_latex: $a>c>b$
+  answer: C
+  fidelity_notes:
+    - 源页例号从例8跳到例10；本卡不补造例9。
+    - 源解法一的导数端点表达按 $f^{\prime}(2024)<0$ 的原意处理，分母疑点见 source_discrepancies。
+solution:
+  source_solution_summary: |
+    法一：构造
+    $f(x)=(4050-x)\ln x$，
+    则
+    $f^{\prime}(x)=-\ln x+\frac{4050-x}{x}$。
+    源解指出 $f^{\prime}(x)$ 递减，且
+    $f^{\prime}(2024)=-\ln(2024)+\frac{4050-2024}{2026}<0$，
+    因此在相关区间上 $f$ 递减。
+    所以
+    $f(2024)>f(2025)>f(2026)$，
+    即
+    $2026\ln2024>2025\ln2025>2024\ln2026$，
+    从而 $a>b>c$。
+    法二：
+    $b=(2024+1)^{2025}<2024\cdot2024^{2025}=2024^{2026}=a$，
+    $c=(2025+1)^{2024}<2025\cdot2025^{2024}=2025^{2025}=b$，
+    故 $a>b>c$，选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 把顺子幂转成统一函数值。
+      formula_trace:
+        from: $a=2024^{2026},\ b=2025^{2025},\ c=2026^{2024}$
+        to: 令 $f(x)=(4050-x)\ln x$，比较 $f(2024),f(2025),f(2026)$
+        operation: 用“底数+指数=4050”的结构统一表达。
+        why: 三项都能写成 $f(k)=\ln(k^{4050-k})$。
+      source_ref: page_0145_ex10_solution
+    - step_id: step_2
+      statement: 判定 $f$ 在相关区间递减。
+      formula_trace:
+        from: $f^{\prime}(x)=-\ln x+\frac{4050-x}{x}$
+        to: $f^{\prime}(2024)<0\Rightarrow f(x)\downarrow$
+        operation: 利用导函数递减和端点符号。
+        why: 得到相邻三点的函数值顺序。
+      source_ref: page_0145_ex10_solution
+    - step_id: step_3
+      statement: 还原幂的大小。
+      formula_trace:
+        from: $f(2024)>f(2025)>f(2026)$
+        to: $2024^{2026}>2025^{2025}>2026^{2024}$
+        operation: 利用对数函数单调性还原。
+        why: 得到 $a>b>c$。
+      source_ref: page_0145_ex10_solution
+    - step_id: step_4
+      statement: 用二项式展开作夹逼复核。
+      formula_trace:
+        from: $b=(2024+1)^{2025},\ c=(2025+1)^{2024}$
+        to: $b<2024\cdot2024^{2025}=a,\ c<2025\cdot2025^{2024}=b$
+        operation: 展开后用正项上界估计。
+        why: 给出不依赖导数函数的快速比较链。
+      source_ref: page_0145_ex10_solution
+    - step_id: step_5
+      statement: 对应选项。
+      formula_trace:
+        from: $a>b>c$
+        to: 选 C
+        operation: 与选项匹配。
+        why: 作答完成。
+      source_ref: page_0145_ex10_solution
+teaching_card:
+  student_title: 大整数顺子幂比较
+  what_it_trains: 训练看到相邻大整数幂时，先抓“底指和固定”的结构，再选择导数同构或二项式夹逼。
+  recognition_cues:
+    - 底数是连续整数 $2024,2025,2026$。
+    - 指数反向连续 $2026,2025,2024$。
+    - 选项只问三项全序。
+  normalization_moves:
+    - 写出统一函数 $f(x)=(4050-x)\ln x$。
+    - 或将后一项改写为前一底数加1的幂。
+    - 用上界夹逼逐级比较。
+  common_failures:
+    - 只背“大指小底”，没有处理三项链。
+    - 忘记对数化后比较的是 $2026\ln2024$ 等系数。
+    - 展开夹逼时把正项总和上界估得过大或方向写反。
+  similar_practice_query: 2024^2026 2025^2025 2026^2024 顺子指数 二项式展开 比大小
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - source markdown 足以还原题干和解析；本地补卡未重新查看 page_0145 原图。

@@ -1,0 +1,133 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0202_xlnx_param恒成立_ch6_log_ex02
+content_revision_id: mst_p0202_xlnx_param恒成立_ch6_log_ex02-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0202_xlnx_param恒成立_ch6_log_ex02.card.yaml
+stem: 已知函数 $f(x)=x(\ln x-ax)+a$，对任意的 $x\geqslant1$，都有 $f(x)\leqslant0$，则实数 $a$ 的取值范围是______。
+answer: |-
+  $a\geqslant\frac12$
+
+  由题设 $x(\ln x-ax)+a\le0$（$x\ge1$）得 $x\ln x\le a(x^2-1)$，即 $\ln x\le a\!\left(x-\frac1x\right)$。在 $x\ge1$ 上有飘带上界 $\ln x\le\frac12\left(x-\frac1x\right)$，故要使不等式对所有 $x\ge1$ 成立， 至少需 $a\ge\frac12$，且 $a\ge\frac12$ 时右端不小于飘带上界，恒成立。 因而参数范围为 $a\ge\frac12$。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把题设化成对数与线性组合的比较。
+      max_score: 1
+    - step_id: step_2
+      description: 调用 $x\ge1$ 的飘带上界。
+      max_score: 1
+    - step_id: step_3
+      description: 比较系数并写出参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 对数飘带函数
+      - 系数比较定下界
+      - 端点效应
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 不等式工具结构
+      - 非齐次结构
+    evidence:
+      - $\ln x\le a(x-\frac1x)$
+      - $\ln x\le\frac12(x-\frac1x)\ (x\ge1)$
+    normalization_moves_used:
+      - 先把题设恒成立改写为同变量函数比较。
+      - 用飘带模板抽出“临界系数 $\frac12$”。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f(x)\le0$ 推到 $\ln x\le a(x-\frac1x)$，回补代数恒等变形。
+      - 若学生对飘带不等式区间方向混淆，回补指数对数基础。
+      - 若学生不知道为何要比较系数，回补不等式工具基础。
+  detail_terms:
+    - $f(x)=x(\ln x-ax)+a$
+    - $\ln x\le a(x-\frac1x)$
+    - $\ln x\le\frac12(x-\frac1x)$
+    - $a\ge\frac12$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0202_xlnx_param恒成立_ch6_log_ex02
+source_evidence:
+  source_refs:
+    - ref_id: page_0202_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0202/page_0202.md
+      role: problem_start
+      evidence: line 25 给出例2题干：$f(x)=x(\ln x-ax)+a$，对任意 $x\ge1$ 有 $f(x)\le0$。
+    - ref_id: page_0202_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0202/page_0202.md
+      role: solution
+      evidence: line 27 给出改写 $\ln x\le a(x-\frac1x)$，并调用飘带上界 $\ln x\le\frac12(x-\frac1x)$ 得 $a\ge\frac12$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0202.png
+      inspected: true
+      notes: 已核对页图：例2题干与解析完整，包含“端点效应篇”提示。
+  source_context: 例2位于飘带函数模板之后，属于“对任意区间恒成立”的参数下界题。
+  source_influence:
+    - 保留源解改写：$x\ln x\le ax^2-a \Rightarrow \ln x\le a(x-\frac1x)$。
+    - 保留源解使用 $x\ge1$ 区间飘带上界 $\ln x\le\frac12(x-\frac1x)$。
+  source_discrepancies: []
+original_problem:
+  stem: 已知函数 $f(x)=x(\ln x-ax)+a$，对任意的 $x\geqslant1$，都有 $f(x)\leqslant0$，则实数 $a$ 的取值范围是______。
+  parts: *a1
+  choices: []
+  answer: $a\geqslant\frac12$
+  fidelity_notes:
+    - 源题是填空题，无选项。
+    - 源解给出结论并提示“大题需端点矛盾补证”。
+solution:
+  source_solution_summary: 由题设 $x(\ln x-ax)+a\le0$（$x\ge1$）得 $x\ln x\le a(x^2-1)$，即 $\ln x\le a\!\left(x-\frac1x\right)$。在 $x\ge1$ 上有飘带上界 $\ln x\le\frac12\left(x-\frac1x\right)$，故要使不等式对所有 $x\ge1$ 成立， 至少需 $a\ge\frac12$，且 $a\ge\frac12$ 时右端不小于飘带上界，恒成立。 因而参数范围为 $a\ge\frac12$。
+  key_steps:
+    - step_id: step_1
+      statement: 把题设化成对数与线性组合的比较。
+      formula_trace:
+        from: $x(\ln x-ax)+a\le0$
+        to: $\ln x\le a\left(x-\frac1x\right)\ (x\ge1)$
+        operation: 移项并除以 $x>0$。
+        why: 化成可直接套用飘带函数模板的形式。
+      source_ref: page_0202_solution
+    - step_id: step_2
+      statement: 调用 $x\ge1$ 的飘带上界。
+      formula_trace:
+        from: $x\ge1$
+        to: $\ln x\le\frac12\left(x-\frac1x\right)$
+        operation: 使用源页给出的飘带函数不等式。
+        why: 给出控制系数的基准下界 $\frac12$。
+      source_ref: page_0202_solution
+    - step_id: step_3
+      statement: 比较系数并写出参数范围。
+      formula_trace:
+        from: $\ln x\le\frac12\left(x-\frac1x\right)$
+        to: $a\ge\frac12$
+        operation: 要让 $\ln x\le a(x-\frac1x)$ 对全区间成立，需 $a$ 不小于基准系数。
+        why: 确定恒成立条件。
+      source_ref: page_0202_solution
+teaching_card:
+  student_title: 飘带上界一把锁定系数下界
+  what_it_trains: 训练“恒成立参数题”的标准拆法：先化同构，再用已知函数上界/下界直接比较参数系数。
+  recognition_cues:
+    - 题干含“对任意 $x\ge1$ 恒成立”。
+    - 式子可化到 $\ln x$ 与 $x-\frac1x$ 的比较。
+    - 参数只在线性系数位置出现。
+  normalization_moves:
+    - 整理成 $\ln x\le a(\cdots)$。
+    - 调用区间对应的飘带不等式。
+    - 用临界系数直接写出参数范围。
+  common_failures:
+    - 把 $x\ge1$ 的飘带方向写反。
+    - 忘记说明 $x>0$ 后才可除以 $x$。
+    - 只写“$a=\frac12$”漏掉“$\ge$”。
+  similar_practice_query: lnx <= a(x-1/x) x>=1 参数范围 飘带函数
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

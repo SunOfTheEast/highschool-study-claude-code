@@ -1,0 +1,192 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0040_section2_ex03
+content_revision_id: mst_p0040_section2_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0040_section2_ex03.card.yaml
+stem: |-
+  （2024 · 新乡模拟 T21）已知函数 f(x)=e^x-k(ln x+1)。
+  (1). 设 x=3 是 f(x) 的极值点，求 k 的值，并求 f(x) 的单调区间。
+  (2). 证明：当 0<k<e 时，f(x)>0。
+answer: |-
+  (1) k=3e^3，f(x) 在 (0,3) 上单调递减，在 (3,+infty) 上单调递增； (2) 对 x>0 且 0<k<e，有 f(x)>0。
+
+  先用 f'(3)=0 求 k=3e^3，再因 f''(x)>0 使 f' 递增而判断单调区间。 对 0<k<e 的证明，源页给出主元法和链式放缩两条路线；卡片主线采用主元法， 并补入法二作为识别线索。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: f'(x)=e^x-k/x，由 f'(3)=0 得 e^3-k/3=0，所以 k=3e^3。
+      max_score: 1
+    - step_id: step_2
+      description: 当 k=3e^3 时，f'(x)=e^x-3e^3/x，且 f''(x)=e^x+3e^3/x^2>0； f' 在 x>0 上递增并在 x=3 处为 0，所以 f 在 (0,3) 上递减，在 (3,+infty) 上递增。
+      max_score: 1
+    - step_id: step_3
+      description: 若 0<x<=1/e，则 ln x+1<=0，且 0<k<e，所以 f(x)=e^x-k(ln x+1)>=e^x>0。
+      max_score: 1
+    - step_id: step_4
+      description: 若 x>1/e，则把 f(x) 看成关于 k 的函数 g(k)=e^x-k(ln x+1)。 因 g'(k)=-ln x-1<0，且 k<e，所以 g(k)>g(e)。
+      max_score: 1
+    - step_id: step_5
+      description: g(e)=e^x-e(ln x+1)=e(e^{x-1}-ln x-1) >=e(x-1-ln x)>=0；结合 k<e 的严格比较，可得 f(x)>0。
+      max_score: 1
+    - step_id: step_6
+      description: 源页法二还可写作：f(x)>0 等价于 e^{x-ln k}>ln x+1； 由 0<k<e 得 e^{x-ln k}>e^{x-1}，再接 e^{x-1}>=x>=ln x+1。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 (1) 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 (2) 问
+        result: 见 source_solution_summary
+  method:
+    primary: 自由度与主元
+    secondary:
+      - 切线放缩与凹凸性
+      - 同构变形与换元法
+    subroute:
+      - k 作主元
+      - 端点 e 比较
+      - 指数切线找点
+      - 参数吸收到指数平移
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 切线/公切线/切点量结构
+    evidence:
+      - g(k)=e^x-k(ln x+1)
+      - e^x-e(ln x+1)=e(e^{x-1}-ln x-1)
+      - e^{x-ln k}>e^{x-1}>=x>=ln x+1
+    normalization_moves_used:
+      - 按 ln x+1 的符号，以 x=1/e 分段，并单独覆盖边界。
+      - 固定 x 后把 k 当作主元，比较到 k=e。
+      - 把 e^x/k 写成 e^{x-ln k}。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 f'(3)=0 求 k，回补导数运算与几何意义。
+      - 若学生不会按 ln x+1 的符号分段，回补指数对数基础。
+      - 若学生不会固定 x 后比较 k 与端点 e，回补代数恒等变形中的参数替换与不等式方向。
+      - 若学生不会使用 e^{x-1}>=x 或 x-1>=ln x，回补导数单调极值基础。
+  detail_terms:
+    - ln x+1 的符号分界 x=1/e
+    - g'(k)=-ln x-1
+    - e^{x-ln k}
+parts: &a1
+  - label: (1)
+    text: 设 x=3 是 f(x) 的极值点，求 k 的值，并求 f(x) 的单调区间。
+  - label: (2)
+    text: 证明：当 0<k<e 时，f(x)>0。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0040_section2_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0040
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0040/page_0040.md
+      role: problem_start
+      evidence: 例 3：已知函数 f(x)=e^x-k(ln x+1)；(1) x=3 是极值点，求 k 并求单调区间； (2) 证明 0<k<e 时 f(x)>0。
+    - ref_id: page_0041
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0041/page_0041.md
+      role: continuation
+      evidence: page_0041 顶部续写主元法与法二，证明 0<k<e 时 f(x)>0。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0040.png
+      inspected: true
+      notes: 页图确认例 3 题头、题干和第 (1) 问解析开始于 page_0040。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0041.png
+      inspected: true
+      notes: 页图确认 page_0041 顶部为例 3 续解，随后才进入“二、指数的切线找点”。
+  source_context: 例 3 是 page_0040 跨到 page_0041 的 worked example，延续前两个例题的 指对同构思想，并在第 (2) 问加入主元法和指数切线链式放缩。
+  source_influence:
+    - 第 (1) 问保留源页用 f' 单调递增确定单调区间的路线。
+    - 第 (2) 问保留源页主元法：先按 ln x+1 的符号分段，再把 k 推到 e。
+    - 同时记录源页法二的链式放缩 e^{x-ln k}>e^{x-1}>=x>=ln x+1。
+  source_discrepancies:
+    - page_0041 续解开头印作“(3) 法一”，但题干只有 (1)(2)，且内容正是在证明 0<k<e 时 f(x)>0；按上下文归入第 (2) 问。
+original_problem:
+  stem: （2024 · 新乡模拟 T21）已知函数 f(x)=e^x-k(ln x+1)。
+  parts: *a1
+  choices: []
+  answer: (1) k=3e^3，f(x) 在 (0,3) 上单调递减，在 (3,+infty) 上单调递增； (2) 对 x>0 且 0<k<e，有 f(x)>0。
+  fidelity_notes:
+    - 题干含 ln x，定义域为 x>0。
+    - 源页续解编号写作“(3)”，按内容判定为第 (2) 问证明。
+solution:
+  source_solution_summary: 先用 f'(3)=0 求 k=3e^3，再因 f''(x)>0 使 f' 递增而判断单调区间。 对 0<k<e 的证明，源页给出主元法和链式放缩两条路线；卡片主线采用主元法， 并补入法二作为识别线索。
+  key_steps:
+    - step_id: step_1
+      statement: f'(x)=e^x-k/x，由 f'(3)=0 得 e^3-k/3=0，所以 k=3e^3。
+      formula_trace:
+        from: f'(3)=e^3-k/3=0
+        to: k=3e^3
+        operation: 代入极值点导数为 0 的必要条件
+        why: x=3 是定义域内部极值点。
+      source_ref: page_0040:例3解析(1)
+    - step_id: step_2
+      statement: 当 k=3e^3 时，f'(x)=e^x-3e^3/x，且 f''(x)=e^x+3e^3/x^2>0； f' 在 x>0 上递增并在 x=3 处为 0，所以 f 在 (0,3) 上递减，在 (3,+infty) 上递增。
+      formula_trace:
+        from: f'(x)=e^x-3e^3/x, f'(3)=0
+        to: x<3 => f'(x)<0; x>3 => f'(x)>0
+        operation: 用 f' 递增和唯一零点判断导函数符号
+        why: f''(x)>0 保证 f' 单调递增。
+      source_ref: page_0040:例3解析(1)
+    - step_id: step_3
+      statement: 若 0<x<=1/e，则 ln x+1<=0，且 0<k<e，所以 f(x)=e^x-k(ln x+1)>=e^x>0。
+      formula_trace:
+        from: ln x+1<=0
+        to: e^x-k(ln x+1)>=e^x>0
+        operation: 按 ln x+1 的符号分段
+        why: 负数乘 -k 变为正数，再加 e^x>0。
+      source_ref: page_0041:例3续解主元法
+    - step_id: step_4
+      statement: 若 x>1/e，则把 f(x) 看成关于 k 的函数 g(k)=e^x-k(ln x+1)。 因 g'(k)=-ln x-1<0，且 k<e，所以 g(k)>g(e)。
+      formula_trace:
+        from: g'(k)=-ln x-1<0, k<e
+        to: g(k)>g(e)=e^x-e(ln x+1)
+        operation: 固定 x，以 k 为主元比较到端点 e
+        why: g(k) 随 k 递减，较小的 k 给出更大的函数值。
+      source_ref: page_0041:例3续解主元法
+    - step_id: step_5
+      statement: g(e)=e^x-e(ln x+1)=e(e^{x-1}-ln x-1) >=e(x-1-ln x)>=0；结合 k<e 的严格比较，可得 f(x)>0。
+      formula_trace:
+        from: e^x-e(ln x+1)
+        to: e(e^{x-1}-ln x-1)>=e(x-1-ln x)>=0
+        operation: 用 e^{x-1}>=x 和 x-1>=ln x 两次切线放缩
+        why: 指数函数和对数函数的切线不等式给出非负下界。
+      source_ref: page_0041:例3续解主元法
+    - step_id: step_6
+      statement: 源页法二还可写作：f(x)>0 等价于 e^{x-ln k}>ln x+1； 由 0<k<e 得 e^{x-ln k}>e^{x-1}，再接 e^{x-1}>=x>=ln x+1。
+      formula_trace:
+        from: e^x-k(ln x+1)>0
+        to: e^{x-ln k}>ln x+1
+        operation: 除以正数 k 后把 1/k 写成 e^{-ln k}
+        why: 把参数 k 吸收入指数平移，变成切线找点链式比较。
+      source_ref: page_0041:例3续解法二
+teaching_card:
+  student_title: 把 k 当主元推到端点 e
+  what_it_trains: 训练学生在含参数的指对不等式中，不急着对 x 求导，而是先观察参数只线性出现， 固定 x 后把 k 当作主元比较到最难端点。
+  recognition_cues:
+    - 参数 k 只出现在 -k(ln x+1) 中。
+    - 条件 0<k<e 给出明确端点 e。
+    - ln x+1 的正负决定 k 越大函数越小还是直接为正。
+  normalization_moves:
+    - 先分 x<=1/e 与 x>1/e。
+    - 在 x>1/e 时设 g(k)=e^x-k(ln x+1)。
+    - 比较到 g(e)，再用 e^{x-1}>=x 与 x-1>=ln x 收尾。
+    - 备用路线：把 1/k 写入指数，得到 e^{x-ln k}。
+  common_failures:
+    - 忘记 ln x 的定义域 x>0。
+    - 把 g'(k)<0 的比较方向写反。
+    - 只证明 g(e)>=0，却没有利用 k<e 带来的严格大于。
+  similar_practice_query: 0<参数<端点 的 e^x-k(ln x+常数) 主元法证明正性
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 页 0041 续解编号疑似印刷为“(3)”，内容已按第 (2) 问处理。

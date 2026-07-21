@@ -1,0 +1,206 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0171_sin_global_tangent_bound_ex14
+content_revision_id: mst_p0171_sin_global_tangent_bound_ex14-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0171_sin_global_tangent_bound_ex14.card.yaml
+stem: |-
+  (2024 · 成都七中月考 T12) 曲线 $y=\sin x$ 在 $x=x_0$ ($x_0\ge0$) 处的切线为 $y=ax+b$, 且满足 $\forall x\ge0,\ \sin x\le ax+b$, 若 $10ab\le m$, 则整数 $m$ 的最小值为 ( )
+  A. 1
+  B. 2
+  C. 3
+  D. 4
+answer: |-
+  B
+
+  源页先由切线条件写出 $a=\cos x_0$、$b=\sin x_0-x_0\cos x_0$，从而 $ab=\cos x_0(\sin x_0-x_0\cos x_0)$，并限制 $0\le x_0\le\frac\pi2$。设 $g(x)=\cos x(\sin x-x\cos x)$，则 $ab=g(x_0)$。续页给出 $g^{\prime}(x)=\sin x(-\sin x+2x\cos x)$，由 $g^{\prime}(x)=0$ 得 $x=0$ 或 $\tan x=2x$（$0<x<\frac\pi2$）。若记内点解为 $t_\ast$，则 $g(t_\ast)=\frac{1}{4t_\ast+1/t_\ast}$。数值解 $t_\ast\approx1.16556$，得 $10g(t_\ast)\approx1.8116$，因此满足 $10ab\le m$ 的最小整数为 $m=2$，选 B。源页使用 $\frac{1}{4t+1/t}\le\frac14$ 推出 $m=3$，这是把松上界误当精确最大值。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 由切点参数写出切线系数。
+      max_score: 1
+    - step_id: step_2
+      description: 构造 $g$ 表示乘积。
+      max_score: 1
+    - step_id: step_3
+      description: 求导并列临界方程。
+      max_score: 1
+    - step_id: step_4
+      description: 得到内点方程 $\tan x=2x$。
+      max_score: 1
+    - step_id: step_5
+      description: 内点极值要按临界方程约束求真实上界。
+      max_score: 1
+    - step_id: step_6
+      description: 把真实最大值转成整数上界。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 数形结合
+      - 含参数分类讨论
+    subroute:
+      - 切点参数化 $a=\cos x_0,\ b=\sin x_0-x_0\cos x_0$
+      - 乘积函数化 $ab=g(x_0)$
+      - 临界方程 $\tan x=2x$
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 三角复合结构
+      - 不等式工具结构
+    evidence:
+      - 全局上界约束 $\sin x\le ax+b$ 与切线条件共同把参数压到切点变量。
+      - $ab$ 被改写成三角复合函数 $g(x)$ 的极值问题。
+    normalization_moves_used:
+      - 切线系数显式化：$a=\cos x_0,\ b=\sin x_0-x_0\cos x_0$。
+      - 把参数乘积转成单变量函数 $ab=g(x_0)$。
+      - 由 $g^{\prime}(x)=0$ 导出 $\tan x=2x$。
+      - 把临界点函数值写成 $\frac{1}{4t+1/t}$ 再估界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从“切线于 $x_0$”写出 $a,b$，回补导数运算与几何意义。
+      - 若学生在 $g(x)$ 求导化简中频繁出错，回补三角函数基础。
+      - 若学生不会把 $F'(x)=0$ 型条件改成临界方程并判极值，回补导数单调极值基础。
+      - 若学生对“估上界后取最小整数上界”流程混乱，回补不等式工具基础。
+  detail_terms:
+    - $a=\cos x_0$
+    - $b=\sin x_0-x_0\cos x_0$
+    - $g(x)=\cos x(\sin x-x\cos x)$
+    - $\tan x=2x$
+    - $10ab\le m$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0171_sin_global_tangent_bound_ex14
+source_evidence:
+  source_refs:
+    - ref_id: page_0171
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0171/page_0171.md
+      role: problem_start
+      evidence: 例14题干、选项及解析开头在 page_0171；解析在“由 $y$”处截断。
+    - ref_id: page_0172
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0172/page_0172.md
+      role: continuation
+      evidence: page_0172 顶部承接例14解析，给出函数 $g$、导数方程、上界估计与源答案 C。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0171.png
+      inspected: true
+      notes: 已核对例14题干为“切线 $y=ax+b$ 且 $\forall x\ge0,\sin x\le ax+b$；若 $10ab\le m$ 求整数 $m$ 最小值”，选项 A-D 为 1/2/3/4。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0172.png
+      inspected: true
+      notes: 已核对续页公式链与结论“故选 C”；续页下半部分转入考点4与例15，不属于本卡。
+  source_context: page_0171 顶部是上一页例13续解，仅作上下文；本题从 page_0171 新起并跨到 page_0172 顶部结束。
+  source_influence:
+    - BATCHES.yaml 指明本题为 page_0171 起题、page_0172 续解的跨页题，已跨页补全。
+    - 卡片主体保留源页推导链，同时把变量重名处做了记号化重写，避免与题干参数 $a,b$ 混淆。
+  source_discrepancies:
+    - field: source_solution.variable_reuse
+      old_value: 续页在“设 $\tan x=2x$ 的解为 $a$”处复用字母 $a$。
+      corrected_value: 卡片中将该临界点记为 $t_\ast$，与题干中切线参数 $a$ 区分。
+      evidence_ref: page_0172
+    - field: source_solution.maximizer_consistency
+      old_value: 源页由 $g(t_\ast)=\frac{1}{4t_\ast+1/t_\ast}\le\frac14$ 直接取等并推出 $10ab\le2.5$。
+      corrected_value: 按方程约束 $\tan t_\ast=2t_\ast$，$t_\ast\neq\frac12$；$\frac14$ 只是松上界，不能用于最小整数的精确判定。
+      evidence_ref: page_0172
+    - field: answer_consistency_check
+      old_value: 源页答案为 C（$m=3$）。
+      corrected_value: 按 $t_\ast\approx1.16556$ 数值复核，$10ab_{\max}\approx1.8116$，对应最小整数应为 2；源答案 C 改为 B。
+      evidence_ref: page_0172 + arithmetic check from source formulas
+original_problem:
+  stem: (2024 · 成都七中月考 T12) 曲线 $y=\sin x$ 在 $x=x_0$ ($x_0\ge0$) 处的切线为 $y=ax+b$, 且满足 $\forall x\ge0,\ \sin x\le ax+b$, 若 $10ab\le m$, 则整数 $m$ 的最小值为 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: "1"
+      text_latex: "1"
+    - label: B
+      text_raw: "2"
+      text_latex: "2"
+    - label: C
+      text_raw: "3"
+      text_latex: "3"
+    - label: D
+      text_raw: "4"
+      text_latex: "4"
+  answer: B
+  fidelity_notes:
+    - 源页结论为 C，但源解使用的 $\frac14$ 是非紧上界；按严格复核改判为 B。
+    - 解析跨页：page_0171 仅有开头，关键推导在 page_0172 顶部。
+    - 源页在临界点符号上复用了 $a$，卡片正文改写为 $t_\ast$ 以避免语义冲突。
+solution:
+  source_solution_summary: 源页先由切线条件写出 $a=\cos x_0$、$b=\sin x_0-x_0\cos x_0$，从而 $ab=\cos x_0(\sin x_0-x_0\cos x_0)$，并限制 $0\le x_0\le\frac\pi2$。设 $g(x)=\cos x(\sin x-x\cos x)$，则 $ab=g(x_0)$。续页给出 $g^{\prime}(x)=\sin x(-\sin x+2x\cos x)$，由 $g^{\prime}(x)=0$ 得 $x=0$ 或 $\tan x=2x$（$0<x<\frac\pi2$）。若记内点解为 $t_\ast$，则 $g(t_\ast)=\frac{1}{4t_\ast+1/t_\ast}$。数值解 $t_\ast\approx1.16556$，得 $10g(t_\ast)\approx1.8116$，因此满足 $10ab\le m$ 的最小整数为 $m=2$，选 B。源页使用 $\frac{1}{4t+1/t}\le\frac14$ 推出 $m=3$，这是把松上界误当精确最大值。
+  key_steps:
+    - step_id: step_1
+      statement: 由切点参数写出切线系数。
+      formula_trace:
+        from: $y=\sin x$ 在 $x=x_0$ 处的切线 $y=ax+b$
+        to: $a=\cos x_0,\quad b=\sin x_0-x_0\cos x_0$
+        operation: 斜率等于导数，切点代入直线方程。
+        why: 把题目中的 $ab$ 转为单变量函数。
+      source_ref: page_0171-page_0172
+    - step_id: step_2
+      statement: 构造 $g$ 表示乘积。
+      formula_trace:
+        from: $ab=\cos x_0(\sin x_0-x_0\cos x_0)$
+        to: $ab=g(x_0),\quad g(x)=\cos x(\sin x-x\cos x),\ 0\le x\le\frac\pi2$
+        operation: 把切点变量统一记作自变量 $x$。
+        why: 后续只需研究 $g$ 的上界。
+      source_ref: page_0172
+    - step_id: step_3
+      statement: 求导并列临界方程。
+      formula_trace:
+        from: $g(x)=\cos x(\sin x-x\cos x)$
+        to: $g^{\prime}(x)=\sin x(-\sin x+2x\cos x)$
+        operation: 乘积求导并整理。
+        why: 源解通过 $g^{\prime}(x)=0$ 定位可能极值点。
+      source_ref: page_0172
+    - step_id: step_4
+      statement: 得到内点方程 $\tan x=2x$。
+      formula_trace:
+        from: $g^{\prime}(x)=0$
+        to: $x=0\ \text{或}\ \tan x=2x\ (0<x<\frac\pi2)$
+        operation: 因子分解后分别令零。
+        why: 源页将内点解作为极大值点候选。
+      source_ref: page_0172
+    - step_id: step_5
+      statement: 内点极值要按临界方程约束求真实上界。
+      formula_trace:
+        from: $\tan t_\ast=2t_\ast$
+        to: $g(t_\ast)=\frac{1}{4t_\ast+1/t_\ast},\quad t_\ast\approx1.16556$
+        operation: 把 $t_\ast=\frac12\tan t_\ast$ 代回 $g$，再数值复核满足临界方程的内点。
+        why: $\frac14$ 的取等点 $t=\frac12$ 不满足 $\tan t=2t$，不能用于最小整数判定。
+      source_ref: page_0172
+    - step_id: step_6
+      statement: 把真实最大值转成整数上界。
+      formula_trace:
+        from: $10g(t_\ast)\approx1.8116$
+        to: $m_{\min}=2$
+        operation: 取不小于真实上确界的最小整数。
+        why: 整数 1 不足以覆盖最大值，整数 2 可以覆盖。
+      source_ref: page_0172
+teaching_card:
+  student_title: 把切线参数压成一个切点变量
+  what_it_trains: 训练把“切线参数约束”改写为“切点函数极值”，再由上界转成整数最小值判定。
+  recognition_cues:
+    - 题干给的是 $y=\sin x$ 的切线 $y=ax+b$，并要求全区间上界。
+    - 目标量是系数乘积 $ab$，适合先用切点表达 $a,b$。
+    - 出现 $\sin x,\cos x$ 复合乘积，通常会落到单变量导数判极值。
+  normalization_moves:
+    - 先在切点写 $a=\cos x_0$、$b=\sin x_0-x_0\cos x_0$。
+    - 把 $ab$ 写为 $g(x_0)$。
+    - 对 $g$ 求导并解 $g^{\prime}(x)=0$。
+    - 把极值上界换成 $m$ 的最小整数。
+  common_failures:
+    - 把切线方程里同名参数与临界点记号混用，导致推导混乱。
+    - 在 $g^{\prime}(x)$ 化简时漏掉因子 $\sin x$。
+    - 把“上界估计”误当“精确最大值”，未检查取等条件是否可达。
+  similar_practice_query: sinx 切线 全局上界 ab 最值 tanx=2x 参数化
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 用户拍板：第 10 项需要自己重做；已按临界方程 $\tan t=2t$ 复核真实最大值，源答案 C 改为 B。

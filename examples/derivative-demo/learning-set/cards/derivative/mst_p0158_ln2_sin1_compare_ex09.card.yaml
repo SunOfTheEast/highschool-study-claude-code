@@ -1,0 +1,207 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0158_ln2_sin1_compare_ex09
+content_revision_id: mst_p0158_ln2_sin1_compare_ex09-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0158_ln2_sin1_compare_ex09.card.yaml
+stem: |-
+  （2023·上开学）设 $a=\frac{2}{3}$，$b=\ln2$，$c=\sin1$，则（  ）
+  A. $b>c>a$
+  B. $b>a>c$
+  C. $c>b>a$
+  D. $c>a>b$
+answer: |
+  C
+
+  先比较 $b$ 与 $a$。由
+  \[
+  \frac{1}{2}\left(x-\frac{1}{x}\right)>\ln x>\frac{2(x-1)}{x+1}\quad(x>1),
+  \]
+  取 $x=2$ 得
+  \[
+  \frac{1}{2}\left(2-\frac{1}{2}\right)>\ln2>\frac{2(2-1)}{2+1},
+  \]
+  即
+  \[
+  \frac{3}{4}>b>\frac{2}{3}=a,
+  \]
+  所以 $b>a$。
+  再比较 $c$ 与 $b$。利用
+  \[
+  \sin x>\ln(1+x)\quad(0<x<1),
+  \]
+  得
+  \[
+  \sin1-\ln2>0,
+  \]
+  即 $c>b$。
+  合并得
+  \[
+  c>b>a.
+  \]
+  故选 C。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 代入 $x=2$，先定 $b$ 在 $(\frac{2}{3},\frac{3}{4})$ 内。
+      max_score: 1
+    - step_id: step_2
+      description: 用三角-对数比较锁定 $c>b$。
+      max_score: 1
+    - step_id: step_3
+      description: 传递得到最终全序。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较 $\frac{2}{3},\ln2,\sin1$ 的大小。
+        result: 见 source_solution_summary
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 局部逼近与找点
+      - 切线放缩与凹凸性
+    subroute:
+      - 对数项先做双边夹逼
+      - 三角项转到 $\sin1$ 与 $\ln2$ 的差值判断
+      - 分段比较后合并全序
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 三角复合结构
+      - 指对复合结构
+    evidence:
+      - 同题同时出现 $\ln2$ 与 $\sin1$，都可映射到标准局部不等式。
+      - 解法不是直接近似数值，而是模板链式锁序。
+    normalization_moves_used:
+      - 用 $x=2$ 代入 $\ln x$ 双边界。
+      - 用 $\sin x>\ln(1+x)$ 比较 $\sin1$ 与 $\ln2$。
+      - 拼接为 $c>b>a$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会代入 $x=2$ 并读出对数上下界，回补指数对数基础。
+      - 若学生对 $\sin x$ 与 $\ln(1+x)$ 比较关系不熟，回补三角函数基础。
+      - 若学生不能把分段结论合并成全序，回补不等式工具基础。
+  detail_terms:
+    - $\frac{1}{2}(x-\frac{1}{x})>\ln x>\frac{2(x-1)}{x+1}$
+    - $\sin x>\ln(1+x)$
+    - $c>b>a$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0158_ln2_sin1_compare_ex09
+source_evidence:
+  source_refs:
+    - ref_id: page_0158_ex09_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0158/page_0158.md
+      role: problem_start
+      evidence: 例9题干在 page_0158：$a=\frac{2}{3},\ b=\ln2,\ c=\sin1$，配四个顺序选项。
+    - ref_id: page_0158_ex09_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0158/page_0158.md
+      role: solution
+      evidence: 解析分两步：先由 $\frac{1}{2}(x-\frac{1}{x})>\ln x>\frac{2(x-1)}{x+1}$（$x=2$）得 $b>a$，再用 $\sin x>\ln(1+x)$ 比较得 $c>b$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0158.png
+      inspected: true
+      notes: 已核对页图：例9题干、解析与答案C在同页且和markdown一致。
+  source_context: 例9延续同页“指数与对数界”工具，叠加 $\sin x>\ln(1+x)$ 做跨函数比较。
+  source_influence:
+    - 保留源解“先比 $b,a$，再比 $c,b$”的顺序。
+    - 保留 $x=2$ 代入对数夹逼式与“$\sin1-\ln2>0$”判断。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·上开学）设 $a=\frac{2}{3}$，$b=\ln2$，$c=\sin1$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $b>c>a$
+      text_latex: $b>c>a$
+    - label: B
+      text_raw: $b>a>c$
+      text_latex: $b>a>c$
+    - label: C
+      text_raw: $c>b>a$
+      text_latex: $c>b>a$
+    - label: D
+      text_raw: $c>a>b$
+      text_latex: $c>a>b$
+  answer: C
+  fidelity_notes:
+    - 源解第2步直接以 $\sin1-\ln2>0$ 得 $c>b$，保留该写法。
+solution:
+  source_solution_summary: |
+    先比较 $b$ 与 $a$。由
+    \[
+    \frac{1}{2}\left(x-\frac{1}{x}\right)>\ln x>\frac{2(x-1)}{x+1}\quad(x>1),
+    \]
+    取 $x=2$ 得
+    \[
+    \frac{1}{2}\left(2-\frac{1}{2}\right)>\ln2>\frac{2(2-1)}{2+1},
+    \]
+    即
+    \[
+    \frac{3}{4}>b>\frac{2}{3}=a,
+    \]
+    所以 $b>a$。
+    再比较 $c$ 与 $b$。利用
+    \[
+    \sin x>\ln(1+x)\quad(0<x<1),
+    \]
+    得
+    \[
+    \sin1-\ln2>0,
+    \]
+    即 $c>b$。
+    合并得
+    \[
+    c>b>a.
+    \]
+    故选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 代入 $x=2$，先定 $b$ 在 $(\frac{2}{3},\frac{3}{4})$ 内。
+      formula_trace:
+        from: $b=\ln2$
+        to: $\frac{3}{4}>b>\frac{2}{3}=a$
+        operation: 对数双边界不等式代入 $x=2$。
+        why: 直接得到 $b>a$。
+      source_ref: page_0158_ex09_solution
+    - step_id: step_2
+      statement: 用三角-对数比较锁定 $c>b$。
+      formula_trace:
+        from: $c=\sin1,\ b=\ln2$
+        to: $\sin1-\ln2>0$，即 $c>b$
+        operation: 套用 $\sin x>\ln(1+x)$ 并取 $x=1$。
+        why: 补上 $c$ 与 $b$ 的顺序。
+      source_ref: page_0158_ex09_solution
+    - step_id: step_3
+      statement: 传递得到最终全序。
+      formula_trace:
+        from: $c>b$ 且 $b>a$
+        to: $c>b>a$，选 C
+        operation: 不等式传递。
+        why: 对应唯一选项。
+      source_ref: page_0158_ex09_solution
+teaching_card:
+  student_title: 两段模板拼成三数全序
+  what_it_trains: 训练“对数先夹、三角再比、最后传递”的标准三步排序流程。
+  recognition_cues:
+    - 出现 $\ln2$ 与 $\sin1$ 的跨函数比较。
+    - 另一个量是简单分数阈值（如 $\frac{2}{3}$）。
+    - 选项是三数全序判断。
+  normalization_moves:
+    - 先把 $\ln2$ 夹在两个可算分数之间。
+    - 再把 $\sin1$ 转成与 $\ln2$ 的直接比较。
+    - 最后用传递律收尾。
+  common_failures:
+    - 把 $\ln x$ 双边不等式方向写错。
+    - 只得到 $b>a$，漏掉 $c$ 与 $b$ 的比较。
+    - 误把“局部不等式”当作数值近似公式随意代点。
+  similar_practice_query: ln2 sin1 三数比较 局部不等式 c>b>a
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

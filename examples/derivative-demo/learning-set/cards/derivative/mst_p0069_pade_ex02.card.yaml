@@ -1,0 +1,181 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0069_pade_ex02
+content_revision_id: mst_p0069_pade_ex02-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0069_pade_ex02.card.yaml
+stem: （2016 · 新课标 II）已知函数 $f(x)=(x+1)\ln x-a(x-1)$。若当 $x\in(1,+\infty)$ 时，$f(x)>0$，求 $a$ 的取值范围。
+answer: |-
+  $a\leqslant2$。
+
+  源页先指出 $f(1)=0$，因此要让 $x>1$ 时 $f(x)>0$，右端点附近不能先下降。求导得 $f^{\prime\prime}(x)=\frac{x-1}{x^2}>0$，所以 $f^{\prime}(x)$ 在 $(1,+\infty)$ 上递增，且 $f^{\prime}(1)=2-a$。若 $a\le2$，则 $f^{\prime}(x)>f^{\prime}(1)\ge0$，$f$ 递增并有 $f(x)>f(1)=0$；若 $a>2$，则 $f^{\prime}(1)<0$，函数在 $1$ 右侧先减小，会出现 $f(x)<0$，与题意矛盾，所以 $a\le2$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 识别端点效应：端点函数值正好为零。
+      max_score: 1
+    - step_id: step_2
+      description: 用二阶导数判断一阶导数的变化。
+      max_score: 1
+    - step_id: step_3
+      description: 求出端点右侧导数门槛。
+      max_score: 1
+    - step_id: step_4
+      description: 证明 $a\le2$ 时条件成立。
+      max_score: 1
+    - step_id: step_5
+      description: 证明 $a>2$ 时必然违背题意。
+      max_score: 1
+    - step_id: step_6
+      description: 合并充分性和必要性。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 充分/必要性探路
+    secondary:
+      - 含参数分类讨论
+      - 局部逼近与找点
+    subroute:
+      - 端点效应
+      - 端点导数判别
+      - 凸性保证导数递增
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $f(1)=0$ 是题设区间 $(1,+\infty)$ 左端点的临界值。
+      - $f^{\prime\prime}(x)=\frac{x-1}{x^2}>0$ 让 $f^{\prime}(x)$ 在右侧递增，端点导数 $f^{\prime}(1)=2-a$ 决定是否先下降。
+      - $a>2$ 时 $f^{\prime}(1)<0$，端点附近负向变化直接制造 $f(x)<0$。
+    normalization_moves_used:
+      - 先补看端点 $x=1$ 的函数值。
+      - 用二阶导数把导函数单调性固定住。
+      - 按 $a\le2$ 与 $a>2$ 分成充分性和矛盾两路。
+      - 用 $x=e^{a-1}$ 说明 $a>2$ 时导数会从负变正，存在极小点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生没有注意 $x>1$ 的开区间左端点 $x=1$，回补函数三要素与定义域。
+      - 若学生不会由 $f^{\prime\prime}(x)>0$ 推出 $f^{\prime}(x)$ 单调递增，回补导数单调极值基础。
+      - 若学生只证明 $a\le2$ 充分而没有排除 $a>2$，回补不等式工具基础。
+      - 若学生在 $\ln x$ 求导或代入 $x=e^{a-1}$ 时出错，回补指数对数基础。
+      - 若学生不能把“先下降”转成存在负值，回补函数性质与图像。
+  detail_terms:
+    - $f(x)=(x+1)\ln x-a(x-1)$
+    - $f(1)=0$
+    - $f^{\prime}(x)=1+\frac1x+\ln x-a$
+    - $f^{\prime\prime}(x)=\frac{x-1}{x^2}>0$
+    - $f^{\prime}(1)=2-a$
+    - $a\le2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0069_pade_ex02
+source_evidence:
+  source_refs:
+    - ref_id: page_0069
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0069/page_0069.md
+      role: problem_start
+      evidence: "line 39 gives 例2题头 and the start of the stem: $(2016\\cdot 新课标 II)$, $f(x)=(x+1)\\ln x-a(x-1)$, and $x\\in(1,+\\infty)$ 时 $f(x)>0$."
+    - ref_id: page_0070
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0070/page_0070.md
+      role: continuation
+      evidence: lines 14-22 continue the stem with “求 $a$ 的取值范围” and give the full endpoint-effect solution ending with $a\le2$.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0069.png
+      inspected: true
+      notes: 页图已核对：例2题头起于 page_0069 底部，题干在 “$f(x)>0$,” 后跨页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0070.png
+      inspected: true
+      notes: 页图已核对：page_0070 顶部续完“求 $a$ 的取值范围”，解析从端点效应、$f^{\prime\prime}(x)>0$ 到结论 $a\le2$ 完整；后续帕德表格是新 exposition，不并入本卡。
+  source_context: 本题紧跟 $\ln x$ 的 $[1,1]$ 帕德放缩说明，但源解析实际采用端点效应：$f(1)=0$，用 $f^{\prime\prime}(x)>0$ 保证 $f^{\prime}(x)$ 递增，再按 $f^{\prime}(1)=2-a$ 的符号做充分性和反证。
+  source_influence:
+    - 题头和函数定义以 page_0069 底部为准；完整问题目标和解析以 page_0070 顶部续页为准。
+    - page_0070 解析结束后的两个帕德逼近表格属于后续知识讲解，不作为本题解答步骤。
+  source_discrepancies: []
+original_problem:
+  stem: （2016 · 新课标 II）已知函数 $f(x)=(x+1)\ln x-a(x-1)$。若当 $x\in(1,+\infty)$ 时，$f(x)>0$，求 $a$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $a\leqslant2$。
+  fidelity_notes:
+    - 题干从 page_0069 底部开始，并在 page_0070 顶部续完。
+    - 本题无选择项，choices 保持为空列表。
+solution:
+  source_solution_summary: 源页先指出 $f(1)=0$，因此要让 $x>1$ 时 $f(x)>0$，右端点附近不能先下降。求导得 $f^{\prime\prime}(x)=\frac{x-1}{x^2}>0$，所以 $f^{\prime}(x)$ 在 $(1,+\infty)$ 上递增，且 $f^{\prime}(1)=2-a$。若 $a\le2$，则 $f^{\prime}(x)>f^{\prime}(1)\ge0$，$f$ 递增并有 $f(x)>f(1)=0$；若 $a>2$，则 $f^{\prime}(1)<0$，函数在 $1$ 右侧先减小，会出现 $f(x)<0$，与题意矛盾，所以 $a\le2$。
+  key_steps:
+    - step_id: step_1
+      statement: 识别端点效应：端点函数值正好为零。
+      formula_trace:
+        from: $f(x)=(x+1)\ln x-a(x-1)$
+        to: $f(1)=0$
+        operation: 代入 $x=1$，利用 $\ln1=0$。
+        why: 题设要求 $x>1$ 时 $f(x)>0$，也就是右侧函数值必须高于端点值 $f(1)$。
+      source_ref: page_0070
+    - step_id: step_2
+      statement: 用二阶导数判断一阶导数的变化。
+      formula_trace:
+        from: $f^{\prime}(x)=1+\frac1x+\ln x-a$
+        to: $f^{\prime\prime}(x)=\frac{x-1}{x^2}>0\quad(x>1)$
+        operation: 对 $f^{\prime}(x)$ 再求导，并利用 $x>1$ 判断符号。
+        why: $f^{\prime\prime}(x)>0$ 说明 $f^{\prime}(x)$ 在 $(1,+\infty)$ 上单调递增，可以由 $f^{\prime}(1)$ 控制右侧趋势。
+      source_ref: page_0070
+    - step_id: step_3
+      statement: 求出端点右侧导数门槛。
+      formula_trace:
+        from: $f^{\prime}(x)=1+\frac1x+\ln x-a$
+        to: $f^{\prime}(1)=2-a,\quad f^{\prime}(x)>f^{\prime}(1)=2-a\ (x>1)$
+        operation: 代入 $x=1$，并用 $f^{\prime}$ 递增得到右侧严格大于端点导数。
+        why: $2-a$ 的符号决定端点右侧是直接上升还是先下降。
+      source_ref: page_0070
+    - step_id: step_4
+      statement: 证明 $a\le2$ 时条件成立。
+      formula_trace:
+        from: $a\le2,\quad f^{\prime}(x)>f^{\prime}(1)=2-a\ge0$
+        to: $f(x)>f(1)=0\quad(x>1)$
+        operation: 由 $f^{\prime}(x)>0$ 得 $f$ 在 $(1,+\infty)$ 上单调递增，再与端点值比较。
+        why: 这给出参数范围 $a\le2$ 的充分性。
+      source_ref: page_0070
+    - step_id: step_5
+      statement: 证明 $a>2$ 时必然违背题意。
+      formula_trace:
+        from: $a>2,\quad f^{\prime}(1)=2-a<0$
+        to: $\exists x_1\in(1,+\infty),\ f(x_1)<0$
+        operation: 源页取 $x=e^{a-1}$ 得 $f^{\prime}(e^{a-1})>0$，由 $f^{\prime}$ 递增可得存在 $x_0$ 使 $f^{\prime}(x_0)=0$；于是 $f$ 在 $(1,x_0)$ 上先递减。
+        why: 从 $f(1)=0$ 出发右侧先递减，就会在某点低于 $0$，与“任意 $x>1$ 都有 $f(x)>0$”矛盾。
+      source_ref: page_0070
+    - step_id: step_6
+      statement: 合并充分性和必要性。
+      formula_trace:
+        from: $a\le2$ 成立，$a>2$ 不成立
+        to: $a\le2$
+        operation: 排除不满足题意的参数，并保留已证明满足的参数。
+        why: 这就是题目所求的完整取值范围。
+      source_ref: page_0070
+teaching_card:
+  student_title: 看端点导数判断对数函数是否先下降
+  what_it_trains: 训练恒成立参数题里的端点效应：先找临界端点，再用导数单调性判断右侧能不能保持在端点上方。
+  recognition_cues:
+    - 题设区间是 $(1,+\infty)$，而函数在 $x=1$ 处自然有 $f(1)=0$。
+    - 目标是 $f(x)>0$，等价于右侧始终高于端点值。
+    - 求导后 $f^{\prime\prime}(x)=\frac{x-1}{x^2}$ 在 $x>1$ 恒正，导函数趋势很干净。
+  normalization_moves:
+    - 先代入端点 $x=1$ 得 $f(1)=0$。
+    - 求出 $f^{\prime}(x)$ 和 $f^{\prime\prime}(x)$，确认 $f^{\prime}$ 递增。
+    - 用 $f^{\prime}(1)=2-a$ 把参数分成 $a\le2$ 与 $a>2$。
+    - 对 $a>2$，说明右侧先下降会让 $f(x)$ 低于 $0$。
+  common_failures:
+    - 只看 $f^{\prime}(x)$ 的表达式，没有先抓住 $f(1)=0$ 这个端点。
+    - 把 $f^{\prime}(x)>f^{\prime}(1)$ 误读成 $f^{\prime}(x)$ 一定为正，漏掉 $a>2$ 情况。
+    - 证明 $a\le2$ 成立后就停笔，没有说明 $a>2$ 会矛盾。
+    - 在 $a>2$ 时只说 $f^{\prime}(1)<0$，却没有用连续性或单调性推出右侧存在负值。
+  similar_practice_query: 端点效应 $(x+1)\ln x-a(x-1)$ 恒正 参数范围 $f(1)=0$ $f^{\prime\prime}>0$
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0069/page_0070 页图；例2题头在 page_0069，题干和解析在 page_0070 顶部续完。
+    - page_0070 解析结束后的帕德逼近表格是后续知识讲解，不属于例2卡片内容。

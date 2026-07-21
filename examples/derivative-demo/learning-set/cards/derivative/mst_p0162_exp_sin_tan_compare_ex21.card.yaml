@@ -1,0 +1,248 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0162_exp_sin_tan_compare_ex21
+content_revision_id: mst_p0162_exp_sin_tan_compare_ex21-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0162_exp_sin_tan_compare_ex21.card.yaml
+stem: |-
+  （2023·鼓楼区校级模拟）设 $a=2\left(e^{\frac14}-1\right)$，$b=e^{\frac12}-1$，$c=\sin\frac14+\tan\frac14$，则（  ）
+  A. $b>a>c$
+  B. $b>c>a$
+  C. $a>b>c$
+  D. $a>c>b$
+answer: |
+  A
+
+  先比较 $b,a$。令
+  \[
+  g(x)=e^{2x}-1-2(e^x-1),
+  \]
+  则 $g(0)=0$，且当 $x>0$ 时
+  \[
+  g^{\prime}(x)=2e^{2x}-2e^x>0.
+  \]
+  所以 $g(x)$ 在 $(0,+\infty)$ 递增，故
+  \[
+  g\!\left(\frac14\right)>0
+  \iff
+  e^{1/2}-1-2\left(e^{1/4}-1\right)>0
+  \iff
+  b>a.
+  \]
+  再比较 $a,c$。源解用
+  \[
+  e^x>1+x+\frac{x^2}{2}\ (x>0),
+  \]
+  得
+  \[
+  a=2\left(e^{1/4}-1\right)>2\left(\frac14+\frac1{32}\right)>0.55.
+  \]
+  同时
+  \[
+  c=\sin\frac14+\tan\frac14<\sin\frac{\pi}{12}+\tan\frac{\pi}{12}<0.53.
+  \]
+  因而 $a>c$。综合
+  \[
+  b>a>c,
+  \]
+  选 A。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 构造差函数，把 $b-a$ 转成符号判断。
+      max_score: 1
+    - step_id: step_2
+      description: 用导数判 $g(1/4)>0$。
+      max_score: 1
+    - step_id: step_3
+      description: 用指数下界估计 $a$。
+      max_score: 1
+    - step_id: step_4
+      description: 给 $c$ 建立上界。
+      max_score: 1
+    - step_id: step_5
+      description: 合并两段比较得到最终排序。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较 $a,b,c$ 三项并确定单选。
+        result: 见 source_solution_summary
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 局部逼近与找点
+      - 同构变形与换元法
+    subroute:
+      - 构造差函数判号
+      - 指数下界压估
+      - 三角上界夹逼
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - 一项是指数差，另一项是正弦与正切和，属于跨结构比较。
+      - 解题依赖“差函数单调 + 上下界夹逼”而非直接精算。
+    normalization_moves_used:
+      - $b-a\to g(1/4)$。
+      - $e^x>1+x+\frac{x^2}{2}$ 得 $a$ 下界。
+      - $\sin\frac14+\tan\frac14<\sin\frac\pi{12}+\tan\frac\pi{12}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会构造 $b-a$ 的差函数，回补代数恒等变形。
+      - 若学生不会用导数判断单调并判号，回补导数单调极值基础。
+      - 若学生不会处理指数下界和三角上界，回补不等式工具基础。
+  detail_terms:
+    - $g(x)=e^{2x}-1-2(e^x-1)$
+    - $g^{\prime}(x)>0$
+    - $e^x>1+x+\frac{x^2}{2}$
+    - $\sin\frac\pi{12}+\tan\frac\pi{12}$
+    - $b>a>c$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0162_exp_sin_tan_compare_ex21
+source_evidence:
+  source_refs:
+    - ref_id: page_0162_ex21_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0162/page_0162.md
+      role: problem_start
+      evidence: 例21题干给出 $a=2(e^{1/4}-1),\ b=e^{1/2}-1,\ c=\sin\frac14+\tan\frac14$，问三者大小。
+    - ref_id: page_0162_ex21_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0162/page_0162.md
+      role: solution
+      evidence: 解析先构造 $g(x)=e^{2x}-1-2(e^x-1)$ 得 $b>a$，再以指数下界与三角上界得 $a>c$，结论选 A。
+    - ref_id: page_0162_section5_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0162/page_0162.md
+      role: local_context
+      evidence: 例21后进入“极值偏移与比大小”新板块，不属于本题解题步骤。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0162.png
+      inspected: true
+      notes: 已核对页图：例21题干、选项、解析和答案 A 清晰。
+  source_context: 例21位于 page_0162 中部，后续“极值偏移”章节仅作页面上下文。
+  source_influence:
+    - 保留源解先证 $b>a$ 再证 $a>c$ 的两段式比较。
+    - 保留 $e^x>1+x+\frac{x^2}{2}$ 与角度替换 $\frac14<\frac\pi{12}$ 的组合夹逼。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·鼓楼区校级模拟）设 $a=2\left(e^{\frac14}-1\right)$，$b=e^{\frac12}-1$，$c=\sin\frac14+\tan\frac14$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $b>a>c$
+      text_latex: $b>a>c$
+    - label: B
+      text_raw: $b>c>a$
+      text_latex: $b>c>a$
+    - label: C
+      text_raw: $a>b>c$
+      text_latex: $a>b>c$
+    - label: D
+      text_raw: $a>c>b$
+      text_latex: $a>c>b$
+  answer: A
+  fidelity_notes:
+    - 源解通过 $b-a>0$ 与 $a>c$ 两步完成排序，未直接算出精确值。
+solution:
+  source_solution_summary: |
+    先比较 $b,a$。令
+    \[
+    g(x)=e^{2x}-1-2(e^x-1),
+    \]
+    则 $g(0)=0$，且当 $x>0$ 时
+    \[
+    g^{\prime}(x)=2e^{2x}-2e^x>0.
+    \]
+    所以 $g(x)$ 在 $(0,+\infty)$ 递增，故
+    \[
+    g\!\left(\frac14\right)>0
+    \iff
+    e^{1/2}-1-2\left(e^{1/4}-1\right)>0
+    \iff
+    b>a.
+    \]
+    再比较 $a,c$。源解用
+    \[
+    e^x>1+x+\frac{x^2}{2}\ (x>0),
+    \]
+    得
+    \[
+    a=2\left(e^{1/4}-1\right)>2\left(\frac14+\frac1{32}\right)>0.55.
+    \]
+    同时
+    \[
+    c=\sin\frac14+\tan\frac14<\sin\frac{\pi}{12}+\tan\frac{\pi}{12}<0.53.
+    \]
+    因而 $a>c$。综合
+    \[
+    b>a>c,
+    \]
+    选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 构造差函数，把 $b-a$ 转成符号判断。
+      formula_trace:
+        from: $b-a=e^{1/2}-1-2(e^{1/4}-1)$
+        to: $b-a=g(1/4)$，其中 $g(x)=e^{2x}-1-2(e^x-1)$
+        operation: 同构为单函数取值。
+        why: 避免直接近似误差，改走单调性判号。
+      source_ref: page_0162_ex21_solution
+    - step_id: step_2
+      statement: 用导数判 $g(1/4)>0$。
+      formula_trace:
+        from: $g^{\prime}(x)=2e^{2x}-2e^x>0\ (x>0)$
+        to: $g(1/4)>g(0)=0\Rightarrow b>a$
+        operation: 先证递增再代点。
+        why: 完成 $b,a$ 顺序。
+      source_ref: page_0162_ex21_solution
+    - step_id: step_3
+      statement: 用指数下界估计 $a$。
+      formula_trace:
+        from: $e^x>1+x+\frac{x^2}{2}$
+        to: $a=2(e^{1/4}-1)>2(\frac14+\frac1{32})>0.55$
+        operation: 把指数项转成可比下界。
+        why: 给出 $a$ 的可量化下界。
+      source_ref: page_0162_ex21_solution
+    - step_id: step_4
+      statement: 给 $c$ 建立上界。
+      formula_trace:
+        from: $c=\sin\frac14+\tan\frac14$
+        to: $c<\sin\frac\pi{12}+\tan\frac\pi{12}<0.53$
+        operation: 利用 $\frac14<\frac\pi{12}$ 与三角函数单调性、精确角值。
+        why: 与 step_3 的 $a$ 下界直接对比。
+      source_ref: page_0162_ex21_solution
+    - step_id: step_5
+      statement: 合并两段比较得到最终排序。
+      formula_trace:
+        from: $b>a$ 且 $a>c$
+        to: $b>a>c$，选 A
+        operation: 传递关系合并。
+        why: 完成题目答案。
+      source_ref: page_0162_ex21_solution
+teaching_card:
+  student_title: 先判 b-a 的符号，再用上下界压出 a>c
+  what_it_trains: 训练跨结构排序：先用差函数处理两项，再用一项下界对另一项上界完成最后比较。
+  recognition_cues:
+    - 题目同时含指数项和三角和式。
+    - 三项差距不大，直接小数估算不稳。
+    - 解析常出现“构造 $g(x)$”与“夹逼”。
+  normalization_moves:
+    - 优先构造差函数判号。
+    - 给指数项做下界，给三角项做上界。
+    - 把两段比较拼成全序。
+  common_failures:
+    - 把 $g^{\prime}(x)>0$ 只在一点验证，忽略区间条件。
+    - 把 $e^x>1+x+\frac{x^2}{2}$ 的方向写反。
+    - 把 $\frac14$ 与 $\frac\pi{12}$ 比较顺序写错。
+  similar_practice_query: e^(1/2)-1 2(e^(1/4)-1) sin1/4+tan1/4 比大小 差函数
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0162 页图；例21在本页完整结束。

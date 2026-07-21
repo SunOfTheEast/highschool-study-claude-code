@@ -1,0 +1,269 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0306_xex_minus_a_concavity_parameter_abs_log_bound_huizhou2025_ex07
+content_revision_id: mst_p0306_xex_minus_a_concavity_parameter_abs_log_bound_huizhou2025_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0306_xex_minus_a_concavity_parameter_abs_log_bound_huizhou2025_ex07.card.yaml
+stem: |-
+  （2025 · 惠州二模远方有梦陪跑课答疑）定义：记函数 $f(x)$ 的导函数为 $f^\prime(x)$，若 $f^\prime(x)$ 在区间 $I$ 上单调递增，则称 $f(x)$ 为区间 $I$ 上的凹函数；若 $f^\prime(x)$ 在区间 $I$ 上单调递减，则称 $f(x)$ 为区间 $I$ 上的凸函数。已知函数 $f(x)=xe^x-a$（$x>0$），$g(x)=\frac{f(x)}x$。
+  1. 求证：$f(x)$ 为区间 $(0,+\infty)$ 上的凹函数。
+  2. 若 $g(x)$ 为区间 $[1,2]$ 的凸函数，求实数 $a$ 的取值范围。
+  3. 求证：当 $a<e^{e+1}$ 时，$|g(x)|+a>a\ln x$。
+answer: |-
+  第(1)问：按题设定义，$f$ 为 $(0,+\infty)$ 上的凹函数。第(2)问：$a\in[4e^2,+\infty)$。第(3)问：$a<e^{e+1}$ 时 $|g(x)|+a>a\ln x$。
+
+  第(1)问：$f^\prime(x)=(x+1)e^x$， $f^{\prime\prime}(x)=(x+2)e^x>0$，所以 $f^\prime$ 在 $(0,+\infty)$ 上递增，按题设定义 $f$ 为凹函数。第(2)问： $g(x)=e^x-\frac ax$，$g^\prime=e^x+\frac a{x^2}$， $g^{\prime\prime}=e^x-\frac{2a}{x^3}$。按题设定义，$g$ 在 $[1,2]$ 上为凸函数等价于 $g^\prime$ 单调递减，即 $g^{\prime\prime}\le0$，所以 $x^3e^x\le2a$ 在 $[1,2]$ 恒成立；$x^3e^x$ 在 $[1,2]$ 上递增，最大值为 $8e^2$， 故 $a\ge4e^2$。第(3)问：若 $a\le0$，可直接化成 $e^x-a(\frac1x-1-\ln\frac1x)>0$。若 $0<a<e^{e+1}$，则 $F(x)=xe^x-a$ 在正半轴递增，存在唯一 $x_0$ 使 $x_0e^{x_0}=a$，且 $0<x_0<e$。当 $0<x<x_0$ 时，$e^x-\frac ax<0$，不等式直接成立。当 $x\ge x_0$ 时，设 $G(x)=e^x-\frac ax-a\ln x+a$。令 $p(x)=x^2e^x+a-ax$，则 $G^\prime(x)=\frac{p(x)}{x^2}$。由 $p^{\prime\prime}(x)=(x^2+4x+2)e^x>0$，且 $p^\prime(x_0)=(x_0^2+2x_0)e^{x_0}-a=ax_0+a>0$， 得 $p$ 递增且 $p(x)\ge p(x_0)=a>0$。所以 $G$ 递增，$G(x)\ge G(x_0)=a(1-\ln x_0)>0$，因为 $x_0<e$。
+rubric:
+  max_score: 9
+  criteria:
+    - step_id: step_1
+      description: 按题设定义证明 $f$ 为凹函数。
+      max_score: 1
+    - step_id: step_2
+      description: 把第(2)问转成参数下界。
+      max_score: 1
+    - step_id: step_3
+      description: 求 $x^3e^x$ 在 $[1,2]$ 上的最大值。
+      max_score: 1
+    - step_id: step_4
+      description: 第(3)问先处理 $a\le0$。
+      max_score: 1
+    - step_id: step_5
+      description: 当 $0<a<e^{e+1}$ 时引入隐零点 $x_0$。
+      max_score: 1
+    - step_id: step_6
+      description: 在 $0<x<x_0$ 上直接判正。
+      max_score: 1
+    - step_id: step_7
+      description: 在 $x\ge x_0$ 上构造 $G$。
+      max_score: 1
+    - step_id: step_8
+      description: 用两层单调性证明 $G$ 递增。
+      max_score: 1
+    - step_id: step_9
+      description: 用 $x_0<e$ 完成端点估计。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 1 问
+        result: $f$ 为 $(0,+\infty)$ 上的凹函数。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $a\in[4e^2,+\infty)$。
+      - part_id: "3"
+        goal: 不等式证明
+        target: 第 3 问
+        result: $a<e^{e+1}$ 时 $|g(x)|+a>a\ln x$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 参变量分离
+      - 含参数分类讨论
+      - 拟合与夹逼
+    subroute:
+      - 题设凹凸定义转导数单调
+      - $g^{\prime\prime}\le0$ 求参数范围
+      - $x_0e^{x_0}=a$ 隐零点分界
+      - 绝对值分段
+      - 构造 $G$ 与 $p$ 两层单调
+      - 用 $x_0<e$ 兜底
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - Max/Min 与绝对值结构
+      - 抽象函数结构
+      - 不等式工具结构
+    evidence:
+      - $xe^x-a$
+      - $g(x)=e^x-\frac ax$
+      - $g^{\prime\prime}=e^x-\frac{2a}{x^3}$
+      - $x^3e^x\le2a$
+      - $x_0e^{x_0}=a$
+      - $|e^x-\frac ax|$
+      - $G(x)=e^x-\frac ax-a\ln x+a$
+    normalization_moves_used:
+      - 严格按题设定义处理凹凸，不套常规术语。
+      - 把凸函数条件翻译成 $g^{\prime\prime}\le0$。
+      - 用隐零点分割绝对值符号。
+      - 在难分支里构造 $G$，再构造 $p$ 证明单调。
+  fallback:
+    only_if_trace_shows:
+      - 若学生混淆本题凹凸定义，回补函数性质与图像。
+      - 若学生不会求 $g^{\prime\prime}$ 和分离参数，回补导数运算与几何意义。
+      - 若学生不会处理 $x^3e^x$ 的最大值，回补导数单调极值基础。
+      - 若学生不会用 $x_0e^{x_0}=a$ 分段，回补代数恒等变形。
+      - 若学生不会处理绝对值和对数项，回补不等式工具基础。
+  detail_terms:
+    - $xe^x-a$
+    - 题设凹函数/凸函数定义
+    - $g(x)=\frac{f(x)}x$
+    - $a\ge4e^2$
+    - $a<e^{e+1}$
+    - $x_0e^{x_0}=a$
+    - $|g(x)|+a>a\ln x$
+    - $G^\prime(x)=\frac{p(x)}{x^2}$
+parts: &a1
+  - part_id: "1"
+    text: 求证：$f(x)$ 为区间 $(0,+\infty)$ 上的凹函数。
+  - part_id: "2"
+    text: 若 $g(x)$ 为区间 $[1,2]$ 的凸函数，求实数 $a$ 的取值范围。
+  - part_id: "3"
+    text: 求证：当 $a<e^{e+1}$ 时，$|g(x)|+a>a\ln x$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0306_xex_minus_a_concavity_parameter_abs_log_bound_huizhou2025_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0306_ex07_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0306/page_0306.md
+      role: problem_start
+      evidence: page_0306 例7题头：定义凹/凸函数；$f(x)=xe^x-a(x>0)$，$g(x)=\frac{f(x)}x$；三问分别证凹函数、求 $g$ 为 $[1,2]$ 凸函数时的 $a$ 范围、证明 $a<e^{e+1}$ 时 $|g(x)|+a>a\ln x$。
+    - ref_id: page_0306_ex07_part1_part2
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0306/page_0306.md
+      role: solution
+      evidence: page_0306 解析第(1)(2)问：$f^\prime=(x+1)e^x$，$f^{\prime\prime}=(x+2)e^x>0$；$g=e^x-\frac ax$，由 $g^{\prime\prime}=e^x-\frac{2a}{x^3}\le0$ 得 $x^3e^x\le2a$，最大值在 $x=2$，所以 $a\ge4e^2$。
+    - ref_id: page_0306_ex07_part3_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0306/page_0306.md
+      role: solution
+      evidence: page_0306 第(3)问开始：当 $a\le0$ 直接成立；当 $0<a<e^{e+1}$，由 $xe^x-a$ 单增，存在唯一 $x_0\in(0,a)$，$x_0e^{x_0}=a$，并由 $a<e^{e+1}$ 得 $0<x_0<e$；$x<x_0$ 时不等式显然。
+    - ref_id: page_0307_ex07_part3_tail
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0307/page_0307.md
+      role: solution
+      evidence: page_0307 顶部：$x\ge x_0$ 时设 $G=e^x-\frac ax-a\ln x+a$，再设 $p=x^2e^x+a-ax$，用 $p^{\prime\prime}>0$、$p^\prime(x_0)>0$、$p(x_0)=a>0$ 得 $G^\prime>0$，所以 $G(x)\ge G(x_0)=a(1-\ln x_0)>0$。
+    - ref_id: page_0307_ex08_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0307/page_0307.md
+      role: local_context
+      evidence: page_0307 后续进入考点3并另起例8，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0306.png
+      inspected: true
+      notes: 已核对页图：page_0306 后半页为 2025 惠州二模例7题干和第(1)(2)(3)问开头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0307.png
+      inspected: true
+      notes: 已核对页图：page_0307 顶部补全例7第(3)问，随后是考点3、图示和例8。
+  source_context: 本卡处理 page_0306 后半页起始、page_0307 顶部结束的 2025 惠州二模例7；page_0307 例8排除。
+  source_influence:
+    - 保留源文自定义的凹/凸术语，不按通常教材定义改写。
+    - 保留第(2)问从 $g^{\prime\prime}\le0$ 转为 $x^3e^x\le2a$。
+    - 保留第(3)问把 $|g(x)|+a>a\ln x$ 转为 $|e^x-\frac ax|>a\ln x-a$。
+    - 保留 $a\le0$ 直接成立的分支。
+    - 保留 $0<a<e^{e+1}$ 时用 $x_0e^{x_0}=a$，并推出 $0<x_0<e$。
+    - 保留按 $x<x_0$、$x\ge x_0$ 分段处理绝对值符号。
+    - 保留 $x\ge x_0$ 时用 $G$、$p$ 两层单调性证明 $G(x)>0$。
+  source_discrepancies:
+    - issue: page_0307 markdown 末句写成“当 $a<e^{x_0+1}$ 时”。
+      resolution: 按题干、页图和前文 $0<x_0<e$ 的逻辑，题卡采用 $a<e^{e+1}$。
+      requires_user_decision: false
+original_problem:
+  stem: （2025 · 惠州二模远方有梦陪跑课答疑）定义：记函数 $f(x)$ 的导函数为 $f^\prime(x)$，若 $f^\prime(x)$ 在区间 $I$ 上单调递增，则称 $f(x)$ 为区间 $I$ 上的凹函数；若 $f^\prime(x)$ 在区间 $I$ 上单调递减，则称 $f(x)$ 为区间 $I$ 上的凸函数。已知函数 $f(x)=xe^x-a$（$x>0$），$g(x)=\frac{f(x)}x$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问：按题设定义，$f$ 为 $(0,+\infty)$ 上的凹函数。第(2)问：$a\in[4e^2,+\infty)$。第(3)问：$a<e^{e+1}$ 时 $|g(x)|+a>a\ln x$。
+  fidelity_notes:
+    - 无选项。
+    - 本题“凹函数/凸函数”使用题设定义；题卡不纠正为常规术语。
+    - 第(3)问默认对 $x>0$ 成立，因为 $f,g$ 的定义域为 $x>0$。
+solution:
+  source_solution_summary: 第(1)问：$f^\prime(x)=(x+1)e^x$， $f^{\prime\prime}(x)=(x+2)e^x>0$，所以 $f^\prime$ 在 $(0,+\infty)$ 上递增，按题设定义 $f$ 为凹函数。第(2)问： $g(x)=e^x-\frac ax$，$g^\prime=e^x+\frac a{x^2}$， $g^{\prime\prime}=e^x-\frac{2a}{x^3}$。按题设定义，$g$ 在 $[1,2]$ 上为凸函数等价于 $g^\prime$ 单调递减，即 $g^{\prime\prime}\le0$，所以 $x^3e^x\le2a$ 在 $[1,2]$ 恒成立；$x^3e^x$ 在 $[1,2]$ 上递增，最大值为 $8e^2$， 故 $a\ge4e^2$。第(3)问：若 $a\le0$，可直接化成 $e^x-a(\frac1x-1-\ln\frac1x)>0$。若 $0<a<e^{e+1}$，则 $F(x)=xe^x-a$ 在正半轴递增，存在唯一 $x_0$ 使 $x_0e^{x_0}=a$，且 $0<x_0<e$。当 $0<x<x_0$ 时，$e^x-\frac ax<0$，不等式直接成立。当 $x\ge x_0$ 时，设 $G(x)=e^x-\frac ax-a\ln x+a$。令 $p(x)=x^2e^x+a-ax$，则 $G^\prime(x)=\frac{p(x)}{x^2}$。由 $p^{\prime\prime}(x)=(x^2+4x+2)e^x>0$，且 $p^\prime(x_0)=(x_0^2+2x_0)e^{x_0}-a=ax_0+a>0$， 得 $p$ 递增且 $p(x)\ge p(x_0)=a>0$。所以 $G$ 递增，$G(x)\ge G(x_0)=a(1-\ln x_0)>0$，因为 $x_0<e$。
+  key_steps:
+    - step_id: step_1
+      statement: 按题设定义证明 $f$ 为凹函数。
+      formula_trace:
+        from: $f(x)=xe^x-a$
+        to: $f^\prime(x)=(x+1)e^x,\quad f^{\prime\prime}(x)=(x+2)e^x>0$
+        operation: 两次求导。
+        why: $f^{\prime\prime}>0$ 表示 $f^\prime$ 单调递增，按题设定义就是凹函数。
+      source_ref: page_0306_ex07_part1_part2
+    - step_id: step_2
+      statement: 把第(2)问转成参数下界。
+      formula_trace:
+        from: $g(x)=e^x-\frac ax,\quad g^{\prime\prime}(x)=e^x-\frac{2a}{x^3}$
+        to: $x^3e^x\le2a\quad(1\le x\le2)$
+        operation: 按题设凸函数定义要求 $g^\prime$ 单调递减，即 $g^{\prime\prime}\le0$。
+        why: 这是求 $a$ 范围的核心转化。
+      source_ref: page_0306_ex07_part1_part2
+    - step_id: step_3
+      statement: 求 $x^3e^x$ 在 $[1,2]$ 上的最大值。
+      formula_trace:
+        from: $m(x)=x^3e^x$
+        to: $m_{\max}=m(2)=8e^2,\quad a\ge4e^2$
+        operation: 求导 $m^\prime=x^2(x+3)e^x>0$。
+        why: 恒成立参数下界由最坏点 $x=2$ 给出。
+      source_ref: page_0306_ex07_part1_part2
+    - step_id: step_4
+      statement: 第(3)问先处理 $a\le0$。
+      formula_trace:
+        from: $|e^x-\frac ax|+a-a\ln x$
+        to: $e^x-a(\frac1x-1-\ln\frac1x)>0$
+        operation: 当 $a\le0$ 时绝对值内为正，整理对数余量。
+        why: 这一路不需要隐零点。
+      source_ref: page_0306_ex07_part3_start
+    - step_id: step_5
+      statement: 当 $0<a<e^{e+1}$ 时引入隐零点 $x_0$。
+      formula_trace:
+        from: $xe^x-a$ 单调递增
+        to: $x_0e^{x_0}=a,\quad 0<x_0<e$
+        operation: 由唯一零点定义 $x_0$，再由 $a<e^{e+1}$ 与 $xe^x$ 单增推出 $x_0<e$。
+        why: 绝对值符号需要靠 $x_0$ 分段。
+      source_ref: page_0306_ex07_part3_start
+    - step_id: step_6
+      statement: 在 $0<x<x_0$ 上直接判正。
+      formula_trace:
+        from: $xe^x-a<0$
+        to: $\frac ax-e^x-a\ln x+a>0$
+        operation: 展开绝对值并观察 $-a\ln x+a$ 的正性。
+        why: 这一侧不需要构造新函数。
+      source_ref: page_0306_ex07_part3_start
+    - step_id: step_7
+      statement: 在 $x\ge x_0$ 上构造 $G$。
+      formula_trace:
+        from: $e^x-\frac ax-a\ln x+a$
+        to: $G^\prime(x)=\frac{x^2e^x+a-ax}{x^2}$
+        operation: 设 $G(x)=e^x-\frac ax-a\ln x+a$ 并求导。
+        why: 绝对值内变正后，目标就是证明 $G(x)>0$。
+      source_ref: page_0307_ex07_part3_tail
+    - step_id: step_8
+      statement: 用两层单调性证明 $G$ 递增。
+      formula_trace:
+        from: $p(x)=x^2e^x+a-ax$
+        to: $p(x)\ge p(x_0)=a>0,\quad G^\prime(x)>0$
+        operation: 先证 $p^{\prime\prime}>0$，再证 $p^\prime(x_0)>0$，于是 $p$ 递增。
+        why: 这是 $x\ge x_0$ 分支的核心。
+      source_ref: page_0307_ex07_part3_tail
+    - step_id: step_9
+      statement: 用 $x_0<e$ 完成端点估计。
+      formula_trace:
+        from: $G(x)\ge G(x_0)=a(1-\ln x_0)$
+        to: $G(x)>0$
+        operation: 利用 $x_0<e$ 得 $1-\ln x_0>0$。
+        why: 这把 $a<e^{e+1}$ 的条件真正用上。
+      source_ref: page_0307_ex07_part3_tail
+teaching_card:
+  student_title: 用隐零点拆开绝对值和对数不等式
+  what_it_trains: 训练先按题设定义翻译凹凸条件，再用 $xe^x-a$ 的隐零点处理含绝对值的不等式。
+  recognition_cues:
+    - 题目自己定义了凹函数和凸函数，不能按平时口径硬套。
+    - $g(x)=\frac{f(x)}x$ 直接变成 $e^x-\frac ax$。
+    - 第三问有 $|g(x)|$，需要先知道 $e^x-\frac ax$ 在哪里变号。
+    - $a<e^{e+1}$ 是为了推出隐零点 $x_0<e$。
+  normalization_moves:
+    - 第(2)问把“凸函数”翻译成 $g^\prime$ 递减。
+    - 第(3)问先分 $a\le0$ 和 $0<a<e^{e+1}$。
+    - $0<a<e^{e+1}$ 时先找 $x_0e^{x_0}=a$。
+    - $x\ge x_0$ 的难点不是继续放缩，而是构造 $G$ 后证明它递增。
+  common_failures:
+    - 忽略题设定义，把凹凸方向按常规术语反过来。
+    - $g^{\prime\prime}\le0$ 后忘记取 $x^3e^x$ 在 $[1,2]$ 的最大值。
+    - 第三问不先按 $x_0$ 分段，直接展开绝对值。
+    - 用到 $a<e^{e+1}$ 却没有说明它推出 $x_0<e$。
+    - 证明 $G^\prime>0$ 时只看分子，没有证明 $p(x)>0$。
+  similar_practice_query: xe^x-a 凹凸定义 g=f/x 绝对值 对数 隐零点 x0e^x0=a
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

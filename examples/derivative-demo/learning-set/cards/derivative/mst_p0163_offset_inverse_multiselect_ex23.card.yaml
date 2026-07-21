@@ -1,0 +1,315 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0163_offset_inverse_multiselect_ex23
+content_revision_id: mst_p0163_offset_inverse_multiselect_ex23-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0163_offset_inverse_multiselect_ex23.card.yaml
+stem: |-
+  （2023·日照一模·多选）已知 $a>b$，$c>d$，$\\frac{e^a}{a+1}=\\frac{e^b}{b+1}=1.01$，$(1-c)e^c=(1-d)e^d=0.99$，则有（  ）
+  A. $a+b>0$
+  B. $c+d>0$
+  C. $a+d>0$
+  D. $b+c>0$
+answer: |
+  AD
+
+  设
+  \[
+  g(x)=\frac{e^x}{x+1},\qquad
+  f(x)=\frac{x+1}{e^x},
+  \]
+  则
+  \[
+  g(a)=g(b)=\frac{101}{100},\qquad
+  f(-c)=f(-d)=\frac{99}{100},\qquad
+  \frac1{f(x)}=g(x).
+  \]
+
+  对 A：源解给出
+  \[
+  g'(x)=\frac{xe^x}{(x+1)^2},\quad
+  g''(x)=\frac{(1-x)e^x}{(x+1)^3},\quad
+  g'''(x)=\frac{(2x-4)e^x}{(x+1)^4}<0\ \text{(在 }(-2,2)\text{)}.
+  \]
+  因 $g$ 的极小值点左偏，且 $g(a)=g(b)$、$a>b$，得
+  \[
+  a+b>0.
+  \]
+  A 正确。
+
+  对 B：源解给出
+  \[
+  f'(x)=\frac{-x}{e^x},\quad
+  f''(x)=\frac{x-1}{e^x},\quad
+  f'''(x)=\frac{2-x}{e^x}>0\ \text{(在 }(-2,2)\text{)}.
+  \]
+  因 $f$ 的极大值点左偏，且 $f(-c)=f(-d)$、$c>d$，得
+  \[
+  -c+(-d)>0\iff c+d<0.
+  \]
+  所以 B 错。
+
+  对 C：由
+  \[
+  g(a)+f(-d)=\frac1{f(a)}+f(-d)=2<\frac1{f(a)}+f(a)
+  \]
+  得 $f(-d)<f(a)$。又 $f$ 在 $(0,+\infty)$ 递减，故
+  \[
+  -d>a\iff a+d<0.
+  \]
+  所以 C 错。
+
+  对 D：同理
+  \[
+  g(b)+f(-c)=\frac1{f(b)}+f(-c)=2<\frac1{f(b)}+f(b)
+  \]
+  得 $f(-c)<f(b)$。又 $f$ 在 $(-\infty,0)$ 递增，故
+  \[
+  -c<b\iff b+c>0.
+  \]
+  所以 D 对。
+
+  综上选 AD。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 建立互倒同构函数并对齐等值条件。
+      max_score: 1
+    - step_id: step_2
+      description: 用 $g$ 的极小值点左偏判 A。
+      max_score: 1
+    - step_id: step_3
+      description: 用 $f$ 的极大值点左偏判 B。
+      max_score: 1
+    - step_id: step_4
+      description: 组合不等式判 C。
+      max_score: 1
+    - step_id: step_5
+      description: 利用 $f$ 在 $(0,+\\infty)$ 递减完成 C。
+      max_score: 1
+    - step_id: step_6
+      description: 同理判 D。
+      max_score: 1
+    - step_id: step_7
+      description: 汇总多选。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 判断四个线性和符号命题的真假。
+        result: 见 source_solution_summary
+  method:
+    primary: 对称化与偏移
+    secondary:
+      - 同构变形与换元法
+      - 数形结合
+    subroute:
+      - 互倒同构：$f(x)$ 与 $g(x)$
+      - 极值点左偏判和
+      - $\\frac1{f}+f$ 组合比较
+  structure:
+    primary: 极值点偏移结构
+    secondary:
+      - 同构结构
+      - 指对复合结构
+    evidence:
+      - 两组条件分别落在 $g(a)=g(b)$ 与 $f(-c)=f(-d)$ 的等值点比较。
+      - $f,g$ 互为倒数关系，使 C/D 的组合式比较可直接代换。
+      - A/B 的真假依赖极值点偏移方向而非纯代数估值。
+    normalization_moves_used:
+      - 统一到 $g(x)=\\frac{e^x}{x+1}$、$f(x)=\\frac{x+1}{e^x}$。
+      - 用 $g^{\prime\prime\prime}(x)$ 与 $f^{\prime\prime\prime}(x)$ 判断偏移方向。
+      - 把 C/D 改写为 $\\frac1{f(\\cdot)}+f(\\cdot)$ 的大小比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能把题设转成 $f,g$ 等值关系，回补指数对数基础。
+      - 若学生不理解偏移结论如何落到 $a+b,c+d$ 符号，回补函数性质与图像。
+      - 若学生在递增/递减区间保序上频繁反向，回补导数单调极值基础。
+  detail_terms:
+    - $g(x)=\\frac{e^x}{x+1}$
+    - $f(x)=\\frac{x+1}{e^x}$
+    - $\\frac1{f(x)}=g(x)$
+    - $g(a)+f(-d)=2$
+    - $g(b)+f(-c)=2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0163_offset_inverse_multiselect_ex23
+source_evidence:
+  source_refs:
+    - ref_id: page_0163_ex23_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0163/page_0163.md
+      role: problem_start
+      evidence: 例23题干给出两组等值条件：$\\frac{e^a}{a+1}=\\frac{e^b}{b+1}=1.01$ 与 $(1-c)e^c=(1-d)e^d=0.99$，并要求判断 A-D。
+    - ref_id: page_0163_ex23_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0163/page_0163.md
+      role: solution
+      evidence: 解析同页完整：构造互倒函数 $g(x)=\\frac{e^x}{x+1}$ 与 $f(x)=\\frac{x+1}{e^x}$，利用极值点偏移判 A、B，再用 $g+f$ 组合判 C、D，结论 AD。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0163.png
+      inspected: true
+      notes: 已核对原图：例23题干、双图与解析完整，答案为 AD。
+  source_context: 例23位于 page_0163 中段，前接无编号例22，后接例24题头。
+  source_influence:
+    - 保留源解“互倒同构”主线：$\\frac{1}{f(x)}=g(x)$。
+    - 保留 A/B 的极值点偏移判定：$g$ 的极小值左偏与 $f$ 的极大值左偏。
+    - 保留 C/D 的组合式比较：$g(a)+f(-d)=2$、$g(b)+f(-c)=2$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·日照一模·多选）已知 $a>b$，$c>d$，$\\frac{e^a}{a+1}=\\frac{e^b}{b+1}=1.01$，$(1-c)e^c=(1-d)e^d=0.99$，则有（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a+b>0$
+      text_latex: $a+b>0$
+    - label: B
+      text_raw: $c+d>0$
+      text_latex: $c+d>0$
+    - label: C
+      text_raw: $a+d>0$
+      text_latex: $a+d>0$
+    - label: D
+      text_raw: $b+c>0$
+      text_latex: $b+c>0$
+  answer: AD
+  fidelity_notes:
+    - 题中两个函数关系一正一倒数，源解通过 $f(x)=\\frac{x+1}{e^x}$ 与 $g(x)=\\frac{e^x}{x+1}$ 联动处理。
+solution:
+  source_solution_summary: |
+    设
+    \[
+    g(x)=\frac{e^x}{x+1},\qquad
+    f(x)=\frac{x+1}{e^x},
+    \]
+    则
+    \[
+    g(a)=g(b)=\frac{101}{100},\qquad
+    f(-c)=f(-d)=\frac{99}{100},\qquad
+    \frac1{f(x)}=g(x).
+    \]
+
+    对 A：源解给出
+    \[
+    g'(x)=\frac{xe^x}{(x+1)^2},\quad
+    g''(x)=\frac{(1-x)e^x}{(x+1)^3},\quad
+    g'''(x)=\frac{(2x-4)e^x}{(x+1)^4}<0\ \text{(在 }(-2,2)\text{)}.
+    \]
+    因 $g$ 的极小值点左偏，且 $g(a)=g(b)$、$a>b$，得
+    \[
+    a+b>0.
+    \]
+    A 正确。
+
+    对 B：源解给出
+    \[
+    f'(x)=\frac{-x}{e^x},\quad
+    f''(x)=\frac{x-1}{e^x},\quad
+    f'''(x)=\frac{2-x}{e^x}>0\ \text{(在 }(-2,2)\text{)}.
+    \]
+    因 $f$ 的极大值点左偏，且 $f(-c)=f(-d)$、$c>d$，得
+    \[
+    -c+(-d)>0\iff c+d<0.
+    \]
+    所以 B 错。
+
+    对 C：由
+    \[
+    g(a)+f(-d)=\frac1{f(a)}+f(-d)=2<\frac1{f(a)}+f(a)
+    \]
+    得 $f(-d)<f(a)$。又 $f$ 在 $(0,+\infty)$ 递减，故
+    \[
+    -d>a\iff a+d<0.
+    \]
+    所以 C 错。
+
+    对 D：同理
+    \[
+    g(b)+f(-c)=\frac1{f(b)}+f(-c)=2<\frac1{f(b)}+f(b)
+    \]
+    得 $f(-c)<f(b)$。又 $f$ 在 $(-\infty,0)$ 递增，故
+    \[
+    -c<b\iff b+c>0.
+    \]
+    所以 D 对。
+
+    综上选 AD。
+  key_steps:
+    - step_id: step_1
+      statement: 建立互倒同构函数并对齐等值条件。
+      formula_trace:
+        from: $\\frac{e^a}{a+1}=\\frac{e^b}{b+1}=1.01$，$(1-c)e^c=(1-d)e^d=0.99$
+        to: $g(a)=g(b)=\\frac{101}{100}$，$f(-c)=f(-d)=\\frac{99}{100}$，且 $\\frac1{f(x)}=g(x)$
+        operation: 定义 $g(x)=\\frac{e^x}{x+1},\\ f(x)=\\frac{x+1}{e^x}$ 并代入。
+        why: 把两组条件放进同一套可互换模型。
+      source_ref: page_0163_ex23_solution
+    - step_id: step_2
+      statement: 用 $g$ 的极小值点左偏判 A。
+      formula_trace:
+        from: $g(a)=g(b)$ 且 $a>b$
+        to: $a+b>0$
+        operation: 结合 $g^{\prime\prime\prime}(x)<0$ 的偏移结论。
+        why: 直接判定 A 正确。
+      source_ref: page_0163_ex23_solution
+    - step_id: step_3
+      statement: 用 $f$ 的极大值点左偏判 B。
+      formula_trace:
+        from: $f(-c)=f(-d)$ 且 $c>d$
+        to: $c+d<0$
+        operation: 由 $f^{\prime\prime\prime}(x)>0$ 得偏移方向，再换回 $c,d$。
+        why: B 要求 $c+d>0$，故 B 错。
+      source_ref: page_0163_ex23_solution
+    - step_id: step_4
+      statement: 组合不等式判 C。
+      formula_trace:
+        from: $g(a)+f(-d)=2<\\frac1{f(a)}+f(a)$
+        to: $f(-d)<f(a)$
+        operation: 消去同项 $\\frac1{f(a)}$。
+        why: 把 C 的真假转成 $f$ 在正区间上的单调比较。
+      source_ref: page_0163_ex23_solution
+    - step_id: step_5
+      statement: 利用 $f$ 在 $(0,+\\infty)$ 递减完成 C。
+      formula_trace:
+        from: $f(-d)<f(a)$
+        to: $-d>a\\iff a+d<0$
+        operation: 递减函数反向保序。
+        why: C 命题为 $a+d>0$，故 C 错。
+      source_ref: page_0163_ex23_solution
+    - step_id: step_6
+      statement: 同理判 D。
+      formula_trace:
+        from: $g(b)+f(-c)=2<\\frac1{f(b)}+f(b)$
+        to: $f(-c)<f(b)\\Rightarrow -c<b\\Rightarrow b+c>0$
+        operation: 在 $(-\\infty,0)$ 递增区做保序比较。
+        why: D 正确。
+      source_ref: page_0163_ex23_solution
+    - step_id: step_7
+      statement: 汇总多选。
+      formula_trace:
+        from: A 对，B 错，C 错，D 对
+        to: 选 AD
+        operation: 逐项汇总。
+        why: 完成作答。
+      source_ref: page_0163_ex23_solution
+teaching_card:
+  student_title: 互倒双函数下的偏移多选
+  what_it_trains: 训练在“等值 + 互倒”结构里，把偏移结论和单调区间组合起来分项判真伪。
+  recognition_cues:
+    - 同时出现 $\\frac{e^x}{x+1}$ 与 $(1-x)e^x$ 这类互倒痕迹。
+    - 题干给出两组等值常数并要求判 A-D。
+    - 选项都在比较线性和的正负。
+  normalization_moves:
+    - 先定义互倒函数 $f,g$，把两组条件对齐。
+    - A/B 先用偏移方向判整体和。
+    - C/D 再用 $\\frac1f+f$ 组合与单调性判。
+  common_failures:
+    - 把 $f$ 的递增区与递减区混淆，导致 C/D 方向反。
+    - 只记住“左偏”口号，但不会转成 $a+b$ 或 $c+d$ 的符号。
+    - 忽略 $\\frac1{f(x)}=g(x)$，看不出 C/D 的同构入口。
+  similar_practice_query: e^x/(x+1) (x+1)/e^x 多选 极值偏移 互倒函数
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

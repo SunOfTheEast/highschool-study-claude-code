@@ -1,0 +1,259 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0139_ln_over_x_reverse_ex09
+content_revision_id: mst_p0139_ln_over_x_reverse_ex09-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0139_ln_over_x_reverse_ex09.card.yaml
+stem: |-
+  （2023·宁乡市月考·多选）设函数 $f^{\prime}(x)$ 是函数 $f(x)$ 的导函数，且满足 $f^{\prime}(x)-\frac{f(x)}{x}=\ln x$，$f\!\left(\frac1e\right)=\frac1e$，则（ ）
+  A. $f(x)$ 有极大值
+  B. $4f(2)<3f(4)$
+  C. $f(1)>f^{\prime}(e)$
+  D. $f^{\prime}(1)>\frac1e$
+answer: |
+  BD
+
+  由
+  \[
+  f^{\prime}(x)-\frac{f(x)}{x}=\ln x
+  \]
+  得
+  \[
+  \frac{xf^{\prime}(x)-f(x)}{x^2}=\frac{\ln x}{x}
+  \Rightarrow
+  \left(\frac{f(x)}{x}\right)'=\frac{\ln x}{x}.
+  \]
+  积分设
+  \[
+  \frac{f(x)}{x}=\frac12(\ln x)^2+b,\quad x>0,
+  \]
+  即
+  \[
+  f(x)=\frac12x(\ln x)^2+bx.
+  \]
+  由
+  \[
+  f\!\left(\frac1e\right)=\frac1e
+  \]
+  得
+  \[
+  \frac{1+2b}{2e}=\frac1e \Rightarrow b=\frac12.
+  \]
+  所以
+  \[
+  f(x)=\frac12x(\ln x)^2+\frac12x,\quad
+  f^{\prime}(x)=\frac12(\ln x+1)^2\ge0.
+  \]
+  故 $f$ 在 $(0,+\infty)$ 递增，无极大值，A 错。
+  又
+  \[
+  f(1)=\frac12,\quad f^{\prime}(e)=2,\quad f(1)<f^{\prime}(e),
+  \]
+  C 错。
+  并且
+  \[
+  f^{\prime}(1)=\frac12>\frac1e,
+  \]
+  D 对。
+  计算
+  \[
+  f(2)=(\ln2)^2+1,\quad f(4)=8(\ln2)^2+2,
+  \]
+  得
+  \[
+  4f(2)=4(\ln2)^2+4<24(\ln2)^2+6=3f(4),
+  \]
+  所以 B 对。故选 BD。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 将题设化为 $\left(\frac{f(x)}x\right)'=\frac{\ln x}{x}$。
+      max_score: 1
+    - step_id: step_2
+      description: 用条件 $f(1/e)=1/e$ 定常数并得显式表达。
+      max_score: 1
+    - step_id: step_3
+      description: 求导与代点完成 A/B/C/D 联判。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 多选联判：单调性、函数值比较与导数比较
+        result: 见 source_solution_summary
+  method:
+    primary: 逆向构造法
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 指数对数比大小
+      - 函数性质锁定
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 抽象函数结构
+    evidence:
+      - $f^{\prime}-f/x$ 与 $\left(\frac{f}{x}\right)'$ 同构。
+      - 积分后出现典型 $x(\ln x)^2$ 结构，导数可整理成平方项。
+    normalization_moves_used:
+      - 先作商导数归一到 $\ln x/x$。
+      - 用特殊点 $x=1/e$ 定常数。
+      - 将导数写成 $\frac12(\ln x+1)^2$ 快速判单调。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会积分 $\int\frac{\ln x}{x}dx$，回补指数对数基础。
+      - 若学生不会由平方项判导数非负，回补导数单调极值基础。
+      - 若学生在 $f(2),f(4)$ 代入化简中出错，回补代数恒等变形。
+  detail_terms:
+    - $\left(\frac{f(x)}x\right)'=\frac{\ln x}{x}$
+    - $f(x)=\frac12x(\ln x)^2+\frac12x$
+    - $f^{\prime}(x)=\frac12(\ln x+1)^2$
+    - $4f(2)<3f(4)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0139_ln_over_x_reverse_ex09
+source_evidence:
+  source_refs:
+    - ref_id: page_0139
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0139/page_0139.md
+      role: problem_start
+      evidence: page_0139 底部给出例9题干前半：条件式与题号起点。
+    - ref_id: page_0140
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0140/page_0140.md
+      role: continuation
+      evidence: page_0140 顶部续完题干（含 $f(1/e)=1/e$ 与 A-D 选项）并给出完整解析，答案 BD。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0139.png
+      inspected: true
+      notes: 已核对页图，例9在 page_0139 起头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0140.png
+      inspected: true
+      notes: 已核对页图，例9在 page_0140 顶部完结。
+  source_context: 例9题头归属 page_0139，按规则读取 page_0140 顶部续页以完成整题。
+  source_influence:
+    - 保留源页逆向构造 $\left(\frac{f(x)}x\right)'=\frac{\ln x}{x}$。
+    - 保留由 $f(1/e)=1/e$ 求常数 $b=1/2$，得到 $f(x)=\frac12x(\ln x)^2+\frac12x$。
+    - 保留四个选项的逐项判定与结论 BD。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·宁乡市月考·多选）设函数 $f^{\prime}(x)$ 是函数 $f(x)$ 的导函数，且满足 $f^{\prime}(x)-\frac{f(x)}{x}=\ln x$，$f\!\left(\frac1e\right)=\frac1e$，则（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(x)$ 有极大值
+      text_latex: $f(x)$ 有极大值
+    - label: B
+      text_raw: $4f(2)<3f(4)$
+      text_latex: $4f(2)<3f(4)$
+    - label: C
+      text_raw: $f(1)>f^{\prime}(e)$
+      text_latex: $f(1)>f^{\prime}(e)$
+    - label: D
+      text_raw: $f^{\prime}(1)>\frac1e$
+      text_latex: $f^{\prime}(1)>\frac1e$
+  answer: BD
+  fidelity_notes:
+    - 题干由 page_0139 与 page_0140 拼接完整。
+    - 源页默认讨论区间 $x>0$（与 $\ln x$ 一致）。
+solution:
+  source_solution_summary: |
+    由
+    \[
+    f^{\prime}(x)-\frac{f(x)}{x}=\ln x
+    \]
+    得
+    \[
+    \frac{xf^{\prime}(x)-f(x)}{x^2}=\frac{\ln x}{x}
+    \Rightarrow
+    \left(\frac{f(x)}{x}\right)'=\frac{\ln x}{x}.
+    \]
+    积分设
+    \[
+    \frac{f(x)}{x}=\frac12(\ln x)^2+b,\quad x>0,
+    \]
+    即
+    \[
+    f(x)=\frac12x(\ln x)^2+bx.
+    \]
+    由
+    \[
+    f\!\left(\frac1e\right)=\frac1e
+    \]
+    得
+    \[
+    \frac{1+2b}{2e}=\frac1e \Rightarrow b=\frac12.
+    \]
+    所以
+    \[
+    f(x)=\frac12x(\ln x)^2+\frac12x,\quad
+    f^{\prime}(x)=\frac12(\ln x+1)^2\ge0.
+    \]
+    故 $f$ 在 $(0,+\infty)$ 递增，无极大值，A 错。
+    又
+    \[
+    f(1)=\frac12,\quad f^{\prime}(e)=2,\quad f(1)<f^{\prime}(e),
+    \]
+    C 错。
+    并且
+    \[
+    f^{\prime}(1)=\frac12>\frac1e,
+    \]
+    D 对。
+    计算
+    \[
+    f(2)=(\ln2)^2+1,\quad f(4)=8(\ln2)^2+2,
+    \]
+    得
+    \[
+    4f(2)=4(\ln2)^2+4<24(\ln2)^2+6=3f(4),
+    \]
+    所以 B 对。故选 BD。
+  key_steps:
+    - step_id: step_1
+      statement: 将题设化为 $\left(\frac{f(x)}x\right)'=\frac{\ln x}{x}$。
+      formula_trace:
+        from: $f^{\prime}(x)-\frac{f(x)}x=\ln x$
+        to: $\left(\frac{f(x)}{x}\right)'=\frac{\ln x}{x}$
+        operation: 通分后识别商导数模板。
+        why: 可直接积分到 $\frac12(\ln x)^2+C$。
+      source_ref: page_0140
+    - step_id: step_2
+      statement: 用条件 $f(1/e)=1/e$ 定常数并得显式表达。
+      formula_trace:
+        from: $f(x)=\frac12x(\ln x)^2+bx$
+        to: $b=\frac12,\ f(x)=\frac12x(\ln x)^2+\frac12x$
+        operation: 代入 $x=1/e$。
+        why: 固定模型后可统一判四个选项。
+      source_ref: page_0140
+    - step_id: step_3
+      statement: 求导与代点完成 A/B/C/D 联判。
+      formula_trace:
+        from: $f^{\prime}(x)=\frac12(\ln x+1)^2$
+        to: A 错，B 对，C 错，D 对
+        operation: 用导数非负判单调，再计算 $f(1),f^{\prime}(e),f^{\prime}(1),f(2),f(4)$。
+        why: 直接对应多选结论 BD。
+      source_ref: page_0140
+teaching_card:
+  student_title: 把 $f^{\prime}-f/x$ 反构成 $f/x$，再用平方导数一键判单调
+  what_it_trains: 训练 $\ln x/x$ 型反向积分模板，以及多选题中“先定表达式再分项代点”流程。
+  recognition_cues:
+    - 条件是 $f^{\prime}(x)-\frac{f(x)}x=\ln x$。
+    - 给定了特殊点值 $f(1/e)$。
+    - 选项同时有单调判断与具体数值比较。
+  normalization_moves:
+    - 先写 $\left(\frac{f}{x}\right)'=\frac{\ln x}{x}$。
+    - 积分并用 $f(1/e)$ 定常数。
+    - 求导后化成平方项，再逐项代点判定。
+  common_failures:
+    - 把 $\int \frac{\ln x}{x}dx$ 漏写为 $\ln x$。
+    - 求 $f^{\prime}(x)$ 时漏掉乘积法则中的 $\ln x$ 项。
+    - 在 B 项里把 $\ln4$ 与 $\ln2$ 的系数关系算错。
+  similar_practice_query: f'-f/x=lnx 反向积分 lnx/x 多选 判单调 4f(2) 3f(4)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

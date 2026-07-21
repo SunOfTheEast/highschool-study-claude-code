@@ -1,0 +1,204 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0243_exp_x_minus_2x_two_level_roots_gap_bound_ch6_cutting_lines_ex20
+content_revision_id: mst_p0243_exp_x_minus_2x_two_level_roots_gap_bound_ch6_cutting_lines_ex20-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0243_exp_x_minus_2x_two_level_roots_gap_bound_ch6_cutting_lines_ex20.card.yaml
+stem: （2025 · 广东高二期末考试节选）已知 $f(x)=e^x-ax$，当 $a=2$ 时，若关于 $f(x)=t$ 的方程有两个实数根 $x_1<x_2$，求证：$x_2-x_1<3t-1$。
+answer: |-
+  $x_2-x_1<3t-1$。
+
+  当 $a=2$ 时，$f(x)=e^x-2x$，$f'(x)=e^x-2$，在 $x=\ln2$ 处取最小值 $2-2\ln2$。若 $f(x)=t$ 有两个根，则 $t>2-2\ln2$。左侧用 $x=0$ 处切线 $y=1-x$，且 $1-x\le e^x-2x$，令 $t=1-x$ 得左侧参考点 $x'=1-t$，所以 $x_1>1-t$。若能证 $x_2<2t$，则 $x_2-x_1<2t-(1-t)=3t-1$。右侧代入 $2t$： $f(2t)=e^{2t}-4t$，要使 $f(2t)>t$，只需 $e^{2t}>5t$，由 $e^{2t}>2et>5t$ 得证。法二用切割线 $y=x/2$ 作右侧夹线，也得到 $x_2<2t$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 先确定曲线单谷结构。
+      max_score: 1
+    - step_id: step_2
+      description: 左侧用切线给根的下界。
+      max_score: 1
+    - step_id: step_3
+      description: 把原目标拆成左右两个界。
+      max_score: 1
+    - step_id: step_4
+      description: 右侧代入 $x=2t$。
+      max_score: 1
+    - step_id: step_5
+      description: 用指数粗界完成右侧。
+      max_score: 1
+    - step_id: step_6
+      description: 法二可理解为右侧切割线夹。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: main
+        goal: 不等式证明
+        target: 第 main 问
+        result: $x_2-x_1<3t-1$。
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 切线放缩与凹凸性
+      - 局部逼近与找点
+    subroute:
+      - 切割线夹
+      - 左切线 $1-x$
+      - 右夹线 $x/2$
+      - 水平线两交点
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 不等式工具结构
+      - 局部逼近结构
+    evidence:
+      - $e^x-2x$
+      - $f(x)=t$
+      - $y=1-x$
+      - $y=x/2$
+      - $x_2<2t$
+      - $x_1>1-t$
+    normalization_moves_used:
+      - 先用单谷结构知道有两交点。
+      - 左侧用切线 $y=1-x$ 得 $x_1>1-t$。
+      - 右侧转证 $x_2<2t$。
+      - 用 $y=x/2$ 或代入 $2t$ 完成右侧夹逼。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会分析 $e^x-2x$ 的单调性，回补导数单调极值基础。
+      - 若学生不会用切线 $y=1-x$，回补导数运算与几何意义。
+      - 若学生不会把目标拆成 $x_1>1-t$ 与 $x_2<2t$，回补代数恒等变形。
+      - 若学生不会用 $e^{2t}>2et$，回补指数对数基础。
+      - 若学生看不懂切割线夹图，回补函数性质与图像。
+  detail_terms:
+    - $e^x-2x$
+    - $f(x)=t$
+    - $x_2-x_1<3t-1$
+    - $y=1-x$
+    - $y=x/2$
+    - $x_1>1-t$
+    - $x_2<2t$
+    - 切割线夹
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0243_exp_x_minus_2x_two_level_roots_gap_bound_ch6_cutting_lines_ex20
+source_evidence:
+  source_refs:
+    - ref_id: page_0243_ex20_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0243/page_0243.md
+      role: problem_start
+      evidence: page_0243 底部给出例20题头：$f(x)=e^x-ax$，当 $a=2$ 时，若 $f(x)=t$ 有两根 $x_1<x_2$，证明 $x_2-x_1<3t-1$。
+    - ref_id: page_0243_ex20_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0243/page_0243.md
+      role: solution
+      evidence: page_0243 底部开始解析：$f(x)=e^x-2x$，$f^\prime=e^x-2$，临界点 $\ln2$，左减右增。
+    - ref_id: page_0244_ex20_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0244/page_0244.md
+      role: continuation
+      evidence: page_0244 续完例20：用左侧切线 $y=1-x$ 得 $x_1>1-t$，再证明右根 $x_2<2t$，从而 $x_2-x_1<3t-1$；另给切割线法二。
+    - ref_id: page_0244_ex20_figure
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0244/page_0244.md
+      role: figure_context
+      evidence: page_0244 图示曲线、水平线和两条切割线，是本题切割线夹的几何说明。
+    - ref_id: page_0244_ex21_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0244/page_0244.md
+      role: local_context
+      evidence: page_0244 随后另起例21和“偏移取点”小节，属于下一批，本卡只取其前方的例20续解。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0243.png
+      inspected: true
+      notes: 已核对页图：例20题头和解析开头位于 page_0243 底部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0244.png
+      inspected: true
+      notes: 已核对页图：page_0244 顶部为例20续解，内嵌切割线夹图属于例20，例21另起。
+  source_context: 本卡处理 page_0243 起头、page_0244 续完的例20；page_0244 例21以后留给下一批。
+  source_influence:
+    - 保留 source 的单谷结构：$f_{\min}=2-2\ln2$，两根意味着 $t>2-2\ln2$。
+    - 保留 source 的左侧显点切线：$y=1-x\le e^x-2x$，得到 $x_1>1-t$。
+    - 保留 source 的右侧目标：证明 $x_2<2t$，用 $e^{2t}>5t$ 完成。
+    - 保留 source 的法二切割线：构造 $y=x/2$ 去夹右侧。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 · 广东高二期末考试节选）已知 $f(x)=e^x-ax$，当 $a=2$ 时，若关于 $f(x)=t$ 的方程有两个实数根 $x_1<x_2$，求证：$x_2-x_1<3t-1$。
+  parts: *a1
+  choices: []
+  answer: $x_2-x_1<3t-1$。
+  fidelity_notes:
+    - 单问不等式证明题，无选项。
+    - 本题在 $a=2$ 下讨论水平线 $f(x)=t$ 的两个交点。
+solution:
+  source_solution_summary: 当 $a=2$ 时，$f(x)=e^x-2x$，$f'(x)=e^x-2$，在 $x=\ln2$ 处取最小值 $2-2\ln2$。若 $f(x)=t$ 有两个根，则 $t>2-2\ln2$。左侧用 $x=0$ 处切线 $y=1-x$，且 $1-x\le e^x-2x$，令 $t=1-x$ 得左侧参考点 $x'=1-t$，所以 $x_1>1-t$。若能证 $x_2<2t$，则 $x_2-x_1<2t-(1-t)=3t-1$。右侧代入 $2t$： $f(2t)=e^{2t}-4t$，要使 $f(2t)>t$，只需 $e^{2t}>5t$，由 $e^{2t}>2et>5t$ 得证。法二用切割线 $y=x/2$ 作右侧夹线，也得到 $x_2<2t$。
+  key_steps:
+    - step_id: step_1
+      statement: 先确定曲线单谷结构。
+      formula_trace:
+        from: $f(x)=e^x-2x$
+        to: $f^\prime(x)=e^x-2$，极小值点 $x=\ln2$
+        operation: 求导判号。
+        why: 两个交点来自水平线高于极小值。
+      source_ref: page_0243_ex20_solution_start
+    - step_id: step_2
+      statement: 左侧用切线给根的下界。
+      formula_trace:
+        from: $y=1-x$
+        to: $1-x\le e^x-2x$
+        operation: 用 $x=0$ 处切线作下界。
+        why: 水平线 $y=t$ 与切线交于 $1-t$，曲线左根在其右侧。
+      source_ref: page_0244_ex20_continuation
+    - step_id: step_3
+      statement: 把原目标拆成左右两个界。
+      formula_trace:
+        from: $x_1>1-t$
+        to: 只需证明 $x_2<2t$
+        operation: 用 $x_2-x_1<2t-(1-t)$。
+        why: 这样目标正好变成 $3t-1$。
+      source_ref: page_0244_ex20_continuation
+    - step_id: step_4
+      statement: 右侧代入 $x=2t$。
+      formula_trace:
+        from: $f(2t)=e^{2t}-4t$
+        to: $f(2t)>t \Leftarrow e^{2t}>5t$
+        operation: 代入右侧候选点。
+        why: 若 $f(2t)>t$，右根必须在 $2t$ 左侧。
+      source_ref: page_0244_ex20_continuation
+    - step_id: step_5
+      statement: 用指数粗界完成右侧。
+      formula_trace:
+        from: $e^{2t}>2et$
+        to: $e^{2t}>5t$
+        operation: 用 $2e>5$。
+        why: 这是 source 给出的快速收尾。
+      source_ref: page_0244_ex20_continuation
+    - step_id: step_6
+      statement: 法二可理解为右侧切割线夹。
+      formula_trace:
+        from: $y=\frac x2$
+        to: $e^x-2x>\frac x2$
+        operation: 构造过原点斜率 $1/2$ 的切割线。
+        why: 这同样让水平线 $y=t$ 对应右侧参考点 $x=2t$。
+      source_ref: page_0244_ex20_continuation
+teaching_card:
+  student_title: 切割线夹两根距离：左边用切线，右边用斜线
+  what_it_trains: 训练用辅助直线夹住曲线交点，把两根距离拆成左右两个显点界。
+  recognition_cues:
+    - $e^x-2x$ 是单谷函数，水平线可能有两个交点。
+    - 目标 $3t-1$ 可以拆成 $2t-(1-t)$。
+    - 左侧自然想到 $x=0$ 处切线 $y=1-x$。
+    - 右侧自然想到过原点的线 $y=x/2$。
+  normalization_moves:
+    - 先写出单调性和极小值。
+    - 用左切线得到 $x_1>1-t$。
+    - 把目标改成证明 $x_2<2t$。
+    - 代入 $2t$ 或用 $y=x/2$ 夹右侧。
+  common_failures:
+    - 直接估 $x_2-x_1$，没有拆成左右两个点。
+    - 不知道 $3t-1$ 来自 $2t-(1-t)$。
+    - 只画图不证明 $x_2<2t$。
+  similar_practice_query: e^x-2x f(x)=t 两根距离 切割线夹 y=1-x y=x/2 x2<2t
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

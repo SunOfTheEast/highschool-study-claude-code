@@ -1,0 +1,220 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0138_exp_reverse_extrema_ex06
+content_revision_id: mst_p0138_exp_reverse_extrema_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0138_exp_reverse_extrema_ex06.card.yaml
+stem: |-
+  （2023·廊坊开学·多选）已知定义域为 $\mathbf{R}$ 的函数 $f(x)$ 的导函数为 $f^{\prime}(x)$，且 $f^{\prime}(x)-f(x)=2xe^x$，$f(0)=0$，则以下错误的有（ ）
+  A. $f(x)$ 有唯一的极值点
+  B. $f(x)$ 在 $(-3,0)$ 上单调递增
+  C. 当关于 $x$ 的方程 $f(x)=m$ 有三个实数根时，实数 $m$ 的取值范围为 $(0,4e^{-1})$
+  D. $f(x)$ 的最小值为 0
+answer: |
+  ABC
+
+  由
+  \[
+  f^{\prime}(x)-f(x)=2xe^x
+  \]
+  得
+  \[
+  \left(\frac{f(x)}{e^x}\right)'=\frac{f^{\prime}(x)-f(x)}{e^x}=2x.
+  \]
+  积分得
+  \[
+  \frac{f(x)}{e^x}=x^2+c,\quad f(x)=(x^2+c)e^x.
+  \]
+  由 $f(0)=0$ 得 $c=0$，故
+  \[
+  f(x)=x^2e^x,\quad f^{\prime}(x)=x(x+2)e^x.
+  \]
+  因 $e^x>0$，故
+  \[
+  f^{\prime}(x)>0\ (x<-2\ \text{或}\ x>0),\quad f^{\prime}(x)<0\ (-2<x<0).
+  \]
+  所以 $x=-2$ 为极大值点，$x=0$ 为极小值点，A 错；在 $(-3,0)$ 上先增后减，B 错。
+  又
+  \[
+  f(-2)=4e^{-2},\quad f(0)=0.
+  \]
+  方程 $f(x)=m$ 有三个实根当且仅当
+  \[
+  0<m<4e^{-2},
+  \]
+  因而题面 C 的 $(0,4e^{-1})$ 错。
+  最后，$f(x)\ge0$ 且在 $x=0$ 取到 0，D 正确。
+  故错误项为 ABC。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把线性方程型导数关系改写为 $(f/e^x)'=2x$。
+      max_score: 1
+    - step_id: step_2
+      description: 由初值确定常数并求导判单调与极值点。
+      max_score: 1
+    - step_id: step_3
+      description: 用极值高度确定三根参数区间并核对 C。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: item_1
+        goal: 零点/极值点分析
+        target: 多选判错：单调、极值点与参数区间联判
+        result: 见 source_solution_summary
+  method:
+    primary: 逆向构造法
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 指数模板还原
+      - 函数性质锁定
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 同构结构
+      - 抽象函数结构
+    evidence:
+      - $f^{\prime}-f=2xe^x$ 与 $\left(\frac{f}{e^x}\right)'$ 同构。
+      - 还原后核心函数是 $x^2e^x$，单调与三根区间均由其双极值结构决定。
+    normalization_moves_used:
+      - 先除以 $e^x$，再积分还原函数。
+      - 用导数零点 $x=-2,0$ 建立增减区间。
+      - 用极大值 $4e^{-2}$ 与极小值 0 锁定三根参数区间。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会识别 $\left(f/e^x\right)'$，回补指数对数基础。
+      - 若学生不会由 $f^{\prime}(x)$ 符号表判极值点，回补导数单调极值基础。
+      - 若学生不会由函数图像判“有三个实根”的 m 区间，回补函数性质与图像。
+  detail_terms:
+    - $\left(\frac{f(x)}{e^x}\right)'=2x$
+    - $f(x)=x^2e^x$
+    - $f^{\prime}(x)=x(x+2)e^x$
+    - $m\in(0,4e^{-2})$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0138_exp_reverse_extrema_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0138
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0138/page_0138.md
+      role: problem_start
+      evidence: page_0138 底部给出例6题干、A-D选项和解析前半段。
+    - ref_id: page_0139
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0139/page_0139.md
+      role: continuation
+      evidence: page_0139 顶部承接例6解析后半段，给出 C、D 判断与最终答案 ABC。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0138.png
+      inspected: true
+      notes: 已核对页图，例6题头起于 page_0138。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0139.png
+      inspected: true
+      notes: 已核对页图，例6在 page_0139 顶部完结。
+  source_context: 例6起于 page_0138，解析跨到 page_0139 顶部；按页头归属由本批次完成。
+  source_influence:
+    - 保留源页逆向构造 $(f/e^x)'=2x$，先还原 $f(x)=x^2e^x$。
+    - 保留源页单调区间、极值点与三根参数区间判断链。
+    - 保留源页最终“错误项为 ABC”。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·廊坊开学·多选）已知定义域为 $\mathbf{R}$ 的函数 $f(x)$ 的导函数为 $f^{\prime}(x)$，且 $f^{\prime}(x)-f(x)=2xe^x$，$f(0)=0$，则以下错误的有（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(x)$ 有唯一的极值点
+      text_latex: $f(x)$ 有唯一的极值点
+    - label: B
+      text_raw: $f(x)$ 在 $(-3,0)$ 上单调递增
+      text_latex: $f(x)$ 在 $(-3,0)$ 上单调递增
+    - label: C
+      text_raw: 当关于 $x$ 的方程 $f(x)=m$ 有三个实数根时，实数 $m$ 的取值范围为 $(0,4e^{-1})$
+      text_latex: 当关于 $x$ 的方程 $f(x)=m$ 有三个实数根时，实数 $m$ 的取值范围为 $(0,4e^{-1})$
+    - label: D
+      text_raw: $f(x)$ 的最小值为 0
+      text_latex: $f(x)$ 的最小值为 0
+  answer: ABC
+  fidelity_notes:
+    - C 选项按题面写为 $(0,4e^{-1})$。
+    - 跨页解析给出的正确三根参数区间是 $(0,4e^{-2})$，据此判 C 错误。
+solution:
+  source_solution_summary: |
+    由
+    \[
+    f^{\prime}(x)-f(x)=2xe^x
+    \]
+    得
+    \[
+    \left(\frac{f(x)}{e^x}\right)'=\frac{f^{\prime}(x)-f(x)}{e^x}=2x.
+    \]
+    积分得
+    \[
+    \frac{f(x)}{e^x}=x^2+c,\quad f(x)=(x^2+c)e^x.
+    \]
+    由 $f(0)=0$ 得 $c=0$，故
+    \[
+    f(x)=x^2e^x,\quad f^{\prime}(x)=x(x+2)e^x.
+    \]
+    因 $e^x>0$，故
+    \[
+    f^{\prime}(x)>0\ (x<-2\ \text{或}\ x>0),\quad f^{\prime}(x)<0\ (-2<x<0).
+    \]
+    所以 $x=-2$ 为极大值点，$x=0$ 为极小值点，A 错；在 $(-3,0)$ 上先增后减，B 错。
+    又
+    \[
+    f(-2)=4e^{-2},\quad f(0)=0.
+    \]
+    方程 $f(x)=m$ 有三个实根当且仅当
+    \[
+    0<m<4e^{-2},
+    \]
+    因而题面 C 的 $(0,4e^{-1})$ 错。
+    最后，$f(x)\ge0$ 且在 $x=0$ 取到 0，D 正确。
+    故错误项为 ABC。
+  key_steps:
+    - step_id: step_1
+      statement: 把线性方程型导数关系改写为 $(f/e^x)'=2x$。
+      formula_trace:
+        from: $f^{\prime}(x)-f(x)=2xe^x$
+        to: $\left(\frac{f(x)}{e^x}\right)'=2x$
+        operation: 两边同除 $e^x$ 并识别商导数模板。
+        why: 直接可积分还原显式函数。
+      source_ref: page_0138
+    - step_id: step_2
+      statement: 由初值确定常数并求导判单调与极值点。
+      formula_trace:
+        from: $f(x)=(x^2+c)e^x,\ f(0)=0$
+        to: $f(x)=x^2e^x,\ f^{\prime}(x)=x(x+2)e^x$
+        operation: 代入初值求 $c=0$，再求导并做符号表。
+        why: 可直接判 A、B。
+      source_ref: page_0138
+    - step_id: step_3
+      statement: 用极值高度确定三根参数区间并核对 C。
+      formula_trace:
+        from: $f(-2)=4e^{-2},\ f(0)=0$
+        to: $f(x)=m\text{ 有三根}\Leftrightarrow m\in(0,4e^{-2})$
+        operation: 结合增减性与水平线交点个数。
+        why: 与题面 C 的 $(0,4e^{-1})$ 比较即可判错。
+      source_ref: page_0139
+teaching_card:
+  student_title: 先还原成 $x^2e^x$，再一口气判 A/B/C/D
+  what_it_trains: 训练从线性导数关系逆向还原函数，并把单调、极值、根个数参数统一处理。
+  recognition_cues:
+    - 条件形如 $f^{\prime}-f=\text{(含 }e^x\text{)}$。
+    - 选项同时考单调、极值点与“方程有三根”的参数。
+  normalization_moves:
+    - 构造 $(f/e^x)'$ 并积分。
+    - 代初值定常数，得到显式函数。
+    - 先做增减表，再做三根参数区间。
+  common_failures:
+    - 把极大值点与极小值点个数判成“唯一一个”。
+    - 把三根区间上端点误写成 $4e^{-1}$。
+    - 忽略 $f(x)=x^2e^x\ge0$ 导致 D 判断反向。
+  similar_practice_query: f'-f=2xe^x 逆向还原 x^2e^x 多选 极值点 三根参数
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

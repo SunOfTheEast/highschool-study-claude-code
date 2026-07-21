@@ -1,0 +1,197 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0076_tangent_ex03
+content_revision_id: mst_p0076_tangent_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0076_tangent_ex03.card.yaml
+stem: |-
+  （2024 长沙四大名校考前模拟多选 T10）已知函数 $f(x)=|\ln x|$，函数 $f(x)$ 的图象在点 $A(x_1,f(x_1))$ 和点 $B(x_2,f(x_2))$ 处的两条切线互相垂直， 且分别交 $y$ 轴于 $M,N$ 两点，若 $x_1<x_2$，则（  ）
+  A. $f(x_1)=f(x_2)$
+  B. $|AM|$ 的取值范围是 $(1,\sqrt{2})$
+  C. 直线 $AM$ 与 $BN$ 的交点的横坐标恒为 1
+  D. $|AM||BN|$ 的取值范围是 $(2,+\infty)$
+answer: |-
+  ABD
+
+  因两条切线互相垂直，切点必在 $0<x_1<1$ 与 $x_2>1$ 两支上。 由 $k_{AM}=-1/x_1$、$k_{BN}=1/x_2$ 得 $x_1x_2=1$。 于是 $f(x_2)=|\ln(1/x_1)|=f(x_1)$，A 正确；切线截距给出 $|AM|=\sqrt{x_1^2+1}\in(1,\sqrt2)$，B 正确；两切线交点横坐标为 $2/(x_1+x_2)<1$，C 错误；$|AM||BN|=\sqrt{(x_1^2+1)(x_2^2+1)}>2$， D 正确。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 确定切点所在分支并写出切线斜率。
+      max_score: 1
+    - step_id: step_2
+      description: 由垂直条件得到两个切点横坐标互为倒数。
+      max_score: 1
+    - step_id: step_3
+      description: 判断 A：互为倒数的两点函数值相等。
+      max_score: 1
+    - step_id: step_4
+      description: 判断 B：用切线与 y 轴交点算出 |AM|。
+      max_score: 1
+    - step_id: step_5
+      description: 判断 C：联立两切线求交点横坐标。
+      max_score: 1
+    - step_id: step_6
+      description: 判断 D：用倒数关系求两段长度乘积的下界。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何量求解
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 数值比较
+        result: 见 source_solution_summary
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 数形结合
+      - 切线放缩与凹凸性
+    subroute:
+      - 垂直切线斜率乘积
+      - 倒数切点
+      - 切线截距与长度
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 对称结构
+      - 不等式工具结构
+    evidence:
+      - $k_{AM}=-1/x_1,\ k_{BN}=1/x_2$
+      - $x_1x_2=1$
+      - $x=2/(x_1+x_2)<1$
+      - $|AM||BN|>2$
+    normalization_moves_used:
+      - 把两切点归到 $0<x_1<1<x_2$ 两个分支。
+      - 把垂直关系归一成倒数关系 $x_1x_2=1$。
+      - 用倒数关系消去 $\ln x_1+\ln x_2$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由切线垂直写出 $k_1k_2=-1$，回补导数运算与几何意义。
+      - 若学生分不清 $|\ln x|$ 的两段导数，回补分段/复合/反函数基础。
+      - 若学生不会用 $x_1+x_2>2\sqrt{x_1x_2}$ 比较交点横坐标，回补不等式工具基础。
+  detail_terms:
+    - $|\ln x|$ 两支切线
+    - $x_1x_2=1$
+    - $|AM|=\sqrt{x_1^2+1}$
+    - $2/(x_1+x_2)<1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0076_tangent_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0076
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0076/page_0076.md
+      role: problem_start
+      evidence: page_0076 中部起头“例 3”，题干给出 f(x)=|\ln x| 的两条互相垂直切线， 交 y 轴于 M,N，要求判断 A-D；本页含题干、四个选项和解析 A-C 的主要推导。
+    - ref_id: page_0077
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0077/page_0077.md
+      role: continuation
+      evidence: page_0077 顶部续写例 3：交点横坐标恒小于 1，所以 C 错误； |AM||BN|>2，所以 D 正确，最终“故选 ABD”。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0076.png
+      inspected: true
+      notes: 页图确认 page_0076 顶部是上一题例 2 的续解，例 3 从本页中部新起头； 题干、A-D 选项和解析开头与 markdown 一致。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0077.png
+      inspected: true
+      notes: 页图确认 page_0077 顶部为例 3 续解并给出答案 ABD；随后才进入例 4。
+  source_context: 本卡只处理 page_0076 新起头的例 3。例 3 延续前页“导数的切线方程”中 由两条切线关系求切点、截距、长度和交点位置的训练；page_0076 顶部例 2 仅作为边界核对，不建卡。
+  source_influence:
+    - 按源解先由两条切线垂直得到 x_1x_2=1。
+    - 选项判断分别绑定到 f(x_1)=f(x_2)、|AM|、两切线交点横坐标、|AM||BN| 四个量。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 长沙四大名校考前模拟多选 T10）已知函数 $f(x)=|\ln x|$，函数 $f(x)$ 的图象在点 $A(x_1,f(x_1))$ 和点 $B(x_2,f(x_2))$ 处的两条切线互相垂直， 且分别交 $y$ 轴于 $M,N$ 两点，若 $x_1<x_2$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(x_1)=f(x_2)$
+      text_latex: $f(x_1)=f(x_2)$
+    - label: B
+      text_raw: $|AM|$ 的取值范围是 $(1,\sqrt{2})$
+      text_latex: $|AM|$ 的取值范围是 $(1,\sqrt{2})$
+    - label: C
+      text_raw: 直线 $AM$ 与 $BN$ 的交点的横坐标恒为 1
+      text_latex: 直线 $AM$ 与 $BN$ 的交点的横坐标恒为 $1$
+    - label: D
+      text_raw: $|AM||BN|$ 的取值范围是 $(2,+\infty)$
+      text_latex: $|AM||BN|$ 的取值范围是 $(2,+\infty)$
+  answer: ABD
+  fidelity_notes:
+    - 题目为多选题；page_0077 顶部给出最终答案 ABD。
+    - 页图与 markdown 均显示 C 的说法为“横坐标恒为 1”，源解判为错误。
+solution:
+  source_solution_summary: 因两条切线互相垂直，切点必在 $0<x_1<1$ 与 $x_2>1$ 两支上。 由 $k_{AM}=-1/x_1$、$k_{BN}=1/x_2$ 得 $x_1x_2=1$。 于是 $f(x_2)=|\ln(1/x_1)|=f(x_1)$，A 正确；切线截距给出 $|AM|=\sqrt{x_1^2+1}\in(1,\sqrt2)$，B 正确；两切线交点横坐标为 $2/(x_1+x_2)<1$，C 错误；$|AM||BN|=\sqrt{(x_1^2+1)(x_2^2+1)}>2$， D 正确。
+  key_steps:
+    - step_id: step_1
+      statement: 确定切点所在分支并写出切线斜率。
+      formula_trace:
+        from: $f(x)=|\ln x|$
+        to: $k_{AM}=-\frac1{x_1},\quad k_{BN}=\frac1{x_2}$
+        operation: 分段求导：$0<x<1$ 时 $f'(x)=-1/x$，$x>1$ 时 $f'(x)=1/x$。
+        why: 两条切线垂直要求斜率一正一负，结合 $x_1<x_2$ 可设 $0<x_1<1<x_2$。
+      source_ref: page_0076:例3解析开头
+    - step_id: step_2
+      statement: 由垂直条件得到两个切点横坐标互为倒数。
+      formula_trace:
+        from: $k_{AM}k_{BN}=-1$
+        to: $-\frac1{x_1}\cdot\frac1{x_2}=-1\Rightarrow x_1x_2=1$
+        operation: 代入两切线斜率并化简。
+        why: 垂直切线的斜率乘积为 $-1$。
+      source_ref: page_0076:例3解析
+    - step_id: step_3
+      statement: 判断 A：互为倒数的两点函数值相等。
+      formula_trace:
+        from: $x_2=\frac1{x_1}$
+        to: $f(x_2)=\left|\ln\frac1{x_1}\right|=|\ln x_1|=f(x_1)$
+        operation: 把 $x_2$ 用 $1/x_1$ 替换。
+        why: $|\ln x|$ 关于变换 $x\mapsto1/x$ 保持函数值不变。
+      source_ref: page_0076:例3解析A
+    - step_id: step_4
+      statement: 判断 B：用切线与 y 轴交点算出 |AM|。
+      formula_trace:
+        from: $l_{AM}:y=-\frac1{x_1}x+1-\ln x_1$
+        to: $M(0,1-\ln x_1),\quad |AM|=\sqrt{x_1^2+1}\in(1,\sqrt2)$
+        operation: 令 $x=0$ 得截距，再用两点距离公式。
+        why: $0<x_1<1$，所以 $x_1^2\in(0,1)$。
+      source_ref: page_0076:例3解析B
+    - step_id: step_5
+      statement: 判断 C：联立两切线求交点横坐标。
+      formula_trace:
+        from: $-\frac1{x_1}x+1-\ln x_1=\frac1{x_2}x+\ln x_2-1$
+        to: $x=\frac{2-(\ln x_1+\ln x_2)}{1/x_1+1/x_2}=\frac2{x_1+x_2}<1$
+        operation: 联立直线方程，并用 $x_1x_2=1$ 与 AM-GM 化简比较。
+        why: $\ln x_1+\ln x_2=0$，且 $x_1+x_2>2\sqrt{x_1x_2}=2$。
+      source_ref: page_0076-page_0077:例3解析C
+    - step_id: step_6
+      statement: 判断 D：用倒数关系求两段长度乘积的下界。
+      formula_trace:
+        from: $|AM||BN|=\sqrt{(x_1^2+1)(x_2^2+1)}$
+        to: $|AM||BN|=\sqrt{x_1^2+x_2^2+2}>\sqrt{2x_1x_2+2}=2$
+        operation: 展开并用 $x_1x_2=1$、$x_1\ne x_2$ 比较。
+        why: $0<x_1<1<x_2$，两数不相等，所以 $x_1^2+x_2^2>2x_1x_2$；当 $x_1\to1^-$ 时乘积趋近 2，范围为 $(2,+\infty)$。
+      source_ref: page_0077:例3解析D
+teaching_card:
+  student_title: 把垂直切线化成倒数切点
+  what_it_trains: 训练学生在 $|\\ln x|$ 的两支图像上用切线斜率建立 $x_1x_2=1$， 再用这个倒数关系统一处理函数值、截距、交点和长度范围。
+  recognition_cues:
+    - $|\ln x|$ 的两条切线互相垂直。
+    - 一个切点在 $(0,1)$，另一个切点在 $(1,+\infty)$。
+    - 题目同时问函数值、线段长度、交点横坐标和乘积范围。
+  normalization_moves:
+    - 先写 $f'(x)=-1/x$ 与 $f'(x)=1/x$ 两段导数。
+    - 由斜率乘积 $-1$ 得 $x_1x_2=1$。
+    - 把 $\ln x_2$ 改写成 $-\ln x_1$，把 $x_2$ 改写成 $1/x_1$。
+    - 比较范围时用 $x_1+x_2>2$ 或 $x_1^2+x_2^2>2$。
+  common_failures:
+    - 默认两切点都在同一支上，导致斜率乘积为正。
+    - 求 $M,N$ 时漏掉切线方程中的常数项。
+    - 把 $2/(x_1+x_2)<1$ 误读成恒等于 1。
+    - 只证明 $|AM||BN|>2$，没有说明下界 2 可以逼近。
+  similar_practice_query: "|ln x| 垂直切线 倒数切点 y轴截距 长度范围 多选"
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0076/page_0077 页图与 markdown 一致；未把 page_0076 顶部例 2 续页建卡。

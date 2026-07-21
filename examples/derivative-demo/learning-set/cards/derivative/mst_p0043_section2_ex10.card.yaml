@@ -1,0 +1,163 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0043_section2_ex10
+content_revision_id: mst_p0043_section2_ex10-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0043_section2_ex10.card.yaml
+stem: 若 $x>0$ 时，恒有 $x^2e^{3x}-(k+3)x-2\ln x-1\geqslant0$ 成立，则实数 $k$ 的取值范围是 ______。
+answer: |
+  $k\leqslant0$
+
+  因 $x>0$，有 $x^2e^{3x}=e^{2\\ln x+3x}$。原式整理为
+  $e^{2\\ln x+3x}-(2\\ln x+3x)-1-kx\\ge0$，即 $g(2\\ln x+3x)-kx\\ge0$，其中 $g(t)=e^t-t-1\\ge0$，等号当 $t=0$。方程 $2\\ln x+3x=0$ 在 $x>0$ 内有解 $x_0$，在该点不等式变为 $-kx_0\\ge0$，所以必要条件为 $k\\le0$；若 $k\\le0$，则 $g(2\\ln x+3x)\\ge0$ 且 $-kx\\ge0$，恒成立。故答案为 $k\\le0$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把乘积型指数项化成单个指数。
+      max_score: 1
+    - step_id: step_2
+      description: 把原式整理成朗博同构模板。
+      max_score: 1
+    - step_id: step_3
+      description: 使用 $g(t)=e^t-t-1$ 的非负性。
+      max_score: 1
+    - step_id: step_4
+      description: 利用等号点推出必要条件。
+      max_score: 1
+    - step_id: step_5
+      description: 验证充分性。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 切线放缩与凹凸性
+    subroute:
+      - 朗博同构
+      - $e^t-t-1$ 非负模板
+      - 等号点必要性
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $x^2e^{3x}=e^{2\ln x+3x}$。
+      - 原式化为 $g(2\ln x+3x)-kx$，参数只剩在 $-kx$。
+    normalization_moves_used:
+      - $x^2=e^{2\ln x}$。
+      - $-(k+3)x-2\ln x=-(2\ln x+3x)-kx$。
+      - 设 $t=2\ln x+3x$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $x^2e^{3x}$ 写成 $e^{2\ln x+3x}$，回补指数对数基础。
+      - 若学生不能把 $-(k+3)x-2\ln x$ 拆成 $-(2\ln x+3x)-kx$，回补代数恒等变形。
+      - 若学生不知道 $e^t-t-1\ge0$ 的等号点，回补导数单调极值基础。
+      - 若学生只得到必要条件 $k\le0$ 而未验证充分性，回补不等式工具基础。
+  detail_terms:
+    - $x^2e^{3x}$
+    - $2\ln x+3x$
+    - $g(t)=e^t-t-1$
+    - $g(2\ln x+3x)-kx$
+    - $k\le0$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0043_section2_ex10
+source_evidence:
+  source_refs:
+    - ref_id: page_0043
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0043/page_0043.md
+      role: problem_start
+      evidence: lines 41-43 give 例 10 题干、解析和答案 $k\le0$。
+    - ref_id: page_0043_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0043/page_0043.md
+      role: local_context
+      evidence: lines 27-31 explain 朗博同构 and the template $e^x-x-1\ge0$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0043.png
+      inspected: true
+      notes: 已核对页图：例 10 题干、解析和填空答案 $k\le0$ 与 markdown 一致；题目在 page_0043 内结束。
+  source_context: 本题继续使用 $g(t)=e^t-t-1$。源解把 $x^2e^{3x}$ 写成 $e^{2\ln x+3x}$，将原式化为 $g(2\ln x+3x)-kx\ge0$。
+  source_influence:
+    - 题干明确 $x>0$，因此 $2\ln x+3x=0$ 的取等点在定义域内可讨论。
+    - 由于是填空题，original_problem.choices 为空列表，答案保留为 $k\le0$。
+  source_discrepancies: []
+original_problem:
+  stem: 若 $x>0$ 时，恒有 $x^2e^{3x}-(k+3)x-2\ln x-1\geqslant0$ 成立，则实数 $k$ 的取值范围是 ______。
+  parts: *a1
+  choices: []
+  answer: $k\leqslant0$
+  fidelity_notes:
+    - 源题为填空题，无选择项。
+    - 页图与 markdown 均显示原式为 $x^2e^{3x}-(k+3)x-2\ln x-1\ge0$。
+solution:
+  source_solution_summary: |
+    因 $x>0$，有 $x^2e^{3x}=e^{2\\ln x+3x}$。原式整理为
+    $e^{2\\ln x+3x}-(2\\ln x+3x)-1-kx\\ge0$，即 $g(2\\ln x+3x)-kx\\ge0$，其中 $g(t)=e^t-t-1\\ge0$，等号当 $t=0$。方程 $2\\ln x+3x=0$ 在 $x>0$ 内有解 $x_0$，在该点不等式变为 $-kx_0\\ge0$，所以必要条件为 $k\\le0$；若 $k\\le0$，则 $g(2\\ln x+3x)\\ge0$ 且 $-kx\\ge0$，恒成立。故答案为 $k\\le0$。
+  key_steps:
+    - step_id: step_1
+      statement: 把乘积型指数项化成单个指数。
+      formula_trace:
+        from: $x^2e^{3x}$
+        to: $e^{2\ln x+3x}$
+        operation: 用 $x^2=e^{2\ln x}$，再合并指数。
+        why: 目标是配出 $e^t-t-1$。
+      source_ref: page_0043
+    - step_id: step_2
+      statement: 把原式整理成朗博同构模板。
+      formula_trace:
+        from: $x^2e^{3x}-(k+3)x-2\ln x-1$
+        to: $e^{2\ln x+3x}-(2\ln x+3x)-1-kx$
+        operation: 将 $-(k+3)x-2\ln x$ 拆成 $-(2\ln x+3x)-kx$。
+        why: 前半部分正好是 $g(2\ln x+3x)$。
+      source_ref: page_0043
+    - step_id: step_3
+      statement: 使用 $g(t)=e^t-t-1$ 的非负性。
+      formula_trace:
+        from: $e^{2\ln x+3x}-(2\ln x+3x)-1-kx$
+        to: $g(2\ln x+3x)-kx$
+        operation: 设 $g(t)=e^t-t-1$。
+        why: $g(t)\ge0$，等号只在 $t=0$。
+      source_ref: page_0043
+    - step_id: step_4
+      statement: 利用等号点推出必要条件。
+      formula_trace:
+        from: $2\ln x_0+3x_0=0$
+        to: $g(2\ln x_0+3x_0)-kx_0=-kx_0\ge0\Rightarrow k\le0
+        operation: 在 $g$ 的取等点代入，且 $x_0>0$。
+        why: 恒成立必须在最危险的取等点也成立。
+      source_ref: page_0043
+    - step_id: step_5
+      statement: 验证充分性。
+      formula_trace:
+        from: $k\le0,\quad x>0$
+        to: $g(2\ln x+3x)-kx\ge0$
+        operation: 由 $g\ge0$ 与 $-kx\ge0$ 相加。
+        why: 说明 $k\le0$ 不只是必要，也是充分。
+      source_ref: page_0043
+teaching_card:
+  student_title: 把多余的 $kx$ 留到等号点检查
+  what_it_trains: 训练把复杂朗博式先压成 $e^t-t-1$，再在等号点看剩下的参数项必须是什么符号。
+  recognition_cues:
+    - 出现 $x^2e^{3x}$ 与 $2\ln x+3x$ 的配对。
+    - 原式里有 $-(k+3)x$，拆开后会留下单独的 $-kx$。
+    - 要求对 $x>0$ 恒成立，适合找模板的等号点。
+  normalization_moves:
+    - 写 $x^2e^{3x}=e^{2\ln x+3x}$。
+    - 把线性和对数项合成 $-(2\ln x+3x)-kx$。
+    - 设 $g(t)=e^t-t-1$。
+    - 在 $2\ln x+3x=0$ 的点检查 $-kx$。
+  common_failures:
+    - 展开拆项时漏掉 $3x$，导致配不出 $2\ln x+3x$。
+    - 看到 $g\ge0$ 就以为任意 $k$ 都可以，忽略 $-kx$。
+    - 只在等号点得到 $k\le0$，没有回头验证所有 $x>0$。
+  similar_practice_query: 朗博同构 x^2e^{3x} 2lnx+3x e^t-t-1 参数 k
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0043 原图与 markdown 一致；填空题无 choices。

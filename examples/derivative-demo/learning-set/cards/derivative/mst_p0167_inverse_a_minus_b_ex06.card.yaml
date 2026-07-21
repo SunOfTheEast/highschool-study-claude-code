@@ -1,0 +1,245 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0167_inverse_a_minus_b_ex06
+content_revision_id: mst_p0167_inverse_a_minus_b_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0167_inverse_a_minus_b_ex06.card.yaml
+stem: |-
+  （2024·山东曲阜师大附中月考 T8）已知函数 $f(x)=\ln x+\frac12$，$g(x)=e^{2x-2}$，若 $f(a)=g(b)$ 成立，则 $a-b$ 的最小值为（  ）
+  A. $1-\frac12\ln2$
+  B. $\frac12$
+  C. $\sqrt{e}-1$
+  D. $\frac12\ln2$
+answer: |
+  D
+
+  设公共函数值为 $x$，则
+  \[
+  a-b=f^{-1}(x)-g^{-1}(x).
+  \]
+  由
+  \[
+  f(x)=\ln x+\frac12\Rightarrow f^{-1}(x)=e^{x-\frac12},\qquad
+  g(x)=e^{2x-2}\Rightarrow g^{-1}(x)=\frac{\ln x+2}{2},
+  \]
+  得
+  \[
+  a-b=e^{x-\frac12}-\frac{\ln x+2}{2}.
+  \]
+  按源解改写为
+  \[
+  a-b=\bigl(e^{x-\frac12}-(x-\frac12)-1\bigr)+\frac12(2x-\ln(2x)-1)+\frac{\ln2}{2}.
+  \]
+  由 $e^u\ge u+1$ 与 $v-\ln v-1\ge0\ (v>0)$，前两项非负，故
+  \[
+  a-b\ge\frac{\ln2}{2}.
+  \]
+  当 $x=\frac12$ 时两项同时取等，故
+  \[
+  (a-b)_{\min}=\frac12\ln2.
+  \]
+  选 D。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 设公共函数值并改写目标差。
+      max_score: 1
+    - step_id: step_2
+      description: 求两个反函数。
+      max_score: 1
+    - step_id: step_3
+      description: 得到差函数并做模板拆分。
+      max_score: 1
+    - step_id: step_4
+      description: 用两段非负得到下界。
+      max_score: 1
+    - step_id: step_5
+      description: 检查等号点并匹配选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level:
+      - part_id: item_1
+        goal: 极值最值
+        target: 求 $a-b$ 的最小值。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 局部逼近与找点
+      - 数形结合
+    subroute:
+      - 反函数差：$a-b=f^{-1}(x)-g^{-1}(x)$
+      - 双非负模板：$e^u-u-1$ 与 $v-\\ln v-1$
+      - 等号点锁定常数下界
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 复合函数与不动点结构
+    evidence:
+      - 同值条件被统一到公共参数 $x$。
+      - $a-b$ 的核心表达是“指数反函数 - 对数反函数”。
+      - 源解最终依赖指数与对数模板不等式给下界。
+    normalization_moves_used:
+      - 先求反函数再作差。
+      - 把差函数改写成两段标准非负量加常数。
+      - 用等号条件核验最小值可达。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $f(a)=g(b)$ 切换到反函数差，回补分段/复合/反函数基础。
+      - 若学生在 $x>0$、$2x>0$ 的定义域判断上出错，回补函数三要素与定义域。
+      - 若学生不会用 $e^u\\ge u+1$、$v-\\ln v-1\\ge0$ 处理下界，回补不等式工具基础。
+      - 若学生对指数与对数互逆变换不熟，回补指数对数基础。
+  detail_terms:
+    - 反函数构造法
+    - $f^{-1}(x)=e^{x-\\frac12}$
+    - $g^{-1}(x)=\\frac{\\ln x+2}{2}$
+    - $a-b=f^{-1}(x)-g^{-1}(x)$
+    - $\\frac12\\ln2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0167_inverse_a_minus_b_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0167_ex06_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0167/page_0167.md
+      role: problem_start
+      evidence: page_0167 页底题头为“例6”：$f(x)=\ln x+\frac12$，$g(x)=e^{2x-2}$，若 $f(a)=g(b)$，求 $a-b$ 最小值，选项 A-D。
+    - ref_id: page_0168_ex06_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0168/page_0168.md
+      role: continuation
+      evidence: page_0168 顶部承接本题解析，从 $a-b=f^{-1}(x)-g^{-1}(x)$ 展开并完成取等点。
+    - ref_id: page_0168_ex06_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0168/page_0168.md
+      role: solution
+      evidence: 同段解析给出下界 $a-b\\ge\\frac{\\ln2}{2}$，当 $x=\\frac12$ 取等，故答案 D。
+    - ref_id: page_0168_local_context_next_ex07
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0168/page_0168.md
+      role: local_context
+      evidence: 例6解析结束后，page_0168 另起新的“例7”，不属于本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0167.png
+      inspected: true
+      notes: 已核对页图：例6题头与 A-D 选项在 page_0167 底部清晰可见。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0168.png
+      inspected: true
+      notes: 已核对页图：page_0168 顶部完整给出本题解析并落到答案 D。
+  source_context: 本题题头从 page_0167 启动，解析跨到 page_0168 顶部；按页头归属规则由本批次 C 组完成整卡。
+  source_influence:
+    - 保留源解主转化：$a-b=f^{-1}(x)-g^{-1}(x)$。
+    - 保留源解两段非负拆分：$e^u-u-1\\ge0$ 与 $v-\\ln v-1\\ge0$。
+    - 保留源解等号点 $x=\\frac12$ 与最小值 $\\frac12\\ln2$。
+  source_discrepancies:
+    - page_0167 在例7之后再次出现例6，编号顺序与常规递增不一致；本卡按题干语义 ID `mst_p0167_inverse_a_minus_b_ex06` 单独标识。
+original_problem:
+  stem: （2024·山东曲阜师大附中月考 T8）已知函数 $f(x)=\ln x+\frac12$，$g(x)=e^{2x-2}$，若 $f(a)=g(b)$ 成立，则 $a-b$ 的最小值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $1-\frac12\ln2$
+      text_latex: $1-\frac12\ln2$
+    - label: B
+      text_raw: $\frac12$
+      text_latex: $\frac12$
+    - label: C
+      text_raw: $\sqrt{e}-1$
+      text_latex: $\sqrt{e}-1$
+    - label: D
+      text_raw: $\frac12\ln2$
+      text_latex: $\frac12\ln2$
+  answer: D
+  fidelity_notes:
+    - 题头位于 page_0167 底部，解析位于 page_0168 顶部。
+    - 本题为单选题，答案字母为 D。
+solution:
+  source_solution_summary: |
+    设公共函数值为 $x$，则
+    \[
+    a-b=f^{-1}(x)-g^{-1}(x).
+    \]
+    由
+    \[
+    f(x)=\ln x+\frac12\Rightarrow f^{-1}(x)=e^{x-\frac12},\qquad
+    g(x)=e^{2x-2}\Rightarrow g^{-1}(x)=\frac{\ln x+2}{2},
+    \]
+    得
+    \[
+    a-b=e^{x-\frac12}-\frac{\ln x+2}{2}.
+    \]
+    按源解改写为
+    \[
+    a-b=\bigl(e^{x-\frac12}-(x-\frac12)-1\bigr)+\frac12(2x-\ln(2x)-1)+\frac{\ln2}{2}.
+    \]
+    由 $e^u\ge u+1$ 与 $v-\ln v-1\ge0\ (v>0)$，前两项非负，故
+    \[
+    a-b\ge\frac{\ln2}{2}.
+    \]
+    当 $x=\frac12$ 时两项同时取等，故
+    \[
+    (a-b)_{\min}=\frac12\ln2.
+    \]
+    选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 设公共函数值并改写目标差。
+      formula_trace:
+        from: $f(a)=g(b)$
+        to: $a-b=f^{-1}(x)-g^{-1}(x)$
+        operation: 设 $x=f(a)=g(b)$，分别取反函数。
+        why: 把双变量关系转成单变量最值。
+      source_ref: page_0168_ex06_solution
+    - step_id: step_2
+      statement: 求两个反函数。
+      formula_trace:
+        from: $f(x)=\\ln x+\\frac12$，$g(x)=e^{2x-2}$
+        to: $f^{-1}(x)=e^{x-\\frac12}$，$g^{-1}(x)=\\frac{\\ln x+2}{2}$
+        operation: 分别解指数方程与对数方程。
+        why: 写出 $a-b$ 的显式表达式。
+      source_ref: page_0168_ex06_solution
+    - step_id: step_3
+      statement: 得到差函数并做模板拆分。
+      formula_trace:
+        from: $a-b=e^{x-\\frac12}-\\frac{\\ln x+2}{2}$
+        to: $a-b=(e^{x-\\frac12}-(x-\\frac12)-1)+\\frac12(2x-\\ln(2x)-1)+\\frac{\\ln2}{2}$
+        operation: 加减同项并凑成 $e^u-u-1$、$v-\\ln v-1$ 两种模板。
+        why: 直接构造全局下界。
+      source_ref: page_0168_ex06_solution
+    - step_id: step_4
+      statement: 用两段非负得到下界。
+      formula_trace:
+        from: $e^u-u-1\\ge0$，$v-\\ln v-1\\ge0$
+        to: $a-b\\ge\\frac{\\ln2}{2}$
+        operation: 前两项下界均为 0。
+        why: 最小值由常数项给出。
+      source_ref: page_0168_ex06_solution
+    - step_id: step_5
+      statement: 检查等号点并匹配选项。
+      formula_trace:
+        from: $x=\\frac12$
+        to: $(a-b)_{\\min}=\\frac12\\ln2$，选 D
+        operation: 代回验证两段模板同时取等。
+        why: 确认下界可达，完成作答。
+      source_ref: page_0168_ex06_solution
+teaching_card:
+  student_title: 把 $a-b$ 化成反函数差后直接压下界
+  what_it_trains: 训练在“同值条件”里优先构造反函数差，并用标准不等式模板一步给出最小值。
+  recognition_cues:
+    - 题干出现 $f(a)=g(b)$ 且要求 $a-b$ 最值。
+    - 一个函数是对数平移，另一个是指数平移。
+    - 选项为常数型表达式。
+  normalization_moves:
+    - 设公共函数值，写出 $f^{-1},g^{-1}$。
+    - 把 $a-b$ 拆成两段非负模板与常数项。
+    - 检查等号点确保下界可达。
+  common_failures:
+    - 把 $g^{-1}(x)$ 误写成 $\\ln x+1$ 一类形式。
+    - 拆分时忽略 $\\ln2/2$ 常数项。
+    - 只证下界不证取等，导致答案不闭合。
+  similar_practice_query: f(a)=g(b) a-b 最小值 反函数 指数对数
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

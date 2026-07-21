@@ -1,0 +1,204 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0229_log_exp_cos_split_inequality_ch6_fenzhi_ex17
+content_revision_id: mst_p0229_log_exp_cos_split_inequality_ch6_fenzhi_ex17-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0229_log_exp_cos_split_inequality_ch6_fenzhi_ex17.card.yaml
+stem: |-
+  （2019 · 新课标 II 卷 T21）已知函数 $f(x)=(x-a)\ln x$（$a\in\mathbf R$），它的导函数为 $f^\prime(x)$。
+  1. 当 $a=1$ 时，求 $f^\prime(x)$ 的零点。
+  2. 当 $a=0$ 时，证明：$f(x)<e^x+\cos x-1$。
+answer: |-
+  第 (1) 问：$f^\prime(x)$ 的零点为 $x=1$；第 (2) 问不等式成立。
+
+  当 $a=1$ 时，$f(x)=(x-1)\ln x$，所以 $f'(x)=\ln x+1-\frac1x$。该函数在 $(0,+\infty)$ 上递增，且 $f'(1)=0$，故导函数零点为 $x=1$。当 $a=0$ 时，$f(x)=x\ln x$。 由 $\cos x-1+\frac{x^2}{2}\geqslant0$ 可知，只需证明 $x\ln x<e^x-\frac{x^2}{2}$，即 $\frac{\ln x}{x}<\frac{e^x}{x^2}-\frac12$。左侧最大为 $1/e$， 在 $x=e$ 取到；右侧最小为 $(e^2-2)/4$，在 $x=2$ 取到。由于 $1/e<(e^2-2)/4$，命题成立。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 第 (1) 问先代入 $a=1$ 并求导。
+      max_score: 1
+    - step_id: step_2
+      description: 用增性锁定导函数零点。
+      max_score: 1
+    - step_id: step_3
+      description: 第 (2) 问把三角部分先放缩掉。
+      max_score: 1
+    - step_id: step_4
+      description: 把证明目标转成两个函数的最大最小比较。
+      max_score: 1
+    - step_id: step_5
+      description: 分别取左侧最大和右侧最小。
+      max_score: 1
+    - step_id: step_6
+      description: 完成分治比较。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: part_1
+        goal: 零点/极值点分析
+        target: 第 part_1 问
+        result: $f^\prime(x)$ 的零点为 $x=1$。
+      - part_id: part_2
+        goal: 不等式证明
+        target: 第 part_2 问
+        result: $x\ln x<e^x+\cos x-1$。
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 切线放缩与凹凸性
+      - 参变量分离
+    subroute:
+      - 导函数零点
+      - 三角二次放缩
+      - $\ln x/x$
+      - $e^x/x^2-1/2$
+      - 左最大右最小
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 三角复合结构
+      - 不等式工具结构
+      - 非齐次结构
+    evidence:
+      - $(x-a)\ln x$
+      - $x\ln x<e^x+\cos x-1$
+      - $\frac{\ln x}{x}<\frac{e^x}{x^2}-\frac12$
+      - $\cos x\geqslant1-\frac{x^2}{2}$
+    normalization_moves_used:
+      - 第 (1) 问用导函数增性找零点。
+      - 第 (2) 问先把 $\cos x$ 放到二次下界。
+      - 把 $x\ln x$ 与 $e^x-\frac{x^2}{2}$ 同除以 $x^2$。
+      - 比较左侧最大值和右侧最小值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求 $(x-1)\ln x$ 的导函数，回补导数运算与几何意义。
+      - 若学生不会证明 $\ln x/x$ 的最大值，回补指数对数基础。
+      - 若学生不会使用 $\cos x\geqslant1-\frac{x^2}{2}$，回补三角函数基础。
+      - 若学生不会“左最大小于右最小”的比较逻辑，回补不等式工具基础。
+  detail_terms:
+    - $(x-a)\ln x$
+    - $\ln x+1-\frac1x$
+    - $\cos x\geqslant1-\frac{x^2}{2}$
+    - $\ln x/x$
+    - $e^x/x^2-\frac12$
+    - $x=e$
+    - $x=2$
+parts: &a1
+  - part_id: part_1
+    text: 当 $a=1$ 时，求 $f^\prime(x)$ 的零点。
+  - part_id: part_2
+    text: 当 $a=0$ 时，证明：$f(x)<e^x+\cos x-1$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0229_log_exp_cos_split_inequality_ch6_fenzhi_ex17
+source_evidence:
+  source_refs:
+    - ref_id: page_0229_ex16_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0229/page_0229.md
+      role: local_context
+      evidence: page_0229 页首是 page_0228 例16续解，不是本卡题头。
+    - ref_id: page_0229_ex17_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0229/page_0229.md
+      role: problem_start
+      evidence: page_0229 中部给出例17题头：$f(x)=(x-a)\ln x$，第 (1) 问求 $a=1$ 时 $f^\prime(x)$ 的零点，第 (2) 问证明 $x\ln x<e^x+\cos x-1$。
+    - ref_id: page_0229_ex17_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0229/page_0229.md
+      role: solution
+      evidence: 解析第 (1) 问由 $f^\prime(x)=\ln x+1-\frac1x$ 的增性得零点 $x=1$；第 (2) 问用 $\cos x-1+x^2/2\geqslant0$ 后比较 $\ln x/x$ 与 $e^x/x^2-1/2$。
+    - ref_id: page_0229_ex18_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0229/page_0229.md
+      role: local_context
+      evidence: page_0229 随后另起例18，属于本批下一张卡，不混入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0229.png
+      inspected: true
+      notes: 已核对页图：例17题干和完整解析位于 page_0229。
+  source_context: 本卡处理 page_0229 起头并在同页完整结束的例17；页首例16续解不处理，后续例18另卡处理。
+  source_influence:
+    - 保留 source 的导函数零点判断：$f^\prime(x)=\ln x+1-\frac1x$ 单调递增，且 $f^\prime(1)=0$。
+    - 保留 source 的分治证明：先用 $\cos x\geqslant1-\frac{x^2}2$，再比较 $\ln x/x$ 和 $e^x/x^2-\frac12$。
+    - 保留 source 的最大最小比较：$\ln x/x$ 在 $x=e$ 取最大 $1/e$，$e^x/x^2-\frac12$ 在 $x=2$ 取最小 $(e^2-2)/4$。
+  source_discrepancies:
+    - 原图第 (1) 问解析末尾疑似印成“$f(x)$ 的零点”；题目和下一句法二均要求 $f^\prime(x)$ 的零点，题卡按导函数零点处理。
+original_problem:
+  stem: （2019 · 新课标 II 卷 T21）已知函数 $f(x)=(x-a)\ln x$（$a\in\mathbf R$），它的导函数为 $f^\prime(x)$。
+  parts: *a1
+  choices: []
+  answer: 第 (1) 问：$f^\prime(x)$ 的零点为 $x=1$；第 (2) 问不等式成立。
+  fidelity_notes:
+    - 两问均无选项。
+    - 第 (2) 问自然定义域为 $x>0$。
+solution:
+  source_solution_summary: 当 $a=1$ 时，$f(x)=(x-1)\ln x$，所以 $f'(x)=\ln x+1-\frac1x$。该函数在 $(0,+\infty)$ 上递增，且 $f'(1)=0$，故导函数零点为 $x=1$。当 $a=0$ 时，$f(x)=x\ln x$。 由 $\cos x-1+\frac{x^2}{2}\geqslant0$ 可知，只需证明 $x\ln x<e^x-\frac{x^2}{2}$，即 $\frac{\ln x}{x}<\frac{e^x}{x^2}-\frac12$。左侧最大为 $1/e$， 在 $x=e$ 取到；右侧最小为 $(e^2-2)/4$，在 $x=2$ 取到。由于 $1/e<(e^2-2)/4$，命题成立。
+  key_steps:
+    - step_id: step_1
+      statement: 第 (1) 问先代入 $a=1$ 并求导。
+      formula_trace:
+        from: $f(x)=(x-1)\ln x$
+        to: $f^\prime(x)=\ln x+1-\frac1x$
+        operation: 乘积求导。
+        why: 导函数零点问题先把导函数写出来。
+      source_ref: page_0229_ex17_solution
+    - step_id: step_2
+      statement: 用增性锁定导函数零点。
+      formula_trace:
+        from: $f^\prime(x)=\ln x+1-\frac1x$
+        to: $x=1$ 是唯一零点
+        operation: 利用 $f^\prime(x)$ 递增且 $f^\prime(1)=0$。
+        why: 递增性排除其他零点。
+      source_ref: page_0229_ex17_solution
+    - step_id: step_3
+      statement: 第 (2) 问把三角部分先放缩掉。
+      formula_trace:
+        from: $\cos x-1+\frac{x^2}{2}\geqslant0$
+        to: $e^x+\cos x-1\geqslant e^x-\frac{x^2}{2}$
+        operation: 使用 $\cos x\geqslant1-\frac{x^2}{2}$。
+        why: 右侧变成指数和二次项，便于和 $x\ln x$ 比。
+      source_ref: page_0229_ex17_solution
+    - step_id: step_4
+      statement: 把证明目标转成两个函数的最大最小比较。
+      formula_trace:
+        from: $x\ln x<e^x-\frac{x^2}{2}$
+        to: $\frac{\ln x}{x}<\frac{e^x}{x^2}-\frac12$
+        operation: 两边除以 $x^2>0$。
+        why: $\ln x/x$ 和 $e^x/x^2-\frac12$ 都有清晰极值点。
+      source_ref: page_0229_ex17_solution
+    - step_id: step_5
+      statement: 分别取左侧最大和右侧最小。
+      formula_trace:
+        from: $h(x)=\frac{\ln x}{x},\quad g(x)=\frac{e^x}{x^2}-\frac12$
+        to: $h_{\max}=1/e,\quad g_{\min}=(e^2-2)/4$
+        operation: 求导判极值，$h$ 在 $x=e$ 取最大，$g$ 在 $x=2$ 取最小。
+        why: 如果左侧最大仍小于右侧最小，则原不等式恒成立。
+      source_ref: page_0229_ex17_solution
+    - step_id: step_6
+      statement: 完成分治比较。
+      formula_trace:
+        from: $\frac1e<\frac{e^2-2}{4}$
+        to: $x\ln x<e^x+\cos x-1$
+        operation: 左最大小于右最小，并回代三角放缩。
+        why: 两个独立块比较完成后，原命题成立。
+      source_ref: page_0229_ex17_solution
+teaching_card:
+  student_title: 把三角先放成二次，再比较 $\ln x/x$ 和指数块
+  what_it_trains: 训练分而治之中的“左最大右最小”：把混合不等式拆成两个可以分别取界的整体。
+  recognition_cues:
+    - $x\ln x$ 与 $e^x$ 同时出现，常需要除出 $\ln x/x$。
+    - $\cos x-1$ 可以用 $-\frac{x^2}{2}$ 承接。
+    - 出现 $\frac{\ln x}{x}$ 和 $\frac{e^x}{x^2}$ 后，极值点分别是 $e$ 和 2。
+  normalization_moves:
+    - 第 (1) 问用导函数增性得到零点 $x=1$。
+    - 第 (2) 问先用 $\cos x\geqslant1-\frac{x^2}{2}$。
+    - 同除以 $x^2$，把目标变成两个函数比较。
+    - 证明左边最大值小于右边最小值。
+  common_failures:
+    - 看见 $\cos x$ 就直接泰勒展开，但没有把它和后面的二次结构接起来。
+    - 只会分别求极值，没说明为什么左最大小于右最小可以推出恒成立。
+    - 忽略 $x>0$，除以 $x^2$ 时没有说明正性。
+  similar_practice_query: xlnx exp cos 三角二次放缩 lnx/x e^x/x^2 左最大右最小 分而治之
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

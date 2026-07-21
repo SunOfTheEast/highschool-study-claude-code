@@ -1,0 +1,218 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0288_log_ratio_param_range_hidden_point_ex01
+content_revision_id: mst_p0288_log_ratio_param_range_hidden_point_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0288_log_ratio_param_range_hidden_point_ex01.card.yaml
+stem: |-
+  （24-25 高二下 · 浙江绍兴 · 阶段练习）设函数 $f(x)=e^x-ax^2-x-1$，$a\in\mathbf R$。设 $g(x)=\ln\frac{me^x-x^2}{x+1}$（$x>0$），若 $g(x)-1\ge x+x^2-me^x$ 恒成立，求 $m$ 的取值范围。
+  1. 求使 $g(x)-1\ge x+x^2-me^x$ 在 $x>0$ 恒成立的 $m$ 的取值范围。
+answer: |-
+  $m\ge\frac3e$。
+
+  法一是参变分离。把 $g(x)-1\ge x+x^2-me^x$ 移项，得到 $\ln\frac{me^x-x^2}{x+1}+me^x-x-x^2-1\ge0$，即 $\ln(me^x-x^2)+(me^x-x^2)\ge\ln(x+1)+(x+1)$。由于 $y=\ln x+x$ 在正半轴单调递增，所以只需 $me^x-x^2\ge x+1$ 恒成立，即 $m\ge\frac{x^2+x+1}{e^x}$ 恒成立。令 $p(x)=\frac{x^2+x+1}{e^x}$，有 $p^\prime(x)=\frac{-x^2+x}{e^x}$，因此 $p$ 在 $(0,1)$ 上递增、 在 $(1,+\infty)$ 上递减，最大值为 $p(1)=3/e$。法二是极点效应： 由 $h(x)=me^x-x^2-x-1$ 的取等探路得到候选点 $x=1$ 和 必要条件 $m\ge3/e$。充分性可取 $m=3/e$，证明 $h(x)\ge q(x)=3e^{x-1}-x^2-x-1\ge0$，其中 $q(0)=q(1)=0$， 通过二阶导形状证明 $q(x)\ge0$ 恒成立。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 把原不等式改写成 $\ln A+A\ge\ln B+B$。
+      max_score: 1
+    - step_id: step_2
+      description: 用同构单调性把不等式降成代数不等式。
+      max_score: 1
+    - step_id: step_3
+      description: 参变量分离，求一个函数的最大值。
+      max_score: 1
+    - step_id: step_4
+      description: 求 $p(x)$ 在 $x>0$ 上的最大值。
+      max_score: 1
+    - step_id: step_5
+      description: 极点效应给同一个候选值。
+      max_score: 1
+    - step_id: step_6
+      description: 证明 $m=3/e$ 时下界函数非负。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: visible_task
+        goal: 求参数范围
+        target: 第 visible_task 问
+        result: $m\ge\frac3e$。
+  method:
+    primary: 参变量分离
+    secondary:
+      - 显隐点探路
+      - 充分/必要性探路
+    subroute:
+      - $\ln A+A$ 同构降阶
+      - 恒成立求最大值
+      - 极点效应取等探路
+      - 下界函数充分性证明
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $\ln(me^x-x^2)+(me^x-x^2)$
+      - $\ln(x+1)+(x+1)$
+      - $p(x)=\frac{x^2+x+1}{e^x}$
+      - $h(x)=me^x-x^2-x-1$
+      - $m\ge\frac3e$
+    normalization_moves_used:
+      - 把题设不等式移项，露出 $\ln A+A$。
+      - 用 $y=\ln x+x$ 单调性把高等函数不等式降成 $A\ge B$。
+      - 把参数 $m$ 分离成 $m\ge p(x)$。
+      - 用 $h(1)\ge0$ 作为极点效应的必要性探路。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会处理定义域和对数真数，回补函数三要素与定义域。
+      - 若学生不会用 $y=\ln x+x$ 的单调性，回补指数对数基础。
+      - 若学生不会恒成立转最值，回补导数单调极值基础。
+      - 若学生不会分离参数，回补代数恒等变形。
+      - 若学生不会证明充分性，回补不等式工具基础。
+  detail_terms:
+    - $\ln A+A$
+    - $y=\ln x+x$
+    - 参变量分离
+    - $p(x)=\frac{x^2+x+1}{e^x}$
+    - 极点效应
+    - $h(x)=me^x-x^2-x-1$
+    - $m\ge\frac3e$
+parts: &a1
+  - part_id: visible_task
+    text: 求使 $g(x)-1\ge x+x^2-me^x$ 在 $x>0$ 恒成立的 $m$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0288_log_ratio_param_range_hidden_point_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0288_ch8_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0288/page_0288.md
+      role: section_context
+      evidence: page_0288 进入第8章隐点探路，并说明隐点效应通常通过放缩取点获得零点或极值点，再用隐点代换、参变分离或主体变量替换证明不等式。
+    - ref_id: page_0288_ex01_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0288/page_0288.md
+      role: problem_start
+      evidence: page_0288 给出例1题头：$f(x)=e^x-ax^2-x-1$，并设 $g(x)=\ln\frac{me^x-x^2}{x+1}$，若 $g(x)-1\ge x+x^2-me^x$ 恒成立，求 $m$ 的取值范围。
+    - ref_id: page_0288_ex01_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0288/page_0288.md
+      role: solution_start
+      evidence: page_0288 解析法一通过移项得到 $\ln(me^x-x^2)+(me^x-x^2)\ge \ln(x+1)+(x+1)$，再利用 $y=\ln x+x$ 的单调性化为 $m\ge\frac{x^2+x+1}{e^x}$ 恒成立。
+    - ref_id: page_0289_ex01_solution_end
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0289/page_0289.md
+      role: solution_end
+      evidence: page_0289 完成例1：令 $p(x)=\frac{x^2+x+1}{e^x}$，由 $p^\prime(x)=\frac{-x^2+x}{e^x}$ 得最大值 $p(1)=\frac3e$；法二用极点效应构造 $h(x)=me^x-x^2-x-1$，由 $h(1)\ge0$ 锁定 $m\ge3/e$，再证明下界函数非负。
+    - ref_id: page_0289_ex02_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0289/page_0289.md
+      role: local_context
+      evidence: page_0289 中部从例2开始新题，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0288.png
+      inspected: true
+      notes: 已核对页图：page_0288 包含第8章导语、考点1说明、例1题头和法一前半。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0289.png
+      inspected: true
+      notes: 已核对页图：page_0289 上半页完成例1，随后另起例2。
+  source_context: 本卡处理 page_0288 起头、page_0289 上半页续完的例1；page_0289 例2排除。
+  source_influence:
+    - 保留第8章隐点探路背景：参变分离和极点效应是本节核心。
+    - 保留同构化：$\ln A+A\ge \ln B+B$，由 $y=\ln x+x$ 单调推出 $A\ge B$。
+    - 保留参变量分离：$m\ge\frac{x^2+x+1}{e^x}$ 恒成立。
+    - 保留 $p(x)=\frac{x^2+x+1}{e^x}$ 的最大值 $3/e$。
+    - 保留极点效应构造：$h(x)=me^x-x^2-x-1$，用 $h(1)\ge0$ 锁定 $m\ge3/e$。
+    - 保留试卷书写中用 $3e^{x-1}-x^2-x-1$ 作为下界证明充分性。
+  source_discrepancies:
+    - discrepancy_id: page_0288_visible_part_marker
+      status: resolved
+      issue: source 解析法一写有“(3)”，但页图可见题头只呈现当前求 $m$ 范围的任务，前面小问不在本页。
+      resolution: 本卡按可见 source 处理当前任务；在 fidelity_notes 中注明这是可见片段。
+    - discrepancy_id: page_0289_auxiliary_g_name_collision
+      status: resolved
+      issue: 原题已经定义 $g(x)=\ln\frac{me^x-x^2}{x+1}$，source 在试卷书写中又把 $3e^{x-1}-x^2-x-1$ 记为 $g(x)$。
+      resolution: 题卡中把后者改名为 $q(x)$，保留原证明路线，避免和题设 $g$ 冲突。
+original_problem:
+  stem: （24-25 高二下 · 浙江绍兴 · 阶段练习）设函数 $f(x)=e^x-ax^2-x-1$，$a\in\mathbf R$。设 $g(x)=\ln\frac{me^x-x^2}{x+1}$（$x>0$），若 $g(x)-1\ge x+x^2-me^x$ 恒成立，求 $m$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $m\ge\frac3e$。
+  fidelity_notes:
+    - 无选项。
+    - source 解析中出现“(3)”标记；本卡只处理页图可见的当前求参任务。
+    - 题设中的 $f(x)$ 和参数 $a$ 在当前可见求 $m$ 任务中没有实际使用，按 source 原样保留。
+solution:
+  source_solution_summary: 法一是参变分离。把 $g(x)-1\ge x+x^2-me^x$ 移项，得到 $\ln\frac{me^x-x^2}{x+1}+me^x-x-x^2-1\ge0$，即 $\ln(me^x-x^2)+(me^x-x^2)\ge\ln(x+1)+(x+1)$。由于 $y=\ln x+x$ 在正半轴单调递增，所以只需 $me^x-x^2\ge x+1$ 恒成立，即 $m\ge\frac{x^2+x+1}{e^x}$ 恒成立。令 $p(x)=\frac{x^2+x+1}{e^x}$，有 $p^\prime(x)=\frac{-x^2+x}{e^x}$，因此 $p$ 在 $(0,1)$ 上递增、 在 $(1,+\infty)$ 上递减，最大值为 $p(1)=3/e$。法二是极点效应： 由 $h(x)=me^x-x^2-x-1$ 的取等探路得到候选点 $x=1$ 和 必要条件 $m\ge3/e$。充分性可取 $m=3/e$，证明 $h(x)\ge q(x)=3e^{x-1}-x^2-x-1\ge0$，其中 $q(0)=q(1)=0$， 通过二阶导形状证明 $q(x)\ge0$ 恒成立。
+  key_steps:
+    - step_id: step_1
+      statement: 把原不等式改写成 $\ln A+A\ge\ln B+B$。
+      formula_trace:
+        from: $g(x)-1\ge x+x^2-me^x$
+        to: $\ln(me^x-x^2)+(me^x-x^2)\ge\ln(x+1)+(x+1)$
+        operation: 移项并拆开对数。
+        why: 这样能使用 $y=\ln x+x$ 的单调性。
+      source_ref: page_0288_ex01_solution_start
+    - step_id: step_2
+      statement: 用同构单调性把不等式降成代数不等式。
+      formula_trace:
+        from: $\ln A+A\ge\ln B+B$
+        to: $me^x-x^2\ge x+1$
+        operation: 利用 $y=\ln x+x$ 在正半轴递增。
+        why: 高等函数被转成一个关于参数 $m$ 的显式不等式。
+      source_ref: page_0288_ex01_solution_start
+    - step_id: step_3
+      statement: 参变量分离，求一个函数的最大值。
+      formula_trace:
+        from: $me^x-x^2\ge x+1$
+        to: $m\ge p(x)=\frac{x^2+x+1}{e^x}$
+        operation: 把 $m$ 分离到一边。
+        why: 恒成立求参数范围转为 $m$ 不小于右侧最大值。
+      source_ref: page_0288_ex01_solution_start
+    - step_id: step_4
+      statement: 求 $p(x)$ 在 $x>0$ 上的最大值。
+      formula_trace:
+        from: $p(x)=\frac{x^2+x+1}{e^x}$
+        to: $p^\prime(x)=\frac{-x^2+x}{e^x},\quad p_{\max}=p(1)=\frac3e$
+        operation: 求导判单调。
+        why: 这给出必要且充分的参数下界。
+      source_ref: page_0289_ex01_solution_end
+    - step_id: step_5
+      statement: 极点效应给同一个候选值。
+      formula_trace:
+        from: $h(x)=me^x-x^2-x-1$
+        to: $h(1)=em-3\ge0,\quad m\ge\frac3e$
+        operation: 用取等点和导数为零探路。
+        why: 这是本章想训练的隐点效应：先猜临界取等点，再回到试卷书写证明充分性。
+      source_ref: page_0289_ex01_solution_end
+    - step_id: step_6
+      statement: 证明 $m=3/e$ 时下界函数非负。
+      formula_trace:
+        from: $h(x)\ge q(x)=3e^{x-1}-x^2-x-1$
+        to: $q(x)\ge0$
+        operation: 研究 $q^\prime,q^{\prime\prime}$ 的形状，结合 $q(0)=q(1)=0$。
+        why: 这一步补齐充分性，防止只靠草稿探路。
+      source_ref: page_0289_ex01_solution_end
+teaching_card:
+  student_title: 把 $\ln A+A$ 降成参变量分离
+  what_it_trains: 训练看到 $\ln$ 和原式同时出现时，先识别 $\ln A+A$ 的同构单调性，再把恒成立问题变成求一个函数最大值。
+  recognition_cues:
+    - 不等式里同时出现 $\ln\frac{me^x-x^2}{x+1}$ 和 $me^x-x^2$。
+    - 移项后能凑出 $\ln(me^x-x^2)+(me^x-x^2)$ 与 $\ln(x+1)+(x+1)$。
+    - 目标是求 $m$ 的取值范围，适合分离成 $m\ge p(x)$。
+    - 本章还要求看懂极点效应：草稿里先用取等点锁定候选值。
+  normalization_moves:
+    - 先移项，别急着求导。
+    - 把左右两边整理成 $\ln A+A$ 的形式。
+    - 利用 $y=\ln x+x$ 单调，把问题降到 $me^x-x^2\ge x+1$。
+    - 分离 $m$ 后求 $p(x)$ 最大值。
+  common_failures:
+    - 没有看出 $\ln A+A$，直接对原式硬求导，计算量会变大。
+    - 分离参数后忘记取右侧最大值。
+    - 把草稿里的极点效应当作完整证明，漏掉充分性。
+    - 被 source 中重复使用的 $g(x)$ 记号干扰。
+  similar_practice_query: ln A + A 同构 参变量分离 me^x-x^2 x+1 m范围 极点效应
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

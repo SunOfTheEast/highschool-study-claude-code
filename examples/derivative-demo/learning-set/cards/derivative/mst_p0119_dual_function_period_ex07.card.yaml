@@ -1,0 +1,189 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0119_dual_function_period_ex07
+content_revision_id: mst_p0119_dual_function_period_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0119_dual_function_period_ex07.card.yaml
+stem: （2024 · 绵阳一诊）已知函数 $f(x)$，$g(x)$ 定义域为 $\mathbf{R}$，$f(-x)=f(x+6)$，$f(2-x)+g(x)=4$，若 $g(x+1)$ 为奇函数，$f(2)=3$，则 $\sum_{k=1}^{31}g(k)=$ ______.
+answer: |
+  -1
+
+  由 $f(-x)=f(x+6)$ 可知 $f$ 关于直线 $x=3$ 对称，因而
+  $f^{\prime}$ 关于点 $(3,0)$ 对称。由 $g(x+1)$ 为奇函数，
+  得 $g$ 关于点 $(1,0)$ 对称，$g(1)=0$，且
+  $g^{\prime}$ 关于直线 $x=1$ 对称。对
+  $f(2-x)+g(x)=4$ 求导，得 $g^{\prime}(x)=f^{\prime}(2-x)$。
+  又 $g^{\prime}(x)$ 关于 $x=1$ 对称，所以
+  $g^{\prime}(x)=g^{\prime}(2-x)=f^{\prime}(x)$，故
+  $f(x)=g(x)+c$。令 $x=1$ 代入 $f(2-x)+g(x)=4$，得
+  $f(1)=4$，又 $g(1)=0$，所以 $c=4$。由 $f(2)=3$ 得
+  $g(2)=-1$。此时 $g$ 既关于点 $(1,0)$ 对称，又继承关于
+  $x=3$ 的对称，故周期为 $8$，且一个周期和为 $0$。
+  因此
+  \[
+    \sum_{k=1}^{31}g(k)
+    =3\sum_{k=1}^{8}g(k)+\sum_{k=1}^{7}g(k)
+    =-g(8)=g(2)=-1.
+  \]
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把两个对称条件翻译成 $f$、$g$ 的图像信息。
+      max_score: 1
+    - step_id: step_2
+      description: 通过求导把 $f$ 和 $g$ 连接起来。
+      max_score: 1
+    - step_id: step_3
+      description: 求出平移常数和关键函数值。
+      max_score: 1
+    - step_id: step_4
+      description: 用双对称生成周期并求和。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level:
+      - part_id: item_1
+        goal: 数值求值
+        target: 求离散函数值和 $\sum_{k=1}^{31}g(k)$。
+        result: 见 source_solution_summary
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 数列和转化
+    subroute:
+      - 双函数求导联动
+      - 轴心配周期
+      - 周期分组求和
+  structure:
+    primary: 对称结构
+    secondary:
+      - 抽象函数结构
+      - 数列离散/递推结构
+    evidence:
+      - $f(-x)=f(x+6)$ 对应 $x=3$ 轴对称。
+      - $g(x+1)$ 为奇函数对应 $g$ 关于 $(1,0)$ 中心对称。
+      - 轴对称与中心对称组合产生周期 $8$。
+    normalization_moves_used:
+      - 先把等式改写成对称轴/对称中心。
+      - 对 $f(2-x)+g(x)=4$ 求导连接 $f^{\prime}$ 与 $g^{\prime}$。
+      - 用 $f=g+c$ 求出 $g(2)$。
+      - 按周期块和余项求和。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $f(-x)=f(x+6)$ 读出对称轴，回补函数性质与图像。
+      - 若学生对 $f(2-x)$ 求导漏掉负号，回补导数运算与几何意义。
+      - 若学生不会由两个对称关系推出周期，回补函数性质与图像。
+      - 若学生周期分组求和出错，回补数列基础。
+  detail_terms:
+    - $f(-x)=f(x+6)$
+    - $g(x+1)$ 奇函数
+    - $f(2-x)+g(x)=4$
+    - $g(2)=-1$
+    - 周期8
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0119_dual_function_period_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0119
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0119/page_0119.md
+      role: problem_start
+      evidence: page_0119 contains 例7题头、完整解析和答案 -1；页首例6续解不归本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0119.png
+      inspected: false
+      notes: 本卡按page_0119 markdown重建；未在父会话直接查看页图。
+  source_context: 例7属于“双函数原函数导函数周期性构造”后的小节，题面没有显式导函数条件，但源页解析把导函数引入来快速寻找共同周期。
+  source_influence:
+    - 保留源页由 $f(-x)=f(x+6)$ 得 $f$ 关于 $x=3$ 对称。
+    - 保留源页由 $g(x+1)$ 为奇函数得 $g$ 关于点 $(1,0)$ 对称、$g^{\prime}$ 关于 $x=1$ 对称。
+    - 保留源页通过 $f(2-x)+g(x)=4$ 求导得到 $f^{\prime}=g^{\prime}$，从而 $f$ 与 $g$ 只差常数。
+    - 保留源页得到 $g(2)=-1$、周期为8，再按周期求和。
+  source_discrepancies:
+    - 源页题干写作 $\sum_{i=1}^{31} g(k)$，上下文和解析均按 $\sum_{k=1}^{31} g(k)$ 处理；本卡按解析语义规范为后者。
+original_problem:
+  stem: （2024 · 绵阳一诊）已知函数 $f(x)$，$g(x)$ 定义域为 $\mathbf{R}$，$f(-x)=f(x+6)$，$f(2-x)+g(x)=4$，若 $g(x+1)$ 为奇函数，$f(2)=3$，则 $\sum_{k=1}^{31}g(k)=$ ______.
+  parts: *a1
+  choices: []
+  answer: "-1"
+  fidelity_notes:
+    - 本题为填空题，题头在page_0119。
+    - 页首是例6续解，按题头归属规则未纳入本卡。
+    - 求和指标按解析含义从 $i/k$ 混写规范为 $k$。
+solution:
+  source_solution_summary: |
+    由 $f(-x)=f(x+6)$ 可知 $f$ 关于直线 $x=3$ 对称，因而
+    $f^{\prime}$ 关于点 $(3,0)$ 对称。由 $g(x+1)$ 为奇函数，
+    得 $g$ 关于点 $(1,0)$ 对称，$g(1)=0$，且
+    $g^{\prime}$ 关于直线 $x=1$ 对称。对
+    $f(2-x)+g(x)=4$ 求导，得 $g^{\prime}(x)=f^{\prime}(2-x)$。
+    又 $g^{\prime}(x)$ 关于 $x=1$ 对称，所以
+    $g^{\prime}(x)=g^{\prime}(2-x)=f^{\prime}(x)$，故
+    $f(x)=g(x)+c$。令 $x=1$ 代入 $f(2-x)+g(x)=4$，得
+    $f(1)=4$，又 $g(1)=0$，所以 $c=4$。由 $f(2)=3$ 得
+    $g(2)=-1$。此时 $g$ 既关于点 $(1,0)$ 对称，又继承关于
+    $x=3$ 的对称，故周期为 $8$，且一个周期和为 $0$。
+    因此
+    \[
+      \sum_{k=1}^{31}g(k)
+      =3\sum_{k=1}^{8}g(k)+\sum_{k=1}^{7}g(k)
+      =-g(8)=g(2)=-1.
+    \]
+  key_steps:
+    - step_id: step_1
+      statement: 把两个对称条件翻译成 $f$、$g$ 的图像信息。
+      formula_trace:
+        from: $f(-x)=f(x+6)$，$g(x+1)$ 为奇函数
+        to: $f$ 关于 $x=3$ 对称；$g$ 关于点 $(1,0)$ 对称，$g(1)=0$
+        operation: 将抽象函数等式改写成轴对称和中心对称。
+        why: 这是后续得到周期和零值的基础。
+      source_ref: page_0119
+    - step_id: step_2
+      statement: 通过求导把 $f$ 和 $g$ 连接起来。
+      formula_trace:
+        from: $f(2-x)+g(x)=4$
+        to: $g^{\prime}(x)=f^{\prime}(2-x)$，再结合 $g^{\prime}$ 关于 $x=1$ 对称得到 $g^{\prime}(x)=f^{\prime}(x)$
+        operation: 对恒等式求导，并用 $g$ 的中心对称推出导函数轴对称。
+        why: 导函数相同说明 $f$ 与 $g$ 只差常数。
+      source_ref: page_0119
+    - step_id: step_3
+      statement: 求出平移常数和关键函数值。
+      formula_trace:
+        from: $f(x)=g(x)+c$，$g(1)=0$，$f(2)=3$
+        to: $c=4$，$g(2)=-1$
+        operation: 令 $x=1$ 代入原方程，再用 $f(2)=3$。
+        why: 最后的余项和会落到 $g(2)$。
+      source_ref: page_0119
+    - step_id: step_4
+      statement: 用双对称生成周期并求和。
+      formula_trace:
+        from: $g$ 关于点 $(1,0)$ 对称且关于 $x=3$ 对称
+        to: $g$ 的周期为 $8$，$\sum_{k=1}^{8}g(k)=0$，$\sum_{k=1}^{31}g(k)=-1$
+        operation: 按8项周期分组，余下7项用中心对称补成一周期。
+        why: 这把长求和压缩成一个已知函数值 $g(2)$。
+      source_ref: page_0119
+teaching_card:
+  student_title: 双函数先求导联动，再用对称周期求和
+  what_it_trains: 训练把两个抽象函数的对称关系、导函数关系和平移常数合并起来，最后压缩长求和。
+  recognition_cues:
+    - 题干同时出现 $f$、$g$，并给出 $f(2-x)+g(x)=4$。
+    - 出现 $g(x+1)$ 为奇函数，说明 $g$ 有明确中心点。
+    - 目标是连续整数点求和，通常需要找周期和一个周期和。
+  normalization_moves:
+    - 把 $f(-x)=f(x+6)$ 还原成 $x=3$ 对称。
+    - 把 $g(x+1)$ 奇函数还原成 $(1,0)$ 中心对称。
+    - 求导得到 $f^{\prime}$ 与 $g^{\prime}$ 的同一性。
+    - 将31项拆为3个完整周期加7项。
+  common_failures:
+    - 不求导，直接在原函数层面硬凑关系。
+    - 把 $g(x+1)$ 的中心误看成原点。
+    - 得到周期后没有利用一个周期和为0。
+    - 把源页求和指标混写当成新的变量条件。
+  similar_practice_query: 双函数 对称 周期 求和 f(2-x)+g(x) g(x+1) 奇函数
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 源页求和指标存在 $i/k$ 混写，已按解析语义规范为 $\sum_{k=1}^{31}g(k)$。

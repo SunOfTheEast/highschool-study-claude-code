@@ -1,0 +1,188 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0132_derivative_compare_ex20
+content_revision_id: mst_p0132_derivative_compare_ex20-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0132_derivative_compare_ex20.card.yaml
+stem: |-
+  （2023·射洪市模拟）设函数 $f(x)$，$g(x)$ 在 $\mathbf{R}$ 的导函数存在，且 $f^{\prime}(x)<g^{\prime}(x)$，则当 $x\in(a,b)$ 时（  ）
+  A. $f(x)<g(x)$
+  B. $f(x)>g(x)$
+  C. $f(x)+g(a)<g(x)+f(a)$
+  D. $f(x)+g(b)<g(x)+f(b)$
+answer: |
+  C
+
+  设 $h(x)=f(x)-g(x)$，则
+  \[
+  h^{\prime}(x)=f^{\prime}(x)-g^{\prime}(x)<0,
+  \]
+  所以 $h(x)$ 在 $\mathbf{R}$ 上单调递减。又 $a<x<b$，故
+  \[
+  h(a)>h(x)>h(b).
+  \]
+  即
+  \[
+  f(a)-g(a)>f(x)-g(x)>f(b)-g(b).
+  \]
+  变形得
+  \[
+  f(x)+g(a)<g(x)+f(a),
+  \]
+  以及
+  \[
+  f(x)+g(b)>g(x)+f(b).
+  \]
+  因而 C 正确、D 错误；A 与 B 仅比较 $f(x)$ 与 $g(x)$ 本身，题设无法确定其恒定大小关系，故不能判断。答案为 C。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 先把“两个导函数比较”转成“一个函数导数符号”。
+      max_score: 1
+    - step_id: step_2
+      description: 利用 $a<x<b$ 做区间内点比较。
+      max_score: 1
+    - step_id: step_3
+      description: 把 $h$ 的比较还原到各选项形式。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 判断四个代数比较式的真伪。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - 差函数构造
+      - 单调链式比较
+  structure:
+    primary: 抽象函数结构
+    secondary:
+      - 同构结构
+    evidence:
+      - 题设只给导函数大小关系，需先构造 $h(x)=f(x)-g(x)$。
+      - 选项均是 $f,g$ 在不同点位的线性组合比较。
+    normalization_moves_used:
+      - 先统一到同一个函数 $h$。
+      - 用 $a<x<b$ 触发 $h(a),h(x),h(b)$ 链式顺序。
+      - 再移项回到选项表达式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不清楚“导数小于0推出递减”，回补导数单调极值基础。
+      - 若学生移项后不等号方向混乱，回补代数恒等变形。
+  detail_terms:
+    - $h(x)=f(x)-g(x)$
+    - $h^{\prime}(x)<0$
+    - $h(a)>h(x)>h(b)$
+    - C正确
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0132_derivative_compare_ex20
+source_evidence:
+  source_refs:
+    - ref_id: page_0132
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0132/page_0132.md
+      role: problem_start
+      evidence: page_0132给出例20完整题干、A-D选项、解析与结论“故选C”。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0132.png
+      inspected: true
+      notes: 已核对页图：例20完整位于page_0132顶部，导数不等式与选项字面一致。
+  source_context: 本题用“导数大小比较”触发差函数单调性，再把端点与区间内点比较转回原式。
+  source_influence:
+    - 保留源页构造 $h(x)=f(x)-g(x)$。
+    - 保留由 $h^{\prime}(x)<0$ 推出 $h(a)>h(x)>h(b)$ 的链式比较。
+    - 保留对四个选项逐项判定：C对，D错，A/B无法判断。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·射洪市模拟）设函数 $f(x)$，$g(x)$ 在 $\mathbf{R}$ 的导函数存在，且 $f^{\prime}(x)<g^{\prime}(x)$，则当 $x\in(a,b)$ 时（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(x)<g(x)$
+      text_latex: $f(x)<g(x)$
+    - label: B
+      text_raw: $f(x)>g(x)$
+      text_latex: $f(x)>g(x)$
+    - label: C
+      text_raw: $f(x)+g(a)<g(x)+f(a)$
+      text_latex: $f(x)+g(a)<g(x)+f(a)$
+    - label: D
+      text_raw: $f(x)+g(b)<g(x)+f(b)$
+      text_latex: $f(x)+g(b)<g(x)+f(b)$
+  answer: C
+  fidelity_notes:
+    - 例20为单选题，源页明确给出“故选C”。
+solution:
+  source_solution_summary: |
+    设 $h(x)=f(x)-g(x)$，则
+    \[
+    h^{\prime}(x)=f^{\prime}(x)-g^{\prime}(x)<0,
+    \]
+    所以 $h(x)$ 在 $\mathbf{R}$ 上单调递减。又 $a<x<b$，故
+    \[
+    h(a)>h(x)>h(b).
+    \]
+    即
+    \[
+    f(a)-g(a)>f(x)-g(x)>f(b)-g(b).
+    \]
+    变形得
+    \[
+    f(x)+g(a)<g(x)+f(a),
+    \]
+    以及
+    \[
+    f(x)+g(b)>g(x)+f(b).
+    \]
+    因而 C 正确、D 错误；A 与 B 仅比较 $f(x)$ 与 $g(x)$ 本身，题设无法确定其恒定大小关系，故不能判断。答案为 C。
+  key_steps:
+    - step_id: step_1
+      statement: 先把“两个导函数比较”转成“一个函数导数符号”。
+      formula_trace:
+        from: $f^{\prime}(x)<g^{\prime}(x)$
+        to: $h^{\prime}(x)=f^{\prime}(x)-g^{\prime}(x)<0$，其中 $h(x)=f(x)-g(x)$
+        operation: 构造差函数并求导。
+        why: 单调性结论只能直接作用在同一个函数上。
+      source_ref: page_0132
+    - step_id: step_2
+      statement: 利用 $a<x<b$ 做区间内点比较。
+      formula_trace:
+        from: $h^{\prime}(x)<0$，$a<x<b$
+        to: $h(a)>h(x)>h(b)$
+        operation: 递减函数值随自变量增大而减小。
+        why: 这是把导数信息落到具体点值比较的关键。
+      source_ref: page_0132
+    - step_id: step_3
+      statement: 把 $h$ 的比较还原到各选项形式。
+      formula_trace:
+        from: $f(a)-g(a)>f(x)-g(x)>f(b)-g(b)$
+        to: 得到 C 真、D 假；A/B不确定
+        operation: 同向移项并逐项对照选项。
+        why: 题目问的是等价命题判定。
+      source_ref: page_0132
+teaching_card:
+  student_title: 导数比较先做差，再看区间点序
+  what_it_trains: 把“两个函数的导数比较”统一为差函数单调性，并把端点/内点关系翻译回原选项。
+  recognition_cues:
+    - 题干出现 $f^{\prime}(x)$ 与 $g^{\prime}(x)$ 的直接比较。
+    - 选项里出现 $f(x),g(x)$ 与 $f(a),g(a),f(b),g(b)$ 的混合比较。
+  normalization_moves:
+    - 设 $h=f-g$。
+    - 由 $h^{\prime}<0$ 判 $h$ 递减。
+    - 利用 $a<x<b$ 写出 $h(a)>h(x)>h(b)$。
+    - 移项对照选项。
+  common_failures:
+    - 把 $f^{\prime}<g^{\prime}$ 误解成 $f<g$。
+    - 忘记利用区间顺序 $a<x<b$。
+    - 链式不等式移项时号向出错。
+  similar_practice_query: 抽象函数 导数比较 差函数 单调性 选项判断
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

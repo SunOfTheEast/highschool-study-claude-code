@@ -1,0 +1,284 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0141_xfx_exp_half_ex13
+content_revision_id: mst_p0141_xfx_exp_half_ex13-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0141_xfx_exp_half_ex13.card.yaml
+stem: |-
+  （2023 · 哈尔滨三模 · 多选）已知函数 $f(x)$ 定义在 $(0,+\infty)$ 上，$f^{\prime}(x)$ 是其导函数，若 $x^2f^{\prime}(x)+xf(x)=e^{x/2}$，且 $f(2)=\frac{e}{2}$，则下列结论正确的是（  ）
+  A. 函数 $f(x)$ 在定义域上有极小值
+  B. 函数 $f(x)$ 在定义域上单调递增
+  C. 函数 $H(x)=xf(x)-e\ln x$ 的单调递减区间为 $(0,2)$
+  D. 不等式 $f(x)>\frac{e^{x/2}+e}{4}$ 的解集为 $(2,+\infty)$
+answer: |
+  BC
+
+  令 $m(x)=xf(x)$，则
+  $m^{\prime}(x)=f(x)+xf^{\prime}(x)=\frac{e^{x/2}}{x}$。
+  又
+  $f(x)=\frac{m(x)}{x}$，所以
+  $f^{\prime}(x)=\frac{m^{\prime}(x)x-m(x)}{x^2}
+  =\frac{e^{x/2}-m(x)}{x^2}$。
+  令 $h(x)=e^{x/2}-m(x)$，则
+  $h^{\prime}(x)=\frac{e^{x/2}}{2}-m^{\prime}(x)
+  =e^{x/2}\frac{x-2}{2x}$。
+  故 $h$ 在 $(0,2)$ 递减、在 $(2,+\infty)$ 递增，且
+  $h(2)=e-m(2)=e-2f(2)=0$，所以 $h(x)\ge0$，从而
+  $f^{\prime}(x)=\frac{h(x)}{x^2}\ge0$，即 $f$ 单调递增，B 对、A 错。
+  对 C：$H(x)=m(x)-e\ln x$，
+  $H^{\prime}(x)=m^{\prime}(x)-\frac{e}{x}
+  =\frac{e^{x/2}-e}{x}$，
+  所以 $H^{\prime}(x)<0\iff 0<x<2$，C 对。
+  对 D：不等式等价于
+  $xf(x)>\frac{xe^{x/2}+xe}{4}$。
+  设
+  $\varphi(x)=m(x)-\frac{xe^{x/2}}4-\frac{ex}{4}$，
+  则
+  $\varphi^{\prime}(x)
+  =m^{\prime}(x)-\frac{e^{x/2}}4\!\left(1+\frac{x}{2}\right)-\frac{e}{4}
+  =e^{x/2}\frac{8-2x-x^2}{8x}-\frac{e}{4}$。
+  当 $x>2$ 时，$8-2x-x^2<0$，故 $\varphi^{\prime}(x)<0$，即 $\varphi$ 在 $(2,+\infty)$ 递减，
+  且 $\varphi(2)=m(2)-e=0$，所以 $x>2$ 时 $\varphi(x)<0$，
+  即 $xf(x)<\frac{xe^{x/2}+xe}{4}$，与 D 断言方向相反，D 错。
+  故选 BC。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 整体代换 $m(x)=xf(x)$，把原式变成一阶关系。
+      max_score: 1
+    - step_id: step_2
+      description: 把 $f^{\prime}(x)$ 表示为一个符号函数除以 $x^2$。
+      max_score: 1
+    - step_id: step_3
+      description: 构造 $h(x)=e^{x/2}-m(x)$ 并定位其最小值点。
+      max_score: 1
+    - step_id: step_4
+      description: 由 $f^{\prime}(x)\ge0$ 判断 A、B。
+      max_score: 1
+    - step_id: step_5
+      description: 直接求 $H^{\prime}(x)$ 判 C。
+      max_score: 1
+    - step_id: step_6
+      description: 把 D 转成 $\varphi(x)$ 的符号问题。
+      max_score: 1
+    - step_id: step_7
+      description: 在 $(2,+\infty)$ 上求出反向不等式，判 D 错。
+      max_score: 1
+    - step_id: step_8
+      description: 汇总正确选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 零点/极值点分析
+        target: A/B：判 $f$ 的单调与极值存在性。
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 抽象函数性质
+        target: C：判 $H(x)=xf(x)-e\ln x$ 的减区间。
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 不等式求解
+        target: D：判不等式解集命题真伪。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 充分/必要性探路
+      - 数形结合
+    subroute:
+      - 整体代换
+      - 符号确定
+      - 函数性质锁定
+  structure:
+    primary: 抽象函数结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $m(x)=xf(x)$ 把原式改写为 $m^{\prime}(x)=\frac{e^{x/2}}{x}$。
+      - $f^{\prime}(x)=\frac{e^{x/2}-m(x)}{x^2}$ 把单调性转成符号函数问题。
+      - $H^{\prime}(x)=\frac{e^{x/2}-e}{x}$ 和 $\varphi^{\prime}(x)$ 都由指数项主导。
+    normalization_moves_used:
+      - 先整体代换到 $m(x)$，再构造 $h(x)$ 控制 $f^{\prime}$ 符号。
+      - 用给定点值 $f(2)=\frac{e}{2}$ 精确锁定 $h(2)=0$。
+      - D 不直接求全解，只在声明区间 $(2,+\infty)$ 上验证反向结论。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $m(x)=xf(x)$ 反推 $f^{\prime}(x)$，回补导数运算与几何意义。
+      - 若学生不能由导数符号判断单调区间，回补导数单调极值基础。
+      - 若学生不熟悉 $e^{x/2}-e$ 的符号区间，回补指数对数基础。
+      - 若学生把“证明 D 错”当成“必须求出完整解集”，回补不等式工具基础。
+  detail_terms:
+    - $m(x)=xf(x)$
+    - $h(x)=e^{x/2}-m(x)$
+    - $h(2)=0$
+    - $H^{\prime}(x)=\frac{e^{x/2}-e}{x}$
+    - $\varphi(x)=m(x)-\frac{xe^{x/2}}4-\frac{ex}{4}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0141_xfx_exp_half_ex13
+source_evidence:
+  source_refs:
+    - ref_id: page_0141_ex13_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0141/page_0141.md
+      role: problem_start
+      evidence: 例 13：已知 $x^2f^{\prime}(x)+xf(x)=e^{x/2}$，$f(2)=\frac{e}{2}$，判断 A-D（多选）。
+    - ref_id: page_0141_ex13_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0141/page_0141.md
+      role: solution
+      evidence: page_0141 先令 $m(x)=xf(x)$、$h(x)=e^{x/2}-m(x)$，证明 $h(x)\ge0$，推出 $f^{\prime}(x)\ge0$，故 B 对、A 错。
+    - ref_id: page_0142_ex13_solution_cont
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0142/page_0142.md
+      role: continuation
+      evidence: page_0142 顶部续解 C、D：由 $H^{\prime}(x)=\frac{e^{x/2}-e}{x}$ 得 C 对；构造 $\varphi(x)$ 得 $x>2$ 时 $\varphi^{\prime}(x)<0,\ \varphi(x)<0$，故 D 错，答案 BC。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0141.png
+      inspected: true
+      notes: 已核对 page_0141 底部例 13 题头与解析前半段。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0142.png
+      inspected: true
+      notes: 已核对 page_0142 顶部为例 13 续解并给出答案 BC；随后开始例 14（不属本卡）。
+  source_context: 例 13 起头在 page_0141，解析续到 page_0142 顶部；按题头归属，本卡跨页完成。
+  source_influence:
+    - 保留源解“整体代换 $m(x)=xf(x)$ + 符号函数 $h(x)$”主线。
+    - 保留源解对 D 的反证方式：在 $(2,+\infty)$ 上证明与选项不等式方向相反。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 哈尔滨三模 · 多选）已知函数 $f(x)$ 定义在 $(0,+\infty)$ 上，$f^{\prime}(x)$ 是其导函数，若 $x^2f^{\prime}(x)+xf(x)=e^{x/2}$，且 $f(2)=\frac{e}{2}$，则下列结论正确的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 函数 $f(x)$ 在定义域上有极小值
+      text_latex: 函数 $f(x)$ 在定义域上有极小值
+    - label: B
+      text_raw: 函数 $f(x)$ 在定义域上单调递增
+      text_latex: 函数 $f(x)$ 在定义域上单调递增
+    - label: C
+      text_raw: 函数 $H(x)=xf(x)-e\ln x$ 的单调递减区间为 $(0,2)$
+      text_latex: 函数 $H(x)=xf(x)-e\ln x$ 的单调递减区间为 $(0,2)$
+    - label: D
+      text_raw: 不等式 $f(x)>\frac{e^{x/2}+e}{4}$ 的解集为 $(2,+\infty)$
+      text_latex: 不等式 $f(x)>\frac{e^{x/2}+e}{4}$ 的解集为 $(2,+\infty)$
+  answer: BC
+  fidelity_notes:
+    - 源解得到 $f^{\prime}(x)\ge0$，据此判 B 对、A 错（定义域开区间端点不取，最小值不一定能取到）。
+    - D 选项被源解在 $(2,+\infty)$ 上直接推出反向不等式，因此 D 错。
+solution:
+  source_solution_summary: |
+    令 $m(x)=xf(x)$，则
+    $m^{\prime}(x)=f(x)+xf^{\prime}(x)=\frac{e^{x/2}}{x}$。
+    又
+    $f(x)=\frac{m(x)}{x}$，所以
+    $f^{\prime}(x)=\frac{m^{\prime}(x)x-m(x)}{x^2}
+    =\frac{e^{x/2}-m(x)}{x^2}$。
+    令 $h(x)=e^{x/2}-m(x)$，则
+    $h^{\prime}(x)=\frac{e^{x/2}}{2}-m^{\prime}(x)
+    =e^{x/2}\frac{x-2}{2x}$。
+    故 $h$ 在 $(0,2)$ 递减、在 $(2,+\infty)$ 递增，且
+    $h(2)=e-m(2)=e-2f(2)=0$，所以 $h(x)\ge0$，从而
+    $f^{\prime}(x)=\frac{h(x)}{x^2}\ge0$，即 $f$ 单调递增，B 对、A 错。
+    对 C：$H(x)=m(x)-e\ln x$，
+    $H^{\prime}(x)=m^{\prime}(x)-\frac{e}{x}
+    =\frac{e^{x/2}-e}{x}$，
+    所以 $H^{\prime}(x)<0\iff 0<x<2$，C 对。
+    对 D：不等式等价于
+    $xf(x)>\frac{xe^{x/2}+xe}{4}$。
+    设
+    $\varphi(x)=m(x)-\frac{xe^{x/2}}4-\frac{ex}{4}$，
+    则
+    $\varphi^{\prime}(x)
+    =m^{\prime}(x)-\frac{e^{x/2}}4\!\left(1+\frac{x}{2}\right)-\frac{e}{4}
+    =e^{x/2}\frac{8-2x-x^2}{8x}-\frac{e}{4}$。
+    当 $x>2$ 时，$8-2x-x^2<0$，故 $\varphi^{\prime}(x)<0$，即 $\varphi$ 在 $(2,+\infty)$ 递减，
+    且 $\varphi(2)=m(2)-e=0$，所以 $x>2$ 时 $\varphi(x)<0$，
+    即 $xf(x)<\frac{xe^{x/2}+xe}{4}$，与 D 断言方向相反，D 错。
+    故选 BC。
+  key_steps:
+    - step_id: step_1
+      statement: 整体代换 $m(x)=xf(x)$，把原式变成一阶关系。
+      formula_trace:
+        from: $x^2f^{\prime}(x)+xf(x)=e^{x/2}$
+        to: $m(x)=xf(x),\quad m^{\prime}(x)=f(x)+xf^{\prime}(x)=\frac{e^{x/2}}{x}$
+        operation: 两边除以 $x$（$x>0$）并识别 $m^{\prime}$。
+        why: 把“$xf$ 与 $x^2f^{\prime}$”统一成一个新函数及其导数。
+      source_ref: page_0141_ex13_solution_start
+    - step_id: step_2
+      statement: 把 $f^{\prime}(x)$ 表示为一个符号函数除以 $x^2$。
+      formula_trace:
+        from: $f(x)=\frac{m(x)}{x}$
+        to: $f^{\prime}(x)=\frac{m^{\prime}(x)x-m(x)}{x^2}=\frac{e^{x/2}-m(x)}{x^2}$
+        operation: 对商函数求导并代入 step_1。
+        why: 后续只需研究分子 $e^{x/2}-m(x)$ 的符号。
+      source_ref: page_0141_ex13_solution_start
+    - step_id: step_3
+      statement: 构造 $h(x)=e^{x/2}-m(x)$ 并定位其最小值点。
+      formula_trace:
+        from: $h(x)=e^{x/2}-m(x)$
+        to: $h^{\prime}(x)=e^{x/2}\frac{x-2}{2x},\ h(2)=e-2f(2)=0,\ h(x)\ge0$
+        operation: 求导判单调，再用已知点值 $f(2)=\frac{e}{2}$ 锁定极小值。
+        why: $h\ge0$ 直接推出 $f^{\prime}\ge0$。
+      source_ref: page_0141_ex13_solution_start
+    - step_id: step_4
+      statement: 由 $f^{\prime}(x)\ge0$ 判断 A、B。
+      formula_trace:
+        from: $f^{\prime}(x)=\frac{h(x)}{x^2}\ge0$
+        to: $f(x)$ 在 $(0,+\infty)$ 单调递增
+        operation: 利用导数符号判单调。
+        why: B 正确；A“有极小值”不成立。
+      source_ref: page_0141_ex13_solution_start
+    - step_id: step_5
+      statement: 直接求 $H^{\prime}(x)$ 判 C。
+      formula_trace:
+        from: $H(x)=xf(x)-e\ln x=m(x)-e\ln x$
+        to: $H^{\prime}(x)=m^{\prime}(x)-\frac{e}{x}=\frac{e^{x/2}-e}{x}<0\iff 0<x<2$
+        operation: 代入 $m^{\prime}(x)=\frac{e^{x/2}}{x}$ 并比较指数。
+        why: 得到单调递减区间恰为 $(0,2)$。
+      source_ref: page_0142_ex13_solution_cont
+    - step_id: step_6
+      statement: 把 D 转成 $\varphi(x)$ 的符号问题。
+      formula_trace:
+        from: $f(x)>\frac{e^{x/2}+e}{4}$
+        to: $\varphi(x)=m(x)-\frac{xe^{x/2}}4-\frac{ex}{4},\ \varphi(x)>0$
+        operation: 两边同乘 $x>0$ 并移项。
+        why: 与原断言“解集是 $(2,+\infty)$”做区间符号比较。
+      source_ref: page_0142_ex13_solution_cont
+    - step_id: step_7
+      statement: 在 $(2,+\infty)$ 上求出反向不等式，判 D 错。
+      formula_trace:
+        from: $\varphi^{\prime}(x)=e^{x/2}\frac{8-2x-x^2}{8x}-\frac{e}{4}$
+        to: $x>2\Rightarrow \varphi^{\prime}(x)<0,\ \varphi(x)<\varphi(2)=0$
+        operation: 用 $8-2x-x^2<0$ 判导数负，再利用端点值。
+        why: 得到 $x>2$ 时 $xf(x)<\frac{xe^{x/2}+xe}{4}$，与 D 声称相反。
+      source_ref: page_0142_ex13_solution_cont
+    - step_id: step_8
+      statement: 汇总正确选项。
+      formula_trace:
+        from: A 错，B 对，C 对，D 错
+        to: 答案 BC
+        operation: 合并逐项判断。
+        why: 与源页结论一致。
+      source_ref: page_0142_ex13_solution_cont
+teaching_card:
+  student_title: 整体代换后做符号追踪
+  what_it_trains: 训练在抽象函数方程里通过 $m(x)=xf(x)$、$h(x)=e^{x/2}-m(x)$ 两层代换，把单调性与选项真假统一成符号链判断。
+  recognition_cues:
+    - 方程同时出现 $x^2f^{\prime}(x)$ 与 $xf(x)$。
+    - 给定单点值 $f(2)=\frac{e}{2}$，通常用于锁定符号函数的零点。
+    - 选项混合“单调/极值/区间/不等式解集”，适合拆成多个导函数符号问题。
+  normalization_moves:
+    - 先令 $m(x)=xf(x)$。
+    - 再令 $h(x)=e^{x/2}-m(x)$，用 $h(2)=0$ 控制 $f^{\prime}$。
+    - 对 D 专门构造 $\varphi(x)$，只检查其声称区间。
+  common_failures:
+    - 把 $m^{\prime}(x)=\frac{e^{x/2}}{x}$ 写成 $\frac{e^{x/2}}{2x}$。
+    - 由 $f^{\prime}(x)\ge0$ 直接断言“有极小值”，忽略定义域是开区间。
+    - D 中未利用 $\varphi(2)=0$，只凭 $\varphi^{\prime}(x)<0$ 下结论不完整。
+  similar_practice_query: 抽象函数 整体代换 x f(x) 指数符号 判单调 不等式解集真假
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0141/page_0142 页图：例 13 跨页延续并于 page_0142 顶部结束，答案 BC 与 markdown 一致。

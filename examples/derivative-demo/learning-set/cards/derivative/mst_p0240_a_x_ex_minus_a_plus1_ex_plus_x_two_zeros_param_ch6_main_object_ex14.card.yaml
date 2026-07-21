@@ -1,0 +1,231 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0240_a_x_ex_minus_a_plus1_ex_plus_x_two_zeros_param_ch6_main_object_ex14
+content_revision_id: mst_p0240_a_x_ex_minus_a_plus1_ex_plus_x_two_zeros_param_ch6_main_object_ex14-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0240_a_x_ex_minus_a_plus1_ex_plus_x_two_zeros_param_ch6_main_object_ex14.card.yaml
+stem: （2025 · 长郡 20 校联盟 17 题节选）已知函数 $f(x)=axe^x-(a+1)e^x+x$，当 $a<0$ 时，$f(x)$ 有两个零点，求 $a$ 的取值范围。
+answer: |-
+  $a\in(-\infty,-1)$。
+
+  $f'(x)=(ax-1)e^x+1$，$f''(x)=(ax-1+a)e^x$。当 $a<0$ 时， $f'$ 先增后减，且 $f'(0)=0$。进一步，$x<0$ 时 $f'(x)=axe^x-e^x+1>1-e^x>0$，所以 $f$ 在负半轴递增；$x>0$ 时 $f'(x)<f'(0)=0$，所以 $f$ 在正半轴递减，最大值为 $f(0)=-a-1$。若要两个零点，必须且只需 $f(0)>0$，即 $a<-1$。 充分性：正半轴有 $f(1)=1-e<0$，与 $f(0)>0$ 夹出 $x_1\in(0,1)$；负半轴用 $f(x)<axe^x-(a+1)+x<-\frac ae-a-1+x$，取 $x=\frac ae+a+1<0$，与 $f(0)>0$ 夹出负根。故答案 $a<-1$。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 先求一阶和二阶导数。
+      max_score: 1
+    - step_id: step_2
+      description: 在 $x<0$ 上，$f$ 单调递增。
+      max_score: 1
+    - step_id: step_3
+      description: 在 $x>0$ 上，$f$ 单调递减。
+      max_score: 1
+    - step_id: step_4
+      description: 两个零点的必要条件是最大值为正。
+      max_score: 1
+    - step_id: step_5
+      description: 正半轴用 $x=1$ 夹出一个零点。
+      max_score: 1
+    - step_id: step_6
+      description: 负半轴用放缩找负值点。
+      max_score: 1
+    - step_id: step_7
+      description: 取 $x=\frac ae+a+1$ 夹出负根。
+      max_score: 1
+    - step_id: step_8
+      description: 合并必要性和充分性。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: main
+        goal: 求参数范围
+        target: 第 main 问
+        result: $a\in(-\infty,-1)$。
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 含参数分类讨论
+      - 充分/必要性探路
+    subroute:
+      - 二阶导数判导函数形状
+      - 左右半轴分治
+      - 最大值必要条件
+      - 正半轴显点
+      - 负半轴放缩取点
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $axe^x-(a+1)e^x+x$
+      - $(ax-1)e^x+1$
+      - $f(0)=-a-1$
+      - $f(1)=1-e$
+      - $a/e+a+1$
+    normalization_moves_used:
+      - 先用 $f^\prime,f^{\prime\prime}$ 判断 $f$ 在两侧的单调性。
+      - 用 $f(0)>0$ 得必要条件 $a<-1$。
+      - 正半轴取 $x=1$。
+      - 负半轴用指数项放缩取 $x=a/e+a+1$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求一阶二阶导，回补导数运算与几何意义。
+      - 若学生不会用二阶导判断一阶导形状，回补导数单调极值基础。
+      - 若学生不会由最大值判断两个零点，回补方程根分布与韦达。
+      - 若学生不会处理 $xe^x$ 的界，回补不等式工具基础。
+      - 若学生不会按正负半轴夹根，回补函数性质与图像。
+  detail_terms:
+    - $axe^x-(a+1)e^x+x$
+    - $a<0$
+    - $f^\prime=(ax-1)e^x+1$
+    - $f(0)=-a-1$
+    - $a<-1$
+    - $f(1)=1-e$
+    - $a/e+a+1$
+    - 左右半轴分治
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0240_a_x_ex_minus_a_plus1_ex_plus_x_two_zeros_param_ch6_main_object_ex14
+source_evidence:
+  source_refs:
+    - ref_id: page_0240_prev_ex13_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0240/page_0240.md
+      role: local_context
+      evidence: page_0240 页首是 page_0239 例13续解，不是本卡题头。
+    - ref_id: page_0240_ex14_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0240/page_0240.md
+      role: problem_start
+      evidence: page_0240 底部给出例14题头：$f(x)=axe^x-(a+1)e^x+x$，当 $a<0$ 时，$f(x)$ 有两个零点，求 $a$ 范围。
+    - ref_id: page_0240_ex14_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0240/page_0240.md
+      role: solution
+      evidence: page_0240 底部开始解析：$f^\prime(x)=(ax-1)e^x+1$，$f^{\prime\prime}(x)=(ax-1+a)e^x$，并说明 $x<0$ 时 $f$ 增、$x>0$ 时 $f$ 减。
+    - ref_id: page_0241_ex14_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0241/page_0241.md
+      role: continuation
+      evidence: page_0241 顶部续完例14：由 $f(0)=-a-1>0$ 得 $a<-1$，再用 $f(1)=1-e<0$ 和负半轴取点证明两个零点。
+    - ref_id: page_0241_ex15_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0241/page_0241.md
+      role: local_context
+      evidence: page_0241 随后另起例15，属于下一批，本卡只取其前方的例14续解。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0240.png
+      inspected: true
+      notes: 已核对页图：例14题头和解析开头位于 page_0240 底部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0241.png
+      inspected: true
+      notes: 已核对页图：page_0241 顶部为例14续解，例15另起。
+  source_context: 本卡处理 page_0240 起头、page_0241 顶部续完的例14；page_0241 例15以后留给下一批。
+  source_influence:
+    - 保留 source 的二阶导数路线：先判 $f^\prime$ 的增减，再判 $f$ 在 $x<0$ 与 $x>0$ 的单调性。
+    - 保留 source 的必要条件：最大值 $f(0)=-a-1>0$，所以 $a<-1$。
+    - 保留 source 的右侧取点：$f(1)=1-e<0$，夹出正根。
+    - 保留 source 的左侧取点：用 $axe^x$ 与 $-(a+1)e^x$ 的放缩，取 $x=a/e+a+1$。
+    - 保留 source 的注意事项：若只知 $a<0$，由于 $a+1$ 符号不定，应把 $-(a+1)e^x$ 放大成 $|a+1|$。
+  source_discrepancies:
+    - type: negative_root_interval_correction
+      source_ref: page_0241_ex14_continuation
+      observed: source/OCR writes the negative-side root as `x_2 in (0,1)`.
+      resolved_as: $x_2\in(\frac ae+a+1,0)$
+      reason: this branch explicitly assumes $x<0$; for $a<-1$, the chosen point $\frac ae+a+1$ is negative, and $f(0)>0$ while the chosen point has negative upper bound.
+original_problem:
+  stem: （2025 · 长郡 20 校联盟 17 题节选）已知函数 $f(x)=axe^x-(a+1)e^x+x$，当 $a<0$ 时，$f(x)$ 有两个零点，求 $a$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $a\in(-\infty,-1)$。
+  fidelity_notes:
+    - 单问求参题，无选项。
+    - 函数定义域为 $\mathbf R$，题设额外限定 $a<0$。
+solution:
+  source_solution_summary: $f'(x)=(ax-1)e^x+1$，$f''(x)=(ax-1+a)e^x$。当 $a<0$ 时， $f'$ 先增后减，且 $f'(0)=0$。进一步，$x<0$ 时 $f'(x)=axe^x-e^x+1>1-e^x>0$，所以 $f$ 在负半轴递增；$x>0$ 时 $f'(x)<f'(0)=0$，所以 $f$ 在正半轴递减，最大值为 $f(0)=-a-1$。若要两个零点，必须且只需 $f(0)>0$，即 $a<-1$。 充分性：正半轴有 $f(1)=1-e<0$，与 $f(0)>0$ 夹出 $x_1\in(0,1)$；负半轴用 $f(x)<axe^x-(a+1)+x<-\frac ae-a-1+x$，取 $x=\frac ae+a+1<0$，与 $f(0)>0$ 夹出负根。故答案 $a<-1$。
+  key_steps:
+    - step_id: step_1
+      statement: 先求一阶和二阶导数。
+      formula_trace:
+        from: $f(x)=axe^x-(a+1)e^x+x$
+        to: $f^\prime(x)=(ax-1)e^x+1,\ f^{\prime\prime}(x)=(ax-1+a)e^x$
+        operation: 逐项求导并整理。
+        why: 本题先通过导函数形状判断 $f$ 的整体单峰结构。
+      source_ref: page_0240_ex14_solution_start
+    - step_id: step_2
+      statement: 在 $x<0$ 上，$f$ 单调递增。
+      formula_trace:
+        from: $a<0,\ x<0$
+        to: $f^\prime(x)=axe^x-e^x+1>1-e^x>0$
+        operation: 利用 $ax>0$ 和 $x<0$。
+        why: 负半轴至多一个零点。
+      source_ref: page_0240_ex14_solution_start
+    - step_id: step_3
+      statement: 在 $x>0$ 上，$f$ 单调递减。
+      formula_trace:
+        from: $f^\prime(0)=0$ 与 $f^\prime$ 的形状
+        to: $x>0$ 时 $f^\prime(x)<0$
+        operation: 由二阶导数先增后减的分析确定导数符号。
+        why: 正半轴也至多一个零点。
+      source_ref: page_0240_ex14_solution_start
+    - step_id: step_4
+      statement: 两个零点的必要条件是最大值为正。
+      formula_trace:
+        from: $f_{\max}=f(0)$
+        to: $f(0)=-a-1>0\Rightarrow a<-1$
+        operation: 代入 $x=0$。
+        why: 左右两侧各至多一个零点，最高点必须高于 x 轴。
+      source_ref: page_0241_ex14_continuation
+    - step_id: step_5
+      statement: 正半轴用 $x=1$ 夹出一个零点。
+      formula_trace:
+        from: $f(0)>0,\ f(1)=1-e<0$
+        to: $x_1\in(0,1)$
+        operation: 介值定理。
+        why: 正半轴单调递减，所以这个根唯一。
+      source_ref: page_0241_ex14_continuation
+    - step_id: step_6
+      statement: 负半轴用放缩找负值点。
+      formula_trace:
+        from: $x<0$
+        to: $f(x)<-\frac ae-a-1+x$
+        operation: 用 $xe^x\leqslant1/e$ 的变形和 $e^x<1$ 控制指数项。
+        why: 要在负半轴找一个 $f<0$ 的显点。
+      source_ref: page_0241_ex14_continuation
+    - step_id: step_7
+      statement: 取 $x=\frac ae+a+1$ 夹出负根。
+      formula_trace:
+        from: $-\frac ae-a-1+x=0$
+        to: $x=\frac ae+a+1<0$，$x_2\in(\frac ae+a+1,0)$
+        operation: 解线性上界的零点。
+        why: 配合 $f(0)>0$ 和负半轴单调递增，得到唯一负根。
+      source_ref: page_0241_ex14_continuation
+    - step_id: step_8
+      statement: 合并必要性和充分性。
+      formula_trace:
+        from: $a<-1$
+        to: $f$ 有两个零点
+        operation: 左右半轴各夹出一个根。
+        why: 单调性保证不会多出根。
+      source_ref: page_0241_ex14_continuation
+teaching_card:
+  student_title: $axe^x-(a+1)e^x+x$ 两零点：先看 $f(0)$，再左右各找一点
+  what_it_trains: 训练含参指数三项式的两零点求参：先用导数确认左右各最多一根，再用最大值和显点完成必要充分。
+  recognition_cues:
+    - 题设 $a<0$，函数含 $axe^x$ 和 $-(a+1)e^x$。
+    - $f^\prime(0)=0$，最高点落在 $x=0$。
+    - 两个零点就是负半轴一个、正半轴一个。
+  normalization_moves:
+    - 先求 $f^\prime$ 和 $f^{\prime\prime}$。
+    - 证明 $x<0$ 时递增、$x>0$ 时递减。
+    - 用 $f(0)>0$ 得 $a<-1$。
+    - 正半轴用 $f(1)<0$。
+    - 负半轴取 $x=a/e+a+1$。
+  common_failures:
+    - 只写 $f(0)>0$，没有补左右取点。
+    - 把负半轴根的区间误写成 $(0,1)$。
+    - 没有处理 $a+1$ 的符号，导致负半轴放缩方向不稳。
+  similar_practice_query: axe^x-(a+1)e^x+x a<0 两零点 f(0)=-a-1 负半轴取点 a/e+a+1
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

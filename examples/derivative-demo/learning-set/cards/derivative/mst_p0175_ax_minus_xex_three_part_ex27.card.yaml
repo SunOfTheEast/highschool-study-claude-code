@@ -1,0 +1,188 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0175_ax_minus_xex_three_part_ex27
+content_revision_id: mst_p0175_ax_minus_xex_three_part_ex27-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0175_ax_minus_xex_three_part_ex27.card.yaml
+stem: |-
+  （2021 · 天津高考）已知函数 $f(x)=a x-x e^x\ (a>0)$。
+  1. 求 $(0,f(0))$ 处的切线方程。
+  2. 求证：$f(x)$ 仅有一个极值点。
+  3. 若存在 $a$，使 $f(x)\leqslant a+b$ 对任意的 $x\in\mathbf{R}$ 恒成立，求实数 $b$ 的取值范围。
+answer: |-
+  （1）$y=(a-1)x$；（2）仅有一个极值点；（3）$b\geqslant -e$。
+
+  第(1)问 $f(0)=0$，$f^{\prime}(x)=a-(x+1)e^x$，所以 $f^{\prime}(0)=a-1$，切线为 $y=(a-1)x$。第(2)问先看 $x\leqslant-1$ 时 $f^{\prime}(x)>0$，无极值；当 $x>-1$ 时 $f^{\prime\prime}(x)=-(x+2)e^x<0$ 在源解控制区间内给出 $f^{\prime}$ 单调下降，并通过 $f^{\prime}(-1)>0$ 与 $f^{\prime}(ea-1)<0$ 夹出唯一零点 $x_0$。第(3)问把 $f(x)\leqslant a+b$ 改写成 $h(x)=xe^x-a(x-1)+b\geqslant0$， 在极小点用 $a=(x_0+1)e^{x_0}$ 消参，得到 $b\geqslant(x_0^2-x_0-1)e^{x_0}$；再令 $t(x)=(x^2-x-1)e^x$，最小值为 $t(1)=-e$，所以 $b\geqslant-e$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 求切线斜率并写出第(1)问切线方程。
+      max_score: 1
+    - step_id: step_2
+      description: 证明 $f^{\prime}$ 只有一个零点。
+      max_score: 1
+    - step_id: step_3
+      description: 把第(3)问恒成立改写成极小值非负。
+      max_score: 1
+    - step_id: step_4
+      description: 用极值点方程消去参数 $a$。
+      max_score: 1
+    - step_id: step_5
+      description: 求单变量函数最小值得到 $b$ 的范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: "1"
+        goal: 几何性质证明
+        target: 第 1 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 零点/极值点分析
+        target: 第 2 问
+        result: 见 source_solution_summary
+      - part_id: "3"
+        goal: 求参数范围
+        target: 第 3 问
+        result: 见 source_solution_summary
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 局部逼近与找点
+      - 参变量分离
+      - 含参数分类讨论
+    subroute:
+      - 导函数零点唯一性
+      - 极值点方程消参
+      - 含参恒成立转极小值非负
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 指对复合结构
+      - 非齐次结构
+      - 局部逼近结构
+    evidence:
+      - $f^{\prime}(x)=a-(x+1)e^x$
+      - $a=(x_0+1)e^{x_0}$
+      - $(x^2-x-1)e^x$
+    normalization_moves_used:
+      - 用乘积求导把 $xe^x$ 转成 $(x+1)e^x$。
+      - 把导函数零点作为隐藏点 $x_0$，再用它消去参数 $a$。
+      - 把恒成立问题降成 $t(x)=(x^2-x-1)e^x$ 的单变量最值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求 $xe^x$ 的导数，回补导数运算与几何意义。
+      - 若学生不能用 $f^{\prime}$ 零点判断极值点个数，回补导数单调极值基础。
+      - 若学生在 $a=(x_0+1)e^{x_0}$ 代入整理时卡住，回补代数恒等变形。
+      - 若学生不理解“恒成立转极小值非负”，回补函数性质与图像。
+  detail_terms:
+    - $f(x)=ax-xe^x$
+    - $f^{\prime}(x)=a-(x+1)e^x$
+    - $f^{\prime\prime}(x)=-(x+2)e^x$
+    - $a=(x_0+1)e^{x_0}$
+    - $(x^2-x-1)e^x$
+parts: &a1
+  - part_id: "1"
+    text: 求 $(0,f(0))$ 处的切线方程。
+  - part_id: "2"
+    text: 求证：$f(x)$ 仅有一个极值点。
+  - part_id: "3"
+    text: 若存在 $a$，使 $f(x)\leqslant a+b$ 对任意的 $x\in\mathbf{R}$ 恒成立，求实数 $b$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0175_ax_minus_xex_three_part_ex27
+source_evidence:
+  source_refs:
+    - ref_id: page_0175
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0175/page_0175.md
+      role: problem_start
+      evidence: "lines 56-71 contain 例27 statement and the beginning of the solution: tangent equation, $f^{\\prime}(x)=a-(x+1)e^x$, $f^{\\prime\\prime}(x)=-(x+2)e^x$, and the setup for uniqueness of the extremum."
+    - ref_id: page_0176
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0176/page_0176.md
+      role: continuation
+      evidence: "lines 9-23 continue and finish 例27: prove existence/uniqueness of $x_0$, rewrite part (3) as $h(x)=xe^x-a(x-1)+b\\geqslant0$, eliminate $a=(x_0+1)e^{x_0}$, and minimize $(x^2-x-1)e^x$ to get $b\\geqslant-e$."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0175.png
+      inspected: true
+      notes: 页图核对通过：例27题头和三问完整可见，解析前半页与 markdown 一致。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0176.png
+      inspected: true
+      notes: 页图核对通过：page_0176 顶部为例27续解，随后进入考点7和例28；本卡只引用例27续解。
+  source_context: 例27 起头在 page_0175，续到 page_0176；按跨页规则由 page_0175 worker 负责补完整卡。page_0176 后续考点7和例28不属于本卡。
+  source_influence:
+    - 保留源解第(2)问“先排除 $x\leqslant-1$，再用 $f^{\prime\prime}<0$ 控制唯一性”的路线。
+    - 保留源解第(3)问用极值点方程消去 $a$，再最小化 $(x^2-x-1)e^x$ 的路线。
+  source_discrepancies: []
+original_problem:
+  stem: （2021 · 天津高考）已知函数 $f(x)=a x-x e^x\ (a>0)$。
+  parts: *a1
+  choices: []
+  answer: （1）$y=(a-1)x$；（2）仅有一个极值点；（3）$b\geqslant -e$。
+  fidelity_notes:
+    - 源题为三问解答题，无选择项。
+    - 第(3)问答案由 page_0176 续解给出。
+solution:
+  source_solution_summary: 第(1)问 $f(0)=0$，$f^{\prime}(x)=a-(x+1)e^x$，所以 $f^{\prime}(0)=a-1$，切线为 $y=(a-1)x$。第(2)问先看 $x\leqslant-1$ 时 $f^{\prime}(x)>0$，无极值；当 $x>-1$ 时 $f^{\prime\prime}(x)=-(x+2)e^x<0$ 在源解控制区间内给出 $f^{\prime}$ 单调下降，并通过 $f^{\prime}(-1)>0$ 与 $f^{\prime}(ea-1)<0$ 夹出唯一零点 $x_0$。第(3)问把 $f(x)\leqslant a+b$ 改写成 $h(x)=xe^x-a(x-1)+b\geqslant0$， 在极小点用 $a=(x_0+1)e^{x_0}$ 消参，得到 $b\geqslant(x_0^2-x_0-1)e^{x_0}$；再令 $t(x)=(x^2-x-1)e^x$，最小值为 $t(1)=-e$，所以 $b\geqslant-e$。
+  key_steps:
+    - step_id: step_1
+      statement: 求切线斜率并写出第(1)问切线方程。
+      formula_trace:
+        from: $f(x)=ax-xe^x$
+        to: $f^{\prime}(x)=a-(x+1)e^x,\quad f^{\prime}(0)=a-1$
+        operation: 对 $xe^x$ 用乘积求导。
+        why: 切线方程需要切点和斜率。
+      source_ref: page_0175:lines 62-66
+    - step_id: step_2
+      statement: 证明 $f^{\prime}$ 只有一个零点。
+      formula_trace:
+        from: $f^{\prime}(x)=a-(x+1)e^x$
+        to: 存在唯一 $x_0\in(-1,ea-1)$ 使 $f^{\prime}(x_0)=0$
+        operation: 用 $f^{\prime}(-1)>0$ 与 $f^{\prime}(ea-1)<0$ 夹根，并结合单调性排除多根。
+        why: 极值点个数等于导函数变号零点个数。
+      source_ref: page_0175:lines 66-71; page_0176:lines 9-12
+    - step_id: step_3
+      statement: 把第(3)问恒成立改写成极小值非负。
+      formula_trace:
+        from: $f(x)\leqslant a+b$
+        to: $h(x)=xe^x-a(x-1)+b\geqslant0$
+        operation: 移项并定义辅助函数 $h$。
+        why: 要对任意 $x$ 恒成立，只需控制 $h$ 的唯一极小值。
+      source_ref: page_0176:lines 13-15
+    - step_id: step_4
+      statement: 用极值点方程消去参数 $a$。
+      formula_trace:
+        from: $h^{\prime}(x_0)=0,\quad (x_0+1)e^{x_0}-a=0$
+        to: $h(x_0)\geqslant0\Rightarrow b\geqslant(x_0^2-x_0-1)e^{x_0}$
+        operation: 代入 $a=(x_0+1)e^{x_0}$ 并整理。
+        why: 这是把含参恒成立降成单变量最值的关键消参。
+      source_ref: page_0176:lines 13-18
+    - step_id: step_5
+      statement: 求单变量函数最小值得到 $b$ 的范围。
+      formula_trace:
+        from: $t(x)=(x^2-x-1)e^x$
+        to: $t_{\min}=t(1)=-e,\quad b\geqslant-e$
+        operation: 求导 $t^{\prime}(x)=(x-1)(x+2)e^x$ 并在 $x>-1$ 上判单调。
+        why: 第(3)问最终只剩 $b$ 的下界。
+      source_ref: page_0176:lines 18-23
+teaching_card:
+  student_title: 用极值点方程消掉参数
+  what_it_trains: 训练从导函数零点找到隐藏极值点，再把极值点方程代回恒成立条件，完成含参问题降维。
+  recognition_cues:
+    - 函数含 $xe^x$，导数会出现 $(x+1)e^x$。
+    - 题目先问极值点唯一性，再问存在参数的恒成立范围。
+    - 第(3)问需要借用第(2)问的唯一极小值点。
+  normalization_moves:
+    - 先求 $f^{\prime}$ 和 $f^{\prime\prime}$。
+    - 用导函数零点 $x_0$ 表示参数 $a$。
+    - 把 $h(x_0)\geqslant0$ 整理成只含 $x_0$ 的不等式。
+    - 最后再对单变量函数求最小值。
+  common_failures:
+    - 第(2)问只说“看图显然唯一”，没有给出导函数变号证据。
+    - 第(3)问忘记使用 $h^{\prime}(x_0)=0$ 消去 $a$。
+    - 整理 $h(x_0)$ 时符号错，把 $x_0^2-x_0-1$ 写错。
+  similar_practice_query: ax-xe^x 极值点唯一性 隐极值点消参 恒成立 b范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

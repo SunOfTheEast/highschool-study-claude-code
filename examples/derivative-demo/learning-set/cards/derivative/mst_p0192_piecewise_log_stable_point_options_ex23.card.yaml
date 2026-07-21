@@ -1,0 +1,196 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0192_piecewise_log_stable_point_options_ex23
+content_revision_id: mst_p0192_piecewise_log_stable_point_options_ex23-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0192_piecewise_log_stable_point_options_ex23.card.yaml
+stem: |-
+  （2023·广州月考·多选T12）已知 $x>0$ 时，$x>\log_2 x$。关于函数 $f(x)=\begin{cases}2^x,&x\le0\\|\log_2 x|,&x>0\end{cases}$，下列说法正确的是（  ）。
+  A. 方程 $f(x)=x$ 的解只有一个
+  B. 方程 $f(f(x))=1$ 的解有五个
+  C. 方程 $f(f(x))=t,\ (0<t<1)$ 的解有五个
+  D. 方程 $f(f(x))=x$ 的解有三个
+answer: |-
+  AC
+
+  先作分段函数图像。由图 23-1 可见，直线 $y=x$ 与 $y=f(x)$ 仅有一个交点，因此 A 正确。 对 B，令 $f(x)=u$，由 $f(u)=1$ 得 $u=0,\frac12,2$。再数方程 $f(x)=0,\ f(x)=\frac12,\ f(x)=2$ 的根数，分别为 $1,3,2$，合计 6 个，所以“有五个”错误，B 错。 对 C，当 $0<t<1$，由图 23-4 得满足 $f(u)=t$ 的 $u$ 有三类：$u_1<0,\ 0<u_2<1,\ u_3>1$。再看 $f(x)=u_i$：对应根数分别为 $0,3,2$，总计 5 个，C 对。 对 D，$f(f(x))=x$ 是稳定点问题，令 $y=f(x)$，则求 $y=f(x)$ 与 $x=f(y)$ 的交点。按图 23-6，将 $y=f(x)$ 关于 $y=x$ 对称后与原曲线有 5 个交点， 因而稳定点有 5 个，D 错。故选 AC。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 由图 23-1 判断 A。
+      max_score: 1
+    - step_id: step_2
+      description: 把 $f(f(x))=1$ 分层为 $f(x)=u$。
+      max_score: 1
+    - step_id: step_3
+      description: 统计 B 的总根数并判错。
+      max_score: 1
+    - step_id: step_4
+      description: 对任意 $0<t<1$，先解 $f(u)=t$ 再回代计数。
+      max_score: 1
+    - step_id: step_5
+      description: 用稳定点对称图判断 D。
+      max_score: 1
+    - step_id: step_6
+      description: 汇总选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 含参数分类讨论
+      - 保值性与分治
+    subroute:
+      - 图像交点计数
+      - 稳定点
+      - 反函数交点
+  structure:
+    primary: 分段函数结构
+    secondary:
+      - 复合函数与不动点结构
+      - 指对复合结构
+    evidence:
+      - $f(x)=\begin{cases}2^x,&x\le0\\|\log_2 x|,&x>0\end{cases}$
+      - $f(f(x))=1$
+      - $f(f(x))=t\ (0<t<1)$
+      - $f(f(x))=x$
+    normalization_moves_used:
+      - 复合方程先设中间变量 $u=f(x)$。
+      - 把每个 $u$ 值转成水平线与 $y=f(x)$ 的交点计数。
+      - 稳定点用“原图与关于 $y=x$ 对称图”的交点计数。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从图像读根数，回补函数性质与图像。
+      - 若学生把 $f(f(x))=t$ 直接硬算，回补分段/复合/反函数基础。
+      - 若学生不清楚 $x>\log_2x$ 的作用范围，回补指数对数基础。
+  detail_terms:
+    - $x>\log_2x\ (x>0)$
+    - $|\log_2x|$
+    - $f(f(x))=1$
+    - $f(f(x))=t,\ 0<t<1$
+    - $f(f(x))=x$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0192_piecewise_log_stable_point_options_ex23
+source_evidence:
+  source_refs:
+    - ref_id: page_0192_ex23_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0192/page_0192.md
+      role: problem_start
+      evidence: lines 33-37 给出例23题头、分段函数定义与 A-D 选项。
+    - ref_id: page_0193_ex23_solution_cont
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0193/page_0193.md
+      role: continuation
+      evidence: lines 15-44 续完例23解析：A对，B错，C对，D错，结论“故选 AC”。
+    - ref_id: page_0193_context_after_ex23
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0193/page_0193.md
+      role: local_context
+      evidence: line 46 起进入“考点2：原函数与反函数交点个数问题”，属于新讲解，不并入例23题卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0192.png
+      inspected: true
+      notes: 已核对页图：例23从 page_0192 底部起头，A-D 选项完整。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0193.png
+      inspected: true
+      notes: 已核对页图：page_0193 上半是例23图像解析并给出“故选 AC”，下半转入考点2新内容。
+  source_context: 按题头归属，例23起于 page_0192，允许跨页读取 page_0193 完成解析；page_0193 的考点2不属于本卡。
+  source_influence:
+    - 保留源解核心：通过图像先计数 $f(x)=x$ 交点，再分层计数 $f(f(x))=1$ 与 $f(f(x))=t$ 的根数。
+    - 保留稳定点作图法：把 $y=f(x)$ 关于 $y=x$ 对称后交点计数。
+    - 保留选项结论：A、C 正确，B、D 错误。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·广州月考·多选T12）已知 $x>0$ 时，$x>\log_2 x$。关于函数 $f(x)=\begin{cases}2^x,&x\le0\\|\log_2 x|,&x>0\end{cases}$，下列说法正确的是（  ）。
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 方程 $f(x)=x$ 的解只有一个
+      text_latex: 方程 $f(x)=x$ 的解只有一个
+    - label: B
+      text_raw: 方程 $f(f(x))=1$ 的解有五个
+      text_latex: 方程 $f(f(x))=1$ 的解有五个
+    - label: C
+      text_raw: 方程 $f(f(x))=t,\ (0<t<1)$ 的解有五个
+      text_latex: 方程 $f(f(x))=t,\ (0<t<1)$ 的解有五个
+    - label: D
+      text_raw: 方程 $f(f(x))=x$ 的解有三个
+      text_latex: 方程 $f(f(x))=x$ 的解有三个
+  answer: AC
+  fidelity_notes:
+    - 题干与四个选项在 page_0192；完整解析与结论在 page_0193 上半。
+    - 本题是多选题，source 明确末句“故选 AC”。
+solution:
+  source_solution_summary: 先作分段函数图像。由图 23-1 可见，直线 $y=x$ 与 $y=f(x)$ 仅有一个交点，因此 A 正确。 对 B，令 $f(x)=u$，由 $f(u)=1$ 得 $u=0,\frac12,2$。再数方程 $f(x)=0,\ f(x)=\frac12,\ f(x)=2$ 的根数，分别为 $1,3,2$，合计 6 个，所以“有五个”错误，B 错。 对 C，当 $0<t<1$，由图 23-4 得满足 $f(u)=t$ 的 $u$ 有三类：$u_1<0,\ 0<u_2<1,\ u_3>1$。再看 $f(x)=u_i$：对应根数分别为 $0,3,2$，总计 5 个，C 对。 对 D，$f(f(x))=x$ 是稳定点问题，令 $y=f(x)$，则求 $y=f(x)$ 与 $x=f(y)$ 的交点。按图 23-6，将 $y=f(x)$ 关于 $y=x$ 对称后与原曲线有 5 个交点， 因而稳定点有 5 个，D 错。故选 AC。
+  key_steps:
+    - step_id: step_1
+      statement: 由图 23-1 判断 A。
+      formula_trace:
+        from: $f(x)=\begin{cases}2^x,&x\le0\\|\log_2 x|,&x>0\end{cases}$
+        to: $y=f(x)$ 与 $y=x$ 仅一个交点
+        operation: 图像交点计数。
+        why: 交点个数就是方程 $f(x)=x$ 的解个数。
+      source_ref: page_0193_ex23_solution_cont
+    - step_id: step_2
+      statement: 把 $f(f(x))=1$ 分层为 $f(x)=u$。
+      formula_trace:
+        from: $f(f(x))=1$
+        to: $f(u)=1\Rightarrow u\in\{0,\frac12,2\}$
+        operation: 设中间变量并先解外层方程。
+        why: 复合方程先外后内，便于逐层计数。
+      source_ref: page_0193_ex23_solution_cont
+    - step_id: step_3
+      statement: 统计 B 的总根数并判错。
+      formula_trace:
+        from: $f(x)=0,\ f(x)=\frac12,\ f(x)=2$
+        to: 根数 $1+3+2=6$
+        operation: 分别数水平线与图像交点。
+        why: 与选项“五个”矛盾，故 B 错。
+      source_ref: page_0193_ex23_solution_cont
+    - step_id: step_4
+      statement: 对任意 $0<t<1$，先解 $f(u)=t$ 再回代计数。
+      formula_trace:
+        from: $f(f(x))=t,\ 0<t<1$
+        to: $u_1<0,\ 0<u_2<1,\ u_3>1$，对应根数 $0,3,2$，总计 5
+        operation: 图像上分三段取值并分别计交点。
+        why: 得到 C 为真。
+      source_ref: page_0193_ex23_solution_cont
+    - step_id: step_5
+      statement: 用稳定点对称图判断 D。
+      formula_trace:
+        from: $f(f(x))=x$
+        to: 原曲线与其关于 $y=x$ 对称曲线交点数为 5
+        operation: 把 $x=f(y)$ 解释为对称曲线并计交点。
+        why: 稳定点个数是 5，不是 3。
+      source_ref: page_0193_ex23_solution_cont
+    - step_id: step_6
+      statement: 汇总选项。
+      formula_trace:
+        from: A对，B错，C对，D错
+        to: AC
+        operation: 多选归并。
+        why: 完成作答。
+      source_ref: page_0193_ex23_solution_cont
+teaching_card:
+  student_title: 复合分段函数：先外层取值，再内层计交点
+  what_it_trains: 训练复合方程的图像分层计数方法，尤其是分段函数下的稳定点与根数判断。
+  recognition_cues:
+    - 题目是多选，核心对象是 $f(f(x))$。
+    - 函数是“指数 + 绝对值对数”的分段结构。
+    - 选项集中在“解的个数”与“稳定点个数”。
+  normalization_moves:
+    - 先画或读出 $y=f(x)$ 图像关键形状。
+    - 令 $u=f(x)$，先解 $f(u)=\text{常数}$。
+    - 把每个 $u$ 转为水平线交点数并求和。
+  common_failures:
+    - 把 B 项中 $f(f(x))=1$ 误数成 5，漏掉一条分支。
+    - 对 C 项忘记负值分支 $u_1<0$ 时无解。
+    - 把 D 项稳定点误当成不动点个数。
+  similar_practice_query: 分段函数 复合方程 根个数 图像交点 稳定点 多选
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

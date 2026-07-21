@@ -1,0 +1,174 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0275_log1px_quadratic_prefactor_pade_ex12
+content_revision_id: mst_p0275_log1px_quadratic_prefactor_pade_ex12-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0275_log1px_quadratic_prefactor_pade_ex12.card.yaml
+stem: （2018 · 新课标Ⅲ）已知函数 $f(x)=(2+x+ax^2)\ln(1+x)-2x$。若 $x=0$ 是 $f(x)$ 的极大值点，求 $a$ 的值，试用帕德逼近原理解释。
+answer: |-
+  $a=-\frac16$。帕德解释：$\ln(1+x)$ 在 $x=0$ 的 $[1,2]$ 阶帕德逼近为 $\frac{12x}{-x^2+6x+12}$，与 $\frac{2x}{2+x+ax^2}$ 匹配时 $a=-\frac16$。
+
+  题目等价于比较 $\ln(1+x)$ 与 $\frac{2x}{2+x+ax^2}$ 在 $x=0$ 附近的局部贴合。source 给出 $\ln(1+x)$ 的 $[1,2]$ 阶帕德逼近 $R_{1,2}(x)=\frac{12x}{-x^2+6x+12}$。若 $\frac{2x}{2+x+ax^2}$ 要成为这个帕德逼近，则分母只差同倍数： $\frac{2x}{2+x+ax^2}=\frac{12x}{12+6x+6ax^2}$，要与 $\frac{12x}{-x^2+6x+12}$ 一致，就有 $6a=-1$，即 $a=-\frac16$。此时 $h(x)=\ln(1+x)-\frac{12x}{-x^2+6x+12}$ 的图像说明 0 附近的符号 正好对应 $f$ 在 $x=0$ 取极大值。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把极大值问题转成对数和有理式的比较。
+      max_score: 1
+    - step_id: step_2
+      description: 写出 $\ln(1+x)$ 的 $[1,2]$ 阶帕德逼近。
+      max_score: 1
+    - step_id: step_3
+      description: 匹配分母，锁定 $a$。
+      max_score: 1
+    - step_id: step_4
+      description: 用图像解释极大值位置。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level:
+      - part_id: main
+        goal: 数值求值
+        target: 第 main 问
+        result: $a=-\frac16$，并由 $[1,2]$ 阶帕德逼近解释。
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 局部逼近与找点
+      - 显隐点探路
+    subroute:
+      - 帕德逼近
+      - $[1,2]$ 阶有理逼近
+      - 对数单身狗恒等变形
+      - 分母系数匹配
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 指对复合结构
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $\ln(1+x)$
+      - $\frac{2x}{2+x+ax^2}$
+      - $\frac{12x}{-x^2+6x+12}$
+      - $a=-\frac16$
+      - $h(x)=\ln(1+x)-\frac{12x}{-x^2+6x+12}$
+    normalization_moves_used:
+      - 用对数单身狗恒等变形，将原函数极值转为 $\ln(1+x)$ 与有理式比较。
+      - 把 $\frac{2x}{2+x+ax^2}$ 同乘 6。
+      - 与 $[1,2]$ 阶帕德逼近分母逐项匹配。
+      - 用 $h$ 的图像解释极大值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不理解帕德逼近，回补指数对数基础。
+      - 若学生不会把原函数转成对数单身狗形式，回补代数恒等变形。
+      - 若学生不知道局部逼近如何判断极值，回补函数性质与图像。
+      - 若学生不会比较分母系数，回补代数恒等变形。
+  detail_terms:
+    - 帕德逼近
+    - $[1,2]$ 阶逼近
+    - $R_{1,2}(x)=\frac{12x}{-x^2+6x+12}$
+    - 对数单身狗
+    - $a=-\frac16$
+    - 局部有理拟合
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0275_log1px_quadratic_prefactor_pade_ex12
+source_evidence:
+  source_refs:
+    - ref_id: page_0275_ex12_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0275/page_0275.md
+      role: problem_start
+      evidence: page_0275 给出例12题头：同一函数 $f(x)=(2+x+ax^2)\ln(1+x)-2x$，若 $x=0$ 是极大值点，求 $a$ 并用帕德逼近原理解释。
+    - ref_id: page_0275_ex12_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0275/page_0275.md
+      role: solution
+      evidence: page_0275 例12解析给出 $g(x)=\ln(1+x)$ 在 $x=0$ 处的 $[1,2]$ 阶帕德逼近 $R_{1,2}(x)=\frac{12x}{-x^2+6x+12}$，并指出当且仅当 $a=-\frac16$ 时匹配。
+    - ref_id: page_0276_ex12_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0276/page_0276.md
+      role: solution
+      evidence: page_0276 顶部给出 $h(x)=\ln(x+1)-\frac{12x}{-x^2+6x+12}$ 的图像，并说明 $f(x)=(2+x-\frac16x^2)\ln(1+x)-2x$ 的极大值与该 $h(x)$ 等价。
+    - ref_id: page_0276_next_section_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0276/page_0276.md
+      role: local_context
+      evidence: page_0276 随后进入“第三节 极值显点探路与零点个数问题”并另起例1，说明例12在页首闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0275.png
+      inspected: true
+      notes: 已核对页图：例12题头和帕德逼近解析起于 page_0275 底部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0276.png
+      inspected: true
+      notes: 已核对页图：page_0276 顶部为例12图像说明，随后新节另起。
+  source_context: 本卡处理 page_0275 起头、page_0276 顶部续完的例12；page_0276 新节例1排除。
+  source_influence:
+    - 保留同源题但改为帕德逼近解释路线。
+    - 保留 $[1,2]$ 阶帕德逼近 $R_{1,2}(x)=\frac{12x}{-x^2+6x+12}$。
+    - 保留匹配条件：$\frac{2x}{2+x+ax^2}$ 与 $R_{1,2}(x)$ 一致时 $a=-\frac16$。
+    - 保留 page_0276 图像：$h(x)=\ln(1+x)-R_{1,2}(x)$ 的形态解释极大值。
+  source_discrepancies: []
+original_problem:
+  stem: （2018 · 新课标Ⅲ）已知函数 $f(x)=(2+x+ax^2)\ln(1+x)-2x$。若 $x=0$ 是 $f(x)$ 的极大值点，求 $a$ 的值，试用帕德逼近原理解释。
+  parts: *a1
+  choices: []
+  answer: $a=-\frac16$。帕德解释：$\ln(1+x)$ 在 $x=0$ 的 $[1,2]$ 阶帕德逼近为 $\frac{12x}{-x^2+6x+12}$，与 $\frac{2x}{2+x+ax^2}$ 匹配时 $a=-\frac16$。
+  fidelity_notes:
+    - 无选项。
+    - 本题和 page_0273 例11同源，但训练目标是帕德逼近解释。
+solution:
+  source_solution_summary: 题目等价于比较 $\ln(1+x)$ 与 $\frac{2x}{2+x+ax^2}$ 在 $x=0$ 附近的局部贴合。source 给出 $\ln(1+x)$ 的 $[1,2]$ 阶帕德逼近 $R_{1,2}(x)=\frac{12x}{-x^2+6x+12}$。若 $\frac{2x}{2+x+ax^2}$ 要成为这个帕德逼近，则分母只差同倍数： $\frac{2x}{2+x+ax^2}=\frac{12x}{12+6x+6ax^2}$，要与 $\frac{12x}{-x^2+6x+12}$ 一致，就有 $6a=-1$，即 $a=-\frac16$。此时 $h(x)=\ln(1+x)-\frac{12x}{-x^2+6x+12}$ 的图像说明 0 附近的符号 正好对应 $f$ 在 $x=0$ 取极大值。
+  key_steps:
+    - step_id: step_1
+      statement: 把极大值问题转成对数和有理式的比较。
+      formula_trace:
+        from: $(2+x+ax^2)\ln(1+x)-2x$
+        to: $\ln(1+x)-\frac{2x}{2+x+ax^2}$
+        operation: 局部除以正的 $2+x+ax^2$。
+        why: 帕德逼近解释的是 $\ln(1+x)$ 与有理式的高阶贴合。
+      source_ref: page_0275_ex12_solution_start
+    - step_id: step_2
+      statement: 写出 $\ln(1+x)$ 的 $[1,2]$ 阶帕德逼近。
+      formula_trace:
+        from: $g(x)=\ln(1+x)$
+        to: $R_{1,2}(x)=\frac{12x}{-x^2+6x+12}$
+        operation: 套用 source 给出的帕德逼近式。
+        why: 这是让有理函数尽可能贴合 $\ln(1+x)$ 的局部模型。
+      source_ref: page_0275_ex12_solution_start
+    - step_id: step_3
+      statement: 匹配分母，锁定 $a$。
+      formula_trace:
+        from: $\frac{2x}{2+x+ax^2}=\frac{12x}{12+6x+6ax^2}$
+        to: $12+6x+6ax^2=12+6x-x^2$，$a=-\frac16$
+        operation: 同乘 6 后比较二次项系数。
+        why: 只有这个 $a$ 能让题目中的有理式成为 $[1,2]$ 阶帕德逼近。
+      source_ref: page_0275_ex12_solution_start
+    - step_id: step_4
+      statement: 用图像解释极大值位置。
+      formula_trace:
+        from: $h(x)=\ln(1+x)-\frac{12x}{-x^2+6x+12}$
+        to: $f(x)=(2+x-\frac16x^2)\ln(1+x)-2x$ 的极大值与 $h$ 的符号形态等价
+        operation: 把同号正因子移回原函数。
+        why: page_0276 图像说明 0 附近有正确的左正右负/极大值形态。
+      source_ref: page_0276_ex12_solution_continuation
+teaching_card:
+  student_title: 用帕德逼近看出 $a=-\\frac16$
+  what_it_trains: 训练帕德逼近视角：把 $\ln(1+x)$ 用有理函数贴住，参数就是分母二次项的匹配结果。
+  recognition_cues:
+    - 题面和例11同源，但明确要求“帕德逼近原理解释”。
+    - 原函数能改写成 $\ln(1+x)-\frac{2x}{2+x+ax^2}$。
+    - $[1,2]$ 阶帕德逼近的分母正好是二次式。
+  normalization_moves:
+    - 先把 $\ln(1+x)$ 单独拿出来。
+    - 写出 source 给出的 $R_{1,2}(x)$。
+    - 把题目里的有理式同乘 6，再比较 $x^2$ 系数。
+    - 用 $h=\ln(1+x)-R_{1,2}$ 的图像解释极大值。
+  common_failures:
+    - 把本题当成例11的重复题，只写高阶导而不解释帕德。
+    - 忘记 $\frac{2x}{2+x+ax^2}$ 需要先同乘 6 才能和 $R_{1,2}$ 比。
+    - 只给 $a=-\frac16$，没有说明为什么这就是 $[1,2]$ 阶逼近。
+    - 把帕德逼近当成泰勒展开，没有突出有理函数分母匹配。
+  similar_practice_query: 帕德逼近 ln(1+x) [1,2] 12x/(-x^2+6x+12) a=-1/6
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

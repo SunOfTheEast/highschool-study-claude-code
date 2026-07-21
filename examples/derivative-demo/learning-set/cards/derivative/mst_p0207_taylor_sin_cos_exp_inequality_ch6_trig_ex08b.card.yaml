@@ -1,0 +1,190 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0207_taylor_sin_cos_exp_inequality_ch6_trig_ex08b
+content_revision_id: mst_p0207_taylor_sin_cos_exp_inequality_ch6_trig_ex08b-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0207_taylor_sin_cos_exp_inequality_ch6_trig_ex08b.card.yaml
+stem: |-
+  （2021 · 吴江区校级月考 T20）给出高阶导数与泰勒展开的三段材料，利用材料完成三问。
+  (1) 求出 $f_1(x)=\sin x$ 在点 $x=0$ 处的 3 阶泰勒展开式 $g_1(x)$，并直接写出 $f_2(x)=\cos x$ 在点 $x=0$ 处的 3 阶泰勒展开式 $g_2(x)$。
+  (2) 比较 (1) 中 $f_1(x)$ 与 $g_1(x)$ 的大小。
+  (3) 已知 $y=e^x$ 不小于其在点 $x=0$ 处的 3 阶泰勒展开式，证明：当 $x\geqslant0$ 时，$e^x+\sin x+\cos x\geqslant2+2x$。
+answer: |
+  (1) $g_1(x)=x-\frac16x^3,\ g_2(x)=1-\frac12x^2$；(2) 当 $x<0$ 时 $f_1(x)<g_1(x)$，$x=0$ 时相等，$x>0$ 时 $f_1(x)>g_1(x)$；(3) 结论成立。
+
+  先由导数在 0 点的取值得到三阶泰勒式 $g_1(x)=x-\frac16x^3,\ g_2(x)=1-\frac12x^2$。比较 $f_1(x)=\sin x$ 与 $g_1(x)$ 时，设 $h(x)=\sin x-x+\frac16x^3$，由 $h^{\prime\prime\prime}(x)=1-\cos x\ge0$ 推出 $h^{\prime}(x)\ge0$，再得 $h(x)$ 在 $\mathbf{R}$ 上单调递增且 $h(0)=0$，从而完成分段比较。再设 $\varphi(x)=\cos x-1+\frac12x^2$，由 $\varphi^{\prime\prime}(x)=1-\cos x\ge0$ 得 $\cos x\ge1-\frac12x^2$。结合已知 $e^x\ge1+x+\frac12x^2+\frac16x^3$ 与 $x\ge0$ 时 $\sin x\ge x-\frac16x^3$，三式相加后 $x^2,x^3$ 项抵消，得到 $e^x+\sin x+\cos x\ge2+2x$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 按 0 点导数写出 $\sin x,\cos x$ 的 3 阶泰勒展开式。
+      max_score: 1
+    - step_id: step_2
+      description: 构造 $h(x)=\sin x-x+\frac16x^3$ 比较 $f_1(x)$ 与 $g_1(x)$。
+      max_score: 1
+    - step_id: step_3
+      description: 构造 $\varphi(x)=\cos x-1+\frac12x^2$ 得到 $\cos x$ 下界。
+      max_score: 1
+    - step_id: step_4
+      description: 调用材料中的指数函数 3 阶泰勒下界。
+      max_score: 1
+    - step_id: step_5
+      description: 把三条下界相加并在 $x\ge0$ 条件下收束为目标。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 (1) 问
+        result: $g_1(x)=x-\frac16x^3,\ g_2(x)=1-\frac12x^2$
+      - part_id: "2"
+        goal: 数值比较
+        target: 第 (2) 问
+        result: $\sin x$ 与 $x-\frac16x^3$ 在 0 点两侧异号比较
+      - part_id: "3"
+        goal: 不等式证明
+        target: 第 (3) 问
+        result: $x\ge0$ 时 $e^x+\sin x+\cos x\ge2+2x$
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 切线放缩与凹凸性
+      - 拟合与夹逼
+    subroute:
+      - 麦克劳林展开
+      - 泰勒项比较
+      - 三阶导单调链
+      - 分项放缩后同阶项抵消
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 三角复合结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - 核心对象是 $e^x,\sin x,\cos x$ 在 $x=0$ 的低阶多项式近似。
+      - 比较 $\sin x$ 与三阶多项式需要经过 $h^{\prime\prime\prime}\to h$ 的导数链判号。
+      - 目标不等式通过三条下界并联后发生同阶项抵消。
+    normalization_moves_used:
+      - 把三角函数替换为 3 阶泰勒多项式与余项符号结论。
+      - 把函数大小比较统一为“构造差函数 + 导数单调”。
+      - 把综合不等式改写成三条标准下界的和。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $h^{\prime\prime\prime}(x)\ge0$ 追踪到 $h(x)$ 的符号，回补导数单调极值基础。
+      - 若学生不会使用 $\varphi(x)=\cos x-1+\frac12x^2$ 的二阶导判号，回补三角函数基础。
+      - 若学生不会把泰勒下界相加并做同阶项抵消，回补不等式工具基础。
+      - 若学生不熟 0 点三阶泰勒式构造，回补函数三要素与定义域。
+  detail_terms:
+    - $g_1(x)=x-\frac16x^3$
+    - $g_2(x)=1-\frac12x^2$
+    - $h(x)=\sin x-x+\frac16x^3$
+    - $\varphi(x)=\cos x-1+\frac12x^2$
+    - $e^x\ge1+x+\frac12x^2+\frac16x^3$
+    - 同阶项抵消
+parts: &a1
+  - (1) 求出 $f_1(x)=\sin x$ 在点 $x=0$ 处的 3 阶泰勒展开式 $g_1(x)$，并直接写出 $f_2(x)=\cos x$ 在点 $x=0$ 处的 3 阶泰勒展开式 $g_2(x)$。
+  - (2) 比较 (1) 中 $f_1(x)$ 与 $g_1(x)$ 的大小。
+  - (3) 已知 $y=e^x$ 不小于其在点 $x=0$ 处的 3 阶泰勒展开式，证明：当 $x\geqslant0$ 时，$e^x+\sin x+\cos x\geqslant2+2x$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0207_taylor_sin_cos_exp_inequality_ch6_trig_ex08b
+source_evidence:
+  source_refs:
+    - ref_id: page_0207_ex08b_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0207/page_0207.md
+      role: problem_start
+      evidence: page_0207 中部出现第二个“例8（2021·吴江区校级月考 T20）”，题干以“三个材料 + 三问”形式给出。
+    - ref_id: page_0208_ex08b_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0208/page_0208.md
+      role: continuation
+      evidence: page_0208 顶部“解析”连续给出本题 (1)(2)(3) 全部解答，并在“第二节 保值性原理”标题前结束。
+    - ref_id: page_0208_section2_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0208/page_0208.md
+      role: local_context
+      evidence: “第二节 保值性原理”及其后内容为新 exposition，按批次规则不并入本题。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0207.png
+      inspected: true
+      notes: 已核对页图：page_0207 顶部是 page_0206 首个例8续页；本卡题头从 page_0207 中部第二个“例8”开始。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0208.png
+      inspected: true
+      notes: 已核对页图：本题解析在页上半结束，页中部“第二节 保值性原理”是后续新内容。
+  source_context: 本题题头起于 page_0207，中途跨页到 page_0208 顶部完成解析；page_0208 后半保值性内容不属于本卡。
+  source_influence:
+    - 保持 source 的“三个材料 + 三问”教学结构，不拆改问序。
+    - 比较 $\sin x$ 与三阶泰勒式时，沿用 source 的三阶导单调链：$h^{\prime\prime\prime}\Rightarrow h^{\prime\prime}\Rightarrow h^{\prime}\Rightarrow h$。
+    - 证明 (3) 时保留 source 的三条下界并联：$e^x$、$\sin x$、$\cos x$ 分别放缩后相加。
+  source_discrepancies: []
+original_problem:
+  stem: （2021 · 吴江区校级月考 T20）给出高阶导数与泰勒展开的三段材料，利用材料完成三问。
+  parts: *a1
+  choices: []
+  answer: (1) $g_1(x)=x-\frac16x^3,\ g_2(x)=1-\frac12x^2$；(2) 当 $x<0$ 时 $f_1(x)<g_1(x)$，$x=0$ 时相等，$x>0$ 时 $f_1(x)>g_1(x)$；(3) 结论成立。
+  fidelity_notes:
+    - 题头为 page_0207 中部第二个“例8”，与 page_0206/page_0207 顶部另一道“例8”区分，使用 ex08b ID。
+    - 本题解析完整位于 page_0208 上半页；下半页“第二节 保值性原理”不属于本题。
+solution:
+  source_solution_summary: |
+    先由导数在 0 点的取值得到三阶泰勒式 $g_1(x)=x-\frac16x^3,\ g_2(x)=1-\frac12x^2$。比较 $f_1(x)=\sin x$ 与 $g_1(x)$ 时，设 $h(x)=\sin x-x+\frac16x^3$，由 $h^{\prime\prime\prime}(x)=1-\cos x\ge0$ 推出 $h^{\prime}(x)\ge0$，再得 $h(x)$ 在 $\mathbf{R}$ 上单调递增且 $h(0)=0$，从而完成分段比较。再设 $\varphi(x)=\cos x-1+\frac12x^2$，由 $\varphi^{\prime\prime}(x)=1-\cos x\ge0$ 得 $\cos x\ge1-\frac12x^2$。结合已知 $e^x\ge1+x+\frac12x^2+\frac16x^3$ 与 $x\ge0$ 时 $\sin x\ge x-\frac16x^3$，三式相加后 $x^2,x^3$ 项抵消，得到 $e^x+\sin x+\cos x\ge2+2x$。
+  key_steps:
+    - step_id: step_1
+      statement: 按 0 点导数写出 $\sin x,\cos x$ 的 3 阶泰勒展开式。
+      formula_trace:
+        from: $f_1(x)=\sin x,\ f_2(x)=\cos x$
+        to: $g_1(x)=x-\frac16x^3,\ g_2(x)=1-\frac12x^2$
+        operation: 计算到三阶导并代入 $x_0=0$ 的泰勒公式。
+        why: 这是后续比较与放缩的基础近似式。
+      source_ref: page_0208_ex08b_solution
+    - step_id: step_2
+      statement: 构造 $h(x)=\sin x-x+\frac16x^3$ 比较 $f_1(x)$ 与 $g_1(x)$。
+      formula_trace:
+        from: $h(x)=\sin x-x+\frac16x^3$
+        to: 当 $x<0$ 时 $h(x)<0$，$x=0$ 时 $h(x)=0$，$x>0$ 时 $h(x)>0$
+        operation: 由 $h^{\prime\prime\prime}(x)=1-\cos x\ge0$ 推得 $h^{\prime\prime}$ 递增、$h^{\prime}$ 在 0 处取最小值 0，故 $h$ 递增。
+        why: 把函数比较转化为单函数符号判断。
+      source_ref: page_0208_ex08b_solution
+    - step_id: step_3
+      statement: 构造 $\varphi(x)=\cos x-1+\frac12x^2$ 得到 $\cos x$ 下界。
+      formula_trace:
+        from: $\varphi(x)=\cos x-1+\frac12x^2$
+        to: $\cos x\ge1-\frac12x^2$
+        operation: 由 $\varphi^{\prime\prime}(x)=1-\cos x\ge0$ 与 $\varphi^{\prime}(0)=0$ 判定 $\varphi(x)\ge\varphi(0)=0$。
+        why: 为第 (3) 问的三式并联放缩提供三角项下界。
+      source_ref: page_0208_ex08b_solution
+    - step_id: step_4
+      statement: 调用材料中的指数函数 3 阶泰勒下界。
+      formula_trace:
+        from: $y=e^x$ 在 $x=0$ 的 3 阶泰勒展开
+        to: $e^x\ge1+x+\frac12x^2+\frac16x^3$
+        operation: 直接使用题设已知。
+        why: 与 step_2、step_3 形成同阶项可抵消的组合。
+      source_ref: page_0208_ex08b_solution
+    - step_id: step_5
+      statement: 把三条下界相加并在 $x\ge0$ 条件下收束为目标。
+      formula_trace:
+        from: $e^x\ge1+x+\frac12x^2+\frac16x^3,\ \sin x\ge x-\frac16x^3,\ \cos x\ge1-\frac12x^2$
+        to: $e^x+\sin x+\cos x\ge2+2x\ (x\ge0)$
+        operation: 逐项相加，$+\frac12x^2$ 与 $-\frac12x^2$、$+\frac16x^3$ 与 $-\frac16x^3$ 抵消。
+        why: 直接闭合第 (3) 问目标不等式。
+      source_ref: page_0208_ex08b_solution
+teaching_card:
+  student_title: 三阶泰勒并联放缩证明 $e^x+\sin x+\cos x$ 下界
+  what_it_trains: 训练“先比较单函数余项符号，再把多函数下界拼接到目标不等式”的两段式证明习惯。
+  recognition_cues:
+    - 题目同时出现 $e^x,\sin x,\cos x$ 且给出泰勒材料。
+    - 中间问先让你比较 $\sin x$ 与三阶多项式，暗示要做余项符号分析。
+    - 终问目标是线性下界 $2+2x$，适合多项式阶次抵消。
+  normalization_moves:
+    - 围绕 0 点写出同阶泰勒式。
+    - 差函数求导建立符号结论。
+    - 将三条下界逐项相加并消去高阶项。
+  common_failures:
+    - 只写出展开式却不证明余项方向，导致比较结论无依据。
+    - 把 $x\ge0$ 条件漏用到 $\sin x\ge x-\frac16x^3$。
+    - 相加时漏掉 $x^2,x^3$ 抵消项，最终式子化简错误。
+  similar_practice_query: 三阶泰勒 余项符号比较 sinx 与多项式 指数三角综合不等式
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

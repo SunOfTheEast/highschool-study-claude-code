@@ -1,0 +1,202 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0138_product_integral_ex05
+content_revision_id: mst_p0138_product_integral_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0138_product_integral_ex05.card.yaml
+stem: |-
+  （2023·凤风县月考·多选）若函数 $f(x),g(x)$ 的导函数都存在，且 $f^{\prime}(x)g(x)+f(x)g^{\prime}(x)<3x^2$，则 $f(2)g(2)-f(1)g(1)$ 的值可能为（ ）
+  A. 9
+  B. 8
+  C. 6
+  D. 5
+answer: |
+  CD
+
+  由题设
+  \[
+  f^{\prime}(x)g(x)+f(x)g^{\prime}(x)<3x^2=(x^3)^{\prime},
+  \]
+  得
+  \[
+  [f(x)g(x)]'<(x^3)'.
+  \]
+  构造
+  \[
+  h(x)=f(x)g(x)-x^3\quad (x>0),
+  \]
+  则
+  \[
+  h^{\prime}(x)=f^{\prime}(x)g(x)+f(x)g^{\prime}(x)-3x^2<0,
+  \]
+  所以 $h$ 在 $(0,+\infty)$ 单调递减，故
+  \[
+  h(1)>h(2).
+  \]
+  即
+  \[
+  f(1)g(1)-1>f(2)g(2)-8
+  \Rightarrow
+  f(2)g(2)-f(1)g(1)<7.
+  \]
+  在选项 $\{9,8,6,5\}$ 中，满足“小于 7”的只有 6 与 5，故选 CD。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把题设识别为乘积导数比较。
+      max_score: 1
+    - step_id: step_2
+      description: 构造 h 并由导数符号得 h(1)>h(2)。
+      max_score: 1
+    - step_id: step_3
+      description: 化为目标差值上界并筛选选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 由不等式上界筛选可能值
+        result: 见 source_solution_summary
+  method:
+    primary: 逆向构造法
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 乘积导数同构
+      - 定点差值比较
+  structure:
+    primary: 同构结构
+    secondary:
+      - 抽象函数结构
+    evidence:
+      - $f^{\prime}g+fg^{\prime}$ 与 $[fg]'$ 完全同构。
+      - 构造 $h=fg-x^3$ 后只需比较 h(1),h(2)。
+    normalization_moves_used:
+      - 把右侧 $3x^2$ 识别为 $(x^3)'$。
+      - 构造差函数并判递减。
+      - 将结论压缩为数值上界 $<7$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能识别 $f^{\prime}g+fg^{\prime}$，回补导数运算与几何意义。
+      - 若学生不会从单调递减得到 h(1)>h(2)，回补导数单调极值基础。
+      - 若学生在代入 1、2 时整理混乱，回补代数恒等变形。
+  detail_terms:
+    - $h(x)=f(x)g(x)-x^3$
+    - $h^{\prime}(x)<0$
+    - $h(1)>h(2)$
+    - $f(2)g(2)-f(1)g(1)<7$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0138_product_integral_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0138
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0138/page_0138.md
+      role: problem_start
+      evidence: page_0138 给出例5完整题干、A-D选项与解析，结论为 CD。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0138.png
+      inspected: true
+      notes: 已核对页图，例5题干与解析完整，未跨页。
+  source_context: 例5在 page_0138 内闭合，后续直接进入例6。
+  source_influence:
+    - 保留源页“把乘积导数与 (x^3)' 比较”的主线。
+    - 保留构造 h(x)=f(x)g(x)-x^3 并用 h(1)>h(2) 得上界 7。
+    - 保留“可能值为 5、6”即选 CD。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·凤风县月考·多选）若函数 $f(x),g(x)$ 的导函数都存在，且 $f^{\prime}(x)g(x)+f(x)g^{\prime}(x)<3x^2$，则 $f(2)g(2)-f(1)g(1)$ 的值可能为（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: "9"
+      text_latex: "9"
+    - label: B
+      text_raw: "8"
+      text_latex: "8"
+    - label: C
+      text_raw: "6"
+      text_latex: "6"
+    - label: D
+      text_raw: "5"
+      text_latex: "5"
+  answer: CD
+  fidelity_notes:
+    - 源页为多选题，目标是“可能值”筛选。
+    - 源页解析在 $(0,+\infty)$ 区间比较 h(1),h(2)。
+solution:
+  source_solution_summary: |
+    由题设
+    \[
+    f^{\prime}(x)g(x)+f(x)g^{\prime}(x)<3x^2=(x^3)^{\prime},
+    \]
+    得
+    \[
+    [f(x)g(x)]'<(x^3)'.
+    \]
+    构造
+    \[
+    h(x)=f(x)g(x)-x^3\quad (x>0),
+    \]
+    则
+    \[
+    h^{\prime}(x)=f^{\prime}(x)g(x)+f(x)g^{\prime}(x)-3x^2<0,
+    \]
+    所以 $h$ 在 $(0,+\infty)$ 单调递减，故
+    \[
+    h(1)>h(2).
+    \]
+    即
+    \[
+    f(1)g(1)-1>f(2)g(2)-8
+    \Rightarrow
+    f(2)g(2)-f(1)g(1)<7.
+    \]
+    在选项 $\{9,8,6,5\}$ 中，满足“小于 7”的只有 6 与 5，故选 CD。
+  key_steps:
+    - step_id: step_1
+      statement: 把题设识别为乘积导数比较。
+      formula_trace:
+        from: $f^{\prime}(x)g(x)+f(x)g^{\prime}(x)<3x^2$
+        to: $[f(x)g(x)]'<(x^3)'$
+        operation: 套用乘积求导公式。
+        why: 为构造差函数单调性做准备。
+      source_ref: page_0138
+    - step_id: step_2
+      statement: 构造 h 并由导数符号得 h(1)>h(2)。
+      formula_trace:
+        from: $h(x)=f(x)g(x)-x^3$
+        to: $h^{\prime}(x)<0\Rightarrow h(1)>h(2)$
+        operation: 求导并在 $(0,+\infty)$ 上用单调递减。
+        why: 把导数不等式转成两个定点函数值不等式。
+      source_ref: page_0138
+    - step_id: step_3
+      statement: 化为目标差值上界并筛选选项。
+      formula_trace:
+        from: $h(1)>h(2)$
+        to: $f(2)g(2)-f(1)g(1)<7$
+        operation: 代入 $x=1,2$ 展开整理。
+        why: “可能值”题只需与 7 比较。
+      source_ref: page_0138
+teaching_card:
+  student_title: 用 $h=fg-x^3$ 的递减性做“可能值”筛选
+  what_it_trains: 训练由乘积求导构造差函数，再把函数不等式压缩成数值上界。
+  recognition_cues:
+    - 条件出现 $f^{\prime}g+fg^{\prime}$。
+    - 问题问某差值“可能为哪些数”。
+  normalization_moves:
+    - 先写成 $[fg]'<(x^3)'$。
+    - 构造 $h=fg-x^3$ 并判单调。
+    - 代入 1、2 得上界后对选项筛选。
+  common_failures:
+    - 把 $h(1)>h(2)$ 方向写反。
+    - 代入后把 $-1,-8$ 常数项算错。
+    - 误以为上界给出唯一值而非“可能值集合”。
+  similar_practice_query: 抽象函数 乘积求导 比较 [fg]' 与 (x^3)' 可能值筛选
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

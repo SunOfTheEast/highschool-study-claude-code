@@ -1,0 +1,200 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0034_ex26
+content_revision_id: mst_p0034_ex26-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0034_ex26.card.yaml
+stem: |-
+  若关于 $x$ 的不等式 $e^{ax}-x+\sin2ax>\frac{1}{e^{ax}}-\frac{1}{x}+\sin(\ln x^2)$ 在 $(0,+\infty)$ 上恒成立，则实数 $a$ 的取值范围是 ( )
+  A. $\left(\frac{2}{e},+\infty\right)$
+  B. $\left(\frac{1}{e},+\infty\right)$
+  C. $\left(-\infty,\frac{1}{e}\right)$
+  D. $\left(-\infty,\frac{2}{e}\right)$
+answer: |
+  B
+
+  构造 $F(t)=e^t-e^{-t}+\sin2t$。由 $F'(t)=e^t+e^{-t}+2\cos2t\ge2+2\cos2t=4\cos^2t\ge0$，且无平区间，$F$ 在 $\mathbb R$ 上严格递增。原不等式等价于 $F(ax)>F(\ln x)$ 对一切 $x>0$ 成立，于是等价于 $ax>\ln x$ 对一切 $x>0$ 成立。即 $a>\frac{\ln x}{x}$ 对一切 $x>0$ 成立；而 $\frac{\ln x}{x}$ 的最大值为 $1/e$，所以 $a>1/e$，选 B。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 构造能同时包住指数差和正弦项的同构函数。
+      max_score: 1
+    - step_id: step_2
+      description: 把右侧也统一成同一个函数的输入。
+      max_score: 1
+    - step_id: step_3
+      description: 证明 $F$ 单调递增。
+      max_score: 1
+    - step_id: step_4
+      description: 把恒成立条件化为 $a$ 与 $\ln x/x$ 的比较。
+      max_score: 1
+    - step_id: step_5
+      description: 求辅助函数最大值并处理严格不等号。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - 双曲正弦同构
+      - $\ln x/x$ 最大值
+      - 严格恒成立端点排除
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 三角复合结构
+    evidence:
+      - 原式两侧分别标准化为 $F(ax)$ 与 $F(\ln x)$，其中 $F(t)=e^t-e^{-t}+\sin2t$。
+      - 恒成立求参最终落到 $a>\max_{x>0}\frac{\ln x}{x}$。
+    normalization_moves_used:
+      - $1/e^{ax}$ 改写为 $e^{-ax}$。
+      - $x$ 与 $1/x$ 改写为 $e^{\ln x}$ 与 $e^{-\ln x}$。
+      - $\sin(\ln x^2)$ 改写为 $\sin(2\ln x)$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能把 $x,1/x$ 改写成 $e^{\ln x},e^{-\ln x}$，回补指数对数基础。
+      - 若学生不理解 $F$ 单调递增时 $F(ax)>F(\ln x)$ 等价于 $ax>\ln x$，回补导数单调极值基础。
+      - 若学生求不出 $\frac{\ln x}{x}$ 的最大值，回补导数单调极值基础。
+      - 若学生把 $a=1/e$ 也选入，回补不等式工具基础。
+  detail_terms:
+    - $e^t-e^{-t}+\sin2t$
+    - $e^t+e^{-t}\ge2$
+    - $1+\cos2t=2\cos^2t$
+    - $\ln x/x$
+    - 恒成立求参
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0034_ex26
+source_evidence:
+  source_refs:
+    - ref_id: page_0034
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md
+      role: problem_start
+      evidence: "lines 25-29: 例 26 题干与四个选项。"
+    - ref_id: page_0034_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md
+      role: solution
+      evidence: "line 31: 构造 $f(x)=e^x-e^{-x}+\\sin2x$，转为 $ax>\\ln x$ 恒成立。"
+    - ref_id: page_0034_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md
+      role: local_context
+      evidence: "lines 14-15 and 33: 本页强调双曲正弦/对数飘带作为单调函数隐藏数据。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0034.png
+      inspected: true
+      notes: 已核对原图：例 26 题干、选项与解析位置清楚；导数估计处原图存在连续加号式排版错误。
+  source_context: 本题承接 page_0034 开头的双曲正弦单调函数背景，把原不等式两侧统一成 $F(ax)$ 与 $F(\ln x)$，再用 $\ln x/x$ 的最大值处理恒成立求参。
+  source_influence:
+    - 题目要求不等式在 $(0,+\infty)$ 上恒成立时的 $a$ 取值范围，goal 取“求参数范围”。
+    - 源解的核心是构造严格递增的 $F(t)=e^t-e^{-t}+\sin2t$，而不是逐项估计原式。
+    - 严格不等式要求 $a>1/e$，不能取等号。
+  source_discrepancies:
+    - field: 例 26 解析中的导数估计排版
+      old_value: |
+        原图与 markdown 在 $2\sqrt{e^x\cdot e^{-x}}$ 后出现类似 `+ + 2\cos2x` 的排版。
+      corrected_value: |
+        按数学链条应读为 $e^x+e^{-x}+2\cos2x\ge2+2\cos2x=4\cos^2x\ge0$。
+      evidence_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md:31; mst26-full-marked-c20/images/page_0034.png
+original_problem:
+  stem: 若关于 $x$ 的不等式 $e^{ax}-x+\sin2ax>\frac{1}{e^{ax}}-\frac{1}{x}+\sin(\ln x^2)$ 在 $(0,+\infty)$ 上恒成立，则实数 $a$ 的取值范围是 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\left(\frac{2}{e},+\infty\right)$
+      text_latex: $\left(\frac{2}{e},+\infty\right)$
+    - label: B
+      text_raw: $\left(\frac{1}{e},+\infty\right)$
+      text_latex: $\left(\frac{1}{e},+\infty\right)$
+    - label: C
+      text_raw: $\left(-\infty,\frac{1}{e}\right)$
+      text_latex: $\left(-\infty,\frac{1}{e}\right)$
+    - label: D
+      text_raw: $\left(-\infty,\frac{2}{e}\right)$
+      text_latex: $\left(-\infty,\frac{2}{e}\right)$
+  answer: B
+  fidelity_notes:
+    - 已核对 page_0034 原图，题干为严格大于号，定义域为 $(0,+\infty)$。
+    - 原图和 markdown 的导数估计处均有排版瑕疵，但不影响将其修正为 $2+2\cos2x\ge0$ 的数学读法。
+solution:
+  source_solution_summary: |
+    构造 $F(t)=e^t-e^{-t}+\sin2t$。由 $F'(t)=e^t+e^{-t}+2\cos2t\ge2+2\cos2t=4\cos^2t\ge0$，且无平区间，$F$ 在 $\mathbb R$ 上严格递增。原不等式等价于 $F(ax)>F(\ln x)$ 对一切 $x>0$ 成立，于是等价于 $ax>\ln x$ 对一切 $x>0$ 成立。即 $a>\frac{\ln x}{x}$ 对一切 $x>0$ 成立；而 $\frac{\ln x}{x}$ 的最大值为 $1/e$，所以 $a>1/e$，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 构造能同时包住指数差和正弦项的同构函数。
+      formula_trace:
+        from: |
+          $e^{ax}-x+\sin2ax>\frac1{e^{ax}}-\frac1x+\sin(\ln x^2)$
+        to: |
+          $e^{ax}-e^{-ax}+\sin2ax>x-\frac1x+\sin(\ln x^2)$
+        operation: 把 $\frac1{e^{ax}}$ 移到左侧，把 $x$ 移到右侧，并把 $\frac1{e^{ax}}$ 写成 $e^{-ax}$。
+        why: 左侧形成 $e^t-e^{-t}+\sin2t$ 中的 $t=ax$ 部分。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md:31
+    - step_id: step_2
+      statement: 把右侧也统一成同一个函数的输入。
+      formula_trace:
+        from: |
+          $x-\frac1x+\sin(\ln x^2)$
+        to: |
+          $e^{\ln x}-e^{-\ln x}+\sin(2\ln x)=F(\ln x)$
+        operation: 用 $x=e^{\ln x}$、$1/x=e^{-\ln x}$、$\ln x^2=2\ln x$。
+        why: 原不等式就能写成 $F(ax)>F(\ln x)$。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md:31
+    - step_id: step_3
+      statement: 证明 $F$ 单调递增。
+      formula_trace:
+        from: |
+          $F'(t)=e^t+e^{-t}+2\cos2t$
+        to: |
+          $F'(t)\ge2+2\cos2t=4\cos^2t\ge0$
+        operation: 用 $e^t+e^{-t}\ge2$，再用 $1+\cos2t=2\cos^2t$。
+        why: 单调性允许把 $F(ax)>F(\ln x)$ 转成输入大小 $ax>\ln x$。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md:31
+    - step_id: step_4
+      statement: 把恒成立条件化为 $a$ 与 $\ln x/x$ 的比较。
+      formula_trace:
+        from: |
+          $F(ax)>F(\ln x)\quad (x>0)$
+        to: |
+          $ax>\ln x\quad (x>0)\Rightarrow a>\frac{\ln x}{x}\quad (x>0)$
+        operation: 利用 $F$ 严格递增，并因为 $x>0$ 可同除以 $x$。
+        why: 求 $a$ 的最小下界变成求 $\frac{\ln x}{x}$ 的最大值。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md:31
+    - step_id: step_5
+      statement: 求辅助函数最大值并处理严格不等号。
+      formula_trace:
+        from: |
+          $\phi(x)=\frac{\ln x}{x}$
+        to: |
+          $\phi'(x)=\frac{1-\ln x}{x^2}$，最大值 $\phi(e)=\frac1e$
+        operation: 求导得 $x<e$ 时增、$x>e$ 时减，最大点为 $x=e$。
+        why: 因为原题是严格大于，$a$ 必须满足 $a>1/e$，对应选项 B。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md:31
+teaching_card:
+  student_title: 把两边统一成同一个 $e^t-e^{-t}+\sin2t$
+  what_it_trains: 含 $e^{ax}$、$1/e^{ax}$、$x$、$1/x$ 和 $\sin(\ln x^2)$ 的不等式，不要逐项硬比；把右边的 $x$ 看成 $e^{\ln x}$，两边就变成同一个递增函数的两个输入。
+  recognition_cues:
+    - 一边出现 $e^{ax}$ 与 $1/e^{ax}$，另一边出现 $x$ 与 $1/x$。
+    - $\sin2ax$ 与 $\sin(\ln x^2)$ 共享“二倍输入”结构。
+    - 题目问 $a$ 的恒成立范围，最后常常落到 $a$ 与 $\ln x/x$ 的最大值比较。
+  normalization_moves:
+    - 把 $1/e^{ax}$ 写成 $e^{-ax}$。
+    - 把 $x$、$1/x$ 写成 $e^{\ln x}$、$e^{-\ln x}$。
+    - 把 $\ln x^2$ 写成 $2\ln x$。
+    - 用 $e^t+e^{-t}\ge2$ 和 $1+\cos2t=2\cos^2t$ 证明外层函数递增。
+  common_failures:
+    - 只看到指数项，没有把 $x$ 统一成 $e^{\ln x}$。
+    - 把 $\sin(\ln x^2)$ 误当成 $\sin^2(\ln x)$。
+    - 求出 $a\ge1/e$ 后忘记原题是严格大于。
+    - 在导数估计中停在 $2+2\cos2t$，没有化成 $4\cos^2t\ge0$。
+  similar_practice_query: 双曲正弦 三角同构 恒成立 求参数 ln x / x 最大值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0034 原图确认例 26 导数估计处有连续加号式排版问题；已按 $2+2\cos2t=4\cos^2t\ge0$ 修正，数学含义明确，不需要人工决策。
+    - 严格区间为 $(1/e,+\infty)$；$a=1/e$ 在 $x=e$ 处无法满足严格大于。

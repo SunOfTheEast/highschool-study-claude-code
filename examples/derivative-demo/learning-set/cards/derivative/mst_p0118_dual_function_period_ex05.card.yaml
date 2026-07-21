@@ -1,0 +1,217 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0118_dual_function_period_ex05
+content_revision_id: mst_p0118_dual_function_period_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0118_dual_function_period_ex05.card.yaml
+stem: |-
+  （2024 · 广陵区月考 · 多选）已知函数 $f(x)$ 及其导函数 $f^{\prime}(x)$ 的定义域均为 $\\mathbf{R}$，且满足 $f(x)=2-f(6-x)$，$f^{\prime}(x)=2-f^{\prime}(4-x)$，$f^{\prime}(3)=-1$，$g(x)=f(3-x)+5$，则 $\\sum_{i=1}^{18} g^{\prime}(k)=$（  ）
+  A. $-18$
+  B. $-20$
+  C. $88$
+  D. $90$
+answer: |
+  B
+
+  由 $f(x)=2-f(6-x)$ 得
+  $f^{\prime}(x)=f^{\prime}(6-x)$，所以 $f^{\prime}$ 关于 $x=3$ 轴对称。
+  又 $f^{\prime}(x)=2-f^{\prime}(4-x)$，即
+  $f^{\prime}(x)+f^{\prime}(4-x)=2$，说明 $f^{\prime}$ 关于点 $(2,1)$ 中心对称。
+  轴对称与中心对称叠加可得周期 $4$，故 $f^{\prime},f$ 都以 $4$ 为周期。
+  由 $g(x)=f(3-x)+5$ 得
+  $g^{\prime}(x)=-f^{\prime}(3-x)$，再用
+  $f^{\prime}(3-x)+f^{\prime}(1+x)=2$ 得
+  $g^{\prime}(x)=f^{\prime}(1+x)-2$。
+  于是
+  \[
+    \sum_{k=1}^{18}g^{\prime}(k)
+    =\sum_{k=1}^{18}\bigl(f^{\prime}(k+1)-2\bigr)
+    =\sum_{j=2}^{19}f^{\prime}(j)-36.
+  \]
+  源页给出 $f^{\prime}(2)=f^{\prime}(4)=\cdots=f^{\prime}(18)=1$、
+  $f^{\prime}(2)+f^{\prime}(3)+f^{\prime}(4)+f^{\prime}(5)=4$，按周期分组可得
+  $\sum_{j=2}^{19}f^{\prime}(j)=16$，故总和为 $16-36=-20$，选 B。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 用两条函数关系锁定 $f^{\prime}$ 的轴对称与中心对称。
+      max_score: 1
+    - step_id: step_2
+      description: 由双对称叠加得到周期 $4$。
+      max_score: 1
+    - step_id: step_3
+      description: 把 $g^{\prime}$ 化为 $f^{\prime}$，再转为等差平移索引求和。
+      max_score: 1
+    - step_id: step_4
+      description: 按周期分组计算并得出选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level:
+      - part_id: item_1
+        goal: 数值求值
+        target: 计算 $\\sum_{k=1}^{18} g^{\prime}(k)$ 的具体数值
+        result: 见 source_solution_summary
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 数形结合
+    subroute:
+      - 双对称合周期
+      - 链式求导换元
+      - 周期分组求和
+  structure:
+    primary: 抽象函数结构
+    secondary:
+      - 对称结构
+      - 同构结构
+    evidence:
+      - $f^{\prime}(x)=f^{\prime}(6-x)$ 给出轴对称。
+      - $f^{\prime}(x)+f^{\prime}(4-x)=2$ 给出中心对称。
+      - $g^{\prime}(x)=f^{\prime}(1+x)-2$ 将问题同构到周期函数求和。
+    normalization_moves_used:
+      - 把原函数关系先求导，统一到导函数层面。
+      - 以“轴+中心”组合直接识别周期。
+      - 将 $g^{\prime}$ 和式改写为平移后的 $f^{\prime}$ 和式。
+      - 按 4 项一组做周期求和。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $f(x)=2-f(6-x)$ 求导，回补导数运算与几何意义。
+      - 若学生看不出“轴对称+中心对称”可推出周期，回补函数性质与图像。
+      - 若学生在 $g^{\prime}(x)=-f^{\prime}(3-x)$ 处链式符号出错，回补导数运算与几何意义。
+      - 若学生分组求和时周期索引混乱，回补数列基础。
+  detail_terms:
+    - $f(x)=2-f(6-x)$
+    - $f^{\prime}(x)=2-f^{\prime}(4-x)$
+    - $g(x)=f(3-x)+5$
+    - $g^{\prime}(x)=f^{\prime}(1+x)-2$
+    - 答案 B（$-20$）
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0118_dual_function_period_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0118
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0118/page_0118.md
+      role: problem_start
+      evidence: lines 32-38 给出例 5 题头、A-D 选项、完整解析与答案 B。
+    - ref_id: page_0118_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0118/page_0118.md
+      role: local_context
+      evidence: line 28 起进入“双函数原函数导函数周期性构造”小节，是例 5 的方法背景。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0118.png
+      inspected: true
+      notes: 已核对 page_0118 图像：例 5 题干、选项、解析与“故选 B”均可见。
+  source_context: 本卡处理 page_0118 起头并在本页解完的例 5，多选题。
+  source_influence:
+    - 保留由 $f(x)=2-f(6-x)$ 推得 $f^{\prime}(x)=f^{\prime}(6-x)$（轴对称）路线。
+    - 保留由 $f^{\prime}(x)=2-f^{\prime}(4-x)$ 推得关于点 $(2,1)$ 的中心对称并合成周期 4。
+    - 保留 $g^{\prime}(x)=-f^{\prime}(3-x)=f^{\prime}(1+x)-2$ 的代换。
+    - 保留按周期分组求和，得到总和 $-20$。
+  source_discrepancies:
+    - 解析末行排版把若干 $f^{\prime}(k)$ 显示成 $f(k)$；结合前文推导可判定应为导函数值求和，结论仍为 $-20$。
+original_problem:
+  stem: （2024 · 广陵区月考 · 多选）已知函数 $f(x)$ 及其导函数 $f^{\prime}(x)$ 的定义域均为 $\\mathbf{R}$，且满足 $f(x)=2-f(6-x)$，$f^{\prime}(x)=2-f^{\prime}(4-x)$，$f^{\prime}(3)=-1$，$g(x)=f(3-x)+5$，则 $\\sum_{i=1}^{18} g^{\prime}(k)=$（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $-18$
+      text_latex: $-18$
+    - label: B
+      text_raw: $-20$
+      text_latex: $-20$
+    - label: C
+      text_raw: $88$
+      text_latex: $88$
+    - label: D
+      text_raw: $90$
+      text_latex: $90$
+  answer: B
+  fidelity_notes:
+    - 题干是多选格式，但源页解析给出唯一正确项 B。
+    - 例 5 在 page_0118 同页完整结束，无跨页补充。
+solution:
+  source_solution_summary: |
+    由 $f(x)=2-f(6-x)$ 得
+    $f^{\prime}(x)=f^{\prime}(6-x)$，所以 $f^{\prime}$ 关于 $x=3$ 轴对称。
+    又 $f^{\prime}(x)=2-f^{\prime}(4-x)$，即
+    $f^{\prime}(x)+f^{\prime}(4-x)=2$，说明 $f^{\prime}$ 关于点 $(2,1)$ 中心对称。
+    轴对称与中心对称叠加可得周期 $4$，故 $f^{\prime},f$ 都以 $4$ 为周期。
+    由 $g(x)=f(3-x)+5$ 得
+    $g^{\prime}(x)=-f^{\prime}(3-x)$，再用
+    $f^{\prime}(3-x)+f^{\prime}(1+x)=2$ 得
+    $g^{\prime}(x)=f^{\prime}(1+x)-2$。
+    于是
+    \[
+      \sum_{k=1}^{18}g^{\prime}(k)
+      =\sum_{k=1}^{18}\bigl(f^{\prime}(k+1)-2\bigr)
+      =\sum_{j=2}^{19}f^{\prime}(j)-36.
+    \]
+    源页给出 $f^{\prime}(2)=f^{\prime}(4)=\cdots=f^{\prime}(18)=1$、
+    $f^{\prime}(2)+f^{\prime}(3)+f^{\prime}(4)+f^{\prime}(5)=4$，按周期分组可得
+    $\sum_{j=2}^{19}f^{\prime}(j)=16$，故总和为 $16-36=-20$，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 用两条函数关系锁定 $f^{\prime}$ 的轴对称与中心对称。
+      formula_trace:
+        from: |
+          $f(x)=2-f(6-x),\qquad f^{\prime}(x)=2-f^{\prime}(4-x)$
+        to: |
+          $f^{\prime}(x)=f^{\prime}(6-x),\qquad f^{\prime}(x)+f^{\prime}(4-x)=2$
+        operation: 第一式求导；第二式直接改写为和为常数。
+        why: 分别对应“关于 $x=3$ 轴对称”和“关于 $(2,1)$ 中心对称”。
+      source_ref: page_0118
+    - step_id: step_2
+      statement: 由双对称叠加得到周期 $4$。
+      formula_trace:
+        from: $f^{\prime}$ 关于 $x=3$ 对称且关于 $(2,1)$ 对称
+        to: $f^{\prime}(x+4)=f^{\prime}(x)$
+        operation: 利用轴对称与中心对称间距为 1 的组合周期结论。
+        why: 周期性是后续分组求和的主干。
+      source_ref: page_0118
+    - step_id: step_3
+      statement: 把 $g^{\prime}$ 化为 $f^{\prime}$，再转为等差平移索引求和。
+      formula_trace:
+        from: |
+          $g(x)=f(3-x)+5,\quad g^{\prime}(x)=-f^{\prime}(3-x),\quad f^{\prime}(3-x)+f^{\prime}(1+x)=2$
+        to: |
+          $g^{\prime}(x)=f^{\prime}(1+x)-2,\quad
+          \sum_{k=1}^{18}g^{\prime}(k)=\sum_{j=2}^{19}f^{\prime}(j)-36$
+        operation: 先用链式求导，再以对称恒等式代换。
+        why: 将目标和式统一到一个周期函数 $f^{\prime}$ 上。
+      source_ref: page_0118
+    - step_id: step_4
+      statement: 按周期分组计算并得出选项。
+      formula_trace:
+        from: $f^{\prime}(2)+f^{\prime}(3)+f^{\prime}(4)+f^{\prime}(5)=4$，且周期为 4
+        to: $\sum_{j=2}^{19}f^{\prime}(j)=16,\ \sum_{k=1}^{18}g^{\prime}(k)=16-36=-20$
+        operation: 把 18 项拆成 4 个完整周期加 2 项并求和。
+        why: 周期和固定后，求和可快速收敛到常数。
+      source_ref: page_0118
+teaching_card:
+  student_title: 双对称先出周期，再做导函数平移求和
+  what_it_trains: 训练在双函数场景下把“对称关系→周期→分组求和”串成一条稳定计算链。
+  recognition_cues:
+    - 题干同时给 $f(x)$ 与 $f^{\prime}(x)$ 的对称关系，优先尝试合成周期。
+    - 目标是 $\\sum g^{\prime}(k)$，应先把 $g^{\prime}$ 统一改写成 $f^{\prime}$。
+    - 给出单点值 $f^{\prime}(3)=-1$ 与周期关系，通常是为周期块求和服务。
+  normalization_moves:
+    - 先把 $f$ 关系求导，提取 $f^{\prime}$ 对称信息。
+    - 由双对称判周期 4。
+    - 用 $g^{\prime}(x)=-f^{\prime}(3-x)$ 与对称恒等式化成 $f^{\prime}(1+x)-2$。
+    - 把长和式按周期分组后一次算完。
+  common_failures:
+    - 把 $[f(6-x)]^{\prime}$ 的负号漏掉。
+    - 只得到对称，不继续提炼周期。
+    - 把 $g^{\prime}(x)=-f^{\prime}(3-x)$ 错写成 $f^{\prime}(3-x)$。
+    - 周期分组时把端点 $2,19$ 的对应项错配。
+  similar_practice_query: 双函数 导函数 对称 周期 求和 g^{\prime}(k)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0118 图像；例 5 题干、选项、解析与答案 B 一致。
+    - 解析末行存在排版符号缺失，已在 source_discrepancies 记录并按前文推导核对结论。

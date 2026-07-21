@@ -1,0 +1,196 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0123_power_construct_ex03
+content_revision_id: mst_p0123_power_construct_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0123_power_construct_ex03.card.yaml
+stem: |-
+  （2023 · 吉林期末）函数 $f(x)$ 是定义在区间 $(0,+\infty)$ 上可导函数，其导函数为 $f^{\prime}(x)$ 且满足 $x f^{\prime}(x)+2f(x)>0$，则不等式 $\frac{(x+2023)f(x+2023)}{5}<\frac{5f(5)}{x+2023}$ 的解集为（  ）
+  A. $\{x\mid x>-2018\}$
+  B. $\{x\mid -2023<x<-2018\}$
+  C. $\{x\mid 0<x<2023\}$
+  D. $\{x\mid x<-2023\}$
+answer: |
+  B
+
+  由定义域可知原不等式中必须有 $x+2023>0$。设
+  $g(t)=t^2f(t)$，$t>0$，则
+  $g'(t)=t[2f(t)+t f'(t)]$。题设给出
+  $t f'(t)+2f(t)>0$，且 $t>0$，所以 $g'(t)>0$，
+  $g$ 在 $(0,+\infty)$ 上单调递增。原不等式两边乘以正数
+  $5(x+2023)$，得
+  $(x+2023)^2f(x+2023)<25f(5)$，即
+  $g(x+2023)<g(5)$。由 $g$ 递增，得到
+  $0<x+2023<5$，故 $-2023<x<-2018$，选 B。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 先保留定义域限制。
+      max_score: 1
+    - step_id: step_2
+      description: 用 $x f^{\prime}(x)+2f(x)$ 构造 $x^2f(x)$。
+      max_score: 1
+    - step_id: step_3
+      description: 把原不等式化为 $g$ 的函数值比较。
+      max_score: 1
+    - step_id: step_4
+      description: 由递增性解出自变量范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式求解
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - 幂函数乘法构造
+      - 定义域先行
+      - 平移代入
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 抽象函数结构
+    evidence:
+      - $x f^{\prime}(x)+2f(x)$ 对应 $(x^2f(x))^{\prime}$ 的正因子形式。
+      - 原不等式乘正数后成为 $(x+2023)^2f(x+2023)<25f(5)$。
+      - $x+2023$ 必须落在 $(0,+\infty)$ 上。
+    normalization_moves_used:
+      - 先写出 $x+2023>0$。
+      - 构造 $g(t)=t^2f(t)$。
+      - 把题目不等式变成 $g(x+2023)<g(5)$。
+      - 由递增性推出 $0<x+2023<5$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生漏掉 $x+2023>0$，回补函数三要素与定义域。
+      - 若学生不会计算 $(x^2f(x))^{\prime}$，回补导数运算与几何意义。
+      - 若学生乘不等式时不判断正负，回补不等式工具基础。
+      - 若学生从 $0<x+2023<5$ 解区间出错，回补代数恒等变形。
+  detail_terms:
+    - $x f^{\prime}(x)+2f(x)>0$
+    - $g(x)=x^2f(x)$
+    - $x+2023>0$
+    - $g(x+2023)<g(5)$
+    - $-2023<x<-2018$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0123_power_construct_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0123
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0123/page_0123.md
+      role: problem_start
+      evidence: lines 42-44 give 例 3 题头、stem and choices A-B; the problem continues across the page boundary.
+    - ref_id: page_0124
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0124/page_0124.md
+      role: continuation
+      evidence: lines 14-17 give choices C-D, the full解析 and answer B before 例 4 starts at line 19.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0123.png
+      inspected: true
+      notes: 已核对 page_0123 页图：例 3 从页底起头，题干与选项 A、B 清楚，续到下一页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0124.png
+      inspected: true
+      notes: 已核对 page_0124 页图：页顶承接例 3 的 C、D 选项和完整解析，答案为 B；随后另起例 4，不纳入本卡。
+  source_context: 例 3 是幂函数基础构造中跨 page_0123-page_0124 的题，使用 $x f^{\prime}(x)+2f(x)>0$ 构造 $g(x)=x^2f(x)$ 的递增性。
+  source_influence:
+    - 保留源页跨页补齐 C、D 选项与答案 B。
+    - 保留源页构造 $g(x)=x^2 f(x)$，由 $g^{\prime}(x)=x[2f(x)+xf^{\prime}(x)]>0$ 得单调递增。
+    - 保留源页先由定义域得到 $x+2023>0$，再把原不等式化为 $g(x+2023)<g(5)$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 吉林期末）函数 $f(x)$ 是定义在区间 $(0,+\infty)$ 上可导函数，其导函数为 $f^{\prime}(x)$ 且满足 $x f^{\prime}(x)+2f(x)>0$，则不等式 $\frac{(x+2023)f(x+2023)}{5}<\frac{5f(5)}{x+2023}$ 的解集为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\{x\mid x>-2018\}$
+      text_latex: $\{x\mid x>-2018\}$
+    - label: B
+      text_raw: $\{x\mid -2023<x<-2018\}$
+      text_latex: $\{x\mid -2023<x<-2018\}$
+    - label: C
+      text_raw: $\{x\mid 0<x<2023\}$
+      text_latex: $\{x\mid 0<x<2023\}$
+    - label: D
+      text_raw: $\{x\mid x<-2023\}$
+      text_latex: $\{x\mid x<-2023\}$
+  answer: B
+  fidelity_notes:
+    - 本题为单选题，题头和 A-B 位于 page_0123，C-D 与解析续到 page_0124 顶部。
+    - page_0124 line 19 起为例 4 题头，未纳入本卡。
+solution:
+  source_solution_summary: |
+    由定义域可知原不等式中必须有 $x+2023>0$。设
+    $g(t)=t^2f(t)$，$t>0$，则
+    $g'(t)=t[2f(t)+t f'(t)]$。题设给出
+    $t f'(t)+2f(t)>0$，且 $t>0$，所以 $g'(t)>0$，
+    $g$ 在 $(0,+\infty)$ 上单调递增。原不等式两边乘以正数
+    $5(x+2023)$，得
+    $(x+2023)^2f(x+2023)<25f(5)$，即
+    $g(x+2023)<g(5)$。由 $g$ 递增，得到
+    $0<x+2023<5$，故 $-2023<x<-2018$，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 先保留定义域限制。
+      formula_trace:
+        from: |
+          $f(x+2023)$ 与分母 $x+2023$
+        to: |
+          $x+2023>0$
+        operation: 由 $f$ 的定义域 $(0,+\infty)$ 和分母非零确定。
+        why: 后面乘以 $x+2023$ 时需要知道它为正，不改变不等号方向。
+      source_ref: page_0124
+    - step_id: step_2
+      statement: 用 $x f^{\prime}(x)+2f(x)$ 构造 $x^2f(x)$。
+      formula_trace:
+        from: |
+          $t f'(t)+2f(t)>0,\qquad t>0$
+        to: |
+          $g(t)=t^2f(t),\quad g'(t)=t[2f(t)+t f'(t)]>0$
+        operation: 乘上正因子 $t$，配成乘积导数。
+        why: 这给出 $g$ 在 $(0,+\infty)$ 上递增，是比较函数值的核心。
+      source_ref: page_0124
+    - step_id: step_3
+      statement: 把原不等式化为 $g$ 的函数值比较。
+      formula_trace:
+        from: |
+          $\frac{(x+2023)f(x+2023)}{5}<\frac{5f(5)}{x+2023}$
+        to: |
+          $(x+2023)^2f(x+2023)<25f(5)$，即 $g(x+2023)<g(5)$
+        operation: 两边乘以正数 $5(x+2023)$，再用 $g(t)=t^2f(t)$ 替换。
+        why: 目标形式与辅助函数完全一致，便于用单调性解不等式。
+      source_ref: page_0124
+    - step_id: step_4
+      statement: 由递增性解出自变量范围。
+      formula_trace:
+        from: |
+          $g(x+2023)<g(5)$，且 $g$ 在 $(0,+\infty)$ 上递增
+        to: |
+          $0<x+2023<5,\qquad -2023<x<-2018$
+        operation: 递增函数保序，并合并定义域约束。
+        why: 这正对应选项 B。
+      source_ref: page_0124
+teaching_card:
+  student_title: 把 $xf^{\prime}+2f$ 打包成 $x^2f$，再别忘定义域
+  what_it_trains: 训练在幂函数乘法构造中同步处理定义域、正因子乘法和辅助函数单调比较。
+  recognition_cues:
+    - 条件中 $xf^{\prime}(x)+2f(x)$，提示构造 $x^2f(x)$。
+    - 目标式里出现 $x+2023$ 和分母，先检查 $x+2023>0$。
+    - 右侧含 $5f(5)$，提示比较点是 $g(5)$。
+  normalization_moves:
+    - 令 $t=x+2023$，先要求 $t>0$。
+    - 设 $g(t)=t^2f(t)$，由 $g^{\prime}(t)>0$ 得递增。
+    - 把原式乘成 $g(t)<g(5)$。
+    - 用递增性得到 $0<t<5$，再平移回 $x$。
+  common_failures:
+    - 忘记 $x+2023$ 必须为正，直接把 $g(x+2023)<g(5)$ 解成 $x<-2018$。
+    - 把 $xf^{\prime}+2f$ 错配成 $xf$ 或 $x^3f$。
+    - 乘以 $x+2023$ 时没有说明不等号方向。
+    - 只选 A，因为只看到 $x<-2018$，漏掉定义域下界。
+  similar_practice_query: xf^{\prime}+2f x^2f 单调 定义域 平移 不等式解集
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0123-page_0124 图片；例 3 跨页完整，C-D 选项和答案 B 在 page_0124 顶部。

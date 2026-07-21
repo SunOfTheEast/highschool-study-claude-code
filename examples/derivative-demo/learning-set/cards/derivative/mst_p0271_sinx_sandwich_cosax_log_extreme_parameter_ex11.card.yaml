@@ -1,0 +1,213 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0271_sinx_sandwich_cosax_log_extreme_parameter_ex11
+content_revision_id: mst_p0271_sinx_sandwich_cosax_log_extreme_parameter_ex11-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0271_sinx_sandwich_cosax_log_extreme_parameter_ex11.card.yaml
+stem: |-
+  （2023 · 新高考Ⅱ）
+  1. 证明：当 $0<x<1$ 时，$x-x^2<\sin x<x$。
+  2. 已知函数 $f(x)=\cos ax-\ln(1-x^2)$，若 $x=0$ 为 $f(x)$ 的极大值点，求 $a$ 的取值范围。
+answer: |-
+  第(1)问：成立。第(2)问：$a\in(-\infty,-\sqrt2)\cup(\sqrt2,+\infty)$。
+
+  第(1)问分别证明两边：设 $g=x-x^2-\sin x$，则 $g^{\prime\prime}=-2+\sin x<0$， $g^\prime<g^\prime(0)=0$，从而 $g<g(0)=0$，得 $x-x^2<\sin x$；再设 $h=x-\sin x$， $h^\prime=1-\cos x>0$，得 $\sin x<x$。第(2)问 $f^\prime(x)=-a\sin ax+\frac{2x}{1-x^2}$， $f^{\prime\prime}(0)=2-a^2$。若 $2-a^2>0$，则 0 右侧 $f$ 会递增，不能是极大值；若 $2-a^2<0$，则 0 附近左增右减， 满足极大值；若 $2-a^2=0$，由偶性只看 $a=\sqrt2$， 此时 $0<x<1$ 上 $f^\prime(x)>-2x+\frac{2x}{1-x^2}>0$， 仍与极大值矛盾。因此 $|a|>\sqrt2$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 证明左侧不等式 $x-x^2<\sin x$。
+      max_score: 1
+    - step_id: step_2
+      description: 证明右侧不等式 $\sin x<x$。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问：计算极值点的二阶信息。
+      max_score: 1
+    - step_id: step_4
+      description: 排除 $2-a^2>0$。
+      max_score: 1
+    - step_id: step_5
+      description: 保留 $2-a^2<0$。
+      max_score: 1
+    - step_id: step_6
+      description: 排除边界 $a=\pm\sqrt2$。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 不等式证明
+        target: 第 1 问
+        result: $0<x<1$ 时 $x-x^2<\sin x<x$。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $a\in(-\infty,-\sqrt2)\cup(\sqrt2,+\infty)$。
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 显隐点探路
+      - 含参数分类讨论
+      - 充分/必要性探路
+    subroute:
+      - 极大值二阶界定
+      - 边界情形排除
+      - 泰勒最低偶次项视角
+      - 三角基础不等式回用
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 局部逼近结构
+      - 不等式工具结构
+      - 对称结构
+    evidence:
+      - $x-x^2<\sin x<x$
+      - $\cos ax-\ln(1-x^2)$
+      - $f^{\prime\prime}(0)=2-a^2$
+      - $a=\pm\sqrt2$
+      - 偶函数
+    normalization_moves_used:
+      - 用两个差函数证明三角夹逼。
+      - 把“0 是极大值点”翻译成 0 附近左增右减。
+      - 先看 $f^{\prime\prime}(0)$ 的正负。
+      - 边界 $f^{\prime\prime}(0)=0$ 时继续用第(1)问的三角估计排除。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会证明 $x-x^2<\sin x<x$，回补三角函数基础。
+      - 若学生不会求 $\cos ax$ 和 $\ln(1-x^2)$ 的导数，回补导数运算与几何意义。
+      - 若学生不知道二阶导如何界定极值，回补导数单调极值基础。
+      - 若学生忽略 $x=0$ 附近局部性，回补函数性质与图像。
+      - 若学生边界分类混乱，回补代数恒等变形。
+  detail_terms:
+    - $x-x^2<\sin x<x$
+    - $\cos ax-\ln(1-x^2)$
+    - 极大值点
+    - $f^{\prime\prime}(0)=2-a^2$
+    - $a=\pm\sqrt2$
+    - 泰勒极值界定
+parts: &a1
+  - id: "1"
+    text: 证明：当 $0<x<1$ 时，$x-x^2<\sin x<x$。
+  - id: "2"
+    text: 已知函数 $f(x)=\cos ax-\ln(1-x^2)$，若 $x=0$ 为 $f(x)$ 的极大值点，求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0271_sinx_sandwich_cosax_log_extreme_parameter_ex11
+source_evidence:
+  source_refs:
+    - ref_id: page_0271_section_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0271/page_0271.md
+      role: local_context
+      evidence: page_0271 处于“极大值和极小值的界定 / 高阶导函数本质解读”，说明极大值通常需要二阶导负，或更高阶偶次项负。
+    - ref_id: page_0271_ex11_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0271/page_0271.md
+      role: problem_start
+      evidence: page_0271 给出例11题头：第(1)问证明 $0<x<1$ 时 $x-x^2<\sin x<x$；第(2)问 $f(x)=\cos ax-\ln(1-x^2)$，若 $x=0$ 为极大值点，求 $a$ 的取值范围。
+    - ref_id: page_0271_ex11_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0271/page_0271.md
+      role: solution
+      evidence: page_0271 例11解析完成第(1)问，并给出第(2)问背景分析：$f^\prime(0)=0$，$f^{\prime\prime}(0)=2-a^2$。
+    - ref_id: page_0272_ex11_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0272/page_0272.md
+      role: solution
+      evidence: page_0272 页首延续例11：分 $2-a^2>0$、$2-a^2<0$、$2-a^2=0$ 三类，排除边界 $a=\pm\sqrt2$，得到 $a\in(-\infty,-\sqrt2)\cup(\sqrt2,+\infty)$。
+    - ref_id: page_0272_next_example_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0272/page_0272.md
+      role: local_context
+      evidence: page_0272 后半页进入“利用泰勒展开式的界定极值”并另起例10，说明 page_0271 例11在页首闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0271.png
+      inspected: true
+      notes: 已核对页图：例11题头与解析起于 page_0271 中下部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0272.png
+      inspected: true
+      notes: 已核对页图：page_0272 页首为例11续解，随后进入新小节和下一题。
+  source_context: 本卡处理 page_0271 起头、page_0272 页首续完的例11；page_0272 后续例10排除。
+  source_influence:
+    - 保留第(1)问的两个差函数证明：$x-x^2-\sin x<0$ 与 $x-\sin x>0$。
+    - 保留第(2)问的二阶导界定：$f^{\prime\prime}(0)=2-a^2$。
+    - 保留三类讨论：二阶导正则矛盾，二阶导负则成立，二阶导零的边界用更细局部分析排除。
+    - 保留 source 的泰勒补充理解：最低偶次项系数负对应极大值。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 新高考Ⅱ）
+  parts: *a1
+  choices: []
+  answer: 第(1)问：成立。第(2)问：$a\in(-\infty,-\sqrt2)\cup(\sqrt2,+\infty)$。
+  fidelity_notes:
+    - 无选项。
+    - 第(2)问函数定义域为 $(-1,1)$。
+solution:
+  source_solution_summary: 第(1)问分别证明两边：设 $g=x-x^2-\sin x$，则 $g^{\prime\prime}=-2+\sin x<0$， $g^\prime<g^\prime(0)=0$，从而 $g<g(0)=0$，得 $x-x^2<\sin x$；再设 $h=x-\sin x$， $h^\prime=1-\cos x>0$，得 $\sin x<x$。第(2)问 $f^\prime(x)=-a\sin ax+\frac{2x}{1-x^2}$， $f^{\prime\prime}(0)=2-a^2$。若 $2-a^2>0$，则 0 右侧 $f$ 会递增，不能是极大值；若 $2-a^2<0$，则 0 附近左增右减， 满足极大值；若 $2-a^2=0$，由偶性只看 $a=\sqrt2$， 此时 $0<x<1$ 上 $f^\prime(x)>-2x+\frac{2x}{1-x^2}>0$， 仍与极大值矛盾。因此 $|a|>\sqrt2$。
+  key_steps:
+    - step_id: step_1
+      statement: 证明左侧不等式 $x-x^2<\sin x$。
+      formula_trace:
+        from: $g(x)=x-x^2-\sin x$
+        to: $g^{\prime\prime}(x)=-2+\sin x<0$，$g(x)<g(0)=0$
+        operation: 二次求导判单调。
+        why: 证明 $g$ 在 $(0,1)$ 上为负。
+      source_ref: page_0271_ex11_solution_start
+    - step_id: step_2
+      statement: 证明右侧不等式 $\sin x<x$。
+      formula_trace:
+        from: $h(x)=x-\sin x$
+        to: $h^\prime(x)=1-\cos x>0$，$h(x)>h(0)=0$
+        operation: 构造差函数并判单调。
+        why: 证明 $x-\sin x$ 为正。
+      source_ref: page_0271_ex11_solution_start
+    - step_id: step_3
+      statement: 第(2)问：计算极值点的二阶信息。
+      formula_trace:
+        from: $f(x)=\cos ax-\ln(1-x^2)$
+        to: $f^\prime(0)=0$，$f^{\prime\prime}(0)=2-a^2$
+        operation: 求导并代入 0。
+        why: 极大值点的局部形态由最低非零偶次项决定。
+      source_ref: page_0271_ex11_solution_start
+    - step_id: step_4
+      statement: 排除 $2-a^2>0$。
+      formula_trace:
+        from: $-\sqrt2<a<\sqrt2$
+        to: 存在 $t_1>0$，$0<x<t_1$ 时 $f^\prime(x)>0$
+        operation: 由 $f^{\prime\prime}(0)>0$ 推出右侧递增。
+        why: 右侧递增与 $x=0$ 为极大值点矛盾。
+      source_ref: page_0272_ex11_solution_continuation
+    - step_id: step_5
+      statement: 保留 $2-a^2<0$。
+      formula_trace:
+        from: $a<-\sqrt2$ 或 $a>\sqrt2$
+        to: 0 附近 $f^\prime$ 单调递减，左侧 $f^\prime>0$，右侧 $f^\prime<0$
+        operation: 用二阶导负控制一阶导局部单调。
+        why: 这正是 $x=0$ 为极大值点的局部形态。
+      source_ref: page_0272_ex11_solution_continuation
+    - step_id: step_6
+      statement: 排除边界 $a=\pm\sqrt2$。
+      formula_trace:
+        from: $a=\sqrt2$ 时 $f^\prime(x)=-\sqrt2\sin(\sqrt2x)+\frac{2x}{1-x^2}$
+        to: $0<x<1$ 时 $f^\prime(x)>-2x+\frac{2x}{1-x^2}>0$
+        operation: 用 $\sin u<u$ 估计边界情形。
+        why: 边界时右侧仍递增，不是极大值；由偶性排除 $-\sqrt2$。
+      source_ref: page_0272_ex11_solution_continuation
+teaching_card:
+  student_title: 极大值先看二阶，边界再用夹逼排掉
+  what_it_trains: 训练极大值参数界定：二阶导负给出主体范围，二阶导为零的边界必须单独检查。
+  recognition_cues:
+    - 题目明确说 $x=0$ 是极大值点。
+    - $f^\prime(0)=0$ 自动成立，关键是 $f^{\prime\prime}(0)=2-a^2$。
+    - 边界 $a=\pm\sqrt2$ 时二阶导为 0，不能直接收进答案。
+  normalization_moves:
+    - 先证明并保存 $x-x^2<\sin x<x$。
+    - 第(2)问先用二阶导分三类。
+    - 对 $|a|>\sqrt2$ 证明局部左增右减。
+    - 对 $|a|=\sqrt2$ 用三角夹逼排除。
+  common_failures:
+    - 把 $f^{\prime\prime}(0)<0$ 当成充要，忘记检查 $f^{\prime\prime}(0)=0$。
+    - 把边界 $a=\pm\sqrt2$ 错误纳入答案。
+    - 第(1)问证明完没有在第(2)问边界分析中回用。
+    - 忽略 $f(x)$ 关于 $a$ 的偶性，重复处理两个边界。
+  similar_practice_query: cos ax ln(1-x^2) 极大值 二阶导 a^2>2 边界 sqrt2 sinx夹逼
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,258 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0297_xplus1_lnx_integer_m_series_log_bound_ex04
+content_revision_id: mst_p0297_xplus1_lnx_integer_m_series_log_bound_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0297_xplus1_lnx_integer_m_series_log_bound_ex04.card.yaml
+stem: |-
+  （2024 秋 · 上期中）已知函数 $f(x)=(x+1)\ln x-(m+1)x+2$，$m\in\mathbf{R}$。
+  1. 当 $m=1$ 时，求 $f(x)$ 的单调区间。
+  2. 若对任意 $x\in(1,+\infty)$，都有 $f(x)+5>0$ 恒成立，求 $m$ 的最大整数值。
+  3. 对于任意的 $n\in\mathbf{N}^*$，证明：$\frac13+\frac17+\cdots+\frac1{4n-1}<\frac{\ln(4n+1)}4$。
+answer: |-
+  第(1)问 $f(x)$ 在 $(0,+\infty)$ 上单调递增，无单调递减区间；第(2)问 $m$ 的最大整数值为 $2$；第(3)问数列不等式成立。
+
+  第(1)问当 $m=1$ 时， $f^\prime(x)=\ln x+\frac1x-1$。令 $g(x)=f^\prime(x)$， 则 $g^\prime(x)=\frac{x-1}{x^2}$，所以 $g$ 在 $(0,1)$ 上递减、 在 $(1,+\infty)$ 上递增，且 $g(1)=0$，故 $f^\prime(x)\ge0$，$f$ 在 $(0,+\infty)$ 上递增。第(2)问由 $f(x)+5>0$ 分离得 $m+1<h(x)=\left(1+\frac1x\right)\ln x+\frac7x$。再令 $t(x)=x-\ln x-6$，由 $t$ 递增且 $t(8)<0<t(\frac{17}{2})$，得唯一隐点 $x_0\in(8,\frac{17}{2})$。在该点 $h_{\min}=x_0+\frac1{x_0}-5$，它落在 $(3,4)$，所以 $m+1$ 最大整数值为 $3$，$m$ 最大整数值为 $2$。法二取 $x=e$ 得必要条件 $m<\frac8e\in(2,3)$，锁定候选 $m=2$ 后再验证。 第(3)问利用第(1)问中 $m=1$ 的函数在 $(1,+\infty)$ 上递增， 得 $(x+1)\ln x-2x+2>0$，即 $\ln x>\frac{2(x-1)}{x+1}$。令 $x=\frac{4n+1}{4n-3}=1+\frac4{4n-3}$，得到 $\ln(4n+1)-\ln(4n-3)>\frac4{4n-1}$，累加后得到目标不等式。
+rubric:
+  max_score: 9
+  criteria:
+    - step_id: step_1
+      description: 第(1)问用导函数的导数判断 $f^\prime$ 的符号。
+      max_score: 1
+    - step_id: step_2
+      description: 得到 $f$ 的单调性。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问分离参数。
+      max_score: 1
+    - step_id: step_4
+      description: 用隐点控制 $h$ 的最小值。
+      max_score: 1
+    - step_id: step_5
+      description: 把 $h_{\min}$ 化到 $x_0+\frac1{x_0}-5$。
+      max_score: 1
+    - step_id: step_6
+      description: 第(2)问得到最大整数。
+      max_score: 1
+    - step_id: step_7
+      description: 法二用特值快速锁定候选。
+      max_score: 1
+    - step_id: step_8
+      description: 第(3)问从第(1)问生成对数下界。
+      max_score: 1
+    - step_id: step_9
+      description: 代入相邻对数比并累加。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 1 问
+        result: $f$ 在 $(0,+\infty)$ 上单调递增。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $m$ 的最大整数值为 $2$。
+      - part_id: "3"
+        goal: 数列关系证明
+        target: 第 3 问
+        result: $\frac13+\frac17+\cdots+\frac1{4n-1}<\frac{\ln(4n+1)}4$。
+  method:
+    primary: 参变量分离
+    secondary:
+      - 显隐点探路
+      - 充分/必要性探路
+      - 数列和转化
+      - 切线放缩与凹凸性
+    subroute:
+      - 二阶判号确认 $f^\prime\ge0$
+      - 分离 $m+1<h(x)$
+      - 隐点 $x_0-\ln x_0-6=0$
+      - 特值 $x=e$ 锁定整数候选
+      - 对数下界生成数列望远镜
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 数列离散/递推结构
+      - 不等式工具结构
+      - 非齐次结构
+      - 局部逼近结构
+    evidence:
+      - $(x+1)\ln x-(m+1)x+2$
+      - $h(x)=\left(1+\frac1x\right)\ln x+\frac7x$
+      - $x_0-\ln x_0-6=0$
+      - $x_0+\frac1{x_0}-5$
+      - $\ln x>\frac{2(x-1)}{x+1}$
+      - $\ln(4n+1)-\ln(4n-3)$
+      - $\frac1{4n-1}$
+    normalization_moves_used:
+      - 第(1)问把 $f^\prime$ 记为 $g$ 来判号。
+      - 第(2)问把恒成立问题分离成 $m+1<h(x)$。
+      - 用 $\ln x_0=x_0-6$ 消掉隐点上的对数。
+      - 第(3)问把连续变量不等式代入离散比值后累加。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会判断 $f^\prime$ 符号，回补导数单调极值基础。
+      - 若学生不会分离参数，回补代数恒等变形。
+      - 若学生不会处理 $\ln x$ 和 $x-\ln x$，回补指数对数基础。
+      - 若学生不会用对数下界做放缩，回补不等式工具基础。
+      - 若学生不会累加相消，回补数列基础。
+  detail_terms:
+    - $(x+1)\ln x-(m+1)x+2$
+    - $m$ 最大整数值 $2$
+    - $x_0-\ln x_0-6=0$
+    - $x_0\in(8,\frac{17}{2})$
+    - $\frac8e\in(2,3)$
+    - $\ln x>\frac{2(x-1)}{x+1}$
+    - 对数望远镜
+parts: &a1
+  - part_id: "1"
+    text: 当 $m=1$ 时，求 $f(x)$ 的单调区间。
+  - part_id: "2"
+    text: 若对任意 $x\in(1,+\infty)$，都有 $f(x)+5>0$ 恒成立，求 $m$ 的最大整数值。
+  - part_id: "3"
+    text: 对于任意的 $n\in\mathbf{N}^*$，证明：$\frac13+\frac17+\cdots+\frac1{4n-1}<\frac{\ln(4n+1)}4$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0297_xplus1_lnx_integer_m_series_log_bound_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0297_ex04_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0297/page_0297.md
+      role: problem_start
+      evidence: page_0297 例4题头：$f(x)=(x+1)\ln x-(m+1)x+2$；三问分别为单调区间、$m$ 最大整数值、数列型对数不等式证明。
+    - ref_id: page_0297_ex04_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0297/page_0297.md
+      role: solution_start
+      evidence: page_0297 完成第(1)问，并完成第(2)问法一：分离参数得 $m+1<h(x)$，令 $t(x)=x-\ln x-6$，锁定 $x_0\in(8,\frac{17}{2})$，得到 $m$ 最大整数值为 $2$。
+    - ref_id: page_0298_ex04_solution_end
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0298/page_0298.md
+      role: solution_end
+      evidence: page_0298 页首给出第(2)问法二：取 $x=e$ 锁定 $m<8/e\in(2,3)$，再验证 $m=2$；随后第(3)问由第(1)问推出 $\ln x>\frac{2(x-1)}{x+1}$ 并代入 $\frac{4n+1}{4n-3}$ 累加。
+    - ref_id: page_0298_ex05_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0298/page_0298.md
+      role: local_context
+      evidence: page_0298 中部从例5开始新题，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0297.png
+      inspected: true
+      notes: 已核对页图：page_0297 包含例4题头、第(1)问和第(2)问法一。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0298.png
+      inspected: true
+      notes: 已核对页图：page_0298 页首完成例4法二和第(3)问，随后另起例5。
+  source_context: 本卡处理 page_0297 起头、page_0298 页首续完的例4；page_0298 例5排除。
+  source_influence:
+    - 保留第(1)问 $m=1$ 时 $f^\prime(x)=\ln x+\frac1x-1$，令 $g=f^\prime$，由 $g(1)=0$ 得 $f$ 在 $(0,+\infty)$ 上递增。
+    - 保留第(2)问分离参数：$m+1<\left(1+\frac1x\right)\ln x+\frac7x$ 对 $x>1$ 恒成立。
+    - 保留隐点 $x_0-\ln x_0-6=0$，且 $x_0\in(8,\frac{17}{2})$。
+    - 保留 $h_{\min}=x_0+\frac1{x_0}-5\in(3,4)$，从而 $m$ 最大整数值为 $2$。
+    - 保留法二用 $x=e$ 得 $m<\frac8e\in(2,3)$，再验证 $m=2$。
+    - 保留第(3)问由第(1)问得到 $\ln x>\frac{2(x-1)}{x+1}$，代入 $x=\frac{4n+1}{4n-3}$ 后累加。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 秋 · 上期中）已知函数 $f(x)=(x+1)\ln x-(m+1)x+2$，$m\in\mathbf{R}$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问 $f(x)$ 在 $(0,+\infty)$ 上单调递增，无单调递减区间；第(2)问 $m$ 的最大整数值为 $2$；第(3)问数列不等式成立。
+  fidelity_notes:
+    - 无选项。
+    - 第(3)问的数列项为 $1/(4j-1)$，从 $1/3$ 到 $1/(4n-1)$。
+solution:
+  source_solution_summary: 第(1)问当 $m=1$ 时， $f^\prime(x)=\ln x+\frac1x-1$。令 $g(x)=f^\prime(x)$， 则 $g^\prime(x)=\frac{x-1}{x^2}$，所以 $g$ 在 $(0,1)$ 上递减、 在 $(1,+\infty)$ 上递增，且 $g(1)=0$，故 $f^\prime(x)\ge0$，$f$ 在 $(0,+\infty)$ 上递增。第(2)问由 $f(x)+5>0$ 分离得 $m+1<h(x)=\left(1+\frac1x\right)\ln x+\frac7x$。再令 $t(x)=x-\ln x-6$，由 $t$ 递增且 $t(8)<0<t(\frac{17}{2})$，得唯一隐点 $x_0\in(8,\frac{17}{2})$。在该点 $h_{\min}=x_0+\frac1{x_0}-5$，它落在 $(3,4)$，所以 $m+1$ 最大整数值为 $3$，$m$ 最大整数值为 $2$。法二取 $x=e$ 得必要条件 $m<\frac8e\in(2,3)$，锁定候选 $m=2$ 后再验证。 第(3)问利用第(1)问中 $m=1$ 的函数在 $(1,+\infty)$ 上递增， 得 $(x+1)\ln x-2x+2>0$，即 $\ln x>\frac{2(x-1)}{x+1}$。令 $x=\frac{4n+1}{4n-3}=1+\frac4{4n-3}$，得到 $\ln(4n+1)-\ln(4n-3)>\frac4{4n-1}$，累加后得到目标不等式。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问用导函数的导数判断 $f^\prime$ 的符号。
+      formula_trace:
+        from: $f^\prime(x)=\ln x+\frac1x-1$
+        to: $g^\prime(x)=\frac{x-1}{x^2},\quad g(1)=0$
+        operation: 令 $g=f^\prime$ 再求导。
+        why: $f^\prime$ 不是一眼可判，先判断它的最小值。
+      source_ref: page_0297_ex04_solution_start
+    - step_id: step_2
+      statement: 得到 $f$ 的单调性。
+      formula_trace:
+        from: $g(x)\ge0$
+        to: $f(x)$ 在 $(0,+\infty)$ 上单调递增
+        operation: 由 $f^\prime=g$ 判单调。
+        why: 这个结论后面第(3)问还要拿来生成对数下界。
+      source_ref: page_0297_ex04_solution_start
+    - step_id: step_3
+      statement: 第(2)问分离参数。
+      formula_trace:
+        from: $(x+1)\ln x-(m+1)x+7>0$
+        to: $m+1<h(x)=\left(1+\frac1x\right)\ln x+\frac7x$
+        operation: 把含 $m$ 项移到一侧并除以 $x>1$。
+        why: 最大整数值转成右侧函数的最小值问题。
+      source_ref: page_0297_ex04_solution_start
+    - step_id: step_4
+      statement: 用隐点控制 $h$ 的最小值。
+      formula_trace:
+        from: $h^\prime(x)=\frac{x-\ln x-6}{x^2}$
+        to: $x_0-\ln x_0-6=0,\quad x_0\in(8,\frac{17}{2})$
+        operation: 令 $t(x)=x-\ln x-6$，用单调性和夹值定位零点。
+        why: 最小点求不出，但只要知道它在一个窄区间内。
+      source_ref: page_0297_ex04_solution_start
+    - step_id: step_5
+      statement: 把 $h_{\min}$ 化到 $x_0+\frac1{x_0}-5$。
+      formula_trace:
+        from: $h(x_0)=\left(1+\frac1{x_0}\right)\ln x_0+\frac7{x_0}$
+        to: $h_{\min}=x_0+\frac1{x_0}-5\in(3,4)$
+        operation: 用 $\ln x_0=x_0-6$ 消参，再在区间上估计。
+        why: 得到最大整数值只需要知道最小值落在 $(3,4)$。
+      source_ref: page_0297_ex04_solution_start
+    - step_id: step_6
+      statement: 第(2)问得到最大整数。
+      formula_trace:
+        from: $m+1<h_{\min}\in(3,4)$
+        to: $m_{\max,\mathbf Z}=2$
+        operation: 取整数并平移一位。
+        why: $m+1$ 的最大整数为 $3$，所以 $m$ 的最大整数为 $2$。
+      source_ref: page_0297_ex04_solution_start
+    - step_id: step_7
+      statement: 法二用特值快速锁定候选。
+      formula_trace:
+        from: $m+1<k(e)=\left(1+\frac1e\right)\ln e+\frac7e$
+        to: $m<\frac8e\in(2,3)$
+        operation: 取 $x=e$ 得必要条件。
+        why: 最大整数只可能是 $2$，但仍需后续验证。
+      source_ref: page_0298_ex04_solution_end
+    - step_id: step_8
+      statement: 第(3)问从第(1)问生成对数下界。
+      formula_trace:
+        from: $(x+1)\ln x-2x+2>0$
+        to: $\ln x>\frac{2(x-1)}{x+1}$
+        operation: 把第(1)问 $m=1$ 的递增结论用于 $x>1$。
+        why: 这是把导数结果转成数列放缩工具。
+      source_ref: page_0298_ex04_solution_end
+    - step_id: step_9
+      statement: 代入相邻对数比并累加。
+      formula_trace:
+        from: $x=\frac{4n+1}{4n-3}$
+        to: $\ln(4n+1)-\ln(4n-3)>\frac4{4n-1}$
+        operation: 把 $\ln x$ 下界应用到连续项。
+        why: 左边能望远镜相消，右边正好生成 $\frac4{4n-1}$。
+      source_ref: page_0298_ex04_solution_end
+teaching_card:
+  student_title: 隐点求整数，再把对数放进数列
+  what_it_trains: 训练先用分参和隐点估界求最大整数，再把导数得到的对数下界迁移到数列不等式。
+  recognition_cues:
+    - $m$ 出现在一次项系数里，且题目问最大整数值。
+    - 分离后右侧含 $\left(1+\frac1x\right)\ln x+\frac7x$。
+    - 最小点满足 $x-\ln x-6=0$，不需要求出精确值。
+    - 第(3)问的分母 $3,7,11,\ldots,4n-1$ 提示相邻对数差累加。
+  normalization_moves:
+    - 第(1)问先证明一个可复用的 $\ln x$ 下界。
+    - 第(2)问用隐点区间估计，只为锁定整数。
+    - 法二的 $x=e$ 是必要性探路，不代替充分性验证。
+    - 第(3)问把 $\frac{4n+1}{4n-3}$ 代入连续放缩式。
+  common_failures:
+    - 第(1)问看到 $f^\prime$ 不会直接判号，就忘记再求一次导。
+    - 第(2)问把 $m+1$ 和 $m$ 的最大整数值混在一起。
+    - 以为 $x_0$ 必须精确解出来。
+    - 第(3)问看不出 $\ln(4n+1)-\ln(4n-3)$ 会累加相消。
+  similar_practice_query: x+1 lnx 参数最大整数 隐点 x-ln x-6 对数下界 数列不等式 4n-1 望远镜
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

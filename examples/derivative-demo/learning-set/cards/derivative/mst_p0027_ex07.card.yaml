@@ -1,0 +1,196 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0027_ex07
+content_revision_id: mst_p0027_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0027_ex07.card.yaml
+stem: |-
+  (2023·安徽模拟 T8) 已知 $a>0$，$b>0$，且 $b[\sqrt{a^2+1}+\ln(ab)]>\sqrt{1+b^2}$，则 $a$，$b$ 的值不可能是（ ）
+
+  A. $\begin{cases}a=2\\ b=\sin31^\circ\end{cases}$
+  B. $\begin{cases}a=\log_2 5\\ b=\frac{\sqrt5}{4}\end{cases}$
+  C. $\begin{cases}a=\log_4 3\\ b=\log_4 5\end{cases}$
+  D. $\begin{cases}a=1\\ b=2\end{cases}$
+answer: |
+  C
+
+  因为 $a,b>0$，原不等式除以 $b$ 并整理为 $\sqrt{a^2+1}+\ln a>\sqrt{\frac1{b^2}+1}+\ln\frac1b$。令 $h(x)=\sqrt{x^2+1}+\ln x$，它在 $x>0$ 上严格递增，所以 $h(a)>h(1/b)$ 等价于 $a>1/b$，即 $ab>1$。逐项检验：A 中 $2\sin31^\circ>1$，B 中 $\log_2 5\cdot\frac{\sqrt5}{4}>1$，D 中 $ab=2>1$，都可能；C 中 $\log_4 3\cdot\log_4 5<1$，不可能，故选 C。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 把原不等式除以正数 $b$。
+      max_score: 1
+    - step_id: step_2
+      description: 把右侧也写成同一个母函数。
+      max_score: 1
+    - step_id: step_3
+      description: 用 $h$ 的单调性得到必要且充分条件。
+      max_score: 1
+    - step_id: step_4
+      description: 检验选项 A。
+      max_score: 1
+    - step_id: step_5
+      description: 检验选项 B。
+      max_score: 1
+    - step_id: step_6
+      description: 检验选项 C。
+      max_score: 1
+    - step_id: step_7
+      description: 检验选项 D 并确定答案。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - $\sqrt{x^2+1}+\ln x$ 单调母函数
+      - $ab>1$ 选项筛查
+      - 对数乘积估计
+  structure:
+    primary: 同构结构
+    secondary:
+      - 根式函数结构
+      - 不等式工具结构
+    evidence:
+      - 原不等式整理为 $h(a)>h(1/b)$。
+      - $h$ 递增后，所有选项都转成 $ab$ 与 1 的比较。
+    normalization_moves_used:
+      - 除以 $b>0$。
+      - $\ln(ab)=\ln a+\ln b$。
+      - $-\ln b=\ln\frac1b$。
+      - $\log_4 3\cdot\log_4 5=\frac{\ln3\ln5}{(\ln4)^2}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生除以 $b$ 时担心不等号方向，回补不等式工具基础。
+      - 若学生不会拆 $\ln(ab)$ 或换底，回补指数对数基础。
+      - 若学生不能证明 $h(x)=\sqrt{x^2+1}+\ln x$ 递增，回补导数运算与几何意义。
+      - 若学生不会用 $uv\le\left(\frac{u+v}{2}\right)^2$ 比较 C 选项，回补不等式工具基础。
+  detail_terms:
+    - $b[\sqrt{a^2+1}+\ln(ab)]>\sqrt{1+b^2}$
+    - $h(x)=\sqrt{x^2+1}+\ln x$
+    - $a>\frac1b$
+    - $ab>1$
+    - $\log_4 3\cdot\log_4 5<1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0027_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0027
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0027/page_0027.md
+      role: problem_start
+      evidence: lines 23-33 give 例7题干、四个选项、完整解析和答案 C。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0027.png
+      inspected: true
+      notes: 已核对例7题干、选项排版、解析中 $h(x)=\sqrt{x^2+1}+\ln x$ 和答案 C。
+  source_context: 本题仍在“构造单调函数 $e^x+x$ 或 $x+\ln x$”之后的同构单调性训练中，但母函数换成 $\sqrt{x^2+1}+\ln x$。
+  source_influence:
+    - 源解把原不等式等价转成 $h(a)>h(1/b)$，再由 $h$ 递增得到 $ab>1$，最后逐项判断。
+  source_discrepancies: []
+original_problem:
+  stem: |
+    (2023·安徽模拟 T8) 已知 $a>0$，$b>0$，且 $b[\sqrt{a^2+1}+\ln(ab)]>\sqrt{1+b^2}$，则 $a$，$b$ 的值不可能是（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\begin{cases}a=2\\ b=\sin31^\circ\end{cases}$
+      text_latex: $\begin{cases}a=2\\ b=\sin31^\circ\end{cases}$
+    - label: B
+      text_raw: $\begin{cases}a=\log_2 5\\ b=\frac{\sqrt5}{4}\end{cases}$
+      text_latex: $\begin{cases}a=\log_2 5\\ b=\frac{\sqrt5}{4}\end{cases}$
+    - label: C
+      text_raw: $\begin{cases}a=\log_4 3\\ b=\log_4 5\end{cases}$
+      text_latex: $\begin{cases}a=\log_4 3\\ b=\log_4 5\end{cases}$
+    - label: D
+      text_raw: $\begin{cases}a=1\\ b=2\end{cases}$
+      text_latex: $\begin{cases}a=1\\ b=2\end{cases}$
+  answer: C
+  fidelity_notes:
+    - 题干、四个选项和解析完整在 page_0027。
+    - 源题问“不可能是”，因此满足推出条件 $ab>1$ 的选项都不是答案。
+solution:
+  source_solution_summary: |
+    因为 $a,b>0$，原不等式除以 $b$ 并整理为 $\sqrt{a^2+1}+\ln a>\sqrt{\frac1{b^2}+1}+\ln\frac1b$。令 $h(x)=\sqrt{x^2+1}+\ln x$，它在 $x>0$ 上严格递增，所以 $h(a)>h(1/b)$ 等价于 $a>1/b$，即 $ab>1$。逐项检验：A 中 $2\sin31^\circ>1$，B 中 $\log_2 5\cdot\frac{\sqrt5}{4}>1$，D 中 $ab=2>1$，都可能；C 中 $\log_4 3\cdot\log_4 5<1$，不可能，故选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 把原不等式除以正数 $b$。
+      formula_trace:
+        from: $b[\sqrt{a^2+1}+\ln(ab)]>\sqrt{1+b^2}$
+        to: $\sqrt{a^2+1}+\ln a+\ln b>\sqrt{\frac1{b^2}+1}$
+        operation: 因 $b>0$，两边除以 $b$；并拆开 $\ln(ab)=\ln a+\ln b$。
+        why: 要把左边整理成关于 $a$ 的函数，右边整理成关于 $1/b$ 的函数。
+      source_ref: page_0027
+    - step_id: step_2
+      statement: 把右侧也写成同一个母函数。
+      formula_trace:
+        from: $\sqrt{a^2+1}+\ln a+\ln b>\sqrt{\frac1{b^2}+1}$
+        to: $\sqrt{a^2+1}+\ln a>\sqrt{\left(\frac1b\right)^2+1}+\ln\frac1b$
+        operation: 把 $\ln b$ 移到右侧，$-\ln b=\ln\frac1b$。
+        why: 两边分别是 $h(a)$ 与 $h(1/b)$。
+      source_ref: page_0027
+    - step_id: step_3
+      statement: 用 $h$ 的单调性得到必要且充分条件。
+      formula_trace:
+        from: $h(a)>h\left(\frac1b\right),\quad h(x)=\sqrt{x^2+1}+\ln x$
+        to: $a>\frac1b\Leftrightarrow ab>1$
+        operation: $h$ 的导数为 $\frac{x}{\sqrt{x^2+1}}+\frac1x>0\ (x>0)$，故 $h$ 严格递增。
+        why: 函数值大小等价于输入大小，选项只需检查 $ab$ 是否大于 1。
+      source_ref: page_0027
+    - step_id: step_4
+      statement: 检验选项 A。
+      formula_trace:
+        from: $ab=2\sin31^\circ$
+        to: $ab>2\sin30^\circ=1$
+        operation: 用 $\sin x$ 在锐角范围内递增。
+        why: A 满足 $ab>1$，因此不是“不可能”的选项。
+      source_ref: page_0027
+    - step_id: step_5
+      statement: 检验选项 B。
+      formula_trace:
+        from: $ab=\frac{\sqrt5}{4}\cdot\frac{\ln5}{\ln2}$
+        to: $ab=\frac{\sqrt5\ln\sqrt5}{2\ln2}>1$
+        operation: 用 $\ln5=2\ln\sqrt5$；函数 $x\ln x$ 在 $(1/e,+\infty)$ 递增，且 $\sqrt5>2$，所以 $\sqrt5\ln\sqrt5>2\ln2$。
+        why: B 也满足 $ab>1$，不是答案。
+      source_ref: page_0027
+    - step_id: step_6
+      statement: 检验选项 C。
+      formula_trace:
+        from: $ab=\frac{\ln3}{\ln4}\cdot\frac{\ln5}{\ln4}$
+        to: $ab<\left(\frac{\ln\sqrt{15}}{\ln4}\right)^2<1$
+        operation: 用 $uv\le\left(\frac{u+v}{2}\right)^2$，得 $\ln3\ln5\le\left(\frac{\ln3+\ln5}{2}\right)^2=(\ln\sqrt{15})^2$；又 $\sqrt{15}<4$。
+        why: C 不满足 $ab>1$，所以不可能满足原题条件。
+      source_ref: page_0027
+    - step_id: step_7
+      statement: 检验选项 D 并确定答案。
+      formula_trace:
+        from: $a=1,\ b=2$
+        to: $ab=2>1$
+        operation: 直接相乘。
+        why: D 满足条件；唯一不可能的是 C。
+      source_ref: page_0027
+teaching_card:
+  student_title: 把根式对数不等式筛成 $ab>1$
+  what_it_trains: 训练把双参数不等式整理成同一个递增函数的比较，再用必要且充分的乘积条件逐项排除。
+  recognition_cues:
+    - 题干同时有 $\sqrt{a^2+1}$、$\ln(ab)$ 和 $\sqrt{1+b^2}$。
+    - 给出 $a>0,b>0$，可以安全除以 $b$ 并拆对数。
+    - 选项都是具体的 $a,b$ 取值，适合先化成简单判据。
+  normalization_moves:
+    - 除以 $b$，把 $\sqrt{1+b^2}/b$ 写成 $\sqrt{1+\frac1{b^2}}$。
+    - 移动 $\ln b$，把右侧写成 $h(1/b)$。
+    - 由 $h$ 递增得到 $ab>1$。
+    - 逐项比较每个选项的 $ab$ 与 1。
+  common_failures:
+    - 把“不可能是”读成“可能是”，答案方向反了。
+    - 只得到 $ab>1$ 是必要条件，却没有意识到由严格递增可反推，实际是等价条件。
+    - B 选项不会用 $x\ln x$ 比较，C 选项不会用均值不等式压乘积。
+  similar_practice_query: 根式 对数 双参数 $h(x)=sqrt(x^2+1)+lnx$ $ab>1$ 不可能选项
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,227 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0292_lnx_plus1_axe_x_param_range_hidden_point_ex08
+content_revision_id: mst_p0292_lnx_plus1_axe_x_param_range_hidden_point_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0292_lnx_plus1_axe_x_param_range_hidden_point_ex08.card.yaml
+stem: |-
+  （2024 · 湖南模拟）已知函数 $f(x)=\ln(x+1)$，$g(x)=axe^x-2\ln a+3\ln2+3$。
+  1. 当 $x\in(-1,0)\cup(0,+\infty)$ 时，求证：$\frac{f(x)}x>-\frac12x+1$。
+  2. 若 $x\in(-1,+\infty)$ 时，$g(x)\ge f(x)$，求实数 $a$ 的取值范围。
+answer: |-
+  第(1)问不等式成立；第(2)问 $a\in(0,4\sqrt e]$。
+
+  第(1)问令 $\phi(x)=\ln(x+1)+\frac{x^2}{2}-x$，则 $\phi^\prime(x)=\frac1{x+1}+x-1=\frac{x^2}{x+1}>0$。 当 $x>0$ 时，原不等式等价于 $\phi(x)>0$，由 $\phi(x)>\phi(0)=0$ 成立；当 $-1<x<0$ 时，由于除以负数方向改变， 原不等式等价于 $\phi(x)<0$，由 $\phi(x)<\phi(0)=0$ 成立。 第(2)问构造 $h(x)=axe^x-\ln(x+1)-2\ln a+3\ln2+3$。有 $h^\prime(x)=ae^x(x+1)-\frac1{x+1}$， $h^{\prime\prime}(x)=a(x+2)e^x+\frac1{(x+1)^2}>0$，所以 $h^\prime$ 递增，$h$ 有唯一极小点 $x_0$。联立 $h^\prime(x_0)=0,h(x_0)=0$，可得 $a=e^{-x_0}/(x_0+1)^2$，即 $\ln a=-2\ln(x_0+1)-x_0$。代回后得到 $F(x_0)=\frac{x_0}{(x_0+1)^2}+3\ln[2(x_0+1)]+2x_0+3=0$。 source 通过 $F(-1/2)=0$ 且 $F^\prime(x)>0$ 得 $x_0=-1/2$。于是 $h(x)\ge h(-1/2)=-\frac{a}{2\sqrt e}-2\ln\frac a4+3$。 令 $t=a/(4\sqrt e)$，该式等价于 $2(1-t-\ln t)\ge0$， 所以 $0<a\le4\sqrt e$。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 第(1)问先构造辅助函数。
+      max_score: 1
+    - step_id: step_2
+      description: 用 $\phi^\prime>0$ 分正负区间证明。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问构造恒非负函数。
+      max_score: 1
+    - step_id: step_4
+      description: 用二阶导保证只有一个极小点。
+      max_score: 1
+    - step_id: step_5
+      description: 联立隐点条件，消掉 $a$。
+      max_score: 1
+    - step_id: step_6
+      description: 证明取等点是 $x_0=-1/2$。
+      max_score: 1
+    - step_id: step_7
+      description: 把最终条件化成 $a$ 的范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 不等式证明
+        target: 第 1 问
+        result: $\frac{\ln(x+1)}x>-\frac12x+1$。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $a\in(0,4\sqrt e]$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 充分/必要性探路
+      - 拟合与夹逼
+    subroute:
+      - 分正负区间处理除法方向
+      - 恒成立转最小值
+      - 隐点条件消参
+      - 构造 $F(x)$ 锁定 $x_0=-1/2$
+      - 参数归一化 $t=a/(4\sqrt e)$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $\ln(x+1)$
+      - $axe^x-2\ln a+3\ln2+3$
+      - $x_0=-1/2$
+      - $a=e^{-x_0}/(x_0+1)^2$
+      - $a\le4\sqrt e$
+    normalization_moves_used:
+      - 第(1)问分 $x>0$ 与 $-1<x<0$。
+      - 第(2)问构造 $h=g-f$。
+      - 由 $h^\prime(x_0)=0$ 写出 $a$。
+      - 用 $F(-1/2)=0$ 和 $F^\prime>0$ 锁定隐点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生忘记 $a>0$ 或 $x>-1$，回补函数三要素与定义域。
+      - 若学生不会负数除法变号，回补不等式工具基础。
+      - 若学生不会隐点消参，回补导数单调极值基础。
+      - 若学生不会处理 $\ln(x+1)$，回补指数对数基础。
+      - 若学生不会参数归一化，回补代数恒等变形。
+  detail_terms:
+    - $\frac{\ln(x+1)}x>-\frac12x+1$
+    - $axe^x-\ln(x+1)$
+    - $h^\prime(x_0)=0$
+    - $x_0=-1/2$
+    - $a=e^{-x_0}/(x_0+1)^2$
+    - $4\sqrt e$
+parts: &a1
+  - part_id: "1"
+    text: 当 $x\in(-1,0)\cup(0,+\infty)$ 时，求证：$\frac{f(x)}x>-\frac12x+1$。
+  - part_id: "2"
+    text: 若 $x\in(-1,+\infty)$ 时，$g(x)\ge f(x)$，求实数 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0292_lnx_plus1_axe_x_param_range_hidden_point_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0292_ex08_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0292/page_0292.md
+      role: problem_start
+      evidence: page_0292 例8题头：$f(x)=\ln(x+1)$，$g(x)=axe^x-2\ln a+3\ln2+3$；第(1)问证明 $\frac{f(x)}x>-\frac12x+1$；第(2)问若 $g(x)\ge f(x)$ 对 $x\in(-1,+\infty)$ 恒成立，求 $a$ 范围。
+    - ref_id: page_0292_ex08_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0292/page_0292.md
+      role: solution_start
+      evidence: page_0292 底部开始第(1)问：把不等式化为 $\ln(x+1)>-\frac{x^2}{2}+x$，令辅助函数处理。
+    - ref_id: page_0293_ex08_solution_end
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0293/page_0293.md
+      role: solution_end
+      evidence: page_0293 完成例8：第(1)问用 $g^\prime(x)=\frac{x^2}{x+1}>0$ 分正负区间证明；第(2)问构造 $h(x)=axe^x-\ln(x+1)-2\ln a+3\ln2+3$，用隐点探出 $x_0=-1/2$，最后得到 $a\in(0,4\sqrt e]$。
+    - ref_id: page_0293_section2_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0293/page_0293.md
+      role: local_context
+      evidence: page_0293 例8后进入第二节“最大整数解问题，特殊点探路与隐零点思想”；本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0292.png
+      inspected: true
+      notes: 已核对页图：page_0292 底部为例8题头和第(1)问开头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0293.png
+      inspected: true
+      notes: 已核对页图：page_0293 完成例8，随后另起第二节说明。
+  source_context: 本卡处理 page_0292 起头、page_0293 续完的例8；page_0293 第二节说明排除。
+  source_influence:
+    - 保留第(1)问辅助函数 $\phi(x)=\ln(x+1)+\frac{x^2}{2}-x$，并按 $x>0$ 与 $-1<x<0$ 分区间。
+    - 保留第(2)问 $a>0$，并构造 $h(x)=axe^x-\ln(x+1)-2\ln a+3\ln2+3$。
+    - 保留 $h^{\prime\prime}(x)>0$，从而 $h^\prime$ 递增，有唯一极小点。
+    - 保留隐点探路：$h(x_0)=0,h^\prime(x_0)=0$，探出 $x_0=-1/2$。
+    - 保留最终约束 $h(-1/2)=-\frac{a}{2\sqrt e}-2\ln\frac a4+3\ge0$。
+    - 保留结论 $a\in(0,4\sqrt e]$。
+  source_discrepancies:
+    - discrepancy_id: page_0293_ex08_a_formula_from_hprime_garbled
+      status: resolved
+      issue: source 由 $h^\prime(x_0)=0$ 推出 $a$ 的公式写作 $\frac{1}{(x_0e^{x_0}+x_0)(x_0+1)}$ 一类形式，和下一行 $\ln a=-2\ln(x_0+1)-x_0$ 不一致。
+      resolution: 按 $h^\prime(x_0)=ae^{x_0}(x_0+1)-\frac1{x_0+1}=0$，应为 $a=e^{-x_0}/(x_0+1)^2$，其对数正是 $\ln a=-2\ln(x_0+1)-x_0$。
+original_problem:
+  stem: （2024 · 湖南模拟）已知函数 $f(x)=\ln(x+1)$，$g(x)=axe^x-2\ln a+3\ln2+3$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问不等式成立；第(2)问 $a\in(0,4\sqrt e]$。
+  fidelity_notes:
+    - 无选项。
+    - 第(2)问由 $\ln a$ 可知 $a>0$。
+solution:
+  source_solution_summary: 第(1)问令 $\phi(x)=\ln(x+1)+\frac{x^2}{2}-x$，则 $\phi^\prime(x)=\frac1{x+1}+x-1=\frac{x^2}{x+1}>0$。 当 $x>0$ 时，原不等式等价于 $\phi(x)>0$，由 $\phi(x)>\phi(0)=0$ 成立；当 $-1<x<0$ 时，由于除以负数方向改变， 原不等式等价于 $\phi(x)<0$，由 $\phi(x)<\phi(0)=0$ 成立。 第(2)问构造 $h(x)=axe^x-\ln(x+1)-2\ln a+3\ln2+3$。有 $h^\prime(x)=ae^x(x+1)-\frac1{x+1}$， $h^{\prime\prime}(x)=a(x+2)e^x+\frac1{(x+1)^2}>0$，所以 $h^\prime$ 递增，$h$ 有唯一极小点 $x_0$。联立 $h^\prime(x_0)=0,h(x_0)=0$，可得 $a=e^{-x_0}/(x_0+1)^2$，即 $\ln a=-2\ln(x_0+1)-x_0$。代回后得到 $F(x_0)=\frac{x_0}{(x_0+1)^2}+3\ln[2(x_0+1)]+2x_0+3=0$。 source 通过 $F(-1/2)=0$ 且 $F^\prime(x)>0$ 得 $x_0=-1/2$。于是 $h(x)\ge h(-1/2)=-\frac{a}{2\sqrt e}-2\ln\frac a4+3$。 令 $t=a/(4\sqrt e)$，该式等价于 $2(1-t-\ln t)\ge0$， 所以 $0<a\le4\sqrt e$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问先构造辅助函数。
+      formula_trace:
+        from: $\frac{\ln(x+1)}x>-\frac12x+1$
+        to: $\phi(x)=\ln(x+1)+\frac{x^2}{2}-x$
+        operation: 把不等式移到一边。
+        why: 正负区间里只需要判断 $\phi$ 相对 $\phi(0)$ 的大小。
+      source_ref: page_0293_ex08_solution_end
+    - step_id: step_2
+      statement: 用 $\phi^\prime>0$ 分正负区间证明。
+      formula_trace:
+        from: $\phi^\prime(x)=\frac{x^2}{x+1}>0$
+        to: $x>0$ 时 $\phi(x)>0$；$-1<x<0$ 时 $\phi(x)<0$
+        operation: 利用 $\phi$ 在 $(-1,+\infty)$ 上递增。
+        why: 除以负数时方向会反，所以必须分区间。
+      source_ref: page_0293_ex08_solution_end
+    - step_id: step_3
+      statement: 第(2)问构造恒非负函数。
+      formula_trace:
+        from: $g(x)\ge f(x)$
+        to: $h(x)=axe^x-\ln(x+1)-2\ln a+3\ln2+3\ge0$
+        operation: 移项。
+        why: 把参数范围问题转成 $h$ 的最小值问题。
+      source_ref: page_0293_ex08_solution_end
+    - step_id: step_4
+      statement: 用二阶导保证只有一个极小点。
+      formula_trace:
+        from: $h^\prime(x)=ae^x(x+1)-\frac1{x+1}$
+        to: $h^{\prime\prime}(x)=a(x+2)e^x+\frac1{(x+1)^2}>0$
+        operation: 求导判凸。
+        why: $h^\prime$ 递增，隐点探路才有唯一目标。
+      source_ref: page_0293_ex08_solution_end
+    - step_id: step_5
+      statement: 联立隐点条件，消掉 $a$。
+      formula_trace:
+        from: $h^\prime(x_0)=0$
+        to: $a=\frac{e^{-x_0}}{(x_0+1)^2},\quad \ln a=-2\ln(x_0+1)-x_0$
+        operation: 由导数为零解参数。
+        why: 把取等点方程改写成只含 $x_0$ 的方程。
+      source_ref: page_0293_ex08_solution_end
+    - step_id: step_6
+      statement: 证明取等点是 $x_0=-1/2$。
+      formula_trace:
+        from: $F(x)=\frac{x}{(x+1)^2}+3\ln[2(x+1)]+2x+3$
+        to: $F(-\frac12)=0,\quad F^\prime(x)>0,\quad x_0=-\frac12$
+        operation: 构造单调函数锁定唯一零点。
+        why: 这一步是 source 所说的“探路 + 证明”。
+      source_ref: page_0293_ex08_solution_end
+    - step_id: step_7
+      statement: 把最终条件化成 $a$ 的范围。
+      formula_trace:
+        from: $h(-\frac12)=-\frac{a}{2\sqrt e}-2\ln\frac a4+3\ge0$
+        to: $0<a\le4\sqrt e$
+        operation: 令 $t=a/(4\sqrt e)$，化为 $1-t-\ln t\ge0$。
+        why: 该不等式对 $0<t\le1$ 成立，给出参数上界。
+      source_ref: page_0293_ex08_solution_end
+teaching_card:
+  student_title: 隐点落在 $x=-1/2$ 的参数题
+  what_it_trains: 训练先用简单单调函数处理基础不等式，再用隐点条件把含 $a$ 的恒成立题压到一个特殊点。
+  recognition_cues:
+    - 第(1)问有 $\frac{\ln(x+1)}x$，必须注意 $x$ 的正负。
+    - 第(2)问中 $a$ 同时在 $axe^x$ 和 $\ln a$ 里。
+    - $h^{\prime\prime}>0$ 暗示可以找唯一极小点。
+    - source 明确提示“探路 + 证明”，最后隐点是 $x=-1/2$。
+  normalization_moves:
+    - 第(1)问构造 $\phi(x)$ 并分区间。
+    - 第(2)问先写 $h=g-f$。
+    - 联立 $h=0,h^\prime=0$ 消去 $a$。
+    - 把最终条件归一化成 $1-t-\ln t\ge0$。
+  common_failures:
+    - 第(1)问在 $x<0$ 时忘记不等号变向。
+    - 把源文里错误的 $a$ 公式照抄，导致后面 $\ln a$ 对不上。
+    - 只猜 $x_0=-1/2$，没有用 $F^\prime>0$ 证明唯一性。
+    - 最后从 $h(-1/2)\ge0$ 解 $a$ 范围时卡住。
+  similar_practice_query: ln(x+1)/x axe^x ln a 隐点 -1/2 4sqrt(e) 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

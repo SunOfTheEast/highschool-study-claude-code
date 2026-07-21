@@ -1,0 +1,227 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0169_exists_quantifier_minmax_ex08
+content_revision_id: mst_p0169_exists_quantifier_minmax_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0169_exists_quantifier_minmax_ex08.card.yaml
+stem: |-
+  （2023·贵州“3+3+3”模拟 T10）已知函数 $f(x)=xe^x+2a$，$g(x)=\frac{e\ln x}{x}$，任意 $x_1 \in [1, 2]$，$\exists x_2 \in [1, 3]$，都有不等式 $f(x_1) \geqslant g(x_2)$ 成立，则 $a$ 的取值范围是（  ）
+  A. $[-e^2, +\infty)$
+  B. $\left[\frac{1-e}{2}, +\infty\right)$
+  C. $\left[-\frac{e}{2}, +\infty\right)$
+  D. $\left[\frac{1}{2}-e^2, +\infty\right)$
+answer: |
+  C
+
+  条件
+  \[
+  \forall x_1\in[1,2],\ \exists x_2\in[1,3],\ f(x_1)\ge g(x_2)
+  \]
+  在源解中改写为
+  \[
+  f(x)_{\min}\ge g(x)_{\min}.
+  \]
+  先看
+  \[
+  f(x)=xe^x+2a,\quad f^{\prime}(x)=e^x(x+1)>0\ (x\in[1,2]),
+  \]
+  故
+  \[
+  f(x)_{\min}=f(1)=e+2a.
+  \]
+  再看
+  \[
+  g(x)=\frac{e\ln x}{x},\quad
+  g^{\prime}(x)=\frac{e(1-\ln x)}{x^2}.
+  \]
+  在 $[1,e]$ 上 $g^{\prime}(x)>0$，在 $(e,3]$ 上 $g^{\prime}(x)<0$，故最小值出现在端点比较处：
+  \[
+  g(1)=0,\quad g(3)=\frac{e\ln3}{3}>0
+  \Rightarrow g(x)_{\min}=0.
+  \]
+  所以
+  \[
+  e+2a\ge0\Rightarrow a\ge-\frac e2.
+  \]
+  故选 C。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把“$\forall x_1\exists x_2$”压缩为最小值比较。
+      max_score: 1
+    - step_id: step_2
+      description: 求 $f$ 在 $[1,2]$ 的最小值。
+      max_score: 1
+    - step_id: step_3
+      description: 求 $g$ 在 $[1,3]$ 的最小值。
+      max_score: 1
+    - step_id: step_4
+      description: 联立下界得到参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 参变量分离
+    secondary:
+      - 含参数分类讨论
+      - 同构变形与换元法
+    subroute:
+      - 存在量词转区间下界
+      - 先求 $f_{\min}$ 再求 $g_{\min}$
+      - 最后落一次不等式
+  structure:
+    primary: Max/Min 与绝对值结构
+    secondary:
+      - 指对复合结构
+      - 非齐次结构
+    evidence:
+      - 题目显式给出“任意-存在”量词，核心是两个区间最小值对接。
+      - $xe^x$ 与 $\frac{\ln x}{x}$ 同时出现，属于指对复合最值比较。
+    normalization_moves_used:
+      - 量词重写为 $f_{\min}\ge g_{\min}$。
+      - 用导数符号表确定两函数最小值。
+      - 把结果收束为线性参数不等式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会处理“任意-存在”量词，回补不等式工具基础。
+      - 若学生在 $g^{\prime}(x)$ 分段符号判断上不稳定，回补导数单调极值基础。
+      - 若学生对 $\ln x$ 与定义域对应关系混淆，回补函数三要素与定义域。
+      - 若学生对 $e^x,\ln x$ 的变化率不熟，回补指数对数基础。
+  detail_terms:
+    - $f(x)=xe^x+2a$
+    - $g(x)=\frac{e\ln x}{x}$
+    - $f_{\min}=e+2a$
+    - $g_{\min}=0$
+    - $a\ge-\frac e2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0169_exists_quantifier_minmax_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0169_ex08_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0169/page_0169.md
+      role: problem_start
+      evidence: page_0169 题头“例8”给出完整题干与 A-D 选项：$f(x)=xe^x+2a$，$g(x)=\frac{e\ln x}{x}$，条件为“$\forall x_1\in[1,2],\ \exists x_2\in[1,3],\ f(x_1)\ge g(x_2)$”。
+    - ref_id: page_0169_ex08_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0169/page_0169.md
+      role: solution
+      evidence: 同页解析将量词条件化为 $f_{\min}\ge g_{\min}$，求得 $f_{\min}=e+2a,\ g_{\min}=0$，得到 $a\ge-\frac e2$，答案 C。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0169.png
+      inspected: true
+      notes: 已核对页图：例8题干、选项、解析与答案 C 在本页完整闭合。
+  source_context: 例8位于 page_0169 中下部，后接例9题头。
+  source_influence:
+    - 保留源解“存在量词”下的最值化处理：$\forall x_1\exists x_2$ 转为 $f_{\min}\ge g_{\min}$。
+    - 保留 $f$ 与 $g$ 的导数符号分段，分别锁定区间最小值。
+    - 保留结论 $e+2a\ge0\Rightarrow a\ge-\frac e2$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·贵州“3+3+3”模拟 T10）已知函数 $f(x)=xe^x+2a$，$g(x)=\frac{e\ln x}{x}$，任意 $x_1 \in [1, 2]$，$\exists x_2 \in [1, 3]$，都有不等式 $f(x_1) \geqslant g(x_2)$ 成立，则 $a$ 的取值范围是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $[-e^2, +\infty)$
+      text_latex: $[-e^2, +\infty)$
+    - label: B
+      text_raw: $\left[\frac{1-e}{2}, +\infty\right)$
+      text_latex: $\left[\frac{1-e}{2}, +\infty\right)$
+    - label: C
+      text_raw: $\left[-\frac{e}{2}, +\infty\right)$
+      text_latex: $\left[-\frac{e}{2}, +\infty\right)$
+    - label: D
+      text_raw: $\left[\frac{1}{2}-e^2, +\infty\right)$
+      text_latex: $\left[\frac{1}{2}-e^2, +\infty\right)$
+  answer: C
+  fidelity_notes:
+    - 题目与解析都在 page_0169，不需要跨页拼接。
+    - 保持源页“先量词改写，再求两个区间最小值”的组织方式。
+solution:
+  source_solution_summary: |
+    条件
+    \[
+    \forall x_1\in[1,2],\ \exists x_2\in[1,3],\ f(x_1)\ge g(x_2)
+    \]
+    在源解中改写为
+    \[
+    f(x)_{\min}\ge g(x)_{\min}.
+    \]
+    先看
+    \[
+    f(x)=xe^x+2a,\quad f^{\prime}(x)=e^x(x+1)>0\ (x\in[1,2]),
+    \]
+    故
+    \[
+    f(x)_{\min}=f(1)=e+2a.
+    \]
+    再看
+    \[
+    g(x)=\frac{e\ln x}{x},\quad
+    g^{\prime}(x)=\frac{e(1-\ln x)}{x^2}.
+    \]
+    在 $[1,e]$ 上 $g^{\prime}(x)>0$，在 $(e,3]$ 上 $g^{\prime}(x)<0$，故最小值出现在端点比较处：
+    \[
+    g(1)=0,\quad g(3)=\frac{e\ln3}{3}>0
+    \Rightarrow g(x)_{\min}=0.
+    \]
+    所以
+    \[
+    e+2a\ge0\Rightarrow a\ge-\frac e2.
+    \]
+    故选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 把“$\forall x_1\exists x_2$”压缩为最小值比较。
+      formula_trace:
+        from: $\forall x_1\in[1,2],\ \exists x_2\in[1,3],\ f(x_1)\ge g(x_2)$
+        to: $f_{\min}\ge g_{\min}$
+        operation: 存在量词使右端可取到区间下界。
+        why: 参数条件只需比较两个固定最小值。
+      source_ref: page_0169_ex08_solution
+    - step_id: step_2
+      statement: 求 $f$ 在 $[1,2]$ 的最小值。
+      formula_trace:
+        from: $f^{\prime}(x)=e^x(x+1)>0$
+        to: $f_{\min}=f(1)=e+2a$
+        operation: 单调递增函数取左端点。
+        why: 得到含参数的一侧下界。
+      source_ref: page_0169_ex08_solution
+    - step_id: step_3
+      statement: 求 $g$ 在 $[1,3]$ 的最小值。
+      formula_trace:
+        from: $g^{\prime}(x)=\frac{e(1-\ln x)}{x^2}$
+        to: $g_{\min}=0$
+        operation: 分段判单调后比较端点 $g(1),g(3)$。
+        why: 把不等式右端变成常数 0。
+      source_ref: page_0169_ex08_solution
+    - step_id: step_4
+      statement: 联立下界得到参数范围。
+      formula_trace:
+        from: $e+2a\ge0$
+        to: $a\ge-\frac e2$
+        operation: 一次不等式求解。
+        why: 对应选项 C。
+      source_ref: page_0169_ex08_solution
+teaching_card:
+  student_title: “任意-存在”先化最小值比较
+  what_it_trains: 训练含量词参数题的第一反应：把条件翻译成可计算的区间最值，再做导数与端点判定。
+  recognition_cues:
+    - 条件里同时出现“任意”“存在”。
+    - 两侧函数定义区间不同。
+    - 问法是参数区间。
+  normalization_moves:
+    - 把量词语句改写成最值不等式。
+    - 对每个区间先看导数符号，再落端点值。
+    - 把最值约束变成一次参数不等式。
+  common_failures:
+    - 把 $\forall x_1\exists x_2$ 误当成“同一个 $x$”比较。
+    - 只看驻点，不比较端点 $g(1),g(3)$。
+    - 漏掉 $2a$ 常数项，导致参数结果偏移。
+  similar_practice_query: 任意存在 量词 最小值比较 xe^x e lnx/x 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

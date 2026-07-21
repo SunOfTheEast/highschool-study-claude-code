@@ -1,0 +1,143 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0021_ex15
+content_revision_id: mst_p0021_ex15-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0021_ex15.card.yaml
+stem: 已知实数 $x_1$，$x_2$ 满足：$x_1+e^{x_1}=2$，$\frac{e}{x_2}-\ln x_2=1$，则 $x_1+\frac{e}{x_2}$ 的值是 ______.
+answer: |-
+  2
+
+  由 $\frac e{x_2}-\ln x_2=1$ 得 $\frac e{x_2}+\ln\frac e{x_2}=2$，即 $e^{\ln(e/x_2)}+\ln(e/x_2)=2$。设 $f(x)=x+e^x$，它严格递增；又 $f(x_1)=2=f(\ln(e/x_2))$，所以 $x_1=\ln(e/x_2)$，进而 $e^{x_1}=e/x_2$，故 $x_1+e/x_2=x_1+e^{x_1}=2$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把第二个方程改写成 $u+e^u=2$ 的形式。
+      max_score: 1
+    - step_id: step_2
+      description: 把 $\frac e{x_2}$ 写成指数形式。
+      max_score: 1
+    - step_id: step_3
+      description: 利用 $f(x)=x+e^x$ 的严格递增性锁定变量相等。
+      max_score: 1
+    - step_id: step_4
+      description: 回代求目标值。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 对称性配凑
+    subroute:
+      - $e^x+x$ 递增同构
+      - $\ln(e/x_2)$ 隐藏变量
+      - $e^{\ln(e/x_2)}=e/x_2$
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - 两个条件都能写成 $u+e^u=2$。
+      - 目标 $x_1+e/x_2$ 在同构后变为 $x_1+e^{x_1}$。
+    normalization_moves_used:
+      - $\frac e{x_2}-\ln x_2=1$ 改写成 $\frac e{x_2}+\ln\frac e{x_2}=2$。
+      - 令隐藏变量 $u=\ln(e/x_2)$。
+      - 用 $f(x)=x+e^x$ 严格递增推出自变量相等。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $1-\ln x_2$ 写成 $\ln(e/x_2)$，回补指数对数基础。
+      - 若学生不能看出 $e/x_2=e^{\ln(e/x_2)}$，回补指数对数基础。
+      - 若学生不知道严格递增函数同值推出自变量相等，回补函数性质与图像。
+      - 若学生在 $x_1+e/x_2$ 回代成 $x_1+e^{x_1}$ 时断裂，回补代数恒等变形。
+  detail_terms:
+    - $x+e^x$
+    - $\ln(e/x_2)$
+    - 严格递增
+    - 同值同元
+    - $x_1+e/x_2=2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0021_ex15
+source_evidence:
+  source_refs:
+    - ref_id: page_0021
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0021/page_0021.md
+      role: problem_start
+      evidence: 例 15 题干和解析完整位于 page_0021，前文小结提示 $e^x+x$、$x+\ln x$ 的同构问题。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0021.png
+      inspected: true
+      notes: 核对题干为 $x_1+e^{x_1}=2$ 与 $e/x_2-\ln x_2=1$；答案为 2。
+  source_context: 例 15 紧接文字“关于 $e^x+x$，$x+\ln x$ 的同构问题，只需知道这两个结构都是递增的即可”；本题使用 $f(x)=x+e^x$ 的严格递增性把两个变量合并。
+  source_influence:
+    - "legacy locator: corpus/problems/derivative/ex_mst_11.yaml 仅用于定位；未继承旧 classification。"
+    - 源解的核心是把第二个方程变为 $e^{\ln(e/x_2)}+\ln(e/x_2)=2$，与 $x_1+e^{x_1}=2$ 对齐。
+  source_discrepancies: []
+original_problem:
+  stem: 已知实数 $x_1$，$x_2$ 满足：$x_1+e^{x_1}=2$，$\frac{e}{x_2}-\ln x_2=1$，则 $x_1+\frac{e}{x_2}$ 的值是 ______.
+  parts: *a1
+  choices: []
+  answer: "2"
+  fidelity_notes:
+    - 源图使用 $\mathrm e$；本卡统一写作 $e$，数学含义不变。
+    - $x_2$ 由 $\ln x_2$ 与 $e/x_2$ 隐含满足 $x_2>0$。
+solution:
+  source_solution_summary: 由 $\frac e{x_2}-\ln x_2=1$ 得 $\frac e{x_2}+\ln\frac e{x_2}=2$，即 $e^{\ln(e/x_2)}+\ln(e/x_2)=2$。设 $f(x)=x+e^x$，它严格递增；又 $f(x_1)=2=f(\ln(e/x_2))$，所以 $x_1=\ln(e/x_2)$，进而 $e^{x_1}=e/x_2$，故 $x_1+e/x_2=x_1+e^{x_1}=2$。
+  key_steps:
+    - step_id: step_1
+      statement: 把第二个方程改写成 $u+e^u=2$ 的形式。
+      formula_trace:
+        from: $\frac e{x_2}-\ln x_2=1$
+        to: $\frac e{x_2}+\ln\frac e{x_2}=2$
+        operation: 使用 $\ln\frac e{x_2}=1-\ln x_2$，两边加上 1 的对数形式。
+        why: 这样第二个方程就能和 $x+e^x$ 的结构对齐。
+      source_ref: page_0021
+    - step_id: step_2
+      statement: 把 $\frac e{x_2}$ 写成指数形式。
+      formula_trace:
+        from: $\frac e{x_2}+\ln\frac e{x_2}=2$
+        to: $e^{\ln(e/x_2)}+\ln\frac e{x_2}=2$
+        operation: 利用 $e^{\ln y}=y$，其中 $y=e/x_2>0$。
+        why: 令 $u=\ln(e/x_2)$ 后，左边就是 $e^u+u$。
+      source_ref: page_0021
+    - step_id: step_3
+      statement: 利用 $f(x)=x+e^x$ 的严格递增性锁定变量相等。
+      formula_trace:
+        from: $f(x_1)=2,\quad f(\ln(e/x_2))=2$
+        to: $x_1=\ln\frac e{x_2}$
+        operation: 由 $f'(x)=1+e^x>0$ 得 $f$ 一一对应。
+        why: 同一个严格递增函数取同一个值，自变量必须相同。
+      source_ref: page_0021
+    - step_id: step_4
+      statement: 回代求目标值。
+      formula_trace:
+        from: $x_1=\ln\frac e{x_2}$
+        to: $\frac e{x_2}=e^{x_1},\quad x_1+\frac e{x_2}=x_1+e^{x_1}=2$
+        operation: 两边取指数，并使用第一个已知方程。
+        why: 目标式正好变回第一个方程左端。
+      source_ref: page_0021
+teaching_card:
+  student_title: 把第二个方程藏成同一个 $x+e^x$
+  what_it_trains: 训练把看似不同的两个方程都改写成同一个递增函数 $f(u)=u+e^u$ 的函数值，从而直接锁定变量关系并求值。
+  recognition_cues:
+    - 一个条件是 $x_1+e^{x_1}=2$，另一个条件含 $e/x_2$ 和 $\ln x_2$。
+    - $1-\ln x_2$ 可以合成 $\ln(e/x_2)$。
+    - 目标式 $x_1+e/x_2$ 与第一个条件左端高度相似。
+  normalization_moves:
+    - 把 $e/x_2-\ln x_2=1$ 改写为 $e/x_2+\ln(e/x_2)=2$。
+    - 将 $e/x_2$ 看作 $e^{\ln(e/x_2)}$。
+    - 用 $f$ 单调递增得到 $x_1=\ln(e/x_2)$，再让目标式回到第一个方程。
+  common_failures:
+    - 只把第二个方程移项，没有想到合成 $\ln(e/x_2)$。
+    - 把 $e/x_2$ 和 $e^{x_1}$ 的关系漏掉，导致目标式无法回代。
+    - 没有说明 $x+e^x$ 严格递增，直接写两个自变量相等。
+  similar_practice_query: e^x+x 同构 x1 e/x2 ln(e/x2) 数值求值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 源图与 markdown 一致；本题不跨页。

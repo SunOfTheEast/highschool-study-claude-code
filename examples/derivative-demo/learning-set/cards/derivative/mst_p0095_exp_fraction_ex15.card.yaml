@@ -1,0 +1,209 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0095_exp_fraction_ex15
+content_revision_id: mst_p0095_exp_fraction_ex15-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0095_exp_fraction_ex15.card.yaml
+stem: |-
+  （2022 扬州高二期末 · 多选 T12）若过点 $P(-1,t)$ 最多可以作出 $n\ (n\in\mathbf{N}^*)$ 条直线与函数 $f(x)=\frac{x+1}{e^x}$ 的图像相切，则 (  )
+  A. $tn$ 可以等于 2022
+  B. $n$ 不可以等于 3
+  C. $te+n>3$
+  D. $n=1$ 时，$t\in\{0\}\cup\left(\frac{4}{e},+\infty\right)$
+answer: |
+  AD
+
+  $f(x)=\frac{x+1}{e^x}=(x+1)e^{-x}$，有
+  $f'(x)=-xe^{-x}$，$f''(x)=(x-1)e^{-x}$，拐点为
+  $(1,2/e)$，拐点切线为 $y=(-x+3)/e$。在 $x=-1$ 上，该切线的高度为
+  $4/e$，曲线的高度为 $f(-1)=0$。因此 $t>4/e$ 的上段只有一条切线；
+  $0<t<4/e$ 的中间段有三条切线；$t=0$ 为曲线交点，只有一条切线；
+  $t=4/e$ 是拐点切线边界，不属于 $n=1$。所以 A 可取 $t=2022,n=1$ 成立；
+  B 因 $0<t<4/e$ 时 $n=3$ 而错误；C 可由 $t=0,n=1$ 得 $te+n=1$ 反驳；
+  D 的 $n=1$ 范围正是 $\{0\}\cup(4/e,+\infty)$。故选 AD。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 求拐点和拐点处切线。
+      max_score: 1
+    - step_id: step_2
+      description: 计算拐点切线在 $x=-1$ 处的边界高度。
+      max_score: 1
+    - step_id: step_3
+      description: 用切点参数复核不同 $t$ 对应的切线条数。
+      max_score: 1
+    - step_id: step_4
+      description: 分类得到 $n$ 的取值。
+      max_score: 1
+    - step_id: step_5
+      description: 逐项判断多选。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 数形结合
+      - 局部逼近与找点
+    subroute:
+      - 过点切线条数
+      - 拐点切线界定
+      - 切点参数化
+      - 区域计数
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $y=(-x+3)/e$ 在 $x=-1$ 处给出区域边界 $t=4/e$。
+      - $H(s)=(s+1)^2e^{-s}$ 把切线条数转成水平线交点数。
+      - $H(-1)=0$、$H(1)=4/e$ 对应源页的曲线交点和拐点切线边界。
+    normalization_moves_used:
+      - 把外点固定在 $x=-1$ 的竖线上，只比较高度 $t$。
+      - 用拐点切线和曲线交点分段数切线。
+      - 用切点参数函数补足边界 $t=4/e$ 的条数。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会对 $(x+1)e^{-x}$ 求导，回补导数运算与几何意义。
+      - 若学生看不懂拐点切线分区，回补函数性质与图像。
+      - 若学生不会由 $H'(s)$ 数交点，回补导数单调极值基础。
+      - 若学生把 $t=4/e$ 误并入 $n=1$，回补方程根分布与韦达。
+  detail_terms:
+    - $f(x)=\frac{x+1}{e^x}$
+    - $P(-1,t)$
+    - $y=\frac{-x+3}{e}$
+    - $t=\frac4e$
+    - $H(s)=(s+1)^2e^{-s}$
+    - 答案 AD
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0095_exp_fraction_ex15
+source_evidence:
+  source_refs:
+    - ref_id: page_0095
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0095/page_0095.md
+      role: problem_start
+      evidence: lines 36-42 give the second 例 15 题头, multi-select stem, A-D options, and the start of the graphical solution; the solution continues on page_0096.
+    - ref_id: page_0096
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0096/page_0096.md
+      role: continuation
+      evidence: lines 14-20 complete the second 例 15 solution, include the region figure, discuss A-D, and conclude AD; line 22 begins 例 16 and is excluded.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0095.png
+      inspected: true
+      notes: 已核对 page_0095 底部第二个例 15：题干为过 $P(-1,t)$ 作 $f(x)=(x+1)/e^x$ 的切线条数，多选 A-D 和拐点切线 $y=(-x+3)/e$ 开始解析。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0096.png
+      inspected: true
+      notes: 已核对 page_0096 顶部为第二个例 15 的续解和区域图，结论为 AD；随后例 16、例 17 未纳入本卡。
+  source_context: page_0095 有两个同号“例 15”；本卡对应第二个，即 $f(x)=\frac{x+1}{e^x}$ 的过 $P(-1,t)$ 切线条数多选题。
+  source_influence:
+    - 保留源页图像法：拐点 $(1,2/e)$ 与拐点切线 $y=(-x+3)/e$ 将直线 $x=-1$ 上的点分成若干切线条数区域。
+    - 保留源页对选项 A、B、D 的区域判断和最终答案 AD。
+  source_discrepancies:
+    - page_0096 line 20 用 $t<0$ 无切线情形反驳 C，但题干写 $n\in\mathbf{N}^*$；本卡改用源页同列边界 $t=0,n=1$ 反驳 C，答案 AD 不变。
+original_problem:
+  stem: （2022 扬州高二期末 · 多选 T12）若过点 $P(-1,t)$ 最多可以作出 $n\ (n\in\mathbf{N}^*)$ 条直线与函数 $f(x)=\frac{x+1}{e^x}$ 的图像相切，则 (  )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $tn$ 可以等于 2022
+      text_latex: $tn$ 可以等于 2022
+    - label: B
+      text_raw: $n$ 不可以等于 3
+      text_latex: $n$ 不可以等于 3
+    - label: C
+      text_raw: $te+n>3$
+      text_latex: $te+n>3$
+    - label: D
+      text_raw: $n=1$ 时，$t\in\{0\}\cup\left(\frac{4}{e},+\infty\right)$
+      text_latex: $n=1$ 时，$t\in\{0\}\cup\left(\frac{4}{e},+\infty\right)$
+  answer: AD
+  fidelity_notes:
+    - 本题为多选题，题头和选项在 page_0095 底部，完整解析跨到 page_0096 顶部。
+    - page_0096 的例 16、例 17 是后续题头，只用于确认边界后停止读取。
+solution:
+  source_solution_summary: |
+    $f(x)=\frac{x+1}{e^x}=(x+1)e^{-x}$，有
+    $f'(x)=-xe^{-x}$，$f''(x)=(x-1)e^{-x}$，拐点为
+    $(1,2/e)$，拐点切线为 $y=(-x+3)/e$。在 $x=-1$ 上，该切线的高度为
+    $4/e$，曲线的高度为 $f(-1)=0$。因此 $t>4/e$ 的上段只有一条切线；
+    $0<t<4/e$ 的中间段有三条切线；$t=0$ 为曲线交点，只有一条切线；
+    $t=4/e$ 是拐点切线边界，不属于 $n=1$。所以 A 可取 $t=2022,n=1$ 成立；
+    B 因 $0<t<4/e$ 时 $n=3$ 而错误；C 可由 $t=0,n=1$ 得 $te+n=1$ 反驳；
+    D 的 $n=1$ 范围正是 $\{0\}\cup(4/e,+\infty)$。故选 AD。
+  key_steps:
+    - step_id: step_1
+      statement: 求拐点和拐点处切线。
+      formula_trace:
+        from: |
+          $f(x)=(x+1)e^{-x}$
+        to: |
+          $f'(x)=-xe^{-x},\quad f''(x)=(x-1)e^{-x},\quad x_{\text{拐}}=1$
+        operation: 连续求导并令二阶导数为 $0$。
+        why: 源页用拐点切线作为切线条数区域的分界线。
+      source_ref: page_0095
+    - step_id: step_2
+      statement: 计算拐点切线在 $x=-1$ 处的边界高度。
+      formula_trace:
+        from: |
+          $f(1)=\frac{2}{e},\quad f'(1)=-\frac1e$
+        to: |
+          $y-\frac2e=-\frac1e(x-1),\qquad y=\frac{-x+3}{e},\qquad y(-1)=\frac4e$
+        operation: 用拐点坐标和斜率写切线，再代入 $x=-1$。
+        why: 点 $P(-1,t)$ 在这条竖线上，$t=4/e$ 是区域分界高度。
+      source_ref: page_0095
+    - step_id: step_3
+      statement: 用切点参数复核不同 $t$ 对应的切线条数。
+      formula_trace:
+        from: |
+          $P(-1,t)\text{ 在 }x=s\text{ 处切线上}$
+        to: |
+          $t=f(s)+f'(s)(-1-s)=(s+1)^2e^{-s}=:H(s)$
+        operation: 把 $P(-1,t)$ 代入 $x=s$ 处切线方程，得到高度函数 $H(s)$。
+        why: 方程 $H(s)=t$ 的实根个数就是从 $P(-1,t)$ 可作切线的条数。
+      source_ref: page_0096
+    - step_id: step_4
+      statement: 分类得到 $n$ 的取值。
+      formula_trace:
+        from: |
+          $H'(s)=(s+1)(1-s)e^{-s},\quad H(-1)=0,\quad H(1)=\frac4e$
+        to: |
+          $t=0:n=1;\quad 0<t<\frac4e:n=3;\quad t=\frac4e:n=2;\quad t>\frac4e:n=1$
+        operation: 按 $H$ 在 $(-\infty,-1)$、$(-1,1)$、$(1,+\infty)$ 的单调性数交点。
+        why: 这与源页区域图的“最上段一条、中间段三条、曲线交点一条”一致，并补足边界 $t=4/e$。
+      source_ref: page_0096
+    - step_id: step_5
+      statement: 逐项判断多选。
+      formula_trace:
+        from: |
+          $n=1\Leftrightarrow t\in\{0\}\cup\left(\frac4e,+\infty\right),\quad 0<t<\frac4e\Rightarrow n=3$
+        to: |
+          $\text{A 正确，B 错误，C 错误，D 正确}$
+        operation: A 取 $t=2022,n=1$；B 用中间段反驳；C 取 $t=0,n=1$；D 直接读 $n=1$ 范围。
+        why: 选项考查的是各区域切线条数与参数 $t$ 的关系。
+      source_ref: page_0096
+teaching_card:
+  student_title: 沿 $x=-1$ 数指数分式曲线的切线条数
+  what_it_trains: 训练把外点沿一条竖线移动时的切线条数变化，转化为拐点切线分区和切点参数函数交点数。
+  recognition_cues:
+    - 题干固定点 $P(-1,t)$，说明只需研究竖线 $x=-1$ 上高度变化。
+    - 函数 $(x+1)e^{-x}$ 在 $x=-1$ 处过 $x$ 轴，在 $x=1$ 处有拐点。
+    - 选项出现 $4/e$，提示它来自拐点切线在 $x=-1$ 处的截距。
+  normalization_moves:
+    - 求 $f'$、$f''$，得到拐点切线 $y=(-x+3)/e$。
+    - 在 $x=-1$ 上标出 $t=0$ 和 $t=4/e$ 两个边界。
+    - 用 $H(s)=(s+1)^2e^{-s}$ 数各段对应的一条、两条或三条切线。
+  common_failures:
+    - 只看源图中上段和中段，漏掉 $t=0$ 的曲线交点也只有一条切线。
+    - 把 $t=4/e$ 当作上段，误判为 $n=1$。
+    - 判断 C 时只随手代 $t>4/e$，没找能反驳的 $t=0,n=1$。
+  similar_practice_query: $(x+1)/e^x$ 过 $P(-1,t)$ 切线条数 拐点切线 $4/e$
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0095-page_0096 图片确认第二个例 15 续解止于 page_0096 line 20，例 16/17 未创建卡片。
+    - 源解对 C 的反例用 $t<0$，本卡改用 $t=0,n=1$ 反驳以避开 $n\in\mathbf{N}^*$ 的口径问题；不影响答案 AD，无需用户拍板。

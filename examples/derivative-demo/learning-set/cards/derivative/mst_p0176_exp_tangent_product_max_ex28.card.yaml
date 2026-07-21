@@ -1,0 +1,167 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0176_exp_tangent_product_max_ex28
+content_revision_id: mst_p0176_exp_tangent_product_max_ex28-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0176_exp_tangent_product_max_ex28.card.yaml
+stem: |-
+  （2025 · 湘潭期末 T8）若关于 $x$ 的不等式 $e^x-(a+1)x-b\geqslant 0$（$e$ 为自然对数的底数）在 $\mathbf{R}$ 上恒成立，则 $(a+1)b$ 的最大值为（  ）
+  A. $e+1$
+  B. $e+\frac{1}{2}$
+  C. $\frac{e}{2}$
+  D. $\frac{e}{4}$
+answer: |-
+  C
+
+  令 $k=a+1$。由 $e^x-(a+1)x-b\geqslant0$ 得 $e^x\geqslant kx+b$。指数函数斜率为 $k$ 的支撑切线给出 $b\leqslant k(1-\ln k)$，故 $(a+1)b=kb\leqslant k^2(1-\ln k)=-k^2\ln\frac{k}{e}$。写成 $-\frac{e^2}{2}u\ln u$（$u=\frac{k^2}{e^2}>0$），由 $-u\ln u\leqslant\frac1e$ 得 $(a+1)b\leqslant\frac e2$。当 $k=\sqrt e$、 $b=\frac{\sqrt e}{2}$ 时取等，故最大值是 $\frac e2$，对应 C。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把恒成立不等式写成指数函数压住一次函数。
+      max_score: 1
+    - step_id: step_2
+      description: 用指数切线模板给出截距上界。
+      max_score: 1
+    - step_id: step_3
+      description: 把目标写成同构最值型。
+      max_score: 1
+    - step_id: step_4
+      description: 取最值得到选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+      - 拟合与夹逼
+    subroute:
+      - 指数切线斜率找点
+      - $-x\ln x$ 模板
+      - 基本不等式复核
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $e^x\geqslant (a+1)x+b$
+      - $b\leqslant (a+1)[1-\ln(a+1)]$
+      - $(a+1)b\leqslant-\frac{e^2}{2}u\ln u$
+    normalization_moves_used:
+      - 把参数乘积问题改写为斜率-截距约束。
+      - 用切点 $x_0=\ln(a+1)$ 消掉函数自变量。
+      - 把参数式同构到 $-u\ln u$ 统一最值模板。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $e^x\geqslant kx+b$ 读出切线模板，回补导数运算与几何意义。
+      - 若学生在 $u=\frac{k^2}{e^2}$ 代换时卡住，回补代数恒等变形。
+      - 若学生不会用 $-u\ln u$ 取最值，回补指数对数基础。
+  detail_terms:
+    - $e^x\geqslant (a+1)x+b$
+    - $b\leqslant (a+1)(1-\ln(a+1))$
+    - $-u\ln u\leqslant\frac1e$
+    - $(a+1)b_{\max}=\frac e2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0176_exp_tangent_product_max_ex28
+source_evidence:
+  source_refs:
+    - ref_id: page_0176
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0176/page_0176.md
+      role: problem_start
+      evidence: lines 28-35 give 例28 statement, options A-D, and two source methods (切线找点 + 基本不等式), both deriving $(a+1)b\leqslant e/2$.
+    - ref_id: page_0176_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0176/page_0176.md
+      role: local_context
+      evidence: lines 14-17 are continuation of page_0175 例27 and are not rebuilt in this card.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0176.png
+      inspected: true
+      notes: 页图核对到例28选项为 A.$e+1$ B.$e+\frac12$ C.$\frac e2$ D.$\frac e4$； 但解析末尾写“故选B”，与同段取等值 $(a+1)b=e/2$ 不一致。
+  source_context: 本页顶部是例27续解，例28是本 worker 在 page_0176 的首个新题头。
+  source_influence:
+    - 保留源解“指数切线斜率找点”主链：$e^x\geqslant kx+b\Rightarrow b\leqslant k(1-\ln k)$。
+    - 保留源解法二用基本不等式复核上界 $e/2$。
+    - 根据页图与公式链修正最终选项标号。
+  source_discrepancies:
+    - source 解析链与取等参数给出 $(a+1)b_{\max}=e/2$，对应选项 C；但页图与 markdown 末尾误写“故选B”。
+original_problem:
+  stem: （2025 · 湘潭期末 T8）若关于 $x$ 的不等式 $e^x-(a+1)x-b\geqslant 0$（$e$ 为自然对数的底数）在 $\mathbf{R}$ 上恒成立，则 $(a+1)b$ 的最大值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $e+1$
+      text_latex: $e+1$
+    - label: B
+      text_raw: $e+\frac{1}{2}$
+      text_latex: $e+\frac{1}{2}$
+    - label: C
+      text_raw: $\frac{e}{2}$
+      text_latex: $\frac{e}{2}$
+    - label: D
+      text_raw: $\frac{e}{4}$
+      text_latex: $\frac{e}{4}$
+  answer: C
+  fidelity_notes:
+    - 题干、选项均来自 page_0176。
+    - source 末尾“故选B”与同段算得的上界 $e/2$ 冲突；本卡按公式链与取等值给出 C。
+solution:
+  source_solution_summary: 令 $k=a+1$。由 $e^x-(a+1)x-b\geqslant0$ 得 $e^x\geqslant kx+b$。指数函数斜率为 $k$ 的支撑切线给出 $b\leqslant k(1-\ln k)$，故 $(a+1)b=kb\leqslant k^2(1-\ln k)=-k^2\ln\frac{k}{e}$。写成 $-\frac{e^2}{2}u\ln u$（$u=\frac{k^2}{e^2}>0$），由 $-u\ln u\leqslant\frac1e$ 得 $(a+1)b\leqslant\frac e2$。当 $k=\sqrt e$、 $b=\frac{\sqrt e}{2}$ 时取等，故最大值是 $\frac e2$，对应 C。
+  key_steps:
+    - step_id: step_1
+      statement: 把恒成立不等式写成指数函数压住一次函数。
+      formula_trace:
+        from: $e^x-(a+1)x-b\geqslant0$
+        to: $e^x\geqslant kx+b,\quad k=a+1$
+        operation: 移项并记斜率参数。
+        why: 后续可直接套指数切线斜率找点模板。
+      source_ref: page_0176:lines 28-35
+    - step_id: step_2
+      statement: 用指数切线模板给出截距上界。
+      formula_trace:
+        from: $e^x\geqslant kx+b$
+        to: $b\leqslant k(1-\ln k)$
+        operation: 令切点 $x_0=\ln k$，代入切线式。
+        why: 在固定斜率 $k$ 下，切线给出最大可行截距。
+      source_ref: page_0176:lines 20-25, 34-35
+    - step_id: step_3
+      statement: 把目标写成同构最值型。
+      formula_trace:
+        from: $(a+1)b=kb\leqslant k^2(1-\ln k)$
+        to: $(a+1)b\leqslant-\frac{e^2}{2}\,u\ln u,\ u=\frac{k^2}{e^2}$
+        operation: 把 $k^2\ln(k/e)$ 改写为 $u\ln u$ 标准型。
+        why: 可直接调用 $-u\ln u$ 的最大值结论。
+      source_ref: page_0176:line 34
+    - step_id: step_4
+      statement: 取最值得到选项。
+      formula_trace:
+        from: $-u\ln u\leqslant\frac1e$
+        to: $(a+1)b\leqslant\frac e2$（等号在 $k=\sqrt e$ 取到）
+        operation: 代回并验证取等参数。
+        why: 最大值不仅要算出，还要验证可达。
+      source_ref: page_0176:lines 34-35
+teaching_card:
+  student_title: 用指数切线斜率直接卡住参数乘积
+  what_it_trains: 训练“指数函数恒压直线”里，把目标乘积转成斜率-截距并同构到 $-x\ln x$ 最值模板。
+  recognition_cues:
+    - 题干形如 $e^x\geqslant$ 一次函数并要求参数乘积最值。
+    - 可把一次函数看成“待定斜率 + 待定截距”的切线比较。
+    - 解链里会自然出现 $\ln(a+1)$ 或 $\ln\frac{a+1}{e}$。
+  normalization_moves:
+    - 先设 $k=a+1$，统一写成 $e^x\geqslant kx+b$。
+    - 由切线斜率找点得 $b\leqslant k(1-\ln k)$。
+    - 把 $kb$ 写成 $-u\ln u$ 型后取最值。
+  common_failures:
+    - 只算出 $b$ 的范围，忘了再乘上 $a+1$ 做二次优化。
+    - 把 $-u\ln u$ 的极值点写错成 $u=1$。
+    - 未核对“故选”与数值是否一致，直接抄错标号。
+  similar_practice_query: e^x >= kx+b 参数乘积最大值 指数切线斜率找点
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 已通过页图与取等参数复核：例28最终数值应为 $\frac e2$，对应 C。

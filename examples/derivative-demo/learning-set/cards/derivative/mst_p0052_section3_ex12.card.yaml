@@ -1,0 +1,187 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0052_section3_ex12
+content_revision_id: mst_p0052_section3_ex12-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0052_section3_ex12.card.yaml
+stem: |-
+  （2025 厦门、泉州五校高二期中 T19）已知函数 $f(x)=e^x-\frac{1}{2}x^2-ax\ (a\in\mathbf{R})$。
+  （1）若不等式 $f(x)\ge1$ 在 $x\in[0,+\infty)$ 上恒成立，求实数 $a$ 的取值范围；
+  （2）若 $x>0$，求证：$\left(e^x-\frac{1}{2}x^2+1\right)\ln(x+1)>2x$。
+answer: |-
+  （1）$a\le1$；（2）对一切 $x>0$，不等式成立。
+
+  第 (1) 问把 $f(x)\ge1$ 化成 $g(x)=e^x-\frac12x^2-ax-1\ge0$ 且 $g(0)=0$。必要性由端点效应得右导数条件 $g^{\prime}(0)=1-a\ge0$，即 $a\le1$；充分性用 $g^{\prime}(x)=e^x-x-a\ge1-a\ge0$ 得 $g$ 在 $[0,+\infty)$ 上递增，所以 $g(x)\ge0$。第 (2) 问用 $\ln(x+1)\ge\frac{2x}{x+2}$，再把目标化成 $e^x-\frac12x^2+1>x+2$，即第 (1) 问在 $a=1$ 时的严格情形。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 第 (1) 问：把恒成立不等式改成端点为零的函数非负问题。
+      max_score: 1
+    - step_id: step_2
+      description: 第 (1) 问：由端点效应得到必要条件。
+      max_score: 1
+    - step_id: step_3
+      description: 第 (1) 问：证明 $a\le1$ 时条件充分。
+      max_score: 1
+    - step_id: step_4
+      description: 第 (2) 问：先把对数因子放小到有理式。
+      max_score: 1
+    - step_id: step_5
+      description: 第 (2) 问：把剩余部分化回第 (1) 问的 $a=1$ 情形。
+      max_score: 1
+    - step_id: step_6
+      description: 第 (2) 问：用第 (1) 问给出的端点结论补上严格性。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 求参数范围
+        target: （1）求参数范围：求 $f(x)\ge1$ 在 $[0,+\infty)$ 恒成立时的 $a$ 范围。
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 不等式证明
+        target: （2）不等式证明：证明含 $e^x$ 与 $\ln(x+1)$ 的乘积不等式。
+        result: 见 source_solution_summary
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 参变量分离
+      - 充分/必要性探路
+    subroute:
+      - 端点效应
+      - $e^x-x\ge1$
+      - $\ln(x+1)\ge2x/(x+2)$
+  structure:
+    primary: 不等式工具结构
+    secondary:
+      - 指对复合结构
+      - 局部逼近结构
+    evidence:
+      - $g(x)=e^x-\frac12x^2-ax-1$ 在 $x=0$ 处取等。
+      - $e^x-x\ge1$ 给出 $a\le1$ 的充分性。
+      - $\ln(x+1)\ge\frac{2x}{x+2}$ 把第 (2) 问接回第 (1) 问。
+    normalization_moves_used:
+      - 把 $f(x)\ge1$ 改写为端点为零的 $g(x)\ge0$。
+      - 用端点右导数判定参数必要条件。
+      - 先放小 $\ln(x+1)$，再化成 $a=1$ 的结论。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看到端点取等却没有检查右导数符号，回补导数单调极值基础。
+      - 若学生不会证明或调用 $e^x-x\ge1$，回补指数对数基础。
+      - 若学生不会把 $\ln(x+1)$ 放缩为 $\frac{2x}{x+2}$，回补不等式工具基础。
+      - 若学生把第 (2) 问化简时没有利用 $x>0$ 与 $x+2>0$，回补代数恒等变形。
+  detail_terms:
+    - $g(x)=e^x-\frac12x^2-ax-1$
+    - $a\le1$
+    - $\ln(x+1)\ge\frac{2x}{x+2}$
+    - $e^x-\frac12x^2-x-1>0$
+parts: &a1
+  - （1）若不等式 $f(x)\ge1$ 在 $x\in[0,+\infty)$ 上恒成立，求实数 $a$ 的取值范围；
+  - （2）若 $x>0$，求证：$\left(e^x-\frac{1}{2}x^2+1\right)\ln(x+1)>2x$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0052_section3_ex12
+source_evidence:
+  source_refs:
+    - ref_id: page_0052_ex12_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0052/page_0052.md
+      role: problem_start
+      evidence: 例 12：已知函数 $f(x)=e^x-\frac{1}{2}x^2-ax(a\in\mathbf{R})$；两问分别求恒成立时 $a$ 的范围，并证明 $\left(e^x-\frac12x^2+1\right)\ln(x+1)>2x$。
+    - ref_id: page_0052_ex12_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0052/page_0052.md
+      role: solution
+      evidence: 解析给出洛必达、泰勒和端点效应三种求 $a\le1$ 的思路；第 (2) 问用 $\ln(x+1)\ge\frac{2x}{x+2}$ 后调用第 (1) 问 $a=1$ 的结论。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0052.png
+      inspected: true
+      notes: 已核对页图：page_0052 顶部是例 11 续解；例 12 的题头、两问和完整解析均在 page_0052。
+  source_context: 第 1 章技能篇“导数基本技能”。page_0052 顶部是上一题例 11 的续解，本卡从 page_0052 的例 12 题头开始。
+  source_influence:
+    - 第 (1) 问源解主线是端点效应：$g(0)=0$，先由右端点导数得到 $a\le1$，再用 $e^x-x\ge1$ 证明充分性。
+    - 第 (2) 问不是独立硬求导，而是先用 $\ln(x+1)\ge2x/(x+2)$ 放小对数，再把剩余不等式化回第 (1) 问的 $a=1$ 情形。
+  source_discrepancies:
+    - page_0052 源解端点效应反证末句印作 $g^{\prime}(x_0)<g(0)=0$；结合前文 $g^{\prime}(x_0)=0$ 与 $g$ 在 $(0,x_0)$ 下降，应为 $g(x_0)<g(0)=0$，本卡按函数值下降记录。
+original_problem:
+  stem: （2025 厦门、泉州五校高二期中 T19）已知函数 $f(x)=e^x-\frac{1}{2}x^2-ax\ (a\in\mathbf{R})$。
+  parts: *a1
+  choices: []
+  answer: （1）$a\le1$；（2）对一切 $x>0$，不等式成立。
+  fidelity_notes:
+    - 题干、两问和解析已与 page_0052 页图核对；本题没有选择项。
+    - 端点效应法中的末句按数学语境校正为 $g(x_0)<g(0)=0$，原始异常已记入 source_discrepancies。
+solution:
+  source_solution_summary: 第 (1) 问把 $f(x)\ge1$ 化成 $g(x)=e^x-\frac12x^2-ax-1\ge0$ 且 $g(0)=0$。必要性由端点效应得右导数条件 $g^{\prime}(0)=1-a\ge0$，即 $a\le1$；充分性用 $g^{\prime}(x)=e^x-x-a\ge1-a\ge0$ 得 $g$ 在 $[0,+\infty)$ 上递增，所以 $g(x)\ge0$。第 (2) 问用 $\ln(x+1)\ge\frac{2x}{x+2}$，再把目标化成 $e^x-\frac12x^2+1>x+2$，即第 (1) 问在 $a=1$ 时的严格情形。
+  key_steps:
+    - step_id: step_1
+      statement: 第 (1) 问：把恒成立不等式改成端点为零的函数非负问题。
+      formula_trace:
+        from: $f(x)\ge1,\quad x\in[0,+\infty)$
+        to: $g(x)=e^x-\frac12x^2-ax-1\ge0,\quad g(0)=0$
+        operation: 把右侧 $1$ 移到左侧，构造 $g(x)=f(x)-1$。
+        why: 端点 $x=0$ 正好取到等号，参数限制可以从端点右侧行为读出。
+      source_ref: page_0052_ex12_solution
+    - step_id: step_2
+      statement: 第 (1) 问：由端点效应得到必要条件。
+      formula_trace:
+        from: $g(x)\ge0,\quad g(0)=0$
+        to: $g^{\prime}(0)=1-a\ge0\Rightarrow a\le1$
+        operation: 在 $[0,+\infty)$ 的左端点取得最小值时，右导数不能为负。
+        why: 若 $1-a<0$，则 $g$ 在 0 右侧会先下降到负值，和恒成立矛盾。
+      source_ref: page_0052_ex12_solution
+    - step_id: step_3
+      statement: 第 (1) 问：证明 $a\le1$ 时条件充分。
+      formula_trace:
+        from: $g^{\prime}(x)=e^x-x-a$
+        to: $g^{\prime}(x)\ge1-a\ge0,\quad g(x)\ge g(0)=0$
+        operation: 用 $e^x-x\ge1$（$x\ge0$）控制 $g^{\prime}(x)$，再由 $g^{\prime}\ge0$ 得 $g$ 递增。
+        why: 这说明 $a\le1$ 时，端点之后不会跌破 0。
+      source_ref: page_0052_ex12_solution
+    - step_id: step_4
+      statement: 第 (2) 问：先把对数因子放小到有理式。
+      formula_trace:
+        from: $\ln(x+1)$
+        to: $\ln(x+1)\ge\frac{2x}{x+2}\quad(x\ge0)$
+        operation: 使用源解给出的对数放缩；也可令 $q(x)=\ln(x+1)-\frac{2x}{x+2}$ 验证 $q(0)=0$ 且 $q(x)>0$（$x>0$）。
+        why: 右侧的 $\frac{2x}{x+2}$ 能与目标中的 $2x$ 直接约掉。
+      source_ref: page_0052_ex12_solution
+    - step_id: step_5
+      statement: 第 (2) 问：把剩余部分化回第 (1) 问的 $a=1$ 情形。
+      formula_trace:
+        from: $\left(e^x-\frac12x^2+1\right)\frac{2x}{x+2}>2x$
+        to: $e^x-\frac12x^2-x-1>0$
+        operation: 因 $x>0$ 且 $x+2>0$，两边同除 $2x$ 并移项。
+        why: 左侧正是第 (1) 问中 $g(x)$ 取 $a=1$ 的表达式。
+      source_ref: page_0052_ex12_solution
+    - step_id: step_6
+      statement: 第 (2) 问：用第 (1) 问给出的端点结论补上严格性。
+      formula_trace:
+        from: $g_1(x)=e^x-\frac12x^2-x-1,\quad g_1(0)=0$
+        to: $g_1(x)>0\quad(x>0)$
+        operation: 由 $g_1^{\prime}(x)=e^x-x-1$ 且 $g_1^{\prime}(0)=0$、$g_1^{\prime\prime}(x)=e^x-1>0$（$x>0$）可知 $g_1$ 在 0 右侧严格增加；源解概括为“由 (1) 得成立”。
+        why: 目标不等式是严格大于号，$x>0$ 时不能只停在非负结论。
+      source_ref: page_0052_ex12_solution
+teaching_card:
+  student_title: 端点取等时，先看右侧会不会跌下去
+  what_it_trains: 训练把端点取等的恒成立问题转成端点效应，再把后续证明题接回已经得到的参数结论。
+  recognition_cues:
+    - 恒成立区间从 $0$ 开始，且代入 $x=0$ 正好等号成立。
+    - 导数里出现 $e^x-x-a$，可以用 $e^x-x\ge1$ 控制。
+    - 第二问同时有 $\ln(x+1)$ 和目标 $2x$，提示先用 $\frac{2x}{x+2}$ 放缩。
+  normalization_moves:
+    - 先构造 $g=f-1$，把端点值固定成 $g(0)=0$。
+    - 必要性看 $g^{\prime}(0)\ge0$，充分性看 $g^{\prime}(x)\ge0$。
+    - 第二问先替换 $\ln(x+1)$，再把剩下的指数二次式识别成第 (1) 问 $a=1$。
+  common_failures:
+    - 只代入 $x=0$，没有检查 0 右侧的变化方向。
+    - 证明充分性时忘记 $e^x-x$ 在 $x\ge0$ 的最小值是 1。
+    - 把 $\ln(x+1)$ 的放缩方向写反，导致乘积不等式方向错误。
+    - 第 (2) 问只得到 $\ge$，没有说明 $x>0$ 时严格大于。
+  similar_practice_query: 端点效应 恒成立 a<=1 ln(x+1)>=2x/(x+2) 指数二次式不等式
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0052 markdown 与页图；page_0052 顶部例 11 续解未建卡。
+    - 源解端点效应末句的函数符号异常已按数学语境处理为 $g(x_0)<g(0)=0$，不影响题干、答案或主证明链。

@@ -1,0 +1,210 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0144_odd_sinh_sin_compare_ex04
+content_revision_id: mst_p0144_odd_sinh_sin_compare_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0144_odd_sinh_sin_compare_ex04.card.yaml
+stem: |-
+  （24-25高二上·安徽·期末）已知函数 $f(x)=e^x-e^{-x}+\sin2x$，记 $a=-f(-\ln2)$，$b=f(\log_4\sqrt3)$，$c=f(e^{0.2})$，则 $a,b,c$ 的大小关系为（  ）
+  A. $c<a<b$
+  B. $b<a<c$
+  C. $a<b<c$
+  D. $b<c<a$
+answer: |
+  B
+
+  先由
+  $f(-x)=e^{-x}-e^x+\sin(-2x)=-f(x)$
+  得 $f$ 是奇函数，所以
+  $a=-f(-\ln2)=f(\ln2)$。再求导：
+  $f^{\prime}(x)=e^x+e^{-x}+2\cos2x$，
+  且 $e^x+e^{-x}\ge2,\ 2\cos2x\ge-2$，
+  故 $f^{\prime}(x)\ge0$，即 $f$ 在 $\mathbf R$ 上递增。
+  比较自变量：
+  $\log_4\sqrt3<\log_42=\frac12=\ln\sqrt e<\ln2<1=e^0<e^{0.2}$，
+  所以
+  $f(\log_4\sqrt3)<f(\ln2)<f(e^{0.2})$，
+  即 $b<a<c$，选 B。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先把 $a$ 改写成同一函数在正点的值。
+      max_score: 1
+    - step_id: step_2
+      description: 用下界放缩判定导数非负。
+      max_score: 1
+    - step_id: step_3
+      description: 确认函数保序。
+      max_score: 1
+    - step_id: step_4
+      description: 比较三个输入点。
+      max_score: 1
+    - step_id: step_5
+      description: 回代到 $a,b,c$。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值求值
+        target: 先化简 $a=-f(-\ln2)$。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 数值比较
+        target: 再用单调性完成三个函数值排序。
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 对称性配凑
+    subroute:
+      - 奇函数化简
+      - 导数下界放缩
+      - 指数对数比大小
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 三角复合结构
+      - 对称结构
+    evidence:
+      - $f(x)$ 同时含 $e^x,e^{-x},\sin2x$，需先判奇偶再判单调。
+      - 最终比较是同一函数在三个不同输入点取值。
+    normalization_moves_used:
+      - 把 $a$ 改写成 $f(\ln2)$。
+      - 用 $f^{\prime}(x)\ge0$ 建立全局保序。
+      - 把大小关系转为输入点比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f(-x)$ 与 $f(x)$ 判奇偶，回补函数性质与图像。
+      - 若学生不会用导数符号判单调，回补导数单调极值基础。
+      - 若学生在 $\log_4\sqrt3$、$\ln2$、$e^{0.2}$ 比较中卡住，回补指数对数基础。
+  detail_terms:
+    - $a=-f(-\ln2)$
+    - $f^{\prime}(x)=e^x+e^{-x}+2\cos2x$
+    - $e^x+e^{-x}\ge2$
+    - $\log_4\sqrt3<\ln2<e^{0.2}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0144_odd_sinh_sin_compare_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0144_ex04_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0144/page_0144.md
+      role: problem_start
+      evidence: 例4题干：$f(x)=e^x-e^{-x}+\sin 2x$，定义 $a,b,c$ 并给出四个选项。
+    - ref_id: page_0144_ex04_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0144/page_0144.md
+      role: solution
+      evidence: 例4解析：先证奇函数，再由 $f^{\prime}(x)\ge0$ 判增，最后比较 $\log_4\sqrt3,\ln2,e^{0.2}$。
+    - ref_id: page_0144_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0144/page_0144.md
+      role: local_context
+      evidence: 本页顶部是例3续解，不属于本卡；例4从本页新起。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0144.png
+      inspected: true
+      notes: 已核对原图：例4题干、选项、答案B与markdown一致。
+  source_context: page_0144 在章切换后给出例4，题目目标是三个函数值比较；解法为“奇偶化简 + 导数保序 + 自变量链式比较”。
+  source_influence:
+    - 保留源解第一步 $a=-f(-\ln2)=f(\ln2)$。
+    - 保留源解用 $e^x+e^{-x}\ge2$ 与 $2\cos2x\ge-2$ 得到 $f^{\prime}(x)\ge0$。
+    - 保留源解比较链：$\log_4\sqrt3<\ln2<e^{0.2}$，推出 $b<a<c$。
+  source_discrepancies: []
+original_problem:
+  stem: （24-25高二上·安徽·期末）已知函数 $f(x)=e^x-e^{-x}+\sin2x$，记 $a=-f(-\ln2)$，$b=f(\log_4\sqrt3)$，$c=f(e^{0.2})$，则 $a,b,c$ 的大小关系为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $c<a<b$
+      text_latex: $c<a<b$
+    - label: B
+      text_raw: $b<a<c$
+      text_latex: $b<a<c$
+    - label: C
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+    - label: D
+      text_raw: $b<c<a$
+      text_latex: $b<c<a$
+  answer: B
+  fidelity_notes:
+    - 原图中三角项写作 $\sin2x$，与markdown一致。
+    - 本题在page_0144内完整结束。
+solution:
+  source_solution_summary: |
+    先由
+    $f(-x)=e^{-x}-e^x+\sin(-2x)=-f(x)$
+    得 $f$ 是奇函数，所以
+    $a=-f(-\ln2)=f(\ln2)$。再求导：
+    $f^{\prime}(x)=e^x+e^{-x}+2\cos2x$，
+    且 $e^x+e^{-x}\ge2,\ 2\cos2x\ge-2$，
+    故 $f^{\prime}(x)\ge0$，即 $f$ 在 $\mathbf R$ 上递增。
+    比较自变量：
+    $\log_4\sqrt3<\log_42=\frac12=\ln\sqrt e<\ln2<1=e^0<e^{0.2}$，
+    所以
+    $f(\log_4\sqrt3)<f(\ln2)<f(e^{0.2})$，
+    即 $b<a<c$，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 先把 $a$ 改写成同一函数在正点的值。
+      formula_trace:
+        from: $a=-f(-\ln2)$
+        to: $f(-x)=-f(x)\Rightarrow a=f(\ln2)$
+        operation: 验证奇函数后代入 $x=\ln2$。
+        why: 把三元比较统一成同一个递增函数在三个自变量处取值。
+      source_ref: page_0144_ex04_solution
+    - step_id: step_2
+      statement: 用下界放缩判定导数非负。
+      formula_trace:
+        from: $f^{\prime}(x)=e^x+e^{-x}+2\cos2x$
+        to: $e^x+e^{-x}\ge2,\ 2\cos2x\ge-2\Rightarrow f^{\prime}(x)\ge0$
+        operation: 指数和用均值不等式，余弦项用值域下界。
+        why: 得到全实数上的单调递增性。
+      source_ref: page_0144_ex04_solution
+    - step_id: step_3
+      statement: 确认函数保序。
+      formula_trace:
+        from: $f^{\prime}(x)\ge0\ (x\in\mathbf R)$
+        to: $f(x)$ 在 $\mathbf R$ 上单调递增
+        operation: 由导数符号判单调。
+        why: 后续只需比较自变量大小。
+      source_ref: page_0144_ex04_solution
+    - step_id: step_4
+      statement: 比较三个输入点。
+      formula_trace:
+        from: $\log_4\sqrt3,\ \ln2,\ e^{0.2}$
+        to: $\log_4\sqrt3<\ln2<e^{0.2}$
+        operation: 用 $\log_42=1/2<\ln2$ 与 $e^0<e^{0.2}$ 拼接链式比较。
+        why: 递增函数下输入次序即输出次序。
+      source_ref: page_0144_ex04_solution
+    - step_id: step_5
+      statement: 回代到 $a,b,c$。
+      formula_trace:
+        from: $b=f(\log_4\sqrt3),\ a=f(\ln2),\ c=f(e^{0.2})$
+        to: $b<a<c$
+        operation: 按 step_3 的保序性比较函数值。
+        why: 对应选项 B。
+      source_ref: page_0144_ex04_solution
+teaching_card:
+  student_title: 先奇偶化简，再靠单调保序
+  what_it_trains: 训练“同函数多点比较”的标准链路：先把变量都写成 $f(\cdot)$，再证 $f$ 单调，最后只比输入点大小。
+  recognition_cues:
+    - 题干给出 $a=-f(-\ln2)$ 这类带负号输入。
+    - 函数由指数项和三角项组成，适合用导数下界直接判单调。
+    - 选项都是严格次序，不需要算具体值。
+  normalization_moves:
+    - 先判 $f$ 奇函数，把 $a$ 写成 $f(\ln2)$。
+    - 求 $f^{\prime}(x)$ 并做上下界放缩。
+    - 将比较任务降成输入点链式比较。
+  common_failures:
+    - 只看到 $a=-f(-\ln2)$ 但没有利用奇函数化简。
+    - 求导后没有证明 $f^{\prime}(x)$ 全程非负。
+    - 把 $\log_4\sqrt3$ 与 $\ln2$ 直接凭感觉比较。
+  similar_practice_query: 奇函数 单调性 指数三角复合 三点函数值比较
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0144 顶部是例3续解，已按ownership规则跳过，仅从例4起建卡。

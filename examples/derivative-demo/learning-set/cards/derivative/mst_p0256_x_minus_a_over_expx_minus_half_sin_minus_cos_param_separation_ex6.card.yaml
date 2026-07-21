@@ -1,0 +1,189 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0256_x_minus_a_over_expx_minus_half_sin_minus_cos_param_separation_ex6
+content_revision_id: mst_p0256_x_minus_a_over_expx_minus_half_sin_minus_cos_param_separation_ex6-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0256_x_minus_a_over_expx_minus_half_sin_minus_cos_param_separation_ex6.card.yaml
+stem: |-
+  已知函数 $f(x)=x-\frac{a}{e^x}-\frac12(\sin x-\cos x)$。
+  1. 当 $a=0$ 时，判断函数 $f(x)$ 的单调性。
+  2. 已知 $f(x)\ge1$ 对任意 $x\in\mathbf R$ 恒成立，求 $a$ 的取值范围。
+answer: |-
+  第(1)问：$f$ 在 $\mathbf R$ 上单调递增。第(2)问：$a\in(-\infty,-\frac12]$。
+
+  第(1)问当 $a=0$ 时， $f^\prime(x)=1-\frac12(\cos x+\sin x) =1-\frac{\sqrt2}{2}\sin(x+\frac\pi4)>0$，所以 $f$ 在 $\mathbf R$ 上递增。第(2)问由 $f(x)\ge1$ 得 $a\le (x-1-\frac12\sin x+\frac12\cos x)e^x$ 对任意 $x$ 恒成立。令右侧为 $g(x)$，则 $g^\prime(x)=(x-\sin x)e^x$。设 $\varphi(x)=x-\sin x$， $\varphi^\prime(x)=1-\cos x\ge0$ 且 $\varphi(0)=0$，故 $g$ 在 $(-\infty,0)$ 递减、在 $(0,+\infty)$ 递增，最小值 $g(0)=-\frac12$，所以 $a\le-\frac12$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 第(1)问：直接求导判单调。
+      max_score: 1
+    - step_id: step_2
+      description: 第(2)问：参变分离。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问：构造右侧函数并求导。
+      max_score: 1
+    - step_id: step_4
+      description: 第(2)问：用 $x-\sin x$ 判极值。
+      max_score: 1
+    - step_id: step_5
+      description: 第(2)问：代入最小值。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 1 问
+        result: $f$ 在 $\mathbf R$ 上单调递增。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $a\le-\frac12$。
+  method:
+    primary: 参变量分离
+    secondary:
+      - 显隐点探路
+      - 同构变形与换元法
+    subroute:
+      - 全域参变分离
+      - 右侧函数最小值
+      - $x-\sin x$ 符号判定
+      - 端点显点 $x=0$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 三角复合结构
+      - 不等式工具结构
+      - 局部逼近结构
+    evidence:
+      - $x-\frac{a}{e^x}-\frac12(\sin x-\cos x)$
+      - $(x-1-\frac12\sin x+\frac12\cos x)e^x$
+      - $x-\sin x$
+      - $g(0)=-\frac12$
+    normalization_moves_used:
+      - 把 $a/e^x$ 移项后乘回 $e^x$。
+      - 把右侧整体设成 $g(x)$。
+      - 用 $x-\sin x$ 的单调性判定全局最小值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会合并 $\sin x+\cos x$，回补三角函数基础。
+      - 若学生不会参变分离，回补不等式工具基础。
+      - 若学生不会求 $g^\prime(x)$，回补导数运算与几何意义。
+      - 若学生不会由导数符号求全局最小值，回补导数单调极值基础。
+  detail_terms:
+    - $a/e^x$
+    - $\sin x-\cos x$
+    - 参变分离
+    - $x-\sin x$
+    - $g(0)=-\frac12$
+parts: &a1
+  - id: "1"
+    text: 当 $a=0$ 时，判断函数 $f(x)$ 的单调性。
+  - id: "2"
+    text: 已知 $f(x)\ge1$ 对任意 $x\in\mathbf R$ 恒成立，求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0256_x_minus_a_over_expx_minus_half_sin_minus_cos_param_separation_ex6
+source_evidence:
+  source_refs:
+    - ref_id: page_0256_ex6_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0256/page_0256.md
+      role: problem_start
+      evidence: page_0256 页底给出例6题头：$f(x)=x-\frac{a}{e^x}-\frac12(\sin x-\cos x)$。
+    - ref_id: page_0257_ex6_problem_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0257/page_0257.md
+      role: problem_continuation
+      evidence: page_0257 页首给出例6两问：第(1)问 $a=0$ 判断单调性；第(2)问 $f(x)\ge1$ 对任意 $x\in\mathbf R$ 恒成立，求 $a$。
+    - ref_id: page_0257_ex6_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0257/page_0257.md
+      role: solution
+      evidence: page_0257 例6解析第(1)问证明 $f^\prime(x)>0$；第(2)问参变分离为 $a\le (x-1-\frac12\sin x+\frac12\cos x)e^x$，求右侧最小值 $-\frac12$。
+    - ref_id: page_0257_theory_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0257/page_0257.md
+      role: local_context
+      evidence: 例6解析后进入“端点效应之参变分离”理论段，说明例6闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0256.png
+      inspected: true
+      notes: 已核对页图：例6题头位于 page_0256 页底。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0257.png
+      inspected: true
+      notes: 已核对页图：page_0257 页首是例6两问和解析，随后进入理论段。
+  source_context: 本卡处理 page_0256 起头、page_0257 页首续完的例6；page_0257 理论段只作边界确认。
+  source_influence:
+    - 保留第(1)问用 $1-\frac{\sqrt2}{2}\sin(x+\frac\pi4)>0$ 判全域递增。
+    - 保留第(2)问把参数 $a$ 分离到一侧。
+    - 保留核心辅助函数 $g(x)=(x-1-\frac12\sin x+\frac12\cos x)e^x$，用 $g^\prime(x)=(x-\sin x)e^x$ 求最小值。
+  source_discrepancies: []
+original_problem:
+  stem: 已知函数 $f(x)=x-\frac{a}{e^x}-\frac12(\sin x-\cos x)$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问：$f$ 在 $\mathbf R$ 上单调递增。第(2)问：$a\in(-\infty,-\frac12]$。
+  fidelity_notes:
+    - 题头跨页，page_0256 给出函数，page_0257 给出两问和解析。
+solution:
+  source_solution_summary: 第(1)问当 $a=0$ 时， $f^\prime(x)=1-\frac12(\cos x+\sin x) =1-\frac{\sqrt2}{2}\sin(x+\frac\pi4)>0$，所以 $f$ 在 $\mathbf R$ 上递增。第(2)问由 $f(x)\ge1$ 得 $a\le (x-1-\frac12\sin x+\frac12\cos x)e^x$ 对任意 $x$ 恒成立。令右侧为 $g(x)$，则 $g^\prime(x)=(x-\sin x)e^x$。设 $\varphi(x)=x-\sin x$， $\varphi^\prime(x)=1-\cos x\ge0$ 且 $\varphi(0)=0$，故 $g$ 在 $(-\infty,0)$ 递减、在 $(0,+\infty)$ 递增，最小值 $g(0)=-\frac12$，所以 $a\le-\frac12$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问：直接求导判单调。
+      formula_trace:
+        from: $f(x)=x-\frac12(\sin x-\cos x)$
+        to: $f^\prime(x)=1-\frac{\sqrt2}{2}\sin(x+\frac\pi4)>0$
+        operation: 合并 $\cos x+\sin x$。
+        why: 导数全正，所以全域递增。
+      source_ref: page_0257_ex6_solution
+    - step_id: step_2
+      statement: 第(2)问：参变分离。
+      formula_trace:
+        from: $x-\frac{a}{e^x}-\frac12(\sin x-\cos x)\ge1$
+        to: $a\le (x-1-\frac12\sin x+\frac12\cos x)e^x$
+        operation: 把含 $a$ 的项移到一侧，再乘以 $e^x$。
+        why: 求参数范围转为求右侧函数的全局最小值。
+      source_ref: page_0257_ex6_solution
+    - step_id: step_3
+      statement: 第(2)问：构造右侧函数并求导。
+      formula_trace:
+        from: $g(x)=(x-1-\frac12\sin x+\frac12\cos x)e^x$
+        to: $g^\prime(x)=(x-\sin x)e^x$
+        operation: 乘积求导并合并三角项。
+        why: 导数被化成简单的 $x-\sin x$。
+      source_ref: page_0257_ex6_solution
+    - step_id: step_4
+      statement: 第(2)问：用 $x-\sin x$ 判极值。
+      formula_trace:
+        from: $\varphi(x)=x-\sin x,\ \varphi^\prime(x)=1-\cos x\ge0,\ \varphi(0)=0$
+        to: $g$ 在 $0$ 处取全局最小值
+        operation: 先判 $\varphi$ 的符号，再判 $g^\prime$ 的符号。
+        why: 右侧函数的最低点给出 $a$ 的上界。
+      source_ref: page_0257_ex6_solution
+    - step_id: step_5
+      statement: 第(2)问：代入最小值。
+      formula_trace:
+        from: $g(0)=-\frac12$
+        to: $a\le-\frac12$
+        operation: 取右侧函数全局最小值。
+        why: 要让 $a\le g(x)$ 对任意 $x$ 成立，必须且只需 $a$ 不超过最小值。
+      source_ref: page_0257_ex6_solution
+teaching_card:
+  student_title: 把 $a/e^x$ 乘回去，转成右侧函数求最小值
+  what_it_trains: 训练全域恒成立里的参变分离：参数挂在 $e^{-x}$ 上时，先乘回 $e^x$，再研究剩下函数的最小值。
+  recognition_cues:
+    - 题目要求 $f(x)\ge1$ 对任意实数成立。
+    - 参数以 $-\frac a{e^x}$ 的形式出现，适合乘以 $e^x$ 分离。
+    - 求导后出现非常干净的 $x-\sin x$。
+  normalization_moves:
+    - 第(1)问直接用 $\sin x+\cos x$ 的最大值控导数。
+    - 第(2)问先参变分离，不要先对原函数硬分类。
+    - 看到 $x-\sin x$，用导数 $1-\cos x\ge0$ 判符号。
+  common_failures:
+    - 移项时忘记 $e^x>0$，把不等号方向弄乱。
+    - 把 $a$ 的范围误写成 $a\ge-\frac12$。
+    - 只找到 $x=0$，没有证明它是全局最小点。
+  similar_practice_query: 参变分离 a/e^x sinx-cosx x-sinx 全局最小值 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,247 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0304_aexp_minus_lnxplusa_min_zero_abs_extreme_bound_ex06
+content_revision_id: mst_p0304_aexp_minus_lnxplusa_min_zero_abs_extreme_bound_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0304_aexp_minus_lnxplusa_min_zero_abs_extreme_bound_ex06.card.yaml
+stem: |-
+  （2023 · 长沙县月考）已知函数 $f(x)=ae^x-\ln(x+a)-1$。
+  1. 若 $f(x)$ 的极小值为 $0$，求实数 $a$ 的值。
+  2. 当 $a>0$ 时，证明：$f(x)$ 存在唯一极值点 $x_0$，且 $f(x_0)+2|x_0|\ge0$。
+answer: |-
+  第(1)问：$a=1$。第(2)问：$f(x)$ 存在唯一极值点 $x_0$，且 $f(x_0)+2|x_0|\ge0$。
+
+  第(1)问：定义域为 $(-a,+\infty)$， $f^\prime(x)=ae^x-\frac1{x+a}$。若 $a\le0$，则 $f^\prime(x)<0$，无极值，所以 $a>0$。此时 $f^{\prime\prime}(x)=ae^x+\frac1{(x+a)^2}>0$， $f^\prime$ 单调递增。设极小值点为 $x_1$，由 $f^\prime(x_1)=0$ 与 $f(x_1)=0$ 得 $ae^{x_1}=\frac1{x_1+a}$，以及 $\frac1{x_1+a}-\ln(x_1+a)-1=0$。令 $t=x_1+a$，$\varphi(t)=\frac1t-\ln t-1$ 单调递减， 且 $\varphi(1)=0$，故 $x_1+a=1$。再由 $ae^{x_1}=1$ 得 $x_1=0,a=1$。 第(2)问：当 $a>0$ 时，$f^{\prime\prime}>0$，所以 $f^\prime$ 严格递增，并由端点趋势知存在唯一极值点 $x_0$。 若 $a=1$，由第(1)问 $x_0=0$，等号成立。若 $0<a<1$，$f^\prime(0)<0$，所以 $x_0>0$；用 $ae^{x_0}=\frac1{x_0+a}$ 得 $f(x_0)+2|x_0| =\frac1{x_0+a}-\ln(x_0+a)+2x_0-1$，再由 $x_0+a<x_0+1$ 下放到 $\frac1{x_0+1}-\ln(x_0+1)+2x_0-1>0$。若 $a>1$，$f^\prime(0)>0$，所以 $x_0<0$；第一次只代换指数不能证明， 改由 $f^\prime(x_0)=0$ 得 $\ln(x_0+a)=-\ln a-x_0$，于是 $f(x_0)+2|x_0|=ae^{x_0}+\ln a-x_0-1 >e^{x_0}-x_0-1>0$。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 先排除 $a\le0$，确认极小值点只能在 $a>0$ 时出现。
+      max_score: 1
+    - step_id: step_2
+      description: 用极小值点同时满足导数为零和函数值为零来消元。
+      max_score: 1
+    - step_id: step_3
+      description: 令 $t=x_1+a$，解出第(1)问参数。
+      max_score: 1
+    - step_id: step_4
+      description: 第(2)问先证明唯一极值点，并用 $f^\prime(0)$ 判断 $x_0$ 正负。
+      max_score: 1
+    - step_id: step_5
+      description: 处理 $0<a<1$：代换指数部分并向 $x_0+1$ 放缩。
+      max_score: 1
+    - step_id: step_6
+      description: 处理 $a>1$：第一次代换指数失败，改代换对数。
+      max_score: 1
+    - step_id: step_7
+      description: 用对数代换完成 $a>1$ 情形。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 数值求值
+        target: 第 1 问
+        result: $a=1$。
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 2 问
+        result: 存在唯一极值点 $x_0$，且 $f(x_0)+2|x_0|\ge0$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 含参数分类讨论
+      - 充分/必要性探路
+      - 拟合与夹逼
+    subroute:
+      - 极小值点 $x_1$ 的方程组
+      - $t=x_1+a$ 消元
+      - $f^\prime(0)=a-\frac1a$ 判定 $x_0$ 符号
+      - $0<a<1$ 代换指数部分
+      - $a>1$ 代换对数部分
+      - 根据主体变量调整隐点代换方向
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非对称结构
+      - Max/Min 与绝对值结构
+      - 不等式工具结构
+    evidence:
+      - $ae^x-\ln(x+a)-1$
+      - $ae^x-\frac1{x+a}$
+      - $x_1+a$
+      - $f(x_0)+2|x_0|$
+      - $ae^{x_0}=\frac1{x_0+a}$
+      - $\ln(x_0+a)=-\ln a-x_0$
+    normalization_moves_used:
+      - 极小值为零用 $f^\prime=0$ 和 $f=0$ 两个条件消元。
+      - 第(2)问先用 $f^\prime(0)$ 决定绝对值展开方向。
+      - 不同参数区间选择不同的隐点代换对象。
+      - 把目标不等式转成 $u-\ln(1+u)$、$e^u-u-1$ 这类基本正性。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会处理定义域和导数，回补函数三要素与定义域。
+      - 若学生不会由极值点转导函数零点，回补导数单调极值基础。
+      - 若学生不会消去 $ae^{x_1}$ 或对导数零点方程取对数，回补代数恒等变形。
+      - 若学生不会用 $e^x>x+1$、$\ln(1+x)<x$，回补指数对数基础。
+      - 若学生不会处理绝对值分段，回补不等式工具基础。
+  detail_terms:
+    - $ae^x-\ln(x+a)-1$
+    - $f(x)$ 的极小值为 $0$
+    - $x_1+a=1$
+    - $a=1$
+    - $f^\prime(0)=a-\frac1a$
+    - $f(x_0)+2|x_0|\ge0$
+    - $ae^{x_0}=\frac1{x_0+a}$
+    - $\ln(x_0+a)=-\ln a-x_0$
+parts: &a1
+  - part_id: "1"
+    text: 若 $f(x)$ 的极小值为 $0$，求实数 $a$ 的值。
+  - part_id: "2"
+    text: 当 $a>0$ 时，证明：$f(x)$ 存在唯一极值点 $x_0$，且 $f(x_0)+2|x_0|\ge0$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0304_aexp_minus_lnxplusa_min_zero_abs_extreme_bound_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0304_ex06_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0304/page_0304.md
+      role: problem_start
+      evidence: page_0304 例6题头：$f(x)=ae^x-\ln(x+a)-1$；(1) 若极小值为 0，求 $a$；(2) 当 $a>0$，证明存在唯一极值点 $x_0$ 且 $f(x_0)+2|x_0|\ge0$。
+    - ref_id: page_0304_ex06_part1_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0304/page_0304.md
+      role: solution
+      evidence: page_0304 第(1)问：由 $f^\prime(x_1)=0$ 与 $f(x_1)=0$ 消去 $ae^{x_1}$，得 $\frac1{x_1+a}-\ln(x_1+a)-1=0$，令 $t=x_1+a$ 后得 $t=1$，最终 $a=1$。
+    - ref_id: page_0304_ex06_part2_split
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0304/page_0304.md
+      role: solution
+      evidence: page_0304 第(2)问：由 $f^{\prime\prime}>0$ 得 $f^\prime$ 单调递增；用 $f^\prime(0)=a-\frac1a$ 分成 $a=1$、$0<a<1$、$a>1$。
+    - ref_id: page_0305_ex06_part2_tail
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0305/page_0305.md
+      role: solution
+      evidence: page_0305 顶部补全 $a>1$ 情形：第一次用 $ae^{x_0}=\frac1{x_0+a}$ 方案失败，改用 $\ln(x_0+a)=-\ln a-x_0$，得 $f(x_0)+2|x_0|>e^{x_0}-x_0-1>0$。
+    - ref_id: page_0305_ex06_note
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0305/page_0305.md
+      role: teacher_note
+      evidence: page_0305 注意段总结：$0<a<1$ 时调整指数部分，$a>1$ 时调整对数部分，核心是根据导致极值点的主体变量选择隐零点代换方向。
+    - ref_id: page_0305_ex07_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0305/page_0305.md
+      role: local_context
+      evidence: page_0305 随后另起例7，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0304.png
+      inspected: true
+      notes: 已核对页图：page_0304 从例6题头到第(2)问 $a>1$ 情形开头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0305.png
+      inspected: true
+      notes: 已核对页图：page_0305 顶部补全例6，随后另起例7。
+  source_context: 本卡处理 page_0304 起始、page_0305 顶部结束的例6；page_0305 例7排除。
+  source_influence:
+    - 保留定义域 $(-a,+\infty)$ 与 $f^\prime(x)=ae^x-\frac1{x+a}$。
+    - 保留第(1)问通过极小值点 $x_1$ 同时满足 $f^\prime(x_1)=0$、$f(x_1)=0$ 来消元。
+    - 保留 $t=x_1+a$ 与 $\frac1t-\ln t-1$ 单调递减。
+    - 保留第(2)问用 $f^\prime(0)=a-\frac1a$ 判定 $x_0$ 正负。
+    - 保留 $0<a<1$ 时用 $ae^{x_0}=\frac1{x_0+a}$ 代换指数部分，再放缩到 $x_0+1$。
+    - 保留 $a>1$ 时第一次代换方案失败，改用 $\ln(x_0+a)=-\ln a-x_0$ 代换对数部分。
+    - 保留教师总结：隐点代换方向由产生极值点的主体变量决定。
+  source_discrepancies:
+    - issue: page_0304 第(1)问源文/OCR 写 $f^{\prime\prime}(x)=ae^x+\frac1{(x_1+a)^2}>0$。
+      resolution: 按导数公式和 page_0304 第(2)问同式，题卡采用 $f^{\prime\prime}(x)=ae^x+\frac1{(x+a)^2}>0$。
+      requires_user_decision: false
+    - issue: page_0304 第(2)问 $0<a<1$ 情形，把 $x_0+a$ 放缩到 $x_0+1$ 后源文写成等号。
+      resolution: 数学上应为下界不等式：因 $x_0+a<x_0+1$ 且 $\frac1u-\ln u$ 递减，所以原式大于替换为 $x_0+1$ 后的表达式。
+      requires_user_decision: false
+    - issue: "page_0305 注意段源 markdown 有 Reconstruction Marker：核心 [?unclear: 实什么]。"
+      resolution: 页图可读作“核心是什么”，但该短语不影响题干或解法；题卡只保留其后关于隐零点代换方向的确定内容。
+      requires_user_decision: false
+original_problem:
+  stem: （2023 · 长沙县月考）已知函数 $f(x)=ae^x-\ln(x+a)-1$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问：$a=1$。第(2)问：$f(x)$ 存在唯一极值点 $x_0$，且 $f(x_0)+2|x_0|\ge0$。
+  fidelity_notes:
+    - 无选项。
+    - 第(2)问的关键分界是 $f^\prime(0)=a-\frac1a$，不是机械按绝对值分段。
+solution:
+  source_solution_summary: 第(1)问：定义域为 $(-a,+\infty)$， $f^\prime(x)=ae^x-\frac1{x+a}$。若 $a\le0$，则 $f^\prime(x)<0$，无极值，所以 $a>0$。此时 $f^{\prime\prime}(x)=ae^x+\frac1{(x+a)^2}>0$， $f^\prime$ 单调递增。设极小值点为 $x_1$，由 $f^\prime(x_1)=0$ 与 $f(x_1)=0$ 得 $ae^{x_1}=\frac1{x_1+a}$，以及 $\frac1{x_1+a}-\ln(x_1+a)-1=0$。令 $t=x_1+a$，$\varphi(t)=\frac1t-\ln t-1$ 单调递减， 且 $\varphi(1)=0$，故 $x_1+a=1$。再由 $ae^{x_1}=1$ 得 $x_1=0,a=1$。 第(2)问：当 $a>0$ 时，$f^{\prime\prime}>0$，所以 $f^\prime$ 严格递增，并由端点趋势知存在唯一极值点 $x_0$。 若 $a=1$，由第(1)问 $x_0=0$，等号成立。若 $0<a<1$，$f^\prime(0)<0$，所以 $x_0>0$；用 $ae^{x_0}=\frac1{x_0+a}$ 得 $f(x_0)+2|x_0| =\frac1{x_0+a}-\ln(x_0+a)+2x_0-1$，再由 $x_0+a<x_0+1$ 下放到 $\frac1{x_0+1}-\ln(x_0+1)+2x_0-1>0$。若 $a>1$，$f^\prime(0)>0$，所以 $x_0<0$；第一次只代换指数不能证明， 改由 $f^\prime(x_0)=0$ 得 $\ln(x_0+a)=-\ln a-x_0$，于是 $f(x_0)+2|x_0|=ae^{x_0}+\ln a-x_0-1 >e^{x_0}-x_0-1>0$。
+  key_steps:
+    - step_id: step_1
+      statement: 先排除 $a\le0$，确认极小值点只能在 $a>0$ 时出现。
+      formula_trace:
+        from: $f^\prime(x)=ae^x-\frac1{x+a}$
+        to: $a>0$
+        operation: 若 $a\le0$，则 $ae^x\le0$ 且 $-\frac1{x+a}<0$。
+        why: 极小值为 $0$ 先要求函数确有极值。
+      source_ref: page_0304_ex06_part1_solution
+    - step_id: step_2
+      statement: 用极小值点同时满足导数为零和函数值为零来消元。
+      formula_trace:
+        from: $f^\prime(x_1)=0,\quad f(x_1)=0$
+        to: $\frac1{x_1+a}-\ln(x_1+a)-1=0$
+        operation: 由 $ae^{x_1}=\frac1{x_1+a}$ 代回 $f(x_1)=0$。
+        why: 把含参极小值条件降成只含 $x_1+a$ 的方程。
+      source_ref: page_0304_ex06_part1_solution
+    - step_id: step_3
+      statement: 令 $t=x_1+a$，解出第(1)问参数。
+      formula_trace:
+        from: $\frac1t-\ln t-1=0$
+        to: $t=1,\quad x_1=0,\quad a=1$
+        operation: 利用 $\frac1t-\ln t-1$ 单调递减且在 $t=1$ 为零。
+        why: 这锁定极小值为零时的唯一参数。
+      source_ref: page_0304_ex06_part1_solution
+    - step_id: step_4
+      statement: 第(2)问先证明唯一极值点，并用 $f^\prime(0)$ 判断 $x_0$ 正负。
+      formula_trace:
+        from: $f^{\prime\prime}(x)=ae^x+\frac1{(x+a)^2}>0,\quad f^\prime(0)=a-\frac1a$
+        to: $a=1\Rightarrow x_0=0;\ 0<a<1\Rightarrow x_0>0;\ a>1\Rightarrow x_0<0$
+        operation: 用 $f^\prime$ 严格递增和零点相对 $0$ 的位置。
+        why: 绝对值 $|x_0|$ 的拆法由 $x_0$ 的符号决定。
+      source_ref: page_0304_ex06_part2_split
+    - step_id: step_5
+      statement: 处理 $0<a<1$：代换指数部分并向 $x_0+1$ 放缩。
+      formula_trace:
+        from: $ae^{x_0}=\frac1{x_0+a}$
+        to: $f(x_0)+2|x_0|>\frac1{x_0+1}-\ln(x_0+1)+2x_0-1>0$
+        operation: 用 $x_0+a<x_0+1$ 与 $\frac1u-\ln u$ 递减，再拆成 $x_0-\ln(x_0+1)$ 和 $\frac1{x_0+1}+x_0+1-2$。
+        why: 这个方向能把单调性调整成可直接判正的式子。
+      source_ref: page_0304_ex06_part2_split
+    - step_id: step_6
+      statement: 处理 $a>1$：第一次代换指数失败，改代换对数。
+      formula_trace:
+        from: $ae^{x_0}(x_0+a)=1$
+        to: $\ln(x_0+a)=-\ln a-x_0$
+        operation: 对导数零点方程取对数。
+        why: 此时产生极值点的主体变量是 $-\frac1{x+a}$，换对数项才顺单调。
+      source_ref: page_0305_ex06_part2_tail
+    - step_id: step_7
+      statement: 用对数代换完成 $a>1$ 情形。
+      formula_trace:
+        from: $f(x_0)+2|x_0|=ae^{x_0}+\ln a-x_0-1$
+        to: $f(x_0)+2|x_0|>e^{x_0}-x_0-1>0$
+        operation: 用 $a>1$、$\ln a>0$，再用 $e^x>x+1$。
+        why: 完成绝对值另一侧的证明。
+      source_ref: page_0305_ex06_part2_tail
+teaching_card:
+  student_title: 按主体变量选择隐点代换方向
+  what_it_trains: 训练含绝对值的极值点不等式：先确定隐点位置，再判断该消指数项还是消对数项。
+  recognition_cues:
+    - 函数里同时有 $ae^x$ 和 $\ln(x+a)$。
+    - 目标里出现 $f(x_0)$ 和 $|x_0|$，而 $x_0$ 是极值点。
+    - $f^\prime(0)=a-\frac1a$ 直接决定 $x_0$ 在 0 的哪一侧。
+    - 同一个隐点方程可以消指数，也可以消对数，方向不同结果差很多。
+  normalization_moves:
+    - 第(1)问不要硬求极小值点，先把 $x_1+a$ 当整体。
+    - 第(2)问先拆 $a=1,0<a<1,a>1$。
+    - $0<a<1$ 时换掉 $ae^{x_0}$，再向 $x_0+1$ 放缩。
+    - $a>1$ 时换掉 $\ln(x_0+a)$，得到 $e^{x_0}-x_0-1$。
+  common_failures:
+    - 忘记检查 $a\le0$ 时没有极值。
+    - 把 $f^{\prime\prime}$ 的正性写成只在极值点成立。
+    - 第(2)问不先判断 $x_0$ 正负就展开绝对值。
+    - 在 $0<a<1$ 情形把放缩方向写反。
+    - $a>1$ 情形坚持只代换指数，导致证明卡死。
+  similar_practice_query: ae^x ln(x+a) 极值点 绝对值 隐点代换 指数对数分流
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

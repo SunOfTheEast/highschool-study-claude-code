@@ -1,0 +1,155 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0045_section2_ex15
+content_revision_id: mst_p0045_section2_ex15-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0045_section2_ex15.card.yaml
+stem: |-
+  函数 f(x)=x^2，g(x)=2\ln x+a 的图象有公共点，则实数 a 的取值范围为（ ）
+  A. [e, +∞)
+  B. (1, +∞)
+  C. [1, +∞)
+  D. (-∞, -1]
+answer: |-
+  C
+
+  公共点等价于 x^2-2\ln x-a=0 在 x>0 有实根。令 h(x)=x^2-2\ln x-a，导数 h'(x)=2x-2/x，最小值在 x=1 处为 1-a，因此有实根需且只需 1-a\leqslant0，即 a\geqslant1。也可令 t=x^2，化为 t=\ln t+a，利用 t\geqslant\ln t+1 得同样结论。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把两个图象有公共点转成一个方程有正根。
+      max_score: 1
+    - step_id: step_2
+      description: 求 h(x) 在正半轴上的最小值。
+      max_score: 1
+    - step_id: step_3
+      description: 用最小值不大于 0 判定有实根。
+      max_score: 1
+    - step_id: step_4
+      description: 同构法也能把问题看成 t 与 \ln t 的切线比较。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 切线放缩与凹凸性
+    subroute:
+      - 对数切线找点
+      - t 与 ln t 比较
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 不等式工具结构
+    evidence:
+      - x^2=2\ln x+a
+      - t=\ln t+a
+      - t\geqslant\ln t+1
+    normalization_moves_used:
+      - 把 2\ln x 改写为 \ln x^2。
+      - 用 t=x^2 统一幂函数与对数变量。
+  fallback:
+    only_if_trace_shows:
+      - 若学生没有写出 x>0 的定义域，回补函数三要素与定义域。
+      - 若学生不会用 h_{\min}\leqslant0 判断方程有根，回补导数单调极值基础。
+      - 若学生看不出 2\ln x=\ln x^2，回补指数对数基础。
+  detail_terms:
+    - h(x)=x^2-2\ln x-a
+    - h_{\min}=1-a
+    - t\geqslant\ln t+1
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0045_section2_ex15
+source_evidence:
+  source_refs:
+    - ref_id: page_0045
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0045/page_0045.md
+      role: problem_start
+      evidence: 例 15：函数 f(x)=x^2，g(x)=2\ln x+a 的图象有公共点，求 a 的取值范围。
+    - ref_id: page_0045_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0045/page_0045.md
+      role: solution
+      evidence: 解析法一研究 h(x)=x^2-2\ln x-a 的最小值，法二令 t=x^2 得 t=\ln t+a，并用 t\geqslant\ln t+1。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0045.png
+      inspected: true
+      notes: 页图已核对：例 15 题干、四个选项、两种解析和答案 C 完整。
+  source_context: 本题承接页首“对数切线斜率找点”公式，用公共点问题转化为参数存在性。
+  source_influence: []
+  source_discrepancies: []
+original_problem:
+  stem: 函数 f(x)=x^2，g(x)=2\ln x+a 的图象有公共点，则实数 a 的取值范围为（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: "[e, +∞)"
+      text_latex: "[e, +\\infty)"
+    - label: B
+      text_raw: (1, +∞)
+      text_latex: (1, +\infty)
+    - label: C
+      text_raw: "[1, +∞)"
+      text_latex: "[1, +\\infty)"
+    - label: D
+      text_raw: (-∞, -1]
+      text_latex: (-\infty, -1]
+  answer: C
+  fidelity_notes: []
+solution:
+  source_solution_summary: 公共点等价于 x^2-2\ln x-a=0 在 x>0 有实根。令 h(x)=x^2-2\ln x-a，导数 h'(x)=2x-2/x，最小值在 x=1 处为 1-a，因此有实根需且只需 1-a\leqslant0，即 a\geqslant1。也可令 t=x^2，化为 t=\ln t+a，利用 t\geqslant\ln t+1 得同样结论。
+  key_steps:
+    - step_id: step_1
+      statement: 把两个图象有公共点转成一个方程有正根。
+      formula_trace:
+        from: x^2=2\ln x+a
+        to: h(x)=x^2-2\ln x-a=0,\quad x>0
+        operation: 移项并明确对数定义域。
+        why: 公共点存在性就是该方程在定义域内有解。
+      source_ref: page_0045_solution
+    - step_id: step_2
+      statement: 求 h(x) 在正半轴上的最小值。
+      formula_trace:
+        from: h'(x)=2x-\frac{2}{x}
+        to: x=1,\quad h_{\min}=h(1)=1-a
+        operation: 令 h'(x)=0 得 x=1，并由导数符号判断先减后增。
+        why: h(x) 趋向两端均变大，最小值决定方程能否与 0 相交。
+      source_ref: page_0045_solution
+    - step_id: step_3
+      statement: 用最小值不大于 0 判定有实根。
+      formula_trace:
+        from: h_{\min}=1-a
+        to: 1-a\leqslant0,\quad a\geqslant1
+        operation: 要求最低点不高于 x 轴。
+        why: 连续函数最低点不高于 0 时，方程 h(x)=0 有解。
+      source_ref: page_0045_solution
+    - step_id: step_4
+      statement: 同构法也能把问题看成 t 与 \ln t 的切线比较。
+      formula_trace:
+        from: x^2=2\ln x+a
+        to: t=\ln t+a,\quad t=x^2>0
+        operation: 用 2\ln x=\ln x^2，令 t=x^2。
+        why: t\geqslant\ln t+1 显示 a 至少为 1 时才可能相交。
+      source_ref: page_0045_solution
+teaching_card:
+  student_title: 把 x^2 和 2\ln x 统一成 t 与 \ln t
+  what_it_trains: 训练把图象公共点转成方程存在性，再用最小值或对数切线不等式判定参数。
+  recognition_cues:
+    - 两个函数图象有公共点。
+    - 一边是 x^2，一边是 2\ln x+a。
+    - 出现 2\ln x，可改写成 \ln x^2。
+  normalization_moves:
+    - 先把公共点写成 x^2-2\ln x-a=0。
+    - 也可以令 t=x^2，把式子化成 t=\ln t+a。
+  common_failures:
+    - 把有公共点误判成对所有 x 恒成立。
+    - 忘记 x>0，错误保留 x=-1 这个驻点。
+    - 把 [1,+\infty) 误写成 (1,+\infty)，漏掉相切情形。
+  similar_practice_query: x^2 与 ln x 图象公共点参数范围，令 t=x^2 使用 t>=ln t+1
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

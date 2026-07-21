@@ -1,0 +1,177 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0260_reciprocal_symmetry_three_zeros_factor_conflict_ex8
+content_revision_id: mst_p0260_reciprocal_symmetry_three_zeros_factor_conflict_ex8-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0260_reciprocal_symmetry_three_zeros_factor_conflict_ex8.card.yaml
+stem: （2025 · 河南 · 三模 18 节选）已知函数 $f(x)=2(x-\frac1x)-a\ln x$，$a\in\mathbf R$，设 $f(x)$ 的图象在 $x=1$ 处的切线为 $l:y=kx+b$。若 $f(x)$ 有三个零点 $x_1,x_2,x_3$（$x_1<x_2<x_3$），求 $a$ 的取值范围。
+answer: |-
+  $a>4$
+
+  题头公式具有倒数反对称：$f(1)=0$，且 $f(x)+f(\frac1x)=0$，所以三个零点等价于在 $x>1$ 侧再出现 一个零点。按题头保留系数 2，有 $f^\prime(x)=2(1+\frac1{x^2})-\frac ax$，特别地 $f^\prime(1)=4-a$。若 $a\le4$，$x=1$ 右侧不能先向下穿出，右侧无额外零点； 若 $a>4$，$f^\prime(1)<0$，而 $x\to+\infty$ 时 $f(x)\to+\infty$， 所以 $(1,+\infty)$ 出现一个额外零点，并由倒数对称配出左侧零点，故三个零点条件为 $a>4$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 识别倒数对称带来的零点配对。
+      max_score: 1
+    - step_id: step_2
+      description: 把三零点问题降成右侧找一个额外零点。
+      max_score: 1
+    - step_id: step_3
+      description: 源解析链路实际按无系数版本判阈值。
+      max_score: 1
+    - step_id: step_4
+      description: 按题头版本重新求阈值。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: main
+        goal: 求参数范围
+        target: 第 main 问
+        result: $a>4$。
+  method:
+    primary: 对称化与偏移
+    secondary:
+      - 显隐点探路
+      - 充分/必要性探路
+      - 含参数分类讨论
+    subroute:
+      - 倒数对称零点配对
+      - 中间零点显点探路
+      - 右侧唯一零点
+      - 题头系数保留
+  structure:
+    primary: 对称结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $f(x)+f(\frac1x)=0$
+      - $x=1$ 中间零点
+      - $2(x-\frac1x)-a\ln x$
+      - $x-\frac1x-a\ln x$
+    normalization_moves_used:
+      - 先用倒数替换确认零点关于 $x=1$ 成对。
+      - 把三零点目标转成右侧额外零点。
+      - 保留题头系数 2，计算右侧导数阈值 $a>4$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会识别 $x$ 与 $\frac1x$ 的配对，回补函数性质与图像。
+      - 若学生不会求 $f^\prime(1)$ 判断中间零点两侧趋势，回补导数单调极值基础。
+      - 若学生处理 $\ln\frac1x$ 出错，回补指数对数基础。
+      - 若学生不清楚三零点和单调区间关系，回补方程根分布与韦达。
+  detail_terms:
+    - $f(x)+f(\frac1x)=0$
+    - $x=1$ 中间零点
+    - 倒数对称
+    - 三个零点
+    - $a>4$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0260_reciprocal_symmetry_three_zeros_factor_conflict_ex8
+source_evidence:
+  source_refs:
+    - ref_id: page_0260_theory_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0260/page_0260.md
+      role: local_context
+      evidence: page_0260 页首是“双端点效应之中间零点模型”的理论续文，不是本卡题头。
+    - ref_id: page_0260_ex8_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0260/page_0260.md
+      role: problem_start
+      evidence: page_0260 例8题头可见 $f(x)=2(x-\frac1x)-a\ln x$，并要求若 $f$ 有三个零点，求 $a$ 的取值范围。
+    - ref_id: page_0260_ex8_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0260/page_0260.md
+      role: solution
+      evidence: page_0260 例8解析先写 $f(x)=2(x-\frac1x)-a\ln x$，随后在求导和比较时改用 $x-\frac1x-a\ln x$，阈值也按该式走到 $a>2$。
+    - ref_id: page_0260_ex9_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0260/page_0260.md
+      role: local_context
+      evidence: page_0260 随后另起例9，说明例8在本页闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0260.png
+      inspected: true
+      notes: 已核对原图：题头处清楚显示 $2(x-\frac1x)-a\ln x$；解析后续多处按 $x-\frac1x-a\ln x$ 处理。
+  source_context: 本卡处理 page_0260 起头并在同页结束的例8；由于题干与解析系数冲突且答案会改变，本卡进入用户拍板队列。
+  source_influence:
+    - 保留题干的倒数对称：$f(x)+f(\frac1x)=0$，中间零点为 $x=1$。
+    - 保留解析的核心思路：只需在 $(1,+\infty)$ 上出现唯一额外零点。
+    - 不强行确定最终参数范围，因为题干中的系数 2 和解析中的无系数版本导致不同阈值。
+  source_discrepancies:
+    - type: user_decision_formula_conflict
+      source_ref: page_0260_ex8_problem_start
+      observed: printed stem shows $f(x)=2(x-\frac1x)-a\ln x$.
+      resolved_as: retain the printed stem with factor 2; final answer is $a>4$.
+      reason: For $2(x-\frac1x)-a\ln x$, $f^\prime(1)=4-a$ and the three-zero condition is controlled by crossing after $x=1$.
+    - type: user_decision_solution_conflict
+      source_ref: page_0260_ex8_solution
+      observed: solution later uses $f(x)=x-\frac1x-a\ln x$ and $f^\prime(1)=2-a$, giving threshold $a>2$.
+      resolved_as: source solution dropped the factor 2; this is treated as a source solution error.
+      reason: The solution chain drops the printed coefficient 2 and therefore changes the answer.
+original_problem:
+  stem: （2025 · 河南 · 三模 18 节选）已知函数 $f(x)=2(x-\frac1x)-a\ln x$，$a\in\mathbf R$，设 $f(x)$ 的图象在 $x=1$ 处的切线为 $l:y=kx+b$。若 $f(x)$ 有三个零点 $x_1,x_2,x_3$（$x_1<x_2<x_3$），求 $a$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $a>4$
+  fidelity_notes:
+    - 题头和解析不一致，且影响最终答案。
+    - 用户确认按题头保留系数 2，解析后续 $a>2$ 视为源书错误。
+solution:
+  source_solution_summary: 题头公式具有倒数反对称：$f(1)=0$，且 $f(x)+f(\frac1x)=0$，所以三个零点等价于在 $x>1$ 侧再出现 一个零点。按题头保留系数 2，有 $f^\prime(x)=2(1+\frac1{x^2})-\frac ax$，特别地 $f^\prime(1)=4-a$。若 $a\le4$，$x=1$ 右侧不能先向下穿出，右侧无额外零点； 若 $a>4$，$f^\prime(1)<0$，而 $x\to+\infty$ 时 $f(x)\to+\infty$， 所以 $(1,+\infty)$ 出现一个额外零点，并由倒数对称配出左侧零点，故三个零点条件为 $a>4$。
+  key_steps:
+    - step_id: step_1
+      statement: 识别倒数对称带来的零点配对。
+      formula_trace:
+        from: $f(x)=2(x-\frac1x)-a\ln x$
+        to: $f(1)=0$，$f(x)+f(\frac1x)=0$
+        operation: 代入 $\frac1x$ 并利用 $\ln\frac1x=-\ln x$。
+        why: 一个 $x>1$ 的零点会配出一个 $0<x<1$ 的零点。
+      source_ref: page_0260_ex8_solution
+    - step_id: step_2
+      statement: 把三零点问题降成右侧找一个额外零点。
+      formula_trace:
+        from: $x_2=1$ 是中间零点
+        to: 只需研究 $(1,+\infty)$ 是否有唯一额外零点
+        operation: 利用倒数对称配对。
+        why: 这是本题的核心降维。
+      source_ref: page_0260_ex8_solution
+    - step_id: step_3
+      statement: 源解析链路实际按无系数版本判阈值。
+      formula_trace:
+        from: $x-\frac1x-a\ln x$
+        to: $f^\prime(1)=2-a$，阈值 $a>2$
+        operation: 按 source 后续求导链复述。
+        why: 这解释了解析中错误答案 $a>2$ 的来源：后续推导漏掉题头系数 2。
+      source_ref: page_0260_ex8_solution
+    - step_id: step_4
+      statement: 按题头版本重新求阈值。
+      formula_trace:
+        from: $2(x-\frac1x)-a\ln x$
+        to: $f^\prime(1)=4-a$，阈值 $a>4$
+        operation: 保留题头系数重新求 $x=1$ 右侧导数。
+        why: 用户确认按题头作答，故最终答案为 $a>4$。
+      source_ref: page_0260_ex8_problem_start
+teaching_card:
+  student_title: 先用倒数对称把三零点变成右侧找一个零点
+  what_it_trains: 训练三零点题的显点探路：中间零点 $x=1$ 已知时，先看倒数对称，再判断右侧是否还能穿一次。
+  recognition_cues:
+    - 题目中同时出现 $x-\frac1x$ 和 $\ln x$。
+    - 代 $x=1$ 直接得到中间零点。
+    - 有 $f(x)+f(\frac1x)=0$，零点会成倒数配对。
+    - 本题题头和解析的系数冲突会改变答案，不能直接照抄。
+  normalization_moves:
+    - 先确认 $f(1)=0$。
+    - 再利用 $x\leftrightarrow\frac1x$ 的反对称。
+    - 最后看 $x=1$ 右侧导数和远处函数值。
+  common_failures:
+    - 没发现题头有系数 2，照抄解析得到 $a>2$。
+    - 只在右侧找零点，忘记倒数对称会自动配出左侧零点。
+    - 把三个零点问题做成普通全局单调题。
+  similar_practice_query: 倒数对称 x-1/x ln x 三个零点 x=1 中间零点 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 用户拍板：第 13 项按重算答案处理；题头系数 2 保留，源解析漏系数导致 $a>2$ 错，最终答案为 $a>4$。

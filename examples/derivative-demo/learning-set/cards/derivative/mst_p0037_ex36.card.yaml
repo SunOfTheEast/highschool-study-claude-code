@@ -1,0 +1,197 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0037_ex36
+content_revision_id: mst_p0037_ex36-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0037_ex36.card.yaml
+stem: |-
+  已知 $a>0,\ b>0,\ abe^a+\ln b-1=0$，则 ( )
+  A. $\ln b>\frac{1}{a}$
+  B. $e^a>\frac{1}{b}$
+  C. $a+\ln b<1$
+  D. $ab<1$
+answer: |
+  BCD
+
+  设 $t=a+\ln b$，则 $b=e^{t-a}$。原条件 $abe^a+\ln b-1=0$ 化为 $ae^t+t-a-1=0$，即 $t+ae^t=a+1$。函数 $\phi(t)=t+ae^t$ 严格递增，且 $\phi(0)=a<a+1$、$\phi(1)=1+ae>a+1$，所以 $0<t<1$。于是 $a+\ln b=t>0$，得到 $e^a>1/b$，B 正确；$t<1$，C 正确。由 $t<1$ 得 $\ln b<1-a\le1/a$，A 错误。又 $ab=a e^{t-a}<a e^{1-a}=e\cdot a/e^a\le1$，且因 $t<1$ 为严格不等，故 $ab<1$，D 正确。故选 BCD。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把条件改写成关于 $t=a+\ln b$ 的单调方程。
+      max_score: 1
+    - step_id: step_2
+      description: 确定 $t$ 的范围。
+      max_score: 1
+    - step_id: step_3
+      description: 判断 B 与 C。
+      max_score: 1
+    - step_id: step_4
+      description: 判断 A。
+      max_score: 1
+    - step_id: step_5
+      description: 判断 D。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 判断 A-D 四个不等式的真假。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 拟合与夹逼
+    subroute:
+      - 双同构上下界
+      - $a+\ln b$ 夹在 $(0,1)$
+      - $a/e^a$ 最大值
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - 源解通过两次同构得到 $e^a>1/b$ 与 $a+\ln b<1$，合起来即 $0<a+\ln b<1$。
+      - $ab=a e^{(a+\ln b)-a}$ 再用 $a/e^a$ 的最大值控制。
+    normalization_moves_used:
+      - 设 $t=a+\\ln b$，把 $b$ 写成 $e^{t-a}$。
+      - 用 $t+ae^t=a+1$ 定位 $0<t<1$。
+      - 把 $ab$ 化为 $a e^{t-a}$ 并放大到 $a e^{1-a}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $b$ 写成 $e^{t-a}$ 并化出 $t+ae^t=a+1$，回补指数对数基础。
+      - 若学生不能由递增函数 $\phi(t)=t+ae^t$ 定位 $0<t<1$，回补函数性质与图像。
+      - 若学生不会用 $a/e^a\le1/e$ 判断 $ab<1$，回补导数单调极值基础。
+      - 若学生从 $a+\ln b>0$ 指数化到 $e^a>1/b$ 时方向出错，回补指数对数基础。
+  detail_terms:
+    - $abe^a+\ln b-1=0$
+    - $t=a+\ln b$
+    - $0<a+\ln b<1$
+    - $a/e^a\\le1/e$
+    - 多选真假判断
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0037_ex36
+source_evidence:
+  source_refs:
+    - ref_id: page_0037
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md
+      role: problem_start
+      evidence: "lines 46-51: 例 36 题干与 A-D 选项。"
+    - ref_id: page_0038_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0038/page_0038.md
+      role: continuation
+      evidence: "lines 14-18: page_0038 顶部续写例 36 解析，分两种同构推出 BCD。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0037.png
+      inspected: true
+      notes: 已核对原图：例 36 题头、题干与四个选项位于 page_0037 底部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0038.png
+      inspected: true
+      notes: 已核对原图：page_0038 顶部为例 36 解析续页，结论为“故选 BCD”；随后才进入考点 9 与例 37。
+  source_context: 本题题头在 page_0037，解析续到 page_0038；按题头规则归本批 A 组。源解用两个同构比较分别得到 $e^a>1/b$ 与 $a+\ln b<1$，再判断 A、D。
+  source_influence:
+    - 题目要求多选判断不等式，goal 取“数值比较”。
+    - 源解的两个核心结论是 $-a<\\ln b<1-a$，即 $0<a+\\ln b<1$。
+    - 四个选项必须完整保留；答案为 BCD。
+  source_discrepancies: []
+original_problem:
+  stem: 已知 $a>0,\ b>0,\ abe^a+\ln b-1=0$，则 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\ln b>\frac{1}{a}$
+      text_latex: $\ln b>\frac{1}{a}$
+    - label: B
+      text_raw: $e^a>\frac{1}{b}$
+      text_latex: $e^a>\frac{1}{b}$
+    - label: C
+      text_raw: $a+\ln b<1$
+      text_latex: $a+\ln b<1$
+    - label: D
+      text_raw: $ab<1$
+      text_latex: $ab<1$
+  answer: BCD
+  fidelity_notes:
+    - 已核对 page_0037 原图，题干为 $abe^a+\\ln b-1=0$，条件 $a>0,b>0$。
+    - page_0038 原图确认解析为例 36 续页，未将例 37 题干计入本卡。
+solution:
+  source_solution_summary: |
+    设 $t=a+\ln b$，则 $b=e^{t-a}$。原条件 $abe^a+\ln b-1=0$ 化为 $ae^t+t-a-1=0$，即 $t+ae^t=a+1$。函数 $\phi(t)=t+ae^t$ 严格递增，且 $\phi(0)=a<a+1$、$\phi(1)=1+ae>a+1$，所以 $0<t<1$。于是 $a+\ln b=t>0$，得到 $e^a>1/b$，B 正确；$t<1$，C 正确。由 $t<1$ 得 $\ln b<1-a\le1/a$，A 错误。又 $ab=a e^{t-a}<a e^{1-a}=e\cdot a/e^a\le1$，且因 $t<1$ 为严格不等，故 $ab<1$，D 正确。故选 BCD。
+  key_steps:
+    - step_id: step_1
+      statement: 把条件改写成关于 $t=a+\ln b$ 的单调方程。
+      formula_trace:
+        from: |
+          $abe^a+\ln b-1=0,\quad t=a+\ln b$
+        to: |
+          $ae^t+t-a-1=0\Rightarrow t+ae^t=a+1$
+        operation: 由 $b=e^{t-a}$ 得 $abe^a=a e^t$，并用 $\ln b=t-a$。
+        why: 四个选项都可由 $t=a+\\ln b$ 的范围控制。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0038/page_0038.md:14-18
+    - step_id: step_2
+      statement: 确定 $t$ 的范围。
+      formula_trace:
+        from: |
+          $\phi(t)=t+ae^t,\quad a>0$
+        to: |
+          $\phi'(t)=1+ae^t>0,\quad \phi(0)=a<a+1<1+ae=\phi(1)$
+        operation: 用严格递增函数和介值比较定位方程解。
+        why: 得到 $0<t<1$，也就是 $0<a+\ln b<1$。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0038/page_0038.md:14-18
+    - step_id: step_3
+      statement: 判断 B 与 C。
+      formula_trace:
+        from: |
+          $0<a+\ln b<1$
+        to: |
+          $a+\ln b>0\Rightarrow e^a>\frac1b,\quad a+\ln b<1$
+        operation: 把 $a+\ln b>0$ 改写为 $a>-\ln b=\ln(1/b)$，再指数化。
+        why: 分别对应选项 B、C。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0038/page_0038.md:14-16
+    - step_id: step_4
+      statement: 判断 A。
+      formula_trace:
+        from: |
+          $a+\ln b<1$
+        to: |
+          $\ln b<1-a\le\frac1a$
+        operation: 移项得上界；再用 $a+1/a\ge2$ 得 $1-a\le1/a$。
+        why: 因此不可能有 $\\ln b>1/a$，A 错误。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0038/page_0038.md:17
+    - step_id: step_5
+      statement: 判断 D。
+      formula_trace:
+        from: |
+          $t=a+\ln b<1,\quad ab=ae^{\ln b}=ae^{t-a}$
+        to: |
+          $ab<a e^{1-a}=e\cdot \frac a{e^a}\le1$
+        operation: 用 $t<1$ 放大，再用函数 $a/e^a$ 在 $a>0$ 上的最大值 $1/e$。
+        why: 严格小于来自 $t<1$，所以 D 正确。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0038/page_0038.md:18
+teaching_card:
+  student_title: 先夹出 $0<a+\ln b<1$ 再判四项
+  what_it_trains: 多选题里四个式子都围着 $a+\ln b$ 和 $ab$ 转时，先把原条件压成一个单调方程，拿到 $0<a+\ln b<1$，再逐项翻译。
+  recognition_cues:
+    - 条件有 $abe^a$ 和 $\\ln b$，把 $a+\ln b$ 合成一个整体很自然。
+    - B、C 直接对应 $a+\ln b$ 的正负和上界。
+    - D 需要把 $ab$ 写成 $ae^{(a+\ln b)-a}$。
+  normalization_moves:
+    - 设 $t=a+\\ln b$，把 $b=e^{t-a}$ 代回条件。
+    - 用 $\phi(0)$ 与 $\phi(1)$ 给 $t$ 定位。
+    - 判断 A 时先由 $t<1$ 得 $\\ln b<1-a$。
+    - 判断 D 时用 $a/e^a$ 的最大值。
+  common_failures:
+    - 只沿源解第一条同构证明 B，却没有得到足够清楚的统一范围。
+    - 把 $a+\ln b>0$ 误读成 $\\ln b>1/a$。
+    - 证明 $ab<1$ 时忘记 $t<1$ 是严格不等。
+  similar_practice_query: abe^a+lnb-1=0 多选 同构 a+lnb ab<1
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 例 36 题头在 page_0037，解析续到 page_0038；已按题头归属创建本卡。
+    - 源解用两条同构分别证明 B、C；本卡用等价变量 $t=a+\\ln b$ 统一呈现 $0<t<1$，结论与源图答案 BCD 一致。

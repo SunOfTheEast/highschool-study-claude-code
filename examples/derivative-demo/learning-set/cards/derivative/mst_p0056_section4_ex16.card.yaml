@@ -1,0 +1,186 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0056_section4_ex16
+content_revision_id: mst_p0056_section4_ex16-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0056_section4_ex16.card.yaml
+stem: |-
+  （2022 · 新高考 I · 多选）已知函数 $f(x)=x^3-x+1$，则（  ）
+  A. $f(x)$ 有两个极值点
+  B. $f(x)$ 有三个零点
+  C. 点 $(0,1)$ 是曲线 $y=f(x)$ 的对称中心
+  D. 直线 $y=2x$ 是曲线 $y=f(x)$ 的切线
+answer: |
+  AC
+
+  $f^{\prime}(x)=3x^2-1$，导数在 $x=\pm\frac{\sqrt3}{3}$ 处为零，且符号为“增-减-增”，所以有两个极值点，A 正确。两个极值值
+  $f\left(-\frac{\sqrt3}{3}\right)=\frac{2\sqrt3+9}{9}>0$，
+  $f\left(\frac{\sqrt3}{3}\right)=\frac{9-2\sqrt3}{9}>0$，因此三次函数只在右侧穿过一次 $x$ 轴，只有一个零点，B 错误。又 $f(x)+f(-x)=2$，曲线关于 $(0,1)$ 成中心对称，C 正确。若 $y=2x$ 是切线，切点横坐标 $a$ 应满足 $f^{\prime}(a)=2$，得 $a=\pm1$；但 $f(1)=1\ne2$，$f(-1)=1\ne-2$，对应点不在直线 $y=2x$ 上，D 错误。故选 AC。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 用导数判断极值点个数。
+      max_score: 1
+    - step_id: step_2
+      description: 比较两个极值值，排除三个零点。
+      max_score: 1
+    - step_id: step_3
+      description: 用代数配对识别对称中心。
+      max_score: 1
+    - step_id: step_4
+      description: 检验直线 $y=2x$ 是否能成为切线。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: item_1
+        goal: 零点/极值点分析
+        target: 判断三次函数的极值点个数和零点个数。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 抽象函数性质
+        target: 判断曲线的对称中心。
+        result: 见 source_solution_summary
+      - part_id: item_3
+        goal: 几何性质证明
+        target: 判断给定直线是否为曲线切线。
+        result: 见 source_solution_summary
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 对称性配凑
+      - 局部逼近与找点
+    subroute:
+      - 三次函数导数符号表
+      - 三次函数对称中心
+      - 切线斜率与切点检验
+  structure:
+    primary: 三次/高次函数结构
+    secondary:
+      - 对称结构
+      - 切线/公切线/切点量结构
+    evidence:
+      - $f^{\prime}(x)=3x^2-1$ 给出两个导数零点。
+      - $f(x)+f(-x)=2$ 给出中心 $(0,1)$。
+      - $f^{\prime}(a)=2$ 的候选点 $a=\pm1$ 都不满足 $f(a)=2a$。
+    normalization_moves_used:
+      - 先用导数符号确定增减和极值。
+      - 用极值值在 $x$ 轴上方判断零点个数。
+      - 用 $x$ 与 $-x$ 配对判断中心对称。
+      - 切线题同时检查斜率和切点坐标。
+  fallback:
+    only_if_trace_shows:
+      - 若学生把导数零点直接当成零点，回补导数单调极值基础。
+      - 若学生不会由极大值、极小值符号判断零点个数，回补函数性质与图像。
+      - 若学生看不出 $f(x)+f(-x)=2$ 对应中心 $(0,1)$，回补函数性质与图像中的中心对称读法。
+      - 若学生只用 $f^{\prime}(a)=2$ 就认定有切线，回补导数运算与几何意义。
+  detail_terms:
+    - $f(x)=x^3-x+1$
+    - $f^{\prime}(x)=3x^2-1$
+    - $f(x)+f(-x)=2$
+    - $(0,1)$
+    - $y=2x$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0056_section4_ex16
+source_evidence:
+  source_refs:
+    - ref_id: page_0056_ex16_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0056/page_0056.md
+      role: problem_start
+      evidence: 例 16：（2022 · 新高考 I · 多选）已知 $f(x)=x^3-x+1$，判断 A-D 四个命题。
+    - ref_id: page_0056_ex16_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0056/page_0056.md
+      role: solution
+      evidence: 解析通过 $f^{\prime}(x)=3x^2-1$ 判断极值和零点，用 $f(x)+f(-x)=2$ 判断对称中心，再检验 $y=2x$ 是否可作切线，结论选 AC。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0056.png
+      inspected: true
+      notes: 页图已核对：例 16 题干、A-D 选项和解析均与 markdown 一致。
+  source_context: 例 16 是三次函数基础性质综合判断题，承接本页三次函数图像与极值训练。
+  source_influence:
+    - 四个选项按源页完整保留。
+    - 卡片按源解顺序组织：导数单调极值与零点、三次函数对称中心、切线斜率与切点检验。
+  source_discrepancies: []
+original_problem:
+  stem: （2022 · 新高考 I · 多选）已知函数 $f(x)=x^3-x+1$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(x)$ 有两个极值点
+      text_latex: $f(x)$ 有两个极值点
+    - label: B
+      text_raw: $f(x)$ 有三个零点
+      text_latex: $f(x)$ 有三个零点
+    - label: C
+      text_raw: 点 $(0,1)$ 是曲线 $y=f(x)$ 的对称中心
+      text_latex: 点 $(0,1)$ 是曲线 $y=f(x)$ 的对称中心
+    - label: D
+      text_raw: 直线 $y=2x$ 是曲线 $y=f(x)$ 的切线
+      text_latex: 直线 $y=2x$ 是曲线 $y=f(x)$ 的切线
+  answer: AC
+  fidelity_notes:
+    - 源题为多选题，答案为 AC。
+    - 选项 D 源解用切点斜率和点在线上两个条件共同排除。
+solution:
+  source_solution_summary: |
+    $f^{\prime}(x)=3x^2-1$，导数在 $x=\pm\frac{\sqrt3}{3}$ 处为零，且符号为“增-减-增”，所以有两个极值点，A 正确。两个极值值
+    $f\left(-\frac{\sqrt3}{3}\right)=\frac{2\sqrt3+9}{9}>0$，
+    $f\left(\frac{\sqrt3}{3}\right)=\frac{9-2\sqrt3}{9}>0$，因此三次函数只在右侧穿过一次 $x$ 轴，只有一个零点，B 错误。又 $f(x)+f(-x)=2$，曲线关于 $(0,1)$ 成中心对称，C 正确。若 $y=2x$ 是切线，切点横坐标 $a$ 应满足 $f^{\prime}(a)=2$，得 $a=\pm1$；但 $f(1)=1\ne2$，$f(-1)=1\ne-2$，对应点不在直线 $y=2x$ 上，D 错误。故选 AC。
+  key_steps:
+    - step_id: step_1
+      statement: 用导数判断极值点个数。
+      formula_trace:
+        from: $f(x)=x^3-x+1$
+        to: $f^{\prime}(x)=3x^2-1,\quad f^{\prime}(x)=0\Rightarrow x=\pm\frac{\sqrt3}{3}$
+        operation: 求导并解导数零点。
+        why: 极值点候选来自导数为零的位置。
+      source_ref: page_0056_ex16_solution
+    - step_id: step_2
+      statement: 比较两个极值值，排除三个零点。
+      formula_trace:
+        from: $f\left(-\frac{\sqrt3}{3}\right)=\frac{2\sqrt3+9}{9},\quad f\left(\frac{\sqrt3}{3}\right)=\frac{9-2\sqrt3}{9}$
+        to: $f(x)\ \text{有两个极值点，但只有一个零点}$
+        operation: 结合导数符号“增-减-增”和两个极值值都大于 0。
+        why: 三次函数若极大值和极小值都在 $x$ 轴上方，就不会有三个实零点。
+      source_ref: page_0056_ex16_solution
+    - step_id: step_3
+      statement: 用代数配对识别对称中心。
+      formula_trace:
+        from: $f(x)+f(-x)$
+        to: $x^3-x+1-x^3+x+1=2$
+        operation: 把横坐标关于 0 对称的两点函数值相加。
+        why: 若和恒为 $2$，则中点纵坐标恒为 $1$，中心为 $(0,1)$。
+      source_ref: page_0056_ex16_solution
+    - step_id: step_4
+      statement: 检验直线 $y=2x$ 是否能成为切线。
+      formula_trace:
+        from: $f^{\prime}(a)=2$
+        to: $a=\pm1,\quad f(1)=1\ne2,\quad f(-1)=1\ne-2$
+        operation: 先由切线斜率等于 2 求切点横坐标，再检查切点是否在直线 $y=2x$ 上。
+        why: 斜率相同只是必要条件，点也必须落在给定直线上。
+      source_ref: page_0056_ex16_solution
+teaching_card:
+  student_title: 三次函数选项题要逐项验条件
+  what_it_trains: 训练把导数、零点、中心对称和切线条件拆开核验，避免把“斜率对了”误当作“切线成立”。
+  recognition_cues:
+    - 函数是标准三次式 $x^3-x+1$。
+    - 选项同时问极值、零点、对称中心和切线。
+    - 给定直线 $y=2x$，需要找可能切点。
+  normalization_moves:
+    - 先求导并列出导数符号。
+    - 算两个极值值，判断是否能有三个零点。
+    - 用 $f(x)+f(-x)$ 找中心。
+    - 切线先看斜率，再看切点是否在直线上。
+  common_failures:
+    - 看到两个极值点就误以为一定有三个零点。
+    - 把 $f(x)+f(-x)=2$ 的中心纵坐标写成 2。
+    - 检验切线时漏掉 $f(a)=2a$。
+  similar_practice_query: 三次函数 多选 极值 零点 对称中心 切线
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0056 页图；例 16 题干、选项和答案 AC 与源页一致。

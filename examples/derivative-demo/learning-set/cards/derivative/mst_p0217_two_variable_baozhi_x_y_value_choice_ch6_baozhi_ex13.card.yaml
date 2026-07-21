@@ -1,0 +1,186 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0217_two_variable_baozhi_x_y_value_choice_ch6_baozhi_ex13
+content_revision_id: mst_p0217_two_variable_baozhi_x_y_value_choice_ch6_baozhi_ex13-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0217_two_variable_baozhi_x_y_value_choice_ch6_baozhi_ex13.card.yaml
+stem: |-
+  （23 · 浙江期末 T10）若存在正实数 $x,y$ 使得不等式 $\ln x-x^2+1\ge\ln y+\frac{4}{y^2}-\ln4$ 成立，则 $x+y=$（  ）
+  A. $\frac{\sqrt{2}}{2}$
+  B. $\sqrt{2}$
+  C. $\frac{3\sqrt{2}}{2}$
+  D. $\frac{5\sqrt{2}}{2}$
+answer: |
+  D；$x+y=\frac{5\sqrt{2}}{2}$。
+
+  由题设不等式得 $x^2-\ln x+\frac{4}{y^2}+\ln y-1-\ln4\le0$。 按 source 的双变量保值性配凑，先提 $\frac12$ 并把对数升级到平方幂： \[ x^2-\ln x+\frac{4}{y^2}+\ln y-1-\ln4 =\frac12\!\left(2x^2-\ln x^2+\frac{8}{y^2}+\ln y^2-2-2\ln4\right). \] 继续写成 \[ \frac12\!\left[h(2x^2)+h\!\left(\frac{8}{y^2}\right)\right]\le0, \quad h(t)=t-\ln t-1\ge0. \] 因为两项都不小于 0，而其和不大于 0，故两项只能同时取 0： $2x^2=1,\ \frac{8}{y^2}=1$。再由 $x,y>0$ 得 $x=\frac{\sqrt2}{2},\ y=2\sqrt2$， 所以 $x+y=\frac{5\sqrt2}{2}$，选 D。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把题设改写成“同侧和式小于等于 0”。
+      max_score: 1
+    - step_id: step_2
+      description: 提 $\frac12$ 并升级对数幂次，统一到同构母式。
+      max_score: 1
+    - step_id: step_3
+      description: 构造保值函数并写成双变量同构和。
+      max_score: 1
+    - step_id: step_4
+      description: 由“非负和小于等于 0”触发同取等。
+      max_score: 1
+    - step_id: step_5
+      description: 解出正实根并回填选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level: []
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 双变量保值性
+      - 同构升级
+      - 取等条件
+      - 共零点锁值
+  structure:
+    primary: 多变量与不等式结构
+    secondary:
+      - 指对复合结构
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - $x^2-\ln x+\frac4{y^2}+\ln y-1-\ln4\le0$
+      - $h(t)=t-\ln t-1\ge0$
+      - $h(2x^2)+h\left(\frac8{y^2}\right)\le0$
+      - $2x^2=1,\ \frac8{y^2}=1$
+      - $x+y=\frac{5\sqrt2}{2}$
+    normalization_moves_used:
+      - 先把双边不等式归并为单侧判号。
+      - 提 $\frac12$ 把对数项升级到平方幂，便于同构。
+      - 用 $h\ge0$ 与“和非正”触发双变量同时取等。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\ln x,\ln y$ 升级为 $\ln x^2,\ln y^2$，回补代数恒等变形。
+      - 若学生不熟悉 $h(t)=t-\ln t-1\ge0$ 的结论，回补不等式工具基础。
+      - 若学生从 $u^2=c$ 取根时忽略正实数条件，回补函数三要素与定义域。
+  detail_terms:
+    - $h(t)=t-\ln t-1$
+    - $h(2x^2)+h\left(\frac8{y^2}\right)\le0$
+    - $2x^2=1$
+    - $\frac8{y^2}=1$
+    - $x+y=\frac{5\sqrt2}{2}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0217_two_variable_baozhi_x_y_value_choice_ch6_baozhi_ex13
+source_evidence:
+  source_refs:
+    - ref_id: page_0217_ex12_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0217/page_0217.md
+      role: local_context
+      evidence: page_0217 line 14-24 为例12续解收尾；line 29 才进入例13新题头。
+    - ref_id: page_0217_ex13_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0217/page_0217.md
+      role: problem_start
+      evidence: page_0217 line 29-34 给出例13题干与 A-D 四个选项。
+    - ref_id: page_0217_ex13_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0217/page_0217.md
+      role: solution
+      evidence: page_0217 line 36 给出双变量保值性同构链，解得 $x=\frac{\sqrt2}{2},y=2\sqrt2$，结论“故选 D”。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0217.png
+      inspected: true
+      notes: 已核对页图：页顶是例12续页；例13题干、A-D 选项与“故选 D”解析均在本页内闭合。
+  source_context: 按题头归属，page_0217 顶部仅是例12续页不新建卡；例13从本页中下部起题并在本页完成。
+  source_influence:
+    - 保留 source 的“双变量保值性”组织方式：先把两变量项配到同一个母函数，再由取等条件反求 $x,y$。
+    - 保留 source 的“先提 $\frac12$ 再升级对数幂次”动作：把 $\ln x,\ln y$ 升级为 $\ln x^2,\ln y^2$。
+    - 保留 source 的结论口径：由 $h(2x^2)+h\left(\frac{8}{y^2}\right)\le0$ 与 $h\ge0$ 反推二者同取等，答案选 D。
+  source_discrepancies: []
+original_problem:
+  stem: （23 · 浙江期末 T10）若存在正实数 $x,y$ 使得不等式 $\ln x-x^2+1\ge\ln y+\frac{4}{y^2}-\ln4$ 成立，则 $x+y=$（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\frac{\sqrt{2}}{2}$
+      text_latex: $\frac{\sqrt{2}}{2}$
+    - label: B
+      text_raw: $\sqrt{2}$
+      text_latex: $\sqrt{2}$
+    - label: C
+      text_raw: $\frac{3\sqrt{2}}{2}$
+      text_latex: $\frac{3\sqrt{2}}{2}$
+    - label: D
+      text_raw: $\frac{5\sqrt{2}}{2}$
+      text_latex: $\frac{5\sqrt{2}}{2}$
+  answer: D；$x+y=\frac{5\sqrt{2}}{2}$。
+  fidelity_notes:
+    - 本题为单选题，A-D 选项已按页图完整保留。
+    - 题干中的“存在正实数 $x,y$”与解析中的取等求值链一致。
+solution:
+  source_solution_summary: |
+    由题设不等式得 $x^2-\ln x+\frac{4}{y^2}+\ln y-1-\ln4\le0$。 按 source 的双变量保值性配凑，先提 $\frac12$ 并把对数升级到平方幂： \[ x^2-\ln x+\frac{4}{y^2}+\ln y-1-\ln4 =\frac12\!\left(2x^2-\ln x^2+\frac{8}{y^2}+\ln y^2-2-2\ln4\right). \] 继续写成 \[ \frac12\!\left[h(2x^2)+h\!\left(\frac{8}{y^2}\right)\right]\le0, \quad h(t)=t-\ln t-1\ge0. \] 因为两项都不小于 0，而其和不大于 0，故两项只能同时取 0： $2x^2=1,\ \frac{8}{y^2}=1$。再由 $x,y>0$ 得 $x=\frac{\sqrt2}{2},\ y=2\sqrt2$， 所以 $x+y=\frac{5\sqrt2}{2}$，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把题设改写成“同侧和式小于等于 0”。
+      formula_trace:
+        from: $\ln x-x^2+1\ge\ln y+\frac4{y^2}-\ln4$
+        to: $x^2-\ln x+\frac4{y^2}+\ln y-1-\ln4\le0$
+        operation: 移项整理。
+        why: 保值性同构通常从“某和式判号”切入。
+      source_ref: page_0217_ex13_solution
+    - step_id: step_2
+      statement: 提 $\frac12$ 并升级对数幂次，统一到同构母式。
+      formula_trace:
+        from: $x^2-\ln x+\frac4{y^2}+\ln y-1-\ln4$
+        to: $\frac12\left(2x^2-\ln x^2+\frac8{y^2}+\ln y^2-2-2\ln4\right)$
+        operation: 把 $\ln x,\ln y$ 重写为 $\frac12\ln x^2,\frac12\ln y^2$。
+        why: 让两变量部分都能写成 $t-\ln t-1$ 的标准形。
+      source_ref: page_0217_ex13_solution
+    - step_id: step_3
+      statement: 构造保值函数并写成双变量同构和。
+      formula_trace:
+        from: $h(t)=t-\ln t-1$
+        to: $\frac12\left[h(2x^2)+h\left(\frac8{y^2}\right)\right]\le0$
+        operation: 加减常数并匹配 $\ln2,\ln4$ 常量项后归并。
+        why: 把原题压缩为“两个非负项之和的符号”问题。
+      source_ref: page_0217_ex13_solution
+    - step_id: step_4
+      statement: 由“非负和小于等于 0”触发同取等。
+      formula_trace:
+        from: $h(t)\ge0,\ h(2x^2)+h\left(\frac8{y^2}\right)\le0$
+        to: $h(2x^2)=0,\ h\left(\frac8{y^2}\right)=0$
+        operation: 利用两项同号判定：和为非正只能各自为 0。
+        why: 直接锁定变量方程。
+      source_ref: page_0217_ex13_solution
+    - step_id: step_5
+      statement: 解出正实根并回填选项。
+      formula_trace:
+        from: $2x^2=1,\ \frac8{y^2}=1,\ x,y>0$
+        to: $x=\frac{\sqrt2}{2},\ y=2\sqrt2,\ x+y=\frac{5\sqrt2}{2}$
+        operation: 由 $h(u)=0\Leftrightarrow u=1$，结合正实数条件取正根。
+        why: 得到唯一和式并对应 D。
+      source_ref: page_0217_ex13_solution
+teaching_card:
+  student_title: 双变量保值性：由同取等直接反求 $x+y$
+  what_it_trains: 训练把双变量混合不等式同构为 $h(a)+h(b)$，再用“非负和的极限符号”快速锁定取等点。
+  recognition_cues:
+    - 题干给“存在正实数 $x,y$”并让你求固定数值。
+    - 式子里同时有二次项、倒平方项与对数项，适合保值同构。
+    - 解析中会出现“提 $\frac12$ 升级对数幂次”的动作。
+  normalization_moves:
+    - 先改写为单侧不等式 $\le0$。
+    - 把两变量都配到 $h(t)=t-\ln t-1$。
+    - 利用 $h\ge0$ 与“和非正”迫使两个同构项同取等。
+    - 结合 $x,y>0$ 取正根并回填选项。
+  common_failures:
+    - 把题目中的“存在”误当作“任意”，导致判号逻辑跑偏。
+    - 同构配凑时常数项（$\ln2,\ln4$）处理不干净。
+    - 求出 $x^2,y^2$ 后忘记用正实数条件筛根。
+  similar_practice_query: 双变量 保值性 h(x)=x-lnx-1 同取等 求x+y 选择题
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

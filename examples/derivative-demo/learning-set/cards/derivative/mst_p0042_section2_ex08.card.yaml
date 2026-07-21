@@ -1,0 +1,201 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0042_section2_ex08
+content_revision_id: mst_p0042_section2_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0042_section2_ex08.card.yaml
+stem: |-
+  （2025 · 桃城区校级三模 T11）已知在函数 $f(x)=ax+b\ (a>0,b>0)$，$g(x)=\ln(x+2)$，若对 $\forall x>-2$，$f(x)\geqslant g(x)$ 恒成立，则实数 $\frac{b}{a}$ 的取值范围为 (  )
+  A. $[0, +\infty)$
+  B. $[1, +\infty)$
+  C. $[2, +\infty)$
+  D. $[\mathrm{e}, +\infty)$
+answer: |
+  B
+
+  令 $t=\\ln(x+2)$，则 $x=e^t-2$，原不等式等价于 $ae^t-2a+b\\ge t$，也就是 $e^{t+\\ln a}\\ge t+2a-b$。由 $e^u\\ge u+1$，$e^{t+\\ln a}\\ge t+\\ln a+1$，要恒压住 $t+2a-b$，最优边界满足 $\\ln a+1\\ge2a-b$，即 $b/a\\ge2-(\\ln a+1)/a$。再设 $y=ea$，有 $2-(\\ln a+1)/a=2-e\\ln(ea)/(ea)\\ge1$，等号在 $a=1$ 处取到，所以 $b/a\\ge1$，且 $a=b=1$ 时可行。零点法中，直线零点为 $-b/a$，对数曲线零点为 $-1$，相切时 $-b/a$ 的最大值为 $-1$，同样得到 $b/a\\ge1$。故选 B。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 把对数自变量换成指数变量。
+      max_score: 1
+    - step_id: step_2
+      description: 把恒成立条件写成指数切线模板。
+      max_score: 1
+    - step_id: step_3
+      description: 由切线式得到关于 $b/a$ 的下界。
+      max_score: 1
+    - step_id: step_4
+      description: 求右端的最小可能值。
+      max_score: 1
+    - step_id: step_5
+      description: 说明边界可取。
+      max_score: 1
+    - step_id: step_6
+      description: 零点比大小给出同一方向。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: item_1
+        goal: 求参数范围
+        target: 求 $\frac ba$ 的取值范围。
+        result: 见 source_solution_summary
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+      - 数形结合
+    subroute:
+      - 指数切线找点
+      - 零点比大小
+      - $\ln x/x$ 最大值
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $\ln(x+2)=t$ 后，$ax+b\ge\ln(x+2)$ 化为 $e^{t+\ln a}\ge t+2a-b$。
+      - 相切边界对应 $\ln a+1=2a-b$ 和 $a=b=1$。
+      - 零点法比较 $-b/a$ 与 $-1$。
+    normalization_moves_used:
+      - $t=\ln(x+2)$。
+      - $ae^t=e^{t+\ln a}$。
+      - $y=ea$。
+      - $\ln(a(x+2))\le a(x+2)-1$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $t=\ln(x+2)$ 反解 $x=e^t-2$，回补指数对数基础。
+      - 若学生不会把 $ae^t$ 写成 $e^{t+\ln a}$，回补指数对数基础。
+      - 若学生无法从 $\ln y/y\le1/e$ 推出 $2-e\ln y/y\ge1$，回补不等式工具基础。
+      - 若学生看不懂零点相切时 $-b/a\le-1$ 的方向，回补函数性质与图像。
+  detail_terms:
+    - $ax+b\ge\ln(x+2)$
+    - $t=\ln(x+2)$
+    - $e^{t+\ln a}\ge t+2a-b$
+    - $\frac ba\ge2-\frac{\ln a+1}{a}$
+    - $\frac ba\ge1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0042_section2_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0042
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0042/page_0042.md
+      role: problem_start
+      evidence: lines 44-50 give 例 8 题干、四个选项和解析开头。
+    - ref_id: page_0043
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0043/page_0043.md
+      role: continuation
+      evidence: lines 15-25 continue 例 8 的法一、法二、配图说明、法三和答案 B。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0042.png
+      inspected: true
+      notes: 已核对页图下半部分：例 8 题干和选项与 markdown 一致，解析跨页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0043.png
+      inspected: true
+      notes: 已核对页图上半部分：例 8 续解、零点相切示意图和答案 B 与 markdown 一致。
+  source_context: 例 8 是直线 $ax+b$ 压住对数曲线 $\ln(x+2)$ 的恒成立问题，源解通过换元、零点比大小和对数切线三种方式得到 $b/a\ge1$。
+  source_influence:
+    - 由于题头在 page_0042，卡片归属本批 D 组；page_0043 只作为 continuation。
+    - 卡片保留源解法一的 $t=\ln(x+2)$ 换元和法二的零点相切直观。
+    - 法三中 $\ln(a(x+2))\le a(x+2)-1$ 是数学上正确的对数切线式，卡片按该式展开。
+  source_discrepancies:
+    - page_0043.md line 25 与页图中法三疑似出现一次 $\ln a(x+2)\le a(x+2)+1$，但同一行随后使用 $a(x+2)-1$，且标准不等式为 $\ln u\le u-1$；本卡按 $-1$ 处理。
+original_problem:
+  stem: （2025 · 桃城区校级三模 T11）已知在函数 $f(x)=ax+b\ (a>0,b>0)$，$g(x)=\ln(x+2)$，若对 $\forall x>-2$，$f(x)\geqslant g(x)$ 恒成立，则实数 $\frac{b}{a}$ 的取值范围为 (  )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $[0, +\infty)$
+      text_latex: $[0, +\infty)$
+    - label: B
+      text_raw: $[1, +\infty)$
+      text_latex: $[1, +\infty)$
+    - label: C
+      text_raw: $[2, +\infty)$
+      text_latex: $[2, +\infty)$
+    - label: D
+      text_raw: $[\mathrm{e}, +\infty)$
+      text_latex: $[\mathrm{e}, +\infty)$
+  answer: B
+  fidelity_notes:
+    - 题干、选项在 page_0042；完整解析续至 page_0043。
+    - 源页写“已知在函数”语序略生硬，卡片保留原意为已知函数 $f,g$。
+solution:
+  source_solution_summary: |
+    令 $t=\\ln(x+2)$，则 $x=e^t-2$，原不等式等价于 $ae^t-2a+b\\ge t$，也就是 $e^{t+\\ln a}\\ge t+2a-b$。由 $e^u\\ge u+1$，$e^{t+\\ln a}\\ge t+\\ln a+1$，要恒压住 $t+2a-b$，最优边界满足 $\\ln a+1\\ge2a-b$，即 $b/a\\ge2-(\\ln a+1)/a$。再设 $y=ea$，有 $2-(\\ln a+1)/a=2-e\\ln(ea)/(ea)\\ge1$，等号在 $a=1$ 处取到，所以 $b/a\\ge1$，且 $a=b=1$ 时可行。零点法中，直线零点为 $-b/a$，对数曲线零点为 $-1$，相切时 $-b/a$ 的最大值为 $-1$，同样得到 $b/a\\ge1$。故选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 把对数自变量换成指数变量。
+      formula_trace:
+        from: $\ln(x+2)=t\quad (x>-2)$
+        to: $x=e^t-2,\quad ax+b=ae^t-2a+b$
+        operation: 令 $t$ 为对数函数值，反解 $x$。
+        why: 这样原不等式变成指数函数压住一次函数。
+      source_ref: page_0042
+    - step_id: step_2
+      statement: 把恒成立条件写成指数切线模板。
+      formula_trace:
+        from: $ae^t-2a+b\ge t$
+        to: $e^{t+\ln a}\ge t+2a-b$
+        operation: 移项，并用 $ae^t=e^{t+\ln a}$。
+        why: 可直接使用 $e^u\ge u+1$。
+      source_ref: page_0043
+    - step_id: step_3
+      statement: 由切线式得到关于 $b/a$ 的下界。
+      formula_trace:
+        from: $e^{t+\ln a}\ge t+\ln a+1$
+        to: $t+\ln a+1\ge t+2a-b\Rightarrow \frac ba\ge2-\frac{\ln a+1}{a}$
+        operation: 比较两个一次式的常数项，再移项除以 $a>0$。
+        why: 这是保证恒成立的最优边界，等号对应两曲线相切。
+      source_ref: page_0043
+    - step_id: step_4
+      statement: 求右端的最小可能值。
+      formula_trace:
+        from: $2-\frac{\ln a+1}{a}$
+        to: $2-e\cdot\frac{\ln(ea)}{ea}\ge1$
+        operation: 令 $y=ea$，使用 $\ln y/y\le1/e$。
+        why: 要得到所有 $a>0$ 下共同的 $b/a$ 下界。
+      source_ref: page_0043
+    - step_id: step_5
+      statement: 说明边界可取。
+      formula_trace:
+        from: $\ln y/y\le1/e$
+        to: $a=1,\ b=1\Rightarrow \frac ba=1$
+        operation: 等号在 $y=e$ 取到，即 $ea=e$。
+        why: 边界可达，所以取值范围包含 1。
+      source_ref: page_0043
+    - step_id: step_6
+      statement: 零点比大小给出同一方向。
+      formula_trace:
+        from: $ax+b=0,\quad \ln(x+2)=0$
+        to: $x=-\frac ba,\quad x=-1,\quad -\frac ba\le-1\Rightarrow \frac ba\ge1$
+        operation: 比较直线和对数曲线共零点相切时零点位置。
+        why: 若直线始终在对数曲线上方，直线零点不能跑到 $-1$ 的右侧。
+      source_ref: page_0043
+teaching_card:
+  student_title: 把对数曲线换成指数切线来压直线
+  what_it_trains: 训练处理直线压住对数曲线的恒成立问题：先换元把对数值变成变量，再用指数切线和相切点确定参数比的边界。
+  recognition_cues:
+    - 题干是 $ax+b$ 在 $x>-2$ 上压住 $\ln(x+2)$。
+    - 目标是 $b/a$ 的范围，说明直线零点 $-b/a$ 很关键。
+    - 对数里是 $x+2$，零点固定在 $x=-1$。
+  normalization_moves:
+    - 令 $t=\ln(x+2)$，把 $x$ 改写成 $e^t-2$。
+    - 把 $ae^t$ 写成 $e^{t+\ln a}$。
+    - 用 $e^u\ge u+1$ 找相切边界。
+    - 也可直接比较直线零点 $-b/a$ 与对数零点 $-1$。
+  common_failures:
+    - 换元后漏掉 $x=e^t-2$ 中的 $-2$。
+    - 把 $b/a\ge2-(\ln a+1)/a$ 当成最终答案，没再对 $a$ 求统一下界。
+    - 零点比较时把 $-b/a\le-1$ 的方向翻错。
+  similar_practice_query: 直线压对数 恒成立 b/a 取值范围 ln(x+2) 零点相切
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 例 8 跨 page_0042 到 page_0043，已核对两页原图。
+    - 法三中的 $\ln(a(x+2))\le a(x+2)+1$ 疑似为源页符号笔误；同一推导下一步和标准公式均要求 $\le a(x+2)-1$，本卡按数学可判定的 $-1$ 记录。

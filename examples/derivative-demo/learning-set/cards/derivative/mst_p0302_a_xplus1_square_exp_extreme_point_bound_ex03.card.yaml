@@ -1,0 +1,199 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0302_a_xplus1_square_exp_extreme_point_bound_ex03
+content_revision_id: mst_p0302_a_xplus1_square_exp_extreme_point_bound_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0302_a_xplus1_square_exp_extreme_point_bound_ex03.card.yaml
+stem: |-
+  （2023 · 山东模拟）已知函数 $f(x)=a(x+1)^2-e^x$，$a\in\mathbf{R}$。若 $f(x)$ 有两个极值点 $x_1,x_2$，且 $x_1<x_2$。
+  1. 证明：$-\frac12<f(x_1)<-\frac1e$。
+answer: |-
+  $-\frac12<f(x_1)<-\frac1e$。
+
+  由 $f$ 有两个极值点可知 $f^\prime(x)=2a(x+1)-e^x$ 有两个根 $x_1,x_2$。令 $h(x)=2a(x+1)-e^x$，则 $h^\prime(x)=2a-e^x$。若 $a\le0$，$h$ 单调递减，不可能有两个根；若 $a>0$， $h$ 先增后减，要有两个根需最大值为正，推出 $a>\frac12$。 此时 $f^\prime(-1)=-\frac1e<0$，$f^\prime(0)=2a-1>0$， 所以 $-1<x_1<0$。因为 $x_1$ 是第一个极值点，且在 $(-1,x_1)$ 上 $f$ 递减，故 $f(x_1)<f(-1)=-\frac1e$，这是原函数找点。另一方面， 由 $f^\prime(x_1)=0$ 得 $a=\frac{e^{x_1}}{2(x_1+1)}$，代回 $f(x_1)=a(x_1+1)^2-e^{x_1} =\frac12(x_1-1)e^{x_1}$。令 $q(x)=\frac12(x-1)e^x$，则 $q^\prime(x)=\frac12xe^x<0$ 在 $(-1,0)$ 上成立，所以 $q(x_1)>q(0)=-\frac12$。综上 $-\frac12<f(x_1)<-\frac1e$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 把两个极值点转成导函数两个零点。
+      max_score: 1
+    - step_id: step_2
+      description: 推出参数必须满足 $a>\frac12$。
+      max_score: 1
+    - step_id: step_3
+      description: 定位较小极值点 $x_1$。
+      max_score: 1
+    - step_id: step_4
+      description: 用原函数找点证明右侧上界。
+      max_score: 1
+    - step_id: step_5
+      description: 用隐零点方程改写 $f(x_1)$。
+      max_score: 1
+    - step_id: step_6
+      description: 证明左侧下界。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 不等式证明
+        target: 第 1 问
+        result: $-\frac12<f(x_1)<-\frac1e$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 充分/必要性探路
+      - 局部逼近与找点
+      - 拟合与夹逼
+    subroute:
+      - 导函数两个零点
+      - 定位 $-1<x_1<0$
+      - 原函数找点证明上界
+      - 隐零点消参证明下界
+      - $\frac12(x-1)e^x$ 单调估计
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - $a(x+1)^2-e^x$
+      - $2a(x+1)-e^x$
+      - $-1<x_1<0$
+      - $a=\frac{e^{x_1}}{2(x_1+1)}$
+      - $f(x_1)=\frac12(x_1-1)e^{x_1}$
+    normalization_moves_used:
+      - 把极值点问题转成 $f^\prime$ 两个零点。
+      - 用 $f^\prime(-1)$ 与 $f^\prime(0)$ 定位 $x_1$。
+      - 上界走原函数找点。
+      - 下界走隐零点消参。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由极值点转导函数零点，回补导数单调极值基础。
+      - 若学生不会处理指数求导，回补指数对数基础。
+      - 若学生不会代回消参，回补代数恒等变形。
+      - 若学生不会区间变号定位零点，回补方程根分布与韦达。
+      - 若学生不会比较极值点函数值，回补不等式工具基础。
+  detail_terms:
+    - $a(x+1)^2-e^x$
+    - $x_1,x_2$ 两个极值点
+    - $-1<x_1<0$
+    - $f(x_1)<-\frac1e$
+    - $f(x_1)=\frac12(x_1-1)e^{x_1}$
+    - $f(x_1)>-\frac12$
+parts: &a1
+  - part_id: "1"
+    text: 证明：$-\frac12<f(x_1)<-\frac1e$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0302_a_xplus1_square_exp_extreme_point_bound_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0302_ex03_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0302/page_0302.md
+      role: problem_start
+      evidence: page_0302 例3题头：$f(x)=a(x+1)^2-e^x$，若 $f$ 有两个极值点 $x_1<x_2$，证明 $-\frac12<f(x_1)<-\frac1e$。
+    - ref_id: page_0302_ex03_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0302/page_0302.md
+      role: solution
+      evidence: page_0302 完整解析：由 $f^\prime(x)=2a(x+1)-e^x$ 有两个根推出 $a>\frac12$，再由 $f^\prime(-1)<0$、$f^\prime(0)>0$ 得 $-1<x_1<0$；用原函数找点得 $f(x_1)<f(-1)=-1/e$，用隐零点调整得 $f(x_1)>-1/2$。
+    - ref_id: page_0302_ex04_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0302/page_0302.md
+      role: local_context
+      evidence: page_0302 后续从例4开始新题，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0302.png
+      inspected: true
+      notes: 已核对页图：page_0302 中部包含例3完整题干和解析，后面另起例4。
+  source_context: 本卡处理 page_0302 单页闭合的例3；page_0302 例4排除。
+  source_influence:
+    - 保留 $f^\prime(x)=2a(x+1)-e^x$ 有两个根 $x_1,x_2$。
+    - 保留由 $f^\prime$ 的最大值为正推出 $a>\frac12$。
+    - 保留 $f^\prime(-1)=-1/e<0$、$f^\prime(0)=2a-1>0$，从而 $-1<x_1<0$。
+    - 保留上界 $f(x_1)<f(-1)=-1/e$，这是原函数找点。
+    - 保留由 $f^\prime(x_1)=0$ 得 $a=\frac{e^{x_1}}{2(x_1+1)}$。
+    - 保留 $f(x_1)=\frac12(x_1-1)e^{x_1}$，再由其在 $(-1,0)$ 上递减得到 $f(x_1)>-\frac12$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 山东模拟）已知函数 $f(x)=a(x+1)^2-e^x$，$a\in\mathbf{R}$。若 $f(x)$ 有两个极值点 $x_1,x_2$，且 $x_1<x_2$。
+  parts: *a1
+  choices: []
+  answer: $-\frac12<f(x_1)<-\frac1e$。
+  fidelity_notes:
+    - 无选项。
+    - $x_1$ 是较小的极值点，对应 $f^\prime$ 的第一个零点。
+solution:
+  source_solution_summary: 由 $f$ 有两个极值点可知 $f^\prime(x)=2a(x+1)-e^x$ 有两个根 $x_1,x_2$。令 $h(x)=2a(x+1)-e^x$，则 $h^\prime(x)=2a-e^x$。若 $a\le0$，$h$ 单调递减，不可能有两个根；若 $a>0$， $h$ 先增后减，要有两个根需最大值为正，推出 $a>\frac12$。 此时 $f^\prime(-1)=-\frac1e<0$，$f^\prime(0)=2a-1>0$， 所以 $-1<x_1<0$。因为 $x_1$ 是第一个极值点，且在 $(-1,x_1)$ 上 $f$ 递减，故 $f(x_1)<f(-1)=-\frac1e$，这是原函数找点。另一方面， 由 $f^\prime(x_1)=0$ 得 $a=\frac{e^{x_1}}{2(x_1+1)}$，代回 $f(x_1)=a(x_1+1)^2-e^{x_1} =\frac12(x_1-1)e^{x_1}$。令 $q(x)=\frac12(x-1)e^x$，则 $q^\prime(x)=\frac12xe^x<0$ 在 $(-1,0)$ 上成立，所以 $q(x_1)>q(0)=-\frac12$。综上 $-\frac12<f(x_1)<-\frac1e$。
+  key_steps:
+    - step_id: step_1
+      statement: 把两个极值点转成导函数两个零点。
+      formula_trace:
+        from: $f(x)=a(x+1)^2-e^x$
+        to: $f^\prime(x)=2a(x+1)-e^x$ 有两个根
+        operation: 求导。
+        why: 极值点来自导函数零点。
+      source_ref: page_0302_ex03_solution
+    - step_id: step_2
+      statement: 推出参数必须满足 $a>\frac12$。
+      formula_trace:
+        from: $h(x)=2a(x+1)-e^x,\quad h^\prime(x)=2a-e^x$
+        to: $a>\frac12$
+        operation: 分析 $h$ 先增后减并要求最大值为正。
+        why: 这保证两个导数零点存在。
+      source_ref: page_0302_ex03_solution
+    - step_id: step_3
+      statement: 定位较小极值点 $x_1$。
+      formula_trace:
+        from: $f^\prime(-1)=-\frac1e<0,\quad f^\prime(0)=2a-1>0$
+        to: $-1<x_1<0$
+        operation: 用变号和零点顺序。
+        why: 后面估 $f(x_1)$ 需要知道 $x_1$ 的区间。
+      source_ref: page_0302_ex03_solution
+    - step_id: step_4
+      statement: 用原函数找点证明右侧上界。
+      formula_trace:
+        from: $-1<x_1<0$ 且 $x_1$ 为第一个极值点
+        to: $f(x_1)<f(-1)=-\frac1e$
+        operation: 利用 $f$ 在 $(-1,x_1)$ 上递减。
+        why: 要证明 $f(x_1)$ 小于某个值，直接在原函数上找更高的点。
+      source_ref: page_0302_ex03_solution
+    - step_id: step_5
+      statement: 用隐零点方程改写 $f(x_1)$。
+      formula_trace:
+        from: $f^\prime(x_1)=2a(x_1+1)-e^{x_1}=0$
+        to: $a=\frac{e^{x_1}}{2(x_1+1)}$
+        operation: 解出参数 $a$。
+        why: 把 $f(x_1)$ 中的参数消掉。
+      source_ref: page_0302_ex03_solution
+    - step_id: step_6
+      statement: 证明左侧下界。
+      formula_trace:
+        from: $f(x_1)=\frac12(x_1-1)e^{x_1}$
+        to: $f(x_1)>-\frac12$
+        operation: 设 $q(x)=\frac12(x-1)e^x$，在 $(-1,0)$ 上递减。
+        why: $x_1<0$，所以 $q(x_1)>q(0)$。
+      source_ref: page_0302_ex03_solution
+teaching_card:
+  student_title: 极值点函数值的两边估
+  what_it_trains: 训练同一个极值点函数值，一边用原函数找点，另一边用导数零点方程消参。
+  recognition_cues:
+    - 题目直接给 $f$ 有两个极值点。
+    - 要估的是较小极值点 $x_1$ 的函数值。
+    - $f^\prime(x_1)=0$ 能把参数 $a$ 消掉。
+    - 右界 $-\frac1e$ 来自原函数上的点 $x=-1$。
+  normalization_moves:
+    - 先判断 $a>\frac12$，不是为了求范围，而是为了定位 $x_1$。
+    - 不要把两个不等号混成一个办法。
+    - 证明 $f(x_1)<-\frac1e$ 时看原函数。
+    - 证明 $f(x_1)>-\frac12$ 时看消参后的新函数。
+  common_failures:
+    - 忘记证明 $-1<x_1<0$。
+    - 把 $f(x_1)<f(-1)$ 的单调方向看反。
+    - 代回 $a$ 时漏掉 $x_1+1$。
+    - 把 $q(x)$ 在 $(-1,0)$ 上递减的结论用反。
+  similar_practice_query: a(x+1)^2-e^x 两个极值点 x1 原函数找点 隐零点消参
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

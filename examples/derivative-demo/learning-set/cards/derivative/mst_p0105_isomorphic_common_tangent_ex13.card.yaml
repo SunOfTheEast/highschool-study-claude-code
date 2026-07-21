@@ -1,0 +1,207 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0105_isomorphic_common_tangent_ex13
+content_revision_id: mst_p0105_isomorphic_common_tangent_ex13-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0105_isomorphic_common_tangent_ex13.card.yaml
+stem: |-
+  （2024 福建泉州四校期末 T8）已知直线 $y=kx+b$ 是曲线 $y=x^2-(a+1)$ 的切线，也是曲线 $y=a\ln x-1$ 的切线，则 $a$ 的最大值是（  ）
+  A. $\frac2e$
+  B. $\frac4e$
+  C. $2e$
+  D. $4e$
+answer: |
+  A
+
+  同一条直线同时切于 $y=x^2-(a+1)$ 与 $y=a\ln x-1$。把第一条曲线整体上移
+  $a+1$，公切线也上移 $a+1$，问题等价于 $y=x^2$ 与
+  $y=a\ln x+a=a(\ln x+1)$ 存在公切线。源页用一凹一凸的公切线模型转成
+  $a(\ln x+1)\le x^2$。求最大 $a$ 时只需考虑 $\ln x+1>0$ 的部分，
+  得
+  $a\le\frac{x^2}{\ln x+1}=\frac{x^2}{\ln(ex)}$。
+  令 $s(x)=\frac{x^2}{\ln(ex)}$，则
+  $s'(x)=\frac{x(2\ln(ex)-1)}{(\ln(ex))^2}$，最小值在
+  $x=e^{-1/2}$ 处取得，$s_{\min}=2/e$。因此 $a$ 的最大值为
+  $\frac2e$，故选 A。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把两条原曲线转成同构比较模型。
+      max_score: 1
+    - step_id: step_2
+      description: 由公切线模型写出恒成立不等式。
+      max_score: 1
+    - step_id: step_3
+      description: 分离参数并求临界最小值。
+      max_score: 1
+    - step_id: step_4
+      description: 计算 $s_{\min}=\frac2e$。
+      max_score: 1
+    - step_id: step_5
+      description: 确定选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+      - 数形结合
+      - 切线放缩与凹凸性
+    subroute:
+      - 纵向平移同构
+      - 公切线存在性转恒成立
+      - 比值函数求最小值
+  structure:
+    primary: 同构结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 非齐次结构
+    evidence:
+      - 原问题等价于 $y=x^2$ 与 $y=a(\ln x+1)$ 的公切线。
+      - $a\le\frac{x^2}{\ln(ex)}$ 给出同构比值结构。
+      - $\left(\frac{x^2}{\ln(ex)}\right)_{\min}=\frac2e$。
+    normalization_moves_used:
+      - 把常数平移吸收到第二条曲线，得到 $a(\ln x+1)$。
+      - 只在 $\ln x+1>0$ 的有效约束区间分离参数。
+      - 把 $\ln x+1$ 写成 $\ln(ex)$ 以对齐标准同构模型。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不理解纵向平移后的等价性，回补函数性质与图像。
+      - 若学生不会把公切线存在性转成 $a(\ln x+1)\le x^2$，回补导数运算与几何意义。
+      - 若学生分离参数时忽略 $\ln x+1$ 的符号，回补不等式工具基础。
+      - 若学生不会求 $\frac{x^2}{\ln(ex)}$ 的最小值，回补导数单调极值基础。
+  detail_terms:
+    - $y=x^2-(a+1)$
+    - $y=a\ln x-1$
+    - $y=a(\ln x+1)$
+    - $a_{\max}=\frac2e$
+    - 同构公切线
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0105_isomorphic_common_tangent_ex13
+source_evidence:
+  source_refs:
+    - ref_id: page_0105
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0105/page_0105.md
+      role: problem_start
+      evidence: page_0105 底部给出例 13 题头、题干、A-D 选项、同构转化解析和答案 A。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0105.png
+      inspected: true
+      notes: 已核对 page_0105 页图：例 13 在页面底部完整结束，解析给出 $a\le\left(\frac{2(ex)^2}{e^2\ln(ex)^2}\right)_{\min}=\frac2e$，故选 A。
+  source_context: 例 13 是 page_0105 最后一题；page_0106 开始新 section 例 14，未为 page_0106 创建卡片。
+  source_influence:
+    - 保留源页同构平移：原问题等价于 $y=x^2$ 与 $y=a(\ln x+1)$ 存在公切线。
+    - 保留源页恒成立比较：$a(\ln x+1)\le x^2$。
+    - 保留源页同构写法和最小值 $\frac2e$。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 福建泉州四校期末 T8）已知直线 $y=kx+b$ 是曲线 $y=x^2-(a+1)$ 的切线，也是曲线 $y=a\ln x-1$ 的切线，则 $a$ 的最大值是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\frac2e$
+      text_latex: $\frac2e$
+    - label: B
+      text_raw: $\frac4e$
+      text_latex: $\frac4e$
+    - label: C
+      text_raw: $2e$
+      text_latex: $2e$
+    - label: D
+      text_raw: $4e$
+      text_latex: $4e$
+  answer: A
+  fidelity_notes:
+    - 本题在 page_0105 底部完整。
+    - page_0106 是新 section 例 14，按批次规则不创建本批卡片。
+solution:
+  source_solution_summary: |
+    同一条直线同时切于 $y=x^2-(a+1)$ 与 $y=a\ln x-1$。把第一条曲线整体上移
+    $a+1$，公切线也上移 $a+1$，问题等价于 $y=x^2$ 与
+    $y=a\ln x+a=a(\ln x+1)$ 存在公切线。源页用一凹一凸的公切线模型转成
+    $a(\ln x+1)\le x^2$。求最大 $a$ 时只需考虑 $\ln x+1>0$ 的部分，
+    得
+    $a\le\frac{x^2}{\ln x+1}=\frac{x^2}{\ln(ex)}$。
+    令 $s(x)=\frac{x^2}{\ln(ex)}$，则
+    $s'(x)=\frac{x(2\ln(ex)-1)}{(\ln(ex))^2}$，最小值在
+    $x=e^{-1/2}$ 处取得，$s_{\min}=2/e$。因此 $a$ 的最大值为
+    $\frac2e$，故选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 把两条原曲线转成同构比较模型。
+      formula_trace:
+        from: |
+          $y=x^2-(a+1),\qquad y=a\ln x-1$
+        to: |
+          $y=x^2,\qquad y=a(\ln x+1)$
+        operation: 把切线和两条曲线同时做纵向平移，消去常数差。
+        why: 平移不改变切点斜率，公切线存在性可转成两个标准函数的比较。
+      source_ref: page_0105
+    - step_id: step_2
+      statement: 由公切线模型写出恒成立不等式。
+      formula_trace:
+        from: |
+          $y=x^2$ 与 $y=a(\ln x+1)$ 存在公切线
+        to: |
+          $a(\ln x+1)\le x^2$
+        operation: 按源页同构公切线模型，把对数曲线放在二次曲线下方。
+        why: 一凹一凸且外侧包裹时存在公切线；最大 $a$ 出现在相切临界。
+      source_ref: page_0105
+    - step_id: step_3
+      statement: 分离参数并求临界最小值。
+      formula_trace:
+        from: |
+          $a(\ln x+1)\le x^2$
+        to: |
+          $a\le s(x)=\frac{x^2}{\ln x+1}=\frac{x^2}{\ln(ex)}$
+        operation: 在 $\ln x+1>0$ 的约束区间分离 $a$。
+        why: 最大允许参数由右端比值函数的最小值决定。
+      source_ref: page_0105
+    - step_id: step_4
+      statement: 计算 $s_{\min}=\frac2e$。
+      formula_trace:
+        from: |
+          $s(x)=\frac{x^2}{\ln(ex)}$
+        to: |
+          $s'(x)=\frac{x(2\ln(ex)-1)}{(\ln(ex))^2},\quad x=e^{-1/2},\quad s_{\min}=\frac2e$
+        operation: 求导令 $2\ln(ex)-1=0$；等价于源页同构式 $\left(\frac{2(ex)^2}{e^2\ln(ex)^2}\right)_{\min}$。
+        why: 这个最小值就是 $a$ 的最大上界。
+      source_ref: page_0105
+    - step_id: step_5
+      statement: 确定选项。
+      formula_trace:
+        from: |
+          $a_{\max}=\frac2e$
+        to: |
+          $\text{选 A}$
+        operation: 与 A-D 选项逐项对应。
+        why: 题目问最大值，不是所有取值范围。
+      source_ref: page_0105
+teaching_card:
+  student_title: 平移成 $x^2$ 和 $a(\ln x+1)$ 后求最大 $a$
+  what_it_trains: 训练把带常数平移的两条切线曲线化成同构比较，再用比值函数最小值求参数最大值。
+  recognition_cues:
+    - 两条曲线分别带 $-(a+1)$ 和 $-1$，说明可以通过纵向平移整理。
+    - 目标是 $a$ 的最大值，常常落在两曲线临界相切的位置。
+    - 出现 $\frac2e$、$\frac4e$ 选项，提示要算 $\frac{x^2}{\ln(ex)}$ 的最小值。
+  normalization_moves:
+    - 把原问题改写为 $y=x^2$ 与 $y=a(\ln x+1)$ 的公切线。
+    - 写出 $a(\ln x+1)\le x^2$。
+    - 分离为 $a\le\frac{x^2}{\ln(ex)}$。
+    - 求导得到最小值 $\frac2e$。
+  common_failures:
+    - 没有做平移同构，直接列切点方程导致计算复杂。
+    - 把 $\ln x+1$ 当成恒正，忽略有效约束区间。
+    - 把例 11 的 $2e$ 机械套用到本题，漏掉 $\ln x+1$ 带来的尺度变化。
+  similar_practice_query: x^2-(a+1) a lnx-1 公切线 同构 平移 2/e
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0105 图片；例 13 在本页底部完结。
+    - 已确认 page_0106 开始新 section 例 14，本批未创建 page_0106 卡。

@@ -1,0 +1,164 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0038_ex38
+content_revision_id: mst_p0038_ex38-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0038_ex38.card.yaml
+stem: |-
+  若实数 $x,y,z$ 满足 $2+\log_2 x=3+\log_3 y=5+\log_5 z$，则 $x,y,z$ 的大小关系不可能是 ( )
+  A. x>y>z
+  B. x>z>y
+  C. y>x>z
+  D. y>z>x
+answer: |-
+  B
+
+  设公共值为 $k$，把比较 $x,y,z$ 转成比较三条直线 $(k-2)\ln2$、$(k-3)\ln3$、$(k-5)\ln5$。特值可实现 A、C、D；交点顺序排除 B。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 设共同参数，把三个数写成同一个参数下的指数式。
+      max_score: 1
+    - step_id: step_2
+      description: 比较正数大小可转成比较其自然对数。
+      max_score: 1
+    - step_id: step_3
+      description: 用特值说明 A、C、D 都可能出现。
+      max_score: 1
+    - step_id: step_4
+      description: 交点顺序说明 B 的 $x>z>y$ 无法出现。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 共同参数 $k$
+      - 比较 $\ln x,\ln y,\ln z$ 的三条直线
+      - 特值排除可能选项
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+    evidence:
+      - $\ln x=(k-2)\ln2$
+      - $\ln y=(k-3)\ln3$
+      - $\ln z=(k-5)\ln5$
+    normalization_moves_used:
+      - 把不同底数对数方程统一到共同参数 $k$。
+      - 把正数大小比较转成自然对数的线性函数比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $\log_a u=r$ 写成 $u=a^r$，回补指数对数基础。
+      - 若学生忘记 $\ln t$ 在正数上保序，回补函数性质与图像。
+      - 若学生无法读出三条直线交点前后的顺序，回补函数性质与图像。
+  detail_terms:
+    - $2+\log_2x=3+\log_3y=5+\log_5z=k$
+    - $(k-2)\ln2,(k-3)\ln3,(k-5)\ln5$
+    - $x>z>y$ 等价于 $L_2>L_5>L_3$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0038_ex38
+source_evidence:
+  source_refs:
+    - ref_id: page_0038
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0038/page_0038.md
+      role: problem_start
+      evidence: 例38题头、题干、四个选项和解析开头在 page_0038；本页末尾给出特值法。
+    - ref_id: page_0039
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0039/page_0039.md
+      role: continuation
+      evidence: page_0039 顶部是例38续页，含比较图像、最终结论“只有 B 不可能，故本题选 B”，以及对 A 的同构估值说明。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0038.png
+      inspected: true
+      notes: 页图确认例38从 page_0038 底部开始，题干问“大小关系不可能是”。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0039.png
+      inspected: true
+      notes: 页图确认 page_0039 顶部是例38图像续页，随后才进入例39。
+  source_context: 例38题头在 page_0038，解答跨到 page_0039 顶部；page_0039 的第二节正文不是本卡内容。
+  source_influence:
+    - 按题干“不可能是”和 page_0039 续页结论确定答案为 B。
+    - 用 page_0039 图像和三条线的交点顺序补足“B 不可能”的理由。
+  source_discrepancies:
+    - page_0038 特值法末尾出现“选 A”，但 page_0039 续页写“只有 B 不可能，故本题选 B”；重新验算后 A、C、D 均可取到，B 不可能，故 page_0038 的“选 A”为源文口误。
+original_problem:
+  stem: 若实数 $x,y,z$ 满足 $2+\log_2 x=3+\log_3 y=5+\log_5 z$，则 $x,y,z$ 的大小关系不可能是 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: x>y>z
+      text_latex: $x>y>z$
+    - label: B
+      text_raw: x>z>y
+      text_latex: $x>z>y$
+    - label: C
+      text_raw: y>x>z
+      text_latex: $y>x>z$
+    - label: D
+      text_raw: y>z>x
+      text_latex: $y>z>x$
+  answer: B
+  fidelity_notes:
+    - 源题解答跨页；page_0038 的“选 A”与 page_0039 的最终“选 B”冲突，已按题干“不可能是”和直接验算确认为答案 B。
+solution:
+  source_solution_summary: 设公共值为 $k$，把比较 $x,y,z$ 转成比较三条直线 $(k-2)\ln2$、$(k-3)\ln3$、$(k-5)\ln5$。特值可实现 A、C、D；交点顺序排除 B。
+  key_steps:
+    - step_id: step_1
+      statement: 设共同参数，把三个数写成同一个参数下的指数式。
+      formula_trace:
+        from: $2+\log_2 x=3+\log_3 y=5+\log_5 z=k$
+        to: $x=2^{k-2},\quad y=3^{k-3},\quad z=5^{k-5}$
+        operation: 分别移项得到 $\log_2x=k-2$、$\log_3y=k-3$、$\log_5z=k-5$，再转成指数式。
+        why: 对数关系中的不同底数先用共同参数统一。
+      source_ref: page_0038
+    - step_id: step_2
+      statement: 比较正数大小可转成比较其自然对数。
+      formula_trace:
+        from: $x=2^{k-2},\ y=3^{k-3},\ z=5^{k-5}$
+        to: $\ln x=(k-2)\ln2,\quad \ln y=(k-3)\ln3,\quad \ln z=(k-5)\ln5$
+        operation: 对三个正数取自然对数。
+        why: $\ln t$ 在 $t>0$ 上严格递增，大小关系不变。
+      source_ref: page_0038
+    - step_id: step_3
+      statement: 用特值说明 A、C、D 都可能出现。
+      formula_trace:
+        from: $x=2^{k-2},\ y=3^{k-3},\ z=5^{k-5}$
+        to: $k=3$ 得 $x>y>z$；$k=5$ 得 $y>x>z$；$k=8$ 得 $y>z>x$
+        operation: 代入 $k=3,5,8$ 直接计算三数。
+        why: 题目问“不可能是”，只要举出可实现的参数，就能排除对应选项。
+      source_ref: page_0038
+    - step_id: step_4
+      statement: 交点顺序说明 B 的 $x>z>y$ 无法出现。
+      formula_trace:
+        from: $L_2=(k-2)\ln2,\ L_3=(k-3)\ln3,\ L_5=(k-5)\ln5$
+        to: 不存在 $L_2>L_5>L_3$ 的 $k$ 区间
+        operation: 比较 $L_2=L_5$ 与 $L_5=L_3$ 的交点：$L_2>L_5$ 要 $k<k_{25}$，$L_5>L_3$ 要 $k>k_{35}$，且 $k_{25}<k_{35}$。
+        why: $x>z>y$ 等价于 $\ln x>\ln z>\ln y$，两个必要条件要求 $k$ 同时在两个不相交区间中。
+      source_ref: page_0039
+teaching_card:
+  student_title: 把三个对数条件画成三条线
+  what_it_trains: 训练把不同底数的对数关系统一成参数 $k$，再通过取对数和图像分区判断哪些大小顺序能出现。
+  recognition_cues:
+    - 多个式子用等号连在一起，适合设共同值。
+    - 底数分别是 2、3、5，直接比较 $x,y,z$ 不方便。
+    - 题目问“不可能是”，可以先用特值证明部分选项可能。
+  normalization_moves:
+    - 设公共值 $k$。
+    - 把 $x,y,z$ 写成 $2^{k-2},3^{k-3},5^{k-5}$。
+    - 取自然对数后比较三条关于 $k$ 的直线。
+  common_failures:
+    - 把“举出 A 可能”误当成最终答案。
+    - 没有注意题干问的是“不可能是”。
+    - 只用一个特值就下结论，没有证明 B 不可能。
+  similar_practice_query: 共同参数 对数比较 三条直线 大小关系不可能
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已重新验算：设公共值为 $k$，A 可由 $k=3$ 取到，C 可由 $k=5$ 取到，D 可由 $k=8$ 取到；而 $x>z>y$ 等价于两组互斥的 $k$ 区间，故 B 不可能。page_0038 的“选 A”为源文口误。

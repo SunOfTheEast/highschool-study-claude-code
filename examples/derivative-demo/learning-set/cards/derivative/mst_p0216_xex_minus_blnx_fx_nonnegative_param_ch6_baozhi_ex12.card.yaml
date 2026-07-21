@@ -1,0 +1,220 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0216_xex_minus_blnx_fx_nonnegative_param_ch6_baozhi_ex12
+content_revision_id: mst_p0216_xex_minus_blnx_fx_nonnegative_param_ch6_baozhi_ex12-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0216_xex_minus_blnx_fx_nonnegative_param_ch6_baozhi_ex12.card.yaml
+stem: |-
+  （2023 · 广州期末 T22）已知函数 $f(x)=a(xe^{x-1}-4)-b\ln x+3x$。
+  1. 当 $a=0$ 时，讨论 $f(-x)$ 的单调性。
+  2. 若 $a=1$，且 $f(x)\geqslant0$，求 $b$ 的值。
+answer: |-
+  (1) 当 $b\leqslant0$ 时，$f(-x)$ 在 $(-\infty,0)$ 上单调递减；当 $b>0$ 时，$f(-x)$ 在 $(-\infty,-\frac b3)$ 上单调递减、在 $(-\frac b3,0)$ 上单调递增。 (2) $b=5$。
+
+  第(1)问：令 $a=0$，得 $f(-x)=-b\ln(-x)-3x$（$x<0$）， $f^{\prime}(-x)=-\frac{b}{x}-3=-\frac{b+3x}{x}$。 当 $b\leqslant0$ 时，导数恒负，故在 $(-\infty,0)$ 上递减； 当 $b>0$ 时，$f^{\prime}(-x)>0\Leftrightarrow-\frac b3<x<0$， $f^{\prime}(-x)<0\Leftrightarrow x<-\frac b3$，故先减后增。 第(2)问取 $a=1$，有 $f(x)=xe^{x-1}-b\ln x+3x-4$。source 先给极点效应速解： $f(x)=h(x+\ln x-1)+4h(\ln x)+(5-b)\ln x$， 其中 $h(t)=e^t-t-1\geqslant0$，两块 $h$ 在 $x=1$ 同时取零，且 $\ln1=0$，因此余量项系数必须为零，得 $b=5$。 其后给完整导数证明：由 $f(1)=0$、恒有 $f(x)\geqslant0$ 可知 $x=1$ 应是最小值点，故 $f^{\prime}(1)=0\Rightarrow b=5$。 再设 $H(x)=x(x+1)e^{x-1}+3x-b$，有 $H^{\prime}(x)=(x^2+3x+1)e^{x-1}+3>0$，故 $H$ 递增， 进而验证 $b=5$ 时 $f$ 先减后增且最小值为 0；若 $b>5$ 或 $b<5$ 都会在某区间出现 $f(x)<0$，矛盾，故唯一 $b=5$。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 第(1)问代入 $a=0$ 并求 $f(-x)$ 的导数。
+      max_score: 1
+    - step_id: step_2
+      description: 第(1)问按 $b$ 分类给出单调区间。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问先做保值同构拆分。
+      max_score: 1
+    - step_id: step_4
+      description: 在共零点 $x=1$ 锁定余量系数。
+      max_score: 1
+    - step_id: step_5
+      description: 按解答题格式：由最小值点条件先得 $b=5$。
+      max_score: 1
+    - step_id: step_6
+      description: 构造单调辅助函数并验证 $b=5$ 的充分性。
+      max_score: 1
+    - step_id: step_7
+      description: 排除 $b>5$ 与 $b<5$，收束唯一参数。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 (1) 问
+        result: $f(-x)$ 的单调性随 $b$ 分两类。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 (2) 问
+        result: $b=5$
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 含参数分类讨论
+      - 同构变形与换元法
+    subroute:
+      - 代入后导数判号
+      - 差一同构
+      - 极点效应
+      - 余量函数
+      - 分类反证
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 抽象函数结构
+      - 不等式工具结构
+      - 非齐次结构
+    evidence:
+      - $f^{\prime}(-x)=-\frac{b+3x}{x}$（$x<0$）
+      - $f(x)=h(x+\ln x-1)+4h(\ln x)+(5-b)\ln x$
+      - $h(t)=e^t-t-1\geqslant0$
+      - $f^{\prime}(x)=\frac{x(x+1)e^{x-1}+3x-b}{x}$
+      - $H^{\prime}(x)=(x^2+3x+1)e^{x-1}+3>0$
+    normalization_moves_used:
+      - 第(1)问先固定定义域 $x<0$，再用分母符号统一导数判号。
+      - 第(2)问把原式配成两个保值块与一个余量项。
+      - 在 $x=1$ 共零点锁定余量系数。
+      - 用导数分类法二次验证并排除 $b\neq5$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会在 $x<0$ 下解 $-\frac{b+3x}{x}>0$，回补导数单调极值基础。
+      - 若学生不会把 $xe^{x-1}$ 与 $\ln x$ 配到 $h(t)=e^t-t-1$，回补指数对数基础。
+      - 若学生只记结论 $b=5$ 但不会证明唯一性，回补不等式工具基础。
+      - 若学生把 $f(-x)$ 与 $f(x)$ 的定义域混用，回补函数三要素与定义域。
+  detail_terms:
+    - $f(-x)=-b\ln(-x)-3x$
+    - $f^{\prime}(-x)=-\frac{b+3x}{x}$
+    - $h(t)=e^t-t-1$
+    - 极点效应
+    - $b=5$
+parts: &a1
+  - part_id: (1)
+    text: 当 $a=0$ 时，讨论 $f(-x)$ 的单调性。
+  - part_id: (2)
+    text: 若 $a=1$，且 $f(x)\geqslant0$，求 $b$ 的值。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0216_xex_minus_blnx_fx_nonnegative_param_ch6_baozhi_ex12
+source_evidence:
+  source_refs:
+    - ref_id: page_0216_ex10_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0216/page_0216.md
+      role: local_context
+      evidence: page_0216 line 14-16 为例10续解收尾，不是本卡题头。
+    - ref_id: page_0216_ex12_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0216/page_0216.md
+      role: problem_start
+      evidence: page_0216 line 44-48 给出例12题干两问。
+    - ref_id: page_0216_ex12_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0216/page_0216.md
+      role: solution
+      evidence: page_0216 line 50 给出第(1)问求导与分段讨论开头，行尾逗号表明解析跨页。
+    - ref_id: page_0217_ex12_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0217/page_0217.md
+      role: continuation
+      evidence: page_0217 line 14-24 承接完成第(1)问，并给出第(2)问的极点效应速解与完整导数分类证明，结论 $b=5$。
+    - ref_id: page_0217_ex13_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0217/page_0217.md
+      role: local_context
+      evidence: page_0217 line 26 起进入“例13”新题头，仅作边界确认，不纳入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0216.png
+      inspected: true
+      notes: 已核对页图：例12题头在页底起，解析第(1)问被跨页截断。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0217.png
+      inspected: true
+      notes: 已核对页图：页顶先完成例12解析，再进入例13新题头。
+  source_context: 例12题头起于 page_0216，解析跨 page_0217 顶部闭合；page_0217 的例13不属于本卡范围。
+  source_influence:
+    - 第(1)问按 source 原链路保留：在 $(-\infty,0)$ 上由 $f^{\prime}(-x)$ 符号分 $b\leqslant0$ 与 $b>0$ 两种单调形态。
+    - 第(2)问保留两条并行路线：极点效应速解与导数分类严证，都收敛到 $b=5$。
+    - 保留关键取等点 $x=1$（两块保值项同取等、余量项过零）作为参数锁定点。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 广州期末 T22）已知函数 $f(x)=a(xe^{x-1}-4)-b\ln x+3x$。
+  parts: *a1
+  choices: []
+  answer: (1) 当 $b\leqslant0$ 时，$f(-x)$ 在 $(-\infty,0)$ 上单调递减；当 $b>0$ 时，$f(-x)$ 在 $(-\infty,-\frac b3)$ 上单调递减、在 $(-\frac b3,0)$ 上单调递增。 (2) $b=5$。
+  fidelity_notes:
+    - 题目为两问解答题，无选项。
+    - 第(1)问研究对象是 $f(-x)$，定义域是 $x<0$。
+    - 第(2)问解析跨页到 page_0217 顶部，已按题头归属完整并入。
+solution:
+  source_solution_summary: 第(1)问：令 $a=0$，得 $f(-x)=-b\ln(-x)-3x$（$x<0$）， $f^{\prime}(-x)=-\frac{b}{x}-3=-\frac{b+3x}{x}$。 当 $b\leqslant0$ 时，导数恒负，故在 $(-\infty,0)$ 上递减； 当 $b>0$ 时，$f^{\prime}(-x)>0\Leftrightarrow-\frac b3<x<0$， $f^{\prime}(-x)<0\Leftrightarrow x<-\frac b3$，故先减后增。 第(2)问取 $a=1$，有 $f(x)=xe^{x-1}-b\ln x+3x-4$。source 先给极点效应速解： $f(x)=h(x+\ln x-1)+4h(\ln x)+(5-b)\ln x$， 其中 $h(t)=e^t-t-1\geqslant0$，两块 $h$ 在 $x=1$ 同时取零，且 $\ln1=0$，因此余量项系数必须为零，得 $b=5$。 其后给完整导数证明：由 $f(1)=0$、恒有 $f(x)\geqslant0$ 可知 $x=1$ 应是最小值点，故 $f^{\prime}(1)=0\Rightarrow b=5$。 再设 $H(x)=x(x+1)e^{x-1}+3x-b$，有 $H^{\prime}(x)=(x^2+3x+1)e^{x-1}+3>0$，故 $H$ 递增， 进而验证 $b=5$ 时 $f$ 先减后增且最小值为 0；若 $b>5$ 或 $b<5$ 都会在某区间出现 $f(x)<0$，矛盾，故唯一 $b=5$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问代入 $a=0$ 并求 $f(-x)$ 的导数。
+      formula_trace:
+        from: $f(x)=a(xe^{x-1}-4)-b\ln x+3x$
+        to: $f(-x)=-b\ln(-x)-3x,\ f^{\prime}(-x)=-\frac{b}{x}-3=-\frac{b+3x}{x}$
+        operation: 先代入参数，再对 $f(-x)$ 直接求导。
+        why: 单调性判定要先建立导数符号表达式。
+      source_ref: page_0216_ex12_solution_start
+    - step_id: step_2
+      statement: 第(1)问按 $b$ 分类给出单调区间。
+      formula_trace:
+        from: $x<0,\ f^{\prime}(-x)=-\frac{b+3x}{x}$
+        to: $b\leqslant0$ 时恒负；$b>0$ 时在 $(-\infty,-\frac b3)$ 负、$(-\frac b3,0)$ 正
+        operation: 利用分母 $x<0$ 的固定符号转化不等式。
+        why: 完成“讨论单调性”的分情形结论。
+      source_ref: page_0217_ex12_solution_continuation
+    - step_id: step_3
+      statement: 第(2)问先做保值同构拆分。
+      formula_trace:
+        from: $a=1,\ f(x)=xe^{x-1}-b\ln x+3x-4$
+        to: $f(x)=h(x+\ln x-1)+4h(\ln x)+(5-b)\ln x$
+        operation: 把指数对数混合项配到 $h(t)=e^t-t-1$。
+        why: 形成“两块非负 + 一块余量”的极点效应结构。
+      source_ref: page_0217_ex12_solution_continuation
+    - step_id: step_4
+      statement: 在共零点 $x=1$ 锁定余量系数。
+      formula_trace:
+        from: $h(x+\ln x-1),\ h(\ln x)$ 在 $x=1$ 同时取零，且 $\ln1=0$
+        to: 余量项系数需满足 $5-b=0$，即 $b=5$
+        operation: 应用极点效应：若要全局非负，余量项在极点处不能破坏取等结构。
+        why: 给出快速求参结论。
+      source_ref: page_0217_ex12_solution_continuation
+    - step_id: step_5
+      statement: 按解答题格式：由最小值点条件先得 $b=5$。
+      formula_trace:
+        from: $f(1)=0,\ f(x)\geqslant0$
+        to: $f^{\prime}(1)=0\Rightarrow b=5$
+        operation: 把恒成立条件转为“在 $x=1$ 处取最小值”的必要条件。
+        why: 给出与速解一致的严格必要条件。
+      source_ref: page_0217_ex12_solution_continuation
+    - step_id: step_6
+      statement: 构造单调辅助函数并验证 $b=5$ 的充分性。
+      formula_trace:
+        from: $f^{\prime}(x)=\frac{x(x+1)e^{x-1}+3x-b}{x}$，令 $H(x)=x(x+1)e^{x-1}+3x-b$
+        to: $H^{\prime}(x)=(x^2+3x+1)e^{x-1}+3>0$，$b=5$ 时 $f$ 先减后增且 $f_{\min}=f(1)=0$
+        operation: 利用 $H$ 递增和 $H(1)=0$ 判定 $f^{\prime}$ 号变。
+        why: 完成充分性验证：$b=5$ 时确有 $f(x)\geqslant0$。
+      source_ref: page_0217_ex12_solution_continuation
+    - step_id: step_7
+      statement: 排除 $b>5$ 与 $b<5$，收束唯一参数。
+      formula_trace:
+        from: $H$ 递增，且 $H(1)$ 符号随 $b-5$ 改变
+        to: $b>5$ 或 $b<5$ 都会在某邻域得到 $f(x)<f(1)=0$，矛盾
+        operation: 对 $b$ 两侧做存在性反证。
+        why: 给出唯一性：$b=5$。
+      source_ref: page_0217_ex12_solution_continuation
+teaching_card:
+  student_title: 极点效应定参：$xe^{x-1}-b\ln x+3x-4\geqslant0$
+  what_it_trains: 训练“先做代入后导数分段，再用保值同构与余量函数锁参”的双问联动处理。
+  recognition_cues:
+    - 同题含“单调性讨论 + 恒成立求参”两类任务。
+    - 第(2)问出现 $xe^{x-1}$ 与 $\ln x$ 叠加，适合配到 $e^t-t-1$ 母函数。
+    - 解析里会出现“极点效应”“余量函数”与 $x=1$ 取等点。
+  normalization_moves:
+    - 先固定定义域再判导数号，避免符号翻转错误。
+    - 把复杂式拆成保值块与余量，再在共零点定参。
+    - 最后用导数分类法复核充分必要性。
+  common_failures:
+    - 在第(1)问解不等式时忘记 $x<0$，导致区间方向写反。
+    - 第(2)问只写 $f^{\prime}(1)=0$ 得 $b=5$，漏掉 $b\neq5$ 的排除。
+    - 把 $h(\ln x)=x-\ln x-1$ 写错，造成同构链断裂。
+  similar_practice_query: xe^{x-1} blnx 恒成立 求参 极点效应 保值性
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

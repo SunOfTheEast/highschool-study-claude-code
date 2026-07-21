@@ -1,0 +1,211 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0132_common_center_monotonic_ex23
+content_revision_id: mst_p0132_common_center_monotonic_ex23-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0132_common_center_monotonic_ex23.card.yaml
+stem: （2024·湖北月考）已知定义在 $\mathbf{R}$ 上的函数 $f(x)$ 的导函数为 $f^{\prime}(x)$，满足 $f(1+x)=f(1-x)$，$(x-1)f^{\prime}(x)>0$，$f(3)=2$，则不等式 $[f(x)-2]\ln x<0$ 的解集为______。
+answer: |
+  $(1,3)$
+
+  由
+  \[
+  f(1+x)=f(1-x)
+  \]
+  且 $f(3)=2$，取 $x=2$ 得
+  \[
+  f(3)=f(-1)=2.
+  \]
+  又由
+  \[
+  (x-1)f^{\prime}(x)>0
+  \]
+  可知：当 $x<1$ 时 $f^{\prime}(x)<0$，当 $x>1$ 时 $f^{\prime}(x)>0$，
+  所以 $f(x)$ 在 $(-\infty,1)$ 递减、在 $(1,+\infty)$ 递增。
+
+  解不等式
+  \[
+  [f(x)-2]\ln x<0.
+  \]
+  先看定义域：$x>0$ 且 $x\neq 1$。
+
+  1) 当 $0<x<1$ 时，$\ln x<0$，故需 $f(x)-2>0$，即 $f(x)>2=f(-1)$。
+  但在 $(-\infty,1)$ 上 $f$ 递减，$f(x)>f(-1)$ 推得 $x<-1$，与 $0<x<1$ 矛盾，无解。
+
+  2) 当 $x>1$ 时，$\ln x>0$，故需 $f(x)-2<0$，即 $f(x)<2=f(3)$。
+  在 $(1,+\infty)$ 上 $f$ 递增，$f(x)<f(3)$ 推得 $x<3$，
+  合并 $x>1$ 得 $1<x<3$。
+
+  故解集为 $(1,3)$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 利用中心对称条件把已知点值搬到另一侧。
+      max_score: 1
+    - step_id: step_2
+      description: 由 $(x-1)f^{\prime}(x)>0$ 判断两侧单调方向。
+      max_score: 1
+    - step_id: step_3
+      description: 按 $\\ln x$ 符号分区间，分别转化为 $f(x)$ 与2的比较。
+      max_score: 1
+    - step_id: step_4
+      description: 结合单调性完成区间筛选。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式求解
+    part_level:
+      - part_id: item_1
+        goal: 不等式求解
+        target: 求含对数因子的乘积不等式解集。
+        result: 见 source_solution_summary
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 含参数分类讨论
+    subroute:
+      - 共对称中心锁定
+      - 按 $\\ln x$ 符号分段
+  structure:
+    primary: 对称结构
+    secondary:
+      - 抽象函数结构
+      - 指对复合结构
+    evidence:
+      - $f(1+x)=f(1-x)$ 对应关于 $x=1$ 的对称关系。
+      - $(x-1)f^{\prime}(x)>0$ 直接引入中心点两侧单调翻转。
+      - 目标式含 $\\ln x$，天然需要按 $x$ 区间分情形。
+    normalization_moves_used:
+      - 先求出 $f(-1)=2$。
+      - 再判定 $(-\\infty,1)$ 递减、$(1,+\\infty)$ 递增。
+      - 按 $\\ln x$ 的正负分两段求解并筛选。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能从 $f(1+x)=f(1-x)$ 读出对称点，回补函数性质与图像。
+      - 若学生不会由 $(x-1)f^{\prime}(x)>0$ 分段判导数符号，回补导数单调极值基础。
+      - 若学生忽略 $\\ln x$ 定义域与符号分段，回补指数对数基础。
+  detail_terms:
+    - $f(3)=f(-1)=2$
+    - "$x<1: f^{\\prime}(x)<0$"
+    - "$x>1: f^{\\prime}(x)>0$"
+    - $[f(x)-2]\\ln x<0$
+    - $(1,3)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0132_common_center_monotonic_ex23
+source_evidence:
+  source_refs:
+    - ref_id: page_0132
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0132/page_0132.md
+      role: problem_start
+      evidence: 例23题头、条件与解析前半段起于page_0132底部。
+    - ref_id: page_0133
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0133/page_0133.md
+      role: continuation
+      evidence: page_0133顶部承接例23解析并给出最终答案 $(1,3)$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0132.png
+      inspected: true
+      notes: 已核对页图：例23起头在page_0132底部，解析跨页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0133.png
+      inspected: true
+      notes: 已核对页图：page_0133顶部完成例23两段分情形推理，答案为 $(1,3)$。
+  source_context: 本题属于“共对称中心+单调性调整”示例，先用 $f(1+x)=f(1-x)$ 锁定对称点，再结合 $(x-1)f^{\prime}(x)>0$ 做分区间单调推理。
+  source_influence:
+    - 保留 $f(3)=f(-1)=2$ 的对称点等值关系。
+    - 保留 $(x-1)f^{\prime}(x)>0$ 导出“左减右增”的单调分段。
+    - 保留按 $\\ln x$ 符号分 $0<x<1$ 与 $x>1$ 两段求解。
+  source_discrepancies: []
+original_problem:
+  stem: （2024·湖北月考）已知定义在 $\mathbf{R}$ 上的函数 $f(x)$ 的导函数为 $f^{\prime}(x)$，满足 $f(1+x)=f(1-x)$，$(x-1)f^{\prime}(x)>0$，$f(3)=2$，则不等式 $[f(x)-2]\ln x<0$ 的解集为______。
+  parts: *a1
+  choices: []
+  answer: $(1,3)$
+  fidelity_notes:
+    - 例23题干起于page_0132，解析与结论跨到page_0133顶部。
+    - page_0133顶部仅是例23续解，不作为新题头。
+solution:
+  source_solution_summary: |
+    由
+    \[
+    f(1+x)=f(1-x)
+    \]
+    且 $f(3)=2$，取 $x=2$ 得
+    \[
+    f(3)=f(-1)=2.
+    \]
+    又由
+    \[
+    (x-1)f^{\prime}(x)>0
+    \]
+    可知：当 $x<1$ 时 $f^{\prime}(x)<0$，当 $x>1$ 时 $f^{\prime}(x)>0$，
+    所以 $f(x)$ 在 $(-\infty,1)$ 递减、在 $(1,+\infty)$ 递增。
+
+    解不等式
+    \[
+    [f(x)-2]\ln x<0.
+    \]
+    先看定义域：$x>0$ 且 $x\neq 1$。
+
+    1) 当 $0<x<1$ 时，$\ln x<0$，故需 $f(x)-2>0$，即 $f(x)>2=f(-1)$。
+    但在 $(-\infty,1)$ 上 $f$ 递减，$f(x)>f(-1)$ 推得 $x<-1$，与 $0<x<1$ 矛盾，无解。
+
+    2) 当 $x>1$ 时，$\ln x>0$，故需 $f(x)-2<0$，即 $f(x)<2=f(3)$。
+    在 $(1,+\infty)$ 上 $f$ 递增，$f(x)<f(3)$ 推得 $x<3$，
+    合并 $x>1$ 得 $1<x<3$。
+
+    故解集为 $(1,3)$。
+  key_steps:
+    - step_id: step_1
+      statement: 利用中心对称条件把已知点值搬到另一侧。
+      formula_trace:
+        from: $f(1+x)=f(1-x)$，$f(3)=2$
+        to: $f(-1)=2$
+        operation: 在对称关系中代 $x=2$。
+        why: 为左侧区间比较提供已知锚点。
+      source_ref: page_0132
+    - step_id: step_2
+      statement: 由 $(x-1)f^{\prime}(x)>0$ 判断两侧单调方向。
+      formula_trace:
+        from: $(x-1)f^{\prime}(x)>0$
+        to: $x<1\\Rightarrow f^{\prime}(x)<0$；$x>1\\Rightarrow f^{\prime}(x)>0$
+        operation: 按 $x-1$ 符号分段。
+        why: 锁定“左减右增”是后续比较的核心。
+      source_ref: page_0132
+    - step_id: step_3
+      statement: 按 $\\ln x$ 符号分区间，分别转化为 $f(x)$ 与2的比较。
+      formula_trace:
+        from: $[f(x)-2]\\ln x<0$
+        to: $0<x<1\\Rightarrow f(x)>2$；$x>1\\Rightarrow f(x)<2$
+        operation: 利用乘积异号条件。
+        why: 把混合不等式拆成可用单调性处理的两段。
+      source_ref: page_0133
+    - step_id: step_4
+      statement: 结合单调性完成区间筛选。
+      formula_trace:
+        from: $f(x)>f(-1)$（左段）与 $f(x)<f(3)$（右段）
+        to: 左段无解，右段得 $1<x<3$
+        operation: 递减/递增函数的值域比较反推自变量。
+        why: 得到唯一有效区间。
+      source_ref: page_0133
+teaching_card:
+  student_title: 先锁对称点，再按对数符号分两段
+  what_it_trains: 把“中心对称 + 单调翻转 + 对数分段”整合成一条稳定解题链。
+  recognition_cues:
+    - 出现 $f(1+x)=f(1-x)$ 这类“同心偏移”条件。
+    - 同时给出 $(x-a)f^{\prime}(x)>0$，提示中心点两侧单调不同。
+    - 目标式含 $\\ln x$，必须分 $0<x<1$ 与 $x>1$。
+  normalization_moves:
+    - 从对称条件把已知点 $x=3$ 转到 $x=-1$。
+    - 由 $(x-1)f^{\prime}(x)>0$ 写出左右单调性。
+    - 按 $\\ln x$ 符号分段，把乘积不等式转为函数值比较。
+  common_failures:
+    - 忘记 $\\ln x$ 仅在 $x>0$ 定义。
+    - 把“左减右增”方向写反。
+    - 左段得到 $x<-1$ 后没有与 $0<x<1$ 交集筛选。
+  similar_practice_query: 抽象函数 共对称中心 $(x-a)f^{\prime}(x)>0$ ln分段 不等式解集
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

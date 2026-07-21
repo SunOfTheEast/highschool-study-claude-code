@@ -1,0 +1,250 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0020_ex14
+content_revision_id: mst_p0020_ex14-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0020_ex14.card.yaml
+stem: |-
+  设函数 $f(x)=x\ln x$，$g(x)=\frac{f'(x)}{x}$，给定下列命题
+  ① 不等式 $g(x)>0$ 的解集为 $(\frac{1}{e}, +\infty)$。
+  ② 函数 $g(x)$ 在 $(0,e)$ 单调递增，在 $(e,+\infty)$ 单调递减。
+  ③ $x\in[\frac{1}{e},1]$ 时，总有 $f(x)<g(x)$ 恒成立。
+  ④ 若函数 $F(x)=f(x)-ax^2$ 有两个极值点，则实数 $a\in(0,1)$。
+  则正确的命题的个数为 ( )
+  A. 1
+  B. 2
+  C. 3
+  D. 4
+answer: |-
+  B
+
+  由 $f'(x)=\ln x+1$ 得 $g(x)=(\ln x+1)/x=e\,h(ex)$，其中 $h(u)=\ln u/u$。① 因 $x>0$，$g(x)>0\iff \ln x+1>0\iff x>1/e$，正确。② $h(u)$ 在 $(0,e)$ 增、$(e,+\infty)$ 减，所以 $g(x)=e h(ex)$ 在 $(0,1)$ 增、$(1,+\infty)$ 减，命题给成 $(0,e)$ 与 $(e,+\infty)$，错误。③ 当 $x\in[1/e,1]$，$f(x)=x\ln x\le0$ 且 $g(x)\ge0$，两端等号不在同一点同时发生，故 $f(x)<g(x)$，正确。④ $F'(x)=\ln x+1-2ax$ 有两个零点等价于水平线 $y=2a$ 与 $y=g(x)$ 有两个交点，正确范围为 $0<2a<1$，即 $a\in(0,1/2)$；源解析据此判命题给出的 $(0,1)$ 错误。故正确命题个数为 2，选 B。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 求出 $g(x)$ 并同构到 $h(ex)$。
+      max_score: 1
+    - step_id: step_2
+      description: 判断命题①。
+      max_score: 1
+    - step_id: step_3
+      description: 判断命题②。
+      max_score: 1
+    - step_id: step_4
+      description: 判断命题③。
+      max_score: 1
+    - step_id: step_5
+      description: 把命题④转成导函数零点个数。
+      max_score: 1
+    - step_id: step_6
+      description: 由图像和 $g$ 的最大值读出命题④的正确范围。
+      max_score: 1
+    - step_id: step_7
+      description: 合并命题真假。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: ①
+        goal: 抽象函数性质
+        target: $g(x)>0$ 的解集
+        result: 正确
+      - part_id: ②
+        goal: 抽象函数性质
+        target: $g(x)$ 的单调区间
+        result: 错误，分界点应为 $1$
+      - part_id: ③
+        goal: 不等式证明
+        target: $[1/e,1]$ 上 $f(x)<g(x)$
+        result: 正确
+      - part_id: ④
+        goal: 求参数范围
+        target: $F(x)=f(x)-ax^2$ 有两个极值点的参数范围
+        result: 正确范围为 $(0,1/2)$，源题命题判错
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 数形结合
+      - 含参数分类讨论
+    subroute:
+      - $g(x)=e h(ex)$，$h(x)=\ln x/x$
+      - $\ln x/x$ 单峰性
+      - 水平线 $y=2a$ 与 $y=g(x)$ 交点个数
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $g(x)=\frac{\ln x+1}{x}$ 通过 $ex$ 与 $h(u)=\ln u/u$ 同构。
+      - $F'(x)=0$ 转成 $2a=g(x)$，用图像交点数判两个极值点。
+    normalization_moves_used:
+      - $\ln x+1=\ln(ex)$。
+      - 把 $h$ 的分界点 $u=e$ 转回 $x=1$。
+      - 在 $[1/e,1]$ 上分别比较 $f\le0$ 与 $g\ge0$。
+      - 把 $F'(x)=0$ 改写为水平线与 $g$ 的交点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求 $f'(x)=\ln x+1$ 或把 $F'(x)$ 写错，回补导数运算与几何意义。
+      - 若学生不能把 $\ln x+1$ 写成 $\ln(ex)$ 并转为 $h(ex)$，回补指数对数基础。
+      - 若学生不知道 $\ln x/x$ 的单调分界点在 $e$，回补导数单调极值基础。
+      - 若学生把 $h(ex)$ 的分界点仍看作 $x=e$，回补分段/复合/反函数基础。
+      - 若学生不能把两个极值点转成 $y=2a$ 与 $y=g(x)$ 的两个交点，回补函数性质与图像。
+  detail_terms:
+    - $g(x)=e h(ex)$
+    - $h(x)=\ln x/x$
+    - $x=1/e$
+    - $x=1$
+    - $F'(x)=\ln x+1-2ax$
+    - $0<2a<1$
+parts: &a1
+  - ① 不等式 $g(x)>0$ 的解集为 $(\frac{1}{e}, +\infty)$。
+  - ② 函数 $g(x)$ 在 $(0,e)$ 单调递增，在 $(e,+\infty)$ 单调递减。
+  - ③ $x\in[\frac{1}{e},1]$ 时，总有 $f(x)<g(x)$ 恒成立。
+  - ④ 若函数 $F(x)=f(x)-ax^2$ 有两个极值点，则实数 $a\in(0,1)$。
+  - 则正确的命题的个数为 ( )
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0020_ex14
+source_evidence:
+  source_refs:
+    - ref_id: page_0020
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0020/page_0020.md
+      role: problem_start
+      evidence: 例 14 题干、选项和解析开头在 page_0020；页底在第③个命题解析处截断。
+    - ref_id: page_0021
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0021/page_0021.md
+      role: continuation
+      evidence: 承接 page_0020 完成第③、第④个命题解析，并给出图像和答案 B。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0020.png
+      inspected: true
+      notes: 核对题干为 $g(x)=f'(x)/x$；四个命题和选项 A-D 完整；解析跨页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0021.png
+      inspected: true
+      notes: 核对续页解析、图像 $y=g(x)$ 与直线 $y=2a$；续页文字把第③个命题处写成“故②正确”，但最终结论为“只有①③正确”。
+  source_context: 例 14 位于 $e^x/x^n$ 最值总结之后，后接“关于 $e^x+x$，$x+\ln x$ 的同构问题”引入例 15；本题核心是把 $g(x)$ 写成 $e\,h(ex)$，其中 $h(x)=\ln x/x$，并用图像判断极值点参数。
+  source_influence:
+    - "legacy locator: corpus/problems/derivative/ex_mst_457.yaml 仅用于定位；未继承旧 classification。"
+    - legacy locator 将 $g(x)$ 写成 $f''(x)/x$，但源 markdown 和源图均为 $f'(x)/x$。
+    - 第④命题按源解析作为“参数范围是否给对”判断：正确范围为 $(0,1/2)$，所以命题中 $(0,1)$ 判错。
+  source_discrepancies:
+    - field: legacy.problem.g_definition
+      old_value: $g(x)=\frac{f''(x)}{x}$
+      corrected_value: $g(x)=\frac{f'(x)}{x}$
+      evidence_ref: materials/math/derivative/source/mst26-full-marked-c20/images/page_0020.png; mst26-full-marked-c20/pages/page_0020/page_0020.md
+    - field: source_solution.label_for_statement_3
+      old_value: 续页在证明 $f(x)<g(x)$ 后写作“故②正确”。
+      corrected_value: 按题序、上下文和最终“只有①③正确”应为“故③正确”。
+      evidence_ref: materials/math/derivative/source/mst26-full-marked-c20/images/page_0021.png; page_0021 final conclusion
+    - field: source_solution.statement_4_truth_condition
+      old_value: 源解析认为第④命题错误，因为精确范围为 $a\in(0,1/2)$，不是 $(0,1)$。
+      corrected_value: 用户已拍板：本组选项按充要条件/精确参数范围口径判断；第④命题给出 $(0,1)$ 不是精确范围，判错。
+      evidence_ref: page_0021
+original_problem:
+  stem: 设函数 $f(x)=x\ln x$，$g(x)=\frac{f'(x)}{x}$，给定下列命题
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: "1"
+      text_latex: "1"
+    - label: B
+      text_raw: "2"
+      text_latex: "2"
+    - label: C
+      text_raw: "3"
+      text_latex: "3"
+    - label: D
+      text_raw: "4"
+      text_latex: "4"
+  answer: B
+  fidelity_notes:
+    - 源图与 markdown 均确认 $g(x)=f'(x)/x$，不是 legacy locator 中的 $f''(x)/x$。
+    - 例 14 题干从 page_0020 开始，解析续到 page_0021；page_0021 的图像属于本题。
+    - 续页解析中“故②正确”应按上下文理解为“故③正确”；最终答案为只有①③正确。
+solution:
+  source_solution_summary: 由 $f'(x)=\ln x+1$ 得 $g(x)=(\ln x+1)/x=e\,h(ex)$，其中 $h(u)=\ln u/u$。① 因 $x>0$，$g(x)>0\iff \ln x+1>0\iff x>1/e$，正确。② $h(u)$ 在 $(0,e)$ 增、$(e,+\infty)$ 减，所以 $g(x)=e h(ex)$ 在 $(0,1)$ 增、$(1,+\infty)$ 减，命题给成 $(0,e)$ 与 $(e,+\infty)$，错误。③ 当 $x\in[1/e,1]$，$f(x)=x\ln x\le0$ 且 $g(x)\ge0$，两端等号不在同一点同时发生，故 $f(x)<g(x)$，正确。④ $F'(x)=\ln x+1-2ax$ 有两个零点等价于水平线 $y=2a$ 与 $y=g(x)$ 有两个交点，正确范围为 $0<2a<1$，即 $a\in(0,1/2)$；源解析据此判命题给出的 $(0,1)$ 错误。故正确命题个数为 2，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 求出 $g(x)$ 并同构到 $h(ex)$。
+      formula_trace:
+        from: $f(x)=x\ln x$
+        to: $f'(x)=\ln x+1,\quad g(x)=\frac{\ln x+1}{x}=e\cdot\frac{\ln(ex)}{ex}=e h(ex)$
+        operation: 求导后把 $\ln x+1$ 写成 $\ln(ex)$，令 $h(u)=\ln u/u$。
+        why: 把 $g$ 的符号和单调性转给熟悉的 $\ln u/u$ 模型。
+      source_ref: page_0020
+    - step_id: step_2
+      statement: 判断命题①。
+      formula_trace:
+        from: $g(x)>0$
+        to: $\frac{\ln x+1}{x}>0\iff \ln x+1>0\iff x>\frac1e$
+        operation: 利用定义域 $x>0$，分母恒正。
+        why: 解集与命题①一致。
+      source_ref: page_0020
+    - step_id: step_3
+      statement: 判断命题②。
+      formula_trace:
+        from: $h(u)=\ln u/u$ 在 $(0,e)$ 增、在 $(e,+\infty)$ 减
+        to: $g(x)=e h(ex)$ 在 $(0,1)$ 增、在 $(1,+\infty)$ 减
+        operation: 令 $u=ex$，把 $u=e$ 对应回 $x=1$。
+        why: 命题②把分界点错写成 $e$，应为 $1$，所以错误。
+      source_ref: page_0020
+    - step_id: step_4
+      statement: 判断命题③。
+      formula_trace:
+        from: $x\in[\frac1e,1]$
+        to: $f(x)=x\ln x\le0,\quad g(x)=\frac{\ln x+1}{x}\ge0$
+        operation: 用 $f'(x)=\ln x+1\ge0$ 得 $f$ 在该区间递增且 $f(1)=0$；用命题①结论得 $g\ge0$。
+        why: $f$ 的等号在 $x=1$，$g$ 的等号在 $x=1/e$，不能同时取等，故 $f(x)<g(x)$ 恒成立。
+      source_ref: page_0020-page_0021
+    - step_id: step_5
+      statement: 把命题④转成导函数零点个数。
+      formula_trace:
+        from: $F(x)=f(x)-ax^2$
+        to: $F'(x)=\ln x+1-2ax$ 有两个零点 $\iff y=2a$ 与 $y=g(x)$ 有两个交点
+        operation: 令 $F'(x)=0$，移项得 $2a=(\ln x+1)/x=g(x)$。
+        why: 极值点个数由导函数零点个数决定，图像交点能读参数范围。
+      source_ref: page_0021
+    - step_id: step_6
+      statement: 由图像和 $g$ 的最大值读出命题④的正确范围。
+      formula_trace:
+        from: $g(x)$ 在 $x=1$ 处最大值为 $1$，且 $g(x)>0$ 的区间为 $(1/e,+\infty)$
+        to: $y=2a$ 与 $y=g(x)$ 有两个交点 $\iff 0<2a<1\iff a\in(0,\frac12)$
+        operation: 用单峰图像与水平线交点个数判定。
+        why: 源题把范围写成 $(0,1)$，不是精确范围，故按源解析判错。
+      source_ref: page_0021
+    - step_id: step_7
+      statement: 合并命题真假。
+      formula_trace:
+        from: ①正确，②错误，③正确，④错误
+        to: 正确命题个数为 $2$，选 B
+        operation: 计数。
+        why: 与源页最终结论“只有①③正确，故选 B”一致。
+      source_ref: page_0021
+teaching_card:
+  student_title: 把 $g(x)$ 看成平移后的 $\ln x/x$
+  what_it_trains: 训练把 $\frac{\ln x+1}{x}$ 同构成 $e\frac{\ln(ex)}{ex}$，再用 $\ln x/x$ 的单峰性一次判断解集、单调区间、不等式和极值点参数。
+  recognition_cues:
+    - 题目给出 $f(x)=x\ln x$ 和 $g(x)=f'(x)/x$。
+    - $g(x)$ 中出现 $\ln x+1$，可以合成 $\ln(ex)$。
+    - 命题同时问 $g>0$、$g$ 单调、$F'(x)=0$ 的交点个数。
+    - 图像中 $g$ 的最高点在 $x=1$，最大值为 $1$。
+  normalization_moves:
+    - 先求 $f'(x)$，再把 $g(x)$ 化为 $e h(ex)$。
+    - 把 $h$ 的单调分界点 $u=e$ 对应回 $ex=e$，即 $x=1$。
+    - 证明 $f<g$ 时分别估 $f\le0$ 和 $g\ge0$，再检查等号点不同。
+    - 极值点问题先写 $F'(x)=0$，再看水平线 $y=2a$ 与 $g$ 的交点个数。
+  common_failures:
+    - 把题干误读成 $g(x)=f''(x)/x$。
+    - 知道 $h(x)=\ln x/x$ 在 $x=e$ 处分界，却忘记 $g(x)=e h(ex)$ 的分界点变成 $x=1$。
+    - 在第③个命题里只看到 $f(1)=0$ 或 $g(1/e)=0$，没有检查等号不能同取。
+    - 第④个命题只凭 $(0,1/2)\subset(0,1)$ 作形式逻辑判断；源题按参数范围是否精确给出，判为错误。
+  similar_practice_query: x ln x f'(x)/x ln x / x 同构 单调区间 极值点参数 y=2a
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 用户已拍板：本题各命题按充要条件/精确口径判断；第④命题正确范围为 $(0,1/2)$，给成 $(0,1)$ 判错，维持答案 B。
+    - 请 reviewer 注意续页源图/markdown 在第③命题后写“故②正确”，但最终结论和上下文均为③正确。
+    - legacy locator 的 $f''(x)/x$ 已按源图修正为 $f'(x)/x$。
+    - Reviewer removed `复合函数与不动点结构`; this card uses a composed $h(ex)$ and horizontal-line intersections, not fixed-point structure.

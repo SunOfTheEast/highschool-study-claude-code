@@ -1,0 +1,167 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0179_product_gap_m_range_ex35
+content_revision_id: mst_p0179_product_gap_m_range_ex35-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0179_product_gap_m_range_ex35.card.yaml
+stem: |-
+  （2024 · 陕西同仁一模 · 多选 T12）已知函数 $f(x)=(ax-me^x)(ax-\ln x)$（其中 $e$ 为自然对数的底数），若存在实数 $a$ 使得 $f(x)<0$ 恒成立，则实数 $m$ 的取值范围是（  ）
+  A. $\left(-\infty,\frac{1}{e^2}\right)$
+  B. $(e^2,+\infty)$
+  C. $\left(\frac{1}{e},+\infty\right)$
+  D. $\left(\frac{1}{e^2},+\infty\right)$
+answer: |-
+  D
+
+  定义域为 $x>0$。由 $f(x)<0$ 得 $(ax-me^x)(ax-\ln x)<0$，即 $\left(a-\frac{me^x}{x}\right)\left(a-\frac{\ln x}{x}\right)<0$。 令 $g(x)=\frac{\ln x}{x}$，$h(x)=\frac{me^x}{x}$，题意等价于存在常数 $a$，使两函数图象分居直线 $y=a$ 两侧，故需要一个函数最小值大于另一函数最大值。 源解取 $h_{\min}>g_{\max}$：$g_{\max}=g(e)=\frac{1}{e}$， $h_{\min}=h(1)=me$，于是 $me>\frac{1}{e}$， 得 $m>\frac{1}{e^2}$，对应选项 D。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把乘积恒负改写为同一参数 $a$ 的双函数比较。
+      max_score: 1
+    - step_id: step_2
+      description: 构造分离函数并写出分隔判据。
+      max_score: 1
+    - step_id: step_3
+      description: 求两个关键极值点。
+      max_score: 1
+    - step_id: step_4
+      description: 比较极值并回到选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 参变量分离
+      - 数形结合
+    subroute:
+      - 构造 $g(x)$ 与 $h(x)$
+      - 水平线分隔判据
+      - 极值端点比较
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - $\left(a-\frac{me^x}{x}\right)\left(a-\frac{\ln x}{x}\right)<0$
+      - $g(x)=\frac{\ln x}{x}$
+      - $h(x)=\frac{me^x}{x}$
+      - $h_{\min}>g_{\max}$
+    normalization_moves_used:
+      - 把含参乘积不等式转成两函数与常数线的相对位置。
+      - 把“存在 $a$”转为极值分离条件。
+      - 先求 $g_{\max}$ 与 $h_{\min}$，再比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把乘积恒负翻译成“直线分隔两函数”，回补函数性质与图像。
+      - 若学生对 $\frac{\ln x}{x}$ 的极值点不熟，回补导数单调极值基础。
+      - 若学生在参数不等式整理中频繁错符号，回补代数恒等变形。
+  detail_terms:
+    - $f(x)=(ax-me^x)(ax-\ln x)$
+    - $g(x)=\frac{\ln x}{x}$
+    - $h(x)=\frac{me^x}{x}$
+    - $g(e)=\frac{1}{e}$
+    - $h(1)=me$
+    - $m>\frac{1}{e^2}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0179_product_gap_m_range_ex35
+source_evidence:
+  source_refs:
+    - ref_id: page_0179_ex35_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0179/page_0179.md
+      role: problem_start
+      evidence: lines 26-30 给出例35题干与 A-D 选项。
+    - ref_id: page_0179_ex35_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0179/page_0179.md
+      role: solution
+      evidence: line 32 给出完整解析：构造 $g(x)=\frac{\ln x}{x}$、$h(x)=\frac{me^x}{x}$，比较 $g_{\max}$ 与 $h_{\min}$，结论 $m>\frac{1}{e^2}$，选 D。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0179.png
+      inspected: true
+      notes: 已核对页图：例35题干、四个选项和解析链与 markdown 一致，答案为 D。
+  source_context: page_0179 顶部是 page_0178 例34续解，仅作上下文；本卡仅处理本页新起头的例35。
+  source_influence:
+    - 保留源解主线：把乘积恒负改写为 $(a-\frac{me^x}{x})(a-\frac{\ln x}{x})<0$。
+    - 保留“存在直线 $y=a$ 将两函数严格分隔”的判据，落到 $h_{\min}>g_{\max}$。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 陕西同仁一模 · 多选 T12）已知函数 $f(x)=(ax-me^x)(ax-\ln x)$（其中 $e$ 为自然对数的底数），若存在实数 $a$ 使得 $f(x)<0$ 恒成立，则实数 $m$ 的取值范围是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\left(-\infty,\frac{1}{e^2}\right)$
+      text_latex: $\left(-\infty,\frac{1}{e^2}\right)$
+    - label: B
+      text_raw: $(e^2,+\infty)$
+      text_latex: $(e^2,+\infty)$
+    - label: C
+      text_raw: $\left(\frac{1}{e},+\infty\right)$
+      text_latex: $\left(\frac{1}{e},+\infty\right)$
+    - label: D
+      text_raw: $\left(\frac{1}{e^2},+\infty\right)$
+      text_latex: $\left(\frac{1}{e^2},+\infty\right)$
+  answer: D
+  fidelity_notes:
+    - 源题为多选格式，但按源解析仅 D 正确。
+    - 题干、选项、解析均在 page_0179 同页完成。
+solution:
+  source_solution_summary: 定义域为 $x>0$。由 $f(x)<0$ 得 $(ax-me^x)(ax-\ln x)<0$，即 $\left(a-\frac{me^x}{x}\right)\left(a-\frac{\ln x}{x}\right)<0$。 令 $g(x)=\frac{\ln x}{x}$，$h(x)=\frac{me^x}{x}$，题意等价于存在常数 $a$，使两函数图象分居直线 $y=a$ 两侧，故需要一个函数最小值大于另一函数最大值。 源解取 $h_{\min}>g_{\max}$：$g_{\max}=g(e)=\frac{1}{e}$， $h_{\min}=h(1)=me$，于是 $me>\frac{1}{e}$， 得 $m>\frac{1}{e^2}$，对应选项 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把乘积恒负改写为同一参数 $a$ 的双函数比较。
+      formula_trace:
+        from: $(ax-me^x)(ax-\ln x)<0$
+        to: $\left(a-\frac{me^x}{x}\right)\left(a-\frac{\ln x}{x}\right)<0$
+        operation: 在定义域 $x>0$ 内提取公因子 $x^2$ 并约去。
+        why: 把问题转成“同一水平线 $y=a$ 与两条曲线的位置关系”。
+      source_ref: page_0179_ex35_solution
+    - step_id: step_2
+      statement: 构造分离函数并写出分隔判据。
+      formula_trace:
+        from: $g(x)=\frac{\ln x}{x},\ h(x)=\frac{me^x}{x}$
+        to: $h(x)_{\min}>g(x)_{\max}$
+        operation: 把“对任意 $x$ 异号”翻译为两函数在整域上可被一条水平线严格隔开。
+        why: 存在性参数题可转成“最大值与最小值”比较。
+      source_ref: page_0179_ex35_solution
+    - step_id: step_3
+      statement: 求两个关键极值点。
+      formula_trace:
+        from: $g(x)=\frac{\ln x}{x},\ h(x)=\frac{me^x}{x}$
+        to: $g(e)=\frac{1}{e},\ h(1)=me$
+        operation: 按源解直接读取 $g$ 的最大值点 $x=e$ 与 $h$ 的最小值点 $x=1$。
+        why: 极值代入后即可直接解出参数下界。
+      source_ref: page_0179_ex35_solution
+    - step_id: step_4
+      statement: 比较极值并回到选项。
+      formula_trace:
+        from: $me>\frac{1}{e}$
+        to: $m>\frac{1}{e^2}$
+        operation: 同除正数 $e$。
+        why: 得到参数范围并匹配 D。
+      source_ref: page_0179_ex35_solution
+teaching_card:
+  student_title: 存在参数先看“最大值 < 最小值”
+  what_it_trains: 训练把“存在一个常数让两个因子恒异号”的题，转换成两条函数曲线被水平线分隔的极值比较问题。
+  recognition_cues:
+    - 题干出现“存在实数 $a$ 使不等式恒成立”。
+    - 两个括号都有同一线性项 $ax$。
+    - 可自然改写成 $a-\text{函数}(x)$ 的乘积。
+  normalization_moves:
+    - 先统一成 $\left(a-u(x)\right)\left(a-v(x)\right)$。
+    - 把恒异号翻译为“$a$ 夹在两函数之间且全程不穿越”。
+    - 把夹逼条件化为 $u_{\min}>v_{\max}$ 或对称形式。
+  common_failures:
+    - 只在某个点比较，忽略“对任意 $x>0$ 恒成立”。
+    - 误把“多选题”当成“至少两个正确”，忽略单个选项也可能成立。
+    - 把 $me>\frac{1}{e}$ 误算成 $m>\frac{1}{e}$。
+  similar_practice_query: 存在参数 恒异号 gmax hmin ln x/x me^x/x
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

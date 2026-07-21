@@ -1,0 +1,216 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0248_one_over_x_plus_a_ln1px_extremum_parameter_range_ex25
+content_revision_id: mst_p0248_one_over_x_plus_a_ln1px_extremum_parameter_range_ex25-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0248_one_over_x_plus_a_ln1px_extremum_parameter_range_ex25.card.yaml
+stem: （2023 · 乙卷第三问）已知函数 $f(x)=\left(\frac1x+a\right)\ln(1+x)$。若 $f(x)$ 在 $(0,+\infty)$ 存在极值，求 $a$ 的取值范围。
+answer: |-
+  $a\in(0,\frac12)$。
+
+  先求导并把分子设为辅助函数： $f^\prime(x)=\frac{-\ln(x+1)+\frac{ax^2+x}{x+1}}{x^2}=\frac{h(x)}{x^2}$， 其中 $h(x)=-\ln(x+1)+\frac{ax^2+x}{x+1}$， $h^\prime(x)=\frac{[ax+(2a-1)]x}{(x+1)^2}$。若 $a\ge\frac12$，则 $h$ 递增且 $h(0)=0$，所以 $h>0$，$f$ 单调递增； 若 $a\le0$，则 $h$ 递减或恒不正，$f$ 单调递减。若 $0<a<\frac12$，则 $h$ 先减后增，且 $h(0)=0$，最低点小于 0；又 $h(x)\sim ax-\ln x\to+\infty$，所以 $h$ 在右侧有唯一零点。于是 $f^\prime$ 由负变正，$f$ 在 $(0,+\infty)$ 存在极小值。故参数范围是 $(0,\frac12)$。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 把 $f^\prime$ 的符号交给辅助函数 $h$。
+      max_score: 1
+    - step_id: step_2
+      description: 分析 $h$ 的导数。
+      max_score: 1
+    - step_id: step_3
+      description: 排除 $a\ge\frac12$。
+      max_score: 1
+    - step_id: step_4
+      description: 排除 $a\le0$。
+      max_score: 1
+    - step_id: step_5
+      description: 处理中间区间 $0<a<\frac12$。
+      max_score: 1
+    - step_id: step_6
+      description: 证明右侧一定回到正值。
+      max_score: 1
+    - step_id: step_7
+      description: 把 $h$ 的零点翻译回 $f$ 的极值点。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: main
+        goal: 求参数范围
+        target: 第 main 问
+        result: $a\in(0,\frac12)$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 局部逼近与找点
+      - 含参数分类讨论
+      - 充分/必要性探路
+    subroute:
+      - 导函数分子辅助函数
+      - 辅助函数隐零点
+      - 参数三段分类
+      - 无穷远回正
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非对称结构
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - $(\frac1x+a)\ln(1+x)$
+      - $h(x)=-\ln(x+1)+\frac{ax^2+x}{x+1}$
+      - $\frac{[ax+(2a-1)]x}{(x+1)^2}$
+      - $0<a<\frac12$
+      - $h(x)\to+\infty$
+    normalization_moves_used:
+      - 把 $f^\prime$ 写成 $h(x)/x^2$。
+      - 对 $h$ 再求导，把参数压到线性因子。
+      - 分 $a\ge\frac12$、$a\le0$、$0<a<\frac12$。
+      - 用 $h$ 的先减后增和右侧回正证明存在极值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求导整理成 $h/x^2$，回补导数运算与几何意义。
+      - 若学生不会分析辅助函数 $h$ 的单调性，回补导数单调极值基础。
+      - 若学生不会判断 $h(x)\sim ax-\ln x$，回补指数对数基础。
+      - 若学生参数分类混乱，回补代数恒等变形。
+      - 若学生不理解“导函数变号才有极值”，回补函数性质与图像。
+  detail_terms:
+    - $(\frac1x+a)\ln(1+x)$
+    - $f^\prime(x)=h(x)/x^2$
+    - $h(x)=-\ln(x+1)+\frac{ax^2+x}{x+1}$
+    - $h^\prime(x)=\frac{[ax+(2a-1)]x}{(x+1)^2}$
+    - $0<a<\frac12$
+    - 辅助函数隐零点
+    - 极值存在
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0248_one_over_x_plus_a_ln1px_extremum_parameter_range_ex25
+source_evidence:
+  source_refs:
+    - ref_id: page_0248_ex25_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0248/page_0248.md
+      role: problem_start
+      evidence: page_0248 例25：$f(x)=(\frac1x+a)\ln(1+x)$，若 $f(x)$ 在 $(0,+\infty)$ 存在极值，求 $a$ 的取值范围。
+    - ref_id: page_0248_ex25_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0248/page_0248.md
+      role: solution
+      evidence: 解析设 $h(x)=-\ln(x+1)+\frac{ax^2+x}{x+1}$，则 $f^\prime(x)=h(x)/x^2$，$h^\prime(x)=\frac{[ax+(2a-1)]x}{(x+1)^2}$。
+    - ref_id: page_0249_ex25_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0249/page_0249.md
+      role: continuation
+      evidence: page_0249 续完例25：当 $0<a<\frac12$ 时，通过右侧取点证明 $h$ 有唯一零点，从而 $f$ 先减后增，有极值。
+    - ref_id: page_0249_ex26_next_head
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0249/page_0249.md
+      role: local_context
+      evidence: page_0249 随后另起例26，属于下一批。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0248.png
+      inspected: true
+      notes: 已核对页图：例25题头和解析开头位于 page_0248 底部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0249.png
+      inspected: true
+      notes: 已核对页图：page_0249 顶部续完例25，例26另起。
+  source_context: 本卡处理 page_0248 起头、page_0249 续完的例25；page_0249 例26留给下一批。
+  source_influence:
+    - 保留 source 的辅助函数：$h(x)=-\ln(x+1)+\frac{ax^2+x}{x+1}$。
+    - 保留 source 的参数三分：$a\ge\frac12$、$a\le0$、$0<a<\frac12$。
+    - 保留 source 的隐点逻辑：先让 $h$ 出现零点，再由 $f^\prime=h/x^2$ 得到 $f$ 有极值。
+    - 保留 source 的取点/放缩意图，但用更直接的 $h(x)\to+\infty$ 收束存在性。
+  source_discrepancies:
+    - type: auxiliary_transform_inconsistency
+      source_ref: page_0249_ex25_continuation
+      observed: source 从 $h(x)>ax-\ln(x+1)$ 和 $\ln(x+1)=t$ 后写 $F(t)=ae^{t-1}-t$。
+      resolved_as: 若按前一行下界，应为 $a(e^t-1)-t$；卡片改用 $a>0$ 时 $h(x)\sim ax-\ln x\to+\infty$ 来证明右侧必有零点。
+      reason: 该处只是充分性取点辅助，结论 $0<a<\frac12$ 可由 $h$ 的形状和无穷远行为严格得到。
+original_problem:
+  stem: （2023 · 乙卷第三问）已知函数 $f(x)=\left(\frac1x+a\right)\ln(1+x)$。若 $f(x)$ 在 $(0,+\infty)$ 存在极值，求 $a$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $a\in(0,\frac12)$。
+  fidelity_notes:
+    - 单问求参数范围题，无选项。
+    - “存在极值”转化为 $f^\prime$ 在 $(0,+\infty)$ 内变号。
+solution:
+  source_solution_summary: 先求导并把分子设为辅助函数： $f^\prime(x)=\frac{-\ln(x+1)+\frac{ax^2+x}{x+1}}{x^2}=\frac{h(x)}{x^2}$， 其中 $h(x)=-\ln(x+1)+\frac{ax^2+x}{x+1}$， $h^\prime(x)=\frac{[ax+(2a-1)]x}{(x+1)^2}$。若 $a\ge\frac12$，则 $h$ 递增且 $h(0)=0$，所以 $h>0$，$f$ 单调递增； 若 $a\le0$，则 $h$ 递减或恒不正，$f$ 单调递减。若 $0<a<\frac12$，则 $h$ 先减后增，且 $h(0)=0$，最低点小于 0；又 $h(x)\sim ax-\ln x\to+\infty$，所以 $h$ 在右侧有唯一零点。于是 $f^\prime$ 由负变正，$f$ 在 $(0,+\infty)$ 存在极小值。故参数范围是 $(0,\frac12)$。
+  key_steps:
+    - step_id: step_1
+      statement: 把 $f^\prime$ 的符号交给辅助函数 $h$。
+      formula_trace:
+        from: $f(x)=\left(\frac1x+a\right)\ln(1+x)$
+        to: $f^\prime(x)=\frac{h(x)}{x^2}$
+        operation: 求导并整理分子。
+        why: $x^2>0$，所以 $f^\prime$ 的符号只看 $h(x)$。
+      source_ref: page_0248_ex25_solution_start
+    - step_id: step_2
+      statement: 分析 $h$ 的导数。
+      formula_trace:
+        from: $h(x)=-\ln(x+1)+\frac{ax^2+x}{x+1}$
+        to: $h^\prime(x)=\frac{[ax+(2a-1)]x}{(x+1)^2}$
+        operation: 对辅助函数求导并因式化。
+        why: 参数只出现在一次因子 $ax+(2a-1)$ 中。
+      source_ref: page_0248_ex25_solution_start
+    - step_id: step_3
+      statement: 排除 $a\ge\frac12$。
+      formula_trace:
+        from: $a\ge\frac12$
+        to: $h^\prime(x)\ge0,\ h(x)>h(0)=0$
+        operation: 用 $h$ 单调递增。
+        why: $f^\prime>0$，函数无极值。
+      source_ref: page_0248_ex25_solution_start
+    - step_id: step_4
+      statement: 排除 $a\le0$。
+      formula_trace:
+        from: $a\le0$
+        to: $h(x)\le0$
+        operation: 按 source 的符号判断。
+        why: $f^\prime<0$，函数无极值。
+      source_ref: page_0248_ex25_solution_start
+    - step_id: step_5
+      statement: 处理中间区间 $0<a<\frac12$。
+      formula_trace:
+        from: $h^\prime(x)=0$
+        to: $x=\frac{1-2a}{a}$
+        operation: 解辅助函数的极小值点。
+        why: $h$ 先减后增，且从 $h(0)=0$ 往下走，最低点必小于 0。
+      source_ref: page_0248_ex25_solution_start
+    - step_id: step_6
+      statement: 证明右侧一定回到正值。
+      formula_trace:
+        from: $h(x)=-\ln(x+1)+\frac{ax^2+x}{x+1}$
+        to: $h(x)\sim ax-\ln x\to+\infty$
+        operation: 看无穷远主导项。
+        why: 这样保证 $h$ 在右侧有一个零点。
+      source_ref: page_0249_ex25_continuation
+    - step_id: step_7
+      statement: 把 $h$ 的零点翻译回 $f$ 的极值点。
+      formula_trace:
+        from: $h(x_0)=0$
+        to: $f^\prime$ 由负变正，$f$ 先减后增
+        operation: 利用 $f^\prime=h/x^2$。
+        why: $h$ 的右侧零点就是 $f$ 的极小值点。
+      source_ref: page_0249_ex25_continuation
+teaching_card:
+  student_title: 把极值存在转成导函数分子的隐零点
+  what_it_trains: 训练把复杂导函数拆出辅助函数，再通过辅助函数的单调性和右侧回正判断极值是否存在。
+  recognition_cues:
+    - 原函数含有 $\frac1x$ 和 $\ln(1+x)$。
+    - 题目只问“存在极值”的参数范围。
+    - 求导后自然出现一个复杂分子，需要设成 $h(x)$。
+    - $h^\prime$ 里出现线性因子 $ax+(2a-1)$。
+  normalization_moves:
+    - 先把 $f^\prime$ 写成 $h/x^2$。
+    - 再看 $h^\prime$，不要直接硬判 $f^\prime$。
+    - 两端参数区间先排除。
+    - 中间区间用 $h$ 先减后增和右侧趋于正无穷。
+  common_failures:
+    - 只求到 $f^\prime$，没有把分子设成辅助函数。
+    - 把 $h$ 的极值点和 $f$ 的极值点混淆。
+    - 漏掉 $a\le0$ 或 $a\ge\frac12$ 的排除。
+    - 不会证明 $h$ 右侧能从负值回到正值。
+  similar_practice_query: (1/x+a)ln(1+x) 极值存在 参数范围 辅助函数 h 导函数分子
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

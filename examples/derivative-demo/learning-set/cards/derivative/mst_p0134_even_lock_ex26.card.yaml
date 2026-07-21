@@ -1,0 +1,175 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0134_even_lock_ex26
+content_revision_id: mst_p0134_even_lock_ex26-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0134_even_lock_ex26.card.yaml
+stem: （2024·城厢区月考）设函数 $f(x)$ 在 $\mathbf{R}$ 上存在导数 $f^{\prime}(x)$，$g(x)=f(x)-\sin x$ 是偶函数。在 $[0,+\infty)$ 上 $f^{\prime}(x)>\cos x$。若 $f\!\left(\frac\pi2-t\right)-f(t)\geqslant \cos t-\sin t$，则实数 $t$ 的取值范围为______。
+answer: |
+  $\left(-\infty,\frac\pi4\right]$
+
+  设 $g(x)=f(x)-\sin x$，则 $g$ 为偶函数，且
+  $g^{\prime}(x)=f^{\prime}(x)-\cos x>0$ 在 $[0,+\infty)$ 成立，
+  所以 $g$ 在 $[0,+\infty)$ 递增；由偶性可知其在
+  $(-\infty,0)$ 递减。题设不等式可改写为
+  $f\!\left(\frac\pi2-t\right)-\sin\!\left(\frac\pi2-t\right)\ge f(t)-\sin t$，
+  即 $g\!\left(\frac\pi2-t\right)\ge g(t)$。再利用偶性写成
+  $g\!\left(\left|\frac\pi2-t\right|\right)\ge g(|t|)$。
+  因为 $g$ 在 $[0,+\infty)$ 递增，故
+  $\left|\frac\pi2-t\right|\ge|t|$，解得 $t\le\frac\pi4$。
+  所以取值范围为 $\left(-\infty,\frac\pi4\right]$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 按题干结构构造偶函数辅助量。
+      max_score: 1
+    - step_id: step_2
+      description: 由导数条件得到半轴递增。
+      max_score: 1
+    - step_id: step_3
+      description: 把原不等式写成 $g$ 的比较。
+      max_score: 1
+    - step_id: step_4
+      description: 借偶性转绝对值，借单调性去函数号。
+      max_score: 1
+    - step_id: step_5
+      description: 解出参数区间。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 偶函数锁定
+      - 绝对值化输入
+      - 单调保序
+  structure:
+    primary: 对称结构
+    secondary:
+      - 抽象函数结构
+      - 三角复合结构
+    evidence:
+      - $g(x)=f(x)-\sin x$ 直接给出偶性；$\cos t=\sin(\frac\pi2-t)$ 让题设与 $g$ 匹配。
+      - 最终比较落在 $|\\frac\\pi2-t|$ 与 $|t|$，是典型对称锁定结构。
+    normalization_moves_used:
+      - 把 $\cos t$ 改写为 $\sin(\frac\pi2-t)$。
+      - 把 $g(\frac\pi2-t)\ge g(t)$ 改写为 $g(|\frac\pi2-t|)\ge g(|t|)$。
+      - 由函数值比较还原为绝对值比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\cos t$ 改成 $\sin(\frac\pi2-t)$，回补三角函数基础。
+      - 若学生不能从偶性写出 $g(u)=g(|u|)$，回补函数性质与图像。
+      - 若学生不会由 $g^{\prime}>0$ 推出输入比较方向，回补导数单调极值基础。
+  detail_terms:
+    - 偶函数锁定
+    - $g(x)=f(x)-\sin x$
+    - $|\\frac\\pi2-t|\\ge|t|$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0134_even_lock_ex26
+source_evidence:
+  source_refs:
+    - ref_id: page_0134
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0134/page_0134.md
+      role: problem_start
+      evidence: "page_0134 lines 34-35: 例26题干（填空题）完整起始。"
+    - ref_id: page_0134_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0134/page_0134.md
+      role: solution
+      evidence: "page_0134 lines 36-38: 法一由偶函数与单调性得到 $|\\\\frac\\\\pi2-t|\\\\ge|t|$。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0134.png
+      inspected: true
+      notes: 已核对原图，例26题干与区间结论清晰。
+  source_context: 本题位于“2. 偶函数锁定”，强调把 $f$ 与 $\sin x$ 组合成偶函数后，利用导数条件拿到半轴单调，再做绝对值输入比较。
+  source_influence:
+    - 题目求 $t$ 的范围，graph.goal 归为“求参数范围”。
+    - 源解主链是设 $g(x)=f(x)-\sin x$，由 $g^{\prime}(x)>0$ 和偶性推出 $g$ 的全轴单峰结构。
+    - 本题无选项，答案字段保留区间文本。
+  source_discrepancies: []
+original_problem:
+  stem: （2024·城厢区月考）设函数 $f(x)$ 在 $\mathbf{R}$ 上存在导数 $f^{\prime}(x)$，$g(x)=f(x)-\sin x$ 是偶函数。在 $[0,+\infty)$ 上 $f^{\prime}(x)>\cos x$。若 $f\!\left(\frac\pi2-t\right)-f(t)\geqslant \cos t-\sin t$，则实数 $t$ 的取值范围为______。
+  parts: *a1
+  choices: []
+  answer: $\left(-\infty,\frac\pi4\right]$
+  fidelity_notes:
+    - 原图与markdown一致：不等式方向为“$\geqslant$”，答案是闭端点 $\frac\pi4$。
+    - 解析法二给了锁定构造验证，与法一一致。
+solution:
+  source_solution_summary: |
+    设 $g(x)=f(x)-\sin x$，则 $g$ 为偶函数，且
+    $g^{\prime}(x)=f^{\prime}(x)-\cos x>0$ 在 $[0,+\infty)$ 成立，
+    所以 $g$ 在 $[0,+\infty)$ 递增；由偶性可知其在
+    $(-\infty,0)$ 递减。题设不等式可改写为
+    $f\!\left(\frac\pi2-t\right)-\sin\!\left(\frac\pi2-t\right)\ge f(t)-\sin t$，
+    即 $g\!\left(\frac\pi2-t\right)\ge g(t)$。再利用偶性写成
+    $g\!\left(\left|\frac\pi2-t\right|\right)\ge g(|t|)$。
+    因为 $g$ 在 $[0,+\infty)$ 递增，故
+    $\left|\frac\pi2-t\right|\ge|t|$，解得 $t\le\frac\pi4$。
+    所以取值范围为 $\left(-\infty,\frac\pi4\right]$。
+  key_steps:
+    - step_id: step_1
+      statement: 按题干结构构造偶函数辅助量。
+      formula_trace:
+        from: $g(x)=f(x)-\sin x$ 是偶函数
+        to: $g(-x)=g(x)$
+        operation: 直接采用题设给出的锁定对象。
+        why: 偶性能把两侧输入统一为绝对值。
+      source_ref: page_0134_solution
+    - step_id: step_2
+      statement: 由导数条件得到半轴递增。
+      formula_trace:
+        from: $f^{\prime}(x)>\cos x\ (x\ge0)$
+        to: $g^{\prime}(x)=f^{\prime}(x)-\cos x>0\Rightarrow g$ 在 $[0,+\infty)$ 递增
+        operation: 对构造函数求导并应用导数判单调。
+        why: 后续把函数值比较转成输入比较。
+      source_ref: page_0134_solution
+    - step_id: step_3
+      statement: 把原不等式写成 $g$ 的比较。
+      formula_trace:
+        from: $f\!\left(\frac\pi2-t\right)-f(t)\ge \cos t-\sin t$
+        to: $g\!\left(\frac\pi2-t\right)\ge g(t)$
+        operation: 把 $\cos t$ 改写为 $\sin(\frac\pi2-t)$ 并移项。
+        why: 与 $g(x)=f(x)-\sin x$ 精确匹配。
+      source_ref: page_0134_solution
+    - step_id: step_4
+      statement: 借偶性转绝对值，借单调性去函数号。
+      formula_trace:
+        from: $g\!\left(\frac\pi2-t\right)\ge g(t)$
+        to: $g\!\left(\left|\frac\pi2-t\right|\right)\ge g(|t|)\Rightarrow \left|\frac\pi2-t\right|\ge|t|$
+        operation: 偶函数满足 $g(u)=g(|u|)$，再在非负轴上用递增保序。
+        why: 得到可直接求解的一元绝对值不等式。
+      source_ref: page_0134_solution
+    - step_id: step_5
+      statement: 解出参数区间。
+      formula_trace:
+        from: $\left|\frac\pi2-t\right|\ge|t|$
+        to: $\left(\frac\pi2-t\right)^2\ge t^2\Rightarrow t\le\frac\pi4$
+        operation: 两侧非负，平方化简。
+        why: 对应填空答案 $\left(-\infty,\frac\pi4\right]$。
+      source_ref: page_0134_solution
+teaching_card:
+  student_title: 偶函数先取绝对值，再解参数
+  what_it_trains: 训练在“$f$ 与三角函数组合成偶函数”的题里，先把函数值比较变成非负轴比较，再一次性落到绝对值不等式。
+  recognition_cues:
+    - 题干直接给出 $g(x)=f(x)-\sin x$ 为偶函数。
+    - 导数条件是 $f^{\prime}(x)$ 与 $\cos x$ 的比较。
+    - 结尾出现 $f(\frac\pi2-t)$ 与 $f(t)$ 的对照。
+  normalization_moves:
+    - 先写 $g^{\prime}(x)=f^{\prime}(x)-\cos x$。
+    - 将原不等式整理为 $g(\frac\pi2-t)\ge g(t)$。
+    - 利用偶性改写成绝对值输入后去掉 $g$。
+  common_failures:
+    - 把偶函数在负半轴的单调方向写反。
+    - 漏掉 $\cos t=\sin(\frac\pi2-t)$ 这一步，导致凑不出 $g$。
+    - 从 $|\frac\pi2-t|\ge|t|$ 解不等式时错号。
+  similar_practice_query: 偶函数锁定 三角配凑 绝对值比较 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,195 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0026_ex06
+content_revision_id: mst_p0026_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0026_ex06.card.yaml
+stem: |-
+  （2025 河南二模 T7）已知函数 $f(x)=e^{2x+a}-\frac12\ln(x+5)+\frac a2-5$ 有零点，那么实数 $a$ 的最大值为（ ）
+
+  A. $\frac12$
+  B. $1$
+  C. $1+\ln2$
+  D. $9-\ln2$
+answer: |
+  D；$9-\ln2$
+
+  由 $f(x)=0$ 得 $e^{2x+a}+\frac a2=5+\frac12\ln(x+5)$。两边加 $x$ 后，左侧是 $e^{2(x+a/2)}+x+\frac a2$，右侧是 $e^{\ln(x+5)}+\frac12\ln(x+5)$。令 $g(t)=e^{2t}+t$，其严格递增，于是 $g(x+\frac a2)=g(\frac12\ln(x+5))$，得到 $a=\ln(x+5)-2x$。在 $x>-5$ 上求 $h(x)=\ln(x+5)-2x$ 的最大值，$h'(x)=\frac1{x+5}-2$，最大点为 $x=-\frac92$，最大值 $9-\ln2$，选 D。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 把“有零点”翻译成存在 $x>-5$ 满足方程。
+      max_score: 1
+    - step_id: step_2
+      description: 两边加 $x$，配出同构函数。
+      max_score: 1
+    - step_id: step_3
+      description: 利用 $g(t)=e^{2t}+t$ 的单调性。
+      max_score: 1
+    - step_id: step_4
+      description: 把参数表示成 $x$ 的函数。
+      max_score: 1
+    - step_id: step_5
+      description: 求 $h(x)=\ln(x+5)-2x$ 在 $x>-5$ 上的最大值。
+      max_score: 1
+    - step_id: step_6
+      description: 计算最大值并选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+    subroute:
+      - $e^{2x}+x$ 单调母函数
+      - 零点条件同构配对
+      - $\ln(x+5)-2x$ 最大值
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $e^{2x+a}+x+\frac a2$ 被写成 $g(x+\frac a2)$。
+      - $x+5+\frac12\ln(x+5)$ 被写成 $g(\frac12\ln(x+5))$。
+      - 同构后只需最大化 $a=\ln(x+5)-2x$。
+    normalization_moves_used:
+      - $2x+a=2(x+\frac a2)$。
+      - $x+5=e^{\ln(x+5)}$。
+      - $g(x+\frac a2)=g(\frac12\ln(x+5))$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生忘记 $x>-5$，回补函数三要素与定义域。
+      - 若学生不会把零点条件移项成同构等式，回补代数恒等变形。
+      - 若学生不能证明 $e^{2t}+t$ 严格递增，回补导数单调极值基础。
+      - 若学生不会求 $\ln(x+5)-2x$ 的最大值，回补导数单调极值基础。
+  detail_terms:
+    - $e^{2x+a}-\frac12\ln(x+5)+\frac a2-5$
+    - $g(t)=e^{2t}+t$
+    - $x+\frac a2=\frac12\ln(x+5)$
+    - $a=\ln(x+5)-2x$
+    - $9-\ln2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0026_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0026
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0026/page_0026.md
+      role: problem_start
+      evidence: line 39 gives 例6题头和题干开头，断在“最大值”。
+    - ref_id: page_0027
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0027/page_0027.md
+      role: continuation
+      evidence: lines 15-21 give 例6选项 A-D、完整解析和答案 D。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0026.png
+      inspected: true
+      notes: 已核对 page_0026 底部例6起题，题干跨页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0027.png
+      inspected: true
+      notes: 已核对 page_0027 顶部补全选项和解析，答案为 D：$9-\ln2$。
+  source_context: 例6从 page_0026 起题、page_0027 续解，是“构造单调函数 $e^x+x$ 或 $x+\ln x$”下的零点参数最大值问题。
+  source_influence:
+    - 按跨页题处理：题干主函数在 page_0026，选项和求解链在 page_0027。
+    - 源解将零点条件同构为 $g(x+\frac a2)=g(\frac12\ln(x+5))$，再求 $a=\ln(x+5)-2x$ 的最大值。
+  source_discrepancies: []
+original_problem:
+  stem: |
+    （2025 河南二模 T7）已知函数 $f(x)=e^{2x+a}-\frac12\ln(x+5)+\frac a2-5$ 有零点，那么实数 $a$ 的最大值为（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\frac12$
+      text_latex: $\frac12$
+    - label: B
+      text_raw: $1$
+      text_latex: $1$
+    - label: C
+      text_raw: $1+\ln2$
+      text_latex: $1+\ln2$
+    - label: D
+      text_raw: $9-\ln2$
+      text_latex: $9-\ln2$
+  answer: D；$9-\ln2$
+  fidelity_notes:
+    - 题头和函数表达式在 page_0026 底部；选项与解析在 page_0027 顶部。
+    - 由 $\ln(x+5)$ 有意义可知零点变量满足 $x>-5$。
+solution:
+  source_solution_summary: |
+    由 $f(x)=0$ 得 $e^{2x+a}+\frac a2=5+\frac12\ln(x+5)$。两边加 $x$ 后，左侧是 $e^{2(x+a/2)}+x+\frac a2$，右侧是 $e^{\ln(x+5)}+\frac12\ln(x+5)$。令 $g(t)=e^{2t}+t$，其严格递增，于是 $g(x+\frac a2)=g(\frac12\ln(x+5))$，得到 $a=\ln(x+5)-2x$。在 $x>-5$ 上求 $h(x)=\ln(x+5)-2x$ 的最大值，$h'(x)=\frac1{x+5}-2$，最大点为 $x=-\frac92$，最大值 $9-\ln2$，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把“有零点”翻译成存在 $x>-5$ 满足方程。
+      formula_trace:
+        from: $f(x)=e^{2x+a}-\frac12\ln(x+5)+\frac a2-5$ 有零点
+        to: $\exists x>-5:\ e^{2x+a}+\frac a2=5+\frac12\ln(x+5)$
+        operation: 令 $f(x)=0$，并把对数项和常数项移到右侧。
+        why: 零点存在问题先转成含参数方程的可解性。
+      source_ref: page_0027
+    - step_id: step_2
+      statement: 两边加 $x$，配出同构函数。
+      formula_trace:
+        from: $e^{2x+a}+\frac a2=5+\frac12\ln(x+5)$
+        to: $e^{2(x+a/2)}+x+\frac a2=e^{\ln(x+5)}+\frac12\ln(x+5)$
+        operation: 两边加 $x$；用 $2x+a=2(x+\frac a2)$，并用 $x+5=e^{\ln(x+5)}$。
+        why: 左右两侧可分别写成 $g(x+\frac a2)$ 与 $g(\frac12\ln(x+5))$。
+      source_ref: page_0027
+    - step_id: step_3
+      statement: 利用 $g(t)=e^{2t}+t$ 的单调性。
+      formula_trace:
+        from: $g\left(x+\frac a2\right)=g\left(\frac12\ln(x+5)\right)$
+        to: $x+\frac a2=\frac12\ln(x+5)$
+        operation: 因 $g$ 的导数 $2e^{2t}+1>0$，$g$ 在 $\mathbf R$ 上严格递增。
+        why: 严格递增函数值相等，输入必须相等。
+      source_ref: page_0027
+    - step_id: step_4
+      statement: 把参数表示成 $x$ 的函数。
+      formula_trace:
+        from: $x+\frac a2=\frac12\ln(x+5)$
+        to: $a=\ln(x+5)-2x$
+        operation: 两边乘以 2 后移项。
+        why: 实数 $a$ 的最大值转化为单变量函数最大值。
+      source_ref: page_0027
+    - step_id: step_5
+      statement: 求 $h(x)=\ln(x+5)-2x$ 在 $x>-5$ 上的最大值。
+      formula_trace:
+        from: $h$ 的导数为 $\frac1{x+5}-2$
+        to: $x=-\frac92$ 时 $h$ 取最大值
+        operation: 令导数为 0 得 $x+5=\frac12$；在 $(-5,-\frac92)$ 上导数大于 0，在 $(-\frac92,+\infty)$ 上导数小于 0。
+        why: 导数由正变负，临界点是全局最大点。
+      source_ref: page_0027
+    - step_id: step_6
+      statement: 计算最大值并选项。
+      formula_trace:
+        from: $h\left(-\frac92\right)=\ln\frac12-2\left(-\frac92\right)$
+        to: $9-\ln2$
+        operation: 用 $\ln\frac12=-\ln2$。
+        why: 与选项 D 对应。
+      source_ref: page_0027
+teaching_card:
+  student_title: 把零点方程配成同一个 $e^{2t}+t$
+  what_it_trains: 训练把含参数零点条件改造成同一个单调函数的函数值相等，再把参数最大值化为单变量最值。
+  recognition_cues:
+    - 函数里有 $e^{2x+a}$ 和 $\frac12\ln(x+5)$。
+    - 题目说“有零点”，目标问参数最大值。
+    - 表达式中 $a/2$ 与指数 $2x+a$ 可以合成 $x+a/2$。
+  normalization_moves:
+    - 由 $f(x)=0$ 移项，两边加 $x$。
+    - 把 $e^{2x+a}$ 写成 $e^{2(x+a/2)}$。
+    - 把 $x+5$ 写成 $e^{\ln(x+5)}$。
+    - 用 $g$ 单调性得到 $a=\ln(x+5)-2x$。
+  common_failures:
+    - 没有给零点变量加上定义域 $x>-5$。
+    - 看不到两边加 $x$ 后的 $e^{2t}+t$。
+    - 把 $a$ 当常数直接求导原函数，计算量会变大。
+    - 求 $h$ 的临界点后漏算 $\ln\frac12=-\ln2$。
+  similar_practice_query: 零点参数最大值 $e^{2x+a}$ $\ln(x+5)$ $e^{2t}+t$ 同构
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 题头在 page_0026，选项和解析跨到 page_0027，已按跨页例题处理。

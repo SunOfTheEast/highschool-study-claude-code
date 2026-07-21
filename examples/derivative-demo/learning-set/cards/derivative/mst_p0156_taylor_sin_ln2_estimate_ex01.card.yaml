@@ -1,0 +1,204 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0156_taylor_sin_ln2_estimate_ex01
+content_revision_id: mst_p0156_taylor_sin_ln2_estimate_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0156_taylor_sin_ln2_estimate_ex01.card.yaml
+stem: |-
+  （2024 · 湖北开学）已知 $a=\sin \frac{\pi}{5}$，$b=\frac{\sqrt{e}}{2}$，$c=\ln 2$，则 $a,b,c$ 的大小关系为（  ）
+  A. $a<c<b$
+  B. $a<b<c$
+  C. $c<a<b$
+  D. $c<b<a$
+answer: |
+  A
+
+  先比 $a$：由 $\sin x<x$，
+  \[
+  a=\sin\frac{\pi}{5}<\frac{\pi}{5}\approx0.63.
+  \]
+  再比 $b$：用 $e>2.56$，
+  \[
+  b=\frac{\sqrt e}{2}>\frac{\sqrt{2.56}}{2}=0.8.
+  \]
+  对 $c$，源解用
+  \[
+  \ln(1+x)<x-\frac{x^2}{2}+\frac{x^3}{3}-\frac{x^4}{4}+\frac{x^5}{5},
+  \]
+  在 $x=1$ 得
+  \[
+  \ln2<1-\frac12+\frac13-\frac14+\frac15=\frac{47}{60}\approx0.78,
+  \]
+  并给出 $0.67<c$。于是
+  \[
+  a<c<b,
+  \]
+  选 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 用 $\sin x<x$ 压住 $a$。
+      max_score: 1
+    - step_id: step_2
+      description: 用 $e>2.56$ 抬高 $b$。
+      max_score: 1
+    - step_id: step_3
+      description: 用截断展开估计 $\ln2$。
+      max_score: 1
+    - step_id: step_4
+      description: 合并三项区间并选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level: []
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 拟合与夹逼
+    subroute:
+      - $\sin x<x$ 快速上界
+      - $\ln(1+x)$ 截断估值
+      - 常数区间夹逼合并
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 三角复合结构
+      - 指对复合结构
+    evidence:
+      - 三项分别来自三角、指数、对数，且都在小量点位做局部估值。
+      - 最终比较完全依赖上下界区间，不依赖精确值。
+    normalization_moves_used:
+      - $\sin\frac{\pi}{5}<\frac{\pi}{5}$。
+      - $\frac{\sqrt e}{2}>\frac{\sqrt{2.56}}{2}$。
+      - $\ln2<1-\frac12+\frac13-\frac14+\frac15$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会用 $\sin x<x$，回补三角函数基础。
+      - 若学生看不懂 $\ln(1+x)$ 截断链，回补指数对数基础。
+      - 若学生拿到区间后仍不会排顺序，回补不等式工具基础。
+  detail_terms:
+    - $a=\sin\frac{\pi}{5}$
+    - $b=\frac{\sqrt e}{2}$
+    - $c=\ln2$
+    - $\ln(1+x)$ 截断估值
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0156_taylor_sin_ln2_estimate_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0156_ex01_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0156/page_0156.md
+      role: problem_start
+      evidence: 例 1 题干、A-D 选项和完整解析均在 page_0156。
+    - ref_id: page_0156_section_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0156/page_0156.md
+      role: local_context
+      evidence: 本页顶部是上一批次例 38 续解；新例题从“例 1”开始。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0156.png
+      inspected: true
+      notes: 已核对例 1 题干、选项、解析与答案 A。
+  source_context: 例 1 是“泰勒展开与数值估算”起始题，核心是分别给三项做上下界后合并顺序。
+  source_influence:
+    - 保留源解链条：先压 $a$、再抬 $b$、最后夹住 $c$。
+    - 保留源文补充：$\ln2$ 也可用 $\ln2<3/4$ 的帕德式估值。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 湖北开学）已知 $a=\sin \frac{\pi}{5}$，$b=\frac{\sqrt{e}}{2}$，$c=\ln 2$，则 $a,b,c$ 的大小关系为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a<c<b$
+      text_latex: $a<c<b$
+    - label: B
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+    - label: C
+      text_raw: $c<a<b$
+      text_latex: $c<a<b$
+    - label: D
+      text_raw: $c<b<a$
+      text_latex: $c<b<a$
+  answer: A
+  fidelity_notes:
+    - 题干、选项、解析均在 page_0156，无跨页。
+    - 源解析直接写出 $0.67<c=\ln2<0.78$，本卡按源文保留。
+solution:
+  source_solution_summary: |
+    先比 $a$：由 $\sin x<x$，
+    \[
+    a=\sin\frac{\pi}{5}<\frac{\pi}{5}\approx0.63.
+    \]
+    再比 $b$：用 $e>2.56$，
+    \[
+    b=\frac{\sqrt e}{2}>\frac{\sqrt{2.56}}{2}=0.8.
+    \]
+    对 $c$，源解用
+    \[
+    \ln(1+x)<x-\frac{x^2}{2}+\frac{x^3}{3}-\frac{x^4}{4}+\frac{x^5}{5},
+    \]
+    在 $x=1$ 得
+    \[
+    \ln2<1-\frac12+\frac13-\frac14+\frac15=\frac{47}{60}\approx0.78,
+    \]
+    并给出 $0.67<c$。于是
+    \[
+    a<c<b,
+    \]
+    选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 用 $\sin x<x$ 压住 $a$。
+      formula_trace:
+        from: $a=\sin\frac{\pi}{5}$
+        to: $a<\frac{\pi}{5}\approx0.63$
+        operation: 在正区间应用正弦函数上界 $\sin x<x$。
+        why: 先得到 $a$ 的明确上界。
+      source_ref: page_0156_ex01_problem
+    - step_id: step_2
+      statement: 用 $e>2.56$ 抬高 $b$。
+      formula_trace:
+        from: $b=\frac{\sqrt e}{2}$
+        to: $b>\frac{\sqrt{2.56}}{2}=0.8$
+        operation: 把无理常数 $e$ 换成便于开方的下界。
+        why: 构造 $b$ 的明确下界。
+      source_ref: page_0156_ex01_problem
+    - step_id: step_3
+      statement: 用截断展开估计 $\ln2$。
+      formula_trace:
+        from: $c=\ln2=\ln(1+1)$
+        to: $c<\frac{47}{60}\approx0.78$
+        operation: 代入源文给出的 $\ln(1+x)$ 多项式上界。
+        why: 把对数项放到数值区间内。
+      source_ref: page_0156_ex01_problem
+    - step_id: step_4
+      statement: 合并三项区间并选项。
+      formula_trace:
+        from: $a<0.63,\ 0.67<c<0.78,\ b>0.8$
+        to: $a<c<b$
+        operation: 比较三个已估出的上界/下界。
+        why: 直接对应选项 A。
+      source_ref: page_0156_ex01_problem
+teaching_card:
+  student_title: 三项分开估值，再拼成大小顺序
+  what_it_trains: 训练“混合函数比大小”里最稳的拆分法：每一项单独找一个易算区间，再统一比较。
+  recognition_cues:
+    - 三个量分别是 $\sin$、$\sqrt e$、$\ln$。
+    - 题目只要顺序，不要精确值。
+    - 参数都在小数或常数点位，适合做局部估值。
+  normalization_moves:
+    - 先用经典不等式给 $a$、$b$ 粗边界。
+    - 对 $\ln2$ 用低阶截断拿上界。
+    - 把三个边界放在同一数轴比较。
+  common_failures:
+    - 把三项放一起硬算近似，计算量大且易错。
+    - 只给 $\ln2$ 上界，忘了结合源文下界信息。
+    - 区间有重叠时不复查边界是否足够强。
+  similar_practice_query: sin pi/5 ln2 sqrt(e)/2 泰勒估值 比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0156 页图；例 1 信息完整且无跨页。

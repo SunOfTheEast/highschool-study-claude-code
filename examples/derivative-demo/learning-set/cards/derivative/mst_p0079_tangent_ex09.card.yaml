@@ -1,0 +1,210 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0079_tangent_ex09
+content_revision_id: mst_p0079_tangent_ex09-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0079_tangent_ex09.card.yaml
+stem: |-
+  （2023 浙江北斗星联盟五月联考 T12）已知 $a,b\in\mathbf R$， $f(x)=e^x-ax$，$g(x)=b\sqrt{x^2+1}$，则（ ）
+  A. 对于任意的实数 $a$，存在 $b$，使得 $f(x)$ 与 $g(x)$ 有互相平行的切线。
+  B. 对于给定的实数 $x_0$，存在 $a,b$，使得 $g(x_0)\geqslant f(x_0)$ 成立。
+  C. $y=f(x)-g(x)$ 在 $[0,+\infty)$ 上的最小值为 0，则 $a+\sqrt5b$ 的最大值为 $2\sqrt e$。
+  D. 存在 $a,b$，使得 $|f(x)-g(x)|\leqslant e^2+2$ 对于任意 $x\in\mathbf R$ 恒成立。
+answer: |-
+  ABC
+
+  源解先把 $g(x)=b\sqrt{x^2+1}$ 看成双曲线的一支，渐近线为 $y=\pm bx$，切线斜率范围在 $(-|b|,|b|)$ 内；而 $f^{\prime}(x)=e^x-a$ 的斜率范围为 $(-a,+\infty)$，因此对任意 $a$ 可取足够大的 $|b|$ 让两者有相同斜率，A 对。给定 $x_0$ 时， 只要调大 $b$ 或配合调整 $a$，即可使 $b\sqrt{x_0^2+1}\ge e^{x_0}-ax_0$，B 对。D 因 $x\to+\infty$ 时 $e^x-ax-bx\to+\infty$，不可能被常数界住，故错。 C 中由 $F(x)=f(x)-g(x)\ge0$ 在 $[0,+\infty)$ 恒成立，代入 $x=\frac12$ 得 $a+\sqrt5b\le2\sqrt e$；取 $a=\frac34\sqrt e$、$b=\frac{\sqrt{5e}}4$ 时， $F(\frac12)=F^{\prime}(\frac12)=0$ 且 $F^{\prime\prime}(x)>0$， 上界可取，故最大值为 $2\sqrt e$。故选 ABC。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 先识别 $g(x)$ 的双曲线形状和斜率范围。
+      max_score: 1
+    - step_id: step_2
+      description: 判断 A：选足够大的 $|b|$ 覆盖 $f$ 的某个斜率。
+      max_score: 1
+    - step_id: step_3
+      description: 判断 B：定点函数值不等式可由参数自由度实现。
+      max_score: 1
+    - step_id: step_4
+      description: 判断 D：指数增长无法被双曲线渐近线界住。
+      max_score: 1
+    - step_id: step_5
+      description: 判断 C 的上界：把最小值为 0 转成整体非负。
+      max_score: 1
+    - step_id: step_6
+      description: 判断 C 的可取性：让 $x=\frac12$ 成为切触最小点。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: A
+        goal: 抽象函数性质
+        target: 第 A 问
+        result: 见 source_solution_summary
+      - part_id: B
+        goal: 抽象函数性质
+        target: 第 B 问
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 极值最值
+        target: 第 C 问
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 抽象函数性质
+        target: 第 D 问
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 切线放缩与凹凸性
+      - 局部逼近与找点
+      - 自由度与主元
+    subroute:
+      - 双曲线渐近线
+      - 斜率值域相交
+      - 极点效应
+      - $x=\frac12$ 支撑点
+  structure:
+    primary: 双曲函数结构
+    secondary:
+      - 指对复合结构
+      - 切线/公切线/切点量结构
+    evidence:
+      - $g(x)=b\sqrt{x^2+1}$ 是双曲线分支，渐近线 $y=\pm bx$。
+      - $f^{\prime}(x)=e^x-a$ 与 $g^{\prime}(x)$ 的值域比较判断平行切线。
+      - $F(x)\ge0$ 的 C 选项通过 $x=\frac12$ 的支撑约束给出最大值。
+    normalization_moves_used:
+      - 把根式函数平方为双曲线方程。
+      - 用导数值域判断平行切线存在性。
+      - 把最小值为 0 改写成 $f(x)-g(x)\ge0$。
+      - 在 $x=\frac12$ 处提取 $a+\sqrt5b$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看不出 $b\sqrt{x^2+1}$ 的双曲线渐近线，回补函数性质与图像。
+      - 若学生不会用导数值域判断平行切线，回补导数运算与几何意义。
+      - 若学生不能比较指数增长与线性渐近增长，回补指数对数基础。
+      - 若学生不知道“最小值为 0”意味着整体非负且可有切触点，回补导数单调极值基础。
+      - 若学生从 $x=\frac12$ 代入不能整理出目标组合，回补代数恒等变形。
+  detail_terms:
+    - $f(x)=e^x-ax$
+    - $g(x)=b\sqrt{x^2+1}$
+    - 双曲线渐近线
+    - 平行切线
+    - $a+\sqrt5b$
+    - 极点效应
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0079_tangent_ex09
+source_evidence:
+  source_refs:
+    - ref_id: page_0079
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0079/page_0079.md
+      role: problem_start
+      evidence: page_0079 例 9 给出题干：已知 $a,b\in\mathbf R$， $f(x)=e^x-ax$，$g(x)=b\sqrt{x^2+1}$，判断 A-D 四个命题； 同页完整给出双曲线图像、A-D 解析和答案 ABC。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0079.png
+      inspected: true
+      notes: 已核对页图：例 9 题头、四个选项、双曲线及渐近线示意图、解析和答案 ABC 均在 page_0079；页顶只是例 8 续页，未纳入本卡。
+  source_context: 本题用 $g(x)=b\sqrt{x^2+1}$ 的双曲线渐近线和切线斜率范围，配合 $e^x-ax$ 的指数增长，判断存在性、上界和全局有界性。
+  source_influence:
+    - 题干为多选题，choices 保留 A-D。
+    - 源图展示 $g(x)$ 的双曲线分支和渐近线 $y=\pm bx$，是解析 D、A 的几何依据。
+    - C 选项源解使用“探路”和“费马引理（极点效应）”，本卡补写使上界可取的切点参数。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 浙江北斗星联盟五月联考 T12）已知 $a,b\in\mathbf R$， $f(x)=e^x-ax$，$g(x)=b\sqrt{x^2+1}$，则（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 对于任意的实数 $a$，存在 $b$，使得 $f(x)$ 与 $g(x)$ 有互相平行的切线。
+      text_latex: 对于任意的实数 $a$，存在 $b$，使得 $f(x)$ 与 $g(x)$ 有互相平行的切线。
+    - label: B
+      text_raw: 对于给定的实数 $x_0$，存在 $a,b$，使得 $g(x_0)\geqslant f(x_0)$ 成立。
+      text_latex: 对于给定的实数 $x_0$，存在 $a,b$，使得 $g(x_0)\geqslant f(x_0)$ 成立。
+    - label: C
+      text_raw: $y=f(x)-g(x)$ 在 $[0,+\infty)$ 上的最小值为 0，则 $a+\sqrt5b$ 的最大值为 $2\sqrt e$。
+      text_latex: $y=f(x)-g(x)$ 在 $[0,+\infty)$ 上的最小值为 0，则 $a+\sqrt5b$ 的最大值为 $2\sqrt e$。
+    - label: D
+      text_raw: 存在 $a,b$，使得 $|f(x)-g(x)|\leqslant e^2+2$ 对于任意 $x\in\mathbf R$ 恒成立。
+      text_latex: 存在 $a,b$，使得 $|f(x)-g(x)|\leqslant e^2+2$ 对于任意 $x\in\mathbf R$ 恒成立。
+  answer: ABC
+  fidelity_notes:
+    - 例 9 题头、题干、配图、解析和答案均在 page_0079。
+    - 配图为源解辅助图，不是题干条件。
+solution:
+  source_solution_summary: 源解先把 $g(x)=b\sqrt{x^2+1}$ 看成双曲线的一支，渐近线为 $y=\pm bx$，切线斜率范围在 $(-|b|,|b|)$ 内；而 $f^{\prime}(x)=e^x-a$ 的斜率范围为 $(-a,+\infty)$，因此对任意 $a$ 可取足够大的 $|b|$ 让两者有相同斜率，A 对。给定 $x_0$ 时， 只要调大 $b$ 或配合调整 $a$，即可使 $b\sqrt{x_0^2+1}\ge e^{x_0}-ax_0$，B 对。D 因 $x\to+\infty$ 时 $e^x-ax-bx\to+\infty$，不可能被常数界住，故错。 C 中由 $F(x)=f(x)-g(x)\ge0$ 在 $[0,+\infty)$ 恒成立，代入 $x=\frac12$ 得 $a+\sqrt5b\le2\sqrt e$；取 $a=\frac34\sqrt e$、$b=\frac{\sqrt{5e}}4$ 时， $F(\frac12)=F^{\prime}(\frac12)=0$ 且 $F^{\prime\prime}(x)>0$， 上界可取，故最大值为 $2\sqrt e$。故选 ABC。
+  key_steps:
+    - step_id: step_1
+      statement: 先识别 $g(x)$ 的双曲线形状和斜率范围。
+      formula_trace:
+        from: $y=b\sqrt{x^2+1}\Rightarrow \frac{y^2}{b^2}-x^2=1$， 渐近线为 $y=\pm bx$。
+        to: $g^{\prime}(x)=\frac{bx}{\sqrt{x^2+1}}\in(-|b|,|b|)$。
+        operation: 把根式函数看成双曲线，并求导确认切线斜率范围。
+        why: 平行切线只需要两个函数的斜率集合有交集。
+      source_ref: page_0079
+    - step_id: step_2
+      statement: 判断 A：选足够大的 $|b|$ 覆盖 $f$ 的某个斜率。
+      formula_trace:
+        from: $f^{\prime}(x)=e^x-a\in(-a,+\infty)$， $g^{\prime}(x)\in(-|b|,|b|)$。
+        to: 对任意实数 $a$，可取 $|b|$ 足够大，使两个斜率范围相交。
+        operation: 比较两个导数值域。
+        why: 斜率相同的两条切线就是互相平行的切线。
+      source_ref: page_0079
+    - step_id: step_3
+      statement: 判断 B：定点函数值不等式可由参数自由度实现。
+      formula_trace:
+        from: $g(x_0)\ge f(x_0)\Longleftrightarrow b\sqrt{x_0^2+1}\ge e^{x_0}-a x_0$。
+        to: 给定 $x_0$ 时，总能选取 $b$ 足够大，并按需要调节 $a$， 使不等式成立。
+        operation: 把 $x_0$ 固定后看成关于 $a,b$ 的一次约束。
+        why: $\sqrt{x_0^2+1}>0$，参数 $a,b$ 有足够自由度。
+      source_ref: page_0079
+    - step_id: step_4
+      statement: 判断 D：指数增长无法被双曲线渐近线界住。
+      formula_trace:
+        from: $f(x)-g(x)=e^x-ax-b\sqrt{x^2+1}$。
+        to: 当 $x\to+\infty$ 时， $e^x-ax-bx\to+\infty$，故 $|f(x)-g(x)|$ 不可能对所有 $x\in\mathbf R$ 小于等于 $e^2+2$。
+        operation: 用 $g(x)$ 的线性渐近增长与 $e^x$ 的指数增长比较。
+        why: 指数项最终压过所有固定斜率的线性/双曲线渐近项。
+      source_ref: page_0079
+    - step_id: step_5
+      statement: 判断 C 的上界：把最小值为 0 转成整体非负。
+      formula_trace:
+        from: $F(x)=f(x)-g(x)\ge0$ 对 $x\in[0,+\infty)$ 恒成立。
+        to: 代入 $x=\frac12$： $\sqrt e-\frac a2-\frac{\sqrt5}{2}b\ge0 \Rightarrow a+\sqrt5b\le2\sqrt e$。
+        operation: 在全局非负条件下取一个关键点 $x=\frac12$。
+        why: 目标线性组合正好是 $x=\frac12$ 处约束的两倍。
+      source_ref: page_0079
+    - step_id: step_6
+      statement: 判断 C 的可取性：让 $x=\frac12$ 成为切触最小点。
+      formula_trace:
+        from: 令 $F(\frac12)=0$、$F^{\prime}(\frac12)=0$。
+        to: $a=\frac34\sqrt e$，$b=\frac{\sqrt{5e}}4$，并且 $F^{\prime\prime}(x)=e^x-\frac{b}{(x^2+1)^{3/2}}>0$。
+        operation: 用等值与等斜率确定参数，再用凸性确认全局最小。
+        why: 这补足源解“极点效应”：上界不仅能推出，还能被切触构造取到。
+      source_ref: page_0079
+teaching_card:
+  student_title: 把根式函数先看成双曲线
+  what_it_trains: 训练在含 $b\sqrt{x^2+1}$ 的多选题中，用双曲线图像和斜率范围处理存在性， 再用关键点代入处理最值型选项。
+  recognition_cues:
+    - 根式是 $\sqrt{x^2+1}$，平方后就是双曲线结构。
+    - 选项 A 问平行切线，直接看两个导数的值域。
+    - 选项 C 的目标 $a+\sqrt5b$ 对应 $x=\frac12$ 时的 $a x+b\sqrt{x^2+1}$。
+    - 选项 D 是全实数有界性，要看 $x\to+\infty$。
+  normalization_moves:
+    - 把 $g$ 的图像换成双曲线与渐近线语言。
+    - 先用导数范围处理平行切线。
+    - 把 $F(x)$ 最小值为 0 翻译成 $F(x)\ge0$。
+    - 代入 $x=\frac12$ 抽出线性组合上界。
+  common_failures:
+    - 把 $g^{\prime}(x)$ 的斜率范围误写成全体实数。
+    - 只证明 $a+\sqrt5b\le2\sqrt e$，没有确认等号可取。
+    - 判断 D 时忽略 $e^x$ 的无界增长。
+  similar_practice_query: 根式双曲线 渐近线 平行切线 e^x-ax 参数 最小值为0 极点效应
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0079 页图；例 9 在 page_0079 内完结，答案 ABC。
+    - C 选项源解较压缩，本卡只补足等号可取的参数构造，没有改变源结论。

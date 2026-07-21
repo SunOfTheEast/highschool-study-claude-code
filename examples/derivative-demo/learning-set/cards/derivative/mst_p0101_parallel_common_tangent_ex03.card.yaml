@@ -1,0 +1,168 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0101_parallel_common_tangent_ex03
+content_revision_id: mst_p0101_parallel_common_tangent_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0101_parallel_common_tangent_ex03.card.yaml
+stem: （2016 · 新课标 Ⅱ T16）若直线 $y=kx+b$ 是曲线 $y=\ln x+2$ 的切线，也是曲线 $y=\ln(x+1)$ 的切线，则 $b=$ ______.
+answer: |
+  $1-\ln 2$
+
+  设两条曲线的切点横坐标分别为 $x_1,x_2$。由导数几何意义，
+  $k=\frac1{x_1}=\frac1{x_2+1}$，所以 $x_1=x_2+1$。切点在直线上，
+  有 $kx_1+b=\ln x_1+2$ 与 $kx_2+b=\ln(x_2+1)$。两式相减并利用
+  $x_1=x_2+1$，得到 $k(x_1-x_2)=2$，即 $k=2$。于是
+  $x_1=\frac12$，代回 $kx_1+b=\ln x_1+2$，得
+  $b=\ln\frac12+2-1=1-\ln2$。也可直接看平移：$y=\ln(x+1)$ 可看成
+  $y=\ln x+2$ 向左 $1$、向下 $2$ 后得到的平行曲线，公切线斜率为 $2$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 设两条对数曲线的切点横坐标。
+      max_score: 1
+    - step_id: step_2
+      description: 把两个切点都代入同一直线。
+      max_score: 1
+    - step_id: step_3
+      description: 利用平移关系求出斜率。
+      max_score: 1
+    - step_id: step_4
+      description: 代回第一条曲线切点求截距。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 显隐点探路
+    subroute:
+      - 平行曲线公切线斜率
+      - 平移量定斜率
+      - 切线找点
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 同构结构
+    evidence:
+      - $y=\ln x+2$ 与 $y=\ln(x+1)$ 是平移得到的同形曲线。
+      - $k=\frac1{x_1}=\frac1{x_2+1}$ 给出 $x_1=x_2+1$。
+      - 两条切点方程相减后对数项抵消，得到 $k=2$。
+    normalization_moves_used:
+      - 先识别两曲线的平移关系。
+      - 用两个切点的横坐标差固定为 $1$。
+      - 斜率确定后再回到切点方程求截距。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求 $\ln x$ 与 $\ln(x+1)$ 的导数，回补导数运算与几何意义。
+      - 若学生看不出两曲线是平移关系，回补函数性质与图像。
+      - 若学生联立后不会相减消元，回补代数恒等变形。
+      - 若学生混淆 $\ln\frac12$ 与 $-\ln2$，回补指数对数基础。
+  detail_terms:
+    - $y=\ln x+2$
+    - $y=\ln(x+1)$
+    - $k=\frac1{x_1}=\frac1{x_2+1}$
+    - $k=2$
+    - $b=1-\ln2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0101_parallel_common_tangent_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0101
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0101/page_0101.md
+      role: problem_start
+      evidence: lines 14-32 state the parallel-curve common-tangent rule; lines 34-50 give 例 3 题干、两种解法 and answer $1-\ln 2$.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0101.png
+      inspected: true
+      notes: 已核对 page_0101 中部例 3：题干为填空题，解析中 $k=2,\ x_1=\frac12,\ x_2=-\frac12,\ b=1-\ln2$ 与 markdown 一致。
+  source_context: page_0101 lines 14-32 给出平行曲线 $g(x)=f(x+a)-b$ 的公切线斜率 $k=\frac{b}{a}$，并用图示说明两切点连线斜率即公切线斜率。
+  source_influence:
+    - 保留源页法一：设两个切点并联立切线方程。
+    - 保留源页法二：识别 $y=\ln x+2$ 与 $y=\ln(x+1)$ 的平移关系，先定公切线斜率 $k=2$。
+  source_discrepancies: []
+original_problem:
+  stem: （2016 · 新课标 Ⅱ T16）若直线 $y=kx+b$ 是曲线 $y=\ln x+2$ 的切线，也是曲线 $y=\ln(x+1)$ 的切线，则 $b=$ ______.
+  parts: *a1
+  choices: []
+  answer: $1-\ln 2$
+  fidelity_notes:
+    - 本题为填空题，无选择项。
+    - page_0101 同页先给出平行曲线公切线说明，作为本题 source_context 而非独立卡片。
+solution:
+  source_solution_summary: |
+    设两条曲线的切点横坐标分别为 $x_1,x_2$。由导数几何意义，
+    $k=\frac1{x_1}=\frac1{x_2+1}$，所以 $x_1=x_2+1$。切点在直线上，
+    有 $kx_1+b=\ln x_1+2$ 与 $kx_2+b=\ln(x_2+1)$。两式相减并利用
+    $x_1=x_2+1$，得到 $k(x_1-x_2)=2$，即 $k=2$。于是
+    $x_1=\frac12$，代回 $kx_1+b=\ln x_1+2$，得
+    $b=\ln\frac12+2-1=1-\ln2$。也可直接看平移：$y=\ln(x+1)$ 可看成
+    $y=\ln x+2$ 向左 $1$、向下 $2$ 后得到的平行曲线，公切线斜率为 $2$。
+  key_steps:
+    - step_id: step_1
+      statement: 设两条对数曲线的切点横坐标。
+      formula_trace:
+        from: |
+          $y=\ln x+2$ 的切点 $x_1$，$y=\ln(x+1)$ 的切点 $x_2$
+        to: |
+          $k=\frac1{x_1}=\frac1{x_2+1},\qquad x_1=x_2+1$
+        operation: 用导数的几何意义让两处切线斜率相等。
+        why: 同一条公切线在两个切点处斜率相同。
+      source_ref: page_0101
+    - step_id: step_2
+      statement: 把两个切点都代入同一直线。
+      formula_trace:
+        from: |
+          $y=kx+b$ 经过 $(x_1,\ln x_1+2)$ 和 $(x_2,\ln(x_2+1))$
+        to: |
+          $\begin{cases}
+          kx_1+b=\ln x_1+2\\
+          kx_2+b=\ln(x_2+1)
+          \end{cases}$
+        operation: 用切点在切线上的条件列方程组。
+        why: 仅有斜率相等还不能确定截距 $b$。
+      source_ref: page_0101
+    - step_id: step_3
+      statement: 利用平移关系求出斜率。
+      formula_trace:
+        from: |
+          $x_1=x_2+1,\qquad kx_1+b=\ln x_1+2,\qquad kx_2+b=\ln(x_2+1)$
+        to: |
+          $k(x_1-x_2)=2,\qquad k=2$
+        operation: 两式相减，因 $\ln x_1=\ln(x_2+1)$，对数项抵消。
+        why: 两曲线相差一个水平位移和竖直位移，公切线斜率由位移比确定。
+      source_ref: page_0101
+    - step_id: step_4
+      statement: 代回第一条曲线切点求截距。
+      formula_trace:
+        from: |
+          $k=2,\qquad k=\frac1{x_1}$
+        to: |
+          $x_1=\frac12,\qquad b=\ln\frac12+2-2\cdot\frac12=1-\ln2$
+        operation: 由斜率求切点，再代入 $kx_1+b=\ln x_1+2$。
+        why: 求 $b$ 需要使用切点坐标而不是只知道斜率。
+      source_ref: page_0101
+teaching_card:
+  student_title: 平移曲线的公切线斜率先出来
+  what_it_trains: 训练识别两条同形平移曲线，先由平移量确定公切线斜率，再用切点求截距。
+  recognition_cues:
+    - 两条曲线都是对数函数，只差水平平移和竖直平移。
+    - 同一条直线同时相切，说明两个切点处导数相等。
+    - 题目只问 $b$，斜率定出后还要回代切点。
+  normalization_moves:
+    - 设切点 $x_1,x_2$，由导数得 $x_1=x_2+1$。
+    - 把两个切点代入 $y=kx+b$ 并相减，得到 $k=2$。
+    - 由 $x_1=\frac12$ 求 $b=1-\ln2$。
+  common_failures:
+    - 只使用 $k=\frac{b}{a}$ 的形式，却没有说明本题平移量如何对应。
+    - 得到 $k=2$ 后误把 $b$ 也当成 $2$。
+    - 代入 $x_1=\frac12$ 时把 $\ln\frac12$ 写错。
+  similar_practice_query: 平行曲线 公切线 对数函数 平移量 斜率 截距
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0101 图片与 markdown 对例 3 题干、解析两法和答案 $1-\ln2$ 一致。

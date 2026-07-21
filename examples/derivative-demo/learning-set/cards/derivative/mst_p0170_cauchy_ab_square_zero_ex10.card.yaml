@@ -1,0 +1,169 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0170_cauchy_ab_square_zero_ex10
+content_revision_id: mst_p0170_cauchy_ab_square_zero_ex10-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0170_cauchy_ab_square_zero_ex10.card.yaml
+stem: |-
+  （2025 · 山东师大附中一模 T8）已知函数 f(x)=(a-2)x^2+bx-a+1（a,b∈R 且 a≠2）在区间 [1,2] 上有零点，则 a^2+b^2 的最小值为（  ）
+  A. 3/2
+  B. 1/2
+  C. 2
+  D. 1
+answer: |
+  D（最小值为 1）
+
+  由题意存在 x_0∈[1,2] 使 f(x_0)=0，即 (x_0^2-1)a+x_0b+1-2x_0^2=0， 从而 (2x_0^2-1)^2=[(x_0^2-1)a+x_0b]^2。对右侧用柯西不等式： [(x_0^2-1)a+x_0b]^2<= (a^2+b^2)[(x_0^2-1)^2+x_0^2]， 得 a^2+b^2>=(4x_0^4-4x_0^2+1)/(x_0^4-x_0^2+1) =4-3/((x_0^2-1/2)^2+3/4)。当 x_0∈[1,2] 时， ((x_0^2-1/2)^2+3/4)>=1，故上式最小值为 1（x_0=1 取到）， 所以 a^2+b^2 的最小值是 1，选 D。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把“有零点”翻译为关于 (a,b) 的线性约束。
+      max_score: 1
+    - step_id: step_2
+      description: 对线性组合套柯西不等式。
+      max_score: 1
+    - step_id: step_3
+      description: 化成单变量函数并取区间最小值。
+      max_score: 1
+    - step_id: step_4
+      description: 回到选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 参变量分离
+    secondary:
+      - 拟合与夹逼
+    subroute:
+      - 零点落点
+      - 柯西不等式
+      - 单变量最小值
+  structure:
+    primary: 多变量与不等式结构
+    secondary:
+      - 不等式工具结构
+    evidence:
+      - 参数只以 (x_0^2-1)a+x_0b 的线性组合出现。
+      - 核心下界由柯西不等式给出。
+      - 最终转成 x_0∈[1,2] 上的单变量最小值。
+    normalization_moves_used:
+      - 先设零点 x_0，再做参数-变量分离。
+      - 把线性组合平方后直接套柯西。
+      - 将有理式改写成 4-3/(...) 便于读最小值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把“有零点”转成代数约束，回补函数三要素与定义域。
+      - 若学生不会对线性组合套柯西，回补不等式工具基础。
+      - 若学生区间最值判断混乱，回补导数单调极值基础。
+  detail_terms:
+    - (x_0^2-1)a+x_0b=2x_0^2-1
+    - "[(x_0^2-1)a+x_0b]^2"
+    - 4-3/((x^2-1/2)^2+3/4)
+    - x_0∈[1,2]
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0170_cauchy_ab_square_zero_ex10
+source_evidence:
+  source_refs:
+    - ref_id: page_0170_ex10_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0170/page_0170.md
+      role: problem_start
+      evidence: lines 20-25 给出例10题干与 A-D 选项。
+    - ref_id: page_0170_ex10_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0170/page_0170.md
+      role: solution
+      evidence: line 27 给出“设零点 x_0，套柯西，再对单变量函数取最小值，故选 D”的完整解链。
+    - ref_id: page_0170_top_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0170/page_0170.md
+      role: local_context
+      evidence: line 14 为 page_0169 例9续解；line 16 起进入“双变量问题”，例10是本页新题头。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0170.png
+      inspected: true
+      notes: 页图核对通过：例10题干、四个选项、柯西放缩链和答案 D 与 markdown 一致。
+  source_context: 例10位于“考点1：a^2+b^2 转化为柯西不等式问题”下，属于本页新起头题。
+  source_influence:
+    - 保留源解核心路线：由“区间有零点”先落到 x_0，再用柯西不等式给出 a^2+b^2 的下界。
+    - 保留源解化简形态：a^2+b^2>=4-3/((x^2-1/2)^2+3/4)。
+    - 保留源解结论：最小值为 1，选 D。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 · 山东师大附中一模 T8）已知函数 f(x)=(a-2)x^2+bx-a+1（a,b∈R 且 a≠2）在区间 [1,2] 上有零点，则 a^2+b^2 的最小值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 3/2
+      text_latex: $\frac{3}{2}$
+    - label: B
+      text_raw: 1/2
+      text_latex: $\frac{1}{2}$
+    - label: C
+      text_raw: "2"
+      text_latex: $2$
+    - label: D
+      text_raw: "1"
+      text_latex: $1$
+  answer: D（最小值为 1）
+  fidelity_notes:
+    - 源题是单选题，四个选项在 page_0170 可完整读出。
+    - “在 [1,2] 上有零点”是全解起点，源解显式设零点为 x_0。
+solution:
+  source_solution_summary: |
+    由题意存在 x_0∈[1,2] 使 f(x_0)=0，即 (x_0^2-1)a+x_0b+1-2x_0^2=0， 从而 (2x_0^2-1)^2=[(x_0^2-1)a+x_0b]^2。对右侧用柯西不等式： [(x_0^2-1)a+x_0b]^2<= (a^2+b^2)[(x_0^2-1)^2+x_0^2]， 得 a^2+b^2>=(4x_0^4-4x_0^2+1)/(x_0^4-x_0^2+1) =4-3/((x_0^2-1/2)^2+3/4)。当 x_0∈[1,2] 时， ((x_0^2-1/2)^2+3/4)>=1，故上式最小值为 1（x_0=1 取到）， 所以 a^2+b^2 的最小值是 1，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把“有零点”翻译为关于 (a,b) 的线性约束。
+      formula_trace:
+        from: f(x)=(a-2)x^2+bx-a+1 在 [1,2] 有零点
+        to: 存在 x_0∈[1,2]，使 (x_0^2-1)a+x_0b=2x_0^2-1
+        operation: 设 f(x_0)=0 后移项整理。
+        why: 把参数问题绑定到一个可控的中间变量 x_0。
+      source_ref: page_0170_ex10_solution
+    - step_id: step_2
+      statement: 对线性组合套柯西不等式。
+      formula_trace:
+        from: (2x_0^2-1)^2=[(x_0^2-1)a+x_0b]^2
+        to: (2x_0^2-1)^2<=(a^2+b^2)[(x_0^2-1)^2+x_0^2]
+        operation: 把 (a,b) 与 (x_0^2-1,x_0) 视作两向量做柯西估计。
+        why: 直接产出 a^2+b^2 的下界。
+      source_ref: page_0170_ex10_solution
+    - step_id: step_3
+      statement: 化成单变量函数并取区间最小值。
+      formula_trace:
+        from: a^2+b^2>=(4x_0^4-4x_0^2+1)/(x_0^4-x_0^2+1)
+        to: a^2+b^2>=4-3/((x_0^2-1/2)^2+3/4)>=1
+        operation: 按源解代数化简并用 x_0∈[1,2] 判断分母下界。
+        why: 完成参数下界的数值化。
+      source_ref: page_0170_ex10_solution
+    - step_id: step_4
+      statement: 回到选项。
+      formula_trace:
+        from: a^2+b^2 的最小值是 1
+        to: 选 D
+        operation: 与选项比对。
+        why: 题目是单选。
+      source_ref: page_0170_ex10_solution
+teaching_card:
+  student_title: 先落零点，再用柯西卡住 a^2+b^2
+  what_it_trains: 训练把“参数二元 + 区间零点”降成“中间变量 + 柯西下界 + 单变量最值”的三段式。
+  recognition_cues:
+    - 题目给出“在区间上有零点”且目标是 a^2+b^2 最小值。
+    - 方程可整理成 A(x)a+B(x)b=C(x) 的线性组合形式。
+    - 出现 a^2+b^2 时优先联想到柯西。
+  normalization_moves:
+    - 设零点 x_0，把参数与 x_0 绑定。
+    - 对 A a + B b 先平方再套柯西。
+    - 把下界函数改写成便于读最小值的结构。
+  common_failures:
+    - 漏掉“x_0∈[1,2]”导致最小值区间判错。
+    - 只写出柯西不等式，不继续化简到可比较的常数。
+    - 把 (2x_0^2-1)^2 与 (1-2x_0^2)^2 误当不同表达。
+  similar_practice_query: 区间有零点 a^2+b^2 最小值 柯西不等式 参数分离
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 本卡未单独核对 page_0170 图片，按 markdown 重建。

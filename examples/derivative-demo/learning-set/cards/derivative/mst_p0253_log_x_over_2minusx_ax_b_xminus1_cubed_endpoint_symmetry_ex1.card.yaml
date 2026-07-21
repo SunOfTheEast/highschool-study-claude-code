@@ -1,0 +1,229 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0253_log_x_over_2minusx_ax_b_xminus1_cubed_endpoint_symmetry_ex1
+content_revision_id: mst_p0253_log_x_over_2minusx_ax_b_xminus1_cubed_endpoint_symmetry_ex1-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0253_log_x_over_2minusx_ax_b_xminus1_cubed_endpoint_symmetry_ex1.card.yaml
+stem: |-
+  （2024 · 新高考一卷 18 题）$f(x)=\ln\frac{x}{2-x}+ax+b(x-1)^3$。
+  1. 若 $b=0$，$f^\prime(x)\ge0$，求 $a$ 的取值范围。
+  2. 证明：$f(x)$ 是中心对称图形。
+  3. $f(x)>-2$，当且仅当 $1<x<2$ 时成立，求 $b$ 的范围。
+answer: |-
+  第(1)问：$a\ge-2$。第(2)问：图像关于 $(1,a)$ 中心对称。第(3)问：$b\ge-\frac23$。
+
+  第(1)问在 $b=0$ 时， $f^\prime(x)=\frac1x+\frac1{2-x}+a$，而 $\frac1x+\frac1{2-x}$ 在 $x=1$ 处最小为 2，所以 $a\ge-2$。第(2)问直接算 $f(x)+f(2-x)=2a$，故图像关于 $(1,a)$ 中心对称。第(3)问由 “$f(x)>-2$ 当且仅当 $1<x<2$” 和连续性锁定 $a=-2$。令 $t=x-1$，得 $h(t)=\ln\frac{1+t}{1-t}-2t+bt^3$，需要 $h(t)>0$ 当且仅当 $0<t<1$。由于 $h$ 是奇函数，只需处理右侧。近零展开 $h(t)=(b+\frac23)t^3+O(t^5)$，必要条件为 $b\ge-\frac23$；当 $b\ge-\frac23$ 时，source 用 $h'''(t)=\frac2{(1+t)^3}+\frac2{(1-t)^3}+6b$ 及四阶导正性推出 $h'''$、$h''$、$h'$、$h$ 在 $(0,1)$ 上逐级非负，从而充分。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 第(1)问用导数最小值。
+      max_score: 1
+    - step_id: step_2
+      description: 第(2)问直接配对 $x$ 和 $2-x$。
+      max_score: 1
+    - step_id: step_3
+      description: 第(3)问先由端点锁定 $a=-2$。
+      max_score: 1
+    - step_id: step_4
+      description: 平移到中心点。
+      max_score: 1
+    - step_id: step_5
+      description: 用近零展开得到必要条件。
+      max_score: 1
+    - step_id: step_6
+      description: 用高阶导链证明充分性。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 求参数范围
+        target: 第 1 问
+        result: $a\ge-2$。
+      - part_id: "2"
+        goal: 几何性质证明
+        target: 第 2 问
+        result: 关于 $(1,a)$ 中心对称。
+      - part_id: "3"
+        goal: 求参数范围
+        target: 第 3 问
+        result: $b\ge-\frac23$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 对称性配凑
+      - 充分/必要性探路
+      - 含参数分类讨论
+    subroute:
+      - 端点效应探路
+      - 中心平移
+      - 奇函数化
+      - 高阶导符号链
+  structure:
+    primary: 对称结构
+    secondary:
+      - 指对复合结构
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - $\ln\frac{x}{2-x}+ax+b(x-1)^3$
+      - $f(x)+f(2-x)=2a$
+      - $x-1=t$
+      - $h(t)=\ln\frac{1+t}{1-t}-2t+bt^3$
+      - $b\ge-\frac23$
+    normalization_moves_used:
+      - 用 $x=1$ 作为端点/中心。
+      - 先证明中心对称。
+      - 把 $x$ 平移为 $t=x-1$。
+      - 用奇函数和高阶导判断右侧符号。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会算导数最小值，回补导数单调极值基础。
+      - 若学生不会中心对称配凑，回补函数性质与图像。
+      - 若学生不会处理 $\ln\frac{1+t}{1-t}$，回补指数对数基础。
+      - 若学生不会近零展开或高阶导链，回补不等式工具基础。
+      - 若学生在变量平移中混乱，回补代数恒等变形。
+  detail_terms:
+    - $\ln\frac{x}{2-x}+ax+b(x-1)^3$
+    - $f(x)+f(2-x)=2a$
+    - $x-1=t$
+    - $\ln\frac{1+t}{1-t}-2t+bt^3$
+    - $b\ge-\frac23$
+    - 端点效应
+    - 中心对称
+    - 奇函数化
+parts: &a1
+  - part_id: "1"
+    text: 若 $b=0$，$f^\prime(x)\ge0$，求 $a$ 的取值范围。
+  - part_id: "2"
+    text: 证明：$f(x)$ 是中心对称图形。
+  - part_id: "3"
+    text: $f(x)>-2$，当且仅当 $1<x<2$ 时成立，求 $b$ 的范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0253_log_x_over_2minusx_ax_b_xminus1_cubed_endpoint_symmetry_ex1
+source_evidence:
+  source_refs:
+    - ref_id: page_0253_ex1_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0253/page_0253.md
+      role: problem_start
+      evidence: page_0253 第7章第一节例1：$f(x)=\ln\frac{x}{2-x}+ax+b(x-1)^3$，含三问。
+    - ref_id: page_0253_ex1_part1_part2_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0253/page_0253.md
+      role: solution
+      evidence: page_0253 解析第(1)(2)问：由 $b=0$ 和导数最小值得 $a\ge-2$；由 $f(x)+f(2-x)=2a$ 得中心对称。
+    - ref_id: page_0253_ex1_part3_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0253/page_0253.md
+      role: solution
+      evidence: page_0253 第(3)问：由连续性得 $a=-2$，令 $t=x-1$，转为 $h(t)=\ln\frac{t+1}{1-t}-2t+bt^3$。
+    - ref_id: page_0254_ex1_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0254/page_0254.md
+      role: continuation
+      evidence: page_0254 续完例1：用三阶导在 0 处的值 $4+6b$ 得必要条件，并用高阶导单调性证明充分性。
+    - ref_id: page_0254_ex2_next_head
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0254/page_0254.md
+      role: local_context
+      evidence: page_0254 中部另起例2，不属于本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0253.png
+      inspected: true
+      notes: 已核对页图：第7章开头、例1题干和解析前半位于 page_0253。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0254.png
+      inspected: true
+      notes: 已核对页图：page_0254 顶部续完例1，随后例2另起。
+  source_context: 本卡处理 page_0253 起头、page_0254 顶部续完的例1；page_0254 例2留给下一批。
+  source_influence:
+    - 保留 source 的端点探路背景：由条件“当且仅当 $1<x<2$”先锁定端点。
+    - 保留 source 的中心对称计算：$f(x)+f(2-x)=2a$。
+    - 保留 source 的变量平移：$t=x-1$，把区间变成 $(-1,1)$。
+    - 保留 source 的高阶导链：由三阶导在 0 处的值控制 $h(t)$ 在 $t>0$ 右侧的符号。
+  source_discrepancies:
+    - type: final_sign_error
+      source_ref: page_0254_ex1_continuation
+      observed: source/page image 最后一行写成 $b\ge\frac23$。
+      resolved_as: $b\ge-\frac23$。
+      reason: 近 $t=0$ 时 $h(t)=(b+\frac23)t^3+O(t^5)$；要使 $t>0$ 时 $h(t)>0$，必要条件是 $b\ge-\frac23$，且 source 前文也用三阶导在 0 处的值推出同一条件。
+original_problem:
+  stem: （2024 · 新高考一卷 18 题）$f(x)=\ln\frac{x}{2-x}+ax+b(x-1)^3$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问：$a\ge-2$。第(2)问：图像关于 $(1,a)$ 中心对称。第(3)问：$b\ge-\frac23$。
+  fidelity_notes:
+    - 三问综合题，无选项。
+    - 第(3)问 source 末尾的 $b$ 范围符号有误，卡片按前文推导和局部展开修正。
+solution:
+  source_solution_summary: 第(1)问在 $b=0$ 时， $f^\prime(x)=\frac1x+\frac1{2-x}+a$，而 $\frac1x+\frac1{2-x}$ 在 $x=1$ 处最小为 2，所以 $a\ge-2$。第(2)问直接算 $f(x)+f(2-x)=2a$，故图像关于 $(1,a)$ 中心对称。第(3)问由 “$f(x)>-2$ 当且仅当 $1<x<2$” 和连续性锁定 $a=-2$。令 $t=x-1$，得 $h(t)=\ln\frac{1+t}{1-t}-2t+bt^3$，需要 $h(t)>0$ 当且仅当 $0<t<1$。由于 $h$ 是奇函数，只需处理右侧。近零展开 $h(t)=(b+\frac23)t^3+O(t^5)$，必要条件为 $b\ge-\frac23$；当 $b\ge-\frac23$ 时，source 用 $h'''(t)=\frac2{(1+t)^3}+\frac2{(1-t)^3}+6b$ 及四阶导正性推出 $h'''$、$h''$、$h'$、$h$ 在 $(0,1)$ 上逐级非负，从而充分。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问用导数最小值。
+      formula_trace:
+        from: $f^\prime(x)=\frac1x+\frac1{2-x}+a$
+        to: $\min(\frac1x+\frac1{2-x})=2$
+        operation: 用均值或求导求最小值。
+        why: $f^\prime(x)\ge0$ 等价于 $a\ge-2$。
+      source_ref: page_0253_ex1_part1_part2_solution
+    - step_id: step_2
+      statement: 第(2)问直接配对 $x$ 和 $2-x$。
+      formula_trace:
+        from: $f(x)+f(2-x)$
+        to: $2a$
+        operation: 代入并相加。
+        why: 函数值和恒定，说明关于 $(1,a)$ 中心对称。
+      source_ref: page_0253_ex1_part1_part2_solution
+    - step_id: step_3
+      statement: 第(3)问先由端点锁定 $a=-2$。
+      formula_trace:
+        from: $f(x)>-2$ 当且仅当 $1<x<2$
+        to: $f(1)=-2$，所以 $a=-2$
+        operation: 用连续性和端点效应。
+        why: $x=1$ 是开区间边界，函数值必须贴住临界水平。
+      source_ref: page_0253_ex1_part3_start
+    - step_id: step_4
+      statement: 平移到中心点。
+      formula_trace:
+        from: $x-1=t$
+        to: $h(t)=\ln\frac{1+t}{1-t}-2t+bt^3$
+        operation: 令 $t=x-1$。
+        why: 把中心对称结构变成奇函数结构。
+      source_ref: page_0253_ex1_part3_start
+    - step_id: step_5
+      statement: 用近零展开得到必要条件。
+      formula_trace:
+        from: $\ln\frac{1+t}{1-t}=2t+\frac23t^3+O(t^5)$
+        to: $h(t)=(b+\frac23)t^3+O(t^5)$
+        operation: 在 $t=0$ 附近展开。
+        why: 若 $b<-\frac23$，右侧极小正 $t$ 会让 $h(t)<0$。
+      source_ref: page_0254_ex1_continuation
+    - step_id: step_6
+      statement: 用高阶导链证明充分性。
+      formula_trace:
+        from: $h^{(3)}(t)=\frac2{(1+t)^3}+\frac2{(1-t)^3}+6b$
+        to: $h(t)>0,\quad 0<t<1$
+        operation: 从 $h^{(3)}(0)\ge0$ 和四阶导正性逐级推出二阶导、一阶导和 $h$ 非负。
+        why: 这完成 $b\ge-\frac23$ 的充分性。
+      source_ref: page_0254_ex1_continuation
+teaching_card:
+  student_title: 端点锁参数，再把中心对称变成奇函数
+  what_it_trains: 训练从“当且仅当”的端点条件锁住参数，再围绕对称中心平移，把恒成立问题转成右侧奇函数符号问题。
+  recognition_cues:
+    - 题目有 $\ln\frac{x}{2-x}$ 和 $(x-1)^3$，天然围绕 $x=1$。
+    - 要求证明中心对称，后续通常要用 $x-1=t$。
+    - “当且仅当 $1<x<2$” 是端点效应，不是普通恒成立。
+    - 平移后出现 $\ln\frac{1+t}{1-t}-2t+bt^3$。
+  normalization_moves:
+    - 先用第(1)问求 $a\ge-2$。
+    - 用 $f(x)+f(2-x)=2a$ 证明中心对称。
+    - 第(3)问由端点锁定 $a=-2$。
+    - 令 $t=x-1$，只看 $0<t<1$。
+    - 用三阶项系数得到 $b\ge-\frac23$，再用高阶导链证明充分。
+  common_failures:
+    - 把第(3)问当成普通求最值，没有先用端点锁 $a=-2$。
+    - 没有利用中心对称，导致左右区间重复分析。
+    - 把 source 末尾的 $b\ge\frac23$ 直接抄下，漏掉负号。
+    - 只做必要条件，没有证明 $b\ge-\frac23$ 的充分性。
+  similar_practice_query: ln x/(2-x) 中心对称 端点效应 x-1=t b>=-2/3 高阶导链
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

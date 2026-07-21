@@ -1,0 +1,156 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0019_ex08
+content_revision_id: mst_p0019_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0019_ex08.card.yaml
+stem: |-
+  (2024 春·封开县校级期中) 函数 $f(x)=ax^2-x\ln x$ 在 $\left[\frac{1}{\mathrm{e}},+\infty\right)$ 上单调递增，则实数 $a$ 的取值范围是 ( )
+  A. $\left[\frac{1}{2},+\infty\right)$
+  B. $\left(\frac{1}{2},+\infty\right)$
+  C. $[1,+\infty)$
+  D. $(1,+\infty)$
+answer: |-
+  A. $\left[\frac{1}{2},+\infty\right)$
+
+  由单调递增要求 $f'(x)=2ax-1-\ln x\ge 0$ 对所有 $x\in[1/e,+\infty)$ 成立。因 $x>0$，分离参数得 $2a\ge\frac{1+\ln x}{x}=e\frac{\ln(ex)}{ex}$。令 $u=ex$，则 $u\in[1,+\infty)$，$\ln u/u$ 的最大值为 $1/e$，所以右端最大值为 1， 得 $a\ge 1/2$，选 A。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把单调递增条件翻译成导数恒非负。
+      max_score: 1
+    - step_id: step_2
+      description: 分离参数并配成源页的同构函数。
+      max_score: 1
+    - step_id: step_3
+      description: 用最大值给出 a 的下界。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 参变量分离
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - (1+ln x)/x 最大值
+      - ln(ex)/(ex) 同构
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - 导数恒非负转为 $2a\ge (1+\ln x)/x$ 的全区间压最大值。
+      - $(1+\ln x)/x=e\ln(ex)/(ex)$ 与 $y=\ln u/u$ 同构。
+    normalization_moves_used:
+      - 导数条件：单调递增转为 $f'(x)\ge0$。
+      - 参变量分离：$2a\ge(1+\ln x)/x$。
+      - 输入换元：$u=ex$，区间变为 $u\in[1,+\infty)$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能由单调递增写出 $f'(x)\ge0$，回补导数单调极值基础。
+      - 若学生分离参数时忘记 $x>0$ 才能同向除以 x，回补函数三要素与定义域。
+      - 若学生不会把 $1+\ln x$ 化成 $\ln(ex)$，回补指数对数基础。
+      - 若学生不知道 $\ln u/u$ 的最大值是 $1/e$，回补导数单调极值基础。
+  detail_terms:
+    - ax^2-x ln x
+    - monotone on [1/e,+infty)
+    - (1+ln x)/x
+    - ln(ex)/(ex)
+    - parameter lower bound
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0019_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0019_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0019/page_0019.md
+      role: problem_start
+      evidence: page_0019 例 8 给出 f(x)=ax^2-xln x 在 [1/e,+infty) 上单调递增，求 a 的取值范围，并列出 A-D。
+    - ref_id: page_0019_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0019/page_0019.md
+      role: solution
+      evidence: 同页解析写出 f'(x)=2ax-1-ln x>=0，分离为 2a>=(1+ln x)/x=e·ln(ex)/(ex)，最大值为 1，故 a>=1/2。
+    - ref_id: page_0018_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0018/page_0018.md
+      role: local_context
+      evidence: page_0018 图 9 及文字说明 (ln x+1)/x 的最大值为 1，支撑本题的同构模型。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0019.png
+      inspected: true
+      notes: 核对例 8 题干、区间 [1/e,+infty)、四个选项、导数不等式和答案 A。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0018.png
+      inspected: true
+      notes: 核对前页衍生模型中 (ln x+1)/x 的最大值 y_max=1。
+  source_context: 本题承接 page_0018 的 (ln x+1)/x 衍生模型，用导数非负条件把参数 a 与该模型的最大值相连。
+  source_influence:
+    - 题干要求整个区间上单调递增，因此要让导数在 [1/e,+infty) 上恒非负。
+    - 参数 a 被分离成下界问题，核心是求 (1+ln x)/x 在给定区间上的最大值。
+  source_discrepancies: []
+original_problem:
+  stem: (2024 春·封开县校级期中) 函数 $f(x)=ax^2-x\ln x$ 在 $\left[\frac{1}{\mathrm{e}},+\infty\right)$ 上单调递增，则实数 $a$ 的取值范围是 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text: $\left[\frac{1}{2},+\infty\right)$
+    - label: B
+      text: $\left(\frac{1}{2},+\infty\right)$
+    - label: C
+      text: $[1,+\infty)$
+    - label: D
+      text: $(1,+\infty)$
+  answer: A. $\left[\frac{1}{2},+\infty\right)$
+  fidelity_notes:
+    - 题头、题干和完整解析均在 page_0019。
+    - 源图与 markdown 对选项开闭区间一致，A 为闭区间。
+solution:
+  source_solution_summary: 由单调递增要求 $f'(x)=2ax-1-\ln x\ge 0$ 对所有 $x\in[1/e,+\infty)$ 成立。因 $x>0$，分离参数得 $2a\ge\frac{1+\ln x}{x}=e\frac{\ln(ex)}{ex}$。令 $u=ex$，则 $u\in[1,+\infty)$，$\ln u/u$ 的最大值为 $1/e$，所以右端最大值为 1， 得 $a\ge 1/2$，选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 把单调递增条件翻译成导数恒非负。
+      formula_trace:
+        from: $f(x)=ax^2-x\ln x$
+        to: $f'(x)=2ax-1-\ln x\ge 0,\quad x\in\left[\frac1e,+\infty\right)$
+        operation: 求导并使用区间内单调递增的充分必要条件。
+        why: 本题参数范围由导数在全区间上的最小要求决定。
+      source_ref: page_0019_solution
+    - step_id: step_2
+      statement: 分离参数并配成源页的同构函数。
+      formula_trace:
+        from: $2ax-1-\ln x\ge0$
+        to: $2a\ge\frac{1+\ln x}{x}=e\cdot\frac{\ln(ex)}{ex}$
+        operation: 利用 $x>0$ 除以 x，并用 $1+\ln x=\ln(ex)$ 配形。
+        why: 右端变成 $\ln u/u$ 的正倍数，可以直接求最大值。
+      source_ref: page_0019_solution
+    - step_id: step_3
+      statement: 用最大值给出 a 的下界。
+      formula_trace:
+        from: $u=ex,\quad u\in[1,+\infty),\quad \max\frac{\ln u}{u}=\frac1e$
+        to: $2a\ge e\cdot\frac1e=1,\quad a\ge\frac12$
+        operation: 把标准模型最大值代回参数不等式。
+        why: 要对全区间恒成立，参数必须压住右端的最大值。
+      source_ref: page_0019_solution
+teaching_card:
+  student_title: 导数恒非负后，用 $\frac{1+\ln x}{x}$ 的最大值压参数
+  what_it_trains: 训练把“在整个区间上单调”转成导数恒成立，再分离参数并用标准同构函数取最大值。
+  recognition_cues:
+    - 题干出现“在某区间上单调递增，求 a 的范围”。
+    - 求导后 a 与 x 相乘，且区间内 x 为正，可以直接除以 x。
+    - 右端出现 $1+\ln x$，提示改写为 $\ln(ex)$。
+  normalization_moves:
+    - 先求导并写全区间约束 $f'(x)\ge0$。
+    - 把含 a 的项留在一边，得到 $2a\ge(1+\ln x)/x$。
+    - 令 $u=ex$，用 $\ln u/u$ 的最大值。
+  common_failures:
+    - 把“单调递增”误当成只在端点检查导数。
+    - 忘记最大值要在 $x\in[1/e,+\infty)$ 内取，虽然本题最大点 x=1 正好在区间内。
+    - 把 $a\ge1/2$ 写成开区间，忽略等号时导数仍可非负。
+  similar_practice_query: 单调递增 参数范围 f'(x)>=0 (1+ln x)/x 最大值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0019 图像核对通过；page_0018 前文模型核对通过。

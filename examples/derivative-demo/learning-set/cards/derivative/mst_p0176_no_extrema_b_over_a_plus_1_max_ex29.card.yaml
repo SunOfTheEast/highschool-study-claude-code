@@ -1,0 +1,164 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0176_no_extrema_b_over_a_plus_1_max_ex29
+content_revision_id: mst_p0176_no_extrema_b_over_a_plus_1_max_ex29-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0176_no_extrema_b_over_a_plus_1_max_ex29.card.yaml
+stem: |-
+  （2024 · 河南漯河高级中学考前模拟 T7）已知函数 $f(x)=e^x-\frac{1}{2(a+1)}x^2-bx$（$a,b\in\mathbf{R}$）没有极值点，则 $\frac{b}{a+1}$ 的最大值为（  ）
+  A. $\frac{\sqrt e}{2}$
+  B. $\frac e2$
+  C. $e$
+  D. $\frac{e^2}{2}$
+answer: |-
+  B
+
+  由题意“没有极值点”，source 直接写成 $f^{\prime}(x)=e^x-\frac{1}{a+1}x-b=0$ 无解，并取 $f^{\prime}(x)\geqslant0$ 恒成立，即 $e^x\geqslant\frac{1}{a+1}x+b$。对 $x>0$ 用 基本不等式： $\frac{1}{a+1}x+b\geqslant2\sqrt{\frac{b}{a+1}x}$， 得 $\frac{e^{2x}}{4x}\geqslant\frac{b}{a+1}$。再用 $\frac{e^{2x}}{4x}\geqslant\frac e2$（最小值在 $x=\frac12$ 取到）， 得 $\frac{b}{a+1}\leqslant\frac e2$。当 $x=\frac12,\ \frac{1}{a+1}=\sqrt e,\ b=\frac{\sqrt e}{2}$ 时取等， 所以最大值是 $\frac e2$，选 B。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把“无极值点”转成导函数恒不变号约束。
+      max_score: 1
+    - step_id: step_2
+      description: 用基本不等式把线性表达压成乘积根式。
+      max_score: 1
+    - step_id: step_3
+      description: 转成单变量上界模板。
+      max_score: 1
+    - step_id: step_4
+      description: 取最值得到最大比值与选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 拟合与夹逼
+      - 参变量分离
+    subroute:
+      - 导函数无根转恒成立
+      - 基本不等式打包参数
+      - $e^{2x}/x$ 最值模板
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $f^{\prime}(x)=e^x-\frac{1}{a+1}x-b$
+      - $e^x\geqslant\frac{1}{a+1}x+b$
+      - $\frac{e^{2x}}{4x}\geqslant\frac{b}{a+1}$
+    normalization_moves_used:
+      - 从“无极值点”直接切到导函数线性压界。
+      - 把两参数线性和改写成几何均值根式。
+      - 把比值参数收束到单变量函数下界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生把“无极值点”与“导函数无零点”关系混淆，回补导数单调极值基础。
+      - 若学生不会从 $u+v$ 配成 $2\sqrt{uv}$，回补不等式工具基础。
+      - 若学生不会求 $\frac{e^{2x}}{4x}$ 的下界，回补指数对数基础。
+  detail_terms:
+    - $f^{\prime}(x)=e^x-\frac{1}{a+1}x-b$
+    - $2\sqrt{\frac{b}{a+1}x}$
+    - $\frac{e^{2x}}{4x}\geqslant\frac e2$
+    - $\frac{b}{a+1}\leqslant\frac e2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0176_no_extrema_b_over_a_plus_1_max_ex29
+source_evidence:
+  source_refs:
+    - ref_id: page_0176
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0176/page_0176.md
+      role: problem_start
+      evidence: "lines 37-43 contain 例29 statement, options, and full source solution: “无极值点”转为 $f^{\\prime}(x)=0$ 无解，再用基本不等式得到 $\\frac{b}{a+1}\\leqslant\\frac e2$。"
+    - ref_id: page_0176_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0176/page_0176.md
+      role: local_context
+      evidence: line 45 starts 例30 and belongs to another card in this batch.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0176.png
+      inspected: true
+      notes: 页图核对通过：例29选项 B 为 $\frac e2$，解析末尾“故选B”与公式链一致。
+  source_context: 例29完整位于 page_0176，不需要跨页补题。
+  source_influence:
+    - 保留源解从“无极值点”进入导函数无根约束的主链。
+    - 保留源解的基本不等式路线：$e^x\geqslant\frac{1}{a+1}x+b\geqslant2\sqrt{\frac{b}{a+1}x}$。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 河南漯河高级中学考前模拟 T7）已知函数 $f(x)=e^x-\frac{1}{2(a+1)}x^2-bx$（$a,b\in\mathbf{R}$）没有极值点，则 $\frac{b}{a+1}$ 的最大值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\frac{\sqrt e}{2}$
+      text_latex: $\frac{\sqrt e}{2}$
+    - label: B
+      text_raw: $\frac e2$
+      text_latex: $\frac e2$
+    - label: C
+      text_raw: $e$
+      text_latex: $e$
+    - label: D
+      text_raw: $\frac{e^2}{2}$
+      text_latex: $\frac{e^2}{2}$
+  answer: B
+  fidelity_notes:
+    - 题干、四个选项、答案标号均来自 page_0176 同页完整文本。
+    - source 解答默认使用 $x>0$ 做基本不等式放缩，本卡按该路线保留。
+solution:
+  source_solution_summary: 由题意“没有极值点”，source 直接写成 $f^{\prime}(x)=e^x-\frac{1}{a+1}x-b=0$ 无解，并取 $f^{\prime}(x)\geqslant0$ 恒成立，即 $e^x\geqslant\frac{1}{a+1}x+b$。对 $x>0$ 用 基本不等式： $\frac{1}{a+1}x+b\geqslant2\sqrt{\frac{b}{a+1}x}$， 得 $\frac{e^{2x}}{4x}\geqslant\frac{b}{a+1}$。再用 $\frac{e^{2x}}{4x}\geqslant\frac e2$（最小值在 $x=\frac12$ 取到）， 得 $\frac{b}{a+1}\leqslant\frac e2$。当 $x=\frac12,\ \frac{1}{a+1}=\sqrt e,\ b=\frac{\sqrt e}{2}$ 时取等， 所以最大值是 $\frac e2$，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 把“无极值点”转成导函数恒不变号约束。
+      formula_trace:
+        from: $f(x)=e^x-\frac{1}{2(a+1)}x^2-bx$
+        to: $f^{\prime}(x)=e^x-\frac{1}{a+1}x-b$，并取 $f^{\prime}(x)\geqslant0$
+        operation: 求导并按 source 路线改写为恒成立不等式。
+        why: 目标比值 $\frac{b}{a+1}$ 要通过线性项系数联动得到上界。
+      source_ref: page_0176:line 43
+    - step_id: step_2
+      statement: 用基本不等式把线性表达压成乘积根式。
+      formula_trace:
+        from: $e^x\geqslant\frac{1}{a+1}x+b$
+        to: $e^x\geqslant2\sqrt{\frac{b}{a+1}x}$
+        operation: 对 $\frac{1}{a+1}x$ 与 $b$ 施加 $u+v\geqslant2\sqrt{uv}$。
+        why: 可把两个参数合并成单个目标量 $\frac{b}{a+1}$。
+      source_ref: page_0176:line 43
+    - step_id: step_3
+      statement: 转成单变量上界模板。
+      formula_trace:
+        from: $e^x\geqslant2\sqrt{\frac{b}{a+1}x}$
+        to: $\frac{e^{2x}}{4x}\geqslant\frac{b}{a+1}$
+        operation: 两边平方并除以 $4x$（$x>0$）。
+        why: 左侧成为可直接求最小值的函数。
+      source_ref: page_0176:line 43
+    - step_id: step_4
+      statement: 取最值得到最大比值与选项。
+      formula_trace:
+        from: $\frac{e^{2x}}{4x}\geqslant\frac e2$
+        to: $\frac{b}{a+1}\leqslant\frac e2$（取等时选 B）
+        operation: 利用 $x=\frac12$ 处取到下界并回代参数。
+        why: 题目要的是 $\frac{b}{a+1}$ 的最大值与可达性。
+      source_ref: page_0176:line 43
+teaching_card:
+  student_title: “无极值点”题先看导函数恒成立
+  what_it_trains: 训练把“无极值点”快速转成导函数压界，再用基本不等式一次性合并参数比值。
+  recognition_cues:
+    - 原函数是“指数项 - 二次项 - 一次项”。
+    - 问题问的是参数比值最大值。
+    - source 会把导函数写成“指数函数 vs 一次函数”的恒成立模型。
+  normalization_moves:
+    - 先求 $f^{\prime}(x)$ 并写成恒成立不等式。
+    - 用 $u+v\geqslant2\sqrt{uv}$ 聚焦到 $\frac{b}{a+1}$。
+    - 再由 $\frac{e^{2x}}{4x}$ 的最小值给出最终上界。
+  common_failures:
+    - 把导函数恒成立误写成只在某个点成立。
+    - 配 AM-GM 时忘记 $x>0$ 条件，导致除以 $x$ 出错。
+    - 只算出上界不验取等参数。
+  similar_practice_query: 无极值点 导函数恒成立 b/(a+1) 最大值 e^{2x}/x
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

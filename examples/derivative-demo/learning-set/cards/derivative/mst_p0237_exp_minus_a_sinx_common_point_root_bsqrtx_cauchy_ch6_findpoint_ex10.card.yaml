@@ -1,0 +1,259 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0237_exp_minus_a_sinx_common_point_root_bsqrtx_cauchy_ch6_findpoint_ex10
+content_revision_id: mst_p0237_exp_minus_a_sinx_common_point_root_bsqrtx_cauchy_ch6_findpoint_ex10-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0237_exp_minus_a_sinx_common_point_root_bsqrtx_cauchy_ch6_findpoint_ex10.card.yaml
+stem: |-
+  （2022 · 天津卷）已知函数 $f(x)=e^x-a\sin x$，$g(x)=b\sqrt{x}$。
+  1. 求函数 $y=f(x)$ 在 $(0,f(0))$ 处的切线方程。
+  2. 若 $y=f(x)$ 和 $y=g(x)$ 有公共点，当 $a=0$ 时，求 $b$ 的取值范围。
+  3. 若 $y=f(x)$ 和 $y=g(x)$ 有公共点，求证：$a^2+b^2>e$。
+answer: |-
+  第 (1) 问：$y=(1-a)x+1$；第 (2)(i) 问：$b\geqslant\sqrt{2e}$；第 (2)(ii) 问：$a^2+b^2>e$。
+
+  第 (1) 问 $f(0)=1$，$f'(0)=1-a$，切线为 $y=(1-a)x+1$。第 (2)(i) 问当 $a=0$，公共点方程为 $e^x=b\sqrt{x}$。若 $b\leqslant0$ 无公共点；若 $b>0$，等价看 $h(x)=e^{2x}-b^2x$ 的零点。由 $h'(x)=2e^{2x}-b^2$，当 $h_{\min}\leqslant0$ 得 $b\geqslant\sqrt{2e}$。第 (2)(ii) 问，由柯西不等式， 只需证明 $|a|+|b|>\sqrt{2e}$。若 $a=0$，由 (i) 得 $|b|\geqslant\sqrt{2e}$，从而 $a^2+b^2>e$。若 $a\neq0$ 且有公共点， $x=0$ 不可能，故 $x>0$，且 $e^x=a\sin x+b\sqrt{x}$。除以 $\sqrt{x}$ 后，只需证明 $|a|\sqrt{x}\geqslant a\sin x$。$a\leqslant0$ 时显然成立；$a>0$ 时， $0<x\leqslant1$ 有 $\sin x<x<\sqrt{x}$，$x>1$ 有 $\sqrt{x}>1\geqslant\sin x$，所以严格成立。于是 $|a|+|b|>e^x/\sqrt{x}\geqslant\sqrt{2e}$，柯西推出 $a^2+b^2>e$。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 第 (1) 问直接写切线。
+      max_score: 1
+    - step_id: step_2
+      description: $a=0$ 时把公共点转成根式零点。
+      max_score: 1
+    - step_id: step_3
+      description: 用 $h$ 的最小值求 $b$ 范围。
+      max_score: 1
+    - step_id: step_4
+      description: 用右侧取点说明 $b>\sqrt{2e}$ 时确有第二个零点。
+      max_score: 1
+    - step_id: step_5
+      description: 证明 $a^2+b^2>e$ 先转成证明 $|a|+|b|>\sqrt{2e}$。
+      max_score: 1
+    - step_id: step_6
+      description: 从公共点方程反推出 $|a|+|b|$ 的下界。
+      max_score: 1
+    - step_id: step_7
+      description: 证明 $|a|\sqrt{x}\geqslant a\sin x$。
+      max_score: 1
+    - step_id: step_8
+      description: 用 $\frac{e^x}{\sqrt{x}}$ 的最小值收尾。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: part_1
+        goal: 几何量求解
+        target: 第 part_1 问
+        result: $y=(1-a)x+1$。
+      - part_id: part_2_i
+        goal: 求参数范围
+        target: 第 part_2_i 问
+        result: $b\geqslant\sqrt{2e}$。
+      - part_id: part_2_ii
+        goal: 不等式证明
+        target: 第 part_2_ii 问
+        result: $a^2+b^2>e$。
+  method:
+    primary: 逆向构造法
+    secondary:
+      - 局部逼近与找点
+      - 参变量分离
+      - 同构变形与换元法
+      - 充分/必要性探路
+    subroute:
+      - 根式零点平方转化
+      - $e^x/\sqrt{x}$ 最小值
+      - 柯西不等式反推
+      - 公共点代回
+      - $\sin x<\sqrt{x}$
+  structure:
+    primary: 根式函数结构
+    secondary:
+      - 三角复合结构
+      - 指对复合结构
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $e^x-a\sin x$
+      - $b\sqrt{x}$
+      - $e^{2x}-b^2x$
+      - $e^x/\sqrt{x}$
+      - $|a|+|b|$
+    normalization_moves_used:
+      - 把 $e^x=b\sqrt{x}$ 平方为 $e^{2x}-b^2x=0$。
+      - 用极小值求出 $b\geqslant\sqrt{2e}$。
+      - 用柯西把 $a^2+b^2$ 转成 $|a|+|b|$。
+      - 公共点方程除以 $\sqrt{x}$，对齐 $e^x/\sqrt{x}$。
+      - 用 $\sin x<\sqrt{x}$ 控制三角项。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会写切线方程，回补导数运算与几何意义。
+      - 若学生不会处理 $\sqrt{x}$ 的定义域和 $x=0$，回补函数三要素与定义域。
+      - 若学生不会把根式零点平方转化，回补代数恒等变形。
+      - 若学生不会用极小值判断公共点存在，回补导数单调极值基础。
+      - 若学生不会用柯西不等式，回补不等式工具基础。
+      - 若学生不会比较 $\sin x$ 与 $\sqrt{x}$，回补三角函数基础。
+  detail_terms:
+    - $e^x-a\sin x$
+    - $b\sqrt{x}$
+    - $e^{2x}-b^2x$
+    - $b\geqslant\sqrt{2e}$
+    - $e^x/\sqrt{x}$
+    - $|a|+|b|$
+    - $\sin x<\sqrt{x}$
+    - 柯西不等式
+parts: &a1
+  - part_id: part_1
+    text: 求函数 $y=f(x)$ 在 $(0,f(0))$ 处的切线方程。
+  - part_id: part_2_i
+    text: 若 $y=f(x)$ 和 $y=g(x)$ 有公共点，当 $a=0$ 时，求 $b$ 的取值范围。
+  - part_id: part_2_ii
+    text: 若 $y=f(x)$ 和 $y=g(x)$ 有公共点，求证：$a^2+b^2>e$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0237_exp_minus_a_sinx_common_point_root_bsqrtx_cauchy_ch6_findpoint_ex10
+source_evidence:
+  source_refs:
+    - ref_id: page_0237_prev_ex9_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0237/page_0237.md
+      role: local_context
+      evidence: page_0237 页首是 page_0236 例9续解，不是本卡题头。
+    - ref_id: page_0237_ex10_section_intro
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0237/page_0237.md
+      role: local_context
+      evidence: page_0237 中部进入“五、单极值点指数函数与幂函数零点取点”，说明用零点等价方程转化根式 $e^x-a\sqrt{x}$。
+    - ref_id: page_0237_ex10_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0237/page_0237.md
+      role: problem_start
+      evidence: page_0237 给出例10题头：$f(x)=e^x-a\sin x$，$g(x)=b\sqrt{x}$；第 (1) 问切线，第 (2) 问公共点条件下求 $b$ 范围并证明 $a^2+b^2>e$。
+    - ref_id: page_0237_ex10_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0237/page_0237.md
+      role: solution
+      evidence: page_0237 给出第 (1) 问 $y=(1-a)x+1$；第 (2)(i) 在 $a=0$ 时令 $h(x)=e^{2x}-b^2x$。
+    - ref_id: page_0238_ex10_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0238/page_0238.md
+      role: continuation
+      evidence: page_0238 顶部续完例10：得到 $b\geqslant\sqrt{2e}$，并用柯西不等式与 $|a|+|b|>e^x/\sqrt{x}$ 证明 $a^2+b^2>e$。
+    - ref_id: page_0238_ex11_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0238/page_0238.md
+      role: local_context
+      evidence: page_0238 中部另起例11，属于下一批，本卡只取其前方的例10续解。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0237.png
+      inspected: true
+      notes: 已核对页图：例10题头和解析前半位于 page_0237 下半页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0238.png
+      inspected: true
+      notes: 已核对页图：page_0238 顶部为例10续解，例11另起。
+  source_context: 本卡处理 page_0237 起头、page_0238 顶部续完的例10；page_0238 例11以后留给下一批。
+  source_influence:
+    - 保留 source 的根式零点转化：$e^x-b\sqrt{x}$ 与 $h(x)=e^{2x}-b^2x$ 同零点。
+    - 保留 source 的取参结论：$a=0$ 时公共点条件等价于 $b\geqslant\sqrt{2e}$。
+    - 保留 source 的证明路线：从公共点反推 $|a|+|b|>e^x/\sqrt{x}$，再用柯西推出 $a^2+b^2>e$。
+    - 保留 source 对 $\sin x<\sqrt{x}$ 的分段说明：$0<x\leqslant1$ 与 $x>1$。
+  source_discrepancies:
+    - type: cross_page_formula_completion
+      source_ref: page_0238_ex10_continuation
+      observed: page_0237 bottom cuts after `$h(2\ln\frac b{\sqrt2})=\frac{b^4}{4}-` and page_0238 OCR marks the line as unclear.
+      resolved_as: $h(2\ln\frac b{\sqrt2})=\frac{b^4}{4}-b^2\ln\frac{b^2}{2}=b^2(\frac{b^2}{4}-\ln\frac{b^2}{2})>0$
+      reason: page_0238 image shows the continued formula and it matches substituting $x=2\ln(b/\sqrt2)=\ln(b^2/2)$ into $h(x)=e^{2x}-b^2x$.
+original_problem:
+  stem: （2022 · 天津卷）已知函数 $f(x)=e^x-a\sin x$，$g(x)=b\sqrt{x}$。
+  parts: *a1
+  choices: []
+  answer: 第 (1) 问：$y=(1-a)x+1$；第 (2)(i) 问：$b\geqslant\sqrt{2e}$；第 (2)(ii) 问：$a^2+b^2>e$。
+  fidelity_notes:
+    - 三小问均无选项。
+    - 由于 $g(x)=b\sqrt{x}$，公共点部分默认 $x\geqslant0$，且实际公共点不能是 $x=0$。
+solution:
+  source_solution_summary: 第 (1) 问 $f(0)=1$，$f'(0)=1-a$，切线为 $y=(1-a)x+1$。第 (2)(i) 问当 $a=0$，公共点方程为 $e^x=b\sqrt{x}$。若 $b\leqslant0$ 无公共点；若 $b>0$，等价看 $h(x)=e^{2x}-b^2x$ 的零点。由 $h'(x)=2e^{2x}-b^2$，当 $h_{\min}\leqslant0$ 得 $b\geqslant\sqrt{2e}$。第 (2)(ii) 问，由柯西不等式， 只需证明 $|a|+|b|>\sqrt{2e}$。若 $a=0$，由 (i) 得 $|b|\geqslant\sqrt{2e}$，从而 $a^2+b^2>e$。若 $a\neq0$ 且有公共点， $x=0$ 不可能，故 $x>0$，且 $e^x=a\sin x+b\sqrt{x}$。除以 $\sqrt{x}$ 后，只需证明 $|a|\sqrt{x}\geqslant a\sin x$。$a\leqslant0$ 时显然成立；$a>0$ 时， $0<x\leqslant1$ 有 $\sin x<x<\sqrt{x}$，$x>1$ 有 $\sqrt{x}>1\geqslant\sin x$，所以严格成立。于是 $|a|+|b|>e^x/\sqrt{x}\geqslant\sqrt{2e}$，柯西推出 $a^2+b^2>e$。
+  key_steps:
+    - step_id: step_1
+      statement: 第 (1) 问直接写切线。
+      formula_trace:
+        from: $f(x)=e^x-a\sin x$
+        to: $f(0)=1,\ f^\prime(0)=1-a$
+        operation: 求导并代入切点 $x=0$。
+        why: 切线方程为 $y-1=(1-a)x$。
+      source_ref: page_0237_ex10_solution_start
+    - step_id: step_2
+      statement: $a=0$ 时把公共点转成根式零点。
+      formula_trace:
+        from: $e^x=b\sqrt{x}$
+        to: $h(x)=e^{2x}-b^2x=0$
+        operation: 平方并利用 $b>0$ 时同零点。
+        why: 根式方程直接看不方便，平方后变成单极值函数。
+      source_ref: page_0237_ex10_solution_start
+    - step_id: step_3
+      statement: 用 $h$ 的最小值求 $b$ 范围。
+      formula_trace:
+        from: $h^\prime(x)=2e^{2x}-b^2=0$
+        to: $x=\ln\frac b{\sqrt2}$，$h_{\min}\leqslant0\Leftrightarrow b\geqslant\sqrt{2e}$
+        operation: 求极小值并解不等式。
+        why: 公共点存在等价于平方后的函数至少有一个零点。
+      source_ref: page_0237_ex10_solution_start
+    - step_id: step_4
+      statement: 用右侧取点说明 $b>\sqrt{2e}$ 时确有第二个零点。
+      formula_trace:
+        from: $h(0)=1>0,\ h_{\min}<0$
+        to: $h(2\ln\frac b{\sqrt2})>0$
+        operation: 在极小值点右侧代入一个显点。
+        why: 这补足存在性，而不是只看必要条件。
+      source_ref: page_0238_ex10_continuation
+    - step_id: step_5
+      statement: 证明 $a^2+b^2>e$ 先转成证明 $|a|+|b|>\sqrt{2e}$。
+      formula_trace:
+        from: $(a^2+b^2)(1^2+1^2)\geqslant(|a|+|b|)^2$
+        to: $a^2+b^2\geqslant\frac{(|a|+|b|)^2}{2}$
+        operation: 使用柯西不等式。
+        why: 若 $|a|+|b|>\sqrt{2e}$，则立刻得到 $a^2+b^2>e$。
+      source_ref: page_0238_ex10_continuation
+    - step_id: step_6
+      statement: 从公共点方程反推出 $|a|+|b|$ 的下界。
+      formula_trace:
+        from: $e^x=a\sin x+b\sqrt{x}$
+        to: $\frac{e^x}{\sqrt{x}}=\frac{a\sin x}{\sqrt{x}}+b$
+        operation: 公共点处除以 $\sqrt{x}$。
+        why: 要和 $\left(e^x/\sqrt{x}\right)_{\min}$ 对接。
+      source_ref: page_0238_ex10_continuation
+    - step_id: step_7
+      statement: 证明 $|a|\sqrt{x}\geqslant a\sin x$。
+      formula_trace:
+        from: $x>0$
+        to: $a\leqslant0$ 时显然；$a>0$ 时 $\sin x<\sqrt{x}$
+        operation: 按 $a$ 的符号和 $x$ 的范围分段。
+        why: 这保证 $|a|+|b|$ 大于公共点处的 $e^x/\sqrt{x}$。
+      source_ref: page_0238_ex10_continuation
+    - step_id: step_8
+      statement: 用 $\frac{e^x}{\sqrt{x}}$ 的最小值收尾。
+      formula_trace:
+        from: $\left(\frac{e^x}{\sqrt{x}}\right)_{\min}=\sqrt{2e}$
+        to: $|a|+|b|>\sqrt{2e}$，所以 $a^2+b^2>e$
+        operation: 代入标准最小值并套柯西。
+        why: 这是 part (i) 的数据反向进入不等式证明。
+      source_ref: page_0238_ex10_continuation
+teaching_card:
+  student_title: 公共点证明 $a^2+b^2>e$：先找出 $\sqrt{2e}$ 这个数据
+  what_it_trains: 训练把公共点条件反向变成不等式：先从根式零点求出关键常数，再用柯西和公共点方程收束。
+  recognition_cues:
+    - $g(x)=b\sqrt{x}$，公共点里自然会出现 $e^x/\sqrt{x}$。
+    - $a=0$ 时就是 $e^x=b\sqrt{x}$，平方后看 $e^{2x}-b^2x$。
+    - 要证平方和大于常数，常先想 $|a|+|b|$ 与柯西。
+  normalization_moves:
+    - 第 (1) 问先写切线。
+    - 第 (2)(i) 把 $e^x=b\sqrt{x}$ 平方成 $h(x)$。
+    - 用 $h_{\min}\leqslant0$ 得 $b\geqslant\sqrt{2e}$。
+    - 第 (2)(ii) 用公共点方程除以 $\sqrt{x}$。
+    - 用 $\sin x<\sqrt{x}$ 和柯西完成证明。
+  common_failures:
+    - 平方后忘记先讨论 $b>0$。
+    - 只证明了 $b\geqslant\sqrt{2e}$，没有把这个常数迁移到第 (2)(ii)。
+    - 公共点处漏掉 $x=0$ 不可能这一点。
+    - 把柯西方向写反，导致 $a^2+b^2$ 推不出来。
+  similar_practice_query: e^x-a sinx b sqrtx 公共点 a^2+b^2>e e^x/sqrtx 柯西
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

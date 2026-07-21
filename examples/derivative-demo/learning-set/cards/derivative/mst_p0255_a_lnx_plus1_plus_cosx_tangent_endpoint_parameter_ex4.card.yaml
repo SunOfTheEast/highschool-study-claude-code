@@ -1,0 +1,234 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0255_a_lnx_plus1_plus_cosx_tangent_endpoint_parameter_ex4
+content_revision_id: mst_p0255_a_lnx_plus1_plus_cosx_tangent_endpoint_parameter_ex4-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0255_a_lnx_plus1_plus_cosx_tangent_endpoint_parameter_ex4.card.yaml
+stem: |-
+  （2025 · 北京石景山 · 一模）已知函数 $f(x)=a\ln(x+1)+\cos x$，$a\in\mathbf{R}$。
+  1. 若 $a=1$，求曲线 $y=f(x)$ 在点 $(0,f(0))$ 处的切线方程。
+  2. 若 $a=1$，证明函数 $f(x)$ 在区间 $(-1,0)$ 上有且只有一个零点。
+  3. 若实数 $a$ 使得 $f(x)\le2e^x-1$ 对 $x\in[0,\pi]$ 恒成立，求 $a$ 的取值范围。
+answer: |-
+  第(1)(i)问：$y=x+1$。第(1)(ii)问：$(-1,0)$ 上唯一零点。第(2)问：$a\le2$。
+
+  第(1)(i)问在 $a=1$ 时，$f(0)=1$ 且 $f^\prime(0)=1$，切线为 $y=x+1$。第(1)(ii)问在 $(-1,0)$ 上有 $f^\prime(x)=\frac1{x+1}-\sin x>0$， 所以 $f$ 单调递增；又 $f(\frac1{e^2}-1)=-2+\cos(\frac1{e^2}-1)<0$， $f(0)=1>0$，故唯一零点存在。第(2)问令 $g_a(x)=2e^x-1-a\ln(1+x)-\cos x$，题设等价于 $g_a(x)\ge0$。由 $g_a(0)=0$ 和 $g_a^\prime(0)=2-a$ 得必要条件 $a\le2$。若 $a\le2$，因 $\ln(1+x)\ge0$，有 $g_a(x)\ge g_2(x)$。 对 $q(x)=g_2(x)$，$q(0)=q^\prime(0)=0$ 且 $q^{\prime\prime}(x)=2e^x+\cos x+\frac2{(1+x)^2}>0$， 所以 $q^\prime\ge0$、$q\ge0$。故 $a\le2$ 充分。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 第(1)(i)问：求点值和斜率。
+      max_score: 1
+    - step_id: step_2
+      description: 第(1)(i)问：写出切线。
+      max_score: 1
+    - step_id: step_3
+      description: 第(1)(ii)问：证明 $(-1,0)$ 上单调递增。
+      max_score: 1
+    - step_id: step_4
+      description: 第(1)(ii)问：用介值定理找零点。
+      max_score: 1
+    - step_id: step_5
+      description: 第(2)问：从端点导数拿必要条件。
+      max_score: 1
+    - step_id: step_6
+      description: 第(2)问：把充分性降到 $a=2$。
+      max_score: 1
+    - step_id: step_7
+      description: 第(2)问：证明 $a=2$ 时成立。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: 1i
+        goal: 几何量求解
+        target: 第 1i 问
+        result: $y=x+1$。
+      - part_id: 1ii
+        goal: 零点/极值点分析
+        target: 第 1ii 问
+        result: $(-1,0)$ 上唯一零点。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $a\le2$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 充分/必要性探路
+      - 切线放缩与凹凸性
+      - 含参数分类讨论
+    subroute:
+      - 端点导数必要性
+      - 参数单调比较
+      - 二阶导凸性验证
+      - 介值定理找零点
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - $a\ln(1+x)+\cos x$
+      - $2e^x-1$
+      - $g_a(0)=0,\ g_a^\prime(0)=2-a$
+      - $g_a(x)\ge g_2(x)$
+    normalization_moves_used:
+      - 切线先取 $x=0$ 的点值和斜率。
+      - 零点唯一性用单调性，不需要复杂估计。
+      - 求参先看端点 $x=0$ 的右导趋势。
+      - 充分性先降到最难边界 $a=2$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求切线，回补导数运算与几何意义。
+      - 若学生不能用单调性证明唯一零点，回补导数单调极值基础。
+      - 若学生不会从端点导数得到必要条件，回补函数性质与图像。
+      - 若学生不熟悉 $\ln(1+x)\ge0$ 在 $x\ge0$ 上成立，回补指数对数基础。
+      - 若学生不会用二阶导推出函数非负，回补导数单调极值基础。
+  detail_terms:
+    - $a\ln(1+x)+\cos x$
+    - $2e^x-1$
+    - $g^\prime(0)=2-a$
+    - $a=2$
+    - $q^{\prime\prime}(x)>0$
+    - $y=x+1$
+parts: &a1
+  - id: 1i
+    text: 若 $a=1$，求曲线 $y=f(x)$ 在点 $(0,f(0))$ 处的切线方程。
+  - id: 1ii
+    text: 若 $a=1$，证明函数 $f(x)$ 在区间 $(-1,0)$ 上有且只有一个零点。
+  - id: "2"
+    text: 若实数 $a$ 使得 $f(x)\le2e^x-1$ 对 $x\in[0,\pi]$ 恒成立，求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0255_a_lnx_plus1_plus_cosx_tangent_endpoint_parameter_ex4
+source_evidence:
+  source_refs:
+    - ref_id: page_0255_ex4_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0255/page_0255.md
+      role: problem_start
+      evidence: page_0255 给出例4题头：$f(x)=a\ln(x+1)+\cos x$；第(1)问 $a=1$ 求切线并证 $(-1,0)$ 上唯一零点；第(2)问 $f(x)\le2e^x-1$ 在 $[0,\pi]$ 恒成立，求 $a$。
+    - ref_id: page_0255_ex4_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0255/page_0255.md
+      role: solution
+      evidence: page_0255 页底给出第(1)问切线方程 $y=x+1$，并用单调性与 $f(\frac1{e^2}-1)<0$ 开始证明唯一零点。
+    - ref_id: page_0256_ex4_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0256/page_0256.md
+      role: solution
+      evidence: page_0256 页首延续例4：由 $f(0)=1>0$ 得唯一零点；第(2)问构造 $g(x)=2e^x-1-a\ln(x+1)-\cos x$，由 $g^\prime(0)=2-a$ 得必要条件 $a\le2$，结论 $a\le2$。
+    - ref_id: page_0256_ex5_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0256/page_0256.md
+      role: local_context
+      evidence: page_0256 随后进入“端点探路+指数找基友”和例5，说明例4在页首闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0255.png
+      inspected: true
+      notes: 已核对页图：例4题头和第(1)问解析起于 page_0255 页底。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0256.png
+      inspected: true
+      notes: 已核对页图：page_0256 页首是例4续解，随后另起例5；本卡不处理例5。
+  source_context: 本卡处理 page_0255 起头并延续至 page_0256 页首的例4；page_0256 新起头例5和例6排除。
+  source_influence:
+    - 保留第(1)(i) 切线：$f(0)=1$，$f^\prime(0)=1$，所以 $y=x+1$。
+    - 保留第(1)(ii) 在 $(-1,0)$ 上单调递增并用介值定理锁唯一零点。
+    - 保留第(2) 端点必要性：$g(0)=0$ 且 $g^\prime(0)=2-a$，所以 $a\le2$。
+    - 第(2) 充分性按可验证路线重写：对 $a\le2$ 只需证 $a=2$ 的情形。
+  source_discrepancies:
+    - type: corrected_sufficiency_proof
+      source_ref: page_0256_ex4_solution_continuation
+      observed: source says when $a\le2$, $g^{\prime\prime}(x)=2e^x+\frac{a}{(x+1)^2}+\cos x>0$.
+      resolved_as: for $a\le2$, since $\ln(1+x)\ge0$ on $[0,\pi]$, $g_a(x)\ge g_2(x)$; prove $g_2(x)\ge0$ using $q^{\prime\prime}(x)=2e^x+\cos x+\frac2{(1+x)^2}>0$.
+      reason: The displayed $g^{\prime\prime}>0$ is false for sufficiently negative $a$, but monotonicity in parameter $a$ gives a clean sufficient proof.
+    - type: corrected_symbol_typo
+      source_ref: page_0256_ex4_solution_continuation
+      observed: source writes "$g^\prime(a)>0$" in the $a>2$ contradiction paragraph.
+      resolved_as: treat as an irrelevant typo; the contradiction follows from $g^\prime(0)<0$, so $g(x)<0$ for small positive $x$.
+      reason: Endpoint derivative already proves necessity.
+original_problem:
+  stem: （2025 · 北京石景山 · 一模）已知函数 $f(x)=a\ln(x+1)+\cos x$，$a\in\mathbf{R}$。
+  parts: *a1
+  choices: []
+  answer: 第(1)(i)问：$y=x+1$。第(1)(ii)问：$(-1,0)$ 上唯一零点。第(2)问：$a\le2$。
+  fidelity_notes:
+    - 无选项。
+    - 第(2)问 source 充分性证明按参数单调性修正。
+solution:
+  source_solution_summary: 第(1)(i)问在 $a=1$ 时，$f(0)=1$ 且 $f^\prime(0)=1$，切线为 $y=x+1$。第(1)(ii)问在 $(-1,0)$ 上有 $f^\prime(x)=\frac1{x+1}-\sin x>0$， 所以 $f$ 单调递增；又 $f(\frac1{e^2}-1)=-2+\cos(\frac1{e^2}-1)<0$， $f(0)=1>0$，故唯一零点存在。第(2)问令 $g_a(x)=2e^x-1-a\ln(1+x)-\cos x$，题设等价于 $g_a(x)\ge0$。由 $g_a(0)=0$ 和 $g_a^\prime(0)=2-a$ 得必要条件 $a\le2$。若 $a\le2$，因 $\ln(1+x)\ge0$，有 $g_a(x)\ge g_2(x)$。 对 $q(x)=g_2(x)$，$q(0)=q^\prime(0)=0$ 且 $q^{\prime\prime}(x)=2e^x+\cos x+\frac2{(1+x)^2}>0$， 所以 $q^\prime\ge0$、$q\ge0$。故 $a\le2$ 充分。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)(i)问：求点值和斜率。
+      formula_trace:
+        from: $f(x)=\ln(1+x)+\cos x$
+        to: $f(0)=1,\ f^\prime(0)=1$
+        operation: 代入 $x=0$ 并求导。
+        why: 切线方程由点和斜率确定。
+      source_ref: page_0255_ex4_solution_start
+    - step_id: step_2
+      statement: 第(1)(i)问：写出切线。
+      formula_trace:
+        from: 点 $(0,1)$，斜率 $1$
+        to: $y=x+1$
+        operation: 套点斜式。
+        why: 完成切线方程。
+      source_ref: page_0255_ex4_solution_start
+    - step_id: step_3
+      statement: 第(1)(ii)问：证明 $(-1,0)$ 上单调递增。
+      formula_trace:
+        from: $f^\prime(x)=\frac1{x+1}-\sin x$
+        to: $x\in(-1,0)\Rightarrow f^\prime(x)>0$
+        operation: 利用 $\frac1{x+1}>0$ 且 $\sin x<0$。
+        why: 单调性给出零点唯一性。
+      source_ref: page_0255_ex4_solution_start
+    - step_id: step_4
+      statement: 第(1)(ii)问：用介值定理找零点。
+      formula_trace:
+        from: $f(\frac1{e^2}-1)<0,\ f(0)=1>0$
+        to: 存在唯一 $x_0\in(\frac1{e^2}-1,0)$ 使 $f(x_0)=0$
+        operation: 结合连续性和单调递增。
+        why: 存在性与唯一性同时完成。
+      source_ref: page_0256_ex4_solution_continuation
+    - step_id: step_5
+      statement: 第(2)问：从端点导数拿必要条件。
+      formula_trace:
+        from: $g_a(x)=2e^x-1-a\ln(1+x)-\cos x$，$g_a(0)=0$
+        to: $g_a^\prime(0)=2-a\ge0$
+        operation: 因为 $x=0$ 是区间端点且右侧必须不能先下降。
+        why: 若 $a>2$，则小正数处 $g_a(x)<0$，题设失败。
+      source_ref: page_0256_ex4_solution_continuation
+    - step_id: step_6
+      statement: 第(2)问：把充分性降到 $a=2$。
+      formula_trace:
+        from: $a\le2$，$\ln(1+x)\ge0$
+        to: $g_a(x)\ge g_2(x)$
+        operation: 按参数 $a$ 比较差函数。
+        why: 避免 source 中对所有 $a\le2$ 直接断言 $g^{\prime\prime}>0$ 的问题。
+      source_ref: page_0256_ex4_solution_continuation
+    - step_id: step_7
+      statement: 第(2)问：证明 $a=2$ 时成立。
+      formula_trace:
+        from: $q(x)=2e^x-1-2\ln(1+x)-\cos x$
+        to: $q(0)=q^\prime(0)=0,\ q^{\prime\prime}(x)>0\Rightarrow q(x)\ge0$
+        operation: 二阶导为正，逐级推出 $q^\prime\ge0$ 和 $q\ge0$。
+        why: 完成 $a\le2$ 的充分性。
+      source_ref: page_0256_ex4_solution_continuation
+teaching_card:
+  student_title: 先看端点导数，再把参数压到边界 $a=2$
+  what_it_trains: 训练含参恒成立题的端点探路：端点取等时先看右导数拿必要条件，再用参数单调性把充分性压到边界值验证。
+  recognition_cues:
+    - 不等式在 $x=0$ 处左右两边相等。
+    - 参数只乘在 $\ln(1+x)$ 上，而 $\ln(1+x)$ 在 $[0,\pi]$ 非负。
+    - 源解出现 $g(0)=0$ 和 $g^\prime(0)=2-a$。
+  normalization_moves:
+    - 先构造差函数 $g_a(x)$，让目标变成 $g_a(x)\ge0$。
+    - 端点取等先看 $g_a^\prime(0)$，不要直接全局求导硬打。
+    - 证明充分性时固定最难的 $a=2$，其他 $a\le2$ 自动更大。
+  common_failures:
+    - 照抄 source 的 $g^{\prime\prime}>0$，没有发现它对很负的 $a$ 不成立。
+    - 只得到 $a\le2$ 必要条件，没证明 $a=2$ 成立。
+    - 第(1)(ii)只说有正有负，漏掉单调性保证唯一。
+  similar_practice_query: 端点探路 参数范围 a ln(1+x)+cosx <= 2e^x-1 gprime0 参数单调比较
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

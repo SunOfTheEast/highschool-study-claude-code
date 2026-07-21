@@ -1,0 +1,182 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0247_x_power_a_over_a_power_x_two_intersections_ex23
+content_revision_id: mst_p0247_x_power_a_over_a_power_x_two_intersections_ex23-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0247_x_power_a_over_a_power_x_two_intersections_ex23.card.yaml
+stem: （2021 · 甲卷第二问）已知 $a>0$ 且 $a\ne1$，函数 $f(x)=\frac{x^a}{a^x}(x>0)$。若曲线 $y=f(x)$ 与直线 $y=1$ 有且仅有两个交点，求 $a$ 的取值范围。
+answer: |-
+  $a\in(1,e)\cup(e,+\infty)$。
+
+  由 $f(x)=1$ 得 $x^a=a^x$，即 $a\ln x=x\ln a$，转成 $g(x)=\frac{\ln a}{a}x-\ln x=0$。当 $0<a<1$ 时， $g'(x)<0$，至多一个零点。故只需考虑 $a>1$。此时 $g$ 先减后增，极小值点为 $x=\frac a{\ln a}$，极小值 $1-\ln\frac a{\ln a}$。要有两个交点，需 $\frac a{\ln a}>e$。利用 $h(x)=\frac x{\ln x}$ 在 $(1,e)$ 递减、$(e,+\infty)$ 递增且最小值为 $e$，得到 $a\in(1,e)\cup(e,+\infty)$，排除 $a=e$ 的切点情形。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先把幂指数方程取对数。
+      max_score: 1
+    - step_id: step_2
+      description: 化成熟悉的 $mx-\ln x$ 找点问题。
+      max_score: 1
+    - step_id: step_3
+      description: 排除 $0<a<1$。
+      max_score: 1
+    - step_id: step_4
+      description: 把两个零点条件转成极小值小于零。
+      max_score: 1
+    - step_id: step_5
+      description: 用 $x/\ln x$ 的最小值解参数。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: main
+        goal: 求参数范围
+        target: 第 main 问
+        result: $a\in(1,e)\cup(e,+\infty)$。
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 显隐点探路
+      - 局部逼近与找点
+    subroute:
+      - 幂指数同构
+      - 取对数降维
+      - $mx-\ln x$ 找点
+      - $x/\ln x$ 参数判别
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 非对称结构
+    evidence:
+      - $x^a=a^x$
+      - $a\ln x=x\ln a$
+      - $\frac{\ln a}{a}x-\ln x$
+      - $\frac a{\ln a}>e$
+      - $h(x)=\frac x{\ln x}$
+    normalization_moves_used:
+      - 把 $x^a=a^x$ 取对数。
+      - 转成 $mx-\ln x$。
+      - 用极小值低于 0 判断两个零点。
+      - 用 $x/\ln x$ 的图像拆出 $(1,e)$ 与 $(e,+\infty)$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会对 $x^a=a^x$ 取对数，回补指数对数基础。
+      - 若学生不会分析 $mx-\ln x$，回补导数单调极值基础。
+      - 若学生不会用极小值判断两个零点，回补函数性质与图像。
+      - 若学生化简 $\frac a{\ln a}>e$ 卡住，回补代数恒等变形。
+  detail_terms:
+    - $x^a=a^x$
+    - $a\ln x=x\ln a$
+    - $mx-\ln x$
+    - $\frac a{\ln a}$
+    - $h(x)=\frac x{\ln x}$
+    - $a\in(1,e)\cup(e,+\infty)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0247_x_power_a_over_a_power_x_two_intersections_ex23
+source_evidence:
+  source_refs:
+    - ref_id: page_0247_ex23_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0247/page_0247.md
+      role: problem_start
+      evidence: page_0247 例23：$a>0$ 且 $a\ne1$，$f(x)=\frac{x^a}{a^x}(x>0)$，曲线 $y=f(x)$ 与 $y=1$ 有且仅有两个交点，求 $a$。
+    - ref_id: page_0247_ex23_main_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0247/page_0247.md
+      role: solution
+      evidence: 解析把 $x^a=a^x$ 转为 $g(x)=\frac{\ln a}{a}x-\ln x=0$，再由极小值条件求参数。
+    - ref_id: page_0247_ex23_offset_transform
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0247/page_0247.md
+      role: solution
+      evidence: source 另给 $\ln x=t$ 的转化：$e^t-\frac a{\ln a}t=0$，说明指数形式取点更方便。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0247.png
+      inspected: true
+      notes: 已核对页图：例23完整位于 page_0247 上半页到中部，无单独图。
+  source_context: 本卡只处理 page_0247 例23；同页例24另建卡。
+  source_influence:
+    - 保留 source 的等价转化：$x^a=a^x\Leftrightarrow \frac{\ln a}{a}x-\ln x=0$。
+    - 保留 source 的函数 $h(x)=\frac{x}{\ln x}$ 判别 $\frac a{\ln a}>e$。
+    - 保留 source 的结论：$a\in(1,e)\cup(e,+\infty)$。
+    - 保留 source 的 $\ln x=t$ 说明：对数定义域不适合直接做对称取点时，转成指数型。
+  source_discrepancies:
+    - type: sign_typo_in_alternative_solution
+      source_ref: page_0247_ex23_offset_transform
+      observed: 备用转化段落写出类似 $g(t)_{\min}>0$ 后仍推出两零点范围。
+      resolved_as: 两零点条件应对应极小值小于 0；卡片以主解的 $1-\ln\frac a{\ln a}<0$ 为准。
+      reason: 若极小值大于 0，则 $e^t-\frac a{\ln a}t=0$ 不会有两个零点。
+original_problem:
+  stem: （2021 · 甲卷第二问）已知 $a>0$ 且 $a\ne1$，函数 $f(x)=\frac{x^a}{a^x}(x>0)$。若曲线 $y=f(x)$ 与直线 $y=1$ 有且仅有两个交点，求 $a$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $a\in(1,e)\cup(e,+\infty)$。
+  fidelity_notes:
+    - 单问参数范围题，无选项。
+    - “两个交点”转化为方程 $x^a=a^x$ 在正数域内有两个不同根。
+solution:
+  source_solution_summary: 由 $f(x)=1$ 得 $x^a=a^x$，即 $a\ln x=x\ln a$，转成 $g(x)=\frac{\ln a}{a}x-\ln x=0$。当 $0<a<1$ 时， $g'(x)<0$，至多一个零点。故只需考虑 $a>1$。此时 $g$ 先减后增，极小值点为 $x=\frac a{\ln a}$，极小值 $1-\ln\frac a{\ln a}$。要有两个交点，需 $\frac a{\ln a}>e$。利用 $h(x)=\frac x{\ln x}$ 在 $(1,e)$ 递减、$(e,+\infty)$ 递增且最小值为 $e$，得到 $a\in(1,e)\cup(e,+\infty)$，排除 $a=e$ 的切点情形。
+  key_steps:
+    - step_id: step_1
+      statement: 先把幂指数方程取对数。
+      formula_trace:
+        from: $\frac{x^a}{a^x}=1$
+        to: $a\ln x=x\ln a$
+        operation: 两边取对数。
+        why: 把 $x$ 同时在底数和指数中的结构降成普通函数方程。
+      source_ref: page_0247_ex23_main_solution
+    - step_id: step_2
+      statement: 化成熟悉的 $mx-\ln x$ 找点问题。
+      formula_trace:
+        from: $a\ln x=x\ln a$
+        to: $g(x)=\frac{\ln a}{a}x-\ln x=0$
+        operation: 除以 $a$ 并移项。
+        why: 这是 source 点名的 $mx-\ln x$ 结构。
+      source_ref: page_0247_ex23_main_solution
+    - step_id: step_3
+      statement: 排除 $0<a<1$。
+      formula_trace:
+        from: $g^\prime(x)=\frac{\ln a}{a}-\frac1x$
+        to: $0<a<1\Rightarrow g^\prime(x)<0$
+        operation: 按 $\ln a$ 的符号判导数。
+        why: 单调函数不可能有两个不同零点。
+      source_ref: page_0247_ex23_main_solution
+    - step_id: step_4
+      statement: 把两个零点条件转成极小值小于零。
+      formula_trace:
+        from: $x=\frac a{\ln a}$
+        to: $g_{\min}=1-\ln\frac a{\ln a}<0$
+        operation: 代入极小值点。
+        why: 先减后增函数有两个零点，当且仅当谷底低于 $x$ 轴。
+      source_ref: page_0247_ex23_main_solution
+    - step_id: step_5
+      statement: 用 $x/\ln x$ 的最小值解参数。
+      formula_trace:
+        from: $1-\ln\frac a{\ln a}<0$
+        to: $\frac a{\ln a}>e$
+        operation: 指数化并引入 $h(x)=x/\ln x$。
+        why: 比较 $a$ 和 $e$ 两侧的参数区间。
+      source_ref: page_0247_ex23_main_solution
+teaching_card:
+  student_title: 把 $x^a=a^x$ 变成 $mx-\ln x$
+  what_it_trains: 训练把底数和指数互相含参的方程取对数，转成可求导的标准找点问题。
+  recognition_cues:
+    - 题目里同时出现 $x^a$ 和 $a^x$。
+    - 问曲线和 $y=1$ 有两个交点。
+    - 取对数后出现 $a\ln x=x\ln a$。
+    - 核心函数是 $\frac{\ln a}{a}x-\ln x$。
+  normalization_moves:
+    - 先转方程 $x^a=a^x$。
+    - 取对数降成 $mx-\ln x$。
+    - 用极小值是否小于 0 判断两个交点。
+    - 用 $x/\ln x$ 的最小值解参数。
+  common_failures:
+    - 忘记 $x>0$ 才能取对数。
+    - 没有排除 $0<a<1$ 的单调情形。
+    - 把 $a=e$ 的切点情形误算成两个交点。
+  similar_practice_query: x^a=a^x 两个交点 取对数 mx-lnx x/lnx 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

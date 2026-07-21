@@ -1,0 +1,198 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0066_taylor_ex05
+content_revision_id: mst_p0066_taylor_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0066_taylor_ex05.card.yaml
+stem: |-
+  已知函数 f(x)=ax+\frac{a}{x}-(\ln x)^2 (a\in\mathbf{R}，且 e 为自然对数的底数)。
+  (1). 当 a\geqslant1 时，求 f(x) 的最小值。
+  (2). 若关于 x 的不等式 e^x+e^{-x}-2\ln x\geqslant b，求整数 b 的最大值。
+answer: |-
+  (1) f(x)_{\min}=2a；(2) 整数 b 的最大值为 3。
+
+  对 f 求导并设 g(x)=ax-\frac{a}{x}-2\ln x。a\geqslant1 时， ax^2-2x+a\geqslant(x-1)^2，所以 g 递增且 g(1)=0，进而 f 在 (0,1) 减、(1,+\infty) 增，最小值为 2a。第 (2) 问取 a=1 得 t+\frac1t-(\ln t)^2\geqslant2，令 t=e^x 得 e^x+e^{-x}-x^2\geqslant2。于是 e^x+e^{-x}-2\ln x>(x^2-2\ln x)+2\geqslant3；另一方面 x=1 时值为 e+e^{-1}\in(3,4)，故能保证的不等式整数最大为 b=3。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 第 (1) 问先把 f'(x) 写成 g(x) 的符号。
+      max_score: 1
+    - step_id: step_2
+      description: 证明 g 在定义域上递增。
+      max_score: 1
+    - step_id: step_3
+      description: 由 g(1)=0 判定 f 的单调性并求最小值。
+      max_score: 1
+    - step_id: step_4
+      description: 把第 (1) 问 a=1 的结论转成指数下界。
+      max_score: 1
+    - step_id: step_5
+      description: 将目标式拆成两个已知非负结构。
+      max_score: 1
+    - step_id: step_6
+      description: 证明目标式严格大于 3。
+      max_score: 1
+    - step_id: step_7
+      description: 用一个取值把整数上界压到 3。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level:
+      - part_id: "1"
+        goal: 极值最值
+        target: 第 (1) 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 (2) 问
+        result: 见 source_solution_summary
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 切线放缩与凹凸性
+      - 同构变形与换元法
+    subroute:
+      - 指数双曲换元
+      - 加减 x^2
+      - 整数参数夹逼
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - t+\frac1t-(\ln t)^2\geqslant2，令 t=e^x 得 e^x+e^{-x}-x^2\geqslant2。
+      - x^2-2\ln x+2=x^2-\ln x^2-1+3\geqslant3。
+      - x=1 时 e+e^{-1}\in(3,4)，锁定整数 b=3。
+    normalization_moves_used:
+      - 用 g(x)=ax-\frac{a}{x}-2\ln x 承接 f'(x) 的符号。
+      - 把第 (1) 问中 a=1 的不等式通过 t=e^x 转为双曲指数不等式。
+      - 对目标式加减 x^2，拆成两个可控下界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生求导时把 -(\ln x)^2 的导数写错，回补导数运算与几何意义。
+      - 若学生不知道用 a\geqslant1 比较 ax^2-2x+a，回补代数恒等变形。
+      - 若学生看不出 t=e^x 的替换，回补指数对数基础。
+      - 若学生不能把 x^2-2\ln x+2 化成 u-\ln u-1+3，回补不等式工具基础。
+      - 若学生从“>3”直接写 b>3，回补函数三要素与定义域中恒成立参数的量词判断。
+  detail_terms:
+    - g(x)=ax-\frac{a}{x}-2\ln x
+    - ax^2-2x+a\geqslant0
+    - t=e^x
+    - e^x+e^{-x}-x^2\geqslant2
+    - x^2-\ln x^2-1\geqslant0
+parts: &a1
+  - label: (1)
+    text: 当 a\geqslant1 时，求 f(x) 的最小值。
+  - label: (2)
+    text: 若关于 x 的不等式 e^x+e^{-x}-2\ln x\geqslant b，求整数 b 的最大值。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0066_taylor_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0066
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0066/page_0066.md
+      role: problem_start
+      evidence: 例 5：（2024 · 赣州二模 T21）已知 f(x)=ax+\frac{a}{x}-(\ln x)^2；(1) a\geqslant1 时求 f(x) 最小值； (2) 若 e^x+e^{-x}-2\ln x\geqslant b，求整数 b 的最大值。
+    - ref_id: page_0066_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0066/page_0066.md
+      role: solution
+      evidence: 解析第 (1) 问设 g(x)=ax-\frac{a}{x}-2\ln x，通过 g'(x)=\frac{ax^2-2x+a}{x^2}\geqslant0 得 f(1)=2a 为最小值； 第 (2) 问由 a=1 的结论推出 e^x+e^{-x}-x^2\geqslant2，再与 x^2-2\ln x+2\geqslant3 组合，最后用 x=1 得 b_{\max}=3。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0066.png
+      inspected: true
+      notes: 页图已核对：例 5 的题干、两问和完整解析均在 page_0066；题后进入“三、泰勒展开与估值” 和例 6 题头。
+  source_context: 本题用第 (1) 问制造一个保值型不等式 t+\frac1t-(\ln t)^2\geqslant2，再令 t=e^x 得到双曲指数表达式的下界， 用整数 b 的要求把“最小值略大于 3”转化为最大整数 3。
+  source_influence:
+    - 题干与解析从 page_0066 源页重建，legacy ex_mst_534 只作为定位提示。
+    - 第 (2) 问保留源解的两层夹逼：先证整体严格大于 3，再用 x=1 给出小于 4 的取值。
+  source_discrepancies: []
+original_problem:
+  stem: 已知函数 f(x)=ax+\frac{a}{x}-(\ln x)^2 (a\in\mathbf{R}，且 e 为自然对数的底数)。
+  parts: *a1
+  choices: []
+  answer: (1) f(x)_{\min}=2a；(2) 整数 b 的最大值为 3。
+  fidelity_notes:
+    - 原题无选择项；第 (2) 问中的 x 由 \ln x 确定定义域为 x>0。
+    - 源解第 (2) 问把 a=1 的第 (1) 问结论用于 t=e^x，从而得到 e^x+e^{-x}-x^2\geqslant2。
+solution:
+  source_solution_summary: 对 f 求导并设 g(x)=ax-\frac{a}{x}-2\ln x。a\geqslant1 时， ax^2-2x+a\geqslant(x-1)^2，所以 g 递增且 g(1)=0，进而 f 在 (0,1) 减、(1,+\infty) 增，最小值为 2a。第 (2) 问取 a=1 得 t+\frac1t-(\ln t)^2\geqslant2，令 t=e^x 得 e^x+e^{-x}-x^2\geqslant2。于是 e^x+e^{-x}-2\ln x>(x^2-2\ln x)+2\geqslant3；另一方面 x=1 时值为 e+e^{-1}\in(3,4)，故能保证的不等式整数最大为 b=3。
+  key_steps:
+    - step_id: step_1
+      statement: 第 (1) 问先把 f'(x) 写成 g(x) 的符号。
+      formula_trace:
+        from: f(x)=ax+\frac{a}{x}-(\ln x)^2
+        to: f'(x)=a-\frac{a}{x^2}-\frac{2\ln x}{x} =\frac1x\left(ax-\frac{a}{x}-2\ln x\right)
+        operation: 对 f 求导，并提出正因子 \frac1x。
+        why: x>0 时 f'(x) 的符号由 g(x)=ax-\frac{a}{x}-2\ln x 决定。
+      source_ref: page_0066_solution
+    - step_id: step_2
+      statement: 证明 g 在定义域上递增。
+      formula_trace:
+        from: g'(x)=a+\frac{a}{x^2}-\frac2x=\frac{ax^2-2x+a}{x^2}
+        to: a\geqslant1\Rightarrow ax^2-2x+a\geqslant x^2-2x+1\geqslant0
+        operation: 用 a\geqslant1 放缩二次式分子。
+        why: 分母 x^2>0，因此 g'(x)\geqslant0，g 单调递增。
+      source_ref: page_0066_solution
+    - step_id: step_3
+      statement: 由 g(1)=0 判定 f 的单调性并求最小值。
+      formula_trace:
+        from: g(1)=0,\quad g \text{ 递增}
+        to: x<1\Rightarrow f'(x)<0,\quad x>1\Rightarrow f'(x)>0,\quad f_{\min}=f(1)=2a
+        operation: 用 g 的符号代回 f'(x)。
+        why: f 先减后增，所以唯一谷底在 x=1。
+      source_ref: page_0066_solution
+    - step_id: step_4
+      statement: 把第 (1) 问 a=1 的结论转成指数下界。
+      formula_trace:
+        from: t+\frac1t-(\ln t)^2\geqslant2\quad(t>0)
+        to: e^x+e^{-x}-x^2\geqslant2\quad(x\in\mathbf{R})
+        operation: 令 t=e^x，使 \ln t=x。
+        why: 目标式含 e^x+e^{-x}，需要把第 (1) 问的 t+\frac1t 同构过去。
+      source_ref: page_0066_solution
+    - step_id: step_5
+      statement: 将目标式拆成两个已知非负结构。
+      formula_trace:
+        from: e^x+e^{-x}-2\ln x
+        to: \left(e^x+e^{-x}-x^2\right)+\left(x^2-2\ln x\right)
+        operation: 加减 x^2。
+        why: 第一括号由 step_4 给出不小于 2，第二括号可用 u-\ln u-1\geqslant0。
+      source_ref: page_0066_solution
+    - step_id: step_6
+      statement: 证明目标式严格大于 3。
+      formula_trace:
+        from: h(x)=x^2-2\ln x+2=x^2-\ln x^2-1+3
+        to: h(x)\geqslant3,\quad e^x+e^{-x}-2\ln x>3
+        operation: 对 u=x^2 使用 u-\ln u-1\geqslant0，并注意两个等号条件不能同时在 x>0 发生。
+        why: e^x+e^{-x}-x^2=2 的等号在 x=0，而 \ln x 要求 x>0；因此目标式在定义域内严格大于 3。
+      source_ref: page_0066_solution
+    - step_id: step_7
+      statement: 用一个取值把整数上界压到 3。
+      formula_trace:
+        from: x=1:\quad e^x+e^{-x}-2\ln x=e+e^{-1}
+        to: 3<\inf\left(e^x+e^{-x}-2\ln x\right)<4
+        operation: 代入 x=1，并用源页给出的 e+e^{-1}\in(3,4)。
+        why: 若 b 是整数且不等式对所有 x>0 成立，则最大整数只能是 3。
+      source_ref: page_0066_solution
+teaching_card:
+  student_title: 把第 (1) 问的最小值搬到指数式里
+  what_it_trains: 训练把一个已证最小值改造成后续恒成立不等式，再用整数参数要求做夹逼。
+  recognition_cues:
+    - 前一问的函数含 x+\frac1x-(\ln x)^2，后一问含 e^x+e^{-x}。
+    - 目标中同时出现 e^x、e^{-x} 和 \ln x，适合加减 x^2 分拆。
+    - b 是整数，通常不需要精确最小值，只要把下确界夹在两个相邻整数之间。
+  normalization_moves:
+    - 令 t=e^x，把 t+\frac1t-(\ln t)^2\geqslant2 变成 e^x+e^{-x}-x^2\geqslant2。
+    - 加减 x^2，把目标式拆为双曲指数部分和对数基本不等式部分。
+    - 用 x=1 的取值证明整体不能保证达到 4。
+  common_failures:
+    - 第 (1) 问求完 2a 后没有想到取 a=1 复用。
+    - 把 e^x+e^{-x}-x^2\geqslant2 的等号点 x=0 误放到目标定义域 x>0 内。
+    - 忽略 b 为整数，去求一个并不需要的精确最小值。
+  similar_practice_query: 前问最值结论复用到后问恒成立，指数对数混合式加减 x^2 求最大整数参数。
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

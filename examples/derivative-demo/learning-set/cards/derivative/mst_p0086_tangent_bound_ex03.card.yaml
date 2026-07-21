@@ -1,0 +1,229 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0086_tangent_bound_ex03
+content_revision_id: mst_p0086_tangent_bound_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0086_tangent_bound_ex03.card.yaml
+stem: |-
+  （2023 福州一中高二期中 T11）已知直线 $l:y=kx+m$ 是曲线 $f(x)=x+\ln x$ 的切线，则（  ）
+  A. $m=-\ln(k-1)-1$
+  B. $k+m$ 的最小值为 1
+  C. $k-m$ 的最大值为 1
+  D. $m=-2k$ 时，直线 $l$ 有 2 条
+answer: |-
+  AB
+
+  设切点为 $(x_0,x_0+\ln x_0)$，其中 $x_0>0$。因为 $f'(x_0)=1+\frac1{x_0}$，切线方程整理为 $y=(1+\frac1{x_0})x-1+\ln x_0$，所以 $k=1+\frac1{x_0}$，$m=-1+\ln x_0=-\ln(k-1)-1$，A 正确。 又 $k+m=\frac1{x_0}+\ln x_0$，其导数为 $\frac{x_0-1}{x_0^2}$，在 $x_0=1$ 处取最小值 1，B 正确。 $k-m=2+\frac1{x_0}-\ln x_0$ 在 $(0,+\infty)$ 上单调递减且 当 $x_0\to0^+$ 时趋于 $+\infty$，没有最大值，C 错误。 若 $m=-2k$，代入切点参数得 $\ln x_0+1+\frac2{x_0}=0$，但该函数在 $x_0=2$ 处最小值为 $\ln2+2>0$，所以不存在这样的切线，更不可能有 2 条，D 错误。 故选 AB。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 设切点并把切线写成 $k,m$ 的参数形式。
+      max_score: 1
+    - step_id: step_2
+      description: 判断 A：消去切点参数得到 $m$ 与 $k$ 的关系。
+      max_score: 1
+    - step_id: step_3
+      description: 判断 B：把 $k+m$ 化成单变量函数求最小值。
+      max_score: 1
+    - step_id: step_4
+      description: 判断 C：$k-m$ 不存在最大值。
+      max_score: 1
+    - step_id: step_5
+      description: 判断 D：把 $m=-2k$ 化成切点方程。
+      max_score: 1
+    - step_id: step_6
+      description: 说明 D 中切点方程无解。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: A
+        goal: 抽象函数性质
+        target: 第 A 问
+        result: 见 source_solution_summary
+      - part_id: B
+        goal: 极值最值
+        target: 第 B 问
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 极值最值
+        target: 第 C 问
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 零点/极值点分析
+        target: 第 D 问
+        result: 见 source_solution_summary
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 数形结合
+      - 局部逼近与找点
+    subroute:
+      - 切点参数化
+      - 切线参数消元
+      - 上凸函数切线支撑
+      - 过定点切线条数
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $k=1+\frac1{x_0}$，$m=-1+\ln x_0$ 是整题的切点参数骨架。
+      - $k+m=\frac1{x_0}+\ln x_0$ 在 $x_0=1$ 处取最小值 1。
+      - $k-m=2+\frac1{x_0}-\ln x_0$ 无最大值。
+      - $m=-2k$ 转为 $\ln x_0+1+\frac2{x_0}=0$ 且无解。
+    normalization_moves_used:
+      - 把“直线是曲线切线”改写为切点参数 $x_0$。
+      - 用 $x_0=\frac1{k-1}$ 消去切点，判断 $m$ 与 $k$ 的关系。
+      - 把 $k\pm m$ 的判断统一成单变量极值/端点问题。
+      - 把 $m=-2k$ 识别为过定点 $(2,0)$，再回到切点方程。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会写 $y=x+\ln x$ 在 $x_0$ 处的切线，回补导数运算与几何意义。
+      - 若学生不会由 $k=1+\frac1{x_0}$ 得到 $x_0=\frac1{k-1}$，回补代数恒等变形。
+      - 若学生不能用导数判断 $\frac1x+\ln x$ 的最小值，回补导数单调极值基础。
+      - 若学生看不懂 $m=-2k$ 对应过定点 $(2,0)$，回补函数性质与图像。
+  detail_terms:
+    - $f(x)=x+\ln x$
+    - $k=1+\frac1{x_0}$
+    - $m=-1+\ln x_0$
+    - $k+m=\frac1{x_0}+\ln x_0$
+    - $m=-2k$
+    - 过定点 $(2,0)$ 的切线条数
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0086_tangent_bound_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0086
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0086/page_0086.md
+      role: problem_start
+      evidence: page_0086 底部新起头“例 3”，给出直线 $l:y=kx+m$ 是 $f(x)=x+\ln x$ 的切线、A-D 四个选项，并给出切点参数化、 A 选项判断、B-D 的主要图像分析；本页顶部是例 2 续页，未建卡。
+    - ref_id: page_0087
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0087/page_0087.md
+      role: continuation
+      evidence: page_0087 顶部续写例 3 最终答案“选 AB”，随后才进入例 4。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0086.png
+      inspected: true
+      notes: 已核对 page_0086 页图：例 3 从本页下部开始，题头、题干、A-D 选项、两张切线示意图和解析主体与 markdown 一致；页顶为上一题续解。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0087.png
+      inspected: true
+      notes: 已核对 page_0087 页图顶部只保留例 3 的答案“选 AB”，再进入例 4。
+  source_context: 本题接在凹凸性定义之后，考查 $x+\ln x$ 这类上凸曲线的切线参数。 题目本身是多选判断，既要从切点表示 $k,m$，又要用图像或代数判断 $k+m$、$k-m$ 和过定点切线条数。
+  source_influence:
+    - 保留源解的切点设法：$k=1+\frac1{x_0}$，$m=-1+\ln x_0$。
+    - 保留源解对 B 的上凸函数切线支撑解释，并补写 $k+m=\frac1{x_0}+\ln x_0$ 的导数判定。
+    - 对 C、D 同时保留源图像判断，并用切点参数补足“不存在最大值”和“过 $(2,0)$ 无切线”的代数依据。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 福州一中高二期中 T11）已知直线 $l:y=kx+m$ 是曲线 $f(x)=x+\ln x$ 的切线，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $m=-\ln(k-1)-1$
+      text_latex: $m=-\ln(k-1)-1$
+    - label: B
+      text_raw: $k+m$ 的最小值为 1
+      text_latex: $k+m$ 的最小值为 $1$
+    - label: C
+      text_raw: $k-m$ 的最大值为 1
+      text_latex: $k-m$ 的最大值为 $1$
+    - label: D
+      text_raw: $m=-2k$ 时，直线 $l$ 有 2 条
+      text_latex: $m=-2k$ 时，直线 $l$ 有 $2$ 条
+  answer: AB
+  fidelity_notes:
+    - 题干、A-D 选项和解析主体在 page_0086；最终答案跨到 page_0087 顶部。
+    - page_0086 页图和 markdown 均显示 C 为“$k-m$ 的最大值为 1”，D 为“$m=-2k$ 时，直线 $l$ 有 2 条”。
+solution:
+  source_solution_summary: 设切点为 $(x_0,x_0+\ln x_0)$，其中 $x_0>0$。因为 $f'(x_0)=1+\frac1{x_0}$，切线方程整理为 $y=(1+\frac1{x_0})x-1+\ln x_0$，所以 $k=1+\frac1{x_0}$，$m=-1+\ln x_0=-\ln(k-1)-1$，A 正确。 又 $k+m=\frac1{x_0}+\ln x_0$，其导数为 $\frac{x_0-1}{x_0^2}$，在 $x_0=1$ 处取最小值 1，B 正确。 $k-m=2+\frac1{x_0}-\ln x_0$ 在 $(0,+\infty)$ 上单调递减且 当 $x_0\to0^+$ 时趋于 $+\infty$，没有最大值，C 错误。 若 $m=-2k$，代入切点参数得 $\ln x_0+1+\frac2{x_0}=0$，但该函数在 $x_0=2$ 处最小值为 $\ln2+2>0$，所以不存在这样的切线，更不可能有 2 条，D 错误。 故选 AB。
+  key_steps:
+    - step_id: step_1
+      statement: 设切点并把切线写成 $k,m$ 的参数形式。
+      formula_trace:
+        from: |
+          $f(x)=x+\ln x,\qquad f'(x_0)=1+\frac1{x_0}$
+        to: |
+          $y-\left(x_0+\ln x_0\right)=\left(1+\frac1{x_0}\right)(x-x_0)$
+          $y=\left(1+\frac1{x_0}\right)x-1+\ln x_0$
+        operation: 用切点 $(x_0,x_0+\ln x_0)$ 和导数斜率写点斜式，再展开。
+        why: 所有切线都由切点横坐标 $x_0>0$ 唯一参数化，后面四个选项都可回到这个参数。
+      source_ref: page_0086
+    - step_id: step_2
+      statement: 判断 A：消去切点参数得到 $m$ 与 $k$ 的关系。
+      formula_trace:
+        from: |
+          $k=1+\frac1{x_0},\qquad m=-1+\ln x_0$
+        to: |
+          $x_0=\frac1{k-1},\qquad m=\ln\frac1{k-1}-1=-\ln(k-1)-1$
+        operation: 由 $k$ 解出 $x_0$，代回 $m$。
+        why: 切线斜率 $k>1$，因此 $k-1=\frac1{x_0}>0$，对数表达有意义。
+      source_ref: page_0086
+    - step_id: step_3
+      statement: 判断 B：把 $k+m$ 化成单变量函数求最小值。
+      formula_trace:
+        from: |
+          $k+m=\left(1+\frac1{x_0}\right)+(-1+\ln x_0)=\frac1{x_0}+\ln x_0$
+        to: |
+          $(k+m)'=\frac{x_0-1}{x_0^2},\qquad (k+m)_{\min}=1$
+        operation: 对 $G(x)=\frac1x+\ln x$ 求导并判定 $x=1$ 为谷底。
+        why: $G(1)=1$，且 $G$ 在 $(0,1)$ 上递减、在 $(1,+\infty)$ 上递增。
+      source_ref: page_0086
+    - step_id: step_4
+      statement: 判断 C：$k-m$ 不存在最大值。
+      formula_trace:
+        from: |
+          $k-m=\left(1+\frac1{x_0}\right)-(-1+\ln x_0)=2+\frac1{x_0}-\ln x_0$
+        to: |
+          $\frac{d}{dx_0}(k-m)=-\frac1{x_0^2}-\frac1{x_0}<0,\qquad
+          \lim_{x_0\to0^+}(k-m)=+\infty$
+        operation: 用切点参数表达 $k-m$，再看单调性和端点趋势。
+        why: 函数从 $+\infty$ 单调降到 $-\infty$，所以不可能有“最大值为 1”。
+      source_ref: page_0086
+    - step_id: step_5
+      statement: 判断 D：把 $m=-2k$ 化成切点方程。
+      formula_trace:
+        from: |
+          $m=-2k,\qquad k=1+\frac1{x_0},\qquad m=-1+\ln x_0$
+        to: |
+          $\ln x_0+1+\frac2{x_0}=0$
+        operation: 把 $k,m$ 的切点参数式代入 $m=-2k$。
+        why: $m=-2k$ 等价于直线族都过定点 $(2,0)$，是否有切线仍要看切点方程有没有解。
+      source_ref: page_0086
+    - step_id: step_6
+      statement: 说明 D 中切点方程无解。
+      formula_trace:
+        from: |
+          $H(x)=\ln x+1+\frac2x$
+        to: |
+          $H'(x)=\frac{x-2}{x^2},\qquad H_{\min}=H(2)=\ln2+2>0$
+        operation: 对 $H$ 求导，找最小值。
+        why: $H(x)$ 恒大于 0，所以过 $(2,0)$ 不存在 $y=x+\ln x$ 的切线。
+      source_ref: page_0086
+teaching_card:
+  student_title: 先用切点把 k 和 m 捆在一起
+  what_it_trains: 训练学生遇到“给出所有切线再判断命题”的多选题时，先把切线斜率和截距 都写成切点横坐标的函数，再逐项判断关系、最值和切线条数。
+  recognition_cues:
+    - 题干只说直线是 $x+\ln x$ 的切线，没有给切点。
+    - 选项同时出现 $m$、$k+m$、$k-m$、$m=-2k$。
+    - $f^{\prime\prime}(x)=-1/x^2<0$，切线与上凸图像的位置关系可辅助判断。
+  normalization_moves:
+    - 设切点 $x_0>0$，写出 $k=1+\frac1{x_0}$、$m=-1+\ln x_0$。
+    - 判断关系式时先消去 $x_0$。
+    - 判断最值时保留 $x_0$，把 $k\pm m$ 化成单变量函数。
+    - 判断 $m=-2k$ 时把直线族看成过 $(2,0)$，再检查切点方程。
+  common_failures:
+    - 把 $k$ 当作任意实数，忘记切线斜率必须满足 $k>1$。
+    - 只会验证 A，不能继续用同一个 $x_0$ 参数处理 B、C、D。
+    - 误以为 $k-m$ 在图像上有最大值，忽略 $x_0\to0^+$ 时它趋于 $+\infty$。
+    - 看到 $m=-2k$ 就认为过定点一定有两条切线，没有检查切点方程是否有解。
+  similar_practice_query: x+lnx 切线 k m 参数 多选 k+m 最小值 过定点切线
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0086/page_0087 页图与 markdown 对例 3 的题干、选项、解析和答案 AB 一致；page_0086 顶部例 2 续页已按所有权规则跳过。

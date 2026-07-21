@@ -1,0 +1,189 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0145_decimal_power_compare_ex07
+content_revision_id: mst_p0145_decimal_power_compare_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0145_decimal_power_compare_ex07.card.yaml
+stem: |-
+  （2023·浙江期中）记 $a=0.2^{0.1}$，$b=0.1^{0.2}$，$c=(\sqrt2)^{-0.5}$，则（  ）
+  A. $a>b>c$
+  B. $b>c>a$
+  C. $a>c>b$
+  D. $c>a>b$
+answer: |
+  C
+
+  把三项统一到 $0.1$ 次幂：
+  $a=0.2^{0.1}$，
+  $b=0.1^{0.2}=(0.1^2)^{0.1}=0.01^{0.1}$，
+  $c=(\sqrt2)^{-0.5}=[(\sqrt2)^{-5}]^{0.1}=(\frac{\sqrt2}{8})^{0.1}$。
+  因为 $x^{0.1}$ 在 $(0,+\infty)$ 上递增，
+  只比真数：
+  $0.2>\frac{\sqrt2}{8}>0.01$，
+  所以 $a>c>b$，选 C。
+  源页法二用“大指小底”先得 $a>b$，再把 $c$ 化成
+  $(\\frac{\\sqrt2}{8})^{0.1}$ 与 $a,b$ 一起比较，结论同样是 $a>c>b$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 统一幂指数。
+      max_score: 1
+    - step_id: step_2
+      description: 调用同幂函数的递增性。
+      max_score: 1
+    - step_id: step_3
+      description: 比较三个真数。
+      max_score: 1
+    - step_id: step_4
+      description: 对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 把三个量同幂化。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 数值比较
+        target: 比较真数确定大小。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 拟合与夹逼
+    subroute:
+      - 统一到0.1次幂
+      - 大指小底复核
+      - 真数比较
+  structure:
+    primary: 同构结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 非齐次结构
+    evidence:
+      - 三项都可改写为 $X^{0.1}$ 的形式。
+      - 比较核心从幂比较转为真数比较。
+    normalization_moves_used:
+      - $b=0.1^{0.2}\to0.01^{0.1}$。
+      - $c=(\sqrt2)^{-0.5}\to(\sqrt2/8)^{0.1}$。
+      - 用 $x^{0.1}$ 递增性保序。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把小数指数统一为同幂，回补代数恒等变形。
+      - 若学生对 $x^r$（$r>0$）递增性不熟，回补函数性质与图像。
+      - 若学生无法估计 $\sqrt2/8$ 与 $0.2,0.01$ 的位置，回补指数对数基础。
+  detail_terms:
+    - $0.01^{0.1}$
+    - $(\sqrt2/8)^{0.1}$
+    - $x^{0.1}$ 递增
+    - 真数比较
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0145_decimal_power_compare_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0145_ex07_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0145/page_0145.md
+      role: problem_start
+      evidence: 例7题干：$a=0.2^{0.1}, b=0.1^{0.2}, c=(\sqrt2)^{-0.5}$，四选一比较。
+    - ref_id: page_0145_ex07_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0145/page_0145.md
+      role: solution
+      evidence: 例7解析给出法一（统一到0.1次幂）与法二（大指小底）并结论 $a>c>b$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0145.png
+      inspected: true
+      notes: 已核对原图：$c=[(\sqrt2)^{-5}]^{0.1}=(\sqrt2/8)^{0.1}$ 清晰可读。
+  source_context: 例7位于page_0145开头，题目和解析均在本页。
+  source_influence:
+    - 保留源解主线：全部写成 $0.1$ 次幂后比较真数。
+    - 保留源解第二法中把 $c$ 化为 $(\sqrt2/8)^{0.1}$ 并复核顺序。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·浙江期中）记 $a=0.2^{0.1}$，$b=0.1^{0.2}$，$c=(\sqrt2)^{-0.5}$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a>b>c$
+      text_latex: $a>b>c$
+    - label: B
+      text_raw: $b>c>a$
+      text_latex: $b>c>a$
+    - label: C
+      text_raw: $a>c>b$
+      text_latex: $a>c>b$
+    - label: D
+      text_raw: $c>a>b$
+      text_latex: $c>a>b$
+  answer: C
+  fidelity_notes:
+    - 原图中 $c$ 的重写为 $[(\sqrt2)^{-5}]^{0.1}$，与markdown一致。
+    - 本题不跨页。
+solution:
+  source_solution_summary: |
+    把三项统一到 $0.1$ 次幂：
+    $a=0.2^{0.1}$，
+    $b=0.1^{0.2}=(0.1^2)^{0.1}=0.01^{0.1}$，
+    $c=(\sqrt2)^{-0.5}=[(\sqrt2)^{-5}]^{0.1}=(\frac{\sqrt2}{8})^{0.1}$。
+    因为 $x^{0.1}$ 在 $(0,+\infty)$ 上递增，
+    只比真数：
+    $0.2>\frac{\sqrt2}{8}>0.01$，
+    所以 $a>c>b$，选 C。
+    源页法二用“大指小底”先得 $a>b$，再把 $c$ 化成
+    $(\\frac{\\sqrt2}{8})^{0.1}$ 与 $a,b$ 一起比较，结论同样是 $a>c>b$。
+  key_steps:
+    - step_id: step_1
+      statement: 统一幂指数。
+      formula_trace:
+        from: $a=0.2^{0.1},\ b=0.1^{0.2},\ c=(\sqrt2)^{-0.5}$
+        to: $a=0.2^{0.1},\ b=0.01^{0.1},\ c=(\frac{\sqrt2}{8})^{0.1}$
+        operation: $b$ 写成 $(0.1^2)^{0.1}$，$c$ 写成 $[(\sqrt2)^{-5}]^{0.1}$。
+        why: 化为同一幂函数后可直接比较真数。
+      source_ref: page_0145_ex07_solution
+    - step_id: step_2
+      statement: 调用同幂函数的递增性。
+      formula_trace:
+        from: $y=x^{0.1}$ 在 $(0,+\infty)$ 递增
+        to: 比较 $0.2,\ \frac{\sqrt2}{8},\ 0.01$
+        operation: 将输出比较转为输入比较。
+        why: 避免直接算小数幂值。
+      source_ref: page_0145_ex07_solution
+    - step_id: step_3
+      statement: 比较三个真数。
+      formula_trace:
+        from: $0.2=\frac15,\ \frac{\sqrt2}{8},\ 0.01=\frac1{100}$
+        to: $0.2>\frac{\sqrt2}{8}>0.01$
+        operation: 数值估计：$\sqrt2\approx1.414$，故 $\sqrt2/8\approx0.1768$。
+        why: 推出函数值次序 $a>c>b$。
+      source_ref: page_0145_ex07_solution
+    - step_id: step_4
+      statement: 对应选项。
+      formula_trace:
+        from: $a>c>b$
+        to: 选 C
+        operation: 与选项逐一匹配。
+        why: 完成作答。
+      source_ref: page_0145_ex07_solution
+teaching_card:
+  student_title: 幂比较先统一指数
+  what_it_trains: 训练“遇到分散指数先同幂化”的标准动作，把复杂幂式比较降成直观的真数比较。
+  recognition_cues:
+    - 指数里有 $0.1,0.2,-0.5$ 等不统一小数。
+    - 出现根号和负指数，适合先去负号再统一幂。
+    - 选项是纯顺序判断。
+  normalization_moves:
+    - 先把每项都写成 $\cdot^{0.1}$。
+    - 再比较括号内数值，不急着算幂。
+    - 用递增性一次性回推。
+  common_failures:
+    - 把 $(\sqrt2)^{-0.5}$ 误写成 $(\sqrt2/2)^{0.1}$ 等错误形式。
+    - 认为底数小于1会改变同幂比较方向（这是同底比较才会发生）。
+    - 真数比较时把 $\sqrt2/8$ 的数量级估错。
+  similar_practice_query: 小数幂比较 同幂化 根号负指数 0.1次幂
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,298 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0126_power_product_construct_ex10
+content_revision_id: mst_p0126_power_product_construct_ex10-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0126_power_product_construct_ex10.card.yaml
+stem: |-
+  （24-25高二下·江苏·期中）设 $f^{\prime}(x)$ 是函数 $f(x)$ 定义在 $(0,+\infty)$ 上的导函数，满足 $xf^{\prime}(x)+2f(x)=e^x$，则下列不等式一定成立的是（ ）
+  A. $\frac{f(e)}{e^2}>\frac{f(e^2)}{e}$
+  B. $\frac{f(2)}{9}>\frac{f(3)}{4}$
+  C. $\frac{f(e)}{e^2}<\frac{f(3)}{9}$
+  D. $\frac{f(2)}{e^2}<\frac{f(e)}{4}$
+answer: |
+  D
+
+  由
+  \[
+  xf^{\prime}(x)+2f(x)=e^x
+  \]
+  可构造
+  \[
+  (x^2f(x))^{\prime}=2xf(x)+x^2f^{\prime}(x)=x\bigl(2f(x)+xf^{\prime}(x)\bigr)=xe^x>0\quad(x>0).
+  \]
+  所以 $x^2f(x)$ 在 $(0,+\infty)$ 上单调递增。
+  取 $2<3$，有
+  \[
+  4f(2)<9f(3)\Rightarrow \frac{f(2)}{9}<\frac{f(3)}{4},
+  \]
+  故 B 错。取 $2<e$，有
+  \[
+  4f(2)<e^2f(e)\Rightarrow \frac{f(2)}{e^2}<\frac{f(e)}{4},
+  \]
+  故 D 恒成立。
+
+  再由积分表达可写
+  \[
+  x^2f(x)=(x-1)e^x+C,\qquad
+  f(x)=\frac{(x-1)e^x+C}{x^2}.
+  \]
+  对 A：当 $C=0$ 时，令 $h(x)=xf(x)=\frac{(x-1)e^x}{x}$，
+  \[
+  h^{\prime}(x)=\frac{(x^2-x+1)e^x}{x^2}>0,
+  \]
+  所以 $h$ 递增，且 $e<e^2$，故
+  \[
+  ef(e)<e^2f(e^2)\Rightarrow \frac{f(e)}{e^2}<\frac{f(e^2)}{e},
+  \]
+  A不成立（因此A不具有“必然性”）。
+
+  对 C：令
+  \[
+  q(x)=\frac{f(x)}{x^2}=\frac{(x-1)e^x+C}{x^4},
+  \]
+  则
+  \[
+  q^{\prime}(x)=\frac{(x-2)^2e^x-4C}{x^5}.
+  \]
+  设 $m(x)=(x-2)^2e^x-4C$，当 $x>2$ 时
+  \[
+  m^{\prime}(x)=x(x-2)e^x>0.
+  \]
+  取 $C=10$，对 $2<x\le 3$ 有
+  \[
+  m(x)\le m(3)=e^3-40<0\Rightarrow q^{\prime}(x)<0,
+  \]
+  所以 $q$ 在 $(2,3]$ 递减，从而
+  \[
+  \frac{f(e)}{e^2}>\frac{f(3)}{9},
+  \]
+  C不成立（也非必然）。
+
+  综上，只有 D 一定成立。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把线性微分关系改写成乘幂乘积导数。
+      max_score: 1
+    - step_id: step_2
+      description: 由 $x^2f(x)$ 递增立即判B错、D对。
+      max_score: 1
+    - step_id: step_3
+      description: 构造常数反例否定A的必然性。
+      max_score: 1
+    - step_id: step_4
+      description: 构造常数反例否定C的必然性。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 判断四个比较式中哪一个恒成立。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 数值比较
+        target: 用反例确认其余选项仅为“可能成立”。
+        result: 见 source_solution_summary
+  method:
+    primary: 逆向构造法
+    secondary:
+      - 同构变形与换元法
+      - 充分/必要性探路
+    subroute:
+      - 幂函数构造
+      - 定点比较
+      - 参数反例构造
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 抽象函数结构
+      - 同构结构
+    evidence:
+      - $xf^{\prime}(x)+2f(x)$ 可直接嵌入 $(x^2f(x))^{\prime}$。
+      - 统一表达 $f(x)=\frac{(x-1)e^x+C}{x^2}$ 后可用常数 $C$ 造反例。
+      - 选项比较都可写成若干点上的 $x^2f(x)$ 或 $\frac{f(x)}{x^2}$ 比较。
+    normalization_moves_used:
+      - 先用“必然单调量”判定恒真候选。
+      - 再用参数化通解分离“必真”与“可假”。
+      - 对同类比较构造辅助函数 $h,q$ 降维处理。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会识别 $(x^2f(x))^{\prime}$，回补导数运算与几何意义。
+      - 若学生只会验证一个取值而不会判“恒成立”，回补不等式工具基础。
+      - 若学生难以用参数 $C$ 构造反例，回补代数恒等变形。
+  detail_terms:
+    - $(x^2f(x))^{\prime}=xe^x>0$
+    - $f(x)=\frac{(x-1)e^x+C}{x^2}$
+    - B错、D对
+    - A与C可被反例否定
+    - 答案 D
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0126_power_product_construct_ex10
+source_evidence:
+  source_refs:
+    - ref_id: page_0126
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0126/page_0126.md
+      role: problem_start
+      evidence: line 30给出例10题头与题干，lines 31-34给出A-D选项，lines 36-38给出前半解析并在页底截断。
+    - ref_id: page_0127
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0127/page_0127.md
+      role: continuation
+      evidence: line 15续完例10关于选项C的判定并收束“故选D”。
+    - ref_id: page_0127_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0127/page_0127.md
+      role: local_context
+      evidence: line 17起进入“三角函数基础构造”板块，line 29起例11。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0126.png
+      inspected: true
+      notes: 已核对页图：例10题干、选项与前半解析位于page_0126并在页底截断。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0127.png
+      inspected: true
+      notes: 已核对页图：page_0127顶部续完例10并给出最终答案D。
+  source_context: 例10起头在page_0126，跨页到page_0127顶部结束，按页头规则归属本批。
+  source_influence:
+    - 保留主构造 $(x^2f(x))^{\prime}=xe^x>0$，先排除B并确认D。
+    - 保留源页对A、C“非必然”的反例思路（分别取不同常数C）。
+    - 保留结论“只有D一定成立”。
+  source_discrepancies:
+    - page_0126关于A项的文字链中出现“$ef(e)<e^2f(e^2)$”后又写“$\frac{f(e)}{e^2}>\frac{f(e^2)}{e}$”，该不等号与前式不一致；结合上下文“用于说明A不一定正确”可判定该处为符号笔误，本卡按可验证代数关系整理。
+original_problem:
+  stem: （24-25高二下·江苏·期中）设 $f^{\prime}(x)$ 是函数 $f(x)$ 定义在 $(0,+\infty)$ 上的导函数，满足 $xf^{\prime}(x)+2f(x)=e^x$，则下列不等式一定成立的是（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\frac{f(e)}{e^2}>\frac{f(e^2)}{e}$
+      text_latex: $\frac{f(e)}{e^2}>\frac{f(e^2)}{e}$
+    - label: B
+      text_raw: $\frac{f(2)}{9}>\frac{f(3)}{4}$
+      text_latex: $\frac{f(2)}{9}>\frac{f(3)}{4}$
+    - label: C
+      text_raw: $\frac{f(e)}{e^2}<\frac{f(3)}{9}$
+      text_latex: $\frac{f(e)}{e^2}<\frac{f(3)}{9}$
+    - label: D
+      text_raw: $\frac{f(2)}{e^2}<\frac{f(e)}{4}$
+      text_latex: $\frac{f(2)}{e^2}<\frac{f(e)}{4}$
+  answer: D
+  fidelity_notes:
+    - 题干中的导函数统一写作 $f^{\prime}(x)$。
+    - 例10跨page_0126/page_0127，答案保持源页“故选D”。
+solution:
+  source_solution_summary: |
+    由
+    \[
+    xf^{\prime}(x)+2f(x)=e^x
+    \]
+    可构造
+    \[
+    (x^2f(x))^{\prime}=2xf(x)+x^2f^{\prime}(x)=x\bigl(2f(x)+xf^{\prime}(x)\bigr)=xe^x>0\quad(x>0).
+    \]
+    所以 $x^2f(x)$ 在 $(0,+\infty)$ 上单调递增。
+    取 $2<3$，有
+    \[
+    4f(2)<9f(3)\Rightarrow \frac{f(2)}{9}<\frac{f(3)}{4},
+    \]
+    故 B 错。取 $2<e$，有
+    \[
+    4f(2)<e^2f(e)\Rightarrow \frac{f(2)}{e^2}<\frac{f(e)}{4},
+    \]
+    故 D 恒成立。
+
+    再由积分表达可写
+    \[
+    x^2f(x)=(x-1)e^x+C,\qquad
+    f(x)=\frac{(x-1)e^x+C}{x^2}.
+    \]
+    对 A：当 $C=0$ 时，令 $h(x)=xf(x)=\frac{(x-1)e^x}{x}$，
+    \[
+    h^{\prime}(x)=\frac{(x^2-x+1)e^x}{x^2}>0,
+    \]
+    所以 $h$ 递增，且 $e<e^2$，故
+    \[
+    ef(e)<e^2f(e^2)\Rightarrow \frac{f(e)}{e^2}<\frac{f(e^2)}{e},
+    \]
+    A不成立（因此A不具有“必然性”）。
+
+    对 C：令
+    \[
+    q(x)=\frac{f(x)}{x^2}=\frac{(x-1)e^x+C}{x^4},
+    \]
+    则
+    \[
+    q^{\prime}(x)=\frac{(x-2)^2e^x-4C}{x^5}.
+    \]
+    设 $m(x)=(x-2)^2e^x-4C$，当 $x>2$ 时
+    \[
+    m^{\prime}(x)=x(x-2)e^x>0.
+    \]
+    取 $C=10$，对 $2<x\le 3$ 有
+    \[
+    m(x)\le m(3)=e^3-40<0\Rightarrow q^{\prime}(x)<0,
+    \]
+    所以 $q$ 在 $(2,3]$ 递减，从而
+    \[
+    \frac{f(e)}{e^2}>\frac{f(3)}{9},
+    \]
+    C不成立（也非必然）。
+
+    综上，只有 D 一定成立。
+  key_steps:
+    - step_id: step_1
+      statement: 把线性微分关系改写成乘幂乘积导数。
+      formula_trace:
+        from: $xf^{\prime}(x)+2f(x)=e^x$
+        to: $(x^2f(x))^{\prime}=xe^x>0$
+        operation: 乘以 $x$ 并识别 $(x^2f(x))^{\prime}$。
+        why: 直接获得可比较的单调量。
+      source_ref: page_0126
+    - step_id: step_2
+      statement: 由 $x^2f(x)$ 递增立即判B错、D对。
+      formula_trace:
+        from: $x^2f(x)$ 在 $(0,+\infty)$ 递增
+        to: $4f(2)<9f(3)$，$4f(2)<e^2f(e)$
+        operation: 分别比较 $x=2,3,e$ 三点。
+        why: 先锁定唯一候选D。
+      source_ref: page_0126
+    - step_id: step_3
+      statement: 构造常数反例否定A的必然性。
+      formula_trace:
+        from: $f(x)=\frac{(x-1)e^x+C}{x^2}$，取 $C=0$
+        to: $h(x)=xf(x)$ 递增 $\Rightarrow \frac{f(e)}{e^2}<\frac{f(e^2)}{e}$
+        operation: 转化为 $h(x)$ 的单调比较。
+        why: 给出A可失败的具体情形。
+      source_ref: page_0126
+    - step_id: step_4
+      statement: 构造常数反例否定C的必然性。
+      formula_trace:
+        from: $q^{\prime}(x)=\frac{(x-2)^2e^x-4C}{x^5}$，取 $C=10$
+        to: $q$ 在 $(2,3]$ 递减 $\Rightarrow \frac{f(e)}{e^2}>\frac{f(3)}{9}$
+        operation: 用符号函数 $m(x)$ 的单调性控制 $q^{\prime}$ 符号。
+        why: 说明C同样不具有必然性。
+      source_ref: page_0127
+teaching_card:
+  student_title: 先找恒增乘积，再用参数反例筛选
+  what_it_trains: 训练“先证恒真，再证其余不恒真”的多选单选混合判定思路，尤其是利用参数通解构造反例。
+  recognition_cues:
+    - 题设是 $xf^{\prime}(x)+2f(x)$ 型。
+    - 四个选项都是不同点位的比值比较。
+    - 关键词“一定成立”提示必须做必要性校验。
+  normalization_moves:
+    - 先构造 $(x^2f)^{\prime}$ 判断核心单调。
+    - 由单调直接判 B、D。
+    - 写出 $f$ 的参数通解。
+    - 对A、C分别代入不同 $C$ 造反例。
+  common_failures:
+    - 只验证D成立就停下，未排除A/C的“也可能成立”。
+    - 把 $ef(e)<e^2f(e^2)$ 转换时不等号方向写错。
+    - 在 $q^{\prime}(x)$ 符号判断时忽略区间 $2<x\le3$。
+  similar_practice_query: 抽象函数 乘积构造 参数反例 恒成立 不等式比较
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对page_0126与page_0127页图：例10跨页拼接完整，最终答案D明确。
+    - A项推导中的符号笔误已在source_discrepancies记录并按代数一致性修正。

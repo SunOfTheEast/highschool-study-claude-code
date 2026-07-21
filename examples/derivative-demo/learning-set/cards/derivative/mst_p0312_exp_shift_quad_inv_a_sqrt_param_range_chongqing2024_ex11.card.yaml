@@ -1,0 +1,246 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0312_exp_shift_quad_inv_a_sqrt_param_range_chongqing2024_ex11
+content_revision_id: mst_p0312_exp_shift_quad_inv_a_sqrt_param_range_chongqing2024_ex11-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0312_exp_shift_quad_inv_a_sqrt_param_range_chongqing2024_ex11.card.yaml
+stem: |-
+  （2024 · 重庆江北区模拟）设 $a>0$，$f(x)=e^{x-1}+x^2+\frac{x}{a^2}$，$g(x)=\frac{a(\ln x+2)}{x}+2\sqrt{x}$。若 $\frac ax f(x)\ge g(x)$ 对任意 $x\in(0,+\infty)$ 恒成立，求 $a$ 的取值范围。
+  1. 求 $a$ 的取值范围。
+answer: |-
+  $a\in(0,\frac12]$。
+
+  原不等式等价于 $\frac1{a^2}-\frac{2\sqrt x}{a}+x\ge\frac1x(\ln x-e^{x-1}+2)$。 令 $m=\frac1a$，化为 $h(x)=x(\sqrt x-m)^2-(\ln x-e^{x-1}+2)\ge0$。临界边界按隐点探路列 $h(x_0)=0,h^\prime(x_0)=0$，由 $h^\prime(x_0)=2x_0-3m\sqrt{x_0}+m^2-\frac1{x_0}+e^{x_0-1}=0$ 表示 $m$，代回 $h(x_0)=0$ 后得到关于 $x_0$ 的方程，探得 $x_0=1$， 从而 $m\ge2$，即 $0<a\le\frac12$。充分性证明再固定 $m\ge2$： 令 $t(x)=\ln x-e^{x-1}+2$，$t$ 在 $(0,1)$ 递增、在 $(1,+\infty)$ 递减。若 $x\ge2$，则 $t(x)\le t(2)<0$，$h(x)\ge0$。若 $0<x<2$， 因 $(\sqrt x-m)^2$ 对 $m\in[2,+\infty)$ 递增，只需证明 $x(\sqrt x-2)^2\ge \ln x-e^{x-1}+2$。令 $F(x)=x^2-4x\sqrt x+4x-\ln x+e^{x-1}-2$，分 $(0,1)$ 与 $(1,2)$ 证明 $F$ 先减后增，且 $F(1)=0$，故 $F(x)\ge0$。综上 $a\in(0,\frac12]$。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 先把原式整理成一个恒成立不等式。
+      max_score: 1
+    - step_id: step_2
+      description: 令 $m=\frac1a$，把参数配成平方。
+      max_score: 1
+    - step_id: step_3
+      description: 用双重接触点探路边界。
+      max_score: 1
+    - step_id: step_4
+      description: 把必要边界翻译回 $a$。
+      max_score: 1
+    - step_id: step_5
+      description: 证明 $m\ge2$ 时充分。
+      max_score: 1
+    - step_id: step_6
+      description: 在 $0<x<2$ 用最小的 $m=2$ 降维。
+      max_score: 1
+    - step_id: step_7
+      description: 分 $(0,1)$ 与 $(1,2)$ 证明 $F(x)\ge0$。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 求参数范围
+        target: 第 1 问
+        result: $a\in(0,\frac12]$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 充分/必要性探路
+      - 自由度与主元
+      - 保值性与分治
+      - 拟合与夹逼
+    subroute:
+      - $m=1/a$
+      - 配方成 $x(\sqrt x-m)^2$
+      - 双重接触探路 $h(x_0)=h^\prime(x_0)=0$
+      - 探得 $x_0=1$
+      - 必要条件 $m\ge2$
+      - 固定 $m\ge2$ 做充分性
+      - $x\ge2$ 与 $0<x<2$ 分治
+      - 边界 $m=2$ 降为 $F(x)\ge0$
+  structure:
+    primary: 根式函数结构
+    secondary:
+      - 指对复合结构
+      - 非齐次结构
+      - 不等式工具结构
+      - 局部逼近结构
+    evidence:
+      - $e^{x-1}+x^2+\frac{x}{a^2}$
+      - $\frac{a(\ln x+2)}x+2\sqrt x$
+      - $x(\sqrt x-m)^2-(\ln x-e^{x-1}+2)$
+      - $t(x)=\ln x-e^{x-1}+2$
+      - $F(x)=x^2-4x\sqrt x+4x-\ln x+e^{x-1}-2$
+      - $x_0=1$
+      - $0<a\le\frac12$
+    normalization_moves_used:
+      - 把 $\frac1{a^2}-\frac{2\sqrt x}{a}+x$ 看成平方。
+      - 令 $m=1/a$，让参数只以 $m$ 和 $m^2$ 出现。
+      - 用临界接触点先找参数边界。
+      - 充分性中先用 $t(x)$ 判掉 $x\ge2$，再用 $F(x)$ 处理 $0<x<2$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把参数配成平方，回补代数恒等变形。
+      - 若学生不理解 $h(x_0)=h^\prime(x_0)=0$，回补导数单调极值基础。
+      - 若学生不会判断 $t(x)$ 的单调性，回补导数运算与几何意义。
+      - 若学生卡在 $\ln x$ 与 $e^{x-1}$ 的比较，回补指数对数基础。
+      - 若学生不会分段证明充分性，回补不等式工具基础。
+  detail_terms:
+    - $m=1/a$
+    - $x(\sqrt x-m)^2$
+    - $\ln x-e^{x-1}+2$
+    - 双重接触
+    - 隐点探路
+    - $x_0=1$
+    - $m\ge2$
+    - $0<a\le\frac12$
+    - $F(x)$ 分段单调
+parts: &a1
+  - part_id: "1"
+    text: 求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0312_exp_shift_quad_inv_a_sqrt_param_range_chongqing2024_ex11
+source_evidence:
+  source_refs:
+    - ref_id: page_0312_ex11_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0312/page_0312.md
+      role: problem_start
+      evidence: page_0312 例11题头：2024重庆江北区模拟，$a>0$，$f(x)=e^{x-1}+x^2+\frac{x}{a^2}$，$g(x)=\frac{a(\ln x+2)}{x}+2\sqrt{x}$，若 $\frac ax f(x)\ge g(x)$ 对任意 $x>0$ 恒成立，求 $a$ 的取值范围。
+    - ref_id: page_0312_ex11_normalization
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0312/page_0312.md
+      role: solution
+      evidence: page_0312 解析把原不等式化为 $\frac1{a^2}-\frac{2\sqrt x}{a}+x\ge\frac1x(\ln x-e^{x-1}+2)$，令 $m=\frac1a$，得到 $h(x)=x(\sqrt x-m)^2-(\ln x-e^{x-1}+2)\ge0$。
+    - ref_id: page_0313_ex11_hidden_point_explore
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0313/page_0313.md
+      role: solution
+      evidence: page_0313 列 $h(x_0)=0,h^\prime(x_0)=0$，由 $h^\prime(x_0)=0$ 表示 $m$，代回 $h(x_0)=0$，得到关于 $x_0$ 的方程并探得 $x_0=1$，从而 $0<a\le\frac12$。
+    - ref_id: page_0313_ex11_sufficiency_t
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0313/page_0313.md
+      role: solution
+      evidence: page_0313 充分性证明：令 $t(x)=\ln x-e^{x-1}+2$，$t$ 在 $(0,1)$ 上递增、在 $(1,+\infty)$ 上递减；当 $x\ge2$ 时 $t(x)\le t(2)<0$。
+    - ref_id: page_0313_ex11_sufficiency_F
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0313/page_0313.md
+      role: solution
+      evidence: page_0313 当 $0<x<2$ 时，因 $m\ge2$，只需证 $F(x)=x^2-4x\sqrt x+4x-\ln x+e^{x-1}-2\ge0$；再分 $(0,1)$、$(1,2)$ 证明 $F$ 先减后增且 $F(1)=0$。
+    - ref_id: page_0314_stop_boundary
+      path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0314.png
+      role: local_context
+      evidence: page_0314 为上册末页/广告页，没有新题头；本批次到此暂停。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0312.png
+      inspected: true
+      notes: 已核对页图：page_0312 下半页为例11题干和化为 $h(x)\ge0$ 的开头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0313.png
+      inspected: true
+      notes: 已核对页图：page_0313 补完整个例11，从双重接触探路到充分性证明和答案。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0314.png
+      inspected: true
+      notes: 已核对页图：page_0314 是上册末页/广告页，无题目内容。
+  source_context: 本卡处理 page_0312 起始、page_0313 结束的例11；page_0314 仅作为停止边界。
+  source_influence:
+    - 保留 $\frac ax f(x)\ge g(x)$ 到 $x(\sqrt x-m)^2-(\ln x-e^{x-1}+2)\ge0$ 的关键整理。
+    - 保留 $m=\frac1a$，把参数范围转化为 $m\ge2$。
+    - 保留隐点/极点效应：临界边界由 $h(x_0)=0,h^\prime(x_0)=0$ 探路。
+    - 保留探得 $x_0=1$，最终得到 $0<a\le\frac12$。
+    - 保留充分性证明的分区间结构：$x\ge2$ 直接由 $t(x)<0$，$0<x<2$ 降为证明 $F(x)\ge0$。
+    - 保留 $F$ 在 $(0,1)$ 递减、在 $(1,2)$ 递增且 $F(1)=0$ 的证明骨架。
+  source_discrepancies:
+    - issue: page_0312 markdown 中题干的 $\frac ax f(x)$ 被换行拆开，视觉页图确认它是一个整体。
+      resolution: 题卡统一写作 $\frac ax f(x)\ge g(x)$。
+      requires_user_decision: false
+    - issue: source 用“则一定有 $h(x_0)=0,h^\prime(x_0)=0$”来探参数边界；严格说这是临界/双重接触探路，不是任意可行参数都必须达到等号。
+      resolution: 题卡把它表述为“边界探路/必要性探路”，并保留后续充分性证明。
+      requires_user_decision: false
+original_problem:
+  stem: （2024 · 重庆江北区模拟）设 $a>0$，$f(x)=e^{x-1}+x^2+\frac{x}{a^2}$，$g(x)=\frac{a(\ln x+2)}{x}+2\sqrt{x}$。若 $\frac ax f(x)\ge g(x)$ 对任意 $x\in(0,+\infty)$ 恒成立，求 $a$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $a\in(0,\frac12]$。
+  fidelity_notes:
+    - 无选项。
+    - 题设已给 $a>0$，所以令 $m=\frac1a$ 后最终要把 $m\ge2$ 翻译为 $0<a\le\frac12$。
+solution:
+  source_solution_summary: 原不等式等价于 $\frac1{a^2}-\frac{2\sqrt x}{a}+x\ge\frac1x(\ln x-e^{x-1}+2)$。 令 $m=\frac1a$，化为 $h(x)=x(\sqrt x-m)^2-(\ln x-e^{x-1}+2)\ge0$。临界边界按隐点探路列 $h(x_0)=0,h^\prime(x_0)=0$，由 $h^\prime(x_0)=2x_0-3m\sqrt{x_0}+m^2-\frac1{x_0}+e^{x_0-1}=0$ 表示 $m$，代回 $h(x_0)=0$ 后得到关于 $x_0$ 的方程，探得 $x_0=1$， 从而 $m\ge2$，即 $0<a\le\frac12$。充分性证明再固定 $m\ge2$： 令 $t(x)=\ln x-e^{x-1}+2$，$t$ 在 $(0,1)$ 递增、在 $(1,+\infty)$ 递减。若 $x\ge2$，则 $t(x)\le t(2)<0$，$h(x)\ge0$。若 $0<x<2$， 因 $(\sqrt x-m)^2$ 对 $m\in[2,+\infty)$ 递增，只需证明 $x(\sqrt x-2)^2\ge \ln x-e^{x-1}+2$。令 $F(x)=x^2-4x\sqrt x+4x-\ln x+e^{x-1}-2$，分 $(0,1)$ 与 $(1,2)$ 证明 $F$ 先减后增，且 $F(1)=0$，故 $F(x)\ge0$。综上 $a\in(0,\frac12]$。
+  key_steps:
+    - step_id: step_1
+      statement: 先把原式整理成一个恒成立不等式。
+      formula_trace:
+        from: $\frac ax\left(e^{x-1}+x^2+\frac{x}{a^2}\right)\ge\frac{a(\ln x+2)}x+2\sqrt x$
+        to: $\frac1{a^2}-\frac{2\sqrt x}{a}+x\ge\frac1x(\ln x-e^{x-1}+2)$
+        operation: 移项并同除正量 $\frac ax$。
+        why: 把参数项、根式项、指对项分到便于配方的位置。
+      source_ref: page_0312_ex11_normalization
+    - step_id: step_2
+      statement: 令 $m=\frac1a$，把参数配成平方。
+      formula_trace:
+        from: $m^2-2m\sqrt x+x\ge\frac1x(\ln x-e^{x-1}+2)$
+        to: $h(x)=x(\sqrt x-m)^2-(\ln x-e^{x-1}+2)\ge0$
+        operation: 同乘 $x>0$，并把 $m^2-2m\sqrt x+x$ 写成 $(\sqrt x-m)^2$。
+        why: 平方结构给后面的 $m\ge2$ 和充分性单调比较留下入口。
+      source_ref: page_0312_ex11_normalization
+    - step_id: step_3
+      statement: 用双重接触点探路边界。
+      formula_trace:
+        from: $h(x_0)=0,\quad h^\prime(x_0)=0$
+        to: $x_0=1,\quad m\ge2$
+        operation: 由 $h^\prime(x_0)=0$ 表示 $m$，代回 $h(x_0)=0$ 后探得 $x_0=1$。
+        why: 恒成立的临界参数常由函数图像刚好接触零线给出。
+      source_ref: page_0313_ex11_hidden_point_explore
+    - step_id: step_4
+      statement: 把必要边界翻译回 $a$。
+      formula_trace:
+        from: $m=\frac1a,\quad m\ge2,\quad a>0$
+        to: $0<a\le\frac12$
+        operation: 正数取倒数。
+        why: 原题问的是 $a$ 的取值范围。
+      source_ref: page_0313_ex11_hidden_point_explore
+    - step_id: step_5
+      statement: 证明 $m\ge2$ 时充分。
+      formula_trace:
+        from: $t(x)=\ln x-e^{x-1}+2,\quad t^\prime(x)=\frac1x-e^{x-1}$
+        to: $x\ge2$ 时 $t(x)\le t(2)=2+\ln2-e<0$
+        operation: 分析 $t$ 在 $1$ 左右的单调性。
+        why: $x\ge2$ 时右侧指对项已经为负，平方项自然压住它。
+      source_ref: page_0313_ex11_sufficiency_t
+    - step_id: step_6
+      statement: 在 $0<x<2$ 用最小的 $m=2$ 降维。
+      formula_trace:
+        from: $x(\sqrt x-m)^2\ge x(\sqrt x-2)^2$
+        to: $F(x)=x^2-4x\sqrt x+4x-\ln x+e^{x-1}-2\ge0$
+        operation: 利用 $(\sqrt x-m)^2$ 对 $m\ge2$ 递增，把问题压到边界 $m=2$。
+        why: 参数已经只剩边界值，证明量降成单变量不等式。
+      source_ref: page_0313_ex11_sufficiency_F
+    - step_id: step_7
+      statement: 分 $(0,1)$ 与 $(1,2)$ 证明 $F(x)\ge0$。
+      formula_trace:
+        from: $F^\prime(x)=2x-6\sqrt x+4-\frac1x+e^{x-1}$
+        to: $F(x)>F(1)=0$
+        operation: 在 $(0,1)$ 用 $e^{x-1}<1$ 得 $F^\prime<0$；在 $(1,2)$ 用 $e^{x-1}>x$ 得 $F^\prime>0$。
+        why: $F$ 以 $x=1$ 为谷底，完成充分性。
+      source_ref: page_0313_ex11_sufficiency_F
+teaching_card:
+  student_title: 把参数配成平方，再探临界点
+  what_it_trains: 训练含根式、指数、对数的恒成立求参：先把参数整理成平方结构，用临界接触点找边界，再回头证明充分。
+  recognition_cues:
+    - 题目要求对所有 $x>0$ 恒成立。
+    - 原式同时含 $a$、$\frac1{a^2}$、$\sqrt x$、$\ln x$、$e^{x-1}$。
+    - 整理后能出现 $m^2-2m\sqrt x+x$。
+    - 临界点很可能落在 $x=1$，因为 $\ln1=0$、$e^0=1$。
+  normalization_moves:
+    - 先不要硬求原函数最值。
+    - 把 $a$ 换成 $m=1/a$。
+    - 把 $m^2-2m\sqrt x+x$ 配成 $(\sqrt x-m)^2$。
+    - 用 $h=0,h^\prime=0$ 探边界。
+    - 拿到边界后必须证明充分性。
+  common_failures:
+    - 只会移项，没看出平方结构。
+    - 把 $x_0=1$ 当成猜答案，缺少双重接触解释。
+    - 得到 $m\ge2$ 后忘记换回 $a$。
+    - 只做必要条件，没有证明 $m\ge2$ 都成立。
+    - 在 $0<x<2$ 的充分性里不会把 $m$ 压到边界 $m=2$。
+  similar_practice_query: 重庆江北 2024 根式 指数对数 恒成立 m=1/a 平方结构 隐点探路 x0=1
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

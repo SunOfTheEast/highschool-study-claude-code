@@ -1,0 +1,153 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0040_section2_ex02
+content_revision_id: mst_p0040_section2_ex02-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0040_section2_ex02.card.yaml
+stem: |-
+  （2018 · 新课标 I T21）已知函数 f(x)=ae^x-\ln x-1。
+  (1). 设 x=2 是 f(x) 的极值点，求 a，并求 f(x) 的单调区间。
+  (2). 证明：当 a>=1/e 时，f(x)>=0。
+answer: |-
+  (1) a=1/(2e^2)，f(x) 在 (0,2) 上单调递减，在 (2,+infty) 上单调递增； (2) f(x)>=0，且当 a=1/e、x=1 时取等。
+
+  第 (1) 问由极值点必要条件求 a，再用 x e^x 的单调性判断 f' 的符号。 第 (2) 问先用 a>=1/e 把 f(x) 下界化成 e^{x-1}-ln x-1， 再写为 h(x-1)+h(ln x)。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 在 x>0 上，f'(x)=ae^x-1/x。由 f'(2)=0 得 ae^2-1/2=0， 所以 a=1/(2e^2)。
+      max_score: 1
+    - step_id: step_2
+      description: 此时 f'(x)=e^x/(2e^2)-1/x。因为 x e^x 在 x>0 上递增， 所以 0<x<2 时 f'(x)<0，x>2 时 f'(x)>0。
+      max_score: 1
+    - step_id: step_3
+      description: 当 a>=1/e 时，f(x)>=e^{x-1}-ln x-1。
+      max_score: 1
+    - step_id: step_4
+      description: 令 h(t)=e^t-t-1，则 e^{x-1}-ln x-1=h(x-1)+h(ln x)>=0。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 (1) 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 (2) 问
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 切线放缩与凹凸性
+    subroute:
+      - 参数降到临界值
+      - e^x-x-1 同构
+      - x-1 与 ln x 双项拆分
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - e^{x-1}-ln x-1=h(x-1)+h(ln x)
+      - h(t)=e^t-t-1>=0
+    normalization_moves_used:
+      - 用 a>=1/e 先替换为最小参数情形。
+      - 加减 x，得到 h(x-1) 与 h(ln x)。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 f'(x) 的符号转为 xe^x 与 2e^2 比较，回补代数恒等变形。
+      - 若学生不知道 h(t)=e^t-t-1 的非负性，回补导数单调极值基础。
+      - 若学生不清楚 ln x 的定义域和 ln x 换元，回补指数对数基础。
+  detail_terms:
+    - a>=1/e 的临界下界
+    - h(x-1)+h(ln x)
+    - 等号在 a=1/e, x=1 同时成立
+parts: &a1
+  - label: (1)
+    text: 设 x=2 是 f(x) 的极值点，求 a，并求 f(x) 的单调区间。
+  - label: (2)
+    text: 证明：当 a>=1/e 时，f(x)>=0。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0040_section2_ex02
+source_evidence:
+  source_refs:
+    - ref_id: page_0040
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0040/page_0040.md
+      role: problem_start
+      evidence: 例 2：已知函数 f(x)=ae^x-\ln x-1；(1) x=2 是极值点，求 a 和单调区间； (2) 证明 a>=1/e 时 f(x)>=0。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0040.png
+      inspected: true
+      notes: 页图确认例 2 的题干、解析和注意文字均在 page_0040；题目无选项、无图形。
+  source_context: 例 2 紧接例 1，对比同一个 h(t)=e^t-t-1 拆分下，取等条件可以同时成立， 所以结论是 >=0 而不是 >0。
+  source_influence:
+    - 源页用 a>=1/e 先降到临界函数，再拆成 h(x-1)+h(ln x)。
+    - 源页注意文字强调取等条件差异，卡片保留 equality case。
+  source_discrepancies: []
+original_problem:
+  stem: （2018 · 新课标 I T21）已知函数 f(x)=ae^x-\ln x-1。
+  parts: *a1
+  choices: []
+  answer: (1) a=1/(2e^2)，f(x) 在 (0,2) 上单调递减，在 (2,+infty) 上单调递增； (2) f(x)>=0，且当 a=1/e、x=1 时取等。
+  fidelity_notes:
+    - 题干含 ln x，默认定义域 x>0。
+solution:
+  source_solution_summary: 第 (1) 问由极值点必要条件求 a，再用 x e^x 的单调性判断 f' 的符号。 第 (2) 问先用 a>=1/e 把 f(x) 下界化成 e^{x-1}-ln x-1， 再写为 h(x-1)+h(ln x)。
+  key_steps:
+    - step_id: step_1
+      statement: 在 x>0 上，f'(x)=ae^x-1/x。由 f'(2)=0 得 ae^2-1/2=0， 所以 a=1/(2e^2)。
+      formula_trace:
+        from: f'(2)=ae^2-1/2=0
+        to: a=1/(2e^2)
+        operation: 代入极值点的导数必要条件
+        why: x=2 为定义域内部极值点。
+      source_ref: page_0040:例2解析(1)
+    - step_id: step_2
+      statement: 此时 f'(x)=e^x/(2e^2)-1/x。因为 x e^x 在 x>0 上递增， 所以 0<x<2 时 f'(x)<0，x>2 时 f'(x)>0。
+      formula_trace:
+        from: e^x/(2e^2)-1/x
+        to: sign(f')=sign(xe^x-2e^2)
+        operation: 同乘正数 2e^2x，转成比较 xe^x 与 2e^2
+        why: xe^x 在正半轴递增，且 x=2 时等号成立。
+      source_ref: page_0040:例2解析(1)
+    - step_id: step_3
+      statement: 当 a>=1/e 时，f(x)>=e^{x-1}-ln x-1。
+      formula_trace:
+        from: ae^x-ln x-1
+        to: e^{x-1}-ln x-1
+        operation: 用 a>=1/e 替换出临界下界
+        why: e^x>0，参数越大，ae^x 越大。
+      source_ref: page_0040:例2解析(2)
+    - step_id: step_4
+      statement: 令 h(t)=e^t-t-1，则 e^{x-1}-ln x-1=h(x-1)+h(ln x)>=0。
+      formula_trace:
+        from: e^{x-1}-ln x-1
+        to: h(x-1)+h(ln x)
+        operation: 加减 x，把指数偏移项和对数换元项拆成两个 h
+        why: h(x-1)=e^{x-1}-x，h(ln x)=x-ln x-1，二者都非负。
+      source_ref: page_0040:例2解析(2)
+teaching_card:
+  student_title: 先降到临界参数，再拆成两个 h(t)
+  what_it_trains: 训练学生处理含参数不等式时，先找使函数最小的参数临界值，再把剩下的 e^{x-1}-ln x-1 拆成两个标准非负项。
+  recognition_cues:
+    - 题干给出 a>=1/e，参数只乘在 e^x 前。
+    - 目标是证明非负，而不是严格正。
+    - e^{x-1} 与 ln x 可以通过加减 x 接到同一个 h(t)。
+  normalization_moves:
+    - 把 ae^x 下界替换为 e^{x-1}。
+    - 写出 e^{x-1}-ln x-1=(e^{x-1}-x)+(x-ln x-1)。
+    - 分别识别为 h(x-1) 和 h(ln x)。
+  common_failures:
+    - 把 a>=1/e 误当作 a=1/e 后忘记说明下界关系。
+    - 证明完两个非负项后漏掉等号成立条件。
+    - 在第 (1) 问判断 f' 符号时没有说明 xe^x 的递增性。
+  similar_practice_query: 参数乘 e^x 的 ln x 不等式，临界参数和 h(t)=e^t-t-1 同构
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,249 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0163_offset_e_product_ex22
+content_revision_id: mst_p0163_offset_e_product_ex22-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0163_offset_e_product_ex22.card.yaml
+stem: |-
+  设 $a=1.1e^{0.9}$，$b=0.99e$，$c=0.9e^{1.1}$，则（  ）
+  A. $c>a>b$
+  B. $c>b>a$
+  C. $a>b>c$
+  D. $a>c>b$
+answer: |
+  D
+
+  设
+  \[
+  g(x)=\frac{e^2x}{e^x},
+  \]
+  则
+  \[
+  g'(x)=\frac{e^2(1-x)}{e^x},\quad
+  g''(x)=\frac{e^2(x-2)}{e^x},\quad
+  g'''(x)=\frac{e^2(3-x)}{e^x}>0\ \text{(在 }(-3,3)\text{)}.
+  \]
+  源解据此使用“极值点左偏”结论：若 $g(x_1)=g(x_2)$，则有 $x_1+x_2>2$。
+
+  令 $g(1.1)=g(m)$，则
+  \[
+  m+1.1>2=0.9+1.1,
+  \]
+  且由函数单峰位置可得 $1>m>0.9$，于是
+  \[
+  g(1.1)=g(m)>g(0.9)
+  \Rightarrow
+  1.1e^{0.9}>0.9e^{1.1}.
+  \]
+  再由
+  \[
+  e^{0.1}>1.1
+  \Rightarrow
+  0.9e^{1.1}>0.99e.
+  \]
+  合并得
+  \[
+  a>c>b,
+  \]
+  选 D。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把 $a,c$ 的比较统一到同一指数函数模型。
+      max_score: 1
+    - step_id: step_2
+      description: 利用三阶导符号触发极值点左偏。
+      max_score: 1
+    - step_id: step_3
+      description: 通过等值点 $m$ 得到 $a>c$。
+      max_score: 1
+    - step_id: step_4
+      description: 再比较 $c$ 与 $b$。
+      max_score: 1
+    - step_id: step_5
+      description: 合并顺序并匹配选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较三个指数型表达式 $a,b,c$ 的大小顺序。
+        result: 见 source_solution_summary
+  method:
+    primary: 对称化与偏移
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 构造 $g(x)=\\frac{e^2x}{e^x}$
+      - 等值点偏移比较
+      - 用 $e^{0.1}>1.1$ 完成末段比较
+  structure:
+    primary: 极值点偏移结构
+    secondary:
+      - 同构结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $a,c$ 被写成同一函数 $g(x)$ 在 $1.1$ 与 $0.9$ 的取值。
+      - 解析核心不是直接估值，而是先用“等值点偏移”判断左右两点函数值。
+      - 最后用常数比较补完与 $b$ 的顺序。
+    normalization_moves_used:
+      - $a=g(1.1),\ c=g(0.9)$。
+      - 引入中间等值点 $m$ 并比较 $m$ 与 $0.9,1$ 的位置。
+      - 把 $c>b$ 归约为 $e^{0.1}>1.1$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $a,c$ 写成同一函数值比较，回补指数对数基础。
+      - 若学生对“极值点左偏”结论与等值点关系不熟，回补函数性质与图像。
+      - 若学生无法通过导数符号读取单峰区间，回补导数单调极值基础。
+  detail_terms:
+    - $g(x)=\\frac{e^2x}{e^x}$
+    - $g^{\prime\prime\prime}(x)>0$
+    - $g(1.1)=g(m)>g(0.9)$
+    - $e^{0.1}>1.1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0163_offset_e_product_ex22
+source_evidence:
+  source_refs:
+    - ref_id: page_0162_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0162/page_0162.md
+      role: local_context
+      evidence: page_0162 末题为“例21”，用于与 page_0163 同页后续“例23”共同确认本题顺序编号应为例22。
+    - ref_id: page_0163_ex22_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0163/page_0163.md
+      role: problem_start
+      evidence: page_0163 在“极值偏移”讲解后给出无编号“例”：$a=1.1e^{0.9},b=0.99e,c=0.9e^{1.1}$，并给出 A-D 四个排序选项。
+    - ref_id: page_0163_ex22_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0163/page_0163.md
+      role: solution
+      evidence: 同页解析构造 $g(x)=\\frac{e^2x}{e^x}$，用极值点左偏先得 $1.1e^{0.9}>0.9e^{1.1}$，再用 $e^{0.1}>1.1$ 得 $0.9e^{1.1}>0.99e$，结论 $a>c>b$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0163.png
+      inspected: true
+      notes: 已核对原图：本题题头仅显示“例”无数字，选项与解析完整，结论为 D。
+  source_context: page_0163 开头为“极值偏移与比大小”说明文字，之后该无编号“例”是本页第一个新题头。
+  source_influence:
+    - 保留源解核心函数：$g(x)=\\frac{e^2x}{e^x}$。
+    - 保留“等值点偏移”链：$g(1.1)=g(m)$ 且 $1>m>0.9$，从而 $g(1.1)>g(0.9)$。
+    - 保留收尾比较：$e^{0.1}>1.1\\Rightarrow 0.9e^{1.1}>0.99e$。
+  source_discrepancies:
+    - page_0163 图像题头仅标“例”未印数字；结合 page_0162 为例21、同页后续为例23，按顺序确认为例22并命名为 mst_p0163_offset_e_product_ex22。
+original_problem:
+  stem: 设 $a=1.1e^{0.9}$，$b=0.99e$，$c=0.9e^{1.1}$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $c>a>b$
+      text_latex: $c>a>b$
+    - label: B
+      text_raw: $c>b>a$
+      text_latex: $c>b>a$
+    - label: C
+      text_raw: $a>b>c$
+      text_latex: $a>b>c$
+    - label: D
+      text_raw: $a>c>b$
+      text_latex: $a>c>b$
+  answer: D
+  fidelity_notes:
+    - 题头在原图中确为无编号“例”，但处于例21与例23之间，按连续编号归入例22。
+solution:
+  source_solution_summary: |
+    设
+    \[
+    g(x)=\frac{e^2x}{e^x},
+    \]
+    则
+    \[
+    g'(x)=\frac{e^2(1-x)}{e^x},\quad
+    g''(x)=\frac{e^2(x-2)}{e^x},\quad
+    g'''(x)=\frac{e^2(3-x)}{e^x}>0\ \text{(在 }(-3,3)\text{)}.
+    \]
+    源解据此使用“极值点左偏”结论：若 $g(x_1)=g(x_2)$，则有 $x_1+x_2>2$。
+
+    令 $g(1.1)=g(m)$，则
+    \[
+    m+1.1>2=0.9+1.1,
+    \]
+    且由函数单峰位置可得 $1>m>0.9$，于是
+    \[
+    g(1.1)=g(m)>g(0.9)
+    \Rightarrow
+    1.1e^{0.9}>0.9e^{1.1}.
+    \]
+    再由
+    \[
+    e^{0.1}>1.1
+    \Rightarrow
+    0.9e^{1.1}>0.99e.
+    \]
+    合并得
+    \[
+    a>c>b,
+    \]
+    选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把 $a,c$ 的比较统一到同一指数函数模型。
+      formula_trace:
+        from: $a=1.1e^{0.9},\ c=0.9e^{1.1}$
+        to: 构造 $g(x)=\\frac{e^2x}{e^x}$，则 $g(1.1)=a,\ g(0.9)=c$
+        operation: 把“系数×指数”改写为同一 $g(x)$ 在两点的函数值。
+        why: 把代数比较转成函数值比较。
+      source_ref: page_0163_ex22_solution
+    - step_id: step_2
+      statement: 利用三阶导符号触发极值点左偏。
+      formula_trace:
+        from: $g^{\prime\prime\prime}(x)=\\frac{e^2(3-x)}{e^x}>0$（在相关区间）
+        to: 若 $g(x_1)=g(x_2)$，则 $x_1+x_2>2$
+        operation: 调用源页“极值偏移”结论。
+        why: 为后续从等值点反推位置关系做准备。
+      source_ref: page_0163_ex22_solution
+    - step_id: step_3
+      statement: 通过等值点 $m$ 得到 $a>c$。
+      formula_trace:
+        from: $g(1.1)=g(m)$ 且 $m+1.1>2=0.9+1.1$
+        to: $1>m>0.9\\Rightarrow g(1.1)=g(m)>g(0.9)$
+        operation: 先定位 $m$ 落在 $(0.9,1)$，再用该段单调性比较函数值。
+        why: 得到 $1.1e^{0.9}>0.9e^{1.1}$，即 $a>c$。
+      source_ref: page_0163_ex22_solution
+    - step_id: step_4
+      statement: 再比较 $c$ 与 $b$。
+      formula_trace:
+        from: $e^{0.1}>1.1$
+        to: $0.9e^{1.1}>0.99e$
+        operation: 两侧同乘 $0.9e$。
+        why: 得到 $c>b$。
+      source_ref: page_0163_ex22_solution
+    - step_id: step_5
+      statement: 合并顺序并匹配选项。
+      formula_trace:
+        from: $a>c$ 且 $c>b$
+        to: $a>c>b$，选 D
+        operation: 链式合并。
+        why: 得到唯一正确项。
+      source_ref: page_0163_ex22_solution
+teaching_card:
+  student_title: 等值点偏移先判 $a,c$，再补 $c,b$
+  what_it_trains: 训练在“系数×指数”比较里，先同构成一元函数，再用极值点偏移完成主比较。
+  recognition_cues:
+    - 几个量都接近“常数×$e^{\\text{小偏移}}$”形态。
+    - 题前紧接“极值偏移”方法讲解。
+    - 选项是三量全序。
+  normalization_moves:
+    - 优先把两项写成同一 $g(x)$ 的函数值。
+    - 用等值点和偏移方向判大小。
+    - 最后用一条基础指数不等式补齐第三项。
+  common_failures:
+    - 只看 $1.1$ 与 $0.9$ 距离对称，误以为对应函数值也对称相等。
+    - 把“左偏/右偏”结论方向记反。
+    - 漏掉 $c$ 与 $b$ 的最后一步比较。
+  similar_practice_query: 极值偏移 等值点 指数函数 比大小 1.1e^0.9
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 无编号“例”已按前后题号与原图顺序确认归为例22。

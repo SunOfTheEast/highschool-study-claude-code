@@ -1,0 +1,164 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0100_common_tangent_ex01
+content_revision_id: mst_p0100_common_tangent_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0100_common_tangent_ex01.card.yaml
+stem: |-
+  （2023 许昌二模 T9）已知函数 $y=x+1+\ln x$ 在点 $A(1,2)$ 处的切线 $l$，若直线 $l$ 与二次函数 $y=ax^2+(a+2)x+1$ 的图象也相切，则实数 $a$ 的取值为（  ）
+  A. 12
+  B. 8
+  C. 0
+  D. 4
+answer: |
+  D（$a=4$）
+
+  对 $y=x+1+\ln x$ 求导得 $y'=1+\frac{1}{x}$，在 $x=1$ 处斜率为 $2$，
+  过点 $A(1,2)$ 的切线为 $y-2=2(x-1)$，即 $y=2x$。令二次函数与这条直线
+  相切，设
+  $g(x)=ax^2+(a+2)x+1-2x=ax^2+ax+1$。相切意味着存在 $x_0$ 使
+  $g(x_0)=0$ 且 $g'(x_0)=0$。由 $g'(x_0)=2ax_0+a=0$ 得 $x_0=-\frac12$，
+  再代入 $g(x_0)=0$ 得 $a=4$，选 D。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 先由已知切点写出切线 $l$。
+      max_score: 1
+    - step_id: step_2
+      description: 把“直线与二次函数相切”转成差函数重根。
+      max_score: 1
+    - step_id: step_3
+      description: 用极点效应求切点横坐标和参数。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 局部逼近与找点
+    subroute:
+      - 已知切点先定切线
+      - 极点效应
+      - 差函数重根
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary: []
+    evidence:
+      - $y=x+1+\ln x$ 在 $A(1,2)$ 处的切线先被固定为 $y=2x$。
+      - $ax^2+ax+1$ 与 $x$ 轴相切，所以 $g(x_0)=g^\prime(x_0)=0$。
+      - $g^\prime(x_0)=2ax_0+a=0$ 锁定切点横坐标 $x_0=-\frac12$。
+    normalization_moves_used:
+      - 先把已知曲线的切线完整写出，减少未知量。
+      - 把二次曲线与直线相切改写成差函数有重根。
+      - 用导数为零先找重根，再回代求参数。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $y^\prime=1+\frac1x$ 求切线斜率，回补导数运算与几何意义。
+      - 若学生不知道相切可转为 $g(x_0)=g^\prime(x_0)=0$，回补方程根分布与韦达。
+      - 若学生展开 $ax^2+(a+2)x+1-2x$ 出错，回补代数恒等变形。
+  detail_terms:
+    - $y=x+1+\ln x$
+    - $A(1,2)$
+    - $l:\ y=2x$
+    - $g(x)=ax^2+ax+1$
+    - $g(x_0)=g^\prime(x_0)=0$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0100_common_tangent_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0100
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0100/page_0100.md
+      role: problem_start
+      evidence: lines 18-25 give the common-tangent setup; lines 27-34 give 例 1 题干、A-D 选项、切线方程 $y=2x$、极点效应方程组 and answer D.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0100.png
+      inspected: true
+      notes: 已核对 page_0100 中上部例 1：题干、四个选项、$y=2x$、方程组和答案 D 与 markdown 一致。
+  source_context: page_0100 lines 18-25 说明公切线可转成切点方程共解；本题属于“已知一条曲线的切点切线，再令该直线与另一曲线相切”。
+  source_influence:
+    - 保留源页先求已知曲线在 $A(1,2)$ 处切线，再把二次函数与直线相切转成双根/极点效应。
+    - 用源页给出的差函数 $g(x)=ax^2+(a+2)x+1-2x$，按相切含义写为 $g(x_0)=0,\ g^\prime(x_0)=0$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 许昌二模 T9）已知函数 $y=x+1+\ln x$ 在点 $A(1,2)$ 处的切线 $l$，若直线 $l$ 与二次函数 $y=ax^2+(a+2)x+1$ 的图象也相切，则实数 $a$ 的取值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: "12"
+      text_latex: "12"
+    - label: B
+      text_raw: "8"
+      text_latex: "8"
+    - label: C
+      text_raw: "0"
+      text_latex: "0"
+    - label: D
+      text_raw: "4"
+      text_latex: "4"
+  answer: D（$a=4$）
+  fidelity_notes:
+    - 题头、选项和完整解析均在 page_0100。
+solution:
+  source_solution_summary: |
+    对 $y=x+1+\ln x$ 求导得 $y'=1+\frac{1}{x}$，在 $x=1$ 处斜率为 $2$，
+    过点 $A(1,2)$ 的切线为 $y-2=2(x-1)$，即 $y=2x$。令二次函数与这条直线
+    相切，设
+    $g(x)=ax^2+(a+2)x+1-2x=ax^2+ax+1$。相切意味着存在 $x_0$ 使
+    $g(x_0)=0$ 且 $g'(x_0)=0$。由 $g'(x_0)=2ax_0+a=0$ 得 $x_0=-\frac12$，
+    再代入 $g(x_0)=0$ 得 $a=4$，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 先由已知切点写出切线 $l$。
+      formula_trace:
+        from: |
+          $y=x+1+\ln x,\qquad y'=1+\frac{1}{x},\qquad A(1,2)$
+        to: |
+          $k=y'(1)=2,\qquad y-2=2(x-1),\qquad l:\ y=2x$
+        operation: 求导并代入切点斜率，用点斜式写切线方程。
+        why: 后面只需判断同一条直线是否与二次函数相切。
+      source_ref: page_0100
+    - step_id: step_2
+      statement: 把“直线与二次函数相切”转成差函数重根。
+      formula_trace:
+        from: |
+          $y=ax^2+(a+2)x+1,\qquad l:\ y=2x$
+        to: |
+          $g(x)=ax^2+(a+2)x+1-2x=ax^2+ax+1$
+        operation: 用二次函数减去直线，公共点变成 $g(x)=0$ 的根。
+        why: 相切对应交点为重根，也就是 $g(x_0)=0,\ g^\prime(x_0)=0$。
+      source_ref: page_0100
+    - step_id: step_3
+      statement: 用极点效应求切点横坐标和参数。
+      formula_trace:
+        from: |
+          $g(x_0)=ax_0^2+ax_0+1=0,\qquad g'(x_0)=2ax_0+a=0$
+        to: |
+          $x_0=-\frac12,\qquad a\cdot\frac14-a\cdot\frac12+1=0,\qquad a=4$
+        operation: 先由导数为零确定重根位置，再代回函数值为零。
+        why: 二次函数和直线在同一点相交且斜率相等，正是相切条件。
+      source_ref: page_0100
+teaching_card:
+  student_title: 先定已知切线，再让二次函数重根
+  what_it_trains: 训练把一条已经确定的切线代入另一条曲线，用差函数重根条件求参数。
+  recognition_cues:
+    - 题干给出明确切点 $A(1,2)$，提示先写出这条固定切线。
+    - 另一条曲线是二次函数，和直线相切时差函数应有重根。
+    - 选项是单个 $a$ 值，通常由重根方程直接算出。
+  normalization_moves:
+    - 求 $y=x+1+\ln x$ 在 $x=1$ 处的切线 $y=2x$。
+    - 构造 $g(x)=ax^2+(a+2)x+1-2x$。
+    - 联立 $g(x_0)=0$ 与 $g^\prime(x_0)=0$ 求出 $a=4$。
+  common_failures:
+    - 只算出切线斜率 $2$，忘记写完整直线 $y=2x$。
+    - 把“相切”当作只有一个交点却没有用重根条件。
+    - 从 $2ax_0+a=0$ 得到 $x_0=-\frac12$ 后忘记代回 $g(x_0)=0$。
+  similar_practice_query: 已知切点切线 二次函数相切 差函数重根 求参数
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0100 图片与 markdown 对例 1 题干、选项、解析主线和答案 D 一致。

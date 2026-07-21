@@ -1,0 +1,208 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0172_exp_line_b_over_a_max_ex15
+content_revision_id: mst_p0172_exp_line_b_over_a_max_ex15-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0172_exp_line_b_over_a_max_ex15.card.yaml
+stem: |-
+  （2023 · 商丘三模 T11）已知函数 $f(x)=ae^x$，$g(x)=2x+b$，若 $f(x)\geqslant g(x)$ 恒成立，则 $\frac{b}{a}$ 的最大值是 (  )
+  A. $-1$
+  B. $1$
+  C. $2$
+  D. $\sqrt{2}$
+answer: |
+  B
+
+  由 $ae^x\ge2x+b$，法一先写成
+  $e^{x+\ln a-\ln2}\ge x+\ln a-\ln2+1\ge x+\frac b2$，
+  从而 $b\le2\ln\frac a2+2$。于是
+  $\frac ba\le\left[2\frac{\ln(a/2)+1}{a}\right]_{\max}
+  =\left[e\cdot\frac{\ln\frac{ea}{2}}{\frac{ea}{2}}\right]_{\max}=1$，
+  且 $a=b=2$ 取等。法二令 $t=e^x$，得 $at-b\ge2\ln t$。
+  当直线 $y=at-b$ 始终在 $y=2\ln t$ 上方时，其横截距
+  $t_1=\frac ba$ 必在 $t_2=1$ 左侧，故 $\frac ba\le1$。
+  两法一致，最大值为 1，选 B。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把不等式对齐到指数切线模板。
+      max_score: 1
+    - step_id: step_2
+      description: 用 $e^u\ge u+1$ 给出 $b$ 的上界。
+      max_score: 1
+    - step_id: step_3
+      description: 把 $\frac ba$ 化成单变量函数并求最大值。
+      max_score: 1
+    - step_id: step_4
+      description: 给出取等参数与选项。
+      max_score: 1
+    - step_id: step_5
+      description: 续页法二用零点比大小复核结论。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level:
+      - part_id: item_1
+        goal: 极值最值
+        target: 求比值参数 $\frac ba$ 的最大值。
+        result: 见 source_solution_summary
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+      - 数形结合
+    subroute:
+      - 切线找点
+      - 零点比大小
+      - $\ln y/y$ 最值模板
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $ae^x\ge2x+b$ 经同构后落到 $e^u\ge u+1$ 的切线模型。
+      - 参数比值通过 $\frac ba=e\cdot\frac{\ln y}{y}$ 归约成单变量最值。
+      - 换元 $t=e^x$ 后可在图像上比较 $t_1=\frac ba$ 与 $t_2=1$。
+    normalization_moves_used:
+      - $\frac{ae^x}{2}=e^{x+\ln a-\ln2}$
+      - $y=\frac{ea}{2}$
+      - $t=e^x$
+  fallback:
+    only_if_trace_shows:
+      - 若学生不知道为何必须先保证 $a>0$，回补函数三要素与定义域。
+      - 若学生不会把指数式改写到 $e^u\ge u+1$ 模板，回补指数对数基础。
+      - 若学生不会用 $\frac{\ln y}{y}\le\frac1e$ 求统一上界，回补导数单调极值基础。
+      - 若学生看不懂 $t_1=\frac ba\le1$ 的图像方向，回补函数性质与图像。
+  detail_terms:
+    - $ae^x\ge2x+b$
+    - $b\le2\ln\frac a2+2$
+    - $\frac ba=e\cdot\frac{\ln\frac{ea}{2}}{\frac{ea}{2}}$
+    - $t=e^x$
+    - $\frac ba\le1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0172_exp_line_b_over_a_max_ex15
+source_evidence:
+  source_refs:
+    - ref_id: page_0172
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0172/page_0172.md
+      role: problem_start
+      evidence: page_0172 底部给出例 15 题干、A-D 选项与法一（切线找点）完整推导，含等号情形 $a=b=2$。
+    - ref_id: page_0173
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0173/page_0173.md
+      role: continuation
+      evidence: page_0173 顶部紧接例 15 的法二（零点比大小），由 $t_1=b/a$ 与 $t_2=1$ 得 $\frac{b}{a}\le 1$，并给出“故选 B”。
+    - ref_id: page_0172_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0172/page_0172.md
+      role: local_context
+      evidence: page_0172 顶部是 page_0171 例 14 续解；中部“考点 4”与配图为方法背景，不单独建卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0172.png
+      inspected: true
+      notes: 已核对页图：例 15 题干与选项完整，法一末行为“$b=a=2$ 时取等，即 $\frac ba$ 的最大值是 1”。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0173.png
+      inspected: true
+      notes: 已核对页图：page_0173 顶部确为例 15 法二续解，结论“$\frac ba\le1$，故选 B”。
+  source_context: 本页仅例 15 归属 worker D；page_0172 顶部续题和“考点 4” exposition 只作上下文。例 15 的第二解法跨页到 page_0173 顶部。
+  source_influence:
+    - 保留源解法一的核心链条：$e^u\ge u+1$ 导出 $b\le 2\ln\frac a2+2$，再把 $\frac ba$ 配成 $e\cdot\frac{\ln y}{y}$ 求最值。
+    - 保留源解法二的零点比大小图像结论：直线 $y=at-b$ 在 $y=2\ln t$ 上方时，横截距 $t_1=b/a$ 在 $t_2=1$ 左侧。
+    - 保留源页答案 B，并保留等号可取点 $a=b=2$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 商丘三模 T11）已知函数 $f(x)=ae^x$，$g(x)=2x+b$，若 $f(x)\geqslant g(x)$ 恒成立，则 $\frac{b}{a}$ 的最大值是 (  )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $-1$
+      text_latex: $-1$
+    - label: B
+      text_raw: $1$
+      text_latex: $1$
+    - label: C
+      text_raw: $2$
+      text_latex: $2$
+    - label: D
+      text_raw: $\sqrt{2}$
+      text_latex: $\sqrt{2}$
+  answer: B
+  fidelity_notes:
+    - 题干与选项起于 page_0172，法二续解与“故选 B”在 page_0173 顶部。
+    - 源解默认进入 $\ln a$ 表达，等价要求 $a>0$；若 $a\le0$，$ae^x$ 不可能对全体 $x$ 恒压住直线 $2x+b$。
+solution:
+  source_solution_summary: |
+    由 $ae^x\ge2x+b$，法一先写成
+    $e^{x+\ln a-\ln2}\ge x+\ln a-\ln2+1\ge x+\frac b2$，
+    从而 $b\le2\ln\frac a2+2$。于是
+    $\frac ba\le\left[2\frac{\ln(a/2)+1}{a}\right]_{\max}
+    =\left[e\cdot\frac{\ln\frac{ea}{2}}{\frac{ea}{2}}\right]_{\max}=1$，
+    且 $a=b=2$ 取等。法二令 $t=e^x$，得 $at-b\ge2\ln t$。
+    当直线 $y=at-b$ 始终在 $y=2\ln t$ 上方时，其横截距
+    $t_1=\frac ba$ 必在 $t_2=1$ 左侧，故 $\frac ba\le1$。
+    两法一致，最大值为 1，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 把不等式对齐到指数切线模板。
+      formula_trace:
+        from: $ae^x\ge2x+b$
+        to: $e^{x+\ln a-\ln2}\ge x+\frac b2$
+        operation: 两边除以 2，并把 $\frac{ae^x}{2}$ 写成 $e^{x+\ln a-\ln2}$。
+        why: 把右侧一次项斜率统一成 1，便于直接使用 $e^u\ge u+1$。
+      source_ref: page_0172
+    - step_id: step_2
+      statement: 用 $e^u\ge u+1$ 给出 $b$ 的上界。
+      formula_trace:
+        from: $e^{x+\ln a-\ln2}\ge x+\ln a-\ln2+1$
+        to: $b\le2\ln\frac a2+2$
+        operation: 由 $x+\ln a-\ln2+1\ge x+\frac b2$ 比较常数项。
+        why: 要让不等式对任意 $x$ 恒成立，直线常数项不能超过切线常数项。
+      source_ref: page_0172
+    - step_id: step_3
+      statement: 把 $\frac ba$ 化成单变量函数并求最大值。
+      formula_trace:
+        from: $\frac ba\le2\cdot\frac{\ln(a/2)+1}{a}$
+        to: $\frac ba\le e\cdot\frac{\ln\frac{ea}{2}}{\frac{ea}{2}}\le1$
+        operation: 设 $y=\frac{ea}{2}>0$，写成标准型 $\frac{\ln y}{y}$。
+        why: $\frac{\ln y}{y}\le\frac1e$，可直接得到 $\frac ba$ 的统一上界。
+      source_ref: page_0172
+    - step_id: step_4
+      statement: 给出取等参数与选项。
+      formula_trace:
+        from: $\frac{\ln y}{y}\le\frac1e$
+        to: $\frac ba\le1$，且 $a=b=2$ 时取等
+        operation: 等号在 $y=e$ 处取到，即 $\frac{ea}{2}=e\Rightarrow a=2$，再由上界式得 $b=2$。
+        why: 不仅要算出最大值，还要验证可达。
+      source_ref: page_0172
+    - step_id: step_5
+      statement: 续页法二用零点比大小复核结论。
+      formula_trace:
+        from: $ae^x\ge2x+b$
+        to: $at-b\ge2\ln t,\ t=e^x>0,\ \frac ba=t_1\le t_2=1$
+        operation: 换元后比较直线与对数曲线零点位置。
+        why: 直线始终在曲线上方时，其横截距不能右移到对数函数零点右侧。
+      source_ref: page_0173
+teaching_card:
+  student_title: 用指数切线和零点比较求 $\frac ba$ 最大值
+  what_it_trains: 训练“指数函数恒压直线”题的双路线：切线放缩求最值 + 零点比大小复核。
+  recognition_cues:
+    - 已知 $ae^x\ge2x+b$ 对全体实数恒成立。
+    - 目标是比值参数 $\frac ba$，不是单独求 $a,b$。
+    - 出现斜率 2，通常先除以 2 对齐 $e^u\ge u+1$。
+  normalization_moves:
+    - 先把 $\frac{ae^x}{2}$ 改写成指数同构形。
+    - 从切线常数项读出 $b$ 的上界。
+    - 把 $\frac ba$ 配成 $\frac{\ln y}{y}$ 的标准最值型。
+    - 换元 $t=e^x$ 后用零点位置判断方向。
+  common_failures:
+    - 不讨论 $a$ 的符号就直接写 $\ln a$。
+    - 把“切线取等给上界”误当成任意 $b$ 都可取等。
+    - 算出 $b\le2\ln\frac a2+2$ 后忘记再对 $a$ 做统一最值。
+    - 零点比较时把“左侧/右侧”不等号方向写反。
+  similar_practice_query: ae^x 恒成立 压直线 b/a 最大值 切线找点 零点比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

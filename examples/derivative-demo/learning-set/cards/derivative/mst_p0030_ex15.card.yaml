@@ -1,0 +1,187 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0030_ex15
+content_revision_id: mst_p0030_ex15-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0030_ex15.card.yaml
+stem: |-
+  已知函数 $f(x)=x+\ln(x-1)$，$g(x)=x\ln x$，若 $f(x_1)=1+2\ln t$，$g(x_2)=t^2$，则 $(x_1x_2-x_2)\ln t$ 的取值可能是 ( )
+  A. $-\frac{2}{e}$
+  B. $-\frac{1}{2e^2}$
+  C. $-\frac{1}{2e}$
+  D. $-\frac{1}{e}$
+answer: |-
+  BC
+
+  由 $f(x_1)=1+2\ln t$ 得 $x_1-1+\ln(x_1-1)=\ln t^2$，即 $t^2=e^{x_1-1}(x_1-1)$。又 $g(x_2)=x_2\ln x_2=t^2=e^{\ln x_2}\ln x_2$，且两边的自变量都在非负区间，利用 $u e^u$ 递增得 $x_1-1=\ln x_2$。于是目标式等于 $x_2\ln x_2\ln t=t^2\ln t=\frac12 t^2\ln t^2$。令 $s=t^2>0$，$\frac12 s\ln s\ge -\frac1{2e}$，所以可能值是所有不小于该最小值的数；选项 B、C 可能，A、D 不可能。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 把第一个条件改写成 $u e^u=t^2$。
+      max_score: 1
+    - step_id: step_2
+      description: 把第二个条件也写成 $u e^u=t^2$。
+      max_score: 1
+    - step_id: step_3
+      description: 用 $u e^u$ 的递增性得到变量关系。
+      max_score: 1
+    - step_id: step_4
+      description: 把目标式转成只含 $t$ 的式子。
+      max_score: 1
+    - step_id: step_5
+      description: 求范围并筛选选项。
+      max_score: 1
+    - step_id: step_6
+      description: 确定多选答案。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: options
+        goal: 数值比较
+        target: 判断四个候选值是否落在 $[-1/(2e),+\infty)$ 内
+        result: B、C
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 拟合与夹逼
+    subroute:
+      - $u e^u$ 递增同构
+      - $x_1-1=\ln x_2$
+      - $s\ln s$ 最小值
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $t^2=e^{x_1-1}(x_1-1)=e^{\ln x_2}\ln x_2$。
+      - 目标式压缩为 $\frac12 t^2\ln t^2$。
+    normalization_moves_used:
+      - $x_1+\ln(x_1-1)=1+2\ln t$ 改写成 $(x_1-1)e^{x_1-1}=t^2$。
+      - $x_2\ln x_2$ 改写成 $e^{\ln x_2}\ln x_2$。
+      - 令 $s=t^2$，用 $s\ln s$ 的最小值筛选选项。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $u+\ln u$ 写成 $\ln(e^u u)$，回补指数对数基础。
+      - 若学生不知道 $u e^u$ 在非负区间递增，回补导数单调极值基础。
+      - 若学生不能由 $g(x_2)=t^2>0$ 判断 $x_2>1$，回补指数对数基础。
+      - 若学生不会求 $s\ln s$ 的最小值，回补导数单调极值基础。
+  detail_terms:
+    - $f(x)=x+\ln(x-1)$
+    - $g(x)=x\ln x$
+    - $t^2=e^{x_1-1}(x_1-1)$
+    - $x_1-1=\ln x_2$
+    - $\frac12 t^2\ln t^2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0030_ex15
+source_evidence:
+  source_refs:
+    - ref_id: page_0030
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0030/page_0030.md
+      role: problem_start
+      evidence: 例 15 题干、选项、解析和答案完整位于 page_0030。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0030.png
+      inspected: true
+      notes: 核对选项 A-D 分别为 $-2/e$、$-1/(2e^2)$、$-1/(2e)$、$-1/e$；答案 BC。
+  source_context: 例 15 继续训练 $xe^x$ 的同构：先把 $x_1-1+\ln(x_1-1)$ 与 $x_2\ln x_2$ 都写成 $u e^u$，再把目标式转成 $\frac12 s\ln s$ 的最小值判断。
+  source_influence:
+    - BATCHES locator hint `mst_p0030_ex15` 仅用于确认题头；卡片内容按 page_0030 源 markdown 与源图重建。
+  source_discrepancies: []
+original_problem:
+  stem: 已知函数 $f(x)=x+\ln(x-1)$，$g(x)=x\ln x$，若 $f(x_1)=1+2\ln t$，$g(x_2)=t^2$，则 $(x_1x_2-x_2)\ln t$ 的取值可能是 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $-\frac{2}{e}$
+      text_latex: $-\frac{2}{e}$
+    - label: B
+      text_raw: $-\frac{1}{2e^2}$
+      text_latex: $-\frac{1}{2e^2}$
+    - label: C
+      text_raw: $-\frac{1}{2e}$
+      text_latex: $-\frac{1}{2e}$
+    - label: D
+      text_raw: $-\frac{1}{e}$
+      text_latex: $-\frac{1}{e}$
+  answer: BC
+  fidelity_notes:
+    - 源题为多选；本卡逐项保留四个选项。
+    - 由 $\ln t$ 隐含 $t>0$；由 $f$ 的定义域隐含 $x_1>1$，由 $g(x_2)=t^2>0$ 可得 $x_2>1$。
+solution:
+  source_solution_summary: 由 $f(x_1)=1+2\ln t$ 得 $x_1-1+\ln(x_1-1)=\ln t^2$，即 $t^2=e^{x_1-1}(x_1-1)$。又 $g(x_2)=x_2\ln x_2=t^2=e^{\ln x_2}\ln x_2$，且两边的自变量都在非负区间，利用 $u e^u$ 递增得 $x_1-1=\ln x_2$。于是目标式等于 $x_2\ln x_2\ln t=t^2\ln t=\frac12 t^2\ln t^2$。令 $s=t^2>0$，$\frac12 s\ln s\ge -\frac1{2e}$，所以可能值是所有不小于该最小值的数；选项 B、C 可能，A、D 不可能。
+  key_steps:
+    - step_id: step_1
+      statement: 把第一个条件改写成 $u e^u=t^2$。
+      formula_trace:
+        from: $x_1+\ln(x_1-1)=1+2\ln t$
+        to: $x_1-1+\ln(x_1-1)=\ln t^2=\ln\left(e^{x_1-1}(x_1-1)\right)$
+        operation: 两边减 1，并用 $2\ln t=\ln t^2$、$u+\ln u=\ln(e^u u)$。
+        why: 这样可推出 $t^2=e^{x_1-1}(x_1-1)$，与 $u e^u$ 对齐。
+      source_ref: page_0030
+    - step_id: step_2
+      statement: 把第二个条件也写成 $u e^u=t^2$。
+      formula_trace:
+        from: $x_2\ln x_2=t^2$
+        to: $e^{\ln x_2}\ln x_2=t^2$
+        operation: 用 $x_2=e^{\ln x_2}$；又因 $t^2>0$，有 $x_2>1$，所以 $\ln x_2>0$。
+        why: 第二个条件的自变量是 $\ln x_2$。
+      source_ref: page_0030
+    - step_id: step_3
+      statement: 用 $u e^u$ 的递增性得到变量关系。
+      formula_trace:
+        from: $(x_1-1)e^{x_1-1}=e^{\ln x_2}\ln x_2$
+        to: $x_1-1=\ln x_2$
+        operation: 函数 $y=u e^u$ 在 $[0,+\infty)$ 上严格递增；这里 $x_1-1>0$，$\ln x_2>0$。
+        why: 同一个递增函数取同一个正值，自变量相等。
+      source_ref: page_0030
+    - step_id: step_4
+      statement: 把目标式转成只含 $t$ 的式子。
+      formula_trace:
+        from: $(x_1x_2-x_2)\ln t=x_2(x_1-1)\ln t$
+        to: $x_2\ln x_2\ln t=t^2\ln t=\frac12 t^2\ln t^2$
+        operation: 代入 $x_1-1=\ln x_2$ 和 $x_2\ln x_2=t^2$。
+        why: 目标值的范围由标准函数 $s\ln s$ 决定。
+      source_ref: page_0030
+    - step_id: step_5
+      statement: 求范围并筛选选项。
+      formula_trace:
+        from: $\frac12 t^2\ln t^2$
+        to: $\frac12 s\ln s\ge -\frac1{2e}\quad (s=t^2>0)$
+        operation: 令 $s=t^2$；$s\ln s$ 在 $s=e^{-1}$ 处取最小值 $-1/e$。
+        why: 选项中不小于 $-1/(2e)$ 的负数可以取到，低于该值的不可能。
+      source_ref: page_0030
+    - step_id: step_6
+      statement: 确定多选答案。
+      formula_trace:
+        from: $-\frac{2}{e},\ -\frac{1}{2e^2},\ -\frac{1}{2e},\ -\frac{1}{e}$
+        to: B、C
+        operation: 比较每个选项与下界 $-1/(2e)$：A、D 更小，B 大于下界，C 等于下界。
+        why: 表达式的值域为 $[-1/(2e),+\infty)$。
+      source_ref: page_0030
+teaching_card:
+  student_title: 把两个条件都化成同一个 $u e^u$
+  what_it_trains: 训练从 $x+\ln x$ 和 $x\ln x$ 两种外形中找出同一个 $u e^u$，再把目标式转为标准最值函数来筛选多选项。
+  recognition_cues:
+    - 条件里同时出现 $x_1-1+\ln(x_1-1)$ 和 $x_2\ln x_2$。
+    - $2\ln t$ 可以写成 $\ln t^2$。
+    - 目标式 $x_2(x_1-1)\ln t$ 能接上 $x_2\ln x_2=t^2$。
+  normalization_moves:
+    - 把第一个条件指数化为 $(x_1-1)e^{x_1-1}=t^2$。
+    - 把第二个条件写成 $e^{\ln x_2}\ln x_2=t^2$。
+    - 用递增性推出 $x_1-1=\ln x_2$。
+    - 把目标式化成 $\frac12 s\ln s$。
+  common_failures:
+    - 忽略 $t>0$，错误处理 $2\ln t$。
+    - 没有说明 $x_2>1$，就直接把 $\ln x_2$ 放进 $u e^u$ 的递增区间。
+    - 把“可能是”误做成只求最小值，漏掉 B 也可以取到。
+  similar_practice_query: x+ln(x-1) xlnx ue^u 同构 多选 s ln s 最小值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 源图与 markdown 一致；本题不跨页。

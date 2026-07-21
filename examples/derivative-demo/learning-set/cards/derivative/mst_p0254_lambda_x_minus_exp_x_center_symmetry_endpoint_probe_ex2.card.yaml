@@ -1,0 +1,219 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0254_lambda_x_minus_exp_x_center_symmetry_endpoint_probe_ex2
+content_revision_id: mst_p0254_lambda_x_minus_exp_x_center_symmetry_endpoint_probe_ex2-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0254_lambda_x_minus_exp_x_center_symmetry_endpoint_probe_ex2.card.yaml
+stem: |-
+  （2025 · 辽宁沈阳 · 模拟预测）已知函数 $f(x)=\lambda x-e^x$。
+  1. 当 $\lambda=2$ 时，曲线 $y=f(x)$ 与 $y=g(x)$ 关于点 $(2,3)$ 中心对称，求函数 $g(x)$ 的解析式。
+  2. 讨论 $f(x)$ 在 $[2,6]$ 上的单调性。
+  3. 若关于 $x$ 的不等式 $f(x)+e^x\le\frac16x^3+\sin x$ 在 $[0,+\infty)$ 上恒成立，求实数 $\lambda$ 的取值范围。
+answer: |-
+  第(1)问：$g(x)=2x-2+e^{4-x}$。第(2)问：$\lambda\le e^2$ 时递减，$\lambda\ge e^6$ 时递增，$e^2<\lambda<e^6$ 时先增后减。第(3)问：$\lambda\in(-\infty,1]$。
+
+  第(1)问，若点 $P(x,y)$ 在 $g$ 上，则其关于 $(2,3)$ 的对称点 $Q(4-x,6-y)$ 在 $f$ 上，于是 $6-y=2(4-x)-e^{4-x}$，得到 $g(x)=2x-2+e^{4-x}$。第(2)问由 $f^\prime(x)=\lambda-e^x$，在 $[2,6]$ 上按 $\lambda\le e^2$、$\lambda\ge e^6$、$e^2<\lambda<e^6$ 分类。第(3)问 化为 $h(x)=\frac16x^3+\sin x-\lambda x\ge0$，$x\ge0$。因为 $h(0)=0$，必要条件是右导数 $h^\prime(0)=1-\lambda\ge0$，所以 $\lambda\le1$。当 $\lambda\le1$ 时， $h''(x)=x-\sin x\ge0$，故 $h'$ 单调递增，$h'(x)\ge h'(0)\ge0$， 进而 $h(x)\ge h(0)=0$，充分成立。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 用中心对称点写出 $g$。
+      max_score: 1
+    - step_id: step_2
+      description: 代入 $\lambda=2$ 得 $g$ 的解析式。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问按导数零点是否落在区间内分类。
+      max_score: 1
+    - step_id: step_4
+      description: 第(3)问先抵消 $e^x$。
+      max_score: 1
+    - step_id: step_5
+      description: 构造端点函数。
+      max_score: 1
+    - step_id: step_6
+      description: 证明 $\lambda\le1$ 的充分性。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 1 问
+        result: $g(x)=2x-2+e^{4-x}$。
+      - part_id: "2"
+        goal: 抽象函数性质
+        target: 第 2 问
+        result: 按 $\lambda$ 与 $e^2,e^6$ 的关系给出单调性。
+      - part_id: "3"
+        goal: 求参数范围
+        target: 第 3 问
+        result: $\lambda\le1$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 对称性配凑
+      - 含参数分类讨论
+      - 充分/必要性探路
+    subroute:
+      - 中心对称点代入
+      - 区间端点分类
+      - 端点效应探路
+      - 二阶导保号
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 对称结构
+      - 局部逼近结构
+    evidence:
+      - $\lambda x-e^x$
+      - $Q(4-x,6-y)$
+      - $f^\prime(x)=\lambda-e^x$
+      - $h(x)=\frac16x^3+\sin x-\lambda x$
+      - $h^\prime(0)=1-\lambda$
+    normalization_moves_used:
+      - 用中心对称把 $g$ 写出来。
+      - 用 $e^2,e^6$ 切分区间单调性。
+      - 把恒成立转成 $h(x)\ge0$。
+      - 用端点导数锁定 $\lambda\le1$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会中心对称点坐标，回补函数性质与图像。
+      - 若学生不会按导数零点分区间，回补导数单调极值基础。
+      - 若学生不会从端点导数得到必要条件，回补导数运算与几何意义。
+      - 若学生不会证明 $x-\sin x\ge0$，回补三角函数基础。
+      - 若学生在恒成立移项中出错，回补代数恒等变形。
+  detail_terms:
+    - $\lambda x-e^x$
+    - 关于 $(2,3)$ 中心对称
+    - $g(x)=2x-2+e^{4-x}$
+    - $e^2,e^6$
+    - $\frac16x^3+\sin x-\lambda x$
+    - $\lambda\le1$
+    - 端点效应
+parts: &a1
+  - part_id: "1"
+    text: 当 $\lambda=2$ 时，曲线 $y=f(x)$ 与 $y=g(x)$ 关于点 $(2,3)$ 中心对称，求函数 $g(x)$ 的解析式。
+  - part_id: "2"
+    text: 讨论 $f(x)$ 在 $[2,6]$ 上的单调性。
+  - part_id: "3"
+    text: 若关于 $x$ 的不等式 $f(x)+e^x\le\frac16x^3+\sin x$ 在 $[0,+\infty)$ 上恒成立，求实数 $\lambda$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0254_lambda_x_minus_exp_x_center_symmetry_endpoint_probe_ex2
+source_evidence:
+  source_refs:
+    - ref_id: page_0254_ex2_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0254/page_0254.md
+      role: problem_start
+      evidence: page_0254 例2：$f(x)=\lambda x-e^x$，含中心对称、区间单调性和端点恒成立三问。
+    - ref_id: page_0254_ex2_part1_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0254/page_0254.md
+      role: solution
+      evidence: 第(1)问：当 $\lambda=2$ 时，关于点 $(2,3)$ 中心对称得到 $g(x)=2x-2+e^{4-x}$。
+    - ref_id: page_0254_ex2_part2_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0254/page_0254.md
+      role: solution
+      evidence: 第(2)问：$f^\prime(x)=\lambda-e^x$，按 $\lambda\le e^2$、$\lambda\ge e^6$、$e^2<\lambda<e^6$ 分类。
+    - ref_id: page_0254_ex2_part3_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0254/page_0254.md
+      role: solution
+      evidence: 第(3)问：恒成立化为 $h(x)=\frac16x^3+\sin x-\lambda x\ge0$，$h(0)=0$，$h^\prime(0)=1-\lambda$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0254.png
+      inspected: true
+      notes: 已核对页图：例2完整位于 page_0254 中下部，随后没有本题跨页内容。
+  source_context: 本卡只处理 page_0254 例2；page_0255 例3留给下一批。
+  source_influence:
+    - 保留 source 的中心对称构造：点 $P(x,y)$ 关于 $(2,3)$ 的对称点是 $Q(4-x,6-y)$。
+    - 保留 source 的区间端点分类：用 $e^2$ 和 $e^6$ 分割 $[2,6]$ 上的单调性。
+    - 保留 source 的端点效应：第(3)问把恒成立转为 $h(0)=0$ 后看 $h^\prime(0)$。
+  source_discrepancies:
+    - type: ocr_unstable_contradiction_tail
+      source_ref: page_0254_ex2_part3_solution
+      observed: source/OCR 在 $\lambda>1$ 的反证尾部出现“取 $x=2+2\lambda$，$4\lambda\cdots$”一类不完整文字。
+      resolved_as: 用端点局部必要性：若 $\lambda>1$，则 $h^\prime(0)=1-\lambda<0$，因此存在足够小的 $x>0$ 使 $h(x)<0$。
+      reason: 恒成立区间包含端点 0，且 $h(0)=0$，端点右导数必须非负。
+original_problem:
+  stem: （2025 · 辽宁沈阳 · 模拟预测）已知函数 $f(x)=\lambda x-e^x$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问：$g(x)=2x-2+e^{4-x}$。第(2)问：$\lambda\le e^2$ 时递减，$\lambda\ge e^6$ 时递增，$e^2<\lambda<e^6$ 时先增后减。第(3)问：$\lambda\in(-\infty,1]$。
+  fidelity_notes:
+    - 三问综合题，无选项。
+    - 第(3)问的 $e^x$ 在不等式两侧抵消，核心变成端点恒成立。
+solution:
+  source_solution_summary: 第(1)问，若点 $P(x,y)$ 在 $g$ 上，则其关于 $(2,3)$ 的对称点 $Q(4-x,6-y)$ 在 $f$ 上，于是 $6-y=2(4-x)-e^{4-x}$，得到 $g(x)=2x-2+e^{4-x}$。第(2)问由 $f^\prime(x)=\lambda-e^x$，在 $[2,6]$ 上按 $\lambda\le e^2$、$\lambda\ge e^6$、$e^2<\lambda<e^6$ 分类。第(3)问 化为 $h(x)=\frac16x^3+\sin x-\lambda x\ge0$，$x\ge0$。因为 $h(0)=0$，必要条件是右导数 $h^\prime(0)=1-\lambda\ge0$，所以 $\lambda\le1$。当 $\lambda\le1$ 时， $h''(x)=x-\sin x\ge0$，故 $h'$ 单调递增，$h'(x)\ge h'(0)\ge0$， 进而 $h(x)\ge h(0)=0$，充分成立。
+  key_steps:
+    - step_id: step_1
+      statement: 用中心对称点写出 $g$。
+      formula_trace:
+        from: $P(x,y)$ 关于 $(2,3)$ 的对称点
+        to: $Q(4-x,6-y)$
+        operation: 用中点坐标公式。
+        why: $Q$ 在 $f$ 上，代入即可解出 $y$。
+      source_ref: page_0254_ex2_part1_solution
+    - step_id: step_2
+      statement: 代入 $\lambda=2$ 得 $g$ 的解析式。
+      formula_trace:
+        from: $6-y=2(4-x)-e^{4-x}$
+        to: $g(x)=2x-2+e^{4-x}$
+        operation: 整理 $y$。
+        why: 这是第(1)问答案。
+      source_ref: page_0254_ex2_part1_solution
+    - step_id: step_3
+      statement: 第(2)问按导数零点是否落在区间内分类。
+      formula_trace:
+        from: $f^\prime(x)=\lambda-e^x$
+        to: $x=\ln\lambda$
+        operation: 解导数零点。
+        why: 区间端点 $2,6$ 对应阈值 $e^2,e^6$。
+      source_ref: page_0254_ex2_part2_solution
+    - step_id: step_4
+      statement: 第(3)问先抵消 $e^x$。
+      formula_trace:
+        from: $f(x)+e^x\le\frac16x^3+\sin x$
+        to: $\lambda x\le\frac16x^3+\sin x$
+        operation: 代入 $f(x)=\lambda x-e^x$ 并抵消。
+        why: 问题变成一元端点恒成立。
+      source_ref: page_0254_ex2_part3_solution
+    - step_id: step_5
+      statement: 构造端点函数。
+      formula_trace:
+        from: $\frac16x^3+\sin x-\lambda x$
+        to: $h(0)=0,\quad h^\prime(0)=1-\lambda$
+        operation: 设 $h(x)$ 并看端点导数。
+        why: 在 $[0,+\infty)$ 上从端点出发保持非负，右导数必须非负。
+      source_ref: page_0254_ex2_part3_solution
+    - step_id: step_6
+      statement: 证明 $\lambda\le1$ 的充分性。
+      formula_trace:
+        from: $h'(x)=x-\sin x\ge0$
+        to: $h^\prime(x)\ge h^\prime(0)\ge0$，$h(x)\ge0$
+        operation: 用二阶导非负推出一阶导递增。
+        why: 这完成恒成立证明。
+      source_ref: page_0254_ex2_part3_solution
+teaching_card:
+  student_title: 中心对称和端点效应放在同一题里
+  what_it_trains: 训练用点对称写函数解析式，并在恒成立问题中用端点导数快速锁定参数。
+  recognition_cues:
+    - 关于点 $(2,3)$ 中心对称，要先写对称点坐标。
+    - $f^\prime(x)=\lambda-e^x$，单调性只看 $\ln\lambda$ 是否落在 $[2,6]$。
+    - 第(3)问两边有 $e^x$ 可以抵消。
+    - 恒成立区间从 $0$ 开始，且 $h(0)=0$，应优先看 $h^\prime(0)$。
+  normalization_moves:
+    - 点对称：$(x,y)\mapsto(4-x,6-y)$。
+    - 区间单调：用 $e^2,e^6$ 分三类。
+    - 恒成立：移项成 $h(x)\ge0$。
+    - 端点探路：$h^\prime(0)\ge0$。
+    - 充分性：$h'(x)=x-\sin x\ge0$。
+  common_failures:
+    - 把中心对称误写成轴对称。
+    - 漏掉 $\lambda\le e^2$ 或 $\lambda\ge e^6$ 的端点情形。
+    - 第(3)问不先抵消 $e^x$，导致表达式复杂化。
+    - 只得到 $\lambda\le1$，没有证明充分性。
+  similar_practice_query: lambda x - e^x 中心对称 端点效应 h(0)=0 lambda<=1 区间单调
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

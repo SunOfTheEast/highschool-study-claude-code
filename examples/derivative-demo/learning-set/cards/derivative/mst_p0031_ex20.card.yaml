@@ -1,0 +1,222 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0031_ex20
+content_revision_id: mst_p0031_ex20-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0031_ex20.card.yaml
+stem: |-
+  $e$ 是自然对数的底数，$m,n\in\mathbf R$，已知 $me^m+\ln n>n\ln n+m$，则下列结论一定正确的是 ( )
+  A. 若 $m>0$，则 $m-n>0$
+  B. 若 $m>0$，则 $e^m-n>0$
+  C. 若 $m<0$，则 $m+\ln n<0$
+  D. 若 $m<0$，则 $e^m+n>2$
+answer: |-
+  BC
+
+  原不等式等价于 $me^m-m>n\ln n-\ln n$，即 $f(m)>f(\ln n)$，其中 $f(x)=xe^x-x$。由 $f'(x)=e^x(x+1)-1$ 得 $f$ 在 $(-\infty,0)$ 递减，在 $(0,+\infty)$ 递增。A 用 $m=n=e$ 可反例；B 当 $m>0$ 时，若 $n\le1$ 则 $e^m>1\ge n$，若 $n>1$ 则 $m,\ln n>0$，由递增性得 $m>\ln n$，所以 $e^m>n$。C 当 $m<0$ 时，若 $n\le1$ 显然；若 $n>1$，用 $f(x)-f(-x)=x(e^x+e^{-x}-2)$ 在 $x<0$ 时小于 0，得 $f(m)<f(-m)$，结合 $f(m)>f(\ln n)$ 与正区间递增性推出 $\ln n<-m$。D 用 $m=-2,n=1/e$ 构造反例。故选 BC。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 把题设改写成同一个函数比较。
+      max_score: 1
+    - step_id: step_2
+      description: 确定 $f$ 的单调区间。
+      max_score: 1
+    - step_id: step_3
+      description: 用反例否定 A。
+      max_score: 1
+    - step_id: step_4
+      description: 证明 B。
+      max_score: 1
+    - step_id: step_5
+      description: 建立负数与相反数的函数值关系。
+      max_score: 1
+    - step_id: step_6
+      description: 证明 C。
+      max_score: 1
+    - step_id: step_7
+      description: 用反例否定 D。
+      max_score: 1
+    - step_id: step_8
+      description: 合并选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: A
+        goal: 数值比较
+        target: $m-n>0$
+        result: 错误，$m=n=e$ 为反例
+      - part_id: B
+        goal: 数值比较
+        target: $e^m-n>0$
+        result: 正确
+      - part_id: C
+        goal: 数值比较
+        target: $m+\ln n<0$
+        result: 正确
+      - part_id: D
+        goal: 数值比较
+        target: $e^m+n>2$
+        result: 错误，$m=-2,n=1/e$ 为反例
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 含参数分类讨论
+      - 对称化与偏移
+    subroute:
+      - $f(x)=xe^x-x$
+      - $f(m)>f(\ln n)$
+      - $f(x)-f(-x)$ 对称比较
+  structure:
+    primary: 同构结构
+    secondary:
+      - 对称结构
+      - 指对复合结构
+    evidence:
+      - 题设等价于 $f(m)>f(\ln n)$。
+      - 选项 C 用 $f(x)-f(-x)=x(e^x+e^{-x}-2)$ 比较负数与相反数。
+    normalization_moves_used:
+      - $n\ln n-\ln n$ 写成 $f(\ln n)$。
+      - 按 $m>0/m<0$ 与 $\ln n\le0/>0$ 分类。
+      - 用 $m=n=e$ 和 $m=-2,n=1/e$ 构造反例。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $n\ln n-\ln n$ 写成 $f(\ln n)$，回补指数对数基础。
+      - 若学生不能判断 $f'(x)$ 在正负区间的符号，回补导数单调极值基础。
+      - 若学生做多选题只会证明不会找反例，回补函数性质与图像。
+      - 若学生看不出 C 需要比较 $f(m)$ 与 $f(-m)$，回补代数恒等变形。
+  detail_terms:
+    - $f(x)=xe^x-x$
+    - $f(m)>f(\ln n)$
+    - $f'(x)=e^x(x+1)-1$
+    - $f(x)-f(-x)=x(e^x+e^{-x}-2)$
+    - 反例 $m=n=e$
+    - 反例 $m=-2,n=1/e$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0031_ex20
+source_evidence:
+  source_refs:
+    - ref_id: page_0031
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0031/page_0031.md
+      role: problem_start
+      evidence: 例 20 题干、选项、解析和答案完整位于 page_0031。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0031.png
+      inspected: true
+      notes: 核对题干为 $me^m+\ln n>n\ln n+m$；四个条件选项完整；答案 BC。
+  source_context: page_0031 源页从例 18 后直接进入例 20，未出现例 19。例 20 构造 $f(x)=xe^x-x$，围绕 $f(m)>f(\ln n)$ 在正负区间分类判断多选项。
+  source_influence:
+    - BATCHES locator hint `mst_p0031_ex20` 仅用于确认题头；卡片内容按 page_0031 源 markdown 与源图重建。
+  source_discrepancies: []
+original_problem:
+  stem: $e$ 是自然对数的底数，$m,n\in\mathbf R$，已知 $me^m+\ln n>n\ln n+m$，则下列结论一定正确的是 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 若 $m>0$，则 $m-n>0$
+      text_latex: 若 $m>0$，则 $m-n>0$
+    - label: B
+      text_raw: 若 $m>0$，则 $e^m-n>0$
+      text_latex: 若 $m>0$，则 $e^m-n>0$
+    - label: C
+      text_raw: 若 $m<0$，则 $m+\ln n<0$
+      text_latex: 若 $m<0$，则 $m+\ln n<0$
+    - label: D
+      text_raw: 若 $m<0$，则 $e^m+n>2$
+      text_latex: 若 $m<0$，则 $e^m+n>2$
+  answer: BC
+  fidelity_notes:
+    - 题干写 $m,n\in\mathbf R$，但 $\ln n$ 存在，故实际需 $n>0$。
+    - 源图与 markdown 一致；源文“满足题变”按语义理解为“满足题意”。
+solution:
+  source_solution_summary: 原不等式等价于 $me^m-m>n\ln n-\ln n$，即 $f(m)>f(\ln n)$，其中 $f(x)=xe^x-x$。由 $f'(x)=e^x(x+1)-1$ 得 $f$ 在 $(-\infty,0)$ 递减，在 $(0,+\infty)$ 递增。A 用 $m=n=e$ 可反例；B 当 $m>0$ 时，若 $n\le1$ 则 $e^m>1\ge n$，若 $n>1$ 则 $m,\ln n>0$，由递增性得 $m>\ln n$，所以 $e^m>n$。C 当 $m<0$ 时，若 $n\le1$ 显然；若 $n>1$，用 $f(x)-f(-x)=x(e^x+e^{-x}-2)$ 在 $x<0$ 时小于 0，得 $f(m)<f(-m)$，结合 $f(m)>f(\ln n)$ 与正区间递增性推出 $\ln n<-m$。D 用 $m=-2,n=1/e$ 构造反例。故选 BC。
+  key_steps:
+    - step_id: step_1
+      statement: 把题设改写成同一个函数比较。
+      formula_trace:
+        from: $me^m+\ln n>n\ln n+m$
+        to: $me^m-m>n\ln n-\ln n=f(\ln n)$
+        operation: 移项；令 $f(x)=xe^x-x$，则 $f(m)=me^m-m$，$f(\ln n)=\ln n\cdot e^{\ln n}-\ln n$。
+        why: 题设的全部信息压缩为 $f(m)>f(\ln n)$。
+      source_ref: page_0031
+    - step_id: step_2
+      statement: 确定 $f$ 的单调区间。
+      formula_trace:
+        from: $f(x)=xe^x-x$
+        to: $f'(x)=e^x(x+1)-1$，$f$ 在 $(-\infty,0)$ 递减，在 $(0,+\infty)$ 递增
+        operation: 求导并判断 $e^x(x+1)-1$ 在负区间小于 0、正区间大于 0。
+        why: 后面所有选项都要按 $m$ 与 $\ln n$ 的正负分区。
+      source_ref: page_0031
+    - step_id: step_3
+      statement: 用反例否定 A。
+      formula_trace:
+        from: $m=n=e$
+        to: $f(m)>f(\ln n)$ 但 $m-n=0$
+        operation: $\ln n=1$，且 $f(e)>f(1)$；原不等式成立。
+        why: A 要求 $m-n>0$，反例中不成立。
+      source_ref: page_0031
+    - step_id: step_4
+      statement: 证明 B。
+      formula_trace:
+        from: $m>0,\ f(m)>f(\ln n)$
+        to: $e^m-n>0$
+        operation: 若 $\ln n\le0$，则 $n\le1<e^m$；若 $\ln n>0$，由正区间递增得 $m>\ln n$，所以 $e^m>n$。
+        why: 两种 $n$ 的范围都推出 $e^m$ 大于 $n$。
+      source_ref: page_0031
+    - step_id: step_5
+      statement: 建立负数与相反数的函数值关系。
+      formula_trace:
+        from: $h(x)=f(x)-f(-x)$
+        to: $h(x)=x(e^x+e^{-x}-2)<0\quad (x<0)$
+        operation: 直接相减；用 $e^x+e^{-x}\ge2$，且 $x<0$。
+        why: 这给出 $m<0$ 时 $f(m)<f(-m)$，用于把负区间信息搬到正区间。
+      source_ref: page_0031
+    - step_id: step_6
+      statement: 证明 C。
+      formula_trace:
+        from: $m<0,\ f(m)>f(\ln n)$
+        to: $m+\ln n<0$
+        operation: 若 $\ln n\le0$，结论显然；若 $\ln n>0$，由 $f(\ln n)<f(m)<f(-m)$，且 $\ln n,-m>0$，正区间递增得 $\ln n<-m$。
+        why: 等价于 $m+\ln n<0$。
+      source_ref: page_0031
+    - step_id: step_7
+      statement: 用反例否定 D。
+      formula_trace:
+        from: $m=-2,\ n=\frac1e$
+        to: $f(m)>f(\ln n)$ 但 $e^m+n=\frac1{e^2}+\frac1e<2$
+        operation: $\ln n=-1$，且 $f$ 在 $(-\infty,0)$ 递减，因 $-2<-1$ 得 $f(-2)>f(-1)$。
+        why: 满足题设但不满足 D。
+      source_ref: page_0031
+    - step_id: step_8
+      statement: 合并选项。
+      formula_trace:
+        from: A 错，B 对，C 对，D 错
+        to: 选 BC
+        operation: 多选题按一定正确的结论筛选。
+        why: 与源页答案一致。
+      source_ref: page_0031
+teaching_card:
+  student_title: 用 $xe^x-x$ 拆开正负区间判断多选
+  what_it_trains: 训练把原不等式转成 $f(m)>f(\ln n)$，再按正负区间的单调性和反例构造判断条件命题。
+  recognition_cues:
+    - 题设左边有 $me^m-m$，右边有 $n\ln n-\ln n$。
+    - $n=e^{\ln n}$，所以右边可以写成同一个 $f(\ln n)$。
+    - 选项按 $m>0$、$m<0$ 分开，提示要看 $f$ 在正负区间的单调性。
+  normalization_moves:
+    - 移项得到 $f(m)>f(\ln n)$。
+    - 求导判断 $f$ 负区间递减、正区间递增。
+    - B、C 用分类证明；A、D 找具体反例。
+  common_failures:
+    - 忘记 $n>0$，把 $\ln n$ 当成任意实数直接代。
+    - 把 $f$ 误认为全局递增，导致 C 的证明断裂。
+    - 没有构造反例，误把 A 或 D 当作可能正确。
+  similar_practice_query: me^m ln n nlnn xe^x-x 同构 多选 正负区间
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 源图与 markdown 一致；page_0031 未出现例 19，例 20 直接接在例 18 后。

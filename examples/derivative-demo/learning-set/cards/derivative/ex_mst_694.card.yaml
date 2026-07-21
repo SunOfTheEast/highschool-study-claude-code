@@ -1,0 +1,247 @@
+schema: highschool-study.problem-card.v1
+content_item_id: ex_mst_694
+content_revision_id: ex_mst_694-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/ex_mst_694.card.yaml
+stem: |-
+  已知函数 $f(x)=2ax+ax\cos x-\sin x\ (a\in\mathbf{R})$。
+  (1) 当 $a=1$ 时，求 $f(x)$ 在点 $(0,f(0))$ 处的切线方程。
+  (2) 若对任意 $x\geqslant 0$，都有 $f(x)\geqslant 0$，求实数 $a$ 的取值范围。
+  (3) 证明：$\sum_{k=1}^n\sin\frac{1}{k+1}<\ln(n+1)$，$n\in\mathbf{N}^*$。
+answer: |-
+  (1) $2x-y=0$；(2) $a\in[\frac13,+\infty)$；(3) 结论成立。
+
+  先求 $a=1$ 时 $f(0)=0,f'(0)=2$ 得切线 $2x-y=0$。恒成立参数由 $f(0)=0$ 推出必要条件 $f'(0)=3a-1\ge0$，再证明 $\sin x\le \frac13x(2+\cos x)$，于是当 $a\ge1/3$ 时 $f(x)=ax(2+\cos x)-\sin x\ge0$；若 $a<1/3$，0 右侧局部递减产生反例。最后用 $\sin(1/(k+1))<1/(k+1)<\ln((k+1)/k)$ 逐项求和，或用源页法二的 $-\ln(1-1/(k+1))$ 直接对齐 $\ln((k+1)/k)$。
+rubric:
+  max_score: 9
+  criteria:
+    - step_id: step_1
+      description: 当 $a=1$ 时，$f(0)=0$，$f'(x)=2+\cos x-x\sin x-\cos x=2-x\sin x$，故 $f'(0)=2$，切线为 $y=2x$。
+      max_score: 1
+    - step_id: step_2
+      description: 因为 $f(0)=0$ 且要求 $x\ge0$ 上 $f(x)\ge0$，0 必须是右端不下降起点，所以 $f'(0)=3a-1\ge0$，得到必要条件 $a\ge1/3$。
+      max_score: 1
+    - step_id: step_3
+      description: 构造 $h(x)=\frac{\sin x}{2+\cos x}-\frac13x$，有 $h'(x)=-\frac{(\cos x-1)^2}{3(2+\cos x)^2}\le0$，所以 $h(x)\le h(0)=0$。
+      max_score: 1
+    - step_id: step_4
+      description: 当 $a\ge1/3$ 时，$f(x)=ax(2+\cos x)-\sin x\ge\frac13x(2+\cos x)-\sin x\ge0$；当 $a<1/3$ 时由 $f'(0)<0$ 得局部反例。
+      max_score: 1
+    - step_id: step_5
+      description: 对每个 $k\ge1$，由 $x>0$ 时 $\sin x<x$，得 $\sin\frac1{k+1}<\frac1{k+1}$。
+      max_score: 1
+    - step_id: step_6
+      description: 把 $\ln(n+1)$ 展开为 $\sum_{k=1}^n\ln\frac{k+1}{k}$。
+      max_score: 1
+    - step_id: step_7
+      description: 设 $F(x)=\ln x+\frac1x-1$，$x>1$，则 $F'(x)=\frac{x-1}{x^2}>0$，故 $F(x)>F(1)=0$，即 $\ln x>1-\frac1x$。
+      max_score: 1
+    - step_id: step_8
+      description: 令 $x=\frac{k+1}{k}$，得 $\frac1{k+1}<\ln\frac{k+1}{k}$；与 step_5 逐项相连后求和，得到 $\sum_{k=1}^n\sin\frac1{k+1}<\ln(n+1)$。
+      max_score: 1
+    - step_id: step_9
+      description: 源页法二也可把目标项直接对齐为 $\ln\frac{k+1}{k}=-\ln(1-\frac1{k+1})$，由 $\sin\frac1{k+1}<\frac1{k+1}<-\ln(1-\frac1{k+1})$ 得证。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 几何量求解
+        target: 求切线方程
+        result: $2x-y=0$
+      - part_id: "2"
+        goal: 求参数范围
+        result: $a\in[\frac13,+\infty)$
+      - part_id: "3"
+        goal: 不等式证明
+        result: $\sum_{k=1}^n\sin\frac1{k+1}<\ln(n+1)$
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 数列和转化
+      - 充分/必要性探路
+      - 拟合与夹逼
+    subroute:
+      - 右端点必要性：$f(0)=0$ 且 $f(x)\ge0$ on $[0,+\infty)$ implies $f'(0)\ge0$
+      - 临界参数构造：证明 $\sin x\le\frac13x(2+\cos x)$ 后回代 $a\ge1/3$
+      - 和式代换：$\ln(n+1)=\sum_{k=1}^n\ln((k+1)/k)$
+      - 逐项夹逼：$\sin(1/(k+1))<1/(k+1)<\ln((k+1)/k)$
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 数列离散/递推结构
+      - 不等式工具结构
+    evidence:
+      - $f(x)=ax(2+\cos x)-\sin x$ 将参数、线性 x、cos x、sin x 绑在一起。
+      - $h(x)=\sin x/(2+\cos x)-x/3$ 是围绕切点 0 的临界放缩结构。
+      - 第三问用 $k\mapsto \ln((k+1)/k)$ 的离散对数增量和左端三角项逐项配对。
+    normalization_moves_used:
+      - 将 $2ax+ax\cos x-\sin x$ 合并为 $ax(2+\cos x)-\sin x$。
+      - 由 $f(0)=0$ 把恒成立参数问题转为右端点导数必要条件。
+      - 将 $\sin x\le\frac13x(2+\cos x)$ 改写为 $\frac{\sin x}{2+\cos x}-\frac13x\le0$ 并求导。
+      - 将 $\ln(n+1)$ 拆成 $\sum_{k=1}^n\ln\frac{k+1}{k}$。
+      - 将 $\frac1{k+1}<\ln\frac{k+1}{k}$ 统一为 $\ln x>1-1/x$，其中 $x=(k+1)/k$。
+      - 法二把 $\ln\frac{k+1}{k}$ 规范为 $-\ln(1-\frac1{k+1})$，与 $u<-\ln(1-u)$ 对齐。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $f(0)=0$ 和右侧恒非负推出 $f'(0)\ge0$，回补导数单调极值基础。
+      - 若学生不会求切线方程，或不会求 $h'(x)$ 判定 $h(x)\le h(0)$，回补导数运算与几何意义。
+      - 若学生不能把 $\ln(n+1)$ 拆成逐项对数和，回补数列基础。
+      - 若学生不能证明 $\ln x>1-1/x$ 或 $u<-\ln(1-u)$，回补指数对数基础。
+      - 若学生不知道 $\sin x<x$、逐项放缩或严格不等式传递，回补不等式工具基础。
+      - 若学生对 $\sin x$、$\cos x$ 的基本求导和局部比较不稳，回补三角函数基础。
+  detail_terms:
+    - $\sin x<x$
+    - $\ln x>1-1/x$
+    - $u<-\ln(1-u)$
+    - $\ln(n+1)=\sum_{k=1}^n\ln((k+1)/k)$
+    - $h'(x)=-(\cos x-1)^2/[3(2+\cos x)^2]$
+    - 和式代换
+    - 逐项放缩
+    - 右端点必要性
+parts: &a1
+  - (1) 当 $a=1$ 时，求 $f(x)$ 在点 $(0,f(0))$ 处的切线方程。
+  - (2) 若对任意 $x\geqslant 0$，都有 $f(x)\geqslant 0$，求实数 $a$ 的取值范围。
+  - (3) 证明：$\sum_{k=1}^n\sin\frac{1}{k+1}<\ln(n+1)$，$n\in\mathbf{N}^*$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: ex_mst_694
+source_evidence:
+  source_refs:
+    - materials/math/derivative/source/mst26-full-marked-c20/pages/page_0458/page_0458.md:27-37
+    - materials/math/derivative/source/mst26-full-marked-c20/pages/page_0459/page_0459.md:12-21
+  source_images:
+    - materials/math/derivative/source/mst26-full-marked-c20/images/page_0458.png
+    - materials/math/derivative/source/mst26-full-marked-c20/images/page_0459.png
+  source_context: 第10章“导数不等式与数列综合”；例10前的小节标题为“sin 1/(n+1) < ln(1+1/n) < sin 1/n < 1/n 型”，并给出由 x > sin x > ln(1+x) > x/(1+x) > sin(x/(1+x)) 令 x=1/n 得到链式不等式。例10本题从三角函数 f(x)=2ax+ax cos x-sin x 的切线、恒成立参数，落到对 sum sin(1/(k+1)) 与 ln(n+1) 的逐项放缩和和式代换。
+  source_influence:
+    - 题面必须保留三小问：切线方程、a 的范围、数列不等式证明。
+    - 参数范围不是单纯代入结论，而是先由 f(0)=0 与 f'(0)>=0 得到必要条件 a>=1/3，再构造 h(x)=sin x/(2+cos x)-x/3 证明充分性。
+    - 第三问的核心不是只记忆 sin x<x，而是把 ln(n+1) 写成 sum ln((k+1)/k)，再逐项比较 sin(1/(k+1))、1/(k+1)、ln((k+1)/k)。
+    - 源页给出法二的和式代换视角：T_n=ln(n+1)=sum a_k，a_k=ln((k+1)/k)，用 sin(1/(k+1)) < 1/(k+1) < -ln(1-1/(k+1))。
+  source_discrepancies:
+    - field: legacy problem
+      old_value: $f(x)=2ax+ax\cos x-\sin x$；求切线、恒成立参数，并证$\sum\sin(1/(k+1))<\ln(n+1)$。
+      corrected_value: 完整题面含三小问，条件为 a in R，第二问是对任意 x>=0 有 f(x)>=0，第三问为 sum_{k=1}^n sin(1/(k+1)) < ln(n+1), n in N*。
+      evidence_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0458/page_0458.md:31-34
+    - field: legacy title/method hint
+      old_value: 三角切线-正弦调和和；三角放缩代入法
+      corrected_value: 源页所在模型是 sin(1/(n+1)) < ln(1+1/n) < sin(1/n) < 1/n 型，解法显式使用切线/导数放缩与 ln(n+1) 的和式代换。
+      evidence_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0458/page_0458.md:27-29; mst26-full-marked-c20/pages/page_0459/page_0459.md:18-21
+    - field: legacy solution_hint
+      old_value: 解析 a in [1/3,+infty)；用 sin x<x 和 1/(k+1)<ln((k+1)/k) 累加。
+      corrected_value: 该提示覆盖法一主线但遗漏切线方程 2x-y=0、a>=1/3 的必要性/充分性证明，以及源页法二的直接逐项比较 sin(1/(k+1)) < 1/(k+1) < -ln(1-1/(k+1))。
+      evidence_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0458/page_0458.md:36-37; mst26-full-marked-c20/pages/page_0459/page_0459.md:12-19
+original_problem:
+  stem: 已知函数 $f(x)=2ax+ax\cos x-\sin x\ (a\in\mathbf{R})$。
+  parts: *a1
+  choices: []
+  answer: (1) $2x-y=0$；(2) $a\in[\frac13,+\infty)$；(3) 结论成立。
+  fidelity_notes:
+    - page_0458.png 与 markdown 一致：第三问求和下标为 k=1 到 n，正弦项为 1/(k+1)，右端为 ln(n+1)。
+    - page_0459.png 确认第二问答案区间写作 [1/3,+infty)，第三问法一和法二均在同页完整呈现。
+solution:
+  source_solution_summary: 先求 $a=1$ 时 $f(0)=0,f'(0)=2$ 得切线 $2x-y=0$。恒成立参数由 $f(0)=0$ 推出必要条件 $f'(0)=3a-1\ge0$，再证明 $\sin x\le \frac13x(2+\cos x)$，于是当 $a\ge1/3$ 时 $f(x)=ax(2+\cos x)-\sin x\ge0$；若 $a<1/3$，0 右侧局部递减产生反例。最后用 $\sin(1/(k+1))<1/(k+1)<\ln((k+1)/k)$ 逐项求和，或用源页法二的 $-\ln(1-1/(k+1))$ 直接对齐 $\ln((k+1)/k)$。
+  key_steps:
+    - step_id: step_1
+      statement: 当 $a=1$ 时，$f(0)=0$，$f'(x)=2+\cos x-x\sin x-\cos x=2-x\sin x$，故 $f'(0)=2$，切线为 $y=2x$。
+      formula_trace:
+        from: $f(x)=2x+x\cos x-\sin x$
+        to: $y-f(0)=f'(0)(x-0)$，即 $2x-y=0$
+        operation: 求导并代入切点 $x=0$
+        why: 切线方程由切点函数值与导数斜率确定。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0458/page_0458.md:31-36
+    - step_id: step_2
+      statement: 因为 $f(0)=0$ 且要求 $x\ge0$ 上 $f(x)\ge0$，0 必须是右端不下降起点，所以 $f'(0)=3a-1\ge0$，得到必要条件 $a\ge1/3$。
+      formula_trace:
+        from: $f'(x)=2a+a\cos x-ax\sin x-\cos x$
+        to: $f'(0)=3a-1\ge0$
+        operation: 在右端点 $0$ 处取导数必要条件
+        why: 若 $f'(0)<0$，则 0 右侧小区间内 $f(x)<f(0)=0$。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0458/page_0458.md:37; mst26-full-marked-c20/pages/page_0459/page_0459.md:12
+    - step_id: step_3
+      statement: 构造 $h(x)=\frac{\sin x}{2+\cos x}-\frac13x$，有 $h'(x)=-\frac{(\cos x-1)^2}{3(2+\cos x)^2}\le0$，所以 $h(x)\le h(0)=0$。
+      formula_trace:
+        from: $h(x)=\frac{\sin x}{2+\cos x}-\frac13x$
+        to: $\sin x\le\frac13x(2+\cos x)$
+        operation: 对辅助函数求导判单调，再移项
+        why: 把三角项压到与 $a=1/3$ 同形的线性-余弦表达。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0458/page_0458.md:37
+    - step_id: step_4
+      statement: 当 $a\ge1/3$ 时，$f(x)=ax(2+\cos x)-\sin x\ge\frac13x(2+\cos x)-\sin x\ge0$；当 $a<1/3$ 时由 $f'(0)<0$ 得局部反例。
+      formula_trace:
+        from: $a\ge\frac13$ 与 $\sin x\le\frac13x(2+\cos x)$
+        to: $f(x)\ge0$ 对任意 $x\ge0$ 成立，范围为 $[\frac13,+\infty)$
+        operation: 用临界参数的下界替换 $a$，再合并必要性
+        why: 完成参数范围的充分必要性闭合。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0459/page_0459.md:12
+    - step_id: step_5
+      statement: 对每个 $k\ge1$，由 $x>0$ 时 $\sin x<x$，得 $\sin\frac1{k+1}<\frac1{k+1}$。
+      formula_trace:
+        from: $\sin x<x\ (x>0)$
+        to: $\sum_{k=1}^n\sin\frac1{k+1}<\sum_{k=1}^n\frac1{k+1}$
+        operation: 令 $x=1/(k+1)$ 后逐项求和
+        why: 先把三角和降成可与对数增量比较的调和项。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0459/page_0459.md:14
+    - step_id: step_6
+      statement: 把 $\ln(n+1)$ 展开为 $\sum_{k=1}^n\ln\frac{k+1}{k}$。
+      formula_trace:
+        from: $\ln(n+1)=\ln\left(\frac21\cdot\frac32\cdots\frac{n+1}{n}\right)$
+        to: $\ln(n+1)=\sum_{k=1}^n\ln\frac{k+1}{k}$
+        operation: 乘积望远镜并把对数乘积化为对数和
+        why: 让右端拆成与左端同下标的逐项比较对象。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0459/page_0459.md:15
+    - step_id: step_7
+      statement: 设 $F(x)=\ln x+\frac1x-1$，$x>1$，则 $F'(x)=\frac{x-1}{x^2}>0$，故 $F(x)>F(1)=0$，即 $\ln x>1-\frac1x$。
+      formula_trace:
+        from: $F'(x)=\frac1x-\frac1{x^2}$
+        to: $\ln x>1-\frac1x\quad(x>1)$
+        operation: 导数判单调并与 $x=1$ 的切点值比较
+        why: 建立对数在切线 $1-1/x$ 上方的基础放缩。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0459/page_0459.md:16
+    - step_id: step_8
+      statement: 令 $x=\frac{k+1}{k}$，得 $\frac1{k+1}<\ln\frac{k+1}{k}$；与 step_5 逐项相连后求和，得到 $\sum_{k=1}^n\sin\frac1{k+1}<\ln(n+1)$。
+      formula_trace:
+        from: $\ln x>1-\frac1x$
+        to: $\sin\frac1{k+1}<\frac1{k+1}<\ln\frac{k+1}{k}$
+        operation: 代入 $x=(k+1)/k$ 并串联三角放缩
+        why: 逐项严格小于可求和的对数增量，求和后右端望远镜。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0459/page_0459.md:16
+    - step_id: step_9
+      statement: 源页法二也可把目标项直接对齐为 $\ln\frac{k+1}{k}=-\ln(1-\frac1{k+1})$，由 $\sin\frac1{k+1}<\frac1{k+1}<-\ln(1-\frac1{k+1})$ 得证。
+      formula_trace:
+        from: $a_k=\ln\frac{k+1}{k}=-\ln(1-\frac1{k+1})$
+        to: $\sin\frac1{k+1}<a_k$
+        operation: 用切线方式比较 $u$ 与 $-\ln(1-u)$，其中 $u=1/(k+1)$
+        why: 这是源页标注的和式代换法，避免另设 $F(x)$ 后再回代。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0459/page_0459.md:18-21
+teaching_card:
+  student_title: 把正弦小项配成对数增量
+  what_it_trains: 训练从导数切线放缩得到可累加的不等式链，并把 $\ln(n+1)$ 拆成逐项对数增量来证明三角数列和不等式。
+  recognition_cues:
+    - 题目同时出现 $\sin\frac1{k+1}$ 和 $\ln(n+1)$。
+    - 右端 $\ln(n+1)$ 可以写成 $\ln\frac21+\ln\frac32+\cdots+\ln\frac{n+1}{n}$。
+    - 函数部分出现 $f(0)=0$、恒有 $f(x)\ge0$，提示先看 $f'(0)$ 的必要条件。
+    - 参数临界值 $1/3$ 与 $2+\cos x$ 组合，提示构造 $\sin x/(2+\cos x)-x/3$。
+  normalization_moves:
+    - 先把 $f(x)$ 写成 $ax(2+\cos x)-\sin x$，看出临界放缩应控制 $\sin x/(2+\cos x)$。
+    - 证明数列和时不要直接估整个和，先把右端拆成与 k 同步的 $\ln((k+1)/k)$。
+    - 把 $\frac1{k+1}<\ln\frac{k+1}{k}$ 改写为标准式 $\ln x>1-1/x$。
+    - 也可令 $u=1/(k+1)$，把目标项写成 $-\ln(1-u)$，使用 $u<-\ln(1-u)$。
+  common_failures:
+    - 只写 $\sin x<x$ 后停止，没有证明 $\sum 1/(k+1)<\ln(n+1)$。
+    - 把 $\ln(n+1)$ 错拆成 $\sum\ln\frac{k+2}{k+1}$，导致下标与左端不配。
+    - 第二问只由 $f'(0)\ge0$ 得 $a\ge1/3$，未证明充分性。
+    - 构造 $h(x)$ 后求导符号错误，漏掉分母平方导致单调性判断失败。
+    - 忽略 $x\ge0$ 是端点区间，把 $f'(0)=0$ 当成必要条件而不是 $f'(0)\ge0$。
+  similar_practice_query: 三角函数 sin(1/(n+1)) 对数增量 ln((n+1)/n) 和式代换 导数切线放缩 参数恒成立
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0458/page_0459 markdown 与对应图片；题面、求和下标、参数范围、法一/法二结构一致。
+    - Reviewer changed part (1) goal to canonical `几何量求解` with target `求切线方程`.
+    - Reviewer replaced method secondary `参变量分离` with `充分/必要性探路`; this problem uses endpoint necessary condition plus critical-parameter sufficiency, not parameter separation.
+    - Reviewer kept `only_if_trace_shows` as conditional remediation text rather than flattening it to bare fallback labels.

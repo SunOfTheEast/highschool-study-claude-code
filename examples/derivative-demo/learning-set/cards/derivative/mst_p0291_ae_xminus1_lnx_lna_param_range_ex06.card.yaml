@@ -1,0 +1,190 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0291_ae_xminus1_lnx_lna_param_range_ex06
+content_revision_id: mst_p0291_ae_xminus1_lnx_lna_param_range_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0291_ae_xminus1_lnx_lna_param_range_ex06.card.yaml
+stem: |-
+  （2020 · 新高考山东卷）已知函数 $f(x)=ae^{x-1}-\ln x+\ln a$。若 $f(x)\ge1$，求 $a$ 的取值范围。
+  1. 求使 $f(x)\ge1$ 恒成立的 $a$ 的取值范围。
+answer: |-
+  $a\ge1$。
+
+  令 $h(x)=ae^{x-1}-\ln x+\ln a-1$。隐点探路联立 $h(x_0)=0,h^\prime(x_0)=0$。由 $h^\prime(x_0)=ae^{x_0-1}-\frac1{x_0}=0$ 得 $a=\frac1{x_0e^{x_0-1}}$；代回 $h(x_0)=0$ 得 $\frac1{x_0}-2\ln x_0-x_0=0$。source 称其为飘带函数，只在 $x_0=1$ 成立，于是候选取等点是 $x=1$。必要性为 $h(1)=a+\ln a-1\ge0$，由于 $a+\ln a$ 在 $a>0$ 上递增，得到 $a\ge1$。充分性：当 $a\ge1$ 时， $f(x)=ae^{x-1}-\ln x+\ln a\ge e^{x-1}-\ln x\ge x-\ln x\ge1$， 所以答案是 $a\ge1$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把恒成立写成 $h(x)\ge0$。
+      max_score: 1
+    - step_id: step_2
+      description: 联立隐点条件探路。
+      max_score: 1
+    - step_id: step_3
+      description: 由飘带函数锁定 $x_0=1$。
+      max_score: 1
+    - step_id: step_4
+      description: 用 $x=1$ 给出必要条件。
+      max_score: 1
+    - step_id: step_5
+      description: 证明 $a\ge1$ 的充分性。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: main
+        goal: 求参数范围
+        target: 第 main 问
+        result: $a\ge1$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 充分/必要性探路
+      - 拟合与夹逼
+    subroute:
+      - 恒成立转目标函数
+      - 双位置参数隐点探路
+      - 飘带函数锁取等点
+      - 取等点必要性
+      - 基础放缩证明充分性
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $ae^{x-1}-\ln x+\ln a$
+      - $a=\frac1{x_0e^{x_0-1}}$
+      - $\frac1{x_0}-2\ln x_0-x_0=0$
+      - $x_0=1$
+      - $a\ge1$
+    normalization_moves_used:
+      - 把 $f(x)\ge1$ 改成 $h(x)\ge0$。
+      - 由 $h^\prime(x_0)=0$ 消去 $a$。
+      - 用取等点 $x=1$ 得到参数必要条件。
+      - 用 $e^{x-1}\ge x$ 证明充分性。
+  fallback:
+    only_if_trace_shows:
+      - 若学生忘记 $a>0$，回补函数三要素与定义域。
+      - 若学生不会隐点取等探路，回补导数单调极值基础。
+      - 若学生不会由导数方程消参，回补代数恒等变形。
+      - 若学生不会 $e^{x-1}\ge x$，回补指数对数基础。
+      - 若学生不会必要性和充分性分开写，回补不等式工具基础。
+  detail_terms:
+    - $ae^{x-1}-\ln x+\ln a$
+    - 双位置参数
+    - $h(x_0)=0,h^\prime(x_0)=0$
+    - $x_0=1$
+    - 飘带函数
+    - $a\ge1$
+parts: &a1
+  - part_id: main
+    text: 求使 $f(x)\ge1$ 恒成立的 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0291_ae_xminus1_lnx_lna_param_range_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0291_ex06_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0291/page_0291.md
+      role: problem_start
+      evidence: page_0291 例6题头：$f(x)=ae^{x-1}-\ln x+\ln a$。若 $f(x)\ge1$，求 $a$ 的取值范围。
+    - ref_id: page_0291_ex06_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0291/page_0291.md
+      role: solution
+      evidence: page_0291 解析构造 $h(x)=ae^{x-1}-\ln x+\ln a-1$，联立 $h(x_0)=0,h^\prime(x_0)=0$ 探路，得到 $x_0=1$ 和 $a\ge1$，并用 $e^{x-1}-\ln x\ge x-\ln x\ge1$ 证明充分性。
+    - ref_id: page_0291_ex07_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0291/page_0291.md
+      role: local_context
+      evidence: page_0291 下方从例7开始新题，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0291.png
+      inspected: true
+      notes: 已核对页图：例6题头与完整解析在 page_0291 中部，随后另起例7。
+  source_context: 本卡处理 page_0291 中部起头并同页完成的例6；page_0291 例7排除。
+  source_influence:
+    - 保留恒成立转化：$h(x)=f(x)-1\ge0$。
+    - 保留双位置参数隐点探路：$h(x_0)=0,h^\prime(x_0)=0$。
+    - 保留由 $h^\prime(x_0)=0$ 得 $a=\frac1{x_0e^{x_0-1}}$。
+    - 保留 $h(x_0)=\frac1{x_0}-2\ln x_0-x_0=0$，借飘带函数只在 $x_0=1$ 成立。
+    - 保留必要条件 $h(1)=a+\ln a-1\ge0$，所以 $a\ge1$。
+    - 保留充分性：当 $a\ge1$，$f(x)\ge e^{x-1}-\ln x\ge x-\ln x\ge1$。
+  source_discrepancies:
+    - discrepancy_id: page_0291_ex06_exam_writing_fprime_typo
+      status: resolved
+      issue: source 在考试书写处写作 $f^\prime(x)=a+\ln a\ge0\Rightarrow a\ge1$，但 $a+\ln a$ 实际是 $f(1)$，不是导函数。
+      resolution: 按上下文改读为检查取等点 $x=1$ 处的必要条件 $f(1)=a+\ln a\ge1$，等价于 $h(1)=a+\ln a-1\ge0$。
+original_problem:
+  stem: （2020 · 新高考山东卷）已知函数 $f(x)=ae^{x-1}-\ln x+\ln a$。若 $f(x)\ge1$，求 $a$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $a\ge1$。
+  fidelity_notes:
+    - 无选项。
+    - 题目默认 $a>0$，否则 $\ln a$ 无定义。
+solution:
+  source_solution_summary: 令 $h(x)=ae^{x-1}-\ln x+\ln a-1$。隐点探路联立 $h(x_0)=0,h^\prime(x_0)=0$。由 $h^\prime(x_0)=ae^{x_0-1}-\frac1{x_0}=0$ 得 $a=\frac1{x_0e^{x_0-1}}$；代回 $h(x_0)=0$ 得 $\frac1{x_0}-2\ln x_0-x_0=0$。source 称其为飘带函数，只在 $x_0=1$ 成立，于是候选取等点是 $x=1$。必要性为 $h(1)=a+\ln a-1\ge0$，由于 $a+\ln a$ 在 $a>0$ 上递增，得到 $a\ge1$。充分性：当 $a\ge1$ 时， $f(x)=ae^{x-1}-\ln x+\ln a\ge e^{x-1}-\ln x\ge x-\ln x\ge1$， 所以答案是 $a\ge1$。
+  key_steps:
+    - step_id: step_1
+      statement: 把恒成立写成 $h(x)\ge0$。
+      formula_trace:
+        from: $f(x)\ge1$
+        to: $h(x)=ae^{x-1}-\ln x+\ln a-1\ge0$
+        operation: 移项构造目标函数。
+        why: 方便用取等点和导数为零探路。
+      source_ref: page_0291_ex06_solution
+    - step_id: step_2
+      statement: 联立隐点条件探路。
+      formula_trace:
+        from: $h(x_0)=0,\quad h^\prime(x_0)=0$
+        to: $a=\frac1{x_0e^{x_0-1}},\quad \frac1{x_0}-2\ln x_0-x_0=0$
+        operation: 由导数方程消去参数 $a$。
+        why: 这是双位置参数隐点效应：先找到可能取等的隐藏点。
+      source_ref: page_0291_ex06_solution
+    - step_id: step_3
+      statement: 由飘带函数锁定 $x_0=1$。
+      formula_trace:
+        from: $\frac1{x_0}-2\ln x_0-x_0=0$
+        to: $x_0=1$
+        operation: 使用 source 所说的飘带函数判定唯一取等点。
+        why: 取等点确定后，参数必要条件也随之确定。
+      source_ref: page_0291_ex06_solution
+    - step_id: step_4
+      statement: 用 $x=1$ 给出必要条件。
+      formula_trace:
+        from: $h(1)=a+\ln a-1$
+        to: $a+\ln a\ge1,\quad a\ge1$
+        operation: 代入取等点并利用单调性。
+        why: $a+\ln a$ 在 $a>0$ 上递增，且 $a=1$ 时等于 $1$。
+      source_ref: page_0291_ex06_solution
+    - step_id: step_5
+      statement: 证明 $a\ge1$ 的充分性。
+      formula_trace:
+        from: $f(x)=ae^{x-1}-\ln x+\ln a$
+        to: $f(x)\ge e^{x-1}-\ln x\ge x-\ln x\ge1$
+        operation: 用 $a\ge1$、$\ln a\ge0$ 和 $e^{x-1}\ge x$。
+        why: 补齐答案范围的充分性。
+      source_ref: page_0291_ex06_solution
+teaching_card:
+  student_title: 用隐点把 $a$ 锁到 1
+  what_it_trains: 训练带 $\ln a$ 的恒成立求参题，先用隐点条件找取等位置，再把必要性和充分性分开证明。
+  recognition_cues:
+    - 函数里既有 $ae^{x-1}$，又有 $\ln a$。
+    - 题目是全体 $x>0$ 上的下界恒成立。
+    - 取等点不能直接看出来，需要联立 $h=0,h^\prime=0$。
+    - source 明确把这一节叫“双位置参数”。
+  normalization_moves:
+    - 先构造 $h=f-1$。
+    - 用 $h^\prime(x_0)=0$ 表示 $a$。
+    - 代回 $h(x_0)=0$ 找 $x_0=1$。
+    - 最后用基础放缩证明 $a\ge1$ 足够。
+  common_failures:
+    - 把 source 的 $f^\prime(x)=a+\ln a$ 当真，忽略它实际是 $f(1)$。
+    - 只用取等点得到必要性，漏写充分性。
+    - 不知道为什么 $a>0$ 是默认条件。
+    - 不会把 $e^{x-1}\ge x$ 接到 $x-\ln x\ge1$。
+  similar_practice_query: ae^{x-1}-lnx+lna >=1 参数范围 双位置参数 隐点探路 x0=1
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

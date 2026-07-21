@@ -1,0 +1,230 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0280_exp_over_x_minus_a_lnx_visible_point_zero_count_ex04
+content_revision_id: mst_p0280_exp_over_x_minus_a_lnx_visible_point_zero_count_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0280_exp_over_x_minus_a_lnx_visible_point_zero_count_ex04.card.yaml
+stem: |-
+  （2024 · 广州模拟）已知函数 $f(x)=\frac{e^x-a}{x}-a\ln x$。
+  1. 若 $f(x)$ 在 $x=1$ 处取得极小值，求实数 $a$ 的取值范围。
+  2. 讨论 $f(x)$ 的零点个数。
+answer: |-
+  (1) $a<e$；(2) 当 $a\le1$ 时无零点，当 $a>1$ 时只有一个零点。
+
+  定义域为 $(0,+\infty)$，求导得 $f^\prime(x)=\frac{(x-1)(e^x-a)}{x^2}$。第(1)问看 $x=1$ 处导数是否从负到正： $a\le1$ 时符合；$1<a<e$ 时另一个驻点 $\ln a<1$，$x=1$ 仍为极小值； $a=e$ 时函数单调递增，不算在 $x=1$ 处取得极小值；$a>e$ 时 $x=1$ 变成极大值。 所以 $a<e$。第(2)问：$a\le1$ 时最小值 $f(1)=e-a>0$，无零点。 $1<a<e$ 时 $f(1)>0$、$f(\ln a)>0$，但靠近 0 有负值；source 用过 $(0,1)$ 与 $(\ln a,a)$ 的割线和小正点 $x=\left(\frac{a-1}{2e-1}\right)^2$ 证明左侧存在唯一零点。 $a=e$ 时单调递增且 $f(1)=0$，只有一个零点。$a>e$ 时两个极值都小于 0， 再取 $x=2\ln(4a)$ 证右侧出现正值，因此只在 $(\ln a,2\ln(4a))$ 有一个零点。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 求导并锁定两个候选极值点。
+      max_score: 1
+    - step_id: step_2
+      description: 判断 $x=1$ 什么时候是极小值。
+      max_score: 1
+    - step_id: step_3
+      description: 当 $a\le1$，最小值仍大于 0，所以无零点。
+      max_score: 1
+    - step_id: step_4
+      description: 当 $1<a<e$，用小正点证明左侧有唯一零点。
+      max_score: 1
+    - step_id: step_5
+      description: 当 $a=e$，单调递增且 $x=1$ 为零点。
+      max_score: 1
+    - step_id: step_6
+      description: 当 $a>e$，右侧取点证明唯一零点。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: "1"
+        goal: 求参数范围
+        target: 第 1 问
+        result: $a<e$。
+      - part_id: "2"
+        goal: 零点/极值点分析
+        target: 第 2 问
+        result: $a\le1$ 无零点；$a>1$ 只有一个零点。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 局部逼近与找点
+      - 拟合与夹逼
+      - 含参数分类讨论
+    subroute:
+      - 显点 $x=1$
+      - 隐点 $x=\ln a$
+      - 极值高度排除零点
+      - 小正点 $\left(\frac{a-1}{2e-1}\right)^2$
+      - 右侧取点 $2\ln(4a)$
+      - 割线估计 $e^x$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - $\frac{e^x-a}{x}-a\ln x$
+      - $f^\prime(x)=\frac{(x-1)(e^x-a)}{x^2}$
+      - $x=1$
+      - $x=\ln a$
+      - $e^x<\frac{a-1}{\ln a}x+1$
+      - $x=\left(\frac{a-1}{2e-1}\right)^2$
+      - $x=2\ln(4a)$
+    normalization_moves_used:
+      - 先看 $x=1$ 和 $\ln a$ 的相对位置。
+      - 把零点个数分成 $a\le1$、$1<a<e$、$a=e$、$a>e$。
+      - 用割线和取点只证明存在性，不替代显点效应主线。
+      - 用右端指数增长补出 $a>e$ 的唯一右零点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求导和因式分解，回补导数运算与几何意义。
+      - 若学生不会比较 $\ln a$ 与 1，回补指数对数基础。
+      - 若学生不理解极值高度控制零点个数，回补导数单调极值基础。
+      - 若学生看不懂割线估计，回补函数性质与图像。
+      - 若学生不会处理取点参数，回补代数恒等变形。
+  detail_terms:
+    - $\frac{e^x-a}{x}-a\ln x$
+    - $x=1$
+    - $x=\ln a$
+    - $a<e$
+    - 零点个数
+    - 割线估计
+    - $\left(\frac{a-1}{2e-1}\right)^2$
+    - $2\ln(4a)$
+parts: &a1
+  - part_id: "1"
+    text: 若 $f(x)$ 在 $x=1$ 处取得极小值，求实数 $a$ 的取值范围。
+  - part_id: "2"
+    text: 讨论 $f(x)$ 的零点个数。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0280_exp_over_x_minus_a_lnx_visible_point_zero_count_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0280_ex04_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0280/page_0280.md
+      role: problem_start
+      evidence: page_0280 给出例4题头：$f(x)=\frac{e^x-a}{x}-a\ln x$，问 $x=1$ 处取极小值时 $a$ 的范围，并讨论零点个数。
+    - ref_id: page_0280_ex04_part1_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0280/page_0280.md
+      role: solution
+      evidence: page_0280 第(1)问给出定义域 $(0,+\infty)$ 与 $f^\prime(x)=\frac{(x-1)(e^x-a)}{x^2}$，按 $a\le1$、$1<a<e$、$a=e$、$a>e$ 判断 $x=1$ 是否为极小值。
+    - ref_id: page_0280_ex04_part2_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0280/page_0280.md
+      role: solution
+      evidence: page_0280 第(2)问先处理 $a\le1$ 无零点，$1<a<e$ 时 $x=1$ 极小值和 $x=\ln a$ 极大值均大于 0，并开始构造小正点。
+    - ref_id: page_0281_ex04_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0281/page_0281.md
+      role: solution
+      evidence: page_0281 续完 $1<a<e$ 的小正点证明，处理 $a=e$ 一零点，并对 $a>e$ 取 $x=2\ln(4a)$ 证明右侧有唯一零点；最终结论为 $a\le1$ 无零点、$a>1$ 只有一个零点。
+    - ref_id: page_0281_ex05_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0281/page_0281.md
+      role: local_context
+      evidence: page_0281 后半进入新小节并另起例5，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0280.png
+      inspected: true
+      notes: 已核对页图：page_0280 中部起为例4题头、part1 与 part2 开头，底部公式截断。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0281.png
+      inspected: true
+      notes: 已核对页图：page_0281 顶部续完例4，随后另起例5。
+  source_context: 本卡处理 page_0280 起头、page_0281 顶部续完的例4；page_0281 例5排除。
+  source_influence:
+    - 保留导数分解：$f^\prime(x)=\frac{(x-1)(e^x-a)}{x^2}$。
+    - 保留第(1)问结论：$a<e$。
+    - 保留第(2)问结论：$a\le1$ 无零点，$a>1$ 只有一个零点。
+    - 保留 $1<a<e$ 时用割线与小正点 $x=\left(\frac{a-1}{2e-1}\right)^2$。
+    - 保留 $a>e$ 时用右侧取点 $x=2\ln(4a)$。
+  source_discrepancies:
+    - field: page_0280_bottom_secant_cutoff
+      source_value: "由于 $e^x < \\frac{a-1}{\\ln a}x +$ [?unclear: 后续内容被截断 | reason=页面底部边缘]"
+      resolved_value: $e^x < \frac{a-1}{\ln a}x + 1$
+      reason: page_0281 首行以 “1(过 $(0,1)$ 和 $(\ln a,a)$ 的割线)” 开头，补齐 page_0280 底部被截断的 $+1$。
+    - field: page_0281_split_inequality
+      source_value: $<2e-1$ followed by $-\frac{a-1}{\sqrt{x}}=0$
+      resolved_value: $<2e-1-\frac{a-1}{\sqrt{x}}=0$
+      reason: source 随后取 $x=\left(\frac{a-1}{2e-1}\right)^2$，说明两行应合并为用小正点令右侧为 0。
+original_problem:
+  stem: （2024 · 广州模拟）已知函数 $f(x)=\frac{e^x-a}{x}-a\ln x$。
+  parts: *a1
+  choices: []
+  answer: (1) $a<e$；(2) 当 $a\le1$ 时无零点，当 $a>1$ 时只有一个零点。
+  fidelity_notes:
+    - 无选项。
+    - source 第(2)问的 $1<a<e$ 和 $a>e$ 存在性证明跨 page_0280/page_0281。
+solution:
+  source_solution_summary: 定义域为 $(0,+\infty)$，求导得 $f^\prime(x)=\frac{(x-1)(e^x-a)}{x^2}$。第(1)问看 $x=1$ 处导数是否从负到正： $a\le1$ 时符合；$1<a<e$ 时另一个驻点 $\ln a<1$，$x=1$ 仍为极小值； $a=e$ 时函数单调递增，不算在 $x=1$ 处取得极小值；$a>e$ 时 $x=1$ 变成极大值。 所以 $a<e$。第(2)问：$a\le1$ 时最小值 $f(1)=e-a>0$，无零点。 $1<a<e$ 时 $f(1)>0$、$f(\ln a)>0$，但靠近 0 有负值；source 用过 $(0,1)$ 与 $(\ln a,a)$ 的割线和小正点 $x=\left(\frac{a-1}{2e-1}\right)^2$ 证明左侧存在唯一零点。 $a=e$ 时单调递增且 $f(1)=0$，只有一个零点。$a>e$ 时两个极值都小于 0， 再取 $x=2\ln(4a)$ 证右侧出现正值，因此只在 $(\ln a,2\ln(4a))$ 有一个零点。
+  key_steps:
+    - step_id: step_1
+      statement: 求导并锁定两个候选极值点。
+      formula_trace:
+        from: $f(x)=\frac{e^x-a}{x}-a\ln x$
+        to: $f^\prime(x)=\frac{(x-1)(e^x-a)}{x^2}$
+        operation: 求导并因式分解。
+        why: $x=1$ 是固定显点，$x=\ln a$ 是随参数移动的隐点。
+      source_ref: page_0280_ex04_part1_solution
+    - step_id: step_2
+      statement: 判断 $x=1$ 什么时候是极小值。
+      formula_trace:
+        from: $x=1,\quad x=\ln a$
+        to: $a<e$
+        operation: 按 $a\le1$、$1<a<e$、$a=e$、$a>e$ 判导数符号。
+        why: $x=1$ 要从递减转递增，不能是单调点或极大值点。
+      source_ref: page_0280_ex04_part1_solution
+    - step_id: step_3
+      statement: 当 $a\le1$，最小值仍大于 0，所以无零点。
+      formula_trace:
+        from: $a\le1,\quad f(1)=e-a$
+        to: $f(x)\ge f(1)>0$
+        operation: 利用第(1)问的单调性形态。
+        why: 全域最小值大于 0，曲线不穿轴。
+      source_ref: page_0280_ex04_part2_start
+    - step_id: step_4
+      statement: 当 $1<a<e$，用小正点证明左侧有唯一零点。
+      formula_trace:
+        from: $e^x<\frac{a-1}{\ln a}x+1$
+        to: $x=\left(\frac{a-1}{2e-1}\right)^2$ 处可令上界为负
+        operation: 用割线估计 $e^x$，再取小正点压出 $f(x)<0$。
+        why: $f(1)>0$ 与 $f(\ln a)>0$ 保证极值在轴上方，小正点负值给出左侧唯一零点。
+      source_ref: page_0281_ex04_continuation
+    - step_id: step_5
+      statement: 当 $a=e$，单调递增且 $x=1$ 为零点。
+      formula_trace:
+        from: $a=e,\quad f(1)=0$
+        to: 恰有一个零点
+        operation: 利用第(1)问中 $a=e$ 的单调性。
+        why: 单调递增时一个零点不会重复出现。
+      source_ref: page_0281_ex04_continuation
+    - step_id: step_6
+      statement: 当 $a>e$，右侧取点证明唯一零点。
+      formula_trace:
+        from: $f(1)=e-a<0,\quad f(\ln a)<0$
+        to: $x=2\ln(4a)$ 处 $f(x)>0$
+        operation: 用 $f(x)>\frac1x(e^x-a-ax^2)$ 的下界，再让 $e^{x/2}-4a=0$。
+        why: 两个极值都在轴下方，只能在右侧最终上升段穿一次。
+      source_ref: page_0281_ex04_continuation
+teaching_card:
+  student_title: 用 $x=1$ 和 $\ln a$ 判断零点个数
+  what_it_trains: 训练显点和隐点一起控制曲线形状：先决定 $x=1$ 是极小值还是极大值，再看极值高度和取点来判断是否穿轴。
+  recognition_cues:
+    - 导数能分解出 $(x-1)(e^x-a)$。
+    - 题目同时问 $x=1$ 处极小值和零点个数。
+    - $a$ 与 $1,e$ 的关系决定 $\ln a$ 在 0、1 的哪一边。
+    - source 在 $1<a<e$ 和 $a>e$ 都用了取点来补存在性。
+  normalization_moves:
+    - 先写定义域，再求导。
+    - 按 $a\le1$、$1<a<e$、$a=e$、$a>e$ 分段。
+    - $1<a<e$ 用割线估计找小正点。
+    - $a>e$ 用指数增长找右侧大点。
+  common_failures:
+    - 忘记定义域是 $(0,+\infty)$。
+    - 把 $a=e$ 误算成也在第(1)问答案里。
+    - 只看两个极值都大于 0，就误以为没有零点，忽略 $x\to0^+$ 方向。
+    - 只看两个极值都小于 0，就误以为没有零点，忽略 $x\to+\infty$ 方向。
+    - 把割线估计和取点当成主线，没看出主线是 $x=1$ 与 $\ln a$ 的形态分类。
+  similar_practice_query: 显点 x=1 隐点 ln a (e^x-a)/x-a ln x 零点个数
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes: []

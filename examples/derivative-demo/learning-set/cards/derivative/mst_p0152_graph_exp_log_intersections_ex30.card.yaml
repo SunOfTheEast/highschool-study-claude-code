@@ -1,0 +1,190 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0152_graph_exp_log_intersections_ex30
+content_revision_id: mst_p0152_graph_exp_log_intersections_ex30-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0152_graph_exp_log_intersections_ex30.card.yaml
+stem: |-
+  （2023·小店区月考）若 $e^a=-\ln a$，$e^{-b}=\ln b$，$e^{-c}=-\ln c$，则（  ）
+  A. $a<b<c$
+  B. $a<c<b$
+  C. $b<c<a$
+  D. $b<a<c$
+answer: |
+  B
+
+  将三条等式解释为交点横坐标：
+  \[
+  e^a=-\ln a \Rightarrow a \text{ 是 } y=e^x \text{ 与 } y=-\ln x \text{ 的交点横坐标};
+  \]
+  \[
+  e^{-b}=\ln b \Rightarrow b \text{ 是 } y=e^{-x} \text{ 与 } y=\ln x \text{ 的交点横坐标};
+  \]
+  \[
+  e^{-c}=-\ln c \Rightarrow c \text{ 是 } y=e^{-x} \text{ 与 } y=-\ln x \text{ 的交点横坐标}.
+  \]
+  在同一坐标系作出四条曲线后，按图像读得交点横坐标顺序
+  \[
+  a<c<b.
+  \]
+  故选 B。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把每个等式转写成两条函数曲线的交点条件。
+      max_score: 1
+    - step_id: step_2
+      description: 在同一坐标系放置四条曲线并读取交点位置。
+      max_score: 1
+    - step_id: step_3
+      description: 对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较由三组交点方程定义的 $a,b,c$。
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 四曲线同图读横坐标
+      - 交点定义变量
+      - 数形结合交点
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 非对称结构
+    evidence:
+      - 同一题中同时出现 $e^x,e^{-x},\ln x,-\ln x$ 四类指对函数。
+      - 未知量不是直接给数值，而是由“曲线交点横坐标”定义。
+      - 配图直接标注了 $a,c,b$ 在 x 轴上的相对位置。
+    normalization_moves_used:
+      - 把等式统一改写为“函数图像交点”。
+      - 把三次比较压缩为一次坐标轴读序。
+      - 在同一图中完成多关系联判。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把等式理解为交点条件，回补函数性质与图像。
+      - 若学生在 $\ln x$ 与 $-\ln x$ 的定义域和符号上混淆，回补函数三要素与定义域。
+      - 若学生不会判断指数对数曲线相对位置，回补指数对数基础。
+  detail_terms:
+    - 四曲线同图
+    - 交点横坐标
+    - $a<c<b$
+    - $y=e^{-x}$ 与 $y=-\ln x$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0152_graph_exp_log_intersections_ex30
+source_evidence:
+  source_refs:
+    - ref_id: page_0152_ex30_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0152/page_0152.md
+      role: problem_start
+      evidence: 例30题干给出 $e^a=-\ln a,\ e^{-b}=\ln b,\ e^{-c}=-\ln c$，要求判断 $a,b,c$ 顺序。
+    - ref_id: page_0152_ex30_figure
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0152/page_0152.md
+      role: solution
+      evidence: 例30配图在同一坐标系画出 $y=e^x,\ y=e^{-x},\ y=\ln x,\ y=-\ln x$，并在 x 轴标出 $a,c,b$。
+    - ref_id: page_0152_ex30_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0152/page_0152.md
+      role: solution
+      evidence: 源解析直接由图像读出 $a<c<b$，故选 B。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0152.png
+      inspected: true
+      notes: 已核对原图：四曲线交点图完整，横坐标顺序标为 $a<c<b$。
+  source_context: 例30属于“数形结合比大小”小节，图像是主要证据。
+  source_influence:
+    - 保留源解法：把三个等式解释为三组曲线交点横坐标。
+    - 保留同图比较：在同一坐标系下直接读出 $a<c<b$。
+    - 保留结论选 B。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·小店区月考）若 $e^a=-\ln a$，$e^{-b}=\ln b$，$e^{-c}=-\ln c$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+    - label: B
+      text_raw: $a<c<b$
+      text_latex: $a<c<b$
+    - label: C
+      text_raw: $b<c<a$
+      text_latex: $b<c<a$
+    - label: D
+      text_raw: $b<a<c$
+      text_latex: $b<a<c$
+  answer: B
+  fidelity_notes:
+    - 例30结论依赖题内配图，非数值近似计算题。
+    - 本卡按源图保留三交点横坐标读序逻辑。
+solution:
+  source_solution_summary: |
+    将三条等式解释为交点横坐标：
+    \[
+    e^a=-\ln a \Rightarrow a \text{ 是 } y=e^x \text{ 与 } y=-\ln x \text{ 的交点横坐标};
+    \]
+    \[
+    e^{-b}=\ln b \Rightarrow b \text{ 是 } y=e^{-x} \text{ 与 } y=\ln x \text{ 的交点横坐标};
+    \]
+    \[
+    e^{-c}=-\ln c \Rightarrow c \text{ 是 } y=e^{-x} \text{ 与 } y=-\ln x \text{ 的交点横坐标}.
+    \]
+    在同一坐标系作出四条曲线后，按图像读得交点横坐标顺序
+    \[
+    a<c<b.
+    \]
+    故选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 把每个等式转写成两条函数曲线的交点条件。
+      formula_trace:
+        from: $e^a=-\ln a,\ e^{-b}=\ln b,\ e^{-c}=-\ln c$
+        to: $a,c,b$ 分别对应三组交点横坐标
+        operation: 把“左式=右式”解释为“同一 $x$ 处两函数值相等”。
+        why: 统一到“交点横坐标比较”这一可视化目标。
+      source_ref: page_0152_ex30_problem
+    - step_id: step_2
+      statement: 在同一坐标系放置四条曲线并读取交点位置。
+      formula_trace:
+        from: $y=e^x,\ y=e^{-x},\ y=\ln x,\ y=-\ln x$
+        to: $a<c<b$
+        operation: 数形结合读取 x 轴上三个交点的先后位置。
+        why: 图像直接给出所求顺序。
+      source_ref: page_0152_ex30_figure
+    - step_id: step_3
+      statement: 对应选项。
+      formula_trace:
+        from: $a<c<b$
+        to: 选 B
+        operation: 与选项对照。
+        why: 完成作答。
+      source_ref: page_0152_ex30_solution
+teaching_card:
+  student_title: 四条指数对数曲线同图读交点顺序
+  what_it_trains: 训练把“方程定义变量”转成“交点横坐标”后，用一张图完成多变量比大小。
+  recognition_cues:
+    - 条件全是“某指数式=某对数式”。
+    - 未知量出现在函数自变量位置。
+    - 题型是三数排序单选。
+  normalization_moves:
+    - 先给每个未知量配一对交点曲线。
+    - 把所有曲线放到同一坐标系。
+    - 按 x 轴位置一次性读出顺序。
+  common_failures:
+    - 把 $e^{-b}=\ln b$ 误画成 $e^b=\ln b$。
+    - 忽略 $\ln x$ 只在 $x>0$ 有定义，导致错判交点。
+    - 分开比较两两关系，遗漏全序链。
+  similar_practice_query: 指数对数 交点横坐标 四曲线同图 比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

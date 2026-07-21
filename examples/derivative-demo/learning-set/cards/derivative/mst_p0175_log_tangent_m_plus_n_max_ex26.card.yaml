@@ -1,0 +1,147 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0175_log_tangent_m_plus_n_max_ex26
+content_revision_id: mst_p0175_log_tangent_m_plus_n_max_ex26-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0175_log_tangent_m_plus_n_max_ex26.card.yaml
+stem: |-
+  （2024 · 重庆十一中月考 T6）已知曲线 $y=\ln(mx+n)$ 与直线 $2x-y=0$ 相切，则 $m+n$ 的最大值为（  ）
+  A. $\frac{e^2}{4}$
+  B. $\frac{e^2}{2}$
+  C. $e^2$
+  D. $2e^2$
+answer: |-
+  C
+
+  因为目标是 $m+n$，直接看 $x=1$ 时曲线的函数值： $y_1=\ln(m+n)$。直线 $2x-y=0$ 即 $y=2x$，在 $x=1$ 时 $y_2=2$。相切且切点比大小给出 $\ln(m+n)\leqslant2$，所以 $m+n\leqslant e^2$，最大值为 $e^2$，选 C。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 从目标 $m+n$ 选取对应横坐标。
+      max_score: 1
+    - step_id: step_2
+      description: 比较曲线和直线在该点的高度。
+      max_score: 1
+    - step_id: step_3
+      description: 指数化得到最大值。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 切线放缩与凹凸性
+    subroute:
+      - 切点比大小
+      - 目标量定点代入
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $y=\ln(mx+n)$
+      - $y=2x$
+      - $x=1\Rightarrow \ln(m+n)\leqslant2$
+    normalization_moves_used:
+      - 由目标 $m+n$ 反推出代入 $x=1$。
+      - 把直线 $2x-y=0$ 改写成 $y=2x$。
+      - 用对数单调性从高度比较转成参数和上界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能从 $m+n$ 想到 $x=1$，回补代数恒等变形。
+      - 若学生不会把 $2x-y=0$ 改成 $y=2x$，回补函数三要素与定义域。
+      - 若学生指数化方向出错，回补指数对数基础。
+  detail_terms:
+    - $\ln(mx+n)$
+    - $2x-y=0$
+    - $m+n$
+    - $x=1$
+    - $e^2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0175_log_tangent_m_plus_n_max_ex26
+source_evidence:
+  source_refs:
+    - ref_id: page_0175
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0175/page_0175.md
+      role: problem_start
+      evidence: "lines 44-54 contain 例26 statement, choices A-D, and solution: use 切点比大小 at $x=1$, compare $y_1=\\ln(m+n)$ with $y_2=2$, and obtain $m+n\\leqslant e^2$."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0175.png
+      inspected: true
+      notes: 页图核对通过：题干为曲线 $y=\ln(mx+n)$ 与直线 $2x-y=0$ 相切，求 $m+n$ 最大值；选项 C 为 $e^2$。
+  source_context: 本题仍属于考点 6 的切点比大小模型，是把目标 $m+n$ 绑定到 $x=1$ 的短题。
+  source_influence:
+    - 保留源解“当 $x=1$ 时 $y_1=\ln(m+n)\leqslant y_2=2$”的最短路线。
+    - 把切点比大小解释为从目标量 $m+n$ 选择横坐标 $x=1$。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 重庆十一中月考 T6）已知曲线 $y=\ln(mx+n)$ 与直线 $2x-y=0$ 相切，则 $m+n$ 的最大值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\frac{e^2}{4}$
+      text_latex: $\frac{e^2}{4}$
+    - label: B
+      text_raw: $\frac{e^2}{2}$
+      text_latex: $\frac{e^2}{2}$
+    - label: C
+      text_raw: $e^2$
+      text_latex: $e^2$
+    - label: D
+      text_raw: $2e^2$
+      text_latex: $2e^2$
+  answer: C
+  fidelity_notes:
+    - 源题为单选题，选项 A-D 已完整保留。
+    - 源解只给出切点比大小的短解，本卡未引入额外求导参数解法。
+solution:
+  source_solution_summary: 因为目标是 $m+n$，直接看 $x=1$ 时曲线的函数值： $y_1=\ln(m+n)$。直线 $2x-y=0$ 即 $y=2x$，在 $x=1$ 时 $y_2=2$。相切且切点比大小给出 $\ln(m+n)\leqslant2$，所以 $m+n\leqslant e^2$，最大值为 $e^2$，选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 从目标 $m+n$ 选取对应横坐标。
+      formula_trace:
+        from: $m+n$
+        to: $x=1,\quad \ln(mx+n)=\ln(m+n)$
+        operation: 把目标量识别为对数内部在 $x=1$ 的值。
+        why: 这样不用先解切点，就能直接比较目标量。
+      source_ref: page_0175:lines 44-54
+    - step_id: step_2
+      statement: 比较曲线和直线在该点的高度。
+      formula_trace:
+        from: $y_1=\ln(m+n),\quad y_2=2x$
+        to: $\ln(m+n)\leqslant2$
+        operation: 在 $x=1$ 代入直线 $y=2x$。
+        why: 源书切点比大小模型把相切约束转成目标点处的高度比较。
+      source_ref: page_0175:lines 50-54
+    - step_id: step_3
+      statement: 指数化得到最大值。
+      formula_trace:
+        from: $\ln(m+n)\leqslant2$
+        to: $m+n\leqslant e^2$
+        operation: 两边取指数。
+        why: $\ln$ 单调递增。
+      source_ref: page_0175:lines 50-54
+teaching_card:
+  student_title: 从目标 $m+n$ 反找切点比较
+  what_it_trains: 训练在相切题中先看目标量能在哪个横坐标自然出现，再用切点比大小直接压出最值。
+  recognition_cues:
+    - 题目给对数曲线和直线相切。
+    - 最后问 $m+n$ 的最大值。
+    - $m+n$ 正好是 $mx+n$ 在 $x=1$ 时的值。
+  normalization_moves:
+    - 把 $2x-y=0$ 写成 $y=2x$。
+    - 代入 $x=1$ 得到 $\ln(m+n)$ 和 $2$。
+    - 用 $\ln(m+n)\leqslant2$ 收束。
+  common_failures:
+    - 一上来联立切点方程，反而增加参数计算量。
+    - 没有意识到 $x=1$ 是由目标 $m+n$ 触发的。
+    - 把最大值写成 $2$ 而不是 $e^2$。
+  similar_practice_query: ln(mx+n) 2x-y=0 相切 m+n 最大值 切点比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

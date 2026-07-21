@@ -1,0 +1,155 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0044_section2_ex14
+content_revision_id: mst_p0044_section2_ex14-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0044_section2_ex14.card.yaml
+stem: |-
+  已知直线 y=k_1x 与 y=k_2x(k_1>k_2) 是曲线 y=ax+2\ln|x|(a\in\mathbf{R}) 的两条切线，则 k_1-k_2=（  ）
+  A. 4/e
+  B. 2a
+  C. 4
+  D. 无法确定
+answer: |-
+  A
+
+  两条切线都是 y=kx，必过原点。x>0 时曲线为 y=ax+2\ln x，过原点切线斜率为 a+2/e；x<0 时曲线为 y=ax+2\ln(-x)，由对称性得到斜率 a-2/e。两斜率差为 4/e。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把曲线按 x 的正负拆成两支。
+      max_score: 1
+    - step_id: step_2
+      description: 正半轴上求过原点切线的斜率。
+      max_score: 1
+    - step_id: step_3
+      description: 负半轴上由对称性求另一条切线。
+      max_score: 1
+    - step_id: step_4
+      description: 相同的 a 项相消，得到斜率差。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何量求解
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 对称性配凑
+      - 数形结合
+    subroute:
+      - 对数切线找点
+      - 过原点切线
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 对称结构
+    evidence:
+      - y=ax+2\ln|x| 的两条 y=kx 切线都过原点。
+      - 两条斜率为 a\pm2/e。
+    normalization_moves_used:
+      - 将 ax 视为共同线性斜率平移。
+      - 把 2\ln|x| 的两支切线斜率看成正负对称。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 y=kx 判断切线过原点，回补导数运算与几何意义。
+      - 若学生没有拆 \ln|x| 的正负两支，回补函数三要素与定义域。
+      - 若学生把 a 留在最终差值中，回补代数恒等变形中的同项相消。
+  detail_terms:
+    - y=(a+2/e)x
+    - y=(a-2/e)x
+    - k_1-k_2=4/e
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0044_section2_ex14
+source_evidence:
+  source_refs:
+    - ref_id: page_0044
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0044/page_0044.md
+      role: problem_start
+      evidence: 例 14：直线 y=k_1x 与 y=k_2x(k_1>k_2) 是曲线 y=ax+2\ln|x| 的两条切线，求 k_1-k_2。
+    - ref_id: page_0044_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0044/page_0044.md
+      role: solution
+      evidence: 解析分别讨论 x>0 与 x<0，得到过原点切线 y=ax+2x/e 与 y=ax-2x/e，因此 k_1-k_2=4/e。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0044.png
+      inspected: true
+      notes: 页图已核对：例 14 题干、选项和解析完整，答案为 A。
+  source_context: 本题接在例 13 后，继续使用对数函数过原点切线找点。
+  source_influence: []
+  source_discrepancies: []
+original_problem:
+  stem: 已知直线 y=k_1x 与 y=k_2x(k_1>k_2) 是曲线 y=ax+2\ln|x|(a\in\mathbf{R}) 的两条切线，则 k_1-k_2=（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 4/e
+      text_latex: \frac{4}{e}
+    - label: B
+      text_raw: 2a
+      text_latex: 2a
+    - label: C
+      text_raw: "4"
+      text_latex: "4"
+    - label: D
+      text_raw: 无法确定
+      text_latex: \text{无法确定}
+  answer: A
+  fidelity_notes: []
+solution:
+  source_solution_summary: 两条切线都是 y=kx，必过原点。x>0 时曲线为 y=ax+2\ln x，过原点切线斜率为 a+2/e；x<0 时曲线为 y=ax+2\ln(-x)，由对称性得到斜率 a-2/e。两斜率差为 4/e。
+  key_steps:
+    - step_id: step_1
+      statement: 把曲线按 x 的正负拆成两支。
+      formula_trace:
+        from: y=ax+2\ln|x|
+        to: "x>0: y=ax+2\\ln x；x<0: y=ax+2\\ln(-x)"
+        operation: 按 |x| 的定义分类。
+        why: 两条过原点切线分别来自正半轴与负半轴。
+      source_ref: page_0044_solution
+    - step_id: step_2
+      statement: 正半轴上求过原点切线的斜率。
+      formula_trace:
+        from: y=ax+2\ln x
+        to: y=\left(a+\frac{2}{e}\right)x
+        operation: 对 2\ln x 使用过原点切点 x=e，切线贡献斜率 2/e，再叠加 ax。
+        why: 线性项 ax 只把切线斜率整体加 a。
+      source_ref: page_0044_solution
+    - step_id: step_3
+      statement: 负半轴上由对称性求另一条切线。
+      formula_trace:
+        from: y=ax+2\ln(-x)
+        to: y=\left(a-\frac{2}{e}\right)x
+        operation: 2\ln(-x) 的过原点切线是 -2x/e，再叠加 ax。
+        why: 正负两支的对数切线斜率相反，a 项相同。
+      source_ref: page_0044_solution
+    - step_id: step_4
+      statement: 相同的 a 项相消，得到斜率差。
+      formula_trace:
+        from: k_1=a+\frac{2}{e},\quad k_2=a-\frac{2}{e}
+        to: k_1-k_2=\frac{4}{e}
+        operation: 用 k_1>k_2 确认顺序并相减。
+        why: 题目只问两条切线斜率差，和参数 a 无关。
+      source_ref: page_0044_solution
+teaching_card:
+  student_title: 把 ax 当共同斜率，求 \ln|x| 两支切线差
+  what_it_trains: 训练从过原点切线识别对数切点，并看出线性项 ax 对两条斜率的贡献会相消。
+  recognition_cues:
+    - 两条直线都是 y=kx。
+    - 曲线含 ax+2\ln|x|。
+    - 题目问 k_1-k_2 而不是分别求 k_1、k_2。
+  normalization_moves:
+    - 拆成 x>0 与 x<0。
+    - 先记 2\ln|x| 的两条过原点切线斜率为 \pm2/e。
+    - 最后再叠加共同的 a。
+  common_failures:
+    - 误选 2a，以为两条切线只由 ax 决定。
+    - 只算正半轴，漏掉负半轴切线。
+    - 把 k_1、k_2 顺序弄反。
+  similar_practice_query: 含 ax+ln|x| 的过原点切线斜率差，利用正负支对称
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

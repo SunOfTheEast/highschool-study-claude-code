@@ -1,0 +1,212 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0144_ab_ba_compare_ex05
+content_revision_id: mst_p0144_ab_ba_compare_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0144_ab_ba_compare_ex05.card.yaml
+stem: |-
+  （20-21高三下·河北衡水·阶段练习）已知函数 $f(x)=e^x\ln|x|$，$a=f(-\ln3)$，$b=f(\ln3)$，$c=f(3^e)$，$d=f(e^3)$，则 $a,b,c,d$ 的大小顺序为（  ）
+  A. $a>b>c>d$
+  B. $d>c>b>a$
+  C. $c>d>b>a$
+  D. $c>d>a>b$
+answer: |
+  B
+
+  先代入定义：
+  $a=e^{-\ln3}\ln(\ln3)=\frac{\ln(\ln3)}3$，
+  $b=e^{\ln3}\ln(\ln3)=3\ln(\ln3)$，
+  所以 $a<b$。再看
+  $f(x)=e^x\ln|x|$ 在 $(0,+\infty)$ 上递增，
+  且 $\ln3<3^e,e^3$，故在 $b,c,d$ 里 $b$ 最小。
+  只需比 $c,d$：
+  $c=f(3^e)$ 与 $d=f(e^3)$ 的底层比较可化为
+  $e\ln3$ 与 $3\ln e$，再化为
+  $\frac{\ln3}{3}$ 与 $\frac{\ln e}{e}$。
+  由同构函数 $\ln x/x$ 在 $x>e$ 递减，得
+  $\frac{\ln3}{3}<\frac1e$，即 $e^3>3^e$，
+  从而 $d>c$。综上 $d>c>b>a$，选 B。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先把 $a,b$ 直接化简。
+      max_score: 1
+    - step_id: step_2
+      description: 用单调性定位 $b$。
+      max_score: 1
+    - step_id: step_3
+      description: 把 $c$ 与 $d$ 转成指数比较。
+      max_score: 1
+    - step_id: step_4
+      description: 使用 $\ln x/x$ 判定 $3^e$ 与 $e^3$。
+      max_score: 1
+    - step_id: step_5
+      description: 汇总全序。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 先定位 $a,b$ 的先后。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 数值比较
+        target: 再在 $b,c,d$ 中判最小并补齐 $c,d$ 次序。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 数形结合
+    subroute:
+      - 分层排序
+      - 同构函数 $\ln x/x$
+      - 指数对数比大小
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 非对称结构
+    evidence:
+      - 对象都来自 $f(x)=e^x\ln|x|$，先以单调性统一比较框架。
+      - $c,d$ 实质是 $3^e$ 与 $e^3$ 的经典同构比较。
+    normalization_moves_used:
+      - 直接化简 $a,b$。
+      - 用 $f$ 递增先锁定 $b$ 为最小。
+      - 把 $3^e$ 与 $e^3$ 转成 $\ln x/x$ 比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会判断 $e^x\ln x$ 的单调区间，回补导数单调极值基础。
+      - 若学生把 $3^e$ 与 $e^3$ 的比较停在取对数前，回补指数对数基础。
+      - 若学生不知道 $\ln x/x$ 在 $x=e$ 处取最大，回补函数性质与图像。
+  detail_terms:
+    - $f(x)=e^x\ln|x|$
+    - $a=\ln(\ln3)/3$
+    - $b=3\ln(\ln3)$
+    - $\ln x/x$
+    - $e^3>3^e$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0144_ab_ba_compare_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0144_ex05_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0144/page_0144.md
+      role: problem_start
+      evidence: 例5题干：$f(x)=e^x\ln|x|$，定义 $a,b,c,d$ 并比较大小。
+    - ref_id: page_0144_ex05_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0144/page_0144.md
+      role: solution
+      evidence: 例5解析：先判 $a<b$，再用 $f$ 在 $(0,+\infty)$ 递增确定 $b$ 最小，最后比较 $c,d$。
+    - ref_id: page_0144_ex05_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0144/page_0144.md
+      role: local_context
+      evidence: 例5位于“关于 $a^b$ 与 $b^a$ 比大小”小节下，前文给出同构函数 $\ln x/x$ 的口诀。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0144.png
+      inspected: true
+      notes: 已核对原图：题干与答案B清晰，$c=f(3^e), d=f(e^3)$ 无歧义。
+  source_context: 本题在page_0144内完整结束，主要训练“分层比较 + 同构函数 $\ln x/x$ 判断 $3^e$ 与 $e^3$”。
+  source_influence:
+    - 保留源解先算 $a,b$：$a=\ln(\ln3)/3$，$b=3\ln(\ln3)$。
+    - 保留源解“$f$ 在 $(0,+\infty)$ 递增”用于判 $b$ 为三者 $b,c,d$ 中最小。
+    - 保留源解用 $\ln x/x$ 比较 $e\ln3$ 与 $3\ln e$，推出 $d>c$。
+  source_discrepancies: []
+original_problem:
+  stem: （20-21高三下·河北衡水·阶段练习）已知函数 $f(x)=e^x\ln|x|$，$a=f(-\ln3)$，$b=f(\ln3)$，$c=f(3^e)$，$d=f(e^3)$，则 $a,b,c,d$ 的大小顺序为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a>b>c>d$
+      text_latex: $a>b>c>d$
+    - label: B
+      text_raw: $d>c>b>a$
+      text_latex: $d>c>b>a$
+    - label: C
+      text_raw: $c>d>b>a$
+      text_latex: $c>d>b>a$
+    - label: D
+      text_raw: $c>d>a>b$
+      text_latex: $c>d>a>b$
+  answer: B
+  fidelity_notes:
+    - 原图与markdown一致：函数写作 $e^x\ln|x|$。
+    - 本题在page_0144内结束，无跨页续解。
+solution:
+  source_solution_summary: |
+    先代入定义：
+    $a=e^{-\ln3}\ln(\ln3)=\frac{\ln(\ln3)}3$，
+    $b=e^{\ln3}\ln(\ln3)=3\ln(\ln3)$，
+    所以 $a<b$。再看
+    $f(x)=e^x\ln|x|$ 在 $(0,+\infty)$ 上递增，
+    且 $\ln3<3^e,e^3$，故在 $b,c,d$ 里 $b$ 最小。
+    只需比 $c,d$：
+    $c=f(3^e)$ 与 $d=f(e^3)$ 的底层比较可化为
+    $e\ln3$ 与 $3\ln e$，再化为
+    $\frac{\ln3}{3}$ 与 $\frac{\ln e}{e}$。
+    由同构函数 $\ln x/x$ 在 $x>e$ 递减，得
+    $\frac{\ln3}{3}<\frac1e$，即 $e^3>3^e$，
+    从而 $d>c$。综上 $d>c>b>a$，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 先把 $a,b$ 直接化简。
+      formula_trace:
+        from: $a=f(-\ln3),\ b=f(\ln3)$
+        to: $a=\frac{\ln(\ln3)}3,\ b=3\ln(\ln3),\ a<b$
+        operation: 按定义代入 $f(x)=e^x\ln|x|$ 并整理系数。
+        why: 先固定一对明显可比的量。
+      source_ref: page_0144_ex05_solution
+    - step_id: step_2
+      statement: 用单调性定位 $b$。
+      formula_trace:
+        from: $f(x)$ 在 $(0,+\infty)$ 递增
+        to: $\ln3<3^e,e^3\Rightarrow b=f(\ln3)<f(3^e),f(e^3)$
+        operation: 比较三个输入点的大小并用递增函数保序。
+        why: 得到 $b$ 在 $b,c,d$ 中最小。
+      source_ref: page_0144_ex05_solution
+    - step_id: step_3
+      statement: 把 $c$ 与 $d$ 转成指数比较。
+      formula_trace:
+        from: $c=f(3^e),\ d=f(e^3)$
+        to: 比较 $3^e$ 与 $e^3$，等价比较 $e\ln3$ 与 $3\ln e$
+        operation: 对指数式取对数并提取系数。
+        why: 把“大数幂比较”转成同构函数值比较。
+      source_ref: page_0144_ex05_solution
+    - step_id: step_4
+      statement: 使用 $\ln x/x$ 判定 $3^e$ 与 $e^3$。
+      formula_trace:
+        from: $e\ln3\ ?\ 3\ln e$
+        to: $\frac{\ln3}{3}<\frac{\ln e}{e}=\frac1e\Rightarrow e^3>3^e$
+        operation: 改写为 $\ln x/x$ 在 $x=3,e$ 的函数值比较。
+        why: 得到 $d=f(e^3)>f(3^e)=c$。
+      source_ref: page_0144_ex05_solution
+    - step_id: step_5
+      statement: 汇总全序。
+      formula_trace:
+        from: $a<b,\ b<c,\ d>c$
+        to: $d>c>b>a$
+        operation: 合并各子比较结论。
+        why: 对应选项 B。
+      source_ref: page_0144_ex05_solution
+teaching_card:
+  student_title: 先分层，再同构
+  what_it_trains: 训练“四元比较先拆层”的执行习惯：先用直代得到一组关系，再用函数单调性压出最小元，最后把剩余难点交给同构函数。
+  recognition_cues:
+    - 同一函数 $f(\cdot)$ 作用在四个不同输入。
+    - 出现 $3^e$、$e^3$ 这类经典互换指数。
+    - 选项是完整全序，不需要求具体数值。
+  normalization_moves:
+    - 先算 $a,b$，别一上来四个量混比。
+    - 把 $b,c,d$ 放回 $f$ 的输入点比较。
+    - 单独处理 $3^e$ 与 $e^3$。
+  common_failures:
+    - 把 $a,b$ 的系数 $3$ 与 $1/3$ 写反。
+    - 忘记先用递增性定位 $b$，导致比较路径过长。
+    - 只记口诀不写出 $\ln x/x$ 的依据链。
+  similar_practice_query: 四元大小比较 同构函数lnx/x 3^e和e^3
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

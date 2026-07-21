@@ -1,0 +1,199 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0062_taylor_ex01
+content_revision_id: mst_p0062_taylor_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0062_taylor_ex01.card.yaml
+stem: |-
+  （2010 · 新课改 2 卷）设函数 $f(x)=e^x-1-x-a x^2$。
+
+  (1) 若 $a=0$，求 $f(x)$ 的单调区间；
+  (2) 若当 $x\ge0$ 时 $f(x)\ge0$，求 $a$ 的取值范围。
+answer: |
+  (1) 当 $a=0$ 时，$f(x)$ 在 $(-\infty,0)$ 上单调递减，在 $(0,+\infty)$ 上单调递增。
+  (2) $a\le\frac12$。
+
+
+  第(1)问直接由 $f'(x)=e^x-1$ 判定单调性。第(2)问先把 $f(x)$ 拆成 $g(x)+(\frac12-a)x^2$，其中 $g(x)=e^x-1-x-\frac12x^2$，再用 $h(x)=\frac{1+x+\frac12x^2}{e^x}$ 单调递减证明 $g(x)\ge0$；若 $a>\frac12$，则 $f''(0)<0$，在 $0$ 右侧出现 $f(x)<0$，与恒成立矛盾。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 第(1)问在 $a=0$ 时，用一阶导数符号求单调区间。
+      max_score: 1
+    - step_id: step_2
+      description: 把参数项和二阶泰勒余量分开。
+      max_score: 1
+    - step_id: step_3
+      description: 证明二阶泰勒余量 $g(x)$ 在 $x\ge0$ 上非负。
+      max_score: 1
+    - step_id: step_4
+      description: 当 $a\le\frac12$ 时，恒成立条件满足。
+      max_score: 1
+    - step_id: step_5
+      description: 当 $a>\frac12$ 时，利用 $0$ 右侧的凹性制造反例。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: (1) 零点/极值点分析
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 求参数范围
+        target: (2) 求参数范围
+        result: 见 source_solution_summary
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 含参数分类讨论
+      - 切线放缩与凹凸性
+    subroute:
+      - 泰勒展开
+      - $e^x$ 二阶下界
+      - 反设后用 $0$ 右侧凹性取负值
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 不等式工具结构
+    evidence:
+      - $e^x-1-x-a x^2=\left(e^x-1-x-\frac12x^2\right)+\left(\frac12-a\right)x^2$。
+      - $h(x)=\frac{1+x+\frac12x^2}{e^x}$ 的单调性等价于 $e^x$ 的二阶泰勒下界。
+      - |
+        $a>\frac12$ 时 $f''(0)<0$，在 $0$ 右侧破坏恒成立。
+    normalization_moves_used:
+      - 加减 $\frac12x^2$，把参数和固定下界分离。
+      - 把 $g(x)\ge0$ 改写为 $\frac{1+x+\frac12x^2}{e^x}\le1$。
+      - |
+        把排除区间转化为 $f''(x)<0\Rightarrow f'(x)<0\Rightarrow f(x)<0$。
+  fallback:
+    only_if_trace_shows:
+      - |
+        若学生不会由 $f'(x)=e^x-1$ 判定 $(-\infty,0)$ 与 $(0,+\infty)$ 上的符号，回补指数对数基础。
+      - 若学生不能想到加减 $\frac12x^2$ 来调用 $e^x$ 的二阶下界，回补不等式工具基础。
+      - |
+        若学生不会用 $h'(x)\le0$ 证明 $h(x)\le h(0)$，回补导数单调极值基础。
+      - |
+        若学生在 $a>\frac12$ 时不能由 $f''(x)<0$ 推出 $0$ 右侧存在 $f(x)<0$，回补导数单调极值基础。
+  detail_terms:
+    - $f(x)=e^x-1-x-a x^2$
+    - $g(x)=e^x-1-x-\frac12x^2$
+    - $h(x)=\frac{1+x+\frac12x^2}{e^x}$
+    - $e^x\ge1+x+\frac12x^2\ (x\ge0)$
+    - $a\le\frac12$
+parts: &a1
+  - (1) 若 $a=0$，求 $f(x)$ 的单调区间；
+  - (2) 若当 $x\ge0$ 时 $f(x)\ge0$，求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0062_taylor_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0062
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0062/page_0062.md
+      role: problem_start
+      evidence: page_0062 前半为泰勒与 $e^x$ 常用展开式；例1题头、题干和解析开头从本页底部开始。
+    - ref_id: page_0063
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0063/page_0063.md
+      role: continuation
+      evidence: page_0063 顶部续完例1第(1)问的单调区间，并给出第(2)问的恒成立参数范围解析。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0062.png
+      inspected: true
+      notes: 已核对泰勒展开上下文、例1题头、两问题干，以及页底解析在“当 $x\in(0,$”处跨页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0063.png
+      inspected: true
+      notes: |
+        已核对续页为 “$+\infty)$ 时，$f'(x)>0$”，与 page_0062 的 $f'(x)=e^x-1$ 连续。
+  source_context: 本题位于“常见的泰勒展开式”中 $e^x$ 的泰勒展开之后，核心使用 $e^x\ge 1+x+\frac{x^2}{2}$ 的二阶近似下界。
+  source_influence:
+    - 题干与两问顺序以 page_0062 为准；第(1)问结论和第(2)问解析以 page_0063 续页为准。
+    - 第(2)问的充分性来自 $e^x-1-x-\frac12x^2\ge0$，必要性来自 $a>\frac12$ 时在 $0$ 右侧构造负值。
+  source_discrepancies:
+    - page_0062 markdown 因页底截断标出 layout 不确定；page_0063 续页图像补足为 $(0,+\infty)$，本卡按跨页完整文本处理。
+original_problem:
+  stem: |
+    （2010 · 新课改 2 卷）设函数 $f(x)=e^x-1-x-a x^2$。
+  parts: *a1
+  choices: []
+  answer: |
+    (1) 当 $a=0$ 时，$f(x)$ 在 $(-\infty,0)$ 上单调递减，在 $(0,+\infty)$ 上单调递增。
+    (2) $a\le\frac12$。
+  fidelity_notes:
+    - 题头从 page_0062 底部开始，解析跨到 page_0063 顶部。
+    - 本题无选择项，choices 保持为空列表。
+solution:
+  source_solution_summary: |
+    第(1)问直接由 $f'(x)=e^x-1$ 判定单调性。第(2)问先把 $f(x)$ 拆成 $g(x)+(\frac12-a)x^2$，其中 $g(x)=e^x-1-x-\frac12x^2$，再用 $h(x)=\frac{1+x+\frac12x^2}{e^x}$ 单调递减证明 $g(x)\ge0$；若 $a>\frac12$，则 $f''(0)<0$，在 $0$ 右侧出现 $f(x)<0$，与恒成立矛盾。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问在 $a=0$ 时，用一阶导数符号求单调区间。
+      formula_trace:
+        from: $f(x)=e^x-1-x$
+        to: $f'(x)=e^x-1$
+        operation: 对 $f(x)$ 求导，并以 $x=0$ 为符号分界点。
+        why: $e^x-1<0$ 当 $x<0$，$e^x-1>0$ 当 $x>0$。
+      source_ref: page_0062, page_0063
+    - step_id: step_2
+      statement: 把参数项和二阶泰勒余量分开。
+      formula_trace:
+        from: $e^x-1-x-a x^2\ge0$
+        to: $g(x)+\left(\frac12-a\right)x^2\ge0,\quad g(x)=e^x-1-x-\frac12x^2$
+        operation: 加减 $\frac12x^2$，把固定的二阶近似差额单独命名为 $g(x)$。
+        why: 若能证明 $g(x)\ge0$，则 $a\le\frac12$ 时剩余参数项也非负。
+      source_ref: page_0063
+    - step_id: step_3
+      statement: 证明二阶泰勒余量 $g(x)$ 在 $x\ge0$ 上非负。
+      formula_trace:
+        from: $g(x)\ge0$
+        to: $h(x)=\frac{1+x+\frac12x^2}{e^x}\le1$
+        operation: |
+          把 $e^x\ge1+x+\frac12x^2$ 改写成比值不超过 $1$，并直接求导得到 $h'(x)=-\frac{x^2}{2e^x}\le0$。
+        why: $h$ 在 $[0,+\infty)$ 单调递减，故 $h(x)\le h(0)=1$。
+      source_ref: page_0063
+    - step_id: step_4
+      statement: 当 $a\le\frac12$ 时，恒成立条件满足。
+      formula_trace:
+        from: $g(x)\ge0,\quad \left(\frac12-a\right)x^2\ge0$
+        to: $f(x)=g(x)+\left(\frac12-a\right)x^2\ge0$
+        operation: 把两个非负项相加。
+        why: 这给出参数范围的充分性。
+      source_ref: page_0063
+    - step_id: step_5
+      statement: 当 $a>\frac12$ 时，利用 $0$ 右侧的凹性制造反例。
+      formula_trace:
+        from: |
+          $f(0)=0,\quad f'(0)=0,\quad f''(x)=e^x-2a,\quad f''(0)=1-2a<0$
+        to: $\exists x\in(0,\ln 2a):\ f(x)<0$
+        operation: |
+          按源页记号承接为二阶判断：$f'(x)=e^x-1-2ax$，$f''(x)=e^x-2a$，在 $(0,\ln 2a)$ 上 $f''(x)<0$，所以 $f'(x)<f'(0)=0$，进而 $f$ 下降到 $0$ 以下。
+        why: 这与 $x\ge0$ 时 $f(x)\ge0$ 矛盾，排除 $a>\frac12$。
+      source_ref: page_0063
+teaching_card:
+  student_title: 用 $e^x$ 二阶下界卡住参数
+  what_it_trains: 训练把恒成立求参拆成一个固定泰勒下界和一个参数余项，再用反设说明参数不能越过临界值。
+  recognition_cues:
+    - 题干出现 $e^x-1-x-a x^2$，前两项正好对应 $e^x$ 在 $0$ 处展开后的低阶项。
+    - 要求 $x\ge0$ 上恒成立，临界参数通常由最低未抵消的二次项决定。
+    - 源页前文刚给出 $e^x\ge1+x+\frac{x^2}{2}$ 的常用展开式。
+  normalization_moves:
+    - 加减 $\frac12x^2$，把式子写成 $g(x)+(\frac12-a)x^2$。
+    - 用 $h(x)$ 的单调性证明 $g(x)\ge0$。
+    - 超过临界值时，在 $0$ 右侧用二阶导数为负制造矛盾。
+  common_failures:
+    - |
+      只会求导讨论 $f'(x)$，看不出临界参数来自二阶泰勒项。
+    - |
+      证明 $g(x)\ge0$ 时把 $h'(x)$ 的符号算错。
+    - |
+      排除 $a>\frac12$ 时，只说“局部为负”却没有用 $f''<0$ 推出 $f'<0$ 和 $f<0$。
+  similar_practice_query: $e^x$ 二阶泰勒下界 恒成立 求参数 $e^x-1-x-a x^2$
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0062 的页底截断已由 page_0063 续页和图像补足，无需人工决策。
+    - |
+      旧 locator 文本中的导数阶数污染未采用；本卡按源图的 $f'(x)=e^x-1$ 以及后续 $f'(x),f''(x)$ 关系重建。

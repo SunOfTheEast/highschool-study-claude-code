@@ -1,0 +1,150 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0195_xlnx_inverse_three_roots_param_range_ex25
+content_revision_id: mst_p0195_xlnx_inverse_three_roots_param_range_ex25-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0195_xlnx_inverse_three_roots_param_range_ex25.card.yaml
+stem: 已知方程 $x^2\ln x=a\ln a-a\ln x$ 有 3 个实根，则实数 $a$ 的取值范围是_______。
+answer: |-
+  $0<a<\frac{1}{e^2}$
+
+  设 $\varphi(t)=t\ln t\ (t>0)$，原方程可化为 $\varphi(x)=\varphi\!\left(\frac{a}{x}\right)$，并得 $a>0$。源解按图像分段： 当 $x>1$ 时，$\varphi(x)>0$，只能在 $x=\frac{a}{x}$（即 $x=\sqrt a$）处给出一根， 不可能单靠该区间得到三根；当 $0<x<1$ 时，$\varphi$ 在 $x=\frac1e$ 处有极小值，临界为两曲线在 $x=\frac1e$ 相切，对应 $a=\frac1{e^2}$。要出现“三根”必须越过该临界并保持两侧各一交点， 即 $0<a<\frac1{e^2}$。因此方程恰有 3 个实根当且仅当 $a\in\left(0,\frac1{e^2}\right)$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 同构改写并锁定参数定义域。
+      max_score: 1
+    - step_id: step_2
+      description: 排查 $x>1$ 区间：只能贡献一个根。
+      max_score: 1
+    - step_id: step_3
+      description: 在 $(0,1)$ 区间用临界相切给出阈值。
+      max_score: 1
+    - step_id: step_4
+      description: 合并区间判定得到最终范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 同构变形与换元法
+      - 含参数分类讨论
+    subroute:
+      - 图像交点计数
+      - 临界相切判边界
+      - 极值点偏移
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 复合函数与不动点结构
+      - 极值点偏移结构
+    evidence:
+      - $x\ln x=\frac{a}{x}\ln\frac{a}{x}$
+      - $y=x\ln x$
+      - $x=\frac1e,\ a=\frac1{e^2}$
+    normalization_moves_used:
+      - 把原式变成同构函数等值问题。
+      - 按 $x>1$ 与 $0<x<1$ 分区计数。
+      - 用相切临界点确定参数阈值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把原式改写为 $x\ln x=\frac{a}{x}\ln\frac{a}{x}$，回补代数恒等变形。
+      - 若学生不会判断 $x\ln x$ 在 $x=\frac1e$ 的极值与单调区间，回补导数单调极值基础。
+      - 若学生无法把“3 根”转成交点计数，回补函数性质与图像。
+  detail_terms:
+    - $x^2\ln x=a\ln a-a\ln x$
+    - $x\ln x=\frac{a}{x}\ln\frac{a}{x}$
+    - $x=\frac1e$
+    - $a=\frac1{e^2}$
+    - $0<a<\frac1{e^2}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0195_xlnx_inverse_three_roots_param_range_ex25
+source_evidence:
+  source_refs:
+    - ref_id: page_0195
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0195/page_0195.md
+      role: problem_start
+      evidence: page_0195 下半页给出例25题头：“已知方程 x^2\ln x=a\ln a-a\ln x 有3个实根，求 a 的取值范围”。
+    - ref_id: page_0195
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0195/page_0195.md
+      role: solution
+      evidence: 源解将方程化为 x\ln x=(a/x)\ln(a/x)，按 x>1 与 0<x<1 分段， 用临界相切点 x=1/e（对应 a=1/e^2）判断“三根”成立区间。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0195.png
+      inspected: true
+      notes: 已核对页图：page_0195 页首是例24续解；例25题头与解析均在本页，图像与 markdown 公式一致。
+  source_context: 本页上半部分为例24续页，不另建卡；本卡仅覆盖 page_0195 新起头的例25。
+  source_influence:
+    - 沿用源解构造：x\ln x=(a/x)\ln(a/x)。
+    - 沿用源解“图像交点计数 + 临界相切”判参。
+    - 保留源注“本质也是极值点偏移 x_2x_3<1/e^2”。
+  source_discrepancies:
+    - 源文结尾未单独写“故 a 的范围为 (0,1/e^2)”的收束句；仅在条件链里出现“即 0<a<1/e^2”，本卡补齐为明确最终答案。
+    - 源文“临界点就 x_1=\frac{a}{x_2}=\frac{1}{e}”下标写法混用；按上下文应表示临界时两侧对应点退化到同一相切点 x=\frac{1}{e}。
+original_problem:
+  stem: 已知方程 $x^2\ln x=a\ln a-a\ln x$ 有 3 个实根，则实数 $a$ 的取值范围是_______。
+  parts: *a1
+  choices: []
+  answer: $0<a<\frac{1}{e^2}$
+  fidelity_notes:
+    - 源题是填空题，无选项。
+solution:
+  source_solution_summary: 设 $\varphi(t)=t\ln t\ (t>0)$，原方程可化为 $\varphi(x)=\varphi\!\left(\frac{a}{x}\right)$，并得 $a>0$。源解按图像分段： 当 $x>1$ 时，$\varphi(x)>0$，只能在 $x=\frac{a}{x}$（即 $x=\sqrt a$）处给出一根， 不可能单靠该区间得到三根；当 $0<x<1$ 时，$\varphi$ 在 $x=\frac1e$ 处有极小值，临界为两曲线在 $x=\frac1e$ 相切，对应 $a=\frac1{e^2}$。要出现“三根”必须越过该临界并保持两侧各一交点， 即 $0<a<\frac1{e^2}$。因此方程恰有 3 个实根当且仅当 $a\in\left(0,\frac1{e^2}\right)$。
+  key_steps:
+    - step_id: step_1
+      statement: 同构改写并锁定参数定义域。
+      formula_trace:
+        from: $x^2\ln x=a\ln a-a\ln x$
+        to: $x\ln x=\frac{a}{x}\ln\frac{a}{x},\ a>0$
+        operation: 移项并除以 $x$，把方程改写成同一函数值比较。
+        why: 便于转为图像交点计数问题。
+      source_ref: page_0195
+    - step_id: step_2
+      statement: 排查 $x>1$ 区间：只能贡献一个根。
+      formula_trace:
+        from: $x>1\Rightarrow x\ln x>0$
+        to: $x=\frac{a}{x}$
+        operation: 同号比较下由图像单调性定位到对称点方程。
+        why: 该区间最多锁定 1 个交点，不能直接形成“三根”。
+      source_ref: page_0195
+    - step_id: step_3
+      statement: 在 $(0,1)$ 区间用临界相切给出阈值。
+      formula_trace:
+        from: $x_1=\frac{a}{x_2}=\frac1e$
+        to: $a=\frac1{e^2}$
+        operation: 令两侧变量在极小值点退化为同一点，得到临界参数。
+        why: 临界处由“三交点”退化为单交点，决定开区间边界。
+      source_ref: page_0195
+    - step_id: step_4
+      statement: 合并区间判定得到最终范围。
+      formula_trace:
+        from: $a=\frac1{e^2}$ 为临界
+        to: $0<a<\frac1{e^2}$
+        operation: 取临界下方可产生三交点的参数区间。
+        why: 题设要求恰有 3 个实根。
+      source_ref: page_0195
+teaching_card:
+  student_title: 用交点临界相切判三根参数
+  what_it_trains: 训练把“指对混合方程的根个数”改写为同构函数交点计数，并用相切临界点定参数边界。
+  recognition_cues:
+    - 题干同时出现 $x\ln x$ 与 $\frac{a}{x}\ln\frac{a}{x}$ 型结构。
+    - 问题问“有 3 个实根”的参数范围。
+    - 源解给出“临界点在 $x=\frac1e$”的图像提示。
+  normalization_moves:
+    - 先把方程化成同构函数等值。
+    - 按区间分开讨论交点个数。
+    - 以相切临界值写出开区间答案。
+  common_failures:
+    - 忽略定义域，未先写 $a>0$。
+    - 把临界值 $a=\frac1{e^2}$ 误并入答案。
+    - 只给必要性，不补充“三根”对应的充分性说明。
+  similar_practice_query: xlnx 与 a/x ln(a/x) 三根 参数范围 相切临界 1/e
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

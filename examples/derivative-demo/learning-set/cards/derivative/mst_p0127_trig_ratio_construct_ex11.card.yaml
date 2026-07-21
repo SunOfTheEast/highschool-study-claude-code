@@ -1,0 +1,289 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0127_trig_ratio_construct_ex11
+content_revision_id: mst_p0127_trig_ratio_construct_ex11-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0127_trig_ratio_construct_ex11.card.yaml
+stem: |-
+  （24-25高二下·山东泰安·阶段练习）已知函数 $y=f(x)$ 是奇函数，对于任意的 $x\in\left(0,\frac{\pi}{2}\right]$ 满足 $f^{\prime}(x)\sin x-f(x)\cos x>0$（其中 $f^{\prime}(x)$ 是函数 $f(x)$ 的导函数），则下列不等式成立的是（ ）
+  A. $\sqrt{3}f\left(-\frac{\pi}{6}\right)<f\left(-\frac{\pi}{3}\right)$
+  B. $f\left(\frac{\pi}{3}\right)<\sqrt{3}f\left(\frac{\pi}{6}\right)$
+  C. $f\left(\frac{\pi}{4}\right)>-\sqrt{2}f\left(-\frac{\pi}{6}\right)$
+  D. $\sqrt{2}f\left(-\frac{\pi}{4}\right)<-f\left(\frac{\pi}{2}\right)$
+answer: |
+  C
+
+  构造
+  \[
+  g(x)=\frac{f(x)}{\sin x},\quad
+  x\in\left[-\frac{\pi}{2},0\right)\cup\left(0,\frac{\pi}{2}\right].
+  \]
+  由 $f$ 为奇函数得
+  \[
+  g(-x)=\frac{f(-x)}{\sin(-x)}=\frac{-f(x)}{-\sin x}=g(x),
+  \]
+  所以 $g$ 为偶函数。再求导：
+  \[
+  g^{\prime}(x)=\frac{f^{\prime}(x)\sin x-f(x)\cos x}{\sin^2x}.
+  \]
+  题设在 $x\in\left(0,\frac{\pi}{2}\right]$ 上给出分子 $>0$，故
+  $g^{\prime}(x)>0$，即 $g$ 在正半区单调递增；结合偶函数性质，$g$ 在
+  $\left[-\frac{\pi}{2},0\right)$ 上单调递减。
+
+  A：$-\frac{\pi}{3}<-\frac{\pi}{6}$，在负半区递减得
+  \[
+  \frac{f\left(-\frac{\pi}{3}\right)}{\sin\left(-\frac{\pi}{3}\right)}>
+  \frac{f\left(-\frac{\pi}{6}\right)}{\sin\left(-\frac{\pi}{6}\right)}
+  \Rightarrow
+  \sqrt{3}f\left(-\frac{\pi}{6}\right)>f\left(-\frac{\pi}{3}\right),
+  \]
+  故A错。
+
+  B：$\frac{\pi}{3}>\frac{\pi}{6}$，在正半区递增得
+  \[
+  \frac{f\left(\frac{\pi}{3}\right)}{\sin\frac{\pi}{3}}>
+  \frac{f\left(\frac{\pi}{6}\right)}{\sin\frac{\pi}{6}}
+  \Rightarrow
+  f\left(\frac{\pi}{3}\right)>\sqrt{3}f\left(\frac{\pi}{6}\right),
+  \]
+  故B错。
+
+  C：由 $\frac{\pi}{6}<\frac{\pi}{4}$，
+  \[
+  \frac{f\left(-\frac{\pi}{6}\right)}{\sin\left(-\frac{\pi}{6}\right)}
+  =\frac{f\left(\frac{\pi}{6}\right)}{\sin\left(\frac{\pi}{6}\right)}
+  <\frac{f\left(\frac{\pi}{4}\right)}{\sin\frac{\pi}{4}}
+  \Rightarrow
+  f\left(\frac{\pi}{4}\right)>-\sqrt{2}f\left(-\frac{\pi}{6}\right),
+  \]
+  C正确。
+
+  D：由 $\frac{\pi}{4}<\frac{\pi}{2}$，
+  \[
+  \frac{f\left(-\frac{\pi}{4}\right)}{\sin\left(-\frac{\pi}{4}\right)}
+  =\frac{f\left(\frac{\pi}{4}\right)}{\sin\left(\frac{\pi}{4}\right)}
+  <\frac{f\left(\frac{\pi}{2}\right)}{\sin\frac{\pi}{2}}
+  \Rightarrow
+  \sqrt{2}f\left(-\frac{\pi}{4}\right)>-f\left(\frac{\pi}{2}\right),
+  \]
+  与D相反，故D错。综上选 C。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 按“三角基础构造”把题设不等式转为导数正号。
+      max_score: 1
+    - step_id: step_2
+      description: 用奇函数条件确定两侧单调方向。
+      max_score: 1
+    - step_id: step_3
+      description: 逐项代角比较判A、B、C。
+      max_score: 1
+    - step_id: step_4
+      description: 对D做同模板比较得到反向不等式。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 在四个三角点值比较中找出唯一成立项。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 抽象函数性质
+        target: 利用构造函数单调性统一处理全部选项。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 对称性配凑
+    subroute:
+      - 三角函数基础构造
+      - 奇偶性锁定
+      - 定点比较
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 对称结构
+      - 抽象函数结构
+    evidence:
+      - $f^{\prime}(x)\sin x-f(x)\cos x$ 对应 $\left(\frac{f(x)}{\sin x}\right)^{\prime}$。
+      - $f$ 奇函数使 $\frac{f(x)}{\sin x}$ 成为偶函数。
+      - 四个选项都可由同一比值函数在指定角度处比较得到。
+    normalization_moves_used:
+      - 先构造比值函数，再整体判单调。
+      - 先处理奇偶性，避免正负角分开硬算。
+      - 每个选项统一转为“同一函数值比较 + 三角常值化简”。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看不出 $f^{\prime}\sin-f\cos$ 与商函数导数对应，回补三角函数基础。
+      - 若学生不会由“奇/奇”推出偶函数，回补函数性质与图像。
+      - 若学生在负角正弦符号上反复出错，回补三角函数基础。
+  detail_terms:
+    - $g(x)=\frac{f(x)}{\sin x}$
+    - $g$ 偶函数
+    - $g^{\prime}(x)>0$（正半区）
+    - A/B/D错误，C正确
+    - 答案 C
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0127_trig_ratio_construct_ex11
+source_evidence:
+  source_refs:
+    - ref_id: page_0127
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0127/page_0127.md
+      role: problem_start
+      evidence: line 29给出例11题头与题干，lines 31-34给出A-D选项，lines 36-38给出解析前半（A、B判定）。
+    - ref_id: page_0128
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0128/page_0128.md
+      role: continuation
+      evidence: lines 14-18续完解析（C、D判定）并给出“故选C”。
+    - ref_id: page_0127_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0127/page_0127.md
+      role: local_context
+      evidence: lines 17-27为“三角函数基础构造”公式模板，直接支撑本题构造 $\frac{f(x)}{\sin x}$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0127.png
+      inspected: true
+      notes: 已核对页图：例11题干与解析前半位于page_0127页下半部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0128.png
+      inspected: true
+      notes: 已核对页图：page_0128顶部续完例11并给出答案C，随后才开始例12。
+  source_context: 例11起头在page_0127，跨页到page_0128顶部结束。
+  source_influence:
+    - 保留核心构造 g(x)=\frac{f(x)}{\sin x}，并由题设推出 g^{\prime}(x)>0（在正半区）。
+    - 保留由 f 为奇函数推 g 为偶函数，从而得到负半区单调递减。
+    - 保留逐项比较A/B/C/D并最终选C。
+  source_discrepancies: []
+original_problem:
+  stem: （24-25高二下·山东泰安·阶段练习）已知函数 $y=f(x)$ 是奇函数，对于任意的 $x\in\left(0,\frac{\pi}{2}\right]$ 满足 $f^{\prime}(x)\sin x-f(x)\cos x>0$（其中 $f^{\prime}(x)$ 是函数 $f(x)$ 的导函数），则下列不等式成立的是（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\sqrt{3}f\left(-\frac{\pi}{6}\right)<f\left(-\frac{\pi}{3}\right)$
+      text_latex: $\sqrt{3}f\left(-\frac{\pi}{6}\right)<f\left(-\frac{\pi}{3}\right)$
+    - label: B
+      text_raw: $f\left(\frac{\pi}{3}\right)<\sqrt{3}f\left(\frac{\pi}{6}\right)$
+      text_latex: $f\left(\frac{\pi}{3}\right)<\sqrt{3}f\left(\frac{\pi}{6}\right)$
+    - label: C
+      text_raw: $f\left(\frac{\pi}{4}\right)>-\sqrt{2}f\left(-\frac{\pi}{6}\right)$
+      text_latex: $f\left(\frac{\pi}{4}\right)>-\sqrt{2}f\left(-\frac{\pi}{6}\right)$
+    - label: D
+      text_raw: $\sqrt{2}f\left(-\frac{\pi}{4}\right)<-f\left(\frac{\pi}{2}\right)$
+      text_latex: $\sqrt{2}f\left(-\frac{\pi}{4}\right)<-f\left(\frac{\pi}{2}\right)$
+  answer: C
+  fidelity_notes:
+    - 例11解析跨page_0127/page_0128拼接完成。
+    - 符号与选项保持源页原式。
+solution:
+  source_solution_summary: |
+    构造
+    \[
+    g(x)=\frac{f(x)}{\sin x},\quad
+    x\in\left[-\frac{\pi}{2},0\right)\cup\left(0,\frac{\pi}{2}\right].
+    \]
+    由 $f$ 为奇函数得
+    \[
+    g(-x)=\frac{f(-x)}{\sin(-x)}=\frac{-f(x)}{-\sin x}=g(x),
+    \]
+    所以 $g$ 为偶函数。再求导：
+    \[
+    g^{\prime}(x)=\frac{f^{\prime}(x)\sin x-f(x)\cos x}{\sin^2x}.
+    \]
+    题设在 $x\in\left(0,\frac{\pi}{2}\right]$ 上给出分子 $>0$，故
+    $g^{\prime}(x)>0$，即 $g$ 在正半区单调递增；结合偶函数性质，$g$ 在
+    $\left[-\frac{\pi}{2},0\right)$ 上单调递减。
+
+    A：$-\frac{\pi}{3}<-\frac{\pi}{6}$，在负半区递减得
+    \[
+    \frac{f\left(-\frac{\pi}{3}\right)}{\sin\left(-\frac{\pi}{3}\right)}>
+    \frac{f\left(-\frac{\pi}{6}\right)}{\sin\left(-\frac{\pi}{6}\right)}
+    \Rightarrow
+    \sqrt{3}f\left(-\frac{\pi}{6}\right)>f\left(-\frac{\pi}{3}\right),
+    \]
+    故A错。
+
+    B：$\frac{\pi}{3}>\frac{\pi}{6}$，在正半区递增得
+    \[
+    \frac{f\left(\frac{\pi}{3}\right)}{\sin\frac{\pi}{3}}>
+    \frac{f\left(\frac{\pi}{6}\right)}{\sin\frac{\pi}{6}}
+    \Rightarrow
+    f\left(\frac{\pi}{3}\right)>\sqrt{3}f\left(\frac{\pi}{6}\right),
+    \]
+    故B错。
+
+    C：由 $\frac{\pi}{6}<\frac{\pi}{4}$，
+    \[
+    \frac{f\left(-\frac{\pi}{6}\right)}{\sin\left(-\frac{\pi}{6}\right)}
+    =\frac{f\left(\frac{\pi}{6}\right)}{\sin\left(\frac{\pi}{6}\right)}
+    <\frac{f\left(\frac{\pi}{4}\right)}{\sin\frac{\pi}{4}}
+    \Rightarrow
+    f\left(\frac{\pi}{4}\right)>-\sqrt{2}f\left(-\frac{\pi}{6}\right),
+    \]
+    C正确。
+
+    D：由 $\frac{\pi}{4}<\frac{\pi}{2}$，
+    \[
+    \frac{f\left(-\frac{\pi}{4}\right)}{\sin\left(-\frac{\pi}{4}\right)}
+    =\frac{f\left(\frac{\pi}{4}\right)}{\sin\left(\frac{\pi}{4}\right)}
+    <\frac{f\left(\frac{\pi}{2}\right)}{\sin\frac{\pi}{2}}
+    \Rightarrow
+    \sqrt{2}f\left(-\frac{\pi}{4}\right)>-f\left(\frac{\pi}{2}\right),
+    \]
+    与D相反，故D错。综上选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 按“三角基础构造”把题设不等式转为导数正号。
+      formula_trace:
+        from: $f^{\prime}(x)\sin x-f(x)\cos x>0$
+        to: $g(x)=\frac{f(x)}{\sin x},\; g^{\prime}(x)=\frac{f^{\prime}(x)\sin x-f(x)\cos x}{\sin^2x}>0$
+        operation: 构造三角比值并直接求导。
+        why: 把题设变成单调性信息。
+      source_ref: page_0127
+    - step_id: step_2
+      statement: 用奇函数条件确定两侧单调方向。
+      formula_trace:
+        from: $f$ 奇函数
+        to: $g(-x)=g(x)$，$g$ 偶；正半区递增 $\Rightarrow$ 负半区递减
+        operation: 奇偶性转化并利用对称性。
+        why: 用于比较负角与正角的函数值。
+      source_ref: page_0127
+    - step_id: step_3
+      statement: 逐项代角比较判A、B、C。
+      formula_trace:
+        from: $g$ 在正半区递增，负半区递减
+        to: A反向、B反向、C成立
+        operation: 将各角度代入 $g(\theta)=\frac{f(\theta)}{\sin\theta}$ 后化简。
+        why: 定位唯一正确项。
+      source_ref: page_0128
+    - step_id: step_4
+      statement: 对D做同模板比较得到反向不等式。
+      formula_trace:
+        from: $\frac{\pi}{4}<\frac{\pi}{2}$
+        to: $\sqrt{2}f\left(-\frac{\pi}{4}\right)>-f\left(\frac{\pi}{2}\right)$
+        operation: 比较 $g\left(\frac{\pi}{4}\right)$ 与 $g\left(\frac{\pi}{2}\right)$ 并回代。
+        why: 排除D并收束答案C。
+      source_ref: page_0128
+teaching_card:
+  student_title: 奇函数配三角比值，单调一次判四项
+  what_it_trains: 训练“导数线性组合→三角比值导数”的标准建模，并通过奇偶性把正负区间比较统一化。
+  recognition_cues:
+    - 题设核心是 $f^{\prime}(x)\sin x-f(x)\cos x$。
+    - 已给 $f$ 是奇函数。
+    - 选项全部是若干固定角度的值比较。
+  normalization_moves:
+    - 构造 $g=\frac{f}{\sin x}$ 并求 $g^{\prime}$。
+    - 由奇函数得到 $g$ 偶，快速判两侧单调。
+    - 将每个选项改写成 $g(\alpha)$ 与 $g(\beta)$ 比较。
+    - 再回代三角函数常值化简系数。
+  common_failures:
+    - 将 $\left(\frac{f}{\sin x}\right)^{\prime}$ 分子符号写错。
+    - 把“正半区递增”误推广到全区间同向递增。
+    - 处理负角时遗漏 $\sin(-\theta)=-\sin\theta$。
+  similar_practice_query: 三角构造 f'/sin 抽象函数 奇函数 单调 比较
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对page_0127与page_0128页图：例11跨页完整，答案C明确。

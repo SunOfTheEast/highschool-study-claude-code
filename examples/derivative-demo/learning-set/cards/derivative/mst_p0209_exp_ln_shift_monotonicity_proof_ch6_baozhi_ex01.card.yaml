@@ -1,0 +1,200 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0209_exp_ln_shift_monotonicity_proof_ch6_baozhi_ex01
+content_revision_id: mst_p0209_exp_ln_shift_monotonicity_proof_ch6_baozhi_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0209_exp_ln_shift_monotonicity_proof_ch6_baozhi_ex01.card.yaml
+stem: |-
+  （2013 · 新课标II T21）已知函数 $f(x)=e^x-\ln(x+m)$。
+  (1). 设 $x=0$ 是 $f(x)$ 的极值点，求 $m$，并讨论 $f(x)$ 的单调性。
+  (2). 当 $m\leqslant2$ 时，证明 $f(x)>0$。
+answer: |-
+  (1) $m=1$，$f(x)$ 在 $(-1,0)$ 上单调递减、在 $(0,+\infty)$ 上单调递增；(2) 当 $m\leqslant2$ 时，恒有 $f(x)>0$。
+
+  第(1)问先由极值点必要条件求参：$f^{\prime}(x)=e^x-\frac{1}{x+m}$， 代入 $x=0$ 得 $m=1$。随后在定义域 $(-1,+\infty)$ 上判号： $f^{\prime}(x)=\frac{e^x(x+1)-1}{x+1}$，令 $g(x)=e^x(x+1)-1$，有 $g^{\prime}(x)=e^x(x+2)>0$，且 $g(0)=0$，故 $f^{\prime}(x)$ 在 $(-1,0)$ 为负、在 $(0,+\infty)$ 为正，从而先减后增。第(2)问沿用法二， 令 $h(t)=e^t-t-1$，把 $f(x)=e^x-\ln(x+m)$ 改写为 $h(x)+h(\ln(x+m))+2-m$；其中前两项非负，且 $m\leqslant2$ 时 $2-m\geqslant0$。再由 source 的取等条件说明三项不能同时为零，故 $f(x)>0$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 用极值点必要条件确定参数 $m$。
+      max_score: 1
+    - step_id: step_2
+      description: 将导数判号转化为单调函数 $g(x)$ 的符号。
+      max_score: 1
+    - step_id: step_3
+      description: 由 $g(x)$ 的单调性给出 $f(x)$ 的单调区间。
+      max_score: 1
+    - step_id: step_4
+      description: 第(2)问做保值拆分并引入余量。
+      max_score: 1
+    - step_id: step_5
+      description: 分别得到三项非负。
+      max_score: 1
+    - step_id: step_6
+      description: 用“不能同取零”收束到严格不等式。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 (1) 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 (2) 问
+        result: 见 source_solution_summary
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 同构变形与换元法
+      - 切线放缩与凹凸性
+    subroute:
+      - 极值点条件定参
+      - 保值性
+      - 余量函数
+      - 取等条件
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - $f^{\prime}(x)=e^x-\frac{1}{x+m}$
+      - $g(x)=e^x(x+1)-1$
+      - $f(x)=h(x)+h(\ln(x+m))+2-m$
+      - $h(t)=e^t-t-1\geqslant0$
+    normalization_moves_used:
+      - 极值点问法先代入 $f^{\prime}(x_0)=0$ 锁定参数。
+      - 导数含分式时先化为“分子函数符号 + 分母定义域符号”。
+      - 证明式拆成两个保值块与一个参数余量，再单独讨论同取零。
+  fallback:
+    only_if_trace_shows:
+      - 若学生把“极值点”误写成“函数值为 0”，回补导数单调极值基础。
+      - 若学生不会由 $\ln y\leqslant y-1$ 推出 $h(\ln y)\geqslant0$，回补指数对数基础。
+      - 若学生把“各项非负”直接当成“严格大于”，回补不等式工具基础。
+  detail_terms:
+    - $m=1$
+    - $g(x)=e^x(x+1)-1$
+    - $h(t)=e^t-t-1$
+    - $h(\ln(x+m))$
+    - $2-m$
+parts: &a1
+  - label: (1)
+    text: 设 $x=0$ 是 $f(x)$ 的极值点，求 $m$，并讨论 $f(x)$ 的单调性。
+  - label: (2)
+    text: 当 $m\leqslant2$ 时，证明 $f(x)>0$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0209_exp_ln_shift_monotonicity_proof_ch6_baozhi_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0209_ex01_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0209/page_0209.md
+      role: problem_start
+      evidence: page_0209 页下部“例1（2013·新课标II T21）”题头给出两问：极值点定参并讨论单调性；当 $m\leqslant2$ 时证明 $f(x)>0$。
+    - ref_id: page_0209_ex01_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0209/page_0209.md
+      role: solution
+      evidence: page_0209 解析给出：由 $f^{\prime}(0)=0$ 得 $m=1$，并给出“法一/法二”两条单调性证明路线；第(2)问在本页底部写到 $f(x)=h(x)+h(\ln(x+m))+2-m$ 后截断。
+    - ref_id: page_0210_ex01_solution_cont
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0210/page_0210.md
+      role: continuation
+      evidence: page_0210 顶部承接例1第(2)问：补全“当且仅当”取等条件、$m\leqslant2\Rightarrow2-m\geqslant0$，并补充“余量函数为 $2-m$，三项不能同时取零，故 $f(x)>0$”。
+    - ref_id: page_0210_ex02_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0210/page_0210.md
+      role: local_context
+      evidence: page_0210 在例1续解结束后进入“例2”新题头；按批次规则不并入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0209.png
+      inspected: true
+      notes: 已核对页图：页顶为保值性 exposition 与图1-图6；例1题头起于本页，解析第(2)问末尾在页底被截断。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0210.png
+      inspected: true
+      notes: 已核对页图：本页顶部完成例1第(2)问并给出“余量函数”说明，随后开始例2。
+  source_context: 本卡只处理 page_0209 起头的例1；page_0209 顶部 exposition 不建卡；例1跨到 page_0210 顶部完成后即止，不处理 page_0210 新题。
+  source_influence:
+    - 保留第(1)问“极值点条件定参 + 导数判号分段”的主线。
+    - 保留第(2)问“$h(x)=e^x-x-1$ 保值拆分”与余量函数 $2-m$ 的结构。
+    - 保留 source 对严格不等式的收束点：三项非负但不能同时取零。
+  source_discrepancies:
+    - page_0209 markdown 在“由 $h(x)\geqslant0$ (当 ...”处有页面底部截断标记；本卡依据 page_0210 顶部续页与页图补全该句与后续论证。
+original_problem:
+  stem: （2013 · 新课标II T21）已知函数 $f(x)=e^x-\ln(x+m)$。
+  parts: *a1
+  choices: []
+  answer: (1) $m=1$，$f(x)$ 在 $(-1,0)$ 上单调递减、在 $(0,+\infty)$ 上单调递增；(2) 当 $m\leqslant2$ 时，恒有 $f(x)>0$。
+  fidelity_notes:
+    - 源题为两问解答题，无选项。
+    - 第(2)问证明在 page_0209 起写，page_0210 顶部续完。
+solution:
+  source_solution_summary: 第(1)问先由极值点必要条件求参：$f^{\prime}(x)=e^x-\frac{1}{x+m}$， 代入 $x=0$ 得 $m=1$。随后在定义域 $(-1,+\infty)$ 上判号： $f^{\prime}(x)=\frac{e^x(x+1)-1}{x+1}$，令 $g(x)=e^x(x+1)-1$，有 $g^{\prime}(x)=e^x(x+2)>0$，且 $g(0)=0$，故 $f^{\prime}(x)$ 在 $(-1,0)$ 为负、在 $(0,+\infty)$ 为正，从而先减后增。第(2)问沿用法二， 令 $h(t)=e^t-t-1$，把 $f(x)=e^x-\ln(x+m)$ 改写为 $h(x)+h(\ln(x+m))+2-m$；其中前两项非负，且 $m\leqslant2$ 时 $2-m\geqslant0$。再由 source 的取等条件说明三项不能同时为零，故 $f(x)>0$。
+  key_steps:
+    - step_id: step_1
+      statement: 用极值点必要条件确定参数 $m$。
+      formula_trace:
+        from: $f(x)=e^x-\ln(x+m),\ f^{\prime}(x)=e^x-\frac{1}{x+m},\ x=0$ 是极值点
+        to: $f^{\prime}(0)=1-\frac{1}{m}=0\Rightarrow m=1$
+        operation: 内点极值处令导数为零。
+        why: 第(1)问先定参，后续单调区间才可判定。
+      source_ref: page_0209_ex01_solution
+    - step_id: step_2
+      statement: 将导数判号转化为单调函数 $g(x)$ 的符号。
+      formula_trace:
+        from: $m=1,\ f^{\prime}(x)=e^x-\frac{1}{x+1}$
+        to: $f^{\prime}(x)=\frac{e^x(x+1)-1}{x+1},\ g(x)=e^x(x+1)-1$
+        operation: 通分并抽取分子函数。
+        why: 在 $x>-1$ 时分母恒正，符号只由 $g(x)$ 决定。
+      source_ref: page_0209_ex01_solution
+    - step_id: step_3
+      statement: 由 $g(x)$ 的单调性给出 $f(x)$ 的单调区间。
+      formula_trace:
+        from: $g^{\prime}(x)=e^x(x+2)>0,\ g(0)=0$
+        to: $-1<x<0$ 时 $f^{\prime}(x)<0$，$x>0$ 时 $f^{\prime}(x)>0$
+        operation: 先判 $g$ 在 $(-1,+\infty)$ 递增，再由过零点读符号。
+        why: 导数符号分段对应“先减后增”。
+      source_ref: page_0209_ex01_solution
+    - step_id: step_4
+      statement: 第(2)问做保值拆分并引入余量。
+      formula_trace:
+        from: $f(x)=e^x-\ln(x+m)$
+        to: $f(x)=e^x-x-1+(x+m)-\ln(x+m)-1+2-m=h(x)+h(\ln(x+m))+2-m$
+        operation: 加减 $x,1,m$ 并套入 $h(t)=e^t-t-1$。
+        why: 把目标拆成两个标准非负块与一个参数余量。
+      source_ref: page_0209_ex01_solution
+    - step_id: step_5
+      statement: 分别得到三项非负。
+      formula_trace:
+        from: $h(t)=e^t-t-1,\ m\leqslant2$
+        to: $h(x)\geqslant0,\ h(\ln(x+m))\geqslant0,\ 2-m\geqslant0$
+        operation: 前两项用指数/对数基础不等式，余量项用题设参数范围。
+        why: 先建立非负和结构，再处理严格号。
+      source_ref: page_0210_ex01_solution_cont
+    - step_id: step_6
+      statement: 用“不能同取零”收束到严格不等式。
+      formula_trace:
+        from: $f(x)=h(x)+h(\ln(x+m))+2-m$
+        to: $f(x)>0$
+        operation: 调用 source 的取等条件说明三项不可能同时为零。
+        why: 避免仅得到 $f(x)\geqslant0$，完成题目要求的严格大于。
+      source_ref: page_0210_ex01_solution_cont
+teaching_card:
+  student_title: 先定参判单调，再用余量锁死严格号
+  what_it_trains: 训练同一道题内切换“导数判号链”和“保值拆分链”，并在最后一步处理“不能同取零”。
+  recognition_cues:
+    - 题干前问给极值点，后问给参数范围并要求严格不等式。
+    - 函数主体是“指数项 - 对数项”，常见 $h(t)=e^t-t-1$ 模板。
+    - 证明阶段出现“余量函数”字样或常数尾项。
+  normalization_moves:
+    - 先做 $f^{\prime}(0)=0$ 定参，再独立完成单调区间。
+    - 把原式改写成 $h(\cdot)+h(\cdot)+$ 余量。
+    - 最后显式检查等号是否可同时成立。
+  common_failures:
+    - 只求出 $m=1$，漏写第(1)问单调区间。
+    - 第(2)问只证到 $f(x)\geqslant0$，没有补“严格大于”的同取零排除。
+    - 忽略定义域 $x+m>0$，导致取等条件讨论失真。
+  similar_practice_query: e^x-lnxm 极值点 定参 单调 保值性 余量函数 严格不等式
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

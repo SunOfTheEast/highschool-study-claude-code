@@ -1,0 +1,187 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0157_exp_ln_sqrt_unclear_ex06
+content_revision_id: mst_p0157_exp_ln_sqrt_unclear_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0157_exp_ln_sqrt_unclear_ex06.card.yaml
+stem: |-
+  （2024 · 深圳月考）已知 $a=e^{0.05}$，$b=1+\ln\sqrt{1.1}$，$c=\sqrt{1.1}$，则（  ）
+  A. $a>b>c$
+  B. $c>b>a$
+  C. $b>a>c$
+  D. $a>c>b$
+answer: |
+  D
+
+  源解链条为：
+  \[
+  e^x>x+1,\quad x>\ln x+1.
+  \]
+  先由 $x=0.1$ 得
+  \[
+  e^{0.1}>1.1\Longleftrightarrow e^{0.05}>\sqrt{1.1}.
+  \]
+  再由 $x=\sqrt{1.1}$ 得
+  \[
+  \sqrt{1.1}>\ln\sqrt{1.1}+1=\frac{\ln1.1}{2}+1.
+  \]
+  因而源文写出 $a>c>b$，选 D。
+
+  因此重建题干为 $a=e^{0.05}$、$c=\sqrt{1.1}$、$b=1+\ln\sqrt{1.1}$，
+  得 $a>c>b$，选 D。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 源解第一段用指数不等式压出 $a$ 的下界。
+      max_score: 1
+    - step_id: step_2
+      description: 源解第二段用对数不等式给出中间量与末量关系。
+      max_score: 1
+    - step_id: step_3
+      description: 按解析链重建题干变量映射。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 局部逼近与找点
+    subroute:
+      - $e^x>x+1$
+      - $x>\ln x+1$
+      - 链式比较映射核对
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 局部逼近结构
+    evidence:
+      - 解析主链完全基于指数与对数的切线型不等式。
+      - 源页题干变量重复，已按解析链重建为闭合对象。
+    normalization_moves_used:
+      - $e^{0.1}>1.1\Rightarrow e^{0.05}>\sqrt{1.1}$。
+      - $\sqrt{1.1}>\ln\sqrt{1.1}+1$。
+      - 解析链到题干变量映射重建。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不熟悉 $e^x>x+1$ 与 $x>\ln x+1$，回补指数对数基础。
+      - 若学生不会判断题干变量是否闭合，回补函数三要素与定义域。
+      - 若学生只看答案字母不核对对象一致性，回补代数恒等变形。
+  detail_terms:
+    - $a=e^{0.05}$
+    - $b=1+\ln\sqrt{1.1}$
+    - $c=\sqrt{1.1}$
+    - $e^{0.05}>\sqrt{1.1}$
+    - $\sqrt{1.1}>\ln\sqrt{1.1}+1$
+    - 源结论 D
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0157_exp_ln_sqrt_unclear_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0157_ex06_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0157/page_0157.md
+      role: problem_start
+      evidence: 例 6 题干与选项在 page_0157，题干变量和数值有印刷/转写错误，需由解析链重建。
+    - ref_id: page_0157_ex06_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0157/page_0157.md
+      role: solution
+      evidence: 解析给出链条 $e^{0.1}>1.1\\Leftrightarrow e^{0.05}>\\sqrt{1.1}>\\ln\\sqrt{1.1}+1=\\frac{\\ln1.1}{2}+1$，并下结论 $a>c>b$，选 D。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0157.png
+      inspected: true
+      notes: 页图可见题干存在变量/数值错印；解析链清楚指向 $a=e^{0.05}$、$c=\sqrt{1.1}$、$b=1+\ln\sqrt{1.1}$。
+  source_context: 例 6 位于例 5 与例 7 之间；题干排版存在明显印刷/转写错误，是本批次已知风险点。
+  source_influence:
+    - 按用户“重建”要求，用源解析链重建题干变量。
+    - 保留源解使用的两条基础不等式：$e^x>x+1$、$x>\ln x+1$。
+    - 保留源答案 D，并将题干改为与解析链自洽的版本。
+  source_discrepancies:
+    - 源页题干变量和数值错印：第二、第三个量不能按可见字符直接发布。用户已拍板重建。
+    - 解析比较链使用 $\sqrt{1.1}$ 与 $1+\ln\sqrt{1.1}$，因此题干重建为 $a=e^{0.05}$、$b=1+\ln\sqrt{1.1}$、$c=\sqrt{1.1}$。
+original_problem:
+  stem: （2024 · 深圳月考）已知 $a=e^{0.05}$，$b=1+\ln\sqrt{1.1}$，$c=\sqrt{1.1}$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a>b>c$
+      text_latex: $a>b>c$
+    - label: B
+      text_raw: $c>b>a$
+      text_latex: $c>b>a$
+    - label: C
+      text_raw: $b>a>c$
+      text_latex: $b>a>c$
+    - label: D
+      text_raw: $a>c>b$
+      text_latex: $a>c>b$
+  answer: D
+  fidelity_notes:
+    - 源页可见字符存在变量/数值错印；本卡按用户拍板和解析链重建题干。
+    - $b=1+\ln\sqrt{1.1}$、$c=\sqrt{1.1}$ 是保证源解 $a>c>b$ 自洽的唯一自然读法。
+solution:
+  source_solution_summary: |
+    源解链条为：
+    \[
+    e^x>x+1,\quad x>\ln x+1.
+    \]
+    先由 $x=0.1$ 得
+    \[
+    e^{0.1}>1.1\Longleftrightarrow e^{0.05}>\sqrt{1.1}.
+    \]
+    再由 $x=\sqrt{1.1}$ 得
+    \[
+    \sqrt{1.1}>\ln\sqrt{1.1}+1=\frac{\ln1.1}{2}+1.
+    \]
+    因而源文写出 $a>c>b$，选 D。
+
+    因此重建题干为 $a=e^{0.05}$、$c=\sqrt{1.1}$、$b=1+\ln\sqrt{1.1}$，
+    得 $a>c>b$，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 源解第一段用指数不等式压出 $a$ 的下界。
+      formula_trace:
+        from: $e^x>x+1$
+        to: $e^{0.1}>1.1\Rightarrow e^{0.05}>\sqrt{1.1}$
+        operation: 先代入 $x=0.1$，再对正数两边开方。
+        why: 构造 $a=e^{0.05}$ 与中间量 $\sqrt{1.1}$ 的比较。
+      source_ref: page_0157_ex06_solution
+    - step_id: step_2
+      statement: 源解第二段用对数不等式给出中间量与末量关系。
+      formula_trace:
+        from: $x>\ln x+1$
+        to: $\sqrt{1.1}>\ln\sqrt{1.1}+1=\frac{\ln1.1}{2}+1$
+        operation: 取 $x=\sqrt{1.1}$。
+        why: 形成“较大量 > 较小量”的比较链。
+      source_ref: page_0157_ex06_solution
+    - step_id: step_3
+      statement: 按解析链重建题干变量映射。
+      formula_trace:
+        from: $e^{0.05}>\sqrt{1.1}>\ln\sqrt{1.1}+1$
+        to: $a>c>b$
+        operation: 令 $a=e^{0.05}$，$c=\sqrt{1.1}$，$b=1+\ln\sqrt{1.1}$。
+        why: 这是与源解和选项 D 同时自洽的题干重建。
+      source_ref: page_0157_ex06_problem
+teaching_card:
+  student_title: 先认结构，再核对象是否闭合
+  what_it_trains: 训练用指数、对数切线不等式建立三数比较链，并在源题错印时按解析链恢复对象。
+  recognition_cues:
+    - 出现 $e^{0.05}$、$\sqrt{1.1}$、$1+\ln\sqrt{1.1}$ 这类相邻小量。
+    - 解析用 $e^x>x+1$ 与 $x>\ln x+1$ 串起比较链。
+    - 目标是比较 $a,b,c$ 的严格顺序。
+  normalization_moves:
+    - 由 $e^{0.1}>1.1$ 开方得到 $e^{0.05}>\sqrt{1.1}$。
+    - 由 $x>\ln x+1$ 得 $\sqrt{1.1}>1+\ln\sqrt{1.1}$。
+    - 合并为 $a>c>b$。
+  common_failures:
+    - 把 $\sqrt{1.1}$ 和 $\ln\sqrt{1.1}+1$ 的顺序写反。
+    - 只看到题干错印，不利用解析链恢复题意。
+    - 忘记 $x>\ln x+1$ 中的 $+1$，导致 $b$ 重建错误。
+  similar_practice_query: e^x>x+1 x>lnx+1 题干疑误 变量重复
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 用户已拍板重建：按解析链恢复为 $a=e^{0.05}$、$b=1+\ln\sqrt{1.1}$、$c=\sqrt{1.1}$，答案 D。

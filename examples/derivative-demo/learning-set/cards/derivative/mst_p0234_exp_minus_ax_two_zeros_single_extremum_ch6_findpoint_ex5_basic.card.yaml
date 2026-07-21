@@ -1,0 +1,205 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0234_exp_minus_ax_two_zeros_single_extremum_ch6_findpoint_ex5_basic
+content_revision_id: mst_p0234_exp_minus_ax_two_zeros_single_extremum_ch6_findpoint_ex5_basic-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0234_exp_minus_ax_two_zeros_single_extremum_ch6_findpoint_ex5_basic.card.yaml
+stem: 当 $a>e$ 时，讨论函数 $f(x)=e^x-ax$ 的零点个数。
+answer: |-
+  $f(x)$ 有两个零点，且可取 $x_1\in(0,\ln a)$、$x_2\in(\ln a,2\ln a)$。
+
+  $f'(x)=e^x-a$，当 $x<\ln a$ 时 $f$ 递减，当 $x>\ln a$ 时 $f$ 递增，极小值为 $f(\ln a)=a(1-\ln a)<0$。又 $f(0)=1>0$， 所以左侧有零点 $x_1\in(0,\ln a)$。右侧要找大于 $\ln a$ 的点， 用等效零点法 $f(x)=e^{x/2}(e^{x/2}-\frac{ax}{e^{x/2}})$。由 $\frac{x}{e^{x/2}}\leqslant\frac2e$ 得 $f(x)\geqslant e^{x/2}(e^{x/2}-\frac{2a}{e})$，取 $x=2\ln\frac{2a}{e}$ 可得右侧变号；source 进一步取整为 $x=2\ln a$，得到 $x_2\in(\ln a,2\ln a)$。因此共有两个零点。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 先确定单极值形状。
+      max_score: 1
+    - step_id: step_2
+      description: 极小值小于 0，确认有两个零点的可能。
+      max_score: 1
+    - step_id: step_3
+      description: 左侧零点由 $f(0)>0$ 直接夹出。
+      max_score: 1
+    - step_id: step_4
+      description: 右侧使用等效零点法。
+      max_score: 1
+    - step_id: step_5
+      description: 用 $x/e^{x/2}$ 的上界构造右侧点。
+      max_score: 1
+    - step_id: step_6
+      description: 取整得到更好看的右侧夹点。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: main
+        goal: 零点/极值点分析
+        target: 第 main 问
+        result: $f$ 有两个零点。
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 同构变形与换元法
+      - 充分/必要性探路
+    subroute:
+      - 单极值双零点
+      - 等效零点法
+      - 主题留一半，客体被吊打
+      - 提出 $e^{x/2}$
+      - 取整 $2\ln a$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $e^x-ax$
+      - $x=\ln a$
+      - $e^{x/2}(e^{x/2}-\frac{ax}{e^{x/2}})$
+      - $2\ln a$
+    normalization_moves_used:
+      - 先用极小值判断两个零点。
+      - 左侧由 $f(0)>0$ 直接夹。
+      - 右侧提出 $e^{x/2}$ 锁住 $x/e^{x/2}$。
+      - 把可用点整理成 $2\ln a$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会分析 $f^\prime(x)=e^x-a$，回补导数单调极值基础。
+      - 若学生不理解 $a>e$ 推出 $\ln a>1$，回补指数对数基础。
+      - 若学生不会用极小值判断双零点，回补方程根分布与韦达。
+      - 若学生不会提出 $e^{x/2}$，回补代数恒等变形。
+      - 若学生不懂取点放缩方向，回补不等式工具基础。
+  detail_terms:
+    - $e^x-ax$
+    - $a>e$
+    - $\ln a$
+    - $e^{x/2}$
+    - $x/e^{x/2}$
+    - $2\ln(2a/e)$
+    - $2\ln a$
+    - 主题留一半，客体被吊打
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0234_exp_minus_ax_two_zeros_single_extremum_ch6_findpoint_ex5_basic
+source_evidence:
+  source_refs:
+    - ref_id: page_0234_single_extremum_section
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0234/page_0234.md
+      role: local_context
+      evidence: page_0234 下半页进入“四、单极值双零点的主体分析”，说明单极值函数放缩取点要分析主体客体转换。
+    - ref_id: page_0234_ex5_basic_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0234/page_0234.md
+      role: problem_start
+      evidence: page_0234 底部给出另一个例5题头：当 $a>e$ 时，讨论 $f(x)=e^x-ax$ 的零点个数。
+    - ref_id: page_0234_ex5_basic_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0234/page_0234.md
+      role: solution
+      evidence: page_0234 开始解析：$f^\prime(x)=e^x-a$，极小值在 $x=\ln a$，且 $f(\ln a)=a(1-\ln a)<0$，已有两个零点框架。
+    - ref_id: page_0235_ex5_basic_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0235/page_0235.md
+      role: continuation
+      evidence: page_0235 顶部续解：用等效零点法提出 $e^{x/2}$，构造右侧取点，得到 $x_2\in(\ln a,2\ln a)$。
+    - ref_id: page_0235_ex5_basic_figure
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0235/page_0235.md
+      role: figure_context
+      evidence: page_0235 顶部图示 $e^x-ax$ 先减后增，标出 $x_1,\ln a,x_2,2\ln a$。
+    - ref_id: page_0235_ex6_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0235/page_0235.md
+      role: local_context
+      evidence: page_0235 随后另起例6，属于下一批，本卡只取其前方的例5续解。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0234.png
+      inspected: true
+      notes: 已核对页图：单极值双零点例5题头和解析开头位于 page_0234 底部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0235.png
+      inspected: true
+      notes: 已核对页图：page_0235 顶部为例5续解、图示和右侧取点，例6另起。
+  source_context: 本卡处理 page_0234 底部起头、page_0235 顶部续完的单极值双零点例5；page_0235 例6以后留给下一批。
+  source_influence:
+    - 保留 source 的单极值双零点结构：极小值小于零，左右各找一个零点。
+    - 保留 source 的等效零点法：“主题留一半，客体被吊打”，提出 $e^{x/2}$ 锁住 $ax/e^{x/2}$。
+    - 保留 source 的取整提醒：可用 $2\ln(2a/e)$，但为了结构好看取 $2\ln a$。
+  source_discrepancies: []
+original_problem:
+  stem: 当 $a>e$ 时，讨论函数 $f(x)=e^x-ax$ 的零点个数。
+  parts: *a1
+  choices: []
+  answer: $f(x)$ 有两个零点，且可取 $x_1\in(0,\ln a)$、$x_2\in(\ln a,2\ln a)$。
+  fidelity_notes:
+    - 单问零点个数题，无选项。
+    - 题设 $a>e$，所以 $\ln a>1$。
+solution:
+  source_solution_summary: $f'(x)=e^x-a$，当 $x<\ln a$ 时 $f$ 递减，当 $x>\ln a$ 时 $f$ 递增，极小值为 $f(\ln a)=a(1-\ln a)<0$。又 $f(0)=1>0$， 所以左侧有零点 $x_1\in(0,\ln a)$。右侧要找大于 $\ln a$ 的点， 用等效零点法 $f(x)=e^{x/2}(e^{x/2}-\frac{ax}{e^{x/2}})$。由 $\frac{x}{e^{x/2}}\leqslant\frac2e$ 得 $f(x)\geqslant e^{x/2}(e^{x/2}-\frac{2a}{e})$，取 $x=2\ln\frac{2a}{e}$ 可得右侧变号；source 进一步取整为 $x=2\ln a$，得到 $x_2\in(\ln a,2\ln a)$。因此共有两个零点。
+  key_steps:
+    - step_id: step_1
+      statement: 先确定单极值形状。
+      formula_trace:
+        from: $f(x)=e^x-ax$
+        to: $f^\prime(x)=e^x-a$，极小值点 $x=\ln a$
+        operation: 求导并令导数为 0。
+        why: 单极值函数的两个零点要围绕极值点左右取点。
+      source_ref: page_0234_ex5_basic_solution_start
+    - step_id: step_2
+      statement: 极小值小于 0，确认有两个零点的可能。
+      formula_trace:
+        from: $f(\ln a)=a-a\ln a$
+        to: $f(\ln a)=a(1-\ln a)<0$
+        operation: 用 $a>e$ 得 $\ln a>1$。
+        why: 极小值低于 x 轴，左右都有机会过零。
+      source_ref: page_0234_ex5_basic_solution_start
+    - step_id: step_3
+      statement: 左侧零点由 $f(0)>0$ 直接夹出。
+      formula_trace:
+        from: $f(0)=1>0,\ f(\ln a)<0$
+        to: $x_1\in(0,\ln a)$
+        operation: 介值定理。
+        why: 左侧不需要复杂取点。
+      source_ref: page_0234_ex5_basic_solution_start
+    - step_id: step_4
+      statement: 右侧使用等效零点法。
+      formula_trace:
+        from: $f(x)=e^x-ax$
+        to: $f(x)=e^{x/2}(e^{x/2}-\frac{ax}{e^{x/2}})$
+        operation: 提出 $e^{x/2}$。
+        why: 把无界客体 $-ax$ 转成可控的 $x/e^{x/2}$。
+      source_ref: page_0235_ex5_basic_continuation
+    - step_id: step_5
+      statement: 用 $x/e^{x/2}$ 的上界构造右侧点。
+      formula_trace:
+        from: $\frac{x}{e^{x/2}}\leqslant\frac2e$
+        to: $f(x)\geqslant e^{x/2}(e^{x/2}-\frac{2a}{e})$
+        operation: 用客体变量上界。
+        why: 这就是 source 的“主题留一半，客体被吊打”。
+      source_ref: page_0235_ex5_basic_continuation
+    - step_id: step_6
+      statement: 取整得到更好看的右侧夹点。
+      formula_trace:
+        from: $x=2\ln\frac{2a}{e}$ 可用
+        to: $x=2\ln a$，故 $x_2\in(\ln a,2\ln a)$
+        operation: 用更大的右侧点保持正值并让结构更整齐。
+        why: source 明确说明通常放缩取点需要取整。
+      source_ref: page_0235_ex5_basic_continuation
+teaching_card:
+  student_title: 单极值双零点：左边直接夹，右边提出 $e^{x/2}$ 再取整
+  what_it_trains: 训练单极值双零点的主体客体分析：右侧零点不能硬猜，要把 $ax$ 变成有界客体。
+  recognition_cues:
+    - $a>e$ 让极小值 $a(1-\ln a)$ 为负。
+    - 左侧已经有 $f(0)>0$，右侧才是取点难点。
+    - $e^x-ax$ 右侧取点常用提出 $e^{x/2}$。
+  normalization_moves:
+    - 先找极小值点 $\ln a$。
+    - 用 $f(0)>0$ 得左零点。
+    - 右侧写成 $e^{x/2}(e^{x/2}-ax/e^{x/2})$。
+    - 用 $x/e^{x/2}\leqslant2/e$ 后取 $2\ln a$。
+  common_failures:
+    - 只说有两个零点，没给右侧取点。
+    - 把 $2\ln(2a/e)$ 和 $2\ln a$ 的作用混淆。
+    - 没有解释为什么要提出 $e^{x/2}$。
+  similar_practice_query: e^x-ax a>e 两个零点 单极值双零点 e^{x/2} 主题留一半 客体被吊打
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,173 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0178_ln_product_a2_b2_min_ex34
+content_revision_id: mst_p0178_ln_product_a2_b2_min_ex34-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0178_ln_product_a2_b2_min_ex34.card.yaml
+stem: |-
+  （2024 · 新课标 2 卷 13）设函数 $f(x)=(a+x)\ln(x+b)$，若 $f(x)\geqslant0$，则 $a^2+b^2$ 的最小值为（  ）
+  A. \frac{1}{8}
+  B. \frac{1}{4}
+  C. \frac{1}{2}
+  D. 1
+answer: |-
+  C
+
+  定义域为 $x>-b$。源解按穿根原理处理乘积结构：一次因子 $a+x$ 的零点为 $x=-a$，对数因子 $\ln(x+b)$ 的零点为 $x=1-b$。由题设 $f(x)=(a+x)\ln(x+b)\ge0$，两处符号切换点对齐，故 $-a=1-b$，即 $a=b-1$。于是\n$ a^2+b^2=(b-1)^2+b^2=2b^2-2b+1=2\left(b-\frac{1}{2}\right)^2+\frac{1}{2}\ge\frac{1}{2}$。\n当 $b=\frac{1}{2}$ 时取等，此时 $a=-\frac{1}{2}$，故最小值为 $\frac{1}{2}$，选 C。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 写出定义域与两个因子的零点。
+      max_score: 1
+    - step_id: step_2
+      description: 按穿根原理对齐零点。
+      max_score: 1
+    - step_id: step_3
+      description: 代入并化为单变量二次式。
+      max_score: 1
+    - step_id: step_4
+      description: 配方求最小值并回填选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level:
+      - part_id: item_1
+        goal: 极值最值
+        target: 求 $a^2+b^2$ 的最小值。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 数形结合
+      - 对称性配凑
+    subroute:
+      - 穿根原理
+      - 零点对齐
+      - 完全平方
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 多变量与不等式结构
+    evidence:
+      - 乘积由线性因子与对数因子构成。
+      - 源解核心约束是 $-a=1-b$。
+      - $a^2+b^2$ 经消元后是标准二次最值。
+    normalization_moves_used:
+      - 先提取两因子的零点位置。
+      - 把 $a$ 用 $b$ 表示：$a=b-1$。
+      - 配方到 $2\left(b-\frac{1}{2}\right)^2+\frac{1}{2}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不清楚 $\ln(x+b)=0$ 的零点是 $x=1-b$，回补指数对数基础。
+      - 若学生不理解“穿根”如何产生 $-a=1-b$，回补函数性质与图像。
+      - 若学生在配方中丢系数，回补代数恒等变形。
+  detail_terms:
+    - $(a+x)\ln(x+b)$
+    - $x>-b$
+    - $-a=1-b$
+    - $a=b-1$
+    - $2\left(b-\frac{1}{2}\right)^2+\frac{1}{2}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0178_ln_product_a2_b2_min_ex34
+source_evidence:
+  source_refs:
+    - ref_id: page_0178_ex34a_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0178/page_0178.md
+      role: problem_start
+      evidence: page_0178 lines 40-45 给出第一个“例34”题干与 A-D 选项（新课标2卷）。
+    - ref_id: page_0178_ex34a_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0178/page_0178.md
+      role: solution
+      evidence: page_0178 line 47 解析：定义域 $x>-b$，由穿根原理得 $-a=1-b$，再求 $a^2+b^2$ 最小值，答案 C。
+    - ref_id: page_0178_numbering_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0178/page_0178.md
+      role: local_context
+      evidence: page_0178 line 60 出现第二个“例34”（多选），本卡仅对应 lines 40-47 的前一个例34。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0178.png
+      inspected: true
+      notes: 页图核对通过：前一个例34题干、选项、穿根原理推导和答案 C 与 markdown 一致；本页另有后一个例34，语义 ID 已区分。
+  source_context: page_0178 同页出现两个例34；本卡处理“$(a+x)\ln(x+b)$、求 $a^2+b^2$ 最小值”的单选题。
+  source_influence:
+    - 保留源页核心触发词“穿根原理”。
+    - 保留源页等价关系 $-a=1-b$ 与最小值 $\frac{1}{2}$。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 新课标 2 卷 13）设函数 $f(x)=(a+x)\ln(x+b)$，若 $f(x)\geqslant0$，则 $a^2+b^2$ 的最小值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: \frac{1}{8}
+      text_latex: $\frac{1}{8}$
+    - label: B
+      text_raw: \frac{1}{4}
+      text_latex: $\frac{1}{4}$
+    - label: C
+      text_raw: \frac{1}{2}
+      text_latex: $\frac{1}{2}$
+    - label: D
+      text_raw: "1"
+      text_latex: "1"
+  answer: C
+  fidelity_notes:
+    - 源解未展开完整证明细节，直接给出“穿根原理”关系式。
+    - 题干默认在函数定义域内比较符号，源解写为 $x>-b$。
+solution:
+  source_solution_summary: 定义域为 $x>-b$。源解按穿根原理处理乘积结构：一次因子 $a+x$ 的零点为 $x=-a$，对数因子 $\ln(x+b)$ 的零点为 $x=1-b$。由题设 $f(x)=(a+x)\ln(x+b)\ge0$，两处符号切换点对齐，故 $-a=1-b$，即 $a=b-1$。于是\n$ a^2+b^2=(b-1)^2+b^2=2b^2-2b+1=2\left(b-\frac{1}{2}\right)^2+\frac{1}{2}\ge\frac{1}{2}$。\n当 $b=\frac{1}{2}$ 时取等，此时 $a=-\frac{1}{2}$，故最小值为 $\frac{1}{2}$，选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 写出定义域与两个因子的零点。
+      formula_trace:
+        from: $f(x)=(a+x)\ln(x+b)$
+        to: 定义域 $x>-b$；$a+x=0$ 的零点是 $x=-a$；$\ln(x+b)=0$ 的零点是 $x=1-b$
+        operation: 分别解线性与对数零点方程。
+        why: 穿根原理要先定位两条“过零”位置。
+      source_ref: page_0178_ex34a_solution
+    - step_id: step_2
+      statement: 按穿根原理对齐零点。
+      formula_trace:
+        from: $f(x)\ge0$
+        to: $-a=1-b$
+        operation: 令两因子符号切换点重合。
+        why: 这是源页给出的核心关系。
+      source_ref: page_0178_ex34a_solution
+    - step_id: step_3
+      statement: 代入并化为单变量二次式。
+      formula_trace:
+        from: $-a=1-b$
+        to: $a=b-1,\quad a^2+b^2=(b-1)^2+b^2=2b^2-2b+1$
+        operation: 消元代换。
+        why: 将双参数最值降为一元最值。
+      source_ref: page_0178_ex34a_solution
+    - step_id: step_4
+      statement: 配方求最小值并回填选项。
+      formula_trace:
+        from: $2b^2-2b+1$
+        to: $2\left(b-\frac{1}{2}\right)^2+\frac{1}{2}\ge\frac{1}{2}$
+        operation: 完全平方。
+        why: 直接得到最小值对应选项 C。
+      source_ref: page_0178_ex34a_solution
+teaching_card:
+  student_title: 穿根后只剩一个二次式
+  what_it_trains: 训练对“线性因子 × 对数因子”的恒号题先做零点对齐，再把参数最值转为单变量配方法。
+  recognition_cues:
+    - 出现 $(\text{线性})\cdot\ln(\text{线性})$ 的乘积结构。
+    - 题目目标是参数平方和最小值。
+    - 源解直接提示“穿根原理”。
+  normalization_moves:
+    - 写两因子零点：$x=-a,\ x=1-b$。
+    - 对齐得 $-a=1-b$。
+    - 消掉一个参数再做配方。
+  common_failures:
+    - 把 $\ln(x+b)=0$ 错写成 $x=-b$。
+    - 由 $-a=1-b$ 反解 $a,b$ 时符号出错。
+    - 配方后误判常数项，导致选项偏到 $\frac{1}{4}$。
+  similar_practice_query: 穿根原理 线性乘对数 参数平方和最小值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 未直接核对 page_0178 页图；本卡依据 markdown transcription。

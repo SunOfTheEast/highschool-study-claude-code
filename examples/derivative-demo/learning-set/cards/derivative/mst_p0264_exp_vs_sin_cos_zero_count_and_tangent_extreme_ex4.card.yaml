@@ -1,0 +1,216 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0264_exp_vs_sin_cos_zero_count_and_tangent_extreme_ex4
+content_revision_id: mst_p0264_exp_vs_sin_cos_zero_count_and_tangent_extreme_ex4-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0264_exp_vs_sin_cos_zero_count_and_tangent_extreme_ex4.card.yaml
+stem: |-
+  （2024 · 福州一中高考模拟）已知函数 $f(x)=e^x$，$g(x)=\sin x+\cos x$，其中 $e$ 为自然对数的底数。
+  1. 证明：$x\ge0$ 时，$e^x-1\ge x\ge\sin x$。
+  2. 求函数 $h(x)=f(x)-g(x)$ 在 $(-\frac54\pi,+\infty)$ 内的零点个数。
+  3. 若 $f(x)+g(x)\ge ax+2$，求 $a$ 的取值范围。
+answer: |-
+  第(1)问：成立。第(2)问：零点个数为 1。第(3)问：$a=2$。
+
+  第(1)问分别构造 $e^x-1-x$ 与 $x-\sin x$，在 $x\ge0$ 上用导数非负证明 $e^x-1\ge x\ge\sin x$。第(2)问 $h(x)=e^x-\sin x-\cos x$，$x>0$ 时由第(1)问得 $h>0$； $x=0$ 是一个零点；在 $(-\frac\pi4,0)$ 上用 $h^\prime<0$ 得 $h>0$；在 $(-\frac54\pi,-\frac\pi4]$ 上直接写成 $e^x-\sqrt2\sin(x+\frac\pi4)>0$，所以只有 1 个零点。第(3)问 令 $F=e^x+\sin x+\cos x-2-ax$，由 $F(0)=0$ 和恒非负得 $F^\prime(0)=2-a=0$，所以 $a=2$；再构造 $G=F/e^x$，用 $G^\prime=2(x-\sin x)/e^x$ 回证。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 第(1)问：证明 $e^x-1\ge x$。
+      max_score: 1
+    - step_id: step_2
+      description: 第(1)问：证明 $x\ge\sin x$。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问：排除 $x>0$ 的零点。
+      max_score: 1
+    - step_id: step_4
+      description: 第(2)问：负区间分段排除。
+      max_score: 1
+    - step_id: step_5
+      description: 第(3)问：用极点效应锁 $a$。
+      max_score: 1
+    - step_id: step_6
+      description: 第(3)问：回证 $a=2$。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 不等式证明
+        target: 第 1 问
+        result: $e^x-1\ge x\ge\sin x$。
+      - part_id: "2"
+        goal: 零点/极值点分析
+        target: 第 2 问
+        result: 零点个数为 1。
+      - part_id: "3"
+        goal: 求参数范围
+        target: 第 3 问
+        result: $a=2$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 切线放缩与凹凸性
+      - 充分/必要性探路
+      - 同构变形与换元法
+    subroute:
+      - 基础不等式铺垫
+      - 分区间零点排除
+      - 极点效应锁参
+      - 指数找基友回证
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+      - 局部逼近结构
+    evidence:
+      - $e^x$
+      - $\sin x+\cos x$
+      - $x-\sin x$
+      - $F(0)=0$
+      - $a=2$
+    normalization_moves_used:
+      - 先建立 $e^x-1\ge x\ge\sin x$。
+      - 用分区间方式数 $h$ 的零点。
+      - 第(3)问用 $F(0)=0$ 锁定极点。
+      - 除以 $e^x$ 形成 $G$，用 $x-\sin x$ 回证。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会证明 $e^x-1\ge x$，回补指数对数基础。
+      - 若学生不会证明 $x\ge\sin x$，回补三角函数基础。
+      - 若学生不会按区间数零点，回补函数性质与图像。
+      - 若学生不知道极小值点导数为 0，回补导数单调极值基础。
+  detail_terms:
+    - $e^x-\sin x-\cos x$
+    - $e^x-1\ge x\ge\sin x$
+    - $(-\frac54\pi,+\infty)$
+    - $F(x)=e^x+\sin x+\cos x-2-ax$
+    - $a=2$
+parts: &a1
+  - id: "1"
+    text: 证明：$x\ge0$ 时，$e^x-1\ge x\ge\sin x$。
+  - id: "2"
+    text: 求函数 $h(x)=f(x)-g(x)$ 在 $(-\frac54\pi,+\infty)$ 内的零点个数。
+  - id: "3"
+    text: 若 $f(x)+g(x)\ge ax+2$，求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0264_exp_vs_sin_cos_zero_count_and_tangent_extreme_ex4
+source_evidence:
+  source_refs:
+    - ref_id: page_0264_ex4_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0264/page_0264.md
+      role: problem_start
+      evidence: page_0264 给出例4题头：$f(x)=e^x$，$g(x)=\sin x+\cos x$；三问分别为基础不等式、$h=f-g$ 零点个数、以及 $f+g\ge ax+2$ 求 $a$。
+    - ref_id: page_0264_ex4_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0264/page_0264.md
+      role: solution
+      evidence: page_0264 给出第(1)问证明和第(2)问起步：$h=e^x-\sin x-\cos x$，先排除 $x>0$ 的零点。
+    - ref_id: page_0265_ex4_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0265/page_0265.md
+      role: solution
+      evidence: page_0265 页首延续例4：第(2)问分区间得到零点个数为 1；第(3)问由 $F(0)=0$、$F^\prime(0)=0$ 得 $a=2$，再用 $G^\prime(x)=2(x-\sin x)/e^x$ 回证。
+    - ref_id: page_0265_ex5_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0265/page_0265.md
+      role: local_context
+      evidence: page_0265 随后进入“双参数的极点效应”和例5，说明例4在页首闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0264.png
+      inspected: true
+      notes: 已核对页图：例4题干和解析起于 page_0264 下半页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0265.png
+      inspected: true
+      notes: 已核对页图：page_0265 页首为例4续解，随后另起例5。
+  source_context: 本卡处理 page_0264 起头、page_0265 页首续完的例4；page_0265 例5排除。
+  source_influence:
+    - 保留第(1)问的两个基础不等式：$e^x-1\ge x$ 与 $x\ge\sin x$。
+    - 保留第(2)问按区间排除零点，只留下 $x=0$。
+    - 保留第(3)问极点效应：$F(0)=0$，恒非负，故 $F^\prime(0)=0$，得 $a=2$。
+  source_discrepancies:
+    - type: corrected_reference_symbol
+      source_ref: page_0265_ex4_solution_continuation
+      observed: source final proof says $G(x)\ge F(0)=0$.
+      resolved_as: use $G(x)\ge G(0)=0$; since $G(0)=F(0)=0$, the conclusion is unchanged.
+      reason: The monotonicity argument is for $G$, not directly for $F$.
+original_problem:
+  stem: （2024 · 福州一中高考模拟）已知函数 $f(x)=e^x$，$g(x)=\sin x+\cos x$，其中 $e$ 为自然对数的底数。
+  parts: *a1
+  choices: []
+  answer: 第(1)问：成立。第(2)问：零点个数为 1。第(3)问：$a=2$。
+  fidelity_notes:
+    - 无选项。
+    - 第(3)问 source 按全实数恒成立处理。
+solution:
+  source_solution_summary: 第(1)问分别构造 $e^x-1-x$ 与 $x-\sin x$，在 $x\ge0$ 上用导数非负证明 $e^x-1\ge x\ge\sin x$。第(2)问 $h(x)=e^x-\sin x-\cos x$，$x>0$ 时由第(1)问得 $h>0$； $x=0$ 是一个零点；在 $(-\frac\pi4,0)$ 上用 $h^\prime<0$ 得 $h>0$；在 $(-\frac54\pi,-\frac\pi4]$ 上直接写成 $e^x-\sqrt2\sin(x+\frac\pi4)>0$，所以只有 1 个零点。第(3)问 令 $F=e^x+\sin x+\cos x-2-ax$，由 $F(0)=0$ 和恒非负得 $F^\prime(0)=2-a=0$，所以 $a=2$；再构造 $G=F/e^x$，用 $G^\prime=2(x-\sin x)/e^x$ 回证。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问：证明 $e^x-1\ge x$。
+      formula_trace:
+        from: $f_1(x)=e^x-1-x$
+        to: $f_1^\prime(x)=e^x-1\ge0$，$f_1(x)\ge f_1(0)=0$
+        operation: 构造差函数并判单调。
+        why: 得到指数的基础下界。
+      source_ref: page_0264_ex4_solution_start
+    - step_id: step_2
+      statement: 第(1)问：证明 $x\ge\sin x$。
+      formula_trace:
+        from: $f_2(x)=x-\sin x$
+        to: $f_2^\prime(x)=1-\cos x\ge0$，$f_2(x)\ge0$
+        operation: 构造差函数并判单调。
+        why: 得到三角基础下界。
+      source_ref: page_0264_ex4_solution_start
+    - step_id: step_3
+      statement: 第(2)问：排除 $x>0$ 的零点。
+      formula_trace:
+        from: $h(x)=e^x-\sin x-\cos x$
+        to: $h(x)>x+1-\sin x-\cos x\ge0$
+        operation: 套用第(1)问。
+        why: 正半轴没有零点。
+      source_ref: page_0264_ex4_solution_start
+    - step_id: step_4
+      statement: 第(2)问：负区间分段排除。
+      formula_trace:
+        from: $(-\frac54\pi,0)$
+        to: $(-\frac\pi4,0)$ 与 $(-\frac54\pi,-\frac\pi4]$ 上均无零点
+        operation: 分别用导数单调和三角合并式判正。
+        why: 只剩 $x=0$ 一个零点。
+      source_ref: page_0265_ex4_solution_continuation
+    - step_id: step_5
+      statement: 第(3)问：用极点效应锁 $a$。
+      formula_trace:
+        from: $F(x)=e^x+\sin x+\cos x-2-ax\ge0$，$F(0)=0$
+        to: $F^\prime(0)=2-a=0$，$a=2$
+        operation: 开区间内最小值点导数为 0。
+        why: 恒非负且在 0 处取等，参数由切线条件确定。
+      source_ref: page_0265_ex4_solution_continuation
+    - step_id: step_6
+      statement: 第(3)问：回证 $a=2$。
+      formula_trace:
+        from: $G(x)=1+\frac{\sin x+\cos x-2-2x}{e^x}$
+        to: $G^\prime(x)=\frac{2(x-\sin x)}{e^x}$，$G(x)\ge G(0)=0$
+        operation: 除以 $e^x$ 后用 $x-\sin x$ 判单调。
+        why: 证明 $F(x)\ge0$ 全域成立。
+      source_ref: page_0265_ex4_solution_continuation
+teaching_card:
+  student_title: 先用基础不等式排零点，再用极点效应锁参数
+  what_it_trains: 训练指数与三角混合题的组合打法：先建立简单不等式，再分区间数零点，最后用取等点锁参数。
+  recognition_cues:
+    - 题目同时有 $e^x$、$\sin x$、$\cos x$。
+    - 第(2)问区间从 $-\frac54\pi$ 开始，必须分负区间。
+    - 第(3)问在 $x=0$ 处取等：$e^0+\sin0+\cos0=2$。
+  normalization_moves:
+    - 先证明 $e^x-1\ge x\ge\sin x$，后面直接复用。
+    - 数零点时按 $x>0$、$x=0$、负区间分开。
+    - 求 $a$ 时先令 $F^\prime(0)=0$，再回证 $a=2$。
+  common_failures:
+    - 第(2)问只看到 $x=0$，没有排除负区间零点。
+    - 第(3)问只求出必要条件 $a=2$，没有回证恒成立。
+    - 把 $G(x)\ge G(0)$ 的回证对象写混。
+  similar_practice_query: 指数三角 e^x sinx cosx 零点个数 极点效应 a=2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

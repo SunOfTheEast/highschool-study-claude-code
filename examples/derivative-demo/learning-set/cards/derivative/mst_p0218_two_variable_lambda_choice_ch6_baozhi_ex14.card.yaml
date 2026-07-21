@@ -1,0 +1,184 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0218_two_variable_lambda_choice_ch6_baozhi_ex14
+content_revision_id: mst_p0218_two_variable_lambda_choice_ch6_baozhi_ex14-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0218_two_variable_lambda_choice_ch6_baozhi_ex14.card.yaml
+stem: |-
+  （2025 · 四川德阳质检 T8）对任意 $a,b\in\mathbf R$，都有 $(b-a)e^{b-a}\geqslant be^{-b}-\lambda a$ 恒成立，则实数 $\lambda$ 的值为 $(\quad)$。
+  A. $e$
+  B. $1$
+  C. $0$
+  D. $-e$
+answer: |-
+  B. $1$。
+
+  法一取特殊值：$a=b=1$ 得 $\lambda\geqslant 1/e$，排除 C、D； 取 $b=0,a=-1/2$ 得 $\lambda\leqslant e^{1/2}$，排除 A，故只能选 B。法二将原不等式整理为 $(b-a)e^{b-a}-\lambda(b-a)+(-be^{-b})-\lambda(-b)\geqslant0$， 令 $h(x)=xe^x-\lambda x$，则需要 $h(b-a)+h(-b)\geqslant0$ 对任意 $a,b$ 成立。由于 $b-a$ 与 $-b$ 可独立取任意实数，这要求 $h(x)\geqslant0$ 恒成立。分类看 $x=0$、$x<0$、$x>0$，分别得到对 $\lambda$ 的夹逼，最终 $\lambda=1$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 用特殊值快速排除。
+      max_score: 1
+    - step_id: step_2
+      description: 把双变量式拆成同一个单变量函数的两项。
+      max_score: 1
+    - step_id: step_3
+      description: 构造保值函数。
+      max_score: 1
+    - step_id: step_4
+      description: 由任意性反推 $h(x)$ 本身必须非负。
+      max_score: 1
+    - step_id: step_5
+      description: 按 $x$ 的正负分类锁定 $\lambda$。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: main
+        goal: 求参数范围
+        target: 第 main 问
+        result: $\lambda=1$
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 含参数分类讨论
+      - 自由度与主元
+    subroute:
+      - 双变量保值性
+      - 特殊值排除
+      - 构造 $h(x)=xe^x-\lambda x$
+      - 正负半轴分类
+  structure:
+    primary: 多变量与不等式结构
+    secondary:
+      - 指对复合结构
+      - 非齐次结构
+      - 同构结构
+    evidence:
+      - $(b-a)e^{b-a}$ 与 $be^{-b}$ 通过 $b-a$、$-b$ 变成同型项。
+      - $h(b-a)+h(-b)\geqslant0$
+      - $h(x)=x(e^x-\lambda)$
+    normalization_moves_used:
+      - 补出 $-\lambda(b-a)-\lambda(-b)$，把参数项拆成两份。
+      - 用 $b-a$ 与 $-b$ 的自由度把双变量问题降到单变量。
+      - 按 $x<0,x=0,x>0$ 分类处理符号。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看不出 $-\lambda a=-\lambda(b-a)-\lambda(-b)$，回补代数恒等变形。
+      - 若学生不会处理 $x(e^x-\lambda)\geqslant0$ 的正负分类，回补不等式工具基础。
+      - 若学生不能从任意 $a,b$ 读出自由度，回补函数性质与图像。
+      - 若学生对 $e^x$ 在正负半轴的范围不熟，回补指数对数基础。
+  detail_terms:
+    - 双变量保值性
+    - $h(x)=xe^x-\lambda x$
+    - $b-a$ 与 $-b$
+    - 特殊值排除
+    - 正负半轴夹参
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0218_two_variable_lambda_choice_ch6_baozhi_ex14
+source_evidence:
+  source_refs:
+    - ref_id: page_0218_ex14_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0218/page_0218.md
+      role: problem_start
+      evidence: page_0218 给出例14题头：对任意 $a,b\in\mathbf R$，$(b-a)e^{b-a}\geqslant be^{-b}-\lambda a$ 恒成立，选择 $\lambda$。
+    - ref_id: page_0218_ex14_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0218/page_0218.md
+      role: solution
+      evidence: page_0218 例14解析给出特殊值排除法与 $h(x)=xe^x-\lambda x$ 的保值性做法，结论选 B。
+    - ref_id: page_0218_ex15_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0218/page_0218.md
+      role: local_context
+      evidence: 例14后进入例15新题头，说明例14在本页闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0218.png
+      inspected: true
+      notes: 已核对整页图像：例14位于页首，A-D 选项分别为 $e,1,0,-e$，解析末尾为“故选 B”。
+  source_context: 本卡仅处理 page_0218 页首例14；同页例15和后续“分而治之”理论文字只作为边界上下文。
+  source_influence:
+    - 保留 source 的两个解法：特殊值快速排除与构造 $h(x)=xe^x-\lambda x$ 的保值性证明。
+    - 重点保留将双变量表达式拆成 $h(b-a)+h(-b)$ 的结构。
+    - 按 source 口径发布答案 B，即 $\lambda=1$。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 · 四川德阳质检 T8）对任意 $a,b\in\mathbf R$，都有 $(b-a)e^{b-a}\geqslant be^{-b}-\lambda a$ 恒成立，则实数 $\lambda$ 的值为 $(\quad)$。
+  parts: *a1
+  choices:
+    - label: A
+      text: $e$
+    - label: B
+      text: $1$
+    - label: C
+      text: $0$
+    - label: D
+      text: $-e$
+  answer: B. $1$。
+  fidelity_notes:
+    - 选择题，需保留全部 A-D 选项。
+    - source 的法一用特殊点排除，法二给出结构性解释。
+solution:
+  source_solution_summary: 法一取特殊值：$a=b=1$ 得 $\lambda\geqslant 1/e$，排除 C、D； 取 $b=0,a=-1/2$ 得 $\lambda\leqslant e^{1/2}$，排除 A，故只能选 B。法二将原不等式整理为 $(b-a)e^{b-a}-\lambda(b-a)+(-be^{-b})-\lambda(-b)\geqslant0$， 令 $h(x)=xe^x-\lambda x$，则需要 $h(b-a)+h(-b)\geqslant0$ 对任意 $a,b$ 成立。由于 $b-a$ 与 $-b$ 可独立取任意实数，这要求 $h(x)\geqslant0$ 恒成立。分类看 $x=0$、$x<0$、$x>0$，分别得到对 $\lambda$ 的夹逼，最终 $\lambda=1$。
+  key_steps:
+    - step_id: step_1
+      statement: 用特殊值快速排除。
+      formula_trace:
+        from: $(b-a)e^{b-a}\geqslant be^{-b}-\lambda a$
+        to: $a=b=1\Rightarrow \lambda\geqslant1/e$；$b=0,a=-1/2\Rightarrow \lambda\leqslant e^{1/2}$
+        operation: 代入能直接限制 $\lambda$ 的点。
+        why: 选择题先缩小候选，保留 source 的最快路径。
+      source_ref: page_0218_ex14_solution
+    - step_id: step_2
+      statement: 把双变量式拆成同一个单变量函数的两项。
+      formula_trace:
+        from: $(b-a)e^{b-a}\geqslant be^{-b}-\lambda a$
+        to: $(b-a)e^{b-a}-\lambda(b-a)+(-be^{-b})-\lambda(-b)\geqslant0$
+        operation: 补出 $-\lambda(b-a)-\lambda(-b)=-\lambda a$。
+        why: 把 $b-a$ 与 $-b$ 都装进同一个 $h(x)$。
+      source_ref: page_0218_ex14_solution
+    - step_id: step_3
+      statement: 构造保值函数。
+      formula_trace:
+        from: $(b-a)e^{b-a}-\lambda(b-a)+(-be^{-b})-\lambda(-b)$
+        to: $h(b-a)+h(-b)$，其中 $h(x)=xe^x-\lambda x$
+        operation: 令 $x=b-a$ 与 $x=-b$ 分别进入 $h$。
+        why: 若 $h(x)\geqslant0$ 恒成立，则两项之和自然非负。
+      source_ref: page_0218_ex14_solution
+    - step_id: step_4
+      statement: 由任意性反推 $h(x)$ 本身必须非负。
+      formula_trace:
+        from: $h(b-a)+h(-b)\geqslant0$ 对任意 $a,b$ 成立
+        to: $h(x)\geqslant0$ 对任意 $x\in\mathbf R$ 成立
+        operation: 利用 $b-a$ 与 $-b$ 的自由度。
+        why: 这是双变量保值性题的关键降维。
+      source_ref: page_0218_ex14_solution
+    - step_id: step_5
+      statement: 按 $x$ 的正负分类锁定 $\lambda$。
+      formula_trace:
+        from: $h(x)=x(e^x-\lambda)\geqslant0$
+        to: $x<0\Rightarrow \lambda\geqslant1$，$x>0\Rightarrow \lambda\leqslant1$，故 $\lambda=1$
+        operation: 除以正负不同的 $x$，并取 $e^x$ 在正负半轴的极限/范围。
+        why: 完成必要性和充分性，得到唯一答案。
+      source_ref: page_0218_ex14_solution
+teaching_card:
+  student_title: 把双变量不等式拆成两个 $h(x)$
+  what_it_trains: 训练双变量保值性：通过补项把两个变量组合拆成同一个单变量函数，再用符号分类夹住参数。
+  recognition_cues:
+    - 题目写着“对任意 $a,b$ 恒成立”，且有 $b-a$ 与 $be^{-b}$ 这种可改写成 $(-b)e^{-b}$ 的结构。
+    - 参数项 $\lambda a$ 可以被拆成与 $b-a$、$-b$ 对应的两份。
+    - 最后会落到 $x(e^x-\lambda)\geqslant0$ 这类正负半轴夹参。
+  normalization_moves:
+    - 先用特殊值排除明显选项。
+    - 再补项构造 $h(b-a)+h(-b)$。
+    - 最后分类 $x<0$ 与 $x>0$。
+  common_failures:
+    - 只代特殊值选出 B，但说不清为什么 B 必然可行。
+    - 把 $be^{-b}$ 误看成 $h(b)$，漏掉应使用 $-b$。
+    - 除以负数 $x$ 时不等号方向写反。
+  similar_practice_query: 双变量 保值性 h(b-a)+h(-b) xe^x-lambda x 恒成立 求参数
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

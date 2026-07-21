@@ -1,0 +1,174 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0036_ex31
+content_revision_id: mst_p0036_ex31-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0036_ex31.card.yaml
+stem: |-
+  已知 $x,y$ 满足 $x+3^x=3,\ 3y+\log_3 y=2$，则 $x+3y=$ ( )
+  A. 1
+  B. 2
+  C. $\frac{3}{2}$
+  D. 3
+answer: |
+  D
+
+  由 $3y+\log_3y=2$ 得 $3y+\log_3y+1=3$，也就是 $3y+\log_3(3y)=3$。因为 $3y=3^{\log_3(3y)}$，所以 $\log_3(3y)+3^{\log_3(3y)}=3$。设 $f(u)=u+3^u$，该函数严格递增。已知 $f(x)=3$，又有 $f(\log_3(3y))=3$，因此 $x=\log_3(3y)$，从而 $3^x=3y$，所以 $x+3y=x+3^x=3$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把第二个条件凑成 $u+3^u$ 的形式。
+      max_score: 1
+    - step_id: step_2
+      description: 把 $3y$ 写成指数形式。
+      max_score: 1
+    - step_id: step_3
+      description: 用递增函数的单射性确定输入相等。
+      max_score: 1
+    - step_id: step_4
+      description: 回代求目标值。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - 双元同构
+      - $u+3^u$ 单调同构
+      - 对数输入凑形
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $x+3^x=3$ 与 $\log_3(3y)+3^{\\log_3(3y)}=3$ 是同一函数 $u+3^u$ 的函数值。
+    normalization_moves_used:
+      - $3y+\\log_3y=2$ 两边加 $1$。
+      - $\\log_3y+1$ 合并为 $\\log_3(3y)$。
+      - $3y$ 写成 $3^{\\log_3(3y)}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\\log_3y+1$ 合并成 $\\log_3(3y)$，回补指数对数基础。
+      - 若学生不能说明 $u+3^u$ 严格递增并据此推出输入相等，回补函数性质与图像。
+      - 若学生得到 $x=\\log_3(3y)$ 后不会推出 $3^x=3y$，回补指数对数基础。
+  detail_terms:
+    - $u+3^u$
+    - $\\log_3(3y)$
+    - 双元同构
+    - 函数单射性
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0036_ex31
+source_evidence:
+  source_refs:
+    - ref_id: page_0036
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md
+      role: problem_start
+      evidence: "lines 33-37: 例 31 题干与 A-D 选项。"
+    - ref_id: page_0036_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md
+      role: solution
+      evidence: "line 39: 将 $3y+\\\\log_3y=2$ 改写为 $\\\\log_3(3y)+3^{\\\\log_3(3y)}=3$，用单调同构求值。"
+    - ref_id: page_0036_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md
+      role: local_context
+      evidence: "lines 29-31: 考点 7 为“双元同构的单调性转化”。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0036.png
+      inspected: true
+      notes: 已核对原图：例 31 题干、四个选项与答案 D 和 markdown 一致。
+  source_context: 本题是“考点 7：双元同构的单调性转化”的第一题，源解把两个不同变量的式子改写到同一个递增函数 $f(u)=u+3^u$ 上。
+  source_influence:
+    - 题目要求求 $x+3y$ 的数值，goal 取“数值求值”。
+    - 源解核心是把 $3y+\\log_3y+1$ 改写为 $\\log_3(3y)+3^{\\log_3(3y)}$。
+    - 四个选项必须完整保留；答案为 D。
+  source_discrepancies: []
+original_problem:
+  stem: 已知 $x,y$ 满足 $x+3^x=3,\ 3y+\log_3 y=2$，则 $x+3y=$ ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: "1"
+      text_latex: $1$
+    - label: B
+      text_raw: "2"
+      text_latex: $2$
+    - label: C
+      text_raw: $\frac{3}{2}$
+      text_latex: $\frac{3}{2}$
+    - label: D
+      text_raw: "3"
+      text_latex: $3$
+  answer: D
+  fidelity_notes:
+    - 已核对 page_0036 原图，第二个条件为 $3y+\\log_3y=2$，所求为 $x+3y$。
+    - 源页 Reconstruction Marker 只涉及例 30，与本题无关。
+solution:
+  source_solution_summary: |
+    由 $3y+\log_3y=2$ 得 $3y+\log_3y+1=3$，也就是 $3y+\log_3(3y)=3$。因为 $3y=3^{\log_3(3y)}$，所以 $\log_3(3y)+3^{\log_3(3y)}=3$。设 $f(u)=u+3^u$，该函数严格递增。已知 $f(x)=3$，又有 $f(\log_3(3y))=3$，因此 $x=\log_3(3y)$，从而 $3^x=3y$，所以 $x+3y=x+3^x=3$。
+  key_steps:
+    - step_id: step_1
+      statement: 把第二个条件凑成 $u+3^u$ 的形式。
+      formula_trace:
+        from: |
+          $3y+\log_3y=2$
+        to: |
+          $3y+\log_3(3y)=3$
+        operation: 两边加 $1$，并用 $\log_3(3y)=\log_3y+1$。
+        why: 要把 $3y$ 与 $\log_3(3y)$ 配成同一个输入。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md:39
+    - step_id: step_2
+      statement: 把 $3y$ 写成指数形式。
+      formula_trace:
+        from: |
+          $3y+\log_3(3y)=3$
+        to: |
+          $\log_3(3y)+3^{\log_3(3y)}=3$
+        operation: 利用 $3^{\log_3(3y)}=3y$。
+        why: 这就与 $x+3^x=3$ 完全同构。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md:39
+    - step_id: step_3
+      statement: 用递增函数的单射性确定输入相等。
+      formula_trace:
+        from: |
+          $f(u)=u+3^u,\quad f(x)=3,\quad f(\log_3(3y))=3$
+        to: |
+          $x=\log_3(3y)$
+        operation: 函数 $f$ 在实数集上严格递增，所以同一个函数值只能对应同一个输入。
+        why: 把两个变量之间的隐藏关系抽出来。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md:39
+    - step_id: step_4
+      statement: 回代求目标值。
+      formula_trace:
+        from: |
+          $x=\log_3(3y)$
+        to: |
+          $3^x=3y,\quad x+3y=x+3^x=3$
+        operation: 对等式取以 $3$ 为底的指数，再代入第一个已知式。
+        why: 所求正好化为已知的 $x+3^x$。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md:39
+teaching_card:
+  student_title: 把 $3y+\log_3y$ 凑成同一个 $u+3^u$
+  what_it_trains: 看到一个变量在指数里、另一个变量在对数里时，先试着把它们改写成同一个递增函数的两个输入，再用函数值相等推出输入相等。
+  recognition_cues:
+    - 一个条件是 $x+3^x=3$，另一个条件含 $3y$ 和 $\\log_3y$。
+    - 给 $3y+\\log_3y=2$ 加 $1$ 后，$\\log_3y+1$ 正好合并成 $\\log_3(3y)$。
+    - 所求 $x+3y$ 可以借 $3y=3^x$ 回到已知式。
+  normalization_moves:
+    - 先给第二个条件两边加 $1$。
+    - 把 $3y$ 写成 $3^{\\log_3(3y)}$。
+    - 设 $f(u)=u+3^u$，用递增性比较输入。
+  common_failures:
+    - 只盯着 $y$，没有把 $3y$ 看成一个整体。
+    - 把 $\\log_3y+1$ 错写成 $\\log_3(y+1)$。
+    - 得到 $x=\\log_3(3y)$ 后没有立刻转成 $3^x=3y$。
+  similar_practice_query: 双元同构 x+3^x log_3(3y) 数值求值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0036 原图与 markdown 对本题一致；本题未跨页。

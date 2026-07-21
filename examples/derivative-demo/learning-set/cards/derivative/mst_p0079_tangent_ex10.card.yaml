@@ -1,0 +1,210 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0079_tangent_ex10
+content_revision_id: mst_p0079_tangent_ex10-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0079_tangent_ex10.card.yaml
+stem: |-
+  （2025 · 北京卷 T20）函数 $f(x)$ 的定义域为 $(-1,+\infty)$， 且 $f(0)=0$，$f^{\prime}(x)=\frac{\ln(x+1)}{x+1}$， $f(x)$ 在 $A(a,f(a))$ 处的切线为 $l_1$。
+  (1). 求 $f^{\prime}(x)$ 的最大值。
+  (2). 证：当 $-1<a<0$ 时，除切点 $A$ 外，$y=f(x)$ 均在 $l_1$ 上方。
+  (3). 当 $a>0$ 时，直线 $l_2$ 过 $A$ 点且与 $l_1$ 垂直，$l_1,l_2$ 与 $x$ 轴的交点横坐标分别为 $x_1,x_2$，求 $\frac{2a-x_2-x_1}{x_2-x_1}$ 的取值范围。
+answer: |-
+  (1) $\frac1e$；(2) 结论成立；(3) $\frac{2a-x_2-x_1}{x_2-x_1}\in \left[\frac{e^2-1}{e^2+1},1\right)$。
+
+  (1) 令 $t=x+1>0$，$f^{\prime}(x)=\ln t/t$，其最大值为 $1/e$。 (2) 固定 $-1<a<0$，设 $H(x)=f(x)-f(a)-f^{\prime}(a)(x-a)$，则 $H^{\prime}(x)=f^{\prime}(x)-f^{\prime}(a)$。因为 $f^{\prime}(x)=\ln(x+1)/(x+1)$ 在 $(-1,0)$ 上递增且其值小于 $x>0$ 时的正值，故 $x<a$ 时 $H^{\prime}<0$，$x>a$ 时 $H^{\prime}>0$，所以 $H$ 在 $x=a$ 处取最小值 0，除切点外图像在 $l_1$ 上方。(3) 设 $m=f^{\prime}(a)>0$， $l_1:y-f(a)=m(x-a)$，$l_2:y-f(a)=-\frac1m(x-a)$， 令 $y=0$ 得 $x_1=a-\frac{f(a)}m$、$x_2=a+mf(a)$。于是目标式化为 $\frac{1-m^2}{1+m^2}$。当 $a>0$ 时 $m=f^{\prime}(a)\in(0,1/e]$，代入得到范围 $\left[\frac{e^2-1}{e^2+1},1\right)$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 第 (1) 问：同构到 $\ln t/t$ 求最大值。
+      max_score: 1
+    - step_id: step_2
+      description: 第 (2) 问：构造图像到切线的竖直差。
+      max_score: 1
+    - step_id: step_3
+      description: 第 (2) 问：证明切点处是唯一最小点。
+      max_score: 1
+    - step_id: step_4
+      description: 第 (3) 问：写两条垂直直线并求 x 轴截距。
+      max_score: 1
+    - step_id: step_5
+      description: 第 (3) 问：把目标式化成只含斜率 $m$。
+      max_score: 1
+    - step_id: step_6
+      description: 第 (3) 问：由 $m$ 的范围推出目标式范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 极值最值
+        target: 第 (1) 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 几何性质证明
+        target: 第 (2) 问
+        result: 见 source_solution_summary
+      - part_id: "3"
+        goal: 求参数范围
+        target: 第 (3) 问
+        result: 见 source_solution_summary
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 局部逼近与找点
+      - 同构变形与换元法
+      - 显隐点探路
+    subroute:
+      - 同构函数 $\ln t/t$
+      - 切线剩余函数
+      - 垂线截距化简
+      - 斜率参数 $m=f^{\prime}(a)$
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+      - 局部逼近结构
+    evidence:
+      - $f^{\prime}(x)$ 是 $\ln t/t$ 的平移同构。
+      - 第 (2) 问直接比较函数与其切线的差 $H(x)$。
+      - 第 (3) 问把两个垂直截距压成斜率 $m$ 的有理式。
+    normalization_moves_used:
+      - 令 $t=x+1$，调用 $\ln t/t$ 最大值。
+      - 构造 $H=f-\text{切线}$。
+      - 垂直直线斜率取负倒数。
+      - 用 $m=f^{\prime}(a)$ 消去 $x_1,x_2$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求 $\ln t/t$ 的最大值，回补导数单调极值基础。
+      - 若学生不理解“曲线在切线上方”要看 $f-\text{切线}$，回补导数运算与几何意义。
+      - 若学生判断 $H^{\prime}$ 符号时忽略定义域，回补函数三要素与定义域。
+      - 若学生不会求垂线斜率和 x 轴截距，回补几何关系基础。
+      - 若学生代入 $x_1,x_2$ 化简出错，回补代数恒等变形。
+  detail_terms:
+    - $f^{\prime}(x)=\ln(x+1)/(x+1)$
+    - $\ln t/t$
+    - 曲线在切线上方
+    - 垂直切线
+    - x 轴截距
+    - $\frac{1-m^2}{1+m^2}$
+parts: &a1
+  - label: (1)
+    text: 求 $f^{\prime}(x)$ 的最大值。
+  - label: (2)
+    text: 证：当 $-1<a<0$ 时，除切点 $A$ 外，$y=f(x)$ 均在 $l_1$ 上方。
+  - label: (3)
+    text: 当 $a>0$ 时，直线 $l_2$ 过 $A$ 点且与 $l_1$ 垂直，$l_1,l_2$ 与 $x$ 轴的交点横坐标分别为 $x_1,x_2$，求 $\frac{2a-x_2-x_1}{x_2-x_1}$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0079_tangent_ex10
+source_evidence:
+  source_refs:
+    - ref_id: page_0079
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0079/page_0079.md
+      role: problem_start
+      evidence: page_0079 例 10 给出题干：函数 $f(x)$ 定义域为 $(-1,+\infty)$， $f(0)=0$，$f^{\prime}(x)=\frac{\ln(x+1)}{x+1}$，在 $A(a,f(a))$ 处切线为 $l_1$，并提出三问。
+    - ref_id: page_0080
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0080/page_0080.md
+      role: continuation
+      evidence: page_0080 顶部续完例 10 解析：(1) 最大值为 $1/e$；(2) 构造 $f(x)-f(a)-f^{\prime}(a)(x-a)$ 证明图像在切线上方；(3) 写出 $l_1,l_2$ 的 x 轴交点并给出取值范围 $\left[\frac{e^2-1}{e^2+1},1\right)$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0079.png
+      inspected: true
+      notes: 已核对页图：例 10 题头和三问从 page_0079 底部开始；markdown 中的两个 reconstruction markers 是逗号补全，页图和数学语义均支持标准写法。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0080.png
+      inspected: true
+      notes: 已核对页图：page_0080 顶部为例 10 完整解析，随后进入“直线与曲线的距离问题” 和例 11；本卡只读取例 10 续解。
+  source_context: 本题是切线方程小节末尾综合题：先掌握同构函数 $\ln(1+x)/(1+x)$ 的最大值，再用切线剩余函数证明图像位置，最后把 垂线与两条 x 轴截距的代数式化成只含斜率的范围问题。
+  source_influence:
+    - 题头起于 page_0079，解析续到 page_0080，按 B 组跨页规则完整建卡。
+    - 题干为三问解答题，original_problem.parts 保留 (1)-(3)。
+  source_discrepancies:
+    - page_0079 markdown 对定义域和点坐标有 reconstruction markers；页图和语义可 直接还原为 $(-1,+\infty)$ 与 $A(a,f(a))$，本卡按标准数学记法书写。
+    - page_0080 图像与 markdown 在第 (3) 问中间行写 $\frac{2a-x_1-x_2}{x_2-x_1}=1+\frac{2}{(f^{\prime}(a))^2+1}$， 但由前一行 $x_1=a-\frac{f(a)}{f^{\prime}(a)}$、 $x_2=a+f(a)f^{\prime}(a)$ 可直接化简为 $\frac{1-(f^{\prime}(a))^2}{1+(f^{\prime}(a))^2}$；源页最终区间也只与该 校正式一致。本卡按代数推导和最终答案校正。
+    - page_0080 写 $f^{\prime}(a)\in(0,\frac1e)$，但当 $a=e-1>0$ 时 $f^{\prime}(a)=1/e$ 可取；源页最终区间左端为闭端点，说明应为 $f^{\prime}(a)\in(0,\frac1e]$。
+original_problem:
+  stem: （2025 · 北京卷 T20）函数 $f(x)$ 的定义域为 $(-1,+\infty)$， 且 $f(0)=0$，$f^{\prime}(x)=\frac{\ln(x+1)}{x+1}$， $f(x)$ 在 $A(a,f(a))$ 处的切线为 $l_1$。
+  parts: *a1
+  choices: []
+  answer: (1) $\frac1e$；(2) 结论成立；(3) $\frac{2a-x_2-x_1}{x_2-x_1}\in \left[\frac{e^2-1}{e^2+1},1\right)$。
+  fidelity_notes:
+    - 例 10 题干起于 page_0079，解析在 page_0080 顶部续完。
+    - 源题无选项。
+    - 第 (3) 问中间式按 source_discrepancies 中记录的代数校正书写。
+solution:
+  source_solution_summary: (1) 令 $t=x+1>0$，$f^{\prime}(x)=\ln t/t$，其最大值为 $1/e$。 (2) 固定 $-1<a<0$，设 $H(x)=f(x)-f(a)-f^{\prime}(a)(x-a)$，则 $H^{\prime}(x)=f^{\prime}(x)-f^{\prime}(a)$。因为 $f^{\prime}(x)=\ln(x+1)/(x+1)$ 在 $(-1,0)$ 上递增且其值小于 $x>0$ 时的正值，故 $x<a$ 时 $H^{\prime}<0$，$x>a$ 时 $H^{\prime}>0$，所以 $H$ 在 $x=a$ 处取最小值 0，除切点外图像在 $l_1$ 上方。(3) 设 $m=f^{\prime}(a)>0$， $l_1:y-f(a)=m(x-a)$，$l_2:y-f(a)=-\frac1m(x-a)$， 令 $y=0$ 得 $x_1=a-\frac{f(a)}m$、$x_2=a+mf(a)$。于是目标式化为 $\frac{1-m^2}{1+m^2}$。当 $a>0$ 时 $m=f^{\prime}(a)\in(0,1/e]$，代入得到范围 $\left[\frac{e^2-1}{e^2+1},1\right)$。
+  key_steps:
+    - step_id: step_1
+      statement: 第 (1) 问：同构到 $\ln t/t$ 求最大值。
+      formula_trace:
+        from: $f^{\prime}(x)=\frac{\ln(x+1)}{x+1}$，令 $t=x+1>0$。
+        to: $f^{\prime}(x)=\frac{\ln t}{t}\le\frac1e$，等号在 $t=e$ 即 $x=e-1$ 处取得。
+        operation: 对 $\ln t/t$ 求导或调用同构函数最大值。
+        why: 这是源解所说“由同构函数”得到的最大值。
+      source_ref: page_0080
+    - step_id: step_2
+      statement: 第 (2) 问：构造图像到切线的竖直差。
+      formula_trace:
+        from: $H(x)=f(x)-f(a)-f^{\prime}(a)(x-a)$。
+        to: $H^{\prime}(x)=\frac{\ln(x+1)}{x+1} -\frac{\ln(a+1)}{a+1}$。
+        operation: 用函数值减去切线函数值。
+        why: $H(x)>0$ 就表示曲线在切线 $l_1$ 上方。
+      source_ref: page_0080
+    - step_id: step_3
+      statement: 第 (2) 问：证明切点处是唯一最小点。
+      formula_trace:
+        from: $-1<a<0$，且 $q(x)=\frac{\ln(x+1)}{x+1}$ 满足 $x<a$ 时 $q(x)<q(a)$，$x>a$ 时 $q(x)>q(a)$。
+        to: $H$ 在 $(-1,a)$ 上递减、在 $(a,+\infty)$ 上递增， $H_{\min}=H(a)=0$。
+        operation: 比较 $H^{\prime}(x)$ 的正负。
+        why: 切线剩余函数以切点为谷底，因此除切点外曲线都在切线上方。
+      source_ref: page_0080
+    - step_id: step_4
+      statement: 第 (3) 问：写两条垂直直线并求 x 轴截距。
+      formula_trace:
+        from: $m=f^{\prime}(a)>0$， $l_1:y-f(a)=m(x-a)$， $l_2:y-f(a)=-\frac1m(x-a)$。
+        to: 令 $y=0$ 得 $x_1=a-\frac{f(a)}m$，$x_2=a+mf(a)$。
+        operation: 用垂直斜率互为负倒数，再令 $y=0$。
+        why: 目标式只涉及两个截距，先把截距写成 $a,f(a),m$。
+      source_ref: page_0080
+    - step_id: step_5
+      statement: 第 (3) 问：把目标式化成只含斜率 $m$。
+      formula_trace:
+        from: $x_1=a-\frac{f(a)}m$，$x_2=a+mf(a)$。
+        to: $\frac{2a-x_2-x_1}{x_2-x_1} =\frac{f(a)(\frac1m-m)}{f(a)(m+\frac1m)} =\frac{1-m^2}{1+m^2}$。
+        operation: 代入并约去公共因子 $f(a)$；当 $a>0$ 时 $f(a)=\frac12\ln^2(1+a)>0$。
+        why: 源页最终范围只取决于 $f^{\prime}(a)$，与 $f(a)$ 的具体值无关。
+      source_ref: page_0080
+    - step_id: step_6
+      statement: 第 (3) 问：由 $m$ 的范围推出目标式范围。
+      formula_trace:
+        from: $a>0$ 时 $m=\frac{\ln(a+1)}{a+1}\in(0,\frac1e]$。
+        to: $\frac{1-m^2}{1+m^2}\in \left[\frac{1-\frac1{e^2}}{1+\frac1{e^2}},1\right) =\left[\frac{e^2-1}{e^2+1},1\right)$。
+        operation: 函数 $(1-m^2)/(1+m^2)$ 在 $m>0$ 上递减。
+        why: $m$ 可等于 $1/e$，但只能趋近 0，不能取 0。
+      source_ref: page_0080
+teaching_card:
+  student_title: 把切线和垂线截距都化成斜率
+  what_it_trains: 训练在综合切线题中先抓住 $f^{\prime}(x)$ 的同构母函数，再用 “函数减切线”证明图像位置，最后把几何截距化成一个斜率参数求范围。
+  recognition_cues:
+    - $f^{\prime}(x)=\ln(x+1)/(x+1)$，看到 $x+1$ 就令 $t=x+1$。
+    - 要证曲线在切线上方，构造 $f(x)-$切线函数。
+    - 出现一条切线和一条过切点的垂线，先设 $m=f^{\prime}(a)$。
+    - 目标式只含 $x_1,x_2,a$，适合用截距公式统一消元。
+  normalization_moves:
+    - 把 $f^{\prime}$ 写成 $\ln t/t$。
+    - 用 $H(x)=f(x)-f(a)-f^{\prime}(a)(x-a)$ 表示竖直差。
+    - 把 $l_2$ 的斜率写成 $-1/f^{\prime}(a)$。
+    - 先求 $x_1,x_2$，再整体代入目标式。
+  common_failures:
+    - 第 (2) 问只说“切线放缩”，没有写出差函数的单调性。
+    - 第 (3) 问把垂线斜率写成 $-f^{\prime}(a)$。
+    - 化简目标式时符号错，得到大于 1 的表达式。
+    - 把 $f^{\prime}(a)$ 的范围写成开区间，漏掉 $a=e-1$。
+  similar_practice_query: 切线方程 垂直直线 x轴截距 ln(x+1)/(x+1) 图像在切线上方 斜率参数
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0079/page_0080 页图；例 10 题头从 page_0079 开始，page_0080 顶部为续解。
+    - 第 (3) 问源页中间式和 $f^{\prime}(a)$ 端点有可由代数与最终答案校正的问题，已写入 source_discrepancies，未列为用户拍板。

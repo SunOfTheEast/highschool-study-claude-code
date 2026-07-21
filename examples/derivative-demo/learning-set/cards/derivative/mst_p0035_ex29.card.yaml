@@ -1,0 +1,228 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0035_ex29
+content_revision_id: mst_p0035_ex29-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0035_ex29.card.yaml
+stem: |-
+  已知正数 $\alpha,\beta$ 满足 $e^\alpha-e^\beta>\frac{1}{2\alpha+\sin\alpha}-\frac{1}{2\beta+\sin\beta}$，则下列不等式正确的是 (   )
+  A. $\frac1\alpha+\frac1\beta<\frac4{\alpha+\beta}$
+  B. $2^{\alpha-\beta+1}>2$
+  C. $\ln\alpha+\alpha<\ln\beta+\beta$
+  D. $\frac1{e^\alpha}+\frac1\alpha<\frac1{e^\beta}+\frac1\beta$
+answer: |
+  BD
+
+  先把条件移项为 $e^\alpha-\frac1{2\alpha+\sin\alpha}>e^\beta-\frac1{2\beta+\sin\beta}$。构造 $F(x)=e^x-\frac1{2x+\sin x}$，$x>0$。因 $q(x)=2x+\sin x$ 满足 $q'(x)=2+\cos x>0$，且 $q(x)>0$，所以 $-1/q(x)$ 递增，$e^x$ 也递增，故 $F$ 在 $(0,+\infty)$ 上递增。由 $F(\alpha)>F(\beta)$ 得 $\alpha>\beta>0$。A 中 $(1/\alpha+1/\beta)(\alpha+\beta)=2+\alpha/\beta+\beta/\alpha>4$，所以 A 反向；B 因 $\alpha-\beta+1>1$ 成立；C 因 $\ln\alpha+\alpha>\ln\beta+\beta$ 反向；D 因 $1/e^\alpha<1/e^\beta$ 且 $1/\alpha<1/\beta$ 成立。故选 BD。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 把题设整理成同一个函数的函数值比较。
+      max_score: 1
+    - step_id: step_2
+      description: 证明构造函数递增。
+      max_score: 1
+    - step_id: step_3
+      description: 由函数值比较推出变量大小。
+      max_score: 1
+    - step_id: step_4
+      description: 判断 A 的方向。
+      max_score: 1
+    - step_id: step_5
+      description: 判断 B。
+      max_score: 1
+    - step_id: step_6
+      description: 判断 C。
+      max_score: 1
+    - step_id: step_7
+      description: 判断 D。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 由条件推出 $\alpha$ 与 $\beta$ 的大小。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 数值比较
+        target: 逐项判断四个不等式方向。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - 构造任意单调同构函数
+      - 复合函数单调性
+      - 倒数反向比较
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 三角复合结构
+    evidence:
+      - 条件移项后是 $F(\alpha)>F(\beta)$，其中 $F(x)=e^x-1/(2x+\sin x)$。
+      - 分母 $2x+\sin x$ 由 $2+\cos x>0$ 控制单调性。
+    normalization_moves_used:
+      - 把 $e^\alpha-e^\beta>1/(2\alpha+\sin\alpha)-1/(2\beta+\sin\beta)$ 移项成 $F(\alpha)>F(\beta)$。
+      - 用 $q'(x)=2+\cos x>0$ 说明 $-1/q(x)$ 递增。
+      - 由 $\alpha>\beta>0$ 分别处理指数、对数、倒数和基本不等式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把原条件移项成 $F(\alpha)>F(\beta)$，回补代数恒等变形。
+      - 若学生不理解 $q(x)$ 递增且为正时 $-1/q(x)$ 递增，回补函数性质与图像。
+      - 若学生把正数取倒数后的不等号方向写错，回补不等式工具基础。
+      - 若学生不会展开 $(1/\alpha+1/\beta)(\alpha+\beta)$ 并使用基本不等式，回补不等式工具基础。
+  detail_terms:
+    - $e^x-1/(2x+\sin x)$
+    - $2x+\sin x$
+    - $2+\cos x>0$
+    - 基本不等式
+    - 倒数比较
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0035_ex29
+source_evidence:
+  source_refs:
+    - ref_id: page_0035
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0035/page_0035.md
+      role: problem_start
+      evidence: "lines 30-34: 例 29 多选题题干与四个选项。"
+    - ref_id: page_0035_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0035/page_0035.md
+      role: solution
+      evidence: "lines 36-39: 构造单调函数推出 $\\alpha>\\beta>0$，逐项判断 A-D。"
+    - ref_id: page_0035_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0035/page_0035.md
+      role: local_context
+      evidence: "line 28: 考点 6 为“构造任意单调同构函数”。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0035.png
+      inspected: true
+      notes: 已核对原图：例 29 题干、四个选项、答案 BD 与 markdown 一致，题目在本页结束。
+  source_context: 本题是 page_0035 的“考点 6：构造任意单调同构函数”首题，源解将条件整理成同一函数 $F(x)=e^x-1/(2x+\sin x)$ 的函数值比较。
+  source_influence:
+    - 题目要求判断多个不等式是否正确，goal 取“数值比较”。
+    - 源解核心是构造任意单调同构函数，由 $F(\alpha)>F(\beta)$ 推出 $\alpha>\beta>0$。
+    - 选项 A 要用基本不等式证明方向相反，选项 D 要分别比较两个倒数项。
+  source_discrepancies: []
+original_problem:
+  stem: 已知正数 $\alpha,\beta$ 满足 $e^\alpha-e^\beta>\frac{1}{2\alpha+\sin\alpha}-\frac{1}{2\beta+\sin\beta}$，则下列不等式正确的是 (   )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\frac1\alpha+\frac1\beta<\frac4{\alpha+\beta}$
+      text_latex: $\frac1\alpha+\frac1\beta<\frac4{\alpha+\beta}$
+    - label: B
+      text_raw: $2^{\alpha-\beta+1}>2$
+      text_latex: $2^{\alpha-\beta+1}>2$
+    - label: C
+      text_raw: $\ln\alpha+\alpha<\ln\beta+\beta$
+      text_latex: $\ln\alpha+\alpha<\ln\beta+\beta$
+    - label: D
+      text_raw: $\frac1{e^\alpha}+\frac1\alpha<\frac1{e^\beta}+\frac1\beta$
+      text_latex: $\frac1{e^\alpha}+\frac1\alpha<\frac1{e^\beta}+\frac1\beta$
+  answer: BD
+  fidelity_notes:
+    - 已核对 page_0035 原图，条件右侧是两个分式之差，分母分别为 $2\alpha+\sin\alpha$ 与 $2\beta+\sin\beta$。
+    - 源页 Reconstruction Markers 为“无”。
+solution:
+  source_solution_summary: |
+    先把条件移项为 $e^\alpha-\frac1{2\alpha+\sin\alpha}>e^\beta-\frac1{2\beta+\sin\beta}$。构造 $F(x)=e^x-\frac1{2x+\sin x}$，$x>0$。因 $q(x)=2x+\sin x$ 满足 $q'(x)=2+\cos x>0$，且 $q(x)>0$，所以 $-1/q(x)$ 递增，$e^x$ 也递增，故 $F$ 在 $(0,+\infty)$ 上递增。由 $F(\alpha)>F(\beta)$ 得 $\alpha>\beta>0$。A 中 $(1/\alpha+1/\beta)(\alpha+\beta)=2+\alpha/\beta+\beta/\alpha>4$，所以 A 反向；B 因 $\alpha-\beta+1>1$ 成立；C 因 $\ln\alpha+\alpha>\ln\beta+\beta$ 反向；D 因 $1/e^\alpha<1/e^\beta$ 且 $1/\alpha<1/\beta$ 成立。故选 BD。
+  key_steps:
+    - step_id: step_1
+      statement: 把题设整理成同一个函数的函数值比较。
+      formula_trace:
+        from: |
+          $e^\alpha-e^\beta>\frac1{2\alpha+\sin\alpha}-\frac1{2\beta+\sin\beta}$
+        to: |
+          $e^\alpha-\frac1{2\alpha+\sin\alpha}>e^\beta-\frac1{2\beta+\sin\beta}$
+        operation: 把含 $\alpha$ 的分式移到左侧，把 $e^\beta$ 移到右侧。
+        why: 两边都变成 $F(x)=e^x-\frac1{2x+\sin x}$ 的形式。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0035/page_0035.md:36
+    - step_id: step_2
+      statement: 证明构造函数递增。
+      formula_trace:
+        from: |
+          $q(x)=2x+\sin x,\quad x>0$
+        to: |
+          $q'(x)=2+\cos x>0,\quad q(x)>q(0)=0$
+        operation: 求导判断 $q$ 递增，并利用 $x>0$ 得分母为正。
+        why: 分母正且递增时，$1/q(x)$ 递减，$-1/q(x)$ 递增。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0035/page_0035.md:36
+    - step_id: step_3
+      statement: 由函数值比较推出变量大小。
+      formula_trace:
+        from: |
+          $F(x)=e^x-\frac1{2x+\sin x}$
+        to: |
+          $F$ 在 $(0,+\infty)$ 上递增，$F(\alpha)>F(\beta)\Rightarrow \alpha>\beta>0$
+        operation: 把递增的 $e^x$ 与递增的 $-1/(2x+\sin x)$ 相加，得到 $F$ 递增。
+        why: 所有选项都只需要 $\alpha>\beta>0$ 这个顺序信息。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0035/page_0035.md:36
+    - step_id: step_4
+      statement: 判断 A 的方向。
+      formula_trace:
+        from: |
+          $\left(\frac1\alpha+\frac1\beta\right)(\alpha+\beta)$
+        to: |
+          $2+\frac\alpha\beta+\frac\beta\alpha>2+2\sqrt{\frac\alpha\beta\cdot\frac\beta\alpha}=4$
+        operation: 展开乘积，并用基本不等式；因 $\alpha>\beta$，两比值不相等，所以严格大于。
+        why: 同除以正数 $\alpha+\beta$ 得 $\frac1\alpha+\frac1\beta>\frac4{\alpha+\beta}$，A 错误。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0035/page_0035.md:36
+    - step_id: step_5
+      statement: 判断 B。
+      formula_trace:
+        from: |
+          $\alpha>\beta>0$
+        to: |
+          $\alpha-\beta+1>1\Rightarrow 2^{\alpha-\beta+1}>2^1=2$
+        operation: 由 $\alpha-\beta>0$ 得指数大于 1，再用底数 $2>1$ 的指数函数递增性。
+        why: B 正确。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0035/page_0035.md:37
+    - step_id: step_6
+      statement: 判断 C。
+      formula_trace:
+        from: |
+          $\alpha>\beta>0$
+        to: |
+          $\ln\alpha>\ln\beta,\quad \alpha>\beta\Rightarrow \ln\alpha+\alpha>\ln\beta+\beta$
+        operation: 分别用对数函数和一次函数在正数域上的递增性，再相加。
+        why: C 给出的方向是小于，故 C 错误。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0035/page_0035.md:38
+    - step_id: step_7
+      statement: 判断 D。
+      formula_trace:
+        from: |
+          $\alpha>\beta>0$
+        to: |
+          $e^\alpha>e^\beta\Rightarrow \frac1{e^\alpha}<\frac1{e^\beta},\quad \frac1\alpha<\frac1\beta$
+        operation: 正数取倒数会反向；两个严格小于的不等式相加。
+        why: 得到 $\frac1{e^\alpha}+\frac1\alpha<\frac1{e^\beta}+\frac1\beta$，D 正确。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0035/page_0035.md:39
+teaching_card:
+  student_title: 先构造单调函数推出 $\alpha>\beta$
+  what_it_trains: 双变量条件看起来复杂时，先把所有含同一个变量的项收在同一边，构造一个递增函数；只要推出 $\alpha>\beta>0$，四个选项就会变成常规的指数、对数、倒数比较。
+  recognition_cues:
+    - 条件中 $e^\alpha,e^\beta$ 与两个同形分式成对出现。
+    - 分母是 $2x+\sin x$，导数 $2+\cos x$ 恒正，适合做单调性。
+    - 选项都是由 $\alpha$ 与 $\beta$ 的大小关系触发的简单不等式。
+  normalization_moves:
+    - 先移项，把条件写成 $F(\alpha)>F(\beta)$。
+    - 设 $q(x)=2x+\sin x$，证明 $q$ 正且递增。
+    - 由 $q$ 正递增推出 $-1/q$ 递增，再与 $e^x$ 相加。
+    - 拿到 $\alpha>\beta>0$ 后逐项判断，不要回到原复杂条件。
+  common_failures:
+    - 没有移项构造函数，直接在原条件里硬比四个选项。
+    - 只说 $2x+\sin x$ 递增，却忘了说明分母为正，无法判断倒数单调。
+    - A 中基本不等式方向写反，把应为 $>$ 的结论看成 $<$。
+    - D 中忘记正数取倒数会改变不等号方向。
+  similar_practice_query: 构造单调同构函数 双变量不等式 2x+sinx 倒数比较
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0035 原图与 markdown 一致；本题在 page_0035 结束，page_0036 从例 30 开始。
+    - 源解中“令 $g(x)=2x+\sin x$”后又写“$g(x)=-1/(2x+\sin x)$”属于函数命名复用/笔误；卡片改用 $q(x)$ 表示分母函数，数学链条明确，不需要人工决策。

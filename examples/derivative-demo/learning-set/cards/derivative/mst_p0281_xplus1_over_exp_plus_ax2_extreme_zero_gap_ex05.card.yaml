@@ -1,0 +1,234 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0281_xplus1_over_exp_plus_ax2_extreme_zero_gap_ex05
+content_revision_id: mst_p0281_xplus1_over_exp_plus_ax2_extreme_zero_gap_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0281_xplus1_over_exp_plus_ax2_extreme_zero_gap_ex05.card.yaml
+stem: |-
+  （2023 · 广州模拟）设函数 $f(x)=\frac{x+1}{e^x}+ax^2$，其中 $a\in\mathbf{R}$。
+  1. 讨论 $f(x)$ 的单调性。
+  2. 若 $f(x)$ 存在两个极值点，设极大值点为 $x_0$，$x_1$ 为 $f(x)$ 的零点，求证：$x_0-x_1\ge\ln2$。
+answer: |-
+  当存在两个极值点时，$x_0-x_1\ge\ln2$；等号情形来自 source 的 $a=\frac{e^2}{4}$、$x_1=-2$。
+
+  先求导：$f^\prime(x)=\frac{x}{e^x}(2ae^x-1)$。当 $a\le0$ 时， $f$ 在 $(-\infty,0)$ 增、$(0,+\infty)$ 减。当 $a>0$ 时， 另一个驻点为 $\ln\frac1{2a}$：$a=\frac12$ 时全域增； $0<a<\frac12$ 时 $x_0=0$ 是极大值点； $a>\frac12$ 时 $x_0=\ln\frac1{2a}$ 是极大值点。 第(2)问需要先知道零点 $x_1<-1$。source 用取点 $x=-1-\frac ae$ 来证明这一点，但该取点不成立；改用 $f(-\infty)=-\infty$、$f(-1)=a>0$ 和导数结构说明左侧唯一零点在 $-1$ 左侧。 若 $0<a<\frac12$，$x_0=0$，于是 $x_0-x_1>1>\ln2$。 若 $a>\frac12$，$x_0=\ln\frac1{2a}$，要证 $x_1\le\ln\frac1{4a}$； source 法一计算 $f(\ln\frac1{4a})=a(\ln\frac1{4a}+2)^2\ge0$， 法二由 $f(x_1)=0$ 和 $2ae^{x_0}=1$ 化为 $e^{x_0-x_1}=-\frac{x_1^2}{2(x_1+1)}\ge2$，即 $(x_1+2)^2\ge0$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 求导并找驻点。
+      max_score: 1
+    - step_id: step_2
+      description: 按 $a$ 讨论单调性。
+      max_score: 1
+    - step_id: step_3
+      description: 定位零点 $x_1$ 在 $-1$ 左侧。
+      max_score: 1
+    - step_id: step_4
+      description: 当 $0<a<\frac12$，极大值点是 $0$。
+      max_score: 1
+    - step_id: step_5
+      description: 当 $a>\frac12$，用中间点锁定零点左界。
+      max_score: 1
+    - step_id: step_6
+      description: 法二把距离不等式化成平方恒成立。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 1 问
+        result: 按 $a\le0$、$0<a<\frac12$、$a=\frac12$、$a>\frac12$ 讨论单调区间。
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 2 问
+        result: $x_0-x_1\ge\ln2$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 局部逼近与找点
+      - 对称性配凑
+      - 充分/必要性探路
+    subroute:
+      - 显点 $x=0$
+      - 隐点 $x=\ln\frac1{2a}$
+      - 零点左界 $x_1<-1$
+      - 目标点 $\ln\frac1{4a}$
+      - 零点方程消参
+      - 平方恒成立 $(x_1+2)^2\ge0$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - $\frac{x+1}{e^x}+ax^2$
+      - $f^\prime(x)=\frac{x}{e^x}(2ae^x-1)$
+      - $x_0=0$
+      - $x_0=\ln\frac1{2a}$
+      - $x_1<-1$
+      - $\ln\frac1{4a}$
+      - $(x_1+2)^2\ge0$
+    normalization_moves_used:
+      - 先确定两个极值点是否存在。
+      - 把目标距离转成 $x_1\le\ln\frac1{4a}$。
+      - 用目标点代入或零点方程消参证明。
+      - source 左侧取点路线不采纳，改用极限 + 导数结构证明 $x_1<-1$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求导，回补导数运算与几何意义。
+      - 若学生不会比较 $\ln\frac1{2a}$ 与 0，回补指数对数基础。
+      - 若学生不理解极值点和零点的位置关系，回补函数性质与图像。
+      - 若学生不会由 $f(x_1)=0$ 消参，回补代数恒等变形。
+      - 若学生不会把目标改写成 $x_1\le\ln\frac1{4a}$，回补指数对数基础。
+  detail_terms:
+    - $\frac{x+1}{e^x}+ax^2$
+    - $x_0$
+    - $x_1$
+    - $x_0-x_1\ge\ln2$
+    - $\ln\frac1{2a}$
+    - $\ln\frac1{4a}$
+    - 零点方程消参
+    - $(x_1+2)^2\ge0$
+parts: &a1
+  - part_id: "1"
+    text: 讨论 $f(x)$ 的单调性。
+  - part_id: "2"
+    text: 若 $f(x)$ 存在两个极值点，设极大值点为 $x_0$，$x_1$ 为 $f(x)$ 的零点，求证：$x_0-x_1\ge\ln2$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0281_xplus1_over_exp_plus_ax2_extreme_zero_gap_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0281_ex05_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0281/page_0281.md
+      role: problem_start
+      evidence: page_0281 给出例5题头：$f(x)=\frac{x+1}{e^x}+ax^2$，讨论单调性；若有两个极值点，设极大值点 $x_0$、零点 $x_1$，证明 $x_0-x_1\ge\ln2$。
+    - ref_id: page_0281_ex05_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0281/page_0281.md
+      role: solution
+      evidence: page_0281 解析给出 $f^\prime(x)=\frac{x}{e^x}(2ae^x-1)$，并开始按 $a\le0$、$a>0$ 讨论单调性。
+    - ref_id: page_0282_ex05_monotonicity_and_gap
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0282/page_0282.md
+      role: solution
+      evidence: page_0282 续完单调性，证明存在两个极值点时的零点位置，并分 $0<a<\frac12$、$a>\frac12$ 证明 $x_0-x_1\ge\ln2$。
+    - ref_id: page_0283_ex05_closure
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0283/page_0283.md
+      role: solution
+      evidence: page_0283 第一行承接 page_0282 法二，化为 $(x_1+2)^2\ge0$，例5证明结束；随后另起例6。
+    - ref_id: page_0283_ex06_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0283/page_0283.md
+      role: local_context
+      evidence: page_0283 从例6开始是新题，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0281.png
+      inspected: true
+      notes: 已核对页图：page_0281 下半页为例5题头和解析开头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0282.png
+      inspected: true
+      notes: 已核对页图：page_0282 为例5主体证明，含两张极值点/零点示意图。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0283.png
+      inspected: true
+      notes: 已核对页图：page_0283 第一行续完例5，随后另起例6。
+  source_context: 本卡处理 page_0281 起头、page_0282 续解、page_0283 第一行闭合的例5；page_0283 例6排除。
+  source_influence:
+    - 保留导数分解：$f^\prime(x)=\frac{x}{e^x}(2ae^x-1)$。
+    - 保留存在两个极值点的条件：$a\in(0,\frac12)\cup(\frac12,+\infty)$。
+    - 保留零点 $x_1<-1$ 与极大值点 $x_0$ 的位置关系。
+    - 保留 $0<a<\frac12$ 时 $x_0=0$ 的直接证明。
+    - 保留 $a>\frac12$ 时用 $f(\ln\frac1{4a})\ge0$ 或法二代数证明。
+  source_discrepancies:
+    - field: page_0282_summary_interval_order
+      source_value: 当 $a\in(\frac12,+\infty)$ 时，单调递减区间为 $(0,\ln\frac1{2a})$
+      resolved_value: 当 $a\in(\frac12,+\infty)$ 时，单调递减区间为 $(\ln\frac1{2a},0)$
+      reason: $\ln\frac1{2a}<0$；page_0282 前面的详细符号判断已写作 $x\in(\ln\frac1{2a},0)$ 时 $f^\prime(x)<0$。
+    - field: page_0282_negative_take_point
+      source_value: 取 $x=-1-\frac ae$，声称 $f(x)<0$，从而 $x_1\in(-1-\frac ae,-1)$
+      resolved_value: 不用该取点；改由 $f(-\infty)=-\infty$、$f(-1)=a>0$ 和左侧导数结构证明唯一零点在 $-1$ 左侧。
+      reason: 按原函数代入，至少在 $a=e$ 时该取点为 $x=-2$ 且 $f(-2)=3e>0$，source 取点论证不成立；用户要求自己重做。
+original_problem:
+  stem: （2023 · 广州模拟）设函数 $f(x)=\frac{x+1}{e^x}+ax^2$，其中 $a\in\mathbf{R}$。
+  parts: *a1
+  choices: []
+  answer: 当存在两个极值点时，$x_0-x_1\ge\ln2$；等号情形来自 source 的 $a=\frac{e^2}{4}$、$x_1=-2$。
+  fidelity_notes:
+    - 无选项。
+    - source 的左侧取点证明存在错误，已替换为极限 + 导数结构证明。
+solution:
+  source_solution_summary: 先求导：$f^\prime(x)=\frac{x}{e^x}(2ae^x-1)$。当 $a\le0$ 时， $f$ 在 $(-\infty,0)$ 增、$(0,+\infty)$ 减。当 $a>0$ 时， 另一个驻点为 $\ln\frac1{2a}$：$a=\frac12$ 时全域增； $0<a<\frac12$ 时 $x_0=0$ 是极大值点； $a>\frac12$ 时 $x_0=\ln\frac1{2a}$ 是极大值点。 第(2)问需要先知道零点 $x_1<-1$。source 用取点 $x=-1-\frac ae$ 来证明这一点，但该取点不成立；改用 $f(-\infty)=-\infty$、$f(-1)=a>0$ 和导数结构说明左侧唯一零点在 $-1$ 左侧。 若 $0<a<\frac12$，$x_0=0$，于是 $x_0-x_1>1>\ln2$。 若 $a>\frac12$，$x_0=\ln\frac1{2a}$，要证 $x_1\le\ln\frac1{4a}$； source 法一计算 $f(\ln\frac1{4a})=a(\ln\frac1{4a}+2)^2\ge0$， 法二由 $f(x_1)=0$ 和 $2ae^{x_0}=1$ 化为 $e^{x_0-x_1}=-\frac{x_1^2}{2(x_1+1)}\ge2$，即 $(x_1+2)^2\ge0$。
+  key_steps:
+    - step_id: step_1
+      statement: 求导并找驻点。
+      formula_trace:
+        from: $f(x)=\frac{x+1}{e^x}+ax^2$
+        to: $f^\prime(x)=\frac{x}{e^x}(2ae^x-1)$
+        operation: 求导并提取 $x/e^x$。
+        why: 极值点只可能是 $x=0$ 和 $x=\ln\frac1{2a}$。
+      source_ref: page_0281_ex05_solution_start
+    - step_id: step_2
+      statement: 按 $a$ 讨论单调性。
+      formula_trace:
+        from: $x=0,\quad x=\ln\frac1{2a}$
+        to: $a\le0$、$0<a<\frac12$、$a=\frac12$、$a>\frac12$
+        operation: 比较 $\ln\frac1{2a}$ 与 0 的位置。
+        why: 两个极值点存在当且仅当 $a>0$ 且 $a\ne\frac12$。
+      source_ref: page_0282_ex05_monotonicity_and_gap
+    - step_id: step_3
+      statement: 定位零点 $x_1$ 在 $-1$ 左侧。
+      formula_trace:
+        from: $f(-\infty)=-\infty,\quad f(-1)=a>0$
+        to: $x_1<-1$
+        operation: 用连续性和导数结构定位左侧唯一零点，替换 source 的错误取点。
+        why: 后续 $x_0-x_1$ 的下界需要先知道零点在 $-1$ 左侧。
+      source_ref: page_0282_ex05_monotonicity_and_gap
+    - step_id: step_4
+      statement: 当 $0<a<\frac12$，极大值点是 $0$。
+      formula_trace:
+        from: $x_0=0,\quad x_1<-1$
+        to: $x_0-x_1>1>\ln2$
+        operation: 直接比较距离。
+        why: 这一段不需要复杂代数，只靠零点位置。
+      source_ref: page_0282_ex05_monotonicity_and_gap
+    - step_id: step_5
+      statement: 当 $a>\frac12$，用中间点锁定零点左界。
+      formula_trace:
+        from: $x_0=\ln\frac1{2a}$
+        to: $f\left(\ln\frac1{4a}\right)=a\left(\ln\frac1{4a}+2\right)^2\ge0$
+        operation: 在目标距离对应的位置代入函数。
+        why: 若该点函数值非负，唯一左零点就在它左侧，从而 $x_0-x_1\ge\ln2$。
+      source_ref: page_0282_ex05_monotonicity_and_gap
+    - step_id: step_6
+      statement: 法二把距离不等式化成平方恒成立。
+      formula_trace:
+        from: $f(x_1)=0,\quad 2ae^{x_0}=1$
+        to: $e^{x_0-x_1}=-\frac{x_1^2}{2(x_1+1)}\ge2\Longleftrightarrow (x_1+2)^2\ge0$
+        operation: 消去参数 $a$，把指数距离转成零点代数式。
+        why: 这是 source 给出的第二条证明路线，等号对应 $x_1=-2$。
+      source_ref: page_0283_ex05_closure
+teaching_card:
+  student_title: 用极值点和零点的位置证明距离不小于 $\\ln2$
+  what_it_trains: 训练把“极大值点到零点的距离”转成一个可代入验证的位置，再用零点方程把参数消掉。
+  recognition_cues:
+    - 题目给了极大值点 $x_0$ 和零点 $x_1$，目标是两者距离。
+    - 导数分解出 $x$ 和 $e^x-\frac1{2a}$，两个极值点位置明确。
+    - $a>\frac12$ 时目标点自然变成 $\ln\frac1{4a}$。
+    - 法二里 $f(x_1)=0$ 和 $2ae^{x_0}=1$ 可以消掉 $a$。
+  normalization_moves:
+    - 先判断什么时候有两个极值点。
+    - 先确认零点 $x_1$ 在 $-1$ 左边。
+    - $0<a<\frac12$ 直接用 $x_0=0$。
+    - $a>\frac12$ 用 $\ln\frac1{4a}$ 或零点方程消参。
+  common_failures:
+    - 没有先证明两个极值点存在的参数范围。
+    - 把 $x_0$ 在两个参数段的位置弄反。
+    - 不知道为什么要看 $\ln\frac1{4a}$。
+    - 消参时忘记 $x_1+1<0$，导致不等式方向混乱。
+    - 直接沿用 source 的 $x=-1-\frac ae$ 取点，可能得到错误的负值判断。
+  similar_practice_query: 极值点 零点 距离 x0-x1 ln2 (x+1)/e^x + ax^2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 用户拍板：第 14 项需要自己重做；已保留结论并把 $x_1<-1$ 的证明改为极限 + 导数结构，source 取点视为错误。

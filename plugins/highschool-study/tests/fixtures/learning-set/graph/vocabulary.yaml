@@ -1,0 +1,24 @@
+schema: highschool-study.taxonomy.v1
+taxonomy_revision_id: taxonomy-conics-v1
+domain: highschool-math/conics
+nodes:
+  - node_id: goal.extremum
+    facet: goal
+    canonical_name: 极值最值
+    aliases: []
+  - node_id: method.parameterize
+    facet: method_cluster
+    canonical_name: 参数化与消元
+    aliases: [设参消元]
+  - node_id: method.freeze-variable
+    facet: method_cluster
+    canonical_name: 冻结变量法
+    aliases: [冻元法]
+  - node_id: subroute.main-variable
+    facet: method_subroute
+    canonical_name: 主元选择与视角转换
+    aliases: []
+  - node_id: subroute.domain-check
+    facet: method_subroute
+    canonical_name: 定义域与可行域检查
+    aliases: []

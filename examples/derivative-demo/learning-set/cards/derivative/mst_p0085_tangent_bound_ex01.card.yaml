@@ -1,0 +1,172 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0085_tangent_bound_ex01
+content_revision_id: mst_p0085_tangent_bound_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0085_tangent_bound_ex01.card.yaml
+stem: |-
+  （2021 · 新高考 Ⅰ T7）若过点 $(a,b)$ 可以作曲线 $y=e^x$ 的两条切线，则 (  )
+  A. $e^b<a$
+  B. $e^a<b$
+  C. $0<a<e^b$
+  D. $0<b<e^a$
+answer: |
+  D
+
+  设切点横坐标为 $t$，指数曲线在 $(t,e^t)$ 处的切线为 $y-e^t=e^t(x-t)$。切线过 $(a,b)$，所以 $b=e^t(a+1-t)$。令 $F(t)=e^t(a+1-t)$，则 $F'(t)=e^t(a-t)$，$F(t)$ 在 $(-\infty,a)$ 上递增、在 $(a,+\infty)$ 上递减，最大值为 $F(a)=e^a$，且左端趋向 $0$。要使水平线 $b$ 与该函数有两个交点，必须且只需 $0<b<e^a$，故选 D。图像法同样说明点 $P(a,b)$ 要在 $x$ 轴上方且在曲线下方。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 设切点参数，写出过点条件。
+      max_score: 1
+    - step_id: step_2
+      description: 分析切点参数函数的单调性。
+      max_score: 1
+    - step_id: step_3
+      description: 由两个切点解得到参数区域。
+      max_score: 1
+    - step_id: step_4
+      description: 用图像区域复核选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 数形结合
+      - 局部逼近与找点
+    subroute:
+      - 过点切线条数
+      - 切点参数化
+      - 单峰函数交点计数
+      - 凹凸区域判定
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $b=e^t(a+1-t)$ 把两条切线转化为切点参数 $t$ 的两个解。
+      - $F'(t)=e^t(a-t)$ 说明 $F(t)$ 在 $t=a$ 处取最大值 $e^a$。
+      - 图像区域给出 $P(a,b)$ 位于 $0<b<e^a$ 的带状区域。
+    normalization_moves_used:
+      - 把“过点作切线”改写为“切线方程代入点 $(a,b)$”。
+      - 把切线条数转化为 $F(t)=b$ 的交点个数。
+      - 用峰值 $F(a)=e^a$ 和下端 $0$ 直接匹配选项。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会写 $y=e^x$ 在 $t$ 处的切线，回补导数运算与几何意义。
+      - 若学生不能由 $F'(t)=e^t(a-t)$ 判断单调性，回补导数单调极值基础。
+      - 若学生不理解点在曲线上方/下方与切线条数的关系，回补函数性质与图像。
+      - 若学生看不懂 $e^a$ 与选项 D 的关系，回补指数对数基础。
+  detail_terms:
+    - $y=e^x$
+    - 过点 $(a,b)$ 作两条切线
+    - $b=e^t(a+1-t)$
+    - $F'(t)=e^t(a-t)$
+    - $0<b<e^a$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0085_tangent_bound_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0085
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0085/page_0085.md
+      role: problem_start
+      evidence: lines 18-44 enter “第二节 函数的切线界定”，给出凹凸性与切线示意、例 1 题干、四个选项和两种解析。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0085.png
+      inspected: true
+      notes: 已核对例 1 题干“过点 $(a,b)$ 可以作曲线 $y=e^x$ 的两条切线”、A-D 选项、两张示意图和答案 D；图像与 markdown 一致。
+  source_context: 本题是“函数的切线界定”第二节首个 worked example，用指数函数的凹凸性判断点在什么区域时能引两条切线。
+  source_influence:
+    - 保留源解法一的切点参数 $t$ 与方程 $b=e^t(a+1-t)$。
+    - 保留源解法二的图像区域判断：点在 $x$ 轴上方且在曲线 $y=e^x$ 下方时有两条切线。
+  source_discrepancies: []
+original_problem:
+  stem: （2021 · 新高考 Ⅰ T7）若过点 $(a,b)$ 可以作曲线 $y=e^x$ 的两条切线，则 (  )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $e^b<a$
+      text_latex: $e^b<a$
+    - label: B
+      text_raw: $e^a<b$
+      text_latex: $e^a<b$
+    - label: C
+      text_raw: $0<a<e^b$
+      text_latex: $0<a<e^b$
+    - label: D
+      text_raw: $0<b<e^a$
+      text_latex: $0<b<e^a$
+  answer: D
+  fidelity_notes:
+    - 本题为单选题，题干、选项和完整解析均在 page_0085。
+    - 源页配有凹凸性示意图和 $y=e^x$ 过点作两切线示意图，均为解析辅助图。
+solution:
+  source_solution_summary: |
+    设切点横坐标为 $t$，指数曲线在 $(t,e^t)$ 处的切线为 $y-e^t=e^t(x-t)$。切线过 $(a,b)$，所以 $b=e^t(a+1-t)$。令 $F(t)=e^t(a+1-t)$，则 $F'(t)=e^t(a-t)$，$F(t)$ 在 $(-\infty,a)$ 上递增、在 $(a,+\infty)$ 上递减，最大值为 $F(a)=e^a$，且左端趋向 $0$。要使水平线 $b$ 与该函数有两个交点，必须且只需 $0<b<e^a$，故选 D。图像法同样说明点 $P(a,b)$ 要在 $x$ 轴上方且在曲线下方。
+  key_steps:
+    - step_id: step_1
+      statement: 设切点参数，写出过点条件。
+      formula_trace:
+        from: |
+          $y-e^t=e^t(x-t),\qquad (a,b)\text{ 在切线上}$
+        to: |
+          $b-e^t=e^t(a-t),\qquad b=e^t(a+1-t)$
+        operation: 用切点 $(t,e^t)$ 和斜率 $e^t$ 写点斜式，再代入外点坐标。
+        why: 过同一点能作几条切线，等价于切点参数方程有几个实数解。
+      source_ref: page_0085
+    - step_id: step_2
+      statement: 分析切点参数函数的单调性。
+      formula_trace:
+        from: |
+          $F(t)=e^t(a+1-t)$
+        to: |
+          $F'(t)=e^t(a-t),\quad F(t)\nearrow(-\infty,a),\quad F(t)\searrow(a,+\infty),\quad F(a)=e^a$
+        operation: 对 $F(t)$ 求导，并按 $t<a$、$t>a$ 判断导数符号。
+        why: 方程 $F(t)=b$ 的解的个数由 $F$ 的单峰形状决定。
+      source_ref: page_0085
+    - step_id: step_3
+      statement: 由两个切点解得到参数区域。
+      formula_trace:
+        from: |
+          $F(t)=b$ 有两个不同实数解
+        to: |
+          $0<b<e^a$
+        operation: 利用 $F(t)$ 左端趋近 $0$、峰值为 $e^a$、右端降到负值的图像。
+        why: 只有当水平线高度介于 $0$ 与最大值 $e^a$ 之间时，左右两侧各有一个切点。
+      source_ref: page_0085
+    - step_id: step_4
+      statement: 用图像区域复核选项。
+      formula_trace:
+        from: |
+          $P(a,b)$ 在 $y=e^x$ 的下方且在 $x$ 轴上方
+        to: |
+          $0<b<e^a$
+        operation: 根据指数曲线 $y>0$ 和下凸曲线外点引两切线的区域判断。
+        why: 点在曲线上只有一条切线，点在曲线上方没有切线，点在曲线下方且 $b>0$ 时有两条切线。
+      source_ref: page_0085
+teaching_card:
+  student_title: 用切点参数判断指数曲线两条切线
+  what_it_trains: 训练把“过一点能作几条切线”转化为切点参数方程的解个数，并用凹凸图像确认点所在区域。
+  recognition_cues:
+    - 题干说“过点可以作两条切线”，切点未知，适合设切点横坐标。
+    - $y=e^x$ 的切线斜率仍是 $e^t$，代入外点后会得到单峰函数。
+    - 选项里出现 $e^a$，提示比较点的纵坐标 $b$ 与曲线上同横坐标的高度。
+  normalization_moves:
+    - 设切点为 $(t,e^t)$，写 $y-e^t=e^t(x-t)$。
+    - 代入 $(a,b)$，把问题化为 $b=F(t)$ 的交点数。
+    - 用 $F$ 的最大值 $e^a$ 与左端界 $0$ 得到 $0<b<e^a$。
+  common_failures:
+    - 把外点横坐标 $a$ 误当成切点横坐标。
+    - 只判断 $b<e^a$，漏掉 $b>0$ 才能有左侧切点。
+    - 看到点在曲线下方就选 $b<e^a$，没有排除 $x$ 轴下方只有一条切线的情形。
+  similar_practice_query: 指数函数 过点两条切线 切点参数 $b=e^t(a+1-t)$
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0085 图像与 markdown 对例 1 题干、选项、两种解析和答案 D 一致，无需用户拍板。

@@ -1,0 +1,202 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0216_xex_a_x_lnx_ge_1_param_ch6_baozhi_ex11
+content_revision_id: mst_p0216_xex_a_x_lnx_ge_1_param_ch6_baozhi_ex11-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0216_xex_a_x_lnx_ge_1_param_ch6_baozhi_ex11.card.yaml
+stem: （2023 · 湖南模拟 T14）已知 $f(x)=xe^x-a(x+\ln x)\geqslant1$ 对于任意的 $x\in(0,+\infty)$ 恒成立，则 $a$ 的取值为______。
+answer: |-
+  $a=1$。
+
+  令 $h(u)=e^u-u-1\geqslant0$，则 $f(x)-1=h(x+\ln x)+(1-a)(x+\ln x)$。设 $x_0+\ln x_0=0$（约 $x_0\approx0.6$），此时 $h(x_0+\ln x_0)=0$，且余量项也在同点为 0。 按 source 的完整证明，先求 $f^{\prime}(x)=\left(1+\frac1x\right)(e^{x+\ln x}-a)$，其中 $g(x)=e^{x+\ln x}-a$ 严格递增、零点唯一，且零点满足 $x+\ln x=\ln a$。分类： (i) $a=1$ 时零点与 $x_0$ 重合，$f$ 在 $x_0$ 处取最小值 1； (ii) $a>1$ 时在 $(x_0,x_1)$ 出现 $f(x)<1$； (iii) $0<a<1$ 时在 $(x_2,x_0)$ 出现 $f(x)<1$； (iv) $a\leqslant0$ 时 $f^{\prime}(x)>0$，在 $(0,x_0)$ 有 $f(x)<1$。后三种均与题设矛盾，故唯一可行参数是 $a=1$。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 先把目标改写成保值块与余量项。
+      max_score: 1
+    - step_id: step_2
+      description: 识别共零点并给出速解直觉。
+      max_score: 1
+    - step_id: step_3
+      description: 写出导数并确定符号控制函数的单调性。
+      max_score: 1
+    - step_id: step_4
+      description: 当 $a=1$ 时验证可行。
+      max_score: 1
+    - step_id: step_5
+      description: 当 $a>1$ 时反证。
+      max_score: 1
+    - step_id: step_6
+      description: 当 $0<a<1$ 与 $a\leqslant0$ 时继续反证。
+      max_score: 1
+    - step_id: step_7
+      description: 汇总参数。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: main
+        goal: 求参数范围
+        target: 第 main 问
+        result: $a=1$
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 含参数分类讨论
+      - 显隐点探路
+    subroute:
+      - 极点效应
+      - 余量函数
+      - 共零点
+      - 导数零点唯一性
+      - 分类反证
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+      - 非齐次结构
+    evidence:
+      - $f(x)-1=h(x+\ln x)+(1-a)(x+\ln x)$
+      - $h(u)=e^u-u-1\geqslant0$
+      - $x_0+\ln x_0=0$
+      - $f^{\prime}(x)=\left(1+\frac1x\right)(e^{x+\ln x}-a)$
+      - $x+\ln x=\ln a$（零点定位）
+    normalization_moves_used:
+      - 先把混合指对式统一成 $h(u)$ 母函数。
+      - 把参数集中到余量项 $(1-a)(x+\ln x)$。
+      - 用导数零点唯一性把“恒成立”改写成分类反证。
+      - 在共零点 $x_0$ 附近做极点效应判定。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $xe^x-a(x+\ln x)-1$ 配成 $h(x+\ln x)$ 结构，回补指数对数基础。
+      - 若学生不会由 $g^{\prime}(x)>0$ 推出零点唯一并读出 $f^{\prime}$ 号变，回补导数单调极值基础。
+      - 若学生只写“看起来应为 $a=1$”但无排除链路，回补不等式工具基础。
+      - 若学生忽略定义域 $x>0$ 导致对 $\ln x$ 的推导失真，回补函数三要素与定义域。
+  detail_terms:
+    - $h(u)=e^u-u-1$
+    - $x_0+\ln x_0=0$
+    - 极点效应
+    - 余量函数 $(1-a)(x+\ln x)$
+    - $a=1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0216_xex_a_x_lnx_ge_1_param_ch6_baozhi_ex11
+source_evidence:
+  source_refs:
+    - ref_id: page_0216_ex10_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0216/page_0216.md
+      role: local_context
+      evidence: page_0216 line 14-16 为例10续解收尾与方法提示，不是新题头。
+    - ref_id: page_0216_ex11_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0216/page_0216.md
+      role: problem_start
+      evidence: page_0216 line 28 给出例11题头：$xe^x-a(x+\ln x)\geqslant1$ 在 $(0,+\infty)$ 恒成立，求 $a$。
+    - ref_id: page_0216_ex11_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0216/page_0216.md
+      role: solution
+      evidence: page_0216 line 30-42 给出“极点效应速解 + 按解答题格式分类证明”，结论为 $a=1$。
+    - ref_id: page_0216_ex12_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0216/page_0216.md
+      role: local_context
+      evidence: page_0216 line 44 起进入例12新题头，说明例11已在本页闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0216.png
+      inspected: true
+      notes: 已核对页图：例11题头与完整解析均在本页中下部，页底才开始例12。
+  source_context: 本卡仅处理 page_0216 起头并完结的例11；页首为例10续页上下文，页底例12题头归下一卡。
+  source_influence:
+    - 保留 source 的主链：先同构到 $h(u)=e^u-u-1$ 的保值块，再围绕余量 $(1-a)(x+\ln x)$ 判参。
+    - 保留 source 的完整分类：$a=1,\ a>1,\ 0<a<1,\ a\leqslant0$ 四段反证。
+    - 保留取等点 $x_0+\ln x_0=0$ 的极点效应解释，用于说明为何只能 $a=1$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 湖南模拟 T14）已知 $f(x)=xe^x-a(x+\ln x)\geqslant1$ 对于任意的 $x\in(0,+\infty)$ 恒成立，则 $a$ 的取值为______。
+  parts: *a1
+  choices: []
+  answer: $a=1$。
+  fidelity_notes:
+    - 题型为求参数填空，无选项、无分问。
+    - 由 $\ln x$ 可知定义域是 $x>0$。
+    - source 先给“余量共零点”速解，再给可书写的导数分类证明。
+solution:
+  source_solution_summary: 令 $h(u)=e^u-u-1\geqslant0$，则 $f(x)-1=h(x+\ln x)+(1-a)(x+\ln x)$。设 $x_0+\ln x_0=0$（约 $x_0\approx0.6$），此时 $h(x_0+\ln x_0)=0$，且余量项也在同点为 0。 按 source 的完整证明，先求 $f^{\prime}(x)=\left(1+\frac1x\right)(e^{x+\ln x}-a)$，其中 $g(x)=e^{x+\ln x}-a$ 严格递增、零点唯一，且零点满足 $x+\ln x=\ln a$。分类： (i) $a=1$ 时零点与 $x_0$ 重合，$f$ 在 $x_0$ 处取最小值 1； (ii) $a>1$ 时在 $(x_0,x_1)$ 出现 $f(x)<1$； (iii) $0<a<1$ 时在 $(x_2,x_0)$ 出现 $f(x)<1$； (iv) $a\leqslant0$ 时 $f^{\prime}(x)>0$，在 $(0,x_0)$ 有 $f(x)<1$。后三种均与题设矛盾，故唯一可行参数是 $a=1$。
+  key_steps:
+    - step_id: step_1
+      statement: 先把目标改写成保值块与余量项。
+      formula_trace:
+        from: $f(x)-1=xe^x-a(x+\ln x)-1$
+        to: $f(x)-1=h(x+\ln x)+(1-a)(x+\ln x),\ h(u)=e^u-u-1$
+        operation: 令 $u=x+\ln x$，并套入标准母函数。
+        why: 将“恒成立求参”转化为“非负块 + 余量项”结构。
+      source_ref: page_0216_ex11_solution
+    - step_id: step_2
+      statement: 识别共零点并给出速解直觉。
+      formula_trace:
+        from: $h(u)\geqslant0$，且 $h(u)=0\Leftrightarrow u=0$
+        to: $x_0+\ln x_0=0$ 时 $h(x_0+\ln x_0)=0$，余量项也在该点取零
+        operation: 对齐保值块与余量项的取等点。
+        why: source 用“极点效应”说明若要全局非负，必须让余量不破坏该极点。
+      source_ref: page_0216_ex11_solution
+    - step_id: step_3
+      statement: 写出导数并确定符号控制函数的单调性。
+      formula_trace:
+        from: $f(x)=xe^x-a(x+\ln x)$
+        to: $f^{\prime}(x)=\left(1+\frac1x\right)(e^{x+\ln x}-a)$，$g(x)=e^{x+\ln x}-a$ 且 $g^{\prime}(x)>0$
+        operation: 乘积求导后提取公因子，构造 $g(x)$。
+        why: 要做参数分类，先锁定导数零点的唯一性。
+      source_ref: page_0216_ex11_solution
+    - step_id: step_4
+      statement: 当 $a=1$ 时验证可行。
+      formula_trace:
+        from: $\ln a=0$
+        to: $f^{\prime}(x_0)=0$，$f$ 在 $(0,x_0)$ 递减、$(x_0,+\infty)$ 递增，$f_{\min}=f(x_0)=1$
+        operation: 由 $g$ 递增与零点位置读取 $f^{\prime}$ 符号分布。
+        why: 给出充分性：$a=1$ 确实满足题设。
+      source_ref: page_0216_ex11_solution
+    - step_id: step_5
+      statement: 当 $a>1$ 时反证。
+      formula_trace:
+        from: $\ln a>0,\ \exists x_1:x_1+\ln x_1=\ln a$
+        to: $f^{\prime}(x_0)<0$，故 $x\in(x_0,x_1)$ 时 $f(x)<1$
+        operation: 比较 $x_0$ 与 $x_1$ 处导数符号，得到局部下降区间。
+        why: 出现违背“恒 $\geqslant1$”的区间，排除 $a>1$。
+      source_ref: page_0216_ex11_solution
+    - step_id: step_6
+      statement: 当 $0<a<1$ 与 $a\leqslant0$ 时继续反证。
+      formula_trace:
+        from: $0<a<1$ 或 $a\leqslant0$
+        to: $0<a<1$ 时在 $(x_2,x_0)$ 有 $f(x)<1$；$a\leqslant0$ 时在 $(0,x_0)$ 有 $f(x)<1$
+        operation: 分别用零点位置与 $f^{\prime}(x)>0$ 判定单调区间，再与 $f(x_0)=1$ 比较。
+        why: 排除全部其余情形，完成必要性。
+      source_ref: page_0216_ex11_solution
+    - step_id: step_7
+      statement: 汇总参数。
+      formula_trace:
+        from: step_4 可行，step_5/6 不可行
+        to: $a=1$
+        operation: 保留唯一可行参数值。
+        why: 完成求参结论。
+      source_ref: page_0216_ex11_solution
+teaching_card:
+  student_title: 极点效应求参：$xe^x-a(x+\ln x)\geqslant1$
+  what_it_trains: 训练“先同构保值，再用余量共零点与导数分类锁定唯一参数”的恒成立求参链路。
+  recognition_cues:
+    - 题目是“对任意 $x>0$ 恒成立”的单参数不等式。
+    - 主式可压成 $e^u-u-1$ 母函数，且有明确取等点。
+    - 解析中出现“余量函数”“共零点”“分类矛盾”关键词。
+  normalization_moves:
+    - 把目标写成 $h(u)+$ 余量的形式。
+    - 先看共零点，再用导数零点位置做参数分类。
+    - 逐段排除，最后只留唯一参数。
+  common_failures:
+    - 只写速解结论 $a=1$，未给出对 $a>1,0<a<1,a\leqslant0$ 的排除。
+    - 把 $g(x)$ 的单调性写错，导致零点个数判断失真。
+    - 忘记定义域 $x>0$，把不在定义域的点代入反证。
+  similar_practice_query: xe^x a(x+lnx) 恒成立 求参 极点效应 余量函数
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

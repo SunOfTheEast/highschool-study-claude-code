@@ -1,0 +1,170 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0030_ex17
+content_revision_id: mst_p0030_ex17-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0030_ex17.card.yaml
+stem: |-
+  设函数 $f(x)=x(e^x+1)$，$g(x)=(x+1)\ln x$，若存在实数 $x_1,x_2$，使得 $f(x_1)=g(x_2)$，则 $|x_1-x_2|$ 的最小值为 ( )
+  A. $e$
+  B. 2
+  C. 1
+  D. $\frac{1}{e}$
+answer: |-
+  C
+
+  把 $g(x_2)=(x_2+1)\ln x_2$ 写成 $\ln x_2(e^{\ln x_2}+1)=f(\ln x_2)$。又 $f'(x)=e^x(x+1)+1\ge 1-1/e^2>0$，所以 $f$ 在实数集上严格递增。由 $f(x_1)=f(\ln x_2)$ 得 $x_1=\ln x_2$，于是 $|x_1-x_2|=|\ln x_2-x_2|=x_2-\ln x_2\ge1$，当 $x_2=1$ 取等，故选 C。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把 $g$ 写成 $f$ 的同构输入。
+      max_score: 1
+    - step_id: step_2
+      description: 证明 $f$ 严格递增。
+      max_score: 1
+    - step_id: step_3
+      description: 由同值推出变量关系。
+      max_score: 1
+    - step_id: step_4
+      description: 把距离问题化成单变量最值。
+      max_score: 1
+    - step_id: step_5
+      description: 确定最小值和选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 局部逼近与找点
+    subroute:
+      - $g(x)=f(\ln x)$
+      - $x(e^x+1)$ 全局递增
+      - $x-\ln x$ 最小值
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $g(x_2)=f(\ln x_2)$，题设变成 $f(x_1)=f(\ln x_2)$。
+      - 距离目标化为 $|\ln x_2-x_2|$。
+    normalization_moves_used:
+      - $x$ 写成 $e^{\ln x}$。
+      - 用 $f'(x)>0$ 推出 $x_1=\ln x_2$。
+      - 用 $x-\ln x\ge1$ 求距离最小值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $(x+1)\ln x$ 写成 $\ln x(e^{\ln x}+1)$，回补指数对数基础。
+      - 若学生不会证明 $x(e^x+1)$ 严格递增，回补导数单调极值基础。
+      - 若学生不知道严格递增函数同值推出自变量相等，回补函数性质与图像。
+      - 若学生不会求 $x-\ln x$ 的最小值，回补导数单调极值基础。
+  detail_terms:
+    - $f(x)=x(e^x+1)$
+    - $g(x)=f(\ln x)$
+    - $f'(x)\ge1-1/e^2$
+    - $x_1=\ln x_2$
+    - $x-\ln x\ge1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0030_ex17
+source_evidence:
+  source_refs:
+    - ref_id: page_0030
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0030/page_0030.md
+      role: problem_start
+      evidence: 例 17 题干、选项、解析和答案完整位于 page_0030 页底。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0030.png
+      inspected: true
+      notes: 核对题干为 $f(x)=x(e^x+1)$、$g(x)=(x+1)\ln x$；选项 A-D 为 $e,2,1,1/e$；答案 C。
+  source_context: 例 17 是同构函数单调性的直接应用：把 $g(x)$ 写成 $f(\ln x)$，再把两变量距离问题化为 $|\ln x-x|$ 的最小值。
+  source_influence:
+    - BATCHES locator hint `mst_p0030_ex17` 仅用于确认题头；卡片内容按 page_0030 源 markdown 与源图重建。
+  source_discrepancies: []
+original_problem:
+  stem: 设函数 $f(x)=x(e^x+1)$，$g(x)=(x+1)\ln x$，若存在实数 $x_1,x_2$，使得 $f(x_1)=g(x_2)$，则 $|x_1-x_2|$ 的最小值为 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $e$
+      text_latex: $e$
+    - label: B
+      text_raw: "2"
+      text_latex: "2"
+    - label: C
+      text_raw: "1"
+      text_latex: "1"
+    - label: D
+      text_raw: $\frac{1}{e}$
+      text_latex: $\frac{1}{e}$
+  answer: C
+  fidelity_notes:
+    - 源题写“存在实数 $x_1,x_2$”，但 $g(x_2)$ 中含 $\ln x_2$，故实际需 $x_2>0$。
+    - 源图与 markdown 一致。
+solution:
+  source_solution_summary: 把 $g(x_2)=(x_2+1)\ln x_2$ 写成 $\ln x_2(e^{\ln x_2}+1)=f(\ln x_2)$。又 $f'(x)=e^x(x+1)+1\ge 1-1/e^2>0$，所以 $f$ 在实数集上严格递增。由 $f(x_1)=f(\ln x_2)$ 得 $x_1=\ln x_2$，于是 $|x_1-x_2|=|\ln x_2-x_2|=x_2-\ln x_2\ge1$，当 $x_2=1$ 取等，故选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 把 $g$ 写成 $f$ 的同构输入。
+      formula_trace:
+        from: $g(x)=(x+1)\ln x$
+        to: $g(x)=\ln x\,(e^{\ln x}+1)=f(\ln x)$
+        operation: 用 $x=e^{\ln x}$，把乘在外面的 $\ln x$ 看成 $f$ 的自变量。
+        why: 这样 $f(x_1)=g(x_2)$ 就能变成同一个函数 $f$ 的同值问题。
+      source_ref: page_0030
+    - step_id: step_2
+      statement: 证明 $f$ 严格递增。
+      formula_trace:
+        from: $f(x)=x(e^x+1)$
+        to: $f'(x)=e^x(x+1)+1\ge 1-\frac1{e^2}>0$
+        operation: 求导；令 $u=x+1$，则 $e^x(x+1)=e^{-1}u e^u$，其最小值为 $-1/e^2$。
+        why: 严格递增保证同值推出自变量相等。
+      source_ref: page_0030
+    - step_id: step_3
+      statement: 由同值推出变量关系。
+      formula_trace:
+        from: $f(x_1)=g(x_2)=f(\ln x_2)$
+        to: $x_1=\ln x_2$
+        operation: 利用 $f$ 在 $\mathbf R$ 上严格递增。
+        why: 函数一一对应，不能有两个不同自变量给出同一函数值。
+      source_ref: page_0030
+    - step_id: step_4
+      statement: 把距离问题化成单变量最值。
+      formula_trace:
+        from: $|x_1-x_2|$
+        to: $|\ln x_2-x_2|=x_2-\ln x_2$
+        operation: 代入 $x_1=\ln x_2$；对 $x_2>0$ 有 $x_2-\ln x_2\ge1$。
+        why: $\ln x_2-x_2\le -1$，绝对值就是 $x_2-\ln x_2$。
+      source_ref: page_0030
+    - step_id: step_5
+      statement: 确定最小值和选项。
+      formula_trace:
+        from: $x_2-\ln x_2\ge1$
+        to: $|x_1-x_2|_{\min}=1$
+        operation: 令 $\phi(x)=x-\ln x$，$\phi'(x)=1-1/x$，在 $x=1$ 取最小值 1。
+        why: 当 $x_2=1$ 时 $x_1=0$，距离等于 1，可取到。
+      source_ref: page_0030
+teaching_card:
+  student_title: 把 $(x+1)\ln x$ 看成同一个 $f(\ln x)$
+  what_it_trains: 训练把含 $x$ 与 $\ln x$ 的表达式同构成同一函数，再用单调性把两个变量锁成一个变量。
+  recognition_cues:
+    - $f(x)$ 是 $x(e^x+1)$，而 $g(x)$ 是 $(x+1)\ln x$。
+    - $x$ 可以写成 $e^{\ln x}$，外面的 $\ln x$ 正好充当 $f$ 的输入。
+    - 目标是 $|x_1-x_2|$，同构后会变成 $|\ln x_2-x_2|$。
+  normalization_moves:
+    - 先写 $g(x)=f(\ln x)$。
+    - 证明 $f'(x)>0$，确保同值同元。
+    - 把距离化为 $x_2-\ln x_2$ 并求最小值。
+  common_failures:
+    - 把 $g(x)$ 只看成乘积，没有想到 $x=e^{\ln x}$。
+    - 证明 $f$ 单调时没有处理 $e^x(x+1)$ 可能为负的部分。
+    - 求 $|\ln x-x|$ 时忘记绝对值，或误以为可以小于 1。
+  similar_practice_query: x(e^x+1) (x+1)lnx 同构 f(lnx) 距离最小值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 源图与 markdown 一致；本题不跨页。

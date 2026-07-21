@@ -1,0 +1,198 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0031_ex21
+content_revision_id: mst_p0031_ex21-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0031_ex21.card.yaml
+stem: 若 $(2a-2b+1)e^{2a-b}+be^{a-1}-2a+1=0$，则 $a+b=$ ______.
+answer: |-
+  3
+
+  源解提示不要拆括号。两边除以 $e^{a-1}$，得 $(2a-2b+1)e^{a-b+1}+b+(1-2a)e^{1-a}=0$。把 $b$ 写成 $(b-a)+a$，并把 $2a-2b+1$ 写成 $1-2(b-a)$，得到 $[1-2(b-a)]e^{1-(b-a)}+(b-a)+(1-2a)e^{1-a}+a=0$。令 $f(x)=(1-2x)e^{1-x}+x$，则 $f(b-a)+f(a)=0$。求导可证 $f(x)$ 的最小值为 $f(1)=0$，故两个非负项相加为 0，只能 $b-a=1$ 且 $a=1$，所以 $b=2$，$a+b=3$。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 先整体除以 $e^{a-1}$。
+      max_score: 1
+    - step_id: step_2
+      description: 把两个主体整理成 $b-a$ 与 $a$。
+      max_score: 1
+    - step_id: step_3
+      description: 构造同构函数。
+      max_score: 1
+    - step_id: step_4
+      description: 求导准备证明 $f(x)\ge0$。
+      max_score: 1
+    - step_id: step_5
+      description: 由 $f''$ 判断 $f'$ 的符号变化。
+      max_score: 1
+    - step_id: step_6
+      description: 得到 $f$ 的非负最小值。
+      max_score: 1
+    - step_id: step_7
+      description: 由 $f(b-a)+f(a)=0$ 锁定 $a,b$。
+      max_score: 1
+    - step_id: step_8
+      description: 求目标值。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 自由度与主元
+      - 切线放缩与凹凸性
+    subroute:
+      - 不拆括号整体同构
+      - $f(b-a)+f(a)=0$
+      - 构造函数非负最小值
+  structure:
+    primary: 同构结构
+    secondary:
+      - 多变量与不等式结构
+      - 指对复合结构
+    evidence:
+      - 原式除以 $e^{a-1}$ 后能整理成同一个 $f$ 在 $b-a$ 和 $a$ 处的值。
+      - $f(x)\ge0$ 且 $f(b-a)+f(a)=0$ 强制两个输入都等于 1。
+    normalization_moves_used:
+      - 两边除以 $e^{a-1}$。
+      - 把 $b$ 拆成 $(b-a)+a$。
+      - 把 $2a-2b+1$ 写成 $1-2(b-a)$。
+      - 构造 $f(x)=(1-2x)e^{1-x}+x$ 并证明 $f(x)\ge0$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生一开始强行拆括号导致结构消失，回补代数恒等变形。
+      - 若学生不会把 $b$ 拆成 $(b-a)+a$，回补代数恒等变形。
+      - 若学生不会对 $(1-2x)e^{1-x}$ 求导，回补导数运算与几何意义。
+      - 若学生不能由 $f(b-a)+f(a)=0$ 和 $f\ge0$ 推出两个都取 0，回补不等式工具基础。
+  detail_terms:
+    - $e^{a-1}$
+    - $b-a$
+    - $f(x)=(1-2x)e^{1-x}+x$
+    - $f(b-a)+f(a)=0$
+    - $f(x)_{\min}=f(1)=0$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0031_ex21
+source_evidence:
+  source_refs:
+    - ref_id: page_0031
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0031/page_0031.md
+      role: problem_start
+      evidence: 例 21 题干与解析开头位于 page_0031 页底，解析在 $f''(x)$ 处截断。
+    - ref_id: page_0032
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0032/page_0032.md
+      role: continuation
+      evidence: page_0032 开头承接例 21 的 $f''(x)=(5-2x)e^{1-x}$，完成单调性证明并给出答案 3。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0031.png
+      inspected: true
+      notes: 核对题干为 $(2a-2b+1)e^{2a-b}+be^{a-1}-2a+1=0$，求 $a+b$；解析开头除以 $e^{a-1}$ 并构造 $f(x)$。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0032.png
+      inspected: true
+      notes: 核对续页从 $f''(x)=(5-2x)e^{1-x}$ 开始，结论为 $f(x)_{\min}=f(1)=0$，从而 $a=1,b=2,a+b=3$。
+  source_context: 例 21 是 page_0031 题头、page_0032 续解的跨页题。它强调“不拆括号，以括号为主体进行同构”，把原式变成 $f(b-a)+f(a)=0$，再用构造函数的非负最小值逼出两个变量。
+  source_influence:
+    - BATCHES locator hint `mst_p0031_ex21` 仅用于确认题头；卡片内容按 page_0031-page_0032 源 markdown 与源图重建。
+  source_discrepancies: []
+original_problem:
+  stem: 若 $(2a-2b+1)e^{2a-b}+be^{a-1}-2a+1=0$，则 $a+b=$ ______.
+  parts: *a1
+  choices: []
+  answer: "3"
+  fidelity_notes:
+    - 题干从 page_0031 开始，解析续到 page_0032；本卡将两页都作为证据。
+    - 源图与 markdown 一致；page_0032 后续的例 22 不属于本卡。
+solution:
+  source_solution_summary: 源解提示不要拆括号。两边除以 $e^{a-1}$，得 $(2a-2b+1)e^{a-b+1}+b+(1-2a)e^{1-a}=0$。把 $b$ 写成 $(b-a)+a$，并把 $2a-2b+1$ 写成 $1-2(b-a)$，得到 $[1-2(b-a)]e^{1-(b-a)}+(b-a)+(1-2a)e^{1-a}+a=0$。令 $f(x)=(1-2x)e^{1-x}+x$，则 $f(b-a)+f(a)=0$。求导可证 $f(x)$ 的最小值为 $f(1)=0$，故两个非负项相加为 0，只能 $b-a=1$ 且 $a=1$，所以 $b=2$，$a+b=3$。
+  key_steps:
+    - step_id: step_1
+      statement: 先整体除以 $e^{a-1}$。
+      formula_trace:
+        from: $(2a-2b+1)e^{2a-b}+be^{a-1}-2a+1=0$
+        to: $(2a-2b+1)e^{a-b+1}+b+(1-2a)e^{1-a}=0$
+        operation: 两边除以正数 $e^{a-1}$；第一项指数 $2a-b-(a-1)=a-b+1$，常数项变为 $(1-2a)e^{1-a}$。
+        why: 让第一项指数中出现 $1-(b-a)$，便于以括号为主体同构。
+      source_ref: page_0031
+    - step_id: step_2
+      statement: 把两个主体整理成 $b-a$ 与 $a$。
+      formula_trace:
+        from: $(2a-2b+1)e^{a-b+1}+b+(1-2a)e^{1-a}=0$
+        to: $[1-2(b-a)]e^{1-(b-a)}+(b-a)+(1-2a)e^{1-a}+a=0$
+        operation: 用 $2a-2b+1=1-2(b-a)$、$a-b+1=1-(b-a)$，并把 $b=(b-a)+a$。
+        why: 这样前两项是同一个函数在 $b-a$ 处的值，后两项是它在 $a$ 处的值。
+      source_ref: page_0031
+    - step_id: step_3
+      statement: 构造同构函数。
+      formula_trace:
+        from: $[1-2(b-a)]e^{1-(b-a)}+(b-a)+(1-2a)e^{1-a}+a=0$
+        to: $f(b-a)+f(a)=0，\quad f(x)=(1-2x)e^{1-x}+x$
+        operation: 把 $[1-2u]e^{1-u}+u$ 定义为 $f(u)$。
+        why: 原方程被压缩成两个同构函数值之和。
+      source_ref: page_0031
+    - step_id: step_4
+      statement: 求导准备证明 $f(x)\ge0$。
+      formula_trace:
+        from: $f(x)=(1-2x)e^{1-x}+x$
+        to: $f'(x)=(2x-3)e^{1-x}+1，\quad f''(x)=(5-2x)e^{1-x}$
+        operation: 对乘积 $(1-2x)e^{1-x}$ 求导，再对 $f'$ 求导。
+        why: 二阶导的符号可以判断 $f'$ 的增减，从而得到 $f$ 的全局最小值。
+      source_ref: page_0031-page_0032
+    - step_id: step_5
+      statement: 由 $f''$ 判断 $f'$ 的符号变化。
+      formula_trace:
+        from: $f''(x)=(5-2x)e^{1-x}$
+        to: $x<1$ 时 $f'(x)<0$，$x>1$ 时 $f'(x)>0$，且 $f'(1)=0$
+        operation: $f''$ 在 $x=5/2$ 前为正、后为负，所以 $f'$ 先增后减；结合 $f'(1)=0$ 以及 $x\ge5/2$ 时 $f'(x)>0$，得到 $f'$ 只在 1 处变号。
+        why: 这说明 $f$ 在 $(-\infty,1)$ 递减，在 $(1,+\infty)$ 递增。
+      source_ref: page_0032
+    - step_id: step_6
+      statement: 得到 $f$ 的非负最小值。
+      formula_trace:
+        from: $f$ 在 $x=1$ 处取全局最小
+        to: $f(x)\ge f(1)=0$
+        operation: 代入 $f(1)=(1-2)e^0+1=0$。
+        why: 两个函数值之和为 0 时，每个都只能取最小值 0。
+      source_ref: page_0032
+    - step_id: step_7
+      statement: 由 $f(b-a)+f(a)=0$ 锁定 $a,b$。
+      formula_trace:
+        from: $f(b-a)+f(a)=0，\quad f(x)\ge0$
+        to: $b-a=1，\quad a=1$
+        operation: 非负数相加为 0，两个都等于 0；而 $f(x)=0$ 只在最小点 $x=1$。
+        why: 这直接给出 $a=1$ 与 $b=2$。
+      source_ref: page_0032
+    - step_id: step_8
+      statement: 求目标值。
+      formula_trace:
+        from: $a=1，\quad b=2$
+        to: $a+b=3$
+        operation: 代入相加。
+        why: 与源页答案一致。
+      source_ref: page_0032
+teaching_card:
+  student_title: 不拆括号，把原式拼成 $f(b-a)+f(a)$
+  what_it_trains: 训练在复杂指数方程中保留括号主体，经过整体除法和变量拆分，构造同一个非负函数来锁定两个变量。
+  recognition_cues:
+    - 原式有 $(2a-2b+1)e^{2a-b}$ 这样的成组括号。
+    - 除以 $e^{a-1}$ 后，指数会出现 $1-(b-a)$。
+    - 还剩一个 $b$，可以拆成 $(b-a)+a$。
+  normalization_moves:
+    - 不要先拆括号，先除以 $e^{a-1}$。
+    - 把所有含 $b$ 的主体改写成 $b-a$。
+    - 构造 $f(x)=(1-2x)e^{1-x}+x$。
+    - 证明 $f$ 的最小值为 0，再由和为 0 推出两个输入都为 1。
+  common_failures:
+    - 把括号拆开后失去 $1-2x$ 与 $e^{1-x}$ 的同构形状。
+    - 忘记把 $b$ 写成 $(b-a)+a$，导致无法形成 $f(b-a)+f(a)$。
+    - 只算出 $f'(1)=0$，没有证明这是全局最小值。
+  similar_practice_query: 指数方程 不拆括号 f(b-a)+f(a) 构造函数 最小值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 例 21 题头在 page_0031，解析跨到 page_0032；已读取续页完成卡片。
+    - page_0032 的例 22 题头归 D 组，不在本卡输出范围内。

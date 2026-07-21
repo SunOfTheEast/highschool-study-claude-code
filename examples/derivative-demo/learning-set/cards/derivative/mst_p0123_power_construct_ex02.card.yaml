@@ -1,0 +1,199 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0123_power_construct_ex02
+content_revision_id: mst_p0123_power_construct_ex02-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0123_power_construct_ex02.card.yaml
+stem: |-
+  （2023 · 厦门模拟）已知函数 $f(x)(x\in\mathbf{R})$ 是偶函数，$f^{\prime}(x)$ 是函数 $f(x)(x\in\mathbf{R})$ 的导函数，$f(1)=1$，若 $x\geqslant0$ 时，$3f(x)+x f^{\prime}(x)>0$，则使得不等式 $(x-2022)^3f(x-2022)>1$ 成立的 $x$ 的取值范围是（  ）
+  A. $(2021,+\infty)$
+  B. $(-\infty,2021)$
+  C. $(2023,+\infty)$
+  D. $(-\infty,2023)$
+answer: |
+  C
+
+  构造 $g(x)=x^3f(x)$。当 $x\ge0$ 时，
+  $g'(x)=3x^2f(x)+x^3f'(x)=x^2[3f(x)+xf'(x)]\ge0$，
+  且不恒为零，所以 $g$ 在 $[0,+\infty)$ 上为增函数。
+  又 $f$ 是偶函数，故
+  $g(-x)=(-x)^3f(-x)=-x^3f(x)=-g(x)$，即 $g$ 是奇函数，
+  于是 $g$ 在 $\mathbf{R}$ 上为增函数。由 $f(1)=1$ 得
+  $g(1)=1$。原不等式即 $g(x-2022)>g(1)$，由 $g$ 单调递增得
+  $x-2022>1$，所以 $x>2023$，选 C。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把 $3f(x)+xf^{\prime}(x)$ 识别为 $x^3f(x)$ 的导数因子。
+      max_score: 1
+    - step_id: step_2
+      description: 由偶函数把 $g$ 转成奇函数。
+      max_score: 1
+    - step_id: step_3
+      description: 确认 $g$ 在全实数上递增。
+      max_score: 1
+    - step_id: step_4
+      description: 把原不等式化成辅助函数比较。
+      max_score: 1
+    - step_id: step_5
+      description: 利用单调性解出 $x$。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式求解
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 对称性配凑
+    subroute:
+      - 幂函数乘法构造
+      - 奇偶性延拓
+      - 平移代入
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 抽象函数结构
+    evidence:
+      - $3f(x)+xf^{\prime}(x)$ 是 $x^3f(x)$ 的导数因子。
+      - $f$ 偶而 $x^3$ 奇，所以 $x^3f(x)$ 为奇函数。
+      - 目标式正是 $g(x-2022)>g(1)$。
+    normalization_moves_used:
+      - 构造 $g(x)=x^3f(x)$。
+      - 先在 $x\ge0$ 上判断 $g$ 单调。
+      - 用奇函数性质把单调性扩展到 $\mathbf{R}$。
+      - 令 $t=x-2022$，把不等式变成 $g(t)>g(1)$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会计算 $(x^3f(x))^{\prime}$，回补导数运算与几何意义。
+      - 若学生不能判断 $x^3f(x)$ 的奇偶性，回补函数性质与图像。
+      - 若学生从 $g(x-2022)>g(1)$ 不能推出 $x-2022>1$，回补导数单调极值基础。
+  detail_terms:
+    - $3f(x)+xf^{\prime}(x)>0$
+    - $g(x)=x^3f(x)$
+    - $g(-x)=-g(x)$
+    - $g(1)=1$
+    - $x>2023$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0123_power_construct_ex02
+source_evidence:
+  source_refs:
+    - ref_id: page_0123
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0123/page_0123.md
+      role: problem_start
+      evidence: lines 34-40 give 例 2 题头、A-D 选项、完整解析 and answer C; lines 14-24 provide the 幂函数基础构造 context.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0123.png
+      inspected: true
+      notes: 已核对 page_0123 页图：例 2 的题干、四个选项、构造 $g(x)=x^3f(x)$ 的解析和答案 C 与 markdown 一致。
+  source_context: 例 2 继续使用幂函数乘法构造，由 $3f(x)+xf^{\prime}(x)>0$ 识别 $x^3f(x)$ 的单调性，并借助偶函数使 $x^3f(x)$ 成为奇函数。
+  source_influence:
+    - 保留源页构造 $g(x)=x^3 f(x)$，把 $3f(x)+x f^{\prime}(x)>0$ 变成 $g^{\prime}(x)\ge0$。
+    - 保留源页用 $f$ 偶函数推出 $g$ 奇函数，从而把 $[0,+\infty)$ 上的增性延拓到全体实数。
+    - 保留源页把原不等式写成 $g(x-2022)>g(1)$，由单调性直接解平移不等式。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 厦门模拟）已知函数 $f(x)(x\in\mathbf{R})$ 是偶函数，$f^{\prime}(x)$ 是函数 $f(x)(x\in\mathbf{R})$ 的导函数，$f(1)=1$，若 $x\geqslant0$ 时，$3f(x)+x f^{\prime}(x)>0$，则使得不等式 $(x-2022)^3f(x-2022)>1$ 成立的 $x$ 的取值范围是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $(2021,+\infty)$
+      text_latex: $(2021,+\infty)$
+    - label: B
+      text_raw: $(-\infty,2021)$
+      text_latex: $(-\infty,2021)$
+    - label: C
+      text_raw: $(2023,+\infty)$
+      text_latex: $(2023,+\infty)$
+    - label: D
+      text_raw: $(-\infty,2023)$
+      text_latex: $(-\infty,2023)$
+  answer: C
+  fidelity_notes:
+    - 本题为单选题，例 2 在 page_0123 内完整结束。
+solution:
+  source_solution_summary: |
+    构造 $g(x)=x^3f(x)$。当 $x\ge0$ 时，
+    $g'(x)=3x^2f(x)+x^3f'(x)=x^2[3f(x)+xf'(x)]\ge0$，
+    且不恒为零，所以 $g$ 在 $[0,+\infty)$ 上为增函数。
+    又 $f$ 是偶函数，故
+    $g(-x)=(-x)^3f(-x)=-x^3f(x)=-g(x)$，即 $g$ 是奇函数，
+    于是 $g$ 在 $\mathbf{R}$ 上为增函数。由 $f(1)=1$ 得
+    $g(1)=1$。原不等式即 $g(x-2022)>g(1)$，由 $g$ 单调递增得
+    $x-2022>1$，所以 $x>2023$，选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 把 $3f(x)+xf^{\prime}(x)$ 识别为 $x^3f(x)$ 的导数因子。
+      formula_trace:
+        from: |
+          $3f(x)+xf'(x)>0,\qquad x\ge0$
+        to: |
+          $g(x)=x^3f(x),\quad g'(x)=x^2[3f(x)+xf'(x)]\ge0$
+        operation: 乘上非负因子 $x^2$，配成乘积导数。
+        why: 目标不等式也含三次幂与 $f$ 的乘积，辅助函数正好承接题干结构。
+      source_ref: page_0123
+    - step_id: step_2
+      statement: 由偶函数把 $g$ 转成奇函数。
+      formula_trace:
+        from: |
+          $f(-x)=f(x),\qquad g(x)=x^3f(x)$
+        to: |
+          $g(-x)=(-x)^3f(-x)=-x^3f(x)=-g(x)$
+        operation: 利用奇次幂和偶函数相乘。
+        why: 已知单调性先在非负半轴上建立，需要奇性将它延拓到负半轴。
+      source_ref: page_0123
+    - step_id: step_3
+      statement: 确认 $g$ 在全实数上递增。
+      formula_trace:
+        from: |
+          $g$ 在 $[0,+\infty)$ 上递增，且 $g$ 为奇函数
+        to: |
+          $g$ 在 $\mathbf{R}$ 上递增
+        operation: 负半轴由奇函数对称得到同向增性，跨过 $0$ 时用 $g(0)=0$ 衔接。
+        why: 原式中的 $x-2022$ 可取任意实数，需要全实数单调性才能直接比较。
+      source_ref: page_0123
+    - step_id: step_4
+      statement: 把原不等式化成辅助函数比较。
+      formula_trace:
+        from: |
+          $(x-2022)^3f(x-2022)>1,\qquad f(1)=1$
+        to: |
+          $g(x-2022)>g(1)$
+        operation: 用 $g(t)=t^3f(t)$ 和 $g(1)=1^3f(1)=1$ 替换。
+        why: 辅助函数递增后，函数值大小等价于自变量大小。
+      source_ref: page_0123
+    - step_id: step_5
+      statement: 利用单调性解出 $x$。
+      formula_trace:
+        from: |
+          $g(x-2022)>g(1)$
+        to: |
+          $x-2022>1,\qquad x>2023$
+        operation: 对递增函数两侧去掉 $g$。
+        why: 这直接给出选项 C。
+      source_ref: page_0123
+teaching_card:
+  student_title: 把 $3f+xf^{\prime}$ 打包成 $x^3f$ 的单调性
+  what_it_trains: 训练从幂函数乘法导数构造辅助函数，并用奇偶性把半轴单调性延拓为全轴比较。
+  recognition_cues:
+    - 条件中 $3f(x)+xf^{\prime}(x)$ 对应 $x^3f(x)$。
+    - 目标式有 $(x-2022)^3f(x-2022)$，提示直接设 $g(t)=t^3f(t)$。
+    - $f$ 是偶函数，乘上 $x^3$ 后辅助函数变奇。
+  normalization_moves:
+    - 构造 $g(x)=x^3f(x)$。
+    - 由 $g^{\prime}(x)=x^2[3f(x)+xf^{\prime}(x)]$ 得 $g$ 在非负半轴递增。
+    - 用 $g$ 是奇函数将增性扩展到全实数。
+    - 把原式写成 $g(x-2022)>g(1)$。
+  common_failures:
+    - 构造了 $x f(x)$ 而不是 $x^3f(x)$。
+    - 看到 $x=0$ 处 $x^2=0$ 就误以为不能判单调，忽略区间内整体增性。
+    - 忘记证明 $g$ 在负半轴也递增。
+    - 平移时把 $x-2022>1$ 算成 $x>2021$。
+  similar_practice_query: 3f+xf^{\prime} x^3f 偶函数 奇函数 单调 不等式 平移
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0123 图片；例 2 题干、选项、解析和答案 C 与 markdown 一致。

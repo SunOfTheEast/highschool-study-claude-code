@@ -1,0 +1,237 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0141_exp_symmetry_whole_ex12
+content_revision_id: mst_p0141_exp_symmetry_whole_ex12-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0141_exp_symmetry_whole_ex12.card.yaml
+stem: |-
+  （2023 · 包河区期末 · 多选）定义在 $\mathbf{R}$ 上的函数 $f(x)$ 的导函数为 $f^{\prime}(x)$，对于任意实数 $x$，都有 $f(-x)=e^{2x}f(x)$，且满足 $2f(x)+f^{\prime}(x)=2x+1-e^{-2x}$，则（  ）
+  A. 函数 $F(x)=e^x f(x)$ 为偶函数
+  B. $f(0)=0$
+  C. $f(x)=x(1+e^{-2x})$
+  D. 不等式 $e^x f(x)+\frac{x}{e^x}>e$ 的解集为 $(1,+\infty)$
+answer: |
+  ABD
+
+  由 $f(-x)=e^{2x}f(x)$，两边同乘 $e^{-x}$ 得
+  $F(-x)=e^{-x}f(-x)=e^x f(x)=F(x)$，故 A 正确。
+  再由
+  $2f(x)+f^{\prime}(x)=2x+1-e^{-2x}$，
+  两边乘 $e^{2x}$ 得
+  $2e^{2x}f(x)+e^{2x}f^{\prime}(x)=(2x+1)e^{2x}-1$，
+  即 $[e^{2x}f(x)]^{\prime}=(2x+1)e^{2x}-1$。
+  结合 $e^{2x}f(x)=f(-x)$，
+  得 $-f^{\prime}(-x)=(2x+1)e^{2x}-1$，
+  进而 $-f^{\prime}(x)=(1-2x)e^{-2x}-1$。
+  代回可得
+  $2f(x)=2x+1-e^{-2x}-f^{\prime}(x)=2x(1-e^{-2x})$，
+  所以 $f(x)=x(1-e^{-2x})$，从而 $f(0)=0$，B 对、C 错。
+  又
+  $e^x f(x)+\frac{x}{e^x}
+  =xe^x(1-e^{-2x})+\frac{x}{e^x}
+  =xe^x$。
+  令 $g(x)=xe^x$，则 $g^{\prime}(x)=(x+1)e^x$，在 $x>-1$ 上递增，且 $g(1)=e$。
+  于是 $xe^x>e\iff x>1$，D 正确。答案 ABD。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 整体乘指数，直接得到偶函数。
+      max_score: 1
+    - step_id: step_2
+      description: 把微分方程与对称关系联立。
+      max_score: 1
+    - step_id: step_3
+      description: 由 $f(-x)$ 的导数关系求出 $f^{\prime}(x)$ 形式。
+      max_score: 1
+    - step_id: step_4
+      description: 回代得到 $f(x)$，判断 B、C。
+      max_score: 1
+    - step_id: step_5
+      description: 化简 D 的不等式为标准比较式。
+      max_score: 1
+    - step_id: step_6
+      description: 利用 $g(x)=xe^x$ 单调性解不等式并汇总。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: A
+        goal: 抽象函数性质
+        target: A：判 $F(x)=e^x f(x)$ 的奇偶性。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 抽象函数性质
+        target: B/C：求 $f(x)$ 显式并核对取值与表达式。
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 不等式求解
+        target: D：解指数型不等式。
+        result: 见 source_solution_summary
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 同构变形与换元法
+      - 数形结合
+    subroute:
+      - 整体代换
+      - 对称性锁定
+      - 指数对数比大小
+  structure:
+    primary: 对称结构
+    secondary:
+      - 指对复合结构
+      - 抽象函数结构
+    evidence:
+      - $f(-x)=e^{2x}f(x)$ 可等价写成 $e^{-x}f(-x)=e^x f(x)$。
+      - $2f+f^{\prime}$ 乘 $e^{2x}$ 后与 $[e^{2x}f]^{\prime}$ 同构。
+      - D 最终收束为 $xe^x>e$。
+    normalization_moves_used:
+      - 先把“带 $-x$ 的关系”改写成偶函数语言。
+      - 再把线性微分组合乘指数转成乘积导数。
+      - 最后把不等式化到 $xe^x$ 与常数比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会处理 $f(-x)$ 的求导链式关系，回补导数运算与几何意义。
+      - 若学生对 $e^x f(x)$ 的整体代换不敏感，回补分段/复合/反函数基础。
+      - 若学生不会解 $xe^x>e$，回补指数对数基础。
+  detail_terms:
+    - $f(-x)=e^{2x}f(x)$
+    - $F(x)=e^x f(x)$
+    - $f(x)=x(1-e^{-2x})$
+    - $xe^x>e$
+    - $g(1)=e$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0141_exp_symmetry_whole_ex12
+source_evidence:
+  source_refs:
+    - ref_id: page_0141_ex12_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0141/page_0141.md
+      role: problem_start
+      evidence: 例 12：对任意实数 $x$，$f(-x)=e^{2x}f(x)$，且 $2f(x)+f^{\prime}(x)=2x+1-e^{-2x}$，判断 A-D（多选）。
+    - ref_id: page_0141_ex12_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0141/page_0141.md
+      role: solution
+      evidence: 解析先设 $F(x)=e^x f(x)$ 证偶性，再联立两条件推出 $f(x)=x(1-e^{-2x})$，并化 D 为 $xe^x>e$，结论 ABD。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0141.png
+      inspected: true
+      notes: 已核对 page_0141 中部例 12 题干、四个选项、完整解析和答案 ABD。
+  source_context: page_0141 顶部是例 11 续解；例 12 从本页中部开始并在本页结束，之后进入例 13。
+  source_influence:
+    - 保留源解第一步：整体乘 $e^x$ 构造 $F(x)=e^x f(x)$，直接对应奇偶判定。
+    - 保留源解把 D 选项化简为 $xe^x>e$ 的单变量比较路径。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 包河区期末 · 多选）定义在 $\mathbf{R}$ 上的函数 $f(x)$ 的导函数为 $f^{\prime}(x)$，对于任意实数 $x$，都有 $f(-x)=e^{2x}f(x)$，且满足 $2f(x)+f^{\prime}(x)=2x+1-e^{-2x}$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 函数 $F(x)=e^x f(x)$ 为偶函数
+      text_latex: 函数 $F(x)=e^x f(x)$ 为偶函数
+    - label: B
+      text_raw: $f(0)=0$
+      text_latex: $f(0)=0$
+    - label: C
+      text_raw: $f(x)=x(1+e^{-2x})$
+      text_latex: $f(x)=x(1+e^{-2x})$
+    - label: D
+      text_raw: 不等式 $e^x f(x)+\frac{x}{e^x}>e$ 的解集为 $(1,+\infty)$
+      text_latex: 不等式 $e^x f(x)+\frac{x}{e^x}>e$ 的解集为 $(1,+\infty)$
+  answer: ABD
+  fidelity_notes:
+    - 源解推出的是 $f(x)=x(1-e^{-2x})$，因此 C 为干扰项。
+    - D 的解集判定在源解中通过 $g(x)=xe^x$ 单调性与 $g(1)=e$ 完成。
+solution:
+  source_solution_summary: |
+    由 $f(-x)=e^{2x}f(x)$，两边同乘 $e^{-x}$ 得
+    $F(-x)=e^{-x}f(-x)=e^x f(x)=F(x)$，故 A 正确。
+    再由
+    $2f(x)+f^{\prime}(x)=2x+1-e^{-2x}$，
+    两边乘 $e^{2x}$ 得
+    $2e^{2x}f(x)+e^{2x}f^{\prime}(x)=(2x+1)e^{2x}-1$，
+    即 $[e^{2x}f(x)]^{\prime}=(2x+1)e^{2x}-1$。
+    结合 $e^{2x}f(x)=f(-x)$，
+    得 $-f^{\prime}(-x)=(2x+1)e^{2x}-1$，
+    进而 $-f^{\prime}(x)=(1-2x)e^{-2x}-1$。
+    代回可得
+    $2f(x)=2x+1-e^{-2x}-f^{\prime}(x)=2x(1-e^{-2x})$，
+    所以 $f(x)=x(1-e^{-2x})$，从而 $f(0)=0$，B 对、C 错。
+    又
+    $e^x f(x)+\frac{x}{e^x}
+    =xe^x(1-e^{-2x})+\frac{x}{e^x}
+    =xe^x$。
+    令 $g(x)=xe^x$，则 $g^{\prime}(x)=(x+1)e^x$，在 $x>-1$ 上递增，且 $g(1)=e$。
+    于是 $xe^x>e\iff x>1$，D 正确。答案 ABD。
+  key_steps:
+    - step_id: step_1
+      statement: 整体乘指数，直接得到偶函数。
+      formula_trace:
+        from: $f(-x)=e^{2x}f(x)$
+        to: $F(x)=e^x f(x),\ F(-x)=e^{-x}f(-x)=e^x f(x)=F(x)$
+        operation: 两边同乘 $e^{-x}$。
+        why: A 项正是这个整体代换后的奇偶性。
+      source_ref: page_0141_ex12_solution
+    - step_id: step_2
+      statement: 把微分方程与对称关系联立。
+      formula_trace:
+        from: $2f(x)+f^{\prime}(x)=2x+1-e^{-2x}$
+        to: $[e^{2x}f(x)]^{\prime}=(2x+1)e^{2x}-1$
+        operation: 两边乘 $e^{2x}$ 并识别乘积导数。
+        why: 便于替换成 $f(-x)$ 的导数。
+      source_ref: page_0141_ex12_solution
+    - step_id: step_3
+      statement: 由 $f(-x)$ 的导数关系求出 $f^{\prime}(x)$ 形式。
+      formula_trace:
+        from: $[e^{2x}f(x)]^{\prime}=[f(-x)]^{\prime}$
+        to: $-f^{\prime}(-x)=(2x+1)e^{2x}-1\Rightarrow -f^{\prime}(x)=(1-2x)e^{-2x}-1$
+        operation: 先写 $[f(-x)]^{\prime}=-f^{\prime}(-x)$，再做变量替换 $x\mapsto -x$。
+        why: 为回代求 $f(x)$ 做准备。
+      source_ref: page_0141_ex12_solution
+    - step_id: step_4
+      statement: 回代得到 $f(x)$，判断 B、C。
+      formula_trace:
+        from: $2f(x)=2x+1-e^{-2x}-f^{\prime}(x)$
+        to: $f(x)=x(1-e^{-2x}),\ f(0)=0$
+        operation: 把 step_3 的 $f^{\prime}(x)$ 表达式代入并化简。
+        why: $f(0)=0$ 成立，且 C 里的“$+$”号错误。
+      source_ref: page_0141_ex12_solution
+    - step_id: step_5
+      statement: 化简 D 的不等式为标准比较式。
+      formula_trace:
+        from: $e^x f(x)+\frac{x}{e^x}>e$
+        to: $xe^x>e$
+        operation: 代入 $f(x)=x(1-e^{-2x})$ 并约简。
+        why: 把复杂表达转成单函数单调性判定。
+      source_ref: page_0141_ex12_solution
+    - step_id: step_6
+      statement: 利用 $g(x)=xe^x$ 单调性解不等式并汇总。
+      formula_trace:
+        from: $g(x)=xe^x,\ g^{\prime}(x)=(x+1)e^x$
+        to: $g(1)=e,\ g(x)>e\iff x>1$
+        operation: 在 $x>-1$ 上用递增性比较到基准点 $x=1$。
+        why: D 正确，合并得答案 ABD。
+      source_ref: page_0141_ex12_solution
+teaching_card:
+  student_title: 先做对称代换，再做整体微分
+  what_it_trains: 训练把“$f(-x)$ 与 $f(x)$ 的指数关系”转成偶函数结构，再联立微分方程快速还原函数并完成多选判定。
+  recognition_cues:
+    - 题目同时给 $f(-x)$ 关系和 $2f+f^{\prime}$ 关系。
+    - 选项里既有奇偶性也有显式表达和不等式解集。
+    - 出现 $e^x f(x)+\frac{x}{e^x}$，常可整体化简。
+  normalization_moves:
+    - 把 $f(-x)=e^{2x}f(x)$ 写成 $F(-x)=F(x)$。
+    - 把 $2f+f^{\prime}$ 乘 $e^{2x}$ 写成乘积导数。
+    - 先定 $f(x)$ 再解 D，不要分开硬算。
+  common_failures:
+    - 把 $[f(-x)]^{\prime}$ 写成 $f^{\prime}(-x)$，漏掉负号。
+    - 把 $f(x)=x(1-e^{-2x})$ 误抄成 $x(1+e^{-2x})$。
+    - D 中忘记先化简，直接对复杂式求导。
+  similar_practice_query: 抽象函数 对称关系 f(-x) 指数整体代换 微分方程 不等式解集
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0141 页图与 markdown：例 12 的符号与答案一致，无需用户拍板。

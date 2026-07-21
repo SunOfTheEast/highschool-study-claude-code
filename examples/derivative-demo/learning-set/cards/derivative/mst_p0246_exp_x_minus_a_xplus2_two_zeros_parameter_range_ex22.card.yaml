@@ -1,0 +1,205 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0246_exp_x_minus_a_xplus2_two_zeros_parameter_range_ex22
+content_revision_id: mst_p0246_exp_x_minus_a_xplus2_two_zeros_parameter_range_ex22-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0246_exp_x_minus_a_xplus2_two_zeros_parameter_range_ex22.card.yaml
+stem: （2020 · 新课标 I 文科第二问）已知函数 $f(x)=e^x-a(x+2)$。若 $f(x)$ 有两个零点，求 $a$ 的取值范围。
+answer: |-
+  $a\in\left(\frac1e,+\infty\right)$。
+
+  若 $a\le0$，则 $f^\prime(x)=e^x-a>0$ 恒成立，$f$ 单调递增，不可能有两个零点。 若 $a>0$，由 $f^\prime(x)=e^x-a$ 得极小值点 $x=\ln a$，最小值 $f(\ln a)=a-a(\ln a+2)=-a(1+\ln a)$。要有两个零点，必须 $f(\ln a)<0$，即 $a>\frac1e$。充分性上，左侧取 $x=-2$，有 $f(-2)=e^{-2}>0$；又极值点右偏，右侧可取 $x=2\ln a+2$，并验证 $f(2\ln a+2)=e^2a^2-2a(\ln a+2)>0$。于是极小值两侧各有一个零点， 所以 $a$ 的取值范围为 $(\frac1e,+\infty)$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 先排除 $a\le0$。
+      max_score: 1
+    - step_id: step_2
+      description: 当 $a>0$ 时找唯一极小值点。
+      max_score: 1
+    - step_id: step_3
+      description: 必要条件来自极小值小于零。
+      max_score: 1
+    - step_id: step_4
+      description: 左侧用固定显点保证穿轴。
+      max_score: 1
+    - step_id: step_5
+      description: 右侧利用极值点右偏取对称点。
+      max_score: 1
+    - step_id: step_6
+      description: 验证右侧显点为正。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: main
+        goal: 求参数范围
+        target: 第 main 问
+        result: $a\in(\frac1e,+\infty)$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 对称化与偏移
+      - 局部逼近与找点
+      - 含参数分类讨论
+    subroute:
+      - 极小值必要条件
+      - 极值点右偏
+      - 左右显点取点
+      - 两侧介值定零点
+  structure:
+    primary: 极值点偏移结构
+    secondary:
+      - 指对复合结构
+      - 非对称结构
+      - 局部逼近结构
+    evidence:
+      - $e^x-a(x+2)$
+      - $x=\ln a$
+      - $f(\ln a)=-a(1+\ln a)$
+      - $x=-2$
+      - $x=2\ln a+2$
+      - $a>\frac1e$
+    normalization_moves_used:
+      - 按 $a$ 的符号先分类。
+      - 把两个零点条件转成极小值小于零。
+      - 左侧固定取 $x=-2$。
+      - 右侧按极值点对称位置取 $2\ln a+2$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由导数判断先减后增，回补导数单调极值基础。
+      - 若学生不会解 $-a(1+\ln a)<0$，回补指数对数基础。
+      - 若学生不会用两侧正值和中间负值证明两个零点，回补函数性质与图像。
+      - 若学生代入 $2\ln a+2$ 出错，回补代数恒等变形。
+      - 若学生不会理解极值点右偏取点，回补导数运算与几何意义。
+  detail_terms:
+    - $e^x-a(x+2)$
+    - $f^\prime(x)=e^x-a$
+    - $x=\ln a$
+    - $f(\ln a)=-a(1+\ln a)$
+    - $a>\frac1e$
+    - $f(-2)>0$
+    - $2\ln a+2$
+    - 极值点右偏
+    - 放缩取点
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0246_exp_x_minus_a_xplus2_two_zeros_parameter_range_ex22
+source_evidence:
+  source_refs:
+    - ref_id: page_0246_ex22_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0246/page_0246.md
+      role: problem_start
+      evidence: page_0246 例22：已知 $f(x)=e^x-a(x+2)$，若 $f(x)$ 有两个零点，求 $a$ 的取值范围。
+    - ref_id: page_0246_ex22_solution_monotonicity
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0246/page_0246.md
+      role: solution
+      evidence: 解析分 $a\le0$ 和 $a>0$；当 $a>0$ 时极小值点为 $x=\ln a$，最小值 $-a(1+\ln a)$。
+    - ref_id: page_0246_ex22_solution_offset
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0246/page_0246.md
+      role: solution
+      evidence: source 用极值点右偏：左侧 $f(-2)=e^{-2}>0$，右侧取 $2\ln a+2$ 得 $f(2\ln a+2)>0$，从而两侧都有零点。
+    - ref_id: page_0246_ex22_figure
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0246/page_0246.md
+      role: figure_context
+      evidence: page_0246 图示 $f(x)=e^x-a(x+2)$ 及关于极值点横坐标的对称点 $2\ln a-x$。
+    - ref_id: page_0246_ex21_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0246/page_0246.md
+      role: local_context
+      evidence: 例22前的 exposition 说明极值点右偏与放缩取点的通用思路，为例22提供方法背景。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0246.png
+      inspected: true
+      notes: 已核对页图：例22完整位于 page_0246，含函数图像和极值点偏移取点说明。
+  source_context: 本卡只处理 page_0246 例22；page_0247 的例23/例24留给下一批。
+  source_influence:
+    - 保留 source 的参数分段：$a\le0$ 时单调递增，不可能两个零点。
+    - 保留 source 的核心条件：$f(\ln a)=-a(1+\ln a)<0$，得到 $a>\frac1e$。
+    - 保留 source 的左侧取点：$f(-2)=e^{-2}>0$。
+    - 保留 source 的极值点右偏取点：右侧取 $x=2\ln a+2$。
+  source_discrepancies: []
+original_problem:
+  stem: （2020 · 新课标 I 文科第二问）已知函数 $f(x)=e^x-a(x+2)$。若 $f(x)$ 有两个零点，求 $a$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $a\in\left(\frac1e,+\infty\right)$。
+  fidelity_notes:
+    - 单问求参数范围题，无选项。
+    - 题目核心是“有两个零点”而不是直接证明不等式。
+solution:
+  source_solution_summary: 若 $a\le0$，则 $f^\prime(x)=e^x-a>0$ 恒成立，$f$ 单调递增，不可能有两个零点。 若 $a>0$，由 $f^\prime(x)=e^x-a$ 得极小值点 $x=\ln a$，最小值 $f(\ln a)=a-a(\ln a+2)=-a(1+\ln a)$。要有两个零点，必须 $f(\ln a)<0$，即 $a>\frac1e$。充分性上，左侧取 $x=-2$，有 $f(-2)=e^{-2}>0$；又极值点右偏，右侧可取 $x=2\ln a+2$，并验证 $f(2\ln a+2)=e^2a^2-2a(\ln a+2)>0$。于是极小值两侧各有一个零点， 所以 $a$ 的取值范围为 $(\frac1e,+\infty)$。
+  key_steps:
+    - step_id: step_1
+      statement: 先排除 $a\le0$。
+      formula_trace:
+        from: $f^\prime(x)=e^x-a$
+        to: $a\le0\Rightarrow f^\prime(x)>0$
+        operation: 按参数符号判导数。
+        why: 单调函数最多一个零点，不符合两个零点。
+      source_ref: page_0246_ex22_solution_monotonicity
+    - step_id: step_2
+      statement: 当 $a>0$ 时找唯一极小值点。
+      formula_trace:
+        from: $e^x-a=0$
+        to: $x=\ln a$
+        operation: 解导数零点。
+        why: 函数先减后增，两个零点必须围绕极小值点。
+      source_ref: page_0246_ex22_solution_monotonicity
+    - step_id: step_3
+      statement: 必要条件来自极小值小于零。
+      formula_trace:
+        from: $f(\ln a)=a-a(\ln a+2)$
+        to: $-a(1+\ln a)<0\Leftrightarrow a>\frac1e$
+        operation: 代入极小值点并解不等式。
+        why: 极小值不低于零时无法穿过 $x$ 轴两次。
+      source_ref: page_0246_ex22_solution_monotonicity
+    - step_id: step_4
+      statement: 左侧用固定显点保证穿轴。
+      formula_trace:
+        from: $x=-2$
+        to: $f(-2)=e^{-2}>0$
+        operation: 代入左侧显点。
+        why: 左端正值、极小值负值，中间必有左零点。
+      source_ref: page_0246_ex22_solution_offset
+    - step_id: step_5
+      statement: 右侧利用极值点右偏取对称点。
+      formula_trace:
+        from: $x=-2$ 关于 $x=\ln a$ 的对称点
+        to: $x=2\ln a+2$
+        operation: 围绕极值点横坐标取对称点。
+        why: 极值点右偏让右侧同距点函数值更高，适合作右侧正值点。
+      source_ref: page_0246_ex22_solution_offset
+    - step_id: step_6
+      statement: 验证右侧显点为正。
+      formula_trace:
+        from: $f(2\ln a+2)$
+        to: $e^2a^2\left(1-2\frac{\ln(e^2a)}{e^2a}\right)>0$
+        operation: 代入并用 $a>\frac1e$ 下的指数对数估计。
+        why: 右侧正值、极小值负值，中间必有右零点。
+      source_ref: page_0246_ex22_solution_offset
+teaching_card:
+  student_title: 用极值点右偏给两个零点找边界
+  what_it_trains: 训练先用极小值给参数必要条件，再用极值点偏移在左右两侧各找一个正值点，证明两个零点确实存在。
+  recognition_cues:
+    - 题目只问“两个零点”的参数范围。
+    - $f^\prime(x)=e^x-a$，极值点能直接写成 $\ln a$。
+    - 左边有固定点 $x=-2$ 让一次项消掉。
+    - 右边自然取关于 $x=\ln a$ 对称的点 $2\ln a+2$。
+  normalization_moves:
+    - 先排除 $a\le0$。
+    - 用极小值 $f(\ln a)<0$ 得到 $a>\frac1e$。
+    - 左侧代 $x=-2$。
+    - 右侧用极值点右偏取 $2\ln a+2$。
+    - 用介值性说明左右各有一个零点。
+  common_failures:
+    - 只写必要条件 $a>\frac1e$，忘记证明充分性。
+    - 不知道右侧显点为什么取 $2\ln a+2$。
+    - 把极值点右偏误解成普通轴对称。
+    - 没有先处理 $a\le0$ 的单调情形。
+  similar_practice_query: e^x-a(x+2) 两个零点 参数范围 极值点右偏 2ln a+2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

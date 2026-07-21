@@ -1,0 +1,281 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0111_exp_log_common_tangent_ex20
+content_revision_id: mst_p0111_exp_log_common_tangent_ex20-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0111_exp_log_common_tangent_ex20.card.yaml
+stem: |-
+  （2023 浙江精诚联盟考前模拟 · 多选 T12）已知两曲线 $y=e^x$ 与 $y=\ln x+a$，则下列结论正确的是（  ）
+  A. 若两曲线只有一个交点，则这个交点的横坐标 $x\in(1,2)$
+  B. 若 $a=3$，则两曲线只有一条公切线
+  C. 若 $a=2$，则两曲线有两条公切线，且两条公切线的斜率之积为 $e$
+  D. 若 $a=1$，$P$，$Q$ 分别是两曲线上的点，则 $P,Q$ 两点距离的最小值为 $1$
+answer: |
+  C
+
+  设 $H_a(x)=e^x-\ln x-a$。若两曲线只有一个交点，则严格凸函数
+  $H_a$ 的唯一零点必须也是极小点，故交点处两曲线相切：
+  $e^{x_0}=\frac1{x_0}$，即 $x_0e^{x_0}=1$。因为
+  $xe^x$ 在 $x>0$ 上递增，且 $0\cdot e^0<1<1\cdot e$，
+  所以 $x_0\in(0,1)$，A 错误。
+  公切线可设在 $y=e^x$ 上切于 $(t,e^t)$，在
+  $y=\ln x+a$ 上切于 $(s,\ln s+a)$。两切线重合时
+  $e^t=\frac1s$，且 $(1-t)e^t=\ln s+a-1$。
+  由 $s=e^{-t}$ 得公共切线参数方程
+  $a=1+t+(1-t)e^t$。当 $a=3$ 时该方程无解，故不是只有一条公切线，B 错误。
+  当 $a=2$ 时方程化为 $(1-t)(e^t-1)=0$，所以
+  $t=0$ 或 $t=1$，两条公切线斜率分别为 $1$ 与 $e$，
+  乘积为 $e$，C 正确。
+  当 $a=1$ 时，为反驳“最小值为 1”，取
+  $P=(0,1)$ 在 $y=e^x$ 上，取
+  $Q=(e^{-1/2},1/2)$ 在 $y=\ln x+1$ 上，则
+  $PQ^2=e^{-1}+\frac14<1$，故最小距离小于 1，D 错误。故选 C。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 把唯一交点转成相切条件，判断 A。
+      max_score: 1
+    - step_id: step_2
+      description: 定位 $x_0$ 的区间。
+      max_score: 1
+    - step_id: step_3
+      description: 建立一般公切线切点参数方程。
+      max_score: 1
+    - step_id: step_4
+      description: 判断 B。
+      max_score: 1
+    - step_id: step_5
+      description: 判断 C。
+      max_score: 1
+    - step_id: step_6
+      description: 求 C 中两条公切线斜率乘积。
+      max_score: 1
+    - step_id: step_7
+      description: 用具体点反驳 D 的“最小值为 1”。
+      max_score: 1
+    - step_id: step_8
+      description: 汇总正确选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何性质证明
+    part_level:
+      - part_id: A
+        goal: 几何量求解
+        target: A：由唯一交点判断交点横坐标范围。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 几何量求解
+        target: B、C：判断两曲线公切线条数和斜率乘积。
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 极值最值
+        target: D：判断两曲线点间距离最小值说法。
+        result: 见 source_solution_summary
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 数形结合
+      - 显隐点探路
+      - 局部逼近与找点
+    subroute:
+      - 唯一交点即相切
+      - 公切线切点参数化
+      - 斜率截距匹配
+      - 反例判伪
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+      - 局部逼近结构
+    evidence:
+      - $H_a^{\prime\prime}(x)>0$ 使“唯一交点”转成“极小点相切”。
+      - $a=1+t+(1-t)e^t$ 把公切线条数压缩成切点参数方程的解数。
+      - $a=2$ 时 $t=0,1$ 对应斜率 $1,e$。
+      - $P=(0,1)$、$Q=(e^{-1/2},1/2)$ 给出 D 的直接反例。
+    normalization_moves_used:
+      - 把两曲线交点问题转成 $H_a(x)=0$ 的凸函数零点问题。
+      - 把两条切线都整理成斜截式，比较斜率和截距。
+      - 用 $s=e^{-t}$ 消去对数曲线切点，统一到 $t$。
+      - 对“最小值为 1”采用反例判伪，避免不必要地求精确最小值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由唯一交点联想到相切，回补函数性质与图像。
+      - 若学生不会写 $y=e^x$ 和 $y=\ln x+a$ 的切线方程，回补导数运算与几何意义。
+      - 若学生不会从 $e^t=1/s$ 得到 $s=e^{-t}$，回补指数对数基础。
+      - 若学生在 $A(t)=1+t+(1-t)e^t$ 的解数判断中卡住，回补导数单调极值基础。
+      - 若学生误以为距离题必须求精确最小值才能判错，回补不等式工具基础。
+  detail_terms:
+    - $y=e^x$
+    - $y=\ln x+a$
+    - $x_0e^{x_0}=1$
+    - $a=1+t+(1-t)e^t$
+    - $a=2$
+    - 斜率 $1,e$
+    - 答案 C
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0111_exp_log_common_tangent_ex20
+source_evidence:
+  source_refs:
+    - ref_id: page_0111_ex20_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0111/page_0111.md
+      role: problem_start
+      evidence: lines 27-32 give 例 20 题头、stem and A-D choices; the markdown has a layout marker after “是”.
+    - ref_id: page_0111_ex20_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0111/page_0111.md
+      role: solution
+      evidence: "lines 34-54 start the solution: A is judged from $x_0e^{x_0}=1$; B from the $a=3$ graph and sign checks; C starts by writing tangent equations for $a=2$."
+    - ref_id: page_0112_ex20_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0112/page_0112.md
+      role: continuation
+      evidence: lines 14-18 finish C by solving $t=0$ or $t=1$, then judge D and conclude the answer is C before 例 21 starts.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0111.png
+      inspected: true
+      notes: 已核对 page_0111：例 20 题干处原图显示“则下列结论正确的是（ ）”，markdown 中的 layout marker 可消解为普通多选题括号；图像和 A-D 选项与页面一致。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0112.png
+      inspected: true
+      notes: 已核对 page_0112：页首为例 20 续解，给出 C 正确、D 错误、故选 C；page_0112 中部另起例 21，不纳入本卡。
+  source_context: page_0111 顶部是例 19 续解，按题头规则跳过；例 20 从 page_0111 起头，解析跨到 page_0112 顶部。
+  source_influence:
+    - 保留源页的题干、A-D 选项和最终答案 C。
+    - 保留源页对 A 的思路：只有一个交点时交点处必须相切，得到 $x_0e^{x_0}=1$。
+    - 保留源页对 C 的核心计算：设 $y=e^x$ 的切点横坐标为 $t$，$y=\ln x+2$ 的切点横坐标为 $s$，由两条切线重合解出 $t=0$ 或 $t=1$。
+    - 保留源页图像对 $a=3$、$a=1$ 的辅助判断，但对 D 的“最小值”说法只用于判伪，不照搬为精确最小值结论。
+  source_discrepancies:
+    - "page_0111 markdown 在例 20 题干末尾保留 `[?layout: | | ...]`；页图可见这是多选题常见空括号“（ ）”附近的排版痕迹，本卡题干按“则下列结论正确的是（ ）”录入。"
+    - page_0112 line 18 将两条支撑切线 $y=x+1$ 与 $y=x$ 的距离直接称为 $P,Q$ 两点距离最小值 $\frac{\sqrt2}{2}$；该等号源页未证明。本卡判断 D 时改用具体点 $P=(0,1)$、$Q=(e^{-1/2},1/2)$，距离小于 1，足以推出 D 错误；源页最终答案 C 不受影响。
+original_problem:
+  stem: （2023 浙江精诚联盟考前模拟 · 多选 T12）已知两曲线 $y=e^x$ 与 $y=\ln x+a$，则下列结论正确的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 若两曲线只有一个交点，则这个交点的横坐标 $x\in(1,2)$
+      text_latex: 若两曲线只有一个交点，则这个交点的横坐标 $x\in(1,2)$
+    - label: B
+      text_raw: 若 $a=3$，则两曲线只有一条公切线
+      text_latex: 若 $a=3$，则两曲线只有一条公切线
+    - label: C
+      text_raw: 若 $a=2$，则两曲线有两条公切线，且两条公切线的斜率之积为 $e$
+      text_latex: 若 $a=2$，则两曲线有两条公切线，且两条公切线的斜率之积为 $e$
+    - label: D
+      text_raw: 若 $a=1$，$P$，$Q$ 分别是两曲线上的点，则 $P,Q$ 两点距离的最小值为 $1$
+      text_latex: 若 $a=1$，$P$，$Q$ 分别是两曲线上的点，则 $P,Q$ 两点距离的最小值为 $1$
+  answer: C
+  fidelity_notes:
+    - 题干中的 layout marker 已经通过 page_0111 页图消解为普通选择题括号。
+    - 解析从 page_0111 续到 page_0112 顶部；page_0112 line 20 起为例 21，不属于本题。
+    - D 项源解给出的精确最小值论证不足；本卡只保留足以判定 D 错误的距离小于 1 证据。
+solution:
+  source_solution_summary: |
+    设 $H_a(x)=e^x-\ln x-a$。若两曲线只有一个交点，则严格凸函数
+    $H_a$ 的唯一零点必须也是极小点，故交点处两曲线相切：
+    $e^{x_0}=\frac1{x_0}$，即 $x_0e^{x_0}=1$。因为
+    $xe^x$ 在 $x>0$ 上递增，且 $0\cdot e^0<1<1\cdot e$，
+    所以 $x_0\in(0,1)$，A 错误。
+    公切线可设在 $y=e^x$ 上切于 $(t,e^t)$，在
+    $y=\ln x+a$ 上切于 $(s,\ln s+a)$。两切线重合时
+    $e^t=\frac1s$，且 $(1-t)e^t=\ln s+a-1$。
+    由 $s=e^{-t}$ 得公共切线参数方程
+    $a=1+t+(1-t)e^t$。当 $a=3$ 时该方程无解，故不是只有一条公切线，B 错误。
+    当 $a=2$ 时方程化为 $(1-t)(e^t-1)=0$，所以
+    $t=0$ 或 $t=1$，两条公切线斜率分别为 $1$ 与 $e$，
+    乘积为 $e$，C 正确。
+    当 $a=1$ 时，为反驳“最小值为 1”，取
+    $P=(0,1)$ 在 $y=e^x$ 上，取
+    $Q=(e^{-1/2},1/2)$ 在 $y=\ln x+1$ 上，则
+    $PQ^2=e^{-1}+\frac14<1$，故最小距离小于 1，D 错误。故选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 把唯一交点转成相切条件，判断 A。
+      formula_trace:
+        from: $H_a(x)=e^x-\ln x-a$ 只有一个零点
+        to: $H_a^{\prime}(x_0)=0,\quad e^{x_0}=\frac1{x_0},\quad x_0e^{x_0}=1$
+        operation: 利用 $H_a^{\prime\prime}(x)=e^x+\frac1{x^2}>0$，唯一零点必须在极小点处。
+        why: 若严格凸函数只与 $x$ 轴相交一次，该点就是相切点。
+      source_ref: page_0111_ex20_solution_start
+    - step_id: step_2
+      statement: 定位 $x_0$ 的区间。
+      formula_trace:
+        from: $x_0e^{x_0}=1,\quad x_0>0$
+        to: $x_0\in(0,1)$
+        operation: 用 $xe^x$ 在 $x>0$ 上递增，且 $0<1<e$。
+        why: 交点横坐标不在 $(1,2)$，所以 A 错误。
+      source_ref: page_0111_ex20_solution_start
+    - step_id: step_3
+      statement: 建立一般公切线切点参数方程。
+      formula_trace:
+        from: $y=e^x$ 在 $t$ 处切线 $y=e^t x+(1-t)e^t$；$y=\ln x+a$ 在 $s$ 处切线 $y=\frac1s x+\ln s+a-1$
+        to: $e^t=\frac1s,\quad (1-t)e^t=\ln s+a-1,\quad a=1+t+(1-t)e^t$
+        operation: 比较两条切线的斜率和截距，并由 $s=e^{-t}$ 消去 $s$。
+        why: B、C 两项都问公切线条数，统一成一个切点参数方程最清楚。
+      source_ref: page_0111_ex20_solution_start
+    - step_id: step_4
+      statement: 判断 B。
+      formula_trace:
+        from: $A(t)=1+t+(1-t)e^t,\quad A^{\prime}(t)=1-te^t$
+        to: $A(t)<3\ \text{对所有实数 }t\text{ 成立，故 }a=3\text{ 时无公切线}$
+        operation: 当 $t\le0$ 时 $A(t)\le2$；当 $t>0$ 时最大点满足 $te^t=1$，最大值为 $t+1/t<3$。
+        why: 选项 B 说“只有一条公切线”，但实际没有公切线。
+      source_ref: page_0111_ex20_solution_start
+    - step_id: step_5
+      statement: 判断 C。
+      formula_trace:
+        from: $a=2,\quad (1-t)e^t=\ln s+1,\quad s=e^{-t}$
+        to: $(1-t)e^t=1-t,\quad t=0\text{ 或 }t=1$
+        operation: 代入 $a=2$ 后化为 $(1-t)(e^t-1)=0$。
+        why: 两个 $t$ 值对应两条不同公切线。
+      source_ref: page_0112_ex20_continuation
+    - step_id: step_6
+      statement: 求 C 中两条公切线斜率乘积。
+      formula_trace:
+        from: $t=0\text{ 或 }t=1,\quad \text{斜率}=e^t$
+        to: $k_1=1,\quad k_2=e,\quad k_1k_2=e$
+        operation: 把切点横坐标代回指数曲线切线斜率。
+        why: 这正是选项 C 的斜率乘积结论。
+      source_ref: page_0112_ex20_continuation
+    - step_id: step_7
+      statement: 用具体点反驳 D 的“最小值为 1”。
+      formula_trace:
+        from: $P=(0,1)\in y=e^x,\quad Q=(e^{-1/2},1/2)\in y=\ln x+1$
+        to: $PQ^2=e^{-1}+\frac14<1$
+        operation: 直接选取两曲线上的点并计算距离平方。
+        why: 存在一组点距离小于 1，则两点距离的最小值不可能等于 1。
+      source_ref: page_0112_ex20_continuation
+    - step_id: step_8
+      statement: 汇总正确选项。
+      formula_trace:
+        from: A 错误，B 错误，C 正确，D 错误
+        to: 答案 C
+        operation: 逐项合并判断。
+        why: 源页结论也是故选 C。
+      source_ref: page_0112_ex20_continuation
+teaching_card:
+  student_title: 用切点参数数清 $e^x$ 与 $\ln x+a$ 的公切线
+  what_it_trains: 训练把指数函数和对数函数的交点、公切线、距离判断统一到切线方程和切点参数上。
+  recognition_cues:
+    - 题目同时出现 $y=e^x$ 与 $y=\ln x+a$，并问交点、公切线、距离。
+    - “只有一个交点”对严格凸差函数通常意味着相切。
+    - “公切线条数、斜率乘积”要设两个切点，而不是只画图猜。
+    - “最小值为 1”这类选项，找到距离小于 1 的具体点即可判错。
+  normalization_moves:
+    - 设 $H_a(x)=e^x-\ln x-a$，用 $H_a^{\prime\prime}>0$ 分析唯一交点。
+    - 设指数曲线切点为 $t$、对数曲线切点为 $s$，比较切线的斜率和截距。
+    - 由 $e^t=1/s$ 消去 $s$，得到 $a=1+t+(1-t)e^t$。
+    - 在 $a=2$ 时直接解 $(1-t)(e^t-1)=0$。
+    - D 项取 $P=(0,1)$、$Q=(e^{-1/2},1/2)$，用距离小于 1 判伪。
+  common_failures:
+    - 把 $x_0e^{x_0}=1$ 的解误放到 $(1,2)$，没有先看 $xe^x$ 在正半轴递增。
+    - 求公切线时只令斜率相等，忘记截距也必须相同。
+    - 把源图中两曲线有两个交点误当成“有一条公切线”。
+    - D 项被 $P=(0,1)$、$Q=(1,1)$ 的距离等于 1 迷惑，忽略还可以选更近的点。
+  similar_practice_query: e^x ln x+a 公切线 切点参数 斜率乘积 多选
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0111 题干 layout marker 已由页图和多选题上下文消解为普通“（ ）”，无需用户拍板。
+    - page_0112 顶部确认例 20 解析在例 21 前结束，源页答案为 C。
+    - D 项源解的精确最小值论证不足；本卡用具体点距离小于 1 判 D 错，保留源页最终答案。

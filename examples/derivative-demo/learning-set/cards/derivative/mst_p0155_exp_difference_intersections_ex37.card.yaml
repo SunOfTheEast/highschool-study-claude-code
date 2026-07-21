@@ -1,0 +1,245 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0155_exp_difference_intersections_ex37
+content_revision_id: mst_p0155_exp_difference_intersections_ex37-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0155_exp_difference_intersections_ex37.card.yaml
+stem: |-
+  （2023·盐城一模）设 $a,b\in\mathbf{R}$，$4^b=6^a-2^a$，$5^a=6^b-2^b$，则（  ）
+  A. $1<a<b$
+  B. $0<b<a$
+  C. $b<0<a$
+  D. $b<a<1$
+answer: |
+  A
+
+  先看
+  \[
+  4^b=6^a-2^a.
+  \]
+  比较
+  \[
+  y_1=4^x,\quad y_2=6^x-2^x.
+  \]
+  由
+  \[
+  4^1=6^1-2^1=4
+  \]
+  知交点为 $(1,4)$。并且图像上 $x>1$ 时 $y_2>y_1$，故同高比较得到两种可能：
+  \[
+  b>a>1 \quad\text{或}\quad 1>a>b.
+  \]
+  再看
+  \[
+  5^a=6^b-2^b.
+  \]
+  令
+  \[
+  y_3=5^x.
+  \]
+  有
+  \[
+  5^1>6^1-2^1,\qquad 5^2<6^2-2^2,
+  \]
+  所以 $y_3$ 与 $y_2$ 交点 $x_0\in(1,2)$；当 $x<x_0$ 时 $y_3>y_2$，当 $x>x_0$ 时 $y_3<y_2$。
+  若落在 $x<1$ 区间，则由同高比较可得 $b>a$，与前一式在该区间给出的 $a>b$ 矛盾，故 $1>a>b$ 不可能。
+  只能取
+  \[
+  b>a>1,
+  \]
+  即
+  \[
+  1<a<b.
+  \]
+  选 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 由第一式对应两曲线交点，得到区间二分结论。
+      max_score: 1
+    - step_id: step_2
+      description: 由第二式锁定 $y_3=5^x$ 与 $y_2=6^x-2^x$ 的交点区间。
+      max_score: 1
+    - step_id: step_3
+      description: 在 $x<1$ 假设下出现顺序矛盾，排除第二种模式。
+      max_score: 1
+    - step_id: step_4
+      description: 保留唯一可行模式并对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 由双方程联合约束判定 $a,b$ 的大小区间与顺序。
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 充分/必要性探路
+    subroute:
+      - 第一式先分两支
+      - 第二式反证排除
+      - 交点基准 $x=1$ 与 $x_0\in(1,2)$
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 非对称结构
+      - 同构结构
+    evidence:
+      - 两条条件都把指数差函数 $6^x-2^x$ 与不同指数函数做同高匹配。
+      - 比较不靠显式求解，而靠交点分区与同高横坐标。
+      - 最终顺序由“候选模式 + 排除矛盾”给出。
+    normalization_moves_used:
+      - 用 $(1,4)$ 固定第一式交点。
+      - 用 $x_0\in(1,2)$ 固定第二式比较区间。
+      - 把双式关系转成候选顺序并反证筛选。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把等式转成同高交点横坐标，回补函数性质与图像。
+      - 若学生不会由端点代值判断交点区间，回补导数单调极值基础。
+      - 若学生在“候选顺序与新条件对撞排除”环节卡住，回补代数恒等变形。
+  detail_terms:
+    - $y_2=6^x-2^x$
+    - 交点 $(1,4)$
+    - $x_0\in(1,2)$
+    - 先分支后排除
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0155_exp_difference_intersections_ex37
+source_evidence:
+  source_refs:
+    - ref_id: page_0155_ex37_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0155/page_0155.md
+      role: problem_start
+      evidence: 例37题头、题干与四个选项完整出现在 page_0155。
+    - ref_id: page_0155_ex37_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0155/page_0155.md
+      role: solution
+      evidence: 解析先用 $4^b=6^a-2^a$ 划分两种区间，再用 $5^a=6^b-2^b$ 配合 $x_0\in(1,2)$ 排除，结论选 A。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0155.png
+      inspected: true
+      notes: 已核对页图：两幅配图分别对应 $4^x$ 与 $6^x-2^x$，以及 $5^x$ 与 $6^x-2^x$，答案 A 清晰。
+  source_context: 例37在 page_0155 起止完整；其前是例36解析，其后是例38题头。
+  source_influence:
+    - 保留源解“先粗分两支，再用第二式排除”的双层判定结构。
+    - 保留关键基准：交点 $(1,4)$ 与 $x_0\in(1,2)$。
+    - 保留结论 $1<a<b$（选 A）。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·盐城一模）设 $a,b\in\mathbf{R}$，$4^b=6^a-2^a$，$5^a=6^b-2^b$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $1<a<b$
+      text_latex: $1<a<b$
+    - label: B
+      text_raw: $0<b<a$
+      text_latex: $0<b<a$
+    - label: C
+      text_raw: $b<0<a$
+      text_latex: $b<0<a$
+    - label: D
+      text_raw: $b<a<1$
+      text_latex: $b<a<1$
+  answer: A
+  fidelity_notes:
+    - 两条方程分别对应“差函数与指数函数”交点比较，题内配图是核心证据。
+    - 答案字母与 page_0155 源页一致为 A。
+solution:
+  source_solution_summary: |
+    先看
+    \[
+    4^b=6^a-2^a.
+    \]
+    比较
+    \[
+    y_1=4^x,\quad y_2=6^x-2^x.
+    \]
+    由
+    \[
+    4^1=6^1-2^1=4
+    \]
+    知交点为 $(1,4)$。并且图像上 $x>1$ 时 $y_2>y_1$，故同高比较得到两种可能：
+    \[
+    b>a>1 \quad\text{或}\quad 1>a>b.
+    \]
+    再看
+    \[
+    5^a=6^b-2^b.
+    \]
+    令
+    \[
+    y_3=5^x.
+    \]
+    有
+    \[
+    5^1>6^1-2^1,\qquad 5^2<6^2-2^2,
+    \]
+    所以 $y_3$ 与 $y_2$ 交点 $x_0\in(1,2)$；当 $x<x_0$ 时 $y_3>y_2$，当 $x>x_0$ 时 $y_3<y_2$。
+    若落在 $x<1$ 区间，则由同高比较可得 $b>a$，与前一式在该区间给出的 $a>b$ 矛盾，故 $1>a>b$ 不可能。
+    只能取
+    \[
+    b>a>1,
+    \]
+    即
+    \[
+    1<a<b.
+    \]
+    选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 由第一式对应两曲线交点，得到区间二分结论。
+      formula_trace:
+        from: $4^b=6^a-2^a$
+        to: $b>a>1$ 或 $1>a>b$
+        operation: 以 $(1,4)$ 为锚点做同高横坐标比较。
+        why: 先把解空间压缩到两种顺序模式。
+      source_ref: page_0155_ex37_solution
+    - step_id: step_2
+      statement: 由第二式锁定 $y_3=5^x$ 与 $y_2=6^x-2^x$ 的交点区间。
+      formula_trace:
+        from: $5^1>6^1-2^1,\ 5^2<6^2-2^2$
+        to: $x_0\in(1,2)$，且 $x<x_0$ 时 $y_3>y_2$
+        operation: 端点代值 + 连续性判交点。
+        why: 为排除“全在 1 左侧”情形准备比较规则。
+      source_ref: page_0155_ex37_solution
+    - step_id: step_3
+      statement: 在 $x<1$ 假设下出现顺序矛盾，排除第二种模式。
+      formula_trace:
+        from: $1>a>b$ 与 $5^a=6^b-2^b$
+        to: 同高比较推出 $b>a$，矛盾
+        operation: 把第二式的同高关系与第一式的候选顺序对撞。
+        why: 实现必要性排除。
+      source_ref: page_0155_ex37_solution
+    - step_id: step_4
+      statement: 保留唯一可行模式并对应选项。
+      formula_trace:
+        from: 只剩 $b>a>1$
+        to: $1<a<b$，选 A
+        operation: 改写为选项顺序。
+        why: 得到最终答案。
+      source_ref: page_0155_ex37_solution
+teaching_card:
+  student_title: 差函数双约束下的先分支后排除
+  what_it_trains: 训练把两条方程拆成两次曲线同高比较，先得到候选顺序，再用第二个约束剔除矛盾分支。
+  recognition_cues:
+    - 同一差函数 $6^x-2^x$ 同时与两个指数函数配对。
+    - 题目不是求值，而是区间与顺序判断。
+    - 选项包含“是否大于 1”与“a,b 谁大”两层信息。
+  normalization_moves:
+    - 先用第一式在基准点 $x=1$ 处分区。
+    - 再用第二式的交点 $x_0$ 做反证排除。
+    - 只保留能同时满足两式的顺序模式。
+  common_failures:
+    - 只根据第一式就直接作答，未用第二式复核。
+    - 知道 $x_0\in(1,2)$ 但不会转换成同高横坐标大小规律。
+    - 把“$1>a>b$”误当可行，遗漏与第二式的矛盾。
+  similar_practice_query: 6^x-2^x 与 4^x 5^x 双方程 同高交点 排除法
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

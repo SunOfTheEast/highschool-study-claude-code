@@ -1,0 +1,270 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0149_four_statements_ln_compare_ex20
+content_revision_id: mst_p0149_four_statements_ln_compare_ex20-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0149_four_statements_ln_compare_ex20.card.yaml
+stem: |-
+  下列四个命题：① $\ln5<\sqrt5\ln2$；② $\ln\pi>\sqrt{\frac\pi e}$；③ $2^{\sqrt{11}}<11$；④ $3e\ln2>4\sqrt2$；其中真命题的个数是（ ）
+  A. 1
+  B. 2
+  C. 3
+  D. 4
+answer: |
+  B
+
+  设模板函数
+  \[
+  f(x)=\frac{\ln x}{x}.
+  \]
+  ① 若 $\ln5<\sqrt5\ln2$，则
+  \[
+  \frac{\ln\sqrt5}{\sqrt5}<\frac{\ln2}{2}.
+  \]
+  但 $2<\sqrt5<e$ 且 $f$ 在 $(0,e)$ 递增，应有
+  \[
+  \frac{\ln\sqrt5}{\sqrt5}>\frac{\ln2}{2},
+  \]
+  矛盾，所以①假。
+  ②
+  \[
+  \frac{\ln\pi}{\sqrt\pi}
+  =
+  \frac{2\ln\sqrt\pi}{\sqrt\pi}
+  >
+  \frac{2\ln\sqrt e}{\sqrt e}
+  =
+  \frac1{\sqrt e},
+  \]
+  （因 $\sqrt e<\sqrt\pi<e$，在增区比较），故
+  \[
+  \ln\pi>\sqrt{\frac\pi e},
+  \]
+  ②真。
+  ③ 比较 $2^{\sqrt{11}}$ 与 $11=(\sqrt{11})^2$，等价比较
+  \[
+  \frac{\ln2}{2}\ \text{与}\ \frac{\ln\sqrt{11}}{\sqrt{11}}.
+  \]
+  源解用 $f(2)=f(4)$：
+  \[
+  \frac{\ln2}{2}=\frac{\ln4}{4}<\frac{\ln\sqrt{11}}{\sqrt{11}},
+  \]
+  故 $2^{\sqrt{11}}<11$，③真。
+  ④ 比较 $3e\ln2$ 与 $4\sqrt2$，等价比较
+  \[
+  \frac{\ln\sqrt8}{\sqrt8}\ \text{与}\ \frac1e.
+  \]
+  由于 $f(x)$ 最大值为 $\frac1e$，有
+  \[
+  \frac{\ln\sqrt8}{\sqrt8}<\frac1e,
+  \]
+  得 $3e\ln2<4\sqrt2$，故④假。
+  综上真命题为②③，共 2 个，选 B。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 统一模型为 $f(x)=\frac{\ln x}{x}$。
+      max_score: 1
+    - step_id: step_2
+      description: 判①为假。
+      max_score: 1
+    - step_id: step_3
+      description: 判②为真。
+      max_score: 1
+    - step_id: step_4
+      description: 判③为真。
+      max_score: 1
+    - step_id: step_5
+      description: 判④为假并统计个数。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 抽象函数性质
+        target: 判断四个命题真假并统计。
+        result: 见 source_solution_summary
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 六大同构函数比大小
+      - $f(2)=f(4)$ 偏移转换
+      - 峰值 $\frac1e$ 判界
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - 四个子命题都可落到 $\frac{\ln x}{x}$ 的比较。
+      - 涉及增区、减区与峰值三类局部信息。
+    normalization_moves_used:
+      - $\ln$ 幂比较同构为 $\frac{\ln x}{x}$。
+      - $\frac{\ln2}{2}=\frac{\ln4}{4}$。
+      - 用 $\max f=\frac1e$ 否定④。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把幂比较转为对数比值比较，回补指数对数基础。
+      - 若学生不熟悉 $f(x)=\frac{\ln x}{x}$ 的增减区间，回补导数单调极值基础。
+      - 若学生不会用“真命题个数”做汇总，回补代数恒等变形。
+  detail_terms:
+    - $f(x)=\frac{\ln x}{x}$
+    - $f(2)=f(4)$
+    - 峰值 $\frac1e$
+    - ①错②对③对④错
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0149_four_statements_ln_compare_ex20
+source_evidence:
+  source_refs:
+    - ref_id: page_0149_ex20_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0149/page_0149.md
+      role: problem_start
+      evidence: 例20题干给出四个命题 ①~④，问真命题个数。
+    - ref_id: page_0149_ex20_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0149/page_0149.md
+      role: solution
+      evidence: 例20解析逐条判断：①错、②对、③对、④错，故真命题个数为2，选 B。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0149.png
+      inspected: false
+      notes: 本次仅按 source markdown 重建，未重新人工核对页图。
+  source_context: 本题把 $f(x)=\frac{\ln x}{x}$ 模型用于四条真假判断，覆盖增区、减区与 $f(2)=f(4)$ 技巧。
+  source_influence:
+    - 保留源解按 ①②③④ 逐条判真假的结构。
+    - 保留源解在③中使用 $f(2)=f(4)$ 绕开 $2<e<\sqrt{11}$ 的难比较区间。
+  source_discrepancies: []
+original_problem:
+  stem: 下列四个命题：① $\ln5<\sqrt5\ln2$；② $\ln\pi>\sqrt{\frac\pi e}$；③ $2^{\sqrt{11}}<11$；④ $3e\ln2>4\sqrt2$；其中真命题的个数是（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: "1"
+      text_latex: $1$
+    - label: B
+      text_raw: "2"
+      text_latex: $2$
+    - label: C
+      text_raw: "3"
+      text_latex: $3$
+    - label: D
+      text_raw: "4"
+      text_latex: $4$
+  answer: B
+  fidelity_notes:
+    - 源解结论为 ①错②对③对④错，对应真命题 2 个。
+solution:
+  source_solution_summary: |
+    设模板函数
+    \[
+    f(x)=\frac{\ln x}{x}.
+    \]
+    ① 若 $\ln5<\sqrt5\ln2$，则
+    \[
+    \frac{\ln\sqrt5}{\sqrt5}<\frac{\ln2}{2}.
+    \]
+    但 $2<\sqrt5<e$ 且 $f$ 在 $(0,e)$ 递增，应有
+    \[
+    \frac{\ln\sqrt5}{\sqrt5}>\frac{\ln2}{2},
+    \]
+    矛盾，所以①假。
+    ②
+    \[
+    \frac{\ln\pi}{\sqrt\pi}
+    =
+    \frac{2\ln\sqrt\pi}{\sqrt\pi}
+    >
+    \frac{2\ln\sqrt e}{\sqrt e}
+    =
+    \frac1{\sqrt e},
+    \]
+    （因 $\sqrt e<\sqrt\pi<e$，在增区比较），故
+    \[
+    \ln\pi>\sqrt{\frac\pi e},
+    \]
+    ②真。
+    ③ 比较 $2^{\sqrt{11}}$ 与 $11=(\sqrt{11})^2$，等价比较
+    \[
+    \frac{\ln2}{2}\ \text{与}\ \frac{\ln\sqrt{11}}{\sqrt{11}}.
+    \]
+    源解用 $f(2)=f(4)$：
+    \[
+    \frac{\ln2}{2}=\frac{\ln4}{4}<\frac{\ln\sqrt{11}}{\sqrt{11}},
+    \]
+    故 $2^{\sqrt{11}}<11$，③真。
+    ④ 比较 $3e\ln2$ 与 $4\sqrt2$，等价比较
+    \[
+    \frac{\ln\sqrt8}{\sqrt8}\ \text{与}\ \frac1e.
+    \]
+    由于 $f(x)$ 最大值为 $\frac1e$，有
+    \[
+    \frac{\ln\sqrt8}{\sqrt8}<\frac1e,
+    \]
+    得 $3e\ln2<4\sqrt2$，故④假。
+    综上真命题为②③，共 2 个，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 统一模型为 $f(x)=\frac{\ln x}{x}$。
+      formula_trace:
+        from: 四个命题分别含 $\ln$、幂与根式比较
+        to: 转换为若干 $\frac{\ln x}{x}$ 型大小判断
+        operation: 同构化处理。
+        why: 便于复用单调性与峰值结论。
+      source_ref: page_0149_ex20_solution
+    - step_id: step_2
+      statement: 判①为假。
+      formula_trace:
+        from: $\ln5<\sqrt5\ln2$
+        to: $\frac{\ln\sqrt5}{\sqrt5}<\frac{\ln2}{2}$ 与 $2<\sqrt5<e$ 增区结论矛盾
+        operation: 改写后与增区保序对照。
+        why: 源解据此否定①。
+      source_ref: page_0149_ex20_solution
+    - step_id: step_3
+      statement: 判②为真。
+      formula_trace:
+        from: $\sqrt e<\sqrt\pi<e$
+        to: $\frac{2\ln\sqrt\pi}{\sqrt\pi}>\frac{2\ln\sqrt e}{\sqrt e}=\frac1{\sqrt e}\Rightarrow \ln\pi>\sqrt{\frac\pi e}$
+        operation: 在增区比较 $f(\sqrt\pi)$ 与 $f(\sqrt e)$。
+        why: 源解直接给出②正确。
+      source_ref: page_0149_ex20_solution
+    - step_id: step_4
+      statement: 判③为真。
+      formula_trace:
+        from: $2^{\sqrt{11}}<11$
+        to: $\frac{\ln2}{2}=\frac{\ln4}{4}<\frac{\ln\sqrt{11}}{\sqrt{11}}$
+        operation: 转化为 $f$ 值比较并调用 $f(2)=f(4)$。
+        why: 绕开 $2<e<\sqrt{11}$ 的直接比较困难。
+      source_ref: page_0149_ex20_solution
+    - step_id: step_5
+      statement: 判④为假并统计个数。
+      formula_trace:
+        from: $3e\ln2>4\sqrt2$
+        to: $\frac{\ln\sqrt8}{\sqrt8}<\frac1e\Rightarrow 3e\ln2<4\sqrt2$，故真命题 2 个
+        operation: 利用 $f$ 的最大值 $\frac1e$。
+        why: 完成④及最终计数。
+      source_ref: page_0149_ex20_solution
+teaching_card:
+  student_title: 四命题统一到一个函数模型判真伪
+  what_it_trains: 训练把多命题真假题统一归约到单一函数模板，再分区间、峰值和特殊等值点逐条击破。
+  recognition_cues:
+    - 选项是“真命题个数”。
+    - 命题里重复出现 $\ln$ 与指数根式混合比较。
+    - 存在 $2,e,\pi,\sqrt{11}$ 等典型锚点。
+  normalization_moves:
+    - 先固定 $f(x)=\frac{\ln x}{x}$。
+    - 每条命题只做一件事：转同构后判区间方向。
+    - 最后再做真假计数。
+  common_failures:
+    - ③里直接比较 $2$ 与 $\sqrt{11}$，忽略 $f(2)=f(4)$。
+    - ④把“最大值”误当“任意点都等于最大值”。
+    - 真假判断对了但统计个数出错。
+  similar_practice_query: 四命题 真命题个数 lnx/x 比大小
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 本卡未核对 page_0149 原图，按重建 markdown 完成。

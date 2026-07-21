@@ -1,0 +1,181 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0078_tangent_ex07
+content_revision_id: mst_p0078_tangent_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0078_tangent_ex07.card.yaml
+stem: |-
+  （2023 江西九江高二期末 · 多选 T10）关于切线，下列结论正确的是（  ）
+  A. 过点 $\left(-\frac{1}{2}, \frac{\sqrt{3}}{2}\right)$ 且与圆 $x^2+y^2=1$ 相切的直线方程为 $x-\sqrt{3}y+2=0$。
+  B. 过点 $(1,2)$ 且与抛物线 $y^2=4x$ 相切的直线方程为 $x-y+1=0$。
+  C. 过点 $(0,-1)$ 且与曲线 $f(x)=x\ln x$ 相切的直线 $l$ 的方程为 $x-y+1=0$。
+  D. 曲线 $y=\frac{2x-1}{x+2}$ 在点 $(-1,-3)$ 处的切线方程为 $5x-y+2=0$。
+answer: |-
+  ABD
+
+  A 中给定点在圆上，半径斜率与切线斜率乘积为 -1，得切线 $x-\sqrt3y+2=0$。B 中设抛物线切点为 $(x_0,y_0)$，用 $yy_0=2(x+x_0)$ 且 $x_0=y_0^2/4$，代入 $(1,2)$ 得 $y_0=2$，切线为 $x-y+1=0$。C 中设切点 $(x_0,x_0\ln x_0)$，由过点 $(0,-1)$ 的割线斜率等于 $\ln x_0+1$，解得 $x_0=1$，实际切线为 $x-y-1=0$，故 C 错。 D 中求导得 $y'=5/(x+2)^2$，在 $(-1,-3)$ 处斜率为 5，切线为 $5x-y+2=0$。故选 ABD。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: A：圆上一点的切线由半径垂直确定。
+      max_score: 1
+    - step_id: step_2
+      description: B：过外部给定点时先设抛物线切点。
+      max_score: 1
+    - step_id: step_3
+      description: C：对 $x\ln x$ 设切点并检验选项符号。
+      max_score: 1
+    - step_id: step_4
+      description: D：给定曲线上点，直接求导写切线。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何性质证明
+    part_level:
+      - part_id: A
+        goal: 几何性质证明
+        target: 第 A 问
+        result: 见 source_solution_summary
+      - part_id: B
+        goal: 几何性质证明
+        target: 第 B 问
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 几何性质证明
+        target: 第 C 问
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 几何性质证明
+        target: 第 D 问
+        result: 见 source_solution_summary
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 局部逼近与找点
+      - 数形结合
+    subroute:
+      - 圆切线半径垂直
+      - 抛物线切点参数
+      - 过定点切线反求切点
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+      - 非齐次结构
+    evidence:
+      - A、D 是已知切点处的切线。
+      - B、C 是过给定点的切线，需要反求真实切点。
+      - $x\ln x$ 的切点由导数斜率等于割线斜率确定。
+    normalization_moves_used:
+      - 圆切线：半径斜率与切线斜率乘积为 $-1$。
+      - 抛物线：$yy_0=2(x+x_0)$ 与 $x_0=y_0^2/4$ 联用。
+      - 曲线切线：$f^{\prime}(x_0)=\frac{f(x_0)-y_P}{x_0-x_P}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生把过点切线误当成该点处切线，回补导数运算与几何意义。
+      - 若学生不会设切点参数并代入定点，回补代数恒等变形。
+      - 若学生忽略 $x\ln x$ 的定义域 $x>0$，回补函数三要素与定义域。
+      - 若学生求分式函数导数出错，回补导数运算与几何意义。
+  detail_terms:
+    - 圆切线
+    - 抛物线切线
+    - 过定点作切线
+    - $x\ln x$
+    - 分式函数切线
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0078_tangent_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0078
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0078/page_0078.md
+      role: problem_start
+      evidence: page_0078 例 7 给出四个关于切线方程的判断选项：圆、抛物线、曲线 y=x\ln x 和分式函数的切线；同页完整给出 A-D 的解析和答案 ABD。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0078.png
+      inspected: true
+      notes: 已核对页图：page_0078 顶部是 page_0077 例 6 续页，例 7 题头从本页开始； 题干、四个选项、解析和答案 ABD 与 markdown 一致。
+  source_context: 本题位于“导数的切线方程”小节，用四种曲线的切线方程检验切点、斜率、 隐含切点和曲线上点代入。
+  source_influence:
+    - 题干为多选题，original_problem.choices 保留 A-D 全部原选项。
+    - page_0078 顶部的例 6 续页只作归属判断，不进入本卡。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 江西九江高二期末 · 多选 T10）关于切线，下列结论正确的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 过点 $\left(-\frac{1}{2}, \frac{\sqrt{3}}{2}\right)$ 且与圆 $x^2+y^2=1$ 相切的直线方程为 $x-\sqrt{3}y+2=0$。
+      text_latex: 过点 $\left(-\frac{1}{2}, \frac{\sqrt{3}}{2}\right)$ 且与圆 $x^2+y^2=1$ 相切的直线方程为 $x-\sqrt{3}y+2=0$。
+    - label: B
+      text_raw: 过点 $(1,2)$ 且与抛物线 $y^2=4x$ 相切的直线方程为 $x-y+1=0$。
+      text_latex: 过点 $(1,2)$ 且与抛物线 $y^2=4x$ 相切的直线方程为 $x-y+1=0$。
+    - label: C
+      text_raw: 过点 $(0,-1)$ 且与曲线 $f(x)=x\ln x$ 相切的直线 $l$ 的方程为 $x-y+1=0$。
+      text_latex: 过点 $(0,-1)$ 且与曲线 $f(x)=x\ln x$ 相切的直线 $l$ 的方程为 $x-y+1=0$。
+    - label: D
+      text_raw: 曲线 $y=\frac{2x-1}{x+2}$ 在点 $(-1,-3)$ 处的切线方程为 $5x-y+2=0$。
+      text_latex: 曲线 $y=\frac{2x-1}{x+2}$ 在点 $(-1,-3)$ 处的切线方程为 $5x-y+2=0$。
+  answer: ABD
+  fidelity_notes:
+    - 源题为多选题，例 7 的题干和完整解析均在 page_0078。
+    - C 选项源解求得实际切线为 $x-y-1=0$，所以原命题错误。
+solution:
+  source_solution_summary: A 中给定点在圆上，半径斜率与切线斜率乘积为 -1，得切线 $x-\sqrt3y+2=0$。B 中设抛物线切点为 $(x_0,y_0)$，用 $yy_0=2(x+x_0)$ 且 $x_0=y_0^2/4$，代入 $(1,2)$ 得 $y_0=2$，切线为 $x-y+1=0$。C 中设切点 $(x_0,x_0\ln x_0)$，由过点 $(0,-1)$ 的割线斜率等于 $\ln x_0+1$，解得 $x_0=1$，实际切线为 $x-y-1=0$，故 C 错。 D 中求导得 $y'=5/(x+2)^2$，在 $(-1,-3)$ 处斜率为 5，切线为 $5x-y+2=0$。故选 ABD。
+  key_steps:
+    - step_id: step_1
+      statement: A：圆上一点的切线由半径垂直确定。
+      formula_trace:
+        from: 点 $\left(-\frac12,\frac{\sqrt3}{2}\right)$ 在 $x^2+y^2=1$ 上， 半径斜率为 $\frac{\frac{\sqrt3}{2}-0}{-\frac12-0}=-\sqrt3$。
+        to: $-\sqrt3\cdot k=-1\Rightarrow k=\frac{\sqrt3}{3}$， $y-\frac{\sqrt3}{2}=\frac{\sqrt3}{3}\left(x+\frac12\right)$， 即 $x-\sqrt3y+2=0$。
+        operation: 用半径与切线垂直，代入点斜式整理。
+        why: 圆上一点切线的斜率由半径斜率唯一确定。
+      source_ref: page_0078
+    - step_id: step_2
+      statement: B：过外部给定点时先设抛物线切点。
+      formula_trace:
+        from: 抛物线 $y^2=4x$ 的切线公式为 $yy_0=2(x+x_0)$，且 $x_0=\frac{y_0^2}{4}$。
+        to: 代入 $(1,2)$ 得 $2y_0=2\left(1+\frac{y_0^2}{4}\right)$， 解得 $y_0=2$，切线 $2y=2(x+1)$，即 $x-y+1=0$。
+        operation: 把切点参数带入切线公式，再用已知点落在切线上解参数。
+        why: 题目给的是过点的切线，不是给定点处的切线，切点需要先求出。
+      source_ref: page_0078
+    - step_id: step_3
+      statement: C：对 $x\ln x$ 设切点并检验选项符号。
+      formula_trace:
+        from: $f^{\prime}(x)=\ln x+1$，切点设为 $(x_0,x_0\ln x_0)$，过 $(0,-1)$ 的切线满足 $\ln x_0+1=\frac{x_0\ln x_0+1}{x_0}$。
+        to: $x_0=1$，切点 $(1,0)$，斜率 $1$，切线 $y=x-1$，即 $x-y-1=0$。
+        operation: 令导数斜率等于切点到给定点的斜率。
+        why: 实际切线与选项 $x-y+1=0$ 差一个常数项符号，所以 C 错。
+      source_ref: page_0078
+    - step_id: step_4
+      statement: D：给定曲线上点，直接求导写切线。
+      formula_trace:
+        from: $y=\frac{2x-1}{x+2}$，$y^{\prime}=\frac{5}{(x+2)^2}$。
+        to: $k=y^{\prime}(-1)=5$， $y+3=5(x+1)$，即 $5x-y+2=0$。
+        operation: 对分式函数求导，并代入点斜式。
+        why: 点 $(-1,-3)$ 在曲线上，切线斜率就是该点导数值。
+      source_ref: page_0078
+teaching_card:
+  student_title: 切线题先分清“在点处”还是“过点”
+  what_it_trains: 训练在切线方程判断题中先判断点是不是切点：已知切点就直接求斜率， 只是“过点”就要另设切点。
+  recognition_cues:
+    - 选项里同时出现“过点”和“在点处”。
+    - 给定点不一定在曲线上，不能直接把它当切点。
+    - 选项 C 的曲线 $x\ln x$ 带定义域，切点必须满足 $x_0>0$。
+  normalization_moves:
+    - 先代入检查给定点是否在曲线上。
+    - 过定点切线统一设切点 $(x_0,f(x_0))$。
+    - 用导数斜率等于切点到定点的斜率。
+    - 最后把点斜式整理成选项中的一般式。
+  common_failures:
+    - 把“过点 $(1,2)$”误看成抛物线在 $(1,2)$ 处切线。
+    - C 选项只算出斜率 1，却没有核对常数项。
+    - 分式求导漏掉分母平方。
+  similar_practice_query: 切线方程 过定点 切点参数 圆 抛物线 xlnx 分式函数
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0078 页图；例 7 题头从 page_0078 开始，page_0078 内完结。
+    - page_0078 顶部是例 6 续页，按归属规则跳过未建卡。

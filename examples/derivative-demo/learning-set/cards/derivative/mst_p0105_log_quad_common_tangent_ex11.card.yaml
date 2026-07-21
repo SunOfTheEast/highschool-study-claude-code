@@ -1,0 +1,191 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0105_log_quad_common_tangent_ex11
+content_revision_id: mst_p0105_log_quad_common_tangent_ex11-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0105_log_quad_common_tangent_ex11.card.yaml
+stem: |-
+  （2022 石家庄期末 · 多选 T12）若两曲线 $y=x^2-1$ 与 $y=a\ln x-1$ 存在公切线，则正实数 $a$ 的取值可能是（  ）
+  A. 1.2
+  B. 4
+  C. 5.6
+  D. $2e$
+answer: |
+  ABD
+
+  两条曲线都减去 1，不影响是否有公切线，所以问题转为
+  $f(x)=x^2$ 与 $g(x)=a\ln x$ 的关系。题设 $a>0$ 时，$g$ 在
+  $(0,+\infty)$ 上递增；在 $0<x<1$ 时 $a\ln x<0<x^2$，只需考虑
+  $x>1$。源页用内公切线模型判断：只要 $x^2\ge a\ln x$ 恒成立，
+  两曲线就存在公切线。因此
+  $a\le\left(\frac{x^2}{\ln x}\right)_{\min}$。令
+  $q(x)=\frac{x^2}{\ln x}$，则
+  $q'(x)=\frac{x(2\ln x-1)}{(\ln x)^2}$，在 $x=\sqrt e$ 处取最小值
+  $q(\sqrt e)=2e$。故 $0<a\le2e$，选项 A、B、D 符合，C 中
+  $5.6>2e$ 不符合。故选 ABD。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 去掉共同的纵向平移。
+      max_score: 1
+    - step_id: step_2
+      description: 把公切线存在性转成函数大小关系。
+      max_score: 1
+    - step_id: step_3
+      description: 求 $\frac{x^2}{\ln x}$ 的最小值。
+      max_score: 1
+    - step_id: step_4
+      description: 结合选项筛选。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 数形结合
+      - 切线放缩与凹凸性
+    subroute:
+      - 共同平移消去
+      - 内公切线恒成立判定
+      - 比值函数求最小值
+  structure:
+    primary: 同构结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 非齐次结构
+    evidence:
+      - $y=x^2-1$ 与 $y=a\ln x-1$ 同时平移为 $y=x^2$ 与 $y=a\ln x$。
+      - $a\le\left(\frac{x^2}{\ln x}\right)_{\min}=2e$ 给出可取范围。
+      - $x=\sqrt e$ 是比值函数的最小点。
+    normalization_moves_used:
+      - 先消去共同的 $-1$。
+      - 把公切线存在性变成 $x^2\ge a\ln x$。
+      - 只在 $\ln x>0$ 的 $x>1$ 区间分离参数。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不理解共同平移不改变公切线存在性，回补函数性质与图像。
+      - 若学生在 $0<x<1$ 也除以 $\ln x$ 且忘记变号，回补不等式工具基础。
+      - 若学生不会求 $\frac{x^2}{\ln x}$ 的最小值，回补导数单调极值基础。
+      - 若学生不会比较 $5.6$ 与 $2e$，回补指数对数基础。
+  detail_terms:
+    - $y=x^2-1$
+    - $y=a\ln x-1$
+    - $a\le2e$
+    - $\left(\frac{x^2}{\ln x}\right)_{\min}=2e$
+    - 答案 ABD
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0105_log_quad_common_tangent_ex11
+source_evidence:
+  source_refs:
+    - ref_id: page_0105
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0105/page_0105.md
+      role: problem_start
+      evidence: page_0105 上半部给出例 11 题头、题干、A-D 选项、两幅图像示意、解析和答案 ABD。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0105.png
+      inspected: true
+      notes: 已核对 page_0105 页图：例 11 的题干为多选，选项 A 1.2、B 4、C 5.6、D $2e$，答案为 ABD。
+  source_context: 例 11 位于 page_0105 中上部，前面是例 10 跨页续解，后面是例 12；只提取例 11。
+  source_influence:
+    - 保留源页平移处理：两曲线同时减 1，转化为 $y=x^2$ 与 $y=a\ln x$。
+    - 保留源页内公切线判定：只需 $x^2\ge a\ln x$ 恒成立。
+    - 保留源页关键值 $\left(\frac{x^2}{\ln x}\right)_{\min}=2e$。
+  source_discrepancies: []
+original_problem:
+  stem: （2022 石家庄期末 · 多选 T12）若两曲线 $y=x^2-1$ 与 $y=a\ln x-1$ 存在公切线，则正实数 $a$ 的取值可能是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: "1.2"
+      text_latex: $1.2$
+    - label: B
+      text_raw: "4"
+      text_latex: $4$
+    - label: C
+      text_raw: "5.6"
+      text_latex: $5.6$
+    - label: D
+      text_raw: $2e$
+      text_latex: $2e$
+  answer: ABD
+  fidelity_notes:
+    - 本题为多选题，例 11 在 page_0105 内完整。
+    - 源页结论为正实数 $a$ 的可能取值是 ABD。
+solution:
+  source_solution_summary: |
+    两条曲线都减去 1，不影响是否有公切线，所以问题转为
+    $f(x)=x^2$ 与 $g(x)=a\ln x$ 的关系。题设 $a>0$ 时，$g$ 在
+    $(0,+\infty)$ 上递增；在 $0<x<1$ 时 $a\ln x<0<x^2$，只需考虑
+    $x>1$。源页用内公切线模型判断：只要 $x^2\ge a\ln x$ 恒成立，
+    两曲线就存在公切线。因此
+    $a\le\left(\frac{x^2}{\ln x}\right)_{\min}$。令
+    $q(x)=\frac{x^2}{\ln x}$，则
+    $q'(x)=\frac{x(2\ln x-1)}{(\ln x)^2}$，在 $x=\sqrt e$ 处取最小值
+    $q(\sqrt e)=2e$。故 $0<a\le2e$，选项 A、B、D 符合，C 中
+    $5.6>2e$ 不符合。故选 ABD。
+  key_steps:
+    - step_id: step_1
+      statement: 去掉共同的纵向平移。
+      formula_trace:
+        from: |
+          $y=x^2-1,\qquad y=a\ln x-1$
+        to: |
+          $y=x^2,\qquad y=a\ln x$
+        operation: 两条曲线同时上移 1。
+        why: 共同平移不改变公切线存在性，只改变切线截距。
+      source_ref: page_0105
+    - step_id: step_2
+      statement: 把公切线存在性转成函数大小关系。
+      formula_trace:
+        from: |
+          $x^2\ge a\ln x\quad (x>0)$
+        to: |
+          $a\le \frac{x^2}{\ln x}\quad (x>1)$
+        operation: 在 $x>1$ 上除以 $\ln x>0$；$0<x<1$ 时不构成约束。
+        why: 源页内公切线模型要求二次曲线在对数曲线外侧。
+      source_ref: page_0105
+    - step_id: step_3
+      statement: 求 $\frac{x^2}{\ln x}$ 的最小值。
+      formula_trace:
+        from: |
+          $q(x)=\frac{x^2}{\ln x}\quad (x>1)$
+        to: |
+          $q'(x)=\frac{x(2\ln x-1)}{(\ln x)^2},\quad x=\sqrt e,\quad q_{\min}=2e$
+        operation: 求导并令 $2\ln x-1=0$。
+        why: 恒成立约束由右端最小值决定。
+      source_ref: page_0105
+    - step_id: step_4
+      statement: 结合选项筛选。
+      formula_trace:
+        from: |
+          $0<a\le2e,\qquad 2e\approx5.436$
+        to: |
+          $1.2,4,2e\text{ 可取};\quad 5.6\text{ 不可取}$
+        operation: 把选项数值与阈值 $2e$ 比较。
+        why: 题目问“可能取值”，多选要逐项判断。
+      source_ref: page_0105
+teaching_card:
+  student_title: 把二次和对数公切线变成 $a\le2e$
+  what_it_trains: 训练识别共同平移后的二次-对数公切线模型，用比值函数的最小值筛选参数选项。
+  recognition_cues:
+    - 两条曲线都有 $-1$，先整体平移掉。
+    - 题干给 $a$ 为正实数，且是多选“可能取值”，通常先求完整范围再选。
+    - 出现 $2e$ 选项，提示 $\frac{x^2}{\ln x}$ 的最小值。
+  normalization_moves:
+    - 把问题转成 $y=x^2$ 与 $y=a\ln x$。
+    - 写出 $x^2\ge a\ln x$，在 $x>1$ 上分离参数。
+    - 求 $q(x)=\frac{x^2}{\ln x}$ 的最小值 $2e$。
+  common_failures:
+    - 漏掉共同平移，误以为 $-1$ 会影响斜率。
+    - 在 $\ln x<0$ 的区间分离参数时方向混乱。
+    - 把 $5.6$ 看成小于 $2e$，导致误选 C。
+  similar_practice_query: 二次 对数 公切线 共同平移 x^2/lnx 最小值 2e
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0105 图片；例 11 在本页内完结，答案 ABD 明确。

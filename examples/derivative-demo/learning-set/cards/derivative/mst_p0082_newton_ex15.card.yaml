@@ -1,0 +1,292 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0082_newton_ex15
+content_revision_id: mst_p0082_newton_ex15-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0082_newton_ex15.card.yaml
+stem: |-
+  （2023 东北三省四市教研联合体·多选 T12）人们很早以前就开始探索高次方程的数值求解问题。牛顿在《流数法》一书中给出了牛顿迭代法：用“作切线”的方法求方程的近似解。具体步骤如下：设 $r$ 是函数 $y=f(x)$ 的一个零点，任意选取 $x_0$ 作为 $r$ 的初始近似值，曲线 $y=f(x)$ 在点 $(x_0,f(x_0))$ 处的切线为 $l_1$，设 $l_1$ 与 $x$ 轴交点的横坐标为 $x_1$，并称 $x_1$ 为 $r$ 的 1 次近似值；曲线 $y=f(x)$ 在点 $(x_1,f(x_1))$ 处的切线为 $l_2$，设 $l_2$ 与 $x$ 轴交点的横坐标为 $x_2$，称 $x_2$ 为 $r$ 的 2 次近似值。一般地，曲线 $y=f(x)$ 在点 $(x_n,f(x_n))(n\in\mathbf{N}_+)$ 处的切线为 $l_{n+1}$，记 $l_{n+1}$ 与 $x$ 轴交点的横坐标为 $x_{n+1}$，并称 $x_{n+1}$ 为 $r$ 的 $n+1$ 次近似值。在一定精确度下，用四舍五入法取值，当 $x_n$ 与 $x_{n+1}$ 的近似值相等时，该近似值即作为函数 $f(x)$ 的一个零点 $r$ 的近似值。下列说法正确的是 (  )
+
+  A. $x_{n+1}=x_n+\frac{f(x_n)}{f^{\prime}(x_n)}\ (f^{\prime}(x_n)\neq0)$
+  B. 利用牛顿迭代法求函数 $f(x)=x^3-6$ 的零点 $r$ 的近似值（精确到 0.1），取 $x_0=2$，需要作两条切线即可确定 $r$ 的近似值
+  C. 利用二分法求函数 $f(x)=x^3-6$ 的零点 $r$ 的近似值（精确度为 0.1），给定初始区间为 $(1,2)$，需进行 4 次区间二分可得到零点 $r$ 的近似值
+  D. 利用牛顿迭代法求函数 $f(x)=\ln x+2x-b\ (b>2)$ 的零点 $r$ 的近似值，任取 $x_0\in(1,r)$，总有 $x_n<x_{n+1}<r$
+answer: |
+  BCD
+
+  对 A，切线方程为 $y-f(x_n)=f^{\prime}(x_n)(x-x_n)$，令 $y=0$ 得 $x_{n+1}=x_n-\frac{f(x_n)}{f^{\prime}(x_n)}$，所以 A 的加号错误。对 B，$f(x)=x^3-6$，$x_0=2$，两次切线给 $x_1=\frac{11}{6}\approx1.83$、$x_2=\frac{1979}{1089}\approx1.82$，二者四舍五入到 $0.1$ 位相同，故两条切线即可确定近似值，B 正确。对 C，二分法从 $(1,2)$ 依次缩到 $(\frac32,2)$、$(\frac74,2)$、$(\frac74,\frac{15}{8})$，三次后长度为 $\frac18=0.125$，第四次后长度小于 $0.1$，C 正确。对 D，$f(x)=\ln x+2x-b$ 是单调递增且上凸向下的函数；在 $x_n$ 处的切线 $h(x)$ 满足 $f(x)\le h(x)$，由切线零点 $x_{n+1}$ 可得 $f(x_{n+1})<0=f(r)$，所以 $x_{n+1}<r$；又 $x_n<r$ 时 $f(x_n)<0$、$f^{\prime}(x_n)>0$，于是 $x_{n+1}>x_n$，D 正确。故选 BCD。
+rubric:
+  max_score: 10
+  criteria:
+    - step_id: step_1
+      description: 由切线与 $x$ 轴交点推出牛顿迭代公式。
+      max_score: 1
+    - step_id: step_2
+      description: 用通式判断 A 选项符号。
+      max_score: 1
+    - step_id: step_3
+      description: 计算 $x^3-6=0$ 从 $x_0=2$ 出发的前两次牛顿迭代。
+      max_score: 1
+    - step_id: step_4
+      description: 继续计算第二条切线给出的近似值。
+      max_score: 1
+    - step_id: step_5
+      description: 用二分法区间长度判断 C 选项。
+      max_score: 1
+    - step_id: step_6
+      description: 比较第三、第四次二分后的区间长度。
+      max_score: 1
+    - step_id: step_7
+      description: 为 D 选项写出切线函数并证明切线在图像上方。
+      max_score: 1
+    - step_id: step_8
+      description: 用差函数证明 $f(x)\le h(x)$。
+      max_score: 1
+    - step_id: step_9
+      description: 由切线零点推出 $x_{n+1}<r$。
+      max_score: 1
+    - step_id: step_10
+      description: 由当前点在根左侧推出下一项更大。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level:
+      - part_id: A
+        goal: 几何量求解
+        target: "A: 几何量求解"
+        result: 见 source_solution_summary
+      - part_id: B
+        goal: 数值求值
+        target: "B: 数值求值"
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 数值求值
+        target: "C: 数值求值"
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 数值比较
+        target: "D: 数值比较"
+        result: 见 source_solution_summary
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 数形结合
+      - 切线放缩与凹凸性
+      - 拟合与夹逼
+    subroute:
+      - 牛顿迭代公式
+      - 二分区间长度
+      - 切线在凹函数图像上方
+      - 迭代单调逼近
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 三次/高次函数结构
+      - 指对复合结构
+      - 数列离散/递推结构
+    evidence:
+      - 通式 $x_{n+1}=x_n-\frac{f(x_n)}{f^{\prime}(x_n)}$ 来自切线与 $x$ 轴交点。
+      - $f(x)=x^3-6$ 的两次牛顿迭代与二分法区间都服务于零点近似。
+      - $f(x)=\ln x+2x-b$ 的切线 $h(x)$ 满足 $f(x)\le h(x)$，从而控制迭代点始终在根的左侧。
+    normalization_moves_used:
+      - 把“作切线求交点”统一写成牛顿迭代公式。
+      - 把“精确到 0.1”转化为相邻近似值四舍五入后相同或区间长度小于 $0.1$。
+      - 把切线位置关系转化为差函数 $F(x)=f(x)-h(x)$ 的单调性。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由切线方程令 $y=0$ 解出 $x_{n+1}$，回补导数运算与几何意义。
+      - 若学生在 $x^3-6$ 的迭代分数计算中出错，回补代数恒等变形。
+      - 若学生不会用异号区间做二分法，回补函数性质与图像。
+      - 若学生不能理解切线在 $\ln x+2x-b$ 图像上方，回补函数性质与图像。
+      - 若学生不会判断 $\frac1x+2>0$ 导致 $f$ 单调递增，回补导数单调极值基础。
+  detail_terms:
+    - $x_{n+1}=x_n-\frac{f(x_n)}{f^{\prime}(x_n)}$
+    - $f(x)=x^3-6$
+    - $x_1=\frac{11}{6},\ x_2=\frac{1979}{1089}$
+    - 二分法区间长度 $\frac1{16}<0.1$
+    - $f(x)=\ln x+2x-b$
+    - $F(x)=\ln x-\frac{x}{x_n}-\ln x_n+1$
+    - $x_n<x_{n+1}<r$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0082_newton_ex15
+source_evidence:
+  source_refs:
+    - ref_id: page_0082
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0082/page_0082.md
+      role: problem_start
+      evidence: page_0082 顶部是例 14 续解；例 15 从本页中部起头，给出牛顿迭代法说明、示意图、A-D 四个选项，并开始解析 A、B。
+    - ref_id: page_0083
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0083/page_0083.md
+      role: continuation
+      evidence: page_0083 顶部续完例 15 的 B、C、D 解析并给出答案 BCD；本卡只读取例 15 续解，未把 page_0083 新起头的例 16 并入。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0082.png
+      inspected: true
+      notes: 已核对 page_0082 顶部为例 14 续页；例 15 题头、牛顿迭代示意图、A-D 选项、A/B 解析起始与页图一致。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0083.png
+      inspected: true
+      notes: 已核对 page_0083 顶部续完例 15，答案为 BCD；例 16 在其后另起题头。
+  source_context: 本题位于“导数的切线方程”中的牛顿迭代法小节，核心是把切线与 $x$ 轴交点转化为递推式，并比较牛顿迭代、二分法和切线放缩下的逼近方向。
+  source_influence:
+    - 题干和四个选项来自 page_0082，答案与 D 选项证明来自 page_0083 续页。
+    - 示意图只用于确认牛顿迭代的几何含义：从 $x_0$ 作切线得到 $x_1,x_2,x_3$，逐步逼近零点。
+    - 解析路线按源页分选项处理：A 推通式，B 做两步牛顿迭代，C 做二分区间长度估计，D 用切线位于凹函数图像上方证明迭代值递增且小于根。
+  source_discrepancies:
+    - page_0082 页图底部将 $1.83-1.82$ 印为 $0.1$；直接计算应为 $0.01$，且 $0.01<0.1$，B 选项“精确到 0.1”结论不受影响。
+    - page_0083 解析 D 中出现“当 $x_n\neq a$ 时”的字样，但题中没有变量 $a$；结合后文“若 $x_n=r$”与根的讨论，应读作 $x_n\neq r$。
+original_problem:
+  stem: |
+    （2023 东北三省四市教研联合体·多选 T12）人们很早以前就开始探索高次方程的数值求解问题。牛顿在《流数法》一书中给出了牛顿迭代法：用“作切线”的方法求方程的近似解。具体步骤如下：设 $r$ 是函数 $y=f(x)$ 的一个零点，任意选取 $x_0$ 作为 $r$ 的初始近似值，曲线 $y=f(x)$ 在点 $(x_0,f(x_0))$ 处的切线为 $l_1$，设 $l_1$ 与 $x$ 轴交点的横坐标为 $x_1$，并称 $x_1$ 为 $r$ 的 1 次近似值；曲线 $y=f(x)$ 在点 $(x_1,f(x_1))$ 处的切线为 $l_2$，设 $l_2$ 与 $x$ 轴交点的横坐标为 $x_2$，称 $x_2$ 为 $r$ 的 2 次近似值。一般地，曲线 $y=f(x)$ 在点 $(x_n,f(x_n))(n\in\mathbf{N}_+)$ 处的切线为 $l_{n+1}$，记 $l_{n+1}$ 与 $x$ 轴交点的横坐标为 $x_{n+1}$，并称 $x_{n+1}$ 为 $r$ 的 $n+1$ 次近似值。在一定精确度下，用四舍五入法取值，当 $x_n$ 与 $x_{n+1}$ 的近似值相等时，该近似值即作为函数 $f(x)$ 的一个零点 $r$ 的近似值。下列说法正确的是 (  )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $x_{n+1}=x_n+\frac{f(x_n)}{f^{\prime}(x_n)}\ (f^{\prime}(x_n)\neq0)$
+      text_latex: $x_{n+1}=x_n+\frac{f(x_n)}{f^{\prime}(x_n)}\ (f^{\prime}(x_n)\neq0)$
+    - label: B
+      text_raw: 利用牛顿迭代法求函数 $f(x)=x^3-6$ 的零点 $r$ 的近似值（精确到 0.1），取 $x_0=2$，需要作两条切线即可确定 $r$ 的近似值
+      text_latex: 利用牛顿迭代法求函数 $f(x)=x^3-6$ 的零点 $r$ 的近似值（精确到 $0.1$），取 $x_0=2$，需要作两条切线即可确定 $r$ 的近似值
+    - label: C
+      text_raw: 利用二分法求函数 $f(x)=x^3-6$ 的零点 $r$ 的近似值（精确度为 0.1），给定初始区间为 $(1,2)$，需进行 4 次区间二分可得到零点 $r$ 的近似值
+      text_latex: 利用二分法求函数 $f(x)=x^3-6$ 的零点 $r$ 的近似值（精确度为 $0.1$），给定初始区间为 $(1,2)$，需进行 $4$ 次区间二分可得到零点 $r$ 的近似值
+    - label: D
+      text_raw: 利用牛顿迭代法求函数 $f(x)=\ln x+2x-b\ (b>2)$ 的零点 $r$ 的近似值，任取 $x_0\in(1,r)$，总有 $x_n<x_{n+1}<r$
+      text_latex: 利用牛顿迭代法求函数 $f(x)=\ln x+2x-b\ (b>2)$ 的零点 $r$ 的近似值，任取 $x_0\in(1,r)$，总有 $x_n<x_{n+1}<r$
+  answer: BCD
+  fidelity_notes:
+    - 题干含一幅牛顿迭代示意图，已在 source_images 中核对；图中标出 $x_0,x_1,x_2,x_3$ 逐步逼近零点。
+    - page_0082 顶部例 14 续解不属于本卡。
+    - 例 15 解析跨到 page_0083 顶部，page_0083 后半页另起例 16。
+    - B 解析中源页差值印刷错误已在 source_discrepancies 记录；本卡按正确算术解释。
+solution:
+  source_solution_summary: |
+    对 A，切线方程为 $y-f(x_n)=f^{\prime}(x_n)(x-x_n)$，令 $y=0$ 得 $x_{n+1}=x_n-\frac{f(x_n)}{f^{\prime}(x_n)}$，所以 A 的加号错误。对 B，$f(x)=x^3-6$，$x_0=2$，两次切线给 $x_1=\frac{11}{6}\approx1.83$、$x_2=\frac{1979}{1089}\approx1.82$，二者四舍五入到 $0.1$ 位相同，故两条切线即可确定近似值，B 正确。对 C，二分法从 $(1,2)$ 依次缩到 $(\frac32,2)$、$(\frac74,2)$、$(\frac74,\frac{15}{8})$，三次后长度为 $\frac18=0.125$，第四次后长度小于 $0.1$，C 正确。对 D，$f(x)=\ln x+2x-b$ 是单调递增且上凸向下的函数；在 $x_n$ 处的切线 $h(x)$ 满足 $f(x)\le h(x)$，由切线零点 $x_{n+1}$ 可得 $f(x_{n+1})<0=f(r)$，所以 $x_{n+1}<r$；又 $x_n<r$ 时 $f(x_n)<0$、$f^{\prime}(x_n)>0$，于是 $x_{n+1}>x_n$，D 正确。故选 BCD。
+  key_steps:
+    - step_id: step_1
+      statement: 由切线与 $x$ 轴交点推出牛顿迭代公式。
+      formula_trace:
+        from: |
+          $y-f(x_n)=f^{\prime}(x_n)(x-x_n)$
+        to: |
+          $0-f(x_n)=f^{\prime}(x_n)(x_{n+1}-x_n)$，所以
+          $x_{n+1}=x_n-\frac{f(x_n)}{f^{\prime}(x_n)}$
+        operation: 令切线上的交点纵坐标 $y=0$，再解出横坐标 $x_{n+1}$。
+        why: $x_{n+1}$ 的定义就是第 $n+1$ 条切线与 $x$ 轴交点的横坐标。
+      source_ref: page_0082
+    - step_id: step_2
+      statement: 用通式判断 A 选项符号。
+      formula_trace:
+        from: |
+          $x_{n+1}=x_n-\frac{f(x_n)}{f^{\prime}(x_n)}$
+        to: |
+          A 中 $x_{n+1}=x_n+\frac{f(x_n)}{f^{\prime}(x_n)}$ 错误
+        operation: 把推得的减号公式与选项 A 的加号公式逐项比较。
+        why: 切线交 $x$ 轴时要从当前横坐标减去 $\frac{f(x_n)}{f^{\prime}(x_n)}$。
+      source_ref: page_0082
+    - step_id: step_3
+      statement: 计算 $x^3-6=0$ 从 $x_0=2$ 出发的前两次牛顿迭代。
+      formula_trace:
+        from: |
+          $f(x)=x^3-6,\quad f^{\prime}(x)=3x^2,\quad x_0=2$
+        to: |
+          $x_1=2-\frac{2}{3\cdot4}=\frac{11}{6}\approx1.83$
+        operation: 代入 $x_{n+1}=x_n-\frac{f(x_n)}{f^{\prime}(x_n)}$。
+        why: 第一条切线交 $x$ 轴横坐标就是 $x_1$。
+      source_ref: page_0082
+    - step_id: step_4
+      statement: 继续计算第二条切线给出的近似值。
+      formula_trace:
+        from: |
+          $x_1=\frac{11}{6}$
+        to: |
+          $x_2=\frac{11}{6}-\frac{(\frac{11}{6})^3-6}{3(\frac{11}{6})^2}
+          =\frac{1979}{1089}\approx1.82$
+        operation: 把 $x_1$ 再代入牛顿迭代公式。
+        why: 第二条切线得到 $x_2$，与 $x_1$ 的 $0.1$ 位近似值相同，可确定近似值。
+      source_ref: page_0082
+    - step_id: step_5
+      statement: 用二分法区间长度判断 C 选项。
+      formula_trace:
+        from: |
+          $f(1)=-5<0,\quad f(2)=2>0$
+        to: |
+          $(1,2)\to(\frac32,2)\to(\frac74,2)\to(\frac74,\frac{15}{8})$
+        operation: 依次检验中点 $\frac32,\frac74,\frac{15}{8}$ 的函数值符号。
+        why: 零点始终位于函数值异号的子区间内。
+      source_ref: page_0083
+    - step_id: step_6
+      statement: 比较第三、第四次二分后的区间长度。
+      formula_trace:
+        from: |
+          $\frac{15}{8}-\frac74=\frac18=0.125$
+        to: |
+          第四次二分后区间长度为 $\frac12\cdot\frac18=\frac1{16}<0.1$
+        operation: 每二分一次区间长度减半。
+        why: 精确度为 $0.1$ 时，区间长度小于 $0.1$ 即可锁定近似值所在区间。
+      source_ref: page_0083
+    - step_id: step_7
+      statement: 为 D 选项写出切线函数并证明切线在图像上方。
+      formula_trace:
+        from: |
+          $f(x)=\ln x+2x-b,\quad f^{\prime}(x_n)=\frac1{x_n}+2$
+        to: |
+          $h(x)=\frac{1+2x_n}{x_n}x+\ln x_n-b-1$
+        operation: 把 $x_n$ 处的切线写成斜截式。
+        why: $h(x)$ 是曲线在 $x_n$ 处的切线，$x_{n+1}$ 是 $h(x)$ 的零点。
+      source_ref: page_0083
+    - step_id: step_8
+      statement: 用差函数证明 $f(x)\le h(x)$。
+      formula_trace:
+        from: |
+          $F(x)=f(x)-h(x)=\ln x-\frac{x}{x_n}-\ln x_n+1$
+        to: |
+          $F^{\prime}(x)=\frac1x-\frac1{x_n}=\frac{x_n-x}{x_nx}$，且 $F(x)\le F(x_n)=0$
+        operation: 按 $x<x_n$、$x>x_n$ 讨论 $F^{\prime}(x)$ 的符号。
+        why: $F$ 在 $x_n$ 左增右减，所以 $x_n$ 是最大点，切线位于图像上方。
+      source_ref: page_0083
+    - step_id: step_9
+      statement: 由切线零点推出 $x_{n+1}<r$。
+      formula_trace:
+        from: |
+          $h(x_{n+1})=0,\quad f(x_{n+1})<h(x_{n+1}),\quad f(r)=0$
+        to: |
+          $f(x_{n+1})<0=f(r)$，所以 $x_{n+1}<r$
+        operation: 利用 $f(x)\le h(x)$ 且非切点处严格小于切线，再用 $f$ 的单调递增性比较横坐标。
+        why: $f^{\prime}(x)=\frac1x+2>0$，因此 $f$ 在 $(0,+\infty)$ 上严格递增。
+      source_ref: page_0083
+    - step_id: step_10
+      statement: 由当前点在根左侧推出下一项更大。
+      formula_trace:
+        from: |
+          $x_n<r,\quad f(x_n)<0,\quad f^{\prime}(x_n)>0$
+        to: |
+          $x_{n+1}=x_n-\frac{f(x_n)}{f^{\prime}(x_n)}>x_n$
+        operation: 把 $f(x_n)$ 的负号和 $f^{\prime}(x_n)$ 的正号代入牛顿公式。
+        why: 减去一个负数等于向右推进；结合上一步得到 $x_n<x_{n+1}<r$。
+      source_ref: page_0083
+teaching_card:
+  student_title: 用切线交点一步步逼近零点
+  what_it_trains: 训练把牛顿迭代的几何步骤翻译成递推公式，并能同时比较牛顿法、二分法和凹函数切线放缩下的逼近效果。
+  recognition_cues:
+    - 题干反复出现“切线与 $x$ 轴交点的横坐标”，应立即写 $y=0$ 推 $x_{n+1}$。
+    - 选项 A 只差一个符号，要从切线方程原推一遍，不要记错公式。
+    - 选项 B、C 都围绕“精确到 0.1”，一个看相邻迭代近似值，一个看二分区间长度。
+    - 选项 D 中 $\ln x+2x-b$ 有 $f^{\prime}>0$ 且 $f^{\prime\prime}<0$，切线会压在图像上方。
+  normalization_moves:
+    - 先把切线点斜式改成 $x_{n+1}=x_n-\frac{f(x_n)}{f^{\prime}(x_n)}$。
+    - 计算牛顿迭代时保留分数，再转小数判断精度。
+    - 二分法每次只保留函数值异号的一半区间。
+    - 证明迭代方向时，先证 $x_{n+1}<r$，再由 $f(x_n)<0$ 推 $x_{n+1}>x_n$。
+  common_failures:
+    - 把牛顿公式写成加号，导致 A 误判。
+    - 只算出 $x_1$ 就认为作了一条切线够用，漏掉题中要比较 $x_1$ 与 $x_2$ 的近似值。
+    - 二分法数次数时把初始区间也算作一次二分。
+    - D 选项只看 $f^{\prime}>0$，没有证明切线零点仍在 $r$ 左侧。
+  similar_practice_query: 牛顿迭代法 切线交 x 轴 二分法精确度 ln x+2x-b 递增逼近
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已按 ownership 跳过 page_0082 顶部例 14 续页，只为 page_0082 起头的例 15 建卡。
+    - page_0082 的 $1.83-1.82=0.1$ 与 page_0083 的 $x_n\neq a$ 均可由直接计算和上下文校正，已记录为普通 source_discrepancies，不需要用户拍板。

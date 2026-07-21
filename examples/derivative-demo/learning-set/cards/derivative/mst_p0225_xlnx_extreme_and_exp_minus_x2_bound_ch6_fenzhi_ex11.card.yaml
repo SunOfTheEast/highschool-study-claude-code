@@ -1,0 +1,230 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0225_xlnx_extreme_and_exp_minus_x2_bound_ch6_fenzhi_ex11
+content_revision_id: mst_p0225_xlnx_extreme_and_exp_minus_x2_bound_ch6_fenzhi_ex11-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0225_xlnx_extreme_and_exp_minus_x2_bound_ch6_fenzhi_ex11.card.yaml
+stem: |-
+  （2020 广西来宾市考前模拟 T21）已知函数 $f(x)=x\ln x$。
+  1. 若函数 $g(x)=\frac{f(x)}{x^2}-\frac1x$，求 $g(x)$ 的极值。
+  2. 证明：$f(x)+1<e^x-x^2$。
+answer: |-
+  （1）$g(x)$ 在 $x=e^2$ 处取得极大值 $\frac1{e^2}$，无极小值；（2）证明见解析。
+
+  第(1)问中 $g(x)=\frac{x\ln x}{x^2}-\frac1x=\frac{\ln x-1}{x}$。 求导 $g^{\prime}(x)=\frac{2-\ln x}{x^2}$，故 $g$ 在 $(0,e^2)$ 递增、$(e^2,+\infty)$ 递减，极大值 $g(e^2)=1/e^2$。第(2)问法一：要证 $e^x-x^2-x\ln x-1>0$。先由 $\ln x\leqslant x-1$ 得 $x\ln x\leqslant x(x-1)$，故只需证 $e^x-2x^2+x-1>0$，即 $\varphi(x)=\frac{2x^2-x+1}{e^x}<1$。求导 $\varphi^{\prime}(x)=\frac{-(2x-1)(x-2)}{e^x}$，最大值在 $x=2$，$\varphi_{\max}=7/e^2<1$，所以原式成立。法二： 要证 $\frac{e^x}{x^2}>\frac{\ln x}{x}+1+\frac1{x^2}$。由 $\ln x/x\leqslant1/e$，再证明 $e^x-\frac32x^2-1>0$，可得 $\frac{e^x-x^2-1}{x^2}>1/2>1/e$，命题得证。source 后续注意段给出 $e^x-\frac32x^2-1\geqslant0$ 的更细证明，使用 $h^{\prime}(x)=e^x-3x$、方程 $e^x/x=3$ 和泰勒放缩定位关键点。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 第(1)问先化简 $g(x)$。
+      max_score: 1
+    - step_id: step_2
+      description: 求 $g$ 的极大值。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问法一先用切线放缩处理 $x\ln x$。
+      max_score: 1
+    - step_id: step_4
+      description: 法一转成指数压多项式。
+      max_score: 1
+    - step_id: step_5
+      description: 用辅助函数证明 $e^x-2x^2+x-1>0$。
+      max_score: 1
+    - step_id: step_6
+      description: 法二把目标除以 $x^2$。
+      max_score: 1
+    - step_id: step_7
+      description: 法二用加强指数不等式给左边余量。
+      max_score: 1
+    - step_id: step_8
+      description: 注意段解释加强不等式如何证明。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 极值最值
+        target: 第 1 问
+        result: $g$ 在 $x=e^2$ 处取得极大值 $1/e^2$。
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 2 问
+        result: $x>0$ 时 $x\ln x+1<e^x-x^2$。
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 保值性与分治
+      - 局部逼近与找点
+    subroute:
+      - 放缩 + 指数找基友
+      - $\ln x\leqslant x-1$
+      - 函数变形后的分而治之
+      - $\frac{\ln x}{x}\leqslant\frac1e$
+      - $e^x-\frac32x^2-1\geqslant0$
+      - 泰勒放缩
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 局部逼近结构
+      - 不等式工具结构
+      - 非齐次结构
+    evidence:
+      - $g(x)=\frac{\ln x-1}{x}$
+      - $e^x-x^2-x\ln x-1>0$
+      - $\varphi(x)=\frac{2x^2-x+1}{e^x}$
+      - $e^x-\frac32x^2-1\geqslant0$
+    normalization_moves_used:
+      - 把 $g(x)$ 化成对数分式。
+      - 用 $\ln x\leqslant x-1$ 消掉对数项。
+      - 构造 $\varphi$ 将指数不等式变成最大值小于 1。
+      - 用 $\frac{\ln x}{x}$ 的最大值和指数加强不等式做第二种证明。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会化简 $g(x)=f(x)/x^2-1/x$，回补代数恒等变形。
+      - 若学生不会求 $\frac{\ln x-1}{x}$ 的极值，回补导数单调极值基础。
+      - 若学生不知道 $\ln x\leqslant x-1$ 的来源，回补指数对数基础。
+      - 若学生不理解为什么可以用更强的不等式替代原命题，回补不等式工具基础。
+  detail_terms:
+    - $\frac{\ln x-1}{x}$
+    - $e^x-x^2-x\ln x-1$
+    - $\ln x\leqslant x-1$
+    - $\varphi(x)=\frac{2x^2-x+1}{e^x}$
+    - $7/e^2<1$
+    - $e^x-\frac32x^2-1$
+parts: &a1
+  - part_id: "1"
+    text: 若函数 $g(x)=\frac{f(x)}{x^2}-\frac1x$，求 $g(x)$ 的极值。
+  - part_id: "2"
+    text: 证明：$f(x)+1<e^x-x^2$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0225_xlnx_extreme_and_exp_minus_x2_bound_ch6_fenzhi_ex11
+source_evidence:
+  source_refs:
+    - ref_id: page_0225_ex11_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0225/page_0225.md
+      role: problem_start
+      evidence: page_0225 下部给出例11题头：$f(x)=x\ln x$，两问求 $g(x)$ 极值并证明 $f(x)+1<e^x-x^2$。
+    - ref_id: page_0225_ex11_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0225/page_0225.md
+      role: solution
+      evidence: page_0225 页底给出第(1)问解析，并开始第(2)问法一：先证明 $\ln x\leqslant x-1$。
+    - ref_id: page_0226_ex11_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0226/page_0226.md
+      role: continuation
+      evidence: page_0226 页首至中部续完例11，包含法一、法二以及关于 $e^x-\frac32x^2-1\geqslant0$ 的注意段。
+    - ref_id: page_0226_ex12_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0226/page_0226.md
+      role: local_context
+      evidence: page_0226 中下部进入考点6和例12题头，属于下一批，本卡不处理。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0225.png
+      inspected: true
+      notes: 已核对页图：例11题头、参考数据、第(1)问解析和第(2)问开头位于 page_0225 下半页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0226.png
+      inspected: true
+      notes: 已核对页图：page_0226 上半页为例11续解与注意段，例12在其后另起。
+  source_context: 本卡处理 page_0225 起头、page_0226 上半页续完的例11；page_0226 例12以后留给下一批。
+  source_influence:
+    - 保留第(1)问：$g(x)=\frac{\ln x-1}{x}$，极大值 $1/e^2$。
+    - 保留第(2)问法一：先用 $\ln x\leqslant x-1$，再证明 $e^x-2x^2+x-1>0$。
+    - 保留第(2)问法二：用 $\ln x/x\leqslant1/e$ 和 $e^x-\frac32x^2-1>0$ 进行放缩。
+    - 保留注意段作为法二中 $e^x-\frac32x^2-1\geqslant0$ 的补强证明。
+  source_discrepancies: []
+original_problem:
+  stem: （2020 广西来宾市考前模拟 T21）已知函数 $f(x)=x\ln x$。
+  parts: *a1
+  choices: []
+  answer: （1）$g(x)$ 在 $x=e^2$ 处取得极大值 $\frac1{e^2}$，无极小值；（2）证明见解析。
+  fidelity_notes:
+    - 两问解答题，无选项。
+    - 原题给出参考数据：$\ln2\approx0.69$，$\ln3\approx1.10$，$e^{3/2}\approx4.48$，$e^2\approx7.39$。
+    - 定义域为 $x>0$。
+solution:
+  source_solution_summary: 第(1)问中 $g(x)=\frac{x\ln x}{x^2}-\frac1x=\frac{\ln x-1}{x}$。 求导 $g^{\prime}(x)=\frac{2-\ln x}{x^2}$，故 $g$ 在 $(0,e^2)$ 递增、$(e^2,+\infty)$ 递减，极大值 $g(e^2)=1/e^2$。第(2)问法一：要证 $e^x-x^2-x\ln x-1>0$。先由 $\ln x\leqslant x-1$ 得 $x\ln x\leqslant x(x-1)$，故只需证 $e^x-2x^2+x-1>0$，即 $\varphi(x)=\frac{2x^2-x+1}{e^x}<1$。求导 $\varphi^{\prime}(x)=\frac{-(2x-1)(x-2)}{e^x}$，最大值在 $x=2$，$\varphi_{\max}=7/e^2<1$，所以原式成立。法二： 要证 $\frac{e^x}{x^2}>\frac{\ln x}{x}+1+\frac1{x^2}$。由 $\ln x/x\leqslant1/e$，再证明 $e^x-\frac32x^2-1>0$，可得 $\frac{e^x-x^2-1}{x^2}>1/2>1/e$，命题得证。source 后续注意段给出 $e^x-\frac32x^2-1\geqslant0$ 的更细证明，使用 $h^{\prime}(x)=e^x-3x$、方程 $e^x/x=3$ 和泰勒放缩定位关键点。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问先化简 $g(x)$。
+      formula_trace:
+        from: $g(x)=\frac{f(x)}{x^2}-\frac1x,\ f(x)=x\ln x$
+        to: $g(x)=\frac{\ln x-1}{x}$
+        operation: 代入并通分。
+        why: 化成标准对数分式后极值直接可求。
+      source_ref: page_0225_ex11_solution_start
+    - step_id: step_2
+      statement: 求 $g$ 的极大值。
+      formula_trace:
+        from: $g(x)=\frac{\ln x-1}{x}$
+        to: $g^{\prime}(x)=\frac{2-\ln x}{x^2}$，$g(e^2)=\frac1{e^2}$
+        operation: 求导判号。
+        why: 完成第(1)问。
+      source_ref: page_0225_ex11_solution_start
+    - step_id: step_3
+      statement: 第(2)问法一先用切线放缩处理 $x\ln x$。
+      formula_trace:
+        from: $\ln x\leqslant x-1$
+        to: $x\ln x\leqslant x(x-1)$
+        operation: 两边乘以 $x>0$。
+        why: 把含对数项换成二次多项式，降低证明难度。
+      source_ref: page_0226_ex11_continuation
+    - step_id: step_4
+      statement: 法一转成指数压多项式。
+      formula_trace:
+        from: $e^x-x^2-x\ln x-1$
+        to: 只需证明 $e^x-2x^2+x-1>0$
+        operation: 用 $x\ln x\leqslant x^2-x$ 替换。
+        why: 证明更强但更可控的不等式。
+      source_ref: page_0226_ex11_continuation
+    - step_id: step_5
+      statement: 用辅助函数证明 $e^x-2x^2+x-1>0$。
+      formula_trace:
+        from: $e^x-2x^2+x-1>0$
+        to: $\varphi(x)=\frac{2x^2-x+1}{e^x}<1$，$\varphi_{\max}=\varphi(2)=7/e^2<1$
+        operation: 构造 $\varphi$ 并求导判最大值。
+        why: 完成法一证明。
+      source_ref: page_0226_ex11_continuation
+    - step_id: step_6
+      statement: 法二把目标除以 $x^2$。
+      formula_trace:
+        from: $e^x-x^2-x\ln x-1>0$
+        to: $\frac{e^x}{x^2}>\frac{\ln x}{x}+1+\frac1{x^2}$
+        operation: 两边除以 $x^2>0$ 并整理。
+        why: 进入分而治之的上函数估值。
+      source_ref: page_0226_ex11_continuation
+    - step_id: step_7
+      statement: 法二用加强指数不等式给左边余量。
+      formula_trace:
+        from: $e^x-\frac32x^2-1>0$
+        to: $\frac{e^x-x^2-1}{x^2}>\frac12>\frac1e\geqslant\frac{\ln x}{x}$
+        operation: 把 $e^x$ 的余量压过 $\ln x/x$ 的最大值。
+        why: 完成法二证明。
+      source_ref: page_0226_ex11_continuation
+    - step_id: step_8
+      statement: 注意段解释加强不等式如何证明。
+      formula_trace:
+        from: $H(x)=e^x-\frac32x^2-1$，$H^{\prime}(x)=e^x-3x$
+        to: 通过 $e^x/x=3$ 的两个根和泰勒放缩，证明关键极小值仍非负
+        operation: 先定位导数零点，再用泰勒放缩验证右侧临界根所在区间。
+        why: source 说明这个加强不等式不是随便引用，而是可证明的估值工具。
+      source_ref: page_0226_ex11_continuation
+teaching_card:
+  student_title: 先用切线压 $\ln x$，再证明指数余量够大
+  what_it_trains: 训练复杂指数不等式的两种处理：一条先消对数，一条用加强指数余量直接压住 $\ln x/x$。
+  recognition_cues:
+    - 题目目标是 $x\ln x+1<e^x-x^2$，对数项和二次项纠缠。
+    - source 给了参考数据，说明后半段会用估值或泰勒放缩。
+    - 第(1)问的 $g(x)$ 是对数分式，和第(2)问的 $\ln x/x$ 上界相关。
+  normalization_moves:
+    - 第(1)问先化简再求导。
+    - 第(2)问法一先用 $\ln x\leqslant x-1$。
+    - 把剩余指数多项式写成 $\varphi(x)<1$。
+    - 法二把目标除以 $x^2$，用指数加强不等式给余量。
+  common_failures:
+    - 把 $g^{\prime}(x)$ 算成 $(1-\ln x)/x^2$，导致极值点错误。
+    - 使用 $\ln x\leqslant x-1$ 后不检查替换方向，证明链反了。
+    - 看到注意段就把 $e^x-\frac32x^2-1\geqslant0$ 当黑箱，没有记录它是估值工具。
+  similar_practice_query: xlnx e^x-x^2 ln x<=x-1 指数余量 e^x-3/2x^2-1 泰勒放缩
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

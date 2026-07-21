@@ -1,0 +1,168 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0030_ex14
+content_revision_id: mst_p0030_ex14-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0030_ex14.card.yaml
+stem: 若 $ae^{ax-1}\geqslant 1+\ln x$ 在 $(0,+\infty)$ 上恒成立，则 $a$ 的取值范围是 ______.
+answer: |-
+  $[1,+\infty)$
+
+  先由大 $x$ 情形排除 $a\le0$。把 $1+\ln x$ 写成 $\ln(ex)$，并两边乘以 $ex$，得到 $axe^{ax}\ge e^{\ln(ex)}\ln(ex)$。若 $\ln(ex)\le0$，右端非正而左端为正，不等式自动成立；若 $\ln(ex)>0$，用 $g(t)=te^t$ 在 $(0,+\infty)$ 上递增，推出 $ax\ge\ln(ex)$，即 $a\ge (1+\ln x)/x$。在 $x>1/e$ 上，$e\ln(ex)/(ex)$ 的最大值为 1，故 $a\ge1$，答案为 $[1,+\infty)$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 先确定参数必须为正。
+      max_score: 1
+    - step_id: step_2
+      description: 把右端合成 $\ln(ex)$ 并制造 $te^t$。
+      max_score: 1
+    - step_id: step_3
+      description: 分开处理 $\ln(ex)$ 的符号。
+      max_score: 1
+    - step_id: step_4
+      description: 用 $g(t)=te^t$ 的递增性消去同构函数。
+      max_score: 1
+    - step_id: step_5
+      description: 求恒成立所需的最大下界。
+      max_score: 1
+    - step_id: step_6
+      description: 写出参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+    subroute:
+      - $te^t$ 递增同构
+      - $1+\ln x=\ln(ex)$
+      - $\ln x/x$ 最大值
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $axe^{ax}$ 与 $e^{\ln(ex)}\ln(ex)$ 同构为 $g(ax)$ 与 $g(\ln(ex))$。
+      - 参数范围由 $a\ge (1+\ln x)/x$ 的最大值给出。
+    normalization_moves_used:
+      - $1+\ln x$ 合成 $\ln(ex)$。
+      - 两边乘 $ex$，把左端改成 $(ax)e^{ax}$。
+      - 按 $\ln(ex)\le0$ 和 $\ln(ex)>0$ 分段。
+      - 令 $u=ex$ 求 $e\ln u/u$ 的最大值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $1+\ln x$ 合成 $\ln(ex)$，回补指数对数基础。
+      - 若学生不知道 $te^t$ 在正区间递增，回补导数单调极值基础。
+      - 若学生漏掉 $\ln(ex)\le0$ 时右端非正的讨论，回补不等式工具基础。
+      - 若学生不会求 $\ln u/u$ 的最大值，回补导数单调极值基础。
+  detail_terms:
+    - $ae^{ax-1}$
+    - $axe^{ax}$
+    - $\ln(ex)$
+    - $g(t)=te^t$
+    - $\max e\ln(ex)/(ex)=1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0030_ex14
+source_evidence:
+  source_refs:
+    - ref_id: page_0030
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0030/page_0030.md
+      role: problem_start
+      evidence: 例 14 题干、解析和答案完整位于 page_0030。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0030.png
+      inspected: true
+      notes: 核对题干为 $ae^{ax-1}\geqslant 1+\ln x$ 在 $(0,+\infty)$ 上恒成立；答案为 $[1,+\infty)$。
+  source_context: 例 14 位于关于 $xe^x+x$ 单调性的上一题续解之后，继续使用 $te^t$ 的递增同构，把参数恒成立问题转为比较 $ax$ 与 $\ln(ex)$。
+  source_influence:
+    - BATCHES locator hint `mst_p0030_ex14` 仅用于确认题头；卡片内容按 page_0030 源 markdown 与源图重建。
+    - 源解把 $1+\ln x$ 写成 $\ln(ex)$，再乘以 $ex$ 形成 $axe^{ax}\geqslant e^{\ln(ex)}\ln(ex)$。
+  source_discrepancies: []
+original_problem:
+  stem: 若 $ae^{ax-1}\geqslant 1+\ln x$ 在 $(0,+\infty)$ 上恒成立，则 $a$ 的取值范围是 ______.
+  parts: *a1
+  choices: []
+  answer: $[1,+\infty)$
+  fidelity_notes:
+    - 源图与 markdown 一致；空格填答案区间。
+    - 由 $\ln x$ 和恒成立条件隐含 $x>0$；由大 $x$ 情形可推出 $a>0$。
+solution:
+  source_solution_summary: 先由大 $x$ 情形排除 $a\le0$。把 $1+\ln x$ 写成 $\ln(ex)$，并两边乘以 $ex$，得到 $axe^{ax}\ge e^{\ln(ex)}\ln(ex)$。若 $\ln(ex)\le0$，右端非正而左端为正，不等式自动成立；若 $\ln(ex)>0$，用 $g(t)=te^t$ 在 $(0,+\infty)$ 上递增，推出 $ax\ge\ln(ex)$，即 $a\ge (1+\ln x)/x$。在 $x>1/e$ 上，$e\ln(ex)/(ex)$ 的最大值为 1，故 $a\ge1$，答案为 $[1,+\infty)$。
+  key_steps:
+    - step_id: step_1
+      statement: 先确定参数必须为正。
+      formula_trace:
+        from: $ae^{ax-1}\geqslant 1+\ln x\quad (x>0)$
+        to: $a>0$
+        operation: 若 $a\le0$，左端 $ae^{ax-1}\le0$；取足够大的 $x$ 时右端 $1+\ln x>0$。
+        why: 恒成立不能在大 $x$ 处被正的右端破坏。
+      source_ref: page_0030
+    - step_id: step_2
+      statement: 把右端合成 $\ln(ex)$ 并制造 $te^t$。
+      formula_trace:
+        from: $ae^{ax-1}\geqslant 1+\ln x$
+        to: $axe^{ax}\geqslant ex\ln(ex)=e^{\ln(ex)}\ln(ex)$
+        operation: 用 $1+\ln x=\ln(ex)$，再两边乘以正数 $ex$。
+        why: 左边成为 $(ax)e^{ax}$，右边成为 $\ln(ex)e^{\ln(ex)}$，可用同一个函数比较。
+      source_ref: page_0030
+    - step_id: step_3
+      statement: 分开处理 $\ln(ex)$ 的符号。
+      formula_trace:
+        from: $axe^{ax}\geqslant e^{\ln(ex)}\ln(ex)$
+        to: $\ln(ex)\le0$ 时恒成立；$\ln(ex)>0$ 时只需比较 $g(ax)$ 与 $g(\ln(ex))$
+        operation: 当 $a>0$ 时左边为正；若右边非正则无需再限制。
+        why: 只有 $x>1/e$ 时右端也为正，递增同构才产生有效参数条件。
+      source_ref: page_0030
+    - step_id: step_4
+      statement: 用 $g(t)=te^t$ 的递增性消去同构函数。
+      formula_trace:
+        from: $g(ax)\geqslant g(\ln(ex)),\quad x>1/e$
+        to: $ax\geqslant \ln(ex)=1+\ln x$
+        operation: 由 $g'(t)=(t+1)e^t>0$ 在正区间递增，且 $ax>0$、$\ln(ex)>0$。
+        why: 同一个严格递增函数值比较等价于自变量比较。
+      source_ref: page_0030
+    - step_id: step_5
+      statement: 求恒成立所需的最大下界。
+      formula_trace:
+        from: $a\geqslant \frac{1+\ln x}{x}\quad (x>1/e)$
+        to: $a\geqslant \max_{x>1/e}\frac{1+\ln x}{x}=1$
+        operation: 令 $u=ex$，则 $\frac{1+\ln x}{x}=e\frac{\ln u}{u}$；$\ln u/u$ 在 $u=e$ 取最大 $1/e$。
+        why: 恒成立要求 $a$ 不小于所有右端值的最大值。
+      source_ref: page_0030
+    - step_id: step_6
+      statement: 写出参数范围。
+      formula_trace:
+        from: $a>0$ 且 $a\ge1$
+        to: $a\in[1,+\infty)$
+        operation: 合并条件，并注意 $a=1$ 可达到最大下界。
+        why: 这正是源页给出的答案。
+      source_ref: page_0030
+teaching_card:
+  student_title: 把 $ae^{ax-1}$ 配成 $te^t$ 来求参数
+  what_it_trains: 训练把含参数指数不等式改写成同一个 $te^t$ 函数值比较，再把恒成立问题落到一个单变量最大值。
+  recognition_cues:
+    - 右端出现 $1+\ln x$，可以合成 $\ln(ex)$。
+    - 左端有 $a$ 和 $e^{ax}$，乘上 $x$ 后能形成 $(ax)e^{ax}$。
+    - 恒成立区间是 $x>0$，但只有 $x>1/e$ 会给出真正限制。
+  normalization_moves:
+    - 先判 $a>0$，再把不等式乘以 $ex$。
+    - 把两边写成 $g(ax)$ 与 $g(\ln(ex))$。
+    - 由 $g$ 递增得到 $a\ge(1+\ln x)/x$。
+    - 令 $u=ex$ 求最大值 1。
+  common_failures:
+    - 没有先排除 $a\le0$，导致乘法和同构比较缺少正性依据。
+    - 把 $\ln(ex)\le0$ 的区域也强行套单调比较。
+    - 求 $\frac{1+\ln x}{x}$ 最大值时忘记 $x>1/e$。
+  similar_practice_query: ae^{ax-1} 1+lnx 恒成立 te^t 同构 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 源图与 markdown 一致；本题不跨页。

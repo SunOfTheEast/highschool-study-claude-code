@@ -1,0 +1,138 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0046_section2_ex18
+content_revision_id: mst_p0046_section2_ex18-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0046_section2_ex18.card.yaml
+stem: "（江苏省卓越高中联盟 2024-2025 学年高三上学期 12 月月考 T12）已知直线 l: x-y+b=0 分别与曲线 y=e^{x+1}，y=-x^2+mx (m>0) 都相切，则 b-2m 的值为______。"
+answer: |-
+  -4\sqrt{2}
+
+  因为 l 的斜率为 1，先让 y=e^{x+1} 的切线斜率等于 1，得切点 x=-1， 从而切线为 y=x+2，所以 b=2。再让直线 y=x+2 与抛物线 y=-x^2+mx 相切， 方程 -x^2+mx=x+2 有重根，判别式为 0，结合 m>0 得 m=1+2\sqrt{2}， 最后 b-2m=-4\sqrt{2}。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: "由直线 l: x-y+b=0 看出切线斜率固定为 1。"
+      max_score: 1
+    - step_id: step_2
+      description: 用指数曲线的切点确定 b。
+      max_score: 1
+    - step_id: step_3
+      description: 把与抛物线相切转化为二次方程有重根。
+      max_score: 1
+    - step_id: step_4
+      description: 结合 m>0 取正的参数值并计算目标量。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 显隐点探路
+    subroute:
+      - 切线找点
+      - 抛物线切线判别式
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - e^{x+1}=1 \Rightarrow b=2
+      - -x^2+mx=x+2,\ \Delta=0
+    normalization_moves_used:
+      - "把 l: x-y+b=0 改写成 y=x+b，先固定斜率。"
+      - 用指数曲线的切点求出整条直线。
+      - 用二次方程重根条件表达抛物线相切。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 x-y+b=0 读出斜率和截距，回补代数恒等变形。
+      - 若学生不会把曲线相切转成导数等于斜率，回补导数运算与几何意义。
+      - 若学生联立抛物线后不知道用判别式为 0，回补方程根分布与韦达。
+  detail_terms:
+    - e^{x+1} 在 x=-1 处切线
+    - y=x+2
+    - \Delta=(1-m)^2-8
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0046_section2_ex18
+source_evidence:
+  source_refs:
+    - ref_id: page_0046
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0046/page_0046.md
+      role: problem_start
+      evidence: "例 18：已知直线 l: x-y+b=0 分别与曲线 y=e^{x+1}、y=-x^2+mx (m>0) 都相切，求 b-2m。"
+    - ref_id: page_0046_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0046/page_0046.md
+      role: solution
+      evidence: 解析由 e^{x+1} 与斜率 1 的直线相切得 b=2；再令 -x^2+mx=x+2， 用判别式为 0 得 m=2\sqrt{2}+1，故 b-2m=-4\sqrt{2}。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0046.png
+      inspected: true
+      notes: 页图已核对：page_0046 顶部是例 17 续页，例 18 题头、题干和完整解析均在本页。
+  source_context: 本题承接第二节公切线与切线找点内容；直线 l 已固定斜率为 1，关键是分别落实指数曲线 与二次曲线的相切条件。
+  source_influence: []
+  source_discrepancies: []
+original_problem:
+  stem: "（江苏省卓越高中联盟 2024-2025 学年高三上学期 12 月月考 T12）已知直线 l: x-y+b=0 分别与曲线 y=e^{x+1}，y=-x^2+mx (m>0) 都相切，则 b-2m 的值为______。"
+  parts: *a1
+  choices: []
+  answer: -4\sqrt{2}
+  fidelity_notes: []
+solution:
+  source_solution_summary: 因为 l 的斜率为 1，先让 y=e^{x+1} 的切线斜率等于 1，得切点 x=-1， 从而切线为 y=x+2，所以 b=2。再让直线 y=x+2 与抛物线 y=-x^2+mx 相切， 方程 -x^2+mx=x+2 有重根，判别式为 0，结合 m>0 得 m=1+2\sqrt{2}， 最后 b-2m=-4\sqrt{2}。
+  key_steps:
+    - step_id: step_1
+      statement: "由直线 l: x-y+b=0 看出切线斜率固定为 1。"
+      formula_trace:
+        from: x-y+b=0
+        to: y=x+b,\quad k=1
+        operation: 改写直线方程，读出斜率。
+        why: 两条曲线都必须有一条斜率为 1 的切线。
+      source_ref: page_0046_solution
+    - step_id: step_2
+      statement: 用指数曲线的切点确定 b。
+      formula_trace:
+        from: (e^{x+1})'=e^{x+1}=1
+        to: x=-1,\quad y=e^0=1,\quad 1=-1+b,\quad b=2
+        operation: 令切点处导数等于直线斜率，再代入 y=x+b。
+        why: 指数曲线处的切线就是题设中的同一条直线。
+      source_ref: page_0046_solution
+    - step_id: step_3
+      statement: 把与抛物线相切转化为二次方程有重根。
+      formula_trace:
+        from: -x^2+mx=x+2
+        to: x^2+(1-m)x+2=0,\quad \Delta=(1-m)^2-8=0
+        operation: 联立抛物线和直线，并令判别式为 0。
+        why: 直线与抛物线相切时交点重合。
+      source_ref: page_0046_solution
+    - step_id: step_4
+      statement: 结合 m>0 取正的参数值并计算目标量。
+      formula_trace:
+        from: (1-m)^2=8,\quad b=2
+        to: m=1+2\sqrt{2},\quad b-2m=-4\sqrt{2}
+        operation: 解判别式方程，舍去 m=1-2\sqrt{2}<0。
+        why: 题设要求 m>0，目标量只需代回 b-2m。
+      source_ref: page_0046_solution
+teaching_card:
+  student_title: 先用指数切点定直线，再让抛物线判别式为零
+  what_it_trains: 训练把“同一条直线同时相切”拆成固定斜率、确定直线、再用重根条件求参数。
+  recognition_cues:
+    - 题干给出一条斜率已知的直线。
+    - 同时切指数曲线和二次曲线。
+    - 二次曲线相切可以联立后看判别式。
+  normalization_moves:
+    - 先把直线写成 y=x+b。
+    - 用 e^{x+1}=1 找指数切点。
+    - 联立抛物线并令 \Delta=0。
+  common_failures:
+    - 忘记 l 的斜率已经固定为 1。
+    - 解出 m=1\pm2\sqrt{2} 后没有用 m>0 舍根。
+    - 把 b-2m 误算成 2m-b。
+  similar_practice_query: 已知直线同时与指数曲线和抛物线相切，先求切线再用判别式
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

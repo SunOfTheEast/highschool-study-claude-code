@@ -1,0 +1,150 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0200_exp_two_extrema_param_range_ch6_exp_ex03
+content_revision_id: mst_p0200_exp_two_extrema_param_range_ch6_exp_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0200_exp_two_extrema_param_range_ch6_exp_ex03.card.yaml
+stem: （2023 · 山西阳泉高二期末 T14）若当 $x>0$ 时，函数 $f(x)=2-e^x+mx^2$ 有两个极值点，求实数 $m$ 的取值范围。
+answer: |-
+  $m\in\left(\frac e2,+\infty\right)$。
+
+  由 $f(x)=2-e^x+mx^2$，得 $f^{\prime}(x)=-e^x+2mx$。题设“有两个极值点”意味着 $f^{\prime}(x)=0$ 在 $(0,+\infty)$ 有两个解，即 $e^x=2mx$ 有两解。写成 $m=\frac{e^x}{2x}$（$x>0$），令 $h(x)=\frac{e^x}{2x}$，则 $h^{\prime}(x)=\frac{e^x(x-1)}{2x^2}$，所以 $h$ 在 $(0,1)$ 递减、在 $(1,+\infty)$ 递增，最小值是 $h(1)=\frac e2$。因此直线 $y=m$ 与 $y=h(x)$ 相交两次当且仅当 $m>\frac e2$；当 $m=\frac e2$ 只有一解，不满足“两极值点”。故 $m\in\left(\frac e2,+\infty\right)$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把极值点条件转成导函数零点个数。
+      max_score: 1
+    - step_id: step_2
+      description: 做参变量分离。
+      max_score: 1
+    - step_id: step_3
+      description: 求 $h(x)=\frac{e^x}{2x}$ 的最小值阈值。
+      max_score: 1
+    - step_id: step_4
+      description: 由交点个数读参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 参变量分离
+    secondary:
+      - 数形结合
+      - 含参数分类讨论
+    subroute:
+      - 导函数零点计数
+      - $m=\frac{e^x}{2x}$
+      - 单峰阈值
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 极值点偏移结构
+      - 指对复合结构
+    evidence:
+      - $f^{\prime}(x)=-e^x+2mx$
+      - $m=\frac{e^x}{2x}$
+      - $h_{\min}=\frac e2$
+      - $m>\frac e2$
+    normalization_moves_used:
+      - 先从“两个极值点”转成“导函数方程两解”。
+      - 把参数 $m$ 分离到等式一边。
+      - 用函数最小阈值判两解条件。
+  fallback:
+    only_if_trace_shows:
+      - 若学生把“两个极值点”误当“两个零点”，回补导数单调极值基础。
+      - 若学生不会把 $e^x=2mx$ 改写为 $m=\frac{e^x}{2x}$，回补代数恒等变形。
+      - 若学生不会用导数判断 $h(x)$ 的先降后升，回补函数性质与图像。
+  detail_terms:
+    - $f(x)=2-e^x+mx^2$
+    - $f^{\prime}(x)=-e^x+2mx$
+    - $h(x)=\frac{e^x}{2x}$
+    - $h(1)=\frac e2$
+    - $m\in(\frac e2,+\infty)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0200_exp_two_extrema_param_range_ch6_exp_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0200_ex03_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0200/page_0200.md
+      role: problem_start
+      evidence: page_0200 行37给出例3题干：$x>0$ 时 $f(x)=2-e^x+mx^2$ 有两个极值点，求 $m$ 范围。
+    - ref_id: page_0200_ex03_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0200/page_0200.md
+      role: solution
+      evidence: page_0200 行39-40给出两条解法：由 $e^x\ge ex$ 推得 $m>\frac e2$，或由 $m=\frac{e^x}{2x}$ 的值域得同结论。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0200.png
+      inspected: true
+      notes: 已核对页图：例3题干、解析与“另解”都完整可读，结论为 $m\in(\frac e2,+\infty)$。
+  source_context: 例3题头与解析均在 page_0200，同页可完成。
+  source_influence:
+    - 保留源解“极值点数量转导函数零点数量”的起手。
+    - 保留方程同构：$e^x=2mx\Leftrightarrow m=\frac{e^x}{2x}$。
+    - 保留“最小阈值 $\frac e2$”这一关键边界，并强调“两解”对应严格不等号。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 山西阳泉高二期末 T14）若当 $x>0$ 时，函数 $f(x)=2-e^x+mx^2$ 有两个极值点，求实数 $m$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $m\in\left(\frac e2,+\infty\right)$。
+  fidelity_notes:
+    - 源题为填空型单问，无选择项。
+    - “有两个极值点”等价于 $f^{\prime}(x)$ 在 $(0,+\infty)$ 有两个零点且变号。
+solution:
+  source_solution_summary: 由 $f(x)=2-e^x+mx^2$，得 $f^{\prime}(x)=-e^x+2mx$。题设“有两个极值点”意味着 $f^{\prime}(x)=0$ 在 $(0,+\infty)$ 有两个解，即 $e^x=2mx$ 有两解。写成 $m=\frac{e^x}{2x}$（$x>0$），令 $h(x)=\frac{e^x}{2x}$，则 $h^{\prime}(x)=\frac{e^x(x-1)}{2x^2}$，所以 $h$ 在 $(0,1)$ 递减、在 $(1,+\infty)$ 递增，最小值是 $h(1)=\frac e2$。因此直线 $y=m$ 与 $y=h(x)$ 相交两次当且仅当 $m>\frac e2$；当 $m=\frac e2$ 只有一解，不满足“两极值点”。故 $m\in\left(\frac e2,+\infty\right)$。
+  key_steps:
+    - step_id: step_1
+      statement: 把极值点条件转成导函数零点个数。
+      formula_trace:
+        from: $f(x)=2-e^x+mx^2$
+        to: $f^{\prime}(x)=-e^x+2mx,\ e^x=2mx$
+        operation: 求导并令导函数等于零。
+        why: 极值点个数由导函数变号零点个数决定。
+      source_ref: page_0200_ex03_solution
+    - step_id: step_2
+      statement: 做参变量分离。
+      formula_trace:
+        from: $e^x=2mx,\ x>0$
+        to: $m=\frac{e^x}{2x}$
+        operation: 移项并除以 $2x$（$x>0$）。
+        why: 把参数范围问题改成水平线与函数值域问题。
+      source_ref: page_0200_ex03_solution
+    - step_id: step_3
+      statement: 求 $h(x)=\frac{e^x}{2x}$ 的最小值阈值。
+      formula_trace:
+        from: $h(x)=\frac{e^x}{2x}$
+        to: $h^{\prime}(x)=\frac{e^x(x-1)}{2x^2},\ h_{\min}=h(1)=\frac e2$
+        operation: 导数判单调并取极小值。
+        why: 两交点条件等价于参数高于极小值。
+      source_ref: page_0200_ex03_solution
+    - step_id: step_4
+      statement: 由交点个数读参数范围。
+      formula_trace:
+        from: $m=\frac{e^x}{2x}$
+        to: $m>\frac e2$
+        operation: 两解对应严格大于最小值；等于最小值仅一解。
+        why: 题目要求“有两个极值点”。
+      source_ref: page_0200_ex03_solution
+teaching_card:
+  student_title: 把两极值点转成一条阈值线
+  what_it_trains: 训练“极值点个数题”中最常用的参变量分离与阈值判交点套路。
+  recognition_cues:
+    - 题干给“有两个极值点”并要求参数范围。
+    - 导函数方程里参数与 $e^x,x$ 乘积同现。
+    - 可改写成 $m=h(x)$ 的值域判定。
+  normalization_moves:
+    - 先写 $f^{\prime}(x)=0$。
+    - 再变形为 $m=\frac{e^x}{2x}$。
+    - 求 $h(x)$ 最小值阈值，再读“两解”条件。
+  common_failures:
+    - 把 $m=\frac e2$ 也算进来，忽略这时只有一个切点。
+    - 只用 $e^x\ge ex$ 给必要条件，不补足充分性。
+    - 忘记题目限制 $x>0$，导致函数讨论区间错位。
+  similar_practice_query: 两个极值点 参数范围 m=e^x/(2x) 阈值 e/2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,238 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0148_power_parameter_sign_ex18
+content_revision_id: mst_p0148_power_parameter_sign_ex18-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0148_power_parameter_sign_ex18.card.yaml
+stem: |-
+  （2022·全国甲卷文）已知 $9^m=10,\ a=10^m-11,\ b=8^m-9$，则（ ）
+  A. $a>0>b$
+  B. $a>b>0$
+  C. $b>a>0$
+  D. $b>0>a$
+answer: |
+  A
+
+  由 $9^m=10$ 得
+  \[
+  m=\log_9 10=\frac{\lg10}{\lg9}>1.
+  \]
+  比较 $a$ 的符号：源解用糖水不等式
+  \[
+  \frac{\lg10}{\lg9}
+  >
+  \frac{\lg10+\lg\frac{10}{9}}{\lg9+\lg\frac{10}{9}}
+  =
+  \frac{\lg(100/9)}{\lg10}
+  >
+  \lg11,
+  \]
+  所以 $m>\lg11$，从而
+  \[
+  a=10^m-11>10^{\lg11}-11=0.
+  \]
+  比较 $b$ 的符号：源解同理给出
+  \[
+  \frac{\lg9}{\lg8}
+  >
+  \frac{\lg9+\lg\frac98}{\lg8+\lg\frac98}
+  >
+  \frac{\lg10}{\lg9}=m,
+  \]
+  即 $\log_8 9>m$，故
+  \[
+  b=8^m-9<8^{\log_8 9}-9=0.
+  \]
+  因此 $a>0>b$，选 A。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先把参数写成对数商。
+      max_score: 1
+    - step_id: step_2
+      description: 第一条糖水链压出 $m>\lg11$。
+      max_score: 1
+    - step_id: step_3
+      description: 回代得到 $a>0$。
+      max_score: 1
+    - step_id: step_4
+      description: 第二条糖水链压出 $m<\log_8 9$。
+      max_score: 1
+    - step_id: step_5
+      description: 回代得到 $b<0$ 并合并结论。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较两个参数指数式的符号。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 拟合与夹逼
+    subroute:
+      - 参数换底
+      - 糖水不等式双链
+      - 指数阈值判符号
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - $m$ 由幂方程定义，需先换成对数分式。
+      - $a,b$ 都是“底数幂减常数”的符号比较。
+    normalization_moves_used:
+      - $m=\frac{\lg10}{\lg9}$。
+      - $m>\lg11$ 与 $m<\log_8 9$。
+      - $10^m-11,\ 8^m-9$ 分别按阈值判号。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $9^m=10$ 得到 $m$ 的对数表达，回补指数对数基础。
+      - 若学生不会用糖水不等式构造双边界，回补不等式工具基础。
+      - 若学生不知道指数函数保序方向，回补函数性质与图像。
+  detail_terms:
+    - $m=\log_9 10$
+    - 糖水不等式
+    - $m>\lg11$
+    - $m<\log_8 9$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0148_power_parameter_sign_ex18
+source_evidence:
+  source_refs:
+    - ref_id: page_0148_ex18_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0148/page_0148.md
+      role: problem_start
+      evidence: 例18题干：$9^m=10,a=10^m-11,b=8^m-9$，判断 $a,b$ 的符号关系。
+    - ref_id: page_0148_ex18_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0148/page_0148.md
+      role: solution
+      evidence: 例18解析用糖水不等式分别得到 $m>\lg11$ 与 $m<\log_8 9$，结论 $a>0>b$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0148.png
+      inspected: false
+      notes: 本次仅按 source markdown 重建，未重新人工核对页图。
+  source_context: 本题是“参数指数转符号比较”的典型：先估参数，再代回指数式。
+  source_influence:
+    - 保留源解的两条糖水链：一条压出 $m>\lg11$，一条压出 $m<\log_8 9$。
+    - 保留最终判断顺序：先判 $a>0$，再判 $b<0$。
+  source_discrepancies: []
+original_problem:
+  stem: （2022·全国甲卷文）已知 $9^m=10,\ a=10^m-11,\ b=8^m-9$，则（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a>0>b$
+      text_latex: $a>0>b$
+    - label: B
+      text_raw: $a>b>0$
+      text_latex: $a>b>0$
+    - label: C
+      text_raw: $b>a>0$
+      text_latex: $b>a>0$
+    - label: D
+      text_raw: $b>0>a$
+      text_latex: $b>0>a$
+  answer: A
+  fidelity_notes:
+    - 源解析明确给出“综上，$a>0>b$，故选 A”。
+solution:
+  source_solution_summary: |
+    由 $9^m=10$ 得
+    \[
+    m=\log_9 10=\frac{\lg10}{\lg9}>1.
+    \]
+    比较 $a$ 的符号：源解用糖水不等式
+    \[
+    \frac{\lg10}{\lg9}
+    >
+    \frac{\lg10+\lg\frac{10}{9}}{\lg9+\lg\frac{10}{9}}
+    =
+    \frac{\lg(100/9)}{\lg10}
+    >
+    \lg11,
+    \]
+    所以 $m>\lg11$，从而
+    \[
+    a=10^m-11>10^{\lg11}-11=0.
+    \]
+    比较 $b$ 的符号：源解同理给出
+    \[
+    \frac{\lg9}{\lg8}
+    >
+    \frac{\lg9+\lg\frac98}{\lg8+\lg\frac98}
+    >
+    \frac{\lg10}{\lg9}=m,
+    \]
+    即 $\log_8 9>m$，故
+    \[
+    b=8^m-9<8^{\log_8 9}-9=0.
+    \]
+    因此 $a>0>b$，选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 先把参数写成对数商。
+      formula_trace:
+        from: $9^m=10$
+        to: $m=\frac{\lg10}{\lg9}$
+        operation: 取对数并换底。
+        why: 后续可直接套糖水不等式。
+      source_ref: page_0148_ex18_solution
+    - step_id: step_2
+      statement: 第一条糖水链压出 $m>\lg11$。
+      formula_trace:
+        from: $m=\frac{\lg10}{\lg9}$
+        to: $m>\frac{\lg(100/9)}{\lg10}>\lg11$
+        operation: 分子分母同加 $\lg\frac{10}{9}$。
+        why: 为 $10^m$ 与 11 比较创造指数阈值。
+      source_ref: page_0148_ex18_solution
+    - step_id: step_3
+      statement: 回代得到 $a>0$。
+      formula_trace:
+        from: $m>\lg11$
+        to: $10^m>11\Rightarrow a=10^m-11>0$
+        operation: 对 10 作指数放大。
+        why: 确定 $a$ 的符号。
+      source_ref: page_0148_ex18_solution
+    - step_id: step_4
+      statement: 第二条糖水链压出 $m<\log_8 9$。
+      formula_trace:
+        from: $\frac{\lg9}{\lg8}$ 与 $m=\frac{\lg10}{\lg9}$
+        to: $\log_8 9>m$
+        operation: 对 $\frac{\lg9}{\lg8}$ 同样做糖水增量比较。
+        why: 为 $8^m$ 与 9 的比较建立上界。
+      source_ref: page_0148_ex18_solution
+    - step_id: step_5
+      statement: 回代得到 $b<0$ 并合并结论。
+      formula_trace:
+        from: $m<\log_8 9$
+        to: $8^m<9\Rightarrow b=8^m-9<0\Rightarrow a>0>b$
+        operation: 对 8 作指数放大并传递比较。
+        why: 完成选项判定。
+      source_ref: page_0148_ex18_solution
+teaching_card:
+  student_title: 先估参数 m，再判两项正负
+  what_it_trains: 训练“参数来自幂方程”时的标准动作：对数化估参数，再把符号判断转成指数阈值比较。
+  recognition_cues:
+    - 未知参数在指数位置。
+    - 目标是 $X^m-k$ 的符号而不是具体数值。
+    - 题干给了可用于糖水构造的相邻比例。
+  normalization_moves:
+    - 先写出 $m$ 的对数形式。
+    - 用两条不等式分别锁定 $m$ 的上下界。
+    - 把上下界回代到 $10^m$、$8^m$。
+  common_failures:
+    - 只算出 $m>1$ 就草率下结论。
+    - 把 $m<\log_8 9$ 误写成 $8^m>9$。
+    - 忽略两项需要分别判号。
+  similar_practice_query: 参数指数 符号比较 糖水不等式 9^m=10
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 本卡未核对 page_0148 原图，按重建 markdown 完成。

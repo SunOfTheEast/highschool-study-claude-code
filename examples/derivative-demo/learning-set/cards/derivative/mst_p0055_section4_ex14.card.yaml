@@ -1,0 +1,191 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0055_section4_ex14
+content_revision_id: mst_p0055_section4_ex14-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0055_section4_ex14.card.yaml
+stem: |-
+  （2021 · 乙卷）设 $a\ne0$，若 $x=a$ 为函数 $f(x)=a(x-a)^2(x-b)$ 的极大值点，则（  ）
+  A. $a<b$
+  B. $a>b$
+  C. $ab<a^2$
+  D. $ab>a^2$
+answer: |
+  D
+
+  由 $f(x)=a(x-a)^2(x-b)$ 可知 $x=a$ 是二重零点，$x=b$ 是另一零点。源解用三次函数图像分 $a$ 的正负讨论：当 $a>0$ 时，三次函数右端向上，要让二重零点 $x=a$ 成为极大值点，草图给出 $0<a<b$；当 $a<0$ 时，右端向下，草图给出 $b<a<0$。两种情形都等价于 $ab>a^2$，故选 D。代数上也可复核：在 $x=a$ 附近，$f(x)=a(a-b)(x-a)^2+O((x-a)^3)$，极大值点要求二次项系数 $a(a-b)<0$，即同样得到 $ab>a^2$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 识别 $x=a$ 是二重零点，$x=b$ 是另一个零点。
+      max_score: 1
+    - step_id: step_2
+      description: 当 $a>0$ 时，用左图判断根的位置。
+      max_score: 1
+    - step_id: step_3
+      description: 当 $a<0$ 时，用右图判断根的位置。
+      max_score: 1
+    - step_id: step_4
+      description: 把两种位置关系统一翻译为选项 D。
+      max_score: 1
+    - step_id: step_5
+      description: 用局部二次项复核“极大值点”的符号条件。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 判断 $a,b,ab,a^2$ 之间必然成立的大小关系。
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 含参数分类讨论
+      - 充分/必要性探路
+    subroute:
+      - 三次函数重根极值
+      - 首项系数定端向
+      - 局部二次项判极大
+  structure:
+    primary: 三次/高次函数结构
+    secondary:
+      - 局部逼近结构
+    evidence:
+      - $f(x)=a(x-a)^2(x-b)$ 中 $x=a$ 是二重零点。
+      - 源图给出 $a>0$ 时 $0<a<b$，$a<0$ 时 $b<a<0$。
+      - 局部条件 $a(a-b)<0$ 等价于 $ab>a^2$。
+    normalization_moves_used:
+      - 先分 $a>0$ 与 $a<0$。
+      - 把极大值点与二重根的“触轴”图像联系起来。
+      - 把 $a$ 与 $a-b$ 异号翻译成 $ab>a^2$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不知道 $(x-a)^2$ 表示 $x=a$ 为二重零点，回补方程根分布与韦达。
+      - 若学生不能由三次函数首项系数判断图像两端方向，回补函数性质与图像。
+      - 若学生把 $0<a<b$ 或 $b<a<0$ 翻译成 $ab>a^2$ 时符号出错，回补代数恒等变形。
+      - 若学生只判断 A 或 B 中一个分支，回补含参数分类讨论。
+  detail_terms:
+    - $a(x-a)^2(x-b)$
+    - 二重零点
+    - $0<a<b$
+    - $b<a<0$
+    - $a(a-b)<0$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0055_section4_ex14
+source_evidence:
+  source_refs:
+    - ref_id: page_0055
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0055/page_0055.md
+      role: problem_start
+      evidence: 例 14（2021 · 乙卷）：设 $a\ne0$，若 $x=a$ 为函数 $f(x)=a(x-a)^2(x-b)$ 的极大值点，则选择 A-D 中成立的关系。
+    - ref_id: page_0055_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0055/page_0055.md
+      role: solution
+      evidence: 解析按 $a>0$ 与 $a<0$ 分两幅三次函数草图：$a>0$ 时 $0<a<b$；$a<0$ 时 $b<a<0$；综上 $ab>a^2$，故选 D。
+    - ref_id: page_0056
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0056/page_0056.md
+      role: continuation
+      evidence: page_0056 顶部续出例 14 的两幅草图，随后才进入例 15。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0055.png
+      inspected: true
+      notes: 页图已核对：例 14 题头、题干、A-D 选项和文字解析均与 markdown 一致；两幅“如下图”位于下一页顶部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0056.png
+      inspected: true
+      notes: 页图已核对：顶部两幅草图是例 14 续图；左图对应 $0<a<b$，右图对应 $b<a<0$；例 15 从图下方重新开始。
+  source_context: 本题紧接第四节三次函数基本理论，用三次函数的根、重根和极值点位置判断参数关系。题头在 page_0055，续图在 page_0056，按题头规则归本卡。
+  source_influence:
+    - 卡片按源解的两种符号情形组织：$a>0$ 看左图，$a<0$ 看右图。
+    - 四个选项完整保留，答案取源页结论 D。
+  source_discrepancies:
+    - page_0056 markdown 的 image_note 写成曲线与 $x$ 轴交于 $0,a,b$ 三点；页图中 $O$ 只是原点标记，题式与 page_0055 解析都表明零点只有 $x=a$ 和 $x=b$，其中 $x=a$ 为二重根。本卡按题式和页图处理。
+original_problem:
+  stem: （2021 · 乙卷）设 $a\ne0$，若 $x=a$ 为函数 $f(x)=a(x-a)^2(x-b)$ 的极大值点，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a<b$
+      text_latex: $a<b$
+    - label: B
+      text_raw: $a>b$
+      text_latex: $a>b$
+    - label: C
+      text_raw: $ab<a^2$
+      text_latex: $ab<a^2$
+    - label: D
+      text_raw: $ab>a^2$
+      text_latex: $ab>a^2$
+  answer: D
+  fidelity_notes:
+    - 源页选项为 A $a<b$，B $a>b$，C $ab<a^2$，D $ab>a^2$；答案为 D。
+    - 源解写“$x=a$ 及 $x=b$ 是 $f(x)$ 的两个零点”，其中 $x=a$ 来自 $(x-a)^2$，是二重零点。
+solution:
+  source_solution_summary: |
+    由 $f(x)=a(x-a)^2(x-b)$ 可知 $x=a$ 是二重零点，$x=b$ 是另一零点。源解用三次函数图像分 $a$ 的正负讨论：当 $a>0$ 时，三次函数右端向上，要让二重零点 $x=a$ 成为极大值点，草图给出 $0<a<b$；当 $a<0$ 时，右端向下，草图给出 $b<a<0$。两种情形都等价于 $ab>a^2$，故选 D。代数上也可复核：在 $x=a$ 附近，$f(x)=a(a-b)(x-a)^2+O((x-a)^3)$，极大值点要求二次项系数 $a(a-b)<0$，即同样得到 $ab>a^2$。
+  key_steps:
+    - step_id: step_1
+      statement: 识别 $x=a$ 是二重零点，$x=b$ 是另一个零点。
+      formula_trace:
+        from: $f(x)=a(x-a)^2(x-b)$
+        to: $f(x)=0\Rightarrow x=a\ \text{或}\ x=b$
+        operation: 令函数值为零并读取因式。
+        why: 三次函数图像与极值点位置要围绕二重根 $a$ 和单根 $b$ 判断。
+      source_ref: page_0055_solution
+    - step_id: step_2
+      statement: 当 $a>0$ 时，用左图判断根的位置。
+      formula_trace:
+        from: $a>0,\quad x=a\ \text{为极大值点}$
+        to: $0<a<b$
+        operation: 按源图：首项系数为正，曲线右端上升；二重零点 $a$ 要成为极大值点，单根 $b$ 位于 $a$ 右侧。
+        why: 此时 $a$ 本身为正，所以得到 $0<a<b$。
+      source_ref: page_0055_solution
+    - step_id: step_3
+      statement: 当 $a<0$ 时，用右图判断根的位置。
+      formula_trace:
+        from: $a<0,\quad x=a\ \text{为极大值点}$
+        to: $b<a<0$
+        operation: 按源图：首项系数为负，曲线右端下降；二重零点 $a$ 要成为极大值点，单根 $b$ 位于 $a$ 左侧。
+        why: 此时 $a$ 本身为负，所以得到 $b<a<0$。
+      source_ref: page_0055_solution
+    - step_id: step_4
+      statement: 把两种位置关系统一翻译为选项 D。
+      formula_trace:
+        from: $0<a<b\ \text{或}\ b<a<0$
+        to: $a(a-b)<0\Longleftrightarrow a^2-ab<0\Longleftrightarrow ab>a^2$
+        operation: 正负两种情形都说明 $a$ 与 $a-b$ 异号。
+        why: 四个选项中只有 D 在两种情形下都成立。
+      source_ref: page_0055_solution
+    - step_id: step_5
+      statement: 用局部二次项复核“极大值点”的符号条件。
+      formula_trace:
+        from: $f(x)=a(x-a)^2(x-b)$
+        to: $f(x)=a(a-b)(x-a)^2+O((x-a)^3),\quad a(a-b)<0$
+        operation: 在 $x=a$ 附近把 $x-b$ 看作 $(a-b)+(x-a)$，极大值点要求二次项开口向下。
+        why: 这说明源图的两种位置判断与局部代数条件一致。
+      source_ref: page_0055_solution
+teaching_card:
+  student_title: 看二重根处是极大还是极小
+  what_it_trains: 训练把三次函数的首项系数、二重根触轴、单根穿轴放在同一张草图里，快速判断参数间的必然关系。
+  recognition_cues:
+    - 函数已经分解成 $a(x-a)^2(x-b)$。
+    - 题目说 $x=a$ 是极大值点，刚好对应二重根位置。
+    - 选项比较的是 $a,b$ 以及 $ab$ 与 $a^2$。
+  normalization_moves:
+    - 先看 $a$ 的正负，确定三次函数右端向上还是向下。
+    - 再让二重根 $a$ 成为极大值点，确定 $b$ 在 $a$ 的哪一侧。
+    - 最后把 $0<a<b$ 与 $b<a<0$ 统一成 $ab>a^2$。
+  common_failures:
+    - 把二重根当成普通穿轴根，画错草图。
+    - 只讨论 $a>0$，误选 A；或只讨论 $a<0$，误选 B。
+    - 负数情形下从 $b<a<0$ 推 $ab>a^2$ 时不敢乘不等式。
+  similar_practice_query: 三次函数 二重根 极大值点 a(x-a)^2(x-b) 参数大小比较
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0055 题图与 markdown 一致；例 14 的两幅解析图续在 page_0056 顶部，已核对。
+    - page_0056 的 image_note 把原点 O 误记为一个零点；页图和题式可直接消解，未升级为人工决策项。

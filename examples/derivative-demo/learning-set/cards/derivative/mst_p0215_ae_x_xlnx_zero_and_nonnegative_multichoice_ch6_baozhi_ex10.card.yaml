@@ -1,0 +1,226 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0215_ae_x_xlnx_zero_and_nonnegative_multichoice_ch6_baozhi_ex10
+content_revision_id: mst_p0215_ae_x_xlnx_zero_and_nonnegative_multichoice_ch6_baozhi_ex10-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0215_ae_x_xlnx_zero_and_nonnegative_multichoice_ch6_baozhi_ex10.card.yaml
+stem: |-
+  （2024 · 衡水月考 · 多选 T12）已知函数 $f(x)=ae^x-x^2+x\ln x-ax$，则（  ）
+  A. 当 $a=0$ 时，$f(x)$ 单调递减
+  B. 当 $a=1$ 时，$f(x)>0$
+  C. 若 $f(x)$ 有且仅有一个零点，则 $a\leqslant1$
+  D. 若 $f(x)\geqslant0$，则 $a\geqslant\frac1{e-1}$
+answer: |-
+  ABD
+
+  对 A：当 $a=0$ 时，$f(x)=x\ln x-x^2$，有 $f^{\prime}(x)=1+\ln x-2x$。设 $g(x)=1+\ln x-2x$， 则 $g^{\prime}(x)=\frac1x-2$，故 $g$ 在 $\left(0,\frac12\right)$ 增、在 $\left(\frac12,+\infty\right)$ 减，且 $f^{\prime}\left(\frac12\right)=1+\ln\frac12-1=-\ln2<0$， 所以 $f^{\prime}(x)<0$，A 正确。 对 B：当 $a=1$ 时， $f(x)=e^x+x\ln x-x^2=x\left[e^{x-\ln x}-(x-\ln x)-1\right]>0$， B 正确。 对 C：令 $t=x-\ln x\ge1$，零点条件化为 $ae^t-t-a=0\iff a=\frac{t}{e^t-1}=F(t)$。由 $F^{\prime}(t)=\frac{(1-t)e^t-1}{(e^t-1)^2}<0$（$t\ge1$），$F$ 递减； source 据此写出“若仅一个零点则 $t=1,\ a=\frac1{e-1}$”，并判 C 错。 用户确认 C 项按“必要且充分 / 精确条件”判断，$a\le1$ 不是有且仅有一个零点的精确条件。 对 D（续页）：若 $f(x)\ge0$，则同样有 $a\ge F(t)$，从而 $a\ge\max_{t\ge1}F(t)=F(1)=\frac1{e-1}$，D 正确。 source 最终答案给为 ABD。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: A 项先把单调性判断降为导函数符号问题。
+      max_score: 1
+    - step_id: step_2
+      description: 用辅助函数 $g$ 的单峰性证明 $f^{\prime}(x)<0$。
+      max_score: 1
+    - step_id: step_3
+      description: B 项把表达式同构到 $e^u-u-1$ 母式。
+      max_score: 1
+    - step_id: step_4
+      description: C 项把零点条件改写成参数函数 $F(t)$。
+      max_score: 1
+    - step_id: step_5
+      description: 判定 $F$ 在 $[1,+\infty)$ 递减并读取临界值。
+      max_score: 1
+    - step_id: step_6
+      description: D 项在续页完成：由 $a\ge F(t)$ 推出下界。
+      max_score: 1
+    - step_id: step_7
+      description: 按 source 跨页汇总答案。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 含参数分类讨论
+      - 数形结合
+    subroute:
+      - 先导后判单调
+      - 差一同构
+      - 设 $t=x-\ln x$
+      - 以 $F(t)=\frac{t}{e^t-1}$ 控参
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 抽象函数结构
+      - 不等式工具结构
+    evidence:
+      - $f(x)=ae^x-x^2+x\ln x-ax$
+      - $f^{\prime}(x)=1+\ln x-2x\ (a=0)$
+      - $x\left[e^{x-\ln x}-(x-\ln x)-1\right]\ (a=1)$
+      - $t=x-\ln x\ge1,\ a=\frac{t}{e^t-1}$
+      - $F^{\prime}(t)<0,\ F(1)=\frac1{e-1}$
+    normalization_moves_used:
+      - A 项先判导函数极大值符号，再回到原函数单调性。
+      - B 项把混合式统一到 $e^u-u-1$ 的保值母式。
+      - C/D 项用同一个参数函数 $F(t)$ 承载零点与非负条件。
+      - 跨页把 D 项结论并入例10原题答案。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会通过 $g^{\prime}(x)$ 判 $f^{\prime}(x)$ 的全局符号，回补导数单调极值基础。
+      - 若学生不会识别 $e^u-u-1$ 的同构非负母式，回补指数对数基础。
+      - 若学生不会从 $t=x-\ln x$ 搭建 $a=\frac{t}{e^t-1}$，回补代数恒等变形。
+      - 若学生在“有且仅有一个零点”与参数临界值关系上混乱，回补方程根分布与韦达。
+  detail_terms:
+    - $f(x)=ae^x-x^2+x\ln x-ax$
+    - $g(x)=1+\ln x-2x$
+    - $t=x-\ln x$
+    - $F(t)=\frac{t}{e^t-1}$
+    - $F(1)=\frac1{e-1}$
+    - 故选 ABD
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0215_ae_x_xlnx_zero_and_nonnegative_multichoice_ch6_baozhi_ex10
+source_evidence:
+  source_refs:
+    - ref_id: page_0215_ex09_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0215/page_0215.md
+      role: local_context
+      evidence: page_0215 line 14-22 为例9续解并在 line 22 收束“故选 ABD”，line 24 才进入例10新题头。
+    - ref_id: page_0215_ex10_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0215/page_0215.md
+      role: problem_start
+      evidence: page_0215 line 24-29 给出例10题干与 A-D 四个选项。
+    - ref_id: page_0215_ex10_solution_abc
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0215/page_0215.md
+      role: solution
+      evidence: page_0215 line 30-35 给出 A、B、C 三项判断与推导。
+    - ref_id: page_0216_ex10_solution_d_tail
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0216/page_0216.md
+      role: continuation
+      evidence: page_0216 line 14 续完 D 项并给出本题页面答案“故选 ABD”。
+    - ref_id: page_0216_ex11_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0216/page_0216.md
+      role: local_context
+      evidence: page_0216 line 28 起为例11新题头，不属于本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0215.png
+      inspected: true
+      notes: 已核对页图：page_0215 顶部为例9续页；例10题头、A-D 选项与 A/B/C 解析位于本页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0216.png
+      inspected: true
+      notes: 已核对页图：page_0216 顶部承接例10的 D 项并写明“故选 ABD”，随后进入例11。
+  source_context: 按题头归属，例10起于 page_0215，解析跨至 page_0216 顶部闭合；page_0215 顶部例9续页与 page_0216 后续例11仅作上下文。
+  source_influence:
+    - 保留 source 对 A 项的导数单峰判定：先看 $g^{\prime}(x)$，再用 $f^{\prime}\left(\frac12\right)<0$ 推出 $f$ 递减。
+    - 保留 source 对 B 项的同构母式 $e^u-u-1$：$f(x)=x\left[e^{x-\ln x}-(x-\ln x)-1\right]>0$。
+    - 保留 source 对 C/D 项的嵌套换元：设 $t=x-\ln x\ge1$，并用 $F(t)=\frac{t}{e^t-1}$ 单调性判参。
+    - 按跨页原文完整保留多选 A-D，并记录 C 项判定与源答案之间的逻辑争议。
+  source_discrepancies:
+    - source 在 C 项中先推出“若仅有一个零点，则 $t=1,\ a=\frac1{e-1}$”，随后判 C 错。用户确认本题与 mst_p0020_ex14 同口径，选项按必要且充分 / 精确条件判断；$a\le1$ 只是宽条件，不是精确条件，故 C 错。
+original_problem:
+  stem: （2024 · 衡水月考 · 多选 T12）已知函数 $f(x)=ae^x-x^2+x\ln x-ax$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 当 $a=0$ 时，$f(x)$ 单调递减
+      text_latex: 当 $a=0$ 时，$f(x)$ 单调递减
+    - label: B
+      text_raw: 当 $a=1$ 时，$f(x)>0$
+      text_latex: 当 $a=1$ 时，$f(x)>0$
+    - label: C
+      text_raw: 若 $f(x)$ 有且仅有一个零点，则 $a\leqslant1$
+      text_latex: 若 $f(x)$ 有且仅有一个零点，则 $a\leqslant1$
+    - label: D
+      text_raw: 若 $f(x)\geqslant0$，则 $a\geqslant\frac1{e-1}$
+      text_latex: 若 $f(x)\geqslant0$，则 $a\geqslant\frac1{e-1}$
+  answer: ABD
+  fidelity_notes:
+    - 例10为多选题，A-D 四个选项已完整保留。
+    - 例10解析跨页：A/B/C 在 page_0215，D 与最终“故选 ABD”在 page_0216 顶部。
+    - 题面默认定义域由 $\ln x$ 决定为 $x>0$。
+solution:
+  source_solution_summary: 对 A：当 $a=0$ 时，$f(x)=x\ln x-x^2$，有 $f^{\prime}(x)=1+\ln x-2x$。设 $g(x)=1+\ln x-2x$， 则 $g^{\prime}(x)=\frac1x-2$，故 $g$ 在 $\left(0,\frac12\right)$ 增、在 $\left(\frac12,+\infty\right)$ 减，且 $f^{\prime}\left(\frac12\right)=1+\ln\frac12-1=-\ln2<0$， 所以 $f^{\prime}(x)<0$，A 正确。 对 B：当 $a=1$ 时， $f(x)=e^x+x\ln x-x^2=x\left[e^{x-\ln x}-(x-\ln x)-1\right]>0$， B 正确。 对 C：令 $t=x-\ln x\ge1$，零点条件化为 $ae^t-t-a=0\iff a=\frac{t}{e^t-1}=F(t)$。由 $F^{\prime}(t)=\frac{(1-t)e^t-1}{(e^t-1)^2}<0$（$t\ge1$），$F$ 递减； source 据此写出“若仅一个零点则 $t=1,\ a=\frac1{e-1}$”，并判 C 错。 用户确认 C 项按“必要且充分 / 精确条件”判断，$a\le1$ 不是有且仅有一个零点的精确条件。 对 D（续页）：若 $f(x)\ge0$，则同样有 $a\ge F(t)$，从而 $a\ge\max_{t\ge1}F(t)=F(1)=\frac1{e-1}$，D 正确。 source 最终答案给为 ABD。
+  key_steps:
+    - step_id: step_1
+      statement: A 项先把单调性判断降为导函数符号问题。
+      formula_trace:
+        from: $a=0,\ f(x)=x\ln x-x^2$
+        to: $f^{\prime}(x)=1+\ln x-2x$
+        operation: 直接求导。
+        why: “单调递减”要通过 $f^{\prime}(x)$ 全负来判定。
+      source_ref: page_0215_ex10_solution_abc
+    - step_id: step_2
+      statement: 用辅助函数 $g$ 的单峰性证明 $f^{\prime}(x)<0$。
+      formula_trace:
+        from: $g(x)=1+\ln x-2x,\ g^{\prime}(x)=\frac1x-2$
+        to: $f^{\prime}\left(\frac12\right)=-\ln2<0\Rightarrow f^{\prime}(x)<0$
+        operation: 先判 $g$ 先增后减，再用极大值点符号定全局符号。
+        why: 完成 A 项真值判定。
+      source_ref: page_0215_ex10_solution_abc
+    - step_id: step_3
+      statement: B 项把表达式同构到 $e^u-u-1$ 母式。
+      formula_trace:
+        from: $a=1,\ f(x)=e^x+x\ln x-x^2$
+        to: $f(x)=x\left[e^{x-\ln x}-(x-\ln x)-1\right]>0$
+        operation: 提取 $x$，令内部成为标准同构差一结构。
+        why: 利用 $e^u-u-1\ge0$ 且取等条件不可达，得 B 正确。
+      source_ref: page_0215_ex10_solution_abc
+    - step_id: step_4
+      statement: C 项把零点条件改写成参数函数 $F(t)$。
+      formula_trace:
+        from: $f(x)=x\left[ae^{x-\ln x}-(x-\ln x)-a\right]$
+        to: $t=x-\ln x\ge1,\ a=\frac{t}{e^t-1}=F(t)$
+        operation: 嵌套换元，把“零点存在/个数”转成 $t$ 变量关系。
+        why: 为后续“一个零点”与参数值的对应建立单变量桥梁。
+      source_ref: page_0215_ex10_solution_abc
+    - step_id: step_5
+      statement: 判定 $F$ 在 $[1,+\infty)$ 递减并读取临界值。
+      formula_trace:
+        from: $F(t)=\frac{t}{e^t-1}$
+        to: $F^{\prime}(t)=\frac{(1-t)e^t-1}{(e^t-1)^2}<0,\ F(1)=\frac1{e-1}$
+        operation: 求导并用 $t\ge1$ 判分子恒负。
+        why: source 用该结论支撑 C、D 两项判定。
+      source_ref: page_0215_ex10_solution_abc
+    - step_id: step_6
+      statement: D 项在续页完成：由 $a\ge F(t)$ 推出下界。
+      formula_trace:
+        from: $f(x)\ge0\Rightarrow a\ge F(t)$
+        to: $a\ge\max_{t\ge1}F(t)=\frac1{e-1}$
+        operation: 利用 $F$ 递减，最大值在 $t=1$ 取得。
+        why: 完成 D 项真值判断。
+      source_ref: page_0216_ex10_solution_d_tail
+    - step_id: step_7
+      statement: 按 source 跨页汇总答案。
+      formula_trace:
+        from: A 正确，B 正确，D 正确，C 按精确条件口径为错
+        to: 故选 ABD
+        operation: 汇总各选项真值。
+        why: 用户确认“有且仅有一个零点”的条件应按精确条件判断，$a\le1$ 过宽。
+      source_ref: page_0216_ex10_solution_d_tail
+teaching_card:
+  student_title: 把 $x-\ln x$ 抽出来：多选题里的同构控参
+  what_it_trains: 训练在同一道多选里切换三种动作：导数判单调、差一同构判正性、嵌套换元判零点/参数。
+  recognition_cues:
+    - 题面同时出现 $ae^x,\ x\ln x,\ x^2,\ ax$，常见于“先同构再换元”。
+    - 选项同时考单调、恒正、零点个数与参数下界。
+    - 解析中出现 $x-\ln x$ 时，通常要转为 $t\ge1$ 的单变量函数。
+  normalization_moves:
+    - A 项先固定参数，再对导函数做“先增后减 + 极大值判号”。
+    - B 项提取 $x$ 并归入 $e^u-u-1$。
+    - C/D 项统一设 $t=x-\ln x$，把命题化为 $F(t)$ 单调性。
+  common_failures:
+    - 把 $f^{\prime}$ 在某点为负误当成全区间为负，漏掉“极大值也为负”这一步。
+    - B 项忘记 $x>0$ 的定义域前提，导致同构结论使用不完整。
+    - C 项只得到参数表达式，不再回看选项文本中的不等式方向。
+    - 跨页题漏读 page_0216 顶部 D 项，导致答案不全。
+  similar_practice_query: ae^x xlnx x^2 多选 t=x-lnx F(t)=t/(e^t-1) 零点个数 参数
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 用户拍板：第 11 项与第 1 项一样，属于必要且充分 / 精确条件判断；C 项 $a\le1$ 不是精确条件，最终答案 ABD。

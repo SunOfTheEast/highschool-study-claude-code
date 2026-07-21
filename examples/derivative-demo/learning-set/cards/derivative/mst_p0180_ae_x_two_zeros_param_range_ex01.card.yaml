@@ -1,0 +1,226 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0180_ae_x_two_zeros_param_range_ex01
+content_revision_id: mst_p0180_ae_x_two_zeros_param_range_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0180_ae_x_two_zeros_param_range_ex01.card.yaml
+stem: |-
+  （2024 · 顺义二中高二期中 T9）若函数 $f(x)=ae^x-x$ 恰有 2 个零点，则实数 $a$ 的取值范围是（  ）
+  A. $\left(0,\frac{1}{e}\right)$
+  B. $(0,1)$
+  C. $\left(-\infty,\frac{1}{e}\right)$
+  D. $(-\infty,0)$
+answer: |
+  A
+
+  由零点方程
+  \[
+  ae^x-x=0
+  \]
+  得
+  \[
+  a=\frac{x}{e^x}.
+  \]
+  令
+  \[
+  g(x)=\frac{x}{e^x}=xe^{-x},
+  \]
+  则“$f(x)=0$ 的解个数”就是“直线 $y=a$ 与曲线 $y=g(x)$ 的交点个数”。
+
+  计算导数
+  \[
+  g^{\prime}(x)=\frac{1-x}{e^x}.
+  \]
+  所以 $g$ 在 $(-\infty,1)$ 递增，在 $(1,+\infty)$ 递减，且
+  \[
+  g(1)=\frac1e,\quad g(0)=0,\quad \lim_{x\to-\infty}g(x)=-\infty,\quad \lim_{x\to+\infty}g(x)=0^+.
+  \]
+  因而水平线 $y=a$ 与 $g$ 恰有两个交点当且仅当
+  \[
+  0<a<\frac1e.
+  \]
+  对应选项 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 做参变分离，把零点个数问题转成交点个数问题。
+      max_score: 1
+    - step_id: step_2
+      description: 求 $g(x)=\frac{x}{e^x}$ 的单调区间与峰值。
+      max_score: 1
+    - step_id: step_3
+      description: 结合端点极限与零点位置，锁定两交点对应的 $a$。
+      max_score: 1
+    - step_id: step_4
+      description: 回填选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 参变量分离
+    secondary:
+      - 数形结合
+    subroute:
+      - 等效零点
+      - 水平线交点计数
+      - 单峰值域锁边界
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $ae^x-x=0\Longleftrightarrow a=\frac{x}{e^x}$
+      - $g^{\prime}(x)=\frac{1-x}{e^x}$，故 $g$ 先增后减且峰值为 $\frac1e$。
+      - 两零点条件等价于水平线落在 $(0,\frac1e)$ 这层高度。
+    normalization_moves_used:
+      - 把参数从方程内部提取成常数线 $y=a$。
+      - 通过导数先定单峰，再用值域层次数交点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能把 $ae^x-x=0$ 改写为 $a=\frac{x}{e^x}$，回补代数恒等变形。
+      - 若学生不会由 $g^{\prime}(x)$ 判断单调和极值，回补导数单调极值基础。
+      - 若学生不会把“零点个数”转成“水平线交点个数”，回补函数性质与图像。
+  detail_terms:
+    - $a=\frac{x}{e^x}$
+    - $g(x)=\frac{x}{e^x}$
+    - $g^{\prime}(x)=\frac{1-x}{e^x}$
+    - $g(1)=\frac1e$
+    - $0<a<\frac1e$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0180_ae_x_two_zeros_param_range_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0180_ex01_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0180/page_0180.md
+      role: problem_start
+      evidence: lines 33-38 给出例1题干与 A-D 四个选项。
+    - ref_id: page_0180_ex01_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0180/page_0180.md
+      role: solution
+      evidence: lines 40-43 把 $ae^x-x=0$ 变形为 $a=\frac{x}{e^x}$，并给出 $g(x)=\frac{x}{e^x}$ 图像。
+    - ref_id: page_0181_ex01_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0181/page_0181.md
+      role: continuation
+      evidence: line 14 续页给出结论：$0<a<\frac{1}{e}$，故选 A。
+    - ref_id: page_0180_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0180/page_0180.md
+      role: local_context
+      evidence: lines 20-21 为 page_0179 例36续解，仅作上下文，不属于本卡题头。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0180.png
+      inspected: true
+      notes: 已核对：page_0180 下半页含例1题干、选项与 $g(x)=\frac{x}{e^x}$ 示意图。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0181.png
+      inspected: true
+      notes: 已核对：page_0181 顶部为例1续解结论“$0<a<\frac{1}{e}$，故选 A”。
+  source_context: page_0180 顶部是上一页例36续题；中段 section exposition/figures 仅作背景；本卡仅处理 page_0180 起头并在 page_0181 续完的例1。
+  source_influence:
+    - 保留源解主线：先做参变分离 $ae^x-x=0\Rightarrow a=\frac{x}{e^x}$。
+    - 保留图像交点判定：把“恰有2个零点”转成“水平线 $y=a$ 与 $y=g(x)$ 恰有2个交点”。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 顺义二中高二期中 T9）若函数 $f(x)=ae^x-x$ 恰有 2 个零点，则实数 $a$ 的取值范围是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\left(0,\frac{1}{e}\right)$
+      text_latex: $\left(0,\frac{1}{e}\right)$
+    - label: B
+      text_raw: $(0,1)$
+      text_latex: $(0,1)$
+    - label: C
+      text_raw: $\left(-\infty,\frac{1}{e}\right)$
+      text_latex: $\left(-\infty,\frac{1}{e}\right)$
+    - label: D
+      text_raw: $(-\infty,0)$
+      text_latex: $(-\infty,0)$
+  answer: A
+  fidelity_notes:
+    - 题头与选项在 page_0180，答案结论在 page_0181 顶部续完。
+    - 本题为单选题，四个选项均来自 source 原文。
+solution:
+  source_solution_summary: |
+    由零点方程
+    \[
+    ae^x-x=0
+    \]
+    得
+    \[
+    a=\frac{x}{e^x}.
+    \]
+    令
+    \[
+    g(x)=\frac{x}{e^x}=xe^{-x},
+    \]
+    则“$f(x)=0$ 的解个数”就是“直线 $y=a$ 与曲线 $y=g(x)$ 的交点个数”。
+
+    计算导数
+    \[
+    g^{\prime}(x)=\frac{1-x}{e^x}.
+    \]
+    所以 $g$ 在 $(-\infty,1)$ 递增，在 $(1,+\infty)$ 递减，且
+    \[
+    g(1)=\frac1e,\quad g(0)=0,\quad \lim_{x\to-\infty}g(x)=-\infty,\quad \lim_{x\to+\infty}g(x)=0^+.
+    \]
+    因而水平线 $y=a$ 与 $g$ 恰有两个交点当且仅当
+    \[
+    0<a<\frac1e.
+    \]
+    对应选项 A。
+  key_steps:
+    - step_id: step_1
+      statement: 做参变分离，把零点个数问题转成交点个数问题。
+      formula_trace:
+        from: $ae^x-x=0$
+        to: $a=\frac{x}{e^x}=:g(x)$
+        operation: 移项并除以 $e^x$。
+        why: 参数 $a$ 被写成常数线，方便做数形结合计数。
+      source_ref: page_0180_ex01_solution_start
+    - step_id: step_2
+      statement: 求 $g(x)=\frac{x}{e^x}$ 的单调区间与峰值。
+      formula_trace:
+        from: $g(x)=xe^{-x}$
+        to: $g^{\prime}(x)=\frac{1-x}{e^x},\ g_{\max}=g(1)=\frac1e$
+        operation: 求导并由导数符号判单调。
+        why: “恰有两个交点”需要知道函数是否单峰及最高点高度。
+      source_ref: page_0180_ex01_solution_start
+    - step_id: step_3
+      statement: 结合端点极限与零点位置，锁定两交点对应的 $a$。
+      formula_trace:
+        from: $g(0)=0,\ \lim_{x\to+\infty}g(x)=0^+,\ \lim_{x\to-\infty}g(x)=-\infty$
+        to: 直线 $y=a$ 与 $y=g(x)$ 恰有2个交点 $\Longleftrightarrow 0<a<\frac1e$
+        operation: 读图像的值域分层并做水平线计数。
+        why: 把“零点个数=2”精确翻译为参数区间。
+      source_ref: page_0181_ex01_continuation
+    - step_id: step_4
+      statement: 回填选项。
+      formula_trace:
+        from: $0<a<\frac1e$
+        to: 选 A
+        operation: 与选项区间逐一匹配。
+        why: 完成选择题输出。
+      source_ref: page_0181_ex01_continuation
+teaching_card:
+  student_title: 先分离参数，再数水平线交点
+  what_it_trains: 训练“零点个数题”的标准落法：参变分离成 $a=g(x)$，再用单峰图像读参数范围。
+  recognition_cues:
+    - 题干出现“恰有几个零点 + 求参数范围”。
+    - 参数与 $e^x$ 同乘，适合直接移到等号一侧。
+    - 选项是区间型答案。
+  normalization_moves:
+    - 把 $ae^x-x=0$ 变成 $a=\frac{x}{e^x}$。
+    - 求 $g^{\prime}(x)$，锁定最大值 $\frac1e$ 与单峰结构。
+    - 用水平线 $y=a$ 与曲线交点个数反推 $a$ 的区间。
+  common_failures:
+    - 把 $g^{\prime}(x)$ 误写成二阶导数或符号看反。
+    - 漏掉 $a\le 0$ 时最多只有一个交点的分层判断。
+    - 把端点 $a=0$ 或 $a=\frac1e$ 误算进“两交点”区间。
+  similar_practice_query: ae^x-x 恰有两个零点 参数范围 参变分离 x/e^x
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

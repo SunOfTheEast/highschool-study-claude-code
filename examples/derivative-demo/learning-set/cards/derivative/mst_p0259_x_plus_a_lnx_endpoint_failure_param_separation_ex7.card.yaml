@@ -1,0 +1,199 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0259_x_plus_a_lnx_endpoint_failure_param_separation_ex7
+content_revision_id: mst_p0259_x_plus_a_lnx_endpoint_failure_param_separation_ex7-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0259_x_plus_a_lnx_endpoint_failure_param_separation_ex7.card.yaml
+stem: （24-25 高二下 · 江苏盐城 · 期中）函数 $f(x)=x+a\ln x$，$a\in\mathbf R$。当 $x\ge1$ 时，不等式 $f(x)\ge(1+\ln x)^2$ 恒成立，求 $a$ 的取值范围。
+answer: |-
+  $a\ge4-e$。
+
+  令 $t=\ln x\ge0$，则 $x=e^t$，原不等式变为 $e^t+at\ge(1+t)^2$。当 $t=0$ 时自动成立；当 $t>0$ 时， 等价于 $2-a\le \frac{e^t}{t}-t-\frac1t$。令 $h(t)=\frac{e^t}{t}-t-\frac1t$，则 $h^\prime(t)=\frac{e^t(t-1)+1-t^2}{t^2}$。设 $k(t)=e^t(t-1)+1-t^2$，$k^\prime(t)=t(e^t-2)$， 可知 $k$ 先减后增，且 $k(0)=k(1)=0$，所以 $0<t<1$ 时 $h^\prime(t)<0$，$t>1$ 时 $h^\prime(t)>0$。 因此 $h(t)\ge h(1)=e-2$，从而 $2-a\le e-2$，即 $a\ge4-e$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 用 $t=\ln x$ 标准化自变量。
+      max_score: 1
+    - step_id: step_2
+      description: 分开处理 $t=0$ 与 $t>0$。
+      max_score: 1
+    - step_id: step_3
+      description: 对 $t>0$ 参变分离。
+      max_score: 1
+    - step_id: step_4
+      description: 求 $h^\prime$ 并设辅助分子。
+      max_score: 1
+    - step_id: step_5
+      description: 用 $k(t)$ 判 $h$ 的最小值。
+      max_score: 1
+    - step_id: step_6
+      description: 代入 $t=1$ 得参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: main
+        goal: 求参数范围
+        target: 第 main 问
+        result: $a\ge4-e$。
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+      - 显隐点探路
+      - 充分/必要性探路
+    subroute:
+      - $t=\ln x$ 标准化
+      - 端点效应失效
+      - 参变分离
+      - 辅助函数最小值
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 不等式工具结构
+      - 局部逼近结构
+    evidence:
+      - $x+a\ln x$
+      - $(1+\ln x)^2$
+      - $e^t+at\ge(1+t)^2$
+      - $h(t)=\frac{e^t}{t}-t-\frac1t$
+    normalization_moves_used:
+      - 令 $t=\ln x$，把对数题变成指数多项式题。
+      - 单独处理 $t=0$，再对 $t>0$ 除以 $t$。
+      - 把 $2-a$ 与 $h(t)$ 比较。
+      - 用 $k(t)$ 的符号判 $h$ 的最低点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会令 $t=\ln x$，回补指数对数基础。
+      - 若学生不会参变分离，回补不等式工具基础。
+      - 若学生不会处理 $t=0$ 端点，回补函数三要素与定义域。
+      - 若学生不会用导数求 $h$ 的最小值，回补导数单调极值基础。
+  detail_terms:
+    - $t=\ln x$
+    - $e^t+at\ge(1+t)^2$
+    - $2-a\le h(t)$
+    - $h(1)=e-2$
+    - $a\ge4-e$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0259_x_plus_a_lnx_endpoint_failure_param_separation_ex7
+source_evidence:
+  source_refs:
+    - ref_id: page_0259_ex6_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0259/page_0259.md
+      role: local_context
+      evidence: page_0259 页首是 page_0258 例6续解，不是本卡题头。
+    - ref_id: page_0259_ex7_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0259/page_0259.md
+      role: problem_start
+      evidence: page_0259 给出例7题头：$f(x)=x+a\ln x$，当 $x\ge1$ 时 $f(x)\ge(1+\ln x)^2$ 恒成立，求 $a$。
+    - ref_id: page_0259_ex7_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0259/page_0259.md
+      role: solution
+      evidence: page_0259 例7解析令 $t=\ln x\ge0$，对 $t>0$ 分离参数，构造 $h(t)=\frac{e^t}{t}-t-\frac1t$，证明 $h(t)\ge h(1)=e-2$，结论 $a\ge4-e$。
+    - ref_id: page_0259_double_endpoint_theory_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0259/page_0259.md
+      role: local_context
+      evidence: 例7后进入“双端点效应之中间零点模型”理论段，说明例7在本页闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0259.png
+      inspected: true
+      notes: 已核对页图：例7位于 page_0259 中部，题干和解析均在本页闭合；下方另起理论段。
+  source_context: 本卡处理 page_0259 起头并在本页结束的例7；页首例6续解与页底理论段均只作边界上下文。
+  source_influence:
+    - 保留 $t=\ln x$ 把 $x\ge1$ 转成 $t\ge0$。
+    - 保留 $t=0$ 自动成立，$t>0$ 再参变分离。
+    - 保留 $h(t)=\frac{e^t}{t}-t-\frac1t$，用 $k(t)=e^t(t-1)+1-t^2$ 判 $h$ 的最小值。
+  source_discrepancies:
+    - type: corrected_variable_names
+      source_ref: page_0259_ex7_solution
+      observed: source mixes variables in the $k(t)$ paragraph, writing examples such as $0<x<\ln2$ and $x>\ln2$ while the active variable is $t$.
+      resolved_as: use $0<t<\ln2$ and $t>\ln2$ for the derivative-sign discussion.
+      reason: The substitution at the start of the solution is $t=\ln x$.
+    - type: corrected_interval_typo
+      source_ref: page_0259_ex7_solution
+      observed: source marker notes an OCR/print issue around "故 $0<...<1$ 时".
+      resolved_as: use $0<t<1$ when concluding $k(t)<0$ and $h^\prime(t)<0$.
+      reason: This matches $k(0)=k(1)=0$ and the subsequent monotonicity conclusion.
+original_problem:
+  stem: （24-25 高二下 · 江苏盐城 · 期中）函数 $f(x)=x+a\ln x$，$a\in\mathbf R$。当 $x\ge1$ 时，不等式 $f(x)\ge(1+\ln x)^2$ 恒成立，求 $a$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $a\ge4-e$。
+  fidelity_notes:
+    - 求参题，无选项、无分问。
+    - source 的变量名混用按 $t=\ln x$ 统一修正。
+solution:
+  source_solution_summary: 令 $t=\ln x\ge0$，则 $x=e^t$，原不等式变为 $e^t+at\ge(1+t)^2$。当 $t=0$ 时自动成立；当 $t>0$ 时， 等价于 $2-a\le \frac{e^t}{t}-t-\frac1t$。令 $h(t)=\frac{e^t}{t}-t-\frac1t$，则 $h^\prime(t)=\frac{e^t(t-1)+1-t^2}{t^2}$。设 $k(t)=e^t(t-1)+1-t^2$，$k^\prime(t)=t(e^t-2)$， 可知 $k$ 先减后增，且 $k(0)=k(1)=0$，所以 $0<t<1$ 时 $h^\prime(t)<0$，$t>1$ 时 $h^\prime(t)>0$。 因此 $h(t)\ge h(1)=e-2$，从而 $2-a\le e-2$，即 $a\ge4-e$。
+  key_steps:
+    - step_id: step_1
+      statement: 用 $t=\ln x$ 标准化自变量。
+      formula_trace:
+        from: $x\ge1$，$f(x)=x+a\ln x$
+        to: $t=\ln x\ge0$，$e^t+at\ge(1+t)^2$
+        operation: 令 $t=\ln x$。
+        why: 把 $x$ 与 $\ln x$ 的混合结构变成 $e^t$ 与多项式结构。
+      source_ref: page_0259_ex7_solution
+    - step_id: step_2
+      statement: 分开处理 $t=0$ 与 $t>0$。
+      formula_trace:
+        from: $e^t+at\ge(1+t)^2$
+        to: $t=0$ 自动成立；$t>0$ 时可除以 $t$
+        operation: 单独处理端点。
+        why: 参变分离需要除以 $t$，不能把 $t=0$ 混进去。
+      source_ref: page_0259_ex7_solution
+    - step_id: step_3
+      statement: 对 $t>0$ 参变分离。
+      formula_trace:
+        from: $e^t+at\ge(1+t)^2$
+        to: $2-a\le h(t)=\frac{e^t}{t}-t-\frac1t$
+        operation: 移项并除以 $t>0$。
+        why: 求 $a$ 的下界转成求 $h$ 的最小值。
+      source_ref: page_0259_ex7_solution
+    - step_id: step_4
+      statement: 求 $h^\prime$ 并设辅助分子。
+      formula_trace:
+        from: $h(t)=\frac{e^t}{t}-t-\frac1t$
+        to: $h^\prime(t)=\frac{k(t)}{t^2}$，$k(t)=e^t(t-1)+1-t^2$
+        operation: 求导并把分子单独设为 $k(t)$。
+        why: $t^2>0$，$h^\prime$ 的符号由 $k$ 决定。
+      source_ref: page_0259_ex7_solution
+    - step_id: step_5
+      statement: 用 $k(t)$ 判 $h$ 的最小值。
+      formula_trace:
+        from: $k^\prime(t)=t(e^t-2)$，$k(0)=k(1)=0$
+        to: $h$ 在 $(0,1)$ 递减，在 $(1,+\infty)$ 递增
+        operation: 先判 $k$ 的符号，再判 $h^\prime$。
+        why: 得到 $h$ 的最小点 $t=1$。
+      source_ref: page_0259_ex7_solution
+    - step_id: step_6
+      statement: 代入 $t=1$ 得参数范围。
+      formula_trace:
+        from: $h(t)\ge h(1)=e-2$
+        to: $2-a\le e-2\Rightarrow a\ge4-e$
+        operation: 取右侧最小值。
+        why: 完成恒成立条件。
+      source_ref: page_0259_ex7_solution
+teaching_card:
+  student_title: 把 $\ln x$ 换成 $t$，再分离参数
+  what_it_trains: 训练对数恒成立题的标准化：先把 $\ln x$ 变成新变量，再把参数从不等式里分离出来。
+  recognition_cues:
+    - 题目同时出现 $x$ 和 $\ln x$，且 $x\ge1$。
+    - 右侧是 $(1+\ln x)^2$，提示令 $t=\ln x$。
+    - 端点 $t=0$ 自动成立，但真正限制来自 $t>0$。
+  normalization_moves:
+    - 先令 $t=\ln x$，不要直接对原式硬求导。
+    - 处理 $t=0$ 后再除以 $t$。
+    - 分离后找 $h(t)$ 的最小值，因为左边是 $2-a$。
+  common_failures:
+    - 忘记 $t=0$ 不能除，直接把端点丢掉。
+    - 把 $h$ 的最小值方向看反，导致 $a$ 范围写错。
+    - 变量从 $x$ 换成 $t$ 后又混用，判区间时出错。
+  similar_practice_query: lnx换元 t=lnx x+a ln x 参数范围 端点效应失效 h最小值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

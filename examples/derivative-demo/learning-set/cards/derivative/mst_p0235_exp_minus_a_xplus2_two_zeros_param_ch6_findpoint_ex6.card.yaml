@@ -1,0 +1,204 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0235_exp_minus_a_xplus2_two_zeros_param_ch6_findpoint_ex6
+content_revision_id: mst_p0235_exp_minus_a_xplus2_two_zeros_param_ch6_findpoint_ex6-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0235_exp_minus_a_xplus2_two_zeros_param_ch6_findpoint_ex6.card.yaml
+stem: |-
+  （2020 · 新课标 I）已知函数 $f(x)=e^x-a(x+2)$。
+  1. 当 $a=1$ 时，讨论 $f(x)$ 的单调性。
+  2. 若 $f(x)$ 有两个零点，求 $a$ 的取值范围。
+answer: |-
+  第 (1) 问：$f$ 在 $(-\infty,0)$ 单调递减，在 $(0,+\infty)$ 单调递增；第 (2) 问：$a\in(\frac1e,+\infty)$。
+
+  $f'(x)=e^x-a$。当 $a=1$ 时，导数零点为 $x=0$，所以 $f$ 在 $(-\infty,0)$ 递减，在 $(0,+\infty)$ 递增。第 (2) 问若 $a\leqslant0$，则 $f$ 递增，不可能有两个零点；若 $a>0$，极小值 点为 $x=\ln a$，$f(\ln a)=-a(1+\ln a)$。要有两个零点必须且只需 $a>1/e$。此时 $f(-2)=e^{-2}>0$，左侧有零点；右侧用等效零点 $f(x)=e^{x/2}[e^{x/2}-a(x+2)/e^{x/2}]$，并用 $\frac{x+2}{2e^{(x+2)/2}}\leqslant1/e$ 得 $f(x)\geqslant e^{x/2}(e^{x/2}-2a)$，取 $x=2\ln2a$，右侧可取到 非负点，故右侧也有零点。综上 $a>1/e$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 第 (1) 问直接用导数判单调。
+      max_score: 1
+    - step_id: step_2
+      description: 第 (2) 问先排除 $a\leqslant0$。
+      max_score: 1
+    - step_id: step_3
+      description: $a>0$ 时用极小值给必要条件。
+      max_score: 1
+    - step_id: step_4
+      description: 左侧零点由 $x=-2$ 夹出。
+      max_score: 1
+    - step_id: step_5
+      description: 右侧用等效零点法。
+      max_score: 1
+    - step_id: step_6
+      description: 取右侧点完成充分性。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: part_1
+        goal: 零点/极值点分析
+        target: 第 part_1 问
+        result: $f$ 在 $(-\infty,0)$ 减，在 $(0,+\infty)$ 增。
+      - part_id: part_2
+        goal: 求参数范围
+        target: 第 part_2 问
+        result: $a\in(\frac1e,+\infty)$。
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 同构变形与换元法
+      - 充分/必要性探路
+    subroute:
+      - 单极值双零点
+      - 等效零点法
+      - 提出 $e^{x/2}$
+      - 左右取点
+      - 参数必要充分
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $e^x-a(x+2)$
+      - $x=\ln a$
+      - $e^{x/2}[e^{x/2}-a(x+2)/e^{x/2}]$
+      - $2\ln2a$
+    normalization_moves_used:
+      - 用极小值条件得到 $a>1/e$。
+      - 左侧用 $f(-2)>0$。
+      - 右侧提出 $e^{x/2}$ 锁住线性项。
+      - 取 $x=2\ln2a$ 完成右侧存在性。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f^\prime(x)=e^x-a$ 判单调，回补导数单调极值基础。
+      - 若学生不会把两零点转成极小值小于 0，回补方程根分布与韦达。
+      - 若学生不会处理 $a>1/e$ 与 $\ln a$ 的关系，回补指数对数基础。
+      - 若学生不会提出 $e^{x/2}$，回补代数恒等变形。
+      - 若学生不懂右侧取点方向，回补不等式工具基础。
+  detail_terms:
+    - $e^x-a(x+2)$
+    - $a>1/e$
+    - $\ln a$
+    - $f(-2)$
+    - $e^{x/2}$
+    - $2\ln2a$
+    - 等效零点法
+parts: &a1
+  - part_id: part_1
+    text: 当 $a=1$ 时，讨论 $f(x)$ 的单调性。
+  - part_id: part_2
+    text: 若 $f(x)$ 有两个零点，求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0235_exp_minus_a_xplus2_two_zeros_param_ch6_findpoint_ex6
+source_evidence:
+  source_refs:
+    - ref_id: page_0235_prev_ex5_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0235/page_0235.md
+      role: local_context
+      evidence: page_0235 页首是 page_0234 第二个例5续解，不是本卡题头。
+    - ref_id: page_0235_ex6_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0235/page_0235.md
+      role: problem_start
+      evidence: page_0235 中部给出例6题头：$f(x)=e^x-a(x+2)$，第 (1) 问 $a=1$ 讨论单调性，第 (2) 问两零点求 $a$ 范围。
+    - ref_id: page_0235_ex6_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0235/page_0235.md
+      role: solution
+      evidence: 解析由 $f^\prime(x)=e^x-a$ 得极小值点 $\ln a$，两零点条件为 $a>1/e$，并用等效零点法找右侧点 $2\ln2a$。
+    - ref_id: page_0235_ex7_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0235/page_0235.md
+      role: local_context
+      evidence: page_0235 随后另起例7，属于本批下一张卡，不混入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0235.png
+      inspected: true
+      notes: 已核对页图：例6题头和完整解析位于 page_0235 中部。
+  source_context: 本卡处理 page_0235 起头并在同页结束的例6；页首续解和后续例7分别隔离。
+  source_influence:
+    - 保留 source 的双零点求参：先由极小值 $-a(1+\ln a)<0$ 得必要条件 $a>1/e$。
+    - 保留 source 的左侧取点：$f(-2)=e^{-2}>0$，夹出左零点。
+    - 保留 source 的等效零点法：提出 $e^{x/2}$，用 $\frac{x+2}{2}/e^{(x+2)/2}\leqslant1/e$ 找右侧点。
+  source_discrepancies: []
+original_problem:
+  stem: （2020 · 新课标 I）已知函数 $f(x)=e^x-a(x+2)$。
+  parts: *a1
+  choices: []
+  answer: 第 (1) 问：$f$ 在 $(-\infty,0)$ 单调递减，在 $(0,+\infty)$ 单调递增；第 (2) 问：$a\in(\frac1e,+\infty)$。
+  fidelity_notes:
+    - 两问均无选项。
+    - 函数定义域为 $\mathbf R$。
+solution:
+  source_solution_summary: $f'(x)=e^x-a$。当 $a=1$ 时，导数零点为 $x=0$，所以 $f$ 在 $(-\infty,0)$ 递减，在 $(0,+\infty)$ 递增。第 (2) 问若 $a\leqslant0$，则 $f$ 递增，不可能有两个零点；若 $a>0$，极小值 点为 $x=\ln a$，$f(\ln a)=-a(1+\ln a)$。要有两个零点必须且只需 $a>1/e$。此时 $f(-2)=e^{-2}>0$，左侧有零点；右侧用等效零点 $f(x)=e^{x/2}[e^{x/2}-a(x+2)/e^{x/2}]$，并用 $\frac{x+2}{2e^{(x+2)/2}}\leqslant1/e$ 得 $f(x)\geqslant e^{x/2}(e^{x/2}-2a)$，取 $x=2\ln2a$，右侧可取到 非负点，故右侧也有零点。综上 $a>1/e$。
+  key_steps:
+    - step_id: step_1
+      statement: 第 (1) 问直接用导数判单调。
+      formula_trace:
+        from: $f(x)=e^x-a(x+2)$，$a=1$
+        to: $f^\prime(x)=e^x-1$
+        operation: 求导并代入 $a=1$。
+        why: 导数零点 $x=0$ 分开递减和递增区间。
+      source_ref: page_0235_ex6_solution
+    - step_id: step_2
+      statement: 第 (2) 问先排除 $a\leqslant0$。
+      formula_trace:
+        from: $f^\prime(x)=e^x-a$
+        to: $a\leqslant0$ 时 $f^\prime(x)>0$
+        operation: 用 $e^x>0$。
+        why: 单调递增时不可能有两个零点。
+      source_ref: page_0235_ex6_solution
+    - step_id: step_3
+      statement: $a>0$ 时用极小值给必要条件。
+      formula_trace:
+        from: $x=\ln a$
+        to: $f(\ln a)=-a(1+\ln a)<0\Leftrightarrow a>\frac1e$
+        operation: 求极小值并要求低于 x 轴。
+        why: 单极值函数有两个零点必须极小值为负。
+      source_ref: page_0235_ex6_solution
+    - step_id: step_4
+      statement: 左侧零点由 $x=-2$ 夹出。
+      formula_trace:
+        from: $f(-2)=e^{-2}>0,\ f(\ln a)<0$
+        to: $x_1\in(-2,\ln a)$
+        operation: 介值定理。
+        why: $a>1/e$ 时 $\ln a>-1$，所以 $-2<\ln a$。
+      source_ref: page_0235_ex6_solution
+    - step_id: step_5
+      statement: 右侧用等效零点法。
+      formula_trace:
+        from: $f(x)=e^x-a(x+2)$
+        to: $e^{x/2}[e^{x/2}-a(x+2)/e^{x/2}]$
+        operation: 提出 $e^{x/2}$。
+        why: 把线性客体转成可界定的 $\frac{x+2}{e^{x/2}}$。
+      source_ref: page_0235_ex6_solution
+    - step_id: step_6
+      statement: 取右侧点完成充分性。
+      formula_trace:
+        from: $f(x)\geqslant e^{x/2}(e^{x/2}-2a)$
+        to: $x=2\ln2a$，右侧有零点
+        operation: 令 $e^{x/2}=2a$。
+        why: 该点在 $\ln a$ 右侧，配合极小值负值夹出右零点。
+      source_ref: page_0235_ex6_solution
+teaching_card:
+  student_title: 两零点先看极小值，再用 $e^{x/2}$ 找右侧点
+  what_it_trains: 训练单极值双零点的求参：必要条件来自极小值，充分性要补左右取点。
+  recognition_cues:
+    - $f^\prime=e^x-a$，极值点是 $\ln a$。
+    - 题目要“两零点”，必须证明左右都能过轴。
+    - 右侧有 $e^x$ 和线性项 $x+2$，适合提出 $e^{x/2}$。
+  normalization_moves:
+    - 第 (1) 问先做 $a=1$ 的单调性。
+    - 第 (2) 问用 $f_{\min}<0$ 得 $a>1/e$。
+    - 用 $f(-2)>0$ 找左零点。
+    - 用等效零点法找右零点。
+  common_failures:
+    - 只写 $f_{\min}<0$，没证明两侧真的有零点。
+    - 忘记排除 $a\leqslant0$。
+    - 右侧取点时没有说明 $2\ln2a$ 在 $\ln a$ 右侧。
+  similar_practice_query: e^x-a(x+2) 两零点 a范围 单极值双零点 e^{x/2} 2ln2a
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

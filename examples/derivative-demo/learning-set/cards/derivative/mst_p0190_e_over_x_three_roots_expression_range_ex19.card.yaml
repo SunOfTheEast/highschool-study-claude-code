@@ -1,0 +1,157 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0190_e_over_x_three_roots_expression_range_ex19
+content_revision_id: mst_p0190_e_over_x_three_roots_expression_range_ex19-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0190_e_over_x_three_roots_expression_range_ex19.card.yaml
+stem: |-
+  （2024 · 郑州模拟 T11）已知函数 $f(x)=\frac{e^{x-1}}{x}+\frac{x}{e^{x-1}+x}+a$，若 $f(x)=0$ 有三个不同的零点 $x_1,x_2,x_3\ (x_1<x_2<x_3)$，则 $\frac{2e^{x_1}}{x_1}+\frac{e^{x_2}}{x_2}+\frac{e^{x_3}}{x_3}$ 的取值范围为（  ）
+  A. $(e,+\infty)$
+  B. $[2e,+\infty)$
+  C. $(-8e,+\infty)$
+  D. $(e,2e)$
+answer: |-
+  A
+
+  源解把 $\frac{e^{x-1}}x$ 记成一个新变量，并等价转成关于 $t=\frac{e^x}{x}$ 的二次方程。设二次方程两根为 $t_1,t_2$，结合 $g(x)=\frac{e^x}{x}$ 图像，三零点对应 $\frac{e^{x_1}}{x_1}=t_1<0$， $\frac{e^{x_2}}{x_2}=\frac{e^{x_3}}{x_3}=t_2>e$。 因此目标式 $\frac{2e^{x_1}}{x_1}+\frac{e^{x_2}}{x_2}+\frac{e^{x_3}}{x_3} =2(t_1+t_2)$。由源解二次函数性质可得 $a<-\frac32$， 从而 $2(t_1+t_2)>e$，故取值范围为 $(e,+\infty)$，选 A。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把复合分式压成一个变量的二次方程。
+      max_score: 1
+    - step_id: step_2
+      description: 用 $g(x)=\frac{e^x}{x}$ 图像分配三根。
+      max_score: 1
+    - step_id: step_3
+      description: 把目标表达式转成二次根和。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 数形结合
+      - 显隐点探路
+    subroute:
+      - 积定值
+      - $t=\frac{e^x}{x}$
+      - 三零点分配
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 复合函数与不动点结构
+      - 非齐次结构
+    evidence:
+      - $t=\frac{e^x}{x}$
+      - $t_1<0,\ t_2>e$
+      - $2(t_1+t_2)>e$
+    normalization_moves_used:
+      - 把分式复合表达式通分成关于 $t$ 的二次方程。
+      - 用 $e^x/x$ 的图像把两个 $t$ 值对应成三个 $x$ 根。
+      - 把目标式化成二次根和。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看不出 $\frac{e^{x-1}}x$ 和 $\frac{e^x}x$ 的换元关系，回补指数对数基础。
+      - 若学生不会用 $e^x/x$ 图像判断一根或两根，回补函数性质与图像。
+      - 若学生不会用二次方程根与系数关系，回补方程根分布与韦达。
+  detail_terms:
+    - $\frac{e^{x-1}}x+\frac{x}{e^{x-1}+x}+a$
+    - $t=\frac{e^x}{x}$
+    - $t_1<0,\ t_2>e$
+    - $2(t_1+t_2)>e$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0190_e_over_x_three_roots_expression_range_ex19
+source_evidence:
+  source_refs:
+    - ref_id: page_0190
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0190/page_0190.md
+      role: problem_start
+      evidence: "page_0190 contains 例19 statement, choices A-D, and the beginning of the solution: transform the equation through a variable $\\frac{e^{x-1}}x$ / $\\frac{e^x}x$ and form a quadratic in the new variable."
+    - ref_id: page_0191
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0191/page_0191.md
+      role: continuation
+      evidence: "page_0191 top continues 例19: use the graph of $g(x)=\\frac{e^x}{x}$ to identify one negative root level and one positive level above $e$, then conclude $2t_1+2t_2>e$, option A."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0190.png
+      inspected: true
+      notes: 页图核对通过：例19题干、选项和变量代换起始可见；题目要求 $\frac{2e^{x_1}}{x_1}+\frac{e^{x_2}}{x_2}+\frac{e^{x_3}}{x_3}$ 的范围。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0191.png
+      inspected: true
+      notes: 页图核对通过：page_0191 顶部为例19续解，图像为 $g(x)=\frac{e^x}{x}$， 结论为 $>e$，选 A。
+  source_context: page_0190 顶部是 page_0189 例18续解，按页头归属规则跳过；本卡处理 page_0190 新起头例19。
+  source_influence:
+    - 保留源解把三零点问题转成关于 $t=\frac{e^x}{x}$ 的二次方程。
+    - 保留源图对 $t_1<0$ 与 $t_2>e$ 的读法。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 郑州模拟 T11）已知函数 $f(x)=\frac{e^{x-1}}{x}+\frac{x}{e^{x-1}+x}+a$，若 $f(x)=0$ 有三个不同的零点 $x_1,x_2,x_3\ (x_1<x_2<x_3)$，则 $\frac{2e^{x_1}}{x_1}+\frac{e^{x_2}}{x_2}+\frac{e^{x_3}}{x_3}$ 的取值范围为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $(e,+\infty)$
+      text_latex: $(e,+\infty)$
+    - label: B
+      text_raw: $[2e,+\infty)$
+      text_latex: $[2e,+\infty)$
+    - label: C
+      text_raw: $(-8e,+\infty)$
+      text_latex: $(-8e,+\infty)$
+    - label: D
+      text_raw: $(e,2e)$
+      text_latex: $(e,2e)$
+  answer: A
+  fidelity_notes:
+    - 源题为单选题，选项 A-D 已完整保留。
+    - 题头在 page_0190，关键图像与结论在 page_0191 顶部续解。
+solution:
+  source_solution_summary: 源解把 $\frac{e^{x-1}}x$ 记成一个新变量，并等价转成关于 $t=\frac{e^x}{x}$ 的二次方程。设二次方程两根为 $t_1,t_2$，结合 $g(x)=\frac{e^x}{x}$ 图像，三零点对应 $\frac{e^{x_1}}{x_1}=t_1<0$， $\frac{e^{x_2}}{x_2}=\frac{e^{x_3}}{x_3}=t_2>e$。 因此目标式 $\frac{2e^{x_1}}{x_1}+\frac{e^{x_2}}{x_2}+\frac{e^{x_3}}{x_3} =2(t_1+t_2)$。由源解二次函数性质可得 $a<-\frac32$， 从而 $2(t_1+t_2)>e$，故取值范围为 $(e,+\infty)$，选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 把复合分式压成一个变量的二次方程。
+      formula_trace:
+        from: $\frac{e^{x-1}}x+\frac{x}{e^{x-1}+x}+a=0$
+        to: $h(t)=\frac{t^2}{e^2}+(a+1)\frac{t}{e}+a+1=0$
+        operation: 令 $t=\frac{e^x}{x}$，把第二个分式写成关于 $t$ 的有理式后通分。
+        why: 三零点来自 $t$ 方程的两个水平值与 $g(x)=\frac{e^x}{x}$ 图像相交。
+      source_ref: page_0190
+    - step_id: step_2
+      statement: 用 $g(x)=\frac{e^x}{x}$ 图像分配三根。
+      formula_trace:
+        from: $g(x)=\frac{e^x}{x}$
+        to: $\frac{e^{x_1}}{x_1}=t_1<0,\quad \frac{e^{x_2}}{x_2}=\frac{e^{x_3}}{x_3}=t_2>e$
+        operation: 读图：负支给一根，正支 $y>e$ 给两根。
+        why: 这是三零点结构的来源。
+      source_ref: page_0191
+    - step_id: step_3
+      statement: 把目标表达式转成二次根和。
+      formula_trace:
+        from: $\frac{2e^{x_1}}{x_1}+\frac{e^{x_2}}{x_2}+\frac{e^{x_3}}{x_3}$
+        to: $2(t_1+t_2)>e$
+        operation: 代入三个零点对应的两个 $t$ 值，并用源解给出的根和范围。
+        why: 目标式不需要求具体 $x_i$，只需二次方程根和。
+      source_ref: page_0191
+teaching_card:
+  student_title: 把三个零点压到两个 $t$ 值
+  what_it_trains: 训练在含 $\frac{e^x}{x}$ 的零点题中，用换元和图像把多个 $x$ 根压缩为二次方程的两个根。
+  recognition_cues:
+    - 题目同时出现 $\frac{e^{x-1}}x$ 和 $\frac{x}{e^{x-1}+x}$。
+    - 最后的目标式含 $\frac{e^{x_i}}{x_i}$。
+    - 源图是 $g(x)=\frac{e^x}{x}$ 的负支和正支。
+  normalization_moves:
+    - 令 $t=\frac{e^x}{x}$。
+    - 把方程通分成 $h(t)=0$。
+    - 读出 $t_1<0$ 对应一个根，$t_2>e$ 对应两个根。
+    - 把目标式写成 $2(t_1+t_2)$。
+  common_failures:
+    - 直接求三个 $x_i$，计算不可控。
+    - 把 $e^{x-1}/x$ 和 $e^x/x$ 差一个 $e$ 的比例关系漏掉。
+    - 没有用图像判断 $t_2>e$。
+  similar_practice_query: e^x/x 三个零点 t换元 根和 表达式范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

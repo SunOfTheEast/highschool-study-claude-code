@@ -1,0 +1,213 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0241_exp_2x_minus_ax_minus1_unique_positive_zero_bound_ch6_inequality_ex17
+content_revision_id: mst_p0241_exp_2x_minus_ax_minus1_unique_positive_zero_bound_ch6_inequality_ex17-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0241_exp_2x_minus_ax_minus1_unique_positive_zero_bound_ch6_inequality_ex17.card.yaml
+stem: |-
+  （2025 · 黑龙江六校高三期末 T17）已知函数 $f(x)=e^{2x}-ax-1$。
+  1. 讨论 $f(x)$ 的单调区间。
+  2. 若 $f(x)$ 在区间 $(0,+\infty)$ 上存在唯一零点 $x_0$，证明：$x_0<a-2$。
+answer: |-
+  第 (1) 问：若 $a\leqslant0$，$f$ 在 $\mathbf R$ 单调递增；若 $a>0$，$f$ 在 $(-\infty,\frac12\ln\frac a2)$ 单调递减，在 $(\frac12\ln\frac a2,+\infty)$ 单调递增。第 (2) 问：$x_0<a-2$。
+
+  $f'(x)=2e^{2x}-a$。若 $a\leqslant0$，则 $f'(x)>0$，全域递增。 若 $a>0$，临界点为 $x=\frac12\ln(a/2)$，左减右增。第 (2) 问， 由 $f(x_0)=0$ 得 $a=(e^{2x_0}-1)/x_0$。要证 $x_0<a-2$，只需证 $e^{2x_0}-(x_0+1)^2>0$。令 $h(x)=e^{2x}-(x+1)^2$，通过 $h'(x)=2e^{2x}-2(x+1)$ 和继续求导， 得 $h$ 在 $x>0$ 上递增且 $h(0)=0$，所以成立。法二从唯一正零点 推出 $a>2$，再用 $e^{2x}>1+2x+2x^2$ 得 $f(x)>2x^2+(2-a)x$，从而 $x_0<(a-2)/2<a-2$。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 第 (1) 问先求导。
+      max_score: 1
+    - step_id: step_2
+      description: 按 $a$ 的符号分类单调性。
+      max_score: 1
+    - step_id: step_3
+      description: 法一先用零点方程分离参数。
+      max_score: 1
+    - step_id: step_4
+      description: 把目标转成纯 $x_0$ 不等式。
+      max_score: 1
+    - step_id: step_5
+      description: 用导数证明 $e^{2x}>(x+1)^2$。
+      max_score: 1
+    - step_id: step_6
+      description: 法二用放缩直接定位零点上界。
+      max_score: 1
+    - step_id: step_7
+      description: 由法二得到更强结论。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: part_1
+        goal: 零点/极值点分析
+        target: 第 part_1 问
+        result: $a\leq0$ 全增；$a>0$ 时在 $\frac12\ln(a/2)$ 左减右增。
+      - part_id: part_2
+        goal: 不等式证明
+        target: 第 part_2 问
+        result: $x_0<a-2$。
+  method:
+    primary: 参变量分离
+    secondary:
+      - 切线放缩与凹凸性
+      - 局部逼近与找点
+    subroute:
+      - 零点方程消参
+      - 指数不等式
+      - 导数证明不等式
+      - 二次下界取点
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+      - 局部逼近结构
+    evidence:
+      - $e^{2x}-ax-1$
+      - $a=\frac{e^{2x_0}-1}{x_0}$
+      - $e^{2x_0}-(x_0+1)^2$
+      - $e^{2x}>1+2x+2x^2$
+      - $(a-2)/2$
+    normalization_moves_used:
+      - 第 (1) 问按导数判单调。
+      - 第 (2) 问用零点方程消掉 $a$。
+      - 把目标转成指数大于平方。
+      - 备用路线用指数下界直接压出零点上界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会解单调区间，回补导数单调极值基础。
+      - 若学生不会由零点方程消参，回补代数恒等变形。
+      - 若学生不会证明 $e^{2x}>(x+1)^2$，回补不等式工具基础。
+      - 若学生不理解指数下界，回补指数对数基础。
+      - 若学生不会用上界定位零点，回补函数性质与图像。
+  detail_terms:
+    - $e^{2x}-ax-1$
+    - $x_0<a-2$
+    - $a=(e^{2x_0}-1)/x_0$
+    - $e^{2x}>(x+1)^2$
+    - $e^{2x}>1+2x+2x^2$
+    - $(a-2)/2$
+parts: &a1
+  - part_id: part_1
+    text: 讨论 $f(x)$ 的单调区间。
+  - part_id: part_2
+    text: 若 $f(x)$ 在区间 $(0,+\infty)$ 上存在唯一零点 $x_0$，证明：$x_0<a-2$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0241_exp_2x_minus_ax_minus1_unique_positive_zero_bound_ch6_inequality_ex17
+source_evidence:
+  source_refs:
+    - ref_id: page_0241_ex17_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0241/page_0241.md
+      role: problem_start
+      evidence: page_0241 底部给出例17题头：$f(x)=e^{2x}-ax-1$。
+    - ref_id: page_0242_ex17_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0242/page_0242.md
+      role: continuation
+      evidence: page_0242 续完例17：第 (1) 问讨论单调区间；第 (2) 问若正半轴唯一零点 $x_0$，证明 $x_0<a-2$。
+    - ref_id: page_0242_ex18_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0242/page_0242.md
+      role: local_context
+      evidence: page_0242 随后另起例18，属于下一批，本卡只取其前方的例17续解。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0241.png
+      inspected: true
+      notes: 已核对页图：例17题头位于 page_0241 底部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0242.png
+      inspected: true
+      notes: 已核对页图：page_0242 顶部至中部为例17完整题目和解析，例18另起。
+  source_context: 本卡处理 page_0241 起头、page_0242 续完的例17；page_0242 例18以后留给下一批。
+  source_influence:
+    - 保留 source 的单调区间分类：$a\leq0$ 全增；$a>0$ 在 $\frac12\ln(a/2)$ 左减右增。
+    - 保留 source 的法一：由零点方程分离 $a$，转证 $e^{2x_0}>(x_0+1)^2$。
+    - 保留 source 的法二：用 $e^{2x}>1+2x+2x^2$ 得 $x_0<(a-2)/2<a-2$。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 · 黑龙江六校高三期末 T17）已知函数 $f(x)=e^{2x}-ax-1$。
+  parts: *a1
+  choices: []
+  answer: 第 (1) 问：若 $a\leqslant0$，$f$ 在 $\mathbf R$ 单调递增；若 $a>0$，$f$ 在 $(-\infty,\frac12\ln\frac a2)$ 单调递减，在 $(\frac12\ln\frac a2,+\infty)$ 单调递增。第 (2) 问：$x_0<a-2$。
+  fidelity_notes:
+    - 两问均无选项。
+    - 第 (2) 问条件只在 $(0,+\infty)$ 上唯一零点。
+solution:
+  source_solution_summary: $f'(x)=2e^{2x}-a$。若 $a\leqslant0$，则 $f'(x)>0$，全域递增。 若 $a>0$，临界点为 $x=\frac12\ln(a/2)$，左减右增。第 (2) 问， 由 $f(x_0)=0$ 得 $a=(e^{2x_0}-1)/x_0$。要证 $x_0<a-2$，只需证 $e^{2x_0}-(x_0+1)^2>0$。令 $h(x)=e^{2x}-(x+1)^2$，通过 $h'(x)=2e^{2x}-2(x+1)$ 和继续求导， 得 $h$ 在 $x>0$ 上递增且 $h(0)=0$，所以成立。法二从唯一正零点 推出 $a>2$，再用 $e^{2x}>1+2x+2x^2$ 得 $f(x)>2x^2+(2-a)x$，从而 $x_0<(a-2)/2<a-2$。
+  key_steps:
+    - step_id: step_1
+      statement: 第 (1) 问先求导。
+      formula_trace:
+        from: $f(x)=e^{2x}-ax-1$
+        to: $f^\prime(x)=2e^{2x}-a$
+        operation: 逐项求导。
+        why: 单调区间由 $2e^{2x}$ 与 $a$ 的比较决定。
+      source_ref: page_0242_ex17_continuation
+    - step_id: step_2
+      statement: 按 $a$ 的符号分类单调性。
+      formula_trace:
+        from: $f^\prime(x)=2e^{2x}-a$
+        to: $a\leq0$ 全增；$a>0$ 时临界点 $\frac12\ln\frac a2$
+        operation: 解 $f^\prime(x)=0$。
+        why: 这是第 (1) 问完整结论。
+      source_ref: page_0242_ex17_continuation
+    - step_id: step_3
+      statement: 法一先用零点方程分离参数。
+      formula_trace:
+        from: $f(x_0)=e^{2x_0}-ax_0-1=0$
+        to: $a=\frac{e^{2x_0}-1}{x_0}$
+        operation: 解出 $a$。
+        why: 目标 $x_0<a-2$ 中同时有 $a$ 和 $x_0$，先消掉 $a$。
+      source_ref: page_0242_ex17_continuation
+    - step_id: step_4
+      statement: 把目标转成纯 $x_0$ 不等式。
+      formula_trace:
+        from: $x_0<\frac{e^{2x_0}-1}{x_0}-2$
+        to: $e^{2x_0}-(x_0+1)^2>0$
+        operation: 移项整理。
+        why: 剩下只需要证明一个标准指数不等式。
+      source_ref: page_0242_ex17_continuation
+    - step_id: step_5
+      statement: 用导数证明 $e^{2x}>(x+1)^2$。
+      formula_trace:
+        from: $h(x)=e^{2x}-(x+1)^2$
+        to: $h(x)>h(0)=0$ for $x>0$
+        operation: 证明 $h^\prime(x)>0$。
+        why: 这直接完成法一。
+      source_ref: page_0242_ex17_continuation
+    - step_id: step_6
+      statement: 法二用放缩直接定位零点上界。
+      formula_trace:
+        from: $e^{2x}>1+2x+2x^2$
+        to: $f(x)>2x^2+(2-a)x$
+        operation: 用指数展开的下界。
+        why: 在正半轴找到一个比零点更右的正值点。
+      source_ref: page_0242_ex17_continuation
+    - step_id: step_7
+      statement: 由法二得到更强结论。
+      formula_trace:
+        from: $2x^2+(2-a)x=0$
+        to: $x_0<\frac{a-2}{2}<a-2$
+        operation: 解二次下界的正根。
+        why: 这给出比题目要求更强的上界。
+      source_ref: page_0242_ex17_continuation
+teaching_card:
+  student_title: 零点方程消掉参数：把 $x_0<a-2$ 变成指数不等式
+  what_it_trains: 训练含参零点不等式证明：先用零点方程消参，再证明纯函数不等式。
+  recognition_cues:
+    - 目标里同时有零点 $x_0$ 和参数 $a$。
+    - 零点方程能直接解出 $a$。
+    - 整理后出现 $e^{2x}$ 和 $(x+1)^2$ 的比较。
+  normalization_moves:
+    - 先完成单调区间。
+    - 用 $f(x_0)=0$ 写出 $a$。
+    - 把 $x_0<a-2$ 化成 $e^{2x_0}>(x_0+1)^2$。
+    - 用导数或指数下界证明。
+  common_failures:
+    - 没有使用 $f(x_0)=0$，导致目标无法化简。
+    - 把 $a-2$ 的正性漏掉。
+    - 证明 $e^{2x}>(x+1)^2$ 时只凭直觉，没有给导数或标准不等式。
+  similar_practice_query: e^{2x}-ax-1 唯一正零点 x0<a-2 零点方程消参 e^{2x}>(x+1)^2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

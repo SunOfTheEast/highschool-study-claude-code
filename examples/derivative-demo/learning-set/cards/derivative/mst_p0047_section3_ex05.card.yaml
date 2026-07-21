@@ -1,0 +1,187 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0047_section3_ex05
+content_revision_id: mst_p0047_section3_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0047_section3_ex05.card.yaml
+stem: |-
+  求证：
+  (1). （2018 · 新课标 Ⅱ 卷）e^x\geqslant x^2+1 (x\geqslant0)。
+  (2). e^x\geqslant ex。
+  (3). e^x\geqslant ex+(x-1)^2 (x\geqslant0)。
+answer: |-
+  三个不等式均成立，证明见解析。
+
+  三问都用作商法，把右侧除以 e^x 后证明商不超过 1。第 (1) 问令 F_1(x)=\frac{x^2+1}{e^x}，则 F_1'(x)=-\frac{(x-1)^2}{e^x}\leqslant0， x\geqslant0 时最大值在 x=0，为 1。第 (2) 问令 F_2(x)=\frac{ex}{e^x}， 导数符号显示最大值在 x=1，为 1。第 (3) 问令 F_3(x)=\frac{ex+(x-1)^2}{e^x}，导数为 -\frac{(x-1)(x+e-3)}{e^x}； 在 x\geqslant0 上分段单调，且 F_3(0)=F_3(1)=1，所以 F_3(x)\leqslant1。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 第 (1) 问把证明转成商函数不超过 1。
+      max_score: 1
+    - step_id: step_2
+      description: 用单调性证明第 (1) 问。
+      max_score: 1
+    - step_id: step_3
+      description: 第 (2) 问证明 e^x\geqslant e\cdot x。
+      max_score: 1
+    - step_id: step_4
+      description: 第 (3) 问继续把右侧整体作商。
+      max_score: 1
+    - step_id: step_5
+      description: 分析 F_3 的导数和端点值。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 不等式证明
+        target: 第 (1) 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 (2) 问
+        result: 见 source_solution_summary
+      - part_id: "3"
+        goal: 不等式证明
+        target: 第 (3) 问
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 切线放缩与凹凸性
+    subroute:
+      - 指数找基友
+      - 作商法 \phi(x)/e^x
+      - 指数切线替换
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 指对复合结构
+      - 切线/公切线/切点量结构
+      - 不等式工具结构
+    evidence:
+      - \frac{x^2+1}{e^x},\quad F_1'(x)=-\frac{(x-1)^2}{e^x}
+      - \frac{ex}{e^x},\quad F_2'(x)=\frac{e(1-x)}{e^x}
+      - \frac{ex+(x-1)^2}{e^x},\quad F_3'(x)=-\frac{(x-1)(x+e-3)}{e^x}
+    normalization_moves_used:
+      - 把 e^x\geqslant \phi(x) 统一改成 \phi(x)/e^x\leqslant1。
+      - 通过作商让导数变成 \phi'(x)-\phi(x) 的结构。
+      - 用切点处商函数取到 1 来完成证明。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不知道 e^x 始终为正、不能安全作商，回补指数对数基础。
+      - 若学生不会通过导数判断商函数最大值，回补导数单调极值基础。
+      - 若学生把 ex 误读为 e^x，回补代数记号与指数对数基础。
+      - 若学生看不出 e^x\geqslant ex 是 x=1 处切线不等式，回补导数运算与几何意义。
+  detail_terms:
+    - 指数找基友
+    - \phi(x)/e^x
+    - e^x\geqslant ex
+    - -(x-1)(x+e-3)
+parts: &a1
+  - label: (1)
+    text: （2018 · 新课标 Ⅱ 卷）e^x\geqslant x^2+1 (x\geqslant0)。
+  - label: (2)
+    text: e^x\geqslant ex。
+  - label: (3)
+    text: e^x\geqslant ex+(x-1)^2 (x\geqslant0)。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0047_section3_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0047
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0047/page_0047.md
+      role: problem_start
+      evidence: 例 5：求证：(1) e^x\geqslant x^2+1 (x\geqslant0)； (2) e^x\geqslant ex；(3) e^x\geqslant ex+(x-1)^2 (x\geqslant0)。
+    - ref_id: page_0047_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0047/page_0047.md
+      role: solution
+      evidence: 解析第 (1) 问作商，令 f(x)=(x^2+1)/e^x， f'(x)=-(x-1)^2/e^x\leqslant0，由 f(0)=1 得证。
+    - ref_id: page_0048
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0048/page_0048.md
+      role: continuation
+      evidence: page_0048 续解第 (2)(3) 问：令 f(x)=ex/e^x 得最大值 f(1)=1； 令 f(x)=(ex+(x-1)^2)/e^x，导数为 -(x-1)(x+e-3)/e^x， 由 f(0)=f(1)=1 得证。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0047.png
+      inspected: true
+      notes: 页图已核对：page_0047 在例 3 后进入“二、指对找基友”，直接出现例 5；未见例 4 题头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0048.png
+      inspected: true
+      notes: 页图已核对：page_0048 顶部续完例 5 第 (2)(3) 问，并在其后开始例 6。
+  source_context: 本题是“指数找基友”的首个例题，核心是把要证的 e^x\geqslant \phi(x) 改成 \phi(x)/e^x\leqslant1，再让导数中出现 \phi'(x)-\phi(x) 的可控因式。 page_0047/0048 页图均未出现例 4 题头，编号从例 3 后直接跳到例 5。
+  source_influence:
+    - page_0048 Reconstruction Marker 提到第 (3) 问结论处可能有 ex/e^x 的排印识别问题；页图与导数计算均支持 此处 ex 表示 e\cdot x，本卡按 e\cdot x 记录。
+  source_discrepancies: []
+original_problem:
+  stem: 求证：
+  parts: *a1
+  choices: []
+  answer: 三个不等式均成立，证明见解析。
+  fidelity_notes:
+    - 源文中的 ex 按惯例读作 e\cdot x，不是 e^x。
+solution:
+  source_solution_summary: 三问都用作商法，把右侧除以 e^x 后证明商不超过 1。第 (1) 问令 F_1(x)=\frac{x^2+1}{e^x}，则 F_1'(x)=-\frac{(x-1)^2}{e^x}\leqslant0， x\geqslant0 时最大值在 x=0，为 1。第 (2) 问令 F_2(x)=\frac{ex}{e^x}， 导数符号显示最大值在 x=1，为 1。第 (3) 问令 F_3(x)=\frac{ex+(x-1)^2}{e^x}，导数为 -\frac{(x-1)(x+e-3)}{e^x}； 在 x\geqslant0 上分段单调，且 F_3(0)=F_3(1)=1，所以 F_3(x)\leqslant1。
+  key_steps:
+    - step_id: step_1
+      statement: 第 (1) 问把证明转成商函数不超过 1。
+      formula_trace:
+        from: e^x\geqslant x^2+1
+        to: F_1(x)=\frac{x^2+1}{e^x}\leqslant1
+        operation: 两边除以正数 e^x。
+        why: 作商后导数中出现 2x-(x^2+1)=-(x-1)^2。
+      source_ref: page_0047_solution
+    - step_id: step_2
+      statement: 用单调性证明第 (1) 问。
+      formula_trace:
+        from: F_1'(x)=\frac{2x-x^2-1}{e^x}
+        to: F_1'(x)=-\frac{(x-1)^2}{e^x}\leqslant0,\quad F_1(0)=1
+        operation: 因式分解导数分子，并在 x\geqslant0 上取左端最大值。
+        why: F_1 单调递减，所以 \frac{x^2+1}{e^x}\leqslant1。
+      source_ref: page_0047_solution
+    - step_id: step_3
+      statement: 第 (2) 问证明 e^x\geqslant e\cdot x。
+      formula_trace:
+        from: F_2(x)=\frac{ex}{e^x}
+        to: F_2'(x)=\frac{e(1-x)}{e^x},\quad F_2(1)=1
+        operation: 作商并求导，导数在 x=1 左正右负。
+        why: F_2 的最大值为 1，所以 e^x\geqslant ex。
+      source_ref: page_0048
+    - step_id: step_4
+      statement: 第 (3) 问继续把右侧整体作商。
+      formula_trace:
+        from: e^x\geqslant ex+(x-1)^2
+        to: F_3(x)=\frac{ex+(x-1)^2}{e^x}\leqslant1
+        operation: 两边除以 e^x，保留右侧两个贴着切点的项。
+        why: 这个商的导数可以分解出两个临界点 3-e 与 1。
+      source_ref: page_0048
+    - step_id: step_5
+      statement: 分析 F_3 的导数和端点值。
+      formula_trace:
+        from: F_3'(x)
+        to: F_3'(x)=-\frac{(x-1)(x+e-3)}{e^x},\quad F_3(0)=F_3(1)=1
+        operation: 求导并分解，得到 F_3 在 (0,3-e)、(1,+\infty) 递减，在 (3-e,1) 递增。
+        why: x\geqslant0 上的最大值只在 0 或 1 处达到，均为 1。
+      source_ref: page_0048
+teaching_card:
+  student_title: 把右侧除以 e^x，找指数函数的“基友”
+  what_it_trains: 训练遇到 e^x 压多项式或切线型表达时，先作商，再让导数自动出现可分解的差式。
+  recognition_cues:
+    - 目标形如 e^x\geqslant 右侧函数。
+    - 右侧在某个切点附近和 e^x 同值。
+    - 直接相减求导不如除以 e^x 简洁。
+  normalization_moves:
+    - 把证明统一成 F(x)=右侧/e^x\leqslant1。
+    - 求 F'(x) 并分解出平方或一次因子。
+    - 用 F 的最大值等于 1 收尾。
+  common_failures:
+    - 把 e\cdot x 看成 e^x，导致第 (2)(3) 问完全变形。
+    - 第 (1) 问没有利用 x\geqslant0，只知道导数非正却不取 F(0)。
+    - 第 (3) 问漏掉临界点 3-e，单调区间写不全。
+  similar_practice_query: e^x 证明大于多项式或切线表达，作商后用指数找基友
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核实 page_0047 页图从例 3 后直接跳到例 5，未发现例 4 题头。

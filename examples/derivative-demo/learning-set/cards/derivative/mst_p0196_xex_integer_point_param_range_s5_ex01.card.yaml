@@ -1,0 +1,183 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0196_xex_integer_point_param_range_s5_ex01
+content_revision_id: mst_p0196_xex_integer_point_param_range_s5_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0196_xex_integer_point_param_range_s5_ex01.card.yaml
+stem: |-
+  若 $f(x)=xe^x-ax+a$，若存在唯一的整数 $x_0$ 使得 $f(x_0)<0$，则实数 $a$ 的取值范围为（  ）
+  A. $\left[-\frac{2}{3e^2},\frac{1}{2e}\right)$
+  B. $\left[\frac{2}{3e^2},\frac{1}{2e}\right)\cup\left(2e^2,\frac{3}{2}e^3\right]$
+  C. $\left[-\frac{1}{e^2},\frac{1}{e}\right)$
+  D. $\left[\frac{1}{e^2},\frac{1}{e}\right)\cup\left(2e^2,\frac{3}{2}e^3\right]$
+answer: |-
+  B
+
+  由 $f(x)<0$ 得 $xe^x<ax-a$，转成曲线 $y=xe^x$ 与直线 $y=ax-a$ 的上下关系， 其中直线恒过 $(1,0)$。若 $a\le0$，则在 $x<0$ 区域不等式会给出无穷多个整点， 不满足“唯一整点”，故 $a>0$。右侧若有整点，只可能由 $x=2$ 成立且 $x=3$ 不成立，得 $2e^2<a\le\frac{3}{2}e^3$。左侧若有整点，只可能由 $x=-1$ 成立且 $x=-2$ 不成立，得 $\frac{2}{3e^2}\le a<\frac{1}{2e}$。并集为 $\left[\frac{2}{3e^2},\frac{1}{2e}\right)\cup\left(2e^2,\frac{3}{2}e^3\right]$， 选 B。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先做参数分离，改写为“曲线 < 直线”的整点判定。
+      max_score: 1
+    - step_id: step_2
+      description: 排除 $a\le0$。
+      max_score: 1
+    - step_id: step_3
+      description: 右侧分支：保留 $x=2$，排除 $x=3$。
+      max_score: 1
+    - step_id: step_4
+      description: 左侧分支：保留 $x=-1$，排除 $x=-2$。
+      max_score: 1
+    - step_id: step_5
+      description: 合并两支范围得到答案。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 参变量分离
+    secondary:
+      - 含参数分类讨论
+      - 数形结合
+    subroute:
+      - 直曲分离
+      - 定直线动曲线
+      - 整点判定
+      - 图像交点计数
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $xe^x<ax-a$
+      - $y=xe^x,\ y=ax-a$（过 $(1,0)$）
+      - $x=2,3,-1,-2$ 的临界判定
+    normalization_moves_used:
+      - 先把题干改写成“定曲线 vs 过定点动直线”。
+      - 按左右两侧分区讨论唯一整点。
+      - 每侧用“一个成立 + 相邻一个不成立”锁定参数区间。
+  fallback:
+    only_if_trace_shows:
+      - 若学生把“唯一整点”误判成“唯一实根”，回补函数性质与图像。
+      - 若学生在 $x=-1,-2$ 代入后化简方向频繁出错，回补不等式工具基础。
+      - 若学生不会判断 $xe^x$ 的增长快慢，回补导数单调极值基础与指数对数基础。
+  detail_terms:
+    - $xe^x<ax-a$
+    - 过定点 $(1,0)$
+    - $x=2,3,-1,-2$
+    - $\left[\frac{2}{3e^2},\frac{1}{2e}\right)\cup\left(2e^2,\frac{3}{2}e^3\right]$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0196_xex_integer_point_param_range_s5_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0196_ex01_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0196/page_0196.md
+      role: problem_start
+      evidence: page_0196 例1题头给出函数 $f(x)=xe^x-ax+a$，条件“存在唯一整数 $x_0$ 使 $f(x_0)<0$”，并给出 A-D 选项。
+    - ref_id: page_0196_ex01_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0196/page_0196.md
+      role: solution
+      evidence: page_0196 例1解析把不等式改写为 $xe^x<ax-a$，再按“右侧 x=2 成立 x=3 不成立”和“左侧 x=-1 成立 x=-2 不成立”两支得到并集区间，结论选 B。
+    - ref_id: page_0196_section_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0196/page_0196.md
+      role: local_context
+      evidence: page_0196 为第5章第三节“整点问题”起始页，例题编号在本节重置为例1。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0196.png
+      inspected: true
+      notes: 已核对页图：例1题干、A-D 选项、解析不等式链与配图（$y=xe^x$ 与过 $(1,0)$ 直线）清晰可读。
+  source_context: page_0196 同页包含例2起头，但本卡仅处理题头在本页的例1。
+  source_influence:
+    - 保留源解“直曲分离”：定曲线 $y=xe^x$ 与过定点 $(1,0)$ 的动直线 $y=ax-a$。
+    - 保留整点临界判定：右侧用 $x=2,3$，左侧用 $x=-1,-2$。
+    - 保留并集结构：唯一整点可出现在右侧或左侧，最后取两段并集。
+  source_discrepancies: []
+original_problem:
+  stem: 若 $f(x)=xe^x-ax+a$，若存在唯一的整数 $x_0$ 使得 $f(x_0)<0$，则实数 $a$ 的取值范围为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\left[-\frac{2}{3e^2},\frac{1}{2e}\right)$
+      text_latex: $\left[-\frac{2}{3e^2},\frac{1}{2e}\right)$
+    - label: B
+      text_raw: $\left[\frac{2}{3e^2},\frac{1}{2e}\right)\cup\left(2e^2,\frac{3}{2}e^3\right]$
+      text_latex: $\left[\frac{2}{3e^2},\frac{1}{2e}\right)\cup\left(2e^2,\frac{3}{2}e^3\right]$
+    - label: C
+      text_raw: $\left[-\frac{1}{e^2},\frac{1}{e}\right)$
+      text_latex: $\left[-\frac{1}{e^2},\frac{1}{e}\right)$
+    - label: D
+      text_raw: $\left[\frac{1}{e^2},\frac{1}{e}\right)\cup\left(2e^2,\frac{3}{2}e^3\right]$
+      text_latex: $\left[\frac{1}{e^2},\frac{1}{e}\right)\cup\left(2e^2,\frac{3}{2}e^3\right]$
+  answer: B
+  fidelity_notes:
+    - 源题为单选题，A-D 选项已完整保留。
+    - 例号来自“第三节 整点问题”新小节，编号重置。
+solution:
+  source_solution_summary: 由 $f(x)<0$ 得 $xe^x<ax-a$，转成曲线 $y=xe^x$ 与直线 $y=ax-a$ 的上下关系， 其中直线恒过 $(1,0)$。若 $a\le0$，则在 $x<0$ 区域不等式会给出无穷多个整点， 不满足“唯一整点”，故 $a>0$。右侧若有整点，只可能由 $x=2$ 成立且 $x=3$ 不成立，得 $2e^2<a\le\frac{3}{2}e^3$。左侧若有整点，只可能由 $x=-1$ 成立且 $x=-2$ 不成立，得 $\frac{2}{3e^2}\le a<\frac{1}{2e}$。并集为 $\left[\frac{2}{3e^2},\frac{1}{2e}\right)\cup\left(2e^2,\frac{3}{2}e^3\right]$， 选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 先做参数分离，改写为“曲线 < 直线”的整点判定。
+      formula_trace:
+        from: $xe^x-ax+a<0$
+        to: $xe^x<ax-a$
+        operation: 移项后把含参项放到右边。
+        why: 便于固定曲线、移动直线做数形判断。
+      source_ref: page_0196_ex01_solution
+    - step_id: step_2
+      statement: 排除 $a\le0$。
+      formula_trace:
+        from: $a\le0$
+        to: 在 $x<0$ 时 $xe^x<ax-a$ 恒成立，整点无穷多个
+        operation: 比较左侧负值与右侧非负值。
+        why: 题设要求“唯一整点”，故必须 $a>0$。
+      source_ref: page_0196_ex01_solution
+    - step_id: step_3
+      statement: 右侧分支：保留 $x=2$，排除 $x=3$。
+      formula_trace:
+        from: $\begin{cases}2e^2<a\\3e^3\ge2a\end{cases}$
+        to: $2e^2<a\le\frac{3}{2}e^3$
+        operation: 由“$x=2$ 成立、$x=3$ 不成立”联立不等式。
+        why: 源解用增长速度判定右侧至多出现这一个整点。
+      source_ref: page_0196_ex01_solution
+    - step_id: step_4
+      statement: 左侧分支：保留 $x=-1$，排除 $x=-2$。
+      formula_trace:
+        from: $\begin{cases}-e^{-1}<-2a\\-2e^{-2}\ge-3a\end{cases}$
+        to: $\frac{2}{3e^2}\le a<\frac{1}{2e}$
+        operation: 由“$x=-1$ 成立、$x=-2$ 不成立”联立并化简。
+        why: 源解左侧整点临界正是这两个相邻整数。
+      source_ref: page_0196_ex01_solution
+    - step_id: step_5
+      statement: 合并两支范围得到答案。
+      formula_trace:
+        from: $a\in\left(2e^2,\frac{3}{2}e^3\right]$ 或 $a\in\left[\frac{2}{3e^2},\frac{1}{2e}\right)$
+        to: $a\in\left[\frac{2}{3e^2},\frac{1}{2e}\right)\cup\left(2e^2,\frac{3}{2}e^3\right]$
+        operation: 取并集并对应选项。
+        why: 唯一整点可能落在左支或右支。
+      source_ref: page_0196_ex01_solution
+teaching_card:
+  student_title: 过 $(1,0)$ 动直线的整点唯一判定
+  what_it_trains: 训练把含参不等式变成“定曲线与动直线”后，用左右分区+相邻整点临界锁范围。
+  recognition_cues:
+    - 题目给“存在唯一整数 $x_0$”且含参数直线项。
+    - 可改写为 $xe^x<a(x-1)$，直线过固定点。
+    - 选项是参数区间并集，提示左右分支讨论。
+  normalization_moves:
+    - 先做参变量分离：$xe^x<ax-a$。
+    - 先排除 $a\le0$ 的无穷整点情形。
+    - 右支用 $x=2$ 成立、$x=3$ 不成立。
+    - 左支用 $x=-1$ 成立、$x=-2$ 不成立。
+    - 并集合并对应选项。
+  common_failures:
+    - 忘记先排除 $a\le0$，导致“唯一整点”条件被破坏。
+    - 只算一侧（只看正半轴或负半轴）漏掉并集。
+    - 代入负整数后不等式方向处理错误。
+  similar_practice_query: xe^x 过定点直线 唯一整点 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

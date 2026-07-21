@@ -1,0 +1,171 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0203_ae_x_log_cos_inequality_ch6_log_ex06
+content_revision_id: mst_p0203_ae_x_log_cos_inequality_ch6_log_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0203_ae_x_log_cos_inequality_ch6_log_ex06.card.yaml
+stem: 已知函数 $f(x)=a e^x-x-a$，当 $a\geqslant 1$ 时，证明 $f(x)>x(\ln x-1)-\cos x$。
+answer: |
+  对任意 $x>0$，结论成立。
+
+  由 $a\ge 1$ 先降阶：$a e^x-x-a\ge e^x-x-1$，故只需证 $e^x-1-x\ln x+\cos x>0$。按源解拆成 $(e^x-x^2-1)+(x^2-x-x\ln x)+(x+\cos x)$。 三段分别用导数或经典对数不等式证明：第一段在 $x>0$ 上严格正， 第二段非负（$x=1$ 取等），第三段在 $x\ge0$ 递增且大于 0。 三段相加即得目标不等式成立。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 由参数条件先把 $a$ 消去到最小情形。
+      max_score: 1
+    - step_id: step_2
+      description: 按源解拆分目标式。
+      max_score: 1
+    - step_id: step_3
+      description: 证明第一段 $e^x-x^2-1>0\ (x>0)$。
+      max_score: 1
+    - step_id: step_4
+      description: 证明第二段 $x^2-x-x\ln x\ge0\ (x>0)$。
+      max_score: 1
+    - step_id: step_5
+      description: 证明第三段 $x+\cos x>0\ (x>0)$。
+      max_score: 1
+    - step_id: step_6
+      description: 三段相加得到原命题。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 拟合与夹逼
+      - 同构变形与换元法
+    subroute:
+      - 先用 $a\ge1$ 降到无参数核心不等式
+      - 目标式三段分拆
+      - 导数判正 + 对数标准不等式拼接
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 三角复合结构
+      - 不等式工具结构
+    evidence:
+      - 目标式同时包含 $e^x,\ x\ln x,\ \cos x$。
+      - 源解明确采用“指数段 + 指对段 + 三角段”拼接。
+    normalization_moves_used:
+      - 把参数项降到 $a=1$ 对应下界。
+      - 添加并减去 $x^2,\ x$ 完成三段分拆。
+      - 分别对三段建立符号后再总和。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $a\ge1$ 做参数下界替换，回补不等式工具基础。
+      - 若学生不会证明 $x-1-\ln x\ge0$，回补指数对数基础。
+      - 若学生不会用导数判定 $P(x),R(x)$ 单调性，回补导数单调极值基础。
+  detail_terms:
+    - $e^x-x^2-1$
+    - $x^2-x-x\ln x$
+    - $x+\cos x$
+    - 三段分拆
+    - 导数判正
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0203_ae_x_log_cos_inequality_ch6_log_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0203_ex06_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0203/page_0203.md
+      role: problem_start
+      evidence: page_0203 中段出现新题头“例6 已知函数 f(x)=ae^x-x-a，当 a≥1 时，证明 f(x)>x(\ln x-1)-\cos x”。
+    - ref_id: page_0203_ex06_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0203/page_0203.md
+      role: solution
+      evidence: 同页“解析”给出主链：先由 a≥1 降到 e^x-x-1，再化为 e^x-1-x\ln x+\cos x>0，并拆成三项。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0203.png
+      inspected: true
+      notes: 已核对页图：例6题头与解析在同页完整；解析确实只给分拆框架并提示“考试需分别证明所用不等式”。
+  source_context: page_0203 顶部是 page_0202 例5续解，不属于本卡；本卡只覆盖从“例6”题头开始的完整内容。
+  source_influence:
+    - 严格沿用源解的三段分拆：$(e^x-x^2-1)+(x^2-x-x\ln x)+(x+\cos x)$。
+    - 保留“需分别证明所用不等式”的课堂要求，因此把每一段都写成独立可核验步骤。
+  source_discrepancies:
+    - source 页面对例6仅给证明骨架，未逐条展开基础不等式证明；本卡按源框架补全了导数可验步骤。
+original_problem:
+  stem: 已知函数 $f(x)=a e^x-x-a$，当 $a\geqslant 1$ 时，证明 $f(x)>x(\ln x-1)-\cos x$。
+  parts: *a1
+  choices: []
+  answer: 对任意 $x>0$，结论成立。
+  fidelity_notes:
+    - 源题未单写定义域，但右端含 $\ln x$，故按题意默认比较区间为 $x>0$。
+    - 题面与解析同页完整，无跨页补题。
+solution:
+  source_solution_summary: |
+    由 $a\ge 1$ 先降阶：$a e^x-x-a\ge e^x-x-1$，故只需证 $e^x-1-x\ln x+\cos x>0$。按源解拆成 $(e^x-x^2-1)+(x^2-x-x\ln x)+(x+\cos x)$。 三段分别用导数或经典对数不等式证明：第一段在 $x>0$ 上严格正， 第二段非负（$x=1$ 取等），第三段在 $x\ge0$ 递增且大于 0。 三段相加即得目标不等式成立。
+  key_steps:
+    - step_id: step_1
+      statement: 由参数条件先把 $a$ 消去到最小情形。
+      formula_trace:
+        from: $f(x)=a e^x-x-a,\ a\ge1$
+        to: $f(x)\ge e^x-x-1$，故只需证 $e^x-1-x\ln x+\cos x>0$
+        operation: 用 $a\ge1$ 对 $a(e^x-1)$ 做下界替换并移项。
+        why: 把参数不等式化为无参目标。
+      source_ref: page_0203_ex06_solution
+    - step_id: step_2
+      statement: 按源解拆分目标式。
+      formula_trace:
+        from: $e^x-1-x\ln x+\cos x$
+        to: $(e^x-x^2-1)+(x^2-x-x\ln x)+(x+\cos x)$
+        operation: 加减同一个 $x^2$ 与 $x$。
+        why: 把目标分成“指数段 + 指对段 + 三角线性段”三块。
+      source_ref: page_0203_ex06_solution
+    - step_id: step_3
+      statement: 证明第一段 $e^x-x^2-1>0\ (x>0)$。
+      formula_trace:
+        from: $P(x)=e^x-x^2-1$
+        to: $P^{\prime}(x)=e^x-2x>0,\ P(0)=0\Rightarrow P(x)>0\ (x>0)$
+        operation: 先由 $e^x>1+x+\frac{x^2}{2}>2x$ 得 $P^{\prime}(x)>0$，再用单调性。
+        why: 第一段需要严格正，提供主正量。
+      source_ref: page_0203_ex06_solution
+    - step_id: step_4
+      statement: 证明第二段 $x^2-x-x\ln x\ge0\ (x>0)$。
+      formula_trace:
+        from: $x^2-x-x\ln x=x(x-1-\ln x)$
+        to: $x-1-\ln x\ge0\Rightarrow x^2-x-x\ln x\ge0$
+        operation: 设 $\phi(x)=x-1-\ln x$，$\phi^{\prime}(x)=1-\frac1x$，在 $x=1$ 处取最小值 0。
+        why: 这是源解提示中的第二条基础不等式。
+      source_ref: page_0203_ex06_solution
+    - step_id: step_5
+      statement: 证明第三段 $x+\cos x>0\ (x>0)$。
+      formula_trace:
+        from: $R(x)=x+\cos x$
+        to: $R^{\prime}(x)=1-\sin x\ge0,\ R(0)=1\Rightarrow R(x)\ge1>0$
+        operation: 导数判单调。
+        why: 给出最后一段的显式正性。
+      source_ref: page_0203_ex06_solution
+    - step_id: step_6
+      statement: 三段相加得到原命题。
+      formula_trace:
+        from: step_3、step_4、step_5
+        to: $e^x-1-x\ln x+\cos x>0\Rightarrow f(x)>x(\ln x-1)-\cos x$
+        operation: 逐段合并并回代 step_1 的等价变形。
+        why: 完成证明闭环。
+      source_ref: page_0203_ex06_solution
+teaching_card:
+  student_title: 三段分拆证明指对三角不等式
+  what_it_trains: 训练把混合型不等式拆成可独立判号的三段，并把参数条件先降成无参数核心。
+  recognition_cues:
+    - 出现 $a e^x$ 与 $x\ln x,\ \cos x$ 的同题比较。
+    - 题干给出参数下界 $a\ge1$。
+    - 目标可以通过加减同项拆成多段。
+  normalization_moves:
+    - 先把 $a e^x-a$ 压到 $e^x-1$。
+    - 对核心式做 $x^2,\ x$ 的配凑分拆。
+    - 每段单独证明后求和。
+  common_failures:
+    - 只写“显然大于0”而不逐段证明。
+    - 把 $\ln x\le x-1$ 用错方向导致第二段符号颠倒。
+    - 忽略 $\ln x$ 的定义域，未说明比较区间是 $x>0$。
+  similar_practice_query: a>=1 指数对数三角 不等式 三段分拆 导数判正
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

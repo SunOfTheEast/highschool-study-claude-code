@@ -1,0 +1,191 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0147_log_same_base_power_ex12
+content_revision_id: mst_p0147_log_same_base_power_ex12-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0147_log_same_base_power_ex12.card.yaml
+stem: 比较 $a=\log_4 3,\ b=\log_5 2,\ c=\log_8 5$ 的大小。
+answer: |
+  $a>c>b$
+
+  先同底化比较 $a$ 与 $c$：
+  \[
+  \log_4 3=\log_{64}27,\quad \log_8 5=\log_{64}25,
+  \]
+  所以 $a>c$。
+  再比较 $c$ 与 $b$：
+  \[
+  2\log_8 5=\log_8 25>1,\quad 2\log_5 2=\log_5 4<1,
+  \]
+  得 $2c>2b$，即 $c>b$。
+  合并得到
+  \[
+  a>c>b.
+  \]
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把两项同步升次到同底数。
+      max_score: 1
+    - step_id: step_2
+      description: 先得出 $a>c$。
+      max_score: 1
+    - step_id: step_3
+      description: 借助阈值1比较 $c$ 与 $b$。
+      max_score: 1
+    - step_id: step_4
+      description: 由 $2c>2b$ 推出 $c>b$。
+      max_score: 1
+    - step_id: step_5
+      description: 合并顺序。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较三个不同底数对数的大小。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 拟合与夹逼
+    subroute:
+      - 对数同步升降次
+      - 同底化比较真数
+      - 中间变量1阈值
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 非对称结构
+    evidence:
+      - 三项均为不同底数的对数，需要先标准化到底数或阈值统一。
+      - $a,c$可通过同步升次化为同底结构，$b,c$可化到“是否大于1”的阈值结构。
+    normalization_moves_used:
+      - $\log_a b\to\log_{a^m} b^m$。
+      - 把“与1比较”作为中间变量。
+      - 先定两两关系再合并全序。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会对数换底和升降次，回补指数对数基础。
+      - 若学生不清楚底数大于1时对数单调性，回补函数性质与图像。
+      - 若学生无法从 $2c>2b$ 还原到 $c>b$，回补不等式工具基础。
+  detail_terms:
+    - 对数同步升降次
+    - $\log_4 3=\log_{64}27$
+    - $\log_8 5=\log_{64}25$
+    - 中间变量1
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0147_log_same_base_power_ex12
+source_evidence:
+  source_refs:
+    - ref_id: page_0146_local_sync_rule
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0146/page_0146.md
+      role: local_context
+      evidence: page_0146小节引入“对数同步升（降）次法”：$\log_a b=\log_{a^m} b^m$。
+    - ref_id: page_0147_ex12_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0147/page_0147.md
+      role: problem_start
+      evidence: 例12题干：比较 $a=\log_4 3,\ b=\log_5 2,\ c=\log_8 5$ 的大小。
+    - ref_id: page_0147_ex12_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0147/page_0147.md
+      role: solution
+      evidence: 解析给出 $\log_4 3=\log_{64}27,\ \log_8 5=\log_{64}25$，且 $2\log_8 5=\log_8 25>1,\ 2\log_5 2=\log_5 4<1$，结论 $a>c>b$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0147.png
+      inspected: true
+      notes: 已核对页图：例12题干、解析与结论“$a>c>b$”与markdown一致。
+  source_context: 本题是“转化为同底数或同真数”小节第一道例题，承接page_0146的同步升降次规则。
+  source_influence:
+    - 保留源解先同底化比较 $a,c$，再用“是否大于1”的中间阈值比较 $c,b$。
+    - 保留源解不做近似值计算、仅做结构化比较。
+  source_discrepancies: []
+original_problem:
+  stem: 比较 $a=\log_4 3,\ b=\log_5 2,\ c=\log_8 5$ 的大小。
+  parts: *a1
+  choices: []
+  answer: $a>c>b$
+  fidelity_notes:
+    - 源题为比较大小题，无A-D选项。
+    - 题干和解析均完整位于page_0147。
+solution:
+  source_solution_summary: |
+    先同底化比较 $a$ 与 $c$：
+    \[
+    \log_4 3=\log_{64}27,\quad \log_8 5=\log_{64}25,
+    \]
+    所以 $a>c$。
+    再比较 $c$ 与 $b$：
+    \[
+    2\log_8 5=\log_8 25>1,\quad 2\log_5 2=\log_5 4<1,
+    \]
+    得 $2c>2b$，即 $c>b$。
+    合并得到
+    \[
+    a>c>b.
+    \]
+  key_steps:
+    - step_id: step_1
+      statement: 把两项同步升次到同底数。
+      formula_trace:
+        from: $a=\log_4 3,\ c=\log_8 5$
+        to: $a=\log_{64}27,\ c=\log_{64}25$
+        operation: 利用 $\log_a b=\log_{a^m}b^m$ 做同底化。
+        why: 同底后可直接比较真数27与25。
+      source_ref: page_0147_ex12_solution
+    - step_id: step_2
+      statement: 先得出 $a>c$。
+      formula_trace:
+        from: $a=\log_{64}27,\ c=\log_{64}25$
+        to: $a>c$
+        operation: 底数64大于1时，对数函数单调递增。
+        why: 27>25。
+      source_ref: page_0147_ex12_solution
+    - step_id: step_3
+      statement: 借助阈值1比较 $c$ 与 $b$。
+      formula_trace:
+        from: $2c=2\log_8 5,\ 2b=2\log_5 2$
+        to: $2c=\log_8 25>1,\ 2b=\log_5 4<1$
+        operation: 把系数2并入对数真数，转为是否超过1的判断。
+        why: 避免直接算小数。
+      source_ref: page_0147_ex12_solution
+    - step_id: step_4
+      statement: 由 $2c>2b$ 推出 $c>b$。
+      formula_trace:
+        from: $2c>1>2b$
+        to: $c>b$
+        operation: 同除正数2。
+        why: 完成剩余两项比较。
+      source_ref: page_0147_ex12_solution
+    - step_id: step_5
+      statement: 合并顺序。
+      formula_trace:
+        from: $a>c,\ c>b$
+        to: $a>c>b$
+        operation: 传递性合并。
+        why: 得到最终大小关系。
+      source_ref: page_0147_ex12_solution
+teaching_card:
+  student_title: 对数三数比较：先同底，再卡1阈值
+  what_it_trains: 训练“不同底对数比大小”时先标准化，再用中间阈值完成剩余比较。
+  recognition_cues:
+    - 出现 $\log_a b$ 与 $\log_c d$ 混合比较。
+    - 底数和真数都不一致，直接算小数不稳。
+    - 题目只需给出顺序关系。
+  normalization_moves:
+    - 优先尝试同步升次到同底数。
+    - 把某些量乘常数后转成“与1比较”。
+    - 两两比较后再拼接完整顺序。
+  common_failures:
+    - 只比较出 $a>c$，漏掉 $b$ 与 $c$。
+    - 把 $\log_8 25>1$ 与 $\log_5 4<1$ 方向写反。
+    - 误把“乘2后比较”当成改变大小方向。
+  similar_practice_query: log4 3 log5 2 log8 5 对数同步升次 比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

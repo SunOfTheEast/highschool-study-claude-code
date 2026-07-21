@@ -1,0 +1,203 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0078_tangent_ex08
+content_revision_id: mst_p0078_tangent_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0078_tangent_ex08.card.yaml
+stem: |-
+  （2023 南通二模 · 多选 T12）过平面内一点 $P$ 作曲线 $y=|\ln x|$ 两条互相垂直的切线 $l_1$、$l_2$，切点为 $P_1$、$P_2$ （$P_1$、$P_2$ 不重合），设直线 $l_1$、$l_2$ 分别与 $y$ 轴交于点 $A$、$B$，则（  ）
+  A. $P_1$、$P_2$ 两点的纵坐标之积为定值。
+  B. 直线 $P_1P_2$ 的斜率为定值。
+  C. 线段 $AB$ 的长度为定值。
+  D. $\triangle ABP$ 面积的取值范围为 $(0,1)$。
+answer: |-
+  BCD
+
+  将 $y=|\ln x|$ 写成左支 $-\ln x$ 与右支 $\ln x$。设 $P_1(x_1,-\ln x_1)$，$0<x_1<1$，$P_2(x_2,\ln x_2)$，$x_2>1$。 两条切线斜率分别为 $-1/x_1$ 与 $1/x_2$，垂直给出 $x_1x_2=1$。 写出两条切线并联立，得 $x_P=\frac{2x_1x_2}{x_1+x_2}=\frac{2}{x_1+1/x_1}\in(0,1)$。 y 轴截距为 $A(0,1-\ln x_1)$、$B(0,\ln x_2-1)$，所以 $|AB|=2$，面积 $S=\frac12|AB|\cdot x_P=x_P\in(0,1)$。续页再算： 纵坐标积为 $\ln^2x_1$，不为定值；$P_1P_2$ 的斜率为 $-\ln(x_1x_2)/(x_1-x_2)=0$，为定值。故选 BCD。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把绝对值对数拆成左右两支并设切点。
+      max_score: 1
+    - step_id: step_2
+      description: 用垂直切线把两个横坐标绑定。
+      max_score: 1
+    - step_id: step_3
+      description: 写切线方程，求交点 P 的横坐标。
+      max_score: 1
+    - step_id: step_4
+      description: 求 y 轴截距并得到 $AB$ 和面积。
+      max_score: 1
+    - step_id: step_5
+      description: 续页判断 A、B 两个“定值”命题。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何量求解
+    part_level:
+      - part_id: A
+        goal: 数值比较
+        target: 第 A 问
+        result: 见 source_solution_summary
+      - part_id: B
+        goal: 几何量求解
+        target: 第 B 问
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 几何量求解
+        target: 第 C 问
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 极值最值
+        target: 第 D 问
+        result: 见 source_solution_summary
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 对称化与偏移
+      - 自由度与主元
+      - 数形结合
+    subroute:
+      - 垂直切线 $x_1x_2=1$
+      - y 轴截距定值
+      - 面积转化为交点横坐标
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 对称结构
+      - Max/Min 与绝对值结构
+    evidence:
+      - $y=|\ln x|$ 的左右两支关于 $x=1$ 形成一正一负斜率。
+      - $x_1x_2=1$ 把两个切点化成一个自由参数。
+      - A、B 都在 y 轴上，面积只需要 $|AB|$ 与 $x_P$。
+    normalization_moves_used:
+      - 绝对值函数分段。
+      - 垂直斜率乘积 $k_1k_2=-1$。
+      - 把 $x_2$ 消成 $1/x_1$。
+      - 用 $x_1+1/x_1>2$ 得 $x_P\in(0,1)$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会拆 $|\ln x|$ 的左右分支，回补函数三要素与定义域。
+      - 若学生忘记垂直直线斜率乘积为 -1，回补导数运算与几何意义。
+      - 若学生联立切线方程时符号错乱，回补代数恒等变形。
+      - 若学生不会由 $x_1+1/x_1>2$ 判断范围，回补不等式工具基础。
+  detail_terms:
+    - $y=|\ln x|$
+    - 互相垂直切线
+    - $x_1x_2=1$
+    - y 轴截距
+    - 面积范围 $(0,1)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0078_tangent_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0078
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0078/page_0078.md
+      role: problem_start
+      evidence: page_0078 例 8 给出题干：过平面内一点 P 作曲线 $y=|\ln x|$ 的两条互相 垂直切线，判断 P_1P_2、AB 和三角形面积等四个结论；同页给出分段函数、 切点设法、$x_1x_2=1$、$x_P$ 和 $|AB|$ 的主体推导。
+    - ref_id: page_0079
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0079/page_0079.md
+      role: continuation
+      evidence: page_0079 顶部续完例 8：判断 P_1、P_2 纵坐标之积不为定值，直线 P_1P_2 斜率为 0，最后给出只有 BCD 正确。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0078.png
+      inspected: true
+      notes: 已核对页图：例 8 题头和 A-D 选项从 page_0078 下半部分开始，解析跨到 page_0079；图上 $B(0,\ln x_2-1)$ 清楚可见。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0079.png
+      inspected: true
+      notes: 已核对页图：page_0079 顶部是例 8 续页，只续完 A、B 判断和答案 BCD； 随后才开始例 9。
+  source_context: 本题把 $y=|\ln x|$ 拆成左右两支，用两条垂直切线把两个切点绑定为 $x_1x_2=1$，再把交点 P、y 轴截距 A、B 和面积都化成同一个参数。
+  source_influence:
+    - 题干为多选题，choices 保留 A-D 四个判断。
+    - 因例 8 题头起于 page_0078，page_0079 顶部续解归本卡读取。
+  source_discrepancies:
+    - page_0078 图像与 markdown 在计算 $|AB|$ 时印作 $|1-\ln x_1-(\ln x_2+1)|=|2+\ln(x_1x_2)|=2$；结合前一行 $B(0,\ln x_2-1)$ 和切线方程，正确差值应为 $|1-\ln x_1-(\ln x_2-1)|=|2-\ln(x_1x_2)|=2$。结论 C 不受影响， 本卡按坐标和计算校正。
+original_problem:
+  stem: （2023 南通二模 · 多选 T12）过平面内一点 $P$ 作曲线 $y=|\ln x|$ 两条互相垂直的切线 $l_1$、$l_2$，切点为 $P_1$、$P_2$ （$P_1$、$P_2$ 不重合），设直线 $l_1$、$l_2$ 分别与 $y$ 轴交于点 $A$、$B$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $P_1$、$P_2$ 两点的纵坐标之积为定值。
+      text_latex: $P_1$、$P_2$ 两点的纵坐标之积为定值。
+    - label: B
+      text_raw: 直线 $P_1P_2$ 的斜率为定值。
+      text_latex: 直线 $P_1P_2$ 的斜率为定值。
+    - label: C
+      text_raw: 线段 $AB$ 的长度为定值。
+      text_latex: 线段 $AB$ 的长度为定值。
+    - label: D
+      text_raw: $\triangle ABP$ 面积的取值范围为 $(0,1)$。
+      text_latex: $\triangle ABP$ 面积的取值范围为 $(0,1)$。
+  answer: BCD
+  fidelity_notes:
+    - 例 8 题干起于 page_0078，最后两个判断和答案续到 page_0079 顶部。
+    - 原题无图，解析中的 A、B 是 y 轴截距点。
+solution:
+  source_solution_summary: 将 $y=|\ln x|$ 写成左支 $-\ln x$ 与右支 $\ln x$。设 $P_1(x_1,-\ln x_1)$，$0<x_1<1$，$P_2(x_2,\ln x_2)$，$x_2>1$。 两条切线斜率分别为 $-1/x_1$ 与 $1/x_2$，垂直给出 $x_1x_2=1$。 写出两条切线并联立，得 $x_P=\frac{2x_1x_2}{x_1+x_2}=\frac{2}{x_1+1/x_1}\in(0,1)$。 y 轴截距为 $A(0,1-\ln x_1)$、$B(0,\ln x_2-1)$，所以 $|AB|=2$，面积 $S=\frac12|AB|\cdot x_P=x_P\in(0,1)$。续页再算： 纵坐标积为 $\ln^2x_1$，不为定值；$P_1P_2$ 的斜率为 $-\ln(x_1x_2)/(x_1-x_2)=0$，为定值。故选 BCD。
+  key_steps:
+    - step_id: step_1
+      statement: 把绝对值对数拆成左右两支并设切点。
+      formula_trace:
+        from: $y=|\ln x|=\begin{cases}-\ln x,&0<x<1\\ \ln x,&x\ge1\end{cases}$
+        to: $P_1(x_1,-\ln x_1)$，$0<x_1<1$； $P_2(x_2,\ln x_2)$，$x_2>1$。
+        operation: 按 $x=1$ 分支设两个不重合切点。
+        why: 互相垂直的一负一正斜率自然来自绝对值函数的左右两支。
+      source_ref: page_0078
+    - step_id: step_2
+      statement: 用垂直切线把两个横坐标绑定。
+      formula_trace:
+        from: $k_{l_1}=-\frac1{x_1}$，$k_{l_2}=\frac1{x_2}$， $l_1\perp l_2$。
+        to: $-\frac1{x_1}\cdot\frac1{x_2}=-1\Rightarrow x_1x_2=1$。
+        operation: 切线斜率乘积为 -1。
+        why: 这是后面所有“定值”的核心约束。
+      source_ref: page_0078
+    - step_id: step_3
+      statement: 写切线方程，求交点 P 的横坐标。
+      formula_trace:
+        from: $l_1:y+\ln x_1=-\frac1{x_1}(x-x_1)$， $l_2:y-\ln x_2=\frac1{x_2}(x-x_2)$。
+        to: $x_P=\frac{2x_1x_2}{x_1+x_2} =\frac{2}{x_1+1/x_1}\in(0,1)$。
+        operation: 联立两条切线，并代入 $x_1x_2=1$。
+        why: P 到 y 轴的距离就是后面三角形面积的高。
+      source_ref: page_0078
+    - step_id: step_4
+      statement: 求 y 轴截距并得到 $AB$ 和面积。
+      formula_trace:
+        from: $A(0,1-\ln x_1)$，$B(0,\ln x_2-1)$。
+        to: $|AB|=|1-\ln x_1-(\ln x_2-1)| =|2-\ln(x_1x_2)|=2$， $S_{\triangle ABP}=\frac12|AB|\cdot x_P=x_P\in(0,1)$。
+        operation: 在切线方程中令 $x=0$，再用 $x_1x_2=1$。
+        why: C 的定长和 D 的面积范围都由同一个参数 $x_P$ 控制。
+      source_ref: page_0078
+    - step_id: step_5
+      statement: 续页判断 A、B 两个“定值”命题。
+      formula_trace:
+        from: 纵坐标积 $(-\ln x_1)(\ln x_2)$，直线 $P_1P_2$ 斜率 $\frac{-\ln x_1-\ln x_2}{x_1-x_2}$。
+        to: $(-\ln x_1)(\ln x_2)=\ln^2x_1$ 不为定值； $\frac{-\ln(x_1x_2)}{x_1-x_2}=0$ 为定值。
+        operation: 把 $x_2=1/x_1$ 代入两个表达式。
+        why: 纵坐标积仍随 $x_1$ 变，而两切点连线水平。
+      source_ref: page_0079
+teaching_card:
+  student_title: 两条垂直切线把切点乘积锁成 1
+  what_it_trains: 训练在绝对值对数曲线中按分支设切点，用垂直关系消掉一个参数，再把截距、 斜率和面积都转成同一个变量判断。
+  recognition_cues:
+    - 题干出现 $|\ln x|$，要先拆成 $0<x<1$ 与 $x\ge1$。
+    - 两条切线互相垂直，一条斜率负、一条斜率正。
+    - 选项集中问“定值”和“面积范围”，提示先找不变量。
+  normalization_moves:
+    - 设 $P_1(x_1,-\ln x_1)$、$P_2(x_2,\ln x_2)$。
+    - 用 $k_1k_2=-1$ 得 $x_1x_2=1$。
+    - 令切线方程中 $x=0$ 求 A、B。
+    - 用 $x_P$ 表示三角形面积。
+  common_failures:
+    - 把两个切点都设在同一支，导致斜率不可能垂直。
+    - 求 B 点截距时把 $-1$ 写成 $+1$。
+    - 只算出 $|AB|=2$，却忘了面积高是 $x_P$。
+    - 看到 $\ln^2x_1$ 误以为是常数。
+  similar_practice_query: 绝对值对数 垂直切线 切点乘积 截距定值 面积范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0078/page_0079 页图；例 8 题头从 page_0078 开始，page_0079 顶部为续解。
+    - 源页 $|AB|$ 中间行存在可计算校正的符号问题，已写入 source_discrepancies，未列为用户拍板。

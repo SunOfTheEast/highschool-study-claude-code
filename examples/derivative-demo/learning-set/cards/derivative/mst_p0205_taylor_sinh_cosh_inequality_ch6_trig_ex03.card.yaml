@@ -1,0 +1,184 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0205_taylor_sinh_cosh_inequality_ch6_trig_ex03
+content_revision_id: mst_p0205_taylor_sinh_cosh_inequality_ch6_trig_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0205_taylor_sinh_cosh_inequality_ch6_trig_ex03.card.yaml
+stem: |-
+  （射洪中学 2024 高二 6 月期末 T19）英国数学家泰勒发现公式 $e^x=1+x+\frac{x^2}{2!}+\frac{x^3}{3!}+\cdots+\frac{x^n}{n!}+\cdots$。设 $f(x)=\frac{e^x-e^{-x}}{2},\ g(x)=\frac{e^x+e^{-x}}{2}$，根据以上信息并结合高中所学知识，解决如下问题。
+  (1) 证明：$e^x \geqslant 1+x$。
+  (2) 设 $x \in (0,+\infty)$，证明：$\frac{f(x)}{x}<g(x)$。
+answer: |-
+  (1) 与 (2) 结论均成立。
+
+  第(1)问：设 $h(x)=e^x-x-1$，则 $h^{\prime}(x)=e^x-1$，故 $x>0$ 时 $h^{\prime}(x)>0$、$x<0$ 时 $h^{\prime}(x)<0$，于是 $h$ 在 $(-\infty,0)$ 递减、在 $(0,+\infty)$ 递增， 最小值在 $x=0$ 处，$h(x)\ge h(0)=0$，即 $e^x\ge1+x$。 第(2)问：由 $e^x$ 与 $e^{-x}$ 的展开式分别作差、作和，得到 $f(x)=x+\frac{x^3}{3!}+\frac{x^5}{5!}+\cdots$， $g(x)=1+\frac{x^2}{2!}+\frac{x^4}{4!}+\cdots$， 因而 $\frac{f(x)}{x}=1+\frac{x^2}{3!}+\frac{x^4}{5!}+\cdots$。 对应项比较分母有 $(2k-1)!>(2k-2)!$，故 $\frac{x^{2k-2}}{(2k-1)!}<\frac{x^{2k-2}}{(2k-2)!}$（$x>0$），逐项比较得 $\frac{f(x)}{x}<g(x)$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 第(1)问先构造差函数并求导判单调。
+      max_score: 1
+    - step_id: step_2
+      description: 由单调性锁定最小值点并完成第(1)问。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问写出 $e^x,e^{-x}$ 的展开并做和差。
+      max_score: 1
+    - step_id: step_4
+      description: 把 $\frac{f(x)}{x}$ 改写成偶次幂级数。
+      max_score: 1
+    - step_id: step_5
+      description: 逐项比较分母大小得到严格不等式。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 不等式证明
+        target: 第 (1) 问
+        result: $e^x\geqslant1+x$
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 (2) 问
+        result: $\frac{f(x)}{x}<g(x)$（$x>0$）
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 切线放缩与凹凸性
+      - 同构变形与换元法
+    subroute:
+      - 麦克劳林展开
+      - 泰勒项比较
+      - 奇偶项分离
+      - 构造函数判单调
+  structure:
+    primary: 双曲函数结构
+    secondary:
+      - 指对复合结构
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - $f(x)=\frac{e^x-e^{-x}}{2},\ g(x)=\frac{e^x+e^{-x}}{2}$
+      - $\frac{f(x)}{x}=1+\frac{x^2}{3!}+\frac{x^4}{5!}+\cdots$
+      - $g(x)=1+\frac{x^2}{2!}+\frac{x^4}{4!}+\cdots$
+      - $h^{\prime}(x)=e^x-1$
+    normalization_moves_used:
+      - 先把第(1)问改写为差函数最小值问题。
+      - 把 $e^x,e^{-x}$ 通过和差转成奇偶幂级数。
+      - 统一幂次后做分母逐项比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $h^{\prime}(x)$ 符号判 $h(x)$ 在 0 两侧单调，回补导数单调极值基础。
+      - 若学生对 $e^{-x}$ 展开的交错符号来源不清楚，回补指数对数基础。
+      - 若学生不会从逐项比较推出整体不等式，回补不等式工具基础。
+  detail_terms:
+    - $h(x)=e^x-x-1$
+    - $h^{\prime}(x)=e^x-1$
+    - $f(x)=x+\frac{x^3}{3!}+\frac{x^5}{5!}+\cdots$
+    - $g(x)=1+\frac{x^2}{2!}+\frac{x^4}{4!}+\cdots$
+    - $\frac{f(x)}{x}<g(x)$
+parts: &a1
+  - (1) 证明：$e^x \geqslant 1+x$。
+  - (2) 设 $x \in (0,+\infty)$，证明：$\frac{f(x)}{x}<g(x)$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0205_taylor_sinh_cosh_inequality_ch6_trig_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0205_ex03_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0205/page_0205.md
+      role: problem_start
+      evidence: page_0205 行17-21给出例3题头与两问：先证 $e^x\geqslant1+x$，再证 $x>0$ 时 $\frac{f(x)}{x}<g(x)$。
+    - ref_id: page_0205_ex03_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0205/page_0205.md
+      role: solution
+      evidence: page_0205 行23-29给出完整解析：第(1)问用 $h(x)=e^x-x-1$ 单调性；第(2)问用 $e^x,e^{-x}$ 展开后奇偶项分离比较。
+    - ref_id: page_0205_ex03_local_context_prev
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0205/page_0205.md
+      role: local_context
+      evidence: page_0205 行15是 page_0204 例2续解，不是新题头；例3从行17开始。
+    - ref_id: page_0205_ex03_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0205/page_0205.md
+      role: local_context
+      evidence: page_0205 行31起进入例4，说明例3在本页内已结束。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0205.png
+      inspected: true
+      notes: 已核对页图：例3题干与解析完整可读，含①②两式与奇偶项比较结论。
+  source_context: 例3题头起于 page_0205，解析也在 page_0205 内完整闭合；页顶为前题续页已排除。
+  source_influence:
+    - 保留第(1)问的构造函数单调性证明链：$h(x)=e^x-x-1$。
+    - 保留第(2)问的泰勒展开奇偶项分离：由①-②得 $f$，由①+②得 $g$。
+    - 保留逐项比较分母大小得到 $\frac{f(x)}{x}<g(x)$ 的核心步骤。
+  source_discrepancies: []
+original_problem:
+  stem: （射洪中学 2024 高二 6 月期末 T19）英国数学家泰勒发现公式 $e^x=1+x+\frac{x^2}{2!}+\frac{x^3}{3!}+\cdots+\frac{x^n}{n!}+\cdots$。设 $f(x)=\frac{e^x-e^{-x}}{2},\ g(x)=\frac{e^x+e^{-x}}{2}$，根据以上信息并结合高中所学知识，解决如下问题。
+  parts: *a1
+  choices: []
+  answer: (1) 与 (2) 结论均成立。
+  fidelity_notes:
+    - 源题是双问证明题，无选项。
+    - 题干先给泰勒公式背景，再定义 $f(x),g(x)$ 并要求完成两问。
+solution:
+  source_solution_summary: 第(1)问：设 $h(x)=e^x-x-1$，则 $h^{\prime}(x)=e^x-1$，故 $x>0$ 时 $h^{\prime}(x)>0$、$x<0$ 时 $h^{\prime}(x)<0$，于是 $h$ 在 $(-\infty,0)$ 递减、在 $(0,+\infty)$ 递增， 最小值在 $x=0$ 处，$h(x)\ge h(0)=0$，即 $e^x\ge1+x$。 第(2)问：由 $e^x$ 与 $e^{-x}$ 的展开式分别作差、作和，得到 $f(x)=x+\frac{x^3}{3!}+\frac{x^5}{5!}+\cdots$， $g(x)=1+\frac{x^2}{2!}+\frac{x^4}{4!}+\cdots$， 因而 $\frac{f(x)}{x}=1+\frac{x^2}{3!}+\frac{x^4}{5!}+\cdots$。 对应项比较分母有 $(2k-1)!>(2k-2)!$，故 $\frac{x^{2k-2}}{(2k-1)!}<\frac{x^{2k-2}}{(2k-2)!}$（$x>0$），逐项比较得 $\frac{f(x)}{x}<g(x)$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问先构造差函数并求导判单调。
+      formula_trace:
+        from: $e^x\geqslant1+x$
+        to: $h(x)=e^x-x-1,\ h^{\prime}(x)=e^x-1$
+        operation: 把不等式改写为 $h(x)\ge0$ 的函数最值判定。
+        why: 导数符号可直接给出 $h$ 在 0 两侧的单调性。
+      source_ref: page_0205_ex03_solution
+    - step_id: step_2
+      statement: 由单调性锁定最小值点并完成第(1)问。
+      formula_trace:
+        from: $h^{\prime}(x)<0\ (x<0),\ h^{\prime}(x)>0\ (x>0)$
+        to: $h(x)\ge h(0)=0\Rightarrow e^x\ge1+x$
+        operation: 利用“左降右升”得到全局最小值在 $x=0$。
+        why: 最小值非负即原不等式成立。
+      source_ref: page_0205_ex03_solution
+    - step_id: step_3
+      statement: 第(2)问写出 $e^x,e^{-x}$ 的展开并做和差。
+      formula_trace:
+        from: $e^x,\ e^{-x}$
+        to: $f(x)=x+\frac{x^3}{3!}+\frac{x^5}{5!}+\cdots,\ g(x)=1+\frac{x^2}{2!}+\frac{x^4}{4!}+\cdots$
+        operation: 由①-②得到 $f$，由①+②得到 $g$。
+        why: 把双曲函数定义还原成幂级数便于比较。
+      source_ref: page_0205_ex03_solution
+    - step_id: step_4
+      statement: 把 $\frac{f(x)}{x}$ 改写成偶次幂级数。
+      formula_trace:
+        from: $f(x)=x+\frac{x^3}{3!}+\frac{x^5}{5!}+\cdots$
+        to: $\frac{f(x)}{x}=1+\frac{x^2}{3!}+\frac{x^4}{5!}+\cdots$
+        operation: 在 $x>0$ 条件下逐项除以 $x$。
+        why: 与 $g(x)=1+\frac{x^2}{2!}+\frac{x^4}{4!}+\cdots$ 对齐比较。
+      source_ref: page_0205_ex03_solution
+    - step_id: step_5
+      statement: 逐项比较分母大小得到严格不等式。
+      formula_trace:
+        from: $\frac{x^{2k-2}}{(2k-1)!}\ \text{与}\ \frac{x^{2k-2}}{(2k-2)!}$
+        to: $\frac{f(x)}{x}<g(x)$
+        operation: 对每个 $k\ge2$ 用 $(2k-1)!>(2k-2)!$ 做同次幂项比较并求和。
+        why: 所有对应项都严格更小，级数和保持严格小于。
+      source_ref: page_0205_ex03_solution
+teaching_card:
+  student_title: 奇偶幂拆分比较：由泰勒到双曲不等式
+  what_it_trains: 训练“先构造单调性证明基础不等式，再用泰勒奇偶项分离做逐项比较”的双路径联动。
+  recognition_cues:
+    - 题干给出 $e^x$ 泰勒公式并定义 $\frac{e^x\pm e^{-x}}{2}$。
+    - 目标是比较两个看似复杂的函数比值。
+    - 出现“先证基础不等式，再证主不等式”的双问结构。
+  normalization_moves:
+    - 第(1)问先写 $h(x)$ 并用导数判最小值。
+    - 第(2)问先把 $f,g$ 都展开成幂级数。
+    - 统一成偶次幂后做分母逐项比较。
+  common_failures:
+    - 漏写 $x>0$ 就直接把 $f(x)$ 除以 $x$。
+    - 把 $e^{-x}$ 展开写成全正项导致后续奇偶项错误。
+    - 只写“显然小于”而未说明对应项比较依据。
+  similar_practice_query: 泰勒展开 奇偶项比较 sinh cosh 不等式 证明
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

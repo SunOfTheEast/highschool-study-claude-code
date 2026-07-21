@@ -1,0 +1,222 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0117_abstract_symmetry_ex03
+content_revision_id: mst_p0117_abstract_symmetry_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0117_abstract_symmetry_ex03.card.yaml
+stem: |-
+  （2023·盐城三模）（2025春·荔湾区校级期中）已知函数 $f(x)$ 及其导函数 $f'(x)$ 的定义域均为 $\mathbf{R}$，记 $g(x)=f'(x+1)$，且 $f(2+x)-f(2-x)=4x$，$g(x+3)$ 为偶函数，则 $g'(7)-g(25)=$（ ）
+  A. 0
+  B. 1
+  C. $-1$
+  D. $-2$
+answer: |
+  D
+
+  由 $f(2+x)-f(2-x)=4x$ 求导得
+  $f'(2+x)+f'(2-x)=4$。代入 $g(x)=f'(x+1)$ 可写成
+  $g(x+1)+g(-x+1)=4$。又 $g(x+3)$ 为偶函数，故
+  $g(-x+3)=g(x+3)$。先令 $x=0$ 得 $2g(1)=4$，即 $g(1)=2$。
+  再把关系平移为
+  $g(-x)+g(x+2)=4$ 与 $g(-x)=g(x+6)$，联立得
+  $g(x+6)+g(x+2)=4$，进而可化出
+  $g(x+4)+g(x)=4$，再平移一次得到
+  $g(x+8)+g(x+4)=4$，相减得 $g(x+8)=g(x)$，
+  因此 $g(25)=g(1)=2$。
+  对 $g(-x)+g(x+2)=4$ 求导得
+  $-g'(-x)+g'(x+2)=0$；对 $g(-x)=g(x+6)$ 求导得
+  $-g'(-x)=g'(x+6)$，所以 $g'(x+6)+g'(x+2)=0$。
+  令 $x=1$，得 $g'(7)=-g'(3)$。再令 $x=-3$ 于
+  $-g'(-x)=g'(x+6)$ 中，得 $-g'(3)=g'(3)$，故 $g'(3)=0$，
+  从而 $g'(7)=0$。最终
+  $g'(7)-g(25)=0-2=-2$，选 D。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把题设关系全部改写成 g 的函数方程。
+      max_score: 1
+    - step_id: step_2
+      description: 先求基准值 $g(1)$，再配出周期8并算 $g(25)$。
+      max_score: 1
+    - step_id: step_3
+      description: 由导数方程求出 $g'(7)=0$。
+      max_score: 1
+    - step_id: step_4
+      description: 代回目标式得到最终选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level:
+      - part_id: item_1
+        goal: 数值求值
+        target: 先求 $g(25)$（靠周期）。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 数值求值
+        target: 再求 $g'(7)$（靠导数方程）。
+        result: 见 source_solution_summary
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 同构变形与换元法
+      - 显隐点探路
+    subroute:
+      - 求导换元
+      - 偶性平移
+      - 方程组联立消元
+      - 周期回代
+  structure:
+    primary: 抽象函数结构
+    secondary:
+      - 对称结构
+    evidence:
+      - $g(x+1)+g(-x+1)=4$ 与 $g(-x+3)=g(x+3)$ 是两条核心对称/配对方程。
+      - 平移后得到 $g(-x)=g(x+6)$，可与第一式联立消元。
+      - 导数关系 $g'(x+6)+g'(x+2)=0$ 直接给出目标点 $7$ 与 $3$ 的联系。
+    normalization_moves_used:
+      - 先统一成 g 的方程，避免在 f 与 g 之间反复切换。
+      - 先取 $x=0$ 锁定基准值 $g(1)$。
+      - 对称式平移到同一模板后联立，提取周期8。
+      - 把同一组方程再求导一次，复用结构求 $g'(7)$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生对 $f(2-x)$ 求导符号常错，回补导数运算与几何意义。
+      - 若学生不会把 $g(x+3)$ 偶改写为 $g(-x+3)=g(x+3)$，回补函数性质与图像。
+      - 若学生不能从多式平移里看出“先定基准再求周期”，回补函数三要素与定义域。
+      - 若学生在导数方程代点时混乱，回补代数恒等变形。
+  detail_terms:
+    - $g(x)=f'(x+1)$
+    - $g(x+1)+g(-x+1)=4$
+    - $g(-x+3)=g(x+3)$
+    - $g(x+8)=g(x)$
+    - $g'(x+6)+g'(x+2)=0$
+    - 答案 D
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0117_abstract_symmetry_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0117
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0117/page_0117.md
+      role: problem_start
+      evidence: lines 40-46给出例3题头、题干和A-D选项；line 47给出主要推导链但在页底截断。
+    - ref_id: page_0118
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0118/page_0118.md
+      role: continuation
+      evidence: line 14续完例3最后一段：$g'(x+6)+g'(x+2)=0\Rightarrow g'(7)=-g'(3)=0$，并给出 $g'(7)-g(25)=-2$，答案D。
+    - ref_id: page_0118_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0118/page_0118.md
+      role: local_context
+      evidence: line 16起进入例4，不属于本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0117.png
+      inspected: true
+      notes: 已核对页图：例3在页底确实截断于“所以…”，与markdown的layout marker一致。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0118.png
+      inspected: true
+      notes: 已核对页图：page_0118首行是例3续解并收束到“故选D”，随后才开始例4。
+  source_context: 例3头部在page_0117，解析跨页到page_0118顶部结束；按页头规则归属page_0117。
+  source_influence:
+    - 保留源页先把 $f(2+x)-f(2-x)=4x$ 求导，再统一改写到 g 的关系。
+    - 保留源页用两条关系配出 $g(x+8)=g(x)$，并据此求 $g(25)=2$。
+    - 保留跨页续解中对导数关系的闭环，得到 $g'(7)=0$ 并算出最终值。
+  source_discrepancies:
+    - "page_0117 markdown line 47含“[?layout: 页面底部内容截断]”；该缺失已由page_0118首行补全，结果与页图一致，无需用户拍板。"
+original_problem:
+  stem: （2023·盐城三模）（2025春·荔湾区校级期中）已知函数 $f(x)$ 及其导函数 $f'(x)$ 的定义域均为 $\mathbf{R}$，记 $g(x)=f'(x+1)$，且 $f(2+x)-f(2-x)=4x$，$g(x+3)$ 为偶函数，则 $g'(7)-g(25)=$（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: "0"
+      text_latex: "0"
+    - label: B
+      text_raw: "1"
+      text_latex: "1"
+    - label: C
+      text_raw: $-1$
+      text_latex: $-1$
+    - label: D
+      text_raw: $-2$
+      text_latex: $-2$
+  answer: D
+  fidelity_notes:
+    - 例3解析在page_0117页底截断，已按ownership规则读取page_0118续页补完。
+    - 题干中的 $g'(7)$ 为对 $g$ 的导函数取值，保留原符号。
+solution:
+  source_solution_summary: |
+    由 $f(2+x)-f(2-x)=4x$ 求导得
+    $f'(2+x)+f'(2-x)=4$。代入 $g(x)=f'(x+1)$ 可写成
+    $g(x+1)+g(-x+1)=4$。又 $g(x+3)$ 为偶函数，故
+    $g(-x+3)=g(x+3)$。先令 $x=0$ 得 $2g(1)=4$，即 $g(1)=2$。
+    再把关系平移为
+    $g(-x)+g(x+2)=4$ 与 $g(-x)=g(x+6)$，联立得
+    $g(x+6)+g(x+2)=4$，进而可化出
+    $g(x+4)+g(x)=4$，再平移一次得到
+    $g(x+8)+g(x+4)=4$，相减得 $g(x+8)=g(x)$，
+    因此 $g(25)=g(1)=2$。
+    对 $g(-x)+g(x+2)=4$ 求导得
+    $-g'(-x)+g'(x+2)=0$；对 $g(-x)=g(x+6)$ 求导得
+    $-g'(-x)=g'(x+6)$，所以 $g'(x+6)+g'(x+2)=0$。
+    令 $x=1$，得 $g'(7)=-g'(3)$。再令 $x=-3$ 于
+    $-g'(-x)=g'(x+6)$ 中，得 $-g'(3)=g'(3)$，故 $g'(3)=0$，
+    从而 $g'(7)=0$。最终
+    $g'(7)-g(25)=0-2=-2$，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把题设关系全部改写成 g 的函数方程。
+      formula_trace:
+        from: $f(2+x)-f(2-x)=4x$，$g(x)=f'(x+1)$，$g(x+3)$ 偶
+        to: $g(x+1)+g(-x+1)=4$，$g(-x+3)=g(x+3)$
+        operation: 先对第一式求导，再用 $g(x)=f'(x+1)$ 换元；第二式由偶性直接改写。
+        why: 后续周期与导数都在 g 的框架内处理最直接。
+      source_ref: page_0117
+    - step_id: step_2
+      statement: 先求基准值 $g(1)$，再配出周期8并算 $g(25)$。
+      formula_trace:
+        from: $g(x+1)+g(-x+1)=4$，$g(-x+3)=g(x+3)$
+        to: $g(1)=2$，$g(x+8)=g(x)$，$g(25)=2$
+        operation: 令 $x=0$ 得基准值；平移改写成 $g(-x)+g(x+2)=4$ 与 $g(-x)=g(x+6)$ 后联立消元。
+        why: 目标式含 $g(25)$，必须先拿到周期与基准点。
+      source_ref: page_0117
+    - step_id: step_3
+      statement: 由导数方程求出 $g'(7)=0$。
+      formula_trace:
+        from: $g(-x)+g(x+2)=4$，$g(-x)=g(x+6)$
+        to: $g'(x+6)+g'(x+2)=0$，$g'(7)=-g'(3)$，$g'(3)=0$，故 $g'(7)=0$
+        operation: 分别求导并联立；再代入特值 $x=1$ 与 $x=-3$。
+        why: 这一段正是page_0118首行补全的截断部分。
+      source_ref: page_0118
+    - step_id: step_4
+      statement: 代回目标式得到最终选项。
+      formula_trace:
+        from: $g'(7)=0$，$g(25)=2$
+        to: $g'(7)-g(25)=-2$
+        operation: 直接代数代入。
+        why: 与源页结论一致，故选D。
+      source_ref: page_0118
+teaching_card:
+  student_title: 两条平移对称方程，先周期后导数
+  what_it_trains: 训练把“差式 + 复合偶性”抽象题改写为同一函数方程组，通过平移联立同时拿下函数值与导数值。
+  recognition_cues:
+    - 题干给 $g(x)=f'(x+1)$，且同时出现 $f(2+x)-f(2-x)$ 与 $g(x+3)$ 偶。
+    - 目标是 $g'(7)-g(25)$，通常要分成“函数值块 + 导数值块”。
+    - 选项是常数，优先找周期和特值点。
+  normalization_moves:
+    - 对 $f(2+x)-f(2-x)=4x$ 先求导，再一口气换成 g。
+    - 把偶性写成 $g(-x+3)=g(x+3)$，再平移成 $g(-x)=g(x+6)$。
+    - 先令 $x=0$ 取到 $g(1)$，再用平移联立构造周期8。
+    - 复用同一方程对求导，直接得到 $g'(7)$。
+  common_failures:
+    - 把 $\frac{d}{dx}f(2-x)$ 写成 $f'(2-x)$，漏掉负号。
+    - 只求出周期却忘记先找基准值，导致 $g(25)$ 无法落地。
+    - 把 $g(-x)=g(x+6)$ 误判为周期6。
+    - 求出 $g'(x+6)+g'(x+2)=0$ 后代点不对应，错过 $x=1$ 与 $x=-3$。
+  similar_practice_query: 抽象函数 平移偶性 周期构造 导数方程 g'(7)-g(25)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对page_0117和page_0118页图：例3跨页续解完整收束为答案D。
+    - page_0117底部layout截断已由page_0118首行补齐，未遗留不确定项。

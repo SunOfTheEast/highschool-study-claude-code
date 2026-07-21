@@ -1,0 +1,203 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0118_abstract_symmetry_ex04
+content_revision_id: mst_p0118_abstract_symmetry_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0118_abstract_symmetry_ex04.card.yaml
+stem: |-
+  （2025 · 长沙市一中月考）已知函数 $f(x)$，$g(x)$ 的定义域均为 $\\mathbf{R}$，它们的导函数分别为 $f'(x)$，$g'(x)$。若 $y=f(x+1)$ 是奇函数，$g'(x)=\\cos(\\pi x)$，$f(x)$ 与 $g(x)$ 图象的交点为 $(x_1, y_1)$，$(x_2, y_2)$，$\\cdots$，$(x_m, y_m)$，则（  ）
+  A. $f(x)$ 的图象关于点 $(-1,0)$ 对称
+  B. $f'(x)$ 的图象关于直线 $x=1$ 对称
+  C. $g(x)$ 的图象关于直线 $x=\\frac{1}{2}$ 对称
+  D. $\\sum_{i=1}^{m}(x_i+y_i)=m$
+answer: |
+  BCD
+
+  由 $y=f(x+1)$ 是奇函数，得
+  $f(x+1)=-f(-x+1)$，即 $f$ 关于点 $(1,0)$ 中心对称，
+  所以 A 说的 $(-1,0)$ 错误。对
+  $f(-x+1)=-f(x+1)$ 求导，
+  得 $f'(-x+1)=f'(x+1)$，故 $f'(x)$
+  图象关于直线 $x=1$ 对称，B 正确。
+  又 $g'(x)=\cos(\pi x)$，
+  积分得 $g(x)=\frac{1}{\pi}\sin(\pi x)+C$，
+  其对称轴为 $x=\frac12+k$，故 C 正确。
+  源页按 $f,g$ 交点关于 $(1,0)$ 对称配对求和，
+  得 $\sum_{i=1}^{m}(x_i+y_i)=m$，D 正确。
+  故选 BCD。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 由 $f(x+1)$ 奇性确定 $f$ 的对称中心，先判 A。
+      max_score: 1
+    - step_id: step_2
+      description: 对对称关系求导，判 B。
+      max_score: 1
+    - step_id: step_3
+      description: 由 $g'(x)$ 反推 $g(x)$ 的对称轴，判 C。
+      max_score: 1
+    - step_id: step_4
+      description: 利用交点成对对称求和，判 D。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 抽象函数性质
+        target: A、B：由平移奇函数推出原函数与导函数对称性
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 抽象函数性质
+        target: C、D：由导函数反推原函数结构并判断交点和式
+        result: 见 source_solution_summary
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 数形结合
+    subroute:
+      - 平移奇偶还原
+      - 求导转对称
+      - 交点配对求和
+  structure:
+    primary: 抽象函数结构
+    secondary:
+      - 对称结构
+      - 三角复合结构
+    evidence:
+      - $f(x+1)$ 奇函数给出中心 $(1,0)$。
+      - $g'(x)=\\cos(\\pi x)$ 导致 $g$ 呈正弦型轴对称。
+      - 选项同时涉及图象对称和交点代数和，属于“对称+求和”联动结构。
+    normalization_moves_used:
+      - 把 $f(x+1)$ 奇性先转为 $f$ 的中心对称。
+      - 对函数等式求导，将中心对称转为轴对称。
+      - 用交点配对把和式拆成 $\\sum x_i$ 与 $\\sum y_i$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看不出“$f(x+1)$ 奇函数”对应中心 $(1,0)$，回补函数性质与图像。
+      - 若学生对 $f(-x+1)$ 求导符号出错，回补导数运算与几何意义。
+      - 若学生不会通过正弦函数识别对称轴，回补三角函数基础。
+      - 若学生不会做对称点配对求和，回补代数恒等变形。
+  detail_terms:
+    - $f(x+1)$ 奇函数
+    - $f'(-x+1)=f'(x+1)$
+    - $g'(x)=\\cos(\\pi x)$
+    - $x=\\frac12+k$
+    - 答案 BCD
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0118_abstract_symmetry_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0118
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0118/page_0118.md
+      role: problem_start
+      evidence: lines 16-24 给出例 4 题头、A-D 选项、完整解析与答案 BCD。
+    - ref_id: page_0118_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0118/page_0118.md
+      role: local_context
+      evidence: line 14 为例 3 续解且不属于本卡；line 28 之后进入下一小节。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0118.png
+      inspected: true
+      notes: 已核对 page_0118 图像：例 4 题干、四个选项、解析及“故选 BCD”均清晰可见。
+  source_context: 本卡仅处理 page_0118 起头的例 4。page_0118 顶部是上一题续页，未建卡。
+  source_influence:
+    - 保留由 $y=f(x+1)$ 奇函数推出 $f$ 关于点 $(1,0)$ 中心对称。
+    - 保留对 $f(-x+1)=-f(x+1)$ 求导得到 $f'(-x+1)=f'(x+1)$ 的轴对称结论。
+    - 保留由 $g'(x)=\cos(\pi x)$ 积分得到 $g(x)=\frac{1}{\pi}\sin(\pi x)+C$ 并据此判定对称轴。
+    - 保留交点关于对称中心成对出现并求和的处理路线。
+  source_discrepancies:
+    - 解析 D 项处把 $g(x)$ 写成 $\\frac{1}{\\pi}\\sin(\\pi x)$（未显式保留积分常数 $C$）；本卡按源页结论保留答案 BCD。
+original_problem:
+  stem: （2025 · 长沙市一中月考）已知函数 $f(x)$，$g(x)$ 的定义域均为 $\\mathbf{R}$，它们的导函数分别为 $f'(x)$，$g'(x)$。若 $y=f(x+1)$ 是奇函数，$g'(x)=\\cos(\\pi x)$，$f(x)$ 与 $g(x)$ 图象的交点为 $(x_1, y_1)$，$(x_2, y_2)$，$\\cdots$，$(x_m, y_m)$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(x)$ 的图象关于点 $(-1,0)$ 对称
+      text_latex: $f(x)$ 的图象关于点 $(-1,0)$ 对称
+    - label: B
+      text_raw: $f'(x)$ 的图象关于直线 $x=1$ 对称
+      text_latex: $f'(x)$ 的图象关于直线 $x=1$ 对称
+    - label: C
+      text_raw: $g(x)$ 的图象关于直线 $x=\\frac{1}{2}$ 对称
+      text_latex: $g(x)$ 的图象关于直线 $x=\\frac{1}{2}$ 对称
+    - label: D
+      text_raw: $\\sum_{i=1}^{m}(x_i+y_i)=m$
+      text_latex: $\\sum_{i=1}^{m}(x_i+y_i)=m$
+  answer: BCD
+  fidelity_notes:
+    - 题目为多选；源页解析末句明确“故选 BCD”。
+    - 题干与解析均在 page_0118 同页完整给出。
+solution:
+  source_solution_summary: |
+    由 $y=f(x+1)$ 是奇函数，得
+    $f(x+1)=-f(-x+1)$，即 $f$ 关于点 $(1,0)$ 中心对称，
+    所以 A 说的 $(-1,0)$ 错误。对
+    $f(-x+1)=-f(x+1)$ 求导，
+    得 $f'(-x+1)=f'(x+1)$，故 $f'(x)$
+    图象关于直线 $x=1$ 对称，B 正确。
+    又 $g'(x)=\cos(\pi x)$，
+    积分得 $g(x)=\frac{1}{\pi}\sin(\pi x)+C$，
+    其对称轴为 $x=\frac12+k$，故 C 正确。
+    源页按 $f,g$ 交点关于 $(1,0)$ 对称配对求和，
+    得 $\sum_{i=1}^{m}(x_i+y_i)=m$，D 正确。
+    故选 BCD。
+  key_steps:
+    - step_id: step_1
+      statement: 由 $f(x+1)$ 奇性确定 $f$ 的对称中心，先判 A。
+      formula_trace:
+        from: $f(x+1)=-f(-x+1)$
+        to: $f(x)$ 关于点 $(1,0)$ 中心对称
+        operation: 把“平移后的奇函数”还原到原函数图象。
+        why: 对称中心是 $(1,0)$ 而不是 $(-1,0)$，A 必错。
+      source_ref: page_0118
+    - step_id: step_2
+      statement: 对对称关系求导，判 B。
+      formula_trace:
+        from: $f(-x+1)=-f(x+1)$
+        to: $-f'(-x+1)=-f'(x+1)\\Rightarrow f'(-x+1)=f'(x+1)$
+        operation: 链式求导并整理。
+        why: $f'(x)$ 关于 $x=1$ 轴对称，B 正确。
+      source_ref: page_0118
+    - step_id: step_3
+      statement: 由 $g'(x)$ 反推 $g(x)$ 的对称轴，判 C。
+      formula_trace:
+        from: $g'(x)=\\cos(\\pi x)$
+        to: $g(x)=\\frac{1}{\\pi}\\sin(\\pi x)+C$，对称轴 $x=\\frac12+k$
+        operation: 积分并读取正弦函数轴对称位置。
+        why: $x=\\frac12$ 是其一条对称轴，C 正确。
+      source_ref: page_0118
+    - step_id: step_4
+      statement: 利用交点成对对称求和，判 D。
+      formula_trace:
+        from: $\\{(x_i,y_i)\\}$ 关于 $(1,0)$ 配对
+        to: $\\sum x_i=\\frac m2\\cdot2=m,\\ \\sum y_i=0\\Rightarrow \\sum(x_i+y_i)=m$
+        operation: 把对称点配对后分别求横纵坐标和。
+        why: 配对后每组横坐标和为 2、纵坐标和为 0。
+      source_ref: page_0118
+teaching_card:
+  student_title: 平移奇函数先还原，再用导数读对称
+  what_it_trains: 训练从“平移后的奇偶性”还原原函数对称中心，再与导函数、交点和式联动判定多选。
+  recognition_cues:
+    - 出现 $f(x+a)$ 奇偶性，通常先把图象平移还原。
+    - 题目把 $f$ 与 $f'$、$g'$、交点求和放在一起，核心是同一套对称信息复用。
+    - 含三角导数关系时，优先识别原函数的对称轴/中心。
+  normalization_moves:
+    - 先定 $f$ 的中心 $(1,0)$。
+    - 再对函数关系求导判 $f'$ 的轴对称。
+    - 由 $g'$ 积分得到 $g$ 的正弦型轴对称。
+    - 交点按中心对称配对，拆分和式。
+  common_failures:
+    - 把 $(x+1)$ 的平移量方向看反，误判成 $(-1,0)$。
+    - 链式求导时漏掉 $-x+1$ 的负号。
+    - 只写出 $g(x)$ 形式，不继续读对称轴位置。
+    - 求和时不配对，直接逐项硬算。
+  similar_practice_query: 抽象函数 平移奇函数 导函数对称 交点和式 多选
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 已核对 page_0118 图像；例 4 题干、选项、解析与答案 BCD 一致。
+    - 解析 D 项对 $g(x)$ 写法未显式保留积分常数，已在 source_discrepancies 记录。

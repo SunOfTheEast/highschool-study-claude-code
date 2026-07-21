@@ -1,0 +1,207 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0098_exp_log_tangent_ex19
+content_revision_id: mst_p0098_exp_log_tangent_ex19-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0098_exp_log_tangent_ex19.card.yaml
+stem: |-
+  （2023 广东五校期末·多选 T12）已知函数 $f(x)=e^{x-1}+\ln x$，则过点 $(a,b)$ 恰能作曲线 $y=f(x)$ 的两条切线的充分条件可以是（  ）
+  A. $b=2a-1>1$
+  B. $b=f(a)$
+  C. $2a-1<b<f(a)$
+  D. $b<2a-1\leqslant -1$
+answer: |
+  AD
+
+  先看曲线 $f(x)=e^{x-1}+\ln x$ 的整体形状：$f^{\prime}(x)=e^{x-1}+\frac1x>0$，所以它在 $(0,+\infty)$ 上单调递增；$f^{\prime\prime}(x)=e^{x-1}-\frac1{x^2}$，唯一零点为 $x=1$，拐点为 $(1,1)$，拐点处切线为 $y=2x-1$。曲线、拐点切线和渐近线 $x=0$ 将平面划成若干区域。源页按区域切线条数判断：曲线上除拐点外的点可作两条切线，拐点切线上除拐点外的点也可作两条切线；夹在切线与曲线之间的相应区域只有一条切线；渐近线外侧的区域 5 少了一条趋向 $y\to-\infty$ 的远切线，因此也恰有两条切线。于是 A、D 是充分条件，B、C 不是，故选 AD。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 确定 $f$ 的单调性、拐点和拐点切线。
+      max_score: 1
+    - step_id: step_2
+      description: 把唯一拐点和拐点切线写出来。
+      max_score: 1
+    - step_id: step_3
+      description: 判断曲线和拐点切线边界上的点。
+      max_score: 1
+    - step_id: step_4
+      description: 逐项判定 A、B、C。
+      max_score: 1
+    - step_id: step_5
+      description: 用渐近线外侧区域判断 D。
+      max_score: 1
+    - step_id: step_6
+      description: 汇总正确选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何性质证明
+    part_level:
+      - part_id: item_1
+        goal: 几何性质证明
+        target: 判断哪些条件能充分保证过点 $(a,b)$ 恰能作曲线 $y=f(x)$ 的两条切线。
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 切线放缩与凹凸性
+      - 显隐点探路
+    subroute:
+      - 拐点切线界定
+      - 渐近线分区
+      - 外点切线条数
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 局部逼近结构
+    evidence:
+      - $f(x)=e^{x-1}+\ln x$ 同时含指数项和对数项，定义域为 $x>0$。
+      - $f^{\prime\prime}(x)$ 在 $x=1$ 变号，唯一拐点 $(1,1)$ 决定曲线的凹凸切换。
+      - 拐点切线 $y=2x-1$ 与渐近线 $x=0$ 共同划分切线条数区域。
+    normalization_moves_used:
+      - 先把“过点作几条切线”转成点在曲线、拐点切线、渐近线分区中的位置。
+      - 把 B 的“在曲线上”细分为拐点和非拐点，避免把必要边界误当充分条件。
+      - 把 D 的不等式 $2a-1\leqslant-1$ 转成 $a\leqslant0$，定位到渐近线外侧。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $f^{\prime\prime}(x)$ 的符号变化找拐点，回补导数单调极值基础。
+      - 若学生不知道切线方程如何由 $f^{\prime}(1)$ 写出，回补导数运算与几何意义。
+      - 若学生把 $b=f(a)$ 直接判为充分条件而漏掉拐点，回补函数性质与图像。
+      - 若学生忽略 $x=0$ 渐近线导致 D 的区域判断错误，回补指数对数基础。
+  detail_terms:
+    - $e^{x-1}+\ln x$
+    - $x>0$
+    - 唯一拐点 $(1,1)$
+    - 拐点切线 $y=2x-1$
+    - 渐近线 $x=0$
+    - 切线条数分区
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0098_exp_log_tangent_ex19
+source_evidence:
+  source_refs:
+    - ref_id: page_0098_ex19_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0098/page_0098.md
+      role: problem_start
+      evidence: 例 19（2023 广东五校期末·多选 T12）：已知 $f(x)=e^{x-1}+\ln x$，判断过点 $(a,b)$ 恰能作曲线 $y=f(x)$ 的两条切线的充分条件。
+    - ref_id: page_0098_ex19_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0098/page_0098.md
+      role: solution
+      evidence: 解析给出 $f^{\prime}(x)=e^{x-1}+\frac1x>0$、唯一拐点 $(1,1)$、拐点切线 $y=2x-1$，并用曲线、切线和渐近线划分区域判断切线条数，结论选 AD。
+    - ref_id: page_0099_ex19_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0099/page_0099.md
+      role: continuation
+      evidence: page_0099 顶部给出例 19 的区域示意图，并提示这类综合发散多选要从渐近线和拐点划分区域来分析切线条数。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0098.png
+      inspected: true
+      notes: 页图已核对：page_0098 顶部是例 18 续解，例 19 题头、A-D 选项和主要解析位于页面下半部，答案为 AD。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0099.png
+      inspected: true
+      notes: 页图已核对：page_0099 顶部是例 19 的五区域示意图和方法提示，随后才进入例 20。
+  source_context: page_0098 顶部为前一题例 18 的续页，按题头规则跳过；例 19 题头从 page_0098 开始，区域示意图延续到 page_0099 顶部，因此本卡同时引用 page_0099 作为续页证据。
+  source_influence:
+    - 保留源页的函数、点 $(a,b)$、四个充分条件选项和答案 AD。
+    - 解题主线沿用源页的“唯一拐点切线 + 渐近线 + 区域切线条数”判定。
+    - page_0099 的区域图用于解释 A、C、D 中点所在区域或边界的切线条数。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 广东五校期末·多选 T12）已知函数 $f(x)=e^{x-1}+\ln x$，则过点 $(a,b)$ 恰能作曲线 $y=f(x)$ 的两条切线的充分条件可以是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $b=2a-1>1$
+      text_latex: $b=2a-1>1$
+    - label: B
+      text_raw: $b=f(a)$
+      text_latex: $b=f(a)$
+    - label: C
+      text_raw: $2a-1<b<f(a)$
+      text_latex: $2a-1<b<f(a)$
+    - label: D
+      text_raw: $b<2a-1\leqslant -1$
+      text_latex: $b<2a-1\leqslant -1$
+  answer: AD
+  fidelity_notes:
+    - 源页是多选题，要求判断“充分条件可以是”，不是求 $(a,b)$ 的完整充要区域。
+    - 选项 B 覆盖曲线上的所有点，其中包含拐点 $(1,1)$，故不能作为充分条件。
+    - 选项 A 是拐点切线 $y=2x-1$ 上且 $b>1$ 的点，避开了拐点本身。
+solution:
+  source_solution_summary: |
+    先看曲线 $f(x)=e^{x-1}+\ln x$ 的整体形状：$f^{\prime}(x)=e^{x-1}+\frac1x>0$，所以它在 $(0,+\infty)$ 上单调递增；$f^{\prime\prime}(x)=e^{x-1}-\frac1{x^2}$，唯一零点为 $x=1$，拐点为 $(1,1)$，拐点处切线为 $y=2x-1$。曲线、拐点切线和渐近线 $x=0$ 将平面划成若干区域。源页按区域切线条数判断：曲线上除拐点外的点可作两条切线，拐点切线上除拐点外的点也可作两条切线；夹在切线与曲线之间的相应区域只有一条切线；渐近线外侧的区域 5 少了一条趋向 $y\to-\infty$ 的远切线，因此也恰有两条切线。于是 A、D 是充分条件，B、C 不是，故选 AD。
+  key_steps:
+    - step_id: step_1
+      statement: 确定 $f$ 的单调性、拐点和拐点切线。
+      formula_trace:
+        from: $f(x)=e^{x-1}+\ln x$
+        to: $f^{\prime}(x)=e^{x-1}+\frac1x>0,\quad f^{\prime\prime}(x)=e^{x-1}-\frac1{x^2}$
+        operation: 对指数项和对数项求一、二阶导。
+        why: 切线条数由曲线整体形状控制，拐点是区域划分的关键边界。
+      source_ref: page_0098_ex19_solution
+    - step_id: step_2
+      statement: 把唯一拐点和拐点切线写出来。
+      formula_trace:
+        from: $f^{\prime\prime}(x)=0$
+        to: $x=1,\quad f(1)=1,\quad f^{\prime}(1)=2,\quad y=2x-1$
+        operation: 解二阶导零点，并用点斜式写切线。
+        why: 源页用这条切线和曲线一起划分切线条数区域。
+      source_ref: page_0098_ex19_solution
+    - step_id: step_3
+      statement: 判断曲线和拐点切线边界上的点。
+      formula_trace:
+        from: 点在 $y=f(x)$ 上或在 $y=2x-1$ 上
+        to: 除拐点 $(1,1)$ 外，边界点恰能作两条切线；拐点本身只对应重合的拐点切线。
+        operation: 利用源页区域图中的边界切线条数。
+        why: 这直接区分 A 与 B：A 避开拐点，B 包含拐点。
+      source_ref: page_0098_ex19_solution
+    - step_id: step_4
+      statement: 逐项判定 A、B、C。
+      formula_trace:
+        from: "A: $b=2a-1>1$；B: $b=f(a)$；C: $2a-1<b<f(a)$"
+        to: A 正确，B 错误，C 错误
+        operation: A 是拐点切线上高于拐点的边界点；B 包含拐点；C 落在切线与曲线之间的一内弧一外弧区域。
+        why: 充分条件必须保证每个满足选项的点都恰有两条切线。
+      source_ref: page_0098_ex19_solution
+    - step_id: step_5
+      statement: 用渐近线外侧区域判断 D。
+      formula_trace:
+        from: $b<2a-1\leqslant -1$
+        to: 点在渐近线外侧的区域 5，恰能作两条切线
+        operation: 由 $2a-1\leqslant -1$ 得 $a\leqslant0$，结合 $b<2a-1$ 定位到源图的渐近线外侧下方区域。
+        why: 该区域比右侧外弧区域少一条 $y\to-\infty$ 的远切线，源页判定为两条切线。
+      source_ref: page_0099_ex19_continuation
+    - step_id: step_6
+      statement: 汇总正确选项。
+      formula_trace:
+        from: A 正确，B 错误，C 错误，D 正确
+        to: 答案 AD
+        operation: 按多选题逐项合并。
+        why: A、D 都能充分保证过点 $(a,b)$ 恰能作两条切线。
+      source_ref: page_0098_ex19_solution
+teaching_card:
+  student_title: 用拐点切线数清外点切线
+  what_it_trains: 训练先找曲线的拐点切线和渐近线，再用平面分区判断外点能作几条切线。
+  recognition_cues:
+    - 题目问“过点能作几条切线”。
+    - 函数含 $e^{x-1}$ 与 $\ln x$，定义域右侧有 $y$ 轴渐近线。
+    - 二阶导只有一个零点，拐点切线会成为分区边界。
+  normalization_moves:
+    - 先求 $f^{\prime}$、$f^{\prime\prime}$，锁定唯一拐点。
+    - 写出拐点切线 $y=2x-1$，把选项里的 $2a-1$ 识别成这条线。
+    - 把“在曲线上”拆成普通点和拐点，充分条件题不能放过例外点。
+    - 遇到 $a\leqslant0$ 时联想到点在定义域外侧，切线条数会受渐近线影响。
+  common_failures:
+    - 看到 $b=f(a)$ 就认为曲线上点都有两条切线，漏掉拐点。
+    - 只比较 $b$ 与 $2a-1$、$f(a)$，没有结合区域图判断切线条数。
+    - 忽略 $\ln x$ 的定义域，把 $a\leqslant0$ 当成普通右侧区域。
+    - 把“充分条件”误做成“所有恰有两条切线的点的充要条件”。
+  similar_practice_query: 指数对数函数 拐点切线 渐近线 外点切线条数 多选
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0098 和 page_0099 页图；page_0098 顶部例 18 续页已跳过，例 19 的区域图在 page_0099 顶部作为续页证据纳入。
+    - 源页答案为 AD；选项 B 因包含拐点 $(1,1)$，不能作为充分条件。

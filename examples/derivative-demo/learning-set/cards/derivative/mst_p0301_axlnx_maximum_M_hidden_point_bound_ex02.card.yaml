@@ -1,0 +1,206 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0301_axlnx_maximum_M_hidden_point_bound_ex02
+content_revision_id: mst_p0301_axlnx_maximum_M_hidden_point_bound_ex02-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0301_axlnx_maximum_M_hidden_point_bound_ex02.card.yaml
+stem: |-
+  （2024 · 北京月考）已知函数 $f(x)=ax\ln x-x$，$a\in\mathbf{R}$。当 $a=1$ 时，记函数 $g(x)=\ln(x+1)-f(x)$ 的最大值为 $M$。
+  1. 证明：$M<2$。
+answer: |-
+  $M<2$。
+
+  当 $a=1$ 时， $g(x)=\ln(x+1)-x\ln x+x$，定义域为 $(0,+\infty)$。 $g^\prime(x)=\frac1{x+1}-\ln x$， 且 $g^{\prime\prime}(x)=-\frac1{(x+1)^2}-\frac1x<0$， 所以 $g^\prime$ 单调递减。又 $g^\prime(1)=\frac12>0$， $g^\prime(\frac32)=\frac25-\ln\frac32<0$，故存在唯一 $x_0\in(1,\frac32)$ 使 $g^\prime(x_0)=0$。此时 $g$ 先增后减， 最大值为 $M=g(x_0)$。由 $g^\prime(x_0)=0$ 得 $\ln x_0=\frac1{x_0+1}$，于是 $M=\ln(x_0+1)-\frac{x_0}{x_0+1}+x_0$。令 $\varphi(x)=\ln(x+1)+x+\frac1{x+1}-1$，则 $\varphi^\prime(x)=\frac{x}{(x+1)^2}+1>0$，所以 $M=\varphi(x_0)<\varphi(\frac32)=\ln\frac52+\frac9{10}<1+\frac9{10}<2$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 写出 $a=1$ 时的 $g$ 和导数。
+      max_score: 1
+    - step_id: step_2
+      description: 证明 $g^\prime$ 单调递减并定位最大点。
+      max_score: 1
+    - step_id: step_3
+      description: 用隐点关系改写最大值 $M$。
+      max_score: 1
+    - step_id: step_4
+      description: 把 $M$ 化成关于 $x_0$ 的可估表达式。
+      max_score: 1
+    - step_id: step_5
+      description: 构造递增函数上估 $M$。
+      max_score: 1
+    - step_id: step_6
+      description: 完成数值上界。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 不等式证明
+        target: 第 1 问
+        result: $M<2$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 拟合与夹逼
+      - 局部逼近与找点
+      - 充分/必要性探路
+    subroute:
+      - 最大值隐点 $x_0$
+      - $g^\prime(x_0)=0$ 消参
+      - 构造 $\varphi$ 上估
+      - 端点 $\frac32$ 估界
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 局部逼近结构
+      - 不等式工具结构
+      - 非齐次结构
+    evidence:
+      - $ax\ln x-x$
+      - $g(x)=\ln(x+1)-x\ln x+x$
+      - $g^\prime(x)=\frac1{x+1}-\ln x$
+      - $\ln x_0=\frac1{x_0+1}$
+      - $M=\ln(x_0+1)-\frac{x_0}{x_0+1}+x_0$
+      - $\varphi(x)=\ln(x+1)+x+\frac1{x+1}-1$
+    normalization_moves_used:
+      - 先代入 $a=1$，把 $g$ 写成显式函数。
+      - 用 $g^{\prime\prime}<0$ 管理 $g^\prime$ 的唯一零点。
+      - 用隐点关系消掉 $\ln x_0$。
+      - 最后只用粗估 $\ln\frac52<1$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会处理 $x\ln x$ 的定义域，回补函数三要素与定义域。
+      - 若学生不会求导或二阶导判单调，回补导数单调极值基础。
+      - 若学生不会对数运算，回补指数对数基础。
+      - 若学生不会把最大值点方程代回目标，回补代数恒等变形。
+      - 若学生不会粗估 $\ln\frac52<1$，回补不等式工具基础。
+  detail_terms:
+    - $x\ln x$
+    - $M<2$
+    - $x_0\in(1,\frac32)$
+    - $g^\prime(x_0)=0$
+    - $\ln x_0=\frac1{x_0+1}$
+    - $\varphi(\frac32)$
+parts: &a1
+  - part_id: "1"
+    text: 证明：$M<2$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0301_axlnx_maximum_M_hidden_point_bound_ex02
+source_evidence:
+  source_refs:
+    - ref_id: page_0301_ex02_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0301/page_0301.md
+      role: problem_start
+      evidence: page_0301 例2题头：$f(x)=ax\ln x-x$；当 $a=1$ 时，记 $g(x)=\ln(x+1)-f(x)$ 的最大值为 $M$，证明 $M<2$。
+    - ref_id: page_0301_ex02_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0301/page_0301.md
+      role: solution_start
+      evidence: page_0301 解析：$g(x)=\ln(x+1)-x\ln x+x$，$g^\prime(x)=\frac1{x+1}-\ln x$，$g^\prime$ 单调递减，并锁定唯一极大值点 $x_0\in(1,\frac32)$。
+    - ref_id: page_0302_ex02_solution_end
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0302/page_0302.md
+      role: solution_end
+      evidence: page_0302 页首续完例2：令 $\varphi(x)=\ln(x+1)+x+\frac1{x+1}-1$，由 $\varphi$ 递增得 $M<\varphi(\frac32)=\ln\frac52+\frac9{10}<2$。
+    - ref_id: page_0302_ex03_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0302/page_0302.md
+      role: local_context
+      evidence: page_0302 随后从例3开始新题，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0301.png
+      inspected: true
+      notes: 已核对页图：page_0301 页底包含例2题头和解析开头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0302.png
+      inspected: true
+      notes: 已核对页图：page_0302 页首完成例2，随后另起例3。
+  source_context: 本卡处理 page_0301 起头、page_0302 页首续完的例2；page_0302 例3排除。
+  source_influence:
+    - 保留 $a=1$ 时 $g(x)=\ln(x+1)-x\ln x+x$。
+    - 保留 $g^\prime(x)=\frac1{x+1}-\ln x$ 且 $g^{\prime\prime}(x)<0$，从而 $g^\prime$ 递减。
+    - 保留 $g^\prime(1)>0$、$g^\prime(\frac32)<0$，存在唯一 $x_0\in(1,\frac32)$。
+    - 保留隐点关系 $\ln x_0=\frac1{x_0+1}$。
+    - 保留 $M=g(x_0)=\ln(x_0+1)-\frac{x_0}{x_0+1}+x_0$。
+    - 保留构造 $\varphi(x)=\ln(x+1)+x+\frac1{x+1}-1$ 并用 $\varphi(\frac32)$ 估上界。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 北京月考）已知函数 $f(x)=ax\ln x-x$，$a\in\mathbf{R}$。当 $a=1$ 时，记函数 $g(x)=\ln(x+1)-f(x)$ 的最大值为 $M$。
+  parts: *a1
+  choices: []
+  answer: $M<2$。
+  fidelity_notes:
+    - 无选项。
+    - 题目只处理 $a=1$ 情形。
+solution:
+  source_solution_summary: 当 $a=1$ 时， $g(x)=\ln(x+1)-x\ln x+x$，定义域为 $(0,+\infty)$。 $g^\prime(x)=\frac1{x+1}-\ln x$， 且 $g^{\prime\prime}(x)=-\frac1{(x+1)^2}-\frac1x<0$， 所以 $g^\prime$ 单调递减。又 $g^\prime(1)=\frac12>0$， $g^\prime(\frac32)=\frac25-\ln\frac32<0$，故存在唯一 $x_0\in(1,\frac32)$ 使 $g^\prime(x_0)=0$。此时 $g$ 先增后减， 最大值为 $M=g(x_0)$。由 $g^\prime(x_0)=0$ 得 $\ln x_0=\frac1{x_0+1}$，于是 $M=\ln(x_0+1)-\frac{x_0}{x_0+1}+x_0$。令 $\varphi(x)=\ln(x+1)+x+\frac1{x+1}-1$，则 $\varphi^\prime(x)=\frac{x}{(x+1)^2}+1>0$，所以 $M=\varphi(x_0)<\varphi(\frac32)=\ln\frac52+\frac9{10}<1+\frac9{10}<2$。
+  key_steps:
+    - step_id: step_1
+      statement: 写出 $a=1$ 时的 $g$ 和导数。
+      formula_trace:
+        from: $g(x)=\ln(x+1)-f(x)$
+        to: $g(x)=\ln(x+1)-x\ln x+x,\quad g^\prime(x)=\frac1{x+1}-\ln x$
+        operation: 代入 $a=1$ 并求导。
+        why: 最大值来自 $g^\prime=0$ 的隐点。
+      source_ref: page_0301_ex02_solution_start
+    - step_id: step_2
+      statement: 证明 $g^\prime$ 单调递减并定位最大点。
+      formula_trace:
+        from: $g^{\prime\prime}(x)=-\frac1{(x+1)^2}-\frac1x<0$
+        to: $x_0\in(1,\frac32),\quad g^\prime(x_0)=0$
+        operation: 用 $g^\prime(1)>0$ 与 $g^\prime(\frac32)<0$ 夹住零点。
+        why: $g$ 在 $x_0$ 处取得唯一最大值。
+      source_ref: page_0301_ex02_solution_start
+    - step_id: step_3
+      statement: 用隐点关系改写最大值 $M$。
+      formula_trace:
+        from: $g^\prime(x_0)=0$
+        to: $\ln x_0=\frac1{x_0+1}$
+        operation: 把导数零点方程改写。
+        why: 这样可以消掉 $M$ 中的 $x_0\ln x_0$。
+      source_ref: page_0301_ex02_solution_start
+    - step_id: step_4
+      statement: 把 $M$ 化成关于 $x_0$ 的可估表达式。
+      formula_trace:
+        from: $M=g(x_0)=\ln(x_0+1)-x_0\ln x_0+x_0$
+        to: $M=\ln(x_0+1)-\frac{x_0}{x_0+1}+x_0$
+        operation: 代入 $\ln x_0=\frac1{x_0+1}$。
+        why: 这是本题的隐点消参核心。
+      source_ref: page_0301_ex02_solution_start
+    - step_id: step_5
+      statement: 构造递增函数上估 $M$。
+      formula_trace:
+        from: $\varphi(x)=\ln(x+1)+x+\frac1{x+1}-1$
+        to: $M=\varphi(x_0)<\varphi(\frac32)$
+        operation: 证明 $\varphi^\prime(x)>0$，并用 $x_0<\frac32$。
+        why: 最大点不可求，但它的位置足够给出上界。
+      source_ref: page_0302_ex02_solution_end
+    - step_id: step_6
+      statement: 完成数值上界。
+      formula_trace:
+        from: $\varphi(\frac32)=\ln\frac52+\frac9{10}$
+        to: $M<2$
+        operation: 用 $\ln\frac52<1$。
+        why: 这是最后的粗估，不是主路线。
+      source_ref: page_0302_ex02_solution_end
+teaching_card:
+  student_title: 最大点消参后估上界
+  what_it_trains: 训练最大值点求不出来时，先用导数方程改写最大值，再用最大点所在区间估上界。
+  recognition_cues:
+    - 题目问最大值 $M$ 的上界，而最大点 $x_0$ 求不出来。
+    - $g^\prime(x)=\frac1{x+1}-\ln x$ 单调递减。
+    - $g^\prime(x_0)=0$ 正好能把 $\ln x_0$ 换成 $\frac1{x_0+1}$。
+    - $x_0<\frac32$ 后可以用一个递增函数压住 $M$。
+  normalization_moves:
+    - 不要硬求 $x_0$。
+    - 先证明 $x_0$ 在 $(1,\frac32)$。
+    - 把 $M$ 改写成 $\varphi(x_0)$。
+    - 最后用 $\varphi(\frac32)$ 做上界。
+  common_failures:
+    - 只知道最大值在 $g^\prime=0$，但忘记把这个方程代回 $M$。
+    - 把 $\ln x_0=\frac1{x_0+1}$ 写反或漏掉。
+    - 不会证明 $\varphi$ 递增。
+    - 把最后的数值粗估当成主方法，忽略前面的隐点消参。
+  similar_practice_query: xlnx ln(x+1) 最大值 M 隐点 x0 gprime=0 上界
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

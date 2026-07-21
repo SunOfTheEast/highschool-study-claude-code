@@ -1,0 +1,207 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0089_inflection_ex07
+content_revision_id: mst_p0089_inflection_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0089_inflection_ex07.card.yaml
+stem: |-
+  （2023 徐州高二期末·多选 T11）连续曲线上凹弧与凸弧的分界点称为曲线的拐点，拐点在统计学、物理学、经济学等领域都有重要应用。若 $f(x)$ 的图象是一条连续不断的曲线，$\forall x\in(a,b)$，$f(x)$ 的导函数 $f^{\prime}(x)$ 都存在，且 $f^{\prime}(x)$ 的导函数 $f^{\prime\prime}(x)$ 也都存在。若 $\exists x_0\in(a,b)$，使得 $f^{\prime\prime}(x_0)=0$，且在 $x_0$ 的左、右附近，$f^{\prime\prime}(x)$ 异号，则称点 $(x_0,f(x_0))$ 为曲线 $y=f(x)$ 的拐点。则以下函数具有唯一拐点的是（  ）
+  A. $f(x)=(x+1)^2$
+  B. $f(x)=x^3+2x^2+3x$
+  C. $f(x)=xe^x$
+  D. $f(x)=\ln x+x^2+\sin x$
+answer: |
+  BCD
+
+  A：$f^{\prime}(x)=2(x+1)$，$f^{\prime\prime}(x)=2\ne0$，无拐点。
+  B：$f^{\prime\prime}(x)=6x+4$，在 $x=-\frac23$ 处为 0，且左右由负变正，所以有唯一拐点。
+  C：$f^{\prime\prime}(x)=(x+2)e^x$，由于 $e^x>0$，只在 $x=-2$ 处变号，所以有唯一拐点。
+  D：$f^{\prime\prime}(x)=-\frac1{x^2}+2-\sin x$，源解由 $f^{\prime\prime}(\frac12)<0$、$f^{\prime\prime}(1)>0$ 得存在拐点；进一步在 $(0,1)$ 上有 $(f^{\prime\prime})^{\prime}(x)=\frac2{x^3}-\cos x>0$，而 $x\ge1$ 时 $f^{\prime\prime}(x)\ge1-\frac1{x^2}\ge0$ 且 $f^{\prime\prime}(1)>0$，故零点唯一并发生变号。故选 BCD。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: A 项二阶导恒正，不能形成拐点。
+      max_score: 1
+    - step_id: step_2
+      description: B 项三次函数有一个二阶导变号零点。
+      max_score: 1
+    - step_id: step_3
+      description: C 项用指数因子恒正锁定唯一变号点。
+      max_score: 1
+    - step_id: step_4
+      description: D 项先按源解证明至少存在一个拐点。
+      max_score: 1
+    - step_id: step_5
+      description: 补充 D 项唯一性。
+      max_score: 1
+    - step_id: step_6
+      description: 汇总符合“唯一拐点”的选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 零点/极值点分析
+        target: 判断四个给定函数是否具有唯一拐点。
+        result: 见 source_solution_summary
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 充分/必要性探路
+      - 局部逼近与找点
+    subroute:
+      - 二阶导变号判拐点
+      - 连续函数介值找零
+      - 唯一性补证
+  structure:
+    primary: 抽象函数结构
+    secondary:
+      - 三次/高次函数结构
+      - 指对复合结构
+      - 三角复合结构
+    evidence:
+      - B 项 $f^{\prime\prime}(x)=6x+4$ 是一次函数，只能有一个变号零点。
+      - C 项 $f^{\prime\prime}(x)=(x+2)e^x$ 中 $e^x>0$，符号由线性因子决定。
+      - D 项 $-\frac1{x^2}+2-\sin x$ 在 $(0,1)$ 单调递增，$x\ge1$ 后保持非负。
+    normalization_moves_used:
+      - 逐项先写二阶导，再看是否为变号零点。
+      - 遇到恒正因子 $e^x$，把符号判断转给剩余因子。
+      - 遇到存在性证明不足时，用单调性和下界排除额外零点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生把二阶导不存在或不为零的点也当拐点，回补导数单调极值基础。
+      - 若学生不知道 $\ln x$ 的定义域是 $x>0$，回补函数三要素与定义域。
+      - 若学生只用介值定理证明 D 存在却忘记唯一性，回补函数性质与图像。
+      - 若学生不会处理 $e^x$ 恒正因子，回补指数对数基础。
+      - 若学生在 D 项估计 $x\ge1$ 区间符号失败，回补不等式工具基础。
+  detail_terms:
+    - $f^{\prime\prime}(x)=2$
+    - $6x+4=0$
+    - $(x+2)e^x=0$
+    - $-\frac1{x^2}+2-\sin x$
+    - $q^{\prime}(x)=\frac2{x^3}-\cos x$
+    - 答案 BCD
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0089_inflection_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0089_ex07_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0089/page_0089.md
+      role: problem_start
+      evidence: 例 7 题头起于 page_0089：给出拐点定义，要求判断以下函数中具有唯一拐点的选项，A-D 分别为 $(x+1)^2$、$x^3+2x^2+3x$、$xe^x$、$\ln x+x^2+\sin x$。
+    - ref_id: page_0089_ex07_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0089/page_0089.md
+      role: solution
+      evidence: 解析逐项求二阶导：A 的 $f^{\prime\prime}=2$ 无拐点；B 在 $x=-\frac23$ 变号；C 在 $x=-2$ 变号；D 由 $f^{\prime\prime}(\frac12)<0$、$f^{\prime\prime}(1)>0$ 判断存在拐点，故选 BCD。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0089.png
+      inspected: true
+      notes: 页图已核对：例 7 完整位于 page_0089 下半页，题干、四个选项、解析和答案 BCD 与 markdown 一致。
+  source_context: 例 7 延续 page_0088-page_0089 中对拐点的定义：必须满足二阶导为 0，并且二阶导在该点左右附近异号；“唯一拐点”还要排除其他变号零点。
+  source_influence:
+    - 卡片保留源解逐项求二阶导、检查变号的路线。
+    - D 项在源解“存在拐点”的基础上补充唯一性论证，使其完全匹配题干“唯一拐点”。
+  source_discrepancies:
+    - 源解 D 项用 $f^{\prime\prime}(\frac12)<0$ 与 $f^{\prime\prime}(1)>0$ 证明存在拐点，但未显式排除第二个拐点；本卡补充 $f^{\prime\prime}$ 在 $(0,1)$ 严格递增且 $x\ge1$ 时恒正的证明。
+original_problem:
+  stem: （2023 徐州高二期末·多选 T11）连续曲线上凹弧与凸弧的分界点称为曲线的拐点，拐点在统计学、物理学、经济学等领域都有重要应用。若 $f(x)$ 的图象是一条连续不断的曲线，$\forall x\in(a,b)$，$f(x)$ 的导函数 $f^{\prime}(x)$ 都存在，且 $f^{\prime}(x)$ 的导函数 $f^{\prime\prime}(x)$ 也都存在。若 $\exists x_0\in(a,b)$，使得 $f^{\prime\prime}(x_0)=0$，且在 $x_0$ 的左、右附近，$f^{\prime\prime}(x)$ 异号，则称点 $(x_0,f(x_0))$ 为曲线 $y=f(x)$ 的拐点。则以下函数具有唯一拐点的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(x)=(x+1)^2$
+      text_latex: $f(x)=(x+1)^2$
+    - label: B
+      text_raw: $f(x)=x^3+2x^2+3x$
+      text_latex: $f(x)=x^3+2x^2+3x$
+    - label: C
+      text_raw: $f(x)=xe^x$
+      text_latex: $f(x)=xe^x$
+    - label: D
+      text_raw: $f(x)=\ln x+x^2+\sin x$
+      text_latex: $f(x)=\ln x+x^2+\sin x$
+  answer: BCD
+  fidelity_notes:
+    - 源题为多选题，选项必须保留 label/text_raw/text_latex 三字段。
+    - D 项定义域为 $x>0$，源题未单列定义域，本卡在解析中按 $\ln x$ 自然定义域处理。
+solution:
+  source_solution_summary: |
+    A：$f^{\prime}(x)=2(x+1)$，$f^{\prime\prime}(x)=2\ne0$，无拐点。
+    B：$f^{\prime\prime}(x)=6x+4$，在 $x=-\frac23$ 处为 0，且左右由负变正，所以有唯一拐点。
+    C：$f^{\prime\prime}(x)=(x+2)e^x$，由于 $e^x>0$，只在 $x=-2$ 处变号，所以有唯一拐点。
+    D：$f^{\prime\prime}(x)=-\frac1{x^2}+2-\sin x$，源解由 $f^{\prime\prime}(\frac12)<0$、$f^{\prime\prime}(1)>0$ 得存在拐点；进一步在 $(0,1)$ 上有 $(f^{\prime\prime})^{\prime}(x)=\frac2{x^3}-\cos x>0$，而 $x\ge1$ 时 $f^{\prime\prime}(x)\ge1-\frac1{x^2}\ge0$ 且 $f^{\prime\prime}(1)>0$，故零点唯一并发生变号。故选 BCD。
+  key_steps:
+    - step_id: step_1
+      statement: A 项二阶导恒正，不能形成拐点。
+      formula_trace:
+        from: $f(x)=(x+1)^2$
+        to: $f^{\prime}(x)=2(x+1),\quad f^{\prime\prime}(x)=2\ne0$
+        operation: 连续求导。
+        why: 没有 $f^{\prime\prime}=0$ 的点，更不可能有二阶导变号。
+      source_ref: page_0089_ex07_solution
+    - step_id: step_2
+      statement: B 项三次函数有一个二阶导变号零点。
+      formula_trace:
+        from: $f(x)=x^3+2x^2+3x$
+        to: $f^{\prime\prime}(x)=6x+4=0\Longleftrightarrow x=-\frac23$
+        operation: 求二阶导并解一次方程。
+        why: $6x+4$ 在 $-\frac23$ 左负右正，因此该点是唯一拐点横坐标。
+      source_ref: page_0089_ex07_solution
+    - step_id: step_3
+      statement: C 项用指数因子恒正锁定唯一变号点。
+      formula_trace:
+        from: $f(x)=xe^x$
+        to: $f^{\prime}(x)=(x+1)e^x,\quad f^{\prime\prime}(x)=(x+2)e^x$
+        operation: 乘积求导并提取恒正因子 $e^x$。
+        why: $e^x>0$，二阶导符号只由 $x+2$ 决定，故在 $x=-2$ 唯一变号。
+      source_ref: page_0089_ex07_solution
+    - step_id: step_4
+      statement: D 项先按源解证明至少存在一个拐点。
+      formula_trace:
+        from: $f(x)=\ln x+x^2+\sin x,\quad x>0$
+        to: $f^{\prime\prime}(x)=-\frac1{x^2}+2-\sin x,\quad f^{\prime\prime}\left(\frac12\right)<0,\quad f^{\prime\prime}(1)>0$
+        operation: 求二阶导并取 $\frac12,1$ 两点比较符号。
+        why: $f^{\prime\prime}$ 连续，所以 $(\frac12,1)$ 内至少有一个变号候选零点。
+      source_ref: page_0089_ex07_solution
+    - step_id: step_5
+      statement: 补充 D 项唯一性。
+      formula_trace:
+        from: $q(x)=f^{\prime\prime}(x)=-\frac1{x^2}+2-\sin x$
+        to: $q^{\prime}(x)=\frac2{x^3}-\cos x>0\ (0<x<1),\quad q(x)>0\ (x\ge1)$
+        operation: 在 $(0,1)$ 用 $\frac2{x^3}>2$、$\cos x<1$ 得严格递增；在 $x\ge1$ 用 $2-\sin x\ge1$ 得下界。
+        why: $q(0^+)=-\infty$ 且 $(0,1)$ 严格递增，只能穿过 0 一次；$x\ge1$ 不再有零点。
+      source_ref: page_0089_ex07_solution
+    - step_id: step_6
+      statement: 汇总符合“唯一拐点”的选项。
+      formula_trace:
+        from: A 无拐点；B、C、D 各有且仅有一个二阶导变号零点
+        to: 答案为 BCD
+        operation: 按多选题逐项取真。
+        why: 题干问“具有唯一拐点”的函数。
+      source_ref: page_0089_ex07_solution
+teaching_card:
+  student_title: 唯一拐点要证明“有且只有”
+  what_it_trains: 训练多选题中逐项用二阶导变号判拐点，并在复杂选项里补上唯一性证明。
+  recognition_cues:
+    - 题干给出完整拐点定义，关键词是 $f^{\prime\prime}=0$ 和左右异号。
+    - 选项包含多项式、指数乘积、对数三角复合函数，难度集中在 D 的唯一性。
+    - 多选题问“具有唯一拐点”，不能只证明“存在拐点”。
+  normalization_moves:
+    - 每个选项先求 $f^{\prime\prime}$。
+    - 线性二阶导直接看一次变号。
+    - 指数乘积先剥离恒正因子。
+    - D 项把 $f^{\prime\prime}$ 记为 $q$，分 $(0,1)$ 与 $[1,+\infty)$ 控制零点。
+  common_failures:
+    - 把 A 的二阶导恒正误判为“凸函数所以有拐点”。
+    - C 项求导时漏掉乘积法则。
+    - D 项只用 $q(\frac12)<0,q(1)>0$ 得到存在，没证明唯一。
+    - 忘记 D 项定义域排除了 $x\le0$。
+  similar_practice_query: 拐点 二阶导 变号 唯一性 多选 函数凹凸性
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0089 页图；例 7 题干、选项、解析和答案均在本页完整呈现。
+    - 源解 D 项的唯一性证明略省，本卡用单调性和下界补足，无需升级为 needs_review。

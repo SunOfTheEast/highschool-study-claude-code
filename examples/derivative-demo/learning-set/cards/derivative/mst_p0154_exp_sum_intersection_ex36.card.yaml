@@ -1,0 +1,247 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0154_exp_sum_intersection_ex36
+content_revision_id: mst_p0154_exp_sum_intersection_ex36-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0154_exp_sum_intersection_ex36.card.yaml
+stem: |-
+  已知实数 $a,b,c$ 满足 $a=6^{\frac13}$，$b=\frac{\ln3}{\ln2}+\frac{2\ln2}{\ln2+\ln3}$，$5^b+12^b=13^c$，则 $a,b,c$ 的关系是（  ）
+  A. $b>a>c$
+  B. $c>b>a$
+  C. $b>c>a$
+  D. $c>a>b$
+answer: |
+  C
+
+  先比较 $a$：
+  \[
+  a=6^{1/3}<8^{1/3}=2.
+  \]
+  再比较 $b$，令
+  \[
+  t=\frac{\ln3}{\ln2}>0,
+  \]
+  则
+  \[
+  b=\frac{\ln3}{\ln2}+\frac{2\ln2}{\ln2+\ln3}
+  =t+\frac{2}{1+t}>2.
+  \]
+  作图比较
+  \[
+  y_1=5^x+12^x,\quad y_2=13^x.
+  \]
+  因
+  \[
+  5^2+12^2=13^2,
+  \]
+  两曲线交于 $(2,13^2)$，且当 $x>2$ 时 $y_1<y_2$。
+  设
+  \[
+  y_0=5^b+12^b=13^c.
+  \]
+  由 $b>2$ 得 $y_0>13^2$，故 $c>2$。在交点右侧同一高度下，$y_1$ 的横坐标大于 $y_2$ 的横坐标，故 $b>c$。
+  综上
+  \[
+  b>c>2>a,
+  \]
+  因而 $b>c>a$，选 C。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 由立方根直接定出 $a<2$。
+      max_score: 1
+    - step_id: step_2
+      description: 利用源解析给出的 b 表达式定出 $b>2$。
+      max_score: 1
+    - step_id: step_3
+      description: 用勾股数确定两曲线基准交点。
+      max_score: 1
+    - step_id: step_4
+      description: 同高读横坐标得到 $b>c$ 且 $c>2$。
+      max_score: 1
+    - step_id: step_5
+      description: 合并三者顺序并对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较由指数和方程与常数定义出的 $a,b,c$ 顺序。
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 先定高度再读横坐标
+      - 勾股三元组交点锚定 $x=2$
+      - 开口差距（交点越高开口越小）
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 非对称结构
+      - 同构结构
+    evidence:
+      - 核心比较来自 $5^x+12^x$ 与 $13^x$ 的交点与相对开口。
+      - 题设含指数和与单指数两类不同增长率函数。
+      - $b,c$ 由同一函数值 $y_0$ 映射到两条曲线横坐标。
+    normalization_moves_used:
+      - 把 $b$ 的表达式换元为 $t+\frac{2}{1+t}$。
+      - 用 $5^2+12^2=13^2$ 固定交点 $x=2$。
+      - 同高水平线横坐标比较得到 $b>c$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 ln 组合式换元并判断 $b>2$，回补指数对数基础。
+      - 若学生不会用交点右侧同高横坐标比较，回补函数性质与图像。
+      - 若学生对“开口差距”与增长率关系混淆，回补导数单调极值基础。
+  detail_terms:
+    - $y_1=5^x+12^x,\ y_2=13^x$
+    - 交点 $(2,13^2)$
+    - $y_0=5^b+12^b=13^c$
+    - $b>c>2>a$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0154_exp_sum_intersection_ex36
+source_evidence:
+  source_refs:
+    - ref_id: page_0154_ex36_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0154/page_0154.md
+      role: problem_start
+      evidence: 例36题头与选项起于 page_0154 页底；题干中 $a=6^{1/3}$ 与 $5^b+12^b=13^c$ 可见，中间条件有缺字。
+    - ref_id: page_0155_ex36_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0155/page_0155.md
+      role: solution
+      evidence: page_0155 页首解析给出 $b=\frac{\ln3}{\ln2}+\frac{2\ln2}{\ln2+\ln3}=t+\frac{2}{1+t}>2$，并由交点法得 $b>c>2>a$，答案 C。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0154.png
+      inspected: true
+      notes: 已核对页图：题干实拍确有残缺，显示为“$a=6^{1/3},\ c,\ 5^b+12^b=13^c$”。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0155.png
+      inspected: true
+      notes: 已核对页图：解析首行明确给出 b 的 ln 形式表达，并据图判断选 C。
+  source_context: page_0154 页首是例35续解不建卡；例36题头在 page_0154，解析续到 page_0155 顶部。
+  source_influence:
+    - 保留源解先比较 $a$ 与 2、再比较 $b$ 与 2 的节奏。
+    - 保留“勾股数交点 $(2,13^2)$ + 开口差距”图像法。
+    - 保留结论链 $b>c>2>a$ 对应选 C。
+  source_discrepancies:
+    - 题干在 page_0154 实拍中间条件缺失；按 page_0155 源解析首行补全为 $b=\frac{\ln3}{\ln2}+\frac{2\ln2}{\ln2+\ln3}$ 后可闭合解题链。
+original_problem:
+  stem: 已知实数 $a,b,c$ 满足 $a=6^{\frac13}$，$b=\frac{\ln3}{\ln2}+\frac{2\ln2}{\ln2+\ln3}$，$5^b+12^b=13^c$，则 $a,b,c$ 的关系是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $b>a>c$
+      text_latex: $b>a>c$
+    - label: B
+      text_raw: $c>b>a$
+      text_latex: $c>b>a$
+    - label: C
+      text_raw: $b>c>a$
+      text_latex: $b>c>a$
+    - label: D
+      text_raw: $c>a>b$
+      text_latex: $c>a>b$
+  answer: C
+  fidelity_notes:
+    - 题干按源解析补全了 b 的定义；原页图此处存在可见漏字。
+    - 选项与答案字母严格按 page_0154/page_0155 源页保留。
+solution:
+  source_solution_summary: |
+    先比较 $a$：
+    \[
+    a=6^{1/3}<8^{1/3}=2.
+    \]
+    再比较 $b$，令
+    \[
+    t=\frac{\ln3}{\ln2}>0,
+    \]
+    则
+    \[
+    b=\frac{\ln3}{\ln2}+\frac{2\ln2}{\ln2+\ln3}
+    =t+\frac{2}{1+t}>2.
+    \]
+    作图比较
+    \[
+    y_1=5^x+12^x,\quad y_2=13^x.
+    \]
+    因
+    \[
+    5^2+12^2=13^2,
+    \]
+    两曲线交于 $(2,13^2)$，且当 $x>2$ 时 $y_1<y_2$。
+    设
+    \[
+    y_0=5^b+12^b=13^c.
+    \]
+    由 $b>2$ 得 $y_0>13^2$，故 $c>2$。在交点右侧同一高度下，$y_1$ 的横坐标大于 $y_2$ 的横坐标，故 $b>c$。
+    综上
+    \[
+    b>c>2>a,
+    \]
+    因而 $b>c>a$，选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 由立方根直接定出 $a<2$。
+      formula_trace:
+        from: $a=6^{1/3}$
+        to: $a<8^{1/3}=2$
+        operation: 用同指数幂函数单调性比较底数。
+        why: 先锁定 $a$ 位于 2 左侧。
+      source_ref: page_0155_ex36_solution
+    - step_id: step_2
+      statement: 利用源解析给出的 b 表达式定出 $b>2$。
+      formula_trace:
+        from: $b=\frac{\ln3}{\ln2}+\frac{2\ln2}{\ln2+\ln3}$
+        to: $b=t+\frac{2}{1+t}>2\ (t=\frac{\ln3}{\ln2}>0)$
+        operation: 换元整理成单变量函数形式。
+        why: 确定水平线高度在交点 $(2,13^2)$ 之上。
+      source_ref: page_0155_ex36_solution
+    - step_id: step_3
+      statement: 用勾股数确定两曲线基准交点。
+      formula_trace:
+        from: $y_1=5^x+12^x,\ y_2=13^x$
+        to: $5^2+12^2=13^2\Rightarrow$ 交点 $x=2$
+        operation: 代入特值建立比较锚点。
+        why: 后续要在锚点右侧比较同高横坐标。
+      source_ref: page_0155_ex36_solution
+    - step_id: step_4
+      statement: 同高读横坐标得到 $b>c$ 且 $c>2$。
+      formula_trace:
+        from: $y_0=5^b+12^b=13^c,\ b>2,\ x>2$ 时 $y_1<y_2$
+        to: $c>2$ 且 $b>c$
+        operation: 先判高度再做“开口差距”横向比较。
+        why: 完成 $b,c$ 的顺序判定。
+      source_ref: page_0155_ex36_solution
+    - step_id: step_5
+      statement: 合并三者顺序并对应选项。
+      formula_trace:
+        from: $a<2,\ c>2,\ b>c$
+        to: $b>c>a$，选 C
+        operation: 传递不等式。
+        why: 得到唯一选项。
+      source_ref: page_0155_ex36_solution
+teaching_card:
+  student_title: 用交点高度读出指数和与单指数的横坐标顺序
+  what_it_trains: 训练先用代数估计锁定交点高度区间，再用两曲线同高横坐标比较完成三数排序。
+  recognition_cues:
+    - 出现 $u^x+v^x$ 与 $w^x$ 的对比，且含勾股数关系。
+    - 未知量分别作为两条曲线达到同一函数值时的横坐标。
+    - 题目目标是三变量顺序单选。
+  normalization_moves:
+    - 先比较常数定义量（如 $a$ 与 2）。
+    - 换元整理复杂对数表达式（如 $b$）。
+    - 用已知交点和同高横坐标完成 $b,c$ 比较。
+  common_failures:
+    - 忽略题干残缺直接照抄，导致推理链断裂。
+    - 知道 $x>2$ 时 $y_1<y_2$，却不会转成同高下横坐标关系。
+    - 只得到 $b>c$，遗漏 $c>2>a$ 造成选项误判。
+  similar_practice_query: 5^x+12^x 与 13^x 交点 开口差距 同高横坐标 比大小
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 例36题干中间条件按 page_0155 解析补全后可唯一闭合解题链。

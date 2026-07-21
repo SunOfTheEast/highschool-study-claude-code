@@ -1,0 +1,164 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0241_log_x_over_2_minus_x_level_minus2_existence_ch6_findpoint_ex15
+content_revision_id: mst_p0241_log_x_over_2_minus_x_level_minus2_existence_ch6_findpoint_ex15-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0241_log_x_over_2_minus_x_level_minus2_existence_ch6_findpoint_ex15.card.yaml
+stem: （MST—李老师，改编）证明：$a<-2$，$0<x<1$ 时，$f(x)=\ln\frac{x}{2-x}+ax+b(x-1)^3=-2$ 有解。
+answer: |-
+  用关于横坐标为 $1$ 的点中心对称思路，可转到右侧区间找点；解析等价证明目标水平 $f(x)=-2$ 有解。
+
+  解析思路是连续性找点：先有 $f(1)=a<-2$，再在右侧 $1<x<2$ 通过放缩给出一个点使函数值高于 $-2$，从而夹出一个 目标水平解。用户已说明这里可以利用相关函数图像关于横坐标为 $1$ 的点中心对称，把区间挪到右侧讨论；解析末尾的 $f(x)=0$ 按把目标水平 $-2$ 移到 0 后的写法理解。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 解析以 $x=1$ 作为低值点。
+      max_score: 1
+    - step_id: step_2
+      description: 解析在 $1<x<2$ 上找高于 $-2$ 的点。
+      max_score: 1
+    - step_id: step_3
+      description: 按用户说明，用关于横坐标为 $1$ 的点中心对称理解区间挪动。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: main
+        goal: 零点/极值点分析
+        target: 第 main 问
+        result: 通过点中心对称转到右侧讨论，证明目标水平有解。
+  method:
+    primary: 对称化与偏移
+    secondary:
+      - 局部逼近与找点
+      - 充分/必要性探路
+    subroute:
+      - $x=1$ 中心对称
+      - 对称搬移区间
+      - 连续性找点
+      - 水平线交点
+  structure:
+    primary: 对称结构
+    secondary:
+      - 指对复合结构
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - 函数图像关于横坐标为 $1$ 的点中心对称。
+      - $\ln\frac{x}{2-x}+ax+b(x-1)^3$
+      - $f(1)=a<-2$
+      - $1<x<2$
+      - $0<x<1$
+    normalization_moves_used:
+      - 先识别 $x=1$ 是对称中心横坐标。
+      - 把左侧区间 $0<x<1$ 的存在性问题搬到右侧 $1<x<2$ 讨论。
+      - 用 $f(1)<-2$ 作为连续性一端。
+      - 解析试图在右侧找另一个跨过目标水平的点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不理解连续性找点，回补函数性质与图像。
+      - 若学生不会处理 $\ln\frac{x}{2-x}$ 的定义域，回补函数三要素与定义域。
+      - 若学生不会做绝对值放缩，回补不等式工具基础。
+  detail_terms:
+    - $\ln\frac{x}{2-x}$
+    - $x=1$ 中心对称
+    - $a<-2$
+    - $0<x<1$
+    - $1<x<2$
+    - $f(x)=-2$
+    - $f(x)=0$
+    - 连续性找点
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0241_log_x_over_2_minus_x_level_minus2_existence_ch6_findpoint_ex15
+source_evidence:
+  source_refs:
+    - ref_id: page_0241_prev_ex14_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0241/page_0241.md
+      role: local_context
+      evidence: page_0241 页首是 page_0240 例14续解，不是本卡题头。
+    - ref_id: page_0241_ex15_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0241/page_0241.md
+      role: problem_start
+      evidence: page_0241 给出例15题头：证明 $a<-2$，$0<x<1$ 时，$f(x)=\ln\frac{x}{2-x}+ax+b(x-1)^3=-2$ 有解。
+    - ref_id: page_0241_ex15_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0241/page_0241.md
+      role: solution
+      evidence: 解析写 $f(1)=a<-2$，随后在 $1<x<2$ 上用下界找点，并写存在 $1<x<...$ 使得 $f(x)=0$。
+    - ref_id: page_0241_ex16_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0241/page_0241.md
+      role: local_context
+      evidence: page_0241 随后另起例16，属于本批下一张卡，不混入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0241.png
+      inspected: true
+      notes: 已核对页图：例15题干、注和解析位于 page_0241 中部；用户已说明相关函数图像关于横坐标为 1 的点作中心对称，可到右侧讨论。
+  source_context: 本卡处理 page_0241 起头并在同页结束的例15；解析中的右侧区间按用户说明理解为利用点中心对称讨论。
+  source_influence:
+    - 保留题干观察：题干写 $0<x<1$ 且目标是 $f(x)=-2$ 有解。
+    - 保留解析观察：解析在 $1<x<2$ 取点，用连续性证明跨过目标水平。
+    - 采用用户说明：相关函数图像关于横坐标为 $1$ 的点作中心对称，解析可把区间挪到右侧讨论；结尾 $f(x)=0$ 按目标水平移到 0 理解。
+  source_discrepancies:
+    - type: user_resolved_symmetry_interval_shift
+      source_ref: page_0241_ex15_problem_start
+      observed: statement says $0<x<1$ and target level is $f(x)=-2$.
+      resolved_as: solution is allowed to discuss $1<x<2$ because the relevant graph has point central symmetry with center x-coordinate $1$; final $f(x)=0$ is target-level shifted notation.
+      reason: user clarified the intended reading.
+original_problem:
+  stem: （MST—李老师，改编）证明：$a<-2$，$0<x<1$ 时，$f(x)=\ln\frac{x}{2-x}+ax+b(x-1)^3=-2$ 有解。
+  parts: *a1
+  choices: []
+  answer: 用关于横坐标为 $1$ 的点中心对称思路，可转到右侧区间找点；解析等价证明目标水平 $f(x)=-2$ 有解。
+  fidelity_notes:
+    - 题干写 $0<x<1$。
+    - 解析使用 $1<x<2$，按用户说明理解为利用关于横坐标为 $1$ 的点中心对称讨论。
+    - 解析末尾 $f(x)=0$ 按目标水平移到 0 的写法处理。
+solution:
+  source_solution_summary: 解析思路是连续性找点：先有 $f(1)=a<-2$，再在右侧 $1<x<2$ 通过放缩给出一个点使函数值高于 $-2$，从而夹出一个 目标水平解。用户已说明这里可以利用相关函数图像关于横坐标为 $1$ 的点中心对称，把区间挪到右侧讨论；解析末尾的 $f(x)=0$ 按把目标水平 $-2$ 移到 0 后的写法理解。
+  key_steps:
+    - step_id: step_1
+      statement: 解析以 $x=1$ 作为低值点。
+      formula_trace:
+        from: $f(1)=a$
+        to: $f(1)<-2$
+        operation: 代入 $x=1$ 并用 $a<-2$。
+        why: 连续性证明需要一个低于目标水平的点。
+      source_ref: page_0241_ex15_solution
+    - step_id: step_2
+      statement: 解析在 $1<x<2$ 上找高于 $-2$ 的点。
+      formula_trace:
+        from: $f(x)=\ln\frac{x}{2-x}+ax+b(x-1)^3$
+        to: $f(x)>\ln\frac{x}{2-x}+2a-|b|$
+        operation: 按解析给出的区间和绝对值界放缩。
+        why: 右侧对数项可向 $+\infty$ 增长，适合找高值点。
+      source_ref: page_0241_ex15_solution
+    - step_id: step_3
+      statement: 按用户说明，用关于横坐标为 $1$ 的点中心对称理解区间挪动。
+      formula_trace:
+        from: 题干 $0<x<1$；解析 $1<x<2$
+        to: 右侧找点可作为点中心对称后的讨论
+        operation: 采用用户澄清后的阅读方式。
+        why: 本题本质训练连续性找点，右侧区间用于构造跨过目标水平的点。
+      source_ref: page_0241_ex15_solution
+teaching_card:
+  student_title: 连续性找点：借 $x=1$ 处的中心对称把区间挪到右侧
+  what_it_trains: 本题核心是先识别关于 $x=1$ 的中心对称，把左侧区间搬到右侧，再用连续性找两个函数值跨过目标水平的点。
+  recognition_cues:
+    - 题干要求“有解”，注释也说无需说明个数和单调性。
+    - 原函数含 $\ln\frac{x}{2-x}$ 和 $(x-1)^3$，天然围绕 $x=1$ 成对变化。
+    - 解析使用 $f(1)<-2$ 作为一端。
+    - 解析随后转到 $1<x<2$，按关于横坐标为 $1$ 的点中心对称理解。
+  normalization_moves:
+    - 先保留源文本。
+    - 先用关于横坐标为 $1$ 的点中心对称解释右侧取点。
+    - 把目标水平 $-2$ 移到 0 后理解结尾写法。
+  common_failures:
+    - 把解析中的 $f(x)=0$ 直接当成题目目标。
+    - 没看出图像关于横坐标为 $1$ 的点中心对称。
+  similar_practice_query: x=1中心对称 ln x/(2-x) (x-1)^3 区间搬移 连续性找点
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

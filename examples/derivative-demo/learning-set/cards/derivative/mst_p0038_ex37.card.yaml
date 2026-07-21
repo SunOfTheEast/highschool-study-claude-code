@@ -1,0 +1,164 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0038_ex37
+content_revision_id: mst_p0038_ex37-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0038_ex37.card.yaml
+stem: |-
+  已知 $x, y \in \mathbf{R}$，若 $x\cdot(e^x+\ln x+x)=1$，$y\cdot[2\ln y+\ln(\ln y)]=1$，其中 $\mathrm{e}=2.71828\cdots$ 是自然对数的底数，则 ( )
+  A. 0<x<1
+  B. xy=2
+  C. y-x>1
+  D. y-x<3/2
+answer: |-
+  ACD
+
+  把两条方程都同构到 $h(t)=e^t+t$，用单调性推出 $x=\ln(1/x)$、$\ln y=1/y$，从而 $y=1/x$，再用 $x$ 的夹逼判断各选项。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 第一条方程可写成同一个函数值相等。
+      max_score: 1
+    - step_id: step_2
+      description: 由 $h$ 的严格单调性确定 $x$ 的位置，判断 A。
+      max_score: 1
+    - step_id: step_3
+      description: 第二条方程同构后给出 $y$ 与 $x$ 的关系，判断 B。
+      max_score: 1
+    - step_id: step_4
+      description: 把第二条的根与第一条的根合并，得到 $xy$。
+      max_score: 1
+    - step_id: step_5
+      description: 用 $x$ 的粗定位判断 C、D。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 局部逼近与找点
+    subroute:
+      - 用 $h(t)=e^t+t$ 承接两条对数指数式
+      - 用 $1/2$ 与 $0.6$ 给根做估值
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $e^x+x=\ln\frac1x+e^{\ln(1/x)}$
+      - $e^{\ln(\ln y)}+\ln(\ln y)=e^{\ln(1/y)}+\ln(1/y)$
+    normalization_moves_used:
+      - 把 $\frac1x$ 写成 $e^{\ln(1/x)}$
+      - 把 $\ln y$ 与 $1/y$ 转成同一个 $u+\ln u=0$
+  fallback:
+    only_if_trace_shows:
+      - 若学生忽略 $\ln x$、$\ln y$、$\ln(\ln y)$ 的可代入条件，回补函数三要素与定义域。
+      - 若学生不会由 $h(u)=h(v)$ 且 $h$ 严格单调推出 $u=v$，回补导数单调极值基础。
+      - 若学生不会用 $1/2$、$0.6$ 夹住 $x+\ln x=0$ 的根，回补不等式工具基础。
+  detail_terms:
+    - $x+\ln x=0$
+    - $\frac1y=x$
+    - $y-x=\frac1x-x$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0038_ex37
+source_evidence:
+  source_refs:
+    - ref_id: page_0038
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0038/page_0038.md
+      role: problem_start
+      evidence: 例37题干、四个选项、解析与答案 ACD 均在 page_0038。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0038.png
+      inspected: true
+      notes: 页图核对：page_0038 顶部是例36续页；例37题头从本页中部开始。题干原文写 x,y in R，但式中含 \ln x、\ln y、\ln(\ln y)，按表达式定义域理解为 x>0,y>1。
+  source_context: 本卡只处理 page_0038 新起头的例37；page_0038 顶部例36解析续页不建卡。
+  source_influence:
+    - 以 page_0038 页图确认例37的题干、选项与答案。
+    - 定义域张力由页图和公式共同确认，作为转写 fidelity note 记录，不改变原题干文字。
+  source_discrepancies: []
+original_problem:
+  stem: 已知 $x, y \in \mathbf{R}$，若 $x\cdot(e^x+\ln x+x)=1$，$y\cdot[2\ln y+\ln(\ln y)]=1$，其中 $\mathrm{e}=2.71828\cdots$ 是自然对数的底数，则 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 0<x<1
+      text_latex: $0<x<1$
+    - label: B
+      text_raw: xy=2
+      text_latex: $xy=2$
+    - label: C
+      text_raw: y-x>1
+      text_latex: $y-x>1$
+    - label: D
+      text_raw: y-x<3/2
+      text_latex: $y-x<\frac{3}{2}$
+  answer: ACD
+  fidelity_notes:
+    - 源题写 $x,y\in\mathbf{R}$；因 $\ln x$、$\ln y$、$\ln(\ln y)$ 出现，实际可代入讨论的定义域为 $x>0,\ y>1$。
+solution:
+  source_solution_summary: 把两条方程都同构到 $h(t)=e^t+t$，用单调性推出 $x=\ln(1/x)$、$\ln y=1/y$，从而 $y=1/x$，再用 $x$ 的夹逼判断各选项。
+  key_steps:
+    - step_id: step_1
+      statement: 第一条方程可写成同一个函数值相等。
+      formula_trace:
+        from: $x(e^x+\ln x+x)=1$
+        to: $h(x)=h\left(\ln\frac1x\right)$，其中 $h(t)=e^t+t$
+        operation: 在 $x>0$ 下除以 $x$，得 $e^x+x=\frac1x-\ln x=\ln\frac1x+\frac1x$，再把 $\frac1x$ 写成 $e^{\ln(1/x)}$。
+        why: $e^t+t$ 能同时承接 $e^x+x$ 与 $e^{\ln(1/x)}+\ln(1/x)$。
+      source_ref: page_0038
+    - step_id: step_2
+      statement: 由 $h$ 的严格单调性确定 $x$ 的位置，判断 A。
+      formula_trace:
+        from: $h(x)=h\left(\ln\frac1x\right)$
+        to: $x=\ln\frac1x\Leftrightarrow x+\ln x=0$，且 $x\approx0.567\in(0,1)$
+        operation: 用 $h'(t)=e^t+1>0$ 得 $h$ 严格递增；再用 $t+\ln t$ 在 $(0,+\infty)$ 上递增定位零点。
+        why: 严格单调函数的函数值相等时，自变量相等。
+      source_ref: page_0038
+    - step_id: step_3
+      statement: 第二条方程同构后给出 $y$ 与 $x$ 的关系，判断 B。
+      formula_trace:
+        from: $y[2\ln y+\ln(\ln y)]=1$
+        to: $h\left(\ln\frac1y\right)=h(\ln(\ln y))\Rightarrow \frac1y=\ln y$
+        operation: 化为 $\ln y+\ln(\ln y)=\frac1y+\ln\frac1y$，再放入 $h(t)=e^t+t$ 中比较。
+        why: $h$ 严格递增，所以 $\ln(1/y)=\ln(\ln y)$，等价于 $1/y=\ln y$。
+      source_ref: page_0038
+    - step_id: step_4
+      statement: 把第二条的根与第一条的根合并，得到 $xy$。
+      formula_trace:
+        from: $\frac1y=\ln y$ 与 $x+\ln x=0$
+        to: $\frac1y+\ln\frac1y=0$，所以 $\frac1y=x$，$xy=1$
+        operation: 令 $u=1/y$，则 $u+\ln u=0$；该方程正根唯一，与 $x$ 相同。
+        why: 同一严格递增方程只能有一个正根，故 B 中的 $xy=2$ 错。
+      source_ref: page_0038
+    - step_id: step_5
+      statement: 用 $x$ 的粗定位判断 C、D。
+      formula_trace:
+        from: $y-x=\frac1x-x$，且 $x+\ln x=0$
+        to: $y-x>1$ 且 $y-x<\frac32$
+        operation: 由 $x+\ln x$ 递增且在 $1/2$、$0.6$ 两侧变号，得 $x\in(1/2,0.6)$；函数 $\frac1x-x$ 在正区间递减。
+        why: $x<0.6$ 给出 $\frac1x-x>\frac1{0.6}-0.6>1$；$x>1/2$ 给出 $\frac1x-x<2-\frac12=\frac32$。
+      source_ref: page_0038
+teaching_card:
+  student_title: 把两条方程同构成同一个 $h(t)$
+  what_it_trains: 训练看到 $e^x+x$、$\ln u+u$ 时主动构造 $h(t)=e^t+t$，再用单调性把隐藏变量关系拉出来。
+  recognition_cues:
+    - 题干同时出现 $e^x$、$\ln x$、$\ln(\ln y)$。
+    - 方程右侧可以整理出 $\ln(1/x)+1/x$ 或 $1/y+\ln(1/y)$。
+    - 选项关心 $xy$、$y-x$，暗示先找 $y=1/x$。
+  normalization_moves:
+    - 把 $\frac1x$ 改写为 $e^{\ln(1/x)}$。
+    - 把 $1/y=\ln y$ 改写成 $1/y+\ln(1/y)=0$。
+    - 用根的粗定位代替小数精算。
+  common_failures:
+    - 只看见 $x,y\in\mathbf{R}$，忘记对数式本身已经限制定义域。
+    - 从 $h(u)=h(v)$ 直接跳结论，却没有说明 $h$ 严格递增。
+    - 判断 D 时只记 $x<1$，没有用 $x>1/2$ 给出上界。
+  similar_practice_query: 同构估值 多选 $e^x+x$ $\ln x$ 根定位
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

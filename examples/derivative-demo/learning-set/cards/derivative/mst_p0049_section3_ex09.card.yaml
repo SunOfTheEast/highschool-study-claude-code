@@ -1,0 +1,190 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0049_section3_ex09
+content_revision_id: mst_p0049_section3_ex09-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0049_section3_ex09.card.yaml
+stem: |-
+  （2025 春 · 静安区高二期末 T17）设函数 $f(x)=e^x-ax$，$a\in\mathbf R$。
+  (1). 讨论 $y=f(x)$ 的单调性。
+  (2). 当 $x\ge0$ 时，$f(x)\ge(x+1)^2$ 恒成立，求 $a$ 的取值范围。
+answer: |-
+  (1) 当 $a\le0$ 时，$f(x)$ 在 $\mathbf R$ 上单调递增；当 $a>0$ 时，$f(x)$ 在 $(-\infty,\ln a)$ 上单调递减，在 $(\ln a,+\infty)$ 上单调递增。 (2) $a\le e-4$。
+
+  f'(x)=e^x-a。若 a<=0，则 f'(x)>0，函数在 R 上递增； 若 a>0，则 f'(x)=0 给 x=ln a，x<ln a 时导数为负， x>ln a 时导数为正，所以先减后增。第 (2) 问设 g(x)=e^x-ax-(x+1)^2。因 g(0)=0，只需在 x>0 上保证 g(x)>=0。写成 g(x)=x([(e^x-(x+1)^2)/x]-a)，令 h(x)=(e^x-(x+1)^2)/x。计算 h'(x)=((e^x-x-1)(x-1))/x^2；由于 x>0 时 e^x-x-1>0， h 在 (0,1) 减、在 (1,+infty) 增，最小值 h(1)=e-4。 因而恒成立等价于 a<=e-4。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 用导数按参数符号讨论单调性。
+      max_score: 1
+    - step_id: step_2
+      description: 当 $a>0$ 时找唯一临界点。
+      max_score: 1
+    - step_id: step_3
+      description: 把恒成立不等式转为辅助函数非负。
+      max_score: 1
+    - step_id: step_4
+      description: 在 $x>0$ 上分离参数。
+      max_score: 1
+    - step_id: step_5
+      description: 求 $h(x)$ 的最小值。
+      max_score: 1
+    - step_id: step_6
+      description: 由最小值给出参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 (1) 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 (2) 问
+        result: 见 source_solution_summary
+  method:
+    primary: 参变量分离
+    secondary:
+      - 切线放缩与凹凸性
+    subroute:
+      - 端点等号
+      - e^x-(x+1)^2 除以 x
+      - $e^x-x-1$ 非负
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $g(x)=e^x-ax-(x+1)^2$
+      - $h(x)=\frac{e^x-(x+1)^2}{x}$
+      - $h^{\prime}(x)=\frac{(e^x-x-1)(x-1)}{x^2}$
+    normalization_moves_used:
+      - 利用 $g(0)=0$，只在 $x>0$ 上分离参数。
+      - 将 $g(x)$ 写成 $x(h(x)-a)$。
+      - 把 $h^{\prime}$ 因式整理为 $(e^x-x-1)(x-1)/x^2$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生讨论单调性时漏掉 $a=0$，回补函数三要素与定义域。
+      - 若学生不知道第 (2) 问应先处理 x=0 再在 x>0 上除以 x，回补函数三要素与定义域。
+      - 若学生不能把 $g(x)$ 写成 $x(h(x)-a)$，回补代数恒等变形。
+      - 若学生无法由 $e^x-x-1>0$ 判断 $h^{\prime}$ 的符号，回补不等式工具基础。
+  detail_terms:
+    - $f^{\prime}(x)=e^x-a$
+    - $g(0)=0$
+    - $h(x)=(e^x-(x+1)^2)/x$
+    - $h_{\min}=e-4$
+parts: &a1
+  - label: (1)
+    text: 讨论 $y=f(x)$ 的单调性。
+  - label: (2)
+    text: 当 $x\ge0$ 时，$f(x)\ge(x+1)^2$ 恒成立，求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0049_section3_ex09
+source_evidence:
+  source_refs:
+    - ref_id: page_0049
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0049/page_0049.md
+      role: problem_start
+      evidence: lines 28-32 give 例 9 题干和第 (1) 问解析开头：f(x)=e^x-ax，讨论单调性，并开始按 a 分类。
+    - ref_id: page_0050
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0050/page_0050.md
+      role: continuation
+      evidence: lines 14-16 continue 例 9：a>0 时临界点 x=ln a；第 (2) 问构造 g 与 h，得 a<=h_min=e-4。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0049.png
+      inspected: true
+      notes: 页图下半部分确认例 9 题干和解析开头；第 (1) 问续到 page_0050。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0050.png
+      inspected: true
+      notes: 页图上半部分确认例 9 第 (1) 问续解和第 (2) 问完整解析；下方例 10 属下一题，未纳入本卡。
+  source_context: 例 9 题头在 page_0049，完整解析跨到 page_0050 顶部；page_0050 的“例 10”另起题头，不属于本卡。
+  source_influence:
+    - 第 (1) 问按源解由 $f^{\prime}(x)=e^x-a$ 分类。
+    - 第 (2) 问按源解利用 g(0)=0，把 g(x)>=0 化为 a 不超过 h(x) 的最小值。
+  source_discrepancies:
+    - page_0049 源解和页图可见处写“当 a<0”时 f 递增，随后讨论 a>0；a=0 未显式列出。数学上 a=0 时 $f^{\prime}(x)=e^x>0$，故本卡答案补为 a<=0 时递增。
+original_problem:
+  stem: （2025 春 · 静安区高二期末 T17）设函数 $f(x)=e^x-ax$，$a\in\mathbf R$。
+  parts: *a1
+  choices: []
+  answer: (1) 当 $a\le0$ 时，$f(x)$ 在 $\mathbf R$ 上单调递增；当 $a>0$ 时，$f(x)$ 在 $(-\infty,\ln a)$ 上单调递减，在 $(\ln a,+\infty)$ 上单调递增。 (2) $a\le e-4$。
+  fidelity_notes:
+    - 第 (2) 问因 x=0 时两边均为 1，实际参数约束来自 x>0。
+    - 源解未显式列出 a=0 的单调性，本卡按导数符号补全。
+solution:
+  source_solution_summary: f'(x)=e^x-a。若 a<=0，则 f'(x)>0，函数在 R 上递增； 若 a>0，则 f'(x)=0 给 x=ln a，x<ln a 时导数为负， x>ln a 时导数为正，所以先减后增。第 (2) 问设 g(x)=e^x-ax-(x+1)^2。因 g(0)=0，只需在 x>0 上保证 g(x)>=0。写成 g(x)=x([(e^x-(x+1)^2)/x]-a)，令 h(x)=(e^x-(x+1)^2)/x。计算 h'(x)=((e^x-x-1)(x-1))/x^2；由于 x>0 时 e^x-x-1>0， h 在 (0,1) 减、在 (1,+infty) 增，最小值 h(1)=e-4。 因而恒成立等价于 a<=e-4。
+  key_steps:
+    - step_id: step_1
+      statement: 用导数按参数符号讨论单调性。
+      formula_trace:
+        from: $f^{\prime}(x)=e^x-a$
+        to: 若 $a\le0$，则 $f^{\prime}(x)>0$，故 $f$ 在 $\mathbf R$ 上递增。
+        operation: 利用 $e^x>0$。
+        why: 非正参数不会让导数出现零点。
+      source_ref: page_0049
+    - step_id: step_2
+      statement: 当 $a>0$ 时找唯一临界点。
+      formula_trace:
+        from: $e^x-a=0$
+        to: $x=\ln a$
+        operation: 取对数解指数方程。
+        why: 导数由负变正，给出先减后增的单调性。
+      source_ref: page_0050
+    - step_id: step_3
+      statement: 把恒成立不等式转为辅助函数非负。
+      formula_trace:
+        from: $e^x-ax\ge(x+1)^2$
+        to: $g(x)=e^x-ax-(x+1)^2\ge0,\quad g(0)=0$
+        operation: 移项定义 $g(x)$。
+        why: x=0 是天然等号点，参数约束来自 x>0。
+      source_ref: page_0050
+    - step_id: step_4
+      statement: 在 $x>0$ 上分离参数。
+      formula_trace:
+        from: $g(x)=e^x-ax-(x+1)^2$
+        to: $g(x)=x\left(\frac{e^x-(x+1)^2}{x}-a\right)$
+        operation: 提取正因子 x。
+        why: 要让 $g(x)\ge0$ 对所有 x>0 成立，需要 $a\le h(x)$ 对所有 x>0 成立。
+      source_ref: page_0050
+    - step_id: step_5
+      statement: 求 $h(x)$ 的最小值。
+      formula_trace:
+        from: $h(x)=\frac{e^x-(x+1)^2}{x}$
+        to: $h^{\prime}(x)=\frac{(e^x-x-1)(x-1)}{x^2}$
+        operation: 商函数求导并因式整理。
+        why: $e^x-x-1>0$ 控制了导数符号只随 $x-1$ 变化。
+      source_ref: page_0050
+    - step_id: step_6
+      statement: 由最小值给出参数范围。
+      formula_trace:
+        from: $h$ 在 $(0,1)$ 减、在 $(1,+\infty)$ 增
+        to: $a\le h_{\min}=h(1)=e-4$
+        operation: 取 $x=1$ 处最小值。
+        why: 这是 $a\le h(x)$ 对所有 x>0 成立的充要条件。
+      source_ref: page_0050
+teaching_card:
+  student_title: 等号在 0，除出真正要压住的 h(x)
+  what_it_trains: 训练处理指数函数压二次式的恒成立参数题：先看端点等号，再在正半轴分离参数并求辅助函数最小值。
+  recognition_cues:
+    - 不等式只要求 $x\ge0$，且 x=0 两边相等。
+    - 参数 a 乘在 x 上，x>0 时可以除以 x 分离。
+    - 分离后出现 $e^x-(x+1)^2$，导数可整理出 $e^x-x-1$。
+  normalization_moves:
+    - 先设 $g(x)=f(x)-(x+1)^2$ 并检查 $g(0)=0$。
+    - 在 x>0 上写 $g=x(h-a)$。
+    - 对 $h$ 求导并整理成两个因子。
+    - 用 $h(1)=e-4$ 给出 $a$ 的上界。
+  common_failures:
+    - 直接除以 x 时忘记 x=0 是端点，需要单独说明。
+    - 把条件误写成 $a\ge h_{\min}$，方向反了。
+    - 第 (1) 问遗漏 a=0 或把 $\ln a$ 用在 a<=0 情形。
+  similar_practice_query: e^x - ax >= (x+1)^2 x>=0 参数范围 h(x) 最小值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 源解可见文字遗漏 a=0 的单调性；按 $f^{\prime}(x)=e^x-a$ 的符号补全为 a<=0 时递增。

@@ -1,0 +1,218 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0157_sin_ln_binomial_compare_ex04
+content_revision_id: mst_p0157_sin_ln_binomial_compare_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0157_sin_ln_binomial_compare_ex04.card.yaml
+stem: |-
+  （2024 · 运城月考）已知 $a=1+\sin0.1$，$b=1+\ln1.1$，$c=1.01^{10}$，则（  ）
+  A. $a<b<c$
+  B. $b<a<c$
+  C. $c<a<b$
+  D. $b<c<a$
+answer: |
+  B
+
+  先比较 $a,c$。
+  源解把
+  \[
+  c=1.01^{10}
+  \]
+  做二项式展开并取前两项，得到
+  \[
+  c>1+\mathrm C_{10}^1\cdot0.01=1.1.
+  \]
+  又由 $\sin x<x\ (x>0)$，
+  \[
+  a=1+\sin0.1<1+0.1=1.1,
+  \]
+  故 $a<c$。
+  再比较 $a,b$。设
+  \[
+  f(x)=\sin x-\ln(1+x),\quad x\in(0,1),
+  \]
+  源解给出
+  \[
+  f(x)>x-\frac{x^3}{6}-\left(x-\frac{x^2}{2}+\frac{x^3}{3}\right)
+    =\frac{x^2}{2}-\frac{x^3}{2}>0.
+  \]
+  代入 $x=0.1$ 得 $\sin0.1>\ln1.1$，即 $a>b$。
+  所以
+  \[
+  b<a<c,
+  \]
+  选 B。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 二项式展开给出 $c$ 的下界。
+      max_score: 1
+    - step_id: step_2
+      description: 用 $\sin x<x$ 得到 $a<1.1$。
+      max_score: 1
+    - step_id: step_3
+      description: 用泰勒差值证明 $\sin0.1>\ln1.1$。
+      max_score: 1
+    - step_id: step_4
+      description: 合并不等式并对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level: []
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 拟合与夹逼
+    subroute:
+      - 二项式截断下界
+      - $\sin x<x$ 线性上界
+      - $\sin x-\ln(1+x)$ 泰勒差值
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 三角复合结构
+      - 指对复合结构
+    evidence:
+      - 三个量分别通过二项式、三角上界、对数上界落到统一点位。
+      - $f(x)=\sin x-\ln(1+x)$ 的符号决定 $a,b$ 顺序。
+    normalization_moves_used:
+      - $1.01^{10}$ 截断为 $1+10\times0.01+\cdots$。
+      - $1+\sin0.1<1.1$。
+      - $\sin x-\ln(1+x)>\frac{x^2}{2}-\frac{x^3}{2}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会二项式截断保向，回补代数恒等变形。
+      - 若学生混淆 $\sin x$ 与 $\ln(1+x)$ 的大小来源，回补三角函数基础。
+      - 若学生不熟悉对数泰勒上界，回补指数对数基础。
+  detail_terms:
+    - $a=1+\sin0.1$
+    - $b=1+\ln1.1$
+    - $c=1.01^{10}$
+    - $\sin x-\ln(1+x)$
+    - $b<a<c$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0157_sin_ln_binomial_compare_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0157_ex04_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0157/page_0157.md
+      role: problem_start
+      evidence: 例 4 题干、A-D 选项与解析都在 page_0157。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0157.png
+      inspected: true
+      notes: 已核对例 4 的题干、选项、解析与答案 B。
+  source_context: 例 4 是本页例 3 续解后的第一道新题，采用“先卡 $1.1$，再证 $\sin0.1>\ln1.1$”的双段比较。
+  source_influence:
+    - 保留源解链条：先证 $c>1.1$、再证 $a<1.1$，得到 $a<c$。
+    - 保留源解对 $\sin x-\ln(1+x)$ 的泰勒差值放缩。
+  source_discrepancies:
+    - 页图与 markdown 的解析首行写作 $1.01^{10}=(1+0.1)^{10}$，但后续二项式展开项均是 $0.01^k$ 且结论用到 $1+10\times0.01=1.1$；本卡按可验证展开链保留结论并记录该书写不一致。
+original_problem:
+  stem: （2024 · 运城月考）已知 $a=1+\sin0.1$，$b=1+\ln1.1$，$c=1.01^{10}$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+    - label: B
+      text_raw: $b<a<c$
+      text_latex: $b<a<c$
+    - label: C
+      text_raw: $c<a<b$
+      text_latex: $c<a<b$
+    - label: D
+      text_raw: $b<c<a$
+      text_latex: $b<c<a$
+  answer: B
+  fidelity_notes:
+    - 例 4 信息均在 page_0157，本题不跨页。
+    - 源解通过 $\sin x>\ln(1+x)\ (0<x<1)$ 给出 $a>b$。
+solution:
+  source_solution_summary: |
+    先比较 $a,c$。
+    源解把
+    \[
+    c=1.01^{10}
+    \]
+    做二项式展开并取前两项，得到
+    \[
+    c>1+\mathrm C_{10}^1\cdot0.01=1.1.
+    \]
+    又由 $\sin x<x\ (x>0)$，
+    \[
+    a=1+\sin0.1<1+0.1=1.1,
+    \]
+    故 $a<c$。
+    再比较 $a,b$。设
+    \[
+    f(x)=\sin x-\ln(1+x),\quad x\in(0,1),
+    \]
+    源解给出
+    \[
+    f(x)>x-\frac{x^3}{6}-\left(x-\frac{x^2}{2}+\frac{x^3}{3}\right)
+      =\frac{x^2}{2}-\frac{x^3}{2}>0.
+    \]
+    代入 $x=0.1$ 得 $\sin0.1>\ln1.1$，即 $a>b$。
+    所以
+    \[
+    b<a<c,
+    \]
+    选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 二项式展开给出 $c$ 的下界。
+      formula_trace:
+        from: $c=1.01^{10}$
+        to: $c>1+\mathrm C_{10}^1\cdot0.01=1.1$
+        operation: 对 $(1+0.01)^{10}$ 取前两项并舍去正高次项。
+        why: 建立与 $a$ 的共同比较锚点 $1.1$。
+      source_ref: page_0157_ex04_problem
+    - step_id: step_2
+      statement: 用 $\sin x<x$ 得到 $a<1.1$。
+      formula_trace:
+        from: $a=1+\sin0.1$
+        to: $a<1+0.1=1.1$
+        operation: 在正区间应用 $\sin x<x$。
+        why: 与 step_1 合并可得 $a<c$。
+      source_ref: page_0157_ex04_problem
+    - step_id: step_3
+      statement: 用泰勒差值证明 $\sin0.1>\ln1.1$。
+      formula_trace:
+        from: $f(x)=\sin x-\ln(1+x)$
+        to: $f(x)>\frac{x^2}{2}-\frac{x^3}{2}>0\ (0<x<1)$
+        operation: 按源解分别用 $\sin x$ 下界与 $\ln(1+x)$ 上界。
+        why: 直接给出 $a>b$。
+      source_ref: page_0157_ex04_problem
+    - step_id: step_4
+      statement: 合并不等式并对应选项。
+      formula_trace:
+        from: $a<c$ 且 $a>b$
+        to: $b<a<c$
+        operation: 传递比较。
+        why: 与选项 B 一致。
+      source_ref: page_0157_ex04_problem
+teaching_card:
+  student_title: 先卡住 1.1，再拆分比较
+  what_it_trains: 训练遇到“1+小量”时先找公共锚点，再用局部展开完成细分排序。
+  recognition_cues:
+    - 题干有 $1+\sin0.1$、$1+\ln1.1$、$1.01^{10}$。
+    - 三个量都围绕 $1$ 附近波动。
+    - 选项是线性次序。
+  normalization_moves:
+    - 把 $c$ 先压到 $>1.1$。
+    - 把 $a$ 先压到 $<1.1$。
+    - 再单独比较 $\sin0.1$ 与 $\ln1.1$。
+  common_failures:
+    - 把 $1.01^{10}$ 错当成 $(1+0.1)^{10}$ 直接放大。
+    - 只比较 $a$ 与 $c$，漏掉 $b$ 的定位。
+    - 泰勒差值展开到不同阶次导致符号不稳。
+  similar_practice_query: 1+sin0.1 1+ln1.1 1.01^10 比大小 泰勒
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 例 4 的 $(1+0.1)^{10}$ 写法与后续 $0.01^k$ 展开不一致，已记录 source_discrepancies；结论 $b<a<c$ 可由同页链条稳定复核。

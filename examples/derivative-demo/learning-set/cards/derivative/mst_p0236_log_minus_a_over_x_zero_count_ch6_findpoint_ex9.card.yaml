@@ -1,0 +1,243 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0236_log_minus_a_over_x_zero_count_ch6_findpoint_ex9
+content_revision_id: mst_p0236_log_minus_a_over_x_zero_count_ch6_findpoint_ex9-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0236_log_minus_a_over_x_zero_count_ch6_findpoint_ex9.card.yaml
+stem: 讨论函数 $f(x)=\ln x-\frac ax$ 的零点个数。
+answer: |-
+  $a<-\frac1e$ 时无零点；$a=-\frac1e$ 或 $a\geqslant0$ 时有 1 个零点；$-\frac1e<a<0$ 时有 2 个零点。
+
+  $f'(x)=\frac1x+\frac a{x^2}=\frac{x+a}{x^2}$。当 $a>0$ 时 $f'(x)>0$，$f$ 单调递增，且 $f(1)=-a<0$， $f(e^a)=a-a/e^a>0$，故有 1 个零点。当 $a=0$ 时， $f(x)=\ln x$，有 1 个零点 $x=1$。当 $a<0$ 时，临界点 $x=-a$，$f$ 在 $(0,-a)$ 递减，在 $(-a,+\infty)$ 递增， 最小值为 $\ln(-a)+1$。若 $a=-1/e$，恰有 1 个零点 $x=1/e$；若 $-1/e<a<0$，最小值小于 0，有 2 个零点，其中 右侧由 $f(1)>0$ 夹出，左侧用等效零点 $f(x)=\frac1{\sqrt{x}}(\sqrt{x}\ln x-a/\sqrt{x})$ 和 $\sqrt{x}\ln x\geqslant-2/e$ 取 $x=a^2$ 夹出；若 $a<-1/e$，最小值大于 0，无零点。
+rubric:
+  max_score: 10
+  criteria:
+    - step_id: step_1
+      description: 先求导，确定参数如何影响单调性。
+      max_score: 1
+    - step_id: step_2
+      description: $a>0$ 时单调递增并夹出一个零点。
+      max_score: 1
+    - step_id: step_3
+      description: $a=0$ 是对数函数本身。
+      max_score: 1
+    - step_id: step_4
+      description: $a<0$ 时有一个极小值点。
+      max_score: 1
+    - step_id: step_5
+      description: 极小值等于 0 时只有一个零点。
+      max_score: 1
+    - step_id: step_6
+      description: 极小值小于 0 时有两个零点。
+      max_score: 1
+    - step_id: step_7
+      description: 右侧零点由 $x=1$ 夹出。
+      max_score: 1
+    - step_id: step_8
+      description: 左侧零点用等效零点取小点。
+      max_score: 1
+    - step_id: step_9
+      description: 取 $x=a^2$ 完成左侧存在性。
+      max_score: 1
+    - step_id: step_10
+      description: 极小值大于 0 时无零点。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: main
+        goal: 零点/极值点分析
+        target: 第 main 问
+        result: $a<-\frac1e$ 无零点；$a=-\frac1e$ 或 $a\geqslant0$ 一个零点；$-\frac1e<a<0$ 两个零点。
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 含参数分类讨论
+      - 同构变形与换元法
+      - 充分/必要性探路
+    subroute:
+      - 参数分段零点计数
+      - 单调函数一零点
+      - 单谷双零点
+      - 等效零点法
+      - 提出 $1/\sqrt{x}$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $\ln x-\frac ax$
+      - $f^\prime(x)=\frac{x+a}{x^2}$
+      - $x=-a$
+      - $\ln(-a)+1$
+      - $\sqrt{x}\ln x-\frac a{\sqrt{x}}$
+    normalization_moves_used:
+      - 按 $a>0,a=0,a<0$ 分支。
+      - 在 $a<0$ 分支用极小值 $\ln(-a)+1$ 判断根数。
+      - 右侧用 $f(1)>0$。
+      - 左侧提出 $1/\sqrt{x}$，用 $\sqrt{x}\ln x$ 下界取点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会对 $-a/x$ 求导，回补导数运算与几何意义。
+      - 若学生不会由 $f^\prime=(x+a)/x^2$ 分参数，回补导数单调极值基础。
+      - 若学生不会解 $\ln(-a)+1$ 与 0 的关系，回补指数对数基础。
+      - 若学生不会用极小值判断零点个数，回补方程根分布与韦达。
+      - 若学生不会提出 $1/\sqrt{x}$，回补代数恒等变形。
+      - 若学生不熟悉 $\sqrt{x}\ln x$ 的下界，回补不等式工具基础。
+  detail_terms:
+    - $\ln x-a/x$
+    - $f^\prime=(x+a)/x^2$
+    - $x=-a$
+    - $\ln(-a)+1$
+    - $a=-1/e$
+    - $\sqrt{x}\ln x$
+    - $x=a^2$
+    - 参数分段零点计数
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0236_log_minus_a_over_x_zero_count_ch6_findpoint_ex9
+source_evidence:
+  source_refs:
+    - ref_id: page_0236_ex9_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0236/page_0236.md
+      role: problem_start
+      evidence: page_0236 底部给出例9题头：讨论 $f(x)=\ln x-\frac ax$ 的零点个数。
+    - ref_id: page_0236_ex9_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0236/page_0236.md
+      role: solution
+      evidence: page_0236 底部给出 $f^\prime(x)=1/x+a/x^2$，并完成 $a>0$ 时单调递增、取 $1$ 与 $e^a$ 夹出一个零点。
+    - ref_id: page_0237_ex9_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0237/page_0237.md
+      role: continuation
+      evidence: page_0237 顶部续完例9：讨论 $a=0$、$a<0$，由极小值 $\ln(-a)+1$ 分出 $a=-1/e$、$-1/e<a<0$、$a<-1/e$。
+    - ref_id: page_0237_ex10_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0237/page_0237.md
+      role: local_context
+      evidence: page_0237 随后另起例10和新小节，属于下一批，本卡只取其前方的例9续解。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0236.png
+      inspected: true
+      notes: 已核对页图：例9题头和 $a>0$ 分支位于 page_0236 底部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0237.png
+      inspected: true
+      notes: 已核对页图：page_0237 顶部为例9续解，例10另起。
+  source_context: 本卡处理 page_0236 起头、page_0237 顶部续完的例9；page_0237 例10留给下一批。
+  source_influence:
+    - 保留 source 的参数三分：$a>0$、$a=0$、$a<0$。
+    - 保留 source 对 $a<0$ 的极小值判断：$f(-a)=\ln(-a)+1$。
+    - 保留 source 的左侧等效零点取点：用 $\sqrt{x}\ln x\geqslant-2/e$，取 $x=a^2$。
+  source_discrepancies: []
+original_problem:
+  stem: 讨论函数 $f(x)=\ln x-\frac ax$ 的零点个数。
+  parts: *a1
+  choices: []
+  answer: $a<-\frac1e$ 时无零点；$a=-\frac1e$ 或 $a\geqslant0$ 时有 1 个零点；$-\frac1e<a<0$ 时有 2 个零点。
+  fidelity_notes:
+    - 单问零点个数题，无选项。
+    - 函数定义域为 $x>0$。
+solution:
+  source_solution_summary: $f'(x)=\frac1x+\frac a{x^2}=\frac{x+a}{x^2}$。当 $a>0$ 时 $f'(x)>0$，$f$ 单调递增，且 $f(1)=-a<0$， $f(e^a)=a-a/e^a>0$，故有 1 个零点。当 $a=0$ 时， $f(x)=\ln x$，有 1 个零点 $x=1$。当 $a<0$ 时，临界点 $x=-a$，$f$ 在 $(0,-a)$ 递减，在 $(-a,+\infty)$ 递增， 最小值为 $\ln(-a)+1$。若 $a=-1/e$，恰有 1 个零点 $x=1/e$；若 $-1/e<a<0$，最小值小于 0，有 2 个零点，其中 右侧由 $f(1)>0$ 夹出，左侧用等效零点 $f(x)=\frac1{\sqrt{x}}(\sqrt{x}\ln x-a/\sqrt{x})$ 和 $\sqrt{x}\ln x\geqslant-2/e$ 取 $x=a^2$ 夹出；若 $a<-1/e$，最小值大于 0，无零点。
+  key_steps:
+    - step_id: step_1
+      statement: 先求导，确定参数如何影响单调性。
+      formula_trace:
+        from: $f(x)=\ln x-\frac ax$
+        to: $f^\prime(x)=\frac1x+\frac a{x^2}=\frac{x+a}{x^2}$
+        operation: 求导并通分。
+        why: 零点个数由单调性和极值决定。
+      source_ref: page_0236_ex9_solution_start
+    - step_id: step_2
+      statement: $a>0$ 时单调递增并夹出一个零点。
+      formula_trace:
+        from: $a>0$
+        to: $f^\prime(x)>0$，$f(1)<0<f(e^a)$
+        operation: 用 $x>0$ 判断导数，并代两个点。
+        why: 单调递增加一次变号，恰有一个零点。
+      source_ref: page_0236_ex9_solution_start
+    - step_id: step_3
+      statement: $a=0$ 是对数函数本身。
+      formula_trace:
+        from: $a=0$
+        to: $f(x)=\ln x$，零点 $x=1$
+        operation: 代入参数。
+        why: 这是参数分界点，单独处理最清楚。
+      source_ref: page_0237_ex9_continuation
+    - step_id: step_4
+      statement: $a<0$ 时有一个极小值点。
+      formula_trace:
+        from: $f^\prime(x)=0$
+        to: $x=-a$，$f_{\min}=f(-a)=\ln(-a)+1$
+        operation: 解导数零点并代回。
+        why: 先降后升的函数，零点个数由最小值相对 0 的位置决定。
+      source_ref: page_0237_ex9_continuation
+    - step_id: step_5
+      statement: 极小值等于 0 时只有一个零点。
+      formula_trace:
+        from: $\ln(-a)+1=0$
+        to: $a=-\frac1e$，$x=\frac1e$
+        operation: 解指数对数方程。
+        why: 曲线恰好与 x 轴相切。
+      source_ref: page_0237_ex9_continuation
+    - step_id: step_6
+      statement: 极小值小于 0 时有两个零点。
+      formula_trace:
+        from: $\ln(-a)+1<0$
+        to: $-\frac1e<a<0$
+        operation: 把 $-a<1/e$ 解回参数。
+        why: 此时两侧都需要各找一个过轴点。
+      source_ref: page_0237_ex9_continuation
+    - step_id: step_7
+      statement: 右侧零点由 $x=1$ 夹出。
+      formula_trace:
+        from: $f(-a)<0,\ f(1)=-a>0$
+        to: $x_2\in(-a,1)$
+        operation: 介值定理。
+        why: $-1/e<a<0$ 时 $-a<1$。
+      source_ref: page_0237_ex9_continuation
+    - step_id: step_8
+      statement: 左侧零点用等效零点取小点。
+      formula_trace:
+        from: $f(x)=\ln x-\frac ax$
+        to: $\frac1{\sqrt{x}}(\sqrt{x}\ln x-\frac a{\sqrt{x}})$
+        operation: 提出 $1/\sqrt{x}$。
+        why: 把 $\ln x$ 与 $-a/x$ 调整成可比较的 $\sqrt{x}\ln x$ 和 $a/\sqrt{x}$。
+      source_ref: page_0237_ex9_continuation
+    - step_id: step_9
+      statement: 取 $x=a^2$ 完成左侧存在性。
+      formula_trace:
+        from: $\sqrt{x}\ln x\geqslant-\frac2e$
+        to: $x=a^2$ 时左侧可取正值，$x_1\in(a^2,-a)$
+        operation: 先解 $x=a^2e^2/4$，再取更小的 $a^2$。
+        why: $-1/e<a<0$ 保证 $a^2<-a$。
+      source_ref: page_0237_ex9_continuation
+    - step_id: step_10
+      statement: 极小值大于 0 时无零点。
+      formula_trace:
+        from: $\ln(-a)+1>0$
+        to: $a<-\frac1e$，无零点
+        operation: 解参数并结合最小值。
+        why: 先降后升但最低点仍高于 x 轴。
+      source_ref: page_0237_ex9_continuation
+teaching_card:
+  student_title: $\ln x-\frac ax$ 分三段看，负参数时用极小值定根数
+  what_it_trains: 训练含参对数函数的零点计数：先按参数改变单调结构，再用极值和取点证明根数。
+  recognition_cues:
+    - 导数通分后是 $(x+a)/x^2$，参数直接决定有没有极值点。
+    - $a<0$ 时临界点 $x=-a$ 在定义域内。
+    - 左侧取点要处理 $\ln x$ 和 $1/x$ 的竞争，适合提出 $1/\sqrt{x}$。
+  normalization_moves:
+    - 先分 $a>0,a=0,a<0$。
+    - $a<0$ 时算 $f(-a)=\ln(-a)+1$。
+    - 用 $a=-1/e$ 做临界分界。
+    - 两零点情形下右侧用 $x=1$，左侧用 $x=a^2$。
+  common_failures:
+    - 忽略 $x>0$，导致 $x=-a$ 的存在条件说错。
+    - 把 $-\frac1e<a<0$ 和 $a<-\frac1e$ 的根数说反。
+    - 只看极小值小于 0，没有证明两侧存在变号点。
+  similar_practice_query: lnx-a/x 零点个数 a<0 极小值 ln(-a)+1 sqrtx lnx a^2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

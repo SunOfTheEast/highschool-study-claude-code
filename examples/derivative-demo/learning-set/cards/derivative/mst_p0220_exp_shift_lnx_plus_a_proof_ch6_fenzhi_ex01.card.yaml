@@ -1,0 +1,203 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0220_exp_shift_lnx_plus_a_proof_ch6_fenzhi_ex01
+content_revision_id: mst_p0220_exp_shift_lnx_plus_a_proof_ch6_fenzhi_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0220_exp_shift_lnx_plus_a_proof_ch6_fenzhi_ex01.card.yaml
+stem: |-
+  （2024 · 贵阳模拟 T21）已知函数 $f(x)=e^{x-1}-\ln(x+a)+1$。
+  1. 设 $x=1$ 是 $f(x)$ 的极值点，求 $a$，并求 $f(x)$ 的单调区间。
+  2. 当 $a\leqslant3$ 时，证明 $f(x)>-1$。
+answer: |-
+  （1）$a=0$，$f(x)$ 在 $(0,1)$ 上单调递减，在 $(1,+\infty)$ 上单调递增；（2）证明见解析。
+
+  第一问求导 $f^{\prime}(x)=e^{x-1}-\frac1{x+a}$。因 $x=1$ 是极值点，$f^{\prime}(1)=0$，即 $1-\frac1{1+a}=0$，所以 $a=0$。此时 $f(x)=e^{x-1}-\ln x+1$，定义域 $(0,+\infty)$， 且 $f^{\prime}(x)=e^{x-1}-\frac1x$ 在 $(0,+\infty)$ 上单调递增， $f^{\prime}(1)=0$，故 $(0,1)$ 递减、$(1,+\infty)$ 递增。 第二问当 $a\leqslant3$ 且 $x>-a$ 时，有 $0<x+a\leqslant x+3$，因此只需证明 $e^{x-1}\geqslant\ln\frac{x+3}{e^2}$。source 用分而治之将左侧 与 $e^{x+3}/(x+3)$ 的最小值、右侧与 $\ln((x+3)/e^2)/((x+3)/e^2)$ 的最大值比较；左边取等点 $x=-2$，右边取等点 $x=e^3-3$，取等不一致，所以得到严格不等式 $f(x)>-1$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 由极值点条件求参数。
+      max_score: 1
+    - step_id: step_2
+      description: 确定第一问单调区间。
+      max_score: 1
+    - step_id: step_3
+      description: 第二问先把参数影响放大到最坏上界。
+      max_score: 1
+    - step_id: step_4
+      description: 把目标改写成上下函数比较。
+      max_score: 1
+    - step_id: step_5
+      description: 比较两侧最值并利用取等点错开。
+      max_score: 1
+    - step_id: step_6
+      description: 回到原函数结论。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 1 问
+        result: $a=0$，单调递减区间 $(0,1)$，递增区间 $(1,+\infty)$。
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 2 问
+        result: $a\leqslant3$ 时 $f(x)>-1$。
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 切线放缩与凹凸性
+      - 含参数分类讨论
+    subroute:
+      - 极值点条件
+      - 上下函数选取
+      - 错位 PS
+      - 取等点不一致
+      - $\frac{e^x}{x}$ 与 $\frac{\ln x}{x}$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+      - 非齐次结构
+    evidence:
+      - $e^{x-1}-\ln(x+a)+1$
+      - $e^{x-1}>\ln\frac{x+3}{e^2}$
+      - $\frac{e^{x+3}}{x+3}$ 与 $\frac{\ln((x+3)/e^2)}{(x+3)/e^2}$
+    normalization_moves_used:
+      - 由极值点导数为零先定参。
+      - 用 $a\leqslant3$ 把 $\ln(x+a)$ 放大成 $\ln(x+3)$。
+      - 把常数 2 吸进对数，制造上下函数。
+      - 用取等点错开得到严格不等式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由极值点推出 $f^{\prime}(1)=0$，回补导数运算与几何意义。
+      - 若学生没有检查 $\ln(x+a)$ 的定义域和单调性，回补函数三要素与定义域。
+      - 若学生不会把 $+2$ 写成对数内的 $/e^2$，回补指数对数基础。
+      - 若学生不理解“最值相等但取等点不一致”为什么给严格不等式，回补不等式工具基础。
+  detail_terms:
+    - $f^{\prime}(1)=0$
+    - $a=0$
+    - $\ln(x+a)\leqslant\ln(x+3)$
+    - $\ln\frac{x+3}{e^2}$
+    - 错位 PS
+    - 取等点不一致
+parts: &a1
+  - part_id: "1"
+    text: 设 $x=1$ 是 $f(x)$ 的极值点，求 $a$，并求 $f(x)$ 的单调区间。
+  - part_id: "2"
+    text: 当 $a\leqslant3$ 时，证明 $f(x)>-1$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0220_exp_shift_lnx_plus_a_proof_ch6_fenzhi_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0220_prev_discussion_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0220/page_0220.md
+      role: local_context
+      evidence: page_0220 页首是前文例题2/4的分而治之续解，不是本批新题头。
+    - ref_id: page_0220_ex01_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0220/page_0220.md
+      role: problem_start
+      evidence: page_0220 中部给出例1题头：$f(x)=e^{x-1}-\ln(x+a)+1$，两问分别求 $a$/单调区间并证明 $a\leqslant3$ 时 $f(x)>-1$。
+    - ref_id: page_0220_ex01_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0220/page_0220.md
+      role: solution
+      evidence: page_0220 例1解析完整给出 $a=0$、单调区间以及用分而治之证明 $f(x)>-1$。
+    - ref_id: page_0220_ex02_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0220/page_0220.md
+      role: local_context
+      evidence: 例1后进入例2题头，说明例1在 page_0220 闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0220.png
+      inspected: true
+      notes: 已核对页图：例1位于 page_0220 中下部，题头、两问和完整解析均在本页。
+  source_context: 本卡只处理 page_0220 例1；页首前文续解和页底例2只作为边界上下文。
+  source_influence:
+    - 保留 source 的第一问：由 $f^{\prime}(1)=0$ 得 $a=0$，再用 $f^{\prime}$ 单调递增判单调区间。
+    - 保留第二问的分而治之思路：先用 $a\leqslant3$ 放大为 $\ln(x+3)$，再把 $e^{x-1}\geqslant\ln\frac{x+3}{e^2}$ 转成上下函数比较。
+    - 取等点不一致是严格大于的来源：左侧在 $x=-2$ 取等，右侧在 $x=e^3-3$ 取等。
+  source_discrepancies:
+    - page_0220 markdown/图像中第二问中间比较项容易读成“$\geqslant e^3$”；按前后式与取等点，应为量级 $\frac1{e^3}$ 的上下函数比较。卡片保留 source 的证明意图：两侧最值相等但取等点不一致，从而严格成立。
+original_problem:
+  stem: （2024 · 贵阳模拟 T21）已知函数 $f(x)=e^{x-1}-\ln(x+a)+1$。
+  parts: *a1
+  choices: []
+  answer: （1）$a=0$，$f(x)$ 在 $(0,1)$ 上单调递减，在 $(1,+\infty)$ 上单调递增；（2）证明见解析。
+  fidelity_notes:
+    - 原题为两问解答题，无选项。
+    - 第一问代入 $a=0$ 后定义域为 $(0,+\infty)$。
+    - 第二问 source 的中间常数有 OCR/排印噪声，但取等点不一致的分而治之逻辑可确定。
+solution:
+  source_solution_summary: 第一问求导 $f^{\prime}(x)=e^{x-1}-\frac1{x+a}$。因 $x=1$ 是极值点，$f^{\prime}(1)=0$，即 $1-\frac1{1+a}=0$，所以 $a=0$。此时 $f(x)=e^{x-1}-\ln x+1$，定义域 $(0,+\infty)$， 且 $f^{\prime}(x)=e^{x-1}-\frac1x$ 在 $(0,+\infty)$ 上单调递增， $f^{\prime}(1)=0$，故 $(0,1)$ 递减、$(1,+\infty)$ 递增。 第二问当 $a\leqslant3$ 且 $x>-a$ 时，有 $0<x+a\leqslant x+3$，因此只需证明 $e^{x-1}\geqslant\ln\frac{x+3}{e^2}$。source 用分而治之将左侧 与 $e^{x+3}/(x+3)$ 的最小值、右侧与 $\ln((x+3)/e^2)/((x+3)/e^2)$ 的最大值比较；左边取等点 $x=-2$，右边取等点 $x=e^3-3$，取等不一致，所以得到严格不等式 $f(x)>-1$。
+  key_steps:
+    - step_id: step_1
+      statement: 由极值点条件求参数。
+      formula_trace:
+        from: $f^{\prime}(x)=e^{x-1}-\frac1{x+a}$
+        to: $f^{\prime}(1)=1-\frac1{1+a}=0\Rightarrow a=0$
+        operation: 代入极值点必要条件。
+        why: 可导函数在内点取极值时导数为 0。
+      source_ref: page_0220_ex01_solution
+    - step_id: step_2
+      statement: 确定第一问单调区间。
+      formula_trace:
+        from: $a=0,\ f^{\prime}(x)=e^{x-1}-\frac1x$
+        to: $f^{\prime}(x)$ 单调递增且 $f^{\prime}(1)=0$，故 $(0,1)$ 递减、$(1,+\infty)$ 递增
+        operation: 用 $f^{\prime}$ 的单调性和零点判号。
+        why: 完成第一问。
+      source_ref: page_0220_ex01_solution
+    - step_id: step_3
+      statement: 第二问先把参数影响放大到最坏上界。
+      formula_trace:
+        from: $a\leqslant3,\ x>-a$
+        to: $0<x+a\leqslant x+3,\ \ln(x+a)\leqslant\ln(x+3)$
+        operation: 利用对数单调性。
+        why: 证明更强的 $e^{x-1}+2>\ln(x+3)$ 即可。
+      source_ref: page_0220_ex01_solution
+    - step_id: step_4
+      statement: 把目标改写成上下函数比较。
+      formula_trace:
+        from: $e^{x-1}+2>\ln(x+3)$
+        to: $e^{x-1}>\ln\frac{x+3}{e^2}$
+        operation: 把常数 2 写进对数：$\ln(x+3)-2=\ln\frac{x+3}{e^2}$。
+        why: 制造 $\frac{e^u}{u}$ 与 $\frac{\ln u}{u}$ 的分而治之结构。
+      source_ref: page_0220_ex01_solution
+    - step_id: step_5
+      statement: 比较两侧最值并利用取等点错开。
+      formula_trace:
+        from: $\frac1{e^4}\frac{e^{x+3}}{x+3}$ 与 $\frac1{e^2}\frac{\ln((x+3)/e^2)}{(x+3)/e^2}$
+        to: 两侧最优值相等但左侧在 $x=-2$ 取等、右侧在 $x=e^3-3$ 取等
+        operation: 套用 $\frac{e^u}{u}\geqslant e$ 与 $\frac{\ln u}{u}\leqslant\frac1e$。
+        why: 最值相等但不能同时取等，所以原不等式严格成立。
+      source_ref: page_0220_ex01_solution
+    - step_id: step_6
+      statement: 回到原函数结论。
+      formula_trace:
+        from: $e^{x-1}>\ln\frac{x+3}{e^2}$ 与 $\ln(x+a)\leqslant\ln(x+3)$
+        to: $f(x)=e^{x-1}-\ln(x+a)+1>-1$
+        operation: 代回 $f(x)$ 并合并不等式。
+        why: 完成第二问证明。
+      source_ref: page_0220_ex01_solution
+teaching_card:
+  student_title: 把 $+2$ 吸进对数后做上下函数比较
+  what_it_trains: 训练两段式导数大题：先用极值点定参，再用分而治之证明指对不等式。
+  recognition_cues:
+    - 第一问给出“$x=1$ 是极值点”，可直接用导数为零。
+    - 第二问有 $a\leqslant3$ 和 $\ln(x+a)$，适合先替换成 $\ln(x+3)$。
+    - 出现 $e^{x-1}$ 对 $\ln(x+3)-2$，提示把常数塞进对数。
+  normalization_moves:
+    - 先求 $f^{\prime}$，不要直接猜 $a$。
+    - 把 $\ln(x+a)$ 放大为更难证明的 $\ln(x+3)$。
+    - 把 $e^{x-1}\geqslant\ln((x+3)/e^2)$ 改成 $\frac{e^u}{u}$ 与 $\frac{\ln u}{u}$ 的比较。
+  common_failures:
+    - 第二问忘记 $x>-a$，导致 $\ln(x+a)$ 的比较失效。
+    - 把非严格最值比较直接当成严格不等式，却没有说明取等点不一致。
+    - 看见 source 中间常数噪声后机械照抄，丢掉实际证明链路。
+  similar_practice_query: e^{x-1} ln(x+a) a<=3 分而治之 上下函数 取等点不一致
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 已按图像和数学链路校正 source 中间常数噪声；不影响题目答案和主要方法。

@@ -1,0 +1,138 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0192_sqrt_exp_fixed_point_param_range_ex21
+content_revision_id: mst_p0192_sqrt_exp_fixed_point_param_range_ex21-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0192_sqrt_exp_fixed_point_param_range_ex21.card.yaml
+stem: （2013·四川文）设函数 $f(x)=\sqrt{e^x+x-a}\ (a\in\mathbf{R})$，若存在 $b\in[0,1]$ 使 $f(f(b))=b$ 成立，则 $a$ 的取值范围是______。
+answer: |-
+  $[1,e]$
+
+  由题意 $f$ 在定义域内单调递增，故可用不动点定理： $f(f(x))=x$ 有解等价于 $f(x)=x$ 有解。题目给“存在 $b\in[0,1]$ 使 $f(f(b))=b$”，等价于 $f(x)=x$ 在 $[0,1]$ 内有解。由 $x=\sqrt{e^x+x-a}$ 得 $a=e^x-x^2+x=:g(x)$（$x\in[0,1]$）。于是 $g^{\prime}(x)=e^x-2x+1\ge0$，故 $g$ 在 $[0,1]$ 单调递增， $a$ 的可取值就是 $g([0,1])=[g(0),g(1)]=[1,e]$。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把稳定点条件转成不动点条件。
+      max_score: 1
+    - step_id: step_2
+      description: 由 $f(x)=x$ 分离参数。
+      max_score: 1
+    - step_id: step_3
+      description: 在 $[0,1]$ 上求 $g$ 的值域。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 参变量分离
+    secondary:
+      - 保值性与分治
+    subroute:
+      - 不动点
+      - 稳定点
+      - 区间值域反推参数
+  structure:
+    primary: 复合函数与不动点结构
+    secondary:
+      - 指对复合结构
+      - 根式函数结构
+    evidence:
+      - $f(f(b))=b$
+      - $x=\sqrt{e^x+x-a}$
+      - $a=e^x-x^2+x$
+      - $x\in[0,1]$
+    normalization_moves_used:
+      - 先用不动点定理把 $f(f(x))=x$ 降到 $f(x)=x$。
+      - 再把参数单独写成 $a=g(x)$。
+      - 最后用单调性把区间自变量映射成参数区间。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $f(f(x))=x$ 转成 $f(x)=x$，回补分段/复合/反函数基础。
+      - 若学生看不出“参数=函数值”这一步，回补代数恒等变形。
+      - 若学生不会用导数判断单调后取值域，回补导数单调极值基础。
+  detail_terms:
+    - $f(x)=\sqrt{e^x+x-a}$
+    - $f(f(x))=x$
+    - $a=e^x-x^2+x$
+    - $g^{\prime}(x)=e^x-2x+1$
+    - $[1,e]$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0192_sqrt_exp_fixed_point_param_range_ex21
+source_evidence:
+  source_refs:
+    - ref_id: page_0192_ex21_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0192/page_0192.md
+      role: problem_start
+      evidence: line 17 给出例21题头：$f(x)=\sqrt{e^x+x-a}$，条件是存在 $b\in[0,1]$ 使 $f(f(b))=b$。
+    - ref_id: page_0192_ex21_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0192/page_0192.md
+      role: solution
+      evidence: line 19 给出完整解析：由不动点定理转为 $f(x)=x$ 在 $[0,1]$ 有解，分离参数得 $a=g(x)$ 并用单调性求值域。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0192.png
+      inspected: true
+      notes: 已核对页图：题干、解析与答案区间均清晰，和 markdown 一致。
+  source_context: page_0192 上方先给出“不动点定理1”，例21直接调用该结论；本题未跨页。
+  source_influence:
+    - 保留源解主线：单调增下 $f(f(x))=x$ 与 $f(x)=x$ 等价。
+    - 保留“分离参数”步骤：$a=e^x-x^2+x=g(x)$。
+    - 保留在 $[0,1]$ 上用 $g$ 单调性取端点值求参数范围。
+  source_discrepancies: []
+original_problem:
+  stem: （2013·四川文）设函数 $f(x)=\sqrt{e^x+x-a}\ (a\in\mathbf{R})$，若存在 $b\in[0,1]$ 使 $f(f(b))=b$ 成立，则 $a$ 的取值范围是______。
+  parts: *a1
+  choices: []
+  answer: $[1,e]$
+  fidelity_notes:
+    - 源题是填空题，无选项。
+    - 答案区间在 source 解析末句直接给出。
+solution:
+  source_solution_summary: 由题意 $f$ 在定义域内单调递增，故可用不动点定理： $f(f(x))=x$ 有解等价于 $f(x)=x$ 有解。题目给“存在 $b\in[0,1]$ 使 $f(f(b))=b$”，等价于 $f(x)=x$ 在 $[0,1]$ 内有解。由 $x=\sqrt{e^x+x-a}$ 得 $a=e^x-x^2+x=:g(x)$（$x\in[0,1]$）。于是 $g^{\prime}(x)=e^x-2x+1\ge0$，故 $g$ 在 $[0,1]$ 单调递增， $a$ 的可取值就是 $g([0,1])=[g(0),g(1)]=[1,e]$。
+  key_steps:
+    - step_id: step_1
+      statement: 把稳定点条件转成不动点条件。
+      formula_trace:
+        from: 存在 $b\in[0,1]$ 使 $f(f(b))=b$
+        to: $f(x)=x$ 在 $[0,1]$ 有解
+        operation: 应用“单调增函数下 $f(f(x))=x$ 与 $f(x)=x$ 等价”的结论。
+        why: 降低复合方程难度，便于分离参数。
+      source_ref: page_0192_ex21_solution
+    - step_id: step_2
+      statement: 由 $f(x)=x$ 分离参数。
+      formula_trace:
+        from: $x=\sqrt{e^x+x-a}$
+        to: $a=e^x-x^2+x=:g(x)$
+        operation: 平方并整理到参数一侧。
+        why: 把“是否有解”改写成“参数属于函数值域”。
+      source_ref: page_0192_ex21_solution
+    - step_id: step_3
+      statement: 在 $[0,1]$ 上求 $g$ 的值域。
+      formula_trace:
+        from: $g^{\prime}(x)=e^x-2x+1$
+        to: $g$ 递增，$g([0,1])=[g(0),g(1)]=[1,e]$
+        operation: 导数判单调，端点取值。
+        why: 参数范围由对应自变量区间内的函数值域确定。
+      source_ref: page_0192_ex21_solution
+teaching_card:
+  student_title: 复合不动点先降阶，再分离参数
+  what_it_trains: 训练“先把复合方程降到不动点，再把参数改写为区间值域问题”的通用流程。
+  recognition_cues:
+    - 题干出现 $f(f(\cdot))$ 且函数单调。
+    - 目标是求参数范围。
+    - 可把方程改写成“参数 = 只含 $x$ 的表达式”。
+  normalization_moves:
+    - 先判是否可用不动点等价。
+    - 再分离参数形成 $a=g(x)$。
+    - 最后在给定区间上求 $g$ 的值域。
+  common_failures:
+    - 未使用等价定理，直接硬算复合方程。
+    - 平方后漏掉整理，参数没有被单独提出。
+    - 只算导数不回到端点值，导致范围不完整。
+  similar_practice_query: 单调函数 f(f(x))=x 等价 f(x)=x 参数范围 分离参数 g(x)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

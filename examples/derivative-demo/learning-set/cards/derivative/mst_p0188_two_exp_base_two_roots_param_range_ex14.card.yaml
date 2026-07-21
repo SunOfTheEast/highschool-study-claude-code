@@ -1,0 +1,136 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0188_two_exp_base_two_roots_param_range_ex14
+content_revision_id: mst_p0188_two_exp_base_two_roots_param_range_ex14-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0188_two_exp_base_two_roots_param_range_ex14.card.yaml
+stem: （2025 · 河南模拟 T14）若关于 $x$ 的方程 $(2^x-ae^x)2^x=-2e^{2x}$ 存在两个不等实根，则实数 $a$ 的取值范围是______。
+answer: |-
+  $(2\sqrt2,+\infty)$
+
+  原方程等价于 $a=\left(\frac2e\right)^x+2\left(\frac e2\right)^x$。令 $t=\left(\frac e2\right)^x>0$，则 $\left(\frac2e\right)^x=\frac1t$，从而 $a=\frac1t+2t$。由 AM-GM（或对勾函数最小值）得 $\frac1t+2t\ge2\sqrt2$，当且仅当 $t=\frac1{\sqrt2}$ 取等。此时对应唯一 $x$，只产生一个实根； 要有两个不等实根，必须严格大于最小值，故 $a\in(2\sqrt2,+\infty)$。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把原方程整理成“参数 = 指数和”形式。
+      max_score: 1
+    - step_id: step_2
+      description: 同构换元到对勾函数。
+      max_score: 1
+    - step_id: step_3
+      description: 求最小值并处理端点根数。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 数形结合
+    subroute:
+      - 对勾函数
+      - 参数判根数
+      - $t=\left(\frac e2\right)^x$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $a=\left(\frac2e\right)^x+2\left(\frac e2\right)^x$
+      - $a=\frac1t+2t$
+      - $a>2\sqrt2$
+    normalization_moves_used:
+      - 把双指数底式统一到一个中间变量。
+      - 把求根个数改成对勾函数水平线交点数。
+      - 用最小值点判断端点是否可取。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会做底数比值换元，回补指数对数基础。
+      - 若学生不会从最小值区分“一根/两根”，回补函数性质与图像。
+      - 若学生对 AM-GM 使用条件不稳，回补不等式工具基础。
+  detail_terms:
+    - $\left(\frac2e\right)^x$
+    - $\left(\frac e2\right)^x$
+    - $\frac1t+2t$
+    - $2\sqrt2$
+    - 两个不等实根
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0188_two_exp_base_two_roots_param_range_ex14
+source_evidence:
+  source_refs:
+    - ref_id: page_0188
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0188/page_0188.md
+      role: problem_start
+      evidence: page_0188 给出例14完整题干与解析：把原方程改写成 $a=\left(\frac2e\right)^x+2\left(\frac e2\right)^x$，令 $t=\left(\frac e2\right)^x>0$，再用 $\frac1t+2t\ge2\sqrt2$ 得参数范围。
+    - ref_id: page_0188_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0188/page_0188.md
+      role: local_context
+      evidence: 例14位于例13与例16之间，本题自身不跨页。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0188.png
+      inspected: true
+      notes: 页图核对通过：例14题干与解析文字一致，答案区间为开区间 $(2\sqrt2,+\infty)$。
+  source_context: 例14题头和解答都在 page_0188；page_0188 顶部例12续题仅作边界确认。
+  source_influence:
+    - 保留 source 的核心同构：$\left(\frac e2\right)^x=t$ 后化成对勾函数 $\frac1t+2t$。
+    - 保留“有两个不等实根”对端点取舍的判定。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 · 河南模拟 T14）若关于 $x$ 的方程 $(2^x-ae^x)2^x=-2e^{2x}$ 存在两个不等实根，则实数 $a$ 的取值范围是______。
+  parts: *a1
+  choices: []
+  answer: $(2\sqrt2,+\infty)$
+  fidelity_notes:
+    - 源题为填空题，无选项。
+    - 答案由 source 的对勾函数最小值与“两个不等实根”共同确定。
+solution:
+  source_solution_summary: 原方程等价于 $a=\left(\frac2e\right)^x+2\left(\frac e2\right)^x$。令 $t=\left(\frac e2\right)^x>0$，则 $\left(\frac2e\right)^x=\frac1t$，从而 $a=\frac1t+2t$。由 AM-GM（或对勾函数最小值）得 $\frac1t+2t\ge2\sqrt2$，当且仅当 $t=\frac1{\sqrt2}$ 取等。此时对应唯一 $x$，只产生一个实根； 要有两个不等实根，必须严格大于最小值，故 $a\in(2\sqrt2,+\infty)$。
+  key_steps:
+    - step_id: step_1
+      statement: 把原方程整理成“参数 = 指数和”形式。
+      formula_trace:
+        from: $(2^x-ae^x)2^x=-2e^{2x}$
+        to: $a=\left(\frac2e\right)^x+2\left(\frac e2\right)^x$
+        operation: 移项后同除 $e^x2^x$。
+        why: 把根问题变成给定 $a$ 与函数值方程的交点数问题。
+      source_ref: page_0188
+    - step_id: step_2
+      statement: 同构换元到对勾函数。
+      formula_trace:
+        from: $a=\left(\frac2e\right)^x+2\left(\frac e2\right)^x$
+        to: $a=\frac1t+2t,\ t=\left(\frac e2\right)^x>0$
+        operation: 设指数底统一变量 $t$。
+        why: 得到一元正变量最值模型。
+      source_ref: page_0188
+    - step_id: step_3
+      statement: 求最小值并处理端点根数。
+      formula_trace:
+        from: $a=\frac1t+2t$
+        to: $a\ge2\sqrt2$，且“两个不等实根”要求 $a>2\sqrt2$
+        operation: 用 $\frac1t+2t\ge2\sqrt2$，并区分等号情形仅一根。
+        why: 题目要求的是根数而非仅值域。
+      source_ref: page_0188
+teaching_card:
+  student_title: 双底指数先同构成对勾函数
+  what_it_trains: 训练把两个互逆底数的指数项合并为单变量对勾函数，并用最小值与根数要求判参数区间。
+  recognition_cues:
+    - 方程中同时出现 $\left(\frac2e\right)^x$ 与 $\left(\frac e2\right)^x$。
+    - 题目问“两个不等实根”的参数范围。
+    - 可直接设一个为 $t$，另一个就变成 $\frac1t$。
+  normalization_moves:
+    - 移项后先把 $a$ 单独写在一侧。
+    - 设 $t=\left(\frac e2\right)^x>0$。
+    - 用 $\frac1t+2t$ 最小值并剔除等号端点。
+  common_failures:
+    - 忘记 $t>0$，导致错误讨论。
+    - 只写 $a\ge2\sqrt2$，漏掉“两个不等实根”应开区间。
+    - 换元后把 $\left(\frac2e\right)^x$ 误写成 $2t$。
+  similar_practice_query: 对勾函数 指数换元 两个不等实根 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,193 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0255_ax_minus_sinx_over_cos3x_trig_substitution_parameter_ex3
+content_revision_id: mst_p0255_ax_minus_sinx_over_cos3x_trig_substitution_parameter_ex3-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0255_ax_minus_sinx_over_cos3x_trig_substitution_parameter_ex3.card.yaml
+stem: |-
+  （2023 · 甲卷理）已知 $f(x)=ax-\frac{\sin x}{\cos^3 x}$，$x\in(0,\frac{\pi}{2})$。
+  1. 若 $a=8$，讨论 $f(x)$ 的单调性。
+  2. 若 $f(x)<\sin2x$ 恒成立，求 $a$ 的取值范围。
+answer: |-
+  第(1)问：$f$ 在 $(0,\frac\pi4)$ 单调递增，在 $(\frac\pi4,\frac\pi2)$ 单调递减。第(2)问：$a\in(-\infty,3]$。
+
+  第(1)问在 $a=8$ 时求导，得到 $f^\prime(x)=\frac{(4\cos^2x+3)(2\cos^2x-1)}{\cos^4x}$， 因此以 $x=\frac\pi4$ 为分界先增后减。第(2)问构造 $g(x)=ax-\frac{\sin x}{\cos^3x}-\sin2x$，把 $g^\prime(x)$ 写成 $h(t)=a+2-4t+\frac2t-\frac3{t^2}$， 其中 $t=\cos^2x\in(0,1)$。因为 $h^\prime(t)=-\frac{2(t-1)(2t^2+2t+3)}{t^3}>0$， 所以 $h(t)<h(1)=a-3$。当 $a\le3$ 时 $g^\prime<0$，从而 $g(x)<g(0)=0$；当 $a>3$ 时 $h(1)>0$ 且 $t\to0$ 时 $h(t)\to-\infty$，于是靠近 $0$ 的一段有 $g^\prime>0$， 导致 $g(x)>0$，矛盾。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 第(1)问：把导数因式分解。
+      max_score: 1
+    - step_id: step_2
+      description: 第(1)问：用 $\cos x=\frac{\sqrt2}{2}$ 分段。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问：把目标不等式改成 $g(x)<0$。
+      max_score: 1
+    - step_id: step_4
+      description: 第(2)问：用 $t=\cos^2x$ 化简导函数。
+      max_score: 1
+    - step_id: step_5
+      description: 第(2)问：用 $h(t)$ 的单调性卡住 $a$。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 1 问
+        result: 先增后减，分界点 $x=\frac\pi4$。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $a\le3$。
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 显隐点探路
+      - 充分/必要性探路
+      - 含参数分类讨论
+    subroute:
+      - 三角换元 $t=\cos^2x$
+      - 导函数有理化
+      - 端点探路
+      - 参数反证
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 不等式工具结构
+      - 局部逼近结构
+    evidence:
+      - $\frac{\sin x}{\cos^3x}$
+      - $\sin2x$
+      - $t=\cos^2x$
+      - $h(t)=a+2-4t+\frac2t-\frac3{t^2}$
+    normalization_moves_used:
+      - 把 $\cos2x$ 统一成 $2\cos^2x-1$。
+      - 把三角导函数转成 $t$ 的有理函数。
+      - 用 $t\to0$ 和 $t=1$ 判断参数边界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求 $\frac{\sin x}{\cos^3x}$ 的导数，回补导数运算与几何意义。
+      - 若学生不会从 $2\cos^2x-1$ 判三角区间，回补三角函数基础。
+      - 若学生不会处理 $t$ 的有理函数单调性，回补导数单调极值基础。
+      - 若学生不知道端点趋势如何排除 $a>3$，回补函数性质与图像。
+  detail_terms:
+    - $\frac{\sin x}{\cos^3x}$
+    - $\sin2x$
+    - $t=\cos^2x$
+    - $h(t)=a+2-4t+\frac2t-\frac3{t^2}$
+    - $a=3$
+parts: &a1
+  - id: "1"
+    text: 若 $a=8$，讨论 $f(x)$ 的单调性。
+  - id: "2"
+    text: 若 $f(x)<\sin2x$ 恒成立，求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0255_ax_minus_sinx_over_cos3x_trig_substitution_parameter_ex3
+source_evidence:
+  source_refs:
+    - ref_id: page_0255_ex3_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0255/page_0255.md
+      role: problem_start
+      evidence: page_0255 给出例3题头：$f(x)=ax-\frac{\sin x}{\cos^3 x}$，$x\in(0,\frac\pi2)$；第(1)问 $a=8$ 讨论单调性，第(2)问 $f(x)<\sin2x$ 恒成立求 $a$。
+    - ref_id: page_0255_ex3_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0255/page_0255.md
+      role: solution
+      evidence: page_0255 例3解析用 $a=8$ 时的导数因式分解判单调；第(2)问构造 $g(x)=ax-\frac{\sin x}{\cos^3x}-\sin2x$，再令 $t=\cos^2x$ 化成 $h(t)$ 单调，结论 $a\le3$。
+    - ref_id: page_0255_ex3_note
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0255/page_0255.md
+      role: local_context
+      evidence: 例3后注释用 $\tan x\ge x+\frac13x^3$ 和 $\sin x\ge x-\frac16x^3$ 解释为什么边界是 $a=3$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0255.png
+      inspected: true
+      notes: 已核对页图：例3题干、解析和注释均在 page_0255 上闭合；例4另起于页底。
+  source_context: 本卡处理 page_0255 起头并在同页结束的例3；页底例4只作边界确认。
+  source_influence:
+    - 保留第(1)问导数因式分解 $(4\cos^2x+3)(2\cos^2x-1)/\cos^4x$。
+    - 保留第(2)问把 $g^\prime(x)$ 转成关于 $t=\cos^2x$ 的 $h(t)$。
+    - 保留边界 $a=3$ 的两侧论证：$a\le3$ 充分，$a>3$ 由近端增大反证。
+  source_discrepancies:
+    - type: corrected_formula_typo
+      source_ref: page_0255_ex3_solution
+      observed: source writes "因为 $4\cos2x+3>0$".
+      resolved_as: use $4\cos^2x+3>0$, matching the displayed factorization.
+      reason: The derivative factorization immediately before it contains $4\cos^2x+3$.
+    - type: corrected_substitution
+      source_ref: page_0255_ex3_solution
+      observed: source writes "令 $\cos2x=t,0<t<1$" but then derives $a+2-4t+2/t-3/t^2$.
+      resolved_as: use $t=\cos^2x$, $0<t<1$.
+      reason: Only $t=\cos^2x$ gives the displayed rational expression and domain.
+original_problem:
+  stem: （2023 · 甲卷理）已知 $f(x)=ax-\frac{\sin x}{\cos^3 x}$，$x\in(0,\frac{\pi}{2})$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问：$f$ 在 $(0,\frac\pi4)$ 单调递增，在 $(\frac\pi4,\frac\pi2)$ 单调递减。第(2)问：$a\in(-\infty,3]$。
+  fidelity_notes:
+    - 无选项。
+    - source 第(2)问换元符号按公式链修正为 $t=\cos^2x$。
+solution:
+  source_solution_summary: 第(1)问在 $a=8$ 时求导，得到 $f^\prime(x)=\frac{(4\cos^2x+3)(2\cos^2x-1)}{\cos^4x}$， 因此以 $x=\frac\pi4$ 为分界先增后减。第(2)问构造 $g(x)=ax-\frac{\sin x}{\cos^3x}-\sin2x$，把 $g^\prime(x)$ 写成 $h(t)=a+2-4t+\frac2t-\frac3{t^2}$， 其中 $t=\cos^2x\in(0,1)$。因为 $h^\prime(t)=-\frac{2(t-1)(2t^2+2t+3)}{t^3}>0$， 所以 $h(t)<h(1)=a-3$。当 $a\le3$ 时 $g^\prime<0$，从而 $g(x)<g(0)=0$；当 $a>3$ 时 $h(1)>0$ 且 $t\to0$ 时 $h(t)\to-\infty$，于是靠近 $0$ 的一段有 $g^\prime>0$， 导致 $g(x)>0$，矛盾。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问：把导数因式分解。
+      formula_trace:
+        from: $f(x)=8x-\frac{\sin x}{\cos^3x}$
+        to: $f^\prime(x)=\frac{(4\cos^2x+3)(2\cos^2x-1)}{\cos^4x}$
+        operation: 求导并整理成可判号的因式。
+        why: 只剩 $2\cos^2x-1$ 决定导数符号。
+      source_ref: page_0255_ex3_solution
+    - step_id: step_2
+      statement: 第(1)问：用 $\cos x=\frac{\sqrt2}{2}$ 分段。
+      formula_trace:
+        from: $2\cos^2x-1$
+        to: $0<x<\frac\pi4$ 时 $f^\prime>0$，$\frac\pi4<x<\frac\pi2$ 时 $f^\prime<0$
+        operation: 在 $(0,\frac\pi2)$ 上按 $\cos x$ 大小判号。
+        why: 得到单调区间。
+      source_ref: page_0255_ex3_solution
+    - step_id: step_3
+      statement: 第(2)问：把目标不等式改成 $g(x)<0$。
+      formula_trace:
+        from: $f(x)<\sin2x$
+        to: $g(x)=ax-\frac{\sin x}{\cos^3x}-\sin2x<0$
+        operation: 移项构造差函数。
+        why: 恒成立求参转为控制差函数符号。
+      source_ref: page_0255_ex3_solution
+    - step_id: step_4
+      statement: 第(2)问：用 $t=\cos^2x$ 化简导函数。
+      formula_trace:
+        from: $g^\prime(x)=a-\frac{3-2\cos^2x}{\cos^4x}-2\cos2x$
+        to: $h(t)=a+2-4t+\frac2t-\frac3{t^2}$
+        operation: 令 $t=\cos^2x$，并用 $\cos2x=2t-1$。
+        why: 三角复合导数被压成一个有理函数。
+      source_ref: page_0255_ex3_solution
+    - step_id: step_5
+      statement: 第(2)问：用 $h(t)$ 的单调性卡住 $a$。
+      formula_trace:
+        from: $h^\prime(t)=-\frac{2(t-1)(2t^2+2t+3)}{t^3}>0$
+        to: $a\le3$ 时 $g^\prime<0$；$a>3$ 时靠近 $0$ 有 $g(x)>0$
+        operation: 比较 $h(t)$ 与 $h(1)$，再用端点趋势反证。
+        why: 边界 $a=3$ 由 $h(1)$ 精确给出。
+      source_ref: page_0255_ex3_solution
+teaching_card:
+  student_title: 把三角导函数换成 $t=\cos^2x$ 来卡参数
+  what_it_trains: 训练看到 $\sin x/\cos^3x$ 和 $\sin2x$ 后，把导函数统一到 $\cos^2x$，再用一个有理函数的单调性完成求参。
+  recognition_cues:
+    - 题目同时出现 $\frac{\sin x}{\cos^3x}$ 与 $\sin2x$。
+    - 导数里出现 $\cos^2x$、$\cos^4x$ 和 $\cos2x$。
+    - 参数边界来自 $t=1$，而反例来自 $t\to0$。
+  normalization_moves:
+    - 第(1)问先把导数整理成因式，不要只看复杂分式。
+    - 第(2)问统一用 $t=\cos^2x$，不要误把 $\cos2x$ 当作换元变量。
+    - 求出 $h^\prime(t)>0$ 后，立刻比较 $h(t)$ 与 $h(1)$。
+  common_failures:
+    - 把 source 中的 $\cos2x=t$ 照抄，导致后面公式对不上。
+    - 只证明 $a\le3$ 充分，漏掉 $a>3$ 时靠近 $0$ 的反例。
+    - 第(1)问忘记 $x\in(0,\frac\pi2)$，把 $\cos x$ 判号搞反。
+  similar_practice_query: 三角复合 cos^2x换元 sinx/cos3x sin2x 参数范围 端点探路
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

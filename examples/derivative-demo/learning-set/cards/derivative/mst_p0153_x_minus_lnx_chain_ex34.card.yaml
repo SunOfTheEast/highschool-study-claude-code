@@ -1,0 +1,225 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0153_x_minus_lnx_chain_ex34
+content_revision_id: mst_p0153_x_minus_lnx_chain_ex34-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0153_x_minus_lnx_chain_ex34.card.yaml
+stem: |-
+  （2025春·无锡校级月考）已知 $a,b,c\in(1,+\infty)$，且 $a-\ln a-1=e^{-1}$，$b-\ln b-2=e^{-2}$，$c-\ln c-4=e^{-4}$，其中 $e$ 是自然对数的底数，则（  ）
+  A. $a<b<c$
+  B. $b<a<c$
+  C. $b<c<a$
+  D. $c<b<a$
+answer: |
+  A
+
+  由题意可化为
+  \[
+  a-\ln a=e^{-1}+1,\quad
+  b-\ln b=e^{-2}+2,\quad
+  c-\ln c=e^{-4}+4.
+  \]
+  令
+  \[
+  f(x)=e^{-x}+x,
+  \]
+  则
+  \[
+  f^{\prime}(x)=1-e^{-x}>0\quad(x>0),
+  \]
+  所以
+  \[
+  f(1)<f(2)<f(4),
+  \]
+  即
+  \[
+  a-\ln a<b-\ln b<c-\ln c.
+  \]
+
+  再令
+  \[
+  g(x)=x-\ln x.
+  \]
+  因 $a,b,c>1$ 且
+  \[
+  g^{\prime}(x)=1-\frac1x>0\quad(x>1),
+  \]
+  得
+  \[
+  g(a)<g(b)<g(c)\Rightarrow a<b<c.
+  \]
+  故选 A。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 先把三条条件统一到 $x-\ln x$ 右端常数链。
+      max_score: 1
+    - step_id: step_2
+      description: 比较右端常数链。
+      max_score: 1
+    - step_id: step_3
+      description: 把函数值链回译成变量链。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 通过同构函数链比较 $a,b,c$。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - 右端参数链先排
+      - 双函数回译
+      - 同构函数比大小
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+    evidence:
+      - 核心量均是 $x-\ln x$ 结构，右端又可写成 $e^{-t}+t$。
+      - 解法依赖两次“函数单调 -> 顺序回译”。
+    normalization_moves_used:
+      - 把三式改写成 $g(a),g(b),g(c)$ 比较。
+      - 引入 $f(t)=e^{-t}+t$ 比较右端常数。
+      - 利用 $a,b,c>1$ 切换到 $g$ 的递增区间。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f^{\prime}(x)=1-e^{-x}$ 判增，回补导数单调极值基础。
+      - 若学生忽视 $a,b,c>1$ 导致误用 $g$ 单调性，回补函数三要素与定义域。
+      - 若学生无法完成“函数值链到变量链”回译，回补函数性质与图像。
+  detail_terms:
+    - $f(x)=e^{-x}+x$
+    - $g(x)=x-\ln x$
+    - $x>1$ 递增
+    - $a<b<c$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0153_x_minus_lnx_chain_ex34
+source_evidence:
+  source_refs:
+    - ref_id: page_0153_ex34_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0153/page_0153.md
+      role: problem_start
+      evidence: 例34题干与A-D选项完整出现在page_0153。
+    - ref_id: page_0153_ex34_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0153/page_0153.md
+      role: solution
+      evidence: 解析先比 $e^{-1}+1,e^{-2}+2,e^{-4}+4$，再用 $g(x)=x-\ln x$ 在 $x>1$ 上单调递增得 $a<b<c$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0153.png
+      inspected: true
+      notes: 已核对页图：例34完整，答案A清晰。
+  source_context: 例34紧接例33，属于“把参数关系化到同构函数比较链”的连续训练题。
+  source_influence:
+    - 保留双函数链：先比较 $f(x)=e^{-x}+x$，再回译到 $g(x)=x-\ln x$。
+    - 保留条件 $a,b,c>1$ 保障 $g$ 的单调区间有效。
+    - 保留结论 $a<b<c$，选A。
+  source_discrepancies: []
+original_problem:
+  stem: （2025春·无锡校级月考）已知 $a,b,c\in(1,+\infty)$，且 $a-\ln a-1=e^{-1}$，$b-\ln b-2=e^{-2}$，$c-\ln c-4=e^{-4}$，其中 $e$ 是自然对数的底数，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+    - label: B
+      text_raw: $b<a<c$
+      text_latex: $b<a<c$
+    - label: C
+      text_raw: $b<c<a$
+      text_latex: $b<c<a$
+    - label: D
+      text_raw: $c<b<a$
+      text_latex: $c<b<a$
+  answer: A
+  fidelity_notes:
+    - 题目为单选，源解析末尾“故选A”。
+    - 解析中的“同构函数”表述保留为方法标签来源。
+solution:
+  source_solution_summary: |
+    由题意可化为
+    \[
+    a-\ln a=e^{-1}+1,\quad
+    b-\ln b=e^{-2}+2,\quad
+    c-\ln c=e^{-4}+4.
+    \]
+    令
+    \[
+    f(x)=e^{-x}+x,
+    \]
+    则
+    \[
+    f^{\prime}(x)=1-e^{-x}>0\quad(x>0),
+    \]
+    所以
+    \[
+    f(1)<f(2)<f(4),
+    \]
+    即
+    \[
+    a-\ln a<b-\ln b<c-\ln c.
+    \]
+
+    再令
+    \[
+    g(x)=x-\ln x.
+    \]
+    因 $a,b,c>1$ 且
+    \[
+    g^{\prime}(x)=1-\frac1x>0\quad(x>1),
+    \]
+    得
+    \[
+    g(a)<g(b)<g(c)\Rightarrow a<b<c.
+    \]
+    故选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 先把三条条件统一到 $x-\ln x$ 右端常数链。
+      formula_trace:
+        from: $a-\ln a-1=e^{-1}$，$b-\ln b-2=e^{-2}$，$c-\ln c-4=e^{-4}$
+        to: $a-\ln a=e^{-1}+1$，$b-\ln b=e^{-2}+2$，$c-\ln c=e^{-4}+4$
+        operation: 移项标准化。
+        why: 左端统一为同一函数形式。
+      source_ref: page_0153_ex34_solution
+    - step_id: step_2
+      statement: 比较右端常数链。
+      formula_trace:
+        from: 令 $f(x)=e^{-x}+x$
+        to: $f(1)<f(2)<f(4)$
+        operation: 由 $f^{\prime}(x)=1-e^{-x}>0\ (x>0)$ 判递增。
+        why: 得到 $a-\ln a<b-\ln b<c-\ln c$。
+      source_ref: page_0153_ex34_solution
+    - step_id: step_3
+      statement: 把函数值链回译成变量链。
+      formula_trace:
+        from: $g(a)<g(b)<g(c)$，其中 $g(x)=x-\ln x$
+        to: $a<b<c$
+        operation: 用 $g^{\prime}(x)=1-\\frac1x>0\ (x>1)$ 的保序性。
+        why: 完成选项匹配。
+      source_ref: page_0153_ex34_solution
+teaching_card:
+  student_title: 先排右端，再回译左端变量
+  what_it_trains: 训练“参数链比较 + 同构函数回译”的两段式流程，避免在 $x-\ln x$ 上直接硬比较。
+  recognition_cues:
+    - 多条条件都含 $x-\ln x$。
+    - 右端是 $e^{-1}+1,e^{-2}+2,e^{-4}+4$ 这类可统一比较的常数。
+    - 题设给出 $a,b,c>1$。
+  normalization_moves:
+    - 把等式先写成 $g(a),g(b),g(c)$。
+    - 引入 $f(t)=e^{-t}+t$ 排序右端。
+    - 再用 $g$ 在 $(1,+\infty)$ 上递增回译。
+  common_failures:
+    - 直接把 $e^{-1},e^{-2},e^{-4}$ 单独比较，忽略“+1,+2,+4”。
+    - 忘记验证 $g$ 的适用区间。
+    - 拿到 $g(a)<g(b)<g(c)$ 后未回到 $a,b,c$ 顺序。
+  similar_practice_query: x-lnx 同构函数 e^{-x}+x 参数链 比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,177 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0223_a_lnx_minus_x2_param_range_ch6_fenzhi_ex07
+content_revision_id: mst_p0223_a_lnx_minus_x2_param_range_ch6_fenzhi_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0223_a_lnx_minus_x2_param_range_ch6_fenzhi_ex07.card.yaml
+stem: 已知函数 $f(x)=a\ln x-x^2-1$，$a\in\mathbf R$。若不等式 $f(x)\leqslant e^x-a$ 恒成立，求实数 $a$ 的取值范围。
+answer: |-
+  $0\leqslant a\leqslant e+2$。
+
+  原不等式等价于 $a(1+\ln x)\leqslant e^x+x^2+1$ 对任意 $x>0$ 恒成立。若 $a<0$，当 $x\to0^+$ 时 $a(1+\ln x)\to+\infty$，而右边趋向 2，矛盾，所以必须 $a\geqslant0$。当 $a\geqslant0$ 时，将不等式两侧除以 $x>0$： $\frac{e^x}{x}+x+\frac1x\geqslant ae\frac{\ln(ex)}{ex}$。 左侧记为 $g(x)$，source 给出 $g_{\min}=g(1)=e+2$；右侧 $ae\frac{\ln(ex)}{ex}$ 的最大值在 $ex=e$ 即 $x=1$ 处取得，值为 $a$。取等点一致，因此要恒成立必须且只需 $a\leqslant e+2$。又 当 $a>e+2$ 时取 $x=1$ 得 $f(1)=-2>e-a$，与题设矛盾。综上 $0\leqslant a\leqslant e+2$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先把恒成立不等式移成参数乘法。
+      max_score: 1
+    - step_id: step_2
+      description: 排除 $a<0$。
+      max_score: 1
+    - step_id: step_3
+      description: 除以 $x$，进入上下函数比较。
+      max_score: 1
+    - step_id: step_4
+      description: 比较左右最值。
+      max_score: 1
+    - step_id: step_5
+      description: 用 $x=1$ 验证必要性。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: main
+        goal: 求参数范围
+        target: 第 main 问
+        result: $0\leqslant a\leqslant e+2$
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 参变量分离
+      - 充分/必要性探路
+    subroute:
+      - 上下函数选取
+      - 取等点一致
+      - 除以 $x$
+      - $\frac{e^x}{x}+x+\frac1x$
+      - $\frac{\ln(ex)}{ex}$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - $a(1+\ln x)\leqslant e^x+x^2+1$
+      - $\frac{e^x}{x}+x+\frac1x\geqslant ae\frac{\ln(ex)}{ex}$
+      - $x=1$ 是左右共同的边界点。
+    normalization_moves_used:
+      - 把参数集中成 $a(1+\ln x)$。
+      - 用端点极限排除 $a<0$。
+      - 除以 $x$，把 $\ln x+1$ 改写成 $\ln(ex)$。
+      - 通过左右最值同点取等定参。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能把 $a\ln x$ 与 $-a$ 合并成 $a(1+\ln x)$，回补代数恒等变形。
+      - 若学生忽略 $x\to0^+$ 对 $a<0$ 的排除，回补函数三要素与定义域。
+      - 若学生不会处理 $\frac{\ln(ex)}{ex}$ 的最大值，回补指数对数基础。
+      - 若学生只给充分性而没有用 $x=1$ 排除 $a>e+2$，回补不等式工具基础。
+  detail_terms:
+    - $a(1+\ln x)$
+    - $\frac{e^x}{x}+x+\frac1x$
+    - $ae\frac{\ln(ex)}{ex}$
+    - $x=1$
+    - 取等点一致
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0223_a_lnx_minus_x2_param_range_ch6_fenzhi_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0223_ex06_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0223/page_0223.md
+      role: local_context
+      evidence: page_0223 页首是 page_0222 例6续解，不是本卡题头。
+    - ref_id: page_0223_ex07_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0223/page_0223.md
+      role: problem_start
+      evidence: page_0223 中下部给出例7题头：$f(x)=a\ln x-x^2-1$，若 $f(x)\leqslant e^x-a$ 恒成立，求 $a$ 的取值范围。
+    - ref_id: page_0223_ex07_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0223/page_0223.md
+      role: solution
+      evidence: page_0223 例7解析将不等式化为 $e^x+x^2+1\geqslant a(1+\ln x)$，再做分而治之，结论 $0\leqslant a\leqslant e+2$。
+    - ref_id: page_0223_ex08_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0223/page_0223.md
+      role: local_context
+      evidence: 例7后进入考点3和例8题头，说明例7在本页闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0223.png
+      inspected: true
+      notes: 已核对页图：例7位于 page_0223 中下部，题头与解析完整，结论为 $0\leqslant a\leqslant e+2$。
+  source_context: 本卡处理 page_0223 例7；页首例6续解与页底例8只作为边界上下文。
+  source_influence:
+    - 保留 source 的必要性：若 $a<0$，令 $x\to0^+$ 时 $a(1+\ln x)\to+\infty$，不可能恒成立，故 $a\geqslant0$。
+    - 保留 source 的分而治之：除以 $x$ 后比较 $\frac{e^x}{x}+x+\frac1x$ 与 $ae\frac{\ln(ex)}{ex}$。
+    - 保留取等一致：左右最值都在 $x=1$ 取得，因此边界 $a=e+2$ 可达。
+  source_discrepancies: []
+original_problem:
+  stem: 已知函数 $f(x)=a\ln x-x^2-1$，$a\in\mathbf R$。若不等式 $f(x)\leqslant e^x-a$ 恒成立，求实数 $a$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $0\leqslant a\leqslant e+2$。
+  fidelity_notes:
+    - 单问求参题，无选项。
+    - 定义域由 $\ln x$ 决定为 $x>0$。
+solution:
+  source_solution_summary: 原不等式等价于 $a(1+\ln x)\leqslant e^x+x^2+1$ 对任意 $x>0$ 恒成立。若 $a<0$，当 $x\to0^+$ 时 $a(1+\ln x)\to+\infty$，而右边趋向 2，矛盾，所以必须 $a\geqslant0$。当 $a\geqslant0$ 时，将不等式两侧除以 $x>0$： $\frac{e^x}{x}+x+\frac1x\geqslant ae\frac{\ln(ex)}{ex}$。 左侧记为 $g(x)$，source 给出 $g_{\min}=g(1)=e+2$；右侧 $ae\frac{\ln(ex)}{ex}$ 的最大值在 $ex=e$ 即 $x=1$ 处取得，值为 $a$。取等点一致，因此要恒成立必须且只需 $a\leqslant e+2$。又 当 $a>e+2$ 时取 $x=1$ 得 $f(1)=-2>e-a$，与题设矛盾。综上 $0\leqslant a\leqslant e+2$。
+  key_steps:
+    - step_id: step_1
+      statement: 先把恒成立不等式移成参数乘法。
+      formula_trace:
+        from: $a\ln x-x^2-1\leqslant e^x-a$
+        to: $a(1+\ln x)\leqslant e^x+x^2+1$
+        operation: 移项并合并含 $a$ 项。
+        why: 参数只出现在一侧，便于判断符号和求范围。
+      source_ref: page_0223_ex07_solution
+    - step_id: step_2
+      statement: 排除 $a<0$。
+      formula_trace:
+        from: $a(1+\ln x)\leqslant e^x+x^2+1$
+        to: $a<0$ 时 $x\to0^+$ 左侧趋向 $+\infty$，不可能恒成立
+        operation: 看定义域端点极限。
+        why: source 写“易知 $a\geqslant0$”，这里补出原因。
+      source_ref: page_0223_ex07_solution
+    - step_id: step_3
+      statement: 除以 $x$，进入上下函数比较。
+      formula_trace:
+        from: $e^x+x^2+1\geqslant a(1+\ln x)$
+        to: $\frac{e^x}{x}+x+\frac1x\geqslant ae\frac{\ln(ex)}{ex}$
+        operation: 两侧除以 $x>0$，并把 $1+\ln x$ 写成 $\ln(ex)$。
+        why: 右侧变成 $\ln u/u$，左侧变成有明确最小值的上函数。
+      source_ref: page_0223_ex07_solution
+    - step_id: step_4
+      statement: 比较左右最值。
+      formula_trace:
+        from: $G(x)=\frac{e^x}{x}+x+\frac1x$，$H(x)=ae\frac{\ln(ex)}{ex}$
+        to: $G_{\min}=G(1)=e+2$，$H_{\max}=H(1)=a$
+        operation: 分别使用基础函数极值。
+        why: 取等点一致，边界可以直接由 $a\leqslant e+2$ 给出。
+      source_ref: page_0223_ex07_solution
+    - step_id: step_5
+      statement: 用 $x=1$ 验证必要性。
+      formula_trace:
+        from: $a>e+2$
+        to: $f(1)=-2>e-a$，矛盾
+        operation: 代入取等点。
+        why: 排除超过边界的参数，完成求参。
+      source_ref: page_0223_ex07_solution
+teaching_card:
+  student_title: 把 $a(1+\ln x)$ 除成 $\ln(ex)/(ex)$ 来夹参
+  what_it_trains: 训练含参恒成立中的分而治之：先判断参数符号，再把指对式除成一组同点取等的上下函数。
+  recognition_cues:
+    - 题里有 $a\ln x$ 和右边的 $-a$，可以合并成 $a(1+\ln x)$。
+    - 出现 $1+\ln x$ 时，可以写成 $\ln(ex)$。
+    - 左右边界都在 $x=1$，说明这是“取等一致”的求参题。
+  normalization_moves:
+    - 先移项集中参数。
+    - 用 $x\to0^+$ 判断 $a$ 不能为负。
+    - 除以 $x$ 后分别找左最小、右最大。
+  common_failures:
+    - 没处理 $a<0$，直接除式求出 $a\leqslant e+2$。
+    - 把 $\ln x+1$ 忘记写成 $\ln(ex)$，导致右侧无法套 $\ln u/u$。
+    - 只看特殊点 $x=1$，没有说明为什么其他 $x$ 都成立。
+  similar_practice_query: a lnx - x^2 -1 <= e^x-a 参数范围 ln(ex)/(ex) 分而治之
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

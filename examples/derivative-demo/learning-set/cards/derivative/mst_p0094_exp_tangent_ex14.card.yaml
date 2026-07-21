@@ -1,0 +1,193 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0094_exp_tangent_ex14
+content_revision_id: mst_p0094_exp_tangent_ex14-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0094_exp_tangent_ex14.card.yaml
+stem: |-
+  （2025 北京二中考前模拟 T6）已知过点 $A(a,0)$ 作曲线 $y=(1-x)e^x$ 的切线有且仅有 1 条，则 $a=$ （  ）
+  A. $-3$
+  B. $3$
+  C. $-3$ 或 $1$
+  D. $3$ 或 $1$
+answer: |
+  C
+
+  设切点为 $(t,(1-t)e^t)$，则 $f'(x)=-xe^x$，切线方程为
+  $y-(1-t)e^t=-te^t(x-t)$。代入 $A(a,0)$ 得
+  $-e^t+te^t=-te^t(a-t)$，整理为 $t^2-(a+1)t+1=0$。
+  只有一条切线时，该二次方程有两个相等的实根，于是
+  $\Delta=(a+1)^2-4=a^2+2a-3=0$，解得 $a=-3$ 或 $a=1$，选 C。
+  图像法中，$f''(x)=-(x+1)e^x$，拐点在 $x=-1$，拐点切线为
+  $y=(x+3)/e$；它与 $x$ 轴交于 $(-3,0)$，曲线与 $x$ 轴交于 $(1,0)$，
+  这两类边界点恰好只引一条切线。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 设切点并写切线方程。
+      max_score: 1
+    - step_id: step_2
+      description: 把切线过 $A(a,0)$ 化成二次方程。
+      max_score: 1
+    - step_id: step_3
+      description: 用重根条件求 $a$。
+      max_score: 1
+    - step_id: step_4
+      description: 用拐点切线边界解释两个答案。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 数形结合
+      - 局部逼近与找点
+    subroute:
+      - 过点切线条数
+      - 切点参数化
+      - 重根判定
+      - 拐点切线界定
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $t^2-(a+1)t+1=0$ 将切线条数转为切点参数根数。
+      - $\Delta=0$ 对应唯一切线。
+      - $y=(x+3)/e$ 与 $x$ 轴交于 $a=-3$，曲线零点给出 $a=1$。
+    normalization_moves_used:
+      - 设切点 $t$ 而不是把 $a$ 当切点。
+      - 将“有且仅有 1 条”转成二次方程重根。
+      - 用曲线零点和拐点切线零点复核选项。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求 $(1-x)e^x$ 的导数，回补导数运算与几何意义。
+      - 若学生代入 $A(a,0)$ 后符号混乱，回补代数恒等变形。
+      - 若学生不知道唯一切线对应重根，回补方程根分布与韦达。
+      - 若学生不理解拐点切线边界，回补函数性质与图像。
+  detail_terms:
+    - $y=(1-x)e^x$
+    - 过点 $A(a,0)$ 的唯一切线
+    - $t^2-(a+1)t+1=0$
+    - $\Delta=0$
+    - $y=(x+3)/e$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0094_exp_tangent_ex14
+source_evidence:
+  source_refs:
+    - ref_id: page_0094
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0094/page_0094.md
+      role: problem_start
+      evidence: lines 46-52 give 例 14 题头、题干、A-D 选项 and the first line of 法一; the solution continues on page_0095.
+    - ref_id: page_0095
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0095/page_0095.md
+      role: continuation
+      evidence: lines 12-20 complete 法一, give 法二 using the inflection tangent, show the figure, and conclude C.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0094.png
+      inspected: true
+      notes: 已核对 page_0094 底部例 14 题头、题干、A-D 选项和法一开头；本页只到切线方程左端，解析跨页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0095.png
+      inspected: true
+      notes: 已核对 page_0095 顶部为例 14 续解，包含二次方程、判别式、拐点切线 $y=(x+3)/e$、图像和答案 C；后续例 15 另起题头。
+  source_context: 本题承接前文“拐点切线界定”区域模型，用 $x$ 轴上的点 $A(a,0)$ 何时只有一条切线来定位曲线交点和拐点切线交点。
+  source_influence:
+    - 保留源页法一：设切点 $t$，得到 $t^2-(a+1)t+1=0$，唯一切线对应判别式为 $0$。
+    - 保留源页法二：函数与 $x$ 轴交点 $a=1$、拐点切线与 $x$ 轴交点 $a=-3$。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 北京二中考前模拟 T6）已知过点 $A(a,0)$ 作曲线 $y=(1-x)e^x$ 的切线有且仅有 1 条，则 $a=$ （  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $-3$
+      text_latex: $-3$
+    - label: B
+      text_raw: $3$
+      text_latex: $3$
+    - label: C
+      text_raw: $-3$ 或 $1$
+      text_latex: $-3$ 或 $1$
+    - label: D
+      text_raw: $3$ 或 $1$
+      text_latex: $3$ 或 $1$
+  answer: C
+  fidelity_notes:
+    - 题头和选项在 page_0094 底部，完整解析和图像在 page_0095 顶部。
+    - page_0095 后续两个例 15 是独立题头，未并入本卡。
+solution:
+  source_solution_summary: |
+    设切点为 $(t,(1-t)e^t)$，则 $f'(x)=-xe^x$，切线方程为
+    $y-(1-t)e^t=-te^t(x-t)$。代入 $A(a,0)$ 得
+    $-e^t+te^t=-te^t(a-t)$，整理为 $t^2-(a+1)t+1=0$。
+    只有一条切线时，该二次方程有两个相等的实根，于是
+    $\Delta=(a+1)^2-4=a^2+2a-3=0$，解得 $a=-3$ 或 $a=1$，选 C。
+    图像法中，$f''(x)=-(x+1)e^x$，拐点在 $x=-1$，拐点切线为
+    $y=(x+3)/e$；它与 $x$ 轴交于 $(-3,0)$，曲线与 $x$ 轴交于 $(1,0)$，
+    这两类边界点恰好只引一条切线。
+  key_steps:
+    - step_id: step_1
+      statement: 设切点并写切线方程。
+      formula_trace:
+        from: |
+          $f(x)=(1-x)e^x,\quad f'(x)=-xe^x,\quad T=(t,(1-t)e^t)$
+        to: |
+          $y-(1-t)e^t=-te^t(x-t)$
+        operation: 用切点函数值和切点处导数写点斜式切线。
+        why: 切线条数由切点参数 $t$ 的可能取值决定。
+      source_ref: page_0094
+    - step_id: step_2
+      statement: 把切线过 $A(a,0)$ 化成二次方程。
+      formula_trace:
+        from: |
+          $0-(1-t)e^t=-te^t(a-t)$
+        to: |
+          $-e^t+te^t=-te^t(a-t),\qquad t^2-(a+1)t+1=0$
+        operation: 代入点 $A(a,0)$，消去 $e^t$ 后展开移项。
+        why: 一个实根对应一个切点；题目要求有且仅有一个切点。
+      source_ref: page_0095
+    - step_id: step_3
+      statement: 用重根条件求 $a$。
+      formula_trace:
+        from: |
+          $t^2-(a+1)t+1=0\text{ 有两个相等的实数根}$
+        to: |
+          $\Delta=(a+1)^2-4=a^2+2a-3=0,\qquad a=-3\text{ 或 }a=1$
+        operation: 令判别式为 $0$ 并解方程。
+        why: 二次方程重根时只有一个切点参数，即只有一条切线。
+      source_ref: page_0095
+    - step_id: step_4
+      statement: 用拐点切线边界解释两个答案。
+      formula_trace:
+        from: |
+          $f''(x)=-(x+1)e^x,\quad x_{\text{拐}}=-1,\quad f(1)=0$
+        to: |
+          $y=\frac{x+3}{e},\quad (-3,0)\text{ 为拐点切线与 }x\text{ 轴交点},\quad (1,0)\text{ 为曲线与 }x\text{ 轴交点}$
+        operation: 求拐点切线和曲线零点。
+        why: 在这两个边界点处，多条切线合并为唯一切线。
+      source_ref: page_0095
+teaching_card:
+  student_title: 唯一切线就是切点方程的重根
+  what_it_trains: 训练把外点引切线条数转化为切点参数方程根数，并用拐点切线边界解释重根位置。
+  recognition_cues:
+    - 题干说“过点 $A(a,0)$ 作切线有且仅有 1 条”，提示切点参数方程只有一个解。
+    - 曲线是 $(1-x)e^x$，导数很快变成 $-xe^x$，适合直接写切线。
+    - 选项只给 $a$ 的离散值，通常来自曲线交点或拐点切线交点。
+  normalization_moves:
+    - 设切点为 $(t,(1-t)e^t)$。
+    - 代入 $A(a,0)$，整理出 $t^2-(a+1)t+1=0$。
+    - 令判别式为 $0$，得到 $a=-3$ 或 $1$。
+  common_failures:
+    - 把题目中的 $a$ 当成切点横坐标。
+    - 从 $-e^t+te^t=-te^t(a-t)$ 整理二次方程时漏掉常数项 $1$。
+    - 只找到曲线与 $x$ 轴交点 $a=1$，漏掉拐点切线与 $x$ 轴交点 $a=-3$。
+  similar_practice_query: $(1-x)e^x$ 过 $A(a,0)$ 唯一切线 重根 拐点切线
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0094-page_0095 图片与 markdown 对例 14 跨页边界、选项、完整解析和答案 C 一致，无需用户拍板。

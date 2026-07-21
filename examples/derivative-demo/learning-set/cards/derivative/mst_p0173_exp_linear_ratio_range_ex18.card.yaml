@@ -1,0 +1,203 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0173_exp_linear_ratio_range_ex18
+content_revision_id: mst_p0173_exp_linear_ratio_range_ex18-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0173_exp_linear_ratio_range_ex18.card.yaml
+stem: （2023 · 浙江月考 T14）已知 $a,b\in\mathbf{R}$，若 $e^x-1\geqslant ax-b$ 对任意实数 $x$ 恒成立，则 $\frac{b-a+1}{a}$ 的取值范围为______。
+answer: |
+  $[\ln 2-1,+\infty)$
+
+  由
+  \[
+  e^x-1\ge ax-b
+  \]
+  改写为
+  \[
+  e^x-2\ge ax-b-1.
+  \]
+  设右侧直线零点为
+  \[
+  x_1=\frac{b+1}{a},
+  \]
+  左侧函数 $e^x-2$ 的零点为
+  \[
+  x_2=\ln2.
+  \]
+  按源解零点比大小模型有 $x_1\ge x_2$，即
+  \[
+  \frac{b+1}{a}\ge\ln2.
+  \]
+  两边减去 1：
+  \[
+  \frac{b+1}{a}-1\ge\ln2-1
+  \Rightarrow
+  \frac{b-a+1}{a}\ge\ln2-1.
+  \]
+  所以取值范围是
+  \[
+  [\ln2-1,+\infty).
+  \]
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把不等式重排为“指数函数 vs 直线”零点模型。
+      max_score: 1
+    - step_id: step_2
+      description: 写出两侧零点。
+      max_score: 1
+    - step_id: step_3
+      description: 使用零点比大小关系。
+      max_score: 1
+    - step_id: step_4
+      description: 转成目标表达式。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 零点比大小
+      - 线性参数比值读取
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+    evidence:
+      - 模型核心为 $e^x-2$ 与 $ax-b-1$ 的零点比较。
+      - 目标式 $\frac{b-a+1}{a}$ 由 $\frac{b+1}{a}-1$ 直接得到。
+    normalization_moves_used:
+      - 常数平移：$e^x-1\mapsto e^x-2$。
+      - 先求零点再转回参数式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不熟悉 $e^x-2=0\Rightarrow x=\ln2$，回补指数对数基础。
+      - 若学生不会把 $\frac{b+1}{a}-1$ 合并成 $\frac{b-a+1}{a}$，回补代数恒等变形。
+      - 若学生不清楚零点比较模型的适用含义，回补函数性质与图像。
+  detail_terms:
+    - $e^x-2$
+    - $ax-b-1$
+    - $x_1=\frac{b+1}{a}$
+    - $x_2=\ln2$
+    - $\frac{b-a+1}{a}\ge\ln2-1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0173_exp_linear_ratio_range_ex18
+source_evidence:
+  source_refs:
+    - ref_id: page_0173_ex18_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0173/page_0173.md
+      role: problem_start
+      evidence: line 34 给出例18题干：$e^x-1\ge ax-b$ 对任意实数恒成立，求 $\frac{b-a+1}{a}$ 的取值范围。
+    - ref_id: page_0173_ex18_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0173/page_0173.md
+      role: solution
+      evidence: line 36 解析设线性函数零点 $x_1=(b+1)/a$ 与指数函数零点 $x_2=\ln2$，由零点比大小得 $x_1\ge x_2$，答案 $[\ln2-1,+\infty)$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0173.png
+      inspected: true
+      notes: 已核对页图：例18为填空题，题干与解析链条与 markdown 一致。
+  source_context: 例18题头、解析都在 page_0173，同页完成。
+  source_influence:
+    - 保留源解重写：$e^x-2\ge ax-b-1$。
+    - 保留源解零点链：$(b+1)/a\ge\ln2\Rightarrow (b-a+1)/a\ge\ln2-1$。
+  source_discrepancies:
+    - 题干文字出现“恒成立恒成立”重复，属源页排版冗字，不影响数学结论。
+original_problem:
+  stem: （2023 · 浙江月考 T14）已知 $a,b\in\mathbf{R}$，若 $e^x-1\geqslant ax-b$ 对任意实数 $x$ 恒成立，则 $\frac{b-a+1}{a}$ 的取值范围为______。
+  parts: *a1
+  choices: []
+  answer: $[\ln 2-1,+\infty)$
+  fidelity_notes:
+    - 原题为填空题，无选项。
+    - 由题目与目标式可知 $a\neq0$；结合全体实数恒成立可排除 $a<0$，故比值约束有意义。
+solution:
+  source_solution_summary: |
+    由
+    \[
+    e^x-1\ge ax-b
+    \]
+    改写为
+    \[
+    e^x-2\ge ax-b-1.
+    \]
+    设右侧直线零点为
+    \[
+    x_1=\frac{b+1}{a},
+    \]
+    左侧函数 $e^x-2$ 的零点为
+    \[
+    x_2=\ln2.
+    \]
+    按源解零点比大小模型有 $x_1\ge x_2$，即
+    \[
+    \frac{b+1}{a}\ge\ln2.
+    \]
+    两边减去 1：
+    \[
+    \frac{b+1}{a}-1\ge\ln2-1
+    \Rightarrow
+    \frac{b-a+1}{a}\ge\ln2-1.
+    \]
+    所以取值范围是
+    \[
+    [\ln2-1,+\infty).
+    \]
+  key_steps:
+    - step_id: step_1
+      statement: 把不等式重排为“指数函数 vs 直线”零点模型。
+      formula_trace:
+        from: $e^x-1\ge ax-b$
+        to: $e^x-2\ge ax-b-1$
+        operation: 两边同时减 1。
+        why: 左侧零点立即可读为 $\ln2$。
+      source_ref: page_0173_ex18_solution
+    - step_id: step_2
+      statement: 写出两侧零点。
+      formula_trace:
+        from: $ax-b-1=0$ 与 $e^x-2=0$
+        to: $x_1=\frac{b+1}{a},\ x_2=\ln2$
+        operation: 线性方程求根、指数方程取对数。
+        why: 零点位置承载参数约束。
+      source_ref: page_0173_ex18_solution
+    - step_id: step_3
+      statement: 使用零点比大小关系。
+      formula_trace:
+        from: 零点比大小模型
+        to: $\frac{b+1}{a}\ge\ln2$
+        operation: 把模型方向代入本题。
+        why: 得到关于 $a,b$ 的一次不等式。
+      source_ref: page_0173_ex18_solution
+    - step_id: step_4
+      statement: 转成目标表达式。
+      formula_trace:
+        from: $\frac{b+1}{a}\ge\ln2$
+        to: $\frac{b-a+1}{a}\ge\ln2-1$
+        operation: 两边减 1，并合并分式。
+        why: 直接对应题目所求表达式。
+      source_ref: page_0173_ex18_solution
+teaching_card:
+  student_title: 先平移常数，再比零点
+  what_it_trains: 训练把“指数与线性恒成立”先做常数平移，读出两个零点，再把零点不等式直接翻译成目标分式范围。
+  recognition_cues:
+    - 条件为 $e^x-1\ge ax-b$ 全实数恒成立。
+    - 问题问的是分式 $\frac{b-a+1}{a}$ 的范围。
+    - 平移后左侧可出现标准零点 $\ln2$。
+  normalization_moves:
+    - 两边减 1，做成 $e^x-2$。
+    - 计算两侧零点并比较。
+    - 把零点条件改写为题目目标分式。
+  common_failures:
+    - 把 $\ln2$ 误写成 $2$。
+    - 分式变形时把 $\frac{b+1}{a}-1$ 写错。
+    - 忽略本题是填空题，答案应写区间而非字母。
+  similar_practice_query: e^x-1≥ax-b 恒成立 (b-a+1)/a 范围 零点比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

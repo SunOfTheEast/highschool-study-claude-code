@@ -1,0 +1,217 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0148_log_power_threshold_ex17
+content_revision_id: mst_p0148_log_power_threshold_ex17-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0148_log_power_threshold_ex17.card.yaml
+stem: |-
+  已知 $a=2^{-\frac12},\ b=\log_4 20,\ c=\log_3 12$，则（ ）
+  A. $b<c<a$
+  B. $a<c<b$
+  C. $b<a<c$
+  D. $a<b<c$
+answer: |
+  D
+
+  先看 $a,b$：
+  \[
+  a=2^{-1/2}=\frac1{\sqrt2}<1,\qquad
+  b=\frac{\ln20}{\ln4}>1,
+  \]
+  所以 $a<b$。
+  再拆分
+  \[
+  b=1+\frac{\ln5}{\ln4},\qquad
+  c=1+\frac{\ln4}{\ln3}.
+  \]
+  只需比较
+  \[
+  \frac{\ln5}{\ln4}\ \text{与}\ \frac{\ln4}{\ln3}.
+  \]
+  由糖水不等式
+  \[
+  \frac{\ln4}{\ln3}
+  >
+  \frac{\ln4+\ln\frac43}{\ln3+\ln\frac43}
+  =
+  \frac{\ln(16/3)}{\ln4}
+  >
+  \frac{\ln5}{\ln4},
+  \]
+  得 $b<c$。综合为 $a<b<c$，选 D。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 先用 1 作为参照，确定 $a<b$。
+      max_score: 1
+    - step_id: step_2
+      description: 把 $b,c$ 拆成“1+尾项”。
+      max_score: 1
+    - step_id: step_3
+      description: 糖水不等式给出尾项大小。
+      max_score: 1
+    - step_id: step_4
+      description: 回代得到 $b<c$ 并合并全序。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较 $a,b,c$ 三项顺序。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 拟合与夹逼
+    subroute:
+      - 1+尾项拆分
+      - 糖水不等式
+      - 中间参照点 1
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - $b,c$ 都能拆为 $1+$ 对数比值。
+      - 尾项比较可通过糖水中项完成。
+    normalization_moves_used:
+      - $\log_4 20=1+\log_4 5$。
+      - $\log_3 12=1+\log_3 4$。
+      - 比较 $\frac{\ln5}{\ln4}$ 与 $\frac{\ln4}{\ln3}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把对数拆成 $1+$ 尾项，回补指数对数基础。
+      - 若学生不会构造糖水中项，回补不等式工具基础。
+      - 若学生无法把尾项比较回推到原式，回补代数恒等变形。
+  detail_terms:
+    - 1+尾项
+    - $\frac{\ln4}{\ln3}$
+    - $\frac{\ln5}{\ln4}$
+    - 糖水不等式
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0148_log_power_threshold_ex17
+source_evidence:
+  source_refs:
+    - ref_id: page_0148_ex17_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0148/page_0148.md
+      role: problem_start
+      evidence: 例17题干给出 $a=2^{-1/2},b=\log_4 20,c=\log_3 12$ 与四个顺序选项。
+    - ref_id: page_0148_ex17_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0148/page_0148.md
+      role: solution
+      evidence: 例17解析先判 $a<1<b$，再用糖水不等式比较 $\frac{\ln5}{\ln4}$ 与 $\frac{\ln4}{\ln3}$，结论选 D。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0148.png
+      inspected: false
+      notes: 本次仅按 source markdown 重建，未重新人工核对页图。
+  source_context: 本题继续训练“先拆整数部分，再比较对数小尾巴”的三数比较。
+  source_influence:
+    - 保留源解的首步阈值：$a<1<b$。
+    - 保留源解对 $b,c$ 的拆分：$b=1+\frac{\ln5}{\ln4},c=1+\frac{\ln4}{\ln3}$。
+  source_discrepancies: []
+original_problem:
+  stem: 已知 $a=2^{-\frac12},\ b=\log_4 20,\ c=\log_3 12$，则（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $b<c<a$
+      text_latex: $b<c<a$
+    - label: B
+      text_raw: $a<c<b$
+      text_latex: $a<c<b$
+    - label: C
+      text_raw: $b<a<c$
+      text_latex: $b<a<c$
+    - label: D
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+  answer: D
+  fidelity_notes:
+    - 源解先比较 $a$ 与 1，再比较 $b,c$，最后合并为 $a<b<c$。
+solution:
+  source_solution_summary: |
+    先看 $a,b$：
+    \[
+    a=2^{-1/2}=\frac1{\sqrt2}<1,\qquad
+    b=\frac{\ln20}{\ln4}>1,
+    \]
+    所以 $a<b$。
+    再拆分
+    \[
+    b=1+\frac{\ln5}{\ln4},\qquad
+    c=1+\frac{\ln4}{\ln3}.
+    \]
+    只需比较
+    \[
+    \frac{\ln5}{\ln4}\ \text{与}\ \frac{\ln4}{\ln3}.
+    \]
+    由糖水不等式
+    \[
+    \frac{\ln4}{\ln3}
+    >
+    \frac{\ln4+\ln\frac43}{\ln3+\ln\frac43}
+    =
+    \frac{\ln(16/3)}{\ln4}
+    >
+    \frac{\ln5}{\ln4},
+    \]
+    得 $b<c$。综合为 $a<b<c$，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 先用 1 作为参照，确定 $a<b$。
+      formula_trace:
+        from: $a=2^{-1/2},\ b=\log_4 20$
+        to: $a<1<b$
+        operation: 把 $a$ 写成倒数根式，把 $b$ 看成正数对数商。
+        why: 先锁定最小项。
+      source_ref: page_0148_ex17_solution
+    - step_id: step_2
+      statement: 把 $b,c$ 拆成“1+尾项”。
+      formula_trace:
+        from: $b=\log_4 20,\ c=\log_3 12$
+        to: $b=1+\frac{\ln5}{\ln4},\ c=1+\frac{\ln4}{\ln3}$
+        operation: 利用 $20=4\cdot5,\ 12=3\cdot4$。
+        why: 比较目标缩成两个对数分式。
+      source_ref: page_0148_ex17_solution
+    - step_id: step_3
+      statement: 糖水不等式给出尾项大小。
+      formula_trace:
+        from: $\frac{\ln4}{\ln3}$
+        to: $\frac{\ln4}{\ln3}>\frac{\ln(16/3)}{\ln4}>\frac{\ln5}{\ln4}$
+        operation: 分子分母同加 $\ln\frac43$，并用 $\frac{16}{3}>5$。
+        why: 推出 $\frac{\ln4}{\ln3}>\frac{\ln5}{\ln4}$。
+      source_ref: page_0148_ex17_solution
+    - step_id: step_4
+      statement: 回代得到 $b<c$ 并合并全序。
+      formula_trace:
+        from: $\frac{\ln4}{\ln3}>\frac{\ln5}{\ln4}$ 与 $a<b$
+        to: $a<b<c$，选 D
+        operation: 把尾项比较加回 1，再传递比较。
+        why: 完成三数排序。
+      source_ref: page_0148_ex17_solution
+teaching_card:
+  student_title: 先比整数壳，再比对数尾巴
+  what_it_trains: 训练三数比较的分层策略：先用显然阈值锁定一项，再把剩余两项化成同形尾项比较。
+  recognition_cues:
+    - 有一项是显然小于 1 的负幂。
+    - 另外两项可拆成 $1+\log$ 的结构。
+    - 选项是严格全序。
+  normalization_moves:
+    - 优先找参照值 1。
+    - 把复杂对数改写成 $1+$ 对数比。
+    - 只比较尾项并回推。
+  common_failures:
+    - 忽略 $b,c$ 的整数部分，直接硬比原式。
+    - 糖水中项方向写反。
+    - 尾项结论没加回“1”。
+  similar_practice_query: log三数比较 1加尾项 糖水不等式
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 本卡未核对 page_0148 原图，按重建 markdown 完成。

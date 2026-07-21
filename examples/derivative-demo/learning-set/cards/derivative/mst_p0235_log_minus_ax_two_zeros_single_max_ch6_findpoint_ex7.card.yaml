@@ -1,0 +1,211 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0235_log_minus_ax_two_zeros_single_max_ch6_findpoint_ex7
+content_revision_id: mst_p0235_log_minus_ax_two_zeros_single_max_ch6_findpoint_ex7-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0235_log_minus_ax_two_zeros_single_max_ch6_findpoint_ex7.card.yaml
+stem: 当 $0<a<\frac1e$ 时，讨论函数 $f(x)=\ln x-ax$ 的零点个数。
+answer: |-
+  $f(x)$ 有两个零点，且可取 $x_1\in(1,\frac1a)$、$x_2\in(\frac1a,\frac1{a^2})$。
+
+  $f'(x)=\frac1x-a$，所以 $f$ 在 $(0,1/a)$ 上递增，在 $(1/a,+\infty)$ 上递减，最大值为 $f(1/a)=\ln(1/a)-1$。当 $0<a<1/e$ 时最大值为正，故有两个零点。 左侧由 $f(1)=-a<0$ 与 $f(1/a)>0$ 得 $x_1\in(1,1/a)$。右侧需要取 $m>1/a$ 使 $f(m)<0$，用等效零点 $f(x)=\sqrt{x}(\frac{\ln x}{\sqrt{x}}-a\sqrt{x})$，并由 $\frac{\ln x}{\sqrt{x}}\leqslant2/e$ 得 $f(x)<\sqrt{x}(\frac2e-a\sqrt{x})$。先取 $m=\frac4{a^2e^2}$，再取整为 $m=\frac1{a^2}$，得到 $x_2\in(1/a,1/a^2)$。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 先确定单峰结构。
+      max_score: 1
+    - step_id: step_2
+      description: 最大值为正，确认两个零点框架。
+      max_score: 1
+    - step_id: step_3
+      description: 左侧零点由 $x=1$ 夹出。
+      max_score: 1
+    - step_id: step_4
+      description: 右侧使用等效零点法。
+      max_score: 1
+    - step_id: step_5
+      description: 用 $\ln x/\sqrt{x}$ 的上界找右侧负值点。
+      max_score: 1
+    - step_id: step_6
+      description: 取整得到右侧零点区间。
+      max_score: 1
+    - step_id: step_7
+      description: 合并得到两个零点。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: main
+        goal: 零点/极值点分析
+        target: 第 main 问
+        result: $f$ 有两个零点。
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 同构变形与换元法
+      - 充分/必要性探路
+    subroute:
+      - 单极值双零点
+      - 等效零点法
+      - 提出 $\sqrt{x}$
+      - $\ln x/\sqrt{x}$
+      - 取整 $1/a^2$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $\ln x-ax$
+      - $x=1/a$
+      - $\sqrt{x}(\ln x/\sqrt{x}-a\sqrt{x})$
+      - $1/a^2$
+    normalization_moves_used:
+      - 先用最大值判断两个零点。
+      - 左侧由 $f(1)<0$ 夹出。
+      - 右侧提出 $\sqrt{x}$ 锁住 $\ln x/\sqrt{x}$。
+      - 把可用点取整为 $1/a^2$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会分析 $f^\prime(x)=1/x-a$，回补导数单调极值基础。
+      - 若学生不理解 $0<a<1/e$ 与 $1/a>e$，回补指数对数基础。
+      - 若学生不会用单峰性判断最多两个零点，回补方程根分布与韦达。
+      - 若学生不会提出 $\sqrt{x}$，回补代数恒等变形。
+      - 若学生不懂右侧取点放缩方向，回补不等式工具基础。
+  detail_terms:
+    - $\ln x-ax$
+    - $0<a<1/e$
+    - $1/a$
+    - $\sqrt{x}$
+    - $\ln x/\sqrt{x}$
+    - $4/(a^2e^2)$
+    - $1/a^2$
+    - 单极值双零点
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0235_log_minus_ax_two_zeros_single_max_ch6_findpoint_ex7
+source_evidence:
+  source_refs:
+    - ref_id: page_0235_ex7_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0235/page_0235.md
+      role: problem_start
+      evidence: page_0235 下部给出例7题头：当 $0<a<1/e$ 时，讨论 $f(x)=\ln x-ax$ 的零点个数。
+    - ref_id: page_0235_ex7_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0235/page_0235.md
+      role: solution
+      evidence: page_0235 给出第一个零点：$f^\prime(x)=1/x-a$，最大值点 $1/a$，由 $f(1)<0<f(1/a)$ 得 $x_1\in(1,1/a)$。
+    - ref_id: page_0235_ex7_figure
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0235/page_0235.md
+      role: figure_context
+      evidence: page_0235 图示 $\ln x-ax$ 先增后减，标出 $1,x_1,1/a,x_2,1/a^2$。
+    - ref_id: page_0236_ex7_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0236/page_0236.md
+      role: continuation
+      evidence: page_0236 顶部续完例7：右侧用等效零点 $\sqrt{x}(\ln x/\sqrt{x}-a\sqrt{x})$，取整 $m=1/a^2$，得到 $x_2\in(1/a,1/a^2)$。
+    - ref_id: page_0236_ex8_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0236/page_0236.md
+      role: local_context
+      evidence: page_0236 随后另起例8，属于下一批，本卡只取其前方的例7续解。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0235.png
+      inspected: true
+      notes: 已核对页图：例7题头、左侧零点解析和图示位于 page_0235 下部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0236.png
+      inspected: true
+      notes: 已核对页图：page_0236 顶部为例7右侧取点续解，例8另起。
+  source_context: 本卡处理 page_0235 起头、page_0236 顶部续完的例7；page_0236 例8以后留给下一批。
+  source_influence:
+    - 保留 source 的单极值双零点结构：最大值大于零，左右各找一个零点。
+    - 保留 source 的右侧等效零点：提出 $\sqrt{x}$，用 $\ln x/\sqrt{x}\leqslant2/e$ 控制主体。
+    - 保留 source 的取整：先取 $4/(a^2e^2)$，再取更好看的 $1/a^2$。
+  source_discrepancies: []
+original_problem:
+  stem: 当 $0<a<\frac1e$ 时，讨论函数 $f(x)=\ln x-ax$ 的零点个数。
+  parts: *a1
+  choices: []
+  answer: $f(x)$ 有两个零点，且可取 $x_1\in(1,\frac1a)$、$x_2\in(\frac1a,\frac1{a^2})$。
+  fidelity_notes:
+    - 单问零点个数题，无选项。
+    - 函数定义域为 $x>0$。
+solution:
+  source_solution_summary: $f'(x)=\frac1x-a$，所以 $f$ 在 $(0,1/a)$ 上递增，在 $(1/a,+\infty)$ 上递减，最大值为 $f(1/a)=\ln(1/a)-1$。当 $0<a<1/e$ 时最大值为正，故有两个零点。 左侧由 $f(1)=-a<0$ 与 $f(1/a)>0$ 得 $x_1\in(1,1/a)$。右侧需要取 $m>1/a$ 使 $f(m)<0$，用等效零点 $f(x)=\sqrt{x}(\frac{\ln x}{\sqrt{x}}-a\sqrt{x})$，并由 $\frac{\ln x}{\sqrt{x}}\leqslant2/e$ 得 $f(x)<\sqrt{x}(\frac2e-a\sqrt{x})$。先取 $m=\frac4{a^2e^2}$，再取整为 $m=\frac1{a^2}$，得到 $x_2\in(1/a,1/a^2)$。
+  key_steps:
+    - step_id: step_1
+      statement: 先确定单峰结构。
+      formula_trace:
+        from: $f(x)=\ln x-ax$
+        to: $f^\prime(x)=\frac1x-a$，最大值点 $x=\frac1a$
+        operation: 求导并判号。
+        why: 单峰函数最多两个零点。
+      source_ref: page_0235_ex7_solution_start
+    - step_id: step_2
+      statement: 最大值为正，确认两个零点框架。
+      formula_trace:
+        from: $f(\frac1a)=\ln\frac1a-1$
+        to: $0<a<\frac1e$ 时 $f(\frac1a)>0$
+        operation: 把 $0<a<1/e$ 转成 $\ln(1/a)>1$。
+        why: 最大值高于 x 轴才可能有两个零点。
+      source_ref: page_0235_ex7_solution_start
+    - step_id: step_3
+      statement: 左侧零点由 $x=1$ 夹出。
+      formula_trace:
+        from: $f(1)=-a<0,\ f(\frac1a)>0$
+        to: $x_1\in(1,\frac1a)$
+        operation: 介值定理。
+        why: 左侧零点不需要复杂放缩。
+      source_ref: page_0235_ex7_solution_start
+    - step_id: step_4
+      statement: 右侧使用等效零点法。
+      formula_trace:
+        from: $f(x)=\ln x-ax$
+        to: $f(x)=\sqrt{x}(\frac{\ln x}{\sqrt{x}}-a\sqrt{x})$
+        operation: 提出 $\sqrt{x}$。
+        why: 把 $-ax$ 转为 $-a\sqrt{x}$，与 $\ln x/\sqrt{x}$ 比较。
+      source_ref: page_0236_ex7_continuation
+    - step_id: step_5
+      statement: 用 $\ln x/\sqrt{x}$ 的上界找右侧负值点。
+      formula_trace:
+        from: $\frac{\ln x}{\sqrt{x}}\leqslant\frac2e$
+        to: $f(x)<\sqrt{x}(\frac2e-a\sqrt{x})$
+        operation: 用标准最大值界。
+        why: 右侧要让函数值重新变负。
+      source_ref: page_0236_ex7_continuation
+    - step_id: step_6
+      statement: 取整得到右侧零点区间。
+      formula_trace:
+        from: $\frac2e-a\sqrt{x}=0$
+        to: $m=\frac4{a^2e^2}$，取整为 $\frac1{a^2}$
+        operation: 先解可用点，再选更好看的更右侧点。
+        why: $0<a<1/e$ 保证 $1/a^2$ 在 $1/a$ 右侧且函数值为负。
+      source_ref: page_0236_ex7_continuation
+    - step_id: step_7
+      statement: 合并得到两个零点。
+      formula_trace:
+        from: $x_1\in(1,\frac1a)$ 与 $x_2\in(\frac1a,\frac1{a^2})$
+        to: $f$ 有两个零点
+        operation: 单峰性加左右变号。
+        why: 单峰函数不会再产生第三个零点。
+      source_ref: page_0236_ex7_continuation
+teaching_card:
+  student_title: 对数单峰双零点：右侧提出 $\sqrt{x}$ 把 $\ln x$ 压住
+  what_it_trains: 训练对数型单峰函数的右侧取点：左侧直接夹，右侧用等效零点法制造负值点。
+  recognition_cues:
+    - $\ln x-ax$ 在 $0<a<1/e$ 时先增后减，最大值为正。
+    - 左零点在 $1$ 和 $1/a$ 之间。
+    - 右侧要处理 $\ln x$ 和线性项，常提出 $\sqrt{x}$。
+  normalization_moves:
+    - 先求最大值点 $1/a$。
+    - 用 $f(1)<0$ 找左零点。
+    - 写成 $\sqrt{x}(\ln x/\sqrt{x}-a\sqrt{x})$。
+    - 用 $\ln x/\sqrt{x}\leqslant2/e$，取 $1/a^2$。
+  common_failures:
+    - 只用最大值为正判断有两个零点，没有给右侧取点。
+    - 把 $4/(a^2e^2)$ 和 $1/a^2$ 的关系说反。
+    - 忽略定义域 $x>0$。
+  similar_practice_query: lnx-ax 0<a<1/e 两个零点 单峰 sqrtx lnx/sqrtx 1/a^2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

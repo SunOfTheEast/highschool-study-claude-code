@@ -1,0 +1,261 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0159_sin_exp_17_16_compare_ex14
+content_revision_id: mst_p0159_sin_exp_17_16_compare_ex14-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0159_sin_exp_17_16_compare_ex14.card.yaml
+stem: |-
+  （2024·锦江区月考）$a=1+\sin0.1$，$b=e^{0.1}$，$c=\frac{17}{16}$，则 $a,b,c$ 的大小关系为（  ）
+  A. $b>c>a$
+  B. $b>a>c$
+  C. $a>b>c$
+  D. $c>b>a$
+answer: |
+  B
+
+  先比较 $b,a$：
+  \[
+  e^x>1+x\ (x>0),\qquad x>\sin x\ (x>0).
+  \]
+  取 $x=0.1$ 得
+  \[
+  b=e^{0.1}>1+0.1>1+\sin0.1=a,
+  \]
+  所以 $b>a$。
+  再比较 $a,c$。
+  法一（构造函数）：
+  \[
+  h(x)=\sin x-\frac58x,\quad 0<x<\frac\pi6.
+  \]
+  则
+  \[
+  h^{\prime}(x)=\cos x-\frac58.
+  \]
+  因 $0<x<\frac\pi6$ 时 $\cos x>\frac{\sqrt3}{2}>\frac58$，故 $h^{\prime}(x)>0$，$h(x)$ 递增，
+  \[
+  h(x)>h(0)=0\Rightarrow \sin x>\frac58x.
+  \]
+  代入 $x=0.1$：
+  \[
+  \sin0.1>\frac58\cdot0.1=\frac1{16},
+  \]
+  所以
+  \[
+  a=1+\sin0.1>1+\frac1{16}=\frac{17}{16}=c.
+  \]
+  法二（割线放缩）：
+  \[
+  \sin x>\frac{2x}{\pi}>\frac58x\quad (0<x<\frac\pi6),
+  \]
+  同样推出 $\sin0.1>\frac1{16}$，故 $a>c$。
+  综上
+  \[
+  b>a>c,
+  \]
+  选 B。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 用指数与正弦的标准不等式先证 $b>a$。
+      max_score: 1
+    - step_id: step_2
+      description: 法一：构造 $h(x)$ 并由导数证明 $\sin x>\frac58x$。
+      max_score: 1
+    - step_id: step_3
+      description: 代入 $x=0.1$ 得到 $a>c$。
+      max_score: 1
+    - step_id: step_4
+      description: 法二：割线放缩给出同一结论。
+      max_score: 1
+    - step_id: step_5
+      description: 合并顺序并对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较 $1+\sin0.1,\ e^{0.1},\ \frac{17}{16}$ 的大小。
+        result: 见 source_solution_summary
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 拟合与夹逼
+      - 局部逼近与找点
+    subroute:
+      - 先用 $e^x>1+x$ 与 $x>\sin x$ 分离 $b,a$
+      - 构造 $h(x)=\sin x-\frac58x$ 做导数单调
+      - 割线下界 $\sin x>\frac{2x}{\pi}$ 作为并行路径
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 指对复合结构
+      - 局部逼近结构
+    evidence:
+      - 核心未知量落在 $\sin0.1$ 与 $e^{0.1}$ 的小量比较。
+      - $a,c$ 比较依赖正弦线性下界，属于局部逼近模型。
+    normalization_moves_used:
+      - $e^x>1+x$，$x>\sin x$。
+      - $h^{\prime}(x)>0\Rightarrow \sin x>\frac58x$。
+      - $\sin x>\frac{2x}{\pi}>\frac58x$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会在小角区间使用 $x>\sin x$ 与割线下界，回补三角函数基础。
+      - 若学生不会通过 $h^{\prime}(x)$ 判断单调并反推函数正负，回补导数单调极值基础。
+      - 若学生不会调用 $e^x>1+x$ 的局部估值，回补指数对数基础。
+  detail_terms:
+    - $h(x)=\sin x-\frac58x$
+    - $\sin0.1>\frac1{16}$
+    - 割线放缩
+    - $b>a>c$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0159_sin_exp_17_16_compare_ex14
+source_evidence:
+  source_refs:
+    - ref_id: page_0159_ex14_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0159/page_0159.md
+      role: problem_start
+      evidence: 例14题头与选项在 page_0159 页底，题干为 $a=1+\sin0.1,\ b=e^{0.1},\ c=\frac{17}{16}$。
+    - ref_id: page_0160_ex14_solution_cont
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0160/page_0160.md
+      role: continuation
+      evidence: 例14解析续于 page_0160 顶部：先证 $b>a$，再分别用“构造函数”和“割线放缩”证明 $a>c$，结论选 B。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0159.png
+      inspected: false
+      notes: 本卡按 source markdown 重建，未重新人工核对页图。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0160.png
+      inspected: false
+      notes: 按跨页归属读取 page_0160 顶部续解，未重新人工核对页图。
+  source_context: 例14题头起于 page_0159，完整解析在 page_0160 顶部结束；之后 page_0160 例15属于下一题。
+  source_influence:
+    - 保留源解先比 $b,a$ 再比 $a,c$ 的流程。
+    - 保留源解双法：法一构造 $h(x)=\sin x-\frac58x$，法二用 $\sin x>\frac{2x}{\pi}$。
+    - 保留关键阈值 $\sin0.1>\frac{1}{16}$。
+  source_discrepancies: []
+original_problem:
+  stem: （2024·锦江区月考）$a=1+\sin0.1$，$b=e^{0.1}$，$c=\frac{17}{16}$，则 $a,b,c$ 的大小关系为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $b>c>a$
+      text_latex: $b>c>a$
+    - label: B
+      text_raw: $b>a>c$
+      text_latex: $b>a>c$
+    - label: C
+      text_raw: $a>b>c$
+      text_latex: $a>b>c$
+    - label: D
+      text_raw: $c>b>a$
+      text_latex: $c>b>a$
+  answer: B
+  fidelity_notes:
+    - 题头在 page_0159，解析跨页到 page_0160 顶部；结论为 $b>a>c$。
+solution:
+  source_solution_summary: |
+    先比较 $b,a$：
+    \[
+    e^x>1+x\ (x>0),\qquad x>\sin x\ (x>0).
+    \]
+    取 $x=0.1$ 得
+    \[
+    b=e^{0.1}>1+0.1>1+\sin0.1=a,
+    \]
+    所以 $b>a$。
+    再比较 $a,c$。
+    法一（构造函数）：
+    \[
+    h(x)=\sin x-\frac58x,\quad 0<x<\frac\pi6.
+    \]
+    则
+    \[
+    h^{\prime}(x)=\cos x-\frac58.
+    \]
+    因 $0<x<\frac\pi6$ 时 $\cos x>\frac{\sqrt3}{2}>\frac58$，故 $h^{\prime}(x)>0$，$h(x)$ 递增，
+    \[
+    h(x)>h(0)=0\Rightarrow \sin x>\frac58x.
+    \]
+    代入 $x=0.1$：
+    \[
+    \sin0.1>\frac58\cdot0.1=\frac1{16},
+    \]
+    所以
+    \[
+    a=1+\sin0.1>1+\frac1{16}=\frac{17}{16}=c.
+    \]
+    法二（割线放缩）：
+    \[
+    \sin x>\frac{2x}{\pi}>\frac58x\quad (0<x<\frac\pi6),
+    \]
+    同样推出 $\sin0.1>\frac1{16}$，故 $a>c$。
+    综上
+    \[
+    b>a>c,
+    \]
+    选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 用指数与正弦的标准不等式先证 $b>a$。
+      formula_trace:
+        from: $b=e^{0.1},\ a=1+\sin0.1$
+        to: $e^{0.1}>1+0.1>1+\sin0.1$，即 $b>a$
+        operation: 联用 $e^x>1+x$ 与 $x>\sin x$（$x=0.1$）。
+        why: 先固定 $b$ 的相对位置。
+      source_ref: page_0160_ex14_solution_cont
+    - step_id: step_2
+      statement: 法一：构造 $h(x)$ 并由导数证明 $\sin x>\frac58x$。
+      formula_trace:
+        from: $h(x)=\sin x-\frac58x$
+        to: $h^{\prime}(x)=\cos x-\frac58>0\Rightarrow \sin x>\frac58x$
+        operation: 在 $\left(0,\frac\pi6\right)$ 上用 $\cos x>\frac{\sqrt3}{2}>\frac58$。
+        why: 建立 $\sin0.1$ 的可计算下界。
+      source_ref: page_0160_ex14_solution_cont
+    - step_id: step_3
+      statement: 代入 $x=0.1$ 得到 $a>c$。
+      formula_trace:
+        from: $\sin0.1>\frac58\cdot0.1$
+        to: $a=1+\sin0.1>1+\frac1{16}=\frac{17}{16}=c$
+        operation: 把线性下界换算为分数阈值。
+        why: 完成 $a,c$ 的比较。
+      source_ref: page_0160_ex14_solution_cont
+    - step_id: step_4
+      statement: 法二：割线放缩给出同一结论。
+      formula_trace:
+        from: $\sin x>\frac{2x}{\pi}>\frac58x$
+        to: $\sin0.1>\frac1{16}\Rightarrow a>c$
+        operation: 用过原点与 $\left(\frac\pi2,1\right)$ 的割线下界。
+        why: 源解提供的备选路径，与法一互证。
+      source_ref: page_0160_ex14_solution_cont
+    - step_id: step_5
+      statement: 合并顺序并对应选项。
+      formula_trace:
+        from: $b>a$ 且 $a>c$
+        to: $b>a>c$，选 B
+        operation: 传递不等式。
+        why: 得到最终答案。
+      source_ref: page_0160_ex14_solution_cont
+teaching_card:
+  student_title: 小角正弦下界配指数下界做三数排序
+  what_it_trains: 训练三角与指数混合比较题里的“双通道”处理：直接不等式判一段，导数或割线判另一段。
+  recognition_cues:
+    - 出现 $\sin(0.1)$ 这类小角数值。
+    - 同时有 $e^{0.1}$ 与简单分数阈值。
+    - 题解常给“构造函数/割线”两法。
+  normalization_moves:
+    - 先把 $b$ 与 $a$ 快速分开。
+    - 给 $\sin0.1$ 找线性下界。
+    - 把下界转成与 $\frac{17}{16}$ 可比的分数。
+  common_failures:
+    - 只用 $\sin x< x$，却没有给出 $\sin x$ 的有效下界。
+    - 在 $h^{\prime}(x)$ 符号判断里忽略区间 $\left(0,\frac\pi6\right)$。
+    - 算 $\frac58\cdot0.1$ 时把 $\frac1{16}$ 算错。
+  similar_practice_query: 1+sin0.1 e^0.1 17/16 比大小 割线放缩
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 本卡按题头归属跨页补全到 page_0160 顶部，未重新人工核对页图。

@@ -1,0 +1,171 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0290_expx_plus_ax2_linear_param_range_ex03
+content_revision_id: mst_p0290_expx_plus_ax2_linear_param_range_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0290_expx_plus_ax2_linear_param_range_ex03.card.yaml
+stem: |-
+  （2024 · MST 虎哥）已知 $f(x)=e^x+ax^2+e(1-x)$，$a\in\mathbf R$，$x\in\mathbf R$。当 $x\ge0$，$f(x)\ge0$，求 $a$ 的取值范围。
+  1. 求使 $x\ge0$ 时 $f(x)\ge0$ 恒成立的 $a$ 的取值范围。
+answer: |-
+  $a\ge\frac{e-e^2}{4}$。
+
+  当 $x=0$ 时，$f(0)=1+e>0$。当 $x>0$ 时，把 $e^x+ax^2+e(1-x)\ge0$ 除以 $x^2$，得到 $a+\frac{e^x+e(1-x)}{x^2}\ge0$，即 $a\ge-\frac{e^x+e(1-x)}{x^2}$。source 等价地令 $q(x)=\frac{e^x+e(1-x)}{x^2}$，求它的最小值。 其导数为 $q^\prime(x)=\frac{(x-2)(e^x+e)}{x^3}$，所以 $q$ 在 $(0,2)$ 上递减，在 $(2,+\infty)$ 上递增，最小值为 $q(2)=\frac{e^2-e}{4}$。因此 $q(x)+a\ge0$ 恒成立等价于 $a+\frac{e^2-e}{4}\ge0$，即 $a\ge\frac{e-e^2}{4}$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 先处理 $x=0$。
+      max_score: 1
+    - step_id: step_2
+      description: 在 $x>0$ 上分离参数。
+      max_score: 1
+    - step_id: step_3
+      description: 求分离后函数的最小值。
+      max_score: 1
+    - step_id: step_4
+      description: 由最小值给出参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: main
+        goal: 求参数范围
+        target: 第 main 问
+        result: $a\ge\frac{e-e^2}{4}$。
+  method:
+    primary: 参变量分离
+    secondary:
+      - 充分/必要性探路
+    subroute:
+      - 端点单独检查
+      - 除以 $x^2$ 分离参数
+      - 分离后函数求最小值
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $e^x+ax^2+e(1-x)$
+      - $\frac{e^x+e(1-x)}{x^2}$
+      - $q^\prime(x)=\frac{(x-2)(e^x+e)}{x^3}$
+      - $x=2$
+      - $a\ge\frac{e-e^2}{4}$
+    normalization_moves_used:
+      - 先看 $x=0$，避免除以 $x^2$ 时漏端点。
+      - 在 $x>0$ 上除以 $x^2$，把参数 $a$ 单独拿出来。
+      - 把导数符号化简到只看 $x-2$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生漏掉 $x=0$，回补函数三要素与定义域。
+      - 若学生不会分离参数，回补代数恒等变形。
+      - 若学生不会恒成立转最值，回补导数单调极值基础。
+      - 若学生不会判断导数符号，回补导数运算与几何意义。
+      - 若学生不会处理指数项正性，回补指数对数基础。
+  detail_terms:
+    - $e^x+ax^2+e(1-x)$
+    - $x\ge0$
+    - 端点 $x=0$
+    - 参变量分离
+    - $\frac{e^x+e(1-x)}{x^2}$
+    - $x=2$
+    - $\frac{e-e^2}{4}$
+parts: &a1
+  - part_id: main
+    text: 求使 $x\ge0$ 时 $f(x)\ge0$ 恒成立的 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0290_expx_plus_ax2_linear_param_range_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0290_ex03_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0290/page_0290.md
+      role: problem_start
+      evidence: page_0290 例3题头：$f(x)=e^x+ax^2+e(1-x)$，$a\in\mathbf R$，$x\in\mathbf R$；当 $x\ge0$，$f(x)\ge0$，求 $a$ 的取值范围。
+    - ref_id: page_0290_ex03_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0290/page_0290.md
+      role: solution
+      evidence: page_0290 解析把 $x>0$ 情况分离为 $\frac{e^x+e(1-x)}{x^2}+a\ge0$，并求导得到导数符号由 $x-2$ 决定，最小点为 $x=2$，从而 $a\ge\frac{e-e^2}{4}$。
+    - ref_id: page_0290_ex04_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0290/page_0290.md
+      role: local_context
+      evidence: page_0290 后面从例4开始新题；本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0290.png
+      inspected: true
+      notes: 已核对页图：例3题头与完整解析在 page_0290 中部，随后另起例4。
+  source_context: 本卡处理 page_0290 中部起头并同页完成的例3；page_0290 例4排除。
+  source_influence:
+    - 保留 $x=0$ 不需要分离参数，因为 $f(0)=1+e>0$。
+    - 保留 $x>0$ 时除以 $x^2$ 后分离参数。
+    - 保留核心函数 $q(x)=\frac{e^x+e(1-x)}{x^2}$。
+    - 保留导数化简：$q^\prime(x)=\frac{(x-2)(e^x+e)}{x^3}$。
+    - 保留最小点 $x=2$ 和参数范围 $a\ge\frac{e-e^2}{4}$。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · MST 虎哥）已知 $f(x)=e^x+ax^2+e(1-x)$，$a\in\mathbf R$，$x\in\mathbf R$。当 $x\ge0$，$f(x)\ge0$，求 $a$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $a\ge\frac{e-e^2}{4}$。
+  fidelity_notes:
+    - 无选项。
+    - $x=0$ 处 $f(0)=1+e>0$，source 主要处理 $x>0$ 的参变量分离。
+solution:
+  source_solution_summary: 当 $x=0$ 时，$f(0)=1+e>0$。当 $x>0$ 时，把 $e^x+ax^2+e(1-x)\ge0$ 除以 $x^2$，得到 $a+\frac{e^x+e(1-x)}{x^2}\ge0$，即 $a\ge-\frac{e^x+e(1-x)}{x^2}$。source 等价地令 $q(x)=\frac{e^x+e(1-x)}{x^2}$，求它的最小值。 其导数为 $q^\prime(x)=\frac{(x-2)(e^x+e)}{x^3}$，所以 $q$ 在 $(0,2)$ 上递减，在 $(2,+\infty)$ 上递增，最小值为 $q(2)=\frac{e^2-e}{4}$。因此 $q(x)+a\ge0$ 恒成立等价于 $a+\frac{e^2-e}{4}\ge0$，即 $a\ge\frac{e-e^2}{4}$。
+  key_steps:
+    - step_id: step_1
+      statement: 先处理 $x=0$。
+      formula_trace:
+        from: $f(x)=e^x+ax^2+e(1-x)$
+        to: $f(0)=1+e>0$
+        operation: 代入端点。
+        why: 后面除以 $x^2$ 只适用于 $x>0$，端点必须单独检查。
+      source_ref: page_0290_ex03_solution
+    - step_id: step_2
+      statement: 在 $x>0$ 上分离参数。
+      formula_trace:
+        from: $e^x+ax^2+e(1-x)\ge0$
+        to: $a+\frac{e^x+e(1-x)}{x^2}\ge0$
+        operation: 除以正数 $x^2$。
+        why: 把恒成立求参转成一个单变量函数的最值问题。
+      source_ref: page_0290_ex03_solution
+    - step_id: step_3
+      statement: 求分离后函数的最小值。
+      formula_trace:
+        from: $q(x)=\frac{e^x+e(1-x)}{x^2}$
+        to: $q^\prime(x)=\frac{(x-2)(e^x+e)}{x^3}$
+        operation: 求导并化简。
+        why: $e^x+e>0$、$x^3>0$，导数符号只看 $x-2$。
+      source_ref: page_0290_ex03_solution
+    - step_id: step_4
+      statement: 由最小值给出参数范围。
+      formula_trace:
+        from: $q_{\min}=q(2)=\frac{e^2-e}{4}$
+        to: $a\ge\frac{e-e^2}{4}$
+        operation: 令 $a+q_{\min}\ge0$。
+        why: 这是保证 $a+q(x)\ge0$ 对所有 $x>0$ 成立的充要条件。
+      source_ref: page_0290_ex03_solution
+teaching_card:
+  student_title: 除以 $x^2$ 后分离参数
+  what_it_trains: 训练含参恒成立题中，先处理不能除的端点，再在正区间把参数分离出来求最值。
+  recognition_cues:
+    - 参数 $a$ 只挂在 $x^2$ 上。
+    - 条件是 $x\ge0$，但除以 $x^2$ 只能在 $x>0$ 做。
+    - 分离后出现 $\frac{e^x+e(1-x)}{x^2}$。
+    - 求导后导数符号只由 $x-2$ 决定。
+  normalization_moves:
+    - 先代 $x=0$。
+    - 再对 $x>0$ 除以 $x^2$。
+    - 把问题转成 $a+q(x)\ge0$。
+    - 求 $q(x)$ 的最小值。
+  common_failures:
+    - 直接除以 $x^2$，忘记检查 $x=0$。
+    - 分离参数后取错最大值/最小值方向。
+    - 求导化简时没有看出共同因子 $e^x+e$。
+    - 把机械除法当成主方法，忽略本题真正训练的是分离参数求最值。
+  similar_practice_query: e^x+a x^2+e(1-x) x>=0 参数范围 除以x^2 分离参数 x=2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

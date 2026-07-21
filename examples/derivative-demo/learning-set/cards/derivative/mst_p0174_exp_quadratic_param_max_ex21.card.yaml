@@ -1,0 +1,225 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0174_exp_quadratic_param_max_ex21
+content_revision_id: mst_p0174_exp_quadratic_param_max_ex21-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0174_exp_quadratic_param_max_ex21.card.yaml
+stem: |-
+  （2021·安徽皖江八校 T12）设函数 $f(x)=6x^2\cdot e^x-3ax+2a$（$e$ 为自然对数的底数），当 $x\in\mathbf{R}$ 时 $f(x)\geqslant0$ 恒成立，则实数 $a$ 的最大值为（  ）
+  A. $e$
+  B. $2e$
+  C. $4e$
+  D. $6e$
+answer: |
+  D
+
+  由 $f(x)\ge0$ 得
+  \[
+  6x^2e^x\ge 3ax-2a=a(3x-2).
+  \]
+  源解作参数分离并取对数，写成
+  \[
+  \ln6+x\ge \ln a+\ln\frac{3x-2}{x^2},
+  \]
+  即
+  \[
+  \ln\frac{6}{a}+x\ge \ln\frac{3x-2}{x^2}.
+  \]
+  令左侧直线函数
+  \[
+  y_1=\ln\frac{6}{a}+x,\quad x_1=\ln\frac{a}{6},
+  \]
+  右侧函数
+  \[
+  y_2=\ln\frac{3x-2}{x^2},\quad x_2=1.
+  \]
+  由源页“零点比大小”模型得 $x_1\le x_2$，故
+  \[
+  \ln\frac{a}{6}\le1\Longrightarrow a\le 6e.
+  \]
+  因此 $a$ 的最大值为 $6e$，选 D。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把“恒成立”不等式分离成含参数的一侧与纯 $x$ 结构的一侧。
+      max_score: 1
+    - step_id: step_2
+      description: 取对数并改写成“直线 vs 函数”比较。
+      max_score: 1
+    - step_id: step_3
+      description: 写出两侧零点并执行零点比大小。
+      max_score: 1
+    - step_id: step_4
+      description: 回到参数并匹配选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level:
+      - part_id: item_1
+        goal: 极值最值
+        target: 求参数 $a$ 的最大值。
+        result: 见 source_solution_summary
+  method:
+    primary: 参变量分离
+    secondary:
+      - 数形结合
+      - 同构变形与换元法
+    subroute:
+      - 对数分离参数
+      - 线性零点 vs 函数零点
+      - 零点比大小
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 不等式工具结构
+    evidence:
+      - 参数只出现在 $\ln\frac{6}{a}+x$ 的截距里。
+      - 右侧为 $\ln\frac{3x-2}{x^2}$ 的固定函数零点。
+      - 最终通过 $x_1\le x_2$ 还原参数上界。
+    normalization_moves_used:
+      - 先把 $a$ 从原式抽离到一侧。
+      - 取对数后改写为零点比较问题。
+      - 用零点顺序反推参数极值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能把 $6x^2e^x-3ax+2a\ge0$ 整理成参数分离形式，回补代数恒等变形。
+      - 若学生在“取对数后可比较”环节丢失定义域意识，回补函数三要素与定义域。
+      - 若学生不会把零点顺序转成参数不等式，回补不等式工具基础。
+      - 若学生对指数与对数互化不熟，回补指数对数基础。
+  detail_terms:
+    - $6x^2e^x$
+    - $a(3x-2)$
+    - $\ln\frac{6}{a}+x$
+    - $\ln\frac{3x-2}{x^2}$
+    - $x_1=\ln\frac{a}{6},\ x_2=1$
+    - $a\le6e$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0174_exp_quadratic_param_max_ex21
+source_evidence:
+  source_refs:
+    - ref_id: page_0174_top_ex20_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0174/page_0174.md
+      role: local_context
+      evidence: page_0174 开头“为 $-\frac{2b}{a}$ ... 故选 A”是 page_0173 例20续解，不是新题头。
+    - ref_id: page_0174_ex21_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0174/page_0174.md
+      role: problem_start
+      evidence: lines 20-24 给出例21题干与 A-D 选项，问“实数 $a$ 的最大值”。
+    - ref_id: page_0174_ex21_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0174/page_0174.md
+      role: solution
+      evidence: line 26 给出完整解析：分离为两侧取对数，比较零点 $x_1=\ln\frac{a}{6}$ 与 $x_2=1$，推出 $a\le 6e$，故选 D。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0174.png
+      inspected: true
+      notes: 已核对页图：例21题干、选项与解析完整在本页，答案字母为 D。
+  source_context: 本页顶部先收尾上一页例20；例21是本页第一个新题头，且题干与解析均在 page_0174 内完成。
+  source_influence:
+    - 保留源解“单参数分离 + 零点比大小”主线，把参数放入直线零点 $x_1=\ln\frac{a}{6}$。
+    - 保留源解右侧函数零点 $x_2=1$ 的固定锚点，由 $x_1\le x_2$ 直接得到参数上界。
+  source_discrepancies: []
+original_problem:
+  stem: （2021·安徽皖江八校 T12）设函数 $f(x)=6x^2\cdot e^x-3ax+2a$（$e$ 为自然对数的底数），当 $x\in\mathbf{R}$ 时 $f(x)\geqslant0$ 恒成立，则实数 $a$ 的最大值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $e$
+      text_latex: $e$
+    - label: B
+      text_raw: $2e$
+      text_latex: $2e$
+    - label: C
+      text_raw: $4e$
+      text_latex: $4e$
+    - label: D
+      text_raw: $6e$
+      text_latex: $6e$
+  answer: D
+  fidelity_notes:
+    - 题干、选项、解析均在 page_0174 单页内闭合。
+    - 本页最上方文字属于例20续解，未并入本题。
+solution:
+  source_solution_summary: |
+    由 $f(x)\ge0$ 得
+    \[
+    6x^2e^x\ge 3ax-2a=a(3x-2).
+    \]
+    源解作参数分离并取对数，写成
+    \[
+    \ln6+x\ge \ln a+\ln\frac{3x-2}{x^2},
+    \]
+    即
+    \[
+    \ln\frac{6}{a}+x\ge \ln\frac{3x-2}{x^2}.
+    \]
+    令左侧直线函数
+    \[
+    y_1=\ln\frac{6}{a}+x,\quad x_1=\ln\frac{a}{6},
+    \]
+    右侧函数
+    \[
+    y_2=\ln\frac{3x-2}{x^2},\quad x_2=1.
+    \]
+    由源页“零点比大小”模型得 $x_1\le x_2$，故
+    \[
+    \ln\frac{a}{6}\le1\Longrightarrow a\le 6e.
+    \]
+    因此 $a$ 的最大值为 $6e$，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把“恒成立”不等式分离成含参数的一侧与纯 $x$ 结构的一侧。
+      formula_trace:
+        from: $6x^2e^x-3ax+2a\ge0$
+        to: $6x^2e^x\ge a(3x-2)$
+        operation: 移项并提取参数 $a$。
+        why: 为后续参数与自变量分离做准备。
+      source_ref: page_0174_ex21_solution
+    - step_id: step_2
+      statement: 取对数并改写成“直线 vs 函数”比较。
+      formula_trace:
+        from: $6x^2e^x\ge a(3x-2)$
+        to: $\ln\frac{6}{a}+x\ge\ln\frac{3x-2}{x^2}$
+        operation: 两侧取对数并把参数项并到左侧。
+        why: 把参数只保留在左侧常数项中，形成零点比较模型。
+      source_ref: page_0174_ex21_solution
+    - step_id: step_3
+      statement: 写出两侧零点并执行零点比大小。
+      formula_trace:
+        from: $y_1=\ln\frac{6}{a}+x,\ y_2=\ln\frac{3x-2}{x^2}$
+        to: $x_1=\ln\frac{a}{6},\ x_2=1,\ x_1\le x_2$
+        operation: 分别令两侧为 0，按源页模型比较零点位置。
+        why: 零点位置关系直接给出参数上界。
+      source_ref: page_0174_ex21_solution
+    - step_id: step_4
+      statement: 回到参数并匹配选项。
+      formula_trace:
+        from: $\ln\frac{a}{6}\le1$
+        to: $a\le6e$，最大值为 $6e$
+        operation: 指数化得到 $a$ 的上界。
+        why: 题目要求最大值，故取该上界。
+      source_ref: page_0174_ex21_solution
+teaching_card:
+  student_title: 把参数塞进直线零点：一眼拿到 $a$ 上界
+  what_it_trains: 训练在“恒成立+参数”题中先分离参数，再把问题转成两侧零点顺序，从而快速求参数极值。
+  recognition_cues:
+    - 题干是“对任意 $x$ 恒成立，求参数最大值”。
+    - 原式含指数和代数混合项，参数只在线性项里。
+    - 解析出现“取对数 + 零点比大小”信号。
+  normalization_moves:
+    - 移项后把参数集中到一边。
+    - 取对数改成“直线函数 vs 固定函数”。
+    - 先算两个零点，再比较位置。
+    - 把零点不等式还原为参数上界。
+  common_failures:
+    - 直接对原式盲目求导，错过更短的零点路线。
+    - 取对数时忽略分式项定义域约束。
+    - 算出 $x_1$ 后把不等号方向写反，导致 $a$ 上下界颠倒。
+  similar_practice_query: 恒成立 参数最大值 取对数 零点比大小 指数函数
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,257 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0087_tangent_bound_ex05
+content_revision_id: mst_p0087_tangent_bound_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0087_tangent_bound_ex05.card.yaml
+stem: |-
+  （2023 东北三省三校二模 T12）已知函数 $f(x)=x^m+\frac1{x^n}\ (m,n\in\mathbf N^*)$，下列结论正确的是（  ）
+  A. 对任意 $m,n\in\mathbf N^*$，函数 $f(x)$ 有且只有两个极值点
+  B. 存在 $m,n\in\mathbf N^*$，曲线 $y=f(x)$ 有经过原点的切线
+  C. 对于任意 $x_1>0,x_2>0$ 且 $x_1\ne x_2$，均满足 $f\left(\frac{x_1+x_2}{2}\right)<\frac{f(x_1)+f(x_2)}2$
+  D. 当 $x>0$ 时，$|f(-x)|\leqslant f(x)$ 恒成立
+answer: |-
+  BCD
+
+  A 可用反例否定：取 $m=2,n=1$，$f(x)=x^2+\frac1x$， $f'(x)=2x-\frac1{x^2}=0$ 只给出 $x=\sqrt[3]{\frac12}$ 一个极小值点， 所以“对任意都有两个极值点”错误。B 同样取 $m=2,n=1$，设切点 $x_0>0$，切线过原点可列 $-\left(x_0^2+\frac1{x_0}\right)= \left(2x_0-\frac1{x_0^2}\right)(-x_0)$，解得 $x_0=\sqrt[3]{2}$，故存在经过原点的切线。C 中当 $x>0$ 时 $f^{\prime\prime}(x)=m(m-1)x^{m-2}+\frac{n(n+1)}{x^{n+2}}>0$， 因而 $f$ 在 $(0,+\infty)$ 上严格凸，满足题中中点不等式。 D 中 $f(-x)=(-1)^m x^m+(-1)^n x^{-n}$，只是把两个正项分别加上 正负号，所以 $|f(-x)|\le x^m+x^{-n}=f(x)$；源页也按 $m,n$ 奇偶四类逐一说明。故选 BCD。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 判断 A：用一个具体 $m,n$ 反例否定“任意”。
+      max_score: 1
+    - step_id: step_2
+      description: 说明反例中确实只有一个极值点。
+      max_score: 1
+    - step_id: step_3
+      description: 判断 B：继续用 $m=2,n=1$ 构造过原点切线。
+      max_score: 1
+    - step_id: step_4
+      description: 解出 B 的切点。
+      max_score: 1
+    - step_id: step_5
+      description: 判断 C：用二阶导数证明正半轴上严格凸。
+      max_score: 1
+    - step_id: step_6
+      description: 把严格凸性转成 C 的中点不等式。
+      max_score: 1
+    - step_id: step_7
+      description: 判断 D：把 $f(-x)$ 写成两个带符号的正项。
+      max_score: 1
+    - step_id: step_8
+      description: 完成 D 的不等式。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: A
+        goal: 零点/极值点分析
+        target: 第 A 问
+        result: 见 source_solution_summary
+      - part_id: B
+        goal: 抽象函数性质
+        target: 第 B 问
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 不等式证明
+        target: 第 C 问
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 不等式证明
+        target: 第 D 问
+        result: 见 source_solution_summary
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 充分/必要性探路
+      - 含参数分类讨论
+      - 对称性配凑
+    subroute:
+      - 反例排除
+      - 存在性构造
+      - 过原点切线
+      - 二阶导凸性
+      - 奇偶性分类
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 对称结构
+      - 不等式工具结构
+    evidence:
+      - $m=2,n=1$ 时 $f(x)=x^2+\frac1x$ 只有一个极值点，且存在过原点切线。
+      - $f^{\prime\prime}(x)=m(m-1)x^{m-2}+\frac{n(n+1)}{x^{n+2}}>0$ 支撑 C。
+      - $f(-x)=(-1)^m x^m+(-1)^n x^{-n}$ 支撑 D 的奇偶分类。
+    normalization_moves_used:
+      - 对“任意”命题先尝试用具体参数反例击破。
+      - 对“存在”命题用同一个具体参数构造切线。
+      - 把中点不等式归一为二阶导数恒正的严格凸性。
+      - 把 $f(-x)$ 按奇偶性拆成两个带符号的正项。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会用一个反例否定“对任意”，回补函数性质与图像。
+      - 若学生不会写过原点的切线方程，回补导数运算与几何意义。
+      - 若学生不能由 $f^{\prime\prime}(x)>0$ 得到中点不等式，回补不等式工具基础。
+      - 若学生对 $(-x)^m$ 和 $1/(-x)^n$ 的奇偶符号混乱，回补代数恒等变形。
+  detail_terms:
+    - $f(x)=x^m+x^{-n}$
+    - $m,n\in\mathbf N^*$
+    - $f(x)=x^2+\frac1x$
+    - 过原点切线
+    - $f^{\prime\prime}(x)>0$
+    - $|f(-x)|\leqslant f(x)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0087_tangent_bound_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0087
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0087/page_0087.md
+      role: problem_start
+      evidence: page_0087 下半页新起头“例 5”，给出 $f(x)=x^m+\frac1{x^n}\ (m,n\in\mathbf N^*)$、A-D 四个选项， 并解析 A、B、C 三项。
+    - ref_id: page_0088
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0088/page_0088.md
+      role: continuation
+      evidence: page_0088 顶部续写例 5 的 D 选项奇偶分类，给出最终答案 BCD； 随后进入“三次函数拐点与切线条数界定”和例 6，未纳入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0087.png
+      inspected: true
+      notes: 已核对 page_0087 页图：例 5 题头、题干、A-D 选项、A-C 解析与 markdown 一致，解析在页末续到下一页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0088.png
+      inspected: true
+      notes: 已核对 page_0088 页图顶部为例 5 续解，D 选项按 $m,n$ 奇偶四类讨论， 最终“故选 BCD”；后续例 6 属下一批页面范围。
+  source_context: 本题仍在切线界定与凹凸性训练中，但题型是多选。源解用反例否定 A， 用 $m=2,n=1$ 构造过原点切线证明 B，用二阶导数正证明 C 的 Jensen 型不等式，用奇偶分类证明 D。
+  source_influence:
+    - 保留源解 A、B 的具体构造 $m=2,n=1$。
+    - 保留源解 C 的 $f^{\prime\prime}(x)>0$ 凹凸性判断。
+    - 保留 page_0088 顶部 D 的奇偶分类，并用符号形式 $f(-x)=\pm x^m\pm x^{-n}$ 汇总。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 东北三省三校二模 T12）已知函数 $f(x)=x^m+\frac1{x^n}\ (m,n\in\mathbf N^*)$，下列结论正确的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 对任意 $m,n\in\mathbf N^*$，函数 $f(x)$ 有且只有两个极值点
+      text_latex: 对任意 $m,n\in\mathbf N^*$，函数 $f(x)$ 有且只有两个极值点
+    - label: B
+      text_raw: 存在 $m,n\in\mathbf N^*$，曲线 $y=f(x)$ 有经过原点的切线
+      text_latex: 存在 $m,n\in\mathbf N^*$，曲线 $y=f(x)$ 有经过原点的切线
+    - label: C
+      text_raw: 对于任意 $x_1>0,x_2>0$ 且 $x_1\ne x_2$，均满足 $f\left(\frac{x_1+x_2}{2}\right)<\frac{f(x_1)+f(x_2)}2$
+      text_latex: 对于任意 $x_1>0,x_2>0$ 且 $x_1\ne x_2$，均满足 $f\left(\frac{x_1+x_2}{2}\right)<\frac{f(x_1)+f(x_2)}2$
+    - label: D
+      text_raw: 当 $x>0$ 时，$|f(-x)|\leqslant f(x)$ 恒成立
+      text_latex: 当 $x>0$ 时，$|f(-x)|\leqslant f(x)$ 恒成立
+  answer: BCD
+  fidelity_notes:
+    - 例 5 为多选题，题干、选项和 A-C 解析在 page_0087；D 解析和答案 BCD 在 page_0088 顶部。
+    - 函数含 $\frac1{x^n}$，整体定义域排除 $x=0$；C、D 选项均显式限制 $x>0$。
+solution:
+  source_solution_summary: A 可用反例否定：取 $m=2,n=1$，$f(x)=x^2+\frac1x$， $f'(x)=2x-\frac1{x^2}=0$ 只给出 $x=\sqrt[3]{\frac12}$ 一个极小值点， 所以“对任意都有两个极值点”错误。B 同样取 $m=2,n=1$，设切点 $x_0>0$，切线过原点可列 $-\left(x_0^2+\frac1{x_0}\right)= \left(2x_0-\frac1{x_0^2}\right)(-x_0)$，解得 $x_0=\sqrt[3]{2}$，故存在经过原点的切线。C 中当 $x>0$ 时 $f^{\prime\prime}(x)=m(m-1)x^{m-2}+\frac{n(n+1)}{x^{n+2}}>0$， 因而 $f$ 在 $(0,+\infty)$ 上严格凸，满足题中中点不等式。 D 中 $f(-x)=(-1)^m x^m+(-1)^n x^{-n}$，只是把两个正项分别加上 正负号，所以 $|f(-x)|\le x^m+x^{-n}=f(x)$；源页也按 $m,n$ 奇偶四类逐一说明。故选 BCD。
+  key_steps:
+    - step_id: step_1
+      statement: 判断 A：用一个具体 $m,n$ 反例否定“任意”。
+      formula_trace:
+        from: |
+          $m=2,\ n=1,\qquad f(x)=x^2+\frac1x$
+        to: |
+          $f'(x)=2x-\frac1{x^2}=0\Rightarrow x=\sqrt[3]{\frac12}$
+        operation: 代入一组正整数参数并求导数零点。
+        why: 只要找到一个例子不是两个极值点，就能否定 A 的“对任意”。
+      source_ref: page_0087
+    - step_id: step_2
+      statement: 说明反例中确实只有一个极值点。
+      formula_trace:
+        from: |
+          $f'(x)=\frac{2x^3-1}{x^2}$
+        to: |
+          $x<0$ 时 $f'(x)<0$；$x>0$ 时只在 $x=\sqrt[3]{\frac12}$ 变号
+        operation: 结合定义域 $x\ne0$ 和导数符号判断极值点个数。
+        why: 该函数只有一个极小值点，所以 A 错误。
+      source_ref: page_0087
+    - step_id: step_3
+      statement: 判断 B：继续用 $m=2,n=1$ 构造过原点切线。
+      formula_trace:
+        from: |
+          $y-\left(x_0^2+\frac1{x_0}\right)=\left(2x_0-\frac1{x_0^2}\right)(x-x_0)$
+        to: |
+          $-\left(x_0^2+\frac1{x_0}\right)=\left(2x_0-\frac1{x_0^2}\right)(-x_0)$
+        operation: 设切点为 $(x_0,f(x_0))$，把原点 $(0,0)$ 代入切线方程。
+        why: B 只要求“存在”一组 $m,n$，因此构造出一条过原点切线即可。
+      source_ref: page_0087
+    - step_id: step_4
+      statement: 解出 B 的切点。
+      formula_trace:
+        from: |
+          $-\left(x_0^2+\frac1{x_0}\right)=-2x_0^2+\frac1{x_0}$
+        to: |
+          $x_0^3=2,\qquad x_0=\sqrt[3]{2}$
+        operation: 移项并乘以 $x_0$ 化简。
+        why: $x_0>0$ 有实数解，说明曲线 $y=x^2+\frac1x$ 确有经过原点的切线。
+      source_ref: page_0087
+    - step_id: step_5
+      statement: 判断 C：用二阶导数证明正半轴上严格凸。
+      formula_trace:
+        from: |
+          $f'(x)=mx^{m-1}-\frac{n}{x^{n+1}}$
+        to: |
+          $f^{\prime\prime}(x)=m(m-1)x^{m-2}+\frac{n(n+1)}{x^{n+2}}>0\quad (x>0)$
+        operation: 连续求导，并利用 $m,n\in\mathbf N^*$、$x>0$ 判断符号。
+        why: 二阶导数恒正，图像严格凸，中点函数值严格小于两端函数值平均数。
+      source_ref: page_0087
+    - step_id: step_6
+      statement: 把严格凸性转成 C 的中点不等式。
+      formula_trace:
+        from: |
+          $f^{\prime\prime}(x)>0\quad (x>0)$
+        to: |
+          $f\left(\frac{x_1+x_2}{2}\right)<\frac{f(x_1)+f(x_2)}2\quad (x_1,x_2>0,\ x_1\ne x_2)$
+        operation: 应用严格凸函数的中点不等式。
+        why: 两个不同正点的中点位于弦下方，故 C 正确。
+      source_ref: page_0087
+    - step_id: step_7
+      statement: 判断 D：把 $f(-x)$ 写成两个带符号的正项。
+      formula_trace:
+        from: |
+          $f(x)=x^m+\frac1{x^n}\quad (x>0)$
+        to: |
+          $f(-x)=(-1)^m x^m+(-1)^n\frac1{x^n}$
+        operation: 按 $m,n$ 的奇偶性给两个正项分别加上正负号。
+        why: 无论奇偶如何，$f(-x)$ 的绝对值都不会超过两个正项的和。
+      source_ref: page_0088
+    - step_id: step_8
+      statement: 完成 D 的不等式。
+      formula_trace:
+        from: |
+          $f(-x)=\pm x^m\pm\frac1{x^n}$
+        to: |
+          $|f(-x)|\le x^m+\frac1{x^n}=f(x)$
+        operation: 用三角不等式汇总源页的四种奇偶分类。
+        why: 同奇或同偶时取等号；一奇一偶时两个正项相减，绝对值小于正项和。
+      source_ref: page_0088
+teaching_card:
+  student_title: 多选题先分清任意、存在和恒成立
+  what_it_trains: 训练学生在含参数函数多选题里，按量词选择路线：任意命题找反例， 存在命题做构造，恒成立不等式再用凸性或奇偶分类证明。
+  recognition_cues:
+    - 选项 A、C、D 是“对任意/恒成立”，选项 B 是“存在”。
+    - $x^m+\frac1{x^n}$ 在正半轴上二阶导数容易判正。
+    - 选项 D 出现 $f(-x)$，提示必须看 $m,n$ 的奇偶。
+    - 选项 B 问“经过原点的切线”，适合设切点并代入 $(0,0)$。
+  normalization_moves:
+    - 先用 $m=2,n=1$ 检查 A 和 B。
+    - 对 B 写切点方程，让原点满足切线。
+    - 对 C 直接求 $f^{\prime\prime}(x)$ 并调用严格凸函数中点不等式。
+    - 对 D 把 $f(-x)$ 写成 $\pm x^m\pm x^{-n}$。
+  common_failures:
+    - 看到 A 的“两个极值点”就凭对勾函数印象判断，没验证负半轴和具体参数。
+    - B 只画图说“原点在外弧”，没有给出一组可行的 $m,n$ 和切点。
+    - C 中把 $f^{\prime\prime}>0$ 的凹凸名称记混，但不等式方向也跟着写反。
+    - D 中只讨论同奇同偶，漏掉一奇一偶时的差值情形。
+  similar_practice_query: x^m+1/x^n 多选 反例 存在过原点切线 凸性 奇偶分类
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0087/page_0088 页图与 markdown 对例 5 的题干、选项、解析和答案 BCD 一致；page_0088 后续例 6 已按所有权规则跳过。
+    - B 选项源解用 $m=2,n=1$ 构造，本卡只补全切点方程化简；D 选项用三角不等式汇总源页四类奇偶讨论，不改变源结论。

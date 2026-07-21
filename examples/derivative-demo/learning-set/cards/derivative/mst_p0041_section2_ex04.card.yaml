@@ -1,0 +1,137 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0041_section2_ex04
+content_revision_id: mst_p0041_section2_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0041_section2_ex04.card.yaml
+stem: （广东省河源市河源中学 2023 届高三 10 月教学质量检测 T16）已知函数 f(x)=a ln x，g(x)=b e^x，若直线 y=kx (k>0) 与函数 f(x)、g(x) 的图象都相切， 则 4a+1/b 的最小值为 _____。
+answer: |-
+  4e
+
+  过原点切 a ln x 的切点是 x=e，给出切线斜率 a/e； 过原点切 b e^x 的切点是 x=1，给出切线斜率 be。由同一条直线得 a/e=be， 再用基本不等式求 4a+1/b 的最小值。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 由 e^x>=ex，得 b e^x>=be x。若 y=kx 与 g(x)=b e^x 相切， 则 k=be，对应切点 x=1。
+      max_score: 1
+    - step_id: step_2
+      description: 由 ln x<=x/e，得 a ln x<=a x/e。若 y=kx 与 f(x)=a ln x 相切， 则 k=a/e，对应切点 x=e。
+      max_score: 1
+    - step_id: step_3
+      description: 同一条直线 y=kx 与两图象都相切，所以 a/e=be，即 a=b e^2。
+      max_score: 1
+    - step_id: step_4
+      description: 4a+1/b>=2 sqrt(4a/b)=4e；当 a=e/2，b=1/(2e) 时等号成立， 所以最小值为 4e。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 对称性配凑
+    subroute:
+      - 指数切线找点
+      - 对数原点切线
+      - 基本不等式求最值
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 不等式工具结构
+    evidence:
+      - e^x>=e x
+      - ln x<=x/e
+      - a/e=be
+    normalization_moves_used:
+      - 把相切条件转化为同一条直线的斜率 k。
+      - 由 k=a/e=be 得到 a 与 b 的比例关系。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从切线 y=kx 反推出切点 x=e 或 x=1，回补导数运算与几何意义。
+      - 若学生不会用 4a+1/b>=2sqrt(4a/b)，回补不等式工具基础。
+  detail_terms:
+    - 过原点切线
+    - k=a/e=be
+    - 4a+1/b 的 AM-GM
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0041_section2_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0041
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0041/page_0041.md
+      role: problem_start
+      evidence: 例 4：已知 f(x)=a ln x，g(x)=b e^x，若直线 y=kx(k>0) 与两函数图象都相切， 求 4a+1/b 的最小值。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0041.png
+      inspected: true
+      notes: 页图确认例 4 题干与解析均在 page_0041；题目为填空题，无选项、无图形。
+  source_context: 例 4 位于“二、指数的切线找点”开头，用 e^x>=ex 与 ln x<=x/e 的原点切线 同时刻画两条切线条件。
+  source_influence:
+    - 源页用切线不等式直接得到 a/e=be，即两函数与 y=kx 的切线斜率一致。
+    - 源页用基本不等式求 4a+1/b 的最小值。
+  source_discrepancies: []
+original_problem:
+  stem: （广东省河源市河源中学 2023 届高三 10 月教学质量检测 T16）已知函数 f(x)=a ln x，g(x)=b e^x，若直线 y=kx (k>0) 与函数 f(x)、g(x) 的图象都相切， 则 4a+1/b 的最小值为 _____。
+  parts: *a1
+  choices: []
+  answer: 4e
+  fidelity_notes:
+    - 题干要求同一条过原点直线 y=kx 分别与 a ln x 和 b e^x 相切。
+solution:
+  source_solution_summary: 过原点切 a ln x 的切点是 x=e，给出切线斜率 a/e； 过原点切 b e^x 的切点是 x=1，给出切线斜率 be。由同一条直线得 a/e=be， 再用基本不等式求 4a+1/b 的最小值。
+  key_steps:
+    - step_id: step_1
+      statement: 由 e^x>=ex，得 b e^x>=be x。若 y=kx 与 g(x)=b e^x 相切， 则 k=be，对应切点 x=1。
+      formula_trace:
+        from: e^x>=e x
+        to: b e^x>=b e x, k=be
+        operation: 把指数函数在 x=1 的切线不等式乘以 b
+        why: 切线相切时，线性函数必须取到指数函数的下界等号。
+      source_ref: page_0041:例4解析
+    - step_id: step_2
+      statement: 由 ln x<=x/e，得 a ln x<=a x/e。若 y=kx 与 f(x)=a ln x 相切， 则 k=a/e，对应切点 x=e。
+      formula_trace:
+        from: ln x<=x/e
+        to: a ln x<=a x/e, k=a/e
+        operation: 使用 ln x 过原点的切线不等式
+        why: ln x 在 x=e 处的切线经过原点，斜率为 1/e。
+      source_ref: page_0041:例4解析
+    - step_id: step_3
+      statement: 同一条直线 y=kx 与两图象都相切，所以 a/e=be，即 a=b e^2。
+      formula_trace:
+        from: k=a/e and k=be
+        to: a/e=be
+        operation: 统一同一条直线的斜率
+        why: 题干给的是同一个 k。
+      source_ref: page_0041:例4解析
+    - step_id: step_4
+      statement: 4a+1/b>=2 sqrt(4a/b)=4e；当 a=e/2，b=1/(2e) 时等号成立， 所以最小值为 4e。
+      formula_trace:
+        from: a/b=e^2
+        to: 4a+1/b>=2 sqrt(4a/b)=4e
+        operation: 对 4a 与 1/b 使用基本不等式
+        why: a,b 为正，且 (4a)(1/b)=4a/b=4e^2；等号要求 4a=1/b。
+      source_ref: page_0041:例4解析
+teaching_card:
+  student_title: 用过原点切线锁住 a/e=be
+  what_it_trains: 训练学生把“同一条直线同时相切”翻译成切点和斜率关系，再把参数关系送进基本不等式。
+  recognition_cues:
+    - 直线 y=kx 经过原点。
+    - ln x 的过原点切点是 x=e。
+    - e^x 的过原点切点是 x=1。
+  normalization_moves:
+    - 写出 e^x>=e x 和 ln x<=x/e。
+    - 分别乘上 b、a，得到 k=be 与 k=a/e。
+    - 用 a/e=be 消去一个自由度，再求最值。
+  common_failures:
+    - 把两条相切直线误当成不同的 k。
+    - 只用求导列切线方程，却漏掉过原点这一条件。
+    - 基本不等式等号条件没有回代检查。
+  similar_practice_query: y=kx 同时切 ae^x 与 a ln x，切点斜率关系求参数最值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

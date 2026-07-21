@@ -1,0 +1,166 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0069_pade_ex01
+content_revision_id: mst_p0069_pade_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0069_pade_ex01.card.yaml
+stem: 求 $f(x)=\ln(1+x)$ 的 $[1,1]$ 阶帕德逼近。
+answer: |-
+  $f(x)=\ln(1+x)$ 的 $[1,1]$ 阶帕德逼近为
+  $R(x)=\frac{x}{1+\frac12 x}=\frac{2x}{x+2}$。
+  源页随后由图像给出：$-1<x<0$ 时 $\ln(1+x)<\frac{2x}{x+2}$，$x>0$ 时 $\ln(1+x)>\frac{2x}{x+2}$；平移后，当 $x\ge1$ 时 $\frac{2(x-1)}{x+1}\le\ln x$，当 $0<x\le1$ 时 $\ln x\le\frac{2(x-1)}{x+1}$。
+
+
+  把 $[1,1]$ 阶帕德逼近写成 $R(x)=\frac{a_0+a_1x}{1+b_1x}$，依次匹配 $f(0)=R(0)$、$f^{\prime}(0)=R^{\prime}(0)$、$f^{\prime\prime}(0)=R^{\prime\prime}(0)$，得到 $a_0=0$、$a_1=1$、$b_1=\frac12$，所以 $R(x)=\frac{2x}{x+2}$；源页还根据图像记录了它与 $\ln(1+x)$ 以及平移后的 $\ln x$ 的比较关系。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 按 $[1,1]$ 阶帕德逼近写出待定有理函数。
+      max_score: 1
+    - step_id: step_2
+      description: 匹配函数值，确定常数项。
+      max_score: 1
+    - step_id: step_3
+      description: 匹配一阶导数，确定分子一次项系数。
+      max_score: 1
+    - step_id: step_4
+      description: 匹配二阶导数，确定分母一次项系数。
+      max_score: 1
+    - step_id: step_5
+      description: 写出帕德逼近式，并记录源页给出的对数比较。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level: []
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 拟合与夹逼
+    subroute:
+      - 帕德逼近
+      - $[1,1]$ 有理逼近
+      - 导数匹配
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $R(x)=\frac{a_0+a_1x}{1+b_1x}$ 在 $x=0$ 附近匹配 $\ln(1+x)$ 的函数值、一阶导和二阶导。
+      - $\frac{2x}{x+2}$ 是 $\ln(1+x)$ 的 $[1,1]$ 有理近似，平移后得到 $\frac{2(x-1)}{x+1}$ 与 $\ln x$ 的比较。
+    normalization_moves_used:
+      - 把“求帕德逼近”先化为待定系数有理函数。
+      - 依次代入 $x=0$ 的函数值、一阶导数、二阶导数。
+      - 把 $x$ 换成 $x-1$，将 $\ln(1+x)$ 的比较平移为 $\ln x$ 的比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求 $R^{\prime}(x)$ 或 $R^{\prime\prime}(x)$，回补导数运算与几何意义。
+      - 若学生把分母也写成带自由常数的 $b_0+b_1x$，回补代数恒等变形。
+      - 若学生不清楚 $\ln(1+x)$ 的定义域和平移到 $\ln x$ 的范围变化，回补指数对数基础。
+      - 若学生只记结论而不能说明上下界来自哪一侧图像，回补函数性质与图像。
+  detail_terms:
+    - $R(x)=\frac{a_0+a_1x}{1+b_1x}$
+    - $f(0)=R(0)$
+    - $f^{\prime}(0)=R^{\prime}(0)$
+    - $f^{\prime\prime}(0)=R^{\prime\prime}(0)$
+    - $R(x)=\frac{2x}{x+2}$
+    - $\frac{2(x-1)}{x+1}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0069_pade_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0069
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0069/page_0069.md
+      role: problem_start
+      evidence: lines 18-37 introduce Padé approximation, give 例1, derive $R(x)=\frac{2x}{x+2}$, and record the graph-based comparison with $\ln(1+x)$ and $\ln x$.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0069.png
+      inspected: true
+      notes: 页图已核对：例1题头、$[1,1]$ 阶形式、导数匹配计算、图像和移项后的 $\ln x$ 不等式与 markdown 一致。
+  source_context: 本题是第五节“帕德逼近的基本原理”下的第一个例题，先计算 $\ln(1+x)$ 在 $x=0$ 处的 $[1,1]$ 有理逼近，再用图像说明它给出的对数上下界。
+  source_influence:
+    - 题目主体和解析均以 page_0069 为准；page_0068 与 page_0069 顶部的泰勒例7续解只作排除依据，不并入本卡。
+    - 源页图像只用于记录 $\ln(1+x)$ 与 $\frac{2x}{x+2}$ 的相对位置，本卡不把图像说明改写成额外的严格证明。
+  source_discrepancies: []
+original_problem:
+  stem: 求 $f(x)=\ln(1+x)$ 的 $[1,1]$ 阶帕德逼近。
+  parts: *a1
+  choices: []
+  answer: |
+    $f(x)=\ln(1+x)$ 的 $[1,1]$ 阶帕德逼近为
+    $R(x)=\frac{x}{1+\frac12 x}=\frac{2x}{x+2}$。
+    源页随后由图像给出：$-1<x<0$ 时 $\ln(1+x)<\frac{2x}{x+2}$，$x>0$ 时 $\ln(1+x)>\frac{2x}{x+2}$；平移后，当 $x\ge1$ 时 $\frac{2(x-1)}{x+1}\le\ln x$，当 $0<x\le1$ 时 $\ln x\le\frac{2(x-1)}{x+1}$。
+  fidelity_notes:
+    - 本题无选择项，choices 保持为空列表。
+    - 题后坐标图属于源题解析的一部分，用来说明逼近函数与 $\ln(1+x)$ 的上下关系。
+solution:
+  source_solution_summary: 把 $[1,1]$ 阶帕德逼近写成 $R(x)=\frac{a_0+a_1x}{1+b_1x}$，依次匹配 $f(0)=R(0)$、$f^{\prime}(0)=R^{\prime}(0)$、$f^{\prime\prime}(0)=R^{\prime\prime}(0)$，得到 $a_0=0$、$a_1=1$、$b_1=\frac12$，所以 $R(x)=\frac{2x}{x+2}$；源页还根据图像记录了它与 $\ln(1+x)$ 以及平移后的 $\ln x$ 的比较关系。
+  key_steps:
+    - step_id: step_1
+      statement: 按 $[1,1]$ 阶帕德逼近写出待定有理函数。
+      formula_trace:
+        from: $[1,1]\text{ 阶帕德逼近}$
+        to: $R(x)=\frac{a_0+a_1x}{1+b_1x}$
+        operation: 分子取一次多项式，分母取首项为 $1$ 的一次多项式。
+        why: 帕德逼近的约定是用有理函数在展开点附近匹配函数值和若干阶导数。
+      source_ref: page_0069
+    - step_id: step_2
+      statement: 匹配函数值，确定常数项。
+      formula_trace:
+        from: $f(0)=\ln1=0,\quad R(0)=a_0$
+        to: $a_0=0$
+        operation: 令 $f(0)=R(0)$。
+        why: 逼近函数必须先在展开点 $x=0$ 处与原函数同值。
+      source_ref: page_0069
+    - step_id: step_3
+      statement: 匹配一阶导数，确定分子一次项系数。
+      formula_trace:
+        from: $f^{\prime}(x)=\frac{1}{1+x},\quad R^{\prime}(x)=\frac{a_1}{(1+b_1x)^2}$
+        to: $f^{\prime}(0)=R^{\prime}(0)\Rightarrow a_1=1$
+        operation: 对 $R(x)=\frac{a_1x}{1+b_1x}$ 求导并代入 $x=0$。
+        why: 一阶导数匹配让有理函数在原点具有相同切线斜率。
+      source_ref: page_0069
+    - step_id: step_4
+      statement: 匹配二阶导数，确定分母一次项系数。
+      formula_trace:
+        from: $f^{\prime\prime}(0)=-1,\quad R^{\prime\prime}(0)=-2b_1$
+        to: $b_1=\frac12$
+        operation: 由 $f^{\prime\prime}(0)=R^{\prime\prime}(0)$ 解出 $b_1$。
+        why: $[1,1]$ 阶共有两个非零待定系数，匹配到二阶导数即可确定逼近式。
+      source_ref: page_0069
+    - step_id: step_5
+      statement: 写出帕德逼近式，并记录源页给出的对数比较。
+      formula_trace:
+        from: $a_0=0,\ a_1=1,\ b_1=\frac12$
+        to: $R(x)=\frac{x}{1+\frac12x}=\frac{2x}{x+2}$
+        operation: 代回待定有理函数并化简。
+        why: 源页随后用该式生成 $\ln(1+x)$ 与 $\ln x$ 的常用有理放缩。
+      source_ref: page_0069
+teaching_card:
+  student_title: 用三次匹配求出 $\ln(1+x)$ 的帕德式
+  what_it_trains: 训练把帕德逼近看成“设有理函数、匹配原点处函数值和导数”的待定系数问题，并把结果转成常用对数放缩。
+  recognition_cues:
+    - 题干直接出现 $[1,1]$ 阶帕德逼近。
+    - 函数是 $\ln(1+x)$，展开点在 $x=0$。
+    - 分母按帕德约定从 $1+b_1x$ 写起。
+  normalization_moves:
+    - 先写 $R(x)=\frac{a_0+a_1x}{1+b_1x}$。
+    - 用 $f(0)=R(0)$ 得 $a_0=0$。
+    - 用一阶导数匹配得 $a_1=1$。
+    - 用二阶导数匹配得 $b_1=\frac12$。
+    - 将 $\ln(1+x)$ 的比较式平移成 $\ln x$ 的比较式。
+  common_failures:
+    - 把泰勒多项式 $\ln(1+x)\approx x-\frac12x^2$ 当成 $[1,1]$ 帕德逼近。
+    - 忘记分母常数项固定为 $1$，导致待定系数不唯一。
+    - 求 $R^{\prime}(x)$ 时漏掉分母平方，得不到 $b_1=\frac12$。
+    - 把 $x$ 换成 $x-1$ 后忘记定义域从 $-1<x$ 变成 $x>0$。
+  similar_practice_query: $\ln(1+x)$ $[1,1]$ 帕德逼近 $R(x)=2x/(x+2)$ 对数放缩
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0069 页图；例1完整位于 page_0069，题头、解析、图像和移项后的不等式均清楚。
+    - 源页用图像说明 $\ln(1+x)$ 与 $\frac{2x}{x+2}$ 的上下关系；本卡按源页记录，没有扩展为源外证明。

@@ -1,0 +1,144 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0041_section2_ex05
+content_revision_id: mst_p0041_section2_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0041_section2_ex05.card.yaml
+stem: |-
+  （山西省三晋名校联盟 2023 学年高三下学期顶尖计划联考 T7）若直线 y=x+a 与函数 f(x)=e^x 和 g(x)=ln x+b 的图象都相切，则 a+b=（ ）
+  A. -1
+  B. 0
+  C. 1
+  D. 3
+answer: |-
+  D，a+b=3
+
+  斜率为 1 的 e^x 切线来自 x=0，故 y=x+1，a=1； 斜率为 1 的 ln x+b 切线来自 x=1，故切线为 y=x-1+b。 与 y=x+1 相同得 b=2，所以 a+b=3。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 对 e^x，有切线不等式 e^x>=x+1，等号在 x=0 取得。 因直线 y=x+a 的斜率也是 1，所以与 e^x 相切时 a=1。
+      max_score: 1
+    - step_id: step_2
+      description: 对 ln x，有 ln x<=x-1，故 ln x+2<=x+1。 若同一直线 y=x+1 与 ln x+b 相切，则 b=2。
+      max_score: 1
+    - step_id: step_3
+      description: 因此 a+b=1+2=3，选择 D。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 数形结合
+    subroute:
+      - 斜率为 1 的指数切线
+      - 斜率为 1 的对数切线
+      - 切线平移
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - e^x>=x+1
+      - ln x<=x-1
+      - y=x+a 同时作为两条切线
+    normalization_moves_used:
+      - 由 e^x 切线确定 a=1。
+      - 由 ln x+b 的斜率 1 切线确定 b=2。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会判断 e^x 的斜率 1 切点，回补导数运算与几何意义。
+      - 若学生不会写 ln x 在 x=1 处的切线，回补导数单调极值基础。
+      - 若学生把两处相切当成两条不同直线，回补函数性质与图像。
+  detail_terms:
+    - e^x>=x+1
+    - ln x<=x-1
+    - a=1, b=2
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0041_section2_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0041
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0041/page_0041.md
+      role: problem_start
+      evidence: 例 5：若直线 y=x+a 与 f(x)=e^x 和 g(x)=ln x+b 的图象都相切， 求 a+b，选项 A -1，B 0，C 1，D 3。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0041.png
+      inspected: true
+      notes: 页图确认例 5 题干、四个选项和解析都在 page_0041；无附图。
+  source_context: 例 5 是“指数的切线找点”的直接选择题：斜率为 1 的指数切线是 y=x+1， 斜率为 1 的对数切线是 y=x-1+b。
+  source_influence:
+    - 源页用 e^x>=x+1 与 x+1=(x-1)+2>=ln x+2 判断 a=1、b=2。
+    - 卡片保留选项逐项文本，并把答案 D 写入 original_problem.answer。
+  source_discrepancies: []
+original_problem:
+  stem: （山西省三晋名校联盟 2023 学年高三下学期顶尖计划联考 T7）若直线 y=x+a 与函数 f(x)=e^x 和 g(x)=ln x+b 的图象都相切，则 a+b=（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: "-1"
+      text_latex: $-1$
+    - label: B
+      text_raw: "0"
+      text_latex: $0$
+    - label: C
+      text_raw: "1"
+      text_latex: $1$
+    - label: D
+      text_raw: "3"
+      text_latex: $3$
+  answer: D，a+b=3
+  fidelity_notes:
+    - 题干要求同一直线 y=x+a，斜率固定为 1。
+solution:
+  source_solution_summary: 斜率为 1 的 e^x 切线来自 x=0，故 y=x+1，a=1； 斜率为 1 的 ln x+b 切线来自 x=1，故切线为 y=x-1+b。 与 y=x+1 相同得 b=2，所以 a+b=3。
+  key_steps:
+    - step_id: step_1
+      statement: 对 e^x，有切线不等式 e^x>=x+1，等号在 x=0 取得。 因直线 y=x+a 的斜率也是 1，所以与 e^x 相切时 a=1。
+      formula_trace:
+        from: e^x>=x+1
+        to: y=x+a=y=x+1, a=1
+        operation: 识别指数函数斜率为 1 的切线
+        why: e^x 的导数等于 1 时切点为 x=0。
+      source_ref: page_0041:例5解析
+    - step_id: step_2
+      statement: 对 ln x，有 ln x<=x-1，故 ln x+2<=x+1。 若同一直线 y=x+1 与 ln x+b 相切，则 b=2。
+      formula_trace:
+        from: ln x<=x-1
+        to: ln x+2<=x+1, b=2
+        operation: 把对数函数斜率为 1 的切线平移 b
+        why: ln x 在 x=1 处切线斜率为 1，切线为 y=x-1+b。
+      source_ref: page_0041:例5解析
+    - step_id: step_3
+      statement: 因此 a+b=1+2=3，选择 D。
+      formula_trace:
+        from: a=1, b=2
+        to: a+b=3
+        operation: 代入求值并匹配选项
+        why: 两次相切条件已唯一确定 a 与 b。
+      source_ref: page_0041:例5解析
+teaching_card:
+  student_title: 斜率 1 同时切住 e^x 和 ln x+b
+  what_it_trains: 训练学生遇到“斜率固定的切线”时，直接找切点：e^x 的斜率 1 切点在 0， ln x 的斜率 1 切点在 1，再用同一直线确定平移量。
+  recognition_cues:
+    - 直线 y=x+a 已经给出斜率 1。
+    - 同时与 e^x 和 ln x+b 相切，说明两边都要使用斜率 1 的切线。
+    - 选项只问 a+b，参数会被切线平移直接锁定。
+  normalization_moves:
+    - 把 e^x 的切线写成 y=x+1。
+    - 把 ln x+b 的切线写成 y=x-1+b。
+    - 令 x+1=x-1+b，得到 b=2。
+  common_failures:
+    - 把 e^x 的切点误认为 x=1。
+    - 忘记 ln x+b 的 b 是整体上移，不改变切线斜率。
+    - 只背 e^x>=x+1，却不会把 x+1 改写成 (x-1)+2 来读出 b。
+  similar_practice_query: 固定斜率直线同时切 e^x 与 ln x 平移，求 a+b
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

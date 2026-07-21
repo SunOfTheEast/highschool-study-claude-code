@@ -1,0 +1,153 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0046_section3_ex01
+content_revision_id: mst_p0046_section3_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0046_section3_ex01.card.yaml
+stem: 若 f(x)=x\ln x，若 f(x)\geqslant ax^2+\frac{2}{a} (a\neq0) 在 x\in(0,+\infty) 上恒成立，求 a 的最小值。
+answer: |-
+  -e^3
+
+  因为 x>0，原不等式等价于 g(x)=\ln x-ax-\frac{2}{ax}\geqslant0 恒成立。 若 a>0，取 x=1 得 g(1)=-a-\frac{2}{a}<0，不合题意。若 a<0， g 的唯一正临界点是 x=-1/a，且那里为最小值；由 g(-1/a)=\ln(-1/a)+3\geqslant0 得 -1/a\geqslant e^{-3}， 即 -e^3\leqslant a<0，所以 a 的最小值为 -e^3。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先把 x 提出来，只留下一个单独的 \ln x。
+      max_score: 1
+    - step_id: step_2
+      description: 定义辅助函数并写出等价条件。
+      max_score: 1
+    - step_id: step_3
+      description: 排除 a>0 的情形。
+      max_score: 1
+    - step_id: step_4
+      description: 对 a<0 求 g 的最小值位置。
+      max_score: 1
+    - step_id: step_5
+      description: 由最小值不小于 0 解出 a 的范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 含参数分类讨论
+      - 参变量分离
+    subroute:
+      - 对数单身狗
+      - 提取 x 清除 x\ln x
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - x\ln x-ax^2-\frac{2}{a}=x(\ln x-ax-\frac{2}{ax})
+      - g'(x)=\frac{-a^2(x+\frac{1}{a})(x-\frac{2}{a})}{ax^2}
+      - g(-1/a)=\ln(-1/a)+3
+    normalization_moves_used:
+      - 把 x\ln x 的 x 提到括号外。
+      - 把恒成立改成 g_{\min}\geqslant0。
+      - 按 a 的正负分类，先用 x=1 排除 a>0。
+  fallback:
+    only_if_trace_shows:
+      - 若学生没有利用 x>0 提取公因式，回补函数三要素与定义域。
+      - 若学生不会对 g'(x) 因式分解并判断单调性，回补导数单调极值基础。
+      - 若学生在 a<0 时不等式变形方向出错，回补代数恒等变形。
+  detail_terms:
+    - 对数单身狗
+    - \ln x-ax-\frac{2}{ax}
+    - g(-1/a)=\ln(-1/a)+3
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0046_section3_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0046
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0046/page_0046.md
+      role: problem_start
+      evidence: 例 1：若 f(x)=x\ln x，且 f(x)\geqslant ax^2+\frac{2}{a} (a\neq0) 在 x\in(0,+\infty) 上恒成立，求 a 的最小值。
+    - ref_id: page_0046_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0046/page_0046.md
+      role: solution
+      evidence: 解析先写 F(x)=x(\ln x-ax-\frac{2}{ax})，令 g(x)=\ln x-ax-\frac{2}{ax}； a>0 时 g(1)<0，不合题意；a<0 时 g 在 -1/a 处取最小，得 0>a\geqslant-e^3。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0046.png
+      inspected: true
+      notes: 页图已核对：第三节“一、对数单身狗”说明、例 1 题干和完整解析均在 page_0046。
+  source_context: 本题是第三节“对数单身狗”的首个例题，源页明确强调先清除 \ln x 前面的因式，避免直接研究 F'(x)=\ln x+1-2ax。
+  source_influence:
+    - 卡片保留源页的核心动作：把 x\ln x-ax^2-\frac{2}{a} 提成 x\left(\ln x-ax-\frac{2}{ax}\right)。
+  source_discrepancies: []
+original_problem:
+  stem: 若 f(x)=x\ln x，若 f(x)\geqslant ax^2+\frac{2}{a} (a\neq0) 在 x\in(0,+\infty) 上恒成立，求 a 的最小值。
+  parts: *a1
+  choices: []
+  answer: -e^3
+  fidelity_notes: []
+solution:
+  source_solution_summary: 因为 x>0，原不等式等价于 g(x)=\ln x-ax-\frac{2}{ax}\geqslant0 恒成立。 若 a>0，取 x=1 得 g(1)=-a-\frac{2}{a}<0，不合题意。若 a<0， g 的唯一正临界点是 x=-1/a，且那里为最小值；由 g(-1/a)=\ln(-1/a)+3\geqslant0 得 -1/a\geqslant e^{-3}， 即 -e^3\leqslant a<0，所以 a 的最小值为 -e^3。
+  key_steps:
+    - step_id: step_1
+      statement: 先把 x 提出来，只留下一个单独的 \ln x。
+      formula_trace:
+        from: x\ln x-ax^2-\frac{2}{a}\geqslant0
+        to: x\left(\ln x-ax-\frac{2}{ax}\right)\geqslant0
+        operation: 利用 x>0 提取公因式 x。
+        why: 恒成立问题可转成研究括号内函数的最小值，导数中不再出现 x\ln x 的乘积。
+      source_ref: page_0046_solution
+    - step_id: step_2
+      statement: 定义辅助函数并写出等价条件。
+      formula_trace:
+        from: x\left(\ln x-ax-\frac{2}{ax}\right)\geqslant0,\quad x>0
+        to: g(x)=\ln x-ax-\frac{2}{ax}\geqslant0,\quad x>0
+        operation: 因 x 为正数，直接除去 x。
+        why: 只需保证 g(x) 的最小值不小于 0。
+      source_ref: page_0046_solution
+    - step_id: step_3
+      statement: 排除 a>0 的情形。
+      formula_trace:
+        from: g(1)=-a-\frac{2}{a}
+        to: g(1)<0\quad(a>0)
+        operation: 代入 x=1 检验恒成立的必要条件。
+        why: 只要存在一个 x 使 g(x)<0，原不等式就不能恒成立。
+      source_ref: page_0046_solution
+    - step_id: step_4
+      statement: 对 a<0 求 g 的最小值位置。
+      formula_trace:
+        from: g'(x)=\frac{-a^2(x+\frac{1}{a})(x-\frac{2}{a})}{ax^2}
+        to: g(x)_{\min}=g\left(-\frac{1}{a}\right)
+        operation: 分析 a<0 时导数符号，正的临界点为 -1/a。
+        why: g 在 (0,-1/a) 递减，在 (-1/a,+\infty) 递增。
+      source_ref: page_0046_solution
+    - step_id: step_5
+      statement: 由最小值不小于 0 解出 a 的范围。
+      formula_trace:
+        from: g\left(-\frac{1}{a}\right)=\ln\left(-\frac{1}{a}\right)+3\geqslant0
+        to: -e^3\leqslant a<0
+        operation: 化为 -1/a\geqslant e^{-3}，再在 a<0 下变形。
+        why: 这是原不等式对所有 x>0 成立的充要范围。
+      source_ref: page_0046_solution
+teaching_card:
+  student_title: 把 x\ln x 提出 x 后再求参数最小值
+  what_it_trains: 训练在含 x\ln x 的恒成立题中先清掉对数前的变量因子，再用导数和参数正负分类找最小值。
+  recognition_cues:
+    - 不等式含 x\ln x、ax^2 和常数除以 a。
+    - 定义域给出 x>0。
+    - 直接求导会留下 \ln x，结构比较复杂。
+  normalization_moves:
+    - 先写成 x(\ln x-ax-\frac{2}{ax})。
+    - a>0 用特值 x=1 快速排除。
+    - a<0 时只研究 g 在 -1/a 处的最小值。
+  common_failures:
+    - 直接研究 F'(x)=\ln x+1-2ax，陷入二次求导。
+    - 忘记 a>0 时 x=1 已经使不等式失败。
+    - 由 -1/a\geqslant e^{-3} 推 a 范围时方向写反。
+  similar_practice_query: x ln x 与 ax^2 加常数的恒成立题，提取 x 后做对数单身狗
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

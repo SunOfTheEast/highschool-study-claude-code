@@ -1,0 +1,233 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0291_exp4x_lnx_tangent_param_range_ex07
+content_revision_id: mst_p0291_exp4x_lnx_tangent_param_range_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0291_exp4x_lnx_tangent_param_range_ex07.card.yaml
+stem: |-
+  （2024 · 湖北金太阳）已知函数 $f(x)=e^{4x-1}-4a\ln(2x)$。
+  1. 当 $a=1$ 时，求曲线 $y=f(x)$ 在点 $(\frac12,f(\frac12))$ 处的切线方程。
+  2. 当 $a>0$ 时，若关于 $x$ 的不等式 $f(x)\ge a+a\ln(2a)$ 恒成立，求实数 $a$ 的取值范围。
+answer: |-
+  第(1)问切线方程为 $y=(4e-8)x-e+4$；第(2)问 $a\in(0,\frac e2]$。
+
+  第(1)问直接求导： $f^\prime(x)=4e^{4x-1}-\frac4x$，所以 $f^\prime(1/2)=4e-8$，$f(1/2)=e$，切线方程为 $y-e=(4e-8)(x-\frac12)$，即 $y=(4e-8)x-e+4$。 第(2)问令 $F(x)=e^{4x-1}-4a\ln(2x)-a-a\ln(2a)$。法一把 $F$ 拆成 $h(4x-\ln2a-1)+h(\ln2x)+\frac32-\frac32\ln2a$， 其中 $h(t)=e^t-t-1\ge0$。若 $\frac32-\frac32\ln2a\ge0$，即 $a\le e/2$，则 $F(x)\ge0$； 等号在 $x=1/2,a=e/2$ 同时达到。若 $a>e/2$，取 $x=1/2$ 得 $F(1/2)=\frac12(\frac ea-\ln(2ae))<0$，矛盾。 法二从分而治之角度同除 $(2x)^2$，让 $e^{4x-1}$ 和 $\ln(2x)$ 都变成二次量；法三用隐点效应也探出取等点 $x_0=1/2$。因此 $a\in(0,e/2]$。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 第(1)问求切线方程。
+      max_score: 1
+    - step_id: step_2
+      description: 第(2)问构造恒非负目标函数。
+      max_score: 1
+    - step_id: step_3
+      description: 法一：朗博同构加保值拆解。
+      max_score: 1
+    - step_id: step_4
+      description: 由常数项给充分性。
+      max_score: 1
+    - step_id: step_5
+      description: 用 $x=1/2$ 排除 $a>e/2$。
+      max_score: 1
+    - step_id: step_6
+      description: 法二：分而治之解释为什么除以 $(2x)^2$。
+      max_score: 1
+    - step_id: step_7
+      description: 法三：隐点效应探出 $x_0=1/2$。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 几何量求解
+        target: 第 1 问
+        result: $y=(4e-8)x-e+4$。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $a\in(0,\frac e2]$。
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 同构变形与换元法
+      - 显隐点探路
+      - 切线放缩与凹凸性
+    subroute:
+      - 朗博同构 $h(t)=e^t-t-1$
+      - 保值拆项消一次项
+      - 分而治之同除 $(2x)^2$
+      - 隐点探出 $x_0=1/2$
+      - 显点反证必要性
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 切线/公切线/切点量结构
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $e^{4x-1}-4a\ln(2x)$
+      - $a+a\ln(2a)$
+      - $h(4x-\ln2a-1)+h(\ln2x)$
+      - $x=\frac12$
+      - $a=\frac e2$
+      - $(2x)^2$
+    normalization_moves_used:
+      - 第(1)问按点斜式求切线。
+      - 第(2)问先构造 $F(x)\ge0$。
+      - 朗博拆项时让一次项抵消。
+      - 分治路线中同除 $(2x)^2$ 平衡尺度。
+      - 隐点路线中由 $f^\prime(x_0)=0$ 消参。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求切线方程，回补导数运算与几何意义。
+      - 若学生不会 $e^t-t-1\ge0$，回补指数对数基础。
+      - 若学生不会保值拆项，回补不等式工具基础。
+      - 若学生不会分而治之同除，回补代数恒等变形。
+      - 若学生不会隐点取等探路，回补导数单调极值基础。
+  detail_terms:
+    - $e^{4x-1}-4a\ln(2x)$
+    - $y=(4e-8)x-e+4$
+    - $a+a\ln(2a)$
+    - 朗博同构
+    - 保值性
+    - 分而治之
+    - $x=1/2$
+    - $a=e/2$
+parts: &a1
+  - part_id: "1"
+    text: 当 $a=1$ 时，求曲线 $y=f(x)$ 在点 $(\frac12,f(\frac12))$ 处的切线方程。
+  - part_id: "2"
+    text: 当 $a>0$ 时，若关于 $x$ 的不等式 $f(x)\ge a+a\ln(2a)$ 恒成立，求实数 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0291_exp4x_lnx_tangent_param_range_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0291_ex07_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0291/page_0291.md
+      role: problem_start
+      evidence: page_0291 例7题头：$f(x)=e^{4x-1}-4a\ln(2x)$；第(1)问 $a=1$ 时求 $x=1/2$ 处切线方程；第(2)问 $a>0$ 时，若 $f(x)\ge a+a\ln(2a)$ 恒成立，求 $a$ 范围。
+    - ref_id: page_0291_ex07_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0291/page_0291.md
+      role: solution_start
+      evidence: page_0291 完成第(1)问切线方程，并开始第(2)问：构造 $F(x)=e^{4x-1}-4a\ln(2x)-a-a\ln(2a)$，说明用朗博同构、分而治之和隐点代换三种视角处理。
+    - ref_id: page_0292_ex07_solution_end
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0292/page_0292.md
+      role: solution_end
+      evidence: page_0292 完成例7：法一用 $h(t)=e^t-t-1\ge0$ 拆出 $h(4x-\ln2a-1)+h(\ln2x)+\frac32-\frac32\ln2a$；法二用同除 $(2x)^2$ 的分而治之；法三用隐点效应，最终结论 $a\in(0,e/2]$。
+    - ref_id: page_0292_ex08_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0292/page_0292.md
+      role: local_context
+      evidence: page_0292 底部从例8开始新题，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0291.png
+      inspected: true
+      notes: 已核对页图：page_0291 下半页为例7题头、第(1)问和第(2)问开头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0292.png
+      inspected: true
+      notes: 已核对页图：page_0292 完成例7三种路线，页底另起例8。
+  source_context: 本卡处理 page_0291 起头、page_0292 续完的例7；page_0292 例8排除。
+  source_influence:
+    - 保留第(1)问切线方程：$y=(4e-8)x-e+4$。
+    - 保留第(2)问目标函数：$F(x)=e^{4x-1}-4a\ln(2x)-a-a\ln(2a)$。
+    - 保留法一朗博+保值拆解：两个 $h(t)=e^t-t-1$ 加常数项。
+    - 保留必要性反证：若 $a>e/2$，取 $x=1/2$ 得 $F(1/2)<0$。
+    - 保留法二分而治之：同除 $(2x)^2$，把指数和对数两边都平衡到二次。
+    - 保留法三隐点效应：由 $f^\prime(x_0)=0$ 和取等条件探出 $x_0=1/2$。
+  source_discrepancies:
+    - discrepancy_id: page_0292_ex07_parameter_function_derivative_typo
+      status: resolved
+      issue: source 法三末尾写 $g(a)=a+a\ln2a,\ g^\prime(a)=2+2\ln2a$；实际导数应为 $2+\ln(2a)$。
+      resolution: 题卡保留法三“由隐点探出 $x_0=1/2$”的作用；最终范围主要以法一/法二的充分必要性为准，参数函数导数按正确形式理解。
+original_problem:
+  stem: （2024 · 湖北金太阳）已知函数 $f(x)=e^{4x-1}-4a\ln(2x)$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问切线方程为 $y=(4e-8)x-e+4$；第(2)问 $a\in(0,\frac e2]$。
+  fidelity_notes:
+    - 无选项。
+    - 第(2)问默认定义域 $x>0$。
+solution:
+  source_solution_summary: 第(1)问直接求导： $f^\prime(x)=4e^{4x-1}-\frac4x$，所以 $f^\prime(1/2)=4e-8$，$f(1/2)=e$，切线方程为 $y-e=(4e-8)(x-\frac12)$，即 $y=(4e-8)x-e+4$。 第(2)问令 $F(x)=e^{4x-1}-4a\ln(2x)-a-a\ln(2a)$。法一把 $F$ 拆成 $h(4x-\ln2a-1)+h(\ln2x)+\frac32-\frac32\ln2a$， 其中 $h(t)=e^t-t-1\ge0$。若 $\frac32-\frac32\ln2a\ge0$，即 $a\le e/2$，则 $F(x)\ge0$； 等号在 $x=1/2,a=e/2$ 同时达到。若 $a>e/2$，取 $x=1/2$ 得 $F(1/2)=\frac12(\frac ea-\ln(2ae))<0$，矛盾。 法二从分而治之角度同除 $(2x)^2$，让 $e^{4x-1}$ 和 $\ln(2x)$ 都变成二次量；法三用隐点效应也探出取等点 $x_0=1/2$。因此 $a\in(0,e/2]$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问求切线方程。
+      formula_trace:
+        from: $f(x)=e^{4x-1}-4\ln(2x)$
+        to: $f^\prime(1/2)=4e-8,\quad f(1/2)=e$
+        operation: 求导并代入切点。
+        why: 切线方程由点斜式直接得到。
+      source_ref: page_0291_ex07_solution_start
+    - step_id: step_2
+      statement: 第(2)问构造恒非负目标函数。
+      formula_trace:
+        from: $f(x)\ge a+a\ln(2a)$
+        to: $F(x)=e^{4x-1}-4a\ln(2x)-a-a\ln(2a)\ge0$
+        operation: 移项。
+        why: 把求参问题变成证明 $F$ 恒非负。
+      source_ref: page_0291_ex07_solution_start
+    - step_id: step_3
+      statement: 法一：朗博同构加保值拆解。
+      formula_trace:
+        from: $F(x)$
+        to: $h(4x-\ln2a-1)+h(\ln2x)+\frac32-\frac32\ln2a$
+        operation: 构造 $h(t)=e^t-t-1$，让一次项抵消。
+        why: 两个 $h$ 都非负，剩下只看常数项。
+      source_ref: page_0292_ex07_solution_end
+    - step_id: step_4
+      statement: 由常数项给充分性。
+      formula_trace:
+        from: $\frac32-\frac32\ln2a\ge0$
+        to: $0<a\le\frac e2$
+        operation: 解 $\ln(2a)\le1$。
+        why: 此时 $F(x)$ 被两个非负项和非负常数压住。
+      source_ref: page_0292_ex07_solution_end
+    - step_id: step_5
+      statement: 用 $x=1/2$ 排除 $a>e/2$。
+      formula_trace:
+        from: $a>\frac e2$
+        to: $F(1/2)=\frac12(\frac ea-\ln(2ae))<0$
+        operation: 代入显点 $x=1/2$。
+        why: 出现负值就与恒成立矛盾，给必要性。
+      source_ref: page_0292_ex07_solution_end
+    - step_id: step_6
+      statement: 法二：分而治之解释为什么除以 $(2x)^2$。
+      formula_trace:
+        from: $e^{4x-1}\ge4a\ln(2x)+a+a\ln(2a)$
+        to: $\frac1e(\frac{e^{2x}}{2x})^2$ 与 $\frac{2a\ln(4x^2\sqrt{2ae})}{4x^2}$ 比较
+        operation: 两边同除 $(2x)^2$ 并做尺度平衡。
+        why: source 解释四次指数和对数之间要先降到同一二次尺度。
+      source_ref: page_0292_ex07_solution_end
+    - step_id: step_7
+      statement: 法三：隐点效应探出 $x_0=1/2$。
+      formula_trace:
+        from: $f(x_0)=a+a\ln(2a),\quad f^\prime(x_0)=0$
+        to: $x_0=\frac12$
+        operation: 用导数取等和参变分离消去 $a$。
+        why: 隐点路线解释为什么切点 $1/2$ 同时是第二问的关键显点。
+      source_ref: page_0292_ex07_solution_end
+teaching_card:
+  student_title: 用朗博保值锁住 $a\le e/2$
+  what_it_trains: 训练把指数和对数的恒成立不等式拆成两个非负的朗博项，并理解为什么切线点 $1/2$ 会成为第二问的取等点。
+  recognition_cues:
+    - 第一问已经给了 $x=1/2$ 处切线，第二问还出现 $2x$。
+    - 目标右侧是 $a+a\ln(2a)$，暗示 $a=e/2$ 可能取等。
+    - 指数是 $e^{4x-1}$，对数是 $\ln(2x)$，尺度差很大。
+    - source 同时给出朗博保值、分而治之、隐点效应三条路线。
+  normalization_moves:
+    - 先把恒成立式写成 $F(x)\ge0$。
+    - 用 $h(t)=e^t-t-1$ 造两个非负块。
+    - 检查常数项 $\frac32-\frac32\ln(2a)$。
+    - 用 $x=1/2$ 反证排除 $a>e/2$。
+  common_failures:
+    - 只会第(1)问切线，没看出切点是第(2)问的提示。
+    - 朗博拆项时一次项没有抵消干净。
+    - 分治路线里随便除，没看出必须除以 $(2x)^2$ 才平衡。
+    - 法三中被 source 末尾的参数导数笔误干扰。
+  similar_practice_query: e^{4x-1}-4a ln(2x) a+a ln(2a) e/2 朗博 保值 分而治之
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

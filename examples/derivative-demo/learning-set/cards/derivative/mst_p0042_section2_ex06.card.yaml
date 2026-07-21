@@ -1,0 +1,175 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0042_section2_ex06
+content_revision_id: mst_p0042_section2_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0042_section2_ex06.card.yaml
+stem: |-
+  （辽宁鞍山 2024 学年高三上学期第一次质量监测 T7）已知函数 $f(x)=ke^x-\frac{1}{2}x^2-2x$，若 $f(x)$ 为 $\mathbf{R}$ 上的增函数，则 $k$ 的取值范围为 (  )
+  A. $\left[\frac{1}{\mathrm{e}}, +\infty\right)$
+  B. $[\mathrm{e}, +\infty)$
+  C. $[\mathrm{e}+1, +\infty)$
+  D. $[2\mathrm{e}, +\infty)$
+answer: |
+  B
+
+  由 $f'(x)=ke^x-x-2$，$f(x)$ 在 $\\mathbf R$ 上递增等价于 $ke^x-x-2\\ge0$ 对所有实数 $x$ 恒成立。法一把它化为 $k\\ge (x+2)/e^x$，令 $u=x+2$，则 $(x+2)/e^x=e^2 u/e^u\\le e$，等号在 $u=1$ 即 $x=-1$ 时取得，所以 $k\\ge e$。法二把 $ke^x=e^{x+\ln k}$，由 $e^u\\ge u+1$ 得只要 $x+\ln k+1\\ge x+2$，即 $\\ln k\\ge1$，并且取等点也说明下界必要。故选 B。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把增函数条件转成导数恒非负。
+      max_score: 1
+    - step_id: step_2
+      description: 分离参数得到一个标准最值。
+      max_score: 1
+    - step_id: step_3
+      description: 求 $\frac{x+2}{e^x}$ 的最大值。
+      max_score: 1
+    - step_id: step_4
+      description: 用切线式解释同一下界。
+      max_score: 1
+    - step_id: step_5
+      description: 让指数切线的右端压过 $x+2$。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 参变量分离
+      - 同构变形与换元法
+    subroute:
+      - 指数切线找点
+      - $x/e^x$ 最大值
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 切线/公切线/切点量结构
+    evidence:
+      - $f'(x)=ke^x-x-2\ge0$ 被化为 $e^{x+\ln k}\ge x+2$。
+      - $\frac{x+2}{e^x}=e^2\frac{x+2}{e^{x+2}}$ 由 $u/e^u$ 最大值控制。
+    normalization_moves_used:
+      - $ke^x=e^{x+\ln k}$。
+      - $u=x+2$。
+      - 用 $e^u\ge u+1$ 构造斜率为 1 的切线式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $f$ 在 $\mathbf R$ 上递增转成 $f'(x)\ge0$ 恒成立，回补导数单调极值基础。
+      - 若学生分离参数时忘记 $e^x>0$，回补指数对数基础。
+      - 若学生不知道 $u/e^u$ 的最大值在 $u=1$ 处取得，回补导数单调极值基础。
+      - 若学生不会把 $ke^x$ 写成 $e^{x+\ln k}$，回补指数对数基础。
+  detail_terms:
+    - $f'(x)=ke^x-x-2$
+    - $k\ge\frac{x+2}{e^x}$
+    - $e^{x+\ln k}\ge x+\ln k+1$
+    - $k\ge e$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0042_section2_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0042
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0042/page_0042.md
+      role: problem_start
+      evidence: lines 18-25 give 例 6 题干、四个选项、两种解析路线和答案 B。
+    - ref_id: page_0042_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0042/page_0042.md
+      role: local_context
+      evidence: lines 14-16 summarize 指数切线切点构造、斜率构造和“构造斜率为 1 的式子”。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0042.png
+      inspected: true
+      notes: 已核对页图：例 6 题干、选项与解析和 markdown 一致；题目在 page_0042 内结束。
+  source_context: 本页正在讲指数切线找点。例 6 将函数在 R 上递增转化为导数非负恒成立，再用 $(x+2)/e^x$ 最大值或 $e^u\ge u+1$ 的切线式推出参数下界。
+  source_influence:
+    - 卡片按源解把目标定为求参数范围，核心条件为 $f'(x)=ke^x-x-2\ge0$ 在 $\mathbf R$ 上恒成立。
+    - 两种源解分别对应六大函数最值模板和指数切线找点，图谱主方法取切线放缩与凹凸性，保留同构变形为辅助路线。
+  source_discrepancies: []
+original_problem:
+  stem: （辽宁鞍山 2024 学年高三上学期第一次质量监测 T7）已知函数 $f(x)=ke^x-\frac{1}{2}x^2-2x$，若 $f(x)$ 为 $\mathbf{R}$ 上的增函数，则 $k$ 的取值范围为 (  )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\left[\frac{1}{\mathrm{e}}, +\infty\right)$
+      text_latex: $\left[\frac{1}{\mathrm{e}}, +\infty\right)$
+    - label: B
+      text_raw: $[\mathrm{e}, +\infty)$
+      text_latex: $[\mathrm{e}, +\infty)$
+    - label: C
+      text_raw: $[\mathrm{e}+1, +\infty)$
+      text_latex: $[\mathrm{e}+1, +\infty)$
+    - label: D
+      text_raw: $[2\mathrm{e}, +\infty)$
+      text_latex: $[2\mathrm{e}, +\infty)$
+  answer: B
+  fidelity_notes:
+    - 源页使用 $\mathrm e$ 表示自然常数，答案为 $[\mathrm e,+\infty)$。
+    - 页图与 markdown 均显示增区间为整个 $\mathbf R$。
+solution:
+  source_solution_summary: |
+    由 $f'(x)=ke^x-x-2$，$f(x)$ 在 $\\mathbf R$ 上递增等价于 $ke^x-x-2\\ge0$ 对所有实数 $x$ 恒成立。法一把它化为 $k\\ge (x+2)/e^x$，令 $u=x+2$，则 $(x+2)/e^x=e^2 u/e^u\\le e$，等号在 $u=1$ 即 $x=-1$ 时取得，所以 $k\\ge e$。法二把 $ke^x=e^{x+\ln k}$，由 $e^u\\ge u+1$ 得只要 $x+\ln k+1\\ge x+2$，即 $\\ln k\\ge1$，并且取等点也说明下界必要。故选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 把增函数条件转成导数恒非负。
+      formula_trace:
+        from: $f(x)=ke^x-\frac12x^2-2x$
+        to: $f'(x)=ke^x-x-2\ge0\quad (x\in\mathbf R)$
+        operation: 求导，并使用函数在 $\mathbf R$ 上递增的充分必要条件。
+        why: 参数 $k$ 只在导数中的指数项前出现，恒成立条件更容易处理。
+      source_ref: page_0042
+    - step_id: step_2
+      statement: 分离参数得到一个标准最值。
+      formula_trace:
+        from: $ke^x-x-2\ge0$
+        to: $k\ge\frac{x+2}{e^x}\quad (x\in\mathbf R)$
+        operation: 两边移项并除以正数 $e^x$。
+        why: 要让不等式对全体 $x$ 成立，$k$ 必须不小于右侧函数的最大值。
+      source_ref: page_0042
+    - step_id: step_3
+      statement: 求 $\frac{x+2}{e^x}$ 的最大值。
+      formula_trace:
+        from: $\frac{x+2}{e^x}$
+        to: $e^2\cdot\frac{x+2}{e^{x+2}}\le e$
+        operation: 令 $u=x+2$，使用 $u/e^u$ 在 $u=1$ 处最大为 $1/e$。
+        why: 这是源解的六大函数同构模板，直接给出参数下界。
+      source_ref: page_0042
+    - step_id: step_4
+      statement: 用切线式解释同一下界。
+      formula_trace:
+        from: $ke^x-x-2\ge0$
+        to: $e^{x+\ln k}\ge x+2$
+        operation: 把 $ke^x$ 写成 $e^{x+\ln k}$。
+        why: 可以套 $e^u\ge u+1$ 的指数切线放缩。
+      source_ref: page_0042
+    - step_id: step_5
+      statement: 让指数切线的右端压过 $x+2$。
+      formula_trace:
+        from: $e^{x+\ln k}\ge x+\ln k+1$
+        to: $x+\ln k+1\ge x+2\Rightarrow \ln k\ge1\Rightarrow k\ge e$
+        operation: 比较两个一次式，并指数化。
+        why: 当 $\ln k=1$ 时在 $x=-1$ 处取等，说明下界也是必要的。
+      source_ref: page_0042
+teaching_card:
+  student_title: 把导数非负配成指数切线
+  what_it_trains: 训练从“全实数上递增”出发，把导数恒非负改写成标准指数函数与直线的比较，并用切线取等点锁定参数下界。
+  recognition_cues:
+    - 题干说函数在 $\mathbf R$ 上为增函数。
+    - 求导后出现 $ke^x-x-2$。
+    - 常数 $2$ 可以和 $x$ 合成 $x+2$，对应 $u/e^u$ 或 $e^u\ge u+1$。
+  normalization_moves:
+    - 先求导得到 $ke^x-x-2\ge0$。
+    - 路线一：分离成 $k\ge (x+2)/e^x$，再令 $u=x+2$。
+    - 路线二：把 $ke^x$ 写成 $e^{x+\ln k}$，让切线式的右端不低于 $x+2$。
+  common_failures:
+    - 把递增误认为只要某一点导数非负，漏掉全体 $x$。
+    - 求 $u/e^u$ 最大值时忽略 $u$ 可以为负，但最大值仍在 $u=1$。
+    - 只证明 $k=e$ 可行，没有说明 $k<e$ 会在取等点附近失败。
+  similar_practice_query: 导数增函数 恒成立参数 指数切线 ke^x-x-2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0042 原图与 markdown 一致；无跨页续解。

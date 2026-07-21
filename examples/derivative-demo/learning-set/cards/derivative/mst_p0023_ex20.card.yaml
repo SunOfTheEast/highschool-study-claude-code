@@ -1,0 +1,198 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0023_ex20
+content_revision_id: mst_p0023_ex20-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0023_ex20.card.yaml
+stem: |-
+  (吉林省长春市五校 2024 学年高三上学期联合模拟考试 T11) 已知 $f(x)=(x+1)\ln x$，$g(x)=x(\mathrm{e}^x+1)$，则下列结论正确的是 (  )
+  A. 函数 $f(x)=(x+1)\ln x$，在 $(0, +\infty)$ 上存在唯一极值点
+  B. 任意 $x \in (0, +\infty)$，有 $f(x)<g(x)$ 恒成立
+  C. 若对任意 $x \in (0, +\infty)$，不等式 $g(x^2+ax+a) \leqslant g(2\mathrm{e}^x)$ 恒成立，则实数 $a$ 的最大值为 2
+  D. 若 $f(x_1)=g(x_2)=t$，$(t>0)$，则 $\frac{\ln t}{2x_2(x_1+1)}$ 的最大值为 $\frac{1}{2\mathrm{e}}$
+answer: |-
+  BCD
+
+  A 中 $f'(x)=\ln x+1+1/x>0$，所以没有极值点。B 中 $f(x)=g(\ln x)$，且 $g$ 在实数域严格递增、$\ln x<x$，故 $f(x)<g(x)$。 C 中由 $g$ 的单调性把不等式化成 $x^2+ax+a\le2e^x$；令 $x\to0^+$ 得 $a\le2$，而 $a=2$ 时 $x^2+2x+2\le2e^x$。D 按题干变量重推：由 $f(x_1)=g(x_2)$ 和 $f(x)=g(\ln x)$ 得 $x_2=\ln x_1$，于是 $t=x_2(x_1+1)$，目标式为 $\ln t/(2t)\le1/(2e)$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 证明 A 错：$f$ 在定义域内严格递增。
+      max_score: 1
+    - step_id: step_2
+      description: 证明 B 对：把 $f(x)$ 写成 $g(\ln x)$。
+      max_score: 1
+    - step_id: step_3
+      description: 证明 C 对：把函数不等式降成指数放缩。
+      max_score: 1
+    - step_id: step_4
+      description: 按题干变量证明 D 对。
+      max_score: 1
+    - step_id: step_5
+      description: 把 D 的目标式化为 $\ln t/(2t)$。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level:
+      - part_id: item_1
+        goal: 零点/极值点分析
+        target: 单调性与极值判断
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 不等式证明
+        target: 函数不等式恒成立
+        result: 见 source_solution_summary
+      - part_id: item_3
+        goal: 求参数范围
+        target: 求参数范围
+        result: 见 source_solution_summary
+      - part_id: item_4
+        goal: 极值最值
+        target: 同构条件下求表达式最大值
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+      - 切线放缩与凹凸性
+      - 局部逼近与找点
+    subroute:
+      - $f(x)=g(\ln x)$ 同构
+      - 端点必要性
+      - $e^x\ge1+x+x^2/2$
+      - $\ln t/t$ 最大值
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $(x+1)\ln x=(e^{\ln x}+1)\ln x=g(\ln x)$
+      - $g'(u)=(u+1)e^u+1>0$
+      - $x^2+ax+a\le2e^x$
+    normalization_moves_used:
+      - $x=e^{\ln x}$
+      - 用 $g$ 单调性把 $g(A)\le g(B)$ 化成 $A\le B$
+      - 用 $t=x_2(x_1+1)$ 把 D 的分母化成 $2t$
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $(x+1)\ln x$ 化成 $g(\ln x)$，回补指数对数基础。
+      - 若学生不能证明 $g'(u)=(u+1)e^u+1>0$，回补导数单调极值基础。
+      - 若学生从 $g(A)\le g(B)$ 推不出 $A\le B$ 的条件，回补函数性质与图像。
+      - 若学生不知道用 $x\to0^+$ 找 $a\le2$ 的必要性，回补不等式工具基础。
+  detail_terms:
+    - $(x+1)\ln x$
+    - $x(e^x+1)$
+    - $g(\ln x)$
+    - $x^2+ax+a\le2e^x$
+    - $\ln t/t$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0023_ex20
+source_evidence:
+  source_refs:
+    - ref_id: page_0023
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0023/page_0023.md
+      role: problem_start
+      evidence: lines 28-36 give 例20 stem and options A-D; lines 38-44 give the solution through the start of D.
+    - ref_id: page_0024
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0024/page_0024.md
+      role: continuation
+      evidence: line 14 completes the D solution and gives final answer BCD.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0023.png
+      inspected: true
+      notes: Inspected stem, options A-D, and the beginning of the solution; option D reads $f(x_1)=g(x_2)$ and denominator $2x_2(x_1+1)$.
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0024.png
+      inspected: true
+      notes: Inspected the continuation line for D; the source solution uses the relabeled denominator $2x_1(x_2+1)$.
+  source_context: "例20 continues the paired-function theme: $f(x)=(x+1)\\ln x$ can be rewritten as $g(\\ln x)$ for $g(u)=u(e^u+1)$."
+  source_influence:
+    - Preserved the source stem exactly, then derived D using variables aligned with the stem rather than inheriting the source solution's relabeling.
+    - Used the source monotonicity and Taylor-expansion arguments for B and C.
+  source_discrepancies:
+    - field: solution.option_D.variable_alignment
+      old_value: Source stem option D has $f(x_1)=g(x_2)=t$ and $\frac{\ln t}{2x_2(x_1+1)}$.
+      corrected_value: Source solution relabels the equality as $x_1(e^{x_1}+1)=(x_2+1)\ln x_2=t$ and the denominator as $2x_1(x_2+1)$; this card keeps the stem variables and derives $x_2=\ln x_1$, so $2x_2(x_1+1)=2t$.
+      evidence_ref: page_0023 lines 36 and 44; page_0024 line 14; page_0023/page_0024 images
+original_problem:
+  stem: (吉林省长春市五校 2024 学年高三上学期联合模拟考试 T11) 已知 $f(x)=(x+1)\ln x$，$g(x)=x(\mathrm{e}^x+1)$，则下列结论正确的是 (  )
+  parts: *a1
+  choices:
+    - A. 函数 $f(x)=(x+1)\ln x$，在 $(0, +\infty)$ 上存在唯一极值点
+    - B. 任意 $x \in (0, +\infty)$，有 $f(x)<g(x)$ 恒成立
+    - C. 若对任意 $x \in (0, +\infty)$，不等式 $g(x^2+ax+a) \leqslant g(2\mathrm{e}^x)$ 恒成立，则实数 $a$ 的最大值为 2
+    - D. 若 $f(x_1)=g(x_2)=t$，$(t>0)$，则 $\frac{\ln t}{2x_2(x_1+1)}$ 的最大值为 $\frac{1}{2\mathrm{e}}$
+  answer: BCD
+  fidelity_notes:
+    - 题头和题干开头在 page_0023；解析 D 的最后一句跨到 page_0024。
+    - 题干 D 的变量与源解析 D 的变量存在互换现象，已在 source_discrepancies 和 review_notes 中标出。
+solution:
+  source_solution_summary: A 中 $f'(x)=\ln x+1+1/x>0$，所以没有极值点。B 中 $f(x)=g(\ln x)$，且 $g$ 在实数域严格递增、$\ln x<x$，故 $f(x)<g(x)$。 C 中由 $g$ 的单调性把不等式化成 $x^2+ax+a\le2e^x$；令 $x\to0^+$ 得 $a\le2$，而 $a=2$ 时 $x^2+2x+2\le2e^x$。D 按题干变量重推：由 $f(x_1)=g(x_2)$ 和 $f(x)=g(\ln x)$ 得 $x_2=\ln x_1$，于是 $t=x_2(x_1+1)$，目标式为 $\ln t/(2t)\le1/(2e)$。
+  key_steps:
+    - step_id: step_1
+      statement: 证明 A 错：$f$ 在定义域内严格递增。
+      formula_trace:
+        from: $f(x)=(x+1)\ln x$
+        to: $f'(x)=\ln x+1+\frac1x=-\ln\frac1x+1+\frac1x\ge2>0$
+        operation: 对 $f$ 求导，并用 $u-\ln u\ge1$（$u=1/x$）估计。
+        why: 导数恒正说明 $f$ 没有极值点。
+      source_ref: page_0023 line 38
+    - step_id: step_2
+      statement: 证明 B 对：把 $f(x)$ 写成 $g(\ln x)$。
+      formula_trace:
+        from: $f(x)=(x+1)\ln x$
+        to: $f(x)=(e^{\ln x}+1)\ln x=g(\ln x)<g(x)$ for $x>0$
+        operation: 先同构改写，再用 $\ln x<x$ 和 $g'(u)=(u+1)e^u+1>0$。
+        why: $g$ 在实数域严格递增，自变量从 $\ln x$ 增大到 $x$ 时函数值随之增大。
+      source_ref: page_0023 lines 40-42
+    - step_id: step_3
+      statement: 证明 C 对：把函数不等式降成指数放缩。
+      formula_trace:
+        from: $g(x^2+ax+a)\le g(2e^x)$ for all $x>0$
+        to: $x^2+ax+a\le2e^x$ for all $x>0$, and $a_{\max}=2$
+        operation: 由 $g$ 单调性去掉 $g$；令 $x\to0^+$ 得必要条件 $a\le2$，再用 $a=2$ 和 $e^x\ge1+x+x^2/2$ 验证充分性。
+        why: 最大参数由端点必要性和二阶泰勒下界共同锁定。
+      source_ref: page_0023 line 42
+    - step_id: step_4
+      statement: 按题干变量证明 D 对。
+      formula_trace:
+        from: $f(x_1)=g(x_2)=t>0$, $f(x)=g(\ln x)$
+        to: $g(\ln x_1)=g(x_2)$, hence $x_2=\ln x_1$ and $t=x_2(e^{x_2}+1)=x_2(x_1+1)$
+        operation: 用 $g$ 的严格单调性消去同构函数值。
+        why: 题干中的分母 $2x_2(x_1+1)$ 正好等于 $2t$。
+      source_ref: page_0023 lines 36,44; page_0024 line 14
+    - step_id: step_5
+      statement: 把 D 的目标式化为 $\ln t/(2t)$。
+      formula_trace:
+        from: $t=x_2(x_1+1)$
+        to: $\frac{\ln t}{2x_2(x_1+1)}=\frac{\ln t}{2t}\le\frac1{2e}$
+        operation: 设 $q(t)=\ln t/t$，求导 $q'(t)=(1-\ln t)/t^2$，最大值在 $t=e$。
+        why: $\ln t/t$ 的最大值是 $1/e$，所以原式最大值是 $1/(2e)$。
+      source_ref: page_0024 line 14
+teaching_card:
+  student_title: 先认出 $f(x)=g(\ln x)$
+  what_it_trains: 训练在多选题里抓住同构主线，再分别处理单调、恒成立参数和表达式最大值。
+  recognition_cues:
+    - $f(x)=(x+1)\ln x$ 与 $g(x)=x(e^x+1)$ 同时出现。
+    - 选项 B、D 都在比较或等值 $f$ 与 $g$，优先尝试 $x\mapsto\ln x$。
+    - 选项 C 的 $g(\cdot)\le g(\cdot)$ 需要先确认 $g$ 单调。
+  normalization_moves:
+    - 把 $f(x)$ 改写成 $g(\ln x)$。
+    - 把 $g(x^2+ax+a)\le g(2e^x)$ 改写成 $x^2+ax+a\le2e^x$。
+    - 把 D 的分母 $2x_2(x_1+1)$ 改写为 $2t$。
+  common_failures:
+    - 只在 $x>0$ 上看 $g$ 的单调，忘了 C 中 $x^2+ax+a$ 可能不是正数。
+    - C 中只写 $a=2$ 可行，没用 $x\to0^+$ 证明最大值不能超过 2。
+    - 照抄源解析 D 的变量，导致题干里的 $x_1,x_2$ 和分母不一致。
+  similar_practice_query: (x+1)lnx x(e^x+1) 同构 参数最大值 ln t/t
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - "Option D should be specially checked: source stem and source solution use swapped variable roles. The card preserves the stem and supplies an aligned derivation."
+    - For B/C, this card states $g$ is increasing on all real inputs, which is stronger and more precise than the markdown phrase about $(0,+\infty)$.
+    - "Reviewer inspected page_0023/page_0024 images and confirmed the discrepancy: option D in the stem has denominator $2x_2(x_1+1)$, while the source solution switches to $2x_1(x_2+1)$. The card keeps the stem variables and records the source inconsistency."

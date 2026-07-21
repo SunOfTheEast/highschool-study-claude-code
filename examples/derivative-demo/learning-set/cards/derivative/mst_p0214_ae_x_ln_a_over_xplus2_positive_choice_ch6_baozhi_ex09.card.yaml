@@ -1,0 +1,204 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0214_ae_x_ln_a_over_xplus2_positive_choice_ch6_baozhi_ex09
+content_revision_id: mst_p0214_ae_x_ln_a_over_xplus2_positive_choice_ch6_baozhi_ex09-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0214_ae_x_ln_a_over_xplus2_positive_choice_ch6_baozhi_ex09.card.yaml
+stem: |-
+  （2023 · 长沙周南中学三模 T12）若 $f(x)=ae^x+\ln\frac{a}{x+2}-2\ (a>0)$，若 $f(x)>0$ 恒成立，则 $a$ 的值不可以是（  ）
+  A. $e$
+  B. 1
+  C. $2e$
+  D. 2
+answer: |
+  ABD
+
+  设 $x>-2$，原式 $ae^x+\ln\frac{a}{x+2}-2>0$ 可写为 $e^{x+\ln a}+\ln a-\ln(x+2)-2>0$。法一令 $G(t)=e^t+t$，因 $G$ 递增，足以要求 $x+\ln a>\ln(x+2)$，即 $a>\frac{x+2}{e^x}$ 对一切 $x>-2$ 成立。由 $\max\frac{x+2}{e^x}=e$（在 $x=-1$ 取到），得 $a>e$。法二写成 $h(x+\ln a)+h(\ln(x+2))-2+2\ln a>0$， 其中 $h(t)=e^t-t-1\ge0$，故仍得 $2\ln a-2>0\Rightarrow a>e$。 法三分而治之同样化到 $a>e$。故可取值区间为 $(e,+\infty)$， 选项中不可以的是 $e,1,2$，即 ABD。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把不等式整理到同构单调比较模板。
+      max_score: 1
+    - step_id: step_2
+      description: 法一：由 $G(t)=e^t+t$ 递增得到参数下界。
+      max_score: 1
+    - step_id: step_3
+      description: 法二：保值分解复核同一结论。
+      max_score: 1
+    - step_id: step_4
+      description: 法三：分而治之极值比较得到同一阈值。
+      max_score: 1
+    - step_id: step_5
+      description: 回填选项并确定多选答案。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 保值性与分治
+      - 含参数分类讨论
+    subroute:
+      - 同构单调性
+      - 保值性
+      - 分而治之
+      - 最大值锚点
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+      - Max/Min 与绝对值结构
+    evidence:
+      - $G(t)=e^t+t$ 递增
+      - $\max\frac{x+2}{e^x}=e$
+      - $h(x+\ln a)+h(\ln(x+2))-2+2\ln a$
+      - $a>e$
+    normalization_moves_used:
+      - 把“恒正”改写为同构母式比较。
+      - 把参数条件收束为“常数大于某函数最大值”。
+      - 以三条方法链交叉验证同一阈值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $G$ 递增推出自变量比较，回补函数性质与图像。
+      - 若学生不会求 $\max\frac{x+2}{e^x}$，回补导数单调极值基础。
+      - 若学生在 $h(t)=e^t-t-1$ 的配凑中丢项，回补代数恒等变形。
+  detail_terms:
+    - $a>e$
+    - $G(t)=e^t+t$
+    - $h(t)=e^t-t-1$
+    - $\frac{x+2}{e^x}$
+    - ABD
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0214_ae_x_ln_a_over_xplus2_positive_choice_ch6_baozhi_ex09
+source_evidence:
+  source_refs:
+    - ref_id: page_0214_ex08_local_context_prev
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0214/page_0214.md
+      role: local_context
+      evidence: page_0214 中上部为例8完整解析与配图；例9题头从页底开始。
+    - ref_id: page_0214_ex09_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0214/page_0214.md
+      role: problem_start
+      evidence: page_0214 页底出现“例9（2023·长沙周南中学三模 T12）”题干与 A-D 选项。
+    - ref_id: page_0215_ex09_solution_method1
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0215/page_0215.md
+      role: continuation
+      evidence: page_0215 顶部法一（同构单调性）：构造 $g(t)=e^t+t$ 递增，转化为 $a>\max\frac{x+2}{e^x}=e$。
+    - ref_id: page_0215_ex09_solution_method2
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0215/page_0215.md
+      role: continuation
+      evidence: 法二（同构保值性）：写成 $h(x+\ln a)+h(\ln(x+2))-2+2\ln a>0$，推出 $2\ln a-2>0$，即 $a>e$。
+    - ref_id: page_0215_ex09_solution_method3
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0215/page_0215.md
+      role: continuation
+      evidence: 法三（分而治之）：比较 $\min\frac{ae^x}{e^2(x+2)/a}$ 与 $\max\frac{\ln\frac{e^2(x+2)}a}{\frac{e^2(x+2)}a}$，化到 $a>e$。
+    - ref_id: page_0215_ex09_answer_line
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0215/page_0215.md
+      role: continuation
+      evidence: 续页末给出“故选 ABD”。
+    - ref_id: page_0215_ex10_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0215/page_0215.md
+      role: local_context
+      evidence: page_0215 在例9结论后立即进入例10新题头；按批次规则本卡不处理例10。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0214.png
+      inspected: true
+      notes: 已核对页图：例9题头与选项位于 page_0214 底部，题干为“若 $f(x)>0$ 恒成立，则 $a$ 的值不可以是（ ）”。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0215.png
+      inspected: true
+      notes: 已核对页图：例9三种解法完整位于 page_0215 顶部，结论为“故选 ABD”，随后开始例10。
+  source_context: 例9题头起于 page_0214，解析跨到 page_0215 顶部闭合；page_0215 的例10属于下一批，不纳入本卡。
+  source_influence:
+    - 保留法一“同构单调性 $g(t)=e^t+t$”的主链。
+    - 保留法二“$h(t)=e^t-t-1$ 双保值 + 余量 $2\ln a-2$”主链。
+    - 保留法三“分而治之极值比较”作为交叉验证。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 长沙周南中学三模 T12）若 $f(x)=ae^x+\ln\frac{a}{x+2}-2\ (a>0)$，若 $f(x)>0$ 恒成立，则 $a$ 的值不可以是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $e$
+      text_latex: $e$
+    - label: B
+      text_raw: "1"
+      text_latex: "1"
+    - label: C
+      text_raw: $2e$
+      text_latex: $2e$
+    - label: D
+      text_raw: "2"
+      text_latex: "2"
+  answer: ABD
+  fidelity_notes:
+    - 题干与选项起于 page_0214，解析与结论在 page_0215 顶部闭合。
+    - source 结论明确写“故选 ABD”，本卡按多选口径保留。
+solution:
+  source_solution_summary: |
+    设 $x>-2$，原式 $ae^x+\ln\frac{a}{x+2}-2>0$ 可写为 $e^{x+\ln a}+\ln a-\ln(x+2)-2>0$。法一令 $G(t)=e^t+t$，因 $G$ 递增，足以要求 $x+\ln a>\ln(x+2)$，即 $a>\frac{x+2}{e^x}$ 对一切 $x>-2$ 成立。由 $\max\frac{x+2}{e^x}=e$（在 $x=-1$ 取到），得 $a>e$。法二写成 $h(x+\ln a)+h(\ln(x+2))-2+2\ln a>0$， 其中 $h(t)=e^t-t-1\ge0$，故仍得 $2\ln a-2>0\Rightarrow a>e$。 法三分而治之同样化到 $a>e$。故可取值区间为 $(e,+\infty)$， 选项中不可以的是 $e,1,2$，即 ABD。
+  key_steps:
+    - step_id: step_1
+      statement: 把不等式整理到同构单调比较模板。
+      formula_trace:
+        from: $ae^x+\ln\frac{a}{x+2}-2>0$
+        to: $e^{x+\ln a}+(x+\ln a)>e^{\ln(x+2)}+\ln(x+2)$
+        operation: 对原式加上并减去 $x$、$x+2$，配成 $e^u+u$ 结构。
+        why: 为法一的单调同构比较做准备。
+      source_ref: page_0215_ex09_solution_method1
+    - step_id: step_2
+      statement: 法一：由 $G(t)=e^t+t$ 递增得到参数下界。
+      formula_trace:
+        from: $G(x+\ln a)>G(\ln(x+2))$
+        to: $a>\frac{x+2}{e^x}\ (\forall x>-2)\Rightarrow a>e$
+        operation: 同值比较转自变量比较，再取右侧函数最大值。
+        why: 直接得到“恒成立”所需的最强参数条件。
+      source_ref: page_0215_ex09_solution_method1
+    - step_id: step_3
+      statement: 法二：保值分解复核同一结论。
+      formula_trace:
+        from: $e^{x+\ln a}+\ln a-\ln(x+2)-2$
+        to: $h(x+\ln a)+h(\ln(x+2))-2+2\ln a>0\Rightarrow a>e$
+        operation: 套入 $h(t)=e^t-t-1$，再由 $h(\cdot)\ge0$ 读取余量条件。
+        why: 用第二条同构链验证法一结果。
+      source_ref: page_0215_ex09_solution_method2
+    - step_id: step_4
+      statement: 法三：分而治之极值比较得到同一阈值。
+      formula_trace:
+        from: $ae^x>\ln\frac{e^2(x+2)}a$
+        to: $\min\frac{ae^x}{e^2(x+2)/a}>\max\frac{\ln\frac{e^2(x+2)}a}{e^2(x+2)/a}\Rightarrow a>e$
+        operation: 把左右两侧分别转为“最小值/最大值”比较。
+        why: 与法一、法二形成三重交叉核验。
+      source_ref: page_0215_ex09_solution_method3
+    - step_id: step_5
+      statement: 回填选项并确定多选答案。
+      formula_trace:
+        from: $a\in(e,+\infty)$
+        to: $e,1,2$ 不可取，$2e$ 可取，故选 ABD
+        operation: 将参数区间与四个选项逐一对照。
+        why: 题目要求“值不可以是”。
+      source_ref: page_0215_ex09_answer_line
+teaching_card:
+  student_title: 三法同判：阈值统一到 $a>e$
+  what_it_trains: 训练把同一指对恒正问题分别用“同构单调、保值拆分、分而治之”三条链条收敛到同一参数阈值。
+  recognition_cues:
+    - 题干含 $ae^x+\ln(\cdot)$ 且要求“恒大于 0”。
+    - 选项是具体常数，通常先求参数区间再反选。
+    - 解析常见 $e^t+t$ 与 $e^t-t-1$ 两类母函数。
+  normalization_moves:
+    - 先把式子配成 $e^u+u$ 比较，读出 $a>\max$。
+    - 再用 $h(t)=e^t-t-1$ 做保值复核。
+    - 最后对照选项输出“不可以取”的集合。
+  common_failures:
+    - 把“$f(x)>0$ 恒成立”误写成“存在 $x$ 使 $f(x)>0$”。
+    - 求 $\max\frac{x+2}{e^x}$ 时忽略定义域 $x>-2$。
+    - 把“不可以是”当成单选，只给一个字母。
+  similar_practice_query: ae^x+ln(a/(x+2))-2 恒大于0 参数范围 a>e 多选
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

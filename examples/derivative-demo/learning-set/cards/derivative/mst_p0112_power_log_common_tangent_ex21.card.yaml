@@ -1,0 +1,255 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0112_power_log_common_tangent_ex21
+content_revision_id: mst_p0112_power_log_common_tangent_ex21-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0112_power_log_common_tangent_ex21.card.yaml
+stem: |-
+  （2024 广东深圳外国语一调 · 多选 T12）已知函数 $f(x)=a^x\ln a$，$g(x)=a\ln(x-1)$，其中 $a>0$，且 $a\ne1$。若函数 $h(x)=f(x)-g(x)$，则下列结论正确的是（  ）
+  A. 当 $0<a<1$ 时，$h(x)$ 有且只有一个零点
+  B. 当 $1<a<e^{\frac{1}{e}}$ 时，$h(x)$ 有两个零点
+  C. 当 $a>e^{\frac{1}{e}}$ 时，曲线 $y=f(x)$ 与曲线 $y=g(x)$ 有且只有两条公切线
+  D. 若 $h(x)$ 为单调函数，则 $e^{-e}<a<1$
+answer: |
+  BC
+
+  由 $f(x)=g(x)$ 得
+  $a^x\ln a=a\ln(x-1)$，即
+  $a^{x-1}=\log_a(x-1)$。令 $t=x-1>0$，问题转为比较
+  $y=a^t$ 与 $y=\log_a t$。当 $a>1$ 时，临界来自
+  $a^t$ 与直线 $y=t$ 的切触：
+  $a^t>t\iff t\ln a>\ln t$，而
+  $\max_{t>0}\frac{\ln t}{t}=\frac1e$。所以
+  $a>e^{1/e}$ 时两函数无交点并出现两条公切线，C 正确；
+  $1<a<e^{1/e}$ 时有两个交点，即 $h$ 有两个零点，B 正确。
+  当 $0<a<1$ 时，临界相切满足两曲线同过 $y=t$ 且斜率为 $-1$：
+  $\frac1{t_0\ln a}=-1$，$a^{t_0}=t_0$，解得
+  $t_0=1/e$，$a=e^{-e}$。源页据此判定 A 错，并用拟合类比说明
+  单调时应落在 $e^{-e}<a<1$，故源页答案为 BCD。
+  严格复核 D 项：令 $r=-\ln a>0$，则
+  $h^\prime$ 的符号由 $r^2te^{-rt}-1$ 决定；函数 $r^2te^{-rt}$
+  的最大值为 $r/e$。所以当 $r\le e$，即 $a\ge e^{-e}$ 时，
+  $h^\prime\le0$，函数单调递减；当 $r>e$ 时，导数变号，函数不单调。
+  因此标准单调口径下单调区间应为 $e^{-e}\le a<1$，D 项严格写
+  $e^{-e}<a<1$ 少了边界，应判错，最终答案为 BC。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 把 $h(x)$ 的零点转成两个标准指对函数的交点。
+      max_score: 1
+    - step_id: step_2
+      description: 分析 $a>1$ 时的两个零点和公切线阈值。
+      max_score: 1
+    - step_id: step_3
+      description: 由 $a>1$ 的阈值判断 B、C。
+      max_score: 1
+    - step_id: step_4
+      description: 分析 $0<a<1$ 时的相切临界。
+      max_score: 1
+    - step_id: step_5
+      description: 严格复核 D 项的单调边界。
+      max_score: 1
+    - step_id: step_6
+      description: 汇总源页答案与严格复核结论。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: item_1
+        goal: 零点/极值点分析
+        target: A、B：判断 $h(x)$ 的零点个数。
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 几何量求解
+        target: C：判断两条曲线的公切线条数。
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 抽象函数性质
+        target: D：由单调性反推参数区间。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 切线放缩与凹凸性
+      - 数形结合
+    subroute:
+      - 指对同构
+      - 切线找点
+      - 拟合临界
+      - 零点个数分区
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 同构结构
+    evidence:
+      - $f(x)=g(x)$ 等价于 $a^{x-1}=\log_a(x-1)$。
+      - $\max_{t>0}\frac{\ln t}{t}=1/e$ 给出 $a>1$ 的阈值 $e^{1/e}$。
+      - $a^{t_0}=t_0$ 与 $\frac1{t_0\ln a}=-1$ 给出 $a=e^{-e}$。
+    normalization_moves_used:
+      - 先把 $x-1$ 换成 $t$，去掉平移干扰。
+      - 用 $y=t$ 作为中间比较线识别 $a^t$ 与 $\log_a t$ 的临界接触。
+      - 把阈值两侧分别解释为零点个数或公切线条数。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $a^x\ln a=a\ln(x-1)$ 化到 $a^{x-1}=\log_a(x-1)$，回补指数对数基础。
+      - 若学生不会求 $\frac{\ln t}{t}$ 的最大值，回补导数单调极值基础。
+      - 若学生不能理解斜率 $-1$ 的相切临界，回补导数运算与几何意义。
+      - 若学生把零点个数与单调性关系混淆，回补函数性质与图像。
+  detail_terms:
+    - $f(x)=a^x\ln a$
+    - $g(x)=a\ln(x-1)$
+    - $a^{x-1}=\log_a(x-1)$
+    - $\max\frac{\ln t}{t}=1/e$
+    - $a=e^{-e}$
+    - 答案 BC
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0112_power_log_common_tangent_ex21
+source_evidence:
+  source_refs:
+    - ref_id: page_0112
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0112/page_0112.md
+      role: problem_start
+      evidence: page_0112 中部给出例 21 题头、题干、A-D 选项、完整解析和源页答案 BCD；页顶为例 20 续页，未纳入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0112.png
+      inspected: true
+      notes: 已核对 page_0112 页图：例 21 的 D 选项为 $e^{-e}<a<1$，解析末段印刷也为 $0<a<e^{-e}$，答案为 BCD。
+  source_context: page_0112 顶部是例 20 的续解，应跳过；例 21 从本页中部开始并在本页内结束，例 22 另起。
+  source_influence:
+    - 保留源页把 $f(x)=g(x)$ 化为 $a^{x-1}=\log_a(x-1)$，再令 $t=x-1$ 的同构转化。
+    - 保留源页对 $a>1$ 的临界值 $\ln a=1/e$，得到 B、C 正确。
+    - 保留源页对 $0<a<1$ 的相切临界：$x_0=1/e$，$a=e^{-e}$。
+    - 源页答案 BCD 中 D 项边界经严格求导复核应含等号；用户确认发布答案改为 BC。
+  source_discrepancies:
+    - page_0112 markdown 带有 reconstruction marker，页图显示例 21 解析末段确为 $e^{-e}$，本卡按页图和前文推导使用 $e^{-e}$。
+    - 源页判 D 正确并给出严格不等式 $e^{-e}<a<1$；直接求导可得当 $0<a<1$、令 $r=-\ln a$ 时，$h^\prime$ 的符号由 $r^2te^{-rt}-1$ 决定，其最大值为 $r/e-1$。因此 $r\le e$，即 $a\ge e^{-e}$ 时 $h$ 单调递减；$a=e^{-e}$ 仍单调。按标准单调定义，D 项严格下界不成立，答案由 BCD 改为 BC。
+original_problem:
+  stem: （2024 广东深圳外国语一调 · 多选 T12）已知函数 $f(x)=a^x\ln a$，$g(x)=a\ln(x-1)$，其中 $a>0$，且 $a\ne1$。若函数 $h(x)=f(x)-g(x)$，则下列结论正确的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 当 $0<a<1$ 时，$h(x)$ 有且只有一个零点
+      text_latex: 当 $0<a<1$ 时，$h(x)$ 有且只有一个零点
+    - label: B
+      text_raw: 当 $1<a<e^{\frac{1}{e}}$ 时，$h(x)$ 有两个零点
+      text_latex: 当 $1<a<e^{\frac{1}{e}}$ 时，$h(x)$ 有两个零点
+    - label: C
+      text_raw: 当 $a>e^{\frac{1}{e}}$ 时，曲线 $y=f(x)$ 与曲线 $y=g(x)$ 有且只有两条公切线
+      text_latex: 当 $a>e^{\frac{1}{e}}$ 时，曲线 $y=f(x)$ 与曲线 $y=g(x)$ 有且只有两条公切线
+    - label: D
+      text_raw: 若 $h(x)$ 为单调函数，则 $e^{-e}<a<1$
+      text_latex: 若 $h(x)$ 为单调函数，则 $e^{-e}<a<1$
+  answer: BC
+  fidelity_notes:
+    - 本题为多选题，例 21 在 page_0112 内完整。
+    - 页图和推导共同确认临界值为 $a=e^{-e}$，不是 $e^{-1}$。
+    - 源页答案为 BCD；用户确认 D 项少等号，按标准单调口径发布答案为 BC。
+solution:
+  source_solution_summary: |
+    由 $f(x)=g(x)$ 得
+    $a^x\ln a=a\ln(x-1)$，即
+    $a^{x-1}=\log_a(x-1)$。令 $t=x-1>0$，问题转为比较
+    $y=a^t$ 与 $y=\log_a t$。当 $a>1$ 时，临界来自
+    $a^t$ 与直线 $y=t$ 的切触：
+    $a^t>t\iff t\ln a>\ln t$，而
+    $\max_{t>0}\frac{\ln t}{t}=\frac1e$。所以
+    $a>e^{1/e}$ 时两函数无交点并出现两条公切线，C 正确；
+    $1<a<e^{1/e}$ 时有两个交点，即 $h$ 有两个零点，B 正确。
+    当 $0<a<1$ 时，临界相切满足两曲线同过 $y=t$ 且斜率为 $-1$：
+    $\frac1{t_0\ln a}=-1$，$a^{t_0}=t_0$，解得
+    $t_0=1/e$，$a=e^{-e}$。源页据此判定 A 错，并用拟合类比说明
+    单调时应落在 $e^{-e}<a<1$，故源页答案为 BCD。
+    严格复核 D 项：令 $r=-\ln a>0$，则
+    $h^\prime$ 的符号由 $r^2te^{-rt}-1$ 决定；函数 $r^2te^{-rt}$
+    的最大值为 $r/e$。所以当 $r\le e$，即 $a\ge e^{-e}$ 时，
+    $h^\prime\le0$，函数单调递减；当 $r>e$ 时，导数变号，函数不单调。
+    因此标准单调口径下单调区间应为 $e^{-e}\le a<1$，D 项严格写
+    $e^{-e}<a<1$ 少了边界，应判错，最终答案为 BC。
+  key_steps:
+    - step_id: step_1
+      statement: 把 $h(x)$ 的零点转成两个标准指对函数的交点。
+      formula_trace:
+        from: |
+          $a^x\ln a=a\ln(x-1)$
+        to: |
+          $a^{x-1}=\log_a(x-1)$，令 $t=x-1>0$，得 $a^t=\log_a t$
+        operation: 两边除以 $a\ln a$，再作平移换元。
+        why: 这样把原函数差的零点问题归入 $a^t$ 与 $\log_a t$ 的同构比较。
+      source_ref: page_0112
+    - step_id: step_2
+      statement: 分析 $a>1$ 时的两个零点和公切线阈值。
+      formula_trace:
+        from: |
+          $a^t>t\iff t\ln a>\ln t$
+        to: |
+          $\ln a>\max_{t>0}\frac{\ln t}{t}=\frac1e,\quad a>e^{1/e}$
+        operation: 用 $\frac{\ln t}{t}$ 的最大值判定 $a^t$ 是否始终压住 $t$。
+        why: 超过阈值时 $a^t$ 与 $\log_a t$ 不相交而有两条公切线；低于阈值时形成两个交点。
+      source_ref: page_0112
+    - step_id: step_3
+      statement: 由 $a>1$ 的阈值判断 B、C。
+      formula_trace:
+        from: |
+          $1<a<e^{1/e}$ 与 $a>e^{1/e}$
+        to: |
+          $1<a<e^{1/e}$ 时 $h$ 有两个零点；$a>e^{1/e}$ 时 $y=f(x)$ 与 $y=g(x)$ 有且只有两条公切线
+        operation: 按源页图像关系把临界值两侧分别解释为交点数与公切线数。
+        why: B 判断零点个数，C 判断公切线条数，二者共享同一阈值。
+      source_ref: page_0112
+    - step_id: step_4
+      statement: 分析 $0<a<1$ 时的相切临界。
+      formula_trace:
+        from: |
+          $a^{t_0}=t_0,\qquad \frac1{t_0\ln a}=-1$
+        to: |
+          $t_0=\frac1e,\qquad a=e^{-e}$
+        operation: 令 $a^t$ 与 $\log_a t$ 在临界点同时过 $y=t$，且切线斜率为 $-1$。
+        why: 这是 $0<a<1$ 时一个交点与三个交点分界的拟合点。
+      source_ref: page_0112
+    - step_id: step_5
+      statement: 严格复核 D 项的单调边界。
+      formula_trace:
+        from: |
+          $h(x)=a[a^{x-1}\ln a-\ln(x-1)]$，令 $t=x-1,\ r=-\ln a>0$
+        to: |
+          $h^\prime$ 的符号由 $r^2te^{-rt}-1$ 决定，最大值为 $\frac re-1$
+        operation: 对 $r^2te^{-rt}$ 取最大值：在 $rt=1$ 处取 $\frac re$。
+        why: 这直接决定 $h^\prime$ 是否变号，比拟合类比更可靠。
+      source_ref: page_0112
+    - step_id: step_6
+      statement: 汇总源页答案与严格复核结论。
+      formula_trace:
+        from: |
+          B 正确，C 正确，A 错；D 按源页判正确，但严格复核下边界应含 $a=e^{-e}$
+        to: |
+          源页答案 BCD；标准单调口径下答案为 BC
+        operation: 合并多选判断结果，并单独保留 D 项争议。
+        why: 用户确认边界点 $a=e^{-e}$ 仍单调，D 项少等号，需覆盖源书答案。
+      source_ref: page_0112
+teaching_card:
+  student_title: 把 $a^x\ln a$ 和 $a\ln(x-1)$ 化成指对相交
+  what_it_trains: 训练把带平移的指数对数方程化成 $a^t$ 与 $\log_a t$，再用切点临界判断零点和公切线。
+  recognition_cues:
+    - 题干同时出现 $a^x\ln a$ 和 $a\ln(x-1)$，先想到除以 $a\ln a$。
+    - 选项出现 $e^{1/e}$ 与 $e^{-e}$，提示分别来自 $\frac{\ln t}{t}$ 最大值和斜率 $-1$ 的拟合点。
+    - 多选题混合零点、公切线、单调性，先统一成同一组图像再逐项判断。
+  normalization_moves:
+    - 令 $t=x-1$，把零点方程写成 $a^t=\log_a t$。
+    - 当 $a>1$，用 $a^t>t>\log_a t$ 的临界判断 B、C。
+    - 当 $0<a<1$，用 $a^t$ 与 $\log_a t$ 相切且斜率为 $-1$ 求出 $a=e^{-e}$。
+    - 用三个零点必不单调来排除 A，并用导数复核排除 D。
+  common_failures:
+    - 忘记 $g(x)$ 的定义域是 $x>1$，没有令 $t=x-1>0$。
+    - 把 $e^{1/e}$ 和 $e^{-e}$ 混成同一个阈值。
+    - 只看零点个数，漏掉 C 讨论的是公切线条数。
+    - 没有单独核查 $a=e^{-e}$ 的边界单调性，导致误选 D。
+  similar_practice_query: a^x log_a x 指对 公切线 e^(1/e) e^(-e) 零点 单调
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 用户拍板：D 项少等号；$a=e^{-e}$ 时 $h$ 仍单调，故 D 为假，答案由源书 BCD 改为 BC。

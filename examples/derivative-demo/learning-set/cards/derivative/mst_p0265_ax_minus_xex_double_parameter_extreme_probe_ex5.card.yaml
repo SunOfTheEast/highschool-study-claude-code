@@ -1,0 +1,219 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0265_ax_minus_xex_double_parameter_extreme_probe_ex5
+content_revision_id: mst_p0265_ax_minus_xex_double_parameter_extreme_probe_ex5-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0265_ax_minus_xex_double_parameter_extreme_probe_ex5.card.yaml
+stem: |-
+  （2021 · 天津）已知 $a>0$，函数 $f(x)=ax-xe^x$。
+  1. 求曲线 $f(x)$ 在点 $(0,f(0))$ 处的切线方程。
+  2. 证明函数 $f(x)$ 存在唯一的极值点。
+  3. 若 $\exists a$，使得 $f(x)\le a+b$ 对任意的 $x\in\mathbf{R}$ 恒成立，求实数 $b$ 的取值范围。
+answer: |-
+  第(1)问：$y=(a-1)x$。第(2)问：存在唯一极值点。第(3)问：$b\ge-e$。
+
+  第(1)问 $f(0)=0$，$f^\prime(x)=a-(x+1)e^x$，所以 $f^\prime(0)=a-1$，切线为 $y=(a-1)x$。第(2)问令 $\phi(x)=(x+1)e^x$，当 $x\le-1$ 时 $f^\prime(x)>0$；当 $x>-1$ 时，$\phi$ 从 0 严格增到 $+\infty$，故存在唯一 $x_0>-1$ 使 $\phi(x_0)=a$，于是 $f^\prime$ 由正变负， $f$ 存在唯一极大值点。第(3)问若存在 $a$ 使 $f(x)\le a+b$ 恒成立，代 $x=1$ 得 $a-e\le a+b$，故 $b\ge-e$。反过来取 $a=2e$，只需证 $F(x)=xe^x-2e(x-1)-e\ge0$；因 $F(1)=0$， $F^\prime(x)=(x+1)e^x-2e$ 在 $x=1$ 左负右正，所以 $F(x)\ge F(1)=0$，从而 $b\ge-e$ 均可行。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 第(1)问：写出切线。
+      max_score: 1
+    - step_id: step_2
+      description: 第(2)问：把极值点转成导函数零点。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问：证明唯一变号。
+      max_score: 1
+    - step_id: step_4
+      description: 第(3)问：先用显点 $x=1$ 得必要条件。
+      max_score: 1
+    - step_id: step_5
+      description: 第(3)问：取切线参数回证充分性。
+      max_score: 1
+    - step_id: step_6
+      description: 第(3)问：证明 $a=2e$ 时 $F(x)\ge0$。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 几何量求解
+        target: 第 1 问
+        result: $y=(a-1)x$。
+      - part_id: "2"
+        goal: 零点/极值点分析
+        target: 第 2 问
+        result: 函数 $f(x)$ 存在唯一极大值点。
+      - part_id: "3"
+        goal: 求参数范围
+        target: 第 3 问
+        result: $b\ge-e$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 参变量分离
+      - 切线放缩与凹凸性
+      - 充分/必要性探路
+    subroute:
+      - 双参数极点效应
+      - 导函数零点唯一性
+      - $x=1$ 显点探路
+      - 切线参数回证
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 非齐次结构
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - $ax-xe^x$
+      - $(x+1)e^x=a$
+      - $xe^x-a(x-1)+b$
+      - $F(1)=0$
+      - $a=2e$
+    normalization_moves_used:
+      - 把 $f^\prime=0$ 化成 $(x+1)e^x=a$。
+      - 用 $x=1$ 直接读取 $b\ge-e$。
+      - 把 $f(x)\le a+b$ 改写成 $xe^x-a(x-1)+b\ge0$。
+      - 令 $x=1$ 成为构造函数的切线最小点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求切线方程，回补导数运算与几何意义。
+      - 若学生不会用导函数零点判极值，回补导数单调极值基础。
+      - 若学生不会处理 $xe^x$ 的导数和单调性，回补指数对数基础。
+      - 若学生不会从恒成立中提必要条件，回补不等式工具基础。
+      - 若学生代数变形卡在 $xe^x-a(x-1)+b$，回补代数恒等变形。
+  detail_terms:
+    - $ax-xe^x$
+    - 双参数极点效应
+    - $(x+1)e^x=a$
+    - $xe^x-a(x-1)+b$
+    - $x=1$ 显点
+    - $b\ge-e$
+parts: &a1
+  - id: "1"
+    text: 求曲线 $f(x)$ 在点 $(0,f(0))$ 处的切线方程。
+  - id: "2"
+    text: 证明函数 $f(x)$ 存在唯一的极值点。
+  - id: "3"
+    text: 若 $\exists a$，使得 $f(x)\le a+b$ 对任意的 $x\in\mathbf{R}$ 恒成立，求实数 $b$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0265_ax_minus_xex_double_parameter_extreme_probe_ex5
+source_evidence:
+  source_refs:
+    - ref_id: page_0265_section_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0265/page_0265.md
+      role: local_context
+      evidence: page_0265 进入“1. 双参数的极点效应”，并说明双参数恒成立的本质是构造已知点的切线极点效应。
+    - ref_id: page_0265_ex5_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0265/page_0265.md
+      role: problem_start
+      evidence: page_0265 给出例5题头：已知 $a>0$，$f(x)=ax-xe^x$；三问分别为切线方程、唯一极值点、若存在 $a$ 使 $f(x)\le a+b$ 恒成立求 $b$ 的范围。
+    - ref_id: page_0265_ex5_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0265/page_0265.md
+      role: solution
+      evidence: page_0265 例5解析给出第(1)问切线 $y=(a-1)x$，第(2)问用 $f^\prime(x)=a-(x+1)e^x$ 证明唯一极值点，并开始第(3)问的参变分离隐点效应路线。
+    - ref_id: page_0266_ex5_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0266/page_0266.md
+      role: solution
+      evidence: page_0266 页首延续例5：先由 $x=1$ 得必要条件 $b\ge-e$，再取 $a=2e$ 构造 $F(x)=xe^x-2e(x-1)-e\ge0$ 证明充分。
+    - ref_id: page_0266_ex6_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0266/page_0266.md
+      role: local_context
+      evidence: page_0266 随后进入“2. 朗博同构在 $x_0+\ln x_0=0$ 处的极点效应”和例6，说明例5在页首闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0265.png
+      inspected: true
+      notes: 已核对页图：例5题头与解析起于 page_0265 下半页，续到下一页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0266.png
+      inspected: true
+      notes: 已核对页图：page_0266 页首为例5续解和图像说明，随后另起例6。
+  source_context: 本卡处理 page_0265 起头、page_0266 页首续完的例5；page_0266 例6排除。
+  source_influence:
+    - 保留第(1)问切线：$f(0)=0$，$f^\prime(0)=a-1$。
+    - 保留第(2)问唯一极值点：$f^\prime(x)=a-(x+1)e^x$，在 $x>-1$ 后唯一变号。
+    - 保留第(3)问两条路线：参变分离隐点效应给 $b\ge-e$，切线构造极点效应取 $a=2e$ 回证。
+  source_discrepancies: []
+original_problem:
+  stem: （2021 · 天津）已知 $a>0$，函数 $f(x)=ax-xe^x$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问：$y=(a-1)x$。第(2)问：存在唯一极值点。第(3)问：$b\ge-e$。
+  fidelity_notes:
+    - 无选项。
+    - 第(3)问沿用 source 记号：同一个字母 $a$ 既是函数参数，也在“存在 $a$”中被选择；结论只求 $b$ 的范围。
+solution:
+  source_solution_summary: 第(1)问 $f(0)=0$，$f^\prime(x)=a-(x+1)e^x$，所以 $f^\prime(0)=a-1$，切线为 $y=(a-1)x$。第(2)问令 $\phi(x)=(x+1)e^x$，当 $x\le-1$ 时 $f^\prime(x)>0$；当 $x>-1$ 时，$\phi$ 从 0 严格增到 $+\infty$，故存在唯一 $x_0>-1$ 使 $\phi(x_0)=a$，于是 $f^\prime$ 由正变负， $f$ 存在唯一极大值点。第(3)问若存在 $a$ 使 $f(x)\le a+b$ 恒成立，代 $x=1$ 得 $a-e\le a+b$，故 $b\ge-e$。反过来取 $a=2e$，只需证 $F(x)=xe^x-2e(x-1)-e\ge0$；因 $F(1)=0$， $F^\prime(x)=(x+1)e^x-2e$ 在 $x=1$ 左负右正，所以 $F(x)\ge F(1)=0$，从而 $b\ge-e$ 均可行。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问：写出切线。
+      formula_trace:
+        from: $f(x)=ax-xe^x$
+        to: $f(0)=0$，$f^\prime(0)=a-1$，$y=(a-1)x$
+        operation: 求导并代入切点。
+        why: 切线方程由切点和切线斜率确定。
+      source_ref: page_0265_ex5_solution_start
+    - step_id: step_2
+      statement: 第(2)问：把极值点转成导函数零点。
+      formula_trace:
+        from: $f^\prime(x)=a-(x+1)e^x$
+        to: 求 $\phi(x)=(x+1)e^x$ 与水平线 $a$ 的交点
+        operation: 等效零点方程。
+        why: 证明唯一极值点，本质是证明 $f^\prime$ 只有一个变号零点。
+      source_ref: page_0265_ex5_solution_start
+    - step_id: step_3
+      statement: 第(2)问：证明唯一变号。
+      formula_trace:
+        from: $x\le-1$ 与 $x>-1$ 分段
+        to: $x\le-1$ 时 $f^\prime>0$；$x>-1$ 时 $\phi$ 严格递增且从 0 到 $+\infty$
+        operation: 分段判号与单调性。
+        why: $a>0$ 保证唯一交点 $x_0>-1$，因此 $f$ 只有一个极大值点。
+      source_ref: page_0265_ex5_solution_start
+    - step_id: step_4
+      statement: 第(3)问：先用显点 $x=1$ 得必要条件。
+      formula_trace:
+        from: $f(1)=a-e\le a+b$
+        to: $b\ge-e$
+        operation: 代入显点。
+        why: 恒成立问题先找能直接给出边界的显点。
+      source_ref: page_0266_ex5_solution_continuation
+    - step_id: step_5
+      statement: 第(3)问：取切线参数回证充分性。
+      formula_trace:
+        from: $F(x)=xe^x-a(x-1)-e$，$F(1)=0$
+        to: 令 $F^\prime(1)=0$ 得 $a=2e$
+        operation: 已知点切线极点效应。
+        why: 让 $x=1$ 成为 $F$ 的全局最小点，才能证明 $F\ge0$。
+      source_ref: page_0266_ex5_solution_continuation
+    - step_id: step_6
+      statement: 第(3)问：证明 $a=2e$ 时 $F(x)\ge0$。
+      formula_trace:
+        from: $F^\prime(x)=(x+1)e^x-2e$，$F^\prime(1)=0$
+        to: $x<1$ 时 $F^\prime<0$，$x>1$ 时 $F^\prime>0$，$F(x)\ge F(1)=0$
+        operation: 判导函数单调并确定最小值。
+        why: 完成 $b=-e$ 的充分性，进而得到所有 $b\ge-e$。
+      source_ref: page_0266_ex5_solution_continuation
+teaching_card:
+  student_title: 双参数恒成立：先用显点卡住 $b$，再选切线参数回证
+  what_it_trains: 训练双参数极点效应：一个参数用于构造切线接触，另一个参数由显点给出边界。
+  recognition_cues:
+    - 题目有 $f(x)=ax-xe^x$，同时又问“存在 $a$”使恒成立。
+    - 第(3)问右侧是 $a+b$，代 $x=1$ 会直接抵消 $a$。
+    - source 图像把 $xe^x$ 和直线 $a(x-1)$ 的切线距离作为核心。
+  normalization_moves:
+    - 第(2)问先证明导函数只有一个零点。
+    - 第(3)问先代 $x=1$ 得 $b\ge-e$。
+    - 再取 $a=2e$，让 $F(1)=F^\prime(1)=0$，证明 $F$ 全局非负。
+  common_failures:
+    - 把第(3)问的“存在 $a$”误读成对所有 $a>0$ 都成立。
+    - 只得到 $b\ge-e$ 的必要性，没有构造 $a=2e$ 回证。
+    - 证明唯一极值点时没有说明 $f^\prime$ 的唯一变号。
+    - 把 $F^\prime$ 单调性说完后忘记转回 $F(x)\ge0$。
+  similar_practice_query: 双参数极点效应 xe^x a(x-1) b范围 x=1 显点 a=2e
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

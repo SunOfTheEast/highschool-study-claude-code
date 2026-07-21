@@ -1,0 +1,183 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0020_ex12
+content_revision_id: mst_p0020_ex12-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0020_ex12.card.yaml
+stem: 已知关于 $x$ 的不等式 $x^{x^2}>ax^2\ln x$ 在 $(0,+\infty)$ 上恒成立，则实数 $a$ 的取值范围为 ________.
+answer: |-
+  $(-2e^{1-\frac{1}{2e}}, e)$
+
+  把 $x^{x^2}$ 写成 $e^{x^2\ln x}$，令 $t=x^2\ln x=\frac12x^2\ln x^2$，则 $t\ge -\frac1{2e}$，原不等式为 $e^t>at$。当 $t=0$ 时恒真；当 $t>0$ 时需 $a<e^t/t$ 对所有 $t>0$ 成立，由 $e^t/t$ 最小值为 $e$ 得 $a<e$；当 $-\frac1{2e}\le t<0$ 时需 $a>e^t/t$，该函数在负区间最大值为 $-2e^{1-\frac1{2e}}$，故 $a>-2e^{1-\frac1{2e}}$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 把左端幂函数写成指数形式，并引入单变量 $t$。
+      max_score: 1
+    - step_id: step_2
+      description: 确定 $t$ 的取值范围。
+      max_score: 1
+    - step_id: step_3
+      description: 处理 $t=0$ 的特殊点。
+      max_score: 1
+    - step_id: step_4
+      description: 当 $t>0$ 时，得到参数上界。
+      max_score: 1
+    - step_id: step_5
+      description: 当 $-\frac1{2e}\le t<0$ 时，得到参数下界。
+      max_score: 1
+    - step_id: step_6
+      description: 合并两个方向的限制。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+      - 含参数分类讨论
+    subroute:
+      - $x^{x^2}=e^{x^2\ln x}$
+      - $t=x^2\ln x$ 整体换元
+      - $e^t/t$ 正负分段最值
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - $x^{x^2}$ 经指数化后变成 $e^{x^2\ln x}$，与右端 $x^2\ln x$ 同构。
+      - 参数 $a$ 通过 $e^t>at$ 被分离到 $a<e^t/t$ 或 $a>e^t/t$。
+    normalization_moves_used:
+      - 用 $x^{x^2}=e^{x^2\ln x}$ 统一底层变量。
+      - 令 $t=\frac12x^2\ln x^2$，先求 $t\ge-1/(2e)$。
+      - 对 $t=0$ 单独处理，避免错误除零。
+      - 按 $t>0$ 和 $t<0$ 分别除以 $t$，记录不等号方向变化。
+      - 用 $g'(t)=e^t(t-1)/t^2$ 判断 $e^t/t$ 的极值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $x^{x^2}$ 写成 $e^{x^2\ln x}$，回补指数对数基础。
+      - 若学生不会由 $t=\frac12x^2\ln x^2$ 求出 $t\ge-\frac1{2e}$，回补导数单调极值基础。
+      - 若学生在 $t<0$ 时除以 $t$ 没有反向不等号，回补不等式工具基础。
+      - 若学生把 $t=0$ 也拿来除，回补代数恒等变形。
+  detail_terms:
+    - $x^{x^2}=e^{x^2\ln x}$
+    - $t=x^2\ln x$
+    - $t\ge-1/(2e)$
+    - $e^t/t$
+    - 正负分段参变量分离
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0020_ex12
+source_evidence:
+  source_refs:
+    - ref_id: page_0020
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0020/page_0020.md
+      role: problem_start
+      evidence: 例 12 题干与完整解析均在 page_0020；markdown 题干将左端转写为 $x^2$，但解析使用 $e^{x^2\ln x}$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0020.png
+      inspected: true
+      notes: 原图题干左端为 $x^{x^2}$，与解析第一步 $x^{x^2}=e^{x^2\ln x}$ 一致；已核对答案区间为 $(-2e^{1-\frac{1}{2e}}, e)$。
+  source_context: 第 1 章技能篇“导数基本技能”；本页例 12 后接例 13 和关于 $e^x/x^n$、$x^n e^x$ 最值的模型总结，说明这里训练把含参恒成立问题化到 $e^t/t$ 的指对同构最值。
+  source_influence:
+    - "legacy locator: corpus/problems/derivative/ex_mst_456.yaml 仅用于确认考试来源和题号；未继承旧 classification。"
+    - 题干必须按原图修正为 $x^{x^2}>ax^2\ln x$，否则解析与答案都不成立。
+    - 解法需要按 $t>0$、$t=0$、$t<0$ 分段处理除以 $t$ 时的不等号方向。
+  source_discrepancies:
+    - field: page_0020.markdown.original_problem.stem
+      old_value: 已知关于 $x$ 的不等式 $x^2 > ax^2 \ln x$ 在 $(0,+\infty)$ 上恒成立。
+      corrected_value: 已知关于 $x$ 的不等式 $x^{x^2} > ax^2 \ln x$ 在 $(0,+\infty)$ 上恒成立。
+      evidence_ref: materials/math/derivative/source/mst26-full-marked-c20/images/page_0020.png; page_0020 解析第一步 $e^{x^2\ln x}>ax^2\ln x$
+    - field: legacy.problem
+      old_value: 已知关于 $x$ 的不等式 $x^2 > ax^2 \ln x$ 在 $(0,+\infty)$ 上恒成立。
+      corrected_value: 应以源图为准：$x^{x^2}>ax^2\ln x$。
+      evidence_ref: materials/math/derivative/source/mst26-full-marked-c20/images/page_0020.png
+original_problem:
+  stem: 已知关于 $x$ 的不等式 $x^{x^2}>ax^2\ln x$ 在 $(0,+\infty)$ 上恒成立，则实数 $a$ 的取值范围为 ________.
+  parts: *a1
+  choices: []
+  answer: $(-2e^{1-\frac{1}{2e}}, e)$
+  fidelity_notes:
+    - 源 markdown 与 legacy locator 均把左端写成 $x^2$；原图清楚为 $x^{x^2}$，且解析全程按 $x^{x^2}=e^{x^2\ln x}$ 推进。
+    - 空格题无选项；答案两端均为开端点。
+solution:
+  source_solution_summary: 把 $x^{x^2}$ 写成 $e^{x^2\ln x}$，令 $t=x^2\ln x=\frac12x^2\ln x^2$，则 $t\ge -\frac1{2e}$，原不等式为 $e^t>at$。当 $t=0$ 时恒真；当 $t>0$ 时需 $a<e^t/t$ 对所有 $t>0$ 成立，由 $e^t/t$ 最小值为 $e$ 得 $a<e$；当 $-\frac1{2e}\le t<0$ 时需 $a>e^t/t$，该函数在负区间最大值为 $-2e^{1-\frac1{2e}}$，故 $a>-2e^{1-\frac1{2e}}$。
+  key_steps:
+    - step_id: step_1
+      statement: 把左端幂函数写成指数形式，并引入单变量 $t$。
+      formula_trace:
+        from: $x^{x^2}>ax^2\ln x$
+        to: $e^{x^2\ln x}>a(x^2\ln x)$
+        operation: 使用 $x^{x^2}=e^{x^2\ln x}$，并把右端 $x^2\ln x$ 视为同一个整体。
+        why: 这样左右两端都围绕同一个量 $t=x^2\ln x$，可转成 $e^t>at$。
+      source_ref: page_0020
+    - step_id: step_2
+      statement: 确定 $t$ 的取值范围。
+      formula_trace:
+        from: $t=x^2\ln x=\frac12x^2\ln x^2$
+        to: $t\ge -\frac1{2e}$
+        operation: 令 $u=x^2>0$，则 $t=\frac12u\ln u$；由 $u\ln u$ 在 $u=e^{-1}$ 处最小为 $-1/e$。
+        why: 后续求 $e^t/t$ 的上、下界必须先知道 $t$ 的完整区间。
+      source_ref: page_0020
+    - step_id: step_3
+      statement: 处理 $t=0$ 的特殊点。
+      formula_trace:
+        from: $e^t>at$
+        to: $1>0$
+        operation: 代入 $t=0$。
+        why: 此处不限制 $a$，因此不能在全程直接除以 $t$。
+      source_ref: page_0020
+    - step_id: step_4
+      statement: 当 $t>0$ 时，得到参数上界。
+      formula_trace:
+        from: $e^t>at,\quad t>0$
+        to: $a<\frac{e^t}{t},\quad \min_{t>0}\frac{e^t}{t}=e$
+        operation: 除以正数 $t$，再对 $g(t)=e^t/t$ 求最小值，$g'(t)=e^t(t-1)/t^2$。
+        why: 恒成立要求 $a$ 小于右侧在正区间的最小值。
+      source_ref: page_0020
+    - step_id: step_5
+      statement: 当 $-\frac1{2e}\le t<0$ 时，得到参数下界。
+      formula_trace:
+        from: $e^t>at,\quad t<0$
+        to: $a>\frac{e^t}{t},\quad \max_{[-\frac1{2e},0)}\frac{e^t}{t}=\frac{e^{-\frac1{2e}}}{-\frac1{2e}}=-2e^{1-\frac1{2e}}$
+        operation: 除以负数 $t$ 时不等号反向；$g'(t)=e^t(t-1)/t^2<0$，故负区间最大值在左端点。
+        why: 这是保证所有负 $t$ 情形均成立的必要且充分下界。
+      source_ref: page_0020
+    - step_id: step_6
+      statement: 合并两个方向的限制。
+      formula_trace:
+        from: $a<e$ 与 $a>-2e^{1-\frac1{2e}}$
+        to: $a\in(-2e^{1-\frac1{2e}},e)$
+        operation: 取交集。
+        why: 正、负 $t$ 区间的限制必须同时满足。
+      source_ref: page_0020
+teaching_card:
+  student_title: 把 $x^{x^2}$ 和 $x^2\ln x$ 合成一个 $t$
+  what_it_trains: 训练在恒成立求参中先把幂指混合式指数化，再围绕同一个整体 $t=x^2\ln x$ 分离参数，并按 $t$ 的正负讨论。
+  recognition_cues:
+    - 题干同时出现 $x^{x^2}$ 和 $x^2\ln x$。
+    - 解析入口能写成 $e^{x^2\ln x}>a(x^2\ln x)$。
+    - 整体变量 $x^2\ln x$ 的范围不是全体实数，最小值来自 $u\ln u$。
+    - 分离参数后出现 $e^t/t$，需要按 $t>0$、$t<0$ 分别看。
+  normalization_moves:
+    - 先把 $x^{x^2}$ 改写为 $e^{x^2\ln x}$。
+    - 令 $u=x^2$，把 $x^2\ln x$ 改写为 $\frac12u\ln u$ 来求范围。
+    - 处理 $e^t>at$ 时先看 $t=0$，再除以正负不同的 $t$。
+    - 把恒成立要求翻译成 $a$ 必须落在 $e^t/t$ 的正区间最小值和负区间最大值之间。
+  common_failures:
+    - 照 markdown 误读成 $x^2>ax^2\ln x$，会得到完全不同的参数结论。
+    - 忘记 $t=x^2\ln x$ 有下界 $-1/(2e)$。
+    - 在 $t<0$ 时不等号没有反向。
+    - 把 $t=0$ 代入 $e^t/t$，导致除零错误。
+    - 只求出 $a<e$，漏掉负区间给出的下界。
+  similar_practice_query: x^{x^2} ax^2 ln x 恒成立 参数范围 e^t/t 正负分段
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - Reviewer inspected page_0020 image and confirmed the original stem is $x^{x^2}>ax^2\ln x$; markdown and legacy locator both dropped the exponent.
+    - 本卡已按源图和解析修正题干，并把修正记录在 source_discrepancies。

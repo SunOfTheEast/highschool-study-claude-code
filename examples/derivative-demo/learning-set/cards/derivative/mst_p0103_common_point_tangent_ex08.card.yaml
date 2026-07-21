@@ -1,0 +1,215 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0103_common_point_tangent_ex08
+content_revision_id: mst_p0103_common_point_tangent_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0103_common_point_tangent_ex08.card.yaml
+stem: |-
+  （2024 · 聊城模拟 T8）若存在 $a>0$，使得函数 $f(x)=6a^2\ln x$ 与 $g(x)=x^2-4ax-b$ 的图象在这两个函数图象的公共点处的切线相同，则 $b$ 的最大值为 （  ）
+  A. $-\frac{1}{3e^2}$
+  B. $-\frac{1}{6e^2}$
+  C. $\frac{1}{6e^2}$
+  D. $\frac{1}{3e^2}$
+answer: |
+  D
+
+  设公共切点为 $(x_0,y_0)$。由
+  $f'(x)=\frac{6a^2}{x}$，$g'(x)=2x-4a$，
+  得 $2x_0-4a=\frac{6a^2}{x_0}$，
+  即 $x_0^2-2ax_0-3a^2=0$。解得
+  $x_0=-a$ 或 $x_0=3a$；因 $x_0>0$ 且 $a>0$，所以 $x_0=3a$。
+  再由 $f(x_0)=g(x_0)$ 得
+  $x_0^2-4ax_0-b=6a^2\ln x_0$，
+  代入 $x_0=3a$：
+  $b=-3a^2-6a^2\ln(3a)=-3a^2(1+\ln 9a^2)$。
+  写成
+  $b=-3a^2\ln(9a^2e)=-\frac1{3e}\,9a^2e\ln(9a^2e)$。
+  令 $t=9a^2e>0$，则 $b=-\frac1{3e}t\ln t$。
+  因 $-t\ln t\le\frac1e$，等号在 $t=e^{-1}$ 处成立，
+  所以 $b\le\frac1{3e^2}$，当 $a=\frac1{3e}$ 时取等，选 D。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 用导数相等锁定公共切点横坐标。
+      max_score: 1
+    - step_id: step_2
+      description: 结合定义域和 $a>0$ 排除负根。
+      max_score: 1
+    - step_id: step_3
+      description: 由函数值相等写出 $b$。
+      max_score: 1
+    - step_id: step_4
+      description: 把断裂公式还原成标准同构函数。
+      max_score: 1
+    - step_id: step_5
+      description: 令 $t=9a^2e$ 求最大值。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 自由度与主元
+      - 显隐点探路
+    subroute:
+      - 公共点公切线
+      - 切点主元化
+      - $-t\ln t$ 同构最值
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 同构结构
+      - 非齐次结构
+      - 多变量与不等式结构
+    evidence:
+      - $x_0=3a$ 将公共切点和参数绑定。
+      - $b=-3a^2(1+\ln 9a^2)$ 把 $b$ 化为单参数函数。
+      - $b=-\frac1{3e}t\ln t$ 用 $t=9a^2e$ 接到标准同构最值。
+    normalization_moves_used:
+      - 先用导数相等确定公共切点。
+      - 再用函数值相等解出目标参数 $b$。
+      - 把 $1+\ln(9a^2)$ 合并进 $\ln(9a^2e)$，统一成 $t\ln t$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从公共点共切列出导数相等和函数值相等，回补导数运算与几何意义。
+      - 若学生解 $x_0^2-2ax_0-3a^2=0$ 时根号化繁，回补代数恒等变形。
+      - 若学生不能把 $1+\ln 9a^2$ 合并为 $\ln(9a^2e)$，回补指数对数基础。
+      - 若学生不会求 $-t\ln t$ 最大值，回补导数单调极值基础。
+  detail_terms:
+    - $f(x)=6a^2\ln x$
+    - $g(x)=x^2-4ax-b$
+    - $x_0=3a$
+    - $b=-3a^2(1+\ln 9a^2)$
+    - $t=9a^2e$
+    - $b_{\max}=\frac1{3e^2}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0103_common_point_tangent_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0103
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0103/page_0103.md
+      role: problem_start
+      evidence: lines 17-25 give 例 8 题头、A-D 选项、common-point tangent derivation, dense formula marker around the maximum of $b$, and answer D; lines 27-50 are exposition-only and excluded.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0103.png
+      inspected: true
+      notes: 已核对 page_0103 图像：例 8 的断裂公式显示为 $b=\cdots=-\frac1{3e}\cdot 9a^2e\ln(9a^2e)\le\frac1{3e^2}$，$a=\frac1{3e}$ 时取等，答案 D。
+  source_context: page_0103 顶部先完成例 7；例 8 从 line 17 开始并在 line 25 完成。line 27 起为“公切线的几何解读”说明，不单独建卡。
+  source_influence:
+    - 保留源页公共点公切线两条件：公共点函数值相等，并且同一点处一阶导数相等；本题不需要二阶导。
+    - 对源页 dense/uncertain formula marker 进行图像核验，并用 $t=9a^2e$ 推导消解最大值。
+  source_discrepancies:
+    - page_0103 markdown line 24-line 25 因版面断裂标出 `[?layout]`，且 line 25 单独转写时丢失前一行末的负系数。图像显示应连读为 $b=-\frac1{3e}\cdot 9a^2e\ln(9a^2e)\le\frac1{3e^2}$；数学推导与答案 D 一致。
+original_problem:
+  stem: （2024 · 聊城模拟 T8）若存在 $a>0$，使得函数 $f(x)=6a^2\ln x$ 与 $g(x)=x^2-4ax-b$ 的图象在这两个函数图象的公共点处的切线相同，则 $b$ 的最大值为 （  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $-\frac{1}{3e^2}$
+      text_latex: $-\frac{1}{3e^2}$
+    - label: B
+      text_raw: $-\frac{1}{6e^2}$
+      text_latex: $-\frac{1}{6e^2}$
+    - label: C
+      text_raw: $\frac{1}{6e^2}$
+      text_latex: $\frac{1}{6e^2}$
+    - label: D
+      text_raw: $\frac{1}{3e^2}$
+      text_latex: $\frac{1}{3e^2}$
+  answer: D
+  fidelity_notes:
+    - 题干、选项和解析均在 page_0103；page_0103 后半的公切线几何说明不建卡。
+    - 源页断裂公式已通过图像和推导消解，无需转为人工决策项。
+solution:
+  source_solution_summary: |
+    设公共切点为 $(x_0,y_0)$。由
+    $f'(x)=\frac{6a^2}{x}$，$g'(x)=2x-4a$，
+    得 $2x_0-4a=\frac{6a^2}{x_0}$，
+    即 $x_0^2-2ax_0-3a^2=0$。解得
+    $x_0=-a$ 或 $x_0=3a$；因 $x_0>0$ 且 $a>0$，所以 $x_0=3a$。
+    再由 $f(x_0)=g(x_0)$ 得
+    $x_0^2-4ax_0-b=6a^2\ln x_0$，
+    代入 $x_0=3a$：
+    $b=-3a^2-6a^2\ln(3a)=-3a^2(1+\ln 9a^2)$。
+    写成
+    $b=-3a^2\ln(9a^2e)=-\frac1{3e}\,9a^2e\ln(9a^2e)$。
+    令 $t=9a^2e>0$，则 $b=-\frac1{3e}t\ln t$。
+    因 $-t\ln t\le\frac1e$，等号在 $t=e^{-1}$ 处成立，
+    所以 $b\le\frac1{3e^2}$，当 $a=\frac1{3e}$ 时取等，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 用导数相等锁定公共切点横坐标。
+      formula_trace:
+        from: |
+          $f'(x)=\frac{6a^2}{x},\qquad g'(x)=2x-4a$
+        to: |
+          $2x_0-4a=\frac{6a^2}{x_0},\qquad x_0^2-2ax_0-3a^2=0$
+        operation: 在公共切点处令两导数相等，再乘以 $x_0$ 并整理。
+        why: 两图象在公共点处切线相同，首先要求切点斜率相同。
+      source_ref: page_0103
+    - step_id: step_2
+      statement: 结合定义域和 $a>0$ 排除负根。
+      formula_trace:
+        from: |
+          $x_0^2-2ax_0-3a^2=0$
+        to: |
+          $(x_0-3a)(x_0+a)=0,\qquad x_0=3a$
+        operation: 因式分解，并用 $x_0>0$、$a>0$ 排除 $x_0=-a$。
+        why: $\ln x$ 要求公共点横坐标为正。
+      source_ref: page_0103
+    - step_id: step_3
+      statement: 由函数值相等写出 $b$。
+      formula_trace:
+        from: |
+          $x_0^2-4ax_0-b=6a^2\ln x_0,\qquad x_0=3a$
+        to: |
+          $b=-3a^2-6a^2\ln(3a)=-3a^2(1+\ln 9a^2)$
+        operation: 代入 $x_0=3a$ 后移项，并把 $2\ln(3a)$ 合并为 $\ln 9a^2$。
+        why: 目标是 $b$ 的最大值，需要先把 $b$ 表示成 $a$ 的函数。
+      source_ref: page_0103
+    - step_id: step_4
+      statement: 把断裂公式还原成标准同构函数。
+      formula_trace:
+        from: |
+          $b=-3a^2(1+\ln 9a^2)$
+        to: |
+          $b=-3a^2\ln(9a^2e)=-\frac1{3e}\,9a^2e\ln(9a^2e)$
+        operation: 用 $1+\ln u=\ln(eu)$，再乘除 $3e$。
+        why: page_0103 图像中断裂的式子正是这一行，写成 $t\ln t$ 后可直接求最值。
+      source_ref: page_0103
+    - step_id: step_5
+      statement: 令 $t=9a^2e$ 求最大值。
+      formula_trace:
+        from: |
+          $t=9a^2e>0,\qquad b=-\frac1{3e}t\ln t$
+        to: |
+          $-t\ln t\le\frac1e,\qquad b\le\frac1{3e^2},\qquad a=\frac1{3e}$
+        operation: 对 $-t\ln t$ 求导，最大值在 $t=e^{-1}$ 处为 $1/e$；由 $9a^2e=e^{-1}$ 得 $a=1/(3e)$。
+        why: 这给出 $b$ 的可取最大值，并对应选项 D。
+      source_ref: page_0103
+teaching_card:
+  student_title: 共点相切后，把 $b$ 变成 $-t\ln t$
+  what_it_trains: 训练先用公共切点确定隐藏关系，再把含参数对数表达式统一成标准同构函数求最大值。
+  recognition_cues:
+    - 题干说“公共点处的切线相同”，先列同点的导数相等。
+    - $a>0$ 和 $\ln x$ 的定义域会把 $x_0=-a$ 排掉。
+    - 式子里出现 $1+\ln 9a^2$，提示把 $1$ 并入对数成为 $\ln(9a^2e)$。
+  normalization_moves:
+    - 由导数相等得到 $x_0=3a$。
+    - 代回函数值相等，得到 $b=-3a^2(1+\ln 9a^2)$。
+    - 令 $t=9a^2e$，用 $-t\ln t$ 的最大值收尾。
+  common_failures:
+    - 把本题误做成不同切点的公切线，导致条件列多了。
+    - 代入 $x_0=3a$ 后把 $9a^2-12a^2$ 算错。
+    - 看到源页断行后漏掉 $-\frac1{3e}$ 这个系数。
+    - 只说“同构”但没有写出 $t=9a^2e$。
+  similar_practice_query: 公共点公切线 对数 二次 $-t\\ln t$ $b$ 最大值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已按要求 inspect page_0103 image；dense/uncertain formula marker 可由图像连读和 $t=9a^2e$ 推导消解，无需转为人工决策项。

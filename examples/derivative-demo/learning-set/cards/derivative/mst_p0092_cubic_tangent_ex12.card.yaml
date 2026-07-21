@@ -1,0 +1,224 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0092_cubic_tangent_ex12
+content_revision_id: mst_p0092_cubic_tangent_ex12-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0092_cubic_tangent_ex12.card.yaml
+stem: |-
+  （2025 齐齐哈尔期中 T11）设 $f'(x)$ 是 $f(x)$ 的导函数，$f''(x)$ 是函数 $f'(x)$ 的导函数。若方程 $f''(x)=0$ 有实数解 $x_0$，且在 $x_0$ 的左、右附近，$f''(x)$ 异号，则称点 $(x_0,f(x_0))$ 为函数 $y=f(x)$ 的“拐点”。经过探究发现：任何一个三次函数都有“拐点”且“拐点”就是三次函数图象的对称中心。已知函数 $f(x)=ax^3+bx^2+9x-4\ (ab\ne0)$ 的对称中心为 $(2,-2)$，则下列说法中正确的是（  ）
+  A. a=1, b=6
+  B. f(x) 的极小值为 -4
+  C. 若函数 f(x) 在区间 (m, 4) 上存在最小值，则 m 的取值范围为 [0, 3)
+  D. 若过点 (3, m) 可以作三条直线与 y=f(x) 的图象相切，则 m 的取值范围为 (-5, -4)
+answer: |-
+  BCD
+
+  由 $f'(x)=3ax^2+2bx+9$、$f''(x)=6ax+2b$，三次函数对称中心 $(2,-2)$ 给出 $f''(2)=0$ 与 $f(2)=-2$，解得 $a=1,b=-6$， 所以 A 错。此时 $f(x)=x^3-6x^2+9x-4$， $f'(x)=3(x-1)(x-3)$，函数在 $x=3$ 处取极小值 $-4$，B 对。 由 $f(x)+4=x(x-3)^2$ 及图象可知，开区间 $(m,4)$ 存在最小值 当且仅当 $0\le m<3$，C 对。D 项设切点横坐标为 $c$， 切线经过 $(3,m)$ 等价于 $m=-2c^3+15c^2-36c+23$； 该辅助三次函数在 $c=2$ 取极小值 $-5$，在 $c=3$ 取极大值 $-4$， 因此 $-5<m<-4$ 时有三个不同切点，D 对。故选 BCD。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 由三次函数对称中心确定参数。
+      max_score: 1
+    - step_id: step_2
+      description: 用导数号表判断极小值并判定 B。
+      max_score: 1
+    - step_id: step_3
+      description: 处理开区间上“存在最小值”的端点效应并判定 C。
+      max_score: 1
+    - step_id: step_4
+      description: 把过定点的三条切线转为切点参数方程。
+      max_score: 1
+    - step_id: step_5
+      description: 分析辅助三次函数的水平截线条数并判定 D。
+      max_score: 1
+    - step_id: step_6
+      description: 用拐点切线法复核 D 项范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: item_1
+        goal: 数值求值
+        target: 数值求值
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 极值最值
+        target: 极值最值
+        result: 见 source_solution_summary
+      - part_id: item_3
+        goal: 求参数范围
+        target: 求参数范围
+        result: 见 source_solution_summary
+      - part_id: item_4
+        goal: 求参数范围
+        target: 求参数范围
+        result: 见 source_solution_summary
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 数形结合
+      - 参变量分离
+    subroute:
+      - 三次函数拐点即对称中心
+      - 开区间最小值端点效应
+      - 切点参数化
+      - 拐点切线
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 三次/高次函数结构
+      - 局部逼近结构
+    evidence:
+      - $f''(2)=0,\quad f(2)=-2$
+      - $f'(x)=3(x-1)(x-3)$
+      - $f(x)+4=x(x-3)^2$
+      - $m=f(c)+f'(c)(3-c)=-2c^3+15c^2-36c+23$
+      - $f'(2)=-3,\quad y=-3x+4$
+    normalization_moves_used:
+      - 把“对称中心为 $(2,-2)$”标准化为 $f''(2)=0$ 与 $f(2)=-2$。
+      - 把极值判断标准化为 $f'(x)=3(x-1)(x-3)$ 的号表。
+      - 把区间最小值存在性标准化为开端点下确界与内部极小值点的比较。
+      - 把过定点切线条数标准化为切点横坐标 $c$ 的方程根个数。
+      - 用拐点切线在 $x=3$ 的纵坐标给出 D 项的几何范围。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能从对称中心写出 $f''(2)=0$，回补导数运算与几何意义。
+      - 若学生把 $f'(x)$ 的正负区间判反，回补导数单调极值基础。
+      - 若学生忽略 $(m,4)$ 是开区间导致 C 项端点判断错误，回补函数性质与图像。
+      - 若学生不会设切点参数 $c$ 写切线方程，回补导数运算与几何意义。
+      - 若学生在 $g'(c)=-6(c-2)(c-3)$ 的号表或极值计算中出错，回补代数恒等变形。
+  detail_terms:
+    - $f(x)=ax^3+bx^2+9x-4$
+    - $(2,-2)$
+    - $a=1,b=-6$
+    - $f'(x)=3(x-1)(x-3)$
+    - $f(x)+4=x(x-3)^2$
+    - $m=-2c^3+15c^2-36c+23$
+    - $-5<m<-4$
+    - BCD
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0092_cubic_tangent_ex12
+source_evidence:
+  source_refs:
+    - ref_id: page_0092
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0092/page_0092.md
+      role: problem_start
+      evidence: lines 34-44 give 例 12 题干、A-D 四个选项，并开始解析： 由对称中心列 $f''(2)=0$ 与 $f(2)=-2$，求出 $a=1,b=-6$， 再判断 A、B、C，并设 D 项切点为 $(c,d)$ 写切线方程。
+    - ref_id: page_0093
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0093/page_0093.md
+      role: continuation
+      evidence: lines 12-26 continue D 项：把切线过 $(3,m)$ 化为 $m=-2c^3+15c^2-36c+23$，分析该三次函数的极值， 又给出拐点切线法，最终答案为 BCD。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0092.png
+      inspected: true
+      notes: 页图确认 page_0092 顶部为例 11 续页；例 12 从中下部开始， 题干、四个选项和解析起始内容与 markdown 一致。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0093.png
+      inspected: true
+      notes: 页图确认 page_0093 顶部为例 12 的 D 项续解，图 1、图 2 均服务于例 12； “三、任意函数拐点与渐近线对切线条数界定”是新小节说明，未单独建卡。
+  source_context: 本卡只收录题头从 page_0092 开始的例 12。page_0092 顶部的例 11 续页按批次规则跳过； page_0093 后半的新小节说明只用于确认例 12 结束边界。
+  source_influence:
+    - 保留源页先由三次函数对称中心确定 $a,b$ 的入口。
+    - 保留源页对 $f'(x)$ 号表、开区间最小值存在性和切线条数三个选项的逐项判断。
+    - D 项同时记录源页的切点参数法与拐点切线法。
+  source_discrepancies:
+    - page_0093 line 12 的 $g'(x)$ 号段文字存在排版/转录错位： $x>3$ 被挤在“令 $g'(x)>0$”附近。按 $g'(x)=-6(x-2)(x-3)$ 可确定正确号段为 $g'(x)<0$ 当 $x<2$ 或 $x>3$，$g'(x)>0$ 当 $2<x<3$； 该问题可由数学计算消解，未标记 needs_review。
+original_problem:
+  stem: （2025 齐齐哈尔期中 T11）设 $f'(x)$ 是 $f(x)$ 的导函数，$f''(x)$ 是函数 $f'(x)$ 的导函数。若方程 $f''(x)=0$ 有实数解 $x_0$，且在 $x_0$ 的左、右附近，$f''(x)$ 异号，则称点 $(x_0,f(x_0))$ 为函数 $y=f(x)$ 的“拐点”。经过探究发现：任何一个三次函数都有“拐点”且“拐点”就是三次函数图象的对称中心。已知函数 $f(x)=ax^3+bx^2+9x-4\ (ab\ne0)$ 的对称中心为 $(2,-2)$，则下列说法中正确的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: a=1, b=6
+      text_latex: $a=1, b=6$
+    - label: B
+      text_raw: f(x) 的极小值为 -4
+      text_latex: $f(x)$ 的极小值为 $-4$
+    - label: C
+      text_raw: 若函数 f(x) 在区间 (m, 4) 上存在最小值，则 m 的取值范围为 [0, 3)
+      text_latex: 若函数 $f(x)$ 在区间 $(m,4)$ 上存在最小值，则 $m$ 的取值范围为 $[0,3)$
+    - label: D
+      text_raw: 若过点 (3, m) 可以作三条直线与 y=f(x) 的图象相切，则 m 的取值范围为 (-5, -4)
+      text_latex: 若过点 $(3,m)$ 可以作三条直线与 $y=f(x)$ 的图象相切，则 $m$ 的取值范围为 $(-5,-4)$
+  answer: BCD
+  fidelity_notes:
+    - 源题为多选题，选项 A-D 全部保留。
+    - 源页 A 项写 $b=6$，解析由对称中心求得 $b=-6$，故 A 错。
+    - 源页 D 项续到 page_0093 顶部，完整答案为 BCD。
+solution:
+  source_solution_summary: 由 $f'(x)=3ax^2+2bx+9$、$f''(x)=6ax+2b$，三次函数对称中心 $(2,-2)$ 给出 $f''(2)=0$ 与 $f(2)=-2$，解得 $a=1,b=-6$， 所以 A 错。此时 $f(x)=x^3-6x^2+9x-4$， $f'(x)=3(x-1)(x-3)$，函数在 $x=3$ 处取极小值 $-4$，B 对。 由 $f(x)+4=x(x-3)^2$ 及图象可知，开区间 $(m,4)$ 存在最小值 当且仅当 $0\le m<3$，C 对。D 项设切点横坐标为 $c$， 切线经过 $(3,m)$ 等价于 $m=-2c^3+15c^2-36c+23$； 该辅助三次函数在 $c=2$ 取极小值 $-5$，在 $c=3$ 取极大值 $-4$， 因此 $-5<m<-4$ 时有三个不同切点，D 对。故选 BCD。
+  key_steps:
+    - step_id: step_1
+      statement: 由三次函数对称中心确定参数。
+      formula_trace:
+        from: $f(x)=ax^3+bx^2+9x-4,\quad \text{对称中心为 }(2,-2)$
+        to: $12a+2b=0,\quad 8a+4b+18-4=-2\Rightarrow a=1,b=-6$
+        operation: 求 $f''(x)=6ax+2b$，用拐点横坐标满足 $f''(2)=0$，再代入中心纵坐标 $f(2)=-2$。
+        why: 三次函数的拐点就是图象对称中心。
+      source_ref: page_0092:lines 34-41
+    - step_id: step_2
+      statement: 用导数号表判断极小值并判定 B。
+      formula_trace:
+        from: $f(x)=x^3-6x^2+9x-4$
+        to: $f'(x)=3x^2-12x+9=3(x-1)(x-3),\quad f(3)=-4$
+        operation: 由 $f'>0$ 得 $x<1$ 或 $x>3$，由 $f'<0$ 得 $1<x<3$，所以 $x=3$ 为极小值点。
+        why: 导数由负变正的位置给出极小值。
+      source_ref: page_0092:line 42
+    - step_id: step_3
+      statement: 处理开区间上“存在最小值”的端点效应并判定 C。
+      formula_trace:
+        from: $f(x)=-4\Leftrightarrow x^3-6x^2+9x=0$
+        to: $f(x)+4=x(x-3)^2,\quad x=0\text{ 或 }3,\quad 0\le m<3$
+        operation: 结合图象与单调性：$m<0$ 时左端开口给出更低但不取到的下确界，$m=0$ 或 $0<m<3$ 时 $x=3$ 在区间内取到最小值，$m\ge3$ 时 $x=3$ 不在区间内。
+        why: 开区间是否包含极小值点，以及被删去端点附近是否产生更低下确界，决定最小值是否存在。
+      source_ref: page_0092:line 43; page_0093:lines 14-18
+    - step_id: step_4
+      statement: 把过定点的三条切线转为切点参数方程。
+      formula_trace:
+        from: $y-f(c)=f'(c)(x-c),\quad f'(c)=3c^2-12c+9,\quad (3,m)\text{ 在切线上}$
+        to: $m-(c^3-6c^2+9c-4)=(3c^2-12c+9)(3-c)$
+        operation: 设切点为 $(c,f(c))$，写出切线方程，再代入定点 $(3,m)$。
+        why: 每一个可行切点对应一条过定点的曲线切线。
+      source_ref: page_0092:line 44; page_0093:line 12
+    - step_id: step_5
+      statement: 分析辅助三次函数的水平截线条数并判定 D。
+      formula_trace:
+        from: $m=-2c^3+15c^2-36c+23$
+        to: $g'(c)=-6(c-2)(c-3),\quad g(2)=-5,\quad g(3)=-4,\quad -5<m<-4$
+        operation: 令 $g(c)=-2c^3+15c^2-36c+23$，由单调区间和极值判断直线 $y=m$ 与 $g$ 有三个交点的条件。
+        why: 三个不同交点对应三个不同切点，因此对应三条切线。
+      source_ref: page_0093:line 12
+    - step_id: step_6
+      statement: 用拐点切线法复核 D 项范围。
+      formula_trace:
+        from: $f'(2)=-3,\quad (2,-2)$
+        to: $y+2=-3(x-2)\Rightarrow y=-3x+4,\quad -3\cdot3+4<m<f(3)\Rightarrow -5<m<-4$
+        operation: 写出拐点处切线，在 $x=3$ 处比较拐点切线纵坐标与曲线纵坐标。
+        why: 三次函数的拐点切线把过定点三切线区域与非三切线区域分开。
+      source_ref: page_0093:line 26
+teaching_card:
+  student_title: 三次函数的拐点中心先定型
+  what_it_trains: 训练学生把三次函数的对称中心转成参数方程，随后用导数号表、 开区间端点效应和切点参数化，逐项判定多选题中的极值与切线条数结论。
+  recognition_cues:
+    - 题干主动给出“三次函数拐点就是对称中心”。
+    - 函数含未知 $a,b$，但对称中心的横纵坐标已知。
+    - 选项同时出现极小值、开区间最小值存在性和过定点三切线。
+    - D 项的定点横坐标 $3$ 正好是曲线的极小值点横坐标。
+  normalization_moves:
+    - 先写 $f''(2)=0$ 和 $f(2)=-2$，不要直接猜 $a,b$。
+    - 求出 $f(x)=x^3-6x^2+9x-4$ 后立刻因式分解 $f'(x)$。
+    - 判断 C 项时同时检查 $m=0$、$m=3$ 两个开端点临界位置。
+    - D 项先设切点横坐标 $c$，把切线条数转成 $g(c)=m$ 的根个数。
+    - 可用拐点切线 $y=-3x+4$ 在 $x=3$ 处的高度快速复核 D 项。
+  common_failures:
+    - 把 A 项中的 $b=6$ 当成对称中心代入后的正确值。
+    - 只算出驻点 $1,3$，但没有用导数符号判断哪个是极小值。
+    - C 项忘记 $(m,4)$ 是开区间，误把 $m<3$ 全部接受。
+    - D 项把切点横坐标 $c$ 与定点横坐标 $3$ 混为一谈。
+    - 在 $g'(c)$ 的号表中漏掉 $x>3$ 的递减区间，导致三交点范围错。
+  similar_practice_query: 三次函数 对称中心 拐点 切线条数 开区间最小值 多选题
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

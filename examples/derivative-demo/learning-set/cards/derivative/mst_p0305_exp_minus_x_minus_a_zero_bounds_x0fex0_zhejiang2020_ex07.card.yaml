@@ -1,0 +1,258 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0305_exp_minus_x_minus_a_zero_bounds_x0fex0_zhejiang2020_ex07
+content_revision_id: mst_p0305_exp_minus_x_minus_a_zero_bounds_x0fex0_zhejiang2020_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0305_exp_minus_x_minus_a_zero_bounds_x0fex0_zhejiang2020_ex07.card.yaml
+stem: |-
+  （2020 · 浙江）已知 $1<a\le2$，函数 $f(x)=e^x-x-a$，其中 $e=2.71828\cdots$ 为自然对数的底数。
+  1. 证明：函数 $y=f(x)$ 在 $(0,+\infty)$ 上有唯一零点。
+  2. 记 $x_0$ 为函数 $y=f(x)$ 在 $(0,+\infty)$ 上的零点，证明：$\sqrt{a-1}\le x_0\le\sqrt{2(a-1)}$。
+  3. 证明：$x_0f(e^{x_0})\ge(e-1)(a-1)a$。
+answer: |-
+  第(1)问：$(0,+\infty)$ 上唯一零点。第(2)(i)：$\sqrt{a-1}\le x_0\le\sqrt{2(a-1)}$。第(2)(ii)：$x_0f(e^{x_0})\ge(e-1)(a-1)a$。
+
+  第(1)问：$f^\prime(x)=e^x-1>0$，所以 $f$ 在 $(0,+\infty)$ 上递增；又 $f(0)=1-a<0$， $f(2)=e^2-2-a\ge e^2-4>0$，故唯一零点存在。 第(2)(i)：令 $t=\sqrt{a-1}\in(0,1]$。左界只需证 $f(t)<0$，即 $g(t)=e^t-t^2-t-1<0$，由导数分析得 $g(t)<g(0)=0$。右界只需证 $f(\sqrt2t)>0$，即 $h(t)=e^{\sqrt2t}-t^2-\sqrt2t-1\ge0$； 因 $h^\prime(t)=\sqrt2(e^{\sqrt2t}-\sqrt2t-1)\ge0$， 所以 $h(t)\ge h(0)=0$。第(2)(ii)：由 $f(x_0)=0$ 得 $e^{x_0}=x_0+a$，故 $f(e^{x_0})=f(x_0+a)=e^{x_0+a}-(x_0+a)-a$。源解先比较以 $a$ 为主元和以 $x_0$ 为主元，最后选择以 $x_0$ 为主元； 由 (i) 的下界，只需证明 $\sqrt{a-1}(e^{\sqrt{a-1}+a}-\sqrt{a-1}-2a) \ge(e-1)a(a-1)$。用 (i) 中的 $h(t)\ge0$ 得到 $e^u\ge1+u+\frac12u^2$，把问题化为 $\frac{a}{\sqrt{a-1}}-\frac{\sqrt{a-1}}a\ge2(e-2)$。 因 $\frac{a}{\sqrt{a-1}}=\frac1{\sqrt{a-1}}+\sqrt{a-1}\ge2$， 且 $\frac{\sqrt{a-1}}a\le\frac12$，左边至少为 $\frac32\ge2(e-2)$，结论成立。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 证明正半轴唯一零点。
+      max_score: 1
+    - step_id: step_2
+      description: 把根式双界改成两个取点判号。
+      max_score: 1
+    - step_id: step_3
+      description: 令 $t=\sqrt{a-1}$ 处理左界。
+      max_score: 1
+    - step_id: step_4
+      description: 处理右界，并拿到后续二阶指数放缩。
+      max_score: 1
+    - step_id: step_5
+      description: 用零点关系改写 $f(e^{x_0})$。
+      max_score: 1
+    - step_id: step_6
+      description: 选择 $x_0$ 为主元。
+      max_score: 1
+    - step_id: step_7
+      description: 用二阶指数放缩把最后一步变成代数不等式。
+      max_score: 1
+    - step_id: step_8
+      description: 完成最后的代数下界。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 1 问
+        result: $(0,+\infty)$ 上唯一零点。
+      - part_id: 2i
+        goal: 不等式证明
+        target: 第 2i 问
+        result: $\sqrt{a-1}\le x_0\le\sqrt{2(a-1)}$。
+      - part_id: 2ii
+        goal: 不等式证明
+        target: 第 2ii 问
+        result: $x_0f(e^{x_0})\ge(e-1)(a-1)a$。
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 显隐点探路
+      - 自由度与主元
+      - 拟合与夹逼
+    subroute:
+      - 唯一零点
+      - 根式取点夹零点
+      - $e^{x_0}=x_0+a$ 零点代换
+      - 选择 $x_0$ 为主元
+      - 二阶指数放缩
+      - 代数下界兜底
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 根式函数结构
+      - 局部逼近结构
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $e^x-x-a$
+      - $e^{x_0}=x_0+a$
+      - $\sqrt{a-1}\le x_0\le\sqrt{2(a-1)}$
+      - $x_0f(e^{x_0})$
+      - $e^{\sqrt{a-1}+a}$
+      - $\frac{a}{\sqrt{a-1}}-\frac{\sqrt{a-1}}a$
+    normalization_moves_used:
+      - 用单调零点把根式界转成取点判号。
+      - 把 $e^{x_0}$ 换成 $x_0+a$。
+      - 比较主元选择，放弃以 $a$ 为主元。
+      - 使用已经构造过的二阶指数放缩，把最终问题代数化。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会用单调性证明唯一零点，回补导数单调极值基础。
+      - 若学生不会把零点夹在两取点之间，回补方程根分布与韦达。
+      - 若学生不会 $e^{x_0}=x_0+a$ 的代换，回补代数恒等变形。
+      - 若学生不会 $e^u\ge1+u+\frac12u^2$，回补指数对数基础。
+      - 若学生不会最后的根式代数下界，回补不等式工具基础。
+  detail_terms:
+    - $e^x-x-a$
+    - $1<a\le2$
+    - $x_0$ 正零点
+    - $\sqrt{a-1}$
+    - $\sqrt{2(a-1)}$
+    - $x_0f(e^{x_0})$
+    - $e^{x_0}=x_0+a$
+    - $e^u\ge1+u+\frac12u^2$
+parts: &a1
+  - part_id: "1"
+    text: 证明：函数 $y=f(x)$ 在 $(0,+\infty)$ 上有唯一零点。
+  - part_id: 2i
+    text: 记 $x_0$ 为函数 $y=f(x)$ 在 $(0,+\infty)$ 上的零点，证明：$\sqrt{a-1}\le x_0\le\sqrt{2(a-1)}$。
+  - part_id: 2ii
+    text: 证明：$x_0f(e^{x_0})\ge(e-1)(a-1)a$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0305_exp_minus_x_minus_a_zero_bounds_x0fex0_zhejiang2020_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0305_ex07_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0305/page_0305.md
+      role: problem_start
+      evidence: page_0305 例7题头：$1<a\le2$，$f(x)=e^x-x-a$；(1) 证明正半轴唯一零点；(2) 对零点 $x_0$ 证明根式双界与 $x_0f(e^{x_0})\ge(e-1)(a-1)a$。
+    - ref_id: page_0305_ex07_part1_part2i
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0305/page_0305.md
+      role: solution
+      evidence: page_0305 解析：第(1)问用 $f^\prime(x)=e^x-1>0$ 与 $f(0)<0,f(2)>0$ 证明唯一零点；第(2)(i) 令 $t=\sqrt{a-1}$，构造 $g(t)=e^t-t^2-t-1$ 与 $h(t)=e^{\sqrt2t}-t^2-\sqrt2t-1$ 夹出 $x_0$。
+    - ref_id: page_0305_ex07_part2ii_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0305/page_0305.md
+      role: solution
+      evidence: page_0305 底部：第(2)(ii) 用 $f(e^{x_0})$ 复杂，转为证明 $x_0f(x_0+a)$，因为零点关系给出 $e^{x_0}=x_0+a$。
+    - ref_id: page_0306_ex07_part2ii_tail
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0306/page_0306.md
+      role: solution
+      evidence: page_0306 顶部：把 $x_0f(x_0+a)$ 写成 $x_0[e^{x_0+a}-(x_0+a)-a]$，选择 $x_0$ 为主元，使用 (i) 的下界和 $e^x\ge1+x+\frac12x^2$，化到 $\frac{a}{\sqrt{a-1}}-\frac{\sqrt{a-1}}a\ge2(e-2)$。
+    - ref_id: page_0306_ex07_teacher_note
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0306/page_0306.md
+      role: teacher_note
+      evidence: page_0306 评注：高考真题强调“找点先行，构造单调放缩函数在后，把握变量主元”。
+    - ref_id: page_0306_ex07_huizhou_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0306/page_0306.md
+      role: local_context
+      evidence: page_0306 后半页另起 2025 惠州二模例7，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0305.png
+      inspected: true
+      notes: 已核对页图：page_0305 下半页开始 2020 浙江例7，含第(1)、第(2)(i) 和第(2)(ii) 开头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0306.png
+      inspected: true
+      notes: 已核对页图：page_0306 顶部补全 2020 浙江例7，随后另起 2025 惠州二模例7。
+  source_context: 本卡处理 page_0305 起始、page_0306 顶部结束的 2020 浙江例7；page_0306 后半页的 2025 惠州二模例7排除。
+  source_influence:
+    - 保留 $f^\prime(x)=e^x-1>0$ 得唯一零点。
+    - 保留第(2)(i) 的找点目标：证明 $f(\sqrt{a-1})<0$ 与 $f(\sqrt{2(a-1)})>0$。
+    - 保留令 $t=\sqrt{a-1}\in(0,1]$，把根式界转成两个单变量不等式。
+    - 保留 $h(t)\ge0$ 提供 $e^x\ge1+x+\frac12x^2$ 的局部放缩依据。
+    - 保留第(2)(ii) 用零点关系 $e^{x_0}=x_0+a$，把 $f(e^{x_0})$ 变为 $f(x_0+a)$。
+    - 保留主元选择：不以 $a$ 为主元，改以 $x_0$ 为主元，用 (i) 的下界替换 $x_0$。
+    - 保留最终代数下界 $\frac{a}{\sqrt{a-1}}-\frac{\sqrt{a-1}}a\ge\frac32\ge2(e-2)$。
+  source_discrepancies: []
+original_problem:
+  stem: （2020 · 浙江）已知 $1<a\le2$，函数 $f(x)=e^x-x-a$，其中 $e=2.71828\cdots$ 为自然对数的底数。
+  parts: *a1
+  choices: []
+  answer: 第(1)问：$(0,+\infty)$ 上唯一零点。第(2)(i)：$\sqrt{a-1}\le x_0\le\sqrt{2(a-1)}$。第(2)(ii)：$x_0f(e^{x_0})\ge(e-1)(a-1)a$。
+  fidelity_notes:
+    - 无选项。
+    - $x_0$ 是 $e^x-x-a=0$ 的正零点，零点关系为 $e^{x_0}=x_0+a$。
+    - 第(2)(ii) 不是直接估 $f(e^{x_0})$，而是先把输入 $e^{x_0}$ 改为 $x_0+a$。
+solution:
+  source_solution_summary: 第(1)问：$f^\prime(x)=e^x-1>0$，所以 $f$ 在 $(0,+\infty)$ 上递增；又 $f(0)=1-a<0$， $f(2)=e^2-2-a\ge e^2-4>0$，故唯一零点存在。 第(2)(i)：令 $t=\sqrt{a-1}\in(0,1]$。左界只需证 $f(t)<0$，即 $g(t)=e^t-t^2-t-1<0$，由导数分析得 $g(t)<g(0)=0$。右界只需证 $f(\sqrt2t)>0$，即 $h(t)=e^{\sqrt2t}-t^2-\sqrt2t-1\ge0$； 因 $h^\prime(t)=\sqrt2(e^{\sqrt2t}-\sqrt2t-1)\ge0$， 所以 $h(t)\ge h(0)=0$。第(2)(ii)：由 $f(x_0)=0$ 得 $e^{x_0}=x_0+a$，故 $f(e^{x_0})=f(x_0+a)=e^{x_0+a}-(x_0+a)-a$。源解先比较以 $a$ 为主元和以 $x_0$ 为主元，最后选择以 $x_0$ 为主元； 由 (i) 的下界，只需证明 $\sqrt{a-1}(e^{\sqrt{a-1}+a}-\sqrt{a-1}-2a) \ge(e-1)a(a-1)$。用 (i) 中的 $h(t)\ge0$ 得到 $e^u\ge1+u+\frac12u^2$，把问题化为 $\frac{a}{\sqrt{a-1}}-\frac{\sqrt{a-1}}a\ge2(e-2)$。 因 $\frac{a}{\sqrt{a-1}}=\frac1{\sqrt{a-1}}+\sqrt{a-1}\ge2$， 且 $\frac{\sqrt{a-1}}a\le\frac12$，左边至少为 $\frac32\ge2(e-2)$，结论成立。
+  key_steps:
+    - step_id: step_1
+      statement: 证明正半轴唯一零点。
+      formula_trace:
+        from: $f(x)=e^x-x-a$
+        to: $f^\prime(x)=e^x-1>0,\quad f(0)<0,\quad f(2)>0$
+        operation: 求导判单调，再找两侧异号点。
+        why: 单调性给唯一性，异号点给存在性。
+      source_ref: page_0305_ex07_part1_part2i
+    - step_id: step_2
+      statement: 把根式双界改成两个取点判号。
+      formula_trace:
+        from: $\sqrt{a-1}\le x_0\le\sqrt{2(a-1)}$
+        to: $f(\sqrt{a-1})<0,\quad f(\sqrt{2(a-1)})>0$
+        operation: 利用 $f$ 单调递增。
+        why: 零点夹在两个取点之间。
+      source_ref: page_0305_ex07_part1_part2i
+    - step_id: step_3
+      statement: 令 $t=\sqrt{a-1}$ 处理左界。
+      formula_trace:
+        from: $f(t)=e^t-t^2-t-1$
+        to: $f(t)<0$
+        operation: 设 $g(t)=e^t-t^2-t-1$，由导数分析得 $g(t)<g(0)=0$。
+        why: 证明 $x_0$ 在 $t$ 的右侧。
+      source_ref: page_0305_ex07_part1_part2i
+    - step_id: step_4
+      statement: 处理右界，并拿到后续二阶指数放缩。
+      formula_trace:
+        from: $h(t)=e^{\sqrt2t}-t^2-\sqrt2t-1$
+        to: $h(t)\ge0$
+        operation: 用 $h^\prime(t)=\sqrt2(e^{\sqrt2t}-\sqrt2t-1)\ge0$。
+        why: 一方面证明右界，另一方面为后面使用 $e^u\ge1+u+\frac12u^2$ 做铺垫。
+      source_ref: page_0305_ex07_part1_part2i
+    - step_id: step_5
+      statement: 用零点关系改写 $f(e^{x_0})$。
+      formula_trace:
+        from: $f(x_0)=0$
+        to: $e^{x_0}=x_0+a,\quad f(e^{x_0})=f(x_0+a)$
+        operation: 把指数输入 $e^{x_0}$ 换成线性输入 $x_0+a$。
+        why: 原式 $f(e^{x_0})$ 太复杂，必须先用零点关系降维。
+      source_ref: page_0305_ex07_part2ii_start
+    - step_id: step_6
+      statement: 选择 $x_0$ 为主元。
+      formula_trace:
+        from: $x_0[e^{x_0+a}-(x_0+a)-a]$
+        to: $\sqrt{a-1}(e^{\sqrt{a-1}+a}-\sqrt{a-1}-2a)$
+        operation: 用 (i) 的 $x_0\ge\sqrt{a-1}$ 做下界替换。
+        why: 若以 $a$ 为主元，两边都随 $a$ 增大，不能直接放缩；以 $x_0$ 为主元右侧固定，更好比较。
+      source_ref: page_0306_ex07_part2ii_tail
+    - step_id: step_7
+      statement: 用二阶指数放缩把最后一步变成代数不等式。
+      formula_trace:
+        from: $e^{\sqrt{a-1}+a}$
+        to: $1+(\sqrt{a-1}+a)+\frac12(\sqrt{a-1}+a)^2$
+        operation: 调用前面右界证明中得到的 $e^u\ge1+u+\frac12u^2$。
+        why: 把指数不等式压成关于 $a$ 和 $\sqrt{a-1}$ 的代数式。
+      source_ref: page_0306_ex07_part2ii_tail
+    - step_id: step_8
+      statement: 完成最后的代数下界。
+      formula_trace:
+        from: $\frac{a}{\sqrt{a-1}}-\frac{\sqrt{a-1}}a$
+        to: $\frac{a}{\sqrt{a-1}}-\frac{\sqrt{a-1}}a\ge\frac32\ge2(e-2)$
+        operation: 用 $\frac{a}{\sqrt{a-1}}=\frac1{\sqrt{a-1}}+\sqrt{a-1}\ge2$ 和 $\frac{\sqrt{a-1}}a\le\frac12$。
+        why: 这是第(2)(ii) 的最终数值兜底。
+      source_ref: page_0306_ex07_part2ii_tail
+teaching_card:
+  student_title: 先找点夹住零点，再选主元放缩
+  what_it_trains: 训练高考真题里常见的路线：先用取点把隐藏零点夹住，再把复杂目标改成适合放缩的主元。
+  recognition_cues:
+    - 题目先要求唯一零点，再让你估这个零点。
+    - 目标里出现 $f(e^{x_0})$，但 $x_0$ 满足 $e^{x_0}=x_0+a$。
+    - 根式 $\sqrt{a-1}$ 和 $\sqrt{2(a-1)}$ 明显提示取点夹零点。
+    - 最后一问同时含 $a$ 和 $x_0$，需要判断谁做主元。
+  normalization_moves:
+    - 先证明 $f$ 单调，之后所有取点才有意义。
+    - 把 $\sqrt{a-1}\le x_0\le\sqrt{2(a-1)}$ 翻译成左右取点判号。
+    - 看到 $f(e^{x_0})$，先用 $e^{x_0}=x_0+a$ 换输入。
+    - 不要急着对 $a$ 放缩；源解明确选择 $x_0$ 为主元。
+  common_failures:
+    - 只证存在零点，忘记唯一性来自单调。
+    - 根式双界的取点方向写反。
+    - 忘记第(2)(i) 的结果是第(2)(ii) 的工具。
+    - 把 $f(e^{x_0})$ 直接展开后硬算，导致表达式爆炸。
+    - 没有解释为什么选择 $x_0$ 为主元。
+  similar_practice_query: 浙江导数 零点根式双界 x0 f(e^x0) 主元 放缩取点
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,175 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0032_ex22
+content_revision_id: mst_p0032_ex22-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0032_ex22.card.yaml
+stem: |-
+  （2025 江苏卓越联盟月考 T8）若关于 $x$ 的不等式 $x^2+x\ln a-ae^x\ln x>0$ 对 $\forall x\in(0,1)$ 恒成立，则实数 $a$ 的取值范围为（ ）
+  A. $\left(-\infty,\frac{1}{e}\right]$
+  B. $\left(0,\frac{1}{e}\right]$
+  C. $\left[\frac{1}{e},1\right)$
+  D. $\left[\frac{1}{e},+\infty\right)$
+answer: |-
+  D，即 $a\in\left[\frac{1}{e},+\infty\right)$。
+
+  先把 $x^2+x\ln a$ 合并成 $x\ln(ae^x)$，再除以正量 $xae^x$，转化为 $f(ae^x)>f(x)$，其中 $f(t)=\ln t/t$。由于 $0<x<1$ 时 $f(x)<0$ 且 $f$ 在 $(0,e)$ 上递增，恒成立等价于 $ae^x>x$ 对所有 $x\in(0,1)$ 成立，于是 $a\ge\sup_{0<x<1}x/e^x=1/e$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把原不等式改写成对数商比较的入口形式。
+      max_score: 1
+    - step_id: step_2
+      description: 除以正量，得到同一个函数的函数值比较。
+      max_score: 1
+    - step_id: step_3
+      description: 分析 $f(t)=\ln t/t$ 的单调和符号。
+      max_score: 1
+    - step_id: step_4
+      description: 把 $f(ae^x)>f(x)$ 化成 $ae^x>x$。
+      max_score: 1
+    - step_id: step_5
+      description: 分离参数并取开区间上确界。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+    subroute:
+      - $\ln x/x$ 同构比较
+      - $x/e^x$ 开区间上确界
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+    evidence:
+      - $x^2+x\ln a$ 被合并为 $x\ln(ae^x)$。
+      - 原不等式转化为 $f(ae^x)>f(x)$，$f(t)=\ln t/t$。
+    normalization_moves_used:
+      - $x^2+x\ln a=x\ln(ae^x)$。
+      - $x\ln(ae^x)>ae^x\ln x$ 除成 $\ln(ae^x)/(ae^x)>\ln x/x$。
+      - $ae^x>x$ 分离为 $a>x/e^x$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生没有先指出 $\ln a$ 要求 $a>0$，回补函数三要素与定义域。
+      - 若学生不会把 $x^2+x\ln a$ 合并为 $x\ln(ae^x)$，回补指数对数基础。
+      - 若学生不能对 $f(t)=\ln t/t$ 求导并判单调，回补导数单调极值基础。
+      - 若学生把 $(0,1)$ 上的上确界误当作必须取到的最大值，回补导数单调极值基础。
+  detail_terms:
+    - $x^2+x\ln a-ae^x\ln x>0$
+    - $f(t)=\ln t/t$
+    - $f(ae^x)>f(x)$
+    - $ae^x>x$
+    - $\sup_{0<x<1}x/e^x=1/e$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0032_ex22
+source_evidence:
+  source_refs:
+    - ref_id: page_0032
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0032/page_0032.md
+      role: problem_start
+      evidence: 例22题干、四个选项和完整解析均在 page_0032 中部，位于“考点4”标题之后。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0032.png
+      inspected: true
+      notes: 已核对例22题头、题干、四个选项、解析变形和答案 D。
+  source_context: page_0032 顶部承接上一页例21，只作上下文；例22从本页“考点4”后独立起题并在本页结束。
+  source_influence:
+    - 按 page_0032 图像确认 $\ln a$ 的实数语境要求 $a>0$。
+    - 解析核心是把原不等式化成 $f(ae^x)>f(x)$，其中 $f(t)=\ln t/t$。
+  source_discrepancies:
+    - 原解析把 $\frac{x}{e^x}$ 在开区间 $(0,1)$ 上的上确界写作“max”；本卡按 $x\to1^-$ 的上确界 $1/e$ 处理，答案不受影响。
+original_problem:
+  stem: （2025 江苏卓越联盟月考 T8）若关于 $x$ 的不等式 $x^2+x\ln a-ae^x\ln x>0$ 对 $\forall x\in(0,1)$ 恒成立，则实数 $a$ 的取值范围为（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\left(-\infty,\frac{1}{e}\right]$
+      text_latex: $\left(-\infty,\frac{1}{e}\right]$
+    - label: B
+      text_raw: $\left(0,\frac{1}{e}\right]$
+      text_latex: $\left(0,\frac{1}{e}\right]$
+    - label: C
+      text_raw: $\left[\frac{1}{e},1\right)$
+      text_latex: $\left[\frac{1}{e},1\right)$
+    - label: D
+      text_raw: $\left[\frac{1}{e},+\infty\right)$
+      text_latex: $\left[\frac{1}{e},+\infty\right)$
+  answer: D，即 $a\in\left[\frac{1}{e},+\infty\right)$。
+  fidelity_notes:
+    - 题干和选项抄自 page_0032；图片确认选项 A 的左端为 $-\infty$，选项 D 的右端为 $+\infty$。
+    - 因题中出现 $\ln a$，实数范围内隐含 $a>0$；解析也使用“又 $a>0$”。
+    - 开区间 $(0,1)$ 上 $\frac{x}{e^x}$ 未取到 $1/e$，但恒成立条件允许 $a=1/e$。
+solution:
+  source_solution_summary: 先把 $x^2+x\ln a$ 合并成 $x\ln(ae^x)$，再除以正量 $xae^x$，转化为 $f(ae^x)>f(x)$，其中 $f(t)=\ln t/t$。由于 $0<x<1$ 时 $f(x)<0$ 且 $f$ 在 $(0,e)$ 上递增，恒成立等价于 $ae^x>x$ 对所有 $x\in(0,1)$ 成立，于是 $a\ge\sup_{0<x<1}x/e^x=1/e$。
+  key_steps:
+    - step_id: step_1
+      statement: 把原不等式改写成对数商比较的入口形式。
+      formula_trace:
+        from: $x^2+x\ln a-ae^x\ln x>0$
+        to: $x\ln(ae^x)-ae^x\ln x>0$
+        operation: 用 $\ln(ae^x)=\ln a+x$，把 $x^2+x\ln a$ 合并为 $x\ln(ae^x)$。
+        why: 这样两项都含有“变量乘对数”的同构形态，便于除成 $\ln t/t$。
+      source_ref: page_0032
+    - step_id: step_2
+      statement: 除以正量，得到同一个函数的函数值比较。
+      formula_trace:
+        from: $x\ln(ae^x)-ae^x\ln x>0$
+        to: $\frac{\ln(ae^x)}{ae^x}>\frac{\ln x}{x}$
+        operation: 在 $x\in(0,1)$ 且 $a>0$ 下，两边移项后除以正数 $xae^x$。
+        why: 原不等式等价于 $f(ae^x)>f(x)$，其中 $f(t)=\ln t/t$。
+      source_ref: page_0032
+    - step_id: step_3
+      statement: 分析 $f(t)=\ln t/t$ 的单调和符号。
+      formula_trace:
+        from: $f(t)=\frac{\ln t}{t}$
+        to: |
+          $f'(t)=\frac{1-\ln t}{t^2}$，$f$ 在 $(0,e)$ 上递增、在 $(e,+\infty)$ 上递减，且 $0<t<1$ 时 $f(t)<0$。
+        operation: 求导并按 $1-\ln t$ 判号，再用 $f(1)=0$ 判断符号。
+        why: 比较 $f(ae^x)$ 与 $f(x)$ 时，$x\in(0,1)$ 落在递增且函数值为负的区间。
+      source_ref: page_0032
+    - step_id: step_4
+      statement: 把 $f(ae^x)>f(x)$ 化成 $ae^x>x$。
+      formula_trace:
+        from: $f(ae^x)>f(x),\quad 0<x<1$
+        to: $ae^x>x$ 对所有 $x\in(0,1)$ 成立
+        operation: 若 $ae^x\le x<1$，由 $f$ 在 $(0,1)$ 上严格递增得 $f(ae^x)\le f(x)$，矛盾；若 $ae^x>x$，则 $ae^x\in(x,1)$ 时由递增性得 $f(ae^x)>f(x)$，而 $ae^x\ge1$ 时 $f(ae^x)\ge0>f(x)$。
+        why: 这是恒成立的必要且充分条件。
+      source_ref: page_0032
+    - step_id: step_5
+      statement: 分离参数并取开区间上确界。
+      formula_trace:
+        from: $ae^x>x\quad(0<x<1)$
+        to: $a>\frac{x}{e^x}\quad(0<x<1)$，故 $a\ge\sup_{0<x<1}\frac{x}{e^x}=\frac1e$
+        operation: |
+          两边除以 $e^x$，再令 $\phi(x)=xe^{-x}$；由 $\phi'(x)=e^{-x}(1-x)>0$ 知 $\phi$ 在 $(0,1)$ 上递增，且 $x\to1^-$ 时 $\phi(x)\to1/e$。
+        why: 因为 $x=1$ 不在区间内，$a=1/e$ 仍使 $ae^x>x$ 对每个 $x<1$ 严格成立。
+      source_ref: page_0032
+teaching_card:
+  student_title: 把恒成立不等式化成 $\ln x/x$ 比较
+  what_it_trains: 训练把含参数的指对混合不等式先同构成同一个函数值比较，再分离参数取临界上确界。
+  recognition_cues:
+    - 题干中同时出现 $x^2+x\ln a$ 和 $ae^x\ln x$。
+    - 变量范围是 $0<x<1$，$\ln x/x$ 在这里为负且递增。
+    - 选项围绕 $1/e$ 展开。
+  normalization_moves:
+    - 把 $x^2+x\ln a$ 合并成 $x\ln(ae^x)$。
+    - 除以 $xae^x$ 得到 $\ln(ae^x)/(ae^x)>\ln x/x$。
+    - 把同构比较降为 $ae^x>x$，再分离出 $a>x/e^x$。
+  common_failures:
+    - 忘记 $\ln a$ 要求 $a>0$，误选含负数的区间。
+    - 只看 $f(t)=\ln t/t$ 在 $(0,e)$ 上递增，漏掉 $ae^x\ge1$ 时函数值已为非负。
+    - 把开区间上的 $1/e$ 当成不能取，误把答案写成 $(1/e,+\infty)$。
+  similar_practice_query: ln x / x 同构 恒成立 参数范围 x/e^x 上确界
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0032 图像已核对；例22不跨页。
+    - 原解析写“max”处按开区间上确界理解，因此 $a=1/e$ 可取。

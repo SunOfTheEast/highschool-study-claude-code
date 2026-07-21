@@ -1,0 +1,202 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0090_cubic_tangent_ex09
+content_revision_id: mst_p0090_cubic_tangent_ex09-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0090_cubic_tangent_ex09.card.yaml
+stem: |-
+  （2023 浙江浙南名校联盟第一次联考·多选 T12）已知函数 $f(x)=ax^3-3ax^2+b$，其中实数 $a>0$，$b\in\mathbf{R}$， 点 $A(2,a)$，则下列结论正确的是（ ）
+  A. $f(x)$ 必有两个极值点
+  B. 当 $b=2a$ 时，点 $(1,0)$ 是曲线 $y=f(x)$ 的对称中心
+  C. 当 $b=3a$ 时，过点 $A$ 可以作曲线 $y=f(x)$ 的 2 条切线
+  D. 当 $5a<b<6a$ 时，过点 $A$ 可以作曲线 $y=f(x)$ 的 3 条切线
+answer: |-
+  ABD
+
+  $f'(x)=3ax^2-6ax=3ax(x-2)$，因 $a>0$， 导数在 $x=0,2$ 处变号，所以必有两个极值点，A 正确。 三次函数的对称中心横坐标为 $x=1$，且 $f(1)=b-2a$， 当 $b=2a$ 时中心为 $(1,0)$，B 正确。若 $b=3a$， 对称中心为 $(1,a)$，而 $A(2,a)$ 落在内弧区域，过 $A$ 仅有一条切线，C 错。若 $5a<b<6a$，则在 $x=2$ 处， 拐点切线高度 $b-5a<a$，曲线高度 $b-4a>a$， 点 $A(2,a)$ 落在外弧区域，可作 3 条切线，D 正确。故选 ABD。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 判断 A：用导数零点和变号确认两个极值点。
+      max_score: 1
+    - step_id: step_2
+      description: 判断 B：求三次函数对称中心。
+      max_score: 1
+    - step_id: step_3
+      description: 判断 C：$b=3a$ 时点 $A$ 位于内弧区域。
+      max_score: 1
+    - step_id: step_4
+      description: 判断 D：用 $5a<b<6a$ 把 $A$ 夹在外弧区域。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: A
+        goal: 零点/极值点分析
+        target: 第 A 问
+        result: 见 source_solution_summary
+      - part_id: B
+        goal: 抽象函数性质
+        target: 第 B 问
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 抽象函数性质
+        target: 第 C 问
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 抽象函数性质
+        target: 第 D 问
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 切线放缩与凹凸性
+      - 含参数分类讨论
+      - 局部逼近与找点
+    subroute:
+      - 三次函数对称中心
+      - 拐点切线分区
+      - 外弧/内弧区域判定
+      - 同横坐标高度比较
+  structure:
+    primary: 三次/高次函数结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 对称结构
+    evidence:
+      - $f'(x)=3ax(x-2)$ 给出两个极值点。
+      - $f''(x)=6a(x-1)$ 给出对称中心 $(1,b-2a)$。
+      - $b-5a<a<b-4a$ 是 D 项外弧区域的高度夹逼。
+    normalization_moves_used:
+      - 把三次函数配到“对称中心 + 拐点切线”框架。
+      - 用 $x=2$ 处的曲线值和拐点切线值判区。
+      - 把“几条切线”翻译成内弧/外弧区域。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会用 $f'(x)$ 的符号判断极值点，回补导数单调极值基础。
+      - 若学生不知道三次函数拐点就是对称中心，回补函数性质与图像。
+      - 若学生不会写拐点切线并代入 $x=2$，回补导数运算与几何意义。
+      - 若学生比较 $b-5a,a,b-4a$ 出错，回补代数恒等变形。
+  detail_terms:
+    - $f(x)=ax^3-3ax^2+b$
+    - 对称中心 $(1,b-2a)$
+    - 点 $A(2,a)$
+    - 内弧区域
+    - 外弧区域
+    - $5a<b<6a$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0090_cubic_tangent_ex09
+source_evidence:
+  source_refs:
+    - ref_id: page_0090
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0090/page_0090.md
+      role: problem_start
+      evidence: page_0090 底部给出例 9 题头、题干、A-D 四个选项， 并完成 A、B 两项解析。
+    - ref_id: page_0091
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0091/page_0091.md
+      role: continuation
+      evidence: page_0091 顶部续完例 9 的 C、D 两项解析，给出左右两张区域示意图， 并明确答案 ABD；随后开始例 10。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0090.png
+      inspected: true
+      notes: 已核对 page_0090 底部：例 9 的题干、四个选项和 A、B 解析清楚可见。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0091.png
+      inspected: true
+      notes: 已核对 page_0091 顶部：例 9 续解含 C、D 判断、两幅区域图和答案 ABD； 例 10 从本页中部另起，未混入本卡。
+  source_context: 例 9 延续 page_0090 的三次函数切线条数结论：对 $f(x)=ax^3-3ax^2+b$，对称中心在 $x=1$， 点 $A(2,a)$ 与曲线、拐点切线的相对位置决定能引几条切线。
+  source_influence:
+    - 题目为多选题，choices 完整保留 A-D。
+    - A、B 来自 page_0090，C、D 和答案来自 page_0091 续页。
+    - 源图把 $b=3a$ 与 $5a<b<6a$ 两种点位分别画成内弧和外弧区域，本卡据此保留区域判定。
+  source_discrepancies:
+    - page_0091 页图/markdown 对 C 项解析处有“有仅有一条”的源文瑕疵， markdown 以 reconstruction marker 纠为“仅有”；本卡按数学含义写“仅有一条”。
+original_problem:
+  stem: （2023 浙江浙南名校联盟第一次联考·多选 T12）已知函数 $f(x)=ax^3-3ax^2+b$，其中实数 $a>0$，$b\in\mathbf{R}$， 点 $A(2,a)$，则下列结论正确的是（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(x)$ 必有两个极值点
+      text_latex: $f(x)$ 必有两个极值点
+    - label: B
+      text_raw: 当 $b=2a$ 时，点 $(1,0)$ 是曲线 $y=f(x)$ 的对称中心
+      text_latex: 当 $b=2a$ 时，点 $(1,0)$ 是曲线 $y=f(x)$ 的对称中心
+    - label: C
+      text_raw: 当 $b=3a$ 时，过点 $A$ 可以作曲线 $y=f(x)$ 的 2 条切线
+      text_latex: 当 $b=3a$ 时，过点 $A$ 可以作曲线 $y=f(x)$ 的 2 条切线
+    - label: D
+      text_raw: 当 $5a<b<6a$ 时，过点 $A$ 可以作曲线 $y=f(x)$ 的 3 条切线
+      text_latex: 当 $5a<b<6a$ 时，过点 $A$ 可以作曲线 $y=f(x)$ 的 3 条切线
+  answer: ABD
+  fidelity_notes:
+    - 例 9 题干起于 page_0090，解析续至 page_0091 顶部。
+    - page_0091 两幅图为解析辅助图，分别对应 C 项内弧区域和 D 项外弧区域。
+solution:
+  source_solution_summary: $f'(x)=3ax^2-6ax=3ax(x-2)$，因 $a>0$， 导数在 $x=0,2$ 处变号，所以必有两个极值点，A 正确。 三次函数的对称中心横坐标为 $x=1$，且 $f(1)=b-2a$， 当 $b=2a$ 时中心为 $(1,0)$，B 正确。若 $b=3a$， 对称中心为 $(1,a)$，而 $A(2,a)$ 落在内弧区域，过 $A$ 仅有一条切线，C 错。若 $5a<b<6a$，则在 $x=2$ 处， 拐点切线高度 $b-5a<a$，曲线高度 $b-4a>a$， 点 $A(2,a)$ 落在外弧区域，可作 3 条切线，D 正确。故选 ABD。
+  key_steps:
+    - step_id: step_1
+      statement: 判断 A：用导数零点和变号确认两个极值点。
+      formula_trace:
+        from: |
+          $f'(x)=3ax^2-6ax=3ax(x-2),\quad a>0$
+        to: |
+          $x=0,2$ 为导数零点，且 $f'$ 在两点处变号，所以 $f(x)$ 必有两个极值点
+        operation: 求导并按区间 $(-\infty,0)$、$(0,2)$、$(2,+\infty)$ 判断符号。
+        why: 三次函数的两个驻点都发生单调性改变时，就是极大/极小值点。
+      source_ref: page_0090
+    - step_id: step_2
+      statement: 判断 B：求三次函数对称中心。
+      formula_trace:
+        from: |
+          $f''(x)=6a(x-1),\quad f(1)=a-3a+b=b-2a$
+        to: |
+          对称中心为 $(1,b-2a)$；当 $b=2a$ 时，对称中心为 $(1,0)$
+        operation: 由 $f''(x)=0$ 定位拐点，再代入函数值。
+        why: 三次函数的拐点就是图象对称中心。
+      source_ref: page_0090
+    - step_id: step_3
+      statement: 判断 C：$b=3a$ 时点 $A$ 位于内弧区域。
+      formula_trace:
+        from: |
+          $b=3a,\quad f(1)=a,\quad f(2)=-a,\quad l_{\text{拐点}}(2)=a-3a=-2a$
+        to: |
+          $A(2,a)$ 在源图所示内弧区域，过 $A$ 仅有一条切线，C 项“2 条切线”错误
+        operation: 把点 $A$ 与曲线及拐点切线的相对位置放回三次函数分区图。
+        why: 内弧区域内的点作三次函数切线有且仅有 1 条。
+      source_ref: page_0091
+    - step_id: step_4
+      statement: 判断 D：用 $5a<b<6a$ 把 $A$ 夹在外弧区域。
+      formula_trace:
+        from: |
+          对称中心 $(1,b-2a)$，拐点切线斜率 $f'(1)=-3a$，
+          $l_{\text{拐点}}(2)=b-5a,\quad f(2)=b-4a$
+        to: |
+          $5a<b<6a\Rightarrow b-5a<a<b-4a$，
+          所以 $A(2,a)$ 位于外弧区域，可作 3 条切线
+        operation: 在 $x=2$ 处比较拐点切线、点 $A$ 和曲线三者高度。
+        why: 外弧区域内的点作三次函数切线有 3 条。
+      source_ref: page_0091
+teaching_card:
+  student_title: 用三次函数对称中心判断外点能引几条切线
+  what_it_trains: 训练在含参数三次函数多选题中，先抓住极值点和对称中心， 再用拐点切线分区判断外点引切线条数。
+  recognition_cues:
+    - 函数形如 $ax^3-3ax^2+b$，二阶导会把对称中心固定在 $x=1$。
+    - 题干给点 $A(2,a)$，选项 C、D 都在问过同一点能作几条切线。
+    - 参数范围 $5a<b<6a$ 正好用于比较 $b-5a,a,b-4a$ 三个高度。
+  normalization_moves:
+    - 求 $f'(x)$ 判断极值点。
+    - 求 $f''(x)=0$ 和 $f(1)$ 得到对称中心。
+    - 在 $x=2$ 处比较拐点切线、点 $A$ 和曲线高度。
+  common_failures:
+    - 把外点 $A(2,a)$ 误当成曲线上的点。
+    - 只比较 $f(2)$ 与 $a$，漏掉拐点切线高度 $b-5a$。
+    - 看到“过点作切线”就直接设切点方程，忽略本题源解给出的三次函数分区捷径。
+  similar_practice_query: 三次函数 对称中心 拐点切线 外弧内弧 过点切线条数 多选
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0090 与 page_0091 页图；例 9 从 page_0090 起题，在 page_0091 顶部完结，答案 ABD。
+    - page_0091 的“有仅有一条”属于源文小瑕疵，本卡按图像和数学含义记录为“仅有一条”，无需用户拍板。

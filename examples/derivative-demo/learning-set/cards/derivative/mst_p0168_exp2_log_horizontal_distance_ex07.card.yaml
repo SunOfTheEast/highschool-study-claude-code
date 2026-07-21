@@ -1,0 +1,215 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0168_exp2_log_horizontal_distance_ex07
+content_revision_id: mst_p0168_exp2_log_horizontal_distance_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0168_exp2_log_horizontal_distance_ex07.card.yaml
+stem: |-
+  （2024·晋江市五校联考 T8）已知函数 $f(x)=e^{2x}$，$g(x)=\ln x+\frac{1}{2}$ 分别与直线 $y=a$ 交于点 $A$，$B$，则 $|AB|$ 的最小值为（  ）
+  A. $1-\frac{1}{2}\ln 2$
+  B. $1+\frac{1}{2}\ln 2$
+  C. $2-\frac{1}{2}\ln 2$
+  D. $2+\frac{1}{2}\ln 2$
+answer: |
+  B
+
+  设 $f(x)=e^{2x}$ 的反函数为 $y=\frac{\ln x}{2}$，设
+  $g(x)=\ln x+\frac12$ 的反函数为 $y=e^{x-\frac12}$。
+  把原来的水平线 $y=a$ 转为反函数图像中的竖线 $x=a$，记交点为 $A',B'$，有
+  \[
+  |AB|=|A'B'|=e^{a-\frac12}-\frac{\ln a}{2}.
+  \]
+  令
+  \[
+  F(x)=e^{x-\frac12}-\frac{\ln x}{2}\quad (x>0),
+  \]
+  则
+  \[
+  F^{\prime}(x)=e^{x-\frac12}-\frac{1}{2x}=0
+  \Rightarrow x=\frac12.
+  \]
+  源解据此取到最小值
+  \[
+  |AB|_{\min}=F\!\left(\frac12\right)=1+\frac{\ln2}{2},
+  \]
+  故选 B。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 分别求两函数反函数并改用竖线 $x=a$ 表达对应距离。
+      max_score: 1
+    - step_id: step_2
+      description: 把长度写成单变量函数。
+      max_score: 1
+    - step_id: step_3
+      description: 求导找极值点。
+      max_score: 1
+    - step_id: step_4
+      description: 代回驻点得到最小值并匹配选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何量求解
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 同构变形与换元法
+      - 局部逼近与找点
+    subroute:
+      - 反函数构造水平距离
+      - $y=a$ 转 $x=a$
+      - 单变量导数取极值
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 抽象函数结构
+    evidence:
+      - $|AB|$ 通过反函数改写成同一自变量下的函数差。
+      - 核心表达式同时含 $e^{x-\frac12}$ 与 $\\ln x$，属于指对复合比较。
+      - 最终只需在 $x>0$ 上处理一元函数极值。
+    normalization_moves_used:
+      - 先反解得到 $f^{-1},g^{-1}$。
+      - 把几何长度改写为 $F(x)=e^{x-\frac12}-\\frac{\\ln x}{2}$。
+      - 用 $F^{\\prime}(x)=0$ 定位最小值点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $y=e^{2x}$、$y=\\ln x+\\frac12$ 反解到反函数，回补分段/复合/反函数基础。
+      - 若学生对 $x>0$ 定义域与 $\\ln x$ 约束混淆，回补函数三要素与定义域。
+      - 若学生无法从导数方程定位极值点，回补导数单调极值基础。
+      - 若学生对 $e^u$ 与 $\\ln x$ 的互逆关系不熟，回补指数对数基础。
+  detail_terms:
+    - $f(x)=e^{2x}$
+    - $g(x)=\\ln x+\\frac12$
+    - $|AB|=|A'B'|$
+    - $F(x)=e^{x-\frac12}-\\frac{\\ln x}{2}$
+    - $x=\\frac12$
+    - $1+\\frac{\\ln2}{2}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0168_exp2_log_horizontal_distance_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0167_late_ex06_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0167/page_0167.md
+      role: local_context
+      evidence: page_0167 末尾出现后置编号“例6”题头，page_0168 顶部“解析 a-b=...”与其连贯，说明 page_0168 开头不是新题头。
+    - ref_id: page_0168_ex07_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0168/page_0168.md
+      role: problem_start
+      evidence: 同页中部新题头“例7（2024·晋江市五校联考 T8）已知函数 f(x)=e^{2x}, g(x)=ln x+1/2...”，并给出 A-D 四个选项。
+    - ref_id: page_0168_ex07_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0168/page_0168.md
+      role: solution
+      evidence: 同页“●解析”给出反函数构造：|AB|=|A'B'|，转为 e^{a-1/2}-ln a/2，再由导数取极值得最小值 1+ln2/2，选 B。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0167.png
+      inspected: true
+      notes: 已核对页图：page_0167 底部确为后置编号“例6”题头，题目未在该页完成。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0168.png
+      inspected: true
+      notes: 已核对页图：page_0168 顶部先是“例6”续解，随后出现新的“例7”题头与完整解析；答案字母为 B。
+  source_context: 本页先接续上页“例6”解析，再出现新的源书“例7”；其后进入“不同函数包裹性...”定理讲解，属于章节 exposition，不生成卡片。
+  source_influence:
+    - 保留源解“把直线 y=a 的竖向截距问题转到 x=a 的横向差”这一反函数构造主线。
+    - 保留源解函数链：|AB|=e^{a-1/2}-\\frac{\\ln a}{2}，再对单变量函数求极小值。
+  source_discrepancies:
+    - source 编号在相邻页重复/错序：page_0167 先有“例7”再有“例6”，而 page_0168 又出现“例7”；本卡按题头起始页与语义 ID `mst_p0168_exp2_log_horizontal_distance_ex07` 区分。
+original_problem:
+  stem: （2024·晋江市五校联考 T8）已知函数 $f(x)=e^{2x}$，$g(x)=\ln x+\frac{1}{2}$ 分别与直线 $y=a$ 交于点 $A$，$B$，则 $|AB|$ 的最小值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $1-\frac{1}{2}\ln 2$
+      text_latex: $1-\frac{1}{2}\ln 2$
+    - label: B
+      text_raw: $1+\frac{1}{2}\ln 2$
+      text_latex: $1+\frac{1}{2}\ln 2$
+    - label: C
+      text_raw: $2-\frac{1}{2}\ln 2$
+      text_latex: $2-\frac{1}{2}\ln 2$
+    - label: D
+      text_raw: $2+\frac{1}{2}\ln 2$
+      text_latex: $2+\frac{1}{2}\ln 2$
+  answer: B
+  fidelity_notes:
+    - 题干、选项、解析同页完整；无跨页补题。
+    - 本页顶部“a-b 最小值”段落属于上题（page_0167 后置例6）续解，不并入本题。
+solution:
+  source_solution_summary: |
+    设 $f(x)=e^{2x}$ 的反函数为 $y=\frac{\ln x}{2}$，设
+    $g(x)=\ln x+\frac12$ 的反函数为 $y=e^{x-\frac12}$。
+    把原来的水平线 $y=a$ 转为反函数图像中的竖线 $x=a$，记交点为 $A',B'$，有
+    \[
+    |AB|=|A'B'|=e^{a-\frac12}-\frac{\ln a}{2}.
+    \]
+    令
+    \[
+    F(x)=e^{x-\frac12}-\frac{\ln x}{2}\quad (x>0),
+    \]
+    则
+    \[
+    F^{\prime}(x)=e^{x-\frac12}-\frac{1}{2x}=0
+    \Rightarrow x=\frac12.
+    \]
+    源解据此取到最小值
+    \[
+    |AB|_{\min}=F\!\left(\frac12\right)=1+\frac{\ln2}{2},
+    \]
+    故选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 分别求两函数反函数并改用竖线 $x=a$ 表达对应距离。
+      formula_trace:
+        from: $f(x)=e^{2x},\ g(x)=\ln x+\frac12$ 与 $y=a$ 相交
+        to: $f^{-1}(x)=\frac{\ln x}{2},\ g^{-1}(x)=e^{x-\frac12}$；且 $|AB|=|A'B'|$
+        operation: 把函数换到反函数坐标后，$y=a$ 对应为 $x=a$。
+        why: 把原问题转化为同一自变量下两函数值之差。
+      source_ref: page_0168_ex07_solution
+    - step_id: step_2
+      statement: 把长度写成单变量函数。
+      formula_trace:
+        from: $|AB|=|A'B'|$
+        to: $|AB|=e^{a-\frac12}-\frac{\ln a}{2}$
+        operation: 代入两条反函数在 $x=a$ 处的函数值并作差。
+        why: 最小距离问题归约为一元函数极值。
+      source_ref: page_0168_ex07_solution
+    - step_id: step_3
+      statement: 求导找极值点。
+      formula_trace:
+        from: $F(x)=e^{x-\frac12}-\frac{\ln x}{2}$
+        to: $F^{\prime}(x)=e^{x-\frac12}-\frac{1}{2x}=0\\Rightarrow x=\frac12$
+        operation: 对 $F$ 求导并解驻点方程。
+        why: 源解用导数法定位最小值点。
+      source_ref: page_0168_ex07_solution
+    - step_id: step_4
+      statement: 代回驻点得到最小值并匹配选项。
+      formula_trace:
+        from: $x=\frac12$
+        to: $|AB|_{\\min}=F\\!\\left(\\frac12\\right)=1+\\frac{\\ln2}{2}$
+        operation: 把驻点代回目标函数。
+        why: 得到选项 B。
+      source_ref: page_0168_ex07_solution
+teaching_card:
+  student_title: 反函数横向差：把 |AB| 化成一元极值
+  what_it_trains: 训练遇到“同一水平线截两函数”的距离题时，先做反函数同构，再把长度化为单变量函数求最小值。
+  recognition_cues:
+    - 题干是两函数与同一条 $y=a$ 的交点距离。
+    - 一条是指数函数，另一条是对数平移函数。
+    - 选项是常数型最小值。
+  normalization_moves:
+    - 先写出两条反函数。
+    - 把 $y=a$ 换到反函数坐标下的 $x=a$。
+    - 长度表达式统一为一个 $F(x)$。
+    - 对 $F$ 求导、解驻点、代回取值。
+  common_failures:
+    - 把 $|AB|$ 直接按原图两点坐标硬算，忽略反函数同构。
+    - 反函数求错：把 $e^{2x}$ 误反解成 $\\ln x$ 而漏掉 $\\frac12$。
+    - 求导后漏掉 $-\\frac{1}{2x}$ 或漏写定义域 $x>0$。
+  similar_practice_query: 反函数构造 水平线交点距离 e^{2x} lnx+1/2 最小值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

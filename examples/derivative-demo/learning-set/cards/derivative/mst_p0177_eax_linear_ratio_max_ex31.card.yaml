@@ -1,0 +1,169 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0177_eax_linear_ratio_max_ex31
+content_revision_id: mst_p0177_eax_linear_ratio_max_ex31-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0177_eax_linear_ratio_max_ex31.card.yaml
+stem: |-
+  （2024 · 先铁一中月考 T12）关于 $x$ 的不等式 $e^{ax}-2x-b\geqslant0$ 的解集为 $\mathbf{R}$，则 $\frac{b}{ea}$ 的最大值是（  ）
+  A. $\frac{1}{4}$
+  B. $\frac{e^2-6}{3e}$
+  C. $\frac{e-1}{2e}$
+  D. $\frac{e+2}{5e}$
+answer: |-
+  A
+
+  由恒成立条件得 $e^{ax}\geqslant2x+b$ 对任意实数成立，令 $t=ax$，转为 $e^t\geqslant\frac{2}{a}t+b$。源解法一把 $e^t=e^{t-\ln\frac{2}{a}}\cdot\frac{2}{a}$ 与 $e^u\geqslant u+1$ 配合，得到可取上界 $b\leqslant\frac{2}{a}\left(1-\ln\frac{2}{a}\right)$，进而 $\frac{b}{ea}\leqslant\frac{1}{4}$。法二用 $\frac{e^{2t}}{2t}\geqslant e$ 与基本不等式同样推出 $\frac{b}{ea}\leqslant\frac{1}{4}$。当 $t=\frac{1}{2},a=\frac{2}{\sqrt e},b=\frac{\sqrt e}{2}$ 取等，所以最大值为 $\frac{1}{4}$，选 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把“对任意 $x$ 恒成立”改写成单变量含参直线比较。
+      max_score: 1
+    - step_id: step_2
+      description: 用指数函数切线不等式给出 $b$ 的可达上界。
+      max_score: 1
+    - step_id: step_3
+      description: 把目标比值写成标准 $\ln z/z$ 形并取上界。
+      max_score: 1
+    - step_id: step_4
+      description: 用法二核验并给出等号条件。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+      - 拟合与夹逼
+    subroute:
+      - 参变分离
+      - 切线找点
+      - 基本不等式
+      - 标准式 $\ln z/z$ 上界
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+      - 非齐次结构
+    evidence:
+      - $e^{ax}-2x-b\geqslant0$
+      - $e^t\geqslant\frac{2}{a}t+b$
+      - $\frac{\ln z}{z}\leqslant\frac{1}{e}$
+    normalization_moves_used:
+      - 先把自变量缩放为 $t=ax$，把参数集中到直线项。
+      - 用指数函数切线模板匹配同斜率直线的最大截距。
+      - 把目标比值转写成 $\ln z/z$ 单峰结构求上界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把恒成立改写成“曲线压住直线”，回补函数性质与图像。
+      - 若学生无法调用 $e^u\geqslant u+1$，回补导数单调极值基础。
+      - 若学生在 $\ln z/z$ 上界处断裂，回补指数对数基础。
+      - 若学生对等号条件追踪不全，回补不等式工具基础。
+  detail_terms:
+    - $e^{ax}-2x-b\geqslant0$
+    - $t=ax$
+    - $e^u\geqslant u+1$
+    - $\frac{b}{ea}$
+    - $\frac{\ln z}{z}\leqslant\frac{1}{e}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0177_eax_linear_ratio_max_ex31
+source_evidence:
+  source_refs:
+    - ref_id: page_0177
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0177/page_0177.md
+      role: problem_start
+      evidence: "lines 21-27 contain the full statement of the first 例31: $e^{ax}-2x-b\\geqslant0$ has solution set $\\mathbf{R}$, and asks for the maximum of $\\frac{b}{ea}$ with choices A-D."
+    - ref_id: page_0177
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0177/page_0177.md
+      role: solution
+      evidence: "lines 28-32 give two source methods: 法一 uses $e^{u}\\geqslant u+1$ after $ax=t$ and a tangent shift; 法二 uses basic inequality and $\\frac{e^{2t}}{2t}\\geqslant e$ to conclude $\\frac{b}{ea}\\leqslant\\frac{1}{4}$, with equality data and option A."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0177.png
+      inspected: true
+      notes: 页图核对通过：本题题干、选项与两种解法在同页完整可见；页首内容为上一题续解，仅作上下文。
+  source_context: page_0177 顶部是 page_0176 的例30续解，不归本卡。第一个“例31”从 page_0177 起并在本页内闭合，无跨页依赖。
+  source_influence:
+    - 保留源解“先令 $ax=t$”的参变分离起手。
+    - 保留源解双路线：切线找点与基本不等式互证上界 $\frac{1}{4}$。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 先铁一中月考 T12）关于 $x$ 的不等式 $e^{ax}-2x-b\geqslant0$ 的解集为 $\mathbf{R}$，则 $\frac{b}{ea}$ 的最大值是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\frac{1}{4}$
+      text_latex: $\frac{1}{4}$
+    - label: B
+      text_raw: $\frac{e^2-6}{3e}$
+      text_latex: $\frac{e^2-6}{3e}$
+    - label: C
+      text_raw: $\frac{e-1}{2e}$
+      text_latex: $\frac{e-1}{2e}$
+    - label: D
+      text_raw: $\frac{e+2}{5e}$
+      text_latex: $\frac{e+2}{5e}$
+  answer: A
+  fidelity_notes:
+    - 源题为单选题，A-D 选项完整保留。
+    - 源解给出两种方法，本卡按“主线+互证”整理。
+solution:
+  source_solution_summary: 由恒成立条件得 $e^{ax}\geqslant2x+b$ 对任意实数成立，令 $t=ax$，转为 $e^t\geqslant\frac{2}{a}t+b$。源解法一把 $e^t=e^{t-\ln\frac{2}{a}}\cdot\frac{2}{a}$ 与 $e^u\geqslant u+1$ 配合，得到可取上界 $b\leqslant\frac{2}{a}\left(1-\ln\frac{2}{a}\right)$，进而 $\frac{b}{ea}\leqslant\frac{1}{4}$。法二用 $\frac{e^{2t}}{2t}\geqslant e$ 与基本不等式同样推出 $\frac{b}{ea}\leqslant\frac{1}{4}$。当 $t=\frac{1}{2},a=\frac{2}{\sqrt e},b=\frac{\sqrt e}{2}$ 取等，所以最大值为 $\frac{1}{4}$，选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 把“对任意 $x$ 恒成立”改写成单变量含参直线比较。
+      formula_trace:
+        from: $e^{ax}-2x-b\geqslant0,\ \forall x\in\mathbf{R}$
+        to: $e^t\geqslant\frac{2}{a}t+b,\ \forall t\in\mathbf{R}$
+        operation: 令 $t=ax$（隐含 $a>0$）。
+        why: 把参数放到斜率与截距，便于用切线或最值模板压上界。
+      source_ref: page_0177:lines 28-29
+    - step_id: step_2
+      statement: 用指数函数切线不等式给出 $b$ 的可达上界。
+      formula_trace:
+        from: $e^u\geqslant u+1$
+        to: $b\leqslant\frac{2}{a}\left(1-\ln\frac{2}{a}\right)$
+        operation: 取 $u=t-\ln\frac{2}{a}$，化为 $e^t\geqslant\frac{2}{a}t+\frac{2}{a}\!\left(1-\ln\frac{2}{a}\right)$。
+        why: 同斜率直线下，切线给出最大允许截距。
+      source_ref: page_0177:line 30
+    - step_id: step_3
+      statement: 把目标比值写成标准 $\ln z/z$ 形并取上界。
+      formula_trace:
+        from: $\frac{b}{ea}\leqslant\frac{2}{ea^2}\ln\frac{ea}{2}$
+        to: $\frac{b}{ea}\leqslant\frac{1}{4}$
+        operation: 令 $z=\frac{e^2a^2}{4}>0$，用 $\frac{\ln z}{z}\leqslant\frac{1}{e}$。
+        why: 把含参最值转成单峰标准函数最值。
+      source_ref: page_0177:line 30
+    - step_id: step_4
+      statement: 用法二核验并给出等号条件。
+      formula_trace:
+        from: $e^t\geqslant\frac{2}{a}t+b$
+        to: $\frac{b}{ea}\leqslant\frac{1}{4}$
+        operation: 用基本不等式与 $\min_{t>0}\frac{e^{2t}}{2t}=e$，并在 $t=\frac{1}{2},a=\frac{2}{\sqrt e},b=\frac{\sqrt e}{2}$ 取等。
+        why: 确认上界可达，得到最大值。
+      source_ref: page_0177:line 32
+teaching_card:
+  student_title: 同斜率切线截距上界
+  what_it_trains: 训练把含参恒成立不等式转成“指数曲线与直线”的全局比较，再用切线模板锁定可达最值。
+  recognition_cues:
+    - 出现 $e^{ax}$ 与一次项并要求“解集为 $\mathbf{R}$”。
+    - 目标是含参比值 $\frac{b}{ea}$ 的最大值。
+    - 源解显式给出“令 $ax=t$”。
+  normalization_moves:
+    - 先做 $t=ax$ 把参数集中。
+    - 匹配 $e^u\geqslant u+1$ 求最大截距。
+    - 把比值改写为 $\ln z/z$ 结构求上界。
+    - 最后核验等号点保证“最大值”可取。
+  common_failures:
+    - 把 $b$ 的上界误写成等式条件，漏掉“先上界后取等”的逻辑。
+    - 忽略 $a$ 的取值约束，导致换元域判断混乱。
+    - 算出上界后未检查是否可达。
+  similar_practice_query: e^{ax}-mx-b 恒成立 参变分离 切线截距 最值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,259 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0233_ax_minus_xex_tangent_unique_extremum_b_range_ch6_findpoint_ex4
+content_revision_id: mst_p0233_ax_minus_xex_tangent_unique_extremum_b_range_ch6_findpoint_ex4-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0233_ax_minus_xex_tangent_unique_extremum_b_range_ch6_findpoint_ex4.card.yaml
+stem: |-
+  （2021 · 天津）已知 $a>0$，函数 $f(x)=ax-xe^x$。
+  1. 求曲线 $f(x)$ 在点 $(0,f(0))$ 处的切线方程。
+  2. 证明函数 $f(x)$ 存在唯一的极值点。
+  3. 若 $\exists a$，使得 $f(x)\leqslant a+b$ 对任意的 $x\in\mathbf R$ 恒成立，求实数 $b$ 的取值范围。
+answer: |-
+  第 (1) 问：$y=(a-1)x$；第 (2) 问：$f$ 存在唯一极值点；第 (3) 问：$b\geqslant-e$。
+
+  $f(0)=0$，$f'(x)=a-(x+1)e^x$，所以切线斜率为 $a-1$，切线方程 为 $y=(a-1)x$。第 (2) 问中，当 $x\leqslant-1$ 时 $f'(x)>0$； 当 $x>-1$ 时，$f''(x)=-(x+2)e^x<0$，故 $f'$ 递减，且 $f'(-1)>0$。为找右侧负值点，方案一 $f'(x)=(x+1)(a/(x+1)-e^x)$ 不能锁定 $a/(x+1)$；方案二 $f'(x)=e^x(a/e^x-x-1)<e^x(a/e^{-1}-x-1)$，取 $x=ea-1$ 得 $f'(ea-1)<0$，故存在唯一 $x_0\in(-1,ea-1)$ 使 $f'(x_0)=0$，从而 $f$ 有唯一极值点。第 (3) 问把恒成立改写为 $h(x)=xe^x-a(x-1)+b\geqslant0$，其导数与第 (2) 问同型，设唯一 极小值点为 $x_0$，则 $a=(x_0+1)e^{x_0}$，进而 $b\geqslant(x_0^2-x_0-1)e^{x_0}$。令 $t(x)=(x^2-x-1)e^x$，在 $x>-1$ 上最小值为 $t(1)=-e$，故 $b\geqslant-e$。
+rubric:
+  max_score: 9
+  criteria:
+    - step_id: step_1
+      description: 用导数求切线方程。
+      max_score: 1
+    - step_id: step_2
+      description: 第 (2) 问先确定 $f^\prime$ 的大致形状。
+      max_score: 1
+    - step_id: step_3
+      description: 排除不能锁界的等效方程。
+      max_score: 1
+    - step_id: step_4
+      description: 用 $a/e^x$ 锁界找右侧负值点。
+      max_score: 1
+    - step_id: step_5
+      description: 取 $x=ea-1$ 得到负值点。
+      max_score: 1
+    - step_id: step_6
+      description: 把第 (3) 问改写为一个非负函数。
+      max_score: 1
+    - step_id: step_7
+      description: 复用第 (2) 问的唯一极小值点结构。
+      max_score: 1
+    - step_id: step_8
+      description: 把 $h(x_0)\geqslant0$ 转成 $b$ 的下界。
+      max_score: 1
+    - step_id: step_9
+      description: 求 $t(x)=(x^2-x-1)e^x$ 的最小值。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: part_1
+        goal: 几何量求解
+        target: 第 part_1 问
+        result: $y=(a-1)x$。
+      - part_id: part_2
+        goal: 零点/极值点分析
+        target: 第 part_2 问
+        result: $f$ 存在唯一极值点。
+      - part_id: part_3
+        goal: 求参数范围
+        target: 第 part_3 问
+        result: $b\geqslant-e$。
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 参变量分离
+      - 充分/必要性探路
+    subroute:
+      - 等效零点方程
+      - 界限锁定
+      - 客体变量 $a/e^x$
+      - 无效方案排除
+      - 极小值转参
+      - $t(x)=(x^2-x-1)e^x$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $ax-xe^x$
+      - $a-(x+1)e^x$
+      - $e^x(a/e^x-x-1)$
+      - $xe^x-a(x-1)+b$
+      - $(x^2-x-1)e^x$
+    normalization_moves_used:
+      - 先用切线公式解决第 (1) 问。
+      - 第 (2) 问把导数零点写成等效零点方程。
+      - 比较两个等效方案，选择能锁住客体变量的方案。
+      - 第 (3) 问把恒成立转为极小值非负，再求 $b$ 下界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求切线方程，回补导数运算与几何意义。
+      - 若学生不会分析 $f^\prime$ 的单调性，回补导数单调极值基础。
+      - 若学生不理解 $x>-1$ 下 $a/e^x$ 的值域，回补指数对数基础。
+      - 若学生不会从恒成立转成最小值非负，回补不等式工具基础。
+      - 若学生整理 $h(x_0)$ 时出错，回补代数恒等变形。
+  detail_terms:
+    - $ax-xe^x$
+    - $y=(a-1)x$
+    - $a-(x+1)e^x$
+    - $a/e^x$
+    - $ea-1$
+    - 等效零点方程
+    - 界限锁定
+    - $b\geqslant-e$
+parts: &a1
+  - part_id: part_1
+    text: 求曲线 $f(x)$ 在点 $(0,f(0))$ 处的切线方程。
+  - part_id: part_2
+    text: 证明函数 $f(x)$ 存在唯一的极值点。
+  - part_id: part_3
+    text: 若 $\exists a$，使得 $f(x)\leqslant a+b$ 对任意的 $x\in\mathbf R$ 恒成立，求实数 $b$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0233_ax_minus_xex_tangent_unique_extremum_b_range_ch6_findpoint_ex4
+source_evidence:
+  source_refs:
+    - ref_id: page_0233_ex3_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0233/page_0233.md
+      role: local_context
+      evidence: page_0233 页首是 page_0232 例3续解，不是本卡题头。
+    - ref_id: page_0233_findpoint_equiv_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0233/page_0233.md
+      role: local_context
+      evidence: page_0233 进入“三、等效零点方程与界限锁定”，说明 $xe^x=a$ 一类方程要转化为主客体变量形式。
+    - ref_id: page_0233_ex4_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0233/page_0233.md
+      role: problem_start
+      evidence: page_0233 给出例4题头：$a>0$，$f(x)=ax-xe^x$，求切线方程、证明唯一极值点、求 $b$ 的范围。
+    - ref_id: page_0233_ex4_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0233/page_0233.md
+      role: solution
+      evidence: page_0233 给出第 (1)(2) 问主体：切线为 $y=(a-1)x$；用等效零点方程和界限锁定证明 $f^\prime$ 有唯一零点。
+    - ref_id: page_0234_ex4_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0234/page_0234.md
+      role: continuation
+      evidence: page_0234 顶部续完第 (3) 问：令 $h(x)=xe^x-a(x-1)+b\geqslant0$，由唯一极小值点和 $t(x)=(x^2-x-1)e^x$ 得 $b\geqslant-e$。
+    - ref_id: page_0234_ex5_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0234/page_0234.md
+      role: local_context
+      evidence: page_0234 随后另起例5，属于下一批，本卡只取其前方的例4续解。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0233.png
+      inspected: true
+      notes: 已核对页图：例4题头和第 (1)(2) 问解析位于 page_0233 下部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0234.png
+      inspected: true
+      notes: 已核对页图：page_0234 顶部为例4第 (3) 问续解，例5另起。
+  source_context: 本卡处理 page_0233 起头、page_0234 顶部续完的例4；page_0234 例5以后留给下一批。
+  source_influence:
+    - 保留 source 的等效零点方程筛选：方案一因为客体变量 $a/(x+1)$ 值域不锁定而无效，方案二用 $a/e^x$ 锁界。
+    - 保留 source 的找大点：取 $x=ea-1$，通过上界比较得到 $f^\prime(x)<0$。
+    - 保留 source 的第 (3) 问复用第 (2) 问：$h^\prime(x)=(x+1)e^x-a$ 与第 (2) 问同型，因此 $h$ 有唯一极小值点。
+  source_discrepancies:
+    - page_0233 markdown 将 $f^\prime(ea-1)$ 的具体值写作 $a(1-e^a)$；按 $x=ea-1$ 直接代入并不等于该式。题卡使用原解真正需要的上界链：$f^\prime(ea-1)<0$。
+original_problem:
+  stem: （2021 · 天津）已知 $a>0$，函数 $f(x)=ax-xe^x$。
+  parts: *a1
+  choices: []
+  answer: 第 (1) 问：$y=(a-1)x$；第 (2) 问：$f$ 存在唯一极值点；第 (3) 问：$b\geqslant-e$。
+  fidelity_notes:
+    - 三问均无选项。
+    - 第 (3) 问的量词是“存在 $a$”，不是“任意 $a$”。
+solution:
+  source_solution_summary: $f(0)=0$，$f'(x)=a-(x+1)e^x$，所以切线斜率为 $a-1$，切线方程 为 $y=(a-1)x$。第 (2) 问中，当 $x\leqslant-1$ 时 $f'(x)>0$； 当 $x>-1$ 时，$f''(x)=-(x+2)e^x<0$，故 $f'$ 递减，且 $f'(-1)>0$。为找右侧负值点，方案一 $f'(x)=(x+1)(a/(x+1)-e^x)$ 不能锁定 $a/(x+1)$；方案二 $f'(x)=e^x(a/e^x-x-1)<e^x(a/e^{-1}-x-1)$，取 $x=ea-1$ 得 $f'(ea-1)<0$，故存在唯一 $x_0\in(-1,ea-1)$ 使 $f'(x_0)=0$，从而 $f$ 有唯一极值点。第 (3) 问把恒成立改写为 $h(x)=xe^x-a(x-1)+b\geqslant0$，其导数与第 (2) 问同型，设唯一 极小值点为 $x_0$，则 $a=(x_0+1)e^{x_0}$，进而 $b\geqslant(x_0^2-x_0-1)e^{x_0}$。令 $t(x)=(x^2-x-1)e^x$，在 $x>-1$ 上最小值为 $t(1)=-e$，故 $b\geqslant-e$。
+  key_steps:
+    - step_id: step_1
+      statement: 用导数求切线方程。
+      formula_trace:
+        from: $f(x)=ax-xe^x$
+        to: $f^\prime(x)=a-(x+1)e^x,\quad f^\prime(0)=a-1$
+        operation: 求导并代入 $x=0$。
+        why: 切线斜率为 $f^\prime(0)$，且 $f(0)=0$。
+      source_ref: page_0233_ex4_solution_start
+    - step_id: step_2
+      statement: 第 (2) 问先确定 $f^\prime$ 的大致形状。
+      formula_trace:
+        from: $f^\prime(x)=a-(x+1)e^x$
+        to: $x\leqslant-1$ 时 $f^\prime(x)>0$；$x>-1$ 时 $f^\prime$ 递减
+        operation: 用 $x+1\leqslant0$ 和 $f^{\prime\prime}(x)=-(x+2)e^x<0$。
+        why: 唯一极值点等价于 $f^\prime$ 有唯一零点。
+      source_ref: page_0233_ex4_solution_start
+    - step_id: step_3
+      statement: 排除不能锁界的等效方程。
+      formula_trace:
+        from: $f^\prime(x)=(x+1)(a\frac1{x+1}-e^x)$
+        to: 该方案无效
+        operation: 观察 $\frac a{x+1}$ 在 $x>-1$ 上值域为 $(0,+\infty)$。
+        why: 客体变量没有被锁住，无法稳定构造取点。
+      source_ref: page_0233_ex4_solution_start
+    - step_id: step_4
+      statement: 用 $a/e^x$ 锁界找右侧负值点。
+      formula_trace:
+        from: $f^\prime(x)=e^x(a/e^x-x-1)$
+        to: $f^\prime(x)<e^x(a/e^{-1}-x-1)$
+        operation: 在 $x>-1$ 时用 $e^x>e^{-1}$，所以 $a/e^x<ae$。
+        why: 客体变量 $a/e^x$ 被锁在 $(0,ae)$。
+      source_ref: page_0233_ex4_solution_start
+    - step_id: step_5
+      statement: 取 $x=ea-1$ 得到负值点。
+      formula_trace:
+        from: $a/e^{-1}-x-1=0$
+        to: $x=ea-1,\quad f^\prime(ea-1)<0$
+        operation: 解上界函数为 0 的可解方程。
+        why: 结合 $f^\prime(-1)>0$ 和递减性，得到唯一零点。
+      source_ref: page_0233_ex4_solution_start
+    - step_id: step_6
+      statement: 把第 (3) 问改写为一个非负函数。
+      formula_trace:
+        from: $ax-xe^x\leqslant a+b$
+        to: $h(x)=xe^x-a(x-1)+b\geqslant0$
+        operation: 移项并取相反数。
+        why: 恒成立问题转为求 $h$ 的最小值非负。
+      source_ref: page_0234_ex4_continuation
+    - step_id: step_7
+      statement: 复用第 (2) 问的唯一极小值点结构。
+      formula_trace:
+        from: $h^\prime(x)=(x+1)e^x-a$
+        to: $a=(x_0+1)e^{x_0}$
+        operation: 设 $h$ 的唯一极小值点为 $x_0$，令 $h^\prime(x_0)=0$。
+        why: 这与第 (2) 问的导数零点结构同型。
+      source_ref: page_0234_ex4_continuation
+    - step_id: step_8
+      statement: 把 $h(x_0)\geqslant0$ 转成 $b$ 的下界。
+      formula_trace:
+        from: $h(x_0)=x_0e^{x_0}-(x_0+1)(x_0-1)e^{x_0}+b\geqslant0$
+        to: $b\geqslant(x_0^2-x_0-1)e^{x_0}$
+        operation: 代入 $a=(x_0+1)e^{x_0}$ 并整理。
+        why: 剩下就是求右侧表达式在 $x_0>-1$ 上的最小值。
+      source_ref: page_0234_ex4_continuation
+    - step_id: step_9
+      statement: 求 $t(x)=(x^2-x-1)e^x$ 的最小值。
+      formula_trace:
+        from: $t^\prime(x)=(x-1)(x+2)e^x$
+        to: $t_{\min}=t(1)=-e$
+        operation: 在 $x>-1$ 上判单调：$(-1,1)$ 递减，$(1,+\infty)$ 递增。
+        why: 因此 $b$ 的最小允许值是 $-e$。
+      source_ref: page_0234_ex4_continuation
+teaching_card:
+  student_title: 等效零点要选能锁界的写法，再把恒成立压到极小值
+  what_it_trains: 训练找点体系里的“方案筛选”：不是所有等效变形都有用，客体变量能不能锁界决定能不能取点。
+  recognition_cues:
+    - $f^\prime(x)=a-(x+1)e^x$ 的零点不能显式解。
+    - 题目已经在讲“等效零点方程与界限锁定”，所以要比较不同拆法。
+    - 第 (3) 问含“存在 $a$”和“任意 $x$ 恒成立”，通常要设极值点参数化。
+  normalization_moves:
+    - 先求切线：$f(0)=0$，斜率 $a-1$。
+    - 第 (2) 问用 $f^\prime$ 的单调性和取点证明唯一零点。
+    - 把 $a/(x+1)$ 方案判为无效，把 $a/e^x$ 方案判为有效。
+    - 第 (3) 问设 $h(x)$，用极小值点 $x_0$ 表示 $a$，最后求 $t(x)$ 最小值。
+  common_failures:
+    - 只写一个等效方程，没检查客体变量值域是否锁定。
+    - 把 $ea-1$ 的作用理解成精确零点，而不是构造负值点。
+    - 第 (3) 问把“存在 $a$”误读成“任意 $a$”。
+  similar_practice_query: ax-xe^x 等效零点方程 界限锁定 a/e^x ea-1 唯一极值点 b>=-e
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

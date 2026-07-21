@@ -1,0 +1,190 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0104_geometric_common_tangent_ex09
+content_revision_id: mst_p0104_geometric_common_tangent_ex09-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0104_geometric_common_tangent_ex09.card.yaml
+stem: |-
+  （2023 常德高三月考 T8）已知直线 $y=kx+b$ 与曲线 $y=e^x+2$ 和曲线 $y=\ln(e^2x)$ 均相切，则实数 $k$ 的解的个数为（  ）
+  A. 0
+  B. 1
+  C. 2
+  D. 无数
+answer: |
+  C
+
+  令 $f(x)=e^x+2$，$g(x)=\ln(e^2x)=2+\ln x$。在 $x>0$ 上有
+  $e^x>\ln x$，所以 $f(x)>g(x)$，两条曲线没有交点；同时 $f$ 上凸、
+  $g$ 下凹，属于源页所说的外离型一凹一凸公切线模型，因此有两条内公切线。
+  若用切点参数复核，设 $f$ 的切点横坐标为 $u$，则斜率 $k=e^u$；
+  $g$ 的切点横坐标为 $v=e^{-u}$。两条切线截距相等给出
+  $F(u)=1+u+(1-u)e^u=0$，且 $F'(u)=1-ue^u$，函数先增后减，
+  结合两端符号可知有两个实根，所以有两个不同斜率。故选 C。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把第二条曲线化简，并判断两曲线相离。
+      max_score: 1
+    - step_id: step_2
+      description: 识别一凹一凸的外离型公切线模型。
+      max_score: 1
+    - step_id: step_3
+      description: 用切点参数复核斜率个数。
+      max_score: 1
+    - step_id: step_4
+      description: 判定参数方程有两个实根。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何量求解
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 切线放缩与凹凸性
+      - 局部逼近与找点
+    subroute:
+      - 外离型公切线计数
+      - 切点参数化复核
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+      - 非对称结构
+    evidence:
+      - $f(x)-g(x)=e^x-\ln x>0$ 给出两曲线相离。
+      - $f''(x)>0,\ g''(x)<0$ 给出一凹一凸形态。
+      - $F(u)=1+u+(1-u)e^u=0$ 有两个实根，对应两个斜率。
+    normalization_moves_used:
+      - 把 $\ln(e^2x)$ 先化为 $2+\ln x$。
+      - 先判断曲线相对位置，再套用外离型公切线模型。
+      - 用切点参数方程复核图像计数。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会展开 $\ln(e^2x)$ 或比较 $e^x$ 与 $\ln x$，回补指数对数基础。
+      - 若学生不会用二阶导判断凹凸性，回补导数单调极值基础。
+      - 若学生不会写切线斜率和截距，回补导数运算与几何意义。
+      - 若学生只凭图像误判为一条切线，回补函数性质与图像。
+  detail_terms:
+    - $y=e^x+2$
+    - $y=\ln(e^2x)=2+\ln x$
+    - 外离型
+    - 两条内公切线
+    - $F(u)=1+u+(1-u)e^u$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0104_geometric_common_tangent_ex09
+source_evidence:
+  source_refs:
+    - ref_id: page_0104
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0104/page_0104.md
+      role: problem_start
+      evidence: page_0104 中部给出例 9 题头、题干、A-D 选项、两函数相离的一凹一凸图像说明和答案 C。
+    - ref_id: page_0104_top_exposition
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0104/page_0104.md
+      role: local_context
+      evidence: page_0104 顶部是 page_0103 公切线几何模型的续页，只作为例 9 的“外离型有两条内公切线”背景。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0104.png
+      inspected: true
+      notes: 已核对 page_0104 页图：顶部为 exposition 续文；例 9 题干、选项、两曲线分离示意和答案 C 与 markdown 一致。
+  source_context: 例 9 直接使用 page_0104 顶部“外离型有两条内公切线”的几何类比；顶部 exposition 不单独建卡。
+  source_influence:
+    - 保留源页设 $f(x)=e^x+2$、$g(x)=\ln(e^2x)=2+\ln x$ 的处理。
+    - 保留源页核心判断：$e^x>\ln x$，两曲线相离且一凹一凸，因此有两条内公切线。
+    - 本卡补写切点参数方程，用来把“两条”落实为两个不同斜率。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 常德高三月考 T8）已知直线 $y=kx+b$ 与曲线 $y=e^x+2$ 和曲线 $y=\ln(e^2x)$ 均相切，则实数 $k$ 的解的个数为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: "0"
+      text_latex: $0$
+    - label: B
+      text_raw: "1"
+      text_latex: $1$
+    - label: C
+      text_raw: "2"
+      text_latex: $2$
+    - label: D
+      text_raw: 无数
+      text_latex: $\text{无数}$
+  answer: C
+  fidelity_notes:
+    - 本题在 page_0104 内完整。
+    - 源页答案为 C，即存在两条公切线，对应两个不同的斜率 $k$。
+solution:
+  source_solution_summary: |
+    令 $f(x)=e^x+2$，$g(x)=\ln(e^2x)=2+\ln x$。在 $x>0$ 上有
+    $e^x>\ln x$，所以 $f(x)>g(x)$，两条曲线没有交点；同时 $f$ 上凸、
+    $g$ 下凹，属于源页所说的外离型一凹一凸公切线模型，因此有两条内公切线。
+    若用切点参数复核，设 $f$ 的切点横坐标为 $u$，则斜率 $k=e^u$；
+    $g$ 的切点横坐标为 $v=e^{-u}$。两条切线截距相等给出
+    $F(u)=1+u+(1-u)e^u=0$，且 $F'(u)=1-ue^u$，函数先增后减，
+    结合两端符号可知有两个实根，所以有两个不同斜率。故选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 把第二条曲线化简，并判断两曲线相离。
+      formula_trace:
+        from: |
+          $g(x)=\ln(e^2x)$
+        to: |
+          $g(x)=2+\ln x,\qquad f(x)-g(x)=e^x-\ln x>0\quad (x>0)$
+        operation: 展开对数，再用 $e^x>\ln x$ 比较上下位置。
+        why: 源页的公切线模型先看两曲线是否相交；相离才对应外离型两内公切线。
+      source_ref: page_0104
+    - step_id: step_2
+      statement: 识别一凹一凸的外离型公切线模型。
+      formula_trace:
+        from: |
+          $f''(x)=e^x>0,\qquad g''(x)=-\frac1{x^2}<0$
+        to: |
+          $f$ 与 $g$ 一凸一凹且无交点，类比外离圆弧，有两条内公切线
+        operation: 用二阶导数确认凹凸性，再调用源页几何类比。
+        why: 这正是 page_0104 顶部“外离型有两条内公切线”的应用。
+      source_ref: page_0104
+    - step_id: step_3
+      statement: 用切点参数复核斜率个数。
+      formula_trace:
+        from: |
+          $k=e^u=\frac1v,\quad b_f=2+e^u(1-u),\quad b_g=1+\ln v$
+        to: |
+          $v=e^{-u},\quad 2+e^u(1-u)=1-u,\quad F(u)=1+u+(1-u)e^u=0$
+        operation: 分别写两条曲线在切点处的切线斜率和截距，并令它们相等。
+        why: 公切线条数等价于切点参数方程的实根个数，且 $k=e^u$ 与 $u$ 一一对应。
+      source_ref: page_0104
+    - step_id: step_4
+      statement: 判定参数方程有两个实根。
+      formula_trace:
+        from: |
+          $F(u)=1+u+(1-u)e^u,\qquad F'(u)=1-ue^u$
+        to: |
+          $F$ 在 $(-\infty,W(1))$ 上递增、在 $(W(1),+\infty)$ 上递减；
+          $F(u)\to-\infty\ (u\to-\infty),\ F(0)=2,\ F(u)\to-\infty\ (u\to+\infty)$
+        operation: 用导数和端点符号数零点。
+        why: 两个零点对应两条公切线，也对应两个不同的斜率 $k$。
+      source_ref: page_0104
+teaching_card:
+  student_title: 看相离的一凸一凹曲线有几条公切线
+  what_it_trains: 训练用曲线相对位置和凹凸性快速判断公切线条数，并能用切点参数方程复核图像结论。
+  recognition_cues:
+    - 题干问同一直线同时与指数曲线和对数曲线相切，本质是公切线计数。
+    - $\ln(e^2x)$ 可先化成 $2+\ln x$，方便比较。
+    - 一条曲线上凸、一条曲线下凹且相离，正对应源页外离型模型。
+  normalization_moves:
+    - 化简 $g(x)=2+\ln x$。
+    - 用 $e^x-\ln x>0$ 判定两曲线无交点。
+    - 用凹凸性和外离型模型得到两条公切线。
+    - 必要时设切点参数，把截距相等化成 $F(u)=0$。
+  common_failures:
+    - 只看 $e^x$ 与 $\ln x$ 的增长速度，忘了两条曲线都平移了 2。
+    - 把“相离”误读成没有公切线，漏掉内公切线模型。
+    - 没有检查斜率是否不同，把两条公切线混成一条。
+  similar_practice_query: 指数 对数 相离 一凹一凸 公切线条数
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0104 图片；顶部 exposition 续页已跳过，例 9 在本页内完结。

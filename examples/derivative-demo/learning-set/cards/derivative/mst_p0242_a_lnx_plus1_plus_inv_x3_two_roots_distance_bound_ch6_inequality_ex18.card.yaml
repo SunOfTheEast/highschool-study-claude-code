@@ -1,0 +1,249 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0242_a_lnx_plus1_plus_inv_x3_two_roots_distance_bound_ch6_inequality_ex18
+content_revision_id: mst_p0242_a_lnx_plus1_plus_inv_x3_two_roots_distance_bound_ch6_inequality_ex18-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0242_a_lnx_plus1_plus_inv_x3_two_roots_distance_bound_ch6_inequality_ex18.card.yaml
+stem: |-
+  （2024 · 河南漯河高级中学三模 T17）已知函数 $f(x)=a(\ln x+1)+\frac1{x^3}$（$a>0$）。
+  1. 求证：$1+x\ln x>0$。
+  2. 若 $x_1,x_2$ 是 $f(x)$ 的两个相异零点，求证：$|x_2-x_1|<1-\sqrt{\frac1a}$。
+answer: |-
+  第 (1) 问：$1+x\ln x>0$；第 (2) 问：在两个相异零点存在时，$|x_2-x_1|<1-\sqrt{1/a}$。
+
+  第 (1) 问令 $g(x)=1+x\ln x$，$g'(x)=1+\ln x$，极小值点为 $x=1/e$，$g_{\min}=1-1/e>0$。第 (2) 问 $f'(x)=\frac{ax^3-3}{x^4}$，所以 $f$ 在 $(0,\sqrt[3]{3/a})$ 递减，在 $(\sqrt[3]{3/a},+\infty)$ 递增。 极小值为 $\frac a3(\ln\frac3a+3)+\frac a3=\frac a3(\ln\frac3a+4)$。 若 $0<a\leq3e^4$，至多一个零点；若 $a>3e^4$，则有两个零点， 且右侧零点 $x_2$ 满足 $\sqrt[3]{3/a}<x_2<1$。左侧用第 (1) 问 得 $x\ln x>-1$，从而 $f(x)=a\ln(ex)+1/x^3>-a/(ex)+1/x^3$，取 $x=\sqrt{e/a}$ 得 $\sqrt{1/a}<\sqrt{e/a}<x_1$。因此 $x_2<1$ 且 $x_1>\sqrt{1/a}$，所以 $|x_2-x_1|<1-\sqrt{1/a}$。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 第 (1) 问先证明基础不等式。
+      max_score: 1
+    - step_id: step_2
+      description: 第 (2) 问分析 $f$ 的单谷结构。
+      max_score: 1
+    - step_id: step_3
+      description: 用极小值判断两个零点存在的参数区间。
+      max_score: 1
+    - step_id: step_4
+      description: 两个零点存在时得到 $a>3e^4$。
+      max_score: 1
+    - step_id: step_5
+      description: 右根被夹在极小值点和 1 之间。
+      max_score: 1
+    - step_id: step_6
+      description: 左侧用第 (1) 问制造正值点。
+      max_score: 1
+    - step_id: step_7
+      description: 取 $x=\sqrt{e/a}$ 得左根下界。
+      max_score: 1
+    - step_id: step_8
+      description: 合并左右根位置完成距离估计。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: part_1
+        goal: 不等式证明
+        target: 第 part_1 问
+        result: $1+x\ln x>0$。
+      - part_id: part_2
+        goal: 不等式证明
+        target: 第 part_2 问
+        result: $|x_2-x_1|<1-\sqrt{1/a}$。
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 切线放缩与凹凸性
+      - 充分/必要性探路
+    subroute:
+      - 单谷双零点
+      - 极小值判根数
+      - 图像定位
+      - 左侧取点
+      - 距离上界
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+      - 局部逼近结构
+    evidence:
+      - $a(\ln x+1)+1/x^3$
+      - $1+x\ln x>0$
+      - $\sqrt[3]{3/a}$
+      - $3e^4$
+      - $\sqrt{1/a}<x_1<\sqrt[3]{3/a}<x_2<1$
+    normalization_moves_used:
+      - 先证明 $1+x\ln x>0$。
+      - 用 $f^\prime$ 得单谷结构。
+      - 用极小值判断必须进入 $a>3e^4$。
+      - 右根用 $f(1)>0$ 控制在 1 以内。
+      - 左根用第 (1) 问取点控制在 $\sqrt{1/a}$ 右侧。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会证明 $1+x\ln x>0$，回补指数对数基础。
+      - 若学生不会分析 $f^\prime=(ax^3-3)/x^4$，回补导数单调极值基础。
+      - 若学生不会由极小值判断两个零点，回补方程根分布与韦达。
+      - 若学生不会把第 (1) 问用于左侧取点，回补不等式工具基础。
+      - 若学生看不懂根的位置图，回补函数性质与图像。
+  detail_terms:
+    - $a(\ln x+1)+1/x^3$
+    - $1+x\ln x>0$
+    - $\sqrt[3]{3/a}$
+    - $a>3e^4$
+    - $\sqrt{e/a}$
+    - $e/\sqrt a$
+    - $|x_2-x_1|<1-\sqrt{1/a}$
+    - 左侧取点
+parts: &a1
+  - part_id: part_1
+    text: 求证：$1+x\ln x>0$。
+  - part_id: part_2
+    text: 若 $x_1,x_2$ 是 $f(x)$ 的两个相异零点，求证：$|x_2-x_1|<1-\sqrt{\frac1a}$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0242_a_lnx_plus1_plus_inv_x3_two_roots_distance_bound_ch6_inequality_ex18
+source_evidence:
+  source_refs:
+    - ref_id: page_0242_prev_ex17_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0242/page_0242.md
+      role: local_context
+      evidence: page_0242 页首是 page_0241 例17续解，不是本卡题头。
+    - ref_id: page_0242_ex18_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0242/page_0242.md
+      role: problem_start
+      evidence: page_0242 中部给出例18题头：$f(x)=a(\ln x+1)+1/x^3$，$a>0$；第 (1) 问证明 $1+x\ln x>0$，第 (2) 问两个相异零点距离上界。
+    - ref_id: page_0242_ex18_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0242/page_0242.md
+      role: solution
+      evidence: page_0242 给出第 (1) 问用 $g(x)=1+x\ln x$ 的最小值证明；第 (2) 问求 $f^\prime=(ax^3-3)/x^4$，极小值点为 $\sqrt[3]{3/a}$。
+    - ref_id: page_0243_ex18_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0243/page_0243.md
+      role: continuation
+      evidence: page_0243 续完例18：当 $a>3e^4$ 时有两个零点，右根 $x_2<1$，左根通过两种取点方案证明 $x_1>\sqrt{1/a}$，从而 $|x_2-x_1|<1-\sqrt{1/a}$。
+    - ref_id: page_0243_ex18_figure
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0243/page_0243.md
+      role: figure_context
+      evidence: page_0243 图示函数先减后增，标出 $\sqrt{1/a}$、$x_1$、$\sqrt[3]{3/a}$、$x_2$、$1$ 的相对位置。
+    - ref_id: page_0243_ex19_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0243/page_0243.md
+      role: local_context
+      evidence: page_0243 随后另起例19，属于下一批，本卡只取其前方的例18续解。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0242.png
+      inspected: true
+      notes: 已核对页图：例18题头和解析前半位于 page_0242 下半页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0243.png
+      inspected: true
+      notes: 已核对页图：page_0243 顶部至中部为例18续解，内嵌图像用于定位 $\sqrt{1/a}<x_1<\sqrt[3]{3/a}<x_2<1$，例19另起。
+  source_context: 本卡处理 page_0242 起头、page_0243 续完的例18；page_0243 例19以后留给下一批。
+  source_influence:
+    - 保留 source 的辅助不等式：$1+x\ln x>0$。
+    - 保留 source 的极小值判根数：$f_{\min}<0$ 等价于 $a>3e^4$，否则不满足两个相异零点。
+    - 保留 source 的图像定位：$x_2<1$，左根需要证明 $x_1>\sqrt{1/a}$。
+    - 保留 source 的左侧取点两案：由 $x\ln x>-1$ 推出 $\sqrt{e/a}<x_1$，或用 $\ln(ex)$ 形式推出 $e/\sqrt a<x_1$。
+  source_discrepancies:
+    - type: reconstructed_monotonicity_confirmation
+      source_ref: page_0242_ex18_solution_start
+      observed: source/OCR reconstructs the monotonicity sentence after the derivative sign analysis.
+      resolved_as: $f$ decreases on $(0,\sqrt[3]{3/a})$ and increases on $(\sqrt[3]{3/a},+\infty)$.
+      reason: $f^\prime(x)=(ax^3-3)/x^4$, and $x^4>0$ on the domain.
+original_problem:
+  stem: （2024 · 河南漯河高级中学三模 T17）已知函数 $f(x)=a(\ln x+1)+\frac1{x^3}$（$a>0$）。
+  parts: *a1
+  choices: []
+  answer: 第 (1) 问：$1+x\ln x>0$；第 (2) 问：在两个相异零点存在时，$|x_2-x_1|<1-\sqrt{1/a}$。
+  fidelity_notes:
+    - 两问均无选项。
+    - 函数定义域为 $x>0$。
+    - 第 (2) 问隐含两个相异零点存在，因此实际进入 $a>3e^4$ 的情形。
+solution:
+  source_solution_summary: 第 (1) 问令 $g(x)=1+x\ln x$，$g'(x)=1+\ln x$，极小值点为 $x=1/e$，$g_{\min}=1-1/e>0$。第 (2) 问 $f'(x)=\frac{ax^3-3}{x^4}$，所以 $f$ 在 $(0,\sqrt[3]{3/a})$ 递减，在 $(\sqrt[3]{3/a},+\infty)$ 递增。 极小值为 $\frac a3(\ln\frac3a+3)+\frac a3=\frac a3(\ln\frac3a+4)$。 若 $0<a\leq3e^4$，至多一个零点；若 $a>3e^4$，则有两个零点， 且右侧零点 $x_2$ 满足 $\sqrt[3]{3/a}<x_2<1$。左侧用第 (1) 问 得 $x\ln x>-1$，从而 $f(x)=a\ln(ex)+1/x^3>-a/(ex)+1/x^3$，取 $x=\sqrt{e/a}$ 得 $\sqrt{1/a}<\sqrt{e/a}<x_1$。因此 $x_2<1$ 且 $x_1>\sqrt{1/a}$，所以 $|x_2-x_1|<1-\sqrt{1/a}$。
+  key_steps:
+    - step_id: step_1
+      statement: 第 (1) 问先证明基础不等式。
+      formula_trace:
+        from: $g(x)=1+x\ln x$
+        to: $g_{\min}=g(1/e)=1-\frac1e>0$
+        operation: 求导并找极小值。
+        why: 这个不等式后面用于左侧取点。
+      source_ref: page_0242_ex18_solution_start
+    - step_id: step_2
+      statement: 第 (2) 问分析 $f$ 的单谷结构。
+      formula_trace:
+        from: $f(x)=a(\ln x+1)+\frac1{x^3}$
+        to: $f^\prime(x)=\frac{ax^3-3}{x^4}$
+        operation: 求导并通分。
+        why: 两个零点的结构来自先减后增。
+      source_ref: page_0242_ex18_solution_start
+    - step_id: step_3
+      statement: 用极小值判断两个零点存在的参数区间。
+      formula_trace:
+        from: $x=\sqrt[3]{3/a}$
+        to: $f_{\min}=\frac a3(\ln\frac3a+4)$
+        operation: 代入极小值点。
+        why: 只有极小值小于 0 时才有两个相异零点。
+      source_ref: page_0242_ex18_solution_start
+    - step_id: step_4
+      statement: 两个零点存在时得到 $a>3e^4$。
+      formula_trace:
+        from: $\frac a3(\ln\frac3a+4)<0$
+        to: $a>3e^4$
+        operation: 解对数不等式。
+        why: 这是后续比较 $\sqrt[3]{3/a}$、$\sqrt{1/a}$、$1$ 的基础。
+      source_ref: page_0243_ex18_continuation
+    - step_id: step_5
+      statement: 右根被夹在极小值点和 1 之间。
+      formula_trace:
+        from: $f(\sqrt[3]{3/a})<0,\ f(1)=a+1>0$
+        to: $\sqrt[3]{3/a}<x_2<1$
+        operation: 在递增区间上用介值定理。
+        why: 右侧距离上界需要 $x_2<1$。
+      source_ref: page_0243_ex18_continuation
+    - step_id: step_6
+      statement: 左侧用第 (1) 问制造正值点。
+      formula_trace:
+        from: $x\ln x>-1$
+        to: $\ln(ex)>-\frac1{ex}$
+        operation: 把 $1+x\ln x>0$ 改写并换成 $\ln(ex)$ 尺度。
+        why: 要控制 $a(\ln x+1)$ 这一项。
+      source_ref: page_0243_ex18_continuation
+    - step_id: step_7
+      statement: 取 $x=\sqrt{e/a}$ 得左根下界。
+      formula_trace:
+        from: $f(x)>-\frac a{ex}+\frac1{x^3}$
+        to: $x=\sqrt{e/a}$，$\sqrt{1/a}<\sqrt{e/a}<x_1$
+        operation: 解右侧下界等号并结合图像。
+        why: 左根在这个点右侧，因此 $x_1>\sqrt{1/a}$。
+      source_ref: page_0243_ex18_continuation
+    - step_id: step_8
+      statement: 合并左右根位置完成距离估计。
+      formula_trace:
+        from: $x_1>\sqrt{1/a}$ 与 $x_2<1$
+        to: $|x_2-x_1|<1-\sqrt{1/a}$
+        operation: 用区间长度比较。
+        why: 两根都在 $(0,1)$ 内，距离小于外层端点差。
+      source_ref: page_0243_ex18_continuation
+teaching_card:
+  student_title: 两根距离估计：先画出根的位置，再给左根找下界
+  what_it_trains: 训练用图像位置和取点估计两个零点距离：右根压到 1 内，左根推到 $\sqrt{1/a}$ 右侧。
+  recognition_cues:
+    - 函数是对数项加 $1/x^3$，定义域在正半轴。
+    - 导数只有一个临界点，图像先减后增。
+    - 目标是两个零点的距离，不是直接求零点。
+  normalization_moves:
+    - 先证明 $1+x\ln x>0$。
+    - 用导数得到单谷图像。
+    - 由两个零点推出 $a>3e^4$。
+    - 用 $f(1)>0$ 得 $x_2<1$。
+    - 用第 (1) 问取 $x=\sqrt{e/a}$ 得 $x_1>\sqrt{1/a}$。
+  common_failures:
+    - 忽略第 (1) 问，导致左侧取点没工具。
+    - 只知道有两个零点，没有定位 $x_1,x_2$。
+    - 把 $\sqrt{1/a}$、$\sqrt{e/a}$、$\sqrt[3]{3/a}$ 的顺序弄错。
+    - 把距离估计当作求根公式。
+  similar_practice_query: a(lnx+1)+1/x^3 两零点 距离 1+xlnx sqrt(1/a) sqrt(e/a) 3e^4
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

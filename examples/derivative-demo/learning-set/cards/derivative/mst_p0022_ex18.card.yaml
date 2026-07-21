@@ -1,0 +1,140 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0022_ex18
+content_revision_id: mst_p0022_ex18-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0022_ex18.card.yaml
+stem: |-
+  （江苏省百校联考 2023-2024 学年高三上学期第一次考试 T7）已知函数 $f(x)=xe^x$，$g(x)=-\frac{\ln x}{x}$，若 $f(x_1)=g(x_2)=t(>0)$，则 $\frac{x_1}{x_2 e^t}$ 的最大值为 (  )
+  A. $e$
+  B. $1$
+  C. $\frac{1}{e}$
+  D. $\frac{1}{e^2}$
+answer: |-
+  C
+
+  由 $t>0$ 得 $x_1>0$ 且 $0<x_2<1$。把 $-\frac{\ln x_2}{x_2}$ 写为 $\ln\frac1{x_2}e^{\ln(1/x_2)}$，与 $x_1e^{x_1}$ 同构，推出 $x_1=\ln\frac1{x_2}$ 和 $x_2e^{x_1}=1$。目标式转成 $t/e^t$，最大值为 $1/e$。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 将 $g(x_2)$ 改写成 $xe^x$ 型并锁定 $x_1$。
+      max_score: 1
+    - step_id: step_2
+      description: 把待求式转成 $t$ 的函数。
+      max_score: 1
+    - step_id: step_3
+      description: 求 $t/e^t$ 的最大值。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level:
+      - part_id: item_1
+        goal: 极值最值
+        target: 同构等值条件下求表达式最大值
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 局部逼近与找点
+    subroute:
+      - $xe^x$ 同构
+      - $t/e^t$ 最大值
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $-\ln x_2/x_2=\ln(1/x_2)e^{\ln(1/x_2)}$
+      - $\frac{x_1}{x_2e^t}=t/e^t$
+    normalization_moves_used:
+      - $-\ln x_2=\ln(1/x_2)$
+      - $1/x_2=e^{\ln(1/x_2)}$
+      - 补乘 $e^{x_1}$ 构造 $x_1e^{x_1}$
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $-\frac{\ln x_2}{x_2}$ 化成 $\ln\frac1{x_2}e^{\ln(1/x_2)}$，回补指数对数基础。
+      - 若学生不知道 $xe^x$ 在 $x>0$ 上单调递增，回补导数单调极值基础。
+      - 若学生不能把 $\frac{x_1}{x_2e^t}$ 化成 $\frac{t}{e^t}$，回补代数恒等变形。
+  detail_terms:
+    - $xe^x$
+    - $-\ln x/x$
+    - $x_2e^{x_1}=1$
+    - $t/e^t$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0022_ex18
+source_evidence:
+  source_refs:
+    - ref_id: page_0022
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0022/page_0022.md
+      role: problem_start
+      evidence: lines 27-32 give 例18 stem and options A-D; line 34 gives the complete source solution and answer C.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0022.png
+      inspected: true
+      notes: Inspected the full page image; the fraction $x_1/(x_2e^t)$, option values, and final answer C match the markdown.
+  source_context: 例18 follows the same source-page theme of converting paired functions into a common homomorphic form.
+  source_influence:
+    - Used the source's rewrite $-\ln x_2/x_2=(1/x_2)\ln(1/x_2)$ to align with $xe^x$.
+  source_discrepancies: []
+original_problem:
+  stem: （江苏省百校联考 2023-2024 学年高三上学期第一次考试 T7）已知函数 $f(x)=xe^x$，$g(x)=-\frac{\ln x}{x}$，若 $f(x_1)=g(x_2)=t(>0)$，则 $\frac{x_1}{x_2 e^t}$ 的最大值为 (  )
+  parts: *a1
+  choices:
+    - A. $e$
+    - B. $1$
+    - C. $\frac{1}{e}$
+    - D. $\frac{1}{e^2}$
+  answer: C
+  fidelity_notes:
+    - 题干、选项和完整解析均在 page_0022。
+    - 图片确认选项 A 为 $e$，D 为 $1/e^2$。
+solution:
+  source_solution_summary: 由 $t>0$ 得 $x_1>0$ 且 $0<x_2<1$。把 $-\frac{\ln x_2}{x_2}$ 写为 $\ln\frac1{x_2}e^{\ln(1/x_2)}$，与 $x_1e^{x_1}$ 同构，推出 $x_1=\ln\frac1{x_2}$ 和 $x_2e^{x_1}=1$。目标式转成 $t/e^t$，最大值为 $1/e$。
+  key_steps:
+    - step_id: step_1
+      statement: 将 $g(x_2)$ 改写成 $xe^x$ 型并锁定 $x_1$。
+      formula_trace:
+        from: $x_1e^{x_1}=-\frac{\ln x_2}{x_2}=t>0$
+        to: $x_1e^{x_1}=\ln\frac1{x_2}e^{\ln(1/x_2)}$, so $x_1=\ln\frac1{x_2}$
+        operation: 把 $1/x_2$ 写成 $e^{\ln(1/x_2)}$，再用 $xe^x$ 在 $x>0$ 上严格递增。
+        why: 等值的两边都进入同一个单调的 $xe^x$ 模型。
+      source_ref: page_0022 line 34
+    - step_id: step_2
+      statement: 把待求式转成 $t$ 的函数。
+      formula_trace:
+        from: $x_1=\ln\frac1{x_2}$ and $x_1e^{x_1}=t$
+        to: $x_2e^{x_1}=1$, $\frac{x_1}{x_2e^t}=\frac{x_1e^{x_1}}{x_2e^{x_1}e^t}=\frac{t}{e^t}$
+        operation: 将分子乘入 $e^{x_1}$，分母同步补出 $x_2e^{x_1}$。
+        why: $x_2e^{x_1}=1$ 消掉了原式中的两个隐含变量。
+      source_ref: page_0022 line 34
+    - step_id: step_3
+      statement: 求 $t/e^t$ 的最大值。
+      formula_trace:
+        from: $h(t)=\frac{t}{e^t}$, $t>0$
+        to: $h_{\max}=h(1)=\frac1e$
+        operation: 求导 $h'(t)=e^{-t}(1-t)$，得到先增后减。
+        why: 正半轴上的峰值出现在 $t=1$。
+      source_ref: page_0022 line 34
+teaching_card:
+  student_title: 把 $-\ln x/x$ 翻成 $xe^x$
+  what_it_trains: 训练用倒数和对数换元把两个函数变成同一个 $xe^x$ 模型，再把双变量表达式降成 $t/e^t$。
+  recognition_cues:
+    - 条件中同时出现 $xe^x$ 和 $-\ln x/x$ 的等值。
+    - 目标式含 $x_2e^t$，源解提示先找到 $x_2e^{x_1}=1$。
+  normalization_moves:
+    - 把 $-\ln x_2$ 改成 $\ln(1/x_2)$。
+    - 把 $1/x_2$ 改成 $e^{\ln(1/x_2)}$。
+    - 用 $x_1e^{x_1}=t$ 替换分子结构。
+  common_failures:
+    - 漏判 $0<x_2<1$，导致 $\ln(1/x_2)$ 的正性不清。
+    - 只记住同构结论，没说明 $xe^x$ 在正半轴单调。
+    - 求 $t/e^t$ 最大值时把极值点误写成 $t=e$。
+  similar_practice_query: xe^x 与 -lnx/x 同构 等值 最大值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

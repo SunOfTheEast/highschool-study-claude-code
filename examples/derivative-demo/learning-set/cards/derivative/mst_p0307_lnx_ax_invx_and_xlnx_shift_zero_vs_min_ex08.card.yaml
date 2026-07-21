@@ -1,0 +1,229 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0307_lnx_ax_invx_and_xlnx_shift_zero_vs_min_ex08
+content_revision_id: mst_p0307_lnx_ax_invx_and_xlnx_shift_zero_vs_min_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0307_lnx_ax_invx_and_xlnx_shift_zero_vs_min_ex08.card.yaml
+stem: |-
+  （2024 · 哈尔滨期末）已知函数 $f(x)=\ln x+ax-\frac1x$，$g(x)=x\ln x+(a-1)x+\frac1x$。
+  1. 讨论 $f(x)$ 的单调性。
+  2. 当 $a>1$ 时，记 $f(x)$ 的零点为 $x_0$，$g(x)$ 的极小值点为 $x_1$，判断 $x_0$ 与 $x_1$ 的大小关系，并说明理由。
+answer: |-
+  第(1)问：$a\ge0$ 时 $f$ 在 $(0,+\infty)$ 上递增；$a<0$ 时，设 $\alpha=\frac{-1-\sqrt{1-4a}}{2a}>0$，$f$ 在 $(0,\alpha)$ 上递增，在 $(\alpha,+\infty)$ 上递减。第(2)问：$x_0>x_1$。
+
+  第(1)问：$f^\prime(x)=\frac1x+a+\frac1{x^2} =\frac{ax^2+x+1}{x^2}$。若 $a\ge0$，则 $f^\prime>0$， $f$ 在正半轴递增。若 $a<0$，方程 $ax^2+x+1=0$ 只有一个正根 $\alpha=\frac{-1-\sqrt{1-4a}}{2a}$，所以 $f$ 在 $(0,\alpha)$ 上递增，在 $(\alpha,+\infty)$ 上递减。 第(2)问：当 $a>1$，$f$ 递增，且 $f(1)=a-1>0$，$f(\frac1{\sqrt a})=-\frac12\ln a<0$， 故唯一零点 $x_0\in(\frac1{\sqrt a},1)$。又 $g^\prime(x)=\ln x-\frac1{x^2}+a$ 严格递增， $g^\prime(1)>0$，$g^\prime(\frac1{\sqrt a})<0$， 所以极小值点 $x_1\in(\frac1{\sqrt a},1)$。由 $g^\prime(x_1)=0$ 得 $a=\frac1{x_1^2}-\ln x_1$，代入 $f(x_1)=\ln x_1+ax_1-\frac1{x_1} =(1-x_1)\ln x_1<0$。因为 $f(x_0)=0$ 且 $f$ 递增， 所以 $x_0>x_1$。另一种方法用 $x\ln x\ge x-1\ge\ln x$ 插值，构造 $h(x)=x\ln x+ax-\frac1x$，并取 $x_2=\frac{1+\sqrt{5+4a}}{2+2a}$，得到 $x_1\in(\frac1{\sqrt a},x_2)$、$x_0\in(x_2,1)$， 也得 $x_0>x_2>x_1$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 讨论 $f$ 的单调性。
+      max_score: 1
+    - step_id: step_2
+      description: 当 $a>1$ 时先定位 $x_0$。
+      max_score: 1
+    - step_id: step_3
+      description: 定位 $g$ 的极小值点 $x_1$。
+      max_score: 1
+    - step_id: step_4
+      description: 把 $g^\prime(x_1)=0$ 代回 $f(x_1)$。
+      max_score: 1
+    - step_id: step_5
+      description: 用插值法给出第二条路线。
+      max_score: 1
+    - step_id: step_6
+      description: 取插值函数零点完成夹逼。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 1 问
+        result: $f$ 的单调区间随 $a$ 分两类。
+      - part_id: "2"
+        goal: 零点/极值点分析
+        target: 第 2 问
+        result: $x_0>x_1$。
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 显隐点探路
+      - 局部逼近与找点
+      - 参变量分离
+    subroute:
+      - $f^\prime$ 二次分子判号
+      - $x_0,x_1$ 同区间定位
+      - 代回 $f(x_1)$
+      - 插值链 $x\ln x\ge x-1\ge\ln x$
+      - 中间零点 $x_2$ 夹逼
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非对称结构
+      - 不等式工具结构
+      - 局部逼近结构
+    evidence:
+      - $\ln x+ax-\frac1x$
+      - $x\ln x+(a-1)x+\frac1x$
+      - $\frac1x-ax$
+      - $x\ln x\ge x-1\ge\ln x$
+      - $x_1<x_2<x_0$
+    normalization_moves_used:
+      - 把零点和极小值点都转成与 $\frac1x-ax$ 的比较。
+      - 法一用极小值点方程代回另一个函数。
+      - 法二用 $x-1$ 插在 $x\ln x$ 与 $\ln x$ 中间。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会讨论 $ax^2+x+1$ 的符号，回补方程根分布与韦达。
+      - 若学生不会由导数零点判断极小值点，回补导数单调极值基础。
+      - 若学生代回 $a=\frac1{x_1^2}-\ln x_1$ 出错，回补代数恒等变形。
+      - 若学生不会使用 $x\ln x\ge x-1\ge\ln x$，回补指数对数基础。
+      - 若学生不理解插值夹零点，回补不等式工具基础。
+  detail_terms:
+    - $\ln x+ax-\frac1x$
+    - $x\ln x+(a-1)x+\frac1x$
+    - $x_0$ 零点
+    - $x_1$ 极小值点
+    - $x\ln x\ge x-1\ge\ln x$
+    - $x_2=\frac{1+\sqrt{5+4a}}{2+2a}$
+parts: &a1
+  - part_id: "1"
+    text: 讨论 $f(x)$ 的单调性。
+  - part_id: "2"
+    text: 当 $a>1$ 时，记 $f(x)$ 的零点为 $x_0$，$g(x)$ 的极小值点为 $x_1$，判断 $x_0$ 与 $x_1$ 的大小关系，并说明理由。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0307_lnx_ax_invx_and_xlnx_shift_zero_vs_min_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0307_ex08_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0307/page_0307.md
+      role: problem_start
+      evidence: page_0307 例8题头：$f(x)=\ln x+ax-\frac1x$，$g(x)=x\ln x+(a-1)x+\frac1x$；(1) 讨论 $f$ 单调性；(2) $a>1$ 时比较 $f$ 的零点 $x_0$ 与 $g$ 的极小值点 $x_1$。
+    - ref_id: page_0307_ex08_part1
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0307/page_0307.md
+      role: solution
+      evidence: page_0307 第(1)问：$f^\prime(x)=\frac{ax^2+x+1}{x^2}$；$a\ge0$ 时递增，$a<0$ 时由正根分段先增后减。
+    - ref_id: page_0307_ex08_analysis
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0307/page_0307.md
+      role: solution
+      evidence: page_0307 第(2)问分析：$f(x_0)=0\Leftrightarrow \ln x_0=\frac1{x_0}-ax_0$，$g^\prime(x_1)=0$ 可化为 $x_1\ln x_1=\frac1{x_1}-ax_1$，图像提示 $x_0>x_1$。
+    - ref_id: page_0308_ex08_method1
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0308/page_0308.md
+      role: solution
+      evidence: page_0308 法一：$a>1$ 时 $f$ 递增，$x_0\in(\frac1{\sqrt a},1)$；$g^\prime$ 递增，极小值点 $x_1\in(\frac1{\sqrt a},1)$；由 $g^\prime(x_1)=0$ 得 $a=\frac1{x_1^2}-\ln x_1$，代回 $f(x_1)=(1-x_1)\ln x_1<0$，故 $x_0>x_1$。
+    - ref_id: page_0308_ex08_method2
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0308/page_0308.md
+      role: solution
+      evidence: page_0308 法二：用 $x\ln x\ge x-1\ge\ln x$ 构造插值函数 $h(x)=x\ln x+ax-\frac1x$，夹在 $f$ 的上方；取正根 $x_2=\frac{1+\sqrt{5+4a}}{2+2a}$，得到 $x_1\in(\frac1{\sqrt a},x_2)$，$x_0\in(x_2,1)$，所以 $x_0>x_2>x_1$。
+    - ref_id: page_0308_ex09_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0308/page_0308.md
+      role: local_context
+      evidence: page_0308 后续另起例9，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0307.png
+      inspected: true
+      notes: 已核对页图：page_0307 下半页为考点3说明和例8题头、第(1)问及第(2)问分析开头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0308.png
+      inspected: true
+      notes: 已核对页图：page_0308 上半页补全例8两种方法，页底另起例9。
+  source_context: 本卡处理 page_0307 起始、page_0308 完成的例8；page_0308 例9排除。
+  source_influence:
+    - 保留第(1)问按 $a\ge0$、$a<0$ 讨论 $f^\prime$ 的符号。
+    - 保留第(2)问的探路等式：$f(x_0)=0$ 与 $g^\prime(x_1)=0$ 化成同一右侧 $\frac1x-ax$ 的比较。
+    - 保留法一：用 $g^\prime(x_1)=0$ 代回 $f(x_1)$，再由 $f$ 单调推出 $x_0>x_1$。
+    - 保留法二：用 $x\ln x\ge x-1\ge\ln x$ 做插值取点。
+    - 保留源图对 $y=\frac1x-ax$、$y=x\ln x$、$y=\ln x$ 的位置提示。
+  source_discrepancies:
+    - issue: page_0307 markdown 第(1)问 $a<0$ 情形在分段处出现“当 $x>x_2$ 时”，但 $x_2<0$ 已舍去。
+      resolution: 题卡按导数符号采用正根 $\alpha=\frac{-1-\sqrt{1-4a}}{2a}$，$f$ 在 $(0,\alpha)$ 递增，在 $(\alpha,+\infty)$ 递减。
+      requires_user_decision: false
+    - issue: page_0308 法一处源文/OCR 写“当 $0<x<m$ 时，$g^\prime(m)<0$；当 $x>m$ 时，$g^\prime(m)>0$”。
+      resolution: 按单调性语义和 reconstruction marker，题卡采用 $g^\prime(x)<0$、$g^\prime(x)>0$。
+      requires_user_decision: false
+    - issue: page_0308 法二中 $x_2$ 的根式符号源图/OCR易误为减号。
+      resolution: 由 $(a+1)x^2-x-1=0$ 的正根，题卡采用 $x_2=\frac{1+\sqrt{5+4a}}{2+2a}$。
+      requires_user_decision: false
+original_problem:
+  stem: （2024 · 哈尔滨期末）已知函数 $f(x)=\ln x+ax-\frac1x$，$g(x)=x\ln x+(a-1)x+\frac1x$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问：$a\ge0$ 时 $f$ 在 $(0,+\infty)$ 上递增；$a<0$ 时，设 $\alpha=\frac{-1-\sqrt{1-4a}}{2a}>0$，$f$ 在 $(0,\alpha)$ 上递增，在 $(\alpha,+\infty)$ 上递减。第(2)问：$x_0>x_1$。
+  fidelity_notes:
+    - 无选项。
+    - 第(2)问源解给出两条路线：法一代回 $f(x_1)$；法二插值取点。
+solution:
+  source_solution_summary: 第(1)问：$f^\prime(x)=\frac1x+a+\frac1{x^2} =\frac{ax^2+x+1}{x^2}$。若 $a\ge0$，则 $f^\prime>0$， $f$ 在正半轴递增。若 $a<0$，方程 $ax^2+x+1=0$ 只有一个正根 $\alpha=\frac{-1-\sqrt{1-4a}}{2a}$，所以 $f$ 在 $(0,\alpha)$ 上递增，在 $(\alpha,+\infty)$ 上递减。 第(2)问：当 $a>1$，$f$ 递增，且 $f(1)=a-1>0$，$f(\frac1{\sqrt a})=-\frac12\ln a<0$， 故唯一零点 $x_0\in(\frac1{\sqrt a},1)$。又 $g^\prime(x)=\ln x-\frac1{x^2}+a$ 严格递增， $g^\prime(1)>0$，$g^\prime(\frac1{\sqrt a})<0$， 所以极小值点 $x_1\in(\frac1{\sqrt a},1)$。由 $g^\prime(x_1)=0$ 得 $a=\frac1{x_1^2}-\ln x_1$，代入 $f(x_1)=\ln x_1+ax_1-\frac1{x_1} =(1-x_1)\ln x_1<0$。因为 $f(x_0)=0$ 且 $f$ 递增， 所以 $x_0>x_1$。另一种方法用 $x\ln x\ge x-1\ge\ln x$ 插值，构造 $h(x)=x\ln x+ax-\frac1x$，并取 $x_2=\frac{1+\sqrt{5+4a}}{2+2a}$，得到 $x_1\in(\frac1{\sqrt a},x_2)$、$x_0\in(x_2,1)$， 也得 $x_0>x_2>x_1$。
+  key_steps:
+    - step_id: step_1
+      statement: 讨论 $f$ 的单调性。
+      formula_trace:
+        from: $f(x)=\ln x+ax-\frac1x$
+        to: $f^\prime(x)=\frac{ax^2+x+1}{x^2}$
+        operation: 求导并把分母变成正量。
+        why: 单调性只看二次分子 $ax^2+x+1$ 的符号。
+      source_ref: page_0307_ex08_part1
+    - step_id: step_2
+      statement: 当 $a>1$ 时先定位 $x_0$。
+      formula_trace:
+        from: $f(1)=a-1>0,\quad f(\frac1{\sqrt a})=-\frac12\ln a<0$
+        to: $x_0\in(\frac1{\sqrt a},1)$
+        operation: 利用 $f$ 在正半轴递增和异号取点。
+        why: 比较 $x_0,x_1$ 前先把两者放进同一区间。
+      source_ref: page_0308_ex08_method1
+    - step_id: step_3
+      statement: 定位 $g$ 的极小值点 $x_1$。
+      formula_trace:
+        from: $g^\prime(x)=\ln x-\frac1{x^2}+a$
+        to: $x_1\in(\frac1{\sqrt a},1)$
+        operation: 证明 $g^\prime$ 递增，再用 $g^\prime(1)>0$ 与 $g^\prime(\frac1{\sqrt a})<0$。
+        why: $x_1$ 是 $g^\prime$ 的唯一零点。
+      source_ref: page_0308_ex08_method1
+    - step_id: step_4
+      statement: 把 $g^\prime(x_1)=0$ 代回 $f(x_1)$。
+      formula_trace:
+        from: $g^\prime(x_1)=\ln x_1-\frac1{x_1^2}+a=0$
+        to: $f(x_1)=(1-x_1)\ln x_1<0$
+        operation: 解出 $a=\frac1{x_1^2}-\ln x_1$ 并代入 $f(x_1)$。
+        why: 只要 $f(x_1)<0=f(x_0)$，就能由 $f$ 递增推出 $x_1<x_0$。
+      source_ref: page_0308_ex08_method1
+    - step_id: step_5
+      statement: 用插值法给出第二条路线。
+      formula_trace:
+        from: $x\ln x\ge x-1\ge\ln x$
+        to: $x\ln x+ax-\frac1x\ge x-1+ax-\frac1x\ge f(x)$
+        operation: 在 $x\ln x$ 与 $\ln x$ 之间插入 $x-1$。
+        why: 插值函数的零点夹在 $x_1$ 与 $x_0$ 中间。
+      source_ref: page_0308_ex08_method2
+    - step_id: step_6
+      statement: 取插值函数零点完成夹逼。
+      formula_trace:
+        from: $(a+1)x^2-x-1=0$
+        to: $x_2=\frac{1+\sqrt{5+4a}}{2+2a},\quad x_1<x_2<x_0$
+        operation: 取正根作为插值取点。
+        why: 这给出 $x_0>x_1$ 的结构化解释。
+      source_ref: page_0308_ex08_method2
+teaching_card:
+  student_title: 用插值函数比较零点和极小值点
+  what_it_trains: 训练不同函数的隐点比较：先把两个隐点放到同一区间，再用代回或插值取点证明谁在左谁在右。
+  recognition_cues:
+    - 一个点来自 $f(x)=0$，另一个点来自 $g^\prime(x)=0$。
+    - 两条方程都能整理出 $\frac1x-ax$。
+    - 题目里同时出现 $\ln x$ 和 $x\ln x$。
+    - $x\ln x\ge x-1\ge\ln x$ 是天然插值链。
+  normalization_moves:
+    - 第(1)问先把单调性讨论清楚，后面才可比较零点位置。
+    - 法一不要硬解 $x_1$，只把 $g^\prime(x_1)=0$ 代回 $f(x_1)$。
+    - 法二的核心是找中间函数，不是记忆根式。
+    - 最终要证明的是 $x_1<x_0$，中间点 $x_2$ 只是桥。
+  common_failures:
+    - 把 $a<0$ 时的正根和负根混掉。
+    - 把 $g$ 的极小值点误认为 $g$ 的零点。
+    - 代回 $f(x_1)$ 时漏掉 $x_1$ 乘法。
+    - 插值链方向写反。
+    - 取 $x_2$ 时误取负根。
+  similar_practice_query: 插值放缩 不同函数隐零点比较 xlnx lnx x-1 x0 x1
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

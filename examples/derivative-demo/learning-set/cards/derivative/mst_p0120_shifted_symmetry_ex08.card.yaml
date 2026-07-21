@@ -1,0 +1,198 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0120_shifted_symmetry_ex08
+content_revision_id: mst_p0120_shifted_symmetry_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0120_shifted_symmetry_ex08.card.yaml
+stem: |-
+  （2024 · 黄冈模拟 · 多选）已知函数 $f(x)$ 及其导函数 $f'(x)$ 定义域均为 $\mathbf{R}$，记 $g(x)=f'(x+1)$，且 $f(2+x)-f(2-x)=4x$，$g(3+x)$ 为偶函数，则 $g'(7)+g(17)=$（  ）
+  A. 0
+  B. 1
+  C. 2
+  D. 3
+answer: |
+  C
+
+  由 $g(3+x)$ 为偶函数且 $g(x)=f'(x+1)$，可得 $f'(x)$ 关于直线 $x=4$
+  对称，即 $f'(4+t)=f'(4-t)$。对
+  $f(2+x)-f(2-x)=4x$ 求导，得
+  $f'(2+x)+f'(2-x)=4$，故 $f'(x)$ 关于点 $(2,2)$ 中心对称。
+  轴对称与中心对称叠加后可得 $f'$ 的周期为 $8$，并有 $f'(2)=2$。
+  又 $g$ 是 $f'$ 左移 $1$ 个单位，故 $g$ 关于 $x=3$ 轴对称，且关于
+  $(1,2)$ 中心对称，所以 $g(17)=g(1)=2$。
+  同时 $g'$ 周期也为 $8$，并有 $g'(-1)=g'(3)=0$，故
+  $g'(7)=g'(-1)=0$。于是
+  $g'(7)+g(17)=2$，选 C。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 由 $g(3+x)$ 偶性把信息转回到 $f'$ 的轴对称。
+      max_score: 1
+    - step_id: step_2
+      description: 由差式求导得到 $f'$ 的中心对称。
+      max_score: 1
+    - step_id: step_3
+      description: 把 $f'$ 的对称性平移到 $g$ 上并取函数值。
+      max_score: 1
+    - step_id: step_4
+      description: 利用 $g'$ 的周期与对称得到导数项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level:
+      - part_id: item_1
+        goal: 数值求值
+        target: 求 $g'(7)+g(17)$ 的确定值。
+        result: 见 source_solution_summary
+  method:
+    primary: 对称化与偏移
+    secondary:
+      - 对称性配凑
+    subroute:
+      - 轴对称 + 中心对称配周期
+      - 平移还原
+      - 点值回代
+  structure:
+    primary: 对称结构
+    secondary:
+      - 抽象函数结构
+      - 非齐次结构
+    evidence:
+      - $g(3+x)$ 偶性给出以 $x=3$ 为轴的对称。
+      - $f(2+x)-f(2-x)=4x$ 求导后给出以 $(2,2)$ 为中心的对称。
+      - 两类对称叠加产生周期 8，再用于求值。
+    normalization_moves_used:
+      - 把题设中的复合函数对称先还原到 $f'$。
+      - 把“差式=线性”先求导再识别中心对称。
+      - 先算函数值 $g(17)$，再算导数值 $g'(7)$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $g(3+x)$ 偶性改写为 $g(3+t)=g(3-t)$，回补函数性质与图像。
+      - 若学生对 $f(2-x)$ 求导符号出错，回补导数运算与几何意义。
+      - 若学生无法从轴对称与中心对称得到周期，回补函数性质与图像。
+      - 若学生不会用周期把自变量回退，回补代数恒等变形。
+  detail_terms:
+    - $g(x)=f'(x+1)$
+    - $f(2+x)-f(2-x)=4x$
+    - $f'(2+x)+f'(2-x)=4$
+    - $T=8$
+    - $g'(7)+g(17)=2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0120_shifted_symmetry_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0120
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0120/page_0120.md
+      role: problem_start
+      evidence: lines 14-21 give 例 8 的题干、A-D 选项、完整解析和答案 C。
+    - ref_id: page_0120_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0120/page_0120.md
+      role: local_context
+      evidence: line 12 is the tail text "轴上." from earlier exposition, and lines 36-38 begin section six exposition; neither is a new worked-example head.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0120.png
+      inspected: true
+      notes: 已核对 page_0120 页图：例 8 题头、选项、解析与答案 C 清晰可见；页首“轴上.”与页末小节标题属于上下文，不单独建卡。
+  source_context: page_0120 顶部是前页衔接文字，随后依次出现例 8、例 9；本卡仅覆盖从 page_0120 起头的例 8。
+  source_influence:
+    - 保留源页由 $g(3+x)$ 偶性推出 $f'(x)$ 关于 $x=4$ 轴对称。
+    - 保留源页对 $f(2+x)-f(2-x)=4x$ 求导得到 $f'(2+x)+f'(2-x)=4$，据此得到 $f'$ 关于 $(2,2)$ 中心对称。
+    - 保留源页把“轴对称 + 中心对称 + 平移”组合成周期结论，再代入 $g'(7)+g(17)$。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 黄冈模拟 · 多选）已知函数 $f(x)$ 及其导函数 $f'(x)$ 定义域均为 $\mathbf{R}$，记 $g(x)=f'(x+1)$，且 $f(2+x)-f(2-x)=4x$，$g(3+x)$ 为偶函数，则 $g'(7)+g(17)=$（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: "0"
+      text_latex: "0"
+    - label: B
+      text_raw: "1"
+      text_latex: "1"
+    - label: C
+      text_raw: "2"
+      text_latex: "2"
+    - label: D
+      text_raw: "3"
+      text_latex: "3"
+  answer: C
+  fidelity_notes:
+    - 题干中导函数在源页记为 $f'(x)$，并定义 $g(x)=f'(x+1)$；本卡按源页保留该记号。
+    - 本题在 page_0120 内完整结束，无跨页依赖。
+solution:
+  source_solution_summary: |
+    由 $g(3+x)$ 为偶函数且 $g(x)=f'(x+1)$，可得 $f'(x)$ 关于直线 $x=4$
+    对称，即 $f'(4+t)=f'(4-t)$。对
+    $f(2+x)-f(2-x)=4x$ 求导，得
+    $f'(2+x)+f'(2-x)=4$，故 $f'(x)$ 关于点 $(2,2)$ 中心对称。
+    轴对称与中心对称叠加后可得 $f'$ 的周期为 $8$，并有 $f'(2)=2$。
+    又 $g$ 是 $f'$ 左移 $1$ 个单位，故 $g$ 关于 $x=3$ 轴对称，且关于
+    $(1,2)$ 中心对称，所以 $g(17)=g(1)=2$。
+    同时 $g'$ 周期也为 $8$，并有 $g'(-1)=g'(3)=0$，故
+    $g'(7)=g'(-1)=0$。于是
+    $g'(7)+g(17)=2$，选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 由 $g(3+x)$ 偶性把信息转回到 $f'$ 的轴对称。
+      formula_trace:
+        from: |
+          $g(3+t)=g(3-t),\qquad g(x)=f'(x+1)$
+        to: |
+          $f'(4+t)=f'(4-t)$
+        operation: 把 $g$ 写成 $f'$ 的平移表达，再对称点回代。
+        why: 确定 $f'$ 的一条对称轴 $x=4$，为后续周期配凑做准备。
+      source_ref: page_0120
+    - step_id: step_2
+      statement: 由差式求导得到 $f'$ 的中心对称。
+      formula_trace:
+        from: $f(2+x)-f(2-x)=4x$
+        to: $f'(2+x)+f'(2-x)=4$
+        operation: 两边对 $x$ 求导并整理成“和为常数”形式。
+        why: 这等价于 $f'$ 关于点 $(2,2)$ 中心对称。
+      source_ref: page_0120
+    - step_id: step_3
+      statement: 把 $f'$ 的对称性平移到 $g$ 上并取函数值。
+      formula_trace:
+        from: |
+          $g(x)=f'(x+1)$
+        to: |
+          $g\text{ 关于 }x=3\text{ 轴对称，关于 }(1,2)\text{ 中心对称，}g(17)=2$
+        operation: 将 $f'$ 左移 1 个单位。
+        why: 目标式包含 $g(17)$，可直接由中心对称与周期读出。
+      source_ref: page_0120
+    - step_id: step_4
+      statement: 利用 $g'$ 的周期与对称得到导数项。
+      formula_trace:
+        from: |
+          $T_g=8,\qquad g'(1+t)=g'(1-t),\qquad g'(3)=0$
+        to: |
+          $g'(7)=g'(-1)=g'(3)=0$
+        operation: 先用周期把 7 退回到 -1，再用对称转到 3。
+        why: 导数项归零后即可得到最终值。
+      source_ref: page_0120
+teaching_card:
+  student_title: 先配对称再读周期：一眼算出组合点值
+  what_it_trains: 训练把复合条件转成轴对称、中心对称并联立出周期，再用于函数值和导数值求值。
+  recognition_cues:
+    - 题干同时给“偶函数”与“$f(a+x)-f(a-x)$”结构，常见于对称配凑。
+    - 最终问的是两个离散点值，通常依赖周期与对称，不靠显式表达式。
+    - 出现 $g(x)=f'(x+1)$ 时要先做平移还原。
+  normalization_moves:
+    - 先由偶性得到轴对称。
+    - 再由求导得到中心对称。
+    - 轴 + 中心配出周期。
+    - 把 17、7 用周期和对称折返到基准点。
+  common_failures:
+    - 把 $f(2-x)$ 求导写成 $f'(2-x)$，漏掉负号导致和式错误。
+    - 把“关于点对称”误当“关于轴对称”，导致导数关系错向。
+    - 只求出 $g(17)$，遗漏 $g'(7)$ 的归零链。
+    - 未先平移还原，直接在 $f'$ 与 $g$ 之间混用对称点。
+  similar_practice_query: 抽象函数 对称 轴对称 中心对称 周期 求值 g(x)=f'(x+1)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0120 图像已核对；例 8 题干、选项、解析与答案 C 一致。

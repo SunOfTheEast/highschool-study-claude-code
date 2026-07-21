@@ -1,0 +1,151 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0170_cauchy_exp_zero_ex11
+content_revision_id: mst_p0170_cauchy_exp_zero_ex11-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0170_cauchy_exp_zero_ex11.card.yaml
+stem: （2024 · 济宁一模 T16）已知函数 f(x)=a*sqrt(x^2-1/2)+sqrt(2)/2*b-e^x，若 f(x)=0 在 [e/3,e] 上有解，则 a^2+b^2 的最小值为 ________。
+answer: |
+  $e^2$
+
+  设 m∈[e/3,e] 是 f 的零点，则 a*sqrt(m^2-1/2)+sqrt(2)/2*b=e^m。两边平方并用柯西不等式： e^{2m}=(a*sqrt(m^2-1/2)+sqrt(2)/2*b)^2 <=(a^2+b^2)((m^2-1/2)+1/2)=(a^2+b^2)m^2， 所以 a^2+b^2>=e^{2m}/m^2=:Q(m)。对 Q(m) 求导： ln Q(m)=2m-2ln m，故 (ln Q)^{\prime}=2-2/m， 即 Q 在 (0,1] 递减、在 [1,+∞) 递增。由于 [e/3,e] 包含 1， 可得 Q_min=Q(1)=e^2，因此 a^2+b^2 的最小值为 e^2。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 在零点处建立参数等式。
+      max_score: 1
+    - step_id: step_2
+      description: 平方后套柯西得到 a^2+b^2 下界。
+      max_score: 1
+    - step_id: step_3
+      description: 转成单变量函数 Q(m)=e^{2m}/m^2 并取最小值。
+      max_score: 1
+    - step_id: step_4
+      description: 回到填空答案。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 参变量分离
+    secondary:
+      - 拟合与夹逼
+    subroute:
+      - 零点落点
+      - 柯西不等式
+      - 单变量极小值
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 多变量与不等式结构
+      - 不等式工具结构
+    evidence:
+      - 根式系数与常系数组合后可直接套柯西。
+      - e^m 与 m^2 同时出现，天然转为 e^{2m}/m^2 的单变量最值。
+      - m 的区间已给定，可完成封闭求最小值。
+    normalization_moves_used:
+      - 零点代入后先移项再平方。
+      - 先把参数项分离成向量内积，再套柯西。
+      - 用 ln Q 的导数替代直接对 Q 求导。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把“有解”转为“取零点代入”，回补函数三要素与定义域。
+      - 若学生不会柯西向量配对，回补不等式工具基础。
+      - 若学生不会对 ln Q 判单调，回补导数单调极值基础。
+  detail_terms:
+    - a*sqrt(m^2-1/2)+sqrt(2)/2*b=e^m
+    - e^{2m}<=(a^2+b^2)m^2
+    - Q(m)=e^{2m}/m^2
+    - Q(1)=e^2
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0170_cauchy_exp_zero_ex11
+source_evidence:
+  source_refs:
+    - ref_id: page_0170_ex11_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0170/page_0170.md
+      role: problem_start
+      evidence: line 29 给出例11题干：f(x)=a*sqrt(x^2-1/2)+sqrt(2)/2*b-e^x，且零点落在 [e/3,e]。
+    - ref_id: page_0170_ex11_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0170/page_0170.md
+      role: solution
+      evidence: line 31 给出“设零点 m，柯西得 a^2+b^2>=e^(2m)/m^2，答案 e^2”的主链。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0170.png
+      inspected: true
+      notes: 页图核对通过：例11题干、零点设为 $m$、柯西放缩链和答案 $e^2$ 与 markdown 一致。
+  source_context: 例11与例10同属“a^2+b^2 转化为柯西不等式问题”，依然是先落零点再分离参数。
+  source_influence:
+    - 保留源解主线：在零点 m 处把 e^m 写成参数线性组合并平方。
+    - 保留源解关键化简：sqrt(m^2-1/2)^2+(sqrt(2)/2)^2=m^2。
+    - 保留源解结论：a^2+b^2 的最小值为 e^2。
+  source_discrepancies:
+    - source markdown 写“当且仅当 m=e 时等号成立”；但由同行公式 Q(m)=e^{2m}/m^2 可得 Q 在 (0,1] 递减、[1,+∞) 递增，m∈[e/3,e] 时最小点应为 m=1。最小值 e^2 不受影响。
+original_problem:
+  stem: （2024 · 济宁一模 T16）已知函数 f(x)=a*sqrt(x^2-1/2)+sqrt(2)/2*b-e^x，若 f(x)=0 在 [e/3,e] 上有解，则 a^2+b^2 的最小值为 ________。
+  parts: *a1
+  choices: []
+  answer: $e^2$
+  fidelity_notes:
+    - 源题为空格填空题。
+    - source markdown 的最终数值结论是 e^2。
+solution:
+  source_solution_summary: |
+    设 m∈[e/3,e] 是 f 的零点，则 a*sqrt(m^2-1/2)+sqrt(2)/2*b=e^m。两边平方并用柯西不等式： e^{2m}=(a*sqrt(m^2-1/2)+sqrt(2)/2*b)^2 <=(a^2+b^2)((m^2-1/2)+1/2)=(a^2+b^2)m^2， 所以 a^2+b^2>=e^{2m}/m^2=:Q(m)。对 Q(m) 求导： ln Q(m)=2m-2ln m，故 (ln Q)^{\prime}=2-2/m， 即 Q 在 (0,1] 递减、在 [1,+∞) 递增。由于 [e/3,e] 包含 1， 可得 Q_min=Q(1)=e^2，因此 a^2+b^2 的最小值为 e^2。
+  key_steps:
+    - step_id: step_1
+      statement: 在零点处建立参数等式。
+      formula_trace:
+        from: f(x)=a*sqrt(x^2-1/2)+sqrt(2)/2*b-e^x，且 f(m)=0
+        to: a*sqrt(m^2-1/2)+sqrt(2)/2*b=e^m
+        operation: 代入零点 m 并移项。
+        why: 把参数关系与区间变量 m 绑定。
+      source_ref: page_0170_ex11_solution
+    - step_id: step_2
+      statement: 平方后套柯西得到 a^2+b^2 下界。
+      formula_trace:
+        from: e^{2m}=(a*sqrt(m^2-1/2)+sqrt(2)/2*b)^2
+        to: e^{2m}<=(a^2+b^2)m^2
+        operation: 把 (a,b) 与 (sqrt(m^2-1/2),sqrt(2)/2) 作柯西估计。
+        why: 直接得到 a^2+b^2>=e^{2m}/m^2。
+      source_ref: page_0170_ex11_solution
+    - step_id: step_3
+      statement: 转成单变量函数 Q(m)=e^{2m}/m^2 并取最小值。
+      formula_trace:
+        from: a^2+b^2>=Q(m)=e^{2m}/m^2
+        to: Q 在 (0,1] 递减、[1,+∞) 递增，故 Q_min=Q(1)=e^2
+        operation: 对 ln Q(m)=2m-2ln m 求导判断单调。
+        why: m 的区间已知，最小值可直接读出。
+      source_ref: page_0170_ex11_solution
+    - step_id: step_4
+      statement: 回到填空答案。
+      formula_trace:
+        from: a^2+b^2>=e^2
+        to: 最小值为 e^2
+        operation: 与题目目标量匹配。
+        why: 题目要求的是最小值数值。
+      source_ref: page_0170_ex11_solution
+teaching_card:
+  student_title: 零点代入后，柯西一夹就变单变量
+  what_it_trains: 训练“零点代入 -> 柯西下界 -> 指数比值最小值”这一类双参数题的标准落法。
+  recognition_cues:
+    - 题干含 a,b 两参数，目标是 a^2+b^2 最小值。
+    - 函数值为 0 的条件里有 e^x 与根式系数线性组合。
+    - 落点变量有明确区间，方便做单变量最值。
+  normalization_moves:
+    - 先设零点 m，再把参数组合移到等号同侧。
+    - 平方并套柯西得到 a^2+b^2 下界。
+    - 把下界写成 Q(m)，对 ln Q 求导判最小值。
+  common_failures:
+    - 漏写 m 的区间，导致最小点判断错误。
+    - 柯西配对时把 sqrt(m^2-1/2)^2 写错。
+    - 直接把 source 文“m=e 取等”照抄，未检查与 Q(m) 单调是否一致。
+  similar_practice_query: a^2+b^2 最小值 零点 柯西 e^x/m 结构
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 本卡未单独核对 page_0170 图片，按 markdown 重建。
+    - 已在 source_discrepancies 记录 source 文“m=e 取等”与公式链的局部不一致。

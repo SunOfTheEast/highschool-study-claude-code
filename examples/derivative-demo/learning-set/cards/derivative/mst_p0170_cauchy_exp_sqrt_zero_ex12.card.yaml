@@ -1,0 +1,148 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0170_cauchy_exp_sqrt_zero_ex12
+content_revision_id: mst_p0170_cauchy_exp_sqrt_zero_ex12-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0170_cauchy_exp_sqrt_zero_ex12.card.yaml
+stem: （2024 · 吉林白城一中期中 T16）已知 t 是函数 f(x)=sqrt(2)m+n*sqrt(x)+e^(x/2) 的一个零点，且 t∈[1,2]，则 sqrt(e/(m^2+n^2)) 的最大值为 ________。
+answer: |
+  $\sqrt{3}$
+
+  由 t 是零点，得 sqrt(2)m+n*sqrt(t)+e^(t/2)=0， 即 sqrt(2)m+n*sqrt(t)=-e^(t/2)。两边平方并用柯西不等式： e^t=(sqrt(2)m+n*sqrt(t))^2 <= (m^2+n^2)(2+t)， 故 m^2+n^2>=e^t/(2+t)=:R(t)。对 R(t) 求导： R^{\prime}(t)=e^t*(t+1)/(t+2)^2>0（t∈[1,2]）， 所以 R(t) 在 [1,2] 递增，最小值在 t=1 处， R_min=e/3。于是 m^2+n^2>=e/3， sqrt(e/(m^2+n^2))<=sqrt(e/(e/3))=sqrt(3)， 最大值为 sqrt(3)。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把零点条件改写成参数线性组合等式。
+      max_score: 1
+    - step_id: step_2
+      description: 平方后套柯西得到 m^2+n^2 的下界。
+      max_score: 1
+    - step_id: step_3
+      description: 在 t∈[1,2] 上求 R(t)=e^t/(2+t) 最小值。
+      max_score: 1
+    - step_id: step_4
+      description: 把下界转换为目标上界并取最大值。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 参变量分离
+    secondary:
+      - 拟合与夹逼
+    subroute:
+      - 零点落点
+      - 柯西不等式
+      - 下界转上界
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 多变量与不等式结构
+      - 不等式工具结构
+    evidence:
+      - 指数项 e^(t/2) 与根式项可在平方后统一进柯西模板。
+      - 参数只通过 m^2+n^2 聚合出现。
+      - 目标量 sqrt(e/(m^2+n^2)) 是下界型结果的反向函数。
+    normalization_moves_used:
+      - 零点代入后先移项再平方。
+      - 柯西后立即定义 R(t)=e^t/(2+t)。
+      - 先求 m^2+n^2 下界，再换算目标上界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由零点条件移项构式，回补函数三要素与定义域。
+      - 若学生柯西配对混乱，回补不等式工具基础。
+      - 若学生不会“下界转上界”的反向关系，回补代数恒等变形。
+  detail_terms:
+    - sqrt(2)m+n*sqrt(t)=-e^(t/2)
+    - e^t<=(m^2+n^2)(2+t)
+    - R(t)=e^t/(2+t)
+    - sqrt(e/(m^2+n^2))<=sqrt(3)
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0170_cauchy_exp_sqrt_zero_ex12
+source_evidence:
+  source_refs:
+    - ref_id: page_0170_ex12_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0170/page_0170.md
+      role: problem_start
+      evidence: line 33 给出例12题干：t 是 f(x)=sqrt(2)m+n*sqrt(x)+e^(x/2) 的零点，t∈[1,2]。
+    - ref_id: page_0170_ex12_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0170/page_0170.md
+      role: solution
+      evidence: lines 35-37 给出“零点代入 -> 柯西 -> m^2+n^2>=e^t/(2+t) -> 最大值 sqrt(3)”全链。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0170.png
+      inspected: true
+      notes: 页图核对通过：例12题干、零点条件、柯西放缩链和答案 $\sqrt3$ 与 markdown 一致。
+  source_context: 例12延续“a^2+b^2 型柯西转化”，但目标改为最大化 sqrt(e/(m^2+n^2))。
+  source_influence:
+    - 保留源解起点：在零点 t 处将 e^(t/2) 与参数线性组合对齐。
+    - 保留源解关键柯西式：e^t=(sqrt(2)m+n*sqrt(t))^2<=(m^2+n^2)(2+t)。
+    - 保留源解结论：m^2+n^2 的下界是 e/3，从而目标最大值为 sqrt(3)。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 吉林白城一中期中 T16）已知 t 是函数 f(x)=sqrt(2)m+n*sqrt(x)+e^(x/2) 的一个零点，且 t∈[1,2]，则 sqrt(e/(m^2+n^2)) 的最大值为 ________。
+  parts: *a1
+  choices: []
+  answer: $\sqrt{3}$
+  fidelity_notes:
+    - 源题为空格填空题，source 文在 line 37 再次给出“故答案为 sqrt(3)”。
+solution:
+  source_solution_summary: |
+    由 t 是零点，得 sqrt(2)m+n*sqrt(t)+e^(t/2)=0， 即 sqrt(2)m+n*sqrt(t)=-e^(t/2)。两边平方并用柯西不等式： e^t=(sqrt(2)m+n*sqrt(t))^2 <= (m^2+n^2)(2+t)， 故 m^2+n^2>=e^t/(2+t)=:R(t)。对 R(t) 求导： R^{\prime}(t)=e^t*(t+1)/(t+2)^2>0（t∈[1,2]）， 所以 R(t) 在 [1,2] 递增，最小值在 t=1 处， R_min=e/3。于是 m^2+n^2>=e/3， sqrt(e/(m^2+n^2))<=sqrt(e/(e/3))=sqrt(3)， 最大值为 sqrt(3)。
+  key_steps:
+    - step_id: step_1
+      statement: 把零点条件改写成参数线性组合等式。
+      formula_trace:
+        from: f(t)=sqrt(2)m+n*sqrt(t)+e^(t/2)=0
+        to: sqrt(2)m+n*sqrt(t)=-e^(t/2)
+        operation: 把指数项移到右侧。
+        why: 为平方与柯西做准备。
+      source_ref: page_0170_ex12_solution
+    - step_id: step_2
+      statement: 平方后套柯西得到 m^2+n^2 的下界。
+      formula_trace:
+        from: e^t=(sqrt(2)m+n*sqrt(t))^2
+        to: e^t<=(m^2+n^2)(2+t)
+        operation: 将 (m,n) 与 (sqrt(2),sqrt(t)) 向量配对应用柯西。
+        why: 把双参数问题转成单变量下界函数 R(t)。
+      source_ref: page_0170_ex12_solution
+    - step_id: step_3
+      statement: 在 t∈[1,2] 上求 R(t)=e^t/(2+t) 最小值。
+      formula_trace:
+        from: m^2+n^2>=R(t)=e^t/(2+t)
+        to: R^{\prime}(t)=e^t*(t+1)/(t+2)^2>0，R_min=R(1)=e/3
+        operation: 求导并利用区间单调。
+        why: 确定 m^2+n^2 的最小可能值。
+      source_ref: page_0170_ex12_solution
+    - step_id: step_4
+      statement: 把下界转换为目标上界并取最大值。
+      formula_trace:
+        from: m^2+n^2>=e/3
+        to: sqrt(e/(m^2+n^2))<=sqrt(3)，故最大值为 sqrt(3)
+        operation: 对正量取倒数并开方。
+        why: 题目求的是反比量的最大值。
+      source_ref: page_0170_ex12_solution
+teaching_card:
+  student_title: 先保底 m^2+n^2，再反推目标上界
+  what_it_trains: 训练“参数和的下界 -> 反比表达式上界”的转换能力，尤其是柯西后的一步反向推理。
+  recognition_cues:
+    - 题干给零点，目标却是 sqrt(e/(m^2+n^2)) 这类反比式。
+    - 参数项是线性组合，适合平方后套柯西。
+    - t 有明确区间，单变量函数容易判单调。
+  normalization_moves:
+    - 零点代入，构造 sqrt(2)m+n*sqrt(t)。
+    - 柯西得 m^2+n^2 的函数下界。
+    - 对 R(t) 取最小，再转换成目标最大。
+  common_failures:
+    - 把 e^t/(2+t) 误当成在区间上递减。
+    - 求出 m^2+n^2 下界后忘记反向到 sqrt(e/(m^2+n^2))。
+    - 平方时漏掉“右侧先取负再平方不影响结果”。
+  similar_practice_query: 零点 柯西 m^2+n^2 下界 反比式最大值 e^t/(t+2)
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 本卡未单独核对 page_0170 图片，按 markdown 重建。

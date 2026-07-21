@@ -1,0 +1,228 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0035_ex28
+content_revision_id: mst_p0035_ex28-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0035_ex28.card.yaml
+stem: |-
+  已知函数 $f(x)=e^x-\frac12x^2-1$，对于任意的实数 $a,b$，下列结论一定成立的有 (   )
+  A. 若 $a+b>0$，则 $f(a)+f(b)>0$
+  B. 若 $a+b>0$，则 $f(a)-f(-b)>0$
+  C. 若 $f(a)+f(b)>0$，则 $a+b>0$
+  D. 若 $f(a)+f(b)<0$，则 $a+b<0$
+answer: |
+  ABD
+
+  先求 $f'(x)=e^x-x$、$f''(x)=e^x-1$。$f'$ 在 $(-\infty,0)$ 上递减、在 $(0,+\infty)$ 上递增，且 $f'(0)=1$，所以 $f'(x)\ge1$，$f$ 在 $\mathbb R$ 上递增且 $f(0)=0$。若 $a+b>0$，则 $a>-b$，从而 $f(a)>f(-b)$，B 正确。再算 $f(b)+f(-b)=e^b+e^{-b}-b^2-2$，令 $h(b)$ 为该式，可证 $h(b)\ge0$，所以 $f(a)+f(b)>0$，A 正确。若 $f(a)+f(b)<0$，则 $f(a)<-f(b)\le f(-b)$，由单调性得 $a<-b$，D 正确。选 $b\ne0$，令 $f(c)=-f(b)$，取 $c<a<-b$，则 $f(a)+f(b)>0$ 但 $a+b<0$，C 错误。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 先证明 $f$ 在全体实数上递增。
+      max_score: 1
+    - step_id: step_2
+      description: 用二阶导判断一阶导的最小值。
+      max_score: 1
+    - step_id: step_3
+      description: 证明 B。
+      max_score: 1
+    - step_id: step_4
+      description: 证明对称和 $f(b)+f(-b)$ 非负。
+      max_score: 1
+    - step_id: step_5
+      description: 证明 A。
+      max_score: 1
+    - step_id: step_6
+      description: 证明 D。
+      max_score: 1
+    - step_id: step_7
+      description: 构造反例否定 C。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 判断 $a+b$ 与 $f(a)+f(b)$ 的符号关系。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 数值比较
+        target: 判断 $f(a)-f(-b)$ 的符号。
+        result: 见 source_solution_summary
+  method:
+    primary: 对称化与偏移
+    secondary:
+      - 切线放缩与凹凸性
+    subroute:
+      - $b$ 与 $-b$ 对称配对
+      - 二阶导控制一阶导
+      - 构造反例否定逆命题
+  structure:
+    primary: 对称结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - 关键辅助量是 $f(b)+f(-b)=e^b+e^{-b}-b^2-2$。
+      - $a+b>0$ 被转成 $a>-b$，再通过 $f$ 的单调性比较 $f(a)$ 与 $f(-b)$。
+    normalization_moves_used:
+      - $a+b>0$ 改写为 $a>-b$。
+      - $f(a)+f(b)$ 拆为 $[f(a)-f(-b)]+[f(b)+f(-b)]$。
+      - 用 $f(b)+f(-b)\ge0$ 改写 $-f(b)\le f(-b)$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会用 $f''$ 的符号判断 $f'$ 的最小值，回补导数单调极值基础。
+      - 若学生看不出 $a+b>0$ 应转成 $a>-b$，回补代数恒等变形。
+      - 若学生不能把 $f(a)+f(b)$ 拆成 $f(a)-f(-b)$ 与 $f(b)+f(-b)$，回补代数恒等变形。
+      - 若学生认为 C 是 A 的逆命题所以也成立，回补不等式工具基础。
+  detail_terms:
+    - $f(b)+f(-b)$
+    - $e^b+e^{-b}-b^2-2$
+    - 对称化
+    - 逆命题反例
+    - 多选题
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0035_ex28
+source_evidence:
+  source_refs:
+    - ref_id: page_0035
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0035/page_0035.md
+      role: problem_start
+      evidence: "lines 17-21: 例 28 多选题题干与四个选项。"
+    - ref_id: page_0035_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0035/page_0035.md
+      role: solution
+      evidence: "lines 23-26: 证明 B、A、D，构造反例否定 C。"
+    - ref_id: page_0035_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0035/page_0035.md
+      role: local_context
+      evidence: "lines 12-15: 本页开头强调双曲正弦隐藏数据与对称化处理。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0035.png
+      inspected: true
+      notes: 已核对原图：例 28 题干、选项、答案 ABD 与 markdown 一致。
+  source_context: 本题位于“需要对称化处理”的双曲正弦例题之后，训练把 $a+b>0$ 转为 $a>-b$，再围绕 $f(b)+f(-b)$ 建立非负性。
+  source_influence:
+    - 多选题要求判断命题必然成立，goal 取“数值比较”。
+    - 源解先证明 $f$ 递增，再证明 $f(b)+f(-b)\ge0$，最后用反例否定 C。
+    - 选项 C 的否定依赖存在性构造，而不是给具体数值代入。
+  source_discrepancies: []
+original_problem:
+  stem: 已知函数 $f(x)=e^x-\frac12x^2-1$，对于任意的实数 $a,b$，下列结论一定成立的有 (   )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 若 $a+b>0$，则 $f(a)+f(b)>0$
+      text_latex: 若 $a+b>0$，则 $f(a)+f(b)>0$
+    - label: B
+      text_raw: 若 $a+b>0$，则 $f(a)-f(-b)>0$
+      text_latex: 若 $a+b>0$，则 $f(a)-f(-b)>0$
+    - label: C
+      text_raw: 若 $f(a)+f(b)>0$，则 $a+b>0$
+      text_latex: 若 $f(a)+f(b)>0$，则 $a+b>0$
+    - label: D
+      text_raw: 若 $f(a)+f(b)<0$，则 $a+b<0$
+      text_latex: 若 $f(a)+f(b)<0$，则 $a+b<0$
+  answer: ABD
+  fidelity_notes:
+    - 已核对 page_0035 原图，题目为多选，函数为 $e^x-\frac12x^2-1$。
+    - 源页 Reconstruction Markers 为“无”。
+solution:
+  source_solution_summary: |
+    先求 $f'(x)=e^x-x$、$f''(x)=e^x-1$。$f'$ 在 $(-\infty,0)$ 上递减、在 $(0,+\infty)$ 上递增，且 $f'(0)=1$，所以 $f'(x)\ge1$，$f$ 在 $\mathbb R$ 上递增且 $f(0)=0$。若 $a+b>0$，则 $a>-b$，从而 $f(a)>f(-b)$，B 正确。再算 $f(b)+f(-b)=e^b+e^{-b}-b^2-2$，令 $h(b)$ 为该式，可证 $h(b)\ge0$，所以 $f(a)+f(b)>0$，A 正确。若 $f(a)+f(b)<0$，则 $f(a)<-f(b)\le f(-b)$，由单调性得 $a<-b$，D 正确。选 $b\ne0$，令 $f(c)=-f(b)$，取 $c<a<-b$，则 $f(a)+f(b)>0$ 但 $a+b<0$，C 错误。
+  key_steps:
+    - step_id: step_1
+      statement: 先证明 $f$ 在全体实数上递增。
+      formula_trace:
+        from: |
+          $f(x)=e^x-\frac12x^2-1$
+        to: |
+          $f'(x)=e^x-x,\quad f''(x)=e^x-1$
+        operation: 连续求一阶、二阶导数。
+        why: 后续要把 $a>-b$ 与 $f(a)>f(-b)$ 相互连接。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0035/page_0035.md:23
+    - step_id: step_2
+      statement: 用二阶导判断一阶导的最小值。
+      formula_trace:
+        from: |
+          $f''(x)<0\ (x<0),\quad f''(x)>0\ (x>0)$
+        to: |
+          $f'(x)\ge f'(0)=1>0$
+        operation: $f'$ 在 $(-\infty,0)$ 上递减、在 $(0,+\infty)$ 上递增，所以 $x=0$ 处为最小值点。
+        why: 得到 $f$ 严格递增且 $f(0)=0$。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0035/page_0035.md:23
+    - step_id: step_3
+      statement: 证明 B。
+      formula_trace:
+        from: |
+          $a+b>0$
+        to: |
+          $a>-b\Rightarrow f(a)>f(-b)\Rightarrow f(a)-f(-b)>0$
+        operation: 移项得到输入大小，再用 $f$ 递增保序。
+        why: 这正是选项 B 的结论。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0035/page_0035.md:23
+    - step_id: step_4
+      statement: 证明对称和 $f(b)+f(-b)$ 非负。
+      formula_trace:
+        from: |
+          $f(b)+f(-b)=e^b+e^{-b}-b^2-2$
+        to: |
+          $h(b)=e^b+e^{-b}-b^2-2\ge h(0)=0$
+        operation: 设 $h(b)$，有 $h'(b)=e^b-e^{-b}-2b$、$h''(b)=e^b+e^{-b}-2\ge0$，故 $h'$ 以 0 为零点，$h$ 在 $(-\infty,0)$ 上递减、在 $(0,+\infty)$ 上递增。
+        why: 对称点 $b,-b$ 的函数值之和非负，是证明 A、D 的关键。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0035/page_0035.md:23-24
+    - step_id: step_5
+      statement: 证明 A。
+      formula_trace:
+        from: |
+          $a+b>0,\quad f(b)+f(-b)\ge0$
+        to: |
+          $f(a)+f(b)=[f(a)-f(-b)]+[f(b)+f(-b)]>0$
+        operation: 把 $f(a)+f(b)$ 拆成一项严格正和一项非负。
+        why: 选项 A 的结论成立。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0035/page_0035.md:24
+    - step_id: step_6
+      statement: 证明 D。
+      formula_trace:
+        from: |
+          $f(a)+f(b)<0$
+        to: |
+          $f(a)<-f(b)\le f(-b)\Rightarrow a<-b\Rightarrow a+b<0$
+        operation: 由 $f(b)+f(-b)\ge0$ 得 $-f(b)\le f(-b)$，再用 $f$ 递增反推输入。
+        why: 选项 D 的逆向判断成立。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0035/page_0035.md:25
+    - step_id: step_7
+      statement: 构造反例否定 C。
+      formula_trace:
+        from: |
+          $f(c)=-f(b),\quad c<a<-b$
+        to: |
+          $f(a)>f(c)=-f(b)\Rightarrow f(a)+f(b)>0,\quad a+b<0$
+        operation: 因 $f$ 严格递增且两端极限分别为 $-\infty,+\infty$，可取唯一 $c$ 使 $f(c)=-f(b)$；取 $b\ne0$ 时 $f(b)+f(-b)>0$，故 $c<-b$，再在 $(c,-b)$ 中选 $a$。
+        why: 存在 $f(a)+f(b)>0$ 但 $a+b<0$ 的情形，所以 C 不一定成立。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0035/page_0035.md:26
+teaching_card:
+  student_title: 把 $a+b$ 的条件转到 $a$ 和 $-b$
+  what_it_trains: 遇到 $a+b$ 的符号与 $f(a)+f(b)$ 的符号联动时，先把 $a+b>0$ 改成 $a>-b$，再补上对称量 $f(b)+f(-b)$；这比直接猜 $f(a)+f(b)$ 的符号稳得多。
+  recognition_cues:
+    - 题干中同时出现 $a+b$、$f(a)+f(b)$ 和 $f(-b)$。
+    - $f(x)=e^x-\frac12x^2-1$ 满足 $f(0)=0$，且可证明全局递增。
+    - 选项 C、D 是类似逆命题的判断，需要特别检查能否反推。
+  normalization_moves:
+    - 先证明 $f$ 递增：$f'(x)=e^x-x$，$f''(x)=e^x-1$。
+    - 把 $f(b)+f(-b)$ 单独算出并设为 $h(b)$。
+    - 证明 A 时拆成 $f(a)-f(-b)$ 与 $f(b)+f(-b)$。
+    - 否定 C 时构造 $f(c)=-f(b)$，再在 $c$ 与 $-b$ 之间取 $a$。
+  common_failures:
+    - 只证明了 B，就直接认为 A 也成立，漏掉 $f(b)+f(-b)\ge0$。
+    - 把 A 的逆命题 C 当作自然成立。
+    - 证明 $h(b)\ge0$ 时只写 $h'(b)$，没有说明 $h'$ 的符号如何确定。
+    - 构造 C 的反例时忘记要同时满足 $a+b<0$。
+  similar_practice_query: 对称化 f(a)+f(b) f(b)+f(-b) 多选 判断命题
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0035 原图与 markdown 一致；本题无 Reconstruction Marker。
+    - 源解证明 $h(b)$ 单调时省略了 $h''(b)\ge0$ 的细节，卡片已补出具体变形。

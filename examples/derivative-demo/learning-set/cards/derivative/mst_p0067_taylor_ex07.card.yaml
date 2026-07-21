@@ -1,0 +1,245 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0067_taylor_ex07
+content_revision_id: mst_p0067_taylor_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0067_taylor_ex07.card.yaml
+stem: |-
+  在高等数学中，我们将 y=f(x) 在 x=x_0 处可以用一个多项式函数近似表示，具体形式为： f(x)=f(x_0)+f'(x_0)(x-x_0)+\frac{f''(x_0)}{2!}(x-x_0)^2+\cdots+ \frac{f^{(n)}(x_0)}{n!}(x-x_0)^n+\cdots（其中 f^{(n)}(x) 表示 f(x) 的 n 次导数，n\geqslant3，n\in\mathbf{N}^*），以上公式称为函数 f(x) 在 x=x_0 处的泰勒展开式。当 x_0=0 时泰勒展开式也称为麦克劳林公式。比如 e^x 在 x=0 处的麦克劳林公式为 e^x=1+x+\frac{1}{2!}x^2+\frac{1}{3!}x^3+\cdots+\frac{1}{n!}x^n+\cdots。 由此当 x\geqslant0 时，可以得到 e^x\geqslant1+x， e^x\geqslant1+x+\frac12x^2， e^x\geqslant1+x+\frac12x^2+\frac16x^3，\cdots。请利用上述公式和所学知识完成下列问题：
+  (1). 写出 \sin x 在 x=0 处的泰勒展开式。
+  (2). 根据泰勒公式估算 \cos\frac12 的值，精确到小数点后两位。
+  (3). 若 \forall x\in\left(0,\frac32\right)，e^{a\sin x}>x+1 恒成立， 求 a 的范围。（参考数据 \ln\frac52\approx0.9）
+answer: |-
+  (1) \sin x=x-\frac{x^3}{3!}+\frac{x^5}{5!}+\cdots+ \frac{(-1)^{n-1}}{(2n-1)!}x^{2n-1}+\cdots； (2) \cos\frac12\approx0.88；(3) a\in[1,+\infty)。
+
+  第 (1) 问由 \sin x、\cos x 的导数循环写出 \sin x=x-\frac{x^3}{3!}+\frac{x^5}{5!}-\cdots。第 (2) 问展开 \cos x=1-\frac{x^2}{2!}+\frac{x^4}{4!}-\cdots，交错估计得 0.875<\cos\frac12<0.878，所以精确到两位小数为 0.88。第 (3) 问先证 \sin x>x-\frac16x^3，再证 g(x)=x-\frac16x^3-\ln(x+1)>0 于 (0,\frac32) 恒成立；若 a\geq1， 则 a\sin x\geq\sin x>\ln(x+1)，从而 e^{a\sin x}>x+1。若 a<1， h(x)=a\sin x-\ln(x+1) 在 0 右侧因 h'(0)=a-1<0 而先小于 0， 与恒成立矛盾。故 a\in[1,+\infty)。
+rubric:
+  max_score: 9
+  criteria:
+    - step_id: step_1
+      description: 写出 \sin x 的 Maclaurin 展开。
+      max_score: 1
+    - step_id: step_2
+      description: 用 \cos x 的交错展开估算 \cos\frac12。
+      max_score: 1
+    - step_id: step_3
+      description: 得到第 (2) 问的小数近似。
+      max_score: 1
+    - step_id: step_4
+      description: 证明 \sin x 的三阶下界。
+      max_score: 1
+    - step_id: step_5
+      description: 再证明 x-\frac16x^3 大于 \ln(x+1)。
+      max_score: 1
+    - step_id: step_6
+      description: 用端点值锁定 G(x)>0。
+      max_score: 1
+    - step_id: step_7
+      description: a\geq1 时给出充分性。
+      max_score: 1
+    - step_id: step_8
+      description: a<1 时用 0 右侧邻域排除。
+      max_score: 1
+    - step_id: step_9
+      description: 合并必要性与充分性。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 (1) 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 数值求值
+        target: 第 (2) 问
+        result: 见 source_solution_summary
+      - part_id: "3"
+        goal: 求参数范围
+        target: 第 (3) 问
+        result: 见 source_solution_summary
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 拟合与夹逼
+      - 充分/必要性探路
+    subroute:
+      - 泰勒展开
+      - 三角函数泰勒下界
+      - 端点效应
+      - 0 右邻域反例
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 指对复合结构
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - \sin x>x-\frac16x^3 由 F'''(x)=1-\cos x>0 推出。
+      - x-\frac16x^3-\ln(x+1)>0 由 G'(x) 的先正后负和端点值推出。
+      - H'(0)=a-1 决定 a=1 是临界参数。
+    normalization_moves_used:
+      - 将 e^{a\sin x}>x+1 化为 a\sin x>\ln(x+1)。
+      - 用 \sin x 的三阶 Taylor 下界连接 \ln(x+1)。
+      - 对 a<1 使用 0 右侧线性项反例。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会写 \sin x、\cos x 的 Taylor 展开，回补三角函数基础。
+      - 若学生不理解交错级数截断上下界，回补不等式工具基础。
+      - 若学生无法从 F''' 到 F>0 逐层推出，回补导数单调极值基础。
+      - 若学生不会把 e^{a\sin x}>x+1 转成 a\sin x>\ln(x+1)，回补指数对数基础。
+      - 若学生只证明 a\geq1 充分而不排除 a<1，回补函数性质与图像中的邻域符号判断。
+  detail_terms:
+    - \sin x=x-\frac{x^3}{3!}+\frac{x^5}{5!}-\cdots
+    - 0.875<\cos\frac12<0.878
+    - \sin x>x-\frac16x^3
+    - x-\frac16x^3-\ln(x+1)>0
+    - H'(0)=a-1
+parts: &a1
+  - label: (1)
+    text: 写出 \sin x 在 x=0 处的泰勒展开式。
+  - label: (2)
+    text: 根据泰勒公式估算 \cos\frac12 的值，精确到小数点后两位。
+  - label: (3)
+    text: 若 \forall x\in\left(0,\frac32\right)，e^{a\sin x}>x+1 恒成立， 求 a 的范围。（参考数据 \ln\frac52\approx0.9）
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0067_taylor_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0067
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0067/page_0067.md
+      role: problem_start
+      evidence: page_0067 页末出现例 7 题头：（江苏常州北郊高级中学 2025 学年高二 4 月期中考试 T19） 在高等数学中，我们将 y=f(x) 在……
+    - ref_id: page_0068
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0068/page_0068.md
+      role: continuation
+      evidence: page_0068 承接例 7 的 Taylor 展开定义、e^x 的 Maclaurin 例子和三问： (1) 写出 \sin x 在 0 处的 Taylor 展开式；(2) 估算 \cos\frac12； (3) 若 \forall x\in(0,\frac32)，e^{a\sin x}>x+1 恒成立，求 a 的范围。 同页给出第 (1)(2) 问和第 (3) 问大部分解析。
+    - ref_id: page_0069
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0069/page_0069.md
+      role: continuation
+      evidence: page_0069 顶部续完例 7 第 (3) 问：当 a\geq1 时由 a\sin x\geq\sin x>x-\frac16x^3>\ln(x+1) 得充分性；当 a<1 时用 h'(0)=a-1<0 给出 0 右侧反例，结论 a\in[1,+\infty)。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0067.png
+      inspected: true
+      notes: 页图已核对：例 7 题头在 page_0067 底部，完整题干跨到 page_0068。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0068.png
+      inspected: true
+      notes: 页图已核对：page_0068 包含例 7 的主体题干、三问和多数解析；图上 e^x 展开式与 \cos\frac12 比较句有可由上下文校正的印刷/转写问题。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0069.png
+      inspected: true
+      notes: 页图已核对：page_0069 顶部是例 7 续解，随后进入“第五节 帕德逼近的基本原理”； 本卡只读取顶部续解，不为 page_0069 的新例题建卡。
+  source_context: 本题以 Taylor 展开公式为题干材料，前两问训练标准 Maclaurin 展开与交错级数估值， 第三问把 \sin x 的三阶下界和 \ln(1+x) 比较起来，再用 a=1 作为临界参数。
+  source_influence:
+    - 题头始于 page_0067，题干和解析跨 page_0068、page_0069；按 A 组跨页规则完成整卡。
+    - legacy ex_mst_536 含页眉和迁移错误，只作为定位提示；本卡以源页图像与 markdown 校正后的数学内容为准。
+  source_discrepancies:
+    - page_0068 图像中 e^x 的 Maclaurin 例子在 \frac{1}{3!} 后印成 x^2； 标准 Taylor 公式和后文 e^x\geqslant1+x+\frac12x^2+\frac16x^3 表明应为 x^3。
+    - page_0068 图像中第 (2) 问有一句把 \cos\frac12 与前两项、前三项的比较号写反； 后文最终给出 0.875<\cos\frac12<0.878，且交错级数余项也支持该方向。
+original_problem:
+  stem: 在高等数学中，我们将 y=f(x) 在 x=x_0 处可以用一个多项式函数近似表示，具体形式为： f(x)=f(x_0)+f'(x_0)(x-x_0)+\frac{f''(x_0)}{2!}(x-x_0)^2+\cdots+ \frac{f^{(n)}(x_0)}{n!}(x-x_0)^n+\cdots（其中 f^{(n)}(x) 表示 f(x) 的 n 次导数，n\geqslant3，n\in\mathbf{N}^*），以上公式称为函数 f(x) 在 x=x_0 处的泰勒展开式。当 x_0=0 时泰勒展开式也称为麦克劳林公式。比如 e^x 在 x=0 处的麦克劳林公式为 e^x=1+x+\frac{1}{2!}x^2+\frac{1}{3!}x^3+\cdots+\frac{1}{n!}x^n+\cdots。 由此当 x\geqslant0 时，可以得到 e^x\geqslant1+x， e^x\geqslant1+x+\frac12x^2， e^x\geqslant1+x+\frac12x^2+\frac16x^3，\cdots。请利用上述公式和所学知识完成下列问题：
+  parts: *a1
+  choices: []
+  answer: (1) \sin x=x-\frac{x^3}{3!}+\frac{x^5}{5!}+\cdots+ \frac{(-1)^{n-1}}{(2n-1)!}x^{2n-1}+\cdots； (2) \cos\frac12\approx0.88；(3) a\in[1,+\infty)。
+  fidelity_notes:
+    - 原题题头在 page_0067，Taylor 公式说明和三问在 page_0068，末段解析在 page_0069 顶部。
+    - stem 中 e^x 的 \frac{1}{3!}x^3 按标准公式和源页后文校正；源图该处疑印作 x^2。
+    - 原题无选择项，第三问参考数据为 \ln\frac52\approx0.9。
+solution:
+  source_solution_summary: 第 (1) 问由 \sin x、\cos x 的导数循环写出 \sin x=x-\frac{x^3}{3!}+\frac{x^5}{5!}-\cdots。第 (2) 问展开 \cos x=1-\frac{x^2}{2!}+\frac{x^4}{4!}-\cdots，交错估计得 0.875<\cos\frac12<0.878，所以精确到两位小数为 0.88。第 (3) 问先证 \sin x>x-\frac16x^3，再证 g(x)=x-\frac16x^3-\ln(x+1)>0 于 (0,\frac32) 恒成立；若 a\geq1， 则 a\sin x\geq\sin x>\ln(x+1)，从而 e^{a\sin x}>x+1。若 a<1， h(x)=a\sin x-\ln(x+1) 在 0 右侧因 h'(0)=a-1<0 而先小于 0， 与恒成立矛盾。故 a\in[1,+\infty)。
+  key_steps:
+    - step_id: step_1
+      statement: 写出 \sin x 的 Maclaurin 展开。
+      formula_trace:
+        from: (\sin x)'=\cos x,\quad(\cos x)'=-\sin x
+        to: \sin x=x-\frac{x^3}{3!}+\frac{x^5}{5!}+\cdots+ \frac{(-1)^{n-1}}{(2n-1)!}x^{2n-1}+\cdots
+        operation: 按导数循环取 x=0 处的各阶导数。
+        why: \sin x 在 0 处只有奇次项，符号交替。
+      source_ref: page_0068
+    - step_id: step_2
+      statement: 用 \cos x 的交错展开估算 \cos\frac12。
+      formula_trace:
+        from: \cos x=1-\frac{x^2}{2!}+\frac{x^4}{4!}-\frac{x^6}{6!}+\cdots
+        to: 1-\frac18<\cos\frac12<1-\frac18+\frac{1}{16\cdot24}
+        operation: 代入 x=\frac12，并用交错级数相邻截断控制上下界。
+        why: 余项绝对值小于下一项，且符号交替。
+      source_ref: page_0068
+    - step_id: step_3
+      statement: 得到第 (2) 问的小数近似。
+      formula_trace:
+        from: 0.875<\cos\frac12<0.878
+        to: \cos\frac12\approx0.88
+        operation: 按小数点后两位四舍五入。
+        why: 整个夹逼区间都落在两位小数 0.88 的范围内。
+      source_ref: page_0068
+    - step_id: step_4
+      statement: 证明 \sin x 的三阶下界。
+      formula_trace:
+        from: F(x)=\sin x-x+\frac16x^3
+        to: F'''(x)=1-\cos x>0\Rightarrow F''(x)>0\Rightarrow F'(x)>0\Rightarrow F(x)>0
+        operation: 连续三次用导数单调性从 0 右侧递推。
+        why: F(0)=F'(0)=F''(0)=0，且 x>0 时 1-\cos x>0。
+      source_ref: page_0068
+    - step_id: step_5
+      statement: 再证明 x-\frac16x^3 大于 \ln(x+1)。
+      formula_trace:
+        from: G(x)=x-\frac16x^3-\ln(x+1)
+        to: G'(x)=\frac{-\frac12x(x-1)(x+2)}{x+1}
+        operation: 对 G 求导并因式分解。
+        why: G' 在 (0,1) 为正、在 (1,\frac32) 为负，所以最小值只需看端点趋势。
+      source_ref: page_0068
+    - step_id: step_6
+      statement: 用端点值锁定 G(x)>0。
+      formula_trace:
+        from: G(0)=0,\quad G\left(\frac32\right)=\frac{15}{16}-\ln\frac52>0
+        to: \forall x\in\left(0,\frac32\right),\quad x-\frac16x^3-\ln(x+1)>0
+        operation: 结合 G 先增后减，以及参考数据 \ln\frac52\approx0.9。
+        why: 左端开区间由 G(0)=0 且先递增保证，右端值仍大于 0，因此全区间为正。
+      source_ref: page_0068
+    - step_id: step_7
+      statement: a\geq1 时给出充分性。
+      formula_trace:
+        from: a\geq1,\quad \sin x>x-\frac16x^3>\ln(x+1)
+        to: a\sin x\geq\sin x>\ln(x+1)\Rightarrow e^{a\sin x}>x+1
+        operation: 用指数函数单调性把指数不等式转为指数上的比较。
+        why: 只要 a\sin x>\ln(x+1)，原不等式立即成立。
+      source_ref: page_0069
+    - step_id: step_8
+      statement: a<1 时用 0 右侧邻域排除。
+      formula_trace:
+        from: H(x)=a\sin x-\ln(x+1),\quad H(0)=0,\quad H'(0)=a-1<0
+        to: \exists m>0,\ 0<x<m\Rightarrow H(x)<0
+        operation: 利用 H'(0)<0 得 H 在 0 右侧某个小区间内先下降。
+        why: 此时 e^{a\sin x}<x+1，与题设的全称恒成立矛盾。
+      source_ref: page_0069
+    - step_id: step_9
+      statement: 合并必要性与充分性。
+      formula_trace:
+        from: a\geq1 可行；a<1 不可行
+        to: a\in[1,+\infty)
+        operation: 取满足恒成立条件的全部参数。
+        why: 临界值由 0 点附近 a\sin x 与 \ln(1+x) 的线性项 a x 与 x 决定。
+      source_ref: page_0069
+teaching_card:
+  student_title: 用 \sin x 三阶下界压住 \ln(1+x)
+  what_it_trains: 训练从 Taylor 展开得到可证明的放缩，再把指数恒成立题降成对数和三角函数的比较。
+  recognition_cues:
+    - 题干先讲 Taylor 展开，后问出现 \sin x、\cos\frac12 和 e^{a\sin x}>x+1。
+    - 第三问区间是 (0,\frac32)，参考数据给 \ln\frac52，暗示要检查右端。
+    - 参数 a 只影响 \sin x 前面的线性系数，0 点附近会决定临界值。
+  normalization_moves:
+    - 先取对数，把 e^{a\sin x}>x+1 转成 a\sin x>\ln(x+1)。
+    - 用导数严格证明 \sin x>x-\frac16x^3，而不是只背 Taylor 形式。
+    - 构造 x-\frac16x^3-\ln(x+1)，用导数和端点值证明全区间为正。
+    - 对 a<1 构造 H(x)，用 H'(0)<0 找到近 0 反例。
+  common_failures:
+    - 把 Taylor 展开当成等号直接截断，忘记证明截断后的不等式方向。
+    - 在第 (2) 问中把 \cos\frac12 的上下界方向写反。
+    - 第 (3) 问只看 a\geq1，没有处理 a<1 的必要性。
+    - 使用参考数据 \ln\frac52\approx0.9 时没有比较 \frac{15}{16}=0.9375。
+  similar_practice_query: Taylor 展开材料题，\sin x 三阶下界与 \ln(1+x) 比较，指数恒成立求参数范围。
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0068 的 e^x 展开式和 \cos\frac12 比较号有可校正的源页问题；已在 source_discrepancies 与 fidelity_notes 中记录，不需要用户拍板。

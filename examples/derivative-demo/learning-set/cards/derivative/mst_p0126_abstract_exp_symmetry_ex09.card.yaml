@@ -1,0 +1,247 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0126_abstract_exp_symmetry_ex09
+content_revision_id: mst_p0126_abstract_exp_symmetry_ex09-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0126_abstract_exp_symmetry_ex09.card.yaml
+stem: |-
+  （2024·东湖区月考）已知定义在 $(-2,2)$ 上的函数 $f(x)$ 满足 $f(x)+e^{4x}f(-x)=0$，$f(1)=e^2$，$f^{\prime}(x)$ 为 $f(x)$ 的导函数。当 $x\in[0,2)$ 时，$f^{\prime}(x)>2f(x)$，则不等式 $e^{2x}f(2-x)<e^4$ 的解集为（ ）
+  A. $(-1,1)$
+  B. $(-1,2)$
+  C. $(1,4)$
+  D. $(1,5)$
+answer: |
+  C
+
+  构造
+  \[
+  g(x)=\frac{f(x)}{e^{2x}}.
+  \]
+  由
+  \[
+  f(x)+e^{4x}f(-x)=0
+  \]
+  两边同除以 $e^{2x}$ 得
+  \[
+  g(x)+g(-x)=0,
+  \]
+  故 $g$ 为奇函数。又当 $x\in[0,2)$ 时，
+  \[
+  g^{\prime}(x)=\frac{f^{\prime}(x)-2f(x)}{e^{2x}}>0,
+  \]
+  所以 $g$ 在 $[0,2)$ 单调递增；结合奇函数对称性，可用同一单调趋势处理
+  $(-2,0]$。由 $f(1)=e^2$，得
+  \[
+  g(1)=\frac{f(1)}{e^2}=1.
+  \]
+  原不等式
+  \[
+  e^{2x}f(2-x)<e^4
+  \]
+  等价为
+  \[
+  \frac{f(2-x)}{e^{2(2-x)}}<1
+  \iff g(2-x)<g(1).
+  \]
+  由单调比较需满足
+  \[
+  -2<2-x<2,\quad 2-x<1.
+  \]
+  解得 $1<x<4$，故选 C。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 将指数系数吸收进归一化函数。
+      max_score: 1
+    - step_id: step_2
+      description: 由导数条件得到 g 的单调性。
+      max_score: 1
+    - step_id: step_3
+      description: 把目标不等式改写成 g(2-x) 与 g(1) 比较。
+      max_score: 1
+    - step_id: step_4
+      description: 结合定义域与单调性解出 x 区间。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式求解
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 将指数混合不等式转成构造函数值比较。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 不等式求解
+        target: 结合定义域限制解出最终区间。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 对称性配凑
+    subroute:
+      - 指数找基友
+      - 奇偶性锁定
+      - 定点比较
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 对称结构
+      - 抽象函数结构
+    evidence:
+      - $f(x)+e^{4x}f(-x)=0$ 可同构为 $g(x)+g(-x)=0$。
+      - $f^{\prime}(x)>2f(x)$ 精准对应 $g^{\prime}(x)>0$。
+      - $e^{2x}f(2-x)<e^4$ 直接改写为 $g(2-x)<g(1)$。
+    normalization_moves_used:
+      - 先统一指数幂次再定义归一化函数。
+      - 先求锚点 $g(1)=1$，再做值比较。
+      - 比较完毕后补回 $2-x$ 的定义域约束。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $e^{4x}f(-x)$ 处理成 $g(-x)$，回补指数对数基础。
+      - 若学生在 $g^{\prime}(x)$ 求导时漏项，回补导数运算与几何意义。
+      - 若学生得到 $2-x<1$ 后忘记联立定义域，回补函数三要素与定义域。
+  detail_terms:
+    - $g(x)=\frac{f(x)}{e^{2x}}$
+    - $g(x)+g(-x)=0$
+    - $g^{\prime}(x)>0$
+    - $g(1)=1$
+    - $1<x<4$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0126_abstract_exp_symmetry_ex09
+source_evidence:
+  source_refs:
+    - ref_id: page_0126
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0126/page_0126.md
+      role: problem_start
+      evidence: line 22给出例9题头与题干，lines 23-26给出A-D选项，line 28给出完整解析并结论“故选C”。
+    - ref_id: page_0127_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0127/page_0127.md
+      role: local_context
+      evidence: page_0127 line 15仍为例10续解，line 29起例11，说明例9不跨页。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0126.png
+      inspected: true
+      notes: 已核对页图：例9题干、选项、解析与答案C完整在page_0126。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0127.png
+      inspected: true
+      notes: 已核对页图：page_0127无例9续解。
+  source_context: 例9以指数归一化后奇函数+单调性为主线，不跨页。
+  source_influence:
+    - 保留源页构造 g(x)=\frac{f(x)}{e^{2x}} 并由题设得到 g(x)+g(-x)=0。
+    - 保留由 f^{\prime}(x)>2f(x) 推得 g^{\prime}(x)>0。
+    - 保留把 e^{2x}f(2-x)<e^4 改写成 g(2-x)<g(1)，再用单调性和定义域求区间。
+  source_discrepancies: []
+original_problem:
+  stem: （2024·东湖区月考）已知定义在 $(-2,2)$ 上的函数 $f(x)$ 满足 $f(x)+e^{4x}f(-x)=0$，$f(1)=e^2$，$f^{\prime}(x)$ 为 $f(x)$ 的导函数。当 $x\in[0,2)$ 时，$f^{\prime}(x)>2f(x)$，则不等式 $e^{2x}f(2-x)<e^4$ 的解集为（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $(-1,1)$
+      text_latex: $(-1,1)$
+    - label: B
+      text_raw: $(-1,2)$
+      text_latex: $(-1,2)$
+    - label: C
+      text_raw: $(1,4)$
+      text_latex: $(1,4)$
+    - label: D
+      text_raw: $(1,5)$
+      text_latex: $(1,5)$
+  answer: C
+  fidelity_notes:
+    - 题设定义域保留为 $(-2,2)$，并在求解中显式使用。
+    - 选项与答案保持源页“故选C”。
+solution:
+  source_solution_summary: |
+    构造
+    \[
+    g(x)=\frac{f(x)}{e^{2x}}.
+    \]
+    由
+    \[
+    f(x)+e^{4x}f(-x)=0
+    \]
+    两边同除以 $e^{2x}$ 得
+    \[
+    g(x)+g(-x)=0,
+    \]
+    故 $g$ 为奇函数。又当 $x\in[0,2)$ 时，
+    \[
+    g^{\prime}(x)=\frac{f^{\prime}(x)-2f(x)}{e^{2x}}>0,
+    \]
+    所以 $g$ 在 $[0,2)$ 单调递增；结合奇函数对称性，可用同一单调趋势处理
+    $(-2,0]$。由 $f(1)=e^2$，得
+    \[
+    g(1)=\frac{f(1)}{e^2}=1.
+    \]
+    原不等式
+    \[
+    e^{2x}f(2-x)<e^4
+    \]
+    等价为
+    \[
+    \frac{f(2-x)}{e^{2(2-x)}}<1
+    \iff g(2-x)<g(1).
+    \]
+    由单调比较需满足
+    \[
+    -2<2-x<2,\quad 2-x<1.
+    \]
+    解得 $1<x<4$，故选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 将指数系数吸收进归一化函数。
+      formula_trace:
+        from: $f(x)+e^{4x}f(-x)=0$
+        to: $g(x)=\frac{f(x)}{e^{2x}},\; g(x)+g(-x)=0$
+        operation: 同除 $e^{2x}$ 并定义新函数。
+        why: 把原式化成标准奇函数关系。
+      source_ref: page_0126
+    - step_id: step_2
+      statement: 由导数条件得到 g 的单调性。
+      formula_trace:
+        from: $x\in[0,2)$ 时 $f^{\prime}(x)>2f(x)$
+        to: $g^{\prime}(x)=\frac{f^{\prime}(x)-2f(x)}{e^{2x}}>0$
+        operation: 对归一化函数求导。
+        why: 建立值比较所需的顺序关系。
+      source_ref: page_0126
+    - step_id: step_3
+      statement: 把目标不等式改写成 g(2-x) 与 g(1) 比较。
+      formula_trace:
+        from: $e^{2x}f(2-x)<e^4$，$f(1)=e^2$
+        to: $g(2-x)<1=g(1)$
+        operation: 除以 $e^{2(2-x)}$ 并代入已知点值。
+        why: 将题目转成单调函数比较题。
+      source_ref: page_0126
+    - step_id: step_4
+      statement: 结合定义域与单调性解出 x 区间。
+      formula_trace:
+        from: $g(2-x)<g(1)$，且 $2-x\in(-2,2)$
+        to: $\begin{cases}-2<2-x<2\\2-x<1\end{cases}\Rightarrow 1<x<4$
+        operation: 参数替换后做区间联立。
+        why: 得到唯一符合的选项C。
+      source_ref: page_0126
+teaching_card:
+  student_title: 指数归一化后做奇函数单调比较
+  what_it_trains: 训练将 $f(x)+e^{4x}f(-x)=0$ 这类混合关系归一化为奇函数模板，再结合导数条件解区间不等式。
+  recognition_cues:
+    - 题设有 $f(x)$ 与 $f(-x)$，且伴随指数幂。
+    - 另给 $f^{\prime}(x)>2f(x)$，提示构造后判单调。
+    - 目标中出现 $f(2-x)$，常需先设中间变量比较。
+  normalization_moves:
+    - 设 $g=\frac{f}{e^{2x}}$，把对称关系改成奇函数。
+    - 由 $f^{\prime}-2f$ 得 $g^{\prime}>0$。
+    - 用 $f(1)=e^2$ 定锚点 $g(1)=1$。
+    - 把不等式化为 $g(2-x)<g(1)$ 并联立区间。
+  common_failures:
+    - 只利用奇函数结论，忽略单调条件。
+    - 把 $g(2-x)<g(1)$ 直接写成 $2-x>1$（方向反了）。
+    - 漏掉 $2-x\in(-2,2)$ 的定义域约束。
+  similar_practice_query: 抽象函数 指数归一化 奇函数 单调性 不等式解集
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对page_0126/page_0127页图：例9完整在page_0126，答案C无歧义。

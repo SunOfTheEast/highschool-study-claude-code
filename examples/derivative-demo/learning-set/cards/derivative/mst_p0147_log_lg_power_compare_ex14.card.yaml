@@ -1,0 +1,227 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0147_log_lg_power_compare_ex14
+content_revision_id: mst_p0147_log_lg_power_compare_ex14-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0147_log_lg_power_compare_ex14.card.yaml
+stem: |-
+  （2024·广州期中）设 $a=\log_6 3,\ b=\lg 5,\ c=2^{0.1}$，则（  ）
+  A. $a<b<c$
+  B. $b<a<c$
+  C. $c<b<a$
+  D. $c<a<b$
+answer: |
+  A
+
+  先看 $c$：因为 $c=2^{0.1}>1$，而 $a=\log_6 3,\ b=\lg5$ 都在 $(0,1)$，所以 $c>a,\ c>b$。
+  只需比较 $a,b$。
+
+  法一：
+  \[
+  a=\log_6\frac62=1-\log_6 2,\quad
+  b=\lg\frac{10}{2}=1-\lg2.
+  \]
+  又
+  \[
+  \log_6 2=\frac{1}{\log_2 6},\quad \lg2=\frac{1}{\log_2 10},
+  \]
+  且 $1<\log_2 6<\log_2 10$，故 $\log_6 2>\lg2$，从而 $a<b$。
+
+  法二（糖水不等式）：
+  \[
+  a=\frac{\lg3}{\lg6}
+  <\frac{\lg3+\lg\frac{10}{6}}{\lg6+\lg\frac{10}{6}}
+  =\lg5=b.
+  \]
+  且 $b<1<c$，所以最终
+  \[
+  a<b<c.
+  \]
+  故选 A。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先剥离显著项 $c$。
+      max_score: 1
+    - step_id: step_2
+      description: 法一把 $a,b$ 改写成“1减去对数”。
+      max_score: 1
+    - step_id: step_3
+      description: 比较 $\log_6 2$ 与 $\lg2$。
+      max_score: 1
+    - step_id: step_4
+      description: 法二用糖水不等式复核。
+      max_score: 1
+    - step_id: step_5
+      description: 合并三项顺序并选项匹配。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较两个对数和一个幂值的大小。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 拟合与夹逼
+    subroute:
+      - 先剥离大于1项
+      - 一减对数同构
+      - 糖水不等式
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - $a,b$ 都是对数值且可写成 $1-$某对数；$c$ 是幂函数值。
+      - 比较 $a,b$ 时可走“换底倒数链”或“糖水不等式”两条同向路径。
+    normalization_moves_used:
+      - 先判 $c>1$。
+      - $a=\log_6(6/2),\ b=\lg(10/2)$。
+      - $\log_6 2,\ \lg2$ 换为底2倒数。
+      - 分式同加正量（糖水不等式）复核。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\log_6 2,\lg2$ 写成底2对数倒数，回补指数对数基础。
+      - 若学生不知道“先比较与1的关系”可降维，回补函数性质与图像。
+      - 若学生糖水不等式方向常错，回补不等式工具基础。
+  detail_terms:
+    - $a=1-\log_6 2$
+    - $b=1-\lg2$
+    - 糖水不等式
+    - $a<b<c$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0147_log_lg_power_compare_ex14
+source_evidence:
+  source_refs:
+    - ref_id: page_0147_ex14_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0147/page_0147.md
+      role: problem_start
+      evidence: 例14题干：$a=\log_6 3,\ b=\lg 5,\ c=2^{0.1}$，给出A-D选项。
+    - ref_id: page_0147_ex14_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0147/page_0147.md
+      role: solution
+      evidence: 解析含两法：法一用 $a=1-\log_6 2,\ b=1-\lg2$，法二用糖水不等式 $a=\frac{\lg3}{\lg6}<\frac{\lg3+\lg(10/6)}{\lg6+\lg(10/6)}=\lg5=b$；结论 $a<b<c$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0147.png
+      inspected: true
+      notes: 已核对页图：例14题干、两种解法、答案A与markdown一致。
+  source_context: 本题处在“对数比大小”段落末，紧接“糖水不等式”方法引入。
+  source_influence:
+    - 保留源解“先判 $c>1$，再比较 $a,b$”的两层结构。
+    - 保留法一（同构改写）与法二（糖水不等式）双路径。
+  source_discrepancies: []
+original_problem:
+  stem: （2024·广州期中）设 $a=\log_6 3,\ b=\lg 5,\ c=2^{0.1}$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+    - label: B
+      text_raw: $b<a<c$
+      text_latex: $b<a<c$
+    - label: C
+      text_raw: $c<b<a$
+      text_latex: $c<b<a$
+    - label: D
+      text_raw: $c<a<b$
+      text_latex: $c<a<b$
+  answer: A
+  fidelity_notes:
+    - 源解给出两种方法，均导向 $a<b<c$。
+    - 题干与解析完整在page_0147。
+solution:
+  source_solution_summary: |
+    先看 $c$：因为 $c=2^{0.1}>1$，而 $a=\log_6 3,\ b=\lg5$ 都在 $(0,1)$，所以 $c>a,\ c>b$。
+    只需比较 $a,b$。
+
+    法一：
+    \[
+    a=\log_6\frac62=1-\log_6 2,\quad
+    b=\lg\frac{10}{2}=1-\lg2.
+    \]
+    又
+    \[
+    \log_6 2=\frac{1}{\log_2 6},\quad \lg2=\frac{1}{\log_2 10},
+    \]
+    且 $1<\log_2 6<\log_2 10$，故 $\log_6 2>\lg2$，从而 $a<b$。
+
+    法二（糖水不等式）：
+    \[
+    a=\frac{\lg3}{\lg6}
+    <\frac{\lg3+\lg\frac{10}{6}}{\lg6+\lg\frac{10}{6}}
+    =\lg5=b.
+    \]
+    且 $b<1<c$，所以最终
+    \[
+    a<b<c.
+    \]
+    故选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 先剥离显著项 $c$。
+      formula_trace:
+        from: $a=\log_6 3,\ b=\lg5,\ c=2^{0.1}$
+        to: $0<a<1,\ 0<b<1,\ c>1$
+        operation: 用底数大于1时对数性质与幂函数基本性质。
+        why: 先锁定 $c$ 最大，降维为比较 $a,b$。
+      source_ref: page_0147_ex14_solution
+    - step_id: step_2
+      statement: 法一把 $a,b$ 改写成“1减去对数”。
+      formula_trace:
+        from: $a=\log_6 3,\ b=\lg5$
+        to: $a=1-\log_6 2,\ b=1-\lg2$
+        operation: 把3写成 $6/2$，5写成 $10/2$。
+        why: 统一成同型表达便于比较。
+      source_ref: page_0147_ex14_solution
+    - step_id: step_3
+      statement: 比较 $\log_6 2$ 与 $\lg2$。
+      formula_trace:
+        from: $\log_6 2=\frac{1}{\log_2 6},\ \lg2=\frac{1}{\log_2 10}$
+        to: $1<\log_2 6<\log_2 10\Rightarrow \log_6 2>\lg2\Rightarrow a<b$
+        operation: 同为正数取倒数，分母越小倒数越大。
+        why: 得到 $a,b$ 的主比较。
+      source_ref: page_0147_ex14_solution
+    - step_id: step_4
+      statement: 法二用糖水不等式复核。
+      formula_trace:
+        from: $a=\frac{\lg3}{\lg6}$
+        to: $a<\frac{\lg3+\lg(10/6)}{\lg6+\lg(10/6)}=\lg5=b$
+        operation: 对分式同时加同一正量，分子小于分母时比值增大。
+        why: 给出与法一一致的独立路径。
+      source_ref: page_0147_ex14_solution
+    - step_id: step_5
+      statement: 合并三项顺序并选项匹配。
+      formula_trace:
+        from: $a<b,\ c>a,\ c>b$
+        to: $a<b<c$，选 A
+        operation: 传递性合并。
+        why: 完成作答。
+      source_ref: page_0147_ex14_solution
+teaching_card:
+  student_title: 先抓最大项，再双路线比较对数
+  what_it_trains: 训练“先粗分层、再细比较”的节奏，以及同一题目两种对数比较方法互证。
+  recognition_cues:
+    - 一项明显是 $>1$ 的幂值，另外两项是 $(0,1)$ 对数值。
+    - 出现 $\log_6 3$ 与 $\lg5$ 这类不同底对数。
+    - 题解常可同时走换底链与糖水不等式。
+  normalization_moves:
+    - 先把 $c$ 与1比较。
+    - 把 $a,b$ 写成 $1-$某项后比较剩余部分。
+    - 用糖水不等式做独立复核。
+  common_failures:
+    - 把 $2^{0.1}$ 误判为小于1。
+    - 在 $\log_6 2=\frac1{\log_2 6}$ 与 $\lg2=\frac1{\log_2 10}$ 比较中倒数方向写反。
+    - 糖水不等式中加量不一致，导致无效比较。
+  similar_practice_query: log6 3 lg5 2^0.1 糖水不等式 对数比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

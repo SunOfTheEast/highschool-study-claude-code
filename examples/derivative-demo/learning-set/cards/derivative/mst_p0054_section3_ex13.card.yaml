@@ -1,0 +1,191 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0054_section3_ex13
+content_revision_id: mst_p0054_section3_ex13-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0054_section3_ex13.card.yaml
+stem: |-
+  求证：(1) $\frac{\ln(x+1)}{\sqrt{x}}<2$，(2) $\frac{\ln(x+1)}{\sqrt{x}}<1$。
+  (1). 证明 $\frac{\ln(x+1)}{\sqrt{x}}<2$。
+  (2). 证明 $\frac{\ln(x+1)}{\sqrt{x}}<1$。
+answer: |
+  两问均成立。
+
+  对第 (1) 问，源解调用 $\ln(1+u)<u\ (u>0)$，先得 $\ln(1+\sqrt{x})/\sqrt{x}<1$，再由 $(1+\sqrt{x})^2>x+1$ 推出
+  \[
+    2>\frac{2\ln(1+\sqrt{x})}{\sqrt{x}}
+     =\frac{\ln(1+\sqrt{x})^2}{\sqrt{x}}
+     >\frac{\ln(1+x)}{\sqrt{x}}.
+  \]
+  对第 (2) 问，法一令 $t=\sqrt{x}$，把问题化为 $e^t>t^2+1$，再证 $h(t)=(t^2+1)/e^t<1$；法二直接证明
+  $h(x)=\sqrt{x}-\ln(x+1)>0$，因 $h'(x)=\frac{(\sqrt{x}-1)^2}{2\sqrt{x}(x+1)}\ge0$，且 $h(0)=0$，故对 $x>0$ 成立。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 调用基础对数不等式，为第 (1) 问准备上界。
+      max_score: 1
+    - step_id: step_2
+      description: 把 $2\ln(1+\sqrt{x})$ 合并成一个对数，再与 $\ln(1+x)$ 比较。
+      max_score: 1
+    - step_id: step_3
+      description: 法一把第 (2) 问换元成指数不等式。
+      max_score: 1
+    - step_id: step_4
+      description: 构造商函数证明 $e^t>t^2+1$。
+      max_score: 1
+    - step_id: step_5
+      description: 法二直接证明 $\sqrt{x}$ 比 $\ln(1+x)$ 大。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: item_1
+        goal: 不等式证明
+        target: 证明 $\frac{\ln(x+1)}{\sqrt{x}}<2$。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 不等式证明
+        target: 证明 $\frac{\ln(x+1)}{\sqrt{x}}<1$。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 切线放缩与凹凸性
+      - 拟合与夹逼
+    subroute:
+      - 对数单身狗
+      - 指数找基友
+      - $\ln(1+u)<u$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 不等式工具结构
+    evidence:
+      - $\frac{\ln(1+x)}{\sqrt{x}}$ 通过 $t=\sqrt{x}$ 化为 $\frac{\ln(1+t^2)}{t}$。
+      - $e^t>t^2+1$ 可由 $h(t)=\frac{t^2+1}{e^t}$ 单调控制。
+      - $\sqrt{x}-\ln(1+x)$ 的导数能化成平方非负。
+    normalization_moves_used:
+      - 令 $t=\sqrt{x}$。
+      - 把 $2\ln(1+\sqrt{x})$ 合并为 $\ln(1+\sqrt{x})^2$。
+      - 把 $h^{\prime}(x)$ 化为 $\frac{(\sqrt{x}-1)^2}{2\sqrt{x}(x+1)}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不知道题中 $\sqrt{x}$ 作分母隐含 $x>0$，回补函数三要素与定义域。
+      - 若学生不会由 $\ln(1+u)<u$ 推出 $\ln(1+\sqrt{x})/\sqrt{x}<1$，回补指数对数基础。
+      - 若学生把 $e^t>t^2+1$ 转回对数不等式时方向出错，回补指数对数基础。
+      - 若学生求导后不能把 $\frac{1}{2\sqrt{x}}-\frac{1}{x+1}$ 化成平方非负，回补代数恒等变形。
+  detail_terms:
+    - $\frac{\ln(x+1)}{\sqrt{x}}$
+    - $t=\sqrt{x}$
+    - $e^t>t^2+1$
+    - $h(t)=\frac{t^2+1}{e^t}$
+    - $\sqrt{x}-\ln(x+1)$
+parts: &a1
+  - label: (1)
+    text: 证明 $\frac{\ln(x+1)}{\sqrt{x}}<2$。
+  - label: (2)
+    text: 证明 $\frac{\ln(x+1)}{\sqrt{x}}<1$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0054_section3_ex13
+source_evidence:
+  source_refs:
+    - ref_id: page_0054
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0054/page_0054.md
+      role: problem_start
+      evidence: 例 13：求证：(1) $\frac{\ln(x+1)}{\sqrt{x}}<2$，(2) $\frac{\ln(x+1)}{\sqrt{x}}<1$。
+    - ref_id: page_0054_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0054/page_0054.md
+      role: solution
+      evidence: 解析先用 $\ln(1+u)/u<1$ 证明第 (1) 问；第 (2) 问给出“指数找基友”和“对数单身狗”两种证明。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0054.png
+      inspected: true
+      notes: 页图已核对：例 13 题干、两问不等式、两种第 (2) 问解析与 markdown 一致；本页后半进入第四节三次函数 exposition，未为 exposition 建卡。
+  source_context: 题头在 page_0054，虽然编号也为例 13，但属于本页新例题；题目未显写定义域，解析与表达式共同给出隐含条件 $x>0$。
+  source_influence:
+    - 卡片按源解保留第 (1) 问由 $\ln(1+u)<u$ 推出的比较链。
+    - 第 (2) 问保留源页的两条课堂路线：“指数找基友”与“对数单身狗”。
+  source_discrepancies: []
+original_problem:
+  stem: 求证：(1) $\frac{\ln(x+1)}{\sqrt{x}}<2$，(2) $\frac{\ln(x+1)}{\sqrt{x}}<1$。
+  parts: *a1
+  choices: []
+  answer: 两问均成立。
+  fidelity_notes:
+    - 源题题干未显写 $x>0$；由于有 $\sqrt{x}$ 作分母，且源解多处写明 $(x>0)$，本卡按隐含定义域 $x>0$ 处理。
+    - 第 (2) 问本身强于第 (1) 问，但源解仍分别展示两类证明思路，本卡保留这种教学结构。
+solution:
+  source_solution_summary: |
+    对第 (1) 问，源解调用 $\ln(1+u)<u\ (u>0)$，先得 $\ln(1+\sqrt{x})/\sqrt{x}<1$，再由 $(1+\sqrt{x})^2>x+1$ 推出
+    \[
+      2>\frac{2\ln(1+\sqrt{x})}{\sqrt{x}}
+       =\frac{\ln(1+\sqrt{x})^2}{\sqrt{x}}
+       >\frac{\ln(1+x)}{\sqrt{x}}.
+    \]
+    对第 (2) 问，法一令 $t=\sqrt{x}$，把问题化为 $e^t>t^2+1$，再证 $h(t)=(t^2+1)/e^t<1$；法二直接证明
+    $h(x)=\sqrt{x}-\ln(x+1)>0$，因 $h'(x)=\frac{(\sqrt{x}-1)^2}{2\sqrt{x}(x+1)}\ge0$，且 $h(0)=0$，故对 $x>0$ 成立。
+  key_steps:
+    - step_id: step_1
+      statement: 调用基础对数不等式，为第 (1) 问准备上界。
+      formula_trace:
+        from: $\ln(1+u)<u\quad(u>0)$
+        to: $\frac{\ln(1+\sqrt{x})}{\sqrt{x}}<1\quad(x>0)$
+        operation: 在 $\ln(1+u)<u$ 中令 $u=\sqrt{x}$ 并除以正数 $\sqrt{x}$。
+        why: 源解用 $f(u)=\ln(1+u)/u<1$ 作为第 (1) 问的起点。
+      source_ref: page_0054_solution
+    - step_id: step_2
+      statement: 把 $2\ln(1+\sqrt{x})$ 合并成一个对数，再与 $\ln(1+x)$ 比较。
+      formula_trace:
+        from: $2>\frac{2\ln(1+\sqrt{x})}{\sqrt{x}}=\frac{\ln(1+\sqrt{x})^2}{\sqrt{x}}$
+        to: $\frac{\ln(1+x)}{\sqrt{x}}<2$
+        operation: 由 $(1+\sqrt{x})^2=x+1+2\sqrt{x}>x+1$ 及 $\ln x$ 递增，得到 $\ln(1+\sqrt{x})^2>\ln(1+x)$。
+        why: 分母为正，比较对数真数即可完成第 (1) 问。
+      source_ref: page_0054_solution
+    - step_id: step_3
+      statement: 法一把第 (2) 问换元成指数不等式。
+      formula_trace:
+        from: $\frac{\ln(1+x)}{\sqrt{x}}<1,\quad t=\sqrt{x}$
+        to: $t>\ln(t^2+1)\Longleftrightarrow e^t>t^2+1$
+        operation: 令 $t=\sqrt{x}>0$，再对两边取指数。
+        why: 这是源解标注的“指数找基友”：把对数比较改为指数函数压住二次式。
+      source_ref: page_0054_solution
+    - step_id: step_4
+      statement: 构造商函数证明 $e^t>t^2+1$。
+      formula_trace:
+        from: $h(t)=\frac{t^2+1}{e^t}$
+        to: $h^{\prime}(t)=-\frac{(t-1)^2}{e^t}\le0,\quad h(t)<h(0)=1\ (t>0)$
+        operation: 求导判断 $h(t)$ 在 $[0,+\infty)$ 上不增，并利用 $t>0$ 时相对端点严格变小。
+        why: 得到 $(t^2+1)/e^t<1$，即 $e^t>t^2+1$。
+      source_ref: page_0054_solution
+    - step_id: step_5
+      statement: 法二直接证明 $\sqrt{x}$ 比 $\ln(1+x)$ 大。
+      formula_trace:
+        from: $h(x)=\sqrt{x}-\ln(x+1)$
+        to: $h^{\prime}(x)=\frac{1}{2\sqrt{x}}-\frac{1}{x+1}=\frac{(\sqrt{x}-1)^2}{2\sqrt{x}(x+1)}\ge0,\quad h(x)>h(0)=0$
+        operation: 求导并化成平方非负形式，再由 $h$ 在 $(0,+\infty)$ 上递增且右端极限为 $0$ 得结论。
+        why: 这对应源页“对数单身狗”路线，直接推出 $\ln(x+1)/\sqrt{x}<1$。
+      source_ref: page_0054_solution
+teaching_card:
+  student_title: 给 $\ln(1+x)/\sqrt{x}$ 找指数搭档
+  what_it_trains: 训练遇到 $\ln(1+x)$ 和 $\sqrt{x}$ 夹在一起时，先把 $\sqrt{x}$ 换成新变量，再在对数式、指数式和导数单调之间切换。
+  recognition_cues:
+    - 分母是 $\sqrt{x}$，题目要求证明对数比它小。
+    - 令 $t=\sqrt{x}$ 后出现 $\ln(1+t^2)$。
+    - 要证明 $\ln(1+t^2)<t$，可以改成 $e^t>t^2+1$。
+  normalization_moves:
+    - 第 (1) 问先用 $\ln(1+u)<u$，再比较 $(1+\sqrt{x})^2$ 与 $x+1$。
+    - 第 (2) 问路线一：令 $t=\sqrt{x}$，构造 $(t^2+1)/e^t$。
+    - 第 (2) 问路线二：直接看 $\sqrt{x}-\ln(x+1)$ 的导数。
+  common_failures:
+    - 忘记 $x>0$，直接把 $x=0$ 代入分式。
+    - 把 $(1+\sqrt{x})^2>x+1$ 漏掉，导致第 (1) 问比较链断开。
+    - 构造 $h(t)=(t^2+1)/e^t$ 后只写 $h^{\prime}(t)\le0$，没有说明 $t>0$ 时 $h(t)<1$。
+  similar_practice_query: ln(1+x)/sqrtx 不等式 令t=sqrtx 指数找基友 对数单身狗
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0054 题图与 markdown 一致；题干在本页开始并在本页解析完毕。

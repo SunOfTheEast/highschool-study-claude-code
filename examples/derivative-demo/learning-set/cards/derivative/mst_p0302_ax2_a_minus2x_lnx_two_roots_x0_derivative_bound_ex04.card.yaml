@@ -1,0 +1,266 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0302_ax2_a_minus2x_lnx_two_roots_x0_derivative_bound_ex04
+content_revision_id: mst_p0302_ax2_a_minus2x_lnx_two_roots_x0_derivative_bound_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0302_ax2_a_minus2x_lnx_two_roots_x0_derivative_bound_ex04.card.yaml
+stem: |-
+  （2025 · 广东汕头 · 三模）已知函数 $f(x)=ax^2+(a-2)x-\ln x$。
+  1. 当 $a=1$ 时，讨论 $f(x)$ 的单调性。
+  2. 若 $f(x)$ 有两个零点，求实数 $a$ 的取值范围。
+  3. 记 $f(x)$ 较小的一个零点为 $x_0$，证明：$x_0f^\prime(x_0)>-2$。
+answer: |-
+  第(1)问 $f$ 在 $(0,1)$ 上递减，在 $(1,+\infty)$ 上递增；第(2)(i) $a\in(0,1)$；第(2)(ii) $x_0f^\prime(x_0)>-2$。
+
+  第(1)问当 $a=1$ 时， $f^\prime(x)=2x-1-\frac1x=\frac{(x-1)(2x+1)}x$， 因 $x>0$，导数符号由 $x-1$ 决定，故 $f$ 在 $(0,1)$ 上递减、 在 $(1,+\infty)$ 上递增。第(2)(i) 中 $f^\prime(x)=2ax+(a-2)-\frac1x=\frac{(ax-1)(2x+1)}x$。 若 $a\le0$，$f$ 至多一个零点；若 $a>0$，$f$ 在 $x=\frac1a$ 处取最小值，且 $f(\frac1a)=1-\frac1a+\ln a$。因 $x\to0^+$ 和 $x\to+\infty$ 时 $f(x)\to+\infty$，有两个零点等价于 $f(\frac1a)<0$。令 $g(a)=\ln a-\frac1a+1$，则 $g$ 在 $(0,+\infty)$ 上递增，$g(1)=0$，故 $a\in(0,1)$。第(2)(ii) 中， 由 $f(1)=2a-2<0$ 得较小零点 $0<x_0<1$。目标等价于 $(2x_0+1)(ax_0-1)>-2$。若 $0<x_0\le\frac12$，左侧展开后直接成立。 若 $\frac12<x_0<1$，由 $f(x_0)=0$ 得 $ax_0(x_0+1)=\ln x_0+2x_0$，代入目标后化为 $\ln x_0+x_0+\frac1{2x_0+1}>0$。设 $p(x)=\ln x+x+\frac1{2x+1}$，在 $(\frac12,1)$ 上 $p^\prime(x)>0$，故 $p(x)>p(\frac12)=1-\ln2>0$，得证。
+rubric:
+  max_score: 10
+  criteria:
+    - step_id: step_1
+      description: 第(1)问求导并因式分解。
+      max_score: 1
+    - step_id: step_2
+      description: 第(2)(i) 用导数形态判断能否有两个零点。
+      max_score: 1
+    - step_id: step_3
+      description: 把两个零点条件化成最小值为负。
+      max_score: 1
+    - step_id: step_4
+      description: 求出参数范围。
+      max_score: 1
+    - step_id: step_5
+      description: 定位较小零点。
+      max_score: 1
+    - step_id: step_6
+      description: 把目标不等式改写。
+      max_score: 1
+    - step_id: step_7
+      description: 处理 $0<x_0\le\frac12$。
+      max_score: 1
+    - step_id: step_8
+      description: 处理 $\frac12<x_0<1$，用零点方程消参。
+      max_score: 1
+    - step_id: step_9
+      description: 把剩余问题化成单变量正性。
+      max_score: 1
+    - step_id: step_10
+      description: 用 $p$ 函数完成证明。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 1 问
+        result: $f$ 在 $(0,1)$ 上递减，在 $(1,+\infty)$ 上递增。
+      - part_id: 2i
+        goal: 求参数范围
+        target: 第 2i 问
+        result: $a\in(0,1)$。
+      - part_id: 2ii
+        goal: 不等式证明
+        target: 第 2ii 问
+        result: $x_0f^\prime(x_0)>-2$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 参变量分离
+      - 含参数分类讨论
+      - 充分/必要性探路
+    subroute:
+      - 单谷函数两个零点
+      - 参数范围 $a\in(0,1)$
+      - 较小零点 $0<x_0<1$
+      - 按 $x_0=\frac12$ 分段
+      - 零点方程 $f(x_0)=0$ 消参
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+      - 局部逼近结构
+    evidence:
+      - $ax^2+(a-2)x-\ln x$
+      - $f^\prime(x)=\frac{(ax-1)(2x+1)}x$
+      - $f(\frac1a)=1-\frac1a+\ln a$
+      - $f(x_0)=0$
+      - $ax_0(x_0+1)=\ln x_0+2x_0$
+      - $p(x)=\ln x+x+\frac1{2x+1}$
+    normalization_moves_used:
+      - 把导函数因式分解成 $(ax-1)(2x+1)/x$。
+      - 用两端极限和极小值判断两个零点。
+      - 用 $f(1)<0$ 定位较小零点。
+      - 用 $f(x_0)=0$ 消去参数 $a$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会定义域和两端极限，回补函数三要素与定义域。
+      - 若学生不会导数判单谷，回补导数单调极值基础。
+      - 若学生不会对数运算，回补指数对数基础。
+      - 若学生不会用零点方程消参，回补代数恒等变形。
+      - 若学生不会证明 $p(x)>0$，回补不等式工具基础。
+  detail_terms:
+    - $ax^2+(a-2)x-\ln x$
+    - $a\in(0,1)$
+    - 较小零点 $x_0$
+    - $x_0f^\prime(x_0)>-2$
+    - $f(x_0)=0$
+    - $\ln x_0+x_0+\frac1{2x_0+1}>0$
+parts: &a1
+  - part_id: "1"
+    text: 当 $a=1$ 时，讨论 $f(x)$ 的单调性。
+  - part_id: 2i
+    text: 若 $f(x)$ 有两个零点，求实数 $a$ 的取值范围。
+  - part_id: 2ii
+    text: 记 $f(x)$ 较小的一个零点为 $x_0$，证明：$x_0f^\prime(x_0)>-2$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0302_ax2_a_minus2x_lnx_two_roots_x0_derivative_bound_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0302_ex04_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0302/page_0302.md
+      role: problem_start
+      evidence: page_0302 例4题头：$f(x)=ax^2+(a-2)x-\ln x$；第(1)问 $a=1$ 时单调性，第(2)问两个零点下求 $a$ 范围并证明较小零点 $x_0$ 满足 $x_0f^\prime(x_0)>-2$。
+    - ref_id: page_0302_ex04_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0302/page_0302.md
+      role: solution_start
+      evidence: page_0302 完成第(1)问并开始第(2)(i)：$f^\prime(x)=\frac{(ax-1)(2x+1)}x$；当 $a>0$ 时极小点在 $x=1/a$，最小值为 $1-\frac1a+\ln a$。
+    - ref_id: page_0303_ex04_solution_end
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0303/page_0303.md
+      role: solution_end
+      evidence: page_0303 续完例4：由两个零点得 $a\in(0,1)$；对较小零点 $x_0$，分 $0<x_0\le1/2$ 和 $1/2<x_0<1$，用 $f(x_0)=0$ 消参化为 $\ln x_0+x_0+\frac1{2x_0+1}>0$。
+    - ref_id: page_0303_ex05_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0303/page_0303.md
+      role: local_context
+      evidence: page_0303 后续进入“考点2：含参数(变量)型”和例5，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0302.png
+      inspected: true
+      notes: 已核对页图：page_0302 下半包含例4题头、第(1)问和第(2)(i)开头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0303.png
+      inspected: true
+      notes: 已核对页图：page_0303 上半完成例4，第(2)(ii) 后另起考点2和例5。
+  source_context: 本卡处理 page_0302 起头、page_0303 续完的例4；page_0303 例5排除。
+  source_influence:
+    - 保留第(1)问 $a=1$ 时 $f^\prime(x)=\frac{(x-1)(2x+1)}x$，单调性为 $(0,1)$ 递减、$(1,+\infty)$ 递增。
+    - 保留第(2)(i) $f^\prime(x)=\frac{(ax-1)(2x+1)}x$，当 $a\le0$ 时至多一个零点，不合题意。
+    - 保留 $a>0$ 时唯一极小点在 $x=1/a$，两个零点等价于 $f(1/a)<0$。
+    - 保留 $g(a)=\ln a-\frac1a+1$ 递增，$g(1)=0$，所以 $a\in(0,1)$。
+    - 保留由 $f(1)=2a-2<0$ 得较小零点 $0<x_0<1$。
+    - 保留第(2)(ii) 分 $0<x_0\le1/2$ 与 $1/2<x_0<1$；后一段由 $f(x_0)=0$ 得 $ax_0(x_0+1)=\ln x_0+2x_0$。
+    - 保留最终转化为 $p(x)=\ln x+x+\frac1{2x+1}>0$。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 · 广东汕头 · 三模）已知函数 $f(x)=ax^2+(a-2)x-\ln x$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问 $f$ 在 $(0,1)$ 上递减，在 $(1,+\infty)$ 上递增；第(2)(i) $a\in(0,1)$；第(2)(ii) $x_0f^\prime(x_0)>-2$。
+  fidelity_notes:
+    - 无选项。
+    - 题中 $f^\prime$ 是 $f$ 的导函数；第(2)(ii) 的 $x_0$ 是较小零点，不是极值点。
+solution:
+  source_solution_summary: 第(1)问当 $a=1$ 时， $f^\prime(x)=2x-1-\frac1x=\frac{(x-1)(2x+1)}x$， 因 $x>0$，导数符号由 $x-1$ 决定，故 $f$ 在 $(0,1)$ 上递减、 在 $(1,+\infty)$ 上递增。第(2)(i) 中 $f^\prime(x)=2ax+(a-2)-\frac1x=\frac{(ax-1)(2x+1)}x$。 若 $a\le0$，$f$ 至多一个零点；若 $a>0$，$f$ 在 $x=\frac1a$ 处取最小值，且 $f(\frac1a)=1-\frac1a+\ln a$。因 $x\to0^+$ 和 $x\to+\infty$ 时 $f(x)\to+\infty$，有两个零点等价于 $f(\frac1a)<0$。令 $g(a)=\ln a-\frac1a+1$，则 $g$ 在 $(0,+\infty)$ 上递增，$g(1)=0$，故 $a\in(0,1)$。第(2)(ii) 中， 由 $f(1)=2a-2<0$ 得较小零点 $0<x_0<1$。目标等价于 $(2x_0+1)(ax_0-1)>-2$。若 $0<x_0\le\frac12$，左侧展开后直接成立。 若 $\frac12<x_0<1$，由 $f(x_0)=0$ 得 $ax_0(x_0+1)=\ln x_0+2x_0$，代入目标后化为 $\ln x_0+x_0+\frac1{2x_0+1}>0$。设 $p(x)=\ln x+x+\frac1{2x+1}$，在 $(\frac12,1)$ 上 $p^\prime(x)>0$，故 $p(x)>p(\frac12)=1-\ln2>0$，得证。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问求导并因式分解。
+      formula_trace:
+        from: $f(x)=x^2-x-\ln x$
+        to: $f^\prime(x)=\frac{(x-1)(2x+1)}x$
+        operation: 代入 $a=1$ 后求导。
+        why: 在 $x>0$ 上导数符号由 $x-1$ 决定。
+      source_ref: page_0302_ex04_solution_start
+    - step_id: step_2
+      statement: 第(2)(i) 用导数形态判断能否有两个零点。
+      formula_trace:
+        from: $f^\prime(x)=2ax+(a-2)-\frac1x$
+        to: $f^\prime(x)=\frac{(ax-1)(2x+1)}x$
+        operation: 因式分解导函数。
+        why: 当 $a>0$ 时唯一极小点为 $x=\frac1a$。
+      source_ref: page_0302_ex04_solution_start
+    - step_id: step_3
+      statement: 把两个零点条件化成最小值为负。
+      formula_trace:
+        from: $x\to0^+,\ f(x)\to+\infty;\quad x\to+\infty,\ f(x)\to+\infty$
+        to: $f(\frac1a)<0$
+        operation: 利用单谷函数形态。
+        why: 两端为正且中间最低点为负，才有两个零点。
+      source_ref: page_0303_ex04_solution_end
+    - step_id: step_4
+      statement: 求出参数范围。
+      formula_trace:
+        from: $f(\frac1a)=1-\frac1a+\ln a<0$
+        to: $a\in(0,1)$
+        operation: 令 $g(a)=\ln a-\frac1a+1$，用单调性解不等式。
+        why: 这是第(2)(ii) 中 $0<x_0<1$ 的基础。
+      source_ref: page_0303_ex04_solution_end
+    - step_id: step_5
+      statement: 定位较小零点。
+      formula_trace:
+        from: $a\in(0,1),\quad f(1)=2a-2<0$
+        to: $0<x_0<1$
+        operation: 结合 $f(x)\to+\infty$ 当 $x\to0^+$ 与较小零点定义。
+        why: 证明要按 $x_0$ 在 $(0,1)$ 内分段。
+      source_ref: page_0303_ex04_solution_end
+    - step_id: step_6
+      statement: 把目标不等式改写。
+      formula_trace:
+        from: $x_0f^\prime(x_0)>-2$
+        to: $ax_0(2x_0+1)>2x_0-1$
+        operation: 代入 $f^\prime(x)=\frac{(ax-1)(2x+1)}x$。
+        why: 这样可以按 $2x_0-1$ 的符号分段。
+      source_ref: page_0303_ex04_solution_end
+    - step_id: step_7
+      statement: 处理 $0<x_0\le\frac12$。
+      formula_trace:
+        from: $ax_0(2x_0+1)>0,\quad 2x_0-1\le0$
+        to: $x_0f^\prime(x_0)>-2$
+        operation: 直接比较左右符号。
+        why: 这一段不需要消参。
+      source_ref: page_0303_ex04_solution_end
+    - step_id: step_8
+      statement: 处理 $\frac12<x_0<1$，用零点方程消参。
+      formula_trace:
+        from: $f(x_0)=0$
+        to: $ax_0(x_0+1)=\ln x_0+2x_0$
+        operation: 把参数项移到一侧。
+        why: 用较小零点条件把 $a$ 消掉。
+      source_ref: page_0303_ex04_solution_end
+    - step_id: step_9
+      statement: 把剩余问题化成单变量正性。
+      formula_trace:
+        from: $ax_0(2x_0+1)>2x_0-1$
+        to: $\ln x_0+x_0+\frac1{2x_0+1}>0$
+        operation: 代入 $ax_0(x_0+1)=\ln x_0+2x_0$ 并化简。
+        why: 得到只含 $x_0$ 的对数不等式。
+      source_ref: page_0303_ex04_solution_end
+    - step_id: step_10
+      statement: 用 $p$ 函数完成证明。
+      formula_trace:
+        from: $p(x)=\ln x+x+\frac1{2x+1}$
+        to: $p(x)>p(\frac12)=1-\ln2>0$
+        operation: 证明 $p^\prime(x)>0$ 在 $(\frac12,1)$ 上成立。
+        why: 从而第(2)(ii) 的不等式成立。
+      source_ref: page_0303_ex04_solution_end
+teaching_card:
+  student_title: 较小零点消参证明导数不等式
+  what_it_trains: 训练先由两个零点确定参数范围，再用较小零点方程消参证明含导数的不等式。
+  recognition_cues:
+    - 题目先问两个零点下的参数范围，再问较小零点处的导数表达式。
+    - $f^\prime(x)$ 可以因式分解成 $\frac{(ax-1)(2x+1)}x$。
+    - $x_0$ 是零点，所以 $f(x_0)=0$ 比 $f^\prime(x_0)=0$ 更关键。
+    - 目标里出现 $2x_0-1$，自然按 $x_0=\frac12$ 分段。
+  normalization_moves:
+    - 第(1)问是基础单调性，不压过第(2)问主线。
+    - 第(2)(i) 先求 $a\in(0,1)$，用于定位 $x_0$。
+    - 第(2)(ii) 不要把 $x_0$ 当极值点。
+    - 用 $f(x_0)=0$ 把 $a$ 换成 $x_0$ 的表达式。
+  common_failures:
+    - 把 $x_0$ 误认为极值点，错误使用 $f^\prime(x_0)=0$。
+    - 漏掉 $x\to0^+$ 时 $f(x)\to+\infty$。
+    - 求 $a$ 范围时把 $g(a)$ 单调方向看反。
+    - 在 $\frac12<x_0<1$ 时没有用零点方程消参。
+  similar_practice_query: ax^2+(a-2)x-lnx 两个零点 较小零点 x0 fprime x0 隐零点消参
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

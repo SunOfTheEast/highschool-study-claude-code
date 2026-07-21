@@ -1,0 +1,261 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0136_reverse_fraction_ex01
+content_revision_id: mst_p0136_reverse_fraction_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0136_reverse_fraction_ex01.card.yaml
+stem: |-
+  （2023 · 山东月考 · 多选）定义在 $\mathbf{R}$ 上的奇函数 $f(x)$ 的导函数为 $f^{\prime}(x)$，且 $\forall x\in(1,+\infty)$，$(x^3-x)f^{\prime}(x)>f(x)(5x^2-3)$，则（  ）
+  A. $6\sqrt{2}f(-\sqrt{2})>f(2)$
+  B. $6\sqrt{2}f(\sqrt{2})<f(2)$
+  C. $f(3)>12f(2)$
+  D. $f(3)+9f(-2)>0$
+answer: |
+  BD
+
+  在 $x>1$ 上有
+  \[
+  (x^3-x)f^{\prime}(x)>f(x)(5x^2-3).
+  \]
+  乘以 $x^2(>0)$ 得
+  \[
+  (x^5-x^3)f^{\prime}(x)>f(x)(5x^4-3x^2).
+  \]
+  设
+  \[
+  g(x)=\frac{f(x)}{x^5-x^3},\quad x>1,
+  \]
+  则
+  \[
+  g^{\prime}(x)=
+  \frac{f^{\prime}(x)(x^5-x^3)-f(x)(5x^4-3x^2)}{(x^5-x^3)^2}>0.
+  \]
+  故 $g$ 在 $(1,+\infty)$ 递增，进而
+  \[
+  g(\sqrt2)<g(2)<g(3),
+  \]
+  即
+  \[
+  \frac{f(\sqrt2)}{2\sqrt2}<\frac{f(2)}{24}=\frac{f(-2)}{-24}<\frac{f(3)}{216}.
+  \]
+  由左段不等式得 $6\sqrt2f(\sqrt2)<f(2)$，B 对；
+  由右段不等式得 $f(3)+9f(-2)>0$，D 对。
+  同时 $f(3)>9f(2)$ 不能推出 $f(3)>12f(2)$，C 错；
+  由奇函数 $f(-\sqrt2)=-f(\sqrt2)$ 可知 A 与 B 方向相反，A 错。
+  故选 BD。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 用“系数5”锁定分母模板。
+      max_score: 1
+    - step_id: step_2
+      description: 作商并判单调。
+      max_score: 1
+    - step_id: step_3
+      description: 在 $(1,+\infty)$ 上建立三点链。
+      max_score: 1
+    - step_id: step_4
+      description: 结合奇函数信息改写中间项。
+      max_score: 1
+    - step_id: step_5
+      description: 判定 B 与 D。
+      max_score: 1
+    - step_id: step_6
+      description: 排除 A、C。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 数值求值
+        target: 比较多个函数值线性组合的不等式真假
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 抽象函数性质
+        target: 利用奇函数性质完成符号替换
+        result: 见 source_solution_summary
+  method:
+    primary: 逆向构造法
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 系数暴露锁定导数模板
+      - 作商判单调
+      - 奇函数换点
+  structure:
+    primary: 同构结构
+    secondary:
+      - 抽象函数结构
+      - 非齐次结构
+    evidence:
+      - $5x^2-3$ 经乘 $x^2$ 后恰与 $(x^5-x^3)^{\prime}$ 同构。
+      - 目标选项都可回收到 $g(\sqrt2),g(2),g(3)$ 的链式比较。
+      - 奇函数性质把 $f(2)$ 与 $f(-2)$ 连接到同一不等式链。
+    normalization_moves_used:
+      - 乘 $x^2$ 对齐导数模板。
+      - 构造 $g(x)=\frac{f(x)}{x^5-x^3}$。
+      - 三点代值后统一化成分式链。
+      - 使用 $f(-x)=-f(x)$ 完成选项换元。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看不出“系数5”对应 $(x^5-x^3)^{\prime}$，回补导数运算与几何意义。
+      - 若学生在奇函数替换时符号反复出错，回补函数性质与图像。
+      - 若学生不会从分式链还原到选项倍数关系，回补代数恒等变形。
+  detail_terms:
+    - $g(x)=\frac{f(x)}{x^5-x^3}$
+    - $g^{\prime}(x)>0$
+    - $g(\sqrt2)<g(2)<g(3)$
+    - $f(-2)=-f(2)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0136_reverse_fraction_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0136
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0136/page_0136.md
+      role: problem_start
+      evidence: "page_0136 lines 38-43: 例1题干与A-D选项。"
+    - ref_id: page_0137_cont
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0137/page_0137.md
+      role: continuation
+      evidence: "page_0137 line 15: 承接例1解析，构造 $g(x)=\\frac{f(x)}{x^5-x^3}$ 并判定答案 BD。"
+    - ref_id: page_0137_note
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0137/page_0137.md
+      role: local_context
+      evidence: "page_0137 line 17: “系数5暴露构造破绽，联想到 $(x^5-x^3)^{\\prime}$”。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0136.png
+      inspected: true
+      notes: 已核对原图：例1题头在 page_0136 页底。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0137.png
+      inspected: true
+      notes: 已核对原图：page_0137 顶部是例1续解并给出“故选BD”。
+  source_context: 例1题头在 page_0136，解析跨到 page_0137 顶部；按页头归属由本批完整收束。
+  source_influence:
+    - 保留源解“先乘 $x^2$”把系数 $5x^2-3$ 对齐为 $(x^5-x^3)^{\prime}$。
+    - 保留作商构造 $g(x)=\frac{f(x)}{x^5-x^3}$ 与 $g^{\prime}(x)>0$。
+    - 保留奇函数信息 $f(-2)=-f(2)$ 用于 D 项判断。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 山东月考 · 多选）定义在 $\mathbf{R}$ 上的奇函数 $f(x)$ 的导函数为 $f^{\prime}(x)$，且 $\forall x\in(1,+\infty)$，$(x^3-x)f^{\prime}(x)>f(x)(5x^2-3)$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $6\sqrt{2}f(-\sqrt{2})>f(2)$
+      text_latex: $6\sqrt{2}f(-\sqrt{2})>f(2)$
+    - label: B
+      text_raw: $6\sqrt{2}f(\sqrt{2})<f(2)$
+      text_latex: $6\sqrt{2}f(\sqrt{2})<f(2)$
+    - label: C
+      text_raw: $f(3)>12f(2)$
+      text_latex: $f(3)>12f(2)$
+    - label: D
+      text_raw: $f(3)+9f(-2)>0$
+      text_latex: $f(3)+9f(-2)>0$
+  answer: BD
+  fidelity_notes:
+    - 题干中的“奇函数”是 D 项化简所必需信息。
+    - 本题解析跨页，page_0137 顶部为例1续解，不可漏读。
+solution:
+  source_solution_summary: |
+    在 $x>1$ 上有
+    \[
+    (x^3-x)f^{\prime}(x)>f(x)(5x^2-3).
+    \]
+    乘以 $x^2(>0)$ 得
+    \[
+    (x^5-x^3)f^{\prime}(x)>f(x)(5x^4-3x^2).
+    \]
+    设
+    \[
+    g(x)=\frac{f(x)}{x^5-x^3},\quad x>1,
+    \]
+    则
+    \[
+    g^{\prime}(x)=
+    \frac{f^{\prime}(x)(x^5-x^3)-f(x)(5x^4-3x^2)}{(x^5-x^3)^2}>0.
+    \]
+    故 $g$ 在 $(1,+\infty)$ 递增，进而
+    \[
+    g(\sqrt2)<g(2)<g(3),
+    \]
+    即
+    \[
+    \frac{f(\sqrt2)}{2\sqrt2}<\frac{f(2)}{24}=\frac{f(-2)}{-24}<\frac{f(3)}{216}.
+    \]
+    由左段不等式得 $6\sqrt2f(\sqrt2)<f(2)$，B 对；
+    由右段不等式得 $f(3)+9f(-2)>0$，D 对。
+    同时 $f(3)>9f(2)$ 不能推出 $f(3)>12f(2)$，C 错；
+    由奇函数 $f(-\sqrt2)=-f(\sqrt2)$ 可知 A 与 B 方向相反，A 错。
+    故选 BD。
+  key_steps:
+    - step_id: step_1
+      statement: 用“系数5”锁定分母模板。
+      formula_trace:
+        from: $(x^3-x)f^{\prime}(x)>f(x)(5x^2-3)$
+        to: $(x^5-x^3)f^{\prime}(x)>f(x)(5x^4-3x^2)$
+        operation: 两边乘以 $x^2$（$x>1$）。
+        why: 把 $5x^4-3x^2$ 对齐为 $(x^5-x^3)^{\prime}$。
+      source_ref: page_0137_cont
+    - step_id: step_2
+      statement: 作商并判单调。
+      formula_trace:
+        from: $g(x)=\frac{f(x)}{x^5-x^3}$
+        to: $g^{\prime}(x)>0$（$x>1$）
+        operation: 商求导后用题设不等式判分子符号。
+        why: 把原不等式转为三点函数值可比。
+      source_ref: page_0137_cont
+    - step_id: step_3
+      statement: 在 $(1,+\infty)$ 上建立三点链。
+      formula_trace:
+        from: $g(\sqrt2)<g(2)<g(3)$
+        to: $\frac{f(\sqrt2)}{2\sqrt2}<\frac{f(2)}{24}<\frac{f(3)}{216}$
+        operation: 代入 $\sqrt2,2,3$ 计算分母。
+        why: 这是所有选项判定的统一母链。
+      source_ref: page_0137_cont
+    - step_id: step_4
+      statement: 结合奇函数信息改写中间项。
+      formula_trace:
+        from: $f(-2)=-f(2)$
+        to: $\frac{f(2)}{24}=\frac{f(-2)}{-24}$
+        operation: 利用奇函数在 $x=2$ 的对应值。
+        why: 把 D 项中的 $f(-2)$ 接入同一比较链。
+      source_ref: page_0137_cont
+    - step_id: step_5
+      statement: 判定 B 与 D。
+      formula_trace:
+        from: $\frac{f(\sqrt2)}{2\sqrt2}<\frac{f(2)}{24}<\frac{f(3)}{216}$
+        to: $6\sqrt2f(\sqrt2)<f(2)$ 且 $f(3)+9f(-2)>0$
+        operation: 同乘正数并用 $f(-2)=-f(2)$。
+        why: 直接对应 B、D 两项。
+      source_ref: page_0137_cont
+    - step_id: step_6
+      statement: 排除 A、C。
+      formula_trace:
+        from: $f(-\sqrt2)=-f(\sqrt2)$ 与 $f(3)>9f(2)$
+        to: A 错、C 错
+        operation: A 与 B 方向互反；C 的“12倍”强于链上“9倍”。
+        why: 完成多选闭环判定。
+      source_ref: page_0137_cont
+teaching_card:
+  student_title: 先补到 $(x^5-x^3)^{\prime}$，再用商函数三点链做多选
+  what_it_trains: 训练从导数不等式中识别“被构造的分母”，作商判单调后用固定点比较链批量判选项。
+  recognition_cues:
+    - 题设出现 $(x^3-x)f^{\prime}(x)$ 与 $5x^2-3$ 这类“导数系数暴露”组合。
+    - 选项是 $\sqrt2,2,3$ 等固定点的线性比较。
+    - 额外给出奇函数条件。
+  normalization_moves:
+    - 先乘幂把右侧系数凑成某个多项式导数。
+    - 作商 $g=\frac{f}{P(x)}$，先判断 $g$ 单调。
+    - 把奇函数关系插回分式链，集中判选项。
+  common_failures:
+    - 忘记 $x>1$，把“乘 $x^2$”条件写成不稳。
+    - 把 $x^5-x^3$ 在 $\sqrt2$ 处值算错。
+    - 由 $f(3)>9f(2)$ 误跳到 $f(3)>12f(2)$。
+  similar_practice_query: 分式反构 系数暴露 x^5-x^3 奇函数 作商单调 多选比较
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,196 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0206_taylor_exp_sin_cos_nonnegative_ch6_trig_ex08
+content_revision_id: mst_p0206_taylor_exp_sin_cos_nonnegative_ch6_trig_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0206_taylor_exp_sin_cos_nonnegative_ch6_trig_ex08.card.yaml
+stem: |-
+  （2024 · 安徽合肥八中高二期中 T19）给出泰勒公式在 $x=0$ 的特殊形式（麦克劳林形式）及高阶导定义，完成下列三问。
+  (1) 写出 $f(x)=\frac{1}{1-x}$ 的泰勒展开式（只需写前 4 项）。
+  (2) 根据泰勒公式估算 $\sin\frac12$ 的值，精确到小数点后两位。
+  (3) 证明：当 $x\geqslant0$ 时，$e^x-\frac{x^2}{2}-\sin x-\cos x\geqslant0$。
+answer: |-
+  (1) $1+x+x^2+x^3$；(2) $\sin\frac12\approx0.48$；(3) 不等式成立。
+
+  第(1)问： $\frac1{1-x}=1+x+x^2+x^3+\cdots$，故前4项为 $1+x+x^2+x^3$。 第(2)问： $\sin x=x-\frac{x^3}{3!}+\frac{x^5}{5!}-\cdots$， 代 $x=\frac12$ 得 $\sin\frac12=\frac12-\frac1{48}+\cdots\approx0.48$。 第(3)问法一： $x\ge0$ 时 $e^x\ge1+x+\frac{x^2}{2}$， 因而 $e^x-\frac{x^2}{2}-\sin x-\cos x \ge1+x-\sin x-\cos x =(1-\cos x)+(x-\sin x)\ge0$。 source 还给出法二：构造 $G(x)=e^x-\frac{x^2}{2}-\sin x-\cos x$， 在 $[0,\frac{3\pi}{4})$ 与 $[\frac{3\pi}{4},+\infty)$ 分段，再以 $F(x)=e^x-\frac{x^2}{2}-2$ 收束，同样可证结论。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 第(1)问：写出 $\frac1{1-x}$ 的前 4 项。
+      max_score: 1
+    - step_id: step_2
+      description: 第(2)问：代入 $\sin x$ 展开估值。
+      max_score: 1
+    - step_id: step_3
+      description: 第(3)问法一：先给指数下界。
+      max_score: 1
+    - step_id: step_4
+      description: 第(3)问法一：拆成两块并联非负。
+      max_score: 1
+    - step_id: step_5
+      description: 补充：source 的法二分段思路。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 (1) 问
+        result: $\frac1{1-x}$ 前4项：$1+x+x^2+x^3$
+      - part_id: "2"
+        goal: 数值求值
+        target: 第 (2) 问
+        result: $\sin\frac12\approx0.48$
+      - part_id: "3"
+        goal: 不等式证明
+        target: 第 (3) 问
+        result: $x\ge0$ 时 $e^x-\frac{x^2}{2}-\sin x-\cos x\ge0$
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 切线放缩与凹凸性
+    subroute:
+      - 麦克劳林展开
+      - 泰勒项比较
+      - 三角放缩
+      - 分段区间证明
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 三角复合结构
+      - 特殊幂函数与指数函数结构
+      - 不等式工具结构
+    evidence:
+      - $e^x\ge1+x+\frac{x^2}{2}$
+      - $1+x-\sin x-\cos x=(1-\cos x)+(x-\sin x)$
+      - $\sin x=x-\frac{x^3}{3!}+\cdots$
+      - $G(x)=e^x-\frac{x^2}{2}-\sin x-\cos x$
+    normalization_moves_used:
+      - 先在 0 点写低阶展开用于数值与证明。
+      - 把综合不等式压成两块标准非负项并联。
+      - 补充分段函数法作为第二通道。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从泰勒式做近似估值，回补指数对数基础。
+      - 若学生不会将 $1+x-\sin x-\cos x$ 拆成两块，回补代数恒等变形。
+      - 若学生对分段法理解不清，回补导数单调极值基础。
+  detail_terms:
+    - $\frac1{1-x}=1+x+x^2+x^3+\cdots$
+    - $\sin\frac12=\frac12-\frac1{48}+\cdots$
+    - $e^x-\frac{x^2}{2}-\sin x-\cos x$
+    - $1-\cos x$
+    - $x-\sin x$
+parts: &a1
+  - (1) 写出 $f(x)=\frac{1}{1-x}$ 的泰勒展开式（只需写前 4 项）。
+  - (2) 根据泰勒公式估算 $\sin\frac12$ 的值，精确到小数点后两位。
+  - (3) 证明：当 $x\geqslant0$ 时，$e^x-\frac{x^2}{2}-\sin x-\cos x\geqslant0$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0206_taylor_exp_sin_cos_nonnegative_ch6_trig_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0206_ex07_local_context_prev
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0206/page_0206.md
+      role: local_context
+      evidence: page_0206 行20-34是例7解析，行36才出现本题例8题头。
+    - ref_id: page_0206_ex08_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0206/page_0206.md
+      role: problem_start
+      evidence: page_0206 行36出现“例8（2024·安徽合肥八中高二期中 T19）”，给出泰勒特殊形式与注释，题干跨页。
+    - ref_id: page_0207_ex08_problem_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0207/page_0207.md
+      role: continuation
+      evidence: page_0207 行15-21续完题干，并给出三问：(1) 展开 $\frac1{1-x}$ 前4项；(2) 估算 $\sin\frac12$；(3) 证 $x\ge0$ 时 $e^x-\frac{x^2}{2}-\sin x-\cos x\ge0$。
+    - ref_id: page_0207_ex08_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0207/page_0207.md
+      role: continuation
+      evidence: page_0207 行23-30给出三问解析；第(3)问给出法一（并联放缩）与法二（构造 $G,F$ 分段判定）。
+    - ref_id: page_0207_ex08b_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0207/page_0207.md
+      role: local_context
+      evidence: page_0207 行32起出现另一道“例8（2021·吴江区校级月考）”，属于下一题，不并入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0206.png
+      inspected: true
+      notes: 已核对页图：本题题头在页底起始，正文被切到下一页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0207.png
+      inspected: true
+      notes: 已核对页图：本题三问与解析在页上半完整；页中部开始第二个例8新题。
+  source_context: 题头起于 page_0206 底部，题目与解析在 page_0207 顶部收束；page_0207 中部第二个例8不属于本卡。
+  source_influence:
+    - 保留 source 的“三问递进”结构：展开写项 -> 数值估算 -> 综合不等式证明。
+    - 第(3)问以法一并联放缩为主线，同时记录 source 给出的法二分段思路。
+    - 保持题干中的“泰勒/麦克劳林材料”语境，不改问序。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 安徽合肥八中高二期中 T19）给出泰勒公式在 $x=0$ 的特殊形式（麦克劳林形式）及高阶导定义，完成下列三问。
+  parts: *a1
+  choices: []
+  answer: (1) $1+x+x^2+x^3$；(2) $\sin\frac12\approx0.48$；(3) 不等式成立。
+  fidelity_notes:
+    - 本题属于跨页题头：page_0206 起题，page_0207 顶部给全题与解析。
+    - 第(3)问 source 同时给出法一与法二；本卡主线采用法一，法二作为补充。
+solution:
+  source_solution_summary: 第(1)问： $\frac1{1-x}=1+x+x^2+x^3+\cdots$，故前4项为 $1+x+x^2+x^3$。 第(2)问： $\sin x=x-\frac{x^3}{3!}+\frac{x^5}{5!}-\cdots$， 代 $x=\frac12$ 得 $\sin\frac12=\frac12-\frac1{48}+\cdots\approx0.48$。 第(3)问法一： $x\ge0$ 时 $e^x\ge1+x+\frac{x^2}{2}$， 因而 $e^x-\frac{x^2}{2}-\sin x-\cos x \ge1+x-\sin x-\cos x =(1-\cos x)+(x-\sin x)\ge0$。 source 还给出法二：构造 $G(x)=e^x-\frac{x^2}{2}-\sin x-\cos x$， 在 $[0,\frac{3\pi}{4})$ 与 $[\frac{3\pi}{4},+\infty)$ 分段，再以 $F(x)=e^x-\frac{x^2}{2}-2$ 收束，同样可证结论。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问：写出 $\frac1{1-x}$ 的前 4 项。
+      formula_trace:
+        from: $f(x)=\frac1{1-x}$
+        to: $f(x)=1+x+x^2+x^3+\cdots$
+        operation: 按 0 点泰勒/几何级数形式展开。
+        why: 题目只要求前四项。
+      source_ref: page_0207_ex08_solution
+    - step_id: step_2
+      statement: 第(2)问：代入 $\sin x$ 展开估值。
+      formula_trace:
+        from: $\sin x=x-\frac{x^3}{3!}+\frac{x^5}{5!}-\cdots$
+        to: $\sin\frac12=\frac12-\frac1{48}+\cdots\approx0.48$
+        operation: 取前两项近似并给出两位小数。
+        why: 完成数值估算要求。
+      source_ref: page_0207_ex08_solution
+    - step_id: step_3
+      statement: 第(3)问法一：先给指数下界。
+      formula_trace:
+        from: $e^x-\frac{x^2}{2}-\sin x-\cos x$
+        to: $e^x-\frac{x^2}{2}-\sin x-\cos x\ge1+x-\sin x-\cos x$
+        operation: 用 $e^x\ge1+x+\frac{x^2}{2}\ (x\ge0)$。
+        why: 把指数项替换为低阶多项式便于并联判号。
+      source_ref: page_0207_ex08_solution
+    - step_id: step_4
+      statement: 第(3)问法一：拆成两块并联非负。
+      formula_trace:
+        from: $1+x-\sin x-\cos x$
+        to: $(1-\cos x)+(x-\sin x)\ge0$
+        operation: 分别用 $1-\cos x\ge0$ 与 $x-\sin x\ge0\ (x\ge0)$。
+        why: 直接得到目标不等式非负。
+      source_ref: page_0207_ex08_solution
+    - step_id: step_5
+      statement: 补充：source 的法二分段思路。
+      formula_trace:
+        from: $G(x)=e^x-\frac{x^2}{2}-\sin x-\cos x$
+        to: 在 $[0,\frac{3\pi}{4})$ 判 $G$ 单调，在 $[\frac{3\pi}{4},+\infty)$ 比较到 $F(x)=e^x-\frac{x^2}{2}-2$
+        operation: 构造导函数与分段下界。
+        why: 提供与法一不同的验证路径。
+      source_ref: page_0207_ex08_solution
+teaching_card:
+  student_title: 泰勒三问联动：估值到综合不等式
+  what_it_trains: 训练“先用展开写项与估值，再把复杂不等式拆成标准非负块”的连贯处理能力。
+  recognition_cues:
+    - 题目先给泰勒材料，再给展开、估值、证明三连问。
+    - 第(3)问含 $e^x,\sin x,\cos x$ 的综合式。
+    - 可通过低阶展开与基础三角不等式快速收束。
+  normalization_moves:
+    - 围绕 $x=0$ 写出低阶展开。
+    - 代入特定数值做截断近似。
+    - 证明时先压指数，再拆三角差值并联判号。
+  common_failures:
+    - 把 $\frac1{1-x}$ 只写成有限多项式，漏“前4项”语义。
+    - 估算 $\sin\frac12$ 时忽略交错级数的符号方向。
+    - 第(3)问漏掉 $1-\cos x\ge0$ 这一块，导致链路不闭合。
+  similar_practice_query: 泰勒展开 估算 sin1/2 指数三角不等式
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

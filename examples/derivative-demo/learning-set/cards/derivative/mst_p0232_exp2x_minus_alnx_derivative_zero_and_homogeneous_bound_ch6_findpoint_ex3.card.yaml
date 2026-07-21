@@ -1,0 +1,235 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0232_exp2x_minus_alnx_derivative_zero_and_homogeneous_bound_ch6_findpoint_ex3
+content_revision_id: mst_p0232_exp2x_minus_alnx_derivative_zero_and_homogeneous_bound_ch6_findpoint_ex3-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0232_exp2x_minus_alnx_derivative_zero_and_homogeneous_bound_ch6_findpoint_ex3.card.yaml
+stem: |-
+  （2015 · 新课标 I）设函数 $f(x)=e^{2x}-a\ln x$。
+  1. 讨论 $f(x)$ 的导函数 $f^\prime(x)$ 零点的个数。
+  2. 证明：当 $a>0$ 时，$f(x)\geqslant2a+a\ln\frac2a$。
+answer: |-
+  第 (1) 问：当 $a\leqslant0$ 时 $f^\prime(x)$ 无零点；当 $a>0$ 时 $f^\prime(x)$ 有唯一零点。第 (2) 问不等式成立，等号在 $x=\frac12,\ a=e$ 时取到。
+
+  $f'(x)=2e^{2x}-\frac ax$。当 $a\leqslant0$ 时 $f'(x)>0$，无零点。 当 $a>0$ 时 $f''(x)>0$，所以 $f'$ 单调递增。找大点时用 $e^{2x}>1$ 得 $f'(x)>2(1-\frac a{2x})$，取 $x=a/2$ 得 $f'(a/2)>0$。找小点时在 $(0,a/2)$ 内有 $f'(x)<2e^a-\frac ax$，取 $x=\frac a{2e^a}$ 得 $f'(x)<0$， 所以唯一零点位于 $(\frac a{2e^a},\frac a2)$。第 (2) 问令 $h(t)=e^t-t-1\geqslant0$，则 $f(x)-2a-a\ln\frac2a =a h(2x-\ln a)+a h(\ln 2x)\geqslant0$，等号要求 $2x-\ln a=0$ 且 $\ln2x=0$，即 $x=1/2,\ a=e$。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 写出导函数并处理 $a\leqslant0$。
+      max_score: 1
+    - step_id: step_2
+      description: $a>0$ 时先确定 $f^\prime$ 单调递增。
+      max_score: 1
+    - step_id: step_3
+      description: 用小函数找大点。
+      max_score: 1
+    - step_id: step_4
+      description: 用大函数找小点。
+      max_score: 1
+    - step_id: step_5
+      description: 取小点并夹出唯一零点。
+      max_score: 1
+    - step_id: step_6
+      description: 第 (2) 问使用 $h(t)=e^t-t-1\geqslant0$。
+      max_score: 1
+    - step_id: step_7
+      description: 把目标差拆成两个同构保值块。
+      max_score: 1
+    - step_id: step_8
+      description: 记录等号条件。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: part_1
+        goal: 零点/极值点分析
+        target: 第 part_1 问
+        result: $a\leqslant0$ 时无零点；$a>0$ 时唯一零点。
+      - part_id: part_2
+        goal: 不等式证明
+        target: 第 part_2 问
+        result: $f(x)\geqslant2a+a\ln\frac2a$。
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 同构变形与换元法
+      - 保值性与分治
+    subroute:
+      - 锁界与放缩
+      - 主客体变量
+      - 导函数零点找点
+      - 同构保值性
+      - $h(t)=e^t-t-1$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $e^{2x}-a\ln x$
+      - $2e^{2x}-\frac ax$
+      - $\frac a{2e^a}<x_1<\frac a2$
+      - $a h(2x-\ln a)+a h(\ln2x)$
+    normalization_moves_used:
+      - 先把问题转到导函数 $f^\prime$ 的零点。
+      - 用 $e^{2x}>1$ 找右侧正值点。
+      - 在 $(0,a/2)$ 内用 $e^{2x}<e^a$ 找左侧负值点。
+      - 把下界证明拆成两个 $e^t-t-1$ 的非负块。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会分析 $f^\prime$ 的单调性，回补导数单调极值基础。
+      - 若学生不会处理 $x>0$ 和 $a>0$ 下的取点范围，回补函数三要素与定义域。
+      - 若学生不会用 $e^{2x}>1$ 或 $e^{2x}<e^a$ 设界，回补指数对数基础。
+      - 若学生不会把目标差拆成两个 $h$，回补代数恒等变形。
+      - 若学生不理解 $h(t)=e^t-t-1\geqslant0$，回补不等式工具基础。
+  detail_terms:
+    - $e^{2x}-a\ln x$
+    - $2e^{2x}-a/x$
+    - $a/(2e^a)$
+    - $a/2$
+    - 导函数零点
+    - 同构保值性
+    - $h(t)=e^t-t-1$
+    - $2x-\ln a$
+    - $\ln2x$
+parts: &a1
+  - part_id: part_1
+    text: 讨论 $f(x)$ 的导函数 $f^\prime(x)$ 零点的个数。
+  - part_id: part_2
+    text: 证明：当 $a>0$ 时，$f(x)\geqslant2a+a\ln\frac2a$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0232_exp2x_minus_alnx_derivative_zero_and_homogeneous_bound_ch6_findpoint_ex3
+source_evidence:
+  source_refs:
+    - ref_id: page_0232_ex3_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0232/page_0232.md
+      role: problem_start
+      evidence: page_0232 底部给出例3题头：$f(x)=e^{2x}-a\ln x$，讨论 $f^\prime(x)$ 零点个数并证明 $a>0$ 时的下界。
+    - ref_id: page_0232_ex3_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0232/page_0232.md
+      role: solution
+      evidence: page_0232 开始第 (1) 问：$f^\prime(x)=2e^{2x}-\frac ax$，$a\leqslant0$ 时无零点，$a>0$ 时 $f^\prime$ 单调递增，需要找变号点。
+    - ref_id: page_0233_ex3_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0233/page_0233.md
+      role: continuation
+      evidence: page_0233 顶部续完例3：通过 $a/(2e^a)$ 与 $a/2$ 夹出 $f^\prime$ 的唯一零点；第 (2) 问用 $h(x)=e^x-x-1\geqslant0$ 证明下界。
+    - ref_id: page_0233_ex3_figure
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0233/page_0233.md
+      role: figure_context
+      evidence: page_0233 图示用比 $f^\prime(x)$ 更大的函数辅助寻找小点。
+    - ref_id: page_0233_ex4_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0233/page_0233.md
+      role: local_context
+      evidence: page_0233 随后另起例4，属于下一批，本卡只取其前方的例3续解。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0232.png
+      inspected: true
+      notes: 已核对页图：例3题头和第 (1) 问解析开头位于 page_0232 底部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0233.png
+      inspected: true
+      notes: 已核对页图：page_0233 顶部为例3续解、图示和第 (2) 问证明，例4另起。
+  source_context: 本卡处理 page_0232 起头、page_0233 顶部续完的例3；page_0233 例4以后留给下一批。
+  source_influence:
+    - 保留 source 的找点法：$a>0$ 时 $f^\prime$ 单调递增，先找大点 $a/2$，再用设界找小点 $a/(2e^a)$。
+    - 保留 source 的主客体变量分析：$2e^{2x}$ 与 $-\frac ax$ 在不同端控制符号。
+    - 保留 source 的同构保值性：把目标差拆成 $a h(2x-\ln a)+a h(\ln 2x)$。
+  source_discrepancies: []
+original_problem:
+  stem: （2015 · 新课标 I）设函数 $f(x)=e^{2x}-a\ln x$。
+  parts: *a1
+  choices: []
+  answer: 第 (1) 问：当 $a\leqslant0$ 时 $f^\prime(x)$ 无零点；当 $a>0$ 时 $f^\prime(x)$ 有唯一零点。第 (2) 问不等式成立，等号在 $x=\frac12,\ a=e$ 时取到。
+  fidelity_notes:
+    - 两问均无选项。
+    - 函数定义域为 $x>0$。
+solution:
+  source_solution_summary: $f'(x)=2e^{2x}-\frac ax$。当 $a\leqslant0$ 时 $f'(x)>0$，无零点。 当 $a>0$ 时 $f''(x)>0$，所以 $f'$ 单调递增。找大点时用 $e^{2x}>1$ 得 $f'(x)>2(1-\frac a{2x})$，取 $x=a/2$ 得 $f'(a/2)>0$。找小点时在 $(0,a/2)$ 内有 $f'(x)<2e^a-\frac ax$，取 $x=\frac a{2e^a}$ 得 $f'(x)<0$， 所以唯一零点位于 $(\frac a{2e^a},\frac a2)$。第 (2) 问令 $h(t)=e^t-t-1\geqslant0$，则 $f(x)-2a-a\ln\frac2a =a h(2x-\ln a)+a h(\ln 2x)\geqslant0$，等号要求 $2x-\ln a=0$ 且 $\ln2x=0$，即 $x=1/2,\ a=e$。
+  key_steps:
+    - step_id: step_1
+      statement: 写出导函数并处理 $a\leqslant0$。
+      formula_trace:
+        from: $f(x)=e^{2x}-a\ln x$
+        to: $f^\prime(x)=2e^{2x}-\frac ax$
+        operation: 求导。
+        why: $a\leqslant0$ 时 $-\frac ax\geqslant0$，所以无零点。
+      source_ref: page_0232_ex3_solution_start
+    - step_id: step_2
+      statement: $a>0$ 时先确定 $f^\prime$ 单调递增。
+      formula_trace:
+        from: $f^\prime(x)=2e^{2x}-\frac ax$
+        to: $f^{\prime\prime}(x)>0$
+        operation: 再求导。
+        why: 单调递增后，只需找一负一正两个点。
+      source_ref: page_0232_ex3_solution_start
+    - step_id: step_3
+      statement: 用小函数找大点。
+      formula_trace:
+        from: $f^\prime(x)=2(e^{2x}-\frac a{2x})$
+        to: $f^\prime(\frac a2)>0$
+        operation: 用 $e^{2x}>1$，解 $1-\frac a{2x}=0$ 得 $x=a/2$。
+        why: 这是找右侧正值点。
+      source_ref: page_0233_ex3_continuation
+    - step_id: step_4
+      statement: 用大函数找小点。
+      formula_trace:
+        from: $0<x<\frac a2$
+        to: $f^\prime(x)<2e^a-\frac ax$
+        operation: 用 $2e^{2x}<2e^a$。
+        why: 要让原函数导数为负，先让一个更大的函数为 0。
+      source_ref: page_0233_ex3_continuation
+    - step_id: step_5
+      statement: 取小点并夹出唯一零点。
+      formula_trace:
+        from: $2e^a-\frac ax=0$
+        to: $x=\frac a{2e^a},\quad x_1\in(\frac a{2e^a},\frac a2)$
+        operation: 解可解方程，结合 $f^\prime$ 单调递增和两端变号。
+        why: 这给出导函数唯一零点的位置。
+      source_ref: page_0233_ex3_continuation
+    - step_id: step_6
+      statement: 第 (2) 问使用 $h(t)=e^t-t-1\geqslant0$。
+      formula_trace:
+        from: $h(t)=e^t-t-1$
+        to: $h(t)\geqslant0$
+        operation: 由导数或基本指数不等式证明。
+        why: 目标差要拆成两个 $h$ 的和。
+      source_ref: page_0233_ex3_continuation
+    - step_id: step_7
+      statement: 把目标差拆成两个同构保值块。
+      formula_trace:
+        from: $f(x)-2a-a\ln\frac2a$
+        to: $a h(2x-\ln a)+a h(\ln2x)$
+        operation: 整理为 $(e^{2x-\ln a}-2x+\ln a-1)+(2x-\ln2x-1)$ 后乘 $a$。
+        why: 两个 $h$ 都非负，且 $a>0$。
+      source_ref: page_0233_ex3_continuation
+    - step_id: step_8
+      statement: 记录等号条件。
+      formula_trace:
+        from: $2x-\ln a=0,\ \ln2x=0$
+        to: $x=\frac12,\ a=e$
+        operation: 联立两个 $h$ 同时取等。
+        why: source 明确给出等号成立条件。
+      source_ref: page_0233_ex3_continuation
+teaching_card:
+  student_title: 先给 $f^\prime$ 两边取点，再把下界拆成两个 $e^t-t-1$
+  what_it_trains: 训练找点体系的升级版：导函数零点靠锁界取点，不等式下界靠同构保值性拆块。
+  recognition_cues:
+    - $f^\prime(x)=2e^{2x}-a/x$ 同时有指数正项和反比例负项。
+    - $a>0$ 时 $f^\prime$ 递增，找一个负点和一个正点即可。
+    - 目标 $2a+a\ln(2/a)$ 暗示把表达式拆成两个 $e^t-t-1$。
+  normalization_moves:
+    - 先分 $a\leqslant0$ 与 $a>0$。
+    - $a>0$ 时用 $a/2$ 找正点，用 $a/(2e^a)$ 找负点。
+    - 第 (2) 问设 $h(t)=e^t-t-1$。
+    - 把目标差整理为 $a h(2x-\ln a)+a h(\ln2x)$。
+  common_failures:
+    - 只知道 $f^\prime$ 递增，却不知道如何证明它真的有零点。
+    - 找小点时放缩方向错，把需要的大函数写成小函数。
+    - 第 (2) 问看不出两个 $h$ 的拆法，只做机械展开。
+  similar_practice_query: e^{2x}-a lnx 导函数零点 找点 锁界 a/(2e^a) a/2 同构保值性 e^t-t-1
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

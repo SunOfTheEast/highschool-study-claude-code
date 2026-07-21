@@ -1,0 +1,173 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0178_common_zero_b_plus_5_over_a_min_ex33
+content_revision_id: mst_p0178_common_zero_b_plus_5_over_a_min_ex33-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0178_common_zero_b_plus_5_over_a_min_ex33.card.yaml
+stem: |-
+  （2025 · 内乡实验高级中学二模 T8）已知 $a>0$，$b\in\mathbf{R}$，若关于 $x$ 的不等式 $(ax-1)(x^2+bx-1)\geqslant0$ 在 $(0,+\infty)$ 上恒成立，则 $b+\frac{5}{a}$ 的最小值是（  ）
+  A. 4
+  B. 4\sqrt{2}
+  C. 8
+  D. 8\sqrt{2}
+answer: |-
+  A
+
+  与例32同理，先由 $ax-1=0$ 得正零点 $x=\frac{1}{a}$，再按共零点关系令其也满足 $x^2+bx-1=0$，得到 $\frac{1}{a^2}+\frac{b}{a}-1=0$，即 $b=a-\frac{1}{a}$。代入目标：$b+\frac{5}{a}=a+\frac{4}{a}\ge2\sqrt{4}=4$。当 $a=2$ 时取等，此时 $b=2-\frac{1}{2}=\frac{3}{2}$，故最小值为 $4$，选 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 抓住显式零点 $x=\frac{1}{a}$。
+      max_score: 1
+    - step_id: step_2
+      description: 代入二次因子得到参数关系。
+      max_score: 1
+    - step_id: step_3
+      description: 消元后重写目标式。
+      max_score: 1
+    - step_id: step_4
+      description: 应用基本不等式并给出取等点。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level:
+      - part_id: item_1
+        goal: 极值最值
+        target: 求 $b+\frac{5}{a}$ 的最小值。
+        result: 见 source_solution_summary
+  method:
+    primary: 参变量分离
+    secondary:
+      - 数形结合
+      - 同构变形与换元法
+    subroute:
+      - 共零点
+      - 消元代换
+      - 基本不等式
+  structure:
+    primary: 多变量与不等式结构
+    secondary:
+      - 同构结构
+    evidence:
+      - 条件是双因子乘积恒成立。
+      - 关键关系是 $\frac{1}{a^2}+\frac{b}{a}-1=0$。
+      - 目标式化成 $a+\frac{4}{a}$。
+    normalization_moves_used:
+      - 先定零点 $x=\frac{1}{a}$。
+      - 代入得到 $b=a-\frac{1}{a}$。
+      - 改写目标为 $a+\frac{4}{a}$ 并求下界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不理解共零点触发条件，回补函数性质与图像。
+      - 若学生在消元时出现分式整理错误，回补代数恒等变形。
+      - 若学生不会处理 $a+\frac{4}{a}$ 下界，回补不等式工具基础。
+  detail_terms:
+    - $(ax-1)(x^2+bx-1)\ge0$
+    - $x=\frac{1}{a}$
+    - $\frac{1}{a^2}+\frac{b}{a}-1=0$
+    - $a+\frac{4}{a}\ge4$
+    - $a=2,\ b=\frac{3}{2}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0178_common_zero_b_plus_5_over_a_min_ex33
+source_evidence:
+  source_refs:
+    - ref_id: page_0178_ex33_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0178/page_0178.md
+      role: problem_start
+      evidence: page_0178 lines 31-36 给出例33题干与 A-D 选项。
+    - ref_id: page_0178_ex33_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0178/page_0178.md
+      role: solution
+      evidence: page_0178 line 38 解析沿用“共零点”得到 $\frac{1}{a^2}+\frac{b}{a}-1=0$，再化为 $\frac{5}{a}+b=a+\frac{4}{a}\ge4$，答案 A。
+    - ref_id: page_0178_top_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0178/page_0178.md
+      role: local_context
+      evidence: page_0178 lines 14-16 是上一页续式，不是本题题头。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0178.png
+      inspected: true
+      notes: 页图核对通过：例33题干、选项、共零点推导和答案 A 与 markdown 一致。
+  source_context: 例33与例32同属“单调函数共零点型”，只是目标式从 $2a-b$ 换成 $b+\frac{5}{a}$。
+  source_influence:
+    - 保留源页与例32同一共零点关系式。
+    - 保留源页取等点 $(a,b)=\left(2,\frac{3}{2}\right)$ 与选项 A。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 · 内乡实验高级中学二模 T8）已知 $a>0$，$b\in\mathbf{R}$，若关于 $x$ 的不等式 $(ax-1)(x^2+bx-1)\geqslant0$ 在 $(0,+\infty)$ 上恒成立，则 $b+\frac{5}{a}$ 的最小值是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: "4"
+      text_latex: "4"
+    - label: B
+      text_raw: 4\sqrt{2}
+      text_latex: $4\sqrt{2}$
+    - label: C
+      text_raw: "8"
+      text_latex: "8"
+    - label: D
+      text_raw: 8\sqrt{2}
+      text_latex: $8\sqrt{2}$
+  answer: A
+  fidelity_notes:
+    - 题干结构与例32一致，仅目标式不同。
+    - 题目为单选。
+solution:
+  source_solution_summary: 与例32同理，先由 $ax-1=0$ 得正零点 $x=\frac{1}{a}$，再按共零点关系令其也满足 $x^2+bx-1=0$，得到 $\frac{1}{a^2}+\frac{b}{a}-1=0$，即 $b=a-\frac{1}{a}$。代入目标：$b+\frac{5}{a}=a+\frac{4}{a}\ge2\sqrt{4}=4$。当 $a=2$ 时取等，此时 $b=2-\frac{1}{2}=\frac{3}{2}$，故最小值为 $4$，选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 抓住显式零点 $x=\frac{1}{a}$。
+      formula_trace:
+        from: $ax-1=0,\ a>0$
+        to: $x=\frac{1}{a}\in(0,+\infty)$
+        operation: 解方程并判断区间位置。
+        why: 为共零点代入做准备。
+      source_ref: page_0178_ex33_solution
+    - step_id: step_2
+      statement: 代入二次因子得到参数关系。
+      formula_trace:
+        from: $x^2+bx-1=0$
+        to: $\frac{1}{a^2}+\frac{b}{a}-1=0$
+        operation: 令 $x=\frac{1}{a}$ 并整理。
+        why: 把 $(a,b)$ 绑定到一条等式。
+      source_ref: page_0178_ex33_solution
+    - step_id: step_3
+      statement: 消元后重写目标式。
+      formula_trace:
+        from: $\frac{1}{a^2}+\frac{b}{a}-1=0$
+        to: $b=a-\frac{1}{a},\quad b+\frac{5}{a}=a+\frac{4}{a}$
+        operation: 先解 $b$ 再回代。
+        why: 把最值问题转为标准一元形式。
+      source_ref: page_0178_ex33_solution
+    - step_id: step_4
+      statement: 应用基本不等式并给出取等点。
+      formula_trace:
+        from: $a+\frac{4}{a},\ a>0$
+        to: $a+\frac{4}{a}\ge4$
+        operation: 应用 $u+\frac{c}{u}\ge2\sqrt{c}$。
+        why: 直接得到最小值和答案。
+      source_ref: page_0178_ex33_solution
+teaching_card:
+  student_title: 同一共零点，换一个目标式
+  what_it_trains: 训练同条件多问法：先固定参数关系，再快速替换目标式完成最值。
+  recognition_cues:
+    - 和上一题几乎同题干，只变目标表达式。
+    - 出现一次因子与二次因子的乘积恒成立。
+    - 目标可被改写为 $a+\frac{c}{a}$。
+  normalization_moves:
+    - 沿用共零点得到统一约束。
+    - 先消掉 $b$ 再做最值。
+    - 优先识别 $a+\frac{c}{a}$ 模板。
+  common_failures:
+    - 把例32中的 $2a-b$ 公式直接照搬，忘了本题目标已经变化。
+    - 算出 $b=a-\frac{1}{a}$ 后代回符号出错。
+    - 基本不等式取等条件和 $b$ 反算不一致。
+  similar_practice_query: 共零点 消元 a+4/a 最小值 参数题
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 未直接核对 page_0178 页图，当前依据 markdown transcription 重建。

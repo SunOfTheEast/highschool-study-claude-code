@@ -1,0 +1,149 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0203_exp_x2_log_inequality_ch6_log_ex07
+content_revision_id: mst_p0203_exp_x2_log_inequality_ch6_log_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0203_exp_x2_log_inequality_ch6_log_ex07.card.yaml
+stem: （2018 · 郑州二模 T21）已知函数 $f(x)=e^x-x^2$，求证：当 $x>0$ 时，$\frac{e^x+(2-e)x-1}{x}\geqslant \ln x+1$。
+answer: |
+  不等式成立，且在 $x=1$ 取等号。
+
+  因为 $x>0$，先乘 $x$ 并移项，目标等价于 $e^x-ex+x-1-x\ln x\ge0$。按源解写成 $\bigl(e^x-ex-(x-1)^2\bigr)+\bigl(x^2-x-x\ln x\bigr)\ge0$。 第一项令 $A(x)=e^x-ex-(x-1)^2$，由二、三阶导数分析得 $A(x)\ge0\ (x\ge0)$，且 $x=0,1$ 取等；第二项令 $B(x)=x^2-x-x\ln x=x(x-1-\ln x)\ge0\ (x>0)$， 且 $x=1$ 取等。两项相加得结论，并且仅在 $x=1$ 取等。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把原式化成 source 给出的等价目标。
+      max_score: 1
+    - step_id: step_2
+      description: 证明第一条：$e^x\ge ex+(x-1)^2\ (x\ge0)$。
+      max_score: 1
+    - step_id: step_3
+      description: 证明第二条：$x^2-x-x\ln x\ge0\ (x>0)$。
+      max_score: 1
+    - step_id: step_4
+      description: 合并两条子不等式，得到原命题及等号。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level: []
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 切线放缩与凹凸性
+      - 同构变形与换元法
+    subroute:
+      - 乘 $x$ 后配凑 $(x-1)^2$
+      - 指数项与二次项做拟合下界
+      - $x-1-\ln x$ 标准不等式并联
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - 目标同含 $e^x,\ x\ln x,\ (x-1)^2$。
+      - source 解法显式拆成“两条子不等式相加”的同构结构。
+    normalization_moves_used:
+      - 将分式不等式乘 $x$ 转为整式-对数混合式。
+      - 配凑 $(x-1)^2$ 制造可控指数拟合项。
+      - 把 $x^2-x-x\ln x$ 规范为 $x(x-1-\ln x)$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由分式不等式做等价配凑，回补代数恒等变形。
+      - 若学生不会用二、三阶导数判定 $A(x)$ 非负，回补导数单调极值基础。
+      - 若学生不熟 $x-1-\ln x\ge0$ 的证明，回补指数对数基础。
+  detail_terms:
+    - $e^x-ex-(x-1)^2$
+    - $x^2-x-x\ln x$
+    - $x-1-\ln x$
+    - 配凑 $(x-1)^2$
+    - 当且仅当 $x=1$ 取等
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0203_exp_x2_log_inequality_ch6_log_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0203_ex07_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0203/page_0203.md
+      role: problem_start
+      evidence: page_0203 出现题头“例7（2018·郑州二模 T21）已知函数 f(x)=e^x-x^2”，并给出待证不等式。
+    - ref_id: page_0203_ex07_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0203/page_0203.md
+      role: solution
+      evidence: 解析给出等价目标：$e^x-(x-1)^2-ex+x^2-x-x\ln x\ge0$，并提示分别证明两条基础不等式。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0203.png
+      inspected: true
+      notes: 已核对页图：例7解析只有“证明思路+两条需分别证明的不等式”，未逐行展开。
+  source_context: 例7位于例6和例8之间，题干与解析均在 page_0203 单页内完成。
+  source_influence:
+    - 保留源解等价变形：把目标写成“指数拟合项 + 指对标准项”之和。
+    - 严格按源提示分别证明 $e^x\ge ex+(x-1)^2$ 与 $x^2-x-x\ln x\ge0$。
+  source_discrepancies:
+    - source 对例7只给证明主线与待证子不等式；本卡补全了子不等式的导数证明细节。
+original_problem:
+  stem: （2018 · 郑州二模 T21）已知函数 $f(x)=e^x-x^2$，求证：当 $x>0$ 时，$\frac{e^x+(2-e)x-1}{x}\geqslant \ln x+1$。
+  parts: *a1
+  choices: []
+  answer: 不等式成立，且在 $x=1$ 取等号。
+  fidelity_notes:
+    - 源题是证明题，无选项。
+    - 等号条件“当且仅当 $x=1$”在 source 解析中已明示。
+solution:
+  source_solution_summary: |
+    因为 $x>0$，先乘 $x$ 并移项，目标等价于 $e^x-ex+x-1-x\ln x\ge0$。按源解写成 $\bigl(e^x-ex-(x-1)^2\bigr)+\bigl(x^2-x-x\ln x\bigr)\ge0$。 第一项令 $A(x)=e^x-ex-(x-1)^2$，由二、三阶导数分析得 $A(x)\ge0\ (x\ge0)$，且 $x=0,1$ 取等；第二项令 $B(x)=x^2-x-x\ln x=x(x-1-\ln x)\ge0\ (x>0)$， 且 $x=1$ 取等。两项相加得结论，并且仅在 $x=1$ 取等。
+  key_steps:
+    - step_id: step_1
+      statement: 把原式化成 source 给出的等价目标。
+      formula_trace:
+        from: $\frac{e^x+(2-e)x-1}{x}\ge \ln x+1,\ x>0$
+        to: $e^x-(x-1)^2-ex+x^2-x-x\ln x\ge0$
+        operation: 乘以正数 $x$ 并配凑 $(x-1)^2$。
+        why: 与源解一致地拆出两个可独立证明的子不等式。
+      source_ref: page_0203_ex07_solution
+    - step_id: step_2
+      statement: 证明第一条：$e^x\ge ex+(x-1)^2\ (x\ge0)$。
+      formula_trace:
+        from: $A(x)=e^x-ex-(x-1)^2$
+        to: $A(x)\ge0$，且 $x=0,1$ 取等
+        operation: 求导：$A^{\prime}(x)=e^x-e-2x+2$，$A^{\prime\prime}(x)=e^x-2$，$A^{\prime\prime\prime}(x)=e^x>0$，据此判定 $A$ 在 $[0,1]$ 先增后减且端点同为 0，在 $(1,+\infty)$ 递增。
+        why: 给出第一项非负与等号点。
+      source_ref: page_0203_ex07_solution
+    - step_id: step_3
+      statement: 证明第二条：$x^2-x-x\ln x\ge0\ (x>0)$。
+      formula_trace:
+        from: $B(x)=x(x-1-\ln x)$
+        to: $x-1-\ln x\ge0\Rightarrow B(x)\ge0$
+        operation: 令 $\phi(x)=x-1-\ln x$，$\phi^{\prime}(x)=1-\frac1x$，在 $x=1$ 处取最小值 0。
+        why: 这是 source 解析明确提示的第二条基础不等式。
+      source_ref: page_0203_ex07_solution
+    - step_id: step_4
+      statement: 合并两条子不等式，得到原命题及等号。
+      formula_trace:
+        from: step_2 与 step_3
+        to: $\frac{e^x+(2-e)x-1}{x}\ge \ln x+1$，且当且仅当 $x=1$ 取等
+        operation: 对子目标求和并回代 step_1。
+        why: 闭合 source 给出的证明链。
+      source_ref: page_0203_ex07_solution
+teaching_card:
+  student_title: 配凑平方后双不等式并联
+  what_it_trains: 训练把分式型指对不等式改写为两个可验证子命题，再通过求和完成整体证明。
+  recognition_cues:
+    - 分式左边含 $e^x$ 与线性项，右边是 $\ln x+1$。
+    - source 明确提示“需分别证明两条不等式”。
+    - 表达式可自然配凑 $(x-1)^2$。
+  normalization_moves:
+    - 先乘 $x$ 再移项，去掉分母。
+    - 配凑 $(x-1)^2$ 并拆成两项。
+    - 对子项分别判号后再相加。
+  common_failures:
+    - 漏掉 $x>0$ 就直接乘 $x$，等价性说明不完整。
+    - 把 $x^2-x-x\ln x$ 错写成 $(x-1-\ln x)$，漏乘因子 $x$。
+    - 只验证数值点，未证明两条子不等式在区间内成立。
+  similar_practice_query: 指数对数不等式 配凑(x-1)^2 两条子不等式相加
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

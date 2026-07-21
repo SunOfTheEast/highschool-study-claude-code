@@ -1,0 +1,327 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0129_trig_sine_ratio_ex14
+content_revision_id: mst_p0129_trig_sine_ratio_ex14-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0129_trig_sine_ratio_ex14.card.yaml
+stem: |-
+  （24-25 高二下 · 重庆 · 阶段练习）定义在 $\\left(0,\\frac{\\pi}{2}\\right)$ 上的函数 $f(x)$ 的导函数为 $f^{\\prime}(x)$，且对任意 $x\\in\\left(0,\\frac{\\pi}{2}\\right)$ 都有 $f(x)>f^{\\prime}(x)\\tan x$，下列说法正确的是（  ）
+  A. $\\sqrt{2}f\\left(\\frac{\\pi}{6}\\right)<f\\left(\\frac{\\pi}{4}\\right)$
+  B. $\\sqrt{6}f\\left(\\frac{\\pi}{4}\\right)<2f\\left(\\frac{\\pi}{3}\\right)$
+  C. $(\\sqrt{6}-\\sqrt{2})f\\left(\\frac{5\\pi}{12}\\right)<2f\\left(\\frac{\\pi}{6}\\right)$
+  D. $(\\sqrt{6}+\\sqrt{2})f\\left(\\frac{\\pi}{12}\\right)<2f\\left(\\frac{\\pi}{6}\\right)$
+answer: |
+  C
+
+  在 $x\in\left(0,\frac{\pi}{2}\right)$ 上有 $\sin x>0,\cos x>0$。
+  由
+  \[
+  f(x)>f^{\prime}(x)\tan x=f^{\prime}(x)\frac{\sin x}{\cos x}
+  \]
+  得
+  \[
+  f(x)\cos x-f^{\prime}(x)\sin x>0.
+  \]
+  设
+  \[
+  F(x)=\frac{f(x)}{\sin x},
+  \]
+  则
+  \[
+  F^{\prime}(x)=\frac{f^{\prime}(x)\sin x-f(x)\cos x}{\sin^2x}<0,
+  \]
+  故 $F$ 在 $\left(0,\frac{\pi}{2}\right)$ 递减。
+
+  对 A：
+  \[
+  F\!\left(\frac{\pi}{6}\right)>F\!\left(\frac{\pi}{4}\right)
+  \Rightarrow
+  \sqrt2 f\!\left(\frac{\pi}{6}\right)>f\!\left(\frac{\pi}{4}\right),
+  \]
+  与 A 相反，A 错。
+
+  对 B：
+  \[
+  F\!\left(\frac{\pi}{4}\right)>F\!\left(\frac{\pi}{3}\right)
+  \Rightarrow
+  \sqrt6 f\!\left(\frac{\pi}{4}\right)>2f\!\left(\frac{\pi}{3}\right),
+  \]
+  与 B 相反，B 错。
+
+  对 C：
+  \[
+  F\!\left(\frac{5\pi}{12}\right)<F\!\left(\frac{\pi}{6}\right),
+  \]
+  且
+  \[
+  \sin\frac{5\pi}{12}
+  =\sin\!\left(\frac{\pi}{4}+\frac{\pi}{6}\right)
+  =\frac{\sqrt6+\sqrt2}{4},
+  \]
+  化简得
+  \[
+  (\sqrt6-\sqrt2)f\!\left(\frac{5\pi}{12}\right)<2f\!\left(\frac{\pi}{6}\right),
+  \]
+  C 正确。
+
+  对 D：
+  \[
+  F\!\left(\frac{\pi}{12}\right)>F\!\left(\frac{\pi}{6}\right),
+  \]
+  且
+  \[
+  \sin\frac{\pi}{12}
+  =\sin\!\left(\frac{\pi}{4}-\frac{\pi}{6}\right)
+  =\frac{\sqrt6-\sqrt2}{4},
+  \]
+  得
+  \[
+  (\sqrt6+\sqrt2)f\!\left(\frac{\pi}{12}\right)>2f\!\left(\frac{\pi}{6}\right),
+  \]
+  与 D 相反，D 错。故选 C。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把题设转为可构造的比值导数符号。
+      max_score: 1
+    - step_id: step_2
+      description: 构造 $F$ 并判单调。
+      max_score: 1
+    - step_id: step_3
+      description: 利用递减性直接排除 A、B。
+      max_score: 1
+    - step_id: step_4
+      description: 用和角公式完成 C 的化简。
+      max_score: 1
+    - step_id: step_5
+      description: 用差角公式反驳 D。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值求值
+        target: 三角特殊角函数值不等式真伪判定
+        result: 见 source_solution_summary
+  method:
+    primary: 逆向构造法
+    secondary:
+      - 同构变形与换元法
+      - 充分/必要性探路
+    subroute:
+      - 三角函数基础构造
+      - 正弦比值单调
+      - 和差角代值
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 同构结构
+      - 抽象函数结构
+    evidence:
+      - $f(x)>f^{\\prime}(x)\\tan x$ 经乘 $\\cos x$ 变成 $f\\cos-f^{\\prime}\\sin$。
+      - $\\left(\\frac{f(x)}{\\sin x}\\right)^{\\prime}$ 分子恰是 $f^{\\prime}\\sin-f\\cos$。
+      - C、D 依赖 $\\sin\\frac{5\\pi}{12}$ 与 $\\sin\\frac{\\pi}{12}$ 的和差角公式。
+    normalization_moves_used:
+      - 先把题设写成“导数分子”符号。
+      - 构造 $F=\\frac{f}{\\sin}$ 并统一用递减性比较。
+      - 最后代入特殊角正弦并有理化到选项形式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $f(x)>f^{\\prime}(x)\\tan x$ 转为 $f\\cos-f^{\\prime}\\sin>0$，回补三角函数基础。
+      - 若学生在 $F^{\\prime}(x)$ 求导符号上反复出错，回补导数运算与几何意义。
+      - 若学生不熟悉 $\\sin\\left(\\frac{\\pi}{4}\\pm\\frac{\\pi}{6}\\right)$ 的计算，回补三角函数基础。
+      - 若学生把“递减函数值比较”方向写反，回补导数单调极值基础。
+  detail_terms:
+    - $F(x)=\\frac{f(x)}{\\sin x}$
+    - $F^{\\prime}(x)<0$
+    - $\\sin\\frac{5\\pi}{12}=\\frac{\\sqrt6+\\sqrt2}{4}$
+    - $\\sin\\frac{\\pi}{12}=\\frac{\\sqrt6-\\sqrt2}{4}$
+    - 答案 C
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0129_trig_sine_ratio_ex14
+source_evidence:
+  source_refs:
+    - ref_id: page_0129
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0129/page_0129.md
+      role: problem_start
+      evidence: page_0129 中下部给出例14题头、A-D选项与解析前半。
+    - ref_id: page_0130
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0130/page_0130.md
+      role: continuation
+      evidence: page_0130 顶部续完例14中 C、D 判断并给出“故选 C”。
+    - ref_id: page_0130_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0130/page_0130.md
+      role: local_context
+      evidence: page_0130 在例14结束后进入“4. 对数函数基础构造”和例15题头，作为边界上下文。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0129.png
+      inspected: true
+      notes: 已核对页图：例14在 page_0129 起头，A/B 与构造 $F(x)=\\frac{f(x)}{\\sin x}$ 的步骤可见。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0130.png
+      inspected: true
+      notes: 已核对页图：例14在 page_0130 顶部续完 C、D 并给出最终答案 C。
+  source_context: 例14题头在 page_0129，解析跨到 page_0130；按题头归属规则由 batch B 继续跨页完成。
+  source_influence:
+    - 保留源页由 $f(x)>f^{\\prime}(x)\\tan x$ 推出 $F^{\\prime}(x)<0$ 的比值构造。
+    - 保留源页通过 $F$ 递减依次判 A、B、C、D。
+    - 保留源页在 C、D 中使用 $\\sin\\frac{5\\pi}{12}$ 与 $\\sin\\frac{\\pi}{12}$ 的和差角公式。
+  source_discrepancies: []
+original_problem:
+  stem: （24-25 高二下 · 重庆 · 阶段练习）定义在 $\\left(0,\\frac{\\pi}{2}\\right)$ 上的函数 $f(x)$ 的导函数为 $f^{\\prime}(x)$，且对任意 $x\\in\\left(0,\\frac{\\pi}{2}\\right)$ 都有 $f(x)>f^{\\prime}(x)\\tan x$，下列说法正确的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\\sqrt{2}f\\left(\\frac{\\pi}{6}\\right)<f\\left(\\frac{\\pi}{4}\\right)$
+      text_latex: $\\sqrt{2}f\\left(\\frac{\\pi}{6}\\right)<f\\left(\\frac{\\pi}{4}\\right)$
+    - label: B
+      text_raw: $\\sqrt{6}f\\left(\\frac{\\pi}{4}\\right)<2f\\left(\\frac{\\pi}{3}\\right)$
+      text_latex: $\\sqrt{6}f\\left(\\frac{\\pi}{4}\\right)<2f\\left(\\frac{\\pi}{3}\\right)$
+    - label: C
+      text_raw: $(\\sqrt{6}-\\sqrt{2})f\\left(\\frac{5\\pi}{12}\\right)<2f\\left(\\frac{\\pi}{6}\\right)$
+      text_latex: $(\\sqrt{6}-\\sqrt{2})f\\left(\\frac{5\\pi}{12}\\right)<2f\\left(\\frac{\\pi}{6}\\right)$
+    - label: D
+      text_raw: $(\\sqrt{6}+\\sqrt{2})f\\left(\\frac{\\pi}{12}\\right)<2f\\left(\\frac{\\pi}{6}\\right)$
+      text_latex: $(\\sqrt{6}+\\sqrt{2})f\\left(\\frac{\\pi}{12}\\right)<2f\\left(\\frac{\\pi}{6}\\right)$
+  answer: C
+  fidelity_notes:
+    - 单选题，题干和 A/B 判定在 page_0129，C/D 判定与答案续至 page_0130。
+    - 后续 page_0130 的“对数函数基础构造”与例15不属于本题内容。
+solution:
+  source_solution_summary: |
+    在 $x\in\left(0,\frac{\pi}{2}\right)$ 上有 $\sin x>0,\cos x>0$。
+    由
+    \[
+    f(x)>f^{\prime}(x)\tan x=f^{\prime}(x)\frac{\sin x}{\cos x}
+    \]
+    得
+    \[
+    f(x)\cos x-f^{\prime}(x)\sin x>0.
+    \]
+    设
+    \[
+    F(x)=\frac{f(x)}{\sin x},
+    \]
+    则
+    \[
+    F^{\prime}(x)=\frac{f^{\prime}(x)\sin x-f(x)\cos x}{\sin^2x}<0,
+    \]
+    故 $F$ 在 $\left(0,\frac{\pi}{2}\right)$ 递减。
+
+    对 A：
+    \[
+    F\!\left(\frac{\pi}{6}\right)>F\!\left(\frac{\pi}{4}\right)
+    \Rightarrow
+    \sqrt2 f\!\left(\frac{\pi}{6}\right)>f\!\left(\frac{\pi}{4}\right),
+    \]
+    与 A 相反，A 错。
+
+    对 B：
+    \[
+    F\!\left(\frac{\pi}{4}\right)>F\!\left(\frac{\pi}{3}\right)
+    \Rightarrow
+    \sqrt6 f\!\left(\frac{\pi}{4}\right)>2f\!\left(\frac{\pi}{3}\right),
+    \]
+    与 B 相反，B 错。
+
+    对 C：
+    \[
+    F\!\left(\frac{5\pi}{12}\right)<F\!\left(\frac{\pi}{6}\right),
+    \]
+    且
+    \[
+    \sin\frac{5\pi}{12}
+    =\sin\!\left(\frac{\pi}{4}+\frac{\pi}{6}\right)
+    =\frac{\sqrt6+\sqrt2}{4},
+    \]
+    化简得
+    \[
+    (\sqrt6-\sqrt2)f\!\left(\frac{5\pi}{12}\right)<2f\!\left(\frac{\pi}{6}\right),
+    \]
+    C 正确。
+
+    对 D：
+    \[
+    F\!\left(\frac{\pi}{12}\right)>F\!\left(\frac{\pi}{6}\right),
+    \]
+    且
+    \[
+    \sin\frac{\pi}{12}
+    =\sin\!\left(\frac{\pi}{4}-\frac{\pi}{6}\right)
+    =\frac{\sqrt6-\sqrt2}{4},
+    \]
+    得
+    \[
+    (\sqrt6+\sqrt2)f\!\left(\frac{\pi}{12}\right)>2f\!\left(\frac{\pi}{6}\right),
+    \]
+    与 D 相反，D 错。故选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 把题设转为可构造的比值导数符号。
+      formula_trace:
+        from: $f(x)>f^{\\prime}(x)\\tan x$
+        to: $f(x)\\cos x-f^{\\prime}(x)\\sin x>0$
+        operation: 利用 $\\tan x=\\frac{\\sin x}{\\cos x}$ 且 $\\sin x,\\cos x>0$。
+        why: 为构造 $F(x)=\\frac{f(x)}{\\sin x}$ 的导数做准备。
+      source_ref: page_0129
+    - step_id: step_2
+      statement: 构造 $F$ 并判单调。
+      formula_trace:
+        from: $F(x)=\\frac{f(x)}{\\sin x}$
+        to: $F^{\\prime}(x)=\\frac{f^{\\prime}(x)\\sin x-f(x)\\cos x}{\\sin^2x}<0$
+        operation: 商法求导并代入 step_1 结果。
+        why: 得到定义域内递减性，用于统一判项。
+      source_ref: page_0129
+    - step_id: step_3
+      statement: 利用递减性直接排除 A、B。
+      formula_trace:
+        from: |
+          $F\!\left(\frac{\pi}{6}\right)>F\!\left(\frac{\pi}{4}\right),\
+          F\!\left(\frac{\pi}{4}\right)>F\!\left(\frac{\pi}{3}\right)$
+        to: |
+          $\sqrt2 f\!\left(\frac{\pi}{6}\right)>f\!\left(\frac{\pi}{4}\right),\
+          \sqrt6 f\!\left(\frac{\pi}{4}\right)>2f\!\left(\frac{\pi}{3}\right)$
+        operation: 代入 $\\sin\\frac{\\pi}{6},\\sin\\frac{\\pi}{4},\\sin\\frac{\\pi}{3}$ 化简。
+        why: 与 A、B 方向均相反。
+      source_ref: page_0129
+    - step_id: step_4
+      statement: 用和角公式完成 C 的化简。
+      formula_trace:
+        from: $F\\left(\\frac{5\\pi}{12}\\right)<F\\left(\\frac{\\pi}{6}\\right)$ 与 $\\sin\\frac{5\\pi}{12}=\\frac{\\sqrt6+\\sqrt2}{4}$
+        to: $(\\sqrt6-\\sqrt2)f\\left(\\frac{5\\pi}{12}\\right)<2f\\left(\\frac{\\pi}{6}\\right)$
+        operation: 把比值不等式代入正弦值并有理化。
+        why: 得到与 C 完全一致的表达。
+      source_ref: page_0130
+    - step_id: step_5
+      statement: 用差角公式反驳 D。
+      formula_trace:
+        from: $F\\left(\\frac{\\pi}{12}\\right)>F\\left(\\frac{\\pi}{6}\\right)$ 与 $\\sin\\frac{\\pi}{12}=\\frac{\\sqrt6-\\sqrt2}{4}$
+        to: $(\\sqrt6+\\sqrt2)f\\left(\\frac{\\pi}{12}\\right)>2f\\left(\\frac{\\pi}{6}\\right)$
+        operation: 同样代入正弦值并化简。
+        why: 与 D 给出的“小于”相反。
+      source_ref: page_0130
+teaching_card:
+  student_title: 用 $\\frac{f}{\\sin x}$ 的递减性筛选四个三角不等式
+  what_it_trains: 训练把“$f$ 与 $f^{\\prime}\\tan x$ 的比较”翻译成比值函数单调，再结合和差角精确化简到选项系数。
+  recognition_cues:
+    - 题设右边是 $f^{\\prime}(x)\\tan x$。
+    - 选项全是 $\\frac{\\pi}{12},\\frac{\\pi}{6},\\frac{\\pi}{4},\\frac{\\pi}{3},\\frac{5\\pi}{12}$ 等特殊角。
+    - 后两项出现 $(\\sqrt6\\pm\\sqrt2)$，通常来自和差角正弦。
+  normalization_moves:
+    - 先构造 $F=\\frac{f}{\\sin x}$ 并判 $F^{\\prime}<0$。
+    - 先用递减性排 A、B。
+    - 再把 C、D 写成 $F$ 比较并代入 $\\sin\\frac{5\\pi}{12},\\sin\\frac{\\pi}{12}$。
+  common_failures:
+    - 乘以 $\\cos x$ 时忘记定义域内 $\\cos x>0$。
+    - 把 $F^{\\prime}$ 分子写成 $f\\cos-f^{\\prime}\\sin$ 后没再带负号。
+    - 和差角公式中 $\\sin\\left(\\frac{\\pi}{4}-\\frac{\\pi}{6}\\right)$ 号写错。
+    - 有理化后把 $(\\sqrt6-\\sqrt2)$ 与 $(\\sqrt6+\\sqrt2)$ 对调。
+  similar_practice_query: 三角函数基础构造 f/\\sin x 单调 特殊角 和差角 不等式判断
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0129 与 page_0130 页图已核对；例14跨页闭合且结论为 C。
+    - page_0130 在例14后进入新小节与例15，已按归属规则仅作边界上下文。

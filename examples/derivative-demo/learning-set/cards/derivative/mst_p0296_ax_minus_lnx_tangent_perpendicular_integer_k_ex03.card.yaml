@@ -1,0 +1,260 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0296_ax_minus_lnx_tangent_perpendicular_integer_k_ex03
+content_revision_id: mst_p0296_ax_minus_lnx_tangent_perpendicular_integer_k_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0296_ax_minus_lnx_tangent_perpendicular_integer_k_ex03.card.yaml
+stem: |-
+  （2024 秋 · 天津校级期中）已知函数 $f(x)=ax-1-\ln x$，$a\in\mathbf{R}$。
+  1. 若 $a=2$，求 $f(x)$ 在 $[\frac1e,e]$ 上的最大值和最小值。
+  2. 若 $a=1$，当 $x>1$ 时，证明：$x\ln x>f(x)$ 恒成立。
+  3. 若函数 $f(x)$ 在 $x=1$ 处的切线与直线 $l:x=1$ 垂直，且 $f(x)+x\ln x+k\geqslant kx-1-\ln x$ 对任意 $x\in(1,+\infty)$ 恒成立，求 $k$ 的最大整数值。
+answer: |-
+  第(1)问最大值为 $2e-2$，最小值为 $\ln2$；第(2)问不等式成立；第(3)问 $k$ 的最大整数值为 $3$。
+
+  第(1)问当 $a=2$ 时，$f^\prime(x)=\frac{2x-1}{x}$， 在 $[\frac1e,\frac12]$ 上递减，在 $[\frac12,e]$ 上递增； 比较 $f(\frac12)=\ln2$、$f(\frac1e)=\frac2e$、 $f(e)=2e-2$，得最小值 $\ln2$，最大值 $2e-2$。第(2)问当 $a=1$ 时，令 $h(x)=x\ln x-f(x)=x\ln x-x+\ln x+1$， 则 $h^\prime(x)=\ln x+\frac1x>0$，所以 $x>1$ 时 $h(x)>h(1)=0$。第(3)问切线与 $x=1$ 垂直说明切线水平， $f^\prime(1)=0$，故 $a=1$。原不等式化为 $g(x)=x\ln x-(k-1)x+k\ge0$ 对 $x>1$ 恒成立。source 按更强的 $g(x)>0$ 处理：$g^\prime(x)=\ln x+2-k$。若 $k\le2$， 则 $g$ 在 $(1,+\infty)$ 上递增，满足条件；若 $k>2$， 最小点为 $x=e^{k-2}$，需 $k-e^{k-2}>0$。检验整数得 $k=3$ 成立，$k=4$ 不成立，$k\ge5$ 更不成立，所以最大整数为 $3$。法二先由 $g(e)>0$ 得 $k<\frac{2e}{e-1}\in(3,4)$， 再验证 $k=3$ 时 $g(x)=x\ln x-2x+3>0$。
+rubric:
+  max_score: 9
+  criteria:
+    - step_id: step_1
+      description: 第(1)问求区间最值。
+      max_score: 1
+    - step_id: step_2
+      description: 比较端点和驻点函数值。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问把待证不等式变成辅助函数正性。
+      max_score: 1
+    - step_id: step_4
+      description: 用单调性完成第(2)问。
+      max_score: 1
+    - step_id: step_5
+      description: 第(3)问先由几何条件确定 $a$。
+      max_score: 1
+    - step_id: step_6
+      description: 把第(3)问转成 $k$ 参数函数正性。
+      max_score: 1
+    - step_id: step_7
+      description: 法一按最小点是否进入区间分类。
+      max_score: 1
+    - step_id: step_8
+      description: 检验整数边界。
+      max_score: 1
+    - step_id: step_9
+      description: 法二先用特值 $x=e$ 锁定候选，再验证。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 极值最值
+        target: 第 1 问
+        result: 最大值 $2e-2$，最小值 $\ln2$。
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 2 问
+        result: $x>1$ 时 $x\ln x>f(x)$。
+      - part_id: "3"
+        goal: 求参数范围
+        target: 第 3 问
+        result: $k$ 的最大整数值为 $3$。
+  method:
+    primary: 含参数分类讨论
+    secondary:
+      - 充分/必要性探路
+      - 参变量分离
+      - 局部逼近与找点
+    subroute:
+      - 区间端点与驻点比较
+      - 辅助函数正性
+      - 切线垂直定参
+      - $e^{k-2}$ 是否进入区间
+      - 特值 $x=e$ 锁定整数候选
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $f(x)=ax-1-\ln x$
+      - $x\ln x>f(x)$
+      - 切线与 $x=1$ 垂直
+      - $g(x)=x\ln x-(k-1)x+k$
+      - $g^\prime(x)=\ln x+2-k$
+      - $x=e^{k-2}$
+      - $g(e)>0$
+    normalization_moves_used:
+      - 第(1)问代入 $a=2$ 后做常规区间最值。
+      - 第(2)问移项成 $h(x)>0$。
+      - 第(3)问先由切线垂直确定 $a=1$。
+      - 把恒成立不等式整理成 $g(x)\ge0$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由切线垂直推出斜率为 $0$，回补导数运算与几何意义。
+      - 若学生不会区间最值比较，回补导数单调极值基础。
+      - 若学生不会整理 $g(x)$，回补代数恒等变形。
+      - 若学生不会判断 $e^{k-2}$，回补指数对数基础。
+      - 若学生不会用特值排除整数候选，回补不等式工具基础。
+  detail_terms:
+    - $ax-1-\ln x$
+    - $[\frac1e,e]$
+    - $x\ln x>f(x)$
+    - 切线与 $x=1$ 垂直
+    - $g(x)=x\ln x-(k-1)x+k$
+    - $e^{k-2}$
+    - 最大整数 $k=3$
+parts: &a1
+  - part_id: "1"
+    text: 若 $a=2$，求 $f(x)$ 在 $[\frac1e,e]$ 上的最大值和最小值。
+  - part_id: "2"
+    text: 若 $a=1$，当 $x>1$ 时，证明：$x\ln x>f(x)$ 恒成立。
+  - part_id: "3"
+    text: 若函数 $f(x)$ 在 $x=1$ 处的切线与直线 $l:x=1$ 垂直，且 $f(x)+x\ln x+k\geqslant kx-1-\ln x$ 对任意 $x\in(1,+\infty)$ 恒成立，求 $k$ 的最大整数值。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0296_ax_minus_lnx_tangent_perpendicular_integer_k_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0296_ex03_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0296/page_0296.md
+      role: problem_start
+      evidence: page_0296 例3题头：$f(x)=ax-1-\ln x$；三问分别为区间最值、不等式证明、切线垂直条件下求 $k$ 最大整数值。
+    - ref_id: page_0296_ex03_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0296/page_0296.md
+      role: solution_start
+      evidence: page_0296 完成第(1)(2)问，并把第(3)问由切线垂直条件推出 $a=1$，再化为 $x\ln x-(k-1)x+k>0$ 对 $x>1$ 恒成立。
+    - ref_id: page_0297_ex03_solution_end
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0297/page_0297.md
+      role: solution_end
+      evidence: page_0297 页首续完第(3)问：令 $g(x)=x\ln x-(k-1)x+k$，分 $k\le2$ 与 $k>2$，得最大整数 $k=3$；法二用 $g(e)>0$ 先锁定 $k<2e/(e-1)\in(3,4)$，再验证 $k=3$。
+    - ref_id: page_0297_ex04_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0297/page_0297.md
+      role: local_context
+      evidence: page_0297 中部从例4开始新题，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0296.png
+      inspected: true
+      notes: 已核对页图：page_0296 包含例3题头、第(1)(2)问解析和第(3)问开头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0297.png
+      inspected: true
+      notes: 已核对页图：page_0297 页首完成例3第(3)问，随后另起例4。
+  source_context: 本卡处理 page_0296 起头、page_0297 页首续完的例3；page_0297 例4排除。
+  source_influence:
+    - 保留第(1)问 $a=2$ 时 $f^\prime(x)=\frac{2x-1}{x}$，最小值 $\ln2$，最大值 $2e-2$。
+    - 保留第(2)问构造 $h(x)=x\ln x-f(x)=x\ln x-x+\ln x+1$，由 $h^\prime(x)>0$ 证明。
+    - 保留第(3)问切线与竖直线垂直，因此切线水平，$f^\prime(1)=0$，得到 $a=1$。
+    - 保留第(3)问核心函数 $g(x)=x\ln x-(k-1)x+k$。
+    - 保留法一按 $e^{k-2}\le1$ 与 $e^{k-2}>1$ 分类，最小值为 $k-e^{k-2}$。
+    - 保留法二用 $g(e)>0$ 锁定 $k<\frac{2e}{e-1}\in(3,4)$，再验证 $k=3$。
+  source_discrepancies:
+    - discrepancy_id: page_0296_ex03_part3_ge_to_gt
+      status: resolved
+      issue: 原题不等式为 $\geqslant$，代入 $a=1$ 后应先得到 $g(x)\ge0$；source 随后写成 $g(x)>0$ 恒成立。
+      resolution: source 证明的是更强的 $g(x)>0$，且最终最大整数值仍为 $3$；题卡保留原题的 $\ge$，解法中注明按更强条件验证。
+original_problem:
+  stem: （2024 秋 · 天津校级期中）已知函数 $f(x)=ax-1-\ln x$，$a\in\mathbf{R}$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问最大值为 $2e-2$，最小值为 $\ln2$；第(2)问不等式成立；第(3)问 $k$ 的最大整数值为 $3$。
+  fidelity_notes:
+    - 无选项。
+    - 第(3)问原题是非严格不等式，source 用严格正证明，最终整数答案不受影响。
+solution:
+  source_solution_summary: 第(1)问当 $a=2$ 时，$f^\prime(x)=\frac{2x-1}{x}$， 在 $[\frac1e,\frac12]$ 上递减，在 $[\frac12,e]$ 上递增； 比较 $f(\frac12)=\ln2$、$f(\frac1e)=\frac2e$、 $f(e)=2e-2$，得最小值 $\ln2$，最大值 $2e-2$。第(2)问当 $a=1$ 时，令 $h(x)=x\ln x-f(x)=x\ln x-x+\ln x+1$， 则 $h^\prime(x)=\ln x+\frac1x>0$，所以 $x>1$ 时 $h(x)>h(1)=0$。第(3)问切线与 $x=1$ 垂直说明切线水平， $f^\prime(1)=0$，故 $a=1$。原不等式化为 $g(x)=x\ln x-(k-1)x+k\ge0$ 对 $x>1$ 恒成立。source 按更强的 $g(x)>0$ 处理：$g^\prime(x)=\ln x+2-k$。若 $k\le2$， 则 $g$ 在 $(1,+\infty)$ 上递增，满足条件；若 $k>2$， 最小点为 $x=e^{k-2}$，需 $k-e^{k-2}>0$。检验整数得 $k=3$ 成立，$k=4$ 不成立，$k\ge5$ 更不成立，所以最大整数为 $3$。法二先由 $g(e)>0$ 得 $k<\frac{2e}{e-1}\in(3,4)$， 再验证 $k=3$ 时 $g(x)=x\ln x-2x+3>0$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问求区间最值。
+      formula_trace:
+        from: $f(x)=2x-1-\ln x$
+        to: $f^\prime(x)=\frac{2x-1}{x}$
+        operation: 代入 $a=2$ 后求导。
+        why: 区间最值先找单调分界点 $x=\frac12$。
+      source_ref: page_0296_ex03_solution_start
+    - step_id: step_2
+      statement: 比较端点和驻点函数值。
+      formula_trace:
+        from: $f(\frac12)=\ln2,\quad f(\frac1e)=\frac2e,\quad f(e)=2e-2$
+        to: $f_{\min}=\ln2,\quad f_{\max}=2e-2$
+        operation: 比较区间端点和唯一极小点。
+        why: 驻点给最小值，最大值仍需比较两个端点。
+      source_ref: page_0296_ex03_solution_start
+    - step_id: step_3
+      statement: 第(2)问把待证不等式变成辅助函数正性。
+      formula_trace:
+        from: $x\ln x>f(x)$
+        to: $h(x)=x\ln x-x+\ln x+1>0$
+        operation: 代入 $a=1$ 并移项。
+        why: 目标变成证明 $h$ 在 $x>1$ 上从 $0$ 往上走。
+      source_ref: page_0296_ex03_solution_start
+    - step_id: step_4
+      statement: 用单调性完成第(2)问。
+      formula_trace:
+        from: $h^\prime(x)=\ln x+\frac1x>0\quad(x>1)$
+        to: $h(x)>h(1)=0$
+        operation: 求导判单调。
+        why: 这是基础的对数正性证明。
+      source_ref: page_0296_ex03_solution_start
+    - step_id: step_5
+      statement: 第(3)问先由几何条件确定 $a$。
+      formula_trace:
+        from: 切线与直线 $x=1$ 垂直
+        to: $f^\prime(1)=0,\quad a=1$
+        operation: 竖直线的垂线是水平线，故切线斜率为 $0$。
+        why: 先把 $a$ 固定，后面只剩 $k$。
+      source_ref: page_0296_ex03_solution_start
+    - step_id: step_6
+      statement: 把第(3)问转成 $k$ 参数函数正性。
+      formula_trace:
+        from: $f(x)+x\ln x+k\geqslant kx-1-\ln x$
+        to: $g(x)=x\ln x-(k-1)x+k\ge0$
+        operation: 代入 $f(x)=x-1-\ln x$ 并整理。
+        why: 最大整数值问题转成 $g$ 在 $(1,+\infty)$ 上的最小值问题。
+      source_ref: page_0296_ex03_solution_start
+    - step_id: step_7
+      statement: 法一按最小点是否进入区间分类。
+      formula_trace:
+        from: $g^\prime(x)=\ln x+2-k$
+        to: $x=e^{k-2}$
+        operation: 令导数为 $0$。
+        why: $e^{k-2}\le1$ 与 $e^{k-2}>1$ 对应两种单调形态。
+      source_ref: page_0297_ex03_solution_end
+    - step_id: step_8
+      statement: 检验整数边界。
+      formula_trace:
+        from: $g_{\min}=k-e^{k-2}$
+        to: $k_{\max,\mathbf Z}=3$
+        operation: 检验 $k=3,4$，并排除 $k\ge5$。
+        why: $3>e$ 成立，$4>e^2$ 不成立，指数增长使更大整数不成立。
+      source_ref: page_0297_ex03_solution_end
+    - step_id: step_9
+      statement: 法二先用特值 $x=e$ 锁定候选，再验证。
+      formula_trace:
+        from: $g(e)>0$
+        to: $k<\frac{2e}{e-1}\in(3,4)$
+        operation: 代入一个必要点。
+        why: 最大整数只能是 $3$，剩下验证 $k=3$。
+      source_ref: page_0297_ex03_solution_end
+teaching_card:
+  student_title: 切线定参后求最大整数
+  what_it_trains: 训练先用切线几何条件把参数定下来，再把恒成立问题转成一个含整数参数的最小值问题。
+  recognition_cues:
+    - 题目说切线与 $x=1$ 垂直，本质是切线水平。
+    - 第(3)问的 $k$ 同时出现在常数项和一次项里。
+    - $x\ln x-(k-1)x+k$ 的导数零点是 $e^{k-2}$。
+    - 问最大整数值时，可以先找必要点快速锁定候选。
+  normalization_moves:
+    - 第(1)问只按端点和驻点比较处理。
+    - 第(2)问移项成辅助函数 $h(x)$。
+    - 第(3)问先定 $a=1$，再集中处理 $k$。
+    - 用 $x=e$ 做必要性探路时，后面仍要验证 $k=3$ 充分成立。
+  common_failures:
+    - 把竖直线的垂线也当成竖直线，导致 $f^\prime(1)$ 判断错误。
+    - 第(1)问只看极小点，忘记最大值要比较两个端点。
+    - 把 $g^\prime(x)=0$ 得到的 $e^{k-2}$ 直接当成一定在区间内。
+    - 用 $g(e)>0$ 得到候选后忘记验证 $k=3$。
+  similar_practice_query: ax-1-lnx 切线垂直 xlnx 最大整数 k e^{k-2} g(e) 必要性探路
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

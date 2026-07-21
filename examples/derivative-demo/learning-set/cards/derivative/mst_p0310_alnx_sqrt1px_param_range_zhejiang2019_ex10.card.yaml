@@ -1,0 +1,238 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0310_alnx_sqrt1px_param_range_zhejiang2019_ex10
+content_revision_id: mst_p0310_alnx_sqrt1px_param_range_zhejiang2019_ex10-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0310_alnx_sqrt1px_param_range_zhejiang2019_ex10.card.yaml
+stem: |-
+  （2019 · 浙江）已知实数 $a\ne0$，设函数 $f(x)=a\ln x+\sqrt{1+x}$，$x>0$。
+  1. 当 $a=-\frac34$ 时，求函数 $f(x)$ 的单调区间。
+  2. 对任意 $x\in[\frac1{e^2},+\infty)$ 均有 $f(x)\le\frac{\sqrt x}{2a}$，求 $a$ 的取值范围。
+answer: |-
+  第(1)问：递减区间 $(0,3)$，递增区间 $(3,+\infty)$。第(2)问：$a\in(0,\frac{\sqrt2}{4}]$。
+
+  第(1)问直接求导： $f^\prime(x)=-\frac{3}{4x}+\frac1{2\sqrt{1+x}} =\frac{(\sqrt{1+x}-2)(2\sqrt{1+x}+1)}{4x\sqrt{1+x}}$， 导数符号由 $\sqrt{1+x}-2$ 决定，故在 $(0,3)$ 上递减， 在 $(3,+\infty)$ 上递增。第(2)问令 $m=\frac1a$，原不等式等价于 $h(x)=m^2\sqrt x-2m\sqrt{1+x}-2\ln x\ge0$。按极点效应列 $h(x_0)=0,h^\prime(x_0)=0$，消去后探得 $x_0=1$，从而必要条件 $h(1)=m^2-2\sqrt2m\ge0$，结合题意取 $m\ge2\sqrt2$，即 $0<a\le\frac{\sqrt2}{4}$。充分性方面，source 给出多条证明： 一条以 $m$ 为主元，把 $h(x)=\sqrt x(m-\sqrt{1+\frac1x})^2-\frac{1+x}{\sqrt x}-2\ln x$， 分 $x\ge\frac17$ 与 $x\in[\frac1{e^2},\frac17)$ 证明非负； 另一条用保值性/以 $x$ 为主元，结合 $\ln x$ 的放缩、飘带和柯西， 证明 $m\ge2\sqrt2$ 时 $h(x)\ge0$。综上 $a$ 的范围为 $(0,\frac{\sqrt2}{4}]$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 第(1)问求导并因式分解。
+      max_score: 1
+    - step_id: step_2
+      description: 第(2)问把参数换成 $m=\frac1a$。
+      max_score: 1
+    - step_id: step_3
+      description: 用极点效应探路参数边界。
+      max_score: 1
+    - step_id: step_4
+      description: 把 $m\ge2\sqrt2$ 翻译回 $a$。
+      max_score: 1
+    - step_id: step_5
+      description: 充分性路线一：以 $m$ 为主元分段证明。
+      max_score: 1
+    - step_id: step_6
+      description: 充分性路线二：用保值性和以 $x$ 为主元补强。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 1 问
+        result: 递减区间 $(0,3)$，递增区间 $(3,+\infty)$。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $a\in(0,\frac{\sqrt2}{4}]$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 自由度与主元
+      - 拟合与夹逼
+      - 保值性与分治
+      - 切线放缩与凹凸性
+    subroute:
+      - $m=1/a$
+      - 双重接触探路 $h(x_0)=h^\prime(x_0)=0$
+      - 探得 $x_0=1$
+      - 必要条件 $m\ge2\sqrt2$
+      - 以 $m$ 为主元充分性证明
+      - 保值性/以 $x$ 为主元补充证明
+  structure:
+    primary: 根式函数结构
+    secondary:
+      - 指对复合结构
+      - 非齐次结构
+      - 不等式工具结构
+      - 局部逼近结构
+    evidence:
+      - $a\ln x+\sqrt{1+x}$
+      - $\frac{\sqrt x}{2a}$
+      - $m^2\sqrt x-2m\sqrt{1+x}-2\ln x$
+      - $x_0=1$
+      - $m\ge2\sqrt2$
+      - $a\in(0,\frac{\sqrt2}{4}]$
+    normalization_moves_used:
+      - 把 $a$ 换成 $m=1/a$，让参数成为二次变量。
+      - 用极点效应先找临界点，不直接硬证恒成立。
+      - 必要范围出来后再做充分性证明。
+      - 复杂充分性分为主元选择、分段、对数放缩。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会根式求导和因式分解，回补导数运算与几何意义。
+      - 若学生不会把 $a$ 换成 $m=1/a$，回补代数恒等变形。
+      - 若学生不理解 $h(x_0)=h^\prime(x_0)=0$，回补导数单调极值基础。
+      - 若学生不会处理 $\ln x$ 的放缩，回补指数对数基础。
+      - 若学生不会分段证明充分性，回补不等式工具基础。
+  detail_terms:
+    - $a\ln x+\sqrt{1+x}$
+    - $m=1/a$
+    - $m^2\sqrt x-2m\sqrt{1+x}-2\ln x$
+    - 极点效应 $x_0=1$
+    - $m\ge2\sqrt2$
+    - $0<a\le\frac{\sqrt2}{4}$
+    - 保值性探路
+parts: &a1
+  - part_id: "1"
+    text: 当 $a=-\frac34$ 时，求函数 $f(x)$ 的单调区间。
+  - part_id: "2"
+    text: 对任意 $x\in[\frac1{e^2},+\infty)$ 均有 $f(x)\le\frac{\sqrt x}{2a}$，求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0310_alnx_sqrt1px_param_range_zhejiang2019_ex10
+source_evidence:
+  source_refs:
+    - ref_id: page_0310_ex10_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0310/page_0310.md
+      role: problem_start
+      evidence: page_0310 例10题头：2019浙江，$a\ne0$，$f(x)=a\ln x+\sqrt{1+x}$，$x>0$；(1) $a=-\frac34$ 求单调区间；(2) 对任意 $x\in[\frac1{e^2},+\infty)$ 有 $f(x)\le\frac{\sqrt x}{2a}$，求 $a$ 范围。
+    - ref_id: page_0310_ex10_part1
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0310/page_0310.md
+      role: solution
+      evidence: page_0310 第(1)问：$f^\prime(x)=\frac{(\sqrt{1+x}-2)(2\sqrt{1+x}+1)}{4x\sqrt{1+x}}$，故递减区间 $(0,3)$、递增区间 $(3,+\infty)$。
+    - ref_id: page_0310_ex10_part2_explore
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0310/page_0310.md
+      role: solution
+      evidence: page_0310 第(2)问：令 $m=\frac1a$，把不等式转成 $h(x)=m^2\sqrt x-2m\sqrt{1+x}-2\ln x\ge0$；由 $h(x_0)=0,h^\prime(x_0)=0$ 探得 $x_0=1$，必要条件 $m\ge2\sqrt2$。
+    - ref_id: page_0311_ex10_sufficiency_main_m
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0311/page_0311.md
+      role: solution
+      evidence: page_0311 法一充分性：以 $m$ 为主元，分 $x\ge\frac17$ 与 $x\in[\frac1{e^2},\frac17)$，构造 $p(x)$、$q(x)$ 证明 $g(m)\ge0$。
+    - ref_id: page_0312_ex10_baozhi_and_x_main
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0312/page_0312.md
+      role: solution
+      evidence: page_0312 继续给出保值性探路与以 $x$ 为主元的证明，并总结 $a$ 的范围为 $(0,\frac{\sqrt2}{4}]$；随后另起例11。
+    - ref_id: page_0312_ex11_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0312/page_0312.md
+      role: local_context
+      evidence: page_0312 后半页另起例11，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0310.png
+      inspected: true
+      notes: 已核对页图：page_0310 为考点4说明、例10题干、第(1)问和第(2)问探路开头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0311.png
+      inspected: true
+      notes: 已核对页图：page_0311 为例10充分性证明的主要计算。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0312.png
+      inspected: true
+      notes: 已核对页图：page_0312 上半页补完例10，后半页另起例11。
+  source_context: 本卡处理 page_0310 起始、page_0312 中部结束的例10；page_0312 例11排除。
+  source_influence:
+    - 保留第(1)问的根式因式分解导数。
+    - 保留第(2)问先令 $m=1/a$，把参数问题变成 $m$ 的下界问题。
+    - 保留极点效应探路：列 $h(x_0)=0,h^\prime(x_0)=0$，探得 $x_0=1$。
+    - 保留必要范围 $m\ge2\sqrt2$，等价于 $0<a\le\frac{\sqrt2}{4}$。
+    - 保留充分性证明的核心：以 $m$ 为主元分段，或以 $x$ 为主元配合对数放缩与柯西。
+    - 保留教师注：复杂对数根式恒成立常见探路点为 $x_0=1$，不能只靠经验跳步。
+  source_discrepancies:
+    - issue: page_0311 第一行导数化简分母最后一项有 reconstruction marker，推测为 $\sqrt{2x}$。
+      resolution: 题卡不依赖该完整分母细节，只保留 $p^\prime$ 在 $x=1$ 两侧变号、$p(x)\ge p(1)=0$ 的结论。
+      requires_user_decision: false
+    - issue: page_0311 表格行首 OCR/视觉为大写 `P(x)`，上下文均为小写 $p(x)$。
+      resolution: 题卡统一写作 $p(x)$。
+      requires_user_decision: false
+    - issue: source 中出现两个“法二”标签：保值性探路与以 $x$ 为主元。
+      resolution: 题卡将二者记录为两个补充充分性路线，不要求用户拍板改编号。
+      requires_user_decision: false
+original_problem:
+  stem: （2019 · 浙江）已知实数 $a\ne0$，设函数 $f(x)=a\ln x+\sqrt{1+x}$，$x>0$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问：递减区间 $(0,3)$，递增区间 $(3,+\infty)$。第(2)问：$a\in(0,\frac{\sqrt2}{4}]$。
+  fidelity_notes:
+    - 无选项。
+    - 第(2)问因为右侧含 $\frac1a$，最终范围必须有 $a>0$。
+solution:
+  source_solution_summary: 第(1)问直接求导： $f^\prime(x)=-\frac{3}{4x}+\frac1{2\sqrt{1+x}} =\frac{(\sqrt{1+x}-2)(2\sqrt{1+x}+1)}{4x\sqrt{1+x}}$， 导数符号由 $\sqrt{1+x}-2$ 决定，故在 $(0,3)$ 上递减， 在 $(3,+\infty)$ 上递增。第(2)问令 $m=\frac1a$，原不等式等价于 $h(x)=m^2\sqrt x-2m\sqrt{1+x}-2\ln x\ge0$。按极点效应列 $h(x_0)=0,h^\prime(x_0)=0$，消去后探得 $x_0=1$，从而必要条件 $h(1)=m^2-2\sqrt2m\ge0$，结合题意取 $m\ge2\sqrt2$，即 $0<a\le\frac{\sqrt2}{4}$。充分性方面，source 给出多条证明： 一条以 $m$ 为主元，把 $h(x)=\sqrt x(m-\sqrt{1+\frac1x})^2-\frac{1+x}{\sqrt x}-2\ln x$， 分 $x\ge\frac17$ 与 $x\in[\frac1{e^2},\frac17)$ 证明非负； 另一条用保值性/以 $x$ 为主元，结合 $\ln x$ 的放缩、飘带和柯西， 证明 $m\ge2\sqrt2$ 时 $h(x)\ge0$。综上 $a$ 的范围为 $(0,\frac{\sqrt2}{4}]$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问求导并因式分解。
+      formula_trace:
+        from: $f(x)=-\frac34\ln x+\sqrt{1+x}$
+        to: $f^\prime(x)=\frac{(\sqrt{1+x}-2)(2\sqrt{1+x}+1)}{4x\sqrt{1+x}}$
+        operation: 通分并按 $\sqrt{1+x}$ 因式分解。
+        why: 导数符号只剩 $\sqrt{1+x}-2$。
+      source_ref: page_0310_ex10_part1
+    - step_id: step_2
+      statement: 第(2)问把参数换成 $m=\frac1a$。
+      formula_trace:
+        from: $a\ln x+\sqrt{1+x}\le\frac{\sqrt x}{2a}$
+        to: $m^2\sqrt x-2m\sqrt{1+x}-2\ln x\ge0$
+        operation: 令 $m=\frac1a$ 并同乘正量。
+        why: 把含 $a$ 的不等式变成关于 $m$ 的二次结构。
+      source_ref: page_0310_ex10_part2_explore
+    - step_id: step_3
+      statement: 用极点效应探路参数边界。
+      formula_trace:
+        from: $h(x_0)=0,\quad h^\prime(x_0)=0$
+        to: $x_0=1,\quad m\ge2\sqrt2$
+        operation: 消元探路并代回 $h(1)$。
+        why: 恒成立临界通常由相切/双重接触点给出。
+      source_ref: page_0310_ex10_part2_explore
+    - step_id: step_4
+      statement: 把 $m\ge2\sqrt2$ 翻译回 $a$。
+      formula_trace:
+        from: $m=\frac1a,\quad m\ge2\sqrt2$
+        to: $0<a\le\frac{\sqrt2}{4}$
+        operation: 取倒数并保留 $a>0$。
+        why: 若 $a<0$，右侧与原不等式方向不符合最终必要条件。
+      source_ref: page_0310_ex10_part2_explore
+    - step_id: step_5
+      statement: 充分性路线一：以 $m$ 为主元分段证明。
+      formula_trace:
+        from: $h(x)=m^2\sqrt x-2m\sqrt{1+x}-2\ln x$
+        to: $h(x)\ge0\quad (x\in[\frac1{e^2},+\infty),\ m\ge2\sqrt2)$
+        operation: 把 $h$ 配成关于 $m$ 的平方，分 $x\ge\frac17$ 与 $x<\frac17$ 处理。
+        why: 这是 source 的主充分性证明。
+      source_ref: page_0311_ex10_sufficiency_main_m
+    - step_id: step_6
+      statement: 充分性路线二：用保值性和以 $x$ 为主元补强。
+      formula_trace:
+        from: $m\sqrt x-\frac{2\ln x}{m}\ge2\sqrt{1+x}$
+        to: $h(x)\ge0$
+        operation: 用基本不等式、飘带/帕德对数放缩和柯西估计。
+        why: source 用这条路线解释端点探路和主元切换。
+      source_ref: page_0312_ex10_baozhi_and_x_main
+teaching_card:
+  student_title: 先探出临界点，再证明恒成立
+  what_it_trains: 训练复杂含参恒成立：先用双重接触点探出参数边界，再分主元证明充分性。
+  recognition_cues:
+    - 题目要求对一整段 $x$ 恒成立。
+    - 参数同时出现在 $\ln x$ 系数和右侧分母里。
+    - 换成 $m=1/a$ 后出现关于 $m$ 的二次式。
+    - source 明确提示复杂含参要两头凑、先猜后证。
+  normalization_moves:
+    - 不要直接对原式求导硬冲。
+    - 先把不等式整理成 $h(x)\ge0$。
+    - 临界恒成立常看 $h=0,h^\prime=0$。
+    - 探得范围后必须回头证充分性。
+  common_failures:
+    - 忘记 $a$ 的正负限制。
+    - 把探路得到的 $x_0=1$ 当成无需证明的经验。
+    - 只得到必要条件，没有证明充分性。
+    - 充分性证明中主元混乱，在 $m$ 和 $x$ 之间来回跳。
+  similar_practice_query: 2019浙江 根式对数 恒成立 m=1/a 极点效应 x0=1 主元
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

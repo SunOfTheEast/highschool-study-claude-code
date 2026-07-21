@@ -1,0 +1,235 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0308_trig_log_two_zeros_sum_less_pi_liaoning2014_ex09
+content_revision_id: mst_p0308_trig_log_two_zeros_sum_less_pi_liaoning2014_ex09-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0308_trig_log_two_zeros_sum_less_pi_liaoning2014_ex09.card.yaml
+stem: |-
+  （2014 · 辽宁）已知函数 $f(x)=(\cos x-x)(\pi+2x)-\frac83(\sin x+1)$，$g(x)=3(x-\pi)\cos x-4(1+\sin x)\ln(3-\frac{2x}{\pi})$。
+  1. 证明：存在唯一 $x_0\in(0,\frac\pi2)$，使 $f(x_0)=0$。
+  2. 证明：存在唯一 $x_1\in(\frac\pi2,\pi)$，使 $g(x_1)=0$，且对 (1) 中的 $x_0$，有 $x_0+x_1<\pi$。
+answer: |-
+  存在唯一 $x_0\in(0,\frac\pi2)$ 和唯一 $x_1\in(\frac\pi2,\pi)$，且 $x_0+x_1<\pi$。
+
+  第(1)问：在 $(0,\frac\pi2)$ 上， $f^\prime(x)=-(1+\sin x)(\pi+2x)-2x-\frac23\cos x<0$， 所以 $f$ 递减。又 $f(0)=\pi-\frac83>0$， $f(\frac\pi2)=-\pi^2-\frac{16}3<0$，故存在唯一 $x_0$。第(2)问法一：把 $g(x)=(1+\sin x)h(x)$，再令 $t=\pi-x$， $u(t)=h(\pi-t)$。计算得到 $u^\prime(t)=\frac{3f(t)}{(\pi+2t)(1+\sin t)}$， 因而 $u$ 在 $(0,x_0)$ 上增，在 $(x_0,\frac\pi2)$ 上减； 又 $u(0)=0$，$u(x_0)>0$，$u(\frac\pi2)=-4\ln2<0$， 所以存在唯一 $t_1\in(x_0,\frac\pi2)$ 使 $u(t_1)=0$。 令 $x_1=\pi-t_1$，则 $x_1\in(\frac\pi2,\pi)$， 且 $g(x_1)=0$，并且 $x_0+x_1=\pi-(t_1-x_0)<\pi$。 法二用 $\ln(1+\frac{2x}{\pi})\le\frac{2x}{\pi}$ 构造 $p(x)=-4(1+\sin x)+\frac{3\pi}{2}\cos x$，证明 $h(x)>p(x)>\frac32 f(x)$，从图像和零点顺序也得到 $x_0<\pi-x_1$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 证明 $f$ 在左区间唯一过零。
+      max_score: 1
+    - step_id: step_2
+      description: 把 $g$ 的右区间零点转成 $u(t)$ 的左区间零点。
+      max_score: 1
+    - step_id: step_3
+      description: 把 $u^\prime$ 与 $f$ 绑定。
+      max_score: 1
+    - step_id: step_4
+      description: 由 $u$ 的增减得到 $t_1>x_0$。
+      max_score: 1
+    - step_id: step_5
+      description: 回到 $x_1$ 并完成主结论。
+      max_score: 1
+    - step_id: step_6
+      description: 法二用插值函数做几何夹逼。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 1 问
+        result: $f$ 在 $(0,\frac\pi2)$ 上唯一零点 $x_0$。
+      - part_id: "2"
+        goal: 零点/极值点分析
+        target: 第 2 问
+        result: $g$ 在 $(\frac\pi2,\pi)$ 上唯一零点 $x_1$，且 $x_0+x_1<\pi$。
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 对称化与偏移
+      - 局部逼近与找点
+      - 数形结合
+    subroute:
+      - 左区间唯一零点
+      - $t=\pi-x$ 反向换元
+      - $u^\prime(t)$ 绑定 $f(t)$
+      - $t_1>x_0$ 推出 $x_0+x_1<\pi$
+      - 插值函数 $p$ 图像夹逼
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 对称结构
+      - 非对称结构
+      - 不等式工具结构
+      - 局部逼近结构
+    evidence:
+      - $(\cos x-x)(\pi+2x)-\frac83(\sin x+1)$
+      - $3(x-\pi)\cos x-4(1+\sin x)\ln(3-\frac2\pi x)$
+      - $t=\pi-x$
+      - $u^\prime(t)=\frac{3f(t)}{(\pi+2t)(1+\sin t)}$
+      - $\ln(1+\frac{2x}{\pi})\le\frac{2x}{\pi}$
+    normalization_moves_used:
+      - 把右侧区间通过 $t=\pi-x$ 折回左侧区间。
+      - 把 $g$ 除以正因子 $1+\sin x$，只研究同零点的 $h$。
+      - 用第(1)问的 $f$ 控制第(2)问新函数的导数。
+      - 法二用插值曲线夹住零点顺序。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会三角求导和符号判断，回补三角函数基础。
+      - 若学生不会通过端点异号证明唯一零点，回补方程根分布与韦达。
+      - 若学生不理解 $t=\pi-x$，回补代数恒等变形。
+      - 若学生不会处理 $\ln(1+u)\le u$，回补指数对数基础。
+      - 若学生看不懂图像夹逼，回补函数性质与图像。
+  detail_terms:
+    - 三角函数与对数混合
+    - $x_0+x_1<\pi$
+    - $t=\pi-x$
+    - $u^\prime(t)$ 与 $f(t)$ 同号
+    - $\ln(1+\frac{2x}{\pi})\le\frac{2x}{\pi}$
+    - $h(x)>p(x)>\frac32f(x)$
+parts: &a1
+  - part_id: "1"
+    text: 证明：存在唯一 $x_0\in(0,\frac\pi2)$，使 $f(x_0)=0$。
+  - part_id: "2"
+    text: 证明：存在唯一 $x_1\in(\frac\pi2,\pi)$，使 $g(x_1)=0$，且对 (1) 中的 $x_0$，有 $x_0+x_1<\pi$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0308_trig_log_two_zeros_sum_less_pi_liaoning2014_ex09
+source_evidence:
+  source_refs:
+    - ref_id: page_0308_ex09_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0308/page_0308.md
+      role: problem_start
+      evidence: page_0308 例9题头：$f(x)=(\cos x-x)(\pi+2x)-\frac83(\sin x+1)$，$g(x)=3(x-\pi)\cos x-4(1+\sin x)\ln(3-\frac{2x}{\pi})$；证明 $f$ 在 $(0,\frac\pi2)$ 唯一零点 $x_0$，$g$ 在 $(\frac\pi2,\pi)$ 唯一零点 $x_1$，且 $x_0+x_1<\pi$。
+    - ref_id: page_0308_ex09_part1_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0308/page_0308.md
+      role: solution
+      evidence: page_0308 底部：第(1)问开始，$f^\prime(x)=-(1+\sin x)(\pi+2x)-2x-\frac23\cos x<0$。
+    - ref_id: page_0309_ex09_method1
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0309/page_0309.md
+      role: solution
+      evidence: page_0309 法一：令 $h(x)=\frac{3(x-\pi)\cos x}{1+\sin x}-4\ln(3-\frac2\pi x)$，再令 $t=\pi-x$，$u(t)=h(\pi-t)$，计算得 $u^\prime(t)=\frac{3f(t)}{(\pi+2t)(1+\sin t)}$，由第(1)问控制 $u$ 的增减，得唯一 $t_1>x_0$，于是 $x_1=\pi-t_1$ 且 $x_0+x_1<\pi$。
+    - ref_id: page_0309_ex09_method2
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0309/page_0309.md
+      role: solution
+      evidence: page_0309 法二：对 $g(\pi-x)$ 构造 $h(x)$，用 $\ln(1+\frac{2x}{\pi})\le\frac{2x}{\pi}$ 构造 $p(x)=-4(1+\sin x)+\frac{3\pi}{2}\cos x$，并证明 $h(x)>p(x)>\frac32 f(x)$，从而插值夹出 $x_0<x_2=\pi-x_1$。
+    - ref_id: page_0310_ex09_figure
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0310/page_0310.md
+      role: figure
+      evidence: page_0310 顶部图示展示 $h(x)$、$p(x)$、$\frac32 f(x)$ 与 $x_0,x_2$ 的相对位置，属于例9法二图像说明。
+    - ref_id: page_0310_ex10_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0310/page_0310.md
+      role: local_context
+      evidence: page_0310 图示后进入考点4并另起例10，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0308.png
+      inspected: true
+      notes: 已核对页图：page_0308 底部为例9题头和第(1)问开头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0309.png
+      inspected: true
+      notes: 已核对页图：page_0309 为例9第(1)问尾部和第(2)问两种方法。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0310.png
+      inspected: true
+      notes: 已核对页图：page_0310 顶部图属于例9法二，图后才开始例10。
+  source_context: 本卡处理 page_0308 起始、page_0309 完成、page_0310 顶部补图的例9；page_0310 例10排除。
+  source_influence:
+    - 保留第(1)问 $f^\prime<0$、端点异号证明唯一零点。
+    - 保留法一通过 $t=\pi-x$ 把右侧区间零点转回 $(0,\frac\pi2)$。
+    - 保留 $u^\prime(t)$ 与 $f(t)$ 同号，借用第(1)问的零点 $x_0$ 控制 $u$。
+    - 保留 $g=(1+\sin x)h$，所以 $g,h$ 零点一致。
+    - 保留法二的插值链：$h(x)>p(x)>\frac32f(x)$。
+    - 保留 page_0310 顶部图作为法二的图像证据。
+  source_discrepancies:
+    - issue: old card/ex_mst_100 把 $u^\prime(t)$ 误写成 $u^{\prime\prime}(t)$。
+      resolution: 按 page_0309 源页计算，题卡采用 $u^\prime(t)=\frac{3f(t)}{(\pi+2t)(1+\sin t)}$。
+      requires_user_decision: false
+    - issue: page_0309 法一有一处“$u(x)$ 是增函数”的变量名混用。
+      resolution: 题卡统一写作 $u(t)$ 在对应区间增/减。
+      requires_user_decision: false
+    - issue: page_0309 法二末尾区间源 markdown reconstruction marker 指出 $(x_3,1)$ 应为 $(x_3,\frac\pi2)$。
+      resolution: 按函数定义域、$p(\frac\pi2)<0$ 和页图，题卡采用 $(x_3,\frac\pi2)$。
+      requires_user_decision: false
+original_problem:
+  stem: （2014 · 辽宁）已知函数 $f(x)=(\cos x-x)(\pi+2x)-\frac83(\sin x+1)$，$g(x)=3(x-\pi)\cos x-4(1+\sin x)\ln(3-\frac{2x}{\pi})$。
+  parts: *a1
+  choices: []
+  answer: 存在唯一 $x_0\in(0,\frac\pi2)$ 和唯一 $x_1\in(\frac\pi2,\pi)$，且 $x_0+x_1<\pi$。
+  fidelity_notes:
+    - 无选项。
+    - 第(2)问法一为主线，法二为插值放缩的替代路线。
+    - page_0310 顶部图是法二图示。
+solution:
+  source_solution_summary: 第(1)问：在 $(0,\frac\pi2)$ 上， $f^\prime(x)=-(1+\sin x)(\pi+2x)-2x-\frac23\cos x<0$， 所以 $f$ 递减。又 $f(0)=\pi-\frac83>0$， $f(\frac\pi2)=-\pi^2-\frac{16}3<0$，故存在唯一 $x_0$。第(2)问法一：把 $g(x)=(1+\sin x)h(x)$，再令 $t=\pi-x$， $u(t)=h(\pi-t)$。计算得到 $u^\prime(t)=\frac{3f(t)}{(\pi+2t)(1+\sin t)}$， 因而 $u$ 在 $(0,x_0)$ 上增，在 $(x_0,\frac\pi2)$ 上减； 又 $u(0)=0$，$u(x_0)>0$，$u(\frac\pi2)=-4\ln2<0$， 所以存在唯一 $t_1\in(x_0,\frac\pi2)$ 使 $u(t_1)=0$。 令 $x_1=\pi-t_1$，则 $x_1\in(\frac\pi2,\pi)$， 且 $g(x_1)=0$，并且 $x_0+x_1=\pi-(t_1-x_0)<\pi$。 法二用 $\ln(1+\frac{2x}{\pi})\le\frac{2x}{\pi}$ 构造 $p(x)=-4(1+\sin x)+\frac{3\pi}{2}\cos x$，证明 $h(x)>p(x)>\frac32 f(x)$，从图像和零点顺序也得到 $x_0<\pi-x_1$。
+  key_steps:
+    - step_id: step_1
+      statement: 证明 $f$ 在左区间唯一过零。
+      formula_trace:
+        from: $f(x)=(\cos x-x)(\pi+2x)-\frac83(\sin x+1)$
+        to: $f^\prime(x)<0,\quad f(0)>0,\quad f(\frac\pi2)<0$
+        operation: 求导判递减，再用端点异号。
+        why: 第(2)问要借用这个唯一零点 $x_0$。
+      source_ref: page_0308_ex09_part1_start
+    - step_id: step_2
+      statement: 把 $g$ 的右区间零点转成 $u(t)$ 的左区间零点。
+      formula_trace:
+        from: $h(x)=\frac{3(x-\pi)\cos x}{1+\sin x}-4\ln(3-\frac2\pi x)$
+        to: $u(t)=h(\pi-t)$
+        operation: 令 $t=\pi-x$。
+        why: 这样可以和第(1)问的 $f(t)$ 放在同一区间比较。
+      source_ref: page_0309_ex09_method1
+    - step_id: step_3
+      statement: 把 $u^\prime$ 与 $f$ 绑定。
+      formula_trace:
+        from: $u(t)=\frac{3t\cos t}{1+\sin t}-4\ln(1+\frac2\pi t)$
+        to: $u^\prime(t)=\frac{3f(t)}{(\pi+2t)(1+\sin t)}$
+        operation: 直接求导并整理。
+        why: 这一步让第(1)问的零点 $x_0$ 控制 $u$ 的增减。
+      source_ref: page_0309_ex09_method1
+    - step_id: step_4
+      statement: 由 $u$ 的增减得到 $t_1>x_0$。
+      formula_trace:
+        from: $u(0)=0,\quad u(x_0)>0,\quad u(\frac\pi2)=-4\ln2<0$
+        to: $\exists!t_1\in(x_0,\frac\pi2),\ u(t_1)=0$
+        operation: 使用 $u$ 先增后减和端点符号。
+        why: 这是 $x_0+x_1<\pi$ 的核心。
+      source_ref: page_0309_ex09_method1
+    - step_id: step_5
+      statement: 回到 $x_1$ 并完成主结论。
+      formula_trace:
+        from: $x_1=\pi-t_1,\quad t_1>x_0$
+        to: $x_0+x_1<\pi$
+        operation: 代回变量。
+        why: 右区间零点的距离关系转成左区间 $t_1$ 与 $x_0$ 的大小关系。
+      source_ref: page_0309_ex09_method1
+    - step_id: step_6
+      statement: 法二用插值函数做几何夹逼。
+      formula_trace:
+        from: $\ln(1+\frac{2x}{\pi})\le\frac{2x}{\pi}$
+        to: $h(x)>p(x)>\frac32f(x)$
+        operation: 构造 $p(x)=-4(1+\sin x)+\frac{3\pi}{2}\cos x$。
+        why: 这给出图像上的中间零点，解释 $x_0<\pi-x_1$。
+      source_ref: page_0309_ex09_method2
+teaching_card:
+  student_title: 把右侧零点折回左侧比较
+  what_it_trains: 训练三角对称区间里的隐零点比较：用 $t=\pi-x$ 折回同一区间，再用已知零点控制新函数。
+  recognition_cues:
+    - 两个零点分别在 $(0,\frac\pi2)$ 和 $(\frac\pi2,\pi)$。
+    - 目标是 $x_0+x_1<\pi$，天然提示令 $t=\pi-x$。
+    - $g$ 里有正因子 $1+\sin x$，可以先剥离。
+    - 法二的图里有 $h,p,\frac32f$ 三条曲线。
+  normalization_moves:
+    - 第(1)问的 $f$ 不是孤立小问，它是第(2)问导数符号的工具。
+    - 先把 $g$ 改成同零点的 $h$。
+    - 再用 $t=\pi-x$ 把右区间映射到左区间。
+    - 看见 $\ln(1+u)$ 时可以插入 $u$ 做上界。
+  common_failures:
+    - 只证明 $g$ 有零点，忘记唯一性。
+    - 把 $t_1>x_0$ 和 $x_0+x_1<\pi$ 的方向换反。
+    - 忽略 $1+\sin x>0$，没有说明 $g,h$ 零点一致。
+    - 法二里把 $p$ 和 $\frac32f$ 的夹逼方向写反。
+  similar_practice_query: 三角对数 隐零点 比大小 x0+x1<pi t=pi-x 插值放缩
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

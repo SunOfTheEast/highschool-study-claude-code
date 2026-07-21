@@ -1,0 +1,181 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0134_odd_lock_ex25
+content_revision_id: mst_p0134_odd_lock_ex25-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0134_odd_lock_ex25.card.yaml
+stem: |-
+  （2023·成都期末）已知定义在 $\mathbf{R}$ 上的可导函数 $f(x)$，对于任意实数 $x$ 都有 $f(-x)+f(x)=x^2$，且当 $x\in(0,+\infty)$ 时都有 $f^{\prime}(x)>x$。若 $f(1-a)\geqslant f(a)+\frac12-a$，则实数 $a$ 的取值范围为（  ）
+  A. $\left(-\infty,\frac12\right]$
+  B. $\left[\frac12,+\infty\right)$
+  C. $(-\infty,2]$
+  D. $[2,+\infty)$
+answer: |
+  A
+
+  令 $F(x)=f(x)-\frac12x^2$，由 $f(-x)+f(x)=x^2$ 得
+  $F(-x)=f(-x)-\frac12x^2=-F(x)$，故 $F$ 为奇函数。
+  又题设给 $x>0$ 时 $f^{\prime}(x)>x$，于是
+  $F^{\prime}(x)=f^{\prime}(x)-x>0$（在 $x>0$ 上）。再由
+  $F$ 奇性可得 $F^{\prime}$ 偶性，从而 $F^{\prime}(x)>0$ 在全体实数成立，
+  即 $F$ 在 $\mathbf{R}$ 上递增。把条件
+  $f(1-a)\ge f(a)+\frac12-a$ 改写为
+  $f(1-a)-\frac12(1-a)^2\ge f(a)-\frac12a^2$，即
+  $F(1-a)\ge F(a)$。由递增性得 $1-a\ge a$，解得
+  $a\le\frac12$，故选 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 平移去掉偶函数部分，锁定奇函数骨架。
+      max_score: 1
+    - step_id: step_2
+      description: 用导数条件建立全轴递增。
+      max_score: 1
+    - step_id: step_3
+      description: 把题设不等式改写成 $F$ 的比较。
+      max_score: 1
+    - step_id: step_4
+      description: 由单调性反推参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 奇偶性锁定
+      - 平移去偶留奇
+      - 函数值比较转输入比较
+  structure:
+    primary: 对称结构
+    secondary:
+      - 抽象函数结构
+    evidence:
+      - $f(-x)+f(x)=x^2$ 先天是“偶部分给定、奇部分待定”的结构。
+      - 平移后得到奇函数 $F$，再借单调性处理 $F(1-a)\ge F(a)$。
+    normalization_moves_used:
+      - 构造 $F(x)=f(x)-\frac12x^2$。
+      - 把 $\frac12-a$ 吸收到平方差：$\frac12(1-a)^2-\frac12a^2$。
+      - 由 $F(1-a)\ge F(a)$ 还原到 $1-a\ge a$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看不出 $\frac12-a$ 来自平方差配凑，回补代数恒等变形。
+      - 若学生不会由奇函数推出导函数偶性并延拓单调区间，回补函数性质与图像。
+      - 若学生不会把 $F(u)\ge F(v)$ 反推为 $u\ge v$，回补导数单调极值基础。
+  detail_terms:
+    - 奇函数锁定
+    - $F(x)=f(x)-\frac12x^2$
+    - 全轴递增
+    - 参数不等式
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0134_odd_lock_ex25
+source_evidence:
+  source_refs:
+    - ref_id: page_0134
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0134/page_0134.md
+      role: problem_start
+      evidence: "page_0134 lines 21-26: 例25题干与A-D选项。"
+    - ref_id: page_0134_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0134/page_0134.md
+      role: solution
+      evidence: "page_0134 lines 28-30: 两种解法均先做奇函数锁定并转为输入比较。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0134.png
+      inspected: true
+      notes: 已核对原图，题干、选项与答案A清晰。
+  source_context: 本题位于“1. 奇函数锁定”，核心是把给定和式 $f(-x)+f(x)=x^2$ 改写成奇函数，再利用导数条件得到全轴单调。
+  source_influence:
+    - 题目问实数 $a$ 的取值范围，graph.goal 归为“求参数范围”。
+    - 源解主路线是构造 $F(x)=f(x)-\frac12x^2$ 并用 $F^{\prime}(x)>0$ 判断单调。
+    - 题目为单选，必须完整保留A-D选项与答案A。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·成都期末）已知定义在 $\mathbf{R}$ 上的可导函数 $f(x)$，对于任意实数 $x$ 都有 $f(-x)+f(x)=x^2$，且当 $x\in(0,+\infty)$ 时都有 $f^{\prime}(x)>x$。若 $f(1-a)\geqslant f(a)+\frac12-a$，则实数 $a$ 的取值范围为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\left(-\infty,\frac12\right]$
+      text_latex: $\left(-\infty,\frac12\right]$
+    - label: B
+      text_raw: $\left[\frac12,+\infty\right)$
+      text_latex: $\left[\frac12,+\infty\right)$
+    - label: C
+      text_raw: $(-\infty,2]$
+      text_latex: $(-\infty,2]$
+    - label: D
+      text_raw: $[2,+\infty)$
+      text_latex: $[2,+\infty)$
+  answer: A
+  fidelity_notes:
+    - 原图与markdown一致：不等式右侧为 $f(a)+\frac12-a$。
+    - 解析给出法一和“奇偶性锁定”法二，结论一致为 $a\le\frac12$。
+solution:
+  source_solution_summary: |
+    令 $F(x)=f(x)-\frac12x^2$，由 $f(-x)+f(x)=x^2$ 得
+    $F(-x)=f(-x)-\frac12x^2=-F(x)$，故 $F$ 为奇函数。
+    又题设给 $x>0$ 时 $f^{\prime}(x)>x$，于是
+    $F^{\prime}(x)=f^{\prime}(x)-x>0$（在 $x>0$ 上）。再由
+    $F$ 奇性可得 $F^{\prime}$ 偶性，从而 $F^{\prime}(x)>0$ 在全体实数成立，
+    即 $F$ 在 $\mathbf{R}$ 上递增。把条件
+    $f(1-a)\ge f(a)+\frac12-a$ 改写为
+    $f(1-a)-\frac12(1-a)^2\ge f(a)-\frac12a^2$，即
+    $F(1-a)\ge F(a)$。由递增性得 $1-a\ge a$，解得
+    $a\le\frac12$，故选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 平移去掉偶函数部分，锁定奇函数骨架。
+      formula_trace:
+        from: $f(-x)+f(x)=x^2$
+        to: $F(x)=f(x)-\frac12x^2,\quad F(-x)=-F(x)$
+        operation: 两边减去同一偶函数 $\frac12x^2$，把“和式约束”改写成奇性约束。
+        why: 后续可把函数值不等式转成输入比较。
+      source_ref: page_0134_solution
+    - step_id: step_2
+      statement: 用导数条件建立全轴递增。
+      formula_trace:
+        from: $x>0$ 时 $f^{\prime}(x)>x$
+        to: $F^{\prime}(x)=f^{\prime}(x)-x>0$，且由奇性推出 $F^{\prime}$ 为偶函数
+        operation: 先在半轴上求导比较，再用奇函数导数为偶函数把结论延拓到全轴。
+        why: 得到 $F$ 在 $\mathbf{R}$ 上递增。
+      source_ref: page_0134_solution
+    - step_id: step_3
+      statement: 把题设不等式改写成 $F$ 的比较。
+      formula_trace:
+        from: $f(1-a)\ge f(a)+\frac12-a$
+        to: $f(1-a)-\frac12(1-a)^2\ge f(a)-\frac12a^2$
+        operation: 利用恒等式 $\frac12(1-a)^2-\frac12a^2=\frac12-a$。
+        why: 左右两侧正好对应 $F(1-a)$ 与 $F(a)$。
+      source_ref: page_0134_solution
+    - step_id: step_4
+      statement: 由单调性反推参数范围。
+      formula_trace:
+        from: $F(1-a)\ge F(a)$
+        to: $1-a\ge a\Rightarrow a\le\frac12$
+        operation: 对递增函数应用保序性，去掉函数符号。
+        why: 直接对应选项 A。
+      source_ref: page_0134_solution
+teaching_card:
+  student_title: 先锁奇函数，再比输入大小
+  what_it_trains: 训练把“$f(-x)+f(x)$ 已知”这类题先做去偶构造，形成奇函数并用导数条件拿到单调性，再把函数值不等式降维成输入不等式。
+  recognition_cues:
+    - 题干出现 $f(-x)+f(x)=\text{偶函数}$。
+    - 附带给出 $f^{\prime}(x)$ 与简单函数的比较，适合构造导数可控的辅助函数。
+    - 最终问参数范围，常见终点是线性不等式。
+  normalization_moves:
+    - 先设 $F(x)=f(x)-\frac12x^2$。
+    - 把常数项配成平方差，写成 $F(1-a)\ge F(a)$。
+    - 用递增性把函数值比较改成输入比较。
+  common_failures:
+    - 只做奇偶拆分，不补单调性依据。
+    - 把 $\frac12-a$ 配错成 $\frac12(1-a)^2+\frac12a^2$。
+    - 从 $F(1-a)\ge F(a)$ 推错为 $1-a\le a$。
+  similar_practice_query: 奇函数锁定 去偶留奇 参数范围 抽象函数
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

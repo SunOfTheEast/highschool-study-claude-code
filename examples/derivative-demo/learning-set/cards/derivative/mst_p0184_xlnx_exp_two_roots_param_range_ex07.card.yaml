@@ -1,0 +1,145 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0184_xlnx_exp_two_roots_param_range_ex07
+content_revision_id: mst_p0184_xlnx_exp_two_roots_param_range_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0184_xlnx_exp_two_roots_param_range_ex07.card.yaml
+stem: |-
+  （2023 · 咸阳模拟 T8）若方程 $x\ln x+e^x+1-ax=0$ 有两个不等的实数根，则实数 $a$ 的取值范围是（  ）
+  A. $(e,+\infty)$
+  B. $(e+1,+\infty)$
+  C. $(2e,+\infty)$
+  D. $(e^{-1},+\infty)$
+answer: |-
+  B
+
+  源解把方程改写为 $(x\ln x-x+1)+(e^x-ex)+(e+1-a)x=0$，并按“特殊点探路”取 $x=1$。其中前两项恒非负，所以若 $a\le e+1$，三项非负且不可能为零； 必须 $a>e+1$。反之当 $a>e+1$ 时， $F(x)=x\ln x+e^x+1-ax$ 满足 $F(0^+)=2>0,\ F(1)=e+1-a<0,\ F(+\infty)=+\infty$， 且 $F''(x)=\frac1x+e^x>0$，故零点至多两个并且由介值性至少两个， 最终恰有两个不等实根，范围为 $(e+1,+\infty)$，选 B。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 拆项并固定试探点。
+      max_score: 1
+    - step_id: step_2
+      description: 给出参数必要条件。
+      max_score: 1
+    - step_id: step_3
+      description: 验证满足条件时恰有两根。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 含参数分类讨论
+    subroute:
+      - 特殊点探路
+      - 固定点 x=1
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+    evidence:
+      - $x\ln x-x+1$
+      - $e^x-ex$
+      - $(e+1-a)x$
+    normalization_moves_used:
+      - 配凑两段非负模板。
+      - 用固定点 $x=1$ 锁定参数方向。
+      - 用凸性补上“恰有两根”的充分性。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看不出 $x\ln x-x+1\ge0$，回补指数对数基础。
+      - 若学生不会用固定点判参数，回补函数性质与图像。
+      - 若学生不会从 $F'(x)>0$ 推零点个数上界，回补导数单调极值基础。
+  detail_terms:
+    - $x\ln x+e^x+1-ax$
+    - $x\ln x-x+1$
+    - $e^x-ex$
+    - $a>e+1$
+    - $(e+1,+\infty)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0184_xlnx_exp_two_roots_param_range_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0184
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0184/page_0184.md
+      role: problem_start
+      evidence: "page_0184 contains 例7 full statement, choices A-D, and solution: rewrite as three-term sum, probe fixed point x=1, conclude a>e+1, and select B."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0184.png
+      inspected: true
+      notes: 页图核对通过：例7题干、选项和答案 B 与 markdown 一致。
+  source_context: page_0184 顶部是上一题续解，仅作上下文；本卡只处理本页新起头例7。
+  source_influence:
+    - 保留源解“特殊点探路”：先把式子拆成两段非负项加参数线性项，再代 x=1。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 咸阳模拟 T8）若方程 $x\ln x+e^x+1-ax=0$ 有两个不等的实数根，则实数 $a$ 的取值范围是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $(e,+\infty)$
+      text_latex: $(e,+\infty)$
+    - label: B
+      text_raw: $(e+1,+\infty)$
+      text_latex: $(e+1,+\infty)$
+    - label: C
+      text_raw: $(2e,+\infty)$
+      text_latex: $(2e,+\infty)$
+    - label: D
+      text_raw: $(e^{-1},+\infty)$
+      text_latex: $(e^{-1},+\infty)$
+  answer: B
+  fidelity_notes:
+    - 源题为单选题，A-D 选项完整保留。
+solution:
+  source_solution_summary: 源解把方程改写为 $(x\ln x-x+1)+(e^x-ex)+(e+1-a)x=0$，并按“特殊点探路”取 $x=1$。其中前两项恒非负，所以若 $a\le e+1$，三项非负且不可能为零； 必须 $a>e+1$。反之当 $a>e+1$ 时， $F(x)=x\ln x+e^x+1-ax$ 满足 $F(0^+)=2>0,\ F(1)=e+1-a<0,\ F(+\infty)=+\infty$， 且 $F''(x)=\frac1x+e^x>0$，故零点至多两个并且由介值性至少两个， 最终恰有两个不等实根，范围为 $(e+1,+\infty)$，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 拆项并固定试探点。
+      formula_trace:
+        from: $x\ln x+e^x+1-ax=0$
+        to: $(x\ln x-x+1)+(e^x-ex)+(e+1-a)x=0$
+        operation: 配凑出两段经典非负结构并抽出参数项。
+        why: 便于直接使用 $x=1$ 和基础不等式判符号。
+      source_ref: page_0184
+    - step_id: step_2
+      statement: 给出参数必要条件。
+      formula_trace:
+        from: $x\ln x-x+1\ge0,\ e^x-ex\ge0$
+        to: $a>e+1$
+        operation: 在 $x>0$ 上判定三项符号；若 $a\le e+1$ 则左边无法为 0。
+        why: 有两个实根首先要“有根”，故需排除 $a\le e+1$。
+      source_ref: page_0184
+    - step_id: step_3
+      statement: 验证满足条件时恰有两根。
+      formula_trace:
+        from: $a>e+1$
+        to: $F(0^+)>0,\ F(1)<0,\ F(+\infty)>0,\ F'(x)>0$
+        operation: 用端点符号+凸性判断交轴次数。
+        why: 连续凸函数先下后上，最多两次过零；介值定理给出至少两次。
+      source_ref: page_0184
+teaching_card:
+  student_title: 先拆非负块再用固定点判参
+  what_it_trains: 训练在“指对+参数线性”方程里，用固定点试探快速给出参数阈值，并补齐根个数判断。
+  recognition_cues:
+    - 题干出现 $x\ln x$ 与 $e^x$ 的和。
+    - 问题问“有两个不等实根”的参数范围。
+    - 表达式可配成 $x\ln x-x+1$ 与 $e^x-ex$ 两段。
+  normalization_moves:
+    - 先做 $(x\ln x-x+1)+(e^x-ex)$ 配凑。
+    - 代 $x=1$ 看参数项符号。
+    - 端点符号+凸性确认恰有两根。
+  common_failures:
+    - 只给出 $a>e+1$ 必要性，没说明“恰有两根”。
+    - 把阈值误写成 $a>e$。
+    - 忽略定义域 $x>0$。
+  similar_practice_query: xlnx e^x 参数方程 两不等实根 特殊点探路 x=1
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,151 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0028_ex10
+content_revision_id: mst_p0028_ex10-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0028_ex10.card.yaml
+stem: (2024 湖北武汉高二月考 T14) 若 $a>1$, 不等式 $xe^x-x+(a-2)\ln x-x^{a-1}>0$ 在 $(1,+\infty)$ 上恒成立，则实数 $a$ 的取值范围是______.
+answer: |-
+  $(1,e+2)$
+
+  设 $f(u)=e^u-u$，在 $u>0$ 上递增。原不等式等价于 $xe^x-x-\ln x>x^{a-1}-(a-1)\ln x$，即 $f(x+\ln x)>f((a-1)\ln x)$。因为 $x>1$、$a>1$ 时两个输入均为正，由 $f$ 递增得 $x+\ln x>(a-1)\ln x$，也就是 $x>(a-2)\ln x$。再化为 $a-2<x/\ln x$ 对任意 $x>1$ 成立，而 $x/\ln x$ 在 $x=e$ 处取最小值 $e$，故 $a-2<e$。结合 $a>1$，得 $a\in(1,e+2)$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把原不等式整理成两个 $f(u)=e^u-u$ 的比较。
+      max_score: 1
+    - step_id: step_2
+      description: 识别同构函数的两个输入。
+      max_score: 1
+    - step_id: step_3
+      description: 由单调性得到参数不等式。
+      max_score: 1
+    - step_id: step_4
+      description: 取 $x/\ln x$ 的最小值确定范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+    subroute:
+      - $e^x-x$ 同构
+      - $x/\ln x$ 最小值
+      - 严格恒成立转参数上界
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $xe^x-x-\ln x=f(x+\ln x)$。
+      - $x^{a-1}-(a-1)\ln x=f((a-1)\ln x)$。
+      - 最终范围由 $x/\ln x$ 的最小值控制。
+    normalization_moves_used:
+      - 把 $(a-2)\ln x$ 拆配成左侧 $-\ln x$ 与右侧 $-(a-1)\ln x$。
+      - 用 $e^{x+\ln x}=xe^x$ 配出 $f(x+\ln x)$。
+      - 用 $x^{a-1}=e^{(a-1)\ln x}$ 配出 $f((a-1)\ln x)$。
+      - 由 $x>(a-2)\ln x$ 化为 $a-2<x/\ln x$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看不出 $xe^x=e^{x+\ln x}$，回补指数对数基础。
+      - 若学生不能把 $x^{a-1}$ 写成 $e^{(a-1)\ln x}$，回补指数对数基础。
+      - 若学生不会用 $f'(u)=e^u-1$ 判断 $f(u)=e^u-u$ 在 $u>0$ 递增，回补导数单调极值基础。
+      - 若学生把严格不等式误写成 $a\le e+2$，回补不等式工具基础。
+  detail_terms:
+    - $xe^x-x+(a-2)\ln x-x^{a-1}>0
+    - $f(u)=e^u-u$
+    - $x+\ln x$
+    - $(a-1)\ln x$
+    - $x/\ln x$ 最小值
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0028_ex10
+source_evidence:
+  source_refs:
+    - ref_id: page_0028_ex10_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0028/page_0028.md
+      role: problem_start
+      evidence: page_0028 例 10 给出 $a>1$，要求 $xe^x-x+(a-2)\ln x-x^{a-1}>0$ 在 $(1,+\infty)$ 上恒成立时的 $a$ 取值范围。
+    - ref_id: page_0028_ex10_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0028/page_0028.md
+      role: solution
+      evidence: page_0028 同页解析设 $f(x)=e^x-x$，把不等式化为 $f(x+\ln x)>f(\ln x^{a-1})$，再得 $x>(a-2)\ln x$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0028.png
+      inspected: true
+      notes: 页图核对例 10 题干、解析与答案 $(1,e+2)$；与 markdown 一致。
+  source_context: 本题延续 $e^x-x$ 同构模型，把原式拆成 $f(x+\ln x)$ 与 $f((a-1)\ln x)$ 的函数值比较。
+  source_influence:
+    - 源解选择 $f(u)=e^u-u$，不是直接对原式整体求导。
+    - 严格不等式要求 $a-2<\min_{x>1}x/\ln x=e$，所以右端点 $e+2$ 不取。
+  source_discrepancies: []
+original_problem:
+  stem: (2024 湖北武汉高二月考 T14) 若 $a>1$, 不等式 $xe^x-x+(a-2)\ln x-x^{a-1}>0$ 在 $(1,+\infty)$ 上恒成立，则实数 $a$ 的取值范围是______.
+  parts: *a1
+  choices: []
+  answer: $(1,e+2)$
+  fidelity_notes:
+    - page_0028.png 已核对：题干为严格大于 $0$，区间为 $(1,+\infty)$，前置条件为 $a>1$。
+solution:
+  source_solution_summary: 设 $f(u)=e^u-u$，在 $u>0$ 上递增。原不等式等价于 $xe^x-x-\ln x>x^{a-1}-(a-1)\ln x$，即 $f(x+\ln x)>f((a-1)\ln x)$。因为 $x>1$、$a>1$ 时两个输入均为正，由 $f$ 递增得 $x+\ln x>(a-1)\ln x$，也就是 $x>(a-2)\ln x$。再化为 $a-2<x/\ln x$ 对任意 $x>1$ 成立，而 $x/\ln x$ 在 $x=e$ 处取最小值 $e$，故 $a-2<e$。结合 $a>1$，得 $a\in(1,e+2)$。
+  key_steps:
+    - step_id: step_1
+      statement: 把原不等式整理成两个 $f(u)=e^u-u$ 的比较。
+      formula_trace:
+        from: $xe^x-x+(a-2)\ln x-x^{a-1}>0
+        to: $xe^x-x-\ln x>x^{a-1}-(a-1)\ln x
+        operation: 把 $x^{a-1}$ 移到右侧，并从左侧的 $(a-2)\ln x$ 中拆出 $-\ln x$，右侧对应拆出 $-(a-1)\ln x$。
+        why: 这样左右两边分别可以写成 $f(x+\ln x)$ 与 $f(\ln x^{a-1})$。
+      source_ref: page_0028_ex10_solution
+    - step_id: step_2
+      statement: 识别同构函数的两个输入。
+      formula_trace:
+        from: $xe^x-x-\ln x>x^{a-1}-(a-1)\ln x
+        to: $f(x+\ln x)>f(\ln x^{a-1})
+        operation: 用 $e^{x+\ln x}=xe^x$，以及 $e^{\ln x^{a-1}}=x^{a-1}$、$\ln x^{a-1}=(a-1)\ln x$。
+        why: $f(u)=e^u-u$ 在正区间递增，可把函数值比较降为输入比较。
+      source_ref: page_0028_ex10_solution
+    - step_id: step_3
+      statement: 由单调性得到参数不等式。
+      formula_trace:
+        from: $f(x+\ln x)>f((a-1)\ln x)$
+        to: $x+\ln x>(a-1)\ln x\iff x>(a-2)\ln x
+        operation: 因 $x>1$、$a>1$，两个输入都大于 0；用 $f'(u)=e^u-1>0$。
+        why: 恒成立条件转成 $a-2$ 与 $x/\ln x$ 的比较。
+      source_ref: page_0028_ex10_solution
+    - step_id: step_4
+      statement: 取 $x/\ln x$ 的最小值确定范围。
+      formula_trace:
+        from: $x>(a-2)\ln x\quad(x>1)$
+        to: $a-2<\left(\frac{x}{\ln x}\right)_{\min}=e$
+        operation: 同除以 $\ln x>0$，得到 $a-2<x/\ln x$，再用 $x/\ln x$ 在 $x=e$ 处取最小值 $e$。
+        why: 严格大于要求右端点不能取到；结合题设 $a>1$ 得 $(1,e+2)$。
+      source_ref: page_0028_ex10_solution
+teaching_card:
+  student_title: 把 $xe^x$ 和 $x^{a-1}$ 都装进 $e^u-u$
+  what_it_trains: 训练把含参数恒成立不等式拆成同一个函数的两个输入比较，再由 $x/\ln x$ 的最小值给出参数范围。
+  recognition_cues:
+    - 式子里同时出现 $xe^x$、$x^{a-1}$ 和多项 $\ln x$。
+    - 有 $a-1$ 与 $a-2$，提示把 $\ln x$ 重新分配到左右两边。
+    - 区间是 $x>1$，所以 $\ln x>0$，适合转成 $x/\ln x$。
+  normalization_moves:
+    - 先把原式整理成 $xe^x-x-\ln x>x^{a-1}-(a-1)\ln x$。
+    - 把左侧识别为 $f(x+\ln x)$，右侧识别为 $f((a-1)\ln x)$。
+    - 用 $f$ 在正区间递增，转成 $x>(a-2)\ln x$。
+    - 最后用 $x/\ln x\ge e$，并注意严格不等式。
+  common_failures:
+    - 直接对原式求导导致参数和指数幂纠缠在一起。
+    - 配 $f(u)=e^u-u$ 时漏掉左侧的 $-\ln x$。
+    - 把 $\ln x^{a-1}$ 忘记化成 $(a-1)\ln x$。
+    - 把 $a=e+2$ 误放进答案。
+  similar_practice_query: xe^x x^{a-1} ln x 恒成立 e^x-x 同构 x/ln x 最小值 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0028 markdown 与页图；未发现题干或解析差异。

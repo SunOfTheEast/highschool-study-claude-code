@@ -1,0 +1,305 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0150_multi_select_ln_over_x_ex25
+content_revision_id: mst_p0150_multi_select_ln_over_x_ex25-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0150_multi_select_ln_over_x_ex25.card.yaml
+stem: |-
+  （多选）若实数 $t\ge2$，则下列不等式一定成立的是（  ）
+  A. $(t+3)\ln(t+2)>(t+2)\ln(t+3)$
+  B. $(t+1)^{t+2}>(t+2)^{t+1}$
+  C. $1+\frac1t>\log_t(t+1)$
+  D. $\log_{t+1}(t+2)>\log_{t+2}(t+3)$
+answer: |
+  ABD
+
+  构造
+  \[
+  g(x)=\frac{\ln x}{x}.
+  \]
+  有 $g$ 在 $(0,e)$ 递增、在 $(e,+\infty)$ 递减。
+
+  对 A：
+  \[
+  (t+3)\ln(t+2)>(t+2)\ln(t+3)
+  \Longleftrightarrow
+  \frac{\ln(t+2)}{t+2}>\frac{\ln(t+3)}{t+3}
+  \Longleftrightarrow
+  g(t+2)>g(t+3).
+  \]
+  由于 $t\ge2\Rightarrow t+2\ge4>e$，在递减区间上有 $g(t+2)>g(t+3)$，故 A 对。
+
+  对 B：取对数后
+  \[
+  (t+2)\ln(t+1)>(t+1)\ln(t+2)
+  \Longleftrightarrow
+  \frac{\ln(t+1)}{t+1}>\frac{\ln(t+2)}{t+2}
+  \Longleftrightarrow
+  g(t+1)>g(t+2).
+  \]
+  且 $t+1\ge3>e$，故 B 对。
+
+  对 C：
+  \[
+  1+\frac1t>\log_t(t+1)
+  \Longleftrightarrow
+  (t+1)\ln t>t\ln(t+1)
+  \Longleftrightarrow
+  g(t)>g(t+1).
+  \]
+  该比较不恒成立：如 $t=2$ 时不成立，而 $t=4$ 时成立，因此 C 不是“必然成立”。
+
+  对 D：
+  \[
+  \log_{t+1}(t+2)>\log_{t+2}(t+3)
+  \Longleftrightarrow
+  [\ln(t+2)]^2>\ln(t+1)\ln(t+3).
+  \]
+  源解给出
+  \[
+  \ln(t+1)\ln(t+3)
+  <\left[\frac{\ln(t+1)+\ln(t+3)}{2}\right]^2
+  =\left[\frac{\ln((t+1)(t+3))}{2}\right]^2
+  <\ln^2(t+2),
+  \]
+  从而 D 对。
+
+  所以正确选项为 ABD。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 统一函数并给出单调分区。
+      max_score: 1
+    - step_id: step_2
+      description: A项化为右侧递减区间比较。
+      max_score: 1
+    - step_id: step_3
+      description: B项取对数后同理成立。
+      max_score: 1
+    - step_id: step_4
+      description: C项并非恒成立。
+      max_score: 1
+    - step_id: step_5
+      description: D项用对数均值链判真。
+      max_score: 1
+    - step_id: step_6
+      description: 汇总多选答案。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 判断四个不等式在参数区间内是否恒成立。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 拟合与夹逼
+      - 含参数分类讨论
+    subroute:
+      - $g(x)=\frac{\ln x}{x}$ 统摄
+      - 取对数降幂
+      - 对数均值链
+      - 反例定非恒真
+  structure:
+    primary: 不等式工具结构
+    secondary:
+      - 同构结构
+      - 指对复合结构
+    evidence:
+      - A/B/C都可改写成 $g(t+k)$ 的两点比较。
+      - D需要换底后转为 $\ln$ 乘积与平方比较。
+      - 题目目标是“必然成立”判定，本质是参数鲁棒性筛选。
+    normalization_moves_used:
+      - 把幂不等式对数化。
+      - 把混合对数不等式化为 $g(\cdot)$ 比较。
+      - 用反例排除非恒真选项。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把选项改写成 $g(x)=\frac{\ln x}{x}$ 比较，回补指数对数基础。
+      - 若学生不会处理“恒成立”与“存在反例”关系，回补不等式工具基础。
+      - 若学生对换底后代数整理不稳定，回补代数恒等变形。
+  detail_terms:
+    - $g(x)=\frac{\ln x}{x}$
+    - $(t+3)\ln(t+2)>(t+2)\ln(t+3)$
+    - $(t+1)^{t+2}>(t+2)^{t+1}$
+    - $1+\frac1t>\log_t(t+1)$
+    - $\log_{t+1}(t+2)>\log_{t+2}(t+3)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0150_multi_select_ln_over_x_ex25
+source_evidence:
+  source_refs:
+    - ref_id: page_0150_ex25_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0150/page_0150.md
+      role: problem_start
+      evidence: 例25题头与A、B选项出现在page_0150底部。
+    - ref_id: page_0151_ex25_problem_cont
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0151/page_0151.md
+      role: continuation
+      evidence: 例25的C、D选项续在page_0151页首。
+    - ref_id: page_0151_ex25_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0151/page_0151.md
+      role: solution
+      evidence: page_0151页首给出完整解析：A、B、D正确，C不恒成立，结论选ABD。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0150.png
+      inspected: true
+      notes: 已核对原图：例25在本页只出现题头与前两项选项。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0151.png
+      inspected: true
+      notes: 已核对原图：例25续出C、D与完整解析，随后开始例26（不属本卡）。
+  source_context: 按页头归属，例25从page_0150起头，故跨页到page_0151只用于补齐选项与解析。
+  source_influence:
+    - 保留源解统一函数：$g(x)=\frac{\ln x}{x}$。
+    - 保留A、B两项都通过改写到 $g(t+k)$ 比较直接判真。
+    - 保留D项的对数均值不等式链：$\ln^2(t+2)>\ln(t+1)\ln(t+3)$。
+    - C项保持“非恒真”的结论，并用可验证反例补强。
+  source_discrepancies:
+    - page_0151解析里C项讨论行的区间符号与前述单调性表述存在笔误/识别噪声，但不影响“C不恒成立、答案ABD”的主结论；本卡用反例 $t=2$ 与 $t=4$ 明确化。
+original_problem:
+  stem: （多选）若实数 $t\ge2$，则下列不等式一定成立的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $(t+3)\ln(t+2)>(t+2)\ln(t+3)$
+      text_latex: $(t+3)\ln(t+2)>(t+2)\ln(t+3)$
+    - label: B
+      text_raw: $(t+1)^{t+2}>(t+2)^{t+1}$
+      text_latex: $(t+1)^{t+2}>(t+2)^{t+1}$
+    - label: C
+      text_raw: $1+\frac1t>\log_t(t+1)$
+      text_latex: $1+\frac1t>\log_t(t+1)$
+    - label: D
+      text_raw: $\log_{t+1}(t+2)>\log_{t+2}(t+3)$
+      text_latex: $\log_{t+1}(t+2)>\log_{t+2}(t+3)$
+  answer: ABD
+  fidelity_notes:
+    - 题头在page_0150，C、D选项与解析续到page_0151页首。
+    - 本卡仅吸收page_0151中例25续解，不吸收后续例26。
+solution:
+  source_solution_summary: |
+    构造
+    \[
+    g(x)=\frac{\ln x}{x}.
+    \]
+    有 $g$ 在 $(0,e)$ 递增、在 $(e,+\infty)$ 递减。
+
+    对 A：
+    \[
+    (t+3)\ln(t+2)>(t+2)\ln(t+3)
+    \Longleftrightarrow
+    \frac{\ln(t+2)}{t+2}>\frac{\ln(t+3)}{t+3}
+    \Longleftrightarrow
+    g(t+2)>g(t+3).
+    \]
+    由于 $t\ge2\Rightarrow t+2\ge4>e$，在递减区间上有 $g(t+2)>g(t+3)$，故 A 对。
+
+    对 B：取对数后
+    \[
+    (t+2)\ln(t+1)>(t+1)\ln(t+2)
+    \Longleftrightarrow
+    \frac{\ln(t+1)}{t+1}>\frac{\ln(t+2)}{t+2}
+    \Longleftrightarrow
+    g(t+1)>g(t+2).
+    \]
+    且 $t+1\ge3>e$，故 B 对。
+
+    对 C：
+    \[
+    1+\frac1t>\log_t(t+1)
+    \Longleftrightarrow
+    (t+1)\ln t>t\ln(t+1)
+    \Longleftrightarrow
+    g(t)>g(t+1).
+    \]
+    该比较不恒成立：如 $t=2$ 时不成立，而 $t=4$ 时成立，因此 C 不是“必然成立”。
+
+    对 D：
+    \[
+    \log_{t+1}(t+2)>\log_{t+2}(t+3)
+    \Longleftrightarrow
+    [\ln(t+2)]^2>\ln(t+1)\ln(t+3).
+    \]
+    源解给出
+    \[
+    \ln(t+1)\ln(t+3)
+    <\left[\frac{\ln(t+1)+\ln(t+3)}{2}\right]^2
+    =\left[\frac{\ln((t+1)(t+3))}{2}\right]^2
+    <\ln^2(t+2),
+    \]
+    从而 D 对。
+
+    所以正确选项为 ABD。
+  key_steps:
+    - step_id: step_1
+      statement: 统一函数并给出单调分区。
+      formula_trace:
+        from: $g(x)=\frac{\ln x}{x}$
+        to: $g$ 在 $(0,e)$ 递增、在 $(e,+\infty)$ 递减
+        operation: 利用导数符号判单调。
+        why: A、B、C均可转为 $g(\cdot)$ 比较。
+      source_ref: page_0151_ex25_solution
+    - step_id: step_2
+      statement: A项化为右侧递减区间比较。
+      formula_trace:
+        from: $(t+3)\ln(t+2)>(t+2)\ln(t+3)$
+        to: $g(t+2)>g(t+3)$
+        operation: 同除正数 $(t+2)(t+3)$。
+        why: $t+2,t+3>e$，递减函数下必成立。
+      source_ref: page_0151_ex25_solution
+    - step_id: step_3
+      statement: B项取对数后同理成立。
+      formula_trace:
+        from: $(t+1)^{t+2}>(t+2)^{t+1}$
+        to: $g(t+1)>g(t+2)$
+        operation: 对数化并整理成比值形式。
+        why: $t+1,t+2>e$，递减函数下必成立。
+      source_ref: page_0151_ex25_solution
+    - step_id: step_4
+      statement: C项并非恒成立。
+      formula_trace:
+        from: $1+\frac1t>\log_t(t+1)$
+        to: $g(t)>g(t+1)$
+        operation: 移项乘正数并化为对数比值比较。
+        why: 该关系随 $t$ 变化，不能保证恒真。
+      source_ref: page_0151_ex25_solution
+    - step_id: step_5
+      statement: D项用对数均值链判真。
+      formula_trace:
+        from: $\log_{t+1}(t+2)>\log_{t+2}(t+3)$
+        to: $\ln^2(t+2)>\ln(t+1)\ln(t+3)$
+        operation: 换底后转为对数乘积比较，再用均值不等式链。
+        why: 直接得到 D 必真。
+      source_ref: page_0151_ex25_solution
+    - step_id: step_6
+      statement: 汇总多选答案。
+      formula_trace:
+        from: A真，B真，C不恒真，D真
+        to: 选 ABD
+        operation: 分类汇总。
+        why: 完成作答。
+      source_ref: page_0151_ex25_solution
+teaching_card:
+  student_title: 四选项同框：先统一到 $\frac{\ln x}{x}$
+  what_it_trains: 训练“必然成立”型多选中，先统一结构、再分类判真假的策略。
+  recognition_cues:
+    - 多选题，关键词是“对任意 $t\ge2$ 恒成立”。
+    - 选项混合出现幂式、对数式、乘积式。
+    - 存在明显可换底/可对数化入口。
+  normalization_moves:
+    - 优先尝试 $g(x)=\frac{\ln x}{x}$。
+    - 把幂比较先取对数。
+    - 对“恒成立”选项用反例快速验伪。
+  common_failures:
+    - 把“某些 $t$ 成立”误当“对所有 $t$ 成立”。
+    - 换底后漏掉分母正值条件，方向判断混乱。
+    - D项只凭直觉比较对数底数，未做严格变形。
+  similar_practice_query: t≥2 多选 恒成立 lnx/x 对数换底 反例判否
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

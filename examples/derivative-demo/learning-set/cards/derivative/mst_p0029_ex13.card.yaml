@@ -1,0 +1,234 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0029_ex13
+content_revision_id: mst_p0029_ex13-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0029_ex13.card.yaml
+stem: |-
+  (2016 · 四川 T21) 设函数 $f(x)=ax^2-a-\ln x$, $g(x)=\frac1x-\frac1{e^{x-1}}$, 其中 $a\in\mathbf{R}$, $e=2.718\cdots$ 为自然对数的底数。
+  (1) 讨论 $f(x)$ 的单调性；
+  (2) 证明：当 $x>1$ 时，$g(x)>0$；
+  (3) 如果 $f(x)>g(x)$ 在区间 $(1,+\infty)$ 内恒成立，求实数 $a$ 的取值范围。
+answer: |-
+  (1) 当 $a\le0$ 时，$f(x)$ 在 $(0,+\infty)$ 上单调递减；当 $a>0$ 时，$f(x)$ 在 $(0,\sqrt{1/(2a)})$ 上递减，在 $(\sqrt{1/(2a)},+\infty)$ 上递增。(2) $x>1$ 时 $g(x)>0$。(3) $a\ge\frac12$。
+
+  第 (1) 问，$f'(x)=2ax-1/x=(2ax^2-1)/x$。若 $a\le0$，则 $f'(x)<0$，$f$ 在 $(0,+\infty)$ 递减；若 $a>0$，正临界点为 $x=\sqrt{1/(2a)}$，其左侧 $f'<0$、右侧 $f'>0$。第 (2) 问，$g(x)>0$ 等价于 $1/x>e/e^x$，即 $e^x/x>e$；因 $G(x)=e^x/x$ 在 $x>1$ 上递增且 $G(1)=e$，故成立。第 (3) 问，$f(x)-g(x)=[e^{-(x-1)}+(x-1)]-(1/x+\ln x)+(x-1)(ax+a-1)$。令 $h(u)=u+e^{-u}$，$u>0$ 时递增；又 $x-1>\ln x$，所以 $h(x-1)>h(\ln x)$。若 $a\ge1/2$，则 $ax+a-1>0$，从而 $f(x)>g(x)$。反过来，$a\le0$ 时 $f(x)<0<g(x)$；$0<a<1/2$ 时取 $x_0=\sqrt{1/(2a)}>1$，有 $f(x_0)<f(1)=0<g(x_0)$，均矛盾。因此 $a\ge1/2$。
+rubric:
+  max_score: 9
+  criteria:
+    - step_id: step_1
+      description: 第 (1) 问：求导并按 $a$ 的符号讨论导数符号。
+      max_score: 1
+    - step_id: step_2
+      description: 第 (1) 问：写出单调区间。
+      max_score: 1
+    - step_id: step_3
+      description: 第 (2) 问：把 $g(x)>0$ 转成 $e^x/x$ 的比较。
+      max_score: 1
+    - step_id: step_4
+      description: 第 (2) 问：用单调性完成证明。
+      max_score: 1
+    - step_id: step_5
+      description: 第 (3) 问：把 $f(x)-g(x)$ 拆成同构差值与参数因子。
+      max_score: 1
+    - step_id: step_6
+      description: 第 (3) 问：证明同构差值为正。
+      max_score: 1
+    - step_id: step_7
+      description: 第 (3) 问：证明 $a\ge1/2$ 充分。
+      max_score: 1
+    - step_id: step_8
+      description: 第 (3) 问：排除 $a\le0$。
+      max_score: 1
+    - step_id: step_9
+      description: 第 (3) 问：排除 $0<a<1/2$。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: (1) 零点/极值点分析：按 $a$ 讨论 $f$ 的单调区间。
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 不等式证明
+        target: (2) 不等式证明：证明 $x>1$ 时 $g(x)>0$。
+        result: 见 source_solution_summary
+      - part_id: "3"
+        goal: 求参数范围
+        target: (3) 求参数范围：求 $f(x)>g(x)$ 在 $(1,+\infty)$ 恒成立的 $a$ 范围。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 含参数分类讨论
+      - 切线放缩与凹凸性
+      - 充分/必要性探路
+    subroute:
+      - $e^x/x$ 单调性
+      - $x+e^{-x}$ 同构比较
+      - $x-1>\ln x$
+      - 临界点 $x_0=\sqrt{1/(2a)}$ 反证
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $g(x)>0$ 被转成 $e^x/x>e$。
+      - $f(x)-g(x)$ 被拆成 $h(x-1)-h(\ln x)$ 与 $(x-1)(ax+a-1)$。
+      - $0<a<1/2$ 时用 $f$ 的极小点 $x_0$ 构造失败点。
+    normalization_moves_used:
+      - $1/e^{x-1}=e/e^x$，把 $g(x)>0$ 化成 $e^x/x>e$。
+      - 把 $f-g$ 改写为 $h(x-1)-h(\ln x)+(x-1)(ax+a-1)$。
+      - 用 $h(\ln x)=\ln x+1/x$。
+      - 用 $x-1>\ln x$ 与 $h$ 递增给出正差。
+      - 按 $a\le0$、$0<a<1/2$、$a\ge1/2$ 分类。
+  fallback:
+    only_if_trace_shows:
+      - 若学生求 $f'(x)$ 后没有保留定义域 $x>0$，回补函数三要素与定义域。
+      - 若学生不会把 $g(x)>0$ 化为 $e^x/x>e$，回补指数对数基础。
+      - 若学生不知道 $e^x/x$ 在 $x>1$ 上递增，回补导数单调极值基础。
+      - 若学生无法把 $f-g$ 拆成 $h(x-1)-h(\ln x)$，回补代数恒等变形。
+      - 若学生不会用 $x_0=\sqrt{1/(2a)}$ 排除 $0<a<1/2$，回补导数单调极值基础。
+  detail_terms:
+    - $f(x)=ax^2-a-\ln x$
+    - $g(x)=1/x-1/e^{x-1}$
+    - $e^x/x>e$
+    - $h(u)=u+e^{-u}$
+    - $h(x-1)-h(\ln x)$
+    - $ax+a-1$
+    - $a\ge1/2$
+parts: &a1
+  - (1) 讨论 $f(x)$ 的单调性；
+  - (2) 证明：当 $x>1$ 时，$g(x)>0$；
+  - (3) 如果 $f(x)>g(x)$ 在区间 $(1,+\infty)$ 内恒成立，求实数 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0029_ex13
+source_evidence:
+  source_refs:
+    - ref_id: page_0029_ex13_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0029/page_0029.md
+      role: problem_start
+      evidence: page_0029 例 13 给出 $f(x)=ax^2-a-\ln x$ 与 $g(x)=1/x-1/e^{x-1}$，三问分别讨论单调性、证明 $g(x)>0$、求 $f(x)>g(x)$ 恒成立时的 $a$ 范围。
+    - ref_id: page_0029_ex13_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0029/page_0029.md
+      role: solution
+      evidence: page_0029 同页解析完成三问：先按 $a\le0$ 与 $a>0$ 讨论 $f'$，再用 $e^x/x>e$ 证 $g>0$，最后拆成 $h(x-1)-h(\ln x)+(x-1)(ax+a-1)>0$ 并分类得 $a\ge1/2$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0029.png
+      inspected: true
+      notes: 页图核对例 13 题干、三问和完整解析均在 page_0029；页末后续为考点 3 与 page_0030 新例题，不是例 13 延续。
+  source_context: 本题是四川高考压轴型三问：先做含参单调性，再把证明与恒成立问题拆成基础同构函数和参数分类。
+  source_influence:
+    - 第 (1) 问必须保留定义域 $x>0$；$a>0$ 时临界点只取正根 $\sqrt{1/(2a)}$。
+    - 第 (2) 问源解使用 $G(x)=e^x/x$ 在 $x>1$ 的递增性证明，不是直接对 $g$ 求导。
+    - 第 (3) 问的充分部分依赖 $h(u)=u+e^{-u}$ 递增与 $x-1>\ln x$，必要部分由 $a\le0$ 和 $0<a<1/2$ 分别构造矛盾。
+  source_discrepancies: []
+original_problem:
+  stem: (2016 · 四川 T21) 设函数 $f(x)=ax^2-a-\ln x$, $g(x)=\frac1x-\frac1{e^{x-1}}$, 其中 $a\in\mathbf{R}$, $e=2.718\cdots$ 为自然对数的底数。
+  parts: *a1
+  choices: []
+  answer: (1) 当 $a\le0$ 时，$f(x)$ 在 $(0,+\infty)$ 上单调递减；当 $a>0$ 时，$f(x)$ 在 $(0,\sqrt{1/(2a)})$ 上递减，在 $(\sqrt{1/(2a)},+\infty)$ 上递增。(2) $x>1$ 时 $g(x)>0$。(3) $a\ge\frac12$。
+  fidelity_notes:
+    - page_0029.png 已核对：$g(x)$ 的第二项为 $1/e^{x-1}$，不是 $1/e^x-1$。
+    - page_0029.png 已核对：第 (3) 问要求在 $(1,+\infty)$ 内恒成立，答案为 $a\ge1/2$。
+solution:
+  source_solution_summary: 第 (1) 问，$f'(x)=2ax-1/x=(2ax^2-1)/x$。若 $a\le0$，则 $f'(x)<0$，$f$ 在 $(0,+\infty)$ 递减；若 $a>0$，正临界点为 $x=\sqrt{1/(2a)}$，其左侧 $f'<0$、右侧 $f'>0$。第 (2) 问，$g(x)>0$ 等价于 $1/x>e/e^x$，即 $e^x/x>e$；因 $G(x)=e^x/x$ 在 $x>1$ 上递增且 $G(1)=e$，故成立。第 (3) 问，$f(x)-g(x)=[e^{-(x-1)}+(x-1)]-(1/x+\ln x)+(x-1)(ax+a-1)$。令 $h(u)=u+e^{-u}$，$u>0$ 时递增；又 $x-1>\ln x$，所以 $h(x-1)>h(\ln x)$。若 $a\ge1/2$，则 $ax+a-1>0$，从而 $f(x)>g(x)$。反过来，$a\le0$ 时 $f(x)<0<g(x)$；$0<a<1/2$ 时取 $x_0=\sqrt{1/(2a)}>1$，有 $f(x_0)<f(1)=0<g(x_0)$，均矛盾。因此 $a\ge1/2$。
+  key_steps:
+    - step_id: step_1
+      statement: 第 (1) 问：求导并按 $a$ 的符号讨论导数符号。
+      formula_trace:
+        from: $f(x)=ax^2-a-\ln x\quad(x>0)$
+        to: $f'(x)=2ax-\frac1x=\frac{2ax^2-1}{x}$
+        operation: 对二次项和对数项分别求导，并通分。
+        why: $x>0$ 时分母为正，导数符号由 $2ax^2-1$ 控制。
+      source_ref: page_0029_ex13_solution
+    - step_id: step_2
+      statement: 第 (1) 问：写出单调区间。
+      formula_trace:
+        from: $f'(x)=\frac{2ax^2-1}{x}$
+        to: $a\le0:\ f'<0;\quad a>0:\ x=\sqrt{\frac1{2a}}\text{ 左负右正}$
+        operation: 当 $a\le0$ 时 $2ax^2-1<0$；当 $a>0$ 时解 $2ax^2-1=0$，在定义域内只保留正根。
+        why: 导数负对应递减，导数正对应递增。
+      source_ref: page_0029_ex13_solution
+    - step_id: step_3
+      statement: 第 (2) 问：把 $g(x)>0$ 转成 $e^x/x$ 的比较。
+      formula_trace:
+        from: $g(x)>0\iff \frac1x-\frac1{e^{x-1}}>0$
+        to: $\frac{e^x}{x}>e$
+        operation: 由 $1/e^{x-1}=e/e^x$，将 $1/x>e/e^x$ 两边同乘正数 $e^x$。
+        why: 这正好调用 $G(x)=e^x/x$ 在 $x>1$ 上的单调性。
+      source_ref: page_0029_ex13_solution
+    - step_id: step_4
+      statement: 第 (2) 问：用单调性完成证明。
+      formula_trace:
+        from: $G(x)=\frac{e^x}{x},\quad x>1$
+        to: $G(x)>G(1)=e\Rightarrow g(x)>0$
+        operation: 由 $G'(x)=e^x(x-1)/x^2>0$ 得 $G$ 在 $(1,+\infty)$ 上递增。
+        why: 输入 $x>1$ 比 1 大，所以函数值严格大于 $e$。
+      source_ref: page_0029_ex13_solution
+    - step_id: step_5
+      statement: 第 (3) 问：把 $f(x)-g(x)$ 拆成同构差值与参数因子。
+      formula_trace:
+        from: $f(x)>g(x)$
+        to: $[e^{-(x-1)}+(x-1)]-\left(\frac1x+\ln x\right)+(x-1)(ax+a-1)>0$
+        operation: 展开 $f-g=ax^2-a-\ln x-1/x+e^{-(x-1)}$，再把 $ax^2-a$ 改写为 $(x-1)(ax+a-1)+(x-1)$ 后合并。
+        why: 前两组可写成 $h(x-1)-h(\ln x)$，后一组只需看参数因子。
+      source_ref: page_0029_ex13_solution
+    - step_id: step_6
+      statement: 第 (3) 问：证明同构差值为正。
+      formula_trace:
+        from: $h(u)=u+e^{-u},\quad x-1>\ln x\quad(x>1)$
+        to: $h(x-1)>h(\ln x)\iff [e^{-(x-1)}+(x-1)]-\left(\frac1x+\ln x\right)>0$
+        operation: 因 $h'(u)=1-e^{-u}>0$ 在 $u>0$ 上成立，且 $h(\ln x)=\ln x+e^{-\ln x}=\ln x+1/x$。
+        why: 这给 $f(x)-g(x)$ 提供一个与 $a$ 无关的正量。
+      source_ref: page_0029_ex13_solution
+    - step_id: step_7
+      statement: 第 (3) 问：证明 $a\ge1/2$ 充分。
+      formula_trace:
+        from: $a\ge\frac12,\quad x>1$
+        to: $ax+a-1>0\Rightarrow (x-1)(ax+a-1)>0$
+        operation: 当 $a=1/2$ 时 $ax+a-1=(x-1)/2>0$；当 $a>1/2$ 时更大。
+        why: 同构差值已为正，再加正的参数项，故 $f(x)>g(x)$ 恒成立。
+      source_ref: page_0029_ex13_solution
+    - step_id: step_8
+      statement: 第 (3) 问：排除 $a\le0$。
+      formula_trace:
+        from: $a\le0,\quad x>1$
+        to: $f(x)=a(x^2-1)-\ln x<0<g(x)$
+        operation: 用 $x^2-1>0$、$a\le0$ 和 $\ln x>0$ 判断 $f(x)<0$，再用第 (2) 问 $g(x)>0$。
+        why: 此时不可能有 $f(x)>g(x)$ 在整个 $(1,+\infty)$ 恒成立。
+      source_ref: page_0029_ex13_solution
+    - step_id: step_9
+      statement: 第 (3) 问：排除 $0<a<1/2$。
+      formula_trace:
+        from: $0<a<\frac12,\quad x_0=\sqrt{\frac1{2a}}>1$
+        to: $f(x_0)<f(1)=0<g(x_0)$
+        operation: 由第 (1) 问，$f$ 在 $(1,x_0)$ 上递减，到 $x_0$ 取到更小值；由第 (2) 问 $g(x_0)>0$。
+        why: 找到一个 $x_0>1$ 使 $f(x_0)>g(x_0)$ 失败，故该参数段不满足恒成立。
+      source_ref: page_0029_ex13_solution
+teaching_card:
+  student_title: 先拆出正差，再卡住参数因子
+  what_it_trains: 训练高考三问中先用导数完成基础性质，再把恒成立不等式拆成一个确定为正的同构差值和一个含参因子。
+  recognition_cues:
+    - 第 (2) 问的 $1/x-1/e^{x-1}$ 可化为 $e^x/x$ 与 $e$ 比较。
+    - 第 (3) 问同时出现 $e^{-(x-1)}$、$1/x$、$x-1$、$\ln x$，提示配 $h(u)=u+e^{-u}$。
+    - 参数 $a$ 在 $ax^2-a$ 中，可拆出 $(x-1)(ax+a-1)$。
+  normalization_moves:
+    - 第 (1) 问先求 $f'$，按 $a\le0$ 与 $a>0$ 分段。
+    - 第 (2) 问把 $g(x)>0$ 改写成 $e^x/x>e$。
+    - 第 (3) 问把 $f-g$ 改写成 $h(x-1)-h(\ln x)+(x-1)(ax+a-1)$。
+    - 充分性看 $a\ge1/2$，必要性用 $a\le0$ 和 $0<a<1/2$ 分别构造矛盾。
+  common_failures:
+    - 第 (1) 问把负根 $-\sqrt{1/(2a)}$ 也放进 $x>0$ 的定义域。
+    - 第 (2) 问直接声称 $g>0$，没有说明 $e^x/x$ 的单调性。
+    - 第 (3) 问不会把 $1/x$ 识别成 $e^{-\ln x}$。
+    - 只证明 $a\ge1/2$ 充分，没有排除 $a<1/2$。
+  similar_practice_query: 2016 四川 T21 f(x)>g(x) e^x/x h(x)=x+e^{-x} 参数范围 a>=1/2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0029 markdown 与页图；例 13 在本页解析完成，page_0030 已确认是新考点与例 14，不是本题延续。

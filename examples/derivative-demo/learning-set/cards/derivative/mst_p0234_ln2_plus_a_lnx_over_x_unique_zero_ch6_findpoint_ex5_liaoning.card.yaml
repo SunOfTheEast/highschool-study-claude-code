@@ -1,0 +1,213 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0234_ln2_plus_a_lnx_over_x_unique_zero_ch6_findpoint_ex5_liaoning
+content_revision_id: mst_p0234_ln2_plus_a_lnx_over_x_unique_zero_ch6_findpoint_ex5_liaoning-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0234_ln2_plus_a_lnx_over_x_unique_zero_ch6_findpoint_ex5_liaoning.card.yaml
+stem: |-
+  （2024 · 辽宁五校高二期末 T18）已知函数 $f(x)=\ln^2x+\frac{a(\ln x+1)}x$，$a>0$。
+  1. 求证：$x>0$，$e^x>x^2$。
+  2. 讨论 $f(x)$ 单调性。
+  3. 求证：$\forall a>0$，$f(x)$ 有唯一零点。
+answer: |-
+  第 (1) 问不等式成立；第 (2) 问按 $a=2$、$0<a<2$、$a>2$ 分类；第 (3) 问 $f$ 有唯一零点，且零点位于 $(e^{-1/a-1},1)$。
+
+  第 (1) 问由同构函数可得 $e^x\geqslant\frac{e^2}{4}x^2>x^2$。第 (2) 问 $f'(x)=\frac{2\ln x}{x}+\frac{a(-\ln x)}{x^2} =\frac{(2x-a)\ln x}{x^2}$。当 $a=2$ 时，导数非负，$f$ 在 $(0,+\infty)$ 上递增；当 $0<a<2$ 时，$f$ 在 $(0,a/2)$ 和 $(1,+\infty)$ 上递增，在 $(a/2,1)$ 上递减；当 $a>2$ 时，$f$ 在 $(0,1)$ 和 $(a/2,+\infty)$ 上递增，在 $(1,a/2)$ 上递减。 第 (3) 问 $f(1)=a>0$，$f(a/2)>0$，且 $x>1$ 时 $f(x)>0$。在 $0<x<1$ 上， $f(x)=\frac1x[x\ln^2x+a(\ln x+1)]$。由 $x\ln^2x\leqslant4/e^2<1$，取 $x=e^{-1/a-1}$ 时 $a(\ln x+1)=-1$，故 $f(x)<0$。结合单调性和正值点，得到唯一 零点位于 $(e^{-1/a-1},1)$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 第 (1) 问用同构界证明 $e^x>x^2$。
+      max_score: 1
+    - step_id: step_2
+      description: 求导并提取两个关键因子。
+      max_score: 1
+    - step_id: step_3
+      description: 按 $a$ 与 2 的关系讨论单调性。
+      max_score: 1
+    - step_id: step_4
+      description: 先排除 $x\geqslant1$ 侧的零点。
+      max_score: 1
+    - step_id: step_5
+      description: 在 $(0,1)$ 内构造负值点。
+      max_score: 1
+    - step_id: step_6
+      description: 由单调结构和变号确定唯一零点。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: part_1
+        goal: 不等式证明
+        target: 第 part_1 问
+        result: $e^x>x^2$。
+      - part_id: part_2
+        goal: 零点/极值点分析
+        target: 第 part_2 问
+        result: $f$ 的单调性按 $a$ 与 2 的关系分类。
+      - part_id: part_3
+        goal: 零点/极值点分析
+        target: 第 part_3 问
+        result: $f$ 有唯一零点。
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 同构变形与换元法
+      - 含参数分类讨论
+    subroute:
+      - 单调性分段
+      - 双因子判号
+      - 取点 $e^{-1/a-1}$
+      - $x\ln^2x<1$
+      - 唯一零点
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $\ln^2x+\frac{a(\ln x+1)}x$
+      - $\frac{(2x-a)\ln x}{x^2}$
+      - $x\ln^2x+a(\ln x+1)$
+      - $e^{-1/a-1}$
+    normalization_moves_used:
+      - 把导数提成 $(2x-a)\ln x$。
+      - 根据 $a/2$ 与 1 的位置分三类。
+      - 把 $f$ 在 $(0,1)$ 内写成 $\frac1x[\cdots]$。
+      - 用一个具体点让括号内变负。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会对 $\frac{(2x-a)\ln x}{x^2}$ 判号，回补导数单调极值基础。
+      - 若学生不清楚定义域和 $x>0$，回补函数三要素与定义域。
+      - 若学生不会用 $e^{-1/a-1}$ 取点，回补指数对数基础。
+      - 若学生不会把唯一零点和单调分段结合，回补方程根分布与韦达。
+      - 若学生不会处理 $x\ln^2x$ 的界，回补不等式工具基础。
+  detail_terms:
+    - $\ln^2x$
+    - $a(\ln x+1)/x$
+    - $(2x-a)\ln x$
+    - $a/2$ 与 1
+    - $x\ln^2x<1$
+    - $e^{-1/a-1}$
+    - 唯一零点
+parts: &a1
+  - part_id: part_1
+    text: 求证：$x>0$，$e^x>x^2$。
+  - part_id: part_2
+    text: 讨论 $f(x)$ 单调性。
+  - part_id: part_3
+    text: 求证：$\forall a>0$，$f(x)$ 有唯一零点。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0234_ln2_plus_a_lnx_over_x_unique_zero_ch6_findpoint_ex5_liaoning
+source_evidence:
+  source_refs:
+    - ref_id: page_0234_ex4_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0234/page_0234.md
+      role: local_context
+      evidence: page_0234 页首是 page_0233 例4续解，不是本卡题头。
+    - ref_id: page_0234_ex5_liaoning_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0234/page_0234.md
+      role: problem_start
+      evidence: page_0234 上半页给出例5（2024 辽宁五校高二期末 T18）：$f(x)=\ln^2x+\frac{a(\ln x+1)}x$，$a>0$。
+    - ref_id: page_0234_ex5_liaoning_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0234/page_0234.md
+      role: solution
+      evidence: 解析证明 $e^x>x^2$，讨论 $f^\prime(x)=\frac{(2x-a)\ln x}{x^2}$ 的符号，并用 $x\in(0,1)$ 的取点证明唯一零点。
+    - ref_id: page_0234_single_extremum_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0234/page_0234.md
+      role: local_context
+      evidence: page_0234 下半页进入“四、单极值双零点的主体分析”并另起一个例5，属于本批下一张卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0234.png
+      inspected: true
+      notes: 已核对页图：辽宁五校例5题干和完整解析位于 page_0234 上半页。
+  source_context: 本卡处理 page_0234 上半页起头并在同页结束的辽宁五校例5；下半页另一个例5单独成卡。
+  source_influence:
+    - 保留 source 的导数因式：$f^\prime(x)=\frac{(2x-a)\ln x}{x^2}$，按 $a=2$、$0<a<2$、$a>2$ 讨论单调性。
+    - 保留 source 的唯一零点思路：先证 $x\geqslant1$ 侧恒正，再在 $(0,1)$ 内找一个负值点。
+    - 修正 source 中 $x\ln^2x$ 的界：使用 $x\ln^2x\leqslant4/e^2<1$，足以完成原解想要的取点。
+  source_discrepancies:
+    - 原文第 (3) 问把 $x\ln^2x=(2\sqrt{x}\ln\sqrt{x})^2$ 后写成 $\leqslant1/e^2$；该界不正确。题卡改用正确且足够的 $x\ln^2x\leqslant4/e^2<1$。
+    - source markdown 保留了原文的“= \leqslant”连写，题卡按证明逻辑整理为不等式链。
+original_problem:
+  stem: （2024 · 辽宁五校高二期末 T18）已知函数 $f(x)=\ln^2x+\frac{a(\ln x+1)}x$，$a>0$。
+  parts: *a1
+  choices: []
+  answer: 第 (1) 问不等式成立；第 (2) 问按 $a=2$、$0<a<2$、$a>2$ 分类；第 (3) 问 $f$ 有唯一零点，且零点位于 $(e^{-1/a-1},1)$。
+  fidelity_notes:
+    - 三问均无选项。
+    - 函数定义域为 $x>0$。
+solution:
+  source_solution_summary: 第 (1) 问由同构函数可得 $e^x\geqslant\frac{e^2}{4}x^2>x^2$。第 (2) 问 $f'(x)=\frac{2\ln x}{x}+\frac{a(-\ln x)}{x^2} =\frac{(2x-a)\ln x}{x^2}$。当 $a=2$ 时，导数非负，$f$ 在 $(0,+\infty)$ 上递增；当 $0<a<2$ 时，$f$ 在 $(0,a/2)$ 和 $(1,+\infty)$ 上递增，在 $(a/2,1)$ 上递减；当 $a>2$ 时，$f$ 在 $(0,1)$ 和 $(a/2,+\infty)$ 上递增，在 $(1,a/2)$ 上递减。 第 (3) 问 $f(1)=a>0$，$f(a/2)>0$，且 $x>1$ 时 $f(x)>0$。在 $0<x<1$ 上， $f(x)=\frac1x[x\ln^2x+a(\ln x+1)]$。由 $x\ln^2x\leqslant4/e^2<1$，取 $x=e^{-1/a-1}$ 时 $a(\ln x+1)=-1$，故 $f(x)<0$。结合单调性和正值点，得到唯一 零点位于 $(e^{-1/a-1},1)$。
+  key_steps:
+    - step_id: step_1
+      statement: 第 (1) 问用同构界证明 $e^x>x^2$。
+      formula_trace:
+        from: $e^x$ 与 $x^2$
+        to: $e^x\geqslant\frac{e^2}{4}x^2>x^2$
+        operation: 使用同构函数界。
+        why: 这是后续控制 $x\ln^2x$ 的基础不等式背景。
+      source_ref: page_0234_ex5_liaoning_solution
+    - step_id: step_2
+      statement: 求导并提取两个关键因子。
+      formula_trace:
+        from: $f(x)=\ln^2x+\frac{a(\ln x+1)}x$
+        to: $f^\prime(x)=\frac{(2x-a)\ln x}{x^2}$
+        operation: 求导并合并。
+        why: 导数符号只由 $2x-a$ 与 $\ln x$ 决定。
+      source_ref: page_0234_ex5_liaoning_solution
+    - step_id: step_3
+      statement: 按 $a$ 与 2 的关系讨论单调性。
+      formula_trace:
+        from: $f^\prime(x)=\frac{(2x-a)\ln x}{x^2}$
+        to: $a=2$ 递增；$0<a<2$ 增减增；$a>2$ 增减增
+        operation: 比较 $a/2$ 与 1 的位置。
+        why: 两个导数零点候选是 $x=a/2$ 与 $x=1$。
+      source_ref: page_0234_ex5_liaoning_solution
+    - step_id: step_4
+      statement: 先排除 $x\geqslant1$ 侧的零点。
+      formula_trace:
+        from: $f(1)=a,\quad f(a/2)>0,\quad x>1$
+        to: $x\geqslant1$ 侧 $f(x)>0$
+        operation: 结合 source 的正值点和单调性。
+        why: 唯一零点只能出现在 $(0,1)$。
+      source_ref: page_0234_ex5_liaoning_solution
+    - step_id: step_5
+      statement: 在 $(0,1)$ 内构造负值点。
+      formula_trace:
+        from: $f(x)=\frac1x[x\ln^2x+a(\ln x+1)]$
+        to: $x=e^{-1/a-1}$ 时 $f(x)<0$
+        operation: 用 $x\ln^2x<1$ 与 $a(\ln x+1)=-1$。
+        why: 这给出左侧负值点。
+      source_ref: page_0234_ex5_liaoning_solution
+    - step_id: step_6
+      statement: 由单调结构和变号确定唯一零点。
+      formula_trace:
+        from: $f(e^{-1/a-1})<0,\ f(1)>0$
+        to: $\exists! x_0\in(e^{-1/a-1},1),\ f(x_0)=0$
+        operation: 结合第 (2) 问单调性。
+        why: source 结论为唯一零点。
+      source_ref: page_0234_ex5_liaoning_solution
+teaching_card:
+  student_title: 先看 $(2x-a)\ln x$ 的单调分段，再在 $(0,1)$ 里取负值点
+  what_it_trains: 训练含参导数题的双因子判号和零点取点：单调性解决唯一性，构造点解决存在性。
+  recognition_cues:
+    - 导数能提成 $(2x-a)\ln x$，两个零点候选是 $a/2$ 和 1。
+    - 唯一零点不能只靠图像，要证明一侧恒正、一侧变号。
+    - $a(\ln x+1)$ 适合用 $x=e^{-1/a-1}$ 精准打成 $-1$。
+  normalization_moves:
+    - 先证明或引用 $e^x>x^2$。
+    - 求导并按 $a=2,0<a<2,a>2$ 分类。
+    - 证明 $x\geqslant1$ 侧没有零点。
+    - 在 $(0,1)$ 取 $x=e^{-1/a-1}$，得到负值。
+  common_failures:
+    - 把 $a/2$ 和 1 的顺序分错。
+    - 只证明有零点，没有证明唯一。
+    - 照抄 source 的 $1/e^2$ 界而不校验。
+  similar_practice_query: ln^2x a(lnx+1)/x 唯一零点 (2x-a)lnx e^{-1/a-1} xln^2x
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

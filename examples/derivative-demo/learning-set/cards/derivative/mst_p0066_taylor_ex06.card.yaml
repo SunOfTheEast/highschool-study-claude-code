@@ -1,0 +1,238 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0066_taylor_ex06
+content_revision_id: mst_p0066_taylor_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0066_taylor_ex06.card.yaml
+stem: |-
+  已知函数 f(x)=e^x-e^{-x}-2x。
+  (1). 讨论 f(x) 的单调性。
+  (2). 设 g(x)=f(2x)-4b f(x)，当 x>0 时，g(x)>0，求 b 的最大值。
+  (3). 已知 1.4142<\sqrt2<1.4143，估计 \ln2 的近似值（精确到 0.001）。
+answer: |-
+  (1) f(x) 在 \mathbf{R} 上为增函数；(2) b 的最大值为 2； (3) \ln2\approx0.693。
+
+  第 (1) 问由 f'(x)=e^x+e^{-x}-2\geqslant0 且等号只在 x=0 取得，得 f 在 \mathbf{R} 上递增。第 (2) 问展开 g(x)=e^{2x}-e^{-2x}-4b(e^x-e^{-x})+(8b-4)x，求导后因式分解为 2(e^x+e^{-x}-2)(e^x+e^{-x}+2-2b)。当 b\leqslant2 时 g'(x)>0 且 g(0)=0，故 x>0 时 g(x)>0；当 b>2 时，0 右侧存在区间使 g'(x)<0， 从而 g(x)<0，矛盾，所以 b_{\max}=2。第 (3) 问代入 x=\ln\sqrt2， 用 b=2 得下界 \ln2>0.6928，再取临界 b=\frac{3\sqrt2}{4}+1>2 得上界 \ln2<0.6934，因此 \ln2 精确到 0.001 为 0.693。
+rubric:
+  max_score: 9
+  criteria:
+    - step_id: step_1
+      description: 由 f'(x) 的非负性判断 f 的单调性。
+      max_score: 1
+    - step_id: step_2
+      description: 展开 g 并完成导数因式分解。
+      max_score: 1
+    - step_id: step_3
+      description: b\leqslant2 时证明 g(x)>0。
+      max_score: 1
+    - step_id: step_4
+      description: b>2 时构造 0 右侧反例。
+      max_score: 1
+    - step_id: step_5
+      description: 用 Taylor 端点效应解释临界值 b=2。
+      max_score: 1
+    - step_id: step_6
+      description: 把 x=\ln\sqrt2 代入 g，得到含 \ln2 的表达式。
+      max_score: 1
+    - step_id: step_7
+      description: 用 b=2 的可行性给出 \ln2 下界。
+      max_score: 1
+    - step_id: step_8
+      description: 用 b>2 的反例边界给出 \ln2 上界。
+      max_score: 1
+    - step_id: step_9
+      description: 合并上下界得到三位小数近似值。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 (1) 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 (2) 问
+        result: 见 source_solution_summary
+      - part_id: "3"
+        goal: 数值求值
+        target: 第 (3) 问
+        result: 见 source_solution_summary
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 局部逼近与找点
+      - 参变量分离
+    subroute:
+      - 泰勒展开
+      - 端点效应
+      - 双曲函数换元
+      - \ln\frac{1+x}{1-x} 近似
+  structure:
+    primary: 双曲函数结构
+    secondary:
+      - 局部逼近结构
+      - 指对复合结构
+    evidence:
+      - f(x)=e^x-e^{-x}-2x，三阶主项为 \frac{x^3}{3}。
+      - g'(x)=2(e^x+e^{-x}-2)(e^x+e^{-x}+2-2b)。
+      - g(\ln\sqrt2)=\frac32-2\sqrt2\,b+2(2b-1)\ln2。
+    normalization_moves_used:
+      - 将 g=f(2x)-4bf(x) 展开后对 e^x+e^{-x} 因式化。
+      - 用 b=2 与 b>2 临界反例分别制造 \ln2 的下界和上界。
+      - 用 \ln2=\ln\frac{1+\frac13}{1-\frac13} 解释 Taylor 估值的替代路线。
+  fallback:
+    only_if_trace_shows:
+      - 若学生求 f'(x) 或 g'(x) 时符号出错，回补导数运算与几何意义。
+      - 若学生不会因式分解 g'(x)，回补代数恒等变形。
+      - 若学生不理解 b>2 时如何找反例区间，回补导数单调极值基础。
+      - 若学生不能把 x=\ln\sqrt2 代入指数项，回补指数对数基础。
+      - 若学生不会由上下界得到 0.001 精度，回补不等式工具基础中的数值夹逼。
+  detail_terms:
+    - e^x-e^{-x}-2x
+    - g(x)=f(2x)-4bf(x)
+    - e^x+e^{-x}+2-2b
+    - b_{\max}=2
+    - x=\ln\sqrt2
+parts: &a1
+  - label: (1)
+    text: 讨论 f(x) 的单调性。
+  - label: (2)
+    text: 设 g(x)=f(2x)-4b f(x)，当 x>0 时，g(x)>0，求 b 的最大值。
+  - label: (3)
+    text: 已知 1.4142<\sqrt2<1.4143，估计 \ln2 的近似值（精确到 0.001）。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0066_taylor_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0066
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0066/page_0066.md
+      role: problem_start
+      evidence: page_0066 页末出现例 6 题头：（2014 · 新课标 II T21）已知函数 f(x)=e^x-e^{-x}-2x。
+    - ref_id: page_0067
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0067/page_0067.md
+      role: continuation
+      evidence: page_0067 承接例 6 的三问：(1) 讨论 f(x) 的单调性； (2) 设 g(x)=f(2x)-4b f(x)，当 x>0 时 g(x)>0，求 b 的最大值； (3) 已知 1.4142<\sqrt2<1.4143，估计 \ln2 的近似值。
+    - ref_id: page_0067_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0067/page_0067.md
+      role: solution
+      evidence: 解析用 f'(x)=e^x+e^{-x}-2 判定 f 增；对 g(x)=f(2x)-4bf(x) 求导并因式分解，得 b_{\max}=2；再代入 x=\ln\sqrt2，用 b=2 和一个 b>2 的临界取值夹出 0.6928<\ln2<0.6934，故近似值为 0.693。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0066.png
+      inspected: true
+      notes: 页图已核对：例 6 题头和函数定义位于 page_0066 底部，三问和解析不在本页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0067.png
+      inspected: true
+      notes: 页图已核对：page_0067 顶部完整给出例 6 三问，整页到例 7 题头之前均为例 6 解析和注意。
+  source_context: 本题位于“三、泰勒展开与估值”开头，用双曲正弦函数 e^x-e^{-x}-2x 的三阶端点效应解释 b=2 的临界性，并把 g(\ln\sqrt2) 作为估算 \ln2 的夹逼工具。
+  source_influence:
+    - 题头归属 page_0066，题干和解析跨到 page_0067；按批次规则由 A 组建完整卡。
+    - legacy ex_mst_535 只作定位提示；本卡的导数符号、跨页内容和答案以源页图文为准。
+  source_discrepancies:
+    - page_0067 markdown 在第 (1) 问解析中有“e^t=e^{-x}”字样；页图与上下文显示应为 e^x=e^{-x}，本卡按 e^x=e^{-x}\Rightarrow x=0 记录。
+original_problem:
+  stem: 已知函数 f(x)=e^x-e^{-x}-2x。
+  parts: *a1
+  choices: []
+  answer: (1) f(x) 在 \mathbf{R} 上为增函数；(2) b 的最大值为 2； (3) \ln2\approx0.693。
+  fidelity_notes:
+    - 例 6 的题头和函数定义在 page_0066，三问及完整解析在 page_0067。
+    - 原题无选择项；源解另附 Taylor 端点效应说明和 \ln\frac{1+x}{1-x} 的近似说明，本卡纳入解题结构。
+solution:
+  source_solution_summary: 第 (1) 问由 f'(x)=e^x+e^{-x}-2\geqslant0 且等号只在 x=0 取得，得 f 在 \mathbf{R} 上递增。第 (2) 问展开 g(x)=e^{2x}-e^{-2x}-4b(e^x-e^{-x})+(8b-4)x，求导后因式分解为 2(e^x+e^{-x}-2)(e^x+e^{-x}+2-2b)。当 b\leqslant2 时 g'(x)>0 且 g(0)=0，故 x>0 时 g(x)>0；当 b>2 时，0 右侧存在区间使 g'(x)<0， 从而 g(x)<0，矛盾，所以 b_{\max}=2。第 (3) 问代入 x=\ln\sqrt2， 用 b=2 得下界 \ln2>0.6928，再取临界 b=\frac{3\sqrt2}{4}+1>2 得上界 \ln2<0.6934，因此 \ln2 精确到 0.001 为 0.693。
+  key_steps:
+    - step_id: step_1
+      statement: 由 f'(x) 的非负性判断 f 的单调性。
+      formula_trace:
+        from: f(x)=e^x-e^{-x}-2x
+        to: f'(x)=e^x+e^{-x}-2\geqslant2\sqrt{e^x e^{-x}}-2=0
+        operation: 求导后使用基本不等式 e^x+e^{-x}\geqslant2。
+        why: 等号只在 e^x=e^{-x} 即 x=0 时成立，导数非负且不在区间内恒为 0， 可判定 f 在 \mathbf{R} 上递增。
+      source_ref: page_0067_solution
+    - step_id: step_2
+      statement: 展开 g 并完成导数因式分解。
+      formula_trace:
+        from: g(x)=f(2x)-4b f(x)
+        to: g'(x)=2(e^x+e^{-x}-2)(e^x+e^{-x}+2-2b)
+        operation: 先写出 g(x)=e^{2x}-e^{-2x}-4b(e^x-e^{-x})+(8b-4)x，再求导整理。
+        why: 因式 e^x+e^{-x}-2 的符号固定，参数 b 只影响第二个因式。
+      source_ref: page_0067_solution
+    - step_id: step_3
+      statement: b\leqslant2 时证明 g(x)>0。
+      formula_trace:
+        from: x>0\Rightarrow e^x+e^{-x}>2,\quad b\leqslant2
+        to: g'(x)>0,\quad g(0)=0,\quad x>0\Rightarrow g(x)>0
+        operation: 用两个因式同为正判断 g' 的符号。
+        why: g 从 0 开始在右侧递增，所以满足题设。
+      source_ref: page_0067_solution
+    - step_id: step_4
+      statement: b>2 时构造 0 右侧反例。
+      formula_trace:
+        from: b>2,\quad 2<e^x+e^{-x}<2b-2
+        to: g'(x)<0,\quad 0<x\leqslant\ln(b-1+\sqrt{b^2-2b})\Rightarrow g(x)<0
+        operation: 解 e^x+e^{-x}<2b-2 并取 0 右侧满足条件的 x。
+        why: 一旦 g 在 0 右侧先下降，就与“所有 x>0 有 g(x)>0”矛盾。
+      source_ref: page_0067_solution
+    - step_id: step_5
+      statement: 用 Taylor 端点效应解释临界值 b=2。
+      formula_trace:
+        from: f(x)=e^x-e^{-x}-2x=\frac{x^3}{3}+\frac{x^5}{60}+\cdots
+        to: f(2x)-4bf(x)=\frac{(2x)^3}{3}-4b\frac{x^3}{3}+\cdots =\frac{4(2-b)}{3}x^3+\cdots
+        operation: 展开 f(2x) 与 f(x) 的三阶主项并比较系数。
+        why: 0 点附近三阶项刚好给出 b\leqslant2 的端点。
+      source_ref: page_0067_solution
+    - step_id: step_6
+      statement: 把 x=\ln\sqrt2 代入 g，得到含 \ln2 的表达式。
+      formula_trace:
+        from: x=\ln\sqrt2,\quad e^x=\sqrt2,\quad e^{2x}=2
+        to: g(\ln\sqrt2)=\frac32-2\sqrt2\,b+2(2b-1)\ln2
+        operation: 将指数项化为 \sqrt2 和 2，并合并线性项。
+        why: 题目给了 \sqrt2 的近似值，代入 \ln\sqrt2=\frac12\ln2 可以夹逼 \ln2。
+      source_ref: page_0067_solution
+    - step_id: step_7
+      statement: 用 b=2 的可行性给出 \ln2 下界。
+      formula_trace:
+        from: b=2:\quad g(\ln\sqrt2)=\frac32-4\sqrt2+6\ln2>0
+        to: \ln2>\frac{8\sqrt2-3}{12}>\frac{8\cdot1.4142-3}{12}=0.6928
+        operation: 解关于 \ln2 的不等式，并代入 \sqrt2 的下界。
+        why: b=2 时 g(x)>0 对 x>0 成立，所以可得到可靠下界。
+      source_ref: page_0067_solution
+    - step_id: step_8
+      statement: 用 b>2 的反例边界给出 \ln2 上界。
+      formula_trace:
+        from: \ln(b-1+\sqrt{b^2-2b})=\ln\sqrt2
+        to: b=\frac{3\sqrt2}{4}+1,\quad \ln2<\frac{18+\sqrt2}{28}<\frac{18+1.4143}{28}<0.6934
+        operation: 令反例区间右端等于 \ln\sqrt2，代入 g(\ln\sqrt2)<0 后解出上界。
+        why: 这个 b 已经大于 2，源解的 b>2 反例机制给出反向不等式。
+      source_ref: page_0067_solution
+    - step_id: step_9
+      statement: 合并上下界得到三位小数近似值。
+      formula_trace:
+        from: 0.6928<\ln2<0.6934
+        to: \ln2\approx0.693
+        operation: 按精确到 0.001 四舍五入。
+        why: 整个区间落在 0.693 的千分位舍入范围内。
+      source_ref: page_0067_solution
+teaching_card:
+  student_title: 用双曲函数的端点效应估算 \ln2
+  what_it_trains: 训练把参数恒成立题中的临界函数继续拿来做数值夹逼，理解 Taylor 三阶主项为什么决定 b=2。
+  recognition_cues:
+    - f(x)=e^x-e^{-x}-2x 出现，说明 0 点三阶主项是核心。
+    - g(x)=f(2x)-4bf(x) 让 f(2x) 与 f(x) 的三阶主项可直接比较。
+    - 题目给 \sqrt2 的小数范围，暗示代入 x=\ln\sqrt2。
+  normalization_moves:
+    - 展开 g 后把 g' 写成两个因式，先解决 b 的临界值。
+    - 将 \ln\sqrt2=\frac12\ln2 代入同一个 g，转成 \ln2 的线性不等式。
+    - 用一个可行 b 和一个不可行 b 的边界分别夹住 \ln2。
+  common_failures:
+    - 把 f'(x)\geqslant0 当成只有非严格单调，忽略导数只在孤立点为 0。
+    - 对 b>2 只说“不符合”而没有给出 0 右侧 g'(x)<0 的区间。
+    - 代入 x=\ln\sqrt2 时把 e^{-2x} 或线性项算错。
+    - 得到 0.6928<\ln2<0.6934 后没有按 0.001 精度判断。
+  similar_practice_query: 双曲正弦 Taylor 三阶主项、g=f(2x)-cf(x) 端点效应、代入 \ln\sqrt2 估算 \ln2。
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0067 markdown 的 e^t 是转写小误差；页图和数学上下文可直接确定为 e^x。

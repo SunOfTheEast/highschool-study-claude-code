@@ -1,0 +1,227 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0203_ln_sequence_inequality_ch6_log_ex08
+content_revision_id: mst_p0203_ln_sequence_inequality_ch6_log_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0203_ln_sequence_inequality_ch6_log_ex08.card.yaml
+stem: |-
+  （2025 · 张家口三模 T19）已知函数 $f(x)=\ln x,\ x\in(0,+\infty)$。
+  (1) 求证：$f(x)<\frac{1}{2}x^2-\frac{x}{e^x}$。
+  (2)(i) 若 $h(x)=a f(x)-2[f(x+1)-f(2)],\ a\in(0,2)$，$m(a)$ 为 $h(x)$ 的最大值，求 $m(a)$ 的极小值。
+  (2)(ii) 设 $n\in\mathbf{N}^*,\ n\ge2$，求证：$2^2\times3^3\times4^4\times\cdots\times(2n-1)^{2n-1}>n^{2n^2-n}$。
+answer: |
+  (1) 结论成立；(2)(i) $m(a)$ 的极小值为 $0$（当 $a=1$）；(2)(ii) 结论成立。
+
+  (1) 令 $g(x)=\left(\frac12x^2-\frac{x}{e^x}\right)-\ln x =\frac12x^2-\frac12\ln x^2-\frac{x}{e^x}$。 用 $t-\ln t\ge1\ (t>0)$ 取 $t=x^2$ 得前两项下界 $\frac12$， 再用 $\frac{x}{e^x}\le\frac1e$，故 $g(x)\ge\frac12-\frac1e>0$，结论成立。 (2)(i) 令 $h(x)=a\ln x-2[\ln(x+1)-\ln2]$， $h^{\prime}(x)=\frac{(a-2)x+a}{x(x+1)}$，故在 $x_0=\frac{a}{2-a}$ 处取最大值， $m(a)=a\ln\frac{a}{2-a}+2\ln(2-a)$。 续页化简得 $m^{\prime}(a)=\ln\frac{a}{2-a}$，从而 $m(a)$ 在 $(0,1)$ 递减、在 $(1,2)$ 递增，极小值 $m(1)=0$。 (2)(ii) 将目标改写为 $\prod_{k=1}^{2n-1}\left(\frac{k}{n}\right)^k>1$ 的对数形式 $\sum_{k=1}^{2n-1}k\ln\frac{k}{n}>0$。 由 (2)(i) 的 $m(a)\ge0$，取 $a=\frac{k}{n}\ (k=1,\dots,n-1)$ 得 $\frac{k}{n}\ln\frac{k}{n}+\frac{2n-k}{n}\ln\frac{2n-k}{n}>0$， 累加即得目标对数和大于 0，指数化后结论成立。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 第一问按 source 构造差函数并拆成“同构项 + 指数项”。
+      max_score: 1
+    - step_id: step_2
+      description: 完成第一问下界估计。
+      max_score: 1
+    - step_id: step_3
+      description: 第二问 (i) 先求 $h(x)$ 的最大值表达式。
+      max_score: 1
+    - step_id: step_4
+      description: 跨页完成 $m(a)$ 极小值。
+      max_score: 1
+    - step_id: step_5
+      description: 把乘积不等式改写为对数和不等式。
+      max_score: 1
+    - step_id: step_6
+      description: 由 $m(a)\ge0$ 构造配对项。
+      max_score: 1
+    - step_id: step_7
+      description: 累加配对项得到总和为正。
+      max_score: 1
+    - step_id: step_8
+      description: 指数化回原式，得到 (2)(ii)。
+      max_score: 1
+graph:
+  goal:
+    primary: 数列关系证明
+    part_level:
+      - part_id: "1"
+        goal: 不等式证明
+        target: 第 (1) 问
+        result: $\ln x<\frac12x^2-\frac{x}{e^x}$
+      - part_id: 2(i)
+        goal: 极值最值
+        target: 第 (2)(i) 问
+        result: $m(a)$ 的极小值为 $0$（$a=1$）
+      - part_id: 2(ii)
+        goal: 数列关系证明
+        target: 第 (2)(ii) 问
+        result: $2^2\cdot3^3\cdots(2n-1)^{2n-1}>n^{2n^2-n}$
+  method:
+    primary: 数列和转化
+    secondary:
+      - 切线放缩与凹凸性
+      - 含参数分类讨论
+      - 拟合与夹逼
+    subroute:
+      - 先由导数求 $h(x)$ 极值，得到参数函数 $m(a)$
+      - 再由 $m(a)\ge0$ 代入离散点 $a=k/n$
+      - 首尾配对累加后转回乘积不等式
+  structure:
+    primary: 数列离散/递推结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - (2)(ii) 的核心是权重对数和 $\sum k\ln(k/n)$。
+      - $m(a)=a\ln\frac{a}{2-a}+2\ln(2-a)$ 与配对项同构。
+      - (1) 里的 $\frac12(x^2-\ln x^2)$ 提供统一函数下界模板。
+    normalization_moves_used:
+      - 把第一问改写成 $t-\ln t$ 标准结构。
+      - 把第二问先“极大值关于 $x$”转为“函数 $m(a)$ 关于 $a$”。
+      - 把乘积比较改写成对数和，再用 $(k,2n-k)$ 配对。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $h^{\prime}(x)$ 判定极大值点，回补导数单调极值基础。
+      - 若学生不会处理 $m^{\prime}(a)=\ln\frac{a}{2-a}$ 的单调性，回补指数对数基础。
+      - 若学生不会把乘积不等式改写为对数和，回补数列基础。
+      - 若学生不会从 $m(a)\ge0$ 代入 $a=\frac{k}{n}$ 并配对求和，回补不等式工具基础。
+  detail_terms:
+    - $m(a)=a\ln\frac{a}{2-a}+2\ln(2-a)$
+    - $m^{\prime}(a)=\ln\frac{a}{2-a}$
+    - $\sum_{k=1}^{2n-1}k\ln\frac{k}{n}$
+    - 首尾配对 $(k,2n-k)$
+    - $t-\ln t\ge1$
+parts: &a1
+  - (1) 求证：$f(x)<\frac{1}{2}x^2-\frac{x}{e^x}$。
+  - (2)(i) 若 $h(x)=a f(x)-2[f(x+1)-f(2)],\ a\in(0,2)$，$m(a)$ 为 $h(x)$ 的最大值，求 $m(a)$ 的极小值。
+  - (2)(ii) 设 $n\in\mathbf{N}^*,\ n\ge2$，求证：$2^2\times3^3\times4^4\times\cdots\times(2n-1)^{2n-1}>n^{2n^2-n}$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0203_ln_sequence_inequality_ch6_log_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0203_ex08_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0203/page_0203.md
+      role: problem_start
+      evidence: page_0203 下半页出现“例8（2025·张家口三模 T19）”，题头含 (1)(2)(i)(ii) 三问。
+    - ref_id: page_0203_ex08_solution_head
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0203/page_0203.md
+      role: solution
+      evidence: page_0203 给出 (1) 的完整证明，以及 (2)(i) 从导数到 $m(a)$ 的推导并写到 $m^{\prime}(a)$。
+    - ref_id: page_0204_ex08_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0204/page_0204.md
+      role: continuation
+      evidence: page_0204 顶部承接例8：完成 $m^{\prime}(a)$ 单调性与 $m(a)$ 极小值，并给出 (2)(ii) 全部证明。
+    - ref_id: page_0204_new_heads_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0204/page_0204.md
+      role: local_context
+      evidence: page_0204 中下部进入“考点3”并出现新的例1/例2题头，按批次规则不纳入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0203.png
+      inspected: true
+      notes: 已核对页图：例8从本页题头开始，(2)(i) 推到 $m^{\prime}(a)$ 行末后跨页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0204.png
+      inspected: true
+      notes: 已核对页图：例8续解在本页顶部结束；其后“考点3/例1/例2”是下一批新题头。
+  source_context: 例8由 page_0203 起题，解答跨到 page_0204 顶部完成；跨页后新题头不属于本批。
+  source_influence:
+    - 保持 source 的三层链路：先证函数不等式，再求参数函数极小值，最后反哺到数列乘积不等式。
+    - 保持 source 的配对累加写法：$\frac{k}{n}\ln\frac{k}{n}+\frac{2n-k}{n}\ln\frac{2n-k}{n}>0$。
+  source_discrepancies:
+    - page_0203 的 $m^{\prime}(a)$ 行在 markdown/页末出现截断，续页 page_0204 顶部补全为 $m^{\prime}(a)=\ln\frac{a}{2-a}$ 并完成单调性判断。
+    - source 在比值中写入 $1^1$ 项后再回到目标式；本卡保留该等价桥接并注明 $1^1=1$。
+original_problem:
+  stem: （2025 · 张家口三模 T19）已知函数 $f(x)=\ln x,\ x\in(0,+\infty)$。
+  parts: *a1
+  choices: []
+  answer: (1) 结论成立；(2)(i) $m(a)$ 的极小值为 $0$（当 $a=1$）；(2)(ii) 结论成立。
+  fidelity_notes:
+    - 题头与 (1)(2) 的问题主体在 page_0203；(2)(i)(ii) 的后半证明在 page_0204 顶部。
+    - page_0204 上“考点3”及其例题不属于本题续解。
+solution:
+  source_solution_summary: |
+    (1) 令 $g(x)=\left(\frac12x^2-\frac{x}{e^x}\right)-\ln x =\frac12x^2-\frac12\ln x^2-\frac{x}{e^x}$。 用 $t-\ln t\ge1\ (t>0)$ 取 $t=x^2$ 得前两项下界 $\frac12$， 再用 $\frac{x}{e^x}\le\frac1e$，故 $g(x)\ge\frac12-\frac1e>0$，结论成立。 (2)(i) 令 $h(x)=a\ln x-2[\ln(x+1)-\ln2]$， $h^{\prime}(x)=\frac{(a-2)x+a}{x(x+1)}$，故在 $x_0=\frac{a}{2-a}$ 处取最大值， $m(a)=a\ln\frac{a}{2-a}+2\ln(2-a)$。 续页化简得 $m^{\prime}(a)=\ln\frac{a}{2-a}$，从而 $m(a)$ 在 $(0,1)$ 递减、在 $(1,2)$ 递增，极小值 $m(1)=0$。 (2)(ii) 将目标改写为 $\prod_{k=1}^{2n-1}\left(\frac{k}{n}\right)^k>1$ 的对数形式 $\sum_{k=1}^{2n-1}k\ln\frac{k}{n}>0$。 由 (2)(i) 的 $m(a)\ge0$，取 $a=\frac{k}{n}\ (k=1,\dots,n-1)$ 得 $\frac{k}{n}\ln\frac{k}{n}+\frac{2n-k}{n}\ln\frac{2n-k}{n}>0$， 累加即得目标对数和大于 0，指数化后结论成立。
+  key_steps:
+    - step_id: step_1
+      statement: 第一问按 source 构造差函数并拆成“同构项 + 指数项”。
+      formula_trace:
+        from: $\frac12x^2-\frac{x}{e^x}-\ln x$
+        to: $g(x)=\frac12x^2-\frac12\ln x^2-\frac{x}{e^x}$
+        operation: 把 $\ln x$ 改写为 $\frac12\ln x^2$。
+        why: 便于调用 $t-\ln t$ 的标准下界。
+      source_ref: page_0203_ex08_solution_head
+    - step_id: step_2
+      statement: 完成第一问下界估计。
+      formula_trace:
+        from: $g(x)=\frac12(x^2-\ln x^2)-\frac{x}{e^x}$
+        to: $g(x)\ge\frac12-\frac1e>0$
+        operation: 用 $x^2-\ln x^2\ge1$ 与 $\frac{x}{e^x}\le\frac1e$。
+        why: 直接得到 $f(x)<\frac12x^2-\frac{x}{e^x}$。
+      source_ref: page_0203_ex08_solution_head
+    - step_id: step_3
+      statement: 第二问 (i) 先求 $h(x)$ 的最大值表达式。
+      formula_trace:
+        from: $h(x)=a\ln x-2[\ln(x+1)-\ln2]$
+        to: $x_0=\frac{a}{2-a},\ m(a)=h(x_0)=a\ln\frac{a}{2-a}+2\ln(2-a)$
+        operation: 求导并按 $a\in(0,2)$ 判定先增后减。
+        why: 把“关于 $x$ 的极值”转为“关于 $a$ 的函数”。
+      source_ref: page_0203_ex08_solution_head
+    - step_id: step_4
+      statement: 跨页完成 $m(a)$ 极小值。
+      formula_trace:
+        from: $m(a)=a\ln\frac{a}{2-a}+2\ln(2-a)$
+        to: $m^{\prime}(a)=\ln\frac{a}{2-a}$，故 $m_{\min}=m(1)=0$
+        operation: 续页化简导数并用 $m^{\prime}(1)=0$ 与单调性分段判断。
+        why: 得到后续数列不等式需要的统一下界 $m(a)\ge0$。
+      source_ref: page_0204_ex08_continuation
+    - step_id: step_5
+      statement: 把乘积不等式改写为对数和不等式。
+      formula_trace:
+        from: $2^2\cdot3^3\cdots(2n-1)^{2n-1}>n^{2n^2-n}$
+        to: $\sum_{k=1}^{2n-1}k\ln\frac{k}{n}>0$
+        operation: 先补入 $1^1$（值为 1）写成整段乘积，再取对数。
+        why: 目标转成可与 $m(a)\ge0$ 对接的可加结构。
+      source_ref: page_0204_ex08_continuation
+    - step_id: step_6
+      statement: 由 $m(a)\ge0$ 构造配对项。
+      formula_trace:
+        from: $m(a)\ge0,\ a\in(0,2)$
+        to: $\frac{k}{n}\ln\frac{k}{n}+\frac{2n-k}{n}\ln\frac{2n-k}{n}>0\ (k=1,\dots,n-1)$
+        operation: 代入 $a=\frac{k}{n}$。
+        why: 得到与目标对数和完全同构的“首尾配对”正项。
+      source_ref: page_0204_ex08_continuation
+    - step_id: step_7
+      statement: 累加配对项得到总和为正。
+      formula_trace:
+        from: step_6 的 $k=1,\dots,n-1$
+        to: $\sum_{k=1}^{2n-1}k\ln\frac{k}{n}>0$
+        operation: 按 $(k,2n-k)$ 配对累加，且中项 $k=n$ 为 $n\ln1=0$。
+        why: 完成与 step_5 的目标对接。
+      source_ref: page_0204_ex08_continuation
+    - step_id: step_8
+      statement: 指数化回原式，得到 (2)(ii)。
+      formula_trace:
+        from: $\sum_{k=1}^{2n-1}k\ln\frac{k}{n}>0$
+        to: $2^2\times3^3\times\cdots\times(2n-1)^{2n-1}>n^{2n^2-n}$
+        operation: 对数不等式指数化，并去掉 $1^1$。
+        why: 得到题设要求的乘积比较。
+      source_ref: page_0204_ex08_continuation
+teaching_card:
+  student_title: 由参数极值反推加权对数和
+  what_it_trains: 训练“函数极值结论反哺数列不等式”的双层迁移：先拿到 $m(a)\ge0$，再离散代入并配对累加。
+  recognition_cues:
+    - 题目先给函数极值，再要求数列乘积比较。
+    - 出现 $a\in(0,2)$ 与 $n$ 的离散参数。
+    - 目标乘积指数是 $1,2,\dots,2n-1$ 的加权型。
+  normalization_moves:
+    - 先把第一问和第二问 (i) 做成稳定下界工具。
+    - 把乘积比较改写为对数和比较。
+    - 将 $a$ 离散化为 $k/n$，制造首尾配对正项。
+  common_failures:
+    - 只证明 $m(a)\ge0$，却不知道如何代入 $a=k/n$ 连接到数列。
+    - 取对数后漏掉权重 $k$。
+    - 未说明补入 $1^1$ 只是等价改写，导致式子前后不一致。
+  similar_practice_query: 参数函数最小值 代入k/n 加权对数和 首尾配对 乘积不等式
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

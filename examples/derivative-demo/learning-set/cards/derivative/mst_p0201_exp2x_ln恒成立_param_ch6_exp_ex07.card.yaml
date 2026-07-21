@@ -1,0 +1,174 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0201_exp2x_ln恒成立_param_ch6_exp_ex07
+content_revision_id: mst_p0201_exp2x_ln恒成立_param_ch6_exp_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0201_exp2x_ln恒成立_param_ch6_exp_ex07.card.yaml
+stem: 已知函数 $f(x)=e^{2x}-(b+2)x\ (b\in\mathbf{R})$，$g(x)=\ln x+\ln 2e$，不等式 $f(x)\ge g(x)$ 对于一切 $x\in(0,+\infty)$ 恒成立，求 $b$ 的取值范围。
+answer: |-
+  $b\le2e-4$。
+
+  由 $f(x)\ge g(x)$ 得 $e^{2x}-(b+2)x-\ln x-\ln 2e\ge0$，等价于 $e^{2x}-2ex+2x-1-\ln(2x)+(2e-4-b)x\ge0$。其中 $e^{2x}-2ex\ge0$（取 $u=2x-1$ 用 $e^u\ge1+u$）且 $2x-1-\ln(2x)\ge0$（用 $\ln t\le t-1$，$t=2x$），两者都在 $x=\frac12$ 取等。故当 $2e-4-b\ge0$ 时整体非负，得到充分条件 $b\le2e-4$。反之若 $b>2e-4$，代入 $x=\frac12$ 时前两块均为 0， 剩余项为 $\frac12(2e-4-b)<0$，与恒成立矛盾，故必要条件同样是 $b\le2e-4$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把 $f-g$ 改写为“标准放缩块 + 参数项”。
+      max_score: 1
+    - step_id: step_2
+      description: 第一块：$e^{2x}-2ex\ge0$。
+      max_score: 1
+    - step_id: step_3
+      description: 第二块：$2x-1-\ln2x\ge0$。
+      max_score: 1
+    - step_id: step_4
+      description: 给出充分性：$b\le2e-4$ 时恒成立。
+      max_score: 1
+    - step_id: step_5
+      description: 用 $x=\frac12$ 反证必要性。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 含参数分类讨论
+    secondary:
+      - 切线放缩与凹凸性
+      - 同构变形与换元法
+    subroute:
+      - 0 线放缩
+      - 取等点
+      - 必要性反证
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 不等式工具结构
+      - 非齐次结构
+    evidence:
+      - $e^{2x}-2ex+2x-1-\ln2x+(2e-4-b)x$
+      - $e^{2x}-2ex\ge0,\ 2x-1-\ln2x\ge0$
+      - $x=\frac12$ 双取等
+    normalization_moves_used:
+      - 先把恒成立式拆成“两个与参数无关的非负块 + 一个线性参数块”。
+      - 充分性看参数块符号，必要性用共同取等点代入反证。
+      - 把“恒成立求参”转成“分情形 + 一点打穿”。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\ln2e$ 与 $\ln2x$ 整理到同一式，回补指数对数基础。
+      - 若学生只给充分性 $b\le2e-4$ 而缺必要性，回补函数性质与图像中的反例取点意识。
+      - 若学生不知道为何代 $x=\frac12$，回补不等式工具基础中的取等点策略。
+  detail_terms:
+    - $2e-4-b$
+    - $e^{2x}-2ex$
+    - $2x-1-\ln2x$
+    - $x=\frac12$
+    - $b\le2e-4$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0201_exp2x_ln恒成立_param_ch6_exp_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0201_ex07_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0201/page_0201.md
+      role: problem_start
+      evidence: page_0201 例7题头：$f(x)=e^{2x}-(b+2)x,\ g(x)=\ln x+\ln 2e$，要求 $f(x)\ge g(x)$ 在 $(0,+\infty)$ 恒成立时的 $b$ 范围。
+    - ref_id: page_0201_ex07_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0201/page_0201.md
+      role: solution
+      evidence: page_0201 例7解析给出变形：$e^{2x}-2ex+2x-1-\ln2x+(2e-4-b)x\ge0$，并以 $x=\frac12$ 取等做分情形。
+    - ref_id: page_0200_ex04_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0200/page_0200.md
+      role: local_context
+      evidence: page_0200 底部是例4起头；page_0201 顶部“另解”是例4续页，不属于例7。
+    - ref_id: page_0202_exposition_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0202/page_0202.md
+      role: local_context
+      evidence: page_0202 顶部继续“对数常见放缩及推导”讲解并开启新例1，不是例7续解。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0200.png
+      inspected: true
+      notes: 已核对：page_0200 底部出现例4，支持 page_0201 页首内容是续解。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0201.png
+      inspected: true
+      notes: 已核对：例7题头、解析与结论 $b\le2e-4$ 全在本页；后半已转入“考点2”讲解。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0202.png
+      inspected: true
+      notes: 已核对：page_0202 顶部承接讲解性 exposition，不涉及例7。
+  source_context: 本卡仅处理 page_0201 新起头的例7；page_0201 顶部例4续页与 page_0201 后半至 page_0202 的 exposition 均不建卡。
+  source_influence:
+    - 保留源解主变形：把 $f-g$ 写成“两块标准非负项 + 参数线性项”的和。
+    - 保留源解中两条取等都在 $x=\frac12$ 的关键点。
+    - 保留源解分情形：$2e-4-b\ge0$ 直接成立；$2e-4-b<0$ 代 $x=\frac12$ 反证。
+  source_discrepancies: []
+original_problem:
+  stem: 已知函数 $f(x)=e^{2x}-(b+2)x\ (b\in\mathbf{R})$，$g(x)=\ln x+\ln 2e$，不等式 $f(x)\ge g(x)$ 对于一切 $x\in(0,+\infty)$ 恒成立，求 $b$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $b\le2e-4$。
+  fidelity_notes:
+    - 源题为求参解答题，无选项。
+    - 恒成立区间为 $(0,+\infty)$，已按原题保留。
+solution:
+  source_solution_summary: 由 $f(x)\ge g(x)$ 得 $e^{2x}-(b+2)x-\ln x-\ln 2e\ge0$，等价于 $e^{2x}-2ex+2x-1-\ln(2x)+(2e-4-b)x\ge0$。其中 $e^{2x}-2ex\ge0$（取 $u=2x-1$ 用 $e^u\ge1+u$）且 $2x-1-\ln(2x)\ge0$（用 $\ln t\le t-1$，$t=2x$），两者都在 $x=\frac12$ 取等。故当 $2e-4-b\ge0$ 时整体非负，得到充分条件 $b\le2e-4$。反之若 $b>2e-4$，代入 $x=\frac12$ 时前两块均为 0， 剩余项为 $\frac12(2e-4-b)<0$，与恒成立矛盾，故必要条件同样是 $b\le2e-4$。
+  key_steps:
+    - step_id: step_1
+      statement: 把 $f-g$ 改写为“标准放缩块 + 参数项”。
+      formula_trace:
+        from: $e^{2x}-(b+2)x-\ln x-\ln 2e\ge0$
+        to: $e^{2x}-2ex+2x-1-\ln2x+(2e-4-b)x\ge0$
+        operation: 利用 $\ln2e=\ln2+1$，并加减 $2ex$ 与 $2x$。
+        why: 为后续分块非负与参数分情形做准备。
+      source_ref: page_0201_ex07_solution
+    - step_id: step_2
+      statement: 第一块：$e^{2x}-2ex\ge0$。
+      formula_trace:
+        from: $e^{2x}-2ex=e\bigl(e^{2x-1}-2x\bigr)$
+        to: $e^{2x}-2ex\ge0$
+        operation: 令 $u=2x-1$，用 $e^u\ge1+u$ 得 $e^{2x-1}\ge2x$。
+        why: 把指数块压成标准切线下界。
+      source_ref: page_0201_ex07_solution
+    - step_id: step_3
+      statement: 第二块：$2x-1-\ln2x\ge0$。
+      formula_trace:
+        from: $\ln t\le t-1\ (t>0)$
+        to: $2x-1-\ln2x\ge0\ (x>0)$
+        operation: 取 $t=2x$ 直接代入。
+        why: 把对数块压成标准 0 线放缩。
+      source_ref: page_0201_ex07_solution
+    - step_id: step_4
+      statement: 给出充分性：$b\le2e-4$ 时恒成立。
+      formula_trace:
+        from: $2e-4-b\ge0$
+        to: 三块均非负 $\Rightarrow$ 原式对一切 $x>0$ 成立
+        operation: step_2、step_3 与参数项同号合并。
+        why: 得到参数上界作为充分条件。
+      source_ref: page_0201_ex07_solution
+    - step_id: step_5
+      statement: 用 $x=\frac12$ 反证必要性。
+      formula_trace:
+        from: $b>2e-4$
+        to: 代入 $x=\frac12$ 得 $\frac12(2e-4-b)<0$，与恒成立矛盾
+        operation: 利用 step_2、step_3 在 $x=\frac12$ 同时取等。
+        why: 排除全部 $b>2e-4$，锁定必要条件。
+      source_ref: page_0201_ex07_solution
+teaching_card:
+  student_title: 两块取等同点，一代锁参数
+  what_it_trains: 训练“恒成立求参”里最常见的三步：拆分标准非负块、先拿充分、再用共同取等点做必要性反证。
+  recognition_cues:
+    - 题干是“对一切 $x>0$ 恒成立”的求参。
+    - 式中同时有 $e^{2x}$ 与 $\ln x$，通常可拆成指数块+对数块。
+    - 解析里出现同一个取等点，意味着可直接一代打穿必要性。
+  normalization_moves:
+    - 先统一成 $e^{2x}-2ex$ 与 $2x-1-\ln2x$ 两块。
+    - 先判参数项系数符号得到充分条件。
+    - 再代共同取等点 $x=\frac12$ 排除其余参数。
+  common_failures:
+    - 变形时漏掉 $\ln2e$ 中的常数 1。
+    - 只写“当 $b\le2e-4$ 时成立”，遗漏“反之不成立”的必要性。
+    - 取等点代入后符号判断出错，把 $b>2e-4$ 误判为可行。
+  similar_practice_query: e^{2x} 与 lnx 恒成立 求 b 取等点 x=1/2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,246 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0150_log_19_20_chain_ex22
+content_revision_id: mst_p0150_log_19_20_chain_ex22-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0150_log_19_20_chain_ex22.card.yaml
+stem: |-
+  （2023·叙州区模拟）实数 $x,y,z$ 分别满足 $19^x=20,\ 20^y=21,\ \log_{\frac{20}{19}}z=\frac{21}{20}$，则 $x,y,z$ 的大小关系为（  ）
+  A. $x>y>z$
+  B. $x>z>y$
+  C. $z>x>y$
+  D. $y>x>z$
+answer: |
+  C
+
+  由
+  \[
+  19^x=20,\quad 20^y=21
+  \]
+  得
+  \[
+  x=\log_{19}20=\frac{\lg20}{\lg19},\qquad y=\log_{20}21=\frac{\lg21}{\lg20}.
+  \]
+  按源解插入同增量
+  \[
+  x=\frac{\lg20}{\lg19}
+  >\frac{\lg20+\lg\frac{20}{19}}{\lg19+\lg\frac{20}{19}}
+  =\frac{\lg\frac{400}{19}}{\lg20}
+  >\frac{\lg21}{\lg20}=y,
+  \]
+  所以 $x>y$。
+  又由“大指小底”：
+  \[
+  19^{20}>20^{19}\Rightarrow 19^{\frac{20}{19}}>20
+  \Rightarrow \frac{20}{19}>\log_{19}20=x.
+  \]
+  由
+  \[
+  \log_{\frac{20}{19}}z=\frac{21}{20}
+  \]
+  得
+  \[
+  z=\left(\frac{20}{19}\right)^{\frac{21}{20}}>\frac{20}{19}>x.
+  \]
+  综上
+  \[
+  z>x>y,
+  \]
+  选 C。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把三个未知量改写成可比较的对数/幂表达。
+      max_score: 1
+    - step_id: step_2
+      description: 先比较 $x$ 与 $y$。
+      max_score: 1
+    - step_id: step_3
+      description: 用“大指小底”给出 $x$ 的上界。
+      max_score: 1
+    - step_id: step_4
+      description: 比较 $z$ 与中间锚点。
+      max_score: 1
+    - step_id: step_5
+      description: 合并链式关系并对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较 $x,y,z$ 三个由指数与对数定义的实数。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 拟合与夹逼
+    subroute:
+      - 换底同分母比较
+      - 大指小底
+      - 中间锚点 $\frac{20}{19}$
+  structure:
+    primary: 同构结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 非对称结构
+    evidence:
+      - $x,y$ 先换底后可并入同类分式比较。
+      - $z$ 由对数方程反解为幂式，天然可与 $\frac{20}{19}$ 对接。
+      - 解法核心是构造“$y < x < \frac{20}{19} < z$”中间链。
+    normalization_moves_used:
+      - $x=\log_{19}20=\frac{\lg20}{\lg19}$。
+      - $y=\log_{20}21=\frac{\lg21}{\lg20}$。
+      - $z=\left(\frac{20}{19}\right)^{\frac{21}{20}}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会换底并比较分式，回补指数对数基础。
+      - 若学生不会由 $19^{20}>20^{19}$ 推对数大小，回补不等式工具基础。
+      - 若学生不会合并链式比较，回补代数恒等变形。
+  detail_terms:
+    - $19^x=20$
+    - $20^y=21$
+    - $\log_{\frac{20}{19}}z=\frac{21}{20}$
+    - $\frac{20}{19}$
+    - $z>x>y$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0150_log_19_20_chain_ex22
+source_evidence:
+  source_refs:
+    - ref_id: page_0150_ex22_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0150/page_0150.md
+      role: problem_start
+      evidence: 例22题干与A-D选项完整出现于page_0150。
+    - ref_id: page_0150_ex22_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0150/page_0150.md
+      role: solution
+      evidence: 例22解析完整给出：先证 $x>y$，再证 $\frac{20}{19}>x$ 与 $z>\frac{20}{19}$，结论 $z>x>y$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0150.png
+      inspected: true
+      notes: 已核对原图：例22题干、选项、解析均完整可读。
+  source_context: page_0150页首为例21续解，不属本卡；本卡仅覆盖从page_0150起头的例22。
+  source_influence:
+    - 保留源解的分式插入比较：把 $x=\frac{\lg 20}{\lg 19}$ 与 $y=\frac{\lg 21}{\lg 20}$ 通过同分母形式比较。
+    - 保留“大指小底”桥接：由 $19^{20}>20^{19}$ 推到 $\frac{20}{19}>x$。
+    - 保留 $z=\left(\frac{20}{19}\right)^{\frac{21}{20}}$ 且指数大于1，从而 $z>x$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·叙州区模拟）实数 $x,y,z$ 分别满足 $19^x=20,\ 20^y=21,\ \log_{\frac{20}{19}}z=\frac{21}{20}$，则 $x,y,z$ 的大小关系为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $x>y>z$
+      text_latex: $x>y>z$
+    - label: B
+      text_raw: $x>z>y$
+      text_latex: $x>z>y$
+    - label: C
+      text_raw: $z>x>y$
+      text_latex: $z>x>y$
+    - label: D
+      text_raw: $y>x>z$
+      text_latex: $y>x>z$
+  answer: C
+  fidelity_notes:
+    - 题干与解析均在page_0150单页完成，无跨页依赖。
+solution:
+  source_solution_summary: |
+    由
+    \[
+    19^x=20,\quad 20^y=21
+    \]
+    得
+    \[
+    x=\log_{19}20=\frac{\lg20}{\lg19},\qquad y=\log_{20}21=\frac{\lg21}{\lg20}.
+    \]
+    按源解插入同增量
+    \[
+    x=\frac{\lg20}{\lg19}
+    >\frac{\lg20+\lg\frac{20}{19}}{\lg19+\lg\frac{20}{19}}
+    =\frac{\lg\frac{400}{19}}{\lg20}
+    >\frac{\lg21}{\lg20}=y,
+    \]
+    所以 $x>y$。
+    又由“大指小底”：
+    \[
+    19^{20}>20^{19}\Rightarrow 19^{\frac{20}{19}}>20
+    \Rightarrow \frac{20}{19}>\log_{19}20=x.
+    \]
+    由
+    \[
+    \log_{\frac{20}{19}}z=\frac{21}{20}
+    \]
+    得
+    \[
+    z=\left(\frac{20}{19}\right)^{\frac{21}{20}}>\frac{20}{19}>x.
+    \]
+    综上
+    \[
+    z>x>y,
+    \]
+    选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 把三个未知量改写成可比较的对数/幂表达。
+      formula_trace:
+        from: $19^x=20,\ 20^y=21,\ \log_{\frac{20}{19}}z=\frac{21}{20}$
+        to: $x=\frac{\lg20}{\lg19},\ y=\frac{\lg21}{\lg20},\ z=\left(\frac{20}{19}\right)^{\frac{21}{20}}$
+        operation: 分别作换底与对数定义反解。
+        why: 统一到“分式比较 + 幂大小”两条线。
+      source_ref: page_0150_ex22_solution
+    - step_id: step_2
+      statement: 先比较 $x$ 与 $y$。
+      formula_trace:
+        from: $x=\frac{\lg20}{\lg19}$
+        to: $x>\frac{\lg\frac{400}{19}}{\lg20}>\frac{\lg21}{\lg20}=y$
+        operation: 按源解在分子分母同时加 $\lg\frac{20}{19}$ 后再比较分子大小。
+        why: 锁定 $x>y$。
+      source_ref: page_0150_ex22_solution
+    - step_id: step_3
+      statement: 用“大指小底”给出 $x$ 的上界。
+      formula_trace:
+        from: $19^{20}>20^{19}$
+        to: $\frac{20}{19}>\log_{19}20=x$
+        operation: 幂不等式改写为同底对数比较。
+        why: 为比较 $z$ 与 $x$ 提供中间锚点。
+      source_ref: page_0150_ex22_solution
+    - step_id: step_4
+      statement: 比较 $z$ 与中间锚点。
+      formula_trace:
+        from: $z=\left(\frac{20}{19}\right)^{\frac{21}{20}}$
+        to: $z>\frac{20}{19}>x$
+        operation: 利用底数大于1且指数 $\frac{21}{20}>1$。
+        why: 得到 $z>x$。
+      source_ref: page_0150_ex22_solution
+    - step_id: step_5
+      statement: 合并链式关系并对应选项。
+      formula_trace:
+        from: $x>y$ 与 $z>x$
+        to: $z>x>y$，选 C
+        operation: 传递性合并。
+        why: 完成作答。
+      source_ref: page_0150_ex22_solution
+teaching_card:
+  student_title: 先造中间锚点，再串三者顺序
+  what_it_trains: 训练“指数定义量 + 对数定义量”混合比较时的统一表达与链式合并能力。
+  recognition_cues:
+    - 题中同时出现 $a^x=b$ 与 $\log_a z=\text{常数}$。
+    - 选项给的是三变量全序。
+    - 可自然构造底数分数作比较锚点。
+  normalization_moves:
+    - 先换底把 $x,y$ 写成同类分式。
+    - 再用“大指小底”找 $x$ 的可比上界。
+    - 最后把 $z$ 写成同底幂并并链。
+  common_failures:
+    - 把 $\log_{\frac{20}{19}}z=\frac{21}{20}$ 误解成 $z=\frac{21}{20}$。
+    - 只得到 $x>y$ 就直接选项，漏比较 $z$。
+    - 忽略底数大于1导致幂函数单调方向判断错误。
+  similar_practice_query: 19^x=20 20^y=21 log_{20/19}z=21/20 比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

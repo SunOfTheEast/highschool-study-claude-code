@@ -1,0 +1,190 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0270_xex_cos_split_sign_parameter_bound_ex10
+content_revision_id: mst_p0270_xex_cos_split_sign_parameter_bound_ex10-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0270_xex_cos_split_sign_parameter_bound_ex10.card.yaml
+stem: |-
+  （2025 高三下 · 辽宁沈阳模拟节选）已知函数 $f(x)=e^x-ax(a\in\mathbf{R})$。
+  1. 若 $x\in[-\frac\pi2,+\infty)$ 时，$xf(x)\ge2x-x\cos x$，求 $a$ 的取值范围。
+answer: |-
+  $a\le1$。
+
+  题设等价于 $x(e^x-ax-2+\cos x)\ge0$。令 $h(x)=e^x-ax-2+\cos x$。因为 $x$ 在 0 两侧符号相反， 需要 $x\ge0$ 时 $h(x)\ge0$，$-\frac\pi2<x<0$ 时 $h(x)<0$。又 $h(0)=0$， $h^\prime(0)=1-a$，为了让 $h$ 在 0 邻域先负后正，必须 $a\le1$。当 $a\le1$ 且 $x\ge0$ 时， $h(x)\ge e^x-x-2+\cos x=k(x)$，而 $k^\prime=e^x-1-\sin x\ge x-\sin x\ge0$，故 $h\ge0$。 当 $-\frac\pi2<x<0$ 时，利用 $p(x)=\frac{1+\sin x}{e^x}$ 在该区间递增且 $p(0)=1$， 得 $h^\prime(x)>0$，于是 $h(x)<h(0)=0$。综上 $a\le1$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把原不等式提出公共因子 $x$。
+      max_score: 1
+    - step_id: step_2
+      description: 转为 $h$ 的分侧符号。
+      max_score: 1
+    - step_id: step_3
+      description: 由 0 附近符号得到必要条件。
+      max_score: 1
+    - step_id: step_4
+      description: 证明 $x\ge0$ 时 $h\ge0$。
+      max_score: 1
+    - step_id: step_5
+      description: 证明负半轴小区间 $h<0$。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "3"
+        goal: 求参数范围
+        target: 第 3 问
+        result: $a\le1$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 充分/必要性探路
+      - 同构变形与换元法
+      - 切线放缩与凹凸性
+    subroute:
+      - 极点效应失效
+      - 公因子 $x$ 分侧
+      - 0 邻域先负后正
+      - 正负区间分别回证
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 指对复合结构
+      - 局部逼近结构
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $x(e^x-ax-2+\cos x)$
+      - $h(0)=0$
+      - $h^\prime(0)=1-a$
+      - $e^x-x-2+\cos x$
+      - $\frac{1+\sin x}{e^x}$
+    normalization_moves_used:
+      - 把原式提取公共因子 $x$。
+      - 按 $x$ 的正负转成 $h$ 的分侧符号。
+      - 在 0 邻域用 $h^\prime(0)$ 锁参。
+      - 正半轴用 $e^x-1\ge x$、$x-\sin x\ge0$。
+      - 负半轴构造 $p=(1+\sin x)/e^x$ 控制导数。
+  fallback:
+    only_if_trace_shows:
+      - 若学生提不出公共因子 $x$，回补代数恒等变形。
+      - 若学生分负半轴符号方向出错，回补不等式工具基础。
+      - 若学生不会求 $e^x-ax-2+\cos x$ 的导数，回补导数运算与几何意义。
+      - 若学生不熟悉 $e^x-1\ge x$，回补指数对数基础。
+      - 若学生不会处理三角导数与单调性，回补三角函数基础。
+  detail_terms:
+    - $x(e^x-ax-2+\cos x)$
+    - 公因子 $x$
+    - 分侧符号
+    - $a\le1$
+    - $p(x)=\frac{1+\sin x}{e^x}$
+    - 极点效应失效
+parts: &a1
+  - id: "3"
+    text: 若 $x\in[-\frac\pi2,+\infty)$ 时，$xf(x)\ge2x-x\cos x$，求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0270_xex_cos_split_sign_parameter_bound_ex10
+source_evidence:
+  source_refs:
+    - ref_id: page_0270_ex10_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0270/page_0270.md
+      role: problem_start
+      evidence: page_0270 给出例10题头：$f(x)=e^x-ax$，只列第(3)问：若 $x\in[-\frac\pi2,+\infty)$ 时 $xf(x)\ge2x-x\cos x$，求 $a$ 的取值范围。
+    - ref_id: page_0270_ex10_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0270/page_0270.md
+      role: solution
+      evidence: page_0270 例10解析先构造 $g=xe^x-ax^2-2x+x\cos x$ 并发现极点效应失效；再利用每项都有 $x$，转为分侧证明 $h=e^x-ax-2+\cos x$ 在 $x\ge0$ 非负、在 $-\frac\pi2<x<0$ 负。
+    - ref_id: page_0270_next_section_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0270/page_0270.md
+      role: local_context
+      evidence: 例10后进入“二、极大值和极小值的界定”，说明例10在 page_0270 内闭合。
+    - ref_id: page_0271_ex11_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0271/page_0271.md
+      role: local_context
+      evidence: page_0271 另起例11，属于下一页问题头，不纳入本批。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0270.png
+      inspected: true
+      notes: 已核对页图：例10题头与完整解析位于 page_0270 中部，随后进入新小节。
+  source_context: 本卡处理 page_0270 起头并在本页闭合的例10；page_0271 例11排除。
+  source_influence:
+    - 保留 source 的第一判断：直接构造 $g$ 会遇到极点效应失效。
+    - 保留关键换路：原不等式每项都有 $x$，因此转为 $h=e^x-ax-2+\cos x$ 的分侧符号。
+    - 保留必要性：$h(0)=0$ 且左负右正，故 $h^\prime(0)\ge0$，得 $a\le1$。
+    - 保留充分性：分别在 $x\ge0$ 与 $-\frac\pi2<x<0$ 上证明 $h$ 的符号。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 高三下 · 辽宁沈阳模拟节选）已知函数 $f(x)=e^x-ax(a\in\mathbf{R})$。
+  parts: *a1
+  choices: []
+  answer: $a\le1$。
+  fidelity_notes:
+    - source 只提供第(3)问；不补写第(1)(2)问。
+    - 在 $x=0$ 时原不等式自动取等，实际证明分 $x\ge0$ 与 $-\frac\pi2<x<0$。
+solution:
+  source_solution_summary: 题设等价于 $x(e^x-ax-2+\cos x)\ge0$。令 $h(x)=e^x-ax-2+\cos x$。因为 $x$ 在 0 两侧符号相反， 需要 $x\ge0$ 时 $h(x)\ge0$，$-\frac\pi2<x<0$ 时 $h(x)<0$。又 $h(0)=0$， $h^\prime(0)=1-a$，为了让 $h$ 在 0 邻域先负后正，必须 $a\le1$。当 $a\le1$ 且 $x\ge0$ 时， $h(x)\ge e^x-x-2+\cos x=k(x)$，而 $k^\prime=e^x-1-\sin x\ge x-\sin x\ge0$，故 $h\ge0$。 当 $-\frac\pi2<x<0$ 时，利用 $p(x)=\frac{1+\sin x}{e^x}$ 在该区间递增且 $p(0)=1$， 得 $h^\prime(x)>0$，于是 $h(x)<h(0)=0$。综上 $a\le1$。
+  key_steps:
+    - step_id: step_1
+      statement: 把原不等式提出公共因子 $x$。
+      formula_trace:
+        from: $x(e^x-ax)\ge2x-x\cos x$
+        to: $x(e^x-ax-2+\cos x)\ge0$
+        operation: 移项并提取 $x$。
+        why: 每项都有 $x$，直接分 $x$ 的正负比硬做 $g$ 更清楚。
+      source_ref: page_0270_ex10_solution
+    - step_id: step_2
+      statement: 转为 $h$ 的分侧符号。
+      formula_trace:
+        from: $h(x)=e^x-ax-2+\cos x$
+        to: $x\ge0$ 需 $h\ge0$；$-\frac\pi2<x<0$ 需 $h<0$
+        operation: 按 $x$ 的符号拆分。
+        why: 乘数 $x$ 改变不等式方向。
+      source_ref: page_0270_ex10_solution
+    - step_id: step_3
+      statement: 由 0 附近符号得到必要条件。
+      formula_trace:
+        from: $h(0)=0$，$h^\prime(0)=1-a$
+        to: $1-a\ge0$，$a\le1$
+        operation: 要求 $h$ 在 0 邻域递增。
+        why: 这样才能在左侧为负、右侧为正。
+      source_ref: page_0270_ex10_solution
+    - step_id: step_4
+      statement: 证明 $x\ge0$ 时 $h\ge0$。
+      formula_trace:
+        from: $a\le1$
+        to: $h(x)\ge e^x-x-2+\cos x=k(x)\ge k(0)=0$
+        operation: 用 $a\le1$ 降到 $a=1$ 并判 $k^\prime\ge0$。
+        why: 正半轴需要 $h$ 非负。
+      source_ref: page_0270_ex10_solution
+    - step_id: step_5
+      statement: 证明负半轴小区间 $h<0$。
+      formula_trace:
+        from: $p(x)=\frac{1+\sin x}{e^x}$
+        to: $p^\prime(x)=\frac{\sqrt2\cos(x+\frac\pi4)-1}{e^x}>0$，$p(x)<p(0)=1$
+        operation: 构造比值并判单调。
+        why: 推出 $h^\prime(x)>0$，从而 $h(x)<h(0)=0$。
+      source_ref: page_0270_ex10_solution
+teaching_card:
+  student_title: 每项都有 $x$，先分左右再证明
+  what_it_trains: 训练极点效应失效后的换路：别在原差函数里硬求高阶导，先利用公共因子把问题拆成左右两侧的符号。
+  recognition_cues:
+    - 原不等式两边每一项都有 $x$。
+    - $x=0$ 自动取等，直接构造大差函数会出现极点效应失效。
+    - 区间从 $-\frac\pi2$ 到正无穷，明显要按 0 左右拆。
+  normalization_moves:
+    - 先提出 $x$，定义 $h=e^x-ax-2+\cos x$。
+    - 用 $h^\prime(0)=1-a$ 得 $a\le1$。
+    - 正半轴降到 $a=1$ 后证明 $h\ge0$。
+    - 负半轴证明 $h^\prime>0$，所以 $h<h(0)=0$。
+  common_failures:
+    - 直接对 $g=xe^x-ax^2-2x+x\cos x$ 多次求导，结构越来越乱。
+    - 在 $x<0$ 时忘记不等式方向反过来。
+    - 只证明 $x\ge0$，漏掉 $-\frac\pi2<x<0$。
+    - 负半轴估计时不知道为什么要构造 $\frac{1+\sin x}{e^x}$。
+  similar_practice_query: xf(x) >= 2x - xcosx 公因子x 分侧符号 e^x ax cosx a<=1
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,268 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0250_a_power_x_minus_bx_plus_e2_two_zeros_bisection_precision_ex27
+content_revision_id: mst_p0250_a_power_x_minus_bx_plus_e2_two_zeros_bisection_precision_ex27-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0250_a_power_x_minus_bx_plus_e2_two_zeros_bisection_precision_ex27.card.yaml
+stem: |-
+  （2021 · 浙江）设 $a,b$ 为实数，且 $a>1$，函数 $f(x)=a^x-bx+e^2$，$x\in\mathbb R$。
+  1. 求函数 $f(x)$ 的单调区间。
+  2. 若对任意 $b>2e^2$，函数 $f(x)$ 有两个不同的零点，求 $a$ 的取值范围。
+  3. 当 $a=e$ 时，证明：对任意 $b>e^4$，函数 $f(x)$ 有两个不同的零点 $x_1,x_2$，满足 $x_2>\frac{b\ln b}{2e^2}x_1+\frac{e^2}{b}$。
+answer: |-
+  第(1)问：$b\le0$ 时在 $\mathbb R$ 上递增；$b>0$ 时先减后增，极小值点 $x_0=\log_a\frac b{\ln a}$。第(2)问：$1<a\le e^2$。第(3)问：按二分取点可证目标不等式。
+
+  $f^\prime(x)=a^x\ln a-b$。若 $b\le0$，则 $f^\prime>0$，函数递增； 若 $b>0$，极小值点为 $x_0=\log_a\frac b{\ln a}$，函数先减后增。 第(2)问对任意 $b>2e^2$ 要有两个零点，需要极小值小于 0。令 $t=\frac b{\ln a}$，则 $f(x_0)=t-t\ln t+e^2$。当 $t>e^2$ 时该值小于 0；为了任意 $b>2e^2$ 都成立，需 $\ln a\le2$，故 $1<a\le e^2$。第(3)问令 $a=e$，则极小值点为 $\ln b$，且 $\frac{e^2}{b}<x_1<\ln b<x_2<2\ln b$。要证 $x_2>\frac{b\ln b}{2e^2}x_1+\frac{e^2}{b}$，找一个 $m$ 满足 $x_1<m<\ln b$，并且 $\frac{b\ln b}{2e^2}m+\frac{e^2}{b}<\ln b$。source 用二分取点 $m=\frac{3e^2}{2b}$，验证 $f(m)<0$，所以 $x_1<m$；同时 $\frac{3}{4}\ln b+\frac{e^2}{b}<\ln b$，于是目标成立。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 先求单调性。
+      max_score: 1
+    - step_id: step_2
+      description: 第(2)问把极小值写成同构变量。
+      max_score: 1
+    - step_id: step_3
+      description: 令 $t=\frac b{\ln a}$ 解出 $a$ 的范围。
+      max_score: 1
+    - step_id: step_4
+      description: 第(3)问先拿到粗范围。
+      max_score: 1
+    - step_id: step_5
+      description: 把目标转成找一个更精确的左侧点 $m$。
+      max_score: 1
+    - step_id: step_6
+      description: 用二分取点 $m=\frac{3e^2}{2b}$。
+      max_score: 1
+    - step_id: step_7
+      description: 验证 $m$ 在左零点右侧。
+      max_score: 1
+    - step_id: step_8
+      description: 验证线性表达式还在 $\ln b$ 左侧。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 1 问
+        result: 给出 $b\le0$ 与 $b>0$ 时的单调区间。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $1<a\le e^2$。
+      - part_id: "3"
+        goal: 不等式证明
+        target: 第 3 问
+        result: $x_2>\frac{b\ln b}{2e^2}x_1+\frac{e^2}{b}$。
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 显隐点探路
+      - 同构变形与换元法
+      - 充分/必要性探路
+      - 拟合与夹逼
+    subroute:
+      - 极小值换元
+      - 零点粗取点
+      - 零点二分法提高精度
+      - 主体客体权重分析
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 局部逼近结构
+      - 非对称结构
+      - 不等式工具结构
+    evidence:
+      - $a^x-bx+e^2$
+      - $t=\frac b{\ln a}$
+      - $t-t\ln t+e^2$
+      - $\frac{e^2}{b}<x_1<\ln b<x_2<2\ln b$
+      - $m=\frac{3e^2}{2b}$
+      - $\frac{b\ln b}{2e^2}x_1+\frac{e^2}{b}$
+    normalization_moves_used:
+      - 用导数找极小值点。
+      - 把极小值换成 $t-t\ln t+e^2$。
+      - 先用粗取点圈住两个零点。
+      - 再用二分点 $m=\frac{3e^2}{2b}$ 提高左零点精度。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求导和单调区间，回补导数单调极值基础。
+      - 若学生不会把 $\frac b{\ln a}$ 换成 $t$，回补代数恒等变形。
+      - 若学生不会用极小值小于零判断两个零点，回补函数性质与图像。
+      - 若学生不会处理指数放缩，回补指数对数基础。
+      - 若学生不会理解二分取点精度，回补不等式工具基础。
+  detail_terms:
+    - $a^x-bx+e^2$
+    - $f^\prime(x)=a^x\ln a-b$
+    - $t=\frac b{\ln a}$
+    - $1<a\le e^2$
+    - $a=e$
+    - $x_0=\ln b$
+    - $\frac{e^2}{b}<x_1<\ln b<x_2<2\ln b$
+    - $m=\frac{3e^2}{2b}$
+    - 零点二分法
+    - 取点精度升级
+parts: &a1
+  - part_id: "1"
+    text: 求函数 $f(x)$ 的单调区间。
+  - part_id: "2"
+    text: 若对任意 $b>2e^2$，函数 $f(x)$ 有两个不同的零点，求 $a$ 的取值范围。
+  - part_id: "3"
+    text: 当 $a=e$ 时，证明：对任意 $b>e^4$，函数 $f(x)$ 有两个不同的零点 $x_1,x_2$，满足 $x_2>\frac{b\ln b}{2e^2}x_1+\frac{e^2}{b}$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0250_a_power_x_minus_bx_plus_e2_two_zeros_bisection_precision_ex27
+source_evidence:
+  source_refs:
+    - ref_id: page_0250_ex27_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0250/page_0250.md
+      role: problem_start
+      evidence: page_0250 底部例27题头：$a,b$ 为实数，$a>1$，$f(x)=a^x-bx+e^2$。
+    - ref_id: page_0251_ex27_parts_and_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0251/page_0251.md
+      role: continuation
+      evidence: page_0251 给出例27三问，并解析第(1)(2)问；第(3)问开始零点二分法提高取点精度。
+    - ref_id: page_0252_ex27_precision_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0252/page_0252.md
+      role: continuation
+      evidence: page_0252 续完第(3)问：取 $m=\frac{3e^2}{2b}$，证明 $m$ 位于 $x_1$ 右侧并把目标不等式压到 $\ln b$ 左侧。
+    - ref_id: page_0251_ex27_figure
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0251/page_0251.md
+      role: figure_context
+      evidence: page_0251 图示 $x_1,m,\ln b,x_2,2\ln b$ 的相对位置，是第(3)问取点精度的几何说明。
+    - ref_id: page_0252_ex27_figure
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0252/page_0252.md
+      role: figure_context
+      evidence: page_0252 图示 $\frac{e^2}{b}$、$\frac{3e^2}{2b}$、$\frac{2e^2}{b}$、$\ln b$、$2\ln b$ 的取点位置。
+    - ref_id: page_0253_next_chapter
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0253/page_0253.md
+      role: local_context
+      evidence: page_0253 已进入第7章并另起例1，不属于本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0250.png
+      inspected: true
+      notes: 已核对页图：例27题头位于 page_0250 底部，前文例26已结束。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0251.png
+      inspected: true
+      notes: 已核对页图：page_0251 包含例27三问、第(1)(2)问和第(3)问开头图。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0252.png
+      inspected: true
+      notes: 已核对页图：page_0252 续完第(3)问，含二分取点图和法一/二/三。
+  source_context: 本卡处理 page_0250 起头、page_0251/page_0252 续完的例27；page_0253 第7章另起。
+  source_influence:
+    - 保留 source 的单调性分析：$f^\prime(x)=a^x\ln a-b$。
+    - 保留 source 的同构换元：令 $t=\frac b{\ln a}$，极小值化成 $t-t\ln t+e^2$。
+    - 保留 source 的第(2)问答案：$1<a\le e^2$。
+    - 保留 source 的第(3)问精度升级：先从 $\frac{e^2}{b}$、$\frac{2e^2}{b}$ 探路，再取 $m=\frac{3e^2}{2b}$。
+    - 保留 source 的多路线说明，主卡以法一的二分点为主。
+  source_discrepancies:
+    - type: numerical_bound_ocr_or_source_instability
+      source_ref: page_0252_ex27_precision_continuation
+      observed: page_0252 对 $f(\frac{3e^2}{2b})$ 的上界常数显示不稳。
+      resolved_as: 直接代入得到 $f(\frac{3e^2}{2b})=e^{3e^2/(2b)}-\frac12e^2<e^{3/(2e^2)}-\frac12e^2<0$。
+      reason: 因为 $b>e^4$，所以 $\frac{3e^2}{2b}<\frac{3}{2e^2}$，且该指数上界足以小于 $\frac12e^2$。
+    - type: formula_ocr_slip
+      source_ref: page_0252_ex27_precision_continuation
+      observed: 法二处 markdown/OCR 出现类似 $f(\frac{2e^2}{b})=e^{2e^2/b}-b^2$ 的写法。
+      resolved_as: 按原函数应为 $f(\frac{2e^2}{b})=e^{2e^2/b}-e^2<0$。
+      reason: 这是直接代入 $e^x-bx+e^2$ 的结果。
+original_problem:
+  stem: （2021 · 浙江）设 $a,b$ 为实数，且 $a>1$，函数 $f(x)=a^x-bx+e^2$，$x\in\mathbb R$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问：$b\le0$ 时在 $\mathbb R$ 上递增；$b>0$ 时先减后增，极小值点 $x_0=\log_a\frac b{\ln a}$。第(2)问：$1<a\le e^2$。第(3)问：按二分取点可证目标不等式。
+  fidelity_notes:
+    - 三问综合题，无选项。
+    - 第(3)问是本题教学重点：在已有粗取点范围内提高 $x_1$ 的取点精度。
+solution:
+  source_solution_summary: $f^\prime(x)=a^x\ln a-b$。若 $b\le0$，则 $f^\prime>0$，函数递增； 若 $b>0$，极小值点为 $x_0=\log_a\frac b{\ln a}$，函数先减后增。 第(2)问对任意 $b>2e^2$ 要有两个零点，需要极小值小于 0。令 $t=\frac b{\ln a}$，则 $f(x_0)=t-t\ln t+e^2$。当 $t>e^2$ 时该值小于 0；为了任意 $b>2e^2$ 都成立，需 $\ln a\le2$，故 $1<a\le e^2$。第(3)问令 $a=e$，则极小值点为 $\ln b$，且 $\frac{e^2}{b}<x_1<\ln b<x_2<2\ln b$。要证 $x_2>\frac{b\ln b}{2e^2}x_1+\frac{e^2}{b}$，找一个 $m$ 满足 $x_1<m<\ln b$，并且 $\frac{b\ln b}{2e^2}m+\frac{e^2}{b}<\ln b$。source 用二分取点 $m=\frac{3e^2}{2b}$，验证 $f(m)<0$，所以 $x_1<m$；同时 $\frac{3}{4}\ln b+\frac{e^2}{b}<\ln b$，于是目标成立。
+  key_steps:
+    - step_id: step_1
+      statement: 先求单调性。
+      formula_trace:
+        from: $f(x)=a^x-bx+e^2$
+        to: $f^\prime(x)=a^x\ln a-b$
+        operation: 求导。
+        why: $a>1$ 时 $a^x\ln a$ 单调递增，导数最多一个零点。
+      source_ref: page_0251_ex27_parts_and_solution
+    - step_id: step_2
+      statement: 第(2)问把极小值写成同构变量。
+      formula_trace:
+        from: $x_0=\log_a\frac b{\ln a}$
+        to: $f(x_0)=\frac b{\ln a}-\frac b{\ln a}\ln\frac b{\ln a}+e^2$
+        operation: 代入极小值点。
+        why: 两个零点需要谷底低于 $x$ 轴。
+      source_ref: page_0251_ex27_parts_and_solution
+    - step_id: step_3
+      statement: 令 $t=\frac b{\ln a}$ 解出 $a$ 的范围。
+      formula_trace:
+        from: $t-t\ln t+e^2<0$
+        to: $t>e^2$，从而 $\ln a\le2$
+        operation: 同构换元并考虑任意 $b>2e^2$。
+        why: 要对所有 $b>2e^2$ 成立，最坏情况逼近 $2e^2$。
+      source_ref: page_0251_ex27_parts_and_solution
+    - step_id: step_4
+      statement: 第(3)问先拿到粗范围。
+      formula_trace:
+        from: $a=e$
+        to: $\frac{e^2}{b}<x_1<\ln b<x_2<2\ln b$
+        operation: 沿用第(2)问的左右取点。
+        why: 先确定两个零点在极小值点两侧的大致位置。
+      source_ref: page_0251_ex27_parts_and_solution
+    - step_id: step_5
+      statement: 把目标转成找一个更精确的左侧点 $m$。
+      formula_trace:
+        from: $x_2>\frac{b\ln b}{2e^2}x_1+\frac{e^2}{b}$
+        to: 找 $m$ 使 $x_1<m<\ln b$ 且 $\frac{b\ln b}{2e^2}m+\frac{e^2}{b}<\ln b$
+        operation: 用 $\ln b<x_2$ 作右侧上桥。
+        why: 只要中间表达式小于 $\ln b$，自然小于 $x_2$。
+      source_ref: page_0251_ex27_parts_and_solution
+    - step_id: step_6
+      statement: 用二分取点 $m=\frac{3e^2}{2b}$。
+      formula_trace:
+        from: $\frac{e^2}{b}<m<\frac{2e^2}{b}$
+        to: $m=\frac{3e^2}{2b}$
+        operation: 在粗取点区间中取中间偏右点。
+        why: 既要保证 $m$ 已经越过左零点，又要让线性表达式仍小于 $\ln b$。
+      source_ref: page_0252_ex27_precision_continuation
+    - step_id: step_7
+      statement: 验证 $m$ 在左零点右侧。
+      formula_trace:
+        from: $f(\frac{3e^2}{2b})$
+        to: $e^{3e^2/(2b)}-\frac12e^2<0$
+        operation: 直接代入并用 $b>e^4$ 放缩。
+        why: $f(\frac{e^2}{b})>0$ 而 $f(m)<0$，所以 $x_1<m$。
+      source_ref: page_0252_ex27_precision_continuation
+    - step_id: step_8
+      statement: 验证线性表达式还在 $\ln b$ 左侧。
+      formula_trace:
+        from: $m=\frac{3e^2}{2b}$
+        to: $\frac{b\ln b}{2e^2}m+\frac{e^2}{b}=\frac34\ln b+\frac{e^2}{b}<\ln b$
+        operation: 代入并用 $b>e^4$。
+        why: 由 $b>e^4$ 得 $\frac{e^2}{b}<\frac14\ln b$。
+      source_ref: page_0252_ex27_precision_continuation
+teaching_card:
+  student_title: 用二分取点把零点估得更准
+  what_it_trains: 训练先用粗取点证明两个零点，再根据目标不等式反推出需要的精度，选择更合适的中间点压住左零点。
+  recognition_cues:
+    - 函数是 $a^x-bx+e^2$，导数只有一个零点。
+    - 第(2)问要求“任意 $b>2e^2$”，需要看最坏参数。
+    - 第(3)问的右边含 $x_1$，说明要给左零点找更精确上界。
+    - 图中出现 $\frac{e^2}{b}$、$\frac{3e^2}{2b}$、$\frac{2e^2}{b}$，就是二分取点。
+  normalization_moves:
+    - 先把极小值写成 $t-t\ln t+e^2$。
+    - 第(2)问用任意性推出 $\ln a\le2$。
+    - 第(3)问先得到粗范围。
+    - 再反推需要一个 $m$，使 $x_1<m<\ln b$。
+    - 取 $m=\frac{3e^2}{2b}$ 同时满足函数值和线性表达式约束。
+  common_failures:
+    - 只知道两个零点存在，不会继续提高 $x_1$ 的估计精度。
+    - 把 $b>2e^2$ 和 $b>e^4$ 两个条件混用。
+    - 没有看清目标右边的线性表达式为什么要小于 $\ln b$。
+    - 在 $f(\frac{3e^2}{2b})$ 的代入中把 $-bm+e^2$ 算错。
+  similar_practice_query: a^x-bx+e^2 两个零点 零点二分法 取点精度 m=3e^2/2b x2>x1线性表达式
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

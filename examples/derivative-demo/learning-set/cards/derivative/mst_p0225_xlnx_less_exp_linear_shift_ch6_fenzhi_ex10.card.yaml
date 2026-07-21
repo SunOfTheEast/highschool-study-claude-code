@@ -1,0 +1,176 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0225_xlnx_less_exp_linear_shift_ch6_fenzhi_ex10
+content_revision_id: mst_p0225_xlnx_less_exp_linear_shift_ch6_fenzhi_ex10-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0225_xlnx_less_exp_linear_shift_ch6_fenzhi_ex10.card.yaml
+stem: 证明：$x\ln x<e^x-(2-\ln2)x-1$。
+answer: |-
+  证明见解析。
+
+  目标等价于 $e^x-(2-\ln2)x-1>x\ln x$。两边移项并除以 $x^2>0$，只需证明 $\frac{e^x-1}{x^2}>\frac{\ln x+2-\ln2}{x} =\frac{\ln(\frac{e^2}{2}x)}x$。右侧用 $\frac{\ln u}{u}\leqslant1/e$：令 $u=\frac{e^2}{2}x$，则 $\frac{\ln(\frac{e^2}{2}x)}x =\frac{e^2}{2}\frac{\ln u}{u}\leqslant e/2$，取等点 $x=2/e$。左侧构造 $g(x)=e^x-\frac e2x^2-1$， $g^{\prime}(x)=e^x-ex\geqslant0$，故 $g$ 在 $x>0$ 单调递增， $g(x)>g(0)=0$，即 $\frac{e^x-1}{x^2}>e/2$。所以左侧严格大于右侧， 原不等式成立。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把目标改成两侧分式比较。
+      max_score: 1
+    - step_id: step_2
+      description: 把右侧配成 $\ln u/u$。
+      max_score: 1
+    - step_id: step_3
+      description: 构造函数证明左侧超过 $e/2$。
+      max_score: 1
+    - step_id: step_4
+      description: 验证 $g(x)>0$。
+      max_score: 1
+    - step_id: step_5
+      description: 合并上下界。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: main
+        goal: 不等式证明
+        target: 第 main 问
+        result: $x>0$ 时 $x\ln x<e^x-(2-\ln2)x-1$。
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 拟合与夹逼
+      - 同构变形与换元法
+    subroute:
+      - 函数变形后的分而治之
+      - 放缩估值
+      - $\frac{e^x-1}{x^2}>\frac e2$
+      - $\frac{\ln u}{u}\leqslant\frac1e$
+      - 指数找基友
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 局部逼近结构
+      - 不等式工具结构
+      - 非齐次结构
+    evidence:
+      - $\frac{e^x-1}{x^2}>\frac{\ln x+2-\ln2}{x}$
+      - $g(x)=e^x-\frac e2x^2-1$
+      - $\frac{\ln(\frac{e^2}{2}x)}x\leqslant e/2$
+    normalization_moves_used:
+      - 把线性项和常数移到同侧，除以 $x^2$。
+      - 右侧通过 $u=\frac{e^2}{2}x$ 配成 $\ln u/u$。
+      - 左侧用构造函数证明粗但够用的下界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不知道为什么可以除以 $x^2$，回补函数三要素与定义域。
+      - 若学生不能把 $\ln x+2-\ln2$ 写成 $\ln(\frac{e^2}{2}x)$，回补指数对数基础。
+      - 若学生不会从 $g^{\prime}(x)\geqslant0$ 推出 $g(x)>0$，回补导数单调极值基础。
+      - 若学生不理解用粗下界也能证明目标，回补不等式工具基础。
+  detail_terms:
+    - $\frac{e^x-1}{x^2}$
+    - $e/2$
+    - $\ln(\frac{e^2}{2}x)$
+    - $g(x)=e^x-\frac e2x^2-1$
+    - 放缩估值
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0225_xlnx_less_exp_linear_shift_ch6_fenzhi_ex10
+source_evidence:
+  source_refs:
+    - ref_id: page_0225_ex09_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0225/page_0225.md
+      role: local_context
+      evidence: page_0225 页首是 page_0224 例9续解和总结，不是本卡题头。
+    - ref_id: page_0225_ex10_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0225/page_0225.md
+      role: problem_start
+      evidence: page_0225 中部给出例10题头：证明 $x\ln x<e^x-(2-\ln2)x-1$。
+    - ref_id: page_0225_ex10_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0225/page_0225.md
+      role: solution
+      evidence: page_0225 例10解析完整给出利用 $\frac{\ln x}{x}\leqslant1/e$ 与构造 $g(x)=e^x-\frac e2x^2-1$ 的证明。
+    - ref_id: page_0225_ex11_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0225/page_0225.md
+      role: local_context
+      evidence: 例10后进入例11题头，说明例10在本页闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0225.png
+      inspected: true
+      notes: 已核对页图：例10位于 page_0225 中部，题头、解析和总结完整。
+  source_context: 本卡处理 page_0225 例10；页首例9续解与后续例11只作为边界上下文。
+  source_influence:
+    - 保留 source 的目标变形：把 $x\ln x<e^x-(2-\ln2)x-1$ 转成 $\frac{e^x-1}{x^2}>\frac{\ln x+2-\ln2}{x}$。
+    - 保留右侧用 $\frac{\ln u}{u}\leqslant1/e$ 得到 $\leqslant e/2$。
+    - 保留左侧构造 $g(x)=e^x-\frac e2x^2-1$，由 $g^{\prime}(x)=e^x-ex\geqslant0$ 得 $\frac{e^x-1}{x^2}>e/2$。
+  source_discrepancies: []
+original_problem:
+  stem: 证明：$x\ln x<e^x-(2-\ln2)x-1$。
+  parts: *a1
+  choices: []
+  answer: 证明见解析。
+  fidelity_notes:
+    - 单问证明题，无选项。
+    - 由 $\ln x$ 可知证明域为 $x>0$。
+solution:
+  source_solution_summary: 目标等价于 $e^x-(2-\ln2)x-1>x\ln x$。两边移项并除以 $x^2>0$，只需证明 $\frac{e^x-1}{x^2}>\frac{\ln x+2-\ln2}{x} =\frac{\ln(\frac{e^2}{2}x)}x$。右侧用 $\frac{\ln u}{u}\leqslant1/e$：令 $u=\frac{e^2}{2}x$，则 $\frac{\ln(\frac{e^2}{2}x)}x =\frac{e^2}{2}\frac{\ln u}{u}\leqslant e/2$，取等点 $x=2/e$。左侧构造 $g(x)=e^x-\frac e2x^2-1$， $g^{\prime}(x)=e^x-ex\geqslant0$，故 $g$ 在 $x>0$ 单调递增， $g(x)>g(0)=0$，即 $\frac{e^x-1}{x^2}>e/2$。所以左侧严格大于右侧， 原不等式成立。
+  key_steps:
+    - step_id: step_1
+      statement: 把目标改成两侧分式比较。
+      formula_trace:
+        from: $x\ln x<e^x-(2-\ln2)x-1$
+        to: $\frac{e^x-1}{x^2}>\frac{\ln x+2-\ln2}{x}$
+        operation: 移项后两边除以 $x^2>0$。
+        why: source 的考点是 $\frac{e^x-1}{x^2}$ 的放缩估值。
+      source_ref: page_0225_ex10_solution
+    - step_id: step_2
+      statement: 把右侧配成 $\ln u/u$。
+      formula_trace:
+        from: $\frac{\ln x+2-\ln2}{x}$
+        to: $\frac{e^2}{2}\cdot\frac{\ln(\frac{e^2}{2}x)}{\frac{e^2}{2}x}\leqslant\frac e2$
+        operation: 令 $u=\frac{e^2}{2}x$ 并套用 $\ln u/u\leqslant1/e$。
+        why: 给右侧统一上界。
+      source_ref: page_0225_ex10_solution
+    - step_id: step_3
+      statement: 构造函数证明左侧超过 $e/2$。
+      formula_trace:
+        from: $\frac{e^x-1}{x^2}>\frac e2$
+        to: $g(x)=e^x-\frac e2x^2-1>0$
+        operation: 等价变形。
+        why: 精确求 $\frac{e^x-1}{x^2}$ 的最小值困难，source 用可证明的下界替代。
+      source_ref: page_0225_ex10_solution
+    - step_id: step_4
+      statement: 验证 $g(x)>0$。
+      formula_trace:
+        from: $g(x)=e^x-\frac e2x^2-1$
+        to: $g^{\prime}(x)=e^x-ex\geqslant0$，$x>0$ 时 $g(x)>g(0)=0$
+        operation: 求导并用 $e^x\geqslant ex$。
+        why: 得到左侧严格下界。
+      source_ref: page_0225_ex10_solution
+    - step_id: step_5
+      statement: 合并上下界。
+      formula_trace:
+        from: $\frac{e^x-1}{x^2}>\frac e2$ 且 $\frac{\ln x+2-\ln2}{x}\leqslant\frac e2$
+        to: $x\ln x<e^x-(2-\ln2)x-1$
+        operation: 用严格左界压住右侧上界，再还原目标。
+        why: 完成证明。
+      source_ref: page_0225_ex10_solution
+teaching_card:
+  student_title: 用 $\frac{e^x-1}{x^2}>e/2$ 压住 $x\ln x$
+  what_it_trains: 训练函数变形后的分而治之：不求精确最值，而找够用的上下界。
+  recognition_cues:
+    - 题目有 $e^x-1$ 和 $x\ln x$，常数被设计成 $2-\ln2$。
+    - 右侧可写出 $\ln(\frac{e^2}{2}x)$。
+    - source 直接提示考点是 $(e^x-1)/x^2$ 的放缩估值。
+  normalization_moves:
+    - 把目标改写成 $(e^x-1)/x^2$ 与对数分式比较。
+    - 右侧套 $\ln u/u$ 最大值。
+    - 左侧构造 $e^x-\frac e2x^2-1$ 证明下界。
+  common_failures:
+    - 试图精确求 $(e^x-1)/x^2$ 的最小值，计算复杂且偏离 source。
+    - 把右侧取等点 $x=2/e$ 漏掉，导致不清楚常数从哪里来。
+    - 只证明 $\geqslant e/2$，没有注意左侧实际是严格 $>e/2$。
+  similar_practice_query: xlnx < e^x linear shift (e^x-1)/x^2 e/2 放缩估值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

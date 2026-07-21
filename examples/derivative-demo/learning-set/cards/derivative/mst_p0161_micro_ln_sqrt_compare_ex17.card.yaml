@@ -1,0 +1,249 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0161_micro_ln_sqrt_compare_ex17
+content_revision_id: mst_p0161_micro_ln_sqrt_compare_ex17-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0161_micro_ln_sqrt_compare_ex17.card.yaml
+stem: |-
+  （2021·全国乙卷理）设 $a=2\ln1.01$，$b=\ln1.02$，$c=\sqrt{1.04}-1$，则（  ）
+  A. $a<b<c$
+  B. $b<c<a$
+  C. $b<a<c$
+  D. $c<a<b$
+answer: |
+  B
+
+  法一（泰勒）先比较 $a,b$：
+  \[
+  a=2\ln(1+0.01)\approx2\left(0.01-\frac{0.01^2}{2}+\frac{0.01^3}{3}\right),
+  \]
+  \[
+  b=\ln(1+0.02)\approx0.02-\frac{0.02^2}{2}+\frac{0.02^3}{3},
+  \]
+  得 $a>b$。
+  再估计
+  \[
+  c=\sqrt{1.04}-1=(1+0.04)^{1/2}-1
+  \approx0.02-\frac{0.02^2}{2}+\frac{0.02^3}{2},
+  \]
+  可知 $c>b$，且与 $a$ 比较后有 $a>c$，所以 $a>c>b$。
+  法二（微元）设
+  \[
+  A(x)=2\ln(1+x),\ B(x)=\ln(1+2x),\ C(x)=\sqrt{1+4x}-1.
+  \]
+  在 $x_0=0$ 有
+  \[
+  A^{\prime}(0)=B^{\prime}(0)=C^{\prime}(0)=2,
+  \]
+  \[
+  A^{\prime\prime}(0)=-2>-4=B^{\prime\prime}(0)=C^{\prime\prime}(0),
+  \]
+  所以 $a$ 最大。再比较
+  \[
+  B^{\prime\prime\prime}(0)=16,\quad C^{\prime\prime\prime}(0)=24,
+  \]
+  得 $c>b$。故最终
+  \[
+  a>c>b,
+  \]
+  选 B。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 用 $\ln(1+x)$ 展开先比较 $a,b$。
+      max_score: 1
+    - step_id: step_2
+      description: 用根式展开估计 $c$ 并完成法一排序。
+      max_score: 1
+    - step_id: step_3
+      description: 法二统一到同一点微元比较。
+      max_score: 1
+    - step_id: step_4
+      description: 二阶导先判 $a$ 最大。
+      max_score: 1
+    - step_id: step_5
+      description: 三阶导区分 $b,c$。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较 $a,b,c$ 的大小并匹配选项。
+        result: 见 source_solution_summary
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 泰勒三阶近似
+      - 同增量逐阶导比较
+      - 二阶持平再看三阶
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 指对复合结构
+      - 根式函数结构
+    evidence:
+      - 三项都在 0 附近小增量区间，适合局部展开。
+      - $\ln$ 与根式混合比较依赖同阶项系数差异。
+    normalization_moves_used:
+      - $\ln(1+x)$ 与 $(1+x)^{1/2}$ 的三阶展开。
+      - 构造 $A,B,C$ 并在 $x_0=0$ 比较导数阶次。
+      - $B^{\prime\prime}=C^{\prime\prime}$ 后转比较三阶导。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会写 $\ln(1+x)$、$(1+x)^{1/2}$ 的低阶展开，回补指数对数基础。
+      - 若学生不会做同点高阶导比较，回补导数运算与几何意义。
+      - 若学生不清楚“同阶打平继续升阶”规则，回补导数单调极值基础。
+  detail_terms:
+    - $a=2\ln1.01$
+    - $c=\sqrt{1.04}-1$
+    - 泰勒展开
+    - 微元法
+    - $A^{\prime\prime}(0)>B^{\prime\prime}(0)=C^{\prime\prime}(0)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0161_micro_ln_sqrt_compare_ex17
+source_evidence:
+  source_refs:
+    - ref_id: page_0161_ex17_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0161/page_0161.md
+      role: problem_start
+      evidence: 例17题干给出 $a=2\ln1.01,\ b=\ln1.02,\ c=\sqrt{1.04}-1$ 与四个选项。
+    - ref_id: page_0161_ex17_solution_method1
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0161/page_0161.md
+      role: solution
+      evidence: 法一用 $\ln(1+x)$ 与 $(1+x)^\alpha$ 泰勒展开，得到 $a>c>b$。
+    - ref_id: page_0161_ex17_solution_method2
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0161/page_0161.md
+      role: solution
+      evidence: 法二设 $A(x)=2\ln(1+x),\ B(x)=\ln(1+2x),\ C(x)=\sqrt{1+4x}-1$，逐阶比较导数后仍得 $a>c>b$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0161.png
+      inspected: true
+      notes: 已核对页图：例17题干、选项、答案B与解析一致。
+  source_context: 例17延续例16的“同增量逐阶导比较”思想，同时给出泰勒法与微元法双解。
+  source_influence:
+    - 保留法一“先比 $a,b$ 再比 $c$”的泰勒链。
+    - 保留法二在 $x_0=0$ 逐阶比较导数的结构。
+  source_discrepancies: []
+original_problem:
+  stem: （2021·全国乙卷理）设 $a=2\ln1.01$，$b=\ln1.02$，$c=\sqrt{1.04}-1$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+    - label: B
+      text_raw: $b<c<a$
+      text_latex: $b<c<a$
+    - label: C
+      text_raw: $b<a<c$
+      text_latex: $b<a<c$
+    - label: D
+      text_raw: $c<a<b$
+      text_latex: $c<a<b$
+  answer: B
+  fidelity_notes:
+    - 源解两法都得到 $a>c>b$，对应选项 B。
+solution:
+  source_solution_summary: |
+    法一（泰勒）先比较 $a,b$：
+    \[
+    a=2\ln(1+0.01)\approx2\left(0.01-\frac{0.01^2}{2}+\frac{0.01^3}{3}\right),
+    \]
+    \[
+    b=\ln(1+0.02)\approx0.02-\frac{0.02^2}{2}+\frac{0.02^3}{3},
+    \]
+    得 $a>b$。
+    再估计
+    \[
+    c=\sqrt{1.04}-1=(1+0.04)^{1/2}-1
+    \approx0.02-\frac{0.02^2}{2}+\frac{0.02^3}{2},
+    \]
+    可知 $c>b$，且与 $a$ 比较后有 $a>c$，所以 $a>c>b$。
+    法二（微元）设
+    \[
+    A(x)=2\ln(1+x),\ B(x)=\ln(1+2x),\ C(x)=\sqrt{1+4x}-1.
+    \]
+    在 $x_0=0$ 有
+    \[
+    A^{\prime}(0)=B^{\prime}(0)=C^{\prime}(0)=2,
+    \]
+    \[
+    A^{\prime\prime}(0)=-2>-4=B^{\prime\prime}(0)=C^{\prime\prime}(0),
+    \]
+    所以 $a$ 最大。再比较
+    \[
+    B^{\prime\prime\prime}(0)=16,\quad C^{\prime\prime\prime}(0)=24,
+    \]
+    得 $c>b$。故最终
+    \[
+    a>c>b,
+    \]
+    选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 用 $\ln(1+x)$ 展开先比较 $a,b$。
+      formula_trace:
+        from: $a=2\ln1.01,\ b=\ln1.02$
+        to: 按三阶展开后 $a>b$
+        operation: 统一到 $\ln(1+x)$ 近似并逐项比较。
+        why: 先锁定 $a,b$ 的先后关系。
+      source_ref: page_0161_ex17_solution_method1
+    - step_id: step_2
+      statement: 用根式展开估计 $c$ 并完成法一排序。
+      formula_trace:
+        from: $c=\sqrt{1.04}-1$
+        to: $c\approx0.02-\frac{0.02^2}{2}+\frac{0.02^3}{2}$，得到 $a>c>b$
+        operation: 套用 $(1+x)^{1/2}$ 展开后与 step_1 对照。
+        why: 得到法一最终结论。
+      source_ref: page_0161_ex17_solution_method1
+    - step_id: step_3
+      statement: 法二统一到同一点微元比较。
+      formula_trace:
+        from: $A(x),B(x),C(x)$ 在 $x_0=0$ 比较
+        to: $A^{\prime}(0)=B^{\prime}(0)=C^{\prime}(0)=2$
+        operation: 先对齐一阶导。
+        why: 进入高阶导数比较。
+      source_ref: page_0161_ex17_solution_method2
+    - step_id: step_4
+      statement: 二阶导先判 $a$ 最大。
+      formula_trace:
+        from: $A^{\prime\prime}(0),B^{\prime\prime}(0),C^{\prime\prime}(0)$
+        to: $-2>-4=-4\Rightarrow a$ 对应增量最大
+        operation: 二阶导直接比较。
+        why: 把 $a$ 放在首位。
+      source_ref: page_0161_ex17_solution_method2
+    - step_id: step_5
+      statement: 三阶导区分 $b,c$。
+      formula_trace:
+        from: $B^{\prime\prime}(0)=C^{\prime\prime}(0)$
+        to: $B^{\prime\prime\prime}(0)=16<24=C^{\prime\prime\prime}(0)\Rightarrow c>b$
+        operation: 二阶持平后比较三阶导。
+        why: 完成全序 $a>c>b$，对应 B。
+      source_ref: page_0161_ex17_solution_method2
+teaching_card:
+  student_title: ln 与根式混合比较：双法都落在局部展开
+  what_it_trains: 训练“泰勒近似 + 微元导数阶次”双通道比较，避免仅靠数值近似导致误判。
+  recognition_cues:
+    - 题目给出 $1.01,1.02,1.04$ 这类接近 1 的数。
+    - 同时出现 $\ln(1+\varepsilon)$ 与 $\sqrt{1+\varepsilon}$。
+    - 选项是严格全序。
+  normalization_moves:
+    - 先用展开锁定粗顺序。
+    - 再用同点导数阶次做严谨复核。
+    - 对打平项继续升阶。
+  common_failures:
+    - 把 $c$ 的三阶项系数误写成 $\frac13$。
+    - 只看二阶导相同就停下，漏比三阶导。
+    - 把“数值接近”误当成“大小不可判”。
+  similar_practice_query: ln1.01 ln1.02 sqrt1.04 比大小 泰勒 微元法
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0161 页图，例17题干与答案 B 清晰。

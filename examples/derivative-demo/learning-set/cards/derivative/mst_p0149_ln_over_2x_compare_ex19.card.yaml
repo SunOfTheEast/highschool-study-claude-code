@@ -1,0 +1,228 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0149_ln_over_2x_compare_ex19
+content_revision_id: mst_p0149_ln_over_2x_compare_ex19-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0149_ln_over_2x_compare_ex19.card.yaml
+stem: |-
+  （22-23高二下·浙江杭州·期中）已知 $a=\frac{\ln\sqrt2}{2},\ b=\frac{\ln3}{6},\ c=\frac1{2e}$，则 $a,b,c$ 的大小为（ ）
+  A. $b>c>a$
+  B. $a>b>c$
+  C. $b>a>c$
+  D. $c>b>a$
+answer: |
+  D
+
+  先化简
+  \[
+  a=\frac{\ln\sqrt2}{2}=\frac{\ln2}{4},\quad
+  c=\frac1{2e}=\frac{\ln e}{2e}.
+  \]
+  构造
+  \[
+  f(x)=\frac{\ln x}{2x}\ (x>0),\qquad
+  f^{\prime}(x)=\frac{1-\ln x}{2x^2}.
+  \]
+  因此 $f$ 在 $(0,e)$ 递增，在 $(e,+\infty)$ 递减。
+  由 $2,3<e$，得
+  \[
+  a=f(2)<f(e)=c,\qquad b=f(3)<f(e)=c.
+  \]
+  再比 $a,b$：
+  \[
+  a=\frac{\ln2}{4}=\frac{\ln8}{12}<\frac{\ln9}{12}=\frac{\ln3}{6}=b.
+  \]
+  所以 $c>b>a$，选 D。
+  法二也可写成
+  \[
+  a=\frac{\ln2}{4}=\frac{\ln4}{8}=f(4),
+  \]
+  而 $4>3>e$ 位于递减段，故 $f(4)<f(3)<f(e)$，同得 $a<b<c$，等价于 $c>b>a$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 统一到同构函数值。
+      max_score: 1
+    - step_id: step_2
+      description: 用导数确定单调区间。
+      max_score: 1
+    - step_id: step_3
+      description: 先得 $a<c,b<c$。
+      max_score: 1
+    - step_id: step_4
+      description: 再比较 $a,b$。
+      max_score: 1
+    - step_id: step_5
+      description: 合并顺序并对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较三项同构比值的大小。
+        result: 见 source_solution_summary
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 六大同构函数比大小
+      - $f(2),f(3),f(e)$
+      - $f(4)$ 辅助比较
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 指对复合结构
+      - 同构结构
+    evidence:
+      - 三项都可归入 $f(x)=\frac{\ln x}{2x}$ 的点值。
+      - 比较点紧邻极值点 $e$，以单调区间分层。
+    normalization_moves_used:
+      - $a\to\frac{\ln2}{4}$。
+      - $c\to\frac{\ln e}{2e}$。
+      - 法二：$a=\frac{\ln4}{8}=f(4)$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把表达式改写为同一 $f(x)$，回补指数对数基础。
+      - 若学生不会由导数符号判单调区间，回补导数单调极值基础。
+      - 若学生在通分比较 $\ln8,\ln9$ 时失误，回补代数恒等变形。
+  detail_terms:
+    - $f(x)=\frac{\ln x}{2x}$
+    - $f^{\prime}(x)=\frac{1-\ln x}{2x^2}$
+    - $f(4)<f(3)<f(e)$
+    - 重建标记 $\ln 2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0149_ln_over_2x_compare_ex19
+source_evidence:
+  source_refs:
+    - ref_id: page_0149_ex19_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0149/page_0149.md
+      role: problem_start
+      evidence: 例19题干给出 $a=\frac{\ln\sqrt2}{2},b=\frac{\ln3}{6},c=\frac1{2e}$ 与四个顺序选项。
+    - ref_id: page_0149_ex19_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0149/page_0149.md
+      role: solution
+      evidence: 例19主解构造 $f(x)=\frac{\ln x}{2x}$ 比较 $f(2),f(3),f(e)$；并给出法二 $f(4)<f(3)<f(e)$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0149.png
+      inspected: false
+      notes: 本次仅按 source markdown 重建，未重新人工核对页图。
+  source_context: 该题承接“六大同构函数比大小”，核心是 $\frac{\ln x}{x}$ 峰值模型。
+  source_influence:
+    - 保留源解主线：统一到 $f(x)=\frac{\ln x}{2x}$ 后比较 $2,3,e$ 三点。
+    - 保留源解法二：把 $a$ 写成 $f(4)$，利用 $4>3>e$ 的递减区间关系。
+  source_discrepancies:
+    - "source markdown 在法二处含重建标记 `[?reconstructed: \\ln]{2}`；本卡按同段等式与整体解法一致性采用 $\\ln 2$，即 $a=\\frac{\\ln2}{4}=\\frac{\\ln4}{8}=f(4)$。"
+original_problem:
+  stem: （22-23高二下·浙江杭州·期中）已知 $a=\frac{\ln\sqrt2}{2},\ b=\frac{\ln3}{6},\ c=\frac1{2e}$，则 $a,b,c$ 的大小为（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $b>c>a$
+      text_latex: $b>c>a$
+    - label: B
+      text_raw: $a>b>c$
+      text_latex: $a>b>c$
+    - label: C
+      text_raw: $b>a>c$
+      text_latex: $b>a>c$
+    - label: D
+      text_raw: $c>b>a$
+      text_latex: $c>b>a$
+  answer: D
+  fidelity_notes:
+    - 源页给出两种做法，主解与法二结论一致：$c>b>a$。
+solution:
+  source_solution_summary: |
+    先化简
+    \[
+    a=\frac{\ln\sqrt2}{2}=\frac{\ln2}{4},\quad
+    c=\frac1{2e}=\frac{\ln e}{2e}.
+    \]
+    构造
+    \[
+    f(x)=\frac{\ln x}{2x}\ (x>0),\qquad
+    f^{\prime}(x)=\frac{1-\ln x}{2x^2}.
+    \]
+    因此 $f$ 在 $(0,e)$ 递增，在 $(e,+\infty)$ 递减。
+    由 $2,3<e$，得
+    \[
+    a=f(2)<f(e)=c,\qquad b=f(3)<f(e)=c.
+    \]
+    再比 $a,b$：
+    \[
+    a=\frac{\ln2}{4}=\frac{\ln8}{12}<\frac{\ln9}{12}=\frac{\ln3}{6}=b.
+    \]
+    所以 $c>b>a$，选 D。
+    法二也可写成
+    \[
+    a=\frac{\ln2}{4}=\frac{\ln4}{8}=f(4),
+    \]
+    而 $4>3>e$ 位于递减段，故 $f(4)<f(3)<f(e)$，同得 $a<b<c$，等价于 $c>b>a$。
+  key_steps:
+    - step_id: step_1
+      statement: 统一到同构函数值。
+      formula_trace:
+        from: $a=\frac{\ln\sqrt2}{2},\ b=\frac{\ln3}{6},\ c=\frac1{2e}$
+        to: $a=f(2),\ b=f(3),\ c=f(e)$，其中 $f(x)=\frac{\ln x}{2x}$
+        operation: 分别改写成 $\frac{\ln x}{2x}$ 的点值。
+        why: 三数比较转成同一函数的函数值比较。
+      source_ref: page_0149_ex19_solution
+    - step_id: step_2
+      statement: 用导数确定单调区间。
+      formula_trace:
+        from: $f^{\prime}(x)=\frac{1-\ln x}{2x^2}$
+        to: $f$ 在 $(0,e)$ 递增，在 $(e,+\infty)$ 递减
+        operation: 判断 $1-\ln x$ 符号。
+        why: 可直接比较 $f(2),f(3),f(e)$。
+      source_ref: page_0149_ex19_solution
+    - step_id: step_3
+      statement: 先得 $a<c,b<c$。
+      formula_trace:
+        from: $2,3<e$ 且 $f$ 在 $(0,e)$ 递增
+        to: $a=f(2)<f(e)=c,\ b=f(3)<f(e)=c$
+        operation: 同区间单调比较。
+        why: 确定 $c$ 为最大项。
+      source_ref: page_0149_ex19_solution
+    - step_id: step_4
+      statement: 再比较 $a,b$。
+      formula_trace:
+        from: $a=\frac{\ln2}{4},\ b=\frac{\ln3}{6}$
+        to: $a=\frac{\ln8}{12}<\frac{\ln9}{12}=b$
+        operation: 通分并比较对数真数。
+        why: 完成剩余顺序。
+      source_ref: page_0149_ex19_solution
+    - step_id: step_5
+      statement: 合并顺序并对应选项。
+      formula_trace:
+        from: $c>b>a$
+        to: 选 D
+        operation: 与选项匹配。
+        why: 作答完成。
+      source_ref: page_0149_ex19_solution
+teaching_card:
+  student_title: 把三项都塞进同一个峰值函数
+  what_it_trains: 训练把零散分式统一到 $\frac{\ln x}{x}$ 模型，再借助极值点附近的单调区间快速排序。
+  recognition_cues:
+    - 表达式含 $\ln x$ 与线性分母。
+    - 出现常见锚点 $2,3,e$。
+    - 题目要求三数全序。
+  normalization_moves:
+    - 先构造同构函数。
+    - 先找谁最接近峰值 $e$。
+    - 再用通分对数补齐剩余比较。
+  common_failures:
+    - 把 $f$ 的增减区间记反。
+    - 认为 $a=\frac{\ln\sqrt2}{2}$ 难算而放弃同构。
+    - 忽略法二重建符号，导致链式比较断裂。
+  similar_practice_query: lnx/x 比大小 e附近 三数排序
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 已记录例19法二的 `ln 2` 重建标记并按数学一致性采用该还原。
+    - 本卡未核对 page_0149 原图，按重建 markdown 完成。

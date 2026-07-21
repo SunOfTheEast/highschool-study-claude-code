@@ -1,0 +1,209 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0290_lnx_shift_exp_param_hidden_point_ex04
+content_revision_id: mst_p0290_lnx_shift_exp_param_hidden_point_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0290_lnx_shift_exp_param_hidden_point_ex04.card.yaml
+stem: |-
+  （2024 · 广东期末）已知函数 $f(x)=\ln x+1$，$g(x)=e^x-1$。若 $a>0$，$\forall x\in(-1,+\infty)$，$f(x+1)\le a^2g(x)+a^2-a+1$，求 $a$ 的取值范围。
+  1. 求使不等式对任意 $x\in(-1,+\infty)$ 恒成立的 $a$ 的取值范围。
+answer: |-
+  $a\in[1,+\infty)$。
+
+  题目等价于 $\ln(x+1)\le a^2e^x-a$ 对所有 $x>-1$ 恒成立。令 $h(x)=a^2e^x-\ln(x+1)-a$，则 $h^\prime(x)=a^2e^x-\frac1{x+1}$， $h^{\prime\prime}(x)=a^2e^x+\frac1{(x+1)^2}>0$，所以 $h^\prime$ 递增，若 $h^\prime(x_0)=0$，则 $h(x_0)$ 是最小值。用隐点探路 联立 $h(x_0)=0,h^\prime(x_0)=0$，可得到候选 $x_0=0$， 因此必要性为 $h(0)=a^2-a\ge0$，即 $a\ge1$。充分性分两段： 当 $x\ge-\ln2$，因 $a\ge1$ 可得 $h(x)\ge e^x-\ln(x+1)-1\ge x-\ln(x+1)\ge0$。当 $-1<x<-\ln2$，把 $h(x)=a^2e^x-\ln(x+1)-a$ 看成关于 $a$ 的二次函数，在 $a\ge1$ 上用顶点下界得到 $h(x)\ge-\ln(x+1)-\frac1{4e^x}=p(x)$；再由 $p^\prime(x)<0$ 和 $p(x)>p(\ln\frac12)>0$ 得 $h(x)\ge0$。所以答案是 $[1,+\infty)$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 先把题目化成一个恒非负函数。
+      max_score: 1
+    - step_id: step_2
+      description: 用隐点探路锁定候选取等点。
+      max_score: 1
+    - step_id: step_3
+      description: 由 $x=0$ 给出必要条件。
+      max_score: 1
+    - step_id: step_4
+      description: 第一段充分性：$x\ge-\ln2$。
+      max_score: 1
+    - step_id: step_5
+      description: 第二段充分性：$-1<x<-\ln2$，换主元看 $a$。
+      max_score: 1
+    - step_id: step_6
+      description: 证明 $p(x)>0$ 完成充分性。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: main
+        goal: 求参数范围
+        target: 第 main 问
+        result: $a\in[1,+\infty)$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 自由度与主元
+      - 充分/必要性探路
+      - 拟合与夹逼
+    subroute:
+      - 恒成立转最小值
+      - 隐点取等探路
+      - 必要性 $h(0)\ge0$
+      - 分区间充分性
+      - 关于 $a$ 的二次函数换主元
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $\ln(x+1)\le a^2e^x-a$
+      - $h(x)=a^2e^x-\ln(x+1)-a$
+      - $x_0=0$
+      - $x\ge-\ln2$
+      - $-1<x<-\ln2$
+      - $p(x)=-\ln(x+1)-\frac1{4e^x}$
+      - $a\ge1$
+    normalization_moves_used:
+      - 代入 $f,g$ 后整理成 $h(x)\ge0$。
+      - 用 $h(x_0)=0,h^\prime(x_0)=0$ 先探候选点。
+      - 按 $x\ge-\ln2$ 和 $-1<x<-\ln2$ 分段。
+      - 第二段把 $a$ 作为主元，利用二次函数顶点下界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会处理 $x>-1$ 和 $\ln(x+1)$，回补函数三要素与定义域。
+      - 若学生不会隐点取等探路，回补导数单调极值基础。
+      - 若学生不会把 $h$ 看成关于 $a$ 的二次函数，回补代数恒等变形。
+      - 若学生不会使用 $e^x\ge x+1$，回补指数对数基础。
+      - 若学生不会分段证明充分性，回补不等式工具基础。
+  detail_terms:
+    - $\ln(x+1)\le a^2e^x-a$
+    - $h(x)=a^2e^x-\ln(x+1)-a$
+    - 隐点取等
+    - $x_0=0$
+    - $a\ge1$
+    - $x\ge-\ln2$
+    - 关于 $a$ 的二次函数
+    - $p(x)=-\ln(x+1)-\frac1{4e^x}$
+parts: &a1
+  - part_id: main
+    text: 求使不等式对任意 $x\in(-1,+\infty)$ 恒成立的 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0290_lnx_shift_exp_param_hidden_point_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0290_ex04_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0290/page_0290.md
+      role: problem_start
+      evidence: page_0290 例4题头：$f(x)=\ln x+1$，$g(x)=e^x-1$；若 $a>0$，对任意 $x\in(-1,+\infty)$，$f(x+1)\le a^2g(x)+a^2-a+1$，求 $a$ 的取值范围。
+    - ref_id: page_0290_ex04_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0290/page_0290.md
+      role: solution_start
+      evidence: page_0290 解析把题目化为 $\ln(x+1)\le a^2e^x-a$ 恒成立，令 $h(x)=a^2e^x-\ln(x+1)-a$，再用 $h^\prime,h^{\prime\prime}$ 和隐点探路得到候选 $x_0=0$。
+    - ref_id: page_0291_ex04_solution_end
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0291/page_0291.md
+      role: solution_end
+      evidence: page_0291 顶部完成例4：由 $h(0)=a^2-a\ge0$ 得 $a\ge1$；当 $a\ge1$ 时分 $x\ge-\ln2$ 与 $-1<x<-\ln2$ 两段证明 $h(x)\ge0$，结论为 $[1,+\infty)$。
+    - ref_id: page_0291_ex05_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0291/page_0291.md
+      role: local_context
+      evidence: page_0291 随后从例5开始新题；本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0290.png
+      inspected: true
+      notes: 已核对页图：page_0290 下半页为例4题头和主要隐点探路。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0291.png
+      inspected: true
+      notes: 已核对页图：page_0291 顶部完成例4，并说明本题是主元法与放缩的碰撞，随后另起例5。
+  source_context: 本卡处理 page_0290 起头、page_0291 顶部续完的例4；page_0291 例5排除。
+  source_influence:
+    - 保留题目等价化：$\ln(x+1)\le a^2e^x-a$。
+    - 保留隐点探路：令 $h(x)=a^2e^x-\ln(x+1)-a$，由 $h(x_0)=0,h^\prime(x_0)=0$ 探出 $x_0=0$。
+    - 保留必要性：$h(0)=a^2-a\ge0$，所以 $a\ge1$。
+    - 保留充分性分段：$x\ge-\ln2$ 时直接放缩；$-1<x<-\ln2$ 时把 $h$ 视为关于 $a$ 的二次函数。
+    - 保留下界函数 $p(x)=-\ln(x+1)-\frac1{4e^x}$ 的单调性证明。
+    - 保留结论 $a\in[1,+\infty)$。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 广东期末）已知函数 $f(x)=\ln x+1$，$g(x)=e^x-1$。若 $a>0$，$\forall x\in(-1,+\infty)$，$f(x+1)\le a^2g(x)+a^2-a+1$，求 $a$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $a\in[1,+\infty)$。
+  fidelity_notes:
+    - 无选项。
+    - page_0291 顶部“主元法与放缩的碰撞”是例4的点评，不属于例5。
+solution:
+  source_solution_summary: 题目等价于 $\ln(x+1)\le a^2e^x-a$ 对所有 $x>-1$ 恒成立。令 $h(x)=a^2e^x-\ln(x+1)-a$，则 $h^\prime(x)=a^2e^x-\frac1{x+1}$， $h^{\prime\prime}(x)=a^2e^x+\frac1{(x+1)^2}>0$，所以 $h^\prime$ 递增，若 $h^\prime(x_0)=0$，则 $h(x_0)$ 是最小值。用隐点探路 联立 $h(x_0)=0,h^\prime(x_0)=0$，可得到候选 $x_0=0$， 因此必要性为 $h(0)=a^2-a\ge0$，即 $a\ge1$。充分性分两段： 当 $x\ge-\ln2$，因 $a\ge1$ 可得 $h(x)\ge e^x-\ln(x+1)-1\ge x-\ln(x+1)\ge0$。当 $-1<x<-\ln2$，把 $h(x)=a^2e^x-\ln(x+1)-a$ 看成关于 $a$ 的二次函数，在 $a\ge1$ 上用顶点下界得到 $h(x)\ge-\ln(x+1)-\frac1{4e^x}=p(x)$；再由 $p^\prime(x)<0$ 和 $p(x)>p(\ln\frac12)>0$ 得 $h(x)\ge0$。所以答案是 $[1,+\infty)$。
+  key_steps:
+    - step_id: step_1
+      statement: 先把题目化成一个恒非负函数。
+      formula_trace:
+        from: $f(x+1)\le a^2g(x)+a^2-a+1$
+        to: $h(x)=a^2e^x-\ln(x+1)-a\ge0$
+        operation: 代入 $f,g$ 并整理。
+        why: 统一成 $h(x)$ 的最小值问题。
+      source_ref: page_0290_ex04_solution_start
+    - step_id: step_2
+      statement: 用隐点探路锁定候选取等点。
+      formula_trace:
+        from: $h(x_0)=0,\quad h^\prime(x_0)=0$
+        to: $x_0=0$
+        operation: 联立取等与导数为零。
+        why: source 先用草稿探路判断临界取等应发生在 $x=0$。
+      source_ref: page_0290_ex04_solution_start
+    - step_id: step_3
+      statement: 由 $x=0$ 给出必要条件。
+      formula_trace:
+        from: $h(0)=a^2-a$
+        to: $a\ge1$
+        operation: 代入取等候选点。
+        why: 由于 $a>0$，$h(0)\ge0$ 等价于 $a\ge1$。
+      source_ref: page_0291_ex04_solution_end
+    - step_id: step_4
+      statement: 第一段充分性：$x\ge-\ln2$。
+      formula_trace:
+        from: $h(x)=a^2e^x-\ln(x+1)-a$
+        to: $h(x)\ge e^x-\ln(x+1)-1\ge x-\ln(x+1)\ge0$
+        operation: 利用 $a\ge1$ 和 $e^x\ge x+1$。
+        why: 这一段指数下界足够直接压住对数项。
+      source_ref: page_0291_ex04_solution_end
+    - step_id: step_5
+      statement: 第二段充分性：$-1<x<-\ln2$，换主元看 $a$。
+      formula_trace:
+        from: $h(x)=a^2e^x-\ln(x+1)-a$
+        to: $h(x)\ge-\ln(x+1)-\frac1{4e^x}=p(x)$
+        operation: 把 $h$ 当作关于 $a$ 的二次函数，取顶点下界。
+        why: 这一段不能直接用第一段放缩，需要换主元处理参数。
+      source_ref: page_0291_ex04_solution_end
+    - step_id: step_6
+      statement: 证明 $p(x)>0$ 完成充分性。
+      formula_trace:
+        from: $p(x)=-\ln(x+1)-\frac1{4e^x}$
+        to: $p^\prime(x)<0,\quad p(x)>p(\ln\frac12)>0$
+        operation: 求导判单调并比较端点。
+        why: 补完 $a\ge1$ 对全区间的充分性。
+      source_ref: page_0291_ex04_solution_end
+teaching_card:
+  student_title: 隐点探出 $a=1$ 后分段证明
+  what_it_trains: 训练先用取等点和导数为零探出参数候选，再用分区间放缩证明这个候选真的充分。
+  recognition_cues:
+    - 题目是 $\ln(x+1)$ 与 $e^x$ 的恒成立比较。
+    - 参数以 $a^2e^x-a$ 的形式出现，既有平方项也有一次项。
+    - 隐点探路会把候选点推到 $x=0$。
+    - 充分性证明分成 $x\ge-\ln2$ 和 $-1<x<-\ln2$ 两段。
+  normalization_moves:
+    - 先整理成 $h(x)=a^2e^x-\ln(x+1)-a\ge0$。
+    - 用 $h(x_0)=0,h^\prime(x_0)=0$ 探候选点。
+    - 从 $h(0)\ge0$ 得到 $a\ge1$。
+    - 证明充分性时，不同区间换不同压法。
+  common_failures:
+    - 只得到 $a\ge1$，但没有证明充分性。
+    - 在 $-1<x<-\ln2$ 仍然硬套第一段放缩。
+    - 没有看出 $h$ 可以换主元当成关于 $a$ 的二次函数。
+    - 把分段放缩当成随手估计，忽略它是为了补充分性的。
+  similar_practice_query: ln(x+1) a^2 e^x - a 隐点探路 a=1 主元法 分区间放缩
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

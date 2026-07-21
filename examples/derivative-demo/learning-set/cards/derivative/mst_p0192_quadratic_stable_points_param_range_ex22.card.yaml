@@ -1,0 +1,161 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0192_quadratic_stable_points_param_range_ex22
+content_revision_id: mst_p0192_quadratic_stable_points_param_range_ex22-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0192_quadratic_stable_points_param_range_ex22.card.yaml
+stem: （重庆市第十八中学2024高一期中T16）对于函数 $f(x)$，若 $f(x_0)=x_0$ 称 $x_0$ 为不动点；若 $f(f(x_0))=x_0$ 称 $x_0$ 为稳定点。若 $f(x)=x^2+a\ (x\in\mathbf{R})$ 的稳定点恰是它的不动点，则实数 $a$ 的取值范围是______。
+answer: |-
+  $\left[-\frac34,\frac14\right]$
+
+  设 $y=f(x)$，稳定点满足 $f(f(x))=x$，得到方程组 $\begin{cases}y^2+a=x\\x^2+a=y\end{cases}$。 两式相减得 $(y-x)(y+x+1)=0$，即分支 $y=x$ 或 $y+x+1=0$。 其中 $y=x$ 等价于不动点方程 $x^2-x+a=0$，它必须有解，故 $1-4a\ge0\Rightarrow a\le\frac14$。 又因“稳定点恰是不动点”，第二分支 $y+x+1=0$ 不能产生额外稳定点：要么 $x^2+x+a+1=0$ 无解（$a>-\frac34$）， 要么它与 $x^2-x+a=0$ 同解。联立同解情形可得 $x=\frac12,\ a=-\frac34$。 综合得到 $a\in\left[-\frac34,\frac14\right]$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把稳定点定义转成联立方程。
+      max_score: 1
+    - step_id: step_2
+      description: 相减得到“不动点分支 + 额外分支”。
+      max_score: 1
+    - step_id: step_3
+      description: 先保证不动点分支有解。
+      max_score: 1
+    - step_id: step_4
+      description: 约束第二分支不产生新稳定点。
+      max_score: 1
+    - step_id: step_5
+      description: 合并区间。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 含参数分类讨论
+    secondary:
+      - 逆向构造法
+      - 数形结合
+    subroute:
+      - 不动点
+      - 稳定点
+      - 同解判定
+  structure:
+    primary: 复合函数与不动点结构
+    secondary:
+      - 同构结构
+      - 非齐次结构
+    evidence:
+      - $f(f(x))=x$
+      - $(y-x)(y+x+1)=0$
+      - $x^2-x+a=0$
+      - $x^2+x+a+1=0$
+    normalization_moves_used:
+      - 先设 $y=f(x)$ 将复合方程对称化。
+      - 相减拆成两个分支，再按“恰是”做分类。
+      - 用判别式和同解条件锁定参数端点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生混淆稳定点与不动点定义，回补分段/复合/反函数基础。
+      - 若学生不会从“恰是”翻译到“无新解/同解”，回补函数三要素与定义域。
+      - 若学生在判别式分类中漏边界，回补方程根分布与韦达。
+  detail_terms:
+    - $f(x)=x^2+a$
+    - $f(f(x))=x$
+    - $(y-x)(y+x+1)=0$
+    - $a\le\frac14$
+    - $a\ge-\frac34$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0192_quadratic_stable_points_param_range_ex22
+source_evidence:
+  source_refs:
+    - ref_id: page_0192_ex22_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0192/page_0192.md
+      role: problem_start
+      evidence: line 21 给出例22题头：$f(x)=x^2+a$，条件是“稳定点恰是它的不动点”。
+    - ref_id: page_0192_ex22_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0192/page_0192.md
+      role: solution
+      evidence: lines 23-25 给出法一、法二并同结论：$a\in[-\frac34,\frac14]$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0192.png
+      inspected: true
+      notes: 已核对页图：例22题干、两种解法和结论区间清晰，配图用于法二切点说明。
+  source_context: 例22在 page_0192 独立完整，不跨页；其前后分别是例21解答和例23题头。
+  source_influence:
+    - 保留法一主线：由 $f(f(x))=x$ 建立方程组，相减得到两分支。
+    - 保留“稳定点恰是不动点”转义为“第二分支无新解”的分类。
+    - 保留边界点 $a=-\frac34,\frac14$ 的来源与并集逻辑。
+  source_discrepancies: []
+original_problem:
+  stem: （重庆市第十八中学2024高一期中T16）对于函数 $f(x)$，若 $f(x_0)=x_0$ 称 $x_0$ 为不动点；若 $f(f(x_0))=x_0$ 称 $x_0$ 为稳定点。若 $f(x)=x^2+a\ (x\in\mathbf{R})$ 的稳定点恰是它的不动点，则实数 $a$ 的取值范围是______。
+  parts: *a1
+  choices: []
+  answer: $\left[-\frac34,\frac14\right]$
+  fidelity_notes:
+    - 源题是填空题，无选项。
+    - source 同时给出代数法和图像法，结论一致。
+solution:
+  source_solution_summary: 设 $y=f(x)$，稳定点满足 $f(f(x))=x$，得到方程组 $\begin{cases}y^2+a=x\\x^2+a=y\end{cases}$。 两式相减得 $(y-x)(y+x+1)=0$，即分支 $y=x$ 或 $y+x+1=0$。 其中 $y=x$ 等价于不动点方程 $x^2-x+a=0$，它必须有解，故 $1-4a\ge0\Rightarrow a\le\frac14$。 又因“稳定点恰是不动点”，第二分支 $y+x+1=0$ 不能产生额外稳定点：要么 $x^2+x+a+1=0$ 无解（$a>-\frac34$）， 要么它与 $x^2-x+a=0$ 同解。联立同解情形可得 $x=\frac12,\ a=-\frac34$。 综合得到 $a\in\left[-\frac34,\frac14\right]$。
+  key_steps:
+    - step_id: step_1
+      statement: 把稳定点定义转成联立方程。
+      formula_trace:
+        from: $f(x)=x^2+a,\ y=f(x),\ f(f(x))=x$
+        to: $\begin{cases}y^2+a=x\\x^2+a=y\end{cases}$
+        operation: 先设中间变量，再写两次函数关系。
+        why: 把复合条件显式化，方便代数分支。
+      source_ref: page_0192_ex22_solution
+    - step_id: step_2
+      statement: 相减得到“不动点分支 + 额外分支”。
+      formula_trace:
+        from: $\begin{cases}y^2+a=x\\x^2+a=y\end{cases}$
+        to: $(y-x)(y+x+1)=0$
+        operation: 两式相减并因式分解。
+        why: 稳定点集合由两类代数关系组成。
+      source_ref: page_0192_ex22_solution
+    - step_id: step_3
+      statement: 先保证不动点分支有解。
+      formula_trace:
+        from: $y=x\Rightarrow x^2-x+a=0$
+        to: $\Delta=1-4a\ge0\Rightarrow a\le\frac14$
+        operation: 判别式判实根。
+        why: “稳定点恰是不动点”至少要求不动点存在。
+      source_ref: page_0192_ex22_solution
+    - step_id: step_4
+      statement: 约束第二分支不产生新稳定点。
+      formula_trace:
+        from: $y+x+1=0\Rightarrow x^2+x+a+1=0$
+        to: 要么无解：$a>-\frac34$；要么与 $x^2-x+a=0$ 同解得到 $a=-\frac34$
+        operation: 做“无解/同解”分类并联立求边界。
+        why: 这一步正是“稳定点恰是不动点”的代数刻画。
+      source_ref: page_0192_ex22_solution
+    - step_id: step_5
+      statement: 合并区间。
+      formula_trace:
+        from: $a\le\frac14$ 且 $a>-\frac34$ 或 $a=-\frac34$
+        to: $a\in\left[-\frac34,\frac14\right]$
+        operation: 并集后与上界条件取交。
+        why: 得到最终参数范围。
+      source_ref: page_0192_ex22_solution
+teaching_card:
+  student_title: “恰是”条件用分支同解来表达
+  what_it_trains: 训练把“稳定点恰是不动点”翻译成代数分支约束，并用分类讨论处理参数边界。
+  recognition_cues:
+    - 题目同时出现不动点与稳定点定义。
+    - 函数是 $x^2+a$，复合后可形成对称方程组。
+    - 关键词“恰是”意味着要排除额外根。
+  normalization_moves:
+    - 先设 $y=f(x)$ 写方程组。
+    - 相减得到两个分支。
+    - 不动点分支保留，另一分支做无解/同解分类。
+  common_failures:
+    - 只算出不动点存在条件 $a\le\frac14$ 就停。
+    - 忽略“同解”边界点 $a=-\frac34$。
+    - 把“无解”写成 $a\ge-\frac34$ 导致端点处理错误。
+  similar_practice_query: x^2+a 稳定点 不动点 恰是 同解 无解 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

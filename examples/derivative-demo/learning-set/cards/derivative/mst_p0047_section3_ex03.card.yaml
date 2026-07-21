@@ -1,0 +1,179 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0047_section3_ex03
+content_revision_id: mst_p0047_section3_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0047_section3_ex03.card.yaml
+stem: |-
+  （2018 · 新课标 Ⅲ 卷 T21）已知函数 f(x)=(2+x+ax^2)\ln(1+x)-2x。
+  (1). 若 a=0，证明：当 -1<x<0 时，f(x)<0；当 x>0 时，f(x)>0。
+  (2). 若 x=0 是 f(x) 的极大值点，求 a 的值。
+answer: |-
+  (1) 证明见解析；(2) a=-\frac{1}{6}。
+
+  第 (1) 问在 a=0 时，f(x)=(x+2)\left(\ln(1+x)-\frac{2x}{x+2}\right)， 因 x+2>0，只需看括号内函数 g。由 g'(x)=\frac{x^2}{(x+1)(x+2)^2}\geqslant0 且 g(0)=0，可得 f 的左右符号。第 (2) 问若 0 是 f 的极大值点，在 0 附近 2+x+ax^2>0，等价地 h(x)=\ln(1+x)-\frac{2x}{2+x+ax^2} 在 0 处取极大。 h'(x) 的符号由 t(x)=a^2x^2+4ax+6a+1 控制，要在 0 附近左正右负，必须 t(0)=0， 得 a=-1/6，再验算导数符号成立。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 第 (1) 问先提出正因子 x+2。
+      max_score: 1
+    - step_id: step_2
+      description: 证明括号内函数过 0 后变号。
+      max_score: 1
+    - step_id: step_3
+      description: 第 (2) 问把 f 在 0 处取极大转成 h 在 0 处取极大。
+      max_score: 1
+    - step_id: step_4
+      description: 求 h 的导数并抽出决定符号的多项式。
+      max_score: 1
+    - step_id: step_5
+      description: 用极大值点的变号要求确定 a。
+      max_score: 1
+    - step_id: step_6
+      description: 验证 a=-1/6 时确为极大值。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: "1"
+        goal: 不等式证明
+        target: 第 (1) 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 (2) 问
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 局部逼近与找点
+      - 充分/必要性探路
+    subroute:
+      - 对数单身狗
+      - 极值点导数变号
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 局部逼近结构
+      - 非齐次结构
+    evidence:
+      - (x+2)\left(\ln(1+x)-\frac{2x}{x+2}\right)
+      - h'(x)=\frac{x^2(a^2x^2+4ax+6a+1)}{(x+1)(ax^2+x+2)^2}
+      - t(0)=6a+1=0
+    normalization_moves_used:
+      - 提出正因子，把 \ln(1+x) 留作单身狗。
+      - 把 f 的极大转移到 h 的极大。
+      - 用导数变号迫使控制多项式在 0 处也过零。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不知道 x>-1 时 x+2>0，回补函数三要素与定义域。
+      - 若学生不会把 f 的符号转成 g 的符号，回补代数恒等变形。
+      - 若学生只用 f'(0)=0 而不会检查极大变号，回补导数单调极值基础。
+      - 若学生无法理解局部正因子不改变极值点判断，回补函数性质与图像。
+  detail_terms:
+    - \ln(1+x)-\frac{2x}{x+2}
+    - \frac{x^2}{(x+1)(x+2)^2}
+    - t(x)=a^2x^2+4ax+6a+1
+parts: &a1
+  - label: (1)
+    text: 若 a=0，证明：当 -1<x<0 时，f(x)<0；当 x>0 时，f(x)>0。
+  - label: (2)
+    text: 若 x=0 是 f(x) 的极大值点，求 a 的值。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0047_section3_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0047
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0047/page_0047.md
+      role: problem_start
+      evidence: 例 3：已知函数 f(x)=(2+x+ax^2)\ln(1+x)-2x。 (1) 若 a=0，证明 -1<x<0 时 f(x)<0，x>0 时 f(x)>0； (2) 若 x=0 是 f(x) 的极大值点，求 a。
+    - ref_id: page_0047_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0047/page_0047.md
+      role: solution
+      evidence: 解析第 (1) 问令 g(x)=\ln(1+x)-2x/(x+2)，由 g'(x)=x^2/((x+1)(x+2)^2) 得 g 单调递增；第 (2) 问令 h(x)=\ln(1+x)-2x/(2+x+ax^2)，由 h'(x)=x^2(a^2x^2+4ax+6a+1)/((x+1)(ax^2+x+2)^2) 推出 a=-1/6。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0047.png
+      inspected: true
+      notes: 页图已核对：例 3 题干和两问完整解析均在 page_0047，位于例 2 续页之后、指数找基友小节之前。
+  source_context: 本题是“对数单身狗”中把正因子提出来的典型题：第 (1) 问提出 x+2，第 (2) 问在极值点附近提出 2+x+ax^2，再研究剩下的对数差。
+  source_influence: []
+  source_discrepancies: []
+original_problem:
+  stem: （2018 · 新课标 Ⅲ 卷 T21）已知函数 f(x)=(2+x+ax^2)\ln(1+x)-2x。
+  parts: *a1
+  choices: []
+  answer: (1) 证明见解析；(2) a=-\frac{1}{6}。
+  fidelity_notes: []
+solution:
+  source_solution_summary: 第 (1) 问在 a=0 时，f(x)=(x+2)\left(\ln(1+x)-\frac{2x}{x+2}\right)， 因 x+2>0，只需看括号内函数 g。由 g'(x)=\frac{x^2}{(x+1)(x+2)^2}\geqslant0 且 g(0)=0，可得 f 的左右符号。第 (2) 问若 0 是 f 的极大值点，在 0 附近 2+x+ax^2>0，等价地 h(x)=\ln(1+x)-\frac{2x}{2+x+ax^2} 在 0 处取极大。 h'(x) 的符号由 t(x)=a^2x^2+4ax+6a+1 控制，要在 0 附近左正右负，必须 t(0)=0， 得 a=-1/6，再验算导数符号成立。
+  key_steps:
+    - step_id: step_1
+      statement: 第 (1) 问先提出正因子 x+2。
+      formula_trace:
+        from: f(x)=(2+x)\ln(1+x)-2x
+        to: f(x)=(x+2)\left(\ln(1+x)-\frac{2x}{x+2}\right)
+        operation: 将 2x 除进 x+2，构造单独的 \ln(1+x)。
+        why: 在 x>-1 时 x+2>0，f 的符号由括号内函数决定。
+      source_ref: page_0047_solution
+    - step_id: step_2
+      statement: 证明括号内函数过 0 后变号。
+      formula_trace:
+        from: g(x)=\ln(1+x)-\frac{2x}{x+2}
+        to: g'(x)=\frac{x^2}{(x+1)(x+2)^2}\geqslant0,\quad g(0)=0
+        operation: 求导并利用 x>-1 判断分母为正。
+        why: g 单调递增，所以 0 左侧为负、右侧为正。
+      source_ref: page_0047_solution
+    - step_id: step_3
+      statement: 第 (2) 问把 f 在 0 处取极大转成 h 在 0 处取极大。
+      formula_trace:
+        from: (2+x+ax^2)\ln(1+x)-2x\leqslant0
+        to: h(x)=\ln(1+x)-\frac{2x}{2+x+ax^2}\leqslant h(0)
+        operation: 在 0 附近取 2+x+ax^2>0，并除以这个正因子。
+        why: 正因子不改变不等号方向，极大值点可转移到更简单的 h。
+      source_ref: page_0047_solution
+    - step_id: step_4
+      statement: 求 h 的导数并抽出决定符号的多项式。
+      formula_trace:
+        from: h(x)=\ln(1+x)-\frac{2x}{2+x+ax^2}
+        to: h'(x)=\frac{x^2(a^2x^2+4ax+6a+1)}{(x+1)(ax^2+x+2)^2}
+        operation: 直接求导并整理成 x^2 与二次式的乘积。
+        why: 在 0 附近分母为正，导数符号由 t(x)=a^2x^2+4ax+6a+1 控制。
+      source_ref: page_0047_solution
+    - step_id: step_5
+      statement: 用极大值点的变号要求确定 a。
+      formula_trace:
+        from: t(0)=6a+1
+        to: a=-\frac{1}{6}
+        operation: 要让 h'(x) 在 0 左右变号，先令 t(0)=0。
+        why: 若 t(0)\neq0，h'(x) 在 0 两侧同号，不能形成极大值。
+      source_ref: page_0047_solution
+    - step_id: step_6
+      statement: 验证 a=-1/6 时确为极大值。
+      formula_trace:
+        from: a=-\frac{1}{6}
+        to: h'(x)=\frac{x^3(x-24)}{(x+1)(x^2-6x-12)^2}
+        operation: 代入 a 并整理导数。
+        why: 在 -1<x<0 时 h'(x)>0，在 0<x<\min\{24,n\} 时 h'(x)<0， 所以 0 确为 h 与 f 的极大值点。
+      source_ref: page_0047_solution
+teaching_card:
+  student_title: 提出正因子，让 \ln(1+x) 单独决定符号和极值
+  what_it_trains: 训练把含 \ln(1+x) 的乘积先拆出正因子，再用剩余函数的单调性或导数变号处理证明和求参。
+  recognition_cues:
+    - 函数形如 多项式乘 \ln(1+x) 再减 2x。
+    - 第 (1) 问要求判断 0 两侧符号。
+    - 第 (2) 问给出 x=0 是极大值点。
+  normalization_moves:
+    - a=0 时提出 x+2。
+    - 一般 a 时在 0 附近提出 2+x+ax^2。
+    - 把 h'(x) 整理成 x^2 乘控制多项式。
+  common_failures:
+    - 忽略定义域 x>-1。
+    - 只算 h'(0)=0，没看导数左右变号。
+    - 忘记最后代入 a=-1/6 验证确实是极大值。
+  similar_practice_query: (多项式)ln(1+x)-线性项，提出正因子后判断符号和极值点
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

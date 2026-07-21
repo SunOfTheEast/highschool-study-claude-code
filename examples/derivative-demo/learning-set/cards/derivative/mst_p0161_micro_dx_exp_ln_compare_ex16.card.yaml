@@ -1,0 +1,220 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0161_micro_dx_exp_ln_compare_ex16
+content_revision_id: mst_p0161_micro_dx_exp_ln_compare_ex16-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0161_micro_dx_exp_ln_compare_ex16.card.yaml
+stem: |-
+  （2022 新课标 I 卷）设 $a=0.1e^{0.1}$，$b=\frac{1}{9}$，$c=-\ln0.9$，则（  ）
+  A. $a<b<c$
+  B. $c<b<a$
+  C. $c<a<b$
+  D. $a<c<b$
+answer: |
+  C
+
+  设
+  \[
+  A(x)=xe^x,\quad B(x)=\frac{x}{1-x},\quad C(x)=-\ln(1-x).
+  \]
+  三个量对应同一点 $x_0=0$、同增量 $\Delta x=0.1$ 的函数增量比较。
+  首先
+  \[
+  A^{\prime}(0)=B^{\prime}(0)=C^{\prime}(0)=1.
+  \]
+  再看二阶导：
+  \[
+  A^{\prime\prime}(0)=2,\quad B^{\prime\prime}(0)=2,\quad C^{\prime\prime}(0)=1,
+  \]
+  得 $a>c$。
+  再比较 $A,B$ 的三阶导：
+  \[
+  A^{\prime\prime\prime}(x)=(x+3)e^x,\ A^{\prime\prime\prime}(0)=3;\quad
+  B^{\prime\prime\prime}(x)=\frac{6}{(x-1)^4},\ B^{\prime\prime\prime}(0)=6,
+  \]
+  所以 $b>a$。综合得
+  \[
+  b>a>c \iff c<a<b,
+  \]
+  选 C。法二泰勒展开也给出同结论。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把三个数写成同一点同增量下的函数增量比较。
+      max_score: 1
+    - step_id: step_2
+      description: 一阶导在 $x_0=0$ 相同，进入二阶导比较。
+      max_score: 1
+    - step_id: step_3
+      description: 在 $A,B$ 间继续比较三阶导。
+      max_score: 1
+    - step_id: step_4
+      description: 合并比较结果对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较 $a,b,c$ 三个量的全序。
+        result: 见 source_solution_summary
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 同增量微元比较
+      - 同阶导持平后升阶比较
+      - 泰勒展开复核
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 指对复合结构
+      - 同构结构
+    evidence:
+      - 三个目标量都落在 $x_0=0$ 邻域的微小增量比较。
+      - 解题关键是二阶与三阶导数的分层比较。
+    normalization_moves_used:
+      - $a,b,c\to A,B,C$ 的同构映射。
+      - 先比 $A^{\prime\prime}(0),B^{\prime\prime}(0),C^{\prime\prime}(0)$。
+      - 再比 $A^{\prime\prime\prime}(0),B^{\prime\prime\prime}(0)$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把题干三项改写成同一点增量比较，回补指数对数基础。
+      - 若学生不熟悉“导数同阶持平后升阶比较”，回补导数运算与几何意义。
+      - 若学生无法从导数比较转成数值顺序，回补导数单调极值基础。
+  detail_terms:
+    - 同增量 $\Delta x=0.1$
+    - $A(x)=xe^x$
+    - $B(x)=\frac{x}{1-x}$
+    - $C(x)=-\ln(1-x)$
+    - 二阶持平看三阶
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0161_micro_dx_exp_ln_compare_ex16
+source_evidence:
+  source_refs:
+    - ref_id: page_0161_ex16_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0161/page_0161.md
+      role: problem_start
+      evidence: 例16题干给出 $a=0.1e^{0.1},\ b=\frac{1}{9},\ c=-\ln0.9$ 与四个排序选项。
+    - ref_id: page_0161_ex16_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0161/page_0161.md
+      role: solution
+      evidence: 解析法一构造 $A(x)=xe^x,\ B(x)=\frac{x}{1-x},\ C(x)=-\ln(1-x)$，用同增量比较导数阶次，结论 $b>a>c$。
+    - ref_id: page_0161_ex16_solution_method2
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0161/page_0161.md
+      role: solution
+      evidence: 解析法二给出泰勒近似并再次得到 $b>a>c$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0161.png
+      inspected: true
+      notes: 已核对页图：题干、选项与解析主链一致。
+  source_context: page_0161 顶部是“同增量比较导数阶次”的微元法说明，例16是该方法的直接应用。
+  source_influence:
+    - 保留源解“同一点同增量，逐阶比较导数”的主线。
+    - 保留先判 $a,c$ 再判 $a,b$ 的分段比较顺序。
+    - 保留法二泰勒展开作为复核。
+  source_discrepancies:
+    - 例16法二文字写成 $c=\ln(1-0.1)$，与题干 $c=-\ln0.9$ 及法一定义 $C(x)=-\ln(1-x)$ 不一致；本卡按题干与法一主链采用 $c=-\ln0.9$。
+original_problem:
+  stem: （2022 新课标 I 卷）设 $a=0.1e^{0.1}$，$b=\frac{1}{9}$，$c=-\ln0.9$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+    - label: B
+      text_raw: $c<b<a$
+      text_latex: $c<b<a$
+    - label: C
+      text_raw: $c<a<b$
+      text_latex: $c<a<b$
+    - label: D
+      text_raw: $a<c<b$
+      text_latex: $a<c<b$
+  answer: C
+  fidelity_notes:
+    - 源解两种方法结论一致，均给出 $b>a>c$，等价于选项 C。
+solution:
+  source_solution_summary: |
+    设
+    \[
+    A(x)=xe^x,\quad B(x)=\frac{x}{1-x},\quad C(x)=-\ln(1-x).
+    \]
+    三个量对应同一点 $x_0=0$、同增量 $\Delta x=0.1$ 的函数增量比较。
+    首先
+    \[
+    A^{\prime}(0)=B^{\prime}(0)=C^{\prime}(0)=1.
+    \]
+    再看二阶导：
+    \[
+    A^{\prime\prime}(0)=2,\quad B^{\prime\prime}(0)=2,\quad C^{\prime\prime}(0)=1,
+    \]
+    得 $a>c$。
+    再比较 $A,B$ 的三阶导：
+    \[
+    A^{\prime\prime\prime}(x)=(x+3)e^x,\ A^{\prime\prime\prime}(0)=3;\quad
+    B^{\prime\prime\prime}(x)=\frac{6}{(x-1)^4},\ B^{\prime\prime\prime}(0)=6,
+    \]
+    所以 $b>a$。综合得
+    \[
+    b>a>c \iff c<a<b,
+    \]
+    选 C。法二泰勒展开也给出同结论。
+  key_steps:
+    - step_id: step_1
+      statement: 把三个数写成同一点同增量下的函数增量比较。
+      formula_trace:
+        from: $a=0.1e^{0.1},\ b=\frac{1}{9},\ c=-\ln0.9$
+        to: $A(x)=xe^x,\ B(x)=\frac{x}{1-x},\ C(x)=-\ln(1-x)$ 且比较点都在 $x_0=0,\ \Delta x=0.1$
+        operation: 同构改写并统一比较坐标。
+        why: 把异构表达式转换为同一微元框架。
+      source_ref: page_0161_ex16_solution
+    - step_id: step_2
+      statement: 一阶导在 $x_0=0$ 相同，进入二阶导比较。
+      formula_trace:
+        from: $A^{\prime}(0)=B^{\prime}(0)=C^{\prime}(0)=1$
+        to: $A^{\prime\prime}(0)=B^{\prime\prime}(0)=2>1=C^{\prime\prime}(0)$
+        operation: 同阶导相同则升阶比较。
+        why: 先确定 $a,c$ 顺序为 $a>c$。
+      source_ref: page_0161_ex16_solution
+    - step_id: step_3
+      statement: 在 $A,B$ 间继续比较三阶导。
+      formula_trace:
+        from: $A^{\prime\prime}(0)=B^{\prime\prime}(0)$
+        to: $A^{\prime\prime\prime}(0)=3<6=B^{\prime\prime\prime}(0)$
+        operation: 二阶持平后升到三阶判大小。
+        why: 得到 $b>a$。
+      source_ref: page_0161_ex16_solution
+    - step_id: step_4
+      statement: 合并比较结果对应选项。
+      formula_trace:
+        from: $b>a$ 且 $a>c$
+        to: $b>a>c\iff c<a<b$
+        operation: 传递比较并回写选项序。
+        why: 完成答案匹配。
+      source_ref: page_0161_ex16_solution
+teaching_card:
+  student_title: 同增量先看二阶，不够再看三阶
+  what_it_trains: 训练把混合表达式统一成同一点微元比较，再按导数阶次逐层分出大小。
+  recognition_cues:
+    - 多个量都可写成某函数在 0 附近的小增量。
+    - 出现指数、分式、对数组合且数值很接近。
+    - 题目给的是排序选项，不要求精算。
+  normalization_moves:
+    - 先统一比较点与增量。
+    - 同阶导若打平，就继续升一阶。
+    - 最后把比较结论回写为选项顺序。
+  common_failures:
+    - 只看一阶导就直接下结论。
+    - 忽略 $A,B$ 二阶导相同，导致 $a,b$ 顺序判错。
+    - 把题干的 $c=-\ln0.9$ 误抄成 $\ln0.9$。
+  similar_practice_query: 同增量 微元法 二阶三阶导 比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0161 页图，例16题干与解析主链可读清晰。

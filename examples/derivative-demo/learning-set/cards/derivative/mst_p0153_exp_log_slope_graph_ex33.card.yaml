@@ -1,0 +1,188 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0153_exp_log_slope_graph_ex33
+content_revision_id: mst_p0153_exp_log_slope_graph_ex33-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0153_exp_log_slope_graph_ex33.card.yaml
+stem: |-
+  已知 $a=e-2$，$b=1-\ln2$，$c=e^e-e^2$。则（  ）
+  A. $c>b>a$
+  B. $a>b>c$
+  C. $a>c>b$
+  D. $c>a>b$
+answer: |
+  D
+
+  源解直接给出图像斜率链
+  \[
+  k_1>k_2>k_3
+  \Longleftrightarrow
+  \frac{c}{a}>\frac{a}{a}>\frac{b}{a},
+  \]
+  从而
+  \[
+  c>a>b.
+  \]
+  故选 D。
+
+  这里 $a=e-2$ 是区间 $[2,e]$ 的横向长度，$b=1-\ln2$ 是
+  $\ln x$ 在该区间上的纵向变化，$c=e^e-e^2$ 是 $e^x$ 在该区间上的纵向变化。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 读取图像中三条过原点射线的斜率顺序。
+      max_score: 1
+    - step_id: step_2
+      description: 把斜率顺序转写成题设量的比值链。
+      max_score: 1
+    - step_id: step_3
+      description: 消去公共正因子并得到最终顺序。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 通过图像斜率顺序比较 $a,b,c$。
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 过原点斜率链
+      - 比值归一到 $a$
+      - 图像到代数回译
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+    evidence:
+      - 同图出现 $y=e^x$ 与 $y=\ln x$，并用同一参考点形成斜率比较。
+      - 解析核心不是直接算值，而是“斜率大小 -> 比值大小”。
+    normalization_moves_used:
+      - 把排序转为 $k_1,k_2,k_3$ 排序。
+      - 将斜率表达改写为 $\\frac{c}{a},1,\\frac{b}{a}$。
+      - 统一乘 $a$ 还原 $c,a,b$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能把斜率关系写成比值链，回补函数性质与图像。
+      - 若学生对指数与对数曲线局部斜率直观混乱，回补指数对数基础。
+      - 若学生在“同乘正数保序”环节出错，回补不等式工具基础。
+  detail_terms:
+    - 斜率链 $k_1>k_2>k_3$
+    - $\\frac{c}{a}>1>\\frac{b}{a}$
+    - 图像回译
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0153_exp_log_slope_graph_ex33
+source_evidence:
+  source_refs:
+    - ref_id: page_0153_ex33_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0153/page_0153.md
+      role: problem_start
+      evidence: 例33题干与选项在page_0153；题干中 $c$ 的指数位在转录时曾标注不清。
+    - ref_id: page_0153_ex33_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0153/page_0153.md
+      role: solution
+      evidence: 源解析给出 $k_1>k_2>k_3 \Leftrightarrow \frac{c}{a}>\frac{a}{a}>\frac{b}{a}$，据此结论 $c>a>b$，选D。
+    - ref_id: page_0153_ex33_figure
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0153/page_0153.md
+      role: local_context
+      evidence: 配图含 $y=e^x$、$y=\ln x$ 及过原点斜率线 $k_1,k_2,k_3$，x轴标注 $2,e$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0153.png
+      inspected: true
+      notes: 页图指数位字形模糊；结合配图 x 轴标注 2 与 e，以及解析斜率链，$c$ 应为指数曲线在 $[2,e]$ 上的纵差 $e^e-e^2$。
+  source_context: 例33位于指数/对数图像比较板块，解法高度依赖配图中的斜率关系。
+  source_influence:
+    - 按配图把 $a=e-2$ 解释为横向长度，$b=1-\ln2$ 解释为 $\ln x$ 在 $[2,e]$ 上的纵差，$c=e^e-e^2$ 解释为 $e^x$ 在 $[2,e]$ 上的纵差。
+    - 保留源解主链：由 $k_1>k_2>k_3$ 推到 $\\frac{c}{a}>\\frac{a}{a}>\\frac{b}{a}$。
+    - 保留结论 $c>a>b$，对应选项 D。
+    - 保留“图像斜率法”作为主方法。
+  source_discrepancies:
+    - 题干指数位 OCR 曾读作 $x$，导致 $c=e^x-e^2$ 不闭合；结合页图中 $x$ 轴端点 $2,e$ 和解析斜率比值，已重建为 $c=e^e-e^2$。
+original_problem:
+  stem: 已知 $a=e-2$，$b=1-\ln2$，$c=e^e-e^2$。则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $c>b>a$
+      text_latex: $c>b>a$
+    - label: B
+      text_raw: $a>b>c$
+      text_latex: $a>b>c$
+    - label: C
+      text_raw: $a>c>b$
+      text_latex: $a>c>b$
+    - label: D
+      text_raw: $c>a>b$
+      text_latex: $c>a>b$
+  answer: D
+  fidelity_notes:
+    - 题干指数位按配图和解析链重建为 $e$；原 OCR/页图模糊处不按变量 $x$ 处理。
+    - $a,b,c$ 分别对应区间 $[2,e]$ 上直线 $y=x$、曲线 $y=\ln x$、曲线 $y=e^x$ 的纵向变化量。
+solution:
+  source_solution_summary: |
+    源解直接给出图像斜率链
+    \[
+    k_1>k_2>k_3
+    \Longleftrightarrow
+    \frac{c}{a}>\frac{a}{a}>\frac{b}{a},
+    \]
+    从而
+    \[
+    c>a>b.
+    \]
+    故选 D。
+
+    这里 $a=e-2$ 是区间 $[2,e]$ 的横向长度，$b=1-\ln2$ 是
+    $\ln x$ 在该区间上的纵向变化，$c=e^e-e^2$ 是 $e^x$ 在该区间上的纵向变化。
+  key_steps:
+    - step_id: step_1
+      statement: 读取图像中三条过原点射线的斜率顺序。
+      formula_trace:
+        from: 配图标注 $k_1,k_2,k_3$
+        to: $k_1>k_2>k_3$
+        operation: 比较同一坐标系中的倾斜程度。
+        why: 源解析首步即以此作为起点。
+      source_ref: page_0153_ex33_solution
+    - step_id: step_2
+      statement: 把斜率顺序转写成题设量的比值链。
+      formula_trace:
+        from: $k_1>k_2>k_3$
+        to: $\\frac{c}{a}>\\frac{a}{a}>\\frac{b}{a}$
+        operation: 按图中对应线段差值建立斜率表达。
+        why: 把几何顺序转回代数量比较。
+      source_ref: page_0153_ex33_solution
+    - step_id: step_3
+      statement: 消去公共正因子并得到最终顺序。
+      formula_trace:
+        from: $\\frac{c}{a}>1>\\frac{b}{a}$
+        to: $c>a>b$
+        operation: 同乘正数 $a$。
+        why: 对应选项 D。
+      source_ref: page_0153_ex33_solution
+teaching_card:
+  student_title: 用斜率链替代硬算
+  what_it_trains: 训练在指数/对数混合图像中，用过原点斜率顺序快速建立代数比值链。
+  recognition_cues:
+    - 图中有多条过原点的比较射线。
+    - 题目目标是三数顺序，不要求精确值。
+    - 解析给出 $k_1,k_2,k_3$ 作为主比较对象。
+  normalization_moves:
+    - 先比斜率，再比比值。
+    - 把中间基准写成 $1=\\frac{a}{a}$。
+    - 最后再回到 $c,a,b$ 本体。
+  common_failures:
+    - 跳过图像关系，直接代数硬算导致链条断裂。
+    - 忽略分母符号条件，机械同乘。
+    - 将“斜率比较”和“函数值比较”混为一谈。
+  similar_practice_query: 指数对数 图像斜率 比值链 c a b 比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已复核页图和解析链：$c$ 应为 $e^e-e^2$，对应指数曲线在 $x=2$ 到 $x=e$ 的纵差；原 OCR 的 $e^x$ 读法不闭合，已重建。

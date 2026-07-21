@@ -1,0 +1,201 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0034_ex27
+content_revision_id: mst_p0034_ex27-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0034_ex27.card.yaml
+stem: |-
+  设 $a>0,b>0$，且满足 $\frac{\ln b}{a-1}=\frac{a+1}{a}$，则下列判断正确的是 ( )
+  A. $a^2>b$
+  B. $a^2<b$
+  C. $\log_a b<2$
+  D. $\log_a b>2$
+answer: |
+  D
+
+  由 $\frac{\ln b}{a-1}=\frac{a+1}{a}$ 得 $\ln b=\frac{a^2-1}{a}=a-\frac1a$，所以 $\ln b-\ln a^2=a-\frac1a-2\ln a$。令 $f(x)=x-\frac1x-2\ln x$，则 $f'(x)=\frac{(x-1)^2}{x^2}\ge0$，$f$ 在 $(0,+\infty)$ 上递增且 $f(1)=0$。当 $0<a<1$ 时，$\ln b-\ln a^2<0$，故 $b<a^2$，但因 $\ln a<0$，得到 $\log_a b>2$；当 $a>1$ 时，$\ln b-\ln a^2>0$，故 $b>a^2$，且因 $\ln a>0$，仍有 $\log_a b>2$。因此只有 D 一定正确。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先把题设等式整理成 $\ln b-\ln a^2$。
+      max_score: 1
+    - step_id: step_2
+      description: 构造对数飘带型函数。
+      max_score: 1
+    - step_id: step_3
+      description: 判断 $f(a)$ 的符号。
+      max_score: 1
+    - step_id: step_4
+      description: 分类判断 $b$ 与 $a^2$。
+      max_score: 1
+    - step_id: step_5
+      description: 判断 $\log_a b$ 与 2，注意底数小于 1 时不等号反向。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较 $a^2$ 与 $b$。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 数值比较
+        target: 比较 $\log_a b$ 与 2。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 含参数分类讨论
+    subroute:
+      - $x-1/x-2\ln x$ 单调
+      - 对数底数小于 1 时反向
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+    evidence:
+      - 题设整理后出现 $a-\frac1a-2\ln a$，正是源页提示的 $x-\frac1x-2\ln x$。
+      - 同一个 $f(a)$ 的符号同时控制 $b$ 与 $a^2$、$\log_a b$ 与 2。
+    normalization_moves_used:
+      - $\ln b=(a^2-1)/a=a-1/a$。
+      - $\ln b-\ln a^2=a-1/a-2\ln a$。
+      - 按 $0<a<1$ 与 $a>1$ 分别处理 $\ln a$ 的符号。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $\frac{\ln b}{a-1}=\frac{a+1}{a}$ 推出 $\ln b=a-1/a$，回补代数恒等变形。
+      - 若学生不知道 $\ln b-\ln a^2$ 的符号如何转成 $b$ 与 $a^2$ 的大小，回补指数对数基础。
+      - 若学生在 $0<a<1$ 时除以 $\ln a$ 没有改变不等号方向，回补指数对数基础。
+      - 若学生不会用 $f'(x)=((x-1)^2)/(x^2)$ 判断 $f$ 的单调性，回补导数单调极值基础。
+  detail_terms:
+    - $x-1/x-2\ln x$
+    - $\ln b-\ln a^2$
+    - $a\ne1$
+    - 底数小于 1
+    - 分类讨论
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0034_ex27
+source_evidence:
+  source_refs:
+    - ref_id: page_0034
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md
+      role: problem_start
+      evidence: "lines 35-39: 例 27 题干与四个选项。"
+    - ref_id: page_0034_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md
+      role: solution
+      evidence: "line 41: 将条件改写成 $\\ln b-\\ln a^2=f(a)$，分类讨论 $a$ 与 1 的大小。"
+    - ref_id: page_0034_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md
+      role: local_context
+      evidence: "lines 14-15 and 33: 源页提示 $x-1/x-2\\ln x$ 的单调性来自对数飘带背景。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0034.png
+      inspected: true
+      notes: 已核对原图：例 27 题干、四个选项和解析均在 page_0034，下方无跨页续题。
+  source_context: 本题延续 page_0034 的“对数飘带/双曲正弦隐藏数据”例题组，核心是把条件整理成 $x-1/x-2\ln x$ 在 $x=a$ 处的符号。
+  source_influence:
+    - 题目要求判断四个选项的真假，最终是数值/关系比较。
+    - 源解明确构造 $f(x)=x-1/x-2\ln x$，并按 $0<a<1$、$a>1$ 分类。
+    - $a=1$ 会使原条件分母 $a-1$ 为 0，因此题设隐含 $a\ne1$。
+  source_discrepancies: []
+original_problem:
+  stem: 设 $a>0,b>0$，且满足 $\frac{\ln b}{a-1}=\frac{a+1}{a}$，则下列判断正确的是 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a^2>b$
+      text_latex: $a^2>b$
+    - label: B
+      text_raw: $a^2<b$
+      text_latex: $a^2<b$
+    - label: C
+      text_raw: $\log_a b<2$
+      text_latex: $\log_a b<2$
+    - label: D
+      text_raw: $\log_a b>2$
+      text_latex: $\log_a b>2$
+  answer: D
+  fidelity_notes:
+    - 已核对 page_0034 原图，条件分母为 $a-1$，选项 C、D 均为以 $a$ 为底的对数。
+    - 题设写 $a>0$ 但表达式要求 $a\ne1$；源解正是分 $0<a<1$ 与 $1<a$ 两种情况。
+solution:
+  source_solution_summary: |
+    由 $\frac{\ln b}{a-1}=\frac{a+1}{a}$ 得 $\ln b=\frac{a^2-1}{a}=a-\frac1a$，所以 $\ln b-\ln a^2=a-\frac1a-2\ln a$。令 $f(x)=x-\frac1x-2\ln x$，则 $f'(x)=\frac{(x-1)^2}{x^2}\ge0$，$f$ 在 $(0,+\infty)$ 上递增且 $f(1)=0$。当 $0<a<1$ 时，$\ln b-\ln a^2<0$，故 $b<a^2$，但因 $\ln a<0$，得到 $\log_a b>2$；当 $a>1$ 时，$\ln b-\ln a^2>0$，故 $b>a^2$，且因 $\ln a>0$，仍有 $\log_a b>2$。因此只有 D 一定正确。
+  key_steps:
+    - step_id: step_1
+      statement: 先把题设等式整理成 $\ln b-\ln a^2$。
+      formula_trace:
+        from: |
+          $\frac{\ln b}{a-1}=\frac{a+1}{a}$
+        to: |
+          $\ln b=\frac{(a-1)(a+1)}a=\frac{a^2-1}a=a-\frac1a$
+        operation: 因 $a\ne1$，两边同乘 $a-1$，再展开分子。
+        why: 要与 $2\ln a=\ln a^2$ 比较，从而判断 $b$ 与 $a^2$ 以及 $\log_a b$ 与 2。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md:41
+    - step_id: step_2
+      statement: 构造对数飘带型函数。
+      formula_trace:
+        from: |
+          $\ln b-\ln a^2=a-\frac1a-2\ln a$
+        to: |
+          $\ln b-\ln a^2=f(a),\quad f(x)=x-\frac1x-2\ln x$
+        operation: 把 $a$ 看作函数输入 $x$，将右侧统一成 $f(a)$。
+        why: 源页开头已经提示 $x-\frac1x-2\ln x$ 是常用递增结构。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md:41
+    - step_id: step_3
+      statement: 判断 $f(a)$ 的符号。
+      formula_trace:
+        from: |
+          $f(x)=x-\frac1x-2\ln x$
+        to: |
+          $f'(x)=1+\frac1{x^2}-\frac2x=\frac{(x-1)^2}{x^2}\ge0,\quad f(1)=0$
+        operation: 求导并配成平方，得到 $f$ 在 $(0,+\infty)$ 上递增。
+        why: 因此 $0<a<1$ 时 $f(a)<0$，$a>1$ 时 $f(a)>0$。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md:41
+    - step_id: step_4
+      statement: 分类判断 $b$ 与 $a^2$。
+      formula_trace:
+        from: |
+          $\ln b-\ln a^2=f(a)$
+        to: |
+          $0<a<1\Rightarrow b<a^2;\quad a>1\Rightarrow b>a^2$
+        operation: 利用自然对数的递增性，把 $\ln b-\ln a^2$ 的符号转成 $b/a^2$ 与 1 的比较。
+        why: A、B 会随 $a$ 在 1 的两侧改变，所以都不是一定正确。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md:41
+    - step_id: step_5
+      statement: 判断 $\log_a b$ 与 2，注意底数小于 1 时不等号反向。
+      formula_trace:
+        from: |
+          $\ln b-\ln a^2=\ln b-2\ln a$
+        to: |
+          $0<a<1:\ \ln b<2\ln a,\ \ln a<0\Rightarrow \frac{\ln b}{\ln a}>2;\quad a>1:\ \ln b>2\ln a,\ \ln a>0\Rightarrow \frac{\ln b}{\ln a}>2$
+        operation: 分别按 $\ln a$ 的正负同除，并在 $0<a<1$ 时改变不等号方向。
+        why: 两种情况都得到 $\log_a b>2$，故 D 一定正确，C 错误。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md:41
+teaching_card:
+  student_title: 用 $x-1/x-2\ln x$ 判断对数比值
+  what_it_trains: 条件里同时有 $\ln b$ 和 $a\pm1$ 时，先把 $\ln b$ 解出来，再主动减去 $2\ln a$；这样 $b$ 与 $a^2$、$\log_a b$ 与 2 都由同一个函数 $x-1/x-2\ln x$ 的符号决定。
+  recognition_cues:
+    - 题干给出 $\ln b/(a-1)=(a+1)/a$，乘开后会出现 $(a^2-1)/a$。
+    - 选项同时比较 $a^2$ 与 $b$、$\log_a b$ 与 2，暗示看 $\ln b-2\ln a$。
+    - $a$ 可能在 1 的两侧，底数为 $a$ 的对数需要分情况。
+  normalization_moves:
+    - 先由题设得到 $\ln b=a-1/a$。
+    - 再减 $2\ln a$，凑成 $f(a)=a-1/a-2\ln a$。
+    - 用 $f'(x)=((x-1)^2)/(x^2)$ 和 $f(1)=0$ 判断 $f(a)$ 的正负。
+    - 判断 $\log_a b$ 时先看 $\ln a$ 的正负，再决定是否翻转不等号。
+  common_failures:
+    - 忽略 $a=1$ 处分母不存在。
+    - 只由 $b<a^2$ 推断 $\log_a b<2$，忘记 $0<a<1$ 时对数函数递减。
+    - 把 A 或 B 当作一定正确，没有注意 $a$ 可以在 1 的两侧。
+    - 求导时把 $-1/x$ 的导数写成 $-1/x^2$。
+  similar_practice_query: 对数飘带 x-1/x-2lnx log_a b 比较 a^2 b
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0034 原图与 markdown 对本题一致；本题无跨页续页。
+    - 题设未显式写 $a\ne1$，但分母 $a-1$ 已自然排除；卡片在 fidelity_notes 和步骤中保留该点。

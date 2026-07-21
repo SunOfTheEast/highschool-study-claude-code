@@ -1,0 +1,206 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0024_ex22
+content_revision_id: mst_p0024_ex22-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0024_ex22.card.yaml
+stem: |-
+  （上海市嘉定区 2024 届高三一模 T21）已知 $f(x)=\frac{x}{\mathrm{e}^{x}}, \ g(x)=\frac{\ln x}{x}$.
+
+  (1) 求函数 $y=f(x)$、$y=g(x)$ 的单调区间和极值;
+  (2) 请严格证明曲线 $y=f(x)$、$y=g(x)$ 有唯一交点;
+  (3) 对于常数 $a \in\left(0, \frac{1}{\mathrm{e}}\right)$，若直线 $y=a$ 和曲线 $y=f(x)$、$y=g(x)$ 共有三个不同交点 $\left(x_{1}, a\right)$、$\left(x_{2}, a\right)$、$\left(x_{3}, a\right)$，其中 $x_{1}<x_{2}<x_{3}$，求证：$x_{1}$、$x_{2}$、$x_{3}$ 成等比数列.
+answer: |-
+  (1) $f(x)=x\mathrm{e}^{-x}$ 在 $(-\infty,1)$ 上递增，在 $(1,+\infty)$ 上递减，极大值为 $f(1)=1/\mathrm{e}$；$g(x)=\ln x/x$ 在 $(0,\mathrm{e})$ 上递增，在 $(\mathrm{e},+\infty)$ 上递减，极大值为 $g(\mathrm{e})=1/\mathrm{e}$。
+  (2) 两曲线有唯一交点，其横坐标 $x_2\in(1,\mathrm{e})$。
+  (3) 在题设三交点情形下，$x_1=\ln x_2$、$x_2=\ln x_3$，且由公共交点方程得 $x_1x_3=x_2^2$，故 $x_1,x_2,x_3$ 成等比数列。
+
+
+  先用导数给出 $x/\mathrm{e}^x$ 与 $\ln x/x$ 的极大值结构；再令 $h(x)=\mathrm{e}^x\ln x-x^2$ 证明两曲线唯一交点。第三问中，三交点条件迫使中间点为两曲线公共点，于是用 $f(x_1)=g(x_2)$、$f(x_2)=g(x_3)$ 的指对同构得到 $x_1=\ln x_2$、$x_2=\ln x_3$，最后由 $h(x_2)=0$ 推出 $x_1x_3=x_2^2$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 求两个函数的单调区间和极值。
+      max_score: 1
+    - step_id: step_2
+      description: 把两曲线交点转化为一个零点方程。
+      max_score: 1
+    - step_id: step_3
+      description: 证明 $h$ 只有一个零点。
+      max_score: 1
+    - step_id: step_4
+      description: 从三交点条件识别中间点为两曲线公共点。
+      max_score: 1
+    - step_id: step_5
+      description: 用同构关系得到 $x_1=\ln x_2$ 与 $x_2=\ln x_3$。
+      max_score: 1
+    - step_id: step_6
+      description: 推出三个横坐标成等比数列。
+      max_score: 1
+graph:
+  goal:
+    primary: 数列关系证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: (1) 零点/极值点分析
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 零点/极值点分析
+        target: (2) 零点/极值点分析
+        result: 见 source_solution_summary
+      - part_id: "3"
+        goal: 数列关系证明
+        target: (3) 数列关系证明
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 数形结合
+    subroute:
+      - $x/\mathrm{e}^x$ 与 $\ln x/x$ 的 $x\leftrightarrow \ln x$ 同构
+      - 唯一交点锁定三交点中的公共点
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $g(u)=f(\ln u)$ 是第三问坐标关系的核心。
+      - $h(x)=\mathrm{e}^x\ln x-x^2$ 用于唯一交点和等比乘积。
+    normalization_moves_used:
+      - $f=g$ 乘以 $x\mathrm{e}^x$ 转为 $\mathrm{e}^x\ln x-x^2=0$。
+      - $g(u)$ 改写为 $f(\ln u)$。
+      - $x_2=\ln x_3$ 改写为 $x_3=\mathrm{e}^{x_2}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会对 $x\mathrm{e}^{-x}$ 和 $\ln x/x$ 求导判单调，回补导数运算与几何意义。
+      - 若学生不能把 $\frac{x}{\mathrm{e}^x}=\frac{\ln x}{x}$ 化成 $\mathrm{e}^x\ln x-x^2=0$，回补代数恒等变形。
+      - |
+        若学生不会证明 $\mathrm{e}^x-2x>0$ 支撑 $h'(x)>0$，回补不等式工具基础。
+      - 若学生看不出 $g(u)=f(\ln u)$，回补指数对数基础。
+  detail_terms:
+    - $f(x)=x/\mathrm{e}^x$
+    - $g(x)=\ln x/x$
+    - $h(x)=\mathrm{e}^x\ln x-x^2$
+    - $x_1=\ln x_2,\ x_2=\ln x_3$
+    - $x_1x_3=x_2^2$
+parts: &a1
+  - (1) 求函数 $y=f(x)$、$y=g(x)$ 的单调区间和极值;
+  - (2) 请严格证明曲线 $y=f(x)$、$y=g(x)$ 有唯一交点;
+  - (3) 对于常数 $a \in\left(0, \frac{1}{\mathrm{e}}\right)$，若直线 $y=a$ 和曲线 $y=f(x)$、$y=g(x)$ 共有三个不同交点 $\left(x_{1}, a\right)$、$\left(x_{2}, a\right)$、$\left(x_{3}, a\right)$，其中 $x_{1}<x_{2}<x_{3}$，求证：$x_{1}$、$x_{2}$、$x_{3}$ 成等比数列.
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0024_ex22
+source_evidence:
+  source_refs:
+    - ref_id: page_0024
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0024/page_0024.md
+      role: problem_start
+      evidence: 例22题干和解析(1)(2)(3)开头在 page_0024，页末截断于第三问交点坐标。
+    - ref_id: page_0025
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0025/page_0025.md
+      role: continuation
+      evidence: page_0025 顶部承接例22第(3)问，给出三交点顺序、配图、$x_1=\ln x_2$、$x_2=\ln x_3$ 以及等比结论。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0024.png
+      inspected: true
+      notes: 已核对例22题干、前三问和解析到 page_0024 底部的截断位置。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0025.png
+      inspected: true
+      notes: 已核对 page_0025 顶部续解、交点示意图和等比结论。
+  source_context: 例22从 page_0024 起题，解析跨到 page_0025 顶部；page_0025 后半进入新章节，不属于本题。
+  source_influence:
+    - 题干完整抄自 page_0024，第三问解析续接 page_0025。
+    - source 解析第(1)只写极值点和极大值；单调区间由导数判号补全。
+  source_discrepancies: []
+original_problem:
+  stem: |
+    （上海市嘉定区 2024 届高三一模 T21）已知 $f(x)=\frac{x}{\mathrm{e}^{x}}, \ g(x)=\frac{\ln x}{x}$.
+  parts: *a1
+  choices: []
+  answer: |
+    (1) $f(x)=x\mathrm{e}^{-x}$ 在 $(-\infty,1)$ 上递增，在 $(1,+\infty)$ 上递减，极大值为 $f(1)=1/\mathrm{e}$；$g(x)=\ln x/x$ 在 $(0,\mathrm{e})$ 上递增，在 $(\mathrm{e},+\infty)$ 上递减，极大值为 $g(\mathrm{e})=1/\mathrm{e}$。
+    (2) 两曲线有唯一交点，其横坐标 $x_2\in(1,\mathrm{e})$。
+    (3) 在题设三交点情形下，$x_1=\ln x_2$、$x_2=\ln x_3$，且由公共交点方程得 $x_1x_3=x_2^2$，故 $x_1,x_2,x_3$ 成等比数列。
+  fidelity_notes:
+    - 题头和题干开头均在 page_0024。
+    - 第(3)问解析跨页至 page_0025 顶部。
+    - 原解析第(1)只给出极值点和极大值，单调区间为根据导数补全。
+solution:
+  source_solution_summary: 先用导数给出 $x/\mathrm{e}^x$ 与 $\ln x/x$ 的极大值结构；再令 $h(x)=\mathrm{e}^x\ln x-x^2$ 证明两曲线唯一交点。第三问中，三交点条件迫使中间点为两曲线公共点，于是用 $f(x_1)=g(x_2)$、$f(x_2)=g(x_3)$ 的指对同构得到 $x_1=\ln x_2$、$x_2=\ln x_3$，最后由 $h(x_2)=0$ 推出 $x_1x_3=x_2^2$。
+  key_steps:
+    - step_id: step_1
+      statement: 求两个函数的单调区间和极值。
+      formula_trace:
+        from: $f(x)=x\mathrm{e}^{-x},\quad g(x)=\frac{\ln x}{x}$
+        to: |
+          $f'(x)=\mathrm{e}^{-x}(1-x),\quad g'(x)=\frac{1-\ln x}{x^2}$
+        operation: 直接求导并按 $1-x$、$1-\ln x$ 判号。
+        why: 导数符号决定单调区间，导数变号点给出极大值。
+      source_ref: page_0024
+    - step_id: step_2
+      statement: 把两曲线交点转化为一个零点方程。
+      formula_trace:
+        from: $\frac{x}{\mathrm{e}^x}=\frac{\ln x}{x}$
+        to: $h(x)=\mathrm{e}^{x}\ln x-x^2=0$
+        operation: 在 $x>0$ 上两边乘以 $x\mathrm{e}^x$，再移项。
+        why: 交点唯一性可转化为 $h$ 的零点唯一性。
+      source_ref: page_0024
+    - step_id: step_3
+      statement: 证明 $h$ 只有一个零点。
+      formula_trace:
+        from: |
+          $h'(x)=\mathrm{e}^{x}\left(\ln x+\frac1x\right)-2x$
+        to: $h(x)$ 在 $(1,+\infty)$ 上严格递增，且唯一零点 $x_2\in(1,\mathrm{e})$
+        operation: |
+          当 $0<x<1$ 时 $\ln x<0$，故 $h(x)<0$；当 $x>1$ 时，$h'(x)>\mathrm{e}^x-2x>0$；再用 $h(1)=-1<0$、$h(\mathrm{e})=\mathrm{e}^{\mathrm{e}}-\mathrm{e}^2>0$。
+        why: 负区间无根，正区间严格递增并出现变号，所以只有一个交点。
+      source_ref: page_0024
+    - step_id: step_4
+      statement: 从三交点条件识别中间点为两曲线公共点。
+      formula_trace:
+        from: $y=a$ 与两曲线共有三个不同交点 $x_1<x_2<x_3$
+        to: $f(x_1)=f(x_2)=g(x_2)=g(x_3),\quad 0<x_1<1<x_2<x_3$
+        operation: 利用 $f$ 在正半轴上先增后减、$g$ 在 $(0,+\infty)$ 上先增后减，且两曲线只有一个公共点。
+        why: 若总交点数为三个，则一个交点必须由两曲线共享，且只能是唯一公共点 $x_2$。
+      source_ref: page_0025
+    - step_id: step_5
+      statement: 用同构关系得到 $x_1=\ln x_2$ 与 $x_2=\ln x_3$。
+      formula_trace:
+        from: $f(x_1)=g(x_2),\quad f(x_2)=g(x_3)$
+        to: $x_1=\ln x_2,\quad x_2=\ln x_3$
+        operation: 把 $g(u)=\ln u/u$ 写成 $f(\ln u)=\ln u/\mathrm{e}^{\ln u}=\ln u/u$，再用 $f$ 在相应单调区间上的唯一性匹配横坐标。
+        why: $f$ 与 $g$ 通过 $u=\mathrm{e}^t$ 形成同构。
+      source_ref: page_0025
+    - step_id: step_6
+      statement: 推出三个横坐标成等比数列。
+      formula_trace:
+        from: $x_1=\ln x_2,\quad x_3=\mathrm{e}^{x_2},\quad h(x_2)=0$
+        to: $x_1x_3=\mathrm{e}^{x_2}\ln x_2=x_2^2$
+        operation: 由 $x_2=\ln x_3$ 得 $x_3=\mathrm{e}^{x_2}$；由公共交点方程 $h(x_2)=0$ 得 $\mathrm{e}^{x_2}\ln x_2=x_2^2$。
+        why: $x_1x_3=x_2^2$ 正是三正数成等比数列的判定式。
+      source_ref: page_0025
+teaching_card:
+  student_title: $x/e^x$ 与 $\ln x/x$ 的三交点等比
+  what_it_trains: 训练把互为指对替换的两条曲线通过同构函数连接起来，并把交点关系转化为数列关系。
+  recognition_cues:
+    - 同时出现 $x/\mathrm{e}^x$ 和 $\ln x/x$。
+    - 水平线与两曲线共有三个交点。
+    - 结论要求横坐标成等比数列。
+  normalization_moves:
+    - 用 $h(x)=\mathrm{e}^x\ln x-x^2$ 证明曲线唯一交点。
+    - 将 $g(u)$ 改写为 $f(\ln u)$。
+    - 用公共交点方程补上乘积 $x_1x_3=x_2^2$。
+  common_failures:
+    - 把三交点误认为两曲线各自都有两个不同交点而忽略公共点。
+    - 未证明唯一交点，直接用图像下结论。
+    - 只得到 $x_1=\ln x_2$、$x_2=\ln x_3$，忘记调用 $h(x_2)=0$。
+  similar_practice_query: x/e^x ln x/x 唯一交点 水平线 三交点 等比
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - Reviewer confirmed $f(x)=x/e^x$ has natural domain $\\mathbb{R}$ in part (1); keeping $(-\\infty,1)$ and $(1,+\\infty)$ is appropriate.
+    - 第三问解析跨 page_0024/page_0025，已按图片核对续接处。
+    - Reviewer changed goal from `几何性质证明` to `数列关系证明`; the target is proving intersection abscissas form a geometric progression.
+    - Reviewer removed `局部逼近与找点` and `极值点偏移结构`; this route uses unique intersection and $x\\leftrightarrow\\ln x$ matching, not local approximation or extremal-point offset.

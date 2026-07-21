@@ -1,0 +1,174 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0178_common_zero_2a_minus_b_min_ex32
+content_revision_id: mst_p0178_common_zero_2a_minus_b_min_ex32-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0178_common_zero_2a_minus_b_min_ex32.card.yaml
+stem: |-
+  （2025 · 昆明一中期末 T8）已知 $a>0$，$b\in\mathbf{R}$，若关于 $x$ 的不等式 $(ax-1)(x^2+bx-1)\geqslant0$ 在 $(0,+\infty)$ 上恒成立，$2a-b$ 的最小值是（  ）
+  A. 0
+  B. 1
+  C. \sqrt{2}
+  D. 2
+answer: |-
+  D
+
+  由 $a>0$ 知 $y=ax-1$ 在 $(0,+\infty)$ 上递增，且零点为 $x=\frac{1}{a}$。源解按“单调函数共零点”处理：乘积在 $(0,+\infty)$ 恒非负时，两因子零点对齐，故 $\frac{1}{a}$ 也是 $x^2+bx-1=0$ 的正根，得到 $\frac{1}{a^2}+\frac{b}{a}-1=0$，即 $b=a-\frac{1}{a}$。于是 $2a-b=a+\frac{1}{a}\ge2$，当 $a=1$ 时取等，配套 $b=0$，最小值为 $2$，选 D。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 锁定第一个因子的零点。
+      max_score: 1
+    - step_id: step_2
+      description: 用共零点关系写出 $a,b$ 约束。
+      max_score: 1
+    - step_id: step_3
+      description: 消去 $b$，把目标改成单变量最值。
+      max_score: 1
+    - step_id: step_4
+      description: 用基本不等式取最小值。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level:
+      - part_id: item_1
+        goal: 极值最值
+        target: 求 $2a-b$ 的最小值。
+        result: 见 source_solution_summary
+  method:
+    primary: 参变量分离
+    secondary:
+      - 数形结合
+      - 同构变形与换元法
+    subroute:
+      - 共零点
+      - 代入消参
+      - 基本不等式下界
+  structure:
+    primary: 多变量与不等式结构
+    secondary:
+      - 同构结构
+    evidence:
+      - 参数来自两个因子 $(ax-1)$ 与 $(x^2+bx-1)$ 的乘积恒成立。
+      - 共零点给出 $\frac{1}{a^2}+\frac{b}{a}-1=0$。
+      - 目标被化成 $a+\frac{1}{a}$ 的单变量最值。
+    normalization_moves_used:
+      - 先取 $x=\frac{1}{a}$。
+      - 把二元约束改写成 $b=a-\frac{1}{a}$。
+      - 把 $2a-b$ 化为 $a+\frac{1}{a}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不理解为何先抓 $x=\frac{1}{a}$，回补函数性质与图像。
+      - 若学生代入后整理 $\frac{1}{a^2}+\frac{b}{a}-1=0$ 出错，回补代数恒等变形。
+      - 若学生不会用 $a+\frac{1}{a}\ge2$，回补不等式工具基础。
+  detail_terms:
+    - 单调函数共零点
+    - $(ax-1)(x^2+bx-1)\ge0$
+    - $x=\frac{1}{a}$
+    - $b=a-\frac{1}{a}$
+    - $a+\frac{1}{a}\ge2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0178_common_zero_2a_minus_b_min_ex32
+source_evidence:
+  source_refs:
+    - ref_id: page_0178_ex32_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0178/page_0178.md
+      role: problem_start
+      evidence: page_0178 lines 22-27 给出例32题干与 A-D 选项。
+    - ref_id: page_0178_ex32_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0178/page_0178.md
+      role: solution
+      evidence: page_0178 line 29 给出“单调函数共零点”解法，推出 $\frac{1}{a^2}+\frac{b}{a}-1=0$ 与 $2a-b=a+\frac{1}{a}\ge2$，答案 D。
+    - ref_id: page_0178_top_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0178/page_0178.md
+      role: local_context
+      evidence: page_0178 lines 14-16 是 page_0177 例31续式，不属于本页新题头。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0178.png
+      inspected: true
+      notes: 页图核对通过：例32题干、选项、共零点推导和答案 D 与 markdown 一致。
+  source_context: 按题头归属规则，例32题头起于 page_0178，故本卡由 worker C 新建；page_0178 顶部续题只作为局部上下文。
+  source_influence:
+    - 保留源页“共零点”主线：由乘积恒非负与单调性对齐零点。
+    - 保留源页最值链：$2a-b=a+\frac{1}{a}\ge2$，并写出取等点 $(a,b)=(1,0)$。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 · 昆明一中期末 T8）已知 $a>0$，$b\in\mathbf{R}$，若关于 $x$ 的不等式 $(ax-1)(x^2+bx-1)\geqslant0$ 在 $(0,+\infty)$ 上恒成立，$2a-b$ 的最小值是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: "0"
+      text_latex: "0"
+    - label: B
+      text_raw: "1"
+      text_latex: "1"
+    - label: C
+      text_raw: \sqrt{2}
+      text_latex: $\sqrt{2}$
+    - label: D
+      text_raw: "2"
+      text_latex: "2"
+  answer: D
+  fidelity_notes:
+    - 题型为单选；源解直接给出“共零点 + 基本不等式”链。
+    - 题干的“在 $(0,+\infty)$ 上恒成立”在本卡按该区间全体 $x$ 解释。
+solution:
+  source_solution_summary: 由 $a>0$ 知 $y=ax-1$ 在 $(0,+\infty)$ 上递增，且零点为 $x=\frac{1}{a}$。源解按“单调函数共零点”处理：乘积在 $(0,+\infty)$ 恒非负时，两因子零点对齐，故 $\frac{1}{a}$ 也是 $x^2+bx-1=0$ 的正根，得到 $\frac{1}{a^2}+\frac{b}{a}-1=0$，即 $b=a-\frac{1}{a}$。于是 $2a-b=a+\frac{1}{a}\ge2$，当 $a=1$ 时取等，配套 $b=0$，最小值为 $2$，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 锁定第一个因子的零点。
+      formula_trace:
+        from: $ax-1=0,\ a>0$
+        to: $x=\frac{1}{a}>0$
+        operation: 解一次方程并用 $a>0$ 判断零点落在目标区间。
+        why: 共零点法需要先抓住可控零点。
+      source_ref: page_0178_ex32_solution
+    - step_id: step_2
+      statement: 用共零点关系写出 $a,b$ 约束。
+      formula_trace:
+        from: $(ax-1)(x^2+bx-1)\ge0$ 在 $(0,+\infty)$ 恒成立
+        to: $\left(\frac{1}{a}\right)^2+b\left(\frac{1}{a}\right)-1=0$
+        operation: 把 $x=\frac{1}{a}$ 代入第二因子。
+        why: 把二元参数约束压成一条代数关系。
+      source_ref: page_0178_ex32_solution
+    - step_id: step_3
+      statement: 消去 $b$，把目标改成单变量最值。
+      formula_trace:
+        from: $\frac{1}{a^2}+\frac{b}{a}-1=0$
+        to: $b=a-\frac{1}{a},\quad 2a-b=a+\frac{1}{a}$
+        operation: 代数移项与代入。
+        why: 把原目标转为标准的 $a+\frac{1}{a}$ 下界问题。
+      source_ref: page_0178_ex32_solution
+    - step_id: step_4
+      statement: 用基本不等式取最小值。
+      formula_trace:
+        from: $a>0,\ 2a-b=a+\frac{1}{a}$
+        to: $2a-b\ge2$
+        operation: 应用 $u+\frac{1}{u}\ge2\ (u>0)$。
+        why: 直接得到最小值与选项。
+      source_ref: page_0178_ex32_solution
+teaching_card:
+  student_title: 先用共零点消掉 b
+  what_it_trains: 训练在乘积恒成立题里，先抓单调因子的确定零点，再通过代入把双参数目标降到一元最值。
+  recognition_cues:
+    - 结构是“两个因子乘积恒非负”。
+    - 其中一个因子是一次函数，零点显式可写。
+    - 题目最终问的是参数线性组合最小值。
+  normalization_moves:
+    - 先解 $ax-1=0$ 得 $x=\frac{1}{a}$。
+    - 代入二次因子得到 $a,b$ 关系式。
+    - 把目标式完全改写为只含 $a$。
+    - 最后用 $u+\frac{1}{u}\ge2$ 收尾。
+  common_failures:
+    - 把“恒成立”误解成只需某个点成立。
+    - 从 $\frac{1}{a^2}+\frac{b}{a}-1=0$ 解 $b$ 时漏项。
+    - 得到 $a+\frac{1}{a}$ 后忘记 $a>0$ 才能直接套下界。
+  similar_practice_query: 共零点 乘积恒成立 参数最值 a+1/a
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 未直接核对 page_0178 页图，当前依据 markdown transcription 重建。

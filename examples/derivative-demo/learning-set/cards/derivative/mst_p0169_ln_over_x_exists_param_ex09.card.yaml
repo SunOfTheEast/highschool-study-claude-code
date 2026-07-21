@@ -1,0 +1,272 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0169_ln_over_x_exists_param_ex09
+content_revision_id: mst_p0169_ln_over_x_exists_param_ex09-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0169_ln_over_x_exists_param_ex09.card.yaml
+stem: |-
+  （2022·哈三中期末 T7）已知函数 $f(x)=\frac{\ln x}{x}$，$g(x)=\ln(x+1)-ax^2$，若 $\forall x_1 \in [1, e]$，$\exists x_2 \in (0, 1]$ 使得 $f(x_1) > g(x_2)$ 成立，则实数 $a$ 的取值范围是（  ）
+  A. $a > \ln 2$
+  B. $a \geqslant \ln 2$
+  C. $a > \frac{1}{e}$
+  D. $a \geqslant \frac{1}{e}-\ln 2$
+answer: |
+  A
+
+  先处理
+  \[
+  f(x)=\frac{\ln x}{x},\quad
+  f^{\prime}(x)=\frac{1-\ln x}{x^2}.
+  \]
+  在 $[1,e]$ 上有 $f^{\prime}(x)\ge0$，故 $f$ 单调递增，最小值为
+  \[
+  f_{\min}=f(1)=0.
+  \]
+  原条件
+  \[
+  \forall x_1\in[1,e],\ \exists x_2\in(0,1],\ f(x_1)>g(x_2)
+  \]
+  由源解改写为存在 $x\in(0,1]$ 使
+  \[
+  g(x)=\ln(x+1)-ax^2<0
+  \iff a>\frac{\ln(x+1)}{x^2}.
+  \]
+  设
+  \[
+  h(x)=\frac{\ln(x+1)}{x^2},\quad x\in(0,1],
+  \]
+  则需
+  \[
+  a>h_{\min}.
+  \]
+  计算
+  \[
+  h^{\prime}(x)=\frac{\frac{x}{x+1}-2\ln(x+1)}{x^3},
+  \]
+  设
+  \[
+  \varphi(x)=\frac{x}{x+1}-2\ln(x+1),
+  \]
+  有
+  \[
+  \varphi^{\prime}(x)=\frac{-2x-1}{(x+1)^2}<0,
+  \]
+  所以 $\varphi(x)<\varphi(0)=0$，进而 $h^{\prime}(x)<0$，即 $h$ 在 $(0,1]$ 单调递减。
+  因而
+  \[
+  h_{\min}=h(1)=\ln2.
+  \]
+  故
+  \[
+  a>\ln2.
+  \]
+  选 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 由导数判出 $f$ 在 $[1,e]$ 的最小值。
+      max_score: 1
+    - step_id: step_2
+      description: 把存在条件转成对 $h(x)=\frac{\ln(x+1)}{x^2}$ 的下界比较。
+      max_score: 1
+    - step_id: step_3
+      description: 用辅助函数 $\varphi$ 判定 $h$ 的单调性。
+      max_score: 1
+    - step_id: step_4
+      description: 代端点并给出严格范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 参变量分离
+    secondary:
+      - 含参数分类讨论
+      - 同构变形与换元法
+    subroute:
+      - 先锁 $f_{\min}$ 再转“存在负值点”
+      - 把 $g<0$ 变为 $a>h(x)$
+      - 辅助函数判导数符号再取端点
+  structure:
+    primary: 抽象函数结构
+    secondary:
+      - Max/Min 与绝对值结构
+      - 指对复合结构
+    evidence:
+      - 题干为“全称-存在”量词复合命题，需先做逻辑降维再做最值。
+      - $h(x)=\frac{\ln(x+1)}{x^2}$ 是典型对数分式最值模型。
+    normalization_moves_used:
+      - 把条件压到 $f_{\min}=0$ 这个临界值。
+      - 把 $g<0$ 统一写成 $a>h(x)$。
+      - 引入 $\varphi$ 处理中间表达式符号。
+      - 由单调性直接端点取 $h_{\min}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看不清“全称-存在”与最值条件的对应，回补不等式工具基础。
+      - 若学生在 $h^{\prime}(x)$ 化简与符号判断上失误，回补导数单调极值基础。
+      - 若学生对 $(0,1]$ 上分母正性与不等式方向不稳，回补函数三要素与定义域。
+      - 若学生对 $\ln(x+1)$ 的变化率模型不熟，回补指数对数基础。
+  detail_terms:
+    - $f(x)=\frac{\ln x}{x}$
+    - $g(x)=\ln(x+1)-ax^2$
+    - $h(x)=\frac{\ln(x+1)}{x^2}$
+    - $\varphi(x)=\frac{x}{x+1}-2\ln(x+1)$
+    - $h_{\min}=\ln2$
+    - $a>\ln2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0169_ln_over_x_exists_param_ex09
+source_evidence:
+  source_refs:
+    - ref_id: page_0169_ex09_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0169/page_0169.md
+      role: problem_start
+      evidence: page_0169 底部出现“例9”题头，给出完整题干与 A-D 选项：$f(x)=\frac{\ln x}{x}$，$g(x)=\ln(x+1)-ax^2$，条件为“$\forall x_1\in[1,e],\ \exists x_2\in(0,1]$ 使 $f(x_1)>g(x_2)$”。
+    - ref_id: page_0169_ex09_solution_head
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0169/page_0169.md
+      role: solution
+      evidence: page_0169 末行解析先给出 $f^{\prime}(x)=\frac{1-\ln x}{x^2}$，并判定 $f$ 在 $[1,e]$ 单调递增；该处随后截断。
+    - ref_id: page_0170_ex09_solution_tail
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0170/page_0170.md
+      role: continuation
+      evidence: page_0170 顶部续完例9解析：由 $f_{\min}=f(1)=0$ 化为“存在 $x\in(0,1]$ 使 $\ln(x+1)-ax^2<0$”，设 $h(x)=\frac{\ln(x+1)}{x^2}$，证明 $h$ 递减并得 $h_{\min}=\ln2$，故 $a>\ln2$，选 A。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0169.png
+      inspected: true
+      notes: 已核对页图：例9题头起于本页，解析确在页底截断。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0170.png
+      inspected: true
+      notes: 已核对页图：例9解析续于本页顶部并给出完整结论 $a>\ln2$、选 A。
+  source_context: 例9题头在 page_0169，解析跨页延续到 page_0170 顶部；按页头归属由 batch A 完成整卡。
+  source_influence:
+    - 保留源解先用 $f$ 的单调性得到 $f_{\min}=0$，再把条件改写为“存在负值点”。
+    - 保留源解定义 $h(x)=\frac{\ln(x+1)}{x^2}$ 并通过 $\varphi(x)$ 判 $h^{\prime}(x)<0$ 的链路。
+    - 保留严格不等式导致的开区间结论 $a>\ln2$。
+  source_discrepancies:
+    - page_0169 markdown 含布局截断标记；通过读取 page_0170 续页与原图已补全，不构成未决冲突。
+original_problem:
+  stem: （2022·哈三中期末 T7）已知函数 $f(x)=\frac{\ln x}{x}$，$g(x)=\ln(x+1)-ax^2$，若 $\forall x_1 \in [1, e]$，$\exists x_2 \in (0, 1]$ 使得 $f(x_1) > g(x_2)$ 成立，则实数 $a$ 的取值范围是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a > \ln 2$
+      text_latex: $a > \ln 2$
+    - label: B
+      text_raw: $a \geqslant \ln 2$
+      text_latex: $a \geqslant \ln 2$
+    - label: C
+      text_raw: $a > \frac{1}{e}$
+      text_latex: $a > \frac{1}{e}$
+    - label: D
+      text_raw: $a \geqslant \frac{1}{e}-\ln 2$
+      text_latex: $a \geqslant \frac{1}{e}-\ln 2$
+  answer: A
+  fidelity_notes:
+    - 题干在 page_0169 起头，解析在 page_0170 顶部续完。
+    - 保留源解中的严格不等式链，最终是开区间“$a>\ln2$”。
+solution:
+  source_solution_summary: |
+    先处理
+    \[
+    f(x)=\frac{\ln x}{x},\quad
+    f^{\prime}(x)=\frac{1-\ln x}{x^2}.
+    \]
+    在 $[1,e]$ 上有 $f^{\prime}(x)\ge0$，故 $f$ 单调递增，最小值为
+    \[
+    f_{\min}=f(1)=0.
+    \]
+    原条件
+    \[
+    \forall x_1\in[1,e],\ \exists x_2\in(0,1],\ f(x_1)>g(x_2)
+    \]
+    由源解改写为存在 $x\in(0,1]$ 使
+    \[
+    g(x)=\ln(x+1)-ax^2<0
+    \iff a>\frac{\ln(x+1)}{x^2}.
+    \]
+    设
+    \[
+    h(x)=\frac{\ln(x+1)}{x^2},\quad x\in(0,1],
+    \]
+    则需
+    \[
+    a>h_{\min}.
+    \]
+    计算
+    \[
+    h^{\prime}(x)=\frac{\frac{x}{x+1}-2\ln(x+1)}{x^3},
+    \]
+    设
+    \[
+    \varphi(x)=\frac{x}{x+1}-2\ln(x+1),
+    \]
+    有
+    \[
+    \varphi^{\prime}(x)=\frac{-2x-1}{(x+1)^2}<0,
+    \]
+    所以 $\varphi(x)<\varphi(0)=0$，进而 $h^{\prime}(x)<0$，即 $h$ 在 $(0,1]$ 单调递减。
+    因而
+    \[
+    h_{\min}=h(1)=\ln2.
+    \]
+    故
+    \[
+    a>\ln2.
+    \]
+    选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 由导数判出 $f$ 在 $[1,e]$ 的最小值。
+      formula_trace:
+        from: $f^{\prime}(x)=\frac{1-\ln x}{x^2}\ge0\ (x\in[1,e])$
+        to: $f_{\min}=f(1)=0$
+        operation: 单调递增函数取左端点。
+        why: 把“$\forall x_1$”条件先锁到最不利值。
+      source_ref: page_0169_ex09_solution_head
+    - step_id: step_2
+      statement: 把存在条件转成对 $h(x)=\frac{\ln(x+1)}{x^2}$ 的下界比较。
+      formula_trace:
+        from: $\exists x\in(0,1],\ \ln(x+1)-ax^2<0$
+        to: $\exists x\in(0,1],\ a>\frac{\ln(x+1)}{x^2}=h(x)\Rightarrow a>h_{\min}$
+        operation: 移项并除以正数 $x^2$。
+        why: 参数范围转为求 $h$ 的最小值。
+      source_ref: page_0170_ex09_solution_tail
+    - step_id: step_3
+      statement: 用辅助函数 $\varphi$ 判定 $h$ 的单调性。
+      formula_trace:
+        from: $h^{\prime}(x)=\frac{\frac{x}{x+1}-2\ln(x+1)}{x^3}$
+        to: $\varphi^{\prime}(x)=\frac{-2x-1}{(x+1)^2}<0\Rightarrow \varphi(x)<0\Rightarrow h^{\prime}(x)<0$
+        operation: 设 $\varphi(x)=\frac{x}{x+1}-2\ln(x+1)$，先判 $\varphi$ 再回代。
+        why: 确定 $h$ 在 $(0,1]$ 递减，从而最小值在 $x=1$。
+      source_ref: page_0170_ex09_solution_tail
+    - step_id: step_4
+      statement: 代端点并给出严格范围。
+      formula_trace:
+        from: $h_{\min}=h(1)=\ln2$
+        to: $a>\ln2$
+        operation: 将 $h_{\min}$ 代入 $a>h_{\min}$。
+        why: 严格不等式对应选项 A。
+      source_ref: page_0170_ex09_solution_tail
+teaching_card:
+  student_title: 全称-存在题先压最小值，再做辅助函数单调
+  what_it_trains: 训练含严格不等式的存在量词参数题：先抓最不利点，再把参数从函数里分离出来，最后用导数判最值。
+  recognition_cues:
+    - 出现“$\forall x_1,\ \exists x_2$”结构。
+    - 目标式含 $\ln(x+1)$ 与 $ax^2$ 的差。
+    - 问参数范围且选项含严格与非严格边界。
+  normalization_moves:
+    - 先求 $f$ 区间最小值。
+    - 把 $g<0$ 改写成 $a>h(x)$。
+    - 对 $h$ 求导并用辅助函数判号。
+    - 端点取最小值后回代参数。
+  common_failures:
+    - 把严格不等式“>”误放宽成“$\ge$”。
+    - 直接把 $a$ 与 $h(1)$ 比较，但未先证明 $h$ 的最小值位置。
+    - 在 $\varphi^{\prime}(x)$ 符号判断时漏看分母恒正。
+  similar_practice_query: forall exists 参数范围 ln(x+1)/x^2 单调性 辅助函数 phi
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

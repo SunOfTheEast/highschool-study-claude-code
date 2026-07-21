@@ -1,0 +1,235 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0118_dual_function_period_ex06
+content_revision_id: mst_p0118_dual_function_period_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0118_dual_function_period_ex06.card.yaml
+stem: |-
+  （2022 · 滕州市月考）已知函数 $f(x)$，$g(x)$ 的定义域为 $\\mathbf{R}$，$g'(x)$ 为 $g(x)$ 的导函数，且 $f(x)+g'(x)=5$，$f(x)-g'(4-x)=5$，若 $g(x)$ 为偶函数，则下列结论一定正确的是（  ）
+  A. $f(4)=5$
+  B. $g'(2)=0$
+  C. $f(-1)=f(-3)$
+  D. $f(1)+f(3)=10$
+answer: |
+  ABD
+
+  因 $g(x)$ 为偶函数，所以 $g'(x)$ 为奇函数。
+  由
+  $f(x)+g'(x)-5=0$ 与
+  $f(x)-g'(4-x)-5=0$ 相减得
+  $g'(x)+g'(4-x)=0$，故 $g'$ 关于点 $(2,0)$ 中心对称，
+  立得 $g'(2)=0$，B 正确。
+  又由
+  $f(x)-5=-g'(x)=g'(4-x)$，
+  配合奇函数关系可得
+  $g'(x)=g'(x+4)$，即 $g'$ 周期为 4。
+  再由
+  $f(x)+g'(x)=5$ 与
+  $f(x)-g'(4-x)=5$
+  可推出 $f(x)=f(x+4)$。
+  同时由代入 $-x$ 并利用 $g'(x+4)=g'(x)$，得到
+  $f(x)+f(-x)=10$，所以 $f$ 关于若干点 $(2+2k,5)$ 中心对称，
+  故 $f(1)+f(3)=10$，D 正确。
+  由周期与对称还可得 $f(0)=f(4)=5$，A 正确。
+  而 $f(-1)+f(-3)=10$ 只能给和，不能推出两者相等，C 不一定成立。
+  故选 ABD。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 由 $g$ 偶推出 $g'$ 奇，并先判 B。
+      max_score: 1
+    - step_id: step_2
+      description: 由奇性与位移关系推出 $g'$ 周期为 4。
+      max_score: 1
+    - step_id: step_3
+      description: 联立两式推出 $f(x)=f(x+4)$ 与 $f(x)+f(-x)=10$。
+      max_score: 1
+    - step_id: step_4
+      description: 用“周期 + 中心对称”判 A、C、D。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 抽象函数性质
+        target: 判断由偶性、导函数与位移方程共同推出的必然结论
+        result: 见 source_solution_summary
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 数形结合
+    subroute:
+      - 偶导奇
+      - 双式消元
+      - 周期与中心联动
+  structure:
+    primary: 抽象函数结构
+    secondary:
+      - 对称结构
+      - 复合函数与不动点结构
+    evidence:
+      - $f(x)+g'(x)=5$ 与 $f(x)-g'(4-x)=5$ 构成可消元的双函数位移系统。
+      - $g$ 偶 $\\Rightarrow g'$ 奇，直接触发中心对称信息。
+      - 周期 4 与中心 $(2+2k,5)$ 共同约束选项结论。
+    normalization_moves_used:
+      - 先由偶性降到导函数奇性。
+      - 把两式化为“和/差”以抽出 $g'$ 和 $f$ 的对称与周期。
+      - 用平移与代入 $-x$ 做二次消元。
+      - 区分“和固定”与“两值相等”的逻辑强度。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不熟悉偶函数导数奇性，回补函数性质与图像。
+      - 若学生在 $g'(-x)$ 与 $g'(4-x)$ 变换中符号混乱，回补导数运算与几何意义。
+      - 若学生无法把对称关系转成周期关系，回补分段/复合/反函数基础。
+      - 若学生把“$a+b$ 固定”误当作“$a=b$”，回补代数恒等变形。
+  detail_terms:
+    - $f(x)+g'(x)=5$
+    - $f(x)-g'(4-x)=5$
+    - $g'(2)=0$
+    - $f(x+4)=f(x)$
+    - 答案 ABD
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0118_dual_function_period_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0118
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0118/page_0118.md
+      role: problem_start
+      evidence: line 40 给出例 6 题头并起始到“且 $f(x)+$”，确认本题头从 page_0118 起。
+    - ref_id: page_0119
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0119/page_0119.md
+      role: continuation
+      evidence: line 15 续接题干并给出四个选项；lines 21-27 给出完整解析并结论“故选 ABD”。
+    - ref_id: page_0119_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0119/page_0119.md
+      role: local_context
+      evidence: line 31 起为例 7 新题头；例 6 到 line 27 已结束。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0118.png
+      inspected: true
+      notes: 已核对 page_0118 图像：例 6 题头完整可见，条件在页尾截断为“且 $f(x)+$”。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0119.png
+      inspected: true
+      notes: 已核对 page_0119 图像：页顶接“$g'(x)=5,\\ f(x)-g'(4-x)=5$”并给出 A-D 与解析；可与 page_0118 跨页拼接成完整第一条件。
+  source_context: 例 6 头部在 page_0118，条件与解析续到 page_0119；按 ownership 规则由本批完成。
+  source_influence:
+    - 保留“$g$ 偶函数 $\\Rightarrow g'$ 奇函数”的起手判断。
+    - 保留由两式相减得到 $g'(x)+g'(4-x)=0$ 并判 $g'(2)=0$。
+    - 保留由 $g'$ 周期 4 反推 $f$ 周期 4，再结合 $f(x)+f(-x)=10$ 的中心对称。
+    - 保留利用多重对称中心推出 $f(4)=5$ 的路线。
+  source_discrepancies:
+    - "page_0119 markdown 含重建标记“[?reconstructed: $f(x)+g'(x)=5$]”；经图像核对，page_0118 页尾确为“且 $f(x)+$”，page_0119 页首为“$g'(x)=5$”，可确定跨页拼接条件为 $f(x)+g'(x)=5$。"
+original_problem:
+  stem: （2022 · 滕州市月考）已知函数 $f(x)$，$g(x)$ 的定义域为 $\\mathbf{R}$，$g'(x)$ 为 $g(x)$ 的导函数，且 $f(x)+g'(x)=5$，$f(x)-g'(4-x)=5$，若 $g(x)$ 为偶函数，则下列结论一定正确的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(4)=5$
+      text_latex: $f(4)=5$
+    - label: B
+      text_raw: $g'(2)=0$
+      text_latex: $g'(2)=0$
+    - label: C
+      text_raw: $f(-1)=f(-3)$
+      text_latex: $f(-1)=f(-3)$
+    - label: D
+      text_raw: $f(1)+f(3)=10$
+      text_latex: $f(1)+f(3)=10$
+  answer: ABD
+  fidelity_notes:
+    - 题干第一条件跨页：page_0118 末尾“$f(x)+$”与 page_0119 顶部“$g'(x)=5$”拼接。
+    - 源页解析明确给出“故选 ABD”。
+solution:
+  source_solution_summary: |
+    因 $g(x)$ 为偶函数，所以 $g'(x)$ 为奇函数。
+    由
+    $f(x)+g'(x)-5=0$ 与
+    $f(x)-g'(4-x)-5=0$ 相减得
+    $g'(x)+g'(4-x)=0$，故 $g'$ 关于点 $(2,0)$ 中心对称，
+    立得 $g'(2)=0$，B 正确。
+    又由
+    $f(x)-5=-g'(x)=g'(4-x)$，
+    配合奇函数关系可得
+    $g'(x)=g'(x+4)$，即 $g'$ 周期为 4。
+    再由
+    $f(x)+g'(x)=5$ 与
+    $f(x)-g'(4-x)=5$
+    可推出 $f(x)=f(x+4)$。
+    同时由代入 $-x$ 并利用 $g'(x+4)=g'(x)$，得到
+    $f(x)+f(-x)=10$，所以 $f$ 关于若干点 $(2+2k,5)$ 中心对称，
+    故 $f(1)+f(3)=10$，D 正确。
+    由周期与对称还可得 $f(0)=f(4)=5$，A 正确。
+    而 $f(-1)+f(-3)=10$ 只能给和，不能推出两者相等，C 不一定成立。
+    故选 ABD。
+  key_steps:
+    - step_id: step_1
+      statement: 由 $g$ 偶推出 $g'$ 奇，并先判 B。
+      formula_trace:
+        from: |
+          $g(-x)=g(x),\qquad
+          f(x)+g'(x)-5=0,\qquad
+          f(x)-g'(4-x)-5=0$
+        to: |
+          $g'(-x)=-g'(x),\qquad
+          g'(x)+g'(4-x)=0,\qquad
+          g'(2)=0$
+        operation: 偶函数求导得奇性；两式相减得对称恒等式，再令 $x=2$。
+        why: $g^{\prime}$ 关于 $(2,0)$ 中心对称，中心点函数值必为 0。
+      source_ref: page_0119
+    - step_id: step_2
+      statement: 由奇性与位移关系推出 $g'$ 周期为 4。
+      formula_trace:
+        from: $f(x)-5=-g^{\prime}(x)=g^{\prime}(4-x)$
+        to: $g^{\prime}(-x)=g^{\prime}(4-x)\\Rightarrow g^{\prime}(x)=g^{\prime}(x+4)$
+        operation: 把奇函数关系代入并做变量替换。
+        why: 得到 $g^{\prime}$ 的周期后，可继续推 $f$ 的周期。
+      source_ref: page_0119
+    - step_id: step_3
+      statement: 联立两式推出 $f(x)=f(x+4)$ 与 $f(x)+f(-x)=10$。
+      formula_trace:
+        from: |
+          $f(x)+g'(x)=5,\qquad
+          f(x)-g'(4-x)=5$
+        to: |
+          $f(x)=f(x+4),\qquad
+          f(x)+f(-x)=10$
+        operation: 对第二式作平移/代入 $-x$，结合 $g^{\prime}$ 奇性与周期性后加减消元。
+        why: 同时得到周期和中心对称，决定 A、C、D 的真伪。
+      source_ref: page_0119
+    - step_id: step_4
+      statement: 用“周期 + 中心对称”判 A、C、D。
+      formula_trace:
+        from: |
+          $f(x)+f(-x)=10,\qquad f(x+4)=f(x)$
+        to: |
+          $f(1)+f(3)=10,\quad f(4)=f(0)=5,\quad f(-1)+f(-3)=10\not\Rightarrow f(-1)=f(-3)$
+        operation: 代入对称点并区分“和值确定”与“单值确定”。
+        why: D、A 必真，C 非必真。
+      source_ref: page_0119
+teaching_card:
+  student_title: 双方程先消 $f$，再用偶导奇锁周期
+  what_it_trains: 训练在双函数位移方程里，先做奇偶性降维，再做消元与周期/对称联判。
+  recognition_cues:
+    - 题干给出“$g$ 偶 + $g'$ 参与方程”，先想到 $g'$ 奇。
+    - 两个方程只差 $g'(x)$ 与 $g'(4-x)$，典型可做加减消元。
+    - 选项同时问零点、和式、相等性，通常要用“周期 + 对称”统一解释。
+  normalization_moves:
+    - 由 $g$ 偶得到 $g'$ 奇。
+    - 两式相减得到 $g'(x)+g'(4-x)=0$。
+    - 推进到 $g'$ 周期 4，再反推 $f$ 周期 4。
+    - 联立 $f(x)+f(-x)=10$ 判和值类选项。
+  common_failures:
+    - 把偶函数求导后的奇偶性写反。
+    - 在 $f(x)-g'(4-x)$ 求导或代换时漏掉负号。
+    - 只得到 $f(-1)+f(-3)=10$ 就误判 $f(-1)=f(-3)$。
+    - 忽略周期导致无法推出 $f(4)=5$。
+  similar_practice_query: 抽象函数 偶函数 导函数奇 双方程消元 周期 对称 多选
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0118/page_0119 图像，例 6 题头跨页拼接无歧义，答案 ABD 与源页一致。
+    - page_0119 的 reconstructed 标记已通过跨页图像确认并记录在 source_discrepancies。

@@ -1,0 +1,209 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0064_taylor_ex03
+content_revision_id: mst_p0064_taylor_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0064_taylor_ex03.card.yaml
+stem: |-
+  设 0<x<1。
+  (1). 证明：\frac{1}{x}-\frac{x}{6}<\frac{\sin x}{x^{2}}。
+  (2). 若 ax-\frac{x^{3}}{6}<\sin x，求 a 的取值范围。
+answer: |-
+  (1) 证明见解析；(2) a\leqslant1。
+
+  第 (1) 问把不等式乘以正数 x^2，等价于证明 g(x)=\sin x+\frac{x^3}{6}-x>0。由 g''(x)=x-\sin x>0 得 g'(x)>g'(0)=0，再得 g(x)>g(0)=0。第 (2) 问令 h(x)=\sin x+\frac{x^3}{6}-ax；若 a\leqslant1，则 h'(x) 递增且 h'(x)>h'(0)=1-a\geqslant0，所以 h(x)>0。若 a>1，则 h'(0)<0， 而源解用 h'(2a)>0 说明 h' 有零点，故 0 附近 h 先下降并小于 0， 与题设矛盾，最终 a\leqslant1。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 先把第 (1) 问的分式不等式化为一个误差函数的正性。
+      max_score: 1
+    - step_id: step_2
+      description: 用二阶导证明 g 在 0 右侧严格为正。
+      max_score: 1
+    - step_id: step_3
+      description: 第 (2) 问改写为 h(x)>0 对所有 0<x<1 成立。
+      max_score: 1
+    - step_id: step_4
+      description: 证明 a\leqslant1 时条件成立。
+      max_score: 1
+    - step_id: step_5
+      description: 排除 a>1：此时 h 在 0 右侧会先下降。
+      max_score: 1
+    - step_id: step_6
+      description: 在 a>1 时取足够小的正 x，就与题设矛盾。
+      max_score: 1
+    - step_id: step_7
+      description: 合并充分性与必要性，得到参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 不等式证明
+        target: 第 (1) 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 (2) 问
+        result: 见 source_solution_summary
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 局部逼近与找点
+      - 充分/必要性探路
+    subroute:
+      - 泰勒展开
+      - 三阶余项函数
+      - 0 右邻域反例
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - g(x)=\sin x+\frac{x^3}{6}-x,\quad g''(x)=x-\sin x>0
+      - h(x)=\sin x+\frac{x^3}{6}-ax,\quad h'(0)=1-a
+      - a>1 时 h'(0)<0，0 右侧出现 h(x)<0 的反例。
+    normalization_moves_used:
+      - 将分式不等式乘以 x^2，化为 \sin x 与三阶泰勒下界的差值。
+      - 把参数 a 合并进同型函数 h(x)=\sin x+\frac{x^3}{6}-ax。
+      - 用 h'(0)=1-a 读出临界参数，并用 0 右邻域排除 a>1。
+  fallback:
+    only_if_trace_shows:
+      - 若学生乘以 x^2 时忘记 0<x<1 保证 x^2>0，回补函数三要素与定义域。
+      - 若学生不知道 x>0 时 \sin x<x，回补三角函数基础。
+      - 若学生不会从 g''>0 推出 g'>0 再推出 g>0，回补导数单调极值基础。
+      - 若学生不能把 ax-\frac{x^3}{6}<\sin x 改写成 h(x)>0，回补代数恒等变形。
+      - 若学生在 a>1 时只写 h'(0)<0 而没有给出近 0 反例，回补导数单调极值基础中的邻域符号判断。
+  detail_terms:
+    - \sin x+\frac{x^3}{6}-x
+    - x-\sin x>0
+    - h'(0)=1-a
+    - h'(2a)\geqslant2a^2-a-1>0
+    - a\leqslant1
+parts: &a1
+  - label: (1)
+    text: 证明：\frac{1}{x}-\frac{x}{6}<\frac{\sin x}{x^{2}}。
+  - label: (2)
+    text: 若 ax-\frac{x^{3}}{6}<\sin x，求 a 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0064_taylor_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0064
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0064/page_0064.md
+      role: problem_start
+      evidence: 例 3：设 0<x<1；(1) 证明 \frac{1}{x}-\frac{x}{6}<\frac{\sin x}{x^{2}}； (2) 若 ax-\frac{x^{3}}{6}<\sin x，求 a 的取值范围。
+    - ref_id: page_0064_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0064/page_0064.md
+      role: solution
+      evidence: 解析第 (1) 问设 g(x)=\sin x+\frac{x^3}{6}-x，由 g'(x)=\cos x+\frac{x^2}{2}-1、g''(x)=x-\sin x>0 推出 g(x)>0。 第 (2) 问设 h(x)=\sin x+\frac{x^3}{6}-ax，由 h'(x)=\cos x+\frac{x^2}{2}-a、h''(x)=x-\sin x>0 分类得 a\leqslant1。
+    - ref_id: page_0065
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0065/page_0065.md
+      role: local_context
+      evidence: page_0065 进入分式函数、幂函数展开，以及“泰勒展开与双曲正弦余弦函数”说明； 未出现新的 worked-example 题头，也不是例 3 的续页。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0064.png
+      inspected: true
+      notes: 页图已核对：顶部是 taylor ex02 续解，例 3 题头、两问题干和完整解析均在 page_0064； 页末进入“4. 分式函数与幂函数展开”，未跨到 page_0065。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0065.png
+      inspected: true
+      notes: 页图已核对：整页为泰勒展开、双曲函数与飘带函数说明及两幅示意图，没有新的“例”题头。
+  source_context: 本题位于“三角函数的泰勒展开”小节，紧接源页给出的 x-\frac{x^3}{6}\leqslant\sin x\leqslant x 等常用放缩；例 3 用导数证明 \sin x 的三阶泰勒下界，并把同一误差函数用于参数 a 的上界判定。
+  source_influence:
+    - 题干和答案完全从 page_0064 的例 3 与解析重建，未使用 legacy card。
+    - 第 (2) 问保留源解的分类：a\leqslant1 给充分性，a>1 由 h'(0)<0 与 h' 后续转正推出近 0 处 h(x)<0。
+    - page_0065 只作为边界核对：确认没有例 3 续页，也不为纯 exposition 建卡。
+  source_discrepancies: []
+original_problem:
+  stem: 设 0<x<1。
+  parts: *a1
+  choices: []
+  answer: (1) 证明见解析；(2) a\leqslant1。
+  fidelity_notes:
+    - 原题为证明题与求参题，没有选择项。
+    - 源解末尾用非严格的 h(x)\geqslant0 收束；结合前文 h(x)>h(0)=0 对 0<x<1 成立，本卡按题干严格不等式记录。
+solution:
+  source_solution_summary: 第 (1) 问把不等式乘以正数 x^2，等价于证明 g(x)=\sin x+\frac{x^3}{6}-x>0。由 g''(x)=x-\sin x>0 得 g'(x)>g'(0)=0，再得 g(x)>g(0)=0。第 (2) 问令 h(x)=\sin x+\frac{x^3}{6}-ax；若 a\leqslant1，则 h'(x) 递增且 h'(x)>h'(0)=1-a\geqslant0，所以 h(x)>0。若 a>1，则 h'(0)<0， 而源解用 h'(2a)>0 说明 h' 有零点，故 0 附近 h 先下降并小于 0， 与题设矛盾，最终 a\leqslant1。
+  key_steps:
+    - step_id: step_1
+      statement: 先把第 (1) 问的分式不等式化为一个误差函数的正性。
+      formula_trace:
+        from: \frac{1}{x}-\frac{x}{6}<\frac{\sin x}{x^2},\quad 0<x<1
+        to: g(x)=\sin x+\frac{x^3}{6}-x>0
+        operation: 两边乘以正数 x^2，并把所有项移到右侧。
+        why: 这样把 \sin x 与它的三阶泰勒下界差值集中到 g(x)。
+      source_ref: page_0064_solution
+    - step_id: step_2
+      statement: 用二阶导证明 g 在 0 右侧严格为正。
+      formula_trace:
+        from: g'(x)=\cos x+\frac{x^2}{2}-1,\quad g''(x)=x-\sin x>0
+        to: g'(x)>g'(0)=0,\quad g(x)>g(0)=0\quad(0<x<1)
+        operation: 先由 g''>0 得 g' 单调递增，再由 g'>0 得 g 单调递增。
+        why: x>0 时有 \sin x<x，故 g''(x)>0；从 0 右侧出发可得到严格正性。
+      source_ref: page_0064_solution
+    - step_id: step_3
+      statement: 第 (2) 问改写为 h(x)>0 对所有 0<x<1 成立。
+      formula_trace:
+        from: ax-\frac{x^3}{6}<\sin x
+        to: h(x)=\sin x+\frac{x^3}{6}-ax>0
+        operation: 把含 a 的线性项移到同一侧，构造与第 (1) 问同型的误差函数。
+        why: 参数 a 只出现在 -ax 中，便于通过 h'(0)=1-a 判断临界值。
+      source_ref: page_0064_solution
+    - step_id: step_4
+      statement: 证明 a\leqslant1 时条件成立。
+      formula_trace:
+        from: h'(x)=\cos x+\frac{x^2}{2}-a,\quad h''(x)=x-\sin x>0
+        to: h'(x)>h'(0)=1-a\geqslant0,\quad h(x)>h(0)=0
+        operation: 利用 h' 在 x>0 上严格递增，并从 h'(0) 与 h(0) 起步比较。
+        why: 当 a\leqslant1 时，h' 在 0 右侧为正，所以 h 在 0 右侧严格增大。
+      source_ref: page_0064_solution
+    - step_id: step_5
+      statement: 排除 a>1：此时 h 在 0 右侧会先下降。
+      formula_trace:
+        from: h'(0)=1-a<0,\quad h'(2a)=\cos2a-a+2a^2
+        to: "h'(2a)\\geqslant2a^2-a-1>0,\\quad \\exists x_0\\in(0,2a): h'(x_0)=0"
+        operation: 用 \cos2a\geqslant-1 估计 h'(2a)，再用零点存在性定理。
+        why: h' 从负变到正且单调递增，说明在第一个零点前 h'(x)<0。
+      source_ref: page_0064_solution
+    - step_id: step_6
+      statement: 在 a>1 时取足够小的正 x，就与题设矛盾。
+      formula_trace:
+        from: h'(x)<0\quad(0<x<x_0),\quad h(0)=0
+        to: 0<x<\min\{x_0,1\}\Rightarrow h(x)<0
+        operation: 在 h' 为负的右邻域内比较函数值。
+        why: 题设要求所有 0<x<1 都有 h(x)>0；近 0 的反例排除 a>1。
+      source_ref: page_0064_solution
+    - step_id: step_7
+      statement: 合并充分性与必要性，得到参数范围。
+      formula_trace:
+        from: a\leqslant1\Rightarrow h(x)>0;\quad a>1\Rightarrow \exists x\in(0,1),h(x)<0
+        to: a\leqslant1
+        operation: 取满足题设的全部 a。
+        why: 临界值由 h'(0)=1-a 决定，且 a=1 本身因 h'(x)>0、h(x)>0 可取。
+      source_ref: page_0064_solution
+teaching_card:
+  student_title: 用 \sin x 的三阶下界卡住参数 a
+  what_it_trains: 训练把三角函数泰勒下界写成“误差函数大于 0”，再用导数递增和 0 右侧邻域判断参数能不能超过临界值。
+  recognition_cues:
+    - 题干出现 \sin x 与 x-\frac{x^3}{6} 的比较。
+    - 区间是 0<x<1，0 的右邻域虽然不含端点，但可以用极限和导数符号逼近。
+    - 参数只在线性项 ax 中出现。
+  normalization_moves:
+    - 先把第 (1) 问化为 g(x)=\sin x+\frac{x^3}{6}-x>0。
+    - 第 (2) 问照样构造 h(x)=\sin x+\frac{x^3}{6}-ax。
+    - 用 h'(0)=1-a 判断 a 的临界值是 1。
+    - 对 a>1，不求全局最小值，只取 0 右侧足够小的反例。
+  common_failures:
+    - 把第 (1) 问误当成直接套 \sin x\geqslant x-\frac{x^3}{6}，忽略本题要证明严格大于。
+    - 认为 a<1 才能成立，漏掉 a=1 时 h'(x)>0、h(x)>0。
+    - 排除 a>1 时只看 h'(0)<0，却忘了说明存在 0<x<1 使 h(x)<0。
+  similar_practice_query: sin x 三阶泰勒下界 参数 a 0 右邻域 导数递增 不等式恒成立
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0064 原图与 markdown 一致；例 3 完整结束于 page_0064，page_0065 未见新题头。
+    - 源解末尾的非严格表述可由前文严格单调链条消解为题干所需的严格不等式，未形成需人工决策项。

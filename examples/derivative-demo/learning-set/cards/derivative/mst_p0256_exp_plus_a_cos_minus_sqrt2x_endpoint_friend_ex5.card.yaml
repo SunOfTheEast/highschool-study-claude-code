@@ -1,0 +1,206 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0256_exp_plus_a_cos_minus_sqrt2x_endpoint_friend_ex5
+content_revision_id: mst_p0256_exp_plus_a_cos_minus_sqrt2x_endpoint_friend_ex5-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0256_exp_plus_a_cos_minus_sqrt2x_endpoint_friend_ex5.card.yaml
+stem: |-
+  已知函数 $f(x)=e^x+a\cos x-\sqrt2x-2$，$f^\prime(x)$ 为 $f(x)$ 的导函数。
+  1. 讨论 $f^\prime(x)$ 在区间 $(0,\frac{\pi}{2})$ 内极值点的个数。
+  2. 若 $x\in[-\frac{\pi}{2},0]$ 时，$f(x)\ge0$ 恒成立，求实数 $a$ 的取值范围。
+answer: |-
+  第(1)问：当 $a\le1$ 时无极值点；当 $a>1$ 时有 1 个极小值点、无极大值点。第(2)问：$a\ge1$。
+
+  第(1)问令 $g(x)=f^\prime(x)=e^x-a\sin x-\sqrt2$， 则 $g^\prime(x)=e^x-a\cos x$。当 $a\le1$ 时， $g^\prime(x)>0$，所以 $f^\prime$ 无极值点；当 $a>1$ 时， $g^{\prime\prime}(x)=e^x+a\sin x>0$，$g^\prime$ 递增且从负到正， 因而 $g$ 有 1 个极小值点。第(2)问先由 $f(0)=a-1\ge0$ 得 $a\ge1$。当 $a\ge1$ 时，$(a-1)\cos x\ge0$，只需证 $e^x+\cos x-\sqrt2x-2\ge0$。令 $u(x)=1+\frac{\cos x-\sqrt2x-2}{e^x}$，则 $u(0)=0$，$u^\prime(x)=\frac{t(x)}{e^x}$， $t(x)=-\sin x-\cos x+\sqrt2x+2-\sqrt2$。在 $[-\frac\pi2,0]$ 上 $t^\prime(x)\ge0$ 且 $t(0)<0$， 所以 $u^\prime<0$，从而 $u(x)\ge u(0)=0$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 第(1)问：把 $f^\prime$ 当作新函数 $g$。
+      max_score: 1
+    - step_id: step_2
+      description: 第(1)问：按 $a$ 与 $1$ 的大小分情况。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问：先用端点得到必要条件。
+      max_score: 1
+    - step_id: step_4
+      description: 第(2)问：把参数项剥离出去。
+      max_score: 1
+    - step_id: step_5
+      description: 第(2)问：除以 $e^x$ 做指数找基友。
+      max_score: 1
+    - step_id: step_6
+      description: 第(2)问：证明 $u(x)\ge0$。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 1 问
+        result: $a\le1$ 无极值点；$a>1$ 有 1 个极小值点。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $a\ge1$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 同构变形与换元法
+      - 充分/必要性探路
+      - 含参数分类讨论
+    subroute:
+      - 端点探路
+      - 指数找基友
+      - 导函数零点个数
+      - 参数剥离
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 指对复合结构
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - $e^x+a\cos x-\sqrt2x-2$
+      - $e^x-a\sin x-\sqrt2$
+      - $1+\frac{\cos x-\sqrt2x-2}{e^x}$
+      - $-\sin x-\cos x+\sqrt2x+2-\sqrt2$
+    normalization_moves_used:
+      - 把 $f^\prime$ 另设为 $g$ 来数极值点。
+      - 先用 $f(0)$ 卡住 $a\ge1$。
+      - 把 $(a-1)\cos x$ 当作非负项剥离。
+      - 除以 $e^x$ 形成指数找基友。
+  fallback:
+    only_if_trace_shows:
+      - 若学生混淆 $f$ 与 $f^\prime$ 的极值点，回补导数单调极值基础。
+      - 若学生不会判断 $\sin x,\cos x$ 在区间内的符号，回补三角函数基础。
+      - 若学生不会处理端点必要条件，回补函数性质与图像。
+      - 若学生对指数项除法变形不熟，回补指数对数基础。
+  detail_terms:
+    - $e^x+a\cos x-\sqrt2x-2$
+    - $f^\prime$ 的极值点
+    - $a=1$
+    - 指数找基友
+    - $1+\frac{\cos x-\sqrt2x-2}{e^x}$
+parts: &a1
+  - id: "1"
+    text: 讨论 $f^\prime(x)$ 在区间 $(0,\frac{\pi}{2})$ 内极值点的个数。
+  - id: "2"
+    text: 若 $x\in[-\frac{\pi}{2},0]$ 时，$f(x)\ge0$ 恒成立，求实数 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0256_exp_plus_a_cos_minus_sqrt2x_endpoint_friend_ex5
+source_evidence:
+  source_refs:
+    - ref_id: page_0256_ex5_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0256/page_0256.md
+      role: problem_start
+      evidence: page_0256 给出例5题头：$f(x)=e^x+a\cos x-\sqrt2x-2$；第(1)问讨论 $f^\prime(x)$ 在 $(0,\frac\pi2)$ 内极值点个数，第(2)问 $x\in[-\frac\pi2,0]$ 时 $f(x)\ge0$ 恒成立求 $a$。
+    - ref_id: page_0256_ex5_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0256/page_0256.md
+      role: solution
+      evidence: page_0256 例5解析第(1)问用 $g(x)=e^x-a\sin x-\sqrt2$，按 $a\le1$ 与 $a>1$ 讨论极值点；第(2)问先由 $f(0)\ge0$ 得 $a\ge1$，再证明 $e^x+\cos x-\sqrt2x-2\ge0$。
+    - ref_id: page_0256_ex6_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0256/page_0256.md
+      role: local_context
+      evidence: page_0256 页底另起例6，说明例5在本页闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0256.png
+      inspected: true
+      notes: 已核对页图：例5位于 page_0256 中下部，题干与解析均在本页闭合；页底例6另起。
+  source_context: 本卡处理 page_0256 起头并在同页结束的例5；页底例6只作边界确认。
+  source_influence:
+    - 保留第(1)问对 $f^\prime$ 的极值点数讨论。
+    - 保留第(2)问先由 $f(0)\ge0$ 得 $a\ge1$。
+    - 保留“指数找基友”处理：把 $e^x+\cos x-\sqrt2x-2\ge0$ 除以 $e^x$，再判辅助函数。
+  source_discrepancies:
+    - type: corrected_derivative_sign
+      source_ref: page_0256_ex5_solution
+      observed: source/OCR around $g^\prime(x)$ in part (2) shows an unstable sign before $\sin x$; the following $t(x)$ definition uses $-\sin x-\cos x+\sqrt2x+2-\sqrt2$.
+      resolved_as: use $g^\prime(x)=\frac{-\sin x-\cos x+\sqrt2x+2-\sqrt2}{e^x}$, matching direct differentiation and the subsequent $t(x)$.
+      reason: For $g(x)=1+\frac{\cos x-\sqrt2x-2}{e^x}$, direct differentiation gives the negative $\sin x$ term.
+    - type: tightened_monotonic_wording
+      source_ref: page_0256_ex5_solution
+      observed: source writes $t^\prime(x)>0$ on $[-\frac\pi2,0]$.
+      resolved_as: use $t^\prime(x)\ge0$ and $t(0)<0$, hence $t(x)<0$ on the interval.
+      reason: $t^\prime(x)=\sqrt2+\sqrt2\sin(x-\frac\pi4)$ can equal $0$, but the conclusion still holds.
+original_problem:
+  stem: 已知函数 $f(x)=e^x+a\cos x-\sqrt2x-2$，$f^\prime(x)$ 为 $f(x)$ 的导函数。
+  parts: *a1
+  choices: []
+  answer: 第(1)问：当 $a\le1$ 时无极值点；当 $a>1$ 时有 1 个极小值点、无极大值点。第(2)问：$a\ge1$。
+  fidelity_notes:
+    - 无选项。
+    - 第(2)问导数符号按直接计算修正。
+solution:
+  source_solution_summary: 第(1)问令 $g(x)=f^\prime(x)=e^x-a\sin x-\sqrt2$， 则 $g^\prime(x)=e^x-a\cos x$。当 $a\le1$ 时， $g^\prime(x)>0$，所以 $f^\prime$ 无极值点；当 $a>1$ 时， $g^{\prime\prime}(x)=e^x+a\sin x>0$，$g^\prime$ 递增且从负到正， 因而 $g$ 有 1 个极小值点。第(2)问先由 $f(0)=a-1\ge0$ 得 $a\ge1$。当 $a\ge1$ 时，$(a-1)\cos x\ge0$，只需证 $e^x+\cos x-\sqrt2x-2\ge0$。令 $u(x)=1+\frac{\cos x-\sqrt2x-2}{e^x}$，则 $u(0)=0$，$u^\prime(x)=\frac{t(x)}{e^x}$， $t(x)=-\sin x-\cos x+\sqrt2x+2-\sqrt2$。在 $[-\frac\pi2,0]$ 上 $t^\prime(x)\ge0$ 且 $t(0)<0$， 所以 $u^\prime<0$，从而 $u(x)\ge u(0)=0$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问：把 $f^\prime$ 当作新函数 $g$。
+      formula_trace:
+        from: $f^\prime(x)=e^x-a\sin x-\sqrt2$
+        to: $g^\prime(x)=e^x-a\cos x$
+        operation: 继续求导判断 $f^\prime$ 的极值点。
+        why: $f^\prime$ 的极值点就是 $g$ 的极值点。
+      source_ref: page_0256_ex5_solution
+    - step_id: step_2
+      statement: 第(1)问：按 $a$ 与 $1$ 的大小分情况。
+      formula_trace:
+        from: $g^\prime(x)=e^x-a\cos x$
+        to: $a\le1$ 无极值点；$a>1$ 有 1 个极小值点
+        operation: 用 $e^x>1$、$0<\cos x<1$ 与 $g^{\prime\prime}>0$ 判号。
+        why: 极值点个数由 $g^\prime$ 的零点个数决定。
+      source_ref: page_0256_ex5_solution
+    - step_id: step_3
+      statement: 第(2)问：先用端点得到必要条件。
+      formula_trace:
+        from: $f(0)=a-1$
+        to: $a\ge1$
+        operation: 代入区间端点 $0$。
+        why: 恒成立必须先满足端点。
+      source_ref: page_0256_ex5_solution
+    - step_id: step_4
+      statement: 第(2)问：把参数项剥离出去。
+      formula_trace:
+        from: $f(x)=(a-1)\cos x+e^x+\cos x-\sqrt2x-2$
+        to: 只需证 $e^x+\cos x-\sqrt2x-2\ge0$
+        operation: 利用 $a\ge1$ 且 $\cos x\ge0$。
+        why: 把含参部分变成非负项。
+      source_ref: page_0256_ex5_solution
+    - step_id: step_5
+      statement: 第(2)问：除以 $e^x$ 做指数找基友。
+      formula_trace:
+        from: $e^x+\cos x-\sqrt2x-2\ge0$
+        to: $u(x)=1+\frac{\cos x-\sqrt2x-2}{e^x}\ge0$
+        operation: 把指数项变成常数 1。
+        why: 这样求导后指数不会干扰零点判断。
+      source_ref: page_0256_ex5_solution
+    - step_id: step_6
+      statement: 第(2)问：证明 $u(x)\ge0$。
+      formula_trace:
+        from: $u^\prime(x)=\frac{-\sin x-\cos x+\sqrt2x+2-\sqrt2}{e^x}$
+        to: $u^\prime(x)<0$，$u(x)\ge u(0)=0$
+        operation: 令分子为 $t(x)$，用 $t^\prime\ge0$ 和 $t(0)<0$ 判号。
+        why: 在 $[-\frac\pi2,0]$ 上，向右递减意味着左侧函数值不低于 $0$。
+      source_ref: page_0256_ex5_solution
+teaching_card:
+  student_title: 指数和三角混在一起时，先找能消掉指数的同伴
+  what_it_trains: 训练“端点探路 + 指数找基友”：先由端点锁参数方向，再把指数项除掉，让剩下的三角线性组合可判号。
+  recognition_cues:
+    - 函数里有 $e^x$、$\cos x$ 和线性项 $\sqrt2x$。
+    - 第(2)问的区间是 $[-\frac\pi2,0]$，$\cos x$ 非负，适合剥离 $(a-1)\cos x$。
+    - 解析把 $e^x+\cos x-\sqrt2x-2$ 改成 $1+\frac{\cos x-\sqrt2x-2}{e^x}$。
+  normalization_moves:
+    - 第(1)问要数的是 $f^\prime$ 的极值点，所以要继续对 $f^\prime$ 求导。
+    - 第(2)问先代 $x=0$，不要上来就全局求最小值。
+    - 看到 $e^x+\text{其他项}$，可以考虑除以 $e^x$。
+  common_failures:
+    - 把 $f$ 的极值点和 $f^\prime$ 的极值点混在一起。
+    - 忽略 $\cos x\ge0$，没有把参数项剥离出来。
+    - 导数分子里 $\sin x$ 符号抄错。
+  similar_practice_query: 端点探路 指数找基友 e^x cosx sqrt2x 参数范围 fprime极值点
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

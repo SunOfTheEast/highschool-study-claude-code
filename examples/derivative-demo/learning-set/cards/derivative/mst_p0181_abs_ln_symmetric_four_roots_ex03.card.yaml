@@ -1,0 +1,239 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0181_abs_ln_symmetric_four_roots_ex03
+content_revision_id: mst_p0181_abs_ln_symmetric_four_roots_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0181_abs_ln_symmetric_four_roots_ex03.card.yaml
+stem: |-
+  （2024·天津模拟 T9）已知函数 $f(x)=\begin{cases} |\ln x|, & 0 < x \leqslant e \\ f(2e-x), & e < x < 2e \end{cases}$，若方程 $F(x)=f(x)-ax$ 有 4 个零点，则 $a$ 的可能的值为（  ）
+  A. $\frac{1}{4}$
+  B. $1$
+  C. $\frac{1}{2}$
+  D. $\frac{1}{e}$
+answer: |
+  A
+
+  方程
+  \[
+  F(x)=f(x)-ax=0
+  \]
+  的零点个数等于曲线 $y=f(x)$ 与直线 $y=ax$ 的交点个数。由题设
+  \[
+  f(x)=|\ln x|\ (0<x\le e),\quad f(x)=f(2e-x)\ (e<x<2e),
+  \]
+  图像关于 $x=e$ 对称。要出现 4 个不同交点，需要直线斜率低于一条临界值；该临界值由
+  $y=\ln x$ 在区间 $[1,e]$ 上“过原点”的切线给出。
+
+  设切点为 $(x_0,\ln x_0)$，则切线方程
+  \[
+  y-\ln x_0=\frac{1}{x_0}(x-x_0).
+  \]
+  代入原点 $(0,0)$：
+  \[
+  -\ln x_0=\frac{1}{x_0}(-x_0)=-1\Rightarrow x_0=e.
+  \]
+  因而临界斜率为
+  \[
+  a_{\text{crit}}=\frac{1}{x_0}=\frac{1}{e}.
+  \]
+  要有 4 个交点，需
+  \[
+  0<a<\frac{1}{e}.
+  \]
+  四个选项中仅 $\frac14$ 落在该区间，故选 A。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 零点计数改写成交点计数。
+      max_score: 1
+    - step_id: step_2
+      description: 读取对称结构并识别临界斜率机制。
+      max_score: 1
+    - step_id: step_3
+      description: 设切点并写出切线过原点条件。
+      max_score: 1
+    - step_id: step_4
+      description: 求临界斜率。
+      max_score: 1
+    - step_id: step_5
+      description: 写出参数区间并匹配选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 数形结合
+      - 对称化与偏移
+    subroute:
+      - 四交点计数
+      - 过原点临界切线
+      - 斜率阈值筛选
+  structure:
+    primary: Max/Min 与绝对值结构
+    secondary:
+      - 分段函数结构
+      - 指对复合结构
+    evidence:
+      - $|\ln x|$ 与 $f(2e-x)$ 形成关于 $x=e$ 的对称拼接。
+      - $F(x)=f(x)-ax$ 把问题转成“曲线 vs 过原点直线”。
+      - 临界斜率由 $y=\ln x$ 的过原点切线确定为 $1/e$。
+    normalization_moves_used:
+      - 先做等效零点，把代数条件改写成交点个数。
+      - 利用对称图像把四交点问题压缩为一侧临界斜率比较。
+      - 通过“切线过原点”方程直接求阈值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看不出 $f(2e-x)$ 带来的轴对称，回补函数性质与图像。
+      - 若学生不会从“4个零点”切换到“4个交点”，回补分段/复合/反函数基础。
+      - 若学生不会写 $\ln x$ 的切线并代入原点，回补导数运算与几何意义。
+      - 若学生对 $a\in(0,\frac1e)$ 的端点开闭理解混乱，回补指数对数基础。
+  detail_terms:
+    - $f(x)=|\ln x|$
+    - $f(2e-x)$
+    - $F(x)=f(x)-ax$
+    - $y=ax$
+    - $x_0=e$
+    - $a_{\text{crit}}=\frac1e$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0181_abs_ln_symmetric_four_roots_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0181_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0181/page_0181.md
+      role: local_context
+      evidence: line 14 是 page_0180 例1续解收尾；本页新起头题是例2与例3。
+    - ref_id: page_0181_ex03_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0181/page_0181.md
+      role: problem_start
+      evidence: lines 30-35 给出例3题干与四个候选值，问“有4个零点时 $a$ 的可能值”。
+    - ref_id: page_0181_ex03_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0181/page_0181.md
+      role: solution
+      evidence: lines 37-42 给出图像阈值法：比较过原点切线斜率，推出 $a\in(0,\frac{1}{e})$，故选 A。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0181.png
+      inspected: true
+      notes: 已核对页图：例3图像呈关于 $x=e$ 的轴对称结构，标有 $x=1,e,2e-1$；直线 $y=ax$ 过原点，与曲线交点个数随斜率变化。图像信息与“取过原点临界切线斜率 $1/e$”一致。
+  source_context: 例3题干与解析均在 page_0181 同页完成；本题强依赖图像交点计数与对称信息。
+  source_influence:
+    - 保留源解“把四零点转化为 $f(x)$ 与 $y=ax$ 四交点”的主线。
+    - 保留源解“临界斜率=过原点切 $y=\ln x$（$x\in[1,e]$）的切线斜率”这一阈值判定。
+    - 保留源解通过切线过原点条件求得切点 $x_0=e$、斜率 $1/e$ 的计算。
+  source_discrepancies: []
+original_problem:
+  stem: （2024·天津模拟 T9）已知函数 $f(x)=\begin{cases} |\ln x|, & 0 < x \leqslant e \\ f(2e-x), & e < x < 2e \end{cases}$，若方程 $F(x)=f(x)-ax$ 有 4 个零点，则 $a$ 的可能的值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\frac{1}{4}$
+      text_latex: $\frac{1}{4}$
+    - label: B
+      text_raw: $1$
+      text_latex: $1$
+    - label: C
+      text_raw: $\frac{1}{2}$
+      text_latex: $\frac{1}{2}$
+    - label: D
+      text_raw: $\frac{1}{e}$
+      text_latex: $\frac{1}{e}$
+  answer: A
+  fidelity_notes:
+    - 源题为单选题，答案字母在原页解析中给出为 A。
+    - 题设第二段 $f(2e-x)$ 强制引入关于 $x=e$ 的对称图像。
+solution:
+  source_solution_summary: |
+    方程
+    \[
+    F(x)=f(x)-ax=0
+    \]
+    的零点个数等于曲线 $y=f(x)$ 与直线 $y=ax$ 的交点个数。由题设
+    \[
+    f(x)=|\ln x|\ (0<x\le e),\quad f(x)=f(2e-x)\ (e<x<2e),
+    \]
+    图像关于 $x=e$ 对称。要出现 4 个不同交点，需要直线斜率低于一条临界值；该临界值由
+    $y=\ln x$ 在区间 $[1,e]$ 上“过原点”的切线给出。
+
+    设切点为 $(x_0,\ln x_0)$，则切线方程
+    \[
+    y-\ln x_0=\frac{1}{x_0}(x-x_0).
+    \]
+    代入原点 $(0,0)$：
+    \[
+    -\ln x_0=\frac{1}{x_0}(-x_0)=-1\Rightarrow x_0=e.
+    \]
+    因而临界斜率为
+    \[
+    a_{\text{crit}}=\frac{1}{x_0}=\frac{1}{e}.
+    \]
+    要有 4 个交点，需
+    \[
+    0<a<\frac{1}{e}.
+    \]
+    四个选项中仅 $\frac14$ 落在该区间，故选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 零点计数改写成交点计数。
+      formula_trace:
+        from: $F(x)=f(x)-ax$ 有 4 个零点
+        to: $y=f(x)$ 与 $y=ax$ 有 4 个不同交点
+        operation: 令 $F(x)=0\Leftrightarrow f(x)=ax$。
+        why: 参数 $a$ 直接对应过原点直线斜率，便于图像阈值分析。
+      source_ref: page_0181_ex03_solution
+    - step_id: step_2
+      statement: 读取对称结构并识别临界斜率机制。
+      formula_trace:
+        from: $f(x)=|\ln x|,\ f(x)=f(2e-x)$
+        to: 临界由 $y=\ln x$ 在 $[1,e]$ 上过原点切线给出
+        operation: 利用 $x=e$ 对称与交点个数随斜率变化。
+        why: 四交点出现与消失发生在“切而不穿”的临界状态。
+      source_ref: page_0181_ex03_solution
+    - step_id: step_3
+      statement: 设切点并写出切线过原点条件。
+      formula_trace:
+        from: $y-\ln x_0=\frac{1}{x_0}(x-x_0)$
+        to: $-\ln x_0=-1$
+        operation: 把 $(0,0)$ 代入切线方程。
+        why: 临界线必须是 $y=ax$，即必过原点。
+      source_ref: page_0181_ex03_solution
+    - step_id: step_4
+      statement: 求临界斜率。
+      formula_trace:
+        from: $-\ln x_0=-1$
+        to: $x_0=e,\ a_{\text{crit}}=\frac{1}{e}$
+        operation: 先解切点，再取导数斜率 $y^{\prime}=\frac1x$。
+        why: 参数范围由斜率阈值决定。
+      source_ref: page_0181_ex03_solution
+    - step_id: step_5
+      statement: 写出参数区间并匹配选项。
+      formula_trace:
+        from: $a<a_{\text{crit}}=\frac1e$
+        to: $a\in(0,\frac1e)$，仅 $\frac14$ 符合
+        operation: 结合交点个数要求与备选值筛选。
+        why: 完成“可能值”判断。
+      source_ref: page_0181_ex03_solution
+teaching_card:
+  student_title: 四交点先找临界切线斜率
+  what_it_trains: 训练“交点个数-斜率阈值”模型：把零点题转成过原点直线与对称曲线的临界切线比较。
+  recognition_cues:
+    - 题目给出 $f(2e-x)$ 这类中心对称拼接。
+    - 未知参数 $a$ 在 $ax$ 中只充当斜率。
+    - 问法是“有若干个零点时，$a$ 可能取值”。
+  normalization_moves:
+    - 把 $F(x)=0$ 改写为 $f(x)=ax$。
+    - 画出或读取关于 $x=e$ 的对称图像。
+    - 寻找过原点的临界切线并求斜率。
+    - 用 $0<a<a_{\text{crit}}$ 筛选选项。
+  common_failures:
+    - 忽略对称性，只在左半边判断交点。
+    - 把临界值 $a=\frac1e$ 误写进可行区间端点。
+    - 将“过原点切线”写成过 $(1,0)$ 等错误点。
+  similar_practice_query: f(2e-x) 对称 4个零点 y=ax 临界切线 斜率范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

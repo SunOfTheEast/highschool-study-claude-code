@@ -1,0 +1,182 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0170_common_tangent_interval_ex13
+content_revision_id: mst_p0170_common_tangent_interval_ex13-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0170_common_tangent_interval_ex13.card.yaml
+stem: |-
+  （2023 · 邢台月考 · 多选 T12）关于 x 的不等式 2x^2-3x-xlnx+1>=ax+b+(x-2)^2>=0 在 [1,+∞) 上恒成立，则（  ）
+  A. a=-2
+  B. a=2
+  C. b=-3
+  D. b=3
+answer: |
+  BC（a=2，b=-3）
+
+  由 2x^2-3x-xlnx+1>=ax+b+(x-2)^2>=0，移项得 x^2+x-xlnx-3>=ax+b，且 ax+b>=-x^2+4x-4。 记 f(x)=x^2+x-xlnx-3，g(x)=-x^2+4x-4，则需 f(x)>=ax+b>=g(x)（x>=1）。再令 h(x)=f(x)-g(x)=2x^2-3x-xlnx+1。 有 h^{\prime}(x)=4x-lnx-4，令 k(x)=4x-lnx-4，则 k^{\prime}(x)=4-1/x>0（x>=1），故 h^{\prime}(x) 递增且 h^{\prime}(1)=0，从而 h^{\prime}(x)>=0，h(x) 在 [1,+∞) 递增， 且 h(1)=0，所以 f(x)>=g(x) 且仅在 x=1 处贴合。 要让一条直线 ax+b 在全区间被 f、g 夹住，必要且充分地取 x=1 处公切线：a=f^{\prime}(1)=g^{\prime}(1)=2，且 b=f(1)-a=-1-2=-3。故选 B、C。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把原双侧不等式改写为“直线夹在两曲线之间”。
+      max_score: 1
+    - step_id: step_2
+      description: 比较上边界与下边界：证明 f>=g 且在 x=1 相贴。
+      max_score: 1
+    - step_id: step_3
+      description: 用贴合点构造公切线，解出 a,b。
+      max_score: 1
+    - step_id: step_4
+      description: 对照选项判定。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 数形结合
+      - 充分/必要性探路
+    subroute:
+      - 公切线夹线
+      - 切线找点
+      - 零点比大小
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+      - 多变量与不等式结构
+    evidence:
+      - 目标是找能被两条函数曲线夹住的直线 ax+b。
+      - h(x)=f(x)-g(x) 在 x=1 处取到贴合点，触发公切线条件。
+      - 参数直接来自切点处斜率与点值（a=f^{\prime}(1), b=f(1)-a）。
+    normalization_moves_used:
+      - 先补成 f>=line>=g 的夹线形式。
+      - 先做 h=f-g，确定唯一贴合位置。
+      - 在贴合点读取公切线参数。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从双侧不等式改写成夹线模型，回补代数恒等变形。
+      - 若学生不会由导数判断 h 的单调与符号，回补导数单调极值基础。
+      - 若学生不理解“夹线恒成立”为什么对应公切线，回补函数性质与图像。
+      - 若学生求 f^{\prime}(x) 出现符号错误，回补导数运算与几何意义。
+  detail_terms:
+    - f(x)=x^2+x-xlnx-3
+    - g(x)=-x^2+4x-4
+    - h(x)=2x^2-3x-xlnx+1
+    - y=2x-3
+    - BC
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0170_common_tangent_interval_ex13
+source_evidence:
+  source_refs:
+    - ref_id: page_0170_ex13_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0170/page_0170.md
+      role: problem_start
+      evidence: lines 41-42 给出例13题干起点：在 [1,+∞) 上恒成立的双侧不等式，题头起于 page_0170。
+    - ref_id: page_0171_ex13_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0171/page_0171.md
+      role: continuation
+      evidence: lines 12-15 续出 A-D 选项；line 17 起续解，把不等式转为 f(x)>=ax+b>=g(x)。
+    - ref_id: page_0171_ex13_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0171/page_0171.md
+      role: solution
+      evidence: lines 17-19 给出完整解析：h(x) 递增、x=1 处相切，得到 a=2,b=-3，故选 BC。
+    - ref_id: page_0171_numbering_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0171/page_0171.md
+      role: local_context
+      evidence: line 22 起出现“考点3 例13”新题头（正弦不等式），是另一道同号例题，不并入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0170.png
+      inspected: true
+      notes: 页图核对通过：page_0170 底部为例13题头和选项起始，题干与 markdown 一致。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0171.png
+      inspected: true
+      notes: 页图核对通过：page_0171 顶部补全例13选项和解析，结论 BC 与 markdown 一致。
+  source_context: 本题头在 page_0170，选项与解答跨到 page_0171 顶部；page_0171 同页后段另有一个“例13”属于下一小节。
+  source_influence:
+    - 保留源解的双夹线表达：f(x)>=ax+b>=g(x)。
+    - 保留源解关键桥：h(x)=f-g 在 [1,+∞) 单调递增且 h(1)=0，因此两曲线在 x=1 贴合。
+    - 保留源解结论：要恒成立需 ax+b 取为公切线 y=2x-3，故选 BC。
+  source_discrepancies:
+    - "page_0171 line 18 含重建标记“f^{\\prime}(x)=2x-[?reconstructed: ln x]”；按同段定义 f(x)=x^2+x-xlnx-3 直接求导，应为 f^{\\prime}(x)=2x-lnx。"
+original_problem:
+  stem: （2023 · 邢台月考 · 多选 T12）关于 x 的不等式 2x^2-3x-xlnx+1>=ax+b+(x-2)^2>=0 在 [1,+∞) 上恒成立，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: a=-2
+      text_latex: $a=-2$
+    - label: B
+      text_raw: a=2
+      text_latex: $a=2$
+    - label: C
+      text_raw: b=-3
+      text_latex: $b=-3$
+    - label: D
+      text_raw: b=3
+      text_latex: $b=3$
+  answer: BC（a=2，b=-3）
+  fidelity_notes:
+    - 源题是多选题，选项在 page_0171 顶部续出。
+    - source 文结论明确写“故选 BC”。
+solution:
+  source_solution_summary: |
+    由 2x^2-3x-xlnx+1>=ax+b+(x-2)^2>=0，移项得 x^2+x-xlnx-3>=ax+b，且 ax+b>=-x^2+4x-4。 记 f(x)=x^2+x-xlnx-3，g(x)=-x^2+4x-4，则需 f(x)>=ax+b>=g(x)（x>=1）。再令 h(x)=f(x)-g(x)=2x^2-3x-xlnx+1。 有 h^{\prime}(x)=4x-lnx-4，令 k(x)=4x-lnx-4，则 k^{\prime}(x)=4-1/x>0（x>=1），故 h^{\prime}(x) 递增且 h^{\prime}(1)=0，从而 h^{\prime}(x)>=0，h(x) 在 [1,+∞) 递增， 且 h(1)=0，所以 f(x)>=g(x) 且仅在 x=1 处贴合。 要让一条直线 ax+b 在全区间被 f、g 夹住，必要且充分地取 x=1 处公切线：a=f^{\prime}(1)=g^{\prime}(1)=2，且 b=f(1)-a=-1-2=-3。故选 B、C。
+  key_steps:
+    - step_id: step_1
+      statement: 把原双侧不等式改写为“直线夹在两曲线之间”。
+      formula_trace:
+        from: 2x^2-3x-xlnx+1>=ax+b+(x-2)^2>=0
+        to: f(x)>=ax+b>=g(x)，其中 f=x^2+x-xlnx-3，g=-x^2+4x-4
+        operation: 按源解移项并命名上下边界函数。
+        why: 把含参数不等式转成几何夹线问题。
+      source_ref: page_0171_ex13_solution
+    - step_id: step_2
+      statement: 比较上边界与下边界：证明 f>=g 且在 x=1 相贴。
+      formula_trace:
+        from: h(x)=f(x)-g(x)=2x^2-3x-xlnx+1
+        to: k^{\prime}(x)=4-1/x>0=>h^{\prime}(x)>=0，h(1)=0=>f(x)>=g(x)
+        operation: 先判 h^{\prime} 的单调，再由 h^{\prime}(1)=0 推全区间非负。
+        why: 确定夹线存在时唯一贴合点在 x=1。
+      source_ref: page_0171_ex13_solution
+    - step_id: step_3
+      statement: 用贴合点构造公切线，解出 a,b。
+      formula_trace:
+        from: x=1 处 f(1)=g(1)=-1，且 f^{\prime}(1)=g^{\prime}(1)=2
+        to: a=2，b=-3
+        operation: 令 ax+b 为两函数在 x=1 处公共切线 y=2x-3。
+        why: 只有公切线才能在全区间保持“上压下托”的恒成立夹线关系。
+      source_ref: page_0171_ex13_solution
+    - step_id: step_4
+      statement: 对照选项判定。
+      formula_trace:
+        from: a=2，b=-3
+        to: B、C 正确，A、D 错误
+        operation: 逐项匹配。
+        why: 题型为多选。
+      source_ref: page_0171_ex13_solution
+teaching_card:
+  student_title: 先证上下边界贴合，再读公切线参数
+  what_it_trains: 训练把恒成立双侧不等式转成“上下函数夹一条线”，再用贴合点公切线一次性读出参数。
+  recognition_cues:
+    - 题干是“表达式>=ax+b+(...)>=0”的双侧恒成立。
+    - 中间只有一次项 ax+b，典型是“线在两曲线之间”。
+    - 最终选项直接给 a,b 的具体值。
+  normalization_moves:
+    - 先拆成 f>=ax+b>=g。
+    - 做 h=f-g，找贴合点与贴合方式。
+    - 在贴合点用公切线条件定 a,b。
+  common_failures:
+    - 只验证 f>=g，不继续落实“line 必须是公切线”。
+    - 把 f^{\prime}(x)=2x-lnx 误写成 2x+lnx。
+    - 由 f(1)=g(1)=-1 算 b 时符号出错。
+  similar_practice_query: 双侧恒成立 夹线 公切线 a b 参数 多选
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 本卡未单独核对 page_0170/page_0171 图片，按 markdown 重建。
+    - 已记录 page_0171 导数项的 reconstructed 标记并按函数定义还原为 f^{\prime}(x)=2x-lnx。

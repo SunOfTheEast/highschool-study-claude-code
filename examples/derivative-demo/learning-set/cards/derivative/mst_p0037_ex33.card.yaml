@@ -1,0 +1,156 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0037_ex33
+content_revision_id: mst_p0037_ex33-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0037_ex33.card.yaml
+stem: 已知正实数 $a,b$，满足 $ae^2(\ln b-\ln a+a-1)\geqslant be^a$，则 $ab$ 的最大值为 ______。
+answer: |
+  4
+
+  将题设除以 $ae^2$ 得 $\ln(b/a)+a-1\ge (b/a)e^{a-2}=e^{a-2+\ln(b/a)}$。令 $t=\ln(b/a)+a-2$，题设即 $t+1\ge e^t$。又指数切线不等式给出 $e^t\ge t+1$，两者合并只能等号成立，故 $t=0$，即 $b=e^{2-a}a$。于是 $ab=e^2a^2/e^a=4e^2\left((a/2)/e^{a/2}\right)^2\le4$，等号在 $a=2,b=2$ 时取到。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把题设整理成指数切线不等式的形式。
+      max_score: 1
+    - step_id: step_2
+      description: 令 $t=\ln(b/a)+a-2$，用上下界夹成等号。
+      max_score: 1
+    - step_id: step_3
+      description: 由指数切线等号条件确定 $a,b$ 的关系。
+      max_score: 1
+    - step_id: step_4
+      description: 求 $ab$ 的最大值。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 指数切线 $e^t\\ge t+1$
+      - 上下界夹成等号
+      - $u/e^u$ 最大值
+  structure:
+    primary: 不等式工具结构
+    secondary:
+      - 指对复合结构
+      - 同构结构
+    evidence:
+      - 题设可化为 $t+1\\ge e^t$，与通用不等式 $e^t\\ge t+1$ 构成上下界。
+      - $ab=e^2a^2/e^a$ 再转为 $((a/2)/e^{a/2})^2$。
+    normalization_moves_used:
+      - 除以 $ae^2$ 并设 $t=\\ln(b/a)+a-2$。
+      - 用 $e^t\\ge t+1$ 的等号条件固定 $t=0$。
+      - 用 $u=a/2$ 归一到 $u/e^u$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $(b/a)e^{a-2}$ 写成 $e^{a-2+\\ln(b/a)}$，回补指数对数基础。
+      - 若学生不知道 $e^t\\ge t+1$ 及其等号条件，回补不等式工具基础。
+      - 若学生不会求 $u/e^u$ 的最大值，回补导数单调极值基础。
+  detail_terms:
+    - $e^t\\ge t+1$
+    - $t=\\ln(b/a)+a-2$
+    - $ab=e^2a^2/e^a$
+    - $u/e^u$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0037_ex33
+source_evidence:
+  source_refs:
+    - ref_id: page_0037
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md
+      role: problem_start
+      evidence: "line 17: 例 33 题干，给出正实数 $a,b$ 与不等式，要求 $ab$ 最大值。"
+    - ref_id: page_0037_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md
+      role: solution
+      evidence: "lines 19-20: 令 $t=\\\\ln(b/a)+a-2$，由 $e^t\\\\ge t+1$ 逼出等号，再求 $ab$ 最大值。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0037.png
+      inspected: true
+      notes: 已核对原图：例 33 题干、解析与答案 4 和 markdown 一致。
+  source_context: 本题位于 page_0037，承接双元同构后进入“考点 8：不完整同构与不等式上下界构造”的前置例题，源解用指数切线不等式把原不等式逼成等式。
+  source_influence:
+    - 题目最终要求 $ab$ 的最大值，goal 取“极值最值”。
+    - 源解关键是用 $e^t\\ge t+1$ 与题设方向合并，强制 $t=0$。
+    - 最大值阶段用 $u/e^u\\le1/e$，而不是直接对 $e^2a^2/e^a$ 硬展开。
+  source_discrepancies: []
+original_problem:
+  stem: 已知正实数 $a,b$，满足 $ae^2(\ln b-\ln a+a-1)\geqslant be^a$，则 $ab$ 的最大值为 ______。
+  parts: *a1
+  choices: []
+  answer: "4"
+  fidelity_notes:
+    - 已核对 page_0037 原图，题干中系数为 $ae^2$，右侧为 $be^a$。
+    - 源页 Reconstruction Markers 为“无”。
+solution:
+  source_solution_summary: |
+    将题设除以 $ae^2$ 得 $\ln(b/a)+a-1\ge (b/a)e^{a-2}=e^{a-2+\ln(b/a)}$。令 $t=\ln(b/a)+a-2$，题设即 $t+1\ge e^t$。又指数切线不等式给出 $e^t\ge t+1$，两者合并只能等号成立，故 $t=0$，即 $b=e^{2-a}a$。于是 $ab=e^2a^2/e^a=4e^2\left((a/2)/e^{a/2}\right)^2\le4$，等号在 $a=2,b=2$ 时取到。
+  key_steps:
+    - step_id: step_1
+      statement: 把题设整理成指数切线不等式的形式。
+      formula_trace:
+        from: |
+          $ae^2(\ln b-\ln a+a-1)\ge be^a$
+        to: |
+          $\ln\frac ba+a-2+1\ge e^{a-2+\ln(b/a)}$
+        operation: 两边除以正数 $ae^2$，并把 $(b/a)e^{a-2}$ 写成指数形式。
+        why: 左边是某个量加 $1$，右边是同一个量的指数。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md:19
+    - step_id: step_2
+      statement: 令 $t=\ln(b/a)+a-2$，用上下界夹成等号。
+      formula_trace:
+        from: |
+          $t+1\ge e^t,\quad e^t\ge t+1$
+        to: |
+          $e^t=t+1$
+        operation: 题设给出上界，基本不等式 $e^t\ge t+1$ 给出下界。
+        why: 同一个量同时不小于又不大于，只能相等。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md:19
+    - step_id: step_3
+      statement: 由指数切线等号条件确定 $a,b$ 的关系。
+      formula_trace:
+        from: |
+          $e^t=t+1$
+        to: |
+          $t=0\Rightarrow \ln\frac ba+a-2=0\Rightarrow b=e^{2-a}a$
+        operation: 使用 $e^t\ge t+1$ 的等号条件仅在 $t=0$。
+        why: 把双变量约束降成 $b$ 关于 $a$ 的表达式。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md:19-20
+    - step_id: step_4
+      statement: 求 $ab$ 的最大值。
+      formula_trace:
+        from: |
+          $ab=e^{2-a}a^2$
+        to: |
+          $ab=4e^2\left(\frac{a/2}{e^{a/2}}\right)^2\le4$
+        operation: 设 $u=a/2>0$，用 $u/e^u\le1/e$。
+        why: 当 $u=1$ 即 $a=2$ 时取等号，最大值为 $4$。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md:20
+teaching_card:
+  student_title: 用 $e^t\ge t+1$ 把条件夹成等号
+  what_it_trains: 当题设方向正好给出 $t+1\ge e^t$，而常用结论永远有 $e^t\ge t+1$ 时，要立刻意识到变量被夹到等号点，后面只剩单变量最值。
+  recognition_cues:
+    - 题干中有 $\\ln(b/a)$ 与 $(b/a)e^{a-2}$，能合成同一个 $t$。
+    - 不等式左侧是“某量 + 1”，右侧是“同量的指数”。
+    - 求 $ab$ 最大值时出现 $a^2/e^a$。
+  normalization_moves:
+    - 先除以 $ae^2$，把正数条件用掉。
+    - 设 $t=\\ln(b/a)+a-2$，不要急着对两个变量求导。
+    - 把 $a^2/e^a$ 写成 $4((a/2)/e^{a/2})^2$。
+  common_failures:
+    - 只用题设 $t+1\\ge e^t$，忘记另一个方向 $e^t\\ge t+1$。
+    - 把 $e^t=t+1$ 当成有多个解，忽略等号条件只有 $t=0$。
+    - 求 $a^2/e^a$ 最大值时漏掉 $a>0$。
+  similar_practice_query: e^t >= t+1 上下界夹逼 ab最大值 a^2/e^a
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0037 原图与 markdown 对本题一致；本题未跨页。

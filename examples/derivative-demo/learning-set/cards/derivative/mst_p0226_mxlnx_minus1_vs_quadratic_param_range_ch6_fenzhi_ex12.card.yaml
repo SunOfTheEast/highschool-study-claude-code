@@ -1,0 +1,220 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0226_mxlnx_minus1_vs_quadratic_param_range_ch6_fenzhi_ex12
+content_revision_id: mst_p0226_mxlnx_minus1_vs_quadratic_param_range_ch6_fenzhi_ex12-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0226_mxlnx_minus1_vs_quadratic_param_range_ch6_fenzhi_ex12.card.yaml
+stem: （2021 · 沈阳一模 T22）已知函数 $f(x)=mx\ln x-1$，$m\neq0$。若 $g(x)=x^2-\frac2e x$，且关于 $x$ 的不等式 $f(x)\leqslant g(x)$ 在 $(0,+\infty)$ 上恒成立（其中 $e$ 是自然对数的底数），求实数 $m$ 的取值范围。
+answer: |-
+  $m\in\left[\frac1e-e,0\right)\cup\left(0,e-\frac1e\right]$。
+
+  由题意 $mx\ln x-1\leqslant x^2-\frac2e x$。当 $m>0$ 时，两边除以 $x^2>0$ 得 $m\frac{\ln x}{x}\leqslant1-\frac2{ex}+\frac1{x^2}$。 左侧最大为 $m/e$，在 $x=e$ 取等；右侧 $1-\frac2{ex}+\frac1{x^2}$ 的最小值为 $1-\frac1{e^2}$，也在 $x=e$ 取等，因此 $m/e\leqslant1-\frac1{e^2}$，即 $0<m\leqslant e-\frac1e$。若 $m>e-\frac1e$，代 $x=e$ 得 $f(e)>g(e)$，矛盾。当 $m<0$ 时，$mx\ln x$ 的最大值为 $-m/e$， 在 $x=1/e$ 取等；右侧 $x^2-\frac2e x+1$ 的最小值为 $1-\frac1{e^2}$，也在 $x=1/e$ 取等，于是 $-m/e\leqslant1-\frac1{e^2}$，得到 $\frac1e-e\leqslant m<0$。 若 $m<\frac1e-e$，代 $x=1/e$ 得 $f(1/e)>g(1/e)$，矛盾。综上 $m\in[\frac1e-e,0)\cup(0,e-\frac1e]$。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 把恒成立不等式写成可分区间比较的形式。
+      max_score: 1
+    - step_id: step_2
+      description: 处理 $m>0$ 情形。
+      max_score: 1
+    - step_id: step_3
+      description: $m>0$ 时同点取界。
+      max_score: 1
+    - step_id: step_4
+      description: 用 $x=e$ 排除 $m>e-\frac1e$。
+      max_score: 1
+    - step_id: step_5
+      description: 处理 $m<0$ 情形。
+      max_score: 1
+    - step_id: step_6
+      description: $m<0$ 时同点取界。
+      max_score: 1
+    - step_id: step_7
+      description: 用 $x=1/e$ 排除过小的 $m$。
+      max_score: 1
+    - step_id: step_8
+      description: 合并并排除 $m=0$。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: main
+        goal: 求参数范围
+        target: 第 main 问
+        result: $m\in[\frac1e-e,0)\cup(0,e-\frac1e]$
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 含参数分类讨论
+      - 参变量分离
+    subroute:
+      - 分区间凹凸反转
+      - 分而治之——分区间
+      - 同点取等
+      - $m>0$ 与 $m<0$
+      - 必要性代点反证
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $mx\ln x-1\leqslant x^2-\frac2e x$
+      - $m\frac{\ln x}{x}\leqslant1-\frac2{ex}+\frac1{x^2}$
+      - $x=e$ 与 $x=1/e$ 两个同点取界。
+    normalization_moves_used:
+      - 把题目先移成 $mx\ln x\leqslant x^2-\frac2e x+1$。
+      - 按 $m$ 的正负分别选取 $\ln x/x$ 或 $x\ln x$ 的有效界。
+      - 利用二次式在同一点取最小值，得到可达参数边界。
+      - 代入同点取界点反证必要性。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把原不等式移项成 $mx\ln x\leqslant x^2-\frac2e x+1$，回补代数恒等变形。
+      - 若学生不理解为什么必须分 $m>0$ 和 $m<0$，回补不等式工具基础。
+      - 若学生不会求 $\ln x/x$ 或 $x\ln x$ 的极值，回补导数单调极值基础。
+      - 若学生忽略 $m\neq0$，回补函数三要素与定义域。
+  detail_terms:
+    - $mx\ln x-1$
+    - $x^2-\frac2e x$
+    - $m\frac{\ln x}{x}$
+    - $x=e$
+    - $x=1/e$
+    - 同点取等
+    - $m\neq0$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0226_mxlnx_minus1_vs_quadratic_param_range_ch6_fenzhi_ex12
+source_evidence:
+  source_refs:
+    - ref_id: page_0226_ex11_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0226/page_0226.md
+      role: local_context
+      evidence: page_0226 页首是 page_0225 例11续解和注意段，不是本卡题头。
+    - ref_id: page_0226_ex12_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0226/page_0226.md
+      role: problem_start
+      evidence: page_0226 中下部给出例12题头：$f(x)=mx\ln x-1$，$g(x)=x^2-\frac2e x$，求恒成立时 $m$ 的范围。
+    - ref_id: page_0226_ex12_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0226/page_0226.md
+      role: solution
+      evidence: page_0226 页底给出 $m>0$ 情形：同在 $x=e$ 取界，得到 $0<m\leqslant e-\frac1e$。
+    - ref_id: page_0227_ex12_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0227/page_0227.md
+      role: continuation
+      evidence: page_0227 页首续完 $m<0$ 情形，得到 $\frac1e-e\leqslant m<0$，并汇总结论。
+    - ref_id: page_0227_ex13_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0227/page_0227.md
+      role: local_context
+      evidence: page_0227 随后进入三角体系和例13题头，属于下一批，本卡不处理。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0226.png
+      inspected: true
+      notes: 已核对页图：例12题头和 $m>0$ 解析位于 page_0226 下部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0227.png
+      inspected: true
+      notes: 已核对页图：page_0227 顶部为例12的 $m<0$ 续解与结论，例13在其后另起。
+  source_context: 本卡处理 page_0226 起头、page_0227 顶部续完的例12；page_0227 例13以后留给下一批。
+  source_influence:
+    - 保留 source 的分区间分而治之：先分 $m>0$ 与 $m<0$，利用 $\ln x/x$ 或 $-x\ln x$ 的界。
+    - 保留同点取等：$m>0$ 时在 $x=e$ 同点取界，$m<0$ 时在 $x=1/e$ 同点取界。
+    - 保留必要性反证：超过边界时分别代入 $x=e$ 或 $x=1/e$ 得矛盾。
+  source_discrepancies: []
+original_problem:
+  stem: （2021 · 沈阳一模 T22）已知函数 $f(x)=mx\ln x-1$，$m\neq0$。若 $g(x)=x^2-\frac2e x$，且关于 $x$ 的不等式 $f(x)\leqslant g(x)$ 在 $(0,+\infty)$ 上恒成立（其中 $e$ 是自然对数的底数），求实数 $m$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $m\in\left[\frac1e-e,0\right)\cup\left(0,e-\frac1e\right]$。
+  fidelity_notes:
+    - 单问求参题，无选项。
+    - 题设明确 $m\neq0$，最终答案应排除 0。
+solution:
+  source_solution_summary: 由题意 $mx\ln x-1\leqslant x^2-\frac2e x$。当 $m>0$ 时，两边除以 $x^2>0$ 得 $m\frac{\ln x}{x}\leqslant1-\frac2{ex}+\frac1{x^2}$。 左侧最大为 $m/e$，在 $x=e$ 取等；右侧 $1-\frac2{ex}+\frac1{x^2}$ 的最小值为 $1-\frac1{e^2}$，也在 $x=e$ 取等，因此 $m/e\leqslant1-\frac1{e^2}$，即 $0<m\leqslant e-\frac1e$。若 $m>e-\frac1e$，代 $x=e$ 得 $f(e)>g(e)$，矛盾。当 $m<0$ 时，$mx\ln x$ 的最大值为 $-m/e$， 在 $x=1/e$ 取等；右侧 $x^2-\frac2e x+1$ 的最小值为 $1-\frac1{e^2}$，也在 $x=1/e$ 取等，于是 $-m/e\leqslant1-\frac1{e^2}$，得到 $\frac1e-e\leqslant m<0$。 若 $m<\frac1e-e$，代 $x=1/e$ 得 $f(1/e)>g(1/e)$，矛盾。综上 $m\in[\frac1e-e,0)\cup(0,e-\frac1e]$。
+  key_steps:
+    - step_id: step_1
+      statement: 把恒成立不等式写成可分区间比较的形式。
+      formula_trace:
+        from: $mx\ln x-1\leqslant x^2-\frac2e x$
+        to: $mx\ln x\leqslant x^2-\frac2e x+1$
+        operation: 移项。
+        why: 右侧二次式加 1 后可以和 $x\ln x$ 同点比较。
+      source_ref: page_0226_ex12_solution_start
+    - step_id: step_2
+      statement: 处理 $m>0$ 情形。
+      formula_trace:
+        from: $mx\ln x\leqslant x^2-\frac2e x+1$
+        to: $m\frac{\ln x}{x}\leqslant1-\frac2{ex}+\frac1{x^2}$
+        operation: 两边除以 $x^2>0$。
+        why: 左边变为 $\ln x/x$，右边变为关于 $1/x$ 的二次式。
+      source_ref: page_0226_ex12_solution_start
+    - step_id: step_3
+      statement: $m>0$ 时同点取界。
+      formula_trace:
+        from: $m\frac{\ln x}{x}$ 与 $1-\frac2{ex}+\frac1{x^2}$
+        to: $m/e\leqslant1-\frac1{e^2}$，故 $0<m\leqslant e-\frac1e$
+        operation: 左侧在 $x=e$ 取最大，右侧在 $x=e$ 取最小。
+        why: 同点取等给出可达边界。
+      source_ref: page_0226_ex12_solution_start
+    - step_id: step_4
+      statement: 用 $x=e$ 排除 $m>e-\frac1e$。
+      formula_trace:
+        from: $m>e-\frac1e$
+        to: $f(e)=me-1>e^2-2=g(e)$
+        operation: 代入共同取界点。
+        why: 给出必要性。
+      source_ref: page_0226_ex12_solution_start
+    - step_id: step_5
+      statement: 处理 $m<0$ 情形。
+      formula_trace:
+        from: $mx\ln x\leqslant x^2-\frac2e x+1$
+        to: $mx\ln x\leqslant -\frac m e$，右侧二次式 $\geqslant1-\frac1{e^2}$
+        operation: 使用 $x\ln x$ 的最小值 $-1/e$，并配二次平方。
+        why: 负系数会把 $x\ln x$ 的最小值变成左侧最大值。
+      source_ref: page_0227_ex12_continuation
+    - step_id: step_6
+      statement: $m<0$ 时同点取界。
+      formula_trace:
+        from: $-\frac m e\leqslant1-\frac1{e^2}$
+        to: $\frac1e-e\leqslant m<0$
+        operation: 两边乘以负向整理。
+        why: 边界点为 $x=1/e$。
+      source_ref: page_0227_ex12_continuation
+    - step_id: step_7
+      statement: 用 $x=1/e$ 排除过小的 $m$。
+      formula_trace:
+        from: $m<\frac1e-e$
+        to: $f(1/e)>g(1/e)$
+        operation: 代入共同取界点。
+        why: 完成 $m<0$ 情形的必要性。
+      source_ref: page_0227_ex12_continuation
+    - step_id: step_8
+      statement: 合并并排除 $m=0$。
+      formula_trace:
+        from: $\frac1e-e\leqslant m<0$ 与 $0<m\leqslant e-\frac1e$
+        to: $m\in[\frac1e-e,0)\cup(0,e-\frac1e]$
+        operation: 合并两个符号区间。
+        why: 题设 $m\neq0$。
+      source_ref: page_0227_ex12_continuation
+teaching_card:
+  student_title: 按 $m$ 正负分开，让两边在同一点取界
+  what_it_trains: 训练分区间分而治之：参数正负改变左侧取最大值的位置，必须拆开处理。
+  recognition_cues:
+    - 参数乘在 $x\ln x$ 前面，正负会改变应该看最大还是最小。
+    - 右侧是 $x^2-\frac2e x+1$，在 $x=1/e$ 附近有自然边界。
+    - source 标注“分区间凹凸反转”，说明不能一套界吃到底。
+  normalization_moves:
+    - 先移项，把 $-1$ 放到右侧。
+    - $m>0$ 时除以 $x^2$，看 $\ln x/x$ 与二次式同在 $x=e$。
+    - $m<0$ 时看 $x\ln x$ 的最小值变成左侧最大值，同在 $x=1/e$。
+    - 最后用取界点代入排除越界参数。
+  common_failures:
+    - 不分 $m$ 正负，直接除以含 $m$ 的量导致方向错误。
+    - 只写出充分条件，漏掉代 $x=e$ 或 $x=1/e$ 的必要性。
+    - 忘记题设 $m\neq0$，把 0 放入答案。
+  similar_practice_query: mxlnx-1 <= x^2-2/e x 参数范围 m正负 分区间分而治之 同点取等
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

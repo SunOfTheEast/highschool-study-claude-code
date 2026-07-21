@@ -1,0 +1,246 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0169_param_range_minmax_ex07
+content_revision_id: mst_p0169_param_range_minmax_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0169_param_range_minmax_ex07.card.yaml
+stem: |-
+  （2024·武汉新洲区高二期末 T8）已知函数 $f(x)=\frac{a}{x}+\ln x-\frac{2}{3}$，$g(x)=-\frac{2}{3}x^3+\frac{3}{2}x^2-x$，对任意的 $x_1, x_2 \in [\frac{1}{3}, 2]$，都有 $f(x_1) \geqslant g(x_2)$ 成立，则实数 $a$ 的取值范围是（  ）
+  A. $\left[\frac{\sqrt{e}}{e}, +\infty\right)$
+  B. $\left(\frac{\sqrt{e}}{e}, +\infty\right)$
+  C. $\left(-\infty, \frac{\sqrt{e}}{e}\right]$
+  D. $(e, +\infty)$
+answer: |
+  A
+
+  由
+  \[
+  g(x)=-\frac23x^3+\frac32x^2-x,\quad
+  g^{\prime}(x)=-2x^2+3x-1=-(2x-1)(x-1),
+  \]
+  在区间 $[\frac13,2]$ 上可知 $g$ 先减后增再减，且
+  \[
+  g\!\left(\frac13\right)<g(1),\quad g(2)<g(1),
+  \]
+  故
+  \[
+  g(x)_{\max}=g(1)=-\frac16.
+  \]
+  题设“任意 $x_1,x_2$ 都满足 $f(x_1)\ge g(x_2)$”等价于
+  \[
+  f(x)_{\min}\ge g(x)_{\max}.
+  \]
+  又
+  \[
+  f(x)=\frac{a}{x}+\ln x-\frac23,\quad
+  f^{\prime}(x)=\frac{x-a}{x^2}.
+  \]
+  源解分两类：
+  当 $a\le0$ 时，$f$ 在 $[\frac13,2]$ 递增，最小值在 $x=\frac13$，该分支被舍去；
+  当 $a>0$ 时，源解取
+  \[
+  f(x)_{\min}=f(a)=\frac13+\ln a.
+  \]
+  代入 $f_{\min}\ge-\frac16$ 得
+  \[
+  \frac13+\ln a\ge-\frac16
+  \Rightarrow \ln a\ge-\frac12
+  \Rightarrow a\ge e^{-1/2}=\frac{\sqrt e}{e}.
+  \]
+  综上
+  \[
+  a\in\left[\frac{\sqrt e}{e},+\infty\right),
+  \]
+  选 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 先求 $g$ 在 $[\frac13,2]$ 上的最大值。
+      max_score: 1
+    - step_id: step_2
+      description: 把量词条件转成最值不等式。
+      max_score: 1
+    - step_id: step_3
+      description: 对 $f^{\prime}(x)=\frac{x-a}{x^2}$ 按参数分情况。
+      max_score: 1
+    - step_id: step_4
+      description: 解不等式并给出参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 含参数分类讨论
+    secondary:
+      - 参变量分离
+      - 同构变形与换元法
+    subroute:
+      - 双变量条件先压成 $f_{\min}\ge g_{\max}$
+      - 先锁定 $g_{\max}$，再处理 $f$ 的参数分支
+      - 把最值约束转成 $\ln a$ 不等式
+  structure:
+    primary: Max/Min 与绝对值结构
+    secondary:
+      - 指对复合结构
+      - 非齐次结构
+    evidence:
+      - 条件是“任意 $x_1,x_2$”的跨函数比较，稳定落点为最小值与最大值对接。
+      - $f(x)$ 含 $\frac{a}{x}+\ln x$，属于参数嵌入的指对复合最值结构。
+    normalization_moves_used:
+      - 统一化为 $f_{\min}\ge g_{\max}$。
+      - 对三次函数 $g$ 先完成单调段切分。
+      - 对参数函数 $f$ 用导数分情况并回到单不等式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能把“任意-任意”转为最值比较，回补不等式工具基础。
+      - 若学生在导数符号表上反复出错，回补导数单调极值基础。
+      - 若学生对 $\ln a$ 与指数化变形不熟，回补指数对数基础。
+      - 若学生遗漏区间约束导致最值点误判，回补函数三要素与定义域。
+  detail_terms:
+    - $f(x)=\frac{a}{x}+\ln x-\frac23$
+    - $g(x)=-\frac23x^3+\frac32x^2-x$
+    - $g_{\max}=g(1)=-\frac16$
+    - $f^{\prime}(x)=\frac{x-a}{x^2}$
+    - $a\ge\frac{\sqrt e}{e}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0169_param_range_minmax_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0169_ex07_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0169/page_0169.md
+      role: problem_start
+      evidence: page_0169 题头“例7”给出完整题干与 A-D 选项：$f(x)=\frac{a}{x}+\ln x-\frac{2}{3}$，$g(x)=-\frac{2}{3}x^3+\frac{3}{2}x^2-x$，条件为 $\forall x_1,x_2\in[\frac13,2], f(x_1)\ge g(x_2)$。
+    - ref_id: page_0169_ex07_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0169/page_0169.md
+      role: solution
+      evidence: 同页“解析”先求 $g(x)$ 在区间上的最大值 $-\frac16$，再由 $f(x)_{\min}\ge g(x)_{\max}$ 对参数 $a$ 分情况，最终结论为 $a\in[\frac{\sqrt e}{e},+\infty)$，选 A。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0169.png
+      inspected: true
+      notes: 已核对页图：例7题干与解析完整在本页；markdown 中重建标记“x>1”与原图一致。
+  source_context: 例7为单页完结题；该页在例7解析后紧接例8题头。
+  source_influence:
+    - 保留源解的主干逻辑：先把“任意 $x_1,x_2$”转化为 $f_{\min}\ge g_{\max}$。
+    - 保留源解对 $g^{\prime}(x)$ 的分段单调分析，锁定 $g_{\max}=g(1)=-\frac16$。
+    - 保留源解在 $f^{\prime}(x)=\frac{x-a}{x^2}$ 下的参数分情况，并按源书答案落选项 A。
+  source_discrepancies:
+    - "page_0169 markdown 标记了“[?reconstructed: x>1]”；核图后该处确为“$x>1$”，可消解。"
+    - 源解在“$3a-\ln3-\frac23\ge-\frac16$”后写成“$a\ge\frac13\ln3+\frac{5}{18}$（舍去）”；该分支被舍去，不影响最终答案 A。
+original_problem:
+  stem: （2024·武汉新洲区高二期末 T8）已知函数 $f(x)=\frac{a}{x}+\ln x-\frac{2}{3}$，$g(x)=-\frac{2}{3}x^3+\frac{3}{2}x^2-x$，对任意的 $x_1, x_2 \in [\frac{1}{3}, 2]$，都有 $f(x_1) \geqslant g(x_2)$ 成立，则实数 $a$ 的取值范围是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\left[\frac{\sqrt{e}}{e}, +\infty\right)$
+      text_latex: $\left[\frac{\sqrt{e}}{e}, +\infty\right)$
+    - label: B
+      text_raw: $\left(\frac{\sqrt{e}}{e}, +\infty\right)$
+      text_latex: $\left(\frac{\sqrt{e}}{e}, +\infty\right)$
+    - label: C
+      text_raw: $\left(-\infty, \frac{\sqrt{e}}{e}\right]$
+      text_latex: $\left(-\infty, \frac{\sqrt{e}}{e}\right]$
+    - label: D
+      text_raw: $(e, +\infty)$
+      text_latex: $(e, +\infty)$
+  answer: A
+  fidelity_notes:
+    - 题干、选项、解析均在 page_0169 完整出现，无跨页补题。
+    - 按源解保持“先求 $g_{\max}$，再比较 $f_{\min}$”的流程。
+solution:
+  source_solution_summary: |
+    由
+    \[
+    g(x)=-\frac23x^3+\frac32x^2-x,\quad
+    g^{\prime}(x)=-2x^2+3x-1=-(2x-1)(x-1),
+    \]
+    在区间 $[\frac13,2]$ 上可知 $g$ 先减后增再减，且
+    \[
+    g\!\left(\frac13\right)<g(1),\quad g(2)<g(1),
+    \]
+    故
+    \[
+    g(x)_{\max}=g(1)=-\frac16.
+    \]
+    题设“任意 $x_1,x_2$ 都满足 $f(x_1)\ge g(x_2)$”等价于
+    \[
+    f(x)_{\min}\ge g(x)_{\max}.
+    \]
+    又
+    \[
+    f(x)=\frac{a}{x}+\ln x-\frac23,\quad
+    f^{\prime}(x)=\frac{x-a}{x^2}.
+    \]
+    源解分两类：
+    当 $a\le0$ 时，$f$ 在 $[\frac13,2]$ 递增，最小值在 $x=\frac13$，该分支被舍去；
+    当 $a>0$ 时，源解取
+    \[
+    f(x)_{\min}=f(a)=\frac13+\ln a.
+    \]
+    代入 $f_{\min}\ge-\frac16$ 得
+    \[
+    \frac13+\ln a\ge-\frac16
+    \Rightarrow \ln a\ge-\frac12
+    \Rightarrow a\ge e^{-1/2}=\frac{\sqrt e}{e}.
+    \]
+    综上
+    \[
+    a\in\left[\frac{\sqrt e}{e},+\infty\right),
+    \]
+    选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 先求 $g$ 在 $[\frac13,2]$ 上的最大值。
+      formula_trace:
+        from: $g^{\prime}(x)=-(2x-1)(x-1)$
+        to: $g(x)_{\max}=g(1)=-\frac16$
+        operation: 由导数符号判单调区间，再比较关键点函数值。
+        why: 把双函数比较中的右端统一成固定上界。
+      source_ref: page_0169_ex07_solution
+    - step_id: step_2
+      statement: 把量词条件转成最值不等式。
+      formula_trace:
+        from: $\forall x_1,x_2\in[\frac13,2],\ f(x_1)\ge g(x_2)$
+        to: $f(x)_{\min}\ge g(x)_{\max}$
+        operation: 左端取最小、右端取最大。
+        why: 得到只含参数 $a$ 的单目标约束。
+      source_ref: page_0169_ex07_solution
+    - step_id: step_3
+      statement: 对 $f^{\prime}(x)=\frac{x-a}{x^2}$ 按参数分情况。
+      formula_trace:
+        from: $f(x)=\frac{a}{x}+\ln x-\frac23$
+        to: 源解在 $a\le0$ 分支舍去，在 $a>0$ 分支取 $f_{\min}=f(a)=\frac13+\ln a$
+        operation: 依据导数正负定位最小值表达式。
+        why: 把条件化为对 $\ln a$ 的线性不等式。
+      source_ref: page_0169_ex07_solution
+    - step_id: step_4
+      statement: 解不等式并给出参数范围。
+      formula_trace:
+        from: $\frac13+\ln a\ge-\frac16$
+        to: $a\ge e^{-1/2}=\frac{\sqrt e}{e}$
+        operation: 移项并指数化。
+        why: 对应选项 A。
+      source_ref: page_0169_ex07_solution
+teaching_card:
+  student_title: 任意-任意条件先做最值对接
+  what_it_trains: 训练把双变量全称不等式压缩成“左侧最小值 ≥ 右侧最大值”，再通过导数与参数分支求范围。
+  recognition_cues:
+    - 题干同时出现两个自变量 $x_1,x_2$ 且量词为“任意”。
+    - 两边都是可导函数，目标是参数范围。
+    - 选项是区间型参数答案。
+  normalization_moves:
+    - 先改写成 $f_{\min}\ge g_{\max}$。
+    - 先求不含参数一侧的极值。
+    - 再求含参数一侧的最小值表达式。
+    - 最后解参数不等式并匹配选项。
+  common_failures:
+    - 把“任意 $x_1,x_2$”误写成比较同一个 $x$。
+    - 只算驻点不看区间端点，导致 $g_{\max}$ 判断错误。
+    - 参数分支漏写，直接套一个最小值公式。
+  similar_practice_query: 任意x1任意x2 最值分离 fmin>=gmax 参数范围 导数分支
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes: []

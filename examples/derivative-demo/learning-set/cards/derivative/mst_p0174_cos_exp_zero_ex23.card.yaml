@@ -1,0 +1,251 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0174_cos_exp_zero_ex23
+content_revision_id: mst_p0174_cos_exp_zero_ex23-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0174_cos_exp_zero_ex23.card.yaml
+stem: （2023·茂名一模 T15）$e$ 是自然对数的底数，$f(x)=e^{\cos(2\pi x)}+e^{2x}-2ex-\frac1e$ 的零点为 ________.
+answer: |
+  $x=\frac12$
+
+  法一：由 $f(x)=0$ 得
+  \[
+  e^{\cos(2\pi x)}=2ex-e^{2x}+\frac1e=:g(x).
+  \]
+  因 $\cos(2\pi x)\ge-1$，故
+  \[
+  e^{\cos(2\pi x)}\ge\frac1e,
+  \]
+  且当且仅当
+  \[
+  2\pi x=\pi+2k\pi,\ k\in\mathbf{Z}\Longleftrightarrow x=\frac12+k
+  \]
+  取等。再看右侧
+  \[
+  g^{\prime}(x)=2e-2e^{2x},
+  \]
+  所以 $x<\frac12$ 时 $g^{\prime}(x)>0$，$x>\frac12$ 时 $g^{\prime}(x)<0$，
+  即 $g$ 在 $x=\frac12$ 取最大值
+  \[
+  g\!\left(\frac12\right)=\frac1e.
+  \]
+  因而
+  \[
+  g(x)\le\frac1e.
+  \]
+  要使 $e^{\cos(2\pi x)}=g(x)$，只能两边同时等于 $\frac1e$，故 $x=\frac12$。
+
+  法二：源页把
+  \[
+  f(x)=(e^{2x}-2ex)+\left(e^{\cos(2\pi x)}-\frac1e\right),
+  \]
+  两项都非负，第一项在 $x=\frac12$ 取等，第二项在 $x=\frac12+k$ 取等，
+  跨页收尾给出
+  \[
+  \frac12=\frac12+k\Rightarrow k=0,
+  \]
+  仍得零点 $x=\frac12$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把零点方程改写为“左侧指数项 = 右侧函数项”。
+      max_score: 1
+    - step_id: step_2
+      description: 给出左侧下界及取等条件。
+      max_score: 1
+    - step_id: step_3
+      description: 求右侧函数最大值。
+      max_score: 1
+    - step_id: step_4
+      description: 双边等号同时成立，锁定唯一解。
+      max_score: 1
+    - step_id: step_5
+      description: 法二跨页复核同一结论。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: item_1
+        goal: 零点/极值点分析
+        target: 求函数零点。
+        result: 见 source_solution_summary
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 数形结合
+      - 局部逼近与找点
+    subroute:
+      - 左侧下界
+      - 右侧上界
+      - 双边同取等
+      - 分项非负复核
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 同构结构
+    evidence:
+      - $e^{\cos(2\pi x)}$ 由余弦下界给出最小值 $\frac1e$。
+      - $2ex-e^{2x}+\frac1e$ 由导数给出最大值 $\frac1e$。
+      - 等式成立需上下界同时取等，交集唯一在 $x=\frac12$。
+    normalization_moves_used:
+      - 先把等式拆成“左函数=右函数”。
+      - 左边做下界、右边做上界。
+      - 用取等点交集判唯一根。
+      - 再用分项非负法二跨页复核。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $\cos(2\pi x)\ge-1$ 推到 $e^{\cos(2\pi x)}\ge\frac1e$，回补三角函数基础。
+      - 若学生对 $g^{\prime}(x)=2e-2e^{2x}$ 的单调判断出错，回补导数单调极值基础。
+      - 若学生只找到候选点不验证“同时取等”，回补不等式工具基础。
+      - 若学生看不懂分项非负的第二解法，回补代数恒等变形。
+  detail_terms:
+    - $e^{\cos(2\pi x)}$
+    - $g(x)=2ex-e^{2x}+\frac1e$
+    - $g\!\left(\frac12\right)=\frac1e$
+    - $x=\frac12+k$
+    - $x=\frac12$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0174_cos_exp_zero_ex23
+source_evidence:
+  source_refs:
+    - ref_id: page_0174_ex23_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0174/page_0174.md
+      role: problem_start
+      evidence: line 38 给出例23题头与填空题题干，求函数零点。
+    - ref_id: page_0174_ex23_solution_method1
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0174/page_0174.md
+      role: solution
+      evidence: line 40 给出法一完整推导：左侧下界与右侧上界同为 $\frac1e$，锁定 $x=\frac12$。
+    - ref_id: page_0174_ex23_solution_method2_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0174/page_0174.md
+      role: continuation
+      evidence: line 42 起进入法二：把 $f(x)$ 拆成两段非负项并开始零点比大小，句末在 page_0174 截断。
+    - ref_id: page_0175_ex23_solution_method2_end
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0175/page_0175.md
+      role: continuation
+      evidence: line 12 承接法二收尾：“即 $\frac12=\frac12+k$，所以 $k=0$，故答案为 $\frac12$”。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0174.png
+      inspected: true
+      notes: 已核对页图：例23题干在页底起头；法一完整，法二在“构造零点比大小”处跨页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0175.png
+      inspected: true
+      notes: 已核对页图：page_0175 顶部是例23法二收尾，随后立刻进入例24新题头。
+  source_context: 按题头归属，例23起于 page_0174，法二续到 page_0175 顶部后结束；page_0175 后续例24起属于下一 worker。
+  source_influence:
+    - 保留法一“双边夹到 $\frac1e$”的核心：$e^{\cos(2\pi x)}\ge\frac1e$ 与 $2ex-e^{2x}+\frac1e\le\frac1e$。
+    - 保留法二“拆成两段非负项同时取等”结构，跨页结论仍锁定 $x=\frac12$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·茂名一模 T15）$e$ 是自然对数的底数，$f(x)=e^{\cos(2\pi x)}+e^{2x}-2ex-\frac1e$ 的零点为 ________.
+  parts: *a1
+  choices: []
+  answer: $x=\frac12$
+  fidelity_notes:
+    - 本题为填空题，无选项。
+    - 题头在 page_0174；法二结尾跨到 page_0175 顶部。
+solution:
+  source_solution_summary: |
+    法一：由 $f(x)=0$ 得
+    \[
+    e^{\cos(2\pi x)}=2ex-e^{2x}+\frac1e=:g(x).
+    \]
+    因 $\cos(2\pi x)\ge-1$，故
+    \[
+    e^{\cos(2\pi x)}\ge\frac1e,
+    \]
+    且当且仅当
+    \[
+    2\pi x=\pi+2k\pi,\ k\in\mathbf{Z}\Longleftrightarrow x=\frac12+k
+    \]
+    取等。再看右侧
+    \[
+    g^{\prime}(x)=2e-2e^{2x},
+    \]
+    所以 $x<\frac12$ 时 $g^{\prime}(x)>0$，$x>\frac12$ 时 $g^{\prime}(x)<0$，
+    即 $g$ 在 $x=\frac12$ 取最大值
+    \[
+    g\!\left(\frac12\right)=\frac1e.
+    \]
+    因而
+    \[
+    g(x)\le\frac1e.
+    \]
+    要使 $e^{\cos(2\pi x)}=g(x)$，只能两边同时等于 $\frac1e$，故 $x=\frac12$。
+
+    法二：源页把
+    \[
+    f(x)=(e^{2x}-2ex)+\left(e^{\cos(2\pi x)}-\frac1e\right),
+    \]
+    两项都非负，第一项在 $x=\frac12$ 取等，第二项在 $x=\frac12+k$ 取等，
+    跨页收尾给出
+    \[
+    \frac12=\frac12+k\Rightarrow k=0,
+    \]
+    仍得零点 $x=\frac12$。
+  key_steps:
+    - step_id: step_1
+      statement: 把零点方程改写为“左侧指数项 = 右侧函数项”。
+      formula_trace:
+        from: $e^{\cos(2\pi x)}+e^{2x}-2ex-\frac1e=0$
+        to: $e^{\cos(2\pi x)}=2ex-e^{2x}+\frac1e=:g(x)$
+        operation: 移项定义右侧函数 $g(x)$。
+        why: 便于分别估计左右两边的可取范围。
+      source_ref: page_0174_ex23_solution_method1
+    - step_id: step_2
+      statement: 给出左侧下界及取等条件。
+      formula_trace:
+        from: $\cos(2\pi x)\ge-1$
+        to: $e^{\cos(2\pi x)}\ge\frac1e$，且取等当且仅当 $x=\frac12+k$
+        operation: 指数函数单调，直接由余弦最小值推下界。
+        why: 锁定左侧最小可达值与候选等号点。
+      source_ref: page_0174_ex23_solution_method1
+    - step_id: step_3
+      statement: 求右侧函数最大值。
+      formula_trace:
+        from: $g(x)=2ex-e^{2x}+\frac1e$
+        to: $g^{\prime}(x)=2e-2e^{2x}$，$g(x)\le g\!\left(\frac12\right)=\frac1e$
+        operation: 求导判单调：先增后减，顶点在 $x=\frac12$。
+        why: 右侧被上界 $\frac1e$ 卡住，与左侧下界形成夹逼。
+      source_ref: page_0174_ex23_solution_method1
+    - step_id: step_4
+      statement: 双边等号同时成立，锁定唯一解。
+      formula_trace:
+        from: $e^{\cos(2\pi x)}\ge\frac1e,\ g(x)\le\frac1e$
+        to: $e^{\cos(2\pi x)}=g(x)$ 只能在 $x=\frac12$ 取到
+        operation: 令上下界同时取等并交叉匹配候选点。
+        why: 等式成立必须两边同取边界值。
+      source_ref: page_0174_ex23_solution_method1
+    - step_id: step_5
+      statement: 法二跨页复核同一结论。
+      formula_trace:
+        from: $f(x)=(e^{2x}-2ex)+\left(e^{\cos(2\pi x)}-\frac1e\right)$
+        to: 两项同为 0 需 $x=\frac12$ 且 $x=\frac12+k$，故 $k=0$
+        operation: 拆成两段非负项并在 page_0175 顶部完成零点比大小收尾。
+        why: 独立路线再次确认零点唯一为 $\frac12$。
+      source_ref: page_0175_ex23_solution_method2_end
+teaching_card:
+  student_title: 上下界夹同一个值：零点只剩 $\frac12$
+  what_it_trains: 训练“等式两边分别估上下界，再看是否夹到同一个常数”的零点判定套路。
+  recognition_cues:
+    - 题式含 $e^{\cos(\cdot)}$ 与指数二次组合，直接硬解困难。
+    - 能分别看出一侧天然有下界、另一侧天然有上界。
+    - 题目是填空零点，常见唯一解结构。
+  normalization_moves:
+    - 移项成 $e^{\cos(2\pi x)}=g(x)$。
+    - 左边用 $\cos\ge-1$ 给下界 $\frac1e$。
+    - 右边用导数给上界 $\frac1e$。
+    - 两边同取等，交集锁定 $x=\frac12$。
+  common_failures:
+    - 把 $g^{\prime}(x)$ 求错成 $2e-2xe^{2x}$。
+    - 只用 $x=\frac12+k$ 就下结论，漏掉与右侧极值点匹配。
+    - 没有检查 page_0175 顶部续解，遗漏法二的收尾等号条件。
+  similar_practice_query: e^{cos2pix} e^{2x}-2ex 零点 夹逼 取等条件
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

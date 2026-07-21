@@ -1,0 +1,254 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0073_pade_ex05
+content_revision_id: mst_p0073_pade_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0073_pade_ex05.card.yaml
+stem: |-
+  （福建省厦门市 2024 届高中毕业班第四次质量检测数学试题 T19）帕德近似是法国数学家亨利·帕德发明的用有理多项式近似特定函数的方法，在计算机数学中有着广泛的应用。已知函数 f(x) 在 x=0 处的 [m,n] 阶帕德近似定义为： R(x)=\frac{a_0+a_1x+\cdots+a_mx^m}{1+b_1x+\cdots+b_nx^n}，且满足： f(0)=R(0), f'(0)=R'(0), f^{(2)}(0)=R^{(2)}(0), \cdots, f^{(m+n)}(0)=R^{(m+n)}(0)。已知 f(x)=\ln(x+1) 在 x=0 处的 [2,2] 阶帕德近似为 R(x)=\frac{a+bx+\frac12x^2}{1+x+\frac16x^2}。
+  (1). 求实数 a,b 的值。
+  (2). 设 h(x)=f(x)-R(x)，证明：xh(x)\geqslant0。
+  (3). 已知 x_1,x_2,x_3 是方程 \ln x=\lambda\left(x-\frac1x\right) 的三个不等实根，求实数 \lambda 的取值范围，并证明： \frac{x_1+x_2+x_3}{3}>\frac1\lambda-1。
+answer: |-
+  (1) a=0,b=1，R(x)=\frac{x+\frac12x^2}{1+x+\frac16x^2} =\frac{6x+3x^2}{6+6x+x^2}。(2) 证明见解析，结论为 xh(x)\geqslant0。 (3) \lambda 的取值范围为 0<\lambda<\frac12，并且 \frac{x_1+x_2+x_3}{3}>\frac1\lambda-1。
+
+  第 (1) 问由 R(0)=a=f(0)=0 与 R'(0)=b=f'(0)=1 得 a=0,b=1。 第 (2) 问写 h(x)=\ln(1+x)-\frac{6x+3x^2}{6+6x+x^2}， 直接求得 h'(x)=\frac{x^4}{(1+x)(x^2+6x+6)^2}\geqslant0， 所以 h 在 (-1,+\infty) 上递增，结合 h(0)=0 得 -1<x<0 时 h(x)<0， x>0 时 h(x)>0，从而 xh(x)\geqslant0。第 (3) 问中，方程恒有根 x=1；存在三个不等实根等价于 0<\lambda<1/2，另两根互为倒数。取 x_3>1、x_1=1/x_3、x_2=1，再由第 (2) 问推出 \ln x>\frac{3x^2-3}{x^2+4x+1} (x>1)，代入 x_3 并与方程联立，得到 \lambda>\frac{3}{x_3+4+1/x_3}，于是 \frac1\lambda<\frac{x_3+4+1/x_3}{3} =\frac{x_1+x_2+x_3}{3}+1。
+rubric:
+  max_score: 9
+  criteria:
+    - step_id: step_1
+      description: 由 x=0 处的函数值和一阶导数求出 a,b。
+      max_score: 1
+    - step_id: step_2
+      description: 把误差函数 h 写成一个可求导的显式差值。
+      max_score: 1
+    - step_id: step_3
+      description: 求 h'(x) 并得到误差函数的单调性。
+      max_score: 1
+    - step_id: step_4
+      description: 由 h 的单调性证明 xh(x)\geqslant0。
+      max_score: 1
+    - step_id: step_5
+      description: 补全方程有三个不等实根时的 lambda 范围。
+      max_score: 1
+    - step_id: step_6
+      description: 利用方程的倒数对称性确定三根关系。
+      max_score: 1
+    - step_id: step_7
+      description: 把第 (2) 问的误差符号偏移到 \ln x 的下界。
+      max_score: 1
+    - step_id: step_8
+      description: 将下界代入较大的根 x_3。
+      max_score: 1
+    - step_id: step_9
+      description: 把倒数关系代回三根均值，推出目标不等式。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 数值求值
+        target: 第 (1) 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 (2) 问
+        result: 见 source_solution_summary
+      - part_id: "3"
+        goal: 求参数范围
+        target: 第 (3) 问
+        result: 见 source_solution_summary
+      - part_id: 3证明
+        goal: 不等式证明
+        target: 第 (3) 证明 问
+        result: 见 source_solution_summary
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 对称性配凑
+      - 局部逼近与找点
+      - 同构变形与换元法
+    subroute:
+      - 高阶帕德逼近
+      - 帕德误差符号
+      - 飘带函数
+      - 倒数对称根
+      - 偏移 x -> x-1
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 对称结构
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - h'(x)=\frac{x^4}{(1+x)(x^2+6x+6)^2}\geqslant0，说明帕德近似误差在 0 两侧有固定符号。
+      - 方程 \ln x=\lambda(x-1/x) 在 x 与 1/x 下成对，且 x=1 恒为根。
+      - \ln x>\frac{3x^2-3}{1+4x+x^2} 与 \lambda(x_3-1/x_3)=\ln x_3 联立，转成三根均值不等式。
+    normalization_moves_used:
+      - 先求出帕德近似，再研究 h=f-R 的误差符号。
+      - 将 \ln(1+t) 的下界用 t=x-1 偏移成 \ln x 的下界。
+      - 把非 1 的两个根写成 x_3 与 1/x_3，统一三根平均值中的对称项。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 R(0)=a、R'(0)=b 读出 a,b，回补导数运算与几何意义。
+      - 若学生在 h'(x) 的商函数求导中漏掉分母平方，回补导数运算与几何意义。
+      - 若学生不能由 h'(x)\ge0 和 h(0)=0 判断 0 两侧 h 的符号，回补导数单调极值基础。
+      - 若学生看不出方程在 x 与 1/x 下成对，回补代数恒等变形。
+      - 若学生不会把 \ln x 写成 \ln(1+(x-1)) 来套用第 (2) 问，回补指数对数基础。
+      - 若学生从 \lambda>\frac{3}{x_3+4+1/x_3} 取倒数时方向出错，回补不等式工具基础。
+  detail_terms:
+    - R(x)=\frac{x+\frac12x^2}{1+x+\frac16x^2}
+    - h'(x)=\frac{x^4}{(1+x)(x^2+6x+6)^2}
+    - \ln x=\lambda\left(x-\frac1x\right)
+    - 0<\lambda<\frac12
+    - x_2=1,\quad x_1x_3=1
+    - \ln x>\frac{3x^2-3}{x^2+4x+1}\quad(x>1)
+parts: &a1
+  - label: (1)
+    text: 求实数 a,b 的值。
+  - label: (2)
+    text: 设 h(x)=f(x)-R(x)，证明：xh(x)\geqslant0。
+  - label: (3)
+    text: 已知 x_1,x_2,x_3 是方程 \ln x=\lambda\left(x-\frac1x\right) 的三个不等实根，求实数 \lambda 的取值范围，并证明： \frac{x_1+x_2+x_3}{3}>\frac1\lambda-1。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0073_pade_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0073
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0073/page_0073.md
+      role: problem_start
+      evidence: page_0073 底部在“三、高阶帕德逼近与偏移综合”下出现例 5 题头，并开始给出帕德近似定义。
+    - ref_id: page_0074_stem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0074/page_0074.md
+      role: continuation
+      evidence: page_0074 顶部续完帕德近似定义，给出已知 [2,2] 近似形式及三问：求 a,b，证明 xh(x)\geqslant0，求 lambda 范围并证明三根均值不等式。
+    - ref_id: page_0074_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0074/page_0074.md
+      role: solution
+      evidence: page_0074 中下部给出完整解析：求 a=0,b=1，证明 h'(x)\geqslant0， 再用飘带函数零点个数、倒数对称根和第 (2) 问的对数下界推出最终不等式。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0073.png
+      inspected: true
+      notes: 已核对例 5 题头从 page_0073 底部开始，页末只到帕德近似定义的 f(0) 处。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0074.png
+      inspected: true
+      notes: 已核对续页三问、解析、h'(x)=x^4/((1+x)(x^2+6x+6)^2) 以及末行 (x_1+x_2+x_3)/3>1/lambda-1；页图可见若干中间公式疑似印刷或转写错误。
+  source_context: 本题紧接例 4 后进入“高阶帕德逼近与偏移综合”，使用 \ln(1+x) 的 [2,2] 帕德近似误差符号，并把 x 与 1/x 的倒数对称关系用于飘带方程 \ln x=\lambda(x-1/x) 的根。
+  source_influence:
+    - 题干跨 page_0073-page_0074，三问和解析以 page_0074 图像与 markdown 为主。
+    - 第 (2) 问保留源解主线：求出 h'(x)\geqslant0，由 h(0)=0 得 x=0 两侧 h 的符号。
+    - 第 (3) 问按源解使用 x_2=1、x_1x_3=1 与 \ln x>\frac{3x^2-3}{1+4x+x^2} 的路线；对源解略写的 lambda 范围补出 0<lambda<1/2 的完整理由。
+  source_discrepancies:
+    - page_0074 法一中出现“f'(0)=R'(0)=0⇒b=1”的写法；数学上 f'(0)=1 且 R'(0)=b，应为由 f'(0)=R'(0)=1 得 b=1。
+    - page_0074 的 R'(x) 中间式分母看起来漏写平方，h'(x) 的中间求导分子也疑似把分母导数写混； 本卡按商函数求导重算，并采用源页最终清楚给出的 h'(x)=x^4/((1+x)(x^2+6x+6)^2)。
+    - page_0074 法二泰勒展开行有断行和转写疑点，本卡不依赖法二作为主证。
+    - 源解第 (3) 问只明写 lambda<1/2；完整取值范围为 0<lambda<1/2，其中 lambda>0 由存在 1 以外的正根时 \ln x 与 x-1/x 同号推出。
+original_problem:
+  stem: （福建省厦门市 2024 届高中毕业班第四次质量检测数学试题 T19）帕德近似是法国数学家亨利·帕德发明的用有理多项式近似特定函数的方法，在计算机数学中有着广泛的应用。已知函数 f(x) 在 x=0 处的 [m,n] 阶帕德近似定义为： R(x)=\frac{a_0+a_1x+\cdots+a_mx^m}{1+b_1x+\cdots+b_nx^n}，且满足： f(0)=R(0), f'(0)=R'(0), f^{(2)}(0)=R^{(2)}(0), \cdots, f^{(m+n)}(0)=R^{(m+n)}(0)。已知 f(x)=\ln(x+1) 在 x=0 处的 [2,2] 阶帕德近似为 R(x)=\frac{a+bx+\frac12x^2}{1+x+\frac16x^2}。
+  parts: *a1
+  choices: []
+  answer: (1) a=0,b=1，R(x)=\frac{x+\frac12x^2}{1+x+\frac16x^2} =\frac{6x+3x^2}{6+6x+x^2}。(2) 证明见解析，结论为 xh(x)\geqslant0。 (3) \lambda 的取值范围为 0<\lambda<\frac12，并且 \frac{x_1+x_2+x_3}{3}>\frac1\lambda-1。
+  fidelity_notes:
+    - 例 5 题头从 page_0073 底部开始，题干和完整解析续至 page_0074。
+    - 原题不是选择题，choices 保持为空列表。
+    - 第 (3) 问源解将 lambda 范围的零点个数证明略写为“后续飘带函数找点”；本卡补出直接单调性说明。
+solution:
+  source_solution_summary: 第 (1) 问由 R(0)=a=f(0)=0 与 R'(0)=b=f'(0)=1 得 a=0,b=1。 第 (2) 问写 h(x)=\ln(1+x)-\frac{6x+3x^2}{6+6x+x^2}， 直接求得 h'(x)=\frac{x^4}{(1+x)(x^2+6x+6)^2}\geqslant0， 所以 h 在 (-1,+\infty) 上递增，结合 h(0)=0 得 -1<x<0 时 h(x)<0， x>0 时 h(x)>0，从而 xh(x)\geqslant0。第 (3) 问中，方程恒有根 x=1；存在三个不等实根等价于 0<\lambda<1/2，另两根互为倒数。取 x_3>1、x_1=1/x_3、x_2=1，再由第 (2) 问推出 \ln x>\frac{3x^2-3}{x^2+4x+1} (x>1)，代入 x_3 并与方程联立，得到 \lambda>\frac{3}{x_3+4+1/x_3}，于是 \frac1\lambda<\frac{x_3+4+1/x_3}{3} =\frac{x_1+x_2+x_3}{3}+1。
+  key_steps:
+    - step_id: step_1
+      statement: 由 x=0 处的函数值和一阶导数求出 a,b。
+      formula_trace:
+        from: R(x)=\frac{a+bx+\frac12x^2}{1+x+\frac16x^2},\quad f(0)=0,\quad f'(0)=1
+        to: a=0,\quad b=1,\quad R(x)=\frac{x+\frac12x^2}{1+x+\frac16x^2}
+        operation: 代 x=0 得 R(0)=a；对 R 求导后代 x=0 得 R'(0)=b。
+        why: 帕德定义要求 f(0)=R(0)、f'(0)=R'(0)，而 f(x)=\ln(1+x) 满足 f(0)=0,f'(0)=1。
+      source_ref: page_0074_solution
+    - step_id: step_2
+      statement: 把误差函数 h 写成一个可求导的显式差值。
+      formula_trace:
+        from: h(x)=f(x)-R(x)
+        to: h(x)=\ln(1+x)-\frac{6x+3x^2}{6+6x+x^2}
+        operation: 将第 (1) 问得到的 R(x) 通分为分母 6+6x+x^2 的形式。
+        why: 后续要直接比较 \ln(1+x) 与它的 [2,2] 帕德近似。
+      source_ref: page_0074_solution
+    - step_id: step_3
+      statement: 求 h'(x) 并得到误差函数的单调性。
+      formula_trace:
+        from: h(x)=\ln(1+x)-\frac{6x+3x^2}{6+6x+x^2}
+        to: h'(x)=\frac{x^4}{(1+x)(x^2+6x+6)^2}\geqslant0
+        operation: 对对数项和有理式分别求导后通分化简。
+        why: 在 x>-1 上有 1+x>0，且 x^2+6x+6 在源题定义域内不为 0，所以 h'(x)\geqslant0。
+      source_ref: page_0074_solution
+    - step_id: step_4
+      statement: 由 h 的单调性证明 xh(x)\geqslant0。
+      formula_trace:
+        from: h'(x)\geqslant0,\quad h(0)=0
+        to: -1<x<0\Rightarrow h(x)<0;\quad x>0\Rightarrow h(x)>0;\quad xh(x)\geqslant0
+        operation: 以 x=0 为分界点比较 h(x) 与 h(0)。
+        why: x 与 h(x) 在 0 两侧同号或同为 0，所以乘积非负。
+      source_ref: page_0074_solution
+    - step_id: step_5
+      statement: 补全方程有三个不等实根时的 lambda 范围。
+      formula_trace:
+        from: \ln x=\lambda\left(x-\frac1x\right),\quad x>0
+        to: 0<\lambda<\frac12
+        operation: 对 x>1 写 \lambda=\Phi(x)=\frac{\ln x}{x-\frac1x}。函数 \Phi(x) 在 (1,+\infty) 上从 \frac12 单调递减到 0；存在一对 1 两侧的非 1 根等价于 \lambda 位于该值域。
+        why: x=1 恒为根；若还有 x>1 的根，则其倒数也是根。正根一侧的值域给出全部三根参数范围。
+      source_ref: page_0074_solution
+    - step_id: step_6
+      statement: 利用方程的倒数对称性确定三根关系。
+      formula_trace:
+        from: \ln x=\lambda\left(x-\frac1x\right)
+        to: x_2=1,\quad x_1x_3=1\quad(0<x_1<1<x_3)
+        operation: 代入 x=1 得一个根；若 x 是根，则 1/x 也满足同一方程。
+        why: \ln(1/x)=-\ln x，且 1/x-x=-(x-1/x)，方程关于取倒数成对出现。
+      source_ref: page_0074_solution
+    - step_id: step_7
+      statement: 把第 (2) 问的误差符号偏移到 \ln x 的下界。
+      formula_trace:
+        from: t>0:\quad \ln(1+t)>\frac{6t+3t^2}{6+6t+t^2}
+        to: x>1:\quad \ln x>\frac{3x^2-3}{x^2+4x+1}
+        operation: 令 t=x-1，并化简分子分母。
+        why: 第 (2) 问在 t>0 时给出 h(t)>0，即 \ln(1+t) 大于对应帕德近似。
+      source_ref: page_0074_solution
+    - step_id: step_8
+      statement: 将下界代入较大的根 x_3。
+      formula_trace:
+        from: \lambda\left(x_3-\frac1{x_3}\right)=\ln x_3 >\frac{3x_3^2-3}{x_3^2+4x_3+1}
+        to: \lambda>\frac{3x_3}{x_3^2+4x_3+1} =\frac{3}{x_3+4+\frac1{x_3}}
+        operation: 用 x_3>1 保证 x_3-\frac1{x_3}>0，再两边同除以该正数。
+        why: 这样把 lambda 与 x_3+1/x_3 的组合联系起来。
+      source_ref: page_0074_solution
+    - step_id: step_9
+      statement: 把倒数关系代回三根均值，推出目标不等式。
+      formula_trace:
+        from: \lambda>\frac{3}{x_3+4+\frac1{x_3}},\quad x_1=\frac1{x_3},\quad x_2=1
+        to: \frac1\lambda<\frac{x_3+4+\frac1{x_3}}{3} =\frac{x_1+x_2+x_3}{3}+1
+        operation: 取倒数并把 x_3+4+1/x_3 改写为 x_1+x_2+x_3+3。
+        why: 移项即得到 \frac{x_1+x_2+x_3}{3}>\frac1\lambda-1。
+      source_ref: page_0074_solution
+teaching_card:
+  student_title: 用帕德误差和倒数对称根压住飘带方程
+  what_it_trains: 训练先证明 \ln(1+x) 与帕德近似的误差符号，再把这个下界偏移到 \ln x， 配合 x 与 1/x 成对的根结构完成参数范围和均值不等式。
+  recognition_cues:
+    - 题干给出 [2,2] 阶帕德近似并专门定义 h(x)=f(x)-R(x)。
+    - 方程含有 \ln x 和 x-\frac1x，天然满足 x 与 1/x 的倒数对称。
+    - 最终结论里出现 \frac{x_1+x_2+x_3}{3} 与 \frac1\lambda，提示要把 lambda 化成 x_3+1/x_3 的形式。
+  normalization_moves:
+    - 用 R(0),R'(0) 快速确定 a,b，然后把 R 写成 \frac{6x+3x^2}{6+6x+x^2}。
+    - 通过 h'(x)\ge0 确认 \ln(1+x) 在 0 右侧大于帕德近似。
+    - 令 t=x-1，把 \ln(1+t) 的下界变成 \ln x 的下界。
+    - 设较大根为 x_3，另一个非 1 根为 1/x_3。
+  common_failures:
+    - 只求出 a,b，没有继续利用 h 的误差符号为第 (3) 问提供下界。
+    - 证明 xh(x)\ge0 时，把 -1<x<0 上 h(x)<0 的方向弄反。
+    - 漏掉 \lambda>0，只写 \lambda<1/2。
+    - 不会把 \ln x_3>\frac{3x_3^2-3}{1+4x_3+x_3^2} 除以 x_3-\frac1{x_3} 化成 \lambda>\frac{3}{x_3+4+1/x_3}。
+  similar_practice_query: 帕德逼近 误差符号 飘带函数 倒数对称根 lambda 范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0074 的几处中间公式疑似印刷或转写错误，均能由源图上下文和直接求导校正，已记录为普通 source_discrepancies。
+    - 第 (3) 问源解把 lambda 范围证明略写为后续内容；本卡补出单调值域说明，无需用户拍板。

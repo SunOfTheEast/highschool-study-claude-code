@@ -1,0 +1,201 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0227_trig_derivative_unique_zero_and_line_param_ch6_fenzhi_ex13
+content_revision_id: mst_p0227_trig_derivative_unique_zero_and_line_param_ch6_fenzhi_ex13-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0227_trig_derivative_unique_zero_and_line_param_ch6_fenzhi_ex13.card.yaml
+stem: |-
+  （2019 · 新课标 I T20）已知函数 $f(x)=2\sin x-x\cos x-x$，$f^\prime(x)$ 为 $f(x)$ 的导数。
+  1. 证明：$f^\prime(x)$ 在区间 $(0,\pi)$ 存在唯一零点。
+  2. 若 $x\in[0,\pi]$ 时，$f(x)\geqslant ax$，求 $a$ 的取值范围。
+answer: |-
+  第 (1) 问唯一零点存在；第 (2) 问 $a\in(-\infty,0]$。
+
+  求导得 $f'(x)=\cos x+x\sin x-1$。令 $g(x)=\cos x+x\sin x-1$，则 $g'(x)=x\cos x$，所以 $g$ 在 $(0,\pi/2)$ 上递增，在 $(\pi/2,\pi)$ 上递减。又 $g(0)=0$，$g(\pi/2)=\pi/2-1>0$，$g(\pi)=-2$，因此 $g$ 在 $(0,\pi)$ 上有且仅有一个零点，即 $f'(x)$ 有唯一零点 $x_0$。 于是 $f$ 先增后减，且 $f(0)=f(\pi)=0$，所以 $f(x)\geqslant0$。 若 $a\leqslant0$，则 $ax\leqslant0$，故 $f(x)\geqslant ax$； 反过来代 $x=\pi$ 得 $0=f(\pi)\geqslant a\pi$，所以 $a\leqslant0$。 故 $a\in(-\infty,0]$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把 $f^\prime(x)$ 写成一个三角整体函数。
+      max_score: 1
+    - step_id: step_2
+      description: 构造 $g(x)$ 并确定它的单调结构。
+      max_score: 1
+    - step_id: step_3
+      description: 用端点和峰值证明唯一零点。
+      max_score: 1
+    - step_id: step_4
+      description: 由 $f^\prime(x)$ 的唯一零点得到 $f$ 的单峰和非负性。
+      max_score: 1
+    - step_id: step_5
+      description: 把 $f(x)\geqslant ax$ 的充分性和必要性收口。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: part_1
+        goal: 零点/极值点分析
+        target: 第 part_1 问
+        result: $f^\prime(x)$ 在 $(0,\pi)$ 上有唯一零点。
+      - part_id: part_2
+        goal: 求参数范围
+        target: 第 part_2 问
+        result: $a\in(-\infty,0]$
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 数形结合
+      - 显隐点探路
+    subroute:
+      - 三角整体函数
+      - $g(x)=\cos x+x\sin x-1$
+      - $x\cos x$ 判号
+      - 端点同值
+      - 天各一方
+      - 直线斜率方向
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - $2\sin x-x\cos x-x$
+      - $\cos x+x\sin x-1$
+      - $x\cos x$
+      - $f(0)=f(\pi)=0$
+    normalization_moves_used:
+      - 把导函数命名为 $g(x)$ 后再求导，得到简单判号因子 $x\cos x$。
+      - 用 $g$ 的先增后减和端点值锁定 $f^\prime(x)$ 唯一零点。
+      - 用 $f$ 的端点同值和单峰性得到 $f(x)\geqslant0$。
+      - 把 $f(x)\geqslant ax$ 转成直线斜率不得为正。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求 $-(x\cos x)'$ 或漏掉乘积求导，回补三角函数基础。
+      - 若学生不会由 $g^\prime(x)=x\cos x$ 判断先增后减，回补导数单调极值基础。
+      - 若学生不会用 $x=\pi$ 给出必要性，回补不等式工具基础。
+      - 若学生看不懂图中曲线与直线的关系，回补函数性质与图像。
+  detail_terms:
+    - $2\sin x-x\cos x-x$
+    - $\cos x+x\sin x-1$
+    - $x\cos x$
+    - 唯一零点
+    - 端点同值
+    - 天各一方
+    - $h(x)=ax$
+    - 斜率非正
+parts: &a1
+  - part_id: part_1
+    text: 证明：$f^\prime(x)$ 在区间 $(0,\pi)$ 存在唯一零点。
+  - part_id: part_2
+    text: 若 $x\in[0,\pi]$ 时，$f(x)\geqslant ax$，求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0227_trig_derivative_unique_zero_and_line_param_ch6_fenzhi_ex13
+source_evidence:
+  source_refs:
+    - ref_id: page_0227_ex12_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0227/page_0227.md
+      role: local_context
+      evidence: page_0227 页首是 page_0226 例12续解和结论，不是本卡题头。
+    - ref_id: page_0227_ch6_trig_fenzhi_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0227/page_0227.md
+      role: local_context
+      evidence: page_0227 进入“四、三角体系中的分而治之”，考点提示构造 $\sin x/x$ 与 $x\cos x-\sin x$ 这类三角整体。
+    - ref_id: page_0227_ex13_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0227/page_0227.md
+      role: problem_start
+      evidence: page_0227 给出例13题头：$f(x)=2\sin x-x\cos x-x$，证明 $f^\prime(x)$ 在 $(0,\pi)$ 有唯一零点并求 $f(x)\geqslant ax$ 的参数范围。
+    - ref_id: page_0227_ex13_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0227/page_0227.md
+      role: solution
+      evidence: 解析构造 $g(x)=\cos x+x\sin x-1$，由 $g^\prime(x)$ 的单调趋势证明 $f^\prime(x)$ 在 $(0,\pi)$ 有唯一零点，再由端点同值和图象得 $a\leqslant0$。
+    - ref_id: page_0227_ex13_figure
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0227/page_0227.md
+      role: figure_context
+      evidence: 图 11-2-1 表示 $f(x)$ 从 0 出发、内部取极大、回到 0，直线 $h(x)=ax$ 斜率为负。
+    - ref_id: page_0227_ex14_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0227/page_0227.md
+      role: local_context
+      evidence: page_0227 随后另起例14，属于本批下一张卡，不混入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0227.png
+      inspected: true
+      notes: 已核对页图：例13题干、完整解析、图 11-2-1 和“天各一方”总结均位于 page_0227。
+  source_context: 本卡处理 page_0227 起头并在同页完整结束的例13；页首例12续解不处理，后续例14另卡处理。
+  source_influence:
+    - 保留 source 的三角整体：构造 $g(x)=\cos x+x\sin x-1$，用 $g^\prime(x)=x\cos x$ 控制导函数零点。
+    - 保留“天各一方”总结：左端点大小相等，若 $f(x)\geqslant ax$，直线 $h(x)=ax$ 必须为减函数。
+    - 参数必要性用端点 $x=\pi$ 更直接：$0=f(\pi)\geqslant a\pi$，故 $a\leqslant0$。
+  source_discrepancies: []
+original_problem:
+  stem: （2019 · 新课标 I T20）已知函数 $f(x)=2\sin x-x\cos x-x$，$f^\prime(x)$ 为 $f(x)$ 的导数。
+  parts: *a1
+  choices: []
+  answer: 第 (1) 问唯一零点存在；第 (2) 问 $a\in(-\infty,0]$。
+  fidelity_notes:
+    - 两问均为证明/求参，无选项。
+    - 图 11-2-1 是第 (2) 问判断斜率方向的辅助图。
+solution:
+  source_solution_summary: 求导得 $f'(x)=\cos x+x\sin x-1$。令 $g(x)=\cos x+x\sin x-1$，则 $g'(x)=x\cos x$，所以 $g$ 在 $(0,\pi/2)$ 上递增，在 $(\pi/2,\pi)$ 上递减。又 $g(0)=0$，$g(\pi/2)=\pi/2-1>0$，$g(\pi)=-2$，因此 $g$ 在 $(0,\pi)$ 上有且仅有一个零点，即 $f'(x)$ 有唯一零点 $x_0$。 于是 $f$ 先增后减，且 $f(0)=f(\pi)=0$，所以 $f(x)\geqslant0$。 若 $a\leqslant0$，则 $ax\leqslant0$，故 $f(x)\geqslant ax$； 反过来代 $x=\pi$ 得 $0=f(\pi)\geqslant a\pi$，所以 $a\leqslant0$。 故 $a\in(-\infty,0]$。
+  key_steps:
+    - step_id: step_1
+      statement: 把 $f^\prime(x)$ 写成一个三角整体函数。
+      formula_trace:
+        from: $f(x)=2\sin x-x\cos x-x$
+        to: $f^\prime(x)=\cos x+x\sin x-1$
+        operation: 逐项求导，对 $-x\cos x$ 求导得 $-\cos x+x\sin x$。
+        why: 导函数正好形成 $\cos x+x\sin x-1$，便于再求导判号。
+      source_ref: page_0227_ex13_solution
+    - step_id: step_2
+      statement: 构造 $g(x)$ 并确定它的单调结构。
+      formula_trace:
+        from: $g(x)=\cos x+x\sin x-1$
+        to: $g^\prime(x)=x\cos x$
+        operation: 求导后抵消 $-\sin x+\sin x$。
+        why: $x\cos x$ 在 $(0,\pi/2)$ 与 $(\pi/2,\pi)$ 上符号相反。
+      source_ref: page_0227_ex13_solution
+    - step_id: step_3
+      statement: 用端点和峰值证明唯一零点。
+      formula_trace:
+        from: $g(0)=0,\ g(\pi/2)=\pi/2-1>0,\ g(\pi)=-2$
+        to: $g(x)$ 在 $(0,\pi)$ 上有唯一零点
+        operation: 结合先增后减和介值定理。
+        why: 左半段从 0 增到正值，不能在开区间左半段再过零；右半段从正值降到负值，只过一次零。
+      source_ref: page_0227_ex13_solution
+    - step_id: step_4
+      statement: 由 $f^\prime(x)$ 的唯一零点得到 $f$ 的单峰和非负性。
+      formula_trace:
+        from: $f^\prime(x)>0$ 于 $(0,x_0)$，$f^\prime(x)<0$ 于 $(x_0,\pi)$
+        to: $f(0)=f(\pi)=0$ 且 $f(x)\geqslant0$
+        operation: 导数判单调，端点同值。
+        why: 函数先增后减，两个端点同为 0，内部不低于端点。
+      source_ref: page_0227_ex13_solution
+    - step_id: step_5
+      statement: 把 $f(x)\geqslant ax$ 的充分性和必要性收口。
+      formula_trace:
+        from: $f(x)\geqslant0$ 与 $x\in[0,\pi]$
+        to: $a\leqslant0$
+        operation: 充分性看 $ax\leqslant0$；必要性代 $x=\pi$。
+        why: $x=\pi$ 时 $f(\pi)=0$，必须有 $0\geqslant a\pi$。
+      source_ref: page_0227_ex13_solution
+teaching_card:
+  student_title: 三角整体先定单峰，再用端点压住直线斜率
+  what_it_trains: 训练三角体系中的分而治之：先把导函数变成可判号的三角整体，再把求参转成端点和图象关系。
+  recognition_cues:
+    - 题干里有 $2\sin x-x\cos x-x$，求导后会出现 $\cos x+x\sin x-1$。
+    - 再求导能化成 $x\cos x$，区间自然被 $\pi/2$ 分开。
+    - $f(0)=f(\pi)=0$，内部单峰，说明直线 $ax$ 不能向上穿出。
+  normalization_moves:
+    - 先求 $f^\prime(x)$，命名为 $g(x)$。
+    - 对 $g$ 再求导，利用 $x\cos x$ 判断 $g$ 的单调。
+    - 用 $g(0),g(\pi/2),g(\pi)$ 证明唯一零点。
+    - 用 $f(0)=f(\pi)=0$ 和 $x=\pi$ 得到 $a\leqslant0$。
+  common_failures:
+    - 只证明存在零点，没有用先增后减排除多个零点。
+    - 把 $f^\prime(x)$ 与 $g^\prime(x)$ 的符号层级混淆。
+    - 只看图说 $a\leqslant0$，没有补 $x=\pi$ 的必要性。
+  similar_practice_query: 三角整体 xcosx 判号 导函数唯一零点 端点同值 天各一方 ax 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

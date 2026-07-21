@@ -1,0 +1,305 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0194_exp_log_inverse_options_ex24
+content_revision_id: mst_p0194_exp_log_inverse_options_ex24-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0194_exp_log_inverse_options_ex24.card.yaml
+stem: |-
+  （2023 · 东昌府区开学 T12）已知函数 $f(x)=e^{kx}$，$g(x)=\\frac{\\ln x}{k}$，其中 $k\\neq0$，则（  ）
+  A. 若点 $P(a,b)$ 在 $f(x)$ 的图象上，则点 $Q(b,a)$ 在 $g(x)$ 的图象上
+  B. 当 $k=e$ 时，设点 $A,B$ 分别在 $f(x),g(x)$ 的图象上，则 $|AB|$ 的最小值为 $\\frac{\\sqrt2}{e}$
+  C. 当 $k=1$ 时，函数 $F(x)=f(x)-g(x)$ 的最小值小于 $\\frac{5}{2}$
+  D. 当 $k=-2e$ 时，函数 $G(x)=f(x)-g(x)$ 有 3 个零点
+answer: |
+  ACD
+
+  对 A：由
+  \[
+  y=e^{kx}\Rightarrow \ln y=kx\Rightarrow x=\frac{\ln y}{k},
+  \]
+  所以 $g(x)=\frac{\ln x}{k}$ 是 $f(x)=e^{kx}$ 的反函数，二者图像关于 $y=x$ 对称，A 正确。
+
+  对 B（$k=e$）：$f(x)=e^{ex}$，求与 $y=x$ 平行切线，令
+  \[
+  f^{\prime}(x)=e\cdot e^{ex}=1\Rightarrow x=-\frac1e,\ f\!\left(-\frac1e\right)=\frac1e.
+  \]
+  切点为 $M(-1/e,1/e)$。$M$ 到对称轴 $x-y=0$ 的距离
+  \[
+  d=\frac{|-\frac1e-\frac1e|}{\sqrt2}=\frac{\sqrt2}{e},
+  \]
+  两条互逆曲线间对应点最短连线为 $2d$，故
+  \[
+  |AB|_{\min}=\frac{2\sqrt2}{e},
+  \]
+  与选项不符，B 错。
+
+  对 C（$k=1$）：$F(x)=e^x-\ln x$，有
+  \[
+  F^{\prime}(x)=e^x-\frac1x,\quad F^{\prime\prime}(x)=e^x+\frac1{x^2}>0.
+  \]
+  故 $F^{\prime}$ 递增，且 $F^{\prime}(1/2)<0,\ F^{\prime}(1)>0$，存在唯一 $x_0\in(1/2,1)$ 使 $F^{\prime}(x_0)=0$。于是
+  \[
+  e^{x_0}=\frac1{x_0},\quad x_0=\ln\frac1{x_0}=-\ln x_0,
+  \]
+  且
+  \[
+  F_{\min}=F(x_0)=e^{x_0}=\frac1{x_0},\quad
+  F_{\min}=-\ln x_0+x_0=\frac1{x_0}+x_0<2+\frac12=\frac52.
+  \]
+  所以 C 正确。
+
+  对 D（$k=-2e$）：$f(x)=e^{-2ex}$、$g(x)=\frac{\ln x}{-2e}$ 都单调递减且互为反函数。由图像可见它们在右侧与 $y=x$ 上各有一交点，且在 $(1,0)$ 左右过渡区与对称位置再产生两交点，共 3 个交点，因此 $G(x)=f(x)-g(x)$ 有 3 个零点，D 正确。源解法二也用
+  \[
+  e^{-2ex}=\frac{\ln x}{-2e}\Rightarrow h(-2ex)=h(\ln x)
+  \]
+  分三段同值对应验证三解。综上选 ACD。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 由对数变形确认 $f,g$ 互为反函数，先判 A。
+      max_score: 1
+    - step_id: step_2
+      description: 在 $k=e$ 时找平行于 $y=x$ 的切线切点。
+      max_score: 1
+    - step_id: step_3
+      description: 把最短距离写成到对称轴距离的两倍，判 B 错。
+      max_score: 1
+    - step_id: step_4
+      description: 在 $k=1$ 时用导数唯一零点锁定极小值点。
+      max_score: 1
+    - step_id: step_5
+      description: 续页完成 C 的数值上界。
+      max_score: 1
+    - step_id: step_6
+      description: 由互逆递减图像交点计数判 D，并汇总答案。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: A
+        goal: 抽象函数性质
+        target: 第 A 问
+        result: 见 source_solution_summary
+      - part_id: B
+        goal: 几何量求解
+        target: 第 B 问
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 极值最值
+        target: 第 C 问
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 零点/极值点分析
+        target: 第 D 问
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 切线放缩与凹凸性
+      - 同构变形与换元法
+    subroute:
+      - 反函数对称
+      - 平行切线找点
+      - 导函数零点定位
+      - 图像交点计数
+      - 同值分段核验
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 复合函数与不动点结构
+      - 切线/公切线/切点量结构
+      - 抽象函数结构
+    evidence:
+      - $f(x)=e^{kx}$ 与 $g(x)=\\frac{\\ln x}{k}$ 互为反函数。
+      - B 选项依赖切点 $M(-1/e,1/e)$ 到 $x-y=0$ 的距离。
+      - C 选项核心是 $F^{\\prime}(x)=e^x-\\frac1x$ 的唯一零点与 $F_{\\min}$ 估计。
+      - D 选项依赖互逆递减曲线与 $y=x$ 的三交点计数。
+    normalization_moves_used:
+      - 先把指数函数转成对数形式，明确反函数对称轴。
+      - 遇到“最短距离”先找与对称轴平行的切线切点。
+      - 极值题先判 $F^{\\prime\\prime}>0$ 再做唯一零点定位。
+      - 零点个数用图像交点计数，再用代数同值分段做复核。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能从 $y=e^{kx}$ 反解出 $x=\\frac{\\ln y}{k}$，回补分段/复合/反函数基础。
+      - 若学生不会把“曲线间最短距离”转成“到 $y=x$ 的距离问题”，回补函数性质与图像。
+      - 若学生在 $F^{\\prime}$ 增减与唯一零点判断上反复出错，回补导数单调极值基础。
+      - 若学生对“交点个数=零点个数”的映射不稳定，回补方程根分布与韦达。
+      - 若学生在对数与指数互化中频繁漏条件，回补指数对数基础。
+  detail_terms:
+    - $g=f^{-1}$
+    - $y=x$
+    - $M(-1/e,1/e)$
+    - $|AB|_{\\min}=2\\,\\mathrm{dist}(M,x-y=0)$
+    - $F^{\\prime}(x)=e^x-\\frac1x$
+    - $x_0\\in(1/2,1)$
+    - $G(x)=f(x)-g(x)$ 三零点
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0194_exp_log_inverse_options_ex24
+source_evidence:
+  source_refs:
+    - ref_id: page_0194_inverse_intersection_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0194/page_0194.md
+      role: local_context
+      evidence: page_0194 lines 14-33 为“原函数与反函数交点个数”讲解，属于例24前置背景，不是新题头。
+    - ref_id: page_0194_ex24_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0194/page_0194.md
+      role: problem_start
+      evidence: page_0194 lines 35-40 给出例24题干与 A-D 选项。
+    - ref_id: page_0194_ex24_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0194/page_0194.md
+      role: solution
+      evidence: page_0194 lines 42-47 给出 A、B 完整判定与 C 的导数起步，末行在 $F(x)_{\\min}=e^{x_0}$ 处跨页。
+    - ref_id: page_0195_ex24_solution_cont
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0195/page_0195.md
+      role: continuation
+      evidence: page_0195 lines 14-19 续完 C、D 并明确“故选 ACD”。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0194.png
+      inspected: true
+      notes: 已核对页图：page_0194 顶部是交点个数讲解；例24题头、选项、A/B/C 起步均清晰可读。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0195.png
+      inspected: true
+      notes: 已核对页图：page_0195 顶部先续完例24并给出“故选 ACD”，随后才进入例25新题头。
+  source_context: 例24从 page_0194 起头，解答跨到 page_0195 顶部后结束；page_0194 页首交点讲解与 page_0195 例25都仅作上下文。
+  source_influence:
+    - 保留 A 的核心判据：$g(x)=\\frac{\\ln x}{k}$ 与 $f(x)=e^{kx}$ 互为反函数，图像关于 $y=x$ 对称。
+    - 保留 B 的几何主线：找与 $y=x$ 平行切线切点 $M(-1/e,1/e)$，最短距离为到对称轴距离的 2 倍。
+    - 保留 C 的导数链：$F^{\\prime}(x)$ 单调增且在 $(1/2,1)$ 有唯一零点，再估计最小值小于 $5/2$。
+    - 保留 D 的双证法信息：图像交点计数法与 $h(-2ex)=h(\\ln x)$ 的分段同值法。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 东昌府区开学 T12）已知函数 $f(x)=e^{kx}$，$g(x)=\\frac{\\ln x}{k}$，其中 $k\\neq0$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 若点 $P(a,b)$ 在 $f(x)$ 的图象上，则点 $Q(b,a)$ 在 $g(x)$ 的图象上
+      text_latex: 若点 $P(a,b)$ 在 $f(x)$ 的图象上，则点 $Q(b,a)$ 在 $g(x)$ 的图象上
+    - label: B
+      text_raw: 当 $k=e$ 时，设点 $A,B$ 分别在 $f(x),g(x)$ 的图象上，则 $|AB|$ 的最小值为 $\\frac{\\sqrt2}{e}$
+      text_latex: 当 $k=e$ 时，设点 $A,B$ 分别在 $f(x),g(x)$ 的图象上，则 $|AB|$ 的最小值为 $\\frac{\\sqrt2}{e}$
+    - label: C
+      text_raw: 当 $k=1$ 时，函数 $F(x)=f(x)-g(x)$ 的最小值小于 $\\frac{5}{2}$
+      text_latex: 当 $k=1$ 时，函数 $F(x)=f(x)-g(x)$ 的最小值小于 $\\frac{5}{2}$
+    - label: D
+      text_raw: 当 $k=-2e$ 时，函数 $G(x)=f(x)-g(x)$ 有 3 个零点
+      text_latex: 当 $k=-2e$ 时，函数 $G(x)=f(x)-g(x)$ 有 3 个零点
+  answer: ACD
+  fidelity_notes:
+    - 题干与四个选项位于 page_0194，答案字母位于 page_0195 续页“故选 ACD”。
+    - B 选项源题给的是 $\\frac{\\sqrt2}{e}$，而解析算得最小值为 $\\frac{2\\sqrt2}{e}$，据此判 B 错。
+solution:
+  source_solution_summary: |
+    对 A：由
+    \[
+    y=e^{kx}\Rightarrow \ln y=kx\Rightarrow x=\frac{\ln y}{k},
+    \]
+    所以 $g(x)=\frac{\ln x}{k}$ 是 $f(x)=e^{kx}$ 的反函数，二者图像关于 $y=x$ 对称，A 正确。
+
+    对 B（$k=e$）：$f(x)=e^{ex}$，求与 $y=x$ 平行切线，令
+    \[
+    f^{\prime}(x)=e\cdot e^{ex}=1\Rightarrow x=-\frac1e,\ f\!\left(-\frac1e\right)=\frac1e.
+    \]
+    切点为 $M(-1/e,1/e)$。$M$ 到对称轴 $x-y=0$ 的距离
+    \[
+    d=\frac{|-\frac1e-\frac1e|}{\sqrt2}=\frac{\sqrt2}{e},
+    \]
+    两条互逆曲线间对应点最短连线为 $2d$，故
+    \[
+    |AB|_{\min}=\frac{2\sqrt2}{e},
+    \]
+    与选项不符，B 错。
+
+    对 C（$k=1$）：$F(x)=e^x-\ln x$，有
+    \[
+    F^{\prime}(x)=e^x-\frac1x,\quad F^{\prime\prime}(x)=e^x+\frac1{x^2}>0.
+    \]
+    故 $F^{\prime}$ 递增，且 $F^{\prime}(1/2)<0,\ F^{\prime}(1)>0$，存在唯一 $x_0\in(1/2,1)$ 使 $F^{\prime}(x_0)=0$。于是
+    \[
+    e^{x_0}=\frac1{x_0},\quad x_0=\ln\frac1{x_0}=-\ln x_0,
+    \]
+    且
+    \[
+    F_{\min}=F(x_0)=e^{x_0}=\frac1{x_0},\quad
+    F_{\min}=-\ln x_0+x_0=\frac1{x_0}+x_0<2+\frac12=\frac52.
+    \]
+    所以 C 正确。
+
+    对 D（$k=-2e$）：$f(x)=e^{-2ex}$、$g(x)=\frac{\ln x}{-2e}$ 都单调递减且互为反函数。由图像可见它们在右侧与 $y=x$ 上各有一交点，且在 $(1,0)$ 左右过渡区与对称位置再产生两交点，共 3 个交点，因此 $G(x)=f(x)-g(x)$ 有 3 个零点，D 正确。源解法二也用
+    \[
+    e^{-2ex}=\frac{\ln x}{-2e}\Rightarrow h(-2ex)=h(\ln x)
+    \]
+    分三段同值对应验证三解。综上选 ACD。
+  key_steps:
+    - step_id: step_1
+      statement: 由对数变形确认 $f,g$ 互为反函数，先判 A。
+      formula_trace:
+        from: $y=e^{kx}$
+        to: $x=\\frac{\\ln y}{k}$
+        operation: 两边取自然对数并解出 $x$。
+        why: 得到关于 $y=x$ 的对称关系，直接支持 A。
+      source_ref: page_0194_ex24_solution_start
+    - step_id: step_2
+      statement: 在 $k=e$ 时找平行于 $y=x$ 的切线切点。
+      formula_trace:
+        from: $f^{\\prime}(x)=e\\cdot e^{ex}$
+        to: $M\\left(-\\frac1e,\\frac1e\\right)$
+        operation: 令斜率等于 1，解 $e\\cdot e^{ex}=1$。
+        why: 最短距离对应对称轴法，需要先定位关键切点。
+      source_ref: page_0194_ex24_solution_start
+    - step_id: step_3
+      statement: 把最短距离写成到对称轴距离的两倍，判 B 错。
+      formula_trace:
+        from: $d=\\mathrm{dist}(M,x-y=0)=\\frac{\\sqrt2}{e}$
+        to: $|AB|_{\\min}=2d=\\frac{2\\sqrt2}{e}$
+        operation: 应用反函数图像关于 $y=x$ 对称的距离结论。
+        why: 与选项给值 $\\frac{\\sqrt2}{e}$ 不一致。
+      source_ref: page_0194_ex24_solution_start
+    - step_id: step_4
+      statement: 在 $k=1$ 时用导数唯一零点锁定极小值点。
+      formula_trace:
+        from: $F^{\\prime}(x)=e^x-\\frac1x,\\ F^{\\prime\\prime}(x)>0$
+        to: $\\exists!\\ x_0\\in\\left(\\frac12,1\\right),\\ F^{\\prime}(x_0)=0$
+        operation: 由 $F^{\\prime}$ 递增与端点异号得到唯一根。
+        why: 把极小值计算集中到 $x_0$。
+      source_ref: page_0194_ex24_solution_start
+    - step_id: step_5
+      statement: 续页完成 C 的数值上界。
+      formula_trace:
+        from: $F^{\\prime}(x_0)=0\\Rightarrow e^{x_0}=\\frac1{x_0},\\ x_0=-\\ln x_0$
+        to: $F_{\\min}=\\frac1{x_0}+x_0<\\frac52$
+        operation: 利用 $x_0\\in(1/2,1)$ 与 $y=\\frac1x+x$ 在该区间递减做估计。
+        why: 直接判定 C 正确。
+      source_ref: page_0195_ex24_solution_cont
+    - step_id: step_6
+      statement: 由互逆递减图像交点计数判 D，并汇总答案。
+      formula_trace:
+        from: $f(x)=e^{-2ex},\\ g(x)=\\frac{\\ln x}{-2e}$
+        to: 3 个交点 $\\Rightarrow$ $G(x)=f(x)-g(x)$ 有 3 个零点，选 ACD
+        operation: 图像对称计数（并可用 $h(-2ex)=h(\\ln x)$ 分段同值核验）。
+        why: 完成 D 的真值判定并收束多选结果。
+      source_ref: page_0195_ex24_solution_cont
+teaching_card:
+  student_title: 互逆图像四选判真
+  what_it_trains: 训练在同一题中切换“反函数对称、切线最短距、导数极小值、交点计数”四条判断链，并稳定完成多选筛查。
+  recognition_cues:
+    - 题干给出一组指数-对数互逆函数。
+    - 选项同时涉及点对称、最短距离、极小值范围、零点个数。
+    - 参数取值分别触发几何法与导数法。
+  normalization_moves:
+    - 先统一到“关于 $y=x$ 对称”的总框架。
+    - 距离题优先找与 $y=x$ 平行切线。
+    - 极值题写出 $F^{\\prime},F^{\\prime\\prime}$ 再定位唯一极小点。
+    - 零点题先看交点计数，再用代数同值式复查。
+  common_failures:
+    - 把 B 项中的 $d$ 误当成 $|AB|_{\\min}$，漏掉 2 倍关系。
+    - C 项只算到 $F_{\\min}=e^{x_0}$ 就停，不继续转成可比较上界。
+    - D 项只说“互为反函数”但未完成三交点数量论证。
+  similar_practice_query: 指数对数互逆 多选 y=x 对称 最短距离 极小值 零点个数
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

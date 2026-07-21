@@ -1,0 +1,144 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0077_tangent_ex04
+content_revision_id: mst_p0077_tangent_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0077_tangent_ex04.card.yaml
+stem: （2024 衡阳县四中高三期中考试 T14）“以直代曲”是微积分中最基本、最朴素的数学思想方法。 在切点附近，用曲线在该点处的切线近似代替曲线就是这一思想的典型应用。 曲线 $y=\ln x$ 在 $(1,0)$ 处的切线方程为_______，已知 $|\\sqrt[2024]{e}-1|<0.0005$，利用上述“切线近似代替曲线”的思想计算 $\\sqrt[2024]{e}$ 所得的结果为_______。（结果用分数表示）
+answer: |-
+  $y=x-1$；$\frac{2025}{2024}$
+
+  对 $y=\ln x$ 求导得 $y'=1/x$，在 $(1,0)$ 处斜率为 1，因此切线为 $y=x-1$。因为 $\sqrt[2024]{e}$ 与 1 很接近，在 $x=1$ 附近可取 $\ln x\approx x-1$。令 $x=\sqrt[2024]{e}=e^{1/2024}$，则 $1/2024=\ln x\approx x-1$，所以 $x\approx1+1/2024=2025/2024$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 求 $\ln x$ 在 $x=1$ 处的切线斜率。
+      max_score: 1
+    - step_id: step_2
+      description: 写出过 $(1,0)$、斜率为 1 的切线方程。
+      max_score: 1
+    - step_id: step_3
+      description: 在 $x=1$ 附近把曲线值换成切线值。
+      max_score: 1
+    - step_id: step_4
+      description: 代入 $x=\sqrt[2024]{e}$ 得到近似分数。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level:
+      - part_id: item_1
+        goal: 几何量求解
+        target: 几何量求解
+        result: 见 source_solution_summary
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 切线放缩与凹凸性
+    subroute:
+      - 以直代曲
+      - 切线近似
+      - 线性化估值
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $\ln x\approx x-1$ near $x=1$
+      - $\sqrt[2024]{e}=e^{1/2024}$
+      - $e^{1/2024}\approx 2025/2024$
+    normalization_moves_used:
+      - 把 $\sqrt[2024]{e}$ 改写成 $e^{1/2024}$。
+      - 把 $\ln x$ 的局部曲线值替换为切线 $x-1$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求 $\ln x$ 的切线方程，回补导数运算与几何意义。
+      - 若学生不知道 $\sqrt[2024]{e}=e^{1/2024}$，回补指数对数基础。
+      - 若学生把近似式方向写反，回补函数性质与图像。
+  detail_terms:
+    - $y=\ln x$ 在 $(1,0)$ 处的切线
+    - $\ln x\approx x-1$
+    - $e^{1/2024}\approx1+1/2024$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0077_tangent_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0077
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0077/page_0077.md
+      role: problem_start
+      evidence: page_0077 在例 3 续解之后新起头“例 4”，题干要求写出曲线 y=ln x 在 (1,0) 处的切线方程，并用切线近似计算 \sqrt[2024]{e}；解析与答案均在本页。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0077.png
+      inspected: true
+      notes: 页图确认例 4 题头、两处填空、解析和答案都在 page_0077； 题目为填空题，无选项、无图形。
+  source_context: 例 4 承接“导数的切线方程”，强调“以直代曲”：在切点附近用切线 $y=x-1$ 近似替代 $y=\ln x$，并利用题干给出的接近性条件保证 $\sqrt[2024]{e}$ 在 $x=1$ 附近。
+  source_influence:
+    - 源解先求 $y=\ln x$ 在 $(1,0)$ 处的切线 $y=x-1$。
+    - 源解用 $\ln x\approx x-1$，令 $x=e^{1/2024}$，得到近似值 $2025/2024$。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 衡阳县四中高三期中考试 T14）“以直代曲”是微积分中最基本、最朴素的数学思想方法。 在切点附近，用曲线在该点处的切线近似代替曲线就是这一思想的典型应用。 曲线 $y=\ln x$ 在 $(1,0)$ 处的切线方程为_______，已知 $|\\sqrt[2024]{e}-1|<0.0005$，利用上述“切线近似代替曲线”的思想计算 $\\sqrt[2024]{e}$ 所得的结果为_______。（结果用分数表示）
+  parts: *a1
+  choices: []
+  answer: $y=x-1$；$\frac{2025}{2024}$
+  fidelity_notes:
+    - 题干第二空要求近似计算结果用分数表示；源答案为 $2025/2024$。
+solution:
+  source_solution_summary: 对 $y=\ln x$ 求导得 $y'=1/x$，在 $(1,0)$ 处斜率为 1，因此切线为 $y=x-1$。因为 $\sqrt[2024]{e}$ 与 1 很接近，在 $x=1$ 附近可取 $\ln x\approx x-1$。令 $x=\sqrt[2024]{e}=e^{1/2024}$，则 $1/2024=\ln x\approx x-1$，所以 $x\approx1+1/2024=2025/2024$。
+  key_steps:
+    - step_id: step_1
+      statement: 求 $\ln x$ 在 $x=1$ 处的切线斜率。
+      formula_trace:
+        from: $y=\ln x$
+        to: $y'=\frac1x,\quad y'(1)=1$
+        operation: 对 $\ln x$ 求导并代入 $x=1$。
+        why: 切线斜率等于导数值。
+      source_ref: page_0077:例4解析
+    - step_id: step_2
+      statement: 写出过 $(1,0)$、斜率为 1 的切线方程。
+      formula_trace:
+        from: $y-0=1\cdot(x-1)$
+        to: $y=x-1$
+        operation: 使用点斜式切线方程。
+        why: 这是后面“以直代曲”的直线模型。
+      source_ref: page_0077:例4解析
+    - step_id: step_3
+      statement: 在 $x=1$ 附近把曲线值换成切线值。
+      formula_trace:
+        from: $y=\ln x,\quad y=x-1$
+        to: $\ln x\approx x-1$
+        operation: 用切线近似代替曲线。
+        why: 题干给出 $|\sqrt[2024]{e}-1|<0.0005$，说明待估数靠近切点横坐标 1。
+      source_ref: page_0077:例4解析
+    - step_id: step_4
+      statement: 代入 $x=\sqrt[2024]{e}$ 得到近似分数。
+      formula_trace:
+        from: $\ln e^{1/2024}\approx e^{1/2024}-1$
+        to: $e^{1/2024}\approx 1+\frac1{2024}=\frac{2025}{2024}$
+        operation: 把 $\sqrt[2024]{e}$ 写成 $e^{1/2024}$，再用 $\ln e^{1/2024}=1/2024$。
+        why: 切线近似把求指数小量变成一次式计算。
+      source_ref: page_0077:例4解析
+teaching_card:
+  student_title: 用 ln x 的切线近似算 2024 次根
+  what_it_trains: 训练学生把“靠近切点的函数值”换成切线上的一次式， 用 $\\ln x\\approx x-1$ 快速估算很接近 1 的指数数值。
+  recognition_cues:
+    - 题干明确出现“以直代曲”“切线近似”。
+    - 待估数与 1 的距离很小。
+    - 出现 $\sqrt[n]{e}$，取对数后变成 $1/n$。
+  normalization_moves:
+    - 先求出切点 $(1,0)$ 的切线 $y=x-1$。
+    - 写成局部近似 $\ln x\approx x-1$。
+    - 令 $x=e^{1/2024}$，把 $\ln x$ 换成 $1/2024$。
+  common_failures:
+    - 只写切线方程，忘记第二空要用近似计算。
+    - 把 $\ln x\approx x-1$ 写成 $x\approx\ln x-1$。
+    - 把 $\sqrt[2024]{e}$ 误写成 $e^{2024}$。
+  similar_practice_query: ln x 在 1 处切线 以直代曲 e 的 n 次根 线性近似
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0077 页图与 markdown 一致；题目在本页完整结束。

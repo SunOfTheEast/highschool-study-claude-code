@@ -1,0 +1,189 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0110_exp_log_tangent_data_ex18
+content_revision_id: mst_p0110_exp_log_tangent_data_ex18-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0110_exp_log_tangent_data_ex18.card.yaml
+stem: （2023 景德镇模拟 T16）若曲线 $y=\ln x$ 在点 $P(x_1,y_1)$ 处的切线与曲线 $y=e^x$ 相切于点 $Q(x_2,y_2)$，则 $\frac{2}{x_1-1}+x_2=$ ______.
+answer: |
+  $-1$
+
+  $y=\ln x$ 在 $P(x_1,\ln x_1)$ 处的切线为
+  $y-\ln x_1=\frac1{x_1}(x-x_1)$，即
+  $y=\frac1{x_1}x-1+\ln x_1$；$y=e^x$ 在
+  $Q(x_2,e^{x_2})$ 处的切线为
+  $y-e^{x_2}=e^{x_2}(x-x_2)$，即
+  $y=e^{x_2}x+e^{x_2}(1-x_2)$。两条切线重合，所以
+  $\frac1{x_1}=e^{x_2}$ 且
+  $\ln x_1-1=e^{x_2}(1-x_2)$。由第一式得
+  $x_2=-\ln x_1$，代回第二式得
+  $\ln x_1-1=\frac1{x_1}(1+\ln x_1)$，即
+  $\ln x_1-1=\frac2{x_1-1}$。于是
+  $\frac2{x_1-1}+x_2=\ln x_1-1-\ln x_1=-1$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 分别写出两条曲线在指定切点处的切线方程。
+      max_score: 1
+    - step_id: step_2
+      description: 匹配斜率和截距，得到切点数据方程组。
+      max_score: 1
+    - step_id: step_3
+      description: 由斜率关系把 $x_2$ 化为 $x_1$ 的对数。
+      max_score: 1
+    - step_id: step_4
+      description: 把截距关系化成目标式中的 $\frac2{x_1-1}$。
+      max_score: 1
+    - step_id: step_5
+      description: 代入目标式求值。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level:
+      - part_id: item_1
+        goal: 数值求值
+        target: 求公切线切点量组合 $\frac2{x_1-1}+x_2$ 的定值。
+        result: 见 source_solution_summary
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+      - 局部逼近与找点
+    subroute:
+      - 切点参数化
+      - 斜率截距匹配
+      - 指对互化
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $y=\ln x$ 与 $y=e^x$ 的同一条切线同时约束斜率和截距。
+      - $\frac1{x_1}=e^{x_2}$ 把对数曲线切点和指数曲线切点绑定。
+      - $(x_1-1)\ln x_1=x_1+1$ 使 $\frac2{x_1-1}$ 可替换成 $\ln x_1-1$。
+    normalization_moves_used:
+      - 把两条切线都整理成斜截式。
+      - 把 $e^{x_2}=1/x_1$ 转成 $x_2=-\ln x_1$。
+      - 把截距方程整理成目标式中分式的等价形式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会写切线方程，回补导数运算与几何意义。
+      - 若学生不会从 $e^{x_2}=1/x_1$ 得到 $x_2=-\ln x_1$，回补指数对数基础。
+      - 若学生在 $(x_1-1)\ln x_1=x_1+1$ 到 $\frac2{x_1-1}$ 的变形中卡住，回补代数恒等变形。
+  detail_terms:
+    - $y=\ln x$
+    - $y=e^x$
+    - $P(x_1,y_1)$
+    - $Q(x_2,y_2)$
+    - $\frac1{x_1}=e^{x_2}$
+    - $x_2=-\ln x_1$
+    - 答案 $-1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0110_exp_log_tangent_data_ex18
+source_evidence:
+  source_refs:
+    - ref_id: page_0110_ex18_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0110/page_0110.md
+      role: problem_start
+      evidence: line 32 gives 例 18 题头 and asks for $\frac{2}{x_1-1}+x_2$ under a common tangent of $y=\ln x$ and $y=e^x$.
+    - ref_id: page_0110_ex18_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0110/page_0110.md
+      role: solution
+      evidence: line 34 writes the two tangent equations, matches slope and intercept, derives $x_2=-\ln x_1$ and concludes the value is $-1$.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0110.png
+      inspected: true
+      notes: 已核对 page_0110 页图：例 18 题干与完整解析位于页面中部，答案为 $-1$；页面顶部是上一段 exposition 续页，未作为题卡处理。
+  source_context: page_0110 顶部为 page_0109 的指对公切线 exposition 续页；本卡只处理从 page_0110 起头的例 18。题前给出的 $e^x$ 与 $\ln x$ 公切线切点数据关系是例 18 的直接背景。
+  source_influence:
+    - 保留源页“先写两条切线方程，再匹配斜率和截距”的求解路线。
+    - 保留源页关键切点关系：$\frac1{x_1}=e^{x_2}$、$\ln x_1-1=e^{x_2}(1-x_2)$。
+    - 保留源页最终数值 $-1$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 景德镇模拟 T16）若曲线 $y=\ln x$ 在点 $P(x_1,y_1)$ 处的切线与曲线 $y=e^x$ 相切于点 $Q(x_2,y_2)$，则 $\frac{2}{x_1-1}+x_2=$ ______.
+  parts: *a1
+  choices: []
+  answer: $-1$
+  fidelity_notes:
+    - 题干和解析均在 page_0110；没有选项。
+    - 源页题前 exposition 中的切点数据关系作为背景，不并入原题题干。
+solution:
+  source_solution_summary: |
+    $y=\ln x$ 在 $P(x_1,\ln x_1)$ 处的切线为
+    $y-\ln x_1=\frac1{x_1}(x-x_1)$，即
+    $y=\frac1{x_1}x-1+\ln x_1$；$y=e^x$ 在
+    $Q(x_2,e^{x_2})$ 处的切线为
+    $y-e^{x_2}=e^{x_2}(x-x_2)$，即
+    $y=e^{x_2}x+e^{x_2}(1-x_2)$。两条切线重合，所以
+    $\frac1{x_1}=e^{x_2}$ 且
+    $\ln x_1-1=e^{x_2}(1-x_2)$。由第一式得
+    $x_2=-\ln x_1$，代回第二式得
+    $\ln x_1-1=\frac1{x_1}(1+\ln x_1)$，即
+    $\ln x_1-1=\frac2{x_1-1}$。于是
+    $\frac2{x_1-1}+x_2=\ln x_1-1-\ln x_1=-1$。
+  key_steps:
+    - step_id: step_1
+      statement: 分别写出两条曲线在指定切点处的切线方程。
+      formula_trace:
+        from: $P(x_1,\ln x_1),\quad Q(x_2,e^{x_2})$
+        to: $y=\frac1{x_1}x-1+\ln x_1,\quad y=e^{x_2}x+e^{x_2}(1-x_2)$
+        operation: 用导数斜率 $1/x_1$、$e^{x_2}$ 写点斜式，再整理成斜截式。
+        why: 公切线相同意味着斜率和截距同时相同。
+      source_ref: page_0110_ex18_solution
+    - step_id: step_2
+      statement: 匹配斜率和截距，得到切点数据方程组。
+      formula_trace:
+        from: $y=\frac1{x_1}x-1+\ln x_1$ 与 $y=e^{x_2}x+e^{x_2}(1-x_2)$ 重合
+        to: $\frac1{x_1}=e^{x_2},\quad \ln x_1-1=e^{x_2}(1-x_2)$
+        operation: 比较一次函数的 $x$ 系数和常数项。
+        why: 这是把“同一条切线”转成代数关系的核心。
+      source_ref: page_0110_ex18_solution
+    - step_id: step_3
+      statement: 由斜率关系把 $x_2$ 化为 $x_1$ 的对数。
+      formula_trace:
+        from: $\frac1{x_1}=e^{x_2}$
+        to: $x_2=-\ln x_1$
+        operation: 两边取自然对数。
+        why: 目标式同时含 $x_1$ 和 $x_2$，先用同一变量表示。
+      source_ref: page_0110_ex18_solution
+    - step_id: step_4
+      statement: 把截距关系化成目标式中的 $\frac2{x_1-1}$。
+      formula_trace:
+        from: $\ln x_1-1=\frac1{x_1}(1+\ln x_1)$
+        to: $\ln x_1-1=\frac2{x_1-1}$
+        operation: 两边乘以 $x_1$ 后移项，得到 $(x_1-1)\ln x_1=x_1+1$。
+        why: 目标式中的分式正好等于 $\ln x_1-1$。
+      source_ref: page_0110_ex18_solution
+    - step_id: step_5
+      statement: 代入目标式求值。
+      formula_trace:
+        from: $\frac2{x_1-1}=\ln x_1-1,\quad x_2=-\ln x_1$
+        to: $\frac2{x_1-1}+x_2=-1$
+        operation: 直接相加并消去 $\ln x_1$。
+        why: 公切线条件使原本复杂的切点量组合变成定值。
+      source_ref: page_0110_ex18_solution
+teaching_card:
+  student_title: 用同一条切线锁住两个切点
+  what_it_trains: 训练把指对公切线题转成“斜率相同、截距相同”的两个方程，再消去切点变量求定值。
+  recognition_cues:
+    - 题干说一条切线既切 $y=\ln x$，又切 $y=e^x$。
+    - 目标式含两个切点横坐标，优先用斜率关系把它们绑在一起。
+    - 出现 $\frac2{x_1-1}$ 时，要从截距方程整理出同样的分式。
+  normalization_moves:
+    - 先写 $y=\frac1{x_1}x-1+\ln x_1$ 和 $y=e^{x_2}x+e^{x_2}(1-x_2)$。
+    - 由斜率相同得到 $x_2=-\ln x_1$。
+    - 由截距相同推出 $\ln x_1-1=\frac2{x_1-1}$。
+  common_failures:
+    - 只比较斜率，忘记同一条直线还要比较截距。
+    - 把 $Q(x_2,y_2)$ 的纵坐标误写成 $\ln x_2$。
+    - 代数整理时把 $\ln x_1-1$ 和 $\frac2{x_1-1}$ 的关系弄反。
+  similar_practice_query: e^x ln x 公切线 切点数据 定值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0110 页图；例 18 完整位于 page_0110，无跨页续解。

@@ -1,0 +1,234 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0125_exponential_construct_ex06
+content_revision_id: mst_p0125_exponential_construct_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0125_exponential_construct_ex06.card.yaml
+stem: |-
+  （24-25高二下·辽宁鞍山·期中）$f(x)$ 是定义在 $\mathbf{R}$ 上的奇函数。当 $x>0$ 时，$f'(x)-f(x)>x-1$，则下列说法中正确的是（  ）
+  A. 令函数 $F(x)=\frac{f(x)-x}{e^x}$，则 $F(x)$ 在 $(0,+\infty)$ 上单调递增
+  B. $ef(1)-f(2)<2-e$
+  C. $ef(1)-f(2)<e-2$
+  D. $ef(-1)+f(2)<e-2$
+answer: |
+  BC
+
+  对选项 A，设
+  \[
+  F(x)=\frac{f(x)-x}{e^x},
+  \]
+  则
+  \[
+  F'(x)=\frac{f'(x)-f(x)+x-1}{e^x}>\frac{2(x-1)}{e^x}.
+  \]
+  由于 $0<x<1$ 时右端为负，不能推出 $F'(x)>0$，故 A 错。
+  再构造
+  \[
+  H(x)=\frac{f(x)+x}{e^x},
+  \]
+  有
+  \[
+  H'(x)=\frac{f'(x)-f(x)-x+1}{e^x}>0,
+  \]
+  所以 $H$ 在 $(0,+\infty)$ 递增，故
+  \[
+  H(1)<H(2)\Rightarrow \frac{f(1)+1}{e}<\frac{f(2)+2}{e^2}\Rightarrow ef(1)-f(2)<2-e.
+  \]
+  因此 B 对；又 $2-e<e-2$，故 C 也对。
+  因 $f$ 为奇函数，$f(1)=-f(-1)$，由 B 得
+  \[
+  ef(-1)+f(2)>e-2,
+  \]
+  与 D 相反，故 D 错。答案 BC。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 检验 A 的构造不足以判全区间递增。
+      max_score: 1
+    - step_id: step_2
+      description: 改用与题设同向的指数商函数。
+      max_score: 1
+    - step_id: step_3
+      description: 由 $H(1)<H(2)$ 推出 B。
+      max_score: 1
+    - step_id: step_4
+      description: 比较常数大小得到 C。
+      max_score: 1
+    - step_id: step_5
+      description: 利用奇函数关系排除 D。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 多选项真伪判定
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 充分/必要性探路
+      - 对称性配凑
+    subroute:
+      - 指数商函数构造
+      - 奇函数代换
+      - 先证后筛
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 指对复合结构
+      - 对称结构
+    evidence:
+      - $H'(x)$ 分子是 $f'(x)-f(x)-x+1$。
+      - $H(1)<H(2)$ 导出 $ef(1)-f(2)<2-e$。
+      - $f(1)=-f(-1)$ 把 B 转成 D 的反向结论。
+    normalization_moves_used:
+      - 先算 A 对应函数的导数并检查是否可判恒正。
+      - 把线性项与 $f$ 一起并入 $(f+x)/e^x$。
+      - 利用常数比较一次性确认 C。
+      - 最后用奇函数关系处理含 $f(-1)$ 的选项。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求 $\frac{f(x)\pm x}{e^x}$ 的导数，回补导数运算与几何意义。
+      - 若学生把“下界可能为负”仍当作“恒正”，回补不等式工具基础。
+      - 若学生代入 H(2) 仍写成 $f(2)+1$，回补代数恒等变形。
+      - 若学生不熟悉奇函数代换，回补函数性质与图像。
+  detail_terms:
+    - $F(x)=\frac{f(x)-x}{e^x}$
+    - $H(x)=\frac{f(x)+x}{e^x}$
+    - $ef(1)-f(2)<2-e$
+    - $f(1)=-f(-1)$
+    - 答案 BC
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0125_exponential_construct_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0125
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0125/page_0125.md
+      role: problem_start
+      evidence: page_0125 中段给出例6完整题干、A-D选项、解析与答案 BC。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0125.png
+      inspected: true
+      notes: 已核对页图：本题完整位于 page_0125。
+  source_context: 例6前面的模型四/模型五是方法背景，不另建卡。
+  source_influence:
+    - 保留源页先否定 A，再构造 H(x)=(f(x)+x)/e^x 的路线。
+    - 保留源页由 H'(x)>0 推出 B，再由常数大小推出 C。
+    - 保留源页结合奇函数关系排除 D。
+  source_discrepancies:
+    - 源页解析中间式写为 $(f(1)+1)/e<(f(2)+1)/e^2$；但已定义 $H(x)=(f(x)+x)/e^x$，故应为 $(f(2)+2)/e^2$，且下一步 $ef(1)-f(2)<2-e$ 也只与 +2 一致。
+original_problem:
+  stem: （24-25高二下·辽宁鞍山·期中）$f(x)$ 是定义在 $\mathbf{R}$ 上的奇函数。当 $x>0$ 时，$f'(x)-f(x)>x-1$，则下列说法中正确的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 令函数 $F(x)=\frac{f(x)-x}{e^x}$，则 $F(x)$ 在 $(0,+\infty)$ 上单调递增
+      text_latex: 令函数 $F(x)=\frac{f(x)-x}{e^x}$，则 $F(x)$ 在 $(0,+\infty)$ 上单调递增
+    - label: B
+      text_raw: $ef(1)-f(2)<2-e$
+      text_latex: $ef(1)-f(2)<2-e$
+    - label: C
+      text_raw: $ef(1)-f(2)<e-2$
+      text_latex: $ef(1)-f(2)<e-2$
+    - label: D
+      text_raw: $ef(-1)+f(2)<e-2$
+      text_latex: $ef(-1)+f(2)<e-2$
+  answer: BC
+  fidelity_notes:
+    - 答案为多选 BC。
+    - 涉及 H(2) 的中间式按函数定义校正为 $\frac{f(2)+2}{e^2}$。
+solution:
+  source_solution_summary: |
+    对选项 A，设
+    \[
+    F(x)=\frac{f(x)-x}{e^x},
+    \]
+    则
+    \[
+    F'(x)=\frac{f'(x)-f(x)+x-1}{e^x}>\frac{2(x-1)}{e^x}.
+    \]
+    由于 $0<x<1$ 时右端为负，不能推出 $F'(x)>0$，故 A 错。
+    再构造
+    \[
+    H(x)=\frac{f(x)+x}{e^x},
+    \]
+    有
+    \[
+    H'(x)=\frac{f'(x)-f(x)-x+1}{e^x}>0,
+    \]
+    所以 $H$ 在 $(0,+\infty)$ 递增，故
+    \[
+    H(1)<H(2)\Rightarrow \frac{f(1)+1}{e}<\frac{f(2)+2}{e^2}\Rightarrow ef(1)-f(2)<2-e.
+    \]
+    因此 B 对；又 $2-e<e-2$，故 C 也对。
+    因 $f$ 为奇函数，$f(1)=-f(-1)$，由 B 得
+    \[
+    ef(-1)+f(2)>e-2,
+    \]
+    与 D 相反，故 D 错。答案 BC。
+  key_steps:
+    - step_id: step_1
+      statement: 检验 A 的构造不足以判全区间递增。
+      formula_trace:
+        from: $F(x)=\frac{f(x)-x}{e^x}$
+        to: $F'(x)=\frac{f'(x)-f(x)+x-1}{e^x}>\frac{2(x-1)}{e^x}$
+        operation: 求导并代入 $f'(x)-f(x)>x-1$。
+        why: 下界在 $(0,1)$ 为负，不能推出恒正。
+      source_ref: page_0125
+    - step_id: step_2
+      statement: 改用与题设同向的指数商函数。
+      formula_trace:
+        from: $f'(x)-f(x)>x-1$
+        to: $H(x)=\frac{f(x)+x}{e^x},\ H'(x)=\frac{f'(x)-f(x)-x+1}{e^x}>0$
+        operation: 把 $x-1$ 移项后配成导数分子。
+        why: 直接得到 $H$ 在 $(0,+\infty)$ 递增。
+      source_ref: page_0125
+    - step_id: step_3
+      statement: 由 $H(1)<H(2)$ 推出 B。
+      formula_trace:
+        from: $\frac{f(1)+1}{e}<\frac{f(2)+2}{e^2}$
+        to: $ef(1)-f(2)<2-e$
+        operation: 两边乘 $e^2$ 并移项。
+        why: 得到选项 B。
+      source_ref: page_0125
+    - step_id: step_4
+      statement: 比较常数大小得到 C。
+      formula_trace:
+        from: $ef(1)-f(2)<2-e$
+        to: $ef(1)-f(2)<e-2$
+        operation: 利用 $2-e<e-2$。
+        why: 小于更小值必小于更大值。
+      source_ref: page_0125
+    - step_id: step_5
+      statement: 利用奇函数关系排除 D。
+      formula_trace:
+        from: $f(1)=-f(-1),\ ef(1)-f(2)<2-e$
+        to: $ef(-1)+f(2)>e-2$
+        operation: 代换并乘以负一反向。
+        why: 与 D 的方向相反。
+      source_ref: page_0125
+teaching_card:
+  student_title: 在 $f'-f>x-1$ 中选对指数构造
+  what_it_trains: 区分“看起来像”与“能直接判号”的构造，并在多选题里串联比较与对称性质。
+  recognition_cues:
+    - 题设是 $f'-f>x-1$，右端含线性项。
+    - 选项既有单调性判断，也有点值比较和奇函数项。
+  normalization_moves:
+    - 先验算 A 提供的函数。
+    - 改构造 $(f+x)/e^x$ 并用递增性拿到 B。
+    - 再由常数大小拿 C，由奇函数排 D。
+  common_failures:
+    - 把 $F'(x)>\frac{2(x-1)}{e^x}$ 误判为恒正。
+    - 中间代值把 $H(2)$ 写错。
+    - 奇函数替换后忘记不等号反向。
+  similar_practice_query: 奇函数 指数构造 (f+x)/e^x 多选 判定
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 页图已核对；例6完整在 page_0125。
+    - 源页中间式存在 +1/+2 记号错误，已据函数定义与后续结论修正。

@@ -1,0 +1,170 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0048_section3_ex06
+content_revision_id: mst_p0048_section3_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0048_section3_ex06.card.yaml
+stem: |-
+  （2025 · 漳州高三第四次质检 T16）已知函数 $f(x)=\sin x-ae^x$。
+  (1). 若 $a=1$，求 $f(x)$ 在 $[0,+\infty)$ 上的最大值。
+  (2). 若 $f(x)$ 在 $[0,2\pi]$ 上恰有两个零点，求实数 $a$ 的取值范围。
+answer: |-
+  (1) 最大值为 $-1$；(2) $a\in\left(-\frac{\sqrt2}{2e^{5\pi/4}},0\right)\cup\left(0,\frac{\sqrt2}{2e^{\pi/4}}\right)$。
+
+  当 a=1 时，f'(x)=cos x-e^x<=0，且 x>0 时严格小于 0，所以 f 在 [0,+infty) 上递减，最大值 f(0)=-1。第 (2) 问由 sin x-ae^x=0 分离出 a=sin x/e^x，令 g(x)=sin x/e^x。 g'(x)=(cos x-sin x)/e^x，在 [0,2pi] 上的临界点为 pi/4 和 5pi/4；g 从 0 增至正最大值，再降至负最小值，再升回 0。 因此水平线 y=a 与图像恰有两个交点时， a 位于负最小值与 0 之间，或 0 与正最大值之间。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 第 (1) 问先判断导数符号。
+      max_score: 1
+    - step_id: step_2
+      description: 由单调性取左端点最大值。
+      max_score: 1
+    - step_id: step_3
+      description: 把零点问题分离成水平线交点问题。
+      max_score: 1
+    - step_id: step_4
+      description: 求 $g(x)=\sin x/e^x$ 的单调分段和极值。
+      max_score: 1
+    - step_id: step_5
+      description: 用交点个数排除端点水平线。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 极值最值
+        target: 第 (1) 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 (2) 问
+        result: 见 source_solution_summary
+  method:
+    primary: 参变量分离
+    secondary:
+      - 数形结合
+      - 切线放缩与凹凸性
+    subroute:
+      - 水平线截函数图像计数
+      - 三角指数复合求极值
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 指对复合结构
+      - 非对称结构
+    evidence:
+      - $a=\sin x/e^x$
+      - $g^{\prime}(x)=(\cos x-\sin x)/e^x$
+      - 水平线 y=a 与三段单调曲线恰有两个交点。
+    normalization_moves_used:
+      - 把 $f(x)=0$ 改写为 $a=g(x)$。
+      - 用 $g$ 的极大值、极小值和端点值划分参数区间。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f(x)=0$ 分离出 $a=\sin x/e^x$，回补代数恒等变形。
+      - 若学生不能用导数符号判断三段单调，回补导数单调极值基础。
+      - 若学生把 $a=0$ 或极值端点误算进“恰有两个零点”，回补函数性质与图像。
+  detail_terms:
+    - $g(x)=\sin x/e^x$
+    - $x=\pi/4,\ 5\pi/4$
+    - $a=0$ 时三个零点
+    - 水平线交点个数
+parts: &a1
+  - label: (1)
+    text: 若 $a=1$，求 $f(x)$ 在 $[0,+\infty)$ 上的最大值。
+  - label: (2)
+    text: 若 $f(x)$ 在 $[0,2\pi]$ 上恰有两个零点，求实数 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0048_section3_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0048
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0048/page_0048.md
+      role: problem_start
+      evidence: lines 20-22 give 例 6 题干：f(x)=sin x-ae^x；(1) a=1 求 [0,+infty) 最大值；(2) [0,2pi] 恰有两个零点求 a。
+    - ref_id: page_0048_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0048/page_0048.md
+      role: solution
+      evidence: lines 24-29 give完整解析：a=1 时单调递减最大值 -1；分离 a=sin x/e^x 后用 g 的单调性数水平线交点。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0048.png
+      inspected: true
+      notes: 页图已核对：例 6 题干、解析和最终区间与 markdown 一致。
+  source_context: page_0048 顶部是前一题 ex05 的续页；本卡只从 page_0048 中部新题头“例 6”开始。
+  source_influence:
+    - 源解把零点个数转化为直线 y=a 与 g(x)=sin x/e^x 在 [0,2pi] 上的交点个数。
+    - 源解排除了 a=0 及两端极值水平线，答案使用开区间。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 · 漳州高三第四次质检 T16）已知函数 $f(x)=\sin x-ae^x$。
+  parts: *a1
+  choices: []
+  answer: (1) 最大值为 $-1$；(2) $a\in\left(-\frac{\sqrt2}{2e^{5\pi/4}},0\right)\cup\left(0,\frac{\sqrt2}{2e^{\pi/4}}\right)$。
+  fidelity_notes:
+    - 源页最终答案两段均为开区间；端点对应切点或端点零点数改变，不属于“恰有两个零点”。
+solution:
+  source_solution_summary: 当 a=1 时，f'(x)=cos x-e^x<=0，且 x>0 时严格小于 0，所以 f 在 [0,+infty) 上递减，最大值 f(0)=-1。第 (2) 问由 sin x-ae^x=0 分离出 a=sin x/e^x，令 g(x)=sin x/e^x。 g'(x)=(cos x-sin x)/e^x，在 [0,2pi] 上的临界点为 pi/4 和 5pi/4；g 从 0 增至正最大值，再降至负最小值，再升回 0。 因此水平线 y=a 与图像恰有两个交点时， a 位于负最小值与 0 之间，或 0 与正最大值之间。
+  key_steps:
+    - step_id: step_1
+      statement: 第 (1) 问先判断导数符号。
+      formula_trace:
+        from: $f(x)=\sin x-e^x$
+        to: $f^{\prime}(x)=\cos x-e^x\le 1-1=0$
+        operation: 求导并用 $x\ge0$ 时 $\cos x\le1,\ e^x\ge1$。
+        why: 导数非正给出单调递减方向。
+      source_ref: page_0048_solution
+    - step_id: step_2
+      statement: 由单调性取左端点最大值。
+      formula_trace:
+        from: $f$ 在 $[0,+\infty)$ 上单调递减
+        to: $f_{\max}=f(0)=-1$
+        operation: 闭区间左端点代入。
+        why: 最大值在递减函数的左端点取得。
+      source_ref: page_0048_solution
+    - step_id: step_3
+      statement: 把零点问题分离成水平线交点问题。
+      formula_trace:
+        from: $\sin x-ae^x=0$
+        to: $a=\frac{\sin x}{e^x}$
+        operation: 移项并除以正数 $e^x$。
+        why: 参数 a 变成水平线 y=a，零点数变成交点数。
+      source_ref: page_0048_solution
+    - step_id: step_4
+      statement: 求 $g(x)=\sin x/e^x$ 的单调分段和极值。
+      formula_trace:
+        from: $g^{\prime}(x)=\frac{\cos x-\sin x}{e^x}=0$
+        to: $x=\frac{\pi}{4},\ \frac{5\pi}{4}$
+        operation: 令 $\tan x=1$，并结合 $[0,2\pi]$ 内符号变化。
+        why: 极大值和极小值决定水平线有几个交点。
+      source_ref: page_0048_solution
+    - step_id: step_5
+      statement: 用交点个数排除端点水平线。
+      formula_trace:
+        from: $g(0)=0,\ g(\frac{\pi}{4})=\frac{\sqrt2}{2e^{\pi/4}},\ g(\frac{5\pi}{4})=-\frac{\sqrt2}{2e^{5\pi/4}},\ g(2\pi)=0$
+        to: $a\in\left(-\frac{\sqrt2}{2e^{5\pi/4}},0\right)\cup\left(0,\frac{\sqrt2}{2e^{\pi/4}}\right)$
+        operation: 按水平线 y=a 与三段单调曲线的交点数分类。
+        why: a=0 会给出 0、pi、2pi 三个零点；极值端点只给一个切点，故均排除。
+      source_ref: page_0048_solution
+teaching_card:
+  student_title: 把零点个数变成水平线切图像
+  what_it_trains: 训练把含参数零点问题分离为 $a=g(x)$，再用导数画出关键单调段，按水平线交点个数确定参数范围。
+  recognition_cues:
+    - 题干说“恰有两个零点”。
+    - 参数 a 只乘在 $e^x$ 前。
+    - $\sin x/e^x$ 在一个周期端点取 0，中间有一正一负两个极值。
+  normalization_moves:
+    - 先由 $f(x)=0$ 分离出 $a=\sin x/e^x$。
+    - 对 $g(x)=\sin x/e^x$ 求导，找 $\pi/4$ 与 $5\pi/4$。
+    - 用端点值、极值和单调段数水平线交点。
+  common_failures:
+    - 只求出极值范围，忘记排除 $a=0$。
+    - 把极值处相切的一个交点误当作两个零点。
+    - 第 (1) 问把 $f^{\prime}(0)=0$ 误读成存在内部最大值。
+  similar_practice_query: sin x - a e^x 零点个数 参数范围 水平线交点
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

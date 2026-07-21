@@ -1,0 +1,174 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0026_ex03
+content_revision_id: mst_p0026_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0026_ex03.card.yaml
+stem: |
+  （2023·陕西一模 T15）已知不等式 $e^x-1\geqslant kx+\ln x$，对于任意的 $x\in(0,+\infty)$ 恒成立，则 $k$ 的最大值________。
+answer: |
+  $e-1$
+
+  令 $h(t)=e^t+t$。原不等式可写成 $h(x)\ge h(\ln(ex))+(k+1-e)x$。因为 $x\ge1+\ln x=\ln(ex)$，且 $h$ 严格递增，所以 $h(x)\ge h(\ln(ex))$，等号在 $x=1$ 处取到；于是必须且只需 $k+1-e\le0$，得 $k\le e-1$。代入 $x=1$ 也给出必要条件 $k\le e-1$。法二等价于求 $\frac{e^x}{x}-\frac{1+\ln x}{x}$ 的下界，利用两项分别在 $x=1$ 同时取等，同样得最大值 $e-1$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 先用特值给出参数上界。
+      max_score: 1
+    - step_id: step_2
+      description: 把原不等式改写成 $e^x+x$ 母函数比较。
+      max_score: 1
+    - step_id: step_3
+      description: 用 $h$ 的单调性确定同构比较的方向。
+      max_score: 1
+    - step_id: step_4
+      description: 由等号点锁定最大参数。
+      max_score: 1
+    - step_id: step_5
+      description: 用分而治之路线验证充分性。
+      max_score: 1
+    - step_id: step_6
+      description: 求出该上界的全局下界。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+    subroute:
+      - $e^x+x$ 单调母函数
+      - $\ln(ex)$ 平移同构
+      - $e^x/x$ 与 $\ln x/x$ 分而治之
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $e^x-1\ge kx+\ln x$ 通过加 $x+1$ 化为 $h(x)\ge h(\ln(ex))+(k+1-e)x$。
+      - $x\ge\ln(ex)$ 与 $h$ 递增给出同构保值，$x=1$ 是卡参数的等号点。
+    normalization_moves_used:
+      - $e^x-1\ge kx+\ln x\Rightarrow e^x\ge kx+\ln(ex)$。
+      - $kx+x+\ln x+1=h(\ln(ex))+(k+1-e)x$。
+      - $\frac{1+\ln x}{x}=e\cdot\frac{\ln(ex)}{ex}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $e^x-1\ge kx+\ln x$ 改写为含 $\ln(ex)$ 的形式，回补指数对数基础。
+      - 若学生不能证明 $x\ge1+\ln x$，回补不等式工具基础。
+      - 若学生不知道 $h(t)=e^t+t$ 严格递增，回补导数单调极值基础。
+      - 若学生在除以 $x$ 后不会处理 $\frac{e^x}{x}$ 与 $\frac{1+\ln x}{x}$ 的极值，回补导数单调极值基础。
+  detail_terms:
+    - $e^x-1\ge kx+\ln x$
+    - $h(t)=e^t+t$
+    - $h(x)\ge h(\ln(ex))+(k+1-e)x$
+    - $\frac{e^x}{x}\ge e$
+    - $\frac{1+\ln x}{x}\le1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0026_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0026
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0026/page_0026.md
+      role: problem_start
+      evidence: lines 16-21 give 例3题干、两种解析路线和答案 $e-1$；页图显示法一中应为 $\ln(ex)$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0026.png
+      inspected: true
+      notes: 已核对例3题干、法一/法二解析和答案；图像中法一使用 $\ln(ex)$，不是 markdown 中的 $\ln x$。
+  source_context: 本题位于“四、指对同构体系”之“考点1：构造单调函数 $e^x+x$ 或 $x+\ln x$”，紧接 page_0025 的例1、例2。
+  source_influence:
+    - 卡片按页图和代数等价式修正法一：由 $e^x-1\ge kx+\ln x$ 得 $e^x\ge kx+\ln(ex)$。
+    - 法二“分而治之”提供同一结论的下界/上界夹逼：$\frac{e^x}{x}\ge e$ 与 $\frac{1+\ln x}{x}\le1$ 同时在 $x=1$ 取等。
+  source_discrepancies:
+    - page_0026.md line 18 将法一中的 $\ln(ex)$ 转写为 $\ln x$，导致与原不等式 $e^x-1\ge kx+\ln x$ 不等价；page_0026.png 与后续 $h(\ln(ex))$ 同构式表明应读作 $\ln(ex)$。
+original_problem:
+  stem: |
+    （2023·陕西一模 T15）已知不等式 $e^x-1\geqslant kx+\ln x$，对于任意的 $x\in(0,+\infty)$ 恒成立，则 $k$ 的最大值________。
+  parts: *a1
+  choices: []
+  answer: $e-1$
+  fidelity_notes:
+    - 题干和答案完整在 page_0026。
+    - 解析法一按页图修正为 $\ln(ex)$；法二与答案均支持 $k_{\max}=e-1$。
+solution:
+  source_solution_summary: |
+    令 $h(t)=e^t+t$。原不等式可写成 $h(x)\ge h(\ln(ex))+(k+1-e)x$。因为 $x\ge1+\ln x=\ln(ex)$，且 $h$ 严格递增，所以 $h(x)\ge h(\ln(ex))$，等号在 $x=1$ 处取到；于是必须且只需 $k+1-e\le0$，得 $k\le e-1$。代入 $x=1$ 也给出必要条件 $k\le e-1$。法二等价于求 $\frac{e^x}{x}-\frac{1+\ln x}{x}$ 的下界，利用两项分别在 $x=1$ 同时取等，同样得最大值 $e-1$。
+  key_steps:
+    - step_id: step_1
+      statement: 先用特值给出参数上界。
+      formula_trace:
+        from: $e^x-1\geqslant kx+\ln x\quad(\forall x>0)$
+        to: $x=1:\ e-1\geqslant k$
+        operation: 代入 $x=1$，利用 $\ln1=0$。
+        why: 恒成立问题的等号点通常给出参数最大值的必要条件。
+      source_ref: page_0026
+    - step_id: step_2
+      statement: 把原不等式改写成 $e^x+x$ 母函数比较。
+      formula_trace:
+        from: $e^x-1\geqslant kx+\ln x$
+        to: $h(x)\geqslant h(\ln(ex))+(k+1-e)x,\quad h(t)=e^t+t$
+        operation: |
+          两边加 $x+1$ 得 $e^x+x\ge kx+x+\ln x+1$；
+          又 $h(\ln(ex))=e^{\ln(ex)}+\ln(ex)=ex+\ln x+1$，
+          所以右侧 $kx+x+\ln x+1=h(\ln(ex))+(k+1-e)x$。
+        why: 把含参项单独分离出来，剩余部分变成同一个单调函数的两个输入。
+      source_ref: page_0026
+    - step_id: step_3
+      statement: 用 $h$ 的单调性确定同构比较的方向。
+      formula_trace:
+        from: $x\geqslant 1+\ln x=\ln(ex)$
+        to: $h(x)\geqslant h(\ln(ex))$
+        operation: 由 $x-\ln x\ge1$ 得 $x\ge\ln(ex)$；又 $h$ 的导数为 $e^t+1>0$，故 $h$ 严格递增。
+        why: 输入大小关系可直接传递到函数值大小关系，等号在 $x=1$。
+      source_ref: page_0026
+    - step_id: step_4
+      statement: 由等号点锁定最大参数。
+      formula_trace:
+        from: $h(x)\geqslant h(\ln(ex))+(k+1-e)x$
+        to: $k+1-e\le0,\quad k\le e-1$
+        operation: 在 $x=1$ 时 $h(x)=h(\ln(ex))$，且 $x>0$；若 $k+1-e>0$，右侧会超过左侧。
+        why: 等号点处不能再承受正的含参增量。
+      source_ref: page_0026
+    - step_id: step_5
+      statement: 用分而治之路线验证充分性。
+      formula_trace:
+        from: $e^x-1\ge kx+\ln x$
+        to: $k\le \frac{e^x}{x}-\frac{1+\ln x}{x}$
+        operation: 移项后除以 $x>0$：$\frac{e^x}{x}\ge k+\frac{1+\ln x}{x}$。
+        why: 右侧关于 $k$ 的上界可由两个标准函数共同估计。
+      source_ref: page_0026
+    - step_id: step_6
+      statement: 求出该上界的全局下界。
+      formula_trace:
+        from: $\frac{e^x}{x}\ge e,\quad \frac{1+\ln x}{x}=e\cdot\frac{\ln(ex)}{ex}\le1$
+        to: $\frac{e^x}{x}-\frac{1+\ln x}{x}\ge e-1$
+        operation: 分别用 $\frac{e^x}{x}$ 的最小值 $e$ 与 $\frac{\ln u}{u}$ 的最大值 $1/e$，其中 $u=ex$。
+        why: 两处等号都在 $x=1$，所以 $k=e-1$ 可以恒成立且是最大值。
+      source_ref: page_0026
+teaching_card:
+  student_title: 把 $-1$ 合进 $\ln(ex)$ 后卡住 $k$
+  what_it_trains: 训练在恒成立参数题中，把常数项并入对数平移，形成同一个递增母函数的比较，再用等号点锁定参数。
+  recognition_cues:
+    - 题干含 $e^x-1$、$kx$ 与 $\ln x$。
+    - 恒成立并问参数最大值，先看 $x=1$。
+    - 解析主题是 $e^x+x$ 与 $x+\ln x$ 的同构单调性。
+  normalization_moves:
+    - 把 $e^x-1\ge kx+\ln x$ 写成 $e^x\ge kx+\ln(ex)$。
+    - 两边加 $x$，配出 $h(x)$ 与 $h(\ln(ex))$。
+    - 用 $x\ge1+\ln x$ 找到同构比较的等号点。
+    - 也可除以 $x$，分开估计 $\frac{e^x}{x}$ 与 $\frac{1+\ln x}{x}$。
+  common_failures:
+    - 把源文 OCR 的 $\ln x$ 直接代入法一，导致与原不等式不等价。
+    - 只代 $x=1$ 得到必要条件，忘记证明 $k=e-1$ 的充分性。
+    - 把 $h(x)\ge h(\ln(ex))$ 的等号点误写成普通比较，漏掉 $x=1$ 卡参。
+  similar_practice_query: 恒成立参数 $e^x-1$ $\ln x$ $\ln(ex)$ $e^x+x$ 同构
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 请 reviewer 留意：markdown 与页图在法一的 $\ln(ex)$ 处不一致，本卡按页图和代数等价式处理。

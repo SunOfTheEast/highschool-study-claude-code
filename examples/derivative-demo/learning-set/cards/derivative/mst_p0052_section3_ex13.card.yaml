@@ -1,0 +1,239 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0052_section3_ex13
+content_revision_id: mst_p0052_section3_ex13-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0052_section3_ex13.card.yaml
+stem: |-
+  （2023 · 河北月考 T21）已知函数 $f(x)=\frac{\ln x}{x-1}$。
+  （1）求 $f(x)$ 的单调区间；
+  （2）证明：$f(x)>\frac{x+1}{e^x}$（其中 $e$ 是自然对数的底数，$e=2.71828\cdots$）。
+answer: |-
+  （1）$f(x)$ 在 $(0,1)$ 上单调递减，在 $(1,+\infty)$ 上也单调递减；（2）对 $x\in(0,1)\cup(1,+\infty)$，有 $\frac{\ln x}{x-1}>\frac{x+1}{e^x}$。
+
+  第 (1) 问求导得 $f^{\prime}(x)=\frac{1-\frac1x-\ln x}{(x-1)^2}$。令 $u(x)=1-\frac1x-\ln x$，则 $u^{\prime}(x)=\frac{1-x}{x^2}$，所以 $u$ 在 $(0,1)$ 递增、在 $(1,+\infty)$ 递减，且两侧均小于 $u(1)=0$，故 $f$ 在两个区间上均递减。第 (2) 问，$0<x<1$ 时由 $\ln x<x-1<0$ 得 $f(x)>1$，又 $e^x>x+1$ 得 $\frac{x+1}{e^x}<1$。当 $x>1$ 时，源解给出两法：构造 $g(x)=\ln x-\frac{x^2-1}{e^x}$ 证明 $g(x)>0$；或用 $\ln x\ge\frac{2(x-1)}{x+1}$ 和 $p(x)=\frac{(x+1)^2}{2e^x}<1$ 完成证明。
+rubric:
+  max_score: 9
+  criteria:
+    - step_id: step_1
+      description: 第 (1) 问：求导并把导数符号集中到分子。
+      max_score: 1
+    - step_id: step_2
+      description: 第 (1) 问：判断 $u(x)$ 在定义域两段内都小于 0。
+      max_score: 1
+    - step_id: step_3
+      description: 第 (1) 问：写出单调区间。
+      max_score: 1
+    - step_id: step_4
+      description: 第 (2) 问：先处理 $0<x<1$。
+      max_score: 1
+    - step_id: step_5
+      description: 第 (2) 问：把 $x>1$ 的目标化成一个新函数为正。
+      max_score: 1
+    - step_id: step_6
+      description: 第 (2) 问方法一：证明 $g(x)$ 在 $x>1$ 上递增。
+      max_score: 1
+    - step_id: step_7
+      description: 第 (2) 问方法一：由起点极限完成 $x>1$ 的证明。
+      max_score: 1
+    - step_id: step_8
+      description: 第 (2) 问方法二：用帕德放缩给出另一条证明路线。
+      max_score: 1
+    - step_id: step_9
+      description: 第 (2) 问方法二：用 $p(x)<1$ 控制剩余因子。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: （1）零点/极值点分析：用导数判断 $f(x)=\frac{\ln x}{x-1}$ 的单调区间。
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 不等式证明
+        target: （2）不等式证明：比较 $\frac{\ln x}{x-1}$ 与 $\frac{x+1}{e^x}$。
+        result: 见 source_solution_summary
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+      - 数形结合
+    subroute:
+      - 对数单身狗
+      - 指数找基友
+      - 帕德放缩
+      - $\ln x$ 与 $\frac{2(x-1)}{x+1}$ 比较
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 不等式工具结构
+      - 同构结构
+    evidence:
+      - $f^{\prime}(x)$ 的符号由 $1-\frac1x-\ln x$ 控制。
+      - $x>1$ 时目标等价于 $\ln x-\frac{x^2-1}{e^x}>0$。
+      - 帕德放缩把 $\ln x$ 与 $\frac{2(x-1)}{x+1}$ 联系起来。
+      - $p(x)=\frac{(x+1)^2}{2e^x}<1$ 控制剩余比较。
+    normalization_moves_used:
+      - 把商函数导数通分，集中判断 $u(x)$。
+      - 按 $0<x<1$ 与 $x>1$ 分开处理，因为乘以 $x-1$ 会改变不等号方向。
+      - 把 $(x-1)(x+1)$ 合成 $x^2-1$，构造 $g(x)$。
+      - 用帕德放缩替代普通切线，获得可约分的 $\frac{2(x-1)}{x+1}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生求导后把 $x=1$ 放进单调区间，回补函数三要素与定义域。
+      - 若学生不会判断 $1-\frac1x-\ln x$ 的符号，回补导数单调极值基础。
+      - 若学生在 $0<x<1$ 时乘除负数忘记改变方向，回补代数恒等变形。
+      - 若学生不能把 $x>1$ 的目标化成 $\ln x-\frac{x^2-1}{e^x}>0$，回补指数对数基础。
+      - 若学生不知道 $\ln x$ 的帕德放缩 $\frac{2(x-1)}{x+1}$，回补不等式工具基础。
+  detail_terms:
+    - $f(x)=\frac{\ln x}{x-1}$
+    - $h(x)=\frac{x+1}{e^x}$
+    - $u(x)=1-\frac1x-\ln x$
+    - $g(x)=\ln x-\frac{x^2-1}{e^x}$
+    - $p(x)=\frac{(x+1)^2}{2e^x}$
+    - $\frac{2(x-1)}{x+1}$
+parts: &a1
+  - （1）求 $f(x)$ 的单调区间；
+  - （2）证明：$f(x)>\frac{x+1}{e^x}$（其中 $e$ 是自然对数的底数，$e=2.71828\cdots$）。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0052_section3_ex13
+source_evidence:
+  source_refs:
+    - ref_id: page_0052_ex13_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0052/page_0052.md
+      role: problem_start
+      evidence: 例 13：已知函数 $f(x)=\frac{\ln x}{x-1}$；第 (1) 问求单调区间，第 (2) 问证明 $f(x)>\frac{x+1}{e^x}$。
+    - ref_id: page_0052_ex13_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0052/page_0052.md
+      role: solution
+      evidence: page_0052 底部开始第 (1) 问解析：定义域为 $(0,1)\cup(1,+\infty)$，求导并令 $u(x)=1-\frac1x-\ln x$。
+    - ref_id: page_0053_ex13_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0053/page_0053.md
+      role: continuation
+      evidence: page_0053 继续第 (1) 问，给出 $f^{\prime}(x)<0$ 的结论，并完成第 (2) 问两种证明：构造函数法与帕德放缩法。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0052.png
+      inspected: true
+      notes: 已核对页图：例 13 题头和第 (1) 问解析起于 page_0052 底部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0053.png
+      inspected: true
+      notes: 已核对页图：page_0053 为例 13 续解，含 $f(x)$ 与 $h(x)=\frac{x+1}{e^x}$ 的图像，以及第 (2) 问完整解析。
+  source_context: 例 13 承接本节“对数单身狗、指数找基友”和对数帕德放缩训练；page_0054 虽也出现新的“例 13”，但那是后续新例题，不是本卡续页。
+  source_influence:
+    - 第 (1) 问必须把 $x=1$ 排除在定义域外；源解把 $f(1)=1$ 作为可去间断点的极限值用于第 (2) 问分析。
+    - 第 (2) 问源解先用图像/单调性说明 $0<x<1$ 时 $f(x)>1>h(x)$，再重点处理 $x>1$。
+    - 源解保留两条路线：一条构造 $g(x)=\ln x-\frac{x^2-1}{e^x}$，一条用 $\ln x$ 与 $\frac{2(x-1)}{x+1}$ 的帕德放缩。
+  source_discrepancies:
+    - page_0053 方法一在定义 $t(x)=e^x+x^3-2x^2-x$ 后，页图写“故 $h(x)$ 在 $(1,+\infty)$ 递增”；markdown 已标记 reconstructed 为 $t(x)$，本卡按 $t(x)$ 处理。
+    - page_0053 方法一在定义 $m(x)=e^x-x-1$ 后，页图写 $g^{\prime}(x)=e^x-1>0$；markdown 已标记 reconstructed 为 $m^{\prime}(x)$，本卡按 $m^{\prime}(x)$ 处理。
+    - page_0053 方法二构造 $g(x)=\ln x-\frac{2(x-1)}{x+1}$ 后，页图写 $f(1)=0$；markdown 已标记 reconstructed 为 $g(1)$，本卡按 $g(1)=0$ 处理。
+    - page_0053 方法二末段求 $p(x)=\frac{(x+1)^2}{2e^x}$ 最大值时，页图写 $h(1)$；markdown 已标记 reconstructed 为 $p(1)$，本卡按 $p(1)=2/e$ 处理。
+original_problem:
+  stem: （2023 · 河北月考 T21）已知函数 $f(x)=\frac{\ln x}{x-1}$。
+  parts: *a1
+  choices: []
+  answer: （1）$f(x)$ 在 $(0,1)$ 上单调递减，在 $(1,+\infty)$ 上也单调递减；（2）对 $x\in(0,1)\cup(1,+\infty)$，有 $\frac{\ln x}{x-1}>\frac{x+1}{e^x}$。
+  fidelity_notes:
+    - 题干没有显式写定义域；按 $\ln x$ 与分母 $x-1$，定义域为 $(0,1)\cup(1,+\infty)$。
+    - page_0053 图像与解析把 $f(1)=1$ 作为极限补点使用；原函数在 $x=1$ 处未定义，本卡在结论中仍保留原定义域。
+    - page_0053 的 reconstruction markers 均可由上下文和页图判定为函数名误印，已作为普通 source discrepancy 记录。
+solution:
+  source_solution_summary: 第 (1) 问求导得 $f^{\prime}(x)=\frac{1-\frac1x-\ln x}{(x-1)^2}$。令 $u(x)=1-\frac1x-\ln x$，则 $u^{\prime}(x)=\frac{1-x}{x^2}$，所以 $u$ 在 $(0,1)$ 递增、在 $(1,+\infty)$ 递减，且两侧均小于 $u(1)=0$，故 $f$ 在两个区间上均递减。第 (2) 问，$0<x<1$ 时由 $\ln x<x-1<0$ 得 $f(x)>1$，又 $e^x>x+1$ 得 $\frac{x+1}{e^x}<1$。当 $x>1$ 时，源解给出两法：构造 $g(x)=\ln x-\frac{x^2-1}{e^x}$ 证明 $g(x)>0$；或用 $\ln x\ge\frac{2(x-1)}{x+1}$ 和 $p(x)=\frac{(x+1)^2}{2e^x}<1$ 完成证明。
+  key_steps:
+    - step_id: step_1
+      statement: 第 (1) 问：求导并把导数符号集中到分子。
+      formula_trace:
+        from: $f(x)=\frac{\ln x}{x-1},\quad x\in(0,1)\cup(1,+\infty)$
+        to: $f^{\prime}(x)=\frac{1-\frac1x-\ln x}{(x-1)^2}$
+        operation: 用商法则求导，分母平方恒为正。
+        why: 单调性只需判断 $u(x)=1-\frac1x-\ln x$ 的符号。
+      source_ref: page_0052_ex13_solution_start
+    - step_id: step_2
+      statement: 第 (1) 问：判断 $u(x)$ 在定义域两段内都小于 0。
+      formula_trace:
+        from: $u(x)=1-\frac1x-\ln x$
+        to: $u(x)<u(1)=0\quad(x\in(0,1)\cup(1,+\infty))$
+        operation: 求 $u^{\prime}(x)=\frac{1-x}{x^2}$，得 $u$ 在 $(0,1)$ 递增、在 $(1,+\infty)$ 递减。
+        why: 两段都以 $x=1$ 的极限值 0 为上界，因此导数分子为负。
+      source_ref: page_0052_ex13_solution_start
+    - step_id: step_3
+      statement: 第 (1) 问：写出单调区间。
+      formula_trace:
+        from: $f^{\prime}(x)=\frac{u(x)}{(x-1)^2},\quad u(x)<0$
+        to: $f(x)\text{ 在 }(0,1)\text{ 与 }(1,+\infty)\text{ 上均单调递减}$
+        operation: 分母为正，分子为负，所以 $f^{\prime}(x)<0$。
+        why: 原函数在 $x=1$ 断开，两个区间必须分开写。
+      source_ref: page_0053_ex13_solution_continuation
+    - step_id: step_4
+      statement: 第 (2) 问：先处理 $0<x<1$。
+      formula_trace:
+        from: $0<x<1$
+        to: $\frac{\ln x}{x-1}>1>\frac{x+1}{e^x}$
+        operation: 由 $\ln x<x-1<0$，两边除以负数 $x-1$ 后方向反转；由 $e^x>x+1$ 得右侧小于 1。
+        why: 这一段不用复杂构造，夹在 1 的两侧即可。
+      source_ref: page_0053_ex13_solution_continuation
+    - step_id: step_5
+      statement: 第 (2) 问：把 $x>1$ 的目标化成一个新函数为正。
+      formula_trace:
+        from: $\frac{\ln x}{x-1}>\frac{x+1}{e^x},\quad x>1$
+        to: $g(x)=\ln x-\frac{x^2-1}{e^x}>0$
+        operation: 两边同乘正数 $x-1$，并把 $(x-1)(x+1)$ 合成 $x^2-1$。
+        why: $x>1$ 时不等号方向不变，问题变成证明 $g$ 从 1 右侧递增。
+      source_ref: page_0053_ex13_solution_continuation
+    - step_id: step_6
+      statement: 第 (2) 问方法一：证明 $g(x)$ 在 $x>1$ 上递增。
+      formula_trace:
+        from: $g^{\prime}(x)=\frac{e^x+x^3-2x^2-x}{xe^x}$
+        to: $g^{\prime}(x)>0\quad(x>1)$
+        operation: 令 $t(x)=e^x+x^3-2x^2-x$；由 $t^{\prime}(x)=e^x+3x^2-4x-1$、$t^{\prime\prime}(x)=e^x+6x-4>0$ 得 $t^{\prime}(x)>t^{\prime}(1)=e-2>0$，进而 $t(x)>t(1)=e-2>0$。
+        why: 分母 $xe^x$ 为正，分子 $t(x)>0$，所以 $g$ 递增。
+      source_ref: page_0053_ex13_solution_continuation
+    - step_id: step_7
+      statement: 第 (2) 问方法一：由起点极限完成 $x>1$ 的证明。
+      formula_trace:
+        from: $g^{\prime}(x)>0,\quad g(1)=0$
+        to: $g(x)>0\Rightarrow \frac{\ln x}{x-1}>\frac{x+1}{e^x}$
+        operation: 把 $g(1)=0$ 理解为右端连续延拓值，$x>1$ 时递增后严格大于 0。
+        why: 这正对应目标不等式乘以 $x-1$ 后的形式。
+      source_ref: page_0053_ex13_solution_continuation
+    - step_id: step_8
+      statement: 第 (2) 问方法二：用帕德放缩给出另一条证明路线。
+      formula_trace:
+        from: $G(x)=\ln x-\frac{2(x-1)}{x+1}$
+        to: $0<x<1:\ \ln x<\frac{2(x-1)}{x+1};\quad x>1:\ \ln x>\frac{2(x-1)}{x+1}$
+        operation: 由 $G^{\prime}(x)=\frac{(x-1)^2}{x(x+1)^2}\ge0$ 且 $G(1)=0$，按 $x$ 在 1 的左右确定大小方向。
+        why: 这一放缩比普通切线更贴近 $\ln x$，能与 $x^2-1$ 约成同一因子。
+      source_ref: page_0053_ex13_solution_continuation
+    - step_id: step_9
+      statement: 第 (2) 问方法二：用 $p(x)<1$ 控制剩余因子。
+      formula_trace:
+        from: $\frac{2}{x+1}>\frac{x+1}{e^x}$
+        to: $1>\frac{(x+1)^2}{2e^x}$
+        operation: 构造 $p(x)=\frac{(x+1)^2}{2e^x}$，由 $p^{\prime}(x)=\frac{1-x^2}{2e^x}$ 得 $p(x)\le p(1)=\frac2e<1$（在两侧区间取对应端点上界）。
+        why: 该因子为正；结合 $x-1$ 的正负和帕德放缩方向，分别推出两侧目标不等式。
+      source_ref: page_0053_ex13_solution_continuation
+teaching_card:
+  student_title: 对数商先分段，再用帕德放缩比较
+  what_it_trains: 训练含 $\ln x$ 与 $e^x$ 的比较题：先守住定义域和分段方向，再用构造函数或帕德放缩完成精细证明。
+  recognition_cues:
+    - 函数是 $\ln x$ 除以 $x-1$，$x=1$ 是可去但原函数未定义的点。
+    - 右侧 $\frac{x+1}{e^x}$ 与 $(x-1)$ 相乘后会出现 $x^2-1$。
+    - 出现 $\ln x$ 和 $x-1$ 的精细比较，适合尝试 $\frac{2(x-1)}{x+1}$。
+  normalization_moves:
+    - 求导后令 $u(x)=1-\frac1x-\ln x$，不要直接硬判复杂分式。
+    - 先把 $0<x<1$ 用 $f(x)>1>h(x)$ 快速拿下。
+    - $x>1$ 时同乘 $x-1$，构造 $g(x)=\ln x-\frac{x^2-1}{e^x}$。
+    - 另一法用 $G(x)=\ln x-\frac{2(x-1)}{x+1}$ 建立帕德放缩，再用 $p(x)<1$ 收尾。
+  common_failures:
+    - 把 $f(1)=1$ 当成原函数值，忘记它只是极限补点。
+    - 在 $0<x<1$ 时除以 $x-1$ 没有反向。
+    - 构造 $g(x)$ 后只写 $g^{\prime}(x)>0$，没有证明分子 $t(x)>0$。
+    - 使用帕德放缩时把 $0<x<1$ 与 $x>1$ 的方向写反。
+  similar_practice_query: ln x/(x-1) 与 (x+1)/e^x 比较 帕德放缩 对数单身狗 指数找基友
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0052、page_0053 markdown 与页图；例 13 从 page_0052 起头并在 page_0053 完成，page_0054 的“例 13”为新题。
+    - page_0053 的四处 reconstruction markers 都是函数名误印，可由上下文和计算链条直接判定，未列为用户拍板项。

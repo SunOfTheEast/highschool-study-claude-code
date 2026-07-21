@@ -1,0 +1,130 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0080_distance_ex11
+content_revision_id: mst_p0080_distance_ex11-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0080_distance_ex11.card.yaml
+stem: （2024 · 湖南模拟 T15）函数 $f(x)=\ln x$ 图象上一点 $P$ 到直线 $y=2x$ 的最短距离为______。
+answer: |-
+  $\frac{(1+\ln 2)\sqrt{5}}{5}$
+
+  曲线 $y=\ln x$ 上到直线 $y=2x$ 距离最短的位置, 其切线应与 $y=2x$ 平行。由 $f'(x)=1/x=2$ 得切点横坐标 $x=1/2$, 切点为 $(1/2,-\ln2)$。把点代入直线 $2x-y=0$ 的距离公式, 得 $d=(1+\ln2)/\sqrt5=(1+\ln2)\sqrt5/5$。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 用平行切线定位最短距离对应的曲线点。
+      max_score: 1
+    - step_id: step_2
+      description: 求出切点坐标。
+      max_score: 1
+    - step_id: step_3
+      description: 把切点到直线 $2x-y=0$ 的距离算出来。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何量求解
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 切线放缩与凹凸性
+    subroute:
+      - 平行切线定位最短距离
+      - 点到直线距离公式
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $f'(x)=\frac1x=2\Rightarrow x=\frac12$
+      - $P\left(\frac12,-\ln2\right)$
+      - $d=\frac{2\cdot\frac12+\ln2}{\sqrt5}$
+    normalization_moves_used:
+      - 把 $y=2x$ 改写为 $2x-y=0$。
+      - 把“点到直线的最短距离”转化为“找平行切线的切点”。
+      - 把 $\frac{1+\ln2}{\sqrt5}$ 有理化为 $\frac{(1+\ln2)\sqrt5}{5}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不知道为什么令 $f'(x)=2$, 回补导数运算与几何意义。
+      - 若学生不会把 $y=2x$ 写成标准直线方程, 回补代数恒等变形。
+      - 若学生点到直线距离公式用错, 回补几何关系基础。
+  detail_terms:
+    - $y=\ln x$
+    - $y=2x$
+    - $f'(x)=1/x$
+    - $\left(\frac12,-\ln2\right)$
+    - $\frac{(1+\ln2)\sqrt5}{5}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0080_distance_ex11
+source_evidence:
+  source_refs:
+    - ref_id: page_0080
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0080/page_0080.md
+      role: problem_start
+      evidence: lines 23-27 start section 二、直线与曲线的距离问题, give 例 11 题干, and solve it by setting the tangent slope of y=ln x equal to 2 before applying the point-to-line distance formula.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0080.png
+      inspected: true
+      notes: 页图确认 page_0080 顶部是例 10 续解; 例 11 从“二、直线与曲线的距离问题” 下方起头, 题干、切点 x=1/2、距离结果与 markdown 一致。
+  source_context: 本卡只处理 page_0080 新起头的例 11。page_0080 顶部的例 10 是 page_0079 起头题目的续解, 不在本卡和本批次 C 组新建范围内。
+  source_influence:
+    - "保留源页路线: 最短距离出现在与给定直线平行的切线处。"
+    - 保留源页用点到直线 y=2x 的距离公式计算最终答案。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 湖南模拟 T15）函数 $f(x)=\ln x$ 图象上一点 $P$ 到直线 $y=2x$ 的最短距离为______。
+  parts: *a1
+  choices: []
+  answer: $\frac{(1+\ln 2)\sqrt{5}}{5}$
+  fidelity_notes:
+    - 源题为填空题, 无分问和选项。
+    - 源页把答案也写作 $\frac{1+\ln 2}{\sqrt5}$ 的等价有理化形式。
+solution:
+  source_solution_summary: 曲线 $y=\ln x$ 上到直线 $y=2x$ 距离最短的位置, 其切线应与 $y=2x$ 平行。由 $f'(x)=1/x=2$ 得切点横坐标 $x=1/2$, 切点为 $(1/2,-\ln2)$。把点代入直线 $2x-y=0$ 的距离公式, 得 $d=(1+\ln2)/\sqrt5=(1+\ln2)\sqrt5/5$。
+  key_steps:
+    - step_id: step_1
+      statement: 用平行切线定位最短距离对应的曲线点。
+      formula_trace:
+        from: $f(x)=\ln x,\quad y=2x$ 的斜率为 $2$
+        to: $f'(x)=\frac1x=2\Rightarrow x=\frac12$
+        operation: 令曲线切线斜率等于给定直线斜率。
+        why: 曲线到直线的最短连线垂直于给定直线, 因而该处切线与给定直线平行。
+      source_ref: page_0080:line 27
+    - step_id: step_2
+      statement: 求出切点坐标。
+      formula_trace:
+        from: $x=\frac12$
+        to: $P\left(\frac12,-\ln2\right)$
+        operation: 把 $x=1/2$ 代入 $y=\ln x$。
+        why: 距离公式需要具体点坐标。
+      source_ref: page_0080:line 27
+    - step_id: step_3
+      statement: 把切点到直线 $2x-y=0$ 的距离算出来。
+      formula_trace:
+        from: $P\left(\frac12,-\ln2\right),\quad 2x-y=0$
+        to: $d=\frac{2\cdot\frac12+\ln2}{\sqrt5}=\frac{(1+\ln2)\sqrt5}{5}$
+        operation: 套用点到直线距离公式并有理化。
+        why: 该切点给出的距离就是全局最短距离。
+      source_ref: page_0080:line 27
+teaching_card:
+  student_title: 用平行切线找曲线到直线的最短距离
+  what_it_trains: "训练学生把曲线到直线的距离问题转成切线斜率问题: 先找与给定直线平行的切线, 再用切点到直线的距离公式收尾。"
+  recognition_cues:
+    - 题目问曲线上一点到固定直线的最短距离。
+    - 曲线是可导函数图象, 固定直线斜率很容易读出。
+    - 最短连线应垂直于直线, 所以切线应平行于直线。
+  normalization_moves:
+    - 读出 $y=2x$ 的斜率为 2。
+    - 令 $f'(x)=2$ 定位切点。
+    - 将直线写为 $2x-y=0$ 后套距离公式。
+  common_failures:
+    - 直接取某个端点或特殊点, 没有用切线斜率定位。
+    - 把点到直线距离写成到 $x$ 轴或 $y$ 轴的距离。
+    - 把切点纵坐标误写为 $\ln2$ 而漏掉负号。
+  similar_practice_query: ln x 曲线到直线 y=2x 最短距离 平行切线 点到直线距离
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

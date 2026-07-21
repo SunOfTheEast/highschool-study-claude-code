@@ -1,0 +1,202 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0139_ln_reverse_formula_ex07
+content_revision_id: mst_p0139_ln_reverse_formula_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0139_ln_reverse_formula_ex07.card.yaml
+stem: |-
+  （2025·广东韶关北中月考）已知 $f(x)$ 的导函数 $f^{\prime}(x)$，若满足 $xf^{\prime}(x)-f(x)=x^2+x$，且 $f(1)\geqslant1$，则 $f(x)$ 的解析式可能是（ ）
+  A. $x^2-x\ln x+x$
+  B. $x^2-x\ln x-x$
+  C. $x^2+x\ln x+x$
+  D. $x^2+2x\ln x+x$
+answer: |
+  C
+
+  由
+  \[
+  xf^{\prime}(x)-f(x)=x^2+x
+  \]
+  得
+  \[
+  \frac{xf^{\prime}(x)-f(x)}{x^2}=1+\frac1x
+  \Rightarrow
+  \left(\frac{f(x)}{x}\right)'=1+\frac1x.
+  \]
+  积分得
+  \[
+  \frac{f(x)}{x}=x+\ln x+C,
+  \]
+  所以
+  \[
+  f(x)=x^2+x\ln x+Cx.
+  \]
+  由 $f(1)\ge1$，
+  \[
+  1+C\ge1 \Rightarrow C\ge0.
+  \]
+  四个选项里与该族一致且常数满足条件的是
+  \[
+  x^2+x\ln x+x,
+  \]
+  即选 C。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把题设改写成 $\left(\frac{f(x)}x\right)'$ 模板。
+      max_score: 1
+    - step_id: step_2
+      description: 积分还原解析式通项。
+      max_score: 1
+    - step_id: step_3
+      description: 用 $f(1)\ge1$ 限制常数并匹配选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 抽象函数性质
+        target: 由导数关系还原解析式并筛选选项
+        result: 见 source_solution_summary
+  method:
+    primary: 逆向构造法
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 指数对数比大小
+      - 作商判定常数
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 抽象函数结构
+    evidence:
+      - $xf^{\prime}-f$ 与 $\left(\frac{f}{x}\right)'$ 的分子同构。
+      - 积分后自然出现 $x\ln x$ 与线性常数项 $Cx$。
+    normalization_moves_used:
+      - 除以 $x^2$ 归一化。
+      - 先求通解，再代入 $x=1$ 缩小常数范围。
+      - 最后回到选项逐项匹配。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会识别 $\left(\frac{f}{x}\right)'$，回补导数运算与几何意义。
+      - 若学生在积分 $1+1/x$ 时丢掉 $\ln x$，回补指数对数基础。
+      - 若学生不会从 $C\ge0$ 做选项映射，回补代数恒等变形。
+  detail_terms:
+    - $\left(\frac{f(x)}x\right)'=1+\frac1x$
+    - $f(x)=x^2+x\ln x+Cx$
+    - $f(1)=1+C$
+    - $C\ge0$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0139_ln_reverse_formula_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0139
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0139/page_0139.md
+      role: problem_start
+      evidence: page_0139 中部给出例7完整题干、A-D选项与解析，答案 C。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0139.png
+      inspected: true
+      notes: 已核对页图，例7完整位于 page_0139。
+  source_context: 例7在 page_0139 单页完成。
+  source_influence:
+    - 保留源页将 $xf^{\prime}(x)-f(x)$ 除以 $x^2$ 后识别为 $\left(\frac{f(x)}{x}\right)'$。
+    - 保留源页积分得到 $f(x)=x^2+x\ln x+Cx$。
+    - 保留源页由 $f(1)\ge1$ 推 $C\ge0$ 后筛出 C。
+  source_discrepancies: []
+original_problem:
+  stem: （2025·广东韶关北中月考）已知 $f(x)$ 的导函数 $f^{\prime}(x)$，若满足 $xf^{\prime}(x)-f(x)=x^2+x$，且 $f(1)\geqslant1$，则 $f(x)$ 的解析式可能是（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $x^2-x\ln x+x$
+      text_latex: $x^2-x\ln x+x$
+    - label: B
+      text_raw: $x^2-x\ln x-x$
+      text_latex: $x^2-x\ln x-x$
+    - label: C
+      text_raw: $x^2+x\ln x+x$
+      text_latex: $x^2+x\ln x+x$
+    - label: D
+      text_raw: $x^2+2x\ln x+x$
+      text_latex: $x^2+2x\ln x+x$
+  answer: C
+  fidelity_notes:
+    - 源页直接使用 $\ln x$，按教材语境默认比较区间为 $x>0$。
+solution:
+  source_solution_summary: |
+    由
+    \[
+    xf^{\prime}(x)-f(x)=x^2+x
+    \]
+    得
+    \[
+    \frac{xf^{\prime}(x)-f(x)}{x^2}=1+\frac1x
+    \Rightarrow
+    \left(\frac{f(x)}{x}\right)'=1+\frac1x.
+    \]
+    积分得
+    \[
+    \frac{f(x)}{x}=x+\ln x+C,
+    \]
+    所以
+    \[
+    f(x)=x^2+x\ln x+Cx.
+    \]
+    由 $f(1)\ge1$，
+    \[
+    1+C\ge1 \Rightarrow C\ge0.
+    \]
+    四个选项里与该族一致且常数满足条件的是
+    \[
+    x^2+x\ln x+x,
+    \]
+    即选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 把题设改写成 $\left(\frac{f(x)}x\right)'$ 模板。
+      formula_trace:
+        from: $xf^{\prime}(x)-f(x)=x^2+x$
+        to: $\left(\frac{f(x)}{x}\right)'=1+\frac1x$
+        operation: 两边同除 $x^2$。
+        why: 把未知函数关系转为可积分的一阶导数。
+      source_ref: page_0139
+    - step_id: step_2
+      statement: 积分还原解析式通项。
+      formula_trace:
+        from: $\left(\frac{f(x)}{x}\right)'=1+\frac1x$
+        to: $f(x)=x^2+x\ln x+Cx$
+        operation: 两边积分并乘回 x。
+        why: 显式表达后可用条件定 C。
+      source_ref: page_0139
+    - step_id: step_3
+      statement: 用 $f(1)\ge1$ 限制常数并匹配选项。
+      formula_trace:
+        from: $f(1)=1+C\ge1$
+        to: $C\ge0\Rightarrow\text{选 C}$
+        operation: 代入 x=1，逐项核对候选式。
+        why: 完成“可能是”类型单选判断。
+      source_ref: page_0139
+teaching_card:
+  student_title: 先作商积分，再用 $f(1)\ge1$ 锁定常数
+  what_it_trains: 训练把 $xf^{\prime}-f$ 型条件转成作商导数，快速还原解析式。
+  recognition_cues:
+    - 条件含 $xf^{\prime}(x)-f(x)$。
+    - 题目要求“解析式可能是”并给出带 $\ln x$ 的候选。
+  normalization_moves:
+    - 同除 $x^2$ 识别 $\left(\frac{f}{x}\right)'$。
+    - 积分得到通式 $x^2+x\ln x+Cx$。
+    - 代点条件定 C 并筛选。
+  common_failures:
+    - 把 $\int\frac1x\,dx$ 误写成 $\frac1x$。
+    - 忘记保留积分常数 C。
+    - 只看符号不核对具体选项系数。
+  similar_practice_query: xf'-f=x^2+x 作商 f/x 导数 积分 解析式 选择题
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,201 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0173_log_line_b_over_a_range_ex17
+content_revision_id: mst_p0173_log_line_b_over_a_range_ex17-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0173_log_line_b_over_a_range_ex17.card.yaml
+stem: |-
+  （2025 · 桃城区校级三模 T8）已知在函数 $f(x)=ax+b\ (a>0,b>0)$，$g(x)=\ln(x+2)$，若对 $\forall x>-2$，$f(x)\geqslant g(x)$ 恒成立，则实数 $\frac{b}{a}$ 的取值范围为（  ）
+  A. $[0,+\infty)$
+  B. $[1,+\infty)$
+  C. $[2,+\infty)$
+  D. $[e,+\infty)$
+answer: |
+  B
+
+  由
+  \[
+  ax+b=0\Rightarrow x=-\frac ba,
+  \]
+  以及
+  \[
+  \ln(x+2)=0\Rightarrow x=-1.
+  \]
+  由源解的零点比大小模型，当直线 $ax+b$ 在定义域内恒压住 $\ln(x+2)$ 时，有
+  \[
+  -\frac ba\le -1,
+  \]
+  即
+  \[
+  \frac ba\ge1.
+  \]
+  所以
+  \[
+  \frac ba\in[1,+\infty),
+  \]
+  选 B。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 求直线零点。
+      max_score: 1
+    - step_id: step_2
+      description: 求对数函数零点。
+      max_score: 1
+    - step_id: step_3
+      description: 用零点比大小建立不等式。
+      max_score: 1
+    - step_id: step_4
+      description: 整理为目标范围并匹配选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 含参数分类讨论
+    subroute:
+      - 零点比大小
+      - 直线对数零点对齐
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+    evidence:
+      - 比较对象是 $ax+b$ 与 $\ln(x+2)$。
+      - 结论直接通过 $-b/a$ 与 $-1$ 的位置关系得到。
+    normalization_moves_used:
+      - 把“恒成立”转为零点位置约束。
+      - 先固定对数零点，再读取线性零点中的参数比值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生把 $\ln(x+2)=0$ 解错，回补指数对数基础。
+      - 若学生不清楚为何比较零点即可给出参数范围，回补函数性质与图像。
+      - 若学生在 $-\frac ba\le-1$ 到 $\frac ba\ge1$ 的符号翻转上出错，回补代数恒等变形。
+  detail_terms:
+    - $ax+b$
+    - $\ln(x+2)$
+    - $x=-\frac ba$
+    - $x=-1$
+    - $\frac ba\ge1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0173_log_line_b_over_a_range_ex17
+source_evidence:
+  source_refs:
+    - ref_id: page_0173_ex17_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0173/page_0173.md
+      role: problem_start
+      evidence: lines 25-30 给出例17题干与 A-D 选项，求 $\frac{b}{a}$ 的取值范围。
+    - ref_id: page_0173_ex17_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0173/page_0173.md
+      role: solution
+      evidence: line 32 解析以零点比大小比较 $x=-b/a$ 与 $x=-1$，得到 $\frac{b}{a}\ge1$，答案 B。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0173.png
+      inspected: true
+      notes: 已核对页图：例17题干、选项、解析与 markdown 一致；答案字母为 B。
+  source_context: 本题位于 page_0173 中部，题干与解析同页结束。
+  source_influence:
+    - 保留源解“直线零点 vs 对数零点”的最短链路。
+    - 保留题干参数条件 $a>0,b>0$。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 · 桃城区校级三模 T8）已知在函数 $f(x)=ax+b\ (a>0,b>0)$，$g(x)=\ln(x+2)$，若对 $\forall x>-2$，$f(x)\geqslant g(x)$ 恒成立，则实数 $\frac{b}{a}$ 的取值范围为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $[0,+\infty)$
+      text_latex: $[0,+\infty)$
+    - label: B
+      text_raw: $[1,+\infty)$
+      text_latex: $[1,+\infty)$
+    - label: C
+      text_raw: $[2,+\infty)$
+      text_latex: $[2,+\infty)$
+    - label: D
+      text_raw: $[e,+\infty)$
+      text_latex: $[e,+\infty)$
+  answer: B
+  fidelity_notes:
+    - 题干与解析同页完整，无跨页。
+    - 题干显式给出 $a>0,b>0$，因此 $\frac{b}{a}$ 有定义且为正。
+solution:
+  source_solution_summary: |
+    由
+    \[
+    ax+b=0\Rightarrow x=-\frac ba,
+    \]
+    以及
+    \[
+    \ln(x+2)=0\Rightarrow x=-1.
+    \]
+    由源解的零点比大小模型，当直线 $ax+b$ 在定义域内恒压住 $\ln(x+2)$ 时，有
+    \[
+    -\frac ba\le -1,
+    \]
+    即
+    \[
+    \frac ba\ge1.
+    \]
+    所以
+    \[
+    \frac ba\in[1,+\infty),
+    \]
+    选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 求直线零点。
+      formula_trace:
+        from: $ax+b=0$
+        to: $x=-\frac ba$
+        operation: 一次方程求根。
+        why: 零点位置承载参数比 $\frac ba$。
+      source_ref: page_0173_ex17_solution
+    - step_id: step_2
+      statement: 求对数函数零点。
+      formula_trace:
+        from: $\ln(x+2)=0$
+        to: $x=-1$
+        operation: 令 $x+2=1$。
+        why: 提供固定参照零点。
+      source_ref: page_0173_ex17_solution
+    - step_id: step_3
+      statement: 用零点比大小建立不等式。
+      formula_trace:
+        from: $f(x)\ge g(x)\ (x>-2)$
+        to: $-\frac ba\le -1$
+        operation: 按源解使用零点比大小结论。
+        why: 把函数包络关系转成参数不等式。
+      source_ref: page_0173_ex17_solution
+    - step_id: step_4
+      statement: 整理为目标范围并匹配选项。
+      formula_trace:
+        from: $-\frac ba\le -1$
+        to: $\frac ba\ge1\Rightarrow [1,+\infty)$
+        operation: 同乘 $-1$ 改变不等号方向。
+        why: 得到选项 B。
+      source_ref: page_0173_ex17_solution
+teaching_card:
+  student_title: 先看零点，再读参数比
+  what_it_trains: 训练“直线压对数曲线”的恒成立题里，用固定零点与参数零点做位置比较，快速拿到 $\frac ba$ 的范围。
+  recognition_cues:
+    - 题面给出 $ax+b$ 与 $\ln(x+2)$ 的全区间比较。
+    - 目标量是 $\frac ba$。
+    - 对数零点固定在 $x=-1$。
+  normalization_moves:
+    - 求出两边零点。
+    - 按包络关系比较零点左右。
+    - 把零点不等式转成参数比范围。
+  common_failures:
+    - 把 $\ln(x+2)=0$ 误写成 $x=1$。
+    - 比较零点时方向写反。
+    - 最后漏掉范围右侧 $+\infty$。
+  similar_practice_query: ax+b 与 ln(x+2) 恒成立 b/a 范围 零点比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

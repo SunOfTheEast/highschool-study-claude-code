@@ -1,0 +1,248 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0155_exp_sum_difference_distance_ex38
+content_revision_id: mst_p0155_exp_sum_difference_distance_ex38-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0155_exp_sum_difference_distance_ex38.card.yaml
+stem: |-
+  （2023·四省联考）已知 $a,b,c$ 满足 $a=\log_5(2^b+3^b)$，$c=\log_3(5^b-2^b)$，则（  ）
+  A. $|a-c|\ge|b-c|,\ |a-b|\ge|b-c|$
+  B. $|a-c|\ge|b-c|,\ |a-b|\le|b-c|$
+  C. $|a-c|\le|b-c|,\ |a-b|\ge|b-c|$
+  D. $|a-c|\le|b-c|,\ |a-b|\le|b-c|$
+answer: |
+  B
+
+  由定义可得
+  \[
+  2^b+3^b=5^a,\qquad 3^c=5^b-2^b.
+  \]
+  先比较相对位置。源解用
+  \[
+  2^2+3^2<5^2,\qquad 3^2<5^2-2^2
+  \]
+  得出
+  \[
+  c\ge b\ge a>1.
+  \]
+  因而在数轴上
+  \[
+  |a-c|\ge|b-c|.
+  \]
+  再把两式相减消去 $2^b$：
+  \[
+  5^a-5^b=3^b-3^c.
+  \]
+  该式表示“底数更大的指数函数 $5^x$ 与底数较小的指数函数 $3^x$ 在两侧产生等高差分”。由于 $5^x$ 增长更快，要产生同样的函数值差，所需横向间隔更短，故
+  \[
+  |a-b|\le|b-c|.
+  \]
+  与上式合并可得
+  \[
+  |a-c|\ge|b-c|,\quad |a-b|\le|b-c|,
+  \]
+  选 B。
+  源法二在 page_0156 顶部以“交点越高开口越小，交点越低开口越大”的三图直观结论再次验证同一结果。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 由题设对指数和、指数差的比较先确定 $a,b,c$ 大致顺序。
+      max_score: 1
+    - step_id: step_2
+      description: 先得到第一条绝对值关系。
+      max_score: 1
+    - step_id: step_3
+      description: 相减消元，把第二条关系转成“等差分”比较。
+      max_score: 1
+    - step_id: step_4
+      description: 用增长率与开口差距判断第二条绝对值关系。
+      max_score: 1
+    - step_id: step_5
+      description: 合并两条结论并对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较 $|a-c|,|a-b|,|b-c|$ 三段距离关系。
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 同构变形与换元法
+      - 对称化与偏移
+    subroute:
+      - 两式相减消去 $2^b$
+      - 同差分比较横向间距
+      - 开口差距（交点越高开口越小）
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 同构结构
+      - 非对称结构
+    evidence:
+      - 题设把未知量放在不同底数指数函数的“和值/差值”位置。
+      - 核心式 $5^a-5^b=3^b-3^c$ 是跨函数同差分比较。
+      - 法二三图直接展示同高处开口差距与横向距离关系。
+    normalization_moves_used:
+      - 先把对数定义还原成指数等式。
+      - 两式相减做同构消元。
+      - 用增长率差转译为距离不等式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把对数定义改写成指数方程，回补指数对数基础。
+      - 若学生不会从 $c\ge b\ge a$ 转成绝对值距离关系，回补函数性质与图像。
+      - 若学生不会理解“同差分下快函数区间更短”，回补导数单调极值基础。
+  detail_terms:
+    - $2^b+3^b=5^a$
+    - $3^c=5^b-2^b$
+    - $5^a-5^b=3^b-3^c$
+    - $|a-b|\le|b-c|$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0155_exp_sum_difference_distance_ex38
+source_evidence:
+  source_refs:
+    - ref_id: page_0155_ex38_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0155/page_0155.md
+      role: problem_start
+      evidence: 例38题头与四个含绝对值比较的选项起于 page_0155。
+    - ref_id: page_0155_ex38_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0155/page_0155.md
+      role: solution
+      evidence: page_0155 给出法一与法二前半：先得 $c\ge b\ge a>1$，并给出差分等式 $5^a-5^b=3^b-3^c$。
+    - ref_id: page_0156_ex38_solution_cont
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0156/page_0156.md
+      role: continuation
+      evidence: page_0156 顶部补完法二末句“交点越高开口越小，交点越低开口越大，所以 $|a-b|\le|b-c|$，故选 B”。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0155.png
+      inspected: true
+      notes: 已核对页图：例38题干完整，法一完整，法二在页底截断。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0156.png
+      inspected: true
+      notes: 已核对页图：例38续句与三幅配图在 page_0156 顶部完整。
+  source_context: 例38题头在 page_0155，解析跨到 page_0156 顶部结束；page_0156 后续“第二节”不属于本题。
+  source_influence:
+    - 保留源解法一：先定顺序 $c\ge b\ge a>1$，再比较两段距离。
+    - 保留源解法二：三图“开口差距”直观说明 $|a-b|\le|b-c|$。
+    - 保留最终判断：选 B。
+  source_discrepancies:
+    - page_0155 markdown 在法二末句有截断标记；已用 page_0156 顶部续页补全为“交点越高开口越小，交点越低开口越大，所以 $|a-b|\le|b-c|$”。
+original_problem:
+  stem: （2023·四省联考）已知 $a,b,c$ 满足 $a=\log_5(2^b+3^b)$，$c=\log_3(5^b-2^b)$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $|a-c|\ge|b-c|,\ |a-b|\ge|b-c|$
+      text_latex: $|a-c|\ge|b-c|,\ |a-b|\ge|b-c|$
+    - label: B
+      text_raw: $|a-c|\ge|b-c|,\ |a-b|\le|b-c|$
+      text_latex: $|a-c|\ge|b-c|,\ |a-b|\le|b-c|$
+    - label: C
+      text_raw: $|a-c|\le|b-c|,\ |a-b|\ge|b-c|$
+      text_latex: $|a-c|\le|b-c|,\ |a-b|\ge|b-c|$
+    - label: D
+      text_raw: $|a-c|\le|b-c|,\ |a-b|\le|b-c|$
+      text_latex: $|a-c|\le|b-c|,\ |a-b|\le|b-c|$
+  answer: B
+  fidelity_notes:
+    - 法二结尾由 page_0156 顶部续页补全后，与法一结论一致均指向 B。
+    - 题内配图是“距离比较”结论的重要直观证据。
+solution:
+  source_solution_summary: |
+    由定义可得
+    \[
+    2^b+3^b=5^a,\qquad 3^c=5^b-2^b.
+    \]
+    先比较相对位置。源解用
+    \[
+    2^2+3^2<5^2,\qquad 3^2<5^2-2^2
+    \]
+    得出
+    \[
+    c\ge b\ge a>1.
+    \]
+    因而在数轴上
+    \[
+    |a-c|\ge|b-c|.
+    \]
+    再把两式相减消去 $2^b$：
+    \[
+    5^a-5^b=3^b-3^c.
+    \]
+    该式表示“底数更大的指数函数 $5^x$ 与底数较小的指数函数 $3^x$ 在两侧产生等高差分”。由于 $5^x$ 增长更快，要产生同样的函数值差，所需横向间隔更短，故
+    \[
+    |a-b|\le|b-c|.
+    \]
+    与上式合并可得
+    \[
+    |a-c|\ge|b-c|,\quad |a-b|\le|b-c|,
+    \]
+    选 B。
+    源法二在 page_0156 顶部以“交点越高开口越小，交点越低开口越大”的三图直观结论再次验证同一结果。
+  key_steps:
+    - step_id: step_1
+      statement: 由题设对指数和、指数差的比较先确定 $a,b,c$ 大致顺序。
+      formula_trace:
+        from: $2^b+3^b=5^a,\ 3^c=5^b-2^b$
+        to: $c\ge b\ge a>1$
+        operation: 利用源解给出的 $x=2$ 基准比较并结合单调性。
+        why: 先固定三点在数轴上的左右位置。
+      source_ref: page_0155_ex38_solution_start
+    - step_id: step_2
+      statement: 先得到第一条绝对值关系。
+      formula_trace:
+        from: $c\ge b\ge a$
+        to: $|a-c|\ge|b-c|$
+        operation: 同一端点 $c$ 下比较两段距离。
+        why: 直接锁定四个选项中的第一半真假。
+      source_ref: page_0155_ex38_solution_start
+    - step_id: step_3
+      statement: 相减消元，把第二条关系转成“等差分”比较。
+      formula_trace:
+        from: $2^b+3^b=5^a,\ 3^c=5^b-2^b$
+        to: $5^a-5^b=3^b-3^c$
+        operation: 两式同减 $2^b$。
+        why: 把问题转成两类指数函数在不同区间的差分长度比较。
+      source_ref: page_0155_ex38_solution_start
+    - step_id: step_4
+      statement: 用增长率与开口差距判断第二条绝对值关系。
+      formula_trace:
+        from: $5^a-5^b=3^b-3^c$，且 $5^x$ 比 $3^x$ 增长更快
+        to: $|a-b|\le|b-c|$
+        operation: 同差分下“快函数区间更短、慢函数区间更长”。
+        why: 完成选项第二半判定。
+      source_ref: page_0156_ex38_solution_cont
+    - step_id: step_5
+      statement: 合并两条结论并对应选项。
+      formula_trace:
+        from: $|a-c|\ge|b-c|$ 且 $|a-b|\le|b-c|$
+        to: 选 B
+        operation: 与 A-D 逐项匹配。
+        why: 得到唯一正确项。
+      source_ref: page_0156_ex38_solution_cont
+teaching_card:
+  student_title: 指数和差同差分下的距离比较
+  what_it_trains: 训练把混合对数定义统一成指数方程后，通过消元与增长率差异比较三段数轴距离。
+  recognition_cues:
+    - 未知量出现在 $\log$ 的真数与底数对应的指数位置。
+    - 选项直接比较绝对值距离。
+    - 题内给了多幅指数函数对比图。
+  normalization_moves:
+    - 先还原为 $2^b+3^b=5^a,\ 3^c=5^b-2^b$。
+    - 先定顺序，再相减消元。
+    - 把函数差分比较转成横向距离比较。
+  common_failures:
+    - 只用 $c\ge b\ge a$ 就草率判定两条绝对值关系都同向。
+    - 相减后得到等式但不会解释成“同差分下区间长短”。
+    - 忽略 page_0156 顶部续句，漏掉法二最终结论。
+  similar_practice_query: log_5(2^b+3^b) log_3(5^b-2^b) 绝对值距离 指数差分
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 例38解析末句由 page_0156 顶部续页补全后，与 page_0155 法一结论一致。

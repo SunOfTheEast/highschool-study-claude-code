@@ -1,0 +1,217 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0267_lnx_over_xminus1_power_bound_derivative_extreme_ex7
+content_revision_id: mst_p0267_lnx_over_xminus1_power_bound_derivative_extreme_ex7-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0267_lnx_over_xminus1_power_bound_derivative_extreme_ex7.card.yaml
+stem: |-
+  （2024 · 重庆南开中学期末）已知函数 $f(x)=\frac{\ln x}{x-1}$。
+  1. 求 $f(x)$ 的单调性。
+  2. 若 $f(x)<x^a$，求实数 $a$ 的取值集合。
+answer: |-
+  第(1)问：$f(x)$ 在 $(0,1)$ 和 $(1,+\infty)$ 上均单调递减，无单调增区间。第(2)问：$a\in\{-\frac12\}$。
+
+  第(1)问定义域为 $(0,1)\cup(1,+\infty)$， $f^\prime(x)=\frac{1-\frac1x-\ln x}{(x-1)^2}$。令 $g(x)=1-\frac1x-\ln x$，则 $g^\prime(x)=\frac{1-x}{x^2}$，在 $(0,1)$ 上递增、 在 $(1,+\infty)$ 上递减，且两侧都以 $g(1)=0$ 为上界， 故 $g(x)<0$，所以 $f$ 在两个定义区间上均递减。第(2)问 $f(x)<x^a$ 等价于：$x>1$ 时 $h(x)=x^{a+1}-x^a-\ln x>0$，$0<x<1$ 时 $h(x)<0$。 因 $h(1)=0$、$h^\prime(1)=0$，这是导函数极点效应； 再令 $\varphi(x)=(a+1)x^{a+1}-ax^a-1$， $\varphi^\prime(x)=x^{a-1}[(a+1)^2x-a^2]$。通过 $x_0=\frac{a^2}{(a+1)^2}$ 与 1 的位置分类，除 $a=-\frac12$ 外均与所需分侧符号矛盾，因此 $a=-\frac12$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 第(1)问：求导并抽出分子。
+      max_score: 1
+    - step_id: step_2
+      description: 第(1)问：证明分子恒负。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问：把不等式改成分侧符号问题。
+      max_score: 1
+    - step_id: step_4
+      description: 第(2)问：识别导函数极点效应。
+      max_score: 1
+    - step_id: step_5
+      description: 第(2)问：用二阶信息锁候选。
+      max_score: 1
+    - step_id: step_6
+      description: 第(2)问：分类排除其余参数。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 1 问
+        result: $f$ 在 $(0,1)$ 和 $(1,+\infty)$ 上均单调递减。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $a\in\{-\frac12\}$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 局部逼近与找点
+      - 含参数分类讨论
+      - 充分/必要性探路
+    subroute:
+      - 导函数极点效应
+      - 开区间分界点 $x=1$
+      - 分侧符号要求
+      - $x_0=\frac{a^2}{(a+1)^2}$ 分类
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 指对复合结构
+      - 特殊幂函数与指数函数结构
+      - 不等式工具结构
+    evidence:
+      - $\frac{\ln x}{x-1}$
+      - $x^a$
+      - $h(1)=0$
+      - $h^\prime(1)=0$
+      - $x_0=\frac{a^2}{(a+1)^2}$
+    normalization_moves_used:
+      - 先判定 $\frac{\ln x}{x-1}$ 的单调性。
+      - 按 $x-1$ 的符号把目标改成 $h$ 的分侧符号。
+      - 把 $x=1$ 视为开区间接触点，而不是定义域内点。
+      - 用 $\varphi^\prime$ 的零点位置排除错误参数段。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会商法则和单调性判断，回补导数运算与几何意义。
+      - 若学生乘负数不等式方向出错，回补不等式工具基础。
+      - 若学生忘记 $x=1$ 不在定义域，回补函数三要素与定义域。
+      - 若学生处理 $x^a$ 求导困难，回补指数对数基础。
+      - 若学生分类讨论混乱，回补代数恒等变形。
+  detail_terms:
+    - $\frac{\ln x}{x-1}$
+    - $x^a$
+    - 导函数极点效应
+    - 分侧符号
+    - $x=1$ 开区间接触
+    - $a=-\frac12$
+parts: &a1
+  - id: "1"
+    text: 求 $f(x)$ 的单调性。
+  - id: "2"
+    text: 若 $f(x)<x^a$，求实数 $a$ 的取值集合。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0267_lnx_over_xminus1_power_bound_derivative_extreme_ex7
+source_evidence:
+  source_refs:
+    - ref_id: page_0267_section_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0267/page_0267.md
+      role: local_context
+      evidence: page_0267 进入“3. 导函数极点效应”，说明可利用导函数极点效应构造二次切线。
+    - ref_id: page_0267_ex7_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0267/page_0267.md
+      role: problem_start
+      evidence: page_0267 给出例7题头：$f(x)=\frac{\ln x}{x-1}$；第(1)问求单调性，第(2)问若 $f(x)<x^a$ 求 $a$ 的取值集合。
+    - ref_id: page_0267_ex7_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0267/page_0267.md
+      role: solution
+      evidence: page_0267 例7解析给出定义域、导数和 $g(x)=1-\frac1x-\ln x$ 的单调性；第(2)问构造 $h(x)=x^{a+1}-x^a-\ln x$，并引入 $\varphi(x)=(a+1)x^{a+1}-ax^a-1$。
+    - ref_id: page_0268_ex7_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0268/page_0268.md
+      role: solution
+      evidence: page_0268 页首延续例7：分 $x_0=\frac{a^2}{(a+1)^2}$ 与 1 的大小讨论，排除除 $a=-\frac12$ 外的情况，结论为 $\{-\frac12\}$。
+    - ref_id: page_0268_ex8_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0268/page_0268.md
+      role: local_context
+      evidence: page_0268 随后另起例8，说明例7在 page_0268 上半页闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0267.png
+      inspected: true
+      notes: 已核对页图：例7题头与解析起于 page_0267 下半页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0268.png
+      inspected: true
+      notes: 已核对页图：page_0268 上半页为例7续解和三幅 $h(x)$ 图，随后另起例8。
+  source_context: 本卡处理 page_0267 起头、page_0268 上半页续完的例7；page_0268 例8排除。
+  source_influence:
+    - 保留第(1)问：用 $g(x)=1-\frac1x-\ln x$ 判定 $f^\prime(x)<0$。
+    - 保留第(2)问：根据 $x>1$ 与 $0<x<1$ 把目标转成 $h(x)>0$ / $h(x)<0$ 的分侧符号要求。
+    - 保留导函数极点效应：$h(1)=0$、$h^\prime(1)=0$，再看 $\varphi^\prime(1)=2a+1$ 和 $x_0=\frac{a^2}{(a+1)^2}$。
+    - 保留三类图像/分类排除，最终只留下 $a=-\frac12$。
+  source_discrepancies:
+    - type: corrected_anchor_point
+      source_ref: page_0268_ex7_solution_continuation
+      observed: source/OCR writes $h(0)=0$ in the continuation when comparing $h(x)$ to the zero value.
+      resolved_as: use $h(1)=0$ throughout the sign discussion.
+      reason: $h(x)=x^{a+1}-x^a-\ln x$ satisfies $h(1)=0$; $h(0)$ is not the relevant defined anchor and the surrounding text/graphs use the split point $x=1$.
+original_problem:
+  stem: （2024 · 重庆南开中学期末）已知函数 $f(x)=\frac{\ln x}{x-1}$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问：$f(x)$ 在 $(0,1)$ 和 $(1,+\infty)$ 上均单调递减，无单调增区间。第(2)问：$a\in\{-\frac12\}$。
+  fidelity_notes:
+    - 定义域为 $(0,1)\cup(1,+\infty)$。
+    - 第(2)问的分侧符号来自分母 $x-1$ 在 1 两侧变号。
+solution:
+  source_solution_summary: 第(1)问定义域为 $(0,1)\cup(1,+\infty)$， $f^\prime(x)=\frac{1-\frac1x-\ln x}{(x-1)^2}$。令 $g(x)=1-\frac1x-\ln x$，则 $g^\prime(x)=\frac{1-x}{x^2}$，在 $(0,1)$ 上递增、 在 $(1,+\infty)$ 上递减，且两侧都以 $g(1)=0$ 为上界， 故 $g(x)<0$，所以 $f$ 在两个定义区间上均递减。第(2)问 $f(x)<x^a$ 等价于：$x>1$ 时 $h(x)=x^{a+1}-x^a-\ln x>0$，$0<x<1$ 时 $h(x)<0$。 因 $h(1)=0$、$h^\prime(1)=0$，这是导函数极点效应； 再令 $\varphi(x)=(a+1)x^{a+1}-ax^a-1$， $\varphi^\prime(x)=x^{a-1}[(a+1)^2x-a^2]$。通过 $x_0=\frac{a^2}{(a+1)^2}$ 与 1 的位置分类，除 $a=-\frac12$ 外均与所需分侧符号矛盾，因此 $a=-\frac12$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问：求导并抽出分子。
+      formula_trace:
+        from: $f(x)=\frac{\ln x}{x-1}$
+        to: $f^\prime(x)=\frac{1-\frac1x-\ln x}{(x-1)^2}$
+        operation: 商法则求导。
+        why: 分母平方为正，单调性只看分子符号。
+      source_ref: page_0267_ex7_solution_start
+    - step_id: step_2
+      statement: 第(1)问：证明分子恒负。
+      formula_trace:
+        from: $g(x)=1-\frac1x-\ln x$
+        to: $g^\prime(x)=\frac{1-x}{x^2}$，$g(x)<g(1)=0$
+        operation: 分 $(0,1)$ 与 $(1,+\infty)$ 判单调。
+        why: 得到 $f^\prime(x)<0$。
+      source_ref: page_0267_ex7_solution_start
+    - step_id: step_3
+      statement: 第(2)问：把不等式改成分侧符号问题。
+      formula_trace:
+        from: $\frac{\ln x}{x-1}<x^a$
+        to: $x>1$ 时 $h(x)>0$；$0<x<1$ 时 $h(x)<0$
+        operation: 乘以 $x-1$ 并注意变号。
+        why: $x=1$ 两侧的符号要求相反。
+      source_ref: page_0267_ex7_solution_start
+    - step_id: step_4
+      statement: 第(2)问：识别导函数极点效应。
+      formula_trace:
+        from: $h(x)=x^{a+1}-x^a-\ln x$
+        to: $h(1)=0$，$h^\prime(1)=0$
+        operation: 代入分界点 $x=1$。
+        why: 原函数定义域不含 $x=1$，但两侧需要在这里一边负一边正。
+      source_ref: page_0267_ex7_solution_start
+    - step_id: step_5
+      statement: 第(2)问：用二阶信息锁候选。
+      formula_trace:
+        from: $\varphi^\prime(1)=2a+1$
+        to: 候选临界为 $a=-\frac12$
+        operation: 让导函数在 $x=1$ 附近产生正确穿越。
+        why: 若二阶方向不匹配，就会在一侧破坏 $h$ 的符号要求。
+      source_ref: page_0268_ex7_solution_continuation
+    - step_id: step_6
+      statement: 第(2)问：分类排除其余参数。
+      formula_trace:
+        from: $x_0=\frac{a^2}{(a+1)^2}$
+        to: $a\ge1$、$a\le-1$、$1>a>-\frac12$、$-1<a<-\frac12$ 均矛盾
+        operation: 按 $x_0$ 与 1 的位置分类。
+        why: 三幅图对应不同弯曲形态，只有 $a=-\frac12$ 符合两侧符号。
+      source_ref: page_0268_ex7_solution_continuation
+teaching_card:
+  student_title: 开区间分界点：$x=1$ 不在定义域，但符号必须从这里穿过去
+  what_it_trains: 训练导函数极点效应失效/成立的判断：函数本身不含分界点，却要靠分界点附近的局部形态锁参数。
+  recognition_cues:
+    - $\frac{\ln x}{x-1}$ 在 $x=1$ 不定义，但左右极限相关。
+    - 目标是和 $x^a$ 比较，乘 $x-1$ 后左右区间符号要求相反。
+    - $h(1)=0$、$h^\prime(1)=0$ 自动成立，关键看更高阶形态。
+  normalization_moves:
+    - 先完成第(1)问的单调性，不把它和求参混在一起。
+    - 第(2)问先改成 $h(x)$ 在 1 两侧的符号要求。
+    - 再看 $\varphi^\prime$ 和 $x_0$，用分类排除只剩 $a=-\frac12$。
+  common_failures:
+    - 乘以 $x-1$ 时忘记 $0<x<1$ 要反向。
+    - 把 $x=1$ 当作定义域内极值点直接套结论。
+    - 只算到 $h^\prime(1)=0$，没有继续看导函数的形态。
+    - 分类时把 $x_0<1$ 与 $x_0>1$ 对应的 $a$ 区间写反。
+  similar_practice_query: lnx/(x-1) x^a 导函数极点效应 x=1 分侧符号 a=-1/2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

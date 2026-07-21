@@ -1,0 +1,190 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0024_ex21
+content_revision_id: mst_p0024_ex21-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0024_ex21.card.yaml
+stem: |-
+  （2022 · 新高考 1）已知函数 $f(x)=\mathrm{e}^{x}-a x$ 和 $g(x)=a x-\ln x$ 有相同的最小值.
+
+  (1) 求 $a$;
+  (2) 证明：存在直线 $y=b$，其与两条曲线 $y=f(x)$ 和 $y=g(x)$ 共有三个不同的交点，并且从左到右的三个交点的横坐标成等差数列.
+answer: |-
+  (1) $a=1$。
+  (2) 设 $x_2$ 为 $f(x)=g(x)$ 的唯一交点横坐标，取 $b=f(x_2)=g(x_2)$。此时水平线 $y=b$ 与 $y=f(x)$、$y=g(x)$ 的三个不同交点横坐标可记为 $x_1<x_2<x_3$，且 $x_1=\ln x_2$、$x_2=\ln x_3$，从而 $x_1+x_3=2x_2$。
+
+
+  先由两函数都有最小值排除 $a\le 0$，再由最小值相等得到 $\ln a=(a-1)/(a+1)$ 并用单调函数证明 $a=1$。随后证明 $f-g$ 只有一个零点，取该公共交点对应的水平线，用 $x-\ln x=e^{\ln x}-\ln x$ 与 $e^x-x$ 的同构根关系推出 $x_1+x_3=2x_2$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 排除 $a\le 0$，确认两个函数存在最小值时必须有 $a>0$。
+      max_score: 1
+    - step_id: step_2
+      description: 在 $a>0$ 下求出两个最小值并列方程。
+      max_score: 1
+    - step_id: step_3
+      description: 把最小值相等转化为单调函数的唯一零点。
+      max_score: 1
+    - step_id: step_4
+      description: 证明两曲线 $y=f(x)$ 与 $y=g(x)$ 只有一个公共点。
+      max_score: 1
+    - step_id: step_5
+      description: 取公共交点高度，得到水平线与两曲线共有三个不同交点。
+      max_score: 1
+    - step_id: step_6
+      description: 用同构根关系证明三个横坐标成等差数列。
+      max_score: 1
+graph:
+  goal:
+    primary: 数列关系证明
+    part_level:
+      - part_id: "1"
+        goal: 数值求值
+        target: (1) 数值求值
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 数列关系证明
+        target: (2) 数列关系证明
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 数形结合
+    subroute:
+      - $\mathrm{e}^x-x$ 与 $x-\ln x$ 的 $t=\ln x$ 同构
+      - 唯一公共点生成水平线
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $x-\ln x=\mathrm{e}^{\ln x}-\ln x$ 使 $g$ 的水平线方程转入 $f$ 的同型方程。
+      - $F(x)=\mathrm{e}^x+\ln x-2x$ 的唯一零点承担两个曲线的公共横坐标。
+    normalization_moves_used:
+      - 最小值相等转为 $\ln a=\frac{a-1}{a+1}$。
+      - 水平线交点方程统一为 $\mathrm{e}^t-t=b$。
+      - 由 $x_2=\ln x_3$ 改写为 $x_3=\mathrm{e}^{x_2}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会先检查 $a\le 0$ 时最小值不存在，回补函数三要素与定义域。
+      - 若学生不能用导数临界点写出 $f_{\min}$ 与 $g_{\min}$，回补导数单调极值基础。
+      - 若学生不会把 $x-\ln x=b$ 化成 $\mathrm{e}^{\ln x}-\ln x=b$ 来匹配 $\mathrm{e}^t-t=b$，回补指数对数基础。
+      - |
+        若学生不会用 $F'(x)>0$ 和端点符号证明唯一零点，回补导数单调极值基础。
+  detail_terms:
+    - $f(x)=\mathrm{e}^x-a x$
+    - $g(x)=a x-\ln x$
+    - $\ln a=\frac{a-1}{a+1}$
+    - $F(x)=\mathrm{e}^x+\ln x-2x$
+    - $x_1=\ln x_2,\ x_2=\ln x_3$
+parts: &a1
+  - (1) 求 $a$;
+  - (2) 证明：存在直线 $y=b$，其与两条曲线 $y=f(x)$ 和 $y=g(x)$ 共有三个不同的交点，并且从左到右的三个交点的横坐标成等差数列.
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0024_ex21
+source_evidence:
+  source_refs:
+    - ref_id: page_0024
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0024/page_0024.md
+      role: problem_start
+      evidence: 例21题干、(1)(2)解析和水平线交点示意图均在 page_0024；页首为上一题收尾，未纳入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0024.png
+      inspected: true
+      notes: 已核对例21题干、解析公式和图中从左到右的横坐标标注 $x_1,O,x_2,x_3$。
+  source_context: 第1章技能篇导数基本技能；本题紧接上一题续页之后，例21完整起止均在 page_0024。
+  source_influence:
+    - 题干、参数方程和交点等差结论以 page_0024 markdown 与整页图像为准。
+    - 图像仅用于确认水平线与两曲线共有三个交点的左右顺序；代数关系以解析文字为准。
+  source_discrepancies: []
+original_problem:
+  stem: |
+    （2022 · 新高考 1）已知函数 $f(x)=\mathrm{e}^{x}-a x$ 和 $g(x)=a x-\ln x$ 有相同的最小值.
+  parts: *a1
+  choices: []
+  answer: |
+    (1) $a=1$。
+    (2) 设 $x_2$ 为 $f(x)=g(x)$ 的唯一交点横坐标，取 $b=f(x_2)=g(x_2)$。此时水平线 $y=b$ 与 $y=f(x)$、$y=g(x)$ 的三个不同交点横坐标可记为 $x_1<x_2<x_3$，且 $x_1=\ln x_2$、$x_2=\ln x_3$，从而 $x_1+x_3=2x_2$。
+  fidelity_notes:
+    - 题头和题干开头均在 page_0024。
+    - page_0024 顶部文字是上一题续解，不属于本题。
+solution:
+  source_solution_summary: 先由两函数都有最小值排除 $a\le 0$，再由最小值相等得到 $\ln a=(a-1)/(a+1)$ 并用单调函数证明 $a=1$。随后证明 $f-g$ 只有一个零点，取该公共交点对应的水平线，用 $x-\ln x=e^{\ln x}-\ln x$ 与 $e^x-x$ 的同构根关系推出 $x_1+x_3=2x_2$。
+  key_steps:
+    - step_id: step_1
+      statement: 排除 $a\le 0$，确认两个函数存在最小值时必须有 $a>0$。
+      formula_trace:
+        from: |
+          $f'(x)=\mathrm{e}^{x}-a,\quad g'(x)=a-\frac{1}{x}$
+        to: $a>0$
+        operation: |
+          当 $a\le 0$ 时，$f'(x)>0$ 且 $g'(x)<0$，两个函数没有题设所需的最小值结构。
+        why: 题设要求 $f$ 与 $g$ 有相同的最小值，必须先保证最小值存在。
+      source_ref: page_0024
+    - step_id: step_2
+      statement: 在 $a>0$ 下求出两个最小值并列方程。
+      formula_trace:
+        from: |
+          $f'(x)=0,\quad g'(x)=0$
+        to: $f_{\min}=f(\ln a)=a-a\ln a,\quad g_{\min}=g\left(\frac1a\right)=1+\ln a$
+        operation: 分别解 $\mathrm{e}^x=a$ 与 $a=1/x$，再代回原函数。
+        why: 导数在临界点两侧变号，对应最小值。
+      source_ref: page_0024
+    - step_id: step_3
+      statement: 把最小值相等转化为单调函数的唯一零点。
+      formula_trace:
+        from: $a-a\ln a=1+\ln a$
+        to: $\ln a=\frac{a-1}{a+1},\quad a=1$
+        operation: |
+          移项得 $(a+1)\ln a=a-1$；令 $h(x)=\ln x-\frac{x-1}{x+1}$，则 $h'(x)=\frac{x^2+1}{x(x+1)^2}>0$ 且 $h(1)=0$。
+        why: $h$ 在 $(0,+\infty)$ 上严格递增，所以零点唯一。
+      source_ref: page_0024
+    - step_id: step_4
+      statement: 证明两曲线 $y=f(x)$ 与 $y=g(x)$ 只有一个公共点。
+      formula_trace:
+        from: $F(x)=f(x)-g(x)=\mathrm{e}^x+\ln x-2x$
+        to: $F(x)$ 在 $(0,+\infty)$ 上有唯一零点 $x_2$
+        operation: |
+          用 $\mathrm{e}^x\ge x+1$ 得 $F'(x)=\mathrm{e}^x+\frac1x-2\ge x+\frac1x-1\ge 1$；再由 $F(\mathrm{e}^{-\mathrm{e}})<\mathrm{e}+\ln(\mathrm{e}^{-\mathrm{e}})=0$、$F(1)=\mathrm{e}-2>0$ 定位零点。
+        why: 严格递增加上一正一负的函数值给出唯一交点。
+      source_ref: page_0024
+    - step_id: step_5
+      statement: 取公共交点高度，得到水平线与两曲线共有三个不同交点。
+      formula_trace:
+        from: $b=f(x_2)=g(x_2)$
+        to: $y=b$ 与 $y=f(x)$、$y=g(x)$ 的交点横坐标为 $x_1<x_2<x_3$
+        operation: 由 $x_2\in(0,1)$ 得 $b>1$；$f(x)=\mathrm{e}^x-x$ 在 $0$ 处取最小值 $1$，$g(x)=x-\ln x$ 在 $1$ 处取最小值 $1$，所以水平线除公共点 $x_2$ 外还分别给出 $f$ 的左根 $x_1$ 与 $g$ 的右根 $x_3$。
+        why: 三个交点的存在性来自极小值两侧的单调性与 $x_2$ 是唯一公共点。
+      source_ref: page_0024
+    - step_id: step_6
+      statement: 用同构根关系证明三个横坐标成等差数列。
+      formula_trace:
+        from: $\mathrm{e}^{x_1}-x_1=b,\quad x_2-\ln x_2=b,\quad x_3-\ln x_3=b$
+        to: $x_1=\ln x_2,\quad x_2=\ln x_3,\quad x_1+x_3=2x_2$
+        operation: 把 $x-\ln x=b$ 写成 $\mathrm{e}^{\ln x}-\ln x=b$，与 $\mathrm{e}^t-t=b$ 的两根匹配；再由公共交点方程 $\mathrm{e}^{x_2}+\ln x_2=2x_2$，代入 $x_3=\mathrm{e}^{x_2}$ 与 $x_1=\ln x_2$。
+        why: 同一水平线下的指对互换把根的坐标关系转化为等差条件。
+      source_ref: page_0024
+teaching_card:
+  student_title: 用指对同构证明水平线三交点成等差
+  what_it_trains: 训练从最小值条件确定参数，再把指数曲线与对数曲线的水平线交点统一到同一个方程中。
+  recognition_cues:
+    - 题干同时出现 $\mathrm{e}^x-a x$ 与 $a x-\ln x$。
+    - 要求水平线与两条曲线的交点横坐标形成数列关系。
+    - 解析中出现 $x$ 与 $\ln x$ 的互换。
+  normalization_moves:
+    - 先由最小值相等求出参数 $a$。
+    - 令 $F=f-g$ 证明公共交点唯一。
+    - 把 $x-\ln x$ 写成 $\mathrm{e}^{\ln x}-\ln x$，转入 $\mathrm{e}^t-t$。
+  common_failures:
+    - 忽略 $a\le 0$ 时函数没有最小值。
+    - 只画图接受三交点，未证明公共交点唯一。
+    - 看不出 $x_1=\ln x_2$ 与 $x_2=\ln x_3$ 的同构来源。
+  similar_practice_query: 指对同构 水平线 三交点 横坐标 等差 $\mathrm{e}^x-x$ $x-\ln x$
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - Reviewer changed goal from `几何性质证明` to `数列关系证明`; the target is proving intersection abscissas form an arithmetic progression.
+    - Reviewer removed `局部逼近与找点`; the route is unique intersection plus same-level equation matching, not local approximation.

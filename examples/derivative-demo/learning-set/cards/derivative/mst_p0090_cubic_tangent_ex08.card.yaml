@@ -1,0 +1,161 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0090_cubic_tangent_ex08
+content_revision_id: mst_p0090_cubic_tangent_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0090_cubic_tangent_ex08.card.yaml
+stem: |-
+  （2023 汕头市月考 T7）若过点 $(m,n)\ (m>0)$ 可作曲线 $y=x^3-3x$ 三条切线，则（ ）
+  A. $n<-3m$
+  B. $n>m^3-3m$
+  C. $n=m^3-3m$ 或 $n=-3m$
+  D. $-3m<n<m^3-3m$
+answer: |-
+  D
+
+  对 $f(x)=x^3-3x$，有 $f'(x)=3x^2-3$， $f''(x)=6x$，故拐点为 $(0,0)$，拐点处切线为 $y=-3x$。 当外点横坐标 $m>0$ 时，曲线上对应高度为 $m^3-3m$， 拐点切线上的对应高度为 $-3m$。根据本页三次函数切线条数图像， 在拐点右侧，点位于拐点切线之上、曲线之下的外弧区域时， 可作三条切线，所以应有 $-3m<n<m^3-3m$，故选 D。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 先找三次函数的拐点和拐点切线。
+      max_score: 1
+    - step_id: step_2
+      description: 把外点 $(m,n)$ 与两条边界比较。
+      max_score: 1
+    - step_id: step_3
+      description: 由三切线区域锁定选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 切线放缩与凹凸性
+      - 局部逼近与找点
+    subroute:
+      - 三次函数拐点切线分区
+      - 过点切线条数
+      - 同横坐标边界比较
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 三次/高次函数结构
+    evidence:
+      - $f''(x)=6x$ 给出拐点 $(0,0)$。
+      - 拐点切线 $y=-3x$ 与曲线 $y=x^3-3x$ 是判定三条切线区域的边界。
+      - 在 $x=m>0$ 处，两条边界高度分别是 $-3m$ 和 $m^3-3m$。
+    normalization_moves_used:
+      - 把“能作三条切线”转成外点所在区域。
+      - 先求拐点切线，再在 $x=m$ 处读出上下边界。
+      - 把图像区域语言落成不等式 $-3m<n<m^3-3m$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f''(x)=0$ 找三次函数拐点，回补导数运算与几何意义。
+      - 若学生不会写拐点处切线方程，回补导数运算与几何意义。
+      - 若学生看不懂外弧/内弧分区，回补函数性质与图像。
+      - 若学生把边界点也算成三条切线，回补导数单调极值基础。
+  detail_terms:
+    - $y=x^3-3x$
+    - 拐点 $(0,0)$
+    - 拐点切线 $y=-3x$
+    - 三次函数切线条数
+    - $-3m<n<m^3-3m$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0090_cubic_tangent_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0090
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0090/page_0090.md
+      role: problem_start
+      evidence: page_0090 先给出“三次函数切线条数”的区域结论，随后例 8 给出题干、A-D 选项、图像解析和答案 D。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0090.png
+      inspected: true
+      notes: 已核对页图：page_0090 开头为三次函数切线条数说明，未单独建卡； 例 8 的题头、四个选项、曲线与拐点切线图、解析和答案 D 均在本页，图像与 markdown 数学内容一致。
+  source_context: 本页例 8 使用前置结论：三次函数图象与过拐点切线把平面分为四区， 外弧区域内的点可引 3 条切线，内弧区域或对称中心只能引 1 条切线， 边界点通常对应 2 条切线。
+  source_influence:
+    - 前置“三次函数切线条数”只作为例 8 的判区依据，不单独建卡。
+    - 题目为单选题，choices 保留 A-D 的原始不等式。
+    - 源解以图像区域判断为主，本卡补写拐点切线与曲线在 $x=m$ 处的两条边界。
+  source_discrepancies:
+    - page_0090 markdown 对例 8 末尾不等式有 reconstruction marker； 页图显示原式因换行被拆成 $-3m<n<m^3$ 与下一行 $-3m$， 本卡按完整式 $-3m<n<m^3-3m$ 记录。
+original_problem:
+  stem: （2023 汕头市月考 T7）若过点 $(m,n)\ (m>0)$ 可作曲线 $y=x^3-3x$ 三条切线，则（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $n<-3m$
+      text_latex: $n<-3m$
+    - label: B
+      text_raw: $n>m^3-3m$
+      text_latex: $n>m^3-3m$
+    - label: C
+      text_raw: $n=m^3-3m$ 或 $n=-3m$
+      text_latex: $n=m^3-3m$ 或 $n=-3m$
+    - label: D
+      text_raw: $-3m<n<m^3-3m$
+      text_latex: $-3m<n<m^3-3m$
+  answer: D
+  fidelity_notes:
+    - 例 8 的题干、选项、配图、解析和答案均在 page_0090。
+    - 图像为解析辅助图，显示曲线 $y=x^3-3x$ 与拐点切线 $y=-3x$。
+solution:
+  source_solution_summary: 对 $f(x)=x^3-3x$，有 $f'(x)=3x^2-3$， $f''(x)=6x$，故拐点为 $(0,0)$，拐点处切线为 $y=-3x$。 当外点横坐标 $m>0$ 时，曲线上对应高度为 $m^3-3m$， 拐点切线上的对应高度为 $-3m$。根据本页三次函数切线条数图像， 在拐点右侧，点位于拐点切线之上、曲线之下的外弧区域时， 可作三条切线，所以应有 $-3m<n<m^3-3m$，故选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 先找三次函数的拐点和拐点切线。
+      formula_trace:
+        from: |
+          $f(x)=x^3-3x,\quad f'(x)=3x^2-3,\quad f''(x)=6x$
+        to: |
+          $f''(x)=0\Rightarrow x=0,\quad (0,f(0))=(0,0),\quad y=f'(0)x=-3x$
+        operation: 求二阶导确定拐点，再用一阶导写拐点处切线。
+        why: 三次函数过点切线条数的分区边界正是曲线和拐点切线。
+      source_ref: page_0090
+    - step_id: step_2
+      statement: 把外点 $(m,n)$ 与两条边界比较。
+      formula_trace:
+        from: |
+          $m>0,\quad y_{\text{切线}}=-3m,\quad y_{\text{曲线}}=m^3-3m$
+        to: |
+          在横坐标 $m$ 处，三切线区域对应 $-3m<n<m^3-3m$
+        operation: 在同一横坐标下比较外点纵坐标、拐点切线高度和曲线高度。
+        why: 右侧外弧区域位于拐点切线上方、曲线下方。
+      source_ref: page_0090
+    - step_id: step_3
+      statement: 由三切线区域锁定选项。
+      formula_trace:
+        from: |
+          过外弧区域内点作三次函数切线有 3 条
+        to: |
+          $-3m<n<m^3-3m$，选 D
+        operation: 套用本页“三次函数切线条数”的区域结论。
+        why: 选项 A、B 落在边界之外，选项 C 是边界点，均不是三条切线区域。
+      source_ref: page_0090
+teaching_card:
+  student_title: 用拐点切线框住三次函数三切线区域
+  what_it_trains: 训练看到“三次函数过点作三条切线”时，先找拐点切线， 再用曲线与拐点切线夹出的区域读参数范围。
+  recognition_cues:
+    - 题干只给外点 $(m,n)$，问能作几条切线，适合先判外点所在区域。
+    - $y=x^3-3x$ 的拐点在原点，拐点切线很快得到 $y=-3x$。
+    - 选项都在比较 $n$ 与 $-3m$、$m^3-3m$，提示同横坐标看上下边界。
+  normalization_moves:
+    - 求 $f''(x)=0$，定位拐点。
+    - 写拐点切线 $y=-3x$。
+    - 在 $x=m$ 处比较 $n$ 与两条边界高度。
+  common_failures:
+    - 把曲线下方所有点都当成三切线区域，漏掉拐点切线这一边界。
+    - 把 $n=m^3-3m$ 或 $n=-3m$ 的边界点误算成三条切线。
+    - 忘记使用 $m>0$，导致左右两侧区域方向混淆。
+  similar_practice_query: 三次函数 拐点切线 外弧区域 过点三条切线 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0090 页图；例 8 起止完整，答案 D。
+    - 页首“三次函数切线条数”是例 8 的上下文说明，按批次要求未单独建卡。
+    - 源页换行造成的不等式 reconstruction marker 已由页图和数学关系确认，无需用户拍板。

@@ -1,0 +1,212 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0152_three_curves_impossible_order_ex31
+content_revision_id: mst_p0152_three_curves_impossible_order_ex31-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0152_three_curves_impossible_order_ex31.card.yaml
+stem: |-
+  若 $e^{-x_1}\cdot x_3=-\ln x_2\cdot x_3=-1$，则下列不等式一定不成立的是（  ）
+  A. $x_1<x_2<x_3$
+  B. $x_3<x_1<x_2$
+  C. $x_3<x_2<x_1$
+  D. $x_1<x_3<x_2$
+answer: |
+  A
+
+  由
+  \[
+  e^{-x_1}\cdot x_3=-\ln x_2\cdot x_3=-1
+  \]
+  且 $x_3\neq0$，可化为
+  \[
+  e^{-x_1}=-\ln x_2=-\frac{1}{x_3}=m.
+  \]
+  这表示同一水平线 $y=m$ 分别与
+  \[
+  y=e^{-x},\quad y=-\ln x,\quad y=-\frac1x
+  \]
+  的交点横坐标依次为 $x_1,x_2,x_3$。
+  由源图与续页结论可知恒有
+  \[
+  x_2>x_3.
+  \]
+  因而选项 A 中 $x_1<x_2<x_3$ 与 $x_2>x_3$ 矛盾，A 一定不成立。
+  故选 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 将条件除以 $x_3$，统一成同一函数值 $m$。
+      max_score: 1
+    - step_id: step_2
+      description: 将统一式解释为三条曲线与同一水平线的交点。
+      max_score: 1
+    - step_id: step_3
+      description: 使用续页给出的恒成立关系。
+      max_score: 1
+    - step_id: step_4
+      description: 排除必错选项并作答。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 在四个顺序选项中排除必错的一项。
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 同一水平线 $y=m$
+      - 三曲线交点横坐标比较
+      - 必要条件排除法
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非对称结构
+      - 同构结构
+    evidence:
+      - 条件可统一为 $e^{-x_1}=-\ln x_2=-1/x_3$，本质是三函数同值比较。
+      - 三条曲线形态不同（指数、对数、双曲线），需要同图读取横坐标关系。
+      - 源解给出稳定关系 $x_2>x_3$，用于“一定不成立”判别。
+    normalization_moves_used:
+      - 公共因子 $x_3$ 约去，得到同值参数 $m$。
+      - 由同值方程切换到同水平线截交图像。
+      - 先抽出必要不等式，再做选项排除。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从乘积等式约去 $x_3$，回补代数恒等变形。
+      - 若学生无法把同值方程转成“同一水平线截交”图像语义，回补函数性质与图像。
+      - 若学生在 $-\ln x$ 或 $-1/x$ 的定义域/符号上混淆，回补函数三要素与定义域。
+  detail_terms:
+    - 同一水平线 $y=m$
+    - $x_2>x_3$ 恒成立
+    - $e^{-x},-\ln x,-1/x$
+    - 一定不成立排除
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0152_three_curves_impossible_order_ex31
+source_evidence:
+  source_refs:
+    - ref_id: page_0152_ex31_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0152/page_0152.md
+      role: problem_start
+      evidence: 例31在 page_0152 页底起头，题干给出 $e^{-x_1}\cdot x_3=-\ln x_2\cdot x_3=-1$，问哪一不等式一定不成立。
+    - ref_id: page_0152_ex31_figure
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0152/page_0152.md
+      role: continuation
+      evidence: 例31配图给出 $y=e^{-x},\ y=-\ln x,\ y=-1/x$ 三条曲线，是判定顺序的核心证据。
+    - ref_id: page_0153_ex31_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0153/page_0153.md
+      role: solution
+      evidence: page_0153 页首续解：三曲线分别与同一水平线 $y=m$ 交于 $x_1,x_2,x_3$，且恒有 $x_2>x_3$，故选 A。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0152.png
+      inspected: true
+      notes: 已核对原图：例31题干与三曲线示意图在 page_0152 页底。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0153.png
+      inspected: true
+      notes: 已核对原图：例31续解在 page_0153 页首，明确写出“$x_2>x_3$ 恒成立，选 A”。
+  source_context: 例31起于 page_0152，解答续到 page_0153 页首后结束；page_0153后续例32起属于下一 worker。
+  source_influence:
+    - 保留跨页逻辑：题头在 page_0152，关键结论“$x_2>x_3$ 恒成立”在 page_0153。
+    - 保留源解的数形化表达：以同一水平线 $y=m$ 读取三曲线横坐标。
+    - 保留“排除法”结论：$x_1<x_2<x_3$ 一定不成立，选 A。
+  source_discrepancies: []
+original_problem:
+  stem: 若 $e^{-x_1}\cdot x_3=-\ln x_2\cdot x_3=-1$，则下列不等式一定不成立的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $x_1<x_2<x_3$
+      text_latex: $x_1<x_2<x_3$
+    - label: B
+      text_raw: $x_3<x_1<x_2$
+      text_latex: $x_3<x_1<x_2$
+    - label: C
+      text_raw: $x_3<x_2<x_1$
+      text_latex: $x_3<x_2<x_1$
+    - label: D
+      text_raw: $x_1<x_3<x_2$
+      text_latex: $x_1<x_3<x_2$
+  answer: A
+  fidelity_notes:
+    - 题头在 page_0152，解析跨页到 page_0153 页首结束。
+    - 源解直接给出“$x_2>x_3$ 恒成立”，本卡按该必要条件执行排除。
+solution:
+  source_solution_summary: |
+    由
+    \[
+    e^{-x_1}\cdot x_3=-\ln x_2\cdot x_3=-1
+    \]
+    且 $x_3\neq0$，可化为
+    \[
+    e^{-x_1}=-\ln x_2=-\frac{1}{x_3}=m.
+    \]
+    这表示同一水平线 $y=m$ 分别与
+    \[
+    y=e^{-x},\quad y=-\ln x,\quad y=-\frac1x
+    \]
+    的交点横坐标依次为 $x_1,x_2,x_3$。
+    由源图与续页结论可知恒有
+    \[
+    x_2>x_3.
+    \]
+    因而选项 A 中 $x_1<x_2<x_3$ 与 $x_2>x_3$ 矛盾，A 一定不成立。
+    故选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 将条件除以 $x_3$，统一成同一函数值 $m$。
+      formula_trace:
+        from: $e^{-x_1}\cdot x_3=-\ln x_2\cdot x_3=-1$
+        to: $e^{-x_1}=-\ln x_2=-1/x_3=m$
+        operation: 利用 $x_3\neq0$ 约去公共因子 $x_3$。
+        why: 把三未知量变成三条曲线在同一高度处的横坐标。
+      source_ref: page_0152_ex31_problem
+    - step_id: step_2
+      statement: 将统一式解释为三条曲线与同一水平线的交点。
+      formula_trace:
+        from: $e^{-x}=m,\ -\ln x=m,\ -1/x=m$
+        to: $x_1,x_2,x_3$ 分别是三曲线与 $y=m$ 的交点横坐标
+        operation: 把代数等式转为图像交点语义。
+        why: 便于直接读取必要顺序关系。
+      source_ref: page_0152_ex31_figure
+    - step_id: step_3
+      statement: 使用续页给出的恒成立关系。
+      formula_trace:
+        from: 同一水平线截交三曲线
+        to: $x_2>x_3$ 恒成立
+        operation: 根据源图与页首续解读取横坐标先后。
+        why: 这是排除选项的关键必要条件。
+      source_ref: page_0153_ex31_solution
+    - step_id: step_4
+      statement: 排除必错选项并作答。
+      formula_trace:
+        from: $x_2>x_3$
+        to: "A: $x_1<x_2<x_3$ 一定不成立，选 A"
+        operation: 与选项顺序条件对照取矛盾项。
+        why: 题目问“一定不成立”。
+      source_ref: page_0153_ex31_solution
+teaching_card:
+  student_title: 三曲线同高截线下的必错顺序排除
+  what_it_trains: 训练把多变量条件统一成“同函数值”后，先抓一个恒成立的必要关系做快速排除。
+  recognition_cues:
+    - 题干出现多个表达式“都等于同一个值”。
+    - 选项是多个顺序链，问“哪项一定不成立”。
+    - 题内附有指数/对数/双曲线同图。
+  normalization_moves:
+    - 先除去公共因子，得到同值参数 $m$。
+    - 切换到同一水平线截交图像。
+    - 先用恒成立关系筛掉矛盾选项。
+  common_failures:
+    - 忘记先约去 $x_3$，导致三式关系看不出同值结构。
+    - 把“恒成立的必要关系”当成“完整全序”，过度推断。
+    - 忽略定义域，误把 $x_2$ 放到非正区间。
+  similar_practice_query: e^{-x} -lnx -1/x 同高截线 交点横坐标 排除法
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

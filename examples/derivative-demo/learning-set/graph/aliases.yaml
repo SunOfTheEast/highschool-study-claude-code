@@ -1,0 +1,278 @@
+# 导数 — 查询别名层
+#
+# 这个文件只服务搜索/召回, 不定义新的 canonical 标签。
+# 题目文件中的 type/strategy/method/knowledge 仍必须使用 vocabulary.yaml 的标准名。
+
+schema: studyforge.problem_aliases.v1
+subject: derivative
+version: 1
+canonical_vocabulary_ref: vocabulary.yaml
+
+policy:
+  aliases_are_query_only: true
+  aliases_must_not_be_used_as_problem_tags: true
+  canonical_tags_remain_in_vocabulary_yaml: true
+  unresolved_aliases_should_be_handled_by_native_text_search: true
+
+alias_groups:
+  - id: implicit_zero
+    label: 隐零点
+    aliases:
+      - 隐零点
+      - 隐根
+      - 暗根
+      - 隐点
+      - 隐极值点
+      - 隐点效应
+      - 隐零点消参
+      - 隐零点代换
+    maps_to:
+      - layer: strategy
+        value: 隐点代换
+      - layer: method
+        value: 隐零点代换-初高分流
+      - layer: method
+        value: 隐零点代换-参变分离
+      - layer: knowledge
+        value: K25.1
+    boundary: 只有特殊点不能直接算出, 需要用 f'(x0)=0、f(x0)=0 或切线条件消参时才按隐点召回。显点 x=0,1,2 不应强行归入隐点。
+
+  - id: visible_point_probe
+    label: 显点探路
+    aliases:
+      - 显点
+      - 特殊点
+      - 等号点
+      - 猜点
+      - 先猜后证
+      - 显点消参
+      - 显点极点
+    maps_to:
+      - layer: strategy
+        value: 极值显点探路
+      - layer: strategy
+        value: 极点效应
+      - layer: method
+        value: 极点效应流程
+      - layer: method
+        value: 高阶导数判定极值
+    boundary: 这是查询别名, 暂不新增 canonical 标签。若后续证据显示显点题量足够且和隐点检索强冲突, 再讨论新增标签。
+
+  - id: quadratic_radical
+    label: 二次根式
+    aliases:
+      - 二次根式
+      - 根式
+      - 根式函数
+      - 开方函数
+      - 开方换元
+      - 根式换元
+      - 根式代换
+      - 根式降次
+    maps_to:
+      - layer: method
+        value: 根式代换降次法
+      - layer: knowledge
+        value: K24.1
+      - layer: knowledge
+        value: K24.2
+      - layer: knowledge
+        value: K24.3
+    boundary: 用户说二次根式时通常是在找含 sqrt 的题。先召回根式相关题, 再由模型判断是代换降次、有理化还是反双曲结构。
+
+  - id: construct_function
+    label: 构造函数
+    aliases:
+      - 构造函数
+      - 造函数
+      - 辅助函数
+      - 构造辅助函数
+      - 作差构造
+      - 作商构造
+      - 反向构造
+    maps_to:
+      - layer: strategy
+        value: 反向构造
+      - layer: method
+        value: 四基底构造法
+      - layer: method
+        value: 分式反向构造
+      - layer: method
+        value: 对称化构造法
+    boundary: 构造函数是大口径搜索入口, 不应直接变成 canonical 标签。返回结果后需要再看题目是作差、作商、四基底还是对称化。
+
+  - id: parameter_separation
+    label: 参变分离
+    aliases:
+      - 参变分离
+      - 分离参数
+      - 参数分离
+      - 参数移到一边
+      - 水平线交点
+      - 横线交点
+    maps_to:
+      - layer: method
+        value: 参变分离法
+      - layer: method
+        value: 参变半分离法
+      - layer: strategy
+        value: 图像交点法
+    boundary: 参变分离是 method 入口, 常与图像交点法一起召回。不要因为做了代数整理就归入表达式清洁。
+
+  - id: telescoping_sequence
+    label: 裂项
+    aliases:
+      - 裂项
+      - 裂项相消
+      - 裂项求和
+      - 望远镜
+      - 望远镜求和
+      - 接龙裂项
+      - 隔项相消
+      - 数列放缩
+    maps_to:
+      - layer: type
+        value: 数列不等式
+      - layer: method
+        value: 接龙型裂项法
+      - layer: method
+        value: 隔项相消法
+      - layer: knowledge
+        value: K21.2
+    boundary: 用户说裂项时常常是在找连续不等式代入 n 后求和的题。需要优先检查是否真的出现可累加相消结构。
+
+  - id: ribbon_bounds
+    label: 飘带函数
+    aliases:
+      - 飘带函数
+      - 飘带放缩
+      - 飘带夹逼
+      - 飘带上界
+      - 飘带下界
+      - 对数飘带
+    maps_to:
+      - layer: knowledge
+        value: K2.7
+      - layer: knowledge
+        value: K2.8
+      - layer: method
+        value: 帕德夹逼法
+    boundary: 飘带函数是本土教培口径。它通常映射到对数帕德/飘带上下界, 不单独新增 canonical 标签。
+
+  - id: symmetry_expression
+    label: 对称表达式
+    aliases:
+      - f(2-x)
+      - f(a-x)
+      - f(1-x)
+      - f(x)+f(2-x)
+      - 轴对称
+      - 中心对称
+      - 关于 x=1 对称
+      - 对称换元
+    maps_to:
+      - layer: strategy
+        value: 对称性锁定
+      - layer: strategy
+        value: 对称化构造
+      - layer: method
+        value: 对称化构造法
+      - layer: knowledge
+        value: K10.1
+      - layer: knowledge
+        value: K14
+    boundary: 公式形态优先走原文搜索, 标签召回只作为辅助。f(2-x) 可能是轴对称, 也可能只是复合函数链式负号。
+
+  - id: tangent_family
+    label: 切线问题
+    aliases:
+      - 切线问题
+      - 过点切线
+      - 外点切线
+      - 过原点切线
+      - 公切线
+      - 共同切线
+      - 切线条数
+      - 切线放缩
+    maps_to:
+      - layer: type
+        value: 切线几何问题
+      - layer: strategy
+        value: 切线放缩
+      - layer: strategy
+        value: 公切线双轨
+      - layer: strategy
+        value: 切线计数
+      - layer: method
+        value: 基本切线计算（过点外）
+      - layer: method
+        value: 公切线代数求法
+      - layer: method
+        value: 切线条数区域判定法
+      - layer: knowledge
+        value: K7.2
+      - layer: knowledge
+        value: K8.1
+      - layer: knowledge
+        value: K8.2
+      - layer: knowledge
+        value: K8.3
+    boundary: 切线是宽入口。用户如果指定公切线、过点切线、切线条数, 应优先匹配更细的 method/knowledge。
+
+  - id: multivariable_inequality
+    label: 多变量不等式
+    aliases:
+      - 多变量不等式
+      - 多元不等式
+      - 三元不等式
+      - 四元不等式
+      - 轮换不等式
+      - 对称不等式
+      - 三角形边长不等式
+      - 多变量平均化
+    maps_to:
+      - layer: strategy
+        value: 调整法（多变量平均化降维）
+      - layer: strategy
+        value: 主元法
+      - layer: method
+        value: 主元选择法
+      - layer: knowledge
+        value: K28
+    boundary: 当前 canonical type 还没有多变量不等式。这个别名先服务搜索; 正式新增 type 见 Round 2 T5。
+
+  - id: viete_extreme_points
+    label: 韦达消参
+    aliases:
+      - 韦达消参
+      - 极值点二次关系
+      - 两个极值点
+      - 极值点和积
+      - 二次方程两根
+    maps_to:
+      - layer: knowledge
+        value: K26.2
+      - layer: method
+        value: 对称化构造法
+      - layer: method
+        value: 比值代换法
+      - layer: method
+        value: 差值代换法
+    boundary: 这是候选新知识标签的查询入口。先映射到二次因式/两点关系工具, 不直接新增 canonical。
+
+  - id: mvt_slope
+    label: 中值定理
+    aliases:
+      - 中值定理
+      - 拉格朗日中值
+      - 割线斜率
+      - 差商
+      - 弦斜率
+    maps_to:
+      - layer: strategy
+        value: 切割线夹
+      - layer: method
+        value: 切割线夹法
+      - layer: knowledge
+        value: K13.1
+    boundary: 这是候选标签的查询入口。中值定理不总等于切割线夹, 召回后需要人工/模型二次判断。

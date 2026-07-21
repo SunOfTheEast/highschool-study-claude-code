@@ -1,0 +1,194 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0101_parallel_common_tangent_ex04
+content_revision_id: mst_p0101_parallel_common_tangent_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0101_parallel_common_tangent_ex04.card.yaml
+stem: |-
+  （2018 内蒙古包头市北重三中模拟 T16）若直线 $y=kx+b$ 与曲线 $C_1:y=3+e^x$ 和曲线 $C_2:y=e^{x+2}$ 同时相切，则 $b=$（  ）
+  A. $\frac{9}{2}-\frac{3}{2}\ln\frac{3}{2}$
+  B. $2-\ln2$
+  C. $\frac{1}{2}-\ln\frac{1}{2}$
+  D. $3-\ln3$
+answer: |
+  A
+
+  曲线 $C_1:y=3+e^x$ 向下移动 $3$ 个单位并向左移动 $2$ 个单位，可得
+  $C_2:y=e^{x+2}$，因此平行曲线的公切线斜率为
+  $k=\frac{3}{2}$。设直线与 $C_2$ 的切点横坐标为 $x_2$，因为
+  $C_2'(x)=e^{x+2}$，所以 $e^{x_2+2}=\frac32$，即
+  $x_2=\ln\frac32-2$，切点为
+  $\left(\ln\frac32-2,\frac32\right)$。代入 $y=kx+b$，
+  $\frac32=\frac32\left(\ln\frac32-2\right)+b$，得
+  $b=\frac92-\frac32\ln\frac32$，选 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 识别两条指数曲线的平移关系。
+      max_score: 1
+    - step_id: step_2
+      description: 由平移量求公切线斜率。
+      max_score: 1
+    - step_id: step_3
+      description: 在 $C_2$ 上找斜率为 $\frac32$ 的切点。
+      max_score: 1
+    - step_id: step_4
+      description: 把切点代入直线求截距。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 显隐点探路
+    subroute:
+      - 平行曲线公切线斜率
+      - 平移量定斜率
+      - 切线找点
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 同构结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $C_2(x)=C_1(x+2)-3$ 表明两曲线为平移同构。
+      - 平移量给出公切线斜率 $k=\frac32$。
+      - $e^{x_2+2}=\frac32$ 定出 $C_2$ 的切点，再由直线方程求 $b$。
+    normalization_moves_used:
+      - 先把 $C_2$ 改写成 $C_1(x+2)-3$。
+      - 用水平平移 $2$ 与竖直平移 $3$ 直接求斜率。
+      - 在较简单的 $C_2$ 切点上代入求截距。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会判断 $C_2(x)=C_1(x+2)-3$ 的平移方向，回补函数性质与图像。
+      - 若学生不会求 $e^{x+2}$ 的导数，回补导数运算与几何意义。
+      - 若学生由 $e^{x_2+2}=\frac32$ 解 $x_2$ 出错，回补指数对数基础。
+      - 若学生代入 $y=kx+b$ 时符号错误，回补代数恒等变形。
+  detail_terms:
+    - $C_1:y=3+e^x$
+    - $C_2:y=e^{x+2}$
+    - $C_2(x)=C_1(x+2)-3$
+    - $k=\frac32$
+    - $x_2=\ln\frac32-2$
+    - $b=\frac92-\frac32\ln\frac32$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0101_parallel_common_tangent_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0101
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0101/page_0101.md
+      role: problem_start
+      evidence: lines 14-32 state the parallel-curve common-tangent rule; lines 52-59 give 例 4 题干、A-D 选项 and the first solution sentence, ending at the page boundary.
+    - ref_id: page_0102
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0102/page_0102.md
+      role: continuation
+      evidence: line 14 continues 例 4 solution with $k=e^{x_2+2}=\frac32$, the $C_2$ tangent point, $b=\frac92-\frac32\ln\frac32$, and answer A.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0101.png
+      inspected: true
+      notes: 已核对 page_0101 底部例 4 题干、四个选项和解析开头；本题解析跨到 page_0102 顶部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0102.png
+      inspected: true
+      notes: 已核对 page_0102 顶部为例 4 续解；图像显示应为 $e^{x_2+2}$，并给出答案 A。
+  source_context: page_0101 lines 14-32 给出平行曲线 $g(x)=f(x+a)-b$ 的公切线斜率 $k=\frac{b}{a}$；例 4 正是用曲线平移量先确定 $k$。
+  source_influence:
+    - 保留源页的平移判断：$C_1$ 向下移动 3 个单位、向左移动 2 个单位得到 $C_2$，故 $k=\frac32$。
+    - 保留源页续解：用 $C_2$ 的导数 $e^{x+2}$ 找切点，再代入 $y=kx+b$ 求 $b$。
+  source_discrepancies:
+    - page_0102 markdown line 14 写作 $e^{r_2+2}$；page_0102 图像和上下文均显示为 $e^{x_2+2}$，本卡按图像和数学推导采用 $x_2$。
+original_problem:
+  stem: （2018 内蒙古包头市北重三中模拟 T16）若直线 $y=kx+b$ 与曲线 $C_1:y=3+e^x$ 和曲线 $C_2:y=e^{x+2}$ 同时相切，则 $b=$（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\frac{9}{2}-\frac{3}{2}\ln\frac{3}{2}$
+      text_latex: $\frac{9}{2}-\frac{3}{2}\ln\frac{3}{2}$
+    - label: B
+      text_raw: $2-\ln2$
+      text_latex: $2-\ln2$
+    - label: C
+      text_raw: $\frac{1}{2}-\ln\frac{1}{2}$
+      text_latex: $\frac{1}{2}-\ln\frac{1}{2}$
+    - label: D
+      text_raw: $3-\ln3$
+      text_latex: $3-\ln3$
+  answer: A
+  fidelity_notes:
+    - 题头和选项在 page_0101 底部，解析在 page_0102 顶部补完。
+    - 已按 page_0102 图像纠正续页 markdown 中 $r_2$ 与 $x_2$ 的 OCR/重建差异。
+solution:
+  source_solution_summary: |
+    曲线 $C_1:y=3+e^x$ 向下移动 $3$ 个单位并向左移动 $2$ 个单位，可得
+    $C_2:y=e^{x+2}$，因此平行曲线的公切线斜率为
+    $k=\frac{3}{2}$。设直线与 $C_2$ 的切点横坐标为 $x_2$，因为
+    $C_2'(x)=e^{x+2}$，所以 $e^{x_2+2}=\frac32$，即
+    $x_2=\ln\frac32-2$，切点为
+    $\left(\ln\frac32-2,\frac32\right)$。代入 $y=kx+b$，
+    $\frac32=\frac32\left(\ln\frac32-2\right)+b$，得
+    $b=\frac92-\frac32\ln\frac32$，选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 识别两条指数曲线的平移关系。
+      formula_trace:
+        from: |
+          $C_1:\ y=3+e^x,\qquad C_2:\ y=e^{x+2}$
+        to: |
+          $C_2(x)=C_1(x+2)-3$
+        operation: 把 $C_1$ 向左平移 $2$ 个单位、向下平移 $3$ 个单位。
+        why: 平行曲线的公切线斜率可由水平和竖直平移量直接确定。
+      source_ref: page_0101
+    - step_id: step_2
+      statement: 由平移量求公切线斜率。
+      formula_trace:
+        from: |
+          $C_2(x)=C_1(x+2)-3$
+        to: |
+          $k=\frac{3}{2}$
+        operation: 用平行曲线公切线规则 $k=\frac{b}{a}$，其中水平量为 $2$，竖直量为 $3$。
+        why: 同形曲线平移后的公切线斜率等于两切点连线斜率。
+      source_ref: page_0101
+    - step_id: step_3
+      statement: 在 $C_2$ 上找斜率为 $\frac32$ 的切点。
+      formula_trace:
+        from: |
+          $C_2'(x)=e^{x+2},\qquad k=\frac32$
+        to: |
+          $e^{x_2+2}=\frac32,\qquad x_2=\ln\frac32-2,\qquad y_2=\frac32$
+        operation: 令导数等于公切线斜率，再求切点坐标。
+        why: 求截距 $b$ 需要一个确定的切点。
+      source_ref: page_0102
+    - step_id: step_4
+      statement: 把切点代入直线求截距。
+      formula_trace:
+        from: |
+          $y_2=\frac32,\qquad x_2=\ln\frac32-2,\qquad k=\frac32$
+        to: |
+          $\frac32=\frac32\left(\ln\frac32-2\right)+b,\qquad b=\frac92-\frac32\ln\frac32$
+        operation: 代入 $y=kx+b$ 并移项。
+        why: 截距由直线经过切点唯一确定。
+      source_ref: page_0102
+teaching_card:
+  student_title: 平移指数曲线先定公切线斜率
+  what_it_trains: 训练把两条指数曲线看成平移同形曲线，先用平移量确定公切线斜率，再找切点求截距。
+  recognition_cues:
+    - $3+e^x$ 和 $e^{x+2}$ 只差水平、竖直平移。
+    - 题干问截距 $b$，不能只停在公切线斜率。
+    - 选项都含对数，说明还要从 $e^{x+2}=\frac32$ 解切点。
+  normalization_moves:
+    - 写出 $C_2(x)=C_1(x+2)-3$。
+    - 由平移量得到 $k=\frac32$。
+    - 在 $C_2$ 上解 $e^{x_2+2}=\frac32$，再代入直线求 $b$。
+  common_failures:
+    - 把向左平移 2 看成向右平移 2，导致斜率符号或切点错误。
+    - 求出 $k=\frac32$ 后直接选含 $\frac32$ 的式子，没有求截距。
+    - 从 $x_2=\ln\frac32-2$ 代入时漏掉 $-2$ 贡献出的 $+3$。
+  similar_practice_query: 指数函数 平行曲线 公切线 平移量 斜率 截距
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0102 markdown 的 $e^{r_2+2}$ 已用 page_0102 图像和数学推导校正为 $e^{x_2+2}$；该差异不需要用户拍板。

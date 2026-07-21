@@ -1,0 +1,307 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0083_newton_ex16
+content_revision_id: mst_p0083_newton_ex16-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0083_newton_ex16.card.yaml
+stem: |-
+  （2023 芜湖五月质检·多选 T11）牛顿在《流数法》一书中，给出了高次代数方程根的一种解法。具体步骤如下：设 $r$ 是函数 $y=f(x)$ 的一个零点，任意选取 $x_0$ 作为 $r$ 的初始近似值，过点 $(x_0,f(x_0))$ 作曲线 $y=f(x)$ 的切线 $l_1$，设 $l_1$ 与 $x$ 轴交点的横坐标为 $x_1$，并称 $x_1$ 为 $r$ 的 1 次近似值；过点 $(x_1,f(x_1))$ 作曲线 $y=f(x)$ 的切线 $l_2$，设 $l_2$ 与 $x$ 轴交点的横坐标为 $x_2$，称 $x_2$ 为 $r$ 的 2 次近似值。一般地，过点 $(x_n,f(x_n))(n\in\mathbf{N}^*)$ 作曲线 $y=f(x)$ 的切线 $l_{n+1}$，记 $l_{n+1}$ 与 $x$ 轴交点的横坐标为 $x_{n+1}$，并称 $x_{n+1}$ 为 $r$ 的 $n+1$ 次近似值。对于方程 $x^3-x+1=0$，记方程的根为 $r$，取初始近似值为 $x_0=-1$，下列说法正确的是 (  )
+
+  A. $r\in(-2,-1)$
+  B. $l_2:23x-4y+31=0$
+  C. $|x_3-x_2|>\frac18$
+  D. $x_{n+1}=\frac{2x_n^3-1}{3x_n^2-1}$
+answer: |
+  ABD
+
+  设 $f(x)=x^3-x+1$，则 $f^{\prime}(x)=3x^2-1$。由导数符号可知函数在 $(-\infty,-\frac{\sqrt3}{3})$ 和 $(\frac{\sqrt3}{3},+\infty)$ 上递增，在 $(-\frac{\sqrt3}{3},\frac{\sqrt3}{3})$ 上递减；又 $f(-2)<0$、$f(-1)>0$，并结合极值点处函数值为正，可知唯一实根 $r\in(-2,-1)$，A 正确。从 $x_0=-1$ 出发，第一条切线给 $x_1=-\frac32$；在 $x_1$ 处 $f^{\prime}(-\frac32)=\frac{23}{4}$、$f(-\frac32)=-\frac78$，切线化为 $23x-4y+31=0$，B 正确。再令该切线 $y=0$ 得 $x_2=-\frac{31}{23}$；按正确导数继续算可得 $|x_3-x_2|<\frac18$，所以 C 错误。一般切点 $(x_n,x_n^3-x_n+1)$ 的切线令 $y=0$，化简得 $x_{n+1}=\frac{2x_n^3-1}{3x_n^2-1}$，D 正确。故选 ABD。
+rubric:
+  max_score: 11
+  criteria:
+    - step_id: step_1
+      description: 求导并划分 $f(x)=x^3-x+1$ 的单调区间。
+      max_score: 1
+    - step_id: step_2
+      description: 由导数符号确定增减区间。
+      max_score: 1
+    - step_id: step_3
+      description: 用符号变化和极值点函数值判断根区间。
+      max_score: 1
+    - step_id: step_4
+      description: 从 $x_0=-1$ 作第一条切线并求 $x_1$。
+      max_score: 1
+    - step_id: step_5
+      description: 在 $x_1=-\frac32$ 处写第二条切线。
+      max_score: 1
+    - step_id: step_6
+      description: 把 $l_2$ 化为选项中的一般式。
+      max_score: 1
+    - step_id: step_7
+      description: 由第二条切线交点求 $x_2$。
+      max_score: 1
+    - step_id: step_8
+      description: 用正确导数继续计算 $x_3$ 并判断 C。
+      max_score: 1
+    - step_id: step_9
+      description: 比较 $|x_3-x_2|$ 与 $\frac18$。
+      max_score: 1
+    - step_id: step_10
+      description: 从一般切点推出牛顿迭代递推式。
+      max_score: 1
+    - step_id: step_11
+      description: 令 $y=0$ 化简出 D 选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level:
+      - part_id: A
+        goal: 零点/极值点分析
+        target: "A: 零点/极值点分析"
+        result: 见 source_solution_summary
+      - part_id: B
+        goal: 几何量求解
+        target: "B: 几何量求解"
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 数值比较
+        target: "C: 数值比较"
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 数列关系证明
+        target: "D: 数列关系证明"
+        result: 见 source_solution_summary
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 数形结合
+      - 显隐点探路
+    subroute:
+      - 牛顿迭代公式
+      - 切线方程点斜式
+      - 三次函数导数单调性
+      - 相邻迭代差比较
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 三次/高次函数结构
+      - 数列离散/递推结构
+    evidence:
+      - $x^3-x+1=0$ 的近似根由切线交点递推产生。
+      - $l_2$ 由 $x_1=-\frac32$ 处的切点和斜率 $\frac{23}{4}$ 决定。
+      - 一般式 $x_{n+1}=\frac{2x_n^3-1}{3x_n^2-1}$ 来自同一切线交点结构。
+    normalization_moves_used:
+      - 把“过点作切线”统一写成 $y-f(x_n)=f^{\prime}(x_n)(x-x_n)$。
+      - 先由切线求出 $x_1,x_2$，再用同一公式求 $x_3$。
+      - 把根区间判断拆成导数单调区间和端点符号。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求 $x^3-x+1$ 的导数或判断导数正负，回补导数单调极值基础。
+      - 若学生不会把切点和斜率写成切线方程，回补导数运算与几何意义。
+      - 若学生在分数代入牛顿公式时出错，回补代数恒等变形。
+      - 若学生不能用函数值异号定位根，回补函数性质与图像。
+      - 若学生不会比较 $\frac{1225}{54142}$ 与 $\frac18$，回补不等式工具基础。
+  detail_terms:
+    - $f(x)=x^3-x+1$
+    - $f^{\prime}(x)=3x^2-1$
+    - $r\in(-2,-1)$
+    - $x_1=-\frac32,\ x_2=-\frac{31}{23}$
+    - $l_2:23x-4y+31=0$
+    - $|x_3-x_2|<\frac18$
+    - $x_{n+1}=\frac{2x_n^3-1}{3x_n^2-1}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0083_newton_ex16
+source_evidence:
+  source_refs:
+    - ref_id: page_0083
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0083/page_0083.md
+      role: problem_start
+      evidence: page_0083 上半页为例 15 续解；例 16 从本页中部起头，给出牛顿迭代法说明、方程 $x^3-x+1=0$、初始值 $x_0=-1$、A-D 四个选项，并开始解析 A。
+    - ref_id: page_0084
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0084/page_0084.md
+      role: continuation
+      evidence: page_0084 顶部续完例 16 的 B、C、D 解析并给出答案 ABD；本卡只读取例 16 续解，未为 page_0084 新起头的例 17 建卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0083.png
+      inspected: true
+      notes: 已核对 page_0083 中部例 16 题头、题干、四个选项和 A 解析；页首例 15 续解不属于本卡。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0084.png
+      inspected: true
+      notes: 已核对 page_0084 顶部例 16 续解、答案 ABD，以及随后例 17 另起题头；页图中 C 选项计算存在斜率数字不一致，已单独记录。
+  source_context: 本题继续牛顿迭代法，专门在三次方程 $x^3-x+1=0$ 上考查根所在区间、前两条切线方程、相邻迭代值差距和递推通式。
+  source_influence:
+    - 题干和四个选项来自 page_0083，B-D 解析来自 page_0084 续页。
+    - 解析按源页分项：用单调性和符号判断根区间；从 $x_0=-1$ 算 $x_1$，再写第二条切线；继续估计 $|x_3-x_2|$；最后从一般切点推出递推式。
+    - C 选项的最终正误不受 page_0084 斜率印刷错误影响；本卡按正确导数给出可复核的计算，并记录源页内部矛盾。
+  source_discrepancies:
+    - page_0084 页图先正确写出 $f^{\prime}(-\frac{31}{23})=\frac{2354}{529}$，下一行切线斜率却印为 $\frac{2325}{529}$；随后 $x_3=-\frac{2834}{2139}$ 与 $\frac{49}{2139}$ 也是按 $\frac{2325}{529}$ 推出的。按正确导数应得 $x_3=-\frac{71749}{54142}$，且 $|x_3-x_2|=\frac{1225}{54142}<\frac18$，C 仍错误。
+    - page_0084 markdown 把该模糊处重建为 $\frac{2354}{529}$，但保留了源页后续的 $x_3=-\frac{2834}{2139}$，两者不相容；本卡在解题步骤中使用数学一致的正确导数。
+original_problem:
+  stem: |
+    （2023 芜湖五月质检·多选 T11）牛顿在《流数法》一书中，给出了高次代数方程根的一种解法。具体步骤如下：设 $r$ 是函数 $y=f(x)$ 的一个零点，任意选取 $x_0$ 作为 $r$ 的初始近似值，过点 $(x_0,f(x_0))$ 作曲线 $y=f(x)$ 的切线 $l_1$，设 $l_1$ 与 $x$ 轴交点的横坐标为 $x_1$，并称 $x_1$ 为 $r$ 的 1 次近似值；过点 $(x_1,f(x_1))$ 作曲线 $y=f(x)$ 的切线 $l_2$，设 $l_2$ 与 $x$ 轴交点的横坐标为 $x_2$，称 $x_2$ 为 $r$ 的 2 次近似值。一般地，过点 $(x_n,f(x_n))(n\in\mathbf{N}^*)$ 作曲线 $y=f(x)$ 的切线 $l_{n+1}$，记 $l_{n+1}$ 与 $x$ 轴交点的横坐标为 $x_{n+1}$，并称 $x_{n+1}$ 为 $r$ 的 $n+1$ 次近似值。对于方程 $x^3-x+1=0$，记方程的根为 $r$，取初始近似值为 $x_0=-1$，下列说法正确的是 (  )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $r\in(-2,-1)$
+      text_latex: $r\in(-2,-1)$
+    - label: B
+      text_raw: $l_2:23x-4y+31=0$
+      text_latex: $l_2:23x-4y+31=0$
+    - label: C
+      text_raw: $|x_3-x_2|>\frac18$
+      text_latex: $|x_3-x_2|>\frac18$
+    - label: D
+      text_raw: $x_{n+1}=\frac{2x_n^3-1}{3x_n^2-1}$
+      text_latex: $x_{n+1}=\frac{2x_n^3-1}{3x_n^2-1}$
+  answer: ABD
+  fidelity_notes:
+    - page_0083 上半页例 15 续解不属于本卡；例 16 从 page_0083 中部新起头。
+    - 例 16 解析跨到 page_0084 顶部；page_0084 后续例 17 不纳入本卡。
+    - 题干本身未配示意图，page_0084 中部的牛顿法图属于下一题例 17。
+    - C 解析中的斜率数字矛盾已在 source_discrepancies 记录；答案 ABD 与正确计算一致。
+solution:
+  source_solution_summary: |
+    设 $f(x)=x^3-x+1$，则 $f^{\prime}(x)=3x^2-1$。由导数符号可知函数在 $(-\infty,-\frac{\sqrt3}{3})$ 和 $(\frac{\sqrt3}{3},+\infty)$ 上递增，在 $(-\frac{\sqrt3}{3},\frac{\sqrt3}{3})$ 上递减；又 $f(-2)<0$、$f(-1)>0$，并结合极值点处函数值为正，可知唯一实根 $r\in(-2,-1)$，A 正确。从 $x_0=-1$ 出发，第一条切线给 $x_1=-\frac32$；在 $x_1$ 处 $f^{\prime}(-\frac32)=\frac{23}{4}$、$f(-\frac32)=-\frac78$，切线化为 $23x-4y+31=0$，B 正确。再令该切线 $y=0$ 得 $x_2=-\frac{31}{23}$；按正确导数继续算可得 $|x_3-x_2|<\frac18$，所以 C 错误。一般切点 $(x_n,x_n^3-x_n+1)$ 的切线令 $y=0$，化简得 $x_{n+1}=\frac{2x_n^3-1}{3x_n^2-1}$，D 正确。故选 ABD。
+  key_steps:
+    - step_id: step_1
+      statement: 求导并划分 $f(x)=x^3-x+1$ 的单调区间。
+      formula_trace:
+        from: |
+          $f(x)=x^3-x+1$
+        to: |
+          $f^{\prime}(x)=3x^2-1$
+        operation: 对三次函数逐项求导。
+        why: 判断根所在区间前，先要知道函数在各区间的增减性。
+      source_ref: page_0083
+    - step_id: step_2
+      statement: 由导数符号确定增减区间。
+      formula_trace:
+        from: |
+          $3x^2-1>0\iff x\in(-\infty,-\frac{\sqrt3}{3})\cup(\frac{\sqrt3}{3},+\infty)$
+        to: |
+          增区间为 $(-\infty,-\frac{\sqrt3}{3})$、$(\frac{\sqrt3}{3},+\infty)$，
+          减区间为 $(-\frac{\sqrt3}{3},\frac{\sqrt3}{3})$
+        operation: 解 $f^{\prime}(x)$ 的正负并翻译成单调性。
+        why: 这能排除额外实根，并支持 A 选项的根区间判断。
+      source_ref: page_0083
+    - step_id: step_3
+      statement: 用符号变化和极值点函数值判断根区间。
+      formula_trace:
+        from: |
+          $f(-2)=-5<0,\quad f(-1)=1>0,\quad
+          f(\frac{\sqrt3}{3})=\frac{\sqrt3}{9}-\frac{\sqrt3}{3}+1>0$
+        to: |
+          $r\in(-2,-1)$
+        operation: 在 $(-2,-1)$ 上用零点存在性确定有根，并结合右侧极小值仍为正排除其他根。
+        why: 三次函数在 $(-\infty,-\frac{\sqrt3}{3})$ 上递增且跨过 $0$，后续区间没有再跨过 $0$。
+      source_ref: page_0083
+    - step_id: step_4
+      statement: 从 $x_0=-1$ 作第一条切线并求 $x_1$。
+      formula_trace:
+        from: |
+          $f(-1)=1,\quad f^{\prime}(-1)=2$
+        to: |
+          $y=2(x+1)+1,\quad y=0\Rightarrow x_1=-\frac32$
+        operation: 写出 $x_0=-1$ 处切线，令纵坐标为 $0$ 求交点横坐标。
+        why: 牛顿迭代中第一条切线与 $x$ 轴交点给 $x_1$。
+      source_ref: page_0084
+    - step_id: step_5
+      statement: 在 $x_1=-\frac32$ 处写第二条切线。
+      formula_trace:
+        from: |
+          $f^{\prime}(-\frac32)=\frac{23}{4},\quad f(-\frac32)=-\frac78$
+        to: |
+          $y=\frac{23}{4}(x+\frac32)-\frac78$
+        operation: 把切点坐标和斜率代入点斜式。
+        why: $l_2$ 是过 $(x_1,f(x_1))$ 的曲线切线。
+      source_ref: page_0084
+    - step_id: step_6
+      statement: 把 $l_2$ 化为选项中的一般式。
+      formula_trace:
+        from: |
+          $y=\frac{23}{4}(x+\frac32)-\frac78$
+        to: |
+          $4y=23x+31,\quad 23x-4y+31=0$
+        operation: 两边乘 $4$ 并移项。
+        why: 所得方程与选项 B 完全一致。
+      source_ref: page_0084
+    - step_id: step_7
+      statement: 由第二条切线交点求 $x_2$。
+      formula_trace:
+        from: |
+          $23x-4y+31=0$
+        to: |
+          $y=0\Rightarrow x_2=-\frac{31}{23}$
+        operation: 令切线纵坐标为 $0$。
+        why: $x_2$ 是 $l_2$ 与 $x$ 轴交点的横坐标。
+      source_ref: page_0084
+    - step_id: step_8
+      statement: 用正确导数继续计算 $x_3$ 并判断 C。
+      formula_trace:
+        from: |
+          $x_2=-\frac{31}{23},\quad
+          f^{\prime}(-\frac{31}{23})=\frac{2354}{529},\quad
+          f(-\frac{31}{23})=-\frac{1225}{12167}$
+        to: |
+          $x_3=x_2-\frac{f(x_2)}{f^{\prime}(x_2)}
+          =-\frac{71749}{54142}$
+        operation: 把 $x_2$ 代入牛顿公式并约分前保留精确分数。
+        why: 判断 $|x_3-x_2|$ 需要第三次近似值；此处按正确导数修正源页斜率印刷错误。
+      source_ref: page_0084
+    - step_id: step_9
+      statement: 比较 $|x_3-x_2|$ 与 $\frac18$。
+      formula_trace:
+        from: |
+          $x_3=-\frac{71749}{54142},\quad x_2=-\frac{31}{23}$
+        to: |
+          $|x_3-x_2|=\frac{1225}{54142}<\frac18$
+        operation: 通分相减并与 $\frac18$ 交叉相乘比较。
+        why: $8\cdot1225=9800<54142$，所以 C 中“大于 $\frac18$”错误。
+      source_ref: page_0084
+    - step_id: step_10
+      statement: 从一般切点推出牛顿迭代递推式。
+      formula_trace:
+        from: |
+          $(x_n,x_n^3-x_n+1),\quad k=3x_n^2-1$
+        to: |
+          $y=(3x_n^2-1)(x-x_n)+x_n^3-x_n+1$
+        operation: 用导数作为切线斜率，写出切点处的点斜式切线。
+        why: 递推式来自第 $n+1$ 条切线与 $x$ 轴的交点。
+      source_ref: page_0084
+    - step_id: step_11
+      statement: 令 $y=0$ 化简出 D 选项。
+      formula_trace:
+        from: |
+          $0=(3x_n^2-1)(x_{n+1}-x_n)+x_n^3-x_n+1$
+        to: |
+          $x_{n+1}=x_n-\frac{x_n^3-x_n+1}{3x_n^2-1}
+          =\frac{2x_n^3-1}{3x_n^2-1}$
+        operation: 解出 $x_{n+1}$，再通分合并分子。
+        why: 这正是选项 D 给出的牛顿迭代通式。
+      source_ref: page_0084
+teaching_card:
+  student_title: 把三次方程的牛顿迭代算成递推式
+  what_it_trains: 训练在具体三次函数上连续写切线、求交点、比较迭代差，同时用导数单调性确认根所在区间。
+  recognition_cues:
+    - 题干指定 $x_0=-1$，说明前几项可以直接按切线公式算。
+    - 选项 B 给出 $l_2$，要先求 $x_1$，再在 $x_1$ 处写切线。
+    - 选项 C 比较 $|x_3-x_2|$，必须继续求到第三个迭代点。
+    - 选项 D 要求通式，不能只代具体数字，要保留 $x_n$。
+  normalization_moves:
+    - 先求 $f^{\prime}(x)=3x^2-1$，用它同时服务单调性和切线斜率。
+    - 每一步切线都按“切点坐标 + 斜率”写点斜式。
+    - 令 $y=0$ 得交点横坐标，再命名为下一次近似值。
+    - 通式推导中把 $x_n-\frac{x_n^3-x_n+1}{3x_n^2-1}$ 通分成选项形式。
+  common_failures:
+    - 把 $l_2$ 误写成在 $x_0$ 处的第一条切线。
+    - 求 $f(-\frac32)$ 时符号出错，导致 $l_2$ 常数项不对。
+    - 看到源页 C 解析中的斜率印刷不一致后直接照抄，造成 $x_3$ 与导数不相容。
+    - 推 D 时漏掉分母 $3x_n^2-1$ 不能为零这一隐含前提。
+  similar_practice_query: 牛顿迭代 三次方程 x^3-x+1 切线方程 递推式 相邻迭代差
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已按 ownership 跳过 page_0083 顶部例 15 续解，只为 page_0083 起头的例 16 建卡；page_0084 只读取例 16 续页，不为例 17 建卡。
+    - page_0084 的 C 选项解析存在可由导数计算直接校正的印刷矛盾；答案 ABD 不受影响，已记录为普通 source_discrepancies，不需要用户拍板。

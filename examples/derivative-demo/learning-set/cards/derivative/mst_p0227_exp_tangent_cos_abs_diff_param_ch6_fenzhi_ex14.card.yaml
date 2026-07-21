@@ -1,0 +1,220 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0227_exp_tangent_cos_abs_diff_param_ch6_fenzhi_ex14
+content_revision_id: mst_p0227_exp_tangent_cos_abs_diff_param_ch6_fenzhi_ex14-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0227_exp_tangent_cos_abs_diff_param_ch6_fenzhi_ex14.card.yaml
+stem: |-
+  （2019 · 河南商开大联考期末 T21）已知函数 $f(x)=a(x-1)e^x(a>0)$，$g(x)=-\cos x$。
+  1. 求函数 $f(x)$ 的单调区间。
+  2. 若对于任意的实数 $x_1,x_2\in[0,\frac{\pi}{2}]$（其中 $x_1\neq x_2$），都有 $|f(x_1)-f(x_2)|>|g(x_1)-g(x_2)|$ 恒成立，求实数 $a$ 的取值范围。
+answer: |-
+  第 (1) 问：$f$ 在 $(-\infty,0)$ 单调递减，在 $(0,+\infty)$ 单调递增；第 (2) 问：$a\geqslant1$。
+
+  $f'(x)=a[e^x+(x-1)e^x]=axe^x$。因 $a>0,e^x>0$，所以 $x<0$ 时 $f'(x)<0$，$x>0$ 时 $f'(x)>0$，故 $f$ 在 $(-\infty,0)$ 递减，在 $(0,+\infty)$ 递增。第 (2) 问不妨设 $x_1<x_2$。在 $[0,\pi/2]$ 上，$g(x)=-\cos x$ 递增，且由第 (1) 问 $f$ 递增， 于是绝对差不等式等价于 $f(x_2)-g(x_2)>f(x_1)-g(x_1)$，即 $h(x)=f(x)-g(x)=a(x-1)e^x+\cos x$ 在区间上递增。故需要 $h'(x)=axe^x-\sin x\geqslant0$。当 $x>0$ 时等价于 $ae^x\geqslant\sin x/x$；而 $e^x$ 最小值为 1， $\sin x/x$ 在 $[0,\pi/2]$ 上递减、最大极限为 1，所以充要条件为 $a\geqslant1$。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 先求 $f$ 的单调区间。
+      max_score: 1
+    - step_id: step_2
+      description: 把绝对差条件转为增量比较。
+      max_score: 1
+    - step_id: step_3
+      description: 把两函数增量比较转成 $h=f-g$ 的单调性。
+      max_score: 1
+    - step_id: step_4
+      description: 对 $h$ 求导，得到参数恒成立不等式。
+      max_score: 1
+    - step_id: step_5
+      description: 把导数不等式转成两个整体比较。
+      max_score: 1
+    - step_id: step_6
+      description: 证明 $\sin x/x$ 递减并取最大极限 1。
+      max_score: 1
+    - step_id: step_7
+      description: 由最坏点得到参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: part_1
+        goal: 零点/极值点分析
+        target: 第 part_1 问
+        result: $f$ 在 $(-\infty,0)$ 递减，在 $(0,+\infty)$ 递增。
+      - part_id: part_2
+        goal: 求参数范围
+        target: 第 part_2 问
+        result: $a\geqslant1$
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 参变量分离
+      - 同构变形与换元法
+    subroute:
+      - 绝对差转单调
+      - $h=f-g$
+      - $\sin x/x$
+      - 三角整体函数
+      - 参数下界
+      - 两函数增量比较
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 三角复合结构
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $a(x-1)e^x$
+      - $-\cos x$
+      - $axe^x-\sin x\geqslant0$
+      - $ae^x\geqslant\sin x/x$
+    normalization_moves_used:
+      - 用 $f,g$ 的单调性去掉绝对值。
+      - 把两函数增量比较转为 $h=f-g$ 的单调性。
+      - 把 $h^\prime(x)\geqslant0$ 化为 $ae^x\geqslant\sin x/x$。
+      - 比较 $ae^x$ 的最小值和 $\sin x/x$ 的最大值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f^\prime(x)=axe^x$ 判断单调区间，回补导数单调极值基础。
+      - 若学生不会处理两个递增函数的绝对差，回补代数恒等变形。
+      - 若学生不会证明 $\sin x/x$ 单调，回补三角函数基础。
+      - 若学生把 $x=0$ 处直接除以 $x$，回补函数三要素与定义域。
+  detail_terms:
+    - $a(x-1)e^x$
+    - $-\cos x$
+    - $|f(x_1)-f(x_2)|>|g(x_1)-g(x_2)|$
+    - $h=f-g$
+    - $axe^x-\sin x$
+    - $\sin x/x$
+    - $x\cos x-\sin x$
+    - $a\geqslant1$
+parts: &a1
+  - part_id: part_1
+    text: 求函数 $f(x)$ 的单调区间。
+  - part_id: part_2
+    text: 若对于任意的实数 $x_1,x_2\in[0,\frac{\pi}{2}]$（其中 $x_1\neq x_2$），都有 $|f(x_1)-f(x_2)|>|g(x_1)-g(x_2)|$ 恒成立，求实数 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0227_exp_tangent_cos_abs_diff_param_ch6_fenzhi_ex14
+source_evidence:
+  source_refs:
+    - ref_id: page_0227_ex14_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0227/page_0227.md
+      role: problem_start
+      evidence: page_0227 底部给出例14题头：$f(x)=a(x-1)e^x(a>0)$，$g(x)=-\cos x$，求 $f$ 单调区间和绝对差恒大条件下 $a$ 的范围。
+    - ref_id: page_0227_ex14_solution_part1
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0227/page_0227.md
+      role: solution
+      evidence: page_0227 给出第 (1) 问：$f^\prime(x)=axe^x$，所以 $f$ 在 $(-\infty,0)$ 递减，在 $(0,+\infty)$ 递增。
+    - ref_id: page_0228_ex14_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0228/page_0228.md
+      role: continuation
+      evidence: page_0228 顶部续解第 (2) 问：将绝对差转成 $h(x)=f(x)-g(x)$ 在 $[0,\pi/2]$ 上递增，并得到 $a\geqslant1$。
+    - ref_id: page_0228_ex15_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0228/page_0228.md
+      role: local_context
+      evidence: page_0228 中部另起例15，属于下一批，本卡只取其前方的例14续解。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0227.png
+      inspected: true
+      notes: 已核对页图：例14题头和第 (1) 问解析位于 page_0227 底部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0228.png
+      inspected: true
+      notes: 已核对页图：page_0228 顶部为例14第 (2) 问续解，例15另起。
+  source_context: 本卡处理 page_0227 起头、page_0228 顶部续完的例14；page_0228 例15以后留给下一批。
+  source_influence:
+    - 保留 source 的绝对差转单调：先利用 $f,g$ 在 $[0,\pi/2]$ 上递增，把 $|f(x_1)-f(x_2)|>|g(x_1)-g(x_2)|$ 转为 $f-g$ 递增。
+    - 保留三角整体 $\sin x/x$：由 $a x e^x-\sin x\geqslant0$ 转为 $a e^x\geqslant \sin x/x$。
+    - 保留 $n(x)=\sin x/x$ 的单调证明：令 $\varphi(x)=x\cos x-\sin x$，由 $\varphi^\prime(x)=-x\sin x<0$ 得 $n$ 递减。
+  source_discrepancies:
+    - page_0228 markdown 将续解两段都编号为“(2)”，原图也是续写排版；题卡按解题逻辑整理为第 (2) 问的连续步骤。
+original_problem:
+  stem: （2019 · 河南商开大联考期末 T21）已知函数 $f(x)=a(x-1)e^x(a>0)$，$g(x)=-\cos x$。
+  parts: *a1
+  choices: []
+  answer: 第 (1) 问：$f$ 在 $(-\infty,0)$ 单调递减，在 $(0,+\infty)$ 单调递增；第 (2) 问：$a\geqslant1$。
+  fidelity_notes:
+    - 两问均无选项。
+    - 第 (2) 问的绝对值条件要求任意不同两点，核心是比较两函数在区间内的增量。
+solution:
+  source_solution_summary: $f'(x)=a[e^x+(x-1)e^x]=axe^x$。因 $a>0,e^x>0$，所以 $x<0$ 时 $f'(x)<0$，$x>0$ 时 $f'(x)>0$，故 $f$ 在 $(-\infty,0)$ 递减，在 $(0,+\infty)$ 递增。第 (2) 问不妨设 $x_1<x_2$。在 $[0,\pi/2]$ 上，$g(x)=-\cos x$ 递增，且由第 (1) 问 $f$ 递增， 于是绝对差不等式等价于 $f(x_2)-g(x_2)>f(x_1)-g(x_1)$，即 $h(x)=f(x)-g(x)=a(x-1)e^x+\cos x$ 在区间上递增。故需要 $h'(x)=axe^x-\sin x\geqslant0$。当 $x>0$ 时等价于 $ae^x\geqslant\sin x/x$；而 $e^x$ 最小值为 1， $\sin x/x$ 在 $[0,\pi/2]$ 上递减、最大极限为 1，所以充要条件为 $a\geqslant1$。
+  key_steps:
+    - step_id: step_1
+      statement: 先求 $f$ 的单调区间。
+      formula_trace:
+        from: $f(x)=a(x-1)e^x$
+        to: $f^\prime(x)=axe^x$
+        operation: 乘积求导并合并。
+        why: 因为 $a>0,e^x>0$，导数符号完全由 $x$ 决定。
+      source_ref: page_0227_ex14_solution_part1
+    - step_id: step_2
+      statement: 把绝对差条件转为增量比较。
+      formula_trace:
+        from: $|f(x_1)-f(x_2)|>|g(x_1)-g(x_2)|,\ x_1<x_2$
+        to: $f(x_2)-f(x_1)>g(x_2)-g(x_1)$
+        operation: 利用 $f,g$ 在 $[0,\pi/2]$ 上递增去掉绝对值。
+        why: 两个差值方向固定后，绝对值可以改写成正向增量。
+      source_ref: page_0228_ex14_continuation
+    - step_id: step_3
+      statement: 把两函数增量比较转成 $h=f-g$ 的单调性。
+      formula_trace:
+        from: $f(x_2)-f(x_1)>g(x_2)-g(x_1)$
+        to: $f(x_2)-g(x_2)>f(x_1)-g(x_1)$
+        operation: 移项重组。
+        why: 这正是 $h(x)=f(x)-g(x)$ 在区间内严格递增的判据。
+      source_ref: page_0228_ex14_continuation
+    - step_id: step_4
+      statement: 对 $h$ 求导，得到参数恒成立不等式。
+      formula_trace:
+        from: $h(x)=a(x-1)e^x+\cos x$
+        to: $h^\prime(x)=axe^x-\sin x\geqslant0$
+        operation: 求导并要求区间上非负。
+        why: $h$ 递增是绝对差恒大的核心条件。
+      source_ref: page_0228_ex14_continuation
+    - step_id: step_5
+      statement: 把导数不等式转成两个整体比较。
+      formula_trace:
+        from: $axe^x-\sin x\geqslant0$
+        to: $ae^x\geqslant\frac{\sin x}{x}$
+        operation: 在 $x>0$ 时除以 $x$，$x=0$ 用极限补边界。
+        why: 左侧参数与指数整体，右侧三角整体 $\sin x/x$。
+      source_ref: page_0228_ex14_continuation
+    - step_id: step_6
+      statement: 证明 $\sin x/x$ 递减并取最大极限 1。
+      formula_trace:
+        from: $n(x)=\frac{\sin x}{x}$
+        to: $n^\prime(x)=\frac{x\cos x-\sin x}{x^2}\leqslant0$
+        operation: 令 $\varphi(x)=x\cos x-\sin x$，由 $\varphi^\prime(x)=-x\sin x<0$ 得 $\varphi(x)\leqslant0$。
+        why: $\sin x/x$ 的最大值在 $0^+$ 处趋于 1。
+      source_ref: page_0228_ex14_continuation
+    - step_id: step_7
+      statement: 由最坏点得到参数范围。
+      formula_trace:
+        from: $ae^x\geqslant\sin x/x$
+        to: $a\geqslant1$
+        operation: 比较左侧最小值 $a$ 与右侧最大极限 1。
+        why: 左侧随 $x$ 增大不小于 $a$，右侧不超过 1。
+      source_ref: page_0228_ex14_continuation
+teaching_card:
+  student_title: 绝对差先变成 $f-g$ 递增，再比较 $ae^x$ 和 $\sin x/x$
+  what_it_trains: 训练分而治之中的增量比较：把两个函数的距离条件转为一个差函数的单调性。
+  recognition_cues:
+    - 题目要求任意两点的函数值差距比较，且两个函数在区间上都递增。
+    - $f-g$ 求导后出现 $axe^x-\sin x$，自然要除以 $x$ 得到 $\sin x/x$。
+    - 区间含 0，除以 $x$ 时必须用极限处理端点。
+  normalization_moves:
+    - 先用第 (1) 问确认 $f$ 在 $[0,\pi/2]$ 上递增。
+    - 再确认 $g(x)=-\cos x$ 在 $[0,\pi/2]$ 上递增。
+    - 把绝对差改写为 $h=f-g$ 的递增性。
+    - 最后用 $\sin x/x\leqslant1$ 和 $e^x\geqslant1$ 收参数。
+  common_failures:
+    - 没有固定 $x_1<x_2$，直接拆绝对值导致方向混乱。
+    - 把严格不等式误处理成必须 $h^\prime(x)>0$，忽略端点极限下 $a=1$ 仍可使整体严格递增。
+    - 在 $x=0$ 直接除以 $x$，没有说明极限。
+  similar_practice_query: 绝对差 恒成立 f-g 单调 ae^x sinx/x 三角整体 参数下界
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

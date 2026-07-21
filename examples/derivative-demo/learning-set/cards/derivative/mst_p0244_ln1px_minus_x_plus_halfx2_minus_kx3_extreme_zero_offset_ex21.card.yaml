@@ -1,0 +1,255 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0244_ln1px_minus_x_plus_halfx2_minus_kx3_extreme_zero_offset_ex21
+content_revision_id: mst_p0244_ln1px_minus_x_plus_halfx2_minus_kx3_extreme_zero_offset_ex21-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0244_ln1px_minus_x_plus_halfx2_minus_kx3_extreme_zero_offset_ex21.card.yaml
+stem: |-
+  （2025 新课标 II 卷第 18 题）已知 $f(x)=\ln(1+x)-x+\frac12x^2-kx^3$，$0<k<\frac13$。
+  1. 证明：$f(x)$ 在 $(0,+\infty)$ 存在唯一极值点和唯一零点。
+  2. 设 $x_1,x_2$ 为 $f(x)$ 在 $(0,+\infty)$ 的极值点和零点；设 $g(t)=f(x_1+t)-f(x_1-t)$，证明：$g(t)$ 在 $(0,x_1)$ 单调递减。
+  3. 比较 $2x_1$ 与 $x_2$ 的大小，并证明。
+answer: |-
+  唯一极值点 $x_1=\frac1{3k}-1$，唯一零点 $x_2$；$g(t)$ 在 $(0,x_1)$ 单调递减，且 $2x_1>x_2$。
+
+  先求导： $f^\prime(x)=\frac{1}{1+x}-1+x-3kx^2 =\frac{x^2[1-3k(x+1)]}{1+x}$。因 $x>0$ 时 $\frac{x^2}{1+x}>0$，导数符号只由 $1-3k(x+1)$ 决定，故 $f$ 在 $(0,\frac1{3k}-1)$ 上递增，在 $(\frac1{3k}-1,+\infty)$ 上递减，唯一极值点为 $\frac1{3k}-1$。又 $f(0)=0$，极值点左侧 $f>0$；在右侧取 $x=\frac1{2k}$，由 $\ln(1+x)-x<0$ 得 $f(\frac1{2k})<0$，所以有且仅有一个正零点。第(2)问 source 令极值点为 $x_1$，零点为 $x_2$，用 $g(t)=f(x_1+t)-f(x_1-t)$ 比较极值点两侧。经真题核对，第(2)(i)应证明 $g$ 单调递减；解析推出 $g^\prime(t)<0$，并由 $g(x_1)<g(0)$ 得 $f(2x_1)<0=f(x_2)$，再利用 $f$ 在右侧递减， 得 $2x_1>x_2$。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 把导数化成一个线性判号因子。
+      max_score: 1
+    - step_id: step_2
+      description: 确定唯一极值点。
+      max_score: 1
+    - step_id: step_3
+      description: 用放缩取点证明右侧一定穿过 $x$ 轴。
+      max_score: 1
+    - step_id: step_4
+      description: 围绕极值点构造偏移函数。
+      max_score: 1
+    - step_id: step_5
+      description: 按解析链路，$g(t)$ 实际为递减。
+      max_score: 1
+    - step_id: step_6
+      description: 由偏移关系推出零点位置。
+      max_score: 1
+    - step_id: step_7
+      description: 利用极值点右侧单调递减比较横坐标。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 1 问
+        result: 唯一极值点 $x_1=\frac1{3k}-1$，唯一正零点 $x_2$。
+      - part_id: 2i
+        goal: 抽象函数性质
+        target: 第 2i 问
+        result: $g(t)$ 在 $(0,x_1)$ 单调递减。
+      - part_id: 2ii
+        goal: 数值比较
+        target: 第 2ii 问
+        result: $2x_1>x_2$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 对称化与偏移
+      - 局部逼近与找点
+      - 含参数分类讨论
+    subroute:
+      - 极值点偏移
+      - 放缩取点
+      - 围绕极值点作左右差
+      - 右侧单调性反推横坐标
+  structure:
+    primary: 极值点偏移结构
+    secondary:
+      - 指对复合结构
+      - 非对称结构
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - $\ln(1+x)-x+\frac12x^2-kx^3$
+      - $\frac{x^2[1-3k(x+1)]}{1+x}$
+      - $x_1=\frac1{3k}-1$
+      - $g(t)=f(x_1+t)-f(x_1-t)$
+      - $2x_1>x_2$
+    normalization_moves_used:
+      - 把导数整理成 $x^2[1-3k(x+1)]/(1+x)$。
+      - 用 $x=\frac1{2k}$ 作右侧负值显点。
+      - 围绕极值点构造左右差函数 $g(t)$。
+      - 把 $f(2x_1)<0$ 转成 $2x_1>x_2$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求导通分分解，回补导数运算与几何意义。
+      - 若学生不会从导数符号推出唯一极值点，回补导数单调极值基础。
+      - 若学生不会用 $\ln(1+x)-x<0$ 取点，回补指数对数基础。
+      - 若学生不会理解右侧递减下函数值和横坐标的反向关系，回补函数性质与图像。
+      - 若学生在不等式放缩上卡住，回补不等式工具基础。
+      - 若学生代数化简 $g^\prime(t)$ 出错，回补代数恒等变形。
+  detail_terms:
+    - $\ln(1+x)-x+\frac12x^2-kx^3$
+    - $0<k<\frac13$
+    - $x_1=\frac1{3k}-1$
+    - $\ln(1+x)-x<0$
+    - $g(t)=f(x_1+t)-f(x_1-t)$
+    - $g^\prime(t)<0$
+    - $2x_1>x_2$
+    - 极值点偏移
+    - 放缩取点
+parts: &a1
+  - part_id: "1"
+    text: 证明：$f(x)$ 在 $(0,+\infty)$ 存在唯一极值点和唯一零点。
+  - part_id: 2i
+    text: 设 $x_1,x_2$ 为 $f(x)$ 在 $(0,+\infty)$ 的极值点和零点；设 $g(t)=f(x_1+t)-f(x_1-t)$，证明：$g(t)$ 在 $(0,x_1)$ 单调递减。
+  - part_id: 2ii
+    text: 比较 $2x_1$ 与 $x_2$ 的大小，并证明。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0244_ln1px_minus_x_plus_halfx2_minus_kx3_extreme_zero_offset_ex21
+source_evidence:
+  source_refs:
+    - ref_id: page_0244_ex21_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0244/page_0244.md
+      role: problem_start
+      evidence: page_0244 “八、偏移取点”下给出例21题头：$f(x)=\ln(1+x)-x+\frac12x^2-kx^3$，$0<k<\frac13$。
+    - ref_id: page_0244_ex21_part1_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0244/page_0244.md
+      role: solution
+      evidence: page_0244 解析第(1)问：$f^\prime(x)=\frac{x^2[1-3k(x+1)]}{1+x}$，由导数符号证明唯一极值点。
+    - ref_id: page_0245_ex21_part1_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0245/page_0245.md
+      role: continuation
+      evidence: page_0245 续完第(1)问：用 $f(0)=0$ 和取点 $x=\frac1{2k}$ 得到唯一正零点，并补充放缩取点说明。
+    - ref_id: page_0245_ex21_offset_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0245/page_0245.md
+      role: solution
+      evidence: page_0245 第(2)问：令极值点 $x_1=\frac1{3k}-1$、零点 $x_2=x_0$，通过 $g(t)$ 的单调性比较 $2x_1$ 与 $x_2$。
+    - ref_id: page_0244_ex21_figure_extreme_point
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0244/page_0244.md
+      role: figure_context
+      evidence: page_0244 底部图示 $f(x)$ 先升后降，极值点在 $\frac1{3k}-1$。
+    - ref_id: page_0245_ex21_figure_offset
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0245/page_0245.md
+      role: figure_context
+      evidence: page_0245 图示 $f(x)$ 与关于极值点横坐标对称的 $f(2x_0-x)$，用于解释极值点偏移。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0244.png
+      inspected: true
+      notes: 已核对页图：例21题头、题干、解析开头和极值点示意图位于 page_0244。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0245.png
+      inspected: true
+      notes: 已核对页图：第(1)问续解、第(2)问推导、偏移图和后续知识点说明位于 page_0245。
+  source_context: 本卡处理 page_0244 起头、page_0245 续完的例21；page_0244 顶部例20续解不属于本卡。
+  source_influence:
+    - 保留 source 的导数分解：$f^\prime(x)=\frac{x^2[1-3k(x+1)]}{1+x}$。
+    - 保留 source 的放缩取点：用 $\ln(1+x)-x<0$，取 $x=\frac1{2k}$ 或 $\frac3{2k}$ 去找负值。
+    - 保留 source 的极值点偏移框架：围绕极值点 $x_1$ 比较 $f(x_1+t)$ 与 $f(x_1-t)$。
+    - 保留 source 的最终结论链：由 $f(2x_1)<0=f(x_2)$ 和右侧单调递减得到 $2x_1>x_2$。
+  source_discrepancies:
+    - type: problem_solution_monotonicity_conflict
+      source_ref: page_0244_ex21_problem_start
+      observed: 题干要求证明 $g(t)$ 在 $(0,x_1)$ 单调递增。
+      conflicting_source_ref: page_0245_ex21_offset_solution
+      conflicting_observed: 解析推导 $g^\prime(t)<0$，并写出 $g(t)$ 单调递减。
+      handling: 用户要求联网核对高考真题；公开真题 PDF 与线上解析均写“单调递减”，故本地题干“递增”按原书/OCR 录入错误修正为“递减”。
+      external_verification:
+        - 2025 年全国统一高考数学试卷（新高考Ⅱ卷）公开 PDF：第 18 题第 (2)(i) 写“证明：$g(t)$ 在区间 $(0,x_1)$ 单调递减”。
+        - 线上解析页《2025年高考数学新课标II卷压轴题解析》同题题面亦写“单调递减”。
+    - type: notation_switch
+      source_ref: page_0245_ex21_part1_continuation
+      observed: source 在第(1)问用 $x_0$ 表示唯一零点，第(2)问又设 $x_1,x_2$ 为极值点和零点，图中标注也容易混淆。
+      handling: 卡片内部补充 $x_E=x_1$ 为极值点、$x_Z=x_2$ 为零点的说明。
+original_problem:
+  stem: （2025 新课标 II 卷第 18 题）已知 $f(x)=\ln(1+x)-x+\frac12x^2-kx^3$，$0<k<\frac13$。
+  parts: *a1
+  choices: []
+  answer: 唯一极值点 $x_1=\frac1{3k}-1$，唯一零点 $x_2$；$g(t)$ 在 $(0,x_1)$ 单调递减，且 $2x_1>x_2$。
+  fidelity_notes:
+    - 三问综合题，无选项。
+    - 本地页第(2)(i)题干与解析方向冲突；经联网核对 2025 新高考Ⅱ卷真题，题干应为“单调递减”。
+solution:
+  source_solution_summary: 先求导： $f^\prime(x)=\frac{1}{1+x}-1+x-3kx^2 =\frac{x^2[1-3k(x+1)]}{1+x}$。因 $x>0$ 时 $\frac{x^2}{1+x}>0$，导数符号只由 $1-3k(x+1)$ 决定，故 $f$ 在 $(0,\frac1{3k}-1)$ 上递增，在 $(\frac1{3k}-1,+\infty)$ 上递减，唯一极值点为 $\frac1{3k}-1$。又 $f(0)=0$，极值点左侧 $f>0$；在右侧取 $x=\frac1{2k}$，由 $\ln(1+x)-x<0$ 得 $f(\frac1{2k})<0$，所以有且仅有一个正零点。第(2)问 source 令极值点为 $x_1$，零点为 $x_2$，用 $g(t)=f(x_1+t)-f(x_1-t)$ 比较极值点两侧。经真题核对，第(2)(i)应证明 $g$ 单调递减；解析推出 $g^\prime(t)<0$，并由 $g(x_1)<g(0)$ 得 $f(2x_1)<0=f(x_2)$，再利用 $f$ 在右侧递减， 得 $2x_1>x_2$。
+  key_steps:
+    - step_id: step_1
+      statement: 把导数化成一个线性判号因子。
+      formula_trace:
+        from: $f(x)=\ln(1+x)-x+\frac12x^2-kx^3$
+        to: $f^\prime(x)=\frac{x^2[1-3k(x+1)]}{1+x}$
+        operation: 求导并通分分解。
+        why: 这样导数符号只看 $1-3k(x+1)$。
+      source_ref: page_0244_ex21_part1_start
+    - step_id: step_2
+      statement: 确定唯一极值点。
+      formula_trace:
+        from: $1-3k(x+1)=0$
+        to: $x_E=\frac1{3k}-1$
+        operation: 解导数变号点。
+        why: $0<k<\frac13$ 保证 $x_E>0$，且导数从正到负。
+      source_ref: page_0244_ex21_part1_start
+    - step_id: step_3
+      statement: 用放缩取点证明右侧一定穿过 $x$ 轴。
+      formula_trace:
+        from: $\ln(1+x)-x<0$
+        to: $f(\frac1{2k})<\frac12(\frac1{2k})^2-k(\frac1{2k})^3=0$
+        operation: 在右侧取显点并放缩。
+        why: 极值点右侧函数递减，从正值到负值，只能有一个零点。
+      source_ref: page_0245_ex21_part1_continuation
+    - step_id: step_4
+      statement: 围绕极值点构造偏移函数。
+      formula_trace:
+        from: $g(t)=f(x_1+t)-f(x_1-t)$
+        to: $g^\prime(t)=f^\prime(x_1+t)+f^\prime(x_1-t)$
+        operation: 对极值点左右两侧差值求导。
+        why: 这是比较右侧零点和 $2x_1$ 的偏移入口。
+      source_ref: page_0245_ex21_offset_solution
+    - step_id: step_5
+      statement: 按解析链路，$g(t)$ 实际为递减。
+      formula_trace:
+        from: $f^\prime(x_1+s)=\frac{(x_1+s)^2[-3ks]}{1+x_1+s}$
+        to: $g^\prime(t)<0,\quad 0<t<x_1$
+        operation: 代入 $s=t$ 和 $s=-t$ 后比较极值点两侧。
+        why: 右侧同距离处下降更快，体现极值点偏移。
+      source_ref: page_0245_ex21_offset_solution
+    - step_id: step_6
+      statement: 由偏移关系推出零点位置。
+      formula_trace:
+        from: $g(x_1)<g(0)$
+        to: $f(2x_1)-f(0)<0$，即 $f(2x_1)<0$
+        operation: 取 $t=x_1$ 并利用 $f(0)=0$。
+        why: 若 $2x_1$ 处已经低于 $x$ 轴，则它在右侧零点之后。
+      source_ref: page_0245_ex21_offset_solution
+    - step_id: step_7
+      statement: 利用极值点右侧单调递减比较横坐标。
+      formula_trace:
+        from: $f(2x_1)<f(x_2)=0$
+        to: $2x_1>x_2$
+        operation: 在 $(x_1,+\infty)$ 上用函数递减反推横坐标。
+        why: 右侧越往右函数值越小。
+      source_ref: page_0245_ex21_offset_solution
+teaching_card:
+  student_title: 用极值点偏移比较零点位置
+  what_it_trains: 训练先找极值点和零点，再围绕极值点比较左右两侧函数值，从而判断零点落在 $2x_1$ 的哪一边。
+  recognition_cues:
+    - 导数能化成 $x^2[1-3k(x+1)]/(1+x)$，极值点显式可写。
+    - 题目同时问极值点和零点的位置关系。
+    - 出现 $f(x_1+t)$ 与 $f(x_1-t)$，说明要看极值点左右偏移。
+    - 结论比较 $2x_1$ 和 $x_2$，本质是在问 $x_2$ 是否超过极值点的对称位置。
+  normalization_moves:
+    - 先把导数判号做到一眼看出唯一极值点。
+    - 用 $\ln(1+x)-x<0$ 找右侧负值点，保证唯一零点。
+    - 把 $x_1$ 当成极值点中心，构造左右差函数。
+    - 用右侧单调递减把函数值比较翻译成横坐标比较。
+  common_failures:
+    - 只算出极值点，不知道怎么证明唯一零点。
+    - 看到 $g(t)$ 就硬算，没意识到它在比较极值点两侧。
+    - 把右侧递减时的函数值大小和横坐标大小关系反了。
+    - 沿用本地页“OCR/录入为递增”的错误题面，导致证明方向反掉。
+  similar_practice_query: 极值点偏移 ln(1+x)-x 放缩取点 唯一零点 2x1 与 x2 比较
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 用户拍板：第 12 项需上网搜高考真题；公开真题 PDF 与线上解析均写“单调递减”，本地题干“递增”按录入错误修正。

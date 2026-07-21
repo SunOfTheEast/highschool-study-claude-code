@@ -1,0 +1,250 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0147_log_sugar_water_ex15
+content_revision_id: mst_p0147_log_sugar_water_ex15-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0147_log_sugar_water_ex15.card.yaml
+stem: |-
+  （26陪跑课答疑，朱茜瑶）已知 $a=\log_6 2,\ b=\log_{12}3,\ c=\log_{40}5$，则 $a,b,c$ 的大小关系为（  ）
+  A. $a<b<c$
+  B. $b<a<c$
+  C. $c<a<b$
+  D. $a<c<b$
+answer: |
+  D
+
+  先取倒数：
+  \[
+  \frac1a=\log_2 6=1+\frac{\ln3}{\ln2},\quad
+  \frac1b=\log_3 12=1+\frac{\ln4}{\ln3},\quad
+  \frac1c=\log_5 40=1+\frac{\ln8}{\ln5}.
+  \]
+  比较三个分式核心量：
+  \[
+  \frac{\ln3}{\ln2}
+  >\frac{\ln3+\ln\frac32}{\ln2+\ln\frac32}
+  >\frac{\ln4}{\ln3},
+  \]
+  且
+  \[
+  \frac{\ln4}{\ln3}
+  =\frac{\ln64}{\ln27}
+  <\frac{\ln64}{\ln25}
+  =\frac{\ln8}{\ln5},
+  \]
+  同时
+  \[
+  \frac{\ln3}{\ln2}
+  =\frac{\ln9}{\ln4}
+  >\frac{\ln8}{\ln5}.
+  \]
+  所以
+  \[
+  \frac1a>\frac1c>\frac1b.
+  \]
+  三者均为正数，取倒数后不等号反向，得
+  \[
+  a<c<b.
+  \]
+  故选 D。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先倒数化，把对数底真数关系转成“1+分式”比较。
+      max_score: 1
+    - step_id: step_2
+      description: 用糖水不等式得到左段夹逼。
+      max_score: 1
+    - step_id: step_3
+      description: 比较 $\frac{\ln4}{\ln3}$ 与 $\frac{\ln8}{\ln5}$。
+      max_score: 1
+    - step_id: step_4
+      description: 补齐 $\frac{\ln3}{\ln2}$ 与 $\frac{\ln8}{\ln5}$ 的直接关系。
+      max_score: 1
+    - step_id: step_5
+      description: 回到原变量并选项匹配。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较三个不同底数对数值的大小关系。
+        result: 见 source_solution_summary
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 糖水不等式
+      - 倒数化对数
+      - 六大同构函数比大小
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - 三项对数底真数均错位，直接互比困难，需先做倒数同构。
+      - 核心比较落在多个 $\frac{\ln u}{\ln v}$ 分式之间，适合糖水不等式夹逼。
+      - 最终通过正数倒数反向恢复原量顺序。
+    normalization_moves_used:
+      - $a,b,c\to\frac1a,\frac1b,\frac1c$。
+      - 构造中间分式 $\frac{\ln3+\ln(3/2)}{\ln2+\ln(3/2)}$。
+      - 把比值改写成 $\frac{\ln64}{\ln27},\frac{\ln64}{\ln25},\frac{\ln9}{\ln4}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会用 $\frac1{\log_m n}=\log_n m$，回补指数对数基础。
+      - 若学生不掌握糖水不等式使用条件与方向，回补不等式工具基础。
+      - 若学生在“对正数取倒数不等号反向”上出错，回补代数恒等变形。
+  detail_terms:
+    - 糖水不等式
+    - $\frac1a,\frac1b,\frac1c$
+    - $\frac{\ln64}{\ln27}<\frac{\ln64}{\ln25}$
+    - $a<c<b$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0147_log_sugar_water_ex15
+source_evidence:
+  source_refs:
+    - ref_id: page_0147_ex15_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0147/page_0147.md
+      role: problem_start
+      evidence: 例15题干：$a=\log_6 2,\ b=\log_{12}3,\ c=\log_{40}5$，给出A-D选项。
+    - ref_id: page_0147_sugar_theorem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0147/page_0147.md
+      role: local_context
+      evidence: 例15前给出“构造糖水不等式比大小”定理：若 $a>b>0,m>0$，则 $\frac{b+m}{a+m}>\frac{b}{a}$。
+    - ref_id: page_0147_ex15_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0147/page_0147.md
+      role: solution
+      evidence: 解析先取倒数：$\frac1a=1+\frac{\ln3}{\ln2},\ \frac1b=1+\frac{\ln4}{\ln3},\ \frac1c=1+\frac{\ln8}{\ln5}$，再链式比较得 $\frac1a>\frac1c>\frac1b$，故 $a<c<b$，选D。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0147.png
+      inspected: true
+      notes: 已核对页图：例15题干、解析和答案D完整位于本页。
+  source_context: 本题是“构造糖水不等式比大小”定理后的直接应用。
+  source_influence:
+    - 保留源解先做倒数化再比较三项分式的结构。
+    - 保留源解两段关键链：糖水不等式夹住 $\frac{\ln4}{\ln3}$，以及 $\frac{\ln64}{\ln27}<\frac{\ln64}{\ln25}$。
+  source_discrepancies: []
+original_problem:
+  stem: （26陪跑课答疑，朱茜瑶）已知 $a=\log_6 2,\ b=\log_{12}3,\ c=\log_{40}5$，则 $a,b,c$ 的大小关系为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+    - label: B
+      text_raw: $b<a<c$
+      text_latex: $b<a<c$
+    - label: C
+      text_raw: $c<a<b$
+      text_latex: $c<a<b$
+    - label: D
+      text_raw: $a<c<b$
+      text_latex: $a<c<b$
+  answer: D
+  fidelity_notes:
+    - 源解主体以倒数比较完成，不直接比较 $a,b,c$ 本身。
+    - 题干与解析均完整在page_0147。
+solution:
+  source_solution_summary: |
+    先取倒数：
+    \[
+    \frac1a=\log_2 6=1+\frac{\ln3}{\ln2},\quad
+    \frac1b=\log_3 12=1+\frac{\ln4}{\ln3},\quad
+    \frac1c=\log_5 40=1+\frac{\ln8}{\ln5}.
+    \]
+    比较三个分式核心量：
+    \[
+    \frac{\ln3}{\ln2}
+    >\frac{\ln3+\ln\frac32}{\ln2+\ln\frac32}
+    >\frac{\ln4}{\ln3},
+    \]
+    且
+    \[
+    \frac{\ln4}{\ln3}
+    =\frac{\ln64}{\ln27}
+    <\frac{\ln64}{\ln25}
+    =\frac{\ln8}{\ln5},
+    \]
+    同时
+    \[
+    \frac{\ln3}{\ln2}
+    =\frac{\ln9}{\ln4}
+    >\frac{\ln8}{\ln5}.
+    \]
+    所以
+    \[
+    \frac1a>\frac1c>\frac1b.
+    \]
+    三者均为正数，取倒数后不等号反向，得
+    \[
+    a<c<b.
+    \]
+    故选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 先倒数化，把对数底真数关系转成“1+分式”比较。
+      formula_trace:
+        from: $a=\log_6 2,\ b=\log_{12}3,\ c=\log_{40}5$
+        to: $\frac1a=1+\frac{\ln3}{\ln2},\ \frac1b=1+\frac{\ln4}{\ln3},\ \frac1c=1+\frac{\ln8}{\ln5}$
+        operation: 用 $\frac1{\log_m n}=\log_n m$ 并拆成 $1+$ 形式。
+        why: 三项统一为同型分式，便于应用糖水不等式。
+      source_ref: page_0147_ex15_solution
+    - step_id: step_2
+      statement: 用糖水不等式得到左段夹逼。
+      formula_trace:
+        from: $\frac{\ln3}{\ln2}$ 与 $\frac{\ln4}{\ln3}$
+        to: $\frac{\ln3}{\ln2}>\frac{\ln3+\ln(3/2)}{\ln2+\ln(3/2)}>\frac{\ln4}{\ln3}$
+        operation: 对比值同时加同一正量构造中间分式。
+        why: 建立 $\frac{\ln3}{\ln2}$ 大于 $\frac{\ln4}{\ln3}$ 的稳定通路。
+      source_ref: page_0147_ex15_solution
+    - step_id: step_3
+      statement: 比较 $\frac{\ln4}{\ln3}$ 与 $\frac{\ln8}{\ln5}$。
+      formula_trace:
+        from: $\frac{\ln4}{\ln3}$
+        to: $\frac{\ln4}{\ln3}=\frac{\ln64}{\ln27}<\frac{\ln64}{\ln25}=\frac{\ln8}{\ln5}$
+        operation: 同分子化后比较分母大小。
+        why: 定位中间项与右项顺序。
+      source_ref: page_0147_ex15_solution
+    - step_id: step_4
+      statement: 补齐 $\frac{\ln3}{\ln2}$ 与 $\frac{\ln8}{\ln5}$ 的直接关系。
+      formula_trace:
+        from: $\frac{\ln3}{\ln2}$
+        to: $\frac{\ln3}{\ln2}=\frac{\ln9}{\ln4}>\frac{\ln8}{\ln5}$
+        operation: 同构改写为“同序幂比值”再比较。
+        why: 完成三项严格全序。
+      source_ref: page_0147_ex15_solution
+    - step_id: step_5
+      statement: 回到原变量并选项匹配。
+      formula_trace:
+        from: $\frac1a>\frac1c>\frac1b$
+        to: $a<c<b$，选 D
+        operation: 对正数取倒数，不等号方向反转。
+        why: 得到题目要求的 $a,b,c$ 顺序。
+      source_ref: page_0147_ex15_solution
+teaching_card:
+  student_title: 先倒数，再用糖水不等式穿起三项
+  what_it_trains: 训练多对数比较题里的“倒数同构 + 分式夹逼 + 反向还原”完整链路。
+  recognition_cues:
+    - 出现 $\log_{m_1}n_1,\log_{m_2}n_2,\log_{m_3}n_3$ 且底真数错位。
+    - 直接换底后得到多个 $\frac{\ln u}{\ln v}$ 比值。
+    - 题型常配合糖水不等式构造中间量。
+  normalization_moves:
+    - 先把对数全变成倒数形式。
+    - 构造一个可控中间分式做夹逼。
+    - 必要时同分子化（如都写成 $\ln64$ 分子）。
+    - 最后倒数反向回到原序。
+  common_failures:
+    - 把 $\frac1{\log_m n}$ 误写成 $\frac{\log_m n}{1}$。
+    - 糖水不等式中“加同量后更甜”方向写反。
+    - 已得到 $\frac1a>\frac1c>\frac1b$ 却忘记反向成 $a<c<b$。
+  similar_practice_query: log6 2 log12 3 log40 5 糖水不等式 倒数比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

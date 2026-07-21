@@ -1,0 +1,244 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0097_exp_tangent_ex18
+content_revision_id: mst_p0097_exp_tangent_ex18-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0097_exp_tangent_ex18.card.yaml
+stem: |-
+  （2022 潍坊月考 T11 · 多选）过点 $P(-1,a)$ 存在 $n\ (n\in\mathbf{N}^*)$ 条直线与函数 $f(x)=(x+1)e^x$ 的图像相切，则 ( )
+  A. $n$ 的最大值为 2
+  B. $na$ 的最大值为 0
+  C. 函数 $y=f(x)$ 图像上的动点，到直线 $2x-y-4=0$ 的距离最小值为 $\sqrt{5}$
+  D. 当 $n=1$ 时，$a$ 的取值范围是 $\left\{a\mid a<-\frac{4}{e^3}\text{ 或 }a=0\right\}$
+answer: |
+  BCD
+
+  设切点为 $(x_0,(x_0+1)e^{x_0})$，因为
+  $f'(x)=(x+2)e^x$，将 $P(-1,a)$ 代入切线方程得
+  $a=-(x_0+1)^2e^{x_0}$。令 $g(x)=-(x+1)^2e^x$，
+  则 $g'(x)=-(x+1)(x+3)e^x$。所以 $g$ 在 $(-\infty,-3)$、
+  $(-1,+\infty)$ 上递减，在 $(-3,-1)$ 上递增，且
+  $g(-3)=-4/e^3$，$g(-1)=0$。由水平线 $y=a$ 与 $g$ 的交点数：
+  $a>0$ 时无切线，$a=0$ 时 $n=1$，$-4/e^3<a<0$ 时 $n=3$，
+  $a=-4/e^3$ 时 $n=2$，$a<-4/e^3$ 时 $n=1$。故 $n$ 最大为 3，
+  A 错；因所有有切线时 $a\le0$，且 $a=0,n=1$，所以 $na$ 最大值为 0，
+  B 对；距离问题中令切线斜率平行于 $2x-y-4=0$，即
+  $(x_0+2)e^{x_0}=2$，唯一解 $x_0=0$，点为 $(0,1)$，
+  距离为 $\frac{|2\cdot0-1-4|}{\sqrt5}=\sqrt5$，C 对；
+  $n=1$ 正是 $a< -4/e^3$ 或 $a=0$，D 对。故选 BCD。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 设切点并把外点代入切线方程。
+      max_score: 1
+    - step_id: step_2
+      description: 得到外点高度参数函数 $g(x)$。
+      max_score: 1
+    - step_id: step_3
+      description: 分析 $g$ 的单调性和极值。
+      max_score: 1
+    - step_id: step_4
+      description: 按 $a$ 的位置数切线条数。
+      max_score: 1
+    - step_id: step_5
+      description: 判断 A、B、D。
+      max_score: 1
+    - step_id: step_6
+      description: 用平行切线求曲线上点到直线的最小距离。
+      max_score: 1
+    - step_id: step_7
+      description: 计算最小距离并给出答案。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: item_1
+        goal: 几何量求解
+        target: A、D：根据 $a$ 判断过点切线条数
+        result: 见 source_solution_summary
+      - part_id: B
+        goal: 极值最值
+        target: B：求 $na$ 的最大值
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 极值最值
+        target: C：求曲线到直线的最小距离
+        result: 见 source_solution_summary
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 数形结合
+      - 局部逼近与找点
+    subroute:
+      - 切点参数化
+      - 过点切线条数
+      - 拐点切线界定
+      - 平行切线求距离
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $a=-(x_0+1)^2e^{x_0}$ 把外点高度与切点横坐标绑定。
+      - $g^{\prime}(x)=-(x+1)(x+3)e^x$ 给出 $a=0$ 和 $a=-4/e^3$ 两个切线条数边界。
+      - $(x_0+2)e^{x_0}=2$ 把最短距离问题转成平行切线条件。
+    normalization_moves_used:
+      - 把过 $P(-1,a)$ 的切线条数转成水平线 $y=a$ 与 $g(x)$ 的交点数。
+      - 把 $na$ 的最大值转成对 $a\le0$ 的端点判断。
+      - 把点到直线最小距离转成切线斜率等于目标直线斜率。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由切点写切线方程，回补导数运算与几何意义。
+      - 若学生不会数 $g(x)=-(x+1)^2e^x$ 的水平线交点，回补导数单调极值基础。
+      - 若学生不会用点到直线距离公式，回补几何关系基础。
+      - 若学生在 $a=-4/e^3$ 边界误判条数，回补方程根分布与韦达。
+  detail_terms:
+    - $f(x)=(x+1)e^x$
+    - $P(-1,a)$
+    - $g(x)=-(x+1)^2e^x$
+    - $-\frac4{e^3}$
+    - $2x-y-4=0$
+    - 答案 BCD
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0097_exp_tangent_ex18
+source_evidence:
+  source_refs:
+    - ref_id: page_0097
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0097/page_0097.md
+      role: problem_start
+      evidence: lines 24-28 give 例 18 题头、stem and A-D choices; lines 30-38 start 法一 and draw the auxiliary function $g(x)=-(x+1)^2e^x$.
+    - ref_id: page_0098
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0098/page_0098.md
+      role: continuation
+      evidence: lines 14-18 finish option checks A-D and conclude BCD; lines 20-28 give 法二 and a second figure, with a count statement recorded as a source discrepancy; line 30 begins 例 19 and is excluded.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0097.png
+      inspected: true
+      notes: 已核对 page_0097：例 18 从中部起头，题干、选项、切点参数方程和 $g(x)$ 图像与 markdown 一致。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0098.png
+      inspected: true
+      notes: 已核对 page_0098 顶部为例 18 续解，结论为 BCD；line 30 后例 19 另起题头，不纳入本卡。
+  source_context: 例 18 是过竖线点 $P(-1,a)$ 作 $f(x)=(x+1)e^x$ 切线的条数题，并附带一个动点到直线的最小距离判断；题解跨到 page_0098 顶部。
+  source_influence:
+    - 保留源页法一：设切点 $x_0$，把 $P(-1,a)$ 代入切线方程，得到 $a=-(x_0+1)^2e^{x_0}$，再用 $g$ 的单调性数切线条数。
+    - 保留源页对 C 的处理：最短距离发生在切线斜率与直线平行处，解 $(x_0+2)e^{x_0}=2$ 得 $x_0=0$。
+    - 保留源页最终答案 BCD。
+  source_discrepancies:
+    - page_0098 line 28 的法二写作 $a=0$ 或 $a=-4/e^3$ 时 $n=1$、$a<-4/e^3$ 时 $n=2$；但 page_0098 line 18、选项 D 和切点参数函数 $g(x)=-(x+1)^2e^x$ 的三段单调性共同给出：$a=0$ 时 $n=1$，$a=-4/e^3$ 时 $n=2$，$a<-4/e^3$ 时 $n=1$。本卡按法一和数学计数处理，答案 BCD 不变。
+original_problem:
+  stem: （2022 潍坊月考 T11 · 多选）过点 $P(-1,a)$ 存在 $n\ (n\in\mathbf{N}^*)$ 条直线与函数 $f(x)=(x+1)e^x$ 的图像相切，则 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $n$ 的最大值为 2
+      text_latex: $n$ 的最大值为 2
+    - label: B
+      text_raw: $na$ 的最大值为 0
+      text_latex: $na$ 的最大值为 0
+    - label: C
+      text_raw: 函数 $y=f(x)$ 图像上的动点，到直线 $2x-y-4=0$ 的距离最小值为 $\sqrt{5}$
+      text_latex: 函数 $y=f(x)$ 图像上的动点，到直线 $2x-y-4=0$ 的距离最小值为 $\sqrt{5}$
+    - label: D
+      text_raw: 当 $n=1$ 时，$a$ 的取值范围是 $\left\{a\mid a<-\frac{4}{e^3}\text{ 或 }a=0\right\}$
+      text_latex: 当 $n=1$ 时，$a$ 的取值范围是 $\left\{a\mid a<-\frac{4}{e^3}\text{ 或 }a=0\right\}$
+  answer: BCD
+  fidelity_notes:
+    - 题干和选项位于 page_0097，解析续到 page_0098 顶部并在例 19 前结束。
+    - 源页法二的边界计数句与法一和代数计数冲突，已在 source_discrepancies 中记录。
+solution:
+  source_solution_summary: |
+    设切点为 $(x_0,(x_0+1)e^{x_0})$，因为
+    $f'(x)=(x+2)e^x$，将 $P(-1,a)$ 代入切线方程得
+    $a=-(x_0+1)^2e^{x_0}$。令 $g(x)=-(x+1)^2e^x$，
+    则 $g'(x)=-(x+1)(x+3)e^x$。所以 $g$ 在 $(-\infty,-3)$、
+    $(-1,+\infty)$ 上递减，在 $(-3,-1)$ 上递增，且
+    $g(-3)=-4/e^3$，$g(-1)=0$。由水平线 $y=a$ 与 $g$ 的交点数：
+    $a>0$ 时无切线，$a=0$ 时 $n=1$，$-4/e^3<a<0$ 时 $n=3$，
+    $a=-4/e^3$ 时 $n=2$，$a<-4/e^3$ 时 $n=1$。故 $n$ 最大为 3，
+    A 错；因所有有切线时 $a\le0$，且 $a=0,n=1$，所以 $na$ 最大值为 0，
+    B 对；距离问题中令切线斜率平行于 $2x-y-4=0$，即
+    $(x_0+2)e^{x_0}=2$，唯一解 $x_0=0$，点为 $(0,1)$，
+    距离为 $\frac{|2\cdot0-1-4|}{\sqrt5}=\sqrt5$，C 对；
+    $n=1$ 正是 $a< -4/e^3$ 或 $a=0$，D 对。故选 BCD。
+  key_steps:
+    - step_id: step_1
+      statement: 设切点并把外点代入切线方程。
+      formula_trace:
+        from: $f(x)=(x+1)e^x,\quad f^{\prime}(x)=(x+2)e^x$
+        to: $y-(x_0+1)e^{x_0}=(x_0+2)e^{x_0}(x-x_0)$
+        operation: 用切点坐标和导数斜率写切线点斜式。
+        why: 过 $P(-1,a)$ 的切线条数由切点参数 $x_0$ 决定。
+      source_ref: page_0097
+    - step_id: step_2
+      statement: 得到外点高度参数函数 $g(x)$。
+      formula_trace:
+        from: $a-(x_0+1)e^{x_0}=(x_0+2)e^{x_0}(-1-x_0)$
+        to: $a=-(x_0+1)^2e^{x_0}=:g(x_0)$
+        operation: 展开并合并含 $(x_0+1)$ 的项。
+        why: 水平线 $y=a$ 与 $g$ 的交点数就是切线条数 $n$。
+      source_ref: page_0097
+    - step_id: step_3
+      statement: 分析 $g$ 的单调性和极值。
+      formula_trace:
+        from: $g(x)=-(x+1)^2e^x$
+        to: $g^{\prime}(x)=-(x+1)(x+3)e^x,\quad g(-3)=-\frac4{e^3},\quad g(-1)=0$
+        operation: 求导并令 $g^{\prime}(x)=0$ 得 $x=-3,-1$。
+        why: 两个临界高度 $-4/e^3$ 与 $0$ 决定水平线交点数变化。
+      source_ref: page_0097
+    - step_id: step_4
+      statement: 按 $a$ 的位置数切线条数。
+      formula_trace:
+        from: $g(-3)=-\frac4{e^3},\quad g(-1)=0,\quad \lim_{x\to-\infty}g(x)=0,\quad \lim_{x\to+\infty}g(x)=-\infty$
+        to: $a=0:n=1;\ -\frac4{e^3}<a<0:n=3;\ a=-\frac4{e^3}:n=2;\ a<-\frac4{e^3}:n=1$
+        operation: 在 $(-\infty,-3)$、$(-3,-1)$、$(-1,+\infty)$ 三段分别数水平线交点。
+        why: 这是判断 A、B、D 的核心计数表。
+      source_ref: page_0098
+    - step_id: step_5
+      statement: 判断 A、B、D。
+      formula_trace:
+        from: $n_{\max}=3,\quad a\le0,\quad n=1\Leftrightarrow a<-\frac4{e^3}\text{ 或 }a=0$
+        to: A 错误，B 正确，D 正确
+        operation: 把计数表代入三个选项。
+        why: 选项 A、B、D 都只依赖 $a$ 与切线条数 $n$ 的关系。
+      source_ref: page_0098
+    - step_id: step_6
+      statement: 用平行切线求曲线上点到直线的最小距离。
+      formula_trace:
+        from: 直线 $2x-y-4=0$ 的斜率为 $2$，曲线切线斜率 $f^{\prime}(x_0)=(x_0+2)e^{x_0}$
+        to: $(x_0+2)e^{x_0}=2,\quad x_0=0,\quad f(0)=1$
+        operation: 令切线斜率与给定直线平行，并用 $h(x)=(x+2)e^x$ 的单调性确定唯一解。
+        why: 曲线上到一条直线距离最小的点，其切线应与该直线平行。
+      source_ref: page_0098
+    - step_id: step_7
+      statement: 计算最小距离并给出答案。
+      formula_trace:
+        from: 最近点 $(0,1)$，直线 $2x-y-4=0$
+        to: $d=\frac{|2\cdot0-1-4|}{\sqrt{2^2+(-1)^2}}=\sqrt5$
+        operation: 代入点到直线距离公式。
+        why: 得到 C 正确，与源页答案 BCD 一致。
+      source_ref: page_0098
+teaching_card:
+  student_title: 把 $P(-1,a)$ 的切线条数化成水平线数交点
+  what_it_trains: 训练用切点参数函数统计过定点的切线条数，并把曲线到直线的最短距离转成平行切线条件。
+  recognition_cues:
+    - 外点固定在 $x=-1$ 上，只剩高度 $a$ 变化。
+    - 切线条数随 $a$ 变化，适合建立 $a=g(x_0)$ 后数水平线交点。
+    - 选项 C 问曲线动点到直线的距离最小值，提示最近点处切线与直线平行。
+  normalization_moves:
+    - 设切点 $x_0$，代入 $P(-1,a)$ 得 $a=-(x_0+1)^2e^{x_0}$。
+    - 求 $g^{\prime}(x)$，用 $x=-3,-1$ 分出 $a=-4/e^3$ 与 $a=0$。
+    - 令 $f^{\prime}(x_0)=2$ 找到最近点 $(0,1)$，再算点到直线距离。
+  common_failures:
+    - 把 $a=-4/e^3$ 当成只有一条切线，漏掉右支上的另一个切点。
+    - 把 $a<-4/e^3$ 误数成两条切线；实际上只有右支一个交点。
+    - 算距离时直接拿任意点代入，没先用平行切线确定最近点。
+  similar_practice_query: $(x+1)e^x$ 过 $P(-1,a)$ 切线条数 $g(x)=-(x+1)^2e^x$
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0097-page_0098 图片确认例 18 跨页完整，page_0098 line 30 起为例 19，未纳入本卡。
+    - page_0098 法二边界计数存在源解内部矛盾；已用法一的切点参数函数和数学计数解析，答案 BCD 与源页结论一致，无需用户拍板。

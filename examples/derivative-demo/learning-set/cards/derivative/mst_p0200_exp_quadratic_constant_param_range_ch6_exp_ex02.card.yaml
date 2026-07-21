@@ -1,0 +1,172 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0200_exp_quadratic_constant_param_range_ch6_exp_ex02
+content_revision_id: mst_p0200_exp_quadratic_constant_param_range_ch6_exp_ex02-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0200_exp_quadratic_constant_param_range_ch6_exp_ex02.card.yaml
+stem: |-
+  （2024 · 利哥每日一题）已知不等式 $e^x-ax^2-x-1\ge0$ 恒成立，求实数 $a$ 的取值范围。
+  1. 当 $x\ge0$ 时，求 $a$ 的取值范围。
+  2. 当 $x\in\mathbf{R}$ 时，求 $a$ 的取值范围。
+answer: |-
+  （1）$a\le\frac12$；（2）$a\in(-\infty,0]$。
+
+  第(1)问：由放缩 $e^x\ge\frac12x^2+x+1\ (x\ge0)$，若 $a\le\frac12$，则 $e^x-ax^2-x-1\ge\left(\frac12-a\right)x^2\ge0$，充分性成立。 若 $a>\frac12$，考察 $x\to0^+$ 时 $e^x-ax^2-x-1=\left(\frac12-a\right)x^2+o(x^2)<0$， 与恒成立矛盾，故第(1)问 $a\le\frac12$。第(2)问：先用 $e^x-x-1\ge0$，当 $a\le0$ 时 $e^x-ax^2-x-1=(e^x-x-1)+(-a)x^2\ge0$，恒成立。 当 $a>0$ 时，取 $x<-\frac1a$ 有 $e^x<1$ 而 $ax^2+x+1>1$，从而 $e^x-ax^2-x-1<0$，矛盾。故第(2)问 $a\in(-\infty,0]$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 第(1)问先用已知放缩给出充分性。
+      max_score: 1
+    - step_id: step_2
+      description: 第(1)问补必要性：$a>\frac12$ 在端点附近失效。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问先处理 $a\le0$ 的恒成立分支。
+      max_score: 1
+    - step_id: step_4
+      description: 第(2)问排除 $a>0$ 分支。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 求参数范围
+        target: 第 1 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: 见 source_solution_summary
+  method:
+    primary: 含参数分类讨论
+    secondary:
+      - 切线放缩与凹凸性
+      - 参变量分离
+    subroute:
+      - 1 线放缩
+      - 端点效应
+      - $a\le0/a>0$ 分支
+      - 反例代点
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+      - 局部逼近结构
+    evidence:
+      - $e^x-ax^2-x-1\ge0$
+      - $e^x\ge\frac12x^2+x+1\ (x\ge0)$
+      - $e^x-x-1\ge0$
+      - $a\le\frac12,\ a\in(-\infty,0]$
+    normalization_moves_used:
+      - 先把题目拆成两个定义域版本分别处理。
+      - 第(1)问先压上界，再用端点局部符号补必要性。
+      - 第(2)问先分参数符号，再用反例点排除正参数。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $e^x-ax^2-x-1$ 拆成“标准非负项 + 参数项”，回补代数恒等变形。
+      - 若学生对 $e^x-x-1\ge0$ 的来源不清楚，回补指数对数基础。
+      - 若学生在“恒成立”题中不会做参数分支，回补不等式工具基础。
+      - 若学生不理解端点附近为何能判必要性，回补导数单调极值基础。
+  detail_terms:
+    - $e^x-ax^2-x-1$
+    - $e^x\ge\frac12x^2+x+1$
+    - $e^x-x-1\ge0$
+    - $x<-\frac1a$
+    - $a\le\frac12,\ a\le0$
+parts: &a1
+  - part_id: "1"
+    text: 当 $x\ge0$ 时，求 $a$ 的取值范围。
+  - part_id: "2"
+    text: 当 $x\in\mathbf{R}$ 时，求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0200_exp_quadratic_constant_param_range_ch6_exp_ex02
+source_evidence:
+  source_refs:
+    - ref_id: page_0200_ex02_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0200/page_0200.md
+      role: problem_start
+      evidence: page_0200 行30-32给出例2题干，分两问分别在 $x\ge0$ 与 $x\in\mathbf{R}$ 上求 $a$ 的范围。
+    - ref_id: page_0200_ex02_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0200/page_0200.md
+      role: solution
+      evidence: page_0200 行34-35给出例2解析：第(1)问结论 $a\le\frac12$，第(2)问结论 $a\in(-\infty,0]$。
+    - ref_id: page_0200_expansion_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0200/page_0200.md
+      role: local_context
+      evidence: page_0200 行17-18给出放缩 $e^x\ge\frac12x^2+x+1\ (x\ge0)$，是第(1)问核心依据。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0200.png
+      inspected: true
+      notes: 已核对页图：例2两问题干、解析与结论区间清晰可读。
+  source_context: 例2题头与解析均在 page_0200，同页可完整建卡。
+  source_influence:
+    - 保留第(1)问的放缩主线：$e^x\ge\frac12x^2+x+1$ 直接压住 $ax^2+x+1$。
+    - 保留第(2)问的分支讨论：先分 $a\le0$ 与 $a>0$，再对 $a>0$ 取反例。
+    - 保留源解给出的反例点思路：$x<-\frac1a$ 或 $x=-\frac1a$。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 利哥每日一题）已知不等式 $e^x-ax^2-x-1\ge0$ 恒成立，求实数 $a$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: （1）$a\le\frac12$；（2）$a\in(-\infty,0]$。
+  fidelity_notes:
+    - 源题为填空型两问，无选择项。
+    - 第(1)问源页提醒“大题需补充分性证明”，本卡在步骤中给出可执行判据。
+solution:
+  source_solution_summary: 第(1)问：由放缩 $e^x\ge\frac12x^2+x+1\ (x\ge0)$，若 $a\le\frac12$，则 $e^x-ax^2-x-1\ge\left(\frac12-a\right)x^2\ge0$，充分性成立。 若 $a>\frac12$，考察 $x\to0^+$ 时 $e^x-ax^2-x-1=\left(\frac12-a\right)x^2+o(x^2)<0$， 与恒成立矛盾，故第(1)问 $a\le\frac12$。第(2)问：先用 $e^x-x-1\ge0$，当 $a\le0$ 时 $e^x-ax^2-x-1=(e^x-x-1)+(-a)x^2\ge0$，恒成立。 当 $a>0$ 时，取 $x<-\frac1a$ 有 $e^x<1$ 而 $ax^2+x+1>1$，从而 $e^x-ax^2-x-1<0$，矛盾。故第(2)问 $a\in(-\infty,0]$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问先用已知放缩给出充分性。
+      formula_trace:
+        from: $e^x\ge\frac12x^2+x+1\ (x\ge0)$
+        to: $a\le\frac12\Rightarrow e^x-ax^2-x-1\ge0$
+        operation: 把目标式拆为 $\left(e^x-\frac12x^2-x-1\right)+\left(\frac12-a\right)x^2$。
+        why: 直接把参数条件压到非负二次项上。
+      source_ref: page_0200_ex02_solution
+    - step_id: step_2
+      statement: 第(1)问补必要性：$a>\frac12$ 在端点附近失效。
+      formula_trace:
+        from: $a>\frac12$
+        to: $x\to0^+\Rightarrow e^x-ax^2-x-1<0$
+        operation: 用端点局部展开（端点效应）判符号。
+        why: 排除 $a>\frac12$，完成“恒成立”参数上界。
+      source_ref: page_0200_ex02_solution
+    - step_id: step_3
+      statement: 第(2)问先处理 $a\le0$ 的恒成立分支。
+      formula_trace:
+        from: $e^x-x-1\ge0,\ a\le0$
+        to: $e^x-ax^2-x-1\ge0$
+        operation: 写成 $(e^x-x-1)+(-a)x^2$ 的和。
+        why: 两个非负项相加，直接得到恒成立。
+      source_ref: page_0200_ex02_solution
+    - step_id: step_4
+      statement: 第(2)问排除 $a>0$ 分支。
+      formula_trace:
+        from: $a>0,\ x<-\frac1a$
+        to: $e^x<1<ax^2+x+1\Rightarrow e^x-ax^2-x-1<0$
+        operation: 按源解给出的反例点比较两侧大小。
+        why: 说明 $a>0$ 不可能满足“对一切实数恒成立”。
+      source_ref: page_0200_ex02_solution
+teaching_card:
+  student_title: 先放缩后分支的恒成立求参
+  what_it_trains: 训练把“恒成立”参数题拆成可控模板：先用放缩给上界，再按参数符号做反例排除。
+  recognition_cues:
+    - 题干出现 $e^x-ax^2-x-1\ge0$ 且求参数范围。
+    - 同一母式给了不同定义域（$x\ge0$ 与 $x\in\mathbf{R}$）。
+    - 解析里出现“端点效应”“$a\le0/a>0$”提示分支法。
+  normalization_moves:
+    - 先写出可复用放缩：$e^x\ge\frac12x^2+x+1$、$e^x-x-1\ge0$。
+    - 第(1)问：压上界 + 端点效应补必要性。
+    - 第(2)问：先留 $a\le0$，再用 $x<-\frac1a$ 排除 $a>0$。
+  common_failures:
+    - 第(1)问只写“$a\le\frac12$ 可行”而漏掉必要性说明。
+    - 第(2)问忘记先分 $a$ 的符号，直接硬算。
+    - 取反例时只写 $x=-\frac1a$，却不说明为何能推出矛盾。
+  similar_practice_query: e^x-ax^2-x-1 恒成立 参数范围 端点效应 a<=0
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

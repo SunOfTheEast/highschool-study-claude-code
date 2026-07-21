@@ -1,0 +1,201 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0173_exp_shift_ratio_max_ex19
+content_revision_id: mst_p0173_exp_shift_ratio_max_ex19-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0173_exp_shift_ratio_max_ex19.card.yaml
+stem: |-
+  （2022 · 镇海月考 T8）不等式 $e^x-4x+2\geqslant ax+b\ (a,b\in\mathbf{R},a\neq-4)$ 对任意实数 $x$ 恒成立，则 $\frac{b-4}{a+4}$ 的最大值为（  ）
+  A. $-\ln 2$
+  B. $-1-\ln 2$
+  C. $-2\ln 2$
+  D. $2-2\ln 2$
+answer: |
+  A
+
+  原不等式等价于
+  \[
+  e^x-2\ge (a+4)x+b-4.
+  \]
+  设右侧直线零点
+  \[
+  x_1=-\frac{b-4}{a+4},
+  \]
+  左侧函数零点
+  \[
+  x_2=\ln2.
+  \]
+  按源解零点比大小模型有
+  \[
+  x_1\ge x_2
+  \Rightarrow
+  -\frac{b-4}{a+4}\ge\ln2
+  \Rightarrow
+  \frac{b-4}{a+4}\le-\ln2.
+  \]
+  因此该比值最大为 $-\ln2$，选 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 先把题目改写成标准比较式。
+      max_score: 1
+    - step_id: step_2
+      description: 写出右侧直线零点。
+      max_score: 1
+    - step_id: step_3
+      description: 写出左侧函数零点。
+      max_score: 1
+    - step_id: step_4
+      description: 零点比较转为分式上界。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 零点比大小
+      - 线性参数分式读取
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+    evidence:
+      - $e^x-2$ 与 $(a+4)x+b-4$ 的零点分别是 $\ln2$ 与 $-\frac{b-4}{a+4}$。
+      - 目标分式通过零点比较直接受上界约束。
+    normalization_moves_used:
+      - 平移重写：$e^x-4x+2\mapsto e^x-2$ 对比一次函数。
+      - 先锁定零点位置，再回读分式极值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生把 $e^x-2=0$ 解错，回补指数对数基础。
+      - 若学生不会把直线零点写成 $-\frac{b-4}{a+4}$，回补代数恒等变形。
+      - 若学生无法理解零点比较到分式最大值的映射，回补函数性质与图像。
+  detail_terms:
+    - $e^x-2$
+    - $(a+4)x+b-4$
+    - $x_1=-\frac{b-4}{a+4}$
+    - $x_2=\ln2$
+    - $\frac{b-4}{a+4}\le-\ln2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0173_exp_shift_ratio_max_ex19
+source_evidence:
+  source_refs:
+    - ref_id: page_0173_ex19_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0173/page_0173.md
+      role: problem_start
+      evidence: lines 38-43 给出例19题干与 A-D 选项，问 $\frac{b-4}{a+4}$ 的最大值。
+    - ref_id: page_0173_ex19_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0173/page_0173.md
+      role: solution
+      evidence: line 45 解析设 $x_1=-\frac{b-4}{a+4}$、$x_2=\ln2$，由零点比大小得 $x_1\ge x_2$，推出 $\frac{b-4}{a+4}\le-\ln2$，答案 A。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0173.png
+      inspected: true
+      notes: 已核对页图：例19题干、选项与解析完整在同页；答案字母 A。
+  source_context: 本题在 page_0173 同页完整，无跨页续解。
+  source_influence:
+    - 保留源解结构：先把不等式改写为 $e^x-2\ge (a+4)x+b-4$。
+    - 保留源解零点表达式直接对应目标分式。
+  source_discrepancies: []
+original_problem:
+  stem: （2022 · 镇海月考 T8）不等式 $e^x-4x+2\geqslant ax+b\ (a,b\in\mathbf{R},a\neq-4)$ 对任意实数 $x$ 恒成立，则 $\frac{b-4}{a+4}$ 的最大值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $-\ln 2$
+      text_latex: $-\ln 2$
+    - label: B
+      text_raw: $-1-\ln 2$
+      text_latex: $-1-\ln 2$
+    - label: C
+      text_raw: $-2\ln 2$
+      text_latex: $-2\ln 2$
+    - label: D
+      text_raw: $2-2\ln 2$
+      text_latex: $2-2\ln 2$
+  answer: A
+  fidelity_notes:
+    - 题干已给 $a\neq-4$，故目标分式分母非零。
+    - 解析与选项在同页完整。
+solution:
+  source_solution_summary: |
+    原不等式等价于
+    \[
+    e^x-2\ge (a+4)x+b-4.
+    \]
+    设右侧直线零点
+    \[
+    x_1=-\frac{b-4}{a+4},
+    \]
+    左侧函数零点
+    \[
+    x_2=\ln2.
+    \]
+    按源解零点比大小模型有
+    \[
+    x_1\ge x_2
+    \Rightarrow
+    -\frac{b-4}{a+4}\ge\ln2
+    \Rightarrow
+    \frac{b-4}{a+4}\le-\ln2.
+    \]
+    因此该比值最大为 $-\ln2$，选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 先把题目改写成标准比较式。
+      formula_trace:
+        from: $e^x-4x+2\ge ax+b$
+        to: $e^x-2\ge (a+4)x+b-4$
+        operation: 移项合并一次项与常数项。
+        why: 便于直接读出“指数函数 vs 直线”的零点。
+      source_ref: page_0173_ex19_solution
+    - step_id: step_2
+      statement: 写出右侧直线零点。
+      formula_trace:
+        from: $(a+4)x+b-4=0$
+        to: $x_1=-\frac{b-4}{a+4}$
+        operation: 一次方程求根。
+        why: 目标分式正好嵌在零点表达式中。
+      source_ref: page_0173_ex19_solution
+    - step_id: step_3
+      statement: 写出左侧函数零点。
+      formula_trace:
+        from: $e^x-2=0$
+        to: $x_2=\ln2$
+        operation: 指数方程取对数。
+        why: 提供固定比较基准。
+      source_ref: page_0173_ex19_solution
+    - step_id: step_4
+      statement: 零点比较转为分式上界。
+      formula_trace:
+        from: $x_1\ge x_2$
+        to: $\frac{b-4}{a+4}\le-\ln2$
+        operation: 代入 $x_1,x_2$ 并整理。
+        why: 直接得到该分式的最大值。
+      source_ref: page_0173_ex19_solution
+teaching_card:
+  student_title: 把分式藏进零点坐标
+  what_it_trains: 训练在“指数函数压线性函数”的恒成立题中，把目标分式重写进直线零点，然后用固定指数零点给出最值界。
+  recognition_cues:
+    - 题干目标是 $\frac{b-4}{a+4}$ 的最大值。
+    - 不等式含 $e^x$ 与线性项，适合零点探路。
+    - 通过移项可出现 $e^x-2$ 的固定零点。
+  normalization_moves:
+    - 先移项得到 $e^x-2\ge (a+4)x+b-4$。
+    - 求两边零点并比较位置。
+    - 把零点不等式回译成目标分式上界。
+  common_failures:
+    - 把 $(a+4)x+b-4=0$ 解根时符号写反。
+    - 把 $\ln2$ 误记为 $2$。
+    - 最后把“最大值”错读成“最小值”。
+  similar_practice_query: e^x-4x+2≥ax+b (b-4)/(a+4) 最大值 零点比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

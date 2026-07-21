@@ -1,0 +1,226 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0261_expx_minus_ax2_minus_cosx_minus_lnx1_extreme_two_sides_ex10
+content_revision_id: mst_p0261_expx_minus_ax2_minus_cosx_minus_lnx1_extreme_two_sides_ex10-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0261_expx_minus_ax2_minus_cosx_minus_lnx1_extreme_two_sides_ex10.card.yaml
+stem: |-
+  （2024 · 全国一模）已知函数 $f(x)=e^x-ax^2-\cos x-\ln(x+1)$。
+  1. 若 $a=1$，求证：函数 $f(x)$ 的图象与 $x$ 轴相切于原点。
+  2. 若函数 $f(x)$ 在区间 $(-1,0)$、$(0,+\infty)$ 各恰有一个极值点，求实数 $a$ 的取值范围。
+answer: |-
+  第(1)问：图象与 $x$ 轴相切于原点。第(2)问：$a\in(\frac32,+\infty)$。
+
+  第(1)问当 $a=1$ 时，$f(0)=0$，且 $f^\prime(x)=e^x-2x+\sin x-\frac1{x+1}$，所以 $f^\prime(0)=0$，在原点处切线为 $y=0$，即与 $x$ 轴相切。 第(2)问令 $g=f^\prime$， $g^\prime(x)=e^x-2a+\cos x+\frac1{(x+1)^2}$。关键是 $g(0)=f^\prime(0)=0$，这是导函数的中间零点。若 $a\le\frac32$，则左侧不能产生所需极值点；若 $a>\frac32$，因为 $g^\prime(0)=3-2a<0$，source 分别在 $(-1,0)$ 与 $(0,+\infty)$ 构造出 $g^\prime$ 的零点，再推出 $g=f^\prime$ 在两侧各有一个零点，故 $f$ 在两侧各有一个极小值点。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 第(1)问：验证原点在图象上。
+      max_score: 1
+    - step_id: step_2
+      description: 第(1)问：验证切线斜率为 0。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问：把极值点问题转成 $f^\prime$ 的零点问题。
+      max_score: 1
+    - step_id: step_4
+      description: 第(2)问：看 $g$ 在中间零点的二阶趋势。
+      max_score: 1
+    - step_id: step_5
+      description: 排除 $a\le\frac32$。
+      max_score: 1
+    - step_id: step_6
+      description: 证明 $a>\frac32$ 时左侧有一个极小值点。
+      max_score: 1
+    - step_id: step_7
+      description: 证明 $a>\frac32$ 时右侧有一个极小值点。
+      max_score: 1
+    - step_id: step_8
+      description: 合并参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 几何性质证明
+        target: 第 1 问
+        result: 图象与 $x$ 轴相切于原点。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $a>\frac32$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 充分/必要性探路
+      - 含参数分类讨论
+      - 数形结合
+    subroute:
+      - 中间零点 $f^\prime(0)=0$
+      - 二阶导探路
+      - 两侧极值点构造
+      - 极值点个数判定
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 三角复合结构
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - $e^x-ax^2-\cos x-\ln(x+1)$
+      - $f^\prime(0)=0$
+      - $f^{\prime\prime}(0)=3-2a$
+      - $a>\frac32$
+    normalization_moves_used:
+      - 把 $f$ 的极值点转成 $f^\prime$ 的零点。
+      - 把 $f^\prime(0)=0$ 当作中间显点。
+      - 用 $f^{\prime\prime}(0)<0$ 作为突破口。
+      - 再分别证明左右两侧各能找到一个零点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会证明切线相切，回补导数运算与几何意义。
+      - 若学生混淆函数零点和极值点，回补导数单调极值基础。
+      - 若学生看不出 $f^\prime(0)=0$ 是中间显点，回补函数性质与图像。
+      - 若学生不会处理 $\ln(x+1)$ 定义域，回补函数三要素与定义域。
+      - 若学生不会用二阶导趋势判断两侧形状，回补导数单调极值基础。
+  detail_terms:
+    - $e^x-ax^2-\cos x-\ln(x+1)$
+    - $f^\prime(0)=0$
+    - $f^{\prime\prime}(0)=3-2a$
+    - 两侧各一个极值点
+    - $a>\frac32$
+parts: &a1
+  - id: "1"
+    text: 若 $a=1$，求证：函数 $f(x)$ 的图象与 $x$ 轴相切于原点。
+  - id: "2"
+    text: 若函数 $f(x)$ 在区间 $(-1,0)$、$(0,+\infty)$ 各恰有一个极值点，求实数 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0261_expx_minus_ax2_minus_cosx_minus_lnx1_extreme_two_sides_ex10
+source_evidence:
+  source_refs:
+    - ref_id: page_0261_ex10_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0261/page_0261.md
+      role: problem_start
+      evidence: page_0261 给出例10题头：$f(x)=e^x-ax^2-\cos x-\ln(x+1)$；第(1)问 $a=1$ 证图象与 $x$ 轴相切于原点，第(2)问在 $(-1,0)$、$(0,+\infty)$ 各恰有一个极值点求 $a$。
+    - ref_id: page_0261_ex10_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0261/page_0261.md
+      role: solution
+      evidence: page_0261 页底给出第(1)问起步：$f(0)=0$，$f^\prime(0)=0$，切线为 $y=0$。
+    - ref_id: page_0262_ex10_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0262/page_0262.md
+      role: solution
+      evidence: page_0262 延续例10第(2)问：设 $g=f^\prime$、$h=g^\prime$，用 $h(0)=3-2a$ 判定，当 $a>\frac32$ 时两侧各有一个极小值点，结论 $(\frac32,+\infty)$。
+    - ref_id: page_0262_ex11_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0262/page_0262.md
+      role: local_context
+      evidence: page_0262 下方另起例11，说明例10在本页闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0261.png
+      inspected: true
+      notes: 已核对页图：例10题干和第(1)问解析起于 page_0261 页底。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0262.png
+      inspected: true
+      notes: 已核对页图：page_0262 为例10续解，随后另起例11。
+  source_context: 本卡处理 page_0261 起头、page_0262 续完的例10；page_0262 例11排除。
+  source_influence:
+    - 保留第(1)问由 $f(0)=0$、$f^\prime(0)=0$ 证明与 $x$ 轴相切。
+    - 保留第(2)问的中间零点逻辑：$f^\prime(0)=0$，要让两侧各有极值点，需要二阶导在 0 处向下，即 $f^{\prime\prime}(0)<0$。
+    - 保留 source 的充分性证明框架：在 $a>\frac32$ 时分别在 $(-1,0)$ 和 $(0,+\infty)$ 找到 $f^\prime$ 的一个零点。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 全国一模）已知函数 $f(x)=e^x-ax^2-\cos x-\ln(x+1)$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问：图象与 $x$ 轴相切于原点。第(2)问：$a\in(\frac32,+\infty)$。
+  fidelity_notes:
+    - 无选项。
+    - 第(2)问是极值点个数，不是零点个数；source 将其解释为 $f^\prime$ 的两侧零点模型。
+solution:
+  source_solution_summary: 第(1)问当 $a=1$ 时，$f(0)=0$，且 $f^\prime(x)=e^x-2x+\sin x-\frac1{x+1}$，所以 $f^\prime(0)=0$，在原点处切线为 $y=0$，即与 $x$ 轴相切。 第(2)问令 $g=f^\prime$， $g^\prime(x)=e^x-2a+\cos x+\frac1{(x+1)^2}$。关键是 $g(0)=f^\prime(0)=0$，这是导函数的中间零点。若 $a\le\frac32$，则左侧不能产生所需极值点；若 $a>\frac32$，因为 $g^\prime(0)=3-2a<0$，source 分别在 $(-1,0)$ 与 $(0,+\infty)$ 构造出 $g^\prime$ 的零点，再推出 $g=f^\prime$ 在两侧各有一个零点，故 $f$ 在两侧各有一个极小值点。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问：验证原点在图象上。
+      formula_trace:
+        from: $f(x)=e^x-x^2-\cos x-\ln(x+1)$
+        to: $f(0)=0$
+        operation: 代入 $x=0$。
+        why: 原点是切点候选。
+      source_ref: page_0261_ex10_solution_start
+    - step_id: step_2
+      statement: 第(1)问：验证切线斜率为 0。
+      formula_trace:
+        from: $f^\prime(x)=e^x-2x+\sin x-\frac1{x+1}$
+        to: $f^\prime(0)=0$
+        operation: 代入 $x=0$。
+        why: 切线为 $y=0$，即 $x$ 轴。
+      source_ref: page_0261_ex10_solution_start
+    - step_id: step_3
+      statement: 第(2)问：把极值点问题转成 $f^\prime$ 的零点问题。
+      formula_trace:
+        from: $f^\prime(x)=e^x-2ax+\sin x-\frac1{x+1}$
+        to: $g(x)=f^\prime(x)$，$g(0)=0$
+        operation: 把导函数另设为 $g$。
+        why: 两侧各有极值点等价于 $g$ 在两侧各有一个零点。
+      source_ref: page_0262_ex10_solution_continuation
+    - step_id: step_4
+      statement: 第(2)问：看 $g$ 在中间零点的二阶趋势。
+      formula_trace:
+        from: $g^\prime(x)=e^x-2a+\cos x+\frac1{(x+1)^2}$
+        to: $g^\prime(0)=3-2a$
+        operation: 求 $f^{\prime\prime}(0)$。
+        why: 中间零点已知时，二阶导符号决定两侧能否产生极值点。
+      source_ref: page_0262_ex10_solution_continuation
+    - step_id: step_5
+      statement: 排除 $a\le\frac32$。
+      formula_trace:
+        from: $3-2a\ge0$
+        to: $(-1,0)$ 上不能形成所需极值点
+        operation: 用 source 的 $h=g^\prime$ 在左侧的单调性判定。
+        why: 左侧 $g$ 没有符合要求的零点，故 $f$ 无极值点。
+      source_ref: page_0262_ex10_solution_continuation
+    - step_id: step_6
+      statement: 证明 $a>\frac32$ 时左侧有一个极小值点。
+      formula_trace:
+        from: $a>\frac32$，$g^\prime(0)<0$
+        to: 存在 $m\in(-1,0)$，$f^\prime(m)=0$，且左侧先负后正
+        operation: 先找 $g^\prime$ 的零点 $x_0$，再找 $g=f^\prime$ 的零点 $m$。
+        why: 这给出 $f$ 在 $(-1,0)$ 的一个极小值点。
+      source_ref: page_0262_ex10_solution_continuation
+    - step_id: step_7
+      statement: 证明 $a>\frac32$ 时右侧有一个极小值点。
+      formula_trace:
+        from: $a>\frac32$，$g^\prime(0)<0$ 且远处 $g^\prime>0$
+        to: 存在 $n>0$，$f^\prime(n)=0$，且右侧先负后正
+        operation: 在 $(0,+\infty)$ 上同样先找 $g^\prime$ 的零点，再找 $g$ 的零点。
+        why: 这给出 $f$ 在 $(0,+\infty)$ 的一个极小值点。
+      source_ref: page_0262_ex10_solution_continuation
+    - step_id: step_8
+      statement: 合并参数范围。
+      formula_trace:
+        from: $a>\frac32$ 必要且充分
+        to: $a\in(\frac32,+\infty)$
+        operation: 合并两侧极值点存在条件。
+        why: 完成求参。
+      source_ref: page_0262_ex10_solution_continuation
+teaching_card:
+  student_title: 极值点题先看 $f^\prime(0)=0$ 这个中间零点
+  what_it_trains: 训练把“两侧各有一个极值点”翻译成导函数两侧各有一个零点，再用 $f^{\prime\prime}(0)$ 判断形状。
+  recognition_cues:
+    - 题目要求 $(-1,0)$ 和 $(0,+\infty)$ 各有一个极值点。
+    - 直接算出 $f^\prime(0)=0$，说明导函数中间零点已知。
+    - source 最后点明本质是 $f^{\prime\prime}(0)<0$，即 $a>\frac32$。
+  normalization_moves:
+    - 先完成第(1)问的 $f(0)=0$、$f^\prime(0)=0$。
+    - 第(2)问不要直接找 $f$ 的极值，先研究 $f^\prime$。
+    - 用 $f^{\prime\prime}(0)$ 锁参数方向，再补左右存在性。
+  common_failures:
+    - 把两侧极值点误读成两侧零点。
+    - 只得到 $a>\frac32$，没有说明两侧确实各有一个极值点。
+    - 忘记定义域左端是 $-1$，左侧只能在 $(-1,0)$ 讨论。
+  similar_practice_query: 中间零点 fprime0 极值点两侧 e^x cosx ln(1+x) 参数范围 a>3/2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

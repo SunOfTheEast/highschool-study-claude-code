@@ -1,0 +1,236 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0152_negative_branch_x_ln_ex29
+content_revision_id: mst_p0152_negative_branch_x_ln_ex29-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0152_negative_branch_x_ln_ex29.card.yaml
+stem: |-
+  （2023·安阳二模）已知 $a,b,c$ 均为负实数，且 $a=\ln\frac{a+1}{3}+2$，$b=\ln\frac{b+1}{4}+3$，$c=2e^{c-1}-1$，则（  ）
+  A. $b<a<c$
+  B. $c<b<a$
+  C. $a<b<c$
+  D. $a<c<b$
+answer: |
+  A
+
+  先把三式整理到同一模板：
+  \[
+  a-\ln(a+1)=2-\ln3,\quad
+  b-\ln(b+1)=3-\ln4,\quad
+  c-\ln(c+1)=1-\ln2.
+  \]
+  令
+  \[
+  f(x)=x-\ln(x+1)\ (x>-1),
+  \]
+  则
+  \[
+  f(a)=f(2),\ f(b)=f(3),\ f(c)=f(1).
+  \]
+  又
+  \[
+  f^{\prime}(x)=1-\frac{1}{x+1}=\frac{x}{x+1},
+  \]
+  所以 $f$ 在 $(-1,0)$ 递减，在 $(0,+\infty)$ 递增，故
+  \[
+  f(1)<f(2)<f(3).
+  \]
+  由于 $a,b,c<0$，三者都落在 $(-1,0)$ 上，且该区间内函数递减，
+  \[
+  f(c)<f(a)<f(b)\Rightarrow c>a>b\Rightarrow b<a<c.
+  \]
+  故选 A。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把三条已知方程统一改写为 $x-\ln(x+1)=\text{常数}$。
+      max_score: 1
+    - step_id: step_2
+      description: 定义同构函数并建立函数值对应。
+      max_score: 1
+    - step_id: step_3
+      description: 用导数判定 $f$ 的分段单调性。
+      max_score: 1
+    - step_id: step_4
+      description: 在负半轴分支上把函数值顺序反推自变量顺序。
+      max_score: 1
+    - step_id: step_5
+      description: 对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 把三个隐式定义的负实数 $a,b,c$ 排序。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 数形结合
+    subroute:
+      - 同构函数 $f(x)=x-\ln(x+1)$
+      - 负半轴分支反序
+      - 数形结合交点
+  structure:
+    primary: 极值点偏移结构
+    secondary:
+      - 指对复合结构
+      - 同构结构
+    evidence:
+      - $f(x)=x-\ln(x+1)$ 在 $x=0$ 左右单调性不同，比较必须锁定所在分支。
+      - 已知条件给出 $a,b,c<0$，使比较落在 $(-1,0)$ 负半轴。
+      - 配图用同一水平线对应 $f(1),f(2),f(3)$，直接体现 $b,a,c$ 的横坐标次序。
+    normalization_moves_used:
+      - 三式统一为 $x-\ln(x+1)=\text{常数}$。
+      - 把常数识别为 $f(1),f(2),f(3)$。
+      - 借助负半轴递减性执行“值序到变量序”的反推。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把三式统一到 $f(x)=x-\ln(x+1)$，回补代数恒等变形。
+      - 若学生不会用导数判定 $(-1,0)$ 与 $(0,+\infty)$ 的单调性，回补导数单调极值基础。
+      - 若学生忽略 $a,b,c<0$ 导致分支选错，回补函数三要素与定义域。
+  detail_terms:
+    - 负半轴分支
+    - $f(1),f(2),f(3)$
+    - $f^{\prime}(x)=\frac{x}{x+1}$
+    - 顺序 $b<a<c$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0152_negative_branch_x_ln_ex29
+source_evidence:
+  source_refs:
+    - ref_id: page_0152_ex29_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0152/page_0152.md
+      role: problem_start
+      evidence: 例29题干给出 $a,b,c$ 均为负实数，且满足三条方程，需判断 $a,b,c$ 的顺序。
+    - ref_id: page_0152_ex29_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0152/page_0152.md
+      role: solution
+      evidence: 源解析将三式统一为 $f(x)=x-\ln(x+1)$ 的函数值比较，结论为 $b<a<c$，故选 A。
+    - ref_id: page_0152_ex29_figure
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0152/page_0152.md
+      role: solution
+      evidence: 例29配图标注 $f(c)=f(1),f(a)=f(2),f(b)=f(3)$，并在负半轴标出顺序 $b,a,c$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0152.png
+      inspected: true
+      notes: 已核对原图：例29题干、选项、解析与配图完整，答案为 A。
+  source_context: page_0152 顶部是例28续解；例29是本页第一个新题。
+  source_influence:
+    - 保留源解同构归约：$a-\ln(a+1)=2-\ln3$，$b-\ln(b+1)=3-\ln4$，$c-\ln(c+1)=1-\ln2$。
+    - 保留源解映射：令 $f(x)=x-\ln(x+1)$，得到 $f(a)=f(2),f(b)=f(3),f(c)=f(1)$。
+    - 结合 $a,b,c<0$ 只取负半轴分支，按递减性得到 $b<a<c$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·安阳二模）已知 $a,b,c$ 均为负实数，且 $a=\ln\frac{a+1}{3}+2$，$b=\ln\frac{b+1}{4}+3$，$c=2e^{c-1}-1$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $b<a<c$
+      text_latex: $b<a<c$
+    - label: B
+      text_raw: $c<b<a$
+      text_latex: $c<b<a$
+    - label: C
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+    - label: D
+      text_raw: $a<c<b$
+      text_latex: $a<c<b$
+  answer: A
+  fidelity_notes:
+    - 题干已明确 $a,b,c$ 为负实数，这一限定决定了取 $f(x)$ 的负半轴分支。
+    - 例29配图承载了“同一函数值对应负半轴横坐标顺序”的证据，本卡已绑定。
+solution:
+  source_solution_summary: |
+    先把三式整理到同一模板：
+    \[
+    a-\ln(a+1)=2-\ln3,\quad
+    b-\ln(b+1)=3-\ln4,\quad
+    c-\ln(c+1)=1-\ln2.
+    \]
+    令
+    \[
+    f(x)=x-\ln(x+1)\ (x>-1),
+    \]
+    则
+    \[
+    f(a)=f(2),\ f(b)=f(3),\ f(c)=f(1).
+    \]
+    又
+    \[
+    f^{\prime}(x)=1-\frac{1}{x+1}=\frac{x}{x+1},
+    \]
+    所以 $f$ 在 $(-1,0)$ 递减，在 $(0,+\infty)$ 递增，故
+    \[
+    f(1)<f(2)<f(3).
+    \]
+    由于 $a,b,c<0$，三者都落在 $(-1,0)$ 上，且该区间内函数递减，
+    \[
+    f(c)<f(a)<f(b)\Rightarrow c>a>b\Rightarrow b<a<c.
+    \]
+    故选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 把三条已知方程统一改写为 $x-\ln(x+1)=\text{常数}$。
+      formula_trace:
+        from: $a=\ln\frac{a+1}{3}+2,\ b=\ln\frac{b+1}{4}+3,\ c=2e^{c-1}-1$
+        to: $a-\ln(a+1)=2-\ln3,\ b-\ln(b+1)=3-\ln4,\ c-\ln(c+1)=1-\ln2$
+        operation: 移项并对 $c+1=2e^{c-1}$ 取对数。
+        why: 三项可并入同一个函数模板。
+      source_ref: page_0152_ex29_solution
+    - step_id: step_2
+      statement: 定义同构函数并建立函数值对应。
+      formula_trace:
+        from: $f(x)=x-\ln(x+1)$
+        to: $f(a)=f(2),\ f(b)=f(3),\ f(c)=f(1)$
+        operation: 把右端常数分别识别为 $f(2),f(3),f(1)$。
+        why: 把未知量比较转成同一函数在不同点的比较。
+      source_ref: page_0152_ex29_solution
+    - step_id: step_3
+      statement: 用导数判定 $f$ 的分段单调性。
+      formula_trace:
+        from: $f^{\prime}(x)=\frac{x}{x+1}$
+        to: $(-1,0)$ 递减，$(0,+\infty)$ 递增
+        operation: 按分子分母符号分区间判号。
+        why: 后续要结合 $a,b,c<0$ 只取负半轴结论。
+      source_ref: page_0152_ex29_solution
+    - step_id: step_4
+      statement: 在负半轴分支上把函数值顺序反推自变量顺序。
+      formula_trace:
+        from: $f(1)<f(2)<f(3)$ 与 $a,b,c<0$
+        to: $f(c)<f(a)<f(b)\Rightarrow c>a>b\Rightarrow b<a<c$
+        operation: 利用 $(-1,0)$ 上递减函数“值大则自变量小”。
+        why: 得到题目所需的三数顺序。
+      source_ref: page_0152_ex29_figure
+    - step_id: step_5
+      statement: 对应选项。
+      formula_trace:
+        from: $b<a<c$
+        to: 选 A
+        operation: 与四个选项匹配。
+        why: 完成作答。
+      source_ref: page_0152_ex29_solution
+teaching_card:
+  student_title: 同构到 $x-\ln(x+1)$ 后在负半轴反推顺序
+  what_it_trains: 训练“先同构、再按分支判序”的比大小意识，尤其是函数左右分支单调方向不同的场景。
+  recognition_cues:
+    - 多个未知量都由“线性项-对数项”隐式定义。
+    - 题干显式给出 $a,b,c<0$。
+    - 选项是纯顺序判断。
+  normalization_moves:
+    - 统一到 $f(x)=x-\ln(x+1)$。
+    - 先算 $f^{\prime}(x)$，明确负半轴递减。
+    - 把 $f(c),f(a),f(b)$ 与 $f(1),f(2),f(3)$ 对齐后反推。
+  common_failures:
+    - 把 $f(1)<f(2)<f(3)$ 直接写成 $c<a<b$，忘了负半轴递减。
+    - 忽略定义域 $x>-1$，对负值范围判断混乱。
+    - 只凭直觉看图，不写同构等式链。
+  similar_practice_query: x-lnx 同构函数 负半轴 递减 分支比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

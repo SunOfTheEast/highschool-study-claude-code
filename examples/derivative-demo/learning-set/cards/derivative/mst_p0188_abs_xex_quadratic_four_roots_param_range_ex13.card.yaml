@@ -1,0 +1,148 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0188_abs_xex_quadratic_four_roots_param_range_ex13
+content_revision_id: mst_p0188_abs_xex_quadratic_four_roots_param_range_ex13-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0188_abs_xex_quadratic_four_roots_param_range_ex13.card.yaml
+stem: （2023 · 福州期末 T16）已知 $f(x)=|xe^x|$，关于 $x$ 的方程 $f^2(x)+af(x)+2=0\ (a\in\mathbf{R})$ 有四个不同的实数根，则 $a$ 的取值范围为______。
+answer: |-
+  $\left(-\infty,-\frac{2e^2+1}{e}\right)$
+
+  把 $f(x)=|xe^x|$ 写成分段后可知：在 $x\ge0$ 单调递增；在 $x<0$ 侧先增后减，且在 $x=-1$ 取极大值 $\frac1e$。 因而方程 $f(x)=t$ 的解个数为：$0<t<\frac1e$ 有 3 解， $t=\frac1e$ 有 2 解，$t>\frac1e$ 或 $t=0$ 有 1 解。 原方程等价于 $t^2+at+2=0$（$t=f(x)\ge0$）。要得到 $x$ 的四个不同实根， 必须让该二次方程在 $\left(0,\frac1e\right)$ 与 $\left(\frac1e,+\infty\right)$ 各有一根。令 $g(t)=t^2+at+2$，由 $g(0)=2>0$ 且抛物线开口向上， 充要条件是 $g(\frac1e)<0$，即 $\frac1{e^2}+\frac{a}{e}+2<0$，解得 $a<-\frac{2e^2+1}{e}$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 分析 $f(x)=|xe^x|$ 的形状与关键高度。
+      max_score: 1
+    - step_id: step_2
+      description: 把原方程改写为关于 $t=f(x)$ 的二次方程。
+      max_score: 1
+    - step_id: step_3
+      description: 用区间判根匹配“四个不同实根”。
+      max_score: 1
+    - step_id: step_4
+      description: 转成抛物线在 $t=\frac1e$ 处的符号条件。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 含参数分类讨论
+    subroute:
+      - 参数判根数
+      - 水平线交点计数
+      - $t=f(x)$ 中间变量分层
+  structure:
+    primary: Max/Min 与绝对值结构
+    secondary:
+      - 指对复合结构
+      - 复合函数与不动点结构
+    evidence:
+      - $f(-1)=\frac1e$
+      - $0<t<\frac1e$ 有 3 解，$t>\frac1e$ 有 1 解
+      - $g(\frac1e)<0$
+    normalization_moves_used:
+      - 把 $x$ 层方程改写成 $t$ 层二次方程。
+      - 先做函数图像交点计数，再做参数判根。
+      - 用单点符号条件 $g(\frac1e)<0$ 代替繁琐分类。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会统计 $f(x)=t$ 的解个数，回补函数性质与图像。
+      - 若学生把 $t=f(x)$ 与 $x$ 根数关系混淆，回补分段/复合/反函数基础。
+      - 若学生不会由 $g(\frac1e)<0$ 反推参数，回补方程根分布与韦达。
+  detail_terms:
+    - $|xe^x|$
+    - $f(-1)=\frac1e$
+    - $t^2+at+2=0$
+    - $g(\frac1e)<0$
+    - $a<-\frac{2e^2+1}{e}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0188_abs_xex_quadratic_four_roots_param_range_ex13
+source_evidence:
+  source_refs:
+    - ref_id: page_0188
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0188/page_0188.md
+      role: problem_start
+      evidence: page_0188 给出例13完整题干、配图与解析：先分析 $f(x)=|xe^x|$ 的单调区间与极值，再令 $t=f(x)$， 把“四个不同实根”转成 $t^2+at+2=0$ 在两段区间各有一根。
+    - ref_id: page_0188_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0188/page_0188.md
+      role: local_context
+      evidence: page_0188 顶部“D正确，故选ACD”是例12续解，不属于本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0188.png
+      inspected: true
+      notes: 页图核对通过：例13题干、双图（$t=f(x)$ 与 $g(t)$）和答案区间可读； 解析末段确有把参数 $a$ 误印成 $t$ 的现象。
+  source_context: 例13题头与解析完整在 page_0188，无需跨页。
+  source_influence:
+    - 保留 source 的“双层判根”：先统计 $f(x)=t$ 的解个数，再对 $t$ 方程判根区间。
+    - 保留在 $t=\frac1e$ 处用抛物线符号判别（$g(\frac1e)<0$）来锁定参数范围。
+  source_discrepancies:
+    - page_0188 解析末段印作 $g(\frac1e)=\frac1{e^2}+\frac{t}{e}+2<0$ 与 $t<-\frac{2e^2+1}{e}$；结合方程 $t^2+at+2=0$ 的语境与 reconstruction marker，应为参数 $a$：$g(\frac1e)=\frac1{e^2}+\frac{a}{e}+2<0$， 从而 $a<-\frac{2e^2+1}{e}$。
+original_problem:
+  stem: （2023 · 福州期末 T16）已知 $f(x)=|xe^x|$，关于 $x$ 的方程 $f^2(x)+af(x)+2=0\ (a\in\mathbf{R})$ 有四个不同的实数根，则 $a$ 的取值范围为______。
+  parts: *a1
+  choices: []
+  answer: $\left(-\infty,-\frac{2e^2+1}{e}\right)$
+  fidelity_notes:
+    - 源题为填空题，无选项。
+    - 答案来自 source 解析末行，并结合重建标记修正误印变量后保持一致。
+solution:
+  source_solution_summary: 把 $f(x)=|xe^x|$ 写成分段后可知：在 $x\ge0$ 单调递增；在 $x<0$ 侧先增后减，且在 $x=-1$ 取极大值 $\frac1e$。 因而方程 $f(x)=t$ 的解个数为：$0<t<\frac1e$ 有 3 解， $t=\frac1e$ 有 2 解，$t>\frac1e$ 或 $t=0$ 有 1 解。 原方程等价于 $t^2+at+2=0$（$t=f(x)\ge0$）。要得到 $x$ 的四个不同实根， 必须让该二次方程在 $\left(0,\frac1e\right)$ 与 $\left(\frac1e,+\infty\right)$ 各有一根。令 $g(t)=t^2+at+2$，由 $g(0)=2>0$ 且抛物线开口向上， 充要条件是 $g(\frac1e)<0$，即 $\frac1{e^2}+\frac{a}{e}+2<0$，解得 $a<-\frac{2e^2+1}{e}$。
+  key_steps:
+    - step_id: step_1
+      statement: 分析 $f(x)=|xe^x|$ 的形状与关键高度。
+      formula_trace:
+        from: $f(x)=\begin{cases}xe^x,&x\ge0\\-xe^x,&x<0\end{cases}$
+        to: $f(-1)=\frac1e$，且 $0<t<\frac1e$ 时 $f(x)=t$ 有 3 解
+        operation: 分段求导并结合极值点统计水平线交点数。
+        why: 后续“四根”条件完全由每个 $t$ 层的交点数决定。
+      source_ref: page_0188
+    - step_id: step_2
+      statement: 把原方程改写为关于 $t=f(x)$ 的二次方程。
+      formula_trace:
+        from: $[f(x)]^2+af(x)+2=0$
+        to: $t^2+at+2=0,\ t=f(x)\ge0$
+        operation: 设中间变量 $t$。
+        why: 把“函数值层”与“自变量根数”分离。
+      source_ref: page_0188
+    - step_id: step_3
+      statement: 用区间判根匹配“四个不同实根”。
+      formula_trace:
+        from: $0<t<\frac1e$ 对应 3 解，$t>\frac1e$ 对应 1 解
+        to: $t^2+at+2=0$ 在 $\left(0,\frac1e\right)$ 与 $\left(\frac1e,+\infty\right)$ 各有一根
+        operation: 按每个 $t$ 层贡献的 $x$ 解数做组合。
+        why: 3+1=4 是唯一满足“四个不同实根”的配型。
+      source_ref: page_0188
+    - step_id: step_4
+      statement: 转成抛物线在 $t=\frac1e$ 处的符号条件。
+      formula_trace:
+        from: $g(t)=t^2+at+2$
+        to: $g(\frac1e)=\frac1{e^2}+\frac{a}{e}+2<0\Rightarrow a<-\frac{2e^2+1}{e}$
+        operation: 利用 $g(0)>0$、开口向上与区间各一根的等价条件。
+        why: 直接得到参数范围。
+      source_ref: page_0188
+teaching_card:
+  student_title: 先数层再判根的四根参数题
+  what_it_trains: 训练“函数值分层 + 参数二次判根”的两层联动思路，快速处理零点个数反推参数范围。
+  recognition_cues:
+    - 题目是 $F(f(x),a)=0$ 且问“有若干不同实根”。
+    - 内层函数带绝对值与指数，图像有明显极值高度。
+    - source 中出现 $t=f(x)$ 与两幅示意图。
+  normalization_moves:
+    - 先求内层函数关键高度（这里是 $\frac1e$）。
+    - 统计每个 $t$ 对应的 $x$ 解个数。
+    - 再对 $t$ 方程做区间判根。
+  common_failures:
+    - 忽略 $t=f(x)\ge0$ 的约束。
+    - 把 $t=\frac1e$ 的 2 解误记成 3 解。
+    - 直接判别式分类，遗漏“根落区间”的必要条件。
+  similar_practice_query: 绝对值指数函数 四个不同实根 t分层 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,191 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0034_ex25
+content_revision_id: mst_p0034_ex25-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0034_ex25.card.yaml
+stem: |-
+  已知函数 $f(x)=\frac{1}{3}x^3+2x+e^x-\frac{1}{e^x}+3$，其中 e 是自然对数的底数，若 $f(2a-3)+f(a^2)\geqslant 6$，则实数 $a$ 的取值范围是 ( )
+  A. $[-3,1]$
+  B. $(-\infty,-3]$
+  C. $[1,+\infty)$
+  D. $(-\infty,-3]\cup[1,+\infty)$
+answer: |
+  D
+
+  令 $g(x)=f(x)-3=\frac13x^3+2x+e^x-e^{-x}$。先验证 $g(-x)=-g(x)$，所以 $g$ 为奇函数；又 $\frac13x^3$、$2x$、$e^x-e^{-x}$ 在 $\mathbb R$ 上递增，所以 $g$ 递增。由 $f(2a-3)+f(a^2)\ge6$ 得 $g(2a-3)+g(a^2)\ge0$，即 $g(2a-3)\ge-g(a^2)=g(-a^2)$。由 $g$ 递增，推出 $2a-3\ge-a^2$，解得 $a\le-3$ 或 $a\ge1$，故选 D。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 平移函数，暴露奇函数结构。
+      max_score: 1
+    - step_id: step_2
+      description: 验证 $g$ 是奇函数。
+      max_score: 1
+    - step_id: step_3
+      description: 确认 $g$ 在实数集上递增。
+      max_score: 1
+    - step_id: step_4
+      description: 把原不等式转成输入比较。
+      max_score: 1
+    - step_id: step_5
+      description: 求出 $a$ 的范围并对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - 平移成奇函数
+      - 双曲正弦单调
+      - 函数值比较转输入比较
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 三次/高次函数结构
+    evidence:
+      - $f(x)-3$ 同时含 $\frac13x^3+2x$ 与 $e^x-e^{-x}$，整体构成奇增函数。
+      - $g(2a-3)+g(a^2)\ge0$ 借奇性变成 $g(2a-3)\ge g(-a^2)$。
+    normalization_moves_used:
+      - $1/e^x$ 改写为 $e^{-x}$。
+      - $f(u)+f(v)\ge6$ 改写为 $g(u)+g(v)\ge0$。
+      - $-g(a^2)$ 用奇性改写为 $g(-a^2)$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $1/e^x$ 改写成 $e^{-x}$，或看不出 $e^x-e^{-x}$ 代入 $-x$ 后变号，回补指数对数基础。
+      - 若学生不能从 $g(2a-3)\ge g(-a^2)$ 反推 $2a-3\ge-a^2$，回补函数性质与图像。
+      - 若学生解错 $(a+3)(a-1)\ge0$，回补代数恒等变形。
+  detail_terms:
+    - 奇函数
+    - 单调递增
+    - $e^x-e^{-x}$
+    - $g(u)+g(v)\ge0$
+    - 二次不等式求参
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0034_ex25
+source_evidence:
+  source_refs:
+    - ref_id: page_0034
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md
+      role: problem_start
+      evidence: "lines 17-21: 例 25 题干与四个选项。"
+    - ref_id: page_0034_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md
+      role: solution
+      evidence: "line 23: 构造奇函数 g(x)=f(x)-3，并用单调性转成二次不等式。"
+    - ref_id: page_0034_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md
+      role: local_context
+      evidence: "lines 14-15: 本页开头给出对数飘带和双曲正弦型单调函数背景。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0034.png
+      inspected: true
+      notes: 已核对原图：例 25 题干、选项、解析与 markdown 一致。
+  source_context: 本题位于第 1 章“导数基本技能”的双曲/飘带函数例题组中，源页先提示 $e^x-e^{-x}-2x$ 等函数的单调性，再用例 25 训练把含 $e^x-e^{-x}$ 的函数平移成奇增函数。
+  source_influence:
+    - 题目最终要求实数 $a$ 的取值范围，因此 goal 取“求参数范围”。
+    - 源解的关键不是直接求导 $f$，而是平移 $f(x)-3$ 得到奇函数 $g$，再用单调性比较输入。
+    - 四个选项必须完整保留；答案为 D。
+  source_discrepancies: []
+original_problem:
+  stem: 已知函数 $f(x)=\frac{1}{3}x^3+2x+e^x-\frac{1}{e^x}+3$，其中 e 是自然对数的底数，若 $f(2a-3)+f(a^2)\geqslant 6$，则实数 $a$ 的取值范围是 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $[-3,1]$
+      text_latex: $[-3,1]$
+    - label: B
+      text_raw: $(-\infty,-3]$
+      text_latex: $(-\infty,-3]$
+    - label: C
+      text_raw: $[1,+\infty)$
+      text_latex: $[1,+\infty)$
+    - label: D
+      text_raw: $(-\infty,-3]\cup[1,+\infty)$
+      text_latex: $(-\infty,-3]\cup[1,+\infty)$
+  answer: D
+  fidelity_notes:
+    - 已核对 page_0034 原图，题干中指数项为 $e^x-\frac{1}{e^x}$，选项 D 为两个闭区间并集。
+    - 源页 Reconstruction Marker 只涉及例 26，与本题无关。
+solution:
+  source_solution_summary: |
+    令 $g(x)=f(x)-3=\frac13x^3+2x+e^x-e^{-x}$。先验证 $g(-x)=-g(x)$，所以 $g$ 为奇函数；又 $\frac13x^3$、$2x$、$e^x-e^{-x}$ 在 $\mathbb R$ 上递增，所以 $g$ 递增。由 $f(2a-3)+f(a^2)\ge6$ 得 $g(2a-3)+g(a^2)\ge0$，即 $g(2a-3)\ge-g(a^2)=g(-a^2)$。由 $g$ 递增，推出 $2a-3\ge-a^2$，解得 $a\le-3$ 或 $a\ge1$，故选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 平移函数，暴露奇函数结构。
+      formula_trace:
+        from: |
+          $f(x)=\frac13x^3+2x+e^x-\frac1{e^x}+3$
+        to: |
+          $g(x)=f(x)-3=\frac13x^3+2x+e^x-e^{-x}$
+        operation: 把常数 $3$ 去掉，并把 $1/e^x$ 改写为 $e^{-x}$。
+        why: 题设右端是 $6=3+3$，两项各减 $3$ 后正好变成同一个 $g$ 的和。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md:23
+    - step_id: step_2
+      statement: 验证 $g$ 是奇函数。
+      formula_trace:
+        from: |
+          $g(-x)=\frac13(-x)^3+2(-x)+e^{-x}-e^x$
+        to: |
+          $g(-x)=-\frac13x^3-2x+e^{-x}-e^x=-g(x)$
+        operation: 逐项代入 $-x$，奇次项和一次项变号，$e^x-e^{-x}$ 也整体变号。
+        why: 奇函数给出 $-g(a^2)=g(-a^2)$，可以把“函数值相反数”转成“另一个输入”。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md:23
+    - step_id: step_3
+      statement: 确认 $g$ 在实数集上递增。
+      formula_trace:
+        from: |
+          $g(x)=\frac13x^3+2x+(e^x-e^{-x})$
+        to: |
+          $\frac13x^3,\ 2x,\ e^x-e^{-x}$ 均在 $\mathbb R$ 上递增，因此 $g$ 递增
+        operation: 把 $g$ 拆成三个递增函数的和；其中 $(e^x-e^{-x})'=e^x+e^{-x}>0$。
+        why: 后续要由 $g(u)\ge g(v)$ 反推 $u\ge v$。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md:23
+    - step_id: step_4
+      statement: 把原不等式转成输入比较。
+      formula_trace:
+        from: |
+          $f(2a-3)+f(a^2)\ge6$
+        to: |
+          $g(2a-3)+g(a^2)\ge0\Rightarrow g(2a-3)\ge-g(a^2)=g(-a^2)$
+        operation: 两项各减 $3$，再利用 $g$ 的奇性改写右侧。
+        why: 把含函数值的不等式降为两个输入 $2a-3$ 与 $-a^2$ 的比较。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md:23
+    - step_id: step_5
+      statement: 求出 $a$ 的范围并对应选项。
+      formula_trace:
+        from: |
+          $g(2a-3)\ge g(-a^2)$
+        to: |
+          $2a-3\ge-a^2\Rightarrow a^2+2a-3\ge0\Rightarrow (a+3)(a-1)\ge0$
+        operation: 用 $g$ 的递增性去掉函数符号，再移项因式分解。
+        why: 解二次不等式得到 $a\le-3$ 或 $a\ge1$，对应选项 D。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0034/page_0034.md:23
+teaching_card:
+  student_title: 把函数和先平移成奇增函数
+  what_it_trains: 看到 $f(u)+f(v)$ 与常数 $6$ 对应函数中的两个 $+3$ 时，先减常数构造 $g=f-3$；只要 $g$ 是奇增函数，就能把函数值不等式直接转成输入不等式。
+  recognition_cues:
+    - 函数里有 $+3$，题设右端是 $6$，暗示两项各减 $3$。
+    - 去掉常数后出现 $\frac13x^3+2x+e^x-e^{-x}$，每一部分都关于原点成奇性。
+    - 条件是 $g(u)+g(v)\ge0$，适合改写为 $g(u)\ge g(-v)$。
+  normalization_moves:
+    - 先设 $g(x)=f(x)-3$，不要急着对原函数整体求导。
+    - 用 $g(-x)=-g(x)$ 把 $-g(a^2)$ 改成 $g(-a^2)$。
+    - 用递增性把函数值比较降成 $2a-3$ 与 $-a^2$ 的比较。
+  common_failures:
+    - 忘记减去常数 $3$，导致看不出奇函数。
+    - 只验证奇性，却没有说明 $g$ 单调递增，无法合法去掉 $g$。
+    - 把 $2a-3\ge-a^2$ 移项后解成区间 $[-3,1]$，方向取反。
+  similar_practice_query: 奇增函数 同构 f(u)+f(v) 求参数范围 e^x-e^{-x}
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0034 原图与 markdown 对本题一致；没有跨页续题。
+    - 未沿用 legacy 的“双曲型换元法”旧标签，按本批 canonical method 归入“同构变形与换元法”，并把双曲正弦放入 subroute/detail。

@@ -1,0 +1,186 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0222_lnx_over_x_extreme_and_exp_bound_ch6_fenzhi_ex04
+content_revision_id: mst_p0222_lnx_over_x_extreme_and_exp_bound_ch6_fenzhi_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0222_lnx_over_x_extreme_and_exp_bound_ch6_fenzhi_ex04.card.yaml
+stem: |-
+  （2019 · 济南考前模拟 T21）已知函数 $f(x)=\frac{1+\ln x}{x}$。
+  1. 求函数 $f(x)$ 的极值。
+  2. 若 $a\geqslant1$，求证：$ae^x>\left(1+\frac1x\right)(1+\ln x)$。
+answer: |-
+  （1）$x=1$ 时取得极大值 $1$，无极小值；（2）证明见解析。
+
+  对 $f(x)=\frac{1+\ln x}{x}$ 求导， $f^{\prime}(x)=-\frac{\ln x}{x^2}$。当 $0<x<1$ 时 $f^{\prime}(x)>0$，当 $x>1$ 时 $f^{\prime}(x)<0$，所以 $f$ 在 $x=1$ 取得极大值 $f(1)=1$，无极小值。第二问中 $a\geqslant1$，故 $ae^x\geqslant e^x$，只需证明 $e^x>\left(1+\frac1x\right)(1+\ln x)$。等价于 $\frac{e^x}{1+x}>\frac{1+\ln x}{x}$。令 $g(x)=\frac{e^x}{1+x}$，则 $g^{\prime}(x)=\frac{xe^x}{(x+1)^2}>0$，所以 $g(x)>g(0)=1$； 又由第一问 $\frac{1+\ln x}{x}\leqslant1$，故 $\frac{e^x}{1+x}>\frac{1+\ln x}{x}$，命题成立。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 求 $f$ 的导数并判号。
+      max_score: 1
+    - step_id: step_2
+      description: 得到极值结论。
+      max_score: 1
+    - step_id: step_3
+      description: 用 $a\geqslant1$ 降到更强不等式。
+      max_score: 1
+    - step_id: step_4
+      description: 转成上下函数比较。
+      max_score: 1
+    - step_id: step_5
+      description: 左侧严格大于 1，右侧不超过 1。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 极值最值
+        target: 第 1 问
+        result: $x=1$ 取极大值 $1$，无极小值。
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 2 问
+        result: $a\geqslant1$ 时 $ae^x>\left(1+\frac1x\right)(1+\ln x)$。
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 同构变形与换元法
+      - 切线放缩与凹凸性
+    subroute:
+      - 上下函数选取
+      - 第一问结论复用
+      - $\frac{1+\ln x}{x}$
+      - $\frac{e^x}{1+x}$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 不等式工具结构
+      - 同构结构
+      - 非齐次结构
+    evidence:
+      - $\frac{1+\ln x}{x}$
+      - $\frac{e^x}{1+x}>\frac{1+\ln x}{x}$
+      - $g(x)>1\geqslant f(x)$
+    normalization_moves_used:
+      - 先通过极值确定 $\frac{1+\ln x}{x}\leqslant1$。
+      - 利用 $a\geqslant1$ 去掉参数。
+      - 把乘积不等式除成两个函数的比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求 $\frac{1+\ln x}{x}$ 的导数和极值，回补导数单调极值基础。
+      - 若学生没有检查 $x>0$ 就随意除以 $x$，回补函数三要素与定义域。
+      - 若学生不会把目标整理成 $\frac{e^x}{1+x}>\frac{1+\ln x}{x}$，回补代数恒等变形。
+      - 若学生不熟悉 $\ln x$ 与 $e^x$ 的基本比较形态，回补指数对数基础。
+  detail_terms:
+    - $\frac{1+\ln x}{x}$
+    - $f_{\max}=1$
+    - $\frac{e^x}{1+x}$
+    - 上下函数选取
+    - 第一问结论复用
+parts: &a1
+  - part_id: "1"
+    text: 求函数 $f(x)$ 的极值。
+  - part_id: "2"
+    text: 若 $a\geqslant1$，求证：$ae^x>\left(1+\frac1x\right)(1+\ln x)$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0222_lnx_over_x_extreme_and_exp_bound_ch6_fenzhi_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0222_ex03_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0222/page_0222.md
+      role: local_context
+      evidence: page_0222 页首是 page_0221 例3续解，不是本卡题头。
+    - ref_id: page_0222_ex04_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0222/page_0222.md
+      role: problem_start
+      evidence: page_0222 给出例4题头：$f(x)=\frac{1+\ln x}{x}$，两问求极值并证明 $ae^x>(1+1/x)(1+\ln x)$。
+    - ref_id: page_0222_ex04_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0222/page_0222.md
+      role: solution
+      evidence: page_0222 例4解析完整给出 $f^{\prime}(x)=-\ln x/x^2$、极大值 $1$，并用 $e^x/(1+x)>1\geqslant(1+\ln x)/x$ 证明不等式。
+    - ref_id: page_0222_ex05_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0222/page_0222.md
+      role: local_context
+      evidence: 例4后进入例5题头，说明例4在本页闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0222.png
+      inspected: true
+      notes: 已核对页图：例4位于 page_0222 上半页，题头与解析完整。
+  source_context: 本卡处理 page_0222 例4；页首例3续解和后续例5只作为边界上下文。
+  source_influence:
+    - 保留第一问：$f^{\prime}(x)=-\ln x/x^2$，$x=1$ 取极大值 $1$，无极小值。
+    - 保留第二问的分离方式：将目标转为 $\frac{e^x}{1+x}>\frac{1+\ln x}{x}$。
+    - 保留 source 中 $g(x)=e^x/(1+x)$ 单调递增且 $g(x)>1$、$f(x)\leqslant1$ 的上下函数比较。
+  source_discrepancies: []
+original_problem:
+  stem: （2019 · 济南考前模拟 T21）已知函数 $f(x)=\frac{1+\ln x}{x}$。
+  parts: *a1
+  choices: []
+  answer: （1）$x=1$ 时取得极大值 $1$，无极小值；（2）证明见解析。
+  fidelity_notes:
+    - 两问解答题，无选项。
+    - 定义域为 $(0,+\infty)$。
+solution:
+  source_solution_summary: 对 $f(x)=\frac{1+\ln x}{x}$ 求导， $f^{\prime}(x)=-\frac{\ln x}{x^2}$。当 $0<x<1$ 时 $f^{\prime}(x)>0$，当 $x>1$ 时 $f^{\prime}(x)<0$，所以 $f$ 在 $x=1$ 取得极大值 $f(1)=1$，无极小值。第二问中 $a\geqslant1$，故 $ae^x\geqslant e^x$，只需证明 $e^x>\left(1+\frac1x\right)(1+\ln x)$。等价于 $\frac{e^x}{1+x}>\frac{1+\ln x}{x}$。令 $g(x)=\frac{e^x}{1+x}$，则 $g^{\prime}(x)=\frac{xe^x}{(x+1)^2}>0$，所以 $g(x)>g(0)=1$； 又由第一问 $\frac{1+\ln x}{x}\leqslant1$，故 $\frac{e^x}{1+x}>\frac{1+\ln x}{x}$，命题成立。
+  key_steps:
+    - step_id: step_1
+      statement: 求 $f$ 的导数并判号。
+      formula_trace:
+        from: $f(x)=\frac{1+\ln x}{x}$
+        to: $f^{\prime}(x)=-\frac{\ln x}{x^2}$
+        operation: 商式求导。
+        why: 极值和第二问的上界都依赖 $f(x)\leqslant1$。
+      source_ref: page_0222_ex04_solution
+    - step_id: step_2
+      statement: 得到极值结论。
+      formula_trace:
+        from: $f^{\prime}(x)>0\ (0<x<1)$，$f^{\prime}(x)<0\ (x>1)$
+        to: $f_{\max}=f(1)=1$，无极小值
+        operation: 导数号变从正到负。
+        why: 完成第一问，并为第二问提供下函数上界。
+      source_ref: page_0222_ex04_solution
+    - step_id: step_3
+      statement: 用 $a\geqslant1$ 降到更强不等式。
+      formula_trace:
+        from: $ae^x>\left(1+\frac1x\right)(1+\ln x)$
+        to: 只需证 $e^x>\left(1+\frac1x\right)(1+\ln x)$
+        operation: 利用 $ae^x\geqslant e^x$。
+        why: 把参数从证明中剥离。
+      source_ref: page_0222_ex04_solution
+    - step_id: step_4
+      statement: 转成上下函数比较。
+      formula_trace:
+        from: $e^x>\left(1+\frac1x\right)(1+\ln x)$
+        to: $\frac{e^x}{1+x}>\frac{1+\ln x}{x}$
+        operation: 两边除以正数 $1+x$ 并整理。
+        why: 右侧正好是第一问的 $f(x)$。
+      source_ref: page_0222_ex04_solution
+    - step_id: step_5
+      statement: 左侧严格大于 1，右侧不超过 1。
+      formula_trace:
+        from: $g(x)=\frac{e^x}{1+x}$，$f(x)=\frac{1+\ln x}{x}$
+        to: $g(x)>1\geqslant f(x)$
+        operation: 求 $g^{\prime}(x)>0$，并调用第一问结论。
+        why: 完成严格不等式证明。
+      source_ref: page_0222_ex04_solution
+teaching_card:
+  student_title: 先求 $\frac{1+\ln x}{x}$ 的顶，再拿来压右边
+  what_it_trains: 训练“前一问极值结论服务后一问证明”的分而治之思路。
+  recognition_cues:
+    - 第一问刚求出 $\frac{1+\ln x}{x}$ 的最大值，第二问右边正好含它。
+    - 题中 $a\geqslant1$，可以先证明更强的 $a=1$ 情形。
+    - 目标乘积可除成 $\frac{e^x}{1+x}$ 与 $\frac{1+\ln x}{x}$。
+  normalization_moves:
+    - 先做第一问极值，不要跳过。
+    - 第二问先把 $a$ 去掉。
+    - 把右边拆成 $(1+x)(1+\ln x)/x$，再两边除以 $1+x$。
+  common_failures:
+    - 把第二问当成独立不等式硬求导，浪费第一问结论。
+    - 忘记 $g(x)>g(0)=1$ 是严格大于，不是大于等于。
+    - 没有说明 $x>0$，导致分式整理不严谨。
+  similar_practice_query: lnx over x 极值 e^x/(1+x) 上下函数 分而治之 不等式证明
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

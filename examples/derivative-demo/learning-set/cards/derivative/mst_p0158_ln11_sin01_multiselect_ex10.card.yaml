@@ -1,0 +1,249 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0158_ln11_sin01_multiselect_ex10
+content_revision_id: mst_p0158_ln11_sin01_multiselect_ex10-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0158_ln11_sin01_multiselect_ex10.card.yaml
+stem: |-
+  （2023·山东月考·多选）若 $a=\ln1.1$，$b=\frac{1}{11}$，$c=\sin0.1$，$d=\frac{21}{220}$，则（  ）
+  A. $a<b$
+  B. $b<c$
+  C. $a<d$
+  D. $c<d$
+answer: |
+  BC
+
+  先比 $a$ 与 $b$。有
+  \[
+  b=\frac1{11}=1-\frac1{1.1},
+  \]
+  且
+  \[
+  \ln x>1-\frac1x\quad(x>1),
+  \]
+  取 $x=1.1$ 得
+  \[
+  a=\ln1.1>b.
+  \]
+  再比 $a$ 与 $d$。注意
+  \[
+  d=\frac{21}{220}
+    =\frac{1.1}{2}-\frac1{2\times1.1}
+    =\frac12\left(1.1-\frac1{1.1}\right),
+  \]
+  且
+  \[
+  \ln x<\frac12\left(x-\frac1x\right)\quad(x>1),
+  \]
+  取 $x=1.1$ 得 $a<d$。
+  再比较 $c$ 与 $d$：
+  \[
+  0.1-\frac{0.1^3}{6}<\sin0.1<0.1
+  \]
+  即
+  \[
+  0.099833\cdots<\sin0.1<0.1.
+  \]
+  而
+  \[
+  d=\frac{21}{220}\approx0.09545<0.0998<\sin0.1,
+  \]
+  所以 $d<c$。综上
+  \[
+  b<a<d<c.
+  \]
+  故 A 错、B 对、C 对、D 错，选 BC。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 用 $\ln x>1-\frac1x$ 判定 $a>b$。
+      max_score: 1
+    - step_id: step_2
+      description: 把 $d$ 改写为 $\frac12(x-\frac1x)$ 形式并比较 $a<d$。
+      max_score: 1
+    - step_id: step_3
+      description: 用正弦小角下界判定 $d<c$。
+      max_score: 1
+    - step_id: step_4
+      description: 汇总为完整顺序并回填多选。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 判定四个陈述中哪些不等式成立。
+        result: 见 source_solution_summary
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 同构变形与换元法
+      - 局部逼近与找点
+    subroute:
+      - 对数项先对齐 $1-\frac1x$ 与 $\frac12(x-\frac1x)$ 双模板
+      - 把 $d$ 改写成模板点
+      - 用 $\sin0.1$ 的泰勒界补齐末端比较
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 指对复合结构
+      - 三角复合结构
+      - 不等式工具结构
+    evidence:
+      - $a,b,d$ 都围绕 $x=1.1$ 的对数/有理模板比较。
+      - $c$ 用小角近似进入同一数值链。
+      - 题型是“链式排序 -> 回填真假”的多选。
+    normalization_moves_used:
+      - $b=1-\frac1{1.1}$。
+      - $d=\frac12(1.1-\frac1{1.1})$。
+      - $0.1-\frac{0.1^3}{6}<\sin0.1<0.1$。
+      - 合并成 $b<a<d<c$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不熟悉 $\ln x$ 的上、下界模板，回补指数对数基础。
+      - 若学生不会把分数改写进模板（如 $\frac{21}{220}$），回补代数恒等变形。
+      - 若学生不掌握 $\sin x$ 小角近似方向，回补三角函数基础。
+  detail_terms:
+    - 多选判真
+    - $\ln x>1-\frac1x$
+    - $\ln x<\frac12(x-\frac1x)$
+    - $0.1-\frac{0.1^3}{6}<\sin0.1<0.1$
+    - $b<a<d<c$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0158_ln11_sin01_multiselect_ex10
+source_evidence:
+  source_refs:
+    - ref_id: page_0158_ex10_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0158/page_0158.md
+      role: problem_start
+      evidence: 例10（多选）题干在 page_0158：$a=\ln1.1,\ b=\frac1{11},\ c=\sin0.1,\ d=\frac{21}{220}$。
+    - ref_id: page_0158_ex10_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0158/page_0158.md
+      role: solution
+      evidence: 解析先由 $\ln x>1-\frac1x$ 得 $b<a$，再由 $\ln x<\frac12(x-\frac1x)$ 得 $a<d$，再用 $0.1-\frac{0.1^3}{6}<\sin0.1<0.1$ 得 $d<c$，结论 $b<a<d<c$，选BC。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0158.png
+      inspected: true
+      notes: 已核对页图：例10题干、选项、解析链和多选答案BC一致。
+  source_context: 例10继续使用 page_0158 已给出的对数上下界，并叠加正弦小角泰勒界。
+  source_influence:
+    - 保留源解“先比较 $a,b,d$，再补上 $c$”的结构。
+    - 保留中间阈值 $0.0998$ 作为 $d$ 与 $c$ 的桥接。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·山东月考·多选）若 $a=\ln1.1$，$b=\frac{1}{11}$，$c=\sin0.1$，$d=\frac{21}{220}$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a<b$
+      text_latex: $a<b$
+    - label: B
+      text_raw: $b<c$
+      text_latex: $b<c$
+    - label: C
+      text_raw: $a<d$
+      text_latex: $a<d$
+    - label: D
+      text_raw: $c<d$
+      text_latex: $c<d$
+  answer: BC
+  fidelity_notes:
+    - 源解最终得到链 $b<a<d<c$，据此多选为 B、C。
+solution:
+  source_solution_summary: |
+    先比 $a$ 与 $b$。有
+    \[
+    b=\frac1{11}=1-\frac1{1.1},
+    \]
+    且
+    \[
+    \ln x>1-\frac1x\quad(x>1),
+    \]
+    取 $x=1.1$ 得
+    \[
+    a=\ln1.1>b.
+    \]
+    再比 $a$ 与 $d$。注意
+    \[
+    d=\frac{21}{220}
+      =\frac{1.1}{2}-\frac1{2\times1.1}
+      =\frac12\left(1.1-\frac1{1.1}\right),
+    \]
+    且
+    \[
+    \ln x<\frac12\left(x-\frac1x\right)\quad(x>1),
+    \]
+    取 $x=1.1$ 得 $a<d$。
+    再比较 $c$ 与 $d$：
+    \[
+    0.1-\frac{0.1^3}{6}<\sin0.1<0.1
+    \]
+    即
+    \[
+    0.099833\cdots<\sin0.1<0.1.
+    \]
+    而
+    \[
+    d=\frac{21}{220}\approx0.09545<0.0998<\sin0.1,
+    \]
+    所以 $d<c$。综上
+    \[
+    b<a<d<c.
+    \]
+    故 A 错、B 对、C 对、D 错，选 BC。
+  key_steps:
+    - step_id: step_1
+      statement: 用 $\ln x>1-\frac1x$ 判定 $a>b$。
+      formula_trace:
+        from: $b=1-\frac1{1.1},\ a=\ln1.1$
+        to: $a>b$
+        operation: 取 $x=1.1$ 代入 $\ln x>1-\frac1x$。
+        why: 先排除选项 A。
+      source_ref: page_0158_ex10_solution
+    - step_id: step_2
+      statement: 把 $d$ 改写为 $\frac12(x-\frac1x)$ 形式并比较 $a<d$。
+      formula_trace:
+        from: $d=\frac{21}{220}$
+        to: $d=\frac12\left(1.1-\frac1{1.1}\right),\ a<d$
+        operation: 同构改写后代入 $\ln x<\frac12(x-\frac1x)$。
+        why: 确定选项 C 为真。
+      source_ref: page_0158_ex10_solution
+    - step_id: step_3
+      statement: 用正弦小角下界判定 $d<c$。
+      formula_trace:
+        from: $0.1-\frac{0.1^3}{6}<\sin0.1<0.1$
+        to: $\frac{21}{220}<0.0998<\sin0.1$
+        operation: 数值阈值对接。
+        why: 推出 $d<c$，从而 B 真、D 假。
+      source_ref: page_0158_ex10_solution
+    - step_id: step_4
+      statement: 汇总为完整顺序并回填多选。
+      formula_trace:
+        from: $a>b,\ a<d,\ d<c$
+        to: $b<a<d<c$，选 BC
+        operation: 传递不等式并逐项核对选项。
+        why: 给出最终多选结论。
+      source_ref: page_0158_ex10_solution
+teaching_card:
+  student_title: 四项多选先连成一条序链
+  what_it_trains: 训练“模板改写 + 局部界 + 一次性全序”来高效处理真假混合选项。
+  recognition_cues:
+    - 含 $\ln(1+\varepsilon)$、$\sin\varepsilon$ 与多个分数常量。
+    - 选项是若干局部不等式判断（A-D）。
+    - 常见策略是先做全序再回填。
+  normalization_moves:
+    - 把常量改写成熟悉模板值。
+    - 对每个函数量给可比上/下界。
+    - 拼成单链后逐项核对选项真假。
+  common_failures:
+    - 把 $d$ 的模板改写写错（尤其分母）。
+    - 把 $\sin0.1$ 下界计算成大于 $0.1$ 的错误值。
+    - 逐选项分散判断，导致逻辑重复且易漏。
+  similar_practice_query: ln1.1 sin0.1 多选 BC 比大小 b<a<d<c
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

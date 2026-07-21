@@ -1,0 +1,148 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0165_parallel_tangent_distance_ex01
+content_revision_id: mst_p0165_parallel_tangent_distance_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0165_parallel_tangent_distance_ex01.card.yaml
+stem: |-
+  （2025 · 临潭二中考前模拟 T8）已知函数 $f(x)=e^x+x^2+x+1$ 与 $g(x)=2x-3$，$P$、$Q$ 分别是函数 $f(x)$、$g(x)$ 图象上的动点，则 $|PQ|$ 的最小值为（  ）
+  A. $\frac{\sqrt{5}}{5}$
+  B. $\sqrt{5}$
+  C. $\frac{2\sqrt{5}}{5}$
+  D. $2\sqrt{5}$
+answer: |-
+  B
+
+  把两图象上动点距离最小转成“曲线 $f(x)$ 在点 $P$ 处切线与直线 $g(x)=2x-3$ 平行”。由 $g$ 的斜率为 2，令 $f^{\prime}(x)=e^x+2x+1=2$，得 $x=0$，切点为 $P(0,2)$。 再把直线写成 $2x-y-3=0$，由点到直线距离公式得 $|PQ|_{\min}=|2\cdot0-2-3|/\sqrt{2^2+(-1)^2}=\sqrt5$，故选 B。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把最短距离条件改写为平行切线条件。
+      max_score: 1
+    - step_id: step_2
+      description: 解出切点并定位最短距离对应点。
+      max_score: 1
+    - step_id: step_3
+      description: 套点到直线距离公式求最小值。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何量求解
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 局部逼近与找点
+    subroute:
+      - 平行切线最短距离
+      - 点到直线距离
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $f^{\prime}(x)=e^x+2x+1=2$
+      - $P(0,2)$
+      - $|PQ|_{\min}=\frac{|2\cdot0-2-3|}{\sqrt5}$
+    normalization_moves_used:
+      - 把“图象上动点最短距离”转成“切线与目标直线平行”。
+      - 把 $y=2x-3$ 改写为标准式 $2x-y-3=0$。
+      - 用切点坐标直接代入点到直线距离公式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由“最短距离”联想到“平行切线”，回补导数运算与几何意义。
+      - 若学生导数 $f^{\prime}(x)$ 写错，回补导数运算与几何意义。
+      - 若学生点到直线距离公式分母写错，回补几何关系基础。
+  detail_terms:
+    - $f(x)=e^x+x^2+x+1$
+    - $g(x)=2x-3$
+    - $f^{\prime}(x)=e^x+2x+1$
+    - $P(0,2)$
+    - $\sqrt5$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0165_parallel_tangent_distance_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0165
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0165/page_0165.md
+      role: problem_start
+      evidence: "lines 25-32 contain 例 1 full statement, options A-D, and the solution: set the tangent slope of $f(x)=e^x+x^2+x+1$ equal to 2, get $x=0$, then compute the point-to-line distance and conclude option B."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0165.png
+      inspected: true
+      notes: 页图核对通过：例1题干、四个选项、解析链 $f^{\prime}(x)=e^x+2x+1=2\Rightarrow x=0$ 与最短距离 $\sqrt5$ 与 markdown 一致。
+  source_context: page_0165 开始第5章并含章节导语；本卡仅抽取该页新起头的例1，不把章前 exposition 写入题卡主体。
+  source_influence:
+    - 保留源解“平行切线定位最短距离”的主路线。
+    - 保留源解从切点 $P(0,2)$ 直接套点到直线距离公式的收束方式。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 · 临潭二中考前模拟 T8）已知函数 $f(x)=e^x+x^2+x+1$ 与 $g(x)=2x-3$，$P$、$Q$ 分别是函数 $f(x)$、$g(x)$ 图象上的动点，则 $|PQ|$ 的最小值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\frac{\sqrt{5}}{5}$
+      text_latex: $\frac{\sqrt{5}}{5}$
+    - label: B
+      text_raw: $\sqrt{5}$
+      text_latex: $\sqrt{5}$
+    - label: C
+      text_raw: $\frac{2\sqrt{5}}{5}$
+      text_latex: $\frac{2\sqrt{5}}{5}$
+    - label: D
+      text_raw: $2\sqrt{5}$
+      text_latex: $2\sqrt{5}$
+  answer: B
+  fidelity_notes:
+    - 源题为单选题，选项 A-D 已完整保留。
+    - 源解显式给出切点 $P(0,2)$ 和最小值 $\sqrt5$。
+solution:
+  source_solution_summary: 把两图象上动点距离最小转成“曲线 $f(x)$ 在点 $P$ 处切线与直线 $g(x)=2x-3$ 平行”。由 $g$ 的斜率为 2，令 $f^{\prime}(x)=e^x+2x+1=2$，得 $x=0$，切点为 $P(0,2)$。 再把直线写成 $2x-y-3=0$，由点到直线距离公式得 $|PQ|_{\min}=|2\cdot0-2-3|/\sqrt{2^2+(-1)^2}=\sqrt5$，故选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 把最短距离条件改写为平行切线条件。
+      formula_trace:
+        from: $g(x)=2x-3$ 的斜率为 $2$
+        to: $f^{\prime}(x)=e^x+2x+1=2$
+        operation: 令曲线切线斜率等于目标直线斜率。
+        why: 曲线到直线的最短距离出现在与该直线平行的支撑切线处。
+      source_ref: page_0165:line 32
+    - step_id: step_2
+      statement: 解出切点并定位最短距离对应点。
+      formula_trace:
+        from: $e^x+2x+1=2$
+        to: $x=0,\ P(0,2)$
+        operation: 解斜率方程并代回 $f(x)=e^x+x^2+x+1$。
+        why: 距离公式需要具体点坐标。
+      source_ref: page_0165:line 32
+    - step_id: step_3
+      statement: 套点到直线距离公式求最小值。
+      formula_trace:
+        from: $P(0,2),\ y=2x-3\Leftrightarrow 2x-y-3=0$
+        to: $|PQ|_{\min}=\frac{|2\cdot0-2-3|}{\sqrt{4+1}}=\sqrt5$
+        operation: 将切点坐标代入点到直线距离公式。
+        why: 该切点对应全局最短距离。
+      source_ref: page_0165:line 32
+teaching_card:
+  student_title: 平行切线法求两图象最短距离
+  what_it_trains: 训练把“曲线点到直线（或到另一图象）的最短距离”先转成切线斜率条件，再用点线距离公式一把收尾。
+  recognition_cues:
+    - 题目问两图象上动点之间的最小距离。
+    - 其中一条对象是斜率固定的直线。
+    - 解析入口是“切线平行于给定直线”。
+  normalization_moves:
+    - 先读出目标直线斜率。
+    - 令 $f^{\prime}(x)=k$ 求切点。
+    - 把直线写成 $Ax+By+C=0$。
+    - 代入点到直线距离公式。
+  common_failures:
+    - 直接在两条图象上设双参数硬算 $|PQ|$。
+    - 求出切点后忘了回到距离公式。
+    - 把 $2x-y-3=0$ 误写成 $2x+y-3=0$。
+  similar_practice_query: e^x+x^2+x+1 与 2x-3 最短距离 平行切线 点到直线距离
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

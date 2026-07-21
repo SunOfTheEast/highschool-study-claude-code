@@ -1,0 +1,219 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0298_exp2x_sinx_one_positive_zero_integer_a_ex06
+content_revision_id: mst_p0298_exp2x_sinx_one_positive_zero_integer_a_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0298_exp2x_sinx_one_positive_zero_integer_a_ex06.card.yaml
+stem: |-
+  （2024 春 · 江北区校级期中）已知函数 $f(x)=e^{2x}+(a-2)e^x-a\sin x-\frac54$。
+  1. 当 $a=0$ 时，讨论 $f(x)$ 的单调性。
+  2. 若 $f(x)$ 在 $\mathbf R$ 上恰有一个零点 $x_0$，且 $x_0\in(0,+\infty)$，求满足条件的最大整数 $a$。
+answer: |-
+  第(1)问 $f$ 在 $(-\infty,0)$ 上单调递减，在 $(0,+\infty)$ 上单调递增；第(2)问满足条件的最大整数 $a$ 为 $1$。
+
+  第(1)问当 $a=0$ 时， $f(x)=e^{2x}-2e^x-\frac54$，$f^\prime(x)=2e^x(e^x-1)$。 因此 $x<0$ 时 $f^\prime(x)<0$，$x>0$ 时 $f^\prime(x)>0$， $f$ 在 $(-\infty,0)$ 上递减，在 $(0,+\infty)$ 上递增。第(2)问把 $f$ 改写成 $(e^x-1)^2+a(e^x-\sin x)-\frac94$。当 $a>0$ 时， $(e^x-1)^2$ 与 $a(e^x-\sin x)$ 在 $(0,+\infty)$ 上都递增， 所以 $f$ 在正半轴递增。又 $f(0)=a-\frac94$，若 $a\ge3$，则正半轴无零点，不合题意。检查整数候选： $a=2$ 时 $f(0)<0$，但 $f(-\frac\pi2)=e^{-\pi}+2-\frac54>0$，负半轴已有零点，不合题意。 $a=1$ 时 $f(x)=e^{2x}-e^x-\sin x-\frac54=(e^x-\frac12)^2-\sin x-\frac32$。 在正半轴，$f(0)<0$ 且 $f(1)>0$，结合正半轴递增，只有一个正零点； 在负半轴，$0<e^x<1$，所以 $(e^x-\frac12)^2<\frac14$，又 $-\sin x\le1$，故 $f(x)<0$ 恒成立。于是最大整数 $a=1$。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 第(1)问代入 $a=0$ 后求导。
+      max_score: 1
+    - step_id: step_2
+      description: 得到第(1)问单调区间。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问先把式子拆成正半轴好判的两块。
+      max_score: 1
+    - step_id: step_4
+      description: 排除所有 $a\ge3$ 的整数。
+      max_score: 1
+    - step_id: step_5
+      description: 排除 $a=2$。
+      max_score: 1
+    - step_id: step_6
+      description: 验证 $a=1$ 正半轴有唯一零点。
+      max_score: 1
+    - step_id: step_7
+      description: 验证 $a=1$ 负半轴无零点。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 1 问
+        result: $f$ 在 $(-\infty,0)$ 上递减，在 $(0,+\infty)$ 上递增。
+      - part_id: "2"
+        goal: 零点/极值点分析
+        target: 第 2 问
+        result: 最大整数 $a=1$，且唯一零点在正半轴。
+  method:
+    primary: 充分/必要性探路
+    secondary:
+      - 含参数分类讨论
+      - 显隐点探路
+      - 拟合与夹逼
+    subroute:
+      - 指数平方配凑
+      - 正半轴单调性
+      - 排除 $a\ge3$
+      - 排除 $a=2$ 的负半轴零点
+      - 验证 $a=1$ 的全局唯一正零点
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $e^{2x}+(a-2)e^x-a\sin x-\frac54$
+      - $(e^x-1)^2+a(e^x-\sin x)-\frac94$
+      - $e^x-\sin x$
+      - $(e^x-\frac12)^2-\sin x-\frac32$
+      - $f(-\frac\pi2)>0$
+    normalization_moves_used:
+      - 第(1)问把导数因式分解成 $2e^x(e^x-1)$。
+      - 第(2)问把 $e^{2x}-2e^x$ 补成 $(e^x-1)^2$。
+      - 用整数候选从大到小排除，而不是完整求实数范围。
+      - 负半轴用平方项上界和正弦范围夹住。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会指数因式分解，回补代数恒等变形。
+      - 若学生不会由导数符号判单调，回补导数单调极值基础。
+      - 若学生不会处理 $e^x$ 的正半轴性质，回补指数对数基础。
+      - 若学生不会用 $\sin x$ 范围估计，回补三角函数基础。
+      - 若学生不会用变号证明零点存在，回补方程根分布与韦达。
+  detail_terms:
+    - $e^{2x}+(a-2)e^x-a\sin x-\frac54$
+    - 恰有一个正零点
+    - 最大整数 $a=1$
+    - $(e^x-1)^2+a(e^x-\sin x)-\frac94$
+    - $f(-\frac\pi2)>0$
+    - 负半轴无零点
+parts: &a1
+  - part_id: "1"
+    text: 当 $a=0$ 时，讨论 $f(x)$ 的单调性。
+  - part_id: "2"
+    text: 若 $f(x)$ 在 $\mathbf R$ 上恰有一个零点 $x_0$，且 $x_0\in(0,+\infty)$，求满足条件的最大整数 $a$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0298_exp2x_sinx_one_positive_zero_integer_a_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0298_ex06_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0298/page_0298.md
+      role: problem_start
+      evidence: page_0298 页底例6题头：$f(x)=e^{2x}+(a-2)e^x-a\sin x-\frac54$；两问分别为 $a=0$ 时单调性，以及恰有一个正零点时最大整数 $a$。
+    - ref_id: page_0299_ex06_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0299/page_0299.md
+      role: solution
+      evidence: page_0299 页首完整解析例6：第(1)问由 $f^\prime=2e^x(e^x-1)$ 判单调；第(2)问改写 $f=(e^x-1)^2+a(e^x-\sin x)-\frac94$，排除 $a\ge3$ 与 $a=2$，验证 $a=1$。
+    - ref_id: page_0299_ex07_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0299/page_0299.md
+      role: local_context
+      evidence: page_0299 中部从例7开始新题，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0298.png
+      inspected: true
+      notes: 已核对页图：page_0298 页底包含例6完整题干。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0299.png
+      inspected: true
+      notes: 已核对页图：page_0299 页首完成例6解析，随后另起例7。
+  source_context: 本卡处理 page_0298 页底起头、page_0299 页首续完的例6；page_0299 例7排除。
+  source_influence:
+    - 保留第(1)问 $a=0$ 时 $f(x)=e^{2x}-2e^x-\frac54$，$f^\prime(x)=2e^x(e^x-1)$。
+    - 保留第(2)问核心改写：$f(x)=(e^x-1)^2+a(e^x-\sin x)-\frac94$。
+    - 保留 $a>0$ 时 $f$ 在 $(0,+\infty)$ 上单调递增。
+    - 保留 $a\ge3$ 时正半轴上 $f(x)>0$，不合题意。
+    - 保留 $a=2$ 时 $f(0)<0$ 且 $f(-\frac\pi2)>0$，负半轴已有零点，不合题意。
+    - 保留 $a=1$ 时正半轴有唯一零点，负半轴恒小于 $0$，因此满足条件。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 春 · 江北区校级期中）已知函数 $f(x)=e^{2x}+(a-2)e^x-a\sin x-\frac54$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问 $f$ 在 $(-\infty,0)$ 上单调递减，在 $(0,+\infty)$ 上单调递增；第(2)问满足条件的最大整数 $a$ 为 $1$。
+  fidelity_notes:
+    - 无选项。
+    - 第(2)问只需要确定最大整数，不需要完整求出所有实数 $a$ 的范围。
+solution:
+  source_solution_summary: 第(1)问当 $a=0$ 时， $f(x)=e^{2x}-2e^x-\frac54$，$f^\prime(x)=2e^x(e^x-1)$。 因此 $x<0$ 时 $f^\prime(x)<0$，$x>0$ 时 $f^\prime(x)>0$， $f$ 在 $(-\infty,0)$ 上递减，在 $(0,+\infty)$ 上递增。第(2)问把 $f$ 改写成 $(e^x-1)^2+a(e^x-\sin x)-\frac94$。当 $a>0$ 时， $(e^x-1)^2$ 与 $a(e^x-\sin x)$ 在 $(0,+\infty)$ 上都递增， 所以 $f$ 在正半轴递增。又 $f(0)=a-\frac94$，若 $a\ge3$，则正半轴无零点，不合题意。检查整数候选： $a=2$ 时 $f(0)<0$，但 $f(-\frac\pi2)=e^{-\pi}+2-\frac54>0$，负半轴已有零点，不合题意。 $a=1$ 时 $f(x)=e^{2x}-e^x-\sin x-\frac54=(e^x-\frac12)^2-\sin x-\frac32$。 在正半轴，$f(0)<0$ 且 $f(1)>0$，结合正半轴递增，只有一个正零点； 在负半轴，$0<e^x<1$，所以 $(e^x-\frac12)^2<\frac14$，又 $-\sin x\le1$，故 $f(x)<0$ 恒成立。于是最大整数 $a=1$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问代入 $a=0$ 后求导。
+      formula_trace:
+        from: $f(x)=e^{2x}-2e^x-\frac54$
+        to: $f^\prime(x)=2e^x(e^x-1)$
+        operation: 求导并因式分解。
+        why: 符号只由 $e^x-1$ 决定。
+      source_ref: page_0299_ex06_solution
+    - step_id: step_2
+      statement: 得到第(1)问单调区间。
+      formula_trace:
+        from: $f^\prime(x)<0\ (x<0),\quad f^\prime(x)>0\ (x>0)$
+        to: $f$ 在 $(-\infty,0)$ 递减，在 $(0,+\infty)$ 递增
+        operation: 按导数符号判单调。
+        why: 这是后面处理正半轴零点的基础。
+      source_ref: page_0299_ex06_solution
+    - step_id: step_3
+      statement: 第(2)问先把式子拆成正半轴好判的两块。
+      formula_trace:
+        from: $e^{2x}+(a-2)e^x-a\sin x-\frac54$
+        to: $(e^x-1)^2+a(e^x-\sin x)-\frac94$
+        operation: 补出 $(e^x-1)^2$，把含 $a$ 的项并成 $a(e^x-\sin x)$。
+        why: 这样 $x>0$ 时可以直接判断两块都递增。
+      source_ref: page_0299_ex06_solution
+    - step_id: step_4
+      statement: 排除所有 $a\ge3$ 的整数。
+      formula_trace:
+        from: $f(0)=a-\frac94$
+        to: $a\ge3$ 时正半轴无零点
+        operation: 结合 $a>0$ 时正半轴单调递增。
+        why: 若从 $x=0$ 起已经为正，正半轴不会出现所需零点。
+      source_ref: page_0299_ex06_solution
+    - step_id: step_5
+      statement: 排除 $a=2$。
+      formula_trace:
+        from: $f(0)<0,\quad f(-\frac\pi2)=e^{-\pi}+2-\frac54>0$
+        to: $(-\frac\pi2,0)$ 上有零点
+        operation: 用介值定理找负半轴零点。
+        why: 题目要求全实数上只有一个零点且它在正半轴，负半轴零点会直接失败。
+      source_ref: page_0299_ex06_solution
+    - step_id: step_6
+      statement: 验证 $a=1$ 正半轴有唯一零点。
+      formula_trace:
+        from: $f(0)=-\frac54<0,\quad f(1)=(e-\frac12)^2-\sin1-\frac32>0$
+        to: $(0,+\infty)$ 上有且只有一个零点
+        operation: 用正半轴递增和变号。
+        why: 递增性保证零点唯一。
+      source_ref: page_0299_ex06_solution
+    - step_id: step_7
+      statement: 验证 $a=1$ 负半轴无零点。
+      formula_trace:
+        from: $f(x)=(e^x-\frac12)^2-\sin x-\frac32,\quad x<0$
+        to: $f(x)<0$
+        operation: 用 $(e^x-\frac12)^2<\frac14$ 与 $-\sin x\le1$。
+        why: 排除负半轴零点后，$a=1$ 才真正满足全局条件。
+      source_ref: page_0299_ex06_solution
+teaching_card:
+  student_title: 排除候选，留下唯一正零点
+  what_it_trains: 训练带指数和正弦的零点个数题中，如何用整数候选、正半轴单调性和负半轴排除来确定最大整数。
+  recognition_cues:
+    - 题目要求全实数只有一个零点，而且零点必须在正半轴。
+    - $e^{2x}-2e^x$ 可以补成 $(e^x-1)^2$。
+    - $a=2$ 不是因为正半轴失败，而是负半轴冒出零点。
+    - $a=1$ 要同时证明正半轴唯一、负半轴没有。
+  normalization_moves:
+    - 先讨论 $a=0$ 的单调性，不把它误当成第(2)问主线。
+    - 第(2)问按整数候选验证：先排大数，再排 $2$，最后证 $1$。
+    - 负半轴估计只需证明函数始终小于 $0$。
+  common_failures:
+    - 只看正半轴，忘记题目说的是在 $\mathbf R$ 上恰有一个零点。
+    - 看到 $a=2$ 正半轴可能有零点就误判通过。
+    - 不会把 $e^{2x}-2e^x$ 补成平方。
+    - 验证 $a=1$ 时漏掉负半轴无零点。
+  similar_practice_query: e^{2x} e^x sin x 恰有一个正零点 最大整数 a 负半轴排除
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,242 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0277_exp_quadratic_visible_point_unique_zero_ex02
+content_revision_id: mst_p0277_exp_quadratic_visible_point_unique_zero_ex02-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0277_exp_quadratic_visible_point_unique_zero_ex02.card.yaml
+stem: |-
+  （2021 · 新高考 II）已知函数 $f(x)=(x-1)e^x-ax^2+b$。
+  1. 讨论 $f(x)$ 的单调性。
+  2. 从以下 (1) 和 (2) 中选择一项，(1) $\frac12<a\le\frac{e^2}{2}$，$b>2a$；(2) $0<a<\frac12$，$b\le2a$。证明：$f(x)$ 恰有一个零点。
+answer: |-
+  (1) 单调性按 $a\le0$、$0<a<\frac12$、$a=\frac12$、$a>\frac12$ 分段； (2) 两个给定选项都可推出 $f(x)$ 恰有一个零点。
+
+  先求导：$f^\prime(x)=x(e^x-2a)$。当 $a\le0$ 时， $f$ 在 $(-\infty,0)$ 减、在 $(0,+\infty)$ 增；当 $0<a<\frac12$ 时，驻点顺序为 $\ln(2a)<0$，所以 $(-\infty,\ln(2a))$、$(0,+\infty)$ 增，$(\ln(2a),0)$ 减； 当 $a=\frac12$ 时全域增；当 $a>\frac12$ 时，驻点顺序为 $0<\ln(2a)$，所以 $(-\infty,0)$、$(\ln(2a),+\infty)$ 增， $(0,\ln(2a))$ 减。第(2)问的核心是显点效应：显点是 $f(1)$， 另一个关键点是 $\ln(2a)$。选(1)时先证 $x\ge0$ 上最小值 $f(\ln(2a))>0$，所以非负半轴无零点；再用 $f(0)=b-1>0$ 和 $f(-\sqrt{b/a})<0$ 锁定负半轴唯一零点。 选(2)时先证 $x\le0$ 上最大值 $f(\ln(2a))<0$，所以非正半轴无零点； 再在正半轴用取点或二次切线模型证明存在正值，从而正半轴唯一零点。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 求导并找出两个可能的驻点。
+      max_score: 1
+    - step_id: step_2
+      description: 按 $a$ 分段给出单调性。
+      max_score: 1
+    - step_id: step_3
+      description: 选(1)：先排除非负半轴零点。
+      max_score: 1
+    - step_id: step_4
+      description: 选(1)：在负半轴取点，锁定唯一零点。
+      max_score: 1
+    - step_id: step_5
+      description: 选(2)：先排除非正半轴零点。
+      max_score: 1
+    - step_id: step_6
+      description: 选(2)：用正半轴取点或二次切线补出存在性。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 1 问
+        result: 按 $a\le0$、$0<a<\frac12$、$a=\frac12$、$a>\frac12$ 讨论单调区间。
+      - part_id: "2"
+        goal: 零点/极值点分析
+        target: 第 2 问
+        result: 在两个给定条件下均证明 $f(x)$ 恰有一个零点。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 局部逼近与找点
+      - 拟合与夹逼
+      - 含参数分类讨论
+    subroute:
+      - 显点 $f(1)$
+      - 隐点 $x=\ln(2a)$
+      - 极值高度排除半轴零点
+      - 负半轴取点 $-\sqrt{b/a}$
+      - 正半轴二次切线 $(x-1)e^x>\frac12x^2-1$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - $(x-1)e^x-ax^2+b$
+      - $f^\prime(x)=x(e^x-2a)$
+      - $x=0$
+      - $x=\ln(2a)$
+      - $(x-1)e^x>\frac12x^2-1$
+      - $x=-\sqrt{b/a}$
+      - $x=\sqrt{\frac{1-b}{\frac12-a}}$
+    normalization_moves_used:
+      - 把导数写成 $x(e^x-2a)$，先看两个驻点的相对位置。
+      - 用 $f(\ln(2a))$ 判断某个半轴是否整体无零点。
+      - 取点只用于补存在性，不替代显点效应主线。
+      - 二次切线用于给 $(x-1)e^x$ 做正半轴下界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f^\prime=x(e^x-2a)$ 判单调，回补导数单调极值基础。
+      - 若学生不会比较 $\ln(2a)$ 与 0，回补指数对数基础。
+      - 若学生不理解介值定理式的存在性证明，回补函数性质与图像。
+      - 若学生卡在二次切线不等式，回补导数运算与几何意义。
+      - 若学生不会处理 $-ax^2+b$ 的取点，回补代数恒等变形。
+  detail_terms:
+    - 显点效应
+    - $f(1)$
+    - $x=\ln(2a)$
+    - $f^\prime(x)=x(e^x-2a)$
+    - 恰有一个零点
+    - $x=-\sqrt{b/a}$
+    - 二次切线
+    - $(x-1)e^x>\frac12x^2-1$
+    - $x=\sqrt{\frac{1-b}{\frac12-a}}$
+parts: &a1
+  - part_id: "1"
+    text: 讨论 $f(x)$ 的单调性。
+  - part_id: "2"
+    text: 从以下 (1) 和 (2) 中选择一项，(1) $\frac12<a\le\frac{e^2}{2}$，$b>2a$；(2) $0<a<\frac12$，$b\le2a$。证明：$f(x)$ 恰有一个零点。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0277_exp_quadratic_visible_point_unique_zero_ex02
+source_evidence:
+  source_refs:
+    - ref_id: page_0277_ex02_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0277/page_0277.md
+      role: problem_start
+      evidence: page_0277 给出例2题头：$f(x)=(x-1)e^x-ax^2+b$，先讨论单调性，再从两个条件中选一项证明恰有一个零点。
+    - ref_id: page_0277_ex02_monotonicity
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0277/page_0277.md
+      role: solution
+      evidence: page_0277 解析给出 $f^\prime(x)=x(e^x-2a)$，按 $a\le0$、$0<a<\frac12$、$a=\frac12$、$a>\frac12$ 讨论单调性。
+    - ref_id: page_0277_ex02_option1_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0277/page_0277.md
+      role: solution
+      evidence: page_0277 第(2)问背景分析说明本题属于显点效应，显点为 $f(1)$；选(1)时先证 $f(\ln 2a)>0$。
+    - ref_id: page_0278_ex02_option1_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0278/page_0278.md
+      role: solution
+      evidence: page_0278 续完选(1)：在 $x\ge0$ 无零点，在 $(-\infty,0)$ 由 $f(0)>0$ 和取点 $x=-\sqrt{b/a}$ 得唯一零点。
+    - ref_id: page_0278_ex02_option2_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0278/page_0278.md
+      role: solution
+      evidence: page_0278 给出选(2)：$0<a<\frac12$ 时先证 $x\le0$ 无零点，再用双变量区间主元锁定或二次切线取点证明正半轴存在唯一零点。
+    - ref_id: page_0279_ex02_figure_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0279/page_0279.md
+      role: figure
+      evidence: page_0279 顶部图像仍属于例2，展示 $(x-1)e^x$ 与二次切线 $0.5x^2-1$ 的比较；随后另起例3。
+    - ref_id: page_0279_ex03_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0279/page_0279.md
+      role: local_context
+      evidence: page_0279 从“例3”开始是新题，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0277.png
+      inspected: true
+      notes: 已核对页图：page_0277 下半页为例2题头、单调性讨论和选(1)开头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0278.png
+      inspected: true
+      notes: 已核对页图：page_0278 为例2主体续解，含两组选项图像与二次切线方案。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0279.png
+      inspected: true
+      notes: 已核对页图：page_0279 顶部图像承接例2，随后另起例3。
+  source_context: 本卡处理 page_0277 起头、page_0278 续解、page_0279 顶部图像补充的例2；page_0279 例3排除。
+  source_influence:
+    - 保留导数分解：$f^\prime(x)=x(e^x-2a)$。
+    - 保留第(1)问完整单调性分段。
+    - 保留 source 的显点效应判断：显点为 $f(1)$，隐点为 $x=\ln(2a)$。
+    - 选(1)保留负半轴取点 $x=-\sqrt{b/a}$。
+    - 选(2)保留两种证明路线：双变量区间与主元锁定、二次切线。
+    - 保留二次切线模型 $(x-1)e^x>\frac12x^2-1$。
+  source_discrepancies:
+    - field: page_0278_initial_formula_fragment
+      source_value: "[?layout: (2-\\ln(2a)) | reason=页面起始，承接上页内容]"
+      resolved_value: $a\ln(2a)(2-\ln(2a))$
+      reason: page_0277 末尾已写到 $=a\ln(2a)$，page_0278 首行公式片段是同一乘积的续写。
+    - field: page_0278_missing_in_symbol
+      source_value: $\exists x_1 \left(-\sqrt{\frac{b}{a}},0\right)$
+      resolved_value: $\exists x_1\in\left(-\sqrt{\frac{b}{a}},0\right)$
+      reason: 上下文是介值定理找零点，明显缺少区间归属符号 $\in$。
+original_problem:
+  stem: （2021 · 新高考 II）已知函数 $f(x)=(x-1)e^x-ax^2+b$。
+  parts: *a1
+  choices: []
+  answer: (1) 单调性按 $a\le0$、$0<a<\frac12$、$a=\frac12$、$a>\frac12$ 分段； (2) 两个给定选项都可推出 $f(x)$ 恰有一个零点。
+  fidelity_notes:
+    - 无选择题选项；第(2)问是从两个证明条件中任选一项。
+    - source 同时写了选(1)和选(2)的证明，本卡均保留。
+solution:
+  source_solution_summary: 先求导：$f^\prime(x)=x(e^x-2a)$。当 $a\le0$ 时， $f$ 在 $(-\infty,0)$ 减、在 $(0,+\infty)$ 增；当 $0<a<\frac12$ 时，驻点顺序为 $\ln(2a)<0$，所以 $(-\infty,\ln(2a))$、$(0,+\infty)$ 增，$(\ln(2a),0)$ 减； 当 $a=\frac12$ 时全域增；当 $a>\frac12$ 时，驻点顺序为 $0<\ln(2a)$，所以 $(-\infty,0)$、$(\ln(2a),+\infty)$ 增， $(0,\ln(2a))$ 减。第(2)问的核心是显点效应：显点是 $f(1)$， 另一个关键点是 $\ln(2a)$。选(1)时先证 $x\ge0$ 上最小值 $f(\ln(2a))>0$，所以非负半轴无零点；再用 $f(0)=b-1>0$ 和 $f(-\sqrt{b/a})<0$ 锁定负半轴唯一零点。 选(2)时先证 $x\le0$ 上最大值 $f(\ln(2a))<0$，所以非正半轴无零点； 再在正半轴用取点或二次切线模型证明存在正值，从而正半轴唯一零点。
+  key_steps:
+    - step_id: step_1
+      statement: 求导并找出两个可能的驻点。
+      formula_trace:
+        from: $f(x)=(x-1)e^x-ax^2+b$
+        to: $f^\prime(x)=x(e^x-2a)$
+        operation: 求导并提取公共因子 $x$。
+        why: 单调性和零点个数都由 $0$ 与 $\ln(2a)$ 的相对位置控制。
+      source_ref: page_0277_ex02_monotonicity
+    - step_id: step_2
+      statement: 按 $a$ 分段给出单调性。
+      formula_trace:
+        from: $x=0,\ x=\ln(2a)$
+        to: 四种情形：$a\le0$、$0<a<\frac12$、$a=\frac12$、$a>\frac12$
+        operation: 比较 $\ln(2a)$ 与 $0$ 的位置，再判 $f^\prime$ 符号。
+        why: 这是第(2)问证明唯一零点的形态基础。
+      source_ref: page_0277_ex02_monotonicity
+    - step_id: step_3
+      statement: 选(1)：先排除非负半轴零点。
+      formula_trace:
+        from: $\frac12<a\le\frac{e^2}{2},\ b>2a$
+        to: $f(\ln(2a))>a\ln(2a)(2-\ln(2a))\ge0$
+        operation: 代入极小点并用 $0<\ln(2a)\le2$。
+        why: 非负半轴的最小值大于 0，所以 $x\ge0$ 没有零点。
+      source_ref: page_0278_ex02_option1_continuation
+    - step_id: step_4
+      statement: 选(1)：在负半轴取点，锁定唯一零点。
+      formula_trace:
+        from: $f(0)=b-1>0,\quad x=-\sqrt{\frac ba}$
+        to: $f\left(-\sqrt{\frac ba}\right)<0,\ \exists x_1\in\left(-\sqrt{\frac ba},0\right)$
+        operation: 利用 $x<0$ 时 $(x-1)e^x\in(-1,0)$，并让 $-ax^2+b=0$。
+        why: $(-\infty,0)$ 上单调递增，正负号各给一端，故只穿一次。
+      source_ref: page_0278_ex02_option1_continuation
+    - step_id: step_5
+      statement: 选(2)：先排除非正半轴零点。
+      formula_trace:
+        from: $0<a<\frac12,\ b\le2a$
+        to: $f(\ln(2a))\le a\ln(2a)(2-\ln(2a))<0$
+        operation: 代入极大点并用 $\ln(2a)<0$。
+        why: 非正半轴最大值小于 0，所以 $x\le0$ 没有零点。
+      source_ref: page_0278_ex02_option2_solution
+    - step_id: step_6
+      statement: 选(2)：用正半轴取点或二次切线补出存在性。
+      formula_trace:
+        from: $(x-1)e^x$ 与二次客体 $-ax^2+b$
+        to: $x=3-b$ 或 $x=\sqrt{\frac{1-b}{\frac12-a}}$ 给出 $f(x)>0$
+        operation: 用 source 的主元锁定不等式，或用二次切线 $(x-1)e^x>\frac12x^2-1$。
+        why: $f(0)=b-1<0$，正半轴又能找到正值，且该区间最终单调上升，所以只穿一次。
+      source_ref: page_0278_ex02_option2_solution
+teaching_card:
+  student_title: 用显点效应证明指数二次函数只有一个零点
+  what_it_trains: 训练先用导数形态确定曲线哪一侧不可能有零点，再用一个取点或二次切线补出另一侧确实穿轴。
+  recognition_cues:
+    - 导数分解成 $x(e^x-2a)$，两个驻点是 $0$ 和 $\ln(2a)$。
+    - 题目不是求零点，而是证明“恰有一个零点”。
+    - 两个选项分别把 $\ln(2a)$ 放在 0 的右侧和左侧。
+    - source 明确提示“显点效应”，不要硬解超越方程。
+  normalization_moves:
+    - 先讨论单调性，得到曲线形状。
+    - 用 $f(\ln(2a))$ 判断一整个半轴没有零点。
+    - 选(1) 在负半轴取 $-\sqrt{b/a}$。
+    - 选(2) 可用 $3-b$ 取点，也可用二次切线 $(x-1)e^x>\frac12x^2-1$。
+  common_failures:
+    - 把第(2)问当成解方程，试图直接求零点。
+    - 没有先做第(1)问的单调性，导致唯一性没有依据。
+    - 混淆 $0<a<\frac12$ 与 $a>\frac12$ 时 $\ln(2a)$ 的左右位置。
+    - 把取点当成主线，忽略“先排除一个半轴，再证明另一个半轴穿轴”。
+    - 不会解释为什么二次切线给的是 $(x-1)e^x$ 的下界。
+  similar_practice_query: 显点效应 (x-1)e^x-ax^2+b 恰有一个零点 ln(2a) 二次切线
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

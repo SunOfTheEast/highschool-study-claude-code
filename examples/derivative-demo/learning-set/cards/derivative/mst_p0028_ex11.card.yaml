@@ -1,0 +1,163 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0028_ex11
+content_revision_id: mst_p0028_ex11-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0028_ex11.card.yaml
+stem: (2023 安徽师大附中月考 T16) 已知 $a>e^{-\frac{2}{3}}$, 若对于任意的 $x\in\left[\frac{2}{3},+\infty\right)$, 不等式 $\ln\frac{2a}{3x}\geqslant-\frac{1}{ae^x}+\frac{2}{3x}-x$ 恒成立，则 $a$ 的最小值为______.
+answer: |-
+  $\frac{3}{2e}$
+
+  把原不等式移项为 $\ln a+x+1/(ae^x)\ge -\ln(2/(3x))+2/(3x)$，即 $\ln(ae^x)+1/(ae^x)\ge\ln(3x/2)+2/(3x)$。设 $F(u)=\ln u+1/u$。由 $x\ge2/3$ 得 $3x/2\ge1$，由 $a>e^{-2/3}$ 得 $ae^x>1$；且 $F'(u)=(u-1)/u^2\ge0$，故 $F$ 在 $[1,+\infty)$ 递增。于是 $F(ae^x)\ge F(3x/2)$ 推出 $ae^x\ge3x/2$，即 $a\ge(3/2)x/e^x$。在 $x\in[2/3,+\infty)$ 上，$x/e^x$ 最大值为 $1/e$，所以 $a_{\min}=3/(2e)$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先把原不等式整理出 $\ln(ae^x)$ 与 $1/(ae^x)$。
+      max_score: 1
+    - step_id: step_2
+      description: 把右侧也配成同一个函数的输入。
+      max_score: 1
+    - step_id: step_3
+      description: 确认两个输入都在单调区间 $[1,+\infty)$。
+      max_score: 1
+    - step_id: step_4
+      description: 用单调性把函数值比较转成输入比较。
+      max_score: 1
+    - step_id: step_5
+      description: 求 $x/e^x$ 在给定区间的最大值。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+    subroute:
+      - $\ln x+1/x$ 同构
+      - $x/e^x$ 最大值
+      - 区间下界保证单调输入
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $\ln(ae^x)+1/(ae^x)=F(ae^x)$。
+      - $\ln(3x/2)+2/(3x)=F(3x/2)$。
+      - 最终由 $x/e^x$ 最大值给出 $a$ 的最小值。
+    normalization_moves_used:
+      - 展开 $\ln(2a/(3x))$ 后移项。
+      - 把 $-\ln(2/(3x))$ 改写为 $\ln(3x/2)$。
+      - 把 $2/(3x)$ 改写为 $1/(3x/2)$。
+      - 用 $ae^x\ge3x/2$ 分离出 $a\ge(3/2)x/e^x$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\ln\frac{2a}{3x}$ 展开并移项，回补指数对数基础。
+      - 若学生不能把 $2/(3x)$ 看成 $1/(3x/2)$，回补代数恒等变形。
+      - 若学生没有检查 $ae^x$ 与 $3x/2$ 是否都大于等于 1，回补函数三要素与定义域。
+      - 若学生不知道 $x/e^x$ 在 $x=1$ 处取最大值，回补导数单调极值基础。
+  detail_terms:
+    - $\ln(2a/(3x))$
+    - $F(u)=\ln u+1/u$
+    - $ae^x$
+    - $3x/2$
+    - $x/e^x$ 最大值
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0028_ex11
+source_evidence:
+  source_refs:
+    - ref_id: page_0028_ex11_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0028/page_0028.md
+      role: problem_start
+      evidence: page_0028 例 11 给出 $a>e^{-2/3}$，要求不等式对任意 $x\in[2/3,+\infty)$ 恒成立时 $a$ 的最小值。
+    - ref_id: page_0028_ex11_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0028/page_0028.md
+      role: solution
+      evidence: page_0028 同页解析把原式化成 $\ln(ae^x)+1/(ae^x)\ge \ln(1/(2/(3x)))+2/(3x)$，构造 $f(u)=\ln u+1/u$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0028.png
+      inspected: true
+      notes: 页图核对例 11 题干、解析和答案 $3/(2e)$；与 markdown 一致。
+  source_context: 本题使用 $\ln u+1/u$ 在 $u\ge1$ 上递增，把两个复杂表达式统一为同一个单调函数。
+  source_influence:
+    - 题设 $a>e^{-2/3}$ 与 $x\ge2/3$ 用来保证 $ae^x>1$，从而可以在 $u\ge1$ 上使用单调性。
+    - 右侧必须识别为 $f(3x/2)$，其中 $1/(3x/2)=2/(3x)$。
+    - 最小值来自 $a\ge(3/2)x/e^x$，而 $x/e^x$ 在 $x=1$ 处取最大值。
+  source_discrepancies: []
+original_problem:
+  stem: (2023 安徽师大附中月考 T16) 已知 $a>e^{-\frac{2}{3}}$, 若对于任意的 $x\in\left[\frac{2}{3},+\infty\right)$, 不等式 $\ln\frac{2a}{3x}\geqslant-\frac{1}{ae^x}+\frac{2}{3x}-x$ 恒成立，则 $a$ 的最小值为______.
+  parts: *a1
+  choices: []
+  answer: $\frac{3}{2e}$
+  fidelity_notes:
+    - page_0028.png 已核对：题干左侧为 $\ln\frac{2a}{3x}$，右侧为 $-\frac1{ae^x}+\frac2{3x}-x$。
+solution:
+  source_solution_summary: 把原不等式移项为 $\ln a+x+1/(ae^x)\ge -\ln(2/(3x))+2/(3x)$，即 $\ln(ae^x)+1/(ae^x)\ge\ln(3x/2)+2/(3x)$。设 $F(u)=\ln u+1/u$。由 $x\ge2/3$ 得 $3x/2\ge1$，由 $a>e^{-2/3}$ 得 $ae^x>1$；且 $F'(u)=(u-1)/u^2\ge0$，故 $F$ 在 $[1,+\infty)$ 递增。于是 $F(ae^x)\ge F(3x/2)$ 推出 $ae^x\ge3x/2$，即 $a\ge(3/2)x/e^x$。在 $x\in[2/3,+\infty)$ 上，$x/e^x$ 最大值为 $1/e$，所以 $a_{\min}=3/(2e)$。
+  key_steps:
+    - step_id: step_1
+      statement: 先把原不等式整理出 $\ln(ae^x)$ 与 $1/(ae^x)$。
+      formula_trace:
+        from: $\ln\frac{2a}{3x}\geqslant-\frac{1}{ae^x}+\frac{2}{3x}-x
+        to: $\ln a+x+\frac1{ae^x}\geqslant-\ln\frac{2}{3x}+\frac2{3x}$
+        operation: 展开 $\ln(2a/(3x))=\ln a+\ln(2/(3x))$，把 $-1/(ae^x)$ 与 $-x$ 移到左侧，把 $\ln(2/(3x))$ 移到右侧。
+        why: 左侧将合并成 $\ln(ae^x)+1/(ae^x)$。
+      source_ref: page_0028_ex11_solution
+    - step_id: step_2
+      statement: 把右侧也配成同一个函数的输入。
+      formula_trace:
+        from: $\ln a+x+\frac1{ae^x}\geqslant-\ln\frac{2}{3x}+\frac2{3x}$
+        to: $\ln(ae^x)+\frac1{ae^x}\geqslant \ln\frac{3x}{2}+\frac1{3x/2}$
+        operation: 用 $\ln a+x=\ln(ae^x)$，$-\ln(2/(3x))=\ln(3x/2)$，且 $2/(3x)=1/(3x/2)$。
+        why: 两边都成为 $F(u)=\ln u+1/u$ 的函数值。
+      source_ref: page_0028_ex11_solution
+    - step_id: step_3
+      statement: 确认两个输入都在单调区间 $[1,+\infty)$。
+      formula_trace:
+        from: $x\geqslant\frac23,\quad a>e^{-2/3}$
+        to: $\frac{3x}{2}\geqslant1,\quad ae^x>1$
+        operation: 由 $x\ge2/3$ 直接得 $3x/2\ge1$；由 $x\ge2/3$ 得 $e^x\ge e^{2/3}$，再乘 $a>e^{-2/3}$。
+        why: $F'(u)=1/u-1/u^2=(u-1)/u^2\ge0$ 只在 $u\ge1$ 上给出递增。
+      source_ref: page_0028_ex11_solution
+    - step_id: step_4
+      statement: 用单调性把函数值比较转成输入比较。
+      formula_trace:
+        from: $F(ae^x)\geqslant F\left(\frac{3x}{2}\right)$
+        to: $ae^x\geqslant\frac{3x}{2}\iff a\geqslant\frac32\cdot\frac{x}{e^x}$
+        operation: 利用 $F(u)=\ln u+1/u$ 在 $[1,+\infty)$ 上递增。
+        why: 恒成立问题转化为 $a$ 压住 $(3/2)x/e^x$ 的最大值。
+      source_ref: page_0028_ex11_solution
+    - step_id: step_5
+      statement: 求 $x/e^x$ 在给定区间的最大值。
+      formula_trace:
+        from: $a\geqslant\frac32\cdot\frac{x}{e^x}\quad\left(x\in\left[\frac23,+\infty\right)\right)$
+        to: $a\geqslant\frac32\cdot\left(\frac{x}{e^x}\right)_{\max}=\frac32\cdot\frac1e=\frac{3}{2e}$
+        operation: 用 $x/e^x$ 在 $x=1$ 处取最大值 $1/e$，且 $1\in[2/3,+\infty)$。
+        why: 该值同时满足题设 $a>e^{-2/3}$，所以就是最小值。
+      source_ref: page_0028_ex11_solution
+teaching_card:
+  student_title: 把两边配成 $\ln u+\frac1u$
+  what_it_trains: 训练把含 $a$ 的对数不等式，通过移项和倒数配形，变成同一个单调函数的输入比较。
+  recognition_cues:
+    - 左边有 $\ln(2a/(3x))$，右边有 $-1/(ae^x)$ 和 $2/(3x)$。
+    - 题设给出 $x\ge2/3$ 与 $a>e^{-2/3}$，正好用来保证两个输入不小于 1。
+    - 目标是 $a$ 的最小值，最后常会落到 $x/e^x$ 的最大值。
+  normalization_moves:
+    - 把 $-1/(ae^x)$ 移到左侧，把 $-x$ 合到 $\ln a$ 中。
+    - 把右侧写成 $\ln(3x/2)+1/(3x/2)$。
+    - 确认输入在 $[1,+\infty)$ 后，用 $F$ 的递增性比较输入。
+    - 把 $ae^x\ge3x/2$ 化成 $a\ge(3/2)x/e^x$。
+  common_failures:
+    - 只整理出 $\ln(ae^x)$，漏掉倒数项的同构。
+    - 忘记验证 $ae^x\ge1$，导致单调性使用区间不清。
+    - 把 $3x/2$ 错写成 $2/(3x)$ 的输入，左右倒置。
+    - 求 $x/e^x$ 最大值时错取端点 $x=2/3$。
+  similar_practice_query: ln u + 1/u 同构 ae^x 3x/2 x/e^x 最大值 参数最小值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0028 markdown 与页图；未发现题干或解析差异。

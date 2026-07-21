@@ -1,0 +1,210 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0224_x2_exp_ax_monotonic_and_lnx_bound_ch6_fenzhi_ex09
+content_revision_id: mst_p0224_x2_exp_ax_monotonic_and_lnx_bound_ch6_fenzhi_ex09-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0224_x2_exp_ax_monotonic_and_lnx_bound_ch6_fenzhi_ex09.card.yaml
+stem: |-
+  （2020 · 衡水中学月考 T21）已知函数 $f(x)=x^2e^{ax}-1$。
+  1. 讨论函数 $f(x)$ 的单调性。
+  2. 当 $a>\frac13e$ 时，求证：$f(x)>\ln x$。
+answer: |-
+  （1）当 $a=0$ 时，$f$ 在 $(-\infty,0)$ 上单调递减，在 $(0,+\infty)$ 上单调递增；当 $a<0$ 时，$f$ 在 $(-\infty,0)$、$(-2/a,+\infty)$ 上单调递减，在 $(0,-2/a)$ 上单调递增；当 $a>0$ 时，$f$ 在 $(-\infty,-2/a)$、$(0,+\infty)$ 上单调递增，在 $(-2/a,0)$ 上单调递减。（2）证明见解析。
+
+  $f^{\prime}(x)=2xe^{ax}+ax^2e^{ax}=x(ax+2)e^{ax}$。当 $a=0$ 时，$f(x)=x^2-1$，在 $(-\infty,0)$ 递减、$(0,+\infty)$ 递增。当 $a<0$ 时，$-2/a>0$，导数在 $x<0$ 或 $x>-2/a$ 时为负，在 $0<x<-2/a$ 时为正，所以对应区间递减、递增、 递减。当 $a>0$ 时，$-2/a<0$，导数在 $x<-2/a$ 或 $x>0$ 时为正， 在 $-2/a<x<0$ 时为负。第二问只考虑 $x>0$。由 $f(x)>\ln x$ 得 $x^2e^{ax}>\ln x+1$，即 $\frac{e^{ax}}x>\frac{\ln x+1}{x^3}$。令 $g(x)=\frac{\ln x+1}{x^3}$，则 $g^{\prime}(x)=-\frac{3\ln x+2}{x^4}$，最大值在 $x=e^{-2/3}$ 处取得，$g_{\max}=\frac13e^2$。令 $h(x)=\frac{e^{ax}}x$，则 $h^{\prime}(x)=\frac{(ax-1)e^{ax}}{x^2}$，最小值在 $x=1/a$， $h_{\min}=ae$。因 $a>\frac13e$，故 $ae>\frac13e^2$，于是 $\frac{e^{ax}}x>\frac{\ln x+1}{x^3}$，从而 $f(x)>\ln x$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 第一问求导并提取符号因子。
+      max_score: 1
+    - step_id: step_2
+      description: 按 $a$ 的符号讨论两个零点的位置。
+      max_score: 1
+    - step_id: step_3
+      description: 第二问先统一尺度。
+      max_score: 1
+    - step_id: step_4
+      description: 求右侧下函数的最大值。
+      max_score: 1
+    - step_id: step_5
+      description: 求左侧上函数的最小值。
+      max_score: 1
+    - step_id: step_6
+      description: 比较两个界完成证明。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 1 问
+        result: 按 $a=0$、$a<0$、$a>0$ 讨论单调性。
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 2 问
+        result: $a>\frac13e$ 时 $f(x)>\ln x$。
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 含参数分类讨论
+      - 同构变形与换元法
+    subroute:
+      - 导数符号表
+      - 除以 $x^3$
+      - 上下函数选取
+      - $x^n e^x$ VS $\ln x$
+      - 参数严格分离
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 指对复合结构
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - $x^2e^{ax}-1$
+      - $f^{\prime}(x)=x(ax+2)e^{ax}$
+      - $\frac{e^{ax}}x>\frac{\ln x+1}{x^3}$
+      - $g_{\max}=\frac13e^2$ 与 $h_{\min}=ae$
+    normalization_moves_used:
+      - 把导数分解成 $x$ 与 $ax+2$ 两个符号因子。
+      - 第二问除以 $x^3$，形成 $\frac{e^{ax}}x$ 与 $\frac{\ln x+1}{x^3}$。
+      - 分别求右最大、左最小，再用 $a>\frac13e$ 做严格比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会比较 $0$ 与 $-2/a$ 的位置，回补导数单调极值基础。
+      - 若学生忘记第二问因 $\ln x$ 只讨论 $x>0$，回补函数三要素与定义域。
+      - 若学生不知道为什么要除以 $x^3$，回补代数恒等变形。
+      - 若学生不会求 $\frac{\ln x+1}{x^3}$ 或 $\frac{e^{ax}}x$ 的极值，回补指数对数基础。
+  detail_terms:
+    - $x^2e^{ax}$
+    - $x(ax+2)e^{ax}$
+    - $-2/a$
+    - $\frac{e^{ax}}x$
+    - $\frac{\ln x+1}{x^3}$
+    - $e^{-2/3}$
+    - $a>\frac13e$
+parts: &a1
+  - part_id: "1"
+    text: 讨论函数 $f(x)$ 的单调性。
+  - part_id: "2"
+    text: 当 $a>\frac13e$ 时，求证：$f(x)>\ln x$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0224_x2_exp_ax_monotonic_and_lnx_bound_ch6_fenzhi_ex09
+source_evidence:
+  source_refs:
+    - ref_id: page_0224_ex08_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0224/page_0224.md
+      role: local_context
+      evidence: page_0224 页首是 page_0223 例8续解，不是本卡题头。
+    - ref_id: page_0224_ex09_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0224/page_0224.md
+      role: problem_start
+      evidence: page_0224 中部给出例9题头：$f(x)=x^2e^{ax}-1$，两问讨论单调性并在 $a>\frac13e$ 时证明 $f(x)>\ln x$。
+    - ref_id: page_0224_ex09_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0224/page_0224.md
+      role: solution
+      evidence: page_0224 给出第一问完整分类，并开始第二问：将 $x^2e^{ax}>\ln x+1$ 化为 $\frac{e^{ax}}x>\frac{\ln x+1}{x^3}$。
+    - ref_id: page_0225_ex09_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0225/page_0225.md
+      role: continuation
+      evidence: page_0225 页首续完例9第二问：$h_{\min}=h(1/a)=ae>\frac13e^2$，故 $f(x)>\ln x$，并给出分而治之总结。
+    - ref_id: page_0225_ex10_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0225/page_0225.md
+      role: local_context
+      evidence: page_0225 中部进入“函数变形后的分而治之”和例10题头，属于下一批，本卡不处理。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0224.png
+      inspected: true
+      notes: 已核对页图：例9题头与解析起点位于 page_0224 中下部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0225.png
+      inspected: true
+      notes: 已核对页图：page_0225 顶部为例9续解和总结，例10在其后另起。
+  source_context: 本卡处理 page_0224 起头、page_0225 顶部续完的例9；page_0225 例10以后留给下一批。
+  source_influence:
+    - 保留第一问按 $a=0$、$a<0$、$a>0$ 分类的全实数单调性。
+    - 保留第二问的关键尺度：由 $x^2e^{ax}>\ln x+1$ 变成 $\frac{e^{ax}}x>\frac{\ln x+1}{x^3}$。
+    - 保留 source 的上下函数比较：右侧最大值 $\frac13e^2$，左侧最小值 $ae$，由 $a>\frac13e$ 得严格大于。
+  source_discrepancies: []
+original_problem:
+  stem: （2020 · 衡水中学月考 T21）已知函数 $f(x)=x^2e^{ax}-1$。
+  parts: *a1
+  choices: []
+  answer: （1）当 $a=0$ 时，$f$ 在 $(-\infty,0)$ 上单调递减，在 $(0,+\infty)$ 上单调递增；当 $a<0$ 时，$f$ 在 $(-\infty,0)$、$(-2/a,+\infty)$ 上单调递减，在 $(0,-2/a)$ 上单调递增；当 $a>0$ 时，$f$ 在 $(-\infty,-2/a)$、$(0,+\infty)$ 上单调递增，在 $(-2/a,0)$ 上单调递减。（2）证明见解析。
+  fidelity_notes:
+    - 两问解答题，无选项。
+    - 第一问 $f$ 的定义域为全体实数；第二问含 $\ln x$，证明域为 $x>0$。
+solution:
+  source_solution_summary: $f^{\prime}(x)=2xe^{ax}+ax^2e^{ax}=x(ax+2)e^{ax}$。当 $a=0$ 时，$f(x)=x^2-1$，在 $(-\infty,0)$ 递减、$(0,+\infty)$ 递增。当 $a<0$ 时，$-2/a>0$，导数在 $x<0$ 或 $x>-2/a$ 时为负，在 $0<x<-2/a$ 时为正，所以对应区间递减、递增、 递减。当 $a>0$ 时，$-2/a<0$，导数在 $x<-2/a$ 或 $x>0$ 时为正， 在 $-2/a<x<0$ 时为负。第二问只考虑 $x>0$。由 $f(x)>\ln x$ 得 $x^2e^{ax}>\ln x+1$，即 $\frac{e^{ax}}x>\frac{\ln x+1}{x^3}$。令 $g(x)=\frac{\ln x+1}{x^3}$，则 $g^{\prime}(x)=-\frac{3\ln x+2}{x^4}$，最大值在 $x=e^{-2/3}$ 处取得，$g_{\max}=\frac13e^2$。令 $h(x)=\frac{e^{ax}}x$，则 $h^{\prime}(x)=\frac{(ax-1)e^{ax}}{x^2}$，最小值在 $x=1/a$， $h_{\min}=ae$。因 $a>\frac13e$，故 $ae>\frac13e^2$，于是 $\frac{e^{ax}}x>\frac{\ln x+1}{x^3}$，从而 $f(x)>\ln x$。
+  key_steps:
+    - step_id: step_1
+      statement: 第一问求导并提取符号因子。
+      formula_trace:
+        from: $f(x)=x^2e^{ax}-1$
+        to: $f^{\prime}(x)=x(ax+2)e^{ax}$
+        operation: 乘积求导并提取 $xe^{ax}$。
+        why: $e^{ax}>0$，单调性只由 $x$ 与 $ax+2$ 控制。
+      source_ref: page_0224_ex09_solution_start
+    - step_id: step_2
+      statement: 按 $a$ 的符号讨论两个零点的位置。
+      formula_trace:
+        from: $f^{\prime}(x)=x(ax+2)e^{ax}$
+        to: $a=0$、$a<0$、$a>0$ 三种单调分布
+        operation: 比较 $0$ 与 $-2/a$ 的位置。
+        why: 完成第一问全实数单调分类。
+      source_ref: page_0224_ex09_solution_start
+    - step_id: step_3
+      statement: 第二问先统一尺度。
+      formula_trace:
+        from: $x^2e^{ax}>\ln x+1$
+        to: $\frac{e^{ax}}x>\frac{\ln x+1}{x^3}$
+        operation: 两边除以 $x^3>0$。
+        why: source 指出这里不能乘，只能除，才能把两边都变成可控函数。
+      source_ref: page_0224_ex09_solution_start
+    - step_id: step_4
+      statement: 求右侧下函数的最大值。
+      formula_trace:
+        from: $g(x)=\frac{\ln x+1}{x^3}$
+        to: $g^{\prime}(x)=-\frac{3\ln x+2}{x^4}$，$g_{\max}=g(e^{-2/3})=\frac13e^2$
+        operation: 求导判号。
+        why: 右侧需要统一上界。
+      source_ref: page_0224_ex09_solution_start
+    - step_id: step_5
+      statement: 求左侧上函数的最小值。
+      formula_trace:
+        from: $h(x)=\frac{e^{ax}}x$
+        to: $h^{\prime}(x)=\frac{(ax-1)e^{ax}}{x^2}$，$h_{\min}=h(1/a)=ae$
+        operation: 求导判号，利用 $a>0$。
+        why: 左侧需要统一下界。
+      source_ref: page_0225_ex09_continuation
+    - step_id: step_6
+      statement: 比较两个界完成证明。
+      formula_trace:
+        from: $h_{\min}=ae$，$g_{\max}=\frac13e^2$，$a>\frac13e$
+        to: $\frac{e^{ax}}x>\frac{\ln x+1}{x^3}$，故 $f(x)>\ln x$
+        operation: 用参数条件使左侧下界严格大于右侧上界。
+        why: 完成第二问。
+      source_ref: page_0225_ex09_continuation
+teaching_card:
+  student_title: 给 $x^2e^{ax}$ 除以 $x^3$，配出上下函数
+  what_it_trains: 训练幂乘指数和对数比较时的尺度选择：不是直接求原式，而是除出能取最值的两个函数。
+  recognition_cues:
+    - 题目含 $x^2e^{ax}$ 和 $\ln x$，source 明确归为 $x^n e^x$ VS $\ln x$。
+    - 第二问参数条件是 $a>\frac13e$，提示最后会比较 $ae$ 与 $\frac13e^2$。
+    - 右边出现 $\ln x+1$，除以 $x^3$ 后能得到单峰函数。
+  normalization_moves:
+    - 第一问先处理全实数单调性。
+    - 第二问只在 $x>0$ 下变形。
+    - 把 $x^2e^{ax}>\ln x+1$ 两边除以 $x^3$。
+    - 左侧求最小，右侧求最大。
+  common_failures:
+    - 第一问忘记 $a=0$ 要单独讨论。
+    - 第二问误把 $x<0$ 也带入 $\ln x$。
+    - 尝试乘以 $x$ 让右边变成 $x(\ln x+1)$，结果得不到合适下函数。
+    - 把 $g_{\max}=e^2/3$ 与 $h_{\min}=ae$ 的方向写反。
+  similar_practice_query: x^2 e^{ax} ln x 除以x^3 e^{ax}/x (lnx+1)/x^3 分而治之
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

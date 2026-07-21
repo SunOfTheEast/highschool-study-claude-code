@@ -1,0 +1,231 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0223_lnx_minus_ax_plus1_monotonic_param_and_exp_bound_ch6_fenzhi_ex08
+content_revision_id: mst_p0223_lnx_minus_ax_plus1_monotonic_param_and_exp_bound_ch6_fenzhi_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0223_lnx_minus_ax_plus1_monotonic_param_and_exp_bound_ch6_fenzhi_ex08.card.yaml
+stem: |-
+  （2018 · 常德一模 T21）已知函数 $f(x)=\ln x-ax+1$，$a\in\mathbf R$。
+  1. 讨论函数 $f(x)$ 的单调性。
+  2. 若对任意的 $x>0$，$f(x)\leqslant0$ 恒成立，求实数 $a$ 的取值范围。
+  3. 求证：当 $x>0$ 时，$e^x-x\ln x+x>0$。
+answer: |-
+  （1）$a\leqslant0$ 时，$f$ 在 $(0,+\infty)$ 上单调递增；$a>0$ 时，$f$ 在 $(0,1/a)$ 上单调递增，在 $(1/a,+\infty)$ 上单调递减。（2）$a\geqslant1$。（3）证明见解析。
+
+  $f^{\prime}(x)=\frac1x-a=\frac{1-ax}{x}$。若 $a\leqslant0$， 则 $f^{\prime}(x)>0$，$f$ 在 $(0,+\infty)$ 上递增；若 $a>0$， 则 $0<x<1/a$ 时 $f^{\prime}(x)>0$，$x>1/a$ 时 $f^{\prime}(x)<0$，所以先增后减。第二问若 $a\leqslant0$ 显然不可能 恒有 $f(x)\leqslant0$；若 $a>0$，最大值在 $x=1/a$， $f(1/a)=-\ln a$，故恒成立等价于 $-\ln a\leqslant0$，即 $a\geqslant1$。source 也写成 $a\geqslant\frac{\ln x+1}{x}=e\frac{\ln(ex)}{ex}$，最大值为 1。 第三问要证 $e^x>x\ln x-x$，即 $\frac{e^x}{x^2}>\frac{\ln x-1}{x}$。令 $g(u)=\frac{e^u}{u}$，则 $\frac{e^x}{x^2}=\frac14\left(\frac{e^{x/2}}{x/2}\right)^2 \geqslant e^2/4$；令 $h(u)=\frac{\ln u}{u}$，则 $\frac{\ln x-1}{x}=\frac1e\frac{\ln(x/e)}{x/e}\leqslant1/e^2$。 因 $e^2/4>1/e^2$，命题得证。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 第一问求导并按 $a$ 分类。
+      max_score: 1
+    - step_id: step_2
+      description: 读出单调性。
+      max_score: 1
+    - step_id: step_3
+      description: 第二问用最大值求参。
+      max_score: 1
+    - step_id: step_4
+      description: 得到 $a$ 的范围。
+      max_score: 1
+    - step_id: step_5
+      description: 第三问转成同构函数比较。
+      max_score: 1
+    - step_id: step_6
+      description: 用 $\frac{e^u}{u}$ 给左边下界。
+      max_score: 1
+    - step_id: step_7
+      description: 用 $\frac{\ln u}{u}$ 给右边上界。
+      max_score: 1
+    - step_id: step_8
+      description: 比较常数完成证明。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 1 问
+        result: $a\leqslant0$ 全域递增；$a>0$ 时先增后减。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $a\geqslant1$
+      - part_id: "3"
+        goal: 不等式证明
+        target: 第 3 问
+        result: $x>0$ 时 $e^x-x\ln x+x>0$。
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 含参数分类讨论
+      - 同构变形与换元法
+    subroute:
+      - 导数符号表
+      - 最大值求参
+      - 除以 $x^2$
+      - $\frac{e^x}{x^2}$ VS $\frac{\ln x}{x}$
+      - 六大基础函数
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+      - 非齐次结构
+    evidence:
+      - $f(x)=\ln x-ax+1$
+      - $f^{\prime}(x)=\frac{1-ax}{x}$
+      - $\frac{e^x}{x^2}>\frac{\ln x-1}{x}$
+      - $\frac14(\frac{e^{x/2}}{x/2})^2$ 与 $\frac1e\frac{\ln(x/e)}{x/e}$
+    normalization_moves_used:
+      - 通过导数零点 $1/a$ 完成单调分类。
+      - 用最大值不超过 0 求出 $a\geqslant1$。
+      - 第三问除以 $x^2$，把两边改造成基础函数的界。
+      - 用 $x/2$ 和 $x/e$ 做尺度变换。
+  fallback:
+    only_if_trace_shows:
+      - 若学生漏掉 $a=0$ 的单调情形，回补导数单调极值基础。
+      - 若学生不会把恒成立 $f(x)\leqslant0$ 转成最大值条件，回补函数性质与图像。
+      - 若学生除以 $x^2$ 或做 $x/2,x/e$ 变换时出错，回补代数恒等变形。
+      - 若学生不熟悉 $\frac{e^u}{u}$ 与 $\frac{\ln u}{u}$ 的极值，回补指数对数基础。
+  detail_terms:
+    - $\ln x-ax+1$
+    - $1/a$
+    - $a\geqslant1$
+    - $\frac{e^x}{x^2}$
+    - $\frac{\ln x-1}{x}$
+    - $x/2$
+    - $x/e$
+parts: &a1
+  - part_id: "1"
+    text: 讨论函数 $f(x)$ 的单调性。
+  - part_id: "2"
+    text: 若对任意的 $x>0$，$f(x)\leqslant0$ 恒成立，求实数 $a$ 的取值范围。
+  - part_id: "3"
+    text: 求证：当 $x>0$ 时，$e^x-x\ln x+x>0$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0223_lnx_minus_ax_plus1_monotonic_param_and_exp_bound_ch6_fenzhi_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0223_ex08_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0223/page_0223.md
+      role: problem_start
+      evidence: page_0223 页底给出例8题头：$f(x)=\ln x-ax+1$，前两问讨论单调性与恒成立求参。
+    - ref_id: page_0224_ex08_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0224/page_0224.md
+      role: continuation
+      evidence: page_0224 页首补出例8第(3)问并给出三问解析，之后进入考点4与例9题头。
+    - ref_id: page_0224_ex09_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0224/page_0224.md
+      role: local_context
+      evidence: page_0224 中部开始例9题头，属于下一批，本卡不处理。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0223.png
+      inspected: true
+      notes: 已核对页图：例8题头从 page_0223 页底开始，前两问清晰可见。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0224.png
+      inspected: true
+      notes: 已核对页图：page_0224 顶部给出第(3)问和完整解析，例9在其后另起。
+  source_context: 本卡处理 page_0223 起头、page_0224 顶部续完的例8；page_0224 例9留给下一批。
+  source_influence:
+    - 保留第一问按 $a$ 正负讨论 $f^{\prime}(x)=1/x-a$ 的单调性。
+    - 保留第二问通过最大值条件得到 $a\geqslant1$。
+    - 保留第三问“除以 $x^2$”构造 $\frac{e^x}{x^2}$ 与 $\frac{\ln x-1}{x}$ 的同构比较。
+  source_discrepancies:
+    - source 第一问只显式写“若 $a<0$”时全域递增；数学上 $a=0$ 时 $f^{\prime}(x)=1/x>0$，也应并入 $a\leqslant0$ 的全域递增情形。卡片按完整分类写入。
+original_problem:
+  stem: （2018 · 常德一模 T21）已知函数 $f(x)=\ln x-ax+1$，$a\in\mathbf R$。
+  parts: *a1
+  choices: []
+  answer: （1）$a\leqslant0$ 时，$f$ 在 $(0,+\infty)$ 上单调递增；$a>0$ 时，$f$ 在 $(0,1/a)$ 上单调递增，在 $(1/a,+\infty)$ 上单调递减。（2）$a\geqslant1$。（3）证明见解析。
+  fidelity_notes:
+    - 三问解答题，无选项。
+    - 第(3)问题头在 page_0224 顶部，是 page_0223 例8的续页，不是新例题。
+solution:
+  source_solution_summary: $f^{\prime}(x)=\frac1x-a=\frac{1-ax}{x}$。若 $a\leqslant0$， 则 $f^{\prime}(x)>0$，$f$ 在 $(0,+\infty)$ 上递增；若 $a>0$， 则 $0<x<1/a$ 时 $f^{\prime}(x)>0$，$x>1/a$ 时 $f^{\prime}(x)<0$，所以先增后减。第二问若 $a\leqslant0$ 显然不可能 恒有 $f(x)\leqslant0$；若 $a>0$，最大值在 $x=1/a$， $f(1/a)=-\ln a$，故恒成立等价于 $-\ln a\leqslant0$，即 $a\geqslant1$。source 也写成 $a\geqslant\frac{\ln x+1}{x}=e\frac{\ln(ex)}{ex}$，最大值为 1。 第三问要证 $e^x>x\ln x-x$，即 $\frac{e^x}{x^2}>\frac{\ln x-1}{x}$。令 $g(u)=\frac{e^u}{u}$，则 $\frac{e^x}{x^2}=\frac14\left(\frac{e^{x/2}}{x/2}\right)^2 \geqslant e^2/4$；令 $h(u)=\frac{\ln u}{u}$，则 $\frac{\ln x-1}{x}=\frac1e\frac{\ln(x/e)}{x/e}\leqslant1/e^2$。 因 $e^2/4>1/e^2$，命题得证。
+  key_steps:
+    - step_id: step_1
+      statement: 第一问求导并按 $a$ 分类。
+      formula_trace:
+        from: $f(x)=\ln x-ax+1$
+        to: $f^{\prime}(x)=\frac1x-a=\frac{1-ax}{x}$
+        operation: 求导并通分。
+        why: 导数零点由 $a$ 的符号决定。
+      source_ref: page_0224_ex08_continuation
+    - step_id: step_2
+      statement: 读出单调性。
+      formula_trace:
+        from: $f^{\prime}(x)=\frac{1-ax}{x}$
+        to: $a\leqslant0$ 时全域递增；$a>0$ 时 $(0,1/a)$ 递增、$(1/a,+\infty)$ 递减
+        operation: 按 $1-ax$ 的符号判号。
+        why: 完成第一问。
+      source_ref: page_0224_ex08_continuation
+    - step_id: step_3
+      statement: 第二问用最大值求参。
+      formula_trace:
+        from: $f(x)\leqslant0$ 对任意 $x>0$ 恒成立
+        to: $a>0$ 且 $f(1/a)=-\ln a\leqslant0$
+        operation: 利用第一问先增后减，取全局最大值。
+        why: 恒小于等于 0 等价于最大值不超过 0。
+      source_ref: page_0224_ex08_continuation
+    - step_id: step_4
+      statement: 得到 $a$ 的范围。
+      formula_trace:
+        from: $-\ln a\leqslant0$
+        to: $a\geqslant1$
+        operation: 利用对数单调性。
+        why: 完成第二问。
+      source_ref: page_0224_ex08_continuation
+    - step_id: step_5
+      statement: 第三问转成同构函数比较。
+      formula_trace:
+        from: $e^x-x\ln x+x>0$
+        to: $\frac{e^x}{x^2}>\frac{\ln x-1}{x}$
+        operation: 移项后除以 $x^2>0$。
+        why: 制造 $\frac{e^x}{x^2}$ 与 $\frac{\ln x-1}{x}$ 的上下界。
+      source_ref: page_0224_ex08_continuation
+    - step_id: step_6
+      statement: 用 $\frac{e^u}{u}$ 给左边下界。
+      formula_trace:
+        from: $\frac{e^x}{x^2}$
+        to: $\frac14\left(\frac{e^{x/2}}{x/2}\right)^2\geqslant\frac{e^2}{4}$
+        operation: 令 $u=x/2$，套用 $\frac{e^u}{u}\geqslant e$。
+        why: 左侧得到统一正下界。
+      source_ref: page_0224_ex08_continuation
+    - step_id: step_7
+      statement: 用 $\frac{\ln u}{u}$ 给右边上界。
+      formula_trace:
+        from: $\frac{\ln x-1}{x}$
+        to: $\frac1e\frac{\ln(x/e)}{x/e}\leqslant\frac1{e^2}$
+        operation: 令 $u=x/e$，套用 $\frac{\ln u}{u}\leqslant1/e$。
+        why: 右侧得到统一上界。
+      source_ref: page_0224_ex08_continuation
+    - step_id: step_8
+      statement: 比较常数完成证明。
+      formula_trace:
+        from: $\frac{e^x}{x^2}\geqslant\frac{e^2}{4}$，$\frac{\ln x-1}{x}\leqslant\frac1{e^2}$
+        to: $\frac{e^x}{x^2}>\frac{\ln x-1}{x}$
+        operation: 使用 $\frac{e^2}{4}>\frac1{e^2}$。
+        why: 完成第三问的不等式证明。
+      source_ref: page_0224_ex08_continuation
+teaching_card:
+  student_title: 先用最大值定 $a$，再除以 $x^2$ 证明指对不等式
+  what_it_trains: 训练同一题中“导数分类求参”和“分而治之证明不等式”的衔接。
+  recognition_cues:
+    - 函数是 $\ln x-ax+1$，导数只有 $\frac1x-a$，适合直接分类。
+    - 恒有 $f(x)\leqslant0$，就是最大值不能超过 0。
+    - 第三问出现 $e^x$ 与 $x\ln x$，source 提示“除以 $x^2$”。
+  normalization_moves:
+    - 先把第一问的单调结果写完整，包括 $a=0$。
+    - 第二问用 $x=1/a$ 的最大值，不要逐点硬压。
+    - 第三问把 $x\ln x-x$ 移到右侧，再除以 $x^2$。
+  common_failures:
+    - 按 source 漏写 $a=0$，导致第一问分类不完整。
+    - 第二问只代 $x=1$ 得 $a\geqslant1$，没有证明充分性。
+    - 第三问看见 $e^x$ 和 $\ln x$ 就乱用切线，没有按 $x^2$ 统一尺度。
+  similar_practice_query: lnx-ax+1 单调性 a>=1 e^x-xlnx+x 除以x^2 e^x/x^2 lnx/x
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

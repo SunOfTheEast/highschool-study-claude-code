@@ -1,0 +1,255 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0149_sin_ln_pi_compare_ex21
+content_revision_id: mst_p0149_sin_ln_pi_compare_ex21-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0149_sin_ln_pi_compare_ex21.card.yaml
+stem: |-
+  （2023·哈尔滨月考）设 $a=\sin\frac\pi e,\ b=\frac{\ln\pi}{\pi},\ c=\frac{2\pi-\pi\ln\pi}{e^2}$，其中 $e$ 为自然对数的底数，则（ ）
+  A. $a<c<b$
+  B. $b<a<c$
+  C. $b<c<a$
+  D. $c<b<a$
+answer: |
+  D
+
+  先比较 $a,b$。
+  源解给出
+  \[
+  a=\sin\frac{\pi}{e}>\sin\frac{\pi}{3}=\frac{\sqrt3}{2}.
+  \]
+  令
+  \[
+  f(x)=\frac{\ln x}{x},
+  \quad
+  f^{\prime}(x)=\frac{1-\ln x}{x^2}.
+  \]
+  因 $f$ 在 $(e,+\infty)$ 递减，且 $\pi>e$，得
+  \[
+  b=\frac{\ln\pi}{\pi}=f(\pi)<f(e)=\frac1e<\frac{\sqrt3}{2}<a,
+  \]
+  所以 $b<a$。
+  再比较 $b,c$：
+  \[
+  c=\frac{2\pi-\pi\ln\pi}{e^2}
+  =
+  \frac{\pi}{e^2}\ln\frac{e^2}{\pi}
+  =
+  \frac{\ln\left(e^2/\pi\right)}{e^2/\pi}.
+  \]
+  设 $x_1=\frac{e^2}{\pi}$，$x_2=\pi$，则 $x_1<e<x_2$ 且 $x_1x_2=e^2$。
+  源解使用“极值点左偏”结论：在该乘积对称关系下，
+  \[
+  f(x_1)<f(x_2),
+  \]
+  即
+  \[
+  c<b.
+  \]
+  综上 $a>b>c$，等价于 $c<b<a$，选 D。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先给出 $a$ 的下界。
+      max_score: 1
+    - step_id: step_2
+      description: 用 $f(x)=\frac{\ln x}{x}$ 得到 $b<a$。
+      max_score: 1
+    - step_id: step_3
+      description: 把 $c$ 同构到 $f(x)$ 形式。
+      max_score: 1
+    - step_id: step_4
+      description: 用极值点偏移结论比较 $c,b$。
+      max_score: 1
+    - step_id: step_5
+      description: 合并顺序并对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较三项不同表达式的大小顺序。
+        result: 见 source_solution_summary
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 对称化与偏移
+      - 同构变形与换元法
+    subroute:
+      - 三角量先给下界
+      - $f(x)=\ln x/x$ 同构比较
+      - 极值点偏移（乘积配对）
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 三角复合结构
+      - 指对复合结构
+      - 极值点偏移结构
+    evidence:
+      - $a$ 来自三角函数，$b,c$ 可落到 $\frac{\ln x}{x}$。
+      - $c$ 与 $b$ 对应的自变量位于 $e$ 左右两侧且乘积固定为 $e^2$。
+    normalization_moves_used:
+      - $a>\sin\frac\pi3$。
+      - $b=f(\pi),\ c=f(e^2/\pi)$。
+      - 利用跨峰配对与极值点偏移判 $f(e^2/\pi)<f(\pi)$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $c$ 改写成 $\frac{\ln x}{x}$ 形式，回补指数对数基础。
+      - 若学生不会根据导数判断 $f$ 在 $(e,+\infty)$ 递减，回补导数单调极值基础。
+      - 若学生不理解跨峰配对的偏移结论，回补函数性质与图像。
+  detail_terms:
+    - $a=\sin\frac\pi e$
+    - $f(x)=\frac{\ln x}{x}$
+    - $c=f\!\left(\frac{e^2}{\pi}\right)$
+    - 极值点左偏
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0149_sin_ln_pi_compare_ex21
+source_evidence:
+  source_refs:
+    - ref_id: page_0149_ex21_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0149/page_0149.md
+      role: problem_start
+      evidence: 例21题头、题干与选项在 page_0149，题目比较 $a=\sin\frac\pi e,b=\frac{\ln\pi}{\pi},c=\frac{2\pi-\pi\ln\pi}{e^2}$。
+    - ref_id: page_0149_ex21_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0149/page_0149.md
+      role: solution
+      evidence: page_0149 解析起步：先给出 $a>\sin\frac\pi3=\frac{\sqrt3}{2}$，并设 $f(x)=\frac{\ln x}{x}$。
+    - ref_id: page_0150_ex21_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0150/page_0150.md
+      role: continuation
+      evidence: page_0150 顶部续完例21：先得 $b<a$，再把 $c$ 写成 $\frac{\ln(e^2/\pi)}{e^2/\pi}$ 并结合极值点偏移得 $c<b$，结论选 D。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0149.png
+      inspected: false
+      notes: 本次仅按 source markdown 重建，未重新人工核对页图。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0150.png
+      inspected: false
+      notes: 按题头归属规则仅读取 page_0150 顶部续页用于补全例21。
+  source_context: 例21题头在 page_0149，解析续到 page_0150 顶部；其后 page_0150 例22起不属于本卡。
+  source_influence:
+    - 保留源解双段逻辑：先证 $b<a$，再证 $c<b$。
+    - 保留源解对 $c$ 的改写：$c=\frac{\ln(e^2/\pi)}{e^2/\pi}$。
+    - 保留源解“极值点左偏”课堂结论用于跨峰比较。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·哈尔滨月考）设 $a=\sin\frac\pi e,\ b=\frac{\ln\pi}{\pi},\ c=\frac{2\pi-\pi\ln\pi}{e^2}$，其中 $e$ 为自然对数的底数，则（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a<c<b$
+      text_latex: $a<c<b$
+    - label: B
+      text_raw: $b<a<c$
+      text_latex: $b<a<c$
+    - label: C
+      text_raw: $b<c<a$
+      text_latex: $b<c<a$
+    - label: D
+      text_raw: $c<b<a$
+      text_latex: $c<b<a$
+  answer: D
+  fidelity_notes:
+    - 题干起于 page_0149，解析跨页至 page_0150 顶部，最终结论为 $a>b>c$（对应 D）。
+solution:
+  source_solution_summary: |
+    先比较 $a,b$。
+    源解给出
+    \[
+    a=\sin\frac{\pi}{e}>\sin\frac{\pi}{3}=\frac{\sqrt3}{2}.
+    \]
+    令
+    \[
+    f(x)=\frac{\ln x}{x},
+    \quad
+    f^{\prime}(x)=\frac{1-\ln x}{x^2}.
+    \]
+    因 $f$ 在 $(e,+\infty)$ 递减，且 $\pi>e$，得
+    \[
+    b=\frac{\ln\pi}{\pi}=f(\pi)<f(e)=\frac1e<\frac{\sqrt3}{2}<a,
+    \]
+    所以 $b<a$。
+    再比较 $b,c$：
+    \[
+    c=\frac{2\pi-\pi\ln\pi}{e^2}
+    =
+    \frac{\pi}{e^2}\ln\frac{e^2}{\pi}
+    =
+    \frac{\ln\left(e^2/\pi\right)}{e^2/\pi}.
+    \]
+    设 $x_1=\frac{e^2}{\pi}$，$x_2=\pi$，则 $x_1<e<x_2$ 且 $x_1x_2=e^2$。
+    源解使用“极值点左偏”结论：在该乘积对称关系下，
+    \[
+    f(x_1)<f(x_2),
+    \]
+    即
+    \[
+    c<b.
+    \]
+    综上 $a>b>c$，等价于 $c<b<a$，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 先给出 $a$ 的下界。
+      formula_trace:
+        from: $a=\sin\frac\pi e$
+        to: $a>\sin\frac\pi3=\frac{\sqrt3}{2}$
+        operation: 用 $\frac\pi e>\frac\pi3$ 且正弦在 $(0,\frac\pi2)$ 递增。
+        why: 为后续与 $b$ 的比较提供明确参照。
+      source_ref: page_0149_ex21_solution_start
+    - step_id: step_2
+      statement: 用 $f(x)=\frac{\ln x}{x}$ 得到 $b<a$。
+      formula_trace:
+        from: $b=f(\pi),\ f(e)=\frac1e$
+        to: $b=f(\pi)<f(e)=\frac1e<\frac{\sqrt3}{2}<a$
+        operation: 在 $(e,+\infty)$ 递减区比较。
+        why: 锁定 $a$ 比 $b$ 大。
+      source_ref: page_0150_ex21_continuation
+    - step_id: step_3
+      statement: 把 $c$ 同构到 $f(x)$ 形式。
+      formula_trace:
+        from: $c=\frac{2\pi-\pi\ln\pi}{e^2}$
+        to: $c=\frac{\ln(e^2/\pi)}{e^2/\pi}=f\!\left(\frac{e^2}{\pi}\right)$
+        operation: 提取 $\frac\pi{e^2}$ 并用 $2-\ln\pi=\ln\frac{e^2}{\pi}$。
+        why: 把 $c$ 与 $b=f(\pi)$ 放到同一函数框架比较。
+      source_ref: page_0150_ex21_continuation
+    - step_id: step_4
+      statement: 用极值点偏移结论比较 $c,b$。
+      formula_trace:
+        from: $x_1=\frac{e^2}{\pi}<e<\pi=x_2,\ x_1x_2=e^2$
+        to: $f(x_1)<f(x_2)$，即 $c<b$
+        operation: 应用源解给出的跨峰配对结论（极值点左偏）。
+        why: 完成 $b,c$ 的顺序判定。
+      source_ref: page_0150_ex21_continuation
+    - step_id: step_5
+      statement: 合并顺序并对应选项。
+      formula_trace:
+        from: $b<a$ 且 $c<b$
+        to: $a>b>c$，等价 $c<b<a$，选 D
+        operation: 传递比较并匹配选项。
+        why: 得到最终答案。
+      source_ref: page_0150_ex21_continuation
+teaching_card:
+  student_title: 先压三角项，再用 ln/x 跨峰配对
+  what_it_trains: 训练混合结构排序：三角项先建立粗下界，剩余项统一到 $\frac{\ln x}{x}$，再用极值点偏移完成跨峰比较。
+  recognition_cues:
+    - 三项里有一个三角值，另外两项可化为 $\ln/x$。
+    - 出现 $\pi,e,e^2/\pi$ 这类天然配对点。
+    - 题目是全序单选。
+  normalization_moves:
+    - 先证 $a$ 足够大（大于 $\frac{\sqrt3}{2}$）。
+    - 把 $b,c$ 全部写成 $f(x)=\frac{\ln x}{x}$。
+    - 用极值点偏移比较左右配对点。
+  common_failures:
+    - 忽略例21跨页续解，导致只完成 $b<a$。
+    - 把 $c$ 化简时漏掉 $\frac\pi{e^2}$ 因子。
+    - 跨峰比较时误用“对称即相等”。
+  similar_practice_query: sin(pi/e) lnpi/pi e2/pi 比大小 极值点偏移
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 本卡按题头归属规则读取 page_0150 顶部续页完成例21。
+    - 本卡未核对 page_0149/page_0150 原图，按重建 markdown 完成。

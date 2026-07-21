@@ -1,0 +1,156 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0039_ex39
+content_revision_id: mst_p0039_ex39-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0039_ex39.card.yaml
+stem: |-
+  已知 $m,n$ 满足 $\frac{me^m}{4n^2}=\frac{\ln n+\ln2}{e^m}$，且 $e^{2m}=\frac1m$，则 ( )
+  A. n=e^m/2
+  B. mn^2=1
+  C. m+n<7/5
+  D. 1<2n-m^2<3/2
+answer: |-
+  ACD
+
+  先把原式整理为 $h(m)=h(\ln 2n)$，其中 $h(t)=te^{2t}$，由单调性得 $m=\ln2n$。再用 $m<1/2$ 估计 $m+n$ 与 $2n-m^2$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把给定方程改写成 $te^{2t}$ 的同构形式。
+      max_score: 1
+    - step_id: step_2
+      description: 用单调性推出 A，并顺手判断 B。
+      max_score: 1
+    - step_id: step_3
+      description: 用 $m<1/2$ 估计 $m+n$，判断 C。
+      max_score: 1
+    - step_id: step_4
+      description: 估计 $2n-m^2$，判断 D。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 局部逼近与找点
+    subroute:
+      - $x e^{2x}$ 同构
+      - 用 $m<1/2$ 做上界估值
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $m e^{2m}=\ln(2n)e^{2\ln(2n)}$
+      - $n=\frac{e^m}{2}$
+      - $2n-m^2=e^m-m^2$
+    normalization_moves_used:
+      - 把 $4n^2$ 写成 $e^{2\ln(2n)}$。
+      - 把 $e^{2m}=1/m$ 改写成 $m e^{2m}=1$。
+      - 用 $h(1/2)>1$ 定位 $m<1/2$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $4n^2$ 改写成 $e^{2\ln(2n)}$，回补指数对数基础。
+      - 若学生不会由 $h(m)=h(\ln2n)$ 且 $h$ 单调推出 $m=\ln2n$，回补导数单调极值基础。
+      - 若学生在 $m+n$ 或 $2n-m^2$ 的端点估计上卡住，回补不等式工具基础。
+  detail_terms:
+    - $h(t)=te^{2t}$
+    - $m=\ln2n$
+    - $0<m<\frac12$
+    - $e^m-m^2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0039_ex39
+source_evidence:
+  source_refs:
+    - ref_id: page_0039
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0039/page_0039.md
+      role: problem_start
+      evidence: 例39题干、四个选项、完整解析与答案 ACD 均在 page_0039。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0039.png
+      inspected: true
+      notes: 页图确认例39位于 page_0039 中部；第一个选项的 A 标签在页图中不明显，按后续 B/C/D 顺序补为 A。
+  source_context: page_0039 顶部先承接例38；例39从本页中部起头，第二节标题之后不属于例39。
+  source_influence:
+    - 以 page_0039 页图确认例39题干、选项排列、解析和答案。
+    - 按 markdown reconstruction marker 与页图顺序补全 A 标签。
+  source_discrepancies: []
+original_problem:
+  stem: 已知 $m,n$ 满足 $\frac{me^m}{4n^2}=\frac{\ln n+\ln2}{e^m}$，且 $e^{2m}=\frac1m$，则 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: n=e^m/2
+      text_latex: $n=\frac{e^m}{2}$
+    - label: B
+      text_raw: mn^2=1
+      text_latex: $mn^2=1$
+    - label: C
+      text_raw: m+n<7/5
+      text_latex: $m+n<\frac75$
+    - label: D
+      text_raw: 1<2n-m^2<3/2
+      text_latex: $1<2n-m^2<\frac32$
+  answer: ACD
+  fidelity_notes:
+    - 页图中第一个选项未清晰印出 A 标签；按选项顺序和 markdown 重构标记转写为 A。
+solution:
+  source_solution_summary: 先把原式整理为 $h(m)=h(\ln 2n)$，其中 $h(t)=te^{2t}$，由单调性得 $m=\ln2n$。再用 $m<1/2$ 估计 $m+n$ 与 $2n-m^2$。
+  key_steps:
+    - step_id: step_1
+      statement: 把给定方程改写成 $te^{2t}$ 的同构形式。
+      formula_trace:
+        from: $\frac{me^m}{4n^2}=\frac{\ln n+\ln2}{e^m}$ 且 $e^{2m}=\frac1m$
+        to: $m e^{2m}=4n^2\ln(2n)=\ln(2n)e^{2\ln(2n)}=1$
+        operation: 两边乘 $e^m$ 得 $\frac{m e^{2m}}{4n^2}=\ln(2n)$，再用 $m e^{2m}=1$ 与 $4n^2=e^{2\ln(2n)}$。
+        why: 这样能把 $m$ 与 $\ln(2n)$ 放进同一个函数 $h(t)=te^{2t}$。
+      source_ref: page_0039
+    - step_id: step_2
+      statement: 用单调性推出 A，并顺手判断 B。
+      formula_trace:
+        from: $h(m)=h(\ln2n)$，$h(t)=te^{2t}$
+        to: $m=\ln2n$，所以 $n=\frac{e^m}{2}$；且 $mn^2=\frac14$
+        operation: 由 $e^{2m}=1/m$ 得 $m>0$；又 $\ln(2n)>0$。在正区间 $h'(t)=e^{2t}(1+2t)>0$，故 $h$ 严格递增。
+        why: 同构变量相等后，A 成立；代入 $n=e^m/2$ 得 $mn^2=m e^{2m}/4=1/4$，所以 B 错。
+      source_ref: page_0039
+    - step_id: step_3
+      statement: 用 $m<1/2$ 估计 $m+n$，判断 C。
+      formula_trace:
+        from: $h(m)=1$，$h\left(\frac12\right)=\frac e2>1$
+        to: $0<m<\frac12$，且 $m+n=m+\frac{e^m}{2}<\frac12+\frac{\sqrt e}{2}<\frac75$
+        operation: 利用 $h$ 递增定位 $m$；再用 $m+\frac{e^m}{2}$ 随 $m$ 递增，把 $m$ 推到上端 $1/2$ 估计。
+        why: 上端估计给出统一上界，且 $\sqrt e<\sqrt3$，所以 $\frac12+\frac{\sqrt e}{2}<\frac{1+\sqrt3}{2}<\frac75$。
+      source_ref: page_0039
+    - step_id: step_4
+      statement: 估计 $2n-m^2$，判断 D。
+      formula_trace:
+        from: $2n-m^2=e^m-m^2$，$0<m<\frac12$
+        to: $1<2n-m^2<\sqrt e-\frac14<\frac32$
+        operation: 设 $g(m)=e^m-m^2$，则 $g'(m)=e^m-2m>0$ 在 $(0,\frac12)$ 成立，故 $g$ 递增；比较端点 $g(0)$ 与 $g(1/2)$。
+        why: 递增函数的值夹在两个端点之间，得到 D 的双边不等式。
+      source_ref: page_0039
+teaching_card:
+  student_title: 把 $m$ 和 $\ln 2n$ 放进同一个 $te^{2t}$
+  what_it_trains: 训练从混合指数、对数、参数方程里看出同构变量，再用一个粗边界完成选项估值。
+  recognition_cues:
+    - 题干同时给出 $e^{2m}=1/m$ 和含 $4n^2\ln(2n)$ 的式子。
+    - 选项 A 直接猜测 $m=\ln2n$。
+    - 后两个选项只要上界，不需要精确求 $m$。
+  normalization_moves:
+    - 先把 $\ln n+\ln2$ 合成 $\ln(2n)$。
+    - 把 $4n^2$ 视为 $e^{2\ln(2n)}$。
+    - 用 $h(1/2)=e/2>1$ 得到 $m<1/2$。
+  common_failures:
+    - 把 $h(t)=te^{2t}$ 的单调区间写错，导致不能推出 $m=\ln2n$。
+    - 误把 B 的 $mn^2$ 算成 $1$，漏掉分母 $4$。
+    - C、D 中想精确解 $m$，没有利用端点估值。
+  similar_practice_query: 同构估值 $te^{2t}$ $\ln(2n)$ 多选
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

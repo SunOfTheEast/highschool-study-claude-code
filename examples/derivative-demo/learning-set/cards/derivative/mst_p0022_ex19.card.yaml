@@ -1,0 +1,187 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0022_ex19
+content_revision_id: mst_p0022_ex19-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0022_ex19.card.yaml
+stem: |-
+  （河北省衡水中学 2024 高三三调 T12）函数 $f(x)=\frac{e^x}{x}-m(x>0)$，$g(x)=\frac{x}{\ln x}-m(x>1)$， 则 (  )
+  A. 若函数 $f(x) \geqslant 0$ 恒成立，则 $m \leqslant 1$
+  B. 若函数 $g(x)$ 有两个不同的零点，记为 $x_1$，$x_2$，则 $x_1+x_2 > 2e$
+  C. 若函数 $f(x)$ 和 $g(x)$ 共有两个不同的零点，则 $m=e$
+  D. 若函数 $f(x)$ 和 $g(x)$ 共有三个不同的零点，记为 $x_1$，$x_2$，$x_3$，且 $x_1 < x_2 < x_3$，则 $x_1 \cdot x_3 = x_2^2$
+answer: |-
+  BCD
+
+  令 $h(x)=e^x/x$、$\varphi(x)=x/\ln x$。A 中 $f(x)\ge0$ 恒成立应得到 $m\le h_{\min}=e$，不是 $m\le1$。B 中若 $\varphi(x)=m$ 有两根， 则 $m>e$，由 $x_i=m\ln x_i$ 得 $m=(x_2-x_1)/(\ln x_2-\ln x_1)<(x_1+x_2)/2$，所以 $x_1+x_2>2e$。C 用两条曲线相同最小值 $e$ 判断。D 用 $h(x)=\varphi(e^x)$ 推出 $e^{x_1}=x_2$、$e^{x_2}=x_3$，再由 $h(x_1)=\varphi(x_3)$ 得 $x_1x_3=x_2^2$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 用 $h(x)=e^x/x$ 的最小值排除 A。
+      max_score: 1
+    - step_id: step_2
+      description: 用两根方程和对数平均斜率证明 B。
+      max_score: 1
+    - step_id: step_3
+      description: 用两条曲线的共同最小值判断 C。
+      max_score: 1
+    - step_id: step_4
+      description: 用 $h(x)=\varphi(e^x)$ 建立三个零点的链式关系。
+      max_score: 1
+    - step_id: step_5
+      description: 推出 D 的乘积关系。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: item_1
+        goal: 求参数范围
+        target: 恒成立参数判断
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 零点/极值点分析
+        target: 双零点和式估计
+        result: 见 source_solution_summary
+      - part_id: item_3
+        goal: 零点/极值点分析
+        target: 水平线交点个数分析
+        result: 见 source_solution_summary
+      - part_id: item_4
+        goal: 不等式证明
+        target: 三零点乘积关系证明
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 同构变形与换元法
+      - 参变量分离
+    subroute:
+      - $e^x/x$ 与 $x/\ln x$ 同构
+      - 水平线 $y=m$ 数交点
+      - 对数平均斜率估计
+  structure:
+    primary: 同构结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 指对复合结构
+    evidence:
+      - $h(x)=e^x/x$ and $\varphi(x)=x/\ln x$ have the same minimum value $e$.
+      - $h(x)=\varphi(e^x)$ creates $x_2=e^{x_1}$ and $x_3=e^{x_2}$ in the three-zero case.
+    normalization_moves_used:
+      - $f(x)=0$ 转成 $h(x)=m$
+      - $g(x)=0$ 转成 $\varphi(x)=m$
+      - $h(x)=e^x/\ln(e^x)=\varphi(e^x)$
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f(x)\ge0$ 恒成立转成 $m\le\min e^x/x$，回补函数三要素与定义域。
+      - 若学生数不清 $h(x)$、$\varphi(x)$ 与 $y=m$ 的交点个数，回补函数性质与图像。
+      - 若学生不能从 $x_i=m\ln x_i$ 相减得到割线斜率式，回补代数恒等变形。
+      - 若学生不会证明 $e^x/x$ 的最小值或 $x/\ln x$ 的单调区间，回补导数单调极值基础。
+  detail_terms:
+    - $e^x/x$
+    - $x/\ln x$
+    - $h(x)=\varphi(e^x)$
+    - $x_1x_3=x_2^2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0022_ex19
+source_evidence:
+  source_refs:
+    - ref_id: page_0022
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0022/page_0022.md
+      role: problem_start
+      evidence: lines 36-43 give 例19 stem, options A-D, and the start of the solution.
+    - ref_id: page_0023
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0023/page_0023.md
+      role: continuation
+      evidence: lines 12-26 continue the solution, include the graph description, and give final answer BCD.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0022.png
+      inspected: true
+      notes: Inspected problem head and options A-D at the bottom of page_0022.
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0023.png
+      inspected: true
+      notes: Inspected continuation and the source graph for $h(x)=e^x/x$ and $\varphi(x)=x/\ln x$; the standalone markdown figure path is not present, but the graph is visible in the full page image.
+  source_context: "This example uses the page's ratio-function slogan: the paired curves $e^x/x$ and $x/\\ln x$ are compared against a horizontal line $y=m$."
+  source_influence:
+    - Used the source graph and the source identities $h(x)=\varphi(e^x)$ to justify C and D.
+    - Used the source logarithmic mean inequality for option B.
+  source_discrepancies: []
+original_problem:
+  stem: （河北省衡水中学 2024 高三三调 T12）函数 $f(x)=\frac{e^x}{x}-m(x>0)$，$g(x)=\frac{x}{\ln x}-m(x>1)$， 则 (  )
+  parts: *a1
+  choices:
+    - A. 若函数 $f(x) \geqslant 0$ 恒成立，则 $m \leqslant 1$
+    - B. 若函数 $g(x)$ 有两个不同的零点，记为 $x_1$，$x_2$，则 $x_1+x_2 > 2e$
+    - C. 若函数 $f(x)$ 和 $g(x)$ 共有两个不同的零点，则 $m=e$
+    - D. 若函数 $f(x)$ 和 $g(x)$ 共有三个不同的零点，记为 $x_1$，$x_2$，$x_3$，且 $x_1 < x_2 < x_3$，则 $x_1 \cdot x_3 = x_2^2$
+  answer: BCD
+  fidelity_notes:
+    - 题头和题干开始于 page_0022；解析跨到 page_0023，已读后续页补完。
+    - page_0023 图像用于判断 $h(x)=e^x/x$ 与 $\varphi(x)=x/\ln x$ 和水平线 $y=m$ 的交点关系。
+solution:
+  source_solution_summary: 令 $h(x)=e^x/x$、$\varphi(x)=x/\ln x$。A 中 $f(x)\ge0$ 恒成立应得到 $m\le h_{\min}=e$，不是 $m\le1$。B 中若 $\varphi(x)=m$ 有两根， 则 $m>e$，由 $x_i=m\ln x_i$ 得 $m=(x_2-x_1)/(\ln x_2-\ln x_1)<(x_1+x_2)/2$，所以 $x_1+x_2>2e$。C 用两条曲线相同最小值 $e$ 判断。D 用 $h(x)=\varphi(e^x)$ 推出 $e^{x_1}=x_2$、$e^{x_2}=x_3$，再由 $h(x_1)=\varphi(x_3)$ 得 $x_1x_3=x_2^2$。
+  key_steps:
+    - step_id: step_1
+      statement: 用 $h(x)=e^x/x$ 的最小值排除 A。
+      formula_trace:
+        from: $f(x)\ge0$ for all $x>0$
+        to: $m\le \frac{e^x}{x}$ for all $x>0$, hence $m\le h(1)=e$
+        operation: 求导 $h'(x)=\frac{(x-1)e^x}{x^2}$，得到 $h$ 在 $x=1$ 取最小值。
+        why: 恒成立约束由右侧函数的全局最小值决定，选项 A 的 $m\le1$ 过强且不等价。
+      source_ref: page_0022 line 43; page_0023 line 12
+    - step_id: step_2
+      statement: 用两根方程和对数平均斜率证明 B。
+      formula_trace:
+        from: $g(x_i)=0$, i.e. $x_i=m\ln x_i$ for $i=1,2$
+        to: $m=\frac{x_2-x_1}{\ln x_2-\ln x_1}<\frac{x_1+x_2}{2}$, so $x_1+x_2>2m>2e$
+        operation: 把两根方程相减，使用 $\ln x$ 在两点间的割线斜率大于 $2/(x_1+x_2)$。
+        why: $\varphi(x)=x/\ln x$ 有两根时 $m>e$，于是和大于 $2e$。
+      source_ref: page_0023 line 14
+    - step_id: step_3
+      statement: 用两条曲线的共同最小值判断 C。
+      formula_trace:
+        from: $h_{\min}=\varphi_{\min}=e$
+        to: $h(x)=m$ and $\varphi(x)=m$ 共有两个不同交点 iff $m=e$
+        operation: 结合 $h$ 在 $1$ 处取最小值、$\varphi$ 在 $e$ 处取最小值，并按图像数交点。
+        why: 当 $m=e$ 时两条曲线各给一个切点；当 $m>e$ 时通常超过两个交点。
+      source_ref: page_0023 lines 16-24
+    - step_id: step_4
+      statement: 用 $h(x)=\varphi(e^x)$ 建立三个零点的链式关系。
+      formula_trace:
+        from: $h(x)=\frac{e^x}{x}=\frac{e^x}{\ln e^x}=\varphi(e^x)$
+        to: $\varphi(e^{x_1})=h(x_1)=\varphi(x_2)$, hence $e^{x_1}=x_2$; similarly $e^{x_2}=x_3$
+        operation: 将 $h$ 的交点送入 $\varphi$ 的自变量，并利用 $\varphi$ 在 $(1,e)$ 上严格递减。
+        why: 三个交点情形下中间点是两曲线共享的水平线交点。
+      source_ref: page_0023 line 26
+    - step_id: step_5
+      statement: 推出 D 的乘积关系。
+      formula_trace:
+        from: $h(x_1)=\varphi(x_3)$, $e^{x_1}=x_2$, $x_2=\ln x_3$
+        to: $\frac{e^{x_1}}{x_1}=\frac{x_3}{\ln x_3}$, so $x_1x_3=e^{x_1}\ln x_3=x_2^2$
+        operation: 交叉相乘后替换 $e^{x_1}$ 和 $\ln x_3$。
+        why: 同构链把最左和最右交点的乘积固定为中间交点平方。
+      source_ref: page_0023 line 26
+teaching_card:
+  student_title: 用同构曲线数清水平线交点
+  what_it_trains: 训练把两个带参数零点问题转成两条固定曲线与水平线的交点问题，并用同构关系推出交点乘积。
+  recognition_cues:
+    - 函数都写成“固定函数减 $m$”，零点等价于固定曲线等于 $m$。
+    - $e^x/x$ 和 $x/\ln x$ 同时出现，且都以 $e$ 为最小值。
+    - 三零点选项含 $x_1x_3=x_2^2$，提示寻找指数-对数链。
+  normalization_moves:
+    - 把 $f(x)=0$、$g(x)=0$ 分别改成 $h(x)=m$、$\varphi(x)=m$。
+    - 将 $h(x)$ 改写为 $\varphi(e^x)$。
+    - 用 $x_i=m\ln x_i$ 相减构造对数割线斜率。
+  common_failures:
+    - 把选项 A 的 $m\le1$ 当成最小值，忘记 $e^x/x$ 的最小值是 $e$。
+    - 把“共有零点”误读成两个函数在同一横坐标同时为零，而源解按两函数零点总数处理。
+    - 在 D 中只写 $e^{x_1}=x_2$，漏掉由 $h(x_1)=\varphi(x_3)$ 得乘积关系的最后一步。
+  similar_practice_query: e^x/x x/lnx 水平线 三个零点 乘积关系
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - "Reviewer may want to confirm the source convention for “函数 f(x) 和 g(x) 共有两个/三个不同的零点”: this card follows the source solution's interpretation as total distinct zero positions from the two equations."

@@ -1,0 +1,250 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0174_exp_log_param_range_ex22
+content_revision_id: mst_p0174_exp_log_param_range_ex22-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0174_exp_log_param_range_ex22.card.yaml
+stem: |-
+  （2023·岳阳平江高二期末 T8）若不等式 $e^{x+a}\geqslant \ln x-a$ 恒成立，则实数 $a$ 的取值范围是（  ）
+  A. $[0,+\infty)$
+  B. $[-1,+\infty)$
+  C. $\left[-\frac{1}{e},+\infty\right)$
+  D. $[-e,+\infty)$
+answer: |
+  B
+
+  法一：构造
+  \[
+  F(u)=e^u+u,
+  \]
+  其在 $\mathbf{R}$ 上递增。由
+  \[
+  e^{x+a}\ge\ln x-a
+  \]
+  得
+  \[
+  e^{x+a}+a+x\ge \ln x+x=e^{\ln x}+\ln x.
+  \]
+  由 $F$ 递增可得
+  \[
+  x+a\ge \ln x\Longrightarrow a\ge \ln x-x\quad(x>0).
+  \]
+  令 $g(x)=\ln x-x$，则
+  \[
+  g^{\prime}(x)=\frac1x-1,
+  \]
+  在 $x=1$ 处取最大值 $g(1)=-1$，故 $a\ge-1$。
+
+  法二：把不等式写为
+  \[
+  e^{x+a}+a\ge \ln x.
+  \]
+  源解按“凹凸性不同函数零点比大小”处理：左侧零点
+  $x_1=\ln(-a)-a$，右侧零点 $x_2=1$，故 $x_1\le x_2$，即
+  \[
+  (-a)+\ln(-a)\le1.
+  \]
+  又 $x+\ln x$ 在 $(0,+\infty)$ 单调递增，推出 $-a\le1$，即
+  \[
+  a\ge-1.
+  \]
+  两法同结论，取值范围为 $[-1,+\infty)$，选 B。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 用递增模板 $e^u+u$ 把原不等式压缩为单参数条件。
+      max_score: 1
+    - step_id: step_2
+      description: 转成函数上确界问题。
+      max_score: 1
+    - step_id: step_3
+      description: 求 $g(x)=\ln x-x$ 的最大值。
+      max_score: 1
+    - step_id: step_4
+      description: 用零点比大小法做独立复核。
+      max_score: 1
+    - step_id: step_5
+      description: 匹配选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 参变量分离
+    secondary:
+      - 数形结合
+      - 局部逼近与找点
+    subroute:
+      - 构造递增模板 $e^u+u$
+      - 上确界：$\max(\ln x-x)$
+      - 零点比大小复核
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 抽象函数结构
+      - 不等式工具结构
+    evidence:
+      - 原式可改写为 $a\ge\ln x-x$。
+      - 核心极值函数 $g(x)=\ln x-x$ 在 $x=1$ 取最大值 $-1$。
+      - 零点关系 $x_1\le x_2$ 与 $x+\ln x$ 单调性给出同一边界。
+    normalization_moves_used:
+      - 先做同构加项：$e^{x+a}+a+x$ 与 $e^{\ln x}+\ln x$。
+      - 把参数条件降成单函数上界。
+      - 用第二条零点路线交叉验证边界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会用 $F(u)=e^u+u$ 的单调性做同构比较，回补指数对数基础。
+      - 若学生在 $g^{\prime}(x)=\frac1x-1$ 的增减判断上出错，回补导数单调极值基础。
+      - 若学生不会把“恒成立”转为“参数不小于函数最大值”，回补不等式工具基础。
+      - 若学生看不懂零点比大小链条，回补函数性质与图像。
+  detail_terms:
+    - $e^{x+a}\ge\ln x-a$
+    - $F(u)=e^u+u$
+    - $g(x)=\ln x-x$
+    - $g_{\max}=g(1)=-1$
+    - $x_1=\ln(-a)-a,\ x_2=1$
+    - $a\in[-1,+\infty)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0174_exp_log_param_range_ex22
+source_evidence:
+  source_refs:
+    - ref_id: page_0174_ex22_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0174/page_0174.md
+      role: problem_start
+      evidence: lines 28-32 给出例22题干与四个区间选项，问参数 $a$ 的取值范围。
+    - ref_id: page_0174_ex22_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0174/page_0174.md
+      role: solution
+      evidence: lines 34-36 给出法一、法二两条解法，均得 $a\ge-1$，结论“故选 B”。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0174.png
+      inspected: true
+      notes: 已核对页图：例22题干、选项与两种解法完整在本页，答案字母为 B。
+  source_context: 例22位于 page_0174 中段，前接例21，后接例23；本题不跨页。
+  source_influence:
+    - 保留法一“构造递增函数 $e^x+x$，把不等式化为 $a\ge\ln x-x$”的路线。
+    - 保留法二“零点比大小 + $x+\ln x$ 单调”的路线，作为独立校验。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·岳阳平江高二期末 T8）若不等式 $e^{x+a}\geqslant \ln x-a$ 恒成立，则实数 $a$ 的取值范围是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $[0,+\infty)$
+      text_latex: $[0,+\infty)$
+    - label: B
+      text_raw: $[-1,+\infty)$
+      text_latex: $[-1,+\infty)$
+    - label: C
+      text_raw: $\left[-\frac{1}{e},+\infty\right)$
+      text_latex: $\left[-\frac{1}{e},+\infty\right)$
+    - label: D
+      text_raw: $[-e,+\infty)$
+      text_latex: $[-e,+\infty)$
+  answer: B
+  fidelity_notes:
+    - 题干、选项、两种解析均在 page_0174 同页。
+    - 本题定义域为 $x>0$（由 $\ln x$ 决定）。
+solution:
+  source_solution_summary: |
+    法一：构造
+    \[
+    F(u)=e^u+u,
+    \]
+    其在 $\mathbf{R}$ 上递增。由
+    \[
+    e^{x+a}\ge\ln x-a
+    \]
+    得
+    \[
+    e^{x+a}+a+x\ge \ln x+x=e^{\ln x}+\ln x.
+    \]
+    由 $F$ 递增可得
+    \[
+    x+a\ge \ln x\Longrightarrow a\ge \ln x-x\quad(x>0).
+    \]
+    令 $g(x)=\ln x-x$，则
+    \[
+    g^{\prime}(x)=\frac1x-1,
+    \]
+    在 $x=1$ 处取最大值 $g(1)=-1$，故 $a\ge-1$。
+
+    法二：把不等式写为
+    \[
+    e^{x+a}+a\ge \ln x.
+    \]
+    源解按“凹凸性不同函数零点比大小”处理：左侧零点
+    $x_1=\ln(-a)-a$，右侧零点 $x_2=1$，故 $x_1\le x_2$，即
+    \[
+    (-a)+\ln(-a)\le1.
+    \]
+    又 $x+\ln x$ 在 $(0,+\infty)$ 单调递增，推出 $-a\le1$，即
+    \[
+    a\ge-1.
+    \]
+    两法同结论，取值范围为 $[-1,+\infty)$，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 用递增模板 $e^u+u$ 把原不等式压缩为单参数条件。
+      formula_trace:
+        from: $e^{x+a}\ge\ln x-a$
+        to: $e^{x+a}+a+x\ge e^{\ln x}+\ln x\Rightarrow x+a\ge\ln x$
+        operation: 两侧同加 $a+x$ 并调用 $F(u)=e^u+u$ 递增。
+        why: 把“恒成立”转成对所有 $x>0$ 的线性下界条件。
+      source_ref: page_0174_ex22_solution
+    - step_id: step_2
+      statement: 转成函数上确界问题。
+      formula_trace:
+        from: $x+a\ge\ln x$
+        to: $a\ge\ln x-x=:g(x)$
+        operation: 移项后提取参数 $a$。
+        why: 参数范围由 $g(x)$ 的最大值决定。
+      source_ref: page_0174_ex22_solution
+    - step_id: step_3
+      statement: 求 $g(x)=\ln x-x$ 的最大值。
+      formula_trace:
+        from: $g^{\prime}(x)=\frac1x-1$
+        to: $g_{\max}=g(1)=-1$
+        operation: 用导数判增减：$(0,1)$ 增、$(1,+\infty)$ 减。
+        why: 得到满足恒成立的必要且充分条件 $a\ge-1$。
+      source_ref: page_0174_ex22_solution
+    - step_id: step_4
+      statement: 用零点比大小法做独立复核。
+      formula_trace:
+        from: $e^{x+a}+a\ge\ln x$
+        to: $x_1=\ln(-a)-a\le x_2=1\Rightarrow (-a)+\ln(-a)\le1$
+        operation: 比较两侧零点并调用 $x+\ln x$ 的单调性。
+        why: 再次推出 $a\ge-1$，与法一一致。
+      source_ref: page_0174_ex22_solution
+    - step_id: step_5
+      statement: 匹配选项。
+      formula_trace:
+        from: $a\ge-1$
+        to: $a\in[-1,+\infty)$，选 B
+        operation: 写成区间并对应选项。
+        why: 完成题目要求。
+      source_ref: page_0174_ex22_solution
+teaching_card:
+  student_title: 先变成 $a\ge\ln x-x$，再拿最大值
+  what_it_trains: 训练指数-对数恒成立题的标准流程：先做同构加项，再把参数范围转成单函数极值。
+  recognition_cues:
+    - 题干形式是“$e^{(\cdot)}$ 与 $\ln x$ 的恒成立不等式”。
+    - 参数 $a$ 同时出现在指数内部和线性项里。
+    - 选项是参数区间。
+  normalization_moves:
+    - 同加 $a+x$，构造 $e^u+u$ 递增模板。
+    - 得到 $a\ge\ln x-x$。
+    - 求 $g(x)=\ln x-x$ 最大值锁定边界。
+    - 可用零点比大小再做一次答案复核。
+  common_failures:
+    - 把 $g(x)=\ln x-x$ 的极值点误算成 $x=e$。
+    - 忘记 $\ln x$ 的定义域 $x>0$。
+    - 只验证“必要”不验证“充分”，导致区间端点漏写。
+  similar_practice_query: e^{x+a} lnx-a 恒成立 参数范围 lnx-x 最大值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,184 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0205_cos_compare_exp_sin_inequality_ch6_trig_ex04
+content_revision_id: mst_p0205_cos_compare_exp_sin_inequality_ch6_trig_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0205_cos_compare_exp_sin_inequality_ch6_trig_ex04.card.yaml
+stem: |-
+  已知 $x$ 为正实数。
+  (1) 比较 $\cos x$ 与 $1-\frac{1}{2}x^2$ 的大小。
+  (2) 求证：$e^x+\cos x \geqslant \sin x+2$。
+answer: |-
+  (1) $\cos x\ge1-\frac12x^2$；(2) 不等式成立。
+
+  第(1)问直接使用经典放缩 $\cos x\ge1-\frac12x^2\ (x\in\mathbf{R})$。 第(2)问把目标改写为 $e^x+\cos x-\sin x-2\ge0$，并按 source 拆成 $\left(e^x-\frac12x^2-x-1\right)+\left(\cos x+\frac12x^2-1\right)+(x-\sin x)\ge0$。 三项分别由 $e^x\ge1+x+\frac12x^2\ (x\ge0)$、 $\cos x\ge1-\frac12x^2\ (x\in\mathbf{R})$、 $x-\sin x\ge0\ (x\ge0)$ 保证非负，因此原不等式成立。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 第(1)问直接给出余弦二次下界。
+      max_score: 1
+    - step_id: step_2
+      description: 第(2)问先移项并拆成三块。
+      max_score: 1
+    - step_id: step_3
+      description: 指数块下界。
+      max_score: 1
+    - step_id: step_4
+      description: 余弦块与正弦块下界。
+      max_score: 1
+    - step_id: step_5
+      description: 三块求和完成第(2)问。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 数值比较
+        target: 第 (1) 问
+        result: $\cos x\ge1-\frac12x^2$
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 (2) 问
+        result: $e^x+\cos x\ge\sin x+2$
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+      - 数形结合
+    subroute:
+      - 三角放缩
+      - 指数切线放缩
+      - 拆项同向拼接
+      - 端点取值
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 不等式工具结构
+      - 局部逼近结构
+    evidence:
+      - $e^x+\cos x\ge\sin x+2$
+      - $e^x\ge1+x+\frac12x^2$
+      - $\cos x\ge1-\frac12x^2$
+      - $x-\sin x\ge0$
+    normalization_moves_used:
+      - 先把目标统一成“左侧减右侧非负”。
+      - 补加补减 $\frac12x^2$ 与 $x$，分离为三块。
+      - 分别调用三条标准下界并求和闭环。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能从 $\cos x$ 与 $1-\frac12x^2$ 的关系起步，回补三角函数基础。
+      - 若学生不会调用 $e^x\ge1+x+\frac12x^2$，回补指数对数基础。
+      - 若学生不会把目标拆成三块再合并，回补代数恒等变形。
+  detail_terms:
+    - $e^x+\cos x-\sin x-2$
+    - $e^x-\frac12x^2-x-1$
+    - $\cos x+\frac12x^2-1$
+    - $x-\sin x$
+    - $\cos x\ge1-\frac12x^2$
+parts: &a1
+  - (1) 比较 $\cos x$ 与 $1-\frac{1}{2}x^2$ 的大小。
+  - (2) 求证：$e^x+\cos x \geqslant \sin x+2$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0205_cos_compare_exp_sin_inequality_ch6_trig_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0205_ex04_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0205/page_0205.md
+      role: problem_start
+      evidence: page_0205 行31-35给出例4题干：已知 $x$ 为正实数，先比较 $\cos x$ 与 $1-\frac12x^2$，再证 $e^x+\cos x\geqslant\sin x+2$。
+    - ref_id: page_0205_ex04_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0205/page_0205.md
+      role: solution
+      evidence: page_0205 行37-41给出解析：第(1)问直接结论；第(2)问拆为三块并调用 $e^x,\cos x,x-\sin x$ 的标准放缩。
+    - ref_id: page_0205_ex04_local_context_prev
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0205/page_0205.md
+      role: local_context
+      evidence: page_0205 行17-29是例3内容，行31才进入例4，题头归属明确。
+    - ref_id: page_0205_ex04_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0205/page_0205.md
+      role: local_context
+      evidence: page_0205 行43起进入例5，说明例4解析已在本页结束。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0205.png
+      inspected: true
+      notes: 已核对页图：例4两问与解析完整，拆项式与三条放缩不等式可辨识。
+  source_context: 例4题头与解析均在 page_0205，无跨页续解。
+  source_influence:
+    - 保留第(1)问的余弦二次下界模板：$\cos x\ge1-\frac12x^2$。
+    - 保留第(2)问的同侧化拆项：指数块 + 余弦块 + $x-\sin x$。
+    - 保留“考试需证明切线不等式”的课堂语境。
+  source_discrepancies: []
+original_problem:
+  stem: 已知 $x$ 为正实数。
+  parts: *a1
+  choices: []
+  answer: (1) $\cos x\ge1-\frac12x^2$；(2) 不等式成立。
+  fidelity_notes:
+    - 源题为两问证明题，无选项。
+    - 第(1)问给出的是全实数范围结论，题设“正实数”主要用于第(2)问中的指数与 $x-\sin x$ 下界。
+solution:
+  source_solution_summary: 第(1)问直接使用经典放缩 $\cos x\ge1-\frac12x^2\ (x\in\mathbf{R})$。 第(2)问把目标改写为 $e^x+\cos x-\sin x-2\ge0$，并按 source 拆成 $\left(e^x-\frac12x^2-x-1\right)+\left(\cos x+\frac12x^2-1\right)+(x-\sin x)\ge0$。 三项分别由 $e^x\ge1+x+\frac12x^2\ (x\ge0)$、 $\cos x\ge1-\frac12x^2\ (x\in\mathbf{R})$、 $x-\sin x\ge0\ (x\ge0)$ 保证非负，因此原不等式成立。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问直接给出余弦二次下界。
+      formula_trace:
+        from: $\cos x$ 与 $1-\frac12x^2$
+        to: $\cos x\ge1-\frac12x^2\ (x\in\mathbf{R})$
+        operation: 调用三角常见放缩模板。
+        why: 得到比较结论并为第(2)问做铺垫。
+      source_ref: page_0205_ex04_solution
+    - step_id: step_2
+      statement: 第(2)问先移项并拆成三块。
+      formula_trace:
+        from: $e^x+\cos x\ge\sin x+2$
+        to: $e^x-\frac12x^2-x-1+\cos x+\frac12x^2-1+x-\sin x\ge0$
+        operation: 加减 $\frac12x^2$ 与 $x$，把目标改成“三项非负和”。
+        why: 便于并行调用指数、余弦、正弦三个标准不等式。
+      source_ref: page_0205_ex04_solution
+    - step_id: step_3
+      statement: 指数块下界。
+      formula_trace:
+        from: $e^x-\frac12x^2-x-1$
+        to: $e^x-\frac12x^2-x-1\ge0$
+        operation: 使用 $e^x\ge1+x+\frac12x^2\ (x\ge0)$。
+        why: 保证第一块非负。
+      source_ref: page_0205_ex04_solution
+    - step_id: step_4
+      statement: 余弦块与正弦块下界。
+      formula_trace:
+        from: $\cos x+\frac12x^2-1,\ x-\sin x$
+        to: $\cos x+\frac12x^2-1\ge0,\ x-\sin x\ge0$
+        operation: 分别使用 $\cos x\ge1-\frac12x^2$ 与 $\sin x\le x$。
+        why: 其余两块同样非负，和即非负。
+      source_ref: page_0205_ex04_solution
+    - step_id: step_5
+      statement: 三块求和完成第(2)问。
+      formula_trace:
+        from: step_3 与 step_4
+        to: $e^x+\cos x-\sin x-2\ge0$
+        operation: 非负项相加。
+        why: 回到原式即得 $e^x+\cos x\ge\sin x+2$。
+      source_ref: page_0205_ex04_solution
+teaching_card:
+  student_title: 指数块+三角块三段拼接
+  what_it_trains: 训练把混合函数不等式改写为三段标准非负块，并快速匹配各段对应的基础放缩模板。
+  recognition_cues:
+    - 同式里同时出现 $e^x,\cos x,\sin x$。
+    - 题目给了一个“先比较、再证明”的两问结构。
+    - 证明目标可改写成“差值非负”。
+  normalization_moves:
+    - 先写 $\cos x\ge1-\frac12x^2$ 作为第(1)问结论。
+    - 第(2)问补加补减 $\frac12x^2$ 与 $x$。
+    - 三条标准不等式分别压住三段，再求和。
+  common_failures:
+    - 漏写 $x-\sin x\ge0$，导致最后一步无法闭合。
+    - 把 $\cos x\ge1-\frac12x^2$ 误写成反向不等式。
+    - 拆项时常数项处理错误（$-2$ 漏拆成 $-1-1$）。
+  similar_practice_query: e^x cosx sinx 不等式 拆项放缩 证明
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

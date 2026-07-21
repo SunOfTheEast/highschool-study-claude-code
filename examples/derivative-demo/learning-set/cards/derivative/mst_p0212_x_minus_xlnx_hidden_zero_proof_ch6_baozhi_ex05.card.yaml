@@ -1,0 +1,220 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0212_x_minus_xlnx_hidden_zero_proof_ch6_baozhi_ex05
+content_revision_id: mst_p0212_x_minus_xlnx_hidden_zero_proof_ch6_baozhi_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0212_x_minus_xlnx_hidden_zero_proof_ch6_baozhi_ex05.card.yaml
+stem: |-
+  （2023 · 越秀期中 T22）设 $f(x)=ax+bx\ln x$，$f(x)$ 在 $x=e$ 处的切线方程是 $x+y-e=0$，其中 $e=2.718\cdots$ 为自然对数的底数。
+  1. 求 $a,b$ 的值。
+  2. 证明：$f(x)\leqslant \frac1{e^x}+x^2$。
+answer: |-
+  (1) $a=1,b=-1$；(2) 对任意 $x>0$，$f(x)\leqslant \frac1{e^x}+x^2$。
+
+  第(1)问：由切线 $x+y-e=0$ 可知切点为 $(e,0)$、斜率为 $-1$，故 $f(e)=0,\ f^{\prime}(e)=-1$。又 $f^{\prime}(x)=a+b+b\ln x$，代入得到 $\begin{cases}a+2b=-1\\a+b=0\end{cases}$，解得 $a=1,b=-1$，即 $f(x)=x-x\ln x$。 第(2)问：设 $h(x)=x-x\ln x-\frac1{e^x}-x^2$。有 $h^{\prime}(x)=-\ln x+\frac1{e^x}-2x$， $h^{\prime\prime}(x)=-\frac1x-\frac1{e^x}-2<0$， 因而 $h^{\prime}$ 严格递减；并且 $\lim_{x\to0^+}h^{\prime}(x)=+\infty,\ h^{\prime}(1)<0$， 故存在唯一 $x_0\in(0,1)$ 使 $h^{\prime}(x_0)=0$，从而 $h$ 在 $x_0$ 处取最大值。由 $2x_0=-\ln x_0+\frac1{e^{x_0}}$ 代回得 $h(x_0)=(x_0+1)\left(x_0-\frac1{e^{x_0}}\right)$。再设 $m(x)=x-\frac1{e^x}$，则 $m^{\prime}(x)=1+\frac1{e^x}>0$，且 $m(0)<0,\ m(1)>0$，故存在唯一 $x_1\in(0,1)$ 满足 $m(x_1)=0$，即 $x_1=\frac1{e^{x_1}}\Rightarrow \ln x_1=-x_1$。 代入可得 $h^{\prime}(x_1)=0$，故 $x_0=x_1$，于是 $h(x)\le h(x_0)=(x_0+1)m(x_0)=0$，即 $f(x)\le \frac1{e^x}+x^2$。同页还给出同构写法： $\frac1{e^x}+x^2+x\ln x-x=x\!\left(e^{-x-\ln x}+x+\ln x-1\right) =xH(-x-\ln x)\ge0$，其中 $H(t)=e^t-t-1$。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 用切线方程提取切点与斜率，建立关于 $a,b$ 的方程组。
+      max_score: 1
+    - step_id: step_2
+      description: 求导并解线性方程组得到 $a,b$。
+      max_score: 1
+    - step_id: step_3
+      description: 构造差函数并分析一、二阶导。
+      max_score: 1
+    - step_id: step_4
+      description: 由 $h^{\prime}$ 的端点符号与单调性确定唯一极大点 $x_0$。
+      max_score: 1
+    - step_id: step_5
+      description: 把极值点方程代回，转成隐藏零点 $x=e^{-x}$。
+      max_score: 1
+    - step_id: step_6
+      description: 证明 $m(x)$ 在 $(0,1)$ 有唯一零点，并与 $x_0$ 对齐。
+      max_score: 1
+    - step_id: step_7
+      description: 给出同构型补证（朗博同构）。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 数值求值
+        target: 第 1 问
+        result: $a=1,b=-1$
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 2 问
+        result: $x>0$ 时 $x-x\ln x\le \frac1{e^x}+x^2$
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 切线放缩与凹凸性
+      - 同构变形与换元法
+    subroute:
+      - 切线条件反求参数
+      - 差函数极值点定位
+      - 隐零点代换
+      - 朗博同构保值性
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - $h(x)=x-x\ln x-\frac1{e^x}-x^2$
+      - $h^{\prime\prime}(x)<0$ 导致 $h^{\prime}$ 递减
+      - $h(x_0)=(x_0+1)\left(x_0-\frac1{e^{x_0}}\right)$
+      - $m(x)=x-\frac1{e^x}$ 的唯一零点与 $h^{\prime}(x_0)=0$ 对齐
+      - $xH(-x-\ln x)\ge0,\ H(t)=e^t-t-1$
+    normalization_moves_used:
+      - 把目标不等式改写为单函数 $h$ 的最大值判号。
+      - 用极值点方程回代把“导数为零”转成“隐藏零点”条件。
+      - 把混合指对式统一到 $e^u-u-1$ 的同构母式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生无法从切线 $x+y-e=0$ 提取 $f(e),f^{\prime}(e)$，回补导数运算与几何意义。
+      - 若学生不会用 $h^{\prime\prime}(x)<0$ 推 $h^{\prime}$ 递减并定位唯一极大点，回补导数单调极值基础。
+      - 若学生不会处理 $x=e^{-x}\Leftrightarrow \ln x=-x$ 这类互化，回补指数对数基础。
+      - 若学生不会把 $\frac1{e^x}+x^2+x\ln x-x$ 归并到 $e^u-u-1$，回补不等式工具基础。
+  detail_terms:
+    - $f(x)=ax+bx\ln x$
+    - $h(x)=x-x\ln x-\frac1{e^x}-x^2$
+    - $h^{\prime}(x)=-\ln x+\frac1{e^x}-2x$
+    - $m(x)=x-\frac1{e^x}$
+    - 隐零点代换
+    - 朗博同构
+parts: &a1
+  - part_id: "1"
+    text: 求 $a,b$ 的值。
+  - part_id: "2"
+    text: 证明：$f(x)\leqslant \frac1{e^x}+x^2$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0212_x_minus_xlnx_hidden_zero_proof_ch6_baozhi_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0212_ex04_local_context_prev
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0212/page_0212.md
+      role: local_context
+      evidence: line 14-25 为 page_0211 例4续解与方法说明；line 33 才进入例5新题头。
+    - ref_id: page_0212_ex05_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0212/page_0212.md
+      role: problem_start
+      evidence: line 33-35 给出例5题干两问。
+    - ref_id: page_0212_ex05_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0212/page_0212.md
+      role: solution
+      evidence: line 37-39 给出例5第(1)问求参结论并引入第(2)问函数 $h(x)$。
+    - ref_id: page_0213_ex05_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0213/page_0213.md
+      role: continuation
+      evidence: line 14-16 承接例5第(2)问，完成隐零点代换与朗博同构说明；line 18 起进入例6。
+    - ref_id: page_0213_ex06_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0213/page_0213.md
+      role: local_context
+      evidence: line 18-30 为例6、例7新题头与解析起始，按批次规则不纳入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0212.png
+      inspected: true
+      notes: 已核对页图：page_0212 顶部为例4续页；例5题头在页底出现并给出第(1)问与第(2)问开头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0213.png
+      inspected: true
+      notes: 已核对页图：page_0213 顶部完成例5第(2)问；中下部出现例6、例7题头，属于下一批。
+  source_context: 例5题头起于 page_0212，解答跨到 page_0213 顶部闭合；仅使用 page_0213 的例5续解，不处理该页新起头的例6、例7。
+  source_influence:
+    - 保留 source 的“两段式”结构：先由切线条件反求 $a,b$，再证明不等式。
+    - 第(2)问保留“隐零点代换”主链：先求 $h$ 的极大值点，再把极值方程转化为 $x=e^{-x}$。
+    - 保留 source 给出的“朗博同构”替代解释，作为同一结论的结构化重写。
+  source_discrepancies:
+    - page_0213 line 14 在同一推导链中混用 $h^{\prime}$ 与 $g^{\prime}$（出现“$g^{\prime}(x)\le g^{\prime}(0)=1$，$g^{\prime}(1)<0$”），但前文并未定义该 $g$；本卡按上下文改为对 $h^{\prime}$ 的符号与单调性判断。
+    - page_0213 line 14 写作“$x-x\ln x\le \frac1{e^x}-x^2$”，但同段后文立即改写为“$\frac1{e^x}+x^2+x\ln x-x=x(\cdots)$”，与题干目标 $f(x)\le\frac1{e^x}+x^2$ 一致；本卡按题干与后续等式链采用“$+x^2$”。
+    - page_0213 line 14 在给出 $x_0=x_1$ 后写“$m(x_0)\le0$”；按同段“$m(x_1)=0$”应为等号。该处不影响最终结论。
+original_problem:
+  stem: （2023 · 越秀期中 T22）设 $f(x)=ax+bx\ln x$，$f(x)$ 在 $x=e$ 处的切线方程是 $x+y-e=0$，其中 $e=2.718\cdots$ 为自然对数的底数。
+  parts: *a1
+  choices: []
+  answer: (1) $a=1,b=-1$；(2) 对任意 $x>0$，$f(x)\leqslant \frac1{e^x}+x^2$。
+  fidelity_notes:
+    - 题目为两问解答题，无选项。
+    - 第(2)问中的定义域由 $\ln x$ 决定为 $x>0$。
+solution:
+  source_solution_summary: 第(1)问：由切线 $x+y-e=0$ 可知切点为 $(e,0)$、斜率为 $-1$，故 $f(e)=0,\ f^{\prime}(e)=-1$。又 $f^{\prime}(x)=a+b+b\ln x$，代入得到 $\begin{cases}a+2b=-1\\a+b=0\end{cases}$，解得 $a=1,b=-1$，即 $f(x)=x-x\ln x$。 第(2)问：设 $h(x)=x-x\ln x-\frac1{e^x}-x^2$。有 $h^{\prime}(x)=-\ln x+\frac1{e^x}-2x$， $h^{\prime\prime}(x)=-\frac1x-\frac1{e^x}-2<0$， 因而 $h^{\prime}$ 严格递减；并且 $\lim_{x\to0^+}h^{\prime}(x)=+\infty,\ h^{\prime}(1)<0$， 故存在唯一 $x_0\in(0,1)$ 使 $h^{\prime}(x_0)=0$，从而 $h$ 在 $x_0$ 处取最大值。由 $2x_0=-\ln x_0+\frac1{e^{x_0}}$ 代回得 $h(x_0)=(x_0+1)\left(x_0-\frac1{e^{x_0}}\right)$。再设 $m(x)=x-\frac1{e^x}$，则 $m^{\prime}(x)=1+\frac1{e^x}>0$，且 $m(0)<0,\ m(1)>0$，故存在唯一 $x_1\in(0,1)$ 满足 $m(x_1)=0$，即 $x_1=\frac1{e^{x_1}}\Rightarrow \ln x_1=-x_1$。 代入可得 $h^{\prime}(x_1)=0$，故 $x_0=x_1$，于是 $h(x)\le h(x_0)=(x_0+1)m(x_0)=0$，即 $f(x)\le \frac1{e^x}+x^2$。同页还给出同构写法： $\frac1{e^x}+x^2+x\ln x-x=x\!\left(e^{-x-\ln x}+x+\ln x-1\right) =xH(-x-\ln x)\ge0$，其中 $H(t)=e^t-t-1$。
+  key_steps:
+    - step_id: step_1
+      statement: 用切线方程提取切点与斜率，建立关于 $a,b$ 的方程组。
+      formula_trace:
+        from: $f(x)=ax+bx\ln x$，切线 $x+y-e=0$
+        to: $f(e)=0,\ f^{\prime}(e)=-1$
+        operation: 把切线写成 $y=-x+e$，读取斜率 $-1$，并由切线过切点得到函数值条件。
+        why: 第(1)问本质是“函数值 + 导数值”联立求参。
+      source_ref: page_0212_ex05_solution_start
+    - step_id: step_2
+      statement: 求导并解线性方程组得到 $a,b$。
+      formula_trace:
+        from: $f^{\prime}(x)=a+b+b\ln x$
+        to: $\begin{cases}a+2b=-1\\a+b=0\end{cases}\Rightarrow a=1,b=-1$
+        operation: 在 $x=e$ 处代入 $\ln e=1$，再联立 $f(e)=0$。
+        why: 将原函数确定为 $f(x)=x-x\ln x$，为第(2)问做准备。
+      source_ref: page_0212_ex05_solution_start
+    - step_id: step_3
+      statement: 构造差函数并分析一、二阶导。
+      formula_trace:
+        from: $h(x)=x-x\ln x-\frac1{e^x}-x^2$
+        to: $h^{\prime}(x)=-\ln x+\frac1{e^x}-2x,\ h^{\prime\prime}(x)=-\frac1x-\frac1{e^x}-2<0$
+        operation: 逐项求导并判定 $h^{\prime\prime}$ 恒负。
+        why: 先确定 $h^{\prime}$ 递减，才能锁定 $h$ 的唯一极大点。
+      source_ref: page_0213_ex05_solution_continuation
+    - step_id: step_4
+      statement: 由 $h^{\prime}$ 的端点符号与单调性确定唯一极大点 $x_0$。
+      formula_trace:
+        from: $\lim_{x\to0^+}h^{\prime}(x)=+\infty,\ h^{\prime}(1)<0,\ h^{\prime\prime}(x)<0$
+        to: 存在唯一 $x_0\in(0,1)$ 使 $h^{\prime}(x_0)=0$，且 $h_{\max}=h(x_0)$
+        operation: 用连续性 + 单调性做零点唯一性与单峰性判断。
+        why: 将全局不等式化为只需判定最大值符号。
+      source_ref: page_0213_ex05_solution_continuation
+    - step_id: step_5
+      statement: 把极值点方程代回，转成隐藏零点 $x=e^{-x}$。
+      formula_trace:
+        from: $h^{\prime}(x_0)=0\Rightarrow 2x_0=-\ln x_0+\frac1{e^{x_0}}$
+        to: $h(x_0)=(x_0+1)\left(x_0-\frac1{e^{x_0}}\right)$
+        operation: 用导数方程替换 $-x_0\ln x_0$ 项并整理因式。
+        why: 把最大值符号问题压缩为单函数 $m(x)=x-e^{-x}$ 的符号问题。
+      source_ref: page_0213_ex05_solution_continuation
+    - step_id: step_6
+      statement: 证明 $m(x)$ 在 $(0,1)$ 有唯一零点，并与 $x_0$ 对齐。
+      formula_trace:
+        from: $m(x)=x-\frac1{e^x},\ m^{\prime}(x)=1+\frac1{e^x}>0,\ m(0)<0<m(1)$
+        to: $\exists!x_1\in(0,1):m(x_1)=0,\ \ln x_1=-x_1,\ h^{\prime}(x_1)=0\Rightarrow x_0=x_1$
+        operation: 单调性确定唯一根，再代入 $h^{\prime}$ 建立同一根。
+        why: 得到 $m(x_0)=0$，从而 $h(x)\le h(x_0)=0$。
+      source_ref: page_0213_ex05_solution_continuation
+    - step_id: step_7
+      statement: 给出同构型补证（朗博同构）。
+      formula_trace:
+        from: $\frac1{e^x}+x^2+x\ln x-x$
+        to: $x\!\left(e^{-x-\ln x}+x+\ln x-1\right)=xH(-x-\ln x)\ge0$
+        operation: 提取公因子并套用 $H(t)=e^t-t-1\ge0$。
+        why: 展示与隐零点代换等价的整体同构视角。
+      source_ref: page_0213_ex05_solution_continuation
+teaching_card:
+  student_title: 隐零点代换：证明 $x-x\ln x\le \frac1{e^x}+x^2$
+  what_it_trains: 训练“先用导数找极大点，再把极值方程转成可求根结构”的不等式收束能力。
+  recognition_cues:
+    - 题目先给切线条件，再要求证明含 $\ln x,e^{-x},x^2$ 的混合不等式。
+    - 导数方程 $h^{\prime}(x)=0$ 无法直接解出显式根。
+    - 中间会出现 $x=e^{-x}$ 或 $\ln x=-x$ 这类隐式取等条件。
+  normalization_moves:
+    - 第(1)问用“切点函数值 + 切线斜率”两条件反求参数。
+    - 第(2)问先构造差函数并锁定唯一极大点。
+    - 在极大点处回代导数方程，转成隐藏零点再判号。
+  common_failures:
+    - 只写 $h^{\prime\prime}(x)<0$，但没说明由此得到 $h^{\prime}$ 递减与唯一极值点。
+    - 代回 $h(x_0)$ 时把 $-\ln x_0$ 替换错号，导致最大值表达式错误。
+    - 把“存在根”当成“根唯一”，遗漏 $x_0=x_1$ 的关键闭环。
+  similar_practice_query: 隐零点代换 x-xlnx e^{-x} 不等式 朗博同构
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes: []

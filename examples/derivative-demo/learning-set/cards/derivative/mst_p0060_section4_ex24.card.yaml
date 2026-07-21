@@ -1,0 +1,224 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0060_section4_ex24
+content_revision_id: mst_p0060_section4_ex24-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0060_section4_ex24.card.yaml
+stem: |-
+  (江苏省扬州中学 2023 届高三下学期高考前保温练 T8) 已知正方形 $ABCD$ 的中心在坐标原点，
+  四个顶点都在函数 $f(x)=x^3+bx$ 的图象上。若正方形 $ABCD$ 唯一确定，则实数 $b$ 的值为 (    )
+  A. $-\sqrt{2}$
+  B. $-2$
+  C. $-2\sqrt{2}$
+  D. $-4$
+answer: |-
+  C. $-2\sqrt{2}$
+
+  法一从正方形中心在原点出发，令两条对角线分别为
+  $y=kx(k>0)$ 与 $y=-\frac1k x$。当 $b\ge0$ 时，曲线单调递增，
+  与负斜率对角线只有原点交点，不合题意。当 $b<0$ 时，联立两条对角线与
+  $y=x^3+bx$，得到 $x_1^2=k-b$、$x_2^2=-\frac1k-b$。由
+  $OA=OB$ 整理为
+  $\left(k-\frac1k\right)^2-b\left(k-\frac1k\right)+2=0$。
+  设 $t=k-\frac1k$，它在 $(0,+\infty)$ 上单调递增且值域为 $\mathbb R$，
+  所以正方形唯一对应二次方程 $t^2-bt+2=0$ 有重根，即
+  $b^2-8=0$；又 $b<0$，故 $b=-2\sqrt2$，选 C。
+  法二用 $A(r\cos\theta,r\sin\theta)$、$B(-r\sin\theta,r\cos\theta)$
+  得到 $b=-(\frac{2}{\tan2\theta}+\tan2\theta)\le-2\sqrt2$，唯一性也在等号处取得。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 把中心在原点的正方形转化为两条过原点且互相垂直的对角线。
+      max_score: 1
+    - step_id: step_2
+      description: 先排除 $b\ge0$，因为此时无法在负斜率对角线上得到所需的非零顶点。
+      max_score: 1
+    - step_id: step_3
+      description: 在 $b<0$ 时分别联立两条对角线与曲线，写出两个顶点横坐标的平方。
+      max_score: 1
+    - step_id: step_4
+      description: 用 $OA=OB$ 把几何等距条件转成一个关于 $k$ 的方程。
+      max_score: 1
+    - step_id: step_5
+      description: 引入 $t=k-\frac1k$，把唯一正方形问题化为二次方程根数问题。
+      max_score: 1
+    - step_id: step_6
+      description: 唯一确定要求二次方程有重根，再结合 $b<0$ 选出答案。
+      max_score: 1
+    - step_id: step_7
+      description: 源页法二用角度参数给出同一临界值，作为另一条验证路径。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level: []
+  method:
+    primary: 自由度与主元
+    secondary:
+      - 数形结合
+      - 对称化与偏移
+    subroute:
+      - 中心对称图像内接正方形
+      - 斜率参数化
+      - 判别式唯一性
+      - 基本不等式取等
+  structure:
+    primary: 对称结构
+    secondary:
+      - 三次/高次函数结构
+    evidence:
+      - $f(x)=x^3+bx$ 为奇函数，正方形中心在原点，顶点自然成中心对称对。
+      - 两条互相垂直的对角线把四点共曲线问题化为 $t=k-\frac1k$ 的二次方程。
+    normalization_moves_used:
+      - 用对角线斜率 $k>0$ 表示正方形的旋转自由度。
+      - 用非零交点方程去掉中心点，只保留顶点。
+      - 用 $t=k-\frac1k$ 把含 $k$ 与 $\frac1k$ 的式子统一成单变量二次方程。
+      - 用判别式为零表达“唯一确定”。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把正方形中心条件转成两条过原点且斜率互为负倒数的直线，回补几何关系基础中的对角线垂直平分与斜率关系。
+      - 若学生把“唯一确定”只理解为选一个选项，回补方程根分布与韦达，用 $t(k)=k-\frac1k$ 的单调性说明二次方程根数如何对应正方形个数。
+      - 若学生在联立曲线和直线时保留了原点作为顶点，回补函数性质与图像中“中心点不是正方形顶点”的交点筛选。
+  detail_terms:
+    - 奇函数中心对称
+    - 正方形对角线
+    - 斜率互为负倒数
+    - $t=k-\frac1k$
+    - 判别式为零
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0060_section4_ex24
+source_evidence:
+  source_refs:
+    - ref_id: page_0060
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0060/page_0060.md
+      role: problem_start
+      evidence: 例 24 题头、四个选项与解析法一开头在本页。
+    - ref_id: page_0061
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0061/page_0061.md
+      role: continuation
+      evidence: 例 24 法一余下推导、法二推导、示意图与答案 C 在本页；本页后半进入泰勒展开说明。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0060.png
+      inspected: true
+      notes: 核对了例 24 的题头、选择项 A-D 和法一开头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0061.png
+      inspected: true
+      notes: 核对了例 24 跨页续解、正方形示意图、法二公式和最终选 C；后半泰勒展开未建卡。
+  source_context: 例 24 从 page_0060 底部开始，解答续到 page_0061；page_0061 后半的“第四节 泰勒展开的基本应用”为纯 exposition，不属于本题卡。
+  source_influence:
+    - 题干与选项逐项来自 page_0060，解法主线同时参考 page_0060/page_0061 的法一与法二。
+  source_discrepancies: []
+original_problem:
+  stem: |-
+    (江苏省扬州中学 2023 届高三下学期高考前保温练 T8) 已知正方形 $ABCD$ 的中心在坐标原点，
+    四个顶点都在函数 $f(x)=x^3+bx$ 的图象上。若正方形 $ABCD$ 唯一确定，则实数 $b$ 的值为 (    )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $-\sqrt{2}$
+      text_latex: $-\sqrt{2}$
+    - label: B
+      text_raw: $-2$
+      text_latex: $-2$
+    - label: C
+      text_raw: $-2\sqrt{2}$
+      text_latex: $-2\sqrt{2}$
+    - label: D
+      text_raw: $-4$
+      text_latex: $-4$
+  answer: C. $-2\sqrt{2}$
+  fidelity_notes:
+    - 源题为选择题，题干本身无图；page_0061 的正方形图是解析法二的辅助示意图。
+solution:
+  source_solution_summary: |-
+    法一从正方形中心在原点出发，令两条对角线分别为
+    $y=kx(k>0)$ 与 $y=-\frac1k x$。当 $b\ge0$ 时，曲线单调递增，
+    与负斜率对角线只有原点交点，不合题意。当 $b<0$ 时，联立两条对角线与
+    $y=x^3+bx$，得到 $x_1^2=k-b$、$x_2^2=-\frac1k-b$。由
+    $OA=OB$ 整理为
+    $\left(k-\frac1k\right)^2-b\left(k-\frac1k\right)+2=0$。
+    设 $t=k-\frac1k$，它在 $(0,+\infty)$ 上单调递增且值域为 $\mathbb R$，
+    所以正方形唯一对应二次方程 $t^2-bt+2=0$ 有重根，即
+    $b^2-8=0$；又 $b<0$，故 $b=-2\sqrt2$，选 C。
+    法二用 $A(r\cos\theta,r\sin\theta)$、$B(-r\sin\theta,r\cos\theta)$
+    得到 $b=-(\frac{2}{\tan2\theta}+\tan2\theta)\le-2\sqrt2$，唯一性也在等号处取得。
+  key_steps:
+    - step_id: step_1
+      statement: 把中心在原点的正方形转化为两条过原点且互相垂直的对角线。
+      formula_trace:
+        from: 正方形 $ABCD$ 的中心为 $O(0,0)$
+        to: $AC:\ y=kx\ (k>0),\quad BD:\ y=-\frac1k x$
+        operation: 用对角线互相垂直且互相平分设斜率
+        why: 正方形的两条对角线过中心，斜率互为负倒数；取 $k>0$ 固定一条对角线的方向。
+      source_ref: page_0060
+    - step_id: step_2
+      statement: 先排除 $b\ge0$，因为此时无法在负斜率对角线上得到所需的非零顶点。
+      formula_trace:
+        from: $b\ge0,\quad f'(x)=3x^2+b\ge0$
+        to: $f(x)$ 在 $\mathbb R$ 上单调递增，且与 $y=-\frac1k x$ 只有原点一个交点
+        operation: 由导函数符号判断单调性，并结合负斜率直线交点
+        why: 若一条对角线上只有原点交点，就不能形成四个非原点顶点的正方形。
+      source_ref: page_0061
+    - step_id: step_3
+      statement: 在 $b<0$ 时分别联立两条对角线与曲线，写出两个顶点横坐标的平方。
+      formula_trace:
+        from: $x_1^3+bx_1=kx_1,\quad x_2^3+bx_2=-\frac1k x_2$
+        to: $x_1^2=k-b,\quad x_2^2=-\frac1k-b$
+        operation: 除去原点交点对应的 $x=0$，保留非零顶点条件
+        why: 正方形顶点不是中心点，非零交点的横坐标平方决定到原点的距离。
+      source_ref: page_0061
+    - step_id: step_4
+      statement: 用 $OA=OB$ 把几何等距条件转成一个关于 $k$ 的方程。
+      formula_trace:
+        from: $OA^2=(1+k^2)x_1^2,\quad OB^2=\left(1+\frac1{k^2}\right)x_2^2$
+        to: $(1+k^2)(k-b)=\left(1+\frac1{k^2}\right)\left(-\frac1k-b\right)$
+        operation: 代入 $x_1^2$、$x_2^2$ 并令两条半对角线相等
+        why: 正方形四个顶点到中心距离相等，等距条件正好把曲线交点和正方形形状联系起来。
+      source_ref: page_0061
+    - step_id: step_5
+      statement: 引入 $t=k-\frac1k$，把唯一正方形问题化为二次方程根数问题。
+      formula_trace:
+        from: $(1+k^2)(k-b)=\left(1+\frac1{k^2}\right)\left(-\frac1k-b\right)$
+        to: $\left(k-\frac1k\right)^2-b\left(k-\frac1k\right)+2=0,\quad t^2-bt+2=0$
+        operation: 整理为 $k-\frac1k$ 的表达式，并设 $t=k-\frac1k$
+        why: $t(k)$ 在 $(0,+\infty)$ 上单调递增且值域为 $\mathbb R$，所以 $t$ 的根数对应正方形个数。
+      source_ref: page_0061
+    - step_id: step_6
+      statement: 唯一确定要求二次方程有重根，再结合 $b<0$ 选出答案。
+      formula_trace:
+        from: $t^2-bt+2=0$ 只有一个实根
+        to: $\Delta=b^2-8=0,\quad b=\pm2\sqrt2,\quad b=-2\sqrt2$
+        operation: 令判别式为零并舍去正根
+        why: 已排除 $b\ge0$，因此只能取负值；对应选项 C。
+      source_ref: page_0061
+    - step_id: step_7
+      statement: 源页法二用角度参数给出同一临界值，作为另一条验证路径。
+      formula_trace:
+        from: $A(r\cos\theta,r\sin\theta),\quad B(-r\sin\theta,r\cos\theta)$
+        to: $b=-\left(\frac{2}{\tan2\theta}+\tan2\theta\right)\le -2\sqrt2$
+        operation: 联立两点在曲线上，消去 $r^2$ 后用基本不等式
+        why: 唯一性发生在等号成立时，即 $\tan2\theta=\sqrt2$，与法一的 $b=-2\sqrt2$ 一致。
+      source_ref: page_0061
+teaching_card:
+  student_title: 把内接正方形的唯一性化成判别式
+  what_it_trains: 训练把几何旋转自由度设成斜率参数，再用曲线交点和等距条件把“唯一正方形”转成一元方程的唯一根。
+  recognition_cues:
+    - 图像是 $x^3+bx$ 这类奇函数，题目又给中心在原点。
+    - 正方形条件主要落在对角线垂直、过中心、半径相等。
+    - 题目问“唯一确定”，常要数参数方程的解的个数。
+  normalization_moves:
+    - 先设两条对角线为 $y=kx$ 与 $y=-\frac1k x$。
+    - 联立曲线时去掉原点交点，留下 $x_1^2$、$x_2^2$。
+    - 把等距条件整理成 $t^2-bt+2=0$。
+    - 用 $\Delta=0$ 把唯一性落到 $b$ 的临界值。
+  common_failures:
+    - 只看到四个顶点在曲线上，却没有利用正方形中心在原点。
+    - 忘记讨论 $b\ge0$，导致保留了不合题意的正根。
+    - 把 $k$ 的根数和正方形个数混在一起，没有说明 $t(k)$ 单调且值域为 $\mathbb R$。
+  similar_practice_query: 奇函数图像 正方形中心原点 顶点在曲线上 唯一确定 参数 判别式
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

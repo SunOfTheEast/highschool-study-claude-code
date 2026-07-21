@@ -1,0 +1,146 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0202_piaodai_inequality_proof_ch6_log_ex04
+content_revision_id: mst_p0202_piaodai_inequality_proof_ch6_log_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0202_piaodai_inequality_proof_ch6_log_ex04.card.yaml
+stem: 已知函数 $f(x)=ax-ax\ln x+1\ (a\in\mathbf R,\ a\ne0)$。证明：当 $a=-2$ 时，$f(x)\le x^2-3x+\frac1x+2\ln x$。
+answer: |-
+  当 $a=-2$ 时，不等式 $f(x)\le x^2-3x+\frac1x+2\ln x$ 成立。
+
+  取 $a=-2$，则 $f(x)=-2x+2x\ln x+1$。考察差值 $\Delta=x^2-3x+\frac1x+2\ln x-f(x)$，整理得 $\Delta=(x-1)\left(x-\frac1x-2\ln x\right)$。设 $g(x)=x-\frac1x-2\ln x$，则 $g^{\prime}(x)=1+\frac1{x^2}-\frac2x=\frac{(x-1)^2}{x^2}\ge0$， 所以 $g$ 在 $(0,+\infty)$ 单调递增，且 $g(1)=0$，于是 $0<x<1$ 时 $g(x)<0$，$x>1$ 时 $g(x)>0$。因此 $(x-1)g(x)\ge0$，即 $\Delta\ge0$，原不等式成立。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 先代入参数 $a=-2$ 并构造目标差值。
+      max_score: 1
+    - step_id: step_2
+      description: 把差值分解成“线性因子 × 飘带因子”。
+      max_score: 1
+    - step_id: step_3
+      description: 用导数判定飘带因子符号。
+      max_score: 1
+    - step_id: step_4
+      description: 合并两因子符号得到结论。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 对数飘带函数
+      - 差值因式分解
+      - 分区判号
+  structure:
+    primary: 不等式工具结构
+    secondary:
+      - 指对复合结构
+      - 非齐次结构
+    evidence:
+      - $\Delta=(x-1)\left(x-\frac1x-2\ln x\right)$
+      - $g^{\prime}(x)=\frac{(x-1)^2}{x^2}\ge0$
+    normalization_moves_used:
+      - 先证“目标差值 $\ge0$”而非直接硬推。
+      - 把复杂式压缩为飘带因子的单调性问题。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会构造并分解差值，回补代数恒等变形。
+      - 若学生求导 $g^{\prime}(x)$ 易错，回补导数运算与几何意义。
+      - 若学生不会由“单调 + 过零点”判两侧符号，回补导数单调极值基础。
+  detail_terms:
+    - $f(x)=ax-ax\ln x+1$
+    - $a=-2$
+    - $g(x)=x-\frac1x-2\ln x$
+    - $g^{\prime}(x)=\frac{(x-1)^2}{x^2}$
+    - $(x-1)g(x)\ge0$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0202_piaodai_inequality_proof_ch6_log_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0202_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0202/page_0202.md
+      role: problem_start
+      evidence: lines 33-34 给出例4题干：$f(x)=ax-ax\ln x+1(a\in\mathbf R,a\ne0)$，证明当 $a=-2$ 时目标不等式成立。
+    - ref_id: page_0202_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0202/page_0202.md
+      role: solution
+      evidence: lines 36-39 给出差值分解 $(x-1)(x-\frac1x-2\ln x)$，并设 $g(x)=x-\frac1x-2\ln x$ 用单调性判号。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0202.png
+      inspected: true
+      notes: 已核对页图：例4题干与解析完整可读。
+  source_context: 该题直接把目标差值因式分解成“$x-1$ × 飘带函数”并通过单调性完成判号。
+  source_influence:
+    - 保留源解核心因式：$(x-1)\left(x-\frac1x-2\ln x\right)$。
+    - 保留源解通过 $g^{\prime}(x)\ge0$ 与 $g(1)=0$ 进行分区判号的路线。
+  source_discrepancies:
+    - 页图在“当 $x>1$ 时”处印作 $g^{\prime}(x)>0$；markdown 转写为 $g(x)>0$。本卡按前文“$g$ 单调递增且 $g(1)=0$”采用 $g(x)>0$ 作为逻辑闭环。
+original_problem:
+  stem: 已知函数 $f(x)=ax-ax\ln x+1\ (a\in\mathbf R,\ a\ne0)$。证明：当 $a=-2$ 时，$f(x)\le x^2-3x+\frac1x+2\ln x$。
+  parts: *a1
+  choices: []
+  answer: 当 $a=-2$ 时，不等式 $f(x)\le x^2-3x+\frac1x+2\ln x$ 成立。
+  fidelity_notes:
+    - 源题为证明题，无选项。
+    - 隐含定义域为 $x>0$（由 $\ln x$ 与 $\frac1x$ 决定）。
+solution:
+  source_solution_summary: 取 $a=-2$，则 $f(x)=-2x+2x\ln x+1$。考察差值 $\Delta=x^2-3x+\frac1x+2\ln x-f(x)$，整理得 $\Delta=(x-1)\left(x-\frac1x-2\ln x\right)$。设 $g(x)=x-\frac1x-2\ln x$，则 $g^{\prime}(x)=1+\frac1{x^2}-\frac2x=\frac{(x-1)^2}{x^2}\ge0$， 所以 $g$ 在 $(0,+\infty)$ 单调递增，且 $g(1)=0$，于是 $0<x<1$ 时 $g(x)<0$，$x>1$ 时 $g(x)>0$。因此 $(x-1)g(x)\ge0$，即 $\Delta\ge0$，原不等式成立。
+  key_steps:
+    - step_id: step_1
+      statement: 先代入参数 $a=-2$ 并构造目标差值。
+      formula_trace:
+        from: $f(x)=ax-ax\ln x+1,\ a=-2$
+        to: $f(x)=-2x+2x\ln x+1$
+        operation: 直接代入参数。
+        why: 证明题目标已固定在 $a=-2$。
+      source_ref: page_0202_solution
+    - step_id: step_2
+      statement: 把差值分解成“线性因子 × 飘带因子”。
+      formula_trace:
+        from: $x^2-3x+\frac1x+2\ln x-f(x)$
+        to: $(x-1)\left(x-\frac1x-2\ln x\right)$
+        operation: 合并同类项并提取公因子。
+        why: 将证明转化为符号判定。
+      source_ref: page_0202_solution
+    - step_id: step_3
+      statement: 用导数判定飘带因子符号。
+      formula_trace:
+        from: $g(x)=x-\frac1x-2\ln x$
+        to: $g^{\prime}(x)=\frac{(x-1)^2}{x^2}\ge0,\ g(1)=0$
+        operation: 求导并结合基准点。
+        why: 得到 $g$ 在 $x=1$ 两侧的符号。
+      source_ref: page_0202_solution
+    - step_id: step_4
+      statement: 合并两因子符号得到结论。
+      formula_trace:
+        from: $0<x<1:\ (x-1)<0,\ g(x)<0;\ x>1:\ (x-1)>0,\ g(x)>0$
+        to: $(x-1)g(x)\ge0$
+        operation: 分区同号相乘。
+        why: 推出差值非负即原不等式成立。
+      source_ref: page_0202_solution
+teaching_card:
+  student_title: 差值拆成飘带因子来判号
+  what_it_trains: 训练证明题里“先作差、再分解、最后单调判号”的稳定路线。
+  recognition_cues:
+    - 结论是“某表达式 $\le$ 另一表达式”。
+    - 式中同时有 $x,\frac1x,\ln x$，适合凑飘带函数。
+    - 参数已固定，核心是纯变量不等式。
+  normalization_moves:
+    - 把目标改写成差值非负。
+    - 尝试提出 $(x-1)$ 并识别飘带因子。
+    - 用导数与 $x=1$ 的取值完成判号。
+  common_failures:
+    - 把 $g^{\prime}(x)$ 算错成 $1-\frac1{x^2}-\frac2x$。
+    - 只写 $g^{\prime}(x)\ge0$，不补 $g(1)=0$ 与符号结论。
+    - 图文有 $g^{\prime}(x)>0$ 的印刷干扰，误把导数符号当作函数符号结论。
+  similar_practice_query: a=-2 x-1 飘带函数 不等式证明
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

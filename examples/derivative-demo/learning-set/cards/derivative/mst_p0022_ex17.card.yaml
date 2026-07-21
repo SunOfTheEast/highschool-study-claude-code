@@ -1,0 +1,142 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0022_ex17
+content_revision_id: mst_p0022_ex17-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0022_ex17.card.yaml
+stem: |-
+  （重庆市沙坪坝区第七中学校 2024 届高三上学期 12 月月考 T8）已知函数 $f(x)=\frac{\ln x}{x}$，$g(x)=\frac{x}{e^x}$，若存在 $x_1 \in (0, +\infty)$，$x_2 \in \mathbf{R}$，使得 $f(x_1)=g(x_2)=k(k<0)$ 成立，则下列结论正确的是 (  )
+  A. $x_1+x_2 > 1$
+  B. $\ln(-x_2)=-x_1$
+  C. $\left(\frac{x_2}{x_1}\right)^2 \cdot e^k$ 的最大值为 $\frac{4}{e^2}$
+  D. $\left(\frac{x_2}{x_1}\right)^2 \cdot e^k$ 的最大值为 $\frac{1}{e^2}$
+answer: |-
+  C
+
+  把 $\frac{\ln x_1}{x_1}$ 写成 $\ln x_1\cdot e^{-\ln x_1}$， 与 $x_2e^{-x_2}$ 同构；由 $k<0$ 得 $\ln x_1=x_2$。于是 $\frac{x_2}{x_1}=k$，目标量化为 $k^2e^k=4((k/2)e^{k/2})^2$， 用 $xe^x$ 在负半轴的最小值推出最大值为 $4/e^2$，并排除 A、B、D。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把两个等值条件统一到 $u e^{-u}$，确定 $x_2=\ln x_1$。
+      max_score: 1
+    - step_id: step_2
+      description: 把目标最大值化成只含 $k$ 的标准极值。
+      max_score: 1
+    - step_id: step_3
+      description: 排除 A、B、D，保留 C。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level:
+      - part_id: item_1
+        goal: 抽象函数性质
+        target: 选择题真伪判断
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 极值最值
+        target: 同构条件下求表达式最大值
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 局部逼近与找点
+    subroute:
+      - $u e^{-u}$ 同构
+      - $x e^x$ 负半轴最值
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $\frac{\ln x_1}{x_1}=\ln x_1 e^{-\ln x_1}$ and $g(x_2)=x_2e^{-x_2}$
+      - $k^2e^k=4((k/2)e^{k/2})^2$
+    normalization_moves_used:
+      - $x_1=e^{\ln x_1}$
+      - $k^2e^k$ 配成 $4((k/2)e^{k/2})^2$
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\frac{\ln x_1}{x_1}$ 化成 $\ln x_1e^{-\ln x_1}$，回补指数对数基础。
+      - 若学生把 $u e^{-u}$ 在负半轴的单调性判断反了，回补导数单调极值基础。
+      - 若学生不能从 $x_2=\ln x_1$ 推出 $x_2/x_1=k$，回补代数恒等变形。
+  detail_terms:
+    - $\frac{\ln x}{x}$
+    - $\frac{x}{e^x}$
+    - $k^2e^k$
+    - $x e^x$ 最小值
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0022_ex17
+source_evidence:
+  source_refs:
+    - ref_id: page_0022
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0022/page_0022.md
+      role: problem_start
+      evidence: lines 17-22 give 例17 stem and options A-D; lines 24-25 give the source solution and answer C.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0022.png
+      inspected: true
+      notes: Inspected the full page image; stem, options, exponents, and final answer match the page markdown. No diagram dependency.
+  source_context: The paragraph immediately above page_0022 例17 introduces the paired homomorphic functions and the slogan about difference/equal-ratio structures.
+  source_influence:
+    - Used the source solution's homomorphic rewrite of both values into the same one-variable form.
+  source_discrepancies: []
+original_problem:
+  stem: （重庆市沙坪坝区第七中学校 2024 届高三上学期 12 月月考 T8）已知函数 $f(x)=\frac{\ln x}{x}$，$g(x)=\frac{x}{e^x}$，若存在 $x_1 \in (0, +\infty)$，$x_2 \in \mathbf{R}$，使得 $f(x_1)=g(x_2)=k(k<0)$ 成立，则下列结论正确的是 (  )
+  parts: *a1
+  choices:
+    - A. $x_1+x_2 > 1$
+    - B. $\ln(-x_2)=-x_1$
+    - C. $\left(\frac{x_2}{x_1}\right)^2 \cdot e^k$ 的最大值为 $\frac{4}{e^2}$
+    - D. $\left(\frac{x_2}{x_1}\right)^2 \cdot e^k$ 的最大值为 $\frac{1}{e^2}$
+  answer: C
+  fidelity_notes:
+    - 题干、四个选项和解析均在 page_0022，同页未跨页。
+    - 图片中 $g(x)=\frac{x}{e^x}$ 与选项 C/D 的 $e^k$ 已核对。
+solution:
+  source_solution_summary: 把 $\frac{\ln x_1}{x_1}$ 写成 $\ln x_1\cdot e^{-\ln x_1}$， 与 $x_2e^{-x_2}$ 同构；由 $k<0$ 得 $\ln x_1=x_2$。于是 $\frac{x_2}{x_1}=k$，目标量化为 $k^2e^k=4((k/2)e^{k/2})^2$， 用 $xe^x$ 在负半轴的最小值推出最大值为 $4/e^2$，并排除 A、B、D。
+  key_steps:
+    - step_id: step_1
+      statement: 把两个等值条件统一到 $u e^{-u}$，确定 $x_2=\ln x_1$。
+      formula_trace:
+        from: $f(x_1)=\frac{\ln x_1}{x_1}$, $g(x_2)=x_2e^{-x_2}$
+        to: $\ln x_1\cdot e^{-\ln x_1}=x_2e^{-x_2}=k<0$, hence $\ln x_1=x_2$
+        operation: 令 $u=\ln x_1$，把 $x_1$ 写成 $e^u$；在 $u<0$ 上 $u e^{-u}$ 严格递增。
+        why: 两个负值落在同一个单调同构函数上，等值只能来自相同自变量。
+      source_ref: page_0022 lines 17,24
+    - step_id: step_2
+      statement: 把目标最大值化成只含 $k$ 的标准极值。
+      formula_trace:
+        from: $x_2=\ln x_1$ and $k=\frac{\ln x_1}{x_1}$
+        to: $\left(\frac{x_2}{x_1}\right)^2 e^k=k^2e^k=4\left(\frac{k}{2}e^{k/2}\right)^2\le \frac{4}{e^2}$
+        operation: 先得 $x_2/x_1=k$，再配成 $y e^y$，其中 $y=k/2<0$。
+        why: $y e^y$ 在 $y<0$ 上的最小值为 $-1/e$，平方最大为 $1/e^2$。
+      source_ref: page_0022 line 24
+    - step_id: step_3
+      statement: 排除 A、B、D，保留 C。
+      formula_trace:
+        from: $k<0$, $x_2=\ln x_1$
+        to: $0<x_1<1$, $x_1+x_2=x_1+\ln x_1<1$; true maximum is $4/e^2$
+        operation: 由 $f(x_1)<0$ 得 $x_1<1$，再用 $x+\ln x$ 单调递增比较到 $x=1$。
+        why: A 与 D 的数值结论和 B 的关系式均不符合源解推出的真实关系。
+      source_ref: page_0022 lines 24-25
+teaching_card:
+  student_title: 把两个负值放进同一个 $u e^{-u}$ 模型
+  what_it_trains: 训练把对数分式和指数分式改写成同一个自变量结构，再把复杂表达式压缩成单变量最值。
+  recognition_cues:
+    - $\ln x/x$ 与 $x/e^x$ 同时出现，并且两者取同一个负值。
+    - 选项含 $x_2/x_1$ 和 $e^k$，提示先把比值换成公共值 $k$。
+  normalization_moves:
+    - 把 $x_1$ 写成 $e^{\ln x_1}$。
+    - 把 $k^2e^k$ 改写成 $4((k/2)e^{k/2})^2$。
+  common_failures:
+    - 只看到 $\ln x_1=x_2$ 就直接接受 B，没有核对 B 的实际式子。
+    - 把 $xe^x$ 的最小值用于全实数时忘记本题使用的是 $k/2<0$。
+    - 判断 A 时漏掉 $k<0$ 带来的 $x_1<1$。
+  similar_practice_query: 同构函数 ln x/x 与 x/e^x 等值 表达式最大值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

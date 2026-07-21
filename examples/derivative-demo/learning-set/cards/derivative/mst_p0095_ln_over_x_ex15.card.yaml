@@ -1,0 +1,188 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0095_ln_over_x_ex15
+content_revision_id: mst_p0095_ln_over_x_ex15-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0095_ln_over_x_ex15.card.yaml
+stem: |-
+  （2023 辽宁高二期末 T8）已知过点 $A(0,b)$ 作曲线 $y=\frac{\ln x}{x}$ 的切线有且仅有两条，则 $b$ 的取值范围为 (  )
+  A. $\left(0,\frac{1}{e}\right)$
+  B. $\left(0,\frac{2}{e}\right)$
+  C. $(0,e)$
+  D. $\left(0,\frac{2}{e^{\frac{3}{2}}}\right)$
+answer: |
+  D
+
+  对 $f(x)=\frac{\ln x}{x}$ 求导，得
+  $f'(x)=\frac{1-\ln x}{x^2}$，
+  $f''(x)=\frac{2\ln x-3}{x^3}$。拐点满足 $x=e^{3/2}$，此处切线斜率为
+  $-\frac{1}{2e^3}$，切线方程为
+  $y=-\frac{x}{2e^3}+\frac{2}{e^{3/2}}$，与 $y$ 轴交于
+  $\left(0,\frac{2}{e^{3/2}}\right)$。由于 $y$ 轴是函数的渐近线，
+  当 $0<b<\frac{2}{e^{3/2}}$ 时，从 $A(0,b)$ 可引一条近切线和一条远切线；
+  等于端点时切线合并，超出端点时不是两条，故选 D。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 求一阶、二阶导数并定位拐点。
+      max_score: 1
+    - step_id: step_2
+      description: 求拐点处切线及其 $y$ 轴截距。
+      max_score: 1
+    - step_id: step_3
+      description: 由区域边界得到 $b$ 的范围。
+      max_score: 1
+    - step_id: step_4
+      description: 用切线截距函数复核两解条件。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 数形结合
+      - 局部逼近与找点
+    subroute:
+      - 过点切线条数
+      - 拐点切线界定
+      - 渐近线边界
+      - 切线截距函数
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $f'(x)=\frac{2\ln x-3}{x^3}$ 给出拐点 $e^{3/2}$。
+      - 拐点切线 $y=-\frac{x}{2e^3}+\frac{2}{e^{3/2}}$ 给出 $y$ 轴边界。
+      - $b=\frac{2\ln u-1}{u}$ 在 $u=e^{3/2}$ 处达到源页边界值。
+    normalization_moves_used:
+      - 把“过 $A(0,b)$ 作切线”转为切线在 $y$ 轴上的截距。
+      - 用二阶导数找到拐点切线边界。
+      - 用开区间排除边界处切线合并。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求 $\frac{\ln x}{x}$ 的导数，回补导数运算与几何意义。
+      - 若学生不知道 $x>0$ 和 $y$ 轴渐近线，回补指数对数基础。
+      - 若学生不能由二阶导数找拐点，回补导数单调极值基础。
+      - 若学生不理解端点为什么不取等，回补函数性质与图像。
+  detail_terms:
+    - $y=\frac{\ln x}{x}$
+    - 过点 $A(0,b)$ 的两条切线
+    - $f'(x)=\frac{2\ln x-3}{x^3}$
+    - $x=e^{3/2}$
+    - $\frac{2}{e^{3/2}}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0095_ln_over_x_ex15
+source_evidence:
+  source_refs:
+    - ref_id: page_0095
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0095/page_0095.md
+      role: problem_start
+      evidence: lines 22-34 give the first 例 15 题头, stem, A-D options, derivative/inflection tangent solution, figure note, and answer D.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0095.png
+      inspected: true
+      notes: 已核对 page_0095 中部第一个例 15：题干为过点 $A(0,b)$ 作曲线 $y=\ln x/x$ 的切线有且仅有两条，四个选项、拐点切线截距 $2/e^{3/2}$、图像和答案 D 与源页一致。
+  source_context: page_0095 有两个同号“例 15”；本卡对应第一个，即 $y=\frac{\ln x}{x}$ 的过 $y$ 轴点两切线问题。
+  source_influence:
+    - 保留源页求 $f'(x)=0$ 得拐点 $x=e^{3/2}$，再求拐点切线与 $y$ 轴交点。
+    - 保留源页的渐近线与近切线/远切线区域解释，确定 $0<b<2/e^{3/2}$。
+  source_discrepancies:
+    - markdown line 22 多出一个“的”（“作的曲线”）；page_0095 图片题干为“作曲线”。本卡按图片和通顺题意写作“作曲线”，不影响数学内容。
+original_problem:
+  stem: （2023 辽宁高二期末 T8）已知过点 $A(0,b)$ 作曲线 $y=\frac{\ln x}{x}$ 的切线有且仅有两条，则 $b$ 的取值范围为 (  )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\left(0,\frac{1}{e}\right)$
+      text_latex: $\left(0,\frac{1}{e}\right)$
+    - label: B
+      text_raw: $\left(0,\frac{2}{e}\right)$
+      text_latex: $\left(0,\frac{2}{e}\right)$
+    - label: C
+      text_raw: $(0,e)$
+      text_latex: $(0,e)$
+    - label: D
+      text_raw: $\left(0,\frac{2}{e^{\frac{3}{2}}}\right)$
+      text_latex: $\left(0,\frac{2}{e^{\frac{3}{2}}}\right)$
+  answer: D
+  fidelity_notes:
+    - 本题是 page_0095 的第一个“例 15”，与下方同号多选题用 problem_id 中的 `ln_over_x` 区分。
+    - 题干和选项未跨页，解析和图像均在 page_0095。
+solution:
+  source_solution_summary: |
+    对 $f(x)=\frac{\ln x}{x}$ 求导，得
+    $f'(x)=\frac{1-\ln x}{x^2}$，
+    $f''(x)=\frac{2\ln x-3}{x^3}$。拐点满足 $x=e^{3/2}$，此处切线斜率为
+    $-\frac{1}{2e^3}$，切线方程为
+    $y=-\frac{x}{2e^3}+\frac{2}{e^{3/2}}$，与 $y$ 轴交于
+    $\left(0,\frac{2}{e^{3/2}}\right)$。由于 $y$ 轴是函数的渐近线，
+    当 $0<b<\frac{2}{e^{3/2}}$ 时，从 $A(0,b)$ 可引一条近切线和一条远切线；
+    等于端点时切线合并，超出端点时不是两条，故选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 求一阶、二阶导数并定位拐点。
+      formula_trace:
+        from: |
+          $f(x)=\frac{\ln x}{x}\quad(x>0)$
+        to: |
+          $f'(x)=\frac{1-\ln x}{x^2},\qquad f''(x)=\frac{2\ln x-3}{x^3},\qquad x=e^{3/2}$
+        operation: 对商式求导，再令 $f'(x)=0$。
+        why: 源页用拐点切线作为过 $y$ 轴点两切线区域的边界。
+      source_ref: page_0095
+    - step_id: step_2
+      statement: 求拐点处切线及其 $y$ 轴截距。
+      formula_trace:
+        from: |
+          $x_0=e^{3/2},\quad f(x_0)=\frac{3}{2e^{3/2}},\quad f'(x_0)=-\frac{1}{2e^3}$
+        to: |
+          $y-\frac{3}{2e^{3/2}}=-\frac{1}{2e^3}(x-e^{3/2}),\qquad
+          y=-\frac{x}{2e^3}+\frac{2}{e^{3/2}}$
+        operation: 把拐点坐标和斜率代入点斜式切线。
+        why: 该切线与 $y$ 轴的交点给出两切线区域的上边界。
+      source_ref: page_0095
+    - step_id: step_3
+      statement: 由区域边界得到 $b$ 的范围。
+      formula_trace:
+        from: |
+          $\text{拐点切线与 }y\text{ 轴交点为 }\left(0,\frac{2}{e^{3/2}}\right)$
+        to: |
+          $0<b<\frac{2}{e^{3/2}}$
+        operation: 结合 $y$ 轴渐近线和源图的近切线/远切线区域判断。
+        why: 此开区间内有一条拐点左侧近切线和一条拐点右侧远切线；端点处不再是两条。
+      source_ref: page_0095
+    - step_id: step_4
+      statement: 用切线截距函数复核两解条件。
+      formula_trace:
+        from: |
+          $A(0,b)\text{ 在 }x=u\text{ 处切线上},\quad b=f(u)-u f'(u)$
+        to: |
+          $b=\frac{2\ln u-1}{u},\qquad \left(\frac{2\ln u-1}{u}\right)'=\frac{3-2\ln u}{u^2}$
+        operation: 把切线代入 $x=0$，得到切线在 $y$ 轴上的截距函数并求导。
+        why: 截距函数在 $u=e^{3/2}$ 处取最大值 $2/e^{3/2}$，水平值 $b$ 介于 $0$ 与最大值之间时有两个切点。
+      source_ref: page_0095
+teaching_card:
+  student_title: 用拐点切线截距锁定两条切线的 $b$
+  what_it_trains: 训练对带渐近线的对数商函数，用拐点切线和截距函数判断外点可引几条切线。
+  recognition_cues:
+    - 外点在 $y$ 轴上，而函数定义域是 $x>0$，说明 $y$ 轴渐近线会参与切线条数判断。
+    - 题目问“有且仅有两条”，要找到切线条数变化的边界。
+    - 选项都以 $0$ 为左端点，提示下边界来自渐近线和切线截距的正负。
+  normalization_moves:
+    - 先求 $f'$、$f''$，找到拐点 $x=e^{3/2}$。
+    - 写拐点切线并取其 $y$ 轴截距 $2/e^{3/2}$。
+    - 判断 $b$ 在 $0$ 与该截距之间时有两条切线。
+  common_failures:
+    - 把最大值 $1/e$ 当成切线截距边界。
+    - 忽略 $y$ 轴是渐近线，把 $b<0$ 的情形也算入。
+    - 在 $b=2/e^{3/2}$ 时仍算两条，漏掉拐点处切线合并。
+  similar_practice_query: $\ln x/x$ 过 $A(0,b)$ 两条切线 拐点切线 截距
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0095 图片与 markdown 对第一个例 15 的选项、解析、图像和答案 D 一致；题干多字已按图片修正，无需用户拍板。

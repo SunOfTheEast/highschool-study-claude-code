@@ -1,0 +1,209 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0121_symmetry_lock_ex12
+content_revision_id: mst_p0121_symmetry_lock_ex12-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0121_symmetry_lock_ex12.card.yaml
+stem: |-
+  （2023 · 山东月考 · 多选）已知定义在 $\mathbf{R}$ 上的函数 $f(x)$，$g(x)$，其导函数分别为 $f^{\prime}(x)$，$g^{\prime}(x)$，若 $f(x)=f(-x)$，$g(-2)=0$，$f(x)+g^{\prime}(x-2)=\cos x$，$f^{\prime}(x-2)+g(x)=x-2$，则（  ）
+  A. $g^{\prime}(x)$ 的图象关于直线 $x=-2$ 对称
+  B. $g(x)$ 的图象关于点 $(-2,0)$ 对称
+  C. $g^{\prime}(x)$ 是周期函数
+  D. $f^{\prime}(4)=0$
+answer: |
+  ABC
+
+  由 $f(x)+g^{\prime}(x-2)=\cos x$，把 $x$ 换成 $-x$ 得
+  $f(-x)+g^{\prime}(-x-2)=\cos x$。因为 $f(x)=f(-x)$，
+  所以 $g^{\prime}(x-2)=g^{\prime}(-x-2)$，即
+  $g^{\prime}$ 关于直线 $x=-2$ 对称，A正确。
+  设 $G(x)=g(x-2)+g(-x-2)$，则
+  $G^{\prime}(x)=g^{\prime}(x-2)-g^{\prime}(-x-2)=0$，
+  故 $G$ 为常数。又 $G(0)=2g(-2)=0$，所以
+  $g(x-2)+g(-x-2)=0$，即 $g$ 关于点 $(-2,0)$ 对称，B正确。
+  因为 $f$ 是偶函数，所以 $f^{\prime}$ 是奇函数，
+  $y=x-f^{\prime}(x)$ 也是奇函数。由
+  $f^{\prime}(x-2)+g(x)=x-2$ 得
+  $g(x)=(x-2)-f^{\prime}(x-2)$，所以 $g$ 关于点 $(2,0)$ 对称。
+  $g$ 同时有中心 $(-2,0)$ 和 $(2,0)$，推出周期 $8$，
+  因而 $g^{\prime}$ 也是周期函数，C正确。
+  令 $x=6$ 代入 $f^{\prime}(x-2)+g(x)=x-2$，得
+  $f^{\prime}(4)+g(6)=4$。由周期和 $g(-2)=0$ 得 $g(6)=0$，
+  所以 $f^{\prime}(4)=4$，D错误。故选ABC。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 利用偶性和 $\cos x$ 偶性锁定 $g^{\prime}$ 的轴对称。
+      max_score: 1
+    - step_id: step_2
+      description: 由导函数轴对称积分出 $g$ 的中心对称。
+      max_score: 1
+    - step_id: step_3
+      description: 用第二个方程找到另一个对称中心。
+      max_score: 1
+    - step_id: step_4
+      description: 用周期求 $g(6)$，再判断D。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 抽象函数性质
+        target: 判断 $g^{\prime}$ 对称性、$g$ 对称性、周期性和特定导数值。
+        result: 见 source_solution_summary
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 对称化与偏移
+    subroute:
+      - 偶函数锁轴
+      - 导函数对称积分回原函数
+      - 双中心成周期
+  structure:
+    primary: 对称结构
+    secondary:
+      - 抽象函数结构
+    evidence:
+      - $f$ 偶函数与 $\cos x$ 偶性把 $g^{\prime}$ 锁到 $x=-2$ 轴对称。
+      - $g(-2)=0$ 把积分常数定成中心 $(-2,0)$。
+      - 第二个方程把 $g$ 写成奇函数平移，得到中心 $(2,0)$。
+    normalization_moves_used:
+      - 把 $x$ 替换为 $-x$ 比较两个方程。
+      - 构造 $G(x)$ 处理导函数对称到原函数对称。
+      - 将 $g(x)$ 改写为 $(x-2)-f^{\prime}(x-2)$。
+      - 由两个中心推出周期8。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会利用偶函数替换 $x\mapsto -x$，回补函数性质与图像。
+      - 若学生从 $g^{\prime}$ 对称推不回 $g$ 对称，回补导数运算与几何意义。
+      - 若学生不知道两个对称中心会产生周期，回补函数性质与图像。
+      - 若学生在令 $x=6$ 代入时算错平移，回补代数恒等变形。
+  detail_terms:
+    - $f(x)=f(-x)$
+    - $g(-2)=0$
+    - $f(x)+g^{\prime}(x-2)=\cos x$
+    - $f^{\prime}(x-2)+g(x)=x-2$
+    - 周期8
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0121_symmetry_lock_ex12
+source_evidence:
+  source_refs:
+    - ref_id: page_0121
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0121/page_0121.md
+      role: problem_start
+      evidence: page_0121 contains 例12题头 and choices A-B; the problem continues to page_0122.
+    - ref_id: page_0122
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0122/page_0122.md
+      role: continuation
+      evidence: page_0122 contains choices C-D, full solution and answer ABC before 例13 starts.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0121.png
+      inspected: false
+      notes: 本卡按page_0121 markdown重建；未在父会话直接查看页图。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0122.png
+      inspected: false
+      notes: 本卡按page_0122 markdown补齐续页；未在父会话直接查看页图。
+  source_context: 例12从page_0121起头，续到page_0122顶部；按题头归属由C批负责，page_0122后续例13另属D批。
+  source_influence:
+    - 保留源页由 $f$ 偶函数和 $\cos x$ 偶性锁定 $g^{\prime}$ 关于 $x=-2$ 轴对称。
+    - 保留源页积分出 $g$ 关于点 $(-2,0)$ 中心对称。
+    - 保留源页由第二个方程得到 $g$ 关于点 $(2,0)$ 中心对称，两个中心推出周期8。
+    - 保留源页令 $x=6$ 得 $f^{\prime}(4)=4$，排除D。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 山东月考 · 多选）已知定义在 $\mathbf{R}$ 上的函数 $f(x)$，$g(x)$，其导函数分别为 $f^{\prime}(x)$，$g^{\prime}(x)$，若 $f(x)=f(-x)$，$g(-2)=0$，$f(x)+g^{\prime}(x-2)=\cos x$，$f^{\prime}(x-2)+g(x)=x-2$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $g^{\prime}(x)$ 的图象关于直线 $x=-2$ 对称
+      text_latex: $g^{\prime}(x)$ 的图象关于直线 $x=-2$ 对称
+    - label: B
+      text_raw: $g(x)$ 的图象关于点 $(-2,0)$ 对称
+      text_latex: $g(x)$ 的图象关于点 $(-2,0)$ 对称
+    - label: C
+      text_raw: $g^{\prime}(x)$ 是周期函数
+      text_latex: $g^{\prime}(x)$ 是周期函数
+    - label: D
+      text_raw: $f^{\prime}(4)=0$
+      text_latex: $f^{\prime}(4)=0$
+  answer: ABC
+  fidelity_notes:
+    - 题头在page_0121，C-D选项和解析续到page_0122顶部。
+    - page_0122中部另起例13，未纳入本卡。
+solution:
+  source_solution_summary: |
+    由 $f(x)+g^{\prime}(x-2)=\cos x$，把 $x$ 换成 $-x$ 得
+    $f(-x)+g^{\prime}(-x-2)=\cos x$。因为 $f(x)=f(-x)$，
+    所以 $g^{\prime}(x-2)=g^{\prime}(-x-2)$，即
+    $g^{\prime}$ 关于直线 $x=-2$ 对称，A正确。
+    设 $G(x)=g(x-2)+g(-x-2)$，则
+    $G^{\prime}(x)=g^{\prime}(x-2)-g^{\prime}(-x-2)=0$，
+    故 $G$ 为常数。又 $G(0)=2g(-2)=0$，所以
+    $g(x-2)+g(-x-2)=0$，即 $g$ 关于点 $(-2,0)$ 对称，B正确。
+    因为 $f$ 是偶函数，所以 $f^{\prime}$ 是奇函数，
+    $y=x-f^{\prime}(x)$ 也是奇函数。由
+    $f^{\prime}(x-2)+g(x)=x-2$ 得
+    $g(x)=(x-2)-f^{\prime}(x-2)$，所以 $g$ 关于点 $(2,0)$ 对称。
+    $g$ 同时有中心 $(-2,0)$ 和 $(2,0)$，推出周期 $8$，
+    因而 $g^{\prime}$ 也是周期函数，C正确。
+    令 $x=6$ 代入 $f^{\prime}(x-2)+g(x)=x-2$，得
+    $f^{\prime}(4)+g(6)=4$。由周期和 $g(-2)=0$ 得 $g(6)=0$，
+    所以 $f^{\prime}(4)=4$，D错误。故选ABC。
+  key_steps:
+    - step_id: step_1
+      statement: 利用偶性和 $\cos x$ 偶性锁定 $g^{\prime}$ 的轴对称。
+      formula_trace:
+        from: $f(x)+g^{\prime}(x-2)=\cos x$，$f(x)=f(-x)$
+        to: $g^{\prime}(x-2)=g^{\prime}(-x-2)$
+        operation: 把 $x$ 换成 $-x$ 后与原式相减。
+        why: 这直接给出A项。
+      source_ref: page_0122
+    - step_id: step_2
+      statement: 由导函数轴对称积分出 $g$ 的中心对称。
+      formula_trace:
+        from: $g^{\prime}(x-2)=g^{\prime}(-x-2)$，$g(-2)=0$
+        to: $g(x-2)+g(-x-2)=0$
+        operation: 构造 $G(x)=g(x-2)+g(-x-2)$ 并求导为0，再代 $x=0$ 定常数。
+        why: 这给出B项。
+      source_ref: page_0122
+    - step_id: step_3
+      statement: 用第二个方程找到另一个对称中心。
+      formula_trace:
+        from: $f^{\prime}(x-2)+g(x)=x-2$，$f^{\prime}$ 是奇函数
+        to: $g(x)=(x-2)-f^{\prime}(x-2)$ 关于点 $(2,0)$ 对称
+        operation: 把 $g$ 写成奇函数 $y=x-f^{\prime}(x)$ 的平移。
+        why: 两个中心相距4，产生周期8。
+      source_ref: page_0122
+    - step_id: step_4
+      statement: 用周期求 $g(6)$，再判断D。
+      formula_trace:
+        from: $g(x+8)=g(x)$，$g(-2)=0$，$f^{\prime}(4)+g(6)=4$
+        to: $g(6)=0$，$f^{\prime}(4)=4$
+        operation: 令 $x=6$ 代入第二个方程，并用周期回到 $-2$。
+        why: D项声称 $f^{\prime}(4)=0$，与计算矛盾。
+      source_ref: page_0122
+teaching_card:
+  student_title: 偶函数锁住导函数，再用双中心打出周期
+  what_it_trains: 训练在双函数方程中先锁定导函数对称，再积分回原函数对称，最后由两个中心推出周期。
+  recognition_cues:
+    - 方程右侧是 $\cos x$，天然适合和 $f$ 的偶性联动。
+    - 题干给 $g(-2)=0$，说明要用它定积分常数或对称中心。
+    - 第二个方程含 $x-2$，提示另一个中心在 $x=2$。
+  normalization_moves:
+    - 对第一式做 $x\mapsto -x$。
+    - 构造 $g(x-2)+g(-x-2)$。
+    - 把第二式整理为 $g(x)=(x-2)-f^{\prime}(x-2)$。
+    - 用周期把 $g(6)$ 拉回 $g(-2)$。
+  common_failures:
+    - 只判断出 $g^{\prime}$ 的对称，忘记用 $g(-2)=0$ 定出 $g$ 的中心。
+    - 把“导函数轴对称”和“原函数中心对称”混成同一种图像。
+    - 没有发现第二个中心 $(2,0)$。
+    - 误选D，忽略 $f^{\prime}(4)=4$。
+  similar_practice_query: 双函数 偶函数 cos 导函数 对称 中心 周期 g(-2)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

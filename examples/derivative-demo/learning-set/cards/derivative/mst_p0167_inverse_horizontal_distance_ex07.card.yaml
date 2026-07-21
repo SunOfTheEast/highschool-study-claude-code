@@ -1,0 +1,242 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0167_inverse_horizontal_distance_ex07
+content_revision_id: mst_p0167_inverse_horizontal_distance_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0167_inverse_horizontal_distance_ex07.card.yaml
+stem: |-
+  （2023·湛江二模 T8）对于两个函数 $h(t)=e^{t-1}\ (t>\frac12)$ 与 $g(t)=\ln(2t-1)+2\ (t>\frac12)$，若这两个函数值相等时对应的自变量分别为 $t_1,t_2$，则 $t_2-t_1$ 的最小值为（  ）
+  A. $-1$
+  B. $-\ln 2$
+  C. $1-\ln 3$
+  D. $1-2\ln 2$
+answer: |
+  B
+
+  设公共函数值为 $t$，则
+  \[
+  h^{-1}(t)=\ln t+1,\qquad g^{-1}(t)=\frac{e^{t-2}+1}{2}.
+  \]
+  因而
+  \[
+  t_2-t_1=g^{-1}(t)-h^{-1}(t)
+  =\frac{e^{t-2}}{2}-\ln t-\frac12=:f(t).
+  \]
+  按源解拆分
+  \[
+  f(t)=\frac12\bigl(e^{t-2}-(t-2)-1\bigr)+\left(\frac t2-\ln\frac t2-1\right)-\ln2.
+  \]
+  由 $e^u\ge u+1$ 与 $x-\ln x-1\ge0\ (x>0)$，得前两项均非负，所以
+  \[
+  f(t)\ge-\ln2.
+  \]
+  当 $t=2$ 时两项同时取等，故
+  \[
+  (t_2-t_1)_{\min}=-\ln2.
+  \]
+  选 B。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 把“函数值相等”转成反函数自变量差。
+      max_score: 1
+    - step_id: step_2
+      description: 显式写出两个反函数。
+      max_score: 1
+    - step_id: step_3
+      description: 构造并化简目标函数。
+      max_score: 1
+    - step_id: step_4
+      description: 拆成两段标准非负模板。
+      max_score: 1
+    - step_id: step_5
+      description: 给出下界并确定等号点。
+      max_score: 1
+    - step_id: step_6
+      description: 匹配选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level:
+      - part_id: item_1
+        goal: 极值最值
+        target: 求 $t_2-t_1$ 的最小值。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 局部逼近与找点
+      - 数形结合
+    subroute:
+      - 反函数水平距离：$t_2-t_1=g^{-1}(t)-h^{-1}(t)$
+      - 双模板拆分：$e^u-u-1$ 与 $x-\ln x-1$
+      - 等号点回代
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 复合函数与不动点结构
+    evidence:
+      - 题设“函数值相等”被统一成同一函数值参数 $t$。
+      - $t_2-t_1$ 被改写为两个反函数的差。
+      - 最终表达式由指数项与对数项配对组成。
+    normalization_moves_used:
+      - 先取反函数，再做差函数最小化。
+      - 把差函数拆成标准非负块加常数。
+      - 用等号条件锁定 $t=2$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能从 $h(t_1)=g(t_2)$ 写出 $t_2-t_1=g^{-1}(t)-h^{-1}(t)$，回补分段/复合/反函数基础。
+      - 若学生对 $t>\\frac1{\\sqrt e}$、$t/2>0$ 的可用范围混乱，回补函数三要素与定义域。
+      - 若学生不会用 $e^u\\ge u+1$ 或 $x-\\ln x-1\\ge0$ 建下界，回补不等式工具基础。
+      - 若学生在指数对数互逆变形上频繁卡顿，回补指数对数基础。
+  detail_terms:
+    - 反函数构造水平距离差
+    - $h^{-1}(t)=\\ln t+1$
+    - $g^{-1}(t)=\\frac{e^{t-2}+1}{2}$
+    - $e^u-u-1\\ge0$
+    - $x-\\ln x-1\\ge0$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0167_inverse_horizontal_distance_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0167_local_context_prev_ex06
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0167/page_0167.md
+      role: local_context
+      evidence: page_0167 顶部先结束上一页例6解析（“故选 B”），随后才进入“反函数构造水平距离差问题”和本题例7。
+    - ref_id: page_0167_ex07_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0167/page_0167.md
+      role: problem_start
+      evidence: 例7题干给出 $h(t)=e^{t-1}$、$g(t)=\ln(2t-1)+2$（均 $t>\frac12$），设等值时自变量为 $t_1,t_2$，求 $t_2-t_1$ 最小值，选项 A-D。
+    - ref_id: page_0167_ex07_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0167/page_0167.md
+      role: solution
+      evidence: 同页解析完整：先求反函数 $h^{-1},g^{-1}$，构造 $t_2-t_1=g^{-1}(t)-h^{-1}(t)$，再拆成两段非负模板，得最小值 $-\ln2$，选 B。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0167.png
+      inspected: true
+      notes: 已核对页图：例7题干、双示意图、解析和答案 B 与 markdown 一致。
+  source_context: 本卡对应 page_0167 上半页后段的新题头例7；同页后续再次出现“例6”是另一道新题，另建卡处理。
+  source_influence:
+    - 保留源解核心转化：把“函数值相等”改写成反函数水平差 $g^{-1}(t)-h^{-1}(t)$。
+    - 保留源解双非负拆分：$e^u-u-1\ge0$ 与 $x-\ln x-1\ge0$。
+    - 保留源解等号点 $t=2$，直接落到最小值。
+  source_discrepancies:
+    - page_0167 的例号顺序为“例7”后又出现“例6”，与通常顺序不一致；本卡按题头语义 ID `mst_p0167_inverse_horizontal_distance_ex07` 区分。
+original_problem:
+  stem: （2023·湛江二模 T8）对于两个函数 $h(t)=e^{t-1}\ (t>\frac12)$ 与 $g(t)=\ln(2t-1)+2\ (t>\frac12)$，若这两个函数值相等时对应的自变量分别为 $t_1,t_2$，则 $t_2-t_1$ 的最小值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $-1$
+      text_latex: $-1$
+    - label: B
+      text_raw: $-\ln 2$
+      text_latex: $-\ln 2$
+    - label: C
+      text_raw: $1-\ln 3$
+      text_latex: $1-\ln 3$
+    - label: D
+      text_raw: $1-2\ln 2$
+      text_latex: $1-2\ln 2$
+  answer: B
+  fidelity_notes:
+    - 本题原图题头编号为例7。
+    - 题中两个函数定义域均为 $t>\frac12$。
+solution:
+  source_solution_summary: |
+    设公共函数值为 $t$，则
+    \[
+    h^{-1}(t)=\ln t+1,\qquad g^{-1}(t)=\frac{e^{t-2}+1}{2}.
+    \]
+    因而
+    \[
+    t_2-t_1=g^{-1}(t)-h^{-1}(t)
+    =\frac{e^{t-2}}{2}-\ln t-\frac12=:f(t).
+    \]
+    按源解拆分
+    \[
+    f(t)=\frac12\bigl(e^{t-2}-(t-2)-1\bigr)+\left(\frac t2-\ln\frac t2-1\right)-\ln2.
+    \]
+    由 $e^u\ge u+1$ 与 $x-\ln x-1\ge0\ (x>0)$，得前两项均非负，所以
+    \[
+    f(t)\ge-\ln2.
+    \]
+    当 $t=2$ 时两项同时取等，故
+    \[
+    (t_2-t_1)_{\min}=-\ln2.
+    \]
+    选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 把“函数值相等”转成反函数自变量差。
+      formula_trace:
+        from: $h(t_1)=g(t_2)$
+        to: $t_2-t_1=g^{-1}(t)-h^{-1}(t)$
+        operation: 设公共函数值为 $t$，并分别取反函数。
+        why: 题目目标是两个自变量之差，反函数表达最直接。
+      source_ref: page_0167_ex07_solution
+    - step_id: step_2
+      statement: 显式写出两个反函数。
+      formula_trace:
+        from: $h(t)=e^{t-1},\ g(t)=\ln(2t-1)+2$
+        to: $h^{-1}(t)=\ln t+1,\ g^{-1}(t)=\\frac{e^{t-2}+1}{2}$
+        operation: 分别解指数式与对数式。
+        why: 得到差函数的解析式。
+      source_ref: page_0167_ex07_solution
+    - step_id: step_3
+      statement: 构造并化简目标函数。
+      formula_trace:
+        from: $t_2-t_1=g^{-1}(t)-h^{-1}(t)$
+        to: $f(t)=\\frac{e^{t-2}}{2}-\\ln t-\\frac12$
+        operation: 代入并合并常数项。
+        why: 把最小值问题统一为一元函数最值。
+      source_ref: page_0167_ex07_solution
+    - step_id: step_4
+      statement: 拆成两段标准非负模板。
+      formula_trace:
+        from: $f(t)=\\frac{e^{t-2}}{2}-\\ln t-\\frac12$
+        to: $f(t)=\\frac12(e^{t-2}-(t-2)-1)+\\left(\\frac t2-\\ln\\frac t2-1\\right)-\\ln2$
+        operation: 加减同项并改写成 $e^u-u-1$ 与 $x-\\ln x-1$ 形式。
+        why: 便于直接给出下界。
+      source_ref: page_0167_ex07_solution
+    - step_id: step_5
+      statement: 给出下界并确定等号点。
+      formula_trace:
+        from: $e^u-u-1\\ge0$，$x-\\ln x-1\\ge0$
+        to: $f(t)\\ge-\\ln2$，且 $t=2$ 取等
+        operation: 两段非负项同时取等。
+        why: 得到 $t_2-t_1$ 的最小值。
+      source_ref: page_0167_ex07_solution
+    - step_id: step_6
+      statement: 匹配选项。
+      formula_trace:
+        from: $(t_2-t_1)_{\\min}=-\\ln2$
+        to: 选 B
+        operation: 对照选项字母。
+        why: 完成作答。
+      source_ref: page_0167_ex07_solution
+teaching_card:
+  student_title: 反函数水平差拆模板求最小值
+  what_it_trains: 训练把“等值对应自变量差”统一成反函数差，再用标准非负模板快速下界。
+  recognition_cues:
+    - 题面出现“两函数值相等，对应自变量之差最值”。
+    - 一个函数指数型、一个函数对数型。
+    - 选项是常数表达式而非参数范围。
+  normalization_moves:
+    - 先设公共函数值并写反函数。
+    - 把目标改写成 $g^{-1}-h^{-1}$。
+    - 拆成 $e^u-u-1$ 与 $x-\\ln x-1$ 两段非负。
+    - 用等号点确认最小值。
+  common_failures:
+    - 把 $t_2-t_1$ 写成原函数差而不是反函数差。
+    - 拆分时漏掉常数 $-\\ln2$。
+    - 只给出下界，不检查等号是否可取。
+  similar_practice_query: 反函数 水平距离差 指数对数 最小值 t2-t1
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

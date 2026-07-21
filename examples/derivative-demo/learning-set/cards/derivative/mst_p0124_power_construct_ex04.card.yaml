@@ -1,0 +1,204 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0124_power_construct_ex04
+content_revision_id: mst_p0124_power_construct_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0124_power_construct_ex04.card.yaml
+stem: |-
+  （2023·孝感期末）定义在 $(0,+\infty)$ 上的函数 $f(x)$ 的导函数为 $f'(x)$，且 $(x^3-x^2+x)f'(x)<(3x^2-2x+1)f(x)$ 恒成立，则必有（  ）
+  A. $f(1)<\frac{f(2)}{2}<\frac{f(3)}{7}$
+  B. $3f(1)<\frac{f(2)}{2}<\frac{f(3)}{7}$
+  C. $f(1)>\frac{f(2)}{2}>\frac{f(3)}{7}$
+  D. $3f(1)>\frac{f(2)}{2}>\frac{f(3)}{7}$
+answer: |
+  D
+
+  由题设
+  \[
+  (x^3-x^2+x)f'(x)<(3x^2-2x+1)f(x)=(x^3-x^2+x)'f(x).
+  \]
+  令
+  \[
+  g(x)=\frac{f(x)}{x^3-x^2+x}\quad(x>0),
+  \]
+  则
+  \[
+  g'(x)=\frac{(x^3-x^2+x)f'(x)-(x^3-x^2+x)'f(x)}{(x^3-x^2+x)^2}<0.
+  \]
+  故 $g(x)$ 在 $(0,+\infty)$ 上单调递减，所以
+  $g(1)>g(2)>g(3)$，即
+  \[
+  \frac{f(1)}{1}>\frac{f(2)}{6}>\frac{f(3)}{21}.
+  \]
+  同乘 3 得
+  \[
+  3f(1)>\frac{f(2)}{2}>\frac{f(3)}{7},
+  \]
+  选 D。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 识别右侧系数是左侧乘子的导数。
+      max_score: 1
+    - step_id: step_2
+      description: 构造商函数并判导数符号。
+      max_score: 1
+    - step_id: step_3
+      description: 用单调递减比较 1,2,3 三点。
+      max_score: 1
+    - step_id: step_4
+      description: 换回 $f$ 并对齐选项形式。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较 $f(1),f(2),f(3)$ 的缩放结果
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 自由度与主元
+    subroute:
+      - 商函数构造
+      - 导数配凑
+      - 单调性回代
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 同构结构
+    evidence:
+      - $(x^3-x^2+x)'=3x^2-2x+1$。
+      - $g'(x)$ 的分子正好由题设控制。
+      - $x=1,2,3$ 对应分母 $1,6,21$。
+    normalization_moves_used:
+      - 先配成 $(p f'-p' f)$。
+      - 令 $g=f/p$ 后直接判 $g'<0$。
+      - 最后把链式不等式缩放到选项系数。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看不出 $(x^3-x^2+x)'$，回补导数运算与几何意义。
+      - 若学生不会由 $g'<0$ 比较三点函数值，回补导数单调极值基础。
+      - 若学生分式回代时常数因子错配，回补代数恒等变形。
+  detail_terms:
+    - $g(x)=\frac{f(x)}{x^3-x^2+x}$
+    - $g'(x)<0$
+    - $3f(1)>\frac{f(2)}2>\frac{f(3)}7$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0124_power_construct_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0124
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0124/page_0124.md
+      role: problem_start
+      evidence: page_0124 中部起头给出例4完整题干、A-D选项、解析与答案。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0124.png
+      inspected: true
+      notes: 已核对页图：本题完整位于 page_0124；页顶内容是例3续页，不属于本卡。
+  source_context: 本卡只覆盖 page_0124 起头的例4。
+  source_influence:
+    - 保留源页构造 g(x)=f(x)/(x^3-x^2+x) 的主线。
+    - 保留源页由 g'(x)<0 判定单调递减，再比较 g(1), g(2), g(3)。
+    - 保留源页将分母 1,6,21 对齐成选项 D 的形式。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·孝感期末）定义在 $(0,+\infty)$ 上的函数 $f(x)$ 的导函数为 $f'(x)$，且 $(x^3-x^2+x)f'(x)<(3x^2-2x+1)f(x)$ 恒成立，则必有（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(1)<\frac{f(2)}{2}<\frac{f(3)}{7}$
+      text_latex: $f(1)<\frac{f(2)}{2}<\frac{f(3)}{7}$
+    - label: B
+      text_raw: $3f(1)<\frac{f(2)}{2}<\frac{f(3)}{7}$
+      text_latex: $3f(1)<\frac{f(2)}{2}<\frac{f(3)}{7}$
+    - label: C
+      text_raw: $f(1)>\frac{f(2)}{2}>\frac{f(3)}{7}$
+      text_latex: $f(1)>\frac{f(2)}{2}>\frac{f(3)}{7}$
+    - label: D
+      text_raw: $3f(1)>\frac{f(2)}{2}>\frac{f(3)}{7}$
+      text_latex: $3f(1)>\frac{f(2)}{2}>\frac{f(3)}{7}$
+  answer: D
+  fidelity_notes:
+    - 题干和解析使用一阶导数符号 $f'(x)$，已按页图核对。
+solution:
+  source_solution_summary: |
+    由题设
+    \[
+    (x^3-x^2+x)f'(x)<(3x^2-2x+1)f(x)=(x^3-x^2+x)'f(x).
+    \]
+    令
+    \[
+    g(x)=\frac{f(x)}{x^3-x^2+x}\quad(x>0),
+    \]
+    则
+    \[
+    g'(x)=\frac{(x^3-x^2+x)f'(x)-(x^3-x^2+x)'f(x)}{(x^3-x^2+x)^2}<0.
+    \]
+    故 $g(x)$ 在 $(0,+\infty)$ 上单调递减，所以
+    $g(1)>g(2)>g(3)$，即
+    \[
+    \frac{f(1)}{1}>\frac{f(2)}{6}>\frac{f(3)}{21}.
+    \]
+    同乘 3 得
+    \[
+    3f(1)>\frac{f(2)}{2}>\frac{f(3)}{7},
+    \]
+    选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 识别右侧系数是左侧乘子的导数。
+      formula_trace:
+        from: $(x^3-x^2+x)f'(x)<(3x^2-2x+1)f(x)$
+        to: $(x^3-x^2+x)f'(x)<(x^3-x^2+x)'f(x)$
+        operation: 将 $3x^2-2x+1$ 识别为 $(x^3-x^2+x)'$。
+        why: 便于直接构造商函数导数分子。
+      source_ref: page_0124
+    - step_id: step_2
+      statement: 构造商函数并判导数符号。
+      formula_trace:
+        from: $g(x)=\frac{f(x)}{x^3-x^2+x}$
+        to: $g'(x)=\frac{(x^3-x^2+x)f'(x)-(x^3-x^2+x)'f(x)}{(x^3-x^2+x)^2}<0$
+        operation: 商法则求导并代入题设。
+        why: 分母平方恒正，符号由分子决定。
+      source_ref: page_0124
+    - step_id: step_3
+      statement: 用单调递减比较 1,2,3 三点。
+      formula_trace:
+        from: $g'(x)<0$
+        to: $g(1)>g(2)>g(3)$
+        operation: 利用递减函数保序反向。
+        why: 选项本质是三个点的比例比较。
+      source_ref: page_0124
+    - step_id: step_4
+      statement: 换回 $f$ 并对齐选项形式。
+      formula_trace:
+        from: $g(1)>g(2)>g(3)$
+        to: $\frac{f(1)}1>\frac{f(2)}6>\frac{f(3)}{21}\Rightarrow 3f(1)>\frac{f(2)}2>\frac{f(3)}7$
+        operation: 计算三个分母并同乘 3。
+        why: 得到选项 D 的标准写法。
+      source_ref: page_0124
+teaching_card:
+  student_title: 把导数不等式配成商函数递减
+  what_it_trains: 看到 $pf'<p'f$ 时快速构造 $g=f/p$，再用单调性做点值比较。
+  recognition_cues:
+    - 题干同时出现 $p(x)f'(x)$ 与 $p'(x)f(x)$。
+    - 选项是同一批点值的分式比较。
+  normalization_moves:
+    - 令 $p(x)=x^3-x^2+x$。
+    - 构造 $g(x)=f(x)/p(x)$ 并求导。
+    - 由 $g(1)>g(2)>g(3)$ 回到 $f$ 的不等式。
+  common_failures:
+    - 误构造为乘积函数 $p(x)f(x)$。
+    - 忽略分母在三点处的具体值 1,6,21。
+    - 链式不等式缩放后方向写错。
+  similar_practice_query: 抽象函数 商函数构造 pf' p'f 单调递减 点值比较
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 页图已核对，例4信息完整且无跨页缺失。

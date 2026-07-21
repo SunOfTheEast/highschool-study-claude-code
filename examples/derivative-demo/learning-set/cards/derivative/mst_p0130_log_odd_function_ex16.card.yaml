@@ -1,0 +1,208 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0130_log_odd_function_ex16
+content_revision_id: mst_p0130_log_odd_function_ex16-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0130_log_odd_function_ex16.card.yaml
+stem: |-
+  （2024·河南月考）若可导函数 $f(x)$ 是定义在 $\mathbf{R}$ 上的奇函数，当 $x>0$ 时，有 $\ln x\cdot f^{\prime}(x)+\frac{1}{x}f(x)<0$，则不等式 $(x-2)\cdot f(x)>0$ 的解集为（  ）
+  A. $(-2,0)$
+  B. $(0,2)$
+  C. $(-2,2)$
+  D. $(2,+\infty)$
+answer: |
+  B
+
+  设
+  \[
+  F(x)=\ln x\cdot f(x)\quad (x>0),
+  \]
+  则
+  \[
+  F^{\prime}(x)=\frac{1}{x}f(x)+\ln x\cdot f^{\prime}(x)<0.
+  \]
+  所以 $F$ 在 $(0,+\infty)$ 上递减，且 $F(1)=0$。
+  因此：当 $x>1$ 时，$F(x)<0$ 且 $\ln x>0$，故 $f(x)<0$；
+  当 $0<x<1$ 时，$F(x)>0$ 且 $\ln x<0$，仍有 $f(x)<0$。
+  综上 $x>0$ 时 $f(x)<0$。又 $f$ 为奇函数，故 $f(0)=0$ 且 $x<0$ 时 $f(x)>0$。
+  现在解 $(x-2)f(x)>0$：
+  - $x<0$ 时，$(x-2)<0,f(x)>0$，乘积<0；
+  - $0<x<2$ 时，$(x-2)<0,f(x)<0$，乘积>0；
+  - $x>2$ 时，$(x-2)>0,f(x)<0$，乘积<0。
+  故解集为 $(0,2)$，选 B。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把题设不等式识别为对数乘积导数构造。
+      max_score: 1
+    - step_id: step_2
+      description: 由 F(1)=0 与 ln x 符号判定 x>0 时 f(x) 的符号。
+      max_score: 1
+    - step_id: step_3
+      description: 结合奇函数性质完成全实数判号。
+      max_score: 1
+    - step_id: step_4
+      description: 分区间解 $(x-2)f(x)>0$。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式求解
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 通过函数判号求乘积不等式解集
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 对称性配凑
+    subroute:
+      - 对数基础构造
+      - 奇偶性锁定
+      - 符号分区
+  structure:
+    primary: 抽象函数结构
+    secondary:
+      - 指对复合结构
+      - 对称结构
+    evidence:
+      - $\ln x\cdot f^{\prime}(x)+\frac{1}{x}f(x)$ 对应 $(\ln x\cdot f(x))^{\prime}$。
+      - 奇函数条件把 $x>0$ 的符号信息镜像到 $x<0$。
+      - 目标式是线性因子与函数值的乘积，适合区间判号。
+    normalization_moves_used:
+      - 先构造 $F(x)=\ln x\cdot f(x)$ 判递减。
+      - 以 $x=1$ 为锚点转换 $F$ 的符号。
+      - 利用奇函数把半轴结论扩展到全轴。
+      - 分区间判断 $(x-2)f(x)$ 的符号。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从导数符号推出单调性，回补导数单调极值基础。
+      - 若学生在 $0<x<1$ 时混淆 $\ln x$ 的正负，回补指数对数基础。
+      - 若学生不会使用奇函数做判号映射，回补函数性质与图像。
+      - 若学生不会做乘积判号表，回补不等式工具基础。
+  detail_terms:
+    - $F(x)=\ln x\cdot f(x)$
+    - $F^{\prime}(x)<0$
+    - $x>0\Rightarrow f(x)<0$
+    - $x<0\Rightarrow f(x)>0$
+    - $(0,2)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0130_log_odd_function_ex16
+source_evidence:
+  source_refs:
+    - ref_id: page_0130
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0130/page_0130.md
+      role: problem_start
+      evidence: page_0130 下半页给出例16题干、A-D选项与主要解析过程。
+    - ref_id: page_0131
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0131/page_0131.md
+      role: continuation
+      evidence: page_0131 顶部补全例16结论：解集为 $(0,2)$，故选 B。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0130.png
+      inspected: true
+      notes: 已核对页图：例16在本页起头并给出主要推导。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0131.png
+      inspected: true
+      notes: 已核对页图：页首补全例16最终解集与选项。
+  source_context: 例16题头在 page_0130，结论句跨到 page_0131 顶部；按页头归属由 batch C 完整重建。
+  source_influence:
+    - 保留源页构造 F(x)=\ln x\cdot f(x) 并由 F^{\prime}(x)<0 判单调。
+    - 保留源页用 F(1)=0 判定 x>0 时 f(x)<0。
+    - 保留源页结合奇函数性质得到 x<0 时 f(x)>0，再解乘积不等式。
+  source_discrepancies: []
+original_problem:
+  stem: （2024·河南月考）若可导函数 $f(x)$ 是定义在 $\mathbf{R}$ 上的奇函数，当 $x>0$ 时，有 $\ln x\cdot f^{\prime}(x)+\frac{1}{x}f(x)<0$，则不等式 $(x-2)\cdot f(x)>0$ 的解集为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $(-2,0)$
+      text_latex: $(-2,0)$
+    - label: B
+      text_raw: $(0,2)$
+      text_latex: $(0,2)$
+    - label: C
+      text_raw: $(-2,2)$
+      text_latex: $(-2,2)$
+    - label: D
+      text_raw: $(2,+\infty)$
+      text_latex: $(2,+\infty)$
+  answer: B
+  fidelity_notes:
+    - 例16最终结论句“解集为 $(0,2)$，故选 B”位于 page_0131 顶部。
+solution:
+  source_solution_summary: |
+    设
+    \[
+    F(x)=\ln x\cdot f(x)\quad (x>0),
+    \]
+    则
+    \[
+    F^{\prime}(x)=\frac{1}{x}f(x)+\ln x\cdot f^{\prime}(x)<0.
+    \]
+    所以 $F$ 在 $(0,+\infty)$ 上递减，且 $F(1)=0$。
+    因此：当 $x>1$ 时，$F(x)<0$ 且 $\ln x>0$，故 $f(x)<0$；
+    当 $0<x<1$ 时，$F(x)>0$ 且 $\ln x<0$，仍有 $f(x)<0$。
+    综上 $x>0$ 时 $f(x)<0$。又 $f$ 为奇函数，故 $f(0)=0$ 且 $x<0$ 时 $f(x)>0$。
+    现在解 $(x-2)f(x)>0$：
+    - $x<0$ 时，$(x-2)<0,f(x)>0$，乘积<0；
+    - $0<x<2$ 时，$(x-2)<0,f(x)<0$，乘积>0；
+    - $x>2$ 时，$(x-2)>0,f(x)<0$，乘积<0。
+    故解集为 $(0,2)$，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 把题设不等式识别为对数乘积导数构造。
+      formula_trace:
+        from: $\ln x\cdot f^{\prime}(x)+\frac{1}{x}f(x)<0$
+        to: $F^{\prime}(x)<0$（$F(x)=\ln x\cdot f(x)$）
+        operation: 定义 $F$ 并直接求导。
+        why: 把条件转化为单调递减。
+      source_ref: page_0130
+    - step_id: step_2
+      statement: 由 F(1)=0 与 ln x 符号判定 x>0 时 f(x) 的符号。
+      formula_trace:
+        from: $F$ 递减且 $F(1)=0$
+        to: $x>0\Rightarrow f(x)<0$
+        operation: 分 $x>1$ 与 $0<x<1$ 两段结合 $\ln x$ 正负判断。
+        why: 为后续乘积不等式提供判号。
+      source_ref: page_0130
+    - step_id: step_3
+      statement: 结合奇函数性质完成全实数判号。
+      formula_trace:
+        from: $f$ 为奇函数
+        to: $x<0\Rightarrow f(x)>0$，$f(0)=0$
+        operation: 使用 $f(-x)=-f(x)$。
+        why: 补齐 $x<0$ 区间信息。
+      source_ref: page_0130
+    - step_id: step_4
+      statement: 分区间解 $(x-2)f(x)>0$。
+      formula_trace:
+        from: $f(x)$ 在三段区间的符号
+        to: $(x-2)f(x)>0\Rightarrow 0<x<2$
+        operation: 按 $x<0,0<x<2,x>2$ 逐段判乘积符号。
+        why: 对应选项 B（结论句续于 page_0131）。
+      source_ref: page_0131
+teaching_card:
+  student_title: 先锁定 f 的符号，再解 $(x-2)f(x)>0$
+  what_it_trains: 训练“导数构造判单调 + 奇偶性补全 + 区间判号”三步联动。
+  recognition_cues:
+    - 题设出现 $\ln x\cdot f^{\prime}(x)+\frac{1}{x}f(x)$。
+    - 已给奇函数信息，通常用于把半轴结论扩展到全轴。
+    - 目标是乘积不等式，最终要做分区间判号。
+  normalization_moves:
+    - 设 $F=\ln x\cdot f(x)$ 并判 $F^{\prime}<0$。
+    - 用 $F(1)=0$ 判断 $x>0$ 时 $f(x)<0$。
+    - 借奇函数得 $x<0$ 时 $f(x)>0$。
+    - 分段解 $(x-2)f(x)>0$。
+  common_failures:
+    - 把“$F$ 递减”误读成“$f$ 递减”。
+    - 在 $0<x<1$ 忽略 $\ln x<0$ 导致 f 的符号判反。
+    - 把奇函数条件当成偶函数使用。
+    - 错误把 $x=0$、$x=2$ 包进严格不等式解集。
+  similar_practice_query: 奇函数 lnx f^{\prime}(x)+f(x)/x 判号 乘积不等式 解集
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

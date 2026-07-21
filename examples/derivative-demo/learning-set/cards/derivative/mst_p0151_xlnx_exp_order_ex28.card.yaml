@@ -1,0 +1,234 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0151_xlnx_exp_order_ex28
+content_revision_id: mst_p0151_xlnx_exp_order_ex28-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0151_xlnx_exp_order_ex28.card.yaml
+stem: |-
+  若 $a\ln a>b\ln b>c\ln c=1$，则（  ）
+  A. $e^{b+c}\ln a>e^{a+c}\ln b>e^{a+b}\ln c$
+  B. $e^{a+b}\ln c>e^{a+c}\ln b>e^{b+c}\ln a$
+  C. $e^{a+c}\ln b>e^{b+c}\ln a>e^{a+b}\ln c$
+  D. $e^{a+b}\ln c>e^{b+c}\ln a>e^{a+c}\ln b$
+answer: |
+  B
+
+  先设
+  \[
+  g(x)=x\ln x.
+  \]
+  因 $x>\frac1e$ 时 $g$ 递增，且
+  \[
+  a\ln a>b\ln b>c\ln c=1,
+  \]
+  得
+  \[
+  a>b>c>1.
+  \]
+  再设
+  \[
+  f(x)=\frac{\ln x}{e^x},\quad
+  f^{\prime}(x)=\frac{1-x\ln x}{xe^x}.
+  \]
+  由 $c\ln c=1$ 知 $x\ge c$ 时 $x\ln x\ge1$，于是 $f^{\prime}(x)\le0$，
+  故在比较区间 $[c,+\infty)$ 上 $f$ 递减。
+  因 $a>b>c$，所以
+  \[
+  \frac{\ln a}{e^a}<\frac{\ln b}{e^b}<\frac{\ln c}{e^c}.
+  \]
+  依次交叉相乘：
+  \[
+  e^a\ln b>e^b\ln a,\quad
+  e^a\ln c>e^c\ln a,\quad
+  e^b\ln c>e^c\ln b.
+  \]
+  再乘公共指数，得到
+  \[
+  e^{a+b}\ln c>e^{a+c}\ln b>e^{b+c}\ln a,
+  \]
+  选 B。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 先由 $x\ln x$ 的单调性排出 $a,b,c$。
+      max_score: 1
+    - step_id: step_2
+      description: 构造 $f(x)=\ln x/e^x$ 并在 $[c,+\infty)$ 用导数判递减。
+      max_score: 1
+    - step_id: step_3
+      description: 交叉相乘并拼接为目标顺序。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - 六大同构函数比大小
+      - 先比 $x\ln x$ 再比 $\ln x/e^x$
+      - 指数加权交叉相乘
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - 条件 $a\ln a>b\ln b>c\ln c$ 先映射到 $g(x)=x\ln x$。
+      - 目标项 $e^{\cdot}\ln(\cdot)$ 通过 $f(x)=\ln x/e^x$ 统一。
+      - 排序结果由 $\frac{\ln a}{e^a}<\frac{\ln b}{e^b}<\frac{\ln c}{e^c}$ 直接推得。
+    normalization_moves_used:
+      - 把题设链式条件先转成 $a>b>c$。
+      - 再把目标量转为同模板比值 $\ln x/e^x$。
+      - 最后用交叉相乘恢复到选项形式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会判断 $x\ln x$ 在 $x>\frac1e$ 的单调性，回补导数单调极值基础。
+      - 若学生在 $f^{\prime}(x)=\frac{1-x\ln x}{xe^x}$ 符号判断出错，回补导数运算与几何意义。
+      - 若学生交叉相乘时方向混乱，回补不等式工具基础。
+  detail_terms:
+    - $g(x)=x\ln x$
+    - $f(x)=\ln x/e^x$
+    - $c\ln c=1$
+    - $a>b>c>1$
+    - $e^{a+b}\ln c>e^{a+c}\ln b>e^{b+c}\ln a$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0151_xlnx_exp_order_ex28
+source_evidence:
+  source_refs:
+    - ref_id: page_0151_ex28_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0151/page_0151.md
+      role: problem_start
+      evidence: page_0151 底部给出例28题头、条件 $a\ln a>b\ln b>c\ln c=1$ 与 A-D 选项。
+    - ref_id: page_0151_ex28_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0151/page_0151.md
+      role: solution
+      evidence: 同页解析起笔构造 $g(x)=x\ln x$，并指出在 $x>\frac1e$ 上单调递增。
+    - ref_id: page_0152_ex28_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0152/page_0152.md
+      role: continuation
+      evidence: page_0152 顶部续完解析：构造 $f(x)=\frac{\ln x}{e^x}$，比较 $\frac{\ln a}{e^a},\frac{\ln b}{e^b},\frac{\ln c}{e^c}$ 并得答案 B。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0151.png
+      inspected: true
+      notes: 已核对 page_0151 原图：例28从本页底部起头，题干与选项完整。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0152.png
+      inspected: true
+      notes: 已核对 page_0152 原图：例28解析续完并给出“故选 B”。
+  source_context: 例28题头在 page_0151，解析跨页到 page_0152 顶部；按页头归属由本批完成。
+  source_influence:
+    - 保留源页“两层函数”路线：先用 $g(x)=x\ln x$ 比 $a,b,c$，再用 $f(x)=\ln x/e^x$ 做指数加权比较。
+    - 保留源页从 $\frac{\ln a}{e^a}<\frac{\ln b}{e^b}<\frac{\ln c}{e^c}$ 推到三条不等式并合并排序的链式结论。
+  source_discrepancies:
+    - page_0152 markdown 写“此时 $f(x)\le 0$”，原图为“此时 $f^{\prime}(x)\le 0$”；本卡按原图修正导数符号。
+    - page_0152 文字把单调区间写作 $[1,+\infty)$；结合前句“当 $x\ge c$ 时 $x\ln x\ge1$”，严格应是对 $[c,+\infty)$（足够覆盖 $a,b,c$）使用递减性。
+original_problem:
+  stem: 若 $a\ln a>b\ln b>c\ln c=1$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $e^{b+c}\ln a>e^{a+c}\ln b>e^{a+b}\ln c$
+      text_latex: $e^{b+c}\ln a>e^{a+c}\ln b>e^{a+b}\ln c$
+    - label: B
+      text_raw: $e^{a+b}\ln c>e^{a+c}\ln b>e^{b+c}\ln a$
+      text_latex: $e^{a+b}\ln c>e^{a+c}\ln b>e^{b+c}\ln a$
+    - label: C
+      text_raw: $e^{a+c}\ln b>e^{b+c}\ln a>e^{a+b}\ln c$
+      text_latex: $e^{a+c}\ln b>e^{b+c}\ln a>e^{a+b}\ln c$
+    - label: D
+      text_raw: $e^{a+b}\ln c>e^{b+c}\ln a>e^{a+c}\ln b$
+      text_latex: $e^{a+b}\ln c>e^{b+c}\ln a>e^{a+c}\ln b$
+  answer: B
+  fidelity_notes:
+    - 题干与选项在 page_0151；解析在 page_0152 顶部续完。
+    - 选项顺序与源页一致，答案为 B。
+solution:
+  source_solution_summary: |
+    先设
+    \[
+    g(x)=x\ln x.
+    \]
+    因 $x>\frac1e$ 时 $g$ 递增，且
+    \[
+    a\ln a>b\ln b>c\ln c=1,
+    \]
+    得
+    \[
+    a>b>c>1.
+    \]
+    再设
+    \[
+    f(x)=\frac{\ln x}{e^x},\quad
+    f^{\prime}(x)=\frac{1-x\ln x}{xe^x}.
+    \]
+    由 $c\ln c=1$ 知 $x\ge c$ 时 $x\ln x\ge1$，于是 $f^{\prime}(x)\le0$，
+    故在比较区间 $[c,+\infty)$ 上 $f$ 递减。
+    因 $a>b>c$，所以
+    \[
+    \frac{\ln a}{e^a}<\frac{\ln b}{e^b}<\frac{\ln c}{e^c}.
+    \]
+    依次交叉相乘：
+    \[
+    e^a\ln b>e^b\ln a,\quad
+    e^a\ln c>e^c\ln a,\quad
+    e^b\ln c>e^c\ln b.
+    \]
+    再乘公共指数，得到
+    \[
+    e^{a+b}\ln c>e^{a+c}\ln b>e^{b+c}\ln a,
+    \]
+    选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 先由 $x\ln x$ 的单调性排出 $a,b,c$。
+      formula_trace:
+        from: |
+          $a\ln a>b\ln b>c\ln c=1,\quad g(x)=x\ln x$
+        to: |
+          $a>b>c>1$
+        operation: 利用 $g(x)$ 在 $x>\frac1e$ 上递增，把函数值比较转为自变量比较。
+        why: 为后续在指数加权分母下比较 $\ln x$ 做顺序准备。
+      source_ref: page_0151_ex28_solution_start
+    - step_id: step_2
+      statement: 构造 $f(x)=\ln x/e^x$ 并在 $[c,+\infty)$ 用导数判递减。
+      formula_trace:
+        from: |
+          $f(x)=\frac{\ln x}{e^x},\quad f^{\prime}(x)=\frac{1-x\ln x}{xe^x},\quad c\ln c=1$
+        to: |
+          $x\ge c\Rightarrow x\ln x\ge1\Rightarrow f^{\prime}(x)\le0\Rightarrow
+          \frac{\ln a}{e^a}<\frac{\ln b}{e^b}<\frac{\ln c}{e^c}$
+        operation: 用 $c\ln c=1$ 锁定导数符号，再按 $a>b>c$ 应用递减性。
+        why: 把目标式统一到“同一函数值”链式比较。
+      source_ref: page_0152_ex28_continuation
+    - step_id: step_3
+      statement: 交叉相乘并拼接为目标顺序。
+      formula_trace:
+        from: |
+          $\frac{\ln a}{e^a}<\frac{\ln b}{e^b}<\frac{\ln c}{e^c}$
+        to: |
+          $e^{a+b}\ln c>e^{a+c}\ln b>e^{b+c}\ln a$
+        operation: 逐对交叉相乘后，再乘公共指数因子合并为三项比较。
+        why: 直接对应选项 B。
+      source_ref: page_0152_ex28_continuation
+teaching_card:
+  student_title: 先用 $x\ln x$ 排序，再用 $\ln x/e^x$ 反推选项
+  what_it_trains: 训练“双同构”流程：第一层定 $a,b,c$ 顺序，第二层把目标式统一成可导函数值比较。
+  recognition_cues:
+    - 条件是 $a\ln a,b\ln b,c\ln c$ 的链式大小。
+    - 选项形态是 $e^{(\cdot)}\ln(\cdot)$ 的三项排序。
+    - 既有 $x\ln x$，又有指数权重，通常要分两层函数构造。
+  normalization_moves:
+    - 构造 $g(x)=x\ln x$ 先得 $a>b>c$。
+    - 构造 $f(x)=\ln x/e^x$ 再得 $\ln a/e^a<\ln b/e^b<\ln c/e^c$。
+    - 交叉相乘转回目标表达式链。
+  common_failures:
+    - 直接把 $a\ln a>b\ln b$ 误当成 $a>b$（未说明单调区间）。
+    - 把 $f^{\prime}(x)$ 写成 $\frac{1-\ln x}{e^x}$ 漏掉乘积项。
+    - 交叉相乘后遗漏同乘指数导致中间项次序错。
+  similar_practice_query: xlnx lnx/e^x 双函数构造 指数加权 比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

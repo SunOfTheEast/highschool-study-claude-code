@@ -1,0 +1,163 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0200_cos_exp_inequality_ch6_exp_ex04
+content_revision_id: mst_p0200_cos_exp_inequality_ch6_exp_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0200_cos_exp_inequality_ch6_exp_ex04.card.yaml
+stem: 求证：当 $x\in[0,+\infty)$ 时，$\cos x\ge x+2-e^x$。
+answer: |-
+  不等式成立。
+
+  主解直接等价改写为 $e^x+\cos x-x-2\ge0$，并拆成 $\left(e^x-\frac12x^2-x-1\right)+\left(\cos x+\frac12x^2-1\right)\ge0$。 由 $x\ge0$ 时 $e^x\ge\frac12x^2+x+1$，以及任意实数 $\cos x\ge1-\frac12x^2$，两项均非负，故原不等式成立。 另解（续页）：令 $F(x)=e^x+\cos x-x-2$，则 $F^{\prime}(x)=e^x-\sin x-1=(e^x-x-1)+(x-\sin x)\ge0$， 所以 $F$ 在 $[0,+\infty)$ 上递增，且 $F(0)=0$，故 $F(x)\ge0$，原式得证。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 先把原式改写为同侧和式。
+      max_score: 1
+    - step_id: step_2
+      description: 主解：用指数与余弦的二次下界拼接。
+      max_score: 1
+    - step_id: step_3
+      description: 另解：构造函数并求导。
+      max_score: 1
+    - step_id: step_4
+      description: 利用端点值完成证明。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 数形结合
+      - 同构变形与换元法
+    subroute:
+      - 指数切线放缩
+      - 三角放缩
+      - 拆项同向拼接
+      - 构造函数判单调
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 不等式工具结构
+      - 局部逼近结构
+    evidence:
+      - $\cos x\ge x+2-e^x$
+      - $e^x\ge\frac12x^2+x+1$
+      - $\cos x\ge1-\frac12x^2$
+      - $F^{\prime}(x)=(e^x-x-1)+(x-\sin x)\ge0$
+    normalization_moves_used:
+      - 先统一移项到 $e^x+\cos x-x-2\ge0$。
+      - 主解按“指数块 + 三角块”分别放缩后相加。
+      - 另解构造 $F$，用导数分拆做单调性证明。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会调用 $e^x\ge1+x+\frac12x^2$，回补指数对数基础。
+      - 若学生对 $\cos x\ge1-\frac12x^2$ 的来源不清楚，回补三角函数基础。
+      - 若学生不会从 $F^{\prime}(x)\ge0$ 推出 $F(x)\ge F(0)$，回补导数单调极值基础。
+  detail_terms:
+    - $\cos x\ge x+2-e^x$
+    - $e^x-\frac12x^2-x-1$
+    - $\cos x+\frac12x^2-1$
+    - $F(x)=e^x+\cos x-x-2$
+    - $e^x-x-1,\ x-\sin x$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0200_cos_exp_inequality_ch6_exp_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0200_ex04_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0200/page_0200.md
+      role: problem_start
+      evidence: page_0200 行42给出例4题干：证明 $x\in[0,+\infty)$ 时 $\cos x\ge x+2-e^x$。
+    - ref_id: page_0200_ex04_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0200/page_0200.md
+      role: solution
+      evidence: page_0200 行44给出主解：拼接 $e^x\ge\frac12x^2+x+1$ 与 $\cos x\ge1-\frac{x^2}{2}$。
+    - ref_id: page_0201_ex04_alt_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0201/page_0201.md
+      role: continuation
+      evidence: page_0201 行15给出例4另解：构造 $f(x)=e^x+\cos x-x-2$，由 $f^{\prime}(x)\ge0$ 推得 $f(x)\ge0$。
+    - ref_id: page_0201_head_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0201/page_0201.md
+      role: local_context
+      evidence: page_0201 行17起进入例5新题头，确认行15仅是例4续页另解。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0200.png
+      inspected: true
+      notes: 已核对页图：例4题干与主解完整，末行提示“考试需证明切线不等式”。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0201.png
+      inspected: true
+      notes: 已核对页图：顶部“另解”确属例4续解，且在例5题头之前。
+  source_context: 例4题头在 page_0200，page_0201 顶部提供另解续页；按题头归属由本批完整建卡。
+  source_influence:
+    - 保留主解的双放缩拼接：指数二次下界 + 余弦二次下界。
+    - 保留续页另解的构造函数法：$f(x)=e^x+\cos x-x-2$。
+    - 保留 $f^{\prime}(x)$ 分拆为 $(e^x-x-1)+(x-\sin x)$ 的判非负思路。
+  source_discrepancies: []
+original_problem:
+  stem: 求证：当 $x\in[0,+\infty)$ 时，$\cos x\ge x+2-e^x$。
+  parts: *a1
+  choices: []
+  answer: 不等式成立。
+  fidelity_notes:
+    - 源题为证明题，无选项。
+    - page_0201 顶部另解属于同一题的跨页续解，已并入本卡。
+solution:
+  source_solution_summary: 主解直接等价改写为 $e^x+\cos x-x-2\ge0$，并拆成 $\left(e^x-\frac12x^2-x-1\right)+\left(\cos x+\frac12x^2-1\right)\ge0$。 由 $x\ge0$ 时 $e^x\ge\frac12x^2+x+1$，以及任意实数 $\cos x\ge1-\frac12x^2$，两项均非负，故原不等式成立。 另解（续页）：令 $F(x)=e^x+\cos x-x-2$，则 $F^{\prime}(x)=e^x-\sin x-1=(e^x-x-1)+(x-\sin x)\ge0$， 所以 $F$ 在 $[0,+\infty)$ 上递增，且 $F(0)=0$，故 $F(x)\ge0$，原式得证。
+  key_steps:
+    - step_id: step_1
+      statement: 先把原式改写为同侧和式。
+      formula_trace:
+        from: $\cos x\ge x+2-e^x$
+        to: $e^x+\cos x-x-2\ge0$
+        operation: 移项，把待证式改成“非负性”目标。
+        why: 便于拼接标准放缩不等式。
+      source_ref: page_0200_ex04_solution
+    - step_id: step_2
+      statement: 主解：用指数与余弦的二次下界拼接。
+      formula_trace:
+        from: $e^x+\cos x-x-2$
+        to: $\left(e^x-\frac12x^2-x-1\right)+\left(\cos x+\frac12x^2-1\right)\ge0$
+        operation: 分别代入 $e^x\ge\frac12x^2+x+1$ 与 $\cos x\ge1-\frac12x^2$。
+        why: 两项各自非负，和即非负。
+      source_ref: page_0200_ex04_solution
+    - step_id: step_3
+      statement: 另解：构造函数并求导。
+      formula_trace:
+        from: $F(x)=e^x+\cos x-x-2$
+        to: $F^{\prime}(x)=e^x-\sin x-1=(e^x-x-1)+(x-\sin x)\ge0$
+        operation: 把导数拆成两个已知非负量。
+        why: 得到 $F$ 的单调递增性。
+      source_ref: page_0201_ex04_alt_continuation
+    - step_id: step_4
+      statement: 利用端点值完成证明。
+      formula_trace:
+        from: $F^{\prime}(x)\ge0,\ x\ge0$
+        to: $F(x)\ge F(0)=0$
+        operation: 单调性 + 端点代值。
+        why: 回到 $e^x+\cos x-x-2\ge0$，即原式成立。
+      source_ref: page_0201_ex04_alt_continuation
+teaching_card:
+  student_title: 指数放缩 + 余弦放缩双拼证不等式
+  what_it_trains: 训练把混合函数不等式拆成两块标准下界，并掌握构造函数单调性的备用证明。
+  recognition_cues:
+    - 式子同时含 $e^x$ 与 $\cos x$。
+    - 证明区间是 $x\ge0$，适合调用指数与三角的二次模板。
+    - 原式可一眼改写成 $e^x+\cos x-x-2\ge0$。
+  normalization_moves:
+    - 先移项统一到“目标非负”。
+    - 主解分别代入指数、余弦二次下界并相加。
+    - 另解构造 $F(x)$，拆导数成两个非负块。
+  common_failures:
+    - 放缩后没有保持同向不等式，符号混乱。
+    - 只写 $F^{\prime}(x)\ge0$，漏写 $F(0)=0$ 的闭环。
+    - 把 $\cos x\ge1-\frac12x^2$ 误用成上界。
+  similar_practice_query: cosx 与 e^x 不等式 证明 构造函数 导数分拆
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

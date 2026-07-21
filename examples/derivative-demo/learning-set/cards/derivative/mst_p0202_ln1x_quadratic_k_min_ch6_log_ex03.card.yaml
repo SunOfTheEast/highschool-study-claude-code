@@ -1,0 +1,132 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0202_ln1x_quadratic_k_min_ch6_log_ex03
+content_revision_id: mst_p0202_ln1x_quadratic_k_min_ch6_log_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0202_ln1x_quadratic_k_min_ch6_log_ex03.card.yaml
+stem: 已知函数 $f(x)=x-\ln(x+1)$ 对任意 $x\in[0,+\infty)$ 有 $f(x)\leqslant kx^2$ 成立，则 $k$ 的最小值为______。
+answer: |-
+  $\frac12$
+
+  由 $x-\ln(1+x)\le kx^2$ 得 $\ln(1+x)\ge x-kx^2$（$x\ge0$）。源解调用标准下界 $\ln(1+x)\ge x-\frac{x^2}{2}$，可知想让右端始终不高于 $\ln(1+x)$， 必须有 $x-kx^2\le x-\frac{x^2}{2}$，即 $k\ge\frac12$。当 $k=\frac12$ 时原不等式成立，所以最小值为 $\frac12$。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把原不等式改写为 $\ln(1+x)$ 下界形式。
+      max_score: 1
+    - step_id: step_2
+      description: 使用 $x\ge0$ 的对数二阶下界。
+      max_score: 1
+    - step_id: step_3
+      description: 比较二次项系数得到最小参数。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 对数下界模板
+      - 系数比较
+      - 端点效应
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 不等式工具结构
+      - 局部逼近结构
+    evidence:
+      - $\ln(1+x)\ge x-kx^2$
+      - $\ln(1+x)\ge x-\frac{x^2}{2}$
+    normalization_moves_used:
+      - 先把原题转为“对数下界”格式。
+      - 用 $x-\frac{x^2}{2}$ 作为统一比较基准。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $f(x)\le kx^2$ 变成 $\ln(1+x)$ 下界，回补代数恒等变形。
+      - 若学生不知道 $\ln(1+x)$ 的二阶下界适用区间，回补指数对数基础。
+      - 若学生比较系数时丢失“最小值”语义，回补不等式工具基础。
+  detail_terms:
+    - $f(x)=x-\ln(1+x)$
+    - $\ln(1+x)\ge x-kx^2$
+    - $\ln(1+x)\ge x-\frac{x^2}{2}$
+    - $k_{\min}=\frac12$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0202_ln1x_quadratic_k_min_ch6_log_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0202_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0202/page_0202.md
+      role: problem_start
+      evidence: line 29 给出例3题干：$f(x)=x-\ln(x+1)$，在 $[0,+\infty)$ 上满足 $f(x)\le kx^2$。
+    - ref_id: page_0202_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0202/page_0202.md
+      role: solution
+      evidence: line 31 给出等价式 $\ln(1+x)\ge x-kx^2$，并用 $\ln(1+x)\ge x-\frac{x^2}{2}$ 得 $k\ge\frac12$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0202.png
+      inspected: true
+      notes: 已核对页图：例3题干与解析完整，末尾含“端点效应篇”提示。
+  source_context: 例3与例2同属于“恒成立 + 对数放缩”模板，变量区间改为 $x\ge0$。
+  source_influence:
+    - 保留源解等价变形：$f(x)\le kx^2 \Leftrightarrow \ln(1+x)\ge x-kx^2$。
+    - 保留源解使用下界 $\ln(1+x)\ge x-\frac{x^2}{2}$。
+  source_discrepancies: []
+original_problem:
+  stem: 已知函数 $f(x)=x-\ln(x+1)$ 对任意 $x\in[0,+\infty)$ 有 $f(x)\leqslant kx^2$ 成立，则 $k$ 的最小值为______。
+  parts: *a1
+  choices: []
+  answer: $\frac12$
+  fidelity_notes:
+    - 源题是填空题，无选项。
+solution:
+  source_solution_summary: 由 $x-\ln(1+x)\le kx^2$ 得 $\ln(1+x)\ge x-kx^2$（$x\ge0$）。源解调用标准下界 $\ln(1+x)\ge x-\frac{x^2}{2}$，可知想让右端始终不高于 $\ln(1+x)$， 必须有 $x-kx^2\le x-\frac{x^2}{2}$，即 $k\ge\frac12$。当 $k=\frac12$ 时原不等式成立，所以最小值为 $\frac12$。
+  key_steps:
+    - step_id: step_1
+      statement: 把原不等式改写为 $\ln(1+x)$ 下界形式。
+      formula_trace:
+        from: $x-\ln(1+x)\le kx^2$
+        to: $\ln(1+x)\ge x-kx^2$
+        operation: 移项整理。
+        why: 与标准 $\ln(1+x)$ 放缩模板对齐。
+      source_ref: page_0202_solution
+    - step_id: step_2
+      statement: 使用 $x\ge0$ 的对数二阶下界。
+      formula_trace:
+        from: $x\ge0$
+        to: $\ln(1+x)\ge x-\frac{x^2}{2}$
+        operation: 调用源页给出的已知不等式。
+        why: 提供可比较的统一下界。
+      source_ref: page_0202_solution
+    - step_id: step_3
+      statement: 比较二次项系数得到最小参数。
+      formula_trace:
+        from: $x-kx^2\le x-\frac{x^2}{2}$
+        to: $k\ge\frac12$
+        operation: 消去一次项后比较二次项系数。
+        why: 确定“对任意 $x\ge0$”恒成立的最小 $k$。
+      source_ref: page_0202_solution
+teaching_card:
+  student_title: 把恒成立变成对数下界比系数
+  what_it_trains: 训练“参数最小值”题里先找可复用的函数下界，再把问题化成系数比较。
+  recognition_cues:
+    - 含 $\ln(1+x)$，区间是 $x\ge0$。
+    - 目标是“$k$ 的最小值”。
+    - 不需要复杂导数，依赖标准放缩式。
+  normalization_moves:
+    - 把不等式整理到 $\ln(1+x)\ge$ 某表达式。
+    - 代入标准下界 $x-\frac{x^2}{2}$。
+    - 比较二次项系数确定 $k_{\min}$。
+  common_failures:
+    - 把 $\ln(1+x)\ge x-\frac{x^2}{2}$ 误写成反向。
+    - 漏写定义域 $x\ge0$ 就直接比较。
+    - 只写 $k\ge\frac12$，未回答“最小值是 $\frac12$”。
+  similar_practice_query: ln(1+x) >= x-kx^2 k最小值 对数放缩
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,188 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0213_lambert_param_range_choice_ch6_baozhi_ex06
+content_revision_id: mst_p0213_lambert_param_range_choice_ch6_baozhi_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0213_lambert_param_range_choice_ch6_baozhi_ex06.card.yaml
+stem: |-
+  （2023 · 江西师大附中三模 T12）若 $\frac{e^x}{x}+a\ln x-ax+e^2\geqslant0\ (a>0)$，则 $a$ 的取值范围为（  ）
+  A. $(0,e^2]$
+  B. $\left(0,\frac{e^2}{2}\right]$
+  C. $\left[\frac1e,e^2\right]$
+  D. $\left[\frac1e,\frac{e^2}{2}\right]$
+answer: |-
+  A；$a\in(0,e^2]$。
+
+  先把原式改写为 $e^{x-\ln x-2}-\frac{a}{e^2}(x-\ln x)+1\ge0$。设 $g(t)=e^t-t-1\ge0$，则 $e^{x-\ln x-2}-\frac{a}{e^2}(x-\ln x)+1 =g(x-\ln x-2)+\left(1-\frac{a}{e^2}\right)(x-\ln x)$。 其中 $x-\ln x\ge1$，且取值 2 可达，因此可把主体选成 $x-\ln x-2$ 以触发 $g(0)=0$。当 $x-\ln x=2$ 时，原不等式化为 $2\left(1-\frac{a}{e^2}\right)\ge0$，故必有 $a\le e^2$；反过来若 $a\le e^2$，则 $\left(1-\frac{a}{e^2}\right)(x-\ln x)\ge0$，再结合 $g(\cdot)\ge0$，原式对定义域内 $x$ 成立。再并上题设 $a>0$，得 $a\in(0,e^2]$，选 A。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把原式统一到 $x-\ln x$ 的同构变量。
+      max_score: 1
+    - step_id: step_2
+      description: 引入母函数并拆成“保值块 + 参数块”。
+      max_score: 1
+    - step_id: step_3
+      description: 利用“可取零点”锁定必要条件。
+      max_score: 1
+    - step_id: step_4
+      description: 验证上界也是充分条件。
+      max_score: 1
+    - step_id: step_5
+      description: 合并题设参数前提得到最终区间。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 含参数分类讨论
+    subroute:
+      - 朗博同构
+      - 保值性
+      - 取等条件
+      - 同构单调性
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - $e^{x-\ln x-2}-\frac{a}{e^2}(x-\ln x)+1$
+      - $g(x-\ln x-2)+\left(1-\frac{a}{e^2}\right)(x-\ln x)$
+      - $x-\ln x\ge1$，并可取到 2
+      - $a\in(0,e^2]$
+    normalization_moves_used:
+      - 先把 $\frac{e^x}{x}$ 重写为 $e^{x-\ln x}$，统一变量层。
+      - 把主体配成 $g(t)=e^t-t-1$，其余留作参数余量。
+      - 用“可取零点 $t=0$”让保值块消失，直接卡参数。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\frac{e^x}{x}$ 写成 $e^{x-\ln x}$，回补指数对数基础。
+      - 若学生不会识别 $e^t-t-1$ 的非负母式，回补不等式工具基础。
+      - 若学生只会给充分性而不会用取等点给必要性，回补函数性质与图像。
+      - 若学生不清楚为何要选 $x-\ln x-2$ 而非 $x-\ln x-1$，回补导数单调极值基础中的取值域分析。
+  detail_terms:
+    - $x-\ln x$
+    - $g(t)=e^t-t-1$
+    - $x-\ln x-2$
+    - $\left(1-\frac{a}{e^2}\right)(x-\ln x)$
+    - $a\in(0,e^2]$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0213_lambert_param_range_choice_ch6_baozhi_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0213_ex05_local_context_prev
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0213/page_0213.md
+      role: local_context
+      evidence: page_0213 line 14-16 为上一批例5续解与方法评注；line 18 才进入例6题头。
+    - ref_id: page_0213_ex06_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0213/page_0213.md
+      role: problem_start
+      evidence: page_0213 line 18-23 给出例6题干与 A-D 选项。
+    - ref_id: page_0213_ex06_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0213/page_0213.md
+      role: solution
+      evidence: page_0213 line 25-28 给出同构主体选取、变形链与结论“$a\\in(0,e^2]$，故选 A”。
+    - ref_id: page_0213_ex07_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0213/page_0213.md
+      role: local_context
+      evidence: page_0213 line 30 起进入例7题头，不并入例6。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0213.png
+      inspected: true
+      notes: 已核对页图：例6题头、选项与解析均在本页闭合；底部例7仅作下一题上下文。
+  source_context: 例6题头与解析都在 page_0213 完整出现，无跨页续解。
+  source_influence:
+    - 保留 source 的朗博同构主体选择：把变量统一到 $x-\\ln x-2$，以便触发 $g(0)=0$ 的取等条件。
+    - 保留 source 的核心拆分：$g(x-\\ln x-2)+\\left(1-\\frac{a}{e^2}\\right)(x-\\ln x)$。
+    - 结论保持 source 口径：$a$ 的范围为 $(0,e^2]$，对应选项 A。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 江西师大附中三模 T12）若 $\frac{e^x}{x}+a\ln x-ax+e^2\geqslant0\ (a>0)$，则 $a$ 的取值范围为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $(0,e^2]$
+      text_latex: $(0,e^2]$
+    - label: B
+      text_raw: $\left(0,\frac{e^2}{2}\right]$
+      text_latex: $\left(0,\frac{e^2}{2}\right]$
+    - label: C
+      text_raw: $\left[\frac1e,e^2\right]$
+      text_latex: $\left[\frac1e,e^2\right]$
+    - label: D
+      text_raw: $\left[\frac1e,\frac{e^2}{2}\right]$
+      text_latex: $\left[\frac1e,\frac{e^2}{2}\right]$
+  answer: A；$a\in(0,e^2]$。
+  fidelity_notes:
+    - source 题干显式给出参数前提 $a>0$。
+    - 题面未单写“对任意 $x>0$ 恒成立”，但解析按 $x-\ln x$ 的全域性质求参，本卡按恒成立题处理。
+solution:
+  source_solution_summary: 先把原式改写为 $e^{x-\ln x-2}-\frac{a}{e^2}(x-\ln x)+1\ge0$。设 $g(t)=e^t-t-1\ge0$，则 $e^{x-\ln x-2}-\frac{a}{e^2}(x-\ln x)+1 =g(x-\ln x-2)+\left(1-\frac{a}{e^2}\right)(x-\ln x)$。 其中 $x-\ln x\ge1$，且取值 2 可达，因此可把主体选成 $x-\ln x-2$ 以触发 $g(0)=0$。当 $x-\ln x=2$ 时，原不等式化为 $2\left(1-\frac{a}{e^2}\right)\ge0$，故必有 $a\le e^2$；反过来若 $a\le e^2$，则 $\left(1-\frac{a}{e^2}\right)(x-\ln x)\ge0$，再结合 $g(\cdot)\ge0$，原式对定义域内 $x$ 成立。再并上题设 $a>0$，得 $a\in(0,e^2]$，选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 把原式统一到 $x-\ln x$ 的同构变量。
+      formula_trace:
+        from: $\frac{e^x}{x}+a\ln x-ax+e^2\ge0$
+        to: $e^{x-\ln x-2}-\frac{a}{e^2}(x-\ln x)+1\ge0$
+        operation: 利用 $\frac{e^x}{x}=e^{x-\ln x}$，再整体除以 $e^2$ 并配凑常数。
+        why: 把混合指对式归并到同一个“朗博同构”变量。
+      source_ref: page_0213_ex06_solution
+    - step_id: step_2
+      statement: 引入母函数并拆成“保值块 + 参数块”。
+      formula_trace:
+        from: $g(t)=e^t-t-1$
+        to: $g(x-\ln x-2)+\left(1-\frac{a}{e^2}\right)(x-\ln x)\ge0$
+        operation: 加减 $(x-\ln x-2)+1$ 完成同构拆分。
+        why: 将恒成立条件压缩成可直接判号的两块。
+      source_ref: page_0213_ex06_solution
+    - step_id: step_3
+      statement: 利用“可取零点”锁定必要条件。
+      formula_trace:
+        from: $x-\ln x\ge1$，且可取到 $x-\ln x=2$
+        to: $2\left(1-\frac{a}{e^2}\right)\ge0\Rightarrow a\le e^2$
+        operation: 在 $x-\ln x=2$ 时有 $g(0)=0$，直接消去保值块。
+        why: 这一步给出参数上界的必要性。
+      source_ref: page_0213_ex06_solution
+    - step_id: step_4
+      statement: 验证上界也是充分条件。
+      formula_trace:
+        from: $a\le e^2$
+        to: $g(x-\ln x-2)+\left(1-\frac{a}{e^2}\right)(x-\ln x)\ge0$
+        operation: 由 $g(\cdot)\ge0$ 与 $x-\ln x>0$ 逐项判非负。
+        why: 完成恒成立的双向闭环。
+      source_ref: page_0213_ex06_solution
+    - step_id: step_5
+      statement: 合并题设参数前提得到最终区间。
+      formula_trace:
+        from: $a\le e^2$ 与 $a>0$
+        to: $a\in(0,e^2]$，选 A
+        operation: 取区间交集。
+        why: 给出与选项对应的最终答案。
+      source_ref: page_0213_ex06_solution
+teaching_card:
+  student_title: 朗博同构取零点：一步锁定参数上界
+  what_it_trains: 训练把含 $e^x/x$ 与 $\ln x$ 的恒成立题统一到 $x-\ln x$ 变量，并用同构母式取等点精确卡参数。
+  recognition_cues:
+    - 题干同时出现 $\frac{e^x}{x}$、$\ln x$ 与线性参数项。
+    - 解析强调“选择有取零点条件的主体”。
+    - 答案区间由同构余量系数直接决定。
+  normalization_moves:
+    - 先把原式改写为 $e^{x-\ln x-2}-\frac{a}{e^2}(x-\ln x)+1$。
+    - 引入 $g(t)=e^t-t-1$ 完成保值拆分。
+    - 选取 $x-\ln x=2$ 使 $g(0)=0$，直取必要条件。
+    - 再用 $g\ge0$ 与余量同号验证充分性。
+  common_failures:
+    - 把 $x-\ln x\ge1$ 错当作“只能取到 1”，忽略可取到 2。
+    - 同构拆分时漏掉常数 1，导致系数错配。
+    - 只得到 $a\le e^2$ 却忘记并上题设 $a>0$。
+  similar_practice_query: e^x/x a lnx 恒成立 朗博同构 x-lnx 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

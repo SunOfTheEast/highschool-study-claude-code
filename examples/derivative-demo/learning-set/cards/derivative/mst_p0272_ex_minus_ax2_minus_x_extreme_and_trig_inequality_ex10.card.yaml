@@ -1,0 +1,223 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0272_ex_minus_ax2_minus_x_extreme_and_trig_inequality_ex10
+content_revision_id: mst_p0272_ex_minus_ax2_minus_x_extreme_and_trig_inequality_ex10-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0272_ex_minus_ax2_minus_x_extreme_and_trig_inequality_ex10.card.yaml
+stem: |-
+  （2024 · 济南模拟）已知函数 $f(x)=e^x-ax^2-x$，$f^\prime(x)$ 为 $f(x)$ 的导数。
+  1. 讨论 $f^\prime(x)$ 的单调性。
+  2. 若 $x=0$ 是 $f(x)$ 的极大值点，求 $a$ 的取值范围。
+  3. 若 $\theta\in(0,\frac\pi2)$，证明：$e^{\sin\theta-1}+e^{\cos\theta-1}+\ln(\sin\theta\cos\theta)<1$。
+answer: |-
+  第(1)问：$a\le0$ 时 $f^\prime$ 在 $\mathbf{R}$ 上递增；$a>0$ 时 $f^\prime$ 在 $(-\infty,\ln 2a)$ 上递减，在 $(\ln 2a,+\infty)$ 上递增。第(2)问：$a>\frac12$。第(3)问：成立。
+
+  第(1)问 $f^\prime(x)=e^x-2ax-1$，令 $g=f^\prime$， $g^\prime=e^x-2a$。若 $a\le0$，$g^\prime>0$，所以 $f^\prime$ 全域递增；若 $a>0$，$g^\prime=0$ 得 $x=\ln2a$，于是 $f^\prime$ 先减后增。第(2)问 $f^\prime(0)=0$，$f^{\prime\prime}(0)=1-2a$。 要使 $x=0$ 为极大值点，需要 $a>\frac12$；source 再按 $a\le0$、$0<a<\frac12$、$a=\frac12$、$a>\frac12$ 用第(1)问验证。第(3)问把目标拆成 $e^{\sin\theta-1}+\ln\sin\theta<\sin^2\theta$ 与 $e^{\cos\theta-1}+\ln\cos\theta<\cos^2\theta$，只需证明 $0<x<1$ 时 $e^{x-1}+\ln x<x^2$。令 $u=x-1\in(-1,0)$， 用第(2)问 $a=1$ 得 $e^u<u^2+u+1$，再用 $\ln(1+u)<u$，相加得到目标。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 第(1)问：把 $f^\prime$ 的单调性转给 $g^\prime$。
+      max_score: 1
+    - step_id: step_2
+      description: 第(1)问：按 $a$ 的符号讨论。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问：用局部二阶信息锁方向。
+      max_score: 1
+    - step_id: step_4
+      description: 第(2)问：用第(1)问验证 $a>\frac12$。
+      max_score: 1
+    - step_id: step_5
+      description: 第(3)问：把三角不等式降成一元模板。
+      max_score: 1
+    - step_id: step_6
+      description: 第(3)问：回用第(2)问的 $a=1$ 特例。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 1 问
+        result: $a\le0$ 时 $f^\prime$ 全域递增；$a>0$ 时 $f^\prime$ 先减后增。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $a>\frac12$。
+      - part_id: "3"
+        goal: 不等式证明
+        target: 第 3 问
+        result: $e^{\sin\theta-1}+e^{\cos\theta-1}+\ln(\sin\theta\cos\theta)<1$。
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 显隐点探路
+      - 充分/必要性探路
+      - 同构变形与换元法
+    subroute:
+      - 泰勒极值界定
+      - 导函数单调性界定
+      - 极大值点参数锁定
+      - 变量替换到 $0<x<1$
+      - 用前问结论证明新不等式
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 三角复合结构
+      - 局部逼近结构
+      - 不等式工具结构
+      - 指对复合结构
+    evidence:
+      - $e^x-ax^2-x$
+      - $f^{\prime\prime}(0)=1-2a$
+      - $e^{\sin\theta-1}+e^{\cos\theta-1}$
+      - $\ln(\sin\theta\cos\theta)$
+      - $e^{x-1}+\ln x<x^2$
+    normalization_moves_used:
+      - 用 $g=f^\prime$ 讨论 $f^\prime$ 单调性。
+      - 用 $f^{\prime\prime}(0)$ 判断极大值参数。
+      - 把三角变量降成 $0<x<1$ 的一元模板。
+      - 令 $u=x-1$，把模板转回 $-1<u<0$。
+      - 回用 $a=1$ 的极大值结论。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会讨论 $f^\prime$ 单调性，回补导数运算与几何意义。
+      - 若学生不会用二阶导判断极大值，回补导数单调极值基础。
+      - 若学生不会处理 $e^x$ 与 $\ln(1+x)$ 的基础不等式，回补指数对数基础。
+      - 若学生不会把三角式拆成 $\sin\theta$ 和 $\cos\theta$ 两个模板，回补三角函数基础。
+      - 若学生变量替换 $u=x-1$ 混乱，回补代数恒等变形。
+  detail_terms:
+    - $e^x-ax^2-x$
+    - $f^\prime$ 单调性
+    - $a>\frac12$
+    - 泰勒极值界定
+    - $e^{x-1}+\ln x<x^2$
+    - $\sin^2\theta+\cos^2\theta=1$
+parts: &a1
+  - id: "1"
+    text: 讨论 $f^\prime(x)$ 的单调性。
+  - id: "2"
+    text: 若 $x=0$ 是 $f(x)$ 的极大值点，求 $a$ 的取值范围。
+  - id: "3"
+    text: 若 $\theta\in(0,\frac\pi2)$，证明：$e^{\sin\theta-1}+e^{\cos\theta-1}+\ln(\sin\theta\cos\theta)<1$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0272_ex_minus_ax2_minus_x_extreme_and_trig_inequality_ex10
+source_evidence:
+  source_refs:
+    - ref_id: page_0272_section_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0272/page_0272.md
+      role: local_context
+      evidence: page_0272 进入“利用泰勒展开式的界定极值”，说明最低非零偶次项的符号决定极大值或极小值。
+    - ref_id: page_0272_ex10_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0272/page_0272.md
+      role: problem_start
+      evidence: page_0272 给出例10题头：$f(x)=e^x-ax^2-x$，第(1)问讨论 $f^\prime(x)$ 单调性，第(2)问若 $x=0$ 是极大值点求 $a$。
+    - ref_id: page_0273_ex10_problem_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0273/page_0273.md
+      role: problem_start
+      evidence: page_0273 页首给出例10第(3)问：若 $\theta\in(0,\frac\pi2)$，证明 $e^{\sin\theta-1}+e^{\cos\theta-1}+\ln(\sin\theta\cos\theta)<1$。
+    - ref_id: page_0273_ex10_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0273/page_0273.md
+      role: solution
+      evidence: page_0273 例10解析完成三问：第(1)问按 $a$ 正负讨论 $f^\prime$ 单调性；第(2)问得 $a>\frac12$；第(3)问化为证明 $e^{x-1}+\ln x<x^2$ 并回用第(2)问 $a=1$。
+    - ref_id: page_0273_next_example_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0273/page_0273.md
+      role: local_context
+      evidence: page_0273 后半页另起例11，说明例10在 page_0273 中部闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0272.png
+      inspected: true
+      notes: 已核对页图：例10题头和前两问位于 page_0272 页底。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0273.png
+      inspected: true
+      notes: 已核对页图：page_0273 页首为例10第(3)问与完整解析，随后另起例11。
+  source_context: 本卡处理 page_0272 起头、page_0273 续完的例10；page_0273 后续例11排除。
+  source_influence:
+    - 保留第(1)问：把 $f^\prime$ 记为 $g$，用 $g^\prime=e^x-2a$ 讨论单调性。
+    - 保留第(2)问：由极大值点和泰勒/导数形态得到 $a>\frac12$，并用第(1)问分段验证。
+    - 保留第(3)问：将三角不等式降到一元不等式 $e^{x-1}+\ln x<x^2$。
+    - 保留第(3)问与第(2)问的依赖：取 $a=1$ 时 $x<0$ 有 $e^x-x^2-x<1$。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 济南模拟）已知函数 $f(x)=e^x-ax^2-x$，$f^\prime(x)$ 为 $f(x)$ 的导数。
+  parts: *a1
+  choices: []
+  answer: 第(1)问：$a\le0$ 时 $f^\prime$ 在 $\mathbf{R}$ 上递增；$a>0$ 时 $f^\prime$ 在 $(-\infty,\ln 2a)$ 上递减，在 $(\ln 2a,+\infty)$ 上递增。第(2)问：$a>\frac12$。第(3)问：成立。
+  fidelity_notes:
+    - 第(3)问题头在 page_0273 页首。
+    - 第(3)问证明依赖第(2)问的 $a=1$ 特例。
+solution:
+  source_solution_summary: 第(1)问 $f^\prime(x)=e^x-2ax-1$，令 $g=f^\prime$， $g^\prime=e^x-2a$。若 $a\le0$，$g^\prime>0$，所以 $f^\prime$ 全域递增；若 $a>0$，$g^\prime=0$ 得 $x=\ln2a$，于是 $f^\prime$ 先减后增。第(2)问 $f^\prime(0)=0$，$f^{\prime\prime}(0)=1-2a$。 要使 $x=0$ 为极大值点，需要 $a>\frac12$；source 再按 $a\le0$、$0<a<\frac12$、$a=\frac12$、$a>\frac12$ 用第(1)问验证。第(3)问把目标拆成 $e^{\sin\theta-1}+\ln\sin\theta<\sin^2\theta$ 与 $e^{\cos\theta-1}+\ln\cos\theta<\cos^2\theta$，只需证明 $0<x<1$ 时 $e^{x-1}+\ln x<x^2$。令 $u=x-1\in(-1,0)$， 用第(2)问 $a=1$ 得 $e^u<u^2+u+1$，再用 $\ln(1+u)<u$，相加得到目标。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问：把 $f^\prime$ 的单调性转给 $g^\prime$。
+      formula_trace:
+        from: $f^\prime(x)=e^x-2ax-1$
+        to: $g^\prime(x)=e^x-2a$
+        operation: 令 $g=f^\prime$ 并求导。
+        why: 讨论导函数的单调性，等价于看二阶导符号。
+      source_ref: page_0273_ex10_solution
+    - step_id: step_2
+      statement: 第(1)问：按 $a$ 的符号讨论。
+      formula_trace:
+        from: $g^\prime(x)=e^x-2a$
+        to: $a\le0$ 全域递增；$a>0$ 在 $\ln2a$ 前减后增
+        operation: 解 $g^\prime=0$ 并判号。
+        why: 指数函数单调，只有 $a>0$ 时出现临界点。
+      source_ref: page_0273_ex10_solution
+    - step_id: step_3
+      statement: 第(2)问：用局部二阶信息锁方向。
+      formula_trace:
+        from: $f^\prime(0)=0$，$f^{\prime\prime}(0)=1-2a$
+        to: $1-2a<0$，即 $a>\frac12$
+        operation: 极大值点要求 0 附近左增右减。
+        why: 最低偶次项系数为负，才可能在 0 处取极大值。
+      source_ref: page_0273_ex10_solution
+    - step_id: step_4
+      statement: 第(2)问：用第(1)问验证 $a>\frac12$。
+      formula_trace:
+        from: $a>\frac12$，$\ln2a>0$，且 $f^\prime(0)=0$
+        to: $x<0$ 时 $f^\prime>0$，$0<x<\ln2a$ 时 $f^\prime<0$
+        operation: 套用 $f^\prime$ 先减后增的形态。
+        why: 确认 $x=0$ 是极大值点，而不是只靠必要条件。
+      source_ref: page_0273_ex10_solution
+    - step_id: step_5
+      statement: 第(3)问：把三角不等式降成一元模板。
+      formula_trace:
+        from: $e^{\sin\theta-1}+e^{\cos\theta-1}+\ln(\sin\theta\cos\theta)<1$
+        to: $0<x<1$ 时 $e^{x-1}+\ln x<x^2$
+        operation: 分别令 $x=\sin\theta$ 与 $x=\cos\theta$。
+        why: $\sin^2\theta+\cos^2\theta=1$，可以逐项证明。
+      source_ref: page_0273_ex10_solution
+    - step_id: step_6
+      statement: 第(3)问：回用第(2)问的 $a=1$ 特例。
+      formula_trace:
+        from: $u=x-1\in(-1,0)$
+        to: $e^u<u^2+u+1$ 且 $\ln(1+u)<u$
+        operation: 用 $a=1$ 时 $e^u-u^2-u<1$，再加对数基础不等式。
+        why: 两式相加得到 $e^u+\ln(1+u)<(1+u)^2$。
+      source_ref: page_0273_ex10_solution
+teaching_card:
+  student_title: 前问不是白做：用极大值结论证明三角不等式
+  what_it_trains: 训练综合题的前后问联动：先界定极大值参数，再把第三问降成可以直接调用前问的指数对数模板。
+  recognition_cues:
+    - 第(2)问得到的是 $a>\frac12$，所以 $a=1$ 是可用特例。
+    - 第(3)问同时出现 $\sin\theta$、$\cos\theta$ 和 $\ln(\sin\theta\cos\theta)$。
+    - 目标右侧是 1，可以拆成 $\sin^2\theta+\cos^2\theta$。
+  normalization_moves:
+    - 第(1)问先把 $f^\prime$ 的单调性完整讨论出来。
+    - 第(2)问用 $f^{\prime\prime}(0)=1-2a$ 锁住 $a>\frac12$。
+    - 第(3)问把三角不等式拆成同一个一元模板。
+    - 用 $a=1$ 时 $x<0$ 的极大值结论提供指数上界。
+  common_failures:
+    - 第(3)问另起炉灶，不回用第(2)问。
+    - 只证明 $e^{x-1}<x^2$，漏掉 $\ln x$ 项。
+    - 忘记 $\sin\theta,\cos\theta$ 都在 $(0,1)$。
+    - 第(2)问把 $a=\frac12$ 错误纳入答案。
+  similar_practice_query: e^x-ax^2-x 极大值 a>1/2 sin cos 指数对数不等式 前问回用
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

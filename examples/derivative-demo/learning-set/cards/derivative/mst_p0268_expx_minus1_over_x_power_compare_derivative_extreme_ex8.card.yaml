@@ -1,0 +1,187 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0268_expx_minus1_over_x_power_compare_derivative_extreme_ex8
+content_revision_id: mst_p0268_expx_minus1_over_x_power_compare_derivative_extreme_ex8-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0268_expx_minus1_over_x_power_compare_derivative_extreme_ex8.card.yaml
+stem: （2024 · 武汉四调节选）已知函数 $f(x)=\frac{e^x-1}{x}$。若 $f(x)>a^x$，其中 $a>0$ 且 $a\ne1$，求实数 $a$ 的值。
+answer: |-
+  $a=\sqrt e$。
+
+  令 $g(x)=e^x-1-xa^x$。原不等式在 $x>0$ 时等价于 $g(x)>0$，在 $x<0$ 时等价于 $g(x)<0$。由于 $g(0)=0$ 且 $g^\prime(0)=0$，要让 $g$ 在 0 左右按正确方向穿过， 需要 $g^\prime$ 在 0 附近以 0 为极小值，即先令 $g^{\prime\prime}(0)=1-2\ln a=0$，得 $a=\sqrt e$。当 $a=\sqrt e$ 时， $g=e^{x/2}(e^{x/2}-e^{-x/2}-x)$，其符号与 $x$ 一致， 所以成立。若 $a>\sqrt e$，则 $g^{\prime\prime}(0)<0$， 正侧附近会使 $g<0$；若 $a<\sqrt e$，负侧附近会使 $g>0$； 均矛盾。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把原不等式转成 $g$ 的左右符号。
+      max_score: 1
+    - step_id: step_2
+      description: 计算导数并识别极点条件。
+      max_score: 1
+    - step_id: step_3
+      description: 由 $g^{\prime\prime}(0)=0$ 锁定参数。
+      max_score: 1
+    - step_id: step_4
+      description: 证明 $a=\sqrt e$ 的充分性。
+      max_score: 1
+    - step_id: step_5
+      description: 排除 $a\ne\sqrt e$。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level:
+      - part_id: main
+        goal: 数值求值
+        target: 第 main 问
+        result: $a=\sqrt e$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 局部逼近与找点
+      - 充分/必要性探路
+    subroute:
+      - 导函数极点效应
+      - $x=0$ 延拓探路
+      - 二阶导锁参
+      - 双曲正弦式回证
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 指对复合结构
+      - 特殊幂函数与指数函数结构
+      - 双曲函数结构
+      - 不等式工具结构
+    evidence:
+      - $\frac{e^x-1}{x}$
+      - $a^x$
+      - $g(0)=g^\prime(0)=0$
+      - $g^{\prime\prime}(0)=1-2\ln a$
+      - $e^{x/2}-e^{-x/2}-x$
+    normalization_moves_used:
+      - 把不等式乘以 $x$ 后分左右符号。
+      - 把 $x=0$ 当作延拓接触点。
+      - 用二阶导决定 $g^\prime$ 在 0 附近的形态。
+      - 用双曲正弦型表达完成充分性。
+  fallback:
+    only_if_trace_shows:
+      - 若学生乘以 $x$ 后符号方向出错，回补不等式工具基础。
+      - 若学生不会处理 $x=0$ 附近的延拓，回补函数三要素与定义域。
+      - 若学生不熟悉 $a^x$ 的求导，回补指数对数基础。
+      - 若学生不会从局部导数形态反证，回补导数单调极值基础。
+  detail_terms:
+    - $\frac{e^x-1}{x}$
+    - $a^x$
+    - 导函数极点效应
+    - $g^{\prime\prime}(0)=0$
+    - $a=\sqrt e$
+    - 双曲正弦回证
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0268_expx_minus1_over_x_power_compare_derivative_extreme_ex8
+source_evidence:
+  source_refs:
+    - ref_id: page_0268_ex8_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0268/page_0268.md
+      role: problem_start
+      evidence: page_0268 给出例8题头：$f(x)=\frac{e^x-1}{x}$，若 $f(x)>a^x$，其中 $a>0$ 且 $a\ne1$，求 $a$。
+    - ref_id: page_0268_ex8_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0268/page_0268.md
+      role: solution
+      evidence: page_0268 例8解析令 $g(x)=e^x-1-xa^x$，按 $x<0$ 与 $x>0$ 的符号要求分析；由导函数极点效应得 $g^{\prime\prime}(0)=0$，推出 $a=\sqrt e$，再证明充分性并排除 $a\ne\sqrt e$。
+    - ref_id: page_0268_next_section_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0268/page_0268.md
+      role: local_context
+      evidence: 例8后进入“4. 极点效应失效分析”，说明例8在 page_0268 内闭合。
+    - ref_id: page_0269_ex9_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0269/page_0269.md
+      role: local_context
+      evidence: page_0269 另起例9，属于下一页问题头，不纳入本批。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0268.png
+      inspected: true
+      notes: 已核对页图：例8完整位于 page_0268 下半页，后接“极点效应失效分析”。
+  source_context: 本卡处理 page_0268 起头并在本页闭合的例8；page_0269 例9排除。
+  source_influence:
+    - 保留 source 的符号转化：$x>0$ 时 $g(x)>0$，$x<0$ 时 $g(x)<0$。
+    - 保留导函数极点效应路线：$g^\prime(0)=0$，需让 $g^\prime$ 在 0 附近恒正，故 $g^{\prime\prime}(0)=0$。
+    - 保留 $a=\sqrt e$ 的充分性证明：$g=e^{x/2}(e^{x/2}-e^{-x/2}-x)$。
+    - 保留反证排除：$a>\sqrt e$ 时正侧矛盾，$a<\sqrt e$ 时负侧矛盾。
+  source_discrepancies:
+    - type: clarified_ocr_marker
+      source_ref: page_0268_ex8_solution
+      observed: OCR marker around the sentence after $a>\sqrt e$ reads as repeated $g^{\prime\prime}(x_0)<0$.
+      resolved_as: "interpret the interval statement as: for some small interval $(0,x_0)$, $g^{\\prime\\prime}(x)<0$, hence $g^\\prime$ decreases below $g^\\prime(0)=0$."
+      reason: The next steps require an interval sign for $g^{\prime\prime}$, not only the single point value.
+original_problem:
+  stem: （2024 · 武汉四调节选）已知函数 $f(x)=\frac{e^x-1}{x}$。若 $f(x)>a^x$，其中 $a>0$ 且 $a\ne1$，求实数 $a$ 的值。
+  parts: *a1
+  choices: []
+  answer: $a=\sqrt e$。
+  fidelity_notes:
+    - 无选项。
+    - 本题默认 $x\ne0$；source 通过 $x=0$ 附近的延拓符号来探路。
+solution:
+  source_solution_summary: 令 $g(x)=e^x-1-xa^x$。原不等式在 $x>0$ 时等价于 $g(x)>0$，在 $x<0$ 时等价于 $g(x)<0$。由于 $g(0)=0$ 且 $g^\prime(0)=0$，要让 $g$ 在 0 左右按正确方向穿过， 需要 $g^\prime$ 在 0 附近以 0 为极小值，即先令 $g^{\prime\prime}(0)=1-2\ln a=0$，得 $a=\sqrt e$。当 $a=\sqrt e$ 时， $g=e^{x/2}(e^{x/2}-e^{-x/2}-x)$，其符号与 $x$ 一致， 所以成立。若 $a>\sqrt e$，则 $g^{\prime\prime}(0)<0$， 正侧附近会使 $g<0$；若 $a<\sqrt e$，负侧附近会使 $g>0$； 均矛盾。
+  key_steps:
+    - step_id: step_1
+      statement: 把原不等式转成 $g$ 的左右符号。
+      formula_trace:
+        from: $\frac{e^x-1}{x}>a^x$
+        to: $g(x)=e^x-1-xa^x$，且 $x>0$ 要 $g>0$，$x<0$ 要 $g<0$
+        operation: 乘以 $x$ 并按正负分侧。
+        why: 0 左右的符号方向相反，是导函数极点效应的入口。
+      source_ref: page_0268_ex8_solution
+    - step_id: step_2
+      statement: 计算导数并识别极点条件。
+      formula_trace:
+        from: $g^\prime(x)=e^x-xa^x\ln a-a^x$
+        to: $g^\prime(0)=0$
+        operation: 求导并代入 0。
+        why: $g$ 要穿过 0，而 $g^\prime(0)=0$，所以要继续看 $g^\prime$ 的局部形态。
+      source_ref: page_0268_ex8_solution
+    - step_id: step_3
+      statement: 由 $g^{\prime\prime}(0)=0$ 锁定参数。
+      formula_trace:
+        from: $g^{\prime\prime}(0)=1-2\ln a$
+        to: $a=\sqrt e$
+        operation: 令导函数在 0 处满足极点效应。
+        why: 否则 $g^\prime$ 会在某一侧变成错误符号，破坏 $g$ 的左右符号。
+      source_ref: page_0268_ex8_solution
+    - step_id: step_4
+      statement: 证明 $a=\sqrt e$ 的充分性。
+      formula_trace:
+        from: $g(x)=e^x-1-xe^{x/2}$
+        to: $g(x)=e^{x/2}(e^{x/2}-e^{-x/2}-x)$
+        operation: 提取 $e^{x/2}$。
+        why: $e^{x/2}-e^{-x/2}$ 与 $x$ 同向比较，给出正确符号。
+      source_ref: page_0268_ex8_solution
+    - step_id: step_5
+      statement: 排除 $a\ne\sqrt e$。
+      formula_trace:
+        from: $g^{\prime\prime}(0)=1-2\ln a$
+        to: $a>\sqrt e$ 正侧矛盾；$a<\sqrt e$ 负侧矛盾
+        operation: 局部反证。
+        why: 说明 $a=\sqrt e$ 不只是候选，而是唯一值。
+      source_ref: page_0268_ex8_solution
+teaching_card:
+  student_title: 同一道题的二阶探路：让导函数在 0 附近贴住
+  what_it_trains: 训练导函数极点效应：原函数左右要穿过 0，但一阶导在 0 也为 0，于是继续看二阶导来锁参数。
+  recognition_cues:
+    - $\frac{e^x-1}{x}$ 和 $a^x$ 在 $x=0$ 附近都贴近 1。
+    - 乘以 $x$ 后，$x>0$ 与 $x<0$ 对 $g$ 的符号要求相反。
+    - $g^\prime(0)=0$ 自动成立，说明要继续看 $g^{\prime\prime}(0)$。
+  normalization_moves:
+    - 先构造 $g=e^x-1-xa^x$。
+    - 再看 $g^\prime$ 是否能在 0 附近保持正确方向。
+    - 由 $g^{\prime\prime}(0)=0$ 得 $a=\sqrt e$，最后回证。
+  common_failures:
+    - 直接把 $x=0$ 当作原函数定义域内点。
+    - 只算 $g^\prime(0)=0$ 就停下，没有看二阶。
+    - 得到 $a=\sqrt e$ 后不验证左右符号。
+    - 反证 $a>\sqrt e$ 或 $a<\sqrt e$ 时只说局部错误，没有指明是哪一侧符号冲突。
+  similar_practice_query: (e^x-1)/x a^x 导函数极点效应 二阶导 sqrt(e)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

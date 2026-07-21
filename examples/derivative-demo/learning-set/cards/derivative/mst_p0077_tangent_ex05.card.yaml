@@ -1,0 +1,152 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0077_tangent_ex05
+content_revision_id: mst_p0077_tangent_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0077_tangent_ex05.card.yaml
+stem: （2025 · 新高考 I T12）若直线 $y=2x+5$ 是曲线 $y=e^x+x+a$ 的切线， 则 $a=$_______。
+answer: |-
+  4
+
+  法一把 $y=2x+5$ 与 $y=e^x+x+a$ 相切改写成 $y=x+5-a$ 是 $y=e^x$ 的切线；由于 $e^x$ 斜率为 1 的切点为 $x=0$，对应切线 $y=x+1$，所以 $5-a=1$，$a=4$。法二设差函数 $g(x)=e^x+x+a-2x-5=e^x-x+a-5$，相切时 $g(x_0)=0,g'(x_0)=0$，由 $e^{x_0}-1=0$ 得 $x_0=0$，再得 $a=4$。 法三设切点直接列切线方程，同样由斜率 $e^{x_0}+1=2$ 得 $x_0=0,a=4$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把曲线中的一次项移到直线一侧，识别 $e^x$ 的切线。
+      max_score: 1
+    - step_id: step_2
+      description: 利用 $e^x$ 斜率为 1 的唯一切线。
+      max_score: 1
+    - step_id: step_3
+      description: 比较截距得到参数值。
+      max_score: 1
+    - step_id: step_4
+      description: 用极点效应复核相切条件。
+      max_score: 1
+    - step_id: step_5
+      description: 用设切点法复核切线方程。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level: []
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 显隐点探路
+      - 充分/必要性探路
+    subroute:
+      - 切线找点
+      - 极点效应
+      - 设切点列方程
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $y=x+5-a$ 是 $y=e^x$ 的切线
+      - $g(x_0)=0,\ g'(x_0)=0$
+      - $e^{x_0}+1=2$
+    normalization_moves_used:
+      - 把 $e^x+x+a$ 与 $2x+5$ 的相切关系减成 $e^x$ 与 $x+5-a$ 的相切。
+      - 把直线斜率 2 归一到指数项斜率 $e^{x_0}=1$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由相切写出导数等于直线斜率，回补导数运算与几何意义。
+      - 若学生不会把 $e^x+x+a$ 减去 $x+a$ 变成 $e^x$ 的切线问题，回补代数恒等变形。
+      - 若学生不理解 $g(x_0)=0,g'(x_0)=0$，回补导数单调极值基础。
+  detail_terms:
+    - $e^x$ 的斜率 1 切线
+    - $y=x+5-a$
+    - 极点效应
+    - $a=4$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0077_tangent_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0077
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0077/page_0077.md
+      role: problem_start
+      evidence: page_0077 在“过某点处的切线方程”讲解后新起头“例 5”，题干给出 直线 y=2x+5 是曲线 y=e^x+x+a 的切线，求 a；三种解析和答案均在本页。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0077.png
+      inspected: true
+      notes: 页图确认例 5 题头、填空、三种解法和答案 a=4 均在 page_0077； 题目为填空题，无选项、无图形。
+  source_context: 本题位于“过某点处的切线方程”小节之后。源页先给出设切点法， 又给出“极点效应”：若直线与曲线相切，则差函数在切点处有不变号零点， 可列 $g(x_0)=0,g'(x_0)=0$。
+  source_influence:
+    - 卡片保留源页三条路线：切线找点、极点效应、设切点列切线方程。
+    - 核心统一为：把相切条件落实到 $e^x$ 在 $x=0$ 处的斜率 1。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 · 新高考 I T12）若直线 $y=2x+5$ 是曲线 $y=e^x+x+a$ 的切线， 则 $a=$_______。
+  parts: *a1
+  choices: []
+  answer: "4"
+  fidelity_notes:
+    - 源页三种解法均得到 $a=4$。
+solution:
+  source_solution_summary: 法一把 $y=2x+5$ 与 $y=e^x+x+a$ 相切改写成 $y=x+5-a$ 是 $y=e^x$ 的切线；由于 $e^x$ 斜率为 1 的切点为 $x=0$，对应切线 $y=x+1$，所以 $5-a=1$，$a=4$。法二设差函数 $g(x)=e^x+x+a-2x-5=e^x-x+a-5$，相切时 $g(x_0)=0,g'(x_0)=0$，由 $e^{x_0}-1=0$ 得 $x_0=0$，再得 $a=4$。 法三设切点直接列切线方程，同样由斜率 $e^{x_0}+1=2$ 得 $x_0=0,a=4$。
+  key_steps:
+    - step_id: step_1
+      statement: 把曲线中的一次项移到直线一侧，识别 $e^x$ 的切线。
+      formula_trace:
+        from: $2x+5=e^x+x+a$
+        to: $e^x=x+5-a$
+        operation: 两边同时减去 $x+a$。
+        why: 曲线 $e^x+x+a$ 与直线 $2x+5$ 相切，等价于 $e^x$ 与直线 $x+5-a$ 相切。
+      source_ref: page_0077:例5解析法一
+    - step_id: step_2
+      statement: 利用 $e^x$ 斜率为 1 的唯一切线。
+      formula_trace:
+        from: $(e^x)'=e^x=1$
+        to: $x=0,\quad y=e^0+e^0(x-0)=x+1$
+        operation: 由切线斜率确定切点，再写出切线方程。
+        why: $x+5-a$ 的斜率是 1，必须对应 $e^x$ 在 $x=0$ 处的切线。
+      source_ref: page_0077:例5解析法一
+    - step_id: step_3
+      statement: 比较截距得到参数值。
+      formula_trace:
+        from: $x+5-a=x+1$
+        to: $a=4$
+        operation: 比较同斜率直线的常数项。
+        why: 两条直线必须完全重合才表示同一条切线。
+      source_ref: page_0077:例5解析法一
+    - step_id: step_4
+      statement: 用极点效应复核相切条件。
+      formula_trace:
+        from: $g(x)=e^x+x+a-2x-5$
+        to: $\begin{cases}g(x_0)=e^{x_0}-x_0+a-5=0\\g'(x_0)=e^{x_0}-1=0\end{cases}\Rightarrow x_0=0,a=4$
+        operation: 令曲线与直线的差函数在切点处函数值和导数值同时为 0。
+        why: 相切意味着差函数在切点处有不变号零点，也就是极值点式零点。
+      source_ref: page_0077:例5解析法二
+    - step_id: step_5
+      statement: 用设切点法复核切线方程。
+      formula_trace:
+        from: $y-(e^{x_0}+x_0+a)=(e^{x_0}+1)(x-x_0)$
+        to: $e^{x_0}+1=2\Rightarrow x_0=0\Rightarrow a=4$
+        operation: 比较给定直线的斜率并代入切点。
+        why: 给定切线斜率为 2，曲线在切点处的导数必须等于 2。
+      source_ref: page_0077:例5解析法三
+teaching_card:
+  student_title: 把给定切线减成 e^x 的切线
+  what_it_trains: 训练学生看到“直线是曲线的切线”时，先把共同的一次项剥离， 把题目降成 $e^x$ 的标准切线找点，再用截距锁定参数。
+  recognition_cues:
+    - 曲线是 $e^x$ 加一次项和参数。
+    - 给定直线的斜率为 2，减去一次项后剩下斜率 1。
+    - 题目只要求一个参数值。
+  normalization_moves:
+    - 由 $2x+5=e^x+x+a$ 改写成 $e^x=x+5-a$。
+    - 用 $e^x$ 斜率 1 的切点 $x=0$。
+    - 把 $x+5-a$ 与 $x+1$ 对齐常数项。
+  common_failures:
+    - 直接把 $e^x+x+a$ 的函数值等于 $2x+5$，却漏掉斜率也要相等。
+    - 求导后写出 $e^{x_0}+1=2$，但没有再代回求 $a$。
+    - 把相切误当成只有一个交点，缺少不变号零点或导数条件。
+  similar_practice_query: e^x 加一次项 给定直线相切 求参数 极点效应
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0077 页图与 markdown 一致；题目在本页完整结束。

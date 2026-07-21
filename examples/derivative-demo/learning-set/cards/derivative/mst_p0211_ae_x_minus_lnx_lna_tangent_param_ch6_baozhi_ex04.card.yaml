@@ -1,0 +1,230 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0211_ae_x_minus_lnx_lna_tangent_param_ch6_baozhi_ex04
+content_revision_id: mst_p0211_ae_x_minus_lnx_lna_tangent_param_ch6_baozhi_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0211_ae_x_minus_lnx_lna_tangent_param_ch6_baozhi_ex04.card.yaml
+stem: |-
+  （2020·全国新高考Ⅰ卷 T21）已知函数 $f(x)=ae^{x-1}-\ln x+\ln a$。
+  (1) 当 $a=e$ 时，求曲线 $y=f(x)$ 在点 $(1,f(1))$ 处的切线与两坐标轴围成的三角形面积。
+  (2) 若 $f(x)\geqslant1$，求 $a$ 的取值范围。
+answer: |-
+  (1) $S=\frac{2}{e-1}$；(2) $a\in[1,+\infty)$。
+
+  第(1)问：代入 $a=e$ 得 $f(x)=e^x-\ln x+1$， $f^{\prime}(x)=e^x-\frac1x$，故 $f^{\prime}(1)=e-1,\ f(1)=e+1$， 切线为 $y-(e+1)=(e-1)(x-1)$。由截距得 $y$ 轴截距为 2，$x$ 轴截距为 $-\frac{2}{e-1}$，面积 $S=\frac12\cdot2\cdot\frac{2}{e-1}=\frac{2}{e-1}$。 第(2)问：令 $h(t)=e^t-t-1\ge0$，且 $a>0$。 原不等式等价于 $a(e^{x-1}-x)+\left(\frac xa-\ln\frac xa-1\right)+\left(a-\frac1a\right)x\ge0$， 即 $ah(x-1)+h(\ln\frac xa)+\left(a-\frac1a\right)x\ge0$。 前两项非负，因此关键是余量项 $\left(a-\frac1a\right)x$： 当 $a>1$ 时恒正；当 $a=1$ 时可取等；当 $0<a<1$ 时代 $x=1$ 得 $f(1)-1=a+\ln a-1<0$ 矛盾，故 $a\in[1,+\infty)$。 source 在续页还给出法二、法三，均归结到同一结论。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 第(1)问先代入 $a=e$ 并求切点处导数。
+      max_score: 1
+    - step_id: step_2
+      description: 写出切线方程并求两轴截距，得到面积。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问先转成非负和结构并引入同构母函数。
+      max_score: 1
+    - step_id: step_4
+      description: 利用取等条件识别“余量项”是参数范围关键。
+      max_score: 1
+    - step_id: step_5
+      description: 分类一与二：$a>1$ 与 $a=1$ 均可行。
+      max_score: 1
+    - step_id: step_6
+      description: 分类三：排除 $0<a<1$。
+      max_score: 1
+    - step_id: step_7
+      description: 汇总第(2)问参数范围。
+      max_score: 1
+    - step_id: step_8
+      description: 记录 source 的并行解法一致性。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 几何量求解
+        target: 第 (1) 问
+        result: $S=\frac{2}{e-1}$
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 (2) 问
+        result: $a\in[1,+\infty)$
+  method:
+    primary: 含参数分类讨论
+    secondary:
+      - 同构变形与换元法
+      - 切线放缩与凹凸性
+    subroute:
+      - 差一同构
+      - 余量函数
+      - 取等条件
+      - 找点反证
+      - 切线截距面积
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $f(x)=ae^{x-1}-\ln x+\ln a$
+      - $y-(e+1)=(e-1)(x-1)$
+      - $ah(x-1)+h\left(\ln\frac xa\right)+\left(a-\frac1a\right)x\ge0$
+      - $f(1)-1=a+\ln a-1$
+    normalization_moves_used:
+      - 先在第(1)问完成“导数-切线-截距-面积”几何链。
+      - 第(2)问把原式同构为“两块保值 + 一块余量”的模型式。
+      - 用余量项符号做 $a>1,\ a=1,\ 0<a<1$ 三段分类。
+      - 用 $x=1$ 快速构造反证点排除 $0<a<1$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f^{\prime}(1)$ 与点斜式写切线并求截距面积，回补导数运算与几何意义。
+      - 若学生不会把 $\frac xa-\ln\frac xa-1$ 识别为 $h(\ln\frac xa)$，回补指数对数基础。
+      - 若学生不会围绕余量项做参数分类讨论，回补不等式工具基础。
+      - 若学生无法用 $x=1$ 组织反证排除区间，回补函数三要素与定义域。
+  detail_terms:
+    - $h(t)=e^t-t-1$
+    - $y-(e+1)=(e-1)(x-1)$
+    - $\left(a-\frac1a\right)x$
+    - $f(1)-1=a+\ln a-1$
+    - $a\in[1,+\infty)$
+parts: &a1
+  - (1) 当 $a=e$ 时，求曲线 $y=f(x)$ 在点 $(1,f(1))$ 处的切线与两坐标轴围成的三角形面积。
+  - (2) 若 $f(x)\geqslant1$，求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0211_ae_x_minus_lnx_lna_tangent_param_ch6_baozhi_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0211_ex03_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0211/page_0211.md
+      role: local_context
+      evidence: page_0211 行15是例3续解收尾，不是新题头。
+    - ref_id: page_0211_ex04_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0211/page_0211.md
+      role: problem_start
+      evidence: page_0211 行32-34给出例4题头与两问：切线围成三角形面积、以及 $f(x)\geqslant1$ 时参数范围。
+    - ref_id: page_0211_ex04_solution_head
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0211/page_0211.md
+      role: solution
+      evidence: page_0211 行36-39给出第(1)问完整解和第(2)问法一起式：引入 $h(x)=e^x-x-1$ 并化为 $ah(x-1)+h(\ln\frac{x}{a})+\left(a-\frac1a\right)x$。
+    - ref_id: page_0212_ex04_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0212/page_0212.md
+      role: continuation
+      evidence: page_0212 行14-25承接完成第(2)问，给出法一分类讨论结论 $a\in[1,+\infty)$，并补充法二、法三同结论。
+    - ref_id: page_0212_ex05_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0212/page_0212.md
+      role: local_context
+      evidence: page_0212 行33起进入例5新题头，说明例4到此结束。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0211.png
+      inspected: true
+      notes: 已核对页图：例4题头在本页下部；第(1)问切线方程与面积计算完整可读，第(2)问法一起式在页末跨页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0212.png
+      inspected: true
+      notes: 已核对页图：本页顶部是例4续解，法一到法三均给出并收束到 $a\in[1,+\infty)$；下部出现例5新题头。
+  source_context: 例4题头起于 page_0211，解析跨到 page_0212 顶部完成；page_0211 顶部是例3续页需跳过，page_0212 下部例5不属于本卡。
+  source_influence:
+    - 第(1)问按 source 原链路保留：求导、切线方程、两轴截距、面积公式。
+    - 第(2)问以 source 法一为主线：同构到 $ah(x-1)+h(\ln\frac{x}{a})+\left(a-\frac1a\right)x$ 后做参数分类讨论。
+    - 保留 source 的反证点 $x=1$ 来排除 $0<a<1$。
+    - source 同页还给出法二、法三，结论一致，作为并行思路记录在总结中。
+  source_discrepancies: []
+original_problem:
+  stem: （2020·全国新高考Ⅰ卷 T21）已知函数 $f(x)=ae^{x-1}-\ln x+\ln a$。
+  parts: *a1
+  choices: []
+  answer: (1) $S=\frac{2}{e-1}$；(2) $a\in[1,+\infty)$。
+  fidelity_notes:
+    - 题面由函数式与两问组成，无选项。
+    - 由 $\ln x$ 与 $\ln a$ 可知定义域要求 $x>0,\ a>0$。
+    - 第(2)问解答跨页到 page_0212，已按题头归属并入同一卡。
+solution:
+  source_solution_summary: 第(1)问：代入 $a=e$ 得 $f(x)=e^x-\ln x+1$， $f^{\prime}(x)=e^x-\frac1x$，故 $f^{\prime}(1)=e-1,\ f(1)=e+1$， 切线为 $y-(e+1)=(e-1)(x-1)$。由截距得 $y$ 轴截距为 2，$x$ 轴截距为 $-\frac{2}{e-1}$，面积 $S=\frac12\cdot2\cdot\frac{2}{e-1}=\frac{2}{e-1}$。 第(2)问：令 $h(t)=e^t-t-1\ge0$，且 $a>0$。 原不等式等价于 $a(e^{x-1}-x)+\left(\frac xa-\ln\frac xa-1\right)+\left(a-\frac1a\right)x\ge0$， 即 $ah(x-1)+h(\ln\frac xa)+\left(a-\frac1a\right)x\ge0$。 前两项非负，因此关键是余量项 $\left(a-\frac1a\right)x$： 当 $a>1$ 时恒正；当 $a=1$ 时可取等；当 $0<a<1$ 时代 $x=1$ 得 $f(1)-1=a+\ln a-1<0$ 矛盾，故 $a\in[1,+\infty)$。 source 在续页还给出法二、法三，均归结到同一结论。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问先代入 $a=e$ 并求切点处导数。
+      formula_trace:
+        from: $f(x)=ae^{x-1}-\ln x+\ln a$
+        to: $f(x)=e^x-\ln x+1,\ f^{\prime}(x)=e^x-\frac1x,\ f^{\prime}(1)=e-1,\ f(1)=e+1$
+        operation: 代入参数并直接求导。
+        why: 切线方程需要斜率与切点坐标。
+      source_ref: page_0211_ex04_solution_head
+    - step_id: step_2
+      statement: 写出切线方程并求两轴截距，得到面积。
+      formula_trace:
+        from: $f^{\prime}(1)=e-1,\ (1,f(1))=(1,e+1)$
+        to: $y-(e+1)=(e-1)(x-1),\ y(0)=2,\ x_{y=0}=-\frac{2}{e-1},\ S=\frac{2}{e-1}$
+        operation: 点斜式建线，再代 $x=0,y=0$ 求截距并套三角形面积公式。
+        why: 第(1)问目标是截距三角形面积。
+      source_ref: page_0211_ex04_solution_head
+    - step_id: step_3
+      statement: 第(2)问先转成非负和结构并引入同构母函数。
+      formula_trace:
+        from: $ae^{x-1}-\ln x+\ln a-1\ge0$
+        to: $ah(x-1)+h\left(\ln\frac xa\right)+\left(a-\frac1a\right)x\ge0$
+        operation: 设 $h(t)=e^t-t-1$，并将中间项配成 $\frac xa-\ln\frac xa-1$。
+        why: 把主体压到两个标准非负块与一个余量项，便于分类讨论参数。
+      source_ref: page_0211_ex04_solution_head
+    - step_id: step_4
+      statement: 利用取等条件识别“余量项”是参数范围关键。
+      formula_trace:
+        from: $ah(x-1)\ge0,\ h\left(\ln\frac xa\right)\ge0$
+        to: 需对所有 $x>0$ 有 $\left(a-\frac1a\right)x\ge0$
+        operation: 前两项非负，问题降到线性余量项符号。
+        why: source 明确把“余量函数”作为分类讨论核心。
+      source_ref: page_0212_ex04_solution_continuation
+    - step_id: step_5
+      statement: 分类一与二：$a>1$ 与 $a=1$ 均可行。
+      formula_trace:
+        from: $\left(a-\frac1a\right)x$
+        to: $a>1$ 时整体 $>0$；$a=1$ 时整体 $\ge0$（且 $x=1$ 取等）
+        operation: 分别判断余量项正性，并结合两块 $h$ 的取等点。
+        why: 得到充分性：$a\ge1$ 时命题成立。
+      source_ref: page_0212_ex04_solution_continuation
+    - step_id: step_6
+      statement: 分类三：排除 $0<a<1$。
+      formula_trace:
+        from: $0<a<1$
+        to: $f(1)-1=(a-1)+\ln a<0$，矛盾
+        operation: 取 $x=1$ 代回原条件做反证。
+        why: 这是 source 给出的必要性判定点。
+      source_ref: page_0212_ex04_solution_continuation
+    - step_id: step_7
+      statement: 汇总第(2)问参数范围。
+      formula_trace:
+        from: step_5 与 step_6
+        to: $a\in[1,+\infty)$
+        operation: 并集可行区间并排除不可行情形。
+        why: 完成第(2)问。
+      source_ref: page_0212_ex04_solution_continuation
+    - step_id: step_8
+      statement: 记录 source 的并行解法一致性。
+      formula_trace:
+        from: 法二、法三不同余量选取
+        to: 结论同为 $a\in[1,+\infty)$
+        operation: 法二用 $(a-1)x+\ln a$，法三用 $(a-1)e^{x-1}+\ln a$ 分类。
+        why: 体现“余量可变、结论不变”的课堂建模思想。
+      source_ref: page_0212_ex04_solution_continuation
+teaching_card:
+  student_title: 同构余量分类：$ae^{x-1}-\ln x+\ln a$ 求参
+  what_it_trains: 训练“先切线求几何量，再把含参指对不等式化为同构模型并围绕余量项分类”的双问联动。
+  recognition_cues:
+    - 函数同时含 $ae^{x-1}$ 与 $\ln x$，且要求恒成立型参数范围。
+    - 题目常配“令 $h(t)=e^t-t-1$”的保值性母函数。
+    - 解析中出现“余量项”并伴随三段分类与取点反证。
+  normalization_moves:
+    - 第(1)问按“导数-切线-截距”一条链直接求面积。
+    - 第(2)问先把主式拆为 $ah(x-1)+h(\ln\frac xa)+\text{余量}$。
+    - 围绕余量项符号做参数分类，再用 $x=1$ 打矛盾。
+  common_failures:
+    - 把 $x$ 轴截距写成正数，忘记直线在该处位于负半轴。
+    - 漏掉 $a>0$ 与 $x>0$ 的定义域前提。
+    - 只给出 $a\ge1$ 的猜测，未证明 $0<a<1$ 不可行。
+    - 把法二/法三当作新结论，忽略它们只是同结论的不同余量选择。
+  similar_practice_query: ae^{x-1} lnx 同构保值 余量函数 参数范围 分类讨论
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

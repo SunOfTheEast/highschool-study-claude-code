@@ -1,0 +1,240 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0236_x_power_a_over_a_power_x_two_intersections_param_ch6_findpoint_ex8
+content_revision_id: mst_p0236_x_power_a_over_a_power_x_two_intersections_param_ch6_findpoint_ex8-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0236_x_power_a_over_a_power_x_two_intersections_param_ch6_findpoint_ex8.card.yaml
+stem: |-
+  （2021 · 甲卷）已知 $a>0$ 且 $a\neq1$，函数 $f(x)=\frac{x^a}{a^x}$（$x>0$）。
+  1. 当 $a=2$ 时，求 $f(x)$ 的单调区间。
+  2. 若曲线 $y=f(x)$ 与直线 $y=1$ 有且仅有两个交点，求 $a$ 的取值范围。
+answer: |-
+  第 (1) 问：$f$ 在 $(0,\frac2{\ln2})$ 单调递增，在 $(\frac2{\ln2},+\infty)$ 单调递减；第 (2) 问：$a\in(1,e)\cup(e,+\infty)$。
+
+  第 (1) 问代入 $a=2$ 得 $f(x)=x^2/2^x$，由 $f'(x)=x(2-x\ln2)/2^x$ 得增区间 $(0,2/\ln2)$、减区间 $(2/\ln2,+\infty)$。第 (2) 问 $f(x)=1$ 等价于 $x^a=a^x$，即 $a\ln x=x\ln a$，再化为 $g(x)=\frac{\ln a}{a}x-\ln x=0$。当 $0<a<1$ 时只有一个零点。 当 $a>1$ 时，$g$ 在 $x=a/\ln a$ 处取最小值 $1-\ln(a/\ln a)$。令 $h(a)=a/\ln a$，知 $h$ 在 $a=e$ 处最小 为 $e$，所以 $a=e$ 时只有一个切点；$1<a<e$ 或 $a>e$ 时最小值 小于 0，有两个零点。右侧充分性用等效零点取点： $g(x)=\sqrt{x}(\frac{\ln a}{a}\sqrt{x}-\frac{\ln x}{\sqrt{x}})$， 由 $\frac{\ln x}{\sqrt{x}}\leqslant2/e$ 得右侧可取 $x=a^2/\ln^2a$。故答案为 $(1,e)\cup(e,+\infty)$。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 第 (1) 问代入 $a=2$ 后求导判号。
+      max_score: 1
+    - step_id: step_2
+      description: 把交点问题转成指对等式的零点问题。
+      max_score: 1
+    - step_id: step_3
+      description: $0<a<1$ 时排除两个交点。
+      max_score: 1
+    - step_id: step_4
+      description: $a>1$ 时用最小值判断两个零点。
+      max_score: 1
+    - step_id: step_5
+      description: 用 $h(a)=a/\ln a$ 找参数临界值。
+      max_score: 1
+    - step_id: step_6
+      description: 排除 $a=e$ 的单切情形。
+      max_score: 1
+    - step_id: step_7
+      description: 用等效零点补右侧存在性。
+      max_score: 1
+    - step_id: step_8
+      description: 合并得到参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: part_1
+        goal: 零点/极值点分析
+        target: 第 part_1 问
+        result: $f$ 在 $(0,\frac2{\ln2})$ 增，在 $(\frac2{\ln2},+\infty)$ 减。
+      - part_id: part_2
+        goal: 求参数范围
+        target: 第 part_2 问
+        result: $a\in(1,e)\cup(e,+\infty)$。
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 局部逼近与找点
+      - 充分/必要性探路
+    subroute:
+      - $x^a=a^x$ 指对等式
+      - $mx-\ln x$
+      - 参数函数 $a/\ln a$
+      - 单谷双零点
+      - 等效零点取右点
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $x^a/a^x$
+      - $x^a=a^x$
+      - $\frac{\ln a}{a}x-\ln x$
+      - $a/\ln a$
+      - $\ln x/\sqrt{x}$
+    normalization_moves_used:
+      - 把交点 $f(x)=1$ 化成 $x^a=a^x$。
+      - 取对数后变成 $mx-\ln x$。
+      - 用 $a/\ln a$ 的最小值判断参数。
+      - 用 $\sqrt{x}$ 形式给右侧取点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会对 $\frac{x^a}{a^x}$ 求导，回补导数运算与几何意义。
+      - 若学生不会取对数转化 $x^a=a^x$，回补指数对数基础。
+      - 若学生不会用凸函数最小值判断两个零点，回补导数单调极值基础。
+      - 若学生不会分析 $a/\ln a$，回补指数对数基础。
+      - 若学生不会提出 $\sqrt{x}$，回补代数恒等变形。
+      - 若学生不懂 $\ln x/\sqrt{x}$ 的界，回补不等式工具基础。
+  detail_terms:
+    - $x^a/a^x$
+    - $x^a=a^x$
+    - $mx-\ln x$
+    - $a/\ln a$
+    - $a=e$
+    - $\ln x/\sqrt{x}$
+    - 指对等式
+    - 单谷双零点
+parts: &a1
+  - part_id: part_1
+    text: 当 $a=2$ 时，求 $f(x)$ 的单调区间。
+  - part_id: part_2
+    text: 若曲线 $y=f(x)$ 与直线 $y=1$ 有且仅有两个交点，求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0236_x_power_a_over_a_power_x_two_intersections_param_ch6_findpoint_ex8
+source_evidence:
+  source_refs:
+    - ref_id: page_0236_prev_ex7_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0236/page_0236.md
+      role: local_context
+      evidence: page_0236 页首是 page_0235 例7续解，不是本卡题头。
+    - ref_id: page_0236_ex8_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0236/page_0236.md
+      role: problem_start
+      evidence: page_0236 中部给出例8题头：$a>0$ 且 $a\neq1$，$f(x)=x^a/a^x$，第 (1) 问 $a=2$ 单调区间，第 (2) 问与 $y=1$ 有且仅有两个交点求 $a$。
+    - ref_id: page_0236_ex8_part1_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0236/page_0236.md
+      role: solution
+      evidence: 解析第 (1) 问由 $f^\prime(x)=x(2-x\ln2)/2^x$ 得单调区间。
+    - ref_id: page_0236_ex8_solution_param_case
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0236/page_0236.md
+      role: solution
+      evidence: 解析第 (2) 问把 $x^a=a^x$ 化为 $g(x)=\frac{\ln a}{a}x-\ln x$，再讨论最小值 $1-\ln(a/\ln a)$。
+    - ref_id: page_0236_ex9_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0236/page_0236.md
+      role: local_context
+      evidence: page_0236 底部另起例9，属于本批下一张卡，不混入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0236.png
+      inspected: true
+      notes: 已核对页图：例8题头和完整解析位于 page_0236 中部。
+  source_context: 本卡处理 page_0236 起头并在同页结束的例8；页首续解和后续例9分别隔离。
+  source_influence:
+    - 保留 source 的指对等式转化：$x^a=a^x\Leftrightarrow \frac{\ln a}{a}x-\ln x=0$。
+    - 保留 source 的 $mx-\ln x$ 单峰/单谷找点路线。
+    - 保留 source 的 $h(a)=a/\ln a$ 分析：最小值为 $e$，排除 $a=e$ 的单切情形。
+    - 保留 source 的右侧等效零点取点：用 $\ln x/\sqrt{x}\leqslant2/e$ 得 $x_2\in(a/\ln a,a^2/\ln^2a)$。
+  source_discrepancies:
+    - type: printed_or_ocr_condition_correction
+      source_ref: page_0236_ex8_solution_param_case
+      observed: case ② in the source/OCR reads like `当 a>0 时`.
+      resolved_as: 当 $a>1$ 时
+      reason: case ① already handles $0<a<1$; for $x=a/\ln a$ to be a positive critical point and for $\ln a/a>0$, this branch must be $a>1$.
+original_problem:
+  stem: （2021 · 甲卷）已知 $a>0$ 且 $a\neq1$，函数 $f(x)=\frac{x^a}{a^x}$（$x>0$）。
+  parts: *a1
+  choices: []
+  answer: 第 (1) 问：$f$ 在 $(0,\frac2{\ln2})$ 单调递增，在 $(\frac2{\ln2},+\infty)$ 单调递减；第 (2) 问：$a\in(1,e)\cup(e,+\infty)$。
+  fidelity_notes:
+    - 两问均无选项。
+    - 函数定义域为 $x>0$。
+solution:
+  source_solution_summary: 第 (1) 问代入 $a=2$ 得 $f(x)=x^2/2^x$，由 $f'(x)=x(2-x\ln2)/2^x$ 得增区间 $(0,2/\ln2)$、减区间 $(2/\ln2,+\infty)$。第 (2) 问 $f(x)=1$ 等价于 $x^a=a^x$，即 $a\ln x=x\ln a$，再化为 $g(x)=\frac{\ln a}{a}x-\ln x=0$。当 $0<a<1$ 时只有一个零点。 当 $a>1$ 时，$g$ 在 $x=a/\ln a$ 处取最小值 $1-\ln(a/\ln a)$。令 $h(a)=a/\ln a$，知 $h$ 在 $a=e$ 处最小 为 $e$，所以 $a=e$ 时只有一个切点；$1<a<e$ 或 $a>e$ 时最小值 小于 0，有两个零点。右侧充分性用等效零点取点： $g(x)=\sqrt{x}(\frac{\ln a}{a}\sqrt{x}-\frac{\ln x}{\sqrt{x}})$， 由 $\frac{\ln x}{\sqrt{x}}\leqslant2/e$ 得右侧可取 $x=a^2/\ln^2a$。故答案为 $(1,e)\cup(e,+\infty)$。
+  key_steps:
+    - step_id: step_1
+      statement: 第 (1) 问代入 $a=2$ 后求导判号。
+      formula_trace:
+        from: $f(x)=\frac{x^2}{2^x}$
+        to: $f^\prime(x)=\frac{x(2-x\ln2)}{2^x}$
+        operation: 求导并整理出导数符号。
+        why: $x>0$，导数符号只看 $2-x\ln2$。
+      source_ref: page_0236_ex8_part1_solution
+    - step_id: step_2
+      statement: 把交点问题转成指对等式的零点问题。
+      formula_trace:
+        from: $\frac{x^a}{a^x}=1$
+        to: $g(x)=\frac{\ln a}{a}x-\ln x=0$
+        operation: 取对数并除以 $a$。
+        why: 把 $x^a=a^x$ 变成熟悉的 $mx-\ln x$。
+      source_ref: page_0236_ex8_solution_param_case
+    - step_id: step_3
+      statement: $0<a<1$ 时排除两个交点。
+      formula_trace:
+        from: $g^\prime(x)=\frac{\ln a}{a}-\frac1x$，$\ln a<0$
+        to: $g^\prime(x)<0$，至多一个零点
+        operation: 用 $\ln a/a<0$ 判导数。
+        why: 单调函数不可能与 0 有两个交点。
+      source_ref: page_0236_ex8_solution_param_case
+    - step_id: step_4
+      statement: $a>1$ 时用最小值判断两个零点。
+      formula_trace:
+        from: $g^\prime(x)=\frac{\ln a}{a}-\frac1x=0$
+        to: $x=\frac a{\ln a}$，$g_{\min}=1-\ln\frac a{\ln a}$
+        operation: 求导数零点并代回。
+        why: 凸函数两零点等价于最小值小于 0。
+      source_ref: page_0236_ex8_solution_param_case
+    - step_id: step_5
+      statement: 用 $h(a)=a/\ln a$ 找参数临界值。
+      formula_trace:
+        from: $g_{\min}<0$
+        to: $\frac a{\ln a}>e$
+        operation: 移项取指数。
+        why: 零点个数变成参数函数 $h(a)$ 的大小判断。
+      source_ref: page_0236_ex8_solution_param_case
+    - step_id: step_6
+      statement: 排除 $a=e$ 的单切情形。
+      formula_trace:
+        from: $h(a)=\frac a{\ln a}$
+        to: $h(e)=e$，$a=e$ 时 $g_{\min}=0$
+        operation: 分析 $h^\prime(a)=\frac{\ln a-1}{(\ln a)^2}$。
+        why: 最小值等于 0 时只有一个交点，不符合“仅有两个”。
+      source_ref: page_0236_ex8_solution_param_case
+    - step_id: step_7
+      statement: 用等效零点补右侧存在性。
+      formula_trace:
+        from: $g(x)=\frac{\ln a}{a}x-\ln x$
+        to: $\sqrt{x}(\frac{\ln a}{a}\sqrt{x}-\frac{\ln x}{\sqrt{x}})$
+        operation: 提出 $\sqrt{x}$。
+        why: 右侧要让正的线性主体压过 $\ln x$。
+      source_ref: page_0236_ex8_solution_param_case
+    - step_id: step_8
+      statement: 合并得到参数范围。
+      formula_trace:
+        from: $1<a<e$ 或 $a>e$
+        to: $a\in(1,e)\cup(e,+\infty)$
+        operation: 去掉 $a=e$ 的单根临界点。
+        why: 这些参数下曲线与 $y=1$ 恰有两个交点。
+      source_ref: page_0236_ex8_solution_param_case
+teaching_card:
+  student_title: $x^a=a^x$ 先化成 $mx-\ln x$，再看 $a/\ln a$
+  what_it_trains: 训练指对同构式交点求参：把 $x^a=a^x$ 变成单谷函数，再用参数函数判断两个交点。
+  recognition_cues:
+    - 题面出现 $x^a$ 和 $a^x$，先想到取对数。
+    - 交点 $y=1$ 会变成 $a\ln x=x\ln a$。
+    - 出现 $\frac{\ln a}{a}x-\ln x$，就是熟悉的 $mx-\ln x$ 找点。
+  normalization_moves:
+    - 先完成 $a=2$ 的单调区间。
+    - 第 (2) 问把 $f(x)=1$ 化成 $g(x)=0$。
+    - 分 $0<a<1$ 与 $a>1$。
+    - 用 $h(a)=a/\ln a$ 判断最小值是否小于 0。
+    - 排除 $a=e$ 的单切情形。
+  common_failures:
+    - 把 $0<a<1$ 也带入 $x=a/\ln a$ 当正临界点。
+    - 只得到 $a/\ln a>e$，没有用 $h(a)$ 解回 $a$。
+    - 忘记 $a=e$ 时只有一个交点。
+  similar_practice_query: x^a=a^x x^a/a^x y=1 两交点 a/ln a mx-lnx 指对同构
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

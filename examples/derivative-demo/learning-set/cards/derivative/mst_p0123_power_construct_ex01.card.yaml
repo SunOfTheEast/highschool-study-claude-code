@@ -1,0 +1,187 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0123_power_construct_ex01
+content_revision_id: mst_p0123_power_construct_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0123_power_construct_ex01.card.yaml
+stem: |-
+  （2015 · 新课标 II）设 $f^{\prime}(x)$ 是奇函数 $f(x)(x\in\mathbf{R})$ 的导函数，$f(-1)=0$，当 $x>0$ 时，$x f^{\prime}(x)-f(x)<0$，则使得 $f(x)>0$ 成立的 $x$ 的取值范围是（  ）
+  A. $(-\infty,-1)\cup(0,1)$
+  B. $(-1,0)\cup(1,+\infty)$
+  C. $(-\infty,-1)\cup(-1,0)$
+  D. $(0,1)\cup(1,+\infty)$
+answer: |
+  A
+
+  当 $x>0$ 时，
+  $\frac{x f'(x)-f(x)}{x^2}=\left[\frac{f(x)}{x}\right]'<0$，
+  所以 $\frac{f(x)}{x}$ 在 $(0,+\infty)$ 上单调递减。又 $f$ 是奇函数且
+  $f(-1)=0$，故 $f(1)=0$，即 $\frac{f(1)}{1}=0$。
+  因此当 $x>1$ 时，$\frac{f(x)}{x}<0$，得 $f(x)<0$；
+  当 $0<x<1$ 时，$\frac{f(x)}{x}>0$，得 $f(x)>0$。
+  再由奇函数对称性，负半轴上 $f(x)>0$ 对应 $x<-1$。
+  故解集为 $(-\infty,-1)\cup(0,1)$，选 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 识别 $x f^{\prime}(x)-f(x)$ 对应的除法构造。
+      max_score: 1
+    - step_id: step_2
+      description: 利用奇函数给出的零点定位正半轴符号。
+      max_score: 1
+    - step_id: step_3
+      description: 在正半轴上解出 $f(x)>0$。
+      max_score: 1
+    - step_id: step_4
+      description: 用奇函数图象补全负半轴。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式求解
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 对称性配凑
+    subroute:
+      - 幂函数乘除构造
+      - 商函数单调
+      - 奇函数延拓
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 抽象函数结构
+    evidence:
+      - $x f^{\prime}(x)-f(x)$ 正好是 $\frac{f(x)}{x}$ 的导数分子。
+      - $f(-1)=0$ 与奇函数性给出 $f(1)=0$。
+      - 正半轴结论通过奇性翻到负半轴。
+    normalization_moves_used:
+      - 把 $x f^{\prime}(x)-f(x)<0$ 除以 $x^2$。
+      - 构造 $u(x)=\frac{f(x)}{x}$，先判断 $u$ 单调递减。
+      - 以 $x=1$ 为零点比较基准。
+      - 用 $f(-x)=-f(x)$ 得到负半轴区间。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\frac{x f^{\prime}(x)-f(x)}{x^2}$ 识别为商函数导数，回补导数运算与几何意义。
+      - 若学生忘记 $x>0$ 才能直接判断 $f(x)$ 与 $\frac{f(x)}{x}$ 同号，回补函数三要素与定义域。
+      - 若学生不能从 $f(-1)=0$ 推出 $f(1)=0$，回补函数性质与图像。
+  detail_terms:
+    - $x f^{\prime}(x)-f(x)<0$
+    - $\left[\frac{f(x)}{x}\right]^{\prime}
+    - $f(-1)=0$
+    - $f(1)=0$
+    - $(-\infty,-1)\cup(0,1)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0123_power_construct_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0123
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0123/page_0123.md
+      role: problem_start
+      evidence: lines 14-24 give the 幂函数乘除/平移构造 model context; lines 26-32 give 例 1 题头、A-D 选项、完整解析和答案 A.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0123.png
+      inspected: true
+      notes: 已核对 page_0123 页图：例 1 的题干、四个选项、构造 $\left[\frac{f(x)}{x}\right]^{\prime}$ 的解析和答案 A 与 markdown 一致。
+  source_context: 例 1 是第二节“抽象函数单调性构造”中幂函数基础构造的第一个例题，直接使用 $x f^{\prime}(x)-f(x)$ 对应 $\left[\frac{f(x)}{x}\right]^{\prime}$ 的除法构造。
+  source_influence:
+    - 保留源页先在 $x>0$ 上构造 $\frac{f(x)}{x}$ 并得到其单调递减。
+    - 保留源页用 $f$ 为奇函数和 $f(-1)=0$ 推出 $f(1)=0$。
+    - 保留源页先求正半轴符号，再由奇函数图象延拓到负半轴。
+  source_discrepancies: []
+original_problem:
+  stem: （2015 · 新课标 II）设 $f^{\prime}(x)$ 是奇函数 $f(x)(x\in\mathbf{R})$ 的导函数，$f(-1)=0$，当 $x>0$ 时，$x f^{\prime}(x)-f(x)<0$，则使得 $f(x)>0$ 成立的 $x$ 的取值范围是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $(-\infty,-1)\cup(0,1)$
+      text_latex: $(-\infty,-1)\cup(0,1)$
+    - label: B
+      text_raw: $(-1,0)\cup(1,+\infty)$
+      text_latex: $(-1,0)\cup(1,+\infty)$
+    - label: C
+      text_raw: $(-\infty,-1)\cup(-1,0)$
+      text_latex: $(-\infty,-1)\cup(-1,0)$
+    - label: D
+      text_raw: $(0,1)\cup(1,+\infty)$
+      text_latex: $(0,1)\cup(1,+\infty)$
+  answer: A
+  fidelity_notes:
+    - 本题为单选题，例 1 在 page_0123 内完整结束。
+    - 源页题干保留“$f^{\prime}(x)$ 是奇函数 $f(x)$ 的导函数”的原式语序；数学含义为 $f(x)$ 是奇函数且 $f^{\prime}(x)$ 为其导函数。
+solution:
+  source_solution_summary: |
+    当 $x>0$ 时，
+    $\frac{x f'(x)-f(x)}{x^2}=\left[\frac{f(x)}{x}\right]'<0$，
+    所以 $\frac{f(x)}{x}$ 在 $(0,+\infty)$ 上单调递减。又 $f$ 是奇函数且
+    $f(-1)=0$，故 $f(1)=0$，即 $\frac{f(1)}{1}=0$。
+    因此当 $x>1$ 时，$\frac{f(x)}{x}<0$，得 $f(x)<0$；
+    当 $0<x<1$ 时，$\frac{f(x)}{x}>0$，得 $f(x)>0$。
+    再由奇函数对称性，负半轴上 $f(x)>0$ 对应 $x<-1$。
+    故解集为 $(-\infty,-1)\cup(0,1)$，选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 识别 $x f^{\prime}(x)-f(x)$ 对应的除法构造。
+      formula_trace:
+        from: |
+          $x f'(x)-f(x)<0,\qquad x>0$
+        to: |
+          $\left[\frac{f(x)}{x}\right]'=\frac{x f'(x)-f(x)}{x^2}<0$
+        operation: 两边除以正数 $x^2$，写成商函数导数。
+        why: 这样把导数不等式转化为 $\frac{f(x)}{x}$ 的单调性。
+      source_ref: page_0123
+    - step_id: step_2
+      statement: 利用奇函数给出的零点定位正半轴符号。
+      formula_trace:
+        from: |
+          $f(-1)=0,\qquad f(-x)=-f(x)$
+        to: |
+          $f(1)=0,\qquad \frac{f(1)}{1}=0$
+        operation: 由奇函数对称把 $-1$ 处零点映到 $1$。
+        why: 单调函数 $\frac{f(x)}{x}$ 需要一个已知比较点来判定符号。
+      source_ref: page_0123
+    - step_id: step_3
+      statement: 在正半轴上解出 $f(x)>0$。
+      formula_trace:
+        from: |
+          $\frac{f(x)}{x}$ 在 $(0,+\infty)$ 上递减，且 $\frac{f(1)}{1}=0$
+        to: |
+          $0<x<1$ 时 $f(x)>0$；$x>1$ 时 $f(x)<0$
+        operation: 按 $x$ 与 $1$ 的大小比较单调函数值，并利用 $x>0$ 不改变符号。
+        why: 题目要求的是 $f(x)$ 的正值区间。
+      source_ref: page_0123
+    - step_id: step_4
+      statement: 用奇函数图象补全负半轴。
+      formula_trace:
+        from: |
+          $0<t<1$ 时 $f(t)>0$，$t>1$ 时 $f(t)<0$
+        to: |
+          $-1<x<0$ 时 $f(x)<0$，$x<-1$ 时 $f(x)>0$
+        operation: 令 $x=-t$，用 $f(-t)=-f(t)$。
+        why: 导数条件只给出 $x>0$，负半轴必须靠奇性延拓。
+      source_ref: page_0123
+teaching_card:
+  student_title: 看到 $x f^{\prime}-f$，先构造 $\frac{f}{x}$
+  what_it_trains: 训练把幂函数除法型导数不等式转化为辅助函数单调性，再结合奇函数求原函数正值区间。
+  recognition_cues:
+    - 条件是 $x f^{\prime}(x)-f(x)$，这是 $\left(\frac{f(x)}{x}\right)^{\prime}$ 的分子。
+    - 导数条件只在 $x>0$，先做正半轴，再由奇函数处理负半轴。
+    - 题干给 $f(-1)=0$，奇函数会把它变成正半轴比较点 $f(1)=0$。
+  normalization_moves:
+    - 写出 $\left[\frac{f(x)}{x}\right]^{\prime}=\frac{x f^{\prime}(x)-f(x)}{x^2}$。
+    - 判断 $\frac{f(x)}{x}$ 在 $(0,+\infty)$ 上递减。
+    - 用 $f(1)=0$ 分出 $(0,1)$ 与 $(1,+\infty)$。
+    - 用奇函数对称补出 $(-\infty,-1)$。
+  common_failures:
+    - 把 $x f^{\prime}(x)-f(x)$ 误构造成 $x f(x)$ 的导数。
+    - 在负半轴也直接除以 $x^2$ 使用条件，忽略条件只给 $x>0$。
+    - 比较 $\frac{f(x)}{x}$ 后忘记 $x>0$ 才能保持同号。
+    - 把 $f(-1)=0$ 错当成正半轴零点。
+  similar_practice_query: xf^{\prime}-f 小于0 f(x)/x 单调 奇函数 正值区间
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0123 图片；例 1 题干、选项、解析和答案 A 与 markdown 一致。

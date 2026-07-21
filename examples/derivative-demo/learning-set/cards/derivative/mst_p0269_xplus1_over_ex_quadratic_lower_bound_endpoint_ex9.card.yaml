@@ -1,0 +1,190 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0269_xplus1_over_ex_quadratic_lower_bound_endpoint_ex9
+content_revision_id: mst_p0269_xplus1_over_ex_quadratic_lower_bound_endpoint_ex9-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0269_xplus1_over_ex_quadratic_lower_bound_endpoint_ex9.card.yaml
+stem: （2025 · 河南安阳 · 一模）已知函数 $f(x)=\frac{x+1}{e^x}$。若当 $x>-1$ 时，$f(x)\ge1-ax^2$，求实数 $a$ 的取值范围。
+answer: |-
+  $a\ge1$。
+
+  设 $g(x)=\frac{x+1}{e^x}-1+ax^2$，题目要求 $g(x)\ge0$ 对 $x>-1$ 恒成立。$a\le0$ 时右侧二次项方向不可能支撑 正无穷处的恒成立，所以先有 $a>0$。又 $g(0)=0$， $g^\prime(x)=-xe^{-x}+2ax$，$g^\prime(0)=0$，此处极点效应失效， 局部至少要 $g^{\prime\prime}(0)=2a-1\ge0$，得 $a\ge\frac12$。但还要检查左端点，$x\to-1^+$ 时 $g(x)\to a-1$，故 $a\ge1$。反过来若 $a\ge1$， $g(x)\ge (x+1)e^{-x}-1+x^2 =(x+1)(x-1+e^{-x})=(x+1)(e^{-x}-1-(-x))\ge0$， 因为 $x+1>0$ 且 $e^u\ge1+u$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 构造差函数。
+      max_score: 1
+    - step_id: step_2
+      description: 检查 $x=0$ 的局部形态。
+      max_score: 1
+    - step_id: step_3
+      description: 局部必要条件。
+      max_score: 1
+    - step_id: step_4
+      description: 端点探路给出更强必要条件。
+      max_score: 1
+    - step_id: step_5
+      description: 证明 $a\ge1$ 的充分性。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: main
+        goal: 求参数范围
+        target: 第 main 问
+        result: $a\ge1$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 充分/必要性探路
+      - 局部逼近与找点
+    subroute:
+      - 极点效应失效
+      - $x=0$ 局部二阶探路
+      - $x\to-1^+$ 端点探路
+      - 端点条件压过局部条件
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 局部逼近结构
+      - 不等式工具结构
+      - 非齐次结构
+    evidence:
+      - $\frac{x+1}{e^x}$
+      - $1-ax^2$
+      - $g(0)=g^\prime(0)=0$
+      - $g^{\prime\prime}(0)=2a-1$
+      - $x\to-1^+$
+    normalization_moves_used:
+      - 构造差函数 $g$。
+      - 在 $x=0$ 处多求一次导，确认极点效应失效。
+      - 检查开端点 $x\to-1^+$。
+      - 用 $e^{-x}\ge1-x$ 完成充分性。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会处理开端点极限，回补函数三要素与定义域。
+      - 若学生不会求 $e^{-x}(x+1)$ 的导数，回补导数运算与几何意义。
+      - 若学生不会用二阶信息判断局部，回补导数单调极值基础。
+      - 若学生不熟悉 $e^u\ge1+u$，回补指数对数基础。
+      - 若学生因式分解 $(x+1)(x-1+e^{-x})$ 卡住，回补代数恒等变形。
+  detail_terms:
+    - $\frac{x+1}{e^x}$
+    - $1-ax^2$
+    - 极点效应失效
+    - $g^{\prime\prime}(0)\ge0$
+    - $x\to-1^+$
+    - $a\ge1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0269_xplus1_over_ex_quadratic_lower_bound_endpoint_ex9
+source_evidence:
+  source_refs:
+    - ref_id: page_0269_section_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0269/page_0269.md
+      role: local_context
+      evidence: page_0269 处于“极点效应失效分析”小节，强调 $F^{\prime\prime}(0)=0$ 不足以保证极点效应，探路要多求一次导。
+    - ref_id: page_0269_ex9_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0269/page_0269.md
+      role: problem_start
+      evidence: page_0269 给出例9题头：$f(x)=\frac{x+1}{e^x}$，若 $x>-1$ 时 $f(x)\ge1-ax^2$，求 $a$ 的取值范围。
+    - ref_id: page_0269_ex9_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0269/page_0269.md
+      role: solution
+      evidence: page_0269 例9解析设 $g(x)=\frac{x+1}{e^x}-1+ax^2$，有 $g(0)=0$、$g^\prime(0)=0$，并判断极点效应失效。
+    - ref_id: page_0270_ex9_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0270/page_0270.md
+      role: solution
+      evidence: page_0270 页首延续例9：由 $g^{\prime\prime}(0)\ge0$ 得 $a\ge\frac12$，再由端点探路 $g(-1)=-1+a\ge0$ 得 $a\ge1$，最后证明 $a\ge1$ 充分。
+    - ref_id: page_0270_ex10_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0270/page_0270.md
+      role: local_context
+      evidence: page_0270 随后另起例10，说明例9在页首闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0269.png
+      inspected: true
+      notes: 已核对页图：例9题头与解析起于 page_0269 页底。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0270.png
+      inspected: true
+      notes: 已核对页图：page_0270 页首为例9续解，随后另起例10。
+  source_context: 本卡处理 page_0269 起头、page_0270 页首续完的例9；page_0270 例10排除。
+  source_influence:
+    - 保留 source 的差函数：$g(x)=\frac{x+1}{e^x}-1+ax^2$。
+    - 保留极点效应失效判断：$g(0)=g^\prime(0)=0$ 后局部只给 $g^{\prime\prime}(0)\ge0$，即 $a\ge\frac12$。
+    - 保留端点探路：用 $x\to-1^+$ 的端点极限得到 $a\ge1$。
+    - 保留充分性证明：$a\ge1$ 时降到 $a=1$，再用 $e^{-x}\ge1-x$。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 · 河南安阳 · 一模）已知函数 $f(x)=\frac{x+1}{e^x}$。若当 $x>-1$ 时，$f(x)\ge1-ax^2$，求实数 $a$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $a\ge1$。
+  fidelity_notes:
+    - 无选项。
+    - 定义域条件是 $x>-1$；source 的 $g(-1)$ 是端点极限探路。
+solution:
+  source_solution_summary: 设 $g(x)=\frac{x+1}{e^x}-1+ax^2$，题目要求 $g(x)\ge0$ 对 $x>-1$ 恒成立。$a\le0$ 时右侧二次项方向不可能支撑 正无穷处的恒成立，所以先有 $a>0$。又 $g(0)=0$， $g^\prime(x)=-xe^{-x}+2ax$，$g^\prime(0)=0$，此处极点效应失效， 局部至少要 $g^{\prime\prime}(0)=2a-1\ge0$，得 $a\ge\frac12$。但还要检查左端点，$x\to-1^+$ 时 $g(x)\to a-1$，故 $a\ge1$。反过来若 $a\ge1$， $g(x)\ge (x+1)e^{-x}-1+x^2 =(x+1)(x-1+e^{-x})=(x+1)(e^{-x}-1-(-x))\ge0$， 因为 $x+1>0$ 且 $e^u\ge1+u$。
+  key_steps:
+    - step_id: step_1
+      statement: 构造差函数。
+      formula_trace:
+        from: $\frac{x+1}{e^x}\ge1-ax^2$
+        to: $g(x)=\frac{x+1}{e^x}-1+ax^2\ge0$
+        operation: 移项。
+        why: 恒成立问题转成差函数非负。
+      source_ref: page_0269_ex9_solution_start
+    - step_id: step_2
+      statement: 检查 $x=0$ 的局部形态。
+      formula_trace:
+        from: $g(0)=0$，$g^\prime(x)=-xe^{-x}+2ax$
+        to: $g^\prime(0)=0$，继续看 $g^{\prime\prime}(0)$
+        operation: 求导并代入接触点。
+        why: 一阶信息自动为 0，说明普通极点探路不足。
+      source_ref: page_0269_ex9_solution_start
+    - step_id: step_3
+      statement: 局部必要条件。
+      formula_trace:
+        from: $g^{\prime\prime}(x)=(x-1)e^{-x}+2a$
+        to: $g^{\prime\prime}(0)=2a-1\ge0$，$a\ge\frac12$
+        operation: 二阶局部判定。
+        why: 否则 0 附近会低于 0。
+      source_ref: page_0270_ex9_solution_continuation
+    - step_id: step_4
+      statement: 端点探路给出更强必要条件。
+      formula_trace:
+        from: $\lim_{x\to-1^+}g(x)=a-1$
+        to: $a\ge1$
+        operation: 取左端点极限。
+        why: 定义域开端点虽然不能代入，但极限不能为负。
+      source_ref: page_0270_ex9_solution_continuation
+    - step_id: step_5
+      statement: 证明 $a\ge1$ 的充分性。
+      formula_trace:
+        from: $g(x)\ge\frac{x+1}{e^x}-1+x^2$
+        to: $(x+1)(e^{-x}-1-(-x))\ge0$
+        operation: 用 $a\ge1$ 降到 $a=1$ 并因式分解。
+        why: $x+1>0$，且指数基础不等式 $e^{-x}\ge1-x$ 成立。
+      source_ref: page_0270_ex9_solution_continuation
+teaching_card:
+  student_title: 极点失效时看端点：局部只给半步，端点给最终答案
+  what_it_trains: 训练极点效应失效后的处理：不能只盯 $x=0$ 的切触，还要检查定义域端点。
+  recognition_cues:
+    - $g(0)=0$ 且 $g^\prime(0)=0$ 自动成立。
+    - 二阶局部条件只推出 $a\ge\frac12$，不够最终。
+    - 定义域是 $x>-1$，左端点虽然开着，但极限会卡住参数。
+  normalization_moves:
+    - 先构造 $g=f-(1-ax^2)$。
+    - 看 $g^{\prime\prime}(0)$ 得局部必要条件。
+    - 再看 $x\to-1^+$ 得 $a\ge1$。
+    - 最后用 $a=1$ 的基准式回证所有 $a\ge1$。
+  common_failures:
+    - 只看到 $g^{\prime\prime}(0)\ge0$，误答 $a\ge\frac12$。
+    - 因为 $x=-1$ 不在定义域，就完全忽略端点极限。
+    - 充分性证明时没有把 $a\ge1$ 降到 $a=1$。
+    - 不会把 $\frac{x+1}{e^x}-1+x^2$ 化成 $(x+1)(e^{-x}-1+x)$。
+  similar_practice_query: (x+1)/e^x 1-ax^2 极点效应失效 端点探路 a>=1
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

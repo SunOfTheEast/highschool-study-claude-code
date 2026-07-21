@@ -1,0 +1,239 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0099_exp_fraction_param_ex20
+content_revision_id: mst_p0099_exp_fraction_param_ex20-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0099_exp_fraction_param_ex20.card.yaml
+stem: |-
+  （2023 山西模拟·多选）已知函数 $f(x)=\frac{x+1}{e^{x-1}}-ax-1$，则下列说法正确的是（  ）
+  A. 若 $f(x)$ 在 $\mathbf{R}$ 上单调递增，则 $a\leqslant -1$
+  B. 若 $0<a<2$，设 $f(x)>a-1$ 的解集为 $(m,n)$（$n>m$），则 $n-m>2$
+  C. 若 $f(x)$ 有两个极值点 $x_1,x_2$，且 $x_2>2x_1$，则 $a\in\left(-\frac{e\ln2}{2},0\right)$
+  D. 若 $a=1$，则过 $(0,3)$ 仅能做曲线 $y=f(x)$ 的一条切线
+answer: |
+  ACD
+
+  对 $f(x)=\frac{x+1}{e^{x-1}}-ax-1$ 求导，得 $f^{\prime}(x)=-\frac{x}{e^{x-1}}-a$。A 中要让 $f$ 在 $\mathbf R$ 上递增，需 $-a\geqslant \max \frac{x}{e^{x-1}}=1$，故 $a\leqslant-1$，A 正确。B 中 $f(x)>a-1$ 等价于 $\frac{x+1}{e^{x-1}}>a(x+1)$；当 $a\in(1,2)$ 时，$h(1)=2<p(1)=2a$，源页据此判 B 错，也可化成解集 $(-1,1-\ln a)$，长度 $2-\ln a<2$。C 中极值点对应方程 $-a=\frac{x}{e^{x-1}}$ 的两个正根；临界条件 $x_2=2x_1$ 给出 $x_1=\ln2$、$-a=\frac{e\ln2}{2}$，要 $x_2>2x_1$ 则 $0<-a<\frac{e\ln2}{2}$，即 $-\frac{e\ln2}{2}<a<0$，C 正确。D 中令 $a=1$，源页由拐点 $(1,0)$ 和切线 $y=-2x+2$ 的图像判断过 $(0,3)$ 仅一条切线；直接切点方程也只有一个解，故 D 正确。答案 ACD。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 先求导并抽出核心函数 $g(x)=\frac{x}{e^{x-1}}$。
+      max_score: 1
+    - step_id: step_2
+      description: 判断 A：全体实数上单调递增对应导函数恒非负。
+      max_score: 1
+    - step_id: step_3
+      description: 判断 B：把不等式解集长度直接算出，看到反例区间。
+      max_score: 1
+    - step_id: step_4
+      description: 判断 C：用两个极值点对应的两个交点做临界比较。
+      max_score: 1
+    - step_id: step_5
+      description: 由临界水平线推出 C 的参数范围。
+      max_score: 1
+    - step_id: step_6
+      description: 判断 D：先按源页找 $a=1$ 时的拐点切线。
+      max_score: 1
+    - step_id: step_7
+      description: 用切点方程核实过 $(0,3)$ 只有一条切线。
+      max_score: 1
+    - step_id: step_8
+      description: 汇总正确选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: A
+        goal: 求参数范围
+        target: A：求使 $f$ 在 $\mathbf R$ 上单调递增的 $a$ 的范围。
+        result: 见 source_solution_summary
+      - part_id: B
+        goal: 几何量求解
+        target: B：判断 $f(x)>a-1$ 的解集长度命题。
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 求参数范围
+        target: C：由两个极值点和 $x_2>2x_1$ 求 $a$ 的范围。
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 几何量求解
+        target: D：判断 $a=1$ 时过定点的切线条数。
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 参变量分离
+      - 含参数分类讨论
+    subroute:
+      - 比值函数最大值
+      - 水平线交点
+      - 极值点根距临界
+      - 拐点切线界定
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 非齐次结构
+    evidence:
+      - $f^{\prime}(x)=-\frac{x}{e^{x-1}}-a$ 把 A、C 统一到 $g(x)=\frac{x}{e^{x-1}}$。
+      - B 中 $f(x)>a-1$ 可提成 $(x+1)(e^{1-x}-a)>0$。
+      - D 中 $a=1$ 后通过拐点切线和切点方程判断过定点切线条数。
+    normalization_moves_used:
+      - 把 $\frac{x}{e^{x-1}}$ 视为核心比值函数，先求最大值和交点数。
+      - 把极值点条件 $x_2>2x_1$ 变成临界等式 $x_2=2x_1$。
+      - 把 B 的解集长度命题化成显式端点 $-1$ 与 $1-\ln a$。
+      - 把 D 的图像判断补成切点方程，防止只凭示意图误判。
+  fallback:
+    only_if_trace_shows:
+      - 若学生求不出 $f^{\prime}(x)$ 或二阶导，回补导数运算与几何意义。
+      - 若学生不知道“恒递增”要让导函数恒非负，回补导数单调极值基础。
+      - 若学生不会分析 $g(x)=\frac{x}{e^{x-1}}$ 的最大值与交点数，回补函数性质与图像。
+      - 若学生在 B 中不能把不等式提成乘积，回补代数恒等变形。
+      - 若学生把切线条数只看作画图直觉，回补导数运算与几何意义。
+  detail_terms:
+    - $\frac{x+1}{e^{x-1}}-ax-1$
+    - $g(x)=\frac{x}{e^{x-1}}$
+    - $\left(\frac{x}{e^{x-1}}\right)_{\max}=1$
+    - $x_2=2x_1$
+    - $x_1=\ln2$
+    - $-\frac{e\ln2}{2}<a<0$
+    - 拐点切线 $y=-2x+2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0099_exp_fraction_param_ex20
+source_evidence:
+  source_refs:
+    - ref_id: page_0099_ex20_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0099/page_0099.md
+      role: problem_start
+      evidence: 例 20（2023 山西模拟·多选）：已知 $f(x)=\frac{x+1}{e^{x-1}}-ax-1$，判断 A-D 四个说法。
+    - ref_id: page_0099_ex20_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0099/page_0099.md
+      role: solution
+      evidence: 解析逐项判断：A 用 $f^{\prime}(x)=-\frac{x}{e^{x-1}}-a$ 和 $\left(\frac{x}{e^{x-1}}\right)_{\max}=1$；B 用 $h(x)=\frac{x+1}{e^{x-1}}$ 与 $p(x)=a(x+1)$；C 用 $g(x)=\frac{x}{e^{x-1}}$ 与 $x_2=2x_1$ 的临界；D 用 $a=1$ 时的拐点切线和图像判断，结论选 ACD。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0099.png
+      inspected: true
+      notes: 页图已核对：page_0099 中部起为例 20 题头、四个选项和完整解析，包含 $h(x)$、$g(x)$、$a=1$ 切线三幅示意图；末句原图为“左侧的近切线”。
+  source_context: page_0099 顶部是例 19 的续图和提示，例 20 从本页中部开始并在本页结束；本卡只处理例 20。
+  source_influence:
+    - 保留源页的四个多选判断和答案 ACD。
+    - A、C 按源页的参变量分离与函数图像交点个数组织。
+    - B 保留源页用 $a\in(1,2)$ 反证的思路，并补出解集长度 $2-\ln a$ 以便教学更清楚。
+    - D 保留源页拐点切线图像判断，并用切点方程核实“仅一条”。
+  source_discrepancies:
+    - page_0099 原图末句写作“左侧的近切线”，Markdown reconstruction 标为“切线”；结合题干“过点仅能做曲线的一条切线”和切点方程，语义应为左侧的一条切线，本卡按“切线”处理并记录该文字差异。
+original_problem:
+  stem: （2023 山西模拟·多选）已知函数 $f(x)=\frac{x+1}{e^{x-1}}-ax-1$，则下列说法正确的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 若 $f(x)$ 在 $\mathbf{R}$ 上单调递增，则 $a\leqslant -1$
+      text_latex: 若 $f(x)$ 在 $\mathbf{R}$ 上单调递增，则 $a\leqslant -1$
+    - label: B
+      text_raw: 若 $0<a<2$，设 $f(x)>a-1$ 的解集为 $(m,n)$（$n>m$），则 $n-m>2$
+      text_latex: 若 $0<a<2$，设 $f(x)>a-1$ 的解集为 $(m,n)$（$n>m$），则 $n-m>2$
+    - label: C
+      text_raw: 若 $f(x)$ 有两个极值点 $x_1,x_2$，且 $x_2>2x_1$，则 $a\in\left(-\frac{e\ln2}{2},0\right)$
+      text_latex: 若 $f(x)$ 有两个极值点 $x_1,x_2$，且 $x_2>2x_1$，则 $a\in\left(-\frac{e\ln2}{2},0\right)$
+    - label: D
+      text_raw: 若 $a=1$，则过 $(0,3)$ 仅能做曲线 $y=f(x)$ 的一条切线
+      text_latex: 若 $a=1$，则过 $(0,3)$ 仅能做曲线 $y=f(x)$ 的一条切线
+  answer: ACD
+  fidelity_notes:
+    - 源页选项 B 的解集记为 $(m,n)(n>m)$，本卡保留为开区间 $(m,n)$ 并补入中文括注。
+    - 源图 D 解析末句为“近切线”，Markdown 重构为“切线”；题干和数学验证均指普通切线条数，本卡按“切线”记录。
+solution:
+  source_solution_summary: |
+    对 $f(x)=\frac{x+1}{e^{x-1}}-ax-1$ 求导，得 $f^{\prime}(x)=-\frac{x}{e^{x-1}}-a$。A 中要让 $f$ 在 $\mathbf R$ 上递增，需 $-a\geqslant \max \frac{x}{e^{x-1}}=1$，故 $a\leqslant-1$，A 正确。B 中 $f(x)>a-1$ 等价于 $\frac{x+1}{e^{x-1}}>a(x+1)$；当 $a\in(1,2)$ 时，$h(1)=2<p(1)=2a$，源页据此判 B 错，也可化成解集 $(-1,1-\ln a)$，长度 $2-\ln a<2$。C 中极值点对应方程 $-a=\frac{x}{e^{x-1}}$ 的两个正根；临界条件 $x_2=2x_1$ 给出 $x_1=\ln2$、$-a=\frac{e\ln2}{2}$，要 $x_2>2x_1$ 则 $0<-a<\frac{e\ln2}{2}$，即 $-\frac{e\ln2}{2}<a<0$，C 正确。D 中令 $a=1$，源页由拐点 $(1,0)$ 和切线 $y=-2x+2$ 的图像判断过 $(0,3)$ 仅一条切线；直接切点方程也只有一个解，故 D 正确。答案 ACD。
+  key_steps:
+    - step_id: step_1
+      statement: 先求导并抽出核心函数 $g(x)=\frac{x}{e^{x-1}}$。
+      formula_trace:
+        from: $f(x)=\frac{x+1}{e^{x-1}}-ax-1$
+        to: $f^{\prime}(x)=-\frac{x}{e^{x-1}}-a$
+        operation: 对 $(x+1)e^{1-x}$ 求导，再对 $-ax-1$ 求导。
+        why: A、C 两项都转化为水平线 $y=-a$ 与 $g(x)=\frac{x}{e^{x-1}}$ 的关系。
+      source_ref: page_0099_ex20_solution
+    - step_id: step_2
+      statement: 判断 A：全体实数上单调递增对应导函数恒非负。
+      formula_trace:
+        from: $f^{\prime}(x)\geqslant0\ \forall x\in\mathbf R$
+        to: $-a\geqslant \left(\frac{x}{e^{x-1}}\right)_{\max}=1,\quad a\leqslant-1$
+        operation: 把参数移到一侧，并用 $g(x)$ 在 $x=1$ 处取最大值 $1$。
+        why: 要对所有 $x$ 成立，必须压住 $g(x)$ 的最大值。
+      source_ref: page_0099_ex20_solution
+    - step_id: step_3
+      statement: 判断 B：把不等式解集长度直接算出，看到反例区间。
+      formula_trace:
+        from: $f(x)>a-1$
+        to: $(x+1)\left(e^{1-x}-a\right)>0$，当 $0<a<2$ 时解集为 $(-1,1-\ln a)$
+        operation: 移项后提取因子 $x+1$，再解 $e^{1-x}>a$。
+        why: 解集长度为 $n-m=(1-\ln a)-(-1)=2-\ln a$；取 $1<a<2$ 时长度小于 $2$。
+      source_ref: page_0099_ex20_solution
+    - step_id: step_4
+      statement: 判断 C：用两个极值点对应的两个交点做临界比较。
+      formula_trace:
+        from: $-\!a=\frac{x_1}{e^{x_1-1}}=\frac{x_2}{e^{x_2-1}},\quad x_2=2x_1$
+        to: $x_1=\ln2,\quad -a=\frac{\ln2}{e^{\ln2-1}}=\frac{e\ln2}{2}$
+        operation: 代入 $x_2=2x_1$，约去正的 $x_1$ 并解指数方程。
+        why: 这是 $x_2>2x_1$ 与 $x_2<2x_1$ 的分界水平线。
+      source_ref: page_0099_ex20_solution
+    - step_id: step_5
+      statement: 由临界水平线推出 C 的参数范围。
+      formula_trace:
+        from: $y=-a$ 与 $g(x)=\frac{x}{e^{x-1}}$ 有两个交点，且 $x_2>2x_1$
+        to: $0<-a<\frac{e\ln2}{2}$，即 $-\frac{e\ln2}{2}<a<0$
+        operation: 结合 $g(x)$ 先增后减的图像和临界值比较。
+        why: 水平线越低，左根越靠近 $0$、右根越向右，因而更容易满足 $x_2>2x_1$。
+      source_ref: page_0099_ex20_solution
+    - step_id: step_6
+      statement: 判断 D：先按源页找 $a=1$ 时的拐点切线。
+      formula_trace:
+        from: $a=1,\quad f(x)=\frac{x+1}{e^{x-1}}-x-1$
+        to: $f^{\prime}(x)=-\frac{x}{e^{x-1}}-1,\quad f^{\prime\prime}(x)=\frac{x-1}{e^{x-1}},\quad \text{拐点 }(1,0),\quad y=-2x+2$
+        operation: 求一、二阶导，取 $x=1$ 得拐点和拐点切线。
+        why: 源图用拐点切线与 $y$ 轴交于 $(0,2)$，判断点 $(0,3)$ 的切线条数。
+      source_ref: page_0099_ex20_solution
+    - step_id: step_7
+      statement: 用切点方程核实过 $(0,3)$ 只有一条切线。
+      formula_trace:
+        from: 切点为 $t$ 时，$3=f(t)-t f^{\prime}(t)$
+        to: $(t^2+t+1)e^{1-t}=4$，该方程只有一个负根
+        operation: 代入 $a=1$ 的 $f(t)$ 与 $f^{\prime}(t)$，并观察左侧在 $(-\infty,0)$ 单调递减、在 $(0,1)$ 增、在 $(1,+\infty)$ 减，最大正侧值为 $3<4$。
+        why: 这把源页的图像判断落实为切点个数判断，确认 D 正确。
+      source_ref: page_0099_ex20_solution
+    - step_id: step_8
+      statement: 汇总正确选项。
+      formula_trace:
+        from: A 正确，B 错误，C 正确，D 正确
+        to: 答案 ACD
+        operation: 逐项合并多选结果。
+        why: 源页结论为 ACD。
+      source_ref: page_0099_ex20_solution
+teaching_card:
+  student_title: 把参数藏进一条水平线里
+  what_it_trains: 训练把含参数导函数、极值点和切线条数问题统一到核心图像，再逐项验证多选命题。
+  recognition_cues:
+    - 导函数里出现 $-\frac{x}{e^{x-1}}-a$。
+    - 题目同时问单调、解集长度、两个极值点和过点切线条数。
+    - 条件 $x_2>2x_1$ 暗示先做等号临界 $x_2=2x_1$。
+  normalization_moves:
+    - 先设 $g(x)=\frac{x}{e^{x-1}}$，把参数 $a$ 变成水平线 $y=-a$。
+    - 对 B 不只看源图，也把不等式提成 $(x+1)(e^{1-x}-a)>0$。
+    - 对 C 先令 $x_2=2x_1$ 找临界参数，再用图像判断方向。
+    - 对 D 先找拐点切线，再用切点方程确认只有一个切点。
+  common_failures:
+    - A 中只令某一点导数非负，没有取 $\frac{x}{e^{x-1}}$ 的最大值。
+    - B 中看到 $0<a<2$ 就默认长度大于 $2$，漏掉 $a>1$ 的反例。
+    - C 中把 $x_2>2x_1$ 的方向判反，得到 $a<-\frac{e\ln2}{2}$。
+    - D 中只记拐点切线 $y=-2x+2$，没有核实过 $(0,3)$ 的切点个数。
+  similar_practice_query: 指数分式 含参数导函数 水平线交点 极值点距离 过定点切线 多选
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0099 页图；例 20 题头、选项、三幅示意图和解析均在 page_0099。
+    - 源图 D 末句“近切线”与 Markdown 重构“切线”存在文字差异；按题干和切点方程验证，结论 D 正确，不需要用户拍板。

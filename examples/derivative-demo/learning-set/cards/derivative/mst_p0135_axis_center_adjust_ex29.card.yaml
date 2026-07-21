@@ -1,0 +1,231 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0135_axis_center_adjust_ex29
+content_revision_id: mst_p0135_axis_center_adjust_ex29-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0135_axis_center_adjust_ex29.card.yaml
+stem: |-
+  （2024·米东区月考）定义在 $\mathbf{R}$ 上的可导函数 $f(x)$，其导函数记为 $f^{\prime}(x)$，满足 $f(x)+2x=f(2-x)+2$，且当 $x\leqslant1$ 时，恒有 $f^{\prime}(x)+2>x$。若 $f(m)-f(1-m)\geqslant\frac32-3m$，则实数 $m$ 的取值范围是（  ）
+  A. $\left[\frac12,+\infty\right)$
+  B. $(-\infty,1]$
+  C. $[1,+\infty)$
+  D. $\left(-\infty,\frac12\right]$
+answer: |
+  A
+
+  由 $f(x)+2x=f(2-x)+2$ 可改写为
+  $f(x)+x=f(2-x)+2-x$，说明 $f(x)+x$ 关于 $x=1$ 对称。
+  按源解构造
+  $g(x)=f(x)+2x-\frac12x^2$，则
+  $g^{\prime}(x)=f^{\prime}(x)+2-x$。
+  题设给出 $x\le1$ 时 $f^{\prime}(x)+2>x$，故
+  $g^{\prime}(x)>0$ 在 $(-\infty,1]$ 恒成立，于是
+  $g$ 在 $(-\infty,1]$ 递增。再由对称关系
+  $f(x)+2x=f(2-x)+2$ 可验得 $g(2-x)=g(x)$，即
+  $g$ 关于 $x=1$ 轴对称，因此在 $[1,+\infty)$ 递减。
+  将条件
+  $f(m)-f(1-m)\ge\frac32-3m$
+  改写为
+  $f(m)+2m-\frac12m^2\ge f(1-m)+2(1-m)-\frac12(1-m)^2$，
+  即 $g(m)\ge g(1-m)$。在“以 $x=1$ 为轴对称且两侧单调”的结构下，
+  这等价于 $|m-1|\le |(1-m)-1|=|m|$。
+  解得 $m\ge\frac12$，故选 A。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 由题设等式读出对称轴位置。
+      max_score: 1
+    - step_id: step_2
+      description: 构造二次偏移函数，匹配导数条件。
+      max_score: 1
+    - step_id: step_3
+      description: 确定 $g$ 的“左增右减”单峰结构。
+      max_score: 1
+    - step_id: step_4
+      description: 把目标不等式改写为 $g$ 值比较。
+      max_score: 1
+    - step_id: step_5
+      description: 在轴对称单峰结构中比较到中心的距离。
+      max_score: 1
+    - step_id: step_6
+      description: 解出参数范围并对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 对称化与偏移
+    secondary:
+      - 对称性配凑
+    subroute:
+      - 对称轴锁定
+      - 二次项偏移调导数
+      - 距离对称轴比较
+  structure:
+    primary: 极值点偏移结构
+    secondary:
+      - 对称结构
+      - 抽象函数结构
+    evidence:
+      - $x$ 与 $2-x$ 成对出现，中心轴固定在 $x=1$。
+      - 通过 $-\frac12x^2$ 偏移把导数条件统一成 $g^{\prime}(x)>0$（左侧）。
+      - $g(m)\ge g(1-m)$ 最终转成“谁更靠近 $x=1$”的绝对值比较。
+    normalization_moves_used:
+      - 构造 $g(x)=f(x)+2x-\frac12x^2$。
+      - 验证 $g(2-x)=g(x)$。
+      - 把 $f(m)-f(1-m)\ge \frac32-3m$ 改写为 $g(m)\ge g(1-m)$。
+      - 由函数值比较过渡到 $|m-1|\le|m|$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看不出 $x$ 与 $2-x$ 对应对称轴 $x=1$，回补函数性质与图像。
+      - 若学生不会把导数条件吸收到 $g^{\prime}(x)=f^{\prime}(x)+2-x$，回补代数恒等变形。
+      - 若学生不理解“轴对称+左右单调”如何转成距离比较，回补函数性质与图像。
+  detail_terms:
+    - 对称轴 $x=1$
+    - $g(x)=f(x)+2x-\frac12x^2$
+    - $|m-1|\\le|m|$
+    - 跨页续解
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0135_axis_center_adjust_ex29
+source_evidence:
+  source_refs:
+    - ref_id: page_0135
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0135/page_0135.md
+      role: problem_start
+      evidence: "page_0135 lines 36-41: 例29题干与A-D选项。"
+    - ref_id: page_0135_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0135/page_0135.md
+      role: solution
+      evidence: "page_0135 line 43: 解法前半段，构造 $g(x)=f(x)+2x-\\frac12x^2$ 并给出 $x\\le1$ 时 $g^{\\prime}(x)>0$。"
+    - ref_id: page_0136_cont
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0136/page_0136.md
+      role: continuation
+      evidence: "page_0136 line 14: 续写“在$[1,+\\\\infty)$上递减”，并完成 $g(m)\\ge g(1-m)$ 到 $m\\ge\\\\frac12$。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0135.png
+      inspected: true
+      notes: 已核对原图，例29题干完整，解析在页底被截断。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0136.png
+      inspected: true
+      notes: 已核对原图，页首承接例29并给出结论“A”，随后开始例30（不属本批）。
+  source_context: 例29题头在page_0135，解析跨页到page_0136首行后结束；按页头归属由本批完成，并且不创建page_0136新起的例30。
+  source_influence:
+    - 题目要求参数范围，graph.goal 归为“求参数范围”。
+    - 核心构造是对称轴 $x=1$ 下再叠加二次偏移，得到 $g^{\prime}(x)=f^{\prime}(x)+2-x$。
+    - 最终比较是“函数值更大离轴更近”：$g(m)\ge g(1-m)\Rightarrow |m-1|\le|m|$。
+  source_discrepancies:
+    - field: page_0135 解析末行截断
+      old_value: page_0135 末尾到“所以函数 $g(x)$ 在 $(-\\infty,1]$ 上单...”即中断。
+      corrected_value: 由page_0136首行补全为“在 $(-\\infty,1]$ 上单调递增，在 $[1,+\\infty)$ 上单调递减”，并继续完成后续推导。
+      evidence_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0135/page_0135.md:43; mst26-full-marked-c20/pages/page_0136/page_0136.md:14
+original_problem:
+  stem: （2024·米东区月考）定义在 $\mathbf{R}$ 上的可导函数 $f(x)$，其导函数记为 $f^{\prime}(x)$，满足 $f(x)+2x=f(2-x)+2$，且当 $x\leqslant1$ 时，恒有 $f^{\prime}(x)+2>x$。若 $f(m)-f(1-m)\geqslant\frac32-3m$，则实数 $m$ 的取值范围是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\left[\frac12,+\infty\right)$
+      text_latex: $\left[\frac12,+\infty\right)$
+    - label: B
+      text_raw: $(-\infty,1]$
+      text_latex: $(-\infty,1]$
+    - label: C
+      text_raw: $[1,+\infty)$
+      text_latex: $[1,+\infty)$
+    - label: D
+      text_raw: $\left(-\infty,\frac12\right]$
+      text_latex: $\left(-\infty,\frac12\right]$
+  answer: A
+  fidelity_notes:
+    - 例29题干在page_0135，解析续到page_0136首行后结束。
+    - page_0136随后立即开始例30；该例不属于本卡。
+solution:
+  source_solution_summary: |
+    由 $f(x)+2x=f(2-x)+2$ 可改写为
+    $f(x)+x=f(2-x)+2-x$，说明 $f(x)+x$ 关于 $x=1$ 对称。
+    按源解构造
+    $g(x)=f(x)+2x-\frac12x^2$，则
+    $g^{\prime}(x)=f^{\prime}(x)+2-x$。
+    题设给出 $x\le1$ 时 $f^{\prime}(x)+2>x$，故
+    $g^{\prime}(x)>0$ 在 $(-\infty,1]$ 恒成立，于是
+    $g$ 在 $(-\infty,1]$ 递增。再由对称关系
+    $f(x)+2x=f(2-x)+2$ 可验得 $g(2-x)=g(x)$，即
+    $g$ 关于 $x=1$ 轴对称，因此在 $[1,+\infty)$ 递减。
+    将条件
+    $f(m)-f(1-m)\ge\frac32-3m$
+    改写为
+    $f(m)+2m-\frac12m^2\ge f(1-m)+2(1-m)-\frac12(1-m)^2$，
+    即 $g(m)\ge g(1-m)$。在“以 $x=1$ 为轴对称且两侧单调”的结构下，
+    这等价于 $|m-1|\le |(1-m)-1|=|m|$。
+    解得 $m\ge\frac12$，故选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 由题设等式读出对称轴位置。
+      formula_trace:
+        from: $f(x)+2x=f(2-x)+2$
+        to: $f(x)+x=f(2-x)+2-x$
+        operation: 两侧各减 $x$，把输入配成 $x$ 与 $2-x$。
+        why: 显示“关于 $x=1$ 的对称配对”结构。
+      source_ref: page_0135_solution
+    - step_id: step_2
+      statement: 构造二次偏移函数，匹配导数条件。
+      formula_trace:
+        from: $g(x)=f(x)+2x-\frac12x^2$
+        to: $g^{\prime}(x)=f^{\prime}(x)+2-x$
+        operation: 按源解直接构造并求导。
+        why: 可把题设 $f^{\prime}(x)+2>x$ 直接转成 $g^{\prime}(x)>0$。
+      source_ref: page_0135_solution
+    - step_id: step_3
+      statement: 确定 $g$ 的“左增右减”单峰结构。
+      formula_trace:
+        from: $x\le1$ 时 $g^{\prime}(x)>0$，且 $g(2-x)=g(x)$
+        to: $g$ 在 $(-\infty,1]$ 递增，在 $[1,+\infty)$ 递减
+        operation: 先用导数得左侧递增，再由关于 $x=1$ 的轴对称延拓右侧递减。
+        why: 后续可把函数值比较转成“离对称轴远近”比较。
+      source_ref: page_0136_cont
+    - step_id: step_4
+      statement: 把目标不等式改写为 $g$ 值比较。
+      formula_trace:
+        from: $f(m)-f(1-m)\ge \frac32-3m$
+        to: $g(m)\ge g(1-m)$
+        operation: 将右侧常量与线性项配成二次差：$g(m)-g(1-m)=f(m)-f(1-m)+3m-\frac32$。
+        why: 把原式降维到同一函数在两点的比较。
+      source_ref: page_0136_cont
+    - step_id: step_5
+      statement: 在轴对称单峰结构中比较到中心的距离。
+      formula_trace:
+        from: $g(m)\ge g(1-m)$
+        to: $|m-1|\le |(1-m)-1|=|m|$
+        operation: 更靠近对称轴 $x=1$ 的输入对应更大函数值。
+        why: 转成绝对值不等式后可直接解参。
+      source_ref: page_0136_cont
+    - step_id: step_6
+      statement: 解出参数范围并对应选项。
+      formula_trace:
+        from: $|m-1|\le |m|$
+        to: $(m-1)^2\le m^2\Rightarrow m\ge \frac12$
+        operation: 两侧平方化简。
+        why: 对应选项 A。
+      source_ref: page_0136_cont
+teaching_card:
+  student_title: 围绕对称轴做二次偏移，再比离轴距离
+  what_it_trains: 训练在“$x$ 与 $2-x$”型对称题中，把函数先调成便于判导数的形式，再用单峰轴对称结构把函数值比较转为绝对值比较。
+  recognition_cues:
+    - 题干出现 $f(x)$ 与 $f(2-x)$ 同时出现。
+    - 导数条件只给到 $x\le1$，常需要配合对称轴补全右侧信息。
+    - 目标式是 $f(m)-f(1-m)$，天然与中心 $x=\frac12$ 或轴 $x=1$ 的距离关系有关。
+  normalization_moves:
+    - 先锁轴：把等式改写成关于 $x=1$ 的成对输入。
+    - 再偏移：构造 $g(x)=f(x)+2x-\frac12x^2$。
+    - 将目标改写为 $g(m)\ge g(1-m)$，再转绝对值。
+  common_failures:
+    - 只用左侧导数结论，不借轴对称补右侧单调。
+    - 配凑时把 $\frac32-3m$ 与二次项对应关系写错。
+    - 从 $|m-1|\le|m|$ 解参时端点漏掉 $\frac12$。
+  similar_practice_query: 对称轴锁定 二次偏移 导数条件 参数范围 跨页例题
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

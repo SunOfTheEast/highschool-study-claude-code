@@ -1,0 +1,157 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0182_piecewise_four_roots_expression_range_ex05
+content_revision_id: mst_p0182_piecewise_four_roots_expression_range_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0182_piecewise_four_roots_expression_range_ex05.card.yaml
+stem: |-
+  （2025 · 锦州模拟 T8）已知 $f(x)=\begin{cases}-x^2-2x,&x\le0\\ |\log_2x|,&x>0\end{cases}$，函数 $g(x)=f(x)-a\ (a\in\mathbf{R})$，若 $g(x)$ 有四个不同零点 $x_1,x_2,x_3,x_4$，满足 $x_1<x_2<x_3<x_4$，则 $x_3(x_1+x_2)+\frac{1}{x_3^2x_4}$ 的范围是（  ）
+  A. $(-1,+\infty)$
+  B. $(0,\frac72)$
+  C. $\left(-1,\frac72\right]$
+  D. $(-1,1)$
+answer: |-
+  D
+
+  $g(x)$ 有四个零点等价于水平线 $y=a$ 与 $f(x)$ 有四个交点。 左侧抛物线 $-x^2-2x$ 关于 $x=-1$ 对称，所以 $x_1+x_2=-2$；右侧 $|\log_2x|$ 的两支等高满足 $x_3x_4=1$。于是 $x_3(x_1+x_2)+\frac{1}{x_3^2x_4} =-2x_3+\frac1{x_3}$。由图中四交点条件可知 $\frac12<x_3<1$，而 $-2x+\frac1x$ 在该区间单调递减，所以 取值范围为 $(-1,1)$，选 D。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把四个零点转成水平线四交点。
+      max_score: 1
+    - step_id: step_2
+      description: 读出左右两侧的等高线关系。
+      max_score: 1
+    - step_id: step_3
+      description: 化简目标并判单调范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 对称化与偏移
+    subroute:
+      - 水平等高线
+      - 抛物线轴对称
+      - 对数倒数对称
+  structure:
+    primary: 分段函数结构
+    secondary:
+      - 对称结构
+      - Max/Min 与绝对值结构
+    evidence:
+      - $x_1+x_2=-2$
+      - $x_3x_4=1$
+      - $-2x_3+\frac1{x_3}$
+    normalization_moves_used:
+      - 把零点改成水平线交点。
+      - 用图像对称性消去 $x_1,x_2,x_4$。
+      - 把四根表达式降成 $x_3$ 的单变量范围。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $g(x)=0$ 转成 $f(x)=a$，回补函数性质与图像。
+      - 若学生看不出 $x_1+x_2=-2$，回补函数性质与图像。
+      - 若学生不理解 $|\log_2x|$ 的倒数对称，回补指数对数基础。
+      - 若学生化简分式时出错，回补代数恒等变形。
+  detail_terms:
+    - $-x^2-2x$
+    - $|\log_2x|$
+    - $x_1+x_2=-2$
+    - $x_3x_4=1$
+    - $-2x_3+\frac1{x_3}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0182_piecewise_four_roots_expression_range_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0182
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0182/page_0182.md
+      role: problem_start
+      evidence: page_0182 contains 例5 statement, choices A-D, the graph of the piecewise function, and the beginning of the solution.
+    - ref_id: page_0183
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0183/page_0183.md
+      role: continuation
+      evidence: "page_0183 top continues and finishes 例5: use symmetry to get $x_1+x_2=-2$, $x_3x_4=1$, reduce the expression to $-2x_3+\\frac1{x_3}$, and use $\\frac12<x_3<1$ to obtain $(-1,1)$."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0182.png
+      inspected: true
+      notes: 页图核对通过：例5题干、选项、分段函数图像与 markdown 一致；图中标出 $x_1,x_2,x_3,x_4$ 和水平线 $y=a$。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0183.png
+      inspected: true
+      notes: 页图核对通过：page_0183 顶部为例5续解并给出最终选 D。
+  source_context: 题头在 page_0182，续解到 page_0183；按跨页规则由 page_0182 worker 负责完整题卡。
+  source_influence:
+    - 保留源解的等高线/对称性关系 $x_1+x_2=-2$ 与 $x_3x_4=1$。
+    - 保留把目标表达式化成 $-2x_3+\frac1{x_3}$ 后判范围。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 · 锦州模拟 T8）已知 $f(x)=\begin{cases}-x^2-2x,&x\le0\\ |\log_2x|,&x>0\end{cases}$，函数 $g(x)=f(x)-a\ (a\in\mathbf{R})$，若 $g(x)$ 有四个不同零点 $x_1,x_2,x_3,x_4$，满足 $x_1<x_2<x_3<x_4$，则 $x_3(x_1+x_2)+\frac{1}{x_3^2x_4}$ 的范围是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $(-1,+\infty)$
+      text_latex: $(-1,+\infty)$
+    - label: B
+      text_raw: $(0,\frac72)$
+      text_latex: $(0,\frac72)$
+    - label: C
+      text_raw: $\left(-1,\frac72\right]$
+      text_latex: $\left(-1,\frac72\right]$
+    - label: D
+      text_raw: $(-1,1)$
+      text_latex: $(-1,1)$
+  answer: D
+  fidelity_notes:
+    - 源题为单选题，选项 A-D 已完整保留。
+    - 源解依赖 page_0182 图像和 page_0183 续解中的对称性关系。
+solution:
+  source_solution_summary: $g(x)$ 有四个零点等价于水平线 $y=a$ 与 $f(x)$ 有四个交点。 左侧抛物线 $-x^2-2x$ 关于 $x=-1$ 对称，所以 $x_1+x_2=-2$；右侧 $|\log_2x|$ 的两支等高满足 $x_3x_4=1$。于是 $x_3(x_1+x_2)+\frac{1}{x_3^2x_4} =-2x_3+\frac1{x_3}$。由图中四交点条件可知 $\frac12<x_3<1$，而 $-2x+\frac1x$ 在该区间单调递减，所以 取值范围为 $(-1,1)$，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把四个零点转成水平线四交点。
+      formula_trace:
+        from: $g(x)=f(x)-a$ 有四个零点
+        to: $f(x)=a$ 有四个不同解 $x_1,x_2,x_3,x_4$
+        operation: 移项并用水平线 $y=a$ 解释。
+        why: 分段函数图象能直接给出根之间的对称关系。
+      source_ref: page_0182-page_0183
+    - step_id: step_2
+      statement: 读出左右两侧的等高线关系。
+      formula_trace:
+        from: 左侧抛物线与右侧 $|\log_2x|$ 等高
+        to: $x_1+x_2=-2,\quad x_3x_4=1$
+        operation: 利用抛物线轴对称和对数绝对值的倒数对称。
+        why: 这是化简目标表达式的核心。
+      source_ref: page_0183
+    - step_id: step_3
+      statement: 化简目标并判单调范围。
+      formula_trace:
+        from: $x_3(x_1+x_2)+\frac{1}{x_3^2x_4}$
+        to: $-2x_3+\frac1{x_3},\quad \frac12<x_3<1$
+        operation: 代入 $x_1+x_2=-2$ 和 $x_3x_4=1$。
+        why: 单变量表达式在给定区间上递减，端点开区间给出 $(-1,1)$。
+      source_ref: page_0183
+teaching_card:
+  student_title: 用等高线关系化简四个零点
+  what_it_trains: 训练在分段函数零点题中，先用图像等高线找根之间的关系，再把复杂表达式降成一个变量。
+  recognition_cues:
+    - 题目给 $f(x)-a$ 的四个零点。
+    - 左侧是有对称轴的二次函数，右侧是 $|\log_2x|$。
+    - 目标表达式同时含 $x_1+x_2$ 和 $x_3x_4$。
+  normalization_moves:
+    - 画水平线 $y=a$。
+    - 读出 $x_1+x_2=-2$ 与 $x_3x_4=1$。
+    - 把表达式化成 $-2x_3+\frac1{x_3}$。
+  common_failures:
+    - 把 $x_3x_4=1$ 误写成 $x_3+x_4=1$。
+    - 没有从图像读出 $\frac12<x_3<1$。
+    - 判断 $-2x+\frac1x$ 单调性时方向写反。
+  similar_practice_query: 分段函数 四个零点 等高线 x1+x2 x3x4 对数倒数对称
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

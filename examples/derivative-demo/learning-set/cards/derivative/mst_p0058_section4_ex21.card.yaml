@@ -1,0 +1,213 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0058_section4_ex21
+content_revision_id: mst_p0058_section4_ex21-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0058_section4_ex21.card.yaml
+stem: |-
+  （2024 广东省名校高三开学考多选 T12）设函数 $f(x)=ax^3+bx^2+cx+d\ (a\ne0)$ 满足 $f(1)+f(3)=2f(2)$，则给出如下结论正确的是（  ）
+  A. $f(x)$ 关于点 $(2,f(2))$ 成中心对称
+  B. 若 $f(x)$ 在 $(0,1)$ 上单调递增，则 $f(x)$ 是在 $(3,4)$ 上单调递增
+  C. 若 $a\cdot f(1)\geqslant a\cdot f(3)$，则 $f(x)$ 无极值
+  D. 对任意实数 $x_0$，直线 $y=(c-12a)(x-x_0)+f(x_0)$ 与曲线 $y=f(x)$ 有唯一公共点
+answer: |
+  ABD
+
+  由 $f(1)+f(3)=2f(2)$ 计算得 $12a+2b=0$，所以 $b=-6a$，于是
+  $f(x)=a(x-2)^3+(c-12a)(x-2)+f(2)$。
+  这说明图像关于点 $(2,f(2))$ 成中心对称，A 正确；导函数 $f^{\prime}(x)=3a(x-2)^2+c-12a$ 关于 $x=2$ 对称，若 $(0,1)$ 上导数为正，则与之对称的 $(3,4)$ 上导数也为正，B 正确。又 $f(1)-f(3)=2(11a-c)$，条件 $a[f(1)-f(3)]\ge0$ 推出导函数在顶点处与开口方向相反，从而有两个极值点，所以 C 错。对 D，任取 $x_0$，设 $u=x-2,u_0=x_0-2$，曲线与该直线相交等价于 $a(u^3-u_0^3)=0$，实数范围内只有 $u=u_0$，故只有一个公共点，D 正确。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 把题设条件化成二次项系数关系。
+      max_score: 1
+    - step_id: step_2
+      description: 用 $x-2$ 重写三次函数，判断 A。
+      max_score: 1
+    - step_id: step_3
+      description: 利用导函数的轴对称性判断 B。
+      max_score: 1
+    - step_id: step_4
+      description: 严格复核 C 的条件会推出有极值，而不是无极值。
+      max_score: 1
+    - step_id: step_5
+      description: 由 C 的条件看导函数确实有两个零点。
+      max_score: 1
+    - step_id: step_6
+      description: 把 D 的几何说法改写成代数唯一交点。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 抽象函数性质
+        target: 判断三次函数在给定二阶差分条件下的对称性、单调性、极值和交点性质。
+        result: 见 source_solution_summary
+  method:
+    primary: 对称化与偏移
+    secondary:
+      - 数形结合
+      - 充分/必要性探路
+    subroute:
+      - 三次函数对称中心
+      - 导函数轴对称
+      - 拐点切线平行线
+  structure:
+    primary: 三次/高次函数结构
+    secondary:
+      - 对称结构
+      - 切线/公切线/切点量结构
+    evidence:
+      - $f(1)+f(3)=2f(2)$ 等价于 $b=-6a$。
+      - $f(x)=a(x-2)^3+(c-12a)(x-2)+f(2)$。
+      - $f^{\prime}(x)=3a(x-2)^2+c-12a$ 关于 $x=2$ 对称。
+      - 与斜率 $c-12a$ 的平行直线相交时只剩三次方差。
+    normalization_moves_used:
+      - 先用题设消掉二次项偏移，定出中心 $x=2$。
+      - 把变量平移为 $u=x-2$，让中心对称结构显形。
+      - 判断单调性时比较导数在对称区间上的符号。
+      - 判断唯一交点时让直线斜率等于拐点切线斜率，使一次项相消。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f(1)+f(3)=2f(2)$ 算出 $b=-6a$，回补代数恒等变形。
+      - 若学生不知道三次函数的对称中心是拐点，回补函数性质与图像。
+      - 若学生把 $(0,1)$ 与 $(3,4)$ 的单调性联系不上，回补导数单调极值基础。
+      - 若学生不能把 D 的相交方程化到 $(x-2)^3=(x_0-2)^3$，回补方程根分布与韦达。
+  detail_terms:
+    - $f(1)+f(3)=2f(2)$
+    - $b=-6a$
+    - $(2,f(2))$
+    - $f^{\prime}(2)=c-12a$
+    - $a[(x-2)^3-(x_0-2)^3]=0$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0058_section4_ex21
+source_evidence:
+  source_refs:
+    - ref_id: page_0058_ex21_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0058/page_0058.md
+      role: problem_start
+      evidence: 例 21 题头起于 page_0058 底部：设函数 $f(x)=ax^3+bx^2+cx+d(a\ne0)$ 满足 $f(1)+$，后续跨到 page_0059。
+    - ref_id: page_0059_ex21_problem_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0059/page_0059.md
+      role: continuation
+      evidence: $f(3)=2f(2)$，则给出如下结论正确的是；选项 A-D 分别涉及中心对称、区间单调性、是否无极值、与斜率 $c-12a$ 的直线唯一交点。
+    - ref_id: page_0059_ex21_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0059/page_0059.md
+      role: solution
+      evidence: 解析由 $f(1)+f(3)=2f(2)$ 得拐点横坐标为 2，判 A、B 正确；C 不正确；再由 $-\frac{b}{3a}=2$ 得 $b=-6a$，$f^{\prime}(2)=c-12a$，判 D 正确，故选 ABD。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0058.png
+      inspected: true
+      notes: 页图已核对：例 21 题头从 page_0058 最底部开始，题干在本页只显示到 $f(1)+$。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0059.png
+      inspected: true
+      notes: 页图已核对：page_0059 顶部续出题干、A-D 选项、三幅图和完整解析，答案为 ABD。
+  source_context: 例 21 属于 page_0058 起头、page_0059 续完的多选题；按题头规则归本批 B 组。
+  source_influence:
+    - 题干和四个选项按 page_0058/page_0059 连读完整保留。
+    - 源解的图像直觉用于教学线索；卡片用 $b=-6a$ 后的代数形式补严 A-D。
+  source_discrepancies:
+    - 源解为说明 A、B、C，把 $f(1)$、$f(3)$ 画作极大值与极小值；严格说题设只推出三次函数的对称中心横坐标为 2，不推出极值点恰在 $x=1,3$。本卡用代数和导数对称性复核结论，未列为用户拍板。
+    - 源页“注意”段把拐点性质作了宽泛表述；本卡只保留本题三次函数中与拐点切线平行直线的唯一交点结论。
+original_problem:
+  stem: （2024 广东省名校高三开学考多选 T12）设函数 $f(x)=ax^3+bx^2+cx+d\ (a\ne0)$ 满足 $f(1)+f(3)=2f(2)$，则给出如下结论正确的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(x)$ 关于点 $(2,f(2))$ 成中心对称
+      text_latex: $f(x)$ 关于点 $(2,f(2))$ 成中心对称
+    - label: B
+      text_raw: 若 $f(x)$ 在 $(0,1)$ 上单调递增，则 $f(x)$ 是在 $(3,4)$ 上单调递增
+      text_latex: 若 $f(x)$ 在 $(0,1)$ 上单调递增，则 $f(x)$ 是在 $(3,4)$ 上单调递增
+    - label: C
+      text_raw: 若 $a\cdot f(1)\geqslant a\cdot f(3)$，则 $f(x)$ 无极值
+      text_latex: 若 $a\cdot f(1)\geqslant a\cdot f(3)$，则 $f(x)$ 无极值
+    - label: D
+      text_raw: 对任意实数 $x_0$，直线 $y=(c-12a)(x-x_0)+f(x_0)$ 与曲线 $y=f(x)$ 有唯一公共点
+      text_latex: 对任意实数 $x_0$，直线 $y=(c-12a)(x-x_0)+f(x_0)$ 与曲线 $y=f(x)$ 有唯一公共点
+  answer: ABD
+  fidelity_notes:
+    - 题干跨页：page_0058 仅显示到 $f(1)+$，page_0059 顶部续为 $f(3)=2f(2)$。
+    - 选项 B 源页文字为“则 $f(x)$ 是在 $(3,4)$ 上单调递增”，本卡按源文保留。
+    - 答案按源页结论为 ABD。
+solution:
+  source_solution_summary: |
+    由 $f(1)+f(3)=2f(2)$ 计算得 $12a+2b=0$，所以 $b=-6a$，于是
+    $f(x)=a(x-2)^3+(c-12a)(x-2)+f(2)$。
+    这说明图像关于点 $(2,f(2))$ 成中心对称，A 正确；导函数 $f^{\prime}(x)=3a(x-2)^2+c-12a$ 关于 $x=2$ 对称，若 $(0,1)$ 上导数为正，则与之对称的 $(3,4)$ 上导数也为正，B 正确。又 $f(1)-f(3)=2(11a-c)$，条件 $a[f(1)-f(3)]\ge0$ 推出导函数在顶点处与开口方向相反，从而有两个极值点，所以 C 错。对 D，任取 $x_0$，设 $u=x-2,u_0=x_0-2$，曲线与该直线相交等价于 $a(u^3-u_0^3)=0$，实数范围内只有 $u=u_0$，故只有一个公共点，D 正确。
+  key_steps:
+    - step_id: step_1
+      statement: 把题设条件化成二次项系数关系。
+      formula_trace:
+        from: $f(1)+f(3)=2f(2)$
+        to: $12a+2b=0\Longleftrightarrow b=-6a$
+        operation: 把 $f(1),f(2),f(3)$ 展开并合并同类项。
+        why: 三次函数的二阶差分只留下 $a,b$，能定位对称中心横坐标。
+      source_ref: page_0059_ex21_solution
+    - step_id: step_2
+      statement: 用 $x-2$ 重写三次函数，判断 A。
+      formula_trace:
+        from: $f(x)=ax^3-6ax^2+cx+d$
+        to: $f(x)=a(x-2)^3+(c-12a)(x-2)+f(2)$
+        operation: 令 $u=x-2$ 展开整理。
+        why: 关于 $u=0$ 只含奇次项和常数，图像关于 $(2,f(2))$ 中心对称。
+      source_ref: page_0059_ex21_solution
+    - step_id: step_3
+      statement: 利用导函数的轴对称性判断 B。
+      formula_trace:
+        from: $f^{\prime}(x)=3ax^2-12ax+c$
+        to: $f^{\prime}(x)=3a(x-2)^2+c-12a,\quad f^{\prime}(x)=f^{\prime}(4-x)$
+        operation: 配方后读取导函数关于 $x=2$ 对称。
+        why: $(0,1)$ 与 $(3,4)$ 关于 $x=2$ 对称，导数符号同步。
+      source_ref: page_0059_ex21_solution
+    - step_id: step_4
+      statement: 严格复核 C 的条件会推出有极值，而不是无极值。
+      formula_trace:
+        from: $a\cdot f(1)\geqslant a\cdot f(3)$
+        to: $a(11a-c)\ge0$
+        operation: 用 $f(1)-f(3)=2(11a-c)$ 化简不等式。
+        why: 这是判断导函数顶点值与二次项开口方向的关键关系。
+      source_ref: page_0059_ex21_solution
+    - step_id: step_5
+      statement: 由 C 的条件看导函数确实有两个零点。
+      formula_trace:
+        from: $f^{\prime}(x)=3a(x-2)^2+c-12a,\quad a(11a-c)\ge0$
+        to: $f^{\prime}(x)=0\ \text{有两个实根，}f(x)\ \text{有极值}$
+        operation: 若 $a>0$，则 $c\le11a<12a$；若 $a<0$，则 $c\ge11a>12a$，均使顶点值 $c-12a$ 与开口方向相反。
+        why: 导函数二次曲线与 $x$ 轴相交两次，三次函数出现极大、极小值。
+      source_ref: page_0059_ex21_solution
+    - step_id: step_6
+      statement: 把 D 的几何说法改写成代数唯一交点。
+      formula_trace:
+        from: $y=(c-12a)(x-x_0)+f(x_0)$ 与 $y=f(x)$
+        to: $a\big[(x-2)^3-(x_0-2)^3\big]=0$
+        operation: 用 $f(x)=a(x-2)^3+(c-12a)(x-2)+f(2)$ 代入相交方程，斜率项相消。
+        why: 实数中 $u^3=u_0^3$ 只有 $u=u_0$，所以唯一公共点就是原点 $x=x_0$。
+      source_ref: page_0059_ex21_solution
+teaching_card:
+  student_title: 把三次函数平移到对称中心
+  what_it_trains: 训练看到三次函数的对称条件后，先平移到拐点中心，再统一处理单调、极值和交点问题。
+  recognition_cues:
+    - 题干给出 $f(1)+f(3)=2f(2)$，三个横坐标关于 2 对称。
+    - 选项同时问中心对称、区间单调、极值和一类直线交点。
+    - 直线斜率出现 $c-12a$，正好是 $f^{\prime}(2)$。
+  normalization_moves:
+    - 先展开题设得到 $b=-6a$。
+    - 再把 $f(x)$ 改写成 $a(x-2)^3+(c-12a)(x-2)+f(2)$。
+    - 用导函数关于 $x=2$ 对称来迁移单调性。
+    - 把 D 的直线代回曲线，让一次项抵消，只剩三次方相等。
+  common_failures:
+    - 直接相信图中 $x=1,3$ 是极值点，没有用题设推导。
+    - 只看函数图像对称，忘记 B 要比较导函数符号。
+    - 判断 C 时把 $a$ 的正负漏掉。
+    - D 中把“过任意曲线上一点且平行拐点切线”误当成普通切线。
+  similar_practice_query: 三次函数 中心对称 拐点切线 平行线唯一交点 f(1)+f(3)=2f(2)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0058/page_0059 页图；例 21 起头在 page_0058，题干、选项和解析在 page_0059 续完。
+    - 源解的极大/极小草图是教学示意，严格结论由平移代数式复核，不需要用户拍板。

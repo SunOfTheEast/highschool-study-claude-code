@@ -1,0 +1,191 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0037_ex35
+content_revision_id: mst_p0037_ex35-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0037_ex35.card.yaml
+stem: |-
+  已知 $\alpha,\beta\in(0,\pi)$，$\alpha\ne\beta$，若 $e^\alpha-e^\beta=\cos\alpha-2\cos\beta$，则下列结论一定成立的是 ( )
+  A. $\sin\alpha<\sin\beta$
+  B. $\cos\alpha<\cos\beta$
+  C. $\sin\alpha>\sin\beta$
+  D. $\cos\alpha>\cos\beta$
+answer: |
+  A
+
+  设 $f(x)=e^x-\cos x$，则 $f'(x)=e^x+\sin x>0$，所以 $f$ 在 $(0,\pi)$ 上严格递增。由题设得 $f(\alpha)=f(\beta)-\cos\beta$。若 $\beta\in(0,\pi/2)$，则 $\cos\beta>0$，于是 $f(\alpha)<f(\beta)$，故 $\alpha<\beta<\pi/2$，从而 $\sin\alpha<\sin\beta$。若 $\beta\in(\pi/2,\pi)$，则 $\cos\beta<0$，于是 $f(\alpha)>f(\beta)$，故 $\pi/2<\beta<\alpha<\pi$，而 $\sin x$ 在 $(\pi/2,\pi)$ 上递减，仍有 $\sin\alpha<\sin\beta$。当 $\beta=\pi/2$ 时会推出 $\alpha=\beta$，与题设矛盾，所以无解。故 A 一定成立。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把条件整理成同一个递增函数的关系。
+      max_score: 1
+    - step_id: step_2
+      description: 证明 $f$ 在 $(0,\pi)$ 上递增。
+      max_score: 1
+    - step_id: step_3
+      description: 当 $\beta$ 在左半区间时比较。
+      max_score: 1
+    - step_id: step_4
+      description: 当 $\beta$ 在右半区间时比较。
+      max_score: 1
+    - step_id: step_5
+      description: 排除边界并确定选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 判断 $\\sin\\alpha$ 与 $\\sin\\beta$ 的必然大小。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 含参数分类讨论
+    subroute:
+      - $e^x-\\cos x$ 单调同构
+      - $\\cos\\beta$ 符号分类
+      - 正弦分段单调
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 指对复合结构
+      - 同构结构
+    evidence:
+      - $e^\\alpha-e^\\beta=\\cos\\alpha-2\\cos\\beta$ 可化为 $f(\\alpha)=f(\\beta)-\\cos\\beta$。
+      - $\\cos\\beta$ 的符号决定 $\\alpha$ 与 $\\beta$ 的顺序；随后用 $\\sin x$ 的分段单调性。
+    normalization_moves_used:
+      - 把条件移项成 $e^\\alpha-\\cos\\alpha=e^\\beta-\\cos\\beta-\\cos\\beta$。
+      - 构造 $f(x)=e^x-\\cos x$。
+      - 按 $\\beta$ 相对 $\\pi/2$ 的位置分类。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把原条件整理成 $f(\\alpha)=f(\\beta)-\\cos\\beta$，回补代数恒等变形。
+      - 若学生不能由 $f'(x)=e^x+\\sin x>0$ 得到函数递增，回补导数单调极值基础。
+      - 若学生混淆 $\\sin x$ 在 $(0,\\pi/2)$ 与 $(\\pi/2,\\pi)$ 上的单调性，回补三角函数基础。
+  detail_terms:
+    - $f(x)=e^x-\\cos x$
+    - $f(\\alpha)=f(\\beta)-\\cos\\beta$
+    - $\\cos\\beta$ 符号
+    - 正弦分段单调
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0037_ex35
+source_evidence:
+  source_refs:
+    - ref_id: page_0037
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md
+      role: problem_start
+      evidence: "lines 35-40: 例 35 题干与 A-D 选项。"
+    - ref_id: page_0037_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md
+      role: solution
+      evidence: "lines 42-44: 构造 $f(x)=e^x-\\\\cos x$，按 $\\\\cos\\\\beta$ 符号比较 $\\\\alpha,\\\\beta$，推出选项 A。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0037.png
+      inspected: true
+      notes: 已核对原图：例 35 题干、四个选项、解析与答案 A 和 markdown 一致。
+  source_context: 本题位于“考点 8”例题组中，用一个不完整同构关系 $f(\\alpha)=f(\\beta)-\\cos\\beta$，配合三角函数在 $(0,\\pi)$ 的分段单调性判断必然结论。
+  source_influence:
+    - 题目要求判断一定成立的三角大小关系，goal 取“数值比较”。
+    - 源解核心是 $f(x)=e^x-\\cos x$ 在 $(0,\\pi)$ 上递增，再按 $\\beta$ 在 $\\pi/2$ 两侧讨论。
+    - 四个选项必须完整保留；答案为 A。
+  source_discrepancies: []
+original_problem:
+  stem: 已知 $\alpha,\beta\in(0,\pi)$，$\alpha\ne\beta$，若 $e^\alpha-e^\beta=\cos\alpha-2\cos\beta$，则下列结论一定成立的是 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\sin\alpha<\sin\beta$
+      text_latex: $\sin\alpha<\sin\beta$
+    - label: B
+      text_raw: $\cos\alpha<\cos\beta$
+      text_latex: $\cos\alpha<\cos\beta$
+    - label: C
+      text_raw: $\sin\alpha>\sin\beta$
+      text_latex: $\sin\alpha>\sin\beta$
+    - label: D
+      text_raw: $\cos\alpha>\cos\beta$
+      text_latex: $\cos\alpha>\cos\beta$
+  answer: A
+  fidelity_notes:
+    - 已核对 page_0037 原图，条件右侧为 $\\cos\\alpha-2\\cos\\beta$，四个选项分别比较正弦或余弦。
+    - 源页 Reconstruction Markers 为“无”。
+solution:
+  source_solution_summary: |
+    设 $f(x)=e^x-\cos x$，则 $f'(x)=e^x+\sin x>0$，所以 $f$ 在 $(0,\pi)$ 上严格递增。由题设得 $f(\alpha)=f(\beta)-\cos\beta$。若 $\beta\in(0,\pi/2)$，则 $\cos\beta>0$，于是 $f(\alpha)<f(\beta)$，故 $\alpha<\beta<\pi/2$，从而 $\sin\alpha<\sin\beta$。若 $\beta\in(\pi/2,\pi)$，则 $\cos\beta<0$，于是 $f(\alpha)>f(\beta)$，故 $\pi/2<\beta<\alpha<\pi$，而 $\sin x$ 在 $(\pi/2,\pi)$ 上递减，仍有 $\sin\alpha<\sin\beta$。当 $\beta=\pi/2$ 时会推出 $\alpha=\beta$，与题设矛盾，所以无解。故 A 一定成立。
+  key_steps:
+    - step_id: step_1
+      statement: 把条件整理成同一个递增函数的关系。
+      formula_trace:
+        from: |
+          $e^\alpha-e^\beta=\cos\alpha-2\cos\beta$
+        to: |
+          $e^\alpha-\cos\alpha=e^\beta-\cos\beta-\cos\beta$
+        operation: 把 $\\cos\\alpha$ 移到左侧，把 $e^\\beta$ 移到右侧，并在右侧配出 $e^\\beta-\\cos\\beta$。
+        why: 两边都能出现 $f(x)=e^x-\\cos x$。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md:42
+    - step_id: step_2
+      statement: 证明 $f$ 在 $(0,\pi)$ 上递增。
+      formula_trace:
+        from: |
+          $f(x)=e^x-\cos x$
+        to: |
+          $f'(x)=e^x+\sin x>0$
+        operation: 求导并利用 $x\\in(0,\\pi)$ 时 $e^x>0$、$\\sin x>0$。
+        why: 函数值比较可以转化为角的大小比较。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md:42
+    - step_id: step_3
+      statement: 当 $\beta$ 在左半区间时比较。
+      formula_trace:
+        from: |
+          $\beta\in(0,\pi/2),\quad f(\alpha)=f(\beta)-\cos\beta$
+        to: |
+          $f(\alpha)<f(\beta)\Rightarrow \alpha<\beta$
+        operation: 由 $\\cos\\beta>0$ 得右侧小于 $f(\\beta)$，再用 $f$ 递增。
+        why: 此时 $0<\\alpha<\\beta<\\pi/2$，正弦递增给出 $\\sin\\alpha<\\sin\\beta$。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md:42
+    - step_id: step_4
+      statement: 当 $\beta$ 在右半区间时比较。
+      formula_trace:
+        from: |
+          $\beta\in(\pi/2,\pi),\quad f(\alpha)=f(\beta)-\cos\beta$
+        to: |
+          $f(\alpha)>f(\beta)\Rightarrow \alpha>\beta$
+        operation: 由 $\\cos\\beta<0$ 得 $-\\cos\\beta>0$，再用 $f$ 递增。
+        why: 此时 $\\pi/2<\\beta<\\alpha<\\pi$，正弦递减仍给出 $\\sin\\alpha<\\sin\\beta$。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md:43-44
+    - step_id: step_5
+      statement: 排除边界并确定选项。
+      formula_trace:
+        from: |
+          $\beta=\pi/2$
+        to: |
+          $f(\alpha)=f(\beta)\Rightarrow \alpha=\beta$
+        operation: 代入 $\\cos\\beta=0$，再用 $f$ 的单调性。
+        why: 这与 $\\alpha\\ne\\beta$ 矛盾；剩余两类都得到 A。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md:42-44
+teaching_card:
+  student_title: 看 $-\cos\beta$ 的符号来比较两个角
+  what_it_trains: 三角和指数混在一起时，先把 $e^x-\cos x$ 作为同一个递增函数；剩下的 $-\cos\beta$ 决定函数值往哪边偏，再结合正弦的分段单调性。
+  recognition_cues:
+    - 条件里有 $e^\\alpha,e^\\beta$，也有 $\\cos\\alpha,\\cos\\beta$。
+    - 移项后能配出 $e^x-\\cos x$。
+    - 选项比较的是 $\\sin$ 或 $\\cos$，需要先知道角的相对位置。
+  normalization_moves:
+    - 先构造 $f(x)=e^x-\\cos x$，不要直接比较正弦。
+    - 按 $\\beta$ 在 $\\pi/2$ 左右分情况，因为 $\\cos\\beta$ 变号。
+    - 左半区间用正弦递增，右半区间用正弦递减。
+  common_failures:
+    - 只讨论 $\\alpha,\\beta$ 同在某个区间，忘记说明这是由 $\\beta$ 的位置推出的。
+    - 在右半区间仍按正弦递增处理。
+    - 把 $e^\\alpha-\\cos\\alpha=e^\\beta-\cos\\beta-\\cos\\beta$ 的符号看反。
+  similar_practice_query: e^x-cosx 同构 alpha beta sin比较 cosbeta符号
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0037 原图与 markdown 一致；本题未跨页。
+    - 源解按 $\\alpha,\\beta$ 同半区间表述，本卡补明：实际由 $\\beta$ 的位置和 $f$ 的递增性推出 $\\alpha$ 落在同一半区间；不需要用户拍板。

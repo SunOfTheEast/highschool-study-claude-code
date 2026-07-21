@@ -1,0 +1,220 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0286_alnx_minus_xminus1_exp_extreme_zero_gap_ex09
+content_revision_id: mst_p0286_alnx_minus_xminus1_exp_extreme_zero_gap_ex09-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0286_alnx_minus_xminus1_exp_extreme_zero_gap_ex09.card.yaml
+stem: |-
+  （2025 · 石家庄期中）已知函数 $f(x)=a\ln x-(x-1)e^{bx}$（$a,b$ 是常数，$e$ 是自然对数的底数）。
+  1. 当 $a=1,b=0$ 时，求函数 $f(x)$ 的最大值。
+  2. 当 $a>e,b=1$ 时，证明：函数 $f(x)$ 存在唯一的极值点 $\beta$。
+  3. 若 $f(\alpha)=0$，且 $\alpha>\beta$，证明：$(\alpha-\beta)(2\beta+1)<3(\beta^2-1)$。
+answer: |-
+  第(1)问最大值为 $0$；第(2)问存在唯一极值点 $\beta$，且右侧零点 $\alpha$ 满足 $(\alpha-\beta)(2\beta+1)<3(\beta^2-1)$。
+
+  第(1)问化为 $f(x)=\ln x-x+1$，由 $f^\prime(x)=\frac{1-x}{x}$ 得 $x=1$ 处取最大值 $0$。第(2)问令 $g(x)=a-e^x x^2$，因为 $g^\prime(x)=-e^x(x^2+2x)<0$， 且 $g(1)=a-e>0$、$g(\ln a)<0$，所以存在唯一 $\beta\in(1,\ln a)$ 使 $g(\beta)=0$，函数 $f$ 先增后减， $\beta$ 是唯一极大值点。接着用 $f(x)=(x-1)(\frac{a\ln x}{x-1}-e^x)$，在 $x=\ln a$ 处找到 $f(\ln a)<0$，结合 $f(1)=0$ 和 $\alpha>\beta$ 得 $\beta<\alpha<\ln a$。目标只需证明 $(\ln a-\beta)(2\beta+1)<3(\beta^2-1)$。由 $a=e^\beta\beta^2$ 得 $\ln a=\beta+2\ln\beta$，目标化为 $3\beta^2-2\ln\beta-4\beta\ln\beta-3>0$。source 给出两条结尾： 一是构造 $h(x)=3x^2-4x\ln x-2\ln x-3$ 并证明 $h$ 在 $x>1$ 单增；二是保值性拆成 $2\beta(\beta-\ln\beta-1)+2(\beta-\ln\beta-1)+\beta(\beta-\frac1\beta-2\ln\beta)>0$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 第(1)问先处理基础最大值。
+      max_score: 1
+    - step_id: step_2
+      description: 用导函数的分子给极值点 $\beta$ 找位置。
+      max_score: 1
+    - step_id: step_3
+      description: 用 $x=\ln a$ 控住右侧零点 $\alpha$。
+      max_score: 1
+    - step_id: step_4
+      description: 把目标换成只需要证明上界版本。
+      max_score: 1
+    - step_id: step_5
+      description: 用极值点方程消去参数 $a$。
+      max_score: 1
+    - step_id: step_6
+      description: 最后证明只含 $\beta$ 的不等式。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 极值最值
+        target: 第 1 问
+        result: 最大值为 $0$。
+      - part_id: 2i
+        goal: 零点/极值点分析
+        target: 第 2i 问
+        result: 存在唯一极值点 $\beta\in(1,\ln a)$。
+      - part_id: 2ii
+        goal: 不等式证明
+        target: 第 2ii 问
+        result: $(\alpha-\beta)(2\beta+1)<3(\beta^2-1)$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 局部逼近与找点
+      - 充分/必要性探路
+      - 保值性与分治
+    subroute:
+      - 导函数分子找点
+      - 显点 $1,\ln a$ 夹住极值点
+      - 右侧零点找点
+      - 极值点方程消参
+      - 构造函数法或保值性收尾
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 极值点偏移结构
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $a\ln x-(x-1)e^x$
+      - $g(x)=a-e^x x^2$
+      - $\beta\in(1,\ln a)$
+      - $\beta<\alpha<\ln a$
+      - $\ln a=\beta+2\ln\beta$
+      - $(\alpha-\beta)(2\beta+1)<3(\beta^2-1)$
+    normalization_moves_used:
+      - 把导函数写成 $\frac{a-e^x x^2}{x}$，先研究分子。
+      - 用 $\ln x/(x-1)<1$ 证明 $f(\ln a)<0$。
+      - 用 $\alpha<\ln a$ 把零点距离不等式变成上界不等式。
+      - 由 $a=e^\beta\beta^2$ 取对数消掉参数。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求导和判单调，回补导数运算与几何意义。
+      - 若学生不理解导函数零点和极值点关系，回补导数单调极值基础。
+      - 若学生不会用 $\ln x<x-1$ 或 $x-\frac1x>2\ln x$，回补指数对数基础。
+      - 若学生不会由 $a=e^\beta\beta^2$ 推出 $\ln a=\beta+2\ln\beta$，回补代数恒等变形。
+      - 若学生看不懂图像上 $1,\beta,\alpha,\ln a$ 的顺序，回补函数性质与图像。
+  detail_terms:
+    - $a\ln x-(x-1)e^x$
+    - $g(x)=a-e^x x^2$
+    - $\beta\in(1,\ln a)$
+    - $\beta<\alpha<\ln a$
+    - $\ln a=\beta+2\ln\beta$
+    - $h(x)=3x^2-4x\ln x-2\ln x-3$
+    - 保值性
+    - 极值点方程消参
+parts: &a1
+  - part_id: "1"
+    text: 当 $a=1,b=0$ 时，求函数 $f(x)$ 的最大值。
+  - part_id: 2i
+    text: 当 $a>e,b=1$ 时，证明：函数 $f(x)$ 存在唯一的极值点 $\beta$。
+  - part_id: 2ii
+    text: 若 $f(\alpha)=0$，且 $\alpha>\beta$，证明：$(\alpha-\beta)(2\beta+1)<3(\beta^2-1)$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0286_alnx_minus_xminus1_exp_extreme_zero_gap_ex09
+source_evidence:
+  source_refs:
+    - ref_id: page_0286_ex09_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0286/page_0286.md
+      role: problem_start
+      evidence: page_0286 给出例9题头：$f(x)=a\ln x-(x-1)e^{bx}$；第(1)问取 $a=1,b=0$ 求最大值；第(2)问取 $a>e,b=1$，证明唯一极值点 $\beta$，并在 $f(\alpha)=0,\alpha>\beta$ 时证明 $(\alpha-\beta)(2\beta+1)<3(\beta^2-1)$。
+    - ref_id: page_0286_ex09_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0286/page_0286.md
+      role: solution
+      evidence: page_0286 完整写出例9解析：先用 $g(x)=a-e^x x^2$ 找到唯一 $\beta\in(1,\ln a)$，再用 $x=\ln a$ 控住右侧零点 $\alpha$，最后由 $a=e^\beta\beta^2$ 得 $\ln a=\beta+2\ln\beta$，化成只含 $\beta$ 的不等式。
+    - ref_id: page_0286_ex09_figure
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0286/page_0286.md
+      role: figure
+      evidence: page_0286 图像标出 $1,\beta,\alpha,\ln a$ 的相对位置：$\beta$ 是极大值点，$\alpha$ 是右侧零点，$\ln a$ 是右侧找点上界。
+    - ref_id: page_0286_ex10_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0286/page_0286.md
+      role: local_context
+      evidence: page_0286 页底从例10开始新题；本批次排除例10。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0286.png
+      inspected: true
+      notes: 已核对页图：例9题头、完整解析、辅助图和页底例10起头均在 page_0286。
+  source_context: 本卡处理 page_0286 起头并在同页完成的例9；page_0286 页底例10排除。
+  source_influence:
+    - 保留第(1)问基础模型：$f(x)=\ln x-x+1$ 的最大值为 $0$。
+    - 保留导函数结构：$f^\prime(x)=\frac{a-e^x x^2}{x}$。
+    - 保留极值点定位：$g(x)=a-e^x x^2$ 单调递减，且 $\beta\in(1,\ln a)$。
+    - 保留右侧零点定位：$f(1)=0$，$f(\ln a)<0$，所以 $\beta<\alpha<\ln a$。
+    - 保留关键消参：由 $a=e^\beta\beta^2$ 得 $\ln a=\beta+2\ln\beta$。
+    - 保留 source 的两种结尾：构造函数法和保值性。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 · 石家庄期中）已知函数 $f(x)=a\ln x-(x-1)e^{bx}$（$a,b$ 是常数，$e$ 是自然对数的底数）。
+  parts: *a1
+  choices: []
+  answer: 第(1)问最大值为 $0$；第(2)问存在唯一极值点 $\beta$，且右侧零点 $\alpha$ 满足 $(\alpha-\beta)(2\beta+1)<3(\beta^2-1)$。
+  fidelity_notes:
+    - 无选项。
+    - 页图中的辅助图属于例9；页底例10另起，不纳入本卡。
+solution:
+  source_solution_summary: 第(1)问化为 $f(x)=\ln x-x+1$，由 $f^\prime(x)=\frac{1-x}{x}$ 得 $x=1$ 处取最大值 $0$。第(2)问令 $g(x)=a-e^x x^2$，因为 $g^\prime(x)=-e^x(x^2+2x)<0$， 且 $g(1)=a-e>0$、$g(\ln a)<0$，所以存在唯一 $\beta\in(1,\ln a)$ 使 $g(\beta)=0$，函数 $f$ 先增后减， $\beta$ 是唯一极大值点。接着用 $f(x)=(x-1)(\frac{a\ln x}{x-1}-e^x)$，在 $x=\ln a$ 处找到 $f(\ln a)<0$，结合 $f(1)=0$ 和 $\alpha>\beta$ 得 $\beta<\alpha<\ln a$。目标只需证明 $(\ln a-\beta)(2\beta+1)<3(\beta^2-1)$。由 $a=e^\beta\beta^2$ 得 $\ln a=\beta+2\ln\beta$，目标化为 $3\beta^2-2\ln\beta-4\beta\ln\beta-3>0$。source 给出两条结尾： 一是构造 $h(x)=3x^2-4x\ln x-2\ln x-3$ 并证明 $h$ 在 $x>1$ 单增；二是保值性拆成 $2\beta(\beta-\ln\beta-1)+2(\beta-\ln\beta-1)+\beta(\beta-\frac1\beta-2\ln\beta)>0$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问先处理基础最大值。
+      formula_trace:
+        from: $f(x)=\ln x-x+1$
+        to: $f^\prime(x)=\frac{1-x}{x},\quad f(1)=0$
+        operation: 求导判单调。
+        why: $f$ 在 $(0,1)$ 上递增、在 $(1,+\infty)$ 上递减，所以最大值在 $x=1$。
+      source_ref: page_0286_ex09_solution
+    - step_id: step_2
+      statement: 用导函数的分子给极值点 $\beta$ 找位置。
+      formula_trace:
+        from: $f^\prime(x)=\frac{a-e^x x^2}{x}$
+        to: $g(x)=a-e^x x^2,\quad \beta\in(1,\ln a)$
+        operation: 令 $g(x)=a-e^x x^2$，证明 $g$ 单调递减，并比较 $g(1)$ 与 $g(\ln a)$。
+        why: 导函数零点不可显式求出，所以先用显点 $1,\ln a$ 把极值点夹住。
+      source_ref: page_0286_ex09_solution
+    - step_id: step_3
+      statement: 用 $x=\ln a$ 控住右侧零点 $\alpha$。
+      formula_trace:
+        from: $f(x)=(x-1)(\frac{a\ln x}{x-1}-e^x)$
+        to: $f(\ln a)<0,\quad \beta<\alpha<\ln a$
+        operation: 利用 $x>1$ 时 $\frac{\ln x}{x-1}<1$，在 $x=\ln a$ 处取负值。
+        why: 这样把未知零点 $\alpha$ 放到同一个右侧显点 $\ln a$ 之前。
+      source_ref: page_0286_ex09_solution
+    - step_id: step_4
+      statement: 把目标换成只需要证明上界版本。
+      formula_trace:
+        from: $\beta<\alpha<\ln a$
+        to: 只需证 $(\ln a-\beta)(2\beta+1)<3(\beta^2-1)$
+        operation: 用 $\ln a$ 替代更小的 $\alpha$。
+        why: $2\beta+1>0$，所以证明更强的上界即可。
+      source_ref: page_0286_ex09_solution
+    - step_id: step_5
+      statement: 用极值点方程消去参数 $a$。
+      formula_trace:
+        from: $g(\beta)=0$
+        to: $a=e^\beta\beta^2,\quad \ln a=\beta+2\ln\beta$
+        operation: 由导函数零点关系取对数。
+        why: 把含 $a$ 的显点 $\ln a$ 改写成只含 $\beta$ 的表达式。
+      source_ref: page_0286_ex09_solution
+    - step_id: step_6
+      statement: 最后证明只含 $\beta$ 的不等式。
+      formula_trace:
+        from: $2\ln\beta(2\beta+1)<3(\beta^2-1)$
+        to: $3\beta^2-2\ln\beta-4\beta\ln\beta-3>0$
+        operation: 构造函数 $h$ 或用保值性拆项。
+        why: 两种方法都把终点落到 $x>1$ 的基础对数不等式上。
+      source_ref: page_0286_ex09_solution
+teaching_card:
+  student_title: 用 $\ln a$ 同时卡住极值点和零点
+  what_it_trains: 训练遇到不可显式求出的极值点和零点时，先用显点 $\ln a$ 建立位置关系，再用极值点方程把参数消掉。
+  recognition_cues:
+    - 导函数零点 $\beta$ 求不出来，但可以用 $1$ 和 $\ln a$ 夹住。
+    - 题目要比较右侧零点 $\alpha$ 和极值点 $\beta$ 的距离。
+    - 函数里同时有 $a\ln x$ 和 $(x-1)e^x$，容易想到用 $x=\ln a$ 做右侧找点。
+    - 最后目标含 $\alpha$，但解析先把 $\alpha$ 换成更大的上界 $\ln a$。
+  normalization_moves:
+    - 先把 $f^\prime(x)$ 写成 $\frac{a-e^x x^2}{x}$。
+    - 用 $g(1)>0,g(\ln a)<0$ 找到 $\beta$。
+    - 把 $f(x)$ 写成 $(x-1)(\frac{a\ln x}{x-1}-e^x)$，在 $x=\ln a$ 处判负。
+    - 用 $g(\beta)=0$ 把 $\ln a$ 换成 $\beta+2\ln\beta$。
+  common_failures:
+    - 只会证明极值点唯一，但不知道为什么还要证明 $\alpha<\ln a$。
+    - 把 $x=\ln a$ 当成机械取点，没有看出它同时服务于极值点和零点定位。
+    - 直接在 $\alpha,\beta$ 之间硬代数，忽略 source 的共同上界路线。
+    - 最后不会把 $3\beta^2-2\ln\beta-4\beta\ln\beta-3>0$ 收到基础对数不等式。
+  similar_practice_query: a ln x minus (x-1)e^x 极值点 零点 beta alpha ln a 距离不等式 保值性
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,179 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0232_exp_minus_ax_zero_lock_bound_ch6_findpoint_ex1
+content_revision_id: mst_p0232_exp_minus_ax_zero_lock_bound_ch6_findpoint_ex1-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0232_exp_minus_ax_zero_lock_bound_ch6_findpoint_ex1.card.yaml
+stem: 当 $a<0$ 时，讨论函数 $f(x)=e^x-ax$ 的零点个数。
+answer: |-
+  $f(x)$ 有唯一零点，且零点 $x_1\in(\frac1a,0)$。
+
+  因为 $f'(x)=e^x-a$，当 $a<0$ 时 $f'(x)>0$，所以 $f$ 单调递增， 至多一个零点。又 $f(0)=1>0$，需要找一个 $m<0$ 使 $f(m)<0$。 当 $x<0$ 时 $e^x<1$，所以 $f(x)=e^x-ax<1-ax$。取 $m=\frac1a$，有 $1-am=0$，且 $f(\frac1a)=e^{1/a}-1<0$。因此由介值定理， 存在唯一 $x_1\in(\frac1a,0)$ 使 $f(x_1)=0$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先证明函数单调递增。
+      max_score: 1
+    - step_id: step_2
+      description: 用 $f(0)>0$ 锁定一个上界点。
+      max_score: 1
+    - step_id: step_3
+      description: 构造找小点的大函数。
+      max_score: 1
+    - step_id: step_4
+      description: 取点并完成存在性。
+      max_score: 1
+    - step_id: step_5
+      description: 由单调性和变号确定唯一零点。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: main
+        goal: 零点/极值点分析
+        target: 第 main 问
+        result: $f$ 有唯一零点，且 $x_1\in(\frac1a,0)$。
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 充分/必要性探路
+    subroute:
+      - 锁界与放缩
+      - 增反减同
+      - 主客体变量
+      - 有界客体 $e^x$
+      - 取点 $1/a$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $e^x-ax$
+      - $e^x<1\quad(x<0)$
+      - $1-ax=0$
+      - $x_1\in(\frac1a,0)$
+    normalization_moves_used:
+      - 先用导数证明单调递增。
+      - 用 $f(0)>0$ 锁定上界。
+      - 把 $e^x$ 用 1 上界替换，构造可解方程。
+      - 用介值定理和单调性收口。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f^\prime(x)>0$ 判断唯一性，回补导数单调极值基础。
+      - 若学生不理解 $1/a<0$，回补函数三要素与定义域。
+      - 若学生不会用 $e^x<1$ 找左侧点，回补指数对数基础。
+      - 若学生不会用变号推出零点存在，回补方程根分布与韦达。
+  detail_terms:
+    - $e^x-ax$
+    - $a<0$
+    - $e^x<1$
+    - $1-ax=0$
+    - $m=1/a$
+    - 锁上界
+    - 增反减同
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0232_exp_minus_ax_zero_lock_bound_ch6_findpoint_ex1
+source_evidence:
+  source_refs:
+    - ref_id: page_0232_findpoint_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0232/page_0232.md
+      role: local_context
+      evidence: page_0232 进入“三、锁界与放缩”，说明单调函数零点取点的关键在值域锁定。
+    - ref_id: page_0232_ex1_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0232/page_0232.md
+      role: problem_start
+      evidence: page_0232 给出例1题头：当 $a<0$ 时，讨论 $f(x)=e^x-ax$ 的零点个数。
+    - ref_id: page_0232_ex1_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0232/page_0232.md
+      role: solution
+      evidence: 解析证明 $f$ 单调递增，用 $f(0)=1>0$ 锁定上界，再取 $m=1/a<0$ 得 $f(1/a)<0$，从而唯一零点在 $(1/a,0)$。
+    - ref_id: page_0232_ex2_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0232/page_0232.md
+      role: local_context
+      evidence: page_0232 随后另起例2，属于本批下一张卡，不混入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0232.png
+      inspected: true
+      notes: 已核对页图：例1题头和完整解析位于 page_0232 中部。
+  source_context: 本卡处理 page_0232 起头并在同页结束的例1。
+  source_influence:
+    - 保留 source 的“锁上界再找小点”：先由 $f(0)>0$ 锁定右侧，再构造 $m<0$ 让 $f(m)<0$。
+    - 保留 source 的主客体变量语言：$e^x$ 是有界客体，$-ax$ 是导致负值的主体变量。
+    - 保留增反减同：增函数找小点需要构造大函数 $1-ax$。
+  source_discrepancies: []
+original_problem:
+  stem: 当 $a<0$ 时，讨论函数 $f(x)=e^x-ax$ 的零点个数。
+  parts: *a1
+  choices: []
+  answer: $f(x)$ 有唯一零点，且零点 $x_1\in(\frac1a,0)$。
+  fidelity_notes:
+    - 单问零点个数题，无选项。
+    - 题设 $a<0$，所以 $\frac1a<0$。
+solution:
+  source_solution_summary: 因为 $f'(x)=e^x-a$，当 $a<0$ 时 $f'(x)>0$，所以 $f$ 单调递增， 至多一个零点。又 $f(0)=1>0$，需要找一个 $m<0$ 使 $f(m)<0$。 当 $x<0$ 时 $e^x<1$，所以 $f(x)=e^x-ax<1-ax$。取 $m=\frac1a$，有 $1-am=0$，且 $f(\frac1a)=e^{1/a}-1<0$。因此由介值定理， 存在唯一 $x_1\in(\frac1a,0)$ 使 $f(x_1)=0$。
+  key_steps:
+    - step_id: step_1
+      statement: 先证明函数单调递增。
+      formula_trace:
+        from: $f(x)=e^x-ax$
+        to: $f^\prime(x)=e^x-a>0$
+        operation: 求导并用 $a<0$。
+        why: 单调递增说明零点至多一个。
+      source_ref: page_0232_ex1_solution
+    - step_id: step_2
+      statement: 用 $f(0)>0$ 锁定一个上界点。
+      formula_trace:
+        from: $f(0)=1$
+        to: $f(0)>0$
+        operation: 代入 $x=0$。
+        why: 递增函数要证明有零点，还需要在左侧找到负值点。
+      source_ref: page_0232_ex1_solution
+    - step_id: step_3
+      statement: 构造找小点的大函数。
+      formula_trace:
+        from: $f(x)=e^x-ax$
+        to: $f(x)<1-ax\quad(x<0)$
+        operation: 用 $x<0$ 时 $e^x<1$。
+        why: 增函数找小点用大函数，令大函数为 0 后原函数更小。
+      source_ref: page_0232_ex1_solution
+    - step_id: step_4
+      statement: 取点并完成存在性。
+      formula_trace:
+        from: $1-ax=0$
+        to: $m=\frac1a,\quad f(\frac1a)=e^{1/a}-1<0$
+        operation: 解可解方程并代回。
+        why: $a<0$ 使 $1/a<0$，刚好在 0 左侧。
+      source_ref: page_0232_ex1_solution
+    - step_id: step_5
+      statement: 由单调性和变号确定唯一零点。
+      formula_trace:
+        from: $f(\frac1a)<0,\ f(0)>0$
+        to: $\exists! x_1\in(\frac1a,0),\ f(x_1)=0$
+        operation: 介值定理加单调性。
+        why: 存在性由变号，唯一性由单调递增。
+      source_ref: page_0232_ex1_solution
+teaching_card:
+  student_title: 递增函数先锁住 $0$，再用 $e^x<1$ 找左边负值点
+  what_it_trains: 训练零点找点的最小模型：单调性给唯一性，放缩取点给存在性。
+  recognition_cues:
+    - $a<0$ 时 $e^x-ax$ 单调递增。
+    - $f(0)>0$，所以要往左找负值点。
+    - 左侧 $x<0$ 时 $e^x$ 有上界 1，可以换成 $1-ax$。
+  normalization_moves:
+    - 先判 $f^\prime(x)>0$。
+    - 代 $x=0$ 得到正值。
+    - 用 $e^x<1$ 构造 $1-ax=0$。
+    - 取 $m=1/a$ 并用介值定理夹出零点。
+  common_failures:
+    - 只说函数递增，忘记还要证明存在零点。
+    - 没有注意 $a<0$，误以为 $1/a$ 在右侧。
+    - 找点时直接猜点，没有解释为什么用 $1-ax$。
+  similar_practice_query: e^x-ax a<0 零点个数 锁界 放缩取点 增反减同 1/a
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

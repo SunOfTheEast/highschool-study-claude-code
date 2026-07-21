@@ -1,0 +1,338 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0163_offset_ln_pair_multiselect_ex24
+content_revision_id: mst_p0163_offset_ln_pair_multiselect_ex24-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0163_offset_ln_pair_multiselect_ex24.card.yaml
+stem: |-
+  （2023·重庆期中·多选）已知 $\\frac{a}{\\ln a}=\\frac{b}{\\ln b}=2.86$，$c\\ln c=d\\ln d=-0.35$，$a<b$，$c<d$，则有（  ）
+  A. $a+b<2e$
+  B. $c+d>\\frac{2}{e}$
+  C. $ad<1$
+  D. $bc>1$
+answer: |
+  BCD
+
+  先由
+  \[
+  \frac1{2.86}\approx0.3497
+  \]
+  令
+  \[
+  f(x)=\frac{\ln x}{x}\quad(x>1).
+  \]
+  则
+  \[
+  \frac{\ln a}{a}=\frac{\ln b}{b}=0.3497.
+  \]
+  若 $f(a)=f(b)$ 且 $a<b$，源解得
+  \[
+  1<a<e<b,
+  \]
+  并据“极大值点左偏”推出
+  \[
+  a+b>2e.
+  \]
+  所以 A（$a+b<2e$）错误。
+
+  再设
+  \[
+  g(x)=x\ln x=-\frac{\ln(1/x)}{1/x}=-f\!\left(\frac1x\right)\quad(0<x<1).
+  \]
+  由
+  \[
+  c\ln c=d\ln d=-0.35,\ c<d
+  \]
+  得
+  \[
+  0<c<\frac1e<d<1,
+  \]
+  且源解据“极小值点左偏”得到
+  \[
+  c+d>\frac2e.
+  \]
+  故 B 正确。
+
+  对 C：由 $-f(1/d)=g(d)$ 以及源解给出的比较
+  \[
+  -f\!\left(\frac1d\right)+f(a)<0
+  \Rightarrow
+  f\!\left(\frac1d\right)>f(a).
+  \]
+  又 $f$ 在 $(1,e)$ 递增，故
+  \[
+  \frac1d>a\Rightarrow ad<1.
+  \]
+  C 正确。
+
+  对 D：由 $-f(1/c)=g(c)=-0.35$ 与源解比较
+  \[
+  -f\!\left(\frac1c\right)+f(b)<0
+  \Rightarrow
+  f(b)<f\!\left(\frac1c\right).
+  \]
+  且 $b>e,\ \frac1c>e$，$f$ 在 $(e,+\infty)$ 递减，所以
+  \[
+  \frac1c<b\Rightarrow bc>1.
+  \]
+  D 正确。
+
+  综上选 BCD。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 把 $a,b$ 条件统一到 $f(x)=\\frac{\\ln x}{x}$。
+      max_score: 1
+    - step_id: step_2
+      description: 用偏移结论判 A。
+      max_score: 1
+    - step_id: step_3
+      description: 把 $c,d$ 条件统一到 $g(x)=x\\ln x$。
+      max_score: 1
+    - step_id: step_4
+      description: 用偏移结论判 B。
+      max_score: 1
+    - step_id: step_5
+      description: 比较 $f(1/d)$ 与 $f(a)$ 判 C。
+      max_score: 1
+    - step_id: step_6
+      description: 比较 $f(1/c)$ 与 $f(b)$ 判 D。
+      max_score: 1
+    - step_id: step_7
+      description: 汇总多选结论。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 判断四个关于 $a,b,c,d$ 的不等式命题真假。
+        result: 见 source_solution_summary
+  method:
+    primary: 对称化与偏移
+    secondary:
+      - 同构变形与换元法
+      - 数形结合
+    subroute:
+      - $f(x)=\\frac{\\ln x}{x}$ 与 $g(x)=x\\ln x$ 互换
+      - 极值点左偏判和
+      - 区间单调性判乘积不等式
+  structure:
+    primary: 极值点偏移结构
+    secondary:
+      - 同构结构
+      - 指对复合结构
+    evidence:
+      - $a,b$ 来自 $f(a)=f(b)$ 的同值点比较，峰值在 $x=e$。
+      - $c,d$ 来自 $g(c)=g(d)$，且 $g(x)=-f(1/x)$ 把两个模型连通。
+      - C/D 都通过比较 $f(1/d),f(a)$ 与 $f(1/c),f(b)$ 完成。
+    normalization_moves_used:
+      - 把 $\\frac{a}{\\ln a}=2.86$ 转成 $\\frac{\\ln a}{a}=\\frac1{2.86}$。
+      - 把 $x\\ln x$ 改写成 $-f(1/x)$。
+      - 先定区间 $1<a<e<b$ 与 $0<c<1/e<d<1$，再用单调性落地。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会在 $\\frac{a}{\\ln a}$ 与 $\\frac{\\ln a}{a}$ 间切换，回补指数对数基础。
+      - 若学生不熟悉“峰值左偏/极小值左偏”到 $a+b,c+d$ 的转换，回补函数性质与图像。
+      - 若学生在 $(1,e)$ 与 $(e,+\\infty)$ 的单调区间上判断混乱，回补导数单调极值基础。
+  detail_terms:
+    - $f(x)=\\frac{\\ln x}{x}$
+    - $g(x)=x\\ln x=-f(1/x)$
+    - $1<a<e<b$
+    - $0<c<1/e<d<1$
+    - $ad<1,\\ bc>1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0163_offset_ln_pair_multiselect_ex24
+source_evidence:
+  source_refs:
+    - ref_id: page_0163_ex24_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0163/page_0163.md
+      role: problem_start
+      evidence: 例24题头与 A-D 选项起于 page_0163 页底。
+    - ref_id: page_0164_ex24_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0164/page_0164.md
+      role: continuation
+      evidence: page_0164 整页为例24解析续页，没有新题头。
+    - ref_id: page_0164_ex24_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0164/page_0164.md
+      role: solution
+      evidence: 解析先用 $f(x)=\\frac{\\ln x}{x}$ 判 $1<a<e<b$ 与 A；再用 $g(x)=x\\ln x=-f(1/x)$ 判 $0<c<1/e<d<1$ 与 B；最后判 C、D，答案 BCD。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0163.png
+      inspected: true
+      notes: 已核对原图：例24题头与四个选项完整出现在 page_0163 底部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0164.png
+      inspected: true
+      notes: 已核对原图：page_0164 仅有例24解析，无新题头。
+  source_context: 例24由 page_0163 起头并在 page_0164 完成；按页头归属由本批完成整卡。
+  source_influence:
+    - 保留源解主函数：$f(x)=\\frac{\\ln x}{x}$ 与 $g(x)=x\\ln x=-f(1/x)$。
+    - 保留源解对 A/B 的偏移判定：$a+b>2e$（A错）与 $c+d>\\frac2e$（B对）。
+    - 保留源解 C/D 的组合判定：比较 $f(1/d)$ 与 $f(a)$、$f(1/c)$ 与 $f(b)$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·重庆期中·多选）已知 $\\frac{a}{\\ln a}=\\frac{b}{\\ln b}=2.86$，$c\\ln c=d\\ln d=-0.35$，$a<b$，$c<d$，则有（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a+b<2e$
+      text_latex: $a+b<2e$
+    - label: B
+      text_raw: $c+d>\\frac{2}{e}$
+      text_latex: $c+d>\\frac{2}{e}$
+    - label: C
+      text_raw: $ad<1$
+      text_latex: $ad<1$
+    - label: D
+      text_raw: $bc>1$
+      text_latex: $bc>1$
+  answer: BCD
+  fidelity_notes:
+    - 题头与选项位于 page_0163，解析完整位于 page_0164。
+solution:
+  source_solution_summary: |
+    先由
+    \[
+    \frac1{2.86}\approx0.3497
+    \]
+    令
+    \[
+    f(x)=\frac{\ln x}{x}\quad(x>1).
+    \]
+    则
+    \[
+    \frac{\ln a}{a}=\frac{\ln b}{b}=0.3497.
+    \]
+    若 $f(a)=f(b)$ 且 $a<b$，源解得
+    \[
+    1<a<e<b,
+    \]
+    并据“极大值点左偏”推出
+    \[
+    a+b>2e.
+    \]
+    所以 A（$a+b<2e$）错误。
+
+    再设
+    \[
+    g(x)=x\ln x=-\frac{\ln(1/x)}{1/x}=-f\!\left(\frac1x\right)\quad(0<x<1).
+    \]
+    由
+    \[
+    c\ln c=d\ln d=-0.35,\ c<d
+    \]
+    得
+    \[
+    0<c<\frac1e<d<1,
+    \]
+    且源解据“极小值点左偏”得到
+    \[
+    c+d>\frac2e.
+    \]
+    故 B 正确。
+
+    对 C：由 $-f(1/d)=g(d)$ 以及源解给出的比较
+    \[
+    -f\!\left(\frac1d\right)+f(a)<0
+    \Rightarrow
+    f\!\left(\frac1d\right)>f(a).
+    \]
+    又 $f$ 在 $(1,e)$ 递增，故
+    \[
+    \frac1d>a\Rightarrow ad<1.
+    \]
+    C 正确。
+
+    对 D：由 $-f(1/c)=g(c)=-0.35$ 与源解比较
+    \[
+    -f\!\left(\frac1c\right)+f(b)<0
+    \Rightarrow
+    f(b)<f\!\left(\frac1c\right).
+    \]
+    且 $b>e,\ \frac1c>e$，$f$ 在 $(e,+\infty)$ 递减，所以
+    \[
+    \frac1c<b\Rightarrow bc>1.
+    \]
+    D 正确。
+
+    综上选 BCD。
+  key_steps:
+    - step_id: step_1
+      statement: 把 $a,b$ 条件统一到 $f(x)=\\frac{\\ln x}{x}$。
+      formula_trace:
+        from: $\\frac{a}{\\ln a}=\\frac{b}{\\ln b}=2.86$
+        to: $f(a)=f(b)=\\frac1{2.86}\\approx0.3497$
+        operation: 取倒数并定义 $f$。
+        why: 引入“同值点 + 峰值偏移”主框架。
+      source_ref: page_0164_ex24_solution
+    - step_id: step_2
+      statement: 用偏移结论判 A。
+      formula_trace:
+        from: $f(a)=f(b)$ 且 $a<b$
+        to: $1<a<e<b$ 且 $a+b>2e$
+        operation: 按源解使用 $f$ 在峰值点附近的偏移判定。
+        why: A 命题与该结论相反，因此 A 错。
+      source_ref: page_0164_ex24_solution
+    - step_id: step_3
+      statement: 把 $c,d$ 条件统一到 $g(x)=x\\ln x$。
+      formula_trace:
+        from: $c\\ln c=d\\ln d=-0.35$
+        to: $g(c)=g(d)$，其中 $g(x)=x\\ln x=-f(1/x)$
+        operation: 定义互换函数并代入。
+        why: 把第二组条件转为同值点偏移比较。
+      source_ref: page_0164_ex24_solution
+    - step_id: step_4
+      statement: 用偏移结论判 B。
+      formula_trace:
+        from: $0<c<\\frac1e<d<1$ 且 $g(c)=g(d)$
+        to: $c+d>\\frac2e$
+        operation: 按源解使用极小值点左偏结论。
+        why: B 正确。
+      source_ref: page_0164_ex24_solution
+    - step_id: step_5
+      statement: 比较 $f(1/d)$ 与 $f(a)$ 判 C。
+      formula_trace:
+        from: $-f(1/d)+f(a)<0$
+        to: $f(1/d)>f(a)\\Rightarrow 1/d>a\\Rightarrow ad<1$
+        operation: 先代数移项，再用 $(1,e)$ 递增保序。
+        why: 得到 C 正确。
+      source_ref: page_0164_ex24_solution
+    - step_id: step_6
+      statement: 比较 $f(1/c)$ 与 $f(b)$ 判 D。
+      formula_trace:
+        from: $-f(1/c)+f(b)<0$
+        to: $f(b)<f(1/c)\\Rightarrow 1/c<b\\Rightarrow bc>1$
+        operation: 在 $(e,+\\infty)$ 递减区做反向保序。
+        why: 得到 D 正确。
+      source_ref: page_0164_ex24_solution
+    - step_id: step_7
+      statement: 汇总多选结论。
+      formula_trace:
+        from: A 错，B 对，C 对，D 对
+        to: 选 BCD
+        operation: 逐项合并。
+        why: 完成作答。
+      source_ref: page_0164_ex24_solution
+teaching_card:
+  student_title: 双同值点偏移：先判和，再判乘积
+  what_it_trains: 训练在多选题里把两组同值条件统一到偏移模型，再分区间用单调性落地到乘积结论。
+  recognition_cues:
+    - 题干同时出现 $\\frac{x}{\\ln x}$ 与 $x\\ln x$ 两类等值条件。
+    - 给出 $a<b,c<d$，通常对应“同值点左右位置”信息。
+    - 选项既有和比较也有乘积比较。
+  normalization_moves:
+    - 先统一函数：$f(x)=\\frac{\\ln x}{x}$。
+    - 再用 $g(x)=x\\ln x=-f(1/x)$ 连接第二组条件。
+    - 最后按区间单调性分别判 C、D。
+  common_failures:
+    - 把 A 的方向看反（应为 $a+b>2e$）。
+    - 忘记 $0<c<1/e<d<1$，导致 C、D 比较基点错位。
+    - 在 $(e,+\\infty)$ 递减区仍按“自变量大函数值大”处理。
+  similar_practice_query: lnx/x xlnx 同值点 偏移 多选 ad<1 bc>1
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

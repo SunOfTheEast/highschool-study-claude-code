@@ -1,0 +1,183 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0166_triangle_area_min_ex06
+content_revision_id: mst_p0166_triangle_area_min_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0166_triangle_area_min_ex06.card.yaml
+stem: |-
+  （2023 · 无为市月考 T12）已知直线 y=a 分别与直线 y=2x-2 和曲线 y=2e^x+x 相交于点 A，B，点 C 在直线 y=2x-2 上，且 BC ⟂ AB，则三角形 ABC 的面积最小值为（  ）
+  A. (1/2)(3+ln2)^2
+  B. (1/4)(3+ln2)^2
+  C. (1/8)(3+ln2)^2
+  D. 3+2ln2
+answer: |-
+  B
+
+  法一：A,C 在 y=2x-2 上，而 AB 在 y=a 上为水平线，且 BC ⟂ AB， 故 BC 垂直、AB 水平，结合直线 AC 斜率 2 得 tan∠BAC=2=BC/AB， 即 BC=2AB。面积 S=AB*BC/2=BC^2/4，只需最小化 BC。设 B 的横坐标为 x， 则 BC=2e^x+x-(2x-2)=2e^x-x+2=:h(x)。h^{\prime}(x)=2e^x-1， h^{\prime}(x)=0 得 x=-ln2，h_min=3+ln2，所以 S_min=(1/4)(3+ln2)^2。法二用 y=2e^x+x=e^{x+ln2}+x>=2x+1+ln2 构造与 y=2x-2 平行的切线，也得到同一结果。故选 B。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把面积最小值转成 BC 的最小值。
+      max_score: 1
+    - step_id: step_2
+      description: 写出 BC 的函数表达式。
+      max_score: 1
+    - step_id: step_3
+      description: 求 h(x) 最小值。
+      max_score: 1
+    - step_id: step_4
+      description: 回代得到面积最小值。
+      max_score: 1
+    - step_id: step_5
+      description: 法二用平行切线校验同一结果。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何量求解
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 切线放缩与凹凸性
+      - 同构变形与换元法
+    subroute:
+      - 竖向距离函数最小化
+      - 平行切线最短距离
+      - 点到直线距离
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - BC=2AB => S=BC^2/4
+      - BC=h(x)=2e^x-x+2
+      - h^{\prime}(x)=2e^x-1=0 => BC_min=3+ln2
+      - S_min=(1/4)(3+ln2)^2
+    normalization_moves_used:
+      - 把面积最小值转成单变量距离函数 h(x) 的最小值。
+      - 把曲线与直线的竖向差写成 2e^x-x+2。
+      - 用 e^u>=u+1 构造平行切线做二次验证。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看不出 BC=2AB，回补几何关系基础。
+      - 若学生不会把 BC 写成纵坐标差函数，回补函数性质与图像。
+      - 若学生对 h^{\prime}(x)=2e^x-1 求根出错，回补导数单调极值基础。
+      - 若学生不理解法二中的 e^u>=u+1，回补指数对数基础。
+  detail_terms:
+    - y=2e^x+x
+    - y=2x-2
+    - BC=2e^x-x+2
+    - x=-ln2
+    - 3+ln2
+    - (1/4)(3+ln2)^2
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0166_triangle_area_min_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0166
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0166/page_0166.md
+      role: problem_start
+      evidence: lines 36-41 给出例 6 题干与四个选项，题头在 page_0166 底部起始。
+    - ref_id: page_0167
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0167/page_0167.md
+      role: continuation
+      evidence: lines 21-23 续完例 6 的两种解法：法一用 h(x)=2e^x-x+2 求 BC 最小值， 法二用平行切线 y=2x+1+ln2 与点到直线距离，结论都为选 B。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0166.png
+      inspected: true
+      notes: 页图确认例 6 题干从 page_0166 底部起头，选项 A-D 完整在本页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0167.png
+      inspected: true
+      notes: 页图确认 page_0167 顶部是例 6 续解，含法一与法二完整公式链， 然后才进入下一节“反函数构造水平距离差问题”。
+  source_context: 本卡遵循页头归属：题头在 page_0166，故由 batch_B 负责；解析跨到 page_0167 顶部后结束。page_0167 后续例 7/例 6（新节）不属于本卡。
+  source_influence:
+    - 保留法一主链：BC=2AB，面积 S=BC^2/4，转化为 h(x)=2e^x-x+2 最小值。
+    - 保留法二平行切线链：y=2e^x+x>=2x+1+ln2，对应最短距离 d=|3+ln2|/sqrt(5)。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 无为市月考 T12）已知直线 y=a 分别与直线 y=2x-2 和曲线 y=2e^x+x 相交于点 A，B，点 C 在直线 y=2x-2 上，且 BC ⟂ AB，则三角形 ABC 的面积最小值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: (1/2)(3+ln2)^2
+      text_latex: $\frac{1}{2}(3+\ln 2)^2$
+    - label: B
+      text_raw: (1/4)(3+ln2)^2
+      text_latex: $\frac{1}{4}(3+\ln 2)^2$
+    - label: C
+      text_raw: (1/8)(3+ln2)^2
+      text_latex: $\frac{1}{8}(3+\ln 2)^2$
+    - label: D
+      text_raw: 3+2ln2
+      text_latex: $3+2\ln 2$
+  answer: B
+  fidelity_notes:
+    - 题干与选项在 page_0166，解析在 page_0167 顶部续完。
+    - 源解同时给出法一与法二，答案一致为 B。
+solution:
+  source_solution_summary: 法一：A,C 在 y=2x-2 上，而 AB 在 y=a 上为水平线，且 BC ⟂ AB， 故 BC 垂直、AB 水平，结合直线 AC 斜率 2 得 tan∠BAC=2=BC/AB， 即 BC=2AB。面积 S=AB*BC/2=BC^2/4，只需最小化 BC。设 B 的横坐标为 x， 则 BC=2e^x+x-(2x-2)=2e^x-x+2=:h(x)。h^{\prime}(x)=2e^x-1， h^{\prime}(x)=0 得 x=-ln2，h_min=3+ln2，所以 S_min=(1/4)(3+ln2)^2。法二用 y=2e^x+x=e^{x+ln2}+x>=2x+1+ln2 构造与 y=2x-2 平行的切线，也得到同一结果。故选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 把面积最小值转成 BC 的最小值。
+      formula_trace:
+        from: A,C 在 y=2x-2 上，AB 水平，BC ⟂ AB
+        to: tan∠BAC=2=BC/AB => BC=2AB => S=(AB*BC)/2=BC^2/4
+        operation: 用斜率和直角关系建立边长比例。
+        why: S 与 BC 单调对应，只需优化一元量 BC。
+      source_ref: page_0167:line 21
+    - step_id: step_2
+      statement: 写出 BC 的函数表达式。
+      formula_trace:
+        from: B 在 y=2e^x+x，C 在 y=2x-2，且 BC 竖直
+        to: BC=2e^x+x-(2x-2)=2e^x-x+2=:h(x)
+        operation: 同横坐标下取纵坐标差。
+        why: 把几何量最值化为单变量函数最值。
+      source_ref: page_0167:line 21
+    - step_id: step_3
+      statement: 求 h(x) 最小值。
+      formula_trace:
+        from: h(x)=2e^x-x+2
+        to: h^{\prime}(x)=2e^x-1=0 => x=-ln2, h_min=3+ln2
+        operation: 求导并在驻点处代值。
+        why: BC 最小值直接决定面积最小值。
+      source_ref: page_0167:line 21
+    - step_id: step_4
+      statement: 回代得到面积最小值。
+      formula_trace:
+        from: S=BC^2/4, BC_min=3+ln2
+        to: S_min=(1/4)(3+ln2)^2
+        operation: 把最小 BC 代入面积表达式。
+        why: 得到选项对应数值。
+      source_ref: page_0167:line 21
+    - step_id: step_5
+      statement: 法二用平行切线校验同一结果。
+      formula_trace:
+        from: 2e^x+x=e^{x+ln2}+x
+        to: 2e^x+x>=2x+1+ln2，平行线距离法也给出 S_min=(1/4)(3+ln2)^2
+        operation: 套 e^u>=u+1 并构造与 y=2x-2 平行的切线。
+        why: 源页给出第二条独立路径，增强结论可靠性。
+      source_ref: page_0167:line 23
+teaching_card:
+  student_title: 先把面积改成 BC^2/4，再最小化 2e^x-x+2
+  what_it_trains: 训练把几何最值题降维：先用几何比例把面积写成单边函数，再用导数求单变量最小值； 同时能用平行切线法做交叉验证。
+  recognition_cues:
+    - 题目给出 AB 水平、BC 垂直和 AC 固定斜率。
+    - 面积目标可先写成边长乘积。
+    - 曲线 y=2e^x+x 与直线 y=2x-2 的纵向差自然出现。
+  normalization_moves:
+    - 由 tan∠BAC=2 得 BC=2AB。
+    - 把 S 写成 BC^2/4。
+    - 设 h(x)=2e^x-x+2 并求 h_min。
+    - 可用平行切线 y=2x+1+ln2 做复核。
+  common_failures:
+    - 直接在 A,B,C 三点坐标上硬算面积，计算量过大。
+    - 把 BC 误写成 2e^x+x-(2x+2) 等符号错误。
+    - 求出 BC_min 后忘记还要平方再除以 4。
+  similar_practice_query: 曲线直线 三角形面积最小值 BC 函数法 平行切线
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已按题头归属跨页完成：题头在 page_0166，解析续到 page_0167 顶部。

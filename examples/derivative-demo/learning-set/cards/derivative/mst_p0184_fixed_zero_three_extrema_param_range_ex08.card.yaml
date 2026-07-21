@@ -1,0 +1,128 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0184_fixed_zero_three_extrema_param_range_ex08
+content_revision_id: mst_p0184_fixed_zero_three_extrema_param_range_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0184_fixed_zero_three_extrema_param_range_ex08.card.yaml
+stem: （2023 · 大荔县一模 T14）已知函数 $f(x)=\frac{e^x}{x}+a(x-\ln x)$（$e$ 为自然对数的底数）。若函数 $f(x)$ 在 $x\in\left(\frac12,2\right)$ 上有三个不同的极值点，则实数 $a$ 的取值范围为________。
+answer: |-
+  $(-2\sqrt e,-e)$
+
+  源解先求导并因式分解： $f^{\prime}(x)=\frac{(x-1)(e^x+ax)}{x^2}$。 题设“有三个不同极值点”等价于 $f^{\prime}(x)=0$ 在 $(\frac12,2)$ 有三个不同根； 其中固定根是 $x=1$，因此 $e^x+ax=0$ 需在该区间再给出两个不同根。 令 $g(x)=-\frac{e^x}{x}$，则 $a=g(x)$。由 $g^{\prime}(x)=-\frac{e^x(x-1)}{x^2}$， $g$ 在 $(\frac12,1)$ 递增、在 $(1,2)$ 递减， 且 $g(1)=-e,\ g(\frac12)=-2\sqrt e,\ g(2)=-\frac12e^2$。 要在左右两侧各交一次，需 $-2\sqrt e<a<-e$，故答案为 $(-2\sqrt e,-e)$。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把三极值条件转成三零点条件。
+      max_score: 1
+    - step_id: step_2
+      description: 拆出固定零点与变化零点。
+      max_score: 1
+    - step_id: step_3
+      description: 由 $a=-\frac{e^x}{x}$ 的图像值域取参。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 含参数分类讨论
+    secondary:
+      - 数形结合
+    subroute:
+      - 定零点与变化零点
+      - 参数判根数
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 极值点偏移结构
+    evidence:
+      - $f^{\prime}(x)=\frac{(x-1)(e^x+ax)}{x^2}$
+      - $g(x)=-\frac{e^x}{x}$
+      - $-2\sqrt e<a<-e$
+    normalization_moves_used:
+      - 先把导函数拆成固定因子与参数因子。
+      - 把参数还原为水平线 $a=g(x)$。
+      - 按左右区间各一根锁定开区间边界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不清楚极值点与 $f^{\prime}(x)=0$ 的关系，回补导数单调极值基础。
+      - 若学生不会读 $g(x)$ 的单调分段，回补函数性质与图像。
+      - 若学生在端点是否取到上犹豫，回补函数三要素与定义域。
+  detail_terms:
+    - $\frac{e^x}{x}+a(x-\ln x)$
+    - $\frac{(x-1)(e^x+ax)}{x^2}$
+    - $g(x)=-\frac{e^x}{x}$
+    - $x=\frac12,1,2$
+    - $(-2\sqrt e,-e)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0184_fixed_zero_three_extrema_param_range_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0184
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0184/page_0184.md
+      role: problem_start
+      evidence: "page_0184 contains 例8 full statement and solution: factor $f^{\\prime}(x)$, use fixed zero x=1, reduce to $e^x+ax=0$ having two roots on $(\\frac12,2)$, define $g(x)=-\\frac{e^x}{x}$, and derive $-2\\sqrt e<a<-e$."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0184.png
+      inspected: true
+      notes: 页图核对通过：例8题干与答案区间 $(-2\sqrt e,-e)$ 和 markdown 一致。
+  source_context: 题头与解答均在 page_0184；本页顶部的上一题续解只作上下文不建卡。
+  source_influence:
+    - 保留源解“一个已知零点 + 变化零点”拆分：先锁定 x=1，再分析 $a=-\frac{e^x}{x}$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 大荔县一模 T14）已知函数 $f(x)=\frac{e^x}{x}+a(x-\ln x)$（$e$ 为自然对数的底数）。若函数 $f(x)$ 在 $x\in\left(\frac12,2\right)$ 上有三个不同的极值点，则实数 $a$ 的取值范围为________。
+  parts: *a1
+  choices: []
+  answer: $(-2\sqrt e,-e)$
+  fidelity_notes:
+    - 源题为填空题，无选项。
+solution:
+  source_solution_summary: 源解先求导并因式分解： $f^{\prime}(x)=\frac{(x-1)(e^x+ax)}{x^2}$。 题设“有三个不同极值点”等价于 $f^{\prime}(x)=0$ 在 $(\frac12,2)$ 有三个不同根； 其中固定根是 $x=1$，因此 $e^x+ax=0$ 需在该区间再给出两个不同根。 令 $g(x)=-\frac{e^x}{x}$，则 $a=g(x)$。由 $g^{\prime}(x)=-\frac{e^x(x-1)}{x^2}$， $g$ 在 $(\frac12,1)$ 递增、在 $(1,2)$ 递减， 且 $g(1)=-e,\ g(\frac12)=-2\sqrt e,\ g(2)=-\frac12e^2$。 要在左右两侧各交一次，需 $-2\sqrt e<a<-e$，故答案为 $(-2\sqrt e,-e)$。
+  key_steps:
+    - step_id: step_1
+      statement: 把三极值条件转成三零点条件。
+      formula_trace:
+        from: $f(x)=\frac{e^x}{x}+a(x-\ln x)$
+        to: $f^{\prime}(x)=\frac{(x-1)(e^x+ax)}{x^2}$
+        operation: 求导并通分因式分解。
+        why: 极值点来自 $f^{\prime}(x)=0$ 的变号零点。
+      source_ref: page_0184
+    - step_id: step_2
+      statement: 拆出固定零点与变化零点。
+      formula_trace:
+        from: $f^{\prime}(x)=0$ 在 $(\frac12,2)$ 有三个不同根
+        to: $x=1$ 为固定根，且 $e^x+ax=0$ 在 $(\frac12,2)$ 另有两根
+        operation: 利用因子 $(x-1)$。
+        why: 题设三根中一个已知，参数只影响其余两个。
+      source_ref: page_0184
+    - step_id: step_3
+      statement: 由 $a=-\frac{e^x}{x}$ 的图像值域取参。
+      formula_trace:
+        from: $a=g(x),\ g(x)=-\frac{e^x}{x}$
+        to: $-2\sqrt e<a<-e$
+        operation: 用单调性与端点/极值点函数值判交点个数。
+        why: 要左右两段各有一个解且不与固定根重合。
+      source_ref: page_0184
+teaching_card:
+  student_title: 一根固定，两根看参数曲线
+  what_it_trains: 训练把“三极值”转成“导数三零点”，再用固定零点拆出参数控制的两根。
+  recognition_cues:
+    - 题目给的是“有三个不同极值点”。
+    - 导数可分解出显式因子 $(x-1)$。
+    - 参数只在线性项 $ax$ 里出现。
+  normalization_moves:
+    - 先因式分解导函数。
+    - 固定根单独拿出。
+    - 把 $a$ 改写成函数值并看左右各一交。
+  common_failures:
+    - 把 $a=-e$ 误包含，导致与固定根重合。
+    - 把 $x=\frac12$ 当作可取根，忽略开区间。
+    - 只看 $(1,2)$ 一侧，漏掉左侧根条件。
+  similar_practice_query: 定零点 变化零点 三极值 导函数分解 a=-e^x/x
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

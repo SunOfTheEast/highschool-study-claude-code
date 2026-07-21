@@ -1,0 +1,224 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0133_exp_axis_adjust_ex24a
+content_revision_id: mst_p0133_exp_axis_adjust_ex24a-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0133_exp_axis_adjust_ex24a.card.yaml
+stem: |-
+  （2023·南岗区三模·多选）已知函数 $f(x)$ 在 $\mathbf{R}$ 上可导，其导函数为 $f^{\prime}(x)$，若 $f(x)$ 满足：$(x-1)[f^{\prime}(x)-f(x)]>0$，$f(2-x)=f(x)e^{2-2x}$，则下列判断不正确的是（  ）
+  A. $f(1)<e f(0)$
+  B. $f(2)>e^2 f(0)$
+  C. $f(3)>e^3 f(0)$
+  D. $f(4)<e^4 f(0)$
+answer: |
+  BD
+
+  设
+  \[
+  g(x)=\frac{f(x)}{e^x},
+  \quad
+  g^{\prime}(x)=\frac{f^{\prime}(x)-f(x)}{e^x}.
+  \]
+  由
+  \[
+  (x-1)[f^{\prime}(x)-f(x)]>0
+  \]
+  知：当 $x<1$ 时 $g^{\prime}(x)<0$，当 $x>1$ 时 $g^{\prime}(x)>0$，
+  即 $g$ 在 $(-\infty,1)$ 递减，在 $(1,+\infty)$ 递增。
+
+  又由
+  \[
+  f(2-x)=f(x)e^{2-2x}
+  \]
+  得
+  \[
+  \frac{f(2-x)}{e^{2-x}}=\frac{f(x)}{e^x}
+  \Rightarrow g(2-x)=g(x),
+  \]
+  所以 $g$ 关于 $x=1$ 对称。
+
+  A: 由左侧递减，$g(1)<g(0)$，即 $\frac{f(1)}{e}<f(0)$，故 $f(1)<e f(0)$，A正确。
+  B: 对称给出 $g(2)=g(0)$，即 $f(2)=e^2 f(0)$，并非“>”，B错误。
+  C: $g(3)>g(2)=g(0)$，故 $f(3)>e^3 f(0)$，C正确。
+  D: $g(4)>g(2)=g(0)$，故 $f(4)>e^4 f(0)$，与选项“<”相反，D错误。
+
+  不正确的是 B、D，故选 BD。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 先构造指数商函数统一两条题设。
+      max_score: 1
+    - step_id: step_2
+      description: 判定 $g$ 在对称轴两侧的单调性。
+      max_score: 1
+    - step_id: step_3
+      description: 用 $g(2-x)=g(x)$ 锁定对称点等值。
+      max_score: 1
+    - step_id: step_4
+      description: 逐项回译到 $f$ 的形式并判错。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 多选判断函数值比较结论的真伪。
+        result: 见 source_solution_summary
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 指数商构造
+      - 轴对称点值回推
+  structure:
+    primary: 对称结构
+    secondary:
+      - 指对复合结构
+      - 抽象函数结构
+    evidence:
+      - $g(2-x)=g(x)$ 表示关于 $x=1$ 轴对称。
+      - $g^{\prime}$ 在 $x=1$ 两侧异号，形成左减右增。
+    normalization_moves_used:
+      - 设 $g=\\frac{f}{e^x}$。
+      - 把 $f(2-x)=f(x)e^{2-2x}$ 变成 $g(2-x)=g(x)$。
+      - 利用 $g(2)=g(0)$ 作公共比较基准。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能把 $f(2-x)=f(x)e^{2-2x}$ 化成 $g(2-x)=g(x)$，回补指数对数基础。
+      - 若学生对“题问不正确”仍按正确项作答，回补函数性质与图像。
+      - 若学生把分段单调方向写反，回补导数单调极值基础。
+  detail_terms:
+    - $g(x)=\\frac{f(x)}{e^x}$
+    - $g(2-x)=g(x)$
+    - $g(2)=g(0)$
+    - 答案BD
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0133_exp_axis_adjust_ex24a
+source_evidence:
+  source_refs:
+    - ref_id: page_0133
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0133/page_0133.md
+      role: problem_start
+      evidence: page_0133中段给出第一个“例24”（2023南岗区三模）完整题干、选项、解析与答案BD。
+    - ref_id: page_0133_ex23_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0133/page_0133.md
+      role: local_context
+      evidence: page_0133顶部是例23续解，按页头规则不另建新卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0133.png
+      inspected: true
+      notes: 已核对页图：本题是page_0133上的第一个例24，结论“故选BD”清晰。
+  source_context: 该题把 $(x-1)[f^{\prime}(x)-f(x)]>0$ 与 $f(2-x)=f(x)e^{2-2x}$ 统一到 $g(x)=\\frac{f(x)}{e^x}$ 的单调+对称框架。
+  source_influence:
+    - 保留 $g(x)=\\frac{f(x)}{e^x}$ 与 $g^{\prime}(x)=\\frac{f^{\prime}(x)-f(x)}{e^x}$。
+    - 保留 $g(2-x)=g(x)$ 的轴对称关系（对称轴 $x=1$）。
+    - 保留对四个选项逐项判定，错误项为B、D。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·南岗区三模·多选）已知函数 $f(x)$ 在 $\mathbf{R}$ 上可导，其导函数为 $f^{\prime}(x)$，若 $f(x)$ 满足：$(x-1)[f^{\prime}(x)-f(x)]>0$，$f(2-x)=f(x)e^{2-2x}$，则下列判断不正确的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(1)<e f(0)$
+      text_latex: $f(1)<e f(0)$
+    - label: B
+      text_raw: $f(2)>e^2 f(0)$
+      text_latex: $f(2)>e^2 f(0)$
+    - label: C
+      text_raw: $f(3)>e^3 f(0)$
+      text_latex: $f(3)>e^3 f(0)$
+    - label: D
+      text_raw: $f(4)<e^4 f(0)$
+      text_latex: $f(4)<e^4 f(0)$
+  answer: BD
+  fidelity_notes:
+    - page_0133上本题与下一题同编号“例24”，本卡使用语义ID ex24a 区分。
+    - 题问“不正确的是”，因此答案为错误选项集合。
+solution:
+  source_solution_summary: |
+    设
+    \[
+    g(x)=\frac{f(x)}{e^x},
+    \quad
+    g^{\prime}(x)=\frac{f^{\prime}(x)-f(x)}{e^x}.
+    \]
+    由
+    \[
+    (x-1)[f^{\prime}(x)-f(x)]>0
+    \]
+    知：当 $x<1$ 时 $g^{\prime}(x)<0$，当 $x>1$ 时 $g^{\prime}(x)>0$，
+    即 $g$ 在 $(-\infty,1)$ 递减，在 $(1,+\infty)$ 递增。
+
+    又由
+    \[
+    f(2-x)=f(x)e^{2-2x}
+    \]
+    得
+    \[
+    \frac{f(2-x)}{e^{2-x}}=\frac{f(x)}{e^x}
+    \Rightarrow g(2-x)=g(x),
+    \]
+    所以 $g$ 关于 $x=1$ 对称。
+
+    A: 由左侧递减，$g(1)<g(0)$，即 $\frac{f(1)}{e}<f(0)$，故 $f(1)<e f(0)$，A正确。
+    B: 对称给出 $g(2)=g(0)$，即 $f(2)=e^2 f(0)$，并非“>”，B错误。
+    C: $g(3)>g(2)=g(0)$，故 $f(3)>e^3 f(0)$，C正确。
+    D: $g(4)>g(2)=g(0)$，故 $f(4)>e^4 f(0)$，与选项“<”相反，D错误。
+
+    不正确的是 B、D，故选 BD。
+  key_steps:
+    - step_id: step_1
+      statement: 先构造指数商函数统一两条题设。
+      formula_trace:
+        from: $(x-1)[f^{\prime}(x)-f(x)]>0$，$f(2-x)=f(x)e^{2-2x}$
+        to: $g(x)=\\frac{f(x)}{e^x}$，$g^{\prime}(x)=\\frac{f^{\prime}(x)-f(x)}{e^x}$，$g(2-x)=g(x)$
+        operation: 除以 $e^x$ 并代入对称条件。
+        why: 单调和对称都能落在同一个 $g$ 上处理。
+      source_ref: page_0133
+    - step_id: step_2
+      statement: 判定 $g$ 在对称轴两侧的单调性。
+      formula_trace:
+        from: $(x-1)[f^{\prime}(x)-f(x)]>0$
+        to: $x<1\\Rightarrow g^{\prime}(x)<0$；$x>1\\Rightarrow g^{\prime}(x)>0$
+        operation: 按 $x-1$ 的符号分段。
+        why: 后续比较 $g(0),g(1),g(2),g(3),g(4)$ 都依赖该结论。
+      source_ref: page_0133
+    - step_id: step_3
+      statement: 用 $g(2-x)=g(x)$ 锁定对称点等值。
+      formula_trace:
+        from: $g(2-x)=g(x)$
+        to: $g(2)=g(0)$
+        operation: 代 $x=0$。
+        why: B、C、D 都以 $g(2)=g(0)$ 为比较基准。
+      source_ref: page_0133
+    - step_id: step_4
+      statement: 逐项回译到 $f$ 的形式并判错。
+      formula_trace:
+        from: $g(1)<g(0)$，$g(3)>g(2)=g(0)$，$g(4)>g(2)=g(0)$
+        to: A对，B错，C对，D错
+        operation: 乘回 $e^x$ 并与选项比较符号。
+        why: 题目问“不正确”，故取错误项 B、D。
+      source_ref: page_0133
+teaching_card:
+  student_title: 先化 $f/e^x$，再围绕 $x=1$ 做对称比较
+  what_it_trains: 把“导数差 + 指数对称式”统一为同一函数框架，快速判定多选真伪。
+  recognition_cues:
+    - 题干同时出现 $f^{\prime}(x)-f(x)$ 与 $e^{2-2x}$。
+    - 出现 $2-x$ 型输入，提示以 $x=1$ 为对称轴。
+  normalization_moves:
+    - 设 $g=\\frac{f}{e^x}$。
+    - 由题设得左减右增并有 $g(2-x)=g(x)$。
+    - 先锁定 $g(2)=g(0)$，再判 $g(3),g(4),g(1)$。
+  common_failures:
+    - 把 B 项中的等号结论误判为“大于”。
+    - 忘记题干问的是“不正确”。
+    - 未区分 $x<1$ 与 $x>1$ 的导数符号。
+  similar_practice_query: 抽象函数 指数商 对称轴x=1 多选 判断错误选项
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

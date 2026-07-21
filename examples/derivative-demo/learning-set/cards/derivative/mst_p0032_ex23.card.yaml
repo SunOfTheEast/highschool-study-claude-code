@@ -1,0 +1,188 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0032_ex23
+content_revision_id: mst_p0032_ex23-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0032_ex23.card.yaml
+stem: |-
+  （2023 · 邯郸开学 T11）已知 $m>1,\ n>1$，若 $e^m>me^{n+1}-ne^m$，则（ ）
+  A. $\frac{e^m}{m}>\frac{e^{n+1}}{n+1}$
+  B. $\left(\frac{1}{2}\right)^{m-1}>\left(\frac{1}{2}\right)^n$
+  C. $2^{m-4}+2^{-n}>\frac{\sqrt2}{2}$
+  D. $\log_3(m+n)>1$
+answer: |-
+  ACD。
+
+  先把题设移项化为 $(n+1)e^m>me^{n+1}$，直接得到选项 A。再构造 $f(x)=e^x/x$，由其在 $(1,+\infty)$ 上递增推出 $m>n+1$。这个强关系一方面让 B 的指数比较反向，另一方面支撑 C 的基本不等式下界和 D 的 $m+n>3$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 由题设直接整理出选项 A。
+      max_score: 1
+    - step_id: step_2
+      description: 用 $e^x/x$ 的单调性把函数值比较转成自变量比较。
+      max_score: 1
+    - step_id: step_3
+      description: 判断选项 B 的指数不等式方向。
+      max_score: 1
+    - step_id: step_4
+      description: 用 $m>n+1$ 和基本不等式证明选项 C。
+      max_score: 1
+    - step_id: step_5
+      description: 由 $m>n+1$ 判断选项 D。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: A
+        goal: 数值比较
+        target: 选项 A：数值比较
+        result: 见 source_solution_summary
+      - part_id: B
+        goal: 数值比较
+        target: 选项 B：数值比较
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 不等式证明
+        target: 选项 C：不等式证明
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 数值比较
+        target: 选项 D：数值比较
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - $e^x/x$ 单调比较
+      - 由 $m>n+1$ 连锁判断选项
+      - 基本不等式给 $2^{n-3}+2^{-n}$ 下界
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 不等式工具结构
+    evidence:
+      - 题设整理后出现 $\frac{e^m}{m}$ 与 $\frac{e^{n+1}}{n+1}$。
+      - 选项 C 需要把 $2^{m-4}$ 替换为更小的 $2^{n-3}$ 后使用基本不等式。
+    normalization_moves_used:
+      - $e^m>me^{n+1}-ne^m$ 移项为 $(n+1)e^m>me^{n+1}$。
+      - $\frac{e^m}{m}>\frac{e^{n+1}}{n+1}$ 由 $e^x/x$ 递增转为 $m>n+1$。
+      - $m>n+1$ 转为 $m-1>n$、$m-4>n-3$、$m+n>2n+1$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从题设移项得到 $(n+1)e^m>me^{n+1}$，回补代数恒等变形。
+      - 若学生不能证明 $e^x/x$ 在 $x>1$ 上递增，回补导数单调极值基础。
+      - 若学生把 $(1/2)^x$ 当作递增函数，回补指数对数基础。
+      - 若学生不会用 $a+b\ge2\sqrt{ab}$ 处理选项 C，回补不等式工具基础。
+  detail_terms:
+    - $e^m>me^{n+1}-ne^m$
+    - $f(x)=e^x/x$
+    - $m>n+1$
+    - $2^{m-4}+2^{-n}>\sqrt2/2$
+    - $\log_3(m+n)>1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0032_ex23
+source_evidence:
+  source_refs:
+    - ref_id: page_0032
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0032/page_0032.md
+      role: problem_start
+      evidence: 例23题干、四个选项和完整解析均在 page_0032 下半页。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0032.png
+      inspected: true
+      notes: 已核对例23题干、选项 A-D、由条件推出 $m>n+1$ 的解析和答案 ACD。
+  source_context: 例23紧接例22之后起题并在 page_0032 本页结束；page_0033 已进入例24，不属于本题续页。
+  source_influence:
+    - 图片确认题设为 $e^m>me^{n+1}-ne^m$，不是 $me^{n+1}+ne^m$。
+    - 解析用 $f(x)=e^x/x$ 在 $x>1$ 上递增，从 $\frac{e^m}{m}>\frac{e^{n+1}}{n+1}$ 推出 $m>n+1$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 邯郸开学 T11）已知 $m>1,\ n>1$，若 $e^m>me^{n+1}-ne^m$，则（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\frac{e^m}{m}>\frac{e^{n+1}}{n+1}$
+      text_latex: $\frac{e^m}{m}>\frac{e^{n+1}}{n+1}$
+    - label: B
+      text_raw: $\left(\frac{1}{2}\right)^{m-1}>\left(\frac{1}{2}\right)^n$
+      text_latex: $\left(\frac{1}{2}\right)^{m-1}>\left(\frac{1}{2}\right)^n$
+    - label: C
+      text_raw: $2^{m-4}+2^{-n}>\frac{\sqrt2}{2}$
+      text_latex: $2^{m-4}+2^{-n}>\frac{\sqrt2}{2}$
+    - label: D
+      text_raw: $\log_3(m+n)>1$
+      text_latex: $\log_3(m+n)>1$
+  answer: ACD。
+  fidelity_notes:
+    - 题干和解析均来自 page_0032；未使用旧卡片迁移内容。
+    - 选项 B 原命题方向为 $>$，解析推出实际应为 $<$，故 B 错。
+solution:
+  source_solution_summary: 先把题设移项化为 $(n+1)e^m>me^{n+1}$，直接得到选项 A。再构造 $f(x)=e^x/x$，由其在 $(1,+\infty)$ 上递增推出 $m>n+1$。这个强关系一方面让 B 的指数比较反向，另一方面支撑 C 的基本不等式下界和 D 的 $m+n>3$。
+  key_steps:
+    - step_id: step_1
+      statement: 由题设直接整理出选项 A。
+      formula_trace:
+        from: $e^m>me^{n+1}-ne^m$
+        to: $(n+1)e^m>me^{n+1}$，即 $\frac{e^m}{m}>\frac{e^{n+1}}{n+1}$
+        operation: 两边加 $ne^m$，再除以正数 $m(n+1)$。
+        why: $m>1,n>1$ 保证除法不改变不等号，所得正是 A。
+      source_ref: page_0032
+    - step_id: step_2
+      statement: 用 $e^x/x$ 的单调性把函数值比较转成自变量比较。
+      formula_trace:
+        from: $f(x)=\frac{e^x}{x}\quad(x>1)$
+        to: |
+          $f'(x)=\frac{e^x(x-1)}{x^2}>0$，故 $f(m)>f(n+1)\Rightarrow m>n+1$。
+        operation: 求导判定 $f$ 在 $(1,+\infty)$ 上严格递增，并注意 $m>1,\ n+1>2$。
+        why: 严格递增函数的函数值大小可以等价转化为自变量大小。
+      source_ref: page_0032
+    - step_id: step_3
+      statement: 判断选项 B 的指数不等式方向。
+      formula_trace:
+        from: $m>n+1$
+        to: $m-1>n$，所以 $\left(\frac12\right)^{m-1}<\left(\frac12\right)^n$
+        operation: 两边减 1，再利用 $y=(1/2)^x$ 单调递减。
+        why: 选项 B 写成 $>$，与递减函数给出的方向相反。
+      source_ref: page_0032
+    - step_id: step_4
+      statement: 用 $m>n+1$ 和基本不等式证明选项 C。
+      formula_trace:
+        from: $m>n+1$
+        to: $2^{m-4}+2^{-n}>2^{n-3}+2^{-n}\ge2\sqrt{2^{n-3}\cdot2^{-n}}=\frac{\sqrt2}{2}$
+        operation: 由 $m-4>n-3$ 得 $2^{m-4}>2^{n-3}$，再对 $2^{n-3}$ 与 $2^{-n}$ 用基本不等式。
+        why: 先把第一项压到只含 $n$ 的更小量，再用积为 $2^{-3}$ 的两项给出统一下界。
+      source_ref: page_0032
+    - step_id: step_5
+      statement: 由 $m>n+1$ 判断选项 D。
+      formula_trace:
+        from: $m>n+1,\quad n>1$
+        to: $m+n>2n+1>3$，故 $\log_3(m+n)>1$
+        operation: 把 $m$ 用更小的 $n+1$ 替代作下界，再利用底数 $3>1$ 的对数单调性。
+        why: $m+n>3$ 与 $\log_3(m+n)>1$ 等价。
+      source_ref: page_0032
+teaching_card:
+  student_title: 用 $e^x/x$ 单调性锁住 $m>n+1$
+  what_it_trains: 训练从指数不等式中拆出 $e^x/x$ 的同构比较，再用一个强大小关系连续判断多项选择。
+  recognition_cues:
+    - 题设含 $e^m$、$e^{n+1}$，并能整理成 $\frac{e^m}{m}$ 与 $\frac{e^{n+1}}{n+1}$。
+    - 变量条件 $m>1,n>1$ 正好匹配 $e^x/x$ 在 $x>1$ 的递增区间。
+    - 选项都可由 $m>n+1$ 继续推出或否定。
+  normalization_moves:
+    - 把题设移项为 $(n+1)e^m>me^{n+1}$。
+    - 构造 $f(x)=e^x/x$，由函数值比较推出 $m>n+1$。
+    - 选项 C 中先用 $2^{m-4}>2^{n-3}$，再用基本不等式。
+  common_failures:
+    - 只得到选项 A，忘记继续用单调性推出 $m>n+1$。
+    - 判断 B 时忽略底数 $1/2$ 小于 1，导致不等号方向错误。
+    - 选项 C 直接估 $2^{m-4}+2^{-n}$，没有先替换成只含 $n$ 的可控下界。
+  similar_practice_query: e^x/x 单调 m n 多选 指数不等式 基本不等式
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0032 图像已核对；例23不跨页。
+    - 解析中“由选项 B”处理解为沿用 B 项分析得到的 $m>n+1$，数学链条与答案 ACD 一致。

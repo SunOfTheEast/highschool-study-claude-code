@@ -1,0 +1,161 @@
+schema: highschool-study.problem-card.v1
+content_item_id: ex_mst_425
+content_revision_id: ex_mst_425-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/ex_mst_425.card.yaml
+stem: |-
+  已知 $a=4\ln 5^{\pi}$，$b=5\ln 4^{\pi}$，$c=5\ln \pi^{4}$，则 $a,b,c$ 的大小关系是 ( )
+  A. $c<a<b$
+  B. $a<b<c$
+  C. $a<c<b$
+  D. $c<b<a$
+answer: |-
+  B
+
+  构造 $f(x)=\frac{\ln x}{x}$。因 $f'(x)=\frac{1-\ln x}{x^2}<0$ 在 $(e,+\infty)$ 上成立，所以 $f$ 在该区间递减。由 $4<5$ 得 $\frac{\ln4}{4}>\frac{\ln5}{5}$，推出 $b>a$；由 $e<\pi<4$ 得 $\frac{\ln\pi}{\pi}>\frac{\ln4}{4}$，推出 $c>b$，故 $a<b<c$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 建立比较函数并确定单调区间。
+      max_score: 1
+    - step_id: step_2
+      description: 比较 $a$ 与 $b$。
+      max_score: 1
+    - step_id: step_3
+      description: 比较 $b$ 与 $c$。
+      max_score: 1
+    - step_id: step_4
+      description: 合并大小关系并选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - 对数幂展开
+      - $\ln x/x$ 标准比较函数
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $a,b,c$ 都先展开为常数倍的 $\ln$ 项，再转成 $\frac{\ln x}{x}$ 的函数值比较。
+      - 源解明确构造 $f(x)=\frac{\ln x}{x}$，只用 $x>e$ 上递减。
+    normalization_moves_used:
+      - $\ln 5^{\pi}=\pi\ln5$，$\ln4^{\pi}=\pi\ln4$，$\ln\pi^4=4\ln\pi$。
+      - $5\pi\ln4>4\pi\ln5$ 等价于 $\frac{\ln4}{4}>\frac{\ln5}{5}$。
+      - $20\ln\pi>5\pi\ln4$ 等价于 $\frac{\ln\pi}{\pi}>\frac{\ln4}{4}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生把 $\ln 5^{\pi}$ 误读成 $(\ln5)^{\pi}$，或不会用 $\ln u^v=v\ln u$，回补指数对数基础。
+      - 若学生不知道 $\frac{\ln x}{x}$ 在 $(e,+\infty)$ 上递减，或不理解递减导致反向比较，回补导数单调极值基础。
+      - 若学生无法把 $k\ln m$ 与 $m\ln k$ 除以正数 $km$ 转成 $\frac{\ln m}{m}$ 与 $\frac{\ln k}{k}$，回补代数恒等变形。
+  detail_terms:
+    - 比大小
+    - $\frac{\ln x}{x}$
+    - 对数幂展开
+    - $e<\pi<4<5$
+    - 递减函数反向比较
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: ex_mst_425
+source_evidence:
+  source_refs:
+    - materials/math/derivative/source/mst26-full-marked-c20/pages/page_0151/page_0151.md:20
+    - materials/math/derivative/source/mst26-full-marked-c20/pages/page_0151/page_0151.md:27
+    - materials/math/derivative/source/mst26-full-marked-c20/pages/page_0150/page_0150.md:12
+    - materials/math/derivative/source/mst26-full-marked-c20/pages/page_0151/page_0151.md:18
+  source_images:
+    - materials/math/derivative/source/mst26-full-marked-c20/images/page_0151.png
+  source_context: 第 4 章“小题篇——比大小”中的例 26；前后例题连续使用构造函数比较数值大小，例 25 与本题都围绕 g(x)=ln x/x 的单调性。源页没有显式写“六大同构函数”，但训练对象是把含幂的对数乘积标准化为同一个比较函数 f(x)=ln x/x。
+  source_influence:
+    - 题目本身是选择题比大小，不是证明大题；解法短链条依赖函数单调性。
+    - 核心函数来自源页：f(x)=ln x/x，且只使用 x>=e 上递减。
+    - 两次比较都需要先把 ln(m^n) 展开，再化到 ln x/x 型；这是本题的主要标准化动作。
+  source_discrepancies:
+    - field: legacy title/method emphasis
+      old_value: 六大同构函数-π参与的对数乘积比大小；六大同构函数比大小
+      corrected_value: 源页语境是“小题篇——比大小”，实际训练对象为 ln x/x 比较函数的局部标准化与单调性应用；可归入同构比较，但不能把“六大函数”当作源页明示标签。
+      evidence_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0150/page_0150.md:12; mst26-full-marked-c20/pages/page_0151/page_0151.md:27
+    - field: classification_v2.features.expression_structures
+      old_value: 包含二次项 x^2、f'(x)=0 极值点方程、数列乘积放缩结构
+      corrected_value: 本题源解只出现 f(x)=ln x/x、f'(x)=(1-ln x)/x^2<0 与对数幂展开；没有二次项、求临界方程或数列乘积放缩。
+      evidence_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0151/page_0151.md:20-27
+original_problem:
+  stem: 已知 $a=4\ln 5^{\pi}$，$b=5\ln 4^{\pi}$，$c=5\ln \pi^{4}$，则 $a,b,c$ 的大小关系是 ( )
+  parts: *a1
+  choices:
+    - A. $c<a<b$
+    - B. $a<b<c$
+    - C. $a<c<b$
+    - D. $c<b<a$
+  answer: B
+  fidelity_notes:
+    - 已核对 page_0151 原图，题干中的指数分别为 $5^{\pi}$、$4^{\pi}$、$\pi^4$，选项与页 markdown 一致。
+    - 源页 Reconstruction Markers 为“无”。
+solution:
+  source_solution_summary: 构造 $f(x)=\frac{\ln x}{x}$。因 $f'(x)=\frac{1-\ln x}{x^2}<0$ 在 $(e,+\infty)$ 上成立，所以 $f$ 在该区间递减。由 $4<5$ 得 $\frac{\ln4}{4}>\frac{\ln5}{5}$，推出 $b>a$；由 $e<\pi<4$ 得 $\frac{\ln\pi}{\pi}>\frac{\ln4}{4}$，推出 $c>b$，故 $a<b<c$。
+  key_steps:
+    - step_id: step_1
+      statement: 建立比较函数并确定单调区间。
+      formula_trace:
+        from: $f(x)=\frac{\ln x}{x}$
+        to: $f'(x)=\frac{1-\ln x}{x^2}<0\quad (x>e)$
+        operation: 求导，并利用 $x>e\Rightarrow \ln x>1$ 判断导数为负。
+        why: 后续所有数值都落在 $e$ 右侧或用 $e<\pi<4<5$ 比较，可用递减性。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0151/page_0151.md:27
+    - step_id: step_2
+      statement: 比较 $a$ 与 $b$。
+      formula_trace:
+        from: $4<5$ 且 $4,5>e$
+        to: $\frac{\ln4}{4}>\frac{\ln5}{5}\Rightarrow 5\pi\ln4>4\pi\ln5\Rightarrow b>a$
+        operation: 由 $f$ 递减得到分式比较，再同乘正数 $20\pi$，并用 $\ln x^r=r\ln x$ 还原。
+        why: $a=4\ln5^{\pi}=4\pi\ln5$，$b=5\ln4^{\pi}=5\pi\ln4$。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0151/page_0151.md:27
+    - step_id: step_3
+      statement: 比较 $b$ 与 $c$。
+      formula_trace:
+        from: $e<\pi<4$
+        to: $\frac{\ln\pi}{\pi}>\frac{\ln4}{4}\Rightarrow 4\ln\pi>\pi\ln4\Rightarrow 5\ln\pi^4>5\ln4^{\pi}\Rightarrow c>b$
+        operation: 由递减性比较 $f(\pi)$ 与 $f(4)$，同乘正数 $4\pi$，再用对数幂展开还原到 $b,c$。
+        why: $c=5\ln\pi^4=20\ln\pi$，$b=5\ln4^{\pi}=5\pi\ln4$。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0151/page_0151.md:27
+    - step_id: step_4
+      statement: 合并大小关系并选项。
+      formula_trace:
+        from: $b>a$ 且 $c>b$
+        to: $a<b<c$
+        operation: 传递合并两个严格不等式。
+        why: 选项 B 与合并后的顺序一致。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0151/page_0151.md:22-27
+teaching_card:
+  student_title: 把对数乘积统一成 $\ln x/x$ 比大小
+  what_it_trains: 看到 $m\ln n^r$ 这类交叉乘积时，先展开幂指数，再把目标不等式改写成 $\frac{\ln x}{x}$ 的函数值比较；本题不是复杂大题同构，而是小题中的快速标准化。
+  recognition_cues:
+    - 待比较对象含有 $4\ln5^{\pi}$、$5\ln4^{\pi}$ 这类“系数与底数交叉”的形式。
+    - 变量底数都在 $e$ 右侧，适合直接调用 $\frac{\ln x}{x}$ 递减。
+    - 比较 $\pi^4$ 与 $4^{\pi}$ 或 $5\ln\pi^4$ 与 $5\ln4^{\pi}$ 时，可转成 $\frac{\ln\pi}{\pi}$ 与 $\frac{\ln4}{4}$。
+  normalization_moves:
+    - 先用 $\ln u^v=v\ln u$ 去掉指数位置的常数。
+    - 比较 $k\ln m$ 与 $m\ln k$ 时，除以正数 $km$，转成 $\ln m/m$ 与 $\ln k/k$。
+    - 确认比较点位于 $e$ 的同侧；本题 $e<\pi<4<5$，均使用递减段。
+  common_failures:
+    - 直接用 $4<5$ 判断 $4\ln5^{\pi}$ 与 $5\ln4^{\pi}$，忽略系数和对数底数交叉。
+    - 把 $\ln5^{\pi}$ 误读成 $(\ln5)^{\pi}$。
+    - 忘记 $\frac{\ln x}{x}$ 在 $(e,+\infty)$ 上递减，导致不等号方向反了。
+    - 比较 $c$ 与 $b$ 时只看 $\pi<4$，没有先标准化到 $\ln x/x$。
+  similar_practice_query: 对数幂乘积 比大小 ln x / x 递减
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 源页 markdown 与 page_0151 原图一致；本题无 OCR reconstruction marker。
+    - Reviewer changed goal from `数值求值` to `数值比较`; this is a comparison choice problem, not a value-computation problem.
+    - Reviewer removed non-canonical method `函数单调性比大小`; monotonic comparison stays under 同构变形与换元法 / subroute.
+    - Reviewer removed `不等式工具结构`; the inequalities are comparison evidence, not a stable inequality-tool structure.
+    - Reviewer kept `only_if_trace_shows` as conditional remediation text rather than flattening it to bare fallback labels.

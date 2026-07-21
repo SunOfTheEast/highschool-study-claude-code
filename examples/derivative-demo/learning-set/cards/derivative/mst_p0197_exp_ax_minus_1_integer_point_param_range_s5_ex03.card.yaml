@@ -1,0 +1,177 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0197_exp_ax_minus_1_integer_point_param_range_s5_ex03
+content_revision_id: mst_p0197_exp_ax_minus_1_integer_point_param_range_s5_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0197_exp_ax_minus_1_integer_point_param_range_s5_ex03.card.yaml
+stem: |-
+  若 $f(x)=e^x(ax-1)-x+2$，若存在唯一的整数 $x_0$ 使得 $f(x_0)<0$，则实数 $a$ 的取值范围为（  ）
+  A. $\left[\frac{1}{4}+\frac{1}{2e^4},\ \frac{1}{3e^3}+\frac{1}{3}\right)$
+  B. $(3e-1,\ 2e^2-\frac{1}{2}]$
+  C. $\left[\frac{1}{2},\ 1-\frac{1}{e}\right)\cup(3e-1,\ 2e^2-\frac{1}{2}]$
+  D. $\left[\frac{1}{2},\ 1-\frac{1}{e}\right)\cup\left[\frac{1}{4}+\frac{1}{2e^4},\ \frac{1}{3e^3}+\frac{1}{3}\right)$
+answer: |-
+  C
+
+  由 $f(x)<0$ 得 $e^x(ax-1)-x+2<0\iff ax-1<\frac{x-2}{e^x}$。设 $h(x)=\frac{x-2}{e^x}$，则 $h^{\prime}(x)=\frac{3-x}{e^x}$， 先增后减；直线 $y=ax-1$ 恒过 $(0,-1)$。要“唯一整数点”可分两侧判定：右侧只能让 $x=1$ 成立而 $x=2$ 不成立，得 $\begin{cases}a-1<-\frac1e\\2a-1\ge0\end{cases}$，即 $\frac12\le a<1-\frac1e$；左侧只能让 $x=-1$ 成立而 $x=-2$ 不成立，得 $\begin{cases}-a-1<-3e\\-2a-1\ge-4e^2\end{cases}$，即 $3e-1<a\le2e^2-\frac12$。并集为 $\left[\frac12,1-\frac1e\right)\cup(3e-1,2e^2-\frac12]$，选 C。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把原不等式改写为“动直线 < 定曲线”的整点判定模型。
+      max_score: 1
+    - step_id: step_2
+      description: 先做右侧整点筛选（只保留 $x=1$，排除 $x=2$）。
+      max_score: 1
+    - step_id: step_3
+      description: 再做左侧整点筛选（只保留 $x=-1$，排除 $x=-2$）。
+      max_score: 1
+    - step_id: step_4
+      description: 合并两种唯一整点情形并匹配选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 参变量分离
+    secondary:
+      - 数形结合
+      - 含参数分类讨论
+    subroute:
+      - 直曲分离
+      - 整点判定
+      - 图像交点计数
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 指对复合结构
+      - 非齐次结构
+    evidence:
+      - $ax-1<\frac{x-2}{e^x}$
+      - $h^{\prime}(x)=\frac{3-x}{e^x}$
+      - $\left[\frac12,1-\frac1e\right)\cup(3e-1,2e^2-\frac12]$
+    normalization_moves_used:
+      - 先把不等式改写成直线与定曲线的上下关系。
+      - 把“唯一整点”落实为“一个点满足、相邻点不满足”的双条件联立。
+      - 左右两侧独立判定后取并集。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把题目改写成 $ax-1<\frac{x-2}{e^x}$，回补代数恒等变形。
+      - 若学生无法用 $h^{\prime}(x)$ 判断曲线走势，回补导数单调极值基础。
+      - 若学生在“唯一整数点”的相邻点排除法反复出错，回补函数性质与图像。
+  detail_terms:
+    - $ax-1$
+    - $\frac{x-2}{e^x}$
+    - $h^{\prime}(x)=\frac{3-x}{e^x}$
+    - $x=1,2,-1,-2$
+    - 唯一整点
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0197_exp_ax_minus_1_integer_point_param_range_s5_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0197_context_ex2_tail
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0197/page_0197.md
+      role: local_context
+      evidence: page_0197 顶部先出现上一题（page_0196 例2）的续图，本卡仅从“例3”题头开始取材。
+    - ref_id: page_0197_ex3_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0197/page_0197.md
+      role: problem_start
+      evidence: page_0197 给出例3完整题干与 A-D 选项：$f(x)=e^x(ax-1)-x+2$，求唯一整点条件下参数 $a$ 的范围。
+    - ref_id: page_0197_ex3_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0197/page_0197.md
+      role: solution
+      evidence: page_0197 同页给出完整解析：化为 $ax-1<\frac{x-2}{e^x}$，分右侧与左侧整点判定，最终选 C。
+    - ref_id: page_0196_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0196/page_0196.md
+      role: local_context
+      evidence: page_0196 末尾是例2正文；结合页图可确认 page_0197 顶部插图属于例2，不属于例3。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0197.png
+      inspected: true
+      notes: 已核对原图：例3题干、四个选项、解析与答案 C 同页完整；页顶插图为例2续图。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0196.png
+      inspected: true
+      notes: 已核对原图：page_0196 末尾为例2，和 page_0197 顶部插图连续对应。
+  source_context: 例3题头起于 page_0197 且同页闭合；page_0197 顶部插图是 page_0196 例2续图，不单独建卡。
+  source_influence:
+    - 保留源解“直曲分离”：先化为 $ax-1<\frac{x-2}{e^x}$，再做整点计数。
+    - 保留源解分区策略：右侧只测 $x=1,2$，左侧只测 $x=-1,-2$。
+    - 保留两段参数区间并集，最终对应选项 C。
+  source_discrepancies: []
+original_problem:
+  stem: 若 $f(x)=e^x(ax-1)-x+2$，若存在唯一的整数 $x_0$ 使得 $f(x_0)<0$，则实数 $a$ 的取值范围为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\left[\frac{1}{4}+\frac{1}{2e^4},\ \frac{1}{3e^3}+\frac{1}{3}\right)$
+      text_latex: $\left[\frac{1}{4}+\frac{1}{2e^4},\ \frac{1}{3e^3}+\frac{1}{3}\right)$
+    - label: B
+      text_raw: $(3e-1,\ 2e^2-\frac{1}{2}]$
+      text_latex: $(3e-1,\ 2e^2-\frac{1}{2}]$
+    - label: C
+      text_raw: $\left[\frac{1}{2},\ 1-\frac{1}{e}\right)\cup(3e-1,\ 2e^2-\frac{1}{2}]$
+      text_latex: $\left[\frac{1}{2},\ 1-\frac{1}{e}\right)\cup(3e-1,\ 2e^2-\frac{1}{2}]$
+    - label: D
+      text_raw: $\left[\frac{1}{2},\ 1-\frac{1}{e}\right)\cup\left[\frac{1}{4}+\frac{1}{2e^4},\ \frac{1}{3e^3}+\frac{1}{3}\right)$
+      text_latex: $\left[\frac{1}{2},\ 1-\frac{1}{e}\right)\cup\left[\frac{1}{4}+\frac{1}{2e^4},\ \frac{1}{3e^3}+\frac{1}{3}\right)$
+  answer: C
+  fidelity_notes:
+    - 例3为单选题，A-D 选项均按 source 原式保留。
+    - 结论区间为两个区间并集，对应选项 C。
+solution:
+  source_solution_summary: 由 $f(x)<0$ 得 $e^x(ax-1)-x+2<0\iff ax-1<\frac{x-2}{e^x}$。设 $h(x)=\frac{x-2}{e^x}$，则 $h^{\prime}(x)=\frac{3-x}{e^x}$， 先增后减；直线 $y=ax-1$ 恒过 $(0,-1)$。要“唯一整数点”可分两侧判定：右侧只能让 $x=1$ 成立而 $x=2$ 不成立，得 $\begin{cases}a-1<-\frac1e\\2a-1\ge0\end{cases}$，即 $\frac12\le a<1-\frac1e$；左侧只能让 $x=-1$ 成立而 $x=-2$ 不成立，得 $\begin{cases}-a-1<-3e\\-2a-1\ge-4e^2\end{cases}$，即 $3e-1<a\le2e^2-\frac12$。并集为 $\left[\frac12,1-\frac1e\right)\cup(3e-1,2e^2-\frac12]$，选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 把原不等式改写为“动直线 < 定曲线”的整点判定模型。
+      formula_trace:
+        from: $e^x(ax-1)-x+2<0$
+        to: $ax-1<\frac{x-2}{e^x}$
+        operation: 移项并同除 $e^x(>0)$。
+        why: 参数 $a$ 只留在线性项，便于逐个整数位置比较。
+      source_ref: page_0197_ex3_solution
+    - step_id: step_2
+      statement: 先做右侧整点筛选（只保留 $x=1$，排除 $x=2$）。
+      formula_trace:
+        from: $a-1<\frac{1-2}{e},\ 2a-1\ge\frac{2-2}{e^2}$
+        to: $\frac12\le a<1-\frac1e$
+        operation: 代入两处临界整数并联立不等式。
+        why: 右半轴上指数曲线增长快，唯一整点只能卡在最近整数。
+      source_ref: page_0197_ex3_solution
+    - step_id: step_3
+      statement: 再做左侧整点筛选（只保留 $x=-1$，排除 $x=-2$）。
+      formula_trace:
+        from: $-a-1<\frac{-1-2}{e^{-1}},\ -2a-1\ge\frac{-2-2}{e^{-2}}$
+        to: $3e-1<a\le2e^2-\frac12$
+        operation: 同样代入相邻左侧整数并联立。
+        why: 保证左侧至多出现一个满足不等式的整数点。
+      source_ref: page_0197_ex3_solution
+    - step_id: step_4
+      statement: 合并两种唯一整点情形并匹配选项。
+      formula_trace:
+        from: $\frac12\le a<1-\frac1e$ 与 $3e-1<a\le2e^2-\frac12$
+        to: $a\in\left[\frac12,1-\frac1e\right)\cup(3e-1,2e^2-\frac12]$
+        operation: 取并集。
+        why: 题目只要求“存在唯一整数 $x_0$”，可来自左右任一侧。
+      source_ref: page_0197_ex3_solution
+teaching_card:
+  student_title: 整点题先做“一个成立一个否”
+  what_it_trains: 训练把指数不等式转成直曲位置关系，再用相邻整数的“成立/不成立”联立条件锁定参数区间。
+  recognition_cues:
+    - 题目给出“存在唯一整数 $x_0$”。
+    - 式子可化成 $ax+b<\text{(定曲线)}$。
+    - 参数只在线性项里，适合逐整数判定。
+  normalization_moves:
+    - 先参变量分离：把 $a$ 留在直线一侧。
+    - 按左右两侧分别找“候选整数 + 邻点排除”。
+    - 每侧联立两条不等式，再取并集。
+  common_failures:
+    - 只写“某点成立”，漏写“相邻点不成立”，导致不是唯一整点。
+    - 把 $\frac{-3}{e^{-1}}$ 误算成 $-\frac3e$。
+    - 最后把两个可行情形误取交集。
+  similar_practice_query: 整点唯一 直曲分离 相邻整数排除 参数范围 指数不等式
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

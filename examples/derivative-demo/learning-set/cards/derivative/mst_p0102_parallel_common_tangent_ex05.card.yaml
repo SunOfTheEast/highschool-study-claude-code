@@ -1,0 +1,169 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0102_parallel_common_tangent_ex05
+content_revision_id: mst_p0102_parallel_common_tangent_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0102_parallel_common_tangent_ex05.card.yaml
+stem: |-
+  （2024 广州六中月考 T7）若直线 $y=kx+b$ 是曲线 $f(x)=e^{x-2023}$ 与 $g(x)=e^{x+2024}-2025$ 的公切线，则 $k=$ （  ）
+  A. $\frac{1}{2025}$
+  B. $\frac{2023}{2024}$
+  C. $\frac{2025}{4047}$
+  D. $\frac{2}{4047}$
+answer: |
+  C
+
+  因为
+  $g(x)=e^{x+2024}-2025=f(x+4047)-2025$，
+  两曲线是水平相差 $4047$、竖直相差 $2025$ 的平行曲线。设公切线
+  分别切于 $f$ 的 $x_1$ 和 $g$ 的 $x_2$，等斜率给出
+  $e^{x_1-2023}=e^{x_2+2024}$，所以 $x_1-x_2=4047$。
+  两切点纵坐标差为 $e^{x_1-2023}-(e^{x_2+2024}-2025)=2025$。
+  公切线经过两个切点，故
+  $k=\frac{\Delta y}{\Delta x}=\frac{2025}{4047}$，选 C。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 识别两条指数曲线的平移关系。
+      max_score: 1
+    - step_id: step_2
+      description: 用切点参数核对水平位移。
+      max_score: 1
+    - step_id: step_3
+      description: 用两切点连线斜率得到公切线斜率。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level: []
+  method:
+    primary: 对称化与偏移
+    secondary:
+      - 数形结合
+    subroute:
+      - 平行曲线公切线
+      - 切点位移斜率
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $g(x)=f(x+4047)-2025$ 暴露出平行曲线结构。
+      - $x_1-x_2=4047$ 且两切点纵差为 $2025$。
+      - $k=\Delta y/\Delta x=\frac{2025}{4047}$。
+    normalization_moves_used:
+      - 先把两个指数的平移量对齐。
+      - 用等斜率锁定两个切点横坐标差。
+      - 把公切线斜率转为平移向量斜率。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会识别 $e^{x+2024}$ 与 $e^{x-2023}$ 的平移关系，回补指数对数基础。
+      - 若学生不知道切线斜率等于导数值，回补导数运算与几何意义。
+      - 若学生把水平位移 $4047$ 的方向弄反，回补函数性质与图像。
+  detail_terms:
+    - $f(x)=e^{x-2023}$
+    - $g(x)=e^{x+2024}-2025$
+    - $g(x)=f(x+4047)-2025$
+    - $k=\frac{2025}{4047}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0102_parallel_common_tangent_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0102
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0102/page_0102.md
+      role: problem_start
+      evidence: lines 16-22 give 例 5 题头、A-D 选项、平行曲线公切线解析 and answer C; line 14 is 例 4 continuation and is excluded.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0102.png
+      inspected: true
+      notes: 已核对 page_0102 图像：顶部为例 4 续页，例 5 题干、四个选项和解析完整同页，答案为 C。
+  source_context: page_0102 顶部是例 4 续解，不创建卡片；例 5 从本页中上部正式开始并在本页解析完毕。
+  source_influence:
+    - 保留源页平行曲线公切线思路：两条指数曲线相差水平位移 4047、竖直位移 2025，公切线斜率等于位移连线斜率。
+    - 用切点参数关系 $x_1-x_2=4047$、纵差 $2025$ 补足平移方向的代数核验。
+  source_discrepancies:
+    - 源页解析文字说“$f$ 由 $g$ 向左平移 4047 且向下平移 2025”，按函数关系应写成 $g(x)=f(x+4047)-2025$；斜率结论 $\frac{2025}{4047}$ 不受影响。
+original_problem:
+  stem: （2024 广州六中月考 T7）若直线 $y=kx+b$ 是曲线 $f(x)=e^{x-2023}$ 与 $g(x)=e^{x+2024}-2025$ 的公切线，则 $k=$ （  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\frac{1}{2025}$
+      text_latex: $\frac{1}{2025}$
+    - label: B
+      text_raw: $\frac{2023}{2024}$
+      text_latex: $\frac{2023}{2024}$
+    - label: C
+      text_raw: $\frac{2025}{4047}$
+      text_latex: $\frac{2025}{4047}$
+    - label: D
+      text_raw: $\frac{2}{4047}$
+      text_latex: $\frac{2}{4047}$
+  answer: C
+  fidelity_notes:
+    - 题干和选项在 page_0102 lines 16-20，解析在 line 22。
+    - 本卡未纳入 page_0102 line 14 的例 4 续解。
+solution:
+  source_solution_summary: |
+    因为
+    $g(x)=e^{x+2024}-2025=f(x+4047)-2025$，
+    两曲线是水平相差 $4047$、竖直相差 $2025$ 的平行曲线。设公切线
+    分别切于 $f$ 的 $x_1$ 和 $g$ 的 $x_2$，等斜率给出
+    $e^{x_1-2023}=e^{x_2+2024}$，所以 $x_1-x_2=4047$。
+    两切点纵坐标差为 $e^{x_1-2023}-(e^{x_2+2024}-2025)=2025$。
+    公切线经过两个切点，故
+    $k=\frac{\Delta y}{\Delta x}=\frac{2025}{4047}$，选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 识别两条指数曲线的平移关系。
+      formula_trace:
+        from: |
+          $f(x)=e^{x-2023},\qquad g(x)=e^{x+2024}-2025$
+        to: |
+          $g(x)=f(x+4047)-2025$
+        operation: 把 $x+2024$ 写成 $(x+4047)-2023$。
+        why: 这说明两曲线是平行曲线，水平位移为 $4047$，竖直位移为 $2025$。
+      source_ref: page_0102
+    - step_id: step_2
+      statement: 用切点参数核对水平位移。
+      formula_trace:
+        from: |
+          $k=f'(x_1)=e^{x_1-2023}=g'(x_2)=e^{x_2+2024}$
+        to: |
+          $x_1-2023=x_2+2024,\qquad x_1-x_2=4047$
+        operation: 等斜率后取指数的同底指数相等。
+        why: 公切线在两条平行指数曲线上的切点横坐标相差固定值。
+      source_ref: page_0102
+    - step_id: step_3
+      statement: 用两切点连线斜率得到公切线斜率。
+      formula_trace:
+        from: |
+          $f(x_1)-g(x_2)=e^{x_1-2023}-(e^{x_2+2024}-2025)=2025,\quad x_1-x_2=4047$
+        to: |
+          $k=\frac{2025}{4047}$
+        operation: 公切线通过两个切点，斜率等于两切点连线斜率。
+        why: 平行曲线公切线的斜率由平移向量直接确定。
+      source_ref: page_0102
+teaching_card:
+  student_title: 平移后的指数曲线，公切线斜率看位移
+  what_it_trains: 训练从两个指数函数中识别平行曲线，把公切线斜率直接转成水平位移与竖直位移的比值。
+  recognition_cues:
+    - 两个函数都是同一个 $e^x$ 的平移。
+    - 题目只问 $k$，没有问切点或截距，提示先看整体平移。
+    - $2024$ 与 $2023$ 的差需要跨过指数内部，合成水平位移 $4047$。
+  normalization_moves:
+    - 把 $g(x)$ 改写成 $f(x+4047)-2025$。
+    - 把两切点横差记为 $4047$，纵差记为 $2025$。
+    - 用 $k=\Delta y/\Delta x$ 直接选 C。
+  common_failures:
+    - 只比较 $2024$ 和 $2023$，把水平位移误算成 $1$。
+    - 忽略 $-2025$ 的竖直平移。
+    - 平移方向说反后又把斜率写成负数。
+  similar_practice_query: 平行曲线 公切线 指数平移 斜率
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0102 图像确认例 5 题干、选项、解析和答案 C；源页平移方向表述已用函数关系消解。

@@ -1,0 +1,175 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0043_section2_ex09
+content_revision_id: mst_p0043_section2_ex09-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0043_section2_ex09.card.yaml
+stem: |-
+  （山东省烟台市 2025 届高三三模 T8）若不等式 $xe^x-x-\ln x-a\geqslant0$ 恒成立，则实数 $a$ 的取值范围为 ( )
+  A. $(0, 1]$
+  B. $(0, e-1]$
+  C. $(-\infty, 1]$
+  D. $(-\infty, e-1]$
+answer: |
+  C
+
+  在 $x>0$ 上，把 $xe^x$ 写成 $e^{x+\ln x}$，令 $h(t)=e^t-t-1$。原式
+  $xe^x-x-\ln x-a=e^{x+\ln x}-(x+\ln x)-1+1-a=h(x+\ln x)+1-a$。由于 $h(t)\\ge0$，且 $h(t)=0$ 当且仅当 $t=0$，又方程 $x+\ln x=0$ 在 $x>0$ 上有唯一解，所以原式的最小可能值为 $1-a$。恒成立等价于 $1-a\\ge0$，即 $a\\le1$。故选 C。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 确认变量定义域。
+      max_score: 1
+    - step_id: step_2
+      description: 把朗博项拿到指数里。
+      max_score: 1
+    - step_id: step_3
+      description: 配出 $h(t)=e^t-t-1$。
+      max_score: 1
+    - step_id: step_4
+      description: 说明等号点可达。
+      max_score: 1
+    - step_id: step_5
+      description: 得到参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 切线放缩与凹凸性
+    subroute:
+      - 朗博同构
+      - $e^t-t-1$ 非负模板
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $xe^x=e^{x+\ln x}$。
+      - $xe^x-x-\ln x-a=h(x+\ln x)+1-a$。
+    normalization_moves_used:
+      - $xe^x=e^{x+\ln x}$。
+      - 补出 $-1+1$。
+      - 整体变量 $t=x+\ln x$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生没有从 $\ln x$ 看出 $x>0$，回补函数三要素与定义域。
+      - 若学生不会把 $xe^x$ 化为 $e^{x+\ln x}$，回补指数对数基础。
+      - 若学生不知道 $e^t-t-1\ge0$ 且等号在 $t=0$，回补导数单调极值基础。
+      - 若学生没有说明 $x+\ln x=0$ 在 $x>0$ 内有解，回补函数性质与图像。
+  detail_terms:
+    - $xe^x-x-\ln x-a$
+    - $xe^x=e^{x+\ln x}$
+    - $h(t)=e^t-t-1$
+    - $x+\ln x=0$
+    - $a\le1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0043_section2_ex09
+source_evidence:
+  source_refs:
+    - ref_id: page_0043
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0043/page_0043.md
+      role: problem_start
+      evidence: lines 27-39 introduce 朗博同构背景, then give 例 9 题干、选项、解析和答案 C。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0043.png
+      inspected: true
+      notes: 已核对页图：例 9 题干、四个选项和解析与 markdown 一致；题目在 page_0043 内结束。
+  source_context: 例 9 是“朗博同构引发的切线放缩”首题，源页先说明把 $xe^x$ 写成 $e^{x+\ln x}$，统一到 $h(t)=e^t-t-1\ge0$。
+  source_influence:
+    - 题干未单独写 $x>0$，但 $\ln x$ 决定原不等式的自然定义域为 $x>0$；卡片在解中显式写出。
+    - 图谱主方法取同构变形与换元法，子路由标注朗博同构和 $e^t-t-1$。
+  source_discrepancies: []
+original_problem:
+  stem: （山东省烟台市 2025 届高三三模 T8）若不等式 $xe^x-x-\ln x-a\geqslant0$ 恒成立，则实数 $a$ 的取值范围为 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $(0, 1]$
+      text_latex: $(0, 1]$
+    - label: B
+      text_raw: $(0, e-1]$
+      text_latex: $(0, e-1]$
+    - label: C
+      text_raw: $(-\infty, 1]$
+      text_latex: $(-\infty, 1]$
+    - label: D
+      text_raw: $(-\infty, e-1]$
+      text_latex: $(-\infty, e-1]$
+  answer: C
+  fidelity_notes:
+    - 源题中的 $\ln x$ 使恒成立范围自然为 $x>0$。
+    - 页图与 markdown 均显示选项 C 为 $(-\infty,1]$。
+solution:
+  source_solution_summary: |
+    在 $x>0$ 上，把 $xe^x$ 写成 $e^{x+\ln x}$，令 $h(t)=e^t-t-1$。原式
+    $xe^x-x-\ln x-a=e^{x+\ln x}-(x+\ln x)-1+1-a=h(x+\ln x)+1-a$。由于 $h(t)\\ge0$，且 $h(t)=0$ 当且仅当 $t=0$，又方程 $x+\ln x=0$ 在 $x>0$ 上有唯一解，所以原式的最小可能值为 $1-a$。恒成立等价于 $1-a\\ge0$，即 $a\\le1$。故选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 确认变量定义域。
+      formula_trace:
+        from: $\ln x$
+        to: $x>0$
+        operation: 由对数真数为正确定自然定义域。
+        why: 后续 $x+\ln x=0$ 的取等点必须在这个定义域内。
+      source_ref: page_0043
+    - step_id: step_2
+      statement: 把朗博项拿到指数里。
+      formula_trace:
+        from: $xe^x$
+        to: $e^{x+\ln x}$
+        operation: 用 $x=e^{\ln x}$，将乘积写成指数和。
+        why: 这样能统一到 $e^t-t-1$ 的非负模板。
+      source_ref: page_0043
+    - step_id: step_3
+      statement: 配出 $h(t)=e^t-t-1$。
+      formula_trace:
+        from: $xe^x-x-\ln x-a$
+        to: $e^{x+\ln x}-(x+\ln x)-1+1-a=h(x+\ln x)+1-a
+        operation: 把 $x+\ln x$ 作为整体，补出 $-1+1$。
+        why: $h(t)\ge0$ 的等号点直接决定原式下界。
+      source_ref: page_0043
+    - step_id: step_4
+      statement: 说明等号点可达。
+      formula_trace:
+        from: $x+\ln x=0$
+        to: 存在唯一 $x_0>0$ 使 $h(x_0+\ln x_0)=0$
+        operation: 函数 $x+\ln x$ 在 $(0,+\infty)$ 上严格递增，且极限从 $-\infty$ 到 $+\infty$。
+        why: 只有等号点可达，才能把恒成立条件压到 $1-a\ge0$。
+      source_ref: page_0043
+    - step_id: step_5
+      statement: 得到参数范围。
+      formula_trace:
+        from: $h(x+\ln x)+1-a\ge0$
+        to: $1-a\ge0\Rightarrow a\le1$
+        operation: 在取等点代入必要条件；反过来 $a\le1$ 时由 $h\ge0$ 保证恒成立。
+        why: 必要性和充分性合在一起给出完整范围。
+      source_ref: page_0043
+teaching_card:
+  student_title: 把 $xe^x$ 拿进指数，卡住 $a\le1$
+  what_it_trains: 训练识别朗博型乘积 $xe^x$，把它改写成 $e^{x+\ln x}$ 后套 $e^t-t-1\ge0$，用等号点判断恒成立参数。
+  recognition_cues:
+    - 式子同时出现 $xe^x$、$x$、$\ln x$。
+    - 结构正好能拼成 $e^{x+\ln x}-(x+\ln x)-1$。
+    - 选项都是关于 $a$ 的上界。
+  normalization_moves:
+    - 先写出 $x>0$。
+    - 把 $xe^x$ 改写为 $e^{x+\ln x}$。
+    - 补 $-1+1$，配成 $h(x+\ln x)+1-a$。
+    - 检查 $x+\ln x=0$ 的等号点存在。
+  common_failures:
+    - 把 $xe^x$ 当普通乘积求导硬做，错过 $e^t-t-1$ 模板。
+    - 只用 $h\ge0$ 得 $a\le1$，忘记说明等号点确实能取到。
+    - 误以为 $a$ 必须为正，排除掉正确答案中的负数。
+  similar_practice_query: 朗博同构 xe^x x+lnx e^t-t-1 恒成立 参数上界
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0043 原图与 markdown 一致；题干的定义域由 $\ln x$ 自然确定为 $x>0$。

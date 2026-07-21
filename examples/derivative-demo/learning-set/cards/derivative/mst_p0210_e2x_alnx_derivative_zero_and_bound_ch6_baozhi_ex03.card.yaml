@@ -1,0 +1,195 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0210_e2x_alnx_derivative_zero_and_bound_ch6_baozhi_ex03
+content_revision_id: mst_p0210_e2x_alnx_derivative_zero_and_bound_ch6_baozhi_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0210_e2x_alnx_derivative_zero_and_bound_ch6_baozhi_ex03.card.yaml
+stem: |-
+  （2015 · 新课标 I）设函数 $f(x)=e^{2x}-a\ln x$。
+  (1) 讨论 $f(x)$ 的导函数 $f^{\prime}(x)$ 零点的个数。
+  (2) 证明：当 $a>0$ 时，$f(x)\geqslant2a+a\ln\frac{2}{a}$。
+answer: |
+  (1) 当 $a\leqslant0$ 时，$f^{\prime}(x)$ 无零点；当 $a>0$ 时，$f^{\prime}(x)$ 有且仅有 1 个零点。 (2) 结论成立。
+
+  由定义域知 $x>0$，且 $f^{\prime}(x)=2e^{2x}-\frac{a}{x}$。第(1)问分两类： 若 $a\le0$，则 $-\frac{a}{x}\ge0$，故 $f^{\prime}(x)>0$ 无零点； 若 $a>0$，则 $f^{\prime\prime}(x)>0$，故 $f^{\prime}(x)$ 递增。 source 取 $x=\frac a2$ 得 $f^{\prime}\!\left(\frac a2\right)>0$， 再用 $e^t<\frac1{1-t}$（$t<1$）在 $x=\frac{a}{2+2a}$ 处构造到 $f^{\prime}(x)<0$，故存在零点；结合递增性知零点唯一。 第(2)问将目标改写为 $e^{2x-\ln a}-\ln2x-2+\ln a\ge0$，令 $h(t)=e^t-t-1$，则该式等于 $h(2x-\ln a)+h(\ln2x)$，两项均非负，结论成立； 且取等需同时满足 $2x-\ln a=0,\ \ln2x=0$，即 $x=\frac12,\ a=e$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 第(1)问先分 $a\le0$ 与 $a>0$ 两类。
+      max_score: 1
+    - step_id: step_2
+      description: 在 $a>0$ 下利用单调性锁定“至多一个零点”。
+      max_score: 1
+    - step_id: step_3
+      description: 找一正一负两点，完成零点存在性。
+      max_score: 1
+    - step_id: step_4
+      description: 第(2)问先把目标改写到同构模板。
+      max_score: 1
+    - step_id: step_5
+      description: 跨页收尾：用双 $h$ 函数并联判非负。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 (1) 问
+        result: $a\le0$ 时 $f^{\prime}(x)$ 无零点；$a>0$ 时 $f^{\prime}(x)$ 有且仅有 1 个零点
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 (2) 问
+        result: 当 $a>0$ 时 $f(x)\ge2a+a\ln\frac2a$
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 同构变形与换元法
+      - 切线放缩与凹凸性
+    subroute:
+      - 主客体变量分析
+      - 找大点找小点
+      - 朗博同构
+      - 取等条件
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 不等式工具结构
+      - 极值点偏移结构
+    evidence:
+      - $f^{\prime}(x)=2e^{2x}-\frac{a}{x}$
+      - $f^{\prime\prime}(x)>0$
+      - $x=\frac a2,\ x=\frac{a}{2+2a}$ 两个探路点
+      - $e^{2x-\ln a}-\ln2x-2+\ln a$
+      - $h(2x-\ln a)+h(\ln2x)$
+    normalization_moves_used:
+      - 先用 $f^{\prime\prime}(x)>0$ 把零点个数问题转为“找符号跨越点”。
+      - 通过上、下界放缩构造一正一负两个样本点。
+      - 把目标式改写成两个 $h(t)=e^t-t-1$ 的和。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把“递增 + 一正一负”转成“唯一零点”，回补方程根分布与韦达。
+      - 若学生不会使用 $e^t<\frac1{1-t}$（$t<1$）做探路放缩，回补不等式工具基础。
+      - 若学生不会完成 $e^{2x-\ln a}-\ln2x-2+\ln a$ 的同构拆分，回补指数对数基础。
+      - 若学生无法从 $f^{\prime}(x),f^{\prime\prime}(x)$ 链条读出单调结论，回补导数单调极值基础。
+  detail_terms:
+    - $f^{\prime}(x)=2e^{2x}-\frac{a}{x}$
+    - $x=\frac a2$
+    - $x=\frac{a}{2+2a}$
+    - $e^{2x-\ln a}-\ln2x-2+\ln a$
+    - $h(2x-\ln a)+h(\ln2x)$
+parts: &a1
+  - (1) 讨论 $f(x)$ 的导函数 $f^{\prime}(x)$ 零点的个数。
+  - (2) 证明：当 $a>0$ 时，$f(x)\geqslant2a+a\ln\frac{2}{a}$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0210_e2x_alnx_derivative_zero_and_bound_ch6_baozhi_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0210_ex01_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0210/page_0210.md
+      role: local_context
+      evidence: page_0210 顶部仍是 page_0209 例1续页，按归属规则不在本批次建卡。
+    - ref_id: page_0210_ex03_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0210/page_0210.md
+      role: problem_start
+      evidence: page_0210 下半出现“例3（2015·新课标 I）设 $f(x)=e^{2x}-a\ln x$”，题干含两问。
+    - ref_id: page_0210_ex03_solution_head
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0210/page_0210.md
+      role: solution
+      evidence: page_0210 给出第(1)问完整讨论，并给出第(2)问的等价变形到“构造函数”前。
+    - ref_id: page_0211_ex03_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0211/page_0211.md
+      role: continuation
+      evidence: page_0211 顶部承接“构造函数”，用 $h(x)=e^x-x-1$ 完成第(2)问并给出取等条件。
+    - ref_id: page_0211_ex04_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0211/page_0211.md
+      role: local_context
+      evidence: page_0211 中部“例4”开始新题头；该题属于下一个 page 所有者，不并入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0210.png
+      inspected: true
+      notes: 已核对页图：例3在本页起题，解析第(1)问完整；第(2)问在页底跨页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0211.png
+      inspected: true
+      notes: 已核对页图：页顶是例3第(2)问续解，随后进入“同构保值性的数据分析”和例4新题。
+  source_context: 例3题头起于 page_0210，下接 page_0211 顶部完成第(2)问；page_0211 的例4不属于本卡。
+  source_influence:
+    - 保留第(1)问“主客体变量分析 + 找一正一负两点”的零点存在性路径。
+    - 保留第(2)问的标准同构重写：$e^{2x-\ln a}-\ln2x-2+\ln a$。
+    - 保留续页给出的双 $h$ 函数并联与等号条件刻画。
+  source_discrepancies:
+    - page_0210 解析文字写“找一个比 $f^{\prime}(x)$ 更大的函数”，但紧随其后使用的是上界放缩 $f^{\prime}(x)<\frac{2}{1-2x}-\frac{a}{x}$ 来构造负值点；语义上应为“更小的函数（上界）”。
+original_problem:
+  stem: （2015 · 新课标 I）设函数 $f(x)=e^{2x}-a\ln x$。
+  parts: *a1
+  choices: []
+  answer: (1) 当 $a\leqslant0$ 时，$f^{\prime}(x)$ 无零点；当 $a>0$ 时，$f^{\prime}(x)$ 有且仅有 1 个零点。 (2) 结论成立。
+  fidelity_notes:
+    - 第(2)问解答跨页：page_0210 页底起式，page_0211 页顶闭合。
+    - source 在第(1)问使用“找大点/找小点”口径来证明存在零点。
+solution:
+  source_solution_summary: |
+    由定义域知 $x>0$，且 $f^{\prime}(x)=2e^{2x}-\frac{a}{x}$。第(1)问分两类： 若 $a\le0$，则 $-\frac{a}{x}\ge0$，故 $f^{\prime}(x)>0$ 无零点； 若 $a>0$，则 $f^{\prime\prime}(x)>0$，故 $f^{\prime}(x)$ 递增。 source 取 $x=\frac a2$ 得 $f^{\prime}\!\left(\frac a2\right)>0$， 再用 $e^t<\frac1{1-t}$（$t<1$）在 $x=\frac{a}{2+2a}$ 处构造到 $f^{\prime}(x)<0$，故存在零点；结合递增性知零点唯一。 第(2)问将目标改写为 $e^{2x-\ln a}-\ln2x-2+\ln a\ge0$，令 $h(t)=e^t-t-1$，则该式等于 $h(2x-\ln a)+h(\ln2x)$，两项均非负，结论成立； 且取等需同时满足 $2x-\ln a=0,\ \ln2x=0$，即 $x=\frac12,\ a=e$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问先分 $a\le0$ 与 $a>0$ 两类。
+      formula_trace:
+        from: $f^{\prime}(x)=2e^{2x}-\frac{a}{x},\ x>0$
+        to: 当 $a\le0$ 时 $f^{\prime}(x)>0$，无零点
+        operation: 利用 $-\frac{a}{x}\ge0$ 与 $2e^{2x}>0$。
+        why: 先快速排除一类参数。
+      source_ref: page_0210_ex03_solution_head
+    - step_id: step_2
+      statement: 在 $a>0$ 下利用单调性锁定“至多一个零点”。
+      formula_trace:
+        from: $a>0$
+        to: $f^{\prime\prime}(x)>0\Rightarrow f^{\prime}(x)$ 单调递增
+        operation: 对 $f^{\prime}(x)$ 再求导并判符号。
+        why: 递增性保证零点唯一性方向。
+      source_ref: page_0210_ex03_solution_head
+    - step_id: step_3
+      statement: 找一正一负两点，完成零点存在性。
+      formula_trace:
+        from: $f^{\prime}(x)=2e^{2x}-\frac{a}{x}$
+        to: $f^{\prime}\!\left(\frac a2\right)>0,\ f^{\prime}\!\left(\frac{a}{2+2a}\right)<0$
+        operation: 先用 $e^{2x}>1$ 得正值点，再用 $e^{2x}<\frac1{1-2x}$（$x<\frac12$）构造负值点。
+        why: 与 step_2 结合推出“有且仅有一个零点”。
+      source_ref: page_0210_ex03_solution_head
+    - step_id: step_4
+      statement: 第(2)问先把目标改写到同构模板。
+      formula_trace:
+        from: $e^{2x}\ge a\ln x+2a+a\ln\frac2a$
+        to: $e^{2x-\ln a}-\ln2x-2+\ln a\ge0$
+        operation: 两边除以 $a(>0)$ 并合并对数项。
+        why: 将不等式整理成 $e^u-u-1$ 可拼接结构。
+      source_ref: page_0210_ex03_solution_head
+    - step_id: step_5
+      statement: 跨页收尾：用双 $h$ 函数并联判非负。
+      formula_trace:
+        from: $h(t)=e^t-t-1$
+        to: $h(2x-\ln a)+h(\ln2x)=e^{2x-\ln a}-\ln2x+\ln a-2\ge0$
+        operation: 把目标式拆成两个 $h$ 项并用 $h(t)\ge0$。
+        why: 直接闭合第(2)问，并可同步读出取等条件。
+      source_ref: page_0211_ex03_solution_continuation
+teaching_card:
+  student_title: 零点探路 + 双同构闭环
+  what_it_trains: 训练先用导数单调性压缩零点个数，再用两点探路判存在，最后把指对不等式改写为母函数并联非负。
+  recognition_cues:
+    - 第一问是“导函数零点个数”，且表达式含指数与反比项。
+    - 第二问目标带 $a\ln\frac2a$，通常要做对数合并与同构配凑。
+    - 题目显式给出参数正负分界（$a\le0$ / $a>0$）。
+  normalization_moves:
+    - 先判 $f^{\prime\prime}(x)$ 单调性，再去找正负样本点。
+    - 用 $e^{2x}>1$ 与 $e^{2x}<\frac1{1-2x}$ 双向放缩定点。
+    - 把目标式拆为 $h(2x-\ln a)+h(\ln2x)$。
+  common_failures:
+    - 只证“有零点”却漏掉“唯一性”所需的单调性。
+    - 在 $x=\frac{a}{2+2a}$ 处代入化简出错，导致符号判断失败。
+    - 第(2)问对数合并时把 $\ln2x$ 与 $\ln x$ 混写。
+  similar_practice_query: e2x alnx 导函数零点个数 找点放缩 同构保值性
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

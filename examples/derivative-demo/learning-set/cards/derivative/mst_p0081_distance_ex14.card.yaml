@@ -1,0 +1,150 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0081_distance_ex14
+content_revision_id: mst_p0081_distance_ex14-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0081_distance_ex14.card.yaml
+stem: （2024 雅安天立高级中学月考 T16）已知 $P$，$Q$ 分别是函数 $y=\frac12e^{2x}$，$y=\frac{\ln2+\ln x}{2}$ 图象上的动点，则 $|PQ|$ 的最小值为_______。
+answer: |-
+  $\frac{\sqrt2}{2}$
+
+  由 $y=\frac12e^{2x}$ 反解得 $x=(\ln2+\ln y)/2$, 所以它与 $y=(\ln2+\ln x)/2$ 互为反函数, 图象关于 $y=x$ 对称。 因此两曲线间的最短距离可看成一侧曲线到对称轴 $y=x$ 的最短距离的 2 倍。 对 $y=\frac12e^{2x}$ 求导得 $y'=e^{2x}$, 令 $y'=1$ 得 $x=0$, 此时 $P=(0,1/2)$。点 $P$ 到 $y=x$ 的距离为 $|0-1/2|/\sqrt2=\sqrt2/4$, 所以 $|PQ|_{\min}=2d=\sqrt2/2$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 识别两条曲线互为反函数。
+      max_score: 1
+    - step_id: step_2
+      description: 把两曲线间距离化为点到对称轴距离的两倍。
+      max_score: 1
+    - step_id: step_3
+      description: 用切线平行于对称轴定位最近点。
+      max_score: 1
+    - step_id: step_4
+      description: 计算点到 $y=x$ 的距离并翻倍。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何量求解
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 对称化与偏移
+      - 切线放缩与凹凸性
+    subroute:
+      - 反函数关于 $y=x$ 对称
+      - 点到对称轴距离翻倍
+      - 平行切线定位最近点
+  structure:
+    primary: 对称结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 指对复合结构
+    evidence:
+      - $y=\frac12e^{2x}\Longleftrightarrow x=\frac{\ln2+\ln y}{2}$
+      - $y'=e^{2x}=1\Rightarrow x=0$
+      - $P\left(0,\frac12\right)$
+      - $2\cdot\frac{\sqrt2}{4}=\frac{\sqrt2}{2}$
+    normalization_moves_used:
+      - 通过反解识别反函数, 不把两条曲线当作无关曲线硬算。
+      - 把两曲线距离压缩为一条曲线到 $y=x$ 的距离。
+      - 对 $y=x$ 使用 $x-y=0$ 的点线距离公式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $y=\frac12e^{2x}$ 反解出反函数, 回补分段/复合/反函数基础。
+      - 若学生不知道反函数图象关于 $y=x$ 对称, 回补函数性质与图像。
+      - 若学生不会令导数等于 1 找最近点, 回补导数运算与几何意义。
+      - 若学生点到 $y=x$ 距离公式出错, 回补几何关系基础。
+  detail_terms:
+    - $y=\frac12e^{2x}$
+    - $y=\frac{\ln2+\ln x}{2}$
+    - 互为反函数
+    - $y=x$
+    - $P\left(0,\frac12\right)$
+    - $\frac{\sqrt2}{2}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0081_distance_ex14
+source_evidence:
+  source_refs:
+    - ref_id: page_0081
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0081/page_0081.md
+      role: problem_start
+      evidence: "lines 15-18 give the first 例 14 on page_0081: two inverse-function graphs, symmetry about y=x, tangent parallel to y=x at x=0, and answer sqrt(2)/2."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0081.png
+      inspected: true
+      notes: 页图确认 page_0081 中部第一处“例14”为距离题, 在“牛顿——拉夫逊方法的应用” 小节之前; 题干和解析公式与 markdown 一致。
+  source_context: page_0081 有两个不同的源书“例 14”。本卡只处理前一个直线与曲线距离题, 后一个牛顿法例 14 另用 problem_id mst_p0081_newton_ex14。
+  source_influence:
+    - 保留源页先识别互为反函数、关于 $y=x$ 对称的路线。
+    - 保留源页把两曲线距离转化为点到对称轴 $y=x$ 距离的 2 倍。
+    - 保留源页令 $y'=1$ 找与 $y=x$ 平行的切线。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 雅安天立高级中学月考 T16）已知 $P$，$Q$ 分别是函数 $y=\frac12e^{2x}$，$y=\frac{\ln2+\ln x}{2}$ 图象上的动点，则 $|PQ|$ 的最小值为_______。
+  parts: *a1
+  choices: []
+  answer: $\frac{\sqrt2}{2}$
+  fidelity_notes:
+    - 源题为填空题, 无分问和选项。
+    - 为避免与同页后一个“例14”混淆, 本卡 ID 加入 distance。
+solution:
+  source_solution_summary: 由 $y=\frac12e^{2x}$ 反解得 $x=(\ln2+\ln y)/2$, 所以它与 $y=(\ln2+\ln x)/2$ 互为反函数, 图象关于 $y=x$ 对称。 因此两曲线间的最短距离可看成一侧曲线到对称轴 $y=x$ 的最短距离的 2 倍。 对 $y=\frac12e^{2x}$ 求导得 $y'=e^{2x}$, 令 $y'=1$ 得 $x=0$, 此时 $P=(0,1/2)$。点 $P$ 到 $y=x$ 的距离为 $|0-1/2|/\sqrt2=\sqrt2/4$, 所以 $|PQ|_{\min}=2d=\sqrt2/2$。
+  key_steps:
+    - step_id: step_1
+      statement: 识别两条曲线互为反函数。
+      formula_trace:
+        from: $y=\frac12e^{2x}$
+        to: $x=\frac{\ln2+\ln y}{2}$
+        operation: 两边乘 2 后取对数, 再把反函数中的自变量记号换回 $x$。
+        why: 反函数图象关于 $y=x$ 对称。
+      source_ref: page_0081:line 17
+    - step_id: step_2
+      statement: 把两曲线间距离化为点到对称轴距离的两倍。
+      formula_trace:
+        from: 两图象关于 $y=x$ 对称
+        to: $|PQ|_{\min}=2\,d(P,\ y=x)$
+        operation: 取一侧曲线上的点和它关于 $y=x$ 的对称点配对。
+        why: 最短连线穿过对称轴且两端到对称轴距离相等。
+      source_ref: page_0081:line 17
+    - step_id: step_3
+      statement: 用切线平行于对称轴定位最近点。
+      formula_trace:
+        from: $y=\frac12e^{2x},\quad y=x$ 的斜率为 $1$
+        to: $y'=e^{2x}=1\Rightarrow x=0,\quad P\left(0,\frac12\right)$
+        operation: 求导后令切线斜率等于对称轴斜率。
+        why: 点到直线距离最小时, 曲线切线与这条直线平行。
+      source_ref: page_0081:line 17
+    - step_id: step_4
+      statement: 计算点到 $y=x$ 的距离并翻倍。
+      formula_trace:
+        from: $P\left(0,\frac12\right),\quad y=x$
+        to: $d=\frac{|0-\frac12|}{\sqrt{1^2+1^2}}=\frac{\sqrt2}{4},\quad |PQ|_{\min}=2d=\frac{\sqrt2}{2}$
+        operation: 把 $y=x$ 写成 $x-y=0$, 用点到直线距离公式。
+        why: 两条反函数图象对称, 两侧距离相等。
+      source_ref: page_0081:lines 17-18
+teaching_card:
+  student_title: 把反函数距离变成到对称轴的距离
+  what_it_trains: 训练学生看到反函数图象时先用 $y=x$ 的对称性降维, 再用平行切线和点线距离 快速求两条曲线的最短距离。
+  recognition_cues:
+    - 一个函数是指数形式, 另一个是对应的对数形式。
+    - 反解 $y=\frac12e^{2x}$ 后正好得到另一个函数。
+    - 题目问两条对称曲线上的动点距离。
+  normalization_moves:
+    - 先反解确认互为反函数。
+    - 把最短距离写成到 $y=x$ 距离的 2 倍。
+    - 令 $e^{2x}=1$ 找切点。
+    - 把 $y=x$ 写成 $x-y=0$ 后算距离。
+  common_failures:
+    - 没有识别反函数, 转而对两个动点设参硬算。
+    - 只算点到 $y=x$ 的距离, 忘记最后乘 2。
+    - 把 $y'=e^{2x}$ 误写成 $2e^{2x}$ 或 $\frac12e^{2x}$。
+  similar_practice_query: 反函数 图象关于 y=x 对称 两曲线最短距离 1/2 e^{2x}
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0081 有两个源书“例14”; 本卡为前一个距离题, ID 使用 distance 区分。

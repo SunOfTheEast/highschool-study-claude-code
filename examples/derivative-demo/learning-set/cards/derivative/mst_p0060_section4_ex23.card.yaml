@@ -1,0 +1,198 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0060_section4_ex23
+content_revision_id: mst_p0060_section4_ex23-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0060_section4_ex23.card.yaml
+stem: |-
+  (2020 · 新课标ⅢT20) 设函数 $f(x)=x^3+bx+c$，曲线 $y=f(x)$ 在点
+  $\left(\frac{1}{2}, f\left(\frac{1}{2}\right)\right)$ 处的切线与 $y$ 轴垂直。
+answer: |-
+  (1) $b=-\frac{3}{4}$。
+  (2) 当 $f(x)$ 在 $[-1,1]$ 内至少有一个零点时，必有
+  $-\frac{1}{4}\le c\le \frac{1}{4}$，进而所有零点都在 $[-1,1]$ 内。
+
+  切线与 $y$ 轴垂直说明该点切线水平，因此 $f'(\frac12)=0$，得
+  $b=-\frac34$。代回后，$f'(x)=3(x+\frac12)(x-\frac12)$，函数在
+  $(-\infty,-\frac12)$、$(\frac12,+\infty)$ 上递增，在
+  $(-\frac12,\frac12)$ 上递减。又有
+  $f(-1)=f(\frac12)=c-\frac14$，
+  $f(-\frac12)=f(1)=c+\frac14$。若 $[-1,1]$ 内有零点，则
+  $c-\frac14\le0\le c+\frac14$。再按
+  $-\frac14<c<\frac14$、$c=\frac14$、$c=-\frac14$ 分类，用介值定理和端点重合情形得到所有零点的绝对值都不大于 $1$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 由切线与 $y$ 轴垂直推出切线水平，令 $f'(\frac12)=0$ 求出 $b$。
+      max_score: 1
+    - step_id: step_2
+      description: 代入 $b$ 后分解导函数，确定两个极值点和三个单调区间。
+      max_score: 1
+    - step_id: step_3
+      description: 计算端点与极值点的函数值，发现两组相等值。
+      max_score: 1
+    - step_id: step_4
+      description: 用 $[-1,1]$ 内存在零点反推参数 $c$ 的闭区间。
+      max_score: 1
+    - step_id: step_5
+      description: 当 $-\frac14<c<\frac14$ 时，三个单调区间各出现一个零点，且都落在 $(-1,1)$ 内。
+      max_score: 1
+    - step_id: step_6
+      description: 检查两个端点情形，得到零点只能落在 $[-1,1]$ 的端点或极值点。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: "1"
+        goal: 数值求值
+        target: 第 (1) 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 零点/极值点分析
+        target: 第 (2) 问
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 充分/必要性探路
+    subroute:
+      - 三次函数四段论
+      - 端点效应
+      - 介值定理分段找根
+  structure:
+    primary: 三次/高次函数结构
+    secondary:
+      - 对称结构
+    evidence:
+      - $f'(x)=3(x+\frac12)(x-\frac12)$ 使三次函数形成两增一减的固定根分布框架。
+      - $f(-1)=f(\frac12)$ 与 $f(-\frac12)=f(1)$ 把端点和极值点配成两组相同高度。
+    normalization_moves_used:
+      - 用切线水平条件先把参数 $b$ 固定。
+      - 把存在一个区间内零点转化为 $0$ 落入 $[c-\frac14,c+\frac14]$。
+      - 按 $c$ 的开区间与两个边界值分别处理零点位置。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能由“切线与 $y$ 轴垂直”推出 $f'(\frac12)=0$，回补导数运算与几何意义中的水平切线判定。
+      - 若学生只会画图但说不清零点为何都在 $[-1,1]$ 内，回补导数单调极值基础，用三个单调区间的端点异号逐段定位。
+      - 若学生漏掉 $c=\pm\frac14$，回补代数恒等变形中的边界参数代入检查。
+  detail_terms:
+    - 水平切线
+    - 三次函数极大极小
+    - 端点与极值点同值
+    - 介值定理
+parts: &a1
+  - label: (1)
+    text_raw: 求 b.
+    text_latex: 求 $b$.
+  - label: (2)
+    text_raw: 若 f(x) 有一个绝对值不大于 1 的零点，证明：f(x) 所有零点的绝对值都不大于 1.
+    text_latex: 若 $f(x)$ 有一个绝对值不大于 $1$ 的零点，证明：$f(x)$ 所有零点的绝对值都不大于 $1$.
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0060_section4_ex23
+source_evidence:
+  source_refs:
+    - ref_id: page_0060
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0060/page_0060.md
+      role: problem_start
+      evidence: 例 23 题头、两问、完整解析与根分布示意图均在本页。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0060.png
+      inspected: true
+      notes: 核对了例 23 的题干、两问、导数因式分解、端点取值和根分布图。
+  source_context: page_0060 顶部是 page_0059 例 22 的续页，本卡未创建例 22；例 23 在 page_0060 正式起题并在同页结束。
+  source_influence:
+    - 题干、解析公式和三种 c 情形均直接来自 page_0060 markdown，并用 page_0060 图片校对。
+  source_discrepancies: []
+original_problem:
+  stem: |-
+    (2020 · 新课标ⅢT20) 设函数 $f(x)=x^3+bx+c$，曲线 $y=f(x)$ 在点
+    $\left(\frac{1}{2}, f\left(\frac{1}{2}\right)\right)$ 处的切线与 $y$ 轴垂直。
+  parts: *a1
+  choices: []
+  answer: |-
+    (1) $b=-\frac{3}{4}$。
+    (2) 当 $f(x)$ 在 $[-1,1]$ 内至少有一个零点时，必有
+    $-\frac{1}{4}\le c\le \frac{1}{4}$，进而所有零点都在 $[-1,1]$ 内。
+  fidelity_notes:
+    - 源页配有函数图像，用来辅助说明 $c$ 的范围与三个单调区间中的零点分布；题干本身不含必须抄入的选项或独立图形条件。
+solution:
+  source_solution_summary: |-
+    切线与 $y$ 轴垂直说明该点切线水平，因此 $f'(\frac12)=0$，得
+    $b=-\frac34$。代回后，$f'(x)=3(x+\frac12)(x-\frac12)$，函数在
+    $(-\infty,-\frac12)$、$(\frac12,+\infty)$ 上递增，在
+    $(-\frac12,\frac12)$ 上递减。又有
+    $f(-1)=f(\frac12)=c-\frac14$，
+    $f(-\frac12)=f(1)=c+\frac14$。若 $[-1,1]$ 内有零点，则
+    $c-\frac14\le0\le c+\frac14$。再按
+    $-\frac14<c<\frac14$、$c=\frac14$、$c=-\frac14$ 分类，用介值定理和端点重合情形得到所有零点的绝对值都不大于 $1$。
+  key_steps:
+    - step_id: step_1
+      statement: 由切线与 $y$ 轴垂直推出切线水平，令 $f'(\frac12)=0$ 求出 $b$。
+      formula_trace:
+        from: $f(x)=x^3+bx+c$ 且切线在 $x=\frac12$ 处水平
+        to: $f'(x)=3x^2+b,\quad f'(\frac12)=3\cdot(\frac12)^2+b=0,\quad b=-\frac34$
+        operation: 求导并代入水平切线条件
+        why: 切线与 $y$ 轴垂直时斜率为 $0$，导数等于该点切线斜率。
+      source_ref: page_0060
+    - step_id: step_2
+      statement: 代入 $b$ 后分解导函数，确定两个极值点和三个单调区间。
+      formula_trace:
+        from: $f(x)=x^3-\frac34x+c$
+        to: $f'(x)=3x^2-\frac34=3(x+\frac12)(x-\frac12)$
+        operation: 因式分解导函数并判定符号
+        why: 导函数在 $x=-\frac12,\frac12$ 处变号，给出三次函数的增减结构。
+      source_ref: page_0060
+    - step_id: step_3
+      statement: 计算端点与极值点的函数值，发现两组相等值。
+      formula_trace:
+        from: $f(x)=x^3-\frac34x+c$
+        to: $f(-1)=f(\frac12)=c-\frac14,\quad f(-\frac12)=f(1)=c+\frac14$
+        operation: 分别代入 $x=-1,\frac12,-\frac12,1$
+        why: 这两组相等值把区间 $[-1,1]$ 的最低、最高水平直接写成 $c-\frac14$ 与 $c+\frac14$。
+      source_ref: page_0060
+    - step_id: step_4
+      statement: 用 $[-1,1]$ 内存在零点反推参数 $c$ 的闭区间。
+      formula_trace:
+        from: $f(x)$ 在 $[-1,1]$ 内有零点
+        to: $f(-1)\le0\le f(1)$，即 $c-\frac14\le0\le c+\frac14$，所以 $-\frac14\le c\le\frac14$
+        operation: 结合单调区间上的极值范围和介值思想
+        why: $[-1,1]$ 上函数值范围为 $[c-\frac14,c+\frac14]$，含有 $0$ 才可能在该区间有零点。
+      source_ref: page_0060
+    - step_id: step_5
+      statement: 当 $-\frac14<c<\frac14$ 时，三个单调区间各出现一个零点，且都落在 $(-1,1)$ 内。
+      formula_trace:
+        from: $f(-1)=f(\frac12)<0,\quad f(-\frac12)=f(1)>0$
+        to: $x_1\in(-1,-\frac12),\ x_2\in(-\frac12,\frac12),\ x_3\in(\frac12,1)$ 且 $f(x_i)=0$
+        operation: 在三个相邻区间分别用介值定理定位零点
+        why: 每个区间上函数单调，端点异号时零点唯一且位置受端点约束。
+      source_ref: page_0060
+    - step_id: step_6
+      statement: 检查两个端点情形，得到零点只能落在 $[-1,1]$ 的端点或极值点。
+      formula_trace:
+        from: $c=\frac14$ 或 $c=-\frac14$
+        to: $c=\frac14$ 时 $f(-1)=f(\frac12)=0$；$c=-\frac14$ 时 $f(-\frac12)=f(1)=0$
+        operation: 把边界参数代入端点与极值点取值
+        why: 边界情形没有新的区间外零点，仍满足所有零点的绝对值不大于 $1$。
+      source_ref: page_0060
+teaching_card:
+  student_title: 用极值点和端点夹住三次函数的零点
+  what_it_trains: 训练从切线条件先定参数，再用导数分段、端点值和极值点值控制三次函数全部零点的位置。
+  recognition_cues:
+    - 三次函数导函数能分解出两个固定临界点。
+    - 题目给“存在一个零点在某区间内”，但要求控制所有零点。
+    - 端点值与极值点值出现相等配对。
+  normalization_moves:
+    - 先由几何切线条件消去 $b$。
+    - 把 $[-1,1]$ 内有零点改写成 $-\frac14\le c\le\frac14$。
+    - 用三个单调区间分别找根，而不是直接求三次方程根。
+  common_failures:
+    - 把“切线与 $y$ 轴垂直”误判成切线斜率不存在。
+    - 由存在一个零点直接跳到三个零点，缺少 $c$ 的范围推导。
+    - 只处理 $-\frac14<c<\frac14$，漏掉 $c=\pm\frac14$ 的重根边界。
+  similar_practice_query: 三次函数 已知区间内有零点 证明所有零点范围 导数极值 端点值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

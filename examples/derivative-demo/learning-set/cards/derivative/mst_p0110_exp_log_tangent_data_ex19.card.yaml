@@ -1,0 +1,260 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0110_exp_log_tangent_data_ex19
+content_revision_id: mst_p0110_exp_log_tangent_data_ex19-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0110_exp_log_tangent_data_ex19.card.yaml
+stem: |-
+  （2023 南通基地大联考·多选 T12）已知 $O$ 为坐标原点，曲线 $y=\ln x$ 在点 $P(x_1,y_1)$ 处的切线与曲线 $y=e^x$ 相切于点 $Q(x_2,y_2)$，则（  ）
+  A. $x_1y_2=1$
+  B. $\frac{x_1+1}{x_1-1}+x_2=0$
+  C. $\overrightarrow{OP}\cdot\overrightarrow{OQ}$ 的最大值为 $0$
+  D. 当 $x_2<0$ 时，$x_1+x_2>e^2-2$
+answer: |
+  AB
+
+  两条切线分别为
+  $y=\frac1{x_1}x-1+\ln x_1$ 与
+  $y=e^{x_2}x+e^{x_2}(1-x_2)$。由重合得
+  $\frac1{x_1}=e^{x_2}$、$\ln x_1-1=e^{x_2}(1-x_2)$。
+  因 $y_2=e^{x_2}$，所以 $x_1y_2=1$，A 正确。又
+  $x_2=-\ln x_1$，且 $x_1=1$ 时两切线分别为
+  $y=x-1$ 与 $y=x+1$，不合题意，所以 $x_1\ne1$。
+  将 $\ln x_1=-x_2$ 代入截距关系，得
+  $-x_2-1=\frac1{x_1}(1-x_2)$，整理成
+  $x_2+\frac{x_1+1}{x_1-1}=0$，B 正确。
+  点积
+  $\overrightarrow{OP}\cdot\overrightarrow{OQ}
+  =\left(\frac1{x_1}-x_1\right)\ln x_1$，当
+  $0<x_1<1$ 或 $x_1>1$ 时都小于 0，因此最大值不是 0，C 错误。
+  若 $x_2<0$，设 $f(x)=e^x(1-x)$，则 $f'(x)=-xe^x>0$，
+  $0<e^{x_2}(1-x_2)<1$，于是 $1<\ln x_1<2$，即
+  $e<x_1<e^2$。令 $g(x)=x-\ln x$，在 $(e,e^2)$ 上递增，
+  所以 $x_1+x_2=x_1-\ln x_1<e^2-2$，D 错误。故选 AB。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 用同一条切线建立斜率和截距方程。
+      max_score: 1
+    - step_id: step_2
+      description: 判断 A。
+      max_score: 1
+    - step_id: step_3
+      description: 判断 B。
+      max_score: 1
+    - step_id: step_4
+      description: 把点积化成只含 $x_1$ 的表达式。
+      max_score: 1
+    - step_id: step_5
+      description: 判断 C。
+      max_score: 1
+    - step_id: step_6
+      description: 在 $x_2<0$ 时确定 $x_1$ 的范围。
+      max_score: 1
+    - step_id: step_7
+      description: 判断 D 并汇总答案。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 不等式证明
+        target: A、B：证明公切线切点量恒等关系。
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 极值最值
+        target: C：判断向量点积的最大值说法。
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 数值比较
+        target: D：在 $x_2<0$ 条件下比较 $x_1+x_2$ 与 $e^2-2$。
+        result: 见 source_solution_summary
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+      - 数形结合
+    subroute:
+      - 切点参数化
+      - 斜率截距匹配
+      - 指对互化
+      - 单调性判界
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - 同一条切线给出 $\frac1{x_1}=e^{x_2}$ 与 $\ln x_1-1=e^{x_2}(1-x_2)$。
+      - 点积可化为 $\left(\frac1{x_1}-x_1\right)\ln x_1$。
+      - $x_2<0$ 时通过 $e^{x_2}(1-x_2)$ 把 $\ln x_1$ 限制在 $(1,2)$。
+    normalization_moves_used:
+      - 把两条切线方程整理成斜截式并比较。
+      - 把 $x_2$ 全部替换成 $-\ln x_1$。
+      - 把向量点积和条件不等式都归到单变量 $x_1$ 上。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从同一切线得到两条代数关系，回补导数运算与几何意义。
+      - 若学生不会处理 $x_2=-\ln x_1$，回补指数对数基础。
+      - 若学生判断点积符号时漏分 $0<x_1<1$ 与 $x_1>1$，回补函数性质与图像。
+      - 若学生不会用单调性比较 $x-\ln x$，回补导数单调极值基础。
+  detail_terms:
+    - $y=\ln x$
+    - $y=e^x$
+    - $x_1y_2=1$
+    - $x_2+\frac{x_1+1}{x_1-1}=0$
+    - $\overrightarrow{OP}\cdot\overrightarrow{OQ}$
+    - $x_1+x_2<e^2-2$
+    - 答案 AB
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0110_exp_log_tangent_data_ex19
+source_evidence:
+  source_refs:
+    - ref_id: page_0110_ex19_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0110/page_0110.md
+      role: problem_start
+      evidence: lines 36-41 give 例 19 题头、stem and A-D choices about the common tangent of $y=\ln x$ and $y=e^x$.
+    - ref_id: page_0110_ex19_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0110/page_0110.md
+      role: solution
+      evidence: lines 43-50 start the solution by writing the two tangent equations and prove option A from $x_1e^{x_2}=1$.
+    - ref_id: page_0111_ex19_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0111/page_0111.md
+      role: continuation
+      evidence: lines 15-25 finish options B-D and conclude the answer is AB before 例 20 begins at line 27.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0110.png
+      inspected: true
+      notes: 已核对 page_0110：例 19 题头、A-D 选项和解析开头位于页面下半部；A 项在本页完成。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0111.png
+      inspected: true
+      notes: 已核对 page_0111：页首为例 19 续解，完成 B、C、D 判断并给出 AB；随后另起例 20。
+  source_context: 例 19 的题头从 page_0110 起，解析跨到 page_0111 顶部；page_0111 line 27 起的例 20 是下一题，不纳入本卡。
+  source_influence:
+    - 保留源页通过切线方程重合得到 $\frac1{x_1}=e^{x_2}$ 与 $\ln x_1-1=e^{x_2}(1-x_2)$。
+    - 保留源页逐项判断 A、B、C、D 的路线，尤其是点积恒小于 0 和 $x_2<0$ 时的反向不等式。
+    - 保留源页最终答案 AB。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 南通基地大联考·多选 T12）已知 $O$ 为坐标原点，曲线 $y=\ln x$ 在点 $P(x_1,y_1)$ 处的切线与曲线 $y=e^x$ 相切于点 $Q(x_2,y_2)$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $x_1y_2=1$
+      text_latex: $x_1y_2=1$
+    - label: B
+      text_raw: $\frac{x_1+1}{x_1-1}+x_2=0$
+      text_latex: $\frac{x_1+1}{x_1-1}+x_2=0$
+    - label: C
+      text_raw: $\overrightarrow{OP}\cdot\overrightarrow{OQ}$ 的最大值为 $0$
+      text_latex: $\overrightarrow{OP}\cdot\overrightarrow{OQ}$ 的最大值为 $0$
+    - label: D
+      text_raw: 当 $x_2<0$ 时，$x_1+x_2>e^2-2$
+      text_latex: 当 $x_2<0$ 时，$x_1+x_2>e^2-2$
+  answer: AB
+  fidelity_notes:
+    - 题干和选项位于 page_0110，解析续到 page_0111 顶部。
+    - C 项源页判断的是实际取值始终小于 0；因此 0 只是上确界趋势，不是最大值。
+solution:
+  source_solution_summary: |
+    两条切线分别为
+    $y=\frac1{x_1}x-1+\ln x_1$ 与
+    $y=e^{x_2}x+e^{x_2}(1-x_2)$。由重合得
+    $\frac1{x_1}=e^{x_2}$、$\ln x_1-1=e^{x_2}(1-x_2)$。
+    因 $y_2=e^{x_2}$，所以 $x_1y_2=1$，A 正确。又
+    $x_2=-\ln x_1$，且 $x_1=1$ 时两切线分别为
+    $y=x-1$ 与 $y=x+1$，不合题意，所以 $x_1\ne1$。
+    将 $\ln x_1=-x_2$ 代入截距关系，得
+    $-x_2-1=\frac1{x_1}(1-x_2)$，整理成
+    $x_2+\frac{x_1+1}{x_1-1}=0$，B 正确。
+    点积
+    $\overrightarrow{OP}\cdot\overrightarrow{OQ}
+    =\left(\frac1{x_1}-x_1\right)\ln x_1$，当
+    $0<x_1<1$ 或 $x_1>1$ 时都小于 0，因此最大值不是 0，C 错误。
+    若 $x_2<0$，设 $f(x)=e^x(1-x)$，则 $f'(x)=-xe^x>0$，
+    $0<e^{x_2}(1-x_2)<1$，于是 $1<\ln x_1<2$，即
+    $e<x_1<e^2$。令 $g(x)=x-\ln x$，在 $(e,e^2)$ 上递增，
+    所以 $x_1+x_2=x_1-\ln x_1<e^2-2$，D 错误。故选 AB。
+  key_steps:
+    - step_id: step_1
+      statement: 用同一条切线建立斜率和截距方程。
+      formula_trace:
+        from: $y=\ln x$ 在 $P(x_1,\ln x_1)$ 处切线，$y=e^x$ 在 $Q(x_2,e^{x_2})$ 处切线
+        to: $\frac1{x_1}=e^{x_2},\quad \ln x_1-1=e^{x_2}(1-x_2)$
+        operation: 分别写斜截式后比较斜率和截距。
+        why: 四个选项都依赖这组切点数据关系。
+      source_ref: page_0110_ex19_solution_start
+    - step_id: step_2
+      statement: 判断 A。
+      formula_trace:
+        from: $\frac1{x_1}=e^{x_2},\quad y_2=e^{x_2}$
+        to: $x_1y_2=x_1e^{x_2}=1$
+        operation: 把指数曲线切点纵坐标代入斜率关系。
+        why: A 项正是斜率相等的直接改写。
+      source_ref: page_0110_ex19_solution_start
+    - step_id: step_3
+      statement: 判断 B。
+      formula_trace:
+        from: $x_2=-\ln x_1,\quad \ln x_1-1=\frac1{x_1}(1-x_2)$
+        to: $x_2+\frac{x_1+1}{x_1-1}=0$
+        operation: 用 $\ln x_1=-x_2$ 代入截距关系并移项分解。
+        why: $x_1=1$ 时两切线不重合，所以可除以 $x_1-1$。
+      source_ref: page_0111_ex19_continuation
+    - step_id: step_4
+      statement: 把点积化成只含 $x_1$ 的表达式。
+      formula_trace:
+        from: $P=(x_1,\ln x_1),\quad Q=(x_2,e^{x_2}),\quad x_2=-\ln x_1,\quad e^{x_2}=\frac1{x_1}$
+        to: $\overrightarrow{OP}\cdot\overrightarrow{OQ}=\left(\frac1{x_1}-x_1\right)\ln x_1$
+        operation: 代入坐标后合并 $x_1x_2+y_1y_2$。
+        why: C 项需要判断点积的取值符号。
+      source_ref: page_0111_ex19_continuation
+    - step_id: step_5
+      statement: 判断 C。
+      formula_trace:
+        from: $\left(\frac1{x_1}-x_1\right)\ln x_1,\quad x_1>0,\quad x_1\ne1$
+        to: $\overrightarrow{OP}\cdot\overrightarrow{OQ}<0$
+        operation: 分 $0<x_1<1$ 与 $x_1>1$ 比较两个因子的符号。
+        why: 实际值始终小于 0，0 不会被取到，所以“最大值为 0”错误。
+      source_ref: page_0111_ex19_continuation
+    - step_id: step_6
+      statement: 在 $x_2<0$ 时确定 $x_1$ 的范围。
+      formula_trace:
+        from: |
+          $f(x)=e^x(1-x),\quad x<0,\quad f'(x)=-xe^x>0$
+        to: $0<e^{x_2}(1-x_2)<1,\quad 1<\ln x_1<2,\quad e<x_1<e^2$
+        operation: 用 $f$ 在 $(-\infty,0)$ 上递增，结合截距关系 $\ln x_1-1=e^{x_2}(1-x_2)$。
+        why: D 项要比较 $x_1+x_2=x_1-\ln x_1$ 与 $e^2-2$。
+      source_ref: page_0111_ex19_continuation
+    - step_id: step_7
+      statement: 判断 D 并汇总答案。
+      formula_trace:
+        from: |
+          $g(x)=x-\ln x,\quad g'(x)=1-\frac1x>0\ (e<x<e^2)$
+        to: $x_1+x_2=x_1-\ln x_1<g(e^2)=e^2-2$
+        operation: 用 $g$ 在 $(e,e^2)$ 上递增，取右端上界。
+        why: 选项 D 的不等号方向与实际结论相反。
+      source_ref: page_0111_ex19_continuation
+teaching_card:
+  student_title: 同一条指对切线带出一串定值关系
+  what_it_trains: 训练从公切线方程中提取切点数据关系，再用这些关系判断点积、范围和不等式选项。
+  recognition_cues:
+    - 题干和例 18 一样，都是 $y=\ln x$ 的切线同时切到 $y=e^x$。
+    - 选项里出现 $x_1y_2$、$\frac{x_1+1}{x_1-1}+x_2$，提示先统一切点数据。
+    - C、D 不是重新求切线，而是把几何量化成 $x_1$ 的单变量表达式。
+  normalization_moves:
+    - 先写两条切线并得到 $\frac1{x_1}=e^{x_2}$。
+    - 用 $x_2=-\ln x_1$ 把 B、C、D 都转成 $x_1$ 语言。
+    - 判断点积时只看 $\left(\frac1{x_1}-x_1\right)$ 与 $\ln x_1$ 的符号。
+    - 处理 $x_2<0$ 时，用 $e^{x_2}(1-x_2)$ 的单调性夹出 $e<x_1<e^2$。
+  common_failures:
+    - 忘记 $x_1=1$ 时两条切线不重合，错误地直接代入 B 项分式。
+    - 把点积小于 0 误读成最大值等于 0；这里 0 没有取到。
+    - D 项中只由 $x_2<0$ 得到 $x_1>1$，没有继续用截距关系缩小范围。
+  similar_practice_query: e^x ln x 公切线 切点数据 向量点积 多选
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0110-page_0111 页图；例 19 从 page_0110 起头，page_0111 顶部续完，答案 AB。

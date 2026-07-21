@@ -1,0 +1,216 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0120_shifted_symmetry_ex09
+content_revision_id: mst_p0120_shifted_symmetry_ex09-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0120_shifted_symmetry_ex09.card.yaml
+stem: |-
+  （2024 · 浙江月考 · 多选）已知连续函数 $f(x)$ 及其导函数 $f'(x)$ 的定义域均为 $\mathbf{R}$，记 $g(x)=f'(x)$，若 $g'\left(\frac{3}{2}-\frac{2}{3}x\right)$ 为奇函数，$f\left(\frac{3}{4}+2x\right)-2x$ 的图象关于 $y$ 轴对称，则（  ）
+  A. $g'(3)=0$
+  B. $g\left(\frac{3}{4}\right)=g'\left(\frac{3}{2}\right)$
+  C. $g'(x)$ 在 $(0,4)$ 上至少有 2 个零点
+  D. $\sum_{k=1}^{2024}\left[g\left(\frac{3}{4}k\right)+g'\left(\frac{3}{4}k\right)\right]=3036$
+answer: |
+  AC
+
+  由 $f(\frac34+2x)-2x$ 关于 $y$ 轴对称，可写成
+  $f(\frac34+x)-x=f(\frac34-x)+x$，求导得
+  \[
+    f'\!\left(\frac34+x\right)+f'\!\left(\frac34-x\right)=2.
+  \]
+  即 $g(x)=f'(x)$ 关于点 $(\frac34,1)$ 中心对称，故
+  $g'$ 关于直线 $x=\frac34$ 轴对称。
+  又由 $g'(\frac32-\frac23x)$ 为奇函数，可得
+  $g'$ 关于点 $(\frac32,0)$ 中心对称，进而 $g$ 关于
+  $x=\frac32$ 轴对称。两类对称叠加得到 $g,g'$ 的周期均为 $3$。
+  于是 $g'(0)=g'(\frac32)=g'(3)=0$，A 正确；且
+  $g(\frac34)=1\ne0=g'(\frac32)$，B 错。
+  由 $g'$ 在 $(0,4)$ 内至少有 $\frac32,3$ 两个零点，C 正确。
+  另由周期与对称可得
+  $\sum_{k=1}^{2024}g'(\frac34k)=0$、
+  $g(\frac34k)=1$，故总和为 $2024\ne3036$，D 错。
+  故选 AC。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 先把复合对称条件转成 $g$ 的中心对称。
+      max_score: 1
+    - step_id: step_2
+      description: 由奇函数复合条件确定 $g'$ 的另一种对称。
+      max_score: 1
+    - step_id: step_3
+      description: 联立两种对称得到零点与 A、B、C。
+      max_score: 1
+    - step_id: step_4
+      description: 计算等差采样和，判断 D。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 抽象函数性质
+        target: 判断四个性质陈述的真伪（多选）。
+        result: 见 source_solution_summary
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 对称化与偏移
+    subroute:
+      - 复合自变量还原
+      - 轴/中心对称联立
+      - 周期采样求和
+  structure:
+    primary: 对称结构
+    secondary:
+      - 抽象函数结构
+      - 非齐次结构
+    evidence:
+      - $f(\frac34+2x)-2x$ 的偶性可转成 $g$ 的中心对称。
+      - $g'(\frac32-\frac23x)$ 奇性对应 $g'$ 的中心对称。
+      - 两种对称共同锁定周期 3，并导出离散点值模式。
+    normalization_moves_used:
+      - 先统一变量尺度再求导，避免直接在 $2x$ 上做错链式。
+      - 把“奇函数复合”翻译成图像中心对称。
+      - 先确定零点模板，再判断多选项。
+      - 把长求和拆成“常值项 + 反对称导数项”。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从“关于 $y$ 轴对称”写出函数等式，回补函数性质与图像。
+      - 若学生链式求导后符号混乱，回补导数运算与几何意义。
+      - 若学生不能把轴对称与中心对称合成为周期，回补函数性质与图像。
+      - 若学生在离散求和中不会成组消去，回补数列基础。
+  detail_terms:
+    - $g'(\frac32-\frac23x)$ 奇函数
+    - $f(\frac34+2x)-2x$ 关于 $y$ 轴对称
+    - $T=3$
+    - $g'(0)=g'(\frac32)=g'(3)=0$
+    - 答案 AC
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0120_shifted_symmetry_ex09
+source_evidence:
+  source_refs:
+    - ref_id: page_0120
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0120/page_0120.md
+      role: problem_start
+      evidence: lines 23-35 give 例 9 的题干、A-D 选项、完整解析与答案 AC。
+    - ref_id: page_0120_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0120/page_0120.md
+      role: local_context
+      evidence: line 36 begins section-six exposition and is not a worked-example head.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0120.png
+      inspected: true
+      notes: 已核对 page_0120 页图：例 9 题干、选项与解析完整，答案为 AC。
+  source_context: 例 9 与例 8 同页，均在 page_0120 内独立完结；页尾小节说明不建卡。
+  source_influence:
+    - 保留源页把 $f(\frac34+2x)-2x$ 的轴对称改写到 $f'(\frac34+x)+f'(\frac34-x)=2$。
+    - 保留源页把 $g'(\frac32-\frac23x)$ 奇性转成 $g'$ 关于 $(\frac32,0)$ 中心对称。
+    - 保留源页通过“轴对称 + 中心对称”推出周期 3，并据此判断四个选项。
+  source_discrepancies:
+    - 源页解析第 32 行写“得 $g(x)$ 在 $(0,4)$ 上至少有 2 个零点”，结合选项 C 与上下文应为 $g'(x)$ 至少有 2 个零点；本卡按题意与前后推导解释为 $g'$。
+original_problem:
+  stem: （2024 · 浙江月考 · 多选）已知连续函数 $f(x)$ 及其导函数 $f'(x)$ 的定义域均为 $\mathbf{R}$，记 $g(x)=f'(x)$，若 $g'\left(\frac{3}{2}-\frac{2}{3}x\right)$ 为奇函数，$f\left(\frac{3}{4}+2x\right)-2x$ 的图象关于 $y$ 轴对称，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $g'(3)=0$
+      text_latex: $g'(3)=0$
+    - label: B
+      text_raw: $g\left(\frac{3}{4}\right)=g'\left(\frac{3}{2}\right)$
+      text_latex: $g\left(\frac{3}{4}\right)=g'\left(\frac{3}{2}\right)$
+    - label: C
+      text_raw: $g'(x)$ 在 $(0,4)$ 上至少有 2 个零点
+      text_latex: $g'(x)$ 在 $(0,4)$ 上至少有 2 个零点
+    - label: D
+      text_raw: $\sum_{k=1}^{2024}\left[g\left(\frac{3}{4}k\right)+g'\left(\frac{3}{4}k\right)\right]=3036$
+      text_latex: $\sum_{k=1}^{2024}\left[g\left(\frac{3}{4}k\right)+g'\left(\frac{3}{4}k\right)\right]=3036$
+  answer: AC
+  fidelity_notes:
+    - 源页记号使用 $f'$, $g'$（单撇）语义，本卡保留源记号。
+    - 关于选项 C，源页解析中“$g(x)$ 在 $(0,4)$ 至少有 2 个零点”与题干不一致，已在 source_discrepancies 记录并按上下文解为 $g'(x)$。
+solution:
+  source_solution_summary: |
+    由 $f(\frac34+2x)-2x$ 关于 $y$ 轴对称，可写成
+    $f(\frac34+x)-x=f(\frac34-x)+x$，求导得
+    \[
+      f'\!\left(\frac34+x\right)+f'\!\left(\frac34-x\right)=2.
+    \]
+    即 $g(x)=f'(x)$ 关于点 $(\frac34,1)$ 中心对称，故
+    $g'$ 关于直线 $x=\frac34$ 轴对称。
+    又由 $g'(\frac32-\frac23x)$ 为奇函数，可得
+    $g'$ 关于点 $(\frac32,0)$ 中心对称，进而 $g$ 关于
+    $x=\frac32$ 轴对称。两类对称叠加得到 $g,g'$ 的周期均为 $3$。
+    于是 $g'(0)=g'(\frac32)=g'(3)=0$，A 正确；且
+    $g(\frac34)=1\ne0=g'(\frac32)$，B 错。
+    由 $g'$ 在 $(0,4)$ 内至少有 $\frac32,3$ 两个零点，C 正确。
+    另由周期与对称可得
+    $\sum_{k=1}^{2024}g'(\frac34k)=0$、
+    $g(\frac34k)=1$，故总和为 $2024\ne3036$，D 错。
+    故选 AC。
+  key_steps:
+    - step_id: step_1
+      statement: 先把复合对称条件转成 $g$ 的中心对称。
+      formula_trace:
+        from: |
+          $f\!\left(\frac34+2x\right)-2x\text{ 关于 }y\text{ 轴对称}$
+        to: |
+          $f'\!\left(\frac34+x\right)+f'\!\left(\frac34-x\right)=2$
+        operation: 先把变量缩放统一为 $\frac34\pm x$，再求导。
+        why: 和为常数的形式直接对应 $g$ 关于 $(\frac34,1)$ 中心对称。
+      source_ref: page_0120
+    - step_id: step_2
+      statement: 由奇函数复合条件确定 $g'$ 的另一种对称。
+      formula_trace:
+        from: $g'\!\left(\frac32-\frac23x\right)\text{ 为奇函数}$
+        to: $g'\text{ 关于点 }\left(\frac32,0\right)\text{ 中心对称}$
+        operation: 将线性自变量变换为对称点坐标形式。
+        why: 该结论与 step_1 的轴对称联立后可推出周期。
+      source_ref: page_0120
+    - step_id: step_3
+      statement: 联立两种对称得到零点与 A、B、C。
+      formula_trace:
+        from: |
+          $g''\text{ 关于 }x=\frac34\text{ 轴对称，且关于 }\left(\frac32,0\right)\text{ 中心对称}$
+        to: |
+          $T=3,\quad g'\!\left(\frac32\right)=0,\quad g'(0)=g'(3)=0$
+        operation: 对称叠加得到周期与基准零点，再平移到目标点。
+        why: 可直接判断 A 正确、B 错误，并支持 C 的“至少两个零点”。
+      source_ref: page_0120
+    - step_id: step_4
+      statement: 计算等差采样和，判断 D。
+      formula_trace:
+        from: |
+          $g\!\left(\frac34\right)=1,\quad T=3,\quad g'\!\left(\frac34\right)=t,\ g'\!\left(\frac94\right)=-t,\ g'(3)=0$
+        to: |
+          $\sum_{k=1}^{2024}g'\!\left(\frac34k\right)=0,\quad
+          \sum_{k=1}^{2024}\left[g\!\left(\frac34k\right)+g'\!\left(\frac34k\right)\right]=2024$
+        operation: 按一个对称周期内的符号配对求和。
+        why: 与选项 D 的 3036 不符，故 D 错。
+      source_ref: page_0120
+teaching_card:
+  student_title: 双对称锁周期：多选题里的快判模板
+  what_it_trains: 训练把复合对称条件还原为函数图像对称，再用“轴 + 中心”迅速判断零点、周期和离散求和。
+  recognition_cues:
+    - 题干同时给 $f(\frac34+2x)-2x$ 的轴对称和 $g'(\cdot)$ 的奇性。
+    - 选项包含导数零点、离散求和，典型依赖周期与对称。
+    - 出现 $\frac34,\frac32$ 这类成倍中心点，常可配出固定周期。
+  normalization_moves:
+    - 先写出对称等式，再求导。
+    - 把 $g'(\frac32-\frac23x)$ 奇性转成 $g'$ 的中心对称。
+    - 由两种对称读出 $T=3$ 与关键零点。
+    - 将求和按对称周期配对消去。
+  common_failures:
+    - 把“奇函数复合”误当 $g'$ 本身奇函数，中心点写错到原点。
+    - 只用一个对称就下结论，遗漏周期信息。
+    - 把 C 项中的 $g'$ 错看成 $g$。
+    - 求和时未拆分 $g$ 与 $g'$ 两部分，导致 D 误判。
+  similar_practice_query: 抽象函数 多选 对称配凑 周期 复合自变量 离散求和
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0120 图像已核对；例 9 题干、选项、解析与答案 AC 一致。
+    - 解析中 C 项对象出现一次 $g$/$g'$ 记号混写，已在 source_discrepancies 记录并按题干闭合。

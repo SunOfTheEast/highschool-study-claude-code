@@ -1,0 +1,169 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0263_xlnx_vs_a_x_minus_sqrtx_extreme_probe_ex2
+content_revision_id: mst_p0263_xlnx_vs_a_x_minus_sqrtx_extreme_probe_ex2-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0263_xlnx_vs_a_x_minus_sqrtx_extreme_probe_ex2.card.yaml
+stem: （2024 · 天津卷压轴节选）设函数 $f(x)=x\ln x$。若 $f(x)\ge a(x-\sqrt x)$ 在 $x\in(0,+\infty)$ 时恒成立，求 $a$ 的取值范围。
+answer: |-
+  $a=2$。
+
+  构造 $g(x)=x\ln x-a(x-\sqrt x)$。因为 $g(1)=0$， 若 $g(x)\ge0$ 对开区间全域成立，则 $x=1$ 是极小值点， 必有 $g^\prime(1)=0$，于是 $g^\prime(x)=\ln x+1-a+\frac{a}{2\sqrt x}$， 代入 $x=1$ 得 $2-\frac a2=0$，所以 $a=2$。充分性： 当 $a=2$ 时， $g(x)=x(\ln x-2+\frac2{\sqrt x}) =2x(\ln\sqrt x-1+\frac1{\sqrt x})\ge0$， 因此答案为 $a=2$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 构造差函数并锁定 $x=1$。
+      max_score: 1
+    - step_id: step_2
+      description: 用极小值必要条件锁参数。
+      max_score: 1
+    - step_id: step_3
+      description: 证明 $a=2$ 的充分性。
+      max_score: 1
+    - step_id: step_4
+      description: 合并结论。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: main
+        goal: 求参数范围
+        target: 第 main 问
+        result: $a=2$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 充分/必要性探路
+      - 同构变形与换元法
+    subroute:
+      - 开区间极点效应
+      - $x=1$ 极小值探路
+      - 导数锁参
+      - 充分性回证
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 根式函数结构
+      - 不等式工具结构
+      - 局部逼近结构
+    evidence:
+      - $x\ln x$
+      - $x-\sqrt x$
+      - $g(1)=0$
+      - $a=2$
+    normalization_moves_used:
+      - 构造差函数 $g$。
+      - 把 $x=1$ 作为极点探路。
+      - 用 $g^\prime(1)=0$ 锁定 $a$。
+      - 把充分性转成 $\ln u\ge1-\frac1u$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会构造差函数，回补不等式工具基础。
+      - 若学生不知道开区间极小值点导数为 0，回补导数单调极值基础。
+      - 若学生不熟悉 $\ln u\ge1-\frac1u$，回补指数对数基础。
+      - 若学生处理 $\sqrt x$ 变形出错，回补代数恒等变形。
+  detail_terms:
+    - $x\ln x$
+    - $x-\sqrt x$
+    - $x=1$ 极点
+    - $a=2$
+    - $\ln\sqrt x-1+\frac1{\sqrt x}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0263_xlnx_vs_a_x_minus_sqrtx_extreme_probe_ex2
+source_evidence:
+  source_refs:
+    - ref_id: page_0263_ex2_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0263/page_0263.md
+      role: problem_start
+      evidence: page_0263 给出例2题头：$f(x)=x\ln x$，若 $f(x)\ge a(x-\sqrt x)$ 在 $x\in(0,+\infty)$ 恒成立，求 $a$ 的取值范围。
+    - ref_id: page_0263_ex2_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0263/page_0263.md
+      role: solution
+      evidence: page_0263 例2解析先用极点效应：构造 $g(x)=x\ln x-a(x-\sqrt x)$，由 $g(1)=0$ 和 $g^\prime(1)=0$ 得 $a=2$。
+    - ref_id: page_0264_ex2_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0264/page_0264.md
+      role: solution
+      evidence: page_0264 页首补充分性：当 $a=2$ 时，$g(x)=x(\ln x-2+\frac2{\sqrt x})\ge0$，最终证明 $a=2$ 可行。
+    - ref_id: page_0264_ex3_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0264/page_0264.md
+      role: local_context
+      evidence: page_0264 随后另起例3，说明例2在页首闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0263.png
+      inspected: true
+      notes: 已核对页图：例2题头与解析起于 page_0263 页底。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0264.png
+      inspected: true
+      notes: 已核对页图：page_0264 页首为例2续解，随后另起例3。
+  source_context: 本卡处理 page_0263 起头、page_0264 页首续完的例2；page_0264 例3排除。
+  source_influence:
+    - 保留 $x=1$ 是开区间极点：$g(1)=0$。
+    - 保留必要性：若全域恒成立，则 $g^\prime(1)=0$，得 $a=2$。
+    - 保留充分性：用 $\ln\sqrt x-1+\frac1{\sqrt x}\ge0$ 证明 $a=2$ 成立。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 天津卷压轴节选）设函数 $f(x)=x\ln x$。若 $f(x)\ge a(x-\sqrt x)$ 在 $x\in(0,+\infty)$ 时恒成立，求 $a$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $a=2$。
+  fidelity_notes:
+    - 求参范围退化为单点值。
+    - source 先用极点效应锁必要性，再在 page_0264 证明充分性。
+solution:
+  source_solution_summary: 构造 $g(x)=x\ln x-a(x-\sqrt x)$。因为 $g(1)=0$， 若 $g(x)\ge0$ 对开区间全域成立，则 $x=1$ 是极小值点， 必有 $g^\prime(1)=0$，于是 $g^\prime(x)=\ln x+1-a+\frac{a}{2\sqrt x}$， 代入 $x=1$ 得 $2-\frac a2=0$，所以 $a=2$。充分性： 当 $a=2$ 时， $g(x)=x(\ln x-2+\frac2{\sqrt x}) =2x(\ln\sqrt x-1+\frac1{\sqrt x})\ge0$， 因此答案为 $a=2$。
+  key_steps:
+    - step_id: step_1
+      statement: 构造差函数并锁定 $x=1$。
+      formula_trace:
+        from: $x\ln x\ge a(x-\sqrt x)$
+        to: $g(x)=x\ln x-a(x-\sqrt x)$，$g(1)=0$
+        operation: 移项构造差函数。
+        why: 恒非负且在 $x=1$ 取到 0，提示极点效应。
+      source_ref: page_0263_ex2_solution_start
+    - step_id: step_2
+      statement: 用极小值必要条件锁参数。
+      formula_trace:
+        from: $g^\prime(x)=\ln x+1-a+\frac{a}{2\sqrt x}$
+        to: $g^\prime(1)=2-\frac a2=0$，$a=2$
+        operation: 令极小值点导数为 0。
+        why: 开区间内极小值点必须满足导数为 0。
+      source_ref: page_0263_ex2_solution_start
+    - step_id: step_3
+      statement: 证明 $a=2$ 的充分性。
+      formula_trace:
+        from: $g(x)=x\ln x-2(x-\sqrt x)$
+        to: $g(x)=2x(\ln\sqrt x-1+\frac1{\sqrt x})\ge0$
+        operation: 提取 $x$ 并把 $\ln x$ 改成 $2\ln\sqrt x$。
+        why: 利用 $\ln u\ge1-\frac1u$ 证明括号非负。
+      source_ref: page_0264_ex2_solution_continuation
+    - step_id: step_4
+      statement: 合并结论。
+      formula_trace:
+        from: $a=2$ 必要且充分
+        to: $a$ 的取值范围为 $\{2\}$
+        operation: 必要性与充分性合并。
+        why: 求参范围退化为单点。
+      source_ref: page_0264_ex2_solution_continuation
+teaching_card:
+  student_title: 全域恒成立在 $x=1$ 贴住，先令导数为 0
+  what_it_trains: 训练开区间极点效应：差函数已经在 $x=1$ 取到 0，恒非负就必须让这里成为极小值点。
+  recognition_cues:
+    - $x\ln x$ 和 $x-\sqrt x$ 在 $x=1$ 都为 0。
+    - 题目要求整个 $(0,+\infty)$ 恒成立。
+    - 参数范围最后退化为一个值。
+  normalization_moves:
+    - 先构造 $g(x)=x\ln x-a(x-\sqrt x)$。
+    - 用 $g(1)=0$ 和 $g^\prime(1)=0$ 锁参。
+    - 锁参后必须回证 $a=2$ 真的全域成立。
+  common_failures:
+    - 只由 $g^\prime(1)=0$ 得到 $a=2$，漏掉充分性。
+    - 把“取值范围”误以为一定是区间，没接受单点答案。
+    - 不会把 $\ln x-2+\frac2{\sqrt x}$ 改写成 $\ln\sqrt x-1+\frac1{\sqrt x}$。
+  similar_practice_query: 极点效应 xlnx x-sqrtx x=1 导数锁参 a=2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

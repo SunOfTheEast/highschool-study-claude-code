@@ -1,0 +1,207 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0285_xex_plus_a_sinx_param_and_shift_ex08
+content_revision_id: mst_p0285_xex_plus_a_sinx_param_and_shift_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0285_xex_plus_a_sinx_param_and_shift_ex08.card.yaml
+stem: |-
+  （江苏盐城二模 18）已知函数 $f(x)=xe^x+a\sin x$。
+  1. 当 $a=0$ 时，求证：$\frac{f(x)}x>x+1$。
+  2. 若 $f(x)>0$ 对于 $x\in(0,\pi)$ 恒成立，求 $a$ 的取值范围。
+  3. 若存在 $x_1,x_2\in(0,\pi)$，使得 $f(x_1)=f^\prime(x_2)=0$，求证：$x_1<2x_2$。
+answer: |-
+  (2) $a\ge-1$；(3) $x_1<2x_2$。
+
+  第(1)问 $a=0$ 时，$\frac{f(x)}x=e^x>x+1$。第(2)问要求 $xe^x+a\sin x>0$ 在 $(0,\pi)$ 恒成立。若 $a\ge-1$， $f''(x)=(x+2)e^x-a\sin x>0$，所以 $f'$ 递增，且 $f'(0)=1+a\ge0$，于是 $f$ 递增，$f(x)>f(0)=0$。若 $a<-1$，则 $f'(0)=1+a<0$，而 $f'(\pi/2)>0$，存在唯一 $x_2\in(0,\pi/2)$ 使 $f'(x_2)=0$，从而 $f$ 先减后增，会在 $(x_2,\pi)$ 出现零点并导致前段为负，矛盾；所以 $a\ge-1$。 第(3)问由存在零点推出 $a<-1$，联立 $x_1e^{x_1}+a\sin x_1=0$ 与 $(x_2+1)e^{x_2}+a\cos x_2=0$。普通消参只能得到一个不易判断的比值， 所以 source 改为看 $f(2x_2)$。代入 $a=-\frac{(x_2+1)e^{x_2}}{\cos x_2}$， 得 $f(2x_2)=2e^{x_2}(x_2e^{x_2}-\sin x_2(x_2+1))>0$。结合第(2)问中 $a<-1$ 时的单调性和零点位置，可得 $x_1<2x_2$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 第(1)问直接调用指数基本不等式。
+      max_score: 1
+    - step_id: step_2
+      description: 第(2)问先证明 $a\ge-1$ 充分。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问排除 $a<-1$。
+      max_score: 1
+    - step_id: step_4
+      description: 第(3)问先尝试消参，但发现比值不好判断。
+      max_score: 1
+    - step_id: step_5
+      description: 改用找点思想，判断 $f(2x_2)$。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 不等式证明
+        target: 第 1 问
+        result: $\frac{f(x)}x>x+1$。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $a\ge-1$。
+      - part_id: "3"
+        goal: 不等式证明
+        target: 第 3 问
+        result: $x_1<2x_2$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 局部逼近与找点
+      - 对称化与偏移
+      - 充分/必要性探路
+    subroute:
+      - 恒正充分必要
+      - 常规消参失败
+      - 找点 $2x_2$
+      - 极值点右偏
+      - 单调性锁零点
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 指对复合结构
+      - 极值点偏移结构
+      - 不等式工具结构
+    evidence:
+      - $xe^x+a\sin x$
+      - $f^\prime(x)=(x+1)e^x+a\cos x$
+      - $f'(x)=(x+2)e^x-a\sin x$
+      - $f(x_1)=0$
+      - $f^\prime(x_2)=0$
+      - $f(2x_2)>0$
+    normalization_moves_used:
+      - 第(2)问先用二阶导控制单调性。
+      - 第(3)问先尝试消参，发现比值不可控后转为找点。
+      - 用 $f^\prime(x_2)=0$ 把 $a$ 代入 $f(2x_2)$。
+      - 用单调性把 $f(2x_2)>0$ 翻译成 $x_1<2x_2$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求导，回补导数运算与几何意义。
+      - 若学生不熟悉 $\sin,\cos$ 的符号和单调区间，回补三角函数基础。
+      - 若学生不会用 $e^x>x+1$，回补不等式工具基础。
+      - 若学生不会由单调性定位零点，回补函数性质与图像。
+      - 若学生不会消去参数 $a$，回补代数恒等变形。
+  detail_terms:
+    - $xe^x+a\sin x$
+    - $a\ge-1$
+    - $f(x_1)=0$
+    - $f^\prime(x_2)=0$
+    - $x_1<2x_2$
+    - 常规消参失效
+    - $f(2x_2)>0$
+    - 极值点右偏
+parts: &a1
+  - part_id: "1"
+    text: 当 $a=0$ 时，求证：$\frac{f(x)}x>x+1$。
+  - part_id: "2"
+    text: 若 $f(x)>0$ 对于 $x\in(0,\pi)$ 恒成立，求 $a$ 的取值范围。
+  - part_id: "3"
+    text: 若存在 $x_1,x_2\in(0,\pi)$，使得 $f(x_1)=f^\prime(x_2)=0$，求证：$x_1<2x_2$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0285_xex_plus_a_sinx_param_and_shift_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0285_ex08_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0285/page_0285.md
+      role: problem_start
+      evidence: page_0285 给出例8题头：$f(x)=xe^x+a\sin x$，三问分别为基础指数不等式、恒正求参、由 $f(x_1)=f^\prime(x_2)=0$ 证明 $x_1<2x_2$。
+    - ref_id: page_0285_ex08_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0285/page_0285.md
+      role: solution
+      evidence: page_0285 完整给出三问解析：第(2)问结论 $a\ge-1$，第(3)问先消参失败，再改用判断 $f(2x_2)>0$ 的找点思想。
+    - ref_id: page_0286_ex09_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0286/page_0286.md
+      role: local_context
+      evidence: page_0286 另起例9，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0285.png
+      inspected: true
+      notes: 已核对页图：page_0285 中部起为例8题头，整题解析在本页闭合。
+  source_context: 本卡处理 page_0285 起头并在本页闭合的例8；page_0286 例9排除。
+  source_influence:
+    - 保留第(1)问：$a=0$ 时 $\frac{f(x)}x=e^x>x+1$。
+    - 保留第(2)问结论：$a\ge-1$。
+    - 保留第(3)问常规消参失败后改用 $f(2x_2)>0$ 的找点路线。
+    - 保留 source 对命题背景的说明：极值点偏移，图像为极值点右偏。
+  source_discrepancies:
+    - field: page_0285_derivative_at_zero_typo
+      source_value: $a<-1$ 时，$f^\prime(0)=1-a<0$
+      resolved_value: $a<-1$ 时，$f^\prime(0)=1+a<0$
+      reason: $f^\prime(x)=(x+1)e^x+a\cos x$，直接代入 $x=0$ 得 $1+a$；source 的 $1-a$ 与 $a<-1$ 下小于 0 不一致。
+original_problem:
+  stem: （江苏盐城二模 18）已知函数 $f(x)=xe^x+a\sin x$。
+  parts: *a1
+  choices: []
+  answer: (2) $a\ge-1$；(3) $x_1<2x_2$。
+  fidelity_notes:
+    - 无选项。
+    - source 第(3)问明确说明常规消参失效，需改用找点思想。
+solution:
+  source_solution_summary: 第(1)问 $a=0$ 时，$\frac{f(x)}x=e^x>x+1$。第(2)问要求 $xe^x+a\sin x>0$ 在 $(0,\pi)$ 恒成立。若 $a\ge-1$， $f''(x)=(x+2)e^x-a\sin x>0$，所以 $f'$ 递增，且 $f'(0)=1+a\ge0$，于是 $f$ 递增，$f(x)>f(0)=0$。若 $a<-1$，则 $f'(0)=1+a<0$，而 $f'(\pi/2)>0$，存在唯一 $x_2\in(0,\pi/2)$ 使 $f'(x_2)=0$，从而 $f$ 先减后增，会在 $(x_2,\pi)$ 出现零点并导致前段为负，矛盾；所以 $a\ge-1$。 第(3)问由存在零点推出 $a<-1$，联立 $x_1e^{x_1}+a\sin x_1=0$ 与 $(x_2+1)e^{x_2}+a\cos x_2=0$。普通消参只能得到一个不易判断的比值， 所以 source 改为看 $f(2x_2)$。代入 $a=-\frac{(x_2+1)e^{x_2}}{\cos x_2}$， 得 $f(2x_2)=2e^{x_2}(x_2e^{x_2}-\sin x_2(x_2+1))>0$。结合第(2)问中 $a<-1$ 时的单调性和零点位置，可得 $x_1<2x_2$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问直接调用指数基本不等式。
+      formula_trace:
+        from: $a=0,\quad f(x)=xe^x$
+        to: $\frac{f(x)}x=e^x>x+1$
+        operation: 使用 $e^x>x+1$（$x\ne0$ 时严格）。
+        why: 这是后续指三角复合题里的基础放缩入口。
+      source_ref: page_0285_ex08_solution
+    - step_id: step_2
+      statement: 第(2)问先证明 $a\ge-1$ 充分。
+      formula_trace:
+        from: $f'(x)=(x+2)e^x-a\sin x$
+        to: $a\ge-1\Rightarrow f'(x)>0,\ f^\prime(0)=1+a\ge0,\ f(x)>0$
+        operation: 用二阶导控制 $f^\prime$，再由 $f(0)=0$ 得恒正。
+        why: 这是从单调性出发证明全区间恒正。
+      source_ref: page_0285_ex08_solution
+    - step_id: step_3
+      statement: 第(2)问排除 $a<-1$。
+      formula_trace:
+        from: $a<-1,\quad f^\prime(0)=1+a<0,\quad f^\prime(\frac\pi2)>0$
+        to: 存在唯一 $x_2\in(0,\frac\pi2)$，并导致 $f$ 在前段取负
+        operation: 用 $f^\prime$ 的单调性和介值判断。
+        why: 这说明恒正不可能成立。
+      source_ref: page_0285_ex08_solution
+    - step_id: step_4
+      statement: 第(3)问先尝试消参，但发现比值不好判断。
+      formula_trace:
+        from: $f(x_1)=0,\quad f^\prime(x_2)=0$
+        to: $e^{x_1-2x_2}<\frac{x_2+1}{e^{x_2}\cos x_2}$
+        operation: 消去参数 $a$。
+        why: source 明确指出这个比值和 1 的大小关系不确定，所以常规消参失效。
+      source_ref: page_0285_ex08_solution
+    - step_id: step_5
+      statement: 改用找点思想，判断 $f(2x_2)$。
+      formula_trace:
+        from: $a=-\frac{(x_2+1)e^{x_2}}{\cos x_2}$
+        to: $f(2x_2)=2e^{x_2}(x_2e^{x_2}-\sin x_2(x_2+1))>0$
+        operation: 把 $f^\prime(x_2)=0$ 得到的 $a$ 代入 $f(2x_2)$。
+        why: 若 $f(2x_2)>0$，结合单调性可知零点 $x_1$ 在 $2x_2$ 左侧。
+      source_ref: page_0285_ex08_solution
+teaching_card:
+  student_title: 常规消参失败时，改看 $f(2x_2)$
+  what_it_trains: 训练极值点偏移题里的找点思路：直接消参比不出来，就把目标点代回原函数，用单调性判断零点在它左边。
+  recognition_cues:
+    - 题目给 $f(x_1)=0$ 和 $f^\prime(x_2)=0$。
+    - 目标是不等式 $x_1<2x_2$，天然提示去看 $2x_2$。
+    - 消参后出现 $\frac{x_2+1}{e^{x_2}\cos x_2}$，大小不好判断。
+    - source 明确说“常规消参失效，判断 $f(2x_2)$”。
+  normalization_moves:
+    - 第(2)问先拿到 $a\ge-1$。
+    - 第(3)问由存在零点推出 $a<-1$。
+    - 用 $f^\prime(x_2)=0$ 解出 $a$。
+    - 把 $a$ 代入 $f(2x_2)$，再结合单调性。
+  common_failures:
+    - 把 $f^\prime(0)$ 误写成 $1-a$，导致 $a<-1$ 的判断错。
+    - 在消参比值处硬算，忽略 source 已经提示大小关系不可控。
+    - 只证明 $f(2x_2)>0$，没有回到单调性说明 $x_1<2x_2$。
+    - 忘记 $x_2\in(0,\frac\pi2)$，导致三角符号判断混乱。
+  similar_practice_query: xe^x+a sinx f(x1)=0 fprime(x2)=0 x1<2x2 极值点偏移
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

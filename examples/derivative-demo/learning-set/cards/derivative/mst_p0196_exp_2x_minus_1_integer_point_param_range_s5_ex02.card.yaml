@@ -1,0 +1,187 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0196_exp_2x_minus_1_integer_point_param_range_s5_ex02
+content_revision_id: mst_p0196_exp_2x_minus_1_integer_point_param_range_s5_ex02-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0196_exp_2x_minus_1_integer_point_param_range_s5_ex02.card.yaml
+stem: |-
+  若 $f(x)=e^x(2x-1)-ax+2a$，$a<\frac12$，若存在唯一的整数 $x_0$ 使得 $f(x_0)<0$，则实数 $a$ 的取值范围为（  ）
+  A. $\left[-\frac{3}{2e^2},\frac{1}{2}\right)$
+  B. $\left[-\frac{3}{2e},\frac{1}{4}\right)$
+  C. $\left[\frac{1}{e},\frac{1}{2}\right)$
+  D. $\left(\frac{1}{4},\frac{1}{e}\right]$
+answer: |-
+  C
+
+  由 $f(x)<0$ 得 $e^x(2x-1)<ax-2a$，记 $h(x)=e^x(2x-1)$，直线 $y=ax-2a$ 过 $(2,0)$ 且斜率为 $a$。若 $a\le0$，在 $x<0$ 区域会产生无穷多个整点， 不满足“唯一整点”，故 $a>0$。题设给 $a<\frac12$。右侧当 $x>2$ 时， $h'(x)=e^x(2x+1)>\frac12$，增长快于斜率 $a<\frac12$ 的直线，右侧不再提供整点。 左侧临界取相邻整数：$x=0$ 需成立（给出 $a<\frac12$），$x=-1$ 需不成立（给出 $a\ge\frac1e$）。合并得 $\frac1e\le a<\frac12$，选 C。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先把题目改写为“定曲线 < 过定点直线”的整点条件。
+      max_score: 1
+    - step_id: step_2
+      description: 排除 $a\le0$。
+      max_score: 1
+    - step_id: step_3
+      description: 右侧判空：$x>2$ 不可能提供整点。
+      max_score: 1
+    - step_id: step_4
+      description: 左侧临界：保留 $x=0$，排除 $x=-1$。
+      max_score: 1
+    - step_id: step_5
+      description: 合并区间得到最终参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 参变量分离
+    secondary:
+      - 含参数分类讨论
+      - 数形结合
+    subroute:
+      - 直曲分离
+      - 定直线动曲线
+      - 整点判定
+      - 图像交点计数
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $e^x(2x-1)<ax-2a$
+      - $h(x)=e^x(2x-1),\ h^{\prime}(x)=e^x(2x+1)$
+      - $x=0,-1$ 的临界代入
+    normalization_moves_used:
+      - 把含参不等式改写为曲线与过定点直线的位置关系。
+      - 先用符号排除 $a\le0$ 的无穷整点情形。
+      - 右侧用导数增长率判空，左侧用相邻整点临界定界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生把“唯一整点”直接当作连续实根问题，回补函数性质与图像。
+      - 若学生在 $x=-1$ 代入后不等式方向反复出错，回补不等式工具基础。
+      - 若学生不理解“$h^{\prime}(x)$ 与直线斜率比较”的作用，回补导数单调极值基础。
+  detail_terms:
+    - $e^x(2x-1)<ax-2a$
+    - 过定点 $(2,0)$
+    - $x=0,-1$
+    - $\left[\frac1e,\frac12\right)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0196_exp_2x_minus_1_integer_point_param_range_s5_ex02
+source_evidence:
+  source_refs:
+    - ref_id: page_0196_ex02_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0196/page_0196.md
+      role: problem_start
+      evidence: page_0196 例2题头给出 $f(x)=e^x(2x-1)-ax+2a,\ a<\frac12$，并问“存在唯一整数 $x_0$ 使 $f(x_0)<0$ 时 $a$ 的范围”及 A-D 选项。
+    - ref_id: page_0196_ex02_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0196/page_0196.md
+      role: solution
+      evidence: page_0196 例2解析把不等式写成 $e^x(2x-1)<ax-2a$，并按“右侧无整点 + 左侧临界点 $x=0,-1$”得到 $\frac1e\le a<\frac12$，结论选 C。
+    - ref_id: page_0197_ex02_figure_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0197/page_0197.md
+      role: continuation
+      evidence: page_0197 页首在例3题头前放置与例2同型的直曲对比图，作为例2“先分析右边图像” 的跨页图像续证据。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0196.png
+      inspected: true
+      notes: 已核对页图：例2题干、A-D 选项与解析文字清晰可读，结论明确为“故选 C”。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0197.png
+      inspected: true
+      notes: 已核对页图：page_0197 顶部图像位于例3题头之前，对应本批次风险提示中的例2跨页图； 其余 page_0197 题头（例3、例4）仅作为上下文，不在本卡处理范围。
+  source_context: 例2题头起于 page_0196；根据批次说明，例2图像延续到 page_0197 顶部。仅把该图作为 continuation context，不处理 page_0197 其他新题。
+  source_influence:
+    - 保留源解“直曲分离”：$h(x)=e^x(2x-1)$ 与过 $(2,0)$ 的直线 $y=ax-2a$。
+    - 保留右侧“增长过快无整点”判断与左侧“$x=0$ 成立、$x=-1$ 不成立”的临界筛选。
+    - 保留题设先验条件 $a<\frac12$，并与左侧判定联立收束到闭开区间。
+  source_discrepancies:
+    - 源解析在 $x=0$ 一步存在记号压缩（文面出现类似“$h(0)=-1-2a>-1$”的写法），与前文 $h(x)=e^x(2x-1)$ 定义并不完全同形；按原不等式 $e^x(2x-1)<ax-2a$ 代入 $x=0$ 可等价得到 $a<\frac12$，与源结论一致。
+original_problem:
+  stem: 若 $f(x)=e^x(2x-1)-ax+2a$，$a<\frac12$，若存在唯一的整数 $x_0$ 使得 $f(x_0)<0$，则实数 $a$ 的取值范围为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\left[-\frac{3}{2e^2},\frac{1}{2}\right)$
+      text_latex: $\left[-\frac{3}{2e^2},\frac{1}{2}\right)$
+    - label: B
+      text_raw: $\left[-\frac{3}{2e},\frac{1}{4}\right)$
+      text_latex: $\left[-\frac{3}{2e},\frac{1}{4}\right)$
+    - label: C
+      text_raw: $\left[\frac{1}{e},\frac{1}{2}\right)$
+      text_latex: $\left[\frac{1}{e},\frac{1}{2}\right)$
+    - label: D
+      text_raw: $\left(\frac{1}{4},\frac{1}{e}\right]$
+      text_latex: $\left(\frac{1}{4},\frac{1}{e}\right]$
+  answer: C
+  fidelity_notes:
+    - 源题为单选题，A-D 选项已完整保留。
+    - 本题图像证据跨到 page_0197 顶部，已作为 continuation 图像检查。
+solution:
+  source_solution_summary: 由 $f(x)<0$ 得 $e^x(2x-1)<ax-2a$，记 $h(x)=e^x(2x-1)$，直线 $y=ax-2a$ 过 $(2,0)$ 且斜率为 $a$。若 $a\le0$，在 $x<0$ 区域会产生无穷多个整点， 不满足“唯一整点”，故 $a>0$。题设给 $a<\frac12$。右侧当 $x>2$ 时， $h'(x)=e^x(2x+1)>\frac12$，增长快于斜率 $a<\frac12$ 的直线，右侧不再提供整点。 左侧临界取相邻整数：$x=0$ 需成立（给出 $a<\frac12$），$x=-1$ 需不成立（给出 $a\ge\frac1e$）。合并得 $\frac1e\le a<\frac12$，选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 先把题目改写为“定曲线 < 过定点直线”的整点条件。
+      formula_trace:
+        from: $e^x(2x-1)-ax+2a<0$
+        to: $e^x(2x-1)<ax-2a$
+        operation: 移项后把含参线性项放右侧。
+        why: 便于采用直曲分离的整点计数框架。
+      source_ref: page_0196_ex02_solution
+    - step_id: step_2
+      statement: 排除 $a\le0$。
+      formula_trace:
+        from: $a\le0$
+        to: 在 $x<0$ 区域会出现无穷多个满足不等式的整点
+        operation: 比较负半轴两侧函数值位置。
+        why: 题设要求唯一整点，因此必须 $a>0$。
+      source_ref: page_0196_ex02_solution
+    - step_id: step_3
+      statement: 右侧判空：$x>2$ 不可能提供整点。
+      formula_trace:
+        from: $h(x)=e^x(2x-1),\ h^{\prime}(x)=e^x(2x+1)$
+        to: $x>2$ 时 $h^{\prime}(x)>\frac12>a$（由 $a<\frac12$）
+        operation: 比较曲线局部增长率与直线斜率。
+        why: 源解据此给出右侧无可保留整点。
+      source_ref: page_0196_ex02_solution
+    - step_id: step_4
+      statement: 左侧临界：保留 $x=0$，排除 $x=-1$。
+      formula_trace:
+        from: $\begin{cases}-1<-2a\\-3e^{-1}\ge-3a\end{cases}$
+        to: $\begin{cases}a<\frac12\\a\ge\frac1e\end{cases}$
+        operation: 分别对应“$x=0$ 成立、$x=-1$ 不成立”。
+        why: 相邻整点临界足以锁定“唯一整点”范围。
+      source_ref: page_0196_ex02_solution
+    - step_id: step_5
+      statement: 合并区间得到最终参数范围。
+      formula_trace:
+        from: $a>0,\ a<\frac12,\ a\ge\frac1e$
+        to: $\frac1e\le a<\frac12$
+        operation: 交集化简。
+        why: 与题设先验和整点临界条件共同确定唯一答案 C。
+      source_ref: page_0196_ex02_solution
+teaching_card:
+  student_title: 过 $(2,0)$ 动直线的唯一整点筛选
+  what_it_trains: 训练在整点参数题中先做直曲分离，再用“右侧判空 + 左侧相邻整点临界”锁定参数区间。
+  recognition_cues:
+    - 题干给“存在唯一整数 $x_0$”和线性参数项。
+    - 可改写为 $e^x(2x-1)<a(x-2)$，直线过固定点 $(2,0)$。
+    - 已给先验 $a<\frac12$，常用于斜率比较。
+  normalization_moves:
+    - 先改写不等式并识别定曲线/动直线。
+    - 先排 $a\le0$（无穷整点）。
+    - 右侧用导数与斜率比较判空。
+    - 左侧用 $x=0$ 成立、$x=-1$ 不成立定界。
+    - 与题设先验取交集。
+  common_failures:
+    - 漏用题设 $a<\frac12$，导致右侧判空失效。
+    - 把“$x=-1$ 不成立”误写成成立，区间端点反向。
+    - 只列出 $a\ge\frac1e$ 而漏掉上界 $a<\frac12$。
+  similar_practice_query: e^x(2x-1) 过定点直线 唯一整点 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

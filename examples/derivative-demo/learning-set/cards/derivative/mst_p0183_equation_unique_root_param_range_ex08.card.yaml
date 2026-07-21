@@ -1,0 +1,139 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0183_equation_unique_root_param_range_ex08
+content_revision_id: mst_p0183_equation_unique_root_param_range_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0183_equation_unique_root_param_range_ex08.card.yaml
+stem: （河南省南阳市 2023 高三期中 T16）若方程 $x^2e^{-x}=ax-\ln x-1$ 存在唯一实根，则实数 $a$ 的取值范围是________。
+answer: |-
+  $(-\infty,0]\cup\left\{1+\frac1e\right\}$
+
+  原方程可化为 $\frac{x}{e^x}=a-\frac{\ln(ex)}x$。令 $f(x)=\frac{x}{e^x}$，则 $f$ 在 $x=1$ 处取最大值 $\frac1e$；另一侧可看作与 $g(x)=-\frac{e\ln(ex)}{e^{\ln(ex)}}$ 同形的平移图像， $g$ 在 $x=1$ 处取最小值 $-1$。从源图和峰谷位置看，要让两图 只有一个交点，只能是平移到 $a\le0$ 的穿过方式，或临界相切 $a=1+\frac1e$。故答案为 $(-\infty,0]\cup\{1+\frac1e\}$。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把方程整理成两函数交点。
+      max_score: 1
+    - step_id: step_2
+      description: 识别左侧峰值函数。
+      max_score: 1
+    - step_id: step_3
+      description: 识别右侧谷值函数和平移参数。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 同构变形与换元法
+      - 参变量分离
+    subroute:
+      - 唯一零点
+      - 等效零点
+      - 图像平移
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 局部逼近结构
+    evidence:
+      - $\frac{x}{e^x}$
+      - $a-\frac{\ln(ex)}x$
+      - $a\le0$ 或 $a=1+\frac1e$
+    normalization_moves_used:
+      - 把 $\ln x+1$ 合并成 $\ln(ex)$。
+      - 把方程改成两图像交点。
+      - 用峰值/谷值和平移判断唯一交点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会合并 $\ln x+1=\ln(ex)$，回补指数对数基础。
+      - 若学生不能把方程实根理解成交点，回补函数性质与图像。
+      - 若学生不会求 $\frac{x}{e^x}$ 的极值，回补导数单调极值基础。
+  detail_terms:
+    - $x^2e^{-x}=ax-\ln x-1$
+    - $\frac{x}{e^x}$
+    - $a-\frac{\ln(ex)}x$
+    - 唯一实根
+    - $(-\infty,0]\cup\{1+\frac1e\}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0183_equation_unique_root_param_range_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0183
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0183/page_0183.md
+      role: problem_start
+      evidence: page_0183 contains 例8 statement and graph; the solution starts on page_0184.
+    - ref_id: page_0184
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0184/page_0184.md
+      role: continuation
+      evidence: "page_0184 top completes 例8: transform the equation into $\\frac{x}{e^x}=a-\\frac{\\ln(ex)}x$, compare two shifted graphs, and obtain $a\\le0$ or $a=1+\\frac1e$."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0183.png
+      inspected: true
+      notes: 页图核对通过：例8题干与图像在 page_0183 底部，解答需接 page_0184。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0184.png
+      inspected: true
+      notes: 页图核对通过：page_0184 顶部续解给出答案 $(-\infty,0]\cup\{1+\frac1e\}$。
+  source_context: 题头在 page_0183，解答跨到 page_0184；按跨页规则由 page_0183 worker 负责完整题卡。
+  source_influence:
+    - 保留源解把唯一实根问题转成两条具有相反峰谷结构的函数图像比较。
+  source_discrepancies: []
+original_problem:
+  stem: （河南省南阳市 2023 高三期中 T16）若方程 $x^2e^{-x}=ax-\ln x-1$ 存在唯一实根，则实数 $a$ 的取值范围是________。
+  parts: *a1
+  choices: []
+  answer: $(-\infty,0]\cup\left\{1+\frac1e\right\}$
+  fidelity_notes:
+    - 源题为填空题，无选项。
+    - 答案来自 page_0184 续解。
+solution:
+  source_solution_summary: 原方程可化为 $\frac{x}{e^x}=a-\frac{\ln(ex)}x$。令 $f(x)=\frac{x}{e^x}$，则 $f$ 在 $x=1$ 处取最大值 $\frac1e$；另一侧可看作与 $g(x)=-\frac{e\ln(ex)}{e^{\ln(ex)}}$ 同形的平移图像， $g$ 在 $x=1$ 处取最小值 $-1$。从源图和峰谷位置看，要让两图 只有一个交点，只能是平移到 $a\le0$ 的穿过方式，或临界相切 $a=1+\frac1e$。故答案为 $(-\infty,0]\cup\{1+\frac1e\}$。
+  key_steps:
+    - step_id: step_1
+      statement: 把方程整理成两函数交点。
+      formula_trace:
+        from: $x^2e^{-x}=ax-\ln x-1$
+        to: $\frac{x}{e^x}=a-\frac{\ln(ex)}x$
+        operation: 两边除以 $x$ 并把 $\ln x+1$ 合成 $\ln(ex)$。
+        why: 唯一实根就是两条图像唯一交点。
+      source_ref: page_0184
+    - step_id: step_2
+      statement: 识别左侧峰值函数。
+      formula_trace:
+        from: $f(x)=\frac{x}{e^x}$
+        to: $f_{\max}=f(1)=\frac1e$
+        operation: 求导 $f^{\prime}(x)=\frac{1-x}{e^x}$。
+        why: 左侧图像先增后减，峰值决定临界交点。
+      source_ref: page_0184
+    - step_id: step_3
+      statement: 识别右侧谷值函数和平移参数。
+      formula_trace:
+        from: $a-\frac{\ln(ex)}x$
+        to: 其图像由基准谷值函数平移得到，临界给出 $a\le0$ 或 $a=1+\frac1e$
+        operation: 利用源图中两函数的峰谷相对位置。
+        why: 唯一交点由图像平移的穿过/相切两种情形给出。
+      source_ref: page_0184
+teaching_card:
+  student_title: 把唯一实根看成两图像唯一交点
+  what_it_trains: 训练把复杂指对方程整理成两个熟悉函数的交点，再通过图像平移判断唯一根。
+  recognition_cues:
+    - 题目问方程存在唯一实根。
+    - 式子里同时有 $x^2e^{-x}$、$ax$ 和 $\ln x+1$。
+    - 源图画出了峰值函数和谷值函数的相对位置。
+  normalization_moves:
+    - 除以 $x$，把左边变成 $\frac{x}{e^x}$。
+    - 把 $\ln x+1$ 写成 $\ln(ex)$。
+    - 用参数 $a$ 理解右侧图像平移。
+  common_failures:
+    - 不做整理，直接对原方程求导导致结构混乱。
+    - 漏掉 $a=1+\frac1e$ 这个临界相切情形。
+    - 把 $a\le0$ 误写成 $a<0$。
+  similar_practice_query: x^2e^{-x} ax ln x 唯一实根 x/e^x 图像平移
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

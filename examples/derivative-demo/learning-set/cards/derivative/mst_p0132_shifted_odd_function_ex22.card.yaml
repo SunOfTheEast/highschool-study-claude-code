@@ -1,0 +1,226 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0132_shifted_odd_function_ex22
+content_revision_id: mst_p0132_shifted_odd_function_ex22-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0132_shifted_odd_function_ex22.card.yaml
+stem: |-
+  （2023·徐州月考）已知定义在 $\mathbf{R}$ 上的可导函数 $f(x)$ 满足 $x f^{\prime}(x)+f(x)<x f(x)$，若 $y=f(x-3)-\frac{1}{e}$ 是奇函数，则不等式 $x f(x)+3e^{x+2}>0$ 的解集是（  ）
+  A. $(-\infty,-2)$
+  B. $(-\infty,-3)$
+  C. $(-2,+\infty)$
+  D. $(-3,+\infty)$
+answer: |
+  B
+
+  设
+  \[
+  g(x)=\frac{x f(x)}{e^x},
+  \]
+  则
+  \[
+  g^{\prime}(x)=\frac{f(x)+x f^{\prime}(x)-x f(x)}{e^x}<0,
+  \]
+  所以 $g(x)$ 在 $\mathbf{R}$ 上单调递减。
+
+  又因
+  \[
+  y=f(x-3)-\frac1e
+  \]
+  是奇函数，代 $x=0$ 得
+  \[
+  f(-3)-\frac1e=0 \Rightarrow f(-3)=\frac1e.
+  \]
+  因此
+  \[
+  g(-3)=\frac{-3f(-3)}{e^{-3}}=\frac{-3\cdot \frac1e}{e^{-3}}=-3e^2.
+  \]
+
+  原不等式
+  \[
+  x f(x)+3e^{x+2}>0
+  \]
+  等价于
+  \[
+  e^x g(x)+3e^{x+2}>0 \Rightarrow g(x)>-3e^2=g(-3).
+  \]
+  由于 $g$ 递减，$g(x)>g(-3)$ 当且仅当 $x<-3$。
+  故解集为 $(-\infty,-3)$，选 B。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 对含 $x f^{\prime}(x)+f(x)-x f(x)$ 的结构做指数标准化。
+      max_score: 1
+    - step_id: step_2
+      description: 用奇函数条件锁定锚点 $x=-3$。
+      max_score: 1
+    - step_id: step_3
+      description: 把原不等式改写成 $g(x)$ 与 $g(-3)$ 的大小比较。
+      max_score: 1
+    - step_id: step_4
+      description: 由递减性得到解集方向。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式求解
+    part_level:
+      - part_id: item_1
+        goal: 不等式求解
+        target: 判定区间型单选答案。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 对称化与偏移
+    subroute:
+      - 指数标准化构造
+      - 奇函数平移定点
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 抽象函数结构
+      - 同构结构
+    evidence:
+      - $\\frac{x f(x)}{e^x}$ 的导数分子与题设完全匹配。
+      - 奇函数对象是 $f(x-3)-\\frac1e$，存在“平移+常量”锁定点。
+    normalization_moves_used:
+      - 设 $g=\\frac{x f(x)}{e^x}$。
+      - 用奇函数过原点求 $f(-3)$。
+      - 把目标式改写为 $g(x)>g(-3)$ 并用单调性反推。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求 $\\frac{x f(x)}{e^x}$ 的导数，回补导数运算与几何意义。
+      - 若学生不熟悉“奇函数在0处取0”的用法，回补函数性质与图像。
+      - 若学生在递减函数比较中写错方向，回补导数单调极值基础。
+  detail_terms:
+    - $g(x)=\\frac{x f(x)}{e^x}$
+    - $g^{\prime}(x)<0$
+    - $f(-3)=\\frac1e$
+    - $g(-3)=-3e^2$
+    - $x<-3$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0132_shifted_odd_function_ex22
+source_evidence:
+  source_refs:
+    - ref_id: page_0132
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0132/page_0132.md
+      role: problem_start
+      evidence: page_0132给出例22完整题干、A-D选项、解析与结论“故选B”。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0132.png
+      inspected: true
+      notes: 已核对页图：例22完整在page_0132内，关键式为 $xf^{\prime}(x)+f(x)<xf(x)$ 与奇函数条件。
+  source_context: 本题结合指数标准化构造单调函数与“平移后奇函数”给定点值，最终转成单调比较求解。
+  source_influence:
+    - 保留源页构造 $g(x)=\\frac{x f(x)}{e^x}$ 并由导数符号判递减。
+    - 保留由奇函数 $f(x-3)-\\frac1e$ 推得 $f(-3)=\\frac1e$。
+    - 保留把目标不等式化为 $g(x)>g(-3)$ 并解得 $x<-3$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·徐州月考）已知定义在 $\mathbf{R}$ 上的可导函数 $f(x)$ 满足 $x f^{\prime}(x)+f(x)<x f(x)$，若 $y=f(x-3)-\frac{1}{e}$ 是奇函数，则不等式 $x f(x)+3e^{x+2}>0$ 的解集是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $(-\infty,-2)$
+      text_latex: $(-\infty,-2)$
+    - label: B
+      text_raw: $(-\infty,-3)$
+      text_latex: $(-\infty,-3)$
+    - label: C
+      text_raw: $(-2,+\infty)$
+      text_latex: $(-2,+\infty)$
+    - label: D
+      text_raw: $(-3,+\infty)$
+      text_latex: $(-3,+\infty)$
+  answer: B
+  fidelity_notes:
+    - 源页选项顺序为 A/B/C/D，对应区间如题。
+solution:
+  source_solution_summary: |
+    设
+    \[
+    g(x)=\frac{x f(x)}{e^x},
+    \]
+    则
+    \[
+    g^{\prime}(x)=\frac{f(x)+x f^{\prime}(x)-x f(x)}{e^x}<0,
+    \]
+    所以 $g(x)$ 在 $\mathbf{R}$ 上单调递减。
+
+    又因
+    \[
+    y=f(x-3)-\frac1e
+    \]
+    是奇函数，代 $x=0$ 得
+    \[
+    f(-3)-\frac1e=0 \Rightarrow f(-3)=\frac1e.
+    \]
+    因此
+    \[
+    g(-3)=\frac{-3f(-3)}{e^{-3}}=\frac{-3\cdot \frac1e}{e^{-3}}=-3e^2.
+    \]
+
+    原不等式
+    \[
+    x f(x)+3e^{x+2}>0
+    \]
+    等价于
+    \[
+    e^x g(x)+3e^{x+2}>0 \Rightarrow g(x)>-3e^2=g(-3).
+    \]
+    由于 $g$ 递减，$g(x)>g(-3)$ 当且仅当 $x<-3$。
+    故解集为 $(-\infty,-3)$，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 对含 $x f^{\prime}(x)+f(x)-x f(x)$ 的结构做指数标准化。
+      formula_trace:
+        from: $x f^{\prime}(x)+f(x)<x f(x)$
+        to: $g^{\prime}(x)=\\frac{f(x)+x f^{\prime}(x)-x f(x)}{e^x}<0$，$g(x)=\\frac{x f(x)}{e^x}$
+        operation: 构造 $\\frac{x f(x)}{e^x}$ 并求导。
+        why: 题设恰好对应该导数分子。
+      source_ref: page_0132
+    - step_id: step_2
+      statement: 用奇函数条件锁定锚点 $x=-3$。
+      formula_trace:
+        from: $f(x-3)-\\frac1e$ 为奇函数
+        to: $f(-3)=\\frac1e$，进而 $g(-3)=-3e^2$
+        operation: 代 $x=0$ 得奇函数过原点，再代入 $g$。
+        why: 为单调比较提供确切参照值。
+      source_ref: page_0132
+    - step_id: step_3
+      statement: 把原不等式改写成 $g(x)$ 与 $g(-3)$ 的大小比较。
+      formula_trace:
+        from: $x f(x)+3e^{x+2}>0$
+        to: $g(x)>-3e^2=g(-3)$
+        operation: 提取 $e^x$ 并代入 $g$ 定义。
+        why: 递减函数比较可直接还原到 $x$ 的区间。
+      source_ref: page_0132
+    - step_id: step_4
+      statement: 由递减性得到解集方向。
+      formula_trace:
+        from: $g(x)>g(-3)$，$g$递减
+        to: $x<-3$
+        operation: 递减函数中函数值大对应自变量小。
+        why: 确定唯一正确选项 B。
+      source_ref: page_0132
+teaching_card:
+  student_title: 先构造指数商，再用奇函数给锚点
+  what_it_trains: 把抽象导数不等式与奇函数平移条件联动，完成“构造-定点-比较”三步求解。
+  recognition_cues:
+    - 题设出现 $x f^{\prime}(x)+f(x)-x f(x)$ 组合。
+    - 另给 $f(x-3)-\\frac1e$ 为奇函数，明显用于求特定点值。
+  normalization_moves:
+    - 构造 $g=\\frac{x f(x)}{e^x}$ 判递减。
+    - 由奇函数条件求 $f(-3)$，再算 $g(-3)$。
+    - 把原不等式改写成 $g(x)>g(-3)$。
+  common_failures:
+    - 把奇函数条件误代成 $f(3)=\\frac1e$。
+    - 算 $g(-3)$ 时 $e^{-3}$ 处理错误。
+    - 忽略递减函数比较方向导致区间反向。
+  similar_practice_query: 抽象函数 奇函数平移 指数商构造 单调性 不等式解集
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

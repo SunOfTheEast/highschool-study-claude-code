@@ -1,0 +1,151 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0026_ex05
+content_revision_id: mst_p0026_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0026_ex05.card.yaml
+stem: |
+  （2025 天津市河东区质检 T15）设函数 $f(x)=x+\ln x$，$g(x)=x+e^x$，若存在 $x_1$，$x_2$，使得 $g(x_1)=f(x_2)$，则 $|x_1-x_2|$ 的最小值为________。
+answer: |-
+  $1$
+
+  由 $g(x_1)=f(x_2)$ 得 $e^{x_1}+x_1=x_2+\ln x_2=e^{\ln x_2}+\ln x_2$。令 $g(t)=e^t+t$，其严格递增，所以 $g(x_1)=g(\ln x_2)$ 推出 $x_1=\ln x_2$。于是 $|x_1-x_2|=|x_2-\ln x_2|$；对 $x_2>0$，$x_2-\ln x_2\ge1$，等号在 $x_2=1$，故最小值为 1。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先确认 $x_2$ 的定义域。
+      max_score: 1
+    - step_id: step_2
+      description: 把 $f(x_2)$ 写成 $g$ 的函数值。
+      max_score: 1
+    - step_id: step_3
+      description: 利用 $g$ 单调性确定 $x_1$。
+      max_score: 1
+    - step_id: step_4
+      description: 把距离转成单变量最值。
+      max_score: 1
+    - step_id: step_5
+      description: 求 $x-\ln x$ 的最小值。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - $e^x+x$ 单调母函数
+      - $x_2=e^{\ln x_2}$
+      - $x-\ln x$ 最小值
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $f(x_2)=x_2+\ln x_2$ 被改写成 $g(\ln x_2)$。
+      - $g(x_1)=g(\ln x_2)$ 由单调性降成 $x_1=\ln x_2$。
+    normalization_moves_used:
+      - $x_2=e^{\ln x_2}$。
+      - $g(x_1)=f(x_2)\Rightarrow g(x_1)=g(\ln x_2)$。
+      - $|x_1-x_2|=x_2-\ln x_2$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生忘记 $x_2>0$，回补函数三要素与定义域。
+      - 若学生不能把 $x_2+\ln x_2$ 写成 $e^{\ln x_2}+\ln x_2$，回补指数对数基础。
+      - 若学生不会证明 $g(t)=e^t+t$ 严格递增，回补导数单调极值基础。
+      - 若学生不会求 $x-\ln x$ 的最小值，回补导数单调极值基础。
+  detail_terms:
+    - $f(x)=x+\ln x$
+    - $g(x)=x+e^x$
+    - $g(x_1)=g(\ln x_2)$
+    - $x_2-\ln x_2\ge1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0026_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0026
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0026/page_0026.md
+      role: problem_start
+      evidence: lines 35-37 give 例5题干、解析和答案 1。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0026.png
+      inspected: true
+      notes: 已核对例5题干、解析和答案；题目完整在 page_0026。
+  source_context: 本题仍属于“构造单调函数 $e^x+x$ 或 $x+\ln x$”考点，直接把 $f(x_2)$ 写成 $g(\ln x_2)$。
+  source_influence:
+    - 源解的核心是 $x_2+\ln x_2=e^{\ln x_2}+\ln x_2$，从而由 $g$ 单调推出 $x_1=\ln x_2$。
+  source_discrepancies: []
+original_problem:
+  stem: |
+    （2025 天津市河东区质检 T15）设函数 $f(x)=x+\ln x$，$g(x)=x+e^x$，若存在 $x_1$，$x_2$，使得 $g(x_1)=f(x_2)$，则 $|x_1-x_2|$ 的最小值为________。
+  parts: *a1
+  choices: []
+  answer: $1$
+  fidelity_notes:
+    - 题干和解析完整在 page_0026；由 $f(x_2)$ 有意义可知 $x_2>0$。
+solution:
+  source_solution_summary: 由 $g(x_1)=f(x_2)$ 得 $e^{x_1}+x_1=x_2+\ln x_2=e^{\ln x_2}+\ln x_2$。令 $g(t)=e^t+t$，其严格递增，所以 $g(x_1)=g(\ln x_2)$ 推出 $x_1=\ln x_2$。于是 $|x_1-x_2|=|x_2-\ln x_2|$；对 $x_2>0$，$x_2-\ln x_2\ge1$，等号在 $x_2=1$，故最小值为 1。
+  key_steps:
+    - step_id: step_1
+      statement: 先确认 $x_2$ 的定义域。
+      formula_trace:
+        from: $f(x_2)=x_2+\ln x_2$ 有意义
+        to: $x_2>0$
+        operation: 对数真数必须大于 0。
+        why: 后续才能使用 $\ln x_2$ 并讨论 $x_2-\ln x_2$ 的最小值。
+      source_ref: page_0026
+    - step_id: step_2
+      statement: 把 $f(x_2)$ 写成 $g$ 的函数值。
+      formula_trace:
+        from: $x_2+\ln x_2$
+        to: $e^{\ln x_2}+\ln x_2=g(\ln x_2)$
+        operation: 用 $x_2=e^{\ln x_2}$。
+        why: 这样 $g(x_1)=f(x_2)$ 变成同一个函数 $g$ 的函数值相等。
+      source_ref: page_0026
+    - step_id: step_3
+      statement: 利用 $g$ 单调性确定 $x_1$。
+      formula_trace:
+        from: $g(x_1)=g(\ln x_2),\quad g(t)=e^t+t$
+        to: $x_1=\ln x_2$
+        operation: 直接由 $g$ 的导数 $e^t+1>0$，故 $g$ 在 $\mathbf R$ 上严格递增。
+        why: 严格递增函数一一对应，函数值相等则输入相等。
+      source_ref: page_0026
+    - step_id: step_4
+      statement: 把距离转成单变量最值。
+      formula_trace:
+        from: $|x_1-x_2|$
+        to: $|x_2-\ln x_2|=x_2-\ln x_2$
+        operation: 代入 $x_1=\ln x_2$；对 $x_2>0$ 有 $x_2-\ln x_2\ge1>0$。
+        why: 原来的两变量距离被降成一个标准函数的最小值。
+      source_ref: page_0026
+    - step_id: step_5
+      statement: 求 $x-\ln x$ 的最小值。
+      formula_trace:
+        from: $\phi(x)=x-\ln x,\quad x>0$
+        to: $\phi(x)\ge\phi(1)=1$
+        operation: $\phi$ 的导数为 $1-\frac1x$，在 $(0,1)$ 负、在 $(1,+\infty)$ 正。
+        why: 唯一极小点为 $x=1$，可取到最小值 1。
+      source_ref: page_0026
+teaching_card:
+  student_title: 把 $f(x_2)$ 改写成 $g(\ln x_2)$
+  what_it_trains: 训练把两个函数值相等的问题转成同一个递增函数的输入相等，再把距离问题降成单变量最值。
+  recognition_cues:
+    - $f(x)=x+\ln x$ 与 $g(x)=x+e^x$ 同时出现。
+    - 条件是 $g(x_1)=f(x_2)$。
+    - 目标是 $|x_1-x_2|$ 的最小值。
+  normalization_moves:
+    - 用 $x_2=e^{\ln x_2}$ 把 $f(x_2)$ 写成 $g(\ln x_2)$。
+    - 由 $g$ 单调得到 $x_1=\ln x_2$。
+    - 把 $|x_1-x_2|$ 化为 $x_2-\ln x_2$。
+  common_failures:
+    - 没有把 $x_2$ 改成 $e^{\ln x_2}$，看不出同构。
+    - 误以为“存在 $x_1,x_2$”需要先解出具体数值。
+    - 求 $x-\ln x$ 最小时漏掉定义域 $x>0$。
+  similar_practice_query: $x+\ln x$ $x+e^x$ 函数值相等 距离最小 同构
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

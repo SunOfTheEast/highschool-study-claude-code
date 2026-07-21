@@ -1,0 +1,175 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0232_log_minus_ax_zero_lock_bound_ch6_findpoint_ex2
+content_revision_id: mst_p0232_log_minus_ax_zero_lock_bound_ch6_findpoint_ex2-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0232_log_minus_ax_zero_lock_bound_ch6_findpoint_ex2.card.yaml
+stem: 当 $a<0$ 时，讨论函数 $f(x)=\ln x-ax$ 的零点个数。
+answer: |-
+  $f(x)$ 有唯一零点，且零点 $x_1\in(e^a,1)$。
+
+  $f'(x)=\frac1x-a>0$，所以 $f$ 在 $(0,+\infty)$ 上单调递增，至多 一个零点。又 $f(1)=-a>0$，需要在 $(0,1)$ 中找一个负值点。 因为 $a<0$，在 $0<x<1$ 时有 $0<-ax<-a$，所以 $f(x)=\ln x-ax<\ln x-a$。令 $\ln x-a=0$，取 $m=e^a$，则 $f(e^a)=a-ae^a=a(1-e^a)<0$。因此存在唯一 $x_1\in(e^a,1)$ 使 $f(x_1)=0$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先证明函数在定义域内递增。
+      max_score: 1
+    - step_id: step_2
+      description: 用 $f(1)>0$ 锁定上界点。
+      max_score: 1
+    - step_id: step_3
+      description: 构造找小点的大函数。
+      max_score: 1
+    - step_id: step_4
+      description: 解可解方程并验证负值点。
+      max_score: 1
+    - step_id: step_5
+      description: 由变号和单调性确定唯一零点。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: main
+        goal: 零点/极值点分析
+        target: 第 main 问
+        result: $f$ 有唯一零点，且 $x_1\in(e^a,1)$。
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 充分/必要性探路
+    subroute:
+      - 锁界与放缩
+      - 增反减同
+      - 主客体变量
+      - 对数主体变量
+      - 取点 $e^a$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $\ln x-ax$
+      - $\ln x-a=0$
+      - $m=e^a$
+      - $x_1\in(e^a,1)$
+    normalization_moves_used:
+      - 先用导数证明单调递增。
+      - 用 $f(1)>0$ 锁定上界。
+      - 用 $-ax<-a$ 把客体变量放缩成常数。
+      - 解 $\ln x-a=0$ 找到小点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f^\prime(x)>0$ 判断唯一性，回补导数单调极值基础。
+      - 若学生不理解 $0<e^a<1$，回补指数对数基础。
+      - 若学生不会用变号推出零点存在，回补方程根分布与韦达。
+      - 若学生不清楚定义域是 $x>0$，回补函数三要素与定义域。
+  detail_terms:
+    - $\ln x-ax$
+    - $a<0$
+    - $f(1)>0$
+    - $\ln x-a=0$
+    - $m=e^a$
+    - 锁上界
+    - 增反减同
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0232_log_minus_ax_zero_lock_bound_ch6_findpoint_ex2
+source_evidence:
+  source_refs:
+    - ref_id: page_0232_ex2_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0232/page_0232.md
+      role: problem_start
+      evidence: page_0232 给出例2题头：当 $a<0$ 时，讨论 $f(x)=\ln x-ax$ 的零点个数。
+    - ref_id: page_0232_ex2_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0232/page_0232.md
+      role: solution
+      evidence: 解析证明 $f$ 在 $(0,+\infty)$ 单调递增，用 $f(1)=-a>0$ 锁定上界，再取 $m=e^a$ 得 $f(e^a)<0$。
+    - ref_id: page_0232_ex3_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0232/page_0232.md
+      role: local_context
+      evidence: page_0232 随后另起例3，属于本批下一张卡，不混入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0232.png
+      inspected: true
+      notes: 已核对页图：例2题头和完整解析位于 page_0232 中下部。
+  source_context: 本卡处理 page_0232 起头并在同页结束的例2。
+  source_influence:
+    - 保留 source 的主客体变量语言：$\ln x$ 是导致负值的主体变量，$-ax$ 是有界客体。
+    - 保留 source 的增反减同：递增函数找小点时构造大函数 $\ln x-a$。
+    - 保留 source 的取点：解 $\ln x-a=0$ 得 $m=e^a$。
+  source_discrepancies: []
+original_problem:
+  stem: 当 $a<0$ 时，讨论函数 $f(x)=\ln x-ax$ 的零点个数。
+  parts: *a1
+  choices: []
+  answer: $f(x)$ 有唯一零点，且零点 $x_1\in(e^a,1)$。
+  fidelity_notes:
+    - 单问零点个数题，无选项。
+    - 题设 $a<0$，所以 $0<e^a<1$。
+solution:
+  source_solution_summary: $f'(x)=\frac1x-a>0$，所以 $f$ 在 $(0,+\infty)$ 上单调递增，至多 一个零点。又 $f(1)=-a>0$，需要在 $(0,1)$ 中找一个负值点。 因为 $a<0$，在 $0<x<1$ 时有 $0<-ax<-a$，所以 $f(x)=\ln x-ax<\ln x-a$。令 $\ln x-a=0$，取 $m=e^a$，则 $f(e^a)=a-ae^a=a(1-e^a)<0$。因此存在唯一 $x_1\in(e^a,1)$ 使 $f(x_1)=0$。
+  key_steps:
+    - step_id: step_1
+      statement: 先证明函数在定义域内递增。
+      formula_trace:
+        from: $f(x)=\ln x-ax$
+        to: $f^\prime(x)=\frac1x-a>0$
+        operation: 求导并用 $a<0$。
+        why: 单调递增说明零点至多一个。
+      source_ref: page_0232_ex2_solution
+    - step_id: step_2
+      statement: 用 $f(1)>0$ 锁定上界点。
+      formula_trace:
+        from: $f(1)=\ln1-a$
+        to: $f(1)=-a>0$
+        operation: 代入 $x=1$。
+        why: 需要在 1 左侧找负值点。
+      source_ref: page_0232_ex2_solution
+    - step_id: step_3
+      statement: 构造找小点的大函数。
+      formula_trace:
+        from: $f(x)=\ln x-ax$
+        to: $f(x)<\ln x-a\quad(0<x<1)$
+        operation: 用 $0<-ax<-a$。
+        why: 递增函数找小点时，用更大的函数先变成 0。
+      source_ref: page_0232_ex2_solution
+    - step_id: step_4
+      statement: 解可解方程并验证负值点。
+      formula_trace:
+        from: $\ln x-a=0$
+        to: $m=e^a,\quad f(e^a)=a(1-e^a)<0$
+        operation: 指数化解方程并代回。
+        why: $a<0$ 使 $e^a<1$，同时 $a(1-e^a)<0$。
+      source_ref: page_0232_ex2_solution
+    - step_id: step_5
+      statement: 由变号和单调性确定唯一零点。
+      formula_trace:
+        from: $f(e^a)<0,\ f(1)>0$
+        to: $\exists! x_1\in(e^a,1),\ f(x_1)=0$
+        operation: 介值定理加单调性。
+        why: 存在性由变号，唯一性由递增。
+      source_ref: page_0232_ex2_solution
+teaching_card:
+  student_title: 递增对数函数先锁住 1，再用 $\ln x-a=0$ 找左边点
+  what_it_trains: 训练对数型零点取点：把客体变量 $-ax$ 锁成常数，转成可解的对数方程。
+  recognition_cues:
+    - $a<0$ 时 $\ln x-ax$ 在正半轴递增。
+    - $f(1)>0$，所以要在 $(0,1)$ 找负值。
+    - $-ax$ 在 $(0,1)$ 上被 $-a$ 控住，能构造 $\ln x-a=0$。
+  normalization_moves:
+    - 先判 $f^\prime(x)>0$。
+    - 代 $x=1$ 得正值。
+    - 用 $f(x)<\ln x-a$ 构造可解方程。
+    - 取 $m=e^a$ 并夹出唯一零点。
+  common_failures:
+    - 忘记 $x>0$ 的定义域。
+    - 不知道为什么要用 $\ln x-a=0$，只是机械猜 $e^a$。
+    - 漏掉 $a(1-e^a)<0$ 的符号验证。
+  similar_practice_query: lnx-ax a<0 零点个数 锁界 放缩取点 增反减同 e^a
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

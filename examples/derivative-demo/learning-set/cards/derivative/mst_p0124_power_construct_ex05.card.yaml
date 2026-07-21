@@ -1,0 +1,207 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0124_power_construct_ex05
+content_revision_id: mst_p0124_power_construct_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0124_power_construct_ex05.card.yaml
+stem: |-
+  （24-25高二下·天津和平·阶段练习）已知 $f(x)$ 为 $(0,+\infty)$ 上的可导函数，且 $(x+1)\cdot f'(x)>f(x)$，则下列不等式一定成立的是（  ）
+  A. $3f(4)<4f(3)$
+  B. $4f(4)<5f(3)$
+  C. $3f(3)<4f(2)$
+  D. $3f(3)>4f(2)$
+answer: |
+  D
+
+  设
+  \[
+  h(x)=\frac{f(x)}{x+1},\quad x>0.
+  \]
+  则
+  \[
+  h'(x)=\frac{(x+1)f'(x)-f(x)}{(x+1)^2}.
+  \]
+  由题设 $(x+1)f'(x)>f(x)$ 得 $h'(x)>0$，故 $h$ 在 $(0,+\infty)$ 上递增。
+  因而
+  \[
+  h(4)>h(3)\Rightarrow \frac{f(4)}5>\frac{f(3)}4\Rightarrow 4f(4)>5f(3),
+  \]
+  所以 B 错；又
+  \[
+  h(3)>h(2)\Rightarrow \frac{f(3)}4>\frac{f(2)}3\Rightarrow 3f(3)>4f(2),
+  \]
+  所以 D 对、C 错。A 无法由已知推出，故选 D。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把题设改写成商函数导数分子。
+      max_score: 1
+    - step_id: step_2
+      description: 构造 $h(x)$ 并判单调性。
+      max_score: 1
+    - step_id: step_3
+      description: 由 $h(4)>h(3)$ 排除 B。
+      max_score: 1
+    - step_id: step_4
+      description: 由 $h(3)>h(2)$ 锁定 D。
+      max_score: 1
+    - step_id: step_5
+      description: 说明 A 不可定。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 判断哪一个比例不等式一定成立
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 充分/必要性探路
+    subroute:
+      - 平移商函数构造
+      - 单调性逐项排除
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 同构结构
+    evidence:
+      - $(x+1)f'(x)-f(x)$ 是 $\left(\frac{f(x)}{x+1}\right)'$ 分子。
+      - $h(4)>h(3)$ 推出 $4f(4)>5f(3)$。
+      - $h(3)>h(2)$ 推出 $3f(3)>4f(2)$。
+    normalization_moves_used:
+      - 构造 $h(x)=f(x)/(x+1)$。
+      - 先从单调性得到标准比例，再和选项逐项比对。
+      - 对“无法确定”的选项单独做充分性判断。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会构造 $\frac{f(x)}{x+1}$，回补导数运算与几何意义。
+      - 若学生交叉相乘方向错误，回补不等式工具基础。
+      - 若学生把“暂不矛盾”误当“必成立”，回补不等式工具基础。
+  detail_terms:
+    - $h(x)=\frac{f(x)}{x+1}$
+    - $h'(x)>0$
+    - $4f(4)>5f(3)$
+    - $3f(3)>4f(2)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0124_power_construct_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0124
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0124/page_0124.md
+      role: problem_start
+      evidence: page_0124 下半页给出例5完整题干、A-D选项、解析和答案。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0124.png
+      inspected: true
+      notes: 已核对页图：例5完整在 page_0124；其后转入指数构造模型讲解。
+  source_context: 本卡仅覆盖例5；页后模型讲解仅作背景，不单独建卡。
+  source_influence:
+    - 保留源页构造 h(x)=f(x)/(x+1) 的主线。
+    - 保留源页由 h'(x)>0 推出 h(4)>h(3)>h(2)。
+    - 保留源页逐项排除 B、C，并确定 D，说明 A 不可定。
+  source_discrepancies: []
+original_problem:
+  stem: （24-25高二下·天津和平·阶段练习）已知 $f(x)$ 为 $(0,+\infty)$ 上的可导函数，且 $(x+1)\cdot f'(x)>f(x)$，则下列不等式一定成立的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $3f(4)<4f(3)$
+      text_latex: $3f(4)<4f(3)$
+    - label: B
+      text_raw: $4f(4)<5f(3)$
+      text_latex: $4f(4)<5f(3)$
+    - label: C
+      text_raw: $3f(3)<4f(2)$
+      text_latex: $3f(3)<4f(2)$
+    - label: D
+      text_raw: $3f(3)>4f(2)$
+      text_latex: $3f(3)>4f(2)$
+  answer: D
+  fidelity_notes:
+    - 页图与 markdown 一致，本题为单选 D。
+solution:
+  source_solution_summary: |
+    设
+    \[
+    h(x)=\frac{f(x)}{x+1},\quad x>0.
+    \]
+    则
+    \[
+    h'(x)=\frac{(x+1)f'(x)-f(x)}{(x+1)^2}.
+    \]
+    由题设 $(x+1)f'(x)>f(x)$ 得 $h'(x)>0$，故 $h$ 在 $(0,+\infty)$ 上递增。
+    因而
+    \[
+    h(4)>h(3)\Rightarrow \frac{f(4)}5>\frac{f(3)}4\Rightarrow 4f(4)>5f(3),
+    \]
+    所以 B 错；又
+    \[
+    h(3)>h(2)\Rightarrow \frac{f(3)}4>\frac{f(2)}3\Rightarrow 3f(3)>4f(2),
+    \]
+    所以 D 对、C 错。A 无法由已知推出，故选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把题设改写成商函数导数分子。
+      formula_trace:
+        from: $(x+1)f'(x)>f(x)$
+        to: $(x+1)f'(x)-f(x)>0$
+        operation: 移项。
+        why: 对应 $\left(\frac{f(x)}{x+1}\right)'$ 的分子结构。
+      source_ref: page_0124
+    - step_id: step_2
+      statement: 构造 $h(x)$ 并判单调性。
+      formula_trace:
+        from: $h(x)=\frac{f(x)}{x+1}$
+        to: $h'(x)=\frac{(x+1)f'(x)-f(x)}{(x+1)^2}>0$
+        operation: 商法则求导并代入题设。
+        why: 分母平方恒正，故 $h$ 递增。
+      source_ref: page_0124
+    - step_id: step_3
+      statement: 由 $h(4)>h(3)$ 排除 B。
+      formula_trace:
+        from: $h(4)>h(3)$
+        to: $\frac{f(4)}5>\frac{f(3)}4\Rightarrow 4f(4)>5f(3)$
+        operation: 代值并交叉相乘。
+        why: 与选项 B 方向相反。
+      source_ref: page_0124
+    - step_id: step_4
+      statement: 由 $h(3)>h(2)$ 锁定 D。
+      formula_trace:
+        from: $h(3)>h(2)$
+        to: $\frac{f(3)}4>\frac{f(2)}3\Rightarrow 3f(3)>4f(2)$
+        operation: 代值并交叉相乘。
+        why: D 与推导一致，C 与其相反。
+      source_ref: page_0124
+    - step_id: step_5
+      statement: 说明 A 不可定。
+      formula_trace:
+        from: $\frac{f(4)}{f(3)}>\frac54$
+        to: $3f(4)<4f(3)$ 不能由已知必然推出
+        operation: 比较阈值 $\frac54$ 与 $\frac43$。
+        why: 已知只给下界，不足以推出 A 的严格上界。
+      source_ref: page_0124
+teaching_card:
+  student_title: 用 $\frac{f(x)}{x+1}$ 的递增性筛选必然结论
+  what_it_trains: 把线性因子型导数不等式转成商函数单调，再做选项真伪筛选。
+  recognition_cues:
+    - 出现 $(x+1)f'(x)-f(x)$ 的结构。
+    - 选项都在比较 $f(k)$ 的分式比例。
+  normalization_moves:
+    - 设 $h(x)=f(x)/(x+1)$。
+    - 由题设得 $h'(x)>0$。
+    - 使用 $h(4)>h(3)>h(2)$ 写出对应比例。
+  common_failures:
+    - 误构造为 $(x+1)f(x)$。
+    - 交叉相乘时漏看正负导致方向反。
+    - 对 A 只看“可能成立”而忽略“必须成立”。
+  similar_practice_query: 抽象函数 商函数 f/(x+1) 单调 不等式一定成立
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 页图已核对，例5题干到答案完整且无跨页。

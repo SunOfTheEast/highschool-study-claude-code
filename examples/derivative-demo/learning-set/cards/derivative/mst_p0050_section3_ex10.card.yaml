@@ -1,0 +1,211 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0050_section3_ex10
+content_revision_id: mst_p0050_section3_ex10-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0050_section3_ex10.card.yaml
+stem: 求证：$(e^x-1)\ln(x+1)\geqslant x^2$（$x>-1$）。
+answer: |
+  不等式在 $x>-1$ 上成立，且 $x=0$ 时取等。
+
+  源解法一先看等号点 $x=0$，按 $x\ge0$ 与 $-1<x\le0$ 分段。对 $x\ge0$，用
+  $\ln(1+x)\ge\frac{2x}{x+2}$，只需证
+  $(e^x-1)\frac{2}{x+2}\ge x$，即
+  $e^x\ge\frac{x^2+2x}{2}+1$；设
+  $h(x)=\frac{x^2+2x+2}{2e^x}$，由
+  $h^{\prime}(x)=-\frac{x^2}{2e^x}\le0$ 得 $h(x)\le h(0)=1$。对
+  $-1<x\le0$，两边因子同为非正，配合
+  $\ln(1+x)\le\frac{2x}{x+2}\le0$ 和
+  $e^x-1\le\frac{x^2+2x}{2}\le0$，取相反数相乘得到同一结论。
+  法二把目标化为
+  $\frac{x}{e^x-1}\le\frac{\ln(x+1)}{x}$，令
+  $F(x)=\frac{\ln(x+1)}{x}$，证明 $F$ 单调递减，又有
+  $e^x-1\ge x$，于是 $F(x)\ge F(e^x-1)=\frac{x}{e^x-1}$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 抓住 $x=0$ 的共零点，按两侧符号分段。
+      max_score: 1
+    - step_id: step_2
+      description: 在 $x\ge0$ 上先放缩对数，把问题压成指数二次不等式。
+      max_score: 1
+    - step_id: step_3
+      description: 用辅助函数证明指数二次放缩。
+      max_score: 1
+    - step_id: step_4
+      description: 在 $-1<x\le0$ 上取相反数后相乘。
+      max_score: 1
+    - step_id: step_5
+      description: 用同构母函数给出第二种证明。
+      max_score: 1
+    - step_id: step_6
+      description: 证明 $F(t)=\frac{\ln(1+t)}{t}$ 单调递减并比较输入。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+      - 拟合与夹逼
+    subroute:
+      - 切线与最值等效转化
+      - 对数 $\frac{2x}{x+2}$ 放缩
+      - 共零点同构母函数
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $F(x)=\frac{\ln(1+x)}{x}$ 与 $F(e^x-1)=\frac{x}{e^x-1}$。
+      - $\ln(1+x)$ 和 $e^x-1$ 都围绕 $x=0$ 的共零点做同向放缩。
+      - $h(x)=\frac{x^2+2x+2}{2e^x}$ 把指数二次放缩转成最大值问题。
+    normalization_moves_used:
+      - $\ln(1+x)\ge\frac{2x}{x+2}$（$x\ge0$），负区间方向相反。
+      - $(e^x-1)\frac{2}{x+2}\ge x\Longleftrightarrow e^x\ge\frac{x^2+2x}{2}+1$。
+      - 把乘积不等式改写为 $\frac{x}{e^x-1}\le\frac{\ln(1+x)}{x}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不知道为什么要在 $x=0$ 两侧分段，回补函数三要素与定义域。
+      - 若学生不会使用 $\ln(1+x)$ 与 $\frac{2x}{x+2}$ 的分段放缩，回补不等式工具基础。
+      - 若学生不能由 $h^{\prime}(x)\le0$ 得出 $h(x)\le1$，回补导数单调极值基础。
+      - 若学生不会把乘积目标化为 $\frac{x}{e^x-1}\le\frac{\ln(1+x)}{x}$，回补代数恒等变形。
+      - 若学生看不出 $F(x)$ 与 $F(e^x-1)$ 是同一母函数的两个输入，回补指数对数基础。
+  detail_terms:
+    - $(e^x-1)\ln(1+x)\ge x^2$
+    - $\ln(1+x)\ge\frac{2x}{x+2}$
+    - $h(x)=\frac{x^2+2x+2}{2e^x}$
+    - $F(x)=\frac{\ln(1+x)}{x}$
+    - $F(e^x-1)=\frac{x}{e^x-1}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0050_section3_ex10
+source_evidence:
+  source_refs:
+    - ref_id: page_0050
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0050/page_0050.md
+      role: problem_start
+      evidence: lines 36-38 give 例 10 题干和法一放缩法主体；page_0050 顶部是 page_0049 例 09 续页，未作为新卡。
+    - ref_id: page_0051
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0051/page_0051.md
+      role: continuation
+      evidence: lines 14-24 complete 例 10 的法一结论、两幅函数图、法二同构证明和母函数说明。
+    - ref_id: page_0050_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0050/page_0050.md
+      role: local_context
+      evidence: lines 18-33 introduce “切线与最值等效转化”，并给出 $f(x)=\frac{\ln(x+1)}{x}$ 与 $g(x)=\frac{x}{e^x-1}$ 的单调性和图像。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0050.png
+      inspected: true
+      notes: 已核对页图：page_0050 顶部是例 09 续页；例 10 题头、题干、法一放缩法开头和两幅 $f,g$ 函数图与 markdown 一致。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0051.png
+      inspected: true
+      notes: 已核对页图：page_0051 顶部继续例 10，包含乘积函数与同构函数图像；随后才开始例 11。
+  source_context: 本题位于“三、切线与最值等效转化”。源页先把 $\frac{\ln(x+1)}{x}$ 与 $\frac{x}{e^x-1}$ 作为同构母函数分析，再用例 10 证明 $(e^x-1)\ln(x+1)\ge x^2$。
+  source_influence:
+    - 题干是证明题，没有选择项，original_problem.choices 保持空列表。
+    - page_0050 与 page_0051 的函数图不属于题干条件，但参与源解的同构理解，已绑定到 source_images。
+    - 源解给出两条路线：按 $x=0$ 两侧做切线放缩；或转化为 $\frac{x}{e^x-1}\le\frac{\ln(x+1)}{x}$ 后比较同构母函数。
+  source_discrepancies:
+    - page_0050 负区间放缩末行印刷/转写为 $-(e^x-1)\ge \frac{x^2+2x}{2}\ge0$；结合前一句 $e^x-1\le\frac{x^2+2x}{2}\le0$ 且 $-1<x\le0$，应使用 $-(e^x-1)\ge-\frac{x^2+2x}{2}\ge0$。本卡按数学上必需的负号写入步骤，并在质量备注中保留。
+original_problem:
+  stem: 求证：$(e^x-1)\ln(x+1)\geqslant x^2$（$x>-1$）。
+  parts: *a1
+  choices: []
+  answer: 不等式在 $x>-1$ 上成立，且 $x=0$ 时取等。
+  fidelity_notes:
+    - 源题为证明题，无选项。
+    - 题干从 page_0050 开始，法二和图像说明续到 page_0051。
+solution:
+  source_solution_summary: |
+    源解法一先看等号点 $x=0$，按 $x\ge0$ 与 $-1<x\le0$ 分段。对 $x\ge0$，用
+    $\ln(1+x)\ge\frac{2x}{x+2}$，只需证
+    $(e^x-1)\frac{2}{x+2}\ge x$，即
+    $e^x\ge\frac{x^2+2x}{2}+1$；设
+    $h(x)=\frac{x^2+2x+2}{2e^x}$，由
+    $h^{\prime}(x)=-\frac{x^2}{2e^x}\le0$ 得 $h(x)\le h(0)=1$。对
+    $-1<x\le0$，两边因子同为非正，配合
+    $\ln(1+x)\le\frac{2x}{x+2}\le0$ 和
+    $e^x-1\le\frac{x^2+2x}{2}\le0$，取相反数相乘得到同一结论。
+    法二把目标化为
+    $\frac{x}{e^x-1}\le\frac{\ln(x+1)}{x}$，令
+    $F(x)=\frac{\ln(x+1)}{x}$，证明 $F$ 单调递减，又有
+    $e^x-1\ge x$，于是 $F(x)\ge F(e^x-1)=\frac{x}{e^x-1}$。
+  key_steps:
+    - step_id: step_1
+      statement: 抓住 $x=0$ 的共零点，按两侧符号分段。
+      formula_trace:
+        from: $(e^x-1)\ln(x+1)\ge x^2,\quad x>-1$
+        to: $x\ge0$ 与 $-1<x\le0$ 分别证明
+        operation: 观察 $x=0$ 时两边同为 $0$，且 $e^x-1$、$\ln(1+x)$ 在 0 两侧同号。
+        why: 乘积不等式在负区间要处理同向取反后的正量，不能直接沿用正区间方向。
+      source_ref: page_0050
+    - step_id: step_2
+      statement: 在 $x\ge0$ 上先放缩对数，把问题压成指数二次不等式。
+      formula_trace:
+        from: $\ln(1+x)\ge\frac{2x}{x+2}$
+        to: $(e^x-1)\frac{2}{x+2}\ge x\Longleftrightarrow e^x\ge\frac{x^2+2x}{2}+1$
+        operation: 用对数在 0 右侧的切线型放缩，再整理分母 $x+2>0$。
+        why: 源解的“先放对数后放指数”把跨阶乘积拆成单个指数函数最值。
+      source_ref: page_0050
+    - step_id: step_3
+      statement: 用辅助函数证明指数二次放缩。
+      formula_trace:
+        from: $e^x\ge\frac{x^2+2x+2}{2}$
+        to: $h(x)=\frac{x^2+2x+2}{2e^x}\le h(0)=1$
+        operation: 求导得 $h^{\prime}(x)=-\frac{x^2}{2e^x}\le0$，所以 $h$ 在 $[0,+\infty)$ 上不增。
+        why: 将切线放缩转化为单函数最大值，等号点仍在 $x=0$。
+      source_ref: page_0050
+    - step_id: step_4
+      statement: 在 $-1<x\le0$ 上取相反数后相乘。
+      formula_trace:
+        from: $\ln(1+x)\le\frac{2x}{x+2}\le0,\quad e^x-1\le\frac{x^2+2x}{2}\le0$
+        to: $[-(e^x-1)]\cdot[-\ln(1+x)]\ge\left[-\frac{x^2+2x}{2}\right]\left[-\frac{2x}{x+2}\right]=x^2$
+        operation: 把两个非正因子同时取相反数，得到两个非负下界后再相乘。
+        why: 负区间的乘积比较必须先统一成非负量，避免不等号方向混乱。
+      source_ref: page_0050
+    - step_id: step_5
+      statement: 用同构母函数给出第二种证明。
+      formula_trace:
+        from: $(e^x-1)\ln(1+x)\ge x^2$
+        to: $\frac{x}{e^x-1}\le\frac{\ln(1+x)}{x}$
+        operation: 在 $x\ne0$ 时按同号因子等价变形，$x=0$ 由极限和取等点补上。
+        why: 转化后两边正是同一个母函数在 $x$ 与 $e^x-1$ 处的函数值。
+      source_ref: page_0051
+    - step_id: step_6
+      statement: 证明 $F(t)=\frac{\ln(1+t)}{t}$ 单调递减并比较输入。
+      formula_trace:
+        from: $F^{\prime}(t)=\frac{\frac{t}{t+1}-\ln(1+t)}{t^2}\le0,\quad e^x-1\ge x$
+        to: $F(x)\ge F(e^x-1)=\frac{x}{e^x-1}$
+        operation: 用 $h(t)=\frac{t}{t+1}-\ln(1+t)$ 的最大值 $0$ 判定 $F$ 递减，再代入较大的输入 $e^x-1$。
+        why: 这就是源页所说“只要分析一个母函数即可证明”的同构路线。
+      source_ref: page_0051
+teaching_card:
+  student_title: 把共零点乘积拆成切线放缩
+  what_it_trains: 训练遇到 $(e^x-1)\ln(1+x)$ 这类指对乘积时，先抓 $x=0$ 共零点，再用切线放缩或同构母函数把跨阶比较压成单函数最值。
+  recognition_cues:
+    - 两个因子 $e^x-1$ 与 $\ln(1+x)$ 都在 $x=0$ 取零。
+    - 定义域跨过 0，负区间里两个因子同为负。
+    - 目标右侧是 $x^2$，提示可以凑 $\frac{2x}{x+2}$ 与 $\frac{x^2+2x}{2}$ 的乘积。
+    - 源页前面刚分析过 $\frac{\ln(1+x)}{x}$ 和 $\frac{x}{e^x-1}$ 的同构关系。
+  normalization_moves:
+    - 先按 $x\ge0$ 与 $-1<x\le0$ 分段。
+    - 用 $\ln(1+x)$ 的 $\frac{2x}{x+2}$ 放缩。
+    - 把指数部分整理为 $e^x\ge\frac{x^2+2x}{2}+1$。
+    - 另一路把目标改写为同构母函数比较 $F(x)\ge F(e^x-1)$。
+  common_failures:
+    - 在负区间直接相乘放缩，忘了两个因子都要先取相反数。
+    - 只记住 $\ln(1+x)\le x$，没有使用更贴合本题的 $\frac{2x}{x+2}$。
+    - 把 $h(x)$ 的单调方向看反，误以为要找最小值。
+    - 同构法中没有补充 $x=0$ 的取等/极限情况。
+  similar_practice_query: 切线放缩 同构母函数 (e^x-1)ln(1+x) x^2 ln(1+x)/x x/(e^x-1)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0050/page_0051 页图；例 10 题头从 page_0050 开始，page_0051 为续解。
+    - 源解负区间末行疑似漏写 $-\frac{x^2+2x}{2}$ 前的负号；该问题由前后文和数学计算可确定，未列为用户拍板。

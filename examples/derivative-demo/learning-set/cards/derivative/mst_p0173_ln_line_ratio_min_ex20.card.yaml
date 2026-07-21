@@ -1,0 +1,229 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0173_ln_line_ratio_min_ex20
+content_revision_id: mst_p0173_ln_line_ratio_min_ex20-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0173_ln_line_ratio_min_ex20.card.yaml
+stem: |-
+  （2025 · 浙江月考 T8）已知函数 $f(x)=\ln x$，$g(x)=(a-e)x+2b$。若不等式 $f(x)\leqslant g(x)$ 在 $x\in(0,+\infty)$ 上恒成立，则 $\frac{2e\cdot b}{a}$ 的最小值为（  ）
+  A. $-1$
+  B. $1$
+  C. $-e$
+  D. $e$
+answer: |
+  A
+
+  由
+  \[
+  \ln x\le (a-e)x+2b
+  \]
+  得
+  \[
+  ex+\ln x\le ax+2b.
+  \]
+  记
+  \[
+  y_1=ex+\ln x,\qquad y_2=ax+2b.
+  \]
+  上页给出 $y_1$ 的零点
+  \[
+  x_{1}=\frac1e,
+  \]
+  续页补全 $y_2$ 的零点
+  \[
+  x_{2}=-\frac{2b}{a}.
+  \]
+  源解按“凹凸性与零点比大小”得到
+  \[
+  \frac1e\ge-\frac{2b}{a},
+  \]
+  即
+  \[
+  \frac{2eb}{a}\ge-1.
+  \]
+  因而 $\frac{2eb}{a}$ 的最小值为 $-1$，选 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把原不等式改写成同斜率比较模型。
+      max_score: 1
+    - step_id: step_2
+      description: 读取两侧零点。
+      max_score: 1
+    - step_id: step_3
+      description: 用凹凸性与零点比大小给出位置关系。
+      max_score: 1
+    - step_id: step_4
+      description: 整理到目标表达式。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 切线放缩与凹凸性
+    subroute:
+      - 零点比大小
+      - 跨页续解补全零点
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+    evidence:
+      - $\ln x$ 经平移为 $ex+\ln x$ 与直线 $ax+2b$ 比较。
+      - 关键关系由零点 $1/e$ 与 $-2b/a$ 的位置比较给出。
+    normalization_moves_used:
+      - 同加 $ex$ 统一比较对象。
+      - 把参数目标嵌入直线零点后做零点比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生无法快速求 $ex+\ln x=0$ 的根，回补指数对数基础。
+      - 若学生把 $ax+2b=0$ 解根符号写反，回补代数恒等变形。
+      - 若学生不理解为何由函数包络可比较零点位置，回补函数性质与图像。
+  detail_terms:
+    - $\ln x\le (a-e)x+2b$
+    - $ex+\ln x\le ax+2b$
+    - $x_1=\frac1e$
+    - $x_2=-\frac{2b}{a}$
+    - $\frac{2eb}{a}\ge-1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0173_ln_line_ratio_min_ex20
+source_evidence:
+  source_refs:
+    - ref_id: page_0173_ex20_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0173/page_0173.md
+      role: problem_start
+      evidence: lines 47-53 给出例20题干与 A-D 选项，求 $\frac{2eb}{a}$ 的最小值。
+    - ref_id: page_0173_ex20_solution_part1
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0173/page_0173.md
+      role: solution
+      evidence: line 54 给出解析前半：$\ln x\le (a-e)x+2b\Rightarrow ex+\ln x\le ax+2b$，并给出 $y_1$ 零点为 $1/e$，$y_2$ 零点句子在页末截断。
+    - ref_id: page_0174_ex20_solution_part2
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0174/page_0174.md
+      role: continuation
+      evidence: line 14 承接上页补全：“$y_2$ 的零点为 $-2b/a$，由凹凸性与零点比大小，$1/e\ge -2b/a\Rightarrow 2eb/a\ge-1$；故选 A。”
+    - ref_id: page_0174_local_context_after_ex20
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0174/page_0174.md
+      role: local_context
+      evidence: line 16 起进入“考点5”与例21，说明 line 14 仍属例20续解结尾。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0173.png
+      inspected: true
+      notes: 已核对页图：例20题头与选项在 page_0173 底部，解析在“$y_2$ 的零点 ...”处跨页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0174.png
+      inspected: true
+      notes: 已核对页图：page_0174 顶部先补完例20结论“$-2b/a$ ... $\frac{2eb}{a}\ge-1$，故选 A”，随后才进入考点5。
+  source_context: 例20题头起于 page_0173，解析跨到 page_0174 首行后结束，按页头归属由本 worker 负责。
+  source_influence:
+    - 保留源解改写：$\ln x\le (a-e)x+2b\Rightarrow ex+\ln x\le ax+2b$。
+    - 保留跨页补全的关键零点：$x_{y_1}=1/e,\ x_{y_2}=-2b/a$。
+    - 保留最终不等式链：$1/e\ge-2b/a\Rightarrow 2eb/a\ge-1$。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 · 浙江月考 T8）已知函数 $f(x)=\ln x$，$g(x)=(a-e)x+2b$。若不等式 $f(x)\leqslant g(x)$ 在 $x\in(0,+\infty)$ 上恒成立，则 $\frac{2e\cdot b}{a}$ 的最小值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $-1$
+      text_latex: $-1$
+    - label: B
+      text_raw: $1$
+      text_latex: $1$
+    - label: C
+      text_raw: $-e$
+      text_latex: $-e$
+    - label: D
+      text_raw: $e$
+      text_latex: $e$
+  answer: A
+  fidelity_notes:
+    - 题干与选项在 page_0173，解析结论跨页到 page_0174 顶部补完。
+    - 目标式含分母 $a$，因此默认 $a\neq0$。
+solution:
+  source_solution_summary: |
+    由
+    \[
+    \ln x\le (a-e)x+2b
+    \]
+    得
+    \[
+    ex+\ln x\le ax+2b.
+    \]
+    记
+    \[
+    y_1=ex+\ln x,\qquad y_2=ax+2b.
+    \]
+    上页给出 $y_1$ 的零点
+    \[
+    x_{1}=\frac1e,
+    \]
+    续页补全 $y_2$ 的零点
+    \[
+    x_{2}=-\frac{2b}{a}.
+    \]
+    源解按“凹凸性与零点比大小”得到
+    \[
+    \frac1e\ge-\frac{2b}{a},
+    \]
+    即
+    \[
+    \frac{2eb}{a}\ge-1.
+    \]
+    因而 $\frac{2eb}{a}$ 的最小值为 $-1$，选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 把原不等式改写成同斜率比较模型。
+      formula_trace:
+        from: $\ln x\le (a-e)x+2b$
+        to: $ex+\ln x\le ax+2b$
+        operation: 两边同加 $ex$。
+        why: 得到“非线性函数 vs 直线”的零点比较形态。
+      source_ref: page_0173_ex20_solution_part1
+    - step_id: step_2
+      statement: 读取两侧零点。
+      formula_trace:
+        from: $y_1=ex+\ln x,\ y_2=ax+2b$
+        to: $x_1=\frac1e,\ x_2=-\frac{2b}{a}$
+        operation: $y_1=0$ 在 $x=1/e$；$y_2=0$ 解一次方程。
+        why: 参数比值直接嵌在 $x_2$ 中。
+      source_ref: page_0173_ex20_solution_part1 + page_0174_ex20_solution_part2
+    - step_id: step_3
+      statement: 用凹凸性与零点比大小给出位置关系。
+      formula_trace:
+        from: $y_1\le y_2$（源解模型）
+        to: $\frac1e\ge-\frac{2b}{a}$
+        operation: 按源页结论比较两零点位置。
+        why: 把函数不等式转成参数不等式。
+      source_ref: page_0174_ex20_solution_part2
+    - step_id: step_4
+      statement: 整理到目标表达式。
+      formula_trace:
+        from: $\frac1e\ge-\frac{2b}{a}$
+        to: $\frac{2eb}{a}\ge-1$
+        operation: 同乘 $e$ 并移项。
+        why: 直接得到最小值边界与选项 A。
+      source_ref: page_0174_ex20_solution_part2
+teaching_card:
+  student_title: 先平移出 $ex+\ln x$，再比零点
+  what_it_trains: 训练处理“对数函数被直线上包络”的参数最值：通过同加线性项形成零点模型，再从零点位置直接读出参数比下界。
+  recognition_cues:
+    - 题干是 $\ln x$ 与一次函数在 $(0,+\infty)$ 上恒比较。
+    - 目标是含 $\frac{b}{a}$ 的线性分式。
+    - 解析会出现 $ex+\ln x$ 的固定零点 $1/e$。
+  normalization_moves:
+    - 两边同加 $ex$。
+    - 写出两边零点并比较。
+    - 将零点不等式整理成 $\frac{2eb}{a}$ 下界。
+  common_failures:
+    - 把 $y_2$ 零点误写成 $-b/a$，漏掉系数 2。
+    - 从 $1/e\ge-2b/a$ 整理时符号翻错。
+    - 遗漏这是跨页题，导致解析链条不完整。
+  similar_practice_query: lnx ≤ (a-e)x+2b 恒成立 2eb/a 最小值 零点比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

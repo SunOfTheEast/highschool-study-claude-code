@@ -1,0 +1,190 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0130_log_antiderivative_ex15
+content_revision_id: mst_p0130_log_antiderivative_ex15-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0130_log_antiderivative_ex15.card.yaml
+stem: |-
+  （24-25高二下·黑龙江·期中）已知定义在 $(0,+\infty)$ 上的函数 $f(x)$ 的导函数 $f^{\prime}(x)$ 满足 $f^{\prime}(x)>\ln x$，则（  ）
+  A. $f(2)-f(1)<\ln 2$
+  B. $f(2)-f(1)>\ln 2$
+  C. $f(e)-f(1)<1$
+  D. $f(e)-f(1)>1$
+answer: |
+  D
+
+  设
+  \[
+  h(x)=f(x)-x\ln x+x,
+  \]
+  则
+  \[
+  h^{\prime}(x)=f^{\prime}(x)-\ln x>0.
+  \]
+  所以 $h(x)$ 在 $(0,+\infty)$ 上递增。
+  对 AB：由 $h(2)>h(1)$ 得
+  \[
+  f(2)-2\ln2+2>f(1)+1
+  \Rightarrow f(2)-f(1)>2\ln2-1.
+  \]
+  该下界不足以判定与 $\ln2$ 的大小关系，AB无法判断。
+  对 CD：由 $h(e)>h(1)$ 得
+  \[
+  f(e)-e\ln e+e>f(1)+1
+  \Rightarrow f(e)-f(1)>1.
+  \]
+  故 C 错、D 对，选 D。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把题设导数比较改写成可直接判单调的构造。
+      max_score: 1
+    - step_id: step_2
+      description: 利用 h(2)>h(1) 得到 AB 的可得边界。
+      max_score: 1
+    - step_id: step_3
+      description: 利用 h(e)>h(1) 直接锁定 CD。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较函数差值与常数的大小关系
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+    subroute:
+      - 对数基础构造
+      - 定点差值比较
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 抽象函数结构
+    evidence:
+      - $h(x)=f(x)-x\ln x+x$ 恰好消去题设中的 $\ln x$。
+      - 同一构造在 $x=2$ 与 $x=e$ 两组比较上分别给出“不可判”和“可判”。
+    normalization_moves_used:
+      - 把 $f^{\prime}(x)>\ln x$ 归一到 $h^{\prime}(x)>0$。
+      - 固定基点 $x=1$ 做差值比较。
+      - 利用 $\ln e=1$ 简化目标量。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $h^{\prime}(x)>0$ 推出函数递增，回补导数单调极值基础。
+      - 若学生在 $h(2)>h(1)$ 展开时丢项，回补代数恒等变形。
+      - 若学生混淆“下界”与“确定大小”，回补不等式工具基础。
+  detail_terms:
+    - $h(x)=f(x)-x\ln x+x$
+    - $h^{\prime}(x)>0$
+    - $f(2)-f(1)>2\ln2-1$
+    - $f(e)-f(1)>1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0130_log_antiderivative_ex15
+source_evidence:
+  source_refs:
+    - ref_id: page_0130
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0130/page_0130.md
+      role: problem_start
+      evidence: page_0130 中部给出例15完整题干、A-D选项、解析与答案 D。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0130.png
+      inspected: true
+      notes: 已核对页图：例15完整位于 page_0130。
+  source_context: 例15题头与完整解析均在 page_0130，不跨页。
+  source_influence:
+    - 保留源页构造 h(x)=f(x)-x\ln x+x。
+    - 保留源页先判 h^{\prime}(x)>0，再分别比较 h(2),h(1) 与 h(e),h(1)。
+    - 保留源页结论：AB无法判断，D正确。
+  source_discrepancies: []
+original_problem:
+  stem: （24-25高二下·黑龙江·期中）已知定义在 $(0,+\infty)$ 上的函数 $f(x)$ 的导函数 $f^{\prime}(x)$ 满足 $f^{\prime}(x)>\ln x$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(2)-f(1)<\ln 2$
+      text_latex: $f(2)-f(1)<\ln 2$
+    - label: B
+      text_raw: $f(2)-f(1)>\ln 2$
+      text_latex: $f(2)-f(1)>\ln 2$
+    - label: C
+      text_raw: $f(e)-f(1)<1$
+      text_latex: $f(e)-f(1)<1$
+    - label: D
+      text_raw: $f(e)-f(1)>1$
+      text_latex: $f(e)-f(1)>1$
+  answer: D
+  fidelity_notes:
+    - 题干不等式为 $f^{\prime}(x)>\ln x$，并非等号。
+solution:
+  source_solution_summary: |
+    设
+    \[
+    h(x)=f(x)-x\ln x+x,
+    \]
+    则
+    \[
+    h^{\prime}(x)=f^{\prime}(x)-\ln x>0.
+    \]
+    所以 $h(x)$ 在 $(0,+\infty)$ 上递增。
+    对 AB：由 $h(2)>h(1)$ 得
+    \[
+    f(2)-2\ln2+2>f(1)+1
+    \Rightarrow f(2)-f(1)>2\ln2-1.
+    \]
+    该下界不足以判定与 $\ln2$ 的大小关系，AB无法判断。
+    对 CD：由 $h(e)>h(1)$ 得
+    \[
+    f(e)-e\ln e+e>f(1)+1
+    \Rightarrow f(e)-f(1)>1.
+    \]
+    故 C 错、D 对，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把题设导数比较改写成可直接判单调的构造。
+      formula_trace:
+        from: $f^{\prime}(x)>\ln x$
+        to: $h^{\prime}(x)=f^{\prime}(x)-\ln x>0$
+        operation: 设 $h(x)=f(x)-x\ln x+x$ 并求导。
+        why: 将原条件变成“某函数导数恒正”。
+      source_ref: page_0130
+    - step_id: step_2
+      statement: 利用 h(2)>h(1) 得到 AB 的可得边界。
+      formula_trace:
+        from: $h(2)>h(1)$
+        to: $f(2)-f(1)>2\ln2-1$
+        operation: 代入 $x=2,1$ 展开化简。
+        why: 只得到下界，不能唯一判 A/B。
+      source_ref: page_0130
+    - step_id: step_3
+      statement: 利用 h(e)>h(1) 直接锁定 CD。
+      formula_trace:
+        from: $h(e)>h(1)$
+        to: $f(e)-f(1)>1$
+        operation: 代入 $x=e,1$，并用 $\ln e=1$。
+        why: 可直接判 D 真、C 假。
+      source_ref: page_0130
+teaching_card:
+  student_title: 先构造递增函数，再分开判断 AB 与 CD
+  what_it_trains: 训练把导数不等式变成单调构造，并区分“能比较”和“不能比较”的选项。
+  recognition_cues:
+    - 题设形如 $f^{\prime}(x)$ 与 $\ln x$ 比较。
+    - 选项涉及 $f(2)-f(1)$、$f(e)-f(1)$ 这类差值。
+  normalization_moves:
+    - 设 $h=f-x\ln x+x$。
+    - 先证 $h$ 递增，再比较 $h(2),h(1),h(e)$。
+    - 把 $e$ 点比较转回 $f(e)-f(1)$。
+  common_failures:
+    - 误把 $f(2)-f(1)>2\ln2-1$ 当成能直接判 B。
+    - 在求 $h^{\prime}(x)$ 时漏写 $(-x\ln x+x)^{\prime}=-\ln x$。
+    - 忽略 $\ln e=1$ 导致 CD 判断出错。
+  similar_practice_query: 抽象函数 导数大于lnx 构造h(x) 单调 比较f(e)-f(1)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

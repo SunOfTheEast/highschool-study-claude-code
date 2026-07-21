@@ -1,0 +1,233 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0150_ln_over_x_peak_ex24
+content_revision_id: mst_p0150_ln_over_x_peak_ex24-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0150_ln_over_x_peak_ex24.card.yaml
+stem: |-
+  （25高三上·河南许昌模拟）设 $a=\frac{4(2-\ln4)}{e^2},\ b=\frac1e,\ c=\frac{\ln4}{4}$，则 $a,b,c$ 的大小顺序为（  ）
+  A. $a<c<b$
+  B. $c<a<b$
+  C. $a<b<c$
+  D. $b<a<c$
+answer: |
+  A
+
+  先把三项改写成统一函数值：
+  \[
+  a=\frac{4(2-\ln4)}{e^2}
+  =\frac{\ln\frac{e^2}{4}}{\frac{e^2}{4}},
+  \quad
+  b=\frac1e=\frac{\ln e}{e},
+  \quad
+  c=\frac{\ln4}{4}.
+  \]
+  构造
+  \[
+  f(x)=\frac{\ln x}{x},
+  \quad
+  f^{\prime}(x)=\frac{1-\ln x}{x^2}.
+  \]
+  则
+  \[
+  a=f\!\left(\frac{e^2}{4}\right),\quad b=f(e),\quad c=f(4)=f(2).
+  \]
+  由 $f^{\prime}(x)$ 符号知：$f$ 在 $(0,e)$ 递增，在 $(e,+\infty)$ 递减，故 $b=f(e)$ 最大。
+  又因为
+  \[
+  \frac{e^2}{4}<2<e,
+  \]
+  且都在增区间 $(0,e)$，所以
+  \[
+  f\!\left(\frac{e^2}{4}\right)<f(2)<f(e),
+  \]
+  即
+  \[
+  a<c<b.
+  \]
+  选 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 将三项统一为 $\frac{\ln x}{x}$ 型。
+      max_score: 1
+    - step_id: step_2
+      description: 判定函数峰值位置。
+      max_score: 1
+    - step_id: step_3
+      description: 比较 $a$ 与 $c$。
+      max_score: 1
+    - step_id: step_4
+      description: 合并顺序并匹配选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 利用 $\frac{\ln x}{x}$ 的峰值结构比较三项。
+        result: 见 source_solution_summary
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - $\frac{\ln x}{x}$ 峰值点 $e$
+      - 先定最大再排剩余
+      - $c=f(4)=f(2)$ 同值换点
+  structure:
+    primary: 极值点偏移结构
+    secondary:
+      - 同构结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - 三项可写成同一函数 $f(x)=\frac{\ln x}{x}$ 在不同点的值。
+      - 比较核心围绕峰值点 $x=e$ 展开。
+      - $\frac{e^2}{4}$ 与 2 都落在峰值左侧，需要用左侧递增关系判断。
+    normalization_moves_used:
+      - 把 $a$ 改写为 $\frac{\ln(e^2/4)}{e^2/4}$。
+      - $\frac{\ln4}{4}=\frac{\ln2}{2}$，故 $c=f(2)$。
+      - 利用 $\frac{e^2}{4}<2<e$ 排序。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f^{\prime}(x)$ 判左右增减，回补导数单调极值基础。
+      - 若学生不会做 $\ln$ 比值同构改写，回补指数对数基础。
+      - 若学生难以把峰值比较落到具体数轴位置，回补函数性质与图像。
+  detail_terms:
+    - $f(x)=\frac{\ln x}{x}$
+    - $f^{\prime}(x)=\frac{1-\ln x}{x^2}$
+    - $\frac{e^2}{4}<2<e$
+    - $c=f(4)=f(2)$
+    - $a<c<b$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0150_ln_over_x_peak_ex24
+source_evidence:
+  source_refs:
+    - ref_id: page_0150_ex24_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0150/page_0150.md
+      role: problem_start
+      evidence: 例24题干与A-D选项完整位于page_0150。
+    - ref_id: page_0150_ex24_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0150/page_0150.md
+      role: solution
+      evidence: 源解把 $a,b,c$ 统一成 $f(x)=\frac{\ln x}{x}$ 的函数值，利用 $f$ 在 $e$ 左增右减得 $a<c<b$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0150.png
+      inspected: true
+      notes: 已核对原图：例24题干、选项、解析完整，答案为A。
+  source_context: 例24仍在page_0150单页，用对数比值函数峰值点 $x=e$ 做三项比较。
+  source_influence:
+    - 保留源解同构：$a=f\left(\frac{e^2}{4}\right),\ b=f(e),\ c=f(4)=f(2)$。
+    - 保留导函数判增减：$f^{\prime}(x)=\frac{1-\ln x}{x^2}$。
+    - 保留区间顺序 $\frac{e^2}{4}<2<e$ 推出 $a<c<b$。
+  source_discrepancies: []
+original_problem:
+  stem: （25高三上·河南许昌模拟）设 $a=\frac{4(2-\ln4)}{e^2},\ b=\frac1e,\ c=\frac{\ln4}{4}$，则 $a,b,c$ 的大小顺序为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a<c<b$
+      text_latex: $a<c<b$
+    - label: B
+      text_raw: $c<a<b$
+      text_latex: $c<a<b$
+    - label: C
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+    - label: D
+      text_raw: $b<a<c$
+      text_latex: $b<a<c$
+  answer: A
+  fidelity_notes:
+    - 源解写有 $c=f(4)=f(2)$，其中 $f(2)$ 来自恒等式 $\frac{\ln4}{4}=\frac{\ln2}{2}$。
+solution:
+  source_solution_summary: |
+    先把三项改写成统一函数值：
+    \[
+    a=\frac{4(2-\ln4)}{e^2}
+    =\frac{\ln\frac{e^2}{4}}{\frac{e^2}{4}},
+    \quad
+    b=\frac1e=\frac{\ln e}{e},
+    \quad
+    c=\frac{\ln4}{4}.
+    \]
+    构造
+    \[
+    f(x)=\frac{\ln x}{x},
+    \quad
+    f^{\prime}(x)=\frac{1-\ln x}{x^2}.
+    \]
+    则
+    \[
+    a=f\!\left(\frac{e^2}{4}\right),\quad b=f(e),\quad c=f(4)=f(2).
+    \]
+    由 $f^{\prime}(x)$ 符号知：$f$ 在 $(0,e)$ 递增，在 $(e,+\infty)$ 递减，故 $b=f(e)$ 最大。
+    又因为
+    \[
+    \frac{e^2}{4}<2<e,
+    \]
+    且都在增区间 $(0,e)$，所以
+    \[
+    f\!\left(\frac{e^2}{4}\right)<f(2)<f(e),
+    \]
+    即
+    \[
+    a<c<b.
+    \]
+    选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 将三项统一为 $\frac{\ln x}{x}$ 型。
+      formula_trace:
+        from: $a=\frac{4(2-\ln4)}{e^2},\ b=\frac1e,\ c=\frac{\ln4}{4}$
+        to: $a=f\left(\frac{e^2}{4}\right),\ b=f(e),\ c=f(4)=f(2)$，$f(x)=\frac{\ln x}{x}$
+        operation: 分子分母同乘同除并用对数恒等式改写。
+        why: 把比大小转成同一函数取值比较。
+      source_ref: page_0150_ex24_solution
+    - step_id: step_2
+      statement: 判定函数峰值位置。
+      formula_trace:
+        from: $f^{\prime}(x)=\frac{1-\ln x}{x^2}$
+        to: $f$ 在 $(0,e)$ 递增、在 $(e,+\infty)$ 递减，且 $f(e)$ 最大
+        operation: 通过导数符号分段。
+        why: 先锁定 $b$ 的位置。
+      source_ref: page_0150_ex24_solution
+    - step_id: step_3
+      statement: 比较 $a$ 与 $c$。
+      formula_trace:
+        from: $\frac{e^2}{4}<2<e$
+        to: $f\left(\frac{e^2}{4}\right)<f(2)$
+        operation: 在增区间内按自变量保序。
+        why: 得到 $a<c$。
+      source_ref: page_0150_ex24_solution
+    - step_id: step_4
+      statement: 合并顺序并匹配选项。
+      formula_trace:
+        from: $a<c$ 与 $b$ 最大
+        to: $a<c<b$，选 A
+        operation: 链式合并。
+        why: 完成作答。
+      source_ref: page_0150_ex24_solution
+teaching_card:
+  student_title: 把三项都送到 $\frac{\ln x}{x}$ 上
+  what_it_trains: 训练“同构到峰值函数 + 分区间排序”的稳定比大小套路。
+  recognition_cues:
+    - 多个表达式都能改成 $\frac{\ln(\cdot)}{(\cdot)}$。
+    - 题里出现 $\frac1e$ 或 $\ln$ 与分母同框。
+    - 选项是三个量的全序关系。
+  normalization_moves:
+    - 优先把各项写成 $f(x)=\frac{\ln x}{x}$。
+    - 先用 $x=e$ 锁最大值。
+    - 再在同一单调区间内比较剩余两点。
+  common_failures:
+    - 把 $f$ 的增减区间写反。
+    - 忽略 $c=f(2)$ 的等值换点，导致比较链断裂。
+    - 只判断 $b$ 最大，未完成 $a,c$ 相对次序。
+  similar_practice_query: lnx/x 峰值 e 比大小 e^2/4 ln4/4 1/e
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

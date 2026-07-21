@@ -1,0 +1,176 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0048_section3_ex07
+content_revision_id: mst_p0048_section3_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0048_section3_ex07.card.yaml
+stem: |-
+  （2018 · 新课标卷 I T21）已知函数 $f(x)=ae^x-\ln x-1$。
+  (1). 设 $x=2$ 是 $f(x)$ 的极值点，求 $a$，并求 $f(x)$ 的单调区间。
+  (2). 证明：当 $a\ge\frac1e$ 时，$f(x)\ge0$。
+answer: |-
+  (1) $a=\frac1{2e^2}$，$f(x)$ 在 $(0,2)$ 上单调递减，在 $(2,+\infty)$ 上单调递增；(2) 当 $a\ge1/e$ 时 $f(x)\ge0$。
+
+  定义域为 x>0，f'(x)=ae^x-1/x。由 x=2 为极值点得 ae^2-1/2=0，所以 a=1/(2e^2)。此时 f'(x) 的符号等价于比较 xe^x 与 2e^2，而 xe^x 在 x>0 上递增，故 0<x<2 时递减， x>2 时递增。证明部分先用 a>=1/e 得 f(x)>=e^x/e-ln x-1；只需证明 (ln x+1)/e^x<=1/e。 令 g(x)=(ln x+1)/e^x，借 h(x)=1/x-1-ln x 的单调性判断 g' 在 x=1 前正后负，所以 g(x)<=g(1)=1/e。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 用极值点必要条件求参数。
+      max_score: 1
+    - step_id: step_2
+      description: 判断第 (1) 问的单调区间。
+      max_score: 1
+    - step_id: step_3
+      description: 把第 (2) 问降到临界参数。
+      max_score: 1
+    - step_id: step_4
+      description: 把非负性证明改写成一个最大值问题。
+      max_score: 1
+    - step_id: step_5
+      description: 证明 $g(x)=(\ln x+1)/e^x$ 的最大值在 x=1。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 (1) 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 (2) 问
+        result: 见 source_solution_summary
+  method:
+    primary: 参变量分离
+    secondary:
+      - 切线放缩与凹凸性
+      - 同构变形与换元法
+    subroute:
+      - 临界参数降阶
+      - (\ln x+1)/e^x 最大值
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 不等式工具结构
+    evidence:
+      - $f^{\prime}(x)=ae^x-1/x$
+      - $f(x)\ge e^x/e-\ln x-1$
+      - $(\ln x+1)/e^x\le1/e$
+    normalization_moves_used:
+      - 将 $a\ge1/e$ 降到临界参数 $a=1/e$。
+      - 把 $e^x/e-\ln x-1\ge0$ 转成比例函数最大值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生忘记 $\ln x$ 的定义域是 $x>0$，回补函数三要素与定义域。
+      - 若学生不会把 $f^{\prime}(x)$ 的符号转成 $xe^x$ 与 $2e^2$ 比较，回补代数恒等变形。
+      - 若学生不能把证明目标化为 $(\ln x+1)/e^x\le1/e$，回补代数恒等变形。
+      - 若学生不会用辅助函数 $h(x)=1/x-1-\ln x$ 判断 $g^{\prime}$ 的符号，回补导数单调极值基础。
+  detail_terms:
+    - $a=1/(2e^2)$
+    - $xe^x$ 单调递增
+    - $g(x)=(\ln x+1)/e^x$
+    - $h(x)=1/x-1-\ln x$
+parts: &a1
+  - label: (1)
+    text: 设 $x=2$ 是 $f(x)$ 的极值点，求 $a$，并求 $f(x)$ 的单调区间。
+  - label: (2)
+    text: 证明：当 $a\ge\frac1e$ 时，$f(x)\ge0$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0048_section3_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0048
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0048/page_0048.md
+      role: problem_start
+      evidence: lines 31-35 give 例 7 题干和第 (1) 问解析：f(x)=ae^x-ln x-1，x=2 为极值点，求 a 与单调区间。
+    - ref_id: page_0049
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0049/page_0049.md
+      role: continuation
+      evidence: line 14 continues 例 7 第 (2) 问：用 g(x)=(ln x+1)/e^x 的最大值证明 a>=1/e 时 f(x)>=0。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0048.png
+      inspected: true
+      notes: 页图下半部分确认例 7 题干和第 (1) 问解析完整，解析跨页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0049.png
+      inspected: true
+      notes: 页图上半部分确认例 7 第 (2) 问续解和结论与 markdown 一致。
+  source_context: 例 7 题头在 page_0048，证明部分续到 page_0049；按页头归属规则由本批 B 组建卡。
+  source_influence:
+    - 第 (1) 问按源解由极值点必要条件求 a，再由导数符号给单调区间。
+    - 第 (2) 问按源解把证明降到临界参数 a=1/e，并证明 (ln x+1)/e^x<=1/e。
+  source_discrepancies: []
+original_problem:
+  stem: （2018 · 新课标卷 I T21）已知函数 $f(x)=ae^x-\ln x-1$。
+  parts: *a1
+  choices: []
+  answer: (1) $a=\frac1{2e^2}$，$f(x)$ 在 $(0,2)$ 上单调递减，在 $(2,+\infty)$ 上单调递增；(2) 当 $a\ge1/e$ 时 $f(x)\ge0$。
+  fidelity_notes:
+    - 由于含 $\ln x$，函数定义域为 $x>0$。
+    - 第 (2) 问源解没有单独讨论等号；由证明可知临界情形 $a=1/e,\ x=1$ 取等。
+solution:
+  source_solution_summary: 定义域为 x>0，f'(x)=ae^x-1/x。由 x=2 为极值点得 ae^2-1/2=0，所以 a=1/(2e^2)。此时 f'(x) 的符号等价于比较 xe^x 与 2e^2，而 xe^x 在 x>0 上递增，故 0<x<2 时递减， x>2 时递增。证明部分先用 a>=1/e 得 f(x)>=e^x/e-ln x-1；只需证明 (ln x+1)/e^x<=1/e。 令 g(x)=(ln x+1)/e^x，借 h(x)=1/x-1-ln x 的单调性判断 g' 在 x=1 前正后负，所以 g(x)<=g(1)=1/e。
+  key_steps:
+    - step_id: step_1
+      statement: 用极值点必要条件求参数。
+      formula_trace:
+        from: $f^{\prime}(x)=ae^x-\frac1x,\quad f^{\prime}(2)=0$
+        to: $ae^2-\frac12=0,\quad a=\frac1{2e^2}$
+        operation: 对 f 求导并代入 x=2。
+        why: x=2 是定义域内部极值点，导数必须为 0。
+      source_ref: page_0048
+    - step_id: step_2
+      statement: 判断第 (1) 问的单调区间。
+      formula_trace:
+        from: $f^{\prime}(x)=\frac{e^x}{2e^2}-\frac1x$
+        to: $\operatorname{sgn} f^{\prime}(x)=\operatorname{sgn}(xe^x-2e^2)$
+        operation: 同乘正数 $2e^2x$。
+        why: $xe^x$ 在 $x>0$ 上递增，且 x=2 时等号成立。
+      source_ref: page_0048
+    - step_id: step_3
+      statement: 把第 (2) 问降到临界参数。
+      formula_trace:
+        from: $a\ge\frac1e,\quad f(x)=ae^x-\ln x-1$
+        to: $f(x)\ge\frac{e^x}{e}-\ln x-1$
+        operation: 用 $e^x>0$ 保序替换参数下界。
+        why: 若临界函数非负，则更大的 a 也非负。
+      source_ref: page_0049
+    - step_id: step_4
+      statement: 把非负性证明改写成一个最大值问题。
+      formula_trace:
+        from: $\frac{e^x}{e}-\ln x-1\ge0$
+        to: $\frac{\ln x+1}{e^x}\le\frac1e$
+        operation: 移项并除以正数 $e^x$。
+        why: 目标变为证明 $g(x)$ 的最大值不超过 $1/e$。
+      source_ref: page_0049
+    - step_id: step_5
+      statement: 证明 $g(x)=(\ln x+1)/e^x$ 的最大值在 x=1。
+      formula_trace:
+        from: $g^{\prime}(x)=\frac{1/x-1-\ln x}{e^x}$
+        to: $g(x)\le g(1)=\frac1e$
+        operation: 令 $h(x)=1/x-1-\ln x$，由 $h^{\prime}(x)=-1/x^2-1/x<0$ 判定 $g^{\prime}$ 先正后负。
+        why: g 在 $(0,1)$ 增、在 $(1,+\infty)$ 减，所以 x=1 取最大值。
+      source_ref: page_0049
+teaching_card:
+  student_title: 把参数压到临界，再求比例最大值
+  what_it_trains: 训练含 $ae^x-\ln x$ 的极值点与不等式证明：先用导数必要条件定位参数，再把参数下界转为一个指对比例函数的最大值。
+  recognition_cues:
+    - 题干给出 $x=2$ 是极值点。
+    - 证明条件是 $a\ge1/e$，参数乘在正的 $e^x$ 前。
+    - 移项后自然出现 $(\ln x+1)/e^x$。
+  normalization_moves:
+    - 先写定义域 $x>0$ 和导数 $ae^x-1/x$。
+    - 用 $f^{\prime}(2)=0$ 求出 $a$。
+    - 证明时先取临界参数 $a=1/e$。
+    - 把非负目标改写成 $g(x)\le1/e$。
+  common_failures:
+    - 极值点求出 a 后直接说 x=2 左右变号，未说明导数符号依据。
+    - 证明第 (2) 问时把 $a\ge1/e$ 误用成 $a=1/e$，但没有说明下界关系。
+    - 求 $g^{\prime}$ 后不知道如何处理 $1/x-1-\ln x$ 的符号。
+  similar_practice_query: ae^x - ln x - 1 极值点 参数下界 证明非负
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

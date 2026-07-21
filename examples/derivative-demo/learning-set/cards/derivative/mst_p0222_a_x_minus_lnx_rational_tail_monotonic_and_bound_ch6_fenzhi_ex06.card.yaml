@@ -1,0 +1,202 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0222_a_x_minus_lnx_rational_tail_monotonic_and_bound_ch6_fenzhi_ex06
+content_revision_id: mst_p0222_a_x_minus_lnx_rational_tail_monotonic_and_bound_ch6_fenzhi_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0222_a_x_minus_lnx_rational_tail_monotonic_and_bound_ch6_fenzhi_ex06.card.yaml
+stem: |-
+  （2016 · 山东 T20）已知 $f(x)=a(x-\ln x)+\frac{2x-1}{x^2}$，$a\in\mathbf R$。
+  1. 讨论 $f(x)$ 的单调性。
+  2. 当 $a=1$ 时，证明 $f(x)>f^{\prime}(x)+\frac32$ 对于任意的 $x\in[1,2]$ 成立。
+answer: |-
+  （1）见解析分类；（2）证明见解析。
+
+  求导得 $f^{\prime}(x)=a(1-\frac1x)+\frac{2-2x}{x^3} =\frac{(x-1)(ax^2-2)}{x^3}$，定义域 $x>0$。若 $a\leqslant0$，则 $ax^2-2<0$，所以 $(0,1)$ 增、$(1,+\infty)$ 减。 若 $0<a<2$，令 $r=\sqrt{2/a}>1$，则 $(0,1)$、$(r,+\infty)$ 增， $(1,r)$ 减。若 $a=2$，$f^{\prime}(x)\geqslant0$，在 $(0,+\infty)$ 上增。若 $a>2$，令 $r=\sqrt{2/a}<1$，则 $(0,r)$、$(1,+\infty)$ 增，$(r,1)$ 减。第二问当 $a=1$ 时， $F(x)=f(x)-f^{\prime}(x)-\frac32 =x-\ln x+\frac3x+\frac1{x^2}-\frac2{x^3}-\frac52$。 令 $g(x)=x-\ln x$，在 $[1,2]$ 上 $g(x)\geqslant g(1)=1$； 令 $h(x)=\frac2{x^3}-\frac1{x^2}-\frac3x+\frac52$，则 $F(x)=g(x)-h(x)$。取 $t=1/x\in[1/2,1]$ 后 $h(t)=2t^3-t^2-3t+\frac52$，source 判定 $h_{\max}=h(1/2)=1$， 即 $x=2$ 取最大。于是 $F(x)\geqslant1-1=0$，且 $g$ 与 $h$ 的取等点 分别为 $x=1$ 与 $x=2$，不能同时取等，所以 $F(x)>0$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 求导并因式分解。
+      max_score: 1
+    - step_id: step_2
+      description: 按参数位置分类单调性。
+      max_score: 1
+    - step_id: step_3
+      description: 第二问构造差函数。
+      max_score: 1
+    - step_id: step_4
+      description: 拆出上函数 $g(x)=x-\ln x$。
+      max_score: 1
+    - step_id: step_5
+      description: 分别估计 $g$ 的下界和 $h$ 的上界。
+      max_score: 1
+    - step_id: step_6
+      description: 用取等点错开得到严格大于。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 1 问
+        result: 按 $a\leqslant0$、$0<a<2$、$a=2$、$a>2$ 分类讨论单调性。
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 2 问
+        result: $a=1$ 时，$x\in[1,2]$ 上 $f(x)>f^{\prime}(x)+\frac32$。
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 含参数分类讨论
+      - 拟合与夹逼
+    subroute:
+      - 导数符号表
+      - 上下函数选取
+      - 错位 PS
+      - $t=1/x$
+      - 六大基础函数 VS 常规二次三次函数
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $f^{\prime}(x)=\frac{(x-1)(ax^2-2)}{x^3}$
+      - $F(x)=g(x)-h(x)$
+      - $g(x)=x-\ln x$
+      - $h(x)=\frac2{x^3}-\frac1{x^2}-\frac3x+\frac52$
+    normalization_moves_used:
+      - 将导数通分并因式分解出两个符号因子。
+      - 把证明目标改成 $F(x)>0$。
+      - 拆成 $g(x)-h(x)$，分别求最小值和最大值。
+      - 用 $t=1/x$ 把分式尾巴改成三次多项式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生导数通分后无法分解出 $(x-1)(ax^2-2)$，回补代数恒等变形。
+      - 若学生不会按 $\sqrt{2/a}$ 与 $1$ 的位置分类，回补导数单调极值基础。
+      - 若学生不能把 $F(x)$ 拆成 $g(x)-h(x)$，回补不等式工具基础。
+      - 若学生对 $x-\ln x$ 的基础性质不熟，回补指数对数基础。
+  detail_terms:
+    - $\frac{(x-1)(ax^2-2)}{x^3}$
+    - $r=\sqrt{2/a}$
+    - $F(x)=f(x)-f^{\prime}(x)-\frac32$
+    - $g(x)=x-\ln x$
+    - $t=1/x$
+    - 错位 PS
+parts: &a1
+  - part_id: "1"
+    text: 讨论 $f(x)$ 的单调性。
+  - part_id: "2"
+    text: 当 $a=1$ 时，证明 $f(x)>f^{\prime}(x)+\frac32$ 对于任意的 $x\in[1,2]$ 成立。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0222_a_x_minus_lnx_rational_tail_monotonic_and_bound_ch6_fenzhi_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0222_ex06_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0222/page_0222.md
+      role: problem_start
+      evidence: page_0222 页底给出例6题头：$f(x)=a(x-\ln x)+\frac{2x-1}{x^2}$，两问讨论单调性并证明 $a=1$ 时的不等式。
+    - ref_id: page_0223_ex06_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0223/page_0223.md
+      role: continuation
+      evidence: page_0223 页首至中部完整续写例6解析，包括 $f^{\prime}(x)=\frac{(x-1)(ax^2-2)}{x^3}$ 的分类和第二问错位 PS 证明。
+    - ref_id: page_0223_ex07_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0223/page_0223.md
+      role: local_context
+      evidence: page_0223 中部进入例7题头，属于下一批，本卡不处理。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0222.png
+      inspected: true
+      notes: 已核对页图：例6题头从 page_0222 页底开始。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0223.png
+      inspected: true
+      notes: 已核对页图：page_0223 上半页为例6续解，图示服务第二问；例7题头在其后。
+  source_context: 本卡处理 page_0222 起头、page_0223 上半页续完的例6；page_0223 例7以后留给下一批。
+  source_influence:
+    - 保留第一问完整分类：$a\leqslant0$、$0<a<2$、$a=2$、$a>2$。
+    - 保留第二问的拆分：$F(x)=f(x)-f^{\prime}(x)-3/2=g(x)-h(x)$，其中 $g(x)=x-\ln x$。
+    - 保留“错位 PS”：$g$ 在 $x=1$ 取最小值，$h$ 在 $x=2$ 取最大值，取等点不同，所以严格大于。
+  source_discrepancies:
+    - page_0223 markdown 中把 $h(t)$ 写成 $2t^3-t^2-3t+1$，但由前式 $h(x)=2/x^3-1/x^2-3/x+5/2$ 可知应为 $2t^3-t^2-3t+5/2$；否则后文 $h(1/2)=1$ 不成立。卡片按前后文一致的 $+5/2$ 处理。
+original_problem:
+  stem: （2016 · 山东 T20）已知 $f(x)=a(x-\ln x)+\frac{2x-1}{x^2}$，$a\in\mathbf R$。
+  parts: *a1
+  choices: []
+  answer: （1）见解析分类；（2）证明见解析。
+  fidelity_notes:
+    - 两问解答题，无选项。
+    - 第一问分类区间中的 $\frac{\sqrt{2a}}a$ 等价于 $\sqrt{2/a}$。
+    - 第二问 source 图示用于说明 $g(x)$ 与 $h(x)$ 的错位最值。
+solution:
+  source_solution_summary: 求导得 $f^{\prime}(x)=a(1-\frac1x)+\frac{2-2x}{x^3} =\frac{(x-1)(ax^2-2)}{x^3}$，定义域 $x>0$。若 $a\leqslant0$，则 $ax^2-2<0$，所以 $(0,1)$ 增、$(1,+\infty)$ 减。 若 $0<a<2$，令 $r=\sqrt{2/a}>1$，则 $(0,1)$、$(r,+\infty)$ 增， $(1,r)$ 减。若 $a=2$，$f^{\prime}(x)\geqslant0$，在 $(0,+\infty)$ 上增。若 $a>2$，令 $r=\sqrt{2/a}<1$，则 $(0,r)$、$(1,+\infty)$ 增，$(r,1)$ 减。第二问当 $a=1$ 时， $F(x)=f(x)-f^{\prime}(x)-\frac32 =x-\ln x+\frac3x+\frac1{x^2}-\frac2{x^3}-\frac52$。 令 $g(x)=x-\ln x$，在 $[1,2]$ 上 $g(x)\geqslant g(1)=1$； 令 $h(x)=\frac2{x^3}-\frac1{x^2}-\frac3x+\frac52$，则 $F(x)=g(x)-h(x)$。取 $t=1/x\in[1/2,1]$ 后 $h(t)=2t^3-t^2-3t+\frac52$，source 判定 $h_{\max}=h(1/2)=1$， 即 $x=2$ 取最大。于是 $F(x)\geqslant1-1=0$，且 $g$ 与 $h$ 的取等点 分别为 $x=1$ 与 $x=2$，不能同时取等，所以 $F(x)>0$。
+  key_steps:
+    - step_id: step_1
+      statement: 求导并因式分解。
+      formula_trace:
+        from: $f(x)=a(x-\ln x)+\frac{2x-1}{x^2}$
+        to: $f^{\prime}(x)=\frac{(x-1)(ax^2-2)}{x^3}$
+        operation: 分别求导后通分并提取 $(x-1)$。
+        why: 第一问所有单调分类都由两个零点 $1$ 与 $\sqrt{2/a}$ 控制。
+      source_ref: page_0223_ex06_continuation
+    - step_id: step_2
+      statement: 按参数位置分类单调性。
+      formula_trace:
+        from: $f^{\prime}(x)=\frac{(x-1)(ax^2-2)}{x^3}$
+        to: $a\leqslant0$、$0<a<2$、$a=2$、$a>2$ 四种单调分布
+        operation: 比较根 $\sqrt{2/a}$ 与 $1$ 的位置，并作符号表。
+        why: 完成第一问。
+      source_ref: page_0223_ex06_continuation
+    - step_id: step_3
+      statement: 第二问构造差函数。
+      formula_trace:
+        from: $f(x)>f^{\prime}(x)+\frac32$
+        to: $F(x)=f(x)-f^{\prime}(x)-\frac32=x-\ln x+\frac3x+\frac1{x^2}-\frac2{x^3}-\frac52$
+        operation: 代入 $a=1$ 并整理。
+        why: 把目标变成 $F(x)>0$。
+      source_ref: page_0223_ex06_continuation
+    - step_id: step_4
+      statement: 拆出上函数 $g(x)=x-\ln x$。
+      formula_trace:
+        from: $F(x)=x-\ln x+\frac3x+\frac1{x^2}-\frac2{x^3}-\frac52$
+        to: $F(x)=g(x)-h(x)$，$g(x)=x-\ln x$
+        operation: 把余下分式定义为 $-h(x)$。
+        why: $g(x)$ 在 $[1,2]$ 上容易给出下界。
+      source_ref: page_0223_ex06_continuation
+    - step_id: step_5
+      statement: 分别估计 $g$ 的下界和 $h$ 的上界。
+      formula_trace:
+        from: $g(x)=x-\ln x$，$h(x)=\frac2{x^3}-\frac1{x^2}-\frac3x+\frac52$
+        to: $g(x)\geqslant g(1)=1$，$h(x)\leqslant h(2)=1$
+        operation: 对 $g$ 求导；对 $h$ 令 $t=1/x\in[1/2,1]$ 判最大值。
+        why: 得到 $F(x)\geqslant0$。
+      source_ref: page_0223_ex06_continuation
+    - step_id: step_6
+      statement: 用取等点错开得到严格大于。
+      formula_trace:
+        from: $g$ 在 $x=1$ 取下界，$h$ 在 $x=2$ 取上界
+        to: $F(x)>0$，即 $f(x)>f^{\prime}(x)+\frac32$
+        operation: 检查最值不可能同点取得。
+        why: 这是 source 总结的“分而治之 + 错位 PS 模型”。
+      source_ref: page_0223_ex06_continuation
+teaching_card:
+  student_title: 导数分类后，把复杂尾巴拆成错位上下函数
+  what_it_trains: 训练“先做参数单调分类，再把证明目标拆成简单函数和分式尾巴”的综合处理。
+  recognition_cues:
+    - 第一问导数能分解成 $(x-1)(ax^2-2)$，分类点就是 $1$ 和 $\sqrt{2/a}$。
+    - 第二问区间固定在 $[1,2]$，容易出现端点错位取等。
+    - 整理后出现 $x-\ln x$ 加一串 $1/x$ 分式，提示拆成 $g-h$。
+  normalization_moves:
+    - 第一问先把导数彻底因式分解。
+    - 第二问先定义 $F=f-f^{\prime}-3/2$。
+    - 把 $x-\ln x$ 单独拿出来，再令 $t=1/x$ 处理剩余分式。
+  common_failures:
+    - 分类时把 $0<a<2$ 和 $a>2$ 的根位置搞反。
+    - 把 $h(t)$ 的常数项照抄成 source 噪声，导致最大值算不对。
+    - 只得到 $F(x)\geqslant0$，没有说明取等点错开，所以没推出严格 $>0$。
+  similar_practice_query: a(x-lnx) rational tail 导数分类 x-lnx 1/x 错位PS f-fprime-3/2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

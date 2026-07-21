@@ -1,0 +1,202 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0117_abstract_symmetry_ex02
+content_revision_id: mst_p0117_abstract_symmetry_ex02-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0117_abstract_symmetry_ex02.card.yaml
+stem: |-
+  （2024·南京模拟·多选）已知函数 $f(x)$ 及其导函数 $f'(x)$ 的定义域均为 $\mathbf{R}$，记 $g(x)=f'(x)$，若 $f(2x+1)$，$g(x-1)$ 均为偶函数，则下列等式一定正确的是（ ）
+  A. $f(-1)=0$
+  B. $f(-3)=f(5)$
+  C. $g(2)=0$
+  D. $g\left(-\frac{1}{2}\right)=g\left(\frac{7}{2}\right)$
+answer: |
+  B
+
+  由 $f(2x+1)$ 为偶函数，得 $f(x)$ 关于直线 $x=1$ 对称，
+  因而 $f(-3)=f(5)$，B 正确。又 $g(x)=f'(x)$ 关于点 $(1,0)$ 对称。
+  由 $g(x-1)$ 为偶函数得 $g$ 关于直线 $x=-1$ 对称。
+  对同一函数 $g$ 而言，中心 $(1,0)$ 与对称轴 $x=-1$ 的距离为 $2$，
+  所以周期可取 $4\\times2=8$，并可推出其中心在 $(4k-3,0)$、
+  对称轴在 $x=4k-1$（$k\\in\\mathbf Z$）。
+  A项：由 $g$ 关于 $x=-1$ 对称，只能推出 $f$ 关于某点 $(-1,b)$ 对称，
+  故 $f(-1)=b$ 不必为0，A错。
+  C项：$x=2$ 不是必然中心点，$g(2)$ 不必为0，C错。
+  D项要求关于 $x=\\frac32$ 对称才成立，但 $x=\\frac32$ 不是上述必然对称轴，
+  故D错。综上选 B。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 由 $f(2x+1)$ 偶函数得到 f 的轴对称并判定 B。
+      max_score: 1
+    - step_id: step_2
+      description: 把两个条件都转成 g 的几何对称信息。
+      max_score: 1
+    - step_id: step_3
+      description: 由一点一轴构造周期并筛掉 C、D。
+      max_score: 1
+    - step_id: step_4
+      description: 解释 A 只可得常数值，不可得零值。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 抽象函数性质
+        target: 由两个复合偶性条件判定 f、g 的对称类型。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 抽象函数性质
+        target: 利用一点一轴构造周期并判断四个选项。
+        result: 见 source_solution_summary
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 对称化与偏移
+      - 含参数分类讨论
+    subroute:
+      - 复合偶性还原
+      - 导函数对称对应
+      - 一点一轴配周期
+      - 必要性筛选
+  structure:
+    primary: 对称结构
+    secondary:
+      - 抽象函数结构
+    evidence:
+      - $f(2x+1)$ 偶 $\Rightarrow$ $f$ 关于 $x=1$ 对称。
+      - $g(x-1)$ 偶 $\Rightarrow$ $g$ 关于 $x=-1$ 对称。
+      - $g$ 同时有中心和轴，周期固定为8。
+    normalization_moves_used:
+      - 把“偶函数条件”统一翻译成几何对称。
+      - 先由 $f$ 的对称转到 $g$ 的中心，再叠加 $g$ 的轴。
+      - 通过周期模板列出所有可能中心/轴，再逐项比对。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $f(2x+1)$ 偶转成关于 $x=1$ 对称，回补函数性质与图像。
+      - 若学生不熟悉“原函数轴对称与导函数中心对称”的互推，回补导数运算与几何意义。
+      - 若学生把“存在某中心/轴”误当“任意点都可作中心/轴”，回补函数性质与图像。
+      - 若学生对“必然成立”与“可能成立”区分不清，回补代数恒等变形。
+  detail_terms:
+    - $f(2x+1)$ 偶
+    - $g(x-1)$ 偶
+    - 中心 $(1,0)$
+    - 对称轴 $x=-1$
+    - 周期 $8$
+    - 答案 B
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0117_abstract_symmetry_ex02
+source_evidence:
+  source_refs:
+    - ref_id: page_0117
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0117/page_0117.md
+      role: problem_start
+      evidence: lines 27-33给出例2题头、题干与A-D选项，lines 34-39给出分项解析并结论“故选 B”。
+    - ref_id: page_0117_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0117/page_0117.md
+      role: local_context
+      evidence: lines 14-25为例1续解；例2从line 27重新起头，归属page_0117。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0117.png
+      inspected: true
+      notes: 已核对页图：例2题干、选项、解析与答案B完整在本页。
+  source_context: 例2在page_0117整页内完整结束，不跨页。
+  source_influence:
+    - 保留源页由 $f(2x+1)$ 偶推出 $f$ 关于 $x=1$ 对称，并转化到 $g=f'$ 关于 $(1,0)$ 对称。
+    - 保留源页由 $g(x-1)$ 偶推出 $g$ 关于 $x=-1$ 对称，并与中心对称合成周期8。
+    - 保留源页分项判断：B正确，A/C/D错误。
+  source_discrepancies:
+    - page_0117 markdown line 35中“则 f(x)关于点(1,b)对称”与其前一句“$f'(x)$关于直线$x=-1$对称”在数学上不一致；按定理应为关于点$(-1,b)$对称。该处不影响A项判错结论，本卡按可验证数学关系整理。
+original_problem:
+  stem: （2024·南京模拟·多选）已知函数 $f(x)$ 及其导函数 $f'(x)$ 的定义域均为 $\mathbf{R}$，记 $g(x)=f'(x)$，若 $f(2x+1)$，$g(x-1)$ 均为偶函数，则下列等式一定正确的是（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(-1)=0$
+      text_latex: $f(-1)=0$
+    - label: B
+      text_raw: $f(-3)=f(5)$
+      text_latex: $f(-3)=f(5)$
+    - label: C
+      text_raw: $g(2)=0$
+      text_latex: $g(2)=0$
+    - label: D
+      text_raw: $g\left(-\frac{1}{2}\right)=g\left(\frac{7}{2}\right)$
+      text_latex: $g\left(-\frac{1}{2}\right)=g\left(\frac{7}{2}\right)$
+  answer: B
+  fidelity_notes:
+    - 题头标注“多选”，源页最终仅有B成立，答案保持“B”。
+    - 例2题干与解析均在page_0117，不需跨页补全。
+solution:
+  source_solution_summary: |
+    由 $f(2x+1)$ 为偶函数，得 $f(x)$ 关于直线 $x=1$ 对称，
+    因而 $f(-3)=f(5)$，B 正确。又 $g(x)=f'(x)$ 关于点 $(1,0)$ 对称。
+    由 $g(x-1)$ 为偶函数得 $g$ 关于直线 $x=-1$ 对称。
+    对同一函数 $g$ 而言，中心 $(1,0)$ 与对称轴 $x=-1$ 的距离为 $2$，
+    所以周期可取 $4\\times2=8$，并可推出其中心在 $(4k-3,0)$、
+    对称轴在 $x=4k-1$（$k\\in\\mathbf Z$）。
+    A项：由 $g$ 关于 $x=-1$ 对称，只能推出 $f$ 关于某点 $(-1,b)$ 对称，
+    故 $f(-1)=b$ 不必为0，A错。
+    C项：$x=2$ 不是必然中心点，$g(2)$ 不必为0，C错。
+    D项要求关于 $x=\\frac32$ 对称才成立，但 $x=\\frac32$ 不是上述必然对称轴，
+    故D错。综上选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 由 $f(2x+1)$ 偶函数得到 f 的轴对称并判定 B。
+      formula_trace:
+        from: $f(2x+1)$ 为偶函数
+        to: $f(1+t)=f(1-t)$，即 $f$ 关于 $x=1$ 对称，故 $f(-3)=f(5)$
+        operation: 把偶性改写成关于中点1的等值关系。
+        why: B项正是关于 $x=1$ 的对称点取值。
+      source_ref: page_0117
+    - step_id: step_2
+      statement: 把两个条件都转成 g 的几何对称信息。
+      formula_trace:
+        from: $g=f'$，$f$ 关于 $x=1$ 对称，且 $g(x-1)$ 为偶函数
+        to: $g$ 关于点 $(1,0)$ 对称，且关于直线 $x=-1$ 对称
+        operation: 用原函数与导函数的对称对应定理 + 偶性平移还原。
+        why: 后续周期构造依赖“一个中心 + 一条轴”。
+      source_ref: page_0117
+    - step_id: step_3
+      statement: 由一点一轴构造周期并筛掉 C、D。
+      formula_trace:
+        from: 中心 $(1,0)$，对称轴 $x=-1$
+        to: 周期 $T=4|1-(-1)|=8$；中心 $(4k-3,0)$；对称轴 $x=4k-1$
+        operation: 应用一点一轴距离四倍为周期的结论。
+        why: $x=2$ 不是必然中心，$x=\frac32$ 不是必然对称轴，所以 C、D 不一定成立。
+      source_ref: page_0117
+    - step_id: step_4
+      statement: 解释 A 只可得常数值，不可得零值。
+      formula_trace:
+        from: $g$ 关于 $x=-1$ 对称
+        to: $f$ 关于点 $(-1,b)$ 对称，故 $f(-1)=b$（常数但不必为0）
+        operation: 用“导函数轴对称 ↔ 原函数中心对称”反推。
+        why: A将未知常数误写成0，因此错误。
+      source_ref: page_0117
+teaching_card:
+  student_title: 双偶性条件下的“一点一轴”周期构造
+  what_it_trains: 训练在抽象函数多选题中，把复合偶性快速还原成对称轴/中心，再用固定周期模板做“必然性”判断。
+  recognition_cues:
+    - 题干给出 $f(2x+1)$、$g(x-1)$ 都是偶函数。
+    - 出现 $g=f'$，要把 f 与 g 的对称关系联动处理。
+    - 选项含“等于0”与“两点函数值相等”混合，需先判断点位是否为必然对称点。
+  normalization_moves:
+    - 偶性平移还原：$u(x-a)$ 偶 $\Rightarrow$ $u$ 关于 $x=a$ 轴对称。
+    - 从 f 的轴对称推出 g 的中心对称。
+    - 一点一轴配周期：$T=4\times$（中心到轴距离）。
+    - 将候选点映射到“中心族/轴族”再判真伪。
+  common_failures:
+    - 把 $f(2x+1)$ 偶误判成 f 关于原点偶。
+    - 忘记导函数对称转换，直接在 f 与 g 之间硬套同一种对称。
+    - 把周期8误解为“任意相差8k才相等”，忽略还需同一函数值轨道。
+    - 将 A 项中的常数中心值误写成0。
+  similar_practice_query: 抽象函数 多选 f(2x+1)偶 g(x-1)偶 一点一轴 周期8
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对page_0117页图：例2题干、选项、解析、答案B均完整。
+    - line 35 的点坐标符号噪声已在source_discrepancies注明，不影响本题结论。

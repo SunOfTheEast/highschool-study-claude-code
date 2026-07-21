@@ -1,0 +1,222 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0243_x_plus_lnx_minus1_abs_level_two_points_ratio_ch6_inequality_ex19
+content_revision_id: mst_p0243_x_plus_lnx_minus1_abs_level_two_points_ratio_ch6_inequality_ex19-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0243_x_plus_lnx_minus1_abs_level_two_points_ratio_ch6_inequality_ex19.card.yaml
+stem: |-
+  （陪跑课学生答疑）已知函数 $f(x)=x+\ln x-1$。
+  1. 若 $f(x)\leqslant kx-k$ 对于 $\forall x>0$ 恒成立，求 $k$ 的值。
+  2. 若存在 $x_1<x_2$，使得 $|f(x_1)|=|f(x_2)|=a$ 成立，求证：$x_2>e^{a/2}x_1$。
+answer: |-
+  第 (1) 问：$k=2$；第 (2) 问：$x_2>e^{a/2}x_1$。
+
+  第 (1) 问，$f$ 是凹函数，且 $f(1)=0$、$f'(1)=2$，所以图像在 $x=1$ 处的切线 $y=2x-2$ 上方不超过切线，故恒成立时 $k=2$。 第 (2) 问由题意可知 $f(x_1)=-a$，$f(x_2)=a$，且 $x_1<1<x_2$。两式相减得 $(x_2-x_1)+\ln(x_2/x_1)=2a$。要证 $x_2>e^{a/2}x_1$，等价于 $\ln(x_2/x_1)>a/2$，只需证明 $x_2-x_1<3a/2$。当 $0<a<2$ 时，先由 $f(a+1)>a$ 得 $x_2<a+1$，再证 $x_1>1-a/2$；当 $a\ge2$ 时，由 $f(3a/2)>a$ 得 $x_2<3a/2$，又 $x_1>0$，所以同样成立。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 第 (1) 问补出 $k=2$。
+      max_score: 1
+    - step_id: step_2
+      description: 把两点条件写成一正一负。
+      max_score: 1
+    - step_id: step_3
+      description: 把目标转成控制 $x_2-x_1$。
+      max_score: 1
+    - step_id: step_4
+      description: $0<a<2$ 时先压住右点。
+      max_score: 1
+    - step_id: step_5
+      description: $0<a<2$ 时给左点下界。
+      max_score: 1
+    - step_id: step_6
+      description: $a\ge2$ 时直接压住右点。
+      max_score: 1
+    - step_id: step_7
+      description: 回到原目标。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: part_1
+        goal: 求参数范围
+        target: 第 part_1 问
+        result: $k=2$。
+      - part_id: part_2
+        goal: 不等式证明
+        target: 第 part_2 问
+        result: $x_2>e^{a/2}x_1$。
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 切线放缩与凹凸性
+      - 充分/必要性探路
+    subroute:
+      - 凹函数切线
+      - 等高两点
+      - 目标转化
+      - 分段取点
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $x+\ln x-1$
+      - $kx-k$
+      - $f(x_1)=-a,\ f(x_2)=a$
+      - $x_2-x_1<3a/2$
+      - $e^{a/2}x_1$
+    normalization_moves_used:
+      - 第 (1) 问用 $x=1$ 处切线确定 $k=2$。
+      - 第 (2) 问把绝对值等高转成一负一正。
+      - 把乘法比例目标转成对数差。
+      - 用 $x_2-x_1<3a/2$ 作为中间目标。
+      - 按 $a<2$ 与 $a\ge2$ 分段取点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会用切线求恒成立参数，回补导数运算与几何意义。
+      - 若学生不会判断凹函数在切线下方，回补函数性质与图像。
+      - 若学生不会把比例目标取对数，回补指数对数基础。
+      - 若学生不会从两式相减得到中间目标，回补代数恒等变形。
+      - 若学生不会分段取点，回补不等式工具基础。
+  detail_terms:
+    - $x+\ln x-1$
+    - $k=2$
+    - $f(x_1)=-a$
+    - $f(x_2)=a$
+    - $x_2-x_1<3a/2$
+    - $1-a/2$
+    - $3a/2$
+    - $x_2>e^{a/2}x_1$
+parts: &a1
+  - part_id: part_1
+    text: 若 $f(x)\leqslant kx-k$ 对于 $\forall x>0$ 恒成立，求 $k$ 的值。
+  - part_id: part_2
+    text: 若存在 $x_1<x_2$，使得 $|f(x_1)|=|f(x_2)|=a$ 成立，求证：$x_2>e^{a/2}x_1$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0243_x_plus_lnx_minus1_abs_level_two_points_ratio_ch6_inequality_ex19
+source_evidence:
+  source_refs:
+    - ref_id: page_0243_prev_ex18_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0243/page_0243.md
+      role: local_context
+      evidence: page_0243 页首是 page_0242 例18续解，不是本卡题头。
+    - ref_id: page_0243_ex19_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0243/page_0243.md
+      role: problem_start
+      evidence: page_0243 中下部给出例19题头：$f(x)=x+\ln x-1$；第 (1) 问恒成立求 $k$，第 (2) 问两点等高绝对值证明比例下界。
+    - ref_id: page_0243_ex19_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0243/page_0243.md
+      role: solution
+      evidence: 解析第 (1) 问略；第 (2) 问写 $f(x_1)=-a,f(x_2)=a$，并把目标转成 $x_2-x_1<3a/2$，分 $0<a<2$ 与 $a\ge2$ 取点证明。
+    - ref_id: page_0243_ex20_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0243/page_0243.md
+      role: local_context
+      evidence: page_0243 底部另起例20，属于本批下一张卡，不混入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0243.png
+      inspected: true
+      notes: 已核对页图：例19题头和完整解析位于 page_0243 中下部。
+  source_context: 本卡处理 page_0243 起头并在同页结束的例19；前后题分别隔离。
+  source_influence:
+    - 保留 source 的第 (2) 问路线：把 $x_2>e^{a/2}x_1$ 转成证明 $x_2-x_1<3a/2$。
+    - 保留 source 的分段：$0<a<2$ 时证明 $x_1>1-a/2$，$a\ge2$ 时用 $x_2<3a/2$。
+    - 第 (1) 问 source 写“略”，本卡补入标准结论 $k=2$ 及其理由。
+  source_discrepancies:
+    - type: source_omits_part1_solution
+      source_ref: page_0243_ex19_solution
+      observed: part (1) solution is marked `略`.
+      resolved_as: $k=2$, by concavity of $x+\ln x-1$ and tangent at $x=1$.
+      reason: The inequality is tight at $x=1$ and the derivative there is 2.
+original_problem:
+  stem: （陪跑课学生答疑）已知函数 $f(x)=x+\ln x-1$。
+  parts: *a1
+  choices: []
+  answer: 第 (1) 问：$k=2$；第 (2) 问：$x_2>e^{a/2}x_1$。
+  fidelity_notes:
+    - 两问均无选项。
+    - 函数定义域为 $x>0$。
+solution:
+  source_solution_summary: 第 (1) 问，$f$ 是凹函数，且 $f(1)=0$、$f'(1)=2$，所以图像在 $x=1$ 处的切线 $y=2x-2$ 上方不超过切线，故恒成立时 $k=2$。 第 (2) 问由题意可知 $f(x_1)=-a$，$f(x_2)=a$，且 $x_1<1<x_2$。两式相减得 $(x_2-x_1)+\ln(x_2/x_1)=2a$。要证 $x_2>e^{a/2}x_1$，等价于 $\ln(x_2/x_1)>a/2$，只需证明 $x_2-x_1<3a/2$。当 $0<a<2$ 时，先由 $f(a+1)>a$ 得 $x_2<a+1$，再证 $x_1>1-a/2$；当 $a\ge2$ 时，由 $f(3a/2)>a$ 得 $x_2<3a/2$，又 $x_1>0$，所以同样成立。
+  key_steps:
+    - step_id: step_1
+      statement: 第 (1) 问补出 $k=2$。
+      formula_trace:
+        from: $f(x)=x+\ln x-1$
+        to: $f(1)=0,\ f^\prime(1)=2$
+        operation: 求切点和切线斜率。
+        why: 恒成立线 $kx-k$ 过 $(1,0)$，必须贴住切线斜率。
+      source_ref: page_0243_ex19_solution
+    - step_id: step_2
+      statement: 把两点条件写成一正一负。
+      formula_trace:
+        from: $|f(x_1)|=|f(x_2)|=a,\ x_1<x_2$
+        to: $f(x_1)=-a,\ f(x_2)=a,\ x_1<1<x_2$
+        operation: 利用 $f$ 单调递增且 $f(1)=0$。
+        why: 这样才能把距离和对数比联系起来。
+      source_ref: page_0243_ex19_solution
+    - step_id: step_3
+      statement: 把目标转成控制 $x_2-x_1$。
+      formula_trace:
+        from: $f(x_2)-f(x_1)=2a$
+        to: $\ln(x_2/x_1)=2a-(x_2-x_1)$
+        operation: 两式相减。
+        why: 若 $x_2-x_1<3a/2$，则 $\ln(x_2/x_1)>a/2$。
+      source_ref: page_0243_ex19_solution
+    - step_id: step_4
+      statement: $0<a<2$ 时先压住右点。
+      formula_trace:
+        from: $f(a+1)=a+\ln(a+1)>a$
+        to: $x_2<a+1$
+        operation: 用 $f$ 单调递增。
+        why: 右点小于 $a+1$ 后，只需给左点下界。
+      source_ref: page_0243_ex19_solution
+    - step_id: step_5
+      statement: $0<a<2$ 时给左点下界。
+      formula_trace:
+        from: $f(1-\frac a2)= -\frac a2+\ln(1-\frac a2)$
+        to: $f(1-\frac a2)<-a$
+        operation: 用 $\ln(1-\frac a2)<-\frac a2$。
+        why: 因为 $f$ 递增，所以 $x_1>1-a/2$。
+      source_ref: page_0243_ex19_solution
+    - step_id: step_6
+      statement: $a\ge2$ 时直接压住右点。
+      formula_trace:
+        from: $f(\frac{3a}{2})=\frac{3a}{2}+\ln\frac{3a}{2}-1$
+        to: $f(\frac{3a}{2})>a$
+        operation: 用 $a\ge2$ 的粗估计。
+        why: 得到 $x_2<3a/2$，且 $x_1>0$，距离自然小于 $3a/2$。
+      source_ref: page_0243_ex19_solution
+    - step_id: step_7
+      statement: 回到原目标。
+      formula_trace:
+        from: $x_2-x_1<3a/2$
+        to: $\ln(x_2/x_1)>a/2$，即 $x_2>e^{a/2}x_1$
+        operation: 代回两式相减结果。
+        why: 完成比例形式的不等式证明。
+      source_ref: page_0243_ex19_solution
+teaching_card:
+  student_title: 等高两点比例题：先把比例变成对数差，再控距离
+  what_it_trains: 训练把指数比例目标转成对数差，再通过两点方程相减寻找中间目标。
+  recognition_cues:
+    - $f(x)=x+\ln x-1$ 单调递增且 $f(1)=0$。
+    - $|f(x_1)|=|f(x_2)|=a$ 会变成 $f(x_1)=-a,f(x_2)=a$。
+    - 目标 $x_2>e^{a/2}x_1$ 应先取对数。
+  normalization_moves:
+    - 第 (1) 问用切线得到 $k=2$。
+    - 第 (2) 问写出两点方程。
+    - 两式相减得到 $\ln(x_2/x_1)=2a-(x_2-x_1)$。
+    - 转证 $x_2-x_1<3a/2$。
+    - 按 $0<a<2$ 和 $a\ge2$ 分段取点。
+  common_failures:
+    - 不取对数，直接处理 $e^{a/2}x_1$。
+    - 忘记 $x_1<1<x_2$。
+    - 不知道为什么要证明 $x_2-x_1<3a/2$。
+  similar_practice_query: x+lnx-1 等高两点 绝对值 a x2>e^(a/2)x1 距离 3a/2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

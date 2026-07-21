@@ -1,0 +1,155 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0184_two_extrema_t_range_ex09
+content_revision_id: mst_p0184_two_extrema_t_range_ex09-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0184_two_extrema_t_range_ex09.card.yaml
+stem: |-
+  （2023 · 成都模拟 T12）已知函数 $f(x)=\frac{e^x}{x}+t\left(3\ln x+\frac2x-x\right)$ 有两个极值点，则 $t$ 的取值范围为（  ）
+  A. $(e^3,+\infty)$
+  B. $(-\infty,-\frac12)\cup\{e^3\}$
+  C. $(-\infty,-e)\cup(-e,-\frac12)\cup\{e^3\}$
+  D. $(-\infty,-e)\cup(-e,-\frac12)$
+answer: |-
+  C
+
+  求导得 $f^{\prime}(x)=\frac{x-1}{x^2}(e^x-tx+2t)$。 因“有两个极值点”，$f^{\prime}(x)$ 需有两个变号零点； 已知 $x=1$ 是一个零点，因此 $g(x)=e^x-tx+2t$ 在 $(0,1)\cup(1,+\infty)$ 上应恰有一个零点。 又 $g(2)=e^2\ne0$，可改写为 $t=\frac{e^x}{x-2}=h(x)$ 在同一区间恰有一个解。 对 $h(x)$，有 $h^{\prime}(x)=\frac{e^x(x-3)}{(x-2)^2}$，故在 $(0,1),(1,2),(2,3)$ 递减，在 $(3,+\infty)$ 递增； 且 $h(0)=-\frac12,\ h(1)=-e,\ h(3)=e^3$。 于是恰一解当且仅当 $t<-\frac12$ 且 $t\ne-e$，或 $t=e^3$，即 $(-\infty,-e)\cup(-e,-\frac12)\cup\{e^3\}$，选 C。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 导函数因式分解并锁定固定根。
+      max_score: 1
+    - step_id: step_2
+      description: 把“再有一根”改写成参数方程。
+      max_score: 1
+    - step_id: step_3
+      description: 用单调区间与关键值判“恰一解”。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 含参数分类讨论
+    secondary:
+      - 数形结合
+    subroute:
+      - 参数判根数
+      - 定零点与变化零点
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 极值点偏移结构
+      - 非齐次结构
+    evidence:
+      - $f^{\prime}(x)=\frac{x-1}{x^2}(e^x-tx+2t)$
+      - $t=\frac{e^x}{x-2}$
+      - $(-\infty,-e)\cup(-e,-\frac12)\cup\{e^3\}$
+    normalization_moves_used:
+      - 先固定零点 x=1。
+      - 把参数方程转成 $t=h(x)$ 横线判交。
+      - 用分区间值域和特值 $-\frac12,-e,e^3$ 完成分类。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能从“两个极值点”联到“两个变号零点”，回补导数单调极值基础。
+      - 若学生不理解 $g(2)\ne0$ 的作用，回补函数三要素与定义域。
+      - 若学生不会按间断点分段读 $h(x)$ 值域，回补函数性质与图像。
+  detail_terms:
+    - $\frac{e^x}{x}+t(3\ln x+\frac2x-x)$
+    - $\frac{x-1}{x^2}(e^x-tx+2t)$
+    - $h(x)=\frac{e^x}{x-2}$
+    - $h(0)=-\frac12,\ h(1)=-e,\ h(3)=e^3$
+    - $(-\infty,-e)\cup(-e,-\frac12)\cup\{e^3\}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0184_two_extrema_t_range_ex09
+source_evidence:
+  source_refs:
+    - ref_id: page_0184
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0184/page_0184.md
+      role: problem_start
+      evidence: page_0184 contains 例9 statement and choices A-D; the solution continues on page_0185.
+    - ref_id: page_0185
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0185/page_0185.md
+      role: continuation
+      evidence: "page_0185 top completes 例9: factor $f^{\\prime}(x)$, set $g(x)=e^x-tx+2t$, transform to $h(x)=\\frac{e^x}{x-2}=t$, and conclude $t<-\\frac12,\\ t\\ne -e$ or $t=e^3$, so choice C."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0184.png
+      inspected: true
+      notes: 页图核对通过：例9题干与选项 A-D 完整，答案标注在续页解析中。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0185.png
+      inspected: true
+      notes: 页图核对通过：续页解析给出区间 $(-\infty,-e)\cup(-e,-\frac12)\cup\{e^3\}$，选 C。
+  source_context: 例9题头在 page_0184、解析跨到 page_0185；按跨页规则由本 worker 完整建卡。
+  source_influence:
+    - 保留源解“固定根 x=1 + 参数方程判单根”的主线，核心替换为 $t=h(x)$。
+  source_discrepancies:
+    - page_0185 markdown 首段含重建标记“函数”；已对照页图确认原意为“因为函数 $f(x)$...”，不影响结论。
+original_problem:
+  stem: （2023 · 成都模拟 T12）已知函数 $f(x)=\frac{e^x}{x}+t\left(3\ln x+\frac2x-x\right)$ 有两个极值点，则 $t$ 的取值范围为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $(e^3,+\infty)$
+      text_latex: $(e^3,+\infty)$
+    - label: B
+      text_raw: $(-\infty,-\frac12)\cup\{e^3\}$
+      text_latex: $(-\infty,-\frac12)\cup\{e^3\}$
+    - label: C
+      text_raw: $(-\infty,-e)\cup(-e,-\frac12)\cup\{e^3\}$
+      text_latex: $(-\infty,-e)\cup(-e,-\frac12)\cup\{e^3\}$
+    - label: D
+      text_raw: $(-\infty,-e)\cup(-e,-\frac12)$
+      text_latex: $(-\infty,-e)\cup(-e,-\frac12)$
+  answer: C
+  fidelity_notes:
+    - 源题为单选题，A-D 选项完整保留。
+    - 解析来自 page_0185 续页。
+solution:
+  source_solution_summary: 求导得 $f^{\prime}(x)=\frac{x-1}{x^2}(e^x-tx+2t)$。 因“有两个极值点”，$f^{\prime}(x)$ 需有两个变号零点； 已知 $x=1$ 是一个零点，因此 $g(x)=e^x-tx+2t$ 在 $(0,1)\cup(1,+\infty)$ 上应恰有一个零点。 又 $g(2)=e^2\ne0$，可改写为 $t=\frac{e^x}{x-2}=h(x)$ 在同一区间恰有一个解。 对 $h(x)$，有 $h^{\prime}(x)=\frac{e^x(x-3)}{(x-2)^2}$，故在 $(0,1),(1,2),(2,3)$ 递减，在 $(3,+\infty)$ 递增； 且 $h(0)=-\frac12,\ h(1)=-e,\ h(3)=e^3$。 于是恰一解当且仅当 $t<-\frac12$ 且 $t\ne-e$，或 $t=e^3$，即 $(-\infty,-e)\cup(-e,-\frac12)\cup\{e^3\}$，选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 导函数因式分解并锁定固定根。
+      formula_trace:
+        from: $f(x)=\frac{e^x}{x}+t\left(3\ln x+\frac2x-x\right)$
+        to: $f^{\prime}(x)=\frac{x-1}{x^2}(e^x-tx+2t)$
+        operation: 求导、通分、提取公因子 $(x-1)$。
+        why: 极值点个数由 $f^{\prime}(x)$ 变号零点个数决定。
+      source_ref: page_0185
+    - step_id: step_2
+      statement: 把“再有一根”改写成参数方程。
+      formula_trace:
+        from: $e^x-tx+2t=0$
+        to: $t=\frac{e^x}{x-2}$
+        operation: 移项并除以 $x-2$（借助 $g(2)=e^2\ne0$ 排除 x=2）。
+        why: 把参数判根数转成水平线与单变量曲线的交点数问题。
+      source_ref: page_0185
+    - step_id: step_3
+      statement: 用单调区间与关键值判“恰一解”。
+      formula_trace:
+        from: $h(x)=\frac{e^x}{x-2},\ h^{\prime}(x)=\frac{e^x(x-3)}{(x-2)^2}$
+        to: $t<-\frac12,\ t\ne-e\ \text{或}\ t=e^3$
+        operation: 分区间读值域并排除导致与固定根重合的 $t=-e$。
+        why: 确保 $f^{\prime}(x)$ 除 x=1 外仅再给一个变号零点。
+      source_ref: page_0185
+teaching_card:
+  student_title: 先锁固定根，再做参数判单根
+  what_it_trains: 训练在“两个极值点”题里先拆固定根，再把剩余参数条件转成单变量函数的交点计数。
+  recognition_cues:
+    - 导函数可提取 $(x-1)$。
+    - 题目只问参数 $t$ 的范围。
+    - 解法出现 $t=\frac{e^x}{x-2}$ 这类参变分离式。
+  normalization_moves:
+    - 先把 $f^{\prime}(x)$ 因式分解。
+    - 固定根 x=1 单独处理。
+    - 改写为 $t=h(x)$ 后按区间值域判“恰一根”。
+  common_failures:
+    - 漏掉 $t=-e$ 需要剔除。
+    - 只写 $t<-\frac12$，漏掉孤立点 $t=e^3$。
+    - 把 $(1,+\infty)$ 当成连通区间，忽略 x=2 间断。
+  similar_practice_query: 导函数因式分解 固定根 x=1 参数判根数 t=e^x/(x-2)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,221 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0158_pade_ln_sin_compare_ex08
+content_revision_id: mst_p0158_pade_ln_sin_compare_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0158_pade_ln_sin_compare_ex08.card.yaml
+stem: |-
+  （2024·京口区月考）设 $a=\frac{2}{21}$，$b=\sin\frac{2}{21}$，$c=\ln\frac{11}{10}$，则（  ）
+  A. $a>b>c$
+  B. $a>c>b$
+  C. $c>a>b$
+  D. $b>c>a$
+answer: |
+  C
+
+  先比较 $b$ 与 $a$。由
+  \[
+  \sin x<x\quad\left(0<x<\frac{\pi}{2}\right),
+  \]
+  代入 $x=\frac{2}{21}$ 得
+  \[
+  b=\sin\frac{2}{21}<\frac{2}{21}=a.
+  \]
+  再比较 $c$ 与 $a$。注意
+  \[
+  a=\frac{2}{21}
+  =\frac{2\left(\frac{11}{10}-1\right)}{\frac{11}{10}+1}.
+  \]
+  由帕德型下界
+  \[
+  \ln x>\frac{2(x-1)}{x+1}\quad(x>1),
+  \]
+  取 $x=\frac{11}{10}$ 得
+  \[
+  c=\ln\frac{11}{10}>a.
+  \]
+  合并可得
+  \[
+  c>a>b.
+  \]
+  故选 C。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 用三角上界直接锁定 $b<a$。
+      max_score: 1
+    - step_id: step_2
+      description: 把 $a$ 改写成对数下界模板值。
+      max_score: 1
+    - step_id: step_3
+      description: 调用帕德下界得到 $c>a$。
+      max_score: 1
+    - step_id: step_4
+      description: 合并两段顺序并匹配选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较 $a=\frac{2}{21},\ b=\sin\frac{2}{21},\ c=\ln\frac{11}{10}$ 的大小。
+        result: 见 source_solution_summary
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 同构变形与换元法
+      - 切线放缩与凹凸性
+    subroute:
+      - 先用 $\sin x<x$ 压住 $b$
+      - 把 $a$ 改写成 $\frac{2(x-1)}{x+1}$ 模板点
+      - 用帕德下界把 $c$ 抬到 $a$ 上方
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 三角复合结构
+      - 指对复合结构
+    evidence:
+      - 三项分别来自三角函数、有理式、对数函数，比较依赖统一到近似模板。
+      - 核心是“一个上界 + 一个下界”拼接形成全序。
+    normalization_moves_used:
+      - $\sin x<x$。
+      - $a=\frac{2(x-1)}{x+1}$ 同构改写。
+      - $\ln x>\frac{2(x-1)}{x+1}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生混淆 $\sin x<x$ 的适用区间或方向，回补三角函数基础。
+      - 若学生不会把常数改写成 $\frac{2(x-1)}{x+1}$ 模板，回补代数恒等变形。
+      - 若学生不熟悉对数帕德下界，回补指数对数基础。
+  detail_terms:
+    - 帕德逼近
+    - $\sin x<x$
+    - $\frac{2(x-1)}{x+1}$
+    - $c>a>b$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0158_pade_ln_sin_compare_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0158_ex08_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0158/page_0158.md
+      role: problem_start
+      evidence: 例8题干与选项在 page_0158：$a=\frac{2}{21},\ b=\sin\frac{2}{21},\ c=\ln\frac{11}{10}$。
+    - ref_id: page_0158_ex08_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0158/page_0158.md
+      role: solution
+      evidence: 解析先用 $\sin x<x$ 得 $b<a$，再把 $a$ 写成 $\frac{2(x-1)}{x+1}$ 形式并用帕德下界得 $c>a$，结论 $c>a>b$。
+    - ref_id: page_0158_bound_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0158/page_0158.md
+      role: local_context
+      evidence: 例题前给出对数上下界 $\frac{1}{2}(x-\frac{1}{x})>\ln x>\frac{2(x-1)}{x+1}>1-\frac{1}{x}$（$x\to1^+$ 附近）。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0158.png
+      inspected: true
+      notes: 已核对页图：例8题干、选项、解析链和答案C与markdown一致。
+  source_context: page_0158 前半为指数/对数上下界图示与口述总结；例8开始进入三数比较应用。
+  source_influence:
+    - 保留源解“先比 $b,a$，再比 $c,a$”的双段结构。
+    - 保留 $a=\frac{2}{21}$ 与 $\frac{2(x-1)}{x+1}$ 模板对齐这一步。
+  source_discrepancies: []
+original_problem:
+  stem: （2024·京口区月考）设 $a=\frac{2}{21}$，$b=\sin\frac{2}{21}$，$c=\ln\frac{11}{10}$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a>b>c$
+      text_latex: $a>b>c$
+    - label: B
+      text_raw: $a>c>b$
+      text_latex: $a>c>b$
+    - label: C
+      text_raw: $c>a>b$
+      text_latex: $c>a>b$
+    - label: D
+      text_raw: $b>c>a$
+      text_latex: $b>c>a$
+  answer: C
+  fidelity_notes:
+    - 源解未做数值近似，完全靠标准不等式模板给出严格顺序。
+solution:
+  source_solution_summary: |
+    先比较 $b$ 与 $a$。由
+    \[
+    \sin x<x\quad\left(0<x<\frac{\pi}{2}\right),
+    \]
+    代入 $x=\frac{2}{21}$ 得
+    \[
+    b=\sin\frac{2}{21}<\frac{2}{21}=a.
+    \]
+    再比较 $c$ 与 $a$。注意
+    \[
+    a=\frac{2}{21}
+    =\frac{2\left(\frac{11}{10}-1\right)}{\frac{11}{10}+1}.
+    \]
+    由帕德型下界
+    \[
+    \ln x>\frac{2(x-1)}{x+1}\quad(x>1),
+    \]
+    取 $x=\frac{11}{10}$ 得
+    \[
+    c=\ln\frac{11}{10}>a.
+    \]
+    合并可得
+    \[
+    c>a>b.
+    \]
+    故选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 用三角上界直接锁定 $b<a$。
+      formula_trace:
+        from: $b=\sin\frac{2}{21}$
+        to: $b<\frac{2}{21}=a$
+        operation: 代入 $\sin x<x$（$0<x<\frac{\pi}{2}$）。
+        why: 先固定三角项在最下方。
+      source_ref: page_0158_ex08_solution
+    - step_id: step_2
+      statement: 把 $a$ 改写成对数下界模板值。
+      formula_trace:
+        from: $a=\frac{2}{21}$
+        to: $a=\frac{2\left(\frac{11}{10}-1\right)}{\frac{11}{10}+1}$
+        operation: 同构变形为 $\frac{2(x-1)}{x+1}$ 形式。
+        why: 与 $\ln x$ 的标准下界同型。
+      source_ref: page_0158_ex08_solution
+    - step_id: step_3
+      statement: 调用帕德下界得到 $c>a$。
+      formula_trace:
+        from: $c=\ln\frac{11}{10}$
+        to: $c>\frac{2\left(\frac{11}{10}-1\right)}{\frac{11}{10}+1}=a$
+        operation: 取 $x=\frac{11}{10}$ 代入 $\ln x>\frac{2(x-1)}{x+1}$。
+        why: 完成对数项与有理项比较。
+      source_ref: page_0158_ex08_solution
+    - step_id: step_4
+      statement: 合并两段顺序并匹配选项。
+      formula_trace:
+        from: $c>a$ 且 $a>b$
+        to: $c>a>b$，选 C
+        operation: 不等式传递。
+        why: 得到唯一全序。
+      source_ref: page_0158_ex08_solution
+teaching_card:
+  student_title: 把常数改写进对数下界模板
+  what_it_trains: 训练三数比较里“先压三角、再抬对数”的两段夹逼链。
+  recognition_cues:
+    - 题目同时出现 $\sin(\text{小角})$ 与 $\ln(1+\text{小量})$。
+    - 有理数可改写为 $\frac{2(x-1)}{x+1}$ 形态。
+    - 选项是严格全序。
+  normalization_moves:
+    - 先处理明显的 $\sin x<x$。
+    - 把常数凑成对数下界模板值。
+    - 最后传递不等式拼全序。
+  common_failures:
+    - 把 $\ln x>\frac{2(x-1)}{x+1}$ 的方向写反。
+    - 只得到 $b<a$ 就停，漏掉 $c$ 与 $a$。
+    - 常数改写时通分出错。
+  similar_practice_query: sin(2/21) ln(11/10) 帕德 比大小 c>a>b
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

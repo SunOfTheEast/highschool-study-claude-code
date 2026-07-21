@@ -1,0 +1,260 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0142_e2x_whole_substitution_ex14
+content_revision_id: mst_p0142_e2x_whole_substitution_ex14-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0142_e2x_whole_substitution_ex14.card.yaml
+stem: |-
+  （2022·香坊区期末·多选）已知 $f(x)$ 是定义在 $(0,+\infty)$ 上的函数，$f^{\prime}(x)$ 是 $f(x)$ 的导函数，若 $xf(x)+x^2f^{\prime}(x)=e^{2x}$，且 $f\left(\frac{1}{2}\right)=2e$，则下列结论正确的是（  ）
+  A. 函数 $f(x)$ 在定义域上单调递增
+  B. 函数 $f(x)$ 在定义域上有极小值
+  C. 函数 $g(x)=xf(x)-e^2\\ln x$ 的单调递增区间为 $(1,+\\infty)$
+  D. 不等式 $f(x)>e^{2x}+e$ 的解集为 $\\left(\\frac{1}{2},+\\infty\\right)$
+answer: |
+  AC
+
+  设 $m(x)=xf(x)$，则
+  \[
+  m^{\prime}(x)=f(x)+xf^{\prime}(x)=\frac{e^{2x}}{x}.
+  \]
+  又 $f(x)=\frac{m(x)}{x}$，故
+  \[
+  f^{\prime}(x)=\frac{m^{\prime}(x)x-m(x)}{x^2}
+  =\frac{e^{2x}-m(x)}{x^2}.
+  \]
+  设 $h(x)=e^{2x}-m(x)$，则
+  \[
+  h^{\prime}(x)=2e^{2x}-m^{\prime}(x)
+  =e^{2x}\left(2-\frac{1}{x}\right)
+  =e^{2x}\cdot\frac{2x-1}{x}.
+  \]
+  所以 $h$ 在 $\left(0,\frac12\right)$ 递减、在 $\left(\frac12,+\infty\right)$ 递增，
+  从而
+  \[
+  h(x)\ge h\left(\frac12\right)=e-\frac12f\left(\frac12\right)=0.
+  \]
+  即 $f^{\prime}(x)=\frac{h(x)}{x^2}\ge0$，故 $f$ 单调递增，A对，B错。
+  对于 C，设 $g(x)=xf(x)-e^2\ln x$，则
+  \[
+  g^{\prime}(x)=f(x)+xf^{\prime}(x)-\frac{e^2}{x}
+  =\frac{e^{2x}-e^2}{x},
+  \]
+  解 $g^{\prime}(x)>0$ 得 $x>1$，故增区间为 $(1,+\infty)$，C对。
+  对于 D，设 $\varphi(x)=f(x)-e^{2x}-e$，有 $\varphi\left(\frac12\right)=0$，
+  \[
+  \varphi^{\prime}(x)=\frac{e^{2x}-xf(x)-2x^2e^{2x}}{x^2}
+  =\frac{n(x)}{x^2},
+  \]
+  \[
+  n^{\prime}(x)=e^{2x}\left[(2-4x)-\frac1x-4x^2\right].
+  \]
+  当 $x>\frac12$ 时上式为负，故 $n$ 递减，且
+  \[
+  n\left(\frac12\right)=e-\frac12f\left(\frac12\right)-\frac e2=-\frac e2<0.
+  \]
+  于是 $x>\frac12$ 时 $\varphi^{\prime}(x)<0$，$\varphi$ 递减，配合 $\varphi\left(\frac12\right)=0$
+  得 $\varphi(x)<0$，即 $f(x)<e^{2x}+e$（在 $x>\frac12$ 上），D错。综上选 AC。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 整体代换 $m(x)=xf(x)$，统一题设中的 $xf$ 与 $x^2f^{\prime}$。
+      max_score: 1
+    - step_id: step_2
+      description: 把 $f^{\prime}(x)$ 写成新函数 $h(x)$ 的符号问题。
+      max_score: 1
+    - step_id: step_3
+      description: 用 $h^{\prime}(x)$ 的分段符号得到 A、B。
+      max_score: 1
+    - step_id: step_4
+      description: 直接对 C 的函数求导并解不等式。
+      max_score: 1
+    - step_id: step_5
+      description: 构造 $\varphi(x)$ 与 $n(x)$，判定 D 结论反向成立。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 判定四个关于单调性、增区间与不等式解集的命题真假。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - 整体代换 $m(x)=xf(x)$
+      - 导函数符号锁定
+      - 指数项同构比较
+  structure:
+    primary: 抽象函数结构
+    secondary:
+      - 同构结构
+      - 指对复合结构
+    evidence:
+      - 题设以 $xf$、$x^2f^{\prime}$ 的耦合关系给出，需要先整体换元。
+      - C、D都落在 $e^{2x}$ 与对数项/常数项的比较框架。
+      - 解析核心是“构造函数后看导数符号”。
+    normalization_moves_used:
+      - 设 $m(x)=xf(x)$。
+      - 设 $h(x)=e^{2x}-m(x)$ 判 $f^{\prime}(x)$。
+      - 设 $\\varphi(x)=f(x)-e^{2x}-e$ 并引入 $n(x)$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $m(x)=xf(x)$ 推出 $f^{\prime}(x)=\\frac{e^{2x}-m(x)}{x^2}$，回补代数恒等变形。
+      - 若学生不能从 $h^{\prime}(x)$ 分段符号得到 $h$ 的最小值点，回补导数单调极值基础。
+      - 若学生在 $g^{\prime}(x)=\\frac{e^{2x}-e^2}{x}$ 的解集判断中出错，回补指数对数基础。
+  detail_terms:
+    - $m(x)=xf(x)$
+    - $h(x)=e^{2x}-m(x)$
+    - $g^{\prime}(x)=\\frac{e^{2x}-e^2}{x}$
+    - $\\varphi^{\prime}(x)=\\frac{n(x)}{x^2}$
+    - 多选结论 AC
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0142_e2x_whole_substitution_ex14
+source_evidence:
+  source_refs:
+    - ref_id: page_0142
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0142/page_0142.md
+      role: problem_start
+      evidence: 例14题干、A-D选项与结论“故选AC”均在page_0142。
+    - ref_id: page_0142_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0142/page_0142.md
+      role: solution
+      evidence: 源页解析给出整体代换 $m(x)=xf(x)$、再构造 $h(x)$ 与 $\varphi(x)$ 分别判A/B、C、D。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0142.png
+      inspected: true
+      notes: 已核对页图：例14完整在本页；题设为 $xf(x)+x^2f^{\prime}(x)=e^{2x}$，答案AC。
+  source_context: page_0142页首是例13续解（不归本卡）；例14从本页中段起头并在本页内结束。
+  source_influence:
+    - 保留源解“先设 $m(x)=xf(x)$ 再回代 $f^{\prime}(x)$”的主线。
+    - 保留 $h(x)=e^{2x}-m(x)$ 的先降后升结构，用于推出 $f^{\prime}(x)\ge0$。
+    - 保留 $g^{\prime}(x)=\\frac{e^{2x}-e^2}{x}$ 与 $\varphi^{\prime}(x)=\\frac{n(x)}{x^2}$ 的分选项判定。
+  source_discrepancies: []
+original_problem:
+  stem: （2022·香坊区期末·多选）已知 $f(x)$ 是定义在 $(0,+\infty)$ 上的函数，$f^{\prime}(x)$ 是 $f(x)$ 的导函数，若 $xf(x)+x^2f^{\prime}(x)=e^{2x}$，且 $f\left(\frac{1}{2}\right)=2e$，则下列结论正确的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 函数 $f(x)$ 在定义域上单调递增
+      text_latex: 函数 $f(x)$ 在定义域上单调递增
+    - label: B
+      text_raw: 函数 $f(x)$ 在定义域上有极小值
+      text_latex: 函数 $f(x)$ 在定义域上有极小值
+    - label: C
+      text_raw: 函数 $g(x)=xf(x)-e^2\\ln x$ 的单调递增区间为 $(1,+\\infty)$
+      text_latex: 函数 $g(x)=xf(x)-e^2\\ln x$ 的单调递增区间为 $(1,+\\infty)$
+    - label: D
+      text_raw: 不等式 $f(x)>e^{2x}+e$ 的解集为 $\\left(\\frac{1}{2},+\\infty\\right)$
+      text_latex: 不等式 $f(x)>e^{2x}+e$ 的解集为 $\\left(\\frac{1}{2},+\\infty\\right)$
+  answer: AC
+  fidelity_notes:
+    - 本题为多选；源页明确结论“故选 AC”。
+    - 题干与解析均在page_0142，不需要跨页补全。
+solution:
+  source_solution_summary: |
+    设 $m(x)=xf(x)$，则
+    \[
+    m^{\prime}(x)=f(x)+xf^{\prime}(x)=\frac{e^{2x}}{x}.
+    \]
+    又 $f(x)=\frac{m(x)}{x}$，故
+    \[
+    f^{\prime}(x)=\frac{m^{\prime}(x)x-m(x)}{x^2}
+    =\frac{e^{2x}-m(x)}{x^2}.
+    \]
+    设 $h(x)=e^{2x}-m(x)$，则
+    \[
+    h^{\prime}(x)=2e^{2x}-m^{\prime}(x)
+    =e^{2x}\left(2-\frac{1}{x}\right)
+    =e^{2x}\cdot\frac{2x-1}{x}.
+    \]
+    所以 $h$ 在 $\left(0,\frac12\right)$ 递减、在 $\left(\frac12,+\infty\right)$ 递增，
+    从而
+    \[
+    h(x)\ge h\left(\frac12\right)=e-\frac12f\left(\frac12\right)=0.
+    \]
+    即 $f^{\prime}(x)=\frac{h(x)}{x^2}\ge0$，故 $f$ 单调递增，A对，B错。
+    对于 C，设 $g(x)=xf(x)-e^2\ln x$，则
+    \[
+    g^{\prime}(x)=f(x)+xf^{\prime}(x)-\frac{e^2}{x}
+    =\frac{e^{2x}-e^2}{x},
+    \]
+    解 $g^{\prime}(x)>0$ 得 $x>1$，故增区间为 $(1,+\infty)$，C对。
+    对于 D，设 $\varphi(x)=f(x)-e^{2x}-e$，有 $\varphi\left(\frac12\right)=0$，
+    \[
+    \varphi^{\prime}(x)=\frac{e^{2x}-xf(x)-2x^2e^{2x}}{x^2}
+    =\frac{n(x)}{x^2},
+    \]
+    \[
+    n^{\prime}(x)=e^{2x}\left[(2-4x)-\frac1x-4x^2\right].
+    \]
+    当 $x>\frac12$ 时上式为负，故 $n$ 递减，且
+    \[
+    n\left(\frac12\right)=e-\frac12f\left(\frac12\right)-\frac e2=-\frac e2<0.
+    \]
+    于是 $x>\frac12$ 时 $\varphi^{\prime}(x)<0$，$\varphi$ 递减，配合 $\varphi\left(\frac12\right)=0$
+    得 $\varphi(x)<0$，即 $f(x)<e^{2x}+e$（在 $x>\frac12$ 上），D错。综上选 AC。
+  key_steps:
+    - step_id: step_1
+      statement: 整体代换 $m(x)=xf(x)$，统一题设中的 $xf$ 与 $x^2f^{\prime}$。
+      formula_trace:
+        from: $xf(x)+x^2f^{\prime}(x)=e^{2x}$
+        to: $m^{\prime}(x)=f(x)+xf^{\prime}(x)=\\frac{e^{2x}}{x}$
+        operation: 先设 $m(x)=xf(x)$，再除以 $x>0$。
+        why: 后续各选项都依赖 $f(x)+xf^{\prime}(x)$ 或 $f^{\prime}(x)$。
+      source_ref: page_0142_solution
+    - step_id: step_2
+      statement: 把 $f^{\prime}(x)$ 写成新函数 $h(x)$ 的符号问题。
+      formula_trace:
+        from: $f(x)=\\frac{m(x)}{x}$
+        to: $f^{\prime}(x)=\\frac{e^{2x}-m(x)}{x^2}=\\frac{h(x)}{x^2}$
+        operation: 商求导后代回 $m^{\prime}(x)=\\frac{e^{2x}}{x}$。
+        why: 只需研究 $h(x)$ 即可判断 $f$ 的单调与极值。
+      source_ref: page_0142_solution
+    - step_id: step_3
+      statement: 用 $h^{\prime}(x)$ 的分段符号得到 A、B。
+      formula_trace:
+        from: $h^{\prime}(x)=e^{2x}\\cdot\\frac{2x-1}{x}$
+        to: $h(x)\\ge h\\left(\\frac12\\right)=0\\Rightarrow f^{\prime}(x)\\ge0$
+        operation: 先判 $h$ 在 $\\left(0,\\frac12\\right)$ 递减、在 $\\left(\\frac12,+\\infty\\right)$ 递增，再代入已知值。
+        why: 推出 $f$ 递增，故 A真、B假。
+      source_ref: page_0142_solution
+    - step_id: step_4
+      statement: 直接对 C 的函数求导并解不等式。
+      formula_trace:
+        from: $g(x)=xf(x)-e^2\\ln x$
+        to: $g^{\prime}(x)=\\frac{e^{2x}-e^2}{x}>0\\iff x>1$
+        operation: 用 step_1 的结论 $f(x)+xf^{\prime}(x)=\\frac{e^{2x}}{x}$。
+        why: 确定增区间即判定 C。
+      source_ref: page_0142_solution
+    - step_id: step_5
+      statement: 构造 $\varphi(x)$ 与 $n(x)$，判定 D 结论反向成立。
+      formula_trace:
+        from: $\\varphi(x)=f(x)-e^{2x}-e,\\ \\varphi\\left(\\frac12\\right)=0$
+        to: $x>\\frac12$ 时 $\\varphi^{\prime}(x)<0\\Rightarrow \\varphi(x)<0$
+        operation: 把 $\\varphi^{\prime}(x)$ 化为 $\\frac{n(x)}{x^2}$，再用 $n^{\prime}(x)<0$ 与 $n\\left(\\frac12\\right)<0$。
+        why: 得到 $f(x)<e^{2x}+e$（在 $x>\\frac12$ 上），所以 D 错。
+      source_ref: page_0142_solution
+teaching_card:
+  student_title: 一题三构造：先换元，再分选项判导数
+  what_it_trains: 训练把耦合的 $xf$ 与 $x^2f^{\prime}$ 关系改写成可控的新函数导数符号，并在多选题里分轨判定。
+  recognition_cues:
+    - 题干给出 $xf(x)+x^2f^{\prime}(x)=\\text{指数函数}$。
+    - 选项同时考单调性、增区间和不等式解集。
+    - 出现已知点值 $f\\left(\\frac12\\right)$，常用于锁定构造函数符号。
+  normalization_moves:
+    - 先设 $m(x)=xf(x)$。
+    - 把 $f^{\prime}(x)$ 转化为 $\\frac{h(x)}{x^2}$ 再判 $h$。
+    - 对不同选项再构造 $g(x),\\varphi(x)$。
+  common_failures:
+    - 把 $f^{\prime}(x)\\ge0$ 误写成“有极小值”。
+    - 在 $g^{\prime}(x)>0$ 时漏掉定义域 $x>0$。
+    - 只看到 $\\varphi\\left(\\frac12\\right)=0$ 就误判 D 为真。
+  similar_practice_query: 整体代换 $xf+x^2f^{\\prime}$ 多选题 单调性与不等式联合判定
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

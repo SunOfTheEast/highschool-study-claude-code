@@ -1,0 +1,239 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0075_tangent_ex02
+content_revision_id: mst_p0075_tangent_ex02-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0075_tangent_ex02.card.yaml
+stem: |-
+  （2023 株洲二中高三月考 T11）已知函数 $f(x)=|e^x-1|$，$x_1<0$，$x_2>0$，函数 $f(x)$ 的图象在点 $A(x_1,f(x_1))$ 和点 $B(x_2,f(x_2))$ 处的两条切线互相垂直，且分别交 $y$ 轴于 $M$，$N$ 两点，则下列结论正确的有 (  )
+
+  A. 函数 $f(x)$ 只有一个极值
+  B. 若函数 $g(x)=f(x)-a$ 有且只有一个零点，则实数 $a$ 的取值范围是 $[1,+\infty)$
+  C. $x_1+x_2=0$
+  D. $\frac{|AM|}{|BN|}$ 的取值范围是 $(0,1)$
+answer: |
+  ACD
+
+  先由 $f(x)=|e^x-1|$ 的图像判断原点处只有一个极值点，所以 A 正确。若 $g(x)=f(x)-a$ 只有一个零点，等价于水平线 $y=a$ 与图像只有一个交点，范围应为 $\{0\}\cup[1,+\infty)$，故 B 错误。再分段写出 $f(x)=1-e^x\ (x<0)$、$f(x)=e^x-1\ (x\ge0)$，两侧切线斜率分别为 $-e^{x_1}$、$e^{x_2}$；垂直得 $-e^{x_1}e^{x_2}=-1$，所以 $x_1+x_2=0$，C 正确。最后求切线与 $y$ 轴交点，得到 $|AM|=\sqrt{1+e^{2x_1}}|x_1|$、$|BN|=\sqrt{1+e^{2x_2}}|x_2|$，代入 $x_2=-x_1$ 后比值为 $e^{x_1}\in(0,1)$，D 正确。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 用绝对值指数函数的图像判断极值个数。
+      max_score: 1
+    - step_id: step_2
+      description: 用水平线交点个数修正 B 选项。
+      max_score: 1
+    - step_id: step_3
+      description: 分段去绝对值并写出两侧切线斜率。
+      max_score: 1
+    - step_id: step_4
+      description: 由两条切线互相垂直推出 $x_1+x_2=0$。
+      max_score: 1
+    - step_id: step_5
+      description: 写出左侧切线与 $y$ 轴交点，并求 $|AM|$。
+      max_score: 1
+    - step_id: step_6
+      description: 同理求右侧长度并化简比值范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何性质证明
+    part_level:
+      - part_id: A
+        goal: 零点/极值点分析
+        target: "A: 零点/极值点分析"
+        result: 见 source_solution_summary
+      - part_id: B
+        goal: 求参数范围
+        target: "B: 求参数范围"
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 几何性质证明
+        target: "C: 几何性质证明"
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 几何量求解
+        target: "D: 几何量求解"
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 局部逼近与找点
+      - 显隐点探路
+    subroute:
+      - 分段去绝对值
+      - 垂直切线斜率乘积
+      - 截距点距离公式
+      - 水平线交点个数
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 分段函数结构
+      - 特殊幂函数与指数函数结构
+      - Max/Min 与绝对值结构
+    evidence:
+      - $f(x)=|e^x-1|$ 在 $0$ 两侧分别是 $1-e^x$ 与 $e^x-1$。
+      - $k_{AM}=-e^{x_1}$、$k_{BN}=e^{x_2}$，垂直条件把两个切点横坐标锁定为 $x_1+x_2=0$。
+      - $|AM|$ 与 $|BN|$ 都化成“切点横坐标长度 $\times\sqrt{1+k^2}$”的形式。
+    normalization_moves_used:
+      - 按 $x<0$ 与 $x>0$ 去绝对值，分别求导。
+      - 把“只有一个零点”转化为水平线与图像的交点个数。
+      - 利用 $x_2=-x_1$ 把长度比中的两个变量化为一个变量。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $|e^x-1|$ 写成分段函数，回补分段/复合/反函数基础。
+      - 若学生不知道两直线垂直时斜率乘积为 $-1$，回补几何关系基础。
+      - 若学生不会用导数表示切线斜率，回补导数运算与几何意义。
+      - 若学生不能用水平线交点个数判断 $g(x)=f(x)-a$ 的零点，回补函数性质与图像。
+      - 若学生不会由两点坐标求 $|AM|$、$|BN|$，回补几何关系基础。
+  detail_terms:
+    - $f(x)=|e^x-1|$
+    - $x_1<0,\ x_2>0$
+    - $k_{AM}=-e^{x_1},\ k_{BN}=e^{x_2}$
+    - $x_1+x_2=0$
+    - $\frac{|AM|}{|BN|}=e^{x_1}\in(0,1)$
+    - $a\in\{0\}\cup[1,+\infty)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0075_tangent_ex02
+source_evidence:
+  source_refs:
+    - ref_id: page_0075
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0075/page_0075.md
+      role: problem_start
+      evidence: page_0075 底部给出例 2 题头、完整题干和 A-D 四个选项。
+    - ref_id: page_0076
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0076/page_0076.md
+      role: continuation
+      evidence: page_0076 顶部续完例 2 解析并给出答案 ACD；本卡只读取例 2 续解，未为 page_0076 的例 3 建卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0075.png
+      inspected: true
+      notes: 已核对例 2 题头、函数 $f(x)=|e^x-1|$、条件 $x_1<0,x_2>0$、两条切线互相垂直，以及四个选项。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0076.png
+      inspected: true
+      notes: 已核对例 2 续页解析、辅助图像、B 选项实际反例范围、C/D 的代数推导和答案 ACD；图像下方例 3 仅作边界确认，不纳入本卡。
+  source_context: 本题承接“基本切线方程”，从在点切线斜率进一步转到绝对值分段函数两侧切线互相垂直、截距点和线段长度比。
+  source_influence:
+    - 题干和选项完全来自 page_0075；解析来自 page_0076 顶部续页。
+    - A 由函数图像与极值点定义判断；B 由 $f(x)=a$ 的交点个数补出 $a=0$ 这一种情况；C/D 由两侧导数、垂直斜率乘积和到 $y$ 轴截点的距离公式推出。
+    - page_0076 的小图用于辅助确认 $f(x)=|e^x-1|$ 在原点有唯一极小值，左支趋近于 $y=1$。
+  source_discrepancies:
+    - page_0076 markdown 将 B 的正确零点参数范围转写为 $\{0\}\cup\{1,+\infty\}$；页图和数学交点个数表明应为 $\{0\}\cup[1,+\infty)$，本卡按页图和解析逻辑记录。
+original_problem:
+  stem: |
+    （2023 株洲二中高三月考 T11）已知函数 $f(x)=|e^x-1|$，$x_1<0$，$x_2>0$，函数 $f(x)$ 的图象在点 $A(x_1,f(x_1))$ 和点 $B(x_2,f(x_2))$ 处的两条切线互相垂直，且分别交 $y$ 轴于 $M$，$N$ 两点，则下列结论正确的有 (  )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 函数 $f(x)$ 只有一个极值
+      text_latex: 函数 $f(x)$ 只有一个极值
+    - label: B
+      text_raw: 若函数 $g(x)=f(x)-a$ 有且只有一个零点，则实数 $a$ 的取值范围是 $[1,+\infty)$
+      text_latex: 若函数 $g(x)=f(x)-a$ 有且只有一个零点，则实数 $a$ 的取值范围是 $[1,+\infty)$
+    - label: C
+      text_raw: $x_1+x_2=0$
+      text_latex: $x_1+x_2=0$
+    - label: D
+      text_raw: $\frac{|AM|}{|BN|}$ 的取值范围是 $(0,1)$
+      text_latex: $\frac{|AM|}{|BN|}$ 的取值范围是 $(0,1)$
+  answer: ACD
+  fidelity_notes:
+    - 题干和选项起于 page_0075 底部，解析跨到 page_0076 顶部。
+    - 本题为多选题，choices 保留 A-D 全部选项。
+    - page_0076 解析图是解题辅助图，不是题干给出的外部图形。
+solution:
+  source_solution_summary: |
+    先由 $f(x)=|e^x-1|$ 的图像判断原点处只有一个极值点，所以 A 正确。若 $g(x)=f(x)-a$ 只有一个零点，等价于水平线 $y=a$ 与图像只有一个交点，范围应为 $\{0\}\cup[1,+\infty)$，故 B 错误。再分段写出 $f(x)=1-e^x\ (x<0)$、$f(x)=e^x-1\ (x\ge0)$，两侧切线斜率分别为 $-e^{x_1}$、$e^{x_2}$；垂直得 $-e^{x_1}e^{x_2}=-1$，所以 $x_1+x_2=0$，C 正确。最后求切线与 $y$ 轴交点，得到 $|AM|=\sqrt{1+e^{2x_1}}|x_1|$、$|BN|=\sqrt{1+e^{2x_2}}|x_2|$，代入 $x_2=-x_1$ 后比值为 $e^{x_1}\in(0,1)$，D 正确。
+  key_steps:
+    - step_id: step_1
+      statement: 用绝对值指数函数的图像判断极值个数。
+      formula_trace:
+        from: |
+          $f(x)=|e^x-1|$
+        to: |
+          $x=0$ 处取得唯一极小值 $0$
+        operation: 结合 $e^x-1$ 在 $0$ 处变号，把图像看作左侧 $1-e^x$ 与右侧 $e^x-1$ 拼接。
+        why: 左侧随 $x$ 增大下降到 $0$，右侧随 $x$ 增大从 $0$ 上升，因此只有原点一个极值点。
+      source_ref: page_0076
+    - step_id: step_2
+      statement: 用水平线交点个数修正 B 选项。
+      formula_trace:
+        from: |
+          $g(x)=f(x)-a$ 有且只有一个零点
+        to: |
+          $a\in\{0\}\cup[1,+\infty)$
+        operation: 把零点个数转化为水平线 $y=a$ 与 $y=|e^x-1|$ 的交点个数。
+        why: $a=0$ 时只有 $x=0$ 一个交点；$0<a<1$ 时左右两支各一个交点；$a\ge1$ 时只有右支一个交点。
+      source_ref: page_0076
+    - step_id: step_3
+      statement: 分段去绝对值并写出两侧切线斜率。
+      formula_trace:
+        from: |
+          $f(x)=|e^x-1|$
+        to: |
+          $f(x)=\begin{cases}1-e^x,&x<0\\ e^x-1,&x\ge0\end{cases},\quad
+          f^{\prime}(x)=\begin{cases}-e^x,&x<0\\ e^x,&x\ge0\end{cases}$
+        operation: 按 $x<0$ 与 $x\ge0$ 去掉绝对值，并分别求导。
+        why: $x_1<0$、$x_2>0$ 分别落在左右两支，切线斜率要分支计算。
+      source_ref: page_0076
+    - step_id: step_4
+      statement: 由两条切线互相垂直推出 $x_1+x_2=0$。
+      formula_trace:
+        from: |
+          $k_{AM}=-e^{x_1},\quad k_{BN}=e^{x_2},\quad k_{AM}k_{BN}=-1$
+        to: |
+          $-e^{x_1}e^{x_2}=-1,\quad e^{x_1+x_2}=1,\quad x_1+x_2=0$
+        operation: 使用两直线垂直时斜率乘积为 $-1$，再取指数函数的一一性。
+        why: 指数函数恒正且 $e^t=1$ 当且仅当 $t=0$。
+      source_ref: page_0076
+    - step_id: step_5
+      statement: 写出左侧切线与 $y$ 轴交点，并求 $|AM|$。
+      formula_trace:
+        from: |
+          $A(x_1,1-e^{x_1}),\quad k_{AM}=-e^{x_1}$
+        to: |
+          $y-1+e^{x_1}=-e^{x_1}(x-x_1),\quad
+          M(0,e^{x_1}x_1-e^{x_1}+1),\quad
+          |AM|=\sqrt{1+e^{2x_1}}\,|x_1|$
+        operation: 写出点斜式切线，令 $x=0$ 得 $M$，再用两点距离公式。
+        why: $A$ 到 $M$ 的横向距离为 $|x_1|$，纵向差为 $|e^{x_1}x_1|$。
+      source_ref: page_0076
+    - step_id: step_6
+      statement: 同理求右侧长度并化简比值范围。
+      formula_trace:
+        from: |
+          $|BN|=\sqrt{1+e^{2x_2}}\,|x_2|,\quad x_2=-x_1$
+        to: |
+          $\frac{|AM|}{|BN|}
+          =\frac{\sqrt{1+e^{2x_1}}|x_1|}{\sqrt{1+e^{2x_2}}|x_2|}
+          =\frac{\sqrt{1+e^{2x_1}}}{\sqrt{1+e^{-2x_1}}}=e^{x_1}\in(0,1)$
+        operation: 代入 $x_2=-x_1$，约去 $|x_1|=|x_2|$，再把根式比值化成指数。
+        why: $x_1<0$，所以 $0<e^{x_1}<1$。
+      source_ref: page_0076
+teaching_card:
+  student_title: 把绝对值两侧切线配成互相垂直
+  what_it_trains: 训练先分段求两侧导数，再用垂直斜率乘积把两个切点联系起来，最后把截距长度比化成单变量范围。
+  recognition_cues:
+    - 题干给出 $x_1<0$、$x_2>0$，说明两个切点分居绝对值尖点两侧。
+    - “两条切线互相垂直”通常立刻写 $k_1k_2=-1$。
+    - 交 $y$ 轴于 $M,N$，长度比可以用切线方程求截距点。
+    - 选项含“只有一个零点”，应改看水平线与函数图像的交点数。
+  normalization_moves:
+    - 先把 $|e^x-1|$ 化为左右两支。
+    - 由 $-e^{x_1}\cdot e^{x_2}=-1$ 得 $x_2=-x_1$。
+    - 把 $|AM|$ 和 $|BN|$ 都写成 $\sqrt{1+k^2}$ 乘横向距离。
+    - 用 $x_1<0$ 判定 $e^{x_1}$ 的范围。
+  common_failures:
+    - 漏掉 $a=0$ 时 $g(x)=f(x)-a$ 只有一个零点，误判 B。
+    - 分段求导时把左支斜率写成 $e^{x_1}$，导致垂直条件符号错误。
+    - 求 $M,N$ 时只算截距，不用两点距离公式处理线段长度。
+    - 得到 $x_1+x_2=0$ 后没有继续代入长度比消元。
+  similar_practice_query: 绝对值指数函数 两侧切线互相垂直 截距长度比 $|e^x-1|$
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0075 是例 2 题头所属页，page_0076 只读取到例 2 答案 ACD；未创建 page_0076 例 3 卡。
+    - B 选项解析中的 markdown 括号转写不稳已由 page_0076 图像和水平线交点个数修正，不需要用户拍板。

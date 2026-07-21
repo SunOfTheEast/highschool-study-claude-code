@@ -1,0 +1,196 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0132_quadratic_adjust_ex21
+content_revision_id: mst_p0132_quadratic_adjust_ex21-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0132_quadratic_adjust_ex21.card.yaml
+stem: （2023·怀仁市期中）已知函数 $f(x)$ 的导函数 $f^{\prime}(x)$ 满足 $f^{\prime}(x)+2x>0$ 在 $\mathbf{R}$ 上恒成立，则不等式 $f(2x-1)+3x^2>f(1-x)+2x$ 的解集是______。
+answer: |
+  $(\frac{2}{3},+\infty)$
+
+  因为
+  \[
+  f^{\prime}(x)+2x=[f(x)+x^2]^{\prime}>0,
+  \]
+  令
+  \[
+  g(x)=f(x)+x^2,
+  \]
+  则 $g(x)$ 在 $\mathbf{R}$ 上单调递增。
+  原不等式
+  \[
+  f(2x-1)+3x^2>f(1-x)+2x
+  \]
+  可改写为
+  \[
+  f(2x-1)+(2x-1)^2>f(1-x)+(1-x)^2,
+  \]
+  即
+  \[
+  g(2x-1)>g(1-x).
+  \]
+  由 $g$ 递增可得
+  \[
+  2x-1>1-x.
+  \]
+  解得
+  \[
+  x>\frac{2}{3}.
+  \]
+  故解集为
+  \[
+  \left(\frac{2}{3},+\infty\right).
+  \]
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 先把已知导数不等式识别成“某函数导数大于0”。
+      max_score: 1
+    - step_id: step_2
+      description: 把原式改写成 $g$ 在两个点的函数值比较。
+      max_score: 1
+    - step_id: step_3
+      description: 由增函数比较转为一次不等式。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式求解
+    part_level:
+      - part_id: item_1
+        goal: 不等式求解
+        target: 求一元不等式的解集区间。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 对称化与偏移
+    subroute:
+      - 配方补项
+      - 单调函数反推自变量
+  structure:
+    primary: 同构结构
+    secondary:
+      - 抽象函数结构
+    evidence:
+      - $f^{\prime}(x)+2x$ 与 $[f(x)+x^2]^{\prime}$ 同构。
+      - 题干中 $2x-1$ 与 $1-x$ 形成可直接比较的线性偏移输入。
+    normalization_moves_used:
+      - 构造 $g(x)=f(x)+x^2$。
+      - 把 $3x^2,2x$ 重新拼成 $(2x-1)^2,(1-x)^2$。
+      - 用递增性把函数值比较转成自变量比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看不出 $f^{\prime}(x)+2x$ 的原函数结构，回补导数运算与几何意义。
+      - 若学生不会将 $3x^2-2x$ 拆成两侧平方差，回补代数恒等变形。
+      - 若学生把“递增”方向写反，回补导数单调极值基础。
+  detail_terms:
+    - $g(x)=f(x)+x^2$
+    - $g^{\prime}(x)>0$
+    - $g(2x-1)>g(1-x)$
+    - $x>\frac{2}{3}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0132_quadratic_adjust_ex21
+source_evidence:
+  source_refs:
+    - ref_id: page_0132
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0132/page_0132.md
+      role: problem_start
+      evidence: page_0132给出例21完整题干与解析，结论为解集 $(\frac{2}{3},+\infty)$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0132.png
+      inspected: true
+      notes: 已核对页图：例21在page_0132内完整结束，题干为填空题。
+  source_context: 本题通过把 $f^{\prime}(x)+2x$ 识别成导数，构造增函数 $g(x)=f(x)+x^2$，再比较复合自变量。
+  source_influence:
+    - 保留源页“$f^{\prime}(x)+2x=[f(x)+x^2]^{\prime}$”的核心观察。
+    - 保留把原不等式配方成 $g(2x-1)>g(1-x)$ 的步骤。
+    - 保留增函数值比较等价为自变量比较，得 $x>\frac{2}{3}$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·怀仁市期中）已知函数 $f(x)$ 的导函数 $f^{\prime}(x)$ 满足 $f^{\prime}(x)+2x>0$ 在 $\mathbf{R}$ 上恒成立，则不等式 $f(2x-1)+3x^2>f(1-x)+2x$ 的解集是______。
+  parts: *a1
+  choices: []
+  answer: $(\frac{2}{3},+\infty)$
+  fidelity_notes:
+    - 源题为填空，答案写作区间。
+solution:
+  source_solution_summary: |
+    因为
+    \[
+    f^{\prime}(x)+2x=[f(x)+x^2]^{\prime}>0,
+    \]
+    令
+    \[
+    g(x)=f(x)+x^2,
+    \]
+    则 $g(x)$ 在 $\mathbf{R}$ 上单调递增。
+    原不等式
+    \[
+    f(2x-1)+3x^2>f(1-x)+2x
+    \]
+    可改写为
+    \[
+    f(2x-1)+(2x-1)^2>f(1-x)+(1-x)^2,
+    \]
+    即
+    \[
+    g(2x-1)>g(1-x).
+    \]
+    由 $g$ 递增可得
+    \[
+    2x-1>1-x.
+    \]
+    解得
+    \[
+    x>\frac{2}{3}.
+    \]
+    故解集为
+    \[
+    \left(\frac{2}{3},+\infty\right).
+    \]
+  key_steps:
+    - step_id: step_1
+      statement: 先把已知导数不等式识别成“某函数导数大于0”。
+      formula_trace:
+        from: $f^{\prime}(x)+2x>0$
+        to: $[f(x)+x^2]^{\prime}>0$
+        operation: 观察并补出 $x^2$ 的导数项。
+        why: 为构造全局单调函数做准备。
+      source_ref: page_0132
+    - step_id: step_2
+      statement: 把原式改写成 $g$ 在两个点的函数值比较。
+      formula_trace:
+        from: $f(2x-1)+3x^2>f(1-x)+2x$
+        to: $g(2x-1)>g(1-x)$
+        operation: 分别配成 $(2x-1)^2$ 与 $(1-x)^2$。
+        why: 让题目直接落入“递增函数比较自变量”模板。
+      source_ref: page_0132
+    - step_id: step_3
+      statement: 由增函数比较转为一次不等式。
+      formula_trace:
+        from: $g(2x-1)>g(1-x)$，$g$递增
+        to: $2x-1>1-x \Rightarrow x>\frac{2}{3}$
+        operation: 函数值比较等价为输入比较。
+        why: 直接得到解集端点。
+      source_ref: page_0132
+teaching_card:
+  student_title: 加一个 $x^2$，把题目变成增函数比较
+  what_it_trains: 训练“补项构造单调函数”的稳定套路，并把复杂不等式压缩成线性自变量比较。
+  recognition_cues:
+    - 已知里出现 $f^{\prime}(x)+$ 线性项。
+    - 待求式里出现 $f(\text{线性式})$ 的对比。
+  normalization_moves:
+    - 识别并设 $g=f+x^2$。
+    - 把原式左右配成 $g(2x-1),g(1-x)$。
+    - 由 $g$ 递增直接比较 $2x-1$ 与 $1-x$。
+  common_failures:
+    - 把 $3x^2$ 误配成 $x^2+(1-x)^2$。
+    - 忘记 $g$ 在全实数上递增。
+    - 最后把严格不等式误写成含端点。
+  similar_practice_query: 抽象函数 补项构造 单调性 g(2x-1)>g(1-x) 解集
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

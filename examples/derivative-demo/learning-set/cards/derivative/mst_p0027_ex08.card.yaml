@@ -1,0 +1,154 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0027_ex08
+content_revision_id: mst_p0027_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0027_ex08.card.yaml
+stem: |
+  (2024 秋·湖北月考 T15) 已知实数 $x_1$，$x_2$ 满足 $e^{x_1}+x_1=10$，$\ln\sqrt[3]{3x_2+2}+x_2=\frac83$，则 $x_1+3x_2=$________。
+answer: |-
+  $8$
+
+  将 $\ln\sqrt[3]{3x_2+2}+x_2=\frac83$ 化为 $\frac13\ln(3x_2+2)+x_2=\frac83$，再乘以 3 并加 2，得 $\ln(3x_2+2)+(3x_2+2)=10$。令 $g(t)=t+e^t$，它在 $\mathbf R$ 上严格递增；因为 $e^{x_1}+x_1=10$，且 $e^{\ln(3x_2+2)}+\ln(3x_2+2)=10$，所以 $\ln(3x_2+2)=x_1$。于是 $3x_2+2=e^{x_1}=10-x_1$，故 $x_1+3x_2=8$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先整理第二个方程。
+      max_score: 1
+    - step_id: step_2
+      description: 配成与 10 相同的同构等式。
+      max_score: 1
+    - step_id: step_3
+      description: 把两个等式放进同一个单调函数。
+      max_score: 1
+    - step_id: step_4
+      description: 利用 $g$ 的单调性确定对数。
+      max_score: 1
+    - step_id: step_5
+      description: 回代求目标值。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - $e^x+x$ 单调母函数
+      - $\ln(3x_2+2)$ 换元
+      - 同值 10 配对
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $e^{x_1}+x_1=10$ 与 $\ln(3x_2+2)+(3x_2+2)=10$ 都是 $g(t)=e^t+t$ 的函数值。
+      - $x_1=\ln(3x_2+2)$ 后，目标值直接由 $3x_2+2=e^{x_1}$ 得出。
+    normalization_moves_used:
+      - $\ln\sqrt[3]{3x_2+2}=\frac13\ln(3x_2+2)$。
+      - 乘以 3 后加 2。
+      - $3x_2+2=e^{\ln(3x_2+2)}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生忽略 $3x_2+2>0$，回补函数三要素与定义域。
+      - 若学生不会把 $\ln\sqrt[3]{u}$ 化成 $\frac13\ln u$，回补指数对数基础。
+      - 若学生想直接求 $x_1,x_2$ 而看不到同构函数，回补函数性质与图像。
+      - 若学生不能从 $g(x_1)=g(\ln(3x_2+2))$ 推出输入相等，回补导数单调极值基础。
+  detail_terms:
+    - $e^{x_1}+x_1=10$
+    - $\ln\sqrt[3]{3x_2+2}+x_2=\frac83$
+    - $g(t)=t+e^t$
+    - $x_1=\ln(3x_2+2)$
+    - $x_1+3x_2=8$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0027_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0027
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0027/page_0027.md
+      role: problem_start
+      evidence: lines 35-37 give 例8题干、解析和答案 8；随后进入考点2，不属于本题。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0027.png
+      inspected: true
+      notes: 已核对例8题干、解析、答案 8，以及题后切换到考点2。
+  source_context: 例8是 page_0027 上“考点1：构造单调函数 $e^x+x$ 或 $x+\ln x$”的最后一道例题，之后进入考点2。
+  source_influence:
+    - 源解把第二个方程乘以 3 后加 2，配成 $\ln(3x_2+2)+(3x_2+2)=10$，再与 $e^{x_1}+x_1=10$ 同构。
+  source_discrepancies: []
+original_problem:
+  stem: |
+    (2024 秋·湖北月考 T15) 已知实数 $x_1$，$x_2$ 满足 $e^{x_1}+x_1=10$，$\ln\sqrt[3]{3x_2+2}+x_2=\frac83$，则 $x_1+3x_2=$________。
+  parts: *a1
+  choices: []
+  answer: $8$
+  fidelity_notes:
+    - 题干和解析完整在 page_0027。
+    - 由 $\ln\sqrt[3]{3x_2+2}$ 有意义可知 $3x_2+2>0$。
+solution:
+  source_solution_summary: 将 $\ln\sqrt[3]{3x_2+2}+x_2=\frac83$ 化为 $\frac13\ln(3x_2+2)+x_2=\frac83$，再乘以 3 并加 2，得 $\ln(3x_2+2)+(3x_2+2)=10$。令 $g(t)=t+e^t$，它在 $\mathbf R$ 上严格递增；因为 $e^{x_1}+x_1=10$，且 $e^{\ln(3x_2+2)}+\ln(3x_2+2)=10$，所以 $\ln(3x_2+2)=x_1$。于是 $3x_2+2=e^{x_1}=10-x_1$，故 $x_1+3x_2=8$。
+  key_steps:
+    - step_id: step_1
+      statement: 先整理第二个方程。
+      formula_trace:
+        from: $\ln\sqrt[3]{3x_2+2}+x_2=\frac83$
+        to: $\frac13\ln(3x_2+2)+x_2=\frac83$
+        operation: 用 $\ln\sqrt[3]{u}=\frac13\ln u$，其中 $u=3x_2+2>0$。
+        why: 把根式对数展开，便于和 $3x_2+2$ 配对。
+      source_ref: page_0027
+    - step_id: step_2
+      statement: 配成与 10 相同的同构等式。
+      formula_trace:
+        from: $\frac13\ln(3x_2+2)+x_2=\frac83$
+        to: $\ln(3x_2+2)+(3x_2+2)=10$
+        operation: 两边乘以 3 得 $\ln(3x_2+2)+3x_2=8$，再两边加 2。
+        why: 左边成为 $y+e^y$ 的形式，其中 $y=\ln(3x_2+2)$。
+      source_ref: page_0027
+    - step_id: step_3
+      statement: 把两个等式放进同一个单调函数。
+      formula_trace:
+        from: $e^{x_1}+x_1=10,\quad \ln(3x_2+2)+(3x_2+2)=10$
+        to: $g(x_1)=g(\ln(3x_2+2)),\quad g(t)=t+e^t$
+        operation: 用 $3x_2+2=e^{\ln(3x_2+2)}$。
+        why: 两个未知量通过同一个函数值 10 联系起来。
+      source_ref: page_0027
+    - step_id: step_4
+      statement: 利用 $g$ 的单调性确定对数。
+      formula_trace:
+        from: $g(x_1)=g(\ln(3x_2+2))$
+        to: $x_1=\ln(3x_2+2)$
+        operation: $g$ 的导数为 $1+e^t>0$，所以 $g$ 在 $\mathbf R$ 上严格递增。
+        why: 严格递增函数值相等，输入相等。
+      source_ref: page_0027
+    - step_id: step_5
+      statement: 回代求目标值。
+      formula_trace:
+        from: $x_1=\ln(3x_2+2),\quad e^{x_1}+x_1=10$
+        to: $x_1+3x_2=8$
+        operation: 由 $3x_2+2=e^{x_1}=10-x_1$，移项得 $x_1+3x_2=8$。
+        why: 目标式正好是回代等式中的线性组合。
+      source_ref: page_0027
+teaching_card:
+  student_title: 乘三加二，把第二个方程配成 $x+e^x$
+  what_it_trains: 训练把看似不同的两个方程整理成同一个递增函数的同一函数值，再利用回代直接求线性组合。
+  recognition_cues:
+    - 一个方程已经是 $e^{x_1}+x_1=10$。
+    - 另一个方程含 $\ln\sqrt[3]{3x_2+2}$ 和 $x_2$。
+    - 目标是 $x_1+3x_2$，提示把第二式变成 $3x_2$。
+  normalization_moves:
+    - 把立方根对数化为 $\frac13\ln(3x_2+2)$。
+    - 第二式乘以 3，再加 2。
+    - 令 $\ln(3x_2+2)$ 与 $x_1$ 通过 $g(t)=e^t+t$ 对齐。
+    - 用 $e^{x_1}=10-x_1$ 回代。
+  common_failures:
+    - 乘以 3 后忘记再加 2，凑不出 $3x_2+2$。
+    - 把 $\ln\sqrt[3]{3x_2+2}$ 错化为 $\sqrt[3]{\ln(3x_2+2)}$。
+    - 解出 $x_1=\ln(3x_2+2)$ 后没有立刻用 $e^{x_1}=3x_2+2$。
+  similar_practice_query: $e^x+x$ 同值 10 $\ln\\sqrt[3]{3x+2}$ 数值求值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

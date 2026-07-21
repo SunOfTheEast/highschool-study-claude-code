@@ -1,0 +1,251 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0239_ae2x_plus_a_minus2_ex_minus_x_two_zeros_param_ch6_main_object_ex13
+content_revision_id: mst_p0239_ae2x_plus_a_minus2_ex_minus_x_two_zeros_param_ch6_main_object_ex13-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0239_ae2x_plus_a_minus2_ex_minus_x_two_zeros_param_ch6_main_object_ex13.card.yaml
+stem: |-
+  （2017 · 新课标 I）已知函数 $f(x)=ae^{2x}+(a-2)e^x-x$。
+  1. 讨论 $f(x)$ 的单调性。
+  2. 若 $f(x)$ 有两个零点，求 $a$ 的取值范围。
+answer: |-
+  第 (1) 问：当 $a\leqslant0$ 时，$f$ 在 $\mathbf R$ 上单调递减；当 $a>0$ 时，$f$ 在 $(-\infty,\ln\frac1a)$ 单调递减，在 $(\ln\frac1a,+\infty)$ 单调递增。第 (2) 问：$a\in(0,1)$。
+
+  $f'(x)=2ae^{2x}+(a-2)e^x-1$。当 $a=0$ 时， $f'(x)=-2e^x-1<0$；当 $a<0$ 时， $f'(x)=2a(e^x+\frac12)(e^x-\frac1a)<0$，所以 $a\leqslant0$ 时 $f$ 在 $\mathbf R$ 上递减。当 $a>0$ 时， $f'(x)=(2e^x+1)(ae^x-1)$，临界点为 $x=\ln(1/a)$，先减后增。若 $f$ 有两个零点，则必须 $a>0$ 且 $f(\ln(1/a))=1-\frac1a-\ln\frac1a<0$。令 $g(u)=u+\ln u-1$，则 $g$ 单调递增且 $g(1)=0$，所以 $g(1/a)>0$ 等价于 $1/a>1$，即 $0<a<1$。充分性方面，左侧可用 $f(-1)>0$，或按主体客体分析取 $x=(a-2)/a$，夹出左零点；右侧把 $f(x)$ 写成 $e^x(ae^x+a-2-x/e^x)$，用 $x/e^x\leqslant1/e$，取 $x=\ln((3-a)/a)$，夹出右零点。故答案为 $(0,1)$。
+rubric:
+  max_score: 9
+  criteria:
+    - step_id: step_1
+      description: 先求导并分类。
+      max_score: 1
+    - step_id: step_2
+      description: $a\leqslant0$ 时函数单调递减。
+      max_score: 1
+    - step_id: step_3
+      description: $a>0$ 时导数可分解。
+      max_score: 1
+    - step_id: step_4
+      description: 两个零点的必要条件来自极小值。
+      max_score: 1
+    - step_id: step_5
+      description: 把极小值条件解成 $0<a<1$。
+      max_score: 1
+    - step_id: step_6
+      description: 左侧用主体客体分析找正值点。
+      max_score: 1
+    - step_id: step_7
+      description: 右侧用等效零点找正值点。
+      max_score: 1
+    - step_id: step_8
+      description: 取 $x=\ln((3-a)/a)$ 夹出右零点。
+      max_score: 1
+    - step_id: step_9
+      description: 合并必要性和左右取点充分性。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: part_1
+        goal: 零点/极值点分析
+        target: 第 part_1 问
+        result: $a\leqslant0$ 时全域递减；$a>0$ 时在 $\ln(1/a)$ 左减右增。
+      - part_id: part_2
+        goal: 求参数范围
+        target: 第 part_2 问
+        result: $a\in(0,1)$。
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 含参数分类讨论
+      - 同构变形与换元法
+      - 充分/必要性探路
+    subroute:
+      - 三项变量主客体分析
+      - 导数因式分解
+      - 单谷双零点
+      - 左右取点
+      - $x/e^x$ 上界
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 特殊幂函数与指数函数结构
+      - 不等式工具结构
+    evidence:
+      - $ae^{2x}+(a-2)e^x-x$
+      - $(2e^x+1)(ae^x-1)$
+      - $\ln(1/a)$
+      - $(a-2)/a$
+      - $\ln((3-a)/a)$
+    normalization_moves_used:
+      - 导数按 $e^x$ 分解，得到唯一临界点。
+      - 极小值条件解出 $0<a<1$。
+      - 左侧用 $-x$ 主体找点。
+      - 右侧提出 $e^x$，用 $x/e^x$ 上界找点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求导或因式分解导数，回补导数运算与几何意义。
+      - 若学生不会按 $a$ 分类判导数，回补含参数分类讨论对应基础：导数单调极值基础。
+      - 若学生不会用极小值判断两个零点，回补方程根分布与韦达。
+      - 若学生不会构造 $g(u)=u+\ln u-1$，回补指数对数基础。
+      - 若学生不会主客体取点，回补不等式工具基础。
+      - 若学生不会提出 $e^x$，回补代数恒等变形。
+  detail_terms:
+    - $ae^{2x}+(a-2)e^x-x$
+    - 三项变量
+    - 主客体分析
+    - $(2e^x+1)(ae^x-1)$
+    - $\ln(1/a)$
+    - $0<a<1$
+    - $(a-2)/a$
+    - $\ln((3-a)/a)$
+parts: &a1
+  - part_id: part_1
+    text: 讨论 $f(x)$ 的单调性。
+  - part_id: part_2
+    text: 若 $f(x)$ 有两个零点，求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0239_ae2x_plus_a_minus2_ex_minus_x_two_zeros_param_ch6_main_object_ex13
+source_evidence:
+  source_refs:
+    - ref_id: page_0239_ex13_section_intro
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0239/page_0239.md
+      role: local_context
+      evidence: page_0239 在例13前进入“三项变量的主客体分析”，说明三项变量要逐一分析主体客体并转成一主体一客体。
+    - ref_id: page_0239_ex13_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0239/page_0239.md
+      role: problem_start
+      evidence: page_0239 下部给出例13题头：$f(x)=ae^{2x}+(a-2)e^x-x$，第 (1) 问单调性，第 (2) 问两个零点求 $a$。
+    - ref_id: page_0239_ex13_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0239/page_0239.md
+      role: solution
+      evidence: page_0239 底部开始第 (1) 问：$f^\prime(x)=2ae^{2x}+(a-2)e^x-1$，并在 $a=0,a>0,a<0$ 中分类。
+    - ref_id: page_0240_ex13_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0240/page_0240.md
+      role: continuation
+      evidence: page_0240 续完例13：$a\leq0$ 时单调递减；$a>0$ 时在 $\ln(1/a)$ 处取最小值，两个零点条件为 $0<a<1$，再用主体客体分析找左右取点。
+    - ref_id: page_0240_ex14_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0240/page_0240.md
+      role: local_context
+      evidence: page_0240 底部另起例14，属于下一批，本卡只取其前方的例13续解。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0239.png
+      inspected: true
+      notes: 已核对页图：例13题头和解析开头位于 page_0239 下部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0240.png
+      inspected: true
+      notes: 已核对页图：page_0240 顶部至中部为例13续解，例14另起。
+  source_context: 本卡处理 page_0239 起头、page_0240 续完的例13；page_0240 例14以后留给下一批。
+  source_influence:
+    - 保留 source 的三项变量主客体分析：左侧以 $-x$ 为主体，右侧以 $ae^{2x}$ 为主体。
+    - 保留 source 的导数分解：$f^\prime(x)=(2e^x+1)(ae^x-1)$ when $a>0$。
+    - 保留 source 的必要条件：极小值 $1-\frac1a-\ln\frac1a<0$ 等价于 $0<a<1$。
+    - 保留 source 的左右取点：左侧可用 $(a-2)/a$，右侧可用 $\ln((3-a)/a)$。
+  source_discrepancies: []
+original_problem:
+  stem: （2017 · 新课标 I）已知函数 $f(x)=ae^{2x}+(a-2)e^x-x$。
+  parts: *a1
+  choices: []
+  answer: 第 (1) 问：当 $a\leqslant0$ 时，$f$ 在 $\mathbf R$ 上单调递减；当 $a>0$ 时，$f$ 在 $(-\infty,\ln\frac1a)$ 单调递减，在 $(\ln\frac1a,+\infty)$ 单调递增。第 (2) 问：$a\in(0,1)$。
+  fidelity_notes:
+    - 两问均无选项。
+    - 函数定义域为 $\mathbf R$。
+solution:
+  source_solution_summary: $f'(x)=2ae^{2x}+(a-2)e^x-1$。当 $a=0$ 时， $f'(x)=-2e^x-1<0$；当 $a<0$ 时， $f'(x)=2a(e^x+\frac12)(e^x-\frac1a)<0$，所以 $a\leqslant0$ 时 $f$ 在 $\mathbf R$ 上递减。当 $a>0$ 时， $f'(x)=(2e^x+1)(ae^x-1)$，临界点为 $x=\ln(1/a)$，先减后增。若 $f$ 有两个零点，则必须 $a>0$ 且 $f(\ln(1/a))=1-\frac1a-\ln\frac1a<0$。令 $g(u)=u+\ln u-1$，则 $g$ 单调递增且 $g(1)=0$，所以 $g(1/a)>0$ 等价于 $1/a>1$，即 $0<a<1$。充分性方面，左侧可用 $f(-1)>0$，或按主体客体分析取 $x=(a-2)/a$，夹出左零点；右侧把 $f(x)$ 写成 $e^x(ae^x+a-2-x/e^x)$，用 $x/e^x\leqslant1/e$，取 $x=\ln((3-a)/a)$，夹出右零点。故答案为 $(0,1)$。
+  key_steps:
+    - step_id: step_1
+      statement: 先求导并分类。
+      formula_trace:
+        from: $f(x)=ae^{2x}+(a-2)e^x-x$
+        to: $f^\prime(x)=2ae^{2x}+(a-2)e^x-1$
+        operation: 逐项求导。
+        why: 单调性和两个零点都由导数结构决定。
+      source_ref: page_0239_ex13_solution_start
+    - step_id: step_2
+      statement: $a\leqslant0$ 时函数单调递减。
+      formula_trace:
+        from: $a=0$ 或 $a<0$
+        to: $f^\prime(x)<0$
+        operation: 分别代入 $a=0$，或用 $2a(e^x+\frac12)(e^x-\frac1a)$ 判号。
+        why: 单调递减函数最多一个零点。
+      source_ref: page_0240_ex13_continuation
+    - step_id: step_3
+      statement: $a>0$ 时导数可分解。
+      formula_trace:
+        from: $f^\prime(x)=2ae^{2x}+(a-2)e^x-1$
+        to: $(2e^x+1)(ae^x-1)$
+        operation: 按 $e^x$ 因式分解。
+        why: 唯一临界点是 $e^x=1/a$。
+      source_ref: page_0239_ex13_solution_start
+    - step_id: step_4
+      statement: 两个零点的必要条件来自极小值。
+      formula_trace:
+        from: $x=\ln\frac1a$
+        to: $f_{\min}=1-\frac1a-\ln\frac1a<0$
+        operation: 代入极小值点。
+        why: 先减后增函数要有两个零点，最低点必须低于 x 轴。
+      source_ref: page_0240_ex13_continuation
+    - step_id: step_5
+      statement: 把极小值条件解成 $0<a<1$。
+      formula_trace:
+        from: $1-\frac1a-\ln\frac1a<0$
+        to: $g(\frac1a)>0,\ g(u)=u+\ln u-1$
+        operation: 移项并构造单调函数 $g$。
+        why: $g$ 在正数上递增且 $g(1)=0$。
+      source_ref: page_0240_ex13_continuation
+    - step_id: step_6
+      statement: 左侧用主体客体分析找正值点。
+      formula_trace:
+        from: $x<\ln\frac1a$
+        to: $f(x)>\frac{a-2}{a}-x$，取 $x=\frac{a-2}{a}$
+        operation: 把 $-x$ 当主体，其余项作客体下界。
+        why: 在极小值左侧找到 $f>0$ 的点，夹出左零点。
+      source_ref: page_0240_ex13_continuation
+    - step_id: step_7
+      statement: 右侧用等效零点找正值点。
+      formula_trace:
+        from: $f(x)=ae^{2x}+(a-2)e^x-x$
+        to: $e^x(ae^x+a-2-\frac{x}{e^x})$
+        operation: 提出 $e^x$。
+        why: 右侧主体是 $ae^{2x}$，提出 $e^x$ 后可用 $x/e^x$ 的上界。
+      source_ref: page_0240_ex13_continuation
+    - step_id: step_8
+      statement: 取 $x=\ln((3-a)/a)$ 夹出右零点。
+      formula_trace:
+        from: $e^x(ae^x+a-2-\frac1e)>0$
+        to: $x=\ln\frac{3-a}{a}$
+        operation: 先解更精确点，再取更好用的整数化界。
+        why: 配合极小值负值，在右侧夹出第二个零点。
+      source_ref: page_0240_ex13_continuation
+    - step_id: step_9
+      statement: 合并必要性和左右取点充分性。
+      formula_trace:
+        from: $0<a<1$
+        to: $f$ 有两个零点
+        operation: 极小值小于 0 加两侧正值点。
+        why: 先减后增函数最多两个零点，左右各夹出一个即恰有两个。
+      source_ref: page_0240_ex13_continuation
+teaching_card:
+  student_title: 三项指数函数两零点：先判一谷，再用主客体分别找两侧点
+  what_it_trains: 训练三项变量的取点思路：必要条件看极小值，充分性靠左右两侧分别锁定主体。
+  recognition_cues:
+    - 函数有 $ae^{2x}$、$(a-2)e^x$、$-x$ 三项。
+    - 导数能分解成 $(2e^x+1)(ae^x-1)$。
+    - 题目要求两个零点，需要在极小值两侧各找正值点。
+  normalization_moves:
+    - 第 (1) 问先按 $a$ 分类讨论单调性。
+    - 第 (2) 问排除 $a\leqslant0$。
+    - 用 $f_{\min}<0$ 得 $0<a<1$。
+    - 左侧以 $-x$ 为主体取 $(a-2)/a$。
+    - 右侧以 $ae^{2x}$ 为主体，提出 $e^x$ 后取 $\ln((3-a)/a)$。
+  common_failures:
+    - 只用极小值小于 0，没补左右取点。
+    - 导数分解时把 $(2e^x+1)$ 写错。
+    - 左侧和右侧主体判断反了。
+    - 把 $a\in(0,1)$ 的充分性当成显然。
+  similar_practice_query: ae^{2x}+(a-2)e^x-x 两零点 三项变量 主客体分析 x/e^x 0<a<1
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

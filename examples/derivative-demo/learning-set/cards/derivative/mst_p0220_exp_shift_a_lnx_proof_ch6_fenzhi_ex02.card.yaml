@@ -1,0 +1,203 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0220_exp_shift_a_lnx_proof_ch6_fenzhi_ex02
+content_revision_id: mst_p0220_exp_shift_a_lnx_proof_ch6_fenzhi_ex02-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0220_exp_shift_a_lnx_proof_ch6_fenzhi_ex02.card.yaml
+stem: |-
+  （2021 · 清华自招）已知函数 $f(x)=e^{x-1}-a\ln x+a\ln a$。
+  1. 当 $a=1$ 时，讨论 $f(x)$ 的单调性。
+  2. 当 $a>0$ 时，证明：$f(x)\geqslant a$。
+answer: |-
+  （1）$a=1$ 时，$f(x)$ 在 $(0,1)$ 上单调递减，在 $(1,+\infty)$ 上单调递增；（2）证明见解析，等号当且仅当 $a=1,x=1$ 取得。
+
+  当 $a=1$ 时，$f(x)=e^{x-1}-\ln x$， $f^{\prime}(x)=e^{x-1}-\frac1x$， $f^{\prime\prime}(x)=e^{x-1}+\frac1{x^2}>0$，故 $f^{\prime}$ 单调递增且 $f^{\prime}(1)=0$，于是 $f$ 在 $(0,1)$ 递减，在 $(1,+\infty)$ 递增。第二问要证 $f(x)\geqslant a$。法一拆成两个保值块： $e^{x-1}-x\geqslant0$ 等价于 $e^{x-1}-(x-1)-1\geqslant0$，在 $x=1$ 取等；同时 $\frac xa-1-\ln\frac xa\geqslant0$，在 $x=a$ 取等，所以 $e^{x-1}-x+a(\frac xa-1-\ln\frac xa)\geqslant0$，等号要求 $x=1$ 且 $x=a$，即 $a=1,x=1$。法二将目标改写为 $e^{x-1}\geqslant a\ln\frac{ex}{a}$，再比较 $\frac{a}{e^2}\frac{e^x}{x}$ 与 $a\frac{\ln(ex/a)}{ex/a}$，左右最优值均为 $a/e$，取等条件分别为 $x=1$ 与 $x=a$，最终同样得到不等式成立。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 第一问用二阶导确认 $f^{\prime}$ 单调。
+      max_score: 1
+    - step_id: step_2
+      description: 读出第一问单调区间。
+      max_score: 1
+    - step_id: step_3
+      description: 法一把第二问拆成两个非负母函数。
+      max_score: 1
+    - step_id: step_4
+      description: 用取等点说明不等式成立。
+      max_score: 1
+    - step_id: step_5
+      description: 法二改写为上下函数比较。
+      max_score: 1
+    - step_id: step_6
+      description: 比较上下函数最值。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 1 问
+        result: $a=1$ 时 $f$ 在 $(0,1)$ 递减，在 $(1,+\infty)$ 递增。
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 2 问
+        result: $a>0$ 时 $f(x)\geqslant a$。
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 同构变形与换元法
+      - 切线放缩与凹凸性
+    subroute:
+      - 同构保值性
+      - $e^u-u-1$
+      - $t-1-\ln t$
+      - 上下函数选取
+      - 亲密接触
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+      - 非齐次结构
+    evidence:
+      - $e^{x-1}-a\ln x+a\ln a$
+      - $e^{x-1}-x+a(\frac xa-1-\ln\frac xa)$
+      - $e^{x-1}\geqslant a\ln\frac{ex}{a}$
+    normalization_moves_used:
+      - 用 $f^{\prime\prime}>0$ 定位第一问导数零点。
+      - 第二问加减 $x$，把目标拆成两个非负块。
+      - 把常数写进对数，形成 $\frac{e^x}{x}$ 与 $\frac{\ln x}{x}$ 的上下函数。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求 $f^{\prime\prime}$ 或不会用 $f^{\prime}$ 单调判号，回补导数单调极值基础。
+      - 若学生不知道 $e^u-u-1\geqslant0$ 或 $t-1-\ln t\geqslant0$，回补不等式工具基础。
+      - 若学生不能把 $a\ln a-a\ln x$ 合成 $-a\ln(x/a)$，回补指数对数基础。
+      - 若学生拆式时漏掉 $a>0$ 对 $\ln(x/a)$ 的定义要求，回补函数三要素与定义域。
+  detail_terms:
+    - $e^u-u-1$
+    - $t-1-\ln t$
+    - $\frac xa$
+    - $a\ln\frac{ex}{a}$
+    - 同构保值性
+    - 亲密接触
+parts: &a1
+  - part_id: "1"
+    text: 当 $a=1$ 时，讨论 $f(x)$ 的单调性。
+  - part_id: "2"
+    text: 当 $a>0$ 时，证明：$f(x)\geqslant a$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0220_exp_shift_a_lnx_proof_ch6_fenzhi_ex02
+source_evidence:
+  source_refs:
+    - ref_id: page_0220_ex02_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0220/page_0220.md
+      role: problem_start
+      evidence: page_0220 页底给出例2题头：$f(x)=e^{x-1}-a\ln x+a\ln a$，两问讨论 $a=1$ 单调性并证明 $a>0$ 时 $f(x)\geqslant a$。
+    - ref_id: page_0220_ex02_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0220/page_0220.md
+      role: solution
+      evidence: page_0220 页底给出第一问解析：$f^{\prime}(x)=e^{x-1}-1/x$，$f^{\prime\prime}(x)>0$，故先减后增。
+    - ref_id: page_0221_ex02_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0221/page_0221.md
+      role: continuation
+      evidence: page_0221 页首继续例2第二问，给出法一“同构保值性”和法二“分而治之”。
+    - ref_id: page_0221_ex03_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0221/page_0221.md
+      role: local_context
+      evidence: page_0221 中部进入“含指对的上下函数选取”和例3题头，说明例2到此闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0220.png
+      inspected: true
+      notes: 已核对页图：例2题头和第一问解析开始于 page_0220 页底。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0221.png
+      inspected: true
+      notes: 已核对页图：page_0221 页首完整承接例2第二问，随后进入新小节和例3。
+  source_context: 本卡处理 page_0220 起头、page_0221 页首续完的例2；page_0221 中部例3归下一卡。
+  source_influence:
+    - 保留第一问通过 $f^{\prime\prime}(x)>0$ 证明 $f^{\prime}$ 递增、$x=1$ 分界。
+    - 保留第二问的两个 source 路径：同构保值性与分而治之。
+    - 卡片将同构保值性中的两个非负母函数分开表述，避免 source 把不同母函数都记作 $h$ 造成歧义。
+  source_discrepancies:
+    - page_0221 的法一把 $e^u-u-1$ 与 $t-1-\ln t$ 都用同一个 $h$ 记号描述，严格来说是两个不同的标准非负块；卡片按数学含义拆成两个母函数。
+original_problem:
+  stem: （2021 · 清华自招）已知函数 $f(x)=e^{x-1}-a\ln x+a\ln a$。
+  parts: *a1
+  choices: []
+  answer: （1）$a=1$ 时，$f(x)$ 在 $(0,1)$ 上单调递减，在 $(1,+\infty)$ 上单调递增；（2）证明见解析，等号当且仅当 $a=1,x=1$ 取得。
+  fidelity_notes:
+    - 两问解答题，无选项。
+    - 第二问 source 同时给出同构保值性和分而治之两种证明。
+solution:
+  source_solution_summary: 当 $a=1$ 时，$f(x)=e^{x-1}-\ln x$， $f^{\prime}(x)=e^{x-1}-\frac1x$， $f^{\prime\prime}(x)=e^{x-1}+\frac1{x^2}>0$，故 $f^{\prime}$ 单调递增且 $f^{\prime}(1)=0$，于是 $f$ 在 $(0,1)$ 递减，在 $(1,+\infty)$ 递增。第二问要证 $f(x)\geqslant a$。法一拆成两个保值块： $e^{x-1}-x\geqslant0$ 等价于 $e^{x-1}-(x-1)-1\geqslant0$，在 $x=1$ 取等；同时 $\frac xa-1-\ln\frac xa\geqslant0$，在 $x=a$ 取等，所以 $e^{x-1}-x+a(\frac xa-1-\ln\frac xa)\geqslant0$，等号要求 $x=1$ 且 $x=a$，即 $a=1,x=1$。法二将目标改写为 $e^{x-1}\geqslant a\ln\frac{ex}{a}$，再比较 $\frac{a}{e^2}\frac{e^x}{x}$ 与 $a\frac{\ln(ex/a)}{ex/a}$，左右最优值均为 $a/e$，取等条件分别为 $x=1$ 与 $x=a$，最终同样得到不等式成立。
+  key_steps:
+    - step_id: step_1
+      statement: 第一问用二阶导确认 $f^{\prime}$ 单调。
+      formula_trace:
+        from: $a=1,\ f(x)=e^{x-1}-\ln x$
+        to: $f^{\prime}(x)=e^{x-1}-\frac1x,\ f^{\prime\prime}(x)=e^{x-1}+\frac1{x^2}>0$
+        operation: 求一阶、二阶导。
+        why: 用 $f^{\prime}$ 单调递增和 $f^{\prime}(1)=0$ 判定 $f$ 的单调性。
+      source_ref: page_0220_ex02_solution_start
+    - step_id: step_2
+      statement: 读出第一问单调区间。
+      formula_trace:
+        from: $f^{\prime}$ 递增且 $f^{\prime}(1)=0$
+        to: $x\in(0,1)$ 时 $f^{\prime}(x)<0$，$x\in(1,+\infty)$ 时 $f^{\prime}(x)>0$
+        operation: 按导数零点分区间判号。
+        why: 得到先减后增。
+      source_ref: page_0220_ex02_solution_start
+    - step_id: step_3
+      statement: 法一把第二问拆成两个非负母函数。
+      formula_trace:
+        from: $f(x)-a=e^{x-1}-a\ln x+a\ln a-a$
+        to: $e^{x-1}-x+a(\frac xa-1-\ln\frac xa)$
+        operation: 加减 $x$，并把 $a\ln a-a\ln x$ 合成 $-a\ln(x/a)$。
+        why: 制造指数母函数和对数母函数的非负块。
+      source_ref: page_0221_ex02_continuation
+    - step_id: step_4
+      statement: 用取等点说明不等式成立。
+      formula_trace:
+        from: $e^{x-1}-x\geqslant0$ 与 $\frac xa-1-\ln\frac xa\geqslant0$
+        to: $f(x)-a\geqslant0$，等号要求 $x=1$ 且 $x=a$
+        operation: 分别套 $e^u-u-1\geqslant0$ 与 $t-1-\ln t\geqslant0$。
+        why: 两个非负块相加，且取等条件可同时读出。
+      source_ref: page_0221_ex02_continuation
+    - step_id: step_5
+      statement: 法二改写为上下函数比较。
+      formula_trace:
+        from: $f(x)\geqslant a$
+        to: $e^{x-1}\geqslant a(\ln x-\ln a+1)=a\ln\frac{ex}{a}$
+        operation: 移项并把常数 1 写进对数。
+        why: 进入 $\frac{e^x}{x}$ 与 $\frac{\ln x}{x}$ 的分而治之模型。
+      source_ref: page_0221_ex02_continuation
+    - step_id: step_6
+      statement: 比较上下函数最值。
+      formula_trace:
+        from: $\frac{e^{x-1}}{ex/a}$ 与 $a\frac{\ln(ex/a)}{ex/a}$
+        to: 左边 $\geqslant a/e$（$x=1$ 取等），右边 $\leqslant a/e$（$x=a$ 取等）
+        operation: 套用 $e^u/u$ 的最小值与 $\ln u/u$ 的最大值。
+        why: source 的第二种证法显示同一题也可用分而治之。
+      source_ref: page_0221_ex02_continuation
+teaching_card:
+  student_title: 同一道题的两种保值：拆非负块或做上下函数
+  what_it_trains: 训练指对不等式的两条等价思路：直接拆成标准非负块，或者构造上下函数比较最值。
+  recognition_cues:
+    - 题中有 $e^{x-1}$、$\ln x$、$a\ln a$，天然提示 $x/a$。
+    - 要证 $f(x)\geqslant a$，等号点很可能要求 $x=1$ 与 $x=a$ 同时成立。
+    - 解析同时出现“同构保值性”和“分而治之”。
+  normalization_moves:
+    - 先把 $f(x)-a$ 写出来。
+    - 尝试加减 $x$，拆出 $e^{x-1}-x$。
+    - 把剩余对数项统一成 $x/a-1-\ln(x/a)$。
+  common_failures:
+    - 把两个不同的非负母函数混成同一个 $h$，导致公式不对。
+    - 只会用导数硬求最小值，没看出 $x/a$ 的同构。
+    - 用分而治之时忘记左右取等点分别是 $x=1$ 与 $x=a$。
+  similar_practice_query: e^{x-1}-a ln x+a ln a >= a 同构保值性 x/a 分而治之
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

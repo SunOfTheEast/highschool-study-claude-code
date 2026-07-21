@@ -1,0 +1,199 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0102_common_point_tangent_ex07
+content_revision_id: mst_p0102_common_point_tangent_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0102_common_point_tangent_ex07.card.yaml
+stem: |-
+  （2020 五岳三月考前模拟 T12）已知函数 $f(x)=ae^x\ (a>0)$ 与 $g(x)=2x^2-m\ (m>0)$ 的图象在第一象限有公共点，且在该点处的切线相同，当实数 $m$ 变化时，实数 $a$ 的取值范围为 （  ）
+  A. $\left(\frac{4}{e^2},+\infty\right)$
+  B. $\left(\frac{8}{e^2},+\infty\right)$
+  C. $\left(0,\frac{4}{e^2}\right)$
+  D. $\left(0,\frac{8}{e^2}\right)$
+answer: |
+  D
+
+  设公共切点为 $A(x_0,y_0)$。因为在公共点处切线相同，所以函数值相等且导数相等：
+  $ae^{x_0}=2x_0^2-m$，$ae^{x_0}=4x_0$。
+  整理得 $4x_0=2x_0^2-m$，又第一象限给出 $x_0>0$，题设 $m>0$，
+  所以 $m=2x_0^2-4x_0=2x_0(x_0-2)>0$，从而 $x_0>2$。
+  由 $ae^{x_0}=4x_0$ 得 $a=\frac{4x_0}{e^{x_0}}$。
+  令 $h(x)=\frac{4x}{e^x}$，则
+  $h'(x)=\frac{4(1-x)}{e^x}<0$ 在 $(2,+\infty)$ 上恒成立，
+  故 $h$ 在该区间单调递减，且
+  $0<h(x)<h(2)=\frac8{e^2}$。所以
+  $a\in(0,\frac8{e^2})$，选 D。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把“公共点处切线相同”翻译为函数值与导数同时相等。
+      max_score: 1
+    - step_id: step_2
+      description: 由 $m>0$ 推出切点横坐标的范围。
+      max_score: 1
+    - step_id: step_3
+      description: 把 $a$ 化成单变量函数。
+      max_score: 1
+    - step_id: step_4
+      description: 研究 $h(x)=4x/e^x$ 在 $(2,+\infty)$ 上的值域。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 显隐点探路
+      - 数形结合
+    subroute:
+      - 公共点公切线
+      - 切点主元化
+      - $xe^{-x}$ 值域
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 同构结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $ae^{x_0}=2x_0^2-m$ 与 $ae^{x_0}=4x_0$ 同时成立。
+      - $m=2x_0(x_0-2)>0$ 把切点限制到 $x_0>2$。
+      - $a=4x_0/e^{x_0}$ 在 $(2,+\infty)$ 上给出 $(0,8/e^2)$。
+    normalization_moves_used:
+      - 把公共点条件和公共切线条件分成两个方程。
+      - 用 $m>0$ 先确定切点变量的区间。
+      - 把 $a$ 的范围转成 $4x/e^x$ 的值域。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把同点相切翻译为函数值和导数同时相等，回补导数运算与几何意义。
+      - 若学生由 $2x_0(x_0-2)>0$ 解不出 $x_0>2$，回补不等式工具基础。
+      - 若学生忽略开区间端点不能取，回补导数单调极值基础。
+  detail_terms:
+    - $f(x)=ae^x$
+    - $g(x)=2x^2-m$
+    - $m=2x_0^2-4x_0$
+    - $a=\frac{4x_0}{e^{x_0}}$
+    - $a\in\left(0,\frac8{e^2}\right)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0102_common_point_tangent_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0102
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0102/page_0102.md
+      role: problem_start
+      evidence: lines 39-45 give 例 7 题头、A-D 选项 and the start of the common-point tangent solution; the last inequality continues to page_0103.
+    - ref_id: page_0103
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0103/page_0103.md
+      role: continuation
+      evidence: "line 15 completes 例 7 solution: $m>0$ gives $x_0>2$, $a=4x_0/e^{x_0}$, $h$ decreases on $(2,+\\infty)$, answer D; line 17 begins 例 8 and is excluded."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0102.png
+      inspected: true
+      notes: 已核对 page_0102 图像底部：例 7 题干、选项和解析开头清晰，解答跨页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0103.png
+      inspected: true
+      notes: 已核对 page_0103 图像顶部：例 7 续解止于答案 D，随后例 8 另起题头。
+  source_context: 例 7 的问题头在 page_0102，解答跨到 page_0103 顶部；page_0103 后续例 8 和公切线几何说明不并入本卡。
+  source_influence:
+    - 保留源页公共点处切线相同的两条件：函数值相等与导数相等。
+    - 保留源页由 $m>0$ 推出 $x_0>2$，再研究 $a=4x_0/e^{x_0}$ 在开区间上的取值。
+  source_discrepancies: []
+original_problem:
+  stem: （2020 五岳三月考前模拟 T12）已知函数 $f(x)=ae^x\ (a>0)$ 与 $g(x)=2x^2-m\ (m>0)$ 的图象在第一象限有公共点，且在该点处的切线相同，当实数 $m$ 变化时，实数 $a$ 的取值范围为 （  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\left(\frac{4}{e^2},+\infty\right)$
+      text_latex: $\left(\frac{4}{e^2},+\infty\right)$
+    - label: B
+      text_raw: $\left(\frac{8}{e^2},+\infty\right)$
+      text_latex: $\left(\frac{8}{e^2},+\infty\right)$
+    - label: C
+      text_raw: $\left(0,\frac{4}{e^2}\right)$
+      text_latex: $\left(0,\frac{4}{e^2}\right)$
+    - label: D
+      text_raw: $\left(0,\frac{8}{e^2}\right)$
+      text_latex: $\left(0,\frac{8}{e^2}\right)$
+  answer: D
+  fidelity_notes:
+    - 题干和选项在 page_0102 底部，完整解析跨至 page_0103 顶部。
+    - page_0103 line 17 的例 8 是新题头，未纳入本卡。
+solution:
+  source_solution_summary: |
+    设公共切点为 $A(x_0,y_0)$。因为在公共点处切线相同，所以函数值相等且导数相等：
+    $ae^{x_0}=2x_0^2-m$，$ae^{x_0}=4x_0$。
+    整理得 $4x_0=2x_0^2-m$，又第一象限给出 $x_0>0$，题设 $m>0$，
+    所以 $m=2x_0^2-4x_0=2x_0(x_0-2)>0$，从而 $x_0>2$。
+    由 $ae^{x_0}=4x_0$ 得 $a=\frac{4x_0}{e^{x_0}}$。
+    令 $h(x)=\frac{4x}{e^x}$，则
+    $h'(x)=\frac{4(1-x)}{e^x}<0$ 在 $(2,+\infty)$ 上恒成立，
+    故 $h$ 在该区间单调递减，且
+    $0<h(x)<h(2)=\frac8{e^2}$。所以
+    $a\in(0,\frac8{e^2})$，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把“公共点处切线相同”翻译为函数值与导数同时相等。
+      formula_trace:
+        from: |
+          $f(x)=ae^x,\quad g(x)=2x^2-m,\quad f'(x)=ae^x,\quad g'(x)=4x$
+        to: |
+          $\begin{cases}
+          ae^{x_0}=2x_0^2-m,\\
+          ae^{x_0}=4x_0
+          \end{cases}$
+        operation: 在公共切点 $x_0$ 处分别令函数值相等、导数值相等。
+        why: 题目明确是两个图象在同一个第一象限公共点处共用切线。
+      source_ref: page_0102
+    - step_id: step_2
+      statement: 由 $m>0$ 推出切点横坐标的范围。
+      formula_trace:
+        from: |
+          $4x_0=2x_0^2-m,\quad x_0>0,\quad m>0$
+        to: |
+          $m=2x_0^2-4x_0=2x_0(x_0-2)>0,\qquad x_0>2$
+        operation: 把 $m$ 用 $x_0$ 表示，再结合 $x_0>0$ 解不等式。
+        why: 切点横坐标的开区间决定 $a$ 的取值端点是否能取到。
+      source_ref: page_0103
+    - step_id: step_3
+      statement: 把 $a$ 化成单变量函数。
+      formula_trace:
+        from: |
+          $ae^{x_0}=4x_0$
+        to: |
+          $a=\frac{4x_0}{e^{x_0}},\qquad x_0>2$
+        operation: 两边除以 $e^{x_0}$。
+        why: 当 $m$ 变化时，$x_0$ 在 $(2,+\infty)$ 上变化，问题转为求该函数值域。
+      source_ref: page_0103
+    - step_id: step_4
+      statement: 研究 $h(x)=4x/e^x$ 在 $(2,+\infty)$ 上的值域。
+      formula_trace:
+        from: |
+          $h(x)=\frac{4x}{e^x},\qquad h'(x)=\frac{4(1-x)}{e^x}$
+        to: |
+          $x>2\Rightarrow h'(x)<0,\qquad 0<h(x)<h(2)=\frac8{e^2}$
+        operation: 求导判断单调递减，并取开区间端点极限。
+        why: 由于 $x_0>2$ 是严格不等式，上端 $\frac8{e^2}$ 不能取到。
+      source_ref: page_0103
+teaching_card:
+  student_title: 公共点共切，把参数交给切点
+  what_it_trains: 训练同一点相切时同时列函数值方程和导数方程，再用切点横坐标控制参数范围。
+  recognition_cues:
+    - 题干说“在该点处的切线相同”，说明两个函数在同一个 $x_0$ 处既同值又同斜率。
+    - 题目让 $m$ 变化求 $a$ 的范围，提示先用 $m>0$ 限制 $x_0$。
+    - 最后出现 $e^2$，通常来自 $x_0=2$ 这个端点。
+  normalization_moves:
+    - 设公共切点 $A(x_0,y_0)$。
+    - 由 $m=2x_0^2-4x_0>0$ 得 $x_0>2$。
+    - 研究 $a=4x_0/e^{x_0}$ 在 $x_0>2$ 上的值域。
+  common_failures:
+    - 把公共点公切线误做成两个不同切点的公切线。
+    - 只由 $ae^{x_0}=4x_0$ 写出 $a$，漏用 $m>0$。
+    - 把 $x_0=2$ 代入后误认为 $\frac8{e^2}$ 可以取到。
+  similar_practice_query: 公共点公切线 指数 二次 参数范围 $4x/e^x$
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0102-page_0103 图像确认例 7 跨页边界、选项和答案 D；page_0103 的例 8 未并入本卡。

@@ -1,0 +1,187 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0081_newton_ex14
+content_revision_id: mst_p0081_newton_ex14-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0081_newton_ex14.card.yaml
+stem: |-
+  （2025 贵阳一中高三月考 T14）牛顿在《流数法》一书中，给出了高次代数方程的一种数值解法——牛顿法。如图，$r$ 是函数 $f(x)$ 的零点，牛顿用“作切线”的方法找到了一串逐步逼近 $r$ 的实数 $x_0,x_1,\cdots,x_{n-1},x_n$。在横坐标为 $x_0$ 的点处作 $f(x)$ 的切线，则 $f(x)$ 在 $x=x_0$ 处的切线与 $x$ 轴交点的横坐标是 $x_1$，同理继续下去，得到数列 $\{x_n\}$。令 $f(x)=(x-1)^3$。当 $x_0=2$ 时，用牛顿法可求出方程 $f(x)=0$ 的近似解 $x_1=$_______；当 $x_0=2$，且 $x_n>1\ (n\in\mathbf N^*)$ 时，数列 $\{x_n\}$ 的通项公式为_______。
+  求第一次牛顿迭代得到的 $x_1$。
+  在 $x_0=2$ 且 $x_n>1$ 的条件下求 $\{x_n\}$ 的通项公式。
+answer: |-
+  $x_1=\frac53$；$x_n=\left(\frac23\right)^n+1$。
+
+  牛顿法给出 $x_{n+1}=x_n-\frac{f(x_n)}{f'(x_n)}$。当 $f(x)=(x-1)^3$、$x_0=2$ 时, $f(2)=1$, $f'(x)=3(x-1)^2$, $f'(2)=3$。 切线 $y-1=3(x-2)$ 与 $x$ 轴交于 $x_1=5/3$。一般地, $x_{n+1}=x_n-\frac{(x_n-1)^3}{3(x_n-1)^2} =\frac23x_n+\frac13$, 所以 $x_{n+1}-1=\frac23(x_n-1)$。 又 $x_0-1=1$, 故 $x_n-1=(2/3)^n$, 即 $x_n=(2/3)^n+1$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 由牛顿切线公式计算第一次迭代。
+      max_score: 1
+    - step_id: step_2
+      description: 写出切线并求它与 $x$ 轴的交点。
+      max_score: 1
+    - step_id: step_3
+      description: 把牛顿迭代公式化成递推式。
+      max_score: 1
+    - step_id: step_4
+      description: 平移到零点 1, 得到等比数列。
+      max_score: 1
+    - step_id: step_5
+      description: 由 $x_0=2$ 写出通项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数列关系证明
+    part_level:
+      - part_id: item_1
+        goal: 数值求值
+        target: 求第一次牛顿迭代值 $x_1$。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 数列关系证明
+        target: 求牛顿迭代数列的通项公式。
+        result: 见 source_solution_summary
+  method:
+    primary: 递推转化
+    secondary:
+      - 数列和转化
+    subroute:
+      - 牛顿迭代公式
+      - 切线与 x 轴交点
+      - 平移到不动点后化等比数列
+  structure:
+    primary: 数列离散/递推结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 三次/高次函数结构
+    evidence:
+      - $x_{n+1}=x_n-\frac{f(x_n)}{f'(x_n)}$
+      - $f(x)=(x-1)^3$
+      - $x_{n+1}=\frac23x_n+\frac13$
+      - $x_{n+1}-1=\frac23(x_n-1)$
+    normalization_moves_used:
+      - 先用切线方程算 $x_1$, 再用公式处理一般 $x_n$。
+      - 把 $x_{n+1}=\frac23x_n+\frac13$ 平移为 $x_{n+1}-1=\frac23(x_n-1)$。
+      - 把牛顿迭代的几何过程转成等比数列。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从切线方程令 $y=0$ 得 $x_1$, 回补导数运算与几何意义。
+      - 若学生不会写 $x_{n+1}=x_n-\frac{f(x_n)}{f'(x_n)}$, 回补导数运算与几何意义。
+      - 若学生化简 $\frac{(x_n-1)^3}{3(x_n-1)^2}$ 出错, 回补代数恒等变形。
+      - 若学生不会由 $x_{n+1}-1=\frac23(x_n-1)$ 写通项, 回补数列基础。
+  detail_terms:
+    - 牛顿法
+    - $x_{n+1}=x_n-\frac{f(x_n)}{f'(x_n)}$
+    - $f(x)=(x-1)^3$
+    - $x_1=\frac53$
+    - $x_{n+1}-1=\frac23(x_n-1)$
+    - $x_n=\left(\frac23\right)^n+1$
+parts: &a1
+  - 求第一次牛顿迭代得到的 $x_1$。
+  - 在 $x_0=2$ 且 $x_n>1$ 的条件下求 $\{x_n\}$ 的通项公式。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0081_newton_ex14
+source_evidence:
+  source_refs:
+    - ref_id: page_0081_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0081/page_0081.md
+      role: local_context
+      evidence: lines 20-24 introduce the Newton-Raphson method and derive x_{k+1}=x_k-f(x_k)/f'(x_k), which is the method used by the worked example.
+    - ref_id: page_0081
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0081/page_0081.md
+      role: problem_start
+      evidence: "lines 26-31 give the second 例 14 on page_0081: the Newton method problem statement, f(x)=(x-1)^3, x_0=2, and the accompanying iteration diagram."
+    - ref_id: page_0082
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0082/page_0082.md
+      role: continuation
+      evidence: "lines 14-15 complete the solution: compute x_1=5/3, derive x_{n+1}=2x_n/3+1/3, and conclude x_n=(2/3)^n+1."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0081.png
+      inspected: true
+      notes: 页图确认 page_0081 底部第二个“例14”为牛顿法题, 配图展示 x_0,x_1,x_2 逐步逼近零点 r。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0082.png
+      inspected: true
+      notes: 页图确认 page_0082 顶部是该例 14 的续解, 给出 $x_1=5/3$ 和 $x_n=(2/3)^n+1$, 随后才进入例 15。
+  source_context: page_0081 中部已有一个距离题“例 14”, 本卡处理同页后半的牛顿法“例 14”。 因题头在 page_0081, 解析续到 page_0082 顶部, 由 C 组跨页完成。
+  source_influence:
+    - 保留源页先用切线方程求 $x_1$ 的几何路线。
+    - 保留源页由牛顿迭代公式化出一阶线性递推的路线。
+    - 保留源页以 $x_n-1$ 为等比数列得到通项公式。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 贵阳一中高三月考 T14）牛顿在《流数法》一书中，给出了高次代数方程的一种数值解法——牛顿法。如图，$r$ 是函数 $f(x)$ 的零点，牛顿用“作切线”的方法找到了一串逐步逼近 $r$ 的实数 $x_0,x_1,\cdots,x_{n-1},x_n$。在横坐标为 $x_0$ 的点处作 $f(x)$ 的切线，则 $f(x)$ 在 $x=x_0$ 处的切线与 $x$ 轴交点的横坐标是 $x_1$，同理继续下去，得到数列 $\{x_n\}$。令 $f(x)=(x-1)^3$。当 $x_0=2$ 时，用牛顿法可求出方程 $f(x)=0$ 的近似解 $x_1=$_______；当 $x_0=2$，且 $x_n>1\ (n\in\mathbf N^*)$ 时，数列 $\{x_n\}$ 的通项公式为_______。
+  parts: *a1
+  choices: []
+  answer: $x_1=\frac53$；$x_n=\left(\frac23\right)^n+1$。
+  fidelity_notes:
+    - 源题为填空题, 两个空分别对应 $x_1$ 与通项公式。
+    - 题干含牛顿法示意图; 卡片 source_images 已绑定 page_0081 原图。
+    - 解析从 page_0082 顶部开始并在 page_0082 例 15 之前结束。
+solution:
+  source_solution_summary: 牛顿法给出 $x_{n+1}=x_n-\frac{f(x_n)}{f'(x_n)}$。当 $f(x)=(x-1)^3$、$x_0=2$ 时, $f(2)=1$, $f'(x)=3(x-1)^2$, $f'(2)=3$。 切线 $y-1=3(x-2)$ 与 $x$ 轴交于 $x_1=5/3$。一般地, $x_{n+1}=x_n-\frac{(x_n-1)^3}{3(x_n-1)^2} =\frac23x_n+\frac13$, 所以 $x_{n+1}-1=\frac23(x_n-1)$。 又 $x_0-1=1$, 故 $x_n-1=(2/3)^n$, 即 $x_n=(2/3)^n+1$。
+  key_steps:
+    - step_id: step_1
+      statement: 由牛顿切线公式计算第一次迭代。
+      formula_trace:
+        from: $f(x)=(x-1)^3,\quad x_0=2$
+        to: $f(2)=1,\quad f'(x)=3(x-1)^2,\quad f'(2)=3$
+        operation: 代入函数和导函数。
+        why: 切线方程需要点值和切线斜率。
+      source_ref: page_0082:line 14
+    - step_id: step_2
+      statement: 写出切线并求它与 $x$ 轴的交点。
+      formula_trace:
+        from: $y-1=3(x-2)$
+        to: $y=0\Rightarrow x_1=\frac53$
+        operation: 令切线方程中的 $y=0$。
+        why: 牛顿法定义的下一次近似值就是切线与 $x$ 轴交点的横坐标。
+      source_ref: page_0082:line 14
+    - step_id: step_3
+      statement: 把牛顿迭代公式化成递推式。
+      formula_trace:
+        from: $x_{n+1}=x_n-\frac{f(x_n)}{f'(x_n)}$
+        to: $x_{n+1}=x_n-\frac{(x_n-1)^3}{3(x_n-1)^2}=\frac23x_n+\frac13$
+        operation: 代入 $f(x_n)$ 和 $f'(x_n)$, 并用 $x_n>1$ 确保分母不为 0。
+        why: 通项公式要先把迭代过程转成可解的递推关系。
+      source_ref: page_0082:line 15
+    - step_id: step_4
+      statement: 平移到零点 1, 得到等比数列。
+      formula_trace:
+        from: $x_{n+1}=\frac23x_n+\frac13$
+        to: $x_{n+1}-1=\frac23(x_n-1)$
+        operation: 递推式两边同时减 1。
+        why: 零点 1 是迭代的不动点, 平移后变成等比递推。
+      source_ref: page_0082:line 15
+    - step_id: step_5
+      statement: 由 $x_0=2$ 写出通项。
+      formula_trace:
+        from: $x_{n+1}-1=\frac23(x_n-1),\quad x_0-1=1$
+        to: $x_n=\left(\frac23\right)^n+1$
+        operation: 按等比数列通项公式还原 $x_n$。
+        why: 每迭代一次, 到零点 1 的距离缩小为原来的 $2/3$。
+      source_ref: page_0082:line 15
+teaching_card:
+  student_title: 把牛顿切线迭代化成等比数列
+  what_it_trains: 训练学生把牛顿法的几何切线过程翻译成递推公式, 再通过平移到零点 把一阶递推化成等比数列求通项。
+  recognition_cues:
+    - 题目描述“作切线”并要求 $x_1$ 和 $x_n$。
+    - 函数是 $(x-1)^3$, 零点 1 会成为递推的不动点。
+    - 通项公式不是靠数值迭代猜, 而是靠 $x_n-1$ 的缩放关系。
+  normalization_moves:
+    - 先写牛顿公式 $x_{n+1}=x_n-f(x_n)/f'(x_n)$。
+    - 用 $x_0=2$ 单独算 $x_1$。
+    - 把一般项代入化成 $x_{n+1}=2x_n/3+1/3$。
+    - 两边减 1 得到等比递推。
+  common_failures:
+    - 把牛顿公式中的减号写成加号。
+    - 算 $f'(x)=3(x-1)^2$ 后代入 $x=2$ 出错。
+    - 只给出递推式, 没有继续求通项。
+    - 把通项误写成 $\left(\frac23\right)^{n-1}+1$。
+  similar_practice_query: 牛顿法 (x-1)^3 x0=2 递推 通项 x_{n+1}=2/3 x_n+1/3
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0081 有两个源书“例14”; 本卡为后一个牛顿法题, ID 使用 newton 区分。
+    - page_0082 顶部仅作为本题续解使用; page_0082 新起头例 15 不在 C 组建卡范围。

@@ -1,0 +1,197 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0096_exp_fraction_ex16
+content_revision_id: mst_p0096_exp_fraction_ex16-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0096_exp_fraction_ex16.card.yaml
+stem: |-
+  （2023 · 思明区月考 · 多选 T12）已知函数 $f(x)=\frac{x}{e^x}$，过点 $(a,b)$ 作曲线 $f(x)$ 的切线，下列说法正确的 ( )
+  A. 当 $a=0,b=0$ 时，有且仅有一条切线
+  B. 当 $a=0$ 时，可作三条切线，$0<b<\frac{4}{e^2}$
+  C. 当 $a=2,b>0$ 时，可作两条切线
+  D. $0<a<2$ 时，可作两条切线，$b=\frac{4-a}{e^2}$ 或 $\frac{a}{e^a}$
+answer: |
+  ABD
+
+  对 $f(x)=x e^{-x}$ 求导得 $f'(x)=(1-x)e^{-x}$，
+  $f''(x)=(x-2)e^{-x}$，拐点为 $\left(2,\frac{2}{e^2}\right)$。
+  拐点处切线为 $y-\frac{2}{e^2}=-\frac1{e^2}(x-2)$，
+  即 $y=\frac{-x+4}{e^2}$。源页据此用曲线和拐点切线划分区域：
+  $(0,0)$ 在曲线上且只作一条切线，A 正确；当 $a=0$ 且
+  $0<b<4/e^2$ 时，点在 y 轴上方区域，可作三条切线，B 正确；
+  当 $a=2,b>0$ 时，点在内弧区域，只能作一条切线，C 错误；
+  当 $0<a<2$ 时，要恰作两条切线只能落在曲线或拐点切线上，
+  所以 $b=a/e^a$ 或 $b=(4-a)/e^2$，D 正确。故选 ABD。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 求出 $f(x)=x/e^x$ 的拐点和拐点切线。
+      max_score: 1
+    - step_id: step_2
+      description: 写出拐点处切线并得到区域边界。
+      max_score: 1
+    - step_id: step_3
+      description: 判断 A、B、C 三个给定位置的切线条数。
+      max_score: 1
+    - step_id: step_4
+      description: 判断 $0<a<2$ 时两条切线的边界条件。
+      max_score: 1
+    - step_id: step_5
+      description: 汇总多选答案。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: item_1
+        goal: 几何量求解
+        target: A、B、C：给定点位置下的切线条数判断
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 求参数范围
+        target: D：$0<a<2$ 时恰作两条切线的 $b$ 值
+        result: 见 source_solution_summary
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 数形结合
+      - 局部逼近与找点
+    subroute:
+      - 拐点切线界定
+      - 过点切线条数
+      - 区域计数
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $f^{\prime\prime}(x)=(x-2)e^{-x}$ 给出拐点 $x=2$。
+      - 拐点处切线 $y=(-x+4)/e^2$ 是两条切线区域的边界。
+      - $b=a/e^a$ 和 $b=(4-a)/e^2$ 分别来自曲线和拐点切线。
+    normalization_moves_used:
+      - 把外点 $(a,b)$ 放到曲线与拐点切线围出的区域中。
+      - 把 $0<a<2$ 的两条切线条件规范成两条边界曲线上的高度。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求 $xe^{-x}$ 的导数，回补导数运算与几何意义。
+      - 若学生分不清拐点切线与普通切线的分区作用，回补函数性质与图像。
+      - 若学生不能把 $x=a$ 代入边界，回补代数恒等变形。
+  detail_terms:
+    - $f(x)=x/e^x$
+    - 拐点 $\left(2,\frac2{e^2}\right)$
+    - $y=\frac{-x+4}{e^2}$
+    - 过点切线条数
+    - 答案 ABD
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0096_exp_fraction_ex16
+source_evidence:
+  source_refs:
+    - ref_id: page_0096
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0096/page_0096.md
+      role: problem_start
+      evidence: lines 22-27 give 例 16 题头、题干和 A-D 选项；lines 29-37 give the graph-based solution and conclude ABD. lines 14-20 are prior ex15 continuation and are excluded.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0096.png
+      inspected: true
+      notes: 已核对 page_0096：页首为上一题 ex15 续解，例 16 从中部起头；题干、四个选项、拐点切线图和答案 ABD 与 markdown 一致。
+  source_context: 例 16 位于“导数的切线方程”中，训练对 $f(x)=x/e^x$ 的外点切线条数分区；本页顶部 ex15 是上一题续页，未纳入本卡。
+  source_influence:
+    - 保留源页图像法：用曲线 $f(x)=x/e^x$ 与拐点处切线 $y=(-x+4)/e^2$ 分割平面区域。
+    - 保留源页对四个选项的判断：A、B、D 正确，C 错误。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 思明区月考 · 多选 T12）已知函数 $f(x)=\frac{x}{e^x}$，过点 $(a,b)$ 作曲线 $f(x)$ 的切线，下列说法正确的 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 当 $a=0,b=0$ 时，有且仅有一条切线
+      text_latex: 当 $a=0,b=0$ 时，有且仅有一条切线
+    - label: B
+      text_raw: 当 $a=0$ 时，可作三条切线，$0<b<\frac{4}{e^2}$
+      text_latex: 当 $a=0$ 时，可作三条切线，$0<b<\frac{4}{e^2}$
+    - label: C
+      text_raw: 当 $a=2,b>0$ 时，可作两条切线
+      text_latex: 当 $a=2,b>0$ 时，可作两条切线
+    - label: D
+      text_raw: $0<a<2$ 时，可作两条切线，$b=\frac{4-a}{e^2}$ 或 $\frac{a}{e^a}$
+      text_latex: $0<a<2$ 时，可作两条切线，$b=\frac{4-a}{e^2}$ 或 $\frac{a}{e^a}$
+  answer: ABD
+  fidelity_notes:
+    - page_0096 顶部是 ex15 续解；本卡只从 line 22 的例 16 新题头开始取材。
+    - 例 16 的图像和解析完整位于 page_0096，无跨页续解。
+solution:
+  source_solution_summary: |
+    对 $f(x)=x e^{-x}$ 求导得 $f'(x)=(1-x)e^{-x}$，
+    $f''(x)=(x-2)e^{-x}$，拐点为 $\left(2,\frac{2}{e^2}\right)$。
+    拐点处切线为 $y-\frac{2}{e^2}=-\frac1{e^2}(x-2)$，
+    即 $y=\frac{-x+4}{e^2}$。源页据此用曲线和拐点切线划分区域：
+    $(0,0)$ 在曲线上且只作一条切线，A 正确；当 $a=0$ 且
+    $0<b<4/e^2$ 时，点在 y 轴上方区域，可作三条切线，B 正确；
+    当 $a=2,b>0$ 时，点在内弧区域，只能作一条切线，C 错误；
+    当 $0<a<2$ 时，要恰作两条切线只能落在曲线或拐点切线上，
+    所以 $b=a/e^a$ 或 $b=(4-a)/e^2$，D 正确。故选 ABD。
+  key_steps:
+    - step_id: step_1
+      statement: 求出 $f(x)=x/e^x$ 的拐点和拐点切线。
+      formula_trace:
+        from: $f(x)=xe^{-x}$
+        to: $f^{\prime}(x)=(1-x)e^{-x},\quad f^{\prime\prime}(x)=(x-2)e^{-x},\quad \left(2,\frac2{e^2}\right)$
+        operation: 连续求导，令二阶导数为 $0$ 得到拐点横坐标。
+        why: 切线条数分区的关键边界是拐点处切线。
+      source_ref: page_0096
+    - step_id: step_2
+      statement: 写出拐点处切线并得到区域边界。
+      formula_trace:
+        from: $f(2)=\frac2{e^2},\quad f^{\prime}(2)=-\frac1{e^2}$
+        to: $y-\frac2{e^2}=-\frac1{e^2}(x-2),\quad y=\frac{-x+4}{e^2}$
+        operation: 用切点坐标和切线斜率写点斜式。
+        why: 源图以该切线和曲线共同分割不同切线条数区域。
+      source_ref: page_0096
+    - step_id: step_3
+      statement: 判断 A、B、C 三个给定位置的切线条数。
+      formula_trace:
+        from: $(0,0)$、$x=0$ 上 $0<b<\frac4{e^2}$、$x=2$ 上 $b>0$
+        to: "A: 1 条；B: 3 条；C: 1 条"
+        operation: 在源页区域图中定位外点相对曲线和拐点切线的位置。
+        why: 切线条数由外点所在区域决定。
+      source_ref: page_0096
+    - step_id: step_4
+      statement: 判断 $0<a<2$ 时两条切线的边界条件。
+      formula_trace:
+        from: $0<a<2$ 且点 $(a,b)$ 恰在曲线或拐点切线上
+        to: $b=f(a)=\frac{a}{e^a}\quad\text{或}\quad b=\frac{4-a}{e^2}$
+        operation: 把 $x=a$ 分别代入曲线方程和拐点切线方程。
+        why: 源页指出拐点左侧恰作两条切线只能出现在这两条边界上。
+      source_ref: page_0096
+    - step_id: step_5
+      statement: 汇总多选答案。
+      formula_trace:
+        from: A、B、D 正确，C 错误
+        to: $\text{答案}=ABD$
+        operation: 按各选项对应区域逐项筛选。
+        why: 本题目标是判断外点切线条数条件是否成立。
+      source_ref: page_0096
+teaching_card:
+  student_title: 用拐点切线分区数 $x/e^x$ 的切线条数
+  what_it_trains: 训练先找曲线拐点切线，再用曲线和切线围出的区域判断外点能作几条切线。
+  recognition_cues:
+    - 题干问“过点 $(a,b)$ 作曲线切线”且选项在变动外点位置。
+    - 函数 $x/e^x$ 的二阶导数只在 $x=2$ 变号，适合用拐点切线界定区域。
+    - 选项中出现 $4/e^2$ 和 $(4-a)/e^2$，提示来自拐点切线。
+  normalization_moves:
+    - 先求 $f^{\prime}$、$f^{\prime\prime}$，定位拐点 $\left(2,2/e^2\right)$。
+    - 写拐点切线 $y=(-x+4)/e^2$。
+    - 把选项里的点或直线 $x=a$ 放回区域图判断切线条数。
+  common_failures:
+    - 只把点在曲线上理解成“本点切线”，漏掉曲线上某些点还可作另一条切线。
+    - 把 $a=2,b>0$ 误看成上方外弧区，导致 C 误判为两条。
+    - D 选项漏掉曲线边界 $b=a/e^a$，只写拐点切线高度。
+  similar_practice_query: $x/e^x$ 外点切线条数 拐点切线 $(-x+4)/e^2$ 多选
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0096 图片确认顶部 ex15 续解结束后才进入例 16；本卡未越权处理 ex15。
+    - 题干、选项、图像解析和答案 ABD 与源页一致，无需用户拍板。

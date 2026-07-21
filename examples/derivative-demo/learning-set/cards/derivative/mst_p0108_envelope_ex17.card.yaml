@@ -1,0 +1,277 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0108_envelope_ex17
+content_revision_id: mst_p0108_envelope_ex17-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0108_envelope_ex17.card.yaml
+stem: |-
+  （2023 咸宁考前模拟 · 多选 T12）一曲线族的包络线 (Envelope) 是这样的曲线：该曲线不包含于曲线族中，但过该曲线上的每一点，都有曲线族中的一条曲线与它在这点处相切。下列说法正确的是 ( )
+  A. 若圆 $C_1: x^2+y^2=1$ 是直线 $ax+by-1=0$ 的包络线，则有 $a^2+b^2=1$
+  B. 若曲线 $C_2$ 是直线族 $(1-t^2)x+2ty-2t-4=0\ (t\in\mathbf R)$ 的包络线，则 $C_2$ 的长为 $2\pi$
+  C. 曲线 $C_3: y=\frac{e}{2x}+\ln x$ 是三条过点 $(a,b)$ 的直线的包络线，其中 $a>e$ 且 $\frac{e}{2a}+\ln a<b<\frac{a}{2e}+1$
+  D. 若两曲线 $y=x^2-1$ 和 $y=a\ln x-1$ 是同一条直线的包络线，则 $a$ 的取值范围是 $(2e,+\infty)$
+answer: |
+  AC
+
+  A 中圆 $x^2+y^2=1$ 是直线族 $ax+by-1=0$ 的包络线，源页用
+  原点到直线的距离等于半径，得
+  $\frac1{\sqrt{a^2+b^2}}=1$，所以 $a^2+b^2=1$，A 正确。
+  B 中设包络线为圆 $(x-\alpha)^2+(y-\beta)^2=r^2$，令圆心到
+  直线族的距离恒为 $r$：
+  $\frac{|(1-t^2)\alpha+2t\beta-2t-4|}{1+t^2}=r$。
+  分子整理为 $-\alpha t^2+2(\beta-1)t+\alpha-4$，为使比值对
+  $t$ 恒定，取 $2(\beta-1)=0$、$-\alpha=\alpha-4$，得
+  $\alpha=2,\beta=1,r=2$，于是 $C_2$ 周长为 $4\pi$，B 错。
+  C 中对 $f(x)=\frac e{2x}+\ln x$ 求导，得
+  $f'(x)=\frac{2x-e}{2x^2}$，函数先减后增；
+  $f''(x)=\frac e{x^3}-\frac1{x^2}$，拐点为 $(e,\frac32)$，
+  拐点切线为 $y=\frac{x}{2e}+1$。源页图示说明当
+  $a>e$ 且 $f(a)<b<\frac a{2e}+1$ 时，点 $(a,b)$ 位于区域 III，
+  可作三条切线，C 正确。D 中两曲线同为一条直线的包络线等价于
+  $y=x^2-1$ 与 $y=a\ln x-1$ 有公切线；源页给出
+  $a\le \min_{x>1}\frac{x^2}{\ln x}=2e$，所以 D 所称
+  $(2e,+\infty)$ 错。故选 AC。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 用圆的切线距离判定选项 A。
+      max_score: 1
+    - step_id: step_2
+      description: 用圆心到直线族的恒定距离判定选项 B。
+      max_score: 1
+    - step_id: step_3
+      description: 由恒定距离求出 $C_2$ 的半径和周长。
+      max_score: 1
+    - step_id: step_4
+      description: 用导数和拐点切线判定选项 C 的三切线区域。
+      max_score: 1
+    - step_id: step_5
+      description: 把 C 的区域条件翻译成选项不等式。
+      max_score: 1
+    - step_id: step_6
+      description: 用公切线阈值判定选项 D。
+      max_score: 1
+    - step_id: step_7
+      description: 汇总多选答案。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何性质证明
+    part_level:
+      - part_id: A
+        goal: 几何性质证明
+        target: A：证明圆作为直线族包络线时的参数关系
+        result: 见 source_solution_summary
+      - part_id: B
+        goal: 几何量求解
+        target: B：求直线族包络圆的周长并判断选项
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 几何性质证明
+        target: C：判断过点可作三条切线的区域条件
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 求参数范围
+        target: D：判断二次曲线与对数曲线公切线对应的参数范围
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 切线放缩与凹凸性
+      - 参变量分离
+    subroute:
+      - 包络线距离判圆
+      - 三切线区域
+      - 拐点切线分区
+      - $x^2/\ln x$ 最小值阈值
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+      - 非齐次结构
+      - 多变量与不等式结构
+    evidence:
+      - A、B 都把直线族包络转成圆心到切线的距离恒定。
+      - C 用 $f(x)=\frac e{2x}+\ln x$ 的拐点切线把平面分区，区域 III 对应三条切线。
+      - D 把两曲线共切转成 $a\le \min_{x>1}\frac{x^2}{\ln x}=2e$。
+    normalization_moves_used:
+      - 把“包络线”落到“每条族中曲线与目标曲线相切”的距离或切线条件。
+      - B 中改用圆心 $(\alpha,\beta)$ 表示，避免与题干其他 $(a,b)$ 混淆。
+      - C 中先求拐点切线，再用图像区域读出 $f(a)<b<\frac a{2e}+1$。
+      - D 中先消去共同平移 $-1$，再在 $x>1$ 上分离参数。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把圆的包络线条件转成点到直线距离，回补导数运算与几何意义。
+      - 若学生在 B 中无法把分子整理为 $-\alpha t^2+2(\beta-1)t+\alpha-4$，回补代数恒等变形。
+      - 若学生不会用 $f''(x)=0$ 找拐点和拐点切线，回补导数单调极值基础。
+      - 若学生读不出区域 III 的上下边界，回补函数性质与图像。
+      - 若学生在 D 中不会求 $\frac{x^2}{\ln x}$ 的最小值，回补导数单调极值基础。
+      - 若学生在 $x>1$ 分离参数时忽略 $\ln x$ 的符号，回补不等式工具基础。
+  detail_terms:
+    - 包络线
+    - $ax+by-1=0$
+    - $(1-t^2)x+2ty-2t-4=0$
+    - $C_2:(x-2)^2+(y-1)^2=4$
+    - $f(x)=\frac e{2x}+\ln x$
+    - 拐点 $(e,\frac32)$
+    - $y=\frac{x}{2e}+1$
+    - $a\le2e$
+    - 答案 AC
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0108_envelope_ex17
+source_evidence:
+  source_refs:
+    - ref_id: page_0108
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0108/page_0108.md
+      role: problem_start
+      evidence: lines 14-19 give 例 17 stem and A-D choices; lines 21-25 give the source solution for A-C and the C-region figure; line 12 is the previous 例 16 continuation and is excluded.
+    - ref_id: page_0109
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0109/page_0109.md
+      role: continuation
+      evidence: line 14 gives the D solution and final answer AC; line 16 starts the next exposition section and is excluded.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0108.png
+      inspected: true
+      notes: 已核对 page_0108 页图：顶部为例 16 续页；例 17 题头、A-D 选项、A-C 解析和三切线区域图完整可见。B 解析中绝对值分子印作类似 $+x-4$，按上下文应为圆心横坐标项。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0109.png
+      inspected: true
+      notes: 已核对 page_0109 页图：顶部为例 17 对 D 的续解，并明确“D 误，故选 AC”；其后为“指对公切线与定值问题” exposition，不纳入本卡。
+  source_context: 本卡只处理 page_0108 起头的例 17。page_0108 顶部是例 16 续解，page_0109 顶部续完例 17 后进入下一节讲解，均不另建卡。
+  source_influence:
+    - A 保留源页的距离判定：原点到直线 $ax+by-1=0$ 的距离等于半径 1。
+    - B 保留源页的圆包络假设与“距离对参数 $t$ 恒定”处理，得到圆心 $(2,1)$、半径 2。
+    - C 保留源页对 $f(x)=\frac{e}{2x}+\ln x$ 的导数、拐点和区域 III 图像判定。
+    - D 保留 page_0109 顶部的公切线判定与阈值 $\min_{x>1}\frac{x^2}{\ln x}=2e$。
+  source_discrepancies:
+    - page_0108 图和 markdown 重构标记显示，B 解析中 $\frac{|-at^2+2(b-1)t+\cdots|}{1+t^2}$ 的常数项原文像写成 $x-4$；由上一式代入圆心 $(a,b)$ 以及随后方程 $-a=a-4$ 可确定应为 $a-4$。本卡用数学上自洽的 $a-4$，无需用户拍板。
+original_problem:
+  stem: （2023 咸宁考前模拟 · 多选 T12）一曲线族的包络线 (Envelope) 是这样的曲线：该曲线不包含于曲线族中，但过该曲线上的每一点，都有曲线族中的一条曲线与它在这点处相切。下列说法正确的是 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: "若圆 $C_1: x^2+y^2=1$ 是直线 $ax+by-1=0$ 的包络线，则有 $a^2+b^2=1$"
+      text_latex: "若圆 $C_1: x^2+y^2=1$ 是直线 $ax+by-1=0$ 的包络线，则有 $a^2+b^2=1$"
+    - label: B
+      text_raw: 若曲线 $C_2$ 是直线族 $(1-t^2)x+2ty-2t-4=0\ (t\in\mathbf R)$ 的包络线，则 $C_2$ 的长为 $2\pi$
+      text_latex: 若曲线 $C_2$ 是直线族 $(1-t^2)x+2ty-2t-4=0\ (t\in\mathbf R)$ 的包络线，则 $C_2$ 的长为 $2\pi$
+    - label: C
+      text_raw: "曲线 $C_3: y=\\frac{e}{2x}+\\ln x$ 是三条过点 $(a,b)$ 的直线的包络线，其中 $a>e$ 且 $\\frac{e}{2a}+\\ln a<b<\\frac{a}{2e}+1$"
+      text_latex: "曲线 $C_3: y=\\frac{e}{2x}+\\ln x$ 是三条过点 $(a,b)$ 的直线的包络线，其中 $a>e$ 且 $\\frac{e}{2a}+\\ln a<b<\\frac{a}{2e}+1$"
+    - label: D
+      text_raw: 若两曲线 $y=x^2-1$ 和 $y=a\ln x-1$ 是同一条直线的包络线，则 $a$ 的取值范围是 $(2e,+\infty)$
+      text_latex: 若两曲线 $y=x^2-1$ 和 $y=a\ln x-1$ 是同一条直线的包络线，则 $a$ 的取值范围是 $(2e,+\infty)$
+  answer: AC
+  fidelity_notes:
+    - 题干和四个选项在 page_0108，D 解析及答案跨到 page_0109 顶部。
+    - 选项 B 源题写“$C_2$ 的长为 $2\pi$”，解析求得实际周长为 $4\pi$，所以 B 错。
+    - 选项 D 源题写取值范围 $(2e,+\infty)$，page_0109 解析给出应满足 $a\le 2e$，所以 D 错。
+solution:
+  source_solution_summary: |
+    A 中圆 $x^2+y^2=1$ 是直线族 $ax+by-1=0$ 的包络线，源页用
+    原点到直线的距离等于半径，得
+    $\frac1{\sqrt{a^2+b^2}}=1$，所以 $a^2+b^2=1$，A 正确。
+    B 中设包络线为圆 $(x-\alpha)^2+(y-\beta)^2=r^2$，令圆心到
+    直线族的距离恒为 $r$：
+    $\frac{|(1-t^2)\alpha+2t\beta-2t-4|}{1+t^2}=r$。
+    分子整理为 $-\alpha t^2+2(\beta-1)t+\alpha-4$，为使比值对
+    $t$ 恒定，取 $2(\beta-1)=0$、$-\alpha=\alpha-4$，得
+    $\alpha=2,\beta=1,r=2$，于是 $C_2$ 周长为 $4\pi$，B 错。
+    C 中对 $f(x)=\frac e{2x}+\ln x$ 求导，得
+    $f'(x)=\frac{2x-e}{2x^2}$，函数先减后增；
+    $f''(x)=\frac e{x^3}-\frac1{x^2}$，拐点为 $(e,\frac32)$，
+    拐点切线为 $y=\frac{x}{2e}+1$。源页图示说明当
+    $a>e$ 且 $f(a)<b<\frac a{2e}+1$ 时，点 $(a,b)$ 位于区域 III，
+    可作三条切线，C 正确。D 中两曲线同为一条直线的包络线等价于
+    $y=x^2-1$ 与 $y=a\ln x-1$ 有公切线；源页给出
+    $a\le \min_{x>1}\frac{x^2}{\ln x}=2e$，所以 D 所称
+    $(2e,+\infty)$ 错。故选 AC。
+  key_steps:
+    - step_id: step_1
+      statement: 用圆的切线距离判定选项 A。
+      formula_trace:
+        from: $C_1:x^2+y^2=1,\qquad ax+by-1=0$
+        to: $\frac{|0+0-1|}{\sqrt{a^2+b^2}}=1\Rightarrow a^2+b^2=1$
+        operation: 把“直线族包络单位圆”转成原点到每条切线的距离等于半径 1。
+        why: 圆的切线到圆心距离恒等于半径。
+      source_ref: page_0108
+    - step_id: step_2
+      statement: 用圆心到直线族的恒定距离判定选项 B。
+      formula_trace:
+        from: |
+          $C_2:(x-\alpha)^2+(y-\beta)^2=r^2$
+        to: |
+          $\frac{|(1-t^2)\alpha+2t\beta-2t-4|}{\sqrt{(1-t^2)^2+(2t)^2}}
+          =\frac{|-\alpha t^2+2(\beta-1)t+\alpha-4|}{1+t^2}=r$
+        operation: 设包络线为圆，代入圆心到直线 $(1-t^2)x+2ty-2t-4=0$ 的距离公式，并化简分母。
+        why: 若直线族包络同一圆，则所有切线到圆心的距离应为同一个半径。
+      source_ref: page_0108
+    - step_id: step_3
+      statement: 由恒定距离求出 $C_2$ 的半径和周长。
+      formula_trace:
+        from: $-\alpha t^2+2(\beta-1)t+\alpha-4$ 与 $1+t^2$ 成比例
+        to: $2(\beta-1)=0,\quad -\alpha=\alpha-4,\quad \alpha=2,\beta=1,r=2,\quad L_{C_2}=4\pi$
+        operation: 令一次项为 0，并让二次项与常数项匹配源页比例关系。
+        why: 距离为定值时，分子绝对值必须随 $1+t^2$ 同比例变化。
+      source_ref: page_0108
+    - step_id: step_4
+      statement: 用导数和拐点切线判定选项 C 的三切线区域。
+      formula_trace:
+        from: $f(x)=\frac e{2x}+\ln x$
+        to: |
+          $f'(x)=\frac{2x-e}{2x^2},\quad
+          f''(x)=\frac e{x^3}-\frac1{x^2},\quad
+          (e,\frac32),\quad y=\frac{x}{2e}+1$
+        operation: 求一、二阶导数，确定单调性、拐点和拐点处切线。
+        why: 源页图把曲线和拐点切线分成四个区域，区域 III 对应过点可作三条切线。
+      source_ref: page_0108
+    - step_id: step_5
+      statement: 把 C 的区域条件翻译成选项不等式。
+      formula_trace:
+        from: 点 $(a,b)$ 位于 $x>e$ 的区域 III
+        to: $a>e,\qquad f(a)<b<\frac a{2e}+1,\qquad f(a)=\frac e{2a}+\ln a$
+        operation: 用曲线值作下边界，用拐点切线作上边界。
+        why: 源页说明该区域内任一点都能作 $y=f(x)$ 的三条切线。
+      source_ref: page_0108
+    - step_id: step_6
+      statement: 用公切线阈值判定选项 D。
+      formula_trace:
+        from: $y=x^2-1$ 与 $y=a\ln x-1$ 有公切线
+        to: $x^2-1\ge a\ln x-1,\quad a\le \min_{x>1}\frac{x^2}{\ln x}=2e$
+        operation: 去掉共同的 $-1$，在 $x>1$ 上分离参数，并求 $\frac{x^2}{\ln x}$ 的最小值。
+        why: 源页用内公切线判定说明允许的 $a$ 不在 $(2e,+\infty)$，所以 D 错。
+      source_ref: page_0109
+    - step_id: step_7
+      statement: 汇总多选答案。
+      formula_trace:
+        from: A 正确；B 错误；C 正确；D 错误
+        to: AC
+        operation: 逐项筛选。
+        why: 题目是多选题，需保留所有正确选项。
+      source_ref: page_0109
+teaching_card:
+  student_title: 用切线距离和区域图判断包络线多选
+  what_it_trains: 训练把“包络线”翻译成切线、距离、区域和公切线阈值，逐项判断一个综合多选题。
+  recognition_cues:
+    - 题干直接给出包络线定义，选项都在问“某曲线能否作为一族切线的外轮廓”。
+    - A、B 是直线族和圆，优先用点到直线距离。
+    - C 出现“过点作三条切线”，要看曲线与拐点切线分出的区域。
+    - D 是二次函数与对数函数公切线，关键数通常来自 $\frac{x^2}{\ln x}$ 的最小值。
+  normalization_moves:
+    - A 把包络单位圆化成 $\frac1{\sqrt{a^2+b^2}}=1$。
+    - B 设圆心和半径，让圆心到参数直线族距离恒定。
+    - C 先求 $f'(x)$、$f''(x)$，再画出拐点切线分区。
+    - D 去掉共同的 $-1$，用 $a\le\min\frac{x^2}{\ln x}$ 判范围。
+  common_failures:
+    - 把包络线只当成“经过曲线上的点”，忘了还要相切。
+    - B 中看到源页分子里的疑似 $x$ 就跟着算，导致圆心参数混乱。
+    - C 中只判断单调性，没有用拐点切线分出三切线区域。
+    - D 中把真实范围 $a\le2e$ 看反，误以为 $(2e,+\infty)$ 正确。
+  similar_practice_query: 包络线 直线族 圆 点到直线距离 三切线区域 公切线 x^2/lnx 2e
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0108/page_0109 图片；page_0108 顶部例 16 续解未建卡，page_0109 后半 exposition 未建卡。
+    - B 解析中的疑似 $x-4$ 已按源页上下文和后续方程解析为圆心横坐标项 $a-4$，并在 source_discrepancies 记录。

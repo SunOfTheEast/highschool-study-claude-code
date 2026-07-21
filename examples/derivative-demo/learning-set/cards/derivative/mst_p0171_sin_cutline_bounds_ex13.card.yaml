@@ -1,0 +1,182 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0171_sin_cutline_bounds_ex13
+content_revision_id: mst_p0171_sin_cutline_bounds_ex13-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0171_sin_cutline_bounds_ex13.card.yaml
+stem: |-
+  (2023 · 惠州三调 T8) 已知 $x\in(0,\frac{\pi}{2})$, 且 $ax<\sin x<bx$ 恒成立, 则 $b-a$ 的最小值为 ( )
+  A. 1
+  B. $\frac{2}{\pi}$
+  C. $\frac{2}{\pi}-1$
+  D. $1-\frac{2}{\pi}$
+answer: |-
+  D
+
+  由 $x>0$ 得 $a<\frac{\sin x}{x}<b$，令 $f(x)=\frac{\sin x}{x}$。求 $b-a$ 的最小值等价于看 $f$ 在 $(0,\frac{\pi}{2})$ 的上确界与下确界之差。源解令 $h(x)=x\cos x-\sin x$，有 $h^{\prime}(x)=-x\sin x<0$，故 $h(x)<h(0)=0$，进而 $f^{\prime}(x)=\frac{x\cos x-\sin x}{x^2}<0$，即 $f$ 递减。再由 $\lim_{x\to0^+}\frac{\sin x}{x}=1$ 与 $f(\frac{\pi}{2})=\frac{2}{\pi}$，得差值为 $1-\frac{2}{\pi}$。源页法二用割线放缩 $\sin x>\frac{2x}{\pi}$ 得到同结论，故选 D。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 先除以正量 $x$，把参数夹逼转成函数值夹逼。
+      max_score: 1
+    - step_id: step_2
+      description: 构造 $f(x)=\frac{\sin x}{x}$ 并求导。
+      max_score: 1
+    - step_id: step_3
+      description: 用辅助函数判定 $f^{\prime}(x)<0$。
+      max_score: 1
+    - step_id: step_4
+      description: 读取端点极限与端值。
+      max_score: 1
+    - step_id: step_5
+      description: 得到 $b-a$ 的最小值。
+      max_score: 1
+    - step_id: step_6
+      description: 源页法二：用割线直接给下界。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 数形结合
+    subroute:
+      - $\sin x/x$ 单调性
+      - 端点极限取界
+      - 割线放缩 $y=\frac{2x}{\pi}$
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 不等式工具结构
+    evidence:
+      - $ax<\sin x<bx$ 经除以 $x$ 化成对 $\sin x/x$ 的全区间夹逼。
+      - 图像中割线通过 $(0,0)$ 与 $(\frac{\pi}{2},1)$，形成稳定下界模板。
+    normalization_moves_used:
+      - 同除 $x$：$ax<\sin x<bx\Rightarrow a<\sin x/x<b$。
+      - 引入 $h(x)=x\cos x-\sin x$ 判 $f^{\prime}(x)$ 符号。
+      - 把最小宽度转成 $\sup f-\inf f$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $ax<\sin x<bx$ 转成 $a<\sin x/x<b$，回补不等式工具基础。
+      - 若学生对 $\sin x/x$ 的导数与辅助函数符号判断不熟，回补导数单调极值基础。
+      - 若学生不会处理 $x\to0^+$ 的 $\sin x/x$ 极限，回补三角函数基础。
+      - 若学生看不出割线 $(0,0)$ 到 $(\frac{\pi}{2},1)$ 的放缩意义，回补函数性质与图像。
+  detail_terms:
+    - $\frac{\sin x}{x}$
+    - $x\cos x-\sin x$
+    - $\lim_{x\to0^+}\frac{\sin x}{x}=1$
+    - $\frac{2}{\pi}$
+    - $1-\frac{2}{\pi}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0171_sin_cutline_bounds_ex13
+source_evidence:
+  source_refs:
+    - ref_id: page_0171
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0171/page_0171.md
+      role: problem_start
+      evidence: 考点3下新起的例13题干、选项、两种解法与答案均在 page_0171。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0171.png
+      inspected: true
+      notes: 已核对题干区间为 $(0,\frac{\pi}{2})$；选项与答案 D 一致；配图给出过原点与 $(\frac{\pi}{2},1)$ 的割线 $y=\frac{2x}{\pi}$。
+  source_context: page_0171 顶部是 page_0170 例13（双参数不等式）的续解，不属于本卡；本卡仅对应考点3中新起的三角函数例13。
+  source_influence:
+    - BATCHES.yaml 指明 page_0171 存在编号重复的“例13”，本卡用语义 problem_id 区分。
+    - 源解同时给出导数单调法与割线放缩法，卡片保留两条路径。
+  source_discrepancies: []
+original_problem:
+  stem: (2023 · 惠州三调 T8) 已知 $x\in(0,\frac{\pi}{2})$, 且 $ax<\sin x<bx$ 恒成立, 则 $b-a$ 的最小值为 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: "1"
+      text_latex: "1"
+    - label: B
+      text_raw: $\frac{2}{\pi}$
+      text_latex: $\frac{2}{\pi}$
+    - label: C
+      text_raw: $\frac{2}{\pi}-1$
+      text_latex: $\frac{2}{\pi}-1$
+    - label: D
+      text_raw: $1-\frac{2}{\pi}$
+      text_latex: $1-\frac{2}{\pi}$
+  answer: D
+  fidelity_notes:
+    - 题干是严格不等式 $ax<\sin x<bx$，并限定 $x\in(0,\frac{\pi}{2})$。
+    - 配图显示在该区间内 $\sin x$ 位于割线 $y=\frac{2x}{\pi}$ 上方。
+solution:
+  source_solution_summary: 由 $x>0$ 得 $a<\frac{\sin x}{x}<b$，令 $f(x)=\frac{\sin x}{x}$。求 $b-a$ 的最小值等价于看 $f$ 在 $(0,\frac{\pi}{2})$ 的上确界与下确界之差。源解令 $h(x)=x\cos x-\sin x$，有 $h^{\prime}(x)=-x\sin x<0$，故 $h(x)<h(0)=0$，进而 $f^{\prime}(x)=\frac{x\cos x-\sin x}{x^2}<0$，即 $f$ 递减。再由 $\lim_{x\to0^+}\frac{\sin x}{x}=1$ 与 $f(\frac{\pi}{2})=\frac{2}{\pi}$，得差值为 $1-\frac{2}{\pi}$。源页法二用割线放缩 $\sin x>\frac{2x}{\pi}$ 得到同结论，故选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 先除以正量 $x$，把参数夹逼转成函数值夹逼。
+      formula_trace:
+        from: $ax<\sin x<bx,\ x\in(0,\frac{\pi}{2})$
+        to: $a<\frac{\sin x}{x}<b$
+        operation: 因 $x>0$，同除以 $x$ 不改变不等号方向。
+        why: 参数 $a,b$ 的可行范围由 $\frac{\sin x}{x}$ 的上下界决定。
+      source_ref: page_0171
+    - step_id: step_2
+      statement: 构造 $f(x)=\frac{\sin x}{x}$ 并求导。
+      formula_trace:
+        from: $f(x)=\frac{\sin x}{x}$
+        to: $f^{\prime}(x)=\frac{x\cos x-\sin x}{x^2}$
+        operation: 商式求导。
+        why: 需要判断 $f$ 在区间内的单调性。
+      source_ref: page_0171
+    - step_id: step_3
+      statement: 用辅助函数判定 $f^{\prime}(x)<0$。
+      formula_trace:
+        from: $h(x)=x\cos x-\sin x$
+        to: $h^{\prime}(x)=-x\sin x<0\Rightarrow h(x)<h(0)=0\Rightarrow f^{\prime}(x)<0$
+        operation: 先证 $h$ 递减，再代回 $f^{\prime}$ 分子符号。
+        why: $f$ 在 $(0,\frac{\pi}{2})$ 单调递减。
+      source_ref: page_0171
+    - step_id: step_4
+      statement: 读取端点极限与端值。
+      formula_trace:
+        from: $f(x)$ 在 $(0,\frac{\pi}{2})$ 递减
+        to: $\sup f=\lim_{x\to0^+}\frac{\sin x}{x}=1,\quad \inf f=f(\frac{\pi}{2})=\frac{2}{\pi}$
+        operation: 左端用极限，右端代入。
+        why: 题目要的最小差值是上下界之差。
+      source_ref: page_0171
+    - step_id: step_5
+      statement: 得到 $b-a$ 的最小值。
+      formula_trace:
+        from: $a<\frac{\sin x}{x}<b$ 对所有 $x$ 成立
+        to: $b-a\ge \sup f-\inf f=1-\frac{2}{\pi}$，最小值取为 $1-\frac{2}{\pi}$
+        operation: 区间宽度至少覆盖函数值域宽度。
+        why: 与选项 D 一致。
+      source_ref: page_0171
+    - step_id: step_6
+      statement: 源页法二：用割线直接给下界。
+      formula_trace:
+        from: 连接 $(0,0)$ 与 $(\frac{\pi}{2},1)$
+        to: $\sin x>\frac{2x}{\pi}\ (0<x<\frac{\pi}{2})$
+        operation: 用图像上的割线放缩。
+        why: 上界 $\sin x<x$ 与下界 $\sin x>\frac{2x}{\pi}$ 一起也可得 $b-a$ 的同一最小值。
+      source_ref: page_0171
+teaching_card:
+  student_title: 先看 $\sin x/x$，再用割线补下界
+  what_it_trains: 训练把“参数夹逼”改写为函数值域宽度问题，并结合导数单调与图像割线两种路径求最小差值。
+  recognition_cues:
+    - 不等式形态是 $ax<\sin x<bx$，变量只在乘法位置。
+    - 区间给在 $(0,\frac{\pi}{2})$，典型对象是 $\sin x/x$。
+    - 题问的是 $b-a$ 的最小值，常转为上下界差。
+  normalization_moves:
+    - 同除以 $x>0$，把参数挤压变成函数挤压。
+    - 对 $\sin x/x$ 求导并用 $x\cos x-\sin x$ 判符号。
+    - 端点用极限和代值拼出上下界。
+    - 图像上补充割线 $y=\frac{2x}{\pi}$ 形成下界。
+  common_failures:
+    - 把 $\sin x<x$ 当成双边界，遗漏下界来源。
+    - 计算 $f^{\prime}(x)$ 后没有进一步判断分子符号。
+    - 把 $x\to0^+$ 极限误当成在开区间内可直接取到的函数值。
+  similar_practice_query: sinx/x 单调 夹逼 b-a 最小值 割线放缩 0 到 pi/2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

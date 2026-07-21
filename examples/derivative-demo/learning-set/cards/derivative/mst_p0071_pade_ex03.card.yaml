@@ -1,0 +1,164 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0071_pade_ex03
+content_revision_id: mst_p0071_pade_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0071_pade_ex03.card.yaml
+stem: 求 $f(x)=\ln(x+1)$ 的 $[2,2]$ 阶帕德逼近。
+answer: |-
+  $R_{2,2}(x)=\frac{x+\frac{1}{2}x^2}{1+x+\frac{1}{6}x^2} =\frac{3x^2+6x}{x^2+6x+6}$。
+
+  设 $R_{2,2}(x)=\frac{a_0+a_1x+a_2x^2}{1+b_1x+b_2x^2}$。 因为分子、分母各 2 阶，需让它与 $\ln(1+x)$ 的泰勒展开匹配到 4 阶。 交叉相乘并比较 $x^0$ 到 $x^4$ 的系数，解得 $a_0=0,a_1=1,a_2=\frac12,b_1=1,b_2=\frac16$，代回即得最终逼近式。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 写出 $\ln(1+x)$ 的四阶展开，并设 [2,2] 阶帕德式的分母常数项为 1。
+      max_score: 1
+    - step_id: step_2
+      description: 把近似关系交叉相乘，转成多项式系数匹配。
+      max_score: 1
+    - step_id: step_3
+      description: 展开左边，并只保留需要匹配的 $x$ 到 $x^4$ 项。
+      max_score: 1
+    - step_id: step_4
+      description: 左边减右边，令 $x^0$ 到 $x^4$ 的系数分别为 0，得到待定系数方程组。
+      max_score: 1
+    - step_id: step_5
+      description: 解方程组并代回有理式，得到最终的 [2,2] 阶帕德逼近。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level: []
+  method:
+    primary: 局部逼近与找点
+    secondary: []
+    subroute:
+      - 帕德逼近
+      - 泰勒展开
+      - 待定系数法
+      - 交叉相乘后匹配四阶系数
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $\ln(1+x)=x-\frac{x^2}{2}+\frac{x^3}{3}-\frac{x^4}{4}+O(x^5)$
+      - $R_{2,2}(x)=\frac{a_0+a_1x+a_2x^2}{1+b_1x+b_2x^2}$
+      - "$R_{2,2}(x)=\\frac{x+\frac12x^2}{1+x+\frac16x^2}$"
+    normalization_moves_used:
+      - 把 [2,2] 阶帕德式的分母常数项标准化为 1。
+      - 按分子阶数加分母阶数，把 $\ln(1+x)$ 保留到 $x^4$。
+      - 交叉相乘后比较低阶系数，而不是直接把 $x^5,x^6$ 的系数也设为 0。
+      - 解出系数后分子分母同乘 6，写成整系数分式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会写 $\ln(1+x)$ 的展开式，回补指数对数基础。
+      - 若学生不清楚为什么 [2,2] 要匹配到四阶，回补导数运算与几何意义中的高阶展开含义。
+      - 若学生交叉相乘后系数混乱，回补代数恒等变形。
+      - 若学生把 $x^5,x^6$ 的系数也强行设为 0，回补代数恒等变形中的截断误差处理。
+  detail_terms:
+    - $[2,2]$ 阶帕德逼近
+    - $\ln(1+x)$ 的四阶泰勒展开
+    - $a_0=0,a_1=1,a_2=\frac12,b_1=1,b_2=\frac16$
+    - $\frac{3x^2+6x}{x^2+6x+6}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0071_pade_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0071
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0071/page_0071.md
+      role: problem_start
+      evidence: lines 29-69 give 例 3 题头、[2,2] 阶帕德逼近的待定形式、泰勒展开、 交叉相乘展开、系数方程组，以及 a_0=0,a_1=1,a_2=1/2,b_1=1,b_2=1/6。
+    - ref_id: page_0072
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0072/page_0072.md
+      role: continuation
+      evidence: line 14 gives the final result R_{2,2}(x)=\frac{x+\frac{1}{2}x^2}{1+x+\frac{1}{6}x^2} =\frac{3x^2+6x}{x^2+6x+6}, after which page_0072 enters 例 4.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0071.png
+      inspected: true
+      notes: 页图确认 page_0071 上半页是上一段帕德图像比较，例 3 从页中部起头； 题干、展开式、系数方程组与 markdown 对应。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0072.png
+      inspected: true
+      notes: 页图确认 page_0072 第一行是例 3 的最终结果，随后才进入“二、帕德逼近与估值”和例 4。
+  source_context: 本卡只处理 page_0071 新起头的例 3。page_0070 是例 2 续解和帕德表格正文， 只作为确认无新 worked-example 题头的本地上下文，不建卡。
+  source_influence:
+    - 保留源页以 ln(1+x) 的泰勒展开配 [2,2] 有理式的待定系数路线。
+    - 保留源页“总复杂度 4 阶”的处理：交叉相乘后匹配到 x^4。
+    - 采用 page_0072 顶部给出的通分化简形式作为最终答案。
+  source_discrepancies: []
+original_problem:
+  stem: 求 $f(x)=\ln(x+1)$ 的 $[2,2]$ 阶帕德逼近。
+  parts: *a1
+  choices: []
+  answer: $R_{2,2}(x)=\frac{x+\frac{1}{2}x^2}{1+x+\frac{1}{6}x^2} =\frac{3x^2+6x}{x^2+6x+6}$。
+  fidelity_notes:
+    - 源页题干只要求求出 [2,2] 阶帕德逼近，没有分问和选项。
+    - 源页使用 $\ln(x+1)$ 在 $x=0$ 附近的展开式匹配有理函数。
+solution:
+  source_solution_summary: 设 $R_{2,2}(x)=\frac{a_0+a_1x+a_2x^2}{1+b_1x+b_2x^2}$。 因为分子、分母各 2 阶，需让它与 $\ln(1+x)$ 的泰勒展开匹配到 4 阶。 交叉相乘并比较 $x^0$ 到 $x^4$ 的系数，解得 $a_0=0,a_1=1,a_2=\frac12,b_1=1,b_2=\frac16$，代回即得最终逼近式。
+  key_steps:
+    - step_id: step_1
+      statement: 写出 $\ln(1+x)$ 的四阶展开，并设 [2,2] 阶帕德式的分母常数项为 1。
+      formula_trace:
+        from: $\ln(1+x)=x-\frac{x^2}{2}+\frac{x^3}{3}-\frac{x^4}{4}+O(x^5)$
+        to: $R_{2,2}(x)=\frac{a_0+a_1x+a_2x^2}{1+b_1x+b_2x^2}$
+        operation: 按 [2,2] 阶有理式设待定系数，并把分母常数项标准化为 1。
+        why: 分子 2 阶、分母 2 阶，总共要匹配到 $m+n=4$ 阶。
+      source_ref: page_0071:lines 31-33
+    - step_id: step_2
+      statement: 把近似关系交叉相乘，转成多项式系数匹配。
+      formula_trace:
+        from: $x-\frac{x^2}{2}+\frac{x^3}{3}\approx\frac{a_0+a_1x+a_2x^2}{1+b_1x+b_2x^2}$
+        to: $\left(x-\frac{x^2}{2}+\frac{x^3}{3}-\frac{x^4}{4}\right)(1+b_1x+b_2x^2)=a_0+a_1x+a_2x^2$
+        operation: 保留到四阶后两边同乘分母。
+        why: 帕德逼近要求误差从更高阶开始出现，低阶系数必须相同。
+      source_ref: page_0071:line 33
+    - step_id: step_3
+      statement: 展开左边，并只保留需要匹配的 $x$ 到 $x^4$ 项。
+      formula_trace:
+        from: $\left(x-\frac{x^2}{2}+\frac{x^3}{3}-\frac{x^4}{4}\right)(1+b_1x+b_2x^2)$
+        to: $x+\left(b_1-\frac12\right)x^2+ \left(b_2-\frac12b_1+\frac13\right)x^3+ \left(-\frac12b_2+\frac13b_1-\frac14\right)x^4$
+        operation: 逐项展开，忽略会被后续泰勒尾项影响的 $x^5,x^6$ 项。
+        why: 本题只需保证 4 阶以内与原函数一致。
+      source_ref: page_0071:lines 35-45
+    - step_id: step_4
+      statement: 左边减右边，令 $x^0$ 到 $x^4$ 的系数分别为 0，得到待定系数方程组。
+      formula_trace:
+        from: $-a_0+(1-a_1)x+\left(b_1-a_2-\frac12\right)x^2+ \left(b_2-\frac12b_1+\frac13\right)x^3+ \left(-\frac12b_2+\frac13b_1-\frac14\right)x^4=0$
+        to: $\begin{cases}-a_0=0,\\ 1-a_1=0,\\ b_1-a_2-\frac12=0,\\ b_2-\frac12b_1+\frac13=0,\\ -\frac12b_2+\frac13b_1-\frac14=0 \end{cases}$
+        operation: 比较同次幂系数。
+        why: 一个多项式恒等为 0 时，每个幂次的系数都必须为 0。
+      source_ref: page_0071:lines 48-61
+    - step_id: step_5
+      statement: 解方程组并代回有理式，得到最终的 [2,2] 阶帕德逼近。
+      formula_trace:
+        from: $\begin{cases}a_0=0,\\ a_1=1,\\ a_2=\frac12,\\ b_1=1,\\ b_2=\frac16\end{cases}$
+        to: $R_{2,2}(x)=\frac{x+\frac12x^2}{1+x+\frac16x^2} =\frac{3x^2+6x}{x^2+6x+6}$
+        operation: 把系数代回，再分子分母同乘 6 化简。
+        why: 待定系数全部确定后，帕德逼近式唯一确定。
+      source_ref: page_0071:lines 62-69; page_0072:line 14
+teaching_card:
+  student_title: 用四阶系数凑出 [2,2] 帕德式
+  what_it_trains: 训练学生把函数的局部展开换成一个分式近似：先设分子分母的待定系数， 再用低阶系数完全相同来解出这个分式。
+  recognition_cues:
+    - 题目直接要求 $[2,2]$ 阶帕德逼近。
+    - 函数是 $\ln(1+x)$，展开点默认围绕 $x=0$。
+    - 分子、分母都是二次，多出来的分母系数要靠更高阶展开来确定。
+  normalization_moves:
+    - 先把分母常数项写成 1。
+    - 把 $\ln(1+x)$ 展开到 $x^4$。
+    - 交叉相乘，把分式问题转成多项式系数比较。
+    - 只匹配 $x^0$ 到 $x^4$，最后把分式通分成整系数形式。
+  common_failures:
+    - 只展开到 $x^3$，导致方程不够确定。
+    - 忘记 $a_0=0$，或者把分母常数项也当成未知自由量。
+    - 把 $x^5,x^6$ 项也设成 0，忽略了泰勒尾项会继续贡献这些阶。
+    - 求出系数后没有代回检查最终分式。
+  similar_practice_query: ln(1+x) [2,2] 帕德逼近 待定系数 泰勒四阶
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

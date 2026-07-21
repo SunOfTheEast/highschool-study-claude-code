@@ -1,0 +1,225 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0279_exp_shift_quadratic_visible_point_two_zeros_ex03
+content_revision_id: mst_p0279_exp_shift_quadratic_visible_point_two_zeros_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0279_exp_shift_quadratic_visible_point_two_zeros_ex03.card.yaml
+stem: |-
+  （2016 · 新课标 I）已知函数 $f(x)=(x-2)e^x+a(x-1)^2$。
+  1. 讨论 $f(x)$ 的单调性。
+  2. 若 $f(x)$ 有两个零点，求 $a$ 的取值范围（文）。
+answer: |-
+  (2) $a\in(0,+\infty)$。
+
+  先求导：$f^\prime(x)=(x-1)(e^x+2a)$。当 $a\ge0$ 时， $e^x+2a>0$，所以 $f$ 在 $(-\infty,1)$ 减、$(1,+\infty)$ 增。 当 $a<0$ 时，另一个驻点是 $\ln(-2a)$，再按它与 1 的位置分三段： $a=-\frac e2$ 时全域递增；$a<-\frac e2$ 时 $(-\infty,1)$、$(\ln(-2a),+\infty)$ 增，$(1,\ln(-2a))$ 减； $-\frac e2<a<0$ 时 $(-\infty,\ln(-2a))$、$(1,+\infty)$ 增， $(\ln(-2a),1)$ 减。第(2)问用显点 $x=1$：$f(1)=-e$。 若 $a>0$，这是唯一极小值，右侧 $f(2)=a>0$，左侧由 $(x-2)e^x\in(-e,0)$ 和取点 $x=1-\sqrt{e/a}$ 得正值，所以两侧各有一个零点。 若 $a=0$，只有零点 $x=2$。若 $a<0$，两处极值都小于 0，不可能有两个零点。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 求导并分出显点 $x=1$。
+      max_score: 1
+    - step_id: step_2
+      description: 按 $a$ 与 $-\frac e2$ 的关系讨论单调性。
+      max_score: 1
+    - step_id: step_3
+      description: 当 $a>0$，用显点值判断曲线有机会两侧穿轴。
+      max_score: 1
+    - step_id: step_4
+      description: 当 $a>0$，左侧用取点补出第二个零点。
+      max_score: 1
+    - step_id: step_5
+      description: 排除 $a=0$ 和 $a<0$。
+      max_score: 1
+    - step_id: step_6
+      description: 合并得到参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 1 问
+        result: 按 $a\ge0$、$a=-\frac e2$、$a<-\frac e2$、$-\frac e2<a<0$ 讨论单调区间。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $a\in(0,+\infty)$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 局部逼近与找点
+      - 含参数分类讨论
+      - 充分/必要性探路
+    subroute:
+      - 显点 $x=1$
+      - 隐点 $x=\ln(-2a)$
+      - 显点极小值 $f(1)=-e$
+      - 右侧取 $f(2)=a$
+      - 左侧取点 $1-\sqrt{e/a}$
+      - 极值高度排除 $a<0$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - $(x-2)e^x+a(x-1)^2$
+      - $f^\prime(x)=(x-1)(e^x+2a)$
+      - $x=1$
+      - $x=\ln(-2a)$
+      - $f(1)=-e$
+      - $x=1-\sqrt{e/a}$
+    normalization_moves_used:
+      - 求导后提取 $(x-1)(e^x+2a)$。
+      - 用 $\ln(-2a)$ 与 1 的位置组织单调性。
+      - 左侧取点只补存在性，不替代显点主线。
+      - 把 $a<0$ 的极值高度化为 $a[(\ln(-2a)-2)^2+1]<0$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由导数符号表判断单调性，回补导数单调极值基础。
+      - 若学生不会比较 $\ln(-2a)$ 与 1，回补指数对数基础。
+      - 若学生不能理解两侧穿轴，回补函数性质与图像。
+      - 若学生卡在 $(x-2)e^x\in(-e,0)$，回补指数对数基础。
+      - 若学生不会处理 $a(x-1)^2$ 取点，回补代数恒等变形。
+  detail_terms:
+    - 显点探路
+    - $x=1$
+    - $f(1)=-e$
+    - $x=\ln(-2a)$
+    - 两个零点
+    - $f(2)=a$
+    - $1-\sqrt{e/a}$
+    - $a\in(0,+\infty)$
+parts: &a1
+  - part_id: "1"
+    text: 讨论 $f(x)$ 的单调性。
+  - part_id: "2"
+    text: 若 $f(x)$ 有两个零点，求 $a$ 的取值范围（文）。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0279_exp_shift_quadratic_visible_point_two_zeros_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0279_ex03_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0279/page_0279.md
+      role: problem_start
+      evidence: page_0279 给出例3题头：$f(x)=(x-2)e^x+a(x-1)^2$，讨论单调性，并在有两个零点时求 $a$ 的范围。
+    - ref_id: page_0279_ex03_monotonicity
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0279/page_0279.md
+      role: solution
+      evidence: page_0279 解析给出 $f^\prime(x)=(x-1)(e^x+2a)$，按 $a\ge0$、$a=-\frac e2$、$a<-\frac e2$、$-\frac e2<a<0$ 讨论单调性。
+    - ref_id: page_0279_ex03_visible_point
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0279/page_0279.md
+      role: solution
+      evidence: page_0279 第(2)问说明关键是探显点 $f(1)=-e$；当 $a>0$ 时唯一极小值小于 0，并由 $f(2)=a>0$ 得右侧零点。
+    - ref_id: page_0280_ex03_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0280/page_0280.md
+      role: solution
+      evidence: page_0280 顶部承接 page_0279 底部，给出取点 $x=1-\sqrt{e/a}$，证明左侧零点，并处理 $a=0$、$a<0$，结论为 $(0,+\infty)$。
+    - ref_id: page_0280_ex04_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0280/page_0280.md
+      role: local_context
+      evidence: page_0280 随后另起例4，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0279.png
+      inspected: true
+      notes: 已核对页图：page_0279 含例3题头、单调性讨论、显点图像和 page bottom 截断。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0280.png
+      inspected: true
+      notes: 已核对页图：page_0280 顶部续完例3，随后另起例4。
+  source_context: 本卡处理 page_0279 起头、page_0280 顶部续完的例3；page_0280 例4排除。
+  source_influence:
+    - 保留导数分解：$f^\prime(x)=(x-1)(e^x+2a)$。
+    - 保留单调性按 $a$ 与 $-\frac e2$ 的关系分类。
+    - 保留显点 $x=1$，$f(1)=-e$。
+    - 保留 $a>0$ 时右侧取 $f(2)=a>0$，左侧取 $x=1-\sqrt{e/a}$。
+    - 保留 $a<0$ 时两个极值都小于 0，因此不可能有两个零点。
+    - 保留结论：$a\in(0,+\infty)$。
+  source_discrepancies:
+    - field: page_0279_bottom_cutoff
+      source_value: "取 $x$ [?unclear: ... | reason=页面底部截断，后续内容不可见]"
+      resolved_value: 取 $x=1-\sqrt{\frac ea}$
+      reason: page_0280 首行以 $=1-\sqrt{\frac ea}$ 开头，并继续证明 $f(1-\sqrt{e/a})>0$。
+original_problem:
+  stem: （2016 · 新课标 I）已知函数 $f(x)=(x-2)e^x+a(x-1)^2$。
+  parts: *a1
+  choices: []
+  answer: (2) $a\in(0,+\infty)$。
+  fidelity_notes:
+    - 无选项。
+    - source 第(1)问完整写在 page_0279，第(2)问结论续到 page_0280 顶部。
+solution:
+  source_solution_summary: 先求导：$f^\prime(x)=(x-1)(e^x+2a)$。当 $a\ge0$ 时， $e^x+2a>0$，所以 $f$ 在 $(-\infty,1)$ 减、$(1,+\infty)$ 增。 当 $a<0$ 时，另一个驻点是 $\ln(-2a)$，再按它与 1 的位置分三段： $a=-\frac e2$ 时全域递增；$a<-\frac e2$ 时 $(-\infty,1)$、$(\ln(-2a),+\infty)$ 增，$(1,\ln(-2a))$ 减； $-\frac e2<a<0$ 时 $(-\infty,\ln(-2a))$、$(1,+\infty)$ 增， $(\ln(-2a),1)$ 减。第(2)问用显点 $x=1$：$f(1)=-e$。 若 $a>0$，这是唯一极小值，右侧 $f(2)=a>0$，左侧由 $(x-2)e^x\in(-e,0)$ 和取点 $x=1-\sqrt{e/a}$ 得正值，所以两侧各有一个零点。 若 $a=0$，只有零点 $x=2$。若 $a<0$，两处极值都小于 0，不可能有两个零点。
+  key_steps:
+    - step_id: step_1
+      statement: 求导并分出显点 $x=1$。
+      formula_trace:
+        from: $f(x)=(x-2)e^x+a(x-1)^2$
+        to: $f^\prime(x)=(x-1)(e^x+2a)$
+        operation: 求导并提取公共因子 $x-1$。
+        why: $x=1$ 是固定显点，另一个驻点由 $e^x+2a=0$ 决定。
+      source_ref: page_0279_ex03_monotonicity
+    - step_id: step_2
+      statement: 按 $a$ 与 $-\frac e2$ 的关系讨论单调性。
+      formula_trace:
+        from: $x=1,\quad x=\ln(-2a)$
+        to: $a\ge0$；$a=-\frac e2$；$a<-\frac e2$；$-\frac e2<a<0$
+        operation: 比较 $\ln(-2a)$ 与 1 的位置。
+        why: 极值个数和位置决定后面能否有两个零点。
+      source_ref: page_0279_ex03_monotonicity
+    - step_id: step_3
+      statement: 当 $a>0$，用显点值判断曲线有机会两侧穿轴。
+      formula_trace:
+        from: $a>0,\quad f(1)=-e<0,\quad f(2)=a>0$
+        to: $\exists x_2\in(1,2),\ f(x_2)=0$
+        operation: 利用右侧单调递增和介值定理。
+        why: 显点 $x=1$ 是唯一极小点，右侧找到正值就有唯一右零点。
+      source_ref: page_0279_ex03_visible_point
+    - step_id: step_4
+      statement: 当 $a>0$，左侧用取点补出第二个零点。
+      formula_trace:
+        from: $(x-2)e^x\in(-e,0),\quad x<1$
+        to: $f(x)>-e+a(x-1)^2$，取 $x=1-\sqrt{\frac ea}$ 得 $f(x)>0$
+        operation: 用指数项范围给下界，再让二次下界取 0。
+        why: 左侧单调递减，且 $f(1)<0$、左侧某点 $>0$，所以左侧唯一穿轴。
+      source_ref: page_0280_ex03_continuation
+    - step_id: step_5
+      statement: 排除 $a=0$ 和 $a<0$。
+      formula_trace:
+        from: $a=0$ 或 $a<0$
+        to: $a=0$ 只有零点 $2$；$a<0$ 两个极值都小于 0
+        operation: 分别代入或计算 $f(\ln(-2a))=a[\ln^2(-2a)-4\ln(-2a)+5]$。
+        why: 这两类都不能满足“有两个零点”。
+      source_ref: page_0280_ex03_continuation
+    - step_id: step_6
+      statement: 合并得到参数范围。
+      formula_trace:
+        from: $a>0$ 可行；$a\le0$ 不可
+        to: $a\in(0,+\infty)$
+        operation: 分类合并。
+        why: 只有正参数时显点两侧都能穿轴。
+      source_ref: page_0280_ex03_continuation
+teaching_card:
+  student_title: 用显点 $x=1$ 判断什么时候有两个零点
+  what_it_trains: 训练显点探路：固定极值点 $x=1$ 已经给出负值，参数为正时只要在左右两边各找一个正值，就能锁定两个零点。
+  recognition_cues:
+    - 导数能分解成 $(x-1)(e^x+2a)$，其中 $x=1$ 是固定点。
+    - 题目要求“有两个零点”，核心是看极小值两侧是否都能穿轴。
+    - $a>0$ 时只有一个极小值，图像最容易判断。
+    - $a<0$ 时多一个隐点 $\ln(-2a)$，但两个极值高度都小于 0。
+  normalization_moves:
+    - 先做完整单调性分类。
+    - 把 $f(1)=-e$ 当成显点高度。
+    - 右侧直接看 $f(2)=a$。
+    - 左侧用 $x=1-\sqrt{e/a}$ 补出正值。
+  common_failures:
+    - 只看到 $f(2)=a>0$，忘记还要证明左侧也有一个零点。
+    - 把 $a=0$ 混进答案，但此时只有 $x=2$ 一个零点。
+    - 认为 $a<0$ 有两个极值就可能有两个零点，忽略两个极值都在 $x$ 轴下方。
+    - 把左侧取点当成主方法，没看出显点 $x=1$ 才是组织全题的核心。
+  similar_practice_query: 显点 x=1 (x-2)e^x+a(x-1)^2 两个零点 a>0
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

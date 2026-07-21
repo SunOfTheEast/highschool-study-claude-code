@@ -1,0 +1,231 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0230_log_sin_lambert_homogeneous_split_inequality_ch6_fenzhi_ex19
+content_revision_id: mst_p0230_log_sin_lambert_homogeneous_split_inequality_ch6_fenzhi_ex19-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0230_log_sin_lambert_homogeneous_split_inequality_ch6_fenzhi_ex19.card.yaml
+stem: |-
+  （2021 · 江西红色七校联考 T21）已知函数 $f(x)=2\ln(x+1)+\sin x+1$，函数 $g(x)=ax-1-b\ln x$（$a,b\in\mathbf R$，$ab\neq0$）。
+  1. 讨论 $g(x)$ 的单调性。
+  2. 证明：当 $x\geqslant0$ 时，$f(x)\leqslant3x+1$。
+  3. 证明：当 $x>-1$ 时，$f(x)<(x^2+2x+2)e^{\sin x}$。
+answer: |-
+  第 (1) 问按 $a,b$ 符号分类给出单调区间；第 (2)(3) 问不等式成立。
+
+  $g$ 的定义域为 $(0,+\infty)$，$g'(x)=\frac{ax-b}{x}$。若 $a>0,b<0$，则 $g$ 在 $(0,+\infty)$ 递增；若 $a>0,b>0$，则 $g$ 在 $(0,b/a)$ 递减，在 $(b/a,+\infty)$ 递增；若 $a<0,b>0$，则 $g$ 在 $(0,+\infty)$ 递减；若 $a<0,b<0$，则 $g$ 在 $(0,b/a)$ 递增，在 $(b/a,+\infty)$ 递减。第 (2) 问令 $h(x)=f(x)-(3x+1)$，则 $h'(x)=\frac2{x+1}+\cos x-3\leqslant0$，且 $h(0)=0$，所以 $f(x)\leqslant3x+1$。第 (3) 问取 $a=b=1$，得 $g(t)=t-1-\ln t\geqslant0$。令 $t=e^{\sin x+2\ln(x+1)}=(x+1)^2e^{\sin x}$，则 $(x+1)^2e^{\sin x}\geqslant2\ln(x+1)+\sin x+1=f(x)$。又 $(x^2+2x+2)e^{\sin x}=((x+1)^2+1)e^{\sin x}>(x+1)^2e^{\sin x}$， 故 $f(x)<(x^2+2x+2)e^{\sin x}$。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 先求 $g$ 的导数并按 $a,b$ 符号分类。
+      max_score: 1
+    - step_id: step_2
+      description: 完成四种符号情形的单调性讨论。
+      max_score: 1
+    - step_id: step_3
+      description: 第 (2) 问构造差函数。
+      max_score: 1
+    - step_id: step_4
+      description: 用导数上界证明 $h$ 单调递减。
+      max_score: 1
+    - step_id: step_5
+      description: 取 $a=b=1$ 得到朗博同构母式。
+      max_score: 1
+    - step_id: step_6
+      description: 把三角指数整体代入同构母式。
+      max_score: 1
+    - step_id: step_7
+      description: 用更大的指数系数完成严格不等式。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: part_1
+        goal: 零点/极值点分析
+        target: 第 part_1 问
+        result: $g$ 的单调性按 $a,b$ 符号四类讨论。
+      - part_id: part_2
+        goal: 不等式证明
+        target: 第 part_2 问
+        result: $f(x)\leqslant3x+1$。
+      - part_id: part_3
+        goal: 不等式证明
+        target: 第 part_3 问
+        result: $f(x)<(x^2+2x+2)e^{\sin x}$。
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 保值性与分治
+      - 含参数分类讨论
+    subroute:
+      - 朗博同构
+      - 三角作为指数
+      - $t-1-\ln t\geqslant0$
+      - $t=(x+1)^2e^{\sin x}$
+      - 差函数上界
+      - 四象限参数讨论
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 三角复合结构
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $g(x)=ax-1-b\ln x$
+      - $t-1-\ln t\geqslant0$
+      - $t=e^{\sin x+2\ln(x+1)}$
+      - $2\ln(x+1)+\sin x+1$
+      - $(x^2+2x+2)e^{\sin x}$
+    normalization_moves_used:
+      - 第 (1) 问先做参数符号分类，取出 $a=b=1$ 的可用母式。
+      - 第 (2) 问用差函数 $h=f-(3x+1)$。
+      - 第 (3) 问把 $2\ln(x+1)+\sin x$ 识别为一个整体的对数。
+      - 令 $t=(x+1)^2e^{\sin x}$ 后套 $t-1-\ln t\geqslant0$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会按 $a,b$ 符号讨论 $g^\prime(x)$，回补导数单调极值基础。
+      - 若学生不会处理 $x>0$ 下 $b/a$ 是否落入定义域，回补函数三要素与定义域。
+      - 若学生不会把 $2\ln(x+1)+\sin x$ 写成 $\ln((x+1)^2e^{\sin x})$，回补指数对数基础。
+      - 若学生不会从 $t-1-\ln t\geqslant0$ 迁移到新整体，回补不等式工具基础。
+      - 若学生展开整理时丢掉严格性，回补代数恒等变形。
+  detail_terms:
+    - $g(x)=ax-1-b\ln x$
+    - $g^\prime(x)=\frac{ax-b}{x}$
+    - 朗博同构
+    - $t-1-\ln t\geqslant0$
+    - $t=(x+1)^2e^{\sin x}$
+    - 三角作为指数
+    - $2\ln(x+1)+\sin x$
+    - 差函数 $h=f-(3x+1)$
+parts: &a1
+  - part_id: part_1
+    text: 讨论 $g(x)$ 的单调性。
+  - part_id: part_2
+    text: 证明：当 $x\geqslant0$ 时，$f(x)\leqslant3x+1$。
+  - part_id: part_3
+    text: 证明：当 $x>-1$ 时，$f(x)<(x^2+2x+2)e^{\sin x}$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0230_log_sin_lambert_homogeneous_split_inequality_ch6_fenzhi_ex19
+source_evidence:
+  source_refs:
+    - ref_id: page_0230_ex18_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0230/page_0230.md
+      role: local_context
+      evidence: page_0230 页首是 page_0229 例18的最后结论，不是本卡题头。
+    - ref_id: page_0230_ch6_trig_lambert_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0230/page_0230.md
+      role: local_context
+      evidence: page_0230 进入“考点3：三角借助朗博同构后的分而治之”，提示三角作为指数时通常需要同构放缩。
+    - ref_id: page_0230_ex19_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0230/page_0230.md
+      role: problem_start
+      evidence: page_0230 给出例19题头：$f(x)=2\ln(x+1)+\sin x+1$，$g(x)=ax-1-b\ln x$，讨论 $g$ 单调性并证明两个不等式。
+    - ref_id: page_0230_ex19_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0230/page_0230.md
+      role: solution
+      evidence: 解析先按 $a,b$ 符号讨论 $g^\prime(x)=\frac{ax-b}{x}$，再用差函数证明 $f(x)\leqslant3x+1$，最后取 $a=b=1$ 得 $t-1-\ln t\geqslant0$ 并代入 $t=(x+1)^2e^{\sin x}$。
+    - ref_id: page_0230_find_point_exposition_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0230/page_0230.md
+      role: local_context
+      evidence: 例19结束后进入“第四节 找点体系与原理解析”，属于讲义正文，不作为本批题卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0230.png
+      inspected: true
+      notes: 已核对页图：例19题头、完整解析和后续找点体系正文边界均位于 page_0230。
+  source_context: 本卡处理 page_0230 起头并在同页结束的例19；页首例18续句和后续找点体系正文不处理。
+  source_influence:
+    - 保留 source 的朗博同构：由 $g(x)=x-1-\ln x\geqslant0$ 推出 $t-1-\ln t\geqslant0$，再令 $t=(x+1)^2e^{\sin x}$。
+    - 保留 source 的分而治之：第 (2) 问用 $h=f-(3x+1)$ 的导数上界，第 (3) 问用同构下界再接一个严格更大的目标。
+    - 保留 source 的四类单调性讨论：$a,b$ 的符号决定 $g^\prime(x)=\frac{ax-b}{x}$ 的符号变化。
+  source_discrepancies:
+    - 原文第 (3) 问最后停在“又 $(x^2+2x+2)e^{\sin x}>(x+1)^2e^{\sin x}$,” 后直接进入下一节；题卡按前后不等式补足最终结论。
+original_problem:
+  stem: （2021 · 江西红色七校联考 T21）已知函数 $f(x)=2\ln(x+1)+\sin x+1$，函数 $g(x)=ax-1-b\ln x$（$a,b\in\mathbf R$，$ab\neq0$）。
+  parts: *a1
+  choices: []
+  answer: 第 (1) 问按 $a,b$ 符号分类给出单调区间；第 (2)(3) 问不等式成立。
+  fidelity_notes:
+    - 三问均无选项。
+    - 第 (3) 问使用第 (1) 问中 $a=b=1$ 的特殊情形。
+solution:
+  source_solution_summary: $g$ 的定义域为 $(0,+\infty)$，$g'(x)=\frac{ax-b}{x}$。若 $a>0,b<0$，则 $g$ 在 $(0,+\infty)$ 递增；若 $a>0,b>0$，则 $g$ 在 $(0,b/a)$ 递减，在 $(b/a,+\infty)$ 递增；若 $a<0,b>0$，则 $g$ 在 $(0,+\infty)$ 递减；若 $a<0,b<0$，则 $g$ 在 $(0,b/a)$ 递增，在 $(b/a,+\infty)$ 递减。第 (2) 问令 $h(x)=f(x)-(3x+1)$，则 $h'(x)=\frac2{x+1}+\cos x-3\leqslant0$，且 $h(0)=0$，所以 $f(x)\leqslant3x+1$。第 (3) 问取 $a=b=1$，得 $g(t)=t-1-\ln t\geqslant0$。令 $t=e^{\sin x+2\ln(x+1)}=(x+1)^2e^{\sin x}$，则 $(x+1)^2e^{\sin x}\geqslant2\ln(x+1)+\sin x+1=f(x)$。又 $(x^2+2x+2)e^{\sin x}=((x+1)^2+1)e^{\sin x}>(x+1)^2e^{\sin x}$， 故 $f(x)<(x^2+2x+2)e^{\sin x}$。
+  key_steps:
+    - step_id: step_1
+      statement: 先求 $g$ 的导数并按 $a,b$ 符号分类。
+      formula_trace:
+        from: $g(x)=ax-1-b\ln x$
+        to: $g^\prime(x)=\frac{ax-b}{x}$
+        operation: 求导并通分。
+        why: $x>0$，导数符号由 $ax-b$ 决定。
+      source_ref: page_0230_ex19_solution
+    - step_id: step_2
+      statement: 完成四种符号情形的单调性讨论。
+      formula_trace:
+        from: $g^\prime(x)=\frac{ax-b}{x}$
+        to: $a>0,b<0$ 递增；$a>0,b>0$ 先减后增；$a<0,b>0$ 递减；$a<0,b<0$ 先增后减
+        operation: 判断 $ax-b$ 在 $x>0$ 上的符号和零点 $x=b/a$。
+        why: $b/a$ 为正时才落入定义域，且符号方向由 $a$ 决定。
+      source_ref: page_0230_ex19_solution
+    - step_id: step_3
+      statement: 第 (2) 问构造差函数。
+      formula_trace:
+        from: $f(x)\leqslant3x+1$
+        to: $h(x)=f(x)-(3x+1)\leqslant0$
+        operation: 移项并构造 $h$。
+        why: 证明上界常转为差函数单调递减。
+      source_ref: page_0230_ex19_solution
+    - step_id: step_4
+      statement: 用导数上界证明 $h$ 单调递减。
+      formula_trace:
+        from: $h^\prime(x)=\frac2{x+1}+\cos x-3$
+        to: $h^\prime(x)\leqslant0$
+        operation: 用 $x\geqslant0$ 时 $\frac2{x+1}\leqslant2$、$\cos x\leqslant1$。
+        why: 两个上界相加刚好不超过 3。
+      source_ref: page_0230_ex19_solution
+    - step_id: step_5
+      statement: 取 $a=b=1$ 得到朗博同构母式。
+      formula_trace:
+        from: $g(x)=ax-1-b\ln x$
+        to: $g(t)=t-1-\ln t\geqslant0\quad(t>0)$
+        operation: 取 $a=b=1$，由第 (1) 问知最小值为 $g(1)=0$。
+        why: 这就是 $t\geqslant1+\ln t$ 的同构放缩。
+      source_ref: page_0230_ex19_solution
+    - step_id: step_6
+      statement: 把三角指数整体代入同构母式。
+      formula_trace:
+        from: $t=(x+1)^2e^{\sin x}=e^{\sin x+2\ln(x+1)}$
+        to: $(x+1)^2e^{\sin x}\geqslant2\ln(x+1)+\sin x+1$
+        operation: 把 $t$ 代入 $t-1-\ln t\geqslant0$。
+        why: $\ln t=\sin x+2\ln(x+1)$，右侧正好等于 $f(x)$。
+      source_ref: page_0230_ex19_solution
+    - step_id: step_7
+      statement: 用更大的指数系数完成严格不等式。
+      formula_trace:
+        from: $(x^2+2x+2)e^{\sin x}=((x+1)^2+1)e^{\sin x}$
+        to: $(x^2+2x+2)e^{\sin x}>(x+1)^2e^{\sin x}\geqslant f(x)$
+        operation: 利用 $e^{\sin x}>0$ 和多出的 $1\cdot e^{\sin x}$。
+        why: 目标右侧严格大于同构下界对应的块。
+      source_ref: page_0230_ex19_solution
+teaching_card:
+  student_title: 先从 $g$ 里取出朗博母式，再把三角指数整体塞进去
+  what_it_trains: 训练朗博同构后的分而治之：先从参数函数中抽出 $t-1-\ln t\geqslant0$，再识别 $2\ln(x+1)+\sin x$ 是某个整体的对数。
+  recognition_cues:
+    - 题目先给 $g(x)=ax-1-b\ln x$，后面又要证明含 $\ln(x+1)$ 和 $e^{\sin x}$ 的不等式。
+    - 第 (3) 问目标右边有 $e^{\sin x}$，说明可以把三角放到指数里做整体。
+    - $2\ln(x+1)+\sin x$ 可以合成 $\ln((x+1)^2e^{\sin x})$。
+  normalization_moves:
+    - 先完整讨论 $g$ 的单调性，尤其记住 $a=b=1$ 时 $t-1-\ln t\geqslant0$。
+    - 第 (2) 问直接做差函数上界。
+    - 第 (3) 问令 $t=(x+1)^2e^{\sin x}$。
+    - 得到 $(x+1)^2e^{\sin x}\geqslant f(x)$ 后，再用目标右边多出的 $e^{\sin x}$ 做严格放大。
+  common_failures:
+    - 第 (1) 问只机械讨论单调性，没有看出它给第 (3) 问准备了母式。
+    - 看不出 $2\ln(x+1)+\sin x$ 可以合成一个对数。
+    - 把 $(x^2+2x+2)$ 错看成 $(x+1)^2$，漏掉严格大于。
+  similar_practice_query: 朗博同构 t-1-lnt 三角作为指数 2ln(x+1)+sinx e^{sinx} 分而治之
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

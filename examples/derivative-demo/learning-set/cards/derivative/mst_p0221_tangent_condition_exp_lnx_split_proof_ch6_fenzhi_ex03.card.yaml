@@ -1,0 +1,206 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0221_tangent_condition_exp_lnx_split_proof_ch6_fenzhi_ex03
+content_revision_id: mst_p0221_tangent_condition_exp_lnx_split_proof_ch6_fenzhi_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0221_tangent_condition_exp_lnx_split_proof_ch6_fenzhi_ex03.card.yaml
+stem: |-
+  （2014 · 新课标 I T21）设函数 $f(x)=ae^x\ln x+\frac{be^{x-1}}x$，曲线 $y=f(x)$ 在点 $(1,f(1))$ 处的切线方程为 $y=e(x-1)+2$。
+  1. 求 $a$ 和 $b$ 的值。
+  2. 证明：$f(x)>1$。
+answer: |-
+  （1）$a=1,b=2$；（2）证明见解析。
+
+  由切线方程 $y=e(x-1)+2$，得 $f(1)=2$、$f^{\prime}(1)=e$。 对 $f(x)=ae^x\ln x+\frac{be^{x-1}}x$ 求导： $f^{\prime}(x)=ae^x\ln x+\frac{a}{x}e^x -\frac{b}{x^2}e^{x-1}+\frac{b}{x}e^{x-1}$。代入 $x=1$， $f(1)=b=2$，$f^{\prime}(1)=ae=e$，所以 $a=1,b=2$。 第二问变为证明 $e^x\ln x+\frac2x e^{x-1}>1$。source 将其等价变形为 $x\ln x>xe^{-x}-\frac2e$。令 $g(x)=x\ln x$，则 $g_{\min}=g(1/e)=-1/e$；令 $h(x)=xe^{-x}-2/e$，则 $h_{\max}=h(1)=-1/e$。虽然数值相等，但左侧取等点 $1/e$ 与右侧取等点 $1$ 不同，因此对任意 $x>0$ 有 $g(x)>h(x)$，即 $f(x)>1$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 由切线方程读出函数值和斜率。
+      max_score: 1
+    - step_id: step_2
+      description: 代入 $x=1$ 求 $a,b$。
+      max_score: 1
+    - step_id: step_3
+      description: 把第二问写成两函数比较。
+      max_score: 1
+    - step_id: step_4
+      description: 求左侧函数的最小值。
+      max_score: 1
+    - step_id: step_5
+      description: 求右侧函数的最大值。
+      max_score: 1
+    - step_id: step_6
+      description: 用取等点不同给出严格大于。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 数值求值
+        target: 第 1 问
+        result: $a=1,b=2$
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 2 问
+        result: $f(x)>1$
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 切线放缩与凹凸性
+      - 拟合与夹逼
+    subroute:
+      - 切线条件定参
+      - 上下函数选取
+      - 错位 PS
+      - 六大基础函数 VS 六大基础函数
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - $ae^x\ln x+\frac{be^{x-1}}x$
+      - $f(1)=2,\ f^{\prime}(1)=e$
+      - $x\ln x>xe^{-x}-2/e$
+      - $g_{\min}=h_{\max}=-1/e$ 但取等点错开。
+    normalization_moves_used:
+      - 从切线方程读取函数值和导数值。
+      - 把证明目标乘以正因子，转成 $x\ln x$ 与 $xe^{-x}-2/e$。
+      - 分别求最小值/最大值，再检查取等点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由切线方程得到 $f(1)$ 和 $f^{\prime}(1)$，回补导数运算与几何意义。
+      - 若学生乘以 $xe^{-x}$ 时担心改变不等号，回补函数三要素与定义域。
+      - 若学生不会求 $x\ln x$ 或 $xe^{-x}$ 的极值，回补导数单调极值基础。
+      - 若学生不理解“最小值等于最大值但取等点不同”仍能得到严格大于，回补不等式工具基础。
+  detail_terms:
+    - 切线条件
+    - $f(1)=2$
+    - $f^{\prime}(1)=e$
+    - $x\ln x$
+    - $xe^{-x}-2/e$
+    - 错位 PS
+parts: &a1
+  - part_id: "1"
+    text: 求 $a$ 和 $b$ 的值。
+  - part_id: "2"
+    text: 证明：$f(x)>1$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0221_tangent_condition_exp_lnx_split_proof_ch6_fenzhi_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0221_ex02_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0221/page_0221.md
+      role: local_context
+      evidence: page_0221 页首是 page_0220 例2续解，不是本卡题头。
+    - ref_id: page_0221_ex03_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0221/page_0221.md
+      role: problem_start
+      evidence: page_0221 中下部给出例3题头：$f(x)=ae^x\ln x+\frac{be^{x-1}}x$，切线方程 $y=e(x-1)+2$，两问求 $a,b$ 并证明 $f(x)>1$。
+    - ref_id: page_0221_ex03_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0221/page_0221.md
+      role: solution
+      evidence: page_0221 页底给出例3第一问解析并开始第二问，把 $f(x)>1$ 化为 $x\ln x>xe^{-x}-2/e$。
+    - ref_id: page_0222_ex03_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0222/page_0222.md
+      role: continuation
+      evidence: page_0222 页首延续例3第二问，分别求 $g(x)=x\ln x$ 的最小值和 $h(x)=xe^{-x}-2/e$ 的最大值，二者均为 $-1/e$，但取等点不同，故 $f(x)>1$。
+    - ref_id: page_0222_ex04_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0222/page_0222.md
+      role: local_context
+      evidence: page_0222 随后进入例4题头，属于下一批，不在本卡处理。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0221.png
+      inspected: true
+      notes: 已核对页图：例3题头和解析起点位于 page_0221 下半页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0222.png
+      inspected: true
+      notes: 已核对页图：page_0222 顶部是例3续解，例4题头在其后。
+  source_context: 本卡处理 page_0221 起头并在 page_0222 顶部续完的例3；page_0222 例4以后留给下一批。
+  source_influence:
+    - 保留切线条件：由 $f(1)=2$ 与 $f^{\prime}(1)=e$ 解出 $a=1,b=2$。
+    - 保留第二问的分而治之核心：把 $f(x)>1$ 化为 $x\ln x>xe^{-x}-2/e$。
+    - 保留严格性的来源：左侧最小值和右侧最大值数值相等，但取等点分别为 $x=1/e$ 与 $x=1$。
+  source_discrepancies: []
+original_problem:
+  stem: （2014 · 新课标 I T21）设函数 $f(x)=ae^x\ln x+\frac{be^{x-1}}x$，曲线 $y=f(x)$ 在点 $(1,f(1))$ 处的切线方程为 $y=e(x-1)+2$。
+  parts: *a1
+  choices: []
+  answer: （1）$a=1,b=2$；（2）证明见解析。
+  fidelity_notes:
+    - 两问解答题，无选项。
+    - 题头中切线点为 $(1,f(1))$，切线方程在 $x=1$ 处函数值为 2、斜率为 $e$。
+solution:
+  source_solution_summary: 由切线方程 $y=e(x-1)+2$，得 $f(1)=2$、$f^{\prime}(1)=e$。 对 $f(x)=ae^x\ln x+\frac{be^{x-1}}x$ 求导： $f^{\prime}(x)=ae^x\ln x+\frac{a}{x}e^x -\frac{b}{x^2}e^{x-1}+\frac{b}{x}e^{x-1}$。代入 $x=1$， $f(1)=b=2$，$f^{\prime}(1)=ae=e$，所以 $a=1,b=2$。 第二问变为证明 $e^x\ln x+\frac2x e^{x-1}>1$。source 将其等价变形为 $x\ln x>xe^{-x}-\frac2e$。令 $g(x)=x\ln x$，则 $g_{\min}=g(1/e)=-1/e$；令 $h(x)=xe^{-x}-2/e$，则 $h_{\max}=h(1)=-1/e$。虽然数值相等，但左侧取等点 $1/e$ 与右侧取等点 $1$ 不同，因此对任意 $x>0$ 有 $g(x)>h(x)$，即 $f(x)>1$。
+  key_steps:
+    - step_id: step_1
+      statement: 由切线方程读出函数值和斜率。
+      formula_trace:
+        from: $y=e(x-1)+2$ 在 $x=1$ 处与 $y=f(x)$ 相切
+        to: $f(1)=2,\ f^{\prime}(1)=e$
+        operation: 切线在切点处函数值相等、斜率相等。
+        why: 第一问求 $a,b$ 的两个方程来自这里。
+      source_ref: page_0221_ex03_solution_start
+    - step_id: step_2
+      statement: 代入 $x=1$ 求 $a,b$。
+      formula_trace:
+        from: $f(x)=ae^x\ln x+\frac{be^{x-1}}x$
+        to: $f(1)=b=2,\ f^{\prime}(1)=ae=e$，故 $a=1,b=2$
+        operation: 求导并代入 $\ln1=0$。
+        why: 完成第一问。
+      source_ref: page_0221_ex03_solution_start
+    - step_id: step_3
+      statement: 把第二问写成两函数比较。
+      formula_trace:
+        from: $e^x\ln x+\frac2x e^{x-1}>1$
+        to: $x\ln x>xe^{-x}-\frac2e$
+        operation: 移项并乘以正数 $xe^{-x}$。
+        why: 制造左侧 $x\ln x$ 与右侧 $xe^{-x}-2/e$ 的上下函数。
+      source_ref: page_0221_ex03_solution_start
+    - step_id: step_4
+      statement: 求左侧函数的最小值。
+      formula_trace:
+        from: $g(x)=x\ln x$
+        to: $g^{\prime}(x)=1+\ln x$，$g_{\min}=g(1/e)=-1/e$
+        operation: 求导判号：$(0,1/e)$ 递减，$(1/e,+\infty)$ 递增。
+        why: 得到左侧的全局下界。
+      source_ref: page_0222_ex03_continuation
+    - step_id: step_5
+      statement: 求右侧函数的最大值。
+      formula_trace:
+        from: $h(x)=xe^{-x}-\frac2e$
+        to: $h^{\prime}(x)=e^{-x}(1-x)$，$h_{\max}=h(1)=-1/e$
+        operation: 求导判号：$(0,1)$ 递增，$(1,+\infty)$ 递减。
+        why: 得到右侧的全局上界。
+      source_ref: page_0222_ex03_continuation
+    - step_id: step_6
+      statement: 用取等点不同给出严格大于。
+      formula_trace:
+        from: $g_{\min}=h_{\max}=-1/e$，但 $g$ 在 $1/e$ 取等、$h$ 在 $1$ 取等
+        to: $g(x)>h(x)$ 对任意 $x>0$ 成立
+        operation: 错位最值比较。
+        why: 这一步把非严格的最值界升级为严格不等式。
+      source_ref: page_0222_ex03_continuation
+teaching_card:
+  student_title: 切线定参后，用错位最值证明 $f(x)>1$
+  what_it_trains: 训练综合题的两步路线：先用切线条件定参数，再把指对不等式拆成两个基础函数比较。
+  recognition_cues:
+    - 题干给切线方程，第一反应是 $f(1)$ 和 $f^{\prime}(1)$。
+    - 证明目标里有 $e^x\ln x$ 和 $e^{x-1}/x$，乘正因子后可得到 $x\ln x$。
+    - 最值数值相同但取等点不同，是“错位 PS”的典型严格性来源。
+  normalization_moves:
+    - 先解出 $a,b$，再处理第二问。
+    - 把 $f(x)>1$ 转成 $x\ln x>xe^{-x}-2/e$。
+    - 分别求左最小、右最大，并检查取等点是否一致。
+  common_failures:
+    - 把切线方程只当成过点条件，漏掉斜率条件。
+    - 乘以 $xe^{-x}$ 时忘记 $x>0$，不敢保证正因子。
+    - 只写 $g_{\min}=h_{\max}$，误以为只能得到 $\geqslant$，没有利用取等点错开。
+  similar_practice_query: 切线条件 定参 e^x ln x xlnx xe^{-x} 分而治之 错位PS
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

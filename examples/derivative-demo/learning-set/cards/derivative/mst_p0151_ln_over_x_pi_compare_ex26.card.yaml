@@ -1,0 +1,209 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0151_ln_over_x_pi_compare_ex26
+content_revision_id: mst_p0151_ln_over_x_pi_compare_ex26-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0151_ln_over_x_pi_compare_ex26.card.yaml
+stem: |-
+  （2024 春·江阴市校级月考）已知 $a=4\ln 5^{\pi}$，$b=5\ln 4^{\pi}$，$c=5\ln \pi^{4}$，则 $a,b,c$ 的大小关系是（  ）
+  A. $c<a<b$
+  B. $a<b<c$
+  C. $a<c<b$
+  D. $c<b<a$
+answer: |
+  B
+
+  令
+  \[
+  f(x)=\frac{\ln x}{x},\quad x\ge e.
+  \]
+  则
+  \[
+  f^{\prime}(x)=\frac{1-\ln x}{x^2}<0,
+  \]
+  所以 $f$ 在 $(e,+\infty)$ 上单调递减。
+  因 $4<5$，可比得
+  \[
+  \frac{\pi\ln4}{4}>\frac{\pi\ln5}{5}
+  \Rightarrow
+  5\ln4^{\pi}>4\ln5^{\pi},
+  \]
+  即 $b>a$。
+  又 $e<\pi<4$，故
+  \[
+  \frac{\ln\pi}{\pi}>\frac{\ln4}{4}
+  \Rightarrow
+  \pi^4>4^{\pi}
+  \Rightarrow
+  5\ln\pi^4>5\ln4^{\pi},
+  \]
+  即 $c>b$。综上 $a<b<c$，选 B。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 统一到同一比较函数并判单调。
+      max_score: 1
+    - step_id: step_2
+      description: 先比较 $b$ 与 $a$。
+      max_score: 1
+    - step_id: step_3
+      description: 再比较 $c$ 与 $b$ 并合并排序。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - 六大同构函数比大小
+      - 统一到 $\ln x/x$
+      - 对数同步升降次
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $4\ln5^{\pi},\,5\ln4^{\pi},\,5\ln\pi^4$ 可统一为比较 $\frac{\ln x}{x}$ 的函数值。
+      - 源页核心导数为 $f^{\prime}(x)=\frac{1-\ln x}{x^2}$。
+    normalization_moves_used:
+      - 把指数幂对数项转成同一模板 $\frac{\ln x}{x}$。
+      - 用单调性替代直接算差。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f^{\prime}(x)=\frac{1-\ln x}{x^2}$ 判单调，回补导数单调极值基础。
+      - 若学生在 $\ln(x^k)=k\ln x$ 变形中出错，回补指数对数基础。
+      - 若学生不能把三项统一到同一函数模板，回补代数恒等变形。
+  detail_terms:
+    - $f(x)=\ln x/x$
+    - $e<\pi<4<5$
+    - $a=4\ln5^{\pi}$
+    - $b=5\ln4^{\pi}$
+    - $c=5\ln\pi^4$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0151_ln_over_x_pi_compare_ex26
+source_evidence:
+  source_refs:
+    - ref_id: page_0151_ex26_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0151/page_0151.md
+      role: problem_start
+      evidence: page_0151 例26题头与 A-D 选项完整给出：$a=4\ln5^{\pi},\,b=5\ln4^{\pi},\,c=5\ln\pi^4$ 的大小比较。
+    - ref_id: page_0151_ex26_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0151/page_0151.md
+      role: solution
+      evidence: 同页解析构造 $f(x)=\frac{\ln x}{x}$（$x\ge e$），用单调递减比较 $\frac{\ln x}{x}$ 在 $4,5,\pi$ 处大小，结论 $a<b<c$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0151.png
+      inspected: true
+      notes: 已核对 page_0151 原图：例26题干、选项、解析与答案 B 清晰一致。
+  source_context: page_0151 顶部是例25续页，例26从本页中段开始，题干与解析均不跨页。
+  source_influence:
+    - 保留源页“同构到 $\frac{\ln x}{x}$”的主线，不另引其他方法。
+    - 保留源页先比 $b,a$，再比 $c,b$ 的两段比较路径。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 春·江阴市校级月考）已知 $a=4\ln 5^{\pi}$，$b=5\ln 4^{\pi}$，$c=5\ln \pi^{4}$，则 $a,b,c$ 的大小关系是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $c<a<b$
+      text_latex: $c<a<b$
+    - label: B
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+    - label: C
+      text_raw: $a<c<b$
+      text_latex: $a<c<b$
+    - label: D
+      text_raw: $c<b<a$
+      text_latex: $c<b<a$
+  answer: B
+  fidelity_notes:
+    - 题干、选项、解析均在 page_0151，同页闭合。
+solution:
+  source_solution_summary: |
+    令
+    \[
+    f(x)=\frac{\ln x}{x},\quad x\ge e.
+    \]
+    则
+    \[
+    f^{\prime}(x)=\frac{1-\ln x}{x^2}<0,
+    \]
+    所以 $f$ 在 $(e,+\infty)$ 上单调递减。
+    因 $4<5$，可比得
+    \[
+    \frac{\pi\ln4}{4}>\frac{\pi\ln5}{5}
+    \Rightarrow
+    5\ln4^{\pi}>4\ln5^{\pi},
+    \]
+    即 $b>a$。
+    又 $e<\pi<4$，故
+    \[
+    \frac{\ln\pi}{\pi}>\frac{\ln4}{4}
+    \Rightarrow
+    \pi^4>4^{\pi}
+    \Rightarrow
+    5\ln\pi^4>5\ln4^{\pi},
+    \]
+    即 $c>b$。综上 $a<b<c$，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 统一到同一比较函数并判单调。
+      formula_trace:
+        from: |
+          $a=4\ln5^{\pi},\ b=5\ln4^{\pi},\ c=5\ln\pi^4$
+        to: |
+          $f(x)=\frac{\ln x}{x},\quad f^{\prime}(x)=\frac{1-\ln x}{x^2}<0\ (x\ge e)$
+        operation: 把含幂对数项改写为“常数倍乘以 $\frac{\ln x}{x}$”并求导。
+        why: 同构后可直接用 $f$ 的单调性完成大小判断。
+      source_ref: page_0151_ex26_solution
+    - step_id: step_2
+      statement: 先比较 $b$ 与 $a$。
+      formula_trace:
+        from: |
+          $\frac{\pi\ln4}{4}\ \text{与}\ \frac{\pi\ln5}{5}$
+        to: |
+          $\frac{\pi\ln4}{4}>\frac{\pi\ln5}{5}
+          \Rightarrow
+          5\ln4^{\pi}>4\ln5^{\pi}
+          \Rightarrow b>a$
+        operation: 在 $(e,+\infty)$ 上用 $f$ 递减性比较 $4,5$ 两点。
+        why: 锁定前两项相对次序。
+      source_ref: page_0151_ex26_solution
+    - step_id: step_3
+      statement: 再比较 $c$ 与 $b$ 并合并排序。
+      formula_trace:
+        from: |
+          $e<\pi<4,\ \frac{\ln\pi}{\pi}\ \text{与}\ \frac{\ln4}{4}$
+        to: |
+          $\frac{\ln\pi}{\pi}>\frac{\ln4}{4}
+          \Rightarrow \pi^4>4^{\pi}
+          \Rightarrow c>b
+          \Rightarrow a<b<c$
+        operation: 仍用 $f$ 的递减性比较 $\pi,4$。
+        why: 完成三项链式比较并匹配选项 B。
+      source_ref: page_0151_ex26_solution
+teaching_card:
+  student_title: 先同构成 $\ln x/x$，再一口气比较 $a,b,c$
+  what_it_trains: 训练把“系数+对数幂”统一成同一单调函数值比较，避免逐项硬算。
+  recognition_cues:
+    - 三项都含“常数 × 对数幂”，且只问大小次序。
+    - 可自然出现 $\frac{\ln x}{x}$ 这一同构模板。
+    - 选项是纯排序题，适合先定单调再链式判断。
+  normalization_moves:
+    - 提取公共结构，构造 $f(x)=\ln x/x$。
+    - 用 $f^{\prime}(x)$ 判 $x\ge e$ 上递减。
+    - 按 $b>a$、$c>b$ 合并成 $a<b<c$。
+  common_failures:
+    - 忽略定义域条件，误把全区间都当递减。
+    - 把 $\pi^4$ 与 $4^{\pi}$ 的比较方向写反。
+    - 分别算近似值导致符号误差。
+  similar_practice_query: lnx/x 单调性 对数幂 比大小 a<b<c
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

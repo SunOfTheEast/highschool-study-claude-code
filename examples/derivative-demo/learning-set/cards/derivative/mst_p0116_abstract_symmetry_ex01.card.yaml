@@ -1,0 +1,209 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0116_abstract_symmetry_ex01
+content_revision_id: mst_p0116_abstract_symmetry_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0116_abstract_symmetry_ex01.card.yaml
+stem: |-
+  （2022·新课标1卷·多选）已知函数 $f(x)$ 及其导函数 $f'(x)$ 的定义域均为 $\mathbf{R}$，记 $g(x)=f'(x)$，若 $f\left(\frac{3}{2}-2x\right)$，$g(2+x)$ 均为偶函数，则（ ）
+  A. $f(0)=0$
+  B. $g\left(-\frac{1}{2}\right)=0$
+  C. $f(-1)=f(4)$
+  D. $g(-1)=g(2)$
+answer: |
+  BC
+
+  由 $f\left(\frac{3}{2}-2x\right)$ 为偶函数，得
+  $f\left(\frac{3}{2}-2x\right)=f\left(\frac{3}{2}+2x\right)$，所以
+  $f(x)$ 关于直线 $x=\frac{3}{2}$ 对称，即
+  $f(x)=f(3-x)$，从而 C 正确。两边求导得
+  $g(x)=-g(3-x)$，故 $g$ 关于点 $\left(\frac{3}{2},0\right)$ 对称。
+  又 $g(2+x)$ 为偶函数，故 $g(2+x)=g(2-x)$，即
+  $g$ 关于直线 $x=2$ 对称。由“一点一轴”可得 $g$ 的周期为
+  $4\left|2-\frac{3}{2}\right|=2$，所以
+  $g\left(-\frac12\right)=g\left(\frac32\right)=0$，B 正确。
+  A、D 不具有必然性（源页法一给出
+  $g(x)=\cos(\pi x),\ f(x)=\frac{1}{\pi}\sin(\pi x)+c$ 的反例），故选 BC。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把复合偶性还原为 f 的轴对称。
+      max_score: 1
+    - step_id: step_2
+      description: 由 f 的轴对称过渡到 g 的中心对称。
+      max_score: 1
+    - step_id: step_3
+      description: 由 g 的另一条轴对称与中心对称配出周期。
+      max_score: 1
+    - step_id: step_4
+      description: 用特殊值反例排除 A、D。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 抽象函数性质
+        target: 由复合偶性判断 f 与 g 的对称中心/对称轴。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 抽象函数性质
+        target: 由一点一轴推出周期，并据此筛选选项。
+        result: 见 source_solution_summary
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 对称化与偏移
+      - 充分/必要性探路
+    subroute:
+      - 复合偶性还原
+      - 求导转对称
+      - 一点一轴配周期
+      - 特值反例排除
+  structure:
+    primary: 对称结构
+    secondary:
+      - 抽象函数结构
+    evidence:
+      - $f\left(\frac32-2x\right)$ 偶 $\Rightarrow$ $f$ 关于 $x=\frac32$ 对称。
+      - $g(2+x)$ 偶 $\Rightarrow$ $g$ 关于 $x=2$ 对称。
+      - $g$ 同时有中心 $\left(\frac32,0\right)$ 与对称轴 $x=2$，可构造周期 $2$。
+    normalization_moves_used:
+      - 把复合偶性统一改写成“关于某条直线/某个点对称”。
+      - 先对 f 做对称判断，再通过求导转成 g 的关系。
+      - 使用一点一轴距离四倍定周期。
+      - 用单个反例否定“必然正确”选项。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $f(a+bx)$ 的偶性还原到图像对称，回补函数性质与图像。
+      - 若学生对 $f(x)=f(3-x)$ 求导时链式符号出错，回补导数运算与几何意义。
+      - 若学生不会用一点一轴构造周期，回补函数性质与图像。
+      - 若学生把“可举反例”与“恒成立”混淆，回补不等式工具基础。
+  detail_terms:
+    - $f\left(\frac{3}{2}-2x\right)$ 偶
+    - $g(2+x)$ 偶
+    - 中心 $\left(\frac{3}{2},0\right)$
+    - 对称轴 $x=2$
+    - 周期 $2$
+    - 答案 BC
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0116_abstract_symmetry_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0116
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0116/page_0116.md
+      role: problem_start
+      evidence: line 42 starts 例 1题头并给出前半题干“已知函数 f, f' 定义域为 R，记 g(x)=f'(x)”；题干在下一页续完。
+    - ref_id: page_0117
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0117/page_0117.md
+      role: continuation
+      evidence: lines 14-20续完例1题干与A-D选项，lines 21-25给出法一、法二与结论“故选 BC”。
+    - ref_id: page_0116_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0116/page_0116.md
+      role: local_context
+      evidence: lines 20-41给出“对称性与周期关系”及“原函数-导函数对称对应”定理，直接支撑例1法二。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0116.png
+      inspected: true
+      notes: 已核对页图：例1题头确实从page_0116底部起头，且只到“记 g(x)=f'(x),”为止。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0117.png
+      inspected: true
+      notes: 已核对页图：例1剩余题干、四个选项、法一法二解析与“故选 BC”完整可见。
+  source_context: 例1按页头规则归属page_0116；题干和解析跨到page_0117。page_0117随后才开始例2。
+  source_influence:
+    - 保留源页“法二”主线：由 f(3/2-2x) 偶推出 f 关于 x=3/2 对称，再由求导得到 g 关于(3/2,0)对称。
+    - 保留源页第二个偶性条件 g(2+x) 偶，转为 g 关于 x=2 对称，并与中心对称配出周期2。
+    - 保留源页“法一(特殊值)”的反例构造，用来排除 A、D。
+  source_discrepancies: []
+original_problem:
+  stem: （2022·新课标1卷·多选）已知函数 $f(x)$ 及其导函数 $f'(x)$ 的定义域均为 $\mathbf{R}$，记 $g(x)=f'(x)$，若 $f\left(\frac{3}{2}-2x\right)$，$g(2+x)$ 均为偶函数，则（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(0)=0$
+      text_latex: $f(0)=0$
+    - label: B
+      text_raw: $g\left(-\frac{1}{2}\right)=0$
+      text_latex: $g\left(-\frac{1}{2}\right)=0$
+    - label: C
+      text_raw: $f(-1)=f(4)$
+      text_latex: $f(-1)=f(4)$
+    - label: D
+      text_raw: $g(-1)=g(2)$
+      text_latex: $g(-1)=g(2)$
+  answer: BC
+  fidelity_notes:
+    - 例1题头在page_0116，题干后半与全部选项在page_0117；已按跨页合并为完整原题。
+    - 题头标注“多选”，答案保持源页“故选 BC”。
+solution:
+  source_solution_summary: |
+    由 $f\left(\frac{3}{2}-2x\right)$ 为偶函数，得
+    $f\left(\frac{3}{2}-2x\right)=f\left(\frac{3}{2}+2x\right)$，所以
+    $f(x)$ 关于直线 $x=\frac{3}{2}$ 对称，即
+    $f(x)=f(3-x)$，从而 C 正确。两边求导得
+    $g(x)=-g(3-x)$，故 $g$ 关于点 $\left(\frac{3}{2},0\right)$ 对称。
+    又 $g(2+x)$ 为偶函数，故 $g(2+x)=g(2-x)$，即
+    $g$ 关于直线 $x=2$ 对称。由“一点一轴”可得 $g$ 的周期为
+    $4\left|2-\frac{3}{2}\right|=2$，所以
+    $g\left(-\frac12\right)=g\left(\frac32\right)=0$，B 正确。
+    A、D 不具有必然性（源页法一给出
+    $g(x)=\cos(\pi x),\ f(x)=\frac{1}{\pi}\sin(\pi x)+c$ 的反例），故选 BC。
+  key_steps:
+    - step_id: step_1
+      statement: 把复合偶性还原为 f 的轴对称。
+      formula_trace:
+        from: $f\left(\frac{3}{2}-2x\right)$ 为偶函数
+        to: $f\left(\frac{3}{2}-2x\right)=f\left(\frac{3}{2}+2x\right)\Rightarrow f(x)=f(3-x)$
+        operation: 对“自变量关于0取反不变”做等值改写并消去线性变换。
+        why: 得到 $f$ 关于 $x=\frac{3}{2}$ 的轴对称，直接判定 C。
+      source_ref: page_0117
+    - step_id: step_2
+      statement: 由 f 的轴对称过渡到 g 的中心对称。
+      formula_trace:
+        from: $f(x)=f(3-x)$
+        to: $f'(x)=-f'(3-x)$，即 $g(x)=-g(3-x)$
+        operation: 对对称恒等式两边求导。
+        why: 把“原函数轴对称”转成“导函数中心对称”，得到中心 $\left(\frac{3}{2},0\right)$。
+      source_ref: page_0117
+    - step_id: step_3
+      statement: 由 g 的另一条轴对称与中心对称配出周期。
+      formula_trace:
+        from: $g(2+x)$ 为偶函数，且 $g(x)=-g(3-x)$
+        to: $g(2+x)=g(2-x)$，$g$ 关于 $x=2$ 对称，周期 $T=2$，$g\left(-\frac12\right)=g\left(\frac32\right)=0$
+        operation: 把偶性改写成关于 $x=2$ 的轴对称，再用一点一轴构造周期。
+        why: 可直接判定 B 正确，并且给出 D 不是由周期必然推出的关系。
+      source_ref: page_0117
+    - step_id: step_4
+      statement: 用特殊值反例排除 A、D。
+      formula_trace:
+        from: $g(x)=\cos(\pi x),\ f(x)=\frac{1}{\pi}\sin(\pi x)+c$
+        to: 满足题设但 A、D 不恒成立
+        operation: 构造一组满足两条偶性条件的具体函数对。
+        why: 源页法一用于确认只剩 BC。
+      source_ref: page_0117
+teaching_card:
+  student_title: 两条偶性条件，配出中心-对称轴-周期
+  what_it_trains: 训练把复合偶性翻译为对称信息，再用“原函数/导函数对称对应 + 一点一轴”完成多选筛选。
+  recognition_cues:
+    - 题干同时给 $f(a+bx)$ 偶与 $g(c+x)$ 偶，通常要做对称还原。
+    - 已给 $g=f'$，要立刻联想“原函数轴对称 ↔ 导函数中心对称”。
+    - 题目出现两个不同对称参照点，常可构造周期。
+  normalization_moves:
+    - 先把 $f\left(\frac{3}{2}-2x\right)$ 偶改写为 $f(x)=f(3-x)$。
+    - 对上式求导得到 $g(x)=-g(3-x)$。
+    - 把 $g(2+x)$ 偶改写为 $g(2+x)=g(2-x)$。
+    - 用一点一轴构造周期并检验选项。
+    - 对剩余选项用特值函数做反例判伪。
+  common_failures:
+    - 把“$f(a+bx)$ 偶”误当成“$f$ 是偶函数”。
+    - 对 $f(x)=f(3-x)$ 求导漏掉右侧链式负号。
+    - 看到周期后误判 $g(-1)=g(2)$，忽略两点差不是周期整数倍。
+    - 多选题只靠直觉，不做反例验证。
+  similar_practice_query: 抽象函数 复合偶函数 导函数 对称中心 对称轴 周期 多选
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对page_0116与page_0117页图：例1跨页拼接无歧义，答案BC与源页一致。

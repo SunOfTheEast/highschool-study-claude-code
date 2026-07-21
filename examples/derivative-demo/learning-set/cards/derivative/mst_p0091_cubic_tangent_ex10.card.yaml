@@ -1,0 +1,205 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0091_cubic_tangent_ex10
+content_revision_id: mst_p0091_cubic_tangent_ex10-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0091_cubic_tangent_ex10.card.yaml
+stem: |-
+  （2025 银川一中月考 T11）已知函数 $f(x)=ax^3-3ax^2+b$，其中实数 $a>0$，$b\in\mathbf{R}$， 则下列结论正确的是（ ）
+  A. $f(x)$ 在 $(0,+\infty)$ 上单调递增
+  B. 当 $f(x)$ 有且仅有 3 个零点时，$b$ 的取值范围是 $(0,4a)$
+  C. 若直线 $l$ 与曲线 $y=f(x)$ 有 3 个不同的交点 $A(x_1,y_1)$，$B(x_2,y_2)$，$C(x_3,y_3)$，且 $|AB|=|AC|$，则 $x_1+x_2+x_3=3$
+  D. 当 $5a<b<6a$ 时，过点 $A(2,a)$ 可以作曲线 $y=f(x)$ 的 3 条切线
+answer: |-
+  BCD
+
+  $f'(x)=3ax(x-2)$，所以 $f$ 在 $(-\infty,0)$ 与 $(2,+\infty)$ 上递增，在 $(0,2)$ 上递减，A 错。 三次函数要有 3 个零点，需极大值 $f(0)=b>0$ 且极小值 $f(2)=b-4a<0$，即 $0<b<4a$，B 正确。 若直线 $y=kx+c$ 与曲线有三个交点，则交点横坐标满足 $ax^3-3ax^2-kx+(b-c)=0$，由韦达定理 $x_1+x_2+x_3=3$；这也与源解“对称中心”判断一致，C 正确。 当 $5a<b<6a$ 时，对点 $A(2,a)$ 有 $b-5a<a<b-4a$，即它位于拐点切线和曲线之间的外弧区域， 可作 3 条切线，D 正确。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 判断 A：导数符号显示 $(0,+\infty)$ 上并非全递增。
+      max_score: 1
+    - step_id: step_2
+      description: 判断 B：三零点对应极大值在 $x$ 轴上方、极小值在 $x$ 轴下方。
+      max_score: 1
+    - step_id: step_3
+      description: 判断 C：直线与三次曲线三交点的横坐标和固定为 3。
+      max_score: 1
+    - step_id: step_4
+      description: 判断 D：外点 $A(2,a)$ 落在三切线外弧区域。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: A
+        goal: 抽象函数性质
+        target: 第 A 问
+        result: 见 source_solution_summary
+      - part_id: B
+        goal: 零点/极值点分析
+        target: 第 B 问
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 抽象函数性质
+        target: 第 C 问
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 抽象函数性质
+        target: 第 D 问
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 切线放缩与凹凸性
+      - 含参数分类讨论
+      - 自由度与主元
+    subroute:
+      - 三次函数极值点判零点
+      - 三交点韦达根和
+      - 拐点切线外弧判定
+  structure:
+    primary: 三次/高次函数结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 对称结构
+    evidence:
+      - $f'(x)=3ax(x-2)$ 同时给出单调区间和两个极值点。
+      - $f(0)=b,\ f(2)=b-4a$ 给出三零点条件 $0<b<4a$。
+      - 交点方程 $ax^3-3ax^2-kx+(b-c)=0$ 的三根和为 3。
+      - $b-5a<a<b-4a$ 判定 $A(2,a)$ 在外弧区域。
+    normalization_moves_used:
+      - 把单调性选项转为导数符号表。
+      - 把“三个零点”转为极大值与极小值异号。
+      - 把“三个交点”转为三次方程根和。
+      - 把“三条切线”转为外点所在区域。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由导数符号写单调区间，回补导数单调极值基础。
+      - 若学生不会用极大/极小值判断三次函数零点个数，回补方程根分布与韦达。
+      - 若学生不能把交点问题写成三次方程，回补代数恒等变形。
+      - 若学生忘记韦达定理中的根和，回补方程根分布与韦达。
+      - 若学生不会用拐点切线分区判断切线条数，回补函数性质与图像。
+  detail_terms:
+    - $f(x)=ax^3-3ax^2+b$
+    - $f'(x)=3ax(x-2)$
+    - $0<b<4a$
+    - $x_1+x_2+x_3=3$
+    - 外弧区域
+    - $5a<b<6a$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0091_cubic_tangent_ex10
+source_evidence:
+  source_refs:
+    - ref_id: page_0091
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0091/page_0091.md
+      role: problem_start
+      evidence: page_0091 中部给出例 10 题头、题干、A-D 四个选项、三次函数图像、 A-D 解析；解析判定 A 错，B、C、D 正确。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0091.png
+      inspected: true
+      notes: 已核对页图：例 10 的题头、选项、配图和解析均在 page_0091； 源页未另起“故选”句，但逐项解析明确 B、C、D 正确。
+  source_context: 例 10 与例 9 使用同一三次函数族 $f(x)=ax^3-3ax^2+b$。 其导数给出极大点 $x=0$、极小点 $x=2$，拐点/对称中心为 $x=1$，这些结构同时服务于零点个数、交点横坐标和过点切线条数。
+  source_influence:
+    - 题目为多选题，choices 完整保留 A-D。
+    - 源解对 C 项用三次函数对称中心说明，本卡补写韦达关系以说明 $x_1+x_2+x_3=3$。
+    - D 项沿用 page_0091 上方例 9 的外弧区域图像。
+  source_discrepancies:
+    - page_0091 markdown 对 B 项解析有 reconstruction marker，指出源文疑似“有有 3 个零点”； 题干选项 B 清楚写作“有且仅有 3 个零点”，本卡按题干和解析含义记录。
+original_problem:
+  stem: （2025 银川一中月考 T11）已知函数 $f(x)=ax^3-3ax^2+b$，其中实数 $a>0$，$b\in\mathbf{R}$， 则下列结论正确的是（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(x)$ 在 $(0,+\infty)$ 上单调递增
+      text_latex: $f(x)$ 在 $(0,+\infty)$ 上单调递增
+    - label: B
+      text_raw: 当 $f(x)$ 有且仅有 3 个零点时，$b$ 的取值范围是 $(0,4a)$
+      text_latex: 当 $f(x)$ 有且仅有 3 个零点时，$b$ 的取值范围是 $(0,4a)$
+    - label: C
+      text_raw: 若直线 $l$ 与曲线 $y=f(x)$ 有 3 个不同的交点 $A(x_1,y_1)$，$B(x_2,y_2)$，$C(x_3,y_3)$，且 $|AB|=|AC|$，则 $x_1+x_2+x_3=3$
+      text_latex: 若直线 $l$ 与曲线 $y=f(x)$ 有 3 个不同的交点 $A(x_1,y_1)$，$B(x_2,y_2)$，$C(x_3,y_3)$，且 $|AB|=|AC|$，则 $x_1+x_2+x_3=3$
+    - label: D
+      text_raw: 当 $5a<b<6a$ 时，过点 $A(2,a)$ 可以作曲线 $y=f(x)$ 的 3 条切线
+      text_latex: 当 $5a<b<6a$ 时，过点 $A(2,a)$ 可以作曲线 $y=f(x)$ 的 3 条切线
+  answer: BCD
+  fidelity_notes:
+    - 例 10 在 page_0091 内完整。
+    - 源页逐项解析给出 A 错、B 正确、C 正确、D 正确；答案 BCD 为据此整理。
+    - 配图为解析 D 的三次函数切线区域示意。
+solution:
+  source_solution_summary: $f'(x)=3ax(x-2)$，所以 $f$ 在 $(-\infty,0)$ 与 $(2,+\infty)$ 上递增，在 $(0,2)$ 上递减，A 错。 三次函数要有 3 个零点，需极大值 $f(0)=b>0$ 且极小值 $f(2)=b-4a<0$，即 $0<b<4a$，B 正确。 若直线 $y=kx+c$ 与曲线有三个交点，则交点横坐标满足 $ax^3-3ax^2-kx+(b-c)=0$，由韦达定理 $x_1+x_2+x_3=3$；这也与源解“对称中心”判断一致，C 正确。 当 $5a<b<6a$ 时，对点 $A(2,a)$ 有 $b-5a<a<b-4a$，即它位于拐点切线和曲线之间的外弧区域， 可作 3 条切线，D 正确。
+  key_steps:
+    - step_id: step_1
+      statement: 判断 A：导数符号显示 $(0,+\infty)$ 上并非全递增。
+      formula_trace:
+        from: |
+          $f'(x)=3ax^2-6ax=3ax(x-2),\quad a>0$
+        to: |
+          $f'(x)>0$ 当 $x<0$ 或 $x>2$；
+          $f'(x)<0$ 当 $0<x<2$
+        operation: 解导数不等式并划分单调区间。
+        why: 在 $(0,2)$ 上函数递减，所以不能说在 $(0,+\infty)$ 上单调递增。
+      source_ref: page_0091
+    - step_id: step_2
+      statement: 判断 B：三零点对应极大值在 $x$ 轴上方、极小值在 $x$ 轴下方。
+      formula_trace:
+        from: |
+          极大点 $x=0$，极小点 $x=2$；
+          $f(0)=b,\quad f(2)=8a-12a+b=b-4a$
+        to: |
+          $f(0)f(2)<0\Longleftrightarrow b(b-4a)<0\Longleftrightarrow 0<b<4a$
+        operation: 用三次函数两个极值点夹住 $x$ 轴，转成端值异号。
+        why: 首项系数 $a>0$ 时，极大值为正且极小值为负才有三个不同零点。
+      source_ref: page_0091
+    - step_id: step_3
+      statement: 判断 C：直线与三次曲线三交点的横坐标和固定为 3。
+      formula_trace:
+        from: |
+          $y=kx+c$ 与 $y=f(x)$ 交于三点
+        to: |
+          $ax^3-3ax^2-kx+(b-c)=0$，
+          所以 $x_1+x_2+x_3=-\frac{-3a}{a}=3$
+        operation: 把交点横坐标看成三次方程的三个根，使用韦达定理。
+        why: 二次项系数固定为 $-3a$，因此三根和固定为对称中心横坐标的三倍。
+      source_ref: page_0091
+    - step_id: step_4
+      statement: 判断 D：外点 $A(2,a)$ 落在三切线外弧区域。
+      formula_trace:
+        from: |
+          对称中心 $(1,b-2a)$，拐点切线斜率 $-3a$；
+          $l_{\text{拐点}}(2)=b-5a,\quad f(2)=b-4a$
+        to: |
+          $5a<b<6a\Rightarrow b-5a<a<b-4a$，
+          过 $A(2,a)$ 可作 3 条切线
+        operation: 在 $x=2$ 处用高度夹逼判定点所在区域。
+        why: 三次函数外弧区域内的点可引 3 条切线。
+      source_ref: page_0091
+teaching_card:
+  student_title: 一条三次函数同时看单调、零点和三切线
+  what_it_trains: 训练把同一个三次函数结构反复使用：导数看单调和极值， 韦达看三交点横坐标和，拐点切线分区看外点切线条数。
+  recognition_cues:
+    - 函数仍是 $ax^3-3ax^2+b$，导数零点固定在 $0,2$。
+    - 选项 B 提到 3 个零点，要立刻看极大值 $f(0)$ 和极小值 $f(2)$。
+    - 选项 C 提到直线与三次曲线 3 个交点，适合写交点方程用韦达。
+    - 选项 D 与例 9 同型，仍比较 $b-5a,a,b-4a$。
+  normalization_moves:
+    - 用 $f'(x)=3ax(x-2)$ 先建立单调表。
+    - 用 $f(0)>0,\ f(2)<0$ 得出三零点范围。
+    - 把直线交点横坐标写成三次方程的根。
+    - 用拐点切线和曲线夹出外弧区域。
+  common_failures:
+    - 看到 $x>2$ 递增，就误判整个 $(0,+\infty)$ 递增。
+    - 三零点条件写成 $b(b-4a)\le0$，把重根也算进去。
+    - C 项只盯着 $|AB|=|AC|$，忘了三次交点方程的根和本来就固定。
+    - D 项只比较点和曲线，漏掉拐点切线这一条边界。
+  similar_practice_query: 三次函数 极值零点 韦达根和 拐点切线 外弧区域 多选
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0091 页图；例 10 在本页内完结。
+    - 源页逐项解析明确 B、C、D 正确，虽未另起答案句，本卡答案整理为 BCD。
+    - B 项解析处疑似重复字已按题干“有且仅有 3 个零点”和数学结论处理，无需用户拍板。

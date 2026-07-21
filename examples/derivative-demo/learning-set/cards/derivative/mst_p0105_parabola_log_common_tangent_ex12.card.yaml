@@ -1,0 +1,208 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0105_parabola_log_common_tangent_ex12
+content_revision_id: mst_p0105_parabola_log_common_tangent_ex12-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0105_parabola_log_common_tangent_ex12.card.yaml
+stem: |-
+  （2025 广西南宁高二期中 · 多选 T11）若曲线 $y=ax^2\ (a\ne0)$ 与 $y=\ln x+1$ 存在公共切线，则实数 $a$ 的可能取值是（  ）
+  A. $-1$
+  B. $e$
+  C. $\frac e2$
+  D. $\frac12$
+answer: |
+  ABC
+
+  分类讨论。若 $a>0$，$y=ax^2$ 与 $y=\ln x+1$ 是一凹一凸内公切线模型，
+  需要抛物线在对数曲线外侧，即
+  $ax^2\ge\ln x+1$ 对 $x>0$ 恒成立，所以
+  $a\ge\left(\frac{\ln x+1}{x^2}\right)_{\max}$。
+  令 $r(x)=\frac{\ln x+1}{x^2}=\frac{\ln(ex)}{x^2}$，则
+  $r'(x)=-\frac{2\ln x+1}{x^3}$，最大值在
+  $x=e^{-1/2}$ 处取得，$r_{\max}=\frac e2$。页图中的同构写法为
+  $\left(\frac{e^2\ln(e^2x^2)}{2e^2x^2}\right)_{\max}=\frac e2$。
+  因此 $a>0$ 时需 $a\ge\frac e2$。若 $a<0$，源页图像显示两曲线在各自递增分支上形成外公切线模型，一定存在一条公共切线。结合选项，
+  $-1$、$e$、$\frac e2$ 可取，$\frac12<\frac e2$ 不可取。故选 ABC。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先讨论 $a>0$ 的内公切线模型。
+      max_score: 1
+    - step_id: step_2
+      description: 分离参数并求最大值。
+      max_score: 1
+    - step_id: step_3
+      description: 消解源页模糊公式并得到 $r_{\max}=\frac e2$。
+      max_score: 1
+    - step_id: step_4
+      description: 处理 $a<0$ 的外公切线模型。
+      max_score: 1
+    - step_id: step_5
+      description: 结合选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 含参数分类讨论
+    secondary:
+      - 数形结合
+      - 切线放缩与凹凸性
+    subroute:
+      - 正负参数分支
+      - 内公切线包裹
+      - 外公切线分支
+      - 同构求最大值
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 同构结构
+      - 非对称结构
+    evidence:
+      - $a>0$ 时 $a\ge\left(\frac{\ln x+1}{x^2}\right)_{\max}=\frac e2$。
+      - $r^\prime(x)=-\frac{2\ln x+1}{x^3}$ 给出最大点 $x=e^{-1/2}$。
+      - $a<0$ 时源页图像给出外公切线存在。
+    normalization_moves_used:
+      - 先按 $a$ 的正负分图像。
+      - 正参数转成 $ax^2\ge\ln x+1$。
+      - 把 $\ln x+1$ 写成 $\ln(ex)$，再求比值最大值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不按 $a$ 的正负分类，回补函数性质与图像。
+      - 若学生不会由图像分辨内公切线和外公切线，回补函数性质与图像。
+      - 若学生不会求 $r^\prime(x)$，回补导数运算与几何意义。
+      - 若学生把 $\frac12$ 误判为大于 $\frac e2$，回补指数对数基础。
+  detail_terms:
+    - $y=ax^2$
+    - $y=\ln x+1$
+    - $a>0$
+    - $a<0$
+    - $\left(\frac{\ln x+1}{x^2}\right)_{\max}=\frac e2$
+    - 答案 ABC
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0105_parabola_log_common_tangent_ex12
+source_evidence:
+  source_refs:
+    - ref_id: page_0105
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0105/page_0105.md
+      role: problem_start
+      evidence: page_0105 中部给出例 12 题头、题干、A-D 选项、$a>0$ 与 $a<0$ 两种图像、解析和答案 ABC。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0105.png
+      inspected: true
+      notes: 已核对 page_0105 页图：例 12 模糊处实际为 $\left(\frac{e^2\ln(e^2x^2)}{2e^2x^2}\right)_{\max}=\frac e2$，答案 ABC。
+  source_context: 例 12 位于 page_0105 中部；其后例 13 另起，不纳入本卡。
+  source_influence:
+    - 保留源页按 $a>0$、$a<0$ 分类的图像路线。
+    - 保留源页结论：$a>0$ 时需要 $a\ge\left(\frac{\ln x+1}{x^2}\right)_{\max}=\frac e2$；$a<0$ 时一定存在一条外公切线。
+    - 对 markdown 的 unclear formula marker 以 page_0105 图片和直接求导消解。
+  source_discrepancies:
+    - page_0105 markdown 在例 12 解析中有 unclear marker；页图显示该步为 $\left(\frac{\ln(ex)}{x^2}\right)_{\max}=\left(\frac{e^2\ln(e^2x^2)}{2e^2x^2}\right)_{\max}=\frac e2$。本卡按页图并用求导复核，无需转为 needs_review。
+original_problem:
+  stem: （2025 广西南宁高二期中 · 多选 T11）若曲线 $y=ax^2\ (a\ne0)$ 与 $y=\ln x+1$ 存在公共切线，则实数 $a$ 的可能取值是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $-1$
+      text_latex: $-1$
+    - label: B
+      text_raw: $e$
+      text_latex: $e$
+    - label: C
+      text_raw: $\frac e2$
+      text_latex: $\frac e2$
+    - label: D
+      text_raw: $\frac12$
+      text_latex: $\frac12$
+  answer: ABC
+  fidelity_notes:
+    - 本题为多选题，例 12 在 page_0105 内完整。
+    - 源页 dense formula 已通过图片核对和求导复核为 $e/2$。
+solution:
+  source_solution_summary: |
+    分类讨论。若 $a>0$，$y=ax^2$ 与 $y=\ln x+1$ 是一凹一凸内公切线模型，
+    需要抛物线在对数曲线外侧，即
+    $ax^2\ge\ln x+1$ 对 $x>0$ 恒成立，所以
+    $a\ge\left(\frac{\ln x+1}{x^2}\right)_{\max}$。
+    令 $r(x)=\frac{\ln x+1}{x^2}=\frac{\ln(ex)}{x^2}$，则
+    $r'(x)=-\frac{2\ln x+1}{x^3}$，最大值在
+    $x=e^{-1/2}$ 处取得，$r_{\max}=\frac e2$。页图中的同构写法为
+    $\left(\frac{e^2\ln(e^2x^2)}{2e^2x^2}\right)_{\max}=\frac e2$。
+    因此 $a>0$ 时需 $a\ge\frac e2$。若 $a<0$，源页图像显示两曲线在各自递增分支上形成外公切线模型，一定存在一条公共切线。结合选项，
+    $-1$、$e$、$\frac e2$ 可取，$\frac12<\frac e2$ 不可取。故选 ABC。
+  key_steps:
+    - step_id: step_1
+      statement: 先讨论 $a>0$ 的内公切线模型。
+      formula_trace:
+        from: |
+          $a>0,\quad y=ax^2,\quad y=\ln x+1$
+        to: |
+          $ax^2\ge\ln x+1\quad (x>0)$
+        operation: 根据源页左图，把开口向上的抛物线放在对数曲线外侧。
+        why: 一凹一凸内公切线存在可由外侧包裹关系保证。
+      source_ref: page_0105
+    - step_id: step_2
+      statement: 分离参数并求最大值。
+      formula_trace:
+        from: |
+          $ax^2\ge\ln x+1$
+        to: |
+          $a\ge r(x)=\frac{\ln x+1}{x^2}=\frac{\ln(ex)}{x^2}$
+        operation: 除以 $x^2>0$，把 $a$ 放到不等式左侧。
+        why: 要对所有 $x>0$ 成立，$a$ 至少要达到右端函数的最大值。
+      source_ref: page_0105
+    - step_id: step_3
+      statement: 消解源页模糊公式并得到 $r_{\max}=\frac e2$。
+      formula_trace:
+        from: |
+          $r(x)=\frac{\ln x+1}{x^2}$
+        to: |
+          $r'(x)=-\frac{2\ln x+1}{x^3},\quad x=e^{-1/2},\quad r_{\max}=\frac e2$
+        operation: 直接求导；也可按页图写成 $\frac{\ln(ex)}{x^2}=\frac{e^2\ln(e^2x^2)}{2e^2x^2}$ 后套 $\frac{\ln u}{u}$ 的最大值。
+        why: 这一步对应 markdown 的 unclear marker，图片和求导给出同一结果。
+      source_ref: page_0105
+    - step_id: step_4
+      statement: 处理 $a<0$ 的外公切线模型。
+      formula_trace:
+        from: |
+          $a<0$
+        to: |
+          $y=ax^2$ 的左支与 $y=\ln x+1$ 的递增分支形成外公切线模型，存在一条公共切线
+        operation: 按源页右图进行分支位置判断。
+        why: 负开口抛物线与对数曲线在两侧分离，外公切线由图像模型保证。
+      source_ref: page_0105
+    - step_id: step_5
+      statement: 结合选项。
+      formula_trace:
+        from: |
+          $a<0\text{ 均可};\qquad a>0\text{ 时 }a\ge\frac e2$
+        to: |
+          $-1,e,\frac e2\text{ 可取};\quad \frac12\text{ 不可取}$
+        operation: 把选项代入分类后的参数条件。
+        why: 题目问可能取值，需同时考虑正负两类。
+      source_ref: page_0105
+teaching_card:
+  student_title: 正负开口分开看抛物线和对数的公切线
+  what_it_trains: 训练对含参二次曲线先按开口方向分类，再用包裹关系和比值最大值判断公共切线是否存在。
+  recognition_cues:
+    - 题干写 $a\ne0$，选项同时有负数和正数，必须先分 $a>0$ 与 $a<0$。
+    - 正开口时要压住 $\ln x+1$，自然出现 $\frac{\ln x+1}{x^2}$。
+    - 选项出现 $\frac e2$，提示最大值点在 $x=e^{-1/2}$。
+  normalization_moves:
+    - 正参数：写 $a\ge\frac{\ln x+1}{x^2}$。
+    - 求 $r_{\max}=\frac e2$。
+    - 负参数：读图判断外公切线存在。
+    - 最后用 $a<0$ 或 $a\ge\frac e2$ 筛选选项。
+  common_failures:
+    - 只做 $a>0$，漏选负数 A。
+    - 把最大值误算成 $\frac12$，从而误选 D。
+    - 看到公共切线就强行列两个切点，忽略图像模型能先给出范围。
+  similar_practice_query: ax^2 ln x+1 公切线 a正负分类 e/2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 例 12 的 unclear marker 已由 page_0105 图片和直接求导消解，未留下需人工裁定的问题。

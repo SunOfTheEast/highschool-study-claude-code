@@ -1,0 +1,204 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0206_maclaurin_ln_param_integer_ch6_trig_ex07
+content_revision_id: mst_p0206_maclaurin_ln_param_integer_ch6_trig_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0206_maclaurin_ln_param_integer_ch6_trig_ex07.card.yaml
+stem: |-
+  （2025 · 辽宁本溪一中高三开学考 T19）已知麦克劳林展开式定义与示例 $e^x=1+x+\frac{x^2}{2!}+\frac{x^3}{3!}+\cdots$，完成下列三问。
+  (1) 写出 $f(x)=\sin x$ 的麦克劳林展开式中的第 2 项与第 4 项。
+  (2) 证明：当 $x>0$ 时，$\ln(1+x)>x-\frac{x^2}{2}$。
+  (3) 当 $x\geqslant1$ 时，若 $e^x+\ln x+\frac12>\frac{x^3}{6}+mx$，求整数 $m$ 的最大值。
+answer: |-
+  (1) 第2项为 $x$，第4项为 $-\frac16x^3$；(2) 结论成立；(3) 最大整数 $m=3$。
+
+  第(1)问由 $\sin x$ 各阶导在 0 点取值可得： 第2项（$T_1$）为 $x$，第4项（$T_3$）为 $-\frac16x^3$。 第(2)问设 $g(x)=\ln(1+x)-x+\frac{x^2}{2}$，则 $g^{\prime}(x)=\frac{1}{1+x}-1+x=\frac{x^2}{1+x}>0\ (x>0)$， 故 $g$ 递增，$g(x)>g(0)=0$，从而 $\ln(1+x)>x-\frac{x^2}{2}$。 第(3)问先代 $x=1$ 得 $m<e+\frac13$，故整数 $m\le3$。 再验 $m=3$： 令 $H(x)=e^x+\ln x+\frac12-\frac{x^3}{6}-3x$， 用 $e^x\ge1+x+\frac{x^2}{2}+\frac{x^3}{6}$ 得 $H(x)\ge P(x):=\frac{x^2}{2}+\ln x+\frac32-2x$。 而 $P^{\prime}(x)=x+\frac1x-2\ge0\ (x\ge1)$， 且 $P(1)=0$，故 $P(x)\ge0$，从而 $H(x)\ge0$； 结合 $x=1$ 时原式严格成立，得 $m=3$ 可行，最大整数即 3。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 第(1)问：由导数在 0 点取值写出所需两项。
+      max_score: 1
+    - step_id: step_2
+      description: 第(2)问：构造差函数并求导。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问：用锚点值收束。
+      max_score: 1
+    - step_id: step_4
+      description: 第(3)问：先由 $x=1$ 卡出参数上界。
+      max_score: 1
+    - step_id: step_5
+      description: 第(3)问：验证候选 $m=3$。
+      max_score: 1
+    - step_id: step_6
+      description: 第(3)问：判定 $P(x)\ge0$ 并完成结论。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 (1) 问
+        result: $\sin x$ 的第2项 $x$、第4项 $-\frac16x^3$
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 (2) 问
+        result: $x>0$ 时 $\ln(1+x)>x-\frac{x^2}{2}$
+      - part_id: "3"
+        goal: 求参数范围
+        target: 第 (3) 问
+        result: 整数 $m$ 最大值为 $3$
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 含参数分类讨论
+      - 切线放缩与凹凸性
+    subroute:
+      - 麦克劳林展开
+      - 构造函数判单调
+      - 参数先卡上界再验可行
+      - 端点取值
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 指对复合结构
+      - 三角复合结构
+      - 不等式工具结构
+    evidence:
+      - $g(x)=\ln(1+x)-x+\frac{x^2}{2}$
+      - $g^{\prime}(x)=\frac{x^2}{1+x}>0$
+      - $m<e+\frac13$
+      - $H(x)\ge\frac{x^2}{2}+\ln x+\frac32-2x$
+      - $x+\frac1x-2\ge0$
+    normalization_moves_used:
+      - 先做麦克劳林项读取，再做差函数单调证明。
+      - 参数题先用端点卡上界，再验证候选值可行。
+      - 把含 $e^x,\ln x$ 的混合式压到可导单函数判号。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从导数值读取麦克劳林项，回补导数运算与几何意义。
+      - 若学生不会构造 $g(x)$ 证明对数不等式，回补指数对数基础。
+      - 若学生不会“先上界后验证”的参数套路，回补函数性质与图像中的端点取值和可行性验证。
+  detail_terms:
+    - $T_1=x,\ T_3=-\frac16x^3$
+    - $\ln(1+x)>x-\frac{x^2}{2}$
+    - $m<e+\frac13$
+    - $H(x)$
+    - $x+\frac1x-2$
+parts: &a1
+  - (1) 写出 $f(x)=\sin x$ 的麦克劳林展开式中的第 2 项与第 4 项。
+  - (2) 证明：当 $x>0$ 时，$\ln(1+x)>x-\frac{x^2}{2}$。
+  - (3) 当 $x\geqslant1$ 时，若 $e^x+\ln x+\frac12>\frac{x^3}{6}+mx$，求整数 $m$ 的最大值。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0206_maclaurin_ln_param_integer_ch6_trig_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0206_ex06_local_context_prev
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0206/page_0206.md
+      role: local_context
+      evidence: page_0206 行16-18是例6，行20才进入例7题头。
+    - ref_id: page_0206_ex07_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0206/page_0206.md
+      role: problem_start
+      evidence: page_0206 行20-26给出例7题干与三问：写 $\sin x$ 麦克劳林项、证明 $\ln(1+x)>x-\frac{x^2}{2}$、求整数参数 $m$ 最大值。
+    - ref_id: page_0206_ex07_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0206/page_0206.md
+      role: solution
+      evidence: page_0206 行28-34给出三问解析：第(1)问直接算导，第(2)问构造 $g(x)$ 判单调，第(3)问先代 $x=1$ 卡 $m$ 再验 $m=3$。
+    - ref_id: page_0206_ex08_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0206/page_0206.md
+      role: local_context
+      evidence: page_0206 行36起进入例8新题头，例7在行34已结束。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0206.png
+      inspected: true
+      notes: 已核对页图：例7三问与解析同页完整；第(3)问收尾处存在可辨识书写噪声，已在 source_discrepancies 记录。
+  source_context: 例7题头与解答均在 page_0206 内闭合，无跨页续解。
+  source_influence:
+    - 保留 source 的“三问联动”节奏：先写项，再证对数不等式，最后做参数上界 + 可行性验证。
+    - 第(2)问沿用构造 $g(x)=\ln(1+x)-x+\frac{x^2}{2}$ 的单调性证明。
+    - 第(3)问沿用“代 $x=1$ 卡上界，再证 $m=3$ 成立”的路线。
+  source_discrepancies:
+    - page_0206 行34 在将 $e^x$ 展开后直接写成 $h(x)=\frac{x^2}{2}+\ln x+\frac32-2x$，严格应为“$\ge$”该表达式（因为省略了更高次正项）；本卡按严格不等式链修正。
+    - page_0206 行34 收尾写有“$x=1$ 时 $e^2+\ln1+\frac12>\frac16+3$”，按代入应为 $e^1$；该处不影响结论，因前文已由函数单调性与 $h(1)=0$ 完成主证。
+original_problem:
+  stem: （2025 · 辽宁本溪一中高三开学考 T19）已知麦克劳林展开式定义与示例 $e^x=1+x+\frac{x^2}{2!}+\frac{x^3}{3!}+\cdots$，完成下列三问。
+  parts: *a1
+  choices: []
+  answer: (1) 第2项为 $x$，第4项为 $-\frac16x^3$；(2) 结论成立；(3) 最大整数 $m=3$。
+  fidelity_notes:
+    - 源题为三问综合题，无选项。
+    - 第(3)问涉及参数整数最值，需同时给出必要上界与可行性验证。
+solution:
+  source_solution_summary: 第(1)问由 $\sin x$ 各阶导在 0 点取值可得： 第2项（$T_1$）为 $x$，第4项（$T_3$）为 $-\frac16x^3$。 第(2)问设 $g(x)=\ln(1+x)-x+\frac{x^2}{2}$，则 $g^{\prime}(x)=\frac{1}{1+x}-1+x=\frac{x^2}{1+x}>0\ (x>0)$， 故 $g$ 递增，$g(x)>g(0)=0$，从而 $\ln(1+x)>x-\frac{x^2}{2}$。 第(3)问先代 $x=1$ 得 $m<e+\frac13$，故整数 $m\le3$。 再验 $m=3$： 令 $H(x)=e^x+\ln x+\frac12-\frac{x^3}{6}-3x$， 用 $e^x\ge1+x+\frac{x^2}{2}+\frac{x^3}{6}$ 得 $H(x)\ge P(x):=\frac{x^2}{2}+\ln x+\frac32-2x$。 而 $P^{\prime}(x)=x+\frac1x-2\ge0\ (x\ge1)$， 且 $P(1)=0$，故 $P(x)\ge0$，从而 $H(x)\ge0$； 结合 $x=1$ 时原式严格成立，得 $m=3$ 可行，最大整数即 3。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问：由导数在 0 点取值写出所需两项。
+      formula_trace:
+        from: $f(x)=\sin x,\ f^{\prime}(x)=\cos x,\ f^{\prime\prime}(x)=-\sin x,\ f^{(3)}(x)=-\cos x$
+        to: $T_1=\frac{f^{\prime}(0)}{1!}x=x,\ T_3=\frac{f^{(3)}(0)}{3!}x^3=-\frac16x^3$
+        operation: 按麦克劳林通项 $T_n=\frac{f^{(n)}(0)}{n!}x^n$ 代入。
+        why: 直接得到题目要求的第 2 项与第 4 项。
+      source_ref: page_0206_ex07_solution
+    - step_id: step_2
+      statement: 第(2)问：构造差函数并求导。
+      formula_trace:
+        from: $\ln(1+x)>x-\frac{x^2}{2}$
+        to: $g(x)=\ln(1+x)-x+\frac{x^2}{2},\ g^{\prime}(x)=\frac{x^2}{1+x}>0\ (x>0)$
+        operation: 移项并化成单函数符号问题。
+        why: 导数正可直接给出单调性。
+      source_ref: page_0206_ex07_solution
+    - step_id: step_3
+      statement: 第(2)问：用锚点值收束。
+      formula_trace:
+        from: $g^{\prime}(x)>0\ (x>0)$
+        to: $g(x)>g(0)=0\Rightarrow \ln(1+x)>x-\frac{x^2}{2}$
+        operation: 由递增性比较 0 点函数值。
+        why: 完成不等式证明。
+      source_ref: page_0206_ex07_solution
+    - step_id: step_4
+      statement: 第(3)问：先由 $x=1$ 卡出参数上界。
+      formula_trace:
+        from: $e^x+\ln x+\frac12>\frac{x^3}{6}+mx,\ x\ge1$
+        to: $e+\frac12>\frac16+m\Rightarrow m<e+\frac13\Rightarrow m\le3$
+        operation: 代入端点 $x=1$ 并利用 $m\in\mathbf{Z}$。
+        why: 得到最大整数候选值。
+      source_ref: page_0206_ex07_solution
+    - step_id: step_5
+      statement: 第(3)问：验证候选 $m=3$。
+      formula_trace:
+        from: $H(x)=e^x+\ln x+\frac12-\frac{x^3}{6}-3x$
+        to: $H(x)\ge P(x)=\frac{x^2}{2}+\ln x+\frac32-2x$
+        operation: 用 $e^x\ge1+x+\frac{x^2}{2}+\frac{x^3}{6}$ 下界替换。
+        why: 把问题转成较简单函数 $P$ 的非负性。
+      source_ref: page_0206_ex07_solution
+    - step_id: step_6
+      statement: 第(3)问：判定 $P(x)\ge0$ 并完成结论。
+      formula_trace:
+        from: $P^{\prime}(x)=x+\frac1x-2\ge0,\ P(1)=0$
+        to: $P(x)\ge0\Rightarrow H(x)\ge0\Rightarrow m=3$ 可行
+        operation: AM-GM 判导数符号，结合单调性与锚点。
+        why: 上界与可行性同时满足，故最大整数为 3。
+      source_ref: page_0206_ex07_solution
+teaching_card:
+  student_title: 麦克劳林三连：写项、证对数、定整数参数
+  what_it_trains: 训练“局部展开读取信息 + 构造函数判号 + 参数上界可行性验证”的完整题组处理链。
+  recognition_cues:
+    - 题干先给麦克劳林定义，再连续追问证明与参数。
+    - 中间问是经典 $\ln(1+x)$ 与二次式比较。
+    - 最后一问有“整数参数 + 恒成立”特征。
+  normalization_moves:
+    - 先按导数值写出指定麦克劳林项。
+    - 对数不等式先构造差函数再看单调。
+    - 参数先代端点卡上界，再证明候选值可行。
+  common_failures:
+    - 把“第 $n+1$ 项”与“$x^n$ 项”索引关系写错。
+    - 第(2)问只写结论，不给 $g^{\prime}(x)$ 判号链。
+    - 第(3)问只求出 $m\le3$，漏掉 $m=3$ 的可行性证明。
+  similar_practice_query: 麦克劳林 ln(1+x) 不等式 参数整数最大值
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes: []

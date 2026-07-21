@@ -1,0 +1,179 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0066_taylor_ex04
+content_revision_id: mst_p0066_taylor_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0066_taylor_ex04.card.yaml
+stem: |-
+  函数 f(x)=e^x-e^{-x}-a\sin x (x\in\mathbf{R})（e 是自然对数的底数， a>0）存在唯一的零点，则实数 a 的取值范围为（ ）
+  A. (0,2]
+  B. (0,1]
+  C. (0,e]
+  D. (0,\pi)
+answer: |-
+  A. (0,2]
+
+  f 是奇函数且 f(0)=0，因此只需判断 x>0 时是否还有零点。若 0<a\leqslant2， 则 e^x-e^{-x}>2x 且 \sin x<x，进而 e^x-e^{-x}-a\sin x>0，故没有正零点；奇函数也没有负零点。若 a>2， 则 f'(0)=2-a<0，连续性保证 0 右侧足够近处 f(x)<0，而 x\to+\infty 时 f(x)\to+\infty，所以存在正零点，因奇性还存在负零点，不可能唯一。 因此 0<a\leqslant2，选 A。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先利用奇偶性把零点个数问题缩到 x>0。
+      max_score: 1
+    - step_id: step_2
+      description: 用 Taylor 放缩给出 0<a\leqslant2 的充分性。
+      max_score: 1
+    - step_id: step_3
+      description: 用 0 点附近的首项排除 a>2。
+      max_score: 1
+    - step_id: step_4
+      description: a>2 时由连续性推出额外正零点。
+      max_score: 1
+    - step_id: step_5
+      description: 合并充分性与必要性得到选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 拟合与夹逼
+      - 充分/必要性探路
+    subroute:
+      - 泰勒展开
+      - 双曲正弦放缩
+      - 0 点邻域反例
+  structure:
+    primary: 双曲函数结构
+    secondary:
+      - 三角复合结构
+      - 局部逼近结构
+    evidence:
+      - f(x)=e^x-e^{-x}-a\sin x 是奇函数，f(0)=0。
+      - x>0 时 e^x-e^{-x}\geqslant2x，\sin x\leqslant x。
+      - f'(0)=2-a，a=2 是 0 点右侧符号变化的临界值。
+    normalization_moves_used:
+      - 利用奇函数把唯一零点问题转化为 x>0 无交点。
+      - 用 2x 与 ax 比较 e^x-e^{-x} 和 a\sin x 的主尺度。
+      - 用 0 点线性主项判断 a>2 的必要性失败。
+  fallback:
+    only_if_trace_shows:
+      - 若学生没有先注意 f(0)=0 与奇函数成对零点，回补函数性质与图像。
+      - 若学生不会使用 e^x-e^{-x}\geqslant2x 或 \sin x\leqslant x，回补不等式工具基础。
+      - 若学生把 2x>ax 的参数方向写反，回补代数恒等变形。
+      - 若学生不能从“近 0 为负、远处为正”推出多一个零点，回补方程根分布与韦达中的连续性判根基础。
+  detail_terms:
+    - e^x-e^{-x}
+    - a\sin x
+    - 奇函数零点成对
+    - e^x-e^{-x}\geqslant2x
+    - (2-a)x
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0066_taylor_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0066
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0066/page_0066.md
+      role: problem_start
+      evidence: 例 4：（2023 辽宁大连二模 T12）函数 f(x)=e^x-e^{-x}-a\sin x (x\in\mathbf{R})，a>0，存在唯一的零点， 求 a 的取值范围；选项为 (0,2]、(0,1]、(0,e]、(0,\pi)。
+    - ref_id: page_0066_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0066/page_0066.md
+      role: solution
+      evidence: 解析用 e^x、e^{-x}、\sin x 在 0 处的展开，指出函数为奇函数，只需看 x>0 时 y=e^x-e^{-x} 与 y=a\sin x 的交点；结论为 0<a\leqslant2， 选 A。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0066.png
+      inspected: true
+      notes: 页图已核对：例 4 题头、四个选项和完整解析均在 page_0066；顶部是上一段 Padé/Taylor 说明，页内后续进入例 5。
+  source_context: 本题接在双曲正弦、正弦和 Taylor 放缩说明之后，核心是用 e^x-e^{-x}\geqslant2x 与 \sin x\leqslant x 控制 x>0 的交点，再用 0 点附近的 Taylor 首项判断 a>2 时会多出正负零点。
+  source_influence:
+    - 题干、选项、答案从 page_0066 源页和页图重建，legacy ex_mst_533 仅用于确认定位。
+    - 源解析的结论为选 A，本卡保留该结论，并把中间符号口误作为 source_discrepancy 记录。
+  source_discrepancies:
+    - page_0066 解析中写有“当 2x>ax，即 a>2”，但 x>0 时 2x>ax 应推出 a<2；结合最终选项 A 与 0 点附近展开，正确判定是 0<a\leqslant2 时 x>0 无额外交点，a>2 时会出现额外正零点。
+original_problem:
+  stem: 函数 f(x)=e^x-e^{-x}-a\sin x (x\in\mathbf{R})（e 是自然对数的底数， a>0）存在唯一的零点，则实数 a 的取值范围为（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: (0,2]
+      text_latex: $(0,2]$
+    - label: B
+      text_raw: (0,1]
+      text_latex: $(0,1]$
+    - label: C
+      text_raw: (0,e]
+      text_latex: $(0,e]$
+    - label: D
+      text_raw: (0,\pi)
+      text_latex: $(0,\pi)$
+  answer: A. (0,2]
+  fidelity_notes:
+    - 原题为选择题；f(0)=0 恒为零点，“唯一零点”指实数范围内只有 x=0。
+    - 源解析中关于 2x>ax 的参数方向有口误，本卡按源结论、选项和数学判定记录。
+solution:
+  source_solution_summary: f 是奇函数且 f(0)=0，因此只需判断 x>0 时是否还有零点。若 0<a\leqslant2， 则 e^x-e^{-x}>2x 且 \sin x<x，进而 e^x-e^{-x}-a\sin x>0，故没有正零点；奇函数也没有负零点。若 a>2， 则 f'(0)=2-a<0，连续性保证 0 右侧足够近处 f(x)<0，而 x\to+\infty 时 f(x)\to+\infty，所以存在正零点，因奇性还存在负零点，不可能唯一。 因此 0<a\leqslant2，选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 先利用奇偶性把零点个数问题缩到 x>0。
+      formula_trace:
+        from: f(x)=e^x-e^{-x}-a\sin x
+        to: f(-x)=-f(x),\quad f(0)=0
+        operation: 分别检查 e^x-e^{-x} 与 \sin x 都是奇函数。
+        why: 若 x>0 有一个非零零点，则 -x 也会是零点；唯一零点只能是 0。
+      source_ref: page_0066_solution
+    - step_id: step_2
+      statement: 用 Taylor 放缩给出 0<a\leqslant2 的充分性。
+      formula_trace:
+        from: e^x-e^{-x}\geqslant2x,\quad \sin x\leqslant x\quad(x>0)
+        to: f(x)=e^x-e^{-x}-a\sin x\geqslant2x-ax\geqslant0
+        operation: 将双曲正弦下界和正弦上界代入 f(x)。
+        why: 当 a\leqslant2 时，x>0 右侧非负；实际在 x>0 上严格为正，因此无正零点。
+      source_ref: page_0066_solution
+    - step_id: step_3
+      statement: 用 0 点附近的首项排除 a>2。
+      formula_trace:
+        from: f'(x)=e^x+e^{-x}-a\cos x
+        to: f'(0)=2-a<0\quad(a>2)
+        operation: 对 f 求导并代入 x=0。
+        why: 这等价于源页 Taylor 展开中的线性主项 (2-a)x；a>2 时 0 右侧函数先下降。
+      source_ref: page_0066_solution
+    - step_id: step_4
+      statement: a>2 时由连续性推出额外正零点。
+      formula_trace:
+        from: \exists\varepsilon>0,\ f(\varepsilon)<0;\quad \lim_{x\to+\infty}f(x)=+\infty
+        to: \exists x_0>0,\ f(x_0)=0
+        operation: 在 (\varepsilon,+\infty) 上使用连续函数介值性。
+        why: 出现正零点后，由奇函数性质还会出现负零点，违背“唯一零点”。
+      source_ref: page_0066_solution
+    - step_id: step_5
+      statement: 合并充分性与必要性得到选项。
+      formula_trace:
+        from: 0<a\leqslant2 可行；a>2 不可行
+        to: a\in(0,2]
+        operation: 结合题设 a>0 和四个选项。
+        why: 这是唯一保证实数范围内只有 x=0 一个零点的参数范围。
+      source_ref: page_0066_solution
+teaching_card:
+  student_title: 用 0 点首项判断唯一零点的参数
+  what_it_trains: 训练先看奇函数的零点对称性，再用 Taylor 主项和基础放缩判断参数临界值。
+  recognition_cues:
+    - 题干出现 e^x-e^{-x} 与 \sin x 的组合，并且问“唯一零点”。
+    - f(0)=0 已经存在，关键不是找零点，而是排除其他正负零点。
+    - 参数 a 乘在 \sin x 上，0 点附近要比较 2x 与 ax。
+  normalization_moves:
+    - 先写出 f(-x)=-f(x)，把问题转成 x>0 时 f(x)>0。
+    - 用 e^x-e^{-x}\geqslant2x、\sin x\leqslant x 给 a\leqslant2 的充分性。
+    - 对 a>2 展开到线性主项，构造 0 右侧反例。
+  common_failures:
+    - 只用 2x 与 ax 比较，却把 a 的方向写反。
+    - 忘记 f(0)=0 已经是一个零点，把“存在唯一零点”误读成“有一个交点”。
+    - 只证明 a\leqslant2 充分，没有说明 a>2 为什么会多出零点。
+  similar_practice_query: 奇函数 e^x-e^{-x} 与三角函数组合的唯一零点参数题，使用 Taylor 首项和 0 点邻域反例。
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 源解析有“2x>ax 即 a>2”的符号口误；已按页图结论、选项和 Taylor 主项纠正， 不需要用户拍板。

@@ -1,0 +1,210 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0289_aex_minus_lnx_hidden_min_param_range_ex02
+content_revision_id: mst_p0289_aex_minus_lnx_hidden_min_param_range_ex02-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0289_aex_minus_lnx_hidden_min_param_range_ex02.card.yaml
+stem: |-
+  （2024 · 山东期中）已知函数 $f(x)=ae^x-\ln x$。
+  1. 当 $a=1$ 时，证明：$f(x)>2$。
+  2. 若 $f(x)\ge e+1$ 恒成立，求 $a$ 的取值范围。
+answer: |-
+  第(1)问 $f(x)>2$；第(2)问 $a\in[e^{1-\frac1e},+\infty)$。
+
+  第(1)问中，当 $a=1$，$f(x)=e^x-\ln x$。 由 $f^\prime(x)=e^x-\frac1x$、$f^{\prime\prime}(x)=e^x+\frac1{x^2}>0$， 可知 $f^\prime$ 递增，且 $f^\prime(1/2)<0,f^\prime(1)>0$， 因而存在唯一极小点 $x_0\in(1/2,1)$。由 $f^\prime(x_0)=0$ 得 $e^{x_0}=1/x_0$，于是 $f(x_0)=e^{x_0}-\ln x_0=1/x_0+x_0>2$，所以 $f(x)>2$。 第(2)问题面原写 $f(x)\le e+1$，但解析从 $f(x)\ge e+1$ 出发；用户确认这是题面错误。按修正后的下界恒成立条件，参变分离得 $a\ge(\frac{\ln x+e+1}{e^x})_{\max}$，最大值在 $x=1/e$， 为 $e^{1-1/e}$；隐点效应也由 $\{f(x_0)=e+1,\ f^\prime(x_0)=0\}$ 推出 $x_0=1/e$， 最终得到 $a\in[e^{1-1/e},+\infty)$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 第(1)问先证明 $f$ 有唯一极小点。
+      max_score: 1
+    - step_id: step_2
+      description: 用隐极小点关系消掉对数。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问按解析意图做参变分离。
+      max_score: 1
+    - step_id: step_4
+      description: 求分离后函数的最大值。
+      max_score: 1
+    - step_id: step_5
+      description: 隐点效应也锁定同一个取等点。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 不等式证明
+        target: 第 1 问
+        result: $f(x)>2$。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $a\in[e^{1-\frac1e},+\infty)$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 参变量分离
+      - 充分/必要性探路
+    subroute:
+      - 隐极小点代换
+      - 参变量分离求最大值
+      - 取等点 $x_0=1/e$
+      - 题面不等号勘误
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $ae^x-\ln x$
+      - $e^{x_0}=\frac1{x_0}$
+      - $\frac{\ln x+e+1}{e^x}$
+      - $x_0=\frac1e$
+      - $a\in[e^{1-\frac1e},+\infty)$
+    normalization_moves_used:
+      - 第(1)问用二阶导证明一阶导单调。
+      - 用 $f^\prime(x_0)=0$ 把 $e^{x_0}$ 替换成 $1/x_0$。
+      - 第(2)问解析意图下把 $a$ 分离出来。
+      - 用取等点和导数为零探路 $x_0=1/e$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会处理定义域和 $x\to0^+$ 行为，回补函数三要素与定义域。
+      - 若学生不会隐极小点代换，回补导数单调极值基础。
+      - 若学生不会分离参数，回补代数恒等变形。
+      - 若学生不会指数对数基础不等式，回补指数对数基础。
+      - 若学生不会判断恒成立方向，回补不等式工具基础。
+  detail_terms:
+    - $ae^x-\ln x$
+    - 隐极小点
+    - $e^{x_0}=1/x_0$
+    - $f(x)>2$
+    - $f(x)\ge e+1$
+    - $x_0=1/e$
+    - $e^{1-1/e}$
+parts: &a1
+  - part_id: "1"
+    text: 当 $a=1$ 时，证明：$f(x)>2$。
+  - part_id: "2"
+    text: 若 $f(x)\ge e+1$ 恒成立，求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0289_aex_minus_lnx_hidden_min_param_range_ex02
+source_evidence:
+  source_refs:
+    - ref_id: page_0289_ex02_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0289/page_0289.md
+      role: problem_start
+      evidence: page_0289 例2题头：$f(x)=ae^x-\ln x$；第(1)问 $a=1$ 时证明 $f(x)>2$；第(2)问页图写作“若 $f(x)\le e+1$ 恒成立，求 $a$ 的取值范围”。
+    - ref_id: page_0289_ex02_solution_part1
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0289/page_0289.md
+      role: solution_part1
+      evidence: page_0289 第(1)问通过 $f^\prime(x)=e^x-\frac1x$、$f^{\prime\prime}(x)>0$ 找到唯一极小点 $x_0\in(1/2,1)$，并由 $e^{x_0}=1/x_0$ 得 $f(x_0)=1/x_0+x_0>2$。
+    - ref_id: page_0289_ex02_solution_part2_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0289/page_0289.md
+      role: solution_part2_start
+      evidence: page_0289 第(2)问解析法一写作“因为 $f(x)=ae^x-\ln x\ge e+1$ 恒成立”，并推出 $a\ge(\frac{\ln x+e+1}{e^x})_{\max}$。
+    - ref_id: page_0290_ex02_solution_end
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0290/page_0290.md
+      role: solution_part2_end
+      evidence: page_0290 继续隐点效应和考试书写，得到 $x_0=1/e$，并给出答案 $a\in[e^{1-1/e},+\infty)$。
+    - ref_id: page_0290_ex03_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0290/page_0290.md
+      role: local_context
+      evidence: page_0290 中部从例3开始新题，随后还有例4；本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0289.png
+      inspected: true
+      notes: 已核对原图：第(2)问题面处可见 $f(x)\le e+1$，但解析立即按 $f(x)\ge e+1$ 推导。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0290.png
+      inspected: true
+      notes: 已核对原图：page_0290 顶部延续按下界恒成立推导，答案为 $[e^{1-1/e},+\infty)$。
+  source_context: 本卡处理 page_0289 起头、page_0290 顶部续完的例2；page_0290 例3和例4排除。
+  source_influence:
+    - 保留第(1)问的隐极小点证明：$f^\prime(x_0)=0$，$e^{x_0}=1/x_0$。
+    - 保留 source 的提示：也可用 $e^x-x-1+x-\ln x-1+2>0$ 直接证明，但本讲训练隐点效应。
+    - 保留解析意图下的第(2)问：按 $f(x)\ge e+1$ 恒成立求下界。
+    - 保留参变分离：$a\ge(\frac{\ln x+e+1}{e^x})_{\max}$。
+    - 保留隐点效应：由 $\{f(x_0)=e+1,\ f^\prime(x_0)=0\}$ 探出 $x_0=1/e$。
+    - 保留答案分支：若按解析意图修正为 $\ge$，则 $a\in[e^{1-1/e},+\infty)$。
+  source_discrepancies:
+    - discrepancy_id: page_0289_problem_solution_inequality_direction_conflict
+      status: resolved_user_decision
+      issue: 题面原图写 $f(x)\le e+1$ 恒成立；解析和答案全部按 $f(x)\ge e+1$ 恒成立推导。
+      impact: 若按题面 $f(x)\le e+1$，由于 $x\to0^+$ 时 $-\ln x\to+\infty$，不存在使其对全部 $x>0$ 恒成立的实数 $a$；若按解析意图 $\ge$，答案为 $[e^{1-1/e},+\infty)$。
+      resolution: 用户确认应为题面错；第(2)问改为 $f(x)\ge e+1$ 恒成立。
+original_problem:
+  stem: （2024 · 山东期中）已知函数 $f(x)=ae^x-\ln x$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问 $f(x)>2$；第(2)问 $a\in[e^{1-\frac1e},+\infty)$。
+  fidelity_notes:
+    - 无选项。
+    - 题面不等号与解析不一致；用户确认本题为题面错误，最终卡面按解析意图改为 $f(x)\ge e+1$。
+solution:
+  source_solution_summary: 第(1)问中，当 $a=1$，$f(x)=e^x-\ln x$。 由 $f^\prime(x)=e^x-\frac1x$、$f^{\prime\prime}(x)=e^x+\frac1{x^2}>0$， 可知 $f^\prime$ 递增，且 $f^\prime(1/2)<0,f^\prime(1)>0$， 因而存在唯一极小点 $x_0\in(1/2,1)$。由 $f^\prime(x_0)=0$ 得 $e^{x_0}=1/x_0$，于是 $f(x_0)=e^{x_0}-\ln x_0=1/x_0+x_0>2$，所以 $f(x)>2$。 第(2)问题面原写 $f(x)\le e+1$，但解析从 $f(x)\ge e+1$ 出发；用户确认这是题面错误。按修正后的下界恒成立条件，参变分离得 $a\ge(\frac{\ln x+e+1}{e^x})_{\max}$，最大值在 $x=1/e$， 为 $e^{1-1/e}$；隐点效应也由 $\{f(x_0)=e+1,\ f^\prime(x_0)=0\}$ 推出 $x_0=1/e$， 最终得到 $a\in[e^{1-1/e},+\infty)$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问先证明 $f$ 有唯一极小点。
+      formula_trace:
+        from: $f(x)=e^x-\ln x$
+        to: $f^\prime(x)=e^x-\frac1x,\quad f^{\prime\prime}(x)>0$
+        operation: 求一阶、二阶导。
+        why: $f^\prime$ 递增后，可以用取点证明唯一极小点存在。
+      source_ref: page_0289_ex02_solution_part1
+    - step_id: step_2
+      statement: 用隐极小点关系消掉对数。
+      formula_trace:
+        from: $f^\prime(x_0)=0$
+        to: $e^{x_0}=\frac1{x_0},\quad f(x_0)=\frac1{x_0}+x_0>2$
+        operation: 由导函数零点关系替换 $e^{x_0}$ 和 $\ln x_0$。
+        why: 这是本章训练的隐点效应：极小点不能直接求，但它满足可用的方程。
+      source_ref: page_0289_ex02_solution_part1
+    - step_id: step_3
+      statement: 第(2)问按解析意图做参变分离。
+      formula_trace:
+        from: $ae^x-\ln x\ge e+1$
+        to: $a\ge \frac{\ln x+e+1}{e^x}$
+        operation: 分离参数 $a$。
+        why: 若条件是下界恒成立，参数要大于右侧最大值。
+      source_ref: page_0289_ex02_solution_part2_start
+    - step_id: step_4
+      statement: 求分离后函数的最大值。
+      formula_trace:
+        from: $F(x)=\frac{\ln x+e+1}{e^x}$
+        to: $F_{\max}=F(1/e)=e^{1-\frac1e}$
+        operation: 研究 $F^\prime$ 的符号。
+        why: 这给出解析意图下的参数下界。
+      source_ref: page_0289_ex02_solution_part2_start
+    - step_id: step_5
+      statement: 隐点效应也锁定同一个取等点。
+      formula_trace:
+        from: $f(x_0)=e+1,\quad f^\prime(x_0)=0$
+        to: $x_0=\frac1e,\quad a\ge e^{1-\frac1e}$
+        operation: 联立取等与导数为零。
+        why: 这是本节“构造极点效应解决含参恒成立”的核心路线。
+      source_ref: page_0290_ex02_solution_end
+teaching_card:
+  student_title: 用隐极小点处理 $ae^x-\ln x$
+  what_it_trains: 训练极小点求不出来时，使用 $f^\prime(x_0)=0$ 提供的关系来替换指数和对数；第(2)问训练下界恒成立的参变量分离。
+  recognition_cues:
+    - $e^x$ 和 $\ln x$ 同时出现，直接求极小点不容易。
+    - 第(1)问只要求证明 $f(x)>2$，可在隐极小点处证明最小值大于 2。
+    - 第(2)问按“下界恒成立”做，需要分离参数并求右侧最大值。
+    - 取等点由 $f(x_0)=e+1$ 和 $f^\prime(x_0)=0$ 一起探出来。
+  normalization_moves:
+    - 先用 $f^{\prime\prime}>0$ 证明 $f^\prime$ 单调。
+    - 用取点 $1/2,1$ 夹住隐极小点 $x_0$。
+    - 把 $f^\prime(x_0)=0$ 改写成 $e^{x_0}=1/x_0$。
+    - 第(2)问把 $f(x)\ge e+1$ 分离成 $a\ge\frac{\ln x+e+1}{e^x}$。
+  common_failures:
+    - 直接尝试求出 $x_0$，但其实只需要用它满足的方程。
+    - 没有先核对恒成立方向，导致最大值/最小值取反。
+    - 分离参数时没有根据恒成立方向判断取最大值还是最小值。
+    - 把 $x\to0^+$ 时 $-\ln x\to+\infty$ 的边界行为漏掉。
+  similar_practice_query: ae^x-lnx 隐极小点 f(x)>2 参数范围 e+1 1/e 不等号冲突
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 用户拍板：第 15 项应为题面错；第(2)问改为 $f(x)\ge e+1$ 恒成立，答案 $[e^{1-\frac1e},+\infty)$。

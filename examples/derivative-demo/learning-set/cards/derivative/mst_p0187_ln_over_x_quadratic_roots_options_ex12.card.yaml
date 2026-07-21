@@ -1,0 +1,326 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0187_ln_over_x_quadratic_roots_options_ex12
+content_revision_id: mst_p0187_ln_over_x_quadratic_roots_options_ex12-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0187_ln_over_x_quadratic_roots_options_ex12.card.yaml
+stem: |-
+  （福建三校协作 2023 高二月考 · 多选 T12）已知方程 $2e^2\ln^2x-3ex\ln x+x^2=0$（$e$ 为常数），下列说法正确的有（  ）
+  A. $x=e$ 为方程实根
+  B. $2\ln3<3\ln2$
+  C. 方程在 $(0,1)$ 无实根
+  D. 方程所有实根之和大于 $3e$
+answer: |
+  ACD
+
+  原方程
+  \[
+  2e^2\ln^2x-3ex\ln x+x^2=0
+  \]
+  等价于
+  \[
+  2e^2\left(\frac{\ln x}{x}\right)^2-3e\left(\frac{\ln x}{x}\right)+1=0.
+  \]
+  令
+  \[
+  t=\frac{\ln x}{x},
+  \]
+  得
+  \[
+  2e^2t^2-3et+1=0
+  \iff (et-1)(2et-1)=0,
+  \]
+  所以
+  \[
+  t=\frac1e\quad\text{或}\quad t=\frac1{2e}.
+  \]
+  设
+  \[
+  f(x)=\frac{\ln x}{x}\ (x>0),\quad
+  f^{\prime}(x)=\frac{1-\ln x}{x^2}.
+  \]
+  则 $f$ 在 $(0,e)$ 递增、在 $(e,+\infty)$ 递减，且
+  \[
+  f(e)=\frac1e,\quad f(1)=0.
+  \]
+  因此 $0<x<1$ 时 $f(x)<0$，而待求水平值 $\frac1e,\frac1{2e}$ 均为正，故 $(0,1)$ 无根，C 正确。又
+  \[
+  f(e)=\frac1e,
+  \]
+  所以 $x=e$ 是实根，A 正确。
+
+  对 B：$2\ln3<3\ln2$ 等价于
+  \[
+  \frac{\ln3}{3}<\frac{\ln2}{2}=\frac{\ln4}{4}.
+  \]
+  但 $3,4>e$ 且 $f$ 在 $(e,+\infty)$ 递减，所以
+  \[
+  \frac{\ln3}{3}=f(3)>f(4)=\frac{\ln4}{4},
+  \]
+  即 $2\ln3>3\ln2$，故 B 错误。
+
+  对 D：令 $t=\frac1{2e}$ 的两根为 $x_1<x_2$，由图像有 $1<x_1<e<x_2$。源解给出
+  \[
+  \frac{\ln x_1}{x_1}=\frac{\ln x_2}{x_2}
+  =\frac{\ln x_2-\ln x_1}{x_2-x_1}
+  =\frac1{2e}
+  >\frac{2}{x_1+x_2},
+  \]
+  得
+  \[
+  x_1+x_2>4e.
+  \]
+  全部实根和为
+  \[
+  e+x_1+x_2>e+4e=5e>3e,
+  \]
+  故 D 正确。综上选 ACD。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 除以 $x^2$ 并换元，把原方程降为关于 $t$ 的二次方程。
+      max_score: 1
+    - step_id: step_2
+      description: 解出两个目标水平值并建立函数模型。
+      max_score: 1
+    - step_id: step_3
+      description: 用导数判定 $f$ 的单峰性，并先判 A、C。
+      max_score: 1
+    - step_id: step_4
+      description: 把 B 的对数不等式改写为 $f(3)$ 与 $f(4)$ 比较。
+      max_score: 1
+    - step_id: step_5
+      description: 对 $t=\frac1{2e}$ 的两根用 ALG 不等式估计和。
+      max_score: 1
+    - step_id: step_6
+      description: 合并三根之和并收束多选答案。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 数形结合
+      - 拟合与夹逼
+    subroute:
+      - 先换元降阶为二次方程
+      - 用单峰函数图像判水平线交点
+      - 以 ALG 不等式给两根和下界
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 抽象函数结构
+      - 不等式工具结构
+    evidence:
+      - 核心变量是 $t=\frac{\ln x}{x}$，属于对数与代数比值复合。
+      - 二次方程给出两个正水平值，再映射回 $f(x)=\frac{\ln x}{x}$ 的交点个数与位置。
+      - D 选项依赖对数平均型不等式来控制 $x_1+x_2$。
+    normalization_moves_used:
+      - 把原式统一除以 $x^2$，消去混合次数。
+      - 设 $t=\frac{\ln x}{x}$，把原方程改写为可分解二次式。
+      - 把选项 B 变成 $\frac{\ln3}{3}$ 与 $\frac{\ln4}{4}$ 的函数值比较。
+      - 把 D 的根和问题转成割线斜率与 $\frac{2}{x_1+x_2}$ 的比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能稳定写出 $f^{\prime}(x)=\frac{1-\ln x}{x^2}$ 并据此判单调，回补导数单调极值基础。
+      - 若学生在 $x>0$ 定义域与 $(0,1)$ 上符号判断混乱，回补函数三要素与定义域。
+      - 若学生不会把 $2\ln3$ 与 $3\ln2$ 改写为 $\frac{\ln3}{3}$、$\frac{\ln4}{4}$ 比较，回补指数对数基础。
+      - 若学生不能从 ALG 不等式推出 $x_1+x_2>4e$，回补不等式工具基础。
+  detail_terms:
+    - $t=\frac{\ln x}{x}$
+    - $2e^2t^2-3et+1=0$
+    - $f(x)=\frac{\ln x}{x}$
+    - $f^{\prime}(x)=\frac{1-\ln x}{x^2}$
+    - $f(e)=\frac1e,\ f(1)=0$
+    - $x_1+x_2>4e$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0187_ln_over_x_quadratic_roots_options_ex12
+source_evidence:
+  source_refs:
+    - ref_id: page_0187_context_ex11_tail
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0187/page_0187.md
+      role: local_context
+      evidence: page_0187 顶部是例11续解并以“故选 D”结束，题头不在本页，仅作上下文。
+    - ref_id: page_0187_ex12_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0187/page_0187.md
+      role: problem_start
+      evidence: page_0187 中部出现“例12”题头，给出方程 $2e^2\ln^2x-3ex\ln x+x^2=0$ 与 A-D 四个选项。
+    - ref_id: page_0187_ex12_solution_main
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0187/page_0187.md
+      role: solution
+      evidence: page_0187 下半页解析给出换元 $t=\frac{\ln x}{x}$、$f(x)=\frac{\ln x}{x}$ 的单调性图像判定，并完成 A/B/C 判断与 D 的主要不等式推导。
+    - ref_id: page_0188_ex12_solution_tail
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0188/page_0188.md
+      role: continuation
+      evidence: page_0188 顶部续上例12最后一句“D 正确。故选 ACD.”，补全最终答案。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0187.png
+      inspected: true
+      notes: 已核对页图：例12题干、A-D 选项、两幅函数图及解析主体均在本页；末行在“故”处跨页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0188.png
+      inspected: true
+      notes: 已核对页图：页首明确续写“D正确，故选 ACD”。
+  source_context: 按页头归属，例12起于 page_0187，解析跨到 page_0188 页首收束；本卡由 batch D 负责完整重建。
+  source_influence:
+    - 保留源解“除以 $x^2$ 后令 $t=\frac{\ln x}{x}$”的二次方程降阶主线。
+    - 保留源解对 $f(x)=\frac{\ln x}{x}$ 的导数单调性与图像交点个数判断。
+    - 保留源解用 ALG 不等式推出 $x_1+x_2>4e$，进而判定 D 正确。
+  source_discrepancies: []
+original_problem:
+  stem: （福建三校协作 2023 高二月考 · 多选 T12）已知方程 $2e^2\ln^2x-3ex\ln x+x^2=0$（$e$ 为常数），下列说法正确的有（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $x=e$ 为方程实根
+      text_latex: $x=e$ 为方程实根
+    - label: B
+      text_raw: $2\ln3<3\ln2$
+      text_latex: $2\ln3<3\ln2$
+    - label: C
+      text_raw: 方程在 $(0,1)$ 无实根
+      text_latex: 方程在 $(0,1)$ 无实根
+    - label: D
+      text_raw: 方程所有实根之和大于 $3e$
+      text_latex: 方程所有实根之和大于 $3e$
+  answer: ACD
+  fidelity_notes:
+    - 题干与四个选项均在 page_0187 起头。
+    - 答案字母在 page_0188 页首续行为“故选 ACD”。
+solution:
+  source_solution_summary: |
+    原方程
+    \[
+    2e^2\ln^2x-3ex\ln x+x^2=0
+    \]
+    等价于
+    \[
+    2e^2\left(\frac{\ln x}{x}\right)^2-3e\left(\frac{\ln x}{x}\right)+1=0.
+    \]
+    令
+    \[
+    t=\frac{\ln x}{x},
+    \]
+    得
+    \[
+    2e^2t^2-3et+1=0
+    \iff (et-1)(2et-1)=0,
+    \]
+    所以
+    \[
+    t=\frac1e\quad\text{或}\quad t=\frac1{2e}.
+    \]
+    设
+    \[
+    f(x)=\frac{\ln x}{x}\ (x>0),\quad
+    f^{\prime}(x)=\frac{1-\ln x}{x^2}.
+    \]
+    则 $f$ 在 $(0,e)$ 递增、在 $(e,+\infty)$ 递减，且
+    \[
+    f(e)=\frac1e,\quad f(1)=0.
+    \]
+    因此 $0<x<1$ 时 $f(x)<0$，而待求水平值 $\frac1e,\frac1{2e}$ 均为正，故 $(0,1)$ 无根，C 正确。又
+    \[
+    f(e)=\frac1e,
+    \]
+    所以 $x=e$ 是实根，A 正确。
+
+    对 B：$2\ln3<3\ln2$ 等价于
+    \[
+    \frac{\ln3}{3}<\frac{\ln2}{2}=\frac{\ln4}{4}.
+    \]
+    但 $3,4>e$ 且 $f$ 在 $(e,+\infty)$ 递减，所以
+    \[
+    \frac{\ln3}{3}=f(3)>f(4)=\frac{\ln4}{4},
+    \]
+    即 $2\ln3>3\ln2$，故 B 错误。
+
+    对 D：令 $t=\frac1{2e}$ 的两根为 $x_1<x_2$，由图像有 $1<x_1<e<x_2$。源解给出
+    \[
+    \frac{\ln x_1}{x_1}=\frac{\ln x_2}{x_2}
+    =\frac{\ln x_2-\ln x_1}{x_2-x_1}
+    =\frac1{2e}
+    >\frac{2}{x_1+x_2},
+    \]
+    得
+    \[
+    x_1+x_2>4e.
+    \]
+    全部实根和为
+    \[
+    e+x_1+x_2>e+4e=5e>3e,
+    \]
+    故 D 正确。综上选 ACD。
+  key_steps:
+    - step_id: step_1
+      statement: 除以 $x^2$ 并换元，把原方程降为关于 $t$ 的二次方程。
+      formula_trace:
+        from: $2e^2\ln^2x-3ex\ln x+x^2=0$
+        to: $2e^2t^2-3et+1=0,\ t=\frac{\ln x}{x}$
+        operation: 两边同除以 $x^2(>0)$ 后令 $t=\frac{\ln x}{x}$。
+        why: 把指对混合方程转成可因式分解的二次式。
+      source_ref: page_0187_ex12_solution_main
+    - step_id: step_2
+      statement: 解出两个目标水平值并建立函数模型。
+      formula_trace:
+        from: $2e^2t^2-3et+1=0$
+        to: $t=\frac1e$ 或 $t=\frac1{2e}$，且设 $f(x)=\frac{\ln x}{x}$
+        operation: 因式分解 $(et-1)(2et-1)=0$。
+        why: 后续只需研究曲线 $y=f(x)$ 与两条水平线的交点。
+      source_ref: page_0187_ex12_solution_main
+    - step_id: step_3
+      statement: 用导数判定 $f$ 的单峰性，并先判 A、C。
+      formula_trace:
+        from: $f^{\prime}(x)=\frac{1-\ln x}{x^2}$
+        to: $f$ 在 $(0,e)$ 递增、$(e,+\infty)$ 递减，$f(e)=\frac1e,\ f(1)=0$
+        operation: 根据 $1-\ln x$ 的符号分区间讨论。
+        why: 由 $f(1)=0$ 得 $(0,1)$ 上 $f<0$（C 对）；由 $f(e)=1/e$ 得 $x=e$ 是根（A 对）。
+      source_ref: page_0187_ex12_solution_main
+    - step_id: step_4
+      statement: 把 B 的对数不等式改写为 $f(3)$ 与 $f(4)$ 比较。
+      formula_trace:
+        from: $2\ln3<3\ln2$
+        to: $\frac{\ln3}{3}<\frac{\ln4}{4}$
+        operation: 等价变形并识别为 $f(3)$ 与 $f(4)$。
+        why: $3,4>e$ 时 $f$ 递减，故应有 $f(3)>f(4)$，因此 B 错。
+      source_ref: page_0187_ex12_solution_main
+    - step_id: step_5
+      statement: 对 $t=\frac1{2e}$ 的两根用 ALG 不等式估计和。
+      formula_trace:
+        from: $\frac{\ln x_2-\ln x_1}{x_2-x_1}=\frac1{2e}>\frac{2}{x_1+x_2}$
+        to: $x_1+x_2>4e$
+        operation: 由分式不等式交叉相乘（各量均为正）。
+        why: 直接给出两根和下界。
+      source_ref: page_0187_ex12_solution_main
+    - step_id: step_6
+      statement: 合并三根之和并收束多选答案。
+      formula_trace:
+        from: $x=e$ 与 $x_1+x_2>4e$
+        to: $e+x_1+x_2>5e>3e$，故 D 对，答案 ACD
+        operation: 相加比较并与选项对照。
+        why: 完成 D 的真值判断并汇总最终选项。
+      source_ref: page_0188_ex12_solution_tail
+teaching_card:
+  student_title: 先换元再看图：$\frac{\ln x}{x}$ 多选判真
+  what_it_trains: 训练“指对混合方程 -> 换元二次 -> 单峰函数交点计数”的完整链路，并结合不等式估计根和。
+  recognition_cues:
+    - 方程同时出现 $\ln x$、$x$ 及二次组合，且可整体除以 $x^2$。
+    - 选项混合了“是否为根”“区间有无根”“对数大小比较”“根和范围”。
+    - 出现 $\frac{\ln x}{x}$ 这类常见单峰函数模型。
+  normalization_moves:
+    - 统一除以 $x^2$，设 $t=\frac{\ln x}{x}$。
+    - 先解 $t$ 的二次方程，再回到函数 $f(x)$ 图像。
+    - 把对数比较改写为同类函数值比较。
+    - 对根和题先做两根和估计，再与总和目标比较。
+  common_failures:
+    - 把 $f(e)=1/e$ 误当成“对应两个 $x$”，忽略极大值点唯一性。
+    - B 选项直接用数值近似却方向算反。
+    - D 选项只得到 $x_1,x_2$ 存在，却没有完成和的下界推导。
+  similar_practice_query: lnx/x 换元 二次方程 多选 根个数 根和不等式
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

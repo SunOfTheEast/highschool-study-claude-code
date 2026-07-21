@@ -1,0 +1,221 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0145_binomial_power_compare_ex08
+content_revision_id: mst_p0145_binomial_power_compare_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0145_binomial_power_compare_ex08.card.yaml
+stem: |-
+  （2023·辽宁模拟）已知 $a=7^9$，$b=8^8$，$c=9^7$，则 $a,b,c$ 的大小关系为（  ）
+  A. $c<a<b$
+  B. $b<c<a$
+  C. $b<a<c$
+  D. $c<b<a$
+answer: |
+  D
+
+  法一：构造
+  $f(x)=(16-x)\ln x\ (7\le x\le9)$，
+  则
+  $f^{\prime}(x)=-\ln x+\frac{16}{x}-1$。
+  源解指出 $f^{\prime}(x)$ 递减，且
+  $f^{\prime}(7)=\frac27-\ln\frac7e<0$，
+  所以 $f^{\prime}(x)<0$，$f$ 在区间上递减，
+  从而
+  $f(9)<f(8)<f(7)$，
+  即
+  $7\ln9<8\ln8<9\ln7$，
+  等价于
+  $\ln9^7<\ln8^8<\ln7^9$，
+  所以 $c<b<a$。
+  法二：二项式展开
+  $b=(7+1)^8<7\cdot7^8=7^9=a$，
+  $c=(8+1)^7<8\cdot8^7=8^8=b$，
+  亦得 $c<b<a$，选 D。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 法一先构造同构函数。
+      max_score: 1
+    - step_id: step_2
+      description: 判 $f$ 递减。
+      max_score: 1
+    - step_id: step_3
+      description: 把函数值顺序还原成原幂顺序。
+      max_score: 1
+    - step_id: step_4
+      description: 法二用二项式展开夹逼。
+      max_score: 1
+    - step_id: step_5
+      description: 对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 函数同构法判全序。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 数值比较
+        target: 二项式展开法做独立验证。
+        result: 见 source_solution_summary
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 数形结合
+    subroute:
+      - 顺子指数比较
+      - 二项式展开上界
+      - 同构函数 $(16-x)\ln x$
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 同构结构
+      - 非对称结构
+    evidence:
+      - $7^9,8^8,9^7$ 是“底数递增、指数递减”的顺子幂结构。
+      - 可同时用导数同构与展开夹逼两条路线。
+    normalization_moves_used:
+      - 构造 $f(x)=(16-x)\ln x$。
+      - 将 $8^8,9^7$ 改写为 $(7+1)^8,(8+1)^7$。
+      - 用正项展开给出线性上界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $f^{\prime}(x)$ 判区间单调，回补导数单调极值基础。
+      - 若学生二项式展开后不会给出上界，回补代数恒等变形。
+      - 若学生不理解 $\ln$ 单调性在还原幂顺序中的作用，回补指数对数基础。
+  detail_terms:
+    - $(16-x)\ln x$
+    - $f^{\prime}(7)=\frac27-\ln\frac7e<0$
+    - $(7+1)^8<7^9$
+    - $(8+1)^7<8^8$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0145_binomial_power_compare_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0145_ex08_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0145/page_0145.md
+      role: problem_start
+      evidence: 例8题干：$a=7^9,b=8^8,c=9^7$，判断三者大小。
+    - ref_id: page_0145_ex08_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0145/page_0145.md
+      role: solution
+      evidence: 例8解析法一用 $f(x)=(16-x)\ln x$ 的单调性；法二用二项式展开。
+    - ref_id: page_0145_ex08_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0145/page_0145.md
+      role: local_context
+      evidence: 本题是“小节3 二项式定理展开比大小”的首题。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0145.png
+      inspected: true
+      notes: 已核对原图：两种方法都完整可读，答案为D。
+  source_context: 例8通过“顺子指数”比较展示二项式展开法，也给出同构函数法作对照。
+  source_influence:
+    - 保留源解法一：$(16-x)\ln x$ 在 $[7,9]$ 递减。
+    - 保留源解法二：$(7+1)^8<7\cdot7^8$ 与 $(8+1)^7<8\cdot8^7$ 的夹逼链。
+    - 最终结论统一为 $c<b<a$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·辽宁模拟）已知 $a=7^9$，$b=8^8$，$c=9^7$，则 $a,b,c$ 的大小关系为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $c<a<b$
+      text_latex: $c<a<b$
+    - label: B
+      text_raw: $b<c<a$
+      text_latex: $b<c<a$
+    - label: C
+      text_raw: $b<a<c$
+      text_latex: $b<a<c$
+    - label: D
+      text_raw: $c<b<a$
+      text_latex: $c<b<a$
+  answer: D
+  fidelity_notes:
+    - 原图解析先给函数法，再给二项式法。
+    - 法一中的区间写作 $7\le x\le9$。
+solution:
+  source_solution_summary: |
+    法一：构造
+    $f(x)=(16-x)\ln x\ (7\le x\le9)$，
+    则
+    $f^{\prime}(x)=-\ln x+\frac{16}{x}-1$。
+    源解指出 $f^{\prime}(x)$ 递减，且
+    $f^{\prime}(7)=\frac27-\ln\frac7e<0$，
+    所以 $f^{\prime}(x)<0$，$f$ 在区间上递减，
+    从而
+    $f(9)<f(8)<f(7)$，
+    即
+    $7\ln9<8\ln8<9\ln7$，
+    等价于
+    $\ln9^7<\ln8^8<\ln7^9$，
+    所以 $c<b<a$。
+    法二：二项式展开
+    $b=(7+1)^8<7\cdot7^8=7^9=a$，
+    $c=(8+1)^7<8\cdot8^7=8^8=b$，
+    亦得 $c<b<a$，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 法一先构造同构函数。
+      formula_trace:
+        from: $a=7^9,\ b=8^8,\ c=9^7$
+        to: 令 $f(x)=(16-x)\ln x$，比较 $f(7),f(8),f(9)$
+        operation: 把幂比较转成“指数和底数系数”统一表达。
+        why: 便于用导数一次性判断三项顺序。
+      source_ref: page_0145_ex08_solution
+    - step_id: step_2
+      statement: 判 $f$ 递减。
+      formula_trace:
+        from: $f^{\prime}(x)=-\ln x+\frac{16}{x}-1$
+        to: $f^{\prime}(x)\downarrow,\ f^{\prime}(7)<0\Rightarrow f^{\prime}(x)<0$
+        operation: 利用导函数单调性与端点符号。
+        why: 得到 $f(9)<f(8)<f(7)$。
+      source_ref: page_0145_ex08_solution
+    - step_id: step_3
+      statement: 把函数值顺序还原成原幂顺序。
+      formula_trace:
+        from: $f(9)<f(8)<f(7)$
+        to: $\ln9^7<\ln8^8<\ln7^9\Rightarrow c<b<a$
+        operation: 展开 $f(k)$ 并利用对数函数单调性。
+        why: 完成法一主结论。
+      source_ref: page_0145_ex08_solution
+    - step_id: step_4
+      statement: 法二用二项式展开夹逼。
+      formula_trace:
+        from: $b=8^8,\ c=9^7$
+        to: $b=(7+1)^8<7^9=a,\ c=(8+1)^7<8^8=b$
+        operation: 展开后上界估计：省略的其余项均为正。
+        why: 独立得到同一顺序 $c<b<a$。
+      source_ref: page_0145_ex08_solution
+    - step_id: step_5
+      statement: 对应选项。
+      formula_trace:
+        from: $c<b<a$
+        to: 选 D
+        operation: 与选项匹配。
+        why: 作答完成。
+      source_ref: page_0145_ex08_solution
+teaching_card:
+  student_title: 顺子幂两招：同构 + 展开
+  what_it_trains: 训练“顺子指数”题的双通路：一条是导数同构函数全局判序，一条是二项式展开逐级夹逼。
+  recognition_cues:
+    - 形如 $n^{m+2},(n+1)^{m+1},(n+2)^m$ 的互换结构。
+    - 题目恰好位于二项式定理比较小节。
+    - 选项给的是严格全序。
+  normalization_moves:
+    - 先尝试把三项写成 $(常数-x)\ln x$ 型。
+    - 再用展开估计做平行验证。
+    - 两条链一致时再定答案。
+  common_failures:
+    - 只凭“大指小底”直接猜顺序，忽略该题不适配单条口诀。
+    - 展开时把“其余项均为正”漏写，导致不等式依据不足。
+    - 函数法中未明确区间，导数判断不完整。
+  similar_practice_query: 7^9 8^8 9^7 二项式展开比较 顺子指数
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

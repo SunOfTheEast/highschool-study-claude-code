@@ -1,0 +1,206 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0151_ln_over_x2_graph_ex27
+content_revision_id: mst_p0151_ln_over_x2_graph_ex27-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0151_ln_over_x2_graph_ex27.card.yaml
+stem: |-
+  （2024·沙河口区月考）已知 $0<a<4$，$0<b<2$，$0<c<3$，且 $16\ln a=a^{2}\ln 4$，$4\ln b=b^{2}\ln 2$，$9\ln c=c^{2}\ln 3$，则（  ）
+  A. $c>b>a$
+  B. $c>a>b$
+  C. $a>c>b$
+  D. $b>c>a$
+answer: |
+  D
+
+  由条件可化为
+  \[
+  \frac{\ln a}{a^2}=\frac{\ln4}{4^2},\quad
+  \frac{\ln b}{b^2}=\frac{\ln2}{2^2},\quad
+  \frac{\ln c}{c^2}=\frac{\ln3}{3^2}.
+  \]
+  令
+  \[
+  f(x)=\frac{\ln x}{x^2}=\frac12\cdot\frac{\ln x^2}{x^2}
+  =\frac12\,g(x^2),\quad g(x)=\frac{\ln x}{x}.
+  \]
+  因 $g$ 在 $(0,e)$ 递增、在 $(e,+\infty)$ 递减，
+  得 $f$ 在 $(0,\sqrt e)$ 递增、在 $(\sqrt e,+\infty)$ 递减。
+  又 $f(2)>f(3)>f(4)$，故
+  \[
+  f(b)>f(c)>f(a).
+  \]
+  结合 $0<b<2,\ 0<c<3,\ 0<a<4$（排除右支点 $2,3,4$），
+  三个未知量都落在左支 $(0,\sqrt e)$，且该支递增，
+  所以
+  \[
+  \sqrt e>b>c>a>0,
+  \]
+  从而 $b>c>a$，选 D。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把三个条件统一成 $\frac{\ln x}{x^2}$ 同值方程。
+      max_score: 1
+    - step_id: step_2
+      description: 通过 $g(x)=\ln x/x$ 传递得到 $f$ 的单峰性。
+      max_score: 1
+    - step_id: step_3
+      description: 借助右支锚点与左支递增性锁定 $b,c,a$ 次序。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 六大同构函数比大小
+      - 统一到 $\ln x/x^2$
+      - 单峰左支反推点位
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $f(a)=f(4),f(b)=f(2),f(c)=f(3)$ 把未知量绑定到右支锚点。
+      - $f(x)=\frac12g(x^2)$ 继承 $g(x)=\ln x/x$ 的“先增后减”形态。
+      - 源图水平线直接给出左支对应顺序 $b,c,a$。
+    normalization_moves_used:
+      - 把系数方程改写成同值关系 $f(\cdot)=f(2/3/4)$。
+      - 用 $g(x)$ 中转避免直接求 $f^{\prime}(x)$。
+      - 先排除右支，再在左支按单调性比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $16\ln a=a^2\ln4$ 归一成函数同值，回补代数恒等变形。
+      - 若学生不知道 $\ln x/x$ 的单调区间，回补导数单调极值基础。
+      - 若学生不会读“同高线”对应点位，回补函数性质与图像。
+  detail_terms:
+    - $f(x)=\ln x/x^2$
+    - $g(x)=\ln x/x$
+    - $\sqrt e$
+    - $f(2)>f(3)>f(4)$
+    - 图像左支 $b,c,a$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0151_ln_over_x2_graph_ex27
+source_evidence:
+  source_refs:
+    - ref_id: page_0151_ex27_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0151/page_0151.md
+      role: problem_start
+      evidence: page_0151 例27完整给出：$0<a<4,0<b<2,0<c<3$，且 $16\ln a=a^2\ln4,\ 4\ln b=b^2\ln2,\ 9\ln c=c^2\ln3$。
+    - ref_id: page_0151_ex27_figure_and_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0151/page_0151.md
+      role: solution
+      evidence: 同页图像和解析将条件改写为 $f(a)=f(4),f(b)=f(2),f(c)=f(3)$，用 $f(x)=\frac{\ln x}{x^2}$ 的单峰性得到 $b>c>a$，选 D。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0151.png
+      inspected: true
+      notes: 已核对 page_0151 原图：例27配图显示 $y=\ln x/x^2$ 单峰曲线，水平对应关系支持“左支点位次序 $b>c>a$”。
+  source_context: 例27题干、图像、解析都在 page_0151；页面顶部例25续页与本题无归属关系。
+  source_influence:
+    - 保留源页把三式归一为 $\frac{\ln x}{x^2}$ 同值比较的主线。
+    - 保留源页中间桥接函数 $g(x)=\frac{\ln x}{x}$，即 $f(x)=\frac12g(x^2)$。
+    - 显式绑定原图中的单峰图像作为“右侧锚点 2/3/4 映射到左侧 $b/c/a$”证据。
+  source_discrepancies: []
+original_problem:
+  stem: （2024·沙河口区月考）已知 $0<a<4$，$0<b<2$，$0<c<3$，且 $16\ln a=a^{2}\ln 4$，$4\ln b=b^{2}\ln 2$，$9\ln c=c^{2}\ln 3$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $c>b>a$
+      text_latex: $c>b>a$
+    - label: B
+      text_raw: $c>a>b$
+      text_latex: $c>a>b$
+    - label: C
+      text_raw: $a>c>b$
+      text_latex: $a>c>b$
+    - label: D
+      text_raw: $b>c>a$
+      text_latex: $b>c>a$
+  answer: D
+  fidelity_notes:
+    - 题干和选项与 page_0151 原图一致。
+    - 本题图像是原解法证据的一部分，已在 source_evidence 与解法步骤中绑定。
+solution:
+  source_solution_summary: |
+    由条件可化为
+    \[
+    \frac{\ln a}{a^2}=\frac{\ln4}{4^2},\quad
+    \frac{\ln b}{b^2}=\frac{\ln2}{2^2},\quad
+    \frac{\ln c}{c^2}=\frac{\ln3}{3^2}.
+    \]
+    令
+    \[
+    f(x)=\frac{\ln x}{x^2}=\frac12\cdot\frac{\ln x^2}{x^2}
+    =\frac12\,g(x^2),\quad g(x)=\frac{\ln x}{x}.
+    \]
+    因 $g$ 在 $(0,e)$ 递增、在 $(e,+\infty)$ 递减，
+    得 $f$ 在 $(0,\sqrt e)$ 递增、在 $(\sqrt e,+\infty)$ 递减。
+    又 $f(2)>f(3)>f(4)$，故
+    \[
+    f(b)>f(c)>f(a).
+    \]
+    结合 $0<b<2,\ 0<c<3,\ 0<a<4$（排除右支点 $2,3,4$），
+    三个未知量都落在左支 $(0,\sqrt e)$，且该支递增，
+    所以
+    \[
+    \sqrt e>b>c>a>0,
+    \]
+    从而 $b>c>a$，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把三个条件统一成 $\frac{\ln x}{x^2}$ 同值方程。
+      formula_trace:
+        from: |
+          $16\ln a=a^2\ln4,\ 4\ln b=b^2\ln2,\ 9\ln c=c^2\ln3$
+        to: |
+          $f(a)=f(4),\ f(b)=f(2),\ f(c)=f(3)$，其中 $f(x)=\frac{\ln x}{x^2}$
+        operation: 各式同除以对应幂次，归一成“函数值相等”模板。
+        why: 把未知量比较转为同一函数左右两支的定位问题。
+      source_ref: page_0151_ex27_figure_and_solution
+    - step_id: step_2
+      statement: 通过 $g(x)=\ln x/x$ 传递得到 $f$ 的单峰性。
+      formula_trace:
+        from: |
+          $f(x)=\frac12g(x^2),\quad g(x)=\frac{\ln x}{x}$
+        to: |
+          $f(x)\ \text{在}\ (0,\sqrt e)\ \text{递增，在}\ (\sqrt e,+\infty)\ \text{递减}$
+        operation: 利用复合 $x^2$ 与 $g$ 的已知单调区间。
+        why: 确定图像为“先升后降”的单峰结构。
+      source_ref: page_0151_ex27_figure_and_solution
+    - step_id: step_3
+      statement: 借助右支锚点与左支递增性锁定 $b,c,a$ 次序。
+      formula_trace:
+        from: |
+          $f(2)>f(3)>f(4)$ 且 $f(b)=f(2),\ f(c)=f(3),\ f(a)=f(4)$
+        to: |
+          $f(b)>f(c)>f(a)\Rightarrow \sqrt e>b>c>a>0\Rightarrow b>c>a$
+        operation: 先由区间约束排除 $2,3,4$ 右支解，再在左支按递增反推出点位次序。
+        why: 与源图水平线对应关系一致，直接匹配选项 D。
+      source_ref: page_0151_ex27_figure_and_solution
+teaching_card:
+  student_title: 把三式压成同一个单峰函数，再用图像左支排顺序
+  what_it_trains: 训练“同值映射 + 单峰图像”联动：先锚定右支已知点，再反推左支未知点大小。
+  recognition_cues:
+    - 条件形如“常数 × ln(未知) = 未知幂 × 常数”。
+    - 每个未知量都附带上界（$a<4,b<2,c<3$），提示可排除右支解。
+    - 题目配了函数图，说明图像对应关系是核心证据。
+  normalization_moves:
+    - 归一出 $f(a)=f(4),f(b)=f(2),f(c)=f(3)$。
+    - 确认 $f$ 单峰后先看右支锚点高低。
+    - 转回左支递增关系得到 $b>c>a$。
+  common_failures:
+    - 只看到 $f(2)>f(3)>f(4)$ 就直接写 $2>3>4$ 式误读。
+    - 忘记用 $b<2,c<3,a<4$ 排除右支点。
+    - 把左支误当递减，导致顺序全反。
+  similar_practice_query: lnx/x^2 单峰 图像 左支反推 b>c>a
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

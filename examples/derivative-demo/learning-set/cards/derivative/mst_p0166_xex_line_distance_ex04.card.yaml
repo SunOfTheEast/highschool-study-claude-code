@@ -1,0 +1,149 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0166_xex_line_distance_ex04
+content_revision_id: mst_p0166_xex_line_distance_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0166_xex_line_distance_ex04.card.yaml
+stem: |-
+  （2024 · 山东临沂一中考前模拟 T5）若 x, y ∈ R，则 sqrt((x-y)^2+(xe^x-y+1)^2) 的最小值为（  ）
+  A. sqrt(2)/2
+  B. sqrt(2)
+  C. 1/2
+  D. sqrt(2)/e
+answer: |-
+  A
+
+  设 A(x,xe^x) 在曲线 y=xe^x 上，B(y,y-1) 在直线 y=x-1 上，则题设根式就是 |AB|。 要使曲线点到直线距离最小，曲线在最近点处切线与直线平行。对 f(x)=xe^x 有 f^{\prime}(x)=(x+1)e^x，令 f^{\prime}(x)=1 得 x=0， 切点是 (0,0)，该处切线为 y=x。于是最小距离是平行线 y=x 与 y=x-1 的距离 d=|1|/sqrt(2)=sqrt(2)/2，故选 A。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把根式表达式改写成两点距离。
+      max_score: 1
+    - step_id: step_2
+      description: 用平行切线条件定位最近点。
+      max_score: 1
+    - step_id: step_3
+      description: 计算两条平行线之间的距离。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何量求解
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 切线放缩与凹凸性
+    subroute:
+      - 平行切线最短距离
+      - 点到直线距离
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - f^{\prime}(x)=(x+1)e^x=1 => x=0
+      - 最近点切线 y=x 与目标直线 y=x-1 平行
+      - d=|1|/sqrt(2)
+    normalization_moves_used:
+      - 把根式二范数识别为平面两点距离。
+      - 把“最小距离”转为“切线斜率等于给定直线斜率”。
+      - 把两条直线写成同法向量形式后套平行线距离公式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把题设根式识别为点距，回补几何关系基础。
+      - 若学生不知道为何令 f^{\prime}(x)=1，回补导数运算与几何意义。
+      - 若学生平行线距离公式出错，回补几何关系基础。
+  detail_terms:
+    - y=xe^x
+    - y=x-1
+    - f^{\prime}(x)=(x+1)e^x
+    - 切点 (0,0)
+    - sqrt(2)/2
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0166_xex_line_distance_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0166
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0166/page_0166.md
+      role: problem_start
+      evidence: lines 16-23 给出例 4 的题干、选项和解析，题目把根式表达式转成 曲线 y=xe^x 与直线 y=x-1 上两点距离最小值，结论为 A。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0166.png
+      inspected: true
+      notes: 已核对页图：例 4 题干和四个选项与 markdown 一致；解析中出现 “y=e^x 上与 y=x-1 平行切线”字样，但切点 (0,0) 与结论只对应 y=xe^x。
+  source_context: page_0166 顶部是 page_0165 例 3 的续解，不属于本卡。例 4 是本页第一个新题头。
+  source_influence:
+    - 保留源解主线：把根式二范数改写成点到点距离，再用平行切线定位最短距离。
+    - 保留源解最终距离公式 d=1/sqrt(2)=sqrt(2)/2。
+  source_discrepancies:
+    - page_0166 解析写作“y=e^x 上与 y=x-1 平行切线…切点为 (0,0)”，与题干曲线 y=xe^x 及切点 (0,0) 不一致；按题干与计算链应为 y=xe^x。
+original_problem:
+  stem: （2024 · 山东临沂一中考前模拟 T5）若 x, y ∈ R，则 sqrt((x-y)^2+(xe^x-y+1)^2) 的最小值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: sqrt(2)/2
+      text_latex: $\frac{\sqrt{2}}{2}$
+    - label: B
+      text_raw: sqrt(2)
+      text_latex: $\sqrt{2}$
+    - label: C
+      text_raw: 1/2
+      text_latex: $\frac{1}{2}$
+    - label: D
+      text_raw: sqrt(2)/e
+      text_latex: $\frac{\sqrt{2}}{e}$
+  answer: A
+  fidelity_notes:
+    - 源题为单选题，选项与页图一致。
+    - 解析文字中“y=e^x”与后续切点 (0,0) 冲突，本卡按题干曲线 y=xe^x 执行。
+solution:
+  source_solution_summary: 设 A(x,xe^x) 在曲线 y=xe^x 上，B(y,y-1) 在直线 y=x-1 上，则题设根式就是 |AB|。 要使曲线点到直线距离最小，曲线在最近点处切线与直线平行。对 f(x)=xe^x 有 f^{\prime}(x)=(x+1)e^x，令 f^{\prime}(x)=1 得 x=0， 切点是 (0,0)，该处切线为 y=x。于是最小距离是平行线 y=x 与 y=x-1 的距离 d=|1|/sqrt(2)=sqrt(2)/2，故选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 把根式表达式改写成两点距离。
+      formula_trace:
+        from: sqrt((x-y)^2+(xe^x-y+1)^2)
+        to: 曲线 y=xe^x 上点 A 与直线 y=x-1 上点 B 的距离 |AB|
+        operation: 把两项分别识别为横纵坐标差。
+        why: 目标从代数最小值转成几何最短距离。
+      source_ref: page_0166:line 23
+    - step_id: step_2
+      statement: 用平行切线条件定位最近点。
+      formula_trace:
+        from: f(x)=xe^x, 目标直线斜率为 1
+        to: f^{\prime}(x)=(x+1)e^x=1 => x=0
+        operation: 令曲线切线斜率等于目标直线斜率。
+        why: 曲线到直线最短距离点的切线与该直线平行。
+      source_ref: page_0166:line 23
+    - step_id: step_3
+      statement: 计算两条平行线之间的距离。
+      formula_trace:
+        from: 切线 y=x 与直线 y=x-1
+        to: d=|1|/sqrt(2)=sqrt(2)/2
+        operation: 用平行线距离公式。
+        why: 该距离就是题设表达式的最小值。
+      source_ref: page_0166:line 23
+teaching_card:
+  student_title: 把根式最小值改写成点到直线最短距离
+  what_it_trains: 训练把二元根式最小值转成几何距离问题，再用“最近点切线平行于目标直线” 快速锁定切点并收尾计算。
+  recognition_cues:
+    - 表达式是 sqrt((Δx)^2+(Δy)^2) 形式。
+    - 其中一部分可识别为曲线 y=xe^x，另一部分可识别为直线 y=x-1。
+    - 题目问最小值，适合平行切线路线。
+  normalization_moves:
+    - 先把代数式翻译成曲线点到直线点的距离。
+    - 令 f^{\prime}(x)=1 找最近点。
+    - 算两条平行线 y=x 与 y=x-1 的距离。
+  common_failures:
+    - 直接对二元式硬求极值，忽略距离几何意义。
+    - 把 y=xe^x 误看成 y=e^x 导致切点错误。
+    - 距离公式分母忘记除以 sqrt(2)。
+  similar_practice_query: xe^x 到 y=x-1 最短距离 平行切线 点到直线距离
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0166 页图；解析中的“y=e^x”按题干与切点信息修正为 y=xe^x，不影响答案 A。

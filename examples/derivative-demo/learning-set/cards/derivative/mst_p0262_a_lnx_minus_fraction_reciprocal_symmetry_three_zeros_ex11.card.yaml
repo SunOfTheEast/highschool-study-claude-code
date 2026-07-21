@@ -1,0 +1,202 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0262_a_lnx_minus_fraction_reciprocal_symmetry_three_zeros_ex11
+content_revision_id: mst_p0262_a_lnx_minus_fraction_reciprocal_symmetry_three_zeros_ex11-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0262_a_lnx_minus_fraction_reciprocal_symmetry_three_zeros_ex11.card.yaml
+stem: （2025 · 北京朝阳 · 一模节选）已知函数 $f(x)=a\ln x-\frac{x-1}{x+1}$，$a\in\mathbf R$。若函数 $f(x)$ 有 3 个不同的零点，求 $a$ 的取值范围。
+answer: |-
+  $a\in(0,\frac12)$。
+
+  本题先看倒数对称：$f(1)=0$，且 $f(x)+f(\frac1x)=0$，所以如果 $x>1$ 有一个额外零点， 就会配出一个 $0<x<1$ 的零点，连同 $x=1$ 得三个零点。 因而只需研究 $x>1$。当 $a\ge\frac12$ 时，可用 $\ln x\ge\frac{2(x-1)}{x+1}$ 得 $f(x)\ge0$，没有右侧额外零点。 当 $a\le0$ 时，右侧也不会产生所需穿越。只有 $0<a<\frac12$ 时，$f^\prime(1)=a-\frac12<0$， 但 $x\to+\infty$ 时 $a\ln x-1\to+\infty$，所以在 $(1,+\infty)$ 先降后升并有唯一零点，倒数对称给出三个零点。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 识别 $x=1$ 是中间零点。
+      max_score: 1
+    - step_id: step_2
+      description: 识别倒数反对称。
+      max_score: 1
+    - step_id: step_3
+      description: 排除 $a\ge\frac12$。
+      max_score: 1
+    - step_id: step_4
+      description: 排除 $a\le0$。
+      max_score: 1
+    - step_id: step_5
+      description: 证明 $0<a<\frac12$ 时可行。
+      max_score: 1
+    - step_id: step_6
+      description: 合并参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: main
+        goal: 求参数范围
+        target: 第 main 问
+        result: $0<a<\frac12$。
+  method:
+    primary: 对称化与偏移
+    secondary:
+      - 显隐点探路
+      - 充分/必要性探路
+      - 含参数分类讨论
+    subroute:
+      - 倒数对称零点配对
+      - 中间零点 $x=1$
+      - 右侧唯一零点
+      - 参数分段排除
+  structure:
+    primary: 对称结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $f(x)+f(\frac1x)=0$
+      - $a\ln x-\frac{x-1}{x+1}$
+      - $x=1$ 中间零点
+      - $0<a<\frac12$
+    normalization_moves_used:
+      - 先用 $x\leftrightarrow\frac1x$ 把左右零点配对。
+      - 只研究 $x>1$ 是否有一个额外零点。
+      - 用 $\frac12$ 边界切分参数。
+      - 用远处 $a\ln x-1$ 的趋势找右侧穿越。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会处理 $f(\frac1x)$，回补函数性质与图像。
+      - 若学生不熟悉 $\ln x$ 的基本不等式，回补指数对数基础。
+      - 若学生不会从导数符号判断唯一零点，回补导数单调极值基础。
+      - 若学生不会通分 $f^\prime$，回补代数恒等变形。
+  detail_terms:
+    - $a\ln x-\frac{x-1}{x+1}$
+    - $f(x)+f(\frac1x)=0$
+    - $x=1$ 中间零点
+    - 倒数对称
+    - $0<a<\frac12$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0262_a_lnx_minus_fraction_reciprocal_symmetry_three_zeros_ex11
+source_evidence:
+  source_refs:
+    - ref_id: page_0262_ex11_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0262/page_0262.md
+      role: problem_start
+      evidence: page_0262 给出例11题头：$f(x)=a\ln x-\frac{x-1}{x+1}$，若函数有 3 个不同零点，求 $a$。
+    - ref_id: page_0262_ex11_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0262/page_0262.md
+      role: solution
+      evidence: page_0262 页底解析开头：$f(1)=0$，$f(x)+f(\frac1x)=0$，三零点只需研究 $(1,+\infty)$ 上的唯一零点。
+    - ref_id: page_0263_ex11_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0263/page_0263.md
+      role: solution
+      evidence: page_0263 页首延续例11：当 $a\ge\frac12$ 时无右侧额外零点；当 $0<a<\frac12$ 时右侧先降后升并有一个零点，结论 $a\in(0,\frac12)$。
+    - ref_id: page_0263_next_section_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0263/page_0263.md
+      role: local_context
+      evidence: page_0263 随后进入“第二节 极点效应探路”，说明例11闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0262.png
+      inspected: true
+      notes: 已核对页图：例11题头和解析开头位于 page_0262 页底。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0263.png
+      inspected: true
+      notes: 已核对页图：page_0263 页首为例11续解，随后进入新节。
+  source_context: 本卡处理 page_0262 起头、page_0263 页首续完的例11；page_0263 新节理论与后续例题排除。
+  source_influence:
+    - 保留倒数反对称：$f(1)=0$，$f(x)+f(\frac1x)=0$。
+    - 保留把三零点问题降到 $x>1$ 侧是否有唯一额外零点。
+    - 保留边界 $\frac12$：$a\ge\frac12$ 时右侧非负，$0<a<\frac12$ 时右侧先负后正。
+  source_discrepancies:
+    - type: tightened_derivative_relation
+      source_ref: page_0263_ex11_solution_continuation
+      observed: source writes $f^\prime(x)=\frac{a}{x}-\frac2{(x+1)^2}\ge\frac{a(x+1)^2-2x}{x(x+1)^2}$.
+      resolved_as: "use equality: $f^\\prime(x)=\\frac{a(x+1)^2-2x}{x(x+1)^2}$."
+      reason: The denominator is exactly the common denominator; no inequality is needed.
+    - type: corrected_boundary_value_wording
+      source_ref: page_0263_ex11_solution_continuation
+      observed: source wording around $a\le0$ says $g(1)=0$ after defining $g(x)=a(x+1)^2-2x$.
+      resolved_as: use $g(1)=4a-2<0$ when $a\le0$.
+      reason: "This supports the same conclusion: no right-side extra zero."
+original_problem:
+  stem: （2025 · 北京朝阳 · 一模节选）已知函数 $f(x)=a\ln x-\frac{x-1}{x+1}$，$a\in\mathbf R$。若函数 $f(x)$ 有 3 个不同的零点，求 $a$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $a\in(0,\frac12)$。
+  fidelity_notes:
+    - 求参题，无选项、无分问。
+    - 题头跨页，page_0263 页首给出最终结论。
+solution:
+  source_solution_summary: 本题先看倒数对称：$f(1)=0$，且 $f(x)+f(\frac1x)=0$，所以如果 $x>1$ 有一个额外零点， 就会配出一个 $0<x<1$ 的零点，连同 $x=1$ 得三个零点。 因而只需研究 $x>1$。当 $a\ge\frac12$ 时，可用 $\ln x\ge\frac{2(x-1)}{x+1}$ 得 $f(x)\ge0$，没有右侧额外零点。 当 $a\le0$ 时，右侧也不会产生所需穿越。只有 $0<a<\frac12$ 时，$f^\prime(1)=a-\frac12<0$， 但 $x\to+\infty$ 时 $a\ln x-1\to+\infty$，所以在 $(1,+\infty)$ 先降后升并有唯一零点，倒数对称给出三个零点。
+  key_steps:
+    - step_id: step_1
+      statement: 识别 $x=1$ 是中间零点。
+      formula_trace:
+        from: $f(x)=a\ln x-\frac{x-1}{x+1}$
+        to: $f(1)=0$
+        operation: 代入 $x=1$。
+        why: 三零点问题先抓中间显点。
+      source_ref: page_0262_ex11_solution_start
+    - step_id: step_2
+      statement: 识别倒数反对称。
+      formula_trace:
+        from: $f(\frac1x)=a\ln\frac1x-\frac{\frac1x-1}{\frac1x+1}$
+        to: $f(x)+f(\frac1x)=0$
+        operation: 化简 $\ln\frac1x=-\ln x$ 和分式。
+        why: 右侧零点会自动配出左侧零点。
+      source_ref: page_0262_ex11_solution_start
+    - step_id: step_3
+      statement: 排除 $a\ge\frac12$。
+      formula_trace:
+        from: $a\ln x-\frac{x-1}{x+1}$，$x>1$
+        to: $f(x)\ge\frac12(\ln x-\frac{2(x-1)}{x+1})\ge0$
+        operation: 用 pade/经典不等式压住右侧。
+        why: 右侧没有额外零点。
+      source_ref: page_0263_ex11_solution_continuation
+    - step_id: step_4
+      statement: 排除 $a\le0$。
+      formula_trace:
+        from: $g(x)=a(x+1)^2-2x$
+        to: $x>1$ 时 $g(x)<0$，右侧单调不产生额外穿越
+        operation: 用导数符号排除。
+        why: 非正参数不能形成三零点。
+      source_ref: page_0263_ex11_solution_continuation
+    - step_id: step_5
+      statement: 证明 $0<a<\frac12$ 时可行。
+      formula_trace:
+        from: $f^\prime(1)=a-\frac12<0$，且 $a\ln x-1\to+\infty$
+        to: $(1,+\infty)$ 有唯一额外零点
+        operation: 先降后升，并用远处正值找点。
+        why: 倒数对称再配出左侧零点，总共三个。
+      source_ref: page_0263_ex11_solution_continuation
+    - step_id: step_6
+      statement: 合并参数范围。
+      formula_trace:
+        from: 只剩 $0<a<\frac12$ 可行
+        to: $a\in(0,\frac12)$
+        operation: 合并必要性和充分性。
+        why: 完成三零点求参。
+      source_ref: page_0263_ex11_solution_continuation
+teaching_card:
+  student_title: 用倒数对称把三个零点缩成右侧一个零点
+  what_it_trains: 训练倒数型三零点：先锁 $x=1$，再用 $x$ 和 $\frac1x$ 的反对称把左右零点成对处理。
+  recognition_cues:
+    - 题目里有 $\ln x$ 和 $\frac{x-1}{x+1}$。
+    - 代入 $x=1$ 直接为零。
+    - 把 $x$ 换成 $\frac1x$ 后，函数值刚好变号。
+    - 参数边界是 $a=\frac12$，对应右侧刚好不再穿越。
+  normalization_moves:
+    - 先证明 $f(x)+f(\frac1x)=0$。
+    - 只在 $x>1$ 找一个零点。
+    - 分段排除 $a\ge\frac12$ 和 $a\le0$，剩下 $0<a<\frac12$。
+  common_failures:
+    - 直接在全定义域找三个零点，漏掉倒数配对。
+    - 把 $a=\frac12$ 边界误纳入答案。
+    - 通分导数时把等号写成不等号，导致判号混乱。
+  similar_practice_query: 倒数对称 a ln x (x-1)/(x+1) 三个零点 x=1 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

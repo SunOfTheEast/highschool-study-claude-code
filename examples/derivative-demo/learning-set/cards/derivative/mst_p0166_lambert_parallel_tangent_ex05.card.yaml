@@ -1,0 +1,165 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0166_lambert_parallel_tangent_ex05
+content_revision_id: mst_p0166_lambert_parallel_tangent_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0166_lambert_parallel_tangent_ex05.card.yaml
+stem: |-
+  （2023 · 江西南昌八一中学三模 T12）在同一平面直角坐标系中，P，Q 分别是函数 f(x)=axe^x-ln(ax) 和 g(x)=2ln(x-1)/x 图象上的动点，若对任意 a>0，有 |PQ|>=m 恒成立，则实数 m 的最大值为（  ）
+  A. sqrt(3)
+  B. 3sqrt(2)/2
+  C. sqrt(2)
+  D. sqrt(5)/2
+answer: |-
+  B
+
+  对 f(x)=axe^x-ln(ax)，源解先做朗博同构： f(x)=e^{x+ln(ax)}-ln(ax)=(e^{x+ln(ax)}-x-ln(ax)-1)+x+1>=x+1， 所以 y=x+1 是 f 的支撑切线。接着在 g(x)=2ln(x-1)/x 上构造斜率为 1 的切线，g^{\prime}(x)=((2x/(x-1))-2ln(x-1))/x^2，令 g^{\prime}(x)=1 得 x=2，且 g(2)=0，切线为 y=x-2。两条平行线 y=x+1 与 y=x-2 的距离 d=3/sqrt(2)=3sqrt(2)/2，因此恒有 |PQ|>=m 时必有 m<=d，故 m 的最大值是 3sqrt(2)/2，选 B。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 用朗博同构把 f(x) 放缩到直线 y=x+1。
+      max_score: 1
+    - step_id: step_2
+      description: 在 g(x) 上构造同斜率切线。
+      max_score: 1
+    - step_id: step_3
+      description: 计算平行切线距离并给出 m 的上界。
+      max_score: 1
+    - step_id: step_4
+      description: 转为“最大值”答案。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 数形结合
+      - 切线放缩与凹凸性
+    subroute:
+      - 朗博同构
+      - 切线找点
+      - 平行切线最短距离
+  structure:
+    primary: 同构结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 指对复合结构
+    evidence:
+      - f(x)=(e^{x+ln(ax)}-x-ln(ax)-1)+x+1>=x+1
+      - g^{\prime}(x)=1 时 x=2，切线 y=x-2
+      - d=3/sqrt(2)
+    normalization_moves_used:
+      - 把 axe^x 改写为 e^{x+ln(ax)}。
+      - 补出 e^t-t-1 模板得到支撑直线 y=x+1。
+      - 把恒成立下界问题转成两条平行切线的距离上界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会配出 e^t-t-1，回补指数对数基础。
+      - 若学生不会从切线斜率条件列 g^{\prime}(x)=1，回补导数运算与几何意义。
+      - 若学生把“m 的最大值”与“距离最小值”关系混淆，回补函数性质与图像。
+      - 若学生平行线距离公式出错，回补几何关系基础。
+  detail_terms:
+    - f(x)=axe^x-ln(ax)
+    - g(x)=2ln(x-1)/x
+    - e^{x+ln(ax)}-x-ln(ax)-1
+    - g^{\prime}(x)=1 => x=2
+    - y=x+1 与 y=x-2
+    - 3sqrt(2)/2
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0166_lambert_parallel_tangent_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0166
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0166/page_0166.md
+      role: problem_start
+      evidence: lines 27-34 给出例 5 的题干、选项与完整解析：先把 f(x)=axe^x-ln(ax) 写成朗博同构链，再构造 g(x) 斜率为 1 的切线， 最后用两条平行切线距离得到答案 B。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0166.png
+      inspected: true
+      notes: 已核对页图：例 5 的题干、四个选项、同构化公式链与 d=3/sqrt(2)=3sqrt(2)/2 一致，答案为 B。
+  source_context: 例 5 位于小节“朗博同构构造切线制造最小距离差”下，是本页新题头； page_0166 顶部例 3 续解不属于本卡。
+  source_influence:
+    - 完整保留源解同构链：e^{x+ln(ax)}-ln(ax)=(e^{x+ln(ax)}-x-ln(ax)-1)+x+1。
+    - 完整保留源解切线构造链：g^{\prime}(x)=1 => x=2 => 切线 y=x-2。
+    - 保留源解结论形式：m<=3sqrt(2)/2，故 m 的最大值是 3sqrt(2)/2。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 江西南昌八一中学三模 T12）在同一平面直角坐标系中，P，Q 分别是函数 f(x)=axe^x-ln(ax) 和 g(x)=2ln(x-1)/x 图象上的动点，若对任意 a>0，有 |PQ|>=m 恒成立，则实数 m 的最大值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: sqrt(3)
+      text_latex: $\sqrt{3}$
+    - label: B
+      text_raw: 3sqrt(2)/2
+      text_latex: $\frac{3}{2}\sqrt{2}$
+    - label: C
+      text_raw: sqrt(2)
+      text_latex: $\sqrt{2}$
+    - label: D
+      text_raw: sqrt(5)/2
+      text_latex: $\frac{\sqrt{5}}{2}$
+  answer: B
+  fidelity_notes:
+    - 源题为单选题，选项与页图一致。
+    - 题干含 ln(ax) 与 ln(x-1)，默认定义域分别要求 ax>0、x>1。
+solution:
+  source_solution_summary: 对 f(x)=axe^x-ln(ax)，源解先做朗博同构： f(x)=e^{x+ln(ax)}-ln(ax)=(e^{x+ln(ax)}-x-ln(ax)-1)+x+1>=x+1， 所以 y=x+1 是 f 的支撑切线。接着在 g(x)=2ln(x-1)/x 上构造斜率为 1 的切线，g^{\prime}(x)=((2x/(x-1))-2ln(x-1))/x^2，令 g^{\prime}(x)=1 得 x=2，且 g(2)=0，切线为 y=x-2。两条平行线 y=x+1 与 y=x-2 的距离 d=3/sqrt(2)=3sqrt(2)/2，因此恒有 |PQ|>=m 时必有 m<=d，故 m 的最大值是 3sqrt(2)/2，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 用朗博同构把 f(x) 放缩到直线 y=x+1。
+      formula_trace:
+        from: f(x)=axe^x-ln(ax)
+        to: f(x)=e^{x+ln(ax)}-ln(ax)=(e^{x+ln(ax)}-x-ln(ax)-1)+x+1>=x+1
+        operation: 把 axe^x 写成 e^{x+ln(ax)}，再补出 e^t-t-1 模板。
+        why: 得到参数 a 下统一的斜率 1 支撑线。
+      source_ref: page_0166:line 34
+    - step_id: step_2
+      statement: 在 g(x) 上构造同斜率切线。
+      formula_trace:
+        from: g(x)=2ln(x-1)/x
+        to: g^{\prime}(x)=((2x/(x-1))-2ln(x-1))/x^2=1 => x=2, 切线 y=x-2
+        operation: 求导并令切线斜率等于 1；再代入点 (2,g(2))=(2,0)。
+        why: 两条斜率同为 1 的切线给出可比较的最短间隔。
+      source_ref: page_0166:line 34
+    - step_id: step_3
+      statement: 计算平行切线距离并给出 m 的上界。
+      formula_trace:
+        from: y=x+1 与 y=x-2
+        to: d=|1-(-2)|/sqrt(2)=3/sqrt(2)=3sqrt(2)/2, 所以 m<=d
+        operation: 用平行线距离公式。
+        why: 任意 P,Q 的下界 m 不能超过这两条支撑线之间的距离。
+      source_ref: page_0166:line 34
+    - step_id: step_4
+      statement: 转为“最大值”答案。
+      formula_trace:
+        from: m<=3sqrt(2)/2
+        to: m_max=3sqrt(2)/2
+        operation: 把恒成立条件改写为参数上界。
+        why: 题目要的是 m 的最大可取值。
+      source_ref: page_0166:line 34
+teaching_card:
+  student_title: 先做朗博同构，再用平行切线卡住 m
+  what_it_trains: 训练“同构放缩 + 切线构造 + 平行线距离”三段式：先把复杂函数压到线性支撑线， 再在另一函数上找同斜率切线，最后把参数上界读成几何距离。
+  recognition_cues:
+    - 题目同时出现 xe^x 与 ln 结构，且问“对任意…恒成立”。
+    - 目标量是动点距离下界 m。
+    - 解析可自然走到 e^t-t-1 与平行切线。
+  normalization_moves:
+    - 把 axe^x 改写为 e^{x+ln(ax)}。
+    - 先锁定 f 的支撑线 y=x+1。
+    - 在 g 上令导数等于 1 找切线 y=x-2。
+    - 由平行线距离得到 m 的上界并取最大值。
+  common_failures:
+    - 朗博同构时漏掉 -1+1，配不出标准模板。
+    - 只求出 g^{\prime}(x)=1 的点，忘记写切线方程。
+    - 算出 d 后直接当 m，而未先说明 m<=d 的逻辑。
+  similar_practice_query: 朗博同构 平行切线 距离下界 m xe^x ln 参数最大值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

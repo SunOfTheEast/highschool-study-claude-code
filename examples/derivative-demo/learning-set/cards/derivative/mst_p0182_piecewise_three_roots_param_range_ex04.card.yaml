@@ -1,0 +1,150 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0182_piecewise_three_roots_param_range_ex04
+content_revision_id: mst_p0182_piecewise_three_roots_param_range_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0182_piecewise_three_roots_param_range_ex04.card.yaml
+stem: |-
+  （2020 · 赤峰模拟 T12）设函数 $f(x)=\begin{cases}e^x+1,&x\ge0\\ |x^2+2x|,&x<0\end{cases}$，若函数 $g(x)=f(x)-ax-1$ 有三个零点，则 $a$ 的取值范围为（  ）
+  A. $\left(0,\frac12\right)$
+  B. $(e,+\infty)$
+  C. $\left(0,\frac12\right)\cup(e,e^2)$
+  D. $\left(0,\frac12\right)\cup(e,+\infty)$
+answer: |-
+  D
+
+  $g(x)=0$ 等价于 $f(x)=ax+1$，所以问题变成过定点 $(0,1)$ 的直线与分段函数图象有三个交点。由图可读： $a<0$ 时只有一个交点，$a=0$ 时有两个交点， $0<a<\frac12$ 时有三个交点；右侧指数支上，$a=e$ 时 $y=ex+1$ 与 $y=e^x+1$ 相切，此时只有两个交点，$a>e$ 时有三个交点，而 $\frac12<a<e$ 时只有一个交点。因此 $a\in(0,\frac12)\cup(e,+\infty)$，选 D。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把零点个数改成交点个数。
+      max_score: 1
+    - step_id: step_2
+      description: 分析左侧 $x<0$ 的斜率阈值。
+      max_score: 1
+    - step_id: step_3
+      description: 分析右侧指数支的切线阈值。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 切线放缩与凹凸性
+      - 含参数分类讨论
+    subroute:
+      - 零点等效交点
+      - 过定点直线斜率分类
+      - 指数切线阈值 $a=e$
+  structure:
+    primary: 分段函数结构
+    secondary:
+      - Max/Min 与绝对值结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $f(x)=e^x+1\ (x\ge0)$
+      - $f(x)=|x^2+2x|\ (x<0)$
+      - $y=ax+1$ 恒过 $(0,1)$
+    normalization_moves_used:
+      - 把 $g(x)$ 零点转成 $f(x)$ 与直线交点。
+      - 按斜率分界值 $0,\frac12,e$ 分类。
+      - 用相切和交点数读出参数区间。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把零点转成图象交点，回补函数性质与图像。
+      - 若学生读不出分段函数左右两支，回补分段/复合/反函数基础。
+      - 若学生不理解 $a=e$ 的切线阈值，回补导数运算与几何意义。
+  detail_terms:
+    - $g(x)=f(x)-ax-1$
+    - $y=ax+1$
+    - $|x^2+2x|$
+    - $e^x+1$
+    - $a\in(0,\frac12)\cup(e,+\infty)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0182_piecewise_three_roots_param_range_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0182
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0182/page_0182.md
+      role: problem_start
+      evidence: "page_0182 contains 例4 full statement, choices A-D, graph, and solution: convert three zeros of $g(x)=f(x)-ax-1$ into three intersections of $f(x)$ and $y=ax+1$, then read the slope intervals from the graph."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0182.png
+      inspected: true
+      notes: 页图核对通过：例4题干、分段函数、选项与解析图一致；图中明确标出 $a=0$、$0<a<\frac12$、$a=\frac12$、$a=e$、$a>e$ 等斜率情形。
+  source_context: 本题属于“零点与图象交点”等效转换，图像是解题证据的一部分。
+  source_influence:
+    - 保留源解把 $g(x)$ 的零点转为 $f(x)$ 与过定点直线 $y=ax+1$ 的交点。
+    - 保留源图对斜率区间的分类读法。
+  source_discrepancies: []
+original_problem:
+  stem: （2020 · 赤峰模拟 T12）设函数 $f(x)=\begin{cases}e^x+1,&x\ge0\\ |x^2+2x|,&x<0\end{cases}$，若函数 $g(x)=f(x)-ax-1$ 有三个零点，则 $a$ 的取值范围为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\left(0,\frac12\right)$
+      text_latex: $\left(0,\frac12\right)$
+    - label: B
+      text_raw: $(e,+\infty)$
+      text_latex: $(e,+\infty)$
+    - label: C
+      text_raw: $\left(0,\frac12\right)\cup(e,e^2)$
+      text_latex: $\left(0,\frac12\right)\cup(e,e^2)$
+    - label: D
+      text_raw: $\left(0,\frac12\right)\cup(e,+\infty)$
+      text_latex: $\left(0,\frac12\right)\cup(e,+\infty)$
+  answer: D
+  fidelity_notes:
+    - 源题为单选题，选项 A-D 已完整保留。
+    - 源解依赖图象分类，本卡将图象作为 source evidence 绑定。
+solution:
+  source_solution_summary: $g(x)=0$ 等价于 $f(x)=ax+1$，所以问题变成过定点 $(0,1)$ 的直线与分段函数图象有三个交点。由图可读： $a<0$ 时只有一个交点，$a=0$ 时有两个交点， $0<a<\frac12$ 时有三个交点；右侧指数支上，$a=e$ 时 $y=ex+1$ 与 $y=e^x+1$ 相切，此时只有两个交点，$a>e$ 时有三个交点，而 $\frac12<a<e$ 时只有一个交点。因此 $a\in(0,\frac12)\cup(e,+\infty)$，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把零点个数改成交点个数。
+      formula_trace:
+        from: $g(x)=f(x)-ax-1=0$
+        to: $f(x)=ax+1$
+        operation: 移项。
+        why: 过定点直线与分段函数图象的交点数可以直接从图象分类。
+      source_ref: page_0182
+    - step_id: step_2
+      statement: 分析左侧 $x<0$ 的斜率阈值。
+      formula_trace:
+        from: $y=ax+1$ 与 $|x^2+2x|$
+        to: $0<a<\frac12$ 给出左侧配合下的三个交点情形
+        operation: 利用源图中 $a=0$、$a=\frac12$ 的分界线读交点个数。
+        why: 左侧绝对值二次支决定第一个有效区间。
+      source_ref: page_0182
+    - step_id: step_3
+      statement: 分析右侧指数支的切线阈值。
+      formula_trace:
+        from: $e^x+1$ 与 $ax+1$
+        to: $a=e$ 为相切分界，$a>e$ 时有三个交点
+        operation: 由 $y=e^x+1$ 在 $x=1$ 处切线斜率 $e$ 读出分界。
+        why: 右侧指数支决定第二个有效区间。
+      source_ref: page_0182
+teaching_card:
+  student_title: 过定点直线扫分段图象
+  what_it_trains: 训练把零点个数问题换成“过定点直线扫图象”的斜率分类，尤其处理左侧绝对值二次和右侧指数支的不同分界。
+  recognition_cues:
+    - 题目问 $f(x)-ax-1$ 的零点个数。
+    - 直线 $y=ax+1$ 恒过定点。
+    - 源图给出了多条不同斜率的直线。
+  normalization_moves:
+    - 先写成 $f(x)=ax+1$。
+    - 分左右两段读图象。
+    - 记录斜率临界值并取开区间。
+  common_failures:
+    - 忘记 $a=e$ 相切时交点数减少。
+    - 把 $a=\frac12$ 边界误纳入。
+    - 只看右侧指数支，漏掉左侧绝对值二次支。
+  similar_practice_query: 分段函数 零点个数 过定点直线 ax+1 三个交点
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

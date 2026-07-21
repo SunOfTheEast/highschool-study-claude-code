@@ -1,0 +1,158 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0263_expx_minus1_over_x_vs_ax_extreme_probe_ex1
+content_revision_id: mst_p0263_expx_minus1_over_x_vs_ax_extreme_probe_ex1-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0263_expx_minus1_over_x_vs_ax_extreme_probe_ex1.card.yaml
+stem: （2024 · 武汉四调节选）已知函数 $f(x)=\frac{e^x-1}{x}$。若 $f(x)>a^x$，其中 $a>0$ 且 $a\ne1$，求实数 $a$ 的值。
+answer: |-
+  $a=\sqrt e$。
+
+  令 $g(x)=\frac{e^x-1}{x}-a^x$。由于 $x\to0$ 时两边都趋近 $1$，要让严格不等式在 0 的两侧都成立，接触点的一阶项必须相等。 展开或按 source 的洛必达路线可得 $\lim_{x\to0}g^\prime(x)=\frac12-\ln a=0$，所以 $a=\sqrt e$。充分性可直接验证：当 $a=\sqrt e$ 时， $\frac{e^x-1}{x}>e^{x/2}$ 等价于 $\frac{2\sinh(x/2)}{x}>1$，对 $x\ne0$ 恒成立。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 构造差函数并看 0 附近的接触。
+      max_score: 1
+    - step_id: step_2
+      description: 由极点效应确定参数。
+      max_score: 1
+    - step_id: step_3
+      description: 补全 $a=\sqrt e$ 的充分性。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level:
+      - part_id: main
+        goal: 数值求值
+        target: 第 main 问
+        result: $a=\sqrt e$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 局部逼近与找点
+      - 充分/必要性探路
+    subroute:
+      - 开区间极点效应
+      - $x\to0$ 接触
+      - 一阶项锁参
+      - 充分性回证
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 局部逼近结构
+      - 双曲函数结构
+      - 不等式工具结构
+    evidence:
+      - $\frac{e^x-1}{x}$
+      - $a^x$
+      - $x\to0$
+      - $\frac{2\sinh(x/2)}{x}>1$
+    normalization_moves_used:
+      - 把 0 当作开区间极点，而不是普通代入点。
+      - 比较两边在 0 附近的一阶项。
+      - 用双曲正弦形式补全严格不等式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会处理 $x\to0$ 极限，回补函数性质与图像。
+      - 若学生不熟悉 $e^x$ 的展开，回补指数对数基础。
+      - 若学生不会把必要性回证为充分性，回补不等式工具基础。
+  detail_terms:
+    - $\frac{e^x-1}{x}$
+    - $a^x$
+    - $x\to0$ 极点
+    - $a=\sqrt e$
+    - $2\sinh(x/2)>x$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0263_expx_minus1_over_x_vs_ax_extreme_probe_ex1
+source_evidence:
+  source_refs:
+    - ref_id: page_0263_section_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0263/page_0263.md
+      role: local_context
+      evidence: page_0263 进入“第二节 极点效应探路 / 开区间极点效应”，本题属于该节开头例1。
+    - ref_id: page_0263_ex1_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0263/page_0263.md
+      role: problem_start
+      evidence: page_0263 给出例1题头：$f(x)=\frac{e^x-1}{x}$，若 $f(x)>a^x$，其中 $a>0$ 且 $a\ne1$，求 $a$。
+    - ref_id: page_0263_ex1_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0263/page_0263.md
+      role: solution
+      evidence: page_0263 例1解析构造 $g(x)=\frac{e^x-1}{x}-a^x$，由极点效应取 $\lim_{x\to0}g^\prime(x)=0$，得 $\ln a=\frac12$，即 $a=\sqrt e$，并注明后续自证。
+    - ref_id: page_0263_ex2_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0263/page_0263.md
+      role: local_context
+      evidence: 例1后另起例2，说明例1在本页闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0263.png
+      inspected: true
+      notes: 已核对页图：例1位于 page_0263 中部，在例2前闭合。
+  source_context: 本卡处理 page_0263 起头并在本页闭合的例1；例2另起。
+  source_influence:
+    - 保留 source 的极点效应思路：在 $x\to0$ 的极限接触处令一阶项相等。
+    - 保留 $a=\sqrt e$ 的必要性。
+    - 补全 source 留作“自证”的充分性证明。
+  source_discrepancies:
+    - type: completed_source_omitted_sufficiency
+      source_ref: page_0263_ex1_solution
+      observed: source derives $a=\sqrt e$ and writes the remaining proof as 自证.
+      resolved_as: "card adds the sufficiency proof: for $a=\\sqrt e$, $\\frac{e^x-1}{x e^{x/2}}=\\frac{2\\sinh(x/2)}{x}>1$ for $x\\ne0$."
+      reason: This proves the strict inequality on both sides of 0 and keeps the source result.
+original_problem:
+  stem: （2024 · 武汉四调节选）已知函数 $f(x)=\frac{e^x-1}{x}$。若 $f(x)>a^x$，其中 $a>0$ 且 $a\ne1$，求实数 $a$ 的值。
+  parts: *a1
+  choices: []
+  answer: $a=\sqrt e$。
+  fidelity_notes:
+    - 求值题，无选项、无分问。
+    - 函数 $f$ 在 $x=0$ 处未定义，source 使用 $x\to0$ 的极点效应。
+solution:
+  source_solution_summary: 令 $g(x)=\frac{e^x-1}{x}-a^x$。由于 $x\to0$ 时两边都趋近 $1$，要让严格不等式在 0 的两侧都成立，接触点的一阶项必须相等。 展开或按 source 的洛必达路线可得 $\lim_{x\to0}g^\prime(x)=\frac12-\ln a=0$，所以 $a=\sqrt e$。充分性可直接验证：当 $a=\sqrt e$ 时， $\frac{e^x-1}{x}>e^{x/2}$ 等价于 $\frac{2\sinh(x/2)}{x}>1$，对 $x\ne0$ 恒成立。
+  key_steps:
+    - step_id: step_1
+      statement: 构造差函数并看 0 附近的接触。
+      formula_trace:
+        from: $\frac{e^x-1}{x}>a^x$
+        to: $g(x)=\frac{e^x-1}{x}-a^x$，且 $x\to0$ 时 $g(x)\to0$
+        operation: 移项构造差函数。
+        why: 开区间极点效应先看接触点附近的一阶项。
+      source_ref: page_0263_ex1_solution
+    - step_id: step_2
+      statement: 由极点效应确定参数。
+      formula_trace:
+        from: $\lim_{x\to0}g^\prime(x)=\frac12-\ln a$
+        to: $\ln a=\frac12$，$a=\sqrt e$
+        operation: 令极点处一阶项相等。
+        why: 否则在 0 的一侧会穿破严格不等式。
+      source_ref: page_0263_ex1_solution
+    - step_id: step_3
+      statement: 补全 $a=\sqrt e$ 的充分性。
+      formula_trace:
+        from: $\frac{e^x-1}{x}>e^{x/2}$
+        to: $\frac{2\sinh(x/2)}{x}>1$
+        operation: 同除 $e^{x/2}$ 并化成双曲正弦。
+        why: $\sinh y/y>1$ 对 $y\ne0$ 成立，故严格不等式成立。
+      source_ref: page_0263_ex1_solution
+teaching_card:
+  student_title: 开区间极点：让 0 附近的一阶项刚好贴住
+  what_it_trains: 训练开区间极点效应：题目不让代 $x=0$，但两边都在 0 附近接触，参数由一阶项决定。
+  recognition_cues:
+    - $\frac{e^x-1}{x}$ 在 $x=0$ 没定义，但极限存在。
+    - 右侧是 $a^x$，在 $x=0$ 附近也趋近 1。
+    - 严格不等式要两侧都成立，必须一阶项刚好相等。
+  normalization_moves:
+    - 先构造差函数，不急着全局求导。
+    - 用 $x\to0$ 锁出 $a=\sqrt e$。
+    - 再补充分性证明，不能只停在必要条件。
+  common_failures:
+    - 把 $x=0$ 当作定义域内点直接代入。
+    - 只得到 $a=\sqrt e$，没证明全体 $x\ne0$ 都成立。
+    - 忽略严格不等式在 0 两侧的方向。
+  similar_practice_query: 开区间极点 (e^x-1)/x a^x x趋于0 一阶项 sqrt(e)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

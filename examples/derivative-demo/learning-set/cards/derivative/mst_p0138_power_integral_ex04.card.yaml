@@ -1,0 +1,184 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0138_power_integral_ex04
+content_revision_id: mst_p0138_power_integral_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0138_power_integral_ex04.card.yaml
+stem: |-
+  （2023·长沙月考）设函数 $f(x)$ 在 $\mathbf{R}$ 上的导函数为 $f^{\prime}(x)$，且 $2f(x)+xf^{\prime}(x)>x$，则下面的不等式在 $\mathbf{R}$ 上恒成立的是（ ）
+  A. $f(x)>0$
+  B. $f(x)<0$
+  C. $f(x)>\frac{x}{3}$
+  D. $f(x)<\frac{x}{3}$
+answer: |
+  C
+
+  按源页构造
+  \[
+  g(x)=x^2f(x)-\frac{x^3}{3},
+  \]
+  则
+  \[
+  g^{\prime}(x)=2xf(x)+x^2f^{\prime}(x)-x^2=x\bigl(2f(x)+xf^{\prime}(x)-x\bigr).
+  \]
+  由题设 $2f(x)+xf^{\prime}(x)-x>0$，可得：
+  当 $x>0$ 时，$g^{\prime}(x)>0$；当 $x<0$ 时，$g^{\prime}(x)<0$。
+  因而 $g$ 在 $(0,+\infty)$ 递增、在 $(-\infty,0)$ 递减，且 $g(0)=0$。
+  所以任意 $x\neq0$ 都有 $g(x)>0$，即
+  \[
+  x^2\!\left(f(x)-\frac{x}{3}\right)>0 \Rightarrow f(x)>\frac{x}{3}.
+  \]
+  又 $x=0$ 时题设给出 $2f(0)>0$，故 $f(0)>0=f(0)-0$ 亦满足。
+  因此恒成立的是 C。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 将题设转成可判单调的构造函数导数。
+      max_score: 1
+    - step_id: step_2
+      description: 按 x 的符号分段确定 g 的单调。
+      max_score: 1
+    - step_id: step_3
+      description: 由 g 与 g(0) 的比较还原目标不等式。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 判定恒成立不等式选项
+        result: 见 source_solution_summary
+  method:
+    primary: 逆向构造法
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 函数性质锁定
+      - 分段符号判单调
+  structure:
+    primary: 同构结构
+    secondary:
+      - 抽象函数结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - 核心构造为 $x^2f(x)-x^3/3$，导数分子与题设同构。
+      - 导数符号受外层 x 影响，天然分成 $(-\infty,0)$ 与 $(0,+\infty)$ 两段。
+    normalization_moves_used:
+      - 从 $2f+xf^{\prime}>x$ 改写到构造导数。
+      - 以 $x=0$ 为锚点比较 $g(x)$ 与 $g(0)$。
+      - 再还原成 $f(x)-x/3$ 的符号结论。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由导数符号判断分段单调，回补导数单调极值基础。
+      - 若学生在 $g^{\prime}(x)$ 求导中漏掉乘法法则，回补导数运算与几何意义。
+      - 若学生不会从 $x^2\left(f(x)-x/3\right)>0$ 还原结论，回补代数恒等变形。
+  detail_terms:
+    - $g(x)=x^2f(x)-x^3/3$
+    - $g^{\prime}(x)=x(2f(x)+xf^{\prime}(x)-x)$
+    - 分段：$x>0$ 递增、$x<0$ 递减
+    - $f(x)>x/3$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0138_power_integral_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0138
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0138/page_0138.md
+      role: problem_start
+      evidence: page_0138 给出例4完整题干、A-D选项与解析，答案为 C。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0138.png
+      inspected: true
+      notes: 已核对页图，例4信息完整且与 markdown 主体一致。
+  source_context: 例4位于 page_0138 单页，不跨页。
+  source_influence:
+    - 保留源页构造函数 g(x)=x^2f(x)-x^3/3 的主线。
+    - 保留源页结论选 C。
+    - 补全源页解析中未展开的 x<0 情形符号分析。
+  source_discrepancies:
+    - 源页【思路分析】写作 [x^2f(x)]'>x^2；按求导应有 [x^2f(x)]'=x[2f(x)+xf^{\prime}(x)]。源页正文直接由 2f(x)+xf^{\prime}(x)>x 推 g^{\prime}(x)>0 省略了 x 的符号分段。按页图条件分段后仍可推出全体实数上 f(x)>x/3。
+original_problem:
+  stem: （2023·长沙月考）设函数 $f(x)$ 在 $\mathbf{R}$ 上的导函数为 $f^{\prime}(x)$，且 $2f(x)+xf^{\prime}(x)>x$，则下面的不等式在 $\mathbf{R}$ 上恒成立的是（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(x)>0$
+      text_latex: $f(x)>0$
+    - label: B
+      text_raw: $f(x)<0$
+      text_latex: $f(x)<0$
+    - label: C
+      text_raw: $f(x)>\frac{x}{3}$
+      text_latex: $f(x)>\frac{x}{3}$
+    - label: D
+      text_raw: $f(x)<\frac{x}{3}$
+      text_latex: $f(x)<\frac{x}{3}$
+  answer: C
+  fidelity_notes:
+    - 题干明确为“在 R 上恒成立”的单选判断。
+    - 源页解析以 x>0 代入 g(x)>g(0) 给出结论，卡片补全 x<0 分段论证以匹配“全 R”表述。
+solution:
+  source_solution_summary: |
+    按源页构造
+    \[
+    g(x)=x^2f(x)-\frac{x^3}{3},
+    \]
+    则
+    \[
+    g^{\prime}(x)=2xf(x)+x^2f^{\prime}(x)-x^2=x\bigl(2f(x)+xf^{\prime}(x)-x\bigr).
+    \]
+    由题设 $2f(x)+xf^{\prime}(x)-x>0$，可得：
+    当 $x>0$ 时，$g^{\prime}(x)>0$；当 $x<0$ 时，$g^{\prime}(x)<0$。
+    因而 $g$ 在 $(0,+\infty)$ 递增、在 $(-\infty,0)$ 递减，且 $g(0)=0$。
+    所以任意 $x\neq0$ 都有 $g(x)>0$，即
+    \[
+    x^2\!\left(f(x)-\frac{x}{3}\right)>0 \Rightarrow f(x)>\frac{x}{3}.
+    \]
+    又 $x=0$ 时题设给出 $2f(0)>0$，故 $f(0)>0=f(0)-0$ 亦满足。
+    因此恒成立的是 C。
+  key_steps:
+    - step_id: step_1
+      statement: 将题设转成可判单调的构造函数导数。
+      formula_trace:
+        from: $2f(x)+xf^{\prime}(x)>x$
+        to: $g^{\prime}(x)=x\bigl(2f(x)+xf^{\prime}(x)-x\bigr)$
+        operation: 设 $g(x)=x^2f(x)-x^3/3$ 并求导。
+        why: 把抽象导数不等式转成一元函数变化率。
+      source_ref: page_0138
+    - step_id: step_2
+      statement: 按 x 的符号分段确定 g 的单调。
+      formula_trace:
+        from: $2f(x)+xf^{\prime}(x)-x>0$
+        to: $x>0\Rightarrow g^{\prime}(x)>0,\ x<0\Rightarrow g^{\prime}(x)<0$
+        operation: 利用 $g^{\prime}(x)=x(\cdots)$ 的乘积符号。
+        why: 补全“全 R 恒成立”所需的两侧区间论证。
+      source_ref: page_0138
+    - step_id: step_3
+      statement: 由 g 与 g(0) 的比较还原目标不等式。
+      formula_trace:
+        from: $g(x)>g(0)=0$（$x\neq0$）
+        to: $f(x)>x/3$
+        operation: 写成 $x^2\left(f(x)-x/3\right)>0$ 并除以 $x^2>0$。
+        why: 直接对应选项 C。
+      source_ref: page_0138
+teaching_card:
+  student_title: 先构造 $x^2f-x^3/3$，再按 x 正负分段判号
+  what_it_trains: 训练把抽象导数不等式转成构造函数导数，并在全实数题中主动做符号分段。
+  recognition_cues:
+    - 题设是 $af(x)+xf^{\prime}(x)$ 与多项式比较。
+    - 选项要求“在 R 上恒成立”。
+  normalization_moves:
+    - 设 $g(x)=x^2f(x)-x^3/3$。
+    - 利用 $g^{\prime}(x)=x(2f+xf^{\prime}-x)$ 做正负分段。
+    - 比较 $g(x)$ 与 $g(0)$ 后还原到 $f(x)-x/3$。
+  common_failures:
+    - 把 $g^{\prime}(x)=x(\cdots)$ 误判成恒正。
+    - 只在 $x>0$ 推导就直接下“全 R”结论。
+    - 最后一步忘记 $x^2>0$ 导致还原失败。
+  similar_practice_query: 抽象函数 2f+xf' 与 x 比较 构造 x^2f-x^3/3 全实数恒成立
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes: []

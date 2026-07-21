@@ -1,0 +1,186 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0026_ex04
+content_revision_id: mst_p0026_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0026_ex04.card.yaml
+stem: |
+  （2023·江西模拟 T16）已知 $ae^{ax}-\ln\left(x+\frac2a\right)-2\geqslant0$ 在其定义域上恒成立，则实数 $a$ 的取值范围________。
+answer: |
+  $[e,+\infty)$
+
+  当 $a<0$ 时源解判定不成立；当 $a>0$ 时，题设在 $\left(-\frac2a,+\infty\right)$ 上恒成立。把 $\ln\left(x+\frac2a\right)$ 改为 $\ln(ax+2)-\ln a$ 后，原式等价于 $ae^{ax}+\ln(ae^{ax})\ge\ln(ax+2)+ax+2$。令 $h(t)=t+\ln t$，由 $h$ 递增得 $ae^{ax}\ge ax+2$，即 $e^{ax}\ge x+\frac2a$。设 $y=ax+2>0$，则 $e^y/y\ge e^2/a$；因为 $e^y/y$ 在 $y>0$ 的最小值为 $e$，故需且只需 $a\ge e$。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 先处理参数符号和定义域。
+      max_score: 1
+    - step_id: step_2
+      description: 把对数真数统一成 $ax+2$。
+      max_score: 1
+    - step_id: step_3
+      description: 配出 $h(t)=t+\ln t$ 的同构形式。
+      max_score: 1
+    - step_id: step_4
+      description: 用 $h(t)=t+\ln t$ 的单调性降维。
+      max_score: 1
+    - step_id: step_5
+      description: 用六大函数模板求参数下界。
+      max_score: 1
+    - step_id: step_6
+      description: 得到并验证取值范围。
+      max_score: 1
+    - step_id: step_7
+      description: 源解的朗博同构路线也给出同一结论。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+    subroute:
+      - $t+\ln t$ 同构保值
+      - $e^y/y$ 最小值
+      - $e^u-u-1$ 朗博同构
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $ae^{ax}+\ln(ae^{ax})\ge\ln(ax+2)+ax+2$ 被统一为 $h(ae^{ax})\ge h(ax+2)$。
+      - $ae^{ax}\ge ax+2$ 经 $y=ax+2$ 化为 $\frac{e^y}{y}\ge\frac{e^2}{a}$。
+    normalization_moves_used:
+      - $\ln\left(x+\frac2a\right)=\ln(ax+2)-\ln a$。
+      - $\ln(ae^{ax})=\ln a+ax$。
+      - $y=ax+2$。
+      - $ae^{ax}-ax-2=e^{ax+\ln a}-(ax+\ln a)-1+\ln a-1$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由对数真数确定 $x>-\frac2a$，回补函数三要素与定义域。
+      - 若学生把 $\ln\left(x+\frac2a\right)$ 拆错符号，回补指数对数基础。
+      - 若学生不能从 $h(ae^{ax})\ge h(ax+2)$ 推出 $ae^{ax}\ge ax+2$，回补函数性质与图像。
+      - 若学生不知道 $\frac{e^y}{y}$ 在 $y=1$ 处取最小值 $e$，回补导数单调极值基础。
+  detail_terms:
+    - $ae^{ax}-\ln\left(x+\frac2a\right)-2$
+    - $h(t)=t+\ln t$
+    - $ae^{ax}\ge ax+2$
+    - $\frac{e^y}{y}\ge\frac{e^2}{a}$
+    - $a\ge e$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0026_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0026
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0026/page_0026.md
+      role: problem_start
+      evidence: lines 23-33 give 例4题干、解析、两种方法、注意段和答案 $[e,+\infty)$；题干原文缺少明确区间。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0026.png
+      inspected: true
+      notes: 已核对例4题干和解析；页图同样只显示“在上恒成立”，解析随后按 $(-2/a,+\infty)$ 处理。
+  source_context: 本题在“构造单调函数 $e^x+x$ 或 $x+\ln x$”考点内，核心是先用 $h(t)=t+\ln t$ 的保值性，把原恒成立式降为 $ae^{ax}\ge ax+2$。
+  source_influence:
+    - 卡片按源解把题干解释为在函数定义域上恒成立，即当 $a>0$ 时在 $\left(-\frac2a,+\infty\right)$ 上恒成立。
+    - 解析中 $\ln\left(x+\frac2a\right)=\ln(ax+2)-\ln a$，页图为 $+\ln a$；markdown line 25 疑似将 $+\ln a$ 误转为 $-\ln a$。
+  source_discrepancies:
+    - page_0026.md line 25 写作 $ae^{ax}-\ln(ax+2)-\ln a-2\ge0$，但页图与下一步 $ae^{ax}+\ln(ae^{ax})\ge\ln(ax+2)+ax+2$ 表明应为 $ae^{ax}-\ln(ax+2)+\ln a-2\ge0$。
+    - 题干在 markdown 和页图中均为“在上恒成立”，未明示“定义域”或具体区间；用户已拍板按“在定义域上”处理，源解按 $\left(-\frac2a,+\infty\right)$ 上恒成立推进。
+original_problem:
+  stem: |
+    （2023·江西模拟 T16）已知 $ae^{ax}-\ln\left(x+\frac2a\right)-2\geqslant0$ 在其定义域上恒成立，则实数 $a$ 的取值范围________。
+  parts: *a1
+  choices: []
+  answer: $[e,+\infty)$
+  fidelity_notes:
+    - 源页题干实际只显示“在上恒成立”，本卡按解析补读为“在其定义域上恒成立”。
+    - 当 $a>0$ 时定义域为 $\left(-\frac2a,+\infty\right)$；源解排除 $a<0$。
+solution:
+  source_solution_summary: |
+    当 $a<0$ 时源解判定不成立；当 $a>0$ 时，题设在 $\left(-\frac2a,+\infty\right)$ 上恒成立。把 $\ln\left(x+\frac2a\right)$ 改为 $\ln(ax+2)-\ln a$ 后，原式等价于 $ae^{ax}+\ln(ae^{ax})\ge\ln(ax+2)+ax+2$。令 $h(t)=t+\ln t$，由 $h$ 递增得 $ae^{ax}\ge ax+2$，即 $e^{ax}\ge x+\frac2a$。设 $y=ax+2>0$，则 $e^y/y\ge e^2/a$；因为 $e^y/y$ 在 $y>0$ 的最小值为 $e$，故需且只需 $a\ge e$。
+  key_steps:
+    - step_id: step_1
+      statement: 先处理参数符号和定义域。
+      formula_trace:
+        from: $\ln\left(x+\frac2a\right)$ 有意义
+        to: 当 $a>0$ 时，$x\in\left(-\frac2a,+\infty\right)$；源解排除 $a<0$。
+        operation: 由 $x+\frac2a>0$ 得定义域；源解说明 $a<0$ 时题设不成立。
+        why: 后续要令 $ax+2>0$，并使用 $\ln(ax+2)$。
+      source_ref: page_0026
+    - step_id: step_2
+      statement: 把对数真数统一成 $ax+2$。
+      formula_trace:
+        from: $ae^{ax}-\ln\left(x+\frac2a\right)-2\ge0$
+        to: $ae^{ax}-\ln(ax+2)+\ln a-2\ge0$
+        operation: 当 $a>0$，$x+\frac2a=\frac{ax+2}{a}$，所以 $\ln\left(x+\frac2a\right)=\ln(ax+2)-\ln a$。
+        why: 这样可以和 $\ln(ae^{ax})=\ln a+ax$ 配成 $t+\ln t$。
+      source_ref: page_0026
+    - step_id: step_3
+      statement: 配出 $h(t)=t+\ln t$ 的同构形式。
+      formula_trace:
+        from: $ae^{ax}-\ln(ax+2)+\ln a-2\ge0$
+        to: $ae^{ax}+\ln(ae^{ax})\ge \ln(ax+2)+ax+2$
+        operation: 两边加 $\ln(ax+2)+ax$，并用 $\ln(ae^{ax})=\ln a+ax$。
+        why: 左边成为 $h(ae^{ax})$，右边成为 $h(ax+2)$。
+      source_ref: page_0026
+    - step_id: step_4
+      statement: 用 $h(t)=t+\ln t$ 的单调性降维。
+      formula_trace:
+        from: $h(ae^{ax})\ge h(ax+2)$
+        to: $ae^{ax}\ge ax+2$
+        operation: 直接由 $h$ 的导数 $1+\frac1t>0\ (t>0)$ 得 $h$ 严格递增。
+        why: 同构保值把复杂指对式变成一个指数函数与直线的比较。
+      source_ref: page_0026
+    - step_id: step_5
+      statement: 用六大函数模板求参数下界。
+      formula_trace:
+        from: $ae^{ax}\ge ax+2$
+        to: $\frac{e^{ax+2}}{ax+2}\ge \frac{e^2}{a}$
+        operation: 令 $y=ax+2>0$，则 $ae^{ax}\ge y$ 等价于 $e^{y-2}\ge y/a$，即 $e^y/y\ge e^2/a$。
+        why: $e^y/y$ 在 $y>0$ 的最小值已知为 $e$。
+      source_ref: page_0026
+    - step_id: step_6
+      statement: 得到并验证取值范围。
+      formula_trace:
+        from: $\min_{y>0}\frac{e^y}{y}=e$
+        to: $e\ge \frac{e^2}{a}\Rightarrow a\ge e$
+        operation: 在 $y=1$ 取等，等价点为 $ax+2=1$。
+        why: 当 $a\ge e$ 时右侧不超过最小值，恒成立；当 $a<e$ 时在 $y=1$ 附近失败。
+      source_ref: page_0026
+    - step_id: step_7
+      statement: 源解的朗博同构路线也给出同一结论。
+      formula_trace:
+        from: $ae^{ax}-ax-2$
+        to: $e^{ax+\ln a}-(ax+\ln a)-1+\ln a-1$
+        operation: 令 $u=ax+\ln a$，把 $ae^{ax}=e^u$、$ax=u-\ln a$ 代入。
+        why: $e^u-u-1\ge0$，所以要保证整体非负，关键仍是 $\ln a-1\ge0$，即 $a\ge e$。
+      source_ref: page_0026
+teaching_card:
+  student_title: 先用 $t+\ln t$ 降维，再用 $\frac{e^y}{y}$ 卡住 $a$
+  what_it_trains: 训练把含参数的指数项和对数项配成同一个递增函数值，再把恒成立问题转成标准函数的最值。
+  recognition_cues:
+    - 式子中同时出现 $ae^{ax}$ 和 $\ln\left(x+\frac2a\right)$。
+    - 解析里出现 $ax+2$，提示先统一对数真数。
+    - 目标是实数 $a$ 的取值范围。
+  normalization_moves:
+    - 把 $\ln\left(x+\frac2a\right)$ 改写为 $\ln(ax+2)-\ln a$。
+    - 补出 $\ln(ae^{ax})$，配成 $h(ae^{ax})$。
+    - 由 $h$ 递增降为 $ae^{ax}\ge ax+2$。
+    - 令 $y=ax+2$，套 $\frac{e^y}{y}$ 的最小值。
+  common_failures:
+    - 忽略题干区间缺字，导致不知道恒成立的变量范围。
+    - 拆 $\ln\left(\frac{ax+2}{a}\right)$ 时把 $+\ln a$ 写成 $-\ln a$。
+    - 看到 $ae^{ax}\ge ax+2$ 后直接取对数，反而把结构弄复杂。
+    - 忘记 $y=ax+2$ 必须为正，不能在全实数上套模板。
+  similar_practice_query: 恒成立参数 $ae^{ax}$ $\ln(x+2/a)$ $t+\ln t$ $e^y/y$
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 用户已拍板：按“在定义域上恒成立”处理，即 $a>0$ 时在 $\left(-\frac2a,+\infty\right)$ 上恒成立。
+    - 请 reviewer 留意：markdown 中 $\ln a$ 符号与页图/代数下一步不一致，本卡按 $+\ln a$ 处理。

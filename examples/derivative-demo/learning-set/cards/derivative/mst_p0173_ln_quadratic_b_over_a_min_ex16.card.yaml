@@ -1,0 +1,205 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0173_ln_quadratic_b_over_a_min_ex16
+content_revision_id: mst_p0173_ln_quadratic_b_over_a_min_ex16-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0173_ln_quadratic_b_over_a_min_ex16.card.yaml
+stem: |-
+  （2023 · 驻马店月考 T8）已知函数 $f(x)=\ln(3x)-ax^2-bx+1\leqslant 0$ 恒成立，则 $\frac{b}{a}$ 的最小值为（  ）
+  A. $\frac{1}{e}$
+  B. $-\frac{1}{e}$
+  C. $-\frac{1}{2e}$
+  D. $-\frac{1}{3e}$
+answer: |
+  D
+
+  由
+  \[
+  \ln(3x)-ax^2-bx+1\le 0
+  \]
+  得
+  \[
+  \frac{\ln(3x)+1}{x}\le ax+b\quad (x>0).
+  \]
+  源解使用零点比大小：左侧
+  \[
+  \frac{\ln(3x)+1}{x}=0\Rightarrow x_1=\frac1{3e},
+  \]
+  右侧
+  \[
+  ax+b=0\Rightarrow x_2=-\frac ba.
+  \]
+  由模型关系 $x_2\le x_1$，得
+  \[
+  -\frac ba\le\frac1{3e}\Rightarrow \frac ba\ge-\frac1{3e}.
+  \]
+  故 $\frac ba$ 的最小值为 $-\frac1{3e}$，选 D。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把原不等式改写成“函数上包络”形式。
+      max_score: 1
+    - step_id: step_2
+      description: 写出左侧函数零点。
+      max_score: 1
+    - step_id: step_3
+      description: 写出右侧直线零点。
+      max_score: 1
+    - step_id: step_4
+      description: 零点比较并转回目标量。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 零点比大小
+      - 分式对直线零点对齐
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $\ln(3x)-ax^2-bx+1\le0$ 被改写为 $\frac{\ln(3x)+1}{x}\le ax+b$。
+      - 核心判据只比较两个零点 $1/(3e)$ 与 $-b/a$ 的相对位置。
+    normalization_moves_used:
+      - 除以 $x$ 把二次项吸收到右侧直线 $ax+b$。
+      - 把参数问题转成零点位置比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $\ln(3x)+1=0$ 解出 $x=1/(3e)$，回补指数对数基础。
+      - 若学生在“恒成立上包络”与零点位置关系上混乱，回补函数性质与图像。
+      - 若学生代数整理 $-\frac ba\le\frac1{3e}$ 出错，回补代数恒等变形。
+  detail_terms:
+    - $\frac{\ln(3x)+1}{x}$
+    - $ax+b$
+    - $x_1=\frac1{3e}$
+    - $x_2=-\frac ba$
+    - $\frac ba\ge-\frac1{3e}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0173_ln_quadratic_b_over_a_min_ex16
+source_evidence:
+  source_refs:
+    - ref_id: page_0173_local_context_prev_ex15
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0173/page_0173.md
+      role: local_context
+      evidence: page_0173 开头“法二(零点比大小)...故选 B”是 page_0172 例15续解，不是本题题头。
+    - ref_id: page_0173_ex16_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0173/page_0173.md
+      role: problem_start
+      evidence: lines 16-21 给出例16题干与 A-D 选项，要求 $b/a$ 的最小值。
+    - ref_id: page_0173_ex16_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0173/page_0173.md
+      role: solution
+      evidence: line 23 解析给出变形 $\frac{\ln(3x)+1}{x}\le ax+b$，并用零点比大小得到 $-b/a\le 1/(3e)$，答案 D。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0173.png
+      inspected: true
+      notes: 已核对页图：例16题干、选项、解析与 markdown 一致；答案字母为 D。
+  source_context: 本题题头从 page_0173 起始并在同页完成；页首段落是上题例15续解，仅作上下文。
+  source_influence:
+    - 保留源解主线：先除以 $x$ 把二次项问题转为“对数分式 vs 直线”的零点比较。
+    - 保留源解关键零点：$x_1=1/(3e)$ 与 $x_2=-b/a$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 驻马店月考 T8）已知函数 $f(x)=\ln(3x)-ax^2-bx+1\leqslant 0$ 恒成立，则 $\frac{b}{a}$ 的最小值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\frac{1}{e}$
+      text_latex: $\frac{1}{e}$
+    - label: B
+      text_raw: $-\frac{1}{e}$
+      text_latex: $-\frac{1}{e}$
+    - label: C
+      text_raw: $-\frac{1}{2e}$
+      text_latex: $-\frac{1}{2e}$
+    - label: D
+      text_raw: $-\frac{1}{3e}$
+      text_latex: $-\frac{1}{3e}$
+  answer: D
+  fidelity_notes:
+    - 题干与解析同页完整。
+    - 由于题目直接问 $\frac{b}{a}$，默认分母 $a\neq0$。
+solution:
+  source_solution_summary: |
+    由
+    \[
+    \ln(3x)-ax^2-bx+1\le 0
+    \]
+    得
+    \[
+    \frac{\ln(3x)+1}{x}\le ax+b\quad (x>0).
+    \]
+    源解使用零点比大小：左侧
+    \[
+    \frac{\ln(3x)+1}{x}=0\Rightarrow x_1=\frac1{3e},
+    \]
+    右侧
+    \[
+    ax+b=0\Rightarrow x_2=-\frac ba.
+    \]
+    由模型关系 $x_2\le x_1$，得
+    \[
+    -\frac ba\le\frac1{3e}\Rightarrow \frac ba\ge-\frac1{3e}.
+    \]
+    故 $\frac ba$ 的最小值为 $-\frac1{3e}$，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把原不等式改写成“函数上包络”形式。
+      formula_trace:
+        from: $\ln(3x)-ax^2-bx+1\le 0$
+        to: $\frac{\ln(3x)+1}{x}\le ax+b$
+        operation: 移项并按源解除以 $x$（定义域 $x>0$）。
+        why: 把含二次项的参数式转为“分式函数与直线”可比较零点。
+      source_ref: page_0173_ex16_solution
+    - step_id: step_2
+      statement: 写出左侧函数零点。
+      formula_trace:
+        from: $\frac{\ln(3x)+1}{x}=0$
+        to: $x_1=\frac1{3e}$
+        operation: 分子置零：$\ln(3x)+1=0$。
+        why: 零点位置是零点比大小的核心量。
+      source_ref: page_0173_ex16_solution
+    - step_id: step_3
+      statement: 写出右侧直线零点。
+      formula_trace:
+        from: $ax+b=0$
+        to: $x_2=-\frac ba$
+        operation: 一次方程求根。
+        why: 与左侧零点比较即可得到参数比值界。
+      source_ref: page_0173_ex16_solution
+    - step_id: step_4
+      statement: 零点比较并转回目标量。
+      formula_trace:
+        from: $x_2\le x_1$
+        to: $-\frac ba\le\frac1{3e}\Rightarrow \frac ba\ge-\frac1{3e}$
+        operation: 代入两个零点表达式并整理。
+        why: 得到最小值边界并匹配选项 D。
+      source_ref: page_0173_ex16_solution
+teaching_card:
+  student_title: 先除以 $x$，再比两个零点
+  what_it_trains: 训练把“对数+二次项”的恒成立参数题转成“分式函数与直线”的零点位置关系，再回推参数比值下界。
+  recognition_cues:
+    - 目标是 $\frac ba$ 的最小值。
+    - 题干形状是 $\ln(3x)-ax^2-bx+\text{常数}\le0$。
+    - 解析可自然出现 $\frac{\ln(3x)+1}{x}$ 与 $ax+b$。
+  normalization_moves:
+    - 移项后除以 $x$。
+    - 先求两边零点，再做大小比较。
+    - 把零点不等式转回 $\frac ba$。
+  common_failures:
+    - 除以 $x$ 时忘记定义域 $x>0$。
+    - 把 $ax+b=0$ 的根误写成 $\frac ba$。
+    - 最后一步符号变形错误，误把下界写成上界。
+  similar_practice_query: ln(3x)-ax^2-bx+1 恒成立 b/a 最小值 零点比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

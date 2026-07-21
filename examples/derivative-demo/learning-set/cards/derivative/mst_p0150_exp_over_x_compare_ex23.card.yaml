@@ -1,0 +1,229 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0150_exp_over_x_compare_ex23
+content_revision_id: mst_p0150_exp_over_x_compare_ex23-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0150_exp_over_x_compare_ex23.card.yaml
+stem: |-
+  （2023·工业园区月考）设 $a=\frac34e^{\frac25},\ b=\frac25,\ c=\frac25e^{\frac34}$，则（  ）
+  A. $b<c<a$
+  B. $b<a<c$
+  C. $c<b<a$
+  D. $c<a<b$
+answer: |
+  A
+
+  令
+  \[
+  f(x)=\frac{e^x}{x},\quad x\in(0,1).
+  \]
+  则
+  \[
+  f^{\prime}(x)=\frac{e^x(x-1)}{x^2}<0\quad (0<x<1),
+  \]
+  所以 $f$ 在 $(0,1)$ 上递减。
+  由于
+  \[
+  \frac25<\frac34,
+  \]
+  有
+  \[
+  f\!\left(\frac25\right)>f\!\left(\frac34\right)
+  \Rightarrow
+  \frac{e^{\frac25}}{\frac25}>\frac{e^{\frac34}}{\frac34}
+  \Rightarrow
+  \frac34e^{\frac25}>\frac25e^{\frac34},
+  \]
+  即 $a>c$。
+  再看
+  \[
+  c-b=\frac25e^{\frac34}-\frac25=\frac25\left(e^{\frac34}-1\right)>0,
+  \]
+  所以 $c>b$。
+  综上
+  \[
+  b<c<a,
+  \]
+  选 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 构造同构函数并判单调。
+      max_score: 1
+    - step_id: step_2
+      description: 比较 $a$ 与 $c$。
+      max_score: 1
+    - step_id: step_3
+      description: 比较 $c$ 与 $b$。
+      max_score: 1
+    - step_id: step_4
+      description: 合并排序并匹配选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较三个带指数因子的代数式大小。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 拟合与夹逼
+    subroute:
+      - $\frac{e^x}{x}$ 单调比较
+      - 作差补链
+  structure:
+    primary: 同构结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 非齐次结构
+    evidence:
+      - $a,c$ 都是“常数乘 $e^{\text{分数}}$”形式，可统一到 $\frac{e^x}{x}$。
+      - $b$ 不含指数因子，源解采用作差补足第三项比较。
+    normalization_moves_used:
+      - 构造 $f(x)=\frac{e^x}{x}$。
+      - 以 $\frac25$ 与 $\frac34$ 的自变量大小触发反向保序。
+      - 通过 $c-b$ 判号收尾。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $f^{\prime}(x)$ 判递减，回补导数单调极值基础。
+      - 若学生不会处理“递减函数反向保序”，回补函数性质与图像。
+      - 若学生作差后不能稳定判号，回补代数恒等变形。
+  detail_terms:
+    - $f(x)=\frac{e^x}{x}$
+    - $x\in(0,1)$
+    - $\frac25<\frac34$
+    - $c-b=\frac25(e^{\frac34}-1)$
+    - $b<c<a$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0150_exp_over_x_compare_ex23
+source_evidence:
+  source_refs:
+    - ref_id: page_0150_ex23_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0150/page_0150.md
+      role: problem_start
+      evidence: 例23题干与A-D选项完整出现在page_0150。
+    - ref_id: page_0150_ex23_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0150/page_0150.md
+      role: solution
+      evidence: 源解先用 $f(x)=\frac{e^x}{x}$ 在 $(0,1)$ 递减判 $a>c$，再用 $c-b=\frac25(e^{\frac34}-1)>0$ 判 $c>b$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0150.png
+      inspected: true
+      notes: 已核对原图：例23题干、选项与解析完整，答案为A。
+  source_context: page_0150例23与例22、例24同属比大小小题，均用同构函数做主比较。
+  source_influence:
+    - 保留源解函数入口：$f(x)=\frac{e^x}{x}$ 且区间限定 $(0,1)$。
+    - 保留关键变形：$f\left(\frac25\right)>f\left(\frac34\right)\Rightarrow a>c$。
+    - 保留补充差值：$c-b=\frac25(e^{\frac34}-1)>0$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·工业园区月考）设 $a=\frac34e^{\frac25},\ b=\frac25,\ c=\frac25e^{\frac34}$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $b<c<a$
+      text_latex: $b<c<a$
+    - label: B
+      text_raw: $b<a<c$
+      text_latex: $b<a<c$
+    - label: C
+      text_raw: $c<b<a$
+      text_latex: $c<b<a$
+    - label: D
+      text_raw: $c<a<b$
+      text_latex: $c<a<b$
+  answer: A
+  fidelity_notes:
+    - 例23在page_0150单页完成，无跨页解析。
+solution:
+  source_solution_summary: |
+    令
+    \[
+    f(x)=\frac{e^x}{x},\quad x\in(0,1).
+    \]
+    则
+    \[
+    f^{\prime}(x)=\frac{e^x(x-1)}{x^2}<0\quad (0<x<1),
+    \]
+    所以 $f$ 在 $(0,1)$ 上递减。
+    由于
+    \[
+    \frac25<\frac34,
+    \]
+    有
+    \[
+    f\!\left(\frac25\right)>f\!\left(\frac34\right)
+    \Rightarrow
+    \frac{e^{\frac25}}{\frac25}>\frac{e^{\frac34}}{\frac34}
+    \Rightarrow
+    \frac34e^{\frac25}>\frac25e^{\frac34},
+    \]
+    即 $a>c$。
+    再看
+    \[
+    c-b=\frac25e^{\frac34}-\frac25=\frac25\left(e^{\frac34}-1\right)>0,
+    \]
+    所以 $c>b$。
+    综上
+    \[
+    b<c<a,
+    \]
+    选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 构造同构函数并判单调。
+      formula_trace:
+        from: $f(x)=\frac{e^x}{x}$
+        to: $f^{\prime}(x)=\frac{e^x(x-1)}{x^2}<0\ (0<x<1)$
+        operation: 求导并用区间符号判定。
+        why: 把两项含指数系数的比较转成函数值比较。
+      source_ref: page_0150_ex23_solution
+    - step_id: step_2
+      statement: 比较 $a$ 与 $c$。
+      formula_trace:
+        from: $\frac25<\frac34$
+        to: $f\left(\frac25\right)>f\left(\frac34\right)\Rightarrow a>c$
+        operation: 在递减函数上反向保序。
+        why: 得到主顺序的上半段。
+      source_ref: page_0150_ex23_solution
+    - step_id: step_3
+      statement: 比较 $c$ 与 $b$。
+      formula_trace:
+        from: $c-b=\frac25e^{\frac34}-\frac25$
+        to: $c-b=\frac25(e^{\frac34}-1)>0\Rightarrow c>b$
+        operation: 直接作差判号。
+        why: 补全与 $b$ 的关系。
+      source_ref: page_0150_ex23_solution
+    - step_id: step_4
+      statement: 合并排序并匹配选项。
+      formula_trace:
+        from: $a>c$ 与 $c>b$
+        to: $b<c<a$，选 A
+        operation: 传递性合并。
+        why: 完成作答。
+      source_ref: page_0150_ex23_solution
+teaching_card:
+  student_title: 先比同构项，再作差补第三项
+  what_it_trains: 训练“函数同构比较 + 直接作差补链”的双段式比大小流程。
+  recognition_cues:
+    - 至少两项可写成“常数倍 $e^{\alpha}$”。
+    - 出现明显分数参数（如 $\frac25,\frac34$）可作为同构自变量。
+    - 第三项结构更简单，适合作差判号。
+  normalization_moves:
+    - 先把两项统一到 $\frac{e^x}{x}$。
+    - 利用单调性完成主比较。
+    - 作差确定剩余一项位置。
+  common_failures:
+    - 把递减函数上的比较方向写反。
+    - 误把 $c-b$ 展开为 $\frac25(e^{\frac34}+1)$。
+    - 只证 $a>c$ 就仓促选项。
+  similar_practice_query: e^x/x 单调性 分数参数 比大小 作差判号
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

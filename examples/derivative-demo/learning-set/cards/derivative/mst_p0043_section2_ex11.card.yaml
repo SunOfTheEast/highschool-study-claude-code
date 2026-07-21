@@ -1,0 +1,193 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0043_section2_ex11
+content_revision_id: mst_p0043_section2_ex11-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0043_section2_ex11.card.yaml
+stem: |-
+  （2024 · 全国百校强 T8）已知函数 $f(x)=\frac{ax}{e^{x-1}}+x-\ln(ax)-2\ (a>0)$，若函数 $f(x)$ 在区间 $(0,+\infty)$ 内存在零点，则实数 $a$ 的取值范围是 ( )
+  A. $(0, 1]$
+  B. $[1, +\infty)$
+  C. $(0, e]$
+  D. $[3, +\infty)$
+answer: |
+  B
+
+  设 $t=\\ln(ax)-x+1$，则 $\\frac{ax}{e^{x-1}}=e^t$，且
+  $f(x)=e^t-[\\ln(ax)-x+1]-1=e^t-t-1$。由于 $e^t-t-1\\ge0$，且只有 $t=0$ 时等号成立，所以 $f(x)$ 存在零点等价于方程 $\\ln(ax)-x+1=0$ 在 $x>0$ 上有解。该方程化为 $a=e^{x-1}/x=(1/e)(e^x/x)$。因为 $e^x/x$ 在 $x>0$ 上最小值为 $e$，故 $a\\ge1$，且每个 $a\\ge1$ 都可由相应的交点取到。故选 B。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把分式指数项写成单个指数。
+      max_score: 1
+    - step_id: step_2
+      description: 配出 $e^t-t-1$。
+      max_score: 1
+    - step_id: step_3
+      description: 把零点存在转成同构变量取零。
+      max_score: 1
+    - step_id: step_4
+      description: 解出参数与 $x$ 的关系。
+      max_score: 1
+    - step_id: step_5
+      description: 求 $a$ 的取值范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: item_1
+        goal: 求参数范围
+        target: 由零点存在求参数 $a$ 的范围。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 切线放缩与凹凸性
+    subroute:
+      - 朗博同构
+      - $e^t-t-1$ 非负模板
+      - $e^x/x$ 最小值
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $\frac{ax}{e^{x-1}}=e^{\ln(ax)-x+1}$。
+      - $f(x)=e^t-t-1$，其中 $t=\ln(ax)-x+1$。
+      - $t=0$ 化为 $a=(1/e)(e^x/x)$。
+    normalization_moves_used:
+      - $ax=e^{\ln(ax)}$。
+      - $x-\ln(ax)-2=-[\ln(ax)-x+1]-1$。
+      - $t=\ln(ax)-x+1$。
+      - $a=e^{x-1}/x$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $ax/e^{x-1}$ 写成 $e^{\ln(ax)-x+1}$，回补指数对数基础。
+      - 若学生不能把 $x-\ln(ax)-2$ 改写成 $-[\ln(ax)-x+1]-1$，回补代数恒等变形。
+      - 若学生不知道 $e^t-t-1=0$ 只在 $t=0$ 成立，回补导数单调极值基础。
+      - 若学生不会求 $e^x/x$ 在 $x>0$ 的最小值，回补导数单调极值基础。
+  detail_terms:
+    - $\frac{ax}{e^{x-1}}$
+    - $t=\ln(ax)-x+1$
+    - $e^t-t-1=0$
+    - $a=\frac1e\frac{e^x}{x}$
+    - $a\ge1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0043_section2_ex11
+source_evidence:
+  source_refs:
+    - ref_id: page_0043
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0043/page_0043.md
+      role: problem_start
+      evidence: lines 45-49 give 例 11 题干和四个选项。
+    - ref_id: page_0044
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0044/page_0044.md
+      role: continuation
+      evidence: line 14 gives 例 11 解析 and answer B before 例 12 starts。
+    - ref_id: page_0043_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0043/page_0043.md
+      role: local_context
+      evidence: lines 27-31 introduce 朗博同构 and $e^t-t-1\ge0$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0043.png
+      inspected: true
+      notes: 已核对页图：例 11 题干、选项在 page_0043 底部，与 markdown 一致。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0044.png
+      inspected: true
+      notes: 已核对页图：page_0044 顶部为例 11 续解，随后才是例 12；解析与 markdown 一致。
+  source_context: 例 11 属于朗博同构：把 $\frac{ax}{e^{x-1}}$ 写为 $e^{\ln(ax)-x+1}$，整个函数变成 $e^t-t-1$，零点存在转化为同构变量能否取到 0。
+  source_influence:
+    - 题头在 page_0043，解析续到 page_0044；卡片归属 D 组并把 page_0044 作为 continuation。
+    - 目标是零点存在对应的参数范围，图谱 goal 取零点/极值点分析，part_level 标明最终落到参数范围。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 全国百校强 T8）已知函数 $f(x)=\frac{ax}{e^{x-1}}+x-\ln(ax)-2\ (a>0)$，若函数 $f(x)$ 在区间 $(0,+\infty)$ 内存在零点，则实数 $a$ 的取值范围是 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $(0, 1]$
+      text_latex: $(0, 1]$
+    - label: B
+      text_raw: $[1, +\infty)$
+      text_latex: $[1, +\infty)$
+    - label: C
+      text_raw: $(0, e]$
+      text_latex: $(0, e]$
+    - label: D
+      text_raw: $[3, +\infty)$
+      text_latex: $[3, +\infty)$
+  answer: B
+  fidelity_notes:
+    - 题干和选项在 page_0043，解析在 page_0044 顶部。
+    - 源页写 $a>0$，因此 $\ln(ax)$ 在 $x>0$ 上有意义。
+solution:
+  source_solution_summary: |
+    设 $t=\\ln(ax)-x+1$，则 $\\frac{ax}{e^{x-1}}=e^t$，且
+    $f(x)=e^t-[\\ln(ax)-x+1]-1=e^t-t-1$。由于 $e^t-t-1\\ge0$，且只有 $t=0$ 时等号成立，所以 $f(x)$ 存在零点等价于方程 $\\ln(ax)-x+1=0$ 在 $x>0$ 上有解。该方程化为 $a=e^{x-1}/x=(1/e)(e^x/x)$。因为 $e^x/x$ 在 $x>0$ 上最小值为 $e$，故 $a\\ge1$，且每个 $a\\ge1$ 都可由相应的交点取到。故选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 把分式指数项写成单个指数。
+      formula_trace:
+        from: $\frac{ax}{e^{x-1}}$
+        to: $e^{\ln(ax)-x+1}$
+        operation: 用 $ax=e^{\ln(ax)}$，除以 $e^{x-1}$ 等于指数相减。
+        why: 这样可以和后面的 $x-\ln(ax)-2$ 配成 $e^t-t-1$。
+      source_ref: page_0044
+    - step_id: step_2
+      statement: 配出 $e^t-t-1$。
+      formula_trace:
+        from: $\frac{ax}{e^{x-1}}+x-\ln(ax)-2$
+        to: $e^{\ln(ax)-x+1}-[\ln(ax)-x+1]-1$
+        operation: 把 $x-\ln(ax)-2$ 改写成 $-[\ln(ax)-x+1]-1$。
+        why: 函数零点只能出现在同构模板的等号点。
+      source_ref: page_0044
+    - step_id: step_3
+      statement: 把零点存在转成同构变量取零。
+      formula_trace:
+        from: $e^t-t-1=0$
+        to: $t=0\Rightarrow \ln(ax)-x+1=0$
+        operation: 使用 $e^t-t-1\ge0$ 且等号当且仅当 $t=0$。
+        why: 原函数要有零点，必须也只需括号中的变量能取到 0。
+      source_ref: page_0044
+    - step_id: step_4
+      statement: 解出参数与 $x$ 的关系。
+      formula_trace:
+        from: $\ln(ax)=x-1$
+        to: $a=\frac{e^{x-1}}{x}=\frac1e\cdot\frac{e^x}{x}$
+        operation: 两边指数化得 $ax=e^{x-1}$，再除以 $x>0$。
+        why: 零点存在问题变为函数 $e^x/x$ 的值域问题。
+      source_ref: page_0044
+    - step_id: step_5
+      statement: 求 $a$ 的取值范围。
+      formula_trace:
+        from: $\frac{e^x}{x}\ge e\quad (x>0)$
+        to: $a=\frac1e\frac{e^x}{x}\ge1$
+        operation: 用 $e^x/x$ 在 $x=1$ 处取最小值 $e$。
+        why: 值域为 $[1,+\infty)$，正好是零点存在的参数范围。
+      source_ref: page_0044
+teaching_card:
+  student_title: 零点存在先变成 $e^t-t-1=0$
+  what_it_trains: 训练把含参数的分式指数和对数项统一成一个同构变量，利用 $e^t-t-1$ 的唯一零点，把函数零点问题降成 $e^x/x$ 的值域。
+  recognition_cues:
+    - 函数里同时有 $ax/e^{x-1}$ 和 $\ln(ax)$。
+    - 题目问在 $(0,+\infty)$ 内是否存在零点。
+    - 把 $ax/e^{x-1}$ 写进指数后，括号正好是 $\ln(ax)-x+1$。
+  normalization_moves:
+    - 把 $ax/e^{x-1}$ 写成 $e^{\ln(ax)-x+1}$。
+    - 把余项写成 $-[\ln(ax)-x+1]-1$。
+    - 设 $t=\ln(ax)-x+1$，用 $e^t-t-1$ 的唯一零点。
+    - 把 $\ln(ax)=x-1$ 化为 $a=(1/e)(e^x/x)$。
+  common_failures:
+    - 直接求导研究 $f(x)$，计算量大且容易漏掉同构零点。
+    - 只知道 $e^t-t-1\ge0$，却没意识到函数要有零点必须 $t=0$。
+    - 求 $e^x/x$ 值域时把最小值写成 1，少乘了外面的 $1/e$。
+  similar_practice_query: 朗博同构 零点存在 ax/e^{x-1} ln(ax) e^t-t-1 e^x/x
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 例 11 题头在 page_0043，完整解析在 page_0044 顶部；已按 continuation 读取。

@@ -1,0 +1,178 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0264_cos_plus_ln1px_tangent_majorant_extreme_probe_ex3
+content_revision_id: mst_p0264_cos_plus_ln1px_tangent_majorant_extreme_probe_ex3-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0264_cos_plus_ln1px_tangent_majorant_extreme_probe_ex3.card.yaml
+stem: |-
+  （2024 · 浙江新阵地教育联盟高三第三次联考）已知函数 $f(x)=\cos x+\lambda\ln(1+x)$，且曲线 $y=f(x)$ 在点 $(0,f(0))$ 处的切线斜率为 1。
+  1. 求 $f(x)$ 的表达式。
+  2. 若 $f(x)\le ax+1$ 恒成立，求 $a$ 的值。
+answer: |-
+  第(1)问：$f(x)=\cos x+\ln(1+x)$。第(2)问：$a=1$。
+
+  第(1)问求导 $f^\prime(x)=-\sin x+\frac{\lambda}{1+x}$，切线斜率 $f^\prime(0)=\lambda=1$，故 $f(x)=\cos x+\ln(1+x)$。 第(2)问令 $h(x)=\cos x+\ln(1+x)-ax-1$。题设要求 $h(x)\le0$， 且 $h(0)=0$，所以 $x=0$ 是极大值点，必有 $h^\prime(0)=1-a=0$，得 $a=1$。当 $a=1$ 时， $h=(\cos x-1)+(\ln(1+x)-x)\le0$，故充分。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 由切线斜率确定 $\lambda$。
+      max_score: 1
+    - step_id: step_2
+      description: 构造差函数。
+      max_score: 1
+    - step_id: step_3
+      description: 用 $h(0)=0$ 锁住参数。
+      max_score: 1
+    - step_id: step_4
+      description: 回证 $a=1$。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level:
+      - part_id: "1"
+        goal: 数值求值
+        target: 第 1 问
+        result: $\lambda=1$，$f(x)=\cos x+\ln(1+x)$。
+      - part_id: "2"
+        goal: 数值求值
+        target: 第 2 问
+        result: $a=1$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 充分/必要性探路
+      - 切线放缩与凹凸性
+    subroute:
+      - 切线斜率锁参
+      - 极大值点探路
+      - 切线型上界
+      - 充分性回证
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 指对复合结构
+      - 切线/公切线/切点量结构
+      - 不等式工具结构
+    evidence:
+      - $\cos x+\ln(1+x)$
+      - $h(0)=0$
+      - $\ln(1+x)-x\le0$
+      - $\cos x-1\le0$
+    normalization_moves_used:
+      - 用切线斜率先定 $\lambda$。
+      - 把不等式改成 $h(x)\le0$。
+      - 由 $h(0)=0$ 得 $x=0$ 是极大值点。
+      - 用两个基础不等式回证。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求切线斜率，回补导数运算与几何意义。
+      - 若学生不知道极值点导数为 0，回补导数单调极值基础。
+      - 若学生不熟悉 $\ln(1+x)\le x$，回补指数对数基础。
+      - 若学生忽略 $x>-1$ 定义域，回补函数三要素与定义域。
+  detail_terms:
+    - $\cos x+\ln(1+x)$
+    - $h(0)=0$
+    - 极大值点
+    - $a=1$
+    - $\lambda=1$
+parts: &a1
+  - id: "1"
+    text: 求 $f(x)$ 的表达式。
+  - id: "2"
+    text: 若 $f(x)\le ax+1$ 恒成立，求 $a$ 的值。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0264_cos_plus_ln1px_tangent_majorant_extreme_probe_ex3
+source_evidence:
+  source_refs:
+    - ref_id: page_0264_ex3_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0264/page_0264.md
+      role: problem_start
+      evidence: page_0264 给出例3题头：$f(x)=\cos x+\lambda\ln(1+x)$，在 $(0,f(0))$ 处切线斜率为 1；第(1)问求 $f$，第(2)问若 $f(x)\le ax+1$ 恒成立，求 $a$。
+    - ref_id: page_0264_ex3_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0264/page_0264.md
+      role: solution
+      evidence: page_0264 例3解析由 $f^\prime(0)=\lambda=1$ 得 $f=\cos x+\ln(1+x)$；第(2)问构造 $h=f-ax-1$，由 $h(0)=0$ 和极大值条件得 $a=1$，再用 $\ln(1+x)-x\le0$、$\cos x-1\le0$ 回证。
+    - ref_id: page_0264_ex4_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0264/page_0264.md
+      role: local_context
+      evidence: 例3后另起例4，说明例3在本页闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0264.png
+      inspected: true
+      notes: 已核对页图：例3题干和解析均在 page_0264 内闭合。
+  source_context: 本卡处理 page_0264 起头并在本页结束的例3；例4另起。
+  source_influence:
+    - 保留切线斜率给 $\lambda=1$。
+    - 保留极点效应：$h(0)=0$，恒有 $h\le0$，所以 $x=0$ 是极大值点，$h^\prime(0)=0$。
+    - 保留充分性回证：$\ln(1+x)-x\le0$ 与 $\cos x-1\le0$。
+  source_discrepancies:
+    - type: tightened_domain_wording
+      source_ref: page_0264_ex3_solution
+      observed: source final sufficient proof wording says "当 $x\in[0,+\infty)$" before concluding $h(x)\le0$.
+      resolved_as: use $x>-1$ for the final conclusion, because $\varphi(x)=\ln(1+x)-x\le0$ on the whole domain and $\cos x-1\le0$ for all real $x$.
+      reason: The problem domain is $x>-1$; the same proof covers the whole domain.
+original_problem:
+  stem: （2024 · 浙江新阵地教育联盟高三第三次联考）已知函数 $f(x)=\cos x+\lambda\ln(1+x)$，且曲线 $y=f(x)$ 在点 $(0,f(0))$ 处的切线斜率为 1。
+  parts: *a1
+  choices: []
+  answer: 第(1)问：$f(x)=\cos x+\ln(1+x)$。第(2)问：$a=1$。
+  fidelity_notes:
+    - 无选项。
+    - 定义域为 $x>-1$。
+solution:
+  source_solution_summary: 第(1)问求导 $f^\prime(x)=-\sin x+\frac{\lambda}{1+x}$，切线斜率 $f^\prime(0)=\lambda=1$，故 $f(x)=\cos x+\ln(1+x)$。 第(2)问令 $h(x)=\cos x+\ln(1+x)-ax-1$。题设要求 $h(x)\le0$， 且 $h(0)=0$，所以 $x=0$ 是极大值点，必有 $h^\prime(0)=1-a=0$，得 $a=1$。当 $a=1$ 时， $h=(\cos x-1)+(\ln(1+x)-x)\le0$，故充分。
+  key_steps:
+    - step_id: step_1
+      statement: 由切线斜率确定 $\lambda$。
+      formula_trace:
+        from: $f^\prime(x)=-\sin x+\frac{\lambda}{1+x}$
+        to: $f^\prime(0)=\lambda=1$
+        operation: 代入切点 $x=0$。
+        why: 切线斜率已给为 1。
+      source_ref: page_0264_ex3_solution
+    - step_id: step_2
+      statement: 构造差函数。
+      formula_trace:
+        from: $f(x)\le ax+1$
+        to: $h(x)=\cos x+\ln(1+x)-ax-1\le0$
+        operation: 移项。
+        why: 恒成立问题转为 $h$ 的极大值不超过 0。
+      source_ref: page_0264_ex3_solution
+    - step_id: step_3
+      statement: 用 $h(0)=0$ 锁住参数。
+      formula_trace:
+        from: $h(0)=0$，且 $h(x)\le0$
+        to: $h^\prime(0)=1-a=0$，$a=1$
+        operation: 开区间内极大值点导数为 0。
+        why: 极点效应给出必要条件。
+      source_ref: page_0264_ex3_solution
+    - step_id: step_4
+      statement: 回证 $a=1$。
+      formula_trace:
+        from: $h(x)=(\cos x-1)+[\ln(1+x)-x]$
+        to: $h(x)\le0$
+        operation: 分别使用 $\cos x\le1$ 和 $\ln(1+x)\le x$。
+        why: 完成充分性。
+      source_ref: page_0264_ex3_solution
+teaching_card:
+  student_title: 上界刚好过 $x=0$，先令导数也贴住
+  what_it_trains: 训练切线型极点效应：恒有 $f(x)\le ax+1$，且 $x=0$ 取等，就先让差函数在 0 处导数为 0。
+  recognition_cues:
+    - 题目给了 $(0,f(0))$ 处切线斜率。
+    - 不等式右侧是直线 $ax+1$，且在 $x=0$ 与函数同值。
+    - 差函数 $h(0)=0$，目标是 $h\le0$。
+  normalization_moves:
+    - 先用切线斜率求 $\lambda$。
+    - 再构造 $h=f-ax-1$。
+    - 由 $h^\prime(0)=0$ 求 $a$，最后回证。
+  common_failures:
+    - 只求出 $a=1$，没有证明 $a=1$ 时全域成立。
+    - 把 $\ln(1+x)\le x$ 只用在 $x\ge0$，忘记它在 $x>-1$ 都成立。
+    - 忽略 $\cos x-1\le0$ 可以直接提供另一半上界。
+  similar_practice_query: 极点效应 cosx ln(1+x) 切线斜率 ax+1 上界 a=1
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

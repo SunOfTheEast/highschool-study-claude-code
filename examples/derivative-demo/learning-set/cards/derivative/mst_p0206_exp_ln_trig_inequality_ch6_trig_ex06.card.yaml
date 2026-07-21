@@ -1,0 +1,169 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0206_exp_ln_trig_inequality_ch6_trig_ex06
+content_revision_id: mst_p0206_exp_ln_trig_inequality_ch6_trig_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0206_exp_ln_trig_inequality_ch6_trig_ex06.card.yaml
+stem: 求证：$e^x+\ln x>\cos x+\frac{\sin x-1}{x}$。
+answer: |-
+  当 $x>0$ 时，不等式成立。
+
+  由题设目标等价于 $e^x+\ln x-\cos x-\frac{\sin x-1}{x}>0$。 按 source 拆项： $e^x+\ln x-\cos x-\frac{\sin x-1}{x} =(e^x-x-1)+(1-\cos x)+(\ln x+\frac1x-1)+(1-\frac{\sin x}{x})$。 对 $x>0$，有 $e^x-x-1>0$， $1-\cos x\ge0$， $\ln x+\frac1x-1\ge0$（等价于 $\ln x\ge1-\frac1x$）， $1-\frac{\sin x}{x}\ge0$（由 $\sin x\le x$）。 四块相加得到严格正值，因此原不等式成立。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先把目标改写成“左减右大于 0”。
+      max_score: 1
+    - step_id: step_2
+      description: 按 source 给出的思路拆为四块。
+      max_score: 1
+    - step_id: step_3
+      description: 指数块与余弦块判号。
+      max_score: 1
+    - step_id: step_4
+      description: 对数块与正弦比值块判号。
+      max_score: 1
+    - step_id: step_5
+      description: 四块并联求和得到严格不等式。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+      - 拟合与夹逼
+    subroute:
+      - 拆项并联放缩
+      - 指数切线放缩
+      - 对数放缩
+      - 三角放缩
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 三角复合结构
+      - 不等式工具结构
+    evidence:
+      - $e^x+\ln x>\cos x+\frac{\sin x-1}{x}$
+      - $(e^x-x-1)+(1-\cos x)+(\ln x+\frac1x-1)+(1-\frac{\sin x}{x})$
+      - $\ln x\ge1-\frac1x$
+      - $\sin x\le x$
+    normalization_moves_used:
+      - 先做左减右同侧化。
+      - 把混合式拆成四个标准可判号块。
+      - 并联调用指数、对数、三角基础不等式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把目标拆成四块，回补代数恒等变形。
+      - 若学生不会使用 $\ln x\ge1-\frac1x$，回补指数对数基础。
+      - 若学生不会判断 $1-\frac{\sin x}{x}\ge0$，回补三角函数基础。
+  detail_terms:
+    - $e^x-x-1$
+    - $1-\cos x$
+    - $\ln x+\frac1x-1$
+    - $1-\frac{\sin x}{x}$
+    - $x>0$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0206_exp_ln_trig_inequality_ch6_trig_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0206_ex05_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0206/page_0206.md
+      role: local_context
+      evidence: page_0206 行14是 page_0205 例5续解收尾；新题头从行16“例6”开始。
+    - ref_id: page_0206_ex06_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0206/page_0206.md
+      role: problem_start
+      evidence: page_0206 行16给出例6题干：求证 $e^x+\ln x>\cos x+\frac{\sin x-1}{x}$。
+    - ref_id: page_0206_ex06_solution_hint
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0206/page_0206.md
+      role: solution
+      evidence: page_0206 行18给出解析思路：拆成 $e^x-x-1$、$1-\cos x$、$\ln x+\frac1x-1$、$1-\frac{\sin x}{x}$ 四块并联放缩。
+    - ref_id: page_0206_ex07_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0206/page_0206.md
+      role: local_context
+      evidence: page_0206 行20起进入例7，说明例6解析只给出思路行。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0206.png
+      inspected: true
+      notes: 已核对页图：例6题干与“证明思路”一致，属于简解型给法。
+  source_context: 本题题头与解析都在 page_0206；页首是上一题续页，仅作为上下文排除。
+  source_influence:
+    - 严格沿用 source 的四块拆项框架组织证明。
+    - 每一块分别调用教材常见基础不等式并联收束。
+  source_discrepancies: []
+original_problem:
+  stem: 求证：$e^x+\ln x>\cos x+\frac{\sin x-1}{x}$。
+  parts: *a1
+  choices: []
+  answer: 当 $x>0$ 时，不等式成立。
+  fidelity_notes:
+    - 定义域由 $\ln x$ 与 $\frac1x$ 共同决定为 $x>0$。
+    - source 仅给出思路拆项，本卡按该拆项补全标准放缩链。
+solution:
+  source_solution_summary: 由题设目标等价于 $e^x+\ln x-\cos x-\frac{\sin x-1}{x}>0$。 按 source 拆项： $e^x+\ln x-\cos x-\frac{\sin x-1}{x} =(e^x-x-1)+(1-\cos x)+(\ln x+\frac1x-1)+(1-\frac{\sin x}{x})$。 对 $x>0$，有 $e^x-x-1>0$， $1-\cos x\ge0$， $\ln x+\frac1x-1\ge0$（等价于 $\ln x\ge1-\frac1x$）， $1-\frac{\sin x}{x}\ge0$（由 $\sin x\le x$）。 四块相加得到严格正值，因此原不等式成立。
+  key_steps:
+    - step_id: step_1
+      statement: 先把目标改写成“左减右大于 0”。
+      formula_trace:
+        from: $e^x+\ln x>\cos x+\frac{\sin x-1}{x}$
+        to: $e^x+\ln x-\cos x-\frac{\sin x-1}{x}>0$
+        operation: 移项同侧化。
+        why: 便于做分块放缩。
+      source_ref: page_0206_ex06_solution_hint
+    - step_id: step_2
+      statement: 按 source 给出的思路拆为四块。
+      formula_trace:
+        from: $e^x+\ln x-\cos x-\frac{\sin x-1}{x}$
+        to: $(e^x-x-1)+(1-\cos x)+(\ln x+\frac1x-1)+(1-\frac{\sin x}{x})$
+        operation: 加减 $x,1,\frac1x$ 并重组。
+        why: 把混合表达式拆成可直接判号的标准块。
+      source_ref: page_0206_ex06_solution_hint
+    - step_id: step_3
+      statement: 指数块与余弦块判号。
+      formula_trace:
+        from: $e^x-x-1,\ 1-\cos x$
+        to: $e^x-x-1>0,\ 1-\cos x\ge0$
+        operation: 用 $e^x>1+x\ (x>0)$ 与 $\cos x\le1$。
+        why: 两块已可确定非负，且第一块严格正。
+      source_ref: page_0206_ex06_solution_hint
+    - step_id: step_4
+      statement: 对数块与正弦比值块判号。
+      formula_trace:
+        from: $\ln x+\frac1x-1,\ 1-\frac{\sin x}{x}$
+        to: $\ln x+\frac1x-1\ge0,\ 1-\frac{\sin x}{x}\ge0$
+        operation: 分别用 $\ln x\ge1-\frac1x$ 与 $\sin x\le x\ (x>0)$。
+        why: 补齐其余两块非负性。
+      source_ref: page_0206_ex06_solution_hint
+    - step_id: step_5
+      statement: 四块并联求和得到严格不等式。
+      formula_trace:
+        from: step_3 与 step_4
+        to: $e^x+\ln x-\cos x-\frac{\sin x-1}{x}>0$
+        operation: 非负项求和，且含严格正项 $e^x-x-1$。
+        why: 回代即原命题成立。
+      source_ref: page_0206_ex06_solution_hint
+teaching_card:
+  student_title: 四块并联放缩证明 $e^x+\ln x$ 型不等式
+  what_it_trains: 训练把指数-对数-三角混合不等式拆成若干标准非负块，再并联完成证明。
+  recognition_cues:
+    - 同式同时出现 $e^x,\ln x,\sin x,\cos x$。
+    - 题面可通过加减常见基准项变成若干“标准块”。
+    - 每个块都能匹配教材基础不等式。
+  normalization_moves:
+    - 先移项成“左减右”。
+    - 补加补减形成四个可判号块。
+    - 逐块判号后并联求和。
+  common_failures:
+    - 忽略定义域，未注明 $x>0$。
+    - 只写“显然大于 0”而不逐块给依据。
+    - 把 $\ln x\ge1-\frac1x$ 与 $\ln x\le x-1$ 混淆。
+  similar_practice_query: e^x lnx sinx cosx 拆项并联放缩 证明
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

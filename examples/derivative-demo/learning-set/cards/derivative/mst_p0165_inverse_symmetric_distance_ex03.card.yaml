@@ -1,0 +1,175 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0165_inverse_symmetric_distance_ex03
+content_revision_id: mst_p0165_inverse_symmetric_distance_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0165_inverse_symmetric_distance_ex03.card.yaml
+stem: |-
+  （2024 · 重庆月考 T6）已知直线 $x+y+a=0$ 与曲线 $y=e^{ex}$，$y=\frac{\ln x}{e}$ 分别交于点 $A$，$B$，则 $|AB|$ 的最小值为（  ）
+  A. $\frac{2}{e}$
+  B. $\frac{2\sqrt{2}}{e}$
+  C. 1
+  D. $e$
+answer: |-
+  B
+
+  由 $y=e^{ex}$ 得 $\ln y=ex$，即 $x=\frac{\ln y}{e}$，故 $y=e^{ex}$ 与 $y=\frac{\ln x}{e}$ 互为反函数，图象关于 $y=x$ 对称。 直线 $x+y+a=0$ 斜率为 $-1$，与 $y=x$ 垂直，因此其与两曲线的交点 $A,B$ 关于 $y=x$ 对称。设 $B(x_0,y_0)$，则 $A(y_0,x_0)$， 且 $|AB|=2\,d(B,y=x)$。要使该距离最小，在 $y=\frac{\ln x}{e}$ 上取切线平行于 $y=x$ 的点： $y^{\prime}=\frac{1}{ex}=1\Rightarrow x_0=\frac1e$， $y_0=\frac{\ln(1/e)}{e}=-\frac1e$。于是 \[ |AB|_{\min}=2\cdot\frac{|x_0-y_0|}{\sqrt2} =2\cdot\frac{\left|\frac1e-\left(-\frac1e\right)\right|}{\sqrt2} =\frac{2\sqrt2}{e}, \] 故选 B。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 识别两条曲线互为反函数。
+      max_score: 1
+    - step_id: step_2
+      description: 把 $|AB|$ 转化为到对称轴 $y=x$ 的距离。
+      max_score: 1
+    - step_id: step_3
+      description: 在 $y=\frac{\ln x}{e}$ 上找与 $y=x$ 平行的切点。
+      max_score: 1
+    - step_id: step_4
+      description: 计算最小距离并对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何量求解
+    part_level: []
+  method:
+    primary: 对称化与偏移
+    secondary:
+      - 切线放缩与凹凸性
+      - 局部逼近与找点
+    subroute:
+      - 反函数关于 y=x 对称
+      - 反函数水平距离
+      - 平行切线最短距离
+  structure:
+    primary: 对称结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $y=e^{ex}\Longleftrightarrow x=\frac{\ln y}{e}$
+      - $|AB|=2\,d(B,\ y=x)$
+      - $y^{\prime}=\frac{1}{ex}=1\Rightarrow \left(\frac1e,-\frac1e\right)$
+      - $|AB|_{\min}=\frac{2\sqrt2}{e}$
+    normalization_moves_used:
+      - 先反解确认互为反函数，再启用关于 $y=x$ 的对称性。
+      - 把两曲线交点距离压缩成单曲线到对称轴距离的 2 倍。
+      - 令导数等于 1，定位与 $y=x$ 平行的切点。
+      - 把 $y=x$ 写成 $x-y=0$ 使用点线距离公式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $y=e^{ex}$ 反解到 $x=\frac{\ln y}{e}$，回补分段/复合/反函数基础。
+      - 若学生不知道反函数图象关于 $y=x$ 对称，回补函数性质与图像。
+      - 若学生只算出点到 $y=x$ 的距离却忘记乘 2，回补几何关系基础。
+      - 若学生不会由 $y^{\prime}=1$ 找最近点，回补导数运算与几何意义。
+  detail_terms:
+    - $y=e^{ex}$
+    - $y=\frac{\ln x}{e}$
+    - $x+y+a=0$
+    - 关于 $y=x$ 对称
+    - $\left(\frac1e,-\frac1e\right)$
+    - $\frac{2\sqrt2}{e}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0165_inverse_symmetric_distance_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0165
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0165/page_0165.md
+      role: problem_start
+      evidence: "lines 43-50 contain 例 3 statement, options A-D, and the start of the solution: from $y=e^{ex}$ get $x=\\ln y/e$, identify inverse relation with $y=\\ln x/e$, then continue on next page."
+    - ref_id: page_0166
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0166/page_0166.md
+      role: continuation
+      evidence: "line 14 completes the argument: by symmetry about $y=x$ and line $x+y+a=0 \\perp y=x$, write $|AB|=2|BM|$; set derivative $y^{\\prime}=1/(ex)=1$ on $y=\\ln x/e$, get $B(1/e,-1/e)$, then compute $|AB|_{\\min}=2\\sqrt2/e$ and choose B."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0165.png
+      inspected: true
+      notes: 页图确认例3题头起于 page_0165 底部，函数写为 $y=e^{ex}$ 与 $y=\frac{\ln x}{e}$，选项 B 为 $\frac{2\sqrt2}{e}$。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0166.png
+      inspected: true
+      notes: 页图确认例3续解在 page_0166 顶部完成：先做反函数对称，再以 $y^{\prime}=\frac{1}{ex}=1$ 定位 $B(1/e,-1/e)$，最终结论选 B。
+  source_context: 例3题头始于 page_0165，按跨页归属规则由本 worker 完整收录；page_0166 仅用于该题续解，不新增例4及后续例题卡。
+  source_influence:
+    - 保留源解“先判互为反函数，再用关于 $y=x$ 对称降维”的主路线。
+    - 保留源解“最短距离等于到对称轴距离的两倍”与“切线平行于 $y=x$”两步联动。
+    - 保留源解最终距离公式 $|AB|_{\min}=2\cdot\frac{|1/e-(-1/e)|}{\sqrt2}$。
+  source_discrepancies:
+    - page_0166 markdown line 14 起始处写成“$e^x$ 与 $y=\frac{\ln x}{e}$ 关于 $y=x$ 对称”，但同句后半与页图均指向例3原函数 $y=e^{ex}$。已按页图与前页题干 统一为 $y=e^{ex}$，不影响最终答案与方法链。
+original_problem:
+  stem: （2024 · 重庆月考 T6）已知直线 $x+y+a=0$ 与曲线 $y=e^{ex}$，$y=\frac{\ln x}{e}$ 分别交于点 $A$，$B$，则 $|AB|$ 的最小值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\frac{2}{e}$
+      text_latex: $\frac{2}{e}$
+    - label: B
+      text_raw: $\frac{2\sqrt{2}}{e}$
+      text_latex: $\frac{2\sqrt{2}}{e}$
+    - label: C
+      text_raw: "1"
+      text_latex: "1"
+    - label: D
+      text_raw: $e$
+      text_latex: $e$
+  answer: B
+  fidelity_notes:
+    - 源题为单选题，选项 A-D 已完整保留。
+    - 题干与解析跨 page_0165/page_0166，已按题头归属完整拼接。
+solution:
+  source_solution_summary: 由 $y=e^{ex}$ 得 $\ln y=ex$，即 $x=\frac{\ln y}{e}$，故 $y=e^{ex}$ 与 $y=\frac{\ln x}{e}$ 互为反函数，图象关于 $y=x$ 对称。 直线 $x+y+a=0$ 斜率为 $-1$，与 $y=x$ 垂直，因此其与两曲线的交点 $A,B$ 关于 $y=x$ 对称。设 $B(x_0,y_0)$，则 $A(y_0,x_0)$， 且 $|AB|=2\,d(B,y=x)$。要使该距离最小，在 $y=\frac{\ln x}{e}$ 上取切线平行于 $y=x$ 的点： $y^{\prime}=\frac{1}{ex}=1\Rightarrow x_0=\frac1e$， $y_0=\frac{\ln(1/e)}{e}=-\frac1e$。于是 \[ |AB|_{\min}=2\cdot\frac{|x_0-y_0|}{\sqrt2} =2\cdot\frac{\left|\frac1e-\left(-\frac1e\right)\right|}{\sqrt2} =\frac{2\sqrt2}{e}, \] 故选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 识别两条曲线互为反函数。
+      formula_trace:
+        from: $y=e^{ex}$
+        to: $\ln y=ex\Rightarrow x=\frac{\ln y}{e}$
+        operation: 对等式取对数并整理为反解形式。
+        why: 反函数图象关于 $y=x$ 对称，可把两曲线距离问题降到一侧。
+      source_ref: page_0165:line 50
+    - step_id: step_2
+      statement: 把 $|AB|$ 转化为到对称轴 $y=x$ 的距离。
+      formula_trace:
+        from: $x+y+a=0\perp y=x$，且 $A,B$ 关于 $y=x$ 对称
+        to: $|AB|=2|BM|=2\,d(B,\ y=x)$
+        operation: 设 $B(x_0,y_0)$，对应点为 $A(y_0,x_0)$，中点 $M$ 在 $y=x$ 上。
+        why: 对称点连线被对称轴平分，最短值可由单侧点到轴距离求得。
+      source_ref: page_0166:line 14
+    - step_id: step_3
+      statement: 在 $y=\frac{\ln x}{e}$ 上找与 $y=x$ 平行的切点。
+      formula_trace:
+        from: $y=\frac{\ln x}{e},\ y=x$ 的斜率为 $1$
+        to: $y^{\prime}=\frac{1}{ex}=1\Rightarrow x_0=\frac1e,\ y_0=-\frac1e$
+        operation: 令导数等于 1，再代回函数求纵坐标。
+        why: 点到直线最短时，曲线在该点的切线平行于目标直线。
+      source_ref: page_0166:line 14
+    - step_id: step_4
+      statement: 计算最小距离并对应选项。
+      formula_trace:
+        from: $x_0=\frac1e,\ y_0=-\frac1e$
+        to: $|AB|_{\min}=2\cdot\frac{|x_0-y_0|}{\sqrt2}=\frac{2\sqrt2}{e}$
+        operation: 用点到直线 $x-y=0$ 的距离公式后乘 2。
+        why: 两侧对称距离相等，总距离是单侧到轴距离的 2 倍。
+      source_ref: page_0166:line 14
+teaching_card:
+  student_title: 反函数对称轴降维求最短距离
+  what_it_trains: 训练学生把“反函数两图象交同一垂轴直线”的距离问题先降为“到 $y=x$ 的距离”，再用平行切线定点完成最值。
+  recognition_cues:
+    - 两条曲线可互相反解，一条是指数型一条是对数型。
+    - 题中直线斜率为 $-1$，与 $y=x$ 垂直。
+    - 目标是两交点间距离最小值。
+  normalization_moves:
+    - 反解确认两曲线互为反函数。
+    - 将 $|AB|$ 写成 $2\,d(B,\ y=x)$。
+    - 在单侧曲线上令导数等于 1 找切点。
+    - 用 $x-y=0$ 的点线距离公式计算并翻倍。
+  common_failures:
+    - 没识别反函数对称性，直接双参数联立硬算。
+    - 把 $y^{\prime}=\frac{1}{ex}$ 误写成 $\frac{1}{x}$。
+    - 忘记总距离是单侧距离的 2 倍。
+  similar_practice_query: e^{ex} 与 lnx/e 反函数对称 y=x 最短距离 平行切线
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

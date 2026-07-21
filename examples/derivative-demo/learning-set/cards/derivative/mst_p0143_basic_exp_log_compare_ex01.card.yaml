@@ -1,0 +1,212 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0143_basic_exp_log_compare_ex01
+content_revision_id: mst_p0143_basic_exp_log_compare_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0143_basic_exp_log_compare_ex01.card.yaml
+stem: |-
+  （24高一上·河北唐山·阶段练习）设 $a=\\left(\\frac34\\right)^{\\frac12}$，$b=\\ln1.5$，$c=\\left(\\frac23\\right)^{\\frac34}$，则 $a,b,c$ 的大小顺序是（  ）
+  A. $c<a<b$
+  B. $c<b<a$
+  C. $a<c<b$
+  D. $b<c<a$
+answer: |
+  D
+
+  先同幂化：
+  \[
+  a=\left(\frac34\right)^{\frac12}=\left(\frac{9}{16}\right)^{\frac14},\quad
+  c=\left(\frac23\right)^{\frac34}=\left(\frac{8}{27}\right)^{\frac14}.
+  \]
+  由于
+  \[
+  \frac{9}{16}>\frac{8}{27}>\frac{1}{16}>0,
+  \]
+  且 $y=x^{1/4}$ 在 $(0,+\infty)$ 上单调递增，所以
+  \[
+  a>c>\left(\frac{1}{16}\right)^{\frac14}=\frac12.
+  \]
+  再比较 $b$：
+  \[
+  \frac32<e^{1/2}\Rightarrow \ln\frac32<\ln e^{1/2}=\frac12,
+  \]
+  即 $b<\frac12$。
+  合并得
+  \[
+  b<c<a.
+  \]
+  故选 D。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把分数幂统一到同一个幂指数 $\\frac14$。
+      max_score: 1
+    - step_id: step_2
+      description: 利用 $x^{1/4}$ 的单调性得到 $a$ 与 $c$ 及 $\\frac12$ 的顺序。
+      max_score: 1
+    - step_id: step_3
+      description: 用指数比较转成对数上界。
+      max_score: 1
+    - step_id: step_4
+      description: 汇总三数顺序并对照选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较三个不同形态的数 $a,b,c$。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - 同幂化
+      - 指数对数比大小
+      - 统一参照点 $\\frac12$
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 指对复合结构
+      - 同构结构
+    evidence:
+      - $a,c$ 都是 $(0,1)$ 上的分数幂，适合同幂化。
+      - $b=\\ln1.5$ 通过指数不等式转为与常数比较。
+      - 三量最终在同一标尺 $\\frac12$ 上完成排序。
+    normalization_moves_used:
+      - $\\left(\\frac34\\right)^{1/2}\\to\\left(\\frac{9}{16}\\right)^{1/4}$。
+      - $\\left(\\frac23\\right)^{3/4}\\to\\left(\\frac{8}{27}\\right)^{1/4}$。
+      - $\\ln\\frac32<\\frac12$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把分数幂改写为同幂形式，回补指数对数基础。
+      - 若学生不能使用“增函数同向保序”比较四次根，回补函数性质与图像。
+      - 若学生在 $\\frac32<e^{1/2}\\Rightarrow\\ln\\frac32<\\frac12$ 上卡住，回补指数对数基础。
+  detail_terms:
+    - 同幂化
+    - $x^{1/4}$ 单调递增
+    - $\\ln\\frac32<\\frac12$
+    - 顺序 $b<c<a$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0143_basic_exp_log_compare_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0143
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0143/page_0143.md
+      role: problem_start
+      evidence: page_0143进入第4章后给出例1题干、A-D选项与解析结论“故选D”。
+    - ref_id: page_0143_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0143/page_0143.md
+      role: solution
+      evidence: 解析采用同幂化比较 $a,c$，并用 $\\frac32<e^{1/2}$ 比较 $b$ 与 $\\frac12$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0143.png
+      inspected: true
+      notes: 已核对页图：chapter 4从本页开始，例1完整且答案D。
+  source_context: page_0143是第4章第1节起始页，例号重置为例1；本题在“转化为同底或同幂”小节下。
+  source_influence:
+    - 保留源解先把 $a,c$ 化成四次根后比较被开方数。
+    - 保留“先与 $\\frac12$ 比较，再汇总三数顺序”的课堂节奏。
+    - 保留 $\\ln\\frac32<\\frac12$ 的指数对数比较桥梁。
+  source_discrepancies: []
+original_problem:
+  stem: （24高一上·河北唐山·阶段练习）设 $a=\\left(\\frac34\\right)^{\\frac12}$，$b=\\ln1.5$，$c=\\left(\\frac23\\right)^{\\frac34}$，则 $a,b,c$ 的大小顺序是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $c<a<b$
+      text_latex: $c<a<b$
+    - label: B
+      text_raw: $c<b<a$
+      text_latex: $c<b<a$
+    - label: C
+      text_raw: $a<c<b$
+      text_latex: $a<c<b$
+    - label: D
+      text_raw: $b<c<a$
+      text_latex: $b<c<a$
+  answer: D
+  fidelity_notes:
+    - 本题为单选，源页明确“故选D”。
+    - chapter 4新起始页例号重置，不沿用上一章例号。
+solution:
+  source_solution_summary: |
+    先同幂化：
+    \[
+    a=\left(\frac34\right)^{\frac12}=\left(\frac{9}{16}\right)^{\frac14},\quad
+    c=\left(\frac23\right)^{\frac34}=\left(\frac{8}{27}\right)^{\frac14}.
+    \]
+    由于
+    \[
+    \frac{9}{16}>\frac{8}{27}>\frac{1}{16}>0,
+    \]
+    且 $y=x^{1/4}$ 在 $(0,+\infty)$ 上单调递增，所以
+    \[
+    a>c>\left(\frac{1}{16}\right)^{\frac14}=\frac12.
+    \]
+    再比较 $b$：
+    \[
+    \frac32<e^{1/2}\Rightarrow \ln\frac32<\ln e^{1/2}=\frac12,
+    \]
+    即 $b<\frac12$。
+    合并得
+    \[
+    b<c<a.
+    \]
+    故选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把分数幂统一到同一个幂指数 $\\frac14$。
+      formula_trace:
+        from: $a=\\left(\\frac34\\right)^{1/2},\\ c=\\left(\\frac23\\right)^{3/4}$
+        to: $a=\\left(\\frac{9}{16}\\right)^{1/4},\\ c=\\left(\\frac{8}{27}\\right)^{1/4}$
+        operation: 平方再开四次根，立方再开四次根。
+        why: 同幂后可直接比较被开方数。
+      source_ref: page_0143_solution
+    - step_id: step_2
+      statement: 利用 $x^{1/4}$ 的单调性得到 $a$ 与 $c$ 及 $\\frac12$ 的顺序。
+      formula_trace:
+        from: $\\frac{9}{16}>\\frac{8}{27}>\\frac{1}{16}>0$
+        to: $a>c>\\frac12$
+        operation: 在 $(0,+\\infty)$ 上施加同一增函数 $x^{1/4}$。
+        why: 先把 $a,c$ 压到同一参照线 $\\frac12$ 上。
+      source_ref: page_0143_solution
+    - step_id: step_3
+      statement: 用指数比较转成对数上界。
+      formula_trace:
+        from: $\\frac32<e^{1/2}$
+        to: $b=\\ln\\frac32<\\frac12$
+        operation: 两侧取自然对数。
+        why: $b$ 也放到 $\\frac12$ 参照线，便于三数合并。
+      source_ref: page_0143_solution
+    - step_id: step_4
+      statement: 汇总三数顺序并对照选项。
+      formula_trace:
+        from: $a>c>\\frac12$ 与 $b<\\frac12$
+        to: $b<c<a$
+        operation: 传递比较。
+        why: 唯一对应选项 D。
+      source_ref: page_0143_solution
+teaching_card:
+  student_title: 先把幂统一，再把对数压到同一参照值
+  what_it_trains: 训练“同幂化 + 参照值比较”的基本比大小套路，避免直接算近似值。
+  recognition_cues:
+    - 多个数分别是分数幂、对数，形态不同。
+    - 底数都在 $(0,1)$，常见同底/同幂改写机会。
+    - 题目是三数排序单选。
+  normalization_moves:
+    - 把 $a,c$ 改写成 $\\frac14$ 次幂。
+    - 以 $\\frac12$ 作为中间参照。
+    - 把 $b$ 通过 $\\frac32<e^{1/2}$ 转成 $b<\\frac12$。
+  common_failures:
+    - 忽略 $x^{1/4}$ 的定义域要求，随意比较负数情形。
+    - 把 $\\ln1.5$ 误当成大于 $\\frac12$。
+    - 只比较 $a,c$ 后忘记与 $b$ 统一。
+  similar_practice_query: 指数对数比大小 同幂化 三数排序 参照值法
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

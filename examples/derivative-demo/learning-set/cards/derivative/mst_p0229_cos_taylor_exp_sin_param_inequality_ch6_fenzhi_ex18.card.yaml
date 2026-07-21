@@ -1,0 +1,207 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0229_cos_taylor_exp_sin_param_inequality_ch6_fenzhi_ex18
+content_revision_id: mst_p0229_cos_taylor_exp_sin_param_inequality_ch6_fenzhi_ex18-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0229_cos_taylor_exp_sin_param_inequality_ch6_fenzhi_ex18.card.yaml
+stem: |-
+  （2019 · 武汉模拟 T21）
+  1. 求证：$x\geqslant0$ 时，$\cos x\geqslant1-\frac12x^2$ 恒成立。
+  2. 当 $a\geqslant1$ 时，$\forall x\in[0,+\infty)$，证明不等式 $xe^{ax}+x\cos x+1\geqslant(1+\sin x)^2$ 恒成立。
+answer: |-
+  两问不等式均成立。
+
+  第 (1) 问令 $F(x)=\cos x-1+\frac12x^2$，$F(0)=0$。有 $F'(x)=x-\sin x$。再令 $u(x)=x-\sin x$，则 $u'(x)=1-\cos x\geqslant0$，$u(0)=0$，故 $u(x)\geqslant0$， 从而 $F'(x)\geqslant0$，$F(x)\geqslant0$，即 $\cos x\geqslant1-\frac12x^2$。第 (2) 问由第 (1) 问和 $x\geqslant\sin x$、$a\geqslant1$ 得 $xe^{ax}+x\cos x+1\geqslant xe^x+x(1-\frac12x^2)+1$， 且 $(1+\sin x)^2\leqslant(1+x)^2$。所以只需证明 $xe^x+x(1-\frac12x^2)+1\geqslant(1+x)^2$，即 $e^x-(\frac12x^2+x+1)\geqslant0$。令 $G(x)=e^x-(\frac12x^2+x+1)$，再令 $H(x)=e^x-x-1$，由 $H'(x)=e^x-1\geqslant0$ 得 $H(x)\geqslant0$，从而 $G'(x)\geqslant0$、$G(x)\geqslant0$，命题成立。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 第 (1) 问构造余弦下界函数。
+      max_score: 1
+    - step_id: step_2
+      description: 用 $x-\sin x$ 控制 $F^\prime(x)$。
+      max_score: 1
+    - step_id: step_3
+      description: 第 (2) 问先把左右两边分别放缩。
+      max_score: 1
+    - step_id: step_4
+      description: 化归到指数二次余项。
+      max_score: 1
+    - step_id: step_5
+      description: 用二次求导证明指数二次余项非负。
+      max_score: 1
+    - step_id: step_6
+      description: 回代得到原不等式。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: part_1
+        goal: 不等式证明
+        target: 第 part_1 问
+        result: $\cos x\geqslant1-\frac12x^2$。
+      - part_id: part_2
+        goal: 不等式证明
+        target: 第 part_2 问
+        result: $xe^{ax}+x\cos x+1\geqslant(1+\sin x)^2$。
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 保值性与分治
+      - 局部逼近与找点
+    subroute:
+      - 余弦二次下界
+      - $x-\sin x$
+      - $a\geqslant1$
+      - 指数二次余项
+      - 左侧下界右侧上界
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 指对复合结构
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - $\cos x\geqslant1-\frac12x^2$
+      - $x\geqslant\sin x$
+      - $xe^{ax}+x\cos x+1$
+      - $e^x-(\frac12x^2+x+1)$
+    normalization_moves_used:
+      - 先证明可复用的三角基础界。
+      - 用 $a\geqslant1$ 把 $e^{ax}$ 降到 $e^x$。
+      - 左侧用下界，右侧用 $\sin x\leqslant x$ 的上界。
+      - 最后证明 $e^x$ 大于二阶多项式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $u^\prime(x)=1-\cos x$ 推出 $x-\sin x\geqslant0$，回补三角函数基础。
+      - 若学生不会用导数证明 $F(x)\geqslant0$，回补导数单调极值基础。
+      - 若学生不会处理 $a\geqslant1$ 下的指数比较，回补指数对数基础。
+      - 若学生不会把左右两边分别放缩后比较，回补不等式工具基础。
+      - 若学生在 $x=0$ 除以 $x$ 出错，回补函数三要素与定义域。
+  detail_terms:
+    - $\cos x\geqslant1-\frac12x^2$
+    - $x-\sin x$
+    - $xe^{ax}$
+    - $(1+\sin x)^2$
+    - $e^x-(\frac12x^2+x+1)$
+    - 二阶下界
+    - 左侧下界右侧上界
+parts: &a1
+  - part_id: part_1
+    text: 求证：$x\geqslant0$ 时，$\cos x\geqslant1-\frac12x^2$ 恒成立。
+  - part_id: part_2
+    text: 当 $a\geqslant1$ 时，$\forall x\in[0,+\infty)$，证明不等式 $xe^{ax}+x\cos x+1\geqslant(1+\sin x)^2$ 恒成立。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0229_cos_taylor_exp_sin_param_inequality_ch6_fenzhi_ex18
+source_evidence:
+  source_refs:
+    - ref_id: page_0229_ex18_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0229/page_0229.md
+      role: problem_start
+      evidence: page_0229 下部给出例18题头：先证明 $\cos x\geqslant1-\frac12x^2$，再证明 $xe^{ax}+x\cos x+1\geqslant(1+\sin x)^2$。
+    - ref_id: page_0229_ex18_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0229/page_0229.md
+      role: solution
+      evidence: page_0229 给出第 (1) 问和第 (2) 问主体：用 $x-\sin x$ 证明余弦下界，再用 $a\geqslant1$、$\sin x\leqslant x$、$\cos x\geqslant1-\frac12x^2$ 化归到指数二次不等式。
+    - ref_id: page_0230_ex18_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0230/page_0230.md
+      role: continuation
+      evidence: page_0230 顶部只续完例18结论：“$(1+\sin x)^2$ 恒成立”。
+    - ref_id: page_0230_ex19_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0230/page_0230.md
+      role: local_context
+      evidence: page_0230 随后进入考点3并另起例19，属于下一批，本卡不处理。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0229.png
+      inspected: true
+      notes: 已核对页图：例18题头、第 (1) 问解析和第 (2) 问主体解析位于 page_0229 下部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0230.png
+      inspected: true
+      notes: 已核对页图：page_0230 顶部为例18最后一行结论，例19另起。
+  source_context: 本卡处理 page_0229 起头、page_0230 顶部续完的例18；page_0230 例19以后留给下一批。
+  source_influence:
+    - 保留 source 的基础引理链：先由 $u(x)=x-\sin x$ 推出 $\cos x\geqslant1-\frac12x^2$，同时得到 $x\geqslant\sin x$。
+    - 保留 source 的参数使用：$a\geqslant1$ 给出 $xe^{ax}\geqslant xe^x$。
+    - 保留 source 的指数二次收口：最终只需证明 $e^x-(\frac12x^2+x+1)\geqslant0$。
+  source_discrepancies: []
+original_problem:
+  stem: （2019 · 武汉模拟 T21）
+  parts: *a1
+  choices: []
+  answer: 两问不等式均成立。
+  fidelity_notes:
+    - 两问均为证明题，无选项。
+    - 第 (2) 问在 $x=0$ 取等；$x>0$ 时可按源解除以 $x$ 处理指数二次块。
+solution:
+  source_solution_summary: 第 (1) 问令 $F(x)=\cos x-1+\frac12x^2$，$F(0)=0$。有 $F'(x)=x-\sin x$。再令 $u(x)=x-\sin x$，则 $u'(x)=1-\cos x\geqslant0$，$u(0)=0$，故 $u(x)\geqslant0$， 从而 $F'(x)\geqslant0$，$F(x)\geqslant0$，即 $\cos x\geqslant1-\frac12x^2$。第 (2) 问由第 (1) 问和 $x\geqslant\sin x$、$a\geqslant1$ 得 $xe^{ax}+x\cos x+1\geqslant xe^x+x(1-\frac12x^2)+1$， 且 $(1+\sin x)^2\leqslant(1+x)^2$。所以只需证明 $xe^x+x(1-\frac12x^2)+1\geqslant(1+x)^2$，即 $e^x-(\frac12x^2+x+1)\geqslant0$。令 $G(x)=e^x-(\frac12x^2+x+1)$，再令 $H(x)=e^x-x-1$，由 $H'(x)=e^x-1\geqslant0$ 得 $H(x)\geqslant0$，从而 $G'(x)\geqslant0$、$G(x)\geqslant0$，命题成立。
+  key_steps:
+    - step_id: step_1
+      statement: 第 (1) 问构造余弦下界函数。
+      formula_trace:
+        from: $\cos x\geqslant1-\frac12x^2$
+        to: $F(x)=\cos x-1+\frac12x^2\geqslant0$
+        operation: 移项。
+        why: 转成证明一个函数从 0 开始不下降。
+      source_ref: page_0229_ex18_solution_start
+    - step_id: step_2
+      statement: 用 $x-\sin x$ 控制 $F^\prime(x)$。
+      formula_trace:
+        from: $F^\prime(x)=x-\sin x$
+        to: $F^\prime(x)\geqslant0$
+        operation: 构造 $u(x)=x-\sin x$，由 $u^\prime(x)=1-\cos x\geqslant0$ 得 $u(x)\geqslant0$。
+        why: 这是余弦二次下界的基础证明。
+      source_ref: page_0229_ex18_solution_start
+    - step_id: step_3
+      statement: 第 (2) 问先把左右两边分别放缩。
+      formula_trace:
+        from: $xe^{ax}+x\cos x+1$ 与 $(1+\sin x)^2$
+        to: $xe^x+x(1-\frac12x^2)+1$ 与 $(1+x)^2$
+        operation: 用 $a\geqslant1$、$\cos x\geqslant1-\frac12x^2$、$\sin x\leqslant x$。
+        why: 把含参指数三角不等式化为单变量指数二次不等式。
+      source_ref: page_0229_ex18_solution_start
+    - step_id: step_4
+      statement: 化归到指数二次余项。
+      formula_trace:
+        from: $xe^x+x(1-\frac12x^2)+1\geqslant(1+x)^2$
+        to: $e^x-(\frac12x^2+x+1)\geqslant0$
+        operation: 整理并在 $x>0$ 时除以 $x$；$x=0$ 直接取等。
+        why: 右边变成指数函数减二次多项式。
+      source_ref: page_0229_ex18_solution_start
+    - step_id: step_5
+      statement: 用二次求导证明指数二次余项非负。
+      formula_trace:
+        from: $G(x)=e^x-(\frac12x^2+x+1)$
+        to: $G(x)\geqslant0$
+        operation: 令 $H(x)=G^\prime(x)=e^x-x-1$，再由 $H^\prime(x)=e^x-1\geqslant0$ 得 $H,G$ 均从 0 起不下降。
+        why: 这是 $e^x$ 的二阶下界形式。
+      source_ref: page_0229_ex18_solution_start
+    - step_id: step_6
+      statement: 回代得到原不等式。
+      formula_trace:
+        from: $xe^x+x(1-\frac12x^2)+1\geqslant(1+x)^2\geqslant(1+\sin x)^2$
+        to: $xe^{ax}+x\cos x+1\geqslant(1+\sin x)^2$
+        operation: 合并左侧下界、右侧上界和 $a\geqslant1$。
+        why: 分而治之的各个下界/上界方向一致。
+      source_ref: page_0230_ex18_continuation
+teaching_card:
+  student_title: 先做三角基础界，再把原题压成指数二次余项
+  what_it_trains: 训练三角借助泰勒放缩后的分而治之：先建可复用引理，再把复杂不等式化为单个指数余项。
+  recognition_cues:
+    - 第 (1) 问证明的 $\cos x$ 下界，在第 (2) 问会直接复用。
+    - 右侧是 $(1+\sin x)^2$，自然想到 $\sin x\leqslant x$。
+    - $a\geqslant1$ 且 $x\geqslant0$，说明 $xe^{ax}$ 可以下放到 $xe^x$。
+  normalization_moves:
+    - 先证明 $x-\sin x\geqslant0$，再证明 $\cos x\geqslant1-\frac12x^2$。
+    - 左侧保留下界：$xe^x+x(1-\frac12x^2)+1$。
+    - 右侧放成上界：$(1+\sin x)^2\leqslant(1+x)^2$。
+    - 整理到 $e^x-(\frac12x^2+x+1)\geqslant0$。
+  common_failures:
+    - 只记住结论 $\cos x\geqslant1-\frac12x^2$，不会在题内证明。
+    - 左边和右边放缩方向混乱，把需要证明的目标变强或变弱。
+    - 整理到指数二次余项时漏掉 $x=0$ 的边界处理。
+  similar_practice_query: cosx>=1-x^2/2 x>=sinx xe^{ax} (1+sinx)^2 e^x 二次下界 分而治之
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

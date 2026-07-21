@@ -1,0 +1,186 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0266_lambert_xex_lnxe_parameter_lock_ex6
+content_revision_id: mst_p0266_lambert_xex_lnxe_parameter_lock_ex6-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0266_lambert_xex_lnxe_parameter_lock_ex6.card.yaml
+stem: （2024 · 山东济宁高三模拟）已知函数 $f(x)=a\ln x-2x+\frac12x^2$。若不等式 $f(x)\le x(e^x+\frac12x-a-2)-1$ 恒成立，求实数 $a$ 的取值范围。
+answer: |-
+  $a=1$。
+
+  将不等式 $a\ln x-2x+\frac12x^2\le x(e^x+\frac12x-a-2)-1$ 整理为 $a(\ln x+x)\le xe^x-1$，即 $xe^x-a\ln(xe^x)-1\ge0$。令 $t=xe^x$，由于 $x>0$ 时 $t$ 从 0 单调增到 $+\infty$，问题化为 $h(t)=t-a\ln t-1\ge0$ 对 $t>0$ 恒成立。又 $h(1)=0$， 所以 $t=1$ 必须是极小值点，$h^\prime(1)=1-a=0$， 得 $a=1$。当 $a=1$ 时，$h(t)=t-\ln t-1\ge0$， 等价于 $e^u-u-1\ge0$，其中 $u=x+\ln x$；故 $a=1$ 成立。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 整理原不等式。
+      max_score: 1
+    - step_id: step_2
+      description: 识别朗博同构结构。
+      max_score: 1
+    - step_id: step_3
+      description: 换元成单变量标准不等式。
+      max_score: 1
+    - step_id: step_4
+      description: 由极点效应锁定 $a$。
+      max_score: 1
+    - step_id: step_5
+      description: 回证 $a=1$。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: main
+        goal: 求参数范围
+        target: 第 main 问
+        result: $a=1$。
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 显隐点探路
+      - 充分/必要性探路
+    subroute:
+      - 朗博同构
+      - $xe^x=t$
+      - $\ln x+x=\ln(xe^x)$
+      - 取等点 $t=1$ 锁参
+      - 充分性回证
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 复合函数与不动点结构
+      - 特殊幂函数与指数函数结构
+      - 不等式工具结构
+    evidence:
+      - $xe^x$
+      - $\ln(xe^x)$
+      - $x+\ln x$
+      - $t-a\ln t-1$
+      - $x_0+\ln x_0=0$
+    normalization_moves_used:
+      - 把 $a\ln x+ax$ 合并成 $a(\ln x+x)$。
+      - 把 $\ln x+x$ 改写成 $\ln(xe^x)$。
+      - 令 $t=xe^x$，回到 $t-a\ln t-1$。
+      - 利用 $t=1$ 的取等点锁定 $a=1$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会合并 $\ln x+x$，回补指数对数基础。
+      - 若学生不会检查换元范围，回补函数三要素与定义域。
+      - 若学生不会用取等点导数为 0 锁参，回补导数单调极值基础。
+      - 若学生整理不等式时丢项，回补代数恒等变形。
+      - 若学生不知道 $e^u-u-1\ge0$，回补不等式工具基础。
+  detail_terms:
+    - 朗博同构
+    - $xe^x=t$
+    - $\ln x+x=\ln(xe^x)$
+    - $t-a\ln t-1$
+    - $x_0+\ln x_0=0$
+    - $a=1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0266_lambert_xex_lnxe_parameter_lock_ex6
+source_evidence:
+  source_refs:
+    - ref_id: page_0266_section_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0266/page_0266.md
+      role: local_context
+      evidence: page_0266 在例5后进入“2. 朗博同构在 $x_0+\ln x_0=0$ 处的极点效应”，说明 $xe^x-a(x+\ln x)-1=h(x+\ln x)$ 的隐零点极点效应。
+    - ref_id: page_0266_ex6_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0266/page_0266.md
+      role: problem_start
+      evidence: page_0266 给出例6题头：$f(x)=a\ln x-2x+\frac12x^2$，若 $f(x)\le x(e^x+\frac12x-a-2)-1$ 恒成立，求 $a$ 的取值范围。
+    - ref_id: page_0266_ex6_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0266/page_0266.md
+      role: solution
+      evidence: page_0266 例6解析将不等式化为 $a(\ln x+x)\le xe^x-1$，即 $xe^x-a\ln(xe^x)-1\ge0$；令 $t=xe^x$ 后由 $h(1)=0$、$h^\prime(1)=0$ 得 $a=1$，再回证。
+    - ref_id: page_0267_ex7_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0267/page_0267.md
+      role: local_context
+      evidence: page_0267 进入“3. 导函数极点效应”并另起例7，说明例6在 page_0266 闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0266.png
+      inspected: true
+      notes: 已核对页图：例6题头和完整解析均在 page_0266 内。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0267.png
+      inspected: true
+      notes: 已核对页图：page_0267 为新小节和例7，不属于本卡。
+  source_context: 本卡处理 page_0266 起头并在本页结束的例6；page_0267 例7排除。
+  source_influence:
+    - 保留 source 的核心变形：$a(\ln x+x)\le xe^x-1$。
+    - 保留朗博同构换元：令 $t=xe^x$，把 $\ln x+x$ 识别为 $\ln(xe^x)$。
+    - 保留极点效应：$h(1)=0$ 且全域非负，故 $h^\prime(1)=0$，得 $a=1$。
+    - 保留回证：$xe^x-\ln(xe^x)-1=e^{x+\ln x}-x-\ln x-1\ge0$。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 山东济宁高三模拟）已知函数 $f(x)=a\ln x-2x+\frac12x^2$。若不等式 $f(x)\le x(e^x+\frac12x-a-2)-1$ 恒成立，求实数 $a$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $a=1$。
+  fidelity_notes:
+    - 定义域为 $x>0$。
+    - 题目问取值范围，但 source 结论为唯一值 $a=1$。
+solution:
+  source_solution_summary: 将不等式 $a\ln x-2x+\frac12x^2\le x(e^x+\frac12x-a-2)-1$ 整理为 $a(\ln x+x)\le xe^x-1$，即 $xe^x-a\ln(xe^x)-1\ge0$。令 $t=xe^x$，由于 $x>0$ 时 $t$ 从 0 单调增到 $+\infty$，问题化为 $h(t)=t-a\ln t-1\ge0$ 对 $t>0$ 恒成立。又 $h(1)=0$， 所以 $t=1$ 必须是极小值点，$h^\prime(1)=1-a=0$， 得 $a=1$。当 $a=1$ 时，$h(t)=t-\ln t-1\ge0$， 等价于 $e^u-u-1\ge0$，其中 $u=x+\ln x$；故 $a=1$ 成立。
+  key_steps:
+    - step_id: step_1
+      statement: 整理原不等式。
+      formula_trace:
+        from: $a\ln x-2x+\frac12x^2\le x(e^x+\frac12x-a-2)-1$
+        to: $a(\ln x+x)\le xe^x-1$
+        operation: 展开右侧并合并同类项。
+        why: 把参数 $a$ 收到同一个括号里，暴露 $\ln x+x$。
+      source_ref: page_0266_ex6_solution
+    - step_id: step_2
+      statement: 识别朗博同构结构。
+      formula_trace:
+        from: $\ln x+x$
+        to: $\ln(xe^x)$
+        operation: 对数合并。
+        why: $xe^x$ 与 $\ln(xe^x)$ 可以统一成同一个变量。
+      source_ref: page_0266_ex6_solution
+    - step_id: step_3
+      statement: 换元成单变量标准不等式。
+      formula_trace:
+        from: $xe^x-a\ln(xe^x)-1\ge0$
+        to: $h(t)=t-a\ln t-1\ge0$，$t=xe^x>0$
+        operation: 令 $t=xe^x$。
+        why: $t$ 在 $x>0$ 上覆盖 $(0,+\infty)$，不丢范围。
+      source_ref: page_0266_ex6_solution
+    - step_id: step_4
+      statement: 由极点效应锁定 $a$。
+      formula_trace:
+        from: $h(1)=0$，$h(t)\ge0$
+        to: $h^\prime(1)=1-a=0$，$a=1$
+        operation: 全域非负且取等点导数为 0。
+        why: 若 $t=1$ 不是极小值点，就会在附近破坏恒成立。
+      source_ref: page_0266_ex6_solution
+    - step_id: step_5
+      statement: 回证 $a=1$。
+      formula_trace:
+        from: $xe^x-\ln(xe^x)-1$
+        to: $e^{x+\ln x}-(x+\ln x)-1\ge0$
+        operation: 令 $u=x+\ln x$，套 $e^u-u-1\ge0$。
+        why: 证明必要条件 $a=1$ 也是充分条件。
+      source_ref: page_0266_ex6_solution
+teaching_card:
+  student_title: 朗博同构：看见 $x+\ln x$，就尝试挂到 $xe^x$
+  what_it_trains: 训练把 $xe^x$ 与 $x+\ln x$ 识别为同一个变量的两种语言，从而把复杂恒成立降成 $t-a\ln t-1\ge0$。
+  recognition_cues:
+    - 题面同时出现 $xe^x$ 和 $\ln x+x$。
+    - 参数 $a$ 乘在 $\ln x+x$ 上。
+    - 整理后能出现 $xe^x-a\ln(xe^x)-1$。
+  normalization_moves:
+    - 先展开并整理，不急着对原式求导。
+    - 把 $\ln x+x$ 看成 $\ln(xe^x)$。
+    - 令 $t=xe^x$ 后用取等点 $t=1$ 锁参。
+  common_failures:
+    - 直接对原式求导，表达式变复杂后看不出结构。
+    - 换元 $t=xe^x$ 后忘记说明 $t$ 覆盖 $(0,+\infty)$。
+    - 只由 $h^\prime(1)=0$ 得 $a=1$，但没有回证充分性。
+  similar_practice_query: 朗博同构 xe^x x+lnx ln(xe^x t-a ln t-1 a=1
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

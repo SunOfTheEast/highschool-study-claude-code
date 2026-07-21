@@ -1,0 +1,232 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0153_log_base_intersection_ex35
+content_revision_id: mst_p0153_log_base_intersection_ex35-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0153_log_base_intersection_ex35.card.yaml
+stem: |-
+  （2024·衡水月考）已知正数 $a,b,c\in(1,+\infty)$，满足 $\\frac{2a-1}{a-1}=2+\\log_2a$，$\\frac{3b-2}{b-1}=3+\\log_3b$，$\\frac{4c-3}{c-1}=4+\\log_4c$，则下列不等式成立的是（  ）
+  A. $c<b<a$
+  B. $a<b<c$
+  C. $a<c<b$
+  D. $c<a<b$
+answer: |
+  B
+
+  先分别化简三式：
+  \[
+  \frac{2a-1}{a-1}=2+\log_2a
+  \Rightarrow
+  \frac1{a-1}=\log_2a,
+  \]
+  \[
+  \frac{3b-2}{b-1}=3+\log_3b
+  \Rightarrow
+  \frac1{b-1}=\log_3b,
+  \]
+  \[
+  \frac{4c-3}{c-1}=4+\log_4c
+  \Rightarrow
+  \frac1{c-1}=\log_4c.
+  \]
+  即 $a,b,c$ 分别是曲线
+  \[
+  y=\frac1{x-1}
+  \]
+  与
+  \[
+  y=\log_2x,\ y=\log_3x,\ y=\log_4x
+  \]
+  的交点横坐标。
+
+  在 $x>1$ 上，$y=\frac1{x-1}$ 递减；且同一 $x$ 下
+  \[
+  \log_2x>\log_3x>\log_4x.
+  \]
+  底数越大，对数曲线越低，与递减双曲线的交点越靠右，所以
+  \[
+  a<b<c.
+  \]
+  故选 B。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把三条分式条件统一为“倒数=对数”交点方程。
+      max_score: 1
+    - step_id: step_2
+      description: 建立同一参考曲线下的三组交点。
+      max_score: 1
+    - step_id: step_3
+      description: 由曲线相对高低判断交点横坐标顺序。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较三组交点横坐标 $a,b,c$ 的顺序。
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 方程交点化
+      - 同参照曲线对比
+      - 对数底数分层
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+    evidence:
+      - 三条条件都被化为 $\\frac1{x-1}=\\log_kx$。
+      - 统一参考曲线 $y=\\frac1{x-1}$，仅改变对数底数。
+      - 比较对象本质是交点横坐标排序。
+    normalization_moves_used:
+      - 把分式等式移项化成倒数-对数交点式。
+      - 固定 $y=\\frac1{x-1}$，把 $k=2,3,4$ 分层。
+      - 用“底数越大曲线越低”判断交点右移。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能化出 $\\frac1{a-1}=\\log_2a$ 这一标准式，回补代数恒等变形。
+      - 若学生忘记 $x>1$ 时不同底对数的高低关系，回补指数对数基础。
+      - 若学生不理解“递减参照曲线下的右移规律”，回补函数性质与图像。
+  detail_terms:
+    - $\\frac1{x-1}$ 与 $\\log_kx$ 交点
+    - 底数越大曲线越低
+    - 交点右移
+    - $a<b<c$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0153_log_base_intersection_ex35
+source_evidence:
+  source_refs:
+    - ref_id: page_0153_ex35_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0153/page_0153.md
+      role: problem_start
+      evidence: 例35题干起始于page_0153底部，给出三条等式条件。
+    - ref_id: page_0154_ex35_choices
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0154/page_0154.md
+      role: continuation
+      evidence: A-D选项在page_0154页首续完。
+    - ref_id: page_0154_ex35_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0154/page_0154.md
+      role: solution
+      evidence: 解析先化为 $\\frac1{a-1}=\\log_2a$ 等，再用交点图得 $a<b<c$，故选B。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0153.png
+      inspected: true
+      notes: 已核对页图：例35题头与条件式在page_0153底部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0154.png
+      inspected: true
+      notes: 已核对页图：例35选项、解析与配图完整，答案B清晰。
+  source_context: 例35跨页：page_0153起题，page_0154页首给出选项和解答；其后转入新节“直线与指数和差函数交点问题”。
+  source_influence:
+    - 保留代数标准化：三式都化成 $\\frac1{x-1}=\\log_k x$ 的交点方程。
+    - 保留图像判断：底数越大，对数曲线越低，交点横坐标越靠右。
+    - 保留结论 $a<b<c$，选B。
+  source_discrepancies: []
+original_problem:
+  stem: （2024·衡水月考）已知正数 $a,b,c\in(1,+\infty)$，满足 $\\frac{2a-1}{a-1}=2+\\log_2a$，$\\frac{3b-2}{b-1}=3+\\log_3b$，$\\frac{4c-3}{c-1}=4+\\log_4c$，则下列不等式成立的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $c<b<a$
+      text_latex: $c<b<a$
+    - label: B
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+    - label: C
+      text_raw: $a<c<b$
+      text_latex: $a<c<b$
+    - label: D
+      text_raw: $c<a<b$
+      text_latex: $c<a<b$
+  answer: B
+  fidelity_notes:
+    - 本题题干在page_0153起始，选项与解析跨到page_0154。
+    - 题设已给 $a,b,c>1$，与图中 $y=\\frac1{x-1}$ 第一象限交点设定一致。
+solution:
+  source_solution_summary: |
+    先分别化简三式：
+    \[
+    \frac{2a-1}{a-1}=2+\log_2a
+    \Rightarrow
+    \frac1{a-1}=\log_2a,
+    \]
+    \[
+    \frac{3b-2}{b-1}=3+\log_3b
+    \Rightarrow
+    \frac1{b-1}=\log_3b,
+    \]
+    \[
+    \frac{4c-3}{c-1}=4+\log_4c
+    \Rightarrow
+    \frac1{c-1}=\log_4c.
+    \]
+    即 $a,b,c$ 分别是曲线
+    \[
+    y=\frac1{x-1}
+    \]
+    与
+    \[
+    y=\log_2x,\ y=\log_3x,\ y=\log_4x
+    \]
+    的交点横坐标。
+
+    在 $x>1$ 上，$y=\frac1{x-1}$ 递减；且同一 $x$ 下
+    \[
+    \log_2x>\log_3x>\log_4x.
+    \]
+    底数越大，对数曲线越低，与递减双曲线的交点越靠右，所以
+    \[
+    a<b<c.
+    \]
+    故选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 把三条分式条件统一为“倒数=对数”交点方程。
+      formula_trace:
+        from: $\\frac{2a-1}{a-1}=2+\\log_2a$ 等三式
+        to: $\\frac1{a-1}=\\log_2a$，$\\frac1{b-1}=\\log_3b$，$\\frac1{c-1}=\\log_4c$
+        operation: 移项并化简分式常数项。
+        why: 将代数条件转成统一的图像交点模型。
+      source_ref: page_0154_ex35_solution
+    - step_id: step_2
+      statement: 建立同一参考曲线下的三组交点。
+      formula_trace:
+        from: $\\frac1{x-1}=\\log_kx\\ (k=2,3,4)$
+        to: $x$ 交点依次记为 $a,b,c$
+        operation: 固定 $y=\\frac1{x-1}$，改变对数底数。
+        why: 把问题转化为“哪条对数曲线交点更靠右”。
+      source_ref: page_0154_ex35_solution
+    - step_id: step_3
+      statement: 由曲线相对高低判断交点横坐标顺序。
+      formula_trace:
+        from: $\\log_2x>\\log_3x>\\log_4x$（$x>1$）
+        to: $a<b<c$
+        operation: 递减双曲线下，曲线越低交点越靠右。
+        why: 直接对应选项B。
+      source_ref: page_0154_ex35_solution
+teaching_card:
+  student_title: 同参照曲线下比较不同底对数交点
+  what_it_trains: 训练“代数方程先交点化，再用曲线相对位置判顺序”的数形结合路径。
+  recognition_cues:
+    - 多个式子都可整理成“分式 = 对数”。
+    - 仅对数底数不同，结构高度统一。
+    - 题目只问 $a,b,c$ 顺序。
+  normalization_moves:
+    - 先把每式化为 $\\frac1{x-1}=\\log_kx$。
+    - 固定参考曲线 $y=\\frac1{x-1}$。
+    - 按 $k=2,3,4$ 的曲线高低推交点左右。
+  common_failures:
+    - 把“底数越大，对数越小（$x>1$）”写反。
+    - 没利用公共参照曲线，陷入逐项硬算。
+    - 忽略题设 $a,b,c>1$ 带来的定义域限制。
+  similar_practice_query: 1/(x-1)=log_k x 交点横坐标 比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

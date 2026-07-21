@@ -1,0 +1,133 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0080_distance_ex12
+content_revision_id: mst_p0080_distance_ex12-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0080_distance_ex12.card.yaml
+stem: （2023 河南驻马店高二期中 T16）点 $P$ 是曲线 $f(x)=2x^2-3\ln x$ 上任意一点，则点 $P$ 到直线 $y=x-4$ 的最短距离______。
+answer: |-
+  $\frac{5\sqrt2}{2}$
+
+  直线 $y=x-4$ 的斜率为 1。曲线 $f(x)=2x^2-3\ln x$ 满足 $f'(x)=4x-\frac3x$。令 $4x-\frac3x=1$, 得 $x=1$ 或 $x=-3/4$, 由 $x>0$ 舍去负根。切点为 $(1,2)$。把直线写成 $x-y-4=0$, 则最短距离为 $|1-2-4|/\sqrt2=5\sqrt2/2$。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 用平行切线条件列方程。
+      max_score: 1
+    - step_id: step_2
+      description: 解切点横坐标并用定义域筛根。
+      max_score: 1
+    - step_id: step_3
+      description: 求切点并计算到直线的距离。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何量求解
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 切线放缩与凹凸性
+    subroute:
+      - 平行切线定位最短距离
+      - 定义域筛根
+      - 点到直线距离公式
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $f'(x)=4x-\frac3x$
+      - $4x-\frac3x=1\Rightarrow x=1$
+      - $d=\frac{|1-2-4|}{\sqrt2}$
+    normalization_moves_used:
+      - 把曲线到直线的最短距离转成平行切线的切点。
+      - 求导方程两边同乘 $x$ 前保留 $x>0$ 的定义域意识。
+      - 把 $y=x-4$ 写成 $x-y-4=0$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不知道令 $f'(x)=1$, 回补导数运算与几何意义。
+      - 若学生没有舍去 $x=-3/4$, 回补函数三要素与定义域。
+      - 若学生点到直线距离公式分母写错, 回补几何关系基础。
+      - 若学生解 $4x^2-x-3=0$ 出错, 回补代数恒等变形。
+  detail_terms:
+    - $2x^2-3\ln x$
+    - $y=x-4$
+    - $4x-\frac3x=1$
+    - $(1,2)$
+    - $\frac{5\sqrt2}{2}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0080_distance_ex12
+source_evidence:
+  source_refs:
+    - ref_id: page_0080
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0080/page_0080.md
+      role: problem_start
+      evidence: "lines 29-31 give 例 12 题干 and solution: compute f'(x)=4x-3/x, set it equal to the slope 1 of y=x-4, keep x=1 by domain, and use the point-to-line distance formula."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0080.png
+      inspected: true
+      notes: 页图确认例 12 位于 page_0080 中下部, 题干、$f'(x)=4x-\frac3x$、 舍去 $x=-3/4$、切点 $(1,2)$ 和答案 $5\sqrt2/2$ 与 markdown 一致。
+  source_context: 本题属于 page_0080 新起头的“直线与曲线的距离问题”。上一段例 11 和下一段例 13 只作为同类距离题的本地上下文, 本卡不合并。
+  source_influence:
+    - 保留源页先令曲线切线斜率等于直线斜率的路线。
+    - 保留源页用函数定义域 $x>0$ 舍去 $x=-3/4$ 的处理。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 河南驻马店高二期中 T16）点 $P$ 是曲线 $f(x)=2x^2-3\ln x$ 上任意一点，则点 $P$ 到直线 $y=x-4$ 的最短距离______。
+  parts: *a1
+  choices: []
+  answer: $\frac{5\sqrt2}{2}$
+  fidelity_notes:
+    - 源题为填空题, 无分问和选项。
+    - 因含 $\ln x$, 曲线定义域为 $x>0$; 源解在求导处明确标出该条件。
+solution:
+  source_solution_summary: 直线 $y=x-4$ 的斜率为 1。曲线 $f(x)=2x^2-3\ln x$ 满足 $f'(x)=4x-\frac3x$。令 $4x-\frac3x=1$, 得 $x=1$ 或 $x=-3/4$, 由 $x>0$ 舍去负根。切点为 $(1,2)$。把直线写成 $x-y-4=0$, 则最短距离为 $|1-2-4|/\sqrt2=5\sqrt2/2$。
+  key_steps:
+    - step_id: step_1
+      statement: 用平行切线条件列方程。
+      formula_trace:
+        from: $f(x)=2x^2-3\ln x,\quad y=x-4$ 的斜率为 $1$
+        to: $f'(x)=4x-\frac3x=1$
+        operation: 求导后令切线斜率等于给定直线斜率。
+        why: 曲线到直线的最短距离对应一条与给定直线平行的曲线切线。
+      source_ref: page_0080:line 31
+    - step_id: step_2
+      statement: 解切点横坐标并用定义域筛根。
+      formula_trace:
+        from: $4x-\frac3x=1$
+        to: $x=1\quad (x=-\frac34\text{舍去})$
+        operation: 两边同乘 $x$ 得 $4x^2-x-3=0$, 再按 $x>0$ 保留正根。
+        why: $\ln x$ 要求 $x>0$, 负根不在曲线上。
+      source_ref: page_0080:line 31
+    - step_id: step_3
+      statement: 求切点并计算到直线的距离。
+      formula_trace:
+        from: $x=1,\quad f(1)=2,\quad y=x-4$
+        to: $d=\frac{|1-2-4|}{\sqrt{1+1}}=\frac{5\sqrt2}{2}$
+        operation: 求出切点 $(1,2)$, 将直线写成 $x-y-4=0$ 后套距离公式。
+        why: 该平行切线切点给出全局最短距离。
+      source_ref: page_0080:line 31
+teaching_card:
+  student_title: 先用定义域筛掉无效切点
+  what_it_trains: 训练学生在曲线到直线的最短距离题中, 先用平行切线找候选点, 再用对数函数的定义域筛掉假根, 最后用距离公式完成计算。
+  recognition_cues:
+    - 题目问曲线 $2x^2-3\ln x$ 到固定直线的最短距离。
+    - 固定直线 $y=x-4$ 的斜率是 1。
+    - 求导方程会出现一个负根, 但原曲线只在 $x>0$ 有意义。
+  normalization_moves:
+    - 先写 $x>0$。
+    - "令 $4x-\frac3x=1$。"
+    - 保留切点 $(1,2)$。
+    - 把直线化为 $x-y-4=0$ 后算距离。
+  common_failures:
+    - 忘记 $\ln x$ 的定义域, 把负根也当候选点。
+    - 把 $y=x-4$ 的标准式误写成 $x-y+4=0$。
+    - 只求出切点, 没有代入点到直线距离公式。
+  similar_practice_query: 2x^2-3lnx 到 y=x-4 最短距离 平行切线 定义域筛根
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,204 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0135_even_construct_ex27
+content_revision_id: mst_p0135_even_construct_ex27-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0135_even_construct_ex27.card.yaml
+stem: |-
+  （2022·安徽期末）已知定义在 $\mathbf{R}$ 上的函数 $f(x)$，其导函数为 $f^{\prime}(x)$。若 $f(x)-f(-x)+2x^3+2x=0$，且当 $x\geqslant0$ 时，$f^{\prime}(x)+3x^2+1\leqslant0$，则不等式 $f(x+1)-f(x)+3x^2+3x+2\leqslant0$ 的解集为（  ）
+  A. $(-\infty,0]$
+  B. $[0,+\infty)$
+  C. $\left(-\infty,-\frac12\right]$
+  D. $\left[-\frac12,+\infty\right)$
+answer: |
+  D
+
+  由 $f(x)-f(-x)+2x^3+2x=0$ 得
+  $f(x)+x^3+x=f(-x)-x^3-x$。设
+  $g(x)=f(x)+x^3+x$，则 $g(-x)=g(x)$，即 $g$ 为偶函数。
+  又 $g^{\prime}(x)=f^{\prime}(x)+3x^2+1$，由题设在 $x\ge0$ 上有
+  $g^{\prime}(x)\le0$，故 $g$ 在 $[0,+\infty)$ 单调递减，
+  由偶性可知在 $(-\infty,0)$ 单调递增。
+  原不等式
+  $f(x+1)-f(x)+3x^2+3x+2\le0$
+  等价于
+  $f(x+1)+(x+1)^3+(x+1)\le f(x)+x^3+x$，
+  即 $g(x+1)\le g(x)$。再写成
+  $g(|x+1|)\le g(|x|)$，在非负轴上由递减性得到
+  $|x+1|\ge |x|$，解得 $x\ge-\frac12$，故选 D。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把奇差约束改写成偶函数约束。
+      max_score: 1
+    - step_id: step_2
+      description: 利用导数条件确定非负轴单调性。
+      max_score: 1
+    - step_id: step_3
+      description: 把题设目标不等式统一成 $g$ 的比较。
+      max_score: 1
+    - step_id: step_4
+      description: 偶性转绝对值，递减性给出输入方向。
+      max_score: 1
+    - step_id: step_5
+      description: 解绝对值不等式并匹配选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式求解
+    part_level: []
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 偶函数锁定
+      - 配凑立方平移
+      - 绝对值输入比较
+  structure:
+    primary: 对称结构
+    secondary:
+      - 抽象函数结构
+      - 三次/高次函数结构
+    evidence:
+      - $f(x)-f(-x)$ 与 $2x^3+2x$ 同时出现，天然可配成 $f(x)+x^3+x$ 的偶函数。
+      - 题设不等式正好对应 $(x+1)^3+(x+1)-(x^3+x)$，适配 $g(x+1)\le g(x)$。
+    normalization_moves_used:
+      - 构造 $g(x)=f(x)+x^3+x$。
+      - 把 $3x^2+3x+2$ 配回 $(x+1)^3+(x+1)-(x^3+x)$。
+      - 由 $g(x+1)\le g(x)$ 过渡到 $|x+1|\ge|x|$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $3x^2+3x+2$ 识别为两组“立方加一次”的差，回补代数恒等变形。
+      - 若学生不能把偶函数比较改写成绝对值输入比较，回补函数性质与图像。
+      - 若学生在“递减函数去函数号”处把方向写反，回补导数单调极值基础。
+  detail_terms:
+    - 偶函数构造
+    - $g(x)=f(x)+x^3+x$
+    - $|x+1|\\ge|x|$
+    - 解集端点
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0135_even_construct_ex27
+source_evidence:
+  source_refs:
+    - ref_id: page_0135
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0135/page_0135.md
+      role: problem_start
+      evidence: "page_0135 lines 14-19: 例27题干与A-D选项。"
+    - ref_id: page_0135_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0135/page_0135.md
+      role: solution
+      evidence: "page_0135 line 21: 法一构造偶函数 $g(x)=f(x)+x^3+x$，转为 $|x+1|$ 与 $|x|$ 比较。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0135.png
+      inspected: true
+      notes: 已核对原图；例27解析中的绝对值不等号印刷较淡，但结合解链与选项可判定为“$\geqslant$”。
+  source_context: 本题位于“奇偶锁定”之后、下一小节之前，是典型“先构造偶函数再比较绝对值输入”的不等式求解。
+  source_influence:
+    - 题目问不等式解集，graph.goal 归为“不等式求解”。
+    - 主解法是把 $f(x)-f(-x)$ 约束吸收到 $x^3+x$，构造偶函数 $g$。
+    - 答案以选项D给出区间端点，解链必须得到 $x\ge-\frac12$。
+  source_discrepancies:
+    - field: 例27解析中 $|x+1|$ 与 $|x|$ 之间不等号
+      old_value: markdown含 `[?unclear]` 标记；原图该符号墨迹较淡。
+      corrected_value: 按解析链 $g(x+1)\le g(x)$ 且 $g$ 在非负轴单调递减，应读作 $|x+1|\ge |x|$，从而 $x\ge-\frac12$，与选项D一致。
+      evidence_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0135/page_0135.md:21; mst26-full-marked-c20/images/page_0135.png
+original_problem:
+  stem: （2022·安徽期末）已知定义在 $\mathbf{R}$ 上的函数 $f(x)$，其导函数为 $f^{\prime}(x)$。若 $f(x)-f(-x)+2x^3+2x=0$，且当 $x\geqslant0$ 时，$f^{\prime}(x)+3x^2+1\leqslant0$，则不等式 $f(x+1)-f(x)+3x^2+3x+2\leqslant0$ 的解集为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $(-\infty,0]$
+      text_latex: $(-\infty,0]$
+    - label: B
+      text_raw: $[0,+\infty)$
+      text_latex: $[0,+\infty)$
+    - label: C
+      text_raw: $\left(-\infty,-\frac12\right]$
+      text_latex: $\left(-\infty,-\frac12\right]$
+    - label: D
+      text_raw: $\left[-\frac12,+\infty\right)$
+      text_latex: $\left[-\frac12,+\infty\right)$
+  answer: D
+  fidelity_notes:
+    - 题干条件为“$\leqslant0$”；解析文字中出现过“$<0$”与“$\leqslant0$”混排，但不影响最终区间端点。
+    - 该题无跨页，完整内容在page_0135。
+solution:
+  source_solution_summary: |
+    由 $f(x)-f(-x)+2x^3+2x=0$ 得
+    $f(x)+x^3+x=f(-x)-x^3-x$。设
+    $g(x)=f(x)+x^3+x$，则 $g(-x)=g(x)$，即 $g$ 为偶函数。
+    又 $g^{\prime}(x)=f^{\prime}(x)+3x^2+1$，由题设在 $x\ge0$ 上有
+    $g^{\prime}(x)\le0$，故 $g$ 在 $[0,+\infty)$ 单调递减，
+    由偶性可知在 $(-\infty,0)$ 单调递增。
+    原不等式
+    $f(x+1)-f(x)+3x^2+3x+2\le0$
+    等价于
+    $f(x+1)+(x+1)^3+(x+1)\le f(x)+x^3+x$，
+    即 $g(x+1)\le g(x)$。再写成
+    $g(|x+1|)\le g(|x|)$，在非负轴上由递减性得到
+    $|x+1|\ge |x|$，解得 $x\ge-\frac12$，故选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把奇差约束改写成偶函数约束。
+      formula_trace:
+        from: $f(x)-f(-x)+2x^3+2x=0$
+        to: $g(x)=f(x)+x^3+x,\quad g(-x)=g(x)$
+        operation: 把 $x^3+x$ 吸收到 $f$ 中，令左右两侧成为同一个函数在 $\pm x$ 处的值。
+        why: 偶性是后续绝对值比较的核心。
+      source_ref: page_0135_solution
+    - step_id: step_2
+      statement: 利用导数条件确定非负轴单调性。
+      formula_trace:
+        from: $x\ge0$ 时 $f^{\prime}(x)+3x^2+1\le0$
+        to: $g^{\prime}(x)=f^{\prime}(x)+3x^2+1\le0\Rightarrow g$ 在 $[0,+\infty)$ 递减
+        operation: 对构造函数求导并直接套导数判单调。
+        why: 需要在非负轴上把函数值不等式还原为输入不等式。
+      source_ref: page_0135_solution
+    - step_id: step_3
+      statement: 把题设目标不等式统一成 $g$ 的比较。
+      formula_trace:
+        from: $f(x+1)-f(x)+3x^2+3x+2\le0$
+        to: $f(x+1)+(x+1)^3+(x+1)\le f(x)+x^3+x\Rightarrow g(x+1)\le g(x)$
+        operation: 用恒等式 $(x+1)^3+(x+1)-(x^3+x)=3x^2+3x+2$ 完成配凑。
+        why: 让不等式两侧正好对应 $g$ 在两个输入处的取值。
+      source_ref: page_0135_solution
+    - step_id: step_4
+      statement: 偶性转绝对值，递减性给出输入方向。
+      formula_trace:
+        from: $g(x+1)\le g(x)$
+        to: $g(|x+1|)\le g(|x|)\Rightarrow |x+1|\ge|x|$
+        operation: 先用偶性统一到非负输入，再在递减函数上去掉函数符号。
+        why: 最终化为一元绝对值不等式。
+      source_ref: page_0135_solution
+    - step_id: step_5
+      statement: 解绝对值不等式并匹配选项。
+      formula_trace:
+        from: $|x+1|\ge|x|$
+        to: $(x+1)^2\ge x^2\Rightarrow x\ge-\frac12$
+        operation: 两侧平方后化简。
+        why: 对应选项 D。
+      source_ref: page_0135_solution
+teaching_card:
+  student_title: 先把差式锁成偶函数再解绝对值
+  what_it_trains: 训练在“$f(x)-f(-x)$ + 多项式”结构里，快速识别可吸收项，做出偶函数后把复杂不等式降成 $|x+1|$ 与 $|x|$ 的比较。
+  recognition_cues:
+    - 题干有 $f(x)-f(-x)$，并伴随奇多项式 $x^3+x$。
+    - 目标式出现 $3x^2+3x+2$，可联想到 $(x+1)^3+(x+1)-(x^3+x)$。
+    - 选项端点是 $-\frac12$，常见于 $|x+1|$ 与 $|x|$ 比较。
+  normalization_moves:
+    - 先定义 $g(x)=f(x)+x^3+x$。
+    - 把目标式改写为 $g(x+1)\le g(x)$。
+    - 偶函数取绝对值输入，再用递减性还原输入比较。
+  common_failures:
+    - 没把多项式吸收进 $g$，导致结构分裂。
+    - 将 $g(x+1)\le g(x)$ 误写成 $|x+1|\le|x|$。
+    - 平方去绝对值时漏算中间项，端点错成 $-1$。
+  similar_practice_query: 偶函数锁定 立方配凑 绝对值不等式 解集
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已处理page_0135重建标记中的不等号不清问题，并在 source_discrepancies 留痕。

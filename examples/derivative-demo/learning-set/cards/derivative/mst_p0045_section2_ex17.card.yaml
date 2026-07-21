@@ -1,0 +1,160 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0045_section2_ex17
+content_revision_id: mst_p0045_section2_ex17-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0045_section2_ex17.card.yaml
+stem: 若直线 y=kx+b 既是曲线 y=\ln x+2 的切线，又是曲线 y=\ln(x+3) 的切线，则 b=______。
+answer: |-
+  1+\ln\frac{3}{2}
+
+  设公切线分别切于 x_1 与 x_2。两处斜率相同给出 1/x_1=1/(x_2+3)，即 x_1=x_2+3；两条切线的截距相同给出 1+\ln x_1=-x_2/(x_2+3)+\ln(x_2+3)。解得 x_1=3/2、x_2=-3/2、k=2/3，再代入第一条曲线切点，得到 b=1+\ln(3/2)。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 分别写出两条对数曲线在切点处的切线。
+      max_score: 1
+    - step_id: step_2
+      description: 用公切线斜率相同建立切点关系。
+      max_score: 1
+    - step_id: step_3
+      description: 用截距相同解出两个切点。
+      max_score: 1
+    - step_id: step_4
+      description: 代回切线方程求截距 b。
+      max_score: 1
+    - step_id: step_5
+      description: 切线不等式法可快速确认同一结果。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何量求解
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 对称性配凑
+      - 显隐点探路
+    subroute:
+      - 公切线参数化
+      - 对数切线找点
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 对称结构
+      - 同构结构
+    evidence:
+      - 1/x_1=1/(x_2+3)
+      - x_1=3/2, x_2=-3/2
+      - b=1+\ln(3/2)
+    normalization_moves_used:
+      - 用切点参数写出两条局部切线。
+      - 把两条公切线条件拆成斜率相同和截距相同。
+      - 用对数切线不等式把 b 表示成 k 的函数。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会写对数曲线在切点处的切线方程，回补导数运算与几何意义。
+      - 若学生没有检查 x_1>0、x_2>-3 的定义域，回补函数三要素与定义域。
+      - 若学生只令斜率相等就停止，回补代数恒等变形中同一直线还需截距相同。
+  detail_terms:
+    - 公切线
+    - 1/x_1=1/(x_2+3)
+    - b=1-\ln k
+    - b=3k-1-\ln k
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0045_section2_ex17
+source_evidence:
+  source_refs:
+    - ref_id: page_0045
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0045/page_0045.md
+      role: problem_start
+      evidence: 例 17：直线 y=kx+b 既是曲线 y=\ln x+2 的切线，又是曲线 y=\ln(x+3) 的切线，求 b。
+    - ref_id: page_0045_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0045/page_0045.md
+      role: solution
+      evidence: 解析法一设两切点列方程，得 x_1=3/2、x_2=-3/2、k=2/3、b=1+\ln(3/2)；法二用对数切线不等式得同样答案。
+    - ref_id: page_0046
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0046/page_0046.md
+      role: continuation
+      evidence: page_0046 顶部续完例 17 后的注意：公切线斜率等于平移纵坐标比上横坐标的比值，本题 k=2/3。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0045.png
+      inspected: true
+      notes: 页图已核对：例 17 题干、两种解析和答案在 page_0045 完整；底部注意段截断。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0046.png
+      inspected: true
+      notes: 页图已核对：page_0046 顶部只续注意段，不新增本题必要解答步骤。
+  source_context: 题目完整起始于 page_0045；page_0046 只补充公切线平移结论说明，不影响答案。
+  source_influence: []
+  source_discrepancies: []
+original_problem:
+  stem: 若直线 y=kx+b 既是曲线 y=\ln x+2 的切线，又是曲线 y=\ln(x+3) 的切线，则 b=______。
+  parts: *a1
+  choices: []
+  answer: 1+\ln\frac{3}{2}
+  fidelity_notes: []
+solution:
+  source_solution_summary: 设公切线分别切于 x_1 与 x_2。两处斜率相同给出 1/x_1=1/(x_2+3)，即 x_1=x_2+3；两条切线的截距相同给出 1+\ln x_1=-x_2/(x_2+3)+\ln(x_2+3)。解得 x_1=3/2、x_2=-3/2、k=2/3，再代入第一条曲线切点，得到 b=1+\ln(3/2)。
+  key_steps:
+    - step_id: step_1
+      statement: 分别写出两条对数曲线在切点处的切线。
+      formula_trace:
+        from: y=\ln x+2,\quad y=\ln(x+3)
+        to: y-\ln x_1-2=\frac{1}{x_1}(x-x_1),\quad y-\ln(x_2+3)=\frac{1}{x_2+3}(x-x_2)
+        operation: 设切点横坐标分别为 x_1>0 与 x_2>-3，并用导数给出斜率。
+        why: 同一条直线必须同时满足两处切线方程。
+      source_ref: page_0045_solution
+    - step_id: step_2
+      statement: 用公切线斜率相同建立切点关系。
+      formula_trace:
+        from: \frac{1}{x_1}=\frac{1}{x_2+3}
+        to: x_1=x_2+3
+        operation: 两条切线是同一直线，因此斜率相等。
+        why: 先把两个未知切点绑定到同一个水平平移关系。
+      source_ref: page_0045_solution
+    - step_id: step_3
+      statement: 用截距相同解出两个切点。
+      formula_trace:
+        from: 1+\ln x_1=-\frac{x_2}{x_2+3}+\ln(x_2+3),\quad x_1=x_2+3
+        to: x_2=-\frac{3}{2},\quad x_1=\frac{3}{2}
+        operation: 把 x_1=x_2+3 代入截距相等式，化为 1=-x_2/(x_2+3)。
+        why: 截距相同确保两条局部切线确实是同一条直线。
+      source_ref: page_0045_solution
+    - step_id: step_4
+      statement: 代回切线方程求截距 b。
+      formula_trace:
+        from: k=\frac{1}{x_1}=\frac{2}{3},\quad \frac{2}{3}\cdot\frac{3}{2}+b=\ln\frac{3}{2}+2
+        to: b=1+\ln\frac{3}{2}
+        operation: 用第一条曲线的切点坐标代入 y=kx+b。
+        why: 切点在公切线上，直接给出截距。
+      source_ref: page_0045_solution
+    - step_id: step_5
+      statement: 切线不等式法可快速确认同一结果。
+      formula_trace:
+        from: \ln x+2\leqslant kx+b,\quad \ln(x+3)\leqslant kx+b
+        to: b=1-\ln k,\quad b=3k-1-\ln k,\quad k=2/3
+        operation: 把 \ln(kx)\leqslant kx-1 与 \ln(k(x+3))\leqslant kx+3k-1 分别转成切线表达。
+        why: 同一条公切线要求两个截距表达相等。
+      source_ref: page_0045_solution
+teaching_card:
+  student_title: 用两个切点参数求对数公切线截距
+  what_it_trains: 训练把公切线问题拆成两个切点、同斜率、同截距三件事，并用对数切线模板快速求 b。
+  recognition_cues:
+    - 同一直线同时切两条对数曲线。
+    - 两条曲线形状相同，只做了平移。
+    - 题目只问截距 b。
+  normalization_moves:
+    - 先设两个切点 x_1、x_2。
+    - 斜率相等给 x_1=x_2+3。
+    - 截距相等再求出切点与 k。
+  common_failures:
+    - 只让导数相等，漏掉截距相等。
+    - 把第二条曲线的定义域 x>-3 忽略。
+    - 把 b=1-\ln k 代入 k=2/3 时符号写反。
+  similar_practice_query: 两条平移对数曲线公切线，设切点并比较斜率截距
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

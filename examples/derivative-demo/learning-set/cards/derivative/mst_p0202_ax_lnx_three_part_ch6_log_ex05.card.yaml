@@ -1,0 +1,189 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0202_ax_lnx_three_part_ch6_log_ex05
+content_revision_id: mst_p0202_ax_lnx_three_part_ch6_log_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0202_ax_lnx_three_part_ch6_log_ex05.card.yaml
+stem: |-
+  （2024 · 青铜峡市模拟 T21）已知函数 $f(x)=ax-\ln x$，$a\in\mathbf R$。
+  1. 求函数 $f(x)$ 的单调区间。
+  2. 当 $x\in(0,e]$ 时，求 $g(x)=e^2x-\ln x$ 的最小值。
+  3. 当 $x\in(0,e]$ 时，证明：$e^2x-\ln x-\frac{\ln x}{x}>\frac52$。
+answer: |-
+  (1) 当 $a\le0$ 时，$f(x)$ 在 $(0,+\infty)$ 上单调递减；当 $a>0$ 时， 递减区间为 $\left(0,\frac1a\right)$，递增区间为 $\left(\frac1a,+\infty\right)$。 (2) 最小值为 $3$（在 $x=\frac1{e^2}$ 处取到）。 (3) 对任意 $x\in(0,e]$，有 $e^2x-\ln x-\frac{\ln x}{x}>\frac52$。
+
+  第(1)问：$f^{\prime}(x)=a-\frac1x=\frac{ax-1}{x}$。当 $a\le0$ 时， $f^{\prime}(x)<0$，故在 $(0,+\infty)$ 单调递减；当 $a>0$ 时， 在 $\left(0,\frac1a\right)$ 上 $f^{\prime}(x)<0$、在 $\left(\frac1a,+\infty\right)$ 上 $f^{\prime}(x)>0$，故先减后增。 第(2)问：$g(x)=e^2x-\ln x=e^2x-\ln(e^2x)+2\ge3$，当且仅当 $e^2x=1$ 取等，即 $x=\frac1{e^2}$，所以 $g_{\min}=3$。 第(3)问：设 $\varphi(x)=\frac{\ln x}{x}+\frac52$，在 $(0,e]$ 上 $\frac{\ln x}{x}\le\frac1e$，故 $\varphi(x)<\frac1e+\frac52<3$。结合第(2)问 $e^2x-\ln x\ge3$， 得 $e^2x-\ln x-\frac{\ln x}{x}>\frac52$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 第(1)问先求导并按参数分段判号。
+      max_score: 1
+    - step_id: step_2
+      description: 第(1)问写出两类参数下的单调区间。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问同构改写并给出下界。
+      max_score: 1
+    - step_id: step_4
+      description: 第(3)问控制 $\frac{\ln x}{x}$ 的上界。
+      max_score: 1
+    - step_id: step_5
+      description: 联立步骤3与步骤4完成第(3)问。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 1 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 极值最值
+        target: 第 2 问
+        result: 见 source_solution_summary
+      - part_id: "3"
+        goal: 不等式证明
+        target: 第 3 问
+        result: 见 source_solution_summary
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 含参数分类讨论
+      - 同构变形与换元法
+    subroute:
+      - 导函数分段判号
+      - 对数同构 $t-\ln t$
+      - $\frac{\ln x}{x}$ 上界比较
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 抽象函数结构
+      - 不等式工具结构
+    evidence:
+      - $f^{\prime}(x)=a-\frac1x$
+      - $g(x)=e^2x-\ln(e^2x)+2$
+      - $\frac{\ln x}{x}\le\frac1e$
+    normalization_moves_used:
+      - 先把参数函数单调性独立求清。
+      - 将第(2)问改写到 $t-\ln t$ 标准形。
+      - 第(3)问拆成“下界 - 上界”并跨问复用第(2)问。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会按 $a\le0/a>0$ 分情况判导数符号，回补导数单调极值基础。
+      - 若学生不会使用 $t-\ln t\ge1$，回补指数对数基础。
+      - 若学生不能判断 $\frac{\ln x}{x}$ 在 $(0,e]$ 的上界，回补函数性质与图像。
+  detail_terms:
+    - $f(x)=ax-\ln x$
+    - $f^{\prime}(x)=a-\frac1x$
+    - $g(x)=e^2x-\ln x$
+    - $g_{\min}=3$
+    - $\frac{\ln x}{x}\le\frac1e$
+parts: &a1
+  - part_id: "1"
+    text: 求函数 $f(x)$ 的单调区间。
+  - part_id: "2"
+    text: 当 $x\in(0,e]$ 时，求 $g(x)=e^2x-\ln x$ 的最小值。
+  - part_id: "3"
+    text: 当 $x\in(0,e]$ 时，证明：$e^2x-\ln x-\frac{\ln x}{x}>\frac52$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0202_ax_lnx_three_part_ch6_log_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0202_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0202/page_0202.md
+      role: problem_start
+      evidence: lines 41-44 给出例5三问题干。
+    - ref_id: page_0203_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0203/page_0203.md
+      role: continuation
+      evidence: lines 14-21 给出例5三问完整解析：第(1)问单调区间、第(2)问最小值 3、第(3)问不等式证明。
+    - ref_id: page_0203_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0203/page_0203.md
+      role: local_context
+      evidence: line 23 起进入例6，说明例5解析在 line 21 结束。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0202.png
+      inspected: true
+      notes: 已核对页图：例5题头和三问在 page_0202 底部完整出现。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0203.png
+      inspected: true
+      notes: 已核对页图：page_0203 顶部为例5续解，随后进入例6。
+  source_context: 例5题头在 page_0202，解析续到 page_0203 顶部后结束；按题头归属由本 batch 完整重建。
+  source_influence:
+    - 保留第(1)问按 $a\le0$ 与 $a>0$ 分类讨论导数符号。
+    - 保留第(2)问同构改写 $e^2x-\ln(e^2x)+2$ 并给出最小值 3。
+    - 保留第(3)问通过 $\frac{\ln x}{x}<\frac1e$ 与第(2)问下界联立。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 青铜峡市模拟 T21）已知函数 $f(x)=ax-\ln x$，$a\in\mathbf R$。
+  parts: *a1
+  choices: []
+  answer: (1) 当 $a\le0$ 时，$f(x)$ 在 $(0,+\infty)$ 上单调递减；当 $a>0$ 时， 递减区间为 $\left(0,\frac1a\right)$，递增区间为 $\left(\frac1a,+\infty\right)$。 (2) 最小值为 $3$（在 $x=\frac1{e^2}$ 处取到）。 (3) 对任意 $x\in(0,e]$，有 $e^2x-\ln x-\frac{\ln x}{x}>\frac52$。
+  fidelity_notes:
+    - 源题是三问解答题，无选项。
+    - 第(2)(3)问中的函数与第(1)问参数 $a$ 无关。
+solution:
+  source_solution_summary: 第(1)问：$f^{\prime}(x)=a-\frac1x=\frac{ax-1}{x}$。当 $a\le0$ 时， $f^{\prime}(x)<0$，故在 $(0,+\infty)$ 单调递减；当 $a>0$ 时， 在 $\left(0,\frac1a\right)$ 上 $f^{\prime}(x)<0$、在 $\left(\frac1a,+\infty\right)$ 上 $f^{\prime}(x)>0$，故先减后增。 第(2)问：$g(x)=e^2x-\ln x=e^2x-\ln(e^2x)+2\ge3$，当且仅当 $e^2x=1$ 取等，即 $x=\frac1{e^2}$，所以 $g_{\min}=3$。 第(3)问：设 $\varphi(x)=\frac{\ln x}{x}+\frac52$，在 $(0,e]$ 上 $\frac{\ln x}{x}\le\frac1e$，故 $\varphi(x)<\frac1e+\frac52<3$。结合第(2)问 $e^2x-\ln x\ge3$， 得 $e^2x-\ln x-\frac{\ln x}{x}>\frac52$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问先求导并按参数分段判号。
+      formula_trace:
+        from: $f(x)=ax-\ln x$
+        to: $f^{\prime}(x)=a-\frac1x=\frac{ax-1}{x}$
+        operation: 对 $\ln x$ 求导并通分。
+        why: 单调区间由导数符号决定。
+      source_ref: page_0203_solution
+    - step_id: step_2
+      statement: 第(1)问写出两类参数下的单调区间。
+      formula_trace:
+        from: $a\le0$ 或 $a>0$
+        to: 单调递减区间/递增区间分段结论
+        operation: 分别解 $f^{\prime}(x)>0$ 与 $f^{\prime}(x)<0$。
+        why: 参数符号改变临界点是否落在定义域内。
+      source_ref: page_0203_solution
+    - step_id: step_3
+      statement: 第(2)问同构改写并给出下界。
+      formula_trace:
+        from: $g(x)=e^2x-\ln x$
+        to: $g(x)=e^2x-\ln(e^2x)+2\ge3$
+        operation: 把 $\ln x$ 合并为 $\ln(e^2x)-2$，再用 $t-\ln t\ge1$。
+        why: 直接得到最小值及取等点。
+      source_ref: page_0203_solution
+    - step_id: step_4
+      statement: 第(3)问控制 $\frac{\ln x}{x}$ 的上界。
+      formula_trace:
+        from: $x\in(0,e]$
+        to: $\frac{\ln x}{x}\le\frac1e$
+        operation: 使用同构函数 $\frac{\ln x}{x}$ 在 $x=e$ 处取最大值。
+        why: 把待证式拆成“第(2)问下界 - 可控上界”。
+      source_ref: page_0203_solution
+    - step_id: step_5
+      statement: 联立步骤3与步骤4完成第(3)问。
+      formula_trace:
+        from: $e^2x-\ln x\ge3,\ \frac{\ln x}{x}+\frac52<3$
+        to: $e^2x-\ln x-\frac{\ln x}{x}>\frac52$
+        operation: 将两式相减。
+        why: 得到严格不等式目标。
+      source_ref: page_0203_solution
+teaching_card:
+  student_title: 三问联动：先分参，再同构，再联立上界
+  what_it_trains: 训练多问题的信息复用：第(2)问给下界，第(3)问补上界，二者拼成严格不等式结论。
+  recognition_cues:
+    - 同一题内既有“单调区间”又有“最值+证明”。
+    - 出现 $ax-\ln x$ 与 $e^2x-\ln x$ 两类相近结构。
+    - 第(3)问含 $\frac{\ln x}{x}$，可触发同构上界。
+  normalization_moves:
+    - 第(1)问固定流程：求导、分参、写区间。
+    - 第(2)问凑出 $t-\ln t$ 下界。
+    - 第(3)问先估 $\frac{\ln x}{x}$，再与第(2)问联立。
+  common_failures:
+    - 把 $a\le0$ 情况错误地写出驻点 $x=\frac1a$。
+    - 第(2)问只求导不写同构放缩，导致取等点解释不完整。
+    - 第(3)问忘记利用第(2)问结果，单独硬证易卡住。
+  similar_practice_query: ax-lnx 单调区间 e^2x-lnx 最小值 lnx/x 上界 5/2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

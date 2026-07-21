@@ -1,0 +1,224 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0276_ax_invx_lnx_visible_hidden_zero_ex01
+content_revision_id: mst_p0276_ax_invx_lnx_visible_hidden_zero_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0276_ax_invx_lnx_visible_hidden_zero_ex01.card.yaml
+stem: |-
+  （2022 · 乙卷文科）已知函数 $f(x)=ax-\frac{1}{x}-(a+1)\ln x$。
+  1. 当 $a=0$ 时，求 $f(x)$ 的最大值。
+  2. 若 $f(x)$ 恰有一个零点，求 $a$ 的取值范围。
+answer: |-
+  (1) $f_{\max}=-1$；(2) $a\in(0,+\infty)$。
+
+  当 $a=0$ 时，$f(x)=-\frac1x-\ln x$，最大值在 $x=1$ 处取得，值为 $-1$。第二问先求导： $f^\prime(x)=\frac{(ax-1)(x-1)}{x^2}$。这里 $x=1$ 是显点， $x=\frac1a$ 是隐点。$a\le0$ 时最大值仍小于 0，没有零点； $a=1$ 时单调递增且 $f(1)=0$，恰有一个零点。$a>1$ 时， $x=\frac1a$ 在 $1$ 左边，显点 $x=1$ 处为极小值且 $f(1)>0$， 再由 page_0277 的取点 $x=\frac1{(a+2)^2}$ 证左侧有负值， 因而只在左侧穿一次。$0<a<1$ 时，显点 $x=1$ 处为极大值且 $f(1)<0$，再由取点 $x=\left(\frac{a+2}{a}\right)^2$ 证右侧有正值， 因而只在右侧穿一次。综上 $a>0$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 先解决 $a=0$ 的最大值。
+      max_score: 1
+    - step_id: step_2
+      description: 求导并识别一显一隐两个驻点。
+      max_score: 1
+    - step_id: step_3
+      description: 排除 $a\le0$，并处理 $a=1$。
+      max_score: 1
+    - step_id: step_4
+      description: 当 $a>1$，用左侧取点补出唯一零点。
+      max_score: 1
+    - step_id: step_5
+      description: 当 $0<a<1$，用右侧取点补出唯一零点。
+      max_score: 1
+    - step_id: step_6
+      description: 合并参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 极值最值
+        target: 第 1 问
+        result: $f_{\max}=-1$。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $a\in(0,+\infty)$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 充分/必要性探路
+      - 局部逼近与找点
+      - 含参数分类讨论
+    subroute:
+      - 显点 $x=1$
+      - 隐点 $x=\frac1a$
+      - 极大极小高度同号判定
+      - 放缩取点认证穿轴
+      - 参数正负分类
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - $ax-\frac1x-(a+1)\ln x$
+      - $f^\prime(x)=\frac{(ax-1)(x-1)}{x^2}$
+      - $x=1$
+      - $x=\frac1a$
+      - $x=\frac1{(a+2)^2}$
+      - $x=\left(\frac{a+2}{a}\right)^2$
+    normalization_moves_used:
+      - 求导后因式分解出 $(ax-1)(x-1)$。
+      - 按 $a>1$、$a=1$、$0<a<1$、$a\le0$ 分清显点和隐点位置。
+      - 用 source 的放缩取点只补存在性，不把取点当成主线。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f^\prime$ 判定单调和极值，回补导数单调极值基础。
+      - 若学生不会把导数因式分解成 $(ax-1)(x-1)$，回补代数恒等变形。
+      - 若学生不理解 $\ln x$ 和 $\frac1x$ 的端点行为，回补指数对数基础。
+      - 若学生不懂介值定理式的穿轴判断，回补函数性质与图像。
+      - 若学生卡在 source 的放缩取点，回补不等式工具基础。
+  detail_terms:
+    - 显点效应
+    - 隐点
+    - $x=1$
+    - $x=\frac1a$
+    - 恰有一个零点
+    - 极大值和极小值同号
+    - $x=\frac1{(a+2)^2}$
+    - $x=\left(\frac{a+2}{a}\right)^2$
+    - $a\in(0,+\infty)$
+parts: &a1
+  - part_id: "1"
+    text: 当 $a=0$ 时，求 $f(x)$ 的最大值。
+  - part_id: "2"
+    text: 若 $f(x)$ 恰有一个零点，求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0276_ax_invx_lnx_visible_hidden_zero_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0276_section_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0276/page_0276.md
+      role: local_context
+      evidence: page_0276 进入“极值显点探路与零点个数问题”，说明显点 $x_0$ 和隐点 $m$ 的极值探路规则。
+    - ref_id: page_0276_ex01_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0276/page_0276.md
+      role: problem_start
+      evidence: page_0276 给出例1题头：$f(x)=ax-\frac1x-(a+1)\ln x$，问 $a=0$ 时最大值，以及恰有一个零点时 $a$ 的取值范围。
+    - ref_id: page_0276_ex01_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0276/page_0276.md
+      role: solution
+      evidence: page_0276 解析给出 $f''(x)=\frac{(ax-1)(x-1)}{x^2}$， 两个驻点为显点 $x=1$ 和隐点 $x=\frac1a$， 并分 $a\le0$、$a=1$、$a>1$ 讨论。
+    - ref_id: page_0277_ex01_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0277/page_0277.md
+      role: solution
+      evidence: page_0277 续完 $a>1$ 与 $0<a<1$ 的放缩取点证明，并给出结论 $a\in(0,+\infty)$。
+    - ref_id: page_0277_ex02_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0277/page_0277.md
+      role: local_context
+      evidence: page_0277 后半另起例2，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0276.png
+      inspected: true
+      notes: 已核对页图：page_0276 含例1题头、显点/隐点图像示意与 $O,\frac1a,1$ 标注。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0277.png
+      inspected: true
+      notes: 已核对页图：page_0277 顶部续完例1，随后另起例2。
+  source_context: 本卡处理 page_0276 起头、page_0277 顶部续完的例1；page_0277 例2排除。
+  source_influence:
+    - 保留第一问结论：$a=0$ 时最大值为 $f(1)=-1$。
+    - 保留导数分解：$f^\prime(x)=\frac{(ax-1)(x-1)}{x^2}$。
+    - 保留显点 $x=1$ 和隐点 $x=\frac1a$ 的相对位置分类。
+    - 保留 source 的放缩取点：$x=\frac1{(a+2)^2}$ 与 $x=\left(\frac{a+2}{a}\right)^2$。
+    - 保留结论：恰有一个零点时 $a\in(0,+\infty)$。
+  source_discrepancies:
+    - field: page_0276_derivative_transcription
+      source_value: $f''(x)=\frac{(ax-1)(x-1)}{x^2}$
+      resolved_value: $f^\prime(x)=\frac{(ax-1)(x-1)}{x^2}$
+      reason: 原 Markdown 显示为 $f''(x)$；按函数 $f(x)=ax-\frac1x-(a+1)\ln x$ 直接求导， 正确对象是一阶导数 $f^\prime(x)$。
+original_problem:
+  stem: （2022 · 乙卷文科）已知函数 $f(x)=ax-\frac{1}{x}-(a+1)\ln x$。
+  parts: *a1
+  choices: []
+  answer: (1) $f_{\max}=-1$；(2) $a\in(0,+\infty)$。
+  fidelity_notes:
+    - 无选项。
+    - source 对 $a>1$ 与 $0<a<1$ 的取点证明写在 page_0277 顶部。
+solution:
+  source_solution_summary: 当 $a=0$ 时，$f(x)=-\frac1x-\ln x$，最大值在 $x=1$ 处取得，值为 $-1$。第二问先求导： $f^\prime(x)=\frac{(ax-1)(x-1)}{x^2}$。这里 $x=1$ 是显点， $x=\frac1a$ 是隐点。$a\le0$ 时最大值仍小于 0，没有零点； $a=1$ 时单调递增且 $f(1)=0$，恰有一个零点。$a>1$ 时， $x=\frac1a$ 在 $1$ 左边，显点 $x=1$ 处为极小值且 $f(1)>0$， 再由 page_0277 的取点 $x=\frac1{(a+2)^2}$ 证左侧有负值， 因而只在左侧穿一次。$0<a<1$ 时，显点 $x=1$ 处为极大值且 $f(1)<0$，再由取点 $x=\left(\frac{a+2}{a}\right)^2$ 证右侧有正值， 因而只在右侧穿一次。综上 $a>0$。
+  key_steps:
+    - step_id: step_1
+      statement: 先解决 $a=0$ 的最大值。
+      formula_trace:
+        from: $f(x)=ax-\frac1x-(a+1)\ln x$
+        to: $a=0,\ f(x)=-\frac1x-\ln x,\ f_{\max}=f(1)=-1$
+        operation: 代入 $a=0$ 后按源解读出最大值点 $x=1$。
+        why: 第一问是基础极值，给第二问的显点 $x=1$ 做铺垫。
+      source_ref: page_0276_ex01_solution_start
+    - step_id: step_2
+      statement: 求导并识别一显一隐两个驻点。
+      formula_trace:
+        from: $f(x)=ax-\frac1x-(a+1)\ln x$
+        to: $f^\prime(x)=\frac{(ax-1)(x-1)}{x^2}$
+        operation: 求导并因式分解。
+        why: $x=1$ 是显点，$x=\frac1a$ 是隐点，零点个数由两处极值高度控制。
+      source_ref: page_0276_ex01_solution_start
+    - step_id: step_3
+      statement: 排除 $a\le0$，并处理 $a=1$。
+      formula_trace:
+        from: $a\le0$ 或 $a=1$
+        to: $a\le0$ 无零点；$a=1$ 时仅 $f(1)=0$
+        operation: 用显点值 $f(1)=a-1$ 和单调性判断。
+        why: $a\le0$ 时整体峰值小于 0；$a=1$ 时两个驻点重合，单调递增，只穿一次。
+      source_ref: page_0276_ex01_solution_start
+    - step_id: step_4
+      statement: 当 $a>1$，用左侧取点补出唯一零点。
+      formula_trace:
+        from: $a>1,\quad 0<\frac1a<1,\quad f(1)=a-1>0$
+        to: $f\left(\frac1{(a+2)^2}\right)<0,\ \exists x_1\in\left(\frac1{(a+2)^2},\frac1a\right),\ f(x_1)=0$
+        operation: 按 source 的放缩取点证明左侧存在负值。
+        why: 两个极值都在 $x$ 轴上方时，只要左端附近找到负值，就能锁定唯一穿轴点。
+      source_ref: page_0277_ex01_solution_continuation
+    - step_id: step_5
+      statement: 当 $0<a<1$，用右侧取点补出唯一零点。
+      formula_trace:
+        from: $0<a<1,\quad 1<\frac1a,\quad f(1)=a-1<0$
+        to: $f\left(\left(\frac{a+2}{a}\right)^2\right)>0,\ \exists x_2\in\left(\frac1a,\left(\frac{a+2}{a}\right)^2\right),\ f(x_2)=0$
+        operation: 按 source 的对称放缩取点证明右侧存在正值。
+        why: 两个极值都在 $x$ 轴下方时，只要右端附近找到正值，就能锁定唯一穿轴点。
+      source_ref: page_0277_ex01_solution_continuation
+    - step_id: step_6
+      statement: 合并参数范围。
+      formula_trace:
+        from: $a=1$、$a>1$、$0<a<1$ 均可；$a\le0$ 不可
+        to: $a\in(0,+\infty)$
+        operation: 分类合并。
+        why: 所有正参数都恰有一个零点，非正参数不满足。
+      source_ref: page_0277_ex01_solution_continuation
+teaching_card:
+  student_title: 用显点 $x=1$ 找出唯一零点的参数范围
+  what_it_trains: 训练显点探路：导数里有一个看得见的驻点 $x=1$，另一个隐点 $1/a$ 跟它换位置，零点个数就由两处极值高度和两端取点决定。
+  recognition_cues:
+    - 导数能分解出 $(ax-1)(x-1)$，其中 $x=1$ 不随参数动。
+    - 题目问“恰有一个零点”，不是单纯求极值。
+    - $a>1$ 与 $0<a<1$ 时，显点和隐点的位置正好互换。
+    - 源页配了两张图，核心是看曲线只在一侧穿过 $x$ 轴。
+  normalization_moves:
+    - 先求导并因式分解，别急着硬解 $f(x)=0$。
+    - 把 $x=1$ 叫显点，把 $x=1/a$ 叫隐点。
+    - 用 $f(1)=a-1$ 先排除和分段。
+    - 最后才用 source 的特殊取点证明确实穿轴。
+  common_failures:
+    - 直接解 $ax-\frac1x-(a+1)\ln x=0$，会陷入超越方程。
+    - 只看到 $x=1$，忘了另一个驻点 $x=\frac1a$。
+    - 把放缩取点当成主方法，反而看不出零点个数由极值位置控制。
+    - 没有分清 $a>1$ 和 $0<a<1$ 时 $1$ 与 $\frac1a$ 的左右顺序。
+    - 认为 $a\le0$ 也可能有一个零点，忽略最大值小于 0。
+  similar_practice_query: 显点 x=1 隐点 1/a 恰有一个零点 ax-1/x-(a+1)lnx
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

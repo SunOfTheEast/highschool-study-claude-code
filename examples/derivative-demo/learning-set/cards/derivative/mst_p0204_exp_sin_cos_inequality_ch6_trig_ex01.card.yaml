@@ -1,0 +1,152 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0204_exp_sin_cos_inequality_ch6_trig_ex01
+content_revision_id: mst_p0204_exp_sin_cos_inequality_ch6_trig_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0204_exp_sin_cos_inequality_ch6_trig_ex01.card.yaml
+stem: 证明：$e^x+\sin x+\cos x-2-2x\geqslant0,\ x\in\mathbf{R}$。
+answer: |-
+  对任意 $x\in\mathbf{R}$，不等式成立。
+
+  将原不等式改写为 $h(x)=\frac{2x+2-\sin x-\cos x}{e^x}\le1$。 由 source 给出 $h^{\prime}(x)=\frac{2(\sin x-x)}{e^x}<0$，所以 $h(x)$ 单调递减， 从而对任意 $x\in\mathbf{R}$ 有 $h(x)\le h(0)=1$，等价回代即得 $e^x+\sin x+\cos x-2-2x\ge0$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 将目标改写为有界函数判定。
+      max_score: 1
+    - step_id: step_2
+      description: 求导并建立判号表达式。
+      max_score: 1
+    - step_id: step_3
+      description: 由三角放缩确定单调性。
+      max_score: 1
+    - step_id: step_4
+      description: 代入锚点值完成证明。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+      - 拟合与夹逼
+    subroute:
+      - 先改写成 $h(x)\le1$
+      - 对 $h$ 求导并用 $\sin x\le x$ 判号
+      - 以 $h(0)$ 为锚点收束
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 不等式工具结构
+    evidence:
+      - $h(x)=\frac{2x+2-\sin x-\cos x}{e^x}$
+      - $h^{\prime}(x)=\frac{2(\sin x-x)}{e^x}$
+      - $h(x)\le h(0)=1$
+    normalization_moves_used:
+      - 把原式整理为“指数分母 + 三角分子”的比值上界问题。
+      - 把导数符号判定压缩到标准不等式 $\sin x\le x$。
+      - 用固定点 $x=0$ 作为全局比较锚点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把原式改写成 $h(x)\le1$，回补代数恒等变形。
+      - 若学生不会由 $\sin x\le x$ 判定 $h^{\prime}(x)$ 符号，回补三角函数基础。
+      - 若学生不会“导数符号 -> 单调性 -> 比较点”的链路，回补导数单调极值基础。
+  detail_terms:
+    - $e^x+\sin x+\cos x-2-2x$
+    - $h(x)=\frac{2x+2-\sin x-\cos x}{e^x}$
+    - $h^{\prime}(x)=\frac{2(\sin x-x)}{e^x}$
+    - $\sin x\le x$
+    - $h(0)=1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0204_exp_sin_cos_inequality_ch6_trig_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0204_ex01_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0204/page_0204.md
+      role: problem_start
+      evidence: page_0204 第 40 行出现“例 1”题头：证明 $e^x+\sin x+\cos x-2-2x\geqslant0,\ x\in\mathbf{R}$。
+    - ref_id: page_0204_ex01_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0204/page_0204.md
+      role: solution
+      evidence: page_0204 第 42 行给出完整解析链：构造 $h(x)$、求 $h^{\prime}(x)$、判单调并代 $h(0)=1$ 收束。
+    - ref_id: page_0204_ex08_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0204/page_0204.md
+      role: local_context
+      evidence: page_0204 顶部第 14-19 行是上一批例8续解，不是本卡题头。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0204.png
+      inspected: true
+      notes: 已核对页图：例1题干与解析均在本页完整，公式与 markdown 一致。
+  source_context: page_0204 上方为上一批例8续页；本卡仅处理本页“例1”完整题卡，不吸收前序续解内容。
+  source_influence:
+    - 保留 source 的“分式改写 + 单调性”主路线。
+    - 保留 source 中 $h^{\prime}(x)=\frac{2(\sin x-x)}{e^x}$ 的关键判号链。
+  source_discrepancies: []
+original_problem:
+  stem: 证明：$e^x+\sin x+\cos x-2-2x\geqslant0,\ x\in\mathbf{R}$。
+  parts: *a1
+  choices: []
+  answer: 对任意 $x\in\mathbf{R}$，不等式成立。
+  fidelity_notes:
+    - 源题为证明题，无子问与选项。
+    - 题面与解析均在 page_0204 同页闭合。
+solution:
+  source_solution_summary: 将原不等式改写为 $h(x)=\frac{2x+2-\sin x-\cos x}{e^x}\le1$。 由 source 给出 $h^{\prime}(x)=\frac{2(\sin x-x)}{e^x}<0$，所以 $h(x)$ 单调递减， 从而对任意 $x\in\mathbf{R}$ 有 $h(x)\le h(0)=1$，等价回代即得 $e^x+\sin x+\cos x-2-2x\ge0$。
+  key_steps:
+    - step_id: step_1
+      statement: 将目标改写为有界函数判定。
+      formula_trace:
+        from: $e^x+\sin x+\cos x-2-2x\ge0$
+        to: $h(x)=\frac{2x+2-\sin x-\cos x}{e^x}\le1$
+        operation: 移项并除以 $e^x>0$。
+        why: 将原式转成“函数上界”后可用单调性收束。
+      source_ref: page_0204_ex01_solution
+    - step_id: step_2
+      statement: 求导并建立判号表达式。
+      formula_trace:
+        from: $h(x)=\frac{2x+2-\sin x-\cos x}{e^x}$
+        to: $h^{\prime}(x)=\frac{2(\sin x-x)}{e^x}$
+        operation: 按商式求导并整理同类项。
+        why: 单调性判断依赖导数符号。
+      source_ref: page_0204_ex01_solution
+    - step_id: step_3
+      statement: 由三角放缩确定单调性。
+      formula_trace:
+        from: $h^{\prime}(x)=\frac{2(\sin x-x)}{e^x}$
+        to: $h^{\prime}(x)\le0$，且 $x\ne0$ 时 $h^{\prime}(x)<0$
+        operation: 用 $\sin x\le x$ 与 $e^x>0$ 判号。
+        why: 得到 $h(x)$ 在 $\mathbf{R}$ 上单调递减。
+      source_ref: page_0204_ex01_solution
+    - step_id: step_4
+      statement: 代入锚点值完成证明。
+      formula_trace:
+        from: $h(x)$ 单调递减
+        to: $h(x)\le h(0)=1$
+        operation: 以 $x=0$ 为比较点。
+        why: 回到 step_1 的等价目标即可得到原不等式。
+      source_ref: page_0204_ex01_solution
+teaching_card:
+  student_title: 比值改写法证明指数三角不等式
+  what_it_trains: 训练把混合型不等式改写成函数上界问题，再通过导数判号与锚点值完成全局证明。
+  recognition_cues:
+    - 目标式同时出现 $e^x,\sin x,\cos x$ 且要求“对任意实数成立”。
+    - 式子可整理成“某表达式除以 $e^x$”的结构。
+    - 可直接调用 $\sin x\le x$ 做导数判号。
+  normalization_moves:
+    - 先改写为 $h(x)\le1$。
+    - 求 $h^{\prime}(x)$ 并降到基础不等式判号。
+    - 用 $x=0$ 计算锚点值并收束。
+  common_failures:
+    - 把 $\sin x\le x$ 误当作只对 $x\ge0$ 成立。
+    - 忘记说明 $e^x>0$，直接除法导致论证缺口。
+    - 只写“单调递减”但未给出比较点 $h(0)$。
+  similar_practice_query: e^x sinx cosx 不等式 比值改写 导数单调性
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

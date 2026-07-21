@@ -1,0 +1,160 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0204_ae_x_cos_lower_bound_ch6_trig_ex02
+content_revision_id: mst_p0204_ae_x_cos_lower_bound_ch6_trig_ex02-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0204_ae_x_cos_lower_bound_ch6_trig_ex02.card.yaml
+stem: （2024 · 宁夏一模 T21）已知函数 $f(x)=a(e^x-1)-x^2+x$。若 $a\geqslant1$，证明：当 $x>0$ 时，$f(x)+\cos x>1$。
+answer: |-
+  当 $a\geqslant1,\ x>0$ 时，$f(x)+\cos x>1$ 成立。
+
+  由 $a\ge1$，要证 $a(e^x-1)-x^2+x+\cos x>1$ 只需证 $e^x-1-x^2+x+\cos x>1$。 设 $F(x)=e^x-1-x^2+x+\cos x$， source 给出 $F^{\prime}(x)=e^x-2x+1-\sin x>0$，故 $F(x)$ 单调递增。 又 $x>0$，所以 $F(x)>F(0)=1$，即 $a(e^x-1)-x^2+x+\cos x>1$，原命题得证。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 用参数下界把命题降到无参数核心。
+      max_score: 1
+    - step_id: step_2
+      description: 构造辅助函数并求导。
+      max_score: 1
+    - step_id: step_3
+      description: 用导数正性得到严格递增。
+      max_score: 1
+    - step_id: step_4
+      description: 代入基准点完成不等式。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 含参数分类讨论
+      - 拟合与夹逼
+    subroute:
+      - 由 $a\ge1$ 先降到 $a=1$ 对应核心式
+      - 构造 $F(x)$ 并判 $F^{\prime}(x)>0$
+      - 用 $F(0)=1$ 作为锚点比较
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 三角复合结构
+      - 不等式工具结构
+    evidence:
+      - $f(x)=a(e^x-1)-x^2+x$
+      - $F(x)=e^x-1-x^2+x+\cos x$
+      - $F^{\prime}(x)=e^x-2x+1-\sin x>0$
+      - $F(x)>F(0)=1$
+    normalization_moves_used:
+      - 把参数命题压缩到最小参数值的核心不等式。
+      - 将目标整理为单函数 $F(x)$ 的单调比较。
+      - 用 $x=0$ 的函数值做收束锚点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $a\ge1$ 推出“只需证 $a=1$ 情形”，回补不等式工具基础。
+      - 若学生求导 $F^{\prime}(x)$ 出错，回补导数运算与几何意义。
+      - 若学生不会由单调性写出 $F(x)>F(0)$，回补导数单调极值基础。
+  detail_terms:
+    - $a(e^x-1)-x^2+x+\cos x$
+    - $F(x)=e^x-1-x^2+x+\cos x$
+    - $F^{\prime}(x)=e^x-2x+1-\sin x$
+    - $a\ge1$
+    - $F(0)=1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0204_ae_x_cos_lower_bound_ch6_trig_ex02
+source_evidence:
+  source_refs:
+    - ref_id: page_0204_ex02_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0204/page_0204.md
+      role: problem_start
+      evidence: page_0204 第 44-45 行出现“例2”题头：$f(x)=a(e^x-1)-x^2+x$，当 $a\ge1$ 时证明 $x>0$ 下 $f(x)+\cos x>1$。
+    - ref_id: page_0205_ex02_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0205/page_0205.md
+      role: continuation
+      evidence: page_0205 第 15 行给出例2续解：先由 $a\ge1$ 降到 $e^x-1-x^2+x+\cos x>1$，再设 $F(x)$ 并用 $F^{\prime}(x)>0$ 推出 $F(x)>F(0)=1$。
+    - ref_id: page_0204_ex08_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0204/page_0204.md
+      role: local_context
+      evidence: page_0204 顶部第 14-19 行是上一批例8续解，不属于本卡。
+    - ref_id: page_0205_ex03_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0205/page_0205.md
+      role: local_context
+      evidence: page_0205 第 17 行开始进入新题“例3”，按批次归属不纳入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0204.png
+      inspected: true
+      notes: 已核对页图：例2题头在本页底部完整出现，且无本页解析。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0205.png
+      inspected: true
+      notes: 已核对页图：例2解析位于本页顶部，随后切换到例3新题头。
+  source_context: 例2题头在 page_0204 底部起始，解析跨到 page_0205 顶部后结束；page_0205 的例3及后续题头不属于本卡。
+  source_influence:
+    - 保留 source 的“由 $a\ge1$ 先降阶到无参数不等式”的首步。
+    - 保留 source 的“构造 $F(x)$ + 判 $F^{\prime}(x)>0$ + 比较 $F(0)$”收束方式。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 宁夏一模 T21）已知函数 $f(x)=a(e^x-1)-x^2+x$。若 $a\geqslant1$，证明：当 $x>0$ 时，$f(x)+\cos x>1$。
+  parts: *a1
+  choices: []
+  answer: 当 $a\geqslant1,\ x>0$ 时，$f(x)+\cos x>1$ 成立。
+  fidelity_notes:
+    - 题干在 page_0204，解析在 page_0205 顶部，属于同一题跨页闭合。
+    - 源题为证明题，无选项。
+solution:
+  source_solution_summary: 由 $a\ge1$，要证 $a(e^x-1)-x^2+x+\cos x>1$ 只需证 $e^x-1-x^2+x+\cos x>1$。 设 $F(x)=e^x-1-x^2+x+\cos x$， source 给出 $F^{\prime}(x)=e^x-2x+1-\sin x>0$，故 $F(x)$ 单调递增。 又 $x>0$，所以 $F(x)>F(0)=1$，即 $a(e^x-1)-x^2+x+\cos x>1$，原命题得证。
+  key_steps:
+    - step_id: step_1
+      statement: 用参数下界把命题降到无参数核心。
+      formula_trace:
+        from: $a(e^x-1)-x^2+x+\cos x>1,\ a\ge1$
+        to: 只需证 $e^x-1-x^2+x+\cos x>1$
+        operation: 将 $a(e^x-1)$ 用最小系数 $1$ 代替。
+        why: 去掉参数后目标可直接做单调性证明。
+      source_ref: page_0205_ex02_solution_continuation
+    - step_id: step_2
+      statement: 构造辅助函数并求导。
+      formula_trace:
+        from: $F(x)=e^x-1-x^2+x+\cos x$
+        to: $F^{\prime}(x)=e^x-2x+1-\sin x$
+        operation: 逐项求导并合并。
+        why: 为判定 $F$ 的单调性。
+      source_ref: page_0205_ex02_solution_continuation
+    - step_id: step_3
+      statement: 用导数正性得到严格递增。
+      formula_trace:
+        from: $F^{\prime}(x)=e^x-2x+1-\sin x>0$
+        to: $F(x)$ 在比较区间上单调递增
+        operation: 按 source 直接使用导数符号结论。
+        why: 把目标转为与 $x=0$ 的函数值比较。
+      source_ref: page_0205_ex02_solution_continuation
+    - step_id: step_4
+      statement: 代入基准点完成不等式。
+      formula_trace:
+        from: $x>0$ 且 $F$ 递增
+        to: $F(x)>F(0)=1$
+        operation: 比较点取 $x=0$。
+        why: 恰好得到 step_1 的核心目标。
+      source_ref: page_0205_ex02_solution_continuation
+teaching_card:
+  student_title: 参数下界降阶 + 单调性收束
+  what_it_trains: 训练先用参数条件降阶，再用“构造函数-求导-锚点比较”完成严格不等式证明。
+  recognition_cues:
+    - 题干含参数下界（如 $a\ge1$）且目标是证明不等式。
+    - 核心表达式含 $e^x$、多项式与三角项，可合并成单函数。
+    - 结论比较值可自然锚定在 $x=0$。
+  normalization_moves:
+    - 先把参数项降到最小值情形。
+    - 把目标改写为 $F(x)>F(0)$ 型。
+    - 通过 $F^{\prime}(x)$ 符号锁定单调性。
+  common_failures:
+    - 忽略 $a\ge1$，直接在含参式上硬算。
+    - 把 $F^{\prime}(x)$ 中 $-\sin x$ 误求成 $+\sin x$。
+    - 只写“$F$ 递增”却未回代 $F(0)=1$ 完成闭环。
+  similar_practice_query: a>=1 e^x 三角 不等式 先降参 再单调性
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,247 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0128_cos_ratio_construct_ex12
+content_revision_id: mst_p0128_cos_ratio_construct_ex12-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0128_cos_ratio_construct_ex12.card.yaml
+stem: |-
+  （2023 · 河南模拟）已知函数 $y=f(x)$ 对任意 $x\\in\\left(-\\frac{\\pi}{2},\\frac{\\pi}{2}\\right)$ 满足 $f^{\\prime}(x)\\cos x+f(x)\\sin x>0$，则下列不等式成立的是（  ）
+  A. $\\sqrt{2}f\\left(-\\frac{\\pi}{3}\\right)<f\\left(-\\frac{\\pi}{4}\\right)$
+  B. $\\sqrt{2}f\\left(\\frac{\\pi}{3}\\right)<f\\left(\\frac{\\pi}{4}\\right)$
+  C. $f(0)>2f\\left(\\frac{\\pi}{3}\\right)$
+  D. $f(0)>\\sqrt{2}f\\left(\\frac{\\pi}{4}\\right)$
+answer: |
+  A
+
+  构造
+  \[
+  g(x)=\frac{f(x)}{\cos x},
+  \]
+  则
+  \[
+  g^{\prime}(x)=\frac{f^{\prime}(x)\cos x-f(x)(\cos x)^{\prime}}{\cos^2 x}
+  =\frac{f^{\prime}(x)\cos x+f(x)\sin x}{\cos^2 x}>0.
+  \]
+  因而 $g(x)$ 在 $\left(-\frac{\pi}{2},\frac{\pi}{2}\right)$ 上递增。
+
+  由 $-\frac{\pi}{3}<-\frac{\pi}{4}$，得
+  \[
+  g\!\left(-\frac{\pi}{3}\right)<g\!\left(-\frac{\pi}{4}\right)
+  \Rightarrow
+  \frac{f\!\left(-\frac{\pi}{3}\right)}{\frac12}
+  <
+  \frac{f\!\left(-\frac{\pi}{4}\right)}{\frac{\sqrt2}{2}}
+  \Rightarrow
+  \sqrt2 f\!\left(-\frac{\pi}{3}\right)<f\!\left(-\frac{\pi}{4}\right),
+  \]
+  所以 A 正确。
+
+  又 $\frac{\pi}{3}>\frac{\pi}{4}$，故
+  $g\!\left(\frac{\pi}{3}\right)>g\!\left(\frac{\pi}{4}\right)$，得到
+  $\sqrt2 f\!\left(\frac{\pi}{3}\right)>f\!\left(\frac{\pi}{4}\right)$，B 错。
+  由 $0<\frac{\pi}{3},\frac{\pi}{4}$，有
+  $g(0)<g\!\left(\frac{\pi}{3}\right),g\!\left(\frac{\pi}{4}\right)$，
+  分别推出
+  $f(0)<2f\!\left(\frac{\pi}{3}\right)$ 与
+  $f(0)<\sqrt2 f\!\left(\frac{\pi}{4}\right)$，
+  所以 C、D 都错。答案 A。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把题设导数不等式配成商函数导数。
+      max_score: 1
+    - step_id: step_2
+      description: 由 $g$ 递增判断 A。
+      max_score: 1
+    - step_id: step_3
+      description: 由 $g$ 递增反驳 B。
+      max_score: 1
+    - step_id: step_4
+      description: 比较 $0$ 与 $\\frac{\\pi}{3}$，排除 C。
+      max_score: 1
+    - step_id: step_5
+      description: 比较 $0$ 与 $\\frac{\\pi}{4}$，排除 D。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 单选项真伪判定
+        result: 见 source_solution_summary
+  method:
+    primary: 逆向构造法
+    secondary:
+      - 同构变形与换元法
+      - 充分/必要性探路
+    subroute:
+      - 三角函数基础构造
+      - 余弦反号模型
+      - 单调比值判定
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 同构结构
+      - 抽象函数结构
+    evidence:
+      - $f^{\\prime}(x)\\cos x+f(x)\\sin x$ 与 $\\left(\\frac{f(x)}{\\cos x}\\right)^{\\prime}$ 同分子。
+      - 定义域正好是 $\\cos x>0$ 的区间 $\\left(-\\frac{\\pi}{2},\\frac{\\pi}{2}\\right)$。
+      - 每个选项都可写成 $g(x_1)$ 与 $g(x_2)$ 的比较。
+    normalization_moves_used:
+      - 先锁定可构造分母 $\\cos x$。
+      - 把题设导数符号直接转为 $g^{\\prime}(x)$ 符号。
+      - 逐项代入特殊角余弦完成数值化。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $f^{\\prime}(x)\\cos x+f(x)\\sin x$ 配成商函数导数，回补导数运算与几何意义。
+      - 若学生比较 $-\\frac{\\pi}{3}$ 与 $-\\frac{\\pi}{4}$ 次序出错，回补三角函数基础。
+      - 若学生在“乘以正数/代入正余弦值”时改变不等号方向，回补不等式工具基础。
+      - 若学生把单调函数值比较误写成自变量反向，回补导数单调极值基础。
+  detail_terms:
+    - $g(x)=\\frac{f(x)}{\\cos x}$
+    - $g^{\\prime}(x)>0$
+    - $\\left(-\\frac{\\pi}{2},\\frac{\\pi}{2}\\right)$
+    - 余弦反号模型
+    - 答案 A
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0128_cos_ratio_construct_ex12
+source_evidence:
+  source_refs:
+    - ref_id: page_0128
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0128/page_0128.md
+      role: problem_start
+      evidence: page_0128 中段给出例12完整题干、A-D选项、解析与结论“故选 A”。
+    - ref_id: page_0128_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0128/page_0128.md
+      role: local_context
+      evidence: page_0128 顶部是例11续解，底部起例13题头；按题头归属规则，本卡仅覆盖例12。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0128.png
+      inspected: true
+      notes: 已核对页图：例12位于本页中部且完整结束，选项与解析和 markdown 一致。
+  source_context: 本题是三角函数基础构造中的“余弦反号模型”，通过构造比值函数把题设导数不等式转为单调性。
+  source_influence:
+    - 保留源页构造 $g(x)=\\frac{f(x)}{\\cos x}$ 的主线。
+    - 保留源页由 $g^{\\prime}(x)>0$ 在 $\\left(-\\frac{\\pi}{2},\\frac{\\pi}{2}\\right)$ 递增来逐项判断 A-D。
+    - 保留源页通过代入 $\\cos\\frac{\\pi}{3},\\cos\\frac{\\pi}{4},\\cos0$ 的数值化简。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 河南模拟）已知函数 $y=f(x)$ 对任意 $x\\in\\left(-\\frac{\\pi}{2},\\frac{\\pi}{2}\\right)$ 满足 $f^{\\prime}(x)\\cos x+f(x)\\sin x>0$，则下列不等式成立的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\\sqrt{2}f\\left(-\\frac{\\pi}{3}\\right)<f\\left(-\\frac{\\pi}{4}\\right)$
+      text_latex: $\\sqrt{2}f\\left(-\\frac{\\pi}{3}\\right)<f\\left(-\\frac{\\pi}{4}\\right)$
+    - label: B
+      text_raw: $\\sqrt{2}f\\left(\\frac{\\pi}{3}\\right)<f\\left(\\frac{\\pi}{4}\\right)$
+      text_latex: $\\sqrt{2}f\\left(\\frac{\\pi}{3}\\right)<f\\left(\\frac{\\pi}{4}\\right)$
+    - label: C
+      text_raw: $f(0)>2f\\left(\\frac{\\pi}{3}\\right)$
+      text_latex: $f(0)>2f\\left(\\frac{\\pi}{3}\\right)$
+    - label: D
+      text_raw: $f(0)>\\sqrt{2}f\\left(\\frac{\\pi}{4}\\right)$
+      text_latex: $f(0)>\\sqrt{2}f\\left(\\frac{\\pi}{4}\\right)$
+  answer: A
+  fidelity_notes:
+    - 单选题，例12题干和解析均在 page_0128 内完整闭合。
+    - 本页顶部例11续解仅作上下文，不纳入本卡。
+solution:
+  source_solution_summary: |
+    构造
+    \[
+    g(x)=\frac{f(x)}{\cos x},
+    \]
+    则
+    \[
+    g^{\prime}(x)=\frac{f^{\prime}(x)\cos x-f(x)(\cos x)^{\prime}}{\cos^2 x}
+    =\frac{f^{\prime}(x)\cos x+f(x)\sin x}{\cos^2 x}>0.
+    \]
+    因而 $g(x)$ 在 $\left(-\frac{\pi}{2},\frac{\pi}{2}\right)$ 上递增。
+
+    由 $-\frac{\pi}{3}<-\frac{\pi}{4}$，得
+    \[
+    g\!\left(-\frac{\pi}{3}\right)<g\!\left(-\frac{\pi}{4}\right)
+    \Rightarrow
+    \frac{f\!\left(-\frac{\pi}{3}\right)}{\frac12}
+    <
+    \frac{f\!\left(-\frac{\pi}{4}\right)}{\frac{\sqrt2}{2}}
+    \Rightarrow
+    \sqrt2 f\!\left(-\frac{\pi}{3}\right)<f\!\left(-\frac{\pi}{4}\right),
+    \]
+    所以 A 正确。
+
+    又 $\frac{\pi}{3}>\frac{\pi}{4}$，故
+    $g\!\left(\frac{\pi}{3}\right)>g\!\left(\frac{\pi}{4}\right)$，得到
+    $\sqrt2 f\!\left(\frac{\pi}{3}\right)>f\!\left(\frac{\pi}{4}\right)$，B 错。
+    由 $0<\frac{\pi}{3},\frac{\pi}{4}$，有
+    $g(0)<g\!\left(\frac{\pi}{3}\right),g\!\left(\frac{\pi}{4}\right)$，
+    分别推出
+    $f(0)<2f\!\left(\frac{\pi}{3}\right)$ 与
+    $f(0)<\sqrt2 f\!\left(\frac{\pi}{4}\right)$，
+    所以 C、D 都错。答案 A。
+  key_steps:
+    - step_id: step_1
+      statement: 把题设导数不等式配成商函数导数。
+      formula_trace:
+        from: $f^{\prime}(x)\\cos x+f(x)\\sin x>0$
+        to: $g(x)=\\frac{f(x)}{\\cos x},\\ g^{\\prime}(x)=\\frac{f^{\\prime}(x)\\cos x+f(x)\\sin x}{\\cos^2 x}>0$
+        operation: 利用 $(\\cos x)^{\\prime}=-\\sin x$ 进行逆向构造。
+        why: 把抽象不等式转成可直接判单调的导数形式。
+      source_ref: page_0128
+    - step_id: step_2
+      statement: 由 $g$ 递增判断 A。
+      formula_trace:
+        from: $-\\frac{\\pi}{3}< -\\frac{\\pi}{4}$
+        to: $\\sqrt2 f\\left(-\\frac{\\pi}{3}\\right)<f\\left(-\\frac{\\pi}{4}\\right)$
+        operation: 先比较 $g$ 值，再代入余弦值化简。
+        why: A 与递增方向一致。
+      source_ref: page_0128
+    - step_id: step_3
+      statement: 由 $g$ 递增反驳 B。
+      formula_trace:
+        from: $\\frac{\\pi}{3}>\\frac{\\pi}{4}$
+        to: $\\sqrt2 f\\left(\\frac{\\pi}{3}\\right)>f\\left(\\frac{\\pi}{4}\\right)$
+        operation: 比较 $g\\left(\\frac{\\pi}{3}\\right)$ 与 $g\\left(\\frac{\\pi}{4}\\right)$。
+        why: 选项 B 给出相反方向。
+      source_ref: page_0128
+    - step_id: step_4
+      statement: 比较 $0$ 与 $\\frac{\\pi}{3}$，排除 C。
+      formula_trace:
+        from: $0<\\frac{\\pi}{3}$
+        to: $f(0)<2f\\left(\\frac{\\pi}{3}\\right)$
+        operation: 由 $g(0)<g\\left(\\frac{\\pi}{3}\\right)$ 代入 $\\cos0=1,\\cos\\frac{\\pi}{3}=\\frac12$。
+        why: 与 C 的不等号方向冲突。
+      source_ref: page_0128
+    - step_id: step_5
+      statement: 比较 $0$ 与 $\\frac{\\pi}{4}$，排除 D。
+      formula_trace:
+        from: $0<\\frac{\\pi}{4}$
+        to: $f(0)<\\sqrt2 f\\left(\\frac{\\pi}{4}\\right)$
+        operation: 由 $g(0)<g\\left(\\frac{\\pi}{4}\\right)$ 代入余弦值。
+        why: 与 D 的方向相反。
+      source_ref: page_0128
+teaching_card:
+  student_title: 把 $f^{\prime}\\cos+f\\sin$ 反向构造成 $\\frac{f}{\\cos}$
+  what_it_trains: 训练把抽象导数不等式快速配成三角比值函数，再用单调性做四个选项的方向筛查。
+  recognition_cues:
+    - 题设出现 $f^{\\prime}(x)\\cos x+f(x)\\sin x$。
+    - 定义域是 $\\left(-\\frac{\\pi}{2},\\frac{\\pi}{2}\\right)$，提示 $\\cos x$ 不变号。
+    - 选项全部是特殊角点值不等式。
+  normalization_moves:
+    - 先设 $g=\\frac{f}{\\cos}$。
+    - 由 $g^{\\prime}>0$ 得递增。
+    - 按自变量大小比较 $g$，再代入 $\\cos\\frac{\\pi}{3},\\cos\\frac{\\pi}{4},\\cos0$。
+  common_failures:
+    - 把 $(\\cos x)^{\\prime}$ 的符号写错。
+    - 负角比较顺序出错，导致 A 方向翻转。
+    - 把“递增”误用成“角越大函数越小”。
+    - 化简时把 $\\frac{1}{\\cos\\frac{\\pi}{3}}$ 和 $\\frac{1}{\\cos\\frac{\\pi}{4}}$ 混淆。
+  similar_practice_query: 三角函数基础构造 f^{\\prime}cos+f sin 比值函数 单调 比较
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 页图核对通过；page_0128 仅有例12与例13题头，页顶例11为续解不归本卡。

@@ -1,0 +1,190 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0201_ae_x_lnx_extreme_and_proof_ch6_exp_ex06
+content_revision_id: mst_p0201_ae_x_lnx_extreme_and_proof_ch6_exp_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0201_ae_x_lnx_extreme_and_proof_ch6_exp_ex06.card.yaml
+stem: |-
+  （2018·新课标I）已知函数 $f(x)=ae^x-\ln x-1$。
+  (1). 设 $x=2$ 是 $f(x)$ 的极值点，求 $a$，并求 $f(x)$ 的单调区间。
+  (2). 证明：当 $a\ge\frac1e$ 时，$f(x)\ge0$。
+answer: |-
+  (1) $a=\frac1{2e^2}$，$f(x)$ 在 $(0,2)$ 单调递减，在 $(2,+\infty)$ 单调递增；(2) $a\ge\frac1e$ 时恒有 $f(x)\ge0$。
+
+  第(1)问：由 $f^{\prime}(x)=ae^x-\frac1x$ 与极值点必要条件 $f^{\prime}(2)=0$ 求得 $a=\frac1{2e^2}$；再把 $f^{\prime}(x)$ 的符号化为 $xe^x-2e^2$ 的符号，用 $xe^x$ 在 $(0,+\infty)$ 严格递增得到单调区间。 第(2)问：把 $f(x)$ 拆为 $(e^{x-1}-x)+(x-\ln x-1)+\left(a-\frac1e\right)e^x$，其中前两项分别由 $e^t\ge1+t$ 与 $\ln x\le x-1$ 保证非负，第三项在 $a\ge\frac1e$ 时非负，故 $f(x)\ge0$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 由极值点必要条件确定参数 $a$。
+      max_score: 1
+    - step_id: step_2
+      description: 把导数符号比较转成 $xe^x$ 与常数比较。
+      max_score: 1
+    - step_id: step_3
+      description: 得到第(1)问单调区间。
+      max_score: 1
+    - step_id: step_4
+      description: 把第(2)问拆成三项非负之和。
+      max_score: 1
+    - step_id: step_5
+      description: 分别证明三项非负并合并结论。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 (1) 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 (2) 问
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+      - 切线放缩与凹凸性
+    subroute:
+      - 极值点条件定参
+      - xe^x 单调判号
+      - 0 线放缩
+      - 取等点
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 不等式工具结构
+    evidence:
+      - $f^{\prime}(x)=ae^x-\frac1x$
+      - $\mathrm{sign}\,f^{\prime}(x)=\mathrm{sign}\,(xe^x-2e^2)$
+      - $(e^{x-1}-x)+(x-\ln x-1)+\left(a-\frac1e\right)e^x$
+    normalization_moves_used:
+      - 极值点题先写 $f^{\prime}(x)$ 并代入给定点求参。
+      - 对含 $\frac1x$ 的导数符号，先乘正量转成 $xe^x$ 比较。
+      - 证明题先降到临界参数 $\frac1e$，再拆成标准非负块。
+  fallback:
+    only_if_trace_shows:
+      - 若学生把“极值点”误作“函数值取零”，回补导数单调极值基础。
+      - 若学生不会由 $f^{\prime}(x)$ 转成 $xe^x-2e^2$ 判号，回补代数恒等变形。
+      - 若学生不会证明 $e^{x-1}-x\ge0$ 或 $x-\ln x-1\ge0$，回补指数对数基础。
+  detail_terms:
+    - $a=\frac1{2e^2}$
+    - $xe^x-2e^2$
+    - $e^{x-1}-x$
+    - $x-\ln x-1$
+    - $\left(a-\frac1e\right)e^x$
+parts: &a1
+  - label: (1)
+    text: 设 $x=2$ 是 $f(x)$ 的极值点，求 $a$，并求 $f(x)$ 的单调区间。
+  - label: (2)
+    text: 证明：当 $a\ge\frac1e$ 时，$f(x)\ge0$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0201_ae_x_lnx_extreme_and_proof_ch6_exp_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0201_ex06_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0201/page_0201.md
+      role: problem_start
+      evidence: page_0201 例6题头：$f(x)=ae^x-\ln x-1$，含两问（极值点求参+单调区间；证明 $a\ge\frac1e$ 时 $f(x)\ge0$）。
+    - ref_id: page_0201_ex06_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0201/page_0201.md
+      role: solution
+      evidence: page_0201 例6解析给出：由 $f^{\prime}(2)=0$ 得 $a=\frac1{2e^2}$，并给出第(2)问拆分到 $e^{x-1}-x+x-\ln x-1+\left(a-\frac1e\right)e^x$ 的证明路径。
+    - ref_id: page_0200_ex04_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0200/page_0200.md
+      role: local_context
+      evidence: page_0200 底部是例4起头，page_0201 顶部是例4另解续页，不属于例6。
+    - ref_id: page_0202_exposition_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0202/page_0202.md
+      role: local_context
+      evidence: page_0202 顶部承接“对数常见放缩”讲解后进入新例1，不是例6续页。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0200.png
+      inspected: true
+      notes: 已核对：page_0200 底部出现例4，支持 page_0201 页首“另解”为续页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0201.png
+      inspected: true
+      notes: 已核对：例6题头、两问与解析均完整在本页，未跨页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0202.png
+      inspected: true
+      notes: 已核对：page_0202 顶部为讲解性内容和新例，不涉及例6续解。
+  source_context: 本卡仅处理 page_0201 新起头的例6；page_0201 顶部例4续页与下半页讲解性 exposition 均不建卡。
+  source_influence:
+    - 保留第(1)问“极值点条件 $f^{\prime}(2)=0$ 定参”的主线。
+    - 保留第(1)问用 $xe^x$ 单调性判断 $f^{\prime}$ 符号的区间分段。
+    - 保留第(2)问“临界参数 $a=\frac1e$ + 两条基础不等式”拆分结构。
+  source_discrepancies: []
+original_problem:
+  stem: （2018·新课标I）已知函数 $f(x)=ae^x-\ln x-1$。
+  parts: *a1
+  choices: []
+  answer: (1) $a=\frac1{2e^2}$，$f(x)$ 在 $(0,2)$ 单调递减，在 $(2,+\infty)$ 单调递增；(2) $a\ge\frac1e$ 时恒有 $f(x)\ge0$。
+  fidelity_notes:
+    - 源题为两问解答题，无选项。
+    - 题干含 $\ln x$，默认定义域为 $x>0$。
+solution:
+  source_solution_summary: 第(1)问：由 $f^{\prime}(x)=ae^x-\frac1x$ 与极值点必要条件 $f^{\prime}(2)=0$ 求得 $a=\frac1{2e^2}$；再把 $f^{\prime}(x)$ 的符号化为 $xe^x-2e^2$ 的符号，用 $xe^x$ 在 $(0,+\infty)$ 严格递增得到单调区间。 第(2)问：把 $f(x)$ 拆为 $(e^{x-1}-x)+(x-\ln x-1)+\left(a-\frac1e\right)e^x$，其中前两项分别由 $e^t\ge1+t$ 与 $\ln x\le x-1$ 保证非负，第三项在 $a\ge\frac1e$ 时非负，故 $f(x)\ge0$。
+  key_steps:
+    - step_id: step_1
+      statement: 由极值点必要条件确定参数 $a$。
+      formula_trace:
+        from: $f(x)=ae^x-\ln x-1,\ f^{\prime}(x)=ae^x-\frac1x,\ f^{\prime}(2)=0$
+        to: $ae^2-\frac12=0\Rightarrow a=\frac1{2e^2}$
+        operation: 在定义域内部极值点处令导数为零。
+        why: 第(1)问先定参才能继续判单调。
+      source_ref: page_0201_ex06_solution
+    - step_id: step_2
+      statement: 把导数符号比较转成 $xe^x$ 与常数比较。
+      formula_trace:
+        from: $f^{\prime}(x)=\frac{e^x}{2e^2}-\frac1x$
+        to: $\mathrm{sign}\,f^{\prime}(x)=\mathrm{sign}\,(xe^x-2e^2)$
+        operation: 同乘正数 $2e^2x$。
+        why: $xe^x$ 在 $x>0$ 上严格递增且 $x=2$ 时等号成立。
+      source_ref: page_0201_ex06_solution
+    - step_id: step_3
+      statement: 得到第(1)问单调区间。
+      formula_trace:
+        from: $xe^x<2e^2\ (0<x<2),\ xe^x>2e^2\ (x>2)$
+        to: $f^{\prime}(x)<0\ (0<x<2),\ f^{\prime}(x)>0\ (x>2)$
+        operation: 由 step_2 的同号关系读出导数符号。
+        why: 导数符号决定函数先减后增。
+      source_ref: page_0201_ex06_solution
+    - step_id: step_4
+      statement: 把第(2)问拆成三项非负之和。
+      formula_trace:
+        from: $ae^x-\ln x-1$
+        to: $(e^{x-1}-x)+(x-\ln x-1)+\left(a-\frac1e\right)e^x$
+        operation: 加减 $x$ 与 $\frac1e e^x$。
+        why: 便于分别调用指数与对数基础不等式。
+      source_ref: page_0201_ex06_solution
+    - step_id: step_5
+      statement: 分别证明三项非负并合并结论。
+      formula_trace:
+        from: $e^{x-1}-x,\ x-\ln x-1,\ \left(a-\frac1e\right)e^x$
+        to: $e^{x-1}-x\ge0,\ x-\ln x-1\ge0,\ \left(a-\frac1e\right)e^x\ge0$
+        operation: 用 $e^t\ge1+t$（$t=x-1$）与 $\ln x\le x-1$，再用 $a\ge\frac1e$。
+        why: 三项同为非负，故 $f(x)\ge0$。
+      source_ref: page_0201_ex06_solution
+teaching_card:
+  student_title: 极值点先定参，证明题再拆三块
+  what_it_trains: 训练在同题里切换“导数判单调”和“临界参数放缩”两条链路，避免把证明题写成只给结论。
+  recognition_cues:
+    - 题目前半给“某点是极值点”，后半给“$a\ge$某阈值”。
+    - 导数含 $ae^x-\frac1x$，常用 $xe^x$ 统一符号判断。
+    - 证明式含指数+对数，通常可拆为 $e^t-(1+t)$ 与 $x-\ln x-1$。
+  normalization_moves:
+    - 先用 $f^{\prime}(2)=0$ 立即定出 $a$。
+    - 判号时先同乘正量，改成单调函数比较。
+    - 证明时把 $f(x)$ 拆成三项非负并逐项落地。
+  common_failures:
+    - 第(1)问只求出 $a$，漏掉单调区间。
+    - 第(2)问把 $a\ge\frac1e$ 直接代成等号，缺失“$\ge$”传递。
+    - 把 $x-\ln x-1\ge0$ 的适用域写错（应为 $x>0$）。
+  similar_practice_query: ae^x-lnx-1 极值点 求参 单调 证明 a>=1/e
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

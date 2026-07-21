@@ -1,0 +1,169 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0200_xex_log_min_values_ch6_exp_ex01
+content_revision_id: mst_p0200_xex_log_min_values_ch6_exp_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0200_xex_log_min_values_ch6_exp_ex01.card.yaml
+stem: |-
+  （2024 · 利哥每日一题）求下列函数的最小值。
+  1. 函数 $f(x)=xe^x-x-\ln x$ 的最小值。
+  2. 函数 $g(x)=\frac{e^x}{x}-x+\ln x$ 的最小值。
+answer: |-
+  （1）最小值为 $1$；（2）最小值为 $e-1$。
+
+  第一问中 $x>0$，令 $t=x+\ln x$，则 $f(x)=e^t-t\ge1$（即 $e^t-t-1\ge0$），故最小值为 $1$，当 $x+\ln x=0$ 取到。第二问令 $u=x-\ln x$，则 $g(x)=e^u-u$。又由 $\ln x\le x-1$ 得 $u\ge1$，并且 $\phi(u)=e^u-u-1$ 在 $u\ge1$ 上递增，因此 $g(x)\ge e-1$，当 $u=1$（即 $x-\ln x=1$）时取等，最小值为 $e-1$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 第(1)问先做同构换元。
+      max_score: 1
+    - step_id: step_2
+      description: 第(1)问调用 $e^t-t\ge1$ 得最小值。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问继续同构并锁定定义域下界。
+      max_score: 1
+    - step_id: step_4
+      description: 第(2)问在 $u\ge1$ 上判最小值。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level:
+      - part_id: "1"
+        goal: 数值求值
+        target: 第 1 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 数值求值
+        target: 第 2 问
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 切线放缩与凹凸性
+    subroute:
+      - 指数模板 $e^t-t$
+      - $t=x+\ln x$
+      - $u=x-\ln x$
+      - 区间下界 $u\ge1$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 局部逼近结构
+    evidence:
+      - $e^{x+\ln x}-(x+\ln x)$
+      - $e^{x-\ln x}-(x-\ln x)$
+      - $x-\ln x\ge1$
+      - $\min f=1,\ \min g=e-1$
+    normalization_moves_used:
+      - 把乘除结构统一改写成指数的加减指数。
+      - 把两问都降到 $e^t-t$ 的同一母题。
+      - 第二问补充变量范围 $u\ge1$ 后再取最小值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看不出 $xe^x=e^{x+\ln x}$、$\frac{e^x}{x}=e^{x-\ln x}$，回补指数对数基础。
+      - 若学生不会由 $\ln x\le x-1$ 得到 $x-\ln x\ge1$，回补不等式工具基础。
+      - 若学生对“$e^t-t$ 最小值”为何成立不清楚，回补导数单调极值基础。
+  detail_terms:
+    - $f(x)=xe^x-x-\ln x$
+    - $g(x)=\frac{e^x}{x}-x+\ln x$
+    - $e^t-t$
+    - $x+\ln x=0$
+    - $x-\ln x=1$
+parts: &a1
+  - part_id: "1"
+    text: 函数 $f(x)=xe^x-x-\ln x$ 的最小值。
+  - part_id: "2"
+    text: 函数 $g(x)=\frac{e^x}{x}-x+\ln x$ 的最小值。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0200_xex_log_min_values_ch6_exp_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0200_ex01_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0200/page_0200.md
+      role: problem_start
+      evidence: page_0200 行23-25给出例1题干，两问分别求 $f(x)$ 与 $g(x)$ 的最小值。
+    - ref_id: page_0200_ex01_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0200/page_0200.md
+      role: solution
+      evidence: page_0200 行27-28给出例1解析：同构为 $e^t-t$ 模板，结论最小值为 $1$ 与 $e-1$。
+    - ref_id: page_0200_expansion_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0200/page_0200.md
+      role: local_context
+      evidence: page_0200 行14-21是本节指数放缩模板，和例1中 $e^t-t$ 的最小值思想一致。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0200.png
+      inspected: true
+      notes: 已核对页图：例1两问题干与解析文字完整清晰，最小值结论与 markdown 一致。
+  source_context: 例1题头与解析均在 page_0200，同页完成，无跨页依赖。
+  source_influence:
+    - 保留源解同构主线：$xe^x-x-\ln x=e^{x+\ln x}-(x+\ln x)$。
+    - 保留第二问的结构重写：$\frac{e^x}{x}-x+\ln x=e^{x-\ln x}-(x-\ln x)$。
+    - 保留“$x-\ln x\ge1$ + $y=e^t-t-1$ 在 $t\ge1$ 递增”的下界判定。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 利哥每日一题）求下列函数的最小值。
+  parts: *a1
+  choices: []
+  answer: （1）最小值为 $1$；（2）最小值为 $e-1$。
+  fidelity_notes:
+    - 源题为填空型两问，无选项。
+    - 两问都通过同一指数模板 $e^t-t$ 求最小值。
+solution:
+  source_solution_summary: 第一问中 $x>0$，令 $t=x+\ln x$，则 $f(x)=e^t-t\ge1$（即 $e^t-t-1\ge0$），故最小值为 $1$，当 $x+\ln x=0$ 取到。第二问令 $u=x-\ln x$，则 $g(x)=e^u-u$。又由 $\ln x\le x-1$ 得 $u\ge1$，并且 $\phi(u)=e^u-u-1$ 在 $u\ge1$ 上递增，因此 $g(x)\ge e-1$，当 $u=1$（即 $x-\ln x=1$）时取等，最小值为 $e-1$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问先做同构换元。
+      formula_trace:
+        from: $f(x)=xe^x-x-\ln x$
+        to: $f(x)=e^{x+\ln x}-(x+\ln x)$
+        operation: 把 $xe^x$ 写成 $e^{x+\ln x}$，统一成 $e^t-t$ 结构。
+        why: 直接套用指数切线模板的最小值结论。
+      source_ref: page_0200_ex01_solution
+    - step_id: step_2
+      statement: 第(1)问调用 $e^t-t\ge1$ 得最小值。
+      formula_trace:
+        from: $f(x)=e^t-t,\ t=x+\ln x\in\mathbf{R}$
+        to: $f(x)\ge1$
+        operation: 应用 $e^t-t-1\ge0$，并由 $x+\ln x=0$ 给取等。
+        why: 得到第一问数值答案。
+      source_ref: page_0200_ex01_solution
+    - step_id: step_3
+      statement: 第(2)问继续同构并锁定定义域下界。
+      formula_trace:
+        from: $g(x)=\frac{e^x}{x}-x+\ln x$
+        to: $g(x)=e^{x-\ln x}-(x-\ln x),\ x-\ln x\ge1$
+        operation: 把 $\frac{e^x}{x}$ 写成 $e^{x-\ln x}$，再用 $\ln x\le x-1$。
+        why: 把第二问转成“$u\ge1$ 上的 $e^u-u$ 最小值”。
+      source_ref: page_0200_ex01_solution
+    - step_id: step_4
+      statement: 第(2)问在 $u\ge1$ 上判最小值。
+      formula_trace:
+        from: $\phi(u)=e^u-u-1,\ u\ge1$
+        to: $g(x)\ge e-1$
+        operation: 用 $\phi^{\prime}(u)=e^u-1>0$ 判递增，最小值在 $u=1$。
+        why: 得到第二问数值答案。
+      source_ref: page_0200_ex01_solution
+teaching_card:
+  student_title: 两问同构到 $e^t-t$ 求最小值
+  what_it_trains: 训练把指数与对数混合式改写成同一个模板，再按变量范围读最小值。
+  recognition_cues:
+    - 题干里同时出现 $xe^x$、$\frac{e^x}{x}$ 与 $\ln x$。
+    - 目标是“最小值”，且式子可重写成 $e^{(\cdot)}-(\cdot)$。
+    - 一问在全实变量上取最小，一问有额外下界条件。
+  normalization_moves:
+    - 先把乘除结构写成指数加减：$xe^x\to e^{x+\ln x}$。
+    - 统一识别模板：$e^t-t$。
+    - 第二问先证 $x-\ln x\ge1$ 再取最小。
+  common_failures:
+    - 把定义域 $x>0$ 漏掉，导致换元范围写错。
+    - 第二问只写 $e^u-u\ge1$，忽略了 $u\ge1$ 的更强下界。
+    - 取等条件只写结论，不写 $x+\ln x=0$ 或 $x-\ln x=1$。
+  similar_practice_query: xe^x lnx 最小值 同构 e^t-t x-lnx>=1
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

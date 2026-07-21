@@ -1,0 +1,170 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0019_ex10
+content_revision_id: mst_p0019_ex10-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0019_ex10.card.yaml
+stem: |-
+  (湖北省十一校 2024 学年高三下学期第二次联考 T8) 若对于任意正数 $x,y$， 不等式 $x(1+\ln x)\ge x\ln y-ay$ 恒成立，则实数 $a$ 的取值范围是 ( )
+  A. $\left(0,\frac1{\mathrm e}\right]$
+  B. $\left[\frac1{\mathrm e^3},\frac1{\mathrm e}\right]$
+  C. $\left[\frac1{\mathrm e^2},+\infty\right)$
+  D. $\left[\frac1{\mathrm e^3},+\infty\right)$
+answer: |-
+  C. $\left[\frac1{\mathrm e^2},+\infty\right)$
+
+  因 $y>0$，将原不等式移项并除以 y，得到 $a\ge \frac{x\ln y-x(1+\ln x)}{y}=\frac{x}{y}\ln\frac{y}{x}-\frac{x}{y}$。 令 $t=y/x>0$，右端为 $\frac{\ln t-1}{t}$。再写成 $\frac1e\frac{\ln(t/e)}{t/e}$，由 $\ln u/u$ 的最大值 $1/e$ 得右端最大值 $1/e^2$。恒成立要求 $a\ge1/e^2$，选 C。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把恒成立不等式分离出参数 a。
+      max_score: 1
+    - step_id: step_2
+      description: 把双变量降成比值变量。
+      max_score: 1
+    - step_id: step_3
+      description: 同构到 $\ln u/u$ 并取最大值。
+      max_score: 1
+    - step_id: step_4
+      description: 写出闭区间答案。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 参变量分离
+    secondary:
+      - 同构变形与换元法
+      - 自由度与主元
+    subroute:
+      - y/x 比值换元
+      - ln(t/e)/(t/e) 最大值
+  structure:
+    primary: 多变量与不等式结构
+    secondary:
+      - 同构结构
+      - 指对复合结构
+    evidence:
+      - 原双变量表达式经移项后只含比值 $t=y/x$。
+      - $(\ln t-1)/t$ 同构为 $\frac1e\ln(t/e)/(t/e)$。
+    normalization_moves_used:
+      - 正变量除法：因 $y>0$ 可同向除以 y。
+      - 尺度降元：令 $t=y/x$。
+      - 对数合并：$\ln y-\ln x=\ln(y/x)$。
+      - 平移同构：$\ln t-1=\ln(t/e)$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生移项除以 y 时不确认 $y>0$，回补函数三要素与定义域。
+      - 若学生不会把 $\ln y-\ln x$ 合成 $\ln(y/x)$，回补指数对数基础。
+      - 若学生看不出表达式只依赖 $y/x$，回补代数恒等变形。
+      - 若学生不知道恒成立要压住右端最大值，回补不等式工具基础。
+      - 若学生不会求 $\ln u/u$ 的最大值，回补导数单调极值基础。
+  detail_terms:
+    - for all positive x,y
+    - parameter range
+    - t=y/x
+    - (ln t-1)/t
+    - ln(t/e)/(t/e)
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0019_ex10
+source_evidence:
+  source_refs:
+    - ref_id: page_0019_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0019/page_0019.md
+      role: problem_start
+      evidence: page_0019 例 10 给出任意正数 x,y 下不等式 x(1+ln x)>=xln y-ay 恒成立，求 a 的取值范围，并列出 A-D。
+    - ref_id: page_0019_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0019/page_0019.md
+      role: solution
+      evidence: 同页解析将不等式化为 a>=(ln t-1)/t，令 t=y/x>0，再同构为 (1/e)·ln(t/e)/(t/e)，最大值为 1/e^2，选 C。
+    - ref_id: page_0018_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0018/page_0018.md
+      role: local_context
+      evidence: page_0018 前文给出 y=ln x/x 的最大值模型，本题解析直接调用同构函数。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0019.png
+      inspected: true
+      notes: 核对例 10 题干、选项 1/e^3 与 1/e^2、换元 t=y/x、答案 C。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0018.png
+      inspected: true
+      notes: 核对前页 ln x/x 模型上下文。
+  source_context: 本题是双变量恒成立不等式，源解用比值 t=y/x 把两个正变量降成一个正变量，再压住 ln t/t 型最大值。
+  source_influence:
+    - “任意正数 x,y 恒成立”决定要对右端关于 t 的表达式取最大值。
+    - 关键不是分别讨论 x,y，而是发现式子只依赖于 y/x。
+  source_discrepancies: []
+original_problem:
+  stem: (湖北省十一校 2024 学年高三下学期第二次联考 T8) 若对于任意正数 $x,y$， 不等式 $x(1+\ln x)\ge x\ln y-ay$ 恒成立，则实数 $a$ 的取值范围是 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text: $\left(0,\frac1{\mathrm e}\right]$
+    - label: B
+      text: $\left[\frac1{\mathrm e^3},\frac1{\mathrm e}\right]$
+    - label: C
+      text: $\left[\frac1{\mathrm e^2},+\infty\right)$
+    - label: D
+      text: $\left[\frac1{\mathrm e^3},+\infty\right)$
+  answer: C. $\left[\frac1{\mathrm e^2},+\infty\right)$
+  fidelity_notes:
+    - 题头、题干和完整解析均在 page_0019。
+    - 源图与 markdown 对选项 B、C、D 中 e 的指数一致。
+solution:
+  source_solution_summary: 因 $y>0$，将原不等式移项并除以 y，得到 $a\ge \frac{x\ln y-x(1+\ln x)}{y}=\frac{x}{y}\ln\frac{y}{x}-\frac{x}{y}$。 令 $t=y/x>0$，右端为 $\frac{\ln t-1}{t}$。再写成 $\frac1e\frac{\ln(t/e)}{t/e}$，由 $\ln u/u$ 的最大值 $1/e$ 得右端最大值 $1/e^2$。恒成立要求 $a\ge1/e^2$，选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 把恒成立不等式分离出参数 a。
+      formula_trace:
+        from: $x(1+\ln x)\ge x\ln y-ay,\quad x>0,\ y>0$
+        to: $a\ge\frac{x\ln y-x(1+\ln x)}{y}$
+        operation: 把含 a 的项移到左侧，再除以正数 y。
+        why: 参数范围由右端表达式对所有正 x,y 的最大值决定。
+      source_ref: page_0019_solution
+    - step_id: step_2
+      statement: 把双变量降成比值变量。
+      formula_trace:
+        from: $\frac{x\ln y-x(1+\ln x)}{y}$
+        to: $\frac{x}{y}\ln\frac{y}{x}-\frac{x}{y}=\frac{\ln t-1}{t},\quad t=\frac yx>0$
+        operation: 把 $\ln y-\ln x$ 合成 $\ln(y/x)$，再令 $t=y/x$。
+        why: 原式对尺度同时放大不敏感，只依赖 y 与 x 的比值。
+      source_ref: page_0019_solution
+    - step_id: step_3
+      statement: 同构到 $\ln u/u$ 并取最大值。
+      formula_trace:
+        from: $\frac{\ln t-1}{t}$
+        to: $\frac1e\cdot\frac{\ln(t/e)}{t/e}\le\frac1e\cdot\frac1e=\frac1{e^2}$
+        operation: 用 $\ln t-1=\ln(t/e)$，令 $u=t/e$，套用 $\max \ln u/u=1/e$。
+        why: 恒成立需要 a 不小于右端的最大可能值。
+      source_ref: page_0019_solution
+    - step_id: step_4
+      statement: 写出闭区间答案。
+      formula_trace:
+        from: $a\ge\max_{t>0}\frac{\ln t-1}{t}=\frac1{e^2}$
+        to: $a\in\left[\frac1{e^2},+\infty\right)$
+        operation: 最大值可取到，所以端点用闭括号。
+        why: 当 $t=e^2$ 时右端达到 $1/e^2$，等号允许。
+      source_ref: page_0019_solution
+teaching_card:
+  student_title: 双变量恒成立：先看比例 $t=\frac yx$
+  what_it_trains: 训练把含两个正变量的恒成立不等式分离参数，再用比值换元降成一个 $\ln u/u$ 最大值问题。
+  recognition_cues:
+    - 题干说“任意正数 x,y”，并且对数里同时有 $\ln x$、$\ln y$。
+    - 移项后出现 $\ln y-\ln x$，提示合成 $\ln(y/x)$。
+    - 选项端点含 $1/e^2$、$1/e^3$，提示要从 $\ln u/u$ 的最大值来。
+  normalization_moves:
+    - 先把 a 分离出来，保留“右端最大值”的意识。
+    - 把 $\frac{x}{y}$ 写成 $1/t$，把 $\ln y-\ln x$ 写成 $\ln t$。
+    - 把 $\ln t-1$ 改成 $\ln(t/e)$。
+  common_failures:
+    - 分别固定 x 或 y 讨论，错过比例换元。
+    - 把恒成立的方向做反，误求右端最小值。
+    - 端点写成开区间，忘记最大值在 $t=e^2$ 可以取到。
+  similar_practice_query: 任意正数 x y 恒成立 参数范围 y/x 换元 ln t over t
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0019 图像核对通过；答案 C 和闭端点已核对。

@@ -1,0 +1,212 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0148_log_sugar_water_chain_ex16
+content_revision_id: mst_p0148_log_sugar_water_chain_ex16-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0148_log_sugar_water_chain_ex16.card.yaml
+stem: |-
+  （2020·新课标Ⅲ）已知 $5^5<8^4$，$13^4<8^5$，设 $a=\log_5 3$，$b=\log_8 5$，$c=\log_{13}8$，则（ ）
+  A. $a<b<c$
+  B. $b<a<c$
+  C. $b<c<a$
+  D. $c<a<b$
+answer: |
+  A
+
+  换底得
+  \[
+  a=\frac{\ln3}{\ln5},\quad b=\frac{\ln5}{\ln8},\quad c=\frac{\ln8}{\ln13}.
+  \]
+  先比 $a,b$：由糖水不等式
+  \[
+  \frac{\ln3}{\ln5}
+  <
+  \frac{\ln3+\ln\frac85}{\ln5+\ln\frac85}
+  =
+  \frac{\ln\frac{24}{5}}{\ln8}
+  <
+  \frac{\ln5}{\ln8},
+  \]
+  故 $a<b$。
+  再比 $b,c$：由 $5^5<8^4$ 得
+  \[
+  \frac{\ln5}{\ln8}<\frac45;
+  \]
+  由 $13^4<8^5$ 得
+  \[
+  \frac{\ln8}{\ln13}>\frac45.
+  \]
+  所以 $b<c$。综合得 $a<b<c$，选 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 统一换底，转成对数分式。
+      max_score: 1
+    - step_id: step_2
+      description: 用糖水不等式比较 $a,b$。
+      max_score: 1
+    - step_id: step_3
+      description: 由题设幂不等式给出 $b,c$ 的同一阈值比较。
+      max_score: 1
+    - step_id: step_4
+      description: 合并结论并对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较三个换底对数值的大小。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 拟合与夹逼
+    subroute:
+      - 换底对数分式
+      - 糖水不等式
+      - 共同阈值 $\frac45$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - $a,b,c$ 都是 $\frac{\ln u}{\ln v}$ 形式。
+      - 题设幂不等式可直接转成对数比值上、下界。
+    normalization_moves_used:
+      - 换底：$\log_m n\to\frac{\ln n}{\ln m}$。
+      - 糖水中项：$\frac{\ln(24/5)}{\ln8}$。
+      - 阈值桥：$b<\frac45<c$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把幂不等式改写成对数比值，回补指数对数基础。
+      - 若学生不会用糖水不等式构造中间分式，回补不等式工具基础。
+      - 若学生在多段比较合并时出错，回补代数恒等变形。
+  detail_terms:
+    - 糖水不等式
+    - $\frac{\ln(24/5)}{\ln8}$
+    - $b<\frac45<c$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0148_log_sugar_water_chain_ex16
+source_evidence:
+  source_refs:
+    - ref_id: page_0148_ex16_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0148/page_0148.md
+      role: problem_start
+      evidence: 例16题干给出条件 $5^5<8^4,13^4<8^5$ 与 $a=\log_5 3,b=\log_8 5,c=\log_{13}8$。
+    - ref_id: page_0148_ex16_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0148/page_0148.md
+      role: solution
+      evidence: 例16解析先用糖水不等式比较 $a,b$，再用题设幂不等式比较 $b,c$，结论选 A。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0148.png
+      inspected: false
+      notes: 本次仅按 source markdown 重建，未重新人工核对页图。
+  source_context: 本题位于第4章“比大小”中，主线是换底后做对数分式比较。
+  source_influence:
+    - 保留源解两段式节奏：先证 $a<b$，再由已知幂不等式证 $b<c$。
+    - 保留源解中的糖水中项 $\frac{\ln(24/5)}{\ln8}$。
+  source_discrepancies: []
+original_problem:
+  stem: （2020·新课标Ⅲ）已知 $5^5<8^4$，$13^4<8^5$，设 $a=\log_5 3$，$b=\log_8 5$，$c=\log_{13}8$，则（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+    - label: B
+      text_raw: $b<a<c$
+      text_latex: $b<a<c$
+    - label: C
+      text_raw: $b<c<a$
+      text_latex: $b<c<a$
+    - label: D
+      text_raw: $c<a<b$
+      text_latex: $c<a<b$
+  answer: A
+  fidelity_notes:
+    - 源解结论写作 $c>b>a$，与选项 A 的 $a<b<c$ 等价。
+solution:
+  source_solution_summary: |
+    换底得
+    \[
+    a=\frac{\ln3}{\ln5},\quad b=\frac{\ln5}{\ln8},\quad c=\frac{\ln8}{\ln13}.
+    \]
+    先比 $a,b$：由糖水不等式
+    \[
+    \frac{\ln3}{\ln5}
+    <
+    \frac{\ln3+\ln\frac85}{\ln5+\ln\frac85}
+    =
+    \frac{\ln\frac{24}{5}}{\ln8}
+    <
+    \frac{\ln5}{\ln8},
+    \]
+    故 $a<b$。
+    再比 $b,c$：由 $5^5<8^4$ 得
+    \[
+    \frac{\ln5}{\ln8}<\frac45;
+    \]
+    由 $13^4<8^5$ 得
+    \[
+    \frac{\ln8}{\ln13}>\frac45.
+    \]
+    所以 $b<c$。综合得 $a<b<c$，选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 统一换底，转成对数分式。
+      formula_trace:
+        from: $a=\log_5 3,\ b=\log_8 5,\ c=\log_{13}8$
+        to: $a=\frac{\ln3}{\ln5},\ b=\frac{\ln5}{\ln8},\ c=\frac{\ln8}{\ln13}$
+        operation: 使用换底公式。
+        why: 三者同构后可做分式比较。
+      source_ref: page_0148_ex16_solution
+    - step_id: step_2
+      statement: 用糖水不等式比较 $a,b$。
+      formula_trace:
+        from: $\frac{\ln3}{\ln5}$ 与 $\frac{\ln5}{\ln8}$
+        to: $\frac{\ln3}{\ln5}<\frac{\ln(24/5)}{\ln8}<\frac{\ln5}{\ln8}$
+        operation: 在分子分母同时加 $\ln\frac85$。
+        why: 构造中间比值并利用 $\frac{24}{5}<5$。
+      source_ref: page_0148_ex16_solution
+    - step_id: step_3
+      statement: 由题设幂不等式给出 $b,c$ 的同一阈值比较。
+      formula_trace:
+        from: $5^5<8^4,\ 13^4<8^5$
+        to: $b=\frac{\ln5}{\ln8}<\frac45<\frac{\ln8}{\ln13}=c$
+        operation: 两条幂不等式分别取对数并整理。
+        why: 把 $b,c$ 压到同一个中间值 $\frac45$ 两侧。
+      source_ref: page_0148_ex16_solution
+    - step_id: step_4
+      statement: 合并结论并对应选项。
+      formula_trace:
+        from: $a<b$ 且 $b<c$
+        to: $a<b<c$，选 A
+        operation: 传递比较。
+        why: 得到唯一顺序。
+      source_ref: page_0148_ex16_solution
+teaching_card:
+  student_title: 换底后用一条阈值线串起三数比较
+  what_it_trains: 训练把不同底对数比值统一成可加可夹的分式，再利用题设幂关系建立中间阈值。
+  recognition_cues:
+    - 多个对数底数不同但都可换底。
+    - 题干额外给了两条幂不等式。
+    - 目标是三数全序单选。
+  normalization_moves:
+    - 先全部换成自然对数比。
+    - 先做一段糖水夹逼，再做一段阈值夹逼。
+    - 最后传递合并。
+  common_failures:
+    - 只比较出 $a,b$，忽略 $b,c$ 还需第二段。
+    - 把 $13^4<8^5$ 整理方向写反。
+    - 中间分式构造后不验证大小链。
+  similar_practice_query: 换底 糖水不等式 对数比值 三数比较
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 本卡未核对 page_0148 原图，按重建 markdown 完成。

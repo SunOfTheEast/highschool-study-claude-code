@@ -1,0 +1,194 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0085_tangent_bound_ex02
+content_revision_id: mst_p0085_tangent_bound_ex02-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0085_tangent_bound_ex02.card.yaml
+stem: |-
+  （2023 · 湖州高二期末 T8）若过点 $(s,t)$ 可以作曲线 $y=\ln x$ 的两条切线，则 (  )
+  A. $s>\ln t$
+  B. $s<\ln t$
+  C. $t<\ln s$
+  D. $t>\ln s$
+answer: |
+  D
+
+  设切点为 $(x_0,\ln x_0)$，切线方程为 $y-\ln x_0=\frac1{x_0}(x-x_0)$。代入 $(s,t)$ 得 $t+1=\ln x_0+\frac{s}{x_0}$。令 $F(x)=\ln x+\frac{s}{x}\ (x>0)$，则切线条数等价于直线 $y=t+1$ 与 $F(x)$ 的交点个数。若 $s\le0$，$F'(x)=\frac{x-s}{x^2}>0$，不可能有两个交点；若 $s>0$，$F$ 在 $(0,s)$ 上递减、在 $(s,+\infty)$ 上递增，最小值为 $F(s)=\ln s+1$。要有两个不同交点，须 $t+1>\ln s+1$，即 $t>\ln s$，故选 D。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 设切点并代入外点坐标。
+      max_score: 1
+    - step_id: step_2
+      description: 把切线条数转成函数交点个数。
+      max_score: 1
+    - step_id: step_3
+      description: 分类讨论 $s$，找辅助函数的极值。
+      max_score: 1
+    - step_id: step_4
+      description: 由两个交点得到最终不等式。
+      max_score: 1
+    - step_id: step_5
+      description: 用上凸函数外侧区域复核答案。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 数形结合
+      - 局部逼近与找点
+    subroute:
+      - 过点切线条数
+      - 切点参数化
+      - 辅助函数交点计数
+      - 上凸函数外侧判定
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $t+1=\ln x_0+\frac{s}{x_0}$ 把切线条数转化为切点方程解数。
+      - $F'(x)=\frac{x-s}{x^2}$ 说明 $s>0$ 时 $F$ 有唯一最小值。
+      - $F_{\min}=\ln s+1$ 给出边界 $t=\ln s$。
+    normalization_moves_used:
+      - 把过点切线条件代入切点方程。
+      - 把方程整理为水平线 $y=t+1$ 与 $F(x)=\ln x+\frac{s}{x}$ 的交点。
+      - 先判定 $s>0$，再比较 $t$ 与 $\ln s$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会写 $y=\ln x$ 在 $x_0$ 处的切线，回补导数运算与几何意义。
+      - 若学生不会处理 $\ln x$ 的定义域和 $\ln s$ 的意义，回补指数对数基础。
+      - 若学生不能由 $F'(x)=\frac{x-s}{x^2}$ 判断单调性，回补导数单调极值基础。
+      - 若学生不理解“两条切线”为什么等价于两个切点参数解，回补函数性质与图像。
+  detail_terms:
+    - $y=\ln x$
+    - 过点 $(s,t)$ 作两条切线
+    - $t+1=\ln x_0+\frac{s}{x_0}$
+    - $F(x)=\ln x+\frac{s}{x}$
+    - $F_{\min}=\ln s+1$
+    - $t>\ln s$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0085_tangent_bound_ex02
+source_evidence:
+  source_refs:
+    - ref_id: page_0085
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0085/page_0085.md
+      role: problem_start
+      evidence: lines 46-50 give 例 2 题头、题干和 A-D 四个选项；page_0085 底部未给解析。
+    - ref_id: page_0086
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0086/page_0086.md
+      role: continuation
+      evidence: lines 14-16 give 例 2 的两种解析和答案 D；line 25 begins page_0086 的例 3，未纳入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0085.png
+      inspected: true
+      notes: 已核对 page_0085 底部例 2 题头、题干“过点 $(s,t)$ 可以作曲线 $y=\ln x$ 的两条切线”和四个选项。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0086.png
+      inspected: true
+      notes: 已核对 page_0086 顶部为例 2 续解，给出切点参数法、类比圆的切线法和答案 D；后续凹凸性定义与例 3 只作边界确认。
+  source_context: 本题紧接指数函数两切线区域题，把曲线换成上凸的 $y=\ln x$，核心仍是用切点参数方程数解。
+  source_influence:
+    - 题干和选项来自 page_0085；完整解析来自 page_0086 顶部续页。
+    - 源解法一将切线条数转为 $f(x)=\ln x+\frac{s}{x}$ 与水平线 $y=t+1$ 的交点个数；法二用上凸函数外侧区域解释 $t>\ln s$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 湖州高二期末 T8）若过点 $(s,t)$ 可以作曲线 $y=\ln x$ 的两条切线，则 (  )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $s>\ln t$
+      text_latex: $s>\ln t$
+    - label: B
+      text_raw: $s<\ln t$
+      text_latex: $s<\ln t$
+    - label: C
+      text_raw: $t<\ln s$
+      text_latex: $t<\ln s$
+    - label: D
+      text_raw: $t>\ln s$
+      text_latex: $t>\ln s$
+  answer: D
+  fidelity_notes:
+    - 题头和选项起于 page_0085 底部，解析跨到 page_0086 顶部。
+    - 能作两条切线的结论隐含 $s>0$，因此选项 D 中 $\ln s$ 有意义；源解在导数分类中显式排除了 $s\le0$。
+solution:
+  source_solution_summary: |
+    设切点为 $(x_0,\ln x_0)$，切线方程为 $y-\ln x_0=\frac1{x_0}(x-x_0)$。代入 $(s,t)$ 得 $t+1=\ln x_0+\frac{s}{x_0}$。令 $F(x)=\ln x+\frac{s}{x}\ (x>0)$，则切线条数等价于直线 $y=t+1$ 与 $F(x)$ 的交点个数。若 $s\le0$，$F'(x)=\frac{x-s}{x^2}>0$，不可能有两个交点；若 $s>0$，$F$ 在 $(0,s)$ 上递减、在 $(s,+\infty)$ 上递增，最小值为 $F(s)=\ln s+1$。要有两个不同交点，须 $t+1>\ln s+1$，即 $t>\ln s$，故选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 设切点并代入外点坐标。
+      formula_trace:
+        from: |
+          $y-\ln x_0=\frac1{x_0}(x-x_0),\qquad (s,t)\text{ 在切线上}$
+        to: |
+          $t-\ln x_0=\frac1{x_0}(s-x_0),\qquad t+1=\ln x_0+\frac{s}{x_0}$
+        operation: 用 $y=\ln x$ 在 $x_0$ 处的导数 $\frac1{x_0}$ 写切线，再代入 $(s,t)$。
+        why: 外点可引两条切线，等价于切点横坐标 $x_0$ 有两个不同解。
+      source_ref: page_0086
+    - step_id: step_2
+      statement: 把切线条数转成函数交点个数。
+      formula_trace:
+        from: |
+          $t+1=\ln x_0+\frac{s}{x_0}$
+        to: |
+          $y=t+1\text{ 与 }F(x)=\ln x+\frac{s}{x}\ (x>0)\text{ 有两个不同交点}$
+        operation: 把切点横坐标改记为自变量 $x$，构造辅助函数 $F(x)$。
+        why: 判断方程解个数比直接画所有切线更稳定。
+      source_ref: page_0086
+    - step_id: step_3
+      statement: 分类讨论 $s$，找辅助函数的极值。
+      formula_trace:
+        from: |
+          $F'(x)=\frac1x-\frac{s}{x^2}=\frac{x-s}{x^2}$
+        to: |
+          $s\le0$ 时 $F$ 单调递增；$s>0$ 时 $F$ 在 $(0,s)$ 上递减、在 $(s,+\infty)$ 上递增，$F_{\min}=F(s)=\ln s+1$
+        operation: 按 $s\le0$ 与 $s>0$ 判断 $x-s$ 的符号变化。
+        why: 只有 $s>0$ 时，辅助函数有一个谷底，水平线高于谷底才可能有两个交点。
+      source_ref: page_0086
+    - step_id: step_4
+      statement: 由两个交点得到最终不等式。
+      formula_trace:
+        from: |
+          $y=t+1$ 与 $F(x)$ 有两个不同交点
+        to: |
+          $t+1>\ln s+1,\qquad t>\ln s$
+        operation: 令水平线高度严格高于 $F$ 的最小值。
+        why: 等于最小值只有一个切点，低于最小值没有切点，高于最小值才有两个切点。
+      source_ref: page_0086
+    - step_id: step_5
+      statement: 用上凸函数外侧区域复核答案。
+      formula_trace:
+        from: |
+          $y=\ln x$ 为上凸函数，过外侧点可作两条切线
+        to: |
+          $(s,t)$ 在曲线上方：$t>\ln s$
+        operation: 类比圆的切线，将两条切线区域理解为对数曲线外侧区域。
+        why: 对 $y=\ln x$ 这类上凸曲线，外侧位于曲线的上方。
+      source_ref: page_0086
+teaching_card:
+  student_title: 把对数曲线两条切线化成一个谷底条件
+  what_it_trains: 训练对 $y=\ln x$ 的过点切线问题设切点参数，用辅助函数的极小值判断能否出现两个切点。
+  recognition_cues:
+    - 题干说“过点 $(s,t)$ 可以作两条切线”，说明切点未知且可能有两个。
+    - $y=\ln x$ 的切线斜率是 $\frac1{x_0}$，代入外点后自然出现 $\ln x_0+\frac{s}{x_0}$。
+    - 选项比较 $t$ 与 $\ln s$，提示最终是在判断点在曲线上方还是下方。
+  normalization_moves:
+    - 设切点为 $(x_0,\ln x_0)$，写出点斜式切线。
+    - 把过点条件整理成 $t+1=F(x_0)$。
+    - 用 $F'(x)=\frac{x-s}{x^2}$ 找谷底 $F(s)=\ln s+1$。
+  common_failures:
+    - 把外点横坐标 $s$ 直接当切点横坐标，漏掉另一个切点。
+    - 没有先排除 $s\le0$，导致 $\ln s$ 的边界说不清。
+    - 把“高于最小值有两个交点”误写成 $t+1\ge\ln s+1$，把相切的一条也算成两条。
+    - 只凭图像选 $t>\ln s$，却不能用切点参数证明。
+  similar_practice_query: 对数函数 过点两条切线 切点参数 $\ln x+s/x$ 极小值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0085 图像与 markdown 对例 2 题干和选项一致；page_0086 顶部续解与 markdown 一致，且已在例 3 前停止读取，无需用户拍板。

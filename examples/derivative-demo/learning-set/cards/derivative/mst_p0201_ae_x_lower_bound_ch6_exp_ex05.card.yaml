@@ -1,0 +1,173 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0201_ae_x_lower_bound_ch6_exp_ex05
+content_revision_id: mst_p0201_ae_x_lower_bound_ch6_exp_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0201_ae_x_lower_bound_ch6_exp_ex05.card.yaml
+stem: 已知函数 $f(x)=ae^x+2x-1$。证明：对任意的 $a\ge1$，当 $x>0$ 时，$f(x)\ge(x+ae)x$。
+answer: |-
+  结论成立；等号在 $x=1$ 时成立（当 $a\ge1$）。
+
+  把目标改写为 $a(e^x-ex)-(x-1)^2\ge0$，再拆成 $(a-1)(e^x-ex)+\bigl(e^x-ex-(x-1)^2\bigr)$。因 $a-1\ge0$，只需分别证明 $e^x-ex\ge0$ 与 $e^x-ex-(x-1)^2\ge0$。前者可由导数或切线不等式得到；后者可设 $t=x-1$ 后用 $e^t\ge1+t+\frac12t^2$ 给出下界，从而原不等式成立。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先把原命题化成指数项与二次项的比较。
+      max_score: 1
+    - step_id: step_2
+      description: 按 $a\ge1$ 拆出“非负系数 × 非负项”的结构。
+      max_score: 1
+    - step_id: step_3
+      description: 证明 $e^x-ex\ge0$（$x>0$）。
+      max_score: 1
+    - step_id: step_4
+      description: 证明 $e^x-ex-(x-1)^2\ge0$。
+      max_score: 1
+    - step_id: step_5
+      description: 合并两块，完成证明。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 参数拆项
+      - 0 线放缩
+      - 指数二阶切线放缩
+      - 取等点
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 不等式工具结构
+      - 非齐次结构
+    evidence:
+      - $a(e^x-ex)-(x-1)^2$
+      - $(a-1)(e^x-ex)+\bigl(e^x-ex-(x-1)^2\bigr)$
+      - $e^t\ge1+t+\frac12t^2$
+    normalization_moves_used:
+      - 先把结论化为“参数项 + 标准放缩项”的和。
+      - 把参数降到 $a-1$ 前的非负系数，剥离出纯 $x$ 不等式。
+      - 对 $e^x-ex-(x-1)^2$ 先换元再接二阶切线下界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $ae^x+2x-1\ge(x+ae)x$ 变到 $a(e^x-ex)-(x-1)^2\ge0$，回补代数恒等变形。
+      - 若学生把 $e^x-ex\ge0$ 的证明写成结论跳步，回补导数单调极值基础。
+      - 若学生不会使用 $e^t\ge1+t+\frac12t^2$，回补指数对数基础与不等式工具基础。
+  detail_terms:
+    - $a(e^x-ex)-(x-1)^2$
+    - $e^x-ex\ge0$
+    - $e^x-ex-(x-1)^2\ge0$
+    - $t=x-1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0201_ae_x_lower_bound_ch6_exp_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0201_ex05_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0201/page_0201.md
+      role: problem_start
+      evidence: page_0201 例5题头：已知 $f(x)=ae^x+2x-1$，证明对任意 $a\ge1$、$x>0$，$f(x)\ge(x+ae)x$。
+    - ref_id: page_0201_ex05_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0201/page_0201.md
+      role: solution
+      evidence: page_0201 例5解析给出核心变形：$a(e^x-ex)-(x-1)^2\ge0\Leftrightarrow(a-1)(e^x-ex)+e^x-ex-(x-1)^2\ge0$。
+    - ref_id: page_0200_ex04_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0200/page_0200.md
+      role: local_context
+      evidence: page_0200 底部是例4题头与解析，page_0201 顶部“另解”是该题续页，不在本卡新建。
+    - ref_id: page_0202_exposition_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0202/page_0202.md
+      role: local_context
+      evidence: page_0202 顶部开始“对数常见放缩及推导”的后续讲解与新例题，不是例5续解。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0200.png
+      inspected: true
+      notes: 已核对：page_0200 底部为例4，支持 page_0201 顶部“另解”属于续页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0201.png
+      inspected: true
+      notes: 已核对：例5题头与解析完整在本页；页首为例4另解续页；页后半转入“考点2”讲解。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0202.png
+      inspected: true
+      notes: 已核对：page_0202 延续的是“考点2”讲解并开启新例1，不是例5的续解。
+  source_context: 本卡仅处理 page_0201 新起头的例5；page_0201 顶部例4续页与 page_0201 后半至 page_0202 的讲解性 exposition 均不建卡。
+  source_influence:
+    - 保留源解的主变形：先把目标不等式改写为 $a(e^x-ex)-(x-1)^2\ge0$。
+    - 保留源解的拆项思路：写成 $(a-1)(e^x-ex)+\bigl(e^x-ex-(x-1)^2\bigr)$ 后分块证明。
+    - 保留“考试需分别证两条基础不等式”的课堂提示。
+  source_discrepancies: []
+original_problem:
+  stem: 已知函数 $f(x)=ae^x+2x-1$。证明：对任意的 $a\ge1$，当 $x>0$ 时，$f(x)\ge(x+ae)x$。
+  parts: *a1
+  choices: []
+  answer: 结论成立；等号在 $x=1$ 时成立（当 $a\ge1$）。
+  fidelity_notes:
+    - 源题为证明题，无选项。
+    - 题干的量词条件“$a\ge1$、$x>0$”已完整保留。
+solution:
+  source_solution_summary: 把目标改写为 $a(e^x-ex)-(x-1)^2\ge0$，再拆成 $(a-1)(e^x-ex)+\bigl(e^x-ex-(x-1)^2\bigr)$。因 $a-1\ge0$，只需分别证明 $e^x-ex\ge0$ 与 $e^x-ex-(x-1)^2\ge0$。前者可由导数或切线不等式得到；后者可设 $t=x-1$ 后用 $e^t\ge1+t+\frac12t^2$ 给出下界，从而原不等式成立。
+  key_steps:
+    - step_id: step_1
+      statement: 先把原命题化成指数项与二次项的比较。
+      formula_trace:
+        from: $ae^x+2x-1\ge (x+ae)x$
+        to: $a(e^x-ex)-(x-1)^2\ge0$
+        operation: 移项并整理同类项。
+        why: 得到可按参数与纯 $x$ 项拆分的标准形。
+      source_ref: page_0201_ex05_solution
+    - step_id: step_2
+      statement: 按 $a\ge1$ 拆出“非负系数 × 非负项”的结构。
+      formula_trace:
+        from: $a(e^x-ex)-(x-1)^2$
+        to: $(a-1)(e^x-ex)+\bigl(e^x-ex-(x-1)^2\bigr)$
+        operation: 加减同项并因式分解。
+        why: 可把证明归结为两条与参数分离的不等式。
+      source_ref: page_0201_ex05_solution
+    - step_id: step_3
+      statement: 证明 $e^x-ex\ge0$（$x>0$）。
+      formula_trace:
+        from: $u(x)=e^x-ex$
+        to: $u^{\prime}(x)=e^x-e,\ u(1)=0,\ u(x)\ge0$
+        operation: 求导判极小值（等价于用 $e^{x-1}\ge x$）。
+        why: 该项是第一块的核心非负因子。
+      source_ref: page_0201_ex05_solution
+    - step_id: step_4
+      statement: 证明 $e^x-ex-(x-1)^2\ge0$。
+      formula_trace:
+        from: $e^x-ex-(x-1)^2$
+        to: $e\!\left(e^t-1-t\right)-t^2\ge \left(\frac e2-1\right)t^2\ge0\ (t=x-1)$
+        operation: 换元 $t=x-1$，再用 $e^t\ge1+t+\frac12t^2$。
+        why: 得到第二块的显式非负下界。
+      source_ref: page_0201_ex05_solution
+    - step_id: step_5
+      statement: 合并两块，完成证明。
+      formula_trace:
+        from: $(a-1)(e^x-ex)\ge0$ 且 $e^x-ex-(x-1)^2\ge0$
+        to: $a(e^x-ex)-(x-1)^2\ge0$
+        operation: 两项非负相加。
+        why: 与 step_1 等价回代即得原命题。
+      source_ref: page_0201_ex05_solution
+teaching_card:
+  student_title: 先拆参数，再证两条标准放缩
+  what_it_trains: 训练把含参数证明题改写成“非负系数 + 基础放缩块”的和，并用指数函数切线不等式稳定收束。
+  recognition_cues:
+    - 题干是“对任意 $a\ge1$”的恒成立证明。
+    - 结论右侧含 $ae\cdot x$，提示把 $e^x-ex$ 拎出来。
+    - 出现 $(x-1)^2$，常对应在 $x=1$ 取等的切线放缩。
+  normalization_moves:
+    - 先移项化为 $a(e^x-ex)-(x-1)^2\ge0$。
+    - 写成 $(a-1)(e^x-ex)+\bigl(e^x-ex-(x-1)^2\bigr)$。
+    - 分别证明两块非负，再相加回代。
+  common_failures:
+    - 只证明 $e^x-ex\ge0$，漏掉 $e^x-ex-(x-1)^2\ge0$。
+    - 把 $a\ge1$ 用成 $a=1$，导致论证不完整。
+    - 等号点不核对，遗漏 $x=1$ 的取等信息。
+  similar_practice_query: a(e^x-ex) 与 (x-1)^2 放缩 证明 恒成立
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

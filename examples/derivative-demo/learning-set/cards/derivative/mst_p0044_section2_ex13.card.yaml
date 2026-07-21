@@ -1,0 +1,126 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0044_section2_ex13
+content_revision_id: mst_p0044_section2_ex13-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0044_section2_ex13.card.yaml
+stem: 写出曲线 y=\ln|x| 过坐标原点的切线方程：______，______。
+answer: |-
+  y=\frac{x}{e}，y=-\frac{x}{e}
+
+  按 |x| 的定义分两支。x>0 时是 y=\ln x，过原点的切线切点为 x=e，得到 y=x/e；x<0 时是 y=\ln(-x)，由对称性或同样求切点得到 y=-x/e。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把绝对值对数拆成正、负两支。
+      max_score: 1
+    - step_id: step_2
+      description: 正半轴上找过原点的对数切线。
+      max_score: 1
+    - step_id: step_3
+      description: 负半轴上利用对称性得到另一条切线。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何量求解
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 数形结合
+      - 对称性配凑
+    subroute:
+      - 对数切线找点
+      - 过原点切线
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 对称结构
+    evidence:
+      - y=\ln x 的过原点切线切点为 x=e。
+      - y=\ln|x| 的两支关于 y 轴对称。
+    normalization_moves_used:
+      - 把 \ln|x| 拆为 \ln x 与 \ln(-x)。
+      - 用切线过原点反推出切点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会写 y=\ln x 在 x=t 处的切线方程，回补导数运算与几何意义。
+      - 若学生没有分 x>0 与 x<0，回补函数三要素与定义域。
+      - 若学生只写一条切线，回补函数性质与图像中的对称性。
+  detail_terms:
+    - y-\ln t=(x-t)/t
+    - t=e
+    - 关于 y 轴对称
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0044_section2_ex13
+source_evidence:
+  source_refs:
+    - ref_id: page_0044
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0044/page_0044.md
+      role: problem_start
+      evidence: 例 13：写出曲线 y=\ln|x| 过坐标原点的切线方程。
+    - ref_id: page_0044_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0044/page_0044.md
+      role: solution
+      evidence: 解析分 x>0 与 x<0，得到 y=x/e 与 y=-x/e。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0044.png
+      inspected: true
+      notes: 页图已核对：题干、两个空和答案 y=x/e、y=-x/e 与 Markdown 一致。
+  source_context: 本题位于“由 \ln x\leqslant x-1 引起的切线找点”小节后，直接训练过原点的对数切线。
+  source_influence: []
+  source_discrepancies: []
+original_problem:
+  stem: 写出曲线 y=\ln|x| 过坐标原点的切线方程：______，______。
+  parts: *a1
+  choices: []
+  answer: y=\frac{x}{e}，y=-\frac{x}{e}
+  fidelity_notes: []
+solution:
+  source_solution_summary: 按 |x| 的定义分两支。x>0 时是 y=\ln x，过原点的切线切点为 x=e，得到 y=x/e；x<0 时是 y=\ln(-x)，由对称性或同样求切点得到 y=-x/e。
+  key_steps:
+    - step_id: step_1
+      statement: 把绝对值对数拆成正、负两支。
+      formula_trace:
+        from: y=\ln|x|
+        to: "x>0: y=\\ln x；x<0: y=\\ln(-x)"
+        operation: 按 |x| 的定义分类。
+        why: 两支的切点和斜率符号不同，必须分开找切线。
+      source_ref: page_0044_solution
+    - step_id: step_2
+      statement: 正半轴上找过原点的对数切线。
+      formula_trace:
+        from: y-\ln t=\frac{1}{t}(x-t),\quad t>0
+        to: t=e,\quad y=\frac{x}{e}
+        operation: 令切线过 (0,0)，得 0-\ln t=-1，所以 t=e。
+        why: 切点确定后，斜率为 1/e。
+      source_ref: page_0044_solution
+    - step_id: step_3
+      statement: 负半轴上利用对称性得到另一条切线。
+      formula_trace:
+        from: y=\ln(-x)
+        to: y=-\frac{x}{e}
+        operation: 函数 y=\ln|x| 关于 y 轴对称，正半轴切线镜像后斜率变为 -1/e。
+        why: 两条过原点切线互为关于 y 轴的对称直线。
+      source_ref: page_0044_solution
+teaching_card:
+  student_title: 给 \ln|x| 找过原点的两条切线
+  what_it_trains: 训练先拆绝对值，再用切线过定点倒推出对数切点。
+  recognition_cues:
+    - 曲线是 y=\ln|x|。
+    - 切线要求过坐标原点。
+    - 答案应成对出现，斜率一正一负。
+  normalization_moves:
+    - 先按 x>0、x<0 拆函数。
+    - 正半轴求出切点 x=e 后，用对称性给出负半轴切线。
+  common_failures:
+    - 忘记负半轴还有一支 y=\ln(-x)。
+    - 把过原点误解为在原点处相切。
+    - 把负半轴切线写成 y=x/e。
+  similar_practice_query: 对数绝对值函数过原点切线，按定义域拆分并利用对称性
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

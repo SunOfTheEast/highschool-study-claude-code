@@ -1,0 +1,9 @@
+schema: highschool-study.method-tree.v1
+taxonomy_revision_id: taxonomy-conics-v1
+relations:
+  - kind: contains
+    parent_node_id: method.freeze-variable
+    child_node_id: subroute.main-variable
+  - kind: contains
+    parent_node_id: method.freeze-variable
+    child_node_id: subroute.domain-check

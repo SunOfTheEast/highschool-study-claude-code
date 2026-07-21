@@ -1,0 +1,243 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0157_sin_cos_ln_compare_ex07
+content_revision_id: mst_p0157_sin_cos_ln_compare_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0157_sin_cos_ln_compare_ex07.card.yaml
+stem: |-
+  （2025 · 广东中山 · 模拟预测）设 $a=\frac14$，$b=2\ln\left(\sin\frac18+\cos\frac18\right)$，$c=\frac54\ln\frac54$，则（  ）
+  A. $a<b<c$
+  B. $b<a<c$
+  C. $b<a<c$
+  D. $c<b<a$
+answer: |
+  源解析写作 B（且 B/C 文本重复）
+
+  先改写
+  \[
+  b=2\ln\left(\sin\frac18+\cos\frac18\right)
+   =\ln\left(\sin\frac18+\cos\frac18\right)^2
+   =\ln\left(1+\sin\frac14\right).
+  \]
+  又
+  \[
+  c=\frac54\ln\frac54
+   =\left(1+\frac14\right)\ln\left(1+\frac14\right).
+  \]
+  对 $b$，由
+  \[
+  \ln(1+\sin x)<\sin x<x
+  \]
+  取 $x=\frac14$，得
+  \[
+  b<\sin\frac14<\frac14=a,
+  \]
+  即 $b<a$。
+  对 $c$，由 $x>0$ 时
+  \[
+  \ln(1+x)>1-\frac1{x+1}=\frac{x}{x+1},
+  \]
+  得
+  \[
+  (1+x)\ln(1+x)>x.
+  \]
+  代入 $x=\frac14$，得
+  \[
+  c>\frac14=a.
+  \]
+  所以 $b<a<c$，与重复选项 B/C 的文本一致；源页标注“选 B”。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把 $b$ 化到 $\ln(1+\sin\frac14)$。
+      max_score: 1
+    - step_id: step_2
+      description: 把 $c$ 写成 $(1+x)\ln(1+x)$ 形式。
+      max_score: 1
+    - step_id: step_3
+      description: 证明 $b<a$。
+      max_score: 1
+    - step_id: step_4
+      description: 证明 $c>a$。
+      max_score: 1
+    - step_id: step_5
+      description: 合并比较并对照选项文本。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level: []
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 和角同构成 $\ln(1+\sin\frac14)$
+      - $\ln(1+u)<u$ 与 $\sin x<x$
+      - $(1+x)\ln(1+x)>x$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 三角复合结构
+      - 局部逼近结构
+    evidence:
+      - $b$ 同时含三角和对数，通过平方恒等式落到 $1+\sin\frac14$。
+      - $c$ 是标准 $(1+x)\ln(1+x)$ 结构。
+    normalization_moves_used:
+      - $(\sin t+\cos t)^2=1+\sin2t$。
+      - $\ln(1+u)<u$。
+      - $\ln(1+x)>\frac{x}{x+1}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $2\ln(\cdot)$ 合并成单个对数，回补指数对数基础。
+      - 若学生不会使用 $(\sin t+\cos t)^2$ 恒等式，回补三角函数基础。
+      - 若学生不熟悉 $(1+x)\ln(1+x)$ 的下界，回补不等式工具基础。
+  detail_terms:
+    - $b=2\ln\left(\sin\frac18+\cos\frac18\right)$
+    - $b=\ln\left(1+\sin\frac14\right)$
+    - $c=\frac54\ln\frac54$
+    - $b<a<c$
+    - B/C 重复选项
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0157_sin_cos_ln_compare_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0157_ex07_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0157/page_0157.md
+      role: problem_start
+      evidence: 例 7 题干、选项与解析都在 page_0157；选项 B 与 C 印刷相同。
+    - ref_id: page_0157_ex07_reconstruction_marker
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0157/page_0157.md
+      role: local_context
+      evidence: 重建标记明确记载“例 7 选项 B 和 C 完全一致（均为 $b<a<c$）”。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0157.png
+      inspected: true
+      notes: 已核对页图：B、C 选项确为重复文本；解析结论写“故选 B”。
+  source_context: 例 7 是本批次最后一题，后文已进入“帕德逼近与飘带函数”新小节。
+  source_influence:
+    - 保留源解关键同构：$2\ln(\sin\frac18+\cos\frac18)=\ln(1+\sin\frac14)$。
+    - 保留源解两端比较：先证 $b<a$，再证 $c>a$。
+    - 按任务要求保留 B/C 重复并记录为 source discrepancy。
+  source_discrepancies:
+    - 选项 B 与 C 在页图和 markdown 中完全一致（均为 $b<a<c$）；源解析末句写“故选 B”。
+original_problem:
+  stem: （2025 · 广东中山 · 模拟预测）设 $a=\frac14$，$b=2\ln\left(\sin\frac18+\cos\frac18\right)$，$c=\frac54\ln\frac54$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+    - label: B
+      text_raw: $b<a<c$
+      text_latex: $b<a<c$
+    - label: C
+      text_raw: $b<a<c$
+      text_latex: $b<a<c$
+    - label: D
+      text_raw: $c<b<a$
+      text_latex: $c<b<a$
+  answer: 源解析写作 B（且 B/C 文本重复）
+  fidelity_notes:
+    - 按页图保留 B、C 重复文本，不做替换。
+    - 解析链条对应的大小关系为 $b<a<c$。
+solution:
+  source_solution_summary: |
+    先改写
+    \[
+    b=2\ln\left(\sin\frac18+\cos\frac18\right)
+     =\ln\left(\sin\frac18+\cos\frac18\right)^2
+     =\ln\left(1+\sin\frac14\right).
+    \]
+    又
+    \[
+    c=\frac54\ln\frac54
+     =\left(1+\frac14\right)\ln\left(1+\frac14\right).
+    \]
+    对 $b$，由
+    \[
+    \ln(1+\sin x)<\sin x<x
+    \]
+    取 $x=\frac14$，得
+    \[
+    b<\sin\frac14<\frac14=a,
+    \]
+    即 $b<a$。
+    对 $c$，由 $x>0$ 时
+    \[
+    \ln(1+x)>1-\frac1{x+1}=\frac{x}{x+1},
+    \]
+    得
+    \[
+    (1+x)\ln(1+x)>x.
+    \]
+    代入 $x=\frac14$，得
+    \[
+    c>\frac14=a.
+    \]
+    所以 $b<a<c$，与重复选项 B/C 的文本一致；源页标注“选 B”。
+  key_steps:
+    - step_id: step_1
+      statement: 把 $b$ 化到 $\ln(1+\sin\frac14)$。
+      formula_trace:
+        from: $b=2\ln\left(\sin\frac18+\cos\frac18\right)$
+        to: $b=\ln\left(1+\sin\frac14\right)$
+        operation: 先合并对数系数，再用 $(\sin t+\cos t)^2=1+\sin2t$。
+        why: 便于与 $\ln(1+u)$ 型不等式对接。
+      source_ref: page_0157_ex07_problem
+    - step_id: step_2
+      statement: 把 $c$ 写成 $(1+x)\ln(1+x)$ 形式。
+      formula_trace:
+        from: $c=\frac54\ln\frac54$
+        to: $c=\left(1+\frac14\right)\ln\left(1+\frac14\right)$
+        operation: 直接代数改写。
+        why: 匹配 $(1+x)\ln(1+x)>x$ 模板。
+      source_ref: page_0157_ex07_problem
+    - step_id: step_3
+      statement: 证明 $b<a$。
+      formula_trace:
+        from: $b=\ln\left(1+\sin\frac14\right)$
+        to: $b<\sin\frac14<\frac14=a$
+        operation: 连用 $\ln(1+u)<u$ 与 $\sin x<x$。
+        why: 锁定左端顺序。
+      source_ref: page_0157_ex07_problem
+    - step_id: step_4
+      statement: 证明 $c>a$。
+      formula_trace:
+        from: $\ln(1+x)>\frac{x}{x+1}\ (x>0)$
+        to: $c=\left(1+\frac14\right)\ln\left(1+\frac14\right)>\frac14=a$
+        operation: 两边同乘正数 $1+x$，再代入 $x=\frac14$。
+        why: 得到右端顺序。
+      source_ref: page_0157_ex07_problem
+    - step_id: step_5
+      statement: 合并比较并对照选项文本。
+      formula_trace:
+        from: $b<a$ 且 $c>a$
+        to: $b<a<c$
+        operation: 传递比较。
+        why: 与 B/C 的重复文本一致；源页记为选 B。
+      source_ref: page_0157_ex07_problem
+teaching_card:
+  student_title: 先同构再估值：把三角对数拆成标准模板
+  what_it_trains: 训练把“和角+对数”混合表达先化成标准 $\ln(1+u)$ 和 $(1+x)\ln(1+x)$，再用两端不等式快速定序。
+  recognition_cues:
+    - 题干出现 $2\ln(\sin t+\cos t)$。
+    - 另一个量是 $(1+x)\ln(1+x)$ 形态。
+    - 目标是三数顺序而非精确值。
+  normalization_moves:
+    - 先把 $b$ 改写为 $\ln(1+\sin\frac14)$。
+    - 用 $\ln(1+u)<u$ 和 $\sin x<x$ 得 $b<a$。
+    - 用 $(1+x)\ln(1+x)>x$ 得 $c>a$。
+  common_failures:
+    - 把 $(\sin t+\cos t)^2$ 展开错成 $1+\cos2t$。
+    - 比较 $c$ 时只用 $\ln(1+x)<x$，方向不够。
+    - 忽视选项 B/C 重复，导致审校记录缺失。
+  similar_practice_query: sin cos 对数同构 ln(1+u) (1+x)ln(1+x) 比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已按要求保留并记录“B/C 选项重复”。
+    - 例 7 数学结论稳定为 $b<a<c$；源文答案字母为 B。

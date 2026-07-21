@@ -1,0 +1,164 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0017_ex06
+content_revision_id: mst_p0017_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0017_ex06.card.yaml
+stem: |-
+  已知函数 $f(x)=\ln x+\frac{k}{x}$，$k\in\mathbf{R}$，$g(x)=2+\frac{1-e}{x}$，若对任意 $x\in(0,+\infty)$，不等式 $f(x)\ge g(x)$ 恒成立，则实数 $k$ 的取值范围是（ ）
+  A. $k>1$
+  B. $k\ge 1$
+  C. $k>3$
+  D. $k\ge 3$
+answer: |-
+  B；$k\ge1$。
+
+  由 $f(x)\ge g(x)$ 得 $\ln x+\frac{k}{x}\ge2+\frac{1-e}{x}$。同乘 $x>0$，得到 $x\ln x-2x\ge1-e-k$。将左侧写成 $e^2\cdot\frac{x}{e^2}\ln\frac{x}{e^2}$。因为 $t\ln t$ 在 $t=1/e$ 处最小值为 $-1/e$，所以 $x\ln x-2x$ 的最小值为 $-e$。要恒有左侧 $\ge1-e-k$，必须且只需 $1-e-k\le-e$，即 $k\ge1$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把函数不等式移项并同乘 $x>0$。
+      max_score: 1
+    - step_id: step_2
+      description: 把左侧标准化为 $t\ln t$。
+      max_score: 1
+    - step_id: step_3
+      description: 求左侧全局最小值。
+      max_score: 1
+    - step_id: step_4
+      description: 由最小值闭合参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+    subroute:
+      - $x\ln x$ 平移同构
+      - $t\ln t$ 最小值
+      - 恒成立转最小值比较
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $x\ln x-2x$ 规范为 $e^2(x/e^2)\ln(x/e^2)$。
+      - 右侧 $1-e-k$ 是参数常数，由左侧最小值 $-e$ 控制。
+    normalization_moves_used:
+      - 同乘 $x>0$ 消去分母。
+      - $x\ln x-2x=x(\ln x-2)=e^2(x/e^2)\ln(x/e^2)$。
+      - $t\ln t$ 最小值 $-1/e$ 乘以 $e^2$ 得 $-e$。
+      - $1-e-k\le -e\Rightarrow k\ge1$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\ln x+\frac{k}{x}\ge2+\frac{1-e}{x}$ 同乘 $x$ 后整理，回补代数恒等变形。
+      - 若学生不会把 $x\ln x-2x$ 写成 $e^2\frac{x}{e^2}\ln\frac{x}{e^2}$，回补指数对数基础。
+      - 若学生不知道 $t\ln t$ 的最小值为 $-\frac1e$，回补导数单调极值基础。
+      - 若学生把 $k\ge1$ 写成 $k>1$，回补不等式工具基础。
+  detail_terms:
+    - $f(x)=\ln x+k/x$
+    - $g(x)=2+(1-e)/x$
+    - $x\ln x-2x$
+    - $e^2(x/e^2)\ln(x/e^2)$
+    - $k\ge1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0017_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0017
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0017/page_0017.md
+      role: problem_start
+      evidence: 例 6 题干、选项和解析完整位于 page_0017；后文图 3、图 4 是新模型说明，不属于例 6 题干。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0017.png
+      inspected: true
+      notes: 页图核对例 6 条件为 $f(x)=\ln x+\frac{k}{x}$、$g(x)=2+\frac{1-e}{x}$，选项 B 为 $k\ge1$；解析在图 3 之前结束。
+  source_context: 例 6 使用 $x\ln x$ 的平移同构：$x\ln x-2x=e^2\cdot (x/e^2)\ln(x/e^2)$，最小值为 $-e$。
+  source_influence:
+    - 题目问 $k$ 的取值范围，源解把 $f(x)\ge g(x)$ 乘以 $x>0$ 后转成 $x\ln x-2x\ge1-e-k$。
+    - 关键是识别 $x\ln x-2x=e^2(x/e^2)\ln(x/e^2)$ 的最小值 $-e$。
+    - page_0017 下半页图 3、图 4 是下一组模型说明，不应并入本题题干。
+  source_discrepancies: []
+original_problem:
+  stem: 已知函数 $f(x)=\ln x+\frac{k}{x}$，$k\in\mathbf{R}$，$g(x)=2+\frac{1-e}{x}$，若对任意 $x\in(0,+\infty)$，不等式 $f(x)\ge g(x)$ 恒成立，则实数 $k$ 的取值范围是（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $k>1$
+      text_latex: $k>1$
+    - label: B
+      text_raw: $k\ge 1$
+      text_latex: $k\ge 1$
+    - label: C
+      text_raw: $k>3$
+      text_latex: $k>3$
+    - label: D
+      text_raw: $k\ge 3$
+      text_latex: $k\ge 3$
+  answer: B；$k\ge1$。
+  fidelity_notes:
+    - page_0017.png 已核对：$g(x)$ 的分子为 $1-e$，不是 $e-1$。
+    - page_0017.png 已核对：题干要求“对任意 $x\in(0,+\infty)$”。
+solution:
+  source_solution_summary: 由 $f(x)\ge g(x)$ 得 $\ln x+\frac{k}{x}\ge2+\frac{1-e}{x}$。同乘 $x>0$，得到 $x\ln x-2x\ge1-e-k$。将左侧写成 $e^2\cdot\frac{x}{e^2}\ln\frac{x}{e^2}$。因为 $t\ln t$ 在 $t=1/e$ 处最小值为 $-1/e$，所以 $x\ln x-2x$ 的最小值为 $-e$。要恒有左侧 $\ge1-e-k$，必须且只需 $1-e-k\le-e$，即 $k\ge1$。
+  key_steps:
+    - step_id: step_1
+      statement: 把函数不等式移项并同乘 $x>0$。
+      formula_trace:
+        from: $\ln x+\frac{k}{x}\ge 2+\frac{1-e}{x}$
+        to: $x\ln x-2x\ge 1-e-k$
+        operation: 两边同乘正数 $x$，再把含 $k$ 的常数项移到右侧。
+        why: 这样左侧成为只含 $x$ 的函数，右侧成为只含参数 $k$ 的常数。
+      source_ref: page_0017
+    - step_id: step_2
+      statement: 把左侧标准化为 $t\ln t$。
+      formula_trace:
+        from: $x\ln x-2x$
+        to: $e^2\cdot\frac{x}{e^2}\ln\frac{x}{e^2}$
+        operation: 利用 $\ln(x/e^2)=\ln x-2$，所以 $e^2(x/e^2)\ln(x/e^2)=x(\ln x-2)$。
+        why: 这正是源页 $x\ln x$ 模型的平移缩放形式。
+      source_ref: page_0017
+    - step_id: step_3
+      statement: 求左侧全局最小值。
+      formula_trace:
+        from: $t\ln t\ge-\frac1e\quad(t>0)$
+        to: $x\ln x-2x\ge -e$
+        operation: 令 $t=x/e^2$，并把最小值乘以 $e^2$。
+        why: 恒成立只需比较左侧函数的最小值与右侧常数。
+      source_ref: page_0017
+    - step_id: step_4
+      statement: 由最小值闭合参数范围。
+      formula_trace:
+        from: $x\ln x-2x\ge -e$，且要求 $x\ln x-2x\ge1-e-k$ 对所有 $x>0$ 成立
+        to: $1-e-k\le -e\quad\Rightarrow\quad k\ge1$
+        operation: 要求右侧常数不超过左侧函数的全局最小值。
+        why: 当 $k=1$ 时右侧等于 $-e$，可取等；所以是不严格的 $k\ge1$。
+      source_ref: page_0017
+teaching_card:
+  student_title: 把 $x\ln x-2x$ 平移成标准 $x\ln x$
+  what_it_trains: 训练把含参数分式的恒成立题，乘正数后分离参数，再识别 $x\ln x$ 平移缩放的最小值。
+  recognition_cues:
+    - 题干含 $\ln x$ 和 $\frac{k}{x}$，另一个函数也含 $\frac{1-e}{x}$。
+    - 同乘 $x$ 后出现 $x\ln x-2x$。
+    - 右侧变成关于 $k$ 的常数，说明要用左侧函数的最小值。
+  normalization_moves:
+    - 先乘以 $x>0$，不要改变不等号方向。
+    - 把 $x\ln x-2x$ 写成 $x(\ln x-2)$。
+    - 用 $\ln(x/e^2)=\ln x-2$，把它化为 $e^2(x/e^2)\ln(x/e^2)$。
+    - 用最小值 $-e$ 与 $1-e-k$ 比较。
+  common_failures:
+    - 同乘 $x$ 后把 $1-e-k$ 的符号整理错。
+    - 把 $g(x)$ 中的 $1-e$ 看成 $e-1$。
+    - 把 $x\ln x$ 的最小值 $-1/e$ 直接套用，忘记外面的 $e^2$ 缩放。
+    - 忽略等号可取，把答案错选为 $k>1$。
+  similar_practice_query: $\ln x+k/x$ 恒成立 $x\ln x-2x$ $t\ln t$ 最小值 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0017 markdown 与页图；例 6 解析在图 3 模型说明之前结束。

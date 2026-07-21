@@ -1,0 +1,140 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0045_section2_ex16
+content_revision_id: mst_p0045_section2_ex16-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0045_section2_ex16.card.yaml
+stem: 若对于 \forall x\in(0,+\infty)，关于 x 的不等式 \ln x-ax+2\leqslant0 恒成立，则实数 a 的取值范围是______。
+answer: |-
+  a\geqslant e
+
+  因为 x>0，恒成立条件可分离为 a\geqslant(\ln x+2)/x 对所有 x>0 成立，所以 a 至少为该函数最大值。将 (\ln x+2)/x 写成 e^2\ln(e^2x)/(e^2x)，用 \ln u/u 的最大值 1/e，得到最大值 e，故 a\geqslant e。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 利用 x>0 分离参数。
+      max_score: 1
+    - step_id: step_2
+      description: 把右侧整理成标准的 \ln u/u。
+      max_score: 1
+    - step_id: step_3
+      description: 取最大值给出参数下界。
+      max_score: 1
+    - step_id: step_4
+      description: 同构法用等号点再次确认 a 的下界。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 参变量分离
+    secondary:
+      - 同构变形与换元法
+      - 切线放缩与凹凸性
+    subroute:
+      - ln x / x 最大值
+      - 对数切线找点
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 不等式工具结构
+      - 同构结构
+    evidence:
+      - a\geq(\ln x+2)/x
+      - (\ln x+2)/x=e^2\ln(e^2x)/(e^2x)
+      - \ln(ax)-ax+1\leqslant0
+    normalization_moves_used:
+      - 将常数 2 吸收到 \ln(e^2x) 中。
+      - 把恒成立问题转化为右侧最大值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生分离参数时没有注意除以 x>0，回补函数三要素与定义域。
+      - 若学生不会求 \ln u/u 的最大值，回补导数单调极值基础。
+      - 若学生不能把 \ln x+2 写成 \ln(e^2x)，回补指数对数基础。
+  detail_terms:
+    - a\geq(\ln x+2)/x
+    - \ln(e^2x)
+    - \max \ln u/u=1/e
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0045_section2_ex16
+source_evidence:
+  source_refs:
+    - ref_id: page_0045
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0045/page_0045.md
+      role: problem_start
+      evidence: 例 16：若对于任意 x\in(0,+\infty)，不等式 \ln x-ax+2\leqslant0 恒成立，求 a 的取值范围。
+    - ref_id: page_0045_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0045/page_0045.md
+      role: solution
+      evidence: 解析法一分离为 a\geqslant((\ln x+2)/x)_{\max}=e；法二用 \ln ax-ax+1+1-\ln a\leqslant0 得 a\geqslant e。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0045.png
+      inspected: true
+      notes: 页图已核对：例 16 题干和两种解析完整，答案为 a\geqslant e。
+  source_context: 本题位于对数切线斜率找点段落中，核心是 \ln x/x 的最大值与切线等号点。
+  source_influence: []
+  source_discrepancies: []
+original_problem:
+  stem: 若对于 \forall x\in(0,+\infty)，关于 x 的不等式 \ln x-ax+2\leqslant0 恒成立，则实数 a 的取值范围是______。
+  parts: *a1
+  choices: []
+  answer: a\geqslant e
+  fidelity_notes: []
+solution:
+  source_solution_summary: 因为 x>0，恒成立条件可分离为 a\geqslant(\ln x+2)/x 对所有 x>0 成立，所以 a 至少为该函数最大值。将 (\ln x+2)/x 写成 e^2\ln(e^2x)/(e^2x)，用 \ln u/u 的最大值 1/e，得到最大值 e，故 a\geqslant e。
+  key_steps:
+    - step_id: step_1
+      statement: 利用 x>0 分离参数。
+      formula_trace:
+        from: \ln x-ax+2\leqslant0
+        to: a\geqslant\frac{\ln x+2}{x},\quad x>0
+        operation: 移项后除以正数 x。
+        why: 不等式要对所有 x>0 成立，a 必须压住右侧的最大值。
+      source_ref: page_0045_solution
+    - step_id: step_2
+      statement: 把右侧整理成标准的 \ln u/u。
+      formula_trace:
+        from: \frac{\ln x+2}{x}
+        to: e^2\cdot\frac{\ln(e^2x)}{e^2x}
+        operation: 令 u=e^2x，把 \ln x+2 写成 \ln(e^2x)。
+        why: 标准函数 \ln u/u 的最大值已知为 1/e。
+      source_ref: page_0045_solution
+    - step_id: step_3
+      statement: 取最大值给出参数下界。
+      formula_trace:
+        from: e^2\cdot\max_{u>0}\frac{\ln u}{u}
+        to: e^2\cdot\frac{1}{e}=e
+        operation: 用 \ln u/u 在 u=e 处取最大值 1/e。
+        why: a\geq e 是恒成立的最小下界。
+      source_ref: page_0045_solution
+    - step_id: step_4
+      statement: 同构法用等号点再次确认 a 的下界。
+      formula_trace:
+        from: \ln x-ax+2\leqslant0
+        to: \ln(ax)-ax+1+1-\ln a\leqslant0
+        operation: 在 a>0 时把 \ln x 改写为 \ln(ax)-\ln a。
+        why: \ln t-t+1\leqslant0 在 t=1 取等，故还需 1-\ln a\leqslant0，即 a\geq e。
+      source_ref: page_0045_solution
+teaching_card:
+  student_title: 把 \ln x+2 吸进 \ln(e^2x) 求恒成立参数
+  what_it_trains: 训练在对数恒成立不等式里分离参数，并把常数合并进对数来套 \ln x/x 的最大值。
+  recognition_cues:
+    - 题目含 \forall x>0。
+    - 不等式是 \ln x-ax+常数\leq0。
+    - 分离后出现 (\ln x+常数)/x。
+  normalization_moves:
+    - 先分离为 a\geq(\ln x+2)/x。
+    - 把 \ln x+2 改成 \ln(e^2x)。
+    - 令 u=e^2x 后使用 \ln u/u 的最大值。
+  common_failures:
+    - 把恒成立误当存在性，只找一个等号点就结束。
+    - 忽略 a 必须至少为右侧最大值。
+    - 把最大值 e 算成 1/e。
+  similar_practice_query: ln x - ax + 常数 恒成立，分离参数并合并常数到对数
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

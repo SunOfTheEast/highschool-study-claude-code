@@ -1,0 +1,241 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0137_reverse_x_over_xplus1_ex03
+content_revision_id: mst_p0137_reverse_x_over_xplus1_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0137_reverse_x_over_xplus1_ex03.card.yaml
+stem: |-
+  （2022 秋 · 龙凤区校级期末）定义在 $(0,+\infty)$ 上的函数 $f(x)$ 的导函数为 $f^{\prime}(x)$，且 $f(x)+(x^2+x)f^{\prime}(x)<0$ 恒成立，则（  ）
+  A. $4f(2)<3f(1)$
+  B. $8f(2)<9f(3)$
+  C. $3f(3)>2f(1)$
+  D. $15f(3)>16f(4)$
+answer: |
+  AD
+
+  设
+  \[
+  g(x)=\frac{xf(x)}{x+1},\quad x>0.
+  \]
+  则
+  \[
+  g^{\prime}(x)=
+  \frac{[f(x)+xf^{\prime}(x)](x+1)-xf(x)}{(x+1)^2}
+  =\frac{f(x)+(x^2+x)f^{\prime}(x)}{(x+1)^2}.
+  \]
+  由题设 $f(x)+(x^2+x)f^{\prime}(x)<0$，得 $g^{\prime}(x)<0$，所以
+  $g$ 在 $(0,+\infty)$ 递减，即
+  \[
+  g(1)>g(2)>g(3)>g(4).
+  \]
+  代入可得
+  \[
+  \frac{f(1)}{2}>\frac{2f(2)}{3}>\frac{3f(3)}{4}>\frac{4f(4)}{5}.
+  \]
+  因而
+  \[
+  4f(2)<3f(1)\quad(\text{A对}),
+  \]
+  \[
+  8f(2)>9f(3)\quad(\text{B错}),
+  \]
+  \[
+  3f(3)<2f(1)\quad(\text{C错}),
+  \]
+  \[
+  15f(3)>16f(4)\quad(\text{D对}).
+  \]
+  故选 AD。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 构造 $\frac{xf(x)}{x+1}$ 以吸收 $f(x)+(x^2+x)f^{\prime}(x)$。
+      max_score: 1
+    - step_id: step_2
+      description: 由题设得到 $g$ 在正半轴递减。
+      max_score: 1
+    - step_id: step_3
+      description: 将主链还原成分式比较。
+      max_score: 1
+    - step_id: step_4
+      description: 据链逐项判定 A、B、C、D。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 判定线性系数函数值比较的真假
+        result: 见 source_solution_summary
+  method:
+    primary: 逆向构造法
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - x/(x+1) 分式模板
+      - 作商判递减
+      - 链式倍数还原
+  structure:
+    primary: 同构结构
+    secondary:
+      - 抽象函数结构
+      - 非齐次结构
+    evidence:
+      - 题设分子 $f(x)+(x^2+x)f^{\prime}(x)$ 与 $\left(\frac{xf(x)}{x+1}\right)^{\prime}$ 同构。
+      - 目标判断全是 $f(1),f(2),f(3),f(4)$ 的线性倍数组合。
+      - 通过 $g$ 的单调链一次性覆盖四个选项。
+    normalization_moves_used:
+      - 构造 $g(x)=\frac{xf(x)}{x+1}$。
+      - 由 $g^{\prime}(x)<0$ 建立四点链。
+      - 分式链同乘正数得到选项形式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看不出 $f(x)+(x^2+x)f^{\prime}(x)$ 的模板来源，回补导数运算与几何意义。
+      - 若学生把递减链方向写反，回补导数单调极值基础。
+      - 若学生在系数化简中反复出错，回补代数恒等变形。
+  detail_terms:
+    - $g(x)=\frac{xf(x)}{x+1}$
+    - $g^{\prime}(x)<0$
+    - $g(1)>g(2)>g(3)>g(4)$
+    - $\frac{4f(4)}{5}$（校正印刷冲突）
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0137_reverse_x_over_xplus1_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0137
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0137/page_0137.md
+      role: problem_start
+      evidence: "page_0137 lines 27-31: 例3题干与A-D选项。"
+    - ref_id: page_0137_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0137/page_0137.md
+      role: solution
+      evidence: "page_0137 line 33: 解析构造 $g(x)=\\frac{xf(x)}{x+1}$，并给出选 AD。"
+    - ref_id: page_0137_reconstruct_note
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0137/page_0137.md
+      role: local_context
+      evidence: "page_0137 lines 45-46: 标注“不等式链末项应为 $\\frac{4f(4)}{5}$，原文视觉似 $f(5)$”。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0137.png
+      inspected: true
+      notes: 已核对原图：不等式链印刷为 $\frac{4f(5)}{5}$；但与 $g(1)>g(2)>g(3)>g(4)$ 及 D 项推导不一致。
+  source_context: 例3整题在 page_0137 单页完成；其解析链末项存在印刷冲突，已结合上下文校正。
+  source_influence:
+    - 保留源解构造 $g(x)=\frac{xf(x)}{x+1}$ 与 $g^{\prime}(x)<0$。
+    - 保留单调链 $g(1)>g(2)>g(3)>g(4)$。
+    - 结合原图与选项 D，采用逻辑一致的末项 $\frac{4f(4)}{5}$ 完成判项。
+  source_discrepancies:
+    - field: 例3解析不等式链末项
+      old_value: page_0137 原图可见末项印刷为 $\frac{4f(5)}{5}$。
+      corrected_value: 按 $g(1)>g(2)>g(3)>g(4)$ 应为 $\frac{4f(4)}{5}$，且与 D 项 $15f(3)>16f(4)$ 一致。
+      evidence_ref: materials/math/derivative/source/mst26-full-marked-c20/images/page_0137.png; mst26-full-marked-c20/pages/page_0137/page_0137.md:33,45-46
+original_problem:
+  stem: （2022 秋 · 龙凤区校级期末）定义在 $(0,+\infty)$ 上的函数 $f(x)$ 的导函数为 $f^{\prime}(x)$，且 $f(x)+(x^2+x)f^{\prime}(x)<0$ 恒成立，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $4f(2)<3f(1)$
+      text_latex: $4f(2)<3f(1)$
+    - label: B
+      text_raw: $8f(2)<9f(3)$
+      text_latex: $8f(2)<9f(3)$
+    - label: C
+      text_raw: $3f(3)>2f(1)$
+      text_latex: $3f(3)>2f(1)$
+    - label: D
+      text_raw: $15f(3)>16f(4)$
+      text_latex: $15f(3)>16f(4)$
+  answer: AD
+  fidelity_notes:
+    - 题干与选项 D 均明确使用 $f(4)$。
+    - 解析链末项的原图印刷与前文单调链冲突，已按可验证逻辑修复。
+solution:
+  source_solution_summary: |
+    设
+    \[
+    g(x)=\frac{xf(x)}{x+1},\quad x>0.
+    \]
+    则
+    \[
+    g^{\prime}(x)=
+    \frac{[f(x)+xf^{\prime}(x)](x+1)-xf(x)}{(x+1)^2}
+    =\frac{f(x)+(x^2+x)f^{\prime}(x)}{(x+1)^2}.
+    \]
+    由题设 $f(x)+(x^2+x)f^{\prime}(x)<0$，得 $g^{\prime}(x)<0$，所以
+    $g$ 在 $(0,+\infty)$ 递减，即
+    \[
+    g(1)>g(2)>g(3)>g(4).
+    \]
+    代入可得
+    \[
+    \frac{f(1)}{2}>\frac{2f(2)}{3}>\frac{3f(3)}{4}>\frac{4f(4)}{5}.
+    \]
+    因而
+    \[
+    4f(2)<3f(1)\quad(\text{A对}),
+    \]
+    \[
+    8f(2)>9f(3)\quad(\text{B错}),
+    \]
+    \[
+    3f(3)<2f(1)\quad(\text{C错}),
+    \]
+    \[
+    15f(3)>16f(4)\quad(\text{D对}).
+    \]
+    故选 AD。
+  key_steps:
+    - step_id: step_1
+      statement: 构造 $\frac{xf(x)}{x+1}$ 以吸收 $f(x)+(x^2+x)f^{\prime}(x)$。
+      formula_trace:
+        from: $g(x)=\frac{xf(x)}{x+1}$
+        to: $g^{\prime}(x)=\frac{f(x)+(x^2+x)f^{\prime}(x)}{(x+1)^2}$
+        operation: 商求导并整理分子。
+        why: 分子与题设不等式同构，可直接判符号。
+      source_ref: page_0137_solution
+    - step_id: step_2
+      statement: 由题设得到 $g$ 在正半轴递减。
+      formula_trace:
+        from: $f(x)+(x^2+x)f^{\prime}(x)<0$
+        to: $g^{\prime}(x)<0\Rightarrow g(1)>g(2)>g(3)>g(4)$
+        operation: 分母 $(x+1)^2>0$，符号由分子决定。
+        why: 建立判选项的主不等式链。
+      source_ref: page_0137_solution
+    - step_id: step_3
+      statement: 将主链还原成分式比较。
+      formula_trace:
+        from: $g(1)>g(2)>g(3)>g(4)$
+        to: $\frac{f(1)}{2}>\frac{2f(2)}{3}>\frac{3f(3)}{4}>\frac{4f(4)}{5}$
+        operation: 逐点代入 $g(x)=\frac{xf(x)}{x+1}$。
+        why: 对应 A-D 的线性系数比较。
+      source_ref: page_0137_solution
+    - step_id: step_4
+      statement: 据链逐项判定 A、B、C、D。
+      formula_trace:
+        from: $\frac{f(1)}{2}>\frac{2f(2)}{3}>\frac{3f(3)}{4}>\frac{4f(4)}{5}$
+        to: A 对，B 错，C 错，D 对
+        operation: 同乘正常数并核对方向。
+        why: 完成多选结论 AD。
+      source_ref: page_0137_solution
+teaching_card:
+  student_title: 把“$f+(x^2+x)f^{\prime}$”反构成 $\frac{xf}{x+1}$ 的递减链
+  what_it_trains: 训练在分式反构题里识别 $x/(x+1)$ 模板，并通过固定点链快速完成多选判定。
+  recognition_cues:
+    - 题设直接给出 $f(x)+(x^2+x)f^{\prime}(x)$。
+    - 选项集中比较 $f(1),f(2),f(3),f(4)$ 的线性组合。
+    - 解析往往只需一次构造即可覆盖全选项。
+  normalization_moves:
+    - 先构造 $g=\frac{xf}{x+1}$ 并验导。
+    - 用 $g^{\prime}<0$ 建立 $1,2,3,4$ 的递减链。
+    - 按系数同乘回到选项表达。
+  common_failures:
+    - 把 $g^{\prime}(x)$ 分子整理错，漏掉 $-xf(x)$。
+    - 从链式比较回代时把不等号方向翻转。
+    - 忽略原图排版错误，误把末项写成 $f(5)$ 导致与 D 项冲突。
+  similar_practice_query: 分式反构 x/(x+1) 抽象函数 多选 递减链 龙凤区期末
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

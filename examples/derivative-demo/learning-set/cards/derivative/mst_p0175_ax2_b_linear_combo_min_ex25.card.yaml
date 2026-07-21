@@ -1,0 +1,149 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0175_ax2_b_linear_combo_min_ex25
+content_revision_id: mst_p0175_ax2_b_linear_combo_min_ex25-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0175_ax2_b_linear_combo_min_ex25.card.yaml
+stem: |-
+  （2023 · 浙江稽阳模拟 T7）已知 $\ln x-a x^2-b\leqslant0$ 在 $(0,+\infty)$ 上恒成立，$a+2b$ 的最小值是（  ）
+  A. 0
+  B. $-1$
+  C. $-\ln4$
+  D. $-\ln2$
+answer: |-
+  D
+
+  恒成立等价于 $ax^2+b\geqslant\ln x$。要最小化 $a+2b$， 观察 $a+2b=2(\frac a2+b)$，所以选择让 $x^2=\frac12$ 的点 $x=\frac{\sqrt2}{2}$。由恒成立得 $\frac a2+b\geqslant\ln\frac{\sqrt2}{2}=-\frac12\ln2$， 因此 $a+2b\geqslant-\ln2$，选 D。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把恒成立式改写成上界切点模型。
+      max_score: 1
+    - step_id: step_2
+      description: 用目标 $a+2b$ 反推代入点。
+      max_score: 1
+    - step_id: step_3
+      description: 代入切点得到最小值。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 切线放缩与凹凸性
+      - 充分/必要性探路
+    subroute:
+      - 切点比大小
+      - 目标线性组合反推代入点
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+      - 非齐次结构
+    evidence:
+      - $a x^2+b\geqslant\ln x$
+      - $a+2b=2(\frac a2+b)$
+      - $x=\frac{\sqrt2}{2}$
+    normalization_moves_used:
+      - 把目标线性组合拆成恒成立式中可直接读出的组合。
+      - 用 $x^2=\frac12$ 对齐 $\frac a2+b$。
+      - 由一个特定点的必要条件给出全局下界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看不出 $a+2b=2(\frac a2+b)$，回补代数恒等变形。
+      - 若学生不会化简 $\ln\frac{\sqrt2}{2}$，回补指数对数基础。
+      - 若学生误以为任意代点都能取等，回补函数性质与图像。
+  detail_terms:
+    - $\ln x-a x^2-b\leqslant0$
+    - $a x^2+b\geqslant\ln x$
+    - $x=\frac{\sqrt2}{2}$
+    - $a+2b$
+    - $-\ln2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0175_ax2_b_linear_combo_min_ex25
+source_evidence:
+  source_refs:
+    - ref_id: page_0175
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0175/page_0175.md
+      role: problem_start
+      evidence: "lines 32-42 contain 例25 statement, options A-D, and the short source solution: use 切点比大小 at $x=\\frac{\\sqrt2}{2}$ to get $\\frac a2+b\\geqslant\\ln\\frac{\\sqrt2}{2}$."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0175.png
+      inspected: true
+      notes: 页图核对通过：题干为 $\ln x-ax^2-b\leqslant0$ 在 $(0,+\infty)$ 恒成立，求 $a+2b$ 最小值，选项 D 为 $-\ln2$。
+  source_context: 考点 6 是“双参数和与差利用切点比大小”，本题是该模型的首例。
+  source_influence:
+    - 保留源解直接选切点 $x=\frac{\sqrt2}{2}$ 的极短路线。
+    - 把“切点比大小”解释为用目标线性组合反推最合适代入点。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 浙江稽阳模拟 T7）已知 $\ln x-a x^2-b\leqslant0$ 在 $(0,+\infty)$ 上恒成立，$a+2b$ 的最小值是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: "0"
+      text_latex: $0$
+    - label: B
+      text_raw: $-1$
+      text_latex: $-1$
+    - label: C
+      text_raw: $-\ln4$
+      text_latex: $-\ln4$
+    - label: D
+      text_raw: $-\ln2$
+      text_latex: $-\ln2$
+  answer: D
+  fidelity_notes:
+    - 源题为单选题，选项 A-D 已完整保留。
+    - 源解备注“大题需说明取等条件”；本卡保留这个教学提醒。
+solution:
+  source_solution_summary: 恒成立等价于 $ax^2+b\geqslant\ln x$。要最小化 $a+2b$， 观察 $a+2b=2(\frac a2+b)$，所以选择让 $x^2=\frac12$ 的点 $x=\frac{\sqrt2}{2}$。由恒成立得 $\frac a2+b\geqslant\ln\frac{\sqrt2}{2}=-\frac12\ln2$， 因此 $a+2b\geqslant-\ln2$，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把恒成立式改写成上界切点模型。
+      formula_trace:
+        from: $\ln x-a x^2-b\leqslant0$
+        to: $a x^2+b\geqslant\ln x$
+        operation: 移项。
+        why: 左侧 $a x^2+b$ 是要压住 $\ln x$ 的参数表达式。
+      source_ref: page_0175:lines 32-42
+    - step_id: step_2
+      statement: 用目标 $a+2b$ 反推代入点。
+      formula_trace:
+        from: $a+2b=2(\frac a2+b)$
+        to: 取 $x^2=\frac12,\ x=\frac{\sqrt2}{2}$
+        operation: 让恒成立不等式中的 $a x^2+b$ 对齐目标线性组合。
+        why: 这样一次代入就能直接给出 $a+2b$ 的下界。
+      source_ref: page_0175:lines 39-42
+    - step_id: step_3
+      statement: 代入切点得到最小值。
+      formula_trace:
+        from: $\frac a2+b\geqslant\ln\frac{\sqrt2}{2}$
+        to: $a+2b\geqslant-\ln2$
+        operation: 两边乘以 2，并化简 $\ln\frac{\sqrt2}{2}=-\frac12\ln2$。
+        why: 该点就是源书“切点比大小”给出的取等点。
+      source_ref: page_0175:lines 39-42
+teaching_card:
+  student_title: 用目标组合反推切点
+  what_it_trains: 训练在双参数恒成立题中，不先解完整参数域，而是从目标组合倒推出最省力的代入点。
+  recognition_cues:
+    - 题目给双参数恒成立，最后问 $a+2b$ 这类线性组合最值。
+    - 恒成立式中有 $a x^2+b$。
+    - 目标组合能被写成 $2(\frac a2+b)$。
+  normalization_moves:
+    - 先把不等式移成 $a x^2+b\geqslant\ln x$。
+    - 让 $x^2$ 等于目标组合里 $a$ 的系数。
+    - 代入后再还原目标组合。
+  common_failures:
+    - 全量求导求参数域，算得很重。
+    - 选错代入点，导致拿不到目标组合。
+    - 忽略取等条件，只写必要下界。
+  similar_practice_query: ln x ax^2 b 恒成立 a+2b 切点比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

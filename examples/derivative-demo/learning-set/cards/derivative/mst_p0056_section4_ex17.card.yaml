@@ -1,0 +1,155 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0056_section4_ex17
+content_revision_id: mst_p0056_section4_ex17-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0056_section4_ex17.card.yaml
+stem: （广东省中山市第一中学 2025 学年高二 4 月月考 T14）设 $f^{\prime}(x)$ 是函数 $f(x)$ 的导数，$f^{\prime\prime}(x)$ 是函数 $f^{\prime}(x)$ 的导数，若方程 $f^{\prime\prime}(x)=0$ 有实数解 $x_0$，则称点 $(x_0,f(x_0))$ 为函数 $f(x)$ 的拐点。某同学经过探究发现：任何一个三次函数 $f(x)=ax^3+bx^2+cx+d\ (a\ne0)$ 都有拐点，任何一个三次函数都有对称中心，且拐点就是对称中心。设函数 $g(x)=x^3-3x^2+4x+2$，利用上述探究结果计算：$g\left(\frac1{2025}\right)+g\left(\frac2{2025}\right)+\cdots+g\left(\frac{4048}{2025}\right)+g\left(\frac{4049}{2025}\right)=$________。
+answer: |
+  16196
+
+  求导得 $g^{\prime}(x)=3x^2-6x+4$，再求二阶导 $g^{\prime\prime}(x)=6x-6$。令 $g^{\prime\prime}(x)=0$ 得 $x=1$，且 $g(1)=4$，所以 $(1,4)$ 是 $g(x)$ 的拐点，也就是对称中心。于是关于 $x=1$ 对称的两个自变量满足 $g(x)+g(2-x)=8$。在
+  $\frac1{2025},\frac2{2025},\ldots,\frac{4049}{2025}$ 中，除 $\frac{2025}{2025}=1$ 外，其余 4048 项两两配成 2024 对，每对和为 8，中间项为 4，所以总和为 $8\times2024+4=16196$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 求二阶导定位三次函数的拐点横坐标。
+      max_score: 1
+    - step_id: step_2
+      description: 得到对称中心。
+      max_score: 1
+    - step_id: step_3
+      description: 把对称中心翻译成函数值配对关系。
+      max_score: 1
+    - step_id: step_4
+      description: 对求和项两两配对并保留中心项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level:
+      - part_id: item_1
+        goal: 数值求值
+        target: 利用三次函数对称中心求一串函数值之和。
+        result: 见 source_solution_summary
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 对称化与偏移
+      - 显隐点探路
+    subroute:
+      - 三次函数拐点即中心
+      - 关于中心项两两配对
+  structure:
+    primary: 对称结构
+    secondary:
+      - 三次/高次函数结构
+    evidence:
+      - $g^{\prime\prime}(x)=6x-6$ 给出拐点横坐标 $1$。
+      - 中心为 $(1,4)$，所以 $g(x)+g(2-x)=8$。
+      - 求和上下标 $1$ 到 $4049$ 正好关于 $2025$ 对称。
+    normalization_moves_used:
+      - 先找三次函数中心，而不是展开求和。
+      - 把自变量写成 $\frac{k}{2025}$，寻找与 $\frac{4050-k}{2025}$ 的配对。
+      - 单独处理中心项 $g(1)$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $g^{\prime\prime}(x)=0$ 找拐点，回补导数单调极值基础。
+      - 若学生不能把中心 $(1,4)$ 写成 $g(x)+g(2-x)=8$，回补函数性质与图像。
+      - 若学生配对时漏掉中间项 $g(1)$，回补代数恒等变形。
+      - 若学生逐项展开求和导致计算量失控，回补代数恒等变形中的成对配凑。
+  detail_terms:
+    - $g(x)=x^3-3x^2+4x+2$
+    - $g^{\prime\prime}(x)=6x-6$
+    - $(1,4)$
+    - $g(x)+g(2-x)=8$
+    - $8\times2024+4$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0056_section4_ex17
+source_evidence:
+  source_refs:
+    - ref_id: page_0056_ex17_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0056/page_0056.md
+      role: problem_start
+      evidence: 例 17：题干说明三次函数拐点就是对称中心，给出 $g(x)=x^3-3x^2+4x+2$，要求计算 $g(\frac1{2025})+\cdots+g(\frac{4049}{2025})$。
+    - ref_id: page_0056_ex17_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0056/page_0056.md
+      role: solution
+      evidence: 解析由 $g^{\prime\prime}(x)=6x-6$ 得中心 $(1,4)$，进而 $g(x)+g(2-x)=8$，配对求和为 $8\times2024+4=16196$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0056.png
+      inspected: true
+      notes: 页图已核对：例 17 题干、长求和式和解析均与 markdown 一致。
+  source_context: 本题把题干给出的“三次函数拐点即对称中心”作为可用结论，用中心对称配对处理长求和。
+  source_influence:
+    - 卡片保留源解的拐点求中心路线，而不是直接展开 4049 项求和。
+    - 配对项按源页从 $\frac1{2025}$ 与 $\frac{4049}{2025}$ 到中心项 $\frac{2025}{2025}$。
+  source_discrepancies: []
+original_problem:
+  stem: （广东省中山市第一中学 2025 学年高二 4 月月考 T14）设 $f^{\prime}(x)$ 是函数 $f(x)$ 的导数，$f^{\prime\prime}(x)$ 是函数 $f^{\prime}(x)$ 的导数，若方程 $f^{\prime\prime}(x)=0$ 有实数解 $x_0$，则称点 $(x_0,f(x_0))$ 为函数 $f(x)$ 的拐点。某同学经过探究发现：任何一个三次函数 $f(x)=ax^3+bx^2+cx+d\ (a\ne0)$ 都有拐点，任何一个三次函数都有对称中心，且拐点就是对称中心。设函数 $g(x)=x^3-3x^2+4x+2$，利用上述探究结果计算：$g\left(\frac1{2025}\right)+g\left(\frac2{2025}\right)+\cdots+g\left(\frac{4048}{2025}\right)+g\left(\frac{4049}{2025}\right)=$________。
+  parts: *a1
+  choices: []
+  answer: "16196"
+  fidelity_notes:
+    - 源题为空格填空题，无选项。
+    - 源题明确允许使用“三次函数拐点就是对称中心”的探究结论。
+solution:
+  source_solution_summary: |
+    求导得 $g^{\prime}(x)=3x^2-6x+4$，再求二阶导 $g^{\prime\prime}(x)=6x-6$。令 $g^{\prime\prime}(x)=0$ 得 $x=1$，且 $g(1)=4$，所以 $(1,4)$ 是 $g(x)$ 的拐点，也就是对称中心。于是关于 $x=1$ 对称的两个自变量满足 $g(x)+g(2-x)=8$。在
+    $\frac1{2025},\frac2{2025},\ldots,\frac{4049}{2025}$ 中，除 $\frac{2025}{2025}=1$ 外，其余 4048 项两两配成 2024 对，每对和为 8，中间项为 4，所以总和为 $8\times2024+4=16196$。
+  key_steps:
+    - step_id: step_1
+      statement: 求二阶导定位三次函数的拐点横坐标。
+      formula_trace:
+        from: $g(x)=x^3-3x^2+4x+2$
+        to: $g^{\prime}(x)=3x^2-6x+4,\quad g^{\prime\prime}(x)=6x-6$
+        operation: 连续求两次导。
+        why: 题干把 $g^{\prime\prime}(x)=0$ 的解定义为拐点横坐标。
+      source_ref: page_0056_ex17_solution
+    - step_id: step_2
+      statement: 得到对称中心。
+      formula_trace:
+        from: $g^{\prime\prime}(x)=6x-6=0$
+        to: $x=1,\quad g(1)=4,\quad \text{中心为 }(1,4)$
+        operation: 解方程并代入原函数。
+        why: 源题给出三次函数的拐点就是对称中心。
+      source_ref: page_0056_ex17_solution
+    - step_id: step_3
+      statement: 把对称中心翻译成函数值配对关系。
+      formula_trace:
+        from: 中心为 $(1,4)$
+        to: $g(x)+g(2-x)=8$
+        operation: 横坐标关于 1 对称，纵坐标关于 4 对称。
+        why: 每一对对称点的函数值平均数为 4。
+      source_ref: page_0056_ex17_solution
+    - step_id: step_4
+      statement: 对求和项两两配对并保留中心项。
+      formula_trace:
+        from: $\frac{k}{2025}+\frac{4050-k}{2025}=2\quad(k=1,\ldots,2024)$
+        to: $2024\cdot8+g(1)=2024\cdot8+4=16196$
+        operation: 将 $\frac{k}{2025}$ 与 $\frac{4050-k}{2025}$ 配成关于 1 对称的一对。
+        why: 共有 2024 对对称项，另有中心项 $\frac{2025}{2025}=1$。
+      source_ref: page_0056_ex17_solution
+teaching_card:
+  student_title: 三次函数长求和，先找对称中心
+  what_it_trains: 训练把三次函数的拐点转成中心对称关系，再把一长串函数值按自变量对称配对。
+  recognition_cues:
+    - 题干特别说明“三次函数拐点就是对称中心”。
+    - 求和自变量从 $\frac1{2025}$ 到 $\frac{4049}{2025}$，围绕 1 对称。
+    - 函数是三次多项式，不适合逐项硬算。
+  normalization_moves:
+    - 求 $g^{\prime\prime}(x)$ 找中心横坐标。
+    - 算中心纵坐标 $g(1)$。
+    - 把 $\frac{k}{2025}$ 与 $\frac{4050-k}{2025}$ 配对。
+  common_failures:
+    - 只找到 $x=1$，忘记还要算中心纵坐标 $g(1)$。
+    - 把每对和写成 4，而不是 $2\times4=8$。
+    - 把 4049 项误配成 2024 对后漏掉中间项。
+  similar_practice_query: 三次函数 拐点 对称中心 函数值求和 配对
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0056 页图；例 17 题干和解析完整，无跨页续解。

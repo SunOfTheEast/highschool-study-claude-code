@@ -1,0 +1,228 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0126_abstract_exp_construct_ex08
+content_revision_id: mst_p0126_abstract_exp_construct_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0126_abstract_exp_construct_ex08.card.yaml
+stem: |-
+  （2023·叙州区模拟）已知函数 $f(x)$ 是定义在 $\mathbf{R}$ 上的增函数，$f(x)+2>f^{\prime}(x)$，$f(0)=1$，则不等式 $\ln[f(x)+2]>\ln 3+x$ 的解集为（ ）
+  A. $(-\infty,0)$
+  B. $(0,+\infty)$
+  C. $(-\infty,1)$
+  D. $(1,+\infty)$
+answer: |
+  A
+
+  构造
+  \[
+  g(x)=\frac{f(x)+2}{e^x}.
+  \]
+  则
+  \[
+  g^{\prime}(x)=\frac{f^{\prime}(x)-f(x)-2}{e^x}.
+  \]
+  由题设 $f(x)+2>f^{\prime}(x)$，得 $g^{\prime}(x)<0$，所以 $g$ 在
+  $\mathbf{R}$ 上单调递减。又 $f(0)=1$，故
+  \[
+  g(0)=\frac{f(0)+2}{e^0}=3.
+  \]
+  原不等式
+  \[
+  \ln[f(x)+2]>\ln3+x
+  \]
+  等价于
+  \[
+  \ln\frac{f(x)+2}{3}>x
+  \iff \frac{f(x)+2}{3}>e^x
+  \iff \frac{f(x)+2}{e^x}>3
+  \iff g(x)>g(0).
+  \]
+  由 $g$ 递减，$g(x)>g(0)$ 当且仅当 $x<0$，故解集为
+  $(-\infty,0)$，选 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 按题设差值结构构造指数商函数。
+      max_score: 1
+    - step_id: step_2
+      description: 用已知点值锁定比较锚点。
+      max_score: 1
+    - step_id: step_3
+      description: 把对数不等式同构为 g 值比较。
+      max_score: 1
+    - step_id: step_4
+      description: 由递减性还原自变量范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式求解
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 将对数不等式转化为构造函数值比较。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 抽象函数性质
+        target: 利用单调性反推自变量范围。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 逆向构造法
+    subroute:
+      - 指数找基友
+      - 定点比较
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 抽象函数结构
+    evidence:
+      - $\ln[f(x)+2]>\ln3+x$ 自然转向 $\frac{f(x)+2}{e^x}$。
+      - $f(x)+2>f^{\prime}(x)$ 精确对应 $g^{\prime}(x)<0$。
+      - $f(0)=1$ 给出锚点 $g(0)=3$。
+    normalization_moves_used:
+      - 先定构造函数，再判断导数符号。
+      - 把“>0”改写为“>g(0)”以便单调比较。
+      - 对数式统一转指数商式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f^{\prime}-f$ 结构选构造函数，回补导数运算与几何意义。
+      - 若学生在 $\ln A>\ln B+x$ 的等价变形中出错，回补指数对数基础。
+      - 若学生不会把 $g(x)>g(0)$ 转为 $x<0$，回补导数单调极值基础。
+  detail_terms:
+    - $g(x)=\frac{f(x)+2}{e^x}$
+    - $g^{\prime}(x)<0$
+    - $g(0)=3$
+    - $g(x)>g(0)$
+    - $x<0$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0126_abstract_exp_construct_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0126
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0126/page_0126.md
+      role: problem_start
+      evidence: line 14给出例8题头，lines 15-18给出A-D选项，line 20给出完整解析并结论“故选A”。
+    - ref_id: page_0127_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0127/page_0127.md
+      role: local_context
+      evidence: page_0127 line 15仍是例10续解，line 29才起例11，说明例8不跨页。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0126.png
+      inspected: true
+      notes: 已核对页图：例8题干、选项、解析与答案A都完整在page_0126。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0127.png
+      inspected: true
+      notes: 已核对页图：page_0127无例8续解。
+  source_context: 例8为指数商构造后单调比较，不跨页。
+  source_influence:
+    - 保留源页核心构造 g(x)=\frac{f(x)+2}{e^x}。
+    - 保留由 f(x)+2>f^{\prime}(x) 推得 g^{\prime}(x)<0 的单调性链。
+    - 保留由 ln 不等式等价变形到 g(x)>g(0) 再反推 x<0 的闭环。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·叙州区模拟）已知函数 $f(x)$ 是定义在 $\mathbf{R}$ 上的增函数，$f(x)+2>f^{\prime}(x)$，$f(0)=1$，则不等式 $\ln[f(x)+2]>\ln 3+x$ 的解集为（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $(-\infty,0)$
+      text_latex: $(-\infty,0)$
+    - label: B
+      text_raw: $(0,+\infty)$
+      text_latex: $(0,+\infty)$
+    - label: C
+      text_raw: $(-\infty,1)$
+      text_latex: $(-\infty,1)$
+    - label: D
+      text_raw: $(1,+\infty)$
+      text_latex: $(1,+\infty)$
+  answer: A
+  fidelity_notes:
+    - 题设中的导函数符号统一写为 $f^{\prime}(x)$。
+    - 选项、结论与page_0126源页一致。
+solution:
+  source_solution_summary: |
+    构造
+    \[
+    g(x)=\frac{f(x)+2}{e^x}.
+    \]
+    则
+    \[
+    g^{\prime}(x)=\frac{f^{\prime}(x)-f(x)-2}{e^x}.
+    \]
+    由题设 $f(x)+2>f^{\prime}(x)$，得 $g^{\prime}(x)<0$，所以 $g$ 在
+    $\mathbf{R}$ 上单调递减。又 $f(0)=1$，故
+    \[
+    g(0)=\frac{f(0)+2}{e^0}=3.
+    \]
+    原不等式
+    \[
+    \ln[f(x)+2]>\ln3+x
+    \]
+    等价于
+    \[
+    \ln\frac{f(x)+2}{3}>x
+    \iff \frac{f(x)+2}{3}>e^x
+    \iff \frac{f(x)+2}{e^x}>3
+    \iff g(x)>g(0).
+    \]
+    由 $g$ 递减，$g(x)>g(0)$ 当且仅当 $x<0$，故解集为
+    $(-\infty,0)$，选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 按题设差值结构构造指数商函数。
+      formula_trace:
+        from: $f(x)+2>f^{\prime}(x)$
+        to: $g(x)=\frac{f(x)+2}{e^x},\; g^{\prime}(x)=\frac{f^{\prime}(x)-f(x)-2}{e^x}<0$
+        operation: 将“$f^{\prime}-f$”型信息写入商函数导数。
+        why: 直接得到全局单调递减。
+      source_ref: page_0126
+    - step_id: step_2
+      statement: 用已知点值锁定比较锚点。
+      formula_trace:
+        from: $f(0)=1$
+        to: $g(0)=3$
+        operation: 代入构造函数。
+        why: 目标不等式最终转化为与3比较。
+      source_ref: page_0126
+    - step_id: step_3
+      statement: 把对数不等式同构为 g 值比较。
+      formula_trace:
+        from: $\ln[f(x)+2]>\ln3+x$
+        to: $g(x)>g(0)$
+        operation: 连用对数指数等价变形。
+        why: 将代数不等式转入单调函数框架。
+      source_ref: page_0126
+    - step_id: step_4
+      statement: 由递减性还原自变量范围。
+      formula_trace:
+        from: $g(x)>g(0)$ 且 $g$ 递减
+        to: $x<0$
+        operation: 单调函数值比较反推自变量比较。
+        why: 确定解集对应选项A。
+      source_ref: page_0126
+teaching_card:
+  student_title: 对数不等式先做指数商构造
+  what_it_trains: 训练在 $f^{\prime}-f$ 型题设下快速构造指数商函数，并把对数不等式翻译成单调函数比较。
+  recognition_cues:
+    - 题设同时出现 $f^{\prime}(x)$ 与 $f(x)$ 的线性比较。
+    - 目标式含 $\ln$ 与线性项 $x$。
+    - 给出单点值 $f(0)$ 常用于锚定比较。
+  normalization_moves:
+    - 构造 $g=\frac{f+2}{e^x}$。
+    - 用题设直接判 $g^{\prime}<0$。
+    - 把原不等式改写成 $g(x)>g(0)$。
+    - 由递减性反推 $x<0$。
+  common_failures:
+    - 只把不等式移项，不做函数构造。
+    - 把 $g^{\prime}(x)$ 分子符号写反。
+    - 将递减函数的比较方向判断错误。
+  similar_practice_query: 抽象函数 指数商构造 对数不等式 单调性 解集
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对page_0126/page_0127页图：例8不跨页，答案A无歧义。

@@ -1,0 +1,153 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0031_ex18
+content_revision_id: mst_p0031_ex18-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0031_ex18.card.yaml
+stem: 已知函数 $f(x)=xe^x$，$g(x)=-\frac{\ln x}{x}$，若 $f(x_1)=g(x_2)>0$，则 $\frac{x_1}{x_2}-x_1-\ln x_1$ 的最小值为 ______.
+answer: |-
+  1
+
+  由 $f(x_1)=g(x_2)>0$ 得 $x_1e^{x_1}=-\ln x_2/x_2=\ln(1/x_2)e^{\ln(1/x_2)}$。设 $h(u)=ue^u$，它在 $(0,+\infty)$ 上递增，而 $x_1>0$、$\ln(1/x_2)>0$，所以 $x_1=\ln(1/x_2)$，即 $x_2=e^{-x_1}$。目标式化为 $x_1e^{x_1}-(x_1+\ln x_1)=e^{x_1+\ln x_1}-(x_1+\ln x_1)$。令 $u=x_1+\ln x_1$，其值域为 $\mathbf R$，于是 $e^u-u\ge1$，最小值为 1。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把 $g(x_2)$ 改写成 $ue^u$。
+      max_score: 1
+    - step_id: step_2
+      description: 用 $h(u)=ue^u$ 的递增性锁定变量。
+      max_score: 1
+    - step_id: step_3
+      description: 把目标式只写成 $x_1$。
+      max_score: 1
+    - step_id: step_4
+      description: 再把乘积指数化。
+      max_score: 1
+    - step_id: step_5
+      description: 求 $e^u-u$ 的最小值。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 拟合与夹逼
+    subroute:
+      - $xe^x$ 正区间同构
+      - $\ln(1/x_2)$ 隐藏变量
+      - $e^u-u$ 最小值
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $x_1e^{x_1}=\ln(1/x_2)e^{\ln(1/x_2)}$。
+      - 目标式归一到 $e^{x_1+\ln x_1}-(x_1+\ln x_1)$。
+    normalization_moves_used:
+      - $-\ln x_2/x_2$ 改写成 $\ln(1/x_2)e^{\ln(1/x_2)}$。
+      - 用 $xe^x$ 在正区间递增推出 $x_1=\ln(1/x_2)$。
+      - 令 $u=x_1+\ln x_1$，求 $e^u-u$ 最小值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $-\ln x/x$ 改成 $\ln(1/x)e^{\ln(1/x)}$，回补指数对数基础。
+      - 若学生忽略 $f(x_1)=g(x_2)>0$ 带来的 $x_1>0$、$0<x_2<1$，回补函数性质与图像。
+      - 若学生不知道 $xe^x$ 在正区间递增，回补导数单调极值基础。
+      - 若学生不能把 $x_1e^{x_1}$ 写成 $e^{x_1+\ln x_1}$，回补指数对数基础。
+  detail_terms:
+    - $f(x)=xe^x$
+    - $g(x)=-\ln x/x$
+    - $x_1=\ln(1/x_2)$
+    - $x_1+\ln x_1$
+    - $e^u-u\ge1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0031_ex18
+source_evidence:
+  source_refs:
+    - ref_id: page_0031
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0031/page_0031.md
+      role: problem_start
+      evidence: 例 18 题干、解析和答案完整位于 page_0031。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0031.png
+      inspected: true
+      notes: 核对题干为 $f(x)=xe^x$、$g(x)=-\ln x/x$，目标为 $x_1/x_2-x_1-\ln x_1$ 的最小值；答案 1。
+  source_context: page_0031 从例 18 开始，没有例 19；例 18 使用 $xe^x$ 同构，把 $-\ln x_2/x_2$ 改写成 $\ln(1/x_2)e^{\ln(1/x_2)}$。
+  source_influence:
+    - BATCHES locator hint `mst_p0031_ex18` 仅用于确认题头；卡片内容按 page_0031 源 markdown 与源图重建。
+  source_discrepancies: []
+original_problem:
+  stem: 已知函数 $f(x)=xe^x$，$g(x)=-\frac{\ln x}{x}$，若 $f(x_1)=g(x_2)>0$，则 $\frac{x_1}{x_2}-x_1-\ln x_1$ 的最小值为 ______.
+  parts: *a1
+  choices: []
+  answer: "1"
+  fidelity_notes:
+    - 由 $g(x_2)$ 隐含 $x_2>0$；由 $g(x_2)>0$ 得 $0<x_2<1$，由 $f(x_1)>0$ 得 $x_1>0$。
+    - 源图与 markdown 一致。
+solution:
+  source_solution_summary: 由 $f(x_1)=g(x_2)>0$ 得 $x_1e^{x_1}=-\ln x_2/x_2=\ln(1/x_2)e^{\ln(1/x_2)}$。设 $h(u)=ue^u$，它在 $(0,+\infty)$ 上递增，而 $x_1>0$、$\ln(1/x_2)>0$，所以 $x_1=\ln(1/x_2)$，即 $x_2=e^{-x_1}$。目标式化为 $x_1e^{x_1}-(x_1+\ln x_1)=e^{x_1+\ln x_1}-(x_1+\ln x_1)$。令 $u=x_1+\ln x_1$，其值域为 $\mathbf R$，于是 $e^u-u\ge1$，最小值为 1。
+  key_steps:
+    - step_id: step_1
+      statement: 把 $g(x_2)$ 改写成 $ue^u$。
+      formula_trace:
+        from: $-\frac{\ln x_2}{x_2}$
+        to: $\frac1{x_2}\ln\frac1{x_2}=\ln\frac1{x_2}\,e^{\ln(1/x_2)}$
+        operation: 用 $-\ln x_2=\ln(1/x_2)$ 和 $1/x_2=e^{\ln(1/x_2)}$。
+        why: 这样右侧与 $x_1e^{x_1}$ 成为同一个 $ue^u$ 结构。
+      source_ref: page_0031
+    - step_id: step_2
+      statement: 用 $h(u)=ue^u$ 的递增性锁定变量。
+      formula_trace:
+        from: $x_1e^{x_1}=\ln\frac1{x_2}\,e^{\ln(1/x_2)}$
+        to: $x_1=\ln\frac1{x_2}=-\ln x_2$
+        operation: 由 $f(x_1)=g(x_2)>0$ 得 $x_1>0$、$\ln(1/x_2)>0$；$h$ 在正区间递增。
+        why: 同一个递增函数取同值，自变量相等。
+      source_ref: page_0031
+    - step_id: step_3
+      statement: 把目标式只写成 $x_1$。
+      formula_trace:
+        from: $\frac{x_1}{x_2}-x_1-\ln x_1$
+        to: $x_1e^{x_1}-(x_1+\ln x_1)$
+        operation: 由 $x_1=\ln(1/x_2)$ 得 $1/x_2=e^{x_1}$。
+        why: 目标中的 $x_2$ 被同构关系消去。
+      source_ref: page_0031
+    - step_id: step_4
+      statement: 再把乘积指数化。
+      formula_trace:
+        from: $x_1e^{x_1}-(x_1+\ln x_1)$
+        to: $e^{x_1+\ln x_1}-(x_1+\ln x_1)$
+        operation: 用 $x_1=e^{\ln x_1}$，所以 $x_1e^{x_1}=e^{x_1+\ln x_1}$。
+        why: 目标变成标准函数 $e^u-u$。
+      source_ref: page_0031
+    - step_id: step_5
+      statement: 求 $e^u-u$ 的最小值。
+      formula_trace:
+        from: $u=x_1+\ln x_1\quad (x_1>0)$
+        to: $u\in\mathbf R,\quad e^u-u\ge1$
+        operation: $x+\ln x$ 在 $(0,+\infty)$ 上连续递增，值域为 $\mathbf R$；$e^u-u$ 在 $u=0$ 取最小值 1。
+        why: 等号可由 $x_1+\ln x_1=0$ 取到。
+      source_ref: page_0031
+teaching_card:
+  student_title: 把 $-\ln x/x$ 也变成 $xe^x$
+  what_it_trains: 训练识别倒数和负对数中的隐藏变量 $\ln(1/x)$，把两个函数值同构后，再把复杂目标压成 $e^u-u$。
+  recognition_cues:
+    - 题干给出 $xe^x$ 和 $-\ln x/x$，后者可写成 $\ln(1/x)\cdot e^{\ln(1/x)}$。
+    - 条件要求函数值大于 0，可以确定同构自变量都为正。
+    - 目标式含 $x_1/x_2$，同构后 $1/x_2=e^{x_1}$。
+  normalization_moves:
+    - 把 $-\ln x_2/x_2$ 改写为 $\ln(1/x_2)e^{\ln(1/x_2)}$。
+    - 推出 $x_1=\ln(1/x_2)$。
+    - 把目标式化为 $e^{x_1+\ln x_1}-(x_1+\ln x_1)$。
+  common_failures:
+    - 没有从 $g(x_2)>0$ 得到 $0<x_2<1$。
+    - 把 $xe^x$ 当作全实数递增来用；本题实际只在正区间使用。
+    - 把 $x_1e^{x_1}$ 化成指数时漏掉 $\ln x_1$。
+  similar_practice_query: xe^x -lnx/x 同构 ln(1/x) e^u-u 最小值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 源图与 markdown 一致；page_0031 确认从例 18 直接跳到例 20，没有例 19 题头。

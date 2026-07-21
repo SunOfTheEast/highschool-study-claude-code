@@ -1,0 +1,197 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0177_defined_function_tangent_product_max_ex31_alt
+content_revision_id: mst_p0177_defined_function_tangent_product_max_ex31_alt-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0177_defined_function_tangent_product_max_ex31_alt.card.yaml
+stem: |-
+  （2012 · 新课标）已知函数 $f(x)$ 满足 $f(x)=f^{\prime}(1)e^{x-1}-f(0)x+\frac{1}{2}x^2$。
+  1. 求 $f(x)$ 的解析式及单调区间。
+  2. 若 $f(x)\geqslant\frac{1}{2}x^2+ax+b$，求 $(a+1)b$ 的最大值。
+answer: |-
+  （1）$f(x)=e^x-x+\frac{1}{2}x^2$，单调递减区间 $(-\infty,0)$，单调递增区间 $(0,+\infty)$；（2）$(a+1)b_{\max}=\frac{e}{2}$。
+
+  对定义式求导得 $f^{\prime}(x)=f^{\prime}(1)e^{x-1}-f(0)+x$。代 $x=1$ 得 $f(0)=1$，再代 $x=0$ 得 $f^{\prime}(1)e^{-1}=1$，故 $f^{\prime}(1)=e$，进而 $f(x)=e^x-x+\frac{1}{2}x^2$。令 $g(x)=f^{\prime}(x)=e^x-1+x$，有 $g^{\prime}(x)=e^x+1>0$，且 $g(0)=0$，所以 $f$ 在 $(-\infty,0)$ 递减、在 $(0,+\infty)$ 递增。第(2)问由 $f(x)\geqslant\frac{1}{2}x^2+ax+b$ 化为 $e^x\geqslant(a+1)x+b$，利用切线意义得 $b=-(a+1)\ln\frac{a+1}{e}$（极值情形取等），于是 $(a+1)b=-(a+1)^2\ln\frac{a+1}{e}$。同构令 $h(u)=-u\ln u$，取 $u=\frac{(a+1)^2}{e^2}$，有 $(a+1)b=\frac{e^2}{2}h(u)\leqslant\frac{e^2}{2}\cdot\frac{1}{e} =\frac{e}{2}$，故最大值为 $\frac{e}{2}$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 对给定关系求导并代 $x=1$ 求出 $f(0)$。
+      max_score: 1
+    - step_id: step_2
+      description: 再代 $x=0$ 求出 $f^{\prime}(1)$ 并得到解析式。
+      max_score: 1
+    - step_id: step_3
+      description: 用导函数单调性判定 $f$ 的单调区间。
+      max_score: 1
+    - step_id: step_4
+      description: 把第(2)问恒成立转为指数曲线压线性函数。
+      max_score: 1
+    - step_id: step_5
+      description: 用切线意义写出极值情形的参数关系。
+      max_score: 1
+    - step_id: step_6
+      description: 同构为 $h(u)=-u\ln u$ 并求上界。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level:
+      - part_id: "1"
+        goal: 抽象函数性质
+        target: 第 1 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 极值最值
+        target: 第 2 问
+        result: 见 source_solution_summary
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+      - 显隐点探路
+    subroute:
+      - 代点定参
+      - 导函数判号
+      - 切线找点
+      - 同构 $h(x)=-x\ln x$
+  structure:
+    primary: 抽象函数结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 切线/公切线/切点量结构
+      - 局部逼近结构
+    evidence:
+      - $f(x)=f^{\prime}(1)e^{x-1}-f(0)x+\frac{1}{2}x^2$
+      - $f^{\prime}(x)=e^x-1+x$
+      - $(a+1)b=-(a+1)^2\ln\frac{a+1}{e}$
+    normalization_moves_used:
+      - 先通过 $x=1,0$ 两次代点，把抽象常量彻底定出。
+      - 把第(2)问恒成立改写为指数函数与线性函数比较。
+      - 把 $(a+1)b$ 同构成 $h(u)=-u\ln u$ 的标准最值模板。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由函数关系代点定参，回补函数三要素与定义域。
+      - 若学生不能由 $f^{\prime}$ 判单调区间，回补导数单调极值基础。
+      - 若学生对 $e^x\geqslant x+1$ 的切线来源不清，回补导数运算与几何意义。
+      - 若学生在同构 $h(u)=-u\ln u$ 时卡住，回补指数对数基础。
+  detail_terms:
+    - $f^{\prime}(1)$
+    - $f(0)$
+    - $f^{\prime}(x)=e^x-1+x$
+    - $e^x\geqslant(a+1)x+b$
+    - $h(u)=-u\ln u$
+parts: &a1
+  - part_id: "1"
+    text: 求 $f(x)$ 的解析式及单调区间。
+  - part_id: "2"
+    text: 若 $f(x)\geqslant\frac{1}{2}x^2+ax+b$，求 $(a+1)b$ 的最大值。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0177_defined_function_tangent_product_max_ex31_alt
+source_evidence:
+  source_refs:
+    - ref_id: page_0177
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0177/page_0177.md
+      role: problem_start
+      evidence: "lines 34-39 contain the second 例31 statement (2012 新课标), including two subquestions: find explicit form/monotonic intervals and then the maximum of $(a+1)b$ under a lower-bound inequality."
+    - ref_id: page_0177
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0177/page_0177.md
+      role: solution
+      evidence: "lines 40-42 provide most of the solution: determine $f(0)=1$ and $f^{\\prime}(1)=e$, get $f(x)=e^x-x+\\frac{1}{2}x^2$, prove monotonic intervals via $f^{\\prime}(x)$, then transform part (2) to $e^x\\geqslant(a+1)x+b$ and to $b=-(a+1)\\ln\\frac{a+1}{e}$ with $h(x)=-x\\ln x$."
+    - ref_id: page_0178
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0178/page_0178.md
+      role: continuation
+      evidence: lines 14-16 carry the tail formula of part (2), ending at $\leqslant \frac{e}{2}$, which completes the truncated final inequality from page_0177.
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0177.png
+      inspected: true
+      notes: 页图核对通过：第二个例31题干与第(1)问解答完整可读；第(2)问最后一行在页底 “ln” 后截断，与 markdown 标注一致。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0178.png
+      inspected: true
+      notes: 页图顶部有上一题续式，接出 $\frac{e^2}{2}h\!\left(\frac{(a+1)^2}{e^2}\right)\leqslant\frac{e}{2}$， 与 page_0177 底部拼接后可恢复结论。
+  source_context: page_0177 同页有两个“例31”。本卡对应第二个例31（2012 新课标）。其第(2)问末式跨到 page_0178 顶部，按题头归属仍由 page_0177 worker 完成。
+  source_influence:
+    - 保留源解“先代点定参再求单调”的第(1)问路线。
+    - 保留第(2)问“切线意义 + 同构 $h(x)=-x\ln x$”的最值路径。
+  source_discrepancies:
+    - page_0177.md line 42 被标记为底部截断；page_0178.md line 15 的续式左端在 markdown 中缺失前半段。经两页原图拼接可恢复为 $(a+1)b=-(a+1)^2\ln\frac{a+1}{e} =-\frac{e^2}{2}\frac{(a+1)^2}{e^2}\ln\frac{(a+1)^2}{e^2} =\frac{e^2}{2}h\!\left(\frac{(a+1)^2}{e^2}\right)\leqslant\frac{e}{2}$。
+original_problem:
+  stem: （2012 · 新课标）已知函数 $f(x)$ 满足 $f(x)=f^{\prime}(1)e^{x-1}-f(0)x+\frac{1}{2}x^2$。
+  parts: *a1
+  choices: []
+  answer: （1）$f(x)=e^x-x+\frac{1}{2}x^2$，单调递减区间 $(-\infty,0)$，单调递增区间 $(0,+\infty)$；（2）$(a+1)b_{\max}=\frac{e}{2}$。
+  fidelity_notes:
+    - 源题为两问解答题，无选择项。
+    - 第(2)问末段跨页续完，已按原图补齐终式。
+solution:
+  source_solution_summary: 对定义式求导得 $f^{\prime}(x)=f^{\prime}(1)e^{x-1}-f(0)+x$。代 $x=1$ 得 $f(0)=1$，再代 $x=0$ 得 $f^{\prime}(1)e^{-1}=1$，故 $f^{\prime}(1)=e$，进而 $f(x)=e^x-x+\frac{1}{2}x^2$。令 $g(x)=f^{\prime}(x)=e^x-1+x$，有 $g^{\prime}(x)=e^x+1>0$，且 $g(0)=0$，所以 $f$ 在 $(-\infty,0)$ 递减、在 $(0,+\infty)$ 递增。第(2)问由 $f(x)\geqslant\frac{1}{2}x^2+ax+b$ 化为 $e^x\geqslant(a+1)x+b$，利用切线意义得 $b=-(a+1)\ln\frac{a+1}{e}$（极值情形取等），于是 $(a+1)b=-(a+1)^2\ln\frac{a+1}{e}$。同构令 $h(u)=-u\ln u$，取 $u=\frac{(a+1)^2}{e^2}$，有 $(a+1)b=\frac{e^2}{2}h(u)\leqslant\frac{e^2}{2}\cdot\frac{1}{e} =\frac{e}{2}$，故最大值为 $\frac{e}{2}$。
+  key_steps:
+    - step_id: step_1
+      statement: 对给定关系求导并代 $x=1$ 求出 $f(0)$。
+      formula_trace:
+        from: $f(x)=f^{\prime}(1)e^{x-1}-f(0)x+\frac{1}{2}x^2$
+        to: $f^{\prime}(x)=f^{\prime}(1)e^{x-1}-f(0)+x,\ f(0)=1$
+        operation: 先求导，再令 $x=1$。
+        why: 原式含 $f(0)$ 与 $f^{\prime}(1)$ 两个常量，需先定一个。
+      source_ref: page_0177:line 40
+    - step_id: step_2
+      statement: 再代 $x=0$ 求出 $f^{\prime}(1)$ 并得到解析式。
+      formula_trace:
+        from: $f(0)=f^{\prime}(1)e^{-1}=1$
+        to: $f^{\prime}(1)=e,\ f(x)=e^x-x+\frac{1}{2}x^2$
+        operation: 代入已知 $f(0)=1$ 并回代原式。
+        why: 完成第(1)问解析式确定。
+      source_ref: page_0177:line 40
+    - step_id: step_3
+      statement: 用导函数单调性判定 $f$ 的单调区间。
+      formula_trace:
+        from: $g(x)=f^{\prime}(x)=e^x-1+x$
+        to: $g^{\prime}(x)=e^x+1>0,\ g(0)=0\Rightarrow f\downarrow(-\infty,0),\ f\uparrow(0,+\infty)$
+        operation: 先证 $g$ 递增，再用 $g(0)$ 定符号。
+        why: 单调区间由 $f^{\prime}$ 符号决定。
+      source_ref: page_0177:line 40
+    - step_id: step_4
+      statement: 把第(2)问恒成立转为指数曲线压线性函数。
+      formula_trace:
+        from: $f(x)\geqslant\frac{1}{2}x^2+ax+b$
+        to: $e^x\geqslant(a+1)x+b$
+        operation: 代入 $f(x)=e^x-x+\frac{1}{2}x^2$ 并移项。
+        why: 把目标转成切线模板可处理的形式。
+      source_ref: page_0177:line 42
+    - step_id: step_5
+      statement: 用切线意义写出极值情形的参数关系。
+      formula_trace:
+        from: $\frac{e^x}{a+1}=e^{x-\ln(a+1)}\geqslant x-\ln(a+1)+1$
+        to: $b=-(a+1)\ln\frac{a+1}{e}$
+        operation: 比较直线项系数并令极值情形取切线等号。
+        why: 最大化 $(a+1)b$ 时需要把 $b$ 写成 $a$ 的函数。
+      source_ref: page_0177:line 42
+    - step_id: step_6
+      statement: 同构为 $h(u)=-u\ln u$ 并求上界。
+      formula_trace:
+        from: $(a+1)b=-(a+1)^2\ln\frac{a+1}{e}$
+        to: $(a+1)b\leqslant\frac{e}{2}$
+        operation: 写成 $-\frac{e^2}{2}\frac{(a+1)^2}{e^2}\ln\frac{(a+1)^2}{e^2} =\frac{e^2}{2}h\!\left(\frac{(a+1)^2}{e^2}\right)$， 用 $h_{\max}=1/e$。
+        why: 把含参式降到标准单峰函数最值。
+      source_ref: page_0177:line 42; page_0178:lines 14-16
+teaching_card:
+  student_title: 代点定参后接切线同构最值
+  what_it_trains: 训练“先把抽象函数常量定死，再把含参恒成立转成切线模板并同构到标准最值函数”的完整链路。
+  recognition_cues:
+    - 题干里同现 $f(0)$ 与 $f^{\prime}(1)$ 这类待定常量。
+    - 先问解析式与单调，再问含参不等式最值。
+    - 第(2)问可化到 $e^x\geqslant$ 线性式。
+  normalization_moves:
+    - 两次代点（$x=1,0$）解出常量。
+    - 以 $f^{\prime}$ 的单调性和零点给出区间结论。
+    - 把参数不等式写成切线可比形式。
+    - 同构成 $-u\ln u$ 并调用标准最值。
+  common_failures:
+    - 只求出 $f(0)$，漏掉再代 $x=0$ 求 $f^{\prime}(1)$。
+    - 把 $g^{\prime}(x)>0$ 误当成 $f$ 递增，混淆了 $g=f^{\prime}$。
+    - 第(2)问直接硬算而不做切线同构，导致式子失控。
+  similar_practice_query: f(0) f^{\\prime}(1) 代点定参 e^x\\ge (a+1)x+b (a+1)b 最大值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,219 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0072_pade_ex04
+content_revision_id: mst_p0072_pade_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0072_pade_ex04.card.yaml
+stem: |-
+  （2024 山东德州高二期末 T19）两个正整数 m,n，函数 f(x) 在 x=0 处的 [m,n] 阶帕德近似定义为：R(x)=\frac{a_0+a_1x+\cdots+a_mx^m}{1+b_1x+\cdots+b_nx^n}， 且满足：f(0)=R(0), f'(0)=R'(0), f''(0)=R''(0), \cdots, f^{(m+n)}(0)=R^{(m+n)}(0)。已知函数 f(x)=\ln(x+1)。
+  (1). 求函数 f(x)=\ln(x+1) 在 x=0 处的 [1,1] 阶帕德近似 R(x)。
+  (2). 在 (1) 的条件下，求证：\frac{R(x)}{\ln(x+1)}<1。
+  (3). 已知 g(x)=e^x 在 x=0 处的 [2,2] 阶帕德近似为 R(x)=\frac{x^2+6x+12}{x^2-6x+12}，依据帕德近似公式 e^x\approx\frac{x^2+6x+12}{x^2-6x+12}；若 f(x)=\ln(x+1) 在 x=0 处的 [2,2] 阶帕德近似为 R(x)=\frac{a+bx+\frac12x^2}{1+x+\frac16x^2}，设 p=0.1e^{0.1}, q=\frac19, r=-\ln0.9，试比较 p,q,r 的大小。
+answer: |-
+  (1) R(x)=\frac{x}{1+\frac12x}=\frac{2x}{x+2}。 (2) 在 x\in(-1,0)\cup(0,+\infty) 上有 \frac{R(x)}{\ln(x+1)}<1。 (3) a=0,b=1，\ln(x+1) 的 [2,2] 阶帕德近似为 R(x)=\frac{x+\frac12x^2}{1+x+\frac16x^2} =\frac{3x^2+6x}{x^2+6x+6}；按源页估算，r<p<q。
+
+  第 (1) 问设 [1,1] 阶帕德近似 R(x)=\frac{a_0+a_1x}{1+b_1x}， 由 f(0),f'(0),f''(0) 与 R 对应相等得到 a_0=0,a_1=1,b_1=\frac12， 故 R(x)=2x/(x+2)。第 (2) 问令 F(x)=2x/(x+2)-\ln(x+1)，求得 F'(x)=-x^2/((x+1)(x+2)^2)<0，再按 x\in(-1,0) 与 x>0 分别利用 \ln(x+1) 的符号证明比值小于 1。第 (3) 问先由给定 [2,2] 形式求得 a=0,b=1，再代入 x=0.1 估算 p，代入 x=-0.1 估算 -\ln0.9，最后与 q=1/9 比较。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 用帕德定义匹配到二阶导数，求出 [1,1] 阶近似。
+      max_score: 1
+    - step_id: step_2
+      description: 把第 (2) 问化为 R(x) 与 \ln(x+1) 的差值符号。
+      max_score: 1
+    - step_id: step_3
+      description: 分别处理 \ln(x+1) 为负和为正时的除法方向。
+      max_score: 1
+    - step_id: step_4
+      description: 求出题设 [2,2] 近似式中的 a,b。
+      max_score: 1
+    - step_id: step_5
+      description: 用 e^x 的 [2,2] 帕德近似估算 p。
+      max_score: 1
+    - step_id: step_6
+      description: 用 \ln(1+x) 的 [2,2] 帕德近似估算 r。
+      max_score: 1
+    - step_id: step_7
+      description: 比较三个近似数。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: "1"
+        goal: 数值求值
+        target: 第 (1) 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 (2) 问
+        result: 见 source_solution_summary
+      - part_id: "3"
+        goal: 数值比较
+        target: 第 (3) 问
+        result: 见 source_solution_summary
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 局部逼近与找点
+      - 切线放缩与凹凸性
+    subroute:
+      - 帕德逼近
+      - 导数匹配求有理近似
+      - 对数比值分区间判断
+      - 指数与对数的 [2,2] 估值
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - "[1,1] 阶近似通过 f(0),f'(0),f''(0) 与 R 的对应导数匹配得到 R(x)=2x/(x+2)。"
+      - F'(x)=-x^2/((x+1)(x+2)^2)<0，使 R(x) 与 \ln(x+1) 的上下关系按 x=0 两侧分开。
+      - e^{0.1} 与 -\ln0.9 分别转化为 x=0 附近的帕德估值。
+    normalization_moves_used:
+      - 把未知有理式系数转成 x=0 处导数匹配方程。
+      - 比较比值时先比较差值 F(x)，再按 \ln(x+1) 的正负决定除法方向。
+      - 把 r=-\ln0.9 写成 -\ln(1-0.1)，与 \ln(1+x) 的近似式对齐。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不知道 [m,n] 阶帕德近似要匹配到 m+n 阶导数，回补导数运算与几何意义。
+      - 若学生求 R'(x),R''(x) 时出现商函数求导错误，回补导数运算与几何意义。
+      - 若学生在 -1<x<0 时除以 \ln(x+1)<0 忘记不等号反向，回补不等式工具基础。
+      - 若学生不能把 -\ln0.9 改写成 -\ln(1-0.1)，回补指数对数基础。
+      - 若学生小数估值或分式比较出错，回补代数恒等变形。
+  detail_terms:
+    - R(x)=\frac{2x}{x+2}
+    - F'(x)=\frac{-x^2}{(x+1)(x+2)^2}
+    - R_{2,2}^{\ln(1+x)}(x)=\frac{3x^2+6x}{x^2+6x+6}
+    - e^x\approx\frac{x^2+6x+12}{x^2-6x+12}
+    - r<p<q
+parts: &a1
+  - label: (1)
+    text: 求函数 f(x)=\ln(x+1) 在 x=0 处的 [1,1] 阶帕德近似 R(x)。
+  - label: (2)
+    text: 在 (1) 的条件下，求证：\frac{R(x)}{\ln(x+1)}<1。
+  - label: (3)
+    text: 已知 g(x)=e^x 在 x=0 处的 [2,2] 阶帕德近似为 R(x)=\frac{x^2+6x+12}{x^2-6x+12}，依据帕德近似公式 e^x\approx\frac{x^2+6x+12}{x^2-6x+12}；若 f(x)=\ln(x+1) 在 x=0 处的 [2,2] 阶帕德近似为 R(x)=\frac{a+bx+\frac12x^2}{1+x+\frac16x^2}，设 p=0.1e^{0.1}, q=\frac19, r=-\ln0.9，试比较 p,q,r 的大小。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0072_pade_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0072
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0072/page_0072.md
+      role: problem_start
+      evidence: page_0072 顶部先续完上一题的 [2,2] 帕德逼近结论，随后进入“二、帕德逼近与估值”说明；例 4 题头和帕德近似定义从本页底部开始。
+    - ref_id: page_0073_stem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0073/page_0073.md
+      role: continuation
+      evidence: page_0073 顶部续完例 4 的三问：求 [1,1] 阶帕德近似、证明 R(x)/ln(x+1)<1、并用 [2,2] 阶帕德近似比较 p,q,r。
+    - ref_id: page_0073_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0073/page_0073.md
+      role: solution
+      evidence: page_0073 中段至下段给出完整解析：先求 R(x)=2x/(x+2)，再构造 F(x)=2x/(x+2)-ln(x+1)，最后估算 p,q,r 并得 r<p<q。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0072.png
+      inspected: true
+      notes: 已核对 page_0072 顶部只是 pade ex03 结论续页，不建卡；例 4 题头在页底开始，题干在“已知函数 f(x)=ln(x+1)”处跨到下一页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0073.png
+      inspected: true
+      notes: 已核对三问题干、完整解析、p≈0.1105、q≈0.1111、r≈0.1054 以及结论 r<p<q。
+  source_context: 本题位于“帕德逼近与估值”小节，前文给出 e^x 与 ln x 在展开点附近的上下界和有理式逼近； 例 4 用导数匹配求出低阶帕德近似，再把近似式用于对 p,q,r 的数值估计。
+  source_influence:
+    - 题干的帕德近似定义、三问顺序、p/q/r 记号均按 page_0072-page_0073 源页重建。
+    - 第 (2) 问保留源解的分区间证明：在 (-1,0) 与 (0,+∞) 上分别结合 ln(x+1) 的符号处理除法方向。
+    - 第 (3) 问按源页给出的帕德估值路线记录为近似比较，而不是改写成另一路严格估计。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 山东德州高二期末 T19）两个正整数 m,n，函数 f(x) 在 x=0 处的 [m,n] 阶帕德近似定义为：R(x)=\frac{a_0+a_1x+\cdots+a_mx^m}{1+b_1x+\cdots+b_nx^n}， 且满足：f(0)=R(0), f'(0)=R'(0), f''(0)=R''(0), \cdots, f^{(m+n)}(0)=R^{(m+n)}(0)。已知函数 f(x)=\ln(x+1)。
+  parts: *a1
+  choices: []
+  answer: (1) R(x)=\frac{x}{1+\frac12x}=\frac{2x}{x+2}。 (2) 在 x\in(-1,0)\cup(0,+\infty) 上有 \frac{R(x)}{\ln(x+1)}<1。 (3) a=0,b=1，\ln(x+1) 的 [2,2] 阶帕德近似为 R(x)=\frac{x+\frac12x^2}{1+x+\frac16x^2} =\frac{3x^2+6x}{x^2+6x+6}；按源页估算，r<p<q。
+  fidelity_notes:
+    - 例 4 题头从 page_0072 底部开始，三问和完整解析在 page_0073。
+    - 原题不是选择题，choices 保持为空列表。
+    - 第 (2) 问源页解析实际讨论 x\in(-1,0)\cup(0,+\infty)，本卡在答案中补出该定义域限制。
+solution:
+  source_solution_summary: 第 (1) 问设 [1,1] 阶帕德近似 R(x)=\frac{a_0+a_1x}{1+b_1x}， 由 f(0),f'(0),f''(0) 与 R 对应相等得到 a_0=0,a_1=1,b_1=\frac12， 故 R(x)=2x/(x+2)。第 (2) 问令 F(x)=2x/(x+2)-\ln(x+1)，求得 F'(x)=-x^2/((x+1)(x+2)^2)<0，再按 x\in(-1,0) 与 x>0 分别利用 \ln(x+1) 的符号证明比值小于 1。第 (3) 问先由给定 [2,2] 形式求得 a=0,b=1，再代入 x=0.1 估算 p，代入 x=-0.1 估算 -\ln0.9，最后与 q=1/9 比较。
+  key_steps:
+    - step_id: step_1
+      statement: 用帕德定义匹配到二阶导数，求出 [1,1] 阶近似。
+      formula_trace:
+        from: R(x)=\frac{a_0+a_1x}{1+b_1x},\quad f(0)=0,\ f'(0)=1,\ f''(0)=-1
+        to: a_0=0,\quad a_1=1,\quad b_1=\frac12,\quad R(x)=\frac{x}{1+\frac12x}=\frac{2x}{x+2}
+        operation: 依次比较 f(0)=R(0)、f'(0)=R'(0)、f''(0)=R''(0)。
+        why: "[1,1] 阶帕德近似要求在 x=0 处匹配到 m+n=2 阶导数。"
+      source_ref: page_0073_solution
+    - step_id: step_2
+      statement: 把第 (2) 问化为 R(x) 与 \ln(x+1) 的差值符号。
+      formula_trace:
+        from: F(x)=\frac{2x}{x+2}-\ln(x+1)
+        to: F'(x)=\frac{4}{(x+2)^2}-\frac{1}{x+1} =\frac{-x^2}{(x+1)(x+2)^2}<0
+        operation: 对 F 求导，并在 (-1,0) 与 (0,+\infty) 上判断导数符号。
+        why: 这两个区间内 x+1>0 且 (x+2)^2>0，所以 F'(x)<0。
+      source_ref: page_0073_solution
+    - step_id: step_3
+      statement: 分别处理 \ln(x+1) 为负和为正时的除法方向。
+      formula_trace:
+        from: "x\\in(-1,0): F(x)>F(0)=0;\\quad x>0: F(x)<F(0)=0"
+        to: x\in(-1,0)\cup(0,+\infty)\Rightarrow \frac{R(x)}{\ln(x+1)}<1
+        operation: 当 -1<x<0 时有 R(x)>\ln(x+1)<0，除以负数不等号反向；当 x>0 时有 R(x)<\ln(x+1) 且分母为正。
+        why: 比值题不能只看 R-\ln 的符号，还必须同步看分母 \ln(x+1) 的正负。
+      source_ref: page_0073_solution
+    - step_id: step_4
+      statement: 求出题设 [2,2] 近似式中的 a,b。
+      formula_trace:
+        from: R(x)=\frac{a+bx+\frac12x^2}{1+x+\frac16x^2},\quad f(0)=0,\quad f'(0)=1
+        to: a=0,\quad b=1,\quad R(x)=\frac{x+\frac12x^2}{1+x+\frac16x^2} =\frac{3x^2+6x}{x^2+6x+6}
+        operation: 先由 R(0)=a=f(0) 得 a=0，再由 R'(0)=b=f'(0) 得 b=1。
+        why: 本小问给定了分母和二次项系数，未知量只剩 a,b。
+      source_ref: page_0073_solution
+    - step_id: step_5
+      statement: 用 e^x 的 [2,2] 帕德近似估算 p。
+      formula_trace:
+        from: p=0.1e^{0.1},\quad e^x\approx\frac{x^2+6x+12}{x^2-6x+12}
+        to: p\approx0.1\cdot\frac{0.1^2+6\cdot0.1+12}{0.1^2-6\cdot0.1+12} =\frac{1.261}{11.41}\approx0.1105
+        operation: 在指数帕德近似式中代入 x=0.1，再乘外面的 0.1。
+        why: p 的难点是 e^{0.1}，正好与源页给出的指数有理近似匹配。
+      source_ref: page_0073_solution
+    - step_id: step_6
+      statement: 用 \ln(1+x) 的 [2,2] 帕德近似估算 r。
+      formula_trace:
+        from: r=-\ln0.9=-\ln(1-0.1)
+        to: r\approx-\frac{3(-0.1)^2+6(-0.1)}{(-0.1)^2+6(-0.1)+6} =\frac{0.57}{5.41}\approx0.1054
+        operation: 在 \ln(1+x) 的近似式中代入 x=-0.1，再取相反数。
+        why: 这样把对数估值也统一到 x=0 附近的有理逼近。
+      source_ref: page_0073_solution
+    - step_id: step_7
+      statement: 比较三个近似数。
+      formula_trace:
+        from: r\approx0.1054,\quad p\approx0.1105,\quad q=\frac19\approx0.1111
+        to: r<p<q
+        operation: 按小数大小排序。
+        why: 三个数已经被估计到足以区分的精度。
+      source_ref: page_0073_solution
+teaching_card:
+  student_title: 用帕德近似比较 0.1 附近的指数和对数
+  what_it_trains: 训练先按导数匹配求出有理近似式，再把指数、对数估值统一成小偏移量代入，最后谨慎处理对数比值的不等号方向。
+  recognition_cues:
+    - 题干直接给出 [m,n] 阶帕德近似定义，并要求在 x=0 处求 R(x)。
+    - 出现 p=0.1e^{0.1}、r=-\ln0.9 这种离 0 很近的小量估值。
+    - 证明 \frac{R(x)}{\ln(x+1)}<1 时，分母在 0 两侧变号。
+  normalization_moves:
+    - 将 [1,1] 近似写成 \frac{a_0+a_1x}{1+b_1x}，逐阶匹配导数。
+    - 用 F(x)=R(x)-\ln(x+1) 代替直接比较比值。
+    - 把 p 和 r 都转成 x=0 附近的帕德近似代入问题。
+  common_failures:
+    - 把帕德近似误当成普通泰勒多项式，忘记分母也有待定系数。
+    - 在 -1<x<0 时直接由 R(x)>\ln(x+1) 推出 R/\ln>1，忽略分母为负。
+    - 估算 r 时没有把 0.9 写成 1-0.1，导致代错近似式。
+    - 比较 p 和 q 时只看 0.1105 与 0.1111 的小数位，未保留足够精度。
+  similar_practice_query: 帕德近似 ln(1+x) e^x 估值 比较 p q r
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0072 顶部的 pade ex03 续页已按 ownership rule 跳过，只为 page_0072 页底新起的例 4 建卡。
+    - 第 (3) 问源页使用“依据帕德近似公式”的估值语言，本卡保留其近似比较口径。

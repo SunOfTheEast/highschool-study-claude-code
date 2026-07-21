@@ -1,0 +1,211 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0131_log_xlnx_construct_ex18
+content_revision_id: mst_p0131_log_xlnx_construct_ex18-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0131_log_xlnx_construct_ex18.card.yaml
+stem: |-
+  （2023·九江模拟）定义在 $(0,+\infty)$ 上的函数 $f(x)$ 的导函数为 $f^{\prime}(x)$，且对 $\forall x\in(0,+\infty)$ 都有 $f^{\prime}(x)\ln x>\frac{1+\ln x}{x}f(x)$，则（  ）
+  A. $12f(2)>3f(4)>f(8)$
+  B. $3f(4)>12f(2)>f(8)$
+  C. $f(8)>3f(4)>12f(2)$
+  D. $f(8)>12f(2)>3f(4)$
+answer: |
+  C
+
+  由
+  \[
+  f^{\prime}(x)\ln x>\frac{1+\ln x}{x}f(x)
+  \]
+  得
+  \[
+  f^{\prime}(x)x\ln x-(1+\ln x)f(x)>0.
+  \]
+  令
+  \[
+  g(x)=\frac{f(x)}{x\ln x},
+  \]
+  则
+  \[
+  g^{\prime}(x)=\frac{f^{\prime}(x)x\ln x-(1+\ln x)f(x)}{(x\ln x)^2}.
+  \]
+  对 $x\in(0,1)\cup(1,+\infty)$，分母平方恒正，且分子由题设大于0，所以
+  $g^{\prime}(x)>0$，即 $g$ 在 $(0,1)$ 与 $(1,+\infty)$ 各自递增。
+  因为 $2,4,8\in(1,+\infty)$，故
+  \[
+  g(2)<g(4)<g(8).
+  \]
+  即
+  \[
+  \frac{f(2)}{2\ln2}<\frac{f(4)}{4\ln4}<\frac{f(8)}{8\ln8}.
+  \]
+  代入 $\ln4=2\ln2,\ \ln8=3\ln2$ 化简得
+  \[
+  12f(2)<3f(4)<f(8),
+  \]
+  即 $f(8)>3f(4)>12f(2)$，选 C。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把题设改写成 xlnx 乘导数的标准减法形式。
+      max_score: 1
+    - step_id: step_2
+      description: 作商构造并判 g 在相关区间递增。
+      max_score: 1
+    - step_id: step_3
+      description: 从 g(2)<g(4)<g(8) 还原到选项所需倍数链。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较 $12f(2),3f(4),f(8)$ 的大小链
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+    subroute:
+      - 对数基础构造
+      - 作商判单调
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 抽象函数结构
+    evidence:
+      - $1+\ln x$ 结构对应 $x\ln x$ 的乘积导数模板。
+      - $\left(\frac{f}{x\ln x}\right)^{\prime}$ 分子与题设不等式同号。
+      - 目标点 2,4,8 都在 $(1,+\infty)$，可在同一单调区间比较。
+    normalization_moves_used:
+      - 先同乘 $x$ 把分式条件统一到 $x\ln x$。
+      - 作商 $g=\frac{f}{x\ln x}$。
+      - 先比较 g，再用对数常数关系还原到 f。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会识别 $1+\ln x$ 模板，回补指数对数基础。
+      - 若学生在商函数求导时通分出错，回补导数运算与几何意义。
+      - 若学生不会把分式链转成倍数链，回补代数恒等变形。
+  detail_terms:
+    - $g(x)=\frac{f(x)}{x\ln x}$
+    - $g^{\prime}(x)>0$
+    - $g(2)<g(4)<g(8)$
+    - $f(8)>3f(4)>12f(2)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0131_log_xlnx_construct_ex18
+source_evidence:
+  source_refs:
+    - ref_id: page_0131
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0131/page_0131.md
+      role: problem_start
+      evidence: page_0131 中部给出例18完整题干、A-D选项、思路分析与解析，答案 C。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0131.png
+      inspected: true
+      notes: 已核对页图：例18完整位于 page_0131。
+  source_context: 例18在 page_0131 单页完成，后续直接进入例19。
+  source_influence:
+    - 保留源页“先转化为 f^{\prime}(x)x\ln x>(1+\ln x)f(x)”的构造提示。
+    - 保留源页作商 $g(x)=\frac{f(x)}{x\ln x}$ 并判递增。
+    - 保留源页由 g(2)<g(4)<g(8) 推出 $f(8)>3f(4)>12f(2)$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·九江模拟）定义在 $(0,+\infty)$ 上的函数 $f(x)$ 的导函数为 $f^{\prime}(x)$，且对 $\forall x\in(0,+\infty)$ 都有 $f^{\prime}(x)\ln x>\frac{1+\ln x}{x}f(x)$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $12f(2)>3f(4)>f(8)$
+      text_latex: $12f(2)>3f(4)>f(8)$
+    - label: B
+      text_raw: $3f(4)>12f(2)>f(8)$
+      text_latex: $3f(4)>12f(2)>f(8)$
+    - label: C
+      text_raw: $f(8)>3f(4)>12f(2)$
+      text_latex: $f(8)>3f(4)>12f(2)$
+    - label: D
+      text_raw: $f(8)>12f(2)>3f(4)$
+      text_latex: $f(8)>12f(2)>3f(4)$
+  answer: C
+  fidelity_notes:
+    - 源页含“思路分析”行，核心是减法作商并识别 $1+\ln x$ 模板。
+solution:
+  source_solution_summary: |
+    由
+    \[
+    f^{\prime}(x)\ln x>\frac{1+\ln x}{x}f(x)
+    \]
+    得
+    \[
+    f^{\prime}(x)x\ln x-(1+\ln x)f(x)>0.
+    \]
+    令
+    \[
+    g(x)=\frac{f(x)}{x\ln x},
+    \]
+    则
+    \[
+    g^{\prime}(x)=\frac{f^{\prime}(x)x\ln x-(1+\ln x)f(x)}{(x\ln x)^2}.
+    \]
+    对 $x\in(0,1)\cup(1,+\infty)$，分母平方恒正，且分子由题设大于0，所以
+    $g^{\prime}(x)>0$，即 $g$ 在 $(0,1)$ 与 $(1,+\infty)$ 各自递增。
+    因为 $2,4,8\in(1,+\infty)$，故
+    \[
+    g(2)<g(4)<g(8).
+    \]
+    即
+    \[
+    \frac{f(2)}{2\ln2}<\frac{f(4)}{4\ln4}<\frac{f(8)}{8\ln8}.
+    \]
+    代入 $\ln4=2\ln2,\ \ln8=3\ln2$ 化简得
+    \[
+    12f(2)<3f(4)<f(8),
+    \]
+    即 $f(8)>3f(4)>12f(2)$，选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 把题设改写成 xlnx 乘导数的标准减法形式。
+      formula_trace:
+        from: $f^{\prime}(x)\ln x>\frac{1+\ln x}{x}f(x)$
+        to: $f^{\prime}(x)x\ln x-(1+\ln x)f(x)>0$
+        operation: 两边同乘 $x>0$。
+        why: 与 $\left(\frac{f(x)}{x\ln x}\right)^{\prime}$ 分子同构。
+      source_ref: page_0131
+    - step_id: step_2
+      statement: 作商构造并判 g 在相关区间递增。
+      formula_trace:
+        from: $g(x)=\frac{f(x)}{x\ln x}$
+        to: $g^{\prime}(x)>0\ (x\in(0,1),(1,+\infty))$
+        operation: 求导并利用分母平方恒正。
+        why: 得到可比较三点函数值的单调性工具。
+      source_ref: page_0131
+    - step_id: step_3
+      statement: 从 g(2)<g(4)<g(8) 还原到选项所需倍数链。
+      formula_trace:
+        from: $\frac{f(2)}{2\ln2}<\frac{f(4)}{4\ln4}<\frac{f(8)}{8\ln8}$
+        to: $f(8)>3f(4)>12f(2)$
+        operation: 代入 $\ln4=2\ln2,\ln8=3\ln2$ 并同乘正数。
+        why: 直接对应选项 C。
+      source_ref: page_0131
+teaching_card:
+  student_title: 用 $\frac{f}{x\ln x}$ 的递增性做三点倍数比较
+  what_it_trains: 训练从导数不等式构造商函数单调，再把分式比较转回目标倍数链。
+  recognition_cues:
+    - 题设出现 $\frac{1+\ln x}{x}f(x)$。
+    - 选项是固定点 2、4、8 的线性倍数比较。
+  normalization_moves:
+    - 同乘 $x$ 得到 $f^{\prime}(x)x\ln x-(1+\ln x)f(x)>0$。
+    - 构造 $g=\frac{f}{x\ln x}$ 并判递增。
+    - 先比 g(2),g(4),g(8)，再化为 f 的大小链。
+  common_failures:
+    - 忽略 $x=1$ 使分母为0，错误写成全区间单调。
+    - 把 $g(2)<g(4)<g(8)$ 直接误抄成 $f(2)<f(4)<f(8)$。
+    - 化简时把 $\ln4,\ln8$ 的系数弄错。
+  similar_practice_query: 抽象函数 xlnx 作商 f/(xlnx) 单调 比较 12f(2) 3f(4) f(8)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

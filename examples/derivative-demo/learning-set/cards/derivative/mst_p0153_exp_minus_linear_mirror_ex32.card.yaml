@@ -1,0 +1,232 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0153_exp_minus_linear_mirror_ex32
+content_revision_id: mst_p0153_exp_minus_linear_mirror_ex32-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0153_exp_minus_linear_mirror_ex32.card.yaml
+stem: |-
+  （2025·黑龙江·一模）已知实数 $x,y,z$ 满足 $e^x-e^2=e(x-2)\ne0$，$e^y-e^3=e(y-3)\ne0$，$e^z-e^5=e(z-5)\ne0$，其中 $e$ 为自然对数的底数。则 $x,y,z$ 的大小关系是（  ）
+  A. $x<y<z$
+  B. $y<x<z$
+  C. $z<x<y$
+  D. $z<y<x$
+answer: |
+  D
+
+  设
+  \[
+  f(t)=e^t-et.
+  \]
+  则
+  \[
+  f^{\prime}(t)=e^t-e,
+  \]
+  所以 $f$ 在 $(-\infty,1)$ 上单调递减，在 $(1,+\infty)$ 上单调递增。
+
+  由题设
+  \[
+  e^x-e^2=e(x-2),\ e^y-e^3=e(y-3),\ e^z-e^5=e(z-5)
+  \]
+  可化为
+  \[
+  e^x-ex=e^2-2e,\ e^y-ey=e^3-3e,\ e^z-ez=e^5-5e,
+  \]
+  即
+  \[
+  f(x)=f(2),\ f(y)=f(3),\ f(z)=f(5),
+  \]
+  且 $x\ne2,y\ne3,z\ne5$。因此 $x,y,z$ 取的是对应右侧点 $2,3,5$ 的左支反解，故 $x,y,z<1$。
+
+  又因
+  \[
+  f(2)<f(3)<f(5),
+  \]
+  在左支（递减）上反解顺序反向，得到
+  \[
+  z<y<x.
+  \]
+  故选 D。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 构造同构函数并判单调区间。
+      max_score: 1
+    - step_id: step_2
+      description: 把三式化成 $f$ 的函数值等式。
+      max_score: 1
+    - step_id: step_3
+      description: 由“$\ne0$”排除右支同点，锁定左支反解。
+      max_score: 1
+    - step_id: step_4
+      description: 用左支递减性反推变量顺序。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 通过同构函数等值点比较 $x,y,z$ 顺序。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 数形结合
+    subroute:
+      - 构造 $f(t)=e^t-et$
+      - 左支反解镜像
+      - 非零条件排除同点
+  structure:
+    primary: 同构结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 极值点偏移结构
+    evidence:
+      - 三组条件统一成同一函数 $f(t)=e^t-et$ 的等值关系。
+      - $f$ 在 $t=1$ 处分左右单调，两支同值对应是核心结构。
+    normalization_moves_used:
+      - 把 $e^u-e^k=e(u-k)$ 变成 $e^u-eu=e^k-ek$。
+      - 引入 $f(u)=e^u-eu$。
+      - 用“右支点+左支镜像点”完成反推。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f^{\prime}(t)=e^t-e$ 判左右单调，回补导数单调极值基础。
+      - 若学生无法把原式改写为同构等值，回补指数对数基础。
+      - 若学生不理解“递减支上函数值顺序反推变量顺序”，回补函数性质与图像。
+  detail_terms:
+    - $f(t)=e^t-et$
+    - 左支递减
+    - 同值反解
+    - $z<y<x$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0153_exp_minus_linear_mirror_ex32
+source_evidence:
+  source_refs:
+    - ref_id: page_0153_ex32_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0153/page_0153.md
+      role: problem_start
+      evidence: 例32题干与A-D选项完整出现在page_0153。
+    - ref_id: page_0153_ex32_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0153/page_0153.md
+      role: solution
+      evidence: 解析构造 $f(t)=e^t-et$，用单调区间与左支反解得到 $z<y<x$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0153.png
+      inspected: true
+      notes: 已核对页图：例32完整，答案D与解析步骤清晰。
+  source_context: page_0153页首是例31续解，不新建卡；例32是本页第一个新题头。
+  source_influence:
+    - 保留源解核心同构：$f(t)=e^t-et$。
+    - 保留“先比较 $f(2),f(3),f(5)$，再回到左支变量顺序”的课堂节奏。
+    - 保留结论 $z<y<x$ 对应选 D。
+  source_discrepancies: []
+original_problem:
+  stem: （2025·黑龙江·一模）已知实数 $x,y,z$ 满足 $e^x-e^2=e(x-2)\ne0$，$e^y-e^3=e(y-3)\ne0$，$e^z-e^5=e(z-5)\ne0$，其中 $e$ 为自然对数的底数。则 $x,y,z$ 的大小关系是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $x<y<z$
+      text_latex: $x<y<z$
+    - label: B
+      text_raw: $y<x<z$
+      text_latex: $y<x<z$
+    - label: C
+      text_raw: $z<x<y$
+      text_latex: $z<x<y$
+    - label: D
+      text_raw: $z<y<x$
+      text_latex: $z<y<x$
+  answer: D
+  fidelity_notes:
+    - 题设中的“$\ne0$”用于排除 $x=2,y=3,z=5$ 的同点解。
+    - 页图包含例32配图（$f$ 的单峰图像），与文字解析一致。
+solution:
+  source_solution_summary: |
+    设
+    \[
+    f(t)=e^t-et.
+    \]
+    则
+    \[
+    f^{\prime}(t)=e^t-e,
+    \]
+    所以 $f$ 在 $(-\infty,1)$ 上单调递减，在 $(1,+\infty)$ 上单调递增。
+
+    由题设
+    \[
+    e^x-e^2=e(x-2),\ e^y-e^3=e(y-3),\ e^z-e^5=e(z-5)
+    \]
+    可化为
+    \[
+    e^x-ex=e^2-2e,\ e^y-ey=e^3-3e,\ e^z-ez=e^5-5e,
+    \]
+    即
+    \[
+    f(x)=f(2),\ f(y)=f(3),\ f(z)=f(5),
+    \]
+    且 $x\ne2,y\ne3,z\ne5$。因此 $x,y,z$ 取的是对应右侧点 $2,3,5$ 的左支反解，故 $x,y,z<1$。
+
+    又因
+    \[
+    f(2)<f(3)<f(5),
+    \]
+    在左支（递减）上反解顺序反向，得到
+    \[
+    z<y<x.
+    \]
+    故选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 构造同构函数并判单调区间。
+      formula_trace:
+        from: $e^x-e^2=e(x-2)$ 等式组
+        to: 令 $f(t)=e^t-et$，$f^{\prime}(t)=e^t-e$，$f$ 左减右增
+        operation: 把题设改写为函数等值问题。
+        why: 统一三组关系到同一个比较框架。
+      source_ref: page_0153_ex32_solution
+    - step_id: step_2
+      statement: 把三式化成 $f$ 的函数值等式。
+      formula_trace:
+        from: $e^x-e^2=e(x-2)$，$e^y-e^3=e(y-3)$，$e^z-e^5=e(z-5)$
+        to: $f(x)=f(2)$，$f(y)=f(3)$，$f(z)=f(5)$
+        operation: 移项并凑成 $e^t-et$ 形式。
+        why: 进入“同值点在两支对应”的标准模型。
+      source_ref: page_0153_ex32_solution
+    - step_id: step_3
+      statement: 由“$\ne0$”排除右支同点，锁定左支反解。
+      formula_trace:
+        from: $x\ne2,y\ne3,z\ne5$
+        to: $x,y,z<1$
+        operation: 排除右支已知点，只保留左支同值点。
+        why: 后续顺序比较发生在同一单调支上。
+      source_ref: page_0153_ex32_solution
+    - step_id: step_4
+      statement: 用左支递减性反推变量顺序。
+      formula_trace:
+        from: $f(2)<f(3)<f(5)$ 且 $x,y,z$ 在左支
+        to: $z<y<x$
+        operation: 递减函数的反向保序。
+        why: 得到与选项对应的唯一顺序。
+      source_ref: page_0153_ex32_solution
+teaching_card:
+  student_title: 同构函数的左支反解排序
+  what_it_trains: 训练把指数线性混合等式统一成同一函数等值，再用左右支单调性反推未知量顺序。
+  recognition_cues:
+    - 多组方程都形如 $e^u-e^k=e(u-k)$。
+    - 题设附带“$\ne0$”限制，提示要排除某个显然解。
+    - 目标是三个未知量的大小关系。
+  normalization_moves:
+    - 移项凑成 $e^u-eu=e^k-ek$。
+    - 统一到 $f(u)=e^u-eu$。
+    - 先判 $f(2),f(3),f(5)$，再用左支递减反推。
+  common_failures:
+    - 忽略“$\ne0$”，误把 $x=2,y=3,z=5$ 当作解。
+    - 只判到 $f(2)<f(3)<f(5)$，忘记回到变量顺序会反向。
+    - 把 $f^{\prime}(t)$ 符号区间写反。
+  similar_practice_query: e^x-ex 同构函数 左支反解 比大小
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

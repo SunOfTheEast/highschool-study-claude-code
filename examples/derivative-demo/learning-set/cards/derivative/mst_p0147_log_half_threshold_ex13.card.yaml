@@ -1,0 +1,193 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0147_log_half_threshold_ex13
+content_revision_id: mst_p0147_log_half_threshold_ex13-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0147_log_half_threshold_ex13.card.yaml
+stem: |-
+  （2021·新高考 II 卷）已知 $a=\log_5 2,\ b=\log_8 3,\ c=\frac{1}{2}$，则下列判断正确的是（  ）
+  A. $c<b<a$
+  B. $b<a<c$
+  C. $a<c<b$
+  D. $a<b<c$
+answer: |
+  C
+
+  先比较 $a$ 与 $c=\frac12$：
+  \[
+  a=\log_5 2<\log_5 5^{1/2}=\frac12=c.
+  \]
+  再比较 $b$ 与 $c=\frac12$：
+  \[
+  b=\log_8 3>\log_8 8^{1/2}=\frac12=c.
+  \]
+  所以
+  \[
+  a<c<b.
+  \]
+  对应选项 C。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 选取共同阈值 $c=\frac12$。
+      max_score: 1
+    - step_id: step_2
+      description: 证明 $a<c$。
+      max_score: 1
+    - step_id: step_3
+      description: 证明 $b>c$。
+      max_score: 1
+    - step_id: step_4
+      description: 合并并匹配选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较两项对数与给定常数 $\frac12$ 的相对位置。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 局部逼近与找点
+    subroute:
+      - 半阈值比较
+      - 同底单调性
+      - 中间变量夹层
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - 未知顺序通过常数 $c=\frac12$ 分层比较，不需直接比较 $\log_5 2$ 与 $\log_8 3$。
+      - 两项都可改写为“与同底指数 $5^{1/2},8^{1/2}$ 比较真数”的同构判断。
+    normalization_moves_used:
+      - 锁定共同参照值 $\frac12$。
+      - $\log_5 2$ 与 $\log_5 5^{1/2}$ 对比。
+      - $\log_8 3$ 与 $\log_8 8^{1/2}$ 对比。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\frac12$ 写成 $\log_5 5^{1/2}$ 或 $\log_8 8^{1/2}$，回补指数对数基础。
+      - 若学生混淆底数大于1时的单调方向，回补函数性质与图像。
+      - 若学生不能把两条比较合并成全序，回补不等式工具基础。
+  detail_terms:
+    - $c=\frac12$ 阈值
+    - $\log_5 5^{1/2}$
+    - $\log_8 8^{1/2}$
+    - $a<c<b$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0147_log_half_threshold_ex13
+source_evidence:
+  source_refs:
+    - ref_id: page_0147_ex13_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0147/page_0147.md
+      role: problem_start
+      evidence: 例12与例14之间出现题头“**3**”：$(2021\cdot 新高考 II 卷)$ 已知 $a=\log_5 2,\ b=\log_8 3,\ c=\frac12$，判断选项。
+    - ref_id: page_0147_ex13_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0147/page_0147.md
+      role: solution
+      evidence: 解析：$\log_5 2<\log_5 5^{1/2}=1/2$，$\log_8 3>\log_8 8^{1/2}=1/2$，所以 $a<c<b$，选C。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0147.png
+      inspected: true
+      notes: 已核对页图：该题位于例12与例14之间，蓝色题头只清晰显示“3”；题干与答案C清楚可读。
+  source_context: 本题位于“转化为同底数或同真数”小节，采用半阈值 $1/2$ 做双边比较。
+  source_influence:
+    - 保留源解“分别与 $1/2$ 比较，再合并顺序”的一步法。
+    - 保留题型为单选，结论 $a<c<b$ 对应选项C。
+  source_discrepancies:
+    - page_0147 markdown题头记作“**3**”，页图蓝色题签也仅清晰显示“3”；结合题序（例12后、例14前）与本批expected_heads，按例13归档。
+original_problem:
+  stem: （2021·新高考 II 卷）已知 $a=\log_5 2,\ b=\log_8 3,\ c=\frac{1}{2}$，则下列判断正确的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $c<b<a$
+      text_latex: $c<b<a$
+    - label: B
+      text_raw: $b<a<c$
+      text_latex: $b<a<c$
+    - label: C
+      text_raw: $a<c<b$
+      text_latex: $a<c<b$
+    - label: D
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+  answer: C
+  fidelity_notes:
+    - 题干与选项完整在page_0147。
+    - 题号显示异常（见source_discrepancies），但数学内容可完整恢复。
+solution:
+  source_solution_summary: |
+    先比较 $a$ 与 $c=\frac12$：
+    \[
+    a=\log_5 2<\log_5 5^{1/2}=\frac12=c.
+    \]
+    再比较 $b$ 与 $c=\frac12$：
+    \[
+    b=\log_8 3>\log_8 8^{1/2}=\frac12=c.
+    \]
+    所以
+    \[
+    a<c<b.
+    \]
+    对应选项 C。
+  key_steps:
+    - step_id: step_1
+      statement: 选取共同阈值 $c=\frac12$。
+      formula_trace:
+        from: $a=\log_5 2,\ b=\log_8 3,\ c=\frac12$
+        to: 分别比较 $a,c$ 与 $b,c$
+        operation: 把三数比较拆成两个二元比较。
+        why: 阈值在题干已给出，最省步骤。
+      source_ref: page_0147_ex13_solution
+    - step_id: step_2
+      statement: 证明 $a<c$。
+      formula_trace:
+        from: $a=\log_5 2$
+        to: $a<\log_5 5^{1/2}=\frac12=c$
+        operation: 底数5大于1，对数函数递增；比较真数 $2$ 与 $\sqrt5$。
+        why: 给出下界侧关系。
+      source_ref: page_0147_ex13_solution
+    - step_id: step_3
+      statement: 证明 $b>c$。
+      formula_trace:
+        from: $b=\log_8 3$
+        to: $b>\log_8 8^{1/2}=\frac12=c$
+        operation: 底数8大于1，对数函数递增；比较真数 $3$ 与 $\sqrt8$。
+        why: 给出上界侧关系。
+      source_ref: page_0147_ex13_solution
+    - step_id: step_4
+      statement: 合并并匹配选项。
+      formula_trace:
+        from: $a<c$ 且 $b>c$
+        to: $a<c<b$，选 C
+        operation: 传递性与选项对照。
+        why: 完成作答。
+      source_ref: page_0147_ex13_solution
+teaching_card:
+  student_title: 给你一个常数，就别硬比两条对数
+  what_it_trains: 训练“先找公共阈值再排序”的对数比较基本动作。
+  recognition_cues:
+    - 三数里包含显式常数（如 $\frac12$）。
+    - 其余两项是不同底对数，直接互比不方便。
+    - 选项是纯顺序判断。
+  normalization_moves:
+    - 把常数改写成对应底数的对数值。
+    - 分别判定每项在阈值上下。
+    - 最后用“左-中-右”拼接顺序。
+  common_failures:
+    - 误把 $\sqrt8$ 看成小于3，导致 $b<c$。
+    - 把底数大于1时的对数单调性写反。
+    - 只得到 $a<c$ 或 $b>c$ 之一，未完成全序。
+  similar_practice_query: log5 2 log8 3 1/2 阈值法 对数比大小
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 题号在markdown/页图均显示异常（“3”），但依据页内序位与题干内容可稳定落为本批例13。

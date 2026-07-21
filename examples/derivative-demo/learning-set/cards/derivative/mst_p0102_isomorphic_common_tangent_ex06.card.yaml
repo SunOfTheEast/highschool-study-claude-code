@@ -1,0 +1,192 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0102_isomorphic_common_tangent_ex06
+content_revision_id: mst_p0102_isomorphic_common_tangent_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0102_isomorphic_common_tangent_ex06.card.yaml
+stem: |-
+  （2023 福建泉州四校期末 T8）已知直线 $y=kx+b$ 是曲线 $y=x^2-(a+1)$ 的切线，也是曲线 $y=a\ln x-1$ 的切线，则 $a$ 的最大值是 （  ）
+  A. $\frac{2}{e}$
+  B. $\frac{4}{e}$
+  C. $2e$
+  D. $4e$
+answer: |
+  A
+
+  设公切线分别切于
+  $A(x_1,x_1^2-(a+1))$ 与 $B(x_2,a\ln x_2-1)$。由导数相等和
+  两切点连线斜率等于切线斜率，
+  $k=2x_1=\frac{a}{x_2}
+  =\frac{x_1^2-(a+1)-a\ln x_2+1}{x_1-x_2}$。
+  由 $2x_1=\frac{a}{x_2}$ 得 $x_1=\frac{a}{2x_2}$，代回并整理：
+  $\frac{a^2}{4x_2^2}=-a\ln x_2$，
+  所以 $a=-4x_2^2\ln x_2=-2x_2^2\ln x_2^2$。
+  令 $t=x_2^2>0$，则 $a=-2t\ln t\le\frac2e$，
+  等号在 $t=e^{-1}$ 即 $x_2=e^{-1/2}$ 时取到，故选 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 设两条曲线上的切点并写斜率关系。
+      max_score: 1
+    - step_id: step_2
+      description: 把同一条直线经过两个切点写成连线斜率。
+      max_score: 1
+    - step_id: step_3
+      description: 消去 $x_1$，把参数 $a$ 化成只含 $x_2$ 的式子。
+      max_score: 1
+    - step_id: step_4
+      description: 同构到 $-t\ln t$ 求最大值。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 自由度与主元
+      - 数形结合
+    subroute:
+      - 公切线双切点设元
+      - 切点连线斜率
+      - $-t\ln t$ 同构最值
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 同构结构
+      - 非齐次结构
+    evidence:
+      - $k=2x_1=\frac{a}{x_2}$ 绑定两个切点导数。
+      - $x_1=\frac{a}{2x_2}$ 将双切点降为单切点变量。
+      - $a=-2x_2^2\ln x_2^2$ 对应 $-t\ln t$ 的标准同构。
+    normalization_moves_used:
+      - 先设两个切点，避免把两曲线误认为同点相切。
+      - 用切线经过两切点把截距 $b$ 消掉。
+      - 令 $t=x_2^2$，把对数和二次幂合并到同构函数。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会分别求 $x^2-(a+1)$ 与 $a\ln x-1$ 的导数，回补导数运算与几何意义。
+      - 若学生不会写两切点连线斜率，回补几何关系基础。
+      - 若学生从分式关系整理不到 $\frac{a^2}{4x_2^2}=-a\ln x_2$，回补代数恒等变形。
+      - 若学生不知道 $-t\ln t$ 的最大值，回补导数单调极值基础。
+  detail_terms:
+    - $y=x^2-(a+1)$
+    - $y=a\ln x-1$
+    - $x_1=\frac{a}{2x_2}$
+    - $a=-2x_2^2\ln x_2^2$
+    - $a_{\max}=\frac2e$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0102_isomorphic_common_tangent_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0102
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0102/page_0102.md
+      role: problem_start
+      evidence: lines 24-37 introduce 同构与公切线, give 例 6 题头、A-D 选项、完整解析、answer A, and a source note on 六大同构函数。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0102.png
+      inspected: true
+      notes: 已核对 page_0102 图像：例 6 题干、选项、代数推导和 $a\le 2/e$ 的结论清晰，答案为 A。
+  source_context: 例 6 位于“三、同构与公切线”开头之后，承接公共切线转同构函数求最值的课堂说明。
+  source_influence:
+    - 保留源页的双切点设元：二次曲线切点 $x_1$、对数曲线切点 $x_2$。
+    - 保留源页从公切线斜率和两切点连线斜率得到 $a=-4x_2^2\ln x_2$，再同构到 $-2t\ln t$ 求最大值。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 福建泉州四校期末 T8）已知直线 $y=kx+b$ 是曲线 $y=x^2-(a+1)$ 的切线，也是曲线 $y=a\ln x-1$ 的切线，则 $a$ 的最大值是 （  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\frac{2}{e}$
+      text_latex: $\frac{2}{e}$
+    - label: B
+      text_raw: $\frac{4}{e}$
+      text_latex: $\frac{4}{e}$
+    - label: C
+      text_raw: $2e$
+      text_latex: $2e$
+    - label: D
+      text_raw: $4e$
+      text_latex: $4e$
+  answer: A
+  fidelity_notes:
+    - 题干、选项和解析均在 page_0102。
+    - 源页等号条件写“当 $x=e^{-1/2}$ 时等号成立”，本卡按设元记为 $x_2=e^{-1/2}$。
+solution:
+  source_solution_summary: |
+    设公切线分别切于
+    $A(x_1,x_1^2-(a+1))$ 与 $B(x_2,a\ln x_2-1)$。由导数相等和
+    两切点连线斜率等于切线斜率，
+    $k=2x_1=\frac{a}{x_2}
+    =\frac{x_1^2-(a+1)-a\ln x_2+1}{x_1-x_2}$。
+    由 $2x_1=\frac{a}{x_2}$ 得 $x_1=\frac{a}{2x_2}$，代回并整理：
+    $\frac{a^2}{4x_2^2}=-a\ln x_2$，
+    所以 $a=-4x_2^2\ln x_2=-2x_2^2\ln x_2^2$。
+    令 $t=x_2^2>0$，则 $a=-2t\ln t\le\frac2e$，
+    等号在 $t=e^{-1}$ 即 $x_2=e^{-1/2}$ 时取到，故选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 设两条曲线上的切点并写斜率关系。
+      formula_trace:
+        from: |
+          $y=x^2-(a+1),\quad y'=2x;\qquad y=a\ln x-1,\quad y'=\frac{a}{x}$
+        to: |
+          $k=2x_1=\frac{a}{x_2}$
+        operation: 分别对两条曲线求导，并令公切线在两个切点处斜率相同。
+        why: 公切线的同一斜率要同时等于两条曲线在各自切点处的导数。
+      source_ref: page_0102
+    - step_id: step_2
+      statement: 把同一条直线经过两个切点写成连线斜率。
+      formula_trace:
+        from: |
+          $A(x_1,x_1^2-(a+1)),\quad B(x_2,a\ln x_2-1)$
+        to: |
+          $2x_1=\frac{x_1^2-(a+1)-a\ln x_2+1}{x_1-x_2}$
+        operation: 用两切点纵差除以横差表示公切线斜率。
+        why: 同一条切线既切于两点，也经过两切点。
+      source_ref: page_0102
+    - step_id: step_3
+      statement: 消去 $x_1$，把参数 $a$ 化成只含 $x_2$ 的式子。
+      formula_trace:
+        from: |
+          $x_1=\frac{a}{2x_2},\quad
+          \frac{a}{x_2}=\frac{\frac{a^2}{4x_2^2}-a-a\ln x_2}{\frac{a}{2x_2}-x_2}$
+        to: |
+          $\frac{a^2}{2x_2^2}-a=\frac{a^2}{4x_2^2}-a-a\ln x_2,\qquad
+          \frac{a^2}{4x_2^2}=-a\ln x_2$
+        operation: 代入 $x_1$ 后交叉相乘并整理同类项。
+        why: 先降到一个切点变量，后面才能做单变量最值。
+      source_ref: page_0102
+    - step_id: step_4
+      statement: 同构到 $-t\ln t$ 求最大值。
+      formula_trace:
+        from: |
+          $\frac{a^2}{4x_2^2}=-a\ln x_2$
+        to: |
+          $a=-4x_2^2\ln x_2=-2x_2^2\ln x_2^2=-2t\ln t\le\frac2e$
+        operation: 令 $t=x_2^2>0$，调用 $-t\ln t$ 在 $t=e^{-1}$ 处取最大值 $1/e$。
+        why: 源页把公切线问题归到六大同构函数的最值。
+      source_ref: page_0102
+teaching_card:
+  student_title: 把二次和对数的公切线化成 $-t\ln t$
+  what_it_trains: 训练用两个切点写公切线条件，再把参数最大值压缩成一个熟悉的同构函数最值。
+  recognition_cues:
+    - 题目说同一条直线分别是两条曲线的切线，不一定在同一点相切。
+    - 一条是二次函数，一条是含 $a\ln x$，常会整理出 $x^2\ln x$ 型同构。
+    - 问 $a$ 的最大值，说明要把 $a$ 表成一个正变量的函数。
+  normalization_moves:
+    - 分别设两个切点 $x_1,x_2$。
+    - 用 $2x_1=\frac{a}{x_2}$ 先消去 $x_1$。
+    - 把 $a$ 写成 $-2t\ln t$ 后直接取最大值。
+  common_failures:
+    - 误把公切线理解成公共点处的切线，少设一个切点。
+    - 两切点连线斜率的纵差中漏掉常数 $-(a+1)$ 与 $-1$ 的抵消。
+    - 从 $-4x_2^2\ln x_2$ 到 $-2x_2^2\ln x_2^2$ 时漏掉系数 $2$。
+  similar_practice_query: 二次函数 对数函数 公切线 $-t\\ln t$ 参数最大值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0102 图像与 markdown 对例 6 题干、选项、公式推导和答案 A 一致。

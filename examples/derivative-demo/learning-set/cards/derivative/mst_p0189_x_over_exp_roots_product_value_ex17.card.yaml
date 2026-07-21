@@ -1,0 +1,161 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0189_x_over_exp_roots_product_value_ex17
+content_revision_id: mst_p0189_x_over_exp_roots_product_value_ex17-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0189_x_over_exp_roots_product_value_ex17.card.yaml
+stem: |-
+  （2020 · 四川攀枝花期末 T12）已知函数 $f(x)=\left(\frac{x}{e^x}\right)^2+\frac{ax}{e^x}-a$ 有三个不同的零点 $x_1,x_2,x_3$（其中 $x_1<x_2<x_3$），则 $\left(1-\frac{x_1}{e^{x_1}}\right)^2\left(1-\frac{x_2}{e^{x_2}}\right)\left(1-\frac{x_3}{e^{x_3}}\right)$ 的值为（  ）
+  A. 1
+  B. -1
+  C. $a$
+  D. $-a$
+answer: |-
+  A
+
+  令 $t=g(x)=\frac{x}{e^x}$，则 $g^{\prime}(x)=\frac{1-x}{e^x}$，所以 $g(x)$ 在 $(-\infty,1)$ 递增、在 $(1,+\infty)$ 递减，最大值是 $g(1)=\frac1e$。由 $f(x)=\left(\frac{x}{e^x}\right)^2+\frac{ax}{e^x}-a=0$ 得 $t^2+at-a=0$。按三零点条件可知该二次式两根满足 $t_1<0<t_2<\frac1e$，且 $t_1=\frac{x_1}{e^{x_1}}$ 对应一个负根 $x_1<0$，$t_2=\frac{x_2}{e^{x_2}}=\frac{x_3}{e^{x_3}}$ 对应两根 $0<x_2<1<x_3$。于是 $\left(1-\frac{x_1}{e^{x_1}}\right)^2\left(1-\frac{x_2}{e^{x_2}}\right)\left(1-\frac{x_3}{e^{x_3}}\right) =(1-t_1)^2(1-t_2)^2=[(1-t_1)(1-t_2)]^2$。 再用韦达 $t_1+t_2=-a,\ t_1t_2=-a$ 得 $[(1-t_1)(1-t_2)]^2=[1-(t_1+t_2)+t_1t_2]^2=1$，故选 A。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 先把原方程压到单变量模板 $t=\frac{x}{e^x}$。
+      max_score: 1
+    - step_id: step_2
+      description: 用 $g(x)=\frac{x}{e^x}$ 的单峰图像判根分配。
+      max_score: 1
+    - step_id: step_3
+      description: 把目标式改写为韦达可算的积定值。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+      - 拟合与夹逼
+    subroute:
+      - 积定值
+      - 参数判根数
+      - 先解 t 再回代 x
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $t=\frac{x}{e^x}$
+      - $t^2+at-a=0$
+      - $g^{\prime}(x)=\frac{1-x}{e^x}$
+      - $[(1-t_1)(1-t_2)]^2
+    normalization_moves_used:
+      - 把 $x$ 零点问题改写为 $t$ 二次根问题。
+      - 用单峰函数的“一个水平值可对应两根”完成根分配。
+      - 把四因子表达式降成韦达模板。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会判断 $g(x)=\frac{x}{e^x}$ 的单调区间，回补导数单调极值基础。
+      - 若学生不能把换元后二次根与原根个数对应起来，回补方程根分布与韦达。
+      - 若学生在 $1-(t_1+t_2)+t_1t_2$ 化简中反复出错，回补代数恒等变形。
+      - 若学生对 $\frac{x}{e^x}$ 的构造不敏感，回补指数对数基础。
+  detail_terms:
+    - $t=\frac{x}{e^x}$
+    - $t_1<0<t_2<\frac1e$
+    - $x_1<0<x_2<1<x_3$
+    - $t_1+t_2=-a,\ t_1t_2=-a$
+    - $[(1-t_1)(1-t_2)]^2=1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0189_x_over_exp_roots_product_value_ex17
+source_evidence:
+  source_refs:
+    - ref_id: page_0189_ex17_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0189/page_0189.md
+      role: problem_start
+      evidence: lines 26-31 给出例17题干与 A-D 选项。
+    - ref_id: page_0189_ex17_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0189/page_0189.md
+      role: solution
+      evidence: lines 33-35 给出完整解析：令 $t=\frac{x}{e^x}$，再由根与系数关系化简目标式并得“故选 A”。
+    - ref_id: page_0189_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0189/page_0189.md
+      role: local_context
+      evidence: lines 12-23 是 page_0188 例16续解，只作上下文边界，不建新卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0189.png
+      inspected: true
+      notes: 已核对页图：例17题干、选项、双图示与解析链完整，末句明确“故选A”。
+  source_context: page_0189 顶部是例16续页；本卡只处理从 page_0189 新起头的例17。
+  source_influence:
+    - 保留源解主链：先令 $t=\frac{x}{e^x}$，把三零点条件转成二次式 $t^2+at-a=0$ 的两根结构。
+    - 保留源解图像判根关系：$t_1<0<t_2<\frac1e$，且 $t_1$ 对应一个 $x_1$，$t_2$ 对应两个根 $x_2,x_3$。
+    - 保留“积定值”化简：把原式写成 $[(1-t_1)(1-t_2)]^2$ 后用韦达直接算值。
+  source_discrepancies: []
+original_problem:
+  stem: （2020 · 四川攀枝花期末 T12）已知函数 $f(x)=\left(\frac{x}{e^x}\right)^2+\frac{ax}{e^x}-a$ 有三个不同的零点 $x_1,x_2,x_3$（其中 $x_1<x_2<x_3$），则 $\left(1-\frac{x_1}{e^{x_1}}\right)^2\left(1-\frac{x_2}{e^{x_2}}\right)\left(1-\frac{x_3}{e^{x_3}}\right)$ 的值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: "1"
+      text_latex: "1"
+    - label: B
+      text_raw: "-1"
+      text_latex: "-1"
+    - label: C
+      text_raw: $a$
+      text_latex: $a$
+    - label: D
+      text_raw: $-a$
+      text_latex: $-a$
+  answer: A
+  fidelity_notes:
+    - 源题为单选题，选项 A-D 与答案 A 已按 page_0189 保留。
+    - 题中目标式第一因子平方、后两因子一次的结构保持不变。
+solution:
+  source_solution_summary: 令 $t=g(x)=\frac{x}{e^x}$，则 $g^{\prime}(x)=\frac{1-x}{e^x}$，所以 $g(x)$ 在 $(-\infty,1)$ 递增、在 $(1,+\infty)$ 递减，最大值是 $g(1)=\frac1e$。由 $f(x)=\left(\frac{x}{e^x}\right)^2+\frac{ax}{e^x}-a=0$ 得 $t^2+at-a=0$。按三零点条件可知该二次式两根满足 $t_1<0<t_2<\frac1e$，且 $t_1=\frac{x_1}{e^{x_1}}$ 对应一个负根 $x_1<0$，$t_2=\frac{x_2}{e^{x_2}}=\frac{x_3}{e^{x_3}}$ 对应两根 $0<x_2<1<x_3$。于是 $\left(1-\frac{x_1}{e^{x_1}}\right)^2\left(1-\frac{x_2}{e^{x_2}}\right)\left(1-\frac{x_3}{e^{x_3}}\right) =(1-t_1)^2(1-t_2)^2=[(1-t_1)(1-t_2)]^2$。 再用韦达 $t_1+t_2=-a,\ t_1t_2=-a$ 得 $[(1-t_1)(1-t_2)]^2=[1-(t_1+t_2)+t_1t_2]^2=1$，故选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 先把原方程压到单变量模板 $t=\frac{x}{e^x}$。
+      formula_trace:
+        from: $\left(\frac{x}{e^x}\right)^2+\frac{ax}{e^x}-a=0$
+        to: $t^2+at-a=0,\quad t=\frac{x}{e^x}$
+        operation: 同构换元，把零点方程转成二次方程。
+        why: 便于用根与系数关系处理目标乘积。
+      source_ref: page_0189_ex17_solution
+    - step_id: step_2
+      statement: 用 $g(x)=\frac{x}{e^x}$ 的单峰图像判根分配。
+      formula_trace:
+        from: $g^{\prime}(x)=\frac{1-x}{e^x},\ g_{\max}=g(1)=\frac1e$
+        to: $t_1<0<t_2<\frac1e$ 且 $t_1\leftrightarrow x_1,\ t_2\leftrightarrow x_2,x_3$
+        operation: 由递增-递减与水平线交点个数判定。
+        why: 确定一个 $t$ 根对应一个或两个 $x$ 根。
+      source_ref: page_0189_ex17_solution
+    - step_id: step_3
+      statement: 把目标式改写为韦达可算的积定值。
+      formula_trace:
+        from: $\left(1-\frac{x_1}{e^{x_1}}\right)^2\left(1-\frac{x_2}{e^{x_2}}\right)\left(1-\frac{x_3}{e^{x_3}}\right)$
+        to: $[(1-t_1)(1-t_2)]^2=[1-(t_1+t_2)+t_1t_2]^2=1$
+        operation: 代入 $t_i$ 对应关系并用 $t_1+t_2=-a,\ t_1t_2=-a$。
+        why: 参数 $a$ 抵消，得到常数值。
+      source_ref: page_0189_ex17_solution
+teaching_card:
+  student_title: 先压成 t 二次式，再做积定值
+  what_it_trains: 训练把“零点个数 + 指数分母”问题同构到 $t=\frac{x}{e^x}$，并用韦达做一键化简。
+  recognition_cues:
+    - 式子里反复出现 $\frac{x}{e^x}$。
+    - 题目给三个零点并要求求积式常数值。
+    - 目标式能写成 $(1-t_1)$、$(1-t_2)$ 的组合。
+  normalization_moves:
+    - 令 $t=\frac{x}{e^x}$。
+    - 先判 $t$ 根所在区间，再判每个 $t$ 根对应几个 $x$ 根。
+    - 把目标式收束为 $1-(t_1+t_2)+t_1t_2$。
+  common_failures:
+    - 只做了换元但没处理“一个 $t$ 根对应两个 $x$ 根”。
+    - 把 $t_1t_2$ 符号写错成 $a$。
+    - 忽略第一因子平方，导致最后少一次方。
+  similar_practice_query: x/e^x 三零点 换元二次方程 韦达 积定值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

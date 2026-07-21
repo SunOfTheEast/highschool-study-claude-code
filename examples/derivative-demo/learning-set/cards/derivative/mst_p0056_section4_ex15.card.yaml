@@ -1,0 +1,145 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0056_section4_ex15
+content_revision_id: mst_p0056_section4_ex15-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0056_section4_ex15.card.yaml
+stem: （2025 · 新高考二卷）若 $x=2$ 是函数 $f(x)=(x-1)(x-2)(x-a)$ 的极值点，则 $f(0)=$________。
+answer: |
+  $-4$
+
+  对 $f(x)=(x-1)(x-2)(x-a)$ 求导，得
+  $f^{\prime}(x)=(x-1)(x-2)+(2x-3)(x-a)$。因为 $x=2$ 是极值点，所以必须有 $f^{\prime}(2)=0$，即 $2-a=0$，从而 $a=2$。代回原函数，$f(0)=(0-1)(0-2)(0-2)=-4$。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 对三因式乘积求导。
+      max_score: 1
+    - step_id: step_2
+      description: 由 $x=2$ 是极值点提取必要条件。
+      max_score: 1
+    - step_id: step_3
+      description: 求出参数并代回求 $f(0)$。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level:
+      - part_id: item_1
+        goal: 零点/极值点分析
+        target: 由极值点条件确定 $a$，再求 $f(0)$。
+        result: 见 source_solution_summary
+  method:
+    primary: 充分/必要性探路
+    secondary:
+      - 局部逼近与找点
+    subroute:
+      - 极值点导数为零
+      - 乘积求导定参
+  structure:
+    primary: 三次/高次函数结构
+    secondary:
+      - 局部逼近结构
+    evidence:
+      - $f(x)=(x-1)(x-2)(x-a)$ 是三次多项式。
+      - $x=2$ 为极值点给出 $f^{\prime}(2)=0$。
+      - $f^{\prime}(2)=2-a$ 直接确定参数。
+    normalization_moves_used:
+      - 先求导而不是直接展开三次式。
+      - 把“是极值点”翻译成 $f^{\prime}(2)=0$。
+      - 定出 $a=2$ 后再代入 $x=0$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不知道极值点处导数为零，回补导数单调极值基础。
+      - 若学生对三因式乘积求导漏项，回补导数运算与几何意义。
+      - 若学生求出 $a$ 后忘记回到 $f(0)$，回补函数三要素与定义域。
+  detail_terms:
+    - $f(x)=(x-1)(x-2)(x-a)$
+    - $f^{\prime}(2)=0$
+    - $a=2$
+    - $f(0)=-4$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0056_section4_ex15
+source_evidence:
+  source_refs:
+    - ref_id: page_0056_ex15_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0056/page_0056.md
+      role: problem_start
+      evidence: 例 15：（2025 · 新高考二卷）若 $x=2$ 是函数 $f(x)=(x-1)(x-2)(x-a)$ 的极值点，则求 $f(0)$。
+    - ref_id: page_0056_ex15_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0056/page_0056.md
+      role: solution
+      evidence: 解析由 $f^{\prime}(x)=(x-1)(x-2)+(2x-3)(x-a)$，代入 $f^{\prime}(2)=2-a=0$ 得 $a=2$，再算 $f(0)=-4$。
+    - ref_id: page_0056_top_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0056/page_0056.md
+      role: local_context
+      evidence: page_0056 顶部两幅图是 page_0055 例 14 的续图；例 15 从图下方重新起头。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0056.png
+      inspected: true
+      notes: 页图已核对：顶部两幅图属于例 14 续图；例 15 的题干和解析与 markdown 一致。
+  source_context: 本卡只处理 page_0056 新起头的例 15；上一题续图不并入本题。
+  source_influence:
+    - 保留源解的最短路线：由极值点必要条件 $f^{\prime}(2)=0$ 先定参，再代入求值。
+    - 答案按源页给出的 $-4$。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 · 新高考二卷）若 $x=2$ 是函数 $f(x)=(x-1)(x-2)(x-a)$ 的极值点，则 $f(0)=$________。
+  parts: *a1
+  choices: []
+  answer: $-4$
+  fidelity_notes:
+    - 源题为空格填空题，无选项。
+    - 源页题干只给出 $x=2$ 是极值点；解析使用必要条件 $f^{\prime}(2)=0$。
+solution:
+  source_solution_summary: |
+    对 $f(x)=(x-1)(x-2)(x-a)$ 求导，得
+    $f^{\prime}(x)=(x-1)(x-2)+(2x-3)(x-a)$。因为 $x=2$ 是极值点，所以必须有 $f^{\prime}(2)=0$，即 $2-a=0$，从而 $a=2$。代回原函数，$f(0)=(0-1)(0-2)(0-2)=-4$。
+  key_steps:
+    - step_id: step_1
+      statement: 对三因式乘积求导。
+      formula_trace:
+        from: $f(x)=(x-1)(x-2)(x-a)$
+        to: $f^{\prime}(x)=(x-1)(x-2)+(2x-3)(x-a)$
+        operation: 把 $(x-1)(x-2)$ 看作一组，使用乘积求导。
+        why: 极值点条件要落到导数为零上。
+      source_ref: page_0056_ex15_solution
+    - step_id: step_2
+      statement: 由 $x=2$ 是极值点提取必要条件。
+      formula_trace:
+        from: $x=2\ \text{是极值点}$
+        to: $f^{\prime}(2)=2-a=0$
+        operation: 把 $x=2$ 代入导函数。
+        why: 可导函数在内点取得极值时导数为零。
+      source_ref: page_0056_ex15_solution
+    - step_id: step_3
+      statement: 求出参数并代回求 $f(0)$。
+      formula_trace:
+        from: $2-a=0$
+        to: $a=2,\quad f(0)=(0-1)(0-2)(0-2)=-4$
+        operation: 解一次方程后代入原函数。
+        why: 题目最终要求的是函数值，不是参数本身。
+      source_ref: page_0056_ex15_solution
+teaching_card:
+  student_title: 极值点先让导数等于零
+  what_it_trains: 训练从“某点是极值点”中提取导数条件，先定参数再回到目标函数值。
+  recognition_cues:
+    - 题干给出一个具体极值点 $x=2$。
+    - 函数含参数 $a$，但最终问的是 $f(0)$。
+    - 原式保持因式分解形态，代入和求导都很快。
+  normalization_moves:
+    - 先求 $f^{\prime}(x)$。
+    - 把 $x=2$ 代入导函数，得到关于 $a$ 的方程。
+    - 用定出的 $a$ 计算 $f(0)$。
+  common_failures:
+    - 把 $f(2)=0$ 当成极值点条件，忽略 $f^{\prime}(2)=0$。
+    - 展开三次式后求导出错。
+    - 只答 $a=2$，没有计算题目要求的 $f(0)$。
+  similar_practice_query: 三次函数 极值点 导数为零 定参 求函数值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0056 页图；例 15 题干和解析完整，顶部例 14 续图已排除。

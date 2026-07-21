@@ -1,0 +1,151 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0018_ex07
+content_revision_id: mst_p0018_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0018_ex07.card.yaml
+stem: |-
+  函数 $f(x)=\frac{a+\ln x}{x}$ 的单调增区间为 ( )
+  A. $(-\infty, \mathrm{e}^{1-a})$
+  B. $(0, \mathrm{e}^{1-a})$
+  C. $(0, \mathrm{e}^a)$
+  D. $(\mathrm{e}^a,+\infty)$
+answer: |-
+  B. $(0, \mathrm{e}^{1-a})$
+
+  将 $f(x)=\frac{a+\ln x}{x}$ 写成 $e^a\frac{\ln(e^a x)}{e^a x}$。由于 $y=\frac{\ln u}{u}$ 在 $(0,e)$ 上单调递增，在 $(e,+\infty)$ 上单调递减， 所以 $e^a x\in(0,e)$ 时原函数单调递增，即 $x\in(0,e^{1-a})$，选 B。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把参数 a 藏进对数的输入，化到标准模型。
+      max_score: 1
+    - step_id: step_2
+      description: 读取同构模型的递增输入范围。
+      max_score: 1
+    - step_id: step_3
+      description: 把输入范围解回 x 的区间并对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - ln x / x 单调区间
+      - a+ln x 化为 ln(e^a x)
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 非齐次结构
+    evidence:
+      - $\frac{a+\ln x}{x}$ 通过 $u=e^a x$ 化为 $\frac{\ln u}{u}$ 的正倍数。
+    normalization_moves_used:
+      - $a+\ln x=\ln(e^a x)$。
+      - $\frac{a+\ln x}{x}=e^a\frac{\ln(e^a x)}{e^a x}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $a+\ln x$ 化成 $\ln(e^a x)$，回补指数对数基础。
+      - 若学生不会把 $\frac{a+\ln x}{x}$ 配成 $e^a\frac{\ln(e^a x)}{e^a x}$，回补代数恒等变形。
+      - 若学生不知道 $y=\frac{\ln x}{x}$ 在 $(0,e)$ 递增、在 $(e,+\infty)$ 递减，回补导数单调极值基础。
+  detail_terms:
+    - ln x / x
+    - a+ln x=ln(e^a x)
+    - e^a x in (0,e)
+    - monotone increasing interval
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0018_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0018_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0018/page_0018.md
+      role: problem_start
+      evidence: page_0018 底部例 7 给出题干：函数 f(x)=(a+ln x)/x 的单调增区间，并列出 A-D 四个选项。
+    - ref_id: page_0019_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0019/page_0019.md
+      role: continuation
+      evidence: page_0019 开头承接例 7 解析，将 f(x) 写为 e^a·ln(e^a x)/(e^a x)，由 y=ln x/x 的单调性得到答案 B。
+    - ref_id: page_0018_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0018/page_0018.md
+      role: local_context
+      evidence: page_0018 本节“六大函数的衍生模型”前文说明 y=ln x/x 在 (0,e) 单调递增、在 (e,+infty) 单调递减。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0018.png
+      inspected: true
+      notes: 核对例 7 题干、A-D 选项、指数 e^{1-a} 与 e^a。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0019.png
+      inspected: true
+      notes: 核对例 7 跨页解析首段、同构式和答案 B。
+  source_context: 本题位于“六大函数的衍生模型”小节，直接训练把 (a+ln x)/x 同构为 y=ln x/x 的横向伸缩输入。
+  source_influence:
+    - 题目只问单调增区间，目标应落在函数单调性识别，不是参数范围或最值题。
+    - 解法核心来自源页给出的 y=ln x/x 基本模型：输入落在 (0,e) 时递增。
+  source_discrepancies: []
+original_problem:
+  stem: 函数 $f(x)=\frac{a+\ln x}{x}$ 的单调增区间为 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text: $(-\infty, \mathrm{e}^{1-a})$
+    - label: B
+      text: $(0, \mathrm{e}^{1-a})$
+    - label: C
+      text: $(0, \mathrm{e}^a)$
+    - label: D
+      text: $(\mathrm{e}^a,+\infty)$
+  answer: B. $(0, \mathrm{e}^{1-a})$
+  fidelity_notes:
+    - 题头在 page_0018，解析跨到 page_0019，已按跨页例题处理。
+    - 源图与 markdown 对题干、选项和解析一致。
+solution:
+  source_solution_summary: 将 $f(x)=\frac{a+\ln x}{x}$ 写成 $e^a\frac{\ln(e^a x)}{e^a x}$。由于 $y=\frac{\ln u}{u}$ 在 $(0,e)$ 上单调递增，在 $(e,+\infty)$ 上单调递减， 所以 $e^a x\in(0,e)$ 时原函数单调递增，即 $x\in(0,e^{1-a})$，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 把参数 a 藏进对数的输入，化到标准模型。
+      formula_trace:
+        from: $f(x)=\frac{a+\ln x}{x}$
+        to: $f(x)=e^a\cdot\frac{\ln(e^a x)}{e^a x}$
+        operation: 用 $a+\ln x=\ln(e^a x)$，再把分母 $x$ 改写为 $(e^a x)/e^a$。
+        why: 这样可以直接套用 $y=\ln u/u$ 的单调区间。
+      source_ref: page_0019_solution
+    - step_id: step_2
+      statement: 读取同构模型的递增输入范围。
+      formula_trace:
+        from: $y=\frac{\ln u}{u}$ 在 $(0,e)$ 递增
+        to: $e^a x\in(0,e)$ 时 $f(x)$ 递增
+        operation: 令 $u=e^a x$，外侧正倍数 $e^a$ 不改变单调性。
+        why: 源页使用的是同一基础函数的横向输入替换。
+      source_ref: page_0019_solution
+    - step_id: step_3
+      statement: 把输入范围解回 x 的区间并对应选项。
+      formula_trace:
+        from: $0<e^a x<e$
+        to: $0<x<e^{1-a}$
+        operation: 两边除以正数 $e^a$。
+        why: 函数定义域要求 $x>0$，所以得到开区间 $(0,e^{1-a})$。
+      source_ref: page_0019_solution
+teaching_card:
+  student_title: 把 $a+\ln x$ 塞进 $\ln(e^a x)$ 来找增区间
+  what_it_trains: 训练把含参数的对数分式配成 $\ln u/u$，再从标准函数的单调区间读出 x 的范围。
+  recognition_cues:
+    - 题干出现 $\frac{a+\ln x}{x}$，常数 a 与 $\ln x$ 可以合并到一个对数里。
+    - 选项都是指数端点，提示要把 $e^a x$ 与 e 比较。
+    - 只问单调增区间，不需要重新全程求导。
+  normalization_moves:
+    - 先写 $a+\ln x=\ln(e^a x)$。
+    - 再把分母 x 同步换成 $e^a x$，补出外面的正倍数 $e^a$。
+    - 最后把 $e^a x\in(0,e)$ 解回 x。
+  common_failures:
+    - 把递增区间误写成 $x\in(0,e^a)$，没有把输入 $e^a x$ 解回 x。
+    - 忽略定义域 $x>0$，误选含负半轴的 A。
+    - 只记得 $\ln x/x$ 有最大值，却忘记递增段是 $(0,e)$。
+  similar_practice_query: ln x over x 同构 a+ln x 单调增区间 e^a x
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0018 题干与 page_0019 解析均已看图核对。

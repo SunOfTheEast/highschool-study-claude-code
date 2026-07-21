@@ -1,0 +1,246 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0051_section3_ex11
+content_revision_id: mst_p0051_section3_ex11-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0051_section3_ex11.card.yaml
+stem: |-
+  （2021 · 多选 · 水哥供题）若实数 $a$、$b$ 满足 $ab=(e^a-1)\ln(1+b)$，则下列选项正确的有（ ）
+  A. 若 $b<0$，则 $a<0$
+  B. 若 $a>0$，则 $b<a+\frac{b^2}{2}$
+  C. 存在实数 $a$、$b$，使得 $|a-b|=\sqrt{2}$
+  D. 设 $(a_1,b_1)$，$(a_2,b_2)$ 为满足等式的两组数，则当 $a_1<0$，$a_2<0$ 时，$|a_1-a_2|<|b_1-b_2|$
+answer: |
+  BC
+
+  先注意零支：若 $a=0$，则任意 $b>-1$ 都满足原等式；若 $b=0$，则任意实数
+  $a$ 都满足原等式。A 可由 $a=0,-1<b<0$ 反驳。对非零支，原等式可化为
+  $\frac{a}{e^a-1}=\frac{\ln(1+b)}{b}$。令
+  $F(x)=\frac{x}{e^x-1}$，则
+  $\frac{\ln(1+b)}{b}=F(\ln(1+b))$；由 $F$ 严格递减，得到
+  $a=\ln(1+b)$，即 $b=e^a-1$。B 中若 $b=0$ 显然成立；若非零支且 $a>0$，
+  则 $b>0$，只需证
+  $\frac{b^2}{2}-b+\ln(1+b)>0$，其导数
+  $b-1+\frac{1}{1+b}\ge0$ 且从 0 出发，故 B 正确。C 可在非零支上由连续函数
+  $b-\ln(1+b)$ 从 0 增至无穷得到解，也可由 $b=0,a=\sqrt2$ 的零支直接给出例子。
+  D 源解用图像说明同一高度下 $F$ 的横向变化更大，得到相反的不等式；零支中取
+  $b_1=b_2=0$、$a_1,a_2<0$ 且 $a_1\ne a_2$ 也立即反驳 D。故选 BC。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 先处理不能直接相除的零支。
+      max_score: 1
+    - step_id: step_2
+      description: 用 $a=0$ 的零支反驳 A。
+      max_score: 1
+    - step_id: step_3
+      description: 在非零支上同构化，推出 $a=\ln(1+b)$。
+      max_score: 1
+    - step_id: step_4
+      description: 判定 B：把目标化成一个递增函数的正性。
+      max_score: 1
+    - step_id: step_5
+      description: 判定 C：构造满足距离为 $\sqrt2$ 的解。
+      max_score: 1
+    - step_id: step_6
+      description: 判定 D：源图给出相反距离关系，零支也能直接反驳。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: A 判断 $b<0$ 是否必推出 $a<0$。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 数值比较
+        target: B 判断 $a>0$ 时 $b$ 与 $a+\frac{b^2}{2}$ 的大小。
+        result: 见 source_solution_summary
+      - part_id: item_3
+        goal: 零点/极值点分析
+        target: C 判断是否存在 $|a-b|=\sqrt2$ 的解。
+        result: 见 source_solution_summary
+      - part_id: item_4
+        goal: 数值比较
+        target: D 判断两组解的横向距离大小。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 数形结合
+      - 切线放缩与凹凸性
+    subroute:
+      - 零支先分离
+      - 共零点同构母函数
+      - 同一高度横向距离比较
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 复合函数与不动点结构
+    evidence:
+      - $\frac{\ln(1+b)}{b}=F(\ln(1+b))$，其中 $F(x)=\frac{x}{e^x-1}$。
+      - 非零支由 $F(a)=F(\ln(1+b))$ 收缩到 $a=\ln(1+b)$。
+      - 零支 $a=0$ 或 $b=0$ 对选项 A、D 的真假有决定作用。
+    normalization_moves_used:
+      - 先分离 $a=0$、$b=0$。
+      - $ab=(e^a-1)\ln(1+b)\Rightarrow \frac{a}{e^a-1}=\frac{\ln(1+b)}{b}$（非零支）。
+      - $\frac{\ln(1+b)}{b}=F(\ln(1+b))$。
+      - $b<a+\frac{b^2}{2}\Rightarrow \frac{b^2}{2}-b+\ln(1+b)>0$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生一上来就除以 $b$ 或 $e^a-1$ 而漏掉零支，回补函数三要素与定义域。
+      - 若学生不会由 $F(a)=F(\ln(1+b))$ 和单调性推出 $a=\ln(1+b)$，回补导数单调极值基础。
+      - 若学生不会证明 $\frac{b^2}{2}-b+\ln(1+b)>0$，回补导数单调极值基础。
+      - 若学生不能用连续性说明 $b-\ln(1+b)=\sqrt2$ 有解，回补函数性质与图像。
+      - 若学生读不出 page_0051 图中同一高度对应的横向距离比较，回补函数性质与图像。
+  detail_terms:
+    - $ab=(e^a-1)\ln(1+b)$
+    - $F(x)=\frac{x}{e^x-1}$
+    - $G(x)=\frac{\ln(1+x)}{x}=F(\ln(1+x))$
+    - $a=\ln(1+b)$
+    - $\frac{b^2}{2}-b+\ln(1+b)>0$
+    - $b=0$ 零支
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0051_section3_ex11
+source_evidence:
+  source_refs:
+    - ref_id: page_0051
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0051/page_0051.md
+      role: problem_start
+      evidence: lines 26-36 give 例 11 题干、A-D 四个选项，以及 A-C 和 D 开头的解析。
+    - ref_id: page_0052
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0052/page_0052.md
+      role: continuation
+      evidence: lines 14-15 complete D 的图像比较并给出答案 BC；line 16 starts 例 12。
+    - ref_id: page_0051_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0051/page_0051.md
+      role: local_context
+      evidence: lines 21-24 summarize the same pair of同构函数 $f(x)=\frac{\ln(1+x)}{x}$ and $g(x)=\frac{x}{e^x-1}$ used by 例 11。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0051.png
+      inspected: true
+      notes: 已核对页图：例 11 题干、四个选项、A-C 解析和 D 所用函数图像与 markdown 一致。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0052.png
+      inspected: true
+      notes: 已核对页图：page_0052 顶部为例 11 续解并明确“故选 BC”，随后进入例 12。
+  source_context: 例 11 承接例 10 的同构函数：$F(x)=\frac{x}{e^x-1}$ 与 $G(x)=\frac{\ln(1+x)}{x}=F(\ln(1+x))$，用单调性和图像横向距离判断选项。
+  source_influence:
+    - 题干写“实数 $a,b$”，但 $\ln(1+b)$ 要求 $b>-1$，卡片按源式隐含定义域处理。
+    - 源解把等式化为 $\frac{a}{e^a-1}=\frac{\ln(1+b)}{b}$，本卡额外先分离 $a=0$ 或 $b=0$ 的零支，避免除以 0。
+    - page_0051 的函数图用于 D 的横向距离比较，已作为 source_images 绑定。
+  source_discrepancies:
+    - 源解在 B-D 的同构化步骤默认可除以 $b$ 和 $e^a-1$；当 $a=0$ 或 $b=0$ 时需要作为零支单独处理。该分支不改变源答案 BC。
+original_problem:
+  stem: （2021 · 多选 · 水哥供题）若实数 $a$、$b$ 满足 $ab=(e^a-1)\ln(1+b)$，则下列选项正确的有（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 若 $b<0$，则 $a<0$
+      text_latex: 若 $b<0$，则 $a<0$
+    - label: B
+      text_raw: 若 $a>0$，则 $b<a+\frac{b^2}{2}$
+      text_latex: 若 $a>0$，则 $b<a+\frac{b^2}{2}$
+    - label: C
+      text_raw: 存在实数 $a$、$b$，使得 $|a-b|=\sqrt{2}$
+      text_latex: 存在实数 $a$、$b$，使得 $|a-b|=\sqrt{2}$
+    - label: D
+      text_raw: 设 $(a_1,b_1)$，$(a_2,b_2)$ 为满足等式的两组数，则当 $a_1<0$，$a_2<0$ 时，$|a_1-a_2|<|b_1-b_2|$
+      text_latex: 设 $(a_1,b_1)$，$(a_2,b_2)$ 为满足等式的两组数，则当 $a_1<0$，$a_2<0$ 时，$|a_1-a_2|<|b_1-b_2|$
+  answer: BC
+  fidelity_notes:
+    - 源题为多选题，四个选项均从 page_0051 原文转录。
+    - 原式含 $\ln(1+b)$，因此隐含 $b>-1$；源页未单独写出定义域。
+    - 解析续到 page_0052 顶部，答案为 BC。
+solution:
+  source_solution_summary: |
+    先注意零支：若 $a=0$，则任意 $b>-1$ 都满足原等式；若 $b=0$，则任意实数
+    $a$ 都满足原等式。A 可由 $a=0,-1<b<0$ 反驳。对非零支，原等式可化为
+    $\frac{a}{e^a-1}=\frac{\ln(1+b)}{b}$。令
+    $F(x)=\frac{x}{e^x-1}$，则
+    $\frac{\ln(1+b)}{b}=F(\ln(1+b))$；由 $F$ 严格递减，得到
+    $a=\ln(1+b)$，即 $b=e^a-1$。B 中若 $b=0$ 显然成立；若非零支且 $a>0$，
+    则 $b>0$，只需证
+    $\frac{b^2}{2}-b+\ln(1+b)>0$，其导数
+    $b-1+\frac{1}{1+b}\ge0$ 且从 0 出发，故 B 正确。C 可在非零支上由连续函数
+    $b-\ln(1+b)$ 从 0 增至无穷得到解，也可由 $b=0,a=\sqrt2$ 的零支直接给出例子。
+    D 源解用图像说明同一高度下 $F$ 的横向变化更大，得到相反的不等式；零支中取
+    $b_1=b_2=0$、$a_1,a_2<0$ 且 $a_1\ne a_2$ 也立即反驳 D。故选 BC。
+  key_steps:
+    - step_id: step_1
+      statement: 先处理不能直接相除的零支。
+      formula_trace:
+        from: $ab=(e^a-1)\ln(1+b)$
+        to: $a=0$ 时任意 $b>-1$ 成立；$b=0$ 时任意 $a$ 成立
+        operation: 分别代入 $a=0$ 与 $b=0$，两边都化为 $0$。
+        why: 后续分式化会除以 $e^a-1$ 和 $b$，必须先把零支拿出来。
+      source_ref: page_0051
+    - step_id: step_2
+      statement: 用 $a=0$ 的零支反驳 A。
+      formula_trace:
+        from: $a=0,\quad -1<b<0$
+        to: $b<0$ 但 $a<0$ 不成立
+        operation: 把零支中的任意负 $b$ 作为反例。
+        why: 一个反例即可判定 A 错。
+      source_ref: page_0051
+    - step_id: step_3
+      statement: 在非零支上同构化，推出 $a=\ln(1+b)$。
+      formula_trace:
+        from: $\frac{a}{e^a-1}=\frac{\ln(1+b)}{b}$
+        to: $F(a)=F(\ln(1+b))\Rightarrow a=\ln(1+b)$
+        operation: 令 $F(x)=\frac{x}{e^x-1}$，并用 $F$ 的严格递减性。
+        why: 同一个单调母函数取相同值，只能对应相同输入。
+      source_ref: page_0051
+    - step_id: step_4
+      statement: 判定 B：把目标化成一个递增函数的正性。
+      formula_trace:
+        from: $b<a+\frac{b^2}{2},\quad a=\ln(1+b)$
+        to: $h(b)=\frac{b^2}{2}+\ln(1+b)-b>0\quad (b>0)$
+        operation: 由 $a>0$ 得非零支上 $b>0$；求导 $h^{\prime}(b)=b-1+\frac{1}{1+b}=\frac{b^2}{1+b}\ge0$，且 $h(0)=0$。
+        why: 把选项 B 的比较变为从 0 出发的单调性判断。
+      source_ref: page_0051
+    - step_id: step_5
+      statement: 判定 C：构造满足距离为 $\sqrt2$ 的解。
+      formula_trace:
+        from: $a=\ln(1+b),\quad |a-b|=|b-\ln(1+b)|$
+        to: 存在 $b>0$ 使 $b-\ln(1+b)=\sqrt2$
+        operation: 函数 $q(b)=b-\ln(1+b)$ 在 $[0,+\infty)$ 连续，$q(0)=0$ 且 $q(b)\to+\infty$。
+        why: 介值性给出非零同构支上的一组解，因此 C 正确。
+      source_ref: page_0051
+    - step_id: step_6
+      statement: 判定 D：源图给出相反距离关系，零支也能直接反驳。
+      formula_trace:
+        from: $b_1=b_2=0,\quad a_1<0,\ a_2<0,\ a_1\ne a_2$
+        to: $|a_1-a_2|>0=|b_1-b_2|$
+        operation: 取 $b=0$ 零支中的两组负 $a$ 解；源图的非零支比较同样显示 $|a_1-a_2|>|b_1-b_2|$。
+        why: D 要求的是严格小于，任一满足条件的反例即可判定 D 错。
+      source_ref: page_0052
+teaching_card:
+  student_title: 先拆零支，再用同构关系选多选
+  what_it_trains: 训练在隐式指对方程里先保护定义域和零支，再把非零部分收缩成同一个单调母函数，从而判断符号、大小和存在性选项。
+  recognition_cues:
+    - 等式两边都是乘积，$a=0$ 或 $b=0$ 会让两边同时为 0。
+    - 非零支能出现 $\frac{a}{e^a-1}$ 与 $\frac{\ln(1+b)}{b}$。
+    - 右边分式正好可以写成 $F(\ln(1+b))$。
+    - 选项同时考符号、大小、存在性和两点距离，不能只算一个通式就结束。
+  normalization_moves:
+    - 先列出 $a=0$ 和 $b=0$ 两条零支。
+    - 非零支除法后统一到 $F(x)=\frac{x}{e^x-1}$。
+    - 由 $F$ 单调递减推出 $a=\ln(1+b)$。
+    - 把 B 化成 $h(b)=\frac{b^2}{2}+\ln(1+b)-b$ 的正性。
+    - 用零支或函数图反驳 D。
+  common_failures:
+    - 漏掉 $a=0$ 或 $b=0$，导致 A、D 判断错误。
+    - 把 $F$ 和 $G$ 当成两个无关函数，没写出 $G(b)=F(\ln(1+b))$。
+    - B 中忘了 $a>0$ 在非零支上推出 $b>0$。
+    - C 只说“一定有解”，没有用连续性或具体零支构造支撑。
+  similar_practice_query: 多选 同构函数 a/(e^a-1) ln(1+b)/b 零支 b=0 a=ln(1+b)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0051/page_0052 页图；例 11 题头从 page_0051 开始，page_0052 顶部完成解析并给出 BC。
+    - 源解默认分式化时未单列 $a=0$、$b=0$，本卡补充分支；该补充不改变答案，不列为用户拍板。

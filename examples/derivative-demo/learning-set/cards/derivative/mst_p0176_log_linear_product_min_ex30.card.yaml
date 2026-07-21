@@ -1,0 +1,175 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0176_log_linear_product_min_ex30
+content_revision_id: mst_p0176_log_linear_product_min_ex30-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0176_log_linear_product_min_ex30.card.yaml
+stem: |-
+  （2023 · 昆明高二期末 T8）已知关于 $x$ 的不等式 $(a+1)x\geqslant\ln x+b$ 恒成立，则 $ae^{b-1}$ 的最小值为（  ）
+  A. $-1$
+  B. $-\frac{1}{2}$
+  C. $-\frac{1}{4}$
+  D. $-\frac{1}{8}$
+answer: |-
+  C
+
+  由题意在 $x>0$ 上有 $(a+1)x\geqslant\ln x+b$。利用 $\ln((a+1)x)\leqslant(a+1)x-1$，化成 $\ln x\leqslant(a+1)x-1-\ln(a+1)$。与题设比较得 $-\ln(a+1)-1\leqslant-b$，即 $e^{b-1}\leqslant a+1$，并知 $a+1>0$。分情形：若 $a\geqslant0$，则 $ae^{b-1}\geqslant0$；若 $-1<a<0$，因乘负数不等号反向， 有 $ae^{b-1}\geqslant a(a+1)$，且该下界在 $e^{b-1}=a+1$ 可达。于是只需最小化 $a(a+1)=\left(a+\frac12\right)^2-\frac14$，得全局最小值 $-\frac14$，故选 C。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 用对数切线基本不等式建立统一上界。
+      max_score: 1
+    - step_id: step_2
+      description: 与题设恒成立式比较，提取 $b$ 与 $a$ 的关系。
+      max_score: 1
+    - step_id: step_3
+      description: 按 $a$ 的符号讨论乘积方向。
+      max_score: 1
+    - step_id: step_4
+      description: 配方法求最小值并对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+      - 对称化与偏移
+    subroute:
+      - 对数切线斜率找点
+      - 恒成立常数项比较
+      - 二次配方取最小值
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+      - 非齐次结构
+    evidence:
+      - $(a+1)x\geqslant\ln x+b$
+      - $\ln((a+1)x)\leqslant(a+1)x-1$
+      - $a\geqslant0$ 时 $ae^{b-1}\geqslant0$，$-1<a<0$ 时 $ae^{b-1}\geqslant a(a+1)$
+    normalization_moves_used:
+      - 把对数不等式改写成同型常数项比较。
+      - 由 $e^{b-1}\leqslant a+1$ 并按 $a$ 的符号提取乘积下界。
+      - 用配方把 $a(a+1)$ 转成标准二次最值式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会使用 $\ln y\leqslant y-1$，回补指数对数基础。
+      - 若学生在常数项比较时丢符号，回补代数恒等变形。
+      - 若学生不会把 $a(a+1)$ 配方，回补导数单调极值基础。
+  detail_terms:
+    - $\ln((a+1)x)\leqslant(a+1)x-1$
+    - $e^{b-1}\leqslant a+1$
+    - $a\geqslant0\Rightarrow ae^{b-1}\geqslant0;\ -1<a<0\Rightarrow ae^{b-1}\geqslant a(a+1)$
+    - $\left(a+\frac12\right)^2-\frac14$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0176_log_linear_product_min_ex30
+source_evidence:
+  source_refs:
+    - ref_id: page_0176
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0176/page_0176.md
+      role: problem_start
+      evidence: "line 45 starts 例30: “$(a+1)x\\geqslant\\ln x+b$ 恒成立，求 $ae^{b-1}$ 最小值”，题头归属 page_0176。"
+    - ref_id: page_0177
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0177/page_0177.md
+      role: continuation
+      evidence: "lines 14-19 continue 例30 with options A-D and full source solution: 由 $\\ln((a+1)x)\\leqslant(a+1)x-1$ 推出 $e^{b-1}\\leqslant a+1$，再得 $ae^{b-1}\\geqslant a(a+1)$，最小值 $-\\frac14$，故选 C。"
+    - ref_id: page_0176_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0176/page_0176.md
+      role: local_context
+      evidence: page_0176 顶部是例27续解；例30本体跨到 page_0177 顶部完成。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0176.png
+      inspected: true
+      notes: 页图核对通过：例30题头在 page_0176 底部起始，未给出选项。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0177.png
+      inspected: true
+      notes: 页图核对通过：例30选项 A-D 与“故选C”完整可见，解析与 markdown 一致。
+  source_context: 按题头归属规则，例30由 worker A 负责，并跨页读取 page_0177 顶部补全。
+  source_influence:
+    - 保留 source 的对数切线不等式：$\ln y\leqslant y-1$。
+    - 保留 source 从 $e^{b-1}\leqslant a+1$ 提取参数耦合，再对目标量按 $a$ 符号分情形。
+    - 保留 source 的配方最小值结论 $a(a+1)\geqslant-\frac14$。
+  source_discrepancies:
+    - source 由 $e^{b-1}\leqslant a+1$ 直接写 $ae^{b-1}\geqslant a(a+1)$，该方向仅在 $a\leqslant0$ 成立；本卡补充分情况论证，最终最小值仍为 $-\frac14$。
+original_problem:
+  stem: （2023 · 昆明高二期末 T8）已知关于 $x$ 的不等式 $(a+1)x\geqslant\ln x+b$ 恒成立，则 $ae^{b-1}$ 的最小值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $-1$
+      text_latex: $-1$
+    - label: B
+      text_raw: $-\frac{1}{2}$
+      text_latex: $-\frac{1}{2}$
+    - label: C
+      text_raw: $-\frac{1}{4}$
+      text_latex: $-\frac{1}{4}$
+    - label: D
+      text_raw: $-\frac{1}{8}$
+      text_latex: $-\frac{1}{8}$
+  answer: C
+  fidelity_notes:
+    - 题头在 page_0176，选项与解析在 page_0177 顶部，已按跨页规则合并。
+    - 题干中的“恒成立”按 $\ln x$ 定义域理解为 $x>0$。
+solution:
+  source_solution_summary: 由题意在 $x>0$ 上有 $(a+1)x\geqslant\ln x+b$。利用 $\ln((a+1)x)\leqslant(a+1)x-1$，化成 $\ln x\leqslant(a+1)x-1-\ln(a+1)$。与题设比较得 $-\ln(a+1)-1\leqslant-b$，即 $e^{b-1}\leqslant a+1$，并知 $a+1>0$。分情形：若 $a\geqslant0$，则 $ae^{b-1}\geqslant0$；若 $-1<a<0$，因乘负数不等号反向， 有 $ae^{b-1}\geqslant a(a+1)$，且该下界在 $e^{b-1}=a+1$ 可达。于是只需最小化 $a(a+1)=\left(a+\frac12\right)^2-\frac14$，得全局最小值 $-\frac14$，故选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 用对数切线基本不等式建立统一上界。
+      formula_trace:
+        from: $\ln((a+1)x)\leqslant(a+1)x-1$
+        to: $\ln x\leqslant(a+1)x-1-\ln(a+1)$
+        operation: 把 $\ln((a+1)x)$ 拆成 $\ln x+\ln(a+1)$。
+        why: 要与题设的 $\ln x+b$ 同型比较常数项。
+      source_ref: page_0177:line 19
+    - step_id: step_2
+      statement: 与题设恒成立式比较，提取 $b$ 与 $a$ 的关系。
+      formula_trace:
+        from: $(a+1)x\geqslant\ln x+b$ 与 $\ln x\leqslant(a+1)x-1-\ln(a+1)$
+        to: $e^{b-1}\leqslant a+1$
+        operation: 比较常数项并指数化。
+        why: 把二参数不等式压成单一乘积约束。
+      source_ref: page_0177:line 19
+    - step_id: step_3
+      statement: 按 $a$ 的符号讨论乘积方向。
+      formula_trace:
+        from: $e^{b-1}\leqslant a+1$
+        to: $a\geqslant0\Rightarrow ae^{b-1}\geqslant0;\ -1<a<0\Rightarrow ae^{b-1}\geqslant a(a+1)$
+        operation: 先由 $a+1>0$ 限定参数域，再按乘数符号比较下界。
+        why: 避免同乘 $a$ 时忽略不等号方向。
+      source_ref: page_0177:line 19
+    - step_id: step_4
+      statement: 配方法求最小值并对应选项。
+      formula_trace:
+        from: $ae^{b-1}\geqslant0$（$a\geqslant0$）与 $ae^{b-1}\geqslant a(a+1)$（$-1<a<0$）
+        to: $ae^{b-1}\geqslant-\frac14$，最小值为 $-\frac14$（C）
+        operation: 对 $a(a+1)$ 配方，最小点 $a=-\frac12$，并取 $e^{b-1}=a+1=\frac12$ 达到下界。
+        why: 得到明确数值最小值并完成单选。
+      source_ref: page_0177:line 19
+teaching_card:
+  student_title: 先用对数切线，再把目标压成二次式
+  what_it_trains: 训练“对数-线性恒成立”问题中，先做切线放缩，再把参数乘积降成二次函数最值。
+  recognition_cues:
+    - 题干出现 $(a+1)x$ 与 $\ln x$ 的全局比较。
+    - 目标量是混合乘积 $ae^{b-1}$。
+    - source 通常先比较常数项，再做二次配方。
+  normalization_moves:
+    - 调用 $\ln y\leqslant y-1$ 并把 $\ln((a+1)x)$ 拆开。
+    - 提取 $e^{b-1}\leqslant a+1$。
+    - 把 $ae^{b-1}$ 下界化为 $a(a+1)$。
+    - 配方得到最小值 $-\frac14$。
+  common_failures:
+    - 忽略 $\ln x$ 的定义域，误把比较写成全实数。
+    - 从 $-\ln(a+1)-1\leqslant-b$ 推指数时方向出错。
+    - 只写出 $a(a+1)$，没有继续配方求最小值。
+  similar_practice_query: ln x 与线性恒成立 ae^{b-1} 最小值 对数切线
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 对 source 中“同乘 $a$”步骤已补充分情况校验，结论仍为选 C。

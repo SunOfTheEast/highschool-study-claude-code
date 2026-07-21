@@ -1,0 +1,215 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0059_section4_ex22
+content_revision_id: mst_p0059_section4_ex22-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0059_section4_ex22.card.yaml
+stem: |-
+  （2018 · 新课标 II T21）已知函数 $f(x)=\frac13x^3-a(x^2+x+1)$。
+  （1）若 $a=3$，求 $f(x)$ 的单调区间；
+  （2）证明：$f(x)$ 只有一个零点。
+answer: |
+  （1）当 $a=3$ 时，$f(x)$ 的增区间为 $(-\infty,3-2\sqrt3)$、$(3+2\sqrt3,+\infty)$，减区间为 $(3-2\sqrt3,3+2\sqrt3)$；（2）$f(x)$ 在实数范围内只有一个零点。
+
+  第 (1) 问令 $a=3$，得 $f^{\prime}(x)=x^2-6x-3$，零点为 $3\pm2\sqrt3$。由于导函数开口向上，$f$ 在 $(-\infty,3-2\sqrt3)$ 与 $(3+2\sqrt3,+\infty)$ 上递增，在 $(3-2\sqrt3,3+2\sqrt3)$ 上递减。
+  第 (2) 问中，$x^2+x+1=(x+\frac12)^2+\frac34>0$，所以 $f(x)=0$ 等价于 $g(x)=\frac{x^3}{3(x^2+x+1)}-a=0$。求导得 $g^{\prime}(x)=\frac{x^2[(x+1)^2+2]}{3(x^2+x+1)^2}\ge0$，且只有 $x=0$ 处为 0，因此 $g$ 在 $\mathbf R$ 上单调递增，零点至多一个。又 $f(3a-1)=-6(a-\frac16)^2-\frac16<0$，$f(3a+1)=\frac13>0$，由介值定理至少有一个零点，故恰有一个零点。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 第 (1) 问：代入 $a=3$ 并求导。
+      max_score: 1
+    - step_id: step_2
+      description: 第 (1) 问：求导函数零点并写出单调区间。
+      max_score: 1
+    - step_id: step_3
+      description: 第 (2) 问：先把零点问题等价转到单调函数 $g$。
+      max_score: 1
+    - step_id: step_4
+      description: 第 (2) 问：证明 $g$ 单调递增，所以零点至多一个。
+      max_score: 1
+    - step_id: step_5
+      description: 第 (2) 问：用两点异号保证至少一个零点。
+      max_score: 1
+    - step_id: step_6
+      description: 法二：当 $a\ne0$ 时，也可反取倒数变量来证明至多一个非零零点。
+      max_score: 1
+    - step_id: step_7
+      description: 补齐法二的 $a=0$ 特殊情形。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: （1）求 $a=3$ 时三次函数的单调区间。
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 不等式证明
+        target: （2）证明含参三次函数在实数范围内只有一个零点。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+      - 充分/必要性探路
+    subroute:
+      - 等效零点法
+      - 正二次式除法
+      - 倒数换元
+  structure:
+    primary: 三次/高次函数结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - $x^2+x+1=(x+\frac12)^2+\frac34>0$。
+      - $f(x)=0$ 等价于 $\frac{x^3}{3(x^2+x+1)}-a=0$。
+      - $g^{\prime}(x)=\frac{x^2[(x+1)^2+2]}{3(x^2+x+1)^2}\ge0$。
+      - $f(3a-1)<0$ 且 $f(3a+1)>0$。
+    normalization_moves_used:
+      - 第 (1) 问先代参，再按导函数符号表写区间。
+      - 第 (2) 问先确认二次式恒正，允许等价除法。
+      - 把参数 $a$ 分离成单调函数值，零点个数由单调性控制。
+      - 用 $3a-1$ 与 $3a+1$ 两个特值补足存在性。
+  fallback:
+    only_if_trace_shows:
+      - 若学生求单调区间时不会解 $x^2-6x-3=0$，回补代数恒等变形。
+      - 若学生不知道 $x^2+x+1$ 恒正才能安全除法，回补函数三要素与定义域。
+      - 若学生把“至多一个零点”误当成“只有一个零点”，回补方程根分布与韦达。
+      - 若学生在法二里直接除以 $a$ 而忘记 $a=0$，回补函数三要素与定义域中的取值限制检查。
+  detail_terms:
+    - $\frac13x^3-a(x^2+x+1)$
+    - $3\pm2\sqrt3$
+    - $x^2+x+1>0$
+    - $g(x)=\frac{x^3}{3(x^2+x+1)}-a$
+    - $f(3a-1)$
+    - $f(3a+1)$
+parts: &a1
+  - （1）若 $a=3$，求 $f(x)$ 的单调区间；
+  - （2）证明：$f(x)$ 只有一个零点。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0059_section4_ex22
+source_evidence:
+  source_refs:
+    - ref_id: page_0059_ex22_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0059/page_0059.md
+      role: problem_start
+      evidence: 例 22（2018 · 新课标 II T21）：已知函数 $f(x)=\frac13x^3-a(x^2+x+1)$；(1) 若 $a=3$，求单调区间；(2) 证明 $f(x)$ 只有一个零点。
+    - ref_id: page_0059_ex22_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0059/page_0059.md
+      role: solution
+      evidence: page_0059 完成第 (1) 问并给出第 (2) 问法一：令 $g(x)=\frac{x^3}{3(x^2+x+1)}-a$，由 $g^{\prime}(x)\ge0$ 且两点异号证明只有一个零点；法二起于页底。
+    - ref_id: page_0060_ex22_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0060/page_0060.md
+      role: continuation
+      evidence: page_0060 顶部续出法二：当 $x\ne0$ 时转为 $0=\frac3{x^3}+\frac3{x^2}+\frac3x-\frac1a$，令 $\frac1x=t$，$h(t)=3t^3+3t^2+3t-\frac1a$，由 $h^{\prime}(t)>0$ 得至多一个零点。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0059.png
+      inspected: true
+      notes: 页图已核对：例 22 题头、两问、第 (1) 问解析和第 (2) 问法一大部分位于 page_0059。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0060.png
+      inspected: true
+      notes: 页图已核对：page_0060 顶部为例 22 法二续解，随后开始例 23；本卡只读取顶部续解，不创建 page_0060 新题卡。
+  source_context: 例 22 起头在 page_0059，法二跨到 page_0060 顶部；按题头规则归本批 B 组。
+  source_influence:
+    - 第 (1) 问按源解求导并给出两个增区间、一个减区间。
+    - 第 (2) 问保留源解主线：先等价除以恒正二次式，构造单调函数，再用两点异号保证存在性。
+    - 法二作为补充路线保留，并补明 $a=0$ 时不能除以 $a$，需单独处理。
+  source_discrepancies:
+    - page_0060 顶部法二写到 $-\frac1a$，默认 $a\ne0$；题干未排除 $a=0$。本卡补充 $a=0$ 时 $f(x)=\frac13x^3$ 只有零点 $x=0$，该数学补分支不改变结论，未列为用户拍板。
+original_problem:
+  stem: （2018 · 新课标 II T21）已知函数 $f(x)=\frac13x^3-a(x^2+x+1)$。
+  parts: *a1
+  choices: []
+  answer: （1）当 $a=3$ 时，$f(x)$ 的增区间为 $(-\infty,3-2\sqrt3)$、$(3+2\sqrt3,+\infty)$，减区间为 $(3-2\sqrt3,3+2\sqrt3)$；（2）$f(x)$ 在实数范围内只有一个零点。
+  fidelity_notes:
+    - 源页第 (1) 问的导函数应为 $f^{\prime}(x)=x^2-6x-3$；由此解得 $x=3\pm2\sqrt3$。
+    - 源页第 (2) 问没有显式限定 $a$ 的取值；法一对所有实数 $a$ 成立。
+    - 法二出现除以 $a$，本卡只作为 $a\ne0$ 的补充证明路线，并补充 $a=0$ 分支。
+solution:
+  source_solution_summary: |
+    第 (1) 问令 $a=3$，得 $f^{\prime}(x)=x^2-6x-3$，零点为 $3\pm2\sqrt3$。由于导函数开口向上，$f$ 在 $(-\infty,3-2\sqrt3)$ 与 $(3+2\sqrt3,+\infty)$ 上递增，在 $(3-2\sqrt3,3+2\sqrt3)$ 上递减。
+    第 (2) 问中，$x^2+x+1=(x+\frac12)^2+\frac34>0$，所以 $f(x)=0$ 等价于 $g(x)=\frac{x^3}{3(x^2+x+1)}-a=0$。求导得 $g^{\prime}(x)=\frac{x^2[(x+1)^2+2]}{3(x^2+x+1)^2}\ge0$，且只有 $x=0$ 处为 0，因此 $g$ 在 $\mathbf R$ 上单调递增，零点至多一个。又 $f(3a-1)=-6(a-\frac16)^2-\frac16<0$，$f(3a+1)=\frac13>0$，由介值定理至少有一个零点，故恰有一个零点。
+  key_steps:
+    - step_id: step_1
+      statement: 第 (1) 问：代入 $a=3$ 并求导。
+      formula_trace:
+        from: $f(x)=\frac13x^3-3(x^2+x+1)$
+        to: $f^{\prime}(x)=x^2-6x-3$
+        operation: 对三次项和二次、一次项分别求导。
+        why: 单调区间由导函数符号决定。
+      source_ref: page_0059_ex22_solution_start
+    - step_id: step_2
+      statement: 第 (1) 问：求导函数零点并写出单调区间。
+      formula_trace:
+        from: $x^2-6x-3=0$
+        to: $x=3\pm2\sqrt3$
+        operation: 解二次方程，并利用开口向上的符号表。
+        why: 导函数在两根外侧为正、两根之间为负。
+      source_ref: page_0059_ex22_solution_start
+    - step_id: step_3
+      statement: 第 (2) 问：先把零点问题等价转到单调函数 $g$。
+      formula_trace:
+        from: $f(x)=0,\quad x^2+x+1>0$
+        to: $g(x)=\frac{x^3}{3(x^2+x+1)}-a=0$
+        operation: 将 $a(x^2+x+1)$ 移到右侧，再除以正的二次式。
+        why: 正分母不改变零点个数，且新函数导数符号容易判断。
+      source_ref: page_0059_ex22_solution_start
+    - step_id: step_4
+      statement: 第 (2) 问：证明 $g$ 单调递增，所以零点至多一个。
+      formula_trace:
+        from: $g(x)=\frac{x^3}{3(x^2+x+1)}-a$
+        to: $g^{\prime}(x)=\frac{x^2[(x+1)^2+2]}{3(x^2+x+1)^2}\ge0$
+        operation: 商法则求导并整理成平方与正项。
+        why: 导数非负且只在孤立点 $x=0$ 为 0，函数整体递增。
+      source_ref: page_0059_ex22_solution_start
+    - step_id: step_5
+      statement: 第 (2) 问：用两点异号保证至少一个零点。
+      formula_trace:
+        from: $x=3a-1,\quad x=3a+1$
+        to: $f(3a-1)=-6\left(a-\frac16\right)^2-\frac16<0,\quad f(3a+1)=\frac13>0$
+        operation: 把两个关于 $a$ 的点代回原函数并化简。
+        why: 连续函数在两点异号时有零点，配合至多一个即可得到只有一个。
+      source_ref: page_0059_ex22_solution_start
+    - step_id: step_6
+      statement: 法二：当 $a\ne0$ 时，也可反取倒数变量来证明至多一个非零零点。
+      formula_trace:
+        from: $\frac{x^3}{3(x^2+x+1)}=a,\quad x\ne0,\ a\ne0$
+        to: $3t^3+3t^2+3t-\frac1a=0,\quad t=\frac1x$
+        operation: 两边取等价倒数形式并令 $t=1/x$。
+        why: $h^{\prime}(t)=9t^2+6t+3$ 的判别式小于 0，故 $h$ 严格递增，至多一个零点。
+      source_ref: page_0060_ex22_solution_continuation
+    - step_id: step_7
+      statement: 补齐法二的 $a=0$ 特殊情形。
+      formula_trace:
+        from: $a=0$
+        to: $f(x)=\frac13x^3$，唯一零点为 $x=0$
+        operation: 直接代入参数。
+        why: page_0060 法二含 $-\frac1a$，需要把 $a=0$ 单独排除。
+      source_ref: page_0060_ex22_solution_continuation
+teaching_card:
+  student_title: 把零点等效成一个单调函数
+  what_it_trains: 训练含参三次函数的零点证明：先找恒正因子做等价变形，再用单调性控制零点个数，用异号点补存在。
+  recognition_cues:
+    - 函数是三次项减去参数乘一个恒正二次式。
+    - 目标是证明“只有一个零点”，需要同时证明至多一个和至少一个。
+    - 源解特意出现 $3a-1$ 与 $3a+1$，说明存在性用特值异号。
+  normalization_moves:
+    - 把 $x^2+x+1$ 配方成恒正，放心除过去。
+    - 令 $g(x)=\frac{x^3}{3(x^2+x+1)}-a$，把参数变成水平平移。
+    - 求 $g^{\prime}(x)$ 并整理成非负形式。
+    - 最后用 $f(3a-1)<0<f(3a+1)$ 说明零点确实存在。
+  common_failures:
+    - 第 (1) 问漏写两个增区间，只写一个。
+    - 第 (2) 问只证明单调，忘记用介值定理证明存在零点。
+    - 求 $g^{\prime}(x)$ 时没有整理出 $x^2[(x+1)^2+2]$，看不出非负。
+    - 使用倒数换元法时默认 $a\ne0$，漏掉 $a=0$。
+  similar_practice_query: 含参三次函数 只有一个零点 等效零点法 x^2+x+1恒正
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0059/page_0060 页图；例 22 起头在 page_0059，法二续至 page_0060 顶部，page_0060 随后进入例 23。
+    - 法二除以 $a$ 的限制已在卡片中补明；主证明法一对全部实数 $a$ 成立。

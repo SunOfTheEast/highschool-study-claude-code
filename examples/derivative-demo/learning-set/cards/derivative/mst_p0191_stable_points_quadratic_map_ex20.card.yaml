@@ -1,0 +1,144 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0191_stable_points_quadratic_map_ex20
+content_revision_id: mst_p0191_stable_points_quadratic_map_ex20-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0191_stable_points_quadratic_map_ex20.card.yaml
+stem: 求函数 $f(x)=2x^2-1$ 的稳定点。
+answer: |-
+  $-\frac12,\ 1,\ \frac{-1+\sqrt5}{4},\ \frac{-1-\sqrt5}{4}$
+
+  稳定点满足 $f(f(x))=x$。对 $f(x)=2x^2-1$， $f(f(x))=2(2x^2-1)^2-1$，所以 $2(2x^2-1)^2-1=x$，即 $8x^4-8x^2-x+1=0$。不动点一定是稳定点，而 $2x^2-1=x$ 的两个不动点为 $x=-\frac12,1$，因此四次多项式含因式 $(x-1)(2x+1)$。继续分解得 $(x-1)(2x+1)(4x^2+2x-1)=0$，所以另外两个稳定点为 $\frac{-1\pm\sqrt5}{4}$。稳定点总共是 $-\frac12,1,\frac{-1+\sqrt5}{4},\frac{-1-\sqrt5}{4}$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 按定义写出稳定点方程。
+      max_score: 1
+    - step_id: step_2
+      description: 展开为四次方程。
+      max_score: 1
+    - step_id: step_3
+      description: 用不动点降阶分解。
+      max_score: 1
+    - step_id: step_4
+      description: 分解剩余二次因式得到全部稳定点。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level: []
+  method:
+    primary: 逆向构造法
+    secondary:
+      - 高阶因式分解
+      - 数形结合
+    subroute:
+      - 不动点
+      - 稳定点
+      - 用已知因式降阶
+  structure:
+    primary: 复合函数与不动点结构
+    secondary:
+      - 三次/高次函数结构
+      - 对称结构
+    evidence:
+      - $f(f(x))=x$
+      - $8x^4-8x^2-x+1=0$
+      - $(x-1)(2x+1)(4x^2+2x-1)=0$
+    normalization_moves_used:
+      - 把稳定点定义落到复合方程。
+      - 先解不动点，作为四次方程的已知因式。
+      - 用因式分解得到剩余稳定点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生混淆不动点和稳定点，回补分段/复合/反函数基础。
+      - 若学生展开 $f(f(x))$ 出错，回补代数恒等变形。
+      - 若学生不会利用已知根分解四次式，回补高阶因式分解对应的代数恒等变形。
+  detail_terms:
+    - $f(x)=2x^2-1$
+    - $f(f(x))=x$
+    - 不动点
+    - 稳定点
+    - $\frac{-1\pm\sqrt5}{4}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0191_stable_points_quadratic_map_ex20
+source_evidence:
+  source_refs:
+    - ref_id: page_0191
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0191/page_0191.md
+      role: problem_start
+      evidence: "page_0191 contains the definitions of 不动点 and 稳定点, followed by 例20: solve stable points of $f(x)=2x^2-1$ through $f(f(x))=x$ and factor using known fixed points."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0191.png
+      inspected: true
+      notes: 页图核对通过：例20题干、四次方程因式分解、稳定点答案和图像说明均与 markdown 一致。
+  source_context: page_0191 顶部是 page_0190 例19续解，按页头归属规则跳过；本卡处理 page_0191 新起头的稳定点例题。
+  source_influence:
+    - 保留源解“先找不动点，再作为稳定点因式”的降阶路线。
+    - 保留稳定点与反函数/曲线 $x=f(y)$ 交点的解释。
+  source_discrepancies: []
+original_problem:
+  stem: 求函数 $f(x)=2x^2-1$ 的稳定点。
+  parts: *a1
+  choices: []
+  answer: $-\frac12,\ 1,\ \frac{-1+\sqrt5}{4},\ \frac{-1-\sqrt5}{4}$
+  fidelity_notes:
+    - 源题为概念例题，无选项。
+    - 题目前 exposition 定义了不动点与稳定点，是本卡必要上下文。
+solution:
+  source_solution_summary: 稳定点满足 $f(f(x))=x$。对 $f(x)=2x^2-1$， $f(f(x))=2(2x^2-1)^2-1$，所以 $2(2x^2-1)^2-1=x$，即 $8x^4-8x^2-x+1=0$。不动点一定是稳定点，而 $2x^2-1=x$ 的两个不动点为 $x=-\frac12,1$，因此四次多项式含因式 $(x-1)(2x+1)$。继续分解得 $(x-1)(2x+1)(4x^2+2x-1)=0$，所以另外两个稳定点为 $\frac{-1\pm\sqrt5}{4}$。稳定点总共是 $-\frac12,1,\frac{-1+\sqrt5}{4},\frac{-1-\sqrt5}{4}$。
+  key_steps:
+    - step_id: step_1
+      statement: 按定义写出稳定点方程。
+      formula_trace:
+        from: $f(x)=2x^2-1$
+        to: $f(f(x))=2(2x^2-1)^2-1=x$
+        operation: 把 $f(x)$ 再代入一次 $f$。
+        why: 稳定点的定义就是 $f(f(x))=x$。
+      source_ref: page_0191
+    - step_id: step_2
+      statement: 展开为四次方程。
+      formula_trace:
+        from: $2(2x^2-1)^2-1=x$
+        to: $8x^4-8x^2-x+1=0$
+        operation: 展开并移项。
+        why: 需要把稳定点求解转成代数方程。
+      source_ref: page_0191
+    - step_id: step_3
+      statement: 用不动点降阶分解。
+      formula_trace:
+        from: $2x^2-1=x$
+        to: $x=-\frac12,\ 1$ 是稳定点，四次式含 $(x-1)(2x+1)$
+        operation: 先解不动点方程，再用“不动点必为稳定点”找因式。
+        why: 避免盲目硬分解四次方程。
+      source_ref: page_0191
+    - step_id: step_4
+      statement: 分解剩余二次因式得到全部稳定点。
+      formula_trace:
+        from: $8x^4-8x^2-x+1$
+        to: $(x-1)(2x+1)(4x^2+2x-1)=0$
+        operation: 多项式因式分解并解 $4x^2+2x-1=0$。
+        why: 剩余两个根是稳定点但不是不动点。
+      source_ref: page_0191
+teaching_card:
+  student_title: 用不动点帮稳定点方程降阶
+  what_it_trains: 训练把复合函数稳定点转成方程后，不硬拆四次式，而是先用不动点找出已知因式。
+  recognition_cues:
+    - 题目问稳定点，定义是 $f(f(x))=x$。
+    - 函数是二次函数，复合后会出现四次方程。
+    - 不动点一定是稳定点，可以先拿来降阶。
+  normalization_moves:
+    - 先写 $f(f(x))=x$。
+    - 再解 $f(x)=x$ 找不动点。
+    - 用不动点作为因式分解四次方程。
+  common_failures:
+    - 只求不动点，漏掉非不动点的稳定点。
+    - 直接展开四次后不会分解。
+    - 把 $\frac{-1\pm\sqrt5}{4}$ 误判成不动点。
+  similar_practice_query: 稳定点 f(f(x))=x 不动点 因式分解 2x^2-1
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

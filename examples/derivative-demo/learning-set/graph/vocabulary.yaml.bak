@@ -1,0 +1,338 @@
+# 导数 — 词表 (machine-readable, canonical names only)
+#
+# 由 MASTER.md 提取，供脚本消费。所有题目标签必须严格匹配此处名称。
+#
+# Tag boundary rules:
+# - 数值比较: only for comparison, ordering, estimation, integer-part, or option
+#   selection tasks. Deriving a Pade approximation is not automatically 数值比较.
+# - 双变量不等式: use only when the main conclusion explicitly involves two
+#   variables or two roots. A two-variable setup that locks a single value should
+#   usually be 求值/数值比较/恒成立 by its actual target.
+# - 多变量不等式: use for three or more variables, cyclic sums, symmetric
+#   constraints, triangle side/angle constraints, or multi-variable averaging.
+# - 距离最值: if the final target is distance, point-line distance, horizontal or
+#   vertical distance, or shortest distance between curves, this type takes
+#   priority over the tool used to solve it.
+# - 逼近替代: reserve for Taylor truncation, Pade rational bounds,
+#   high-precision two-sided estimates, or explicit curve replacement. Ordinary
+#   e^x >= 1+x and ln x <= x-1 alone should not force this strategy.
+# - 参变分离法: normally pairs with 图像交点法 or 恒成立求参的图像分析. Do not
+#   attach it to 表达式清洁 merely because the expression was rearranged.
+# - 主客体分析法: use only when the solution compares dominant/subordinate
+#   growth or deliberately selects points by comparing a main term against a
+#   secondary term.
+# - K2.11 三角放缩: use only for actual trigonometric inequalities or bounds.
+#   Do not tag every trigonometric derivative/zero-count problem as K2.11.
+# - K25.1 隐零点代换: use for genuinely hidden zero/extreme-point substitution
+#   or parameter elimination. Visible equality points such as x=0,1,2 should
+#   not be forced into K25.1.
+# - K26.1 因式分解-提公因式: use only when factorization is a meaningful solving
+#   step, not just a derivative simplification artifact.
+
+types:
+  - 恒成立求参数范围
+  - 不等式证明
+  - 零点个数与存在性
+  - 对称中心偏移
+  - 数值比较
+  - 距离最值
+  - 切线几何问题
+  - 抽象函数性质推断
+  - 双变量不等式
+  - 多变量不等式
+  - 数列不等式
+  - 三角-导数综合
+
+modules:
+  - 三次函数性质体系
+
+strategies:
+  - 同构归约
+  - 切线放缩
+  - 表达式清洁
+  - 逼近替代
+  - 初级比较法
+  - 保值性分解
+  - 分而治之
+  - 极值显点探路
+  - 放缩取点
+  - 图像交点法
+  - 图像位置法（包裹性）
+  - 切线零点比大小
+  - 切线计数
+  - 公切线双轨
+  - 对称性锁定
+  - 反向构造
+  - 距离几何化
+  - 距离几何化（反函数）
+  - 乘积指数化+切线放缩
+  - 加强不等式
+  - 端点效应
+  - 极点效应
+  - 隐点代换
+  - 比值/差值代换
+  - 对称化构造
+  - 对数均值不等式策略
+  - 拟合替代
+  - 切割线夹
+  - 主元法
+  - 调整法（多变量平均化降维）
+
+methods:
+  # 同构归约
+  - 多步换元
+  - 乘积型换元
+  - 和差型换元
+  - 双曲型换元
+  - 不对称补全+夹逼法
+  - 乘积指数化+切线放缩法
+  # 切线放缩
+  - 切点构造法
+  - 斜率构造法
+  - 基本切线计算（在点）
+  - 基本切线计算（过点外）
+  - 公切线代数求法
+  - 公切线几何判定法
+  - 平行曲线公切线法
+  - 切线条数区域判定法
+  - 包络线判别法
+  - 切线零点比大小法
+  # 表达式清洁
+  - 对数项孤立化
+  - 指数项配对化简
+  - 除以单项式重构法
+  - 根式代换降次法
+  # 逼近替代
+  - 泰勒估值法
+  - 帕德夹逼法
+  - 双曲型放缩夹逼法
+  - 以曲代曲法
+  # 比大小
+  - 同底/同幂化
+  - 中间变量传递法
+  - 二项式定理展开
+  - 六大同构函数比大小
+  - 糖水不等式法
+  - 直线与指数和差交点法
+  # 抽象函数构造
+  - 四基底构造法
+  - 分式反向构造
+  - 奇偶性锁定法
+  - 对称-周期互推法
+  # 图像分析
+  - 参变分离法
+  - 参变半分离法
+  - 嵌套函数零点法
+  - 模块函数分析法
+  - 包裹性分析法
+  - 平行切线距离法
+  - 反函数水平距离法
+  - 乘积型探路法（单调函数共零点）
+  # 放缩与找点
+  - 保值性余量分析法
+  - 上下函数选取法
+  - 放缩取点标准链
+  - 等效零点法
+  - 主客体分析法
+  - 极值点偏移取点法
+  - 二分法升级精度
+  # 探路
+  - 端点效应标准流程
+  - 端点探路+矛盾取点
+  - 端点探路+指对清洁
+  - 双端点+中间零点模型
+  - 端点效应参变分离
+  - 极点效应流程
+  - 双参数极点效应
+  - 极点效应失效分析
+  - 高阶导数判定极值
+  - 隐零点代换-初高分流
+  - 隐零点代换-参变分离
+  - 插值放缩法
+  - 整数格点探路法
+  # 双变量
+  - 比值代换法
+  - 差值代换法
+  - 对称化构造法
+  - ALG不等式应用
+  - 切割线夹法
+  - 拟合替代法
+  - 主元选择法
+  # 数列
+  - 数列代换法
+  - 接龙型裂项法
+  - 隔项相消法
+  - 等比放缩构造法
+  # 三角
+  - 分区间讨论法
+  - 三角放缩代入法
+  - 和差化积+双变量法
+
+# 知识标签 (knowledge) — 两级体系
+# 父标签 (K1-K24): 向下兼容, 等价于其所有子标签的并集
+# 子标签 (Kx.y): 精标. 题目应优先使用, 一个 distinct 数学工具一个标签.
+knowledge:
+  - K1
+  - K1.1
+  - K1.2
+  - K1.3
+  - K2
+  - K2.1
+  - K2.2
+  - K2.3
+  - K2.4
+  - K2.5
+  - K2.6
+  - K2.7
+  - K2.8
+  - K2.9
+  - K2.10
+  - K2.11
+  - K2.12
+  - K2.13
+  - K3
+  - K4
+  - K5
+  - K5.1
+  - K5.2
+  - K6
+  - K6.1
+  - K6.2
+  - K6.3
+  - K6.4
+  - K7
+  - K7.1
+  - K7.2
+  - K8
+  - K8.1
+  - K8.2
+  - K8.3
+  - K9
+  - K10
+  - K10.1
+  - K10.2
+  - K10.3
+  - K11
+  - K11.1
+  - K11.2
+  - K12
+  - K12.1
+  - K12.2
+  - K13
+  - K13.1
+  - K13.2
+  - K13.3
+  - K14
+  - K15
+  - K15.1
+  - K15.2
+  - K15.3
+  - K15.4
+  - K16
+  - K17
+  - K17.1
+  - K17.2
+  - K17.3
+  - K18
+  - K19
+  - K20
+  - K20.1
+  - K20.2
+  - K21
+  - K21.1
+  - K21.2
+  - K21.3
+  - K22
+  - K22.1
+  - K22.2
+  - K22.3
+  - K23
+  - K24
+  - K24.1
+  - K24.2
+  - K24.3
+  - K25
+  - K25.1
+  - K25.2
+  - K26
+  - K26.1
+  - K26.2
+  - K26.3
+  - K27
+  - K27.1
+  - K28
+
+# 子标签定义 (来源: MASTER.md 知识层)
+# K1.1  六大函数-单调极值 (x·eˣ, x·lnx, lnx/x, eˣ/x, x/lnx, x/eˣ)
+# K1.2  六大函数-飘带对称 (x₁x₂=1下 g(x)+g(1/x)化简消元)
+# K1.3  六大函数-衍生识别 (平移/缩放/代换归约到六大函数)
+# K2.1  放缩-指数一阶切线 (eˣ≥x+1, eˣ≥ex, eˣ≥eˣ⁰(x-x₀+1))
+# K2.2  放缩-指数二阶加强 (eˣ≥ex+(x-1)², eˣ≥(e/2)x²+e/2)
+# K2.3  放缩-指数高阶泰勒 (eˣ≥1+x+x²/2, ≥1+x+x²/2+x³/6)
+# K2.4  放缩-指数分式型 (eˣ/xⁿ≥(e/n)ⁿ)
+# K2.5  放缩-对数一阶切线 (lnx≤x-1, ln(x+1)≤x)
+# K2.6  放缩-对数倒数界 (lnx≥1-1/x)
+# K2.7  放缩-帕德下界 (lnx≥2(x-1)/(x+1), 飘带下界)
+# K2.8  放缩-飘带上界 (lnx≤(x-1/x)/2)
+# K2.9  放缩-对数根式界 (lnx≤√x-1/√x, ≤4(√x-1)/(√x+1))
+# K2.10 放缩-对数泰勒 (ln(1+x)≥x-x²/2)
+# K2.11 放缩-三角 (sinx≤x≤tanx, cosx≥1-x²/2, sinx≥x-x³/6)
+# K2.12 放缩-分式幂 (1/(1-x)≥1+x+x², (1+x)ᵅ≥1+αx, 伯努利)
+# K2.13 放缩-双曲 (eᵗ−e⁻ᵗ≥2t, eᵗ+e⁻ᵗ≥2, sinh/cosh 相关不等式)
+# K3    泰勒/麦克劳林-理论 (余项分析, 奇偶阶交替方向)
+# K4    三角/分式/幂展开 (已合并至K2, 等价于K2)
+# K5.1  帕德-对数 (ln(1+x)的帕德有理界)
+# K5.2  帕德-指数 (eˣ的有理逼近(2+x)/(2-x))
+# K6.1  三次函数-单调极值 (Δ判别, 极值点个数)
+# K6.2  三次函数-对称中心 (x₀=-b/(3a)=拐点=两极值中点)
+# K6.3  三次函数-实根判别 (两极值异号→3根, 同号→1根, 一为零→2根)
+# K6.4  三次函数-切线条数区域 (四区域: 3/1/1/3)
+# K7.1  渐近线-七区域切线 (拐点切线+渐近线分区, 双外弧3/内弧1/截断2/零0)
+# K7.2  通用函数-过点切线条数 (设切点→关于t的方程个数→切线条数, 非三次非渐近线型, 覆盖eˣ/x²等)
+# K8.1  公切线-凹凸性判定 (同/异凹凸 × 交点 → 公切线条数)
+# K8.2  公切线-平行曲线 (g(x)=f(x-a)-b, 斜率k=b/a)
+# K8.3  公切线-指对型 (aˣ与log_a x公切线, 斜率之积=1)
+# K9    牛顿迭代 (x_{n+1}=x_n-f/f')
+# K10.1 对称-轴点互推 (f对称轴↔f'对称中心)
+# K10.2 对称-周期互推 (双轴/双心/轴心→周期)
+# K10.3 对称-奇偶性 (偶→导奇, 奇→导偶)
+# K11.1 高阶导数-二阶判定 (f'=0, f''≠0→极值)
+# K11.2 高阶导数-高阶判定 (f'=f''=0, 首个非零导→偶阶极值/奇阶拐点)
+# K12.1 零点-等差关联 (差值函数 eˣ-x/x-lnx 四交点等差 x₁+x₄=x₂+x₃)
+# K12.2 零点-等比关联 (比值函数 eˣ/x·x/lnx 四交点等比 x₁x₄=x₂x₃)
+# K13.1 ALG-对数均值 (√(x₁x₂) < Δ/Δln < (x₁+x₂)/2)
+# K13.2 ALG-指数均值
+# K13.3 ALG-阿达玛积分 (f((a+b)/2) ≤ 均值积分 ≤ (f(a)+f(b))/2)
+# K14   极值点偏移方向 (f‴(x₀)>0→极小左偏/极大右偏)
+# K15.1 包裹性-∀∀型 (f_min > g_max)
+# K15.2 包裹性-∀∃型 (f_min > g_min)
+# K15.3 包裹性-∃∀型 (f_max > g_max)
+# K15.4 包裹性-值域包含 (f_min<g_min 且 f_max>g_max)
+# K16   指数和差交点 (a+b=c→x=1,y=c; a²+b²=c²→x=2,y=c²)
+# K17.1 比大小-aᵇvsbᵃ (大指小底, f(x)=lnx/x单调性)
+# K17.2 比大小-糖水不等式 (a/b < (a+c)/(b+c))
+# K17.3 比大小-(a-x)^(a+x)型 (f(t)=(a-t)^(a+t)在(0,e)↑/(e,∞)↓)
+# K18   可解方程清单 (一次/二次/简单指对/可因式分解, 找点用)
+# K19   放缩方向原则 (缩小正项→下界, 放大负项→下界)
+# K20.1 拟合-二次 (x·eˣ在x=-1附近, lnx在x=1附近)
+# K20.2 拟合-以曲代曲 (可证不等式简单曲线替代复杂曲线)
+# K21.1 数列-1/n代换 (x=1/n, 连续不等式→离散)
+# K21.2 数列-裂项代换 (x=n/(n+1)接龙, x=(2n+1)/(2n-1)帕德)
+# K21.3 数列-飘带代换 (x=1+1/n)
+# K22.1 三角-平方和 (sin²x+cos²x=1)
+# K22.2 三角-二倍角 (sin2x=2sinx cosx)
+# K22.3 三角-和差化积
+# K23   牛顿迭代 (等价于K9, 保留为别名)
+# K24.1 根式-代换降次 (t=√x消除根式)
+# K24.2 根式-有理化 (√(x²+1)-x = 1/(√(x²+1)+x))
+# K24.3 根式-反双曲 (ln(x+√(x²+1)) = arsh(x), 导数=1/√(x²+1))
+# K25   隐点代换体系 (f'(x₀)=0建立隐零点关系, 用于消参/跨界/探路)
+# K25.1 隐零点代换-消参 (f'(x₀)=0 → 参数用x₀表达 → 代入化简; 含极点效应/整数格点)
+# K25.2 插值放缩法 (构造中间函数p: f≥p≥g, 利用已有零点跨界比较大小)
+# K26   因式分解 (导数表达式的代数因式分解以求解零点/判号)
+# K26.1 因式分解-提公因式 (提(x-a), 提eˣ; 含参数情形提公因式求临界点)
+# K26.2 因式分解-十字相乘/分组 (二次三项式分解为(mx+n)(px+q); 高次分组分解)
+# K26.3 因式分解-试根法 (试x=±1,±2,…→找到一根→多项式除法→继续分解; 三次及以上适用)
+# K27   非对称偏移 (对称中心不适用时, 按权重比构造非对称比较函数)
+# K27.1 非对称偏移-加权构造 (F(x)=f(x)−f(kx₀−(k−1)x), k≠2, 代替对称化构造法)
+# K28   代数不等式 (非导数额域的纯代数不等式: AM-GM/Cauchy/Schur/轮换对称/调整法)

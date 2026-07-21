@@ -1,0 +1,170 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0058_section4_ex20
+content_revision_id: mst_p0058_section4_ex20-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0058_section4_ex20.card.yaml
+stem: |-
+  （2023 · 龙岩一模 T12）已知 $f(x)=x^3-3x+m$，在区间 $[0,2]$ 上任取三个数 $a,b,c$，均存在以 $f(a),f(b),f(c)$ 为边长的三角形，则 $m$ 的取值范围是（  ）
+  A. $m>2$
+  B. $m>4$
+  C. $m>6$
+  D. $m>8$
+answer: |
+  C
+
+  在 $[0,2]$ 上，$f^{\prime}(x)=3x^2-3=3(x+1)(x-1)$，所以 $f$ 在 $[0,1]$ 上递减、在 $[1,2]$ 上递增，最小值为 $f(1)=m-2$，最大值为 $f(2)=m+2$。要让任取三个函数值都能成为三角形三边，只需检查最危险的组合：两条边都取最小值，一条边取最大值，即 $2(m-2)>m+2$。解得 $m>6$，故选 C。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 先求 $f$ 在 $[0,2]$ 上的单调性。
+      max_score: 1
+    - step_id: step_2
+      description: 在闭区间上确定最小值和最大值。
+      max_score: 1
+    - step_id: step_3
+      description: 把“任取三个函数值能作三角形”化成最小值与最大值的不等式。
+      max_score: 1
+    - step_id: step_4
+      description: 解出参数范围并对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: item_1
+        goal: 数值求值
+        target: 求使任意三个函数值都能构成三角形边长的 $m$ 的范围。
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 充分/必要性探路
+    subroute:
+      - 三次函数四段论
+      - 闭区间最值
+      - 三角形最坏边长
+  structure:
+    primary: 三次/高次函数结构
+    secondary:
+      - 不等式工具结构
+    evidence:
+      - $f^{\prime}(x)=3(x+1)(x-1)$，在 $[0,2]$ 上先减后增。
+      - $f(1)=m-2$ 是最小值，$f(2)=m+2$ 是最大值。
+      - 任意三边成立归结为 $2f_{\min}>f_{\max}$。
+    normalization_moves_used:
+      - 先把函数值集合压缩成区间 $[m-2,m+2]$。
+      - 把任意三角形条件转成“两个最小值大于一个最大值”。
+      - 由 $m>6$ 自动补足边长为正。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会用导数在闭区间上找最值，回补导数单调极值基础。
+      - 若学生只检验 $m-2>0$ 而漏掉三角形不等式，回补不等式工具基础。
+      - 若学生不知道任意三边的最坏情况是 $2f_{\min}>f_{\max}$，回补几何关系基础。
+      - 若学生把 $f(0)=m$ 误判为最大值，回补函数性质与图像。
+  detail_terms:
+    - $x^3-3x+m$
+    - $[0,2]$
+    - $f(1)=m-2$
+    - $f(2)=m+2$
+    - $2f_{\min}>f_{\max}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0058_section4_ex20
+source_evidence:
+  source_refs:
+    - ref_id: page_0058_ex20_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0058/page_0058.md
+      role: problem_start
+      evidence: 例 20：已知 $f(x)=x^3-3x+m$，在区间 $[0,2]$ 上任取三个数 $a,b,c$，均存在以 $f(a),f(b),f(c)$ 为边长的三角形，求 $m$ 的取值范围。
+    - ref_id: page_0058_ex20_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0058/page_0058.md
+      role: solution
+      evidence: 解析由 $f^{\prime}(x)=3x^2-3=3(x+1)(x-1)$ 得 $[0,2]$ 上最小值 $f(1)=m-2$、最大值 $f(2)=m+2$，再由 $f(1)+f(1)>f(2)$ 得 $m>6$，故选 C。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0058.png
+      inspected: true
+      notes: 页图已核对：例 20 题头、A-D 选项、解析和区间草图均位于 page_0058；图中 $x=1$ 为区间内最小值点，$x=2$ 为区间端点最大值。
+  source_context: page_0058 顶部是例 19 续解，按题头规则跳过；例 20 是本页第一个新起头例题，属于第四节三次函数四段论后的应用。
+  source_influence:
+    - 卡片保留源页的四个选项和答案 C。
+    - 解法按源解的最小值、最大值和三角形最坏边长条件组织。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 龙岩一模 T12）已知 $f(x)=x^3-3x+m$，在区间 $[0,2]$ 上任取三个数 $a,b,c$，均存在以 $f(a),f(b),f(c)$ 为边长的三角形，则 $m$ 的取值范围是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $m>2$
+      text_latex: $m>2$
+    - label: B
+      text_raw: $m>4$
+      text_latex: $m>4$
+    - label: C
+      text_raw: $m>6$
+      text_latex: $m>6$
+    - label: D
+      text_raw: $m>8$
+      text_latex: $m>8$
+  answer: C
+  fidelity_notes:
+    - 源页题意为“任取三个数 $a,b,c$”，所以必须让区间内任意三个函数值都能作三角形边长。
+    - 源解只写出 $f(1)+f(1)>f(2)$；该条件给出 $m>6$，同时保证最小函数值 $m-2>0$，边长为正自动满足。
+solution:
+  source_solution_summary: |
+    在 $[0,2]$ 上，$f^{\prime}(x)=3x^2-3=3(x+1)(x-1)$，所以 $f$ 在 $[0,1]$ 上递减、在 $[1,2]$ 上递增，最小值为 $f(1)=m-2$，最大值为 $f(2)=m+2$。要让任取三个函数值都能成为三角形三边，只需检查最危险的组合：两条边都取最小值，一条边取最大值，即 $2(m-2)>m+2$。解得 $m>6$，故选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 先求 $f$ 在 $[0,2]$ 上的单调性。
+      formula_trace:
+        from: $f(x)=x^3-3x+m$
+        to: $f^{\prime}(x)=3x^2-3=3(x+1)(x-1)$
+        operation: 对三次函数求导并分解导函数。
+        why: 区间内函数值范围决定任取三边时的最坏情况。
+      source_ref: page_0058_ex20_solution
+    - step_id: step_2
+      statement: 在闭区间上确定最小值和最大值。
+      formula_trace:
+        from: $x\in[0,2]$，临界点为 $x=1$
+        to: $f(x)_{\min}=f(1)=m-2,\quad f(x)_{\max}=f(2)=m+2$
+        operation: 由导数符号得 $[0,1]$ 递减、$[1,2]$ 递增，并比较端点值。
+        why: $f(0)=m$ 介于 $m-2$ 与 $m+2$ 之间，所以最大值取在 $x=2$。
+      source_ref: page_0058_ex20_solution
+    - step_id: step_3
+      statement: 把“任取三个函数值能作三角形”化成最小值与最大值的不等式。
+      formula_trace:
+        from: 任意 $u,v,w\in[m-2,m+2]$ 都要满足三角形不等式
+        to: $2(m-2)>m+2$
+        operation: 取两条边为最小值、一条边为最大值，这是三角形不等式最容易失败的组合。
+        why: 若最小值加最小值仍大于最大值，则任意两边之和都大于第三边。
+      source_ref: page_0058_ex20_solution
+    - step_id: step_4
+      statement: 解出参数范围并对应选项。
+      formula_trace:
+        from: $2(m-2)>m+2$
+        to: $m>6$
+        operation: 移项化简。
+        why: $m>6$ 同时推出 $m-2>0$，满足三角形边长为正。
+      source_ref: page_0058_ex20_solution
+teaching_card:
+  student_title: 任取三边先看最小值和最大值
+  what_it_trains: 训练把“任取函数值都能作三角形”翻译成函数值范围里的最坏边长不等式。
+  recognition_cues:
+    - 题目说在一个区间内任取 $a,b,c$。
+    - 函数值 $f(a),f(b),f(c)$ 被当作三角形边长。
+    - 源函数是三次函数，区间端点和临界点都容易算。
+  normalization_moves:
+    - 先用导数找出 $[0,2]$ 上的函数值范围。
+    - 再取“两条最短边加一条最长边”作为最严检验。
+    - 最后解 $2(m-2)>m+2$，不要把正边长条件单独误当答案。
+  common_failures:
+    - 把“任取”看成“存在”，只找一组三角形。
+    - 只检查 $f(x)>0$，漏掉两边之和大于第三边。
+    - 没有比较 $f(0),f(1),f(2)$，直接把端点当最值。
+  similar_practice_query: 三次函数 闭区间最值 任取函数值 三角形边长 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0058 markdown 与页图一致；例 20 题头、选项和完整解析均在 page_0058。

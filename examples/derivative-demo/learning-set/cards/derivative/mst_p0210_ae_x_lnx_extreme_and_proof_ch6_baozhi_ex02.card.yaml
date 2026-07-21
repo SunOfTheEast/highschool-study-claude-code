@@ -1,0 +1,175 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0210_ae_x_lnx_extreme_and_proof_ch6_baozhi_ex02
+content_revision_id: mst_p0210_ae_x_lnx_extreme_and_proof_ch6_baozhi_ex02-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0210_ae_x_lnx_extreme_and_proof_ch6_baozhi_ex02.card.yaml
+stem: |-
+  （2018 · 新课标 I）已知函数 $f(x)=ae^x-\ln x-1$。
+  (1) 设 $x=2$ 是 $f(x)$ 的极值点，求 $a$，并求 $f(x)$ 的单调区间。
+  (2) 证明：当 $a\geqslant\frac{1}{e}$ 时，$f(x)\geqslant0$。
+answer: |
+  (1) $a=\frac{1}{2e^2}$，$f(x)$ 在 $(0,2)$ 上单调递减、在 $(2,+\infty)$ 上单调递增；(2) 结论成立。
+
+  由 $f(x)=ae^x-\ln x-1$ 的定义域得 $x>0$，且 $f^{\prime}(x)=ae^x-\frac1x$。由 $x=2$ 是极值点， $f^{\prime}(2)=ae^2-\frac12=0$，故 $a=\frac{1}{2e^2}$。 代回得 $f^{\prime}(x)=\frac{1}{2e^2}e^x-\frac1x$，从而在 $(0,2)$ 上为负、在 $(2,+\infty)$ 上为正，单调区间可得。 对第(2)问，先写 $f(x)=\frac1e e^x-\ln x-1+\left(a-\frac1e\right)e^x$， 令 $h(x)=e^x-x-1$，则 $f(x)=h(x-1)+h(\ln x)+\left(a-\frac1e\right)e^x$。 由 $h(\cdot)\ge0$ 及 $a-\frac1e\ge0$，三项均非负，故 $f(x)\ge0$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 由极值点条件解参数 $a$。
+      max_score: 1
+    - step_id: step_2
+      description: 代回参数并判定单调区间。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问先做参数拆分并引入母函数 $h$。
+      max_score: 1
+    - step_id: step_4
+      description: 逐项判非负并闭合证明。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 极值最值
+        target: 第 (1) 问
+        result: $a=\frac{1}{2e^2}$，单调递减区间 $(0,2)$，单调递增区间 $(2,+\infty)$
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 (2) 问
+        result: 当 $a\ge\frac1e$ 时 $f(x)\ge0$
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 切线放缩与凹凸性
+      - 含参数分类讨论
+    subroute:
+      - 差一同构
+      - 同构保值性
+      - 余量函数
+      - 极值点代入
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 不等式工具结构
+      - 极值点偏移结构
+    evidence:
+      - $f(x)=ae^x-\ln x-1$
+      - $f^{\prime}(x)=ae^x-\frac1x$
+      - $h(x)=e^x-x-1$
+      - $f(x)=h(x-1)+h(\ln x)+\left(a-\frac1e\right)e^x$
+    normalization_moves_used:
+      - 先用极值点条件把参数定值，再做导数判号。
+      - 把 $e^x,\ln x$ 组合改写为 $h(x-1)$ 与 $h(\ln x)$。
+      - 单独保留余量项 $\left(a-\frac1e\right)e^x$ 做参数控制。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f^{\prime}(2)=0$ 反解参数，回补导数运算与几何意义。
+      - 若学生不会由 $h(t)=e^t-t-1\ge0$ 判非负，回补指数对数基础。
+      - 若学生写不出从导数符号到单调区间的结论，回补导数单调极值基础。
+      - 若学生在配凑 $h(x-1),h(\ln x)$ 时频繁丢项，回补代数恒等变形。
+  detail_terms:
+    - $a=\frac{1}{2e^2}$
+    - $f^{\prime}(x)=ae^x-\frac1x$
+    - $h(x)=e^x-x-1$
+    - $h(x-1)+h(\ln x)$
+    - $\left(a-\frac1e\right)e^x$
+parts: &a1
+  - (1) 设 $x=2$ 是 $f(x)$ 的极值点，求 $a$，并求 $f(x)$ 的单调区间。
+  - (2) 证明：当 $a\geqslant\frac{1}{e}$ 时，$f(x)\geqslant0$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0210_ae_x_lnx_extreme_and_proof_ch6_baozhi_ex02
+source_evidence:
+  source_refs:
+    - ref_id: page_0210_ex01_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0210/page_0210.md
+      role: local_context
+      evidence: page_0210 顶部先承接 page_0209 例1第(2)问收尾，按批次规则不新建该题卡。
+    - ref_id: page_0210_ex02_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0210/page_0210.md
+      role: problem_start
+      evidence: page_0210 中上部出现“例2（2018·新课标 I）已知函数 $f(x)=ae^x-\ln x-1$”，并给出两问。
+    - ref_id: page_0210_ex02_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0210/page_0210.md
+      role: solution
+      evidence: “解析”完整覆盖第(1)(2)问：先由极值点求 $a=\frac{1}{2e^2}$ 与单调区间，再用 $h(x)=e^x-x-1$ 的同构分解证明 $f(x)\geqslant0$。
+    - ref_id: page_0210_ex03_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0210/page_0210.md
+      role: local_context
+      evidence: 例2解析后紧接“例3”新题头，确认例2在本页已闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0210.png
+      inspected: true
+      notes: 已核对页图：页首确为例1续页；例2题头与解析完整位于本页，未跨页。
+  source_context: 本卡题头与解答均在 page_0210；页首例1是续页上下文，页下例3是下一题题头。
+  source_influence:
+    - 保留 source 的导数判号路线：由极值点方程先定参数，再据 $f^{\prime}(x)$ 符号写单调区间。
+    - 保留保值性拆分：$f(x)=h(x-1)+h(\ln x)+\left(a-\frac{1}{e}\right)e^x$。
+    - 保留“余量函数为 $e^x$，定义域内恒正”的课堂备注。
+  source_discrepancies: []
+original_problem:
+  stem: （2018 · 新课标 I）已知函数 $f(x)=ae^x-\ln x-1$。
+  parts: *a1
+  choices: []
+  answer: (1) $a=\frac{1}{2e^2}$，$f(x)$ 在 $(0,2)$ 上单调递减、在 $(2,+\infty)$ 上单调递增；(2) 结论成立。
+  fidelity_notes:
+    - source 题干为双问综合题，第(1)问求参并判单调，第(2)问做全局不等式证明。
+    - 本题解析未跨页。
+solution:
+  source_solution_summary: |
+    由 $f(x)=ae^x-\ln x-1$ 的定义域得 $x>0$，且 $f^{\prime}(x)=ae^x-\frac1x$。由 $x=2$ 是极值点， $f^{\prime}(2)=ae^2-\frac12=0$，故 $a=\frac{1}{2e^2}$。 代回得 $f^{\prime}(x)=\frac{1}{2e^2}e^x-\frac1x$，从而在 $(0,2)$ 上为负、在 $(2,+\infty)$ 上为正，单调区间可得。 对第(2)问，先写 $f(x)=\frac1e e^x-\ln x-1+\left(a-\frac1e\right)e^x$， 令 $h(x)=e^x-x-1$，则 $f(x)=h(x-1)+h(\ln x)+\left(a-\frac1e\right)e^x$。 由 $h(\cdot)\ge0$ 及 $a-\frac1e\ge0$，三项均非负，故 $f(x)\ge0$。
+  key_steps:
+    - step_id: step_1
+      statement: 由极值点条件解参数 $a$。
+      formula_trace:
+        from: $f^{\prime}(x)=ae^x-\frac1x,\ f^{\prime}(2)=0$
+        to: $a=\frac{1}{2e^2}$
+        operation: 代入 $x=2$ 并解一元方程。
+        why: 第(1)问先锁定参数，后续才能判导数符号。
+      source_ref: page_0210_ex02_solution
+    - step_id: step_2
+      statement: 代回参数并判定单调区间。
+      formula_trace:
+        from: $f^{\prime}(x)=\frac{1}{2e^2}e^x-\frac1x$
+        to: $0<x<2$ 时 $f^{\prime}(x)<0$，$x>2$ 时 $f^{\prime}(x)>0$
+        operation: 按 source 的导数符号比较写出区间结论。
+        why: 单调性是第(1)问目标输出。
+      source_ref: page_0210_ex02_solution
+    - step_id: step_3
+      statement: 第(2)问先做参数拆分并引入母函数 $h$。
+      formula_trace:
+        from: $f(x)=ae^x-\ln x-1,\ a\ge\frac1e$
+        to: $f(x)=h(x-1)+h(\ln x)+\left(a-\frac1e\right)e^x$
+        operation: 先拆出 $\frac1e e^x$，再把指数项与对数项配凑到 $h(t)=e^t-t-1$。
+        why: 把目标转化为“若干非负项之和”。
+      source_ref: page_0210_ex02_solution
+    - step_id: step_4
+      statement: 逐项判非负并闭合证明。
+      formula_trace:
+        from: $h(x-1)\ge0,\ h(\ln x)\ge0,\ \left(a-\frac1e\right)e^x\ge0$
+        to: $f(x)\ge0$
+        operation: 利用 $h(t)=e^t-t-1\ge0$ 与参数条件。
+        why: 三项同向非负直接得到目标不等式。
+      source_ref: page_0210_ex02_solution
+teaching_card:
+  student_title: 极值定参后做差一同构证明
+  what_it_trains: 训练“先由导数极值点定参数，再把指对混合式拆成母函数非负项”的双段式处理。
+  recognition_cues:
+    - 题干同时给出“极值点定参”与“全局不等式证明”。
+    - 表达式含 $ae^x-\ln x-1$，适合配凑到 $e^t-t-1$ 母函数。
+    - 参数条件是下界型（$a\ge\frac1e$），天然对应余量项。
+  normalization_moves:
+    - 极值点代入导数方程先定 $a$。
+    - 把目标式改写成 $h(\cdot)$ 非负项之和。
+    - 将参数差值作为余量独立判非负。
+  common_failures:
+    - 只算出 $a$ 却没把导数符号转成完整单调区间。
+    - 把 $h(\ln x)$ 错写为 $h(x)$ 导致结构断裂。
+    - 漏写 $x>0$ 定义域，后续对 $\ln x$ 的使用不严谨。
+  similar_practice_query: ae^x lnx 极值点 定参 同构保值性 不等式
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

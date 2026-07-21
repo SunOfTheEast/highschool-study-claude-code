@@ -1,0 +1,188 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0241_a_x_plus1_ex_minus_1_minus_1_over_x_zero_count_ch6_findpoint_ex16
+content_revision_id: mst_p0241_a_x_plus1_ex_minus_1_minus_1_over_x_zero_count_ch6_findpoint_ex16-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0241_a_x_plus1_ex_minus_1_minus_1_over_x_zero_count_ch6_findpoint_ex16.card.yaml
+stem: （MST 陪跑课答疑）已知 $a>0$，$x>0$，$f(x)=a(x+1)e^x-1-\frac1x$，判断 $f(x)$ 的零点个数。
+answer: |-
+  $f(x)$ 有唯一零点。
+
+  $f'(x)=a(x+2)e^x+\frac1{x^2}>0$，所以 $f$ 在 $(0,+\infty)$ 上 单调递增，最多一个零点。法一按 $f(1)=2ae-2$ 分界：若 $a>1/e$，则 $f(1)>0$，在 $(0,1)$ 中用 $f(x)<2ae-1-\frac1x$，取 $x=1/(2ae-1)$ 得左侧负值点；若 $a<1/e$，则 $f(1)<0$，在 $(1,+\infty)$ 中用 $f(x)>2ae^x-2$，取 $x=\ln(1/a)$ 得右侧正值点；若 $a=1/e$， $x=1$ 即零点。故总是唯一零点。法二则取远右点 $x=e^{1/a}$， 用 $ae^{1/a}>1$ 构造正值点，再由左侧负值点夹根。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 先确认函数严格递增。
+      max_score: 1
+    - step_id: step_2
+      description: 用 $f(1)$ 作为分界。
+      max_score: 1
+    - step_id: step_3
+      description: $a>1/e$ 时在左侧找负值点。
+      max_score: 1
+    - step_id: step_4
+      description: $a<1/e$ 时在右侧找正值点。
+      max_score: 1
+    - step_id: step_5
+      description: $a=1/e$ 时零点就是 $x=1$。
+      max_score: 1
+    - step_id: step_6
+      description: 远点法用 $x=e^{1/a}$ 消掉参数影响。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: main
+        goal: 零点/极值点分析
+        target: 第 main 问
+        result: $f(x)$ 有唯一零点。
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 充分/必要性探路
+    subroute:
+      - 单调函数唯一零点
+      - $f(1)$ 分界
+      - 左右取点
+      - 远点 $e^{1/a}$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $a(x+1)e^x-1-\frac1x$
+      - $f(1)=2ae-2$
+      - $1/(2ae-1)$
+      - $\ln(1/a)$
+      - $e^{1/a}$
+    normalization_moves_used:
+      - 先用导数证明单调递增。
+      - 用 $f(1)$ 划分参数。
+      - 在 $f(1)$ 左右分别找异号点。
+      - 远点法用 $e^{1/a}$ 消除参数影响。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会判断单调性，回补导数单调极值基础。
+      - 若学生不会对 $-1/x$ 求导，回补导数运算与几何意义。
+      - 若学生不会按 $f(1)$ 分界，回补函数性质与图像。
+      - 若学生不会用 $e^{1/a}$ 取远点，回补指数对数基础。
+      - 若学生不会做取点放缩，回补不等式工具基础。
+  detail_terms:
+    - $a(x+1)e^x-1-\frac1x$
+    - $a>0$
+    - $f(1)=2ae-2$
+    - $a=1/e$
+    - $1/(2ae-1)$
+    - $\ln(1/a)$
+    - $e^{1/a}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0241_a_x_plus1_ex_minus_1_minus_1_over_x_zero_count_ch6_findpoint_ex16
+source_evidence:
+  source_refs:
+    - ref_id: page_0241_ex16_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0241/page_0241.md
+      role: problem_start
+      evidence: page_0241 给出例16题头：$a>0$，$x>0$，$f(x)=a(x+1)e^x-1-\frac1x$，判断零点个数。
+    - ref_id: page_0241_ex16_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0241/page_0241.md
+      role: solution
+      evidence: 解析给出法一按 $f(1)$ 分界取点，法二取 $x=e^{1/a}$ 作为远右侧高值点，最终得到唯一零点。
+    - ref_id: page_0241_ex17_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0241/page_0241.md
+      role: local_context
+      evidence: page_0241 底部另起例17，属于本批下一张卡，不混入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0241.png
+      inspected: true
+      notes: 已核对页图：例16题头和完整解析位于 page_0241 中下部。
+  source_context: 本卡处理 page_0241 起头并在同页结束的例16；前后题分别隔离。
+  source_influence:
+    - 保留 source 的单调性判断：$f$ 在 $x>0$ 上递增。
+    - 保留 source 的按 $f(1)$ 分界取点：$a>1/e$、$a<1/e$、$a=1/e$。
+    - 保留 source 的远点法：取 $x=e^{1/a}$，用 $ae^{1/a}>1$ 消掉参数影响。
+  source_discrepancies: []
+original_problem:
+  stem: （MST 陪跑课答疑）已知 $a>0$，$x>0$，$f(x)=a(x+1)e^x-1-\frac1x$，判断 $f(x)$ 的零点个数。
+  parts: *a1
+  choices: []
+  answer: $f(x)$ 有唯一零点。
+  fidelity_notes:
+    - 单问零点个数题，无选项。
+    - 函数定义域为 $x>0$。
+solution:
+  source_solution_summary: $f'(x)=a(x+2)e^x+\frac1{x^2}>0$，所以 $f$ 在 $(0,+\infty)$ 上 单调递增，最多一个零点。法一按 $f(1)=2ae-2$ 分界：若 $a>1/e$，则 $f(1)>0$，在 $(0,1)$ 中用 $f(x)<2ae-1-\frac1x$，取 $x=1/(2ae-1)$ 得左侧负值点；若 $a<1/e$，则 $f(1)<0$，在 $(1,+\infty)$ 中用 $f(x)>2ae^x-2$，取 $x=\ln(1/a)$ 得右侧正值点；若 $a=1/e$， $x=1$ 即零点。故总是唯一零点。法二则取远右点 $x=e^{1/a}$， 用 $ae^{1/a}>1$ 构造正值点，再由左侧负值点夹根。
+  key_steps:
+    - step_id: step_1
+      statement: 先确认函数严格递增。
+      formula_trace:
+        from: $f(x)=a(x+1)e^x-1-\frac1x$
+        to: $f^\prime(x)=a(x+2)e^x+\frac1{x^2}>0$
+        operation: 求导并用 $a>0,x>0$ 判号。
+        why: 严格递增保证零点至多一个。
+      source_ref: page_0241_ex16_solution
+    - step_id: step_2
+      statement: 用 $f(1)$ 作为分界。
+      formula_trace:
+        from: $f(1)=2ae-2$
+        to: $a>1/e,\ a=1/e,\ a<1/e$ 三种情况
+        operation: 判断 $f(1)$ 的符号。
+        why: 没有明显定号点时，用中间点分界最直接。
+      source_ref: page_0241_ex16_solution
+    - step_id: step_3
+      statement: $a>1/e$ 时在左侧找负值点。
+      formula_trace:
+        from: $x\in(0,1)$
+        to: $f(x)<2ae-1-\frac1x$，取 $x=\frac1{2ae-1}$
+        operation: 用 $x+1<2$、$e^x<e$ 放大正项。
+        why: 配合 $f(1)>0$ 夹出唯一零点。
+      source_ref: page_0241_ex16_solution
+    - step_id: step_4
+      statement: $a<1/e$ 时在右侧找正值点。
+      formula_trace:
+        from: $x\in(1,+\infty)$
+        to: $f(x)>2ae^x-2$，取 $x=\ln\frac1a$
+        operation: 用 $x+1>2$ 和 $-1-\frac1x>-2$。
+        why: 配合 $f(1)<0$ 夹出唯一零点。
+      source_ref: page_0241_ex16_solution
+    - step_id: step_5
+      statement: $a=1/e$ 时零点就是 $x=1$。
+      formula_trace:
+        from: $a=1/e$
+        to: $f(1)=0$
+        operation: 代入分界值。
+        why: 边界情形不需要另找点。
+      source_ref: page_0241_ex16_solution
+    - step_id: step_6
+      statement: 远点法用 $x=e^{1/a}$ 消掉参数影响。
+      formula_trace:
+        from: $x=e^{1/a}$
+        to: $ae^{1/a}>1$
+        operation: 利用 $e^u>u$。
+        why: 远离零点时更容易构造确定正值点。
+      source_ref: page_0241_ex16_solution
+teaching_card:
+  student_title: 没有明显定号点时，用 $f(1)$ 分界找唯一零点
+  what_it_trains: 训练单调函数零点计数：先证明最多一个，再按中间点符号去两侧找异号点。
+  recognition_cues:
+    - $f$ 在 $x>0$ 上明显递增。
+    - $f(1)=2ae-2$ 正好给出 $a=1/e$ 分界。
+    - 右侧远点可以取 $e^{1/a}$，用指数增长压住参数。
+  normalization_moves:
+    - 先求导证明递增。
+    - 看 $f(1)$ 的符号。
+    - $a>1/e$ 在 $(0,1)$ 找点。
+    - $a<1/e$ 在 $(1,+\infty)$ 找点。
+    - $a=1/e$ 直接得到 $x=1$。
+  common_failures:
+    - 只说递增，没有证明存在零点。
+    - 把 $f(1)$ 算成 $ae-2$。
+    - $a<1/e$ 时取 $\ln(1/a)$ 前忘记它大于 1。
+  similar_practice_query: a(x+1)e^x-1-1/x 零点个数 f(1) 1/e e^(1/a)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

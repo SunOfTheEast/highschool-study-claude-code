@@ -1,0 +1,174 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0020_ex13
+content_revision_id: mst_p0020_ex13-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0020_ex13.card.yaml
+stem: |-
+  已知函数 $f(x)=\sqrt{x}-\ln x-m$ 有零点，则实数 $m$ 的范围为 ( )
+  A. $(-\infty, \sqrt{2}-\ln 2]$
+  B. $(-\infty, 2-2\ln 2]$
+  C. $[\sqrt{2}-\ln 2, +\infty)$
+  D. $[2-2\ln 2, +\infty)$
+answer: |-
+  D
+
+  有零点等价于存在 $x>0$ 使 $m=\sqrt{x}-\ln x$。令 $t=\sqrt{x}>0$，则 $m=t-\ln t^2=\ln(e^t/t^2)=2\ln\bigl(\frac12\cdot\frac{e^{t/2}}{t/2}\bigr)$。由 $e^u/u\ge e$（$u>0$，等号 $u=1$）得 $m\ge 2\ln(e/2)=2-2\ln2$，故选 D。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把零点存在转成参数 $m$ 的值域问题。
+      max_score: 1
+    - step_id: step_2
+      description: 用根式换元清理表达式。
+      max_score: 1
+    - step_id: step_3
+      description: 把 $t-2\ln t$ 写成可套用 $e^u/u$ 最小值的形式。
+      max_score: 1
+    - step_id: step_4
+      description: 调用 $e^u/u$ 在 $u=1$ 处取最小值 $e$。
+      max_score: 1
+    - step_id: step_5
+      description: 确定选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+    subroute:
+      - 根式换元 $t=\sqrt{x}$
+      - $e^x/x^2$ 最小值
+      - $e^{t/2}/(t/2)$ 标准化
+  structure:
+    primary: 根式函数结构
+    secondary:
+      - 指对复合结构
+      - 同构结构
+    evidence:
+      - $\sqrt{x}-\ln x$ 经 $t=\sqrt{x}$ 化成 $t-2\ln t$。
+      - $t-2\ln t=\ln(e^t/t^2)$，可转入 $e^u/u$ 最值结构。
+    normalization_moves_used:
+      - 把有零点改写为 $m=\sqrt{x}-\ln x$。
+      - 令 $t=\sqrt{x}$，将 $\ln x$ 改写为 $\ln t^2$。
+      - 将 $t-\ln t^2$ 写成 $\ln(e^t/t^2)$。
+      - 把 $e^t/t^2$ 改写成 $\left(\frac12\cdot\frac{e^{t/2}}{t/2}\right)^2$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从“有零点”转成 $m=\sqrt{x}-\ln x$ 的值域问题，回补函数性质与图像。
+      - 若学生不会令 $t=\sqrt{x}$ 并把 $\ln x$ 写成 $\ln t^2$，回补代数恒等变形。
+      - 若学生不会使用 $e^u/u\ge e$ 或不知道其等号条件，回补导数单调极值基础。
+      - 若学生在 $\ln(e^t/t^2)$ 与 $t-2\ln t$ 的互化中出错，回补指数对数基础。
+  detail_terms:
+    - $m=\sqrt{x}-\ln x$
+    - $t=\sqrt{x}$
+    - $t-2\ln t$
+    - $e^u/u\ge e$
+    - $2-2\ln2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0020_ex13
+source_evidence:
+  source_refs:
+    - ref_id: page_0020
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0020/page_0020.md
+      role: problem_start
+      evidence: 例 13 题干、四个选项、解析和答案均在 page_0020。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0020.png
+      inspected: true
+      notes: 核对题干为 $f(x)=\sqrt{x}-\ln x-m$ 有零点；选项 A-D 与 markdown 一致；答案为 D。
+  source_context: 例 13 位于例 12 之后，后文紧接关于 $e^x/x^n$ 的最值总结；本题把 $m=\sqrt{x}-\ln x$ 通过 $t=\sqrt{x}$ 化到 $e^t/t^2$ 的最小值。
+  source_influence:
+    - "legacy locator: corpus/problems/derivative/ex_mst_10.yaml 仅用于定位；未继承旧 classification。"
+    - 源解采用同构最值写法，不只是直接对 $t-2\ln t$ 求导；卡片保留源页的 $e^{t/2}/(t/2)$ 结构。
+  source_discrepancies: []
+original_problem:
+  stem: 已知函数 $f(x)=\sqrt{x}-\ln x-m$ 有零点，则实数 $m$ 的范围为 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $(-\infty, \sqrt{2}-\ln 2]$
+      text_latex: $(-\infty, \sqrt{2}-\ln 2]$
+    - label: B
+      text_raw: $(-\infty, 2-2\ln 2]$
+      text_latex: $(-\infty, 2-2\ln 2]$
+    - label: C
+      text_raw: $[\sqrt{2}-\ln 2, +\infty)$
+      text_latex: $[\sqrt{2}-\ln 2, +\infty)$
+    - label: D
+      text_raw: $[2-2\ln 2, +\infty)$
+      text_latex: $[2-2\ln 2, +\infty)$
+  answer: D
+  fidelity_notes:
+    - 源图确认选项 A、B 为左无穷到闭端点，选项 C、D 为闭端点到正无穷。
+    - 定义域来自 $\sqrt{x}$ 与 $\ln x$ 的交集：$x>0$。
+solution:
+  source_solution_summary: 有零点等价于存在 $x>0$ 使 $m=\sqrt{x}-\ln x$。令 $t=\sqrt{x}>0$，则 $m=t-\ln t^2=\ln(e^t/t^2)=2\ln\bigl(\frac12\cdot\frac{e^{t/2}}{t/2}\bigr)$。由 $e^u/u\ge e$（$u>0$，等号 $u=1$）得 $m\ge 2\ln(e/2)=2-2\ln2$，故选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把零点存在转成参数 $m$ 的值域问题。
+      formula_trace:
+        from: $f(x)=\sqrt{x}-\ln x-m$ 有零点
+        to: $m=\sqrt{x}-\ln x,\quad x>0$
+        operation: 令 $f(x)=0$ 并移项。
+        why: 实数 $m$ 的范围就是函数 $\sqrt{x}-\ln x$ 在 $x>0$ 上的值域。
+      source_ref: page_0020
+    - step_id: step_2
+      statement: 用根式换元清理表达式。
+      formula_trace:
+        from: $m=\sqrt{x}-\ln x$
+        to: $m=t-\ln t^2,\quad t=\sqrt{x}>0$
+        operation: 令 $t=\sqrt{x}$，则 $x=t^2$。
+        why: 根式与对数的自变量被统一到同一个正变量 $t$。
+      source_ref: page_0020
+    - step_id: step_3
+      statement: 把 $t-2\ln t$ 写成可套用 $e^u/u$ 最小值的形式。
+      formula_trace:
+        from: $t-\ln t^2$
+        to: $\ln\frac{e^t}{t^2}=2\ln\left(\frac12\cdot\frac{e^{t/2}}{t/2}\right)$
+        operation: 指数对数互化，并令内部出现 $u=t/2$ 的 $e^u/u$。
+        why: 源页后文总结的标准模型是 $e^x/x^n$ 最值。
+      source_ref: page_0020
+    - step_id: step_4
+      statement: 调用 $e^u/u$ 在 $u=1$ 处取最小值 $e$。
+      formula_trace:
+        from: $\frac{e^{t/2}}{t/2}\ge e$
+        to: $m\ge 2\ln\frac e2=2-2\ln2$
+        operation: 在 $u=t/2>0$ 上应用最值，再代回对数表达式。
+        why: 得到 $m$ 的最小值，且等号在 $t=2$ 时取得。
+      source_ref: page_0020
+    - step_id: step_5
+      statement: 确定选项。
+      formula_trace:
+        from: $m\ge 2-2\ln2$
+        to: $m\in[2-2\ln2,+\infty)$
+        operation: 把值域写成区间并对照选项。
+        why: 与选项 D 完全一致。
+      source_ref: page_0020
+teaching_card:
+  student_title: 根号换元后套 $e^u/u$ 的最小值
+  what_it_trains: 训练把“函数有零点”改成参数值域，再用 $t=\sqrt{x}$ 把根式对数混合式化成 $e^u/u$ 的标准最值。
+  recognition_cues:
+    - 题干问 $f(x)=\sqrt{x}-\ln x-m$ 有零点时 $m$ 的范围。
+    - 表达式里同时有 $\sqrt{x}$ 和 $\ln x$，提示令 $t=\sqrt{x}$。
+    - 换元后出现 $t-2\ln t$，可看成 $\ln(e^t/t^2)$。
+  normalization_moves:
+    - 先移项得到 $m=\sqrt{x}-\ln x$。
+    - 用 $t=\sqrt{x}$ 把根号去掉，同时把 $\ln x$ 变成 $2\ln t$。
+    - 把 $e^t/t^2$ 拆成含 $e^{t/2}/(t/2)$ 的平方，直接读最小值。
+  common_failures:
+    - 把“有零点”误当成判别式问题，没有转成值域。
+    - 令 $t=\sqrt{x}$ 后忘记 $t>0$。
+    - 把最小值误算成 $\sqrt2-\ln2$，对应选项 A/C 的干扰项。
+    - 用 $e^u/u$ 最值时漏掉外面的 $2\ln$。
+  similar_practice_query: sqrt x ln x m 有零点 参数范围 t=sqrt x e^x/x^2 最值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 源图与 markdown 一致；选项完整转录。

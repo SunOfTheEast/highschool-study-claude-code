@@ -1,0 +1,145 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0021_ex16
+content_revision_id: mst_p0021_ex16-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0021_ex16.card.yaml
+stem: 已知实数 $x_1$、$x_2$ 满足 $e^{x_1}+x_1=6$，$\ln\sqrt[5]{5x_2+3}+x_2=\frac35$，则 $x_1+5x_2=$ ______.
+answer: |-
+  3
+
+  将 $\ln\sqrt[5]{5x_2+3}+x_2=3/5$ 乘 5 得 $\ln(5x_2+3)+5x_2=3$，再加 3 得 $\ln(5x_2+3)+5x_2+3=6$，即 $e^{\ln(5x_2+3)}+\ln(5x_2+3)=6$。设 $f(x)=e^x+x$，由严格递增和 $f(x_1)=f(\ln(5x_2+3))=6$ 得 $x_1=\ln(5x_2+3)$，所以 $x_1+5x_2=3$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 去掉五次根带来的系数。
+      max_score: 1
+    - step_id: step_2
+      description: 配出与第一个方程相同的 $e^u+u=6$。
+      max_score: 1
+    - step_id: step_3
+      description: 利用 $f(x)=e^x+x$ 的单调性。
+      max_score: 1
+    - step_id: step_4
+      description: 回到目标式。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 对称性配凑
+    subroute:
+      - $e^x+x$ 递增同构
+      - 五次根对数清理
+      - $\ln(5x_2+3)$ 隐藏变量
+  structure:
+    primary: 同构结构
+    secondary:
+      - 根式函数结构
+      - 指对复合结构
+    evidence:
+      - 第二个方程整理后配出 $e^{\ln(5x_2+3)}+\ln(5x_2+3)=6$。
+      - 目标 $x_1+5x_2$ 与整理式 $\ln(5x_2+3)+5x_2=3$ 对齐。
+    normalization_moves_used:
+      - $\ln\sqrt[5]{5x_2+3}$ 乘 5 化为 $\ln(5x_2+3)$。
+      - 把 $5x_2+3$ 改写为 $e^{\ln(5x_2+3)}$。
+      - 用 $f(x)=e^x+x$ 严格递增推出自变量相等。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\ln\sqrt[5]{5x_2+3}$ 化为 $\frac15\ln(5x_2+3)$，回补指数对数基础。
+      - 若学生不能想到给 $\ln(5x_2+3)+5x_2=3$ 两边加 3 来配 $e^u+u$，回补代数恒等变形。
+      - 若学生不知道 $e^x+x$ 严格递增并可由同值推出同元，回补函数性质与图像。
+      - 若学生忽略 $5x_2+3>0$ 的定义域条件，回补函数三要素与定义域。
+  detail_terms:
+    - $e^x+x$
+    - $\ln\sqrt[5]{5x_2+3}$
+    - $\ln(5x_2+3)$
+    - $e^{\ln(5x_2+3)}$
+    - $x_1+5x_2=3$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0021_ex16
+source_evidence:
+  source_refs:
+    - ref_id: page_0021
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0021/page_0021.md
+      role: problem_start
+      evidence: 例 16 题干和解析完整位于 page_0021。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0021.png
+      inspected: true
+      notes: 核对题干为 $e^{x_1}+x_1=6$ 与 $\ln\sqrt[5]{5x_2+3}+x_2=3/5$；答案为 3。
+  source_context: 例 16 紧接例 15，继续训练 $e^x+x$ 的递增同构；区别在于第二个方程先要把五次根内的 $5x_2+3$ 与常数 3 配成 $e^u+u=6$。
+  source_influence:
+    - "legacy locator: corpus/problems/derivative/ex_mst_458.yaml 仅用于定位；未继承旧 classification。"
+    - 源解将第二式乘 5 后再加 3，配成 $e^{\ln(5x_2+3)}+\ln(5x_2+3)=6$。
+  source_discrepancies: []
+original_problem:
+  stem: 已知实数 $x_1$、$x_2$ 满足 $e^{x_1}+x_1=6$，$\ln\sqrt[5]{5x_2+3}+x_2=\frac35$，则 $x_1+5x_2=$ ______.
+  parts: *a1
+  choices: []
+  answer: "3"
+  fidelity_notes:
+    - 源图确认根号为五次根，根内为 $5x_2+3$。
+    - 定义域由 $\ln\sqrt[5]{5x_2+3}$ 隐含 $5x_2+3>0$。
+solution:
+  source_solution_summary: 将 $\ln\sqrt[5]{5x_2+3}+x_2=3/5$ 乘 5 得 $\ln(5x_2+3)+5x_2=3$，再加 3 得 $\ln(5x_2+3)+5x_2+3=6$，即 $e^{\ln(5x_2+3)}+\ln(5x_2+3)=6$。设 $f(x)=e^x+x$，由严格递增和 $f(x_1)=f(\ln(5x_2+3))=6$ 得 $x_1=\ln(5x_2+3)$，所以 $x_1+5x_2=3$。
+  key_steps:
+    - step_id: step_1
+      statement: 去掉五次根带来的系数。
+      formula_trace:
+        from: $\ln\sqrt[5]{5x_2+3}+x_2=\frac35$
+        to: $\ln(5x_2+3)+5x_2=3$
+        operation: 利用 $5\ln\sqrt[5]{5x_2+3}=\ln(5x_2+3)$，并把方程两边乘以 5。
+        why: 把根式对数清成普通对数，目标式中的 $5x_2$ 同时出现。
+      source_ref: page_0021
+    - step_id: step_2
+      statement: 配出与第一个方程相同的 $e^u+u=6$。
+      formula_trace:
+        from: $\ln(5x_2+3)+5x_2=3$
+        to: $e^{\ln(5x_2+3)}+\ln(5x_2+3)=6$
+        operation: 两边加 3，并用 $e^{\ln(5x_2+3)}=5x_2+3$。
+        why: 这样第二个条件就成为 $f(\ln(5x_2+3))=6$。
+      source_ref: page_0021
+    - step_id: step_3
+      statement: 利用 $f(x)=e^x+x$ 的单调性。
+      formula_trace:
+        from: $f(x_1)=6,\quad f(\ln(5x_2+3))=6$
+        to: $x_1=\ln(5x_2+3)$
+        operation: 由 $f'(x)=e^x+1>0$ 得 $f$ 严格递增。
+        why: 同一个严格递增函数取同一个值，输入必须相同。
+      source_ref: page_0021
+    - step_id: step_4
+      statement: 回到目标式。
+      formula_trace:
+        from: $x_1=\ln(5x_2+3)$ 与 $\ln(5x_2+3)+5x_2=3$
+        to: $x_1+5x_2=3$
+        operation: 把 $x_1$ 替换进已整理的第二个方程。
+        why: 目标式正好是第二个方程整理后的左端。
+      source_ref: page_0021
+teaching_card:
+  student_title: 五次根先清掉，再配同一个 $e^x+x$
+  what_it_trains: 训练把根式对数方程清理成 $\ln(5x_2+3)+5x_2=3$，再补出 $e^{\ln(5x_2+3)}$，与 $e^{x_1}+x_1=6$ 同构求值。
+  recognition_cues:
+    - 第一个方程已经是 $e^x+x=6$。
+    - 第二个方程含 $\ln\sqrt[5]{5x_2+3}$，乘 5 后会出现 $\ln(5x_2+3)+5x_2$。
+    - 根内的 $5x_2+3$ 可以写成 $e^{\ln(5x_2+3)}$，刚好把右端补到 6。
+  normalization_moves:
+    - 先乘 5 去掉五次根的 $1/5$ 系数。
+    - 给 $\ln(5x_2+3)+5x_2=3$ 两边加 3，左端变成 $\ln(5x_2+3)+(5x_2+3)$。
+    - 把 $5x_2+3$ 看成 $e^{\ln(5x_2+3)}$，套 $e^x+x$ 的单调性。
+  common_failures:
+    - 漏乘 5，导致目标里的 $5x_2$ 配不出来。
+    - 忘记加 3，把第二个方程停在 $\ln(5x_2+3)+5x_2=3$，看不到 $e^u+u=6$。
+    - 把 $\sqrt[5]{5x_2+3}$ 的对数展开错误。
+    - 没有用单调性说明 $x_1=\ln(5x_2+3)$。
+  similar_practice_query: e^x+x 同构 ln 五次根 5x2+3 x1+5x2 数值求值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 源图与 markdown 一致；本题不跨页。

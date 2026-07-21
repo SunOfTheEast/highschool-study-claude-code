@@ -1,0 +1,45 @@
+schema: highschool-study.problem-card.v1
+content_item_id: content-item-freeze-01
+content_revision_id: content-rev-freeze-01-v1
+taxonomy_revision_id: taxonomy-conics-v1
+storage_uri: cards/conics/freeze-variable-01.yaml
+stem: 已知椭圆上一动点满足给定切线条件，求目标式的最大值并说明取等条件。
+answer: 通过冻结目标式中的一个组合量，参数化后消元，并检查定义域与取等可行性。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: identify-freeze
+      description: 识别可冻结组合量
+      max_score: 1
+      method: { facet: method_cluster, node: 冻结变量法 }
+    - step_id: parameterize
+      description: 完成参数化与消元
+      max_score: 1
+      method: { facet: method_cluster, node: 参数化与消元 }
+    - step_id: derive-extremum
+      description: 求得最值
+      max_score: 1
+      method: { facet: method_subroute, node: 主元选择与视角转换 }
+    - step_id: domain-check
+      description: 检查定义域和取等条件
+      max_score: 1
+      method: { facet: method_subroute, node: 定义域与可行域检查 }
+graph:
+  goal:
+    primary: 极值最值
+  method:
+    primary: 冻结变量法
+    secondary: [参数化与消元]
+    subroute:
+      - node: 主元选择与视角转换
+        weight: primary
+      - node: 定义域与可行域检查
+        weight: supporting
+  structure:
+    primary: 多变量与不等式结构
+    secondary: []
+  fallback:
+    only_if_trace_shows:
+      - node: 函数三要素与定义域
+        condition: 学生遗漏变量范围或取等可行性
+parts: []

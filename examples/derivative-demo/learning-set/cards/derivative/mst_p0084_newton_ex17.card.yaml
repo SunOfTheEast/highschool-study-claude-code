@@ -1,0 +1,205 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0084_newton_ex17
+content_revision_id: mst_p0084_newton_ex17-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0084_newton_ex17.card.yaml
+stem: |-
+  （2025 惠东县高二期中 T19）牛顿在《流数法》一书中给出了“牛顿切线法”求方程的近似解。具体步骤如下：设 $r$ 是函数 $y=f(x)$ 的一个零点，任意选取 $x_0$ 作为 $r$ 的初始近似值，曲线 $y=f(x)$ 在点 $(x_0,f(x_0))$ 处的切线为 $l_1$，设 $l_1$ 与 $x$ 轴交点的横坐标为 $x_1$，并称 $x_1$ 为 $r$ 的 1 次近似值；曲线 $y=f(x)$ 在点 $(x_1,f(x_1))$ 处的切线为 $l_2$，设 $l_2$ 与 $x$ 轴交点的横坐标为 $x_2$，称 $x_2$ 为 $r$ 的 2 次近似值。一般地，$y=f(x)$ 在点 $(x_n,f(x_n))(n\in \mathbf N)$ 处的切线为 $l_{n+1}$，记 $l_{n+1}$ 与 $x$ 轴交点的横坐标为 $x_{n+1}$，并称 $x_{n+1}$ 为 $r$ 的 $n+1$ 次近似值。重复以上操作，在一定精确度下，可取 $x_n$ 为 $f(x)=0$ 的近似解。求函数 $f(x)=x^2-2$ 的大于零的零点 $r$ 的近似值，取 $x_0=2$。
+
+  (1). 求 $x_1$ 和 $x_2$。
+  (2). 求 $x_n$ 和 $x_{n-1}$ 的关系并证明 $(n\in \mathbf N^*)$。
+  (3). 证明：$\sqrt2 n<\sum_{i=1}^n x_i<\sqrt2 n+1\ (n\in \mathbf N^*)$。
+answer: |
+  (1) $x_1=\frac32,\ x_2=\frac{17}{12}$；(2) $x_n=\frac{x_{n-1}^2+2}{2x_{n-1}}=\frac12\left(x_{n-1}+\frac2{x_{n-1}}\right)$；(3) 由 $\sqrt2<x_i<\sqrt2+\frac1{2^i}$ 求和得 $\sqrt2 n<\sum_{i=1}^n x_i<\sqrt2 n+1$。
+
+  先由 $f'(x)=2x$ 得第一条切线 $l_1:y-2=4(x-2)$，令 $y=0$ 得 $x_1=\frac32$；第二条切线为 $l_2:y-\frac14=3(x-\frac32)$，令 $y=0$ 得 $x_2=\frac{17}{12}$。一般地，第 $n$ 次切线写作 $l_n:y-(x_{n-1}^2-2)=2x_{n-1}(x-x_{n-1})$，令 $y=0$ 得 $x_n=\frac{x_{n-1}^2+2}{2x_{n-1}}$。由基本不等式得 $x_n>\sqrt2$，故求和下界成立；再由 $\sqrt2<x_n\le2$ 推出 $x_n^2-2<\frac14(x_{n-1}^2-2)<\cdots<\frac2{4^n}$，于是 $x_n<\sqrt{2+\frac2{4^n}}<\sqrt2+\frac1{2^n}$，求和得到上界。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 写出前两次切线并求 $x_1,x_2$。
+      max_score: 1
+    - step_id: step_2
+      description: 推出一般递推式。
+      max_score: 1
+    - step_id: step_3
+      description: 用基本不等式给每一项的下界。
+      max_score: 1
+    - step_id: step_4
+      description: 把递推式平方，建立误差递推。
+      max_score: 1
+    - step_id: step_5
+      description: 把单项误差上界求和。
+      max_score: 1
+graph:
+  goal:
+    primary: 数列关系证明
+    part_level:
+      - part_id: "1"
+        goal: 数值求值
+        target: 第 (1) 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 数列关系证明
+        target: 第 (2) 问
+        result: 见 source_solution_summary
+      - part_id: "3"
+        goal: 不等式证明
+        target: 第 (3) 问
+        result: 见 source_solution_summary
+  method:
+    primary: 递推转化
+    secondary:
+      - 局部逼近与找点
+      - 数列和转化
+    subroute:
+      - 牛顿迭代
+      - 切线横截距递推
+      - 基本不等式
+      - 平方误差递推
+  structure:
+    primary: 数列离散/递推结构
+    secondary:
+      - 切线/公切线/切点量结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $l_n:y-(x_{n-1}^2-2)=2x_{n-1}(x-x_{n-1})$ 把切线法转成递推。
+      - $x_n=\frac12(x_{n-1}+\frac2{x_{n-1}})$ 既能用基本不等式下压，又能平方做误差收缩。
+      - $x_n^2-2<\frac14(x_{n-1}^2-2)$ 是求和上界的核心。
+    normalization_moves_used:
+      - 把切线与 $x$ 轴交点转化为令 $y=0$ 解点斜式。
+      - 把递推式改写成 $\frac12(x+\frac2x)$，对准基本不等式。
+      - 把上界问题转成平方误差 $x_n^2-2$ 的几何衰减。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由点斜式切线求 $x$ 轴交点，回补导数运算与几何意义。
+      - 若学生不能从 $x_n=\frac12(x_{n-1}+\frac2{x_{n-1}})$ 看到基本不等式，回补不等式工具基础。
+      - 若学生不会迭代 $x_n^2-2<\frac14(x_{n-1}^2-2)$，回补数列基础。
+      - 若学生求和 $\sum_{i=1}^n 2^{-i}$ 出错，回补数列基础。
+  detail_terms:
+    - $f(x)=x^2-2$
+    - $x_0=2,\ x_1=\frac32,\ x_2=\frac{17}{12}$
+    - $x_n=\frac{x_{n-1}^2+2}{2x_{n-1}}$
+    - $x_n^2-2<\frac14(x_{n-1}^2-2)$
+    - $\sqrt2 n<\sum_{i=1}^n x_i<\sqrt2 n+1$
+parts: &a1
+  - label: (1)
+    text: 求 $x_1$ 和 $x_2$。
+  - label: (2)
+    text: 求 $x_n$ 和 $x_{n-1}$ 的关系并证明 $(n\in \mathbf N^*)$。
+  - label: (3)
+    text: 证明：$\sqrt2 n<\sum_{i=1}^n x_i<\sqrt2 n+1\ (n\in \mathbf N^*)$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0084_newton_ex17
+source_evidence:
+  source_refs:
+    - ref_id: page_0084
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0084/page_0084.md
+      role: problem_start
+      evidence: lines 20-24 give 例 17 的题头、牛顿切线法说明、函数 $f(x)=x^2-2$、初值 $x_0=2$ 和三问；lines 32-37 give 解析开头。
+    - ref_id: page_0085
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0085/page_0085.md
+      role: continuation
+      evidence: lines 15-16 continue 例 17 第 (3) 问的误差估计与求和上界，并在第二节标题前结束。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0084.png
+      inspected: true
+      notes: 已核对 page_0084 中部例 17 题头、三问、牛顿迭代示意图和解析开头；page_0084 顶部是例 16 续页，未为其建卡。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0085.png
+      inspected: true
+      notes: 已核对 page_0085 顶部为例 17 续解，随后才进入“第二节 函数的切线界定”；续解公式与 markdown 一致。
+  source_context: 例 17 是第一节牛顿切线法的收束题，把切线法求零点转化为递推数列，再证明迭代值求和的上下界。
+  source_influence:
+    - 题干、三问和示意图来自 page_0084；第 (3) 问完整结论跨到 page_0085 顶部。
+    - 源解主线保留为：写两次切线交点，推出一般递推式，用基本不等式给下界，用平方误差递推给上界。
+  source_discrepancies: []
+original_problem:
+  stem: |
+    （2025 惠东县高二期中 T19）牛顿在《流数法》一书中给出了“牛顿切线法”求方程的近似解。具体步骤如下：设 $r$ 是函数 $y=f(x)$ 的一个零点，任意选取 $x_0$ 作为 $r$ 的初始近似值，曲线 $y=f(x)$ 在点 $(x_0,f(x_0))$ 处的切线为 $l_1$，设 $l_1$ 与 $x$ 轴交点的横坐标为 $x_1$，并称 $x_1$ 为 $r$ 的 1 次近似值；曲线 $y=f(x)$ 在点 $(x_1,f(x_1))$ 处的切线为 $l_2$，设 $l_2$ 与 $x$ 轴交点的横坐标为 $x_2$，称 $x_2$ 为 $r$ 的 2 次近似值。一般地，$y=f(x)$ 在点 $(x_n,f(x_n))(n\in \mathbf N)$ 处的切线为 $l_{n+1}$，记 $l_{n+1}$ 与 $x$ 轴交点的横坐标为 $x_{n+1}$，并称 $x_{n+1}$ 为 $r$ 的 $n+1$ 次近似值。重复以上操作，在一定精确度下，可取 $x_n$ 为 $f(x)=0$ 的近似解。求函数 $f(x)=x^2-2$ 的大于零的零点 $r$ 的近似值，取 $x_0=2$。
+  parts: *a1
+  choices: []
+  answer: (1) $x_1=\frac32,\ x_2=\frac{17}{12}$；(2) $x_n=\frac{x_{n-1}^2+2}{2x_{n-1}}=\frac12\left(x_{n-1}+\frac2{x_{n-1}}\right)$；(3) 由 $\sqrt2<x_i<\sqrt2+\frac1{2^i}$ 求和得 $\sqrt2 n<\sum_{i=1}^n x_i<\sqrt2 n+1$。
+  fidelity_notes:
+    - 题头和完整题干起于 page_0084；第 (3) 问解析跨到 page_0085 顶部。
+    - 题图为牛顿切线法示意图，辅助说明 $x_0,x_1,x_2,x_3$ 逐步逼近正零点。
+solution:
+  source_solution_summary: |
+    先由 $f'(x)=2x$ 得第一条切线 $l_1:y-2=4(x-2)$，令 $y=0$ 得 $x_1=\frac32$；第二条切线为 $l_2:y-\frac14=3(x-\frac32)$，令 $y=0$ 得 $x_2=\frac{17}{12}$。一般地，第 $n$ 次切线写作 $l_n:y-(x_{n-1}^2-2)=2x_{n-1}(x-x_{n-1})$，令 $y=0$ 得 $x_n=\frac{x_{n-1}^2+2}{2x_{n-1}}$。由基本不等式得 $x_n>\sqrt2$，故求和下界成立；再由 $\sqrt2<x_n\le2$ 推出 $x_n^2-2<\frac14(x_{n-1}^2-2)<\cdots<\frac2{4^n}$，于是 $x_n<\sqrt{2+\frac2{4^n}}<\sqrt2+\frac1{2^n}$，求和得到上界。
+  key_steps:
+    - step_id: step_1
+      statement: 写出前两次切线并求 $x_1,x_2$。
+      formula_trace:
+        from: |
+          $f(x)=x^2-2,\quad x_0=2,\quad f'(x)=2x$
+        to: |
+          $l_1:y-2=4(x-2),\quad x_1=\frac32;\qquad
+          l_2:y-\frac14=3\left(x-\frac32\right),\quad x_2=\frac{17}{12}$
+        operation: 分别在 $x_0=2$ 与 $x_1=\frac32$ 处用点斜式写切线，再令 $y=0$ 求横截距。
+        why: 牛顿切线法的下一次近似值就是当前切线与 $x$ 轴交点的横坐标。
+      source_ref: page_0084
+    - step_id: step_2
+      statement: 推出一般递推式。
+      formula_trace:
+        from: |
+          $l_n:y-(x_{n-1}^2-2)=2x_{n-1}(x-x_{n-1})$
+        to: |
+          $x_n=\frac{x_{n-1}^2+2}{2x_{n-1}}
+          =\frac12\left(x_{n-1}+\frac2{x_{n-1}}\right)$
+        operation: 令切线方程中的 $y=0$，解出横坐标 $x=x_n$。
+        why: 把几何切线步骤改写成数列递推，后续才能做不等式估计。
+      source_ref: page_0084
+    - step_id: step_3
+      statement: 用基本不等式给每一项的下界。
+      formula_trace:
+        from: |
+          $x_n=\frac12\left(x_{n-1}+\frac2{x_{n-1}}\right)$
+        to: |
+          $x_n>\sqrt2,\qquad \sqrt2 n<\sum_{i=1}^n x_i$
+        operation: 对正数 $x_{n-1}$ 和 $\frac2{x_{n-1}}$ 使用基本不等式，并结合迭代值不是精确根。
+        why: $\sqrt2$ 是 $x^2-2=0$ 的正根，每个迭代值都在它的右侧，逐项求和给出下界。
+      source_ref: page_0084
+    - step_id: step_4
+      statement: 把递推式平方，建立误差递推。
+      formula_trace:
+        from: |
+          $x_n^2=\frac14\left(x_{n-1}^2+\frac4{x_{n-1}^2}+4\right),\qquad \sqrt2<x_{n-1}\le2$
+        to: |
+          $x_n^2<\frac14(x_{n-1}^2+6),\qquad
+          x_n^2-2<\frac14(x_{n-1}^2-2)<\cdots<\frac2{4^n}$
+        operation: 由 $x_{n-1}^2>2$ 得 $\frac4{x_{n-1}^2}<2$，再递推迭代误差 $x_n^2-2$。
+        why: 平方误差每步至多缩小到原来的 $\frac14$，这给出足够强的上界。
+      source_ref: page_0084,page_0085
+    - step_id: step_5
+      statement: 把单项误差上界求和。
+      formula_trace:
+        from: |
+          $x_n^2<2+\frac2{4^n}$
+        to: |
+          $x_n<\sqrt{2+\frac2{4^n}}<\sqrt2+\frac1{2^n},\qquad
+          \sum_{i=1}^n x_i<\sqrt2 n+\sum_{i=1}^n\frac1{2^i}<\sqrt2 n+1$
+        operation: 由平方上界转成 $x_n$ 上界，再对等比数列余项求和。
+        why: 逐项控制 $x_i-\sqrt2$，即可得到总和不超过 $\sqrt2 n+1$。
+      source_ref: page_0085
+teaching_card:
+  student_title: 把牛顿切线法变成递推数列
+  what_it_trains: 训练把切线求零点的几何操作写成递推式，再用基本不等式和误差递推证明迭代数列的求和夹逼。
+  recognition_cues:
+    - 题干反复描述“切线与 $x$ 轴交点的横坐标”为下一次近似值。
+    - 函数是 $x^2-2$，正零点是 $\sqrt2$，递推式会出现 $x+\frac2x$。
+    - 第 (3) 问要求 $\sum x_i$ 的上下界，需要先控制每个 $x_i$。
+  normalization_moves:
+    - 先令切线方程 $y=0$，把几何步骤变成 $x_n$ 递推。
+    - 把递推式写成平均数形式 $\frac12(x_{n-1}+\frac2{x_{n-1}})$。
+    - 把上界转成 $x_n^2-2$ 的误差缩小，再求等比和。
+  common_failures:
+    - 把第 $n$ 条切线的切点误写成 $x_n$，导致递推下标错位。
+    - 只用基本不等式得到下界，忘记还要单独证明上界。
+    - 平方后没有利用 $x_{n-1}^2>2$，卡在 $\frac4{x_{n-1}^2}$ 项。
+    - 把 $\sum_{i=1}^n 2^{-i}$ 算成大于 1，无法得到严格上界。
+  similar_practice_query: 牛顿迭代 $x^2-2$ 递推 基本不等式 平方误差 求和上界
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0084 图像与 markdown 对例 17 题干、示意图和解析开头一致；page_0085 顶部续解与 markdown 一致，无需用户拍板。

@@ -1,0 +1,218 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0107_envelope_ex16
+content_revision_id: mst_p0107_envelope_ex16-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0107_envelope_ex16.card.yaml
+stem: |-
+  （2022 江苏苏北七市三调 T16）一曲线族的包络线 (Envelope) 是这样的曲线：该曲线不包含于曲线族中，但过该曲线上的每一点，都有曲线族中的一条曲线与它在这一点处相切。若圆 $C_1:x^2+y^2=1$ 是直线族 $ax+by-1=0(a,b\in\mathbf{R})$ 的包络线，则 $a,b$ 满足的关系式为_______；若曲线 $C_2$ 是直线族 $(1-t^2)x+2ty-2t-4=0(t\in\mathbf{R})$ 的包络线，则 $C_2$ 的长为_______。
+  blank_1. 求圆 $C_1:x^2+y^2=1$ 作为直线族 $ax+by-1=0$ 的包络线时，$a,b$ 满足的关系式。
+  blank_2. 求直线族 $(1-t^2)x+2ty-2t-4=0$ 的包络线 $C_2$ 的长。
+answer: |
+  $a^2+b^2=1$；$4\pi$
+
+  对第一空，若单位圆 $C_1:x^2+y^2=1$ 是直线族 $ax+by-1=0$ 的包络线，
+  则每条直线都应与单位圆相切。原点到直线的距离为
+  $\frac{1}{\sqrt{a^2+b^2}}$，令它等于半径 $1$，得
+  $a^2+b^2=1$。对第二空，源页设 $C_2$ 为圆
+  $(X-x)^2+(Y-y)^2=r^2$，则圆心 $(x,y)$ 到直线族
+  $(1-t^2)X+2tY-2t-4=0$ 的距离要恒为 $r$：
+  \[
+    \frac{|(1-t^2)x+2ty-2t-4|}{\sqrt{(1-t^2)^2+(2t)^2}}
+    =\frac{|-xt^2+2(y-1)t+x-4|}{1+t^2}=r.
+  \]
+  因为右端对任意 $t$ 都为定值，分子必须与 $1+t^2$ 成比例，源页比较系数得
+  $2(y-1)=0,\ -x=x-4$，所以圆心为 $(2,1)$。此时
+  $r=2$，故 $C_2$ 方程为 $(X-2)^2+(Y-1)^2=4$，长为 $2\pi r=4\pi$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 由单位圆与直线相切求 $a,b$ 的关系。
+      max_score: 1
+    - step_id: step_2
+      description: 设 $C_2$ 为被直线族切出的圆，并写圆心到直线的距离。
+      max_score: 1
+    - step_id: step_3
+      description: 用“距离为定值”比较系数。
+      max_score: 1
+    - step_id: step_4
+      description: 求圆心、半径和周长。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何量求解
+    part_level:
+      - part_id: item_1
+        goal: 几何量求解
+        target: "blank_1: 求参数关系式"
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 几何量求解
+        target: "blank_2: 求包络曲线长度"
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 自由度与主元
+      - 参变量分离
+      - 充分/必要性探路
+    subroute:
+      - 包络线判别
+      - 点到直线距离恒定
+      - 系数对齐
+      - 圆心半径反推
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 非齐次结构
+      - 多变量与不等式结构
+    evidence:
+      - $ax+by-1=0$ 与单位圆相切给出 $\frac1{\sqrt{a^2+b^2}}=1$。
+      - $(1-t^2)X+2tY-2t-4=0$ 到同一圆心的距离恒为 $r$。
+      - $|-xt^2+2(y-1)t+x-4|$ 必须与 $1+t^2$ 成比例，锁定圆心 $(2,1)$。
+    normalization_moves_used:
+      - 把“包络线”翻译成“直线族都是某曲线的切线”。
+      - 用点到直线距离替代直接求包络参数方程。
+      - 把对所有 $t$ 恒定的距离转成多项式系数关系。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会用圆心到切线距离等于半径，回补几何关系基础。
+      - 若学生点到直线距离公式写错，回补几何关系基础。
+      - 若学生化简 $(1-t^2)^2+(2t)^2$ 出错，回补代数恒等变形。
+      - 若学生不理解“对任意 $t$ 为定值”为什么要比较系数，回补方程根分布与韦达。
+  detail_terms:
+    - 包络线
+    - $ax+by-1=0$
+    - $a^2+b^2=1$
+    - $(1-t^2)x+2ty-2t-4=0$
+    - $(x-2)^2+(y-1)^2=4$
+    - $4\pi$
+parts: &a1
+  - label: blank_1
+    text: 求圆 $C_1:x^2+y^2=1$ 作为直线族 $ax+by-1=0$ 的包络线时，$a,b$ 满足的关系式。
+  - label: blank_2
+    text: 求直线族 $(1-t^2)x+2ty-2t-4=0$ 的包络线 $C_2$ 的长。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0107_envelope_ex16
+source_evidence:
+  source_refs:
+    - ref_id: page_0107_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0107/page_0107.md
+      role: local_context
+      evidence: lines 33-39 introduce the envelope method by substituting a point into a line family and requiring the resulting equation to have real solutions; this is section exposition only.
+    - ref_id: page_0107
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0107/page_0107.md
+      role: problem_start
+      evidence: lines 41-43 give 例 16 题头、two blanks, first distance result $\frac{1}{\sqrt{a^2+b^2}}=1$, and the start of the $C_2$ calculation.
+    - ref_id: page_0108
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0108/page_0108.md
+      role: continuation
+      evidence: "line 12 continues 例 16: the distance expression $\\frac{|-xt^2+2(y-1)t+x-4|}{1+t^2}$, coefficient comparison, center $(2,1)$, radius $2$, and final answer $a^2+b^2=1;\\ 4\\pi$."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0107.png
+      inspected: true
+      notes: 已核对 page_0107 页图：例 16 题干、两个填空、$C_1$ 的距离式和 $C_2$ 续解开头与 markdown 一致。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0108.png
+      inspected: true
+      notes: 已核对 page_0108 顶部：例 16 续解给出 $x=2,y=1,r=2$，圆方程 $(x-2)^2+(y-1)^2=4$，周长 $4\pi$。
+  source_context: page_0107 line 39 的 $y_0$ 重构属于例 16 前的包络线讲解，只作为理解包络线判别的背景，不进入题干。page_0108 从 line 14 开始是例 17，按归属规则只作为后续边界，不创建本卡内容。
+  source_influence:
+    - 保留源页对 $C_1$ 的判定：直线族切于单位圆时，原点到直线的距离恒为半径 1。
+    - 保留源页对 $C_2$ 的处理：把所有直线视为同一圆的切线，令圆心到直线族的距离为常数 $r$。
+    - 保留源页的系数对齐：分子必须与 $1+t^2$ 成比例，从而 $2(y-1)=0,\ -x=x-4$。
+  source_discrepancies:
+    - page_0107 line 39 的 section exposition 有 $y_0$ reconstruction marker；页图和上下文支持 $P(x_0,y_0)$，该处只作本题背景，不影响例 16 题干或答案。
+    - page_0108 line 12 末句写作“曲线 $C$ 的周长”，题干和前文均指 $C_2$；本卡按上下文记录为曲线 $C_2$ 的长，无需用户拍板。
+original_problem:
+  stem: （2022 江苏苏北七市三调 T16）一曲线族的包络线 (Envelope) 是这样的曲线：该曲线不包含于曲线族中，但过该曲线上的每一点，都有曲线族中的一条曲线与它在这一点处相切。若圆 $C_1:x^2+y^2=1$ 是直线族 $ax+by-1=0(a,b\in\mathbf{R})$ 的包络线，则 $a,b$ 满足的关系式为_______；若曲线 $C_2$ 是直线族 $(1-t^2)x+2ty-2t-4=0(t\in\mathbf{R})$ 的包络线，则 $C_2$ 的长为_______。
+  parts: *a1
+  choices: []
+  answer: $a^2+b^2=1$；$4\pi$
+  fidelity_notes:
+    - 例 16 题干从 page_0107 开始，解析续到 page_0108 顶部并在例 17 前结束。
+    - 本题为双填空题，无选择项。
+solution:
+  source_solution_summary: |
+    对第一空，若单位圆 $C_1:x^2+y^2=1$ 是直线族 $ax+by-1=0$ 的包络线，
+    则每条直线都应与单位圆相切。原点到直线的距离为
+    $\frac{1}{\sqrt{a^2+b^2}}$，令它等于半径 $1$，得
+    $a^2+b^2=1$。对第二空，源页设 $C_2$ 为圆
+    $(X-x)^2+(Y-y)^2=r^2$，则圆心 $(x,y)$ 到直线族
+    $(1-t^2)X+2tY-2t-4=0$ 的距离要恒为 $r$：
+    \[
+      \frac{|(1-t^2)x+2ty-2t-4|}{\sqrt{(1-t^2)^2+(2t)^2}}
+      =\frac{|-xt^2+2(y-1)t+x-4|}{1+t^2}=r.
+    \]
+    因为右端对任意 $t$ 都为定值，分子必须与 $1+t^2$ 成比例，源页比较系数得
+    $2(y-1)=0,\ -x=x-4$，所以圆心为 $(2,1)$。此时
+    $r=2$，故 $C_2$ 方程为 $(X-2)^2+(Y-1)^2=4$，长为 $2\pi r=4\pi$。
+  key_steps:
+    - step_id: step_1
+      statement: 由单位圆与直线相切求 $a,b$ 的关系。
+      formula_trace:
+        from: |
+          C_1:x^2+y^2=1,\qquad ax+by-1=0
+        to: |
+          d=\frac{|0+0-1|}{\sqrt{a^2+b^2}}=\frac1{\sqrt{a^2+b^2}}=1,\qquad
+          a^2+b^2=1
+        operation: 把“直线族包络单位圆”转成每条直线到圆心的距离等于半径。
+        why: 圆的切线到圆心距离等于半径，这是源页第一空的直接判定。
+      source_ref: page_0107
+    - step_id: step_2
+      statement: 设 $C_2$ 为被直线族切出的圆，并写圆心到直线的距离。
+      formula_trace:
+        from: |
+          (1-t^2)X+2tY-2t-4=0,\qquad C_2:(X-x)^2+(Y-y)^2=r^2
+        to: |
+          \frac{|(1-t^2)x+2ty-2t-4|}{\sqrt{(1-t^2)^2+(2t)^2}}
+          =
+          \frac{|-xt^2+2(y-1)t+x-4|}{1+t^2}=r
+        operation: 使用点到直线距离公式，并化简分母 $(1-t^2)^2+(2t)^2=(1+t^2)^2$。
+        why: 若所有直线都是同一圆的切线，圆心到每条直线的距离必须是不随 $t$ 改变的半径。
+      source_ref: page_0108
+    - step_id: step_3
+      statement: 用“距离为定值”比较系数。
+      formula_trace:
+        from: |
+          \frac{|-xt^2+2(y-1)t+x-4|}{1+t^2}=r
+        to: |
+          2(y-1)=0,\qquad -x=x-4
+        operation: 令一次项系数为 0，并让 $t^2$ 项系数与常数项按 $1+t^2$ 成比例。
+        why: 只有这样分子绝对值才会恒等于某个常数倍的 $1+t^2$。
+      source_ref: page_0108
+    - step_id: step_4
+      statement: 求圆心、半径和周长。
+      formula_trace:
+        from: |
+          2(y-1)=0,\qquad -x=x-4
+        to: |
+          x=2,\qquad y=1,\qquad r=2,\qquad C_2:(X-2)^2+(Y-1)^2=4,\qquad
+          |C_2|=4\pi
+        operation: 解系数方程，再把圆心代回距离式确定半径。
+        why: 半径为 2 的圆的周长为 $2\pi r=4\pi$。
+      source_ref: page_0108
+teaching_card:
+  student_title: 用圆心到直线的恒定距离找包络圆
+  what_it_trains: 训练把直线族的包络线问题转成“每条直线都是圆的切线”，再用点到直线距离和系数对齐求圆心、半径。
+  recognition_cues:
+    - 题干直接给“直线族的包络线”，且源页讲过可看成切线存在性。
+    - 第一空是圆的切线族，优先用圆心到直线距离等于半径。
+    - 第二空的直线族含参数 $t$，距离对所有 $t$ 都应等于同一个半径。
+  normalization_moves:
+    - 对 $C_1$ 写 $\frac1{\sqrt{a^2+b^2}}=1$。
+    - 对 $C_2$ 设圆心 $(x,y)$、半径 $r$。
+    - 写出 $\frac{|-xt^2+2(y-1)t+x-4|}{1+t^2}=r$。
+    - 比较系数得到圆心 $(2,1)$、半径 $2$，周长 $4\pi$。
+  common_failures:
+    - 把包络线误认为直线族中的某一条直线。
+    - 第二空直接令分子等于 0，忘记它表示圆心到切线的距离。
+    - 忽略分母 $1+t^2$，只让一次项为 0 而没有比较 $t^2$ 项和常数项。
+    - 算出半径 2 后把周长误写成面积 $4\pi$；本题的 $4\pi$ 是周长。
+  similar_practice_query: 包络线 直线族 圆心到直线距离 恒定 系数比较 周长
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0107/page_0108 图片已核对；例 16 跨页续解在 page_0108 顶部结束，答案为 $a^2+b^2=1$；$4\pi$。
+    - page_0107 exposition 的 $y_0$ reconstruction 只作为包络线方法背景；page_0108 末句的 $C$ 按上下文解析为 $C_2$，不影响答案。

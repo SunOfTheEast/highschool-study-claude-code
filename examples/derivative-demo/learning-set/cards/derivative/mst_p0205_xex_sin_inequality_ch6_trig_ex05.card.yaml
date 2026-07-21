@@ -1,0 +1,177 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0205_xex_sin_inequality_ch6_trig_ex05
+content_revision_id: mst_p0205_xex_sin_inequality_ch6_trig_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0205_xex_sin_inequality_ch6_trig_ex05.card.yaml
+stem: |-
+  已知函数 $f(x)=2x^2+\cos2x-1$。
+  当 $x\geqslant0$ 时，证明：$xe^x+\frac{1}{2}\sin2x\geqslant2\sin x+\sin^2x$。
+answer: |-
+  不等式成立。
+
+  先用 $\frac12\sin2x=\sin x\cos x$，原式等价为 $xe^x\ge\sin x(2-\cos x)+\sin^2x$。 分两段： (i) 当 $x\ge\pi$，有 $xe^x\ge\pi e^\pi>4$；而右侧 $\sin x(2-\cos x)+\sin^2x\le4$，故成立。 (ii) 当 $0\le x<\pi$，由 $\cos x\ge1-\frac12x^2$ 得 $2-\cos x\le1+\frac12x^2$，故只需证 $xe^x\ge\sin x(1+\frac12x^2)+\sin^2x$。 再由 $x\ge\sin x\ (x\ge0)$（从而 $x^2\ge\sin^2x$）可进一步归约到 $xe^x\ge x(1+\frac12x^2)+x^2=\frac12x^3+x^2+x$。 续页给出收束：由 $e^x\ge1+x+\frac12x^2\ (x\ge0)$，乘以 $x$ 即得 $xe^x\ge x+x^2+\frac12x^3$，与目标一致，故原不等式成立。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先把含 $\sin2x$ 的目标改写成 $xe^x$ 下界问题。
+      max_score: 1
+    - step_id: step_2
+      description: 分段一：处理 $x\ge\pi$ 的粗界。
+      max_score: 1
+    - step_id: step_3
+      description: 分段二：$0\le x<\pi$ 先用余弦下界降低右侧。
+      max_score: 1
+    - step_id: step_4
+      description: 把三角项再压到多项式项。
+      max_score: 1
+    - step_id: step_5
+      description: 跨页收尾：用指数二次下界闭合证明。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 三角放缩
+      - 指数切线放缩
+      - 分段区间证明
+      - 粗界先判
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $xe^x+\frac12\sin2x\ge2\sin x+\sin^2x$
+      - $xe^x\ge\sin x(2-\cos x)+\sin^2x$
+      - $\cos x\ge1-\frac12x^2$
+      - $e^x\ge1+x+\frac12x^2$
+    normalization_moves_used:
+      - 先用二倍角公式把混合三角项并入右侧。
+      - 按 $x\ge\pi$ 与 $0\le x<\pi$ 分段处理，先粗后细。
+      - 小区间内把右侧压到多项式，再用指数二次下界收束。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\frac12\sin2x$ 改写并移项，回补三角函数基础。
+      - 若学生在分段时不会选择阈值 $\pi$ 做粗界，回补不等式工具基础。
+      - 若学生不会从 $e^x\ge1+x+\frac12x^2$ 推到 $xe^x$ 下界，回补指数对数基础。
+  detail_terms:
+    - $\frac12\sin2x=\sin x\cos x$
+    - $\sin x(2-\cos x)+\sin^2x$
+    - $0\le x<\pi$
+    - $\frac12x^3+x^2+x$
+    - $xe^x$
+parts: &a1
+  - 当 $x\geqslant0$ 时，证明：$xe^x+\frac{1}{2}\sin2x\geqslant2\sin x+\sin^2x$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0205_xex_sin_inequality_ch6_trig_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0205_ex05_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0205/page_0205.md
+      role: problem_start
+      evidence: page_0205 行43-45给出例5题头：已知 $f(x)=2x^2+\cos2x-1$，证明 $x\ge0$ 时 $xe^x+\frac12\sin2x\ge2\sin x+\sin^2x$。
+    - ref_id: page_0205_ex05_solution_head
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0205/page_0205.md
+      role: solution
+      evidence: page_0205 行47-51给出解析前半：先化为 $xe^x\ge\sin x(2-\cos x)+\sin^2x$，并分 $x\ge\pi$ 与 $0\le x<\pi$ 两段。
+    - ref_id: page_0206_ex05_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0206/page_0206.md
+      role: continuation
+      evidence: page_0206 行14承接完成：即证 $xe^x\ge x(1+\frac12x^2)+x^2=\frac12x^3+x^2+x$，再用 $e^x\ge\frac12x^2+x+1$ 得证。
+    - ref_id: page_0206_ex05_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0206/page_0206.md
+      role: local_context
+      evidence: page_0206 行16起进入例6新题头，说明例5续解在行14已收束。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0205.png
+      inspected: true
+      notes: 已核对页图：例5题头与分段证明起始完整，末行“由于 $x\ge\sin x$”后跨页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0206.png
+      inspected: true
+      notes: 已核对页图：页首一行确为例5续解收尾，随后立即切到例6。
+  source_context: 例5题头在 page_0205 底部，解析跨至 page_0206 顶部一行结束；page_0206 后续新例题不归本卡。
+  source_influence:
+    - 保留等价化简：$\frac12\sin2x=\sin x\cos x$，目标化为 $xe^x$ 与三角项比较。
+    - 保留 source 的分段策略：$x\ge\pi$ 粗界，$0\le x<\pi$ 用 $\cos x$ 放缩。
+    - 保留续页收尾链：由 $x\ge\sin x$ 与 $e^x\ge1+x+\frac12x^2$ 推得结论。
+  source_discrepancies: []
+original_problem:
+  stem: 已知函数 $f(x)=2x^2+\cos2x-1$。
+  parts: *a1
+  choices: []
+  answer: 不等式成立。
+  fidelity_notes:
+    - 源题为单问证明题，无选项。
+    - 题干给出的 $f(x)$ 在解法中未直接参与计算，主要起背景提示作用。
+    - 解析末段跨页到 page_0206 顶部，已并入同一卡。
+solution:
+  source_solution_summary: 先用 $\frac12\sin2x=\sin x\cos x$，原式等价为 $xe^x\ge\sin x(2-\cos x)+\sin^2x$。 分两段： (i) 当 $x\ge\pi$，有 $xe^x\ge\pi e^\pi>4$；而右侧 $\sin x(2-\cos x)+\sin^2x\le4$，故成立。 (ii) 当 $0\le x<\pi$，由 $\cos x\ge1-\frac12x^2$ 得 $2-\cos x\le1+\frac12x^2$，故只需证 $xe^x\ge\sin x(1+\frac12x^2)+\sin^2x$。 再由 $x\ge\sin x\ (x\ge0)$（从而 $x^2\ge\sin^2x$）可进一步归约到 $xe^x\ge x(1+\frac12x^2)+x^2=\frac12x^3+x^2+x$。 续页给出收束：由 $e^x\ge1+x+\frac12x^2\ (x\ge0)$，乘以 $x$ 即得 $xe^x\ge x+x^2+\frac12x^3$，与目标一致，故原不等式成立。
+  key_steps:
+    - step_id: step_1
+      statement: 先把含 $\sin2x$ 的目标改写成 $xe^x$ 下界问题。
+      formula_trace:
+        from: $xe^x+\frac12\sin2x\ge2\sin x+\sin^2x$
+        to: $xe^x\ge\sin x(2-\cos x)+\sin^2x$
+        operation: 用 $\frac12\sin2x=\sin x\cos x$ 并移项。
+        why: 把难点集中到一个“指数项 vs 三角项”比较。
+      source_ref: page_0205_ex05_solution_head
+    - step_id: step_2
+      statement: 分段一：处理 $x\ge\pi$ 的粗界。
+      formula_trace:
+        from: $x\ge\pi$
+        to: $xe^x\ge\pi e^\pi>4,\ \sin x(2-\cos x)+\sin^2x\le4$
+        operation: 左侧用单调增长粗下界，右侧用三角函数有界性粗上界。
+        why: 在大区间快速完成判定。
+      source_ref: page_0205_ex05_solution_head
+    - step_id: step_3
+      statement: 分段二：$0\le x<\pi$ 先用余弦下界降低右侧。
+      formula_trace:
+        from: $\cos x\ge1-\frac12x^2$
+        to: $\sin x(2-\cos x)+\sin^2x\le\sin x(1+\frac12x^2)+\sin^2x$
+        operation: 由 $2-\cos x\le1+\frac12x^2$ 进行同向放缩。
+        why: 把右侧变为“$\sin x$ 与 $x$”可进一步比较的形式。
+      source_ref: page_0205_ex05_solution_head
+    - step_id: step_4
+      statement: 把三角项再压到多项式项。
+      formula_trace:
+        from: $\sin x(1+\frac12x^2)+\sin^2x$
+        to: $x(1+\frac12x^2)+x^2=\frac12x^3+x^2+x$
+        operation: 用 $x\ge\sin x$（$x\ge0$）与 $x^2\ge\sin^2x$。
+        why: 右侧归约成与 $xe^x$ 可直接比较的多项式。
+      source_ref: page_0205_ex05_solution_head
+    - step_id: step_5
+      statement: 跨页收尾：用指数二次下界闭合证明。
+      formula_trace:
+        from: $e^x\ge1+x+\frac12x^2\ (x\ge0)$
+        to: $xe^x\ge x+x^2+\frac12x^3=\frac12x^3+x^2+x$
+        operation: 两边乘以 $x\ge0$。
+        why: 与 step_4 的目标右侧一致，故分段二成立，原式得证。
+      source_ref: page_0206_ex05_solution_continuation
+teaching_card:
+  student_title: 先分段再并联放缩的 $xe^x$ 比较
+  what_it_trains: 训练“粗界分段 + 细化放缩”的两层策略：大区间先秒判，小区间再用三角与指数模板做精确压缩。
+  recognition_cues:
+    - 目标同时含 $xe^x,\sin2x,\sin^2x$。
+    - 存在天然阈值点（如 $\pi$）可做分段。
+    - 小区间里能把三角项逐步压到 $x,x^2,x^3$ 多项式。
+  normalization_moves:
+    - 先用 $\sin2x$ 恒等变形统一结构。
+    - 先判 $x\ge\pi$ 粗界，再做 $0\le x<\pi$ 的精细放缩。
+    - 最后用 $e^x\ge1+x+\frac12x^2$ 一步闭环。
+  common_failures:
+    - 分段后只证明了一个区间。
+    - 在 $0\le x<\pi$ 中把 $2-\cos x$ 放缩方向写反。
+    - 忘记说明 $x\ge0$ 时乘以 $x$ 不改变不等号方向。
+  similar_practice_query: xe^x 与 sin2x 不等式 分段 放缩 证明
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

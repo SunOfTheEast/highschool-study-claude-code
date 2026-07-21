@@ -1,0 +1,196 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0197_exp_linear_unique_integer_positive_s5_ex04
+content_revision_id: mst_p0197_exp_linear_unique_integer_positive_s5_ex04-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0197_exp_linear_unique_integer_positive_s5_ex04.card.yaml
+stem: |-
+  （2024·中山市模拟）设函数 $f(x)=2x+1-(ax+1)e^x$，其中 $a>0$，若存在唯一的整数 $x_0$ 使得 $f(x_0)>0$，则实数 $a$ 的取值范围是（  ）
+  A. $(0,\ 4]$
+  B. $(0,\ \frac{1+3e^2}{2}]$
+  C. $(e+1,\ 8]$
+  D. $(0,\ \frac{3}{e}-1)\cup(e+1,\ \frac{1+3e^2}{2}]$
+answer: |-
+  D
+
+  由 $f(x)>0$ 得 $2x+1-(ax+1)e^x>0\iff g(x)<h(x)$，其中 $g(x)=e^x(ax+1),\ h(x)=2x+1$。且 $g^{\prime}(x)=(ax+1+a)e^x=a\left(x+\frac{a+1}{a}\right)e^x$， 所以 $g$ 在 $x=-1-\frac1a$ 处取最小值。按 source 图像分两种唯一整点情形： 图1（左侧唯一整点）要求 $\begin{cases}g(-1)<h(-1)\\g(-2)\ge h(-2)\end{cases}$， 即 $\begin{cases}(1-a)e^{-1}<-1\\e^{-2}(1-2a)\ge-3\end{cases}$， 得 $1+e<a\le\frac{1+3e^2}{2}$； 图2（右侧唯一整点）要求 $\begin{cases}g(1)<h(1)\\g(2)\ge h(2)\end{cases}$， 即 $\begin{cases}e(a+1)<3\\e^2(2a+1)\ge5\end{cases}$，并结合 $a>0$ 得 $0<a<\frac3e-1$。合并可得 $a\in\left(0,\frac3e-1\right)\cup\left(1+e,\frac{1+3e^2}{2}\right]$，选 D。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把题目改写为“指数曲线在直线下方”的整点计数问题。
+      max_score: 1
+    - step_id: step_2
+      description: 先定位 $g(x)$ 的谷底位置，确认可用两侧分类。
+      max_score: 1
+    - step_id: step_3
+      description: 图1：左侧唯一整点判定。
+      max_score: 1
+    - step_id: step_4
+      description: 图2：右侧唯一整点判定。
+      max_score: 1
+    - step_id: step_5
+      description: 合并两类可行情形并对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 含参数分类讨论
+    secondary:
+      - 数形结合
+      - 参变量分离
+    subroute:
+      - 直曲分离
+      - 整点判定
+      - 图像交点计数
+      - 双图分治
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 指对复合结构
+      - 非齐次结构
+    evidence:
+      - $g(x)=e^x(ax+1),\ h(x)=2x+1$
+      - $g^{\prime}(x)=a\left(x+\frac{a+1}{a}\right)e^x$
+      - $\left(0,\frac3e-1\right)\cup\left(1+e,\frac{1+3e^2}{2}\right]$
+    normalization_moves_used:
+      - 先把 $f(x)>0$ 改写成两函数上下关系。
+      - 先定谷底，再按左右窗口做整数点排除。
+      - 每一图形情形都用“两点联立”保证唯一整点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $g^{\prime}(x)$ 判断单谷结构，回补导数单调极值基础。
+      - 若学生不能把“唯一整数”翻译成成对整数条件，回补函数性质与图像。
+      - 若学生在两种图形情形的并集处理上出错，回补方程根分布与韦达。
+  detail_terms:
+    - $g(x)=e^x(ax+1)$
+    - $h(x)=2x+1$
+    - $x=-1-\frac1a$
+    - $g(-1),g(-2),g(1),g(2)$
+    - 图1/图2
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0197_exp_linear_unique_integer_positive_s5_ex04
+source_evidence:
+  source_refs:
+    - ref_id: page_0197_context_ex2_tail
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0197/page_0197.md
+      role: local_context
+      evidence: page_0197 顶部仍有例2续图；例4题头在 page_0197 下半页开始。
+    - ref_id: page_0197_ex4_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0197/page_0197.md
+      role: problem_start
+      evidence: page_0197 给出例4题干、A-D 选项与解析起笔：设 $g(x)=e^x(ax+1),h(x)=2x+1$，并求出 $g^{\prime}(x)$ 的符号分界。
+    - ref_id: page_0198_ex4_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0198/page_0198.md
+      role: continuation
+      evidence: page_0198 顶部续完例4：按图1、图2建立整数点条件组，得到两段参数区间并集，答案 D。
+    - ref_id: page_0198_ex4_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0198/page_0198.md
+      role: solution
+      evidence: page_0198 续解明确写出两组不等式与结论：$(0,\frac{3}{e}-1)\cup(1+e,\frac{1+3e^2}{2}]$。
+    - ref_id: page_0196_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0196/page_0196.md
+      role: local_context
+      evidence: 结合 page_0196 末尾与 page_0197 顶部页图，可确认顶部插图属于例2，不属于例4。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0197.png
+      inspected: true
+      notes: 已核对原图：例4题干、四个选项与解析前半在本页，且页首插图为例2续图。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0198.png
+      inspected: true
+      notes: 已核对原图：page_0198 顶部为例4续解，含图1/图2两种整点判定并给出答案 D。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0196.png
+      inspected: true
+      notes: 已核对原图：例2在 page_0196 起题，支撑“page_0197 顶图不建卡”的边界判断。
+  source_context: 例4题头起于 page_0197，解析续到 page_0198 顶部；按题头归属由 batch_E_page_0197 完整建卡。
+  source_influence:
+    - 保留 source 的直曲分离：把 $f(x)>0$ 转成 $g(x)<h(x)$ 的整点计数。
+    - 保留 source 的双图分治（图1/图2）与对应整数点组：$(-1,-2)$ 与 $(1,2)$。
+    - 保留两段区间并集与端点开闭，最终对应选项 D。
+  source_discrepancies: []
+original_problem:
+  stem: （2024·中山市模拟）设函数 $f(x)=2x+1-(ax+1)e^x$，其中 $a>0$，若存在唯一的整数 $x_0$ 使得 $f(x_0)>0$，则实数 $a$ 的取值范围是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $(0,\ 4]$
+      text_latex: $(0,\ 4]$
+    - label: B
+      text_raw: $(0,\ \frac{1+3e^2}{2}]$
+      text_latex: $(0,\ \frac{1+3e^2}{2}]$
+    - label: C
+      text_raw: $(e+1,\ 8]$
+      text_latex: $(e+1,\ 8]$
+    - label: D
+      text_raw: $(0,\ \frac{3}{e}-1)\cup(e+1,\ \frac{1+3e^2}{2}]$
+      text_latex: $(0,\ \frac{3}{e}-1)\cup(e+1,\ \frac{1+3e^2}{2}]$
+  answer: D
+  fidelity_notes:
+    - 例4为单选题，A-D 选项完整保留。
+    - 题干与解析跨页：题头在 page_0197，结论在 page_0198 顶部。
+solution:
+  source_solution_summary: 由 $f(x)>0$ 得 $2x+1-(ax+1)e^x>0\iff g(x)<h(x)$，其中 $g(x)=e^x(ax+1),\ h(x)=2x+1$。且 $g^{\prime}(x)=(ax+1+a)e^x=a\left(x+\frac{a+1}{a}\right)e^x$， 所以 $g$ 在 $x=-1-\frac1a$ 处取最小值。按 source 图像分两种唯一整点情形： 图1（左侧唯一整点）要求 $\begin{cases}g(-1)<h(-1)\\g(-2)\ge h(-2)\end{cases}$， 即 $\begin{cases}(1-a)e^{-1}<-1\\e^{-2}(1-2a)\ge-3\end{cases}$， 得 $1+e<a\le\frac{1+3e^2}{2}$； 图2（右侧唯一整点）要求 $\begin{cases}g(1)<h(1)\\g(2)\ge h(2)\end{cases}$， 即 $\begin{cases}e(a+1)<3\\e^2(2a+1)\ge5\end{cases}$，并结合 $a>0$ 得 $0<a<\frac3e-1$。合并可得 $a\in\left(0,\frac3e-1\right)\cup\left(1+e,\frac{1+3e^2}{2}\right]$，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把题目改写为“指数曲线在直线下方”的整点计数问题。
+      formula_trace:
+        from: $2x+1-(ax+1)e^x>0$
+        to: $g(x)<h(x),\ g(x)=e^x(ax+1),\ h(x)=2x+1$
+        operation: 移项并定义两函数。
+        why: 唯一整数解可转化为两图像在整数横坐标处的上下关系。
+      source_ref: page_0197_ex4_problem_start
+    - step_id: step_2
+      statement: 先定位 $g(x)$ 的谷底位置，确认可用两侧分类。
+      formula_trace:
+        from: $g^{\prime}(x)=(ax+1+a)e^x$
+        to: $x=-1-\frac1a$ 处 $g$ 取最小值
+        operation: 令 $g^{\prime}(x)=0$ 并做符号判断。
+        why: 单谷结构决定“唯一整点”会落在谷底左侧或右侧的局部窗口。
+      source_ref: page_0197_ex4_problem_start
+    - step_id: step_3
+      statement: 图1：左侧唯一整点判定。
+      formula_trace:
+        from: $g(-1)<h(-1),\ g(-2)\ge h(-2)$
+        to: $1+e<a\le\frac{1+3e^2}{2}$
+        operation: 代入 $x=-1,-2$ 联立不等式。
+        why: 保证左侧只有一个整数满足 $g(x)<h(x)$。
+      source_ref: page_0198_ex4_continuation
+    - step_id: step_4
+      statement: 图2：右侧唯一整点判定。
+      formula_trace:
+        from: $g(1)<h(1),\ g(2)\ge h(2),\ a>0$
+        to: $0<a<\frac3e-1$
+        operation: 代入 $x=1,2$ 联立并结合题设。
+        why: 在右侧窗口锁定“仅一个整数点在直线下方”。
+      source_ref: page_0198_ex4_continuation
+    - step_id: step_5
+      statement: 合并两类可行情形并对应选项。
+      formula_trace:
+        from: $1+e<a\le\frac{1+3e^2}{2}$ 与 $0<a<\frac3e-1$
+        to: $a\in\left(0,\frac3e-1\right)\cup\left(1+e,\frac{1+3e^2}{2}\right]$
+        operation: 取并集并对照选项 D。
+        why: 题目只要求“存在唯一整数 $x_0$”，两种图形机制均可成立。
+      source_ref: page_0198_ex4_solution
+teaching_card:
+  student_title: 单谷曲线配直线的整点双情形
+  what_it_trains: 训练把“唯一整数解”拆成两种图形窗口，再用相邻整数的成立/排除条件联立求参数并集。
+  recognition_cues:
+    - 题干是“存在唯一整数 $x_0$”且含指数线性乘积。
+    - 可写成 $g(x)<h(x)$ 的曲线-直线比较。
+    - 解析出现图1/图2双分支。
+  normalization_moves:
+    - 先设 $g,h$ 并求 $g^{\prime}(x)$ 定位谷底。
+    - 每个分支都写成“近点成立、邻点不成立”的二元条件组。
+    - 最后把两段参数区间做并集。
+  common_failures:
+    - 只验证一个整数点成立，没排除邻点，导致不唯一。
+    - 漏加题设 $a>0$，把无效区间带入答案。
+    - 把两种图形情形误并为交集。
+  similar_practice_query: 整点唯一 单谷函数 直曲分离 双情形分类 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

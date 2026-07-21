@@ -1,0 +1,225 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0140_xe_reverse_ex11
+content_revision_id: mst_p0140_xe_reverse_ex11-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0140_xe_reverse_ex11.card.yaml
+stem: |-
+  （2023 · 哈尔滨期末 · 多选）已知函数 $f(x)$ 的定义域为 $(0,+\infty)$，导函数为 $f^{\prime}(x)$，满足 $xf^{\prime}(x)-f(x)=(x-1)e^x$（$e$ 为自然对数的底数），且 $f(1)=0$，则（  ）
+  A. $\frac{f(2)}{2}<\frac{f(3)}{3}$
+  B. $f(x)$ 在 $(0,1)$ 上单调递增
+  C. $f(x)$ 在 $x=1$ 处取得极小值
+  D. $f(x)$ 无最大值
+answer: |
+  ACD
+
+  设 $g(x)=\frac{f(x)}{x}$，则
+  $g^{\prime}(x)=\frac{xf^{\prime}(x)-f(x)}{x^2}
+  =\frac{(x-1)e^x}{x^2}
+  =\left(\frac{e^x}{x}\right)^{\prime}$。
+  故 $g(x)=\frac{e^x}{x}+c$。由 $f(1)=0$ 得 $g(1)=0$，所以
+  $e+c=0$，即 $c=-e$，从而
+  $g(x)=\frac{e^x}{x}-e$，$f(x)=e^x-ex$。
+  再算 $f^{\prime}(x)=e^x-e$：当 $0<x<1$ 时 $f^{\prime}(x)<0$，当 $x>1$ 时 $f^{\prime}(x)>0$，
+  所以 $f$ 先减后增，在 $x=1$ 处取极小值，B 错、C 对；且 $x\to+\infty$ 时 $f(x)\to+\infty$，D 对。
+  另外由 $g^{\prime}(x)=\frac{e^x(x-1)}{x^2}$，当 $x>1$ 时 $g$ 递增，故
+  $g(2)<g(3)$，即 $\frac{f(2)}{2}<\frac{f(3)}{3}$，A 对。答案 ACD。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 作比值代换，消去“$xf^{\prime}(x)-f(x)$”结构。
+      max_score: 1
+    - step_id: step_2
+      description: 识别右侧为已知导数并积分。
+      max_score: 1
+    - step_id: step_3
+      description: 用初值确定常数并还原 $f(x)$。
+      max_score: 1
+    - step_id: step_4
+      description: 判断 A：比较比值函数在 2 与 3 处的大小。
+      max_score: 1
+    - step_id: step_5
+      description: 判断 B、C：用 $f^{\prime}(x)$ 的符号表。
+      max_score: 1
+    - step_id: step_6
+      description: 判断 D 并汇总答案。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: A
+        goal: 数值比较
+        target: A：比较 $\frac{f(2)}{2}$ 与 $\frac{f(3)}{3}$。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 抽象函数性质
+        target: B/C：判断 $(0,1)$ 上单调性与 $x=1$ 极值类型。
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 极值最值
+        target: D：判断是否存在最大值。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 数形结合
+    subroute:
+      - 反向构造
+      - 比值代换
+      - 函数性质锁定
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 抽象函数结构
+    evidence:
+      - $\left(\frac{f(x)}{x}\right)^{\prime}$ 与 $\left(\frac{e^x}{x}\right)^{\prime}$ 同构。
+      - 还原后 $f(x)=e^x-ex$，性质判断转为指数函数符号与增长。
+    normalization_moves_used:
+      - 先把 $xf^{\prime}(x)-f(x)$ 改写成比值导数。
+      - 通过初值 $f(1)=0$ 一步定常数。
+      - 对 A 用 $g$ 的单调性，对 B/C/D 用 $f^{\prime}$ 与极限。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会写 $\left(\frac{f(x)}{x}\right)^{\prime}$，回补导数运算与几何意义。
+      - 若学生不会从 $f^{\prime}$ 符号判断单调与极值，回补导数单调极值基础。
+      - 若学生对 $e^x$ 与常数比较不熟，回补指数对数基础。
+  detail_terms:
+    - $g(x)=\frac{f(x)}{x}$
+    - $\left(\frac{e^x}{x}\right)^{\prime}$
+    - $f(x)=e^x-ex$
+    - $f^{\prime}(x)=e^x-e$
+    - 先减后增
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0140_xe_reverse_ex11
+source_evidence:
+  source_refs:
+    - ref_id: page_0140_ex11_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0140/page_0140.md
+      role: problem_start
+      evidence: 例 11：已知 $xf^{\prime}(x)-f(x)=(x-1)e^x$，$f(1)=0$，判断 A-D（多选）。
+    - ref_id: page_0140_ex11_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0140/page_0140.md
+      role: solution
+      evidence: page_0140 先设 $g(x)=\frac{f(x)}{x}$，推出 $g^{\prime}(x)=\frac{(x-1)e^x}{x^2}=(\frac{e^x}{x})^{\prime}$，并由 $g(1)=0$ 得 $f(x)=e^x-ex$。
+    - ref_id: page_0141_ex11_solution_cont
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0141/page_0141.md
+      role: continuation
+      evidence: page_0141 顶部续解：由 $g$ 与 $f^{\prime}(x)=e^x-e$ 的符号判断 A、B、C、D，结论 ACD。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0140.png
+      inspected: true
+      notes: 已核对 page_0140 底部例 11 题头和解法前半段。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0141.png
+      inspected: true
+      notes: 已核对 page_0141 顶部为例 11 续解并给出答案 ACD。
+  source_context: 例 11 起头在 page_0140，解析续到 page_0141 顶部；page_0141 后续出现新题例 12。
+  source_influence:
+    - 保留源解主线：先比值代换 $g(x)=\frac{f(x)}{x}$，再逆向积分得到 $f(x)$ 显式。
+    - 保留源解对 A/B/C 的单调与极值判断，并补成统一符号表叙述。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 哈尔滨期末 · 多选）已知函数 $f(x)$ 的定义域为 $(0,+\infty)$，导函数为 $f^{\prime}(x)$，满足 $xf^{\prime}(x)-f(x)=(x-1)e^x$（$e$ 为自然对数的底数），且 $f(1)=0$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\frac{f(2)}{2}<\frac{f(3)}{3}$
+      text_latex: $\frac{f(2)}{2}<\frac{f(3)}{3}$
+    - label: B
+      text_raw: $f(x)$ 在 $(0,1)$ 上单调递增
+      text_latex: $f(x)$ 在 $(0,1)$ 上单调递增
+    - label: C
+      text_raw: $f(x)$ 在 $x=1$ 处取得极小值
+      text_latex: $f(x)$ 在 $x=1$ 处取得极小值
+    - label: D
+      text_raw: $f(x)$ 无最大值
+      text_latex: $f(x)$ 无最大值
+  answer: ACD
+  fidelity_notes:
+    - 源题为多选，page_0141 末句明确“故选 ACD”。
+    - A 选项比较的是比值 $\frac{f(x)}{x}$ 在 2 与 3 处的大小，不是直接比较 $f(2),f(3)$。
+solution:
+  source_solution_summary: |
+    设 $g(x)=\frac{f(x)}{x}$，则
+    $g^{\prime}(x)=\frac{xf^{\prime}(x)-f(x)}{x^2}
+    =\frac{(x-1)e^x}{x^2}
+    =\left(\frac{e^x}{x}\right)^{\prime}$。
+    故 $g(x)=\frac{e^x}{x}+c$。由 $f(1)=0$ 得 $g(1)=0$，所以
+    $e+c=0$，即 $c=-e$，从而
+    $g(x)=\frac{e^x}{x}-e$，$f(x)=e^x-ex$。
+    再算 $f^{\prime}(x)=e^x-e$：当 $0<x<1$ 时 $f^{\prime}(x)<0$，当 $x>1$ 时 $f^{\prime}(x)>0$，
+    所以 $f$ 先减后增，在 $x=1$ 处取极小值，B 错、C 对；且 $x\to+\infty$ 时 $f(x)\to+\infty$，D 对。
+    另外由 $g^{\prime}(x)=\frac{e^x(x-1)}{x^2}$，当 $x>1$ 时 $g$ 递增，故
+    $g(2)<g(3)$，即 $\frac{f(2)}{2}<\frac{f(3)}{3}$，A 对。答案 ACD。
+  key_steps:
+    - step_id: step_1
+      statement: 作比值代换，消去“$xf^{\prime}(x)-f(x)$”结构。
+      formula_trace:
+        from: $xf^{\prime}(x)-f(x)=(x-1)e^x$
+        to: $g(x)=\frac{f(x)}{x},\quad g^{\prime}(x)=\frac{(x-1)e^x}{x^2}$
+        operation: 利用 $\left(\frac{f(x)}{x}\right)^{\prime}=\frac{xf^{\prime}(x)-f(x)}{x^2}$。
+        why: 把原方程直接改写为一个可积分的一阶导数等式。
+      source_ref: page_0140_ex11_solution_start
+    - step_id: step_2
+      statement: 识别右侧为已知导数并积分。
+      formula_trace:
+        from: $g^{\prime}(x)=\frac{(x-1)e^x}{x^2}$
+        to: $g^{\prime}(x)=\left(\frac{e^x}{x}\right)^{\prime}\Rightarrow g(x)=\frac{e^x}{x}+c$
+        operation: 逆向识别导数模板。
+        why: 把隐式关系转成显式函数式。
+      source_ref: page_0140_ex11_solution_start
+    - step_id: step_3
+      statement: 用初值确定常数并还原 $f(x)$。
+      formula_trace:
+        from: $f(1)=0\Rightarrow g(1)=0$
+        to: $0=e+c,\ c=-e,\ g(x)=\frac{e^x}{x}-e,\ f(x)=e^x-ex$
+        operation: 代入 $x=1$ 求常数，再乘回 $x$。
+        why: 后续所有选项都依赖 $f$ 的显式表达。
+      source_ref: page_0140_ex11_solution_start
+    - step_id: step_4
+      statement: 判断 A：比较比值函数在 2 与 3 处的大小。
+      formula_trace:
+        from: $g^{\prime}(x)=\frac{e^x(x-1)}{x^2}$
+        to: $x>1\Rightarrow g^{\prime}(x)>0\Rightarrow g(2)<g(3)\Rightarrow \frac{f(2)}{2}<\frac{f(3)}{3}$
+        operation: 在区间 $(1,+\infty)$ 用单调性比较函数值。
+        why: A 选项本质是 $g(2)<g(3)$。
+      source_ref: page_0141_ex11_solution_cont
+    - step_id: step_5
+      statement: 判断 B、C：用 $f^{\prime}(x)$ 的符号表。
+      formula_trace:
+        from: $f^{\prime}(x)=e^x-e$
+        to: $0<x<1\Rightarrow f^{\prime}(x)<0;\ x>1\Rightarrow f^{\prime}(x)>0$
+        operation: 比较 $e^x$ 与 $e$。
+        why: $f$ 在 $(0,1)$ 递减，故 B 错；在 $x=1$ 处由负到正，故 C 对。
+      source_ref: page_0141_ex11_solution_cont
+    - step_id: step_6
+      statement: 判断 D 并汇总答案。
+      formula_trace:
+        from: $f(x)=e^x-ex$
+        to: $x\to+\infty,\ f(x)\to+\infty\Rightarrow f(x)\text{ 无最大值}$
+        operation: 看指数项主导增长。
+        why: D 为真，联合 A/C 得答案 ACD。
+      source_ref: page_0141_ex11_solution_cont
+teaching_card:
+  student_title: 先除以 x，再把函数还原出来
+  what_it_trains: 训练识别 $xf^{\prime}(x)-f(x)$ 的比值导数结构，并把抽象条件快速还原成显式函数进行多选判定。
+  recognition_cues:
+    - 题设出现 $xf^{\prime}(x)-f(x)$。
+    - 给出一个点值条件 $f(1)=0$。
+    - 选项同时考比值、单调、极值和最大值。
+  normalization_moves:
+    - 令 $g(x)=\frac{f(x)}{x}$。
+    - 把右侧识别成 $\left(\frac{e^x}{x}\right)^{\prime}$。
+    - 先求出 $f(x)$，再分流做 A 与 B/C/D。
+  common_failures:
+    - 把 $g(1)$ 错写成 $\frac{f(1)}{1}$ 以外的值，导致常数算错。
+    - 只判断 $f^{\prime}(1)=0$ 就断言极小，忽略左右符号。
+    - A 项误比 $f(2)$ 与 $f(3)$，忽略选项中的分母。
+  similar_practice_query: 抽象函数 比值导数 x f^{\prime}-f 逆向构造 指数函数 单调极值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0140/page_0141 页图：例 11 起于 page_0140，续解止于 page_0141 顶部，答案 ACD 与 markdown 一致。

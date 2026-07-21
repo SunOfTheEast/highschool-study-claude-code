@@ -1,0 +1,215 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0106_log_reciprocal_common_tangent_ex15
+content_revision_id: mst_p0106_log_reciprocal_common_tangent_ex15-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0106_log_reciprocal_common_tangent_ex15.card.yaml
+stem: |-
+  （2023 烟台期末·多选 T12）关于曲线 $f(x)=\ln x$ 和 $g(x)=\frac{a}{x}(a\neq0)$ 的公切线，下列说法正确的有（  ）
+  A. 无论 $a$ 取何值，两曲线都有公切线
+  B. 若两曲线恰有两条公切线，则 $a=-\frac{1}{e}$
+  C. 若 $a<-1$，则两曲线只有一条公切线
+  D. 若 $-\frac{1}{e^2}<a<0$，则两曲线有三条公切线
+answer: |
+  BCD
+
+  当 $a>0$ 时，源页图示说明 $f(x)=\ln x$ 与 $g(x)=\frac{a}{x}$ 一个递增、一个递减，
+  没有公切线，因此 A 错。下面只需看 $a<0$。这时 $g$ 的第二象限分支与
+  $f$ 的第一象限部分先存在一条公切线；其余公切线由 $g$ 的第四象限分支与
+  $f$ 的交点情况决定。若 $f(x)>g(x)$ 恒成立，则
+  $\ln x>\frac{a}{x}$，即 $x\ln x\ge -\frac1e>a$，两曲线只有这一条公切线；
+  因为 $a<-1$ 一定满足 $a<-\frac1e$，C 正确。若临界
+  $x\ln x\ge -\frac1e=a$，两曲线恰有两条公切线，B 正确。若
+  $f(x)=g(x)$ 有两个交点，即 $a=x\ln x$ 在负值区间有两个解，则
+  $-\frac1e<a<0$，总共有三条公切线；而
+  $\left(-\frac1{e^2},0\right)\subset\left(-\frac1e,0\right)$，所以 D 正确。
+  故选 BCD。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先用 $a>0$ 情形否定 A。
+      max_score: 1
+    - step_id: step_2
+      description: 在 $a<0$ 时先固定一条跨象限公切线。
+      max_score: 1
+    - step_id: step_3
+      description: 用 $x\ln x$ 的最小值判断无交点和临界相切。
+      max_score: 1
+    - step_id: step_4
+      description: 判断 C、B 两项。
+      max_score: 1
+    - step_id: step_5
+      description: 判断两交点区间并验证 D。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 参变量分离
+      - 切线放缩与凹凸性
+    subroute:
+      - 象限分支拆分
+      - $x\ln x$ 值域
+      - 公切线条数与交点数
+      - 选项区间包含关系
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+      - 分段函数结构
+    evidence:
+      - $a<0$ 时先有一条跨象限公切线。
+      - 第四象限的额外公切线由 $a=x\ln x$ 的交点数决定。
+      - $x\ln x$ 的最小值 $-\frac1e$ 把一条、两条、三条公切线分开。
+    normalization_moves_used:
+      - 先用 $a>0$ 排除全称选项。
+      - 把 $a<0$ 的问题拆成固定公切线与额外交点。
+      - 用 $a=x\ln x$ 的两解区间判断三条公切线。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不清楚 $\ln x$ 的定义域和单调性，回补指数对数基础。
+      - 若学生不会分析 $g(x)=a/x$ 在 $a<0$ 时的象限分支，回补函数三要素与定义域。
+      - 若学生不会求 $x\ln x$ 的最小值，回补导数单调极值基础。
+      - 若学生把 $(-1/e^2,0)$ 与 $(-1/e,0)$ 的包含关系弄反，回补不等式工具基础。
+  detail_terms:
+    - $f(x)=\ln x$
+    - $g(x)=\frac{a}{x}$
+    - $a=x\ln x$
+    - $-\frac1e<a<0$
+    - 答案 BCD
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0106_log_reciprocal_common_tangent_ex15
+source_evidence:
+  source_refs:
+    - ref_id: page_0106
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0106/page_0106.md
+      role: problem_start
+      evidence: lines 28-40 give 例 15 题头、题干、A-D 选项、$a>0$ 情形判 A 错，以及 $a<0$ 时先存在一条跨象限公切线的开头。
+    - ref_id: page_0107
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0107/page_0107.md
+      role: continuation
+      evidence: lines 14-31 continue 例 15：用 $g(x)$ 第四象限与 $f(x)$ 的交点情况分三图判断 C、B、D，并给出答案 BCD。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0106.png
+      inspected: true
+      notes: 已核对 page_0106 下半部：例 15 题头、四个选项、$a>0$ 无公切线图和 $a<0$ 先有一条公切线图与 markdown 一致。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0107.png
+      inspected: true
+      notes: 已核对 page_0107 顶部：三幅 $f(x)=\ln x$ 与 $g(x)=a/x$ 的位置图、$x\ln x$ 临界值和答案 BCD 与 markdown 一致。
+  source_context: 例 15 从 page_0106 底部跨到 page_0107 顶部；page_0107 的“六、包络线与切线范围”从 line 33 开始，属于后续 section，不纳入本题。
+  source_influence:
+    - 保留源页先排除 $a>0$：一增一减位置下没有公切线，所以 A 错。
+    - 保留源页 $a<0$ 的一条固定公切线：$f$ 第一象限部分与 $g$ 第二象限分支先有一条。
+    - 保留源页对 $g$ 第四象限与 $f$ 的交点分类：无交点、临界相切、两交点分别对应总公切线一条、两条、三条。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 烟台期末·多选 T12）关于曲线 $f(x)=\ln x$ 和 $g(x)=\frac{a}{x}(a\neq0)$ 的公切线，下列说法正确的有（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 无论 $a$ 取何值，两曲线都有公切线
+      text_latex: $\text{无论 }a\text{ 取何值，两曲线都有公切线}$
+    - label: B
+      text_raw: 若两曲线恰有两条公切线，则 $a=-\frac{1}{e}$
+      text_latex: $\text{若两曲线恰有两条公切线，则 }a=-\frac{1}{e}$
+    - label: C
+      text_raw: 若 $a<-1$，则两曲线只有一条公切线
+      text_latex: $\text{若 }a<-1\text{，则两曲线只有一条公切线}$
+    - label: D
+      text_raw: 若 $-\frac{1}{e^2}<a<0$，则两曲线有三条公切线
+      text_latex: $\text{若 }-\frac{1}{e^2}<a<0\text{，则两曲线有三条公切线}$
+  answer: BCD
+  fidelity_notes:
+    - 本题为多选题，题干和选项在 page_0106，解析结论续至 page_0107 顶部。
+    - 源页答案为 BCD。
+solution:
+  source_solution_summary: |
+    当 $a>0$ 时，源页图示说明 $f(x)=\ln x$ 与 $g(x)=\frac{a}{x}$ 一个递增、一个递减，
+    没有公切线，因此 A 错。下面只需看 $a<0$。这时 $g$ 的第二象限分支与
+    $f$ 的第一象限部分先存在一条公切线；其余公切线由 $g$ 的第四象限分支与
+    $f$ 的交点情况决定。若 $f(x)>g(x)$ 恒成立，则
+    $\ln x>\frac{a}{x}$，即 $x\ln x\ge -\frac1e>a$，两曲线只有这一条公切线；
+    因为 $a<-1$ 一定满足 $a<-\frac1e$，C 正确。若临界
+    $x\ln x\ge -\frac1e=a$，两曲线恰有两条公切线，B 正确。若
+    $f(x)=g(x)$ 有两个交点，即 $a=x\ln x$ 在负值区间有两个解，则
+    $-\frac1e<a<0$，总共有三条公切线；而
+    $\left(-\frac1{e^2},0\right)\subset\left(-\frac1e,0\right)$，所以 D 正确。
+    故选 BCD。
+  key_steps:
+    - step_id: step_1
+      statement: 先用 $a>0$ 情形否定 A。
+      formula_trace:
+        from: |
+          a>0,\qquad f(x)=\ln x,\qquad g(x)=\frac{a}{x}\quad(x>0)
+        to: |
+          f\text{ 递增},\quad g\text{ 递减},\quad \text{两曲线没有公切线}
+        operation: 按源页左图和单调性判断图像位置。
+        why: A 说“无论 $a$ 取何值”都有公切线，只要 $a>0$ 反例成立即可排除。
+      source_ref: page_0106
+    - step_id: step_2
+      statement: 在 $a<0$ 时先固定一条跨象限公切线。
+      formula_trace:
+        from: |
+          a<0,\qquad g(x)=\frac{a}{x}
+        to: |
+          f\text{ 第一象限部分与 }g\text{ 第二象限分支存在一条公切线}
+        operation: 利用源页右图的跨象限位置关系。
+        why: 后续只需统计 $g$ 第四象限分支与 $f$ 的交点带来的额外公切线。
+      source_ref: page_0106
+    - step_id: step_3
+      statement: 用 $x\ln x$ 的最小值判断无交点和临界相切。
+      formula_trace:
+        from: |
+          \ln x\ge \frac{a}{x}\quad(x>0)
+        to: |
+          x\ln x\ge -\frac1e,\qquad a\le -\frac1e
+        operation: 两边乘以 $x>0$，再用 $x\ln x$ 的最小值 $-\frac1e$。
+        why: 当 $a<-\frac1e$ 时第四象限无交点，总数只有固定的一条；当 $a=-\frac1e$ 时临界相切，总数恰为两条。
+      source_ref: page_0107
+    - step_id: step_4
+      statement: 判断 C、B 两项。
+      formula_trace:
+        from: |
+          a<-1<-\frac1e,\qquad a=-\frac1e
+        to: |
+          C\text{ 正确},\qquad B\text{ 正确}
+        operation: 把选项中的具体条件与交点分类对应。
+        why: $a<-1$ 落在无额外交点区间；$a=-1/e$ 是一条额外切线的临界。
+      source_ref: page_0107
+    - step_id: step_5
+      statement: 判断两交点区间并验证 D。
+      formula_trace:
+        from: |
+          f(x)=g(x),\qquad \ln x=\frac{a}{x}
+        to: |
+          a=x\ln x\text{ 有两个交点}\Longleftrightarrow -\frac1e<a<0
+        operation: 用 $x\ln x$ 在 $(0,1)$ 上先降后升、最小值为 $-\frac1e$ 的图像。
+        why: 两交点会带来两条额外公切线，再加固定一条，共三条；$(-1/e^2,0)$ 是该区间的子集。
+      source_ref: page_0107
+teaching_card:
+  student_title: 把对数和反比例的公切线数交给 $x\ln x$
+  what_it_trains: 训练按参数正负和象限分支统计公切线条数，再用 $x\ln x$ 的最小值判断选项真假。
+  recognition_cues:
+    - 题干是多选“说法正确”，要逐项对应公切线条数。
+    - $g(x)=a/x$ 的分支随 $a$ 正负改变位置，先分 $a>0$、$a<0$。
+    - 出现 $\ln x=\frac{a}{x}$ 时，立刻整理成 $a=x\ln x$。
+  normalization_moves:
+    - 用 $a>0$ 时无公切线排除 A。
+    - 在 $a<0$ 时先保留一条跨象限固定公切线。
+    - 用 $x\ln x$ 的最小值 $-\frac1e$ 区分无交点、临界、两交点。
+    - 把 D 的 $-\frac1{e^2}<a<0$ 看作三条公切线区间的子区间。
+  common_failures:
+    - 忽略 $a>0$ 的反例，误选 A。
+    - 把 $a<-1$ 误认为比 $-\frac1e$ 更靠近 0。
+    - 只看 $f$ 与 $g$ 的交点，漏掉 $a<0$ 时先存在的一条跨象限公切线。
+  similar_practice_query: lnx a/x 公切线 多选 xlnx 最小值 三条公切线
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0106/page_0107 图片与 markdown 对例 15 的题干、选项、跨页解析和答案 BCD 一致。

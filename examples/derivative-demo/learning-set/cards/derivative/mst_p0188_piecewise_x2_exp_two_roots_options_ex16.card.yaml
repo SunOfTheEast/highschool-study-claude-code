@@ -1,0 +1,172 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0188_piecewise_x2_exp_two_roots_options_ex16
+content_revision_id: mst_p0188_piecewise_x2_exp_two_roots_options_ex16-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0188_piecewise_x2_exp_two_roots_options_ex16.card.yaml
+stem: |-
+  已知函数 $f(x)=\begin{cases}x^2e^x,&x<1\\ \frac{e^x}{x^2},&x\ge1\end{cases}$，方程 $[f(x)]^2-2af(x)=0\ (a\in\mathbf{R})$ 有两个不等实根，则下列选项正确的是（  ）
+  A. 点 $(0,0)$ 是函数 $f(x)$ 的零点
+  B. $a$ 的取值范围是 $\left(\frac{2}{e^2},\frac{e^2}{8}\right)\cup\left[\frac e2,+\infty\right)$
+  C. $x=-3$ 是 $f(x)$ 的极大值点
+  D. $\exists x_1\in(0,1),x_2\in(1,3)$，使 $f(x_1)>f(x_2)$
+answer: |-
+  D
+
+  先分段分析：对 $x<1$，$f(x)=x^2e^x$，有 $f^{\prime}(x)=x(x+2)e^x$，故在 $(-\infty,-2)$ 递增、在 $(-2,0)$ 递减、在 $(0,1)$ 递增，且极大值 $f(-2)=\frac4{e^2}$、$f(0)=0$、$f(1^-)=e$。对 $x\ge1$， $f(x)=\frac{e^x}{x^2}$，在 $(1,2)$ 递减、在 $(2,+\infty)$ 递增， 且最小值 $f(2)=\frac{e^2}{4}$，并有 $f(1)=e$。 方程 $[f(x)]^2-2af(x)=0$ 等价于 $f(x)=0$ 或 $f(x)=2a$。 其中 $f(x)=0$ 仅有 $x=0$ 一根。要使总根数为两个不同实根， 需 $f(x)=2a$ 恰有一根，即 $2a\in\left(\frac4{e^2},\frac{e^2}{4}\right)\cup(e,+\infty)$， 所以 $a\in\left(\frac2{e^2},\frac{e^2}{8}\right)\cup\left(\frac e2,+\infty\right)$。 因此 B 的 $\left[\frac e2,+\infty\right)$ 端点写错；C 的极大值点应为 $x=-2$；A 按 source 判为错误；D 由图像成立，故选 D。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 完成分段函数的单调与极值分析。
+      max_score: 1
+    - step_id: step_2
+      description: 把原方程拆成两条水平线方程。
+      max_score: 1
+    - step_id: step_3
+      description: 利用图像判定 $f(x)=2a$ 恰有一根。
+      max_score: 1
+    - step_id: step_4
+      description: 回到选项逐项判定。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 含参数分类讨论
+    subroute:
+      - 参数判根数
+      - 分段函数作草图
+      - 水平线交点计数
+  structure:
+    primary: 分段函数结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 指对复合结构
+    evidence:
+      - $f(-2)=\frac4{e^2}$
+      - $f(2)=\frac{e^2}{4}$
+      - $2a\in\left(\frac4{e^2},\frac{e^2}{4}\right)\cup(e,+\infty)$
+    normalization_moves_used:
+      - 先分段求形状，再统一做水平线判根。
+      - 把二次方程因式分解为 $f(x)=0$ 与 $f(x)=2a$。
+      - 用“固定一根 + 另一方程一根”控制总根数为 2。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会分段判单调，回补导数单调极值基础。
+      - 若学生无法从草图读交点个数，回补函数性质与图像。
+      - 若学生在端点开闭上反复出错，回补方程根分布与韦达。
+  detail_terms:
+    - $x^2e^x$
+    - $\frac{e^x}{x^2}$
+    - $\frac4{e^2}$
+    - $\frac{e^2}{4}$
+    - $\left(\frac2{e^2},\frac{e^2}{8}\right)\cup\left(\frac e2,+\infty\right)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0188_piecewise_x2_exp_two_roots_options_ex16
+source_evidence:
+  source_refs:
+    - ref_id: page_0188
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0188/page_0188.md
+      role: problem_start
+      evidence: page_0188 给出例16题干、A-D 选项与解析前半：定义 $f(x)=x^2e^x\ (x<1)$、$f(x)=\frac{e^x}{x^2}\ (x\ge1)$， 并开始分析两段函数的单调与极值。
+    - ref_id: page_0189
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0189/page_0189.md
+      role: continuation
+      evidence: page_0189 顶部续完例16解析：补齐两段函数的草图，逐项判断 A-D， 得 $a\in\left(\frac2{e^2},\frac{e^2}8\right)\cup\left(\frac e2,+\infty\right)$， 最终选 D。
+    - ref_id: page_0188_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0188/page_0188.md
+      role: local_context
+      evidence: page_0188 顶部仍是例12续解；本卡从例16题头开始。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0188.png
+      inspected: true
+      notes: 已核对例16题干与四个选项；选项 B 写成 $\left(\frac2{e^2},\frac{e^2}8\right)\cup\left[\frac e2,+\infty\right)$。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0189.png
+      inspected: true
+      notes: 已核对例16续解与草图：解析给出 $a\in\left(\frac2{e^2},\frac{e^2}8\right)\cup\left(\frac e2,+\infty\right)$， 并判定 A、B、C 错，D 对。
+  source_context: 例16题头起于 page_0188，解析续到 page_0189 顶部；按题头归属由本 worker 完整建卡。
+  source_influence:
+    - 保留 source 的分段图像法：先分别求两段的单调/极值，再用水平线判 $f(x)=2a$ 的交点个数。
+    - 保留 source 对 B 项端点 $\frac e2$ 的开闭区分（题干写闭，真值应开）。
+    - 保留 source 的选项逐项判定链，最终答案 D。
+  source_discrepancies: []
+original_problem:
+  stem: 已知函数 $f(x)=\begin{cases}x^2e^x,&x<1\\ \frac{e^x}{x^2},&x\ge1\end{cases}$，方程 $[f(x)]^2-2af(x)=0\ (a\in\mathbf{R})$ 有两个不等实根，则下列选项正确的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 点 $(0,0)$ 是函数 $f(x)$ 的零点
+      text_latex: 点 $(0,0)$ 是函数 $f(x)$ 的零点
+    - label: B
+      text_raw: $a$ 的取值范围是 $\left(\frac{2}{e^2},\frac{e^2}{8}\right)\cup\left[\frac e2,+\infty\right)$
+      text_latex: $a$ 的取值范围是 $\left(\frac{2}{e^2},\frac{e^2}{8}\right)\cup\left[\frac e2,+\infty\right)$
+    - label: C
+      text_raw: $x=-3$ 是 $f(x)$ 的极大值点
+      text_latex: $x=-3$ 是 $f(x)$ 的极大值点
+    - label: D
+      text_raw: $\exists x_1\in(0,1),x_2\in(1,3)$，使 $f(x_1)>f(x_2)$
+      text_latex: $\exists x_1\in(0,1),x_2\in(1,3)$，使 $f(x_1)>f(x_2)$
+  answer: D
+  fidelity_notes:
+    - 例16为单选题，A-D 选项已完整保留。
+    - 解析跨页到 page_0189 顶部，已并入本卡。
+solution:
+  source_solution_summary: 先分段分析：对 $x<1$，$f(x)=x^2e^x$，有 $f^{\prime}(x)=x(x+2)e^x$，故在 $(-\infty,-2)$ 递增、在 $(-2,0)$ 递减、在 $(0,1)$ 递增，且极大值 $f(-2)=\frac4{e^2}$、$f(0)=0$、$f(1^-)=e$。对 $x\ge1$， $f(x)=\frac{e^x}{x^2}$，在 $(1,2)$ 递减、在 $(2,+\infty)$ 递增， 且最小值 $f(2)=\frac{e^2}{4}$，并有 $f(1)=e$。 方程 $[f(x)]^2-2af(x)=0$ 等价于 $f(x)=0$ 或 $f(x)=2a$。 其中 $f(x)=0$ 仅有 $x=0$ 一根。要使总根数为两个不同实根， 需 $f(x)=2a$ 恰有一根，即 $2a\in\left(\frac4{e^2},\frac{e^2}{4}\right)\cup(e,+\infty)$， 所以 $a\in\left(\frac2{e^2},\frac{e^2}{8}\right)\cup\left(\frac e2,+\infty\right)$。 因此 B 的 $\left[\frac e2,+\infty\right)$ 端点写错；C 的极大值点应为 $x=-2$；A 按 source 判为错误；D 由图像成立，故选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 完成分段函数的单调与极值分析。
+      formula_trace:
+        from: $f(x)=x^2e^x\ (x<1),\ f(x)=\frac{e^x}{x^2}\ (x\ge1)$
+        to: $f(-2)=\frac4{e^2}$（左段极大），$f(2)=\frac{e^2}{4}$（右段极小）
+        operation: 分别求导或按 source 的同构不等式判定两段走势。
+        why: 后续 $f(x)=2a$ 的交点个数完全依赖这两个阈值。
+      source_ref: page_0188-page_0189
+    - step_id: step_2
+      statement: 把原方程拆成两条水平线方程。
+      formula_trace:
+        from: $[f(x)]^2-2af(x)=0$
+        to: $f(x)=0$ 或 $f(x)=2a$
+        operation: 提取公因式 $f(x)$。
+        why: “两个不同实根”可拆成固定根 + 可变根数。
+      source_ref: page_0189
+    - step_id: step_3
+      statement: 利用图像判定 $f(x)=2a$ 恰有一根。
+      formula_trace:
+        from: $f(x)=0$ 仅有 $x=0$
+        to: $2a\in\left(\frac4{e^2},\frac{e^2}{4}\right)\cup(e,+\infty)$
+        operation: 在草图上读取水平线与曲线只交一次的高度区间。
+        why: 与 $x=0$ 合并后正好得到两个不同实根。
+      source_ref: page_0189
+    - step_id: step_4
+      statement: 回到选项逐项判定。
+      formula_trace:
+        from: $a\in\left(\frac2{e^2},\frac{e^2}{8}\right)\cup\left(\frac e2,+\infty\right)$
+        to: B 错（端点 $\frac e2$ 不能取），C 错（极大点是 $-2$），D 对
+        operation: 换元回 $a$ 并与选项文本比较。
+        why: 完成单选判定链并得到答案 D。
+      source_ref: page_0189
+teaching_card:
+  student_title: 分段草图下的“固定根+可变根”
+  what_it_trains: 训练把 $f(x)$ 型方程先拆因式，再用分段图像控制第二条方程的根数，从而精确满足总根数条件。
+  recognition_cues:
+    - 方程可写成 $f(x)\cdot(\cdots)=0$。
+    - 函数是分段指数型，题目同时考根数与极值性质。
+    - 选项里有参数区间端点和极值点位置。
+  normalization_moves:
+    - 先定位分段阈值点（$-2,0,1,2$）与关键函数值。
+    - 将总根数拆为 $f(x)=0$ 与 $f(x)=2a$ 的根数和。
+    - 用水平线只交一次的高度区间反推参数范围。
+  common_failures:
+    - 把 $a=\frac e2$ 误判为可取，忽略此时 $f(x)=e$ 在右段有两根，导致总根数变成 3。
+    - 把左段极大值点写成 $x=-3$。
+    - 未先拆因式，直接在 $[f(x)]^2-2af(x)=0$ 上做无效代数分类。
+  similar_practice_query: 分段函数 水平线 根数 两个不同实根 参数区间 端点开闭
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

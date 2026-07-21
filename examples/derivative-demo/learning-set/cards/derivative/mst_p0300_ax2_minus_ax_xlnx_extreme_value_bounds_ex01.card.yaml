@@ -1,0 +1,230 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0300_ax2_minus_ax_xlnx_extreme_value_bounds_ex01
+content_revision_id: mst_p0300_ax2_minus_ax_xlnx_extreme_value_bounds_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0300_ax2_minus_ax_xlnx_extreme_value_bounds_ex01.card.yaml
+stem: |-
+  （2017 · 新课标 II）已知函数 $f(x)=ax^2-ax-x\ln x$，且 $f(x)\geqslant0$。
+  1. 求 $a$。
+  2. 证明：$f(x)$ 存在唯一的极大值点 $x_0$，且 $e^{-2}<f(x_0)<2^{-2}$。
+answer: |-
+  第(1)问 $a=1$；第(2)问存在唯一极大值点 $x_0$，且 $e^{-2}<f(x_0)<2^{-2}$。
+
+  第(1)问将 $f(x)=x(ax-a-\ln x)$，因 $x>0$，题设等价于 $h(x)=ax-a-\ln x\ge0$。又 $h(1)=0$，所以 $h$ 在 $x=1$ 处取最小值，必要有 $h^\prime(1)=a-1=0$， 得 $a=1$。第(2)问此时 $f(x)=x^2-x-x\ln x$，$f^\prime(x)=2x-\ln x-2$。 令 $t(x)=2x-2-\ln x$，$t^\prime(x)=2-\frac1x$， $t$ 在 $(0,\frac12)$ 递减、$(\frac12,+\infty)$ 递增， 且 $t(\frac1{e^2})>0$、$t(\frac12)<0$，从而 $t$ 在 $(\frac1{e^2},\frac12)$ 有唯一零点 $x_0$， 它对应 $f$ 的唯一极大值点。由 $2x_0-2-\ln x_0=0$ 得 $f(x_0)=x_0^2-x_0-x_0\ln x_0=x_0-x_0^2$。 方案一用 $x_0\in(\frac1{e^2},\frac12)$ 得 $f(x_0)<\frac14$，并由原函数找点得 $f(x_0)>f(\frac1{e^2})=e^{-4}+e^{-2}>e^{-2}$。方案二进一步用 $x_0\in(\frac1{e^2},\frac1e)$，得 $f(x_0)>f(\frac1e)=e^{-2}$，且 $f(x_0)<\frac1e-\frac1{e^2}<\frac14$。source 注释强调： 对极大值点，下界用原函数找点，上界用隐零点关系改写极值点表达式。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 第(1)问把 $f(x)\ge0$ 化成 $h(x)\ge0$。
+      max_score: 1
+    - step_id: step_2
+      description: 利用显点 $x=1$ 求参数。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问研究极大值点。
+      max_score: 1
+    - step_id: step_4
+      description: 锁定唯一极大值点 $x_0$。
+      max_score: 1
+    - step_id: step_5
+      description: 用隐零点关系改写 $f(x_0)$。
+      max_score: 1
+    - step_id: step_6
+      description: 证明上界 $f(x_0)<2^{-2}$。
+      max_score: 1
+    - step_id: step_7
+      description: 证明下界 $e^{-2}<f(x_0)$。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 求参数范围
+        target: 第 1 问
+        result: $a=1$。
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 2 问
+        result: $e^{-2}<f(x_0)<2^{-2}$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 充分/必要性探路
+      - 拟合与夹逼
+      - 局部逼近与找点
+    subroute:
+      - 显点 $x=1$ 定参
+      - 导函数零点定位极大值点
+      - 原函数找点证明下界
+      - 隐零点消参证明上界
+      - 极值点表达式 $f(x_0)=x_0-x_0^2$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 局部逼近结构
+      - 不等式工具结构
+      - 非齐次结构
+    evidence:
+      - $ax^2-ax-x\ln x$
+      - $h(x)=ax-a-\ln x$
+      - $f^\prime(x)=2x-\ln x-2$
+      - $2x_0-2-\ln x_0=0$
+      - $f(x_0)=x_0-x_0^2$
+      - $e^{-2}<f(x_0)<2^{-2}$
+    normalization_moves_used:
+      - 提出正因子 $x$，把 $f(x)\ge0$ 化成 $h(x)\ge0$。
+      - 把 $f^\prime$ 记为 $t$ 来定位极值点。
+      - 用隐零点方程消掉 $\ln x_0$。
+      - 下界走原函数找点，上界走隐点表达式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会处理 $x\ln x$ 定义域，回补函数三要素与定义域。
+      - 若学生不会显点导数必要条件，回补导数运算与几何意义。
+      - 若学生不会由导数零点判极值点，回补导数单调极值基础。
+      - 若学生不会对数变形，回补指数对数基础。
+      - 若学生不会二次式 $x-x^2$ 估界，回补不等式工具基础。
+  detail_terms:
+    - $ax^2-ax-x\ln x$
+    - $a=1$
+    - $x_0\in(\frac1{e^2},\frac12)$
+    - $2x_0-2-\ln x_0=0$
+    - $f(x_0)=x_0-x_0^2$
+    - 原函数找点
+    - 隐零点调整单调性
+parts: &a1
+  - part_id: "1"
+    text: 求 $a$。
+  - part_id: "2"
+    text: 证明：$f(x)$ 存在唯一的极大值点 $x_0$，且 $e^{-2}<f(x_0)<2^{-2}$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0300_ax2_minus_ax_xlnx_extreme_value_bounds_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0300_ex01_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0300/page_0300.md
+      role: problem_start
+      evidence: page_0300 第三节例1题头：$f(x)=ax^2-ax-x\ln x$，且 $f(x)\ge0$；第(1)问求 $a$，第(2)问证明唯一极大值点 $x_0$ 且 $e^{-2}<f(x_0)<2^{-2}$。
+    - ref_id: page_0300_ex01_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0300/page_0300.md
+      role: solution_start
+      evidence: page_0300 解析第(1)问由 $h(x)=ax-a-\ln x\ge0$、$h(1)=0$ 得 $h^\prime(1)=0$，所以 $a=1$；第(2)问开始分析 $f^\prime(x)=2x-\ln x-2$。
+    - ref_id: page_0301_ex01_solution_end
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0301/page_0301.md
+      role: solution_end
+      evidence: page_0301 续完第(2)问：锁定极大值点 $x_0$，由 $2x_0-2-\ln x_0=0$ 得 $f(x_0)=x_0-x_0^2$，并给出两种证明 $e^{-2}<f(x_0)<2^{-2}$ 的方案和教学注释。
+    - ref_id: page_0301_ex02_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0301/page_0301.md
+      role: local_context
+      evidence: page_0301 页底从例2开始新题，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0300.png
+      inspected: true
+      notes: 已核对页图：page_0300 包含第三节说明、例1题头、第(1)问和第(2)问开头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0301.png
+      inspected: true
+      notes: 已核对页图：page_0301 完成例1，并包含两幅解释 $f(x_0)=x_0-x_0^2$ 的图。
+  source_context: 本卡处理 page_0300 起头、page_0301 续完的第三节例1；page_0301 例2排除。
+  source_influence:
+    - 保留第(1)问显点 $x=1$：$h(1)=0$ 且 $h(x)\ge h(1)$，所以 $h^\prime(1)=0$，得 $a=1$。
+    - 保留第(2)问 $f^\prime(x)=2x-\ln x-2$，令 $t(x)=2x-2-\ln x$，由 $t$ 的形状得到唯一极大值点 $x_0$。
+    - 保留隐零点关系 $2x_0-2-\ln x_0=0$，从而 $f(x_0)=x_0-x_0^2$。
+    - 保留方案一：$x_0\in(\frac1{e^2},\frac12)$，用 $f(x_0)>f(\frac1{e^2})>e^{-2}$ 与 $x_0-x_0^2<\frac14$。
+    - 保留方案二：$x_0\in(\frac1{e^2},\frac1e)$，用 $f(x_0)>f(\frac1e)=e^{-2}$ 与 $x_0-x_0^2<\frac1e-\frac1{e^2}<\frac14$。
+    - 保留 source 注释：极大值的下界是原函数找点，上界是隐零点调整单调性。
+  source_discrepancies:
+    - discrepancy_id: page_0300_ex01_footer_truncation
+      status: resolved
+      issue: page_0300 页脚附近有 reconstruction markers：$t(\frac12)=\ln2-1<$ 后数值遮挡，且“方案一：考虑 $2x-\ln x-2>$...”被截断。
+      resolution: page_0301 续页和原图闭合了语义：应为 $t(\frac12)=\ln2-1<0$，并继续用 $t(\frac1{e^2})>0$ 锁定 $x_0$。
+original_problem:
+  stem: （2017 · 新课标 II）已知函数 $f(x)=ax^2-ax-x\ln x$，且 $f(x)\geqslant0$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问 $a=1$；第(2)问存在唯一极大值点 $x_0$，且 $e^{-2}<f(x_0)<2^{-2}$。
+  fidelity_notes:
+    - 无选项。
+    - 函数含 $x\ln x$，默认定义域为 $x>0$。
+solution:
+  source_solution_summary: 第(1)问将 $f(x)=x(ax-a-\ln x)$，因 $x>0$，题设等价于 $h(x)=ax-a-\ln x\ge0$。又 $h(1)=0$，所以 $h$ 在 $x=1$ 处取最小值，必要有 $h^\prime(1)=a-1=0$， 得 $a=1$。第(2)问此时 $f(x)=x^2-x-x\ln x$，$f^\prime(x)=2x-\ln x-2$。 令 $t(x)=2x-2-\ln x$，$t^\prime(x)=2-\frac1x$， $t$ 在 $(0,\frac12)$ 递减、$(\frac12,+\infty)$ 递增， 且 $t(\frac1{e^2})>0$、$t(\frac12)<0$，从而 $t$ 在 $(\frac1{e^2},\frac12)$ 有唯一零点 $x_0$， 它对应 $f$ 的唯一极大值点。由 $2x_0-2-\ln x_0=0$ 得 $f(x_0)=x_0^2-x_0-x_0\ln x_0=x_0-x_0^2$。 方案一用 $x_0\in(\frac1{e^2},\frac12)$ 得 $f(x_0)<\frac14$，并由原函数找点得 $f(x_0)>f(\frac1{e^2})=e^{-4}+e^{-2}>e^{-2}$。方案二进一步用 $x_0\in(\frac1{e^2},\frac1e)$，得 $f(x_0)>f(\frac1e)=e^{-2}$，且 $f(x_0)<\frac1e-\frac1{e^2}<\frac14$。source 注释强调： 对极大值点，下界用原函数找点，上界用隐零点关系改写极值点表达式。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问把 $f(x)\ge0$ 化成 $h(x)\ge0$。
+      formula_trace:
+        from: $f(x)=ax^2-ax-x\ln x$
+        to: $h(x)=ax-a-\ln x\ge0$
+        operation: 提出正因子 $x$。
+        why: 定义域 $x>0$，所以不改变不等号方向。
+      source_ref: page_0300_ex01_solution_start
+    - step_id: step_2
+      statement: 利用显点 $x=1$ 求参数。
+      formula_trace:
+        from: $h(1)=0,\quad h(x)\ge h(1)$
+        to: $h^\prime(1)=a-1=0,\quad a=1$
+        operation: 显点最小值处导数为 $0$。
+        why: 题目给出的固定点 $1$ 是定参入口。
+      source_ref: page_0300_ex01_solution_start
+    - step_id: step_3
+      statement: 第(2)问研究极大值点。
+      formula_trace:
+        from: $f^\prime(x)=2x-\ln x-2$
+        to: $t(x)=2x-2-\ln x$
+        operation: 把导函数记为 $t$ 并研究其零点。
+        why: $f$ 的极值点来自 $t$ 的零点。
+      source_ref: page_0300_ex01_solution_start
+    - step_id: step_4
+      statement: 锁定唯一极大值点 $x_0$。
+      formula_trace:
+        from: $t(\frac1{e^2})>0,\quad t(\frac12)<0$
+        to: $x_0\in(\frac1{e^2},\frac12),\quad t(x_0)=0$
+        operation: 用 $t$ 的单调性和变号。
+        why: 这个较小零点对应 $f$ 的唯一极大值点。
+      source_ref: page_0301_ex01_solution_end
+    - step_id: step_5
+      statement: 用隐零点关系改写 $f(x_0)$。
+      formula_trace:
+        from: $2x_0-2-\ln x_0=0$
+        to: $f(x_0)=x_0-x_0^2$
+        operation: 把 $\ln x_0$ 替换成 $2x_0-2$。
+        why: 极值点表达式换成简单二次式后才能估上界。
+      source_ref: page_0301_ex01_solution_end
+    - step_id: step_6
+      statement: 证明上界 $f(x_0)<2^{-2}$。
+      formula_trace:
+        from: $x_0\in(\frac1{e^2},\frac12),\quad f(x_0)=x_0-x_0^2$
+        to: $f(x_0)<\frac14$
+        operation: 用二次函数 $x-x^2$ 的最大值。
+        why: 这个上界比极大值还大，不能直接在原函数上找点，必须改写极值点表达式。
+      source_ref: page_0301_ex01_solution_end
+    - step_id: step_7
+      statement: 证明下界 $e^{-2}<f(x_0)$。
+      formula_trace:
+        from: $x_0$ 是极大值点
+        to: $f(x_0)>f(\frac1e)=e^{-2}$
+        operation: 在原函数上取点。
+        why: 要证明一个比极大值小的下界，只需找一个函数值已经超过它的点。
+      source_ref: page_0301_ex01_solution_end
+teaching_card:
+  student_title: 极大值点的上下界怎么分工
+  what_it_trains: 训练极值点不等式里，什么时候在原函数上找点，什么时候必须用极值点方程消参。
+  recognition_cues:
+    - 题目要求估计的是 $f(x_0)$，其中 $x_0$ 是极值点。
+    - 下界 $e^{-2}<f(x_0)$ 是比极大值小的数，可以找点。
+    - 上界 $f(x_0)<2^{-2}$ 是比极大值大的控制，必须改写 $f(x_0)$。
+    - $f^\prime(x_0)=0$ 给出 $\ln x_0=2x_0-2$。
+  normalization_moves:
+    - 第(1)问用 $x=1$ 显点定参。
+    - 第(2)问先定位 $x_0$ 在小区间内。
+    - 证明下界时直接比较 $f(\frac1e)$。
+    - 证明上界时先把 $f(x_0)$ 化成 $x_0-x_0^2$。
+  common_failures:
+    - 把 $x=1$ 这个显点忽略，硬做参数讨论。
+    - 以为上下界都要用同一种办法证明。
+    - 没有用 $f^\prime(x_0)=0$ 消掉 $\ln x_0$。
+    - 把 $x_0$ 的较小零点和 $x=1$ 这个另一零点混淆。
+  similar_practice_query: 极值点不等式 原函数找点 隐零点消参 xlnx f(x0)=x0-x0^2
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

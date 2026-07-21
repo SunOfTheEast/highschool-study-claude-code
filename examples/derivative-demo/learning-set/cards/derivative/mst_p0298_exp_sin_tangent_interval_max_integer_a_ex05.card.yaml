@@ -1,0 +1,230 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0298_exp_sin_tangent_interval_max_integer_a_ex05
+content_revision_id: mst_p0298_exp_sin_tangent_interval_max_integer_a_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0298_exp_sin_tangent_interval_max_integer_a_ex05.card.yaml
+stem: |-
+  （2023 · 张店区校级三模）已知函数 $f(x)=e^x\sin x-2x$。
+  1. 求曲线 $y=f(x)$ 在点 $(0,f(0))$ 处的切线方程。
+  2. 求 $f(x)$ 在区间 $[-1,1]$ 上的最大值。
+  3. 设实数 $a$ 使得 $f(x)+x>ae^x$ 对 $x\in\mathbf{R}$ 恒成立，写出 $a$ 的最大整数值，并说明理由。
+answer: |-
+  第(1)问切线方程为 $y=-x$；第(2)问最大值为 $2-\frac{\sin1}{e}$；第(3)问 $a$ 的最大整数值为 $-2$。
+
+  第(1)问由 $f^\prime(x)=e^x(\sin x+\cos x)-2$，$f^\prime(0)=-1$， $f(0)=0$，得切线 $y=-x$。第(2)问令 $g(x)=f^\prime(x)=e^x(\sin x+\cos x)-2$，则 $g^\prime(x)=2e^x\cos x$。在 $[-1,1]$ 上，$g^\prime(x)>0$， 且 $g(0)<0<g(1)$，所以存在唯一 $x_0\in(0,1)$ 使 $f^\prime(x_0)=0$，$f$ 先减后增，最大值在端点取得。 比较 $f(1)=e\sin1-2<e-2<1$ 与 $f(-1)=2-\frac{\sin1}{e}>1$，得最大值为 $2-\frac{\sin1}{e}$。第(3)问化为 $a<\varphi(x)=\sin x-\frac{x}{e^x}$ 对全体实数成立。 当 $x\le0$，有 $-\frac{x}{e^x}\ge0$，所以 $\varphi(x)>-1$；当 $x>0$，有 $0>-\frac{x}{e^x}>-\frac1e$，所以 $\varphi(x)>-1-\frac1e>-2$，故 $a=-2$ 充分。再取 $x=\frac{3\pi}{2}$ 得 $\varphi(x)<-1$，排除 $a=-1$，所以最大整数为 $-2$。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 第(1)问求在点切线。
+      max_score: 1
+    - step_id: step_2
+      description: 第(2)问先研究 $f^\prime$ 的零点。
+      max_score: 1
+    - step_id: step_3
+      description: 用 $f^\prime$ 的唯一零点确定最大值位置。
+      max_score: 1
+    - step_id: step_4
+      description: 比较端点。
+      max_score: 1
+    - step_id: step_5
+      description: 第(3)问分离参数。
+      max_score: 1
+    - step_id: step_6
+      description: 分段给出充分下界。
+      max_score: 1
+    - step_id: step_7
+      description: 排除下一个整数 $a=-1$。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 几何量求解
+        target: 第 1 问
+        result: $y=-x$。
+      - part_id: "2"
+        goal: 极值最值
+        target: 第 2 问
+        result: 最大值 $2-\frac{\sin1}{e}$。
+      - part_id: "3"
+        goal: 求参数范围
+        target: 第 3 问
+        result: $a$ 的最大整数值为 $-2$。
+  method:
+    primary: 充分/必要性探路
+    secondary:
+      - 参变量分离
+      - 显隐点探路
+      - 拟合与夹逼
+      - 含参数分类讨论
+    subroute:
+      - 在点切线计算
+      - 导函数零点初高分流
+      - 分离 $a<\varphi(x)$
+      - 分段下界证明充分性
+      - 特值 $x=\frac{3\pi}{2}$ 排除 $a=-1$
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 指对复合结构
+      - 切线/公切线/切点量结构
+      - 不等式工具结构
+      - 局部逼近结构
+    evidence:
+      - $e^x\sin x-2x$
+      - $e^x(\sin x+\cos x)-2$
+      - $2e^x\cos x$
+      - $\sin x-\frac{x}{e^x}$
+      - $x=\frac{3\pi}{2}$
+    normalization_moves_used:
+      - 第(1)问直接切线计算。
+      - 第(2)问把 $f^\prime$ 记为 $g$，用 $g^\prime>0$ 判断 $f^\prime$ 零点。
+      - 第(3)问除以 $e^x$ 分离参数。
+      - 对 $\varphi$ 做 $x\le0$ 与 $x>0$ 分段估计。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会切线方程，回补导数运算与几何意义。
+      - 若学生不会区间最值，回补导数单调极值基础。
+      - 若学生不会处理 $e^x$ 分母，回补指数对数基础。
+      - 若学生不会三角取值范围，回补三角函数基础。
+      - 若学生不会最大整数的充分与必要，回补不等式工具基础。
+  detail_terms:
+    - $e^x\sin x-2x$
+    - $y=-x$
+    - $[-1,1]$
+    - $2-\frac{\sin1}{e}$
+    - $a<\sin x-\frac{x}{e^x}$
+    - $-1-\frac1e$
+    - $a_{\max,\mathbf Z}=-2$
+parts: &a1
+  - part_id: "1"
+    text: 求曲线 $y=f(x)$ 在点 $(0,f(0))$ 处的切线方程。
+  - part_id: "2"
+    text: 求 $f(x)$ 在区间 $[-1,1]$ 上的最大值。
+  - part_id: "3"
+    text: 设实数 $a$ 使得 $f(x)+x>ae^x$ 对 $x\in\mathbf{R}$ 恒成立，写出 $a$ 的最大整数值，并说明理由。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0298_exp_sin_tangent_interval_max_integer_a_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0298_ex05_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0298/page_0298.md
+      role: problem_start
+      evidence: page_0298 例5题头：$f(x)=e^x\sin x-2x$；三问分别为切线方程、$[-1,1]$ 上最大值、恒成立条件下 $a$ 的最大整数值。
+    - ref_id: page_0298_ex05_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0298/page_0298.md
+      role: solution
+      evidence: page_0298 完整解析：第(1)问得切线 $y=-x$；第(2)问令 $g=f^\prime$，由 $g^\prime=2e^x\cos x>0$ 锁定唯一零点，最大值为 $2-\frac{\sin1}{e}$；第(3)问化为 $a<\sin x-\frac{x}{e^x}$，用分段下界得到最大整数值 $-2$。
+    - ref_id: page_0298_ex06_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0298/page_0298.md
+      role: local_context
+      evidence: page_0298 页底从例6开始新题，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0298.png
+      inspected: true
+      notes: 已核对页图：page_0298 包含例5完整题干与解析，页底另起例6。
+  source_context: 本卡处理 page_0298 单页闭合的例5；page_0298 页底例6排除。
+  source_influence:
+    - 保留第(1)问 $f^\prime(x)=e^x(\sin x+\cos x)-2$，$f^\prime(0)=-1$，切线为 $y=-x$。
+    - 保留第(2)问令 $g=f^\prime$，$g^\prime=2e^x\cos x>0$，故 $f^\prime$ 在 $[-1,1]$ 上单调递增。
+    - 保留第(2)问存在唯一 $x_0\in(0,1)$ 使 $f^\prime(x_0)=0$，最大值只需比较端点。
+    - 保留第(3)问化为 $a<\varphi(x)=\sin x-\frac{x}{e^x}$ 对所有实数成立。
+    - 保留分段估计：$x\le0$ 时 $\varphi(x)>-1$，$x>0$ 时 $\varphi(x)>-1-\frac1e\in(-2,-1)$。
+    - 补足排除 $a=-1$ 的必要性检查：取 $x=\frac{3\pi}{2}$ 得 $\varphi(x)<-1$。
+  source_discrepancies:
+    - discrepancy_id: page_0298_ex05_part3_missing_exclude_minus_one
+      status: resolved
+      issue: source 用 $\varphi(x)>-1-\frac1e\in(-2,-1)$ 能证明 $a=-2$ 充分，但没有显式说明为什么 $a=-1$ 不成立。
+      resolution: 取 $x=\frac{3\pi}{2}$，有 $\varphi(x)=-1-\frac{3\pi}{2e^{3\pi/2}}<-1$，故 $a=-1$ 不满足；最大整数值确为 $-2$。
+original_problem:
+  stem: （2023 · 张店区校级三模）已知函数 $f(x)=e^x\sin x-2x$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问切线方程为 $y=-x$；第(2)问最大值为 $2-\frac{\sin1}{e}$；第(3)问 $a$ 的最大整数值为 $-2$。
+  fidelity_notes:
+    - 无选项。
+    - 第(3)问 source 的充分性证明已补充排除 $a=-1$ 的必要性检查。
+solution:
+  source_solution_summary: 第(1)问由 $f^\prime(x)=e^x(\sin x+\cos x)-2$，$f^\prime(0)=-1$， $f(0)=0$，得切线 $y=-x$。第(2)问令 $g(x)=f^\prime(x)=e^x(\sin x+\cos x)-2$，则 $g^\prime(x)=2e^x\cos x$。在 $[-1,1]$ 上，$g^\prime(x)>0$， 且 $g(0)<0<g(1)$，所以存在唯一 $x_0\in(0,1)$ 使 $f^\prime(x_0)=0$，$f$ 先减后增，最大值在端点取得。 比较 $f(1)=e\sin1-2<e-2<1$ 与 $f(-1)=2-\frac{\sin1}{e}>1$，得最大值为 $2-\frac{\sin1}{e}$。第(3)问化为 $a<\varphi(x)=\sin x-\frac{x}{e^x}$ 对全体实数成立。 当 $x\le0$，有 $-\frac{x}{e^x}\ge0$，所以 $\varphi(x)>-1$；当 $x>0$，有 $0>-\frac{x}{e^x}>-\frac1e$，所以 $\varphi(x)>-1-\frac1e>-2$，故 $a=-2$ 充分。再取 $x=\frac{3\pi}{2}$ 得 $\varphi(x)<-1$，排除 $a=-1$，所以最大整数为 $-2$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问求在点切线。
+      formula_trace:
+        from: $f^\prime(x)=e^x(\sin x+\cos x)-2,\quad f(0)=0$
+        to: $f^\prime(0)=-1,\quad y=-x$
+        operation: 代入 $x=0$ 求斜率和点。
+        why: 在点切线直接用点斜式。
+      source_ref: page_0298_ex05_solution
+    - step_id: step_2
+      statement: 第(2)问先研究 $f^\prime$ 的零点。
+      formula_trace:
+        from: $g(x)=f^\prime(x)=e^x(\sin x+\cos x)-2$
+        to: $g^\prime(x)=2e^x\cos x>0\quad(x\in[-1,1])$
+        operation: 再求一次导。
+        why: 直接求 $f^\prime=0$ 不方便，但 $f^\prime$ 本身单调。
+      source_ref: page_0298_ex05_solution
+    - step_id: step_3
+      statement: 用 $f^\prime$ 的唯一零点确定最大值位置。
+      formula_trace:
+        from: $g(0)<0,\quad g(1)>0$
+        to: $\exists x_0\in(0,1),\ f^\prime(x_0)=0$
+        operation: 用单调性和零点存在性。
+        why: $f$ 先减后增，所以最大值只能在端点取。
+      source_ref: page_0298_ex05_solution
+    - step_id: step_4
+      statement: 比较端点。
+      formula_trace:
+        from: $f(1)=e\sin1-2,\quad f(-1)=2-\frac{\sin1}{e}$
+        to: $f_{\max}=2-\frac{\sin1}{e}$
+        operation: 用 $f(1)<1<f(-1)$ 比较。
+        why: 避开不可显式求出的极小点。
+      source_ref: page_0298_ex05_solution
+    - step_id: step_5
+      statement: 第(3)问分离参数。
+      formula_trace:
+        from: $f(x)+x>ae^x$
+        to: $a<\varphi(x)=\sin x-\frac{x}{e^x}$
+        operation: 代入 $f$ 并除以 $e^x>0$。
+        why: 最大整数值转成 $\varphi$ 的全局下界问题。
+      source_ref: page_0298_ex05_solution
+    - step_id: step_6
+      statement: 分段给出充分下界。
+      formula_trace:
+        from: $\varphi(x)=\sin x-\frac{x}{e^x}$
+        to: $\varphi(x)>-2\quad(x\in\mathbf R)$
+        operation: 分别处理 $x\le0$ 和 $x>0$。
+        why: 证明 $a=-2$ 对全体实数都成立。
+      source_ref: page_0298_ex05_solution
+    - step_id: step_7
+      statement: 排除下一个整数 $a=-1$。
+      formula_trace:
+        from: $x=\frac{3\pi}{2}$
+        to: $\varphi(x)=-1-\frac{x}{e^x}<-1$
+        operation: 选正弦取到 $-1$ 的点。
+        why: 最大整数必须同时证明 $-1$ 不满足。
+      source_ref: page_0298_ex05_solution
+teaching_card:
+  student_title: 指数三角函数里的最大整数
+  what_it_trains: 训练指数三角混合函数中，先用导函数零点处理区间最大值，再用全局下界和反例点确定最大整数。
+  recognition_cues:
+    - $e^x\sin x$ 求导后会出现 $\sin x+\cos x$。
+    - 区间 $[-1,1]$ 上 $\cos x>0$，所以 $f^\prime$ 本身单调。
+    - 恒成立问最大整数时，要先分离成 $a<\varphi(x)$。
+    - $\sin x$ 的最低点可以用来排除 $a=-1$。
+  normalization_moves:
+    - 第(1)问只作为切线计算。
+    - 第(2)问不求出 $x_0$，只用它说明最大值在端点。
+    - 第(3)问先证明 $a=-2$ 充分，再用一个点排除 $a=-1$。
+  common_failures:
+    - 把第(2)问的隐零点当成最大值点，其实它是极小点。
+    - 只证明 $\varphi(x)>-2$，忘记说明 $a=-1$ 为什么不行。
+    - 误以为 $\sin x>-1$ 对所有实数都成立；它会取到 $-1$。
+    - 分离参数时忘记 $e^x>0$，不等号方向不变。
+  similar_practice_query: e^x sin x 区间最大值 导函数零点 最大整数 a sin x - x/e^x
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

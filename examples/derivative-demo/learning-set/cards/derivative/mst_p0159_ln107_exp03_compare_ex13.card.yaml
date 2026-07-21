@@ -1,0 +1,252 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0159_ln107_exp03_compare_ex13
+content_revision_id: mst_p0159_ln107_exp03_compare_ex13-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0159_ln107_exp03_compare_ex13.card.yaml
+stem: |-
+  （2024·西安月考）已知 $a=\ln10-\ln7$，$b=0.3e^{0.3}$，$c=\frac37$，则 $a,b,c$ 的大小关系为（  ）
+  A. $c>b>a$
+  B. $c>a>b$
+  C. $b>c>a$
+  D. $a>b>c$
+answer: |
+  A
+
+  先化简
+  \[
+  a=\ln10-\ln7=\ln\frac{10}{7}.
+  \]
+  对 $x>0$ 用
+  \[
+  \frac{2(x-1)}{x+1}<\ln x<\frac12\left(x-\frac1x\right),
+  \]
+  取 $x=\frac{10}{7}$ 得
+  \[
+  \frac6{17}<a<\frac{51}{140},
+  \]
+  从而
+  \[
+  a<\frac{51}{140}<\frac37=c.
+  \]
+  再看
+  \[
+  b=0.3e^{0.3}.
+  \]
+  由
+  \[
+  1+x<e^x<\frac{1}{1-x}\quad (0<x<1),
+  \]
+  取 $x=0.3$ 得
+  \[
+  0.39=0.3(1+0.3)<b<0.3\cdot\frac{1}{0.7}=\frac37=c.
+  \]
+  又
+  \[
+  0.39>\frac{51}{140},
+  \]
+  故 $b>a$。综合得
+  \[
+  a<b<c,
+  \]
+  对应选项 A（$c>b>a$）。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把 $a$ 化成单对数并做双边估计。
+      max_score: 1
+    - step_id: step_2
+      description: 由上界直接得到 $a<c$。
+      max_score: 1
+    - step_id: step_3
+      description: 对 $b=0.3e^{0.3}$ 做双边估计。
+      max_score: 1
+    - step_id: step_4
+      description: 用数值桥接比较 $a,b$。
+      max_score: 1
+    - step_id: step_5
+      description: 合并结论并对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较对数差、指数乘积与分数阈值的大小。
+        result: 见 source_solution_summary
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 切线放缩与凹凸性
+      - 同构变形与换元法
+    subroute:
+      - 先把 $a$ 化为 $\ln\frac{10}{7}$
+      - 两段双边估计分别夹住 $a,b$
+      - 用 $0.39$ 与 $\frac{51}{140}$ 跨链桥接
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - $a,b$ 都是指数/对数小量估值模型，可套入标准不等式。
+      - 结论通过两条范围链拼接而非直接同式比较。
+    normalization_moves_used:
+      - $\ln x$ 双侧估计。
+      - $e^x$ 双侧估计。
+      - 中间阈值桥接：$0.39>\frac{51}{140}$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会使用 $\ln x$ 的双边估计，回补指数对数基础。
+      - 若学生不会从 $1+x<e^x<\frac{1}{1-x}$ 推到 $b$ 的区间，回补不等式工具基础。
+      - 若学生不会做分数/小数桥接比较，回补代数恒等变形。
+  detail_terms:
+    - $\ln\frac{10}{7}$
+    - $\frac6{17}<a<\frac{51}{140}$
+    - $0.39<b<\frac37$
+    - $0.39>\frac{51}{140}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0159_ln107_exp03_compare_ex13
+source_evidence:
+  source_refs:
+    - ref_id: page_0159_ex13_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0159/page_0159.md
+      role: problem_start
+      evidence: 例13题头与选项位于 page_0159，题干给出 $a=\ln10-\ln7,\ b=0.3e^{0.3},\ c=\frac37$。
+    - ref_id: page_0159_ex13_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0159/page_0159.md
+      role: solution
+      evidence: 例13解析在 page_0159：先夹逼 $a$，再夹逼 $b$，并用 $0.39>\frac{51}{140}$ 收束成 $a<b<c$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0159.png
+      inspected: false
+      notes: 本卡按 source markdown 重建，未重新人工核对页图。
+  source_context: 本题与例12同页，均属于指对混合量的数值比较。
+  source_influence:
+    - 保留源解对 $a$ 的双边估计：$\frac6{17}<a<\frac{51}{140}$。
+    - 保留源解对 $b$ 的双边估计：$0.39<b<\frac37$。
+    - 保留末步关键桥接 $0.39>\frac{51}{140}$。
+  source_discrepancies: []
+original_problem:
+  stem: （2024·西安月考）已知 $a=\ln10-\ln7$，$b=0.3e^{0.3}$，$c=\frac37$，则 $a,b,c$ 的大小关系为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $c>b>a$
+      text_latex: $c>b>a$
+    - label: B
+      text_raw: $c>a>b$
+      text_latex: $c>a>b$
+    - label: C
+      text_raw: $b>c>a$
+      text_latex: $b>c>a$
+    - label: D
+      text_raw: $a>b>c$
+      text_latex: $a>b>c$
+  answer: A
+  fidelity_notes:
+    - 源解结论写成 $a<b<c$，与选项 A（$c>b>a$）等价。
+solution:
+  source_solution_summary: |
+    先化简
+    \[
+    a=\ln10-\ln7=\ln\frac{10}{7}.
+    \]
+    对 $x>0$ 用
+    \[
+    \frac{2(x-1)}{x+1}<\ln x<\frac12\left(x-\frac1x\right),
+    \]
+    取 $x=\frac{10}{7}$ 得
+    \[
+    \frac6{17}<a<\frac{51}{140},
+    \]
+    从而
+    \[
+    a<\frac{51}{140}<\frac37=c.
+    \]
+    再看
+    \[
+    b=0.3e^{0.3}.
+    \]
+    由
+    \[
+    1+x<e^x<\frac{1}{1-x}\quad (0<x<1),
+    \]
+    取 $x=0.3$ 得
+    \[
+    0.39=0.3(1+0.3)<b<0.3\cdot\frac{1}{0.7}=\frac37=c.
+    \]
+    又
+    \[
+    0.39>\frac{51}{140},
+    \]
+    故 $b>a$。综合得
+    \[
+    a<b<c,
+    \]
+    对应选项 A（$c>b>a$）。
+  key_steps:
+    - step_id: step_1
+      statement: 把 $a$ 化成单对数并做双边估计。
+      formula_trace:
+        from: $a=\ln\frac{10}{7}$
+        to: $\frac6{17}<a<\frac{51}{140}$
+        operation: 代入 $\ln x$ 的常用上下界不等式。
+        why: 先锁定 $a$ 的范围。
+      source_ref: page_0159_ex13_solution
+    - step_id: step_2
+      statement: 由上界直接得到 $a<c$。
+      formula_trace:
+        from: $a<\frac{51}{140}$ 与 $c=\frac37$
+        to: $a<c$
+        operation: 比较分数大小。
+        why: 完成一段顺序关系。
+      source_ref: page_0159_ex13_solution
+    - step_id: step_3
+      statement: 对 $b=0.3e^{0.3}$ 做双边估计。
+      formula_trace:
+        from: $b=0.3e^{0.3}$
+        to: $0.39<b<\frac37=c$
+        operation: 先估 $e^{0.3}$，再乘 0.3。
+        why: 同时得到 $b$ 的下界和上界。
+      source_ref: page_0159_ex13_solution
+    - step_id: step_4
+      statement: 用数值桥接比较 $a,b$。
+      formula_trace:
+        from: $a<\frac{51}{140}$ 与 $b>0.39$
+        to: $a<b$
+        operation: 利用 $0.39>\frac{51}{140}$。
+        why: 把两段夹逼链连接成完整顺序。
+      source_ref: page_0159_ex13_solution
+    - step_id: step_5
+      statement: 合并结论并对应选项。
+      formula_trace:
+        from: $a<b$ 且 $b<c$
+        to: $a<b<c$，即 $c>b>a$，选 A
+        operation: 传递不等式并对照选项。
+        why: 得到最终答案。
+      source_ref: page_0159_ex13_solution
+teaching_card:
+  student_title: 双边估值后用中间阈值连成全序
+  what_it_trains: 训练“各自夹逼 + 跨链桥接”的三数比较套路，避免只做单段不等式。
+  recognition_cues:
+    - 一项是 $\ln$ 差，一项是 $e^x$ 乘系数。
+    - 题目给出显式分数阈值 $\frac37$。
+    - 源解出现连续区间估计。
+  normalization_moves:
+    - 先把差对数并成单个 $\ln$。
+    - 分别给 $a,b$ 做上下界。
+    - 选取可比的公共数值桥接。
+  common_failures:
+    - 只得到 $a<c$ 和 $b<c$，但没比较 $a,b$。
+    - 把 $e^x$ 上界条件 $x<1$ 忽略。
+    - 比较 $0.39$ 与 $\frac{51}{140}$ 时算错小数。
+  similar_practice_query: ln(10/7) 0.3e^0.3 3/7 比大小 双边估值
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 本卡未核对 page_0159 页图，按重建 markdown 完成。

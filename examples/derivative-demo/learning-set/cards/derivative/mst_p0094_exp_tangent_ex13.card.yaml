@@ -1,0 +1,165 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0094_exp_tangent_ex13
+content_revision_id: mst_p0094_exp_tangent_ex13-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0094_exp_tangent_ex13.card.yaml
+stem: （2022 · 新课标 I 卷 T15）若曲线 $y=(x+a)e^x$ 有两条过坐标原点的切线，则 $a$ 的取值范围是 ________.
+answer: |
+  $a\in(-\infty,-4)\cup(0,+\infty)$
+
+  设切点为 $(x_0,(x_0+a)e^{x_0})$，则 $f'(x)=(x+a+1)e^x$。切线过原点给出
+  $-(x_0+a)e^{x_0}=(x_0+a+1)e^{x_0}(-x_0)$，化简为
+  $x_0^2+ax_0-a=0$。要有两条不同切线，切点参数方程必须有两个不同实根，
+  因而 $\Delta=a^2+4a=a(a+4)>0$，得到 $a<-4$ 或 $a>0$。
+  图像法中，$a>0$ 时原点在区域 5；拐点切线为 $y=-e^{-a-2}(x+a+4)$，
+  其横截距为 $-a-4$，要使原点在区域 7 需 $-a-4>0$，即 $a<-4$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 设切点并写出过原点切线条件。
+      max_score: 1
+    - step_id: step_2
+      description: 化简为切点参数二次方程。
+      max_score: 1
+    - step_id: step_3
+      description: 用判别式保证有两条切线。
+      max_score: 1
+    - step_id: step_4
+      description: 用拐点切线区域复核两个参数段。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 数形结合
+      - 局部逼近与找点
+    subroute:
+      - 过点切线条数
+      - 切点参数化
+      - 判别式计数
+      - 拐点切线界定
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $x_0^2+ax_0-a=0$ 把切线条数转成切点参数方程的实根个数。
+      - $\Delta=a(a+4)>0$ 直接给出两个参数区间。
+      - $y=-e^{-a-2}(x+a+4)$ 的横截距 $-a-4$ 对应源页区域 7 的边界。
+    normalization_moves_used:
+      - 设切点横坐标，而不是把原点当切点。
+      - 把“过原点”代入切线方程，消去 $e^{x_0}$。
+      - 用判别式和拐点切线区域双重确认答案。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会写切线点斜式，回补导数运算与几何意义。
+      - 若学生不会把过原点条件整理成二次方程，回补代数恒等变形。
+      - 若学生把 $\Delta=0$ 也算作两条切线，回补方程根分布与韦达。
+      - 若学生看不懂拐点切线区域，回补函数性质与图像。
+  detail_terms:
+    - $y=(x+a)e^x$
+    - 过坐标原点的两条切线
+    - $x_0^2+ax_0-a=0$
+    - $\Delta=a(a+4)>0$
+    - $y=-e^{-a-2}(x+a+4)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0094_exp_tangent_ex13
+source_evidence:
+  source_refs:
+    - ref_id: page_0094
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0094/page_0094.md
+      role: problem_start
+      evidence: lines 28-44 give 例 13 题头、题干、切点参数解析、两幅示意图说明和最终答案。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0094.png
+      inspected: true
+      notes: 已核对 page_0094：顶部为上一页切线区域说明续文；例 13 题干、解析式 $x_0^2+ax_0-a=0$、答案 $(-\infty,-4)\cup(0,+\infty)$ 和两幅 $a>0$、$a<-4$ 图像与 markdown 一致。
+  source_context: page_0094 顶部续讲拐点切线与外弧/内弧区域，作为例 13 数形结合说明的局部背景；不作为独立题卡。
+  source_influence:
+    - 保留源页代数法：设切点 $x_0$，把过原点切线条件化为二次方程 $x_0^2+ax_0-a=0$。
+    - 保留源页图像法：用区域 5、区域 7 和拐点切线横截距 $-a-4$ 解释 $a>0$ 与 $a<-4$。
+  source_discrepancies: []
+original_problem:
+  stem: （2022 · 新课标 I 卷 T15）若曲线 $y=(x+a)e^x$ 有两条过坐标原点的切线，则 $a$ 的取值范围是 ________.
+  parts: *a1
+  choices: []
+  answer: $a\in(-\infty,-4)\cup(0,+\infty)$
+  fidelity_notes:
+    - 本题为填空题，题头、题干、解析和答案均在 page_0094。
+    - page_0094 顶部理论续文只作为切线区域背景，未创建额外卡片。
+solution:
+  source_solution_summary: |
+    设切点为 $(x_0,(x_0+a)e^{x_0})$，则 $f'(x)=(x+a+1)e^x$。切线过原点给出
+    $-(x_0+a)e^{x_0}=(x_0+a+1)e^{x_0}(-x_0)$，化简为
+    $x_0^2+ax_0-a=0$。要有两条不同切线，切点参数方程必须有两个不同实根，
+    因而 $\Delta=a^2+4a=a(a+4)>0$，得到 $a<-4$ 或 $a>0$。
+    图像法中，$a>0$ 时原点在区域 5；拐点切线为 $y=-e^{-a-2}(x+a+4)$，
+    其横截距为 $-a-4$，要使原点在区域 7 需 $-a-4>0$，即 $a<-4$。
+  key_steps:
+    - step_id: step_1
+      statement: 设切点并写出过原点切线条件。
+      formula_trace:
+        from: |
+          $f(x)=(x+a)e^x,\quad f'(x)=(x+a+1)e^x,\quad T=(x_0,(x_0+a)e^{x_0})$
+        to: |
+          $0-(x_0+a)e^{x_0}=(x_0+a+1)e^{x_0}(0-x_0)$
+        operation: 用切点处导数作为斜率，写切线点斜式并代入原点。
+        why: 过原点的切线条数等价于切点横坐标 $x_0$ 的可取个数。
+      source_ref: page_0094
+    - step_id: step_2
+      statement: 化简为切点参数二次方程。
+      formula_trace:
+        from: |
+          $-(x_0+a)e^{x_0}=-(x_0+a+1)x_0e^{x_0}$
+        to: |
+          $x_0+a=x_0(x_0+a+1),\qquad x_0^2+ax_0-a=0$
+        operation: 消去正因子 $e^{x_0}$，再展开移项。
+        why: 二次方程的不同实根对应不同切点，从而对应不同切线。
+      source_ref: page_0094
+    - step_id: step_3
+      statement: 用判别式保证有两条切线。
+      formula_trace:
+        from: |
+          $x_0^2+ax_0-a=0\text{ 有两个不同实根}$
+        to: |
+          $\Delta=a^2+4a=a(a+4)>0,\qquad a\in(-\infty,-4)\cup(0,+\infty)$
+        operation: 对二次方程使用 $\Delta>0$，解一元二次不等式。
+        why: 题目要求“两条”切线，重根只对应一条切线。
+      source_ref: page_0094
+    - step_id: step_4
+      statement: 用拐点切线区域复核两个参数段。
+      formula_trace:
+        from: |
+          $f''(x)=(x+a+2)e^x,\quad x_{\text{拐}}=-a-2$
+        to: |
+          $y=-e^{-a-2}(x+a+4),\quad x\text{ 截距}=-a-4$
+        operation: 求拐点与拐点处切线方程，读取其横截距。
+        why: $a>0$ 时原点位于区域 5；$-a-4>0$ 即 $a<-4$ 时原点位于区域 7，均可作两条切线。
+      source_ref: page_0094
+teaching_card:
+  student_title: 把过原点两切线化成切点方程判别式
+  what_it_trains: 训练对含参指数曲线设切点，用切线过定点条件建立切点参数方程，再用判别式判断切线条数。
+  recognition_cues:
+    - 题干说“过坐标原点的切线”，切点未知，先设切点横坐标。
+    - 函数是 $(x+a)e^x$，求导后仍带同一个指数因子，过点条件容易消去 $e^{x_0}$。
+    - 要求两条切线，通常对应切点参数方程有两个不同实根。
+  normalization_moves:
+    - 设切点 $(x_0,(x_0+a)e^{x_0})$。
+    - 把原点代入切线点斜式，得到 $x_0^2+ax_0-a=0$。
+    - 用 $\Delta>0$ 解出 $a<-4$ 或 $a>0$。
+  common_failures:
+    - 把原点误认为曲线上的点，直接令 $a=0$。
+    - 消去指数因子后符号出错，把方程写成 $x_0^2+ax_0+a=0$。
+    - 把判别式等于 $0$ 的重切点也算成两条切线。
+  similar_practice_query: $(x+a)e^x$ 过原点两条切线 切点参数 判别式
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0094 图片与 markdown 对例 13 的题干、代数解析、图像说明和答案一致，无需用户拍板。

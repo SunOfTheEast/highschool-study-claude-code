@@ -1,0 +1,112 @@
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { extname, join, relative } from 'node:path';
+import { parse } from 'yaml';
+import { resolveInsideRoot } from './learning-set';
+import { buildTraceIndex } from './trace-index';
+import { readActiveTraces, type TraceRecord } from './traces';
+
+export type CardHit = {
+  path: string;
+  title: string;
+  content: string;
+  goal: string;
+  methods: Array<{ name: string; role: 'primary' | 'secondary' }>;
+  steps: Array<{ id: string; title: string }>;
+  traceHistory: TraceRecord[];
+};
+
+export type CardContent = Omit<CardHit, 'traceHistory'>;
+export type ActiveTraceReader = (root: string) => TraceRecord[];
+export type CardSearchInput = { query: string; limit: number };
+
+type LoadedCard = { card: CardContent; searchText: string };
+
+function record(value: unknown): Record<string, unknown> | null {
+  return value !== null && typeof value === 'object' && !Array.isArray(value)
+    ? value as Record<string, unknown>
+    : null;
+}
+
+function text(value: unknown): string {
+  return typeof value === 'string' ? value : '';
+}
+
+function cardPaths(root: string): string[] {
+  const rootPath = resolveInsideRoot(root, '.');
+  const cardsPath = resolveInsideRoot(root, 'cards');
+  if (!existsSync(cardsPath)) return [];
+  const paths: string[] = [];
+  const visit = (directory: string) => {
+    for (const entry of readdirSync(directory, { withFileTypes: true })) {
+      const path = join(directory, entry.name);
+      if (entry.isDirectory()) visit(path);
+      else if (entry.isFile() && ['.yaml', '.yml'].includes(extname(entry.name).toLowerCase())) {
+        paths.push(relative(rootPath, path).replaceAll('\\', '/'));
+      }
+    }
+  };
+  visit(cardsPath);
+  return paths.sort();
+}
+
+function loadCard(root: string, path: string): LoadedCard | null {
+  const source = readFileSync(resolveInsideRoot(root, path), 'utf8');
+  const raw = record(parse(source));
+  if (raw?.schema !== 'highschool-study.problem-card.v1') return null;
+  const graph = record(raw.graph);
+  const goal = record(graph?.goal);
+  const method = record(graph?.method);
+  const rubric = record(raw.rubric);
+  const criteria = Array.isArray(rubric?.criteria) ? rubric.criteria : [];
+  const methods: CardHit['methods'] = [];
+  const primary = text(method?.primary);
+  if (primary) methods.push({ name: primary, role: 'primary' });
+  for (const name of Array.isArray(method?.secondary) ? method.secondary : []) {
+    if (typeof name === 'string' && !methods.some((item) => item.name === name)) {
+      methods.push({ name, role: 'secondary' });
+    }
+  }
+  const stem = text(raw.stem);
+  const card: CardContent = {
+    path,
+    title: stem || text(raw.content_item_id),
+    content: source,
+    goal: text(goal?.primary),
+    methods,
+    steps: criteria.flatMap((value) => {
+      const criterion = record(value);
+      const id = text(criterion?.step_id);
+      const title = text(criterion?.description);
+      return id && title ? [{ id, title }] : [];
+    }),
+  };
+  return { card, searchText: `${path}\n${source}`.toLowerCase() };
+}
+
+export function readCard(root: string, path: string): CardContent | null {
+  return loadCard(root, path)?.card ?? null;
+}
+
+export function createCardSearcher(readTraces: ActiveTraceReader = readActiveTraces) {
+  return (root: string, input: CardSearchInput): { cards: CardHit[] } => {
+    const index = buildTraceIndex(readTraces(root));
+    const terms = input.query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    if (terms.length === 0) return { cards: [] };
+    const cards = cardPaths(root)
+      .map((path) => loadCard(root, path))
+      .filter((value): value is LoadedCard => value !== null)
+      .filter(({ searchText }) => terms.every((term) => searchText.includes(term)))
+      .map(({ card }) => ({
+        ...card,
+        traceHistory: index.byCardPath.get(card.path) ?? [],
+      }))
+      .slice(0, input.limit);
+    return { cards };
+  };
+}
+
+const defaultCardSearcher = createCardSearcher();
+
+export function searchCards(root: string, input: CardSearchInput): { cards: CardHit[] } {
+  return defaultCardSearcher(root, input);
+}

@@ -1,0 +1,201 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0036_ex32
+content_revision_id: mst_p0036_ex32-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0036_ex32.card.yaml
+stem: |-
+  若正实数 $x,y$ 满足 $xe^{x-1}=y(1+\ln y)$，则下列不等式中可能成立的是 ( )
+  A. $1<x<y$
+  B. $1<y<x$
+  C. $x<y<1$
+  D. $y<x<1$
+answer: |
+  AC
+
+  因为 $y(1+\ln y)=(1+\ln y)e^{(1+\ln y)-1}$，且左侧 $xe^{x-1}>0$，所以 $1+\ln y>0$。设 $h(u)=ue^{u-1}$，在 $(0,+\infty)$ 上严格递增，由 $h(x)=h(1+\ln y)$ 得 $x=1+\ln y$。又 $\ln y\le y-1$，等号仅在 $y=1$ 取到，所以 $x=1+\ln y\le y$，且 $y\ne1$ 时 $x<y$。若 $y>1$，则 $x=1+\ln y>1$，得 $1<x<y$；若 $0<y<1$，则 $x<1$ 且 $x<y<1$。故选 AC。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把右侧写成同一个 $h(u)=ue^{u-1}$。
+      max_score: 1
+    - step_id: step_2
+      description: 确认两个输入都在单调区间内。
+      max_score: 1
+    - step_id: step_3
+      description: 由同构函数值相等推出输入相等。
+      max_score: 1
+    - step_id: step_4
+      description: 比较 $x$ 与 $y$。
+      max_score: 1
+    - step_id: step_5
+      description: 按 $y$ 与 $1$ 的关系判断可能区间。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 判断 $x,y$ 与 $1$ 的相对位置。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 数值比较
+        target: 选择可能成立的选项。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - $xe^{x-1}$ 同构
+      - $\\ln y\\le y-1$ 比较
+      - 按 $y$ 与 $1$ 分支
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - $xe^{x-1}=y(1+\\ln y)$ 可写成 $h(x)=h(1+\\ln y)$。
+      - $x=1+\\ln y$ 后，大小比较由 $\ln y\\le y-1$ 控制。
+    normalization_moves_used:
+      - $y$ 改写为 $e^{\\ln y}$。
+      - 设 $h(u)=ue^{u-1}$ 并用单调性去掉函数符号。
+      - 用 $\ln y\\le y-1$ 得 $x\\le y$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $y(1+\\ln y)$ 写成 $(1+\\ln y)e^{(1+\\ln y)-1}$，回补指数对数基础。
+      - 若学生忽略 $1+\\ln y>0$，导致同构函数的单调区间不清，回补函数三要素与定义域。
+      - 若学生不会用 $\\ln y\\le y-1$ 比较 $1+\\ln y$ 与 $y$，回补不等式工具基础。
+  detail_terms:
+    - $h(u)=ue^{u-1}$
+    - $x=1+\\ln y$
+    - $\\ln y\\le y-1$
+    - 正实数分支
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0036_ex32
+source_evidence:
+  source_refs:
+    - ref_id: page_0036
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md
+      role: problem_start
+      evidence: "lines 41-45: 例 32 题干与 A-D 选项。"
+    - ref_id: page_0036_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md
+      role: solution
+      evidence: "line 47: 将等式同构为 $h(x)=h(1+\\\\ln y)$，推出 $x=1+\\\\ln y$ 并比较 $x$ 与 $y$。"
+    - ref_id: page_0037_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md
+      role: continuation
+      evidence: "line 15: page_0037 顶部续写例 32 结论“或 $x<y<1$; 故选 AC”。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0036.png
+      inspected: true
+      notes: 已核对原图：例 32 题头、题干、选项与解析起始位于 page_0036。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0037.png
+      inspected: true
+      notes: 已核对原图：page_0037 顶部为例 32 的续页结论“或 $x<y<1$; 故选 AC”，没有新题头。
+  source_context: 本题继续训练“考点 7：双元同构的单调性转化”，通过 $h(u)=ue^{u-1}$ 把 $x$ 与 $1+\ln y$ 绑定，再用 $\ln y\le y-1$ 判断可能区间。
+  source_influence:
+    - 题目要求判断可能成立的大小关系，goal 取“数值比较”。
+    - 例 32 的答案在 page_0037 顶部续完；按题头规则仍由本批 A 组创建卡。
+    - 四个选项必须完整保留；答案为 AC。
+  source_discrepancies: []
+original_problem:
+  stem: 若正实数 $x,y$ 满足 $xe^{x-1}=y(1+\ln y)$，则下列不等式中可能成立的是 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $1<x<y$
+      text_latex: $1<x<y$
+    - label: B
+      text_raw: $1<y<x$
+      text_latex: $1<y<x$
+    - label: C
+      text_raw: $x<y<1$
+      text_latex: $x<y<1$
+    - label: D
+      text_raw: $y<x<1$
+      text_latex: $y<x<1$
+  answer: AC
+  fidelity_notes:
+    - 已核对 page_0036 原图，条件为 $xe^{x-1}=y(1+\\ln y)$，题目问“可能成立”。
+    - 答案 AC 来自 page_0037 顶部续页，未把 page_0037 后续例 33 混入本题。
+solution:
+  source_solution_summary: |
+    因为 $y(1+\ln y)=(1+\ln y)e^{(1+\ln y)-1}$，且左侧 $xe^{x-1}>0$，所以 $1+\ln y>0$。设 $h(u)=ue^{u-1}$，在 $(0,+\infty)$ 上严格递增，由 $h(x)=h(1+\ln y)$ 得 $x=1+\ln y$。又 $\ln y\le y-1$，等号仅在 $y=1$ 取到，所以 $x=1+\ln y\le y$，且 $y\ne1$ 时 $x<y$。若 $y>1$，则 $x=1+\ln y>1$，得 $1<x<y$；若 $0<y<1$，则 $x<1$ 且 $x<y<1$。故选 AC。
+  key_steps:
+    - step_id: step_1
+      statement: 把右侧写成同一个 $h(u)=ue^{u-1}$。
+      formula_trace:
+        from: |
+          $y(1+\ln y)$
+        to: |
+          $(1+\ln y)e^{(1+\ln y)-1}$
+        operation: 利用 $e^{\ln y}=y$，把 $y$ 写成 $e^{\ln y}$。
+        why: 这样右侧与左侧 $xe^{x-1}$ 具有同一函数形式。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md:47
+    - step_id: step_2
+      statement: 确认两个输入都在单调区间内。
+      formula_trace:
+        from: |
+          $xe^{x-1}=y(1+\ln y),\quad x>0,\ y>0$
+        to: |
+          $xe^{x-1}>0\Rightarrow 1+\ln y>0$
+        operation: 由于 $y>0$，右侧符号由 $1+\ln y$ 决定。
+        why: $h(u)=ue^{u-1}$ 在 $u>0$ 上递增，需保证 $1+\ln y$ 也为正。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md:47
+    - step_id: step_3
+      statement: 由同构函数值相等推出输入相等。
+      formula_trace:
+        from: |
+          $h(x)=h(1+\ln y),\quad h(u)=ue^{u-1}$
+        to: |
+          $x=1+\ln y$
+        operation: 用 $h'(u)=e^{u-1}(u+1)>0$ 说明 $h$ 在正数域上严格递增。
+        why: 递增函数的同一函数值对应同一输入。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md:47
+    - step_id: step_4
+      statement: 比较 $x$ 与 $y$。
+      formula_trace:
+        from: |
+          $x=1+\ln y,\quad \ln y\le y-1$
+        to: |
+          $x\le y$，且 $y\ne1$ 时 $x<y$
+        operation: 把基本不等式 $\ln y\le y-1$ 两边加 $1$。
+        why: 先确定 $x$ 一定不大于 $y$，排除 $y<x$ 的选项。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0036/page_0036.md:47
+    - step_id: step_5
+      statement: 按 $y$ 与 $1$ 的关系判断可能区间。
+      formula_trace:
+        from: |
+          $x=1+\ln y,\quad x<y$
+        to: |
+          $y>1\Rightarrow 1<x<y;\quad 0<y<1\Rightarrow x<y<1$
+        operation: 当 $y>1$ 时 $\ln y>0$；当 $0<y<1$ 时 $\ln y<0$。
+        why: 两个分支分别对应选项 A 与 C。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md:15
+teaching_card:
+  student_title: 把 $y(1+\ln y)$ 改成 $h(1+\ln y)$
+  what_it_trains: 看到 $xe^{x-1}$ 与 $y(1+\ln y)$ 对等时，把 $y$ 写成 $e^{\ln y}$，就能让两个变量落到同一个递增函数里，再用对数基本不等式判断大小。
+  recognition_cues:
+    - 左侧是标准的 $u e^{u-1}$。
+    - 右侧有 $1+\\ln y$，而 $y=e^{\\ln y}$ 正好能补成指数。
+    - 选项都在比较 $x,y,1$ 的顺序。
+  normalization_moves:
+    - 先把 $y(1+\\ln y)$ 写为 $(1+\\ln y)e^{(1+\\ln y)-1}$。
+    - 确认 $1+\\ln y>0$ 后用 $h$ 的单调性。
+    - 把 $x=1+\\ln y$ 与 $\\ln y\\le y-1$ 连起来。
+  common_failures:
+    - 把 $h(u)=ue^{u-1}$ 的单调区间写成全实数，忽略输入为正。
+    - 只得到 $x<y$，忘记还要分 $y>1$ 和 $y<1$。
+    - 认为只能选 A，漏掉 $0<y<1$ 时的 C。
+  similar_practice_query: xe^{x-1} y(1+lny) 同构 ln y <= y-1 数值比较
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 例 32 题头在 page_0036，答案结论续到 page_0037 顶部；已按题头归属创建本卡。
+    - page_0036 与 page_0037 原图和 markdown 对本题一致。

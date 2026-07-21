@@ -1,0 +1,193 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0214_exp_shift_alnax_param_max_choice_ch6_baozhi_ex08
+content_revision_id: mst_p0214_exp_shift_alnax_param_max_choice_ch6_baozhi_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0214_exp_shift_alnax_param_max_choice_ch6_baozhi_ex08.card.yaml
+stem: |-
+  （2023 · 浙江精诚联盟高二月考 T8）已知 $a,x$ 均为正实数，不等式 $e^{x-1}-a\ln(ax)+a\geqslant0$ 恒成立，则 $a$ 的最大值为（  ）
+  A. 1
+  B. $\sqrt{e}$
+  C. $e$
+  D. $e^2$
+answer: |
+  C
+
+  先做法一同构：原式除以 $a(>0)$ 后整理为 $e^{x-\ln a-1}-(x-\ln a)+x-\ln x-1+2-2\ln a\geqslant0$。 令 $h(t)=e^t-t-1$，得 $h(x-\ln a-1)+h(\ln x)+2-2\ln a\geqslant0$， 由 $h(\cdot)\geqslant0$ 得上界条件 $a\leqslant e$。 法二把原式写成 $g(x)\ge h(x)$，其中 $g(x)=\frac{1}{a}\frac{e^x}{x}$，$h(x)=a\frac{\ln\frac{ax}{e}}{\frac{ax}{e}}$， 得 $g_{\min}=e/a,\ h_{\max}=a/e$，故仍需 $a\leqslant e$。 源页两图说明：$a=e$ 时两端极值点错位（左图），$a=e^2$ 时明显违背 $g\ge h$（右图，且代 $x=1$ 有 $1-e^2<0$），因此最大值为 $e$，选 C。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 法一：把原式改写为保值母函数加余量。
+      max_score: 1
+    - step_id: step_2
+      description: 由保值性读取参数上界。
+      max_score: 1
+    - step_id: step_3
+      description: 法二：转成 $g_{\min}$ 与 $h_{\max}$ 比较，复核同一上界。
+      max_score: 1
+    - step_id: step_4
+      description: 结合两图与反例确认选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 同构变形与换元法
+      - 数形结合
+    subroute:
+      - 保值性
+      - 余量函数
+      - 分而治之
+      - 错位 PS 模型
+      - 取等条件
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - Max/Min 与绝对值结构
+      - 不等式工具结构
+    evidence:
+      - $h(x-\ln a-1)+h(\ln x)+2-2\ln a$
+      - $g(x)=\frac1a\cdot\frac{e^x}{x}$
+      - $h(x)=a\cdot\frac{\ln\frac{ax}{e}}{\frac{ax}{e}}$
+      - 左图 $a=e$、右图 $a=e^2$ 的对照
+    normalization_moves_used:
+      - 把指对混合式配成 $e^t-t-1$ 母函数。
+      - 把“恒成立”转化为“上函数最小值 ≥ 下函数最大值”。
+      - 用图像错位解释“边界可行但不同点取等”。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $h(t)=e^t-t-1\geqslant0$ 读取余量约束，回补指数对数基础。
+      - 若学生不会把 $g_{\min}\ge h_{\max}$ 写成参数不等式，回补不等式工具基础。
+      - 若学生把“可取上界”误解为“同一点同取等”，回补函数性质与图像。
+  detail_terms:
+    - $a\leqslant e$
+    - $h(t)=e^t-t-1$
+    - $g_{\min}=e/a$
+    - $h_{\max}=a/e$
+    - 错位 PS 模型
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0214_exp_shift_alnax_param_max_choice_ch6_baozhi_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0214_ex07_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0214/page_0214.md
+      role: local_context
+      evidence: page_0214 顶部先承接 page_0213 例7续解并在“故选 A”收尾，不是新题头。
+    - ref_id: page_0214_ex08_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0214/page_0214.md
+      role: problem_start
+      evidence: page_0214 中部“例 8（2023·浙江精诚联盟高二月考 T8）”给出题干与 A-D 四个选项。
+    - ref_id: page_0214_ex08_solution_method1
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0214/page_0214.md
+      role: solution
+      evidence: 法一按同构保值性把原式改写为两个 $h(\cdot)$ 项加余量 $2-2\ln a$，得到 $a\leqslant e$ 的上界信息。
+    - ref_id: page_0214_ex08_solution_method2
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0214/page_0214.md
+      role: solution
+      evidence: 法二把不等式写成 $g(x)\geqslant h(x)$，并比较 $g_{\min}$ 与 $h_{\max}$：$g_{\min}=e/a,\ h_{\max}=a/e$。
+    - ref_id: page_0214_ex08_figure_left
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0214/page_0214.md
+      role: solution
+      evidence: 法二后左图对应 $a=e$：图上标出 $g(x)$ 的极小点与 $h(x)$ 的极大点，位置错位。
+    - ref_id: page_0214_ex08_figure_right
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0214/page_0214.md
+      role: solution
+      evidence: 右图对应 $a=e^2$：图示 $h(x)$ 整体压在 $g(x)$ 上方，和 $g\ge h$ 要求矛盾。
+    - ref_id: page_0214_ex09_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0214/page_0214.md
+      role: local_context
+      evidence: page_0214 底部进入“例9”新题头，属本批次另一张卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0214.png
+      inspected: true
+      notes: 已核对整页图：例8完整位于本页，且确有两张配图（左图标注 $a=e$，右图标注 $a=e^2$），用于解释分而治之的错位 PS 模型。
+  source_context: 本卡只处理 page_0214 起头的例8；页首例7为续页不建卡，页底例9题头留给下一卡处理。
+  source_influence:
+    - 保留法一“同构保值 + 余量 $2-2\ln a$”主链。
+    - 保留法二“$g_{\min}\ge h_{\max}$ + 取等点错位”主链。
+    - 把左/右两图作为结论解释证据显式绑定。
+  source_discrepancies:
+    - page_0214 markdown 引用了 `images/page_0214_fig_1.png`、`images/page_0214_fig_2.png`，仓库未发现对应独立文件；本卡以整页图中的两幅插图完成核验与绑定。
+    - 法一文字先写“当且仅当 $a=e,x=1$ 时取等”，随后又说明“三个不等式不能同时取等”；本卡按后续论证保留“$a=e$ 可取到上界但不发生同点同取等”。
+original_problem:
+  stem: （2023 · 浙江精诚联盟高二月考 T8）已知 $a,x$ 均为正实数，不等式 $e^{x-1}-a\ln(ax)+a\geqslant0$ 恒成立，则 $a$ 的最大值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: "1"
+      text_latex: "1"
+    - label: B
+      text_raw: $\sqrt{e}$
+      text_latex: $\sqrt{e}$
+    - label: C
+      text_raw: $e$
+      text_latex: $e$
+    - label: D
+      text_raw: $e^2$
+      text_latex: $e^2$
+  answer: C
+  fidelity_notes:
+    - 题干与四个选项已按 page_0214 页图核对。
+    - 例8的两幅图属于解法证据的一部分，已在 source_evidence 中单独绑定。
+solution:
+  source_solution_summary: |
+    先做法一同构：原式除以 $a(>0)$ 后整理为 $e^{x-\ln a-1}-(x-\ln a)+x-\ln x-1+2-2\ln a\geqslant0$。 令 $h(t)=e^t-t-1$，得 $h(x-\ln a-1)+h(\ln x)+2-2\ln a\geqslant0$， 由 $h(\cdot)\geqslant0$ 得上界条件 $a\leqslant e$。 法二把原式写成 $g(x)\ge h(x)$，其中 $g(x)=\frac{1}{a}\frac{e^x}{x}$，$h(x)=a\frac{\ln\frac{ax}{e}}{\frac{ax}{e}}$， 得 $g_{\min}=e/a,\ h_{\max}=a/e$，故仍需 $a\leqslant e$。 源页两图说明：$a=e$ 时两端极值点错位（左图），$a=e^2$ 时明显违背 $g\ge h$（右图，且代 $x=1$ 有 $1-e^2<0$），因此最大值为 $e$，选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 法一：把原式改写为保值母函数加余量。
+      formula_trace:
+        from: $e^{x-1}-a\ln(ax)+a\geqslant0$
+        to: $h(x-\ln a-1)+h(\ln x)+2-2\ln a\geqslant0,\ h(t)=e^t-t-1$
+        operation: 先除以 $a$，再通过加减配凑转成两个 $h(\cdot)$ 项。
+        why: 把题目压成“标准非负块 + 参数余量”的结构。
+      source_ref: page_0214_ex08_solution_method1
+    - step_id: step_2
+      statement: 由保值性读取参数上界。
+      formula_trace:
+        from: $h(x-\ln a-1)\geqslant0,\ h(\ln x)\geqslant0$
+        to: $2-2\ln a\geqslant0\Rightarrow a\leqslant e$
+        operation: 余量项必须不破坏全局非负。
+        why: 题问“最大值”，先得到上界是关键。
+      source_ref: page_0214_ex08_solution_method1
+    - step_id: step_3
+      statement: 法二：转成 $g_{\min}$ 与 $h_{\max}$ 比较，复核同一上界。
+      formula_trace:
+        from: $e^{x-1}\geqslant a\ln\frac{ax}{e}$
+        to: $g_{\min}=\frac{e}{a},\ h_{\max}=\frac{a}{e},\ g_{\min}\geqslant h_{\max}\Rightarrow a\leqslant e$
+        operation: 把两侧分别写成六大同构函数极值模板。
+        why: 第二条路线与法一互证。
+      source_ref: page_0214_ex08_solution_method2
+    - step_id: step_4
+      statement: 结合两图与反例确认选项。
+      formula_trace:
+        from: 左图标注 $a=e$；右图标注 $a=e^2$
+        to: 最大值为 $e$；当 $a=e^2,x=1$ 时原式为 $1-e^2<0$，故 D 不可
+        operation: 读图判断可行性并用代入反例排除超界选项。
+        why: 把“上界不等式”落到具体选项判定。
+      source_ref: page_0214_ex08_figure_right
+teaching_card:
+  student_title: 保值余量 + 极值错位锁定参数上界
+  what_it_trains: 训练“同构保值上界”和“分而治之极值比较”双路线互证，并用图像解释边界点的错位取等。
+  recognition_cues:
+    - 题干是“对任意正实数恒成立，求参数最大值”。
+    - 式子同时含 $e^{x-1}$ 与 $\ln(ax)$，可配到 $e^t-t-1$。
+    - 源解给出两幅 $g/h$ 图，说明极值比较是关键证据。
+  normalization_moves:
+    - 先做同构配凑得到“两个 $h$ + 余量”。
+    - 再做 $g_{\min}\ge h_{\max}$ 复核参数区间。
+    - 最后回到选项，用图像与代入反例筛除超界项。
+  common_failures:
+    - 把 $h(x-\ln a-1)$ 配凑时漏掉常数项，导致余量写错。
+    - 只写出 $a\le e$ 却不回到选项验证。
+    - 把“边界可行”误写成“必有同点取等”。
+  similar_practice_query: e^{x-1}-aln(ax)+a 恒成立 参数最大值 保值性 分而治之
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes: []

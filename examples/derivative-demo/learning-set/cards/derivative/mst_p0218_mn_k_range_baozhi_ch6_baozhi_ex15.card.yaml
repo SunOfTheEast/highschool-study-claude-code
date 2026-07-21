@@ -1,0 +1,171 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0218_mn_k_range_baozhi_ch6_baozhi_ex15
+content_revision_id: mst_p0218_mn_k_range_baozhi_ch6_baozhi_ex15-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0218_mn_k_range_baozhi_ch6_baozhi_ex15.card.yaml
+stem: （2022 · 名校联盟 T14）对任意实数 $m,n$，不等式 $kme^{n-1}-2n+1+(2n-2m+1)e^{2n-m}\geqslant0$ 恒成立，求实数 $k$ 的取值范围。
+answer: |-
+  $k\in[1,4e^{3/2}]$。
+
+  先将原式整理为 $[1-2(m-n)]e^{n-m+1}+k(m-n)+(1-2n)e^{1-n}+kn\geqslant0$。 构造 $f(x)=(1-2x)e^{1-x}+kx$，则原式即 $f(m-n)+f(n)\geqslant0$。由 $m-n$ 与 $n$ 可自由取值，source 转为 要求 $f(x)\geqslant0$ 恒成立。对 $x\ne0$，由 $(1-2x)e^{1-x}+kx\geqslant0$ 得 $x<0$ 时 $k\leqslant g(x)$，$x>0$ 时 $k\geqslant g(x)$，其中 $g(x)=\frac{2x-1}{xe^{x-1}}$。求导 $g^{\prime}(x)=\frac{-2x^2+x+1}{x^2e^{x-1}} =-\frac{(2x+1)(x-1)}{x^2e^{x-1}}$，可得 $x<0$ 段的下界为 $g(-1/2)=4e^{3/2}$，$x>0$ 段的上界为 $g(1)=1$，故 $1\leqslant k\leqslant4e^{3/2}$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把原式重组为两个同型输入。
+      max_score: 1
+    - step_id: step_2
+      description: 构造单变量保值函数。
+      max_score: 1
+    - step_id: step_3
+      description: 把 $f(x)\geqslant0$ 化成关于 $k$ 的不等式。
+      max_score: 1
+    - step_id: step_4
+      description: 求辅助函数 $g$ 的极值。
+      max_score: 1
+    - step_id: step_5
+      description: 合并参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: main
+        goal: 求参数范围
+        target: 第 main 问
+        result: $k\in[1,4e^{3/2}]$
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 自由度与主元
+      - 含参数分类讨论
+    subroute:
+      - 双变量保值性
+      - $m-n$ 与 $n$ 降维
+      - 参数半轴夹逼
+      - 辅助函数极值
+  structure:
+    primary: 多变量与不等式结构
+    secondary:
+      - 指对复合结构
+      - 非齐次结构
+      - 同构结构
+    evidence:
+      - $f(m-n)+f(n)\geqslant0$
+      - $f(x)=(1-2x)e^{1-x}+kx$
+      - $g(x)=\frac{2x-1}{xe^{x-1}}$
+    normalization_moves_used:
+      - 把 $m,n$ 重写成 $m-n$ 与 $n$ 两个自由变量。
+      - 把恒成立条件转为 $f(x)\geqslant0$。
+      - 按 $x<0,x>0$ 夹出 $k$ 的上下界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能把原式改写成 $f(m-n)+f(n)$，回补代数恒等变形。
+      - 若学生不会从 $x$ 的正负处理除法不等号，回补不等式工具基础。
+      - 若学生求不出 $g^{\prime}(x)$ 或判错极值，回补导数单调极值基础。
+      - 若学生对指数项换写 $e^{1-x}=1/e^{x-1}$ 不熟，回补指数对数基础。
+  detail_terms:
+    - $m-n$ 与 $n$
+    - $f(m-n)+f(n)$
+    - $f(x)=(1-2x)e^{1-x}+kx$
+    - $g(x)=\frac{2x-1}{xe^{x-1}}$
+    - $[1,4e^{3/2}]$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0218_mn_k_range_baozhi_ch6_baozhi_ex15
+source_evidence:
+  source_refs:
+    - ref_id: page_0218_ex15_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0218/page_0218.md
+      role: problem_start
+      evidence: page_0218 给出例15题头：对任意实数 $m,n$，$kme^{n-1}-2n+1+(2n-2m+1)e^{2n-m}\geqslant0$ 恒成立，求 $k$ 的取值范围。
+    - ref_id: page_0218_ex15_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0218/page_0218.md
+      role: solution
+      evidence: page_0218 例15解析将原式改写为 $f(m-n)+f(n)\geqslant0$，构造 $f(x)=(1-2x)e^{1-x}+kx$，结论 $k\in[1,4e^{3/2}]$。
+    - ref_id: page_0218_fenzhi_theory_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0218/page_0218.md
+      role: local_context
+      evidence: 例15后进入“第三节 分而治之的上下函数选取”，说明例15在本页闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0218.png
+      inspected: true
+      notes: 已核对整页图像：例15位于页中，解析与答案均在本页闭合，答案为 $k\in[1,4e^{3/2}]$。
+  source_context: 本卡仅处理 page_0218 例15；页底“分而治之”理论文字只用于确认题卡边界。
+  source_influence:
+    - 保留 source 的核心变量组合：把 $m,n$ 改成 $m-n$ 与 $n$ 两个自由输入。
+    - 保留构造 $f(x)=(1-2x)e^{1-x}+kx$ 后要求 $f(x)\geqslant0$ 恒成立。
+    - 保留通过 $g(x)=\frac{2x-1}{xe^{x-1}}$ 在 $x<0$、$x>0$ 两段夹住 $k$ 的做法。
+  source_discrepancies: []
+original_problem:
+  stem: （2022 · 名校联盟 T14）对任意实数 $m,n$，不等式 $kme^{n-1}-2n+1+(2n-2m+1)e^{2n-m}\geqslant0$ 恒成立，求实数 $k$ 的取值范围。
+  parts: *a1
+  choices: []
+  answer: $k\in[1,4e^{3/2}]$。
+  fidelity_notes:
+    - 填空/求参题，无选项、无分问。
+    - source 直接使用保值性降维，并未展开证明 $f(x)\geqslant0$ 的充分必要细节。
+solution:
+  source_solution_summary: 先将原式整理为 $[1-2(m-n)]e^{n-m+1}+k(m-n)+(1-2n)e^{1-n}+kn\geqslant0$。 构造 $f(x)=(1-2x)e^{1-x}+kx$，则原式即 $f(m-n)+f(n)\geqslant0$。由 $m-n$ 与 $n$ 可自由取值，source 转为 要求 $f(x)\geqslant0$ 恒成立。对 $x\ne0$，由 $(1-2x)e^{1-x}+kx\geqslant0$ 得 $x<0$ 时 $k\leqslant g(x)$，$x>0$ 时 $k\geqslant g(x)$，其中 $g(x)=\frac{2x-1}{xe^{x-1}}$。求导 $g^{\prime}(x)=\frac{-2x^2+x+1}{x^2e^{x-1}} =-\frac{(2x+1)(x-1)}{x^2e^{x-1}}$，可得 $x<0$ 段的下界为 $g(-1/2)=4e^{3/2}$，$x>0$ 段的上界为 $g(1)=1$，故 $1\leqslant k\leqslant4e^{3/2}$。
+  key_steps:
+    - step_id: step_1
+      statement: 把原式重组为两个同型输入。
+      formula_trace:
+        from: $kme^{n-1}-2n+1+(2n-2m+1)e^{2n-m}$
+        to: $[1-2(m-n)]e^{n-m+1}+k(m-n)+(1-2n)e^{1-n}+kn$
+        operation: 围绕 $m-n$ 与 $n$ 重新配项。
+        why: 这一步把双变量表达式改造成 $f(m-n)+f(n)$。
+      source_ref: page_0218_ex15_solution
+    - step_id: step_2
+      statement: 构造单变量保值函数。
+      formula_trace:
+        from: $[1-2(m-n)]e^{n-m+1}+k(m-n)+(1-2n)e^{1-n}+kn$
+        to: $f(m-n)+f(n)$，$f(x)=(1-2x)e^{1-x}+kx$
+        operation: 将 $x=m-n$ 与 $x=n$ 分别代入同一个 $f$。
+        why: 把“任意 $m,n$”转成单变量函数的恒非负要求。
+      source_ref: page_0218_ex15_solution
+    - step_id: step_3
+      statement: 把 $f(x)\geqslant0$ 化成关于 $k$ 的不等式。
+      formula_trace:
+        from: $(1-2x)e^{1-x}+kx\geqslant0$
+        to: $x<0\Rightarrow k\leqslant\frac{2x-1}{xe^{x-1}}$；$x>0\Rightarrow k\geqslant\frac{2x-1}{xe^{x-1}}$
+        operation: 移项并按 $x$ 的符号除以 $x$。
+        why: 参数夹逼必须分正负半轴。
+      source_ref: page_0218_ex15_solution
+    - step_id: step_4
+      statement: 求辅助函数 $g$ 的极值。
+      formula_trace:
+        from: $g(x)=\frac{2x-1}{xe^{x-1}}$
+        to: $g^{\prime}(x)=-\frac{(2x+1)(x-1)}{x^2e^{x-1}}$，$g(-1/2)=4e^{3/2}$，$g(1)=1$
+        operation: 求导判号，分别取 $x<0$ 段的最小值与 $x>0$ 段的最大值。
+        why: 这两个极值给出 $k$ 的上下界。
+      source_ref: page_0218_ex15_solution
+    - step_id: step_5
+      statement: 合并参数范围。
+      formula_trace:
+        from: $k\leqslant4e^{3/2}$ 且 $k\geqslant1$
+        to: $k\in[1,4e^{3/2}]$
+        operation: 取两段条件交集。
+        why: 完成对任意 $m,n$ 恒成立的求参。
+      source_ref: page_0218_ex15_solution
+teaching_card:
+  student_title: 用 $m-n$ 和 $n$ 把双变量题降成 $f(x)\geqslant0$
+  what_it_trains: 训练双变量恒成立题中的保值性降维：先找两个自由输入，再在单变量函数上夹参数。
+  recognition_cues:
+    - 题干含任意 $m,n$，且指数里出现 $n-1$、$2n-m$ 这类可拼成 $m-n$ 的结构。
+    - 解析目标是构造 $f(m-n)+f(n)$。
+    - 最后会出现一个含参数的一元不等式，需要按 $x$ 正负分段。
+  normalization_moves:
+    - 先围绕 $m-n$ 整理指数和线性项。
+    - 构造 $f(x)$ 后不要急着求二元最值，直接看 $f(x)\geqslant0$。
+    - 把参数项移到一边，用辅助函数极值夹出范围。
+  common_failures:
+    - 没看出 $2n-m=n-(m-n)$，导致无法降维。
+    - 除以负数 $x$ 时把 $k\leqslant g(x)$ 写成 $k\geqslant g(x)$。
+    - 只算出 $g(1)=1$，漏掉 $x<0$ 段的 $4e^{3/2}$。
+  similar_practice_query: 双变量 保值性 m-n n f(m-n)+f(n) k范围 指数恒成立
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

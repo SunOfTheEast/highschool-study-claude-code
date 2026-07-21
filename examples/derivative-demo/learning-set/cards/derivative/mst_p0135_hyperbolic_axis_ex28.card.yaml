@@ -1,0 +1,200 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0135_hyperbolic_axis_ex28
+content_revision_id: mst_p0135_hyperbolic_axis_ex28-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0135_hyperbolic_axis_ex28.card.yaml
+stem: |-
+  （2023·广州二模）已知偶函数 $f(x)$ 与其导函数 $f^{\prime}(x)$ 的定义域均为 $\mathbf{R}$，且 $f^{\prime}(x)+e^{-x}+x$ 也是偶函数。若 $f(2a-1)<f(a+1)$，则实数 $a$ 的取值范围是（  ）
+  A. $(-\infty,2)$
+  B. $(0,2)$
+  C. $(2,+\infty)$
+  D. $(-\infty,0)\cup(2,+\infty)$
+answer: |
+  B
+
+  由 $f$ 为偶函数得 $f^{\prime}(x)=-f^{\prime}(-x)$。
+  又 $f^{\prime}(x)+e^{-x}+x$ 为偶函数，所以
+  $f^{\prime}(x)+e^{-x}+x=f^{\prime}(-x)+e^{x}-x$。
+  联立两式：
+  $2f^{\prime}(x)=e^x-e^{-x}-2x$，即
+  $f^{\prime}(x)=\frac{e^x-e^{-x}}2-x=\sinh x-x$。
+  积分可写
+  $f(x)=\cosh x-\frac12x^2+C$，从而
+  $f^{\prime\prime}(x)=\cosh x-1\ge0$，故 $f^{\prime}$ 在 $\mathbf{R}$ 上递增。
+  且 $f^{\prime}(0)=0$，所以 $x>0$ 时 $f^{\prime}(x)>0$，即
+  $f$ 在 $[0,+\infty)$ 递增。由 $f(2a-1)<f(a+1)$ 并结合偶性得
+  $f(|2a-1|)<f(|a+1|)$，再由递增性得
+  $|2a-1|<|a+1|$。解得 $a^2-2a<0$，
+  即 $0<a<2$，故选 B。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把两个偶性条件联立成导函数方程。
+      max_score: 1
+    - step_id: step_2
+      description: 得到双曲函数型导数并积分。
+      max_score: 1
+    - step_id: step_3
+      description: 由二阶导判断半轴递增。
+      max_score: 1
+    - step_id: step_4
+      description: 偶性改写输入并去掉函数号。
+      max_score: 1
+    - step_id: step_5
+      description: 解出参数区间。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 偶性联立解导数
+      - 双曲函数构造
+      - 绝对值输入比较
+  structure:
+    primary: 双曲函数结构
+    secondary:
+      - 对称结构
+      - 抽象函数结构
+    evidence:
+      - $f^{\prime}(x)$ 由 $e^x-e^{-x}$ 与 $x$ 组合而成，显式落到 $\sinh x-x$。
+      - 目标比较通过偶性统一到非负轴，再转为 $|2a-1|$ 与 $|a+1|$。
+    normalization_moves_used:
+      - 用偶性方程组消去 $f^{\prime}(-x)$。
+      - 引入 $\sinh x,\cosh x$。
+      - 把 $f(2a-1)<f(a+1)$ 改写为绝对值输入比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不熟悉“偶函数导数是奇函数”，回补函数性质与图像。
+      - 若学生不会把 $e^x\pm e^{-x}$ 转成双曲函数，回补指数对数基础。
+      - 若学生不会从 $f^{\prime\prime}\ge0$ 与 $f^{\prime}(0)=0$ 推 $f$ 在正半轴递增，回补导数单调极值基础。
+  detail_terms:
+    - $\sinh x,\cosh x$
+    - $f^{\prime}(x)=\sinh x-x$
+    - $|2a-1|<|a+1|$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0135_hyperbolic_axis_ex28
+source_evidence:
+  source_refs:
+    - ref_id: page_0135
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0135/page_0135.md
+      role: problem_start
+      evidence: "page_0135 lines 25-30: 例28题干与A-D选项。"
+    - ref_id: page_0135_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0135/page_0135.md
+      role: solution
+      evidence: "page_0135 lines 32-34: 先联立奇偶关系求 $f^{\\prime}(x)$，再由单调性转绝对值比较。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0135.png
+      inspected: true
+      notes: 已核对原图，双曲函数引入与答案B（$0<a<2$）清晰。
+  source_context: 本题位于“3. 对称轴与对称中心锁定构造”开头，先由偶性方程组解出导函数，再通过双曲函数表达式分析单调区间。
+  source_influence:
+    - 题目求参数范围，graph.goal 归为“求参数范围”。
+    - 解链关键节点是 $f^{\prime}(x)=\sinh x-x$ 与 $f(x)=\cosh x-\frac12x^2+C$。
+    - 最终比较是 $f(|2a-1|)<f(|a+1|)$ 导出的绝对值不等式。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·广州二模）已知偶函数 $f(x)$ 与其导函数 $f^{\prime}(x)$ 的定义域均为 $\mathbf{R}$，且 $f^{\prime}(x)+e^{-x}+x$ 也是偶函数。若 $f(2a-1)<f(a+1)$，则实数 $a$ 的取值范围是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $(-\infty,2)$
+      text_latex: $(-\infty,2)$
+    - label: B
+      text_raw: $(0,2)$
+      text_latex: $(0,2)$
+    - label: C
+      text_raw: $(2,+\infty)$
+      text_latex: $(2,+\infty)$
+    - label: D
+      text_raw: $(-\infty,0)\cup(2,+\infty)$
+      text_latex: $(-\infty,0)\cup(2,+\infty)$
+  answer: B
+  fidelity_notes:
+    - 原图与markdown一致：条件是“$f^{\prime}(x)+e^{-x}+x$ 也是偶函数”。
+    - 解析显式引入 $\sinh x,\cosh x$ 辅助表达。
+solution:
+  source_solution_summary: |
+    由 $f$ 为偶函数得 $f^{\prime}(x)=-f^{\prime}(-x)$。
+    又 $f^{\prime}(x)+e^{-x}+x$ 为偶函数，所以
+    $f^{\prime}(x)+e^{-x}+x=f^{\prime}(-x)+e^{x}-x$。
+    联立两式：
+    $2f^{\prime}(x)=e^x-e^{-x}-2x$，即
+    $f^{\prime}(x)=\frac{e^x-e^{-x}}2-x=\sinh x-x$。
+    积分可写
+    $f(x)=\cosh x-\frac12x^2+C$，从而
+    $f^{\prime\prime}(x)=\cosh x-1\ge0$，故 $f^{\prime}$ 在 $\mathbf{R}$ 上递增。
+    且 $f^{\prime}(0)=0$，所以 $x>0$ 时 $f^{\prime}(x)>0$，即
+    $f$ 在 $[0,+\infty)$ 递增。由 $f(2a-1)<f(a+1)$ 并结合偶性得
+    $f(|2a-1|)<f(|a+1|)$，再由递增性得
+    $|2a-1|<|a+1|$。解得 $a^2-2a<0$，
+    即 $0<a<2$，故选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 把两个偶性条件联立成导函数方程。
+      formula_trace:
+        from: $f$ 为偶函数；$f^{\prime}(x)+e^{-x}+x$ 为偶函数
+        to: $f^{\prime}(x)=-f^{\prime}(-x)$，且 $f^{\prime}(x)+e^{-x}+x=f^{\prime}(-x)+e^x-x$
+        operation: 分别写出“函数偶/导函数奇”的等价式，再代入消元。
+        why: 可直接求出 $f^{\prime}(x)$ 的显式表达。
+      source_ref: page_0135_solution
+    - step_id: step_2
+      statement: 得到双曲函数型导数并积分。
+      formula_trace:
+        from: $2f^{\prime}(x)=e^x-e^{-x}-2x$
+        to: $f^{\prime}(x)=\sinh x-x,\quad f(x)=\cosh x-\frac12x^2+C$
+        operation: 把指数差写成双曲正弦，再做不定积分。
+        why: 后续单调性和比较都要基于该表达。
+      source_ref: page_0135_solution
+    - step_id: step_3
+      statement: 由二阶导判断半轴递增。
+      formula_trace:
+        from: $f^{\prime\prime}(x)=\cosh x-1$
+        to: $f^{\prime\prime}(x)\ge0\Rightarrow f^{\prime}$ 递增，且 $f^{\prime}(0)=0\Rightarrow x>0$ 时 $f^{\prime}(x)>0$
+        operation: 先判 $f^{\prime}$ 单调，再用零点定位符号。
+        why: 确定 $f$ 在 $[0,+\infty)$ 递增。
+      source_ref: page_0135_solution
+    - step_id: step_4
+      statement: 偶性改写输入并去掉函数号。
+      formula_trace:
+        from: $f(2a-1)<f(a+1)$
+        to: $f(|2a-1|)<f(|a+1|)\Rightarrow |2a-1|<|a+1|$
+        operation: 偶函数满足 $f(u)=f(|u|)$，再在非负轴上用递增保序。
+        why: 最终化为代数不等式。
+      source_ref: page_0135_solution
+    - step_id: step_5
+      statement: 解出参数区间。
+      formula_trace:
+        from: $|2a-1|<|a+1|$
+        to: $(2a-1)^2<(a+1)^2\Rightarrow a^2-2a<0\Rightarrow 0<a<2$
+        operation: 两侧平方并因式分解。
+        why: 对应选项 B。
+      source_ref: page_0135_solution
+teaching_card:
+  student_title: 偶性联立后，导数变成 $\sinh x-x$
+  what_it_trains: 训练在“函数偶 + 导函数组合偶”的条件下做方程联立，先解出导函数显式，再回到单调性和绝对值比较求参。
+  recognition_cues:
+    - 题干同时给出 $f$ 偶性和含 $f^{\prime}$ 的偶性条件。
+    - 表达式里有 $e^x,e^{-x}$，常导向双曲函数。
+    - 结尾是不等式 $f(\cdot)<f(\cdot)$，适合做偶性绝对值化。
+  normalization_moves:
+    - 先写 $f^{\prime}(x)=-f^{\prime}(-x)$。
+    - 将第二个偶性条件在 $x$ 与 $-x$ 处对照后消元。
+    - 得到 $f$ 在非负轴递增后再去掉 $f$。
+  common_failures:
+    - 把“$f$ 偶”误写成“$f^{\prime}$ 偶”。
+    - 联立时漏掉 $-x$ 项，导致 $f^{\prime}(x)$ 系数错误。
+    - 从 $f(|u|)<f(|v|)$ 推输入关系时忘记依赖非负轴递增。
+  similar_practice_query: 偶函数 导函数偶条件 双曲函数 求参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,203 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0189_x2_over_exp_four_roots_options_ex18
+content_revision_id: mst_p0189_x2_over_exp_four_roots_options_ex18-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0189_x2_over_exp_four_roots_options_ex18.card.yaml
+stem: |-
+  （2023 · 枣庄期末 · 多选 T12）已知函数 $f(x)=\frac{x^2}{e^x}+e^{x-4}-ax$ 有四个零点 $x_1,x_2,x_3,x_4$（$x_1<x_2<x_3<x_4$），则（  ）
+  A. $x_1+x_2>2$
+  B. $\frac{2}{e^2}<a<\frac1e+\frac1{e^3}$
+  C. $\ln(x_1x_2x_3x_4)-(x_1+x_2+x_3+x_4)=-8$
+  D. 若 $x_2=2-\sqrt3$，则 $x_4=2+\sqrt3$
+answer: |-
+  BCD
+
+  由四零点条件： $\frac{x^2}{e^x}+e^{x-4}-ax=0$，且 $x\neq0$，可化为 $\frac{x}{e^x}+\frac{e^x}{e^4x}-a=0$。令 $t=\frac{x}{e^x}$，得到 $t+\frac1{e^4t}-a=0$，即 $e^4t^2-e^4at+1=0$。因原式有四个不同零点，故此二次式有两正根 $0<t_1<t_2<\frac1e$，并且 $t_1=\frac{x_1}{e^{x_1}}=\frac{x_4}{e^{x_4}}$， $t_2=\frac{x_2}{e^{x_2}}=\frac{x_3}{e^{x_3}}$。 由 $t(x)=\frac{x}{e^x}$ 图像知 $0<x_1<x_2<1$，故 $x_1+x_2<2$，A 错。 对 B：结合 $\Delta>0$、$0<\frac a2<\frac1e$ 与 $e^4(\frac1e)^2-e^4a\cdot\frac1e+1>0$，得 $\frac2{e^2}<a<\frac1e+\frac1{e^3}$，B 对。 对 C：由 $\prod_{i=1}^4\frac{x_i}{e^{x_i}}=(t_1t_2)^2=\frac1{e^8}$， 取对数得 $\ln(x_1x_2x_3x_4)-(x_1+x_2+x_3+x_4)=-8$，C 对。 对 D：由 $t_1t_2=\frac{x_2x_4}{e^{x_2+x_4}}=\frac1{e^4}$ 得 $\ln x_2+\ln x_4=x_2+x_4-4$。代 $x_2=2-\sqrt3$ 化为 $\ln x_4-x_4=\ln(2+\sqrt3)-(2+\sqrt3)$。 令 $m(x)=\ln x-x$（$x>1$），其在 $(1,+\infty)$ 单调递减，且 $x_4>1$，故 $x_4=2+\sqrt3$，D 对。综上选 BCD。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 把原零点方程同构到 $t=\frac{x}{e^x}$ 二次式。
+      max_score: 1
+    - step_id: step_2
+      description: 由图像与四根条件确定 $t_1,t_2$ 的区间和配对。
+      max_score: 1
+    - step_id: step_3
+      description: 用根位置快速判 A。
+      max_score: 1
+    - step_id: step_4
+      description: 由二次根落在 $(0,\frac1e)$ 推出参数范围 B。
+      max_score: 1
+    - step_id: step_5
+      description: 乘积取对数得到 C。
+      max_score: 1
+    - step_id: step_6
+      description: 利用 $m(x)=\ln x-x$ 的单调性验证 D。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 含参数分类讨论
+      - 拟合与夹逼
+    subroute:
+      - 参数判根数
+      - 积定值
+      - 内函数横着走
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $t=\frac{x}{e^x}$
+      - $e^4t^2-e^4at+1=0$
+      - $0<t_1<t_2<\frac1e$
+      - $\ln(x_1x_2x_3x_4)-(x_1+x_2+x_3+x_4)=-8$
+      - $m(x)=\ln x-x$
+    normalization_moves_used:
+      - 先把原方程除以 $x$，再压成 $t$ 的二次方程。
+      - 用单峰图像把两个 $t$ 根映射成四个 $x$ 根。
+      - 用韦达积与对数线性化处理乘积型选项。
+      - 用单调函数同值唯一性处理带根式的反推选项。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $t=\frac{x}{e^x}$ 图像读出一值双根关系，回补导数单调极值基础。
+      - 若学生不会由“根在区间内”列判别条件，回补方程根分布与韦达。
+      - 若学生不熟悉乘积取对数的线性化，回补指数对数基础。
+      - 若学生把 $\ln x-x$ 的单调性判断错，回补函数性质与图像。
+  detail_terms:
+    - $\frac{x^2}{e^x}+e^{x-4}-ax=0$
+    - $e^4t^2-e^4at+1=0$
+    - $0<t_1<t_2<\frac1e$
+    - $\frac2{e^2}<a<\frac1e+\frac1{e^3}$
+    - $\ln(x_1x_2x_3x_4)-(x_1+x_2+x_3+x_4)=-8$
+    - $x_4=2+\sqrt3$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0189_x2_over_exp_four_roots_options_ex18
+source_evidence:
+  source_refs:
+    - ref_id: page_0189_ex18_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0189/page_0189.md
+      role: problem_start
+      evidence: line 48 给出例18题头与题干起始：$f(x)=\frac{x^2}{e^x}+e^{x-4}-ax$，并给出“四个零点”条件。
+    - ref_id: page_0190_ex18_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0190/page_0190.md
+      role: continuation
+      evidence: lines 14-35 续完例18：A-D 选项、完整解析与结论“故选 BCD”。
+    - ref_id: page_0189_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0189/page_0189.md
+      role: local_context
+      evidence: lines 12-23 是例16续解，属于上一页题头；本卡只从例18起头位置开始重建。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0189.png
+      inspected: true
+      notes: 已核对页图：例18从 page_0189 页底起头，题干至“$x_1<$”处跨页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0190.png
+      inspected: true
+      notes: 已核对页图：page_0190 顶部续完“$x_2<x_3<x_4$”，给出 A-D 与完整解析，最终答案 BCD。
+  source_context: 例18题头在 page_0189，完整题目与解答续到 page_0190 顶部后结束；随后 page_0190 才进入例19。
+  source_influence:
+    - 保留源解换元主线：除以 $x$ 后令 $t=\frac{x}{e^x}$，得到 $e^4t^2-e^4at+1=0$。
+    - 保留源解根分配：$0<t_1<t_2<\frac1e$，且 $t_1=\frac{x_1}{e^{x_1}}=\frac{x_4}{e^{x_4}}$、$t_2=\frac{x_2}{e^{x_2}}=\frac{x_3}{e^{x_3}}$。
+    - 保留四个选项逐项判定链，尤其 C 的对数恒等式与 D 的 $m(x)=\ln x-x$ 单调性反推。
+  source_discrepancies:
+    - page_0190 markdown line 14 以 layout 片段形式记录续行；已由页图确认原文为“$x_2<x_3<x_4$”，并与上下文一致。
+    - page_0190 markdown line 35 含“对数”重建标记；已由页图核对该步确为“取自然对数”。
+original_problem:
+  stem: （2023 · 枣庄期末 · 多选 T12）已知函数 $f(x)=\frac{x^2}{e^x}+e^{x-4}-ax$ 有四个零点 $x_1,x_2,x_3,x_4$（$x_1<x_2<x_3<x_4$），则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $x_1+x_2>2$
+      text_latex: $x_1+x_2>2$
+    - label: B
+      text_raw: $\frac{2}{e^2}<a<\frac1e+\frac1{e^3}$
+      text_latex: $\frac{2}{e^2}<a<\frac1e+\frac1{e^3}$
+    - label: C
+      text_raw: $\ln(x_1x_2x_3x_4)-(x_1+x_2+x_3+x_4)=-8$
+      text_latex: $\ln(x_1x_2x_3x_4)-(x_1+x_2+x_3+x_4)=-8$
+    - label: D
+      text_raw: 若 $x_2=2-\sqrt3$，则 $x_4=2+\sqrt3$
+      text_latex: 若 $x_2=2-\sqrt3$，则 $x_4=2+\sqrt3$
+  answer: BCD
+  fidelity_notes:
+    - 源题为多选题，A-D 选项来自 page_0190 顶部续页。
+    - source 解析末句明确“故选 BCD”。
+solution:
+  source_solution_summary: 由四零点条件： $\frac{x^2}{e^x}+e^{x-4}-ax=0$，且 $x\neq0$，可化为 $\frac{x}{e^x}+\frac{e^x}{e^4x}-a=0$。令 $t=\frac{x}{e^x}$，得到 $t+\frac1{e^4t}-a=0$，即 $e^4t^2-e^4at+1=0$。因原式有四个不同零点，故此二次式有两正根 $0<t_1<t_2<\frac1e$，并且 $t_1=\frac{x_1}{e^{x_1}}=\frac{x_4}{e^{x_4}}$， $t_2=\frac{x_2}{e^{x_2}}=\frac{x_3}{e^{x_3}}$。 由 $t(x)=\frac{x}{e^x}$ 图像知 $0<x_1<x_2<1$，故 $x_1+x_2<2$，A 错。 对 B：结合 $\Delta>0$、$0<\frac a2<\frac1e$ 与 $e^4(\frac1e)^2-e^4a\cdot\frac1e+1>0$，得 $\frac2{e^2}<a<\frac1e+\frac1{e^3}$，B 对。 对 C：由 $\prod_{i=1}^4\frac{x_i}{e^{x_i}}=(t_1t_2)^2=\frac1{e^8}$， 取对数得 $\ln(x_1x_2x_3x_4)-(x_1+x_2+x_3+x_4)=-8$，C 对。 对 D：由 $t_1t_2=\frac{x_2x_4}{e^{x_2+x_4}}=\frac1{e^4}$ 得 $\ln x_2+\ln x_4=x_2+x_4-4$。代 $x_2=2-\sqrt3$ 化为 $\ln x_4-x_4=\ln(2+\sqrt3)-(2+\sqrt3)$。 令 $m(x)=\ln x-x$（$x>1$），其在 $(1,+\infty)$ 单调递减，且 $x_4>1$，故 $x_4=2+\sqrt3$，D 对。综上选 BCD。
+  key_steps:
+    - step_id: step_1
+      statement: 把原零点方程同构到 $t=\frac{x}{e^x}$ 二次式。
+      formula_trace:
+        from: $\frac{x^2}{e^x}+e^{x-4}-ax=0$
+        to: $e^4t^2-e^4at+1=0,\quad t=\frac{x}{e^x}$
+        operation: 在 $x\neq0$ 上先除以 $x$ 再换元。
+        why: 把四根问题转成“二次根 + 单峰函数反解”结构。
+      source_ref: page_0190_ex18_continuation
+    - step_id: step_2
+      statement: 由图像与四根条件确定 $t_1,t_2$ 的区间和配对。
+      formula_trace:
+        from: $0<t_1<t_2<\frac1e,\ t_1t_2=\frac1{e^4}$
+        to: $t_1=\frac{x_1}{e^{x_1}}=\frac{x_4}{e^{x_4}},\ t_2=\frac{x_2}{e^{x_2}}=\frac{x_3}{e^{x_3}}$
+        operation: 利用 $t(x)=\frac{x}{e^x}$ 在 $(0,1)$ 增、$(1,+\infty)$ 减的交点分布。
+        why: 后续每个选项都依赖这组配对关系。
+      source_ref: page_0190_ex18_continuation
+    - step_id: step_3
+      statement: 用根位置快速判 A。
+      formula_trace:
+        from: $0<x_1<x_2<1$
+        to: $x_1+x_2<2$
+        operation: 区间上界直接比较。
+        why: 否定 A 项。
+      source_ref: page_0190_ex18_continuation
+    - step_id: step_4
+      statement: 由二次根落在 $(0,\frac1e)$ 推出参数范围 B。
+      formula_trace:
+        from: $e^4t^2-e^4at+1=0$ 两根满足 $0<t_1<t_2<\frac1e$
+        to: $\frac2{e^2}<a<\frac1e+\frac1{e^3}$
+        operation: 联立判别式、根均值位置和端点函数值条件。
+        why: 完整刻画两根落区间的充要范围。
+      source_ref: page_0190_ex18_continuation
+    - step_id: step_5
+      statement: 乘积取对数得到 C。
+      formula_trace:
+        from: $\prod_{i=1}^4\frac{x_i}{e^{x_i}}=(t_1t_2)^2=\frac1{e^8}$
+        to: $\ln(x_1x_2x_3x_4)-(x_1+x_2+x_3+x_4)=-8$
+        operation: 两边取自然对数并整理。
+        why: 把“积等式”转成选项 C 的线性和式。
+      source_ref: page_0190_ex18_continuation
+    - step_id: step_6
+      statement: 利用 $m(x)=\ln x-x$ 的单调性验证 D。
+      formula_trace:
+        from: $\ln x_2+\ln x_4=x_2+x_4-4,\ x_2=2-\sqrt3$
+        to: $\ln x_4-x_4=\ln(2+\sqrt3)-(2+\sqrt3)\Rightarrow x_4=2+\sqrt3$
+        operation: 构造 $m(x)=\ln x-x$，在 $(1,+\infty)$ 上严格递减。
+        why: 同值反推唯一点，得到 D 正确。
+      source_ref: page_0190_ex18_continuation
+teaching_card:
+  student_title: 四根先降维成二根，再逐项判真
+  what_it_trains: 训练“先换元降维，再用图像配对 + 区间根条件 + 对数线性化”完成多选判定。
+  recognition_cues:
+    - 原式同时有 $\frac{x^2}{e^x}$ 与 $e^{x}/x$ 互逆结构。
+    - 题目给“四个零点”，常见要先压成两个参数根。
+    - 选项里既有参数范围也有根间代数关系。
+  normalization_moves:
+    - 先化成 $t+\frac1{e^4t}-a=0$。
+    - 再用 $t=\frac{x}{e^x}$ 单峰图做根配对。
+    - 乘积型先取对数，根式型构造 $m(x)=\ln x-x$。
+  common_failures:
+    - 忘记排除 $x=0$ 就直接除以 $x$。
+    - 把 $t_1,t_2$ 与 $(x_1,x_4)$、$(x_2,x_3)$ 的配对写反。
+    - B 项只写判别式，漏写两根都落在 $(0,\frac1e)$ 的附加条件。
+    - D 项算到同值方程后没有用单调性保证唯一。
+  similar_practice_query: x^2/e^x + e^{x-k} - ax 四零点 换元 t=x/e^x 多选 BCD
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

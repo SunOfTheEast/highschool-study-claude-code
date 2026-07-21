@@ -1,0 +1,180 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0186_piecewise_nested_quadratic_zero_count_ex11
+content_revision_id: mst_p0186_piecewise_nested_quadratic_zero_count_ex11-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0186_piecewise_nested_quadratic_zero_count_ex11.card.yaml
+stem: |-
+  （江苏苏州常熟中学 2024 高三阶段性抽测 T8）已知函数 $f(x)=\begin{cases} -x^2-2x, & x \leqslant 0 \\ |\log_{\frac{1}{2}}x|, & x > 0 \end{cases}$，$g(x)=2[f(x)]^2-mf(x)+1$，若 $m \in (2\sqrt{2}, 3)$，则 $g(x)$ 零点的个数为（  ）
+  A. 2
+  B. 4
+  C. 6
+  D. 8
+answer: |-
+  D
+
+  令 t=f(x)，则 g(x)=0 等价于 h(t)=2t^2-mt+1=0。由 m∈(2√2,3) 得 Δ=m^2-8>0，且对称轴 t=m/4 满足 0<t<1，再由 h(1)=3-m>0 可知 两根满足 0<t1<t2<1。于是只需分别统计 f(x)=t1 与 f(x)=t2 的解数。 对任意 t∈(0,1)：左支 -x^2-2x=t 在 x≤0 给出两个解，右支 |log_{1/2}x|=t 在 x>0 也给出两个解，所以每个 t 对应 4 个 x 解。 故 f(x)=t1 有 4 解、f(x)=t2 有 4 解，总零点数 8，选 D。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把复合零点问题改写为外层二次函数根问题。
+      max_score: 1
+    - step_id: step_2
+      description: 由参数区间确定外函数两根落在 (0,1)。
+      max_score: 1
+    - step_id: step_3
+      description: 统计分段函数在 0<t<1 时的原像个数。
+      max_score: 1
+    - step_id: step_4
+      description: 合并两层根计数得到最终零点数。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 数形结合
+    subroute:
+      - 嵌套函数零点
+      - 外函数竖着走
+      - 内函数横着走
+  structure:
+    primary: 分段函数结构
+    secondary:
+      - 复合函数与不动点结构
+      - 指对复合结构
+    evidence:
+      - $g(x)=h(f(x))$，其中 $h(t)=2t^2-mt+1$。
+      - $f(x)$ 左支为下开口二次，右支为 $|\log_{\frac12}x|$。
+      - 续页图像明确 $0<t_1<t_2<1$，回代后做水平线交点计数。
+    normalization_moves_used:
+      - 先求外层二次 h(t) 的零点范围。
+      - 把每个 t 根转成水平线 y=t 与 f(x) 的交点数。
+      - 按分段结构分左右支计数并汇总。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 g(x)=0 改写到 h(f(x))=0，回补分段/复合/反函数基础。
+      - 若学生无法判断二次函数两根所在区间，回补导数单调极值基础。
+      - 若学生读不出水平线与分段图像交点个数，回补函数性质与图像。
+      - 若学生在 |log_{1/2}x|=t 上漏根，回补指数对数基础。
+  detail_terms:
+    - $g(x)=2[f(x)]^2-mf(x)+1$
+    - $h(t)=2t^2-mt+1$
+    - $0<t_1<t_2<1$
+    - $-x^2-2x=t$
+    - $|\log_{\frac12}x|=t$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0186_piecewise_nested_quadratic_zero_count_ex11
+source_evidence:
+  source_refs:
+    - ref_id: page_0186_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0186/page_0186.md
+      role: local_context
+      evidence: lines 14-42 are 例10续解与图3-图8，不是本页新起题头。
+    - ref_id: page_0186_ex11_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0186/page_0186.md
+      role: problem_start
+      evidence: lines 44-49 给出例11题干与 A-D 选项。
+    - ref_id: page_0186_ex11_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0186/page_0186.md
+      role: solution
+      evidence: lines 51-54 给出解析起步：先作分段函数 f(x) 图像，并画水平线 y=t。
+    - ref_id: page_0187_ex11_solution_continue
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0187/page_0187.md
+      role: continuation
+      evidence: lines 15-23 承接例11：令 t=f(x)，解 h(t)=2t^2-mt+1=0，并由图像统计零点个数。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0186.png
+      inspected: true
+      notes: 已核对页图：例11题头确在本页底部；f(x) 图显示左侧下开口抛物线顶点 (-1,1)，右侧 |log_{1/2}x| 过 (1,0)，配有水平线 y=t，支撑“0<t<1 时四交点”读图。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0187.png
+      inspected: true
+      notes: 已核对续页图：h(t)=2t^2-mt+1 为开口向上抛物线，两个零点均在 (0,1)； 文字续解明确给出 f(x)=t1、f(x)=t2 各有四个解，结论为 8 个零点。
+  source_context: 例11题头始于 page_0186，解析跨到 page_0187；页首内容是例10续题，仅作上下文。
+  source_influence:
+    - 遵循源解主线：先设 t=f(x)，把 g(x)=0 转化为 h(t)=0 的根与原像计数。
+    - 保留续页的判定链：由 m∈(2√2,3) 推出 0<t1<t2<1。
+    - 保留图像计数思路：分别统计 f(x)=t1 与 f(x)=t2 的解个数。
+  source_discrepancies: []
+original_problem:
+  stem: （江苏苏州常熟中学 2024 高三阶段性抽测 T8）已知函数 $f(x)=\begin{cases} -x^2-2x, & x \leqslant 0 \\ |\log_{\frac{1}{2}}x|, & x > 0 \end{cases}$，$g(x)=2[f(x)]^2-mf(x)+1$，若 $m \in (2\sqrt{2}, 3)$，则 $g(x)$ 零点的个数为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: "2"
+      text_latex: "2"
+    - label: B
+      text_raw: "4"
+      text_latex: "4"
+    - label: C
+      text_raw: "6"
+      text_latex: "6"
+    - label: D
+      text_raw: "8"
+      text_latex: "8"
+  answer: D
+  fidelity_notes:
+    - 题干、分段定义、参数区间与四个选项均按 page_0186 原文保留。
+    - 解析在 source 中跨页（0186→0187）连续，卡片已合并重建。
+    - 本题属于图像依赖题：f(x) 与 h(t) 两幅图均已核对。
+solution:
+  source_solution_summary: 令 t=f(x)，则 g(x)=0 等价于 h(t)=2t^2-mt+1=0。由 m∈(2√2,3) 得 Δ=m^2-8>0，且对称轴 t=m/4 满足 0<t<1，再由 h(1)=3-m>0 可知 两根满足 0<t1<t2<1。于是只需分别统计 f(x)=t1 与 f(x)=t2 的解数。 对任意 t∈(0,1)：左支 -x^2-2x=t 在 x≤0 给出两个解，右支 |log_{1/2}x|=t 在 x>0 也给出两个解，所以每个 t 对应 4 个 x 解。 故 f(x)=t1 有 4 解、f(x)=t2 有 4 解，总零点数 8，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把复合零点问题改写为外层二次函数根问题。
+      formula_trace:
+        from: $g(x)=2[f(x)]^2-mf(x)+1=0$
+        to: $h(t)=2t^2-mt+1=0,\ t=f(x)$
+        operation: 设 t=f(x) 做同构换元。
+        why: 先定位外函数零点 t1,t2，再回到内函数统计原像个数。
+      source_ref: page_0187_ex11_solution_continue
+    - step_id: step_2
+      statement: 由参数区间确定外函数两根落在 (0,1)。
+      formula_trace:
+        from: $m\in(2\sqrt{2},3)$
+        to: $0<t_1<t_2<1$
+        operation: 用 Δ=m^2-8>0 得两实根；用对称轴 t=\frac{m}{4}\in(0,1) 及 h(1)=3-m>0 锁定两根都在 0 与 1 之间。
+        why: 后续只需统计 f(x)=t 在 0<t<1 的交点个数。
+      source_ref: page_0187_ex11_solution_continue
+    - step_id: step_3
+      statement: 统计分段函数在 0<t<1 时的原像个数。
+      formula_trace:
+        from: $f(x)=\begin{cases}-x^2-2x,&x\le0\\ |\log_{\frac12}x|,&x>0\end{cases}=t,\ 0<t<1$
+        to: 左支 2 解 + 右支 2 解 = 4 解
+        operation: 左支解 -x^2-2x=t 得 x=-1\pm\sqrt{1-t}（均 ≤0）；右支 |\log_{\frac12}x|=t 得 x=(\frac12)^t 与 x=2^t。
+        why: 每个 t∈(0,1) 都对应 4 个不同 x。
+      source_ref: page_0186_ex11_solution_start
+    - step_id: step_4
+      statement: 合并两层根计数得到最终零点数。
+      formula_trace:
+        from: $f(x)=t_1$ 有 4 解，$f(x)=t_2$ 有 4 解
+        to: $g(x)$ 零点个数 $=8$
+        operation: 按 t1、t2 分层计数后相加。
+        why: t1≠t2，两个原像集合互不重合。
+      source_ref: page_0187_ex11_solution_continue
+teaching_card:
+  student_title: 先解外层二次，再数内层四交点
+  what_it_trains: 训练“复合零点=外层根 + 内层原像计数”的两层拆解，并在分段图像上稳定完成交点计数。
+  recognition_cues:
+    - 题目形态是 $g(x)=\Phi(f(x))$ 的复合零点计数。
+    - 给出 m 的区间，常用于先定外层方程根区间。
+    - 内函数是分段二次+对数绝对值，天然适合水平线法。
+  normalization_moves:
+    - 设 t=f(x)，先解 h(t)=0。
+    - 用判别式与函数值把 t 根压到具体区间。
+    - 对每个 t 根分别统计 f(x)=t 的解数。
+    - 最后将两层计数相加。
+  common_failures:
+    - 只算出 t1,t2 就直接报 2 个零点，忘记回代原像。
+    - 把 0<t<1 时左支二次方程误判成 1 解。
+    - 在 |log_{1/2}x|=t 中漏掉 x=2^t 或 x=(1/2)^t。
+    - 把 t=1 当作根并误引入边界。
+  similar_practice_query: 复合函数 g(x)=h(f(x)) 零点个数 分段函数 水平线法
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,233 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0139_xlnx_reverse_ex08
+content_revision_id: mst_p0139_xlnx_reverse_ex08-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0139_xlnx_reverse_ex08.card.yaml
+stem: |-
+  （2023·常熟市月考·多选）已知函数 $f(x)$ 及其导函数 $f^{\prime}(x)$ 满足 $xf^{\prime}(x)+f(x)=1+\ln x$，$f(1)=2$，则下列说法正确的是（ ）
+  A. $f(2)=1+\ln 2$
+  B. $x=2$ 是函数 $f(x)$ 的极大值点
+  C. 方程 $f(x)=x$ 有且只有一个实根
+  D. 存在 $k>0$，使得 $f(x)>kx$ 恒成立
+answer: |
+  AC
+
+  由
+  \[
+  xf^{\prime}(x)+f(x)=1+\ln x
+  \]
+  识别
+  \[
+  (xf(x))'=1+\ln x.
+  \]
+  积分得
+  \[
+  xf(x)=x\ln x+C,\quad f(x)=\ln x+\frac{C}{x}.
+  \]
+  由 $f(1)=2$ 得 $C=2$，即
+  \[
+  f(x)=\ln x+\frac{2}{x},\quad f^{\prime}(x)=\frac{x-2}{x^2}.
+  \]
+  所以 $x=2$ 为极小值点，且
+  \[
+  f(2)=1+\ln2,
+  \]
+  A 对、B 错。
+
+  设
+  \[
+  y=f(x)-x=\frac{2}{x}+\ln x-x,
+  \]
+  则
+  \[
+  y^{\prime}=\frac{-x^2+x-2}{x^2}<0,
+  \]
+  故 $y$ 单调递减。又 $y(1)=1>0,\ y(e)=\frac2e+1-e<0$，故 $y=0$ 仅有一解，C 对。
+
+  对 D：由 $f(x)>kx$ 得
+  \[
+  k<\frac{2}{x^2}+\frac{\ln x}{x}=:g(x).
+  \]
+  源页用
+  \[
+  g^{\prime}(x)=\frac{-4+x-x\ln x}{x^3},\ h(x)=-4+x-x\ln x,\ h'(x)=-\ln x
+  \]
+  判断 $g$ 在 $x>0$ 上递减且无正下界，从而不存在统一的 $k>0$，D 错。
+  故选 AC。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 先由 $(xf)'$ 模板还原出 f 的显式表达。
+      max_score: 1
+    - step_id: step_2
+      description: 用导数符号判 A、B。
+      max_score: 1
+    - step_id: step_3
+      description: 构造 y=f-x 判根唯一性，构造 g 判 D。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 零点/极值点分析
+        target: 多选综合判定：极值点、方程根个数与比例下界
+        result: 见 source_solution_summary
+  method:
+    primary: 逆向构造法
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 函数性质锁定
+      - 方程根分布联判
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 抽象函数结构
+    evidence:
+      - $xf^{\prime}+f$ 与 $(xf)'$ 同构，先还原到 $f=\ln x+2/x$。
+      - 后续两次辅助构造 $y=f-x$、$g=f/x$ 分别对应 C 与 D。
+    normalization_moves_used:
+      - 先反解函数，再分选项分层判断。
+      - C 用单调+异号锁“唯一根”。
+      - D 把“存在 k”转为 $k<\inf g(x)$ 问题。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会识别 $(xf)'$，回补导数运算与几何意义。
+      - 若学生不会用单调与异号判唯一根，回补函数性质与图像。
+      - 若学生不会把“存在 k”改写为下确界问题，回补不等式工具基础。
+  detail_terms:
+    - $f(x)=\ln x+2/x$
+    - $f^{\prime}(x)=(x-2)/x^2$
+    - $y=f(x)-x$ 单调递减
+    - $g(x)=2/x^2+\ln x/x$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0139_xlnx_reverse_ex08
+source_evidence:
+  source_refs:
+    - ref_id: page_0139
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0139/page_0139.md
+      role: problem_start
+      evidence: page_0139 给出例8完整题干、A-D选项与解析，结论 AC。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0139.png
+      inspected: true
+      notes: 已核对页图，例8完整位于 page_0139。
+  source_context: 例8在 page_0139 单页闭合，不跨页。
+  source_influence:
+    - 保留源页从 $xf^{\prime}(x)+f(x)=1+\ln x$ 逆向积分得到 $xf=x\ln x+C$。
+    - 保留源页先判 A/B，再用 y=f-x 判 C，最后用 g(x)=2/x^2+\ln x/x 判 D。
+    - 保留源页结论 AC。
+  source_discrepancies:
+    - 源页解析有“$xf^{\prime}(x)+f(x)=1+\ln x=(xf(x))'$”的连写。按公式应理解为“$xf^{\prime}(x)+f(x)=(xf(x))'=1+\ln x$”。后续推导与结论一致。
+original_problem:
+  stem: （2023·常熟市月考·多选）已知函数 $f(x)$ 及其导函数 $f^{\prime}(x)$ 满足 $xf^{\prime}(x)+f(x)=1+\ln x$，$f(1)=2$，则下列说法正确的是（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(2)=1+\ln 2$
+      text_latex: $f(2)=1+\ln 2$
+    - label: B
+      text_raw: $x=2$ 是函数 $f(x)$ 的极大值点
+      text_latex: $x=2$ 是函数 $f(x)$ 的极大值点
+    - label: C
+      text_raw: 方程 $f(x)=x$ 有且只有一个实根
+      text_latex: 方程 $f(x)=x$ 有且只有一个实根
+    - label: D
+      text_raw: 存在 $k>0$，使得 $f(x)>kx$ 恒成立
+      text_latex: 存在 $k>0$，使得 $f(x)>kx$ 恒成立
+  answer: AC
+  fidelity_notes:
+    - 题干含 $\ln x$，讨论区间默认为 $x>0$。
+solution:
+  source_solution_summary: |
+    由
+    \[
+    xf^{\prime}(x)+f(x)=1+\ln x
+    \]
+    识别
+    \[
+    (xf(x))'=1+\ln x.
+    \]
+    积分得
+    \[
+    xf(x)=x\ln x+C,\quad f(x)=\ln x+\frac{C}{x}.
+    \]
+    由 $f(1)=2$ 得 $C=2$，即
+    \[
+    f(x)=\ln x+\frac{2}{x},\quad f^{\prime}(x)=\frac{x-2}{x^2}.
+    \]
+    所以 $x=2$ 为极小值点，且
+    \[
+    f(2)=1+\ln2,
+    \]
+    A 对、B 错。
+
+    设
+    \[
+    y=f(x)-x=\frac{2}{x}+\ln x-x,
+    \]
+    则
+    \[
+    y^{\prime}=\frac{-x^2+x-2}{x^2}<0,
+    \]
+    故 $y$ 单调递减。又 $y(1)=1>0,\ y(e)=\frac2e+1-e<0$，故 $y=0$ 仅有一解，C 对。
+
+    对 D：由 $f(x)>kx$ 得
+    \[
+    k<\frac{2}{x^2}+\frac{\ln x}{x}=:g(x).
+    \]
+    源页用
+    \[
+    g^{\prime}(x)=\frac{-4+x-x\ln x}{x^3},\ h(x)=-4+x-x\ln x,\ h'(x)=-\ln x
+    \]
+    判断 $g$ 在 $x>0$ 上递减且无正下界，从而不存在统一的 $k>0$，D 错。
+    故选 AC。
+  key_steps:
+    - step_id: step_1
+      statement: 先由 $(xf)'$ 模板还原出 f 的显式表达。
+      formula_trace:
+        from: $xf^{\prime}(x)+f(x)=1+\ln x$
+        to: $f(x)=\ln x+\frac{2}{x}$
+        operation: 积分 $ (xf)'=1+\ln x $ 并用 $f(1)=2$ 定常数。
+        why: 显式后可逐项判断各选项。
+      source_ref: page_0139
+    - step_id: step_2
+      statement: 用导数符号判 A、B。
+      formula_trace:
+        from: $f^{\prime}(x)=\frac{x-2}{x^2}$
+        to: $x=2$ 为极小值点且 $f(2)=1+\ln2$
+        operation: 分段讨论 $x<2, x>2$。
+        why: 直接判 A 真 B 假。
+      source_ref: page_0139
+    - step_id: step_3
+      statement: 构造 y=f-x 判根唯一性，构造 g 判 D。
+      formula_trace:
+        from: $y=f-x,\ g=2/x^2+\ln x/x$
+        to: $y\text{ 仅一零点},\ \nexists k>0\text{ 使 }f(x)>kx\ \forall x>0$
+        operation: 先证 $y^{\prime}<0$，再证 g 递减且无正下界。
+        why: 完成 C、D 的真假判断。
+      source_ref: page_0139
+teaching_card:
+  student_title: 反解 f 后，分三层判 A/B、C、D
+  what_it_trains: 训练“先显式化，再按选项目标分构造”的多选题处理路径。
+  recognition_cues:
+    - 条件是 $xf^{\prime}+f=\text{含 }\ln x\text{ 的函数}$。
+    - 选项同时涉及函数值、极值点、方程根与比例不等式。
+  normalization_moves:
+    - 先解出 $f(x)=\ln x+2/x$。
+    - A/B 用 $f^{\prime}$ 判极值。
+    - C 用 $y=f-x$，D 用 $g=f/x$。
+  common_failures:
+    - 把 $x=2$ 的极小值点误判为极大值点。
+    - 对 C 只证“有根”但未证“唯一根”。
+    - D 只在单点估计 k，未处理全体 x。
+  similar_practice_query: xf'+f=1+lnx 反解函数 多选 根唯一性 存在k>0
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

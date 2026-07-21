@@ -1,0 +1,196 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0213_xlnx_x2_aex_max_param_choice_ch6_baozhi_ex07
+content_revision_id: mst_p0213_xlnx_x2_aex_max_param_choice_ch6_baozhi_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0213_xlnx_x2_aex_max_param_choice_ch6_baozhi_ex07.card.yaml
+stem: |-
+  （2023 · 江西乐安二中高二期末 T8）不等式 $x\ln x-x^2-x-ae^x\geqslant0$ 对任意 $x>0$ 都成立，则实数 $a$ 的最大值为（  ）
+  A. $-\frac2e$
+  B. $-\frac{3}{2e}$
+  C. $-\frac1e$
+  D. $-1$
+answer: |-
+  A；$a_{\max}=-\frac2e$。
+
+  由 $x\ln x-x^2-x-ae^x\ge0$（$x>0$）两边除以 $x$，得 $-a\frac{e^x}{x}-(x-\ln x)-1\ge0$，即 $-ae^{x-\ln x}-(x-\ln x)-1\ge0$。设 $t=x-\ln x$，则 $t\ge1$，问题化为 $-ae^t-t-1\ge0\ (t\ge1)$。source 在续页给出两种等价处理： 一是写成 $e^{t-1}-(t-1)-1-1+(-ae-1)e^{t-1}\ge0$，利用 $e^{t-1}-(t-1)-1\ge0$ 并在取等点 $t=1$ 处卡出 $-1+(-ae-1)\ge0$；二是直接变形为 $-a\ge\frac{t+1}{e^t}=h(t)$，且 $h^{\prime}(t)=-\frac{t}{e^t}<0$，故 $h(t)\le h(1)=\frac2e$。两路均得 $-a\ge\frac2e$，即 $a\le-\frac2e$，所以最大值为 $-\frac2e$，选 A。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先除以正数 $x$，把变量聚焦到 $x-\\ln x$。
+      max_score: 1
+    - step_id: step_2
+      description: 作换元 $t=x-\\ln x$，把原题转为单变量恒成立。
+      max_score: 1
+    - step_id: step_3
+      description: 用 $h(t)=\frac{t+1}{e^t}$ 的单调性得到必要上界。
+      max_score: 1
+    - step_id: step_4
+      description: 取区间上确界得到参数界。
+      max_score: 1
+    - step_id: step_5
+      description: 读出“最大值”并对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 参变量分离
+    secondary:
+      - 同构变形与换元法
+      - 含参数分类讨论
+    subroute:
+      - 朗博同构
+      - t=x-\ln x
+      - 保值性
+      - 取等条件
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - $-ae^{x-\ln x}-(x-\ln x)-1\ge0$
+      - $t=x-\ln x\ge1$
+      - $-a\ge\frac{t+1}{e^t}$
+      - $h^{\prime}(t)=-\frac{t}{e^t}<0$
+      - $a_{\max}=-\frac2e$
+    normalization_moves_used:
+      - 先除以 $x>0$ 去掉乘子，把结构压到 $x-\ln x$。
+      - 用 $t=x-\ln x$ 完成变量域收缩（$t\ge1$）。
+      - 把恒成立转为参数下界 $-a\ge h(t)$，再用单调性读最大值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $x\ln x-ae^x$ 型同除 $x$ 到 $e^{x-\ln x}$，回补指数对数基础。
+      - 若学生不知道 $x-\ln x\ge1$ 的来源，回补导数单调极值基础。
+      - 若学生不会把“对所有 $t\ge1$”转成比较 $h(t)$ 最大值，回补函数性质与图像。
+      - 若学生只会算区间却不会回答“最大值端点”，回补不等式工具基础。
+  detail_terms:
+    - $t=x-\ln x$
+    - $-ae^t-t-1\ge0$
+    - $h(t)=\frac{t+1}{e^t}$
+    - $h^{\prime}(t)=-\frac{t}{e^t}$
+    - $a_{\max}=-\frac2e$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0213_xlnx_x2_aex_max_param_choice_ch6_baozhi_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0213_ex06_local_context_prev
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0213/page_0213.md
+      role: local_context
+      evidence: page_0213 line 18-28 为例6题头与解析收束；line 30 才进入例7题头。
+    - ref_id: page_0213_ex07_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0213/page_0213.md
+      role: problem_start
+      evidence: page_0213 line 30-35 给出例7题干与 A-D 选项。
+    - ref_id: page_0213_ex07_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0213/page_0213.md
+      role: solution
+      evidence: page_0213 line 37 给出例7解析起式：化为 $-ae^{x-\\ln x}-(x-\\ln x)-1\\ge0$。
+    - ref_id: page_0214_ex07_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0214/page_0214.md
+      role: continuation
+      evidence: page_0214 line 14-15 承接例7解析，给出 $t\\ge1$ 单调分析并得 $a\\le-\\frac2e$，故选 A。
+    - ref_id: page_0214_ex08_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0214/page_0214.md
+      role: local_context
+      evidence: page_0214 line 17 起进入例8新题头，不并入例7。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0213.png
+      inspected: true
+      notes: 已核对页图：例7题头与解析起式在 page_0213 页底；本页仅到“对”字即换页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0214.png
+      inspected: true
+      notes: 已核对页图：页顶完成例7推导并给出答案 A；随后进入例8。
+  source_context: 例7题头起于 page_0213，解析跨到 page_0214 顶部闭合；page_0214 后续例8、例9属于下一批次。
+  source_influence:
+    - 保留 source 的核心换元：先除以 $x$，再取 $t=x-\\ln x\\ge1$。
+    - 保留 source 两条同结论链路：保值性拆分与 $h(t)=\\frac{t+1}{e^t}$ 单调判界。
+    - 答案按 source 保持为 $a$ 最大值 $-\\frac2e$（选 A）。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 江西乐安二中高二期末 T8）不等式 $x\ln x-x^2-x-ae^x\geqslant0$ 对任意 $x>0$ 都成立，则实数 $a$ 的最大值为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $-\frac2e$
+      text_latex: $-\frac2e$
+    - label: B
+      text_raw: $-\frac{3}{2e}$
+      text_latex: $-\frac{3}{2e}$
+    - label: C
+      text_raw: $-\frac1e$
+      text_latex: $-\frac1e$
+    - label: D
+      text_raw: $-1$
+      text_latex: $-1$
+  answer: A；$a_{\max}=-\frac2e$。
+  fidelity_notes:
+    - 题干显式给出“对任意 $x>0$ 恒成立”，属于典型恒成立求参选择题。
+    - 解析跨页：page_0213 只给起式，page_0214 顶部给出完整结论。
+solution:
+  source_solution_summary: 由 $x\ln x-x^2-x-ae^x\ge0$（$x>0$）两边除以 $x$，得 $-a\frac{e^x}{x}-(x-\ln x)-1\ge0$，即 $-ae^{x-\ln x}-(x-\ln x)-1\ge0$。设 $t=x-\ln x$，则 $t\ge1$，问题化为 $-ae^t-t-1\ge0\ (t\ge1)$。source 在续页给出两种等价处理： 一是写成 $e^{t-1}-(t-1)-1-1+(-ae-1)e^{t-1}\ge0$，利用 $e^{t-1}-(t-1)-1\ge0$ 并在取等点 $t=1$ 处卡出 $-1+(-ae-1)\ge0$；二是直接变形为 $-a\ge\frac{t+1}{e^t}=h(t)$，且 $h^{\prime}(t)=-\frac{t}{e^t}<0$，故 $h(t)\le h(1)=\frac2e$。两路均得 $-a\ge\frac2e$，即 $a\le-\frac2e$，所以最大值为 $-\frac2e$，选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 先除以正数 $x$，把变量聚焦到 $x-\\ln x$。
+      formula_trace:
+        from: $x\ln x-x^2-x-ae^x\ge0\ (x>0)$
+        to: $-ae^{x-\ln x}-(x-\ln x)-1\ge0$
+        operation: 两边同除以 $x$，并用 $\frac{e^x}{x}=e^{x-\ln x}$。
+        why: 将混合项统一为单一同构变量。
+      source_ref: page_0213_ex07_solution_start
+    - step_id: step_2
+      statement: 作换元 $t=x-\\ln x$，把原题转为单变量恒成立。
+      formula_trace:
+        from: $x-\ln x\ge1$
+        to: $-ae^t-t-1\ge0\quad(t\ge1)$
+        operation: 设 $t=x-\ln x$，用其定义域下界 $1$。
+        why: “对任意 $x>0$”转化为“对任意 $t\ge1$”。
+      source_ref: page_0214_ex07_solution_continuation
+    - step_id: step_3
+      statement: 用 $h(t)=\frac{t+1}{e^t}$ 的单调性得到必要上界。
+      formula_trace:
+        from: $-ae^t-t-1\ge0$
+        to: $-a\ge h(t)=\frac{t+1}{e^t},\ h^{\prime}(t)=-\frac{t}{e^t}<0,\ h(1)=\frac2e$
+        operation: 移项除以 $e^t>0$，再求导判 $h$ 递减。
+        why: 把参数条件转化成对区间最大值的比较。
+      source_ref: page_0214_ex07_solution_continuation
+    - step_id: step_4
+      statement: 取区间上确界得到参数界。
+      formula_trace:
+        from: $-a\ge h(t)$ 对所有 $t\ge1$ 成立
+        to: $-a\ge h(1)=\frac2e\Rightarrow a\le-\frac2e$
+        operation: 利用递减函数在左端点取最大值。
+        why: 得到恒成立所需且充分的参数上界。
+      source_ref: page_0214_ex07_solution_continuation
+    - step_id: step_5
+      statement: 读出“最大值”并对应选项。
+      formula_trace:
+        from: $a\le-\frac2e$
+        to: $a_{\max}=-\frac2e$，选 A
+        operation: 在可行区间上取最大端点。
+        why: 题目问的是最大值而非全区间。
+      source_ref: page_0214_ex07_solution_continuation
+teaching_card:
+  student_title: 先换元再看单调：恒成立题的最大参数
+  what_it_trains: 训练“恒成立求最大参数”中最稳的路线：变量同构换元、参数分离、区间最值比较。
+  recognition_cues:
+    - 题干有“对任意 $x>0$ 恒成立 + 求参数最大值”。
+    - 式中同时出现 $x\ln x$ 与 $ae^x$，适合先除以 $x$。
+    - 解析会落到 $x-\ln x$ 与 $e^t$ 的组合。
+  normalization_moves:
+    - 先做 $\div x$，把式子统一到 $x-\ln x$。
+    - 设 $t=x-\ln x$，把定义域收成 $t\ge1$。
+    - 改写成 $-a\ge h(t)$，用 $h$ 的单调性读出端点值。
+  common_failures:
+    - 忘记 $x>0$ 就直接除以 $x$，导致等价性说明不完整。
+    - 把 $h^{\prime}(t)$ 号判断错，误把最大值放到 $t\to+\infty$。
+    - 求出 $a\le-\frac2e$ 后误填成“最小值”而非“最大值”。
+  similar_practice_query: xlnx-x^2-x-ae^x 恒成立 参数最大值 x-lnx 换元
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

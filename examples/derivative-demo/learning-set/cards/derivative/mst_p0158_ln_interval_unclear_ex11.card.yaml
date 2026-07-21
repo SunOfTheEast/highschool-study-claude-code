@@ -1,0 +1,232 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0158_ln_interval_unclear_ex11
+content_revision_id: mst_p0158_ln_interval_unclear_ex11-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0158_ln_interval_unclear_ex11.card.yaml
+stem: |-
+  已知 $a=5$，$b=15\ln\frac43$，$c=16(\ln5-\ln4)$，则（  ）
+  A. $a<c<b$
+  B. $c<b<a$
+  C. $b<a<c$
+  D. $a<b<c$
+answer: |
+  B
+
+  按重建后的题干，$b=15\ln\frac43$。
+  先用
+  \[
+  \ln x\le x-1
+  \]
+  取 $x=\frac43$，得
+  \[
+  b<15\left(\frac43-1\right)=5=a,
+  \]
+  所以 $b<a$。
+  对
+  \[
+  c=16(\ln5-\ln4)=16\ln\frac54,
+  \]
+  同样用 $\ln x\le x-1$ 得
+  \[
+  c<16\left(\frac54-1\right)=4.
+  \]
+  再用
+  \[
+  \ln x\ge\frac{2(x-1)}{x+1}\quad(x\ge1),
+  \]
+  取 $x=\frac43$，有
+  \[
+  b>15\cdot\frac{2\left(\frac43-1\right)}{\frac43+1}
+   =\frac{30}{7}>4.
+  \]
+  于是
+  \[
+  c<4<\frac{30}{7}<b<a,
+  \]
+  即 $c<b<a$，选 B。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 按解析使用的 $b$ 口径，先由上界得 $b<a$。
+      max_score: 1
+    - step_id: step_2
+      description: 估计 $c$ 的上界。
+      max_score: 1
+    - step_id: step_3
+      description: 给 $b$ 下界并与 4 对接。
+      max_score: 1
+    - step_id: step_4
+      description: 合并不等式得到结论。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较 $a,b,c$ 的大小关系。
+        result: 见 source_solution_summary
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 同构变形与换元法
+      - 切线放缩与凹凸性
+    subroute:
+      - 两次使用 $\ln x\le x-1$ 压上界
+      - 用 $\ln x\ge\frac{2(x-1)}{x+1}$ 给 $b$ 提下界
+      - 引入中间阈值 4 与 $\frac{30}{7}$ 拼链
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - $b,c$ 都被写成常数倍对数，核心操作是统一套对数上下界。
+      - 比较链依赖“同一参考阈值 4”进行跨量传递。
+    normalization_moves_used:
+      - $c=16\ln\frac54$。
+      - $\ln x\le x-1$ 与 $\ln x\ge\frac{2(x-1)}{x+1}$ 双侧夹逼。
+      - $c<4<\frac{30}{7}<b<a$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不清楚 $\ln x$ 两个常用界的适用区间与方向，回补指数对数基础。
+      - 若学生不会从“上下界 + 中间阈值”拼成全序，回补不等式工具基础。
+      - 若学生在对数差改写（如 $\ln5-\ln4$）出错，回补代数恒等变形。
+  detail_terms:
+    - $15\ln\frac43$
+    - $16\ln\frac54$
+    - $\frac{30}{7}$
+    - $c<b<a$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0158_ln_interval_unclear_ex11
+source_evidence:
+  source_refs:
+    - ref_id: page_0158_ex11_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0158/page_0158.md
+      role: problem_start
+      evidence: page_0158 markdown 将例11题干记为 $a=5,\ b=5,\ c=16(\ln5-\ln4)$，但解析链表明 $b$ 应为 $15\ln\frac43$。
+    - ref_id: page_0158_ex11_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0158/page_0158.md
+      role: solution
+      evidence: 解析先写 $b<15(\frac43-1)=5$，又写 $4<15\cdot\frac{2(\frac43-1)}{\frac43+1}<b$；该链只与 $b=15\ln\frac43$ 一致。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0158.png
+      inspected: true
+      notes: 已核对页图：例11题干可读为“$a=5,\ a=5,\ c=16(\ln5-\ln4)$”，第二个变量与数值明显错印；按用户拍板和解析链重建 $b=15\ln\frac43$。
+  source_context: 例11与前几题同属对数不等式比大小，但题干变量出现印刷/转录冲突。
+  source_influence:
+    - 按用户“重建”要求，将题干中的 $b$ 重建为 $15\ln\frac43$。
+    - 保留源解析核心结论链：$c<4<\frac{30}{7}<b<a$。
+    - 保留对 $b$ 的上下界分别来自 $\ln x\le x-1$ 与 $\ln x\ge\frac{2(x-1)}{x+1}$。
+  source_discrepancies:
+    - markdown题干给出 $b=5$，页图疑似重复写 $a=5$；但解析中 $b$ 被当作 $15\ln\frac43$ 处理。用户已拍板重建为 $b=15\ln\frac43$。
+original_problem:
+  stem: 已知 $a=5$，$b=15\ln\frac43$，$c=16(\ln5-\ln4)$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a<c<b$
+      text_latex: $a<c<b$
+    - label: B
+      text_raw: $c<b<a$
+      text_latex: $c<b<a$
+    - label: C
+      text_raw: $b<a<c$
+      text_latex: $b<a<c$
+    - label: D
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+  answer: B
+  fidelity_notes:
+    - 源页题干中 $b$ 的定义与解析不一致；用户已拍板按解析一致性重建为 $b=15\ln\frac43$。
+solution:
+  source_solution_summary: |
+    按重建后的题干，$b=15\ln\frac43$。
+    先用
+    \[
+    \ln x\le x-1
+    \]
+    取 $x=\frac43$，得
+    \[
+    b<15\left(\frac43-1\right)=5=a,
+    \]
+    所以 $b<a$。
+    对
+    \[
+    c=16(\ln5-\ln4)=16\ln\frac54,
+    \]
+    同样用 $\ln x\le x-1$ 得
+    \[
+    c<16\left(\frac54-1\right)=4.
+    \]
+    再用
+    \[
+    \ln x\ge\frac{2(x-1)}{x+1}\quad(x\ge1),
+    \]
+    取 $x=\frac43$，有
+    \[
+    b>15\cdot\frac{2\left(\frac43-1\right)}{\frac43+1}
+     =\frac{30}{7}>4.
+    \]
+    于是
+    \[
+    c<4<\frac{30}{7}<b<a,
+    \]
+    即 $c<b<a$，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 按解析使用的 $b$ 口径，先由上界得 $b<a$。
+      formula_trace:
+        from: $b=15\ln\frac43$
+        to: $b<15(\frac43-1)=5=a$
+        operation: 代入 $\ln x\le x-1$。
+        why: 锁定 $b$ 在 $a$ 下方。
+      source_ref: page_0158_ex11_solution
+    - step_id: step_2
+      statement: 估计 $c$ 的上界。
+      formula_trace:
+        from: $c=16\ln\frac54$
+        to: $c<16(\frac54-1)=4$
+        operation: 同样使用 $\ln x\le x-1$。
+        why: 把 $c$ 压到 4 以下。
+      source_ref: page_0158_ex11_solution
+    - step_id: step_3
+      statement: 给 $b$ 下界并与 4 对接。
+      formula_trace:
+        from: $b=15\ln\frac43$
+        to: $b>\frac{30}{7}>4$
+        operation: 代入 $\ln x\ge\frac{2(x-1)}{x+1}$（$x=\frac43$）。
+        why: 得到 $b$ 在 4 上方，从而可比较 $b,c$。
+      source_ref: page_0158_ex11_solution
+    - step_id: step_4
+      statement: 合并不等式得到结论。
+      formula_trace:
+        from: $c<4<\frac{30}{7}<b$ 且 $b<a$
+        to: $c<b<a$，选 B
+        operation: 不等式传递。
+        why: 对应源答案。
+      source_ref: page_0158_ex11_solution
+teaching_card:
+  student_title: 同一对数模板下的双侧夹逼链
+  what_it_trains: 训练把多个对数量统一到同一不等式模板，并用中间阈值连接比较链。
+  recognition_cues:
+    - 多个量都可写成“常数倍 $\ln(\frac{p}{q})$”。
+    - 解析同时调用 $\ln x\le x-1$ 与 $\ln x\ge\frac{2(x-1)}{x+1}$。
+    - 题目目标是三数顺序，常通过构造公共阈值完成。
+  normalization_moves:
+    - 先把每个量写成单个对数形式。
+    - 先压上界，再给关键量提下界。
+    - 用固定阈值（如 4）拼接整条顺序。
+  common_failures:
+    - 把两条对数不等式方向混淆。
+    - 只做 $b<a$、$c<4$，忘了补 $b>4$ 导致无法比较 $b,c$。
+    - 没有看出 $b=15\ln\frac43$ 才能同时满足源解析的上下界链。
+  similar_practice_query: 15ln(4/3) 16ln(5/4) 比大小 c<b<a 对数上下界
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 用户已拍板重建：题干修订为 $a=5$、$b=15\ln\frac43$、$c=16(\ln5-\ln4)$，答案 B。

@@ -1,0 +1,150 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0175_exist_param_m_range_ex24
+content_revision_id: mst_p0175_exist_param_m_range_ex24-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0175_exist_param_m_range_ex24.card.yaml
+stem: |-
+  （2024 · 重庆万州高二期末 T8）已知函数 $f(x)=(e-a)e^x-ma+x$（$m,a$ 为实数），若存在实数 $a$，使得 $f(x)\leqslant0$ 对任意 $x\in\mathbf{R}$ 恒成立，则实数 $m$ 的取值范围是（  ）
+  A. $\left[-\frac{1}{e},+\infty\right)$
+  B. $[-e,+\infty)$
+  C. $\left[\frac{1}{e},e\right]$
+  D. $\left[-e,-\frac{1}{e}\right]$
+answer: |-
+  A
+
+  由 $f(x)\leqslant0$ 得 $e^{x+1}+x\leqslant a(m+e^x)$。令 $e^x=t>0$，左边变成 $et+\ln t$，右边是 $a(t+m)$。 左边零点为 $t_1=\frac1e$，右边零点为 $t_2=-m$。要存在 参数 $a$ 使直线压住左边曲线，按零点比大小需 $\frac1e\geqslant -m$，所以 $m\geqslant-\frac1e$，选 A。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把恒成立可行性改写到 $e^x=t$ 的零点比较模型。
+      max_score: 1
+    - step_id: step_2
+      description: 换元后读出两边零点。
+      max_score: 1
+    - step_id: step_3
+      description: 用零点比大小得到参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 充分/必要性探路
+      - 切线放缩与凹凸性
+    subroute:
+      - 零点比大小
+      - 逆否命题构造
+      - 指数换元 $e^x=t$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $e^{x+1}+x\leqslant a(m+e^x)$
+      - $e^x=t>0$
+      - $et+\ln t\leqslant a(t+m)$
+    normalization_moves_used:
+      - 把存在 $a$ 的恒成立问题转成两条曲线/直线的可压制关系。
+      - 用 $e^x=t$ 把指数和线性 $x$ 变成 $et+\ln t$。
+      - 用零点位置比较代替全量求导讨论。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $e^x=t$ 后的 $x$ 改成 $\ln t$，回补指数对数基础。
+      - 若学生移项后看不出参数 $a$ 的线性因子，回补代数恒等变形。
+      - 若学生不理解零点比大小为什么能给存在性条件，回补函数性质与图像。
+  detail_terms:
+    - $f(x)=(e-a)e^x-ma+x$
+    - $e^{x+1}+x$
+    - $e^x=t$
+    - $et+\ln t$
+    - $m\geqslant-\frac1e$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0175_exist_param_m_range_ex24
+source_evidence:
+  source_refs:
+    - ref_id: page_0175
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0175/page_0175.md
+      role: problem_start
+      evidence: "lines 5-30 contain 例24 full statement, choices A-D, and three source solution routes: contrapositive construction, tangent-point search, and zero-point comparison."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0175.png
+      inspected: true
+      notes: 页图核对通过：题干为存在实数 a 使 $f(x)=(e-a)e^x-ma+x\leqslant0$ 恒成立，选项 A-D 与 markdown 一致， 源解三法均收束到 $m\geqslant-\frac1e$。
+  source_context: page_0175 顶部是 page_0174 例23续解，按页头归属规则跳过；本卡只处理 page_0175 新起头的例24。
+  source_influence:
+    - 保留源解“存在参数 a”转成可行性/逆否命题的思路。
+    - 保留源解零点比大小路线：令 $e^x=t$ 后比较 $et+\ln t$ 与 $a(t+m)$ 的零点。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 重庆万州高二期末 T8）已知函数 $f(x)=(e-a)e^x-ma+x$（$m,a$ 为实数），若存在实数 $a$，使得 $f(x)\leqslant0$ 对任意 $x\in\mathbf{R}$ 恒成立，则实数 $m$ 的取值范围是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\left[-\frac{1}{e},+\infty\right)$
+      text_latex: $\left[-\frac{1}{e},+\infty\right)$
+    - label: B
+      text_raw: $[-e,+\infty)$
+      text_latex: $[-e,+\infty)$
+    - label: C
+      text_raw: $\left[\frac{1}{e},e\right]$
+      text_latex: $\left[\frac{1}{e},e\right]$
+    - label: D
+      text_raw: $\left[-e,-\frac{1}{e}\right]$
+      text_latex: $\left[-e,-\frac{1}{e}\right]$
+  answer: A
+  fidelity_notes:
+    - 源题为单选题，四个选项已完整保留。
+    - 源解给出三种路线，本卡以零点比大小为主线，逆否与切线找点作为辅助路线。
+solution:
+  source_solution_summary: 由 $f(x)\leqslant0$ 得 $e^{x+1}+x\leqslant a(m+e^x)$。令 $e^x=t>0$，左边变成 $et+\ln t$，右边是 $a(t+m)$。 左边零点为 $t_1=\frac1e$，右边零点为 $t_2=-m$。要存在 参数 $a$ 使直线压住左边曲线，按零点比大小需 $\frac1e\geqslant -m$，所以 $m\geqslant-\frac1e$，选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 把恒成立可行性改写到 $e^x=t$ 的零点比较模型。
+      formula_trace:
+        from: $(e-a)e^x-ma+x\leqslant0$
+        to: $e^{x+1}+x\leqslant a(m+e^x)$
+        operation: 移项并把 $e\cdot e^x$ 合并成 $e^{x+1}$。
+        why: 右边出现 $a$ 乘以一条关于 $e^x$ 的线性表达式，便于做存在性判断。
+      source_ref: page_0175:lines 5-30
+    - step_id: step_2
+      statement: 换元后读出两边零点。
+      formula_trace:
+        from: $e^x=t>0,\quad et+\ln t\leqslant a(t+m)$
+        to: $t_1=\frac1e,\quad t_2=-m$
+        operation: 分别令左边 $et+\ln t=0$ 与右边 $t+m=0$。
+        why: 零点位置决定了是否存在一条参数直线完成整体压制。
+      source_ref: page_0175:lines 26-30
+    - step_id: step_3
+      statement: 用零点比大小得到参数范围。
+      formula_trace:
+        from: $t_1=\frac1e,\quad t_2=-m$
+        to: $\frac1e\geqslant -m\Rightarrow m\geqslant-\frac1e$
+        operation: 比较左侧曲线零点和右侧线性因子零点。
+        why: 这是源书“零点比大小”模型在存在参数题中的收束条件。
+      source_ref: page_0175:lines 26-30
+teaching_card:
+  student_title: 用零点比大小判断参数可行性
+  what_it_trains: 训练把“存在一个参数使恒成立”转成两条曲线的可压制关系，再用零点位置快速读出参数范围。
+  recognition_cues:
+    - 题目出现“存在实数 a，使得对任意 x 恒成立”。
+    - 表达式里同时有 $e^x$ 和 $x$，参数又乘在 $e^x$ 的线性组合上。
+    - 源解提示零点比大小或逆否命题。
+  normalization_moves:
+    - 先把不等式移项成 $e^{x+1}+x\leqslant a(m+e^x)$。
+    - 令 $e^x=t$，把 $x$ 改写成 $\ln t$。
+    - 分别找 $et+\ln t$ 与 $t+m$ 的零点。
+  common_failures:
+    - 直接对含两个参数的函数全量求导，计算膨胀。
+    - 换元后忘记 $x=\ln t$。
+    - 把 $\frac1e\geqslant -m$ 的方向写反。
+  similar_practice_query: 存在参数 a 恒成立 e^x t 零点比大小 m+e^x
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

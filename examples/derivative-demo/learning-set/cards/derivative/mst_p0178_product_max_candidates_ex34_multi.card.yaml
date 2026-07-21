@@ -1,0 +1,201 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0178_product_max_candidates_ex34_multi
+content_revision_id: mst_p0178_product_max_candidates_ex34_multi-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0178_product_max_candidates_ex34_multi.card.yaml
+stem: |-
+  （2023 · 山西模拟 · 多选 T11）已知 $(e^x-ax)(x^2-ax+1)\geqslant0$，则 $a$ 的可能取值有（  ）
+  A. -e
+  B. \ln 6
+  C. e^2
+  D. \frac{\pi}{2}
+answer: |-
+  BD
+
+  先验算 $x=0$ 时 $(e^0-0)(0^2-0+1)=1\ge0$。对 $x\ne0$ 分区：\n当 $x>0$，原式等价于 $\left(a-\frac{e^x}{x}\right)\left(a-\left(x+\frac{1}{x}\right)\right)\le0$ 的同号判定。源解写成两组“同时 $\le$ 或同时 $\ge$”条件，并令 $f(x)=\frac{e^x}{x}$、$g(x)=x+\frac{1}{x}$，用 $f_{\min}=e,\ g_{\min}=2$ 且两者无最大值得到 $a\le2$。\n当 $x<0$，同理得到 $a$ 需要同时不小于两函数的上界边界；由 $g_{\max}=-2$、$f(x)<0$ 且上确界为 $0$，可归结为 $a\ge0$。综合得 $0\le a\le2$。\n检验选项：$-e<0$ 不可，$\ln6\in(0,2)$ 可，$e^2>2$ 不可，$\frac{\pi}{2}\in(0,2)$ 可，故选 BD。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 先做 $x=0$ 的基点检验。
+      max_score: 1
+    - step_id: step_2
+      description: 处理 $x>0$：改写为两函数对参数的上下夹。
+      max_score: 1
+    - step_id: step_3
+      description: 在 $x>0$ 上取可行公共边界。
+      max_score: 1
+    - step_id: step_4
+      description: 处理 $x<0$：继续做同号分支。
+      max_score: 1
+    - step_id: step_5
+      description: 在 $x<0$ 上压出下界。
+      max_score: 1
+    - step_id: step_6
+      description: 合并区间并筛选选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: item_1
+        goal: 求参数范围
+        target: 判断给定候选值中哪些属于参数可行集。
+        result: 见 source_solution_summary
+  method:
+    primary: 含参数分类讨论
+    secondary:
+      - 参变量分离
+      - 数形结合
+    subroute:
+      - 正负区间分治
+      - 同号分支
+      - 函数最值边界
+  structure:
+    primary: Max/Min 与绝对值结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 多变量与不等式结构
+    evidence:
+      - 参数 $a$ 同时受 $\frac{e^x}{x}$ 与 $x+\frac{1}{x}$ 两族边界约束。
+      - $x>0$ 与 $x<0$ 的分支方向不同，必须分区讨论。
+      - 最终可行区间由“上界 2”与“下界 0”交集给出。
+    normalization_moves_used:
+      - 令 $f(x)=\frac{e^x}{x},\ g(x)=x+\frac{1}{x}$。
+      - 先在 $x>0$ 求公共上界，再在 $x<0$ 求公共下界。
+      - 把结果改写成区间后回填多选项。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会按 $x>0/x<0$ 分开处理，回补函数三要素与定义域。
+      - 若学生在除以 $x$ 时不等号方向混乱，回补代数恒等变形。
+      - 若学生不会读 $x+\frac{1}{x}$ 与 $\frac{e^x}{x}$ 的极值信息，回补导数单调极值基础。
+  detail_terms:
+    - $(e^x-ax)(x^2-ax+1)\ge0$
+    - $f(x)=\frac{e^x}{x}$
+    - $g(x)=x+\frac{1}{x}$
+    - $0\le a\le2$
+    - 多选 BD
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0178_product_max_candidates_ex34_multi
+source_evidence:
+  source_refs:
+    - ref_id: page_0178_ex34b_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0178/page_0178.md
+      role: problem_start
+      evidence: page_0178 lines 60-65 给出第二个“例34”（山西模拟多选）题干与 A-D 选项。
+    - ref_id: page_0179_ex34b_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0179/page_0179.md
+      role: continuation
+      evidence: page_0179 lines 15-22 续完该题解析：按 $x>0$ 与 $x<0$ 分区，构造 $f(x)=\frac{e^x}{x}, g(x)=x+\frac{1}{x}$ 的最值边界，结论 $0\le a\le2$，答案 BD。
+    - ref_id: page_0178_numbering_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0178/page_0178.md
+      role: local_context
+      evidence: 同页已有前一个单选“例34”（lines 40-47）；本卡仅对应多选版本。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0178.png
+      inspected: true
+      notes: 页图核对通过：page_0178 底部为后一个例34多选题题头和选项。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0179.png
+      inspected: true
+      notes: 页图核对通过：page_0179 顶部补全后一个例34解析，结论 BD。
+  source_context: 该多选题题头起于 page_0178，解析续到 page_0179 顶部后才进入下一题例35，归属仍为 worker C。
+  source_influence:
+    - 保留源解的双区间分治：$x>0$ 与 $x<0$ 分别做“同号同向”条件。
+    - 保留源解的两个辅助函数：$f(x)=\frac{e^x}{x}$ 与 $g(x)=x+\frac{1}{x}$。
+    - 保留候选筛选链：$0\le a\le2\Rightarrow$ 选 B、D。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 山西模拟 · 多选 T11）已知 $(e^x-ax)(x^2-ax+1)\geqslant0$，则 $a$ 的可能取值有（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: -e
+      text_latex: $-e$
+    - label: B
+      text_raw: \ln 6
+      text_latex: $\ln 6$
+    - label: C
+      text_raw: e^2
+      text_latex: $e^2$
+    - label: D
+      text_raw: \frac{\pi}{2}
+      text_latex: $\frac{\pi}{2}$
+  answer: BD
+  fidelity_notes:
+    - 本题为多选；题干在 page_0178，完整解析在 page_0179 顶部。
+    - 同页编号重复为“例34”，本卡用语义 ID 区分。
+solution:
+  source_solution_summary: 先验算 $x=0$ 时 $(e^0-0)(0^2-0+1)=1\ge0$。对 $x\ne0$ 分区：\n当 $x>0$，原式等价于 $\left(a-\frac{e^x}{x}\right)\left(a-\left(x+\frac{1}{x}\right)\right)\le0$ 的同号判定。源解写成两组“同时 $\le$ 或同时 $\ge$”条件，并令 $f(x)=\frac{e^x}{x}$、$g(x)=x+\frac{1}{x}$，用 $f_{\min}=e,\ g_{\min}=2$ 且两者无最大值得到 $a\le2$。\n当 $x<0$，同理得到 $a$ 需要同时不小于两函数的上界边界；由 $g_{\max}=-2$、$f(x)<0$ 且上确界为 $0$，可归结为 $a\ge0$。综合得 $0\le a\le2$。\n检验选项：$-e<0$ 不可，$\ln6\in(0,2)$ 可，$e^2>2$ 不可，$\frac{\pi}{2}\in(0,2)$ 可，故选 BD。
+  key_steps:
+    - step_id: step_1
+      statement: 先做 $x=0$ 的基点检验。
+      formula_trace:
+        from: $(e^x-ax)(x^2-ax+1)\ge0$
+        to: $(e^0-0)(0^2-0+1)=1\ge0$
+        operation: 代入零点。
+        why: 确认原不等式在中心点无额外约束。
+      source_ref: page_0179_ex34b_continuation
+    - step_id: step_2
+      statement: 处理 $x>0$：改写为两函数对参数的上下夹。
+      formula_trace:
+        from: $e^x-ax$ 与 $x^2-ax+1$ 在 $x>0$ 的同号要求
+        to: $a\le\frac{e^x}{x},\ a\le x+\frac{1}{x}$（或另一支 $a\ge\cdots$）
+        operation: 对 $x>0$ 除以正数 $x$，分同号两支。
+        why: 把乘积条件转成参数与函数图像的比较。
+      source_ref: page_0179_ex34b_continuation
+    - step_id: step_3
+      statement: 在 $x>0$ 上取可行公共边界。
+      formula_trace:
+        from: $f(x)=\frac{e^x}{x},\ g(x)=x+\frac{1}{x}$
+        to: $f_{\min}=e,\ g_{\min}=2$，且上界分支无解 $\Rightarrow a\le2$
+        operation: 比较两函数在 $(0,+\infty)$ 的最小值与“无最大值”性质。
+        why: 得到正半轴对 $a$ 的必要范围。
+      source_ref: page_0179_ex34b_continuation
+    - step_id: step_4
+      statement: 处理 $x<0$：继续做同号分支。
+      formula_trace:
+        from: $e^x-ax$ 与 $x^2-ax+1$ 在 $x<0$ 的同号要求
+        to: $a\ge\frac{e^x}{x},\ a\ge x+\frac{1}{x}$（或另一支 $a\le\cdots$）
+        operation: 对 $x<0$ 除以负数后按源解分支。
+        why: 补齐负半轴约束。
+      source_ref: page_0179_ex34b_continuation
+    - step_id: step_5
+      statement: 在 $x<0$ 上压出下界。
+      formula_trace:
+        from: $g_{\max}=-2,\ f(x)<0,\ \sup f(x)=0$
+        to: $a\ge0$
+        operation: 取两函数共同上界约束；另一分支因“下无界”不可行。
+        why: 得到负半轴对 $a$ 的必要范围。
+      source_ref: page_0179_ex34b_continuation
+    - step_id: step_6
+      statement: 合并区间并筛选选项。
+      formula_trace:
+        from: $a\le2$ 与 $a\ge0$
+        to: $0\le a\le2 \Rightarrow a\in\{\ln6,\frac{\pi}{2}\}$
+        operation: 区间交集后逐项代数比较。
+        why: 得到多选答案 BD。
+      source_ref: page_0179_ex34b_continuation
+teaching_card:
+  student_title: 先分 $x$ 正负，再夹住参数区间
+  what_it_trains: 训练“乘积恒号 + 参数”题的稳定流程：按自变量符号分区，把每区间都改写成参数与函数最值的比较。
+  recognition_cues:
+    - 题干是两个含 $a$ 因子的乘积恒非负。
+    - 一个因子含 $e^x$，另一个可整理成 $x+\frac{1}{x}$。
+    - 最终问题是多选候选参数筛选。
+  normalization_moves:
+    - 先代 $x=0$ 做一致性检查。
+    - 对 $x>0$、$x<0$ 各自除以 $x$，注意方向。
+    - 把条件统一成 $a$ 与 $f,g$ 的上下界比较。
+    - 合并区间后再做候选值判定。
+  common_failures:
+    - 忽略 $x<0$ 分支，直接只做 $x>0$。
+    - 把“无最大值/无最小值”误读成有界，导致错误保留无解分支。
+    - 最后筛选选项时只近似估值，不先写出区间 $[0,2]$。
+  similar_practice_query: 乘积恒成立 参数范围 x正负分类 e^x/x x+1/x 多选
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 题头在 page_0178、解析在 page_0179；两页图片本次均未直接核对。

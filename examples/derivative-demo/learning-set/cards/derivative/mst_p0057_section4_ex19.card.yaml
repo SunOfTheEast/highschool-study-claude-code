@@ -1,0 +1,219 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0057_section4_ex19
+content_revision_id: mst_p0057_section4_ex19-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0057_section4_ex19.card.yaml
+stem: |-
+  （24 新 I 卷第 10 题 · 多选）设函数 $f(x)=(x-1)^2(x-4)$，则（  ）
+  A. $x=3$ 是 $f(x)$ 的极小值点
+  B. 当 $0<x<1$ 时，$f(x)<f(x^2)$
+  C. 当 $1<x<2$ 时，$-4<f(2x-1)<0$
+  D. 当 $-1<x<0$ 时，$f(2-x)>f(x)$
+answer: |
+  ACD
+
+  $f(x)=(x-1)^2(x-4)$，求导得
+  $f^{\prime}(x)=2(x-1)(x-4)+(x-1)^2=3(x-1)(x-3)$。因此 $f$ 在 $(-\infty,1)$、$(3,+\infty)$ 上递增，在 $(1,3)$ 上递减，所以 $x=3$ 是极小值点，A 正确。若 $0<x<1$，则 $0<x^2<x<1$，而 $f$ 在 $(0,1)$ 上递增，所以 $f(x)>f(x^2)$，B 错误。若 $1<x<2$，则 $1<2x-1<3$，在递减区间上有 $f(1)>f(2x-1)>f(3)$，即 $0>f(2x-1)>-4$，C 正确。若 $-1<x<0$，则
+  $f(2-x)-f(x)=(x-1)^2(2-2x)>0$，所以 D 正确。故选 ACD。源页法二还指出：$x=1$ 是偶回零点，$x=4$ 是奇穿零点，对称中心为 $(2,-2)$，图像也支持上述判断。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 求导并确定单调区间。
+      max_score: 1
+    - step_id: step_2
+      description: 判断 A：$x=3$ 是极小值点。
+      max_score: 1
+    - step_id: step_3
+      description: 判断 B：比较 $x$ 与 $x^2$ 在 $(0,1)$ 内的函数值。
+      max_score: 1
+    - step_id: step_4
+      description: 判断 C：把 $2x-1$ 映到递减区间。
+      max_score: 1
+    - step_id: step_5
+      description: 判断 D：直接比较 $f(2-x)$ 与 $f(x)$。
+      max_score: 1
+    - step_id: step_6
+      description: 用四段论图像复核整体结构。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 零点/极值点分析
+        target: 判断极小值点。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 数值求值
+        target: 比较不同自变量处的函数值。
+        result: 见 source_solution_summary
+      - part_id: item_3
+        goal: 数值求值
+        target: 判断区间内复合自变量的函数值范围。
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 显隐点探路
+      - 对称性配凑
+    subroute:
+      - 三次函数四段论
+      - 零点穿根与偶回
+      - 导数符号表逐项判断
+  structure:
+    primary: 三次/高次函数结构
+    secondary:
+      - 对称结构
+      - 复合函数与不动点结构
+    evidence:
+      - $f^{\prime}(x)=3(x-1)(x-3)$ 给出 $1,3$ 两个关键点。
+      - $x=1$ 是二重零点，$x=4$ 是单根，图像在 $x=1$ 偶回、在 $x=4$ 穿过。
+      - 三次函数四段论给出中心 $(2,-2)$ 和 $x=3$ 的极小值点。
+      - $f(2-x)-f(x)=(x-1)^2(2-2x)$ 直接判定 D。
+    normalization_moves_used:
+      - 先求导建立完整单调区间。
+      - 把 $0<x<1$ 转成 $0<x^2<x<1$。
+      - 把 $1<x<2$ 转成 $1<2x-1<3$。
+      - 遇到 $f(2-x)$ 与 $f(x)$，直接作差并因式分解。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $f^{\prime}(x)=3(x-1)(x-3)$ 判断增减，回补导数单调极值基础。
+      - 若学生在 $0<x<1$ 中把 $x^2$ 与 $x$ 的大小写反，回补代数恒等变形。
+      - 若学生不知道递减区间里函数值不等号要反向，回补函数性质与图像。
+      - 若学生不能处理 $f(2-x)-f(x)$ 的因式分解，回补代数恒等变形。
+      - 若学生看不懂二重零点“偶回”和单根“奇穿”的图像含义，回补方程根分布与韦达。
+  detail_terms:
+    - $f(x)=(x-1)^2(x-4)$
+    - $f^{\prime}(x)=3(x-1)(x-3)$
+    - $x=1$ 偶回
+    - $x=4$ 奇穿
+    - $x=3$ 极小值点
+    - $f(2-x)-f(x)=(x-1)^2(2-2x)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0057_section4_ex19
+source_evidence:
+  source_refs:
+    - ref_id: page_0057_ex19_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0057/page_0057.md
+      role: problem_start
+      evidence: 例 19：（24 新 I 卷第 10 题 · 多选）设 $f(x)=(x-1)^2(x-4)$，判断 A-D 四个命题。
+    - ref_id: page_0057_four_segment_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0057/page_0057.md
+      role: local_context
+      evidence: 例 19 前面给出“三次函数四段论”：三次函数对称中心和极值点、等值点的等距结构。
+    - ref_id: page_0058_ex19_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0058/page_0058.md
+      role: continuation
+      evidence: page_0058 开头续出例 19 解析：法一用 $f^{\prime}(x)=3(x-1)(x-3)$ 逐项判断；法二用零点穿根和四段论作图，结论选 ACD。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0057.png
+      inspected: true
+      notes: 页图已核对：page_0057 底部为例 19 题头、函数和 A-D 选项；题头前有三次函数四段论示意图。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0058.png
+      inspected: true
+      notes: 页图已核对：page_0058 顶部为例 19 完整解析和函数图像；随后才进入例 20，例 20 不属于本卡。
+  source_context: 例 19 题头在 page_0057，解析跨到 page_0058，按题头规则归本 A 组；page_0058 后续例 20 是下一题，不纳入。
+  source_influence:
+    - 四个选项完整保留，答案按源页 ACD。
+    - 卡片主线采用源解法一的导数单调判断，并保留法二的四段论/图像识别作为结构证据。
+  source_discrepancies: []
+original_problem:
+  stem: （24 新 I 卷第 10 题 · 多选）设函数 $f(x)=(x-1)^2(x-4)$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $x=3$ 是 $f(x)$ 的极小值点
+      text_latex: $x=3$ 是 $f(x)$ 的极小值点
+    - label: B
+      text_raw: 当 $0<x<1$ 时，$f(x)<f(x^2)$
+      text_latex: 当 $0<x<1$ 时，$f(x)<f(x^2)$
+    - label: C
+      text_raw: 当 $1<x<2$ 时，$-4<f(2x-1)<0$
+      text_latex: 当 $1<x<2$ 时，$-4<f(2x-1)<0$
+    - label: D
+      text_raw: 当 $-1<x<0$ 时，$f(2-x)>f(x)$
+      text_latex: 当 $-1<x<0$ 时，$f(2-x)>f(x)$
+  answer: ACD
+  fidelity_notes:
+    - 源题为多选题，题头在 page_0057，解析在 page_0058。
+    - 源解给出法一导数法和法二四段论作图法，结论均为 ACD。
+solution:
+  source_solution_summary: |
+    $f(x)=(x-1)^2(x-4)$，求导得
+    $f^{\prime}(x)=2(x-1)(x-4)+(x-1)^2=3(x-1)(x-3)$。因此 $f$ 在 $(-\infty,1)$、$(3,+\infty)$ 上递增，在 $(1,3)$ 上递减，所以 $x=3$ 是极小值点，A 正确。若 $0<x<1$，则 $0<x^2<x<1$，而 $f$ 在 $(0,1)$ 上递增，所以 $f(x)>f(x^2)$，B 错误。若 $1<x<2$，则 $1<2x-1<3$，在递减区间上有 $f(1)>f(2x-1)>f(3)$，即 $0>f(2x-1)>-4$，C 正确。若 $-1<x<0$，则
+    $f(2-x)-f(x)=(x-1)^2(2-2x)>0$，所以 D 正确。故选 ACD。源页法二还指出：$x=1$ 是偶回零点，$x=4$ 是奇穿零点，对称中心为 $(2,-2)$，图像也支持上述判断。
+  key_steps:
+    - step_id: step_1
+      statement: 求导并确定单调区间。
+      formula_trace:
+        from: $f(x)=(x-1)^2(x-4)$
+        to: $f^{\prime}(x)=2(x-1)(x-4)+(x-1)^2=3(x-1)(x-3)$
+        operation: 对二重因子和一次因子乘积求导并提取公因式。
+        why: 四个选项都可以由单调性、极值和函数值比较判断。
+      source_ref: page_0058_ex19_solution
+    - step_id: step_2
+      statement: 判断 A：$x=3$ 是极小值点。
+      formula_trace:
+        from: $f^{\prime}(x)=3(x-1)(x-3)$
+        to: $f\ \text{在}\ (1,3)\ \text{递减，在}\ (3,+\infty)\ \text{递增}$
+        operation: 按导数符号判断 $x=3$ 两侧先减后增。
+        why: 先减后增说明 $x=3$ 为极小值点。
+      source_ref: page_0058_ex19_solution
+    - step_id: step_3
+      statement: 判断 B：比较 $x$ 与 $x^2$ 在 $(0,1)$ 内的函数值。
+      formula_trace:
+        from: $0<x<1$
+        to: $0<x^2<x<1,\quad f(x)>f(x^2)$
+        operation: 利用 $f$ 在 $(0,1)$ 上单调递增。
+        why: 选项 B 写成 $f(x)<f(x^2)$，方向与单调性相反。
+      source_ref: page_0058_ex19_solution
+    - step_id: step_4
+      statement: 判断 C：把 $2x-1$ 映到递减区间。
+      formula_trace:
+        from: $1<x<2$
+        to: $1<2x-1<3,\quad f(1)>f(2x-1)>f(3)$
+        operation: 用线性代换确定 $2x-1$ 的范围，再用 $(1,3)$ 上递减。
+        why: $f(1)=0$，$f(3)=-4$，所以 $-4<f(2x-1)<0$。
+      source_ref: page_0058_ex19_solution
+    - step_id: step_5
+      statement: 判断 D：直接比较 $f(2-x)$ 与 $f(x)$。
+      formula_trace:
+        from: $f(2-x)-f(x)$
+        to: $(1-x)^2(-2-x)-(x-1)^2(x-4)=(x-1)^2(2-2x)>0$
+        operation: 代入并提取公共因子 $(x-1)^2$。
+        why: 当 $-1<x<0$ 时，平方因子为正且 $2-2x>0$，差值为正。
+      source_ref: page_0058_ex19_solution
+    - step_id: step_6
+      statement: 用四段论图像复核整体结构。
+      formula_trace:
+        from: $f(x)=(x-1)^2(x-4)$
+        to: $x=1\ \text{偶回},\quad x=4\ \text{奇穿},\quad \text{中心 }(2,-2)$
+        operation: 读取二重零点、单根和三次函数对称中心。
+        why: 图像显示 $x=1$ 为极大值点、$x=3$ 为极小值点，也解释 C、D 中的区间比较。
+      source_ref: page_0058_ex19_solution
+teaching_card:
+  student_title: 二重根三次函数，用单调区间逐项判
+  what_it_trains: 训练把已分解的三次函数转成导数符号表和草图，再逐项处理复合自变量、区间范围和函数值比较。
+  recognition_cues:
+    - 函数已经写成 $(x-1)^2(x-4)$，有二重零点和单根。
+    - 选项中既有极值点，也有 $x^2$、$2x-1$、$2-x$ 这样的自变量变换。
+    - 题目前刚讲“三次函数四段论”，适合用图像快速复核。
+  normalization_moves:
+    - 求 $f^{\prime}(x)$ 并画出增减：增、减、增。
+    - 把每个选项的自变量范围先化到单调区间里。
+    - 比较两个复杂函数值时，能作差就作差。
+    - 用零点穿根图像检查结论方向。
+  common_failures:
+    - 把 $x=1$ 误认为极小值点，忽略它是二重零点处的极大值点。
+    - 在 $0<x<1$ 时把 $x^2<x$ 看反。
+    - 在递减区间 $(1,3)$ 内比较 $f(1)$、$f(2x-1)$、$f(3)$ 时不等号方向写错。
+    - D 选项只靠图像直觉，没有用作差确认。
+  similar_practice_query: 三次函数 二重根 多选 单调区间 函数值比较 四段论
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0057、page_0058 页图；例 19 题头在 page_0057，解析和函数图在 page_0058，答案 ACD。

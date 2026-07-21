@@ -1,0 +1,140 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0016_ex02
+content_revision_id: mst_p0016_ex02-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0016_ex02.card.yaml
+stem: 已知实数 $\alpha$，$\beta$ 满足 $\alpha e^\alpha=e^3$，$\beta(\ln\beta-1)=e^4$，则 $\alpha\beta=$_______。
+answer: |-
+  $e^4$
+
+  由 $\alpha e^\alpha=e^3>0$ 得 $\alpha>0$，由 $\ln\beta$ 存在且 $\beta(\ln\beta-1)=e^4>0$ 得 $\beta>0$ 且 $\ln\beta-1>0$。设 $F(t)=te^t$，第二式可写成 $(\ln\beta-1)e^{\ln\beta-1}=e^3$，即 $F(\ln\beta-1)=F(\alpha)$。因为两边自变量都为正，$F$ 在 $(0,+\infty)$ 上递增，所以 $\alpha=\ln\beta-1$，从而 $\alpha\beta=\beta(\ln\beta-1)=e^4$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 确认同构自变量位于递增区间。
+      max_score: 1
+    - step_id: step_2
+      description: 把第二个条件写成同一个 $F(t)=te^t$。
+      max_score: 1
+    - step_id: step_3
+      description: 由同构函数值相等推出自变量相等。
+      max_score: 1
+    - step_id: step_4
+      description: 回代求目标乘积。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - $xe^x$ 同构
+      - 用 $\beta=e^{\ln\beta}$ 降幂
+      - 函数值相等推出自变量相等
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $\alpha e^\alpha$ 与 $(\ln\beta-1)e^{\ln\beta-1}$ 同为 $F(t)=te^t$。
+      - 目标 $\alpha\beta$ 可由 $\alpha=\ln\beta-1$ 直接变回题设第二式。
+    normalization_moves_used:
+      - $\beta=e^{\ln\beta}$。
+      - $\beta(\ln\beta-1)=e^4\Rightarrow(\ln\beta-1)e^{\ln\beta-1}=e^3$。
+      - $F(\alpha)=F(\ln\beta-1)$ 后用正区间单调性。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $\beta>0$ 写出 $\beta=e^{\ln\beta}$，回补指数对数基础。
+      - 若学生不知道 $xe^x$ 在 $(0,+\infty)$ 上单调递增，回补导数单调极值基础。
+      - 若学生推出 $\alpha=\ln\beta-1$ 后仍去硬解 $\beta$，回补代数恒等变形。
+  detail_terms:
+    - $\alpha e^\alpha=e^3$
+    - $\beta(\ln\beta-1)=e^4$
+    - $(\ln\beta-1)e^{\ln\beta-1}=e^3$
+    - $F(t)=te^t$
+    - $\alpha\beta=e^4$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0016_ex02
+source_evidence:
+  source_refs:
+    - ref_id: page_0016
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0016/page_0016.md
+      role: problem_start
+      evidence: 例 2 题干和解析完整位于 page_0016；题目给出 $\alpha e^\alpha=e^3$ 与 $\beta(\ln\beta-1)=e^4$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0016.png
+      inspected: true
+      notes: 页图核对例 2 为填空题，条件和答案线均清晰；解析中 $(\ln\beta-1)e^{(\ln\beta-1)}=e^3$ 与 markdown 一致。
+  source_context: 例 2 紧跟例 1，继续使用 $F(x)=xe^x$ 的同构单调模型。
+  source_influence:
+    - 源解先判定 $\alpha,\beta>0$，再把第二个条件降幂为 $F(\ln\beta-1)=e^3$。
+    - 结果不是先求出 $\alpha,\beta$，而是由 $\alpha=\ln\beta-1$ 直接回代 $\alpha\beta=e^4$。
+  source_discrepancies: []
+original_problem:
+  stem: 已知实数 $\alpha$，$\beta$ 满足 $\alpha e^\alpha=e^3$，$\beta(\ln\beta-1)=e^4$，则 $\alpha\beta=$_______。
+  parts: *a1
+  choices: []
+  answer: $e^4$
+  fidelity_notes:
+    - page_0016.png 已核对：第二个条件为 $\beta(\ln\beta-1)=e^4$，括号内是 $\ln\beta-1$。
+solution:
+  source_solution_summary: 由 $\alpha e^\alpha=e^3>0$ 得 $\alpha>0$，由 $\ln\beta$ 存在且 $\beta(\ln\beta-1)=e^4>0$ 得 $\beta>0$ 且 $\ln\beta-1>0$。设 $F(t)=te^t$，第二式可写成 $(\ln\beta-1)e^{\ln\beta-1}=e^3$，即 $F(\ln\beta-1)=F(\alpha)$。因为两边自变量都为正，$F$ 在 $(0,+\infty)$ 上递增，所以 $\alpha=\ln\beta-1$，从而 $\alpha\beta=\beta(\ln\beta-1)=e^4$。
+  key_steps:
+    - step_id: step_1
+      statement: 确认同构自变量位于递增区间。
+      formula_trace:
+        from: $\alpha e^\alpha=e^3,\quad \beta(\ln\beta-1)=e^4$
+        to: $\alpha>0,\quad \beta>0,\quad \ln\beta-1>0$
+        operation: 利用右侧为正数，以及 $\beta>0$ 是对数定义域条件。
+        why: $F(t)=te^t$ 在正区间递增，后续才能由函数值相等推出自变量相等。
+      source_ref: page_0016
+    - step_id: step_2
+      statement: 把第二个条件写成同一个 $F(t)=te^t$。
+      formula_trace:
+        from: $\beta(\ln\beta-1)=e^4$
+        to: $(\ln\beta-1)e^{\ln\beta-1}=e^3$
+        operation: 用 $\beta=e^{\ln\beta}$，并把等式两边同除以 $e$。
+        why: 这样第二式也成为 $te^t=e^3$ 的形式。
+      source_ref: page_0016
+    - step_id: step_3
+      statement: 由同构函数值相等推出自变量相等。
+      formula_trace:
+        from: $\alpha e^\alpha=e^3,\quad (\ln\beta-1)e^{\ln\beta-1}=e^3$
+        to: $\alpha=\ln\beta-1$
+        operation: 令 $F(t)=te^t$，在 $(0,+\infty)$ 上使用单调性。
+        why: 两个正自变量对应同一个函数值，必须相等。
+      source_ref: page_0016
+    - step_id: step_4
+      statement: 回代求目标乘积。
+      formula_trace:
+        from: $\alpha=\ln\beta-1$
+        to: $\alpha\beta=\beta(\ln\beta-1)=e^4$
+        operation: 将 $\alpha$ 替换为 $\ln\beta-1$，直接使用题设第二式。
+        why: 题目只问乘积，不需要单独解出 $\alpha$ 或 $\beta$。
+      source_ref: page_0016
+teaching_card:
+  student_title: 把 $\beta(\ln\beta-1)$ 变成 $xe^x$
+  what_it_trains: 训练把含 $\ln\beta$ 的乘积改写成同一个 $te^t$，再用单调性直接读出等量关系。
+  recognition_cues:
+    - 一个式子是 $\alpha e^\alpha$，另一个式子含 $\beta(\ln\beta-1)$。
+    - 题目问 $\alpha\beta$，而题设已有 $\beta(\ln\beta-1)$。
+    - 看到 $\beta$ 与 $\ln\beta-1$ 相乘，考虑把 $\beta$ 写成 $e^{\ln\beta}$。
+  normalization_moves:
+    - 把 $\beta$ 改写成 $e^{\ln\beta}$。
+    - 把指数中的 $\ln\beta$ 下移成 $\ln\beta-1$，同时右侧从 $e^4$ 除到 $e^3$。
+    - 得到 $\alpha=\ln\beta-1$ 后，立刻回到 $\alpha\beta$。
+  common_failures:
+    - 没有检查 $\ln\beta$ 的定义域和正区间单调性。
+    - 把 $(\ln\beta-1)e^{\ln\beta-1}$ 误写成 $(\ln\beta)e^{\ln\beta}-1$。
+    - 推出 $\alpha=\ln\beta-1$ 后继续求 $\beta$，反而绕远。
+  similar_practice_query: $\alpha e^\alpha$ $\beta(\ln\beta-1)$ 填空 $xe^x$ 同构 乘积求值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0016 markdown 与页图；例 2 不跨页。

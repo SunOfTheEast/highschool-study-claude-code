@@ -1,0 +1,175 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0046_section3_ex02
+content_revision_id: mst_p0046_section3_ex02-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0046_section3_ex02.card.yaml
+stem: （河南省部分省示范高中 2024 届高三下学期 3 月联考 T19）已知函数 f(x)=\frac{\ln(x-1)}{x-2}。当 a\in(2,+\infty) 时，求函数 g(x)=f(x+1)-\frac{a}{x+1} 的零点个数。
+answer: |-
+  2 个。
+
+  原零点方程可化为 H(x)=\ln x-\frac{a(x-1)}{x+1}=0。源解析利用 H(1/x)=-H(x) 与 H(1)=0，把零点关于 x=1 成倒数配对。对 x>1， H'(x)=\frac{(x+1)^2-2ax}{x(x+1)^2}；当 a>2 时，H 在 1 右侧先降后升， 且最小值小于 0，而 H(e^a)>0，所以 x>1 还有唯一一个零点；由倒数对称， (0,1) 中也有唯一一个零点。源解析再把 x=1 计入，得到 3 个零点； 但 x=1 不在原函数 g 的定义域内，是乘去 x-1 后产生的增根，因此最终按原函数计为 2 个零点。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 先把原函数的零点方程化成不含分母 x-1 的辅助方程。
+      max_score: 1
+    - step_id: step_2
+      description: 利用倒数变换得到零点成对出现。
+      max_score: 1
+    - step_id: step_3
+      description: 在 x>1 上研究 H 的导数。
+      max_score: 1
+    - step_id: step_4
+      description: 找到 x>1 上先降后升的唯一谷底。
+      max_score: 1
+    - step_id: step_5
+      description: 证明 x>1 上除 1 外还有唯一一个零点。
+      max_score: 1
+    - step_id: step_6
+      description: 回到原函数定义域，排除化简产生的增根。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level: []
+  method:
+    primary: 对称化与偏移
+    secondary:
+      - 同构变形与换元法
+      - 显隐点探路
+    subroute:
+      - 对数单身狗
+      - 倒数对称 H(1/x)=-H(x)
+  structure:
+    primary: 对称结构
+    secondary:
+      - 指对复合结构
+      - 复合函数与不动点结构
+    evidence:
+      - H(1/x)=-H(x)
+      - H'(x)=\frac{(x+1)^2-2ax}{x(x+1)^2}
+      - x_1,\ 1/x_1 与中心点 1
+    normalization_moves_used:
+      - 将原零点方程乘以 x-1 化为 H(x)=0。
+      - 用 x\leftrightarrow 1/x 对称，只研究 x>1。
+      - 用导数的先负后正确定唯一右侧零点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生没有先检查 f(x+1) 在 x=1 的定义域，回补函数三要素与定义域。
+      - 若学生不会把零点方程化成 H(x)=\ln x-\frac{a(x-1)}{x+1}，回补代数恒等变形。
+      - 若学生不能利用 H(1/x)=-H(x) 成对计数，回补函数性质与图像。
+      - 若学生不会用导数符号判断唯一零点，回补导数单调极值基础。
+  detail_terms:
+    - H(1/x)=-H(x)
+    - \frac{(x+1)^2-2ax}{x(x+1)^2}
+    - 可去间断点 x=1 的计数口径
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0046_section3_ex02
+source_evidence:
+  source_refs:
+    - ref_id: page_0046
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0046/page_0046.md
+      role: problem_start
+      evidence: 例 2：已知函数 f(x)=\frac{\ln(x-1)}{x-2}。当 a\in(2,+\infty) 时， 求函数 g(x)=f(x+1)-\frac{a}{x+1} 的零点个数。
+    - ref_id: page_0046_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0046/page_0046.md
+      role: solution
+      evidence: 解析把零点方程化为 \ln x-\frac{a(x-1)}{x+1}=0，并利用 H(1/x)=-H(x)、H(1)=0 只研究 x>1。
+    - ref_id: page_0047
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0047/page_0047.md
+      role: continuation
+      evidence: page_0047 顶部续解：存在唯一 x_0\in(1,2a-2) 使导数为 0； H 在 (1,x_0) 递减、在 (x_0,+\infty) 递增，且再有唯一 x_1\in(1,e^a) 使 H(x_1)=0，故源解析称此时有 3 个零点。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0046.png
+      inspected: true
+      notes: 页图已核对：例 2 题头与主要化简在 page_0046 底部，解析跨页未完。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0047.png
+      inspected: true
+      notes: 页图已核对：page_0047 顶部是例 2 续页，续完后才进入例 3。
+  source_context: 本题仍属于“对数单身狗”，源解析把原零点方程等价转到 H(x)=\ln x-\frac{a(x-1)}{x+1} 的奇对称结构，再用 x 与 1/x 成对计数。
+  source_influence:
+    - 卡片将源页重新命名的辅助函数记为 H(x)，避免和原题的 g(x)=f(x+1)-a/(x+1) 混淆。
+  source_discrepancies:
+    - 源解析把 H(1)=0 计入“3 个零点”；但按原函数 f(x)=\ln(x-1)/(x-2) 的通常定义， f(2) 未定义，故原 g(x) 在 x=1 也未定义。若严格按原函数定义域计数，x=1 不应计为零点， 个数会变为 2。用户已拍板该点属于化简后的增根问题，最终答案按原函数定义域计为 2 个。
+original_problem:
+  stem: （河南省部分省示范高中 2024 届高三下学期 3 月联考 T19）已知函数 f(x)=\frac{\ln(x-1)}{x-2}。当 a\in(2,+\infty) 时，求函数 g(x)=f(x+1)-\frac{a}{x+1} 的零点个数。
+  parts: *a1
+  choices: []
+  answer: 2 个。
+  fidelity_notes:
+    - 源页未说明 f 在 x=2 处作可去间断补定义；用户已拍板 x=1 是化简后的增根，最终按原函数定义域排除。
+solution:
+  source_solution_summary: 原零点方程可化为 H(x)=\ln x-\frac{a(x-1)}{x+1}=0。源解析利用 H(1/x)=-H(x) 与 H(1)=0，把零点关于 x=1 成倒数配对。对 x>1， H'(x)=\frac{(x+1)^2-2ax}{x(x+1)^2}；当 a>2 时，H 在 1 右侧先降后升， 且最小值小于 0，而 H(e^a)>0，所以 x>1 还有唯一一个零点；由倒数对称， (0,1) 中也有唯一一个零点。源解析再把 x=1 计入，得到 3 个零点； 但 x=1 不在原函数 g 的定义域内，是乘去 x-1 后产生的增根，因此最终按原函数计为 2 个零点。
+  key_steps:
+    - step_id: step_1
+      statement: 先把原函数的零点方程化成不含分母 x-1 的辅助方程。
+      formula_trace:
+        from: \frac{\ln x}{x-1}-\frac{a}{x+1}=0
+        to: H(x)=\ln x-\frac{a(x-1)}{x+1}=0
+        operation: 在 x>0 且 x\neq1 的原定义域内，两边乘以 x-1。
+        why: 化简后的 H(x) 便于使用倒数对称和导数研究。
+      source_ref: page_0046_solution
+    - step_id: step_2
+      statement: 利用倒数变换得到零点成对出现。
+      formula_trace:
+        from: H\left(\frac{1}{x}\right)=\ln\frac{1}{x}-\frac{a(\frac{1}{x}-1)}{\frac{1}{x}+1}
+        to: H\left(\frac{1}{x}\right)=-H(x)
+        operation: 通分化简，把 \frac{1-x}{1+x} 改写成 -\frac{x-1}{x+1}。
+        why: 若 x>1 是零点，则 1/x\in(0,1) 也是零点。
+      source_ref: page_0046_solution
+    - step_id: step_3
+      statement: 在 x>1 上研究 H 的导数。
+      formula_trace:
+        from: H'(x)=\frac{1}{x}-\frac{2a}{(x+1)^2}
+        to: H'(x)=\frac{(x+1)^2-2ax}{x(x+1)^2}
+        operation: 通分整理导数。
+        why: 导数符号由二次式 (x+1)^2-2ax 决定。
+      source_ref: page_0046_solution
+    - step_id: step_4
+      statement: 找到 x>1 上先降后升的唯一谷底。
+      formula_trace:
+        from: H'(1)<0,\quad H'(2a-2)>0
+        to: \exists x_0\in(1,2a-2),\ H'(x_0)=0
+        operation: 用连续性和导数符号确定正根位置，并据此划分单调区间。
+        why: a>2 时，H 在 1 右侧先递减、后递增。
+      source_ref: page_0047
+    - step_id: step_5
+      statement: 证明 x>1 上除 1 外还有唯一一个零点。
+      formula_trace:
+        from: H(x_0)<H(1)=0,\quad H(e^a)=a-\frac{a(e^a-1)}{e^a+1}>0
+        to: \exists! x_1\in(1,e^a),\ H(x_1)=0
+        operation: 用最小值为负、远处取正值和递增性确定唯一交点。
+        why: 这给出 x>1 的一个非 1 零点，再由倒数对称得到 (0,1) 的一个零点。
+      source_ref: page_0047
+    - step_id: step_6
+      statement: 回到原函数定义域，排除化简产生的增根。
+      formula_trace:
+        from: H(1)=0,\quad H(x_1)=0,\quad H(1/x_1)=0
+        to: x=1 不在原函数 g 的定义域内，最终只计 x_1 与 1/x_1 两个零点
+        operation: 检查由 \frac{\ln x}{x-1} 化到 H(x)=0 时乘去的 x-1，并回代原式定义域。
+        why: H(1)=0 是辅助方程的零点，不是原函数 g 的零点。
+      source_ref: page_0047
+teaching_card:
+  student_title: 先造倒数对称，再数对数函数零点
+  what_it_trains: 训练把含 \ln x/(x-1) 的零点方程化成倒数反对称函数，只研究一侧后再用对称补回另一侧。
+  recognition_cues:
+    - 题目里出现 f(x+1)，化简后有 \ln x/(x-1)。
+    - 参数 a>2，导数分子是关于 x 与 1/x 对称的二次式。
+    - H(1/x)=-H(x) 让零点左右成对。
+  normalization_moves:
+    - 乘以 x-1 得 H(x)=\ln x-\frac{a(x-1)}{x+1}。
+    - 用倒数变换把问题压到 x>1。
+    - 找 H 的谷底，再用 H(e^a)>0 确认右侧唯一零点。
+  common_failures:
+    - 忽略原式在 x=1 处未定义，直接把 H(1)=0 当作原函数零点。
+    - 只看到 H(1)=0，没有继续找 x>1 的第二个交点。
+    - 求导后没有利用 a>2 判断单调区间。
+  similar_practice_query: ln x/(x-1) 减有理式的零点个数，倒数对称 H(1/x)=-H(x)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 用户已拍板：x=1 属于化简后辅助方程的增根；最终按原函数定义域排除，答案为 2 个零点。

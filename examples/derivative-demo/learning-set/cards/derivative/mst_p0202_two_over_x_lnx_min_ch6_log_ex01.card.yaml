@@ -1,0 +1,129 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0202_two_over_x_lnx_min_ch6_log_ex01
+content_revision_id: mst_p0202_two_over_x_lnx_min_ch6_log_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0202_two_over_x_lnx_min_ch6_log_ex01.card.yaml
+stem: （2024 · 定州市月考）函数 $g(x)=\frac{2}{x}+\ln x$ 的最小值为______。
+answer: |-
+  $1+\ln 2$
+
+  源解把 $g(x)$ 改写为 $g(x)=\frac{2}{x}-\ln\frac{2}{x}+\ln2$。设 $t=\frac{2}{x}>0$，则 $t-\ln t\ge1$，故 $g(x)\ge1+\ln2$。当且仅当 $t=1$（即 $x=2$）取等， 因而最小值是 $1+\ln2$。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把对数项改写成同构模板。
+      max_score: 1
+    - step_id: step_2
+      description: 应用切线放缩得到下界。
+      max_score: 1
+    - step_id: step_3
+      description: 回代并给出最小值。
+      max_score: 1
+graph:
+  goal:
+    primary: 极值最值
+    part_level: []
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 对数切线放缩
+      - 同构代换 $t=\frac2x$
+      - 取等点回代
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 不等式工具结构
+    evidence:
+      - $g(x)=\frac2x-\ln\frac2x+\ln2$
+      - $t-\ln t\ge1$
+    normalization_moves_used:
+      - 把 $\frac2x+\ln x$ 统一改写为 $t-\ln t+\text{常数}$。
+      - 优先使用 $\ln t\le t-1$ 的切线下界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\ln x$ 改写成 $-\ln\frac2x+\ln2$，回补代数恒等变形。
+      - 若学生不知道 $t-\ln t\ge1$ 的来源，回补指数对数基础。
+  detail_terms:
+    - $g(x)=\frac2x+\ln x$
+    - $t=\frac2x$
+    - $t-\ln t\ge1$
+    - $1+\ln2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0202_two_over_x_lnx_min_ch6_log_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0202_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0202/page_0202.md
+      role: problem_start
+      evidence: line 21 给出例1题干：$g(x)=\frac{2}{x}+\ln x$ 的最小值。
+    - ref_id: page_0202_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0202/page_0202.md
+      role: solution
+      evidence: line 23 给出同构改写：$g(x)=\frac{2}{x}-\ln\frac{2}{x}+\ln2\ge 1+\ln2$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0202.png
+      inspected: true
+      notes: 已核对页图：例1题干与解析完整，公式与 markdown 一致。
+  source_context: page_0202 顶部先给对数不等式与飘带函数模板，例1是该模板的直接应用。
+  source_influence:
+    - 保留源解“令 t=\frac{2}{x}，用 t-\ln t\ge1”这一同构放缩路线。
+    - 保留取等点隐含条件：$\frac{2}{x}=1$。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 定州市月考）函数 $g(x)=\frac{2}{x}+\ln x$ 的最小值为______。
+  parts: *a1
+  choices: []
+  answer: $1+\ln 2$
+  fidelity_notes:
+    - 源题是填空题，无选项。
+solution:
+  source_solution_summary: 源解把 $g(x)$ 改写为 $g(x)=\frac{2}{x}-\ln\frac{2}{x}+\ln2$。设 $t=\frac{2}{x}>0$，则 $t-\ln t\ge1$，故 $g(x)\ge1+\ln2$。当且仅当 $t=1$（即 $x=2$）取等， 因而最小值是 $1+\ln2$。
+  key_steps:
+    - step_id: step_1
+      statement: 把对数项改写成同构模板。
+      formula_trace:
+        from: $g(x)=\frac{2}{x}+\ln x$
+        to: $g(x)=\frac{2}{x}-\ln\frac{2}{x}+\ln2$
+        operation: 利用 $\ln x=-\ln\frac1x=-\ln\frac2x+\ln2$。
+        why: 转成 $t-\ln t$ 的标准放缩结构。
+      source_ref: page_0202_solution
+    - step_id: step_2
+      statement: 应用切线放缩得到下界。
+      formula_trace:
+        from: $t=\frac2x>0$
+        to: $t-\ln t\ge1$
+        operation: 用 $\ln t\le t-1$。
+        why: 直接给出最小值下界。
+      source_ref: page_0202_solution
+    - step_id: step_3
+      statement: 回代并给出最小值。
+      formula_trace:
+        from: $g(x)=t-\ln t+\ln2$
+        to: $g(x)\ge1+\ln2$
+        operation: 把步骤2结论加上常数 $\ln2$。
+        why: 得到题目所求最小值。
+      source_ref: page_0202_solution
+teaching_card:
+  student_title: 先配成 $t-\ln t$ 再求最小值
+  what_it_trains: 训练把“分式+对数”最值题改写为同构模板，并用切线放缩一步给出下界与取等点。
+  recognition_cues:
+    - 出现 $\frac{c}{x}+\ln x$ 型。
+    - 目标是求最小值且无复杂导数运算。
+    - 可自然凑出 $t-\ln t$。
+  normalization_moves:
+    - 把 $\ln x$ 写成 $-\ln\frac{c}{x}+\ln c$。
+    - 代换 $t=\frac{c}{x}$。
+    - 用 $\ln t\le t-1$ 得下界并回代。
+  common_failures:
+    - 把 $\ln x$ 误写成 $\ln\frac2x+\ln2$（符号错）。
+    - 只写“最小值”不写对应取等条件。
+  similar_practice_query: 2/x+lnx 最小值 t-lnt 放缩
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

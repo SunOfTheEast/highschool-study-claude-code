@@ -1,0 +1,184 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0077_tangent_ex06
+content_revision_id: mst_p0077_tangent_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0077_tangent_ex06.card.yaml
+stem: |-
+  （2023 · 东城区一模 T7）过坐标原点作曲线 $y=e^{x-2}+1$ 的切线， 则切线方程为（   ）
+  A. $y=x$
+  B. $y=2x$
+  C. $y=\frac{1}{e^2}x$
+  D. $y=ex$
+answer: |-
+  A
+
+  设切点为 $(t,e^{t-2}+1)$，曲线导数为 $e^{x-2}$，切线方程是 $y-(e^{t-2}+1)=e^{t-2}(x-t)$。原点在该切线上，代入 $(0,0)$ 得 $-(e^{t-2}+1)=-t e^{t-2}$，即 $(t-1)e^{t-2}=1$，解得 $t=2$。 此时斜率 $e^{0}=1$，切线为 $y-(1+1)=1(x-2)$，即 $y=x$。 也可设切线为 $y=kx$，令差函数 $f(x)=e^{x-2}+1-kx$，相切时 $f(x_0)=0,f'(x_0)=0$，解得 $x_0=2,k=1$，故选 A。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 设未知切点并写出切线斜率。
+      max_score: 1
+    - step_id: step_2
+      description: 写出切点处切线方程并代入原点。
+      max_score: 1
+    - step_id: step_3
+      description: 求出切点横坐标。
+      max_score: 1
+    - step_id: step_4
+      description: 代回切点和斜率，得到切线方程。
+      max_score: 1
+    - step_id: step_5
+      description: 用极点效应复核斜率。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何量求解
+    part_level:
+      - part_id: item_1
+        goal: 数值求值
+        target: 数值求值
+        result: 见 source_solution_summary
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 显隐点探路
+      - 充分/必要性探路
+    subroute:
+      - 过原点切线
+      - 切线找点
+      - 极点效应
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $y-(e^{t-2}+1)=e^{t-2}(x-t)$
+      - $(t-1)e^{t-2}=1$
+      - $f(x_0)=0,\ f'(x_0)=0$
+      - $x_0=2,k=1$
+    normalization_moves_used:
+      - 把过原点切线写成未知切点的切线方程。
+      - 把直线过原点转化为代入 $(0,0)$。
+      - 把 $y=kx$ 与曲线相切转化为差函数极点效应方程组。
+  fallback:
+    only_if_trace_shows:
+      - 若学生把原点误当切点，回补导数运算与几何意义。
+      - 若学生不会用点斜式写切线方程，回补导数运算与几何意义。
+      - 若学生不会从 $f(x_0)=0,f'(x_0)=0$ 解出切点和斜率，回补导数单调极值基础。
+      - 若学生在 $e^{x-2}$ 的代入中出错，回补指数对数基础。
+  detail_terms:
+    - 过原点作指数曲线切线
+    - $P(t,e^{t-2}+1)$
+    - $(t-1)e^{t-2}=1$
+    - $y=x$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0077_tangent_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0077
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0077/page_0077.md
+      role: problem_start
+      evidence: page_0077 底部新起头“例 6”，题干要求过原点作曲线 $y=e^{x-2}+1$ 的切线，A-D 选项和法一完整推导在本页，法二开头跨页。
+    - ref_id: page_0078
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0078/page_0078.md
+      role: continuation
+      evidence: page_0078 顶部续写例 6 的极点效应方程组： $f(x_0)=e^{x_0-2}+1-kx_0=0$、$f'(x_0)=e^{x_0-2}-k=0$， 解得 $x_0=2,k=1$，故选 A；随后才进入例 7。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0077.png
+      inspected: true
+      notes: 页图确认例 6 题头、四个选项和法一解析位于 page_0077 底部； 选项 A 为 $y=x$，B 为 $y=2x$，C 为 $y=\\frac1{e^2}x$，D 为 $y=ex$。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0078.png
+      inspected: true
+      notes: 页图确认 page_0078 顶部是例 6 续解并给出“故选 A”；例 7 从其后新起头， 不纳入本卡。
+  source_context: 本题属于“过某点处的切线方程”。原点不是曲线上的点，必须设切点 或设过原点直线 $y=kx$，再用切线条件求切点横坐标和斜率。
+  source_influence:
+    - 源解法一设切点 $(t,e^{t-2}+1)$，把原点代入切线方程求 $t=2$。
+    - 源解法二设 $y=kx$，用差函数的极点效应列 $f(x_0)=0,f'(x_0)=0$，得到 $k=1$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 东城区一模 T7）过坐标原点作曲线 $y=e^{x-2}+1$ 的切线， 则切线方程为（   ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $y=x$
+      text_latex: $y=x$
+    - label: B
+      text_raw: $y=2x$
+      text_latex: $y=2x$
+    - label: C
+      text_raw: $y=\frac{1}{e^2}x$
+      text_latex: $y=\frac{1}{e^2}x$
+    - label: D
+      text_raw: $y=ex$
+      text_latex: $y=ex$
+  answer: A
+  fidelity_notes:
+    - 题头和题干起于 page_0077，极点效应解法与最终选择续到 page_0078 顶部。
+solution:
+  source_solution_summary: 设切点为 $(t,e^{t-2}+1)$，曲线导数为 $e^{x-2}$，切线方程是 $y-(e^{t-2}+1)=e^{t-2}(x-t)$。原点在该切线上，代入 $(0,0)$ 得 $-(e^{t-2}+1)=-t e^{t-2}$，即 $(t-1)e^{t-2}=1$，解得 $t=2$。 此时斜率 $e^{0}=1$，切线为 $y-(1+1)=1(x-2)$，即 $y=x$。 也可设切线为 $y=kx$，令差函数 $f(x)=e^{x-2}+1-kx$，相切时 $f(x_0)=0,f'(x_0)=0$，解得 $x_0=2,k=1$，故选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 设未知切点并写出切线斜率。
+      formula_trace:
+        from: $y=e^{x-2}+1$
+        to: $y'=e^{x-2},\quad P(t,e^{t-2}+1),\quad k=e^{t-2}$
+        operation: 求导并用 $t$ 表示切点横坐标。
+        why: 原点不在曲线上，不能直接把原点当切点。
+      source_ref: page_0077:例6解析法一
+    - step_id: step_2
+      statement: 写出切点处切线方程并代入原点。
+      formula_trace:
+        from: $y-(e^{t-2}+1)=e^{t-2}(x-t)$
+        to: $0-(e^{t-2}+1)=e^{t-2}(0-t)$
+        operation: 把 $(0,0)$ 代入切线方程。
+        why: 题目要求过坐标原点作切线。
+      source_ref: page_0077:例6解析法一
+    - step_id: step_3
+      statement: 求出切点横坐标。
+      formula_trace:
+        from: $-(e^{t-2}+1)=-t e^{t-2}$
+        to: $(t-1)e^{t-2}=1\Rightarrow t=2$
+        operation: 移项整理；源解直接给出解 $t=2$。
+        why: $t=2$ 代入左侧为 1，且该方程在可行正区间上对应唯一切点。
+      source_ref: page_0077:例6解析法一
+    - step_id: step_4
+      statement: 代回切点和斜率，得到切线方程。
+      formula_trace:
+        from: $t=2,\quad e^{t-2}=1$
+        to: $y-(e^0+1)=e^0(x-2)\Rightarrow y=x$
+        operation: 代入切线方程并化简。
+        why: 切点为 $(2,2)$，斜率为 1，且该直线过原点。
+      source_ref: page_0077:例6解析法一
+    - step_id: step_5
+      statement: 用极点效应复核斜率。
+      formula_trace:
+        from: $f(x)=e^{x-2}+1-kx$
+        to: $\begin{cases}e^{x_0-2}+1-kx_0=0\\e^{x_0-2}-k=0\end{cases}\Rightarrow\begin{cases}x_0=2\\k=1\end{cases}$
+        operation: 令曲线与直线 $y=kx$ 的差函数在切点处函数值和导数值均为 0。
+        why: 相切且直线过原点，等价于差函数在切点有不变号零点。
+      source_ref: page_0078:例6续解法二
+teaching_card:
+  student_title: 原点不在曲线上，就先设切点
+  what_it_trains: 训练学生处理“过曲线外一点作切线”：不要把给定点当切点， 而是设真实切点，写切线方程，再把给定点代入求斜率。
+  recognition_cues:
+    - 题干说“过坐标原点作切线”，但曲线 $y=e^{x-2}+1$ 不过原点。
+    - 选项都是过原点的直线 $y=kx$。
+    - 曲线是指数平移，导数仍为 $e^{x-2}$。
+  normalization_moves:
+    - 设切点横坐标 $t$，切点为 $(t,e^{t-2}+1)$。
+    - 写 $y-(e^{t-2}+1)=e^{t-2}(x-t)$。
+    - 代入原点得到 $(t-1)e^{t-2}=1$。
+    - 解出 $t=2$ 后得到斜率 $k=1$。
+  common_failures:
+    - 把 $(0,0)$ 直接代入曲线，发现不满足后误判无切线。
+    - 只用切线斜率 $k=e^{t-2}$，漏掉切线必须过原点。
+    - 解出 $t=2$ 后忘记选的是切线方程 $y=x$。
+  similar_practice_query: 过原点作指数曲线切线 设切点 极点效应 y=e^{x-2}+1
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0077/page_0078 页图与 markdown 一致；未把 page_0078 后续例 7 纳入本卡。

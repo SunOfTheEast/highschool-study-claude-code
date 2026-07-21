@@ -1,0 +1,239 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0133_trig_cos_product_ex24b
+content_revision_id: mst_p0133_trig_cos_product_ex24b-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0133_trig_cos_product_ex24b.card.yaml
+stem: |-
+  （2024·小店区月考·多选）已知函数 $f(x)$ 的定义域为 $\left(-\frac{\pi}{2},\frac{\pi}{2}\right)$，其导函数为 $f^{\prime}(x)$。若 $[x+f(x)]\sin x=f^{\prime}(x)\cos x$，且 $f(0)=0$，则（  ）
+  A. $f(x)$ 是增函数
+  B. $f(x)$ 是减函数
+  C. $f(x)$ 有最大值
+  D. $f(x)$ 没有极值
+answer: |
+  AD
+
+  由题设
+  \[
+  [x+f(x)]\sin x=f^{\prime}(x)\cos x
+  \]
+  得
+  \[
+  f^{\prime}(x)\cos x-f(x)\sin x=x\sin x.
+  \]
+  设
+  \[
+  g(x)=f(x)\cos x,
+  \]
+  则
+  \[
+  g^{\prime}(x)=x\sin x.
+  \]
+  在区间 $\left(-\frac{\pi}{2},\frac{\pi}{2}\right)$ 内有 $x\sin x\ge 0$，故 $g$ 单调递增。
+  又 $f(0)=0$，所以 $g(0)=0$，从而
+  \[
+  x\in\left(-\frac{\pi}{2},0\right)\Rightarrow g(x)<0,\quad
+  x\in\left(0,\frac{\pi}{2}\right)\Rightarrow g(x)>0.
+  \]
+
+  由
+  \[
+  f(x)=\frac{g(x)}{\cos x}
+  \]
+  可得
+  \[
+  f^{\prime}(x)=\left[\frac{g(x)}{\cos x}\right]^{\prime}
+  =\frac{g^{\prime}(x)\cos x+g(x)\sin x}{\cos^2 x}.
+  \]
+  当 $x\in\left(-\frac{\pi}{2},0\right)$ 时，$g(x)<0,\ g^{\prime}(x)>0,\ \cos x>0,\ \sin x<0$，
+  故分子两项均为正，$f^{\prime}(x)>0$；
+  当 $x\in\left(0,\frac{\pi}{2}\right)$ 时，$g(x)>0,\ g^{\prime}(x)>0,\ \cos x>0,\ \sin x>0$，
+  仍有 $f^{\prime}(x)>0$。
+  因而 $f^{\prime}(x)\ge 0$ 在全区间成立，$f(x)$ 单调递增，A正确、B错误。
+  又该区间为开区间且函数单调递增，所以无极值与最值，D正确、C错误。
+  故选 AD。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把原式改写为可识别的乘积求导结构。
+      max_score: 1
+    - step_id: step_2
+      description: 构造 $g(x)=f(x)\\cos x$ 并判定其单调与符号。
+      max_score: 1
+    - step_id: step_3
+      description: 用商函数求导表达 $f^{\prime}(x)$ 并分区间判号。
+      max_score: 1
+    - step_id: step_4
+      description: 由单调性与开区间性质判断选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 抽象函数性质
+        target: 判断单调性与极值结论的真假。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 对称化与偏移
+    subroute:
+      - 三角函数基础构造
+      - 乘积函数构造
+      - 分区间符号判定
+  structure:
+    primary: 三角复合结构
+    secondary:
+      - 抽象函数结构
+      - 同构结构
+    evidence:
+      - 题设含 $f^{\prime}(x)\\cos x$ 与 $f(x)\\sin x$，天然对应 $(f\\cos x)^{\prime}$。
+      - 定义域是对称开区间 $\\left(-\\frac{\\pi}{2},\\frac{\\pi}{2}\\right)$，需分左右符号。
+    normalization_moves_used:
+      - 设 $g=f\\cos x$。
+      - 先判 $g$ 的单调和符号，再回代求 $f^{\prime}$。
+      - 结合开区间性质判断是否有极值/最值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生看不出 $f^{\prime}(x)\\cos x-f(x)\\sin x$ 是乘积导数，回补导数运算与几何意义。
+      - 若学生不会用 $g(0)=0$ + 递增推左右符号，回补函数性质与图像。
+      - 若学生混淆“极值”和“最值”，回补导数单调极值基础。
+  detail_terms:
+    - $g(x)=f(x)\\cos x$
+    - $g^{\prime}(x)=x\\sin x\\ge 0$
+    - $f^{\prime}(x)=\\frac{g^{\prime}(x)\\cos x+g(x)\\sin x}{\\cos^2 x}$
+    - 答案AD
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0133_trig_cos_product_ex24b
+source_evidence:
+  source_refs:
+    - ref_id: page_0133
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0133/page_0133.md
+      role: problem_start
+      evidence: page_0133下半页给出第二个“例24”（2024小店区月考）完整题干、选项、解析与答案AD。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0133.png
+      inspected: true
+      notes: 已核对页图：本题在page_0133内完整结束，后续进入“三、奇偶性锁定”节。
+  source_context: 本题利用乘积构造 $g(x)=f(x)\\cos x$，先判 $g$ 单调与符号，再回代判断 $f^{\prime}(x)$ 符号与函数极值性质。
+  source_influence:
+    - 保留源页由 $f^{\prime}(x)\\cos x-f(x)\\sin x=x\\sin x$ 构造 $g(x)=f(x)\\cos x$。
+    - 保留 $g^{\prime}(x)=x\\sin x\\ge 0$ 及 $g(0)=0$ 推出 $g$ 在左右区间符号。
+    - 保留对 $f^{\prime}(x)$ 分区间判正，得 $f$ 递增且无极值，结论AD。
+  source_discrepancies: []
+original_problem:
+  stem: （2024·小店区月考·多选）已知函数 $f(x)$ 的定义域为 $\left(-\frac{\pi}{2},\frac{\pi}{2}\right)$，其导函数为 $f^{\prime}(x)$。若 $[x+f(x)]\sin x=f^{\prime}(x)\cos x$，且 $f(0)=0$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(x)$ 是增函数
+      text_latex: $f(x)$ 是增函数
+    - label: B
+      text_raw: $f(x)$ 是减函数
+      text_latex: $f(x)$ 是减函数
+    - label: C
+      text_raw: $f(x)$ 有最大值
+      text_latex: $f(x)$ 有最大值
+    - label: D
+      text_raw: $f(x)$ 没有极值
+      text_latex: $f(x)$ 没有极值
+  answer: AD
+  fidelity_notes:
+    - 本题是page_0133第二个例24，语义ID使用 ex24b 与前一题区分。
+    - 源页解析结论为“故选AD”。
+solution:
+  source_solution_summary: |
+    由题设
+    \[
+    [x+f(x)]\sin x=f^{\prime}(x)\cos x
+    \]
+    得
+    \[
+    f^{\prime}(x)\cos x-f(x)\sin x=x\sin x.
+    \]
+    设
+    \[
+    g(x)=f(x)\cos x,
+    \]
+    则
+    \[
+    g^{\prime}(x)=x\sin x.
+    \]
+    在区间 $\left(-\frac{\pi}{2},\frac{\pi}{2}\right)$ 内有 $x\sin x\ge 0$，故 $g$ 单调递增。
+    又 $f(0)=0$，所以 $g(0)=0$，从而
+    \[
+    x\in\left(-\frac{\pi}{2},0\right)\Rightarrow g(x)<0,\quad
+    x\in\left(0,\frac{\pi}{2}\right)\Rightarrow g(x)>0.
+    \]
+
+    由
+    \[
+    f(x)=\frac{g(x)}{\cos x}
+    \]
+    可得
+    \[
+    f^{\prime}(x)=\left[\frac{g(x)}{\cos x}\right]^{\prime}
+    =\frac{g^{\prime}(x)\cos x+g(x)\sin x}{\cos^2 x}.
+    \]
+    当 $x\in\left(-\frac{\pi}{2},0\right)$ 时，$g(x)<0,\ g^{\prime}(x)>0,\ \cos x>0,\ \sin x<0$，
+    故分子两项均为正，$f^{\prime}(x)>0$；
+    当 $x\in\left(0,\frac{\pi}{2}\right)$ 时，$g(x)>0,\ g^{\prime}(x)>0,\ \cos x>0,\ \sin x>0$，
+    仍有 $f^{\prime}(x)>0$。
+    因而 $f^{\prime}(x)\ge 0$ 在全区间成立，$f(x)$ 单调递增，A正确、B错误。
+    又该区间为开区间且函数单调递增，所以无极值与最值，D正确、C错误。
+    故选 AD。
+  key_steps:
+    - step_id: step_1
+      statement: 把原式改写为可识别的乘积求导结构。
+      formula_trace:
+        from: $[x+f(x)]\\sin x=f^{\prime}(x)\\cos x$
+        to: $f^{\prime}(x)\\cos x-f(x)\\sin x=x\\sin x$
+        operation: 移项整理。
+        why: 左侧正是 $(f(x)\\cos x)^{\prime}$ 的形式。
+      source_ref: page_0133
+    - step_id: step_2
+      statement: 构造 $g(x)=f(x)\\cos x$ 并判定其单调与符号。
+      formula_trace:
+        from: $g^{\prime}(x)=x\\sin x$，$f(0)=0$
+        to: $g$递增，$g(0)=0$，故左负右正
+        operation: 利用 $x\\sin x\\ge 0$ 与过零点信息。
+        why: 这是后续判断 $f^{\prime}(x)$ 号向的关键输入。
+      source_ref: page_0133
+    - step_id: step_3
+      statement: 用商函数求导表达 $f^{\prime}(x)$ 并分区间判号。
+      formula_trace:
+        from: $f(x)=\\frac{g(x)}{\\cos x}$
+        to: $f^{\prime}(x)=\\frac{g^{\prime}(x)\\cos x+g(x)\\sin x}{\\cos^2 x}>0$
+        operation: 求导后按 $(-\\frac{\\pi}{2},0)$ 与 $(0,\\frac{\\pi}{2})$ 分析各因子符号。
+        why: 直接给出 $f$ 的单调性。
+      source_ref: page_0133
+    - step_id: step_4
+      statement: 由单调性与开区间性质判断选项。
+      formula_trace:
+        from: $f$ 在 $\\left(-\\frac{\\pi}{2},\\frac{\\pi}{2}\\right)$ 单调递增
+        to: A对，B错，且无极值和最值，D对、C错
+        operation: 逐项对照。
+        why: 多选题需要区分“增减性”与“极值/最值”两个层面。
+      source_ref: page_0133
+teaching_card:
+  student_title: 把式子认成 $(f\\cos x)^{\prime}$，再回代判 $f^{\prime}$
+  what_it_trains: 训练三角复合场景下的结构识别、符号分区间分析和多选结论拆分。
+  recognition_cues:
+    - 出现 $f^{\prime}(x)\\cos x$ 与 $f(x)\\sin x$ 的线性组合。
+    - 定义域是 $\\left(-\\frac{\\pi}{2},\\frac{\\pi}{2}\\right)$，提示按左右半区讨论符号。
+  normalization_moves:
+    - 移项后设 $g=f\\cos x$。
+    - 由 $g^{\prime}=x\\sin x$ 判 $g$ 递增，并结合 $g(0)=0$ 定符号。
+    - 写 $f=\\frac{g}{\\cos x}$，求 $f^{\prime}$ 后判号。
+  common_failures:
+    - 忽视 $\cos x>0$ 在该定义域内恒成立。
+    - 把 $x\\sin x$ 在负半轴误判为负。
+    - 把“没有最值”误当成“有极值”。
+  similar_practice_query: 抽象函数 三角复合 $f^{\prime}(x)\cos x-f(x)\sin x$ 乘积构造 单调性 极值 多选
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

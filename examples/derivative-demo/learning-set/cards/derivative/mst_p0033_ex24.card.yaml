@@ -1,0 +1,233 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0033_ex24
+content_revision_id: mst_p0033_ex24-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0033_ex24.card.yaml
+stem: |-
+  （2021 · 多选 · 老唐原创）若 $f(x)=\frac{e^{x-1}}{x}$，$g(x)=\frac{x}{1+\ln x}$，$\exists x_1,x_2$，使得 $f(x_1)=g(x_2)$，则下列说法正确的是（ ）
+  A. 若 $x_1>x_2$，则 $x_2<1$
+  B. 若 $x_1<x_2$，则 $x_1<1$
+  C. 存在 $x_1=x_2$
+  D. $\exists x_0$，使得当 $x_1>x_0,\ x_2>x_0$ 时，$|x_2-x_1|$ 的值随着 $x_1,\ x_2$ 的增大而增大
+answer: |
+  ACD。
+
+  先把 $g(x)$ 改写为 $f(1+\ln x)$，令 $t=1+\ln x_2$，于是问题变成 $f(x_1)=f(t)$。不用二阶导，直接求导得 $f'(x)=e^{x-1}(x-1)/x^2$，所以 $f$ 在 $(-\infty,0)$ 与 $(0,1)$ 上递减、在 $(1,+\infty)$ 上递增。按 $t<0$、$0<t<1$、$t=1$、$t>1$ 分段列出等值点位置，即可判断 A、B、C。若 $x_1,x_2>1$，则只能落在右侧递增分支，$x_1=1+\ln x_2$，从而 $|x_2-x_1|=x_2-\ln x_2-1$ 随 $x_2$ 增大而增大，D 正确。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 把 $g$ 改写成 $f$ 的平移对数输入。
+      max_score: 1
+    - step_id: step_2
+      description: 求出 $f$ 的分支单调结构。
+      max_score: 1
+    - step_id: step_3
+      description: 讨论 $t=1+\ln x_2<0$ 的情形。
+      max_score: 1
+    - step_id: step_4
+      description: 讨论 $0<t<1$ 的情形。
+      max_score: 1
+    - step_id: step_5
+      description: 讨论 $t=1$ 的情形。
+      max_score: 1
+    - step_id: step_6
+      description: 讨论 $t>1$ 的情形。
+      max_score: 1
+    - step_id: step_7
+      description: 汇总分段结论判断 A、B、C。
+      max_score: 1
+    - step_id: step_8
+      description: 在右侧大分支上证明距离随变量增大而增大。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: A
+        goal: 数值比较
+        target: 选项 A：数值比较
+        result: 见 source_solution_summary
+      - part_id: B
+        goal: 数值比较
+        target: 选项 B：数值比较
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 数值求值
+        target: 选项 C：数值求值
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 几何量求解
+        target: 选项 D：几何量求解
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 数形结合
+    subroute:
+      - $g(x)=f(1+\ln x)$
+      - $f(x)=e^{x-1}/x$ 的等值分支分类
+      - $x_2-\ln x_2-1$ 距离单调
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - Max/Min 与绝对值结构
+    evidence:
+      - $g(x)$ 被完全改写为 $f(1+\ln x)$。
+      - $f$ 在 $x=1$ 两侧的等值点形成分支判断。
+      - 右侧分支的距离为 $x_2-\ln x_2-1$。
+    normalization_moves_used:
+      - $x/(1+\ln x)$ 改写为 $e^{\ln(ex)-1}/\ln(ex)$。
+      - 设 $t=1+\ln x_2$ 后按 $t<0$、$0<t<1$、$t=1$、$t>1$ 分类。
+      - $x_1=1+\ln x_2$ 代入 $|x_2-x_1|$ 得 $x_2-\ln x_2-1$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $g(x)$ 改写成 $f(1+\ln x)$，回补指数对数基础。
+      - 若学生忽略 $x=0$ 和 $x=1$ 对 $f$ 单调分支的切分，回补函数三要素与定义域。
+      - 若学生把 $f$ 当成全局一一函数，回补函数性质与图像。
+      - |
+        若学生不能用 $h'(x)=1-1/x$ 判断距离增大，回补导数单调极值基础。
+  detail_terms:
+    - $f(x)=e^{x-1}/x$
+    - $g(x)=x/(1+\ln x)=f(1+\ln x)$
+    - |
+      $f'(x)=e^{x-1}(x-1)/x^2$
+    - $t=1+\ln x_2$
+    - $x_2-\ln x_2-1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0033_ex24
+source_evidence:
+  source_refs:
+    - ref_id: page_0033
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0033/page_0033.md
+      role: problem_start
+      evidence: 例24题干、四个选项、三幅函数示意图和完整解析均在 page_0033。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0033.png
+      inspected: true
+      notes: 已核对例24题干、选项、三幅图中 $x_1,x_2,x_0=1$ 的标注、分段讨论和答案 ACD。
+  source_context: 例24从 page_0033 顶部起题并在本页结束；本页底部进入“考点5”，不属于例24续页。
+  source_influence:
+    - 解析核心是 $g(x)=f(1+\ln x)$，把 $f(x_1)=g(x_2)$ 化成 $f(x_1)=f(1+\ln x_2)$。
+    - 页面图像中的三幅示意图用于确认等值点在 $x=1$ 两侧的分支关系。
+  source_discrepancies:
+    - 解析早段写“因为 $x\ge1+\ln x$，故 $f(x)\ge f(1+\ln x)$”，该概括在 $1/e<x<1$ 时不成立；本卡未用该句，改按导数和分段等值点重建。
+    - 解析第①种情况写 $f(x_1)-f(1+\ln x_2)<0$，但由题设应为 $f(x_1)=f(1+\ln x_2)$；本卡按等式处理。
+    - 解析第①种情况将 $x_2$ 范围写作 $0\le x_2<1/e$，函数 $g$ 的定义域要求 $x_2>0$；本卡写作 $0<x_2<1/e$。
+original_problem:
+  stem: （2021 · 多选 · 老唐原创）若 $f(x)=\frac{e^{x-1}}{x}$，$g(x)=\frac{x}{1+\ln x}$，$\exists x_1,x_2$，使得 $f(x_1)=g(x_2)$，则下列说法正确的是（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 若 $x_1>x_2$，则 $x_2<1$
+      text_latex: 若 $x_1>x_2$，则 $x_2<1$
+    - label: B
+      text_raw: 若 $x_1<x_2$，则 $x_1<1$
+      text_latex: 若 $x_1<x_2$，则 $x_1<1$
+    - label: C
+      text_raw: 存在 $x_1=x_2$
+      text_latex: 存在 $x_1=x_2$
+    - label: D
+      text_raw: $\exists x_0$，使得当 $x_1>x_0,\ x_2>x_0$ 时，$|x_2-x_1|$ 的值随着 $x_1,\ x_2$ 的增大而增大
+      text_latex: $\exists x_0$，使得当 $x_1>x_0,\ x_2>x_0$ 时，$|x_2-x_1|$ 的值随着 $x_1,\ x_2$ 的增大而增大
+  answer: ACD。
+  fidelity_notes:
+    - 题干和选项抄自 page_0033；原文使用中文逗号连接 $x_1，x_2$，本卡统一为英文逗号。
+    - 函数定义域隐含 $x_1\ne0$、$x_2>0$ 且 $x_2\ne e^{-1}$。
+    - 解析中的三幅图已由 page_0033 整页图像核对，未单独生成裁图。
+solution:
+  source_solution_summary: |
+    先把 $g(x)$ 改写为 $f(1+\ln x)$，令 $t=1+\ln x_2$，于是问题变成 $f(x_1)=f(t)$。不用二阶导，直接求导得 $f'(x)=e^{x-1}(x-1)/x^2$，所以 $f$ 在 $(-\infty,0)$ 与 $(0,1)$ 上递减、在 $(1,+\infty)$ 上递增。按 $t<0$、$0<t<1$、$t=1$、$t>1$ 分段列出等值点位置，即可判断 A、B、C。若 $x_1,x_2>1$，则只能落在右侧递增分支，$x_1=1+\ln x_2$，从而 $|x_2-x_1|=x_2-\ln x_2-1$ 随 $x_2$ 增大而增大，D 正确。
+  key_steps:
+    - step_id: step_1
+      statement: 把 $g$ 改写成 $f$ 的平移对数输入。
+      formula_trace:
+        from: $g(x)=\frac{x}{1+\ln x}$
+        to: $g(x)=\frac{e^{\ln(ex)-1}}{\ln(ex)}=f(1+\ln x)$
+        operation: 用 $\ln(ex)=1+\ln x$，且 $e^{\ln(ex)-1}=e^{\ln x}=x$。
+        why: 这样 $f(x_1)=g(x_2)$ 就变成同一函数 $f$ 的等值问题。
+      source_ref: page_0033
+    - step_id: step_2
+      statement: 求出 $f$ 的分支单调结构。
+      formula_trace:
+        from: $f(x)=\frac{e^{x-1}}{x}$
+        to: |
+          $f'(x)=\frac{e^{x-1}(x-1)}{x^2}$；$f$ 在 $(-\infty,0)$、$(0,1)$ 上递减，在 $(1,+\infty)$ 上递增，且 $f(1)=1$。
+        operation: 对商式求导，并按 $x-1$ 与定义域断点 $x=0$ 分区间判号。
+        why: 等值方程 $f(x_1)=f(t)$ 的解数和位置完全由这些分支决定。
+      source_ref: page_0033
+    - step_id: step_3
+      statement: 讨论 $t=1+\ln x_2<0$ 的情形。
+      formula_trace:
+        from: $t=1+\ln x_2<0$，即 $0<x_2<\frac1e$，且 $f(x_1)=f(t)$
+        to: $x_1=t=1+\ln x_2<x_2$
+        operation: 此时 $f(t)<0$，所以 $x_1<0$；又 $f$ 在 $(-\infty,0)$ 上严格递减，等值点唯一，故 $x_1=t$。
+        why: 负分支上没有第二个等值点，且 $1+\ln x_2<x_2$。
+      source_ref: page_0033
+    - step_id: step_4
+      statement: 讨论 $0<t<1$ 的情形。
+      formula_trace:
+        from: $0<1+\ln x_2<1$，即 $\frac1e<x_2<1$
+        to: 等值点为 $x_1=t=1+\ln x_2<x_2<1$，或另一个 $x_1>1>x_2$
+        operation: 因 $f(t)>1$，在 $(0,1)$ 的递减分支上有一个解 $x_1=t$，在 $(1,+\infty)$ 的递增分支上还有一个对应解。
+        why: 这一段同时给出 $x_1<x_2$ 的小分支和 $x_1>x_2$ 的大分支。
+      source_ref: page_0033
+    - step_id: step_5
+      statement: 讨论 $t=1$ 的情形。
+      formula_trace:
+        from: $1+\ln x_2=1$
+        to: $x_2=1,\quad f(x_1)=f(1)$ 只有 $x_1=1$，所以 $x_1=x_2=1$
+        operation: 解 $\ln x_2=0$ 得 $x_2=1$，再用 $f$ 在正半轴的最小值点唯一性。
+        why: 这直接证明选项 C 的存在性。
+      source_ref: page_0033
+    - step_id: step_6
+      statement: 讨论 $t>1$ 的情形。
+      formula_trace:
+        from: $1+\ln x_2>1$，即 $x_2>1$
+        to: 等值点为 $x_1\in(0,1)$，或 $x_1=t=1+\ln x_2<x_2$
+        operation: 右侧递增分支给出解 $x_1=t$，左侧 $(0,1)$ 递减分支给出另一个正解；由 $x_2>1$ 得 $1+\ln x_2<x_2$。
+        why: 当 $x_2>1$ 时不会出现 $x_1>x_2$，但会出现 $x_1<x_2$ 且 $x_1>1$ 的反例。
+      source_ref: page_0033
+    - step_id: step_7
+      statement: 汇总分段结论判断 A、B、C。
+      formula_trace:
+        from: 四段情况中的 $x_1,x_2$ 位置关系
+        to: 若 $x_1>x_2$ 则只能在 $\frac1e<x_2<1$ 的大分支，故 $x_2<1$；当 $x_2>1$ 且 $x_1=1+\ln x_2$ 时有 $x_1<x_2$ 但 $x_1>1$，故 B 错；$x_1=x_2=1$ 存在
+        operation: 按条件筛选分支，分别验证或构造反例。
+        why: 选项 A、B、C 都是等值点分支位置的直接读出。
+      source_ref: page_0033
+    - step_id: step_8
+      statement: 在右侧大分支上证明距离随变量增大而增大。
+      formula_trace:
+        from: $x_1>1,\ x_2>1,\ f(x_1)=f(1+\ln x_2)$
+        to: |
+          $x_1=1+\ln x_2,\quad |x_2-x_1|=x_2-\ln x_2-1$，且 $\left(x-\ln x-1\right)'=1-\frac1x>0\ (x>1)$。
+        operation: 取 $x_0=1$，由 $f$ 在 $(1,+\infty)$ 上严格递增得到 $x_1=1+\ln x_2$；再对 $h(x)=x-\ln x-1$ 求导。
+        why: 当 $x_2>1$ 增大时，$x_1=1+\ln x_2$ 也增大，而距离 $h(x_2)$ 严格增大。
+      source_ref: page_0033
+teaching_card:
+  student_title: 把 $x/(1+\ln x)$ 变成同一个 $f$ 的等值点
+  what_it_trains: 训练把两个看似不同的函数化成同一个函数的不同输入，再用单调分支判断变量位置和距离变化。
+  recognition_cues:
+    - 一个函数是 $e^{x-1}/x$，另一个是 $x/(1+\ln x)$。
+    - 题目只给 $f(x_1)=g(x_2)$，要求判断 $x_1,x_2$ 的相对位置。
+    - 图像都围绕 $x=1$ 的最小值和两侧等值点展开。
+  normalization_moves:
+    - 把 $g(x)$ 写成 $f(1+\ln x)$。
+    - 设 $t=1+\ln x_2$，按 $t$ 落在负半轴、$(0,1)$、$1$、$(1,+\infty)$ 分类。
+    - 当 $x_1,x_2>1$ 时，用 $x_1=1+\ln x_2$ 化出距离 $x_2-\ln x_2-1$。
+  common_failures:
+    - 只看 $x\ge1+\ln x$，误以为可以直接比较 $f(x)$ 与 $f(1+\ln x)$。
+    - 忘记 $f$ 在负半轴和正半轴被 $x=0$ 分开，导致第①类情况漏解。
+    - 把 B 当成 A 的对称命题，忽略 $x_2>1$ 时 $x_1=1+\ln x_2>1$ 仍小于 $x_2$。
+  similar_practice_query: e^(x-1)/x x/(1+ln x) 同构 等值点 分支 距离
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - page_0033 图像已核对；例24不跨页。
+    - 源解析有三个可由数学确认的小瑕疵：$f(x)\ge f(1+\ln x)$ 的概括不全局成立、第①类中等式误写为差小于零、$x_2$ 下界应为 $>0$。本卡按等值方程和导数分支重建，结论仍为 ACD。
+    - reviewer 修正：choices 统一为 label/text_raw/text_latex 结构；goal 改为抽象函数性质；结构标签从极值点偏移改为 Max/Min 与绝对值结构。

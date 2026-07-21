@@ -1,0 +1,207 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0144_same_power_transform_ex06
+content_revision_id: mst_p0144_same_power_transform_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0144_same_power_transform_ex06.card.yaml
+stem: |-
+  （2023·浙江期中）已知 $a=\left(\frac35\right)^{\frac25}$，$b=\left(\frac25\right)^{\frac35}$，$c=\left(\frac25\right)^5$，则（  ）
+  A. $a<b<c$
+  B. $c<b<a$
+  C. $b<c<a$
+  D. $c<a<b$
+answer: |
+  B
+
+  法一：同幂化到 $\\frac15$ 次幂。
+  $a=\\sqrt[5]{\\frac9{25}}$，
+  $b=\\sqrt[5]{\\frac8{125}}$，
+  $c=\\sqrt[5]{(\\frac25)^{25}}$。
+  由于 $\\left(\\frac25\\right)^{25}<\\frac8{125}<\\frac9{25}$，
+  且 $x^{1/5}$ 在 $(0,+\\infty)$ 上递增，
+  得 $c<b<a$。
+  法二：把前两项看成 $a^b$ 与 $b^a$ 型，
+  取 $a_0=\\frac35,b_0=\\frac25$，满足 $e>a_0>b_0>0$，
+  所以 $a_0^{b_0}>b_0^{a_0}$，即 $a>b$；
+  又 $0<\\frac25<1$ 且 $\\frac35<5$，
+  故 $\\left(\\frac25\\right)^{\\frac35}>\\left(\\frac25\\right)^5$，即 $b>c$。
+  合并得 $c<b<a$，选 B。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 法一先统一成同幂函数。
+      max_score: 1
+    - step_id: step_2
+      description: 比较三个被开方数。
+      max_score: 1
+    - step_id: step_3
+      description: 法二用 $a^b$ 与 $b^a$ 规则判 $a>b$。
+      max_score: 1
+    - step_id: step_4
+      description: 同底比较得到 $b>c$。
+      max_score: 1
+    - step_id: step_5
+      description: 汇总结论。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 同幂化比较三项。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 数值比较
+        target: 用 $a^b$ 与同底指数规则做复核。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 拟合与夹逼
+    subroute:
+      - 同幂化
+      - 大指小底
+      - 同底指数比较
+  structure:
+    primary: 同构结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 非对称结构
+    evidence:
+      - 三项均可转成同一幂函数 $x^{1/5}$ 的输入比较。
+      - 其中两项天然是 $a^b,b^a$ 互换结构。
+    normalization_moves_used:
+      - 把三项统一成5次根。
+      - 将前两项映射到 $a_0^{b_0}$ 与 $b_0^{a_0}$。
+      - 对 $b,c$ 使用底数小于1的同底比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把分数指数改写为同次根，回补代数恒等变形。
+      - 若学生不熟悉 $e>a>b>0$ 时 $a^b>b^a$ 的来源，回补指数对数基础。
+      - 若学生把 $0<q<1$ 的同底幂大小方向写反，回补不等式工具基础。
+  detail_terms:
+    - $\sqrt[5]{\cdot}$ 同幂化
+    - $(\frac25)^{25}<\frac8{125}<\frac9{25}$
+    - 大指小底
+    - $0<\frac25<1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0144_same_power_transform_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0144_ex06_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0144/page_0144.md
+      role: problem_start
+      evidence: 例6题干：$a=(\frac35)^{\frac25}, b=(\frac25)^{\frac35}, c=(\frac25)^5$ 并给出四个选项。
+    - ref_id: page_0144_ex06_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0144/page_0144.md
+      role: solution
+      evidence: 例6解析给出法一（同幂化到5次根）与法二（大指小底）两条路径。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0144.png
+      inspected: true
+      notes: 已核对原图：$c=(2/5)^5$ 的5次根重写与答案B一致。
+  source_context: 例6位于page_0144底部，完整结束在本页。
+  source_influence:
+    - 保留源解法一：统一成5次根后比较被开方数。
+    - 保留源解法二：使用“$e>a>b>0$ 时 $a^b>b^a$（大指小底）”。
+    - 最终顺序均导向 $c<b<a$。
+  source_discrepancies: []
+original_problem:
+  stem: （2023·浙江期中）已知 $a=\left(\frac35\right)^{\frac25}$，$b=\left(\frac25\right)^{\frac35}$，$c=\left(\frac25\right)^5$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+    - label: B
+      text_raw: $c<b<a$
+      text_latex: $c<b<a$
+    - label: C
+      text_raw: $b<c<a$
+      text_latex: $b<c<a$
+    - label: D
+      text_raw: $c<a<b$
+      text_latex: $c<a<b$
+  answer: B
+  fidelity_notes:
+    - 原图中法一明确写成：$a=\sqrt[5]{9/25}, b=\sqrt[5]{8/125}, c=\sqrt[5]{(2/5)^{25}}$。
+    - 本题不跨页。
+solution:
+  source_solution_summary: |
+    法一：同幂化到 $\\frac15$ 次幂。
+    $a=\\sqrt[5]{\\frac9{25}}$，
+    $b=\\sqrt[5]{\\frac8{125}}$，
+    $c=\\sqrt[5]{(\\frac25)^{25}}$。
+    由于 $\\left(\\frac25\\right)^{25}<\\frac8{125}<\\frac9{25}$，
+    且 $x^{1/5}$ 在 $(0,+\\infty)$ 上递增，
+    得 $c<b<a$。
+    法二：把前两项看成 $a^b$ 与 $b^a$ 型，
+    取 $a_0=\\frac35,b_0=\\frac25$，满足 $e>a_0>b_0>0$，
+    所以 $a_0^{b_0}>b_0^{a_0}$，即 $a>b$；
+    又 $0<\\frac25<1$ 且 $\\frac35<5$，
+    故 $\\left(\\frac25\\right)^{\\frac35}>\\left(\\frac25\\right)^5$，即 $b>c$。
+    合并得 $c<b<a$，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 法一先统一成同幂函数。
+      formula_trace:
+        from: $a=(\frac35)^{\frac25},\ b=(\frac25)^{\frac35},\ c=(\frac25)^5$
+        to: $a=\sqrt[5]{\frac9{25}},\ b=\sqrt[5]{\frac8{125}},\ c=\sqrt[5]{(\frac25)^{25}}$
+        operation: 把指数写成 $1/5$ 的形式。
+        why: 转成同一递增函数 $x\mapsto x^{1/5}$ 的输入比较。
+      source_ref: page_0144_ex06_solution
+    - step_id: step_2
+      statement: 比较三个被开方数。
+      formula_trace:
+        from: $(\frac25)^{25},\ \frac8{125},\ \frac9{25}$
+        to: $(\frac25)^{25}<\frac8{125}<\frac9{25}\Rightarrow c<b<a$
+        operation: 先比较真数，再用5次根函数保序。
+        why: 直接得到目标次序。
+      source_ref: page_0144_ex06_solution
+    - step_id: step_3
+      statement: 法二用 $a^b$ 与 $b^a$ 规则判 $a>b$。
+      formula_trace:
+        from: $a=(\frac35)^{\frac25},\ b=(\frac25)^{\frac35}$
+        to: 令 $a_0=\frac35,b_0=\frac25$，$e>a_0>b_0>0\Rightarrow a_0^{b_0}>b_0^{a_0}$，故 $a>b$
+        operation: 套用同构函数 $\ln x/x$ 对应的“大指小底”结论。
+        why: 避免繁琐数值估算。
+      source_ref: page_0144_ex06_solution
+    - step_id: step_4
+      statement: 同底比较得到 $b>c$。
+      formula_trace:
+        from: $b=(\frac25)^{\frac35},\ c=(\frac25)^5$
+        to: 0<\frac25<1,\ \frac35<5\Rightarrow b>c$
+        operation: 底数在 $(0,1)$ 时指数越大值越小。
+        why: 与 step_3 合并可得全序。
+      source_ref: page_0144_ex06_solution
+    - step_id: step_5
+      statement: 汇总结论。
+      formula_trace:
+        from: $a>b,\ b>c$
+        to: $c<b<a$
+        operation: 传递性合并。
+        why: 对应选项 B。
+      source_ref: page_0144_ex06_solution
+teaching_card:
+  student_title: 先同幂，再用口诀复核
+  what_it_trains: 训练“幂比较优先做标准化”：把杂乱指数统一成同幂，再用一条递增性完成排序；同时学会用 $a^b$ 与 $b^a$ 规则做快速二次验证。
+  recognition_cues:
+    - 多个分数指数同时出现。
+    - 出现互换结构 $(3/5)^{2/5}$ 与 $(2/5)^{3/5}$。
+    - 其中一项是同底高次幂，便于直接判断。
+  normalization_moves:
+    - 把每一项都改写为5次根。
+    - 先比较根号内，再回到原量。
+    - 用同底 $q\in(0,1)$ 的指数规则收尾。
+  common_failures:
+    - 同幂化后把 $\frac9{25}$ 与 $\frac8{125}$ 比大小算错。
+    - 把“大指小底”应用方向记反。
+    - 忘记底数小于1时同底幂比较会反向。
+  similar_practice_query: 同幂化 分数指数比较 a^b与b^a 底数小于1
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

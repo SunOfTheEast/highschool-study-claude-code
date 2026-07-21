@@ -1,0 +1,161 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0025_section4_ex01
+content_revision_id: mst_p0025_section4_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0025_section4_ex01.card.yaml
+stem: |-
+  (2020·新课标ⅠT12) 若 $2^a+\log_2 a=4^b+2\log_4 b$ 则 (  )
+
+  A. $a>2b$
+  B. $a<2b$
+  C. $a>b^2$
+  D. $a<b^2$
+answer: |-
+  B
+
+  把右侧 $4^b+2\log_4 b$ 改写为 $2^{2b}+\log_2 b$，再与 $2^{2b}+\log_2(2b)$ 比较。令 $f(x)=2^x+\log_2 x$，由其在 $(0,+\infty)$ 上单调递增，得到 $f(a)<f(2b)$，所以 $a<2b$，选 B。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 先明确对数定义域。
+      max_score: 1
+    - step_id: step_2
+      description: 把题设右侧化到以 2 为底的同构形式。
+      max_score: 1
+    - step_id: step_3
+      description: 制造 $f(2b)$ 并得到严格比较。
+      max_score: 1
+    - step_id: step_4
+      description: 利用母函数单调性比较参数。
+      max_score: 1
+    - step_id: step_5
+      description: 确定选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - $2^x+\log_2 x$ 单调母函数
+      - $4^b$ 与 $\log_4 b$ 统一底数
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - 题设等式通过换底后变为 $f(a)=2^{2b}+\log_2 b<f(2b)$。
+      - 单调母函数 $f(x)=2^x+\log_2 x$ 直接输出 $a<2b$。
+    normalization_moves_used:
+      - $4^b=2^{2b}$。
+      - $2\log_4 b=\log_2 b$。
+      - $\log_2(2b)=\log_2 b+1$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生忘记由 $\log_2 a,\log_4 b$ 得到 $a>0,b>0$，回补函数三要素与定义域。
+      - 若学生不会把 $4^b+2\log_4 b$ 化为 $2^{2b}+\log_2 b$，回补指数对数基础。
+      - 若学生不能证明 $2^x+\log_2 x$ 单调递增，回补导数运算与几何意义。
+      - 若学生从 $f(a)<f(2b)$ 不能推出 $a<2b$，回补函数性质与图像。
+  detail_terms:
+    - $2^a+\log_2 a$
+    - $4^b+2\log_4 b$
+    - $f(x)=2^x+\log_2 x$
+    - $a<2b$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0025_section4_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0025
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0025/page_0025.md
+      role: problem_start
+      evidence: 四、指对同构体系下的同构函数单调性考点1；例1题干、选项和解析完整在 page_0025。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0025.png
+      inspected: true
+      notes: 已核对 section4 例1题干、四个选项和解析结论 B。
+  source_context: page_0025 后半进入“四、指对同构体系”，本题是“构造单调函数 $e^x+x$ 或 $x+\ln x$”考点下的例1。
+  source_influence:
+    - 章节引导强调构造单调母函数；本卡按 $f(x)=2^x+\log_2 x$ 的单调性归类。
+  source_discrepancies: []
+original_problem:
+  stem: |
+    (2020·新课标ⅠT12) 若 $2^a+\log_2 a=4^b+2\log_4 b$ 则 (  )
+  parts: *a1
+  choices:
+    - A. $a>2b$
+    - B. $a<2b$
+    - C. $a>b^2$
+    - D. $a<b^2$
+  answer: B
+  fidelity_notes:
+    - 题头位于 page_0025 新章节 section4 的例1。
+    - 由对数定义域可知 $a>0,b>0$，题面未另列。
+solution:
+  source_solution_summary: 把右侧 $4^b+2\log_4 b$ 改写为 $2^{2b}+\log_2 b$，再与 $2^{2b}+\log_2(2b)$ 比较。令 $f(x)=2^x+\log_2 x$，由其在 $(0,+\infty)$ 上单调递增，得到 $f(a)<f(2b)$，所以 $a<2b$，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 先明确对数定义域。
+      formula_trace:
+        from: $\log_2 a,\ \log_4 b$ 有意义
+        to: $a>0,\quad b>0$
+        operation: 使用对数真数必须为正。
+        why: 后续比较 $f(a)$ 与 $f(2b)$ 需要 $a,2b$ 都在母函数定义域内。
+      source_ref: page_0025
+    - step_id: step_2
+      statement: 把题设右侧化到以 2 为底的同构形式。
+      formula_trace:
+        from: $4^b+2\log_4 b$
+        to: $2^{2b}+\log_2 b$
+        operation: 用 $4^b=2^{2b}$ 与 $2\log_4 b=\log_2 b$ 换底。
+        why: 目标是和 $2^x+\log_2 x$ 的母函数形式对齐。
+      source_ref: page_0025
+    - step_id: step_3
+      statement: 制造 $f(2b)$ 并得到严格比较。
+      formula_trace:
+        from: $2^a+\log_2 a=2^{2b}+\log_2 b$
+        to: $2^a+\log_2 a<2^{2b}+\log_2(2b)$
+        operation: 因 $b>0$，$\log_2(2b)=\log_2 b+1>\log_2 b$。
+        why: 右端正好是 $f(2b)$。
+      source_ref: page_0025
+    - step_id: step_4
+      statement: 利用母函数单调性比较参数。
+      formula_trace:
+        from: $f(x)=2^x+\log_2 x,\quad f(a)<f(2b)$
+        to: $a<2b$
+        operation: |
+          由 $f'(x)=2^x\ln2+\frac1{x\ln2}>0$ 知 $f$ 在 $(0,+\infty)$ 上严格递增。
+        why: 严格递增函数保持输入顺序。
+      source_ref: page_0025
+    - step_id: step_5
+      statement: 确定选项。
+      formula_trace:
+        from: $a<2b$
+        to: 选 B
+        operation: 与四个选项逐项对照，只有 B 直接成立。
+        why: 题设不能推出关于 $b^2$ 的大小关系。
+      source_ref: page_0025
+teaching_card:
+  student_title: 统一底数后用单调母函数比较 $a$ 与 $2b$
+  what_it_trains: 训练把指数项和对数项整理成同一个单调函数值，再由函数单调性比较参数。
+  recognition_cues:
+    - 等式两边都有指数项加对数项。
+    - 一侧出现 $4^b$ 与 $\log_4 b$，可统一到底数 2。
+    - 选项直接比较 $a$ 与 $2b$。
+  normalization_moves:
+    - 换底：$4^b\to2^{2b}$，$2\log_4 b\to\log_2 b$。
+    - 补成 $f(2b)=2^{2b}+\log_2(2b)$。
+    - 用 $f$ 单调递增把函数值比较转为输入比较。
+  common_failures:
+    - 把题设等式直接误读成 $a=2b$。
+    - 漏掉 $\log_2(2b)=\log_2 b+1$ 带来的严格小于。
+    - 尝试比较 $b^2$，偏离可由题设稳定推出的关系。
+  similar_practice_query: 同构函数 单调性 $2^x+\log_2 x$ 比较 $a$ $2b$
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

@@ -1,0 +1,202 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0121_adjusted_symmetry_ex11
+content_revision_id: mst_p0121_adjusted_symmetry_ex11-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0121_adjusted_symmetry_ex11.card.yaml
+stem: |-
+  （2023 · 厦门月考 · 多选）已知函数 $f(x)$ 定义域为 $\mathbf{R}$，$f(x+1)$ 是奇函数，$g(x)=(x-1)f(x)$，$f^{\prime}(x)$，$g^{\prime}(x)$ 分别是函数 $f(x)$，$g(x)$ 的导函数，函数 $g(x)$ 在区间 $(-\infty,1]$ 上单调递增，则（  ）
+  A. $f(1)=0$
+  B. $f^{\prime}(1+x)=f^{\prime}(1-x)$
+  C. $g^{\prime}(1+x)=g^{\prime}(1-x)$
+  D. $g(e^{0.1})<g(1-\ln1.1)<0$
+answer: |
+  ABD
+
+  因为 $f(x+1)$ 是奇函数，令 $x=0$ 得 $f(1)=0$，A正确。
+  由 $f(1-x)=-f(1+x)$ 求导，得
+  $f^{\prime}(1+x)=f^{\prime}(1-x)$，B正确。
+  又 $g(x)=(x-1)f(x)$，于是
+  $g(1+x)=x f(1+x)$，$g(1-x)=-x f(1-x)=x f(1+x)$，
+  所以 $g(1+x)=g(1-x)$，即 $g$ 关于 $x=1$ 轴对称。
+  对这个轴对称关系求导应得
+  $g^{\prime}(1+x)=-g^{\prime}(1-x)$，所以C错误。
+  由于 $g$ 关于 $x=1$ 对称，且在 $(-\infty,1]$ 上递增，
+  所以在 $(1,+\infty)$ 上递减，并且 $g(x)\le g(1)=0$，
+  等号只在 $x=1$ 处取到。由
+  $e^{0.1}>1+\ln1.1$，可得
+  $2-e^{0.1}<1-\ln1.1<1$。又由轴对称
+  $g(e^{0.1})=g(2-e^{0.1})$，而 $g$ 在 $(-\infty,1]$
+  上递增，所以
+  $g(e^{0.1})<g(1-\ln1.1)<0$，D正确。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 由平移奇函数得到中心值和导函数轴对称。
+      max_score: 1
+    - step_id: step_2
+      description: 两个同中心对象相乘，得到 $g$ 的轴对称。
+      max_score: 1
+    - step_id: step_3
+      description: 对轴对称函数求导，排除 C。
+      max_score: 1
+    - step_id: step_4
+      description: 先把右侧点关于 $x=1$ 翻回左侧，再比较。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 数值求值
+        target: 判断函数值、导函数对称关系和函数值大小比较。
+        result: 见 source_solution_summary
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 切线放缩与凹凸性
+    subroute:
+      - 同中心相乘成轴对称
+      - 对称单调性翻折
+      - 指数对数基本比较
+  structure:
+    primary: 对称结构
+    secondary:
+      - 抽象函数结构
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $f(x+1)$ 奇函数给出以 $(1,0)$ 为中心的反对称。
+      - $(x-1)$ 也关于 $(1,0)$ 中心对称，二者乘积 $g$ 关于 $x=1$ 轴对称。
+      - $e^{0.1}$ 与 $1-\ln1.1$ 的比较需要先过 $x=1$ 对称轴翻折。
+    normalization_moves_used:
+      - 把 $f(x+1)$ 改写成 $f(1+x)$。
+      - 在 $g$ 中代入 $1+x$ 与 $1-x$。
+      - 对轴对称关系求导时保留负号。
+      - 用 $e^{0.1}>1+\ln1.1$ 比较翻折后的左侧位置。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $f(x+1)$ 奇函数转成中心对称，回补函数性质与图像。
+      - 若学生对 $g(1-x)$ 求导漏掉负号，回补导数运算与几何意义。
+      - 若学生不清楚对称轴两侧单调性相反，回补函数性质与图像。
+      - 若学生不会比较 $e^{0.1}$ 与 $\ln1.1$，回补指数对数基础。
+  detail_terms:
+    - $f(x+1)$ 奇函数
+    - $g(x)=(x-1)f(x)$
+    - $g(1+x)=g(1-x)$
+    - $g^{\prime}(1+x)=-g^{\prime}(1-x)$
+    - 答案ABD
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0121_adjusted_symmetry_ex11
+source_evidence:
+  source_refs:
+    - ref_id: page_0121
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0121/page_0121.md
+      role: problem_start
+      evidence: page_0121 contains 例11题头、A-D选项、完整解析与答案ABD。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0121.png
+      inspected: false
+      notes: 本卡按page_0121 markdown重建；未在父会话直接查看页图。
+  source_context: 例11位于“对称性锁定和调整”，核心是两个同中心对象相乘后形成轴对称函数，并配合单调性比较指数、对数位置。
+  source_influence:
+    - 保留源页由 $f(x+1)$ 奇函数推出 $f(1)=0$ 与 $f^{\prime}(1+x)=f^{\prime}(1-x)$。
+    - 保留源页由 $g(x)=(x-1)f(x)$ 推出 $g$ 关于 $x=1$ 轴对称。
+    - 保留源页利用 $g$ 在 $(-\infty,1]$ 递增，推出 $(1,+\infty)$ 递减且 $g(x)\le g(1)=0$。
+    - 保留源页用 $e^x\ge1+x\ge1+\ln(1+x)$ 比较输入大小。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 厦门月考 · 多选）已知函数 $f(x)$ 定义域为 $\mathbf{R}$，$f(x+1)$ 是奇函数，$g(x)=(x-1)f(x)$，$f^{\prime}(x)$，$g^{\prime}(x)$ 分别是函数 $f(x)$，$g(x)$ 的导函数，函数 $g(x)$ 在区间 $(-\infty,1]$ 上单调递增，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f(1)=0$
+      text_latex: $f(1)=0$
+    - label: B
+      text_raw: $f^{\prime}(1+x)=f^{\prime}(1-x)$
+      text_latex: $f^{\prime}(1+x)=f^{\prime}(1-x)$
+    - label: C
+      text_raw: $g^{\prime}(1+x)=g^{\prime}(1-x)$
+      text_latex: $g^{\prime}(1+x)=g^{\prime}(1-x)$
+    - label: D
+      text_raw: $g(e^{0.1})<g(1-\ln1.1)<0$
+      text_latex: $g(e^{0.1})<g(1-\ln1.1)<0$
+  answer: ABD
+  fidelity_notes:
+    - 本题为多选题，例11在page_0121内完整结束。
+solution:
+  source_solution_summary: |
+    因为 $f(x+1)$ 是奇函数，令 $x=0$ 得 $f(1)=0$，A正确。
+    由 $f(1-x)=-f(1+x)$ 求导，得
+    $f^{\prime}(1+x)=f^{\prime}(1-x)$，B正确。
+    又 $g(x)=(x-1)f(x)$，于是
+    $g(1+x)=x f(1+x)$，$g(1-x)=-x f(1-x)=x f(1+x)$，
+    所以 $g(1+x)=g(1-x)$，即 $g$ 关于 $x=1$ 轴对称。
+    对这个轴对称关系求导应得
+    $g^{\prime}(1+x)=-g^{\prime}(1-x)$，所以C错误。
+    由于 $g$ 关于 $x=1$ 对称，且在 $(-\infty,1]$ 上递增，
+    所以在 $(1,+\infty)$ 上递减，并且 $g(x)\le g(1)=0$，
+    等号只在 $x=1$ 处取到。由
+    $e^{0.1}>1+\ln1.1$，可得
+    $2-e^{0.1}<1-\ln1.1<1$。又由轴对称
+    $g(e^{0.1})=g(2-e^{0.1})$，而 $g$ 在 $(-\infty,1]$
+    上递增，所以
+    $g(e^{0.1})<g(1-\ln1.1)<0$，D正确。
+  key_steps:
+    - step_id: step_1
+      statement: 由平移奇函数得到中心值和导函数轴对称。
+      formula_trace:
+        from: $f(x+1)$ 是奇函数
+        to: $f(1)=0$，$f^{\prime}(1+x)=f^{\prime}(1-x)$
+        operation: 令 $x=0$，并对 $f(1-x)=-f(1+x)$ 求导。
+        why: 直接判断 A、B。
+      source_ref: page_0121
+    - step_id: step_2
+      statement: 两个同中心对象相乘，得到 $g$ 的轴对称。
+      formula_trace:
+        from: $g(x)=(x-1)f(x)$，$f(1-x)=-f(1+x)$
+        to: $g(1+x)=g(1-x)$
+        operation: 将 $x=1\pm t$ 代入并利用奇性抵消负号。
+        why: 这是判断 $g$ 单调延拓和 C 项导数关系的核心。
+      source_ref: page_0121
+    - step_id: step_3
+      statement: 对轴对称函数求导，排除 C。
+      formula_trace:
+        from: $g(1+x)=g(1-x)$
+        to: $g^{\prime}(1+x)=-g^{\prime}(1-x)$
+        operation: 两边对 $x$ 求导，右侧出现链式负号。
+        why: C 少了负号，因此不成立。
+      source_ref: page_0121
+    - step_id: step_4
+      statement: 先把右侧点关于 $x=1$ 翻回左侧，再比较。
+      formula_trace:
+        from: $g$ 关于 $x=1$ 对称且左侧递增
+        to: $g(e^{0.1})=g(2-e^{0.1})<g(1-\ln1.1)<0$
+        operation: 用 $e^{0.1}>1+\ln1.1$ 得 $2-e^{0.1}<1-\ln1.1$，再在左侧递增区间比较。
+        why: D项的两个输入分居对称轴两侧，必须先翻折再比较。
+      source_ref: page_0121
+teaching_card:
+  student_title: 同中心相乘，会把中心对称变成轴对称
+  what_it_trains: 训练识别对称中心相同的两个因子相乘后形成轴对称，并用轴对称翻折单调性。
+  recognition_cues:
+    - 题干同时出现 $f(x+1)$ 奇函数和因子 $x-1$。
+    - $g(x)=(x-1)f(x)$ 是围绕 $x=1$ 的乘积构造。
+    - 选项问 $g^{\prime}(1+x)$ 与 $g^{\prime}(1-x)$，要警惕链式负号。
+  normalization_moves:
+    - 先把中心点统一到 $x=1$。
+    - 写 $g(1+x)$、$g(1-x)$。
+    - 由 $g$ 的轴对称推导右侧单调性。
+    - 再比较指数、对数输入位置。
+  common_failures:
+    - 只看到 $f$ 的奇性，没有把 $(x-1)$ 也看成同中心对象。
+    - 把 $g$ 的轴对称导成 $g^{\prime}(1+x)=g^{\prime}(1-x)$。
+    - 对称轴右侧单调方向没有反过来。
+    - 直接在右侧比较 $e^{0.1}$ 和 $1-\ln1.1$，忘记先用轴对称翻回左侧。
+  similar_practice_query: f(x+1) 奇函数 (x-1)f(x) 对称性调整 单调性 指数对数比较
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - D项需要先利用 $g$ 关于 $x=1$ 的轴对称，将 $e^{0.1}$ 翻折为 $2-e^{0.1}$，再与 $1-\ln1.1$ 在左侧递增区间比较。

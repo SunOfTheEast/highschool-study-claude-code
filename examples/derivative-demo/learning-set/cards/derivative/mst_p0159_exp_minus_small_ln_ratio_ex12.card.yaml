@@ -1,0 +1,234 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0159_exp_minus_small_ln_ratio_ex12
+content_revision_id: mst_p0159_exp_minus_small_ln_ratio_ex12-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0159_exp_minus_small_ln_ratio_ex12.card.yaml
+stem: |-
+  （2024·德化县月考）设 $a=e^{-0.01}$，$b=\frac{\ln1.01}{0.01}$，$c=0.99$，则（  ）
+  A. $b>a>c$
+  B. $c>b>a$
+  C. $a>b>c$
+  D. $a>c>b$
+answer: |
+  A
+
+  先比较 $a,c$。由指数函数在 $0$ 点的常用下界，
+  \[
+  e^x>1+x,
+  \]
+  取 $x=-0.01$ 得
+  \[
+  a=e^{-0.01}>1-0.01=0.99=c.
+  \]
+  再给 $a$ 一个上界：
+  \[
+  e^x<\frac{1}{1-x}\ (x<1),
+  \]
+  取 $x=-0.01$ 得
+  \[
+  a=e^{-0.01}<\frac{1}{1.01}\approx0.9901.
+  \]
+  比较 $b$ 时，令 $x=0.01>0$，用
+  \[
+  \ln(1+x)>\frac{2x}{x+2}
+  \]
+  得
+  \[
+  b=\frac{\ln(1+0.01)}{0.01}
+  >
+  \frac{2\cdot0.01}{2.01\cdot0.01}
+  =
+  \frac{2}{2.01}
+  \approx0.995.
+  \]
+  于是 $b>a$，再与 $a>c$ 合并，得
+  \[
+  b>a>c,
+  \]
+  选 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 用指数下界先确定 $a>c$。
+      max_score: 1
+    - step_id: step_2
+      description: 补充 $a$ 的上界，便于和 $b$ 的下界对接。
+      max_score: 1
+    - step_id: step_3
+      description: 对 $b$ 用 $\ln(1+x)$ 下界。
+      max_score: 1
+    - step_id: step_4
+      description: 合并比较链并匹配选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较指数项、对数平均项与常数的大小。
+        result: 见 source_solution_summary
+  method:
+    primary: 拟合与夹逼
+    secondary:
+      - 切线放缩与凹凸性
+      - 同构变形与换元法
+    subroute:
+      - 指数项上下界双侧夹逼
+      - 对数项用 $\ln(1+x)$ 标准下界
+      - 上下界对接形成顺序链
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - $a$ 是指数微小扰动，$b$ 是对数平均比值，天然适合统一到局部不等式模板。
+      - 比较依赖“一个上界 + 一个下界”的夹逼拼接。
+    normalization_moves_used:
+      - $e^x>1+x$ 与 $e^x<\frac{1}{1-x}$。
+      - $\ln(1+x)>\frac{2x}{x+2}$。
+      - 用 $0.9901$ 与 $0.995$ 建立跨项比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会调用 $e^x,\ln(1+x)$ 的常用估计式，回补指数对数基础。
+      - 若学生不会把分式下界代回并化简，回补代数恒等变形。
+      - 若学生不会把两段比较合并成全序，回补不等式工具基础。
+  detail_terms:
+    - $a=e^{-0.01}$
+    - $b=\frac{\ln1.01}{0.01}$
+    - $\ln(1+x)>\frac{2x}{x+2}$
+    - $\frac{2}{2.01}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0159_exp_minus_small_ln_ratio_ex12
+source_evidence:
+  source_refs:
+    - ref_id: page_0159_ex12_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0159/page_0159.md
+      role: problem_start
+      evidence: 例12题头与四个选项均在 page_0159，题干给出 $a=e^{-0.01},\ b=\frac{\ln1.01}{0.01},\ c=0.99$。
+    - ref_id: page_0159_ex12_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0159/page_0159.md
+      role: solution
+      evidence: 例12解析在 page_0159：先证 $a>c$，再用 $\ln(1+x)$ 下界估计 $b$，结论 $b>a>c$。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0159.png
+      inspected: false
+      notes: 本卡按 source markdown 重建，未重新人工核对页图。
+  source_context: 本题位于 page_0159 的例12；同页后半是三角函数切割线讲解，与本题无直接步骤依赖。
+  source_influence:
+    - 保留源解两段夹逼：$a$ 用指数上下界，$b$ 用 $\ln(1+x)$ 下界。
+    - 保留源解关键中间量 $\frac{2}{2.01}$ 与 $0.99$ 的阈值比较。
+  source_discrepancies: []
+original_problem:
+  stem: （2024·德化县月考）设 $a=e^{-0.01}$，$b=\frac{\ln1.01}{0.01}$，$c=0.99$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $b>a>c$
+      text_latex: $b>a>c$
+    - label: B
+      text_raw: $c>b>a$
+      text_latex: $c>b>a$
+    - label: C
+      text_raw: $a>b>c$
+      text_latex: $a>b>c$
+    - label: D
+      text_raw: $a>c>b$
+      text_latex: $a>c>b$
+  answer: A
+  fidelity_notes:
+    - 源解先比较 $a,c$，再比较 $b,a$，最终得到 $b>a>c$。
+solution:
+  source_solution_summary: |
+    先比较 $a,c$。由指数函数在 $0$ 点的常用下界，
+    \[
+    e^x>1+x,
+    \]
+    取 $x=-0.01$ 得
+    \[
+    a=e^{-0.01}>1-0.01=0.99=c.
+    \]
+    再给 $a$ 一个上界：
+    \[
+    e^x<\frac{1}{1-x}\ (x<1),
+    \]
+    取 $x=-0.01$ 得
+    \[
+    a=e^{-0.01}<\frac{1}{1.01}\approx0.9901.
+    \]
+    比较 $b$ 时，令 $x=0.01>0$，用
+    \[
+    \ln(1+x)>\frac{2x}{x+2}
+    \]
+    得
+    \[
+    b=\frac{\ln(1+0.01)}{0.01}
+    >
+    \frac{2\cdot0.01}{2.01\cdot0.01}
+    =
+    \frac{2}{2.01}
+    \approx0.995.
+    \]
+    于是 $b>a$，再与 $a>c$ 合并，得
+    \[
+    b>a>c,
+    \]
+    选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 用指数下界先确定 $a>c$。
+      formula_trace:
+        from: $a=e^{-0.01}$
+        to: $a>1-0.01=0.99=c$
+        operation: 套用 $e^x>1+x$（取 $x=-0.01$）。
+        why: 先固定 $a,c$ 的顺序。
+      source_ref: page_0159_ex12_solution
+    - step_id: step_2
+      statement: 补充 $a$ 的上界，便于和 $b$ 的下界对接。
+      formula_trace:
+        from: $a=e^{-0.01}$
+        to: $a<\frac{1}{1.01}\approx0.9901$
+        operation: 套用 $e^x<\frac{1}{1-x}$（取 $x=-0.01$）。
+        why: 为后续证明 $b>a$ 提供可比较数值。
+      source_ref: page_0159_ex12_solution
+    - step_id: step_3
+      statement: 对 $b$ 用 $\ln(1+x)$ 下界。
+      formula_trace:
+        from: $b=\frac{\ln(1+0.01)}{0.01}$
+        to: $b>\frac{2}{2.01}\approx0.995$
+        operation: 由 $\ln(1+x)>\frac{2x}{x+2}$（$x=0.01$）代入并化简。
+        why: 建立 $b$ 的明确下界并超过 $a$ 的上界。
+      source_ref: page_0159_ex12_solution
+    - step_id: step_4
+      statement: 合并比较链并匹配选项。
+      formula_trace:
+        from: $b>a$ 且 $a>c$
+        to: $b>a>c$，选 A
+        operation: 传递不等式。
+        why: 得到唯一正确顺序。
+      source_ref: page_0159_ex12_solution
+teaching_card:
+  student_title: 指数上界接对数下界的三数排序
+  what_it_trains: 训练微小量比大小时的“上下界拼接”：先压住指数项，再抬高对数项，最后传递比较。
+  recognition_cues:
+    - 题目同时出现 $e^{\pm\varepsilon}$ 与 $\frac{\ln(1+\varepsilon)}{\varepsilon}$。
+    - 常数阈值接近 1，适合局部不等式。
+    - 选项是三数全序。
+  normalization_moves:
+    - 先定 $a$ 与常数的关系。
+    - 给 $a$ 上界、给 $b$ 下界。
+    - 把两条链拼成 $b>a>c$。
+  common_failures:
+    - 只得到 $a>c$ 就停止，漏掉 $b$ 与 $a$。
+    - 把 $\ln(1+x)$ 下界代入后分母处理错误。
+    - 把 $e^{-0.01}$ 的上界方向写反。
+  similar_practice_query: e^{-0.01} ln(1.01)/0.01 三数比较 夹逼
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 本卡未核对 page_0159 页图，按重建 markdown 完成。

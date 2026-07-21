@@ -1,0 +1,206 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0122_symmetry_period_ex13
+content_revision_id: mst_p0122_symmetry_period_ex13-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0122_symmetry_period_ex13.card.yaml
+stem: |-
+  （2023 · 桃城区三模 · 多选）已知函数 $f(x)$ 的定义域为 $\mathbf{R}$，$h(x)=f(x)+f(2-x)$ 是奇函数，$h(x)$ 的导函数为 $h^{\prime}(x)$，则（  ）
+  A. $h(1)=0$
+  B. $f(6)=-f(-4)$
+  C. $h^{\prime}(1)=0$
+  D. $f^{\prime}(6)=f^{\prime}(-4)$
+answer: |
+  BC
+
+  因为 $h(x)$ 是奇函数，所以 $h(x)=-h(-x)$ 且 $h(0)=0$。
+  又 $h(2-x)=f(2-x)+f(x)=h(x)$，于是 $h(2-x)=-h(-x)$，
+  即 $h(2+x)=-h(x)$。把 $x$ 换成 $x+2$，得
+  $h(4+x)=-h(x+2)=h(x)$，所以 $4$ 是 $h$ 的一个周期。
+  因此 $h(6)=h(2)=-h(0)=0$，展开得
+  $f(6)+f(-4)=0$，B正确。
+
+  对 $h(x)=-h(-x)$ 求导，得 $h^{\prime}(x)=h^{\prime}(-x)$；
+  又 $h^{\prime}(x)=f^{\prime}(x)-f^{\prime}(2-x)$，所以
+  $h^{\prime}(2-x)=-h^{\prime}(x)$。令 $x=1$ 得
+  $h^{\prime}(1)=-h^{\prime}(1)$，即 $h^{\prime}(1)=0$，C正确。
+  取 $f(x)=\frac12\sin\frac{\pi}{2}x$，则
+  $h(x)=\sin\frac{\pi}{2}x$ 满足题设，但 $h(1)=1$，A错误；
+  且 $h^{\prime}(6)=f^{\prime}(6)-f^{\prime}(-4)=-\frac{\pi}{2}$，
+  所以 $f^{\prime}(6)\ne f^{\prime}(-4)$，D错误。故选BC。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 先把 $h$ 的轴对称和奇性配成周期。
+      max_score: 1
+    - step_id: step_2
+      description: 用周期计算 $h(6)$，再展开回 $f$。
+      max_score: 1
+    - step_id: step_3
+      description: 对对称关系求导，锁定 $h^{\prime}(1)$。
+      max_score: 1
+    - step_id: step_4
+      description: 构造满足题设的函数反驳过强结论。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: item_1
+        goal: 抽象函数性质
+        target: A、B判断抽象函数对称关系推出的函数值结论。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 抽象函数性质
+        target: C、D判断导函数关系是否必然成立。
+        result: 见 source_solution_summary
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 对称化与偏移
+      - 逆向构造法
+    subroute:
+      - 奇函数配轴对称生成周期
+      - 对称式求导
+      - 反例构造
+  structure:
+    primary: 对称结构
+    secondary:
+      - 抽象函数结构
+    evidence:
+      - $h(x)=-h(-x)$ 是关于原点的奇性。
+      - $h(2-x)=h(x)$ 是关于 $x=1$ 的轴对称。
+      - 中心对称与轴对称组合生成周期 $4$。
+    normalization_moves_used:
+      - 把 $h(2-x)=h(x)$ 与 $h(x)=-h(-x)$ 联立。
+      - 平移变量得到 $h(x+4)=h(x)$。
+      - 对对称关系求导，处理导函数选项。
+      - 用具体函数反例排除非必然结论。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由奇函数得到 $h(0)=0$，回补函数性质与图像。
+      - 若学生无法识别 $h(2-x)=h(x)$ 表示关于 $x=1$ 对称，回补函数性质与图像。
+      - 若学生对 $h(2-x)$ 求导时漏掉负号，回补导数运算与几何意义。
+      - 若学生不会用反例否定“必然成立”，回补代数恒等变形。
+  detail_terms:
+    - $h(x)=f(x)+f(2-x)$
+    - $h(2-x)=h(x)$
+    - $h(x+4)=h(x)$
+    - $h^{\prime}(1)=0$
+    - 答案BC
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0122_symmetry_period_ex13
+source_evidence:
+  source_refs:
+    - ref_id: page_0122
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0122/page_0122.md
+      role: problem_start
+      evidence: page_0122 contains 例13题头、A-D选项、完整解析和答案BC；页顶例12续解不归本卡。
+    - ref_id: page_0122_section_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0122/page_0122.md
+      role: local_context
+      evidence: 例13之后进入第二节“抽象函数单调性构造”，仅作为局部上下文，不建 exposition card。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0122.png
+      inspected: true
+      notes: 页图核对：例13从page_0122中部起头并在本页结束；题干、选项、解析、答案BC与markdown一致。
+  source_context: 例13是第一节抽象函数周期/对称构造的收束题，核心是把 $h(x)$ 的奇性与 $h(2-x)=h(x)$ 的轴对称配成周期，并继续判断导函数关系。
+  source_influence:
+    - 保留源页由 $h(x)=-h(-x)$ 与 $h(2-x)=h(x)$ 推出 $h(x+4)=h(x)$ 的周期配凑。
+    - 保留源页对 $h$ 的对称关系求导，得到 $h^{\prime}(1)=0$。
+    - 保留源页用 $f(x)=\frac12\sin\frac{\pi}{2}x$ 反驳 A、D。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 桃城区三模 · 多选）已知函数 $f(x)$ 的定义域为 $\mathbf{R}$，$h(x)=f(x)+f(2-x)$ 是奇函数，$h(x)$ 的导函数为 $h^{\prime}(x)$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $h(1)=0$
+      text_latex: $h(1)=0$
+    - label: B
+      text_raw: $f(6)=-f(-4)$
+      text_latex: $f(6)=-f(-4)$
+    - label: C
+      text_raw: $h^{\prime}(1)=0$
+      text_latex: $h^{\prime}(1)=0$
+    - label: D
+      text_raw: $f^{\prime}(6)=f^{\prime}(-4)$
+      text_latex: $f^{\prime}(6)=f^{\prime}(-4)$
+  answer: BC
+  fidelity_notes:
+    - 本题为多选题，例13在page_0122内完整结束。
+    - page_0122顶端是例12续解，未纳入本卡。
+solution:
+  source_solution_summary: |
+    因为 $h(x)$ 是奇函数，所以 $h(x)=-h(-x)$ 且 $h(0)=0$。
+    又 $h(2-x)=f(2-x)+f(x)=h(x)$，于是 $h(2-x)=-h(-x)$，
+    即 $h(2+x)=-h(x)$。把 $x$ 换成 $x+2$，得
+    $h(4+x)=-h(x+2)=h(x)$，所以 $4$ 是 $h$ 的一个周期。
+    因此 $h(6)=h(2)=-h(0)=0$，展开得
+    $f(6)+f(-4)=0$，B正确。
+
+    对 $h(x)=-h(-x)$ 求导，得 $h^{\prime}(x)=h^{\prime}(-x)$；
+    又 $h^{\prime}(x)=f^{\prime}(x)-f^{\prime}(2-x)$，所以
+    $h^{\prime}(2-x)=-h^{\prime}(x)$。令 $x=1$ 得
+    $h^{\prime}(1)=-h^{\prime}(1)$，即 $h^{\prime}(1)=0$，C正确。
+    取 $f(x)=\frac12\sin\frac{\pi}{2}x$，则
+    $h(x)=\sin\frac{\pi}{2}x$ 满足题设，但 $h(1)=1$，A错误；
+    且 $h^{\prime}(6)=f^{\prime}(6)-f^{\prime}(-4)=-\frac{\pi}{2}$，
+    所以 $f^{\prime}(6)\ne f^{\prime}(-4)$，D错误。故选BC。
+  key_steps:
+    - step_id: step_1
+      statement: 先把 $h$ 的轴对称和奇性配成周期。
+      formula_trace:
+        from: $h(x)=-h(-x)$，$h(2-x)=h(x)$
+        to: $h(2+x)=-h(x)$，进而 $h(x+4)=h(x)$
+        operation: 用奇函数关系替换 $h(2-x)$ 中的右侧，再平移变量。
+        why: 奇性加轴对称会生成周期，这是判断 B 的主线。
+      source_ref: page_0122
+    - step_id: step_2
+      statement: 用周期计算 $h(6)$，再展开回 $f$。
+      formula_trace:
+        from: $h(6)=h(2)=-h(0)$，$h(0)=0$
+        to: $f(6)+f(-4)=0$，即 $f(6)=-f(-4)$
+        operation: 代入 $h(x)=f(x)+f(2-x)$。
+        why: B项本质上是 $h(6)=0$ 的展开式。
+      source_ref: page_0122
+    - step_id: step_3
+      statement: 对对称关系求导，锁定 $h^{\prime}(1)$。
+      formula_trace:
+        from: $h(x)=-h(-x)$，$h(2-x)=h(x)$
+        to: $h^{\prime}(x)=h^{\prime}(-x)$，$h^{\prime}(2-x)=-h^{\prime}(x)$，$h^{\prime}(1)=0$
+        operation: 分别求导，并在对称轴 $x=1$ 处代入。
+        why: 导函数在这个点同时受到偶性和反对称约束，只能取零。
+      source_ref: page_0122
+    - step_id: step_4
+      statement: 构造满足题设的函数反驳过强结论。
+      formula_trace:
+        from: $f(x)=\frac12\sin\frac{\pi}{2}x$
+        to: $h(x)=\sin\frac{\pi}{2}x$，$h(1)=1$，$f^{\prime}(6)\ne f^{\prime}(-4)$
+        operation: 代入具体函数验证题设并计算选项结论。
+        why: A、D只要有一个合法反例就不能作为必然结论。
+      source_ref: page_0122
+teaching_card:
+  student_title: 奇性加轴对称，先配出周期
+  what_it_trains: 训练把抽象函数的中心对称、轴对称、周期和导函数关系串起来，并区分必然结论与反例可破的结论。
+  recognition_cues:
+    - 看到 $f(x)+f(2-x)$，先写出 $h(2-x)=h(x)$。
+    - 题干又说 $h$ 是奇函数，提示“奇性 + 轴对称 = 周期”。
+    - 选项问导数时，要对已有对称关系求导，而不是凭图像直觉判断。
+  normalization_moves:
+    - 写出 $h(x)=-h(-x)$ 和 $h(2-x)=h(x)$。
+    - 推出 $h(2+x)=-h(x)$。
+    - 再平移得到 $h(x+4)=h(x)$。
+    - 对关系式求导后在 $x=1$ 代入。
+  common_failures:
+    - 只用奇函数，忘了 $h(2-x)=h(x)$ 这个隐藏轴对称。
+    - 把 $h(2-x)$ 求导时负号写丢。
+    - 把 $h^{\prime}(6)=f^{\prime}(6)-f^{\prime}(-4)$ 误读成 $f^{\prime}(6)=f^{\prime}(-4)$。
+    - 看到 A、D 像对称结论就直接选，没有构造反例。
+  similar_practice_query: 抽象函数 奇函数 轴对称 周期 h(2-x)=h(x) 导函数 对称 反例
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

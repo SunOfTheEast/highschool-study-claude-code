@@ -1,0 +1,229 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0145_around_e_power_compare_ex11
+content_revision_id: mst_p0145_around_e_power_compare_ex11-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0145_around_e_power_compare_ex11.card.yaml
+stem: |-
+  （2024·金太阳模拟）已知 $a=(e-0.1)^{e+0.1}$，$b=e^e$，$c=(e+0.1)^{e-0.1}$，则（  ）
+  A. $c<a<b$
+  B. $a<c<b$
+  C. $a<b<c$
+  D. $c<b<a$
+answer: |
+  B
+
+  构造
+  $f(x)=(2e-x)\ln x$。
+  则
+  $\ln a=f(e-0.1)$，
+  $\ln b=f(e)=e$，
+  $\ln c=f(e+0.1)$。
+  源解给出
+  $f^{\prime}(x)=\frac{2e}{x}-1-\ln x$，
+  且 $f^{\prime}(x)$ 递减，$f^{\prime}(e)=0$，
+  所以 $f(x)\le f(e)=e$，即 $b$ 最大。
+  再比较 $a,c$：微元法把
+  $f^{\prime}(e-0.1)$ 与 $f^{\prime}(e+0.1)$ 相加，得到
+  $\frac{\ln c-\ln a}{0.1}>0$，
+  因此 $\ln c>\ln a$。
+  也可以用源解的极值点偏移法：
+  $f^{\prime\prime}(x)<0$，$f^{\prime\prime\prime}(x)>0$，
+  极大值点左偏，所以右侧近点函数值更高。
+  综上 $b>c>a$，即 $a<c<b$，选 B。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 构造统一函数。
+      max_score: 1
+    - step_id: step_2
+      description: 先证明 $b$ 最大。
+      max_score: 1
+    - step_id: step_3
+      description: 再比较左右两点。
+      max_score: 1
+    - step_id: step_4
+      description: 用极值点偏移作直观解释。
+      max_score: 1
+    - step_id: step_5
+      description: 合并排序并选项匹配。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较 $e$ 附近三项幂的大小。
+        result: 见 source_solution_summary
+      - part_id: item_2
+        goal: 零点/极值点分析
+        target: 识别极值点偏移导致左右两侧不对称。
+        result: 见 source_solution_summary
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 对称化与偏移
+      - 同构变形与换元法
+    subroute:
+      - $e$ 附近微元比较
+      - 极值点偏移
+      - 三阶导判断峰值偏移
+  structure:
+    primary: 极值点偏移结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 非对称结构
+      - 局部逼近结构
+    evidence:
+      - $(e-0.1)^{e+0.1},e^e,(e+0.1)^{e-0.1}$ 围绕 $e$ 左右偏移。
+      - 函数 $f(x)=(2e-x)\ln x$ 在 $e$ 处取极大值，但左右下降速度不对称。
+    normalization_moves_used:
+      - 取对数，把幂比较改为函数值比较。
+      - 构造 $f(x)=(2e-x)\ln x$。
+      - 用微元法或三阶导解释左右偏移。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把幂比较转成对数比较，回补指数对数基础。
+      - 若学生不会由 $f^{\prime}$ 判极值点，回补导数单调极值基础。
+      - 若学生无法理解左右偏移比较，回补函数性质与图像。
+  detail_terms:
+    - $(a-x)^{a+x}$
+    - $(a+x)^{a-x}$
+    - $f(x)=(2e-x)\ln x$
+    - 极大值点左偏
+    - 微元法
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0145_around_e_power_compare_ex11
+source_evidence:
+  source_refs:
+    - ref_id: page_0145_ex11_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0145/page_0145.md
+      role: problem_start
+      evidence: 例11题干：$a=(e-0.1)^{e+0.1}$，$b=e^e$，$c=(e+0.1)^{e-0.1}$，判断大小。
+    - ref_id: page_0145_ex11_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0145/page_0145.md
+      role: solution
+      evidence: 源解析开头构造 $f(x)=(2e-x)\ln x$，并把 $\ln a,\ln b,\ln c$ 放入该函数。
+    - ref_id: page_0146_ex11_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0146/page_0146.md
+      role: continuation
+      evidence: page_0146 继续给出 $f^{\prime}(x)$、微元法、极值点偏移法和最终结论 $b>c>a$，选 B。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0145.png
+      inspected: false
+      notes: 本卡由 source markdown 补齐；未重新人工查看原图。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0146.png
+      inspected: false
+      notes: page_0146 markdown 含图像说明；未重新人工查看原图。
+  source_context: 例11是“$(a-x)^{a+x},a^a,(a+x)^{a-x}$ 比大小”的引入题，用 $e$ 附近的小偏移展示极值点偏移。
+  source_influence:
+    - 保留源解析的函数构造：$f(x)=(2e-x)\ln x$。
+    - 保留源解析的上界判断：$f^{\prime}(x)$ 递减且 $f^{\prime}(e)=0$，所以 $f(x)\le e$，即 $b$ 最大。
+    - 保留源解析的微元法/极值点偏移结论：$\ln c>\ln a$，从而 $b>c>a$。
+  source_discrepancies:
+    - page_0145 写“$\ln a=g(e-0.1)$”但同段构造函数记作 $f$；本卡按上下文统一为 $f$。
+original_problem:
+  stem: （2024·金太阳模拟）已知 $a=(e-0.1)^{e+0.1}$，$b=e^e$，$c=(e+0.1)^{e-0.1}$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $c<a<b$
+      text_latex: $c<a<b$
+    - label: B
+      text_raw: $a<c<b$
+      text_latex: $a<c<b$
+    - label: C
+      text_raw: $a<b<c$
+      text_latex: $a<b<c$
+    - label: D
+      text_raw: $c<b<a$
+      text_latex: $c<b<a$
+  answer: B
+  fidelity_notes:
+    - 本题题头在 page_0145，解析跨到 page_0146；按题头归属规则由本批完成。
+    - page_0146 后半段一般化讨论作为本题延伸背景，不另建卡。
+solution:
+  source_solution_summary: |
+    构造
+    $f(x)=(2e-x)\ln x$。
+    则
+    $\ln a=f(e-0.1)$，
+    $\ln b=f(e)=e$，
+    $\ln c=f(e+0.1)$。
+    源解给出
+    $f^{\prime}(x)=\frac{2e}{x}-1-\ln x$，
+    且 $f^{\prime}(x)$ 递减，$f^{\prime}(e)=0$，
+    所以 $f(x)\le f(e)=e$，即 $b$ 最大。
+    再比较 $a,c$：微元法把
+    $f^{\prime}(e-0.1)$ 与 $f^{\prime}(e+0.1)$ 相加，得到
+    $\frac{\ln c-\ln a}{0.1}>0$，
+    因此 $\ln c>\ln a$。
+    也可以用源解的极值点偏移法：
+    $f^{\prime\prime}(x)<0$，$f^{\prime\prime\prime}(x)>0$，
+    极大值点左偏，所以右侧近点函数值更高。
+    综上 $b>c>a$，即 $a<c<b$，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 构造统一函数。
+      formula_trace:
+        from: $a=(e-0.1)^{e+0.1},\ b=e^e,\ c=(e+0.1)^{e-0.1}$
+        to: $\ln a=f(e-0.1),\ \ln b=f(e),\ \ln c=f(e+0.1)$，其中 $f(x)=(2e-x)\ln x$
+        operation: 对数化并把底数位置设为自变量。
+        why: 三项都变成同一函数在 $e$ 附近三点的函数值。
+      source_ref: page_0145_ex11_solution_start
+    - step_id: step_2
+      statement: 先证明 $b$ 最大。
+      formula_trace:
+        from: $f^{\prime}(x)=\frac{2e}{x}-1-\ln x,\ f^{\prime}(e)=0$
+        to: $f(x)\le f(e)=e$
+        operation: 用 $f^{\prime}$ 递减确认 $e$ 为极大值点。
+        why: 得到 $\ln b$ 大于等于左右两侧函数值。
+      source_ref: page_0146_ex11_continuation
+    - step_id: step_3
+      statement: 再比较左右两点。
+      formula_trace:
+        from: $f^{\prime}(e-0.1)+f^{\prime}(e+0.1)>0$
+        to: $\frac{\ln c-\ln a}{0.1}>0\Rightarrow \ln c>\ln a$
+        operation: 用微元斜率近似比较左右两侧下降幅度。
+        why: 判定 $c>a$。
+      source_ref: page_0146_ex11_continuation
+    - step_id: step_4
+      statement: 用极值点偏移作直观解释。
+      formula_trace:
+        from: $f^{\prime\prime}(x)<0,\ f^{\prime\prime\prime}(x)>0$
+        to: 极大值点左偏，故 $f(e+0.1)>f(e-0.1)$
+        operation: 用三阶导符号判断峰值偏移。
+        why: 解释为什么右侧近点 $c$ 高于左侧近点 $a$。
+      source_ref: page_0146_ex11_continuation
+    - step_id: step_5
+      statement: 合并排序并选项匹配。
+      formula_trace:
+        from: $b>c>a$
+        to: $a<c<b$，选 B
+        operation: 转写成选项顺序。
+        why: 作答完成。
+      source_ref: page_0146_ex11_continuation
+teaching_card:
+  student_title: $e$ 附近的幂比较：看峰值偏向哪边
+  what_it_trains: 训练把左右对称外壳下的幂比较转成函数值比较，并用极值点偏移判断左右谁更大。
+  recognition_cues:
+    - 出现 $e-0.1,e,e+0.1$ 这种围绕 $e$ 的三项。
+    - 底数和指数一增一减，形如 $(a-x)^{a+x}$ 与 $(a+x)^{a-x}$。
+    - 选项需要判断左右两侧谁离峰值更“高”。
+  normalization_moves:
+    - 先取对数。
+    - 构造 $f(x)=(2e-x)\ln x$。
+    - 先定中间项最大，再判左右偏移。
+  common_failures:
+    - 误以为左右 $0.1$ 对称，所以 $a=c$。
+    - 只证明 $b$ 最大，没有继续比较 $a,c$。
+    - 把极大值左偏理解成“左边函数值更大”，方向反了。
+  similar_practice_query: (e-0.1)^(e+0.1) e^e (e+0.1)^(e-0.1) 极值点偏移 比大小
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - source markdown 足以还原题干和解析；本地补卡未重新查看 page_0145/page_0146 原图。

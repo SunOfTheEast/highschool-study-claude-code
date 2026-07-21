@@ -1,0 +1,237 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0161_micro_multiselect_ex20
+content_revision_id: mst_p0161_micro_multiselect_ex20-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0161_micro_multiselect_ex20.card.yaml
+stem: |-
+  （2023·清远期末·多选）设 $a=e^{0.02}-1$，$b=\ln1.02$，$c=\frac{1}{51}$，$d=\sqrt{1.02}-1$，则（  ）
+  A. $b<a$
+  B. $b<c$
+  C. $d<b$
+  D. $d<c$
+answer: |
+  ACD
+
+  法一设
+  \[
+  A(x)=e^x-1,\quad B(x)=\ln(1+x),\quad C(x)=\frac{x}{1+x},\quad D(x)=\sqrt{1+x}-1.
+  \]
+  在同一点 $x_0=0$、同增量 $\Delta x=0.02$ 比较。
+  先看一阶导：
+  \[
+  A^{\prime}(0)=B^{\prime}(0)=C^{\prime}(0)=1>D^{\prime}(0)=\frac12,
+  \]
+  得 $d$ 最小。再看二阶导：
+  \[
+  A^{\prime\prime}(0)=1,\quad B^{\prime\prime}(0)=-1,\quad C^{\prime\prime}(0)=-2,
+  \]
+  得 $a>b>c$。综合
+  \[
+  a>b>c>d.
+  \]
+  所以 A、C、D 正确，B 错误。
+  法二数值夹逼也支持该顺序：
+  \[
+  0.02<a<0.0202,\quad 0.0196<b<0.02,\quad c=\frac1{51}\approx0.0196,\quad d<0.01.
+  \]
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把四个量统一成同点同增量函数值比较。
+      max_score: 1
+    - step_id: step_2
+      description: 一阶导先判 $d$ 最小。
+      max_score: 1
+    - step_id: step_3
+      description: 二阶导确定 $a,b,c$ 的顺序。
+      max_score: 1
+    - step_id: step_4
+      description: 合并得到总序并映射到多选。
+      max_score: 1
+    - step_id: step_5
+      description: 用法二区间估计做数值复核。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 多选题：判定四个比较式真伪。
+        result: 见 source_solution_summary
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 拟合与夹逼
+      - 同构变形与换元法
+    subroute:
+      - 同增量微元比较
+      - 先一阶后二阶
+      - 数值区间夹逼复核
+  structure:
+    primary: 局部逼近结构
+    secondary:
+      - 指对复合结构
+      - 根式函数结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - 四个量都围绕 1 附近的小增量，适配局部导数比较。
+      - $e^x,\ln(1+x),\frac{x}{1+x},\sqrt{1+x}$ 属典型同增量比较模板。
+    normalization_moves_used:
+      - $a,b,c,d\to A,B,C,D$。
+      - $A^{\prime}(0)=B^{\prime}(0)=C^{\prime}(0)>D^{\prime}(0)$。
+      - $A^{\prime\prime}(0)>B^{\prime\prime}(0)>C^{\prime\prime}(0)$。
+      - 法二区间估值二次校验。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会构造同增量比较函数，回补指数对数基础。
+      - 若学生不会用导数阶次判细微大小，回补导数运算与几何意义。
+      - 若学生多选题真伪映射出错，回补不等式工具基础。
+  detail_terms:
+    - 同增量 $\Delta x=0.02$
+    - $A(x)=e^x-1$
+    - $B(x)=\ln(1+x)$
+    - $C(x)=\frac{x}{1+x}$
+    - $D(x)=\sqrt{1+x}-1$
+    - ACD
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0161_micro_multiselect_ex20
+source_evidence:
+  source_refs:
+    - ref_id: page_0161_ex20_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0161/page_0161.md
+      role: problem_start
+      evidence: 例20题头、题干与选项起于 page_0161，题目为多选。
+    - ref_id: page_0161_ex20_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0161/page_0161.md
+      role: solution
+      evidence: page_0161 解析法一开头：同增量 $\Delta x=0.02<0.1$，设 $A,B,C$。
+    - ref_id: page_0162_ex20_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0162/page_0162.md
+      role: continuation
+      evidence: page_0162 顶部续完法一并给出法二，最终结论选 ACD。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0161.png
+      inspected: true
+      notes: 已核对：例20题干与选项在本页起头，解析跨页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0162.png
+      inspected: true
+      notes: 已核对：例20解析续页完整并给出答案 ACD。
+  source_context: 按页头归属规则，例20题头在 page_0161，解析续到 page_0162 顶部；page_0162 后续“极值偏移”板块仅作上下文。
+  source_influence:
+    - 保留法一“同点同增量 + 导数阶次比较”的主链。
+    - 保留法二数值夹逼作为验证。
+    - 保留多选结论 ACD。
+  source_discrepancies:
+    - 例20法二把 $1-\frac{1}{1.02}$ 与 $\frac{1}{51}$ 写成 $0.196$，与上下文 $<0.02$ 不一致；应为 $0.0196$（小数点后一位疑似漏写 0）。本卡按可验证数值关系处理。
+original_problem:
+  stem: （2023·清远期末·多选）设 $a=e^{0.02}-1$，$b=\ln1.02$，$c=\frac{1}{51}$，$d=\sqrt{1.02}-1$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $b<a$
+      text_latex: $b<a$
+    - label: B
+      text_raw: $b<c$
+      text_latex: $b<c$
+    - label: C
+      text_raw: $d<b$
+      text_latex: $d<b$
+    - label: D
+      text_raw: $d<c$
+      text_latex: $d<c$
+  answer: ACD
+  fidelity_notes:
+    - 题头在 page_0161，解析续到 page_0162。
+    - 源解法一直接给出链式顺序 $a>b>c>d$，对应 ACD。
+solution:
+  source_solution_summary: |
+    法一设
+    \[
+    A(x)=e^x-1,\quad B(x)=\ln(1+x),\quad C(x)=\frac{x}{1+x},\quad D(x)=\sqrt{1+x}-1.
+    \]
+    在同一点 $x_0=0$、同增量 $\Delta x=0.02$ 比较。
+    先看一阶导：
+    \[
+    A^{\prime}(0)=B^{\prime}(0)=C^{\prime}(0)=1>D^{\prime}(0)=\frac12,
+    \]
+    得 $d$ 最小。再看二阶导：
+    \[
+    A^{\prime\prime}(0)=1,\quad B^{\prime\prime}(0)=-1,\quad C^{\prime\prime}(0)=-2,
+    \]
+    得 $a>b>c$。综合
+    \[
+    a>b>c>d.
+    \]
+    所以 A、C、D 正确，B 错误。
+    法二数值夹逼也支持该顺序：
+    \[
+    0.02<a<0.0202,\quad 0.0196<b<0.02,\quad c=\frac1{51}\approx0.0196,\quad d<0.01.
+    \]
+  key_steps:
+    - step_id: step_1
+      statement: 把四个量统一成同点同增量函数值比较。
+      formula_trace:
+        from: $a,b,c,d$ 的定义
+        to: $A,B,C,D$ 在 $x_0=0,\ \Delta x=0.02$ 下比较
+        operation: 同构映射并统一比较框架。
+        why: 可直接用导数阶次判细微大小。
+      source_ref: page_0161_ex20_solution_start
+    - step_id: step_2
+      statement: 一阶导先判 $d$ 最小。
+      formula_trace:
+        from: $A^{\prime}(0)=B^{\prime}(0)=C^{\prime}(0)=1,\ D^{\prime}(0)=\frac12$
+        to: $d$ 对应函数增量最小
+        operation: 同增量下先比较一阶导大小。
+        why: 先把最小项锁定。
+      source_ref: page_0162_ex20_solution_continuation
+    - step_id: step_3
+      statement: 二阶导确定 $a,b,c$ 的顺序。
+      formula_trace:
+        from: $A^{\prime\prime}(0)=1,\ B^{\prime\prime}(0)=-1,\ C^{\prime\prime}(0)=-2$
+        to: $a>b>c$
+        operation: 一阶同值时用二阶导排序。
+        why: 完成前三项大小关系。
+      source_ref: page_0162_ex20_solution_continuation
+    - step_id: step_4
+      statement: 合并得到总序并映射到多选。
+      formula_trace:
+        from: $a>b>c$ 且 $c>d$
+        to: $a>b>c>d\Rightarrow A,C,D$ 正确
+        operation: 链式传递比较。
+        why: 直接判断四个选项真伪。
+      source_ref: page_0162_ex20_solution_continuation
+    - step_id: step_5
+      statement: 用法二区间估计做数值复核。
+      formula_trace:
+        from: $0.02<a<0.0202,\ 0.0196<b<0.02,\ c\approx0.0196,\ d<0.01$
+        to: $a>b>c>d$ 与法一一致
+        operation: 夹逼估值。
+        why: 验证选择 ACD 的稳定性。
+      source_ref: page_0162_ex20_solution_continuation
+teaching_card:
+  student_title: 四函数同增量：先锁最小，再排其余
+  what_it_trains: 训练多选排序题的稳健流程：同构成四个标准函数后，用一阶和二阶导分层判真伪。
+  recognition_cues:
+    - 题目变量都靠近 1，且含 $e^x,\ln(1+x),\sqrt{1+x}$。
+    - 选项是若干二元比较式的真假判断。
+    - 题干显式给小增量数值（如 0.02）。
+  normalization_moves:
+    - 把每一项写成 $x=0$ 邻域增量。
+    - 一阶导先分出明显小项。
+    - 其余项再靠二阶导细分。
+    - 最后回到选项逐条判真。
+  common_failures:
+    - 把 $d$ 与其他项混在一起比较，丢掉一阶导优势。
+    - 法二小数位误抄导致 $b,c$ 顺序误判。
+    - 明明得到总序，却在多选映射时漏选 C 或 D。
+  similar_practice_query: e^0.02 ln1.02 1/51 sqrt1.02-1 多选 比大小 微元法
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 已跨页核对 page_0161+page_0162，按题头归属完成例20整卡。
+    - 法二中 0.196 表达按上下文判为 0.0196 的印刷漏位，不影响最终选项 ACD。

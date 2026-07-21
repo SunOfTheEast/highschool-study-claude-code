@@ -1,0 +1,182 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0222_x_minus_a_lnx_no_zero_ch6_fenzhi_ex05
+content_revision_id: mst_p0222_x_minus_a_lnx_no_zero_ch6_fenzhi_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0222_x_minus_a_lnx_no_zero_ch6_fenzhi_ex05.card.yaml
+stem: |-
+  （2019 · 雅安三诊 T21）设函数 $f(x)=x-a\ln x$，其中 $e$ 为自然对数的底数。
+  1. 若 $a=1$，求 $f(x)$ 的单调区间。
+  2. 若 $g(x)=f(x)-x+e^{x-1}$，$0\leqslant a\leqslant e$，求证：$g(x)$ 无零点。
+answer: |-
+  （1）$f(x)$ 在 $(0,1)$ 上单调递减，在 $(1,+\infty)$ 上单调递增；（2）证明见解析，$g(x)>0$，故无零点。
+
+  若 $a=1$，$f(x)=x-\ln x$， $f^{\prime}(x)=1-\frac1x=\frac{x-1}{x}$，故 $f$ 在 $(0,1)$ 单调递减，在 $(1,+\infty)$ 单调递增。第二问 $g(x)=f(x)-x+e^{x-1}=e^{x-1}-a\ln x$。要证明 $g$ 无零点，只需证 $e^{x-1}>a\ln x$ 恒成立。对 $x>0$，转成 $\frac{e^{x-1}}x>a\frac{\ln x}{x}$。左侧 $\frac{e^{x-1}}x=\frac1e\frac{e^x}{x}\geqslant1$，在 $x=1$ 取等； 右侧 $a\frac{\ln x}{x}\leqslant a/e\leqslant1$，在 $x=e$ 取最大。 即使 $a=e$，两侧取等点也不一致，故严格大于，$g(x)>0$，无零点。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 第一问求导判单调。
+      max_score: 1
+    - step_id: step_2
+      description: 化简第二问的 $g(x)$。
+      max_score: 1
+    - step_id: step_3
+      description: 把无零点转成上下函数比较。
+      max_score: 1
+    - step_id: step_4
+      description: 比较左侧下界与右侧上界。
+      max_score: 1
+    - step_id: step_5
+      description: 用取等点不一致得到严格大于。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 1 问
+        result: $(0,1)$ 递减，$(1,+\infty)$ 递增。
+      - part_id: "2"
+        goal: 零点/极值点分析
+        target: 第 2 问
+        result: $g(x)>0$，无零点。
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 同构变形与换元法
+      - 拟合与夹逼
+    subroute:
+      - 上下函数选取
+      - 错位 PS
+      - 取等点不一致
+      - $\frac{e^x}{x}$ 与 $\frac{\ln x}{x}$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+      - 非齐次结构
+    evidence:
+      - $g(x)=e^{x-1}-a\ln x$
+      - $\frac{e^{x-1}}x>a\frac{\ln x}{x}$
+      - 左侧取等 $x=1$，右侧取等 $x=e$。
+    normalization_moves_used:
+      - 先化简 $g(x)$，把零点问题变成恒正问题。
+      - 除以 $x$ 形成上下函数。
+      - 用取等点错开保证严格大于。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $f^{\prime}(x)$ 判单调，回补导数单调极值基础。
+      - 若学生忘记 $x>0$ 才能除以 $x$，回补函数三要素与定义域。
+      - 若学生不熟悉 $\frac{e^x}{x}$ 与 $\frac{\ln x}{x}$ 的极值，回补指数对数基础。
+      - 若学生不能解释边界 $a=e$ 时为何仍严格，回补不等式工具基础。
+  detail_terms:
+    - $x-a\ln x$
+    - $g(x)=e^{x-1}-a\ln x$
+    - $\frac{e^x}{x}$
+    - $\frac{\ln x}{x}$
+    - 取等点不一致
+parts: &a1
+  - part_id: "1"
+    text: 若 $a=1$，求 $f(x)$ 的单调区间。
+  - part_id: "2"
+    text: 若 $g(x)=f(x)-x+e^{x-1}$，$0\leqslant a\leqslant e$，求证：$g(x)$ 无零点。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0222_x_minus_a_lnx_no_zero_ch6_fenzhi_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0222_ex05_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0222/page_0222.md
+      role: problem_start
+      evidence: page_0222 给出例5题头：$f(x)=x-a\ln x$，两问求 $a=1$ 单调区间并证明 $g(x)=f(x)-x+e^{x-1}$ 无零点。
+    - ref_id: page_0222_ex05_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0222/page_0222.md
+      role: solution
+      evidence: page_0222 例5解析完整给出 $f^{\prime}(x)=(x-1)/x$，以及 $e^{x-1}>a\ln x$ 的上下函数证明。
+    - ref_id: page_0222_ex06_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0222/page_0222.md
+      role: local_context
+      evidence: 例5后进入“考点2”和例6题头，说明例5在本页闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0222.png
+      inspected: true
+      notes: 已核对页图：例5位于 page_0222 中下部，题头和解析完整。
+  source_context: 本卡处理 page_0222 例5；后续例6另成一卡。
+  source_influence:
+    - 保留第一问标准导数单调性。
+    - 保留第二问的核心：证明 $e^{x-1}>a\ln x$，即 $\frac{e^{x-1}}x>a\frac{\ln x}{x}$。
+    - 保留严格性的来源：左侧下界在 $x=1$ 取等，右侧上界在 $x=e$ 取等，取等点不一致。
+  source_discrepancies: []
+original_problem:
+  stem: （2019 · 雅安三诊 T21）设函数 $f(x)=x-a\ln x$，其中 $e$ 为自然对数的底数。
+  parts: *a1
+  choices: []
+  answer: （1）$f(x)$ 在 $(0,1)$ 上单调递减，在 $(1,+\infty)$ 上单调递增；（2）证明见解析，$g(x)>0$，故无零点。
+  fidelity_notes:
+    - 两问解答题，无选项。
+    - 第二问的 $g(x)$ 化简为 $e^{x-1}-a\ln x$。
+solution:
+  source_solution_summary: 若 $a=1$，$f(x)=x-\ln x$， $f^{\prime}(x)=1-\frac1x=\frac{x-1}{x}$，故 $f$ 在 $(0,1)$ 单调递减，在 $(1,+\infty)$ 单调递增。第二问 $g(x)=f(x)-x+e^{x-1}=e^{x-1}-a\ln x$。要证明 $g$ 无零点，只需证 $e^{x-1}>a\ln x$ 恒成立。对 $x>0$，转成 $\frac{e^{x-1}}x>a\frac{\ln x}{x}$。左侧 $\frac{e^{x-1}}x=\frac1e\frac{e^x}{x}\geqslant1$，在 $x=1$ 取等； 右侧 $a\frac{\ln x}{x}\leqslant a/e\leqslant1$，在 $x=e$ 取最大。 即使 $a=e$，两侧取等点也不一致，故严格大于，$g(x)>0$，无零点。
+  key_steps:
+    - step_id: step_1
+      statement: 第一问求导判单调。
+      formula_trace:
+        from: $a=1,\ f(x)=x-\ln x$
+        to: $f^{\prime}(x)=1-\frac1x=\frac{x-1}{x}$
+        operation: 求导并合并分式。
+        why: 导数正负直接给出单调区间。
+      source_ref: page_0222_ex05_solution
+    - step_id: step_2
+      statement: 化简第二问的 $g(x)$。
+      formula_trace:
+        from: $g(x)=f(x)-x+e^{x-1}$，$f(x)=x-a\ln x$
+        to: $g(x)=e^{x-1}-a\ln x$
+        operation: 抵消 $x$ 项。
+        why: 无零点问题转成证明一个指对差恒正。
+      source_ref: page_0222_ex05_solution
+    - step_id: step_3
+      statement: 把无零点转成上下函数比较。
+      formula_trace:
+        from: $e^{x-1}-a\ln x>0$
+        to: $\frac{e^{x-1}}x>a\frac{\ln x}{x}$
+        operation: 两边除以正数 $x$。
+        why: 制造 $\frac{e^x}{x}$ 与 $\frac{\ln x}{x}$ 的上下函数。
+      source_ref: page_0222_ex05_solution
+    - step_id: step_4
+      statement: 比较左侧下界与右侧上界。
+      formula_trace:
+        from: $\frac{e^{x-1}}x=\frac1e\frac{e^x}{x}$，$a\frac{\ln x}{x}$
+        to: 左侧 $\geqslant1$，右侧 $\leqslant a/e\leqslant1$
+        operation: 套用 $\frac{e^x}{x}\geqslant e$ 与 $\frac{\ln x}{x}\leqslant1/e$。
+        why: 上下界已经足以证明 $g(x)\geqslant0$。
+      source_ref: page_0222_ex05_solution
+    - step_id: step_5
+      statement: 用取等点不一致得到严格大于。
+      formula_trace:
+        from: 左侧在 $x=1$ 取等，右侧最大在 $x=e$ 取等
+        to: $\frac{e^{x-1}}x>a\frac{\ln x}{x}$，故 $g(x)>0$
+        operation: 检查等号条件不能同时满足。
+        why: 排除 $a=e$ 时边界等号导致零点的风险。
+      source_ref: page_0222_ex05_solution
+teaching_card:
+  student_title: 把“无零点”变成上下函数严格分离
+  what_it_trains: 训练零点问题中的分而治之：证明函数恒正，而不是直接解方程。
+  recognition_cues:
+    - 第二问问“无零点”，但式子能化成 $e^{x-1}-a\ln x$。
+    - 参数范围 $0\leqslant a\leqslant e$ 正好配合 $\ln x/x$ 的最大值。
+    - 左边和右边的边界值相同，需要检查取等点是否一致。
+  normalization_moves:
+    - 先化简 $g(x)$。
+    - 除以 $x$，把两边变成基础函数。
+    - 最后专门处理 $a=e$ 的等号错位。
+  common_failures:
+    - 把 $g(x)$ 与题干里的 $f(x)$ 混淆，没有先化简。
+    - 得到 $\geqslant$ 后就停下，忘了题目要求无零点，需要严格 $>0$。
+    - 漏看 $a=0$ 或 $a=e$ 的边界。
+  similar_practice_query: x-a lnx e^{x-1}-a lnx 无零点 e^x/x lnx/x 取等点不一致
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

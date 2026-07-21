@@ -1,0 +1,214 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0228_exp_tangent_trig_split_inequality_ch6_fenzhi_ex15
+content_revision_id: mst_p0228_exp_tangent_trig_split_inequality_ch6_fenzhi_ex15-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0228_exp_tangent_trig_split_inequality_ch6_fenzhi_ex15.card.yaml
+stem: |-
+  （2020 · 黄山一模 T21）已知曲线 $f(x)=\frac{mx-m}{e^x}$ 在点 $(1,f(1))$ 处的切线斜率为 $-\frac1e$。
+  1. 求 $m$ 的值，并求函数 $f(x)$ 的极小值。
+  2. 当 $x\in(0,\pi)$ 时，求证：$e^x\sin x-x+e^{x-2}+1>e^x x\cos x$。
+answer: |-
+  第 (1) 问：$m=-1$，$f(x)$ 的极小值为 $-\frac1{e^2}$；第 (2) 问不等式成立。
+
+  $f(x)=m(x-1)e^{-x}$，求导得 $f'(x)=-\frac{m(x-2)}{e^x}$，所以 $f'(1)=m/e=-1/e$，得 $m=-1$。此时 $f(x)=\frac{1-x}{e^x}$，$f'(x)=\frac{x-2}{e^x}$，故 $x=2$ 处取得极小值 $-\frac1{e^2}$。第 (2) 问两边同除以 $e^x$， 只需证明 $\frac{1-x}{e^x}+\frac1{e^2}>x\cos x-\sin x$。左侧即 $f(x)+\frac1{e^2}\geqslant0$；右侧令 $g(x)=x\cos x-\sin x$， 则 $g'(x)=-x\sin x<0$，所以 $g(x)<g(0)=0$。因此左侧非负、 右侧为负，不等式成立。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 用切线斜率确定参数 $m$。
+      max_score: 1
+    - step_id: step_2
+      description: 代入斜率得到 $m=-1$。
+      max_score: 1
+    - step_id: step_3
+      description: 求 $f$ 的极小值。
+      max_score: 1
+    - step_id: step_4
+      description: 把原不等式除以 $e^x$，露出第 (1) 问的函数。
+      max_score: 1
+    - step_id: step_5
+      description: 左侧由极小值保证非负。
+      max_score: 1
+    - step_id: step_6
+      description: 右侧三角整体恒为负。
+      max_score: 1
+    - step_id: step_7
+      description: 两边分治完成证明。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: part_1
+        goal: 极值最值
+        target: 第 part_1 问
+        result: $m=-1$，$f_{\min}=-1/e^2$。
+      - part_id: part_2
+        goal: 不等式证明
+        target: 第 part_2 问
+        result: $e^x\sin x-x+e^{x-2}+1>e^x x\cos x$。
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 参变量分离
+      - 显隐点探路
+    subroute:
+      - 切线斜率定参
+      - 指数找基友
+      - $f(x)+1/e^2$
+      - $x\cos x-\sin x$
+      - 非负块大于负块
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 三角复合结构
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $\frac{mx-m}{e^x}$
+      - $\frac{1-x}{e^x}+\frac1{e^2}$
+      - $x\cos x-\sin x$
+      - $e^x\sin x-x+e^{x-2}+1$
+    normalization_moves_used:
+      - 由切线斜率先确定 $m$。
+      - 把函数极小值转为 $f(x)+1/e^2\geqslant0$。
+      - 把三角差转成 $x\cos x-\sin x<0$。
+      - 两边各自估计后再比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会用切线斜率写 $f^\prime(1)$，回补导数运算与几何意义。
+      - 若学生不会由 $f^\prime(x)$ 判断极小值，回补导数单调极值基础。
+      - 若学生不会证明 $x\cos x-\sin x<0$，回补三角函数基础。
+      - 若学生不会把原式除以 $e^x$ 后重组，回补代数恒等变形。
+  detail_terms:
+    - $\frac{mx-m}{e^x}$
+    - 切线斜率
+    - $m=-1$
+    - $f(x)+1/e^2$
+    - $x\cos x-\sin x$
+    - 指数找基友
+    - 分而治之
+parts: &a1
+  - part_id: part_1
+    text: 求 $m$ 的值，并求函数 $f(x)$ 的极小值。
+  - part_id: part_2
+    text: 当 $x\in(0,\pi)$ 时，求证：$e^x\sin x-x+e^{x-2}+1>e^x x\cos x$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0228_exp_tangent_trig_split_inequality_ch6_fenzhi_ex15
+source_evidence:
+  source_refs:
+    - ref_id: page_0228_ex14_continuation_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0228/page_0228.md
+      role: local_context
+      evidence: page_0228 页首是 page_0227 例14续解，不是本卡题头。
+    - ref_id: page_0228_ex15_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0228/page_0228.md
+      role: problem_start
+      evidence: page_0228 中部给出例15题头：曲线 $f(x)=\frac{mx-m}{e^x}$ 在点 $(1,f(1))$ 处切线斜率为 $-\frac1e$，并要求证明含指数三角不等式。
+    - ref_id: page_0228_ex15_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0228/page_0228.md
+      role: solution
+      evidence: 解析先由 $f^\prime(1)=m/e=-1/e$ 得 $m=-1$，再用 $f(x)+1/e^2\geqslant0$ 与 $x\cos x-\sin x<0$ 分而治之证明不等式。
+    - ref_id: page_0228_ex16_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0228/page_0228.md
+      role: local_context
+      evidence: page_0228 底部另起例16，属于本批下一张卡，不混入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0228.png
+      inspected: true
+      notes: 已核对页图：例15题干、完整解析和总结均位于 page_0228。
+  source_context: 本卡处理 page_0228 起头并在同页完整结束的例15；页首例14续解不处理，后续例16另卡处理。
+  source_influence:
+    - 保留 source 的切线斜率定参：$f^\prime(1)=m/e=-1/e$，所以 $m=-1$。
+    - 保留 source 的分而治之：左侧改写为 $f(x)+1/e^2$，右侧改写为 $x\cos x-\sin x$。
+    - 保留“指数找基友”的局部语言：指数部分由第 (1) 问的极小值给出非负块，三角部分由 $x\cos x-\sin x$ 给出负块。
+  source_discrepancies: []
+original_problem:
+  stem: （2020 · 黄山一模 T21）已知曲线 $f(x)=\frac{mx-m}{e^x}$ 在点 $(1,f(1))$ 处的切线斜率为 $-\frac1e$。
+  parts: *a1
+  choices: []
+  answer: 第 (1) 问：$m=-1$，$f(x)$ 的极小值为 $-\frac1{e^2}$；第 (2) 问不等式成立。
+  fidelity_notes:
+    - 两问均无选项。
+    - 第 (2) 问需要使用第 (1) 问所得函数极小值。
+solution:
+  source_solution_summary: $f(x)=m(x-1)e^{-x}$，求导得 $f'(x)=-\frac{m(x-2)}{e^x}$，所以 $f'(1)=m/e=-1/e$，得 $m=-1$。此时 $f(x)=\frac{1-x}{e^x}$，$f'(x)=\frac{x-2}{e^x}$，故 $x=2$ 处取得极小值 $-\frac1{e^2}$。第 (2) 问两边同除以 $e^x$， 只需证明 $\frac{1-x}{e^x}+\frac1{e^2}>x\cos x-\sin x$。左侧即 $f(x)+\frac1{e^2}\geqslant0$；右侧令 $g(x)=x\cos x-\sin x$， 则 $g'(x)=-x\sin x<0$，所以 $g(x)<g(0)=0$。因此左侧非负、 右侧为负，不等式成立。
+  key_steps:
+    - step_id: step_1
+      statement: 用切线斜率确定参数 $m$。
+      formula_trace:
+        from: $f(x)=\frac{mx-m}{e^x}=m(x-1)e^{-x}$
+        to: $f^\prime(x)=-\frac{m(x-2)}{e^x}$
+        operation: 乘积求导。
+        why: 切线斜率就是 $x=1$ 处导数。
+      source_ref: page_0228_ex15_solution
+    - step_id: step_2
+      statement: 代入斜率得到 $m=-1$。
+      formula_trace:
+        from: $f^\prime(1)=\frac m e=-\frac1e$
+        to: $m=-1$
+        operation: 按切线斜率方程解参数。
+        why: 题目只给了斜率信息，先把函数定死。
+      source_ref: page_0228_ex15_solution
+    - step_id: step_3
+      statement: 求 $f$ 的极小值。
+      formula_trace:
+        from: $f(x)=\frac{1-x}{e^x},\ f^\prime(x)=\frac{x-2}{e^x}$
+        to: $f(2)=-\frac1{e^2}$
+        operation: 导数判单调，确定 $x=2$ 为极小值点。
+        why: 这一步给第 (2) 问准备非负块 $f(x)+1/e^2$。
+      source_ref: page_0228_ex15_solution
+    - step_id: step_4
+      statement: 把原不等式除以 $e^x$，露出第 (1) 问的函数。
+      formula_trace:
+        from: $e^x\sin x-x+e^{x-2}+1>e^x x\cos x$
+        to: $\frac{1-x}{e^x}+\frac1{e^2}>x\cos x-\sin x$
+        operation: 两边除以 $e^x$ 并移项。
+        why: 左侧变为 $f(x)+1/e^2$，可以直接使用极小值。
+      source_ref: page_0228_ex15_solution
+    - step_id: step_5
+      statement: 左侧由极小值保证非负。
+      formula_trace:
+        from: $f(x)_{\min}=-\frac1{e^2}$
+        to: $f(x)+\frac1{e^2}\geqslant0$
+        operation: 由第 (1) 问结论平移函数。
+        why: 分而治之的一侧已经压到 0。
+      source_ref: page_0228_ex15_solution
+    - step_id: step_6
+      statement: 右侧三角整体恒为负。
+      formula_trace:
+        from: $g(x)=x\cos x-\sin x$
+        to: $g^\prime(x)=-x\sin x<0,\ g(x)<g(0)=0$
+        operation: 求导判单调。
+        why: $x\in(0,\pi)$ 时 $\sin x>0$，所以 $g$ 从 0 开始递减。
+      source_ref: page_0228_ex15_solution
+    - step_id: step_7
+      statement: 两边分治完成证明。
+      formula_trace:
+        from: $f(x)+\frac1{e^2}\geqslant0$ 与 $x\cos x-\sin x<0$
+        to: $\frac{1-x}{e^x}+\frac1{e^2}>x\cos x-\sin x$
+        operation: 非负块大于负块。
+        why: 严格性来自右侧严格小于 0。
+      source_ref: page_0228_ex15_solution
+teaching_card:
+  student_title: 把指数块认回第 (1) 问，再把三角块压成负数
+  what_it_trains: 训练分而治之：复杂不等式不硬凑同构，而是拆成一个已知非负块和一个已知负块。
+  recognition_cues:
+    - 第 (2) 问出现 $e^{x-2}$ 和 $1$，除以 $e^x$ 后会露出 $1/e^2$ 与 $(1-x)/e^x$。
+    - 第 (1) 问刚求出 $f$ 的极小值，通常要在第 (2) 问复用。
+    - 三角侧出现 $x\cos x-\sin x$，导数直接是 $-x\sin x$。
+  normalization_moves:
+    - 先用切线斜率确定 $m$。
+    - 求出 $f_{\min}=-1/e^2$。
+    - 第 (2) 问两边除以 $e^x$，把指数部分改成 $f(x)+1/e^2$。
+    - 证明 $x\cos x-\sin x<0$，完成两块比较。
+  common_failures:
+    - 第 (1) 问做完后没有意识到极小值是第 (2) 问的钥匙。
+    - 除以 $e^x$ 后没有把 $\frac{1-x}{e^x}$ 认成 $f(x)$。
+    - 把 $x\cos x-\sin x$ 当成需要复杂放缩的对象，漏掉直接求导。
+  similar_practice_query: 指数找基友 切线斜率 极小值复用 f(x)+1/e^2 xcosx-sinx 分而治之
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

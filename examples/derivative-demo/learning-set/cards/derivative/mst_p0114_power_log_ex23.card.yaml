@@ -1,0 +1,270 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0114_power_log_ex23
+content_revision_id: mst_p0114_power_log_ex23-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0114_power_log_ex23.card.yaml
+stem: |-
+  （2024 春 · 浦东新区校级月考 T1）已知 $f(x)=\log_a x$，$g(x)=a^x$，其中 $a>1$。
+  (1). 请利用 $y=\ln x$ 的导函数推出 $f(x)$ 导函数，并求函数 $h(x)=f(x)-\frac{x}{\ln a}$ 的递增区间。
+  (2). 若曲线 $y=f(x)$ 在点 $(x_1,f(x_1))$ 处的切线与曲线 $y=g(x)$ 在点 $(x_2,g(x_2))$ 处的切线平行，求 $f(x_1)+x_2$，化简为只含 $a$ 的代数式。
+  (3). 证明：当 $a\ge e^{\frac{1}{e}}$ 时，存在直线 $l$，使得 $l$ 既是 $y=f(x)$ 的一条切线，也是 $y=g(x)$ 的一条切线。
+answer: |
+  (1) $f'(x)=\frac{1}{x\ln a}$，$h(x)$ 的递增区间为 $(0,1)$；(2) $f(x_1)+x_2=-\frac{2\ln\ln a}{\ln a}$；(3) 当 $a\ge e^{1/e}$ 时公切线存在。
+
+  第 (1) 问由换底公式 $f(x)=\frac{\ln x}{\ln a}$ 得
+  $f'(x)=\frac{1}{x\ln a}$，于是
+  $h'(x)=\frac{1}{\ln a}\left(\frac1x-1\right)$，因 $a>1$，
+  递增区间为 $(0,1)$。
+  第 (2) 问令两条切线斜率相等：
+  $a^{x_2}\ln a=\frac{1}{x_1\ln a}$，取以 $a$ 为底的对数得
+  $\log_a x_1+x_2+2\log_a(\ln a)=0$，所以
+  $f(x_1)+x_2=-\frac{2\ln\ln a}{\ln a}$。
+  第 (3) 问把公切线分别写成 $y=a^x$ 在 $x_1$ 处的切线和
+  $y=\log_a x$ 在 $x_2$ 处的切线。两条线重合给出斜率、截距方程，
+  消去 $x_2$ 后得到
+  $u(x)=a^x-xa^x\ln a+x+\frac1{\ln a}+\frac{2\ln\ln a}{\ln a}$。
+  通过 $u'(x)=1-(\ln a)^2xa^x$ 找到唯一极大点 $x_0>0$，
+  用 $a\ge e^{1/e}$ 和均值不等式得 $u(x_0)\ge0$；再用
+  $a^x\ge1+x\ln a$ 在足够大的 $x$ 处推出 $u(x)<0$，由连续性得到零点，
+  从而公切线存在。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 用换底公式求 $f'(x)$，并判定 $h(x)$ 的递增区间。
+      max_score: 1
+    - step_id: step_2
+      description: 由第 (2) 问的平行切线斜率关系求 $f(x_1)+x_2$。
+      max_score: 1
+    - step_id: step_3
+      description: 为第 (3) 问分别写出指数曲线和对数曲线的切线。
+      max_score: 1
+    - step_id: step_4
+      description: 把两条切线重合转成斜率相等和截距相等。
+      max_score: 1
+    - step_id: step_5
+      description: 消去 $x_2$，把公切线存在性化成 $u(x_1)=0$ 有解。
+      max_score: 1
+    - step_id: step_6
+      description: 分析 $u'(x)$，找到 $u$ 的唯一极大点。
+      max_score: 1
+    - step_id: step_7
+      description: 证明极大值处 $u(x_0)\ge0$。
+      max_score: 1
+    - step_id: step_8
+      description: 找一个足够大的点使 $u(x)<0$，由连续性推出零点。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: (1) 零点/极值点分析
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 数值求值
+        target: (2) 数值求值
+        result: 见 source_solution_summary
+      - part_id: "3"
+        goal: 不等式证明
+        target: (3) 不等式证明
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 切线放缩与凹凸性
+      - 局部逼近与找点
+      - 充分/必要性探路
+    subroute:
+      - 公切线双切点设元
+      - 斜率截距重合方程
+      - 消元成零点方程
+      - 切线找点不等式 $a^x\ge1+x\ln a$
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+      - 同构结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $a^{x_1}\ln a=\frac{1}{x_2\ln a}$ 把指数切点和对数切点绑定。
+      - $x_2=\frac{1}{a^{x_1}(\ln a)^2}$ 将双切点消成单变量。
+      - $u(x)=a^x-xa^x\ln a+x+\frac1{\ln a}+\frac{2\ln\ln a}{\ln a}$ 承载公切线存在性。
+      - $a^x\ge1+x\ln a$ 用切线放缩制造 $u(t)<0$。
+    normalization_moves_used:
+      - 先区分 $y=a^x$ 与 $y=\log_a x$ 的两个切点，修正源页曲线名错位。
+      - 由斜率相等先解出 $x_2$，再把截距相等压缩成 $u(x_1)=0$。
+      - 令极大点满足 $(\ln a)^2x_0a^{x_0}=1$，把 $u(x_0)$ 化成 AM-GM 可估式。
+      - 在 $x>1/\ln a$ 时利用 $1-x\ln a<0$，把指数下界反向转成 $u$ 的上界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由换底公式求 $\log_a x$ 的导数，回补指数对数基础。
+      - 若学生不会用导数符号判断 $h(x)$ 的递增区间，回补导数单调极值基础。
+      - 若学生把公切线误认为同一个切点，回补导数运算与几何意义。
+      - 若学生从斜率、截距方程整理不到 $u(x_1)=0$，回补代数恒等变形。
+      - 若学生不会用 $a^x\ge1+x\ln a$ 进行放缩，回补不等式工具基础。
+      - 若学生不理解“极大值非负且远处为负”推出零点，回补函数性质与图像。
+  detail_terms:
+    - $f(x)=\log_a x$
+    - $g(x)=a^x$
+    - $f'(x)=\frac{1}{x\ln a}$
+    - $f(x_1)+x_2=-\frac{2\ln\ln a}{\ln a}$
+    - $a^{x_1}\ln a=\frac{1}{x_2\ln a}$
+    - $u(x)=a^x-xa^x\ln a+x+\frac1{\ln a}+\frac{2\ln\ln a}{\ln a}$
+parts: &a1
+  - label: (1)
+    text: 请利用 $y=\ln x$ 的导函数推出 $f(x)$ 导函数，并求函数 $h(x)=f(x)-\frac{x}{\ln a}$ 的递增区间。
+  - label: (2)
+    text: 若曲线 $y=f(x)$ 在点 $(x_1,f(x_1))$ 处的切线与曲线 $y=g(x)$ 在点 $(x_2,g(x_2))$ 处的切线平行，求 $f(x_1)+x_2$，化简为只含 $a$ 的代数式。
+  - label: (3)
+    text: 证明：当 $a\ge e^{\frac{1}{e}}$ 时，存在直线 $l$，使得 $l$ 既是 $y=f(x)$ 的一条切线，也是 $y=g(x)$ 的一条切线。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0114_power_log_ex23
+source_evidence:
+  source_refs:
+    - ref_id: page_0114
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0114/page_0114.md
+      role: problem_start
+      evidence: page_0114 顶部为例 22 续页；页面下半部开始例 23，给出题头、三问题干，并写出第 (1) 问解析和第 (2) 问开头斜率。
+    - ref_id: page_0115
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0115/page_0115.md
+      role: continuation
+      evidence: page_0115 续完第 (2) 问，并给出第 (3) 问公切线存在性的完整证明。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0114.png
+      inspected: true
+      notes: 已核对 page_0114 图像：例 23 从页面下半部开始，page_0114 顶部仅为例 22 续页，未纳入本卡。第 (2) 问题干处原图写作 $(x_2,f(x_2))$。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0115.png
+      inspected: true
+      notes: 已核对 page_0115 图像：第 (3) 问开头原文把曲线名与切点坐标写乱，后续切线方程显示 $l_1$ 应为 $y=a^x$ 在 $(x_1,a^{x_1})$ 处的切线，$l_2$ 应为 $y=\log_a x$ 在 $(x_2,\log_a x_2)$ 处的切线。
+  source_context: 本卡只处理 page_0114 起头的例 23。page_0114 顶部的例 22 续页按批次规则跳过；page_0116 经 markdown 核对已进入第 3 章，不为本批创建卡片。
+  source_influence:
+    - 保留源页第 (1) 问的换底求导和 $h'(x)$ 单调判定路线，直接由 $h'(x)$ 判号。
+    - 保留第 (2) 问由两条切线平行得到 $a^{x_2}\ln a=\frac{1}{x_1\ln a}$，再取以 $a$ 为底的对数。
+    - 保留第 (3) 问的双切点公切线方程、消元成 $u(x)=0$、再用极大值与负值点夹出零点的证明结构。
+  source_discrepancies:
+    - page_0114 题干第 (2) 问的图像与 markdown 写“曲线 $y=g(x)$ 在点 $(x_2,f(x_2))$ 的切线”，但该点不在 $y=g(x)=a^x$ 上；page_0115 解析按 $(x_2,g(x_2))$ 求 $g'(x_2)$，本卡据数学语境修正为 $(x_2,g(x_2))$。
+    - page_0115 第 (3) 问图像中写“曲线 $y=f(x)$ 在点 $(x_1,ax_1)$ 处的切线 $l_1$”和“曲线 $y=g(x)$ 在点 $(x_2,\log_a x_2)$ 处的切线 $l_2$”；但紧随其后的 $y-a^{x_1}=a^{x_1}\ln a(x-x_1)$ 与 $y-\log_a x_2=\frac{1}{x_2\ln a}(x-x_2)$ 明确说明 $l_1$ 是 $y=g(x)=a^x$ 的切线，$l_2$ 是 $y=f(x)=\log_a x$ 的切线，本卡按公式修正。
+    - page_0115 部分位置的 $u(x)$ 字形近似 $\mu(x)$，本卡按函数定义统一为 $u(x)$。
+original_problem:
+  stem: （2024 春 · 浦东新区校级月考 T1）已知 $f(x)=\log_a x$，$g(x)=a^x$，其中 $a>1$。
+  parts: *a1
+  choices: []
+  answer: (1) $f'(x)=\frac{1}{x\ln a}$，$h(x)$ 的递增区间为 $(0,1)$；(2) $f(x_1)+x_2=-\frac{2\ln\ln a}{\ln a}$；(3) 当 $a\ge e^{1/e}$ 时公切线存在。
+  fidelity_notes:
+    - 第 (2) 问按 page_0115 解析与函数定义修正为 $(x_2,g(x_2))$，见 source_discrepancies。
+    - 第 (3) 问的证明文字按切线方程修正曲线归属，见 source_discrepancies。
+solution:
+  source_solution_summary: |
+    第 (1) 问由换底公式 $f(x)=\frac{\ln x}{\ln a}$ 得
+    $f'(x)=\frac{1}{x\ln a}$，于是
+    $h'(x)=\frac{1}{\ln a}\left(\frac1x-1\right)$，因 $a>1$，
+    递增区间为 $(0,1)$。
+    第 (2) 问令两条切线斜率相等：
+    $a^{x_2}\ln a=\frac{1}{x_1\ln a}$，取以 $a$ 为底的对数得
+    $\log_a x_1+x_2+2\log_a(\ln a)=0$，所以
+    $f(x_1)+x_2=-\frac{2\ln\ln a}{\ln a}$。
+    第 (3) 问把公切线分别写成 $y=a^x$ 在 $x_1$ 处的切线和
+    $y=\log_a x$ 在 $x_2$ 处的切线。两条线重合给出斜率、截距方程，
+    消去 $x_2$ 后得到
+    $u(x)=a^x-xa^x\ln a+x+\frac1{\ln a}+\frac{2\ln\ln a}{\ln a}$。
+    通过 $u'(x)=1-(\ln a)^2xa^x$ 找到唯一极大点 $x_0>0$，
+    用 $a\ge e^{1/e}$ 和均值不等式得 $u(x_0)\ge0$；再用
+    $a^x\ge1+x\ln a$ 在足够大的 $x$ 处推出 $u(x)<0$，由连续性得到零点，
+    从而公切线存在。
+  key_steps:
+    - step_id: step_1
+      statement: 用换底公式求 $f'(x)$，并判定 $h(x)$ 的递增区间。
+      formula_trace:
+        from: $f(x)=\log_a x=\frac{\ln x}{\ln a},\quad h(x)=f(x)-\frac{x}{\ln a}$
+        to: $f'(x)=\frac{1}{x\ln a},\quad h'(x)=\frac{1}{\ln a}\left(\frac1x-1\right)$
+        operation: 把 $\log_a x$ 换成 $\ln x/\ln a$ 后求导，并对 $h$ 求导。
+        why: $a>1$ 保证 $\ln a>0$，所以 $h'(x)>0$ 等价于 $0<x<1$。
+      source_ref: page_0114
+    - step_id: step_2
+      statement: 由第 (2) 问的平行切线斜率关系求 $f(x_1)+x_2$。
+      formula_trace:
+        from: $f'(x_1)=\frac{1}{x_1\ln a},\quad g'(x_2)=a^{x_2}\ln a,\quad f'(x_1)=g'(x_2)$
+        to: $\log_a x_1+x_2+2\log_a(\ln a)=0,\quad f(x_1)+x_2=-\frac{2\ln\ln a}{\ln a}$
+        operation: 令两斜率相等，再对 $x_1(\ln a)^2a^{x_2}=1$ 取以 $a$ 为底的对数。
+        why: $f(x_1)=\log_a x_1$，所以目标式正好是对数方程左侧的前两项。
+      source_ref: page_0114-page_0115
+    - step_id: step_3
+      statement: 为第 (3) 问分别写出指数曲线和对数曲线的切线。
+      formula_trace:
+        from: $g(x)=a^x,\quad f(x)=\log_a x$
+        to: $l_1:\ y-a^{x_1}=a^{x_1}\ln a(x-x_1),\quad l_2:\ y-\log_a x_2=\frac{1}{x_2\ln a}(x-x_2)$
+        operation: 按 page_0115 后续公式修正曲线归属：$l_1$ 切于 $y=g(x)$，$l_2$ 切于 $y=f(x)$。
+        why: 公切线可以切在两条曲线的不同横坐标处，需设 $x_1\in\mathbb R$、$x_2>0$。
+      source_ref: page_0115
+    - step_id: step_4
+      statement: 把两条切线重合转成斜率相等和截距相等。
+      formula_trace:
+        from: $l_1=l_2$
+        to: $a^{x_1}\ln a=\frac{1}{x_2\ln a},\quad a^{x_1}-x_1a^{x_1}\ln a=\log_a x_2-\frac1{\ln a}$
+        operation: 比较 $x$ 的系数和常数项。
+        why: 两条一次函数完全相同，当且仅当斜率和截距分别相等。
+      source_ref: page_0115
+    - step_id: step_5
+      statement: 消去 $x_2$，把公切线存在性化成 $u(x_1)=0$ 有解。
+      formula_trace:
+        from: $a^{x_1}\ln a=\frac{1}{x_2\ln a},\quad a^{x_1}-x_1a^{x_1}\ln a=\log_a x_2-\frac1{\ln a}$
+        to: $x_2=\frac{1}{a^{x_1}(\ln a)^2},\quad u(x_1)=a^{x_1}-x_1a^{x_1}\ln a+x_1+\frac1{\ln a}+\frac{2\ln\ln a}{\ln a}=0$
+        operation: 由斜率方程解出 $x_2$，代入截距方程并用 $\log_a x_2=-x_1-\frac{2\ln\ln a}{\ln a}$。
+        why: 只要这个单变量方程有实根，就能反推出对应 $x_2>0$，两切线重合。
+      source_ref: page_0115
+    - step_id: step_6
+      statement: 分析 $u'(x)$，找到 $u$ 的唯一极大点。
+      formula_trace:
+        from: $u(x)=a^x-xa^x\ln a+x+\frac1{\ln a}+\frac{2\ln\ln a}{\ln a}$
+        to: $u'(x)=1-(\ln a)^2xa^x$，且存在唯一 $x_0>0$ 使 $u'(x_0)=0$
+        operation: 求导；在 $x<0$ 时 $u'(x)>0$，在 $x>0$ 时 $u'(x)$ 严格递减，并用 $u'(0)=1$、$u'\!\left(\frac1{(\ln a)^2}\right)<0$ 夹出唯一零点。
+        why: 这个极大点给出零点存在性的上端参照。
+      source_ref: page_0115
+    - step_id: step_7
+      statement: 证明极大值处 $u(x_0)\ge0$。
+      formula_trace:
+        from: $(\ln a)^2x_0a^{x_0}=1,\quad a\ge e^{1/e}$
+        to: $u(x_0)=\frac{1}{x_0(\ln a)^2}+x_0+\frac{2\ln\ln a}{\ln a}\ge\frac{2+2\ln\ln a}{\ln a}\ge0$
+        operation: 把临界方程代入 $u(x_0)$，再用 $\frac{1}{x_0(\ln a)^2}+x_0\ge\frac2{\ln a}$ 和 $\ln\ln a\ge-1$。
+        why: 当 $a\ge e^{1/e}$ 时，极大值不低于 $x$ 轴。
+      source_ref: page_0115
+    - step_id: step_8
+      statement: 找一个足够大的点使 $u(x)<0$，由连续性推出零点。
+      formula_trace:
+        from: $x>\frac1{\ln a},\quad a^x\ge1+x\ln a$
+        to: $u(x)\le-(\ln a)^2x^2+x+1+\frac1{\ln a}+\frac{2\ln\ln a}{\ln a}\to-\infty$
+        operation: 把 $u(x)$ 写为 $a^x(1-x\ln a)+x+\frac1{\ln a}+\frac{2\ln\ln a}{\ln a}$；因 $1-x\ln a<0$，用 $a^x\ge1+x\ln a$ 作上界。
+        why: 存在 $t$ 使 $u(t)<0$，再结合 $u(x_0)\ge0$ 可由介值定理得到 $u(x_1)=0$。
+      source_ref: page_0115
+teaching_card:
+  student_title: 把指数和对数的公切线化成一个零点
+  what_it_trains: 训练先用导数写出两条曲线的切线条件，再把双切点公切线存在性压缩成单变量零点问题。
+  recognition_cues:
+    - 题目同时出现 $y=\log_a x$ 与 $y=a^x$，且问平行切线或同一条切线。
+    - 平行切线只需要斜率相等；公切线还要斜率和截距都相等。
+    - 条件 $a\ge e^{1/e}$ 等价于 $\ln a\ge1/e$，后面常配合 $\ln\ln a\ge-1$。
+    - 出现 $a^x-xa^x\ln a$ 时，要想到把它写成 $a^x(1-x\ln a)$。
+  normalization_moves:
+    - 用换底公式先把 $\log_a x$ 的导数写清楚。
+    - 第 (2) 问对 $x_1(\ln a)^2a^{x_2}=1$ 取以 $a$ 为底的对数。
+    - 第 (3) 问分别设指数曲线切点 $x_1$、对数曲线切点 $x_2$。
+    - 用斜率方程消去 $x_2$，得到 $u(x_1)=0$。
+    - 用 $u$ 的极大值和远处负值夹出零点。
+  common_failures:
+    - 把 page_0115 的印刷错位照抄，导致把 $a^{x_1}$ 当成 $f(x_1)$。
+    - 只令两条切线斜率相等，忘记公切线还需要截距相等。
+    - 由 $x_2=\frac{1}{a^{x_1}(\ln a)^2}$ 求 $\log_a x_2$ 时漏掉 $-2\ln\ln a/\ln a$。
+    - 在 $1-x\ln a<0$ 时使用 $a^x\ge1+x\ln a$ 不变号，导致放缩方向反了。
+    - 把 $u(x_0)\ge0$ 当成已有零点，漏掉还要找 $u(t)<0$。
+  similar_practice_query: log_a x a^x 公切线 平行切线 消元 零点存在 e^{1/e}
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0114 与 page_0115 图像；例 23 题头从 page_0114 开始并在 page_0115 完结。
+    - page_0114 顶部是例 22 续页，已按批次规则跳过。
+    - page_0115 的 $(x_1,ax_1)$ 及曲线名错位已由紧随其后的切线方程和函数定义数学修正；不需要用户拍板。
+    - page_0116 markdown 已核对为第 3 章开头，本批未创建第 3 章卡。

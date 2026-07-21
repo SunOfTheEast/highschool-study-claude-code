@@ -1,0 +1,189 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0106_piecewise_common_tangent_ex14
+content_revision_id: mst_p0106_piecewise_common_tangent_ex14-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0106_piecewise_common_tangent_ex14.card.yaml
+stem: |-
+  （2024 泉州五中高二期中 T8）若曲线 $f(x)=\frac{k}{x}(k<0)$ 与 $g(x)=e^x$ 有三条公切线，则 $k$ 的取值范围为（  ）
+  A. $\left(-\frac{1}{e},0\right)$
+  B. $\left(-\infty,-\frac{1}{e}\right)$
+  C. $\left(-\frac{2}{e},0\right)$
+  D. $\left(-\infty,-\frac{2}{e}\right)$
+answer: |
+  A
+
+  当 $k<0$ 时，$f(x)=\frac{k}{x}$ 在第二、四象限各有一支。源页先用图像说明：
+  第四象限的 $f$ 分支与第一象限的 $g(x)=e^x$ 分支外离，并受渐近线限制，
+  必有一条公切线。要共有三条公切线，还需第二象限里再出现两条外公切线。
+  按同旁相交型模型，只需 $x<0$ 时 $f(x)=g(x)$ 有两个交点，即
+  $\frac{k}{x}=e^x$，也就是 $k=xe^x(x<0)$ 有两个解。
+  函数 $h(x)=xe^x$ 在 $x<0$ 上于 $x=-1$ 处取最小值 $-\frac1e$，
+  且两侧值域都是 $\left(-\frac1e,0\right)$。因此要有两个交点，
+  必须且只需 $-\frac1e<k<0$，故选 A。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 先把已存在的一条公切线从总数中分离出来。
+      max_score: 1
+    - step_id: step_2
+      description: 把另外两条公切线转成第二象限内两交点。
+      max_score: 1
+    - step_id: step_3
+      description: 求 $xe^x$ 在负半轴上的两解范围。
+      max_score: 1
+    - step_id: step_4
+      description: 确定参数范围并对应选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 参变量分离
+      - 切线放缩与凹凸性
+    subroute:
+      - 象限分支拆分
+      - 外离型固定公切线
+      - 同旁相交型
+      - $xe^x$ 值域
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 分段函数结构
+    evidence:
+      - $f(x)=\frac{k}{x}(k<0)$ 的两支分别位于第二、四象限。
+      - 先固定第四象限分支与第一象限指数分支之间的一条公切线。
+      - 剩余两条公切线由 $k=xe^x(x<0)$ 的两个交点控制。
+    normalization_moves_used:
+      - 按象限拆分曲线分支，避免把三条公切线混在一起数。
+      - 把第二象限的公切线条数转成交点个数。
+      - 用 $xe^x$ 的单峰谷值域筛出 $k$ 的开区间。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不能判断 $k<0$ 时 $\frac{k}{x}$ 的两支象限，回补函数三要素与定义域。
+      - 若学生不知道公切线可由图像位置关系转成交点模型，回补函数性质与图像。
+      - 若学生不会求 $xe^x$ 在 $x<0$ 上的值域，回补导数单调极值基础。
+      - 若学生把端点 $-\frac1e$ 也取入，回补方程根分布与韦达。
+  detail_terms:
+    - $f(x)=\frac{k}{x}(k<0)$
+    - $g(x)=e^x$
+    - 三条公切线
+    - $k=xe^x(x<0)$
+    - $k\in\left(-\frac1e,0\right)$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0106_piecewise_common_tangent_ex14
+source_evidence:
+  source_refs:
+    - ref_id: page_0106
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0106/page_0106.md
+      role: problem_start
+      evidence: lines 12-26 give section 五、例 14 题头、题干、A-D 选项、两幅公切线图示说明、$k=xe^x(x<0)$ 的两交点判定和答案 A。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0106.png
+      inspected: true
+      notes: 已核对 page_0106 页图：例 14 的题干、四个选项、两幅公切线示意、$xe^x$ 值域推导和答案 A 与 markdown 一致。
+  source_context: 本题位于“五、分段函数的公切线”开头；源页把 $f(x)=k/x(k<0)$ 的两支与 $g(x)=e^x$ 按象限拆开讨论。
+  source_influence:
+    - 保留源页的象限分支判断：第四象限的 $f$ 分支与第一象限的 $g$ 分支外离，受渐近线限制已有一条公切线。
+    - 保留源页的同旁相交型转化：还需要第二象限内 $f(x)=g(x)$ 有两个交点，等价于 $k=xe^x(x<0)$ 有两解。
+    - 保留源页对 $xe^x$ 在 $x<0$ 上值域的判断，得到开区间 $(-1/e,0)$。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 泉州五中高二期中 T8）若曲线 $f(x)=\frac{k}{x}(k<0)$ 与 $g(x)=e^x$ 有三条公切线，则 $k$ 的取值范围为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\left(-\frac{1}{e},0\right)$
+      text_latex: $\left(-\frac{1}{e},0\right)$
+    - label: B
+      text_raw: $\left(-\infty,-\frac{1}{e}\right)$
+      text_latex: $\left(-\infty,-\frac{1}{e}\right)$
+    - label: C
+      text_raw: $\left(-\frac{2}{e},0\right)$
+      text_latex: $\left(-\frac{2}{e},0\right)$
+    - label: D
+      text_raw: $\left(-\infty,-\frac{2}{e}\right)$
+      text_latex: $\left(-\infty,-\frac{2}{e}\right)$
+  answer: A
+  fidelity_notes:
+    - 例 14 在 page_0106 内完整，未跨页。
+    - 题干为单选题，源页答案为 A。
+solution:
+  source_solution_summary: |
+    当 $k<0$ 时，$f(x)=\frac{k}{x}$ 在第二、四象限各有一支。源页先用图像说明：
+    第四象限的 $f$ 分支与第一象限的 $g(x)=e^x$ 分支外离，并受渐近线限制，
+    必有一条公切线。要共有三条公切线，还需第二象限里再出现两条外公切线。
+    按同旁相交型模型，只需 $x<0$ 时 $f(x)=g(x)$ 有两个交点，即
+    $\frac{k}{x}=e^x$，也就是 $k=xe^x(x<0)$ 有两个解。
+    函数 $h(x)=xe^x$ 在 $x<0$ 上于 $x=-1$ 处取最小值 $-\frac1e$，
+    且两侧值域都是 $\left(-\frac1e,0\right)$。因此要有两个交点，
+    必须且只需 $-\frac1e<k<0$，故选 A。
+  key_steps:
+    - step_id: step_1
+      statement: 先把已存在的一条公切线从总数中分离出来。
+      formula_trace:
+        from: |
+          $k<0,\qquad f(x)=\frac{k}{x},\qquad g(x)=e^x$
+        to: |
+          f\text{ 的第四象限分支与 }g\text{ 的第一象限分支外离，已有一条公切线。}
+        operation: 按源页图像把反比例函数的两支与指数函数的象限位置拆开。
+        why: 题目要求三条公切线，先固定源页指出的必然一条，剩下只需再判断两条。
+      source_ref: page_0106
+    - step_id: step_2
+      statement: 把另外两条公切线转成第二象限内两交点。
+      formula_trace:
+        from: |
+          f(x)=g(x),\qquad x<0
+        to: |
+          \frac{k}{x}=e^x,\qquad k=xe^x\quad(x<0)
+        operation: 在 $x<0$ 的同旁相交型模型下，把交点条件改写成参数方程。
+        why: 源页右图说明第二象限要有两条外公切线，需要两曲线在该象限满足两交点位置关系。
+      source_ref: page_0106
+    - step_id: step_3
+      statement: 求 $xe^x$ 在负半轴上的两解范围。
+      formula_trace:
+        from: |
+          h(x)=xe^x,\qquad x<0,\qquad h'(x)=e^x(x+1)
+        to: |
+          h(-1)=-\frac1e,\qquad h((-\infty,-1))=\left(-\frac1e,0\right),\qquad
+          h((-1,0))=\left(-\frac1e,0\right)
+        operation: 求导判断单调性，并记录极小值与两侧值域。
+        why: 水平线 $y=k$ 与 $h(x)$ 在 $x<0$ 有两个交点当且仅当 $k$ 位于两侧共同开值域内。
+      source_ref: page_0106
+    - step_id: step_4
+      statement: 确定参数范围并对应选项。
+      formula_trace:
+        from: |
+          k=xe^x\text{ 有两个负根}
+        to: |
+          -\frac1e<k<0,\qquad \text{选 A}
+        operation: 把两交点条件翻译成 $k$ 的开区间。
+        why: 端点 $k=-1/e$ 只有一个重交点，不能提供两条额外公切线；$k=0$ 又不符合 $k<0$。
+      source_ref: page_0106
+teaching_card:
+  student_title: 先数固定公切线，再看 $xe^x$ 的两交点
+  what_it_trains: 训练把反比例函数的两支按象限拆开，用图像位置关系把公切线条数转成参数方程的交点个数。
+  recognition_cues:
+    - $k<0$ 的 $\frac{k}{x}$ 有第二、四象限两支，不能只画一支。
+    - 题目要求“三条公切线”，源图提示其中一条来自外离型，另外两条来自同旁相交型。
+    - 出现 $e^x$ 与 $\frac{k}{x}$ 相交时，参数自然整理成 $k=xe^x$。
+  normalization_moves:
+    - 先确认第四象限反比例分支和第一象限指数分支已有一条公切线。
+    - 再让第二象限两曲线有两个交点：$k=xe^x(x<0)$。
+    - 求 $xe^x$ 在负半轴上的值域，得到 $-\frac1e<k<0$。
+  common_failures:
+    - 只研究 $x>0$，漏掉第二象限分支。
+    - 把“已有一条”和“还需两条”混在一起，导致公切线数量多算或少算。
+    - 求 $xe^x$ 值域时把 $x=-1$ 的端点取入，误以为 $k=-1/e$ 也可。
+  similar_practice_query: 反比例 指数 公切线 三条 xe^x 负半轴 值域
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0106 图片与 markdown 对例 14 的题干、选项、图示主线、值域结论和答案 A 一致。

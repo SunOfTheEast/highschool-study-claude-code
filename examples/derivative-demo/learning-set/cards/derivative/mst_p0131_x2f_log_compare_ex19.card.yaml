@@ -1,0 +1,254 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0131_x2f_log_compare_ex19
+content_revision_id: mst_p0131_x2f_log_compare_ex19-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0131_x2f_log_compare_ex19.card.yaml
+stem: |-
+  （2025·浙江杭州·模拟预测）定义在 $(0,+\infty)$ 上的可导函数 $f(x)$，满足 $f^{\prime}(x)+\frac{2f(x)}{x}=\frac{\ln x}{x^2}$，且 $f(e)=\frac{1}{2e}$，若 $a=f(3),\ b=f(2),\ c=f(e)$，则 $a,b,c$ 的大小关系是（  ）
+  A. $a>b>c$
+  B. $a>c>b$
+  C. $b>c>a$
+  D. $c>b>a$
+answer: |
+  C
+
+  由题设
+  \[
+  f^{\prime}(x)+\frac{2f(x)}{x}=\frac{\ln x}{x^2}
+  \]
+  得
+  \[
+  x^2f^{\prime}(x)+2xf(x)=\ln x.
+  \]
+  令
+  \[
+  g(x)=x^2f(x),
+  \]
+  则
+  \[
+  g^{\prime}(x)=x^2f^{\prime}(x)+2xf(x)=\ln x.
+  \]
+  又
+  \[
+  f^{\prime}(x)=\frac{xg^{\prime}(x)-2g(x)}{x^3}
+  =\frac{x\ln x-2g(x)}{x^3}.
+  \]
+  再令
+  \[
+  h(x)=x\ln x-2g(x),
+  \]
+  则
+  \[
+  h^{\prime}(x)=1+\ln x-2g^{\prime}(x)=1-\ln x.
+  \]
+  所以 $h$ 在 $(0,e)$ 递增，在 $(e,+\infty)$ 递减，故 $h(x)\le h(e)$。
+  由 $f(e)=\frac{1}{2e}$ 得
+  \[
+  h(e)=e-2g(e)=e-2e^2f(e)=0.
+  \]
+  因而 $h(x)\le0$，即
+  \[
+  f^{\prime}(x)=\frac{h(x)}{x^3}\le0\quad (x>0),
+  \]
+  所以 $f$ 在 $(0,+\infty)$ 上递减。又 $2<e<3$，故
+  \[
+  f(2)>f(e)>f(3),
+  \]
+  即 $b>c>a$，选 C。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 先用 $x^2$ 乘方程，构造幂乘函数 g。
+      max_score: 1
+    - step_id: step_2
+      description: 把 f^{\prime} 写成辅助函数 h 的符号问题。
+      max_score: 1
+    - step_id: step_3
+      description: 用 h^{\prime}(x)=1-\ln x 锁定 h 的全局上界。
+      max_score: 1
+    - step_id: step_4
+      description: 由 f 递减和 2<e<3 还原 a,b,c 排序。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 比较 $a=f(3),b=f(2),c=f(e)$ 的大小关系
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 局部逼近与找点
+    subroute:
+      - 幂函数构造
+      - 对数基础构造
+      - 极值点锁定
+  structure:
+    primary: 非齐次结构
+    secondary:
+      - 指对复合结构
+      - 特殊幂函数与指数函数结构
+      - 同构结构
+    evidence:
+      - $f^{\prime}(x)+\frac{2f(x)}{x}$ 与 $(x^2f(x))^{\prime}/x^2$ 同构。
+      - 分子 $x\ln x-2g(x)$ 再构造成 h 后，可由 $1-\ln x$ 控制。
+      - 已知点 $x=e$ 给出 h(e)=0，从而全局锁定 f^{\prime}(x)\le0。
+    normalization_moves_used:
+      - 第一层构造：$g=x^2f$。
+      - 第二层构造：$h=x\ln x-2g$。
+      - 先判 h 的极值，再回推 f 的单调。
+      - 用 2<e<3 做最终值比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会识别 $(x^2f(x))^{\prime}$，回补导数运算与几何意义。
+      - 若学生看不出 h 在 e 处取极大，回补导数单调极值基础。
+      - 若学生把 $f^{\prime}(x)\le0$ 与严格单调混淆，回补函数性质与图像。
+      - 若学生在 a,b,c 与函数值替换时出错，回补代数恒等变形。
+  detail_terms:
+    - $g(x)=x^2f(x)$
+    - $g^{\prime}(x)=\ln x$
+    - $h(x)=x\ln x-2g(x)$
+    - $h^{\prime}(x)=1-\ln x$
+    - $b>c>a$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0131_x2f_log_compare_ex19
+source_evidence:
+  source_refs:
+    - ref_id: page_0131
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0131/page_0131.md
+      role: problem_start
+      evidence: page_0131 下半页给出例19完整题干、A-D选项、解析与答案 C。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0131.png
+      inspected: true
+      notes: 已核对页图：例19题干与解析完整位于 page_0131，后接“函数性质锁定”节标题。
+  source_context: 例19在 page_0131 内闭合完成，不跨页到 page_0132。
+  source_influence:
+    - 保留源页先构造 $g(x)=x^2f(x)$ 将方程改写为 g^{\prime}(x)=\ln x。
+    - 保留源页再构造 $h(x)=x\ln x-2g(x)$ 并用 h^{\prime}(x)=1-\ln x 判极值。
+    - 保留源页由 h(x)\le h(e)=0 推出 f^{\prime}(x)\le0，再比较 2<e<3。
+  source_discrepancies: []
+original_problem:
+  stem: （2025·浙江杭州·模拟预测）定义在 $(0,+\infty)$ 上的可导函数 $f(x)$，满足 $f^{\prime}(x)+\frac{2f(x)}{x}=\frac{\ln x}{x^2}$，且 $f(e)=\frac{1}{2e}$，若 $a=f(3),\ b=f(2),\ c=f(e)$，则 $a,b,c$ 的大小关系是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $a>b>c$
+      text_latex: $a>b>c$
+    - label: B
+      text_raw: $a>c>b$
+      text_latex: $a>c>b$
+    - label: C
+      text_raw: $b>c>a$
+      text_latex: $b>c>a$
+    - label: D
+      text_raw: $c>b>a$
+      text_latex: $c>b>a$
+  answer: C
+  fidelity_notes:
+    - 源页解析通过两次构造函数完成，不直接解显式表达式。
+solution:
+  source_solution_summary: |
+    由题设
+    \[
+    f^{\prime}(x)+\frac{2f(x)}{x}=\frac{\ln x}{x^2}
+    \]
+    得
+    \[
+    x^2f^{\prime}(x)+2xf(x)=\ln x.
+    \]
+    令
+    \[
+    g(x)=x^2f(x),
+    \]
+    则
+    \[
+    g^{\prime}(x)=x^2f^{\prime}(x)+2xf(x)=\ln x.
+    \]
+    又
+    \[
+    f^{\prime}(x)=\frac{xg^{\prime}(x)-2g(x)}{x^3}
+    =\frac{x\ln x-2g(x)}{x^3}.
+    \]
+    再令
+    \[
+    h(x)=x\ln x-2g(x),
+    \]
+    则
+    \[
+    h^{\prime}(x)=1+\ln x-2g^{\prime}(x)=1-\ln x.
+    \]
+    所以 $h$ 在 $(0,e)$ 递增，在 $(e,+\infty)$ 递减，故 $h(x)\le h(e)$。
+    由 $f(e)=\frac{1}{2e}$ 得
+    \[
+    h(e)=e-2g(e)=e-2e^2f(e)=0.
+    \]
+    因而 $h(x)\le0$，即
+    \[
+    f^{\prime}(x)=\frac{h(x)}{x^3}\le0\quad (x>0),
+    \]
+    所以 $f$ 在 $(0,+\infty)$ 上递减。又 $2<e<3$，故
+    \[
+    f(2)>f(e)>f(3),
+    \]
+    即 $b>c>a$，选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 先用 $x^2$ 乘方程，构造幂乘函数 g。
+      formula_trace:
+        from: $f^{\prime}(x)+\frac{2f(x)}{x}=\frac{\ln x}{x^2}$
+        to: $g^{\prime}(x)=\ln x$（$g=x^2f$）
+        operation: 同乘 $x^2$ 后识别积的导数。
+        why: 把含 $f^{\prime},f$ 的线性组合简化为单一导数。
+      source_ref: page_0131
+    - step_id: step_2
+      statement: 把 f^{\prime} 写成辅助函数 h 的符号问题。
+      formula_trace:
+        from: $f^{\prime}(x)=\frac{x\ln x-2g(x)}{x^3}$
+        to: $f^{\prime}(x)=\frac{h(x)}{x^3}$（$h=x\ln x-2g$）
+        operation: 定义 $h$ 作为分子。
+        why: 只需判断 h 的正负即可判断 f 单调。
+      source_ref: page_0131
+    - step_id: step_3
+      statement: 用 h^{\prime}(x)=1-\ln x 锁定 h 的全局上界。
+      formula_trace:
+        from: $h^{\prime}(x)=1-\ln x$，$f(e)=\frac{1}{2e}$
+        to: $h(x)\le h(e)=0$
+        operation: 判 h 在 e 处取最大并代入条件算 h(e)。
+        why: 得到 $f^{\prime}(x)\le0$ 的关键。
+      source_ref: page_0131
+    - step_id: step_4
+      statement: 由 f 递减和 2<e<3 还原 a,b,c 排序。
+      formula_trace:
+        from: $f^{\prime}(x)\le0$，$2<e<3$
+        to: $f(2)>f(e)>f(3)$
+        operation: 应用单调递减函数的自变量顺序。
+        why: 换元即得 $b>c>a$。
+      source_ref: page_0131
+teaching_card:
+  student_title: 两次构造锁定单调，再比较 2、e、3 三点
+  what_it_trains: 训练线性微分关系下的分层构造思路：先消去组合项，再用辅助函数判导数符号。
+  recognition_cues:
+    - 题设是 $f^{\prime}(x)+\frac{2f(x)}{x}$ 这类“导数+函数”线性组合。
+    - 给了特定点值 $f(e)$，常用于确定辅助函数常数或极值高度。
+    - 最终只比较三个函数值，核心是先拿到单调性。
+  normalization_moves:
+    - 构造 $g=x^2f$，把方程变成 $g^{\prime}=\ln x$。
+    - 再构造 $h=x\ln x-2g$，改判 $h$ 的正负。
+    - 由 $h(e)=0$ 与极值性推出 $f^{\prime}\le0$。
+    - 用 $2<e<3$ 还原排序。
+  common_failures:
+    - 把 $g^{\prime}(x)$ 误写成 $x^2f^{\prime}(x)$，漏掉 $2xf(x)$。
+    - 求 $h^{\prime}(x)$ 时漏写 $-2g^{\prime}(x)$。
+    - 由 $h(x)\le0$ 推 $f^{\prime}(x)\ge0$ 方向写反。
+    - 混淆 $a,b,c$ 与 $f(3),f(2),f(e)$ 的对应关系。
+  similar_practice_query: x^2f 构造 h(x)=xlnx-2g 判 f^{\prime}(x)<=0 比较 f(2) f(e) f(3)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

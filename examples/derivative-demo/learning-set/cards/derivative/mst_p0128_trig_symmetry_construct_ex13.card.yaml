@@ -1,0 +1,306 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0128_trig_symmetry_construct_ex13
+content_revision_id: mst_p0128_trig_symmetry_construct_ex13-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0128_trig_symmetry_construct_ex13.card.yaml
+stem: |-
+  （2023 · 广东期末）已知关于变量 $x$ 的非常值函数 $f(x)$ 在 $\\left(0,\\frac{\\pi}{2}\\right)$ 上满足 $f^{\\prime}(x)\\sin2x+f(x)\\cos2x<f(x)$，且 $f(x)>0$；在 $(0,\\pi)$ 上 $f(x)$ 的图像关于 $x=\\frac{\\pi}{2}$ 对称，则下列不等式一定成立的是（  ）
+  A. $f\\left(\\frac{\\pi}{3}\\right)>\\sqrt{2}f\\left(\\frac{\\pi}{4}\\right)$
+  B. $\\sqrt{3}f\\left(\\frac{5\\pi}{6}\\right)<\\sqrt{2}f\\left(\\frac{3\\pi}{4}\\right)$
+  C. $3f\\left(\\frac{5\\pi}{6}\\right)<\\sqrt{3}f\\left(\\frac{2\\pi}{3}\\right)$
+  D. $\\sqrt{3}f\\left(\\frac{\\pi}{6}\\right)>f\\left(\\frac{2\\pi}{3}\\right)$
+answer: |
+  D
+
+  由
+  \[
+  f^{\prime}(x)\sin2x+f(x)\cos2x<f(x)
+  \]
+  得
+  \[
+  f^{\prime}(x)\sin2x+f(x)(\cos2x-1)<0.
+  \]
+  代入 $\sin2x=2\sin x\cos x,\ \cos2x-1=-2\sin^2x$，化为
+  \[
+  2\sin x\,[f^{\prime}(x)\cos x-f(x)\sin x]<0.
+  \]
+  在 $x\in\left(0,\frac{\pi}{2}\right)$ 内 $\sin x>0$，故
+  \[
+  f^{\prime}(x)\cos x-f(x)\sin x<0.
+  \]
+  构造
+  \[
+  g(x)=f(x)\cos x,\qquad g^{\prime}(x)=f^{\prime}(x)\cos x-f(x)\sin x<0,
+  \]
+  所以 $g$ 在 $\left(0,\frac{\pi}{2}\right)$ 递减。
+
+  又因 $f$ 在 $(0,\pi)$ 关于 $x=\frac{\pi}{2}$ 对称，任取 $x_1+x_2=\pi$ 有
+  $f(x_1)=f(x_2)$，且 $\cos x_1=-\cos x_2$，故
+  \[
+  g(x_1)=f(x_1)\cos x_1=-f(x_2)\cos x_2=-g(x_2).
+  \]
+  即 $g$ 关于 $\left(\frac{\pi}{2},0\right)$ 中心对称，从而在
+  $\left(\frac{\pi}{2},\pi\right)$ 也递减。
+
+  于是
+  \[
+  g\!\left(\frac{\pi}{3}\right)<g\!\left(\frac{\pi}{4}\right)
+  \Rightarrow
+  f\!\left(\frac{\pi}{3}\right)<\sqrt2f\!\left(\frac{\pi}{4}\right),
+  \]
+  A 错；
+  \[
+  g\!\left(\frac{5\pi}{6}\right)<g\!\left(\frac{3\pi}{4}\right)
+  \Rightarrow
+  \sqrt3f\!\left(\frac{5\pi}{6}\right)>\sqrt2f\!\left(\frac{3\pi}{4}\right),
+  \]
+  B 错；
+  \[
+  g\!\left(\frac{5\pi}{6}\right)<g\!\left(\frac{2\pi}{3}\right)
+  \Rightarrow
+  3f\!\left(\frac{5\pi}{6}\right)>\sqrt3f\!\left(\frac{2\pi}{3}\right),
+  \]
+  C 错。
+  再由对称性 $f\!\left(\frac{5\pi}{6}\right)=f\!\left(\frac{\pi}{6}\right)$，得
+  \[
+  \sqrt3f\!\left(\frac{\pi}{6}\right)>f\!\left(\frac{2\pi}{3}\right),
+  \]
+  D 正确。故选 D。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把题设不等式化为一阶线性组合。
+      max_score: 1
+    - step_id: step_2
+      description: 先在 $(0,\\frac{\\pi}{2})$ 上判 $g$ 递减。
+      max_score: 1
+    - step_id: step_3
+      description: 用关于 $x=\\frac{\\pi}{2}$ 的对称关系延展到 $(\\frac{\\pi}{2},\\pi)$。
+      max_score: 1
+    - step_id: step_4
+      description: 按递减性判 A、B、C 全错。
+      max_score: 1
+    - step_id: step_5
+      description: 用对称性把 C 的结论转成 D。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 四个三角点值不等式真伪判定
+        result: 见 source_solution_summary
+  method:
+    primary: 对称性配凑
+    secondary:
+      - 逆向构造法
+      - 同构变形与换元法
+    subroute:
+      - 三角函数基础构造
+      - 中心对称延拓单调区间
+      - 负余弦号向判定
+  structure:
+    primary: 对称结构
+    secondary:
+      - 三角复合结构
+      - 抽象函数结构
+    evidence:
+      - $f$ 关于 $x=\\frac{\\pi}{2}$ 轴对称，$\\cos x$ 关于 $\\left(\\frac{\\pi}{2},0\\right)$ 中心对称。
+      - $g(x)=f(x)\\cos x$ 的导数恰是 $f^{\\prime}(x)\\cos x-f(x)\\sin x$。
+      - B、C 选项都落在 $\\left(\\frac{\\pi}{2},\\pi\\right)$，必须处理余弦负号。
+    normalization_moves_used:
+      - 把题设先压缩到 $g^{\\prime}(x)<0$。
+      - 先判左半区递减，再用对称补全右半区。
+      - 对负余弦项比较时先写 $g$ 再化简。
+      - 最后用对称点替换函数值收口到 D。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\\cos2x-1$ 化为 $-2\\sin^2x$，回补三角函数基础。
+      - 若学生不能识别 $g^{\\prime}(x)=f^{\\prime}(x)\\cos x-f(x)\\sin x$，回补导数运算与几何意义。
+      - 若学生在含负余弦的比较里不等号方向反复出错，回补不等式工具基础。
+      - 若学生不会利用 $x_1+x_2=\\pi$ 做函数值替换，回补函数性质与图像。
+  detail_terms:
+    - $g(x)=f(x)\\cos x$
+    - $g^{\\prime}(x)<0$
+    - $x_1+x_2=\\pi$
+    - $g(x_1)=-g(x_2)$
+    - 答案 D
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0128_trig_symmetry_construct_ex13
+source_evidence:
+  source_refs:
+    - ref_id: page_0128
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0128/page_0128.md
+      role: problem_start
+      evidence: page_0128 下部给出例13完整题干与 A-D 选项，并起始解析到“即”。
+    - ref_id: page_0129
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0129/page_0129.md
+      role: continuation
+      evidence: page_0129 顶部续完例13解析并给出“故选 D”。
+    - ref_id: page_0129_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0129/page_0129.md
+      role: local_context
+      evidence: page_0129 中下部起例14题头；例13在“故选 D”处已结束。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0128.png
+      inspected: true
+      notes: 已核对页图：例13题头在 page_0128 下部起始，选项完整可见。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0129.png
+      inspected: true
+      notes: 已核对页图：例13解析在 page_0129 顶部结束，答案为 D。
+  source_context: 本题头在 page_0128，解析跨到 page_0129；按 ownership 规则由 batch B 完成整卡。
+  source_influence:
+    - 保留源页先把 $f^{\\prime}(x)\\sin2x+f(x)\\cos2x<f(x)$ 化到 $f^{\\prime}(x)\\cos x-f(x)\\sin x<0$ 的步骤。
+    - 保留源页构造 $g(x)=f(x)\\cos x$ 并判其在 $(0,\\pi)$ 上单调递减。
+    - 保留源页“关于 $x=\\frac{\\pi}{2}$ 对称”与“余弦中心对称”联动，推出 D 正确。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 广东期末）已知关于变量 $x$ 的非常值函数 $f(x)$ 在 $\\left(0,\\frac{\\pi}{2}\\right)$ 上满足 $f^{\\prime}(x)\\sin2x+f(x)\\cos2x<f(x)$，且 $f(x)>0$；在 $(0,\\pi)$ 上 $f(x)$ 的图像关于 $x=\\frac{\\pi}{2}$ 对称，则下列不等式一定成立的是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $f\\left(\\frac{\\pi}{3}\\right)>\\sqrt{2}f\\left(\\frac{\\pi}{4}\\right)$
+      text_latex: $f\\left(\\frac{\\pi}{3}\\right)>\\sqrt{2}f\\left(\\frac{\\pi}{4}\\right)$
+    - label: B
+      text_raw: $\\sqrt{3}f\\left(\\frac{5\\pi}{6}\\right)<\\sqrt{2}f\\left(\\frac{3\\pi}{4}\\right)$
+      text_latex: $\\sqrt{3}f\\left(\\frac{5\\pi}{6}\\right)<\\sqrt{2}f\\left(\\frac{3\\pi}{4}\\right)$
+    - label: C
+      text_raw: $3f\\left(\\frac{5\\pi}{6}\\right)<\\sqrt{3}f\\left(\\frac{2\\pi}{3}\\right)$
+      text_latex: $3f\\left(\\frac{5\\pi}{6}\\right)<\\sqrt{3}f\\left(\\frac{2\\pi}{3}\\right)$
+    - label: D
+      text_raw: $\\sqrt{3}f\\left(\\frac{\\pi}{6}\\right)>f\\left(\\frac{2\\pi}{3}\\right)$
+      text_latex: $\\sqrt{3}f\\left(\\frac{\\pi}{6}\\right)>f\\left(\\frac{2\\pi}{3}\\right)$
+  answer: D
+  fidelity_notes:
+    - 题干和选项在 page_0128，解析和结论延续到 page_0129。
+    - 本题要求“必然成立”，源页采用逐项判定并给出 D。
+solution:
+  source_solution_summary: |
+    由
+    \[
+    f^{\prime}(x)\sin2x+f(x)\cos2x<f(x)
+    \]
+    得
+    \[
+    f^{\prime}(x)\sin2x+f(x)(\cos2x-1)<0.
+    \]
+    代入 $\sin2x=2\sin x\cos x,\ \cos2x-1=-2\sin^2x$，化为
+    \[
+    2\sin x\,[f^{\prime}(x)\cos x-f(x)\sin x]<0.
+    \]
+    在 $x\in\left(0,\frac{\pi}{2}\right)$ 内 $\sin x>0$，故
+    \[
+    f^{\prime}(x)\cos x-f(x)\sin x<0.
+    \]
+    构造
+    \[
+    g(x)=f(x)\cos x,\qquad g^{\prime}(x)=f^{\prime}(x)\cos x-f(x)\sin x<0,
+    \]
+    所以 $g$ 在 $\left(0,\frac{\pi}{2}\right)$ 递减。
+
+    又因 $f$ 在 $(0,\pi)$ 关于 $x=\frac{\pi}{2}$ 对称，任取 $x_1+x_2=\pi$ 有
+    $f(x_1)=f(x_2)$，且 $\cos x_1=-\cos x_2$，故
+    \[
+    g(x_1)=f(x_1)\cos x_1=-f(x_2)\cos x_2=-g(x_2).
+    \]
+    即 $g$ 关于 $\left(\frac{\pi}{2},0\right)$ 中心对称，从而在
+    $\left(\frac{\pi}{2},\pi\right)$ 也递减。
+
+    于是
+    \[
+    g\!\left(\frac{\pi}{3}\right)<g\!\left(\frac{\pi}{4}\right)
+    \Rightarrow
+    f\!\left(\frac{\pi}{3}\right)<\sqrt2f\!\left(\frac{\pi}{4}\right),
+    \]
+    A 错；
+    \[
+    g\!\left(\frac{5\pi}{6}\right)<g\!\left(\frac{3\pi}{4}\right)
+    \Rightarrow
+    \sqrt3f\!\left(\frac{5\pi}{6}\right)>\sqrt2f\!\left(\frac{3\pi}{4}\right),
+    \]
+    B 错；
+    \[
+    g\!\left(\frac{5\pi}{6}\right)<g\!\left(\frac{2\pi}{3}\right)
+    \Rightarrow
+    3f\!\left(\frac{5\pi}{6}\right)>\sqrt3f\!\left(\frac{2\pi}{3}\right),
+    \]
+    C 错。
+    再由对称性 $f\!\left(\frac{5\pi}{6}\right)=f\!\left(\frac{\pi}{6}\right)$，得
+    \[
+    \sqrt3f\!\left(\frac{\pi}{6}\right)>f\!\left(\frac{2\pi}{3}\right),
+    \]
+    D 正确。故选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把题设不等式化为一阶线性组合。
+      formula_trace:
+        from: $f^{\\prime}(x)\\sin2x+f(x)\\cos2x<f(x)$
+        to: $2\\sin x\\,[f^{\\prime}(x)\\cos x-f(x)\\sin x]<0$
+        operation: 移项并用 $\\sin2x,\\cos2x-1$ 的恒等式化简。
+        why: 为构造 $g(x)=f(x)\\cos x$ 的导数做准备。
+      source_ref: page_0128
+    - step_id: step_2
+      statement: 先在 $(0,\\frac{\\pi}{2})$ 上判 $g$ 递减。
+      formula_trace:
+        from: $f^{\\prime}(x)\\cos x-f(x)\\sin x<0$
+        to: $g(x)=f(x)\\cos x,\\ g^{\\prime}(x)<0$
+        operation: 直接对应乘积求导结构。
+        why: 把抽象函数约束落到单调性。
+      source_ref: page_0129
+    - step_id: step_3
+      statement: 用关于 $x=\\frac{\\pi}{2}$ 的对称关系延展到 $(\\frac{\\pi}{2},\\pi)$。
+      formula_trace:
+        from: $f(x_1)=f(x_2),\\ x_1+x_2=\\pi,\\ \\cos x_1=-\\cos x_2$
+        to: $g(x_1)=-g(x_2)$，故 $g$ 关于 $\\left(\\frac{\\pi}{2},0\\right)$ 中心对称并在 $(\\frac{\\pi}{2},\\pi)$ 递减
+        operation: 把函数轴对称与余弦中心对称配凑。
+        why: 后两项比较点都在 $(\\frac{\\pi}{2},\\pi)$。
+      source_ref: page_0129
+    - step_id: step_4
+      statement: 按递减性判 A、B、C 全错。
+      formula_trace:
+        from: |
+          $g\!\left(\frac{\pi}{3}\right)<g\!\left(\frac{\pi}{4}\right),\
+          g\!\left(\frac{5\pi}{6}\right)<g\!\left(\frac{3\pi}{4}\right),\
+          g\!\left(\frac{5\pi}{6}\right)<g\!\left(\frac{2\pi}{3}\right)$
+        to: |
+          $f\!\left(\frac{\pi}{3}\right)<\sqrt2f\!\left(\frac{\pi}{4}\right),\
+          \sqrt3f\!\left(\frac{5\pi}{6}\right)>\sqrt2f\!\left(\frac{3\pi}{4}\right),\
+          3f\!\left(\frac{5\pi}{6}\right)>\sqrt3f\!\left(\frac{2\pi}{3}\right)$
+        operation: 代入对应余弦值并注意负号翻转。
+        why: 直接反驳 A、B、C。
+      source_ref: page_0129
+    - step_id: step_5
+      statement: 用对称性把 C 的结论转成 D。
+      formula_trace:
+        from: $f\\left(\\frac{5\\pi}{6}\\right)=f\\left(\\frac{\\pi}{6}\\right)$ 且 $\\sqrt3f\\left(\\frac{5\\pi}{6}\\right)>f\\left(\\frac{2\\pi}{3}\\right)$
+        to: $\\sqrt3f\\left(\\frac{\\pi}{6}\\right)>f\\left(\\frac{2\\pi}{3}\\right)$
+        operation: 用轴对称点替换函数值。
+        why: 得到唯一必真选项 D。
+      source_ref: page_0129
+teaching_card:
+  student_title: 先构造 $f\\cos x$，再用对称把单调性跨过 $\\frac{\\pi}{2}$
+  what_it_trains: 训练“导数构造 + 对称配凑”联动：先在半区间判单调，再借轴对称/中心对称覆盖整段比较。
+  recognition_cues:
+    - 题设含 $f^{\\prime}(x)\\sin2x+f(x)\\cos2x$。
+    - 额外给出“图像关于 $x=\\frac{\\pi}{2}$ 对称”。
+    - 选项比较点同时出现在 $(0,\\frac{\\pi}{2})$ 和 $(\\frac{\\pi}{2},\\pi)$。
+  normalization_moves:
+    - 化简到 $f^{\\prime}(x)\\cos x-f(x)\\sin x<0$。
+    - 设 $g=f\\cos x$，判 $(0,\\frac{\\pi}{2})$ 递减。
+    - 用 $x_1+x_2=\\pi$ 得 $g(x_1)=-g(x_2)$，延展右半区单调性。
+    - 逐项比较并利用对称替换锁定 D。
+  common_failures:
+    - 把 $\\cos2x-1$ 误写成 $1-\\cos2x$ 导致符号反。
+    - 只证明左半区递减，没有处理右半区选项。
+    - 负余弦参与比较时忘记翻转方向。
+    - 知道 $f\\left(\\frac{5\\pi}{6}\\right)=f\\left(\\frac{\\pi}{6}\\right)$ 却没回代到 D。
+  similar_practice_query: 三角函数基础构造 对称性配凑 f cosx 单调 比较
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0128 与 page_0129 页图均已核对；例13跨页闭合，答案 D 与源页一致。

@@ -1,0 +1,224 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0283_a_xplus1_over_exp_plus_x2_zero_count_gap_ex06
+content_revision_id: mst_p0283_a_xplus1_over_exp_plus_x2_zero_count_gap_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0283_a_xplus1_over_exp_plus_x2_zero_count_gap_ex06.card.yaml
+stem: |-
+  （2024 · 广州二模）设函数 $f(x)=a\frac{x+1}{e^x}+x^2$，其中 $a\in\mathbf{R}$。
+  1. 讨论 $f(x)$ 零点个数。
+  2. 若 $f(x)$ 存在两个极值点，设极大值点为 $x_0$，$x_1$ 为 $f(x)$ 的零点，求证：$x_0-2x_1>2$。
+answer: |-
+  (1) $a<0$ 时两个零点，$a=0$ 时一个零点，$a>0$ 时一个零点；(2) $x_0-2x_1>2$。
+
+  先求导： $f^\prime(x)=\frac{x}{e^x}(-a+2e^x)$。当 $a<0$ 时， $x=0$ 是唯一极小点，且 $f(0)=a<0$，左右各能找到正值，所以有两个零点。 当 $a=0$ 时，只有零点 $x=0$。当 $a>0$ 时，另一个驻点是 $\ln\frac a2$；source 通过极值高度和左侧取点证明只有一个零点，并定位 $x_1\in(-\frac{a+1}{a},-1)$。第(2)问中，两个极值点存在时 $a\in(0,2)\cup(2,+\infty)$。若 $a>2$，极大值点 $x_0=0$， 由 $x_1<-1$ 得 $x_0-2x_1>2$。若 $0<a<2$， $x_0=\ln\frac a2$。由 $f(x_1)=0$ 和 $a=2e^{x_0}$ 消参， 目标化为证明 $e^{x_0}>e^{2x_1+2}$。因为 $x_1+1<0$， 可等价转为 $x_1^2+2(x_1+1)e^{x_1+2}>0$，再用 $e^{x_1+2}>x_1+3$ 化成 $3x_1^2+8x_1+6>0$。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 求导并找驻点。
+      max_score: 1
+    - step_id: step_2
+      description: 分类讨论零点个数。
+      max_score: 1
+    - step_id: step_3
+      description: 确定第(2)问的参数范围和零点位置。
+      max_score: 1
+    - step_id: step_4
+      description: 当 $a>2$，极大值点为 $0$，直接完成。
+      max_score: 1
+    - step_id: step_5
+      description: 当 $0<a<2$，用零点方程消去参数。
+      max_score: 1
+    - step_id: step_6
+      description: 把目标转成一个恒正二次式。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 1 问
+        result: $a<0$ 两个零点；$a=0$ 一个零点；$a>0$ 一个零点。
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 2 问
+        result: $x_0-2x_1>2$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 局部逼近与找点
+      - 充分/必要性探路
+      - 含参数分类讨论
+    subroute:
+      - 极大值点 $x_0$
+      - 零点 $x_1$
+      - 零点定位 $x_1<-1$
+      - 零点方程消参
+      - 指数下界 $e^{x_1+2}>x_1+3$
+      - 二次式恒正
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 非齐次结构
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - $a\frac{x+1}{e^x}+x^2$
+      - $f^\prime(x)=\frac{x}{e^x}(-a+2e^x)$
+      - $x_0=\ln\frac a2$
+      - $x_1\in(-\frac{a+1}{a},-1)$
+      - $2e^{x_0}(x_1+1)+x_1^2e^{x_1}=0$
+      - $3x_1^2+8x_1+6>0$
+    normalization_moves_used:
+      - 先完成零点个数分类，再进入极值点-零点距离证明。
+      - 用第(1)问的零点定位作为第(2)问的前提。
+      - 用 $a=2e^{x_0}$ 消去参数。
+      - 用指数基础下界把指数式压成二次式。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求导，回补导数运算与几何意义。
+      - 若学生不会比较 $\ln\frac a2$ 与 0，回补指数对数基础。
+      - 若学生不理解零点唯一性，回补函数性质与图像。
+      - 若学生不会由零点方程消参，回补代数恒等变形。
+      - 若学生不会用 $e^t>t+1$，回补不等式工具基础。
+  detail_terms:
+    - $a\frac{x+1}{e^x}+x^2$
+    - $x_0-2x_1>2$
+    - $x_0=\ln\frac a2$
+    - $x_1<-1$
+    - 零点方程消参
+    - $e^{x_1+2}>x_1+3$
+    - $3x_1^2+8x_1+6>0$
+parts: &a1
+  - part_id: "1"
+    text: 讨论 $f(x)$ 零点个数。
+  - part_id: "2"
+    text: 若 $f(x)$ 存在两个极值点，设极大值点为 $x_0$，$x_1$ 为 $f(x)$ 的零点，求证：$x_0-2x_1>2$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0283_a_xplus1_over_exp_plus_x2_zero_count_gap_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0283_ex06_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0283/page_0283.md
+      role: problem_start
+      evidence: page_0283 给出例6题头：$f(x)=a\frac{x+1}{e^x}+x^2$，讨论零点个数；若存在两个极值点，设极大值点 $x_0$、零点 $x_1$，证明 $x_0-2x_1>2$。
+    - ref_id: page_0283_ex06_zero_count
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0283/page_0283.md
+      role: solution
+      evidence: page_0283 解析给出 $f^\prime(x)=\frac{x}{e^x}(-a+2e^x)$，按 $a<0$、$a=0$、$a>0$ 讨论零点个数，并给出 $a>0$ 时唯一零点在 $(-\frac{a+1}{a},-1)$。
+    - ref_id: page_0283_ex06_gap_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0283/page_0283.md
+      role: solution
+      evidence: page_0283 第(2)问说明两个极值点存在当且仅当 $a\in(0,2)\cup(2,+\infty)$，并分 $a>2$ 与 $0<a<2$ 证明。
+    - ref_id: page_0284_ex06_closure
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0284/page_0284.md
+      role: solution
+      evidence: page_0284 顶部续完 $0<a<2$ 的证明，把目标化为 $x_1^2+2(x_1+1)e^{x_1+2}>0$，再用 $e^{x_1+2}>x_1+3$ 化成二次式恒正。
+    - ref_id: page_0284_ex07_exclusion
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0284/page_0284.md
+      role: local_context
+      evidence: page_0284 随后另起例7，本批次排除。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0283.png
+      inspected: true
+      notes: 已核对页图：page_0283 含例6题头、零点个数讨论和第(2)问开头。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0284.png
+      inspected: true
+      notes: 已核对页图：page_0284 顶部续完例6，随后另起例7；图中也显示配方常数写作 38/9。
+  source_context: 本卡处理 page_0283 起头、page_0284 顶部续完的例6；page_0284 例7排除。
+  source_influence:
+    - 保留导数分解：$f^\prime(x)=\frac{x}{e^x}(-a+2e^x)$。
+    - 保留零点个数结论：$a<0$ 两个零点，$a=0$ 一个零点，$a>0$ 一个零点。
+    - 保留两个极值点条件：$a\in(0,2)\cup(2,+\infty)$。
+    - 保留唯一零点定位：$x_1\in(-\frac{a+1}{a},-1)$。
+    - 保留 $a>2$ 时 $x_0=0$ 的直接证明。
+    - 保留 $0<a<2$ 时用零点方程消参证明 $x_0-2x_1>2$。
+  source_discrepancies:
+    - field: page_0284_square_completion_constant
+      source_value: $3x_1^2+8x_1+6=3(x_1+\frac43)^2+\frac{38}{9}>0$
+      resolved_value: $3x_1^2+8x_1+6=3(x_1+\frac43)^2+\frac23>0$
+      reason: 直接配方可得常数为 $6-\frac{16}{3}=\frac23$；source 的 $\frac{38}{9}$ 是算术误排，但不影响恒正结论。
+original_problem:
+  stem: （2024 · 广州二模）设函数 $f(x)=a\frac{x+1}{e^x}+x^2$，其中 $a\in\mathbf{R}$。
+  parts: *a1
+  choices: []
+  answer: (1) $a<0$ 时两个零点，$a=0$ 时一个零点，$a>0$ 时一个零点；(2) $x_0-2x_1>2$。
+  fidelity_notes:
+    - 无选项。
+    - source 的配方常数有误排，已记录并修正为不影响结论的等价式。
+solution:
+  source_solution_summary: 先求导： $f^\prime(x)=\frac{x}{e^x}(-a+2e^x)$。当 $a<0$ 时， $x=0$ 是唯一极小点，且 $f(0)=a<0$，左右各能找到正值，所以有两个零点。 当 $a=0$ 时，只有零点 $x=0$。当 $a>0$ 时，另一个驻点是 $\ln\frac a2$；source 通过极值高度和左侧取点证明只有一个零点，并定位 $x_1\in(-\frac{a+1}{a},-1)$。第(2)问中，两个极值点存在时 $a\in(0,2)\cup(2,+\infty)$。若 $a>2$，极大值点 $x_0=0$， 由 $x_1<-1$ 得 $x_0-2x_1>2$。若 $0<a<2$， $x_0=\ln\frac a2$。由 $f(x_1)=0$ 和 $a=2e^{x_0}$ 消参， 目标化为证明 $e^{x_0}>e^{2x_1+2}$。因为 $x_1+1<0$， 可等价转为 $x_1^2+2(x_1+1)e^{x_1+2}>0$，再用 $e^{x_1+2}>x_1+3$ 化成 $3x_1^2+8x_1+6>0$。
+  key_steps:
+    - step_id: step_1
+      statement: 求导并找驻点。
+      formula_trace:
+        from: $f(x)=a\frac{x+1}{e^x}+x^2$
+        to: $f^\prime(x)=\frac{x}{e^x}(-a+2e^x)$
+        operation: 求导并提取 $x/e^x$。
+        why: 零点个数和极值点位置都由 $x=0$ 与 $x=\ln\frac a2$ 控制。
+      source_ref: page_0283_ex06_zero_count
+    - step_id: step_2
+      statement: 分类讨论零点个数。
+      formula_trace:
+        from: $a<0,\ a=0,\ a>0$
+        to: $a<0$ 两个零点；$a=0$ 一个零点；$a>0$ 一个零点
+        operation: 用单调性、极值高度和 source 的左侧取点判断穿轴次数。
+        why: 这是第(2)问可用零点位置 $x_1<-1$ 的前提。
+      source_ref: page_0283_ex06_zero_count
+    - step_id: step_3
+      statement: 确定第(2)问的参数范围和零点位置。
+      formula_trace:
+        from: $f$ 存在两个极值点
+        to: $a\in(0,2)\cup(2,+\infty)$，且 $x_1\in(-\frac{a+1}{a},-1)$
+        operation: 排除 $a=2$ 的单调情形，并引用第(1)问的唯一零点定位。
+        why: 后面比较 $x_0-2x_1$ 时必须知道 $x_1<-1$。
+      source_ref: page_0283_ex06_gap_start
+    - step_id: step_4
+      statement: 当 $a>2$，极大值点为 $0$，直接完成。
+      formula_trace:
+        from: $a>2,\quad x_0=0,\quad x_1<-1$
+        to: $x_0-2x_1=-2x_1>2$
+        operation: 直接代入极大值点位置。
+        why: 这一段不需要消参。
+      source_ref: page_0283_ex06_gap_start
+    - step_id: step_5
+      statement: 当 $0<a<2$，用零点方程消去参数。
+      formula_trace:
+        from: $f(x_1)=0,\quad a=2e^{x_0}$
+        to: $2e^{x_0}(x_1+1)+x_1^2e^{x_1}=0$
+        operation: 由 $x_0=\ln\frac a2$ 得 $a=2e^{x_0}$，代回零点方程。
+        why: 目标里同时有 $x_0$、$x_1$，必须把参数从中拿掉。
+      source_ref: page_0283_ex06_gap_start
+    - step_id: step_6
+      statement: 把目标转成一个恒正二次式。
+      formula_trace:
+        from: $x_0-2x_1>2$
+        to: $x_1^2+2(x_1+1)e^{x_1+2}>0$，再到 $3x_1^2+8x_1+6>0$
+        operation: 利用 $x_1+1<0$ 改写不等式方向，再用 $e^{x_1+2}>x_1+3$。
+        why: 最终二次式判别式小于 0，因此恒正。
+      source_ref: page_0284_ex06_closure
+teaching_card:
+  student_title: 用零点方程消参证明 $x_0-2x_1>2$
+  what_it_trains: 训练先用零点个数定位 $x_1$，再把极值点方程和零点方程合起来消掉参数，最后把距离不等式化成可证明的代数式。
+  recognition_cues:
+    - 题目同时给极大值点 $x_0$ 和零点 $x_1$。
+    - 导数分解出 $x$ 和 $e^x-\frac a2$。
+    - 第(1)问已经给了唯一零点在 $-1$ 左边。
+    - $0<a<2$ 时需要用 $a=2e^{x_0}$ 消参。
+  normalization_moves:
+    - 先完整讨论零点个数。
+    - 第(2)问先确定 $a\in(0,2)\cup(2,+\infty)$。
+    - $a>2$ 直接用 $x_0=0$。
+    - $0<a<2$ 用零点方程和 $a=2e^{x_0}$ 消参。
+  common_failures:
+    - 没有使用第(1)问的零点定位，导致 $x_1<-1$ 没有依据。
+    - 把 $a>2$ 和 $0<a<2$ 时的极大值点位置弄反。
+    - 消参时忘记 $x_1+1<0$，导致不等式方向错误。
+    - 看到指数式就停止，没想到用 $e^t>t+1$ 降到二次式。
+  similar_practice_query: 极值点 零点 x0-2x1 a(x+1)/e^x+x^2 零点方程消参
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

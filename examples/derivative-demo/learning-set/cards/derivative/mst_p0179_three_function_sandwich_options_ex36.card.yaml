@@ -1,0 +1,200 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0179_three_function_sandwich_options_ex36
+content_revision_id: mst_p0179_three_function_sandwich_options_ex36-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0179_three_function_sandwich_options_ex36.card.yaml
+stem: |-
+  （2023 · 云南三校联考 · 多选 T12）已知 $x>0$ 时，$(e^x-ax-b-c)(ax+b-\ln x)\geqslant0$，则（  ）
+  A. 当 $c<2$ 时，$a+\ln a>c$
+  B. 当 $c<2$ 时，$a+\ln a>2c-3$
+  C. 当 $c>3$ 时，$a+\ln a<c$
+  D. 当 $c>3$ 时，$a+\ln a<2c-3$
+answer: |-
+  BCD
+
+  设 $f(x)=e^x-c,\ g(x)=\ln x,\ h(x)=ax+b$。由 $(e^x-ax-b-c)(ax+b-\ln x)\ge0$ 得 $[f(x)-h(x)][h(x)-g(x)]\ge0$，故对 $x>0$ 有 $f\ge h\ge g$ 或 $f\le h\le g$。 当 $c<2$ 时，源解把 $f-g=e^x-\ln x-c$ 拆为 $(e^x-x-1)+(x-\ln x-1)+(2-c)>0$，从而全域 $f>g$，只能是 $f\ge h\ge g$。令 $s(x)=h-g=ax+b-\ln x\ge0$， $s^{\prime}(x)=a-\frac1x$，得 $s(x)\ge s\left(\frac1a\right)=1+b+\ln a\ge0$ 与 $s(1)\ge0$， 即 $a\ge e^{-b-1},\ a\ge-b$。于是 $a+\ln a\ge a-b-1\ge-2b-1$。又由 $x\to0^+$ 时 $f\ge h$ 得 $b<1-c$，故 $a+\ln a>2c-3$，B 正确。取 $(c,a,b)=(1,1,-1)$ 时 $a+\ln a=c$，A 错误。 当 $c>3$ 时，源解由图像构造 $f$ 与 $g$ 两交点 $M(x_1,\ln x_1),N(x_2,\ln x_2)$（$0<x_1<1<x_2$），并令直线 $h$ 过两点，得到 $c>a+\ln a$，故 C 正确；又因 $c>3$，有 $c<2c-3$，于是 $a+\ln a<2c-3$，D 正确。 所以选 BCD。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 把原乘积不等式改写为三函数顺序关系。
+      max_score: 1
+    - step_id: step_2
+      description: 处理 $c<2$ 时的全域顺序。
+      max_score: 1
+    - step_id: step_3
+      description: 由 $s(x)=h(x)-g(x)\ge0$ 推出 B 项结论。
+      max_score: 1
+    - step_id: step_4
+      description: 用源解反例否定 A。
+      max_score: 1
+    - step_id: step_5
+      description: 处理 $c>3$ 时的两交点构造。
+      max_score: 1
+    - step_id: step_6
+      description: 由 $c>3$ 推出 D 并汇总答案。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 含参数分类讨论
+      - 拟合与夹逼
+    subroute:
+      - 三函数夹逼链
+      - 分情形 $c<2$ 与 $c>3$
+      - 反例排除
+      - 两交点均值比较
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 抽象函数结构
+      - 不等式工具结构
+    evidence:
+      - $[f(x)-h(x)][h(x)-g(x)]\ge0$
+      - $f(x)=e^x-c,\ g(x)=\ln x,\ h(x)=ax+b$
+      - $s(x)=ax+b-\ln x\ge0$
+      - $0<x_1<1<x_2$ 的两交点构造
+    normalization_moves_used:
+      - 先把原式改写为三函数顺序判定。
+      - 按 $c<2$、$c>3$ 两段做参数分类。
+      - 在 $c<2$ 用最小值估计和 $x\to0^+$ 约束联立。
+      - 在 $c>3$ 用两交点表达式和不等式工具比较。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从乘积非负读出三函数链式关系，回补函数性质与图像。
+      - 若学生不能处理 $s(x)=ax+b-\ln x$ 的最小值估计，回补导数单调极值基础。
+      - 若学生在分情形真假判定中易混淆，回补不等式工具基础。
+      - 若学生在参数代入反例检验上不熟练，回补代数恒等变形。
+  detail_terms:
+    - $f(x)=e^x-c$
+    - $g(x)=\ln x$
+    - $h(x)=ax+b$
+    - $a+\ln a>2c-3$
+    - $a+\ln a<c<2c-3$
+    - 选 BCD
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0179_three_function_sandwich_options_ex36
+source_evidence:
+  source_refs:
+    - ref_id: page_0179_ex36_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0179/page_0179.md
+      role: problem_start
+      evidence: lines 34-38 给出例36题干与 A-D 选项。
+    - ref_id: page_0179_ex36_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0179/page_0179.md
+      role: solution
+      evidence: lines 40-41 给出解析起始：设 $f(x)=e^x-c,\ g(x)=\ln x,\ h(x)=ax+b$，并分为 $f\ge h\ge g$ 或 $f\le h\le g$。
+    - ref_id: page_0180_ex36_solution_cont
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0180/page_0180.md
+      role: continuation
+      evidence: lines 20-21 续完例36解析：证明 B 正确、A 错误；当 $c>3$ 时推出 $a+\ln a<c<2c-3$，故 C、D 正确，答案 BCD。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0179.png
+      inspected: true
+      notes: 已核对页图：例36题头和四个选项位于 page_0179 底部，解析起始与 markdown 一致。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0180.png
+      inspected: true
+      notes: 已核对页图：page_0180 顶部为例36续解并含两幅示意图，结论“故选 BCD”清晰。
+  source_context: page_0179 顶部是 page_0178 例34续题，仅作上下文；例36从 page_0179 起头并续到 page_0180 页首后结束。
+  source_influence:
+    - 保留源解三函数链式关系：由乘积非负得到 $f\ge h\ge g$ 或 $f\le h\le g$。
+    - 保留分情形主线：$c<2$ 与 $c>3$ 分别判定选项真伪。
+    - 保留 A 的反例 $(c,a,b)=(1,1,-1)$ 与 $c>3$ 情形的两交点构造。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 云南三校联考 · 多选 T12）已知 $x>0$ 时，$(e^x-ax-b-c)(ax+b-\ln x)\geqslant0$，则（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 当 $c<2$ 时，$a+\ln a>c$
+      text_latex: 当 $c<2$ 时，$a+\ln a>c$
+    - label: B
+      text_raw: 当 $c<2$ 时，$a+\ln a>2c-3$
+      text_latex: 当 $c<2$ 时，$a+\ln a>2c-3$
+    - label: C
+      text_raw: 当 $c>3$ 时，$a+\ln a<c$
+      text_latex: 当 $c>3$ 时，$a+\ln a<c$
+    - label: D
+      text_raw: 当 $c>3$ 时，$a+\ln a<2c-3$
+      text_latex: 当 $c>3$ 时，$a+\ln a<2c-3$
+  answer: BCD
+  fidelity_notes:
+    - 题干与选项起于 page_0179，解析续于 page_0180 页首。
+    - 源解最终给出“故选 BCD”，与页图一致。
+solution:
+  source_solution_summary: 设 $f(x)=e^x-c,\ g(x)=\ln x,\ h(x)=ax+b$。由 $(e^x-ax-b-c)(ax+b-\ln x)\ge0$ 得 $[f(x)-h(x)][h(x)-g(x)]\ge0$，故对 $x>0$ 有 $f\ge h\ge g$ 或 $f\le h\le g$。 当 $c<2$ 时，源解把 $f-g=e^x-\ln x-c$ 拆为 $(e^x-x-1)+(x-\ln x-1)+(2-c)>0$，从而全域 $f>g$，只能是 $f\ge h\ge g$。令 $s(x)=h-g=ax+b-\ln x\ge0$， $s^{\prime}(x)=a-\frac1x$，得 $s(x)\ge s\left(\frac1a\right)=1+b+\ln a\ge0$ 与 $s(1)\ge0$， 即 $a\ge e^{-b-1},\ a\ge-b$。于是 $a+\ln a\ge a-b-1\ge-2b-1$。又由 $x\to0^+$ 时 $f\ge h$ 得 $b<1-c$，故 $a+\ln a>2c-3$，B 正确。取 $(c,a,b)=(1,1,-1)$ 时 $a+\ln a=c$，A 错误。 当 $c>3$ 时，源解由图像构造 $f$ 与 $g$ 两交点 $M(x_1,\ln x_1),N(x_2,\ln x_2)$（$0<x_1<1<x_2$），并令直线 $h$ 过两点，得到 $c>a+\ln a$，故 C 正确；又因 $c>3$，有 $c<2c-3$，于是 $a+\ln a<2c-3$，D 正确。 所以选 BCD。
+  key_steps:
+    - step_id: step_1
+      statement: 把原乘积不等式改写为三函数顺序关系。
+      formula_trace:
+        from: $(e^x-ax-b-c)(ax+b-\ln x)\geqslant0$
+        to: $[f(x)-h(x)][h(x)-g(x)]\geqslant0$
+        operation: 设 $f(x)=e^x-c,\ g(x)=\ln x,\ h(x)=ax+b$。
+        why: 便于转化为 $f,h,g$ 的链式大小关系。
+      source_ref: page_0179_ex36_solution_start
+    - step_id: step_2
+      statement: 处理 $c<2$ 时的全域顺序。
+      formula_trace:
+        from: $f(x)-g(x)=e^x-\ln x-c$
+        to: $f(x)-g(x)>0\ (x>0)$
+        operation: 按源解拆分为 $(e^x-x-1)+(x-\ln x-1)+(2-c)$。
+        why: 锁定只能取 $f\ge h\ge g$ 分支。
+      source_ref: page_0179_ex36_solution_start
+    - step_id: step_3
+      statement: 由 $s(x)=h(x)-g(x)\ge0$ 推出 B 项结论。
+      formula_trace:
+        from: $s(x)=ax+b-\ln x,\ s^{\prime}(x)=a-\frac1x$
+        to: $a+\ln a>2c-3$
+        operation: 用 $s\left(\frac1a\right)\ge0,\ s(1)\ge0$ 与 $b<1-c$ 组合估计。
+        why: 直接得到 B 正确。
+      source_ref: page_0180_ex36_solution_cont
+    - step_id: step_4
+      statement: 用源解反例否定 A。
+      formula_trace:
+        from: 取 $c=1,\ a=1,\ b=-1$
+        to: $a+\ln a=c$
+        operation: 代入验证不满足严格大于。
+        why: A 不是必然成立。
+      source_ref: page_0180_ex36_solution_cont
+    - step_id: step_5
+      statement: 处理 $c>3$ 时的两交点构造。
+      formula_trace:
+        from: $\ln x_1=e^{x_1}-c=ax_1+b,\ \ln x_2=e^{x_2}-c=ax_2+b$
+        to: $a+\ln a<c$
+        operation: 按源解使用两交点表达式与 ALG 不等式比较。
+        why: 给出 C 正确。
+      source_ref: page_0180_ex36_solution_cont
+    - step_id: step_6
+      statement: 由 $c>3$ 推出 D 并汇总答案。
+      formula_trace:
+        from: $a+\ln a<c,\ c>3$
+        to: $a+\ln a<2c-3$，选 BCD
+        operation: 比较 $c$ 与 $2c-3$ 的大小并合并真假。
+        why: 完成多选判定。
+      source_ref: page_0180_ex36_solution_cont
+teaching_card:
+  student_title: 三函数夹逼，多选分情形判真
+  what_it_trains: 训练把乘积符号题转成三函数顺序关系，再用参数分段与反例法稳定判断多选项真假。
+  recognition_cues:
+    - 题面结构是 $(f-h)(h-g)\ge0$。
+    - 选项都在比较同一个量 $a+\ln a$ 与 $c$ 的线性表达式。
+    - 参数阈值被分成明显的 $c<2$ 与 $c>3$。
+  normalization_moves:
+    - 先写出 $f,h,g$ 并转成链式关系。
+    - 按参数区间逐段判定，而不是一次硬推全局。
+    - 用一个具体反例快速否掉“必然成立”选项。
+  common_failures:
+    - 把“或”关系误读成“且”，导致链式关系写错。
+    - 只证明了 B 就误判 A 一定也对。
+    - 在 $c>3$ 情形只得到 $a+\ln a<c$，漏掉与 $2c-3$ 的再比较。
+  similar_practice_query: (f-h)(h-g)≥0 三函数夹逼 多选 参数分类 a+ln a
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

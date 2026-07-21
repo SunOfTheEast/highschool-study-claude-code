@@ -1,0 +1,216 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0185_nested_function_zero_count_ex10
+content_revision_id: mst_p0185_nested_function_zero_count_ex10-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0185_nested_function_zero_count_ex10.card.yaml
+stem: |-
+  （多选）定义域和值域均为 $[-a,a]$（常数 $a>0$）的函数 $y=f(x)$ 和 $y=g(x)$ 的图象如图所示，下列四个命题中正确的结论是（  ）
+  A. 方程 $f[g(x)]=0$ 有且仅有三个解
+  B. 方程 $g[f(x)]=0$ 有且仅有三个解
+  C. 方程 $f[f(x)]=0$ 有且仅有九个解
+  D. 方程 $g[g(x)]=0$ 有且仅有一个解
+answer: |
+  AD
+
+  设外函数零点集先被“竖着”读出，再到内函数图像中“横着”作水平线数交点。
+  对 A：$f[g(x)]=0$ 等价于 $g(x)$ 取到 $f$ 的三个零点值，故有 3 解；A 对。
+  对 B：$g[f(x)]=0$ 等价于 $f(x)$ 取到 $g$ 的唯一零点值，图像只交 1 次；B 错。
+  对 C：$f[f(x)]=0$ 需考察 $f(x)$ 取到 $f$ 的三个零点值，源图计数明显不是 9；C 错。
+  对 D：$g[g(x)]=0$ 等价于 $g(x)$ 取到 $g$ 的唯一零点值，图像只交 1 次；D 对。
+  故选 AD。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 统一复合方程的计数规则：先找外函数零点，再在内函数图像上作对应水平线。
+      max_score: 1
+    - step_id: step_2
+      description: 判断 A：$f[g(x)]=0$ 有且仅有三个解。
+      max_score: 1
+    - step_id: step_3
+      description: 判断 B：$g[f(x)]=0$ 不是三个解。
+      max_score: 1
+    - step_id: step_4
+      description: 判断 C：$f[f(x)]=0$ 不可能有九个解。
+      max_score: 1
+    - step_id: step_5
+      description: 判断 D：$g[g(x)]=0$ 有且仅有一个解。
+      max_score: 1
+    - step_id: step_6
+      description: 汇总真值：A 对，B 错，C 错，D 对。
+      max_score: 1
+graph:
+  goal:
+    primary: 零点/极值点分析
+    part_level:
+      - part_id: A-D
+        goal: 零点/极值点分析
+        target: 第 A-D 问
+        result: 见 source_solution_summary
+  method:
+    primary: 参变量分离
+    secondary:
+      - 数形结合
+      - 显隐点探路
+    subroute:
+      - 嵌套函数零点
+      - 外函数竖着走
+      - 内函数横着走
+      - 定零点与变化零点
+  structure:
+    primary: 复合函数与不动点结构
+    secondary:
+      - 抽象函数结构
+    evidence:
+      - $f(g(x))=0$、$g(f(x))=0$、$f(f(x))=0$、$g(g(x))=0$ 都是复合层级零点计数。
+      - 题目只给函数图像与定义/值域，不给解析式，必须依靠交点结构判解数。
+      - “先外后内”在四个选项中可重复复用。
+    normalization_moves_used:
+      - 统一改写为“内层取外层零点值”。
+      - 把外层零点值转为若干条水平线。
+      - 在内层函数图像上逐条数交点后汇总。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $F(H(x))=0$ 改写为 $H(x)\in Z_F$，回补分段/复合/反函数基础。
+      - 若学生看不懂“水平线交点数=方程解数”，回补函数性质与图像。
+      - 若学生在多选题中把“不是九解”误判成“无法判断”，回补方程根分布与韦达中的根计数直觉。
+  detail_terms:
+    - $f[g(x)]$
+    - $g[f(x)]$
+    - $f[f(x)]$
+    - $g[g(x)]$
+    - $x_1,x_2,x_3$
+    - 图 1-图 8
+    - 先外后内
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0185_nested_function_zero_count_ex10
+source_evidence:
+  source_refs:
+    - ref_id: page_0185_ex10_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0185/page_0185.md
+      role: problem_start
+      evidence: page_0185 例 10 起头：给出定义域和值域均为 $[-a,a]$ 的函数 $y=f(x),y=g(x)$ 图像，以及 A-D 四个“方程解个数”命题。
+    - ref_id: page_0185_ex10_solution_A
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0185/page_0185.md
+      role: solution
+      evidence: page_0185 末段开始解析 A：先取外函数 $y=f$ 的零点 $x_1,x_2,x_3$，再在内函数 $y=g$ 图上作三条水平线，得到三个交点，判 A 正确。
+    - ref_id: page_0186_ex10_solution_BCD
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0186/page_0186.md
+      role: continuation
+      evidence: page_0186 顶部续完 B、C、D：B 仅一解而错，C 非九解而错，D 唯一解而对，结论选 AD；随后才进入例 11。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0185.png
+      inspected: true
+      notes: 已核对 page_0185：页首是例 9 续解；例 10 在本页中下部起头，题干、A-D 选项和 A 的图 1-2 解析清晰。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0186.png
+      inspected: true
+      notes: 已核对 page_0186：顶部为例 10 的 B/C/D 图 3-8 与结论 AD；底部例 11 另起题头。
+  source_context: 本题位于“嵌套函数与零点”考点 1，核心方法是把复合方程 $f(g(x))=0$ 拆成“外函数找零点 + 内函数作水平线数交点”的横竖分离图像法。
+  source_influence:
+    - 完整保留源页分选项路线：A、B、C、D 全部通过“先外后内”作图计数，不做代数化改写。
+    - C 选项按源页“$y=x_2$ 与 $y=f(x)$ 有三个交点”的课堂口径落结论，只需判“不是九解”即可。
+    - 跨页读取到 page_0186 顶部后收束为 AD，并按 ownership 停止在例 11 之前。
+  source_discrepancies:
+    - page_0186 的图 6 曲线标注为 $y=g(x)$，但 C 项文字叙述为“$y=x_2$ 与 $y=f(x)$ 有三个交点”；图注/文字存在标注不一致。该不一致不影响“C 不可能有九解”的结论。
+original_problem:
+  stem: （多选）定义域和值域均为 $[-a,a]$（常数 $a>0$）的函数 $y=f(x)$ 和 $y=g(x)$ 的图象如图所示，下列四个命题中正确的结论是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 方程 $f[g(x)]=0$ 有且仅有三个解
+      text_latex: 方程 $f[g(x)]=0$ 有且仅有三个解
+    - label: B
+      text_raw: 方程 $g[f(x)]=0$ 有且仅有三个解
+      text_latex: 方程 $g[f(x)]=0$ 有且仅有三个解
+    - label: C
+      text_raw: 方程 $f[f(x)]=0$ 有且仅有九个解
+      text_latex: 方程 $f[f(x)]=0$ 有且仅有九个解
+    - label: D
+      text_raw: 方程 $g[g(x)]=0$ 有且仅有一个解
+      text_latex: 方程 $g[g(x)]=0$ 有且仅有一个解
+  answer: AD
+  fidelity_notes:
+    - page_0185 顶部是例 9 续解，不属于本卡。
+    - 例 10 解析跨页至 page_0186 顶部，完整答案为 AD。
+    - page_0186 底部的例 11 题头与解析开头不纳入本卡。
+solution:
+  source_solution_summary: |
+    设外函数零点集先被“竖着”读出，再到内函数图像中“横着”作水平线数交点。
+    对 A：$f[g(x)]=0$ 等价于 $g(x)$ 取到 $f$ 的三个零点值，故有 3 解；A 对。
+    对 B：$g[f(x)]=0$ 等价于 $f(x)$ 取到 $g$ 的唯一零点值，图像只交 1 次；B 错。
+    对 C：$f[f(x)]=0$ 需考察 $f(x)$ 取到 $f$ 的三个零点值，源图计数明显不是 9；C 错。
+    对 D：$g[g(x)]=0$ 等价于 $g(x)$ 取到 $g$ 的唯一零点值，图像只交 1 次；D 对。
+    故选 AD。
+  key_steps:
+    - step_id: step_1
+      statement: 统一复合方程的计数规则：先找外函数零点，再在内函数图像上作对应水平线。
+      formula_trace:
+        from: $F(H(x))=0$
+        to: $H(x)\in Z_F$（其中 $Z_F$ 为外函数 $F$ 的零点集）
+        operation: 把“外层等于 0”转写成“内层取外层零点值”。
+        why: 这一步把复合方程解个数问题转成图像交点计数问题。
+      source_ref: page_0185_ex10_solution_A
+    - step_id: step_2
+      statement: 判断 A：$f[g(x)]=0$ 有且仅有三个解。
+      formula_trace:
+        from: $f[g(x)]=0\iff g(x)\in\{x_1,x_2,x_3\}$
+        to: 在 $y=g(x)$ 上与 $y=x_1,y=x_2,y=x_3$ 共得到 3 个交点
+        operation: 先取外函数 $f$ 的三个零点，再把三个零点值回代到内函数 $g$ 图像。
+        why: 每条水平线与源图中的 $y=g(x)$ 对应一个交点，总数为 3。
+      source_ref: page_0185_ex10_solution_A
+    - step_id: step_3
+      statement: 判断 B：$g[f(x)]=0$ 不是三个解。
+      formula_trace:
+        from: $g[f(x)]=0\iff f(x)=\xi$（$\xi$ 为 $g$ 的唯一零点）
+        to: 水平线 $y=\xi$ 与 $y=f(x)$ 仅 1 个交点
+        operation: 先取外函数 $g$ 的零点，再在内函数 $f$ 图像上数交点。
+        why: 源图 3-4 给出唯一交点，因此 B 错。
+      source_ref: page_0186_ex10_solution_BCD
+    - step_id: step_4
+      statement: 判断 C：$f[f(x)]=0$ 不可能有九个解。
+      formula_trace:
+        from: $f[f(x)]=0\iff f(x)\in\{x_1,x_2,x_3\}$
+        to: 三条水平线与内函数图像的总交点数明显小于 9（源文指出仅 $y=x_2$ 给出 3 个交点）
+        operation: 沿 A 的同一路线，把外函数 $f$ 的零点值回代到内函数图像继续计数。
+        why: 只需判定“并非九解”即可否定 C。
+      source_ref: page_0186_ex10_solution_BCD
+    - step_id: step_5
+      statement: 判断 D：$g[g(x)]=0$ 有且仅有一个解。
+      formula_trace:
+        from: $g[g(x)]=0\iff g(x)=\xi$（$\xi$ 为 $g$ 的唯一零点）
+        to: 水平线 $y=\xi$ 与 $y=g(x)$ 仅 1 个交点
+        operation: 外内同为 $g$，先取外零点，再回内图计数。
+        why: 源图 7-8 显示唯一交点，所以 D 对。
+      source_ref: page_0186_ex10_solution_BCD
+    - step_id: step_6
+      statement: 汇总真值：A 对，B 错，C 错，D 对。
+      formula_trace:
+        from: A 对，B 错，C 错，D 对
+        to: 答案 AD
+        operation: 多选题逐项真值合并。
+        why: 与源页结论一致。
+      source_ref: page_0186_ex10_solution_BCD
+teaching_card:
+  student_title: 复合方程先外后内数交点
+  what_it_trains: 训练“外函数定零点、内函数作水平线”的嵌套函数零点计数套路，并在多选场景下快速逐项判真伪。
+  recognition_cues:
+    - 题干出现 $f(g(x))$、$g(f(x))$ 这类复合方程。
+    - 已给函数图像且强调定义域/值域范围。
+    - 问法是“有且仅有几个解”，本质是交点计数。
+  normalization_moves:
+    - 先把外函数零点读成若干目标水平值。
+    - 再在内函数图像画这些水平线并数交点。
+    - 四个选项复用同一模板，避免逐项重新发明方法。
+  common_failures:
+    - 把“先外后内”做反，直接在错误图像上数交点。
+    - 忽略“有且仅有”中的“仅有”，只验证存在性不验证个数。
+    - 看到 C 项数字大（9）就凭感觉判断，不回到图像计数。
+  similar_practice_query: 嵌套函数 零点个数 先外后内 内函数横着走 外函数竖着走 多选
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - 已按 ownership 规则：跳过 page_0185 顶部例 9 续解，只为 page_0185 起头的例 10 建卡，并跨页读取到 page_0186 顶部收束。
+    - page_0186 图 6 的曲线标注与 C 项文字存在不一致，但不影响“C 非九解、答案 AD”的结论，已记录在 source_discrepancies。

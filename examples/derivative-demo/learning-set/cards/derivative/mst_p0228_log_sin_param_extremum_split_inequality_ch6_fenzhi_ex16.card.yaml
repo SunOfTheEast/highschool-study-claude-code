@@ -1,0 +1,218 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0228_log_sin_param_extremum_split_inequality_ch6_fenzhi_ex16
+content_revision_id: mst_p0228_log_sin_param_extremum_split_inequality_ch6_fenzhi_ex16-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0228_log_sin_param_extremum_split_inequality_ch6_fenzhi_ex16.card.yaml
+stem: |-
+  （2020 · 淮南一模 T21）已知函数 $f(x)=\frac{x\ln x+a+1}{x}$，在区间 $[1,2]$ 有极值。
+  1. 求 $a$ 的取值范围。
+  2. 证明：$f(x)>\frac{a(\sin x+1)}{x}$。
+answer: |-
+  第 (1) 问：$0<a<1$；第 (2) 问在 $x>0$ 上成立。
+
+  $f(x)=\ln x+\frac{a+1}{x}$，所以 $f'(x)=\frac{x-(a+1)}{x^2}$。若 $a+1\leqslant1$，则 $f$ 在 $[1,2]$ 上单调递增，无极值；若 $a+1\geqslant2$，则 $f$ 在 $[1,2]$ 上单调递减，无极值。只有 $1<a+1<2$，即 $0<a<1$ 时，临界点落在区间内部，$f$ 先减后增，有极值。 第 (2) 问等价于证明 $x\ln x+a+1>a(\sin x+1)$，即 $x\ln x+1>a\sin x$。令 $g(x)=x\ln x-x+1$，得 $x\ln x\geqslant x-1$；又由 $h(x)=x-\sin x$ 可知 $x>\sin x$ 对 $x>0$ 成立。因为 $0<a<1$，所以 $x\ln x\geqslant x-1>ax-1>a\sin x-1$，即 $x\ln x+1>a\sin x$，从而 $f(x)>\frac{a(\sin x+1)}x$。
+rubric:
+  max_score: 7
+  criteria:
+    - step_id: step_1
+      description: 先把 $f$ 化成易求导形式。
+      max_score: 1
+    - step_id: step_2
+      description: 求导并定位临界点。
+      max_score: 1
+    - step_id: step_3
+      description: 用“区间内部极值点”给出参数范围。
+      max_score: 1
+    - step_id: step_4
+      description: 把第 (2) 问乘以正数 $x$ 后化简。
+      max_score: 1
+    - step_id: step_5
+      description: 证明 $x\ln x\geqslant x-1$。
+      max_score: 1
+    - step_id: step_6
+      description: 证明 $x>\sin x$。
+      max_score: 1
+    - step_id: step_7
+      description: 利用 $0<a<1$ 串起不等式链。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: part_1
+        goal: 求参数范围
+        target: 第 part_1 问
+        result: $0<a<1$
+      - part_id: part_2
+        goal: 不等式证明
+        target: 第 part_2 问
+        result: $f(x)>\frac{a(\sin x+1)}x$。
+  method:
+    primary: 保值性与分治
+    secondary:
+      - 切线放缩与凹凸性
+      - 含参数分类讨论
+    subroute:
+      - 区间内部极值点
+      - $x\ln x\geqslant x-1$
+      - $x>\sin x$
+      - 参数缩放链
+      - 三角借放缩
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 三角复合结构
+      - 不等式工具结构
+      - 非齐次结构
+    evidence:
+      - $\frac{x\ln x+a+1}{x}$
+      - $x\ln x+1>a\sin x$
+      - $x\ln x\geqslant x-1>ax-1>a\sin x-1$
+    normalization_moves_used:
+      - 把 $f$ 拆成 $\ln x+(a+1)/x$。
+      - 用临界点 $a+1$ 是否落入 $(1,2)$ 判断有无极值。
+      - 把第 (2) 问乘以 $x$ 后化为基础不等式链。
+      - 同时使用对数切线界和三角 $x>\sin x$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $f^\prime(x)=\frac{x-(a+1)}{x^2}$ 读出极值条件，回补导数单调极值基础。
+      - 若学生不会处理 $x>0$ 下乘以 $x$，回补函数三要素与定义域。
+      - 若学生不会证明 $x\ln x\geqslant x-1$，回补指数对数基础。
+      - 若学生不会证明 $x>\sin x$，回补三角函数基础。
+      - 若学生不会串起 $x-1>ax-1>a\sin x-1$，回补不等式工具基础。
+  detail_terms:
+    - $\frac{x\ln x+a+1}{x}$
+    - $a+1$ 临界点
+    - $0<a<1$
+    - $x\ln x\geqslant x-1$
+    - $x>\sin x$
+    - 参数缩放链
+    - 三角借助放缩
+parts: &a1
+  - part_id: part_1
+    text: 求 $a$ 的取值范围。
+  - part_id: part_2
+    text: 证明：$f(x)>\frac{a(\sin x+1)}{x}$。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0228_log_sin_param_extremum_split_inequality_ch6_fenzhi_ex16
+source_evidence:
+  source_refs:
+    - ref_id: page_0228_ex16_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0228/page_0228.md
+      role: problem_start
+      evidence: page_0228 底部给出例16题头：$f(x)=\frac{x\ln x+a+1}{x}$ 在 $[1,2]$ 有极值，并要求证明 $f(x)>\frac{a(\sin x+1)}x$。
+    - ref_id: page_0228_ex16_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0228/page_0228.md
+      role: solution
+      evidence: page_0228 底部开始第 (1) 问：$f(x)=\ln x+\frac{a+1}{x}$，$f^\prime(x)=\frac{x-(a+1)}{x^2}$。
+    - ref_id: page_0229_ex16_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0229/page_0229.md
+      role: continuation
+      evidence: page_0229 顶部续完例16：有极值要求 $0<a<1$；随后用 $x\ln x\geqslant x-1$ 和 $x>\sin x$ 证明第 (2) 问。
+    - ref_id: page_0229_ex17_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0229/page_0229.md
+      role: local_context
+      evidence: page_0229 随后另起例17，属于下一批，本卡只取其前方的例16续解。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0228.png
+      inspected: true
+      notes: 已核对页图：例16题头和第 (1) 问解析开头位于 page_0228 底部。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0229.png
+      inspected: true
+      notes: 已核对页图：page_0229 顶部为例16续解，例17另起。
+  source_context: 本卡处理 page_0228 起头、page_0229 顶部续完的例16；page_0229 例17以后留给下一批。
+  source_influence:
+    - 保留 source 的极值条件：临界点 $x=a+1$ 必须落在开区间 $(1,2)$，所以 $0<a<1$。
+    - 保留 source 的两条基础不等式链：$x\ln x\geqslant x-1$ 与 $x>\sin x$。
+    - 保留参数范围对证明的使用：$0<a<1$ 使 $x-1>ax-1>a\sin x-1$。
+  source_discrepancies:
+    - 第 (2) 问题干未单独写明 $x$ 的范围；原解析使用 $x\in(0,+\infty)$，题卡按函数定义域 $x>0$ 处理。
+original_problem:
+  stem: （2020 · 淮南一模 T21）已知函数 $f(x)=\frac{x\ln x+a+1}{x}$，在区间 $[1,2]$ 有极值。
+  parts: *a1
+  choices: []
+  answer: 第 (1) 问：$0<a<1$；第 (2) 问在 $x>0$ 上成立。
+  fidelity_notes:
+    - 两问均无选项。
+    - 第 (2) 问原题未另列区间，解析按 $x>0$ 使用；这是 $f$ 的自然定义域。
+solution:
+  source_solution_summary: $f(x)=\ln x+\frac{a+1}{x}$，所以 $f'(x)=\frac{x-(a+1)}{x^2}$。若 $a+1\leqslant1$，则 $f$ 在 $[1,2]$ 上单调递增，无极值；若 $a+1\geqslant2$，则 $f$ 在 $[1,2]$ 上单调递减，无极值。只有 $1<a+1<2$，即 $0<a<1$ 时，临界点落在区间内部，$f$ 先减后增，有极值。 第 (2) 问等价于证明 $x\ln x+a+1>a(\sin x+1)$，即 $x\ln x+1>a\sin x$。令 $g(x)=x\ln x-x+1$，得 $x\ln x\geqslant x-1$；又由 $h(x)=x-\sin x$ 可知 $x>\sin x$ 对 $x>0$ 成立。因为 $0<a<1$，所以 $x\ln x\geqslant x-1>ax-1>a\sin x-1$，即 $x\ln x+1>a\sin x$，从而 $f(x)>\frac{a(\sin x+1)}x$。
+  key_steps:
+    - step_id: step_1
+      statement: 先把 $f$ 化成易求导形式。
+      formula_trace:
+        from: $f(x)=\frac{x\ln x+a+1}{x}$
+        to: $f(x)=\ln x+\frac{a+1}{x}$
+        operation: 拆分分式。
+        why: 拆开后临界点直接由一阶导决定。
+      source_ref: page_0228_ex16_solution_start
+    - step_id: step_2
+      statement: 求导并定位临界点。
+      formula_trace:
+        from: $f(x)=\ln x+\frac{a+1}{x}$
+        to: $f^\prime(x)=\frac{x-(a+1)}{x^2}$
+        operation: 求导并通分。
+        why: $x^2>0$，导数符号由 $x-(a+1)$ 决定。
+      source_ref: page_0228_ex16_solution_start
+    - step_id: step_3
+      statement: 用“区间内部极值点”给出参数范围。
+      formula_trace:
+        from: $x=a+1$ 要落在 $(1,2)$
+        to: $0<a<1$
+        operation: 由 $1<a+1<2$ 解参数。
+        why: 端点或区间外只会导致 $[1,2]$ 上单调，无极值。
+      source_ref: page_0229_ex16_continuation
+    - step_id: step_4
+      statement: 把第 (2) 问乘以正数 $x$ 后化简。
+      formula_trace:
+        from: $f(x)>\frac{a(\sin x+1)}x$
+        to: $x\ln x+1>a\sin x$
+        operation: 两边乘以 $x>0$ 并消去 $a$。
+        why: 证明目标变成 $x\ln x$、$x$、$\sin x$ 的基础比较。
+      source_ref: page_0229_ex16_continuation
+    - step_id: step_5
+      statement: 证明 $x\ln x\geqslant x-1$。
+      formula_trace:
+        from: $g(x)=x\ln x-x+1$
+        to: $g(x)\geqslant0$
+        operation: 求导 $g^\prime(x)=\ln x$，最小值在 $x=1$ 处为 0。
+        why: 这是对数切线放缩的基础形式。
+      source_ref: page_0229_ex16_continuation
+    - step_id: step_6
+      statement: 证明 $x>\sin x$。
+      formula_trace:
+        from: $h(x)=x-\sin x$
+        to: $h(x)>0\quad(x>0)$
+        operation: 求导 $h^\prime(x)=1-\cos x\geqslant0$，且 $h(0)=0$。
+        why: 三角部分用最基础的整体比较处理。
+      source_ref: page_0229_ex16_continuation
+    - step_id: step_7
+      statement: 利用 $0<a<1$ 串起不等式链。
+      formula_trace:
+        from: $x\ln x\geqslant x-1,\ x>\sin x,\ 0<a<1$
+        to: $x\ln x+1>a\sin x$
+        operation: 写成 $x\ln x\geqslant x-1>ax-1>a\sin x-1$。
+        why: 参数范围把 $x$ 缩成 $ax$，三角界再把 $ax$ 缩成 $a\sin x$。
+      source_ref: page_0229_ex16_continuation
+teaching_card:
+  student_title: 先让极值点落进区间，再用两条基础不等式串链
+  what_it_trains: 训练参数范围反哺证明：第 (1) 问得到 $0<a<1$ 后，第 (2) 问用它把 $x$ 缩成 $ax$，再接三角界。
+  recognition_cues:
+    - “在 $[1,2]$ 有极值”说明导数零点要落在区间内部。
+    - $x\ln x$ 优先想到 $x\ln x\geqslant x-1$。
+    - 右侧有 $a\sin x$，且已知 $0<a<1$，可以走 $x>ax>a\sin x$ 这条链。
+  normalization_moves:
+    - 拆分 $f(x)$ 并求导，得到临界点 $a+1$。
+    - 由 $1<a+1<2$ 得 $0<a<1$。
+    - 第 (2) 问乘以 $x>0$，化为 $x\ln x+1>a\sin x$。
+    - 用 $x\ln x\geqslant x-1$ 和 $x>\sin x$ 串成严格不等式。
+  common_failures:
+    - 把端点 $a=0$ 或 $a=1$ 也放进“有极值”的范围。
+    - 第 (2) 问忘记先乘以 $x>0$，导致结构看不出来。
+    - 只会分别写 $x\ln x\geqslant x-1$ 和 $x>\sin x$，但不会用 $0<a<1$ 串链。
+  similar_practice_query: xlnx+a+1 over x 区间极值 0<a<1 xlnx>=x-1 x>sinx 参数缩放链
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

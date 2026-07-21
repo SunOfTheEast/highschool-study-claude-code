@@ -1,0 +1,158 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0025_section4_ex02
+content_revision_id: mst_p0025_section4_ex02-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0025_section4_ex02.card.yaml
+stem: |-
+  (甘肃张家川回族自治县第一中学 2024 届高三月考 T11) 若 $2^a+\log_2 a<2^{2b}+\log_2 b+1$，则下列正确的是 (  )
+
+  A. $\ln(2b-a+1)<0$
+  B. $\ln(2b-a+1)>0$
+  C. $\ln|a-2b|>0$
+  D. $\ln|a-2b|<0$
+answer: |-
+  B
+
+  把 $2^{2b}+\log_2 b+1$ 写成 $2^{2b}+\log_2(2b)$。令 $f(x)=2^x+\log_2 x$，由其在 $(0,+\infty)$ 上单调递增，题设变为 $f(a)<f(2b)$，所以 $a<2b$。于是 $2b-a+1>1$，$\ln(2b-a+1)>0$，选 B。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 先处理定义域。
+      max_score: 1
+    - step_id: step_2
+      description: 把右侧补成 $f(2b)$。
+      max_score: 1
+    - step_id: step_3
+      description: 用单调母函数比较 $a$ 与 $2b$。
+      max_score: 1
+    - step_id: step_4
+      description: 把 $a<2b$ 转成选项中的对数符号。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - $2^x+\log_2 x$ 单调母函数
+      - 补 $+1$ 成 $\log_2(2b)$
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $2^a+\log_2 a<2^{2b}+\log_2(2b)$ 被统一成 $f(a)<f(2b)$。
+      - 答案只依赖 $a<2b$ 后的 $\ln(2b-a+1)>0$。
+    normalization_moves_used:
+      - $\log_2 b+1=\log_2(2b)$。
+      - $f(a)<f(2b)$ 由单调性转为 $a<2b$。
+      - $a<2b$ 转为 $2b-a+1>1$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生忽略 $\log_2 a,\log_2 b$ 的定义域，回补函数三要素与定义域。
+      - 若学生不会把 $\log_2 b+1$ 合成为 $\log_2(2b)$，回补指数对数基础。
+      - 若学生不能用导数证明 $2^x+\log_2 x$ 递增，回补导数运算与几何意义。
+      - 若学生得到 $a<2b$ 后仍不会判断 $\ln(2b-a+1)>0$，回补函数性质与图像。
+  detail_terms:
+    - $2^a+\log_2 a$
+    - $2^{2b}+\log_2 b+1$
+    - $f(x)=2^x+\log_2 x$
+    - $\ln(2b-a+1)>0$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0025_section4_ex02
+source_evidence:
+  source_refs:
+    - ref_id: page_0025
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0025/page_0025.md
+      role: problem_start
+      evidence: 四、指对同构体系下例2题干、四个选项和解析开头在 page_0025 底部。
+    - ref_id: page_0026
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0026/page_0026.md
+      role: continuation
+      evidence: page_0026 顶部承接例2解析，给出 $f(a)<f(2b)\Leftrightarrow a<2b$，进而 $\ln(2b-a+1)>0$，故选 B。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0025.png
+      inspected: true
+      notes: 已核对例2题干和选项，解析在页底截断。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0026.png
+      inspected: true
+      notes: 已核对 page_0026 顶部续解和答案 B。
+  source_context: 本题属于 page_0025 section4 的“构造单调函数 $e^x+x$ 或 $x+\ln x$”考点，解析跨页到 page_0026 顶部。
+  source_influence:
+    - 题干与选项以 page_0025 为准，答案和最后一步以 page_0026 续页为准。
+  source_discrepancies: []
+original_problem:
+  stem: |
+    (甘肃张家川回族自治县第一中学 2024 届高三月考 T11) 若 $2^a+\log_2 a<2^{2b}+\log_2 b+1$，则下列正确的是 (  )
+  parts: *a1
+  choices:
+    - A. $\ln(2b-a+1)<0$
+    - B. $\ln(2b-a+1)>0$
+    - C. $\ln|a-2b|>0$
+    - D. $\ln|a-2b|<0$
+  answer: B
+  fidelity_notes:
+    - 题头和题干开头位于 page_0025；解析跨到 page_0026 顶部。
+    - 由 $\log_2 a,\log_2 b$ 有意义可知 $a>0,b>0$。
+solution:
+  source_solution_summary: 把 $2^{2b}+\log_2 b+1$ 写成 $2^{2b}+\log_2(2b)$。令 $f(x)=2^x+\log_2 x$，由其在 $(0,+\infty)$ 上单调递增，题设变为 $f(a)<f(2b)$，所以 $a<2b$。于是 $2b-a+1>1$，$\ln(2b-a+1)>0$，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 先处理定义域。
+      formula_trace:
+        from: $\log_2 a,\ \log_2 b$ 有意义
+        to: $a>0,\quad b>0,\quad 2b>0$
+        operation: 使用对数真数大于 0。
+        why: $a$ 与 $2b$ 都必须落在单调母函数 $f$ 的定义域内。
+      source_ref: page_0025
+    - step_id: step_2
+      statement: 把右侧补成 $f(2b)$。
+      formula_trace:
+        from: $2^{2b}+\log_2 b+1$
+        to: $2^{2b}+\log_2(2b)$
+        operation: 使用 $\log_2(2b)=\log_2 b+\log_2 2=\log_2 b+1$。
+        why: 这样题设左、右两侧同构为 $f(a)$ 与 $f(2b)$。
+      source_ref: page_0025
+    - step_id: step_3
+      statement: 用单调母函数比较 $a$ 与 $2b$。
+      formula_trace:
+        from: $2^a+\log_2 a<2^{2b}+\log_2(2b)$
+        to: $f(a)<f(2b)\Rightarrow a<2b$
+        operation: |
+          令 $f(x)=2^x+\log_2 x$，由 $f'(x)=2^x\ln2+\frac1{x\ln2}>0$ 得 $f$ 严格递增。
+        why: 严格递增函数把函数值不等式等价转回自变量不等式。
+      source_ref: page_0026
+    - step_id: step_4
+      statement: 把 $a<2b$ 转成选项中的对数符号。
+      formula_trace:
+        from: $a<2b$
+        to: $2b-a+1>1,\quad \ln(2b-a+1)>0$
+        operation: 两边移项得 $2b-a>0$，再加 1；利用 $\ln x$ 在 $x>0$ 上递增且 $\ln1=0$。
+        why: 选项 B 正是该正负判断。
+      source_ref: page_0026
+teaching_card:
+  student_title: 把 $+1$ 合进对数后比较 $a$ 与 $2b$
+  what_it_trains: 训练识别 $2^x+\log_2 x$ 型单调同构，并把参数比较转成选项里的对数正负。
+  recognition_cues:
+    - 题设左侧是 $2^a+\log_2 a$。
+    - 右侧有 $2^{2b}$ 和 $\log_2 b+1$。
+    - 选项围绕 $2b-a$ 的符号或大小。
+  normalization_moves:
+    - 把 $\log_2 b+1$ 合并成 $\log_2(2b)$。
+    - 令 $f(x)=2^x+\log_2 x$ 并比较 $f(a)$、$f(2b)$。
+    - 由 $a<2b$ 推出 $2b-a+1>1$。
+  common_failures:
+    - 看见 $+1$ 后没有想到 $\log_2 2$。
+    - 误以为 $a<2b$ 可以判断 $|a-2b|$ 与 1 的大小。
+    - 忘记用 $\ln 1=0$ 判断选项 B。
+  similar_practice_query: 同构函数 $2^x+\log_2 x$ 不等式 $a<2b$ 对数选项
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 解析跨 page_0025/page_0026；已按 page_0026 顶部图片核对答案 B。

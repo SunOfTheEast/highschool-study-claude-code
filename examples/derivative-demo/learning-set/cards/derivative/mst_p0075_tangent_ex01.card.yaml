@@ -1,0 +1,170 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0075_tangent_ex01
+content_revision_id: mst_p0075_tangent_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0075_tangent_ex01.card.yaml
+stem: |-
+  （2024 广州二中期中考试 T2）已知函数 $f(x)=\frac{1}{e^x}-x+1$，则曲线 $y=f(x)$ 在 $x=0$ 处的切线方程为 (  )
+
+  A. $x+y-2=0$
+  B. $2x+y-1=0$
+  C. $2x+y-2=0$
+  D. $x+y-1=0$
+answer: |
+  C
+
+  法一直接求 $f(0)=2$、$f^{\prime}(x)=-e^{-x}-1$，得到 $f^{\prime}(0)=-2$，所以切线为 $y=-2x+2$，即 $2x+y-2=0$。法二设切线为 $y=kx+b$，令差函数 $g(x)=e^{-x}-x+1-kx-b$，由 $g(0)=0$ 得 $b=2$，由 $g^{\prime}(0)=0$ 得 $k=-2$，得到同一切线方程。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 求切点纵坐标和切线斜率。
+      max_score: 1
+    - step_id: step_2
+      description: 代入在点切线公式。
+      max_score: 1
+    - step_id: step_3
+      description: 把斜截式化成选项中的一般式。
+      max_score: 1
+    - step_id: step_4
+      description: 用源页法二的极点效应复核切线。
+      max_score: 1
+graph:
+  goal:
+    primary: 几何量求解
+    part_level: []
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 数形结合
+    subroute:
+      - 在点切线公式
+      - 极点效应
+      - 切点函数值与导数同时匹配
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $f(0)=2$ 给出切点 $(0,2)$。
+      - $f^{\prime}(0)=-2$ 给出切线斜率。
+      - $g(0)=0,\ g^{\prime}(0)=0$ 等价于直线与曲线在 $x=0$ 处相切。
+    normalization_moves_used:
+      - 把 $\frac{1}{e^x}$ 写成 $e^{-x}$ 便于求导。
+      - 把 $y=-2x+2$ 整理为选项中的 $2x+y-2=0$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\frac{1}{e^x}$ 求导为 $-e^{-x}$，回补指数对数基础。
+      - 若学生不知道切线斜率等于切点处导数，回补导数运算与几何意义。
+      - 若学生从 $y=-2x+2$ 不能匹配到 $2x+y-2=0$，回补代数恒等变形。
+  detail_terms:
+    - $f(x)=e^{-x}-x+1$
+    - $f(0)=2$
+    - $f^{\prime}(0)=-2$
+    - $y-f(x_0)=f^{\prime}(x_0)(x-x_0)$
+    - $2x+y-2=0$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0075_tangent_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0075
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0075/page_0075.md
+      role: problem_start
+      evidence: page_0075 进入第 2 章“导数的切线方程”，例 1 题头、题干、四个选项和完整解析均在本页。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0075.png
+      inspected: true
+      notes: 已核对例 1 的函数、$x=0$ 处切线题干、四个选项，以及两种解析路线；图像与 markdown 一致。
+  source_context: 本题位于“第一节 基本切线方程”的“在某点处的切线方程”之后，前文刚给出切线公式 $y-f(x_0)=f^{\prime}(x_0)(x-x_0)$。
+  source_influence:
+    - 按 page_0075 图像和 markdown 保留选择题四个选项，答案由源解两种方法共同确定为 C。
+    - 法一使用在点切线公式；法二使用源页标注的“极点效应”，把切线写成 $y=kx+b$ 并令差函数在切点处函数值与导数同时为 $0$。
+  source_discrepancies: []
+original_problem:
+  stem: |
+    （2024 广州二中期中考试 T2）已知函数 $f(x)=\frac{1}{e^x}-x+1$，则曲线 $y=f(x)$ 在 $x=0$ 处的切线方程为 (  )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $x+y-2=0$
+      text_latex: $x+y-2=0$
+    - label: B
+      text_raw: $2x+y-1=0$
+      text_latex: $2x+y-1=0$
+    - label: C
+      text_raw: $2x+y-2=0$
+      text_latex: $2x+y-2=0$
+    - label: D
+      text_raw: $x+y-1=0$
+      text_latex: $x+y-1=0$
+  answer: C
+  fidelity_notes:
+    - 本题为单选题，题干和解析未跨页。
+    - 源页函数写作 $\frac{1}{e^x}-x+1$；本卡等价保留为 $e^{-x}-x+1$ 的导数计算。
+solution:
+  source_solution_summary: |
+    法一直接求 $f(0)=2$、$f^{\prime}(x)=-e^{-x}-1$，得到 $f^{\prime}(0)=-2$，所以切线为 $y=-2x+2$，即 $2x+y-2=0$。法二设切线为 $y=kx+b$，令差函数 $g(x)=e^{-x}-x+1-kx-b$，由 $g(0)=0$ 得 $b=2$，由 $g^{\prime}(0)=0$ 得 $k=-2$，得到同一切线方程。
+  key_steps:
+    - step_id: step_1
+      statement: 求切点纵坐标和切线斜率。
+      formula_trace:
+        from: |
+          $f(x)=\frac{1}{e^x}-x+1=e^{-x}-x+1$
+        to: |
+          $f(0)=2,\quad f^{\prime}(x)=-e^{-x}-1,\quad f^{\prime}(0)=-2$
+        operation: 代入 $x=0$ 求切点纵坐标，并对 $e^{-x}-x+1$ 求导。
+        why: 在点 $x=0$ 处的切线斜率等于 $f^{\prime}(0)$。
+      source_ref: page_0075
+    - step_id: step_2
+      statement: 代入在点切线公式。
+      formula_trace:
+        from: |
+          $y-f(0)=f^{\prime}(0)(x-0)$
+        to: |
+          $y-2=-2x,\quad y=-2x+2$
+        operation: 把切点 $(0,2)$ 与斜率 $-2$ 代入 $y-f(x_0)=f^{\prime}(x_0)(x-x_0)$。
+        why: 切线必须经过曲线上的切点，并且斜率与该点导数相同。
+      source_ref: page_0075
+    - step_id: step_3
+      statement: 把斜截式化成选项中的一般式。
+      formula_trace:
+        from: |
+          $y=-2x+2$
+        to: |
+          $2x+y-2=0$
+        operation: 移项整理并匹配选项。
+        why: 选项 C 与所得切线方程完全一致。
+      source_ref: page_0075
+    - step_id: step_4
+      statement: 用源页法二的极点效应复核切线。
+      formula_trace:
+        from: |
+          $g(x)=\frac{1}{e^x}-x+1-kx-b,\quad g(0)=0,\quad g^{\prime}(0)=0$
+        to: |
+          $b=2,\quad -2-k=0,\quad k=-2$
+        operation: 令曲线与直线的差在切点处函数值为 $0$，且一阶导数为 $0$。
+        why: 切点处两曲线相切时，函数值和斜率同时相同。
+      source_ref: page_0075
+teaching_card:
+  student_title: 先找切点和斜率，再写切线方程
+  what_it_trains: 训练在已知切点横坐标时，先算 $f(x_0)$ 和 $f^{\prime}(x_0)$，再把切线方程整理成选项形式。
+  recognition_cues:
+    - 题干直接给出“在 $x=0$ 处的切线”。
+    - 只需要曲线在这一点的函数值和导数，不需要另设未知切点。
+    - 选项都是直线一般式，最后要把斜截式移项匹配。
+  normalization_moves:
+    - 把 $\frac{1}{e^x}$ 改写成 $e^{-x}$ 后求导。
+    - 代入 $y-f(0)=f^{\prime}(0)(x-0)$。
+    - 将 $y=-2x+2$ 化为 $2x+y-2=0$。
+  common_failures:
+    - 把 $f(0)$ 算成 $1$，导致切点纵坐标错误。
+    - 漏掉 $-x$ 的导数，误把斜率算成 $-1$。
+    - 求出 $y=-2x+2$ 后没有转换成选项的一般式。
+  similar_practice_query: 在点切线方程 $e^{-x}-x+1$ $x=0$ 切点斜率
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0075 图像与 markdown 对例 1 的题干、选项和解析一致，无需用户拍板。

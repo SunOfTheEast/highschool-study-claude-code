@@ -1,0 +1,153 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0040_section2_ex01
+content_revision_id: mst_p0040_section2_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0040_section2_ex01.card.yaml
+stem: |-
+  （2013 · 新课标 II T21）已知函数 f(x)=e^x-\ln(x+m)。
+  (1). 设 x=0 是 f(x) 的极值点，求 m，并讨论 f(x) 的单调性。
+  (2). 当 m<=2 时，证明 f(x)>0。
+answer: |-
+  (1) m=1，f(x) 在 (-1,0) 上单调递减，在 (0,+infty) 上单调递增； (2) 对定义域内的 x，f(x)>0。
+
+  先由 f'(0)=0 求出 m=1，再把 f(x) 表成 h(x)+h(ln(x+1))+1 来判断单调性； 第 (2) 问用同一个 h(t)=e^t-t-1>=0 拆成两个非负同构项和 2-m，并检查取等条件不能同时成立。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 求导得 f'(x)=e^x-1/(x+m)。由 x=0 是极值点，f'(0)=1-1/m=0，所以 m=1。
+      max_score: 1
+    - step_id: step_2
+      description: 令 h(t)=e^t-t-1，则 h'(t)=e^t-1，h(t) 在 (-infty,0) 上递减、 在 (0,+infty) 上递增，且 h(t)>=0。
+      max_score: 1
+    - step_id: step_3
+      description: m=1 时，f(x)=h(x)+h(ln(x+1))+1；其中 h(x) 与 h(ln(x+1)) 在 (-1,0) 上都随 x 递减，在 (0,+infty) 上都随 x 递增。
+      max_score: 1
+    - step_id: step_4
+      description: 一般 m<=2 时， e^x-ln(x+m)=h(x)+h(ln(x+m))+2-m。前两项非负，2-m 非负； 若 m=2，h(x)=0 要求 x=0，而 h(ln(x+2))=0 要求 x=-1，不能同时成立， 所以 f(x)>0。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        target: 第 (1) 问
+        result: 见 source_solution_summary
+      - part_id: "2"
+        goal: 不等式证明
+        target: 第 (2) 问
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 切线放缩与凹凸性
+    subroute:
+      - e^x-x-1 同构
+      - ln(x+m) 换元到 h(ln(x+m))
+      - 取等条件排除
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - h(t)=e^t-t-1>=0
+      - e^x-ln(x+m)=h(x)+h(ln(x+m))+2-m
+    normalization_moves_used:
+      - 把 x+m 写成 e^{ln(x+m)}，制造 h(ln(x+m))。
+      - 把常数项整理为 2-m，用参数条件保证非负。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由极值点写出 f'(0)=0，回补导数运算与几何意义。
+      - 若学生不会证明 h(t)=e^t-t-1>=0，回补导数单调极值基础。
+      - 若学生不会把 x+m-ln(x+m)-1 改写成 h(ln(x+m))，回补指数对数基础。
+  detail_terms:
+    - h(t)=e^t-t-1
+    - h(ln(x+m))
+    - 三个非负项不能同时取零
+parts: &a1
+  - label: (1)
+    text: 设 x=0 是 f(x) 的极值点，求 m，并讨论 f(x) 的单调性。
+  - label: (2)
+    text: 当 m<=2 时，证明 f(x)>0。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0040_section2_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0040
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0040/page_0040.md
+      role: problem_start
+      evidence: 例 1：已知函数 f(x)=e^x-\ln(x+m)；(1) x=0 是极值点，求 m 并讨论单调性； (2) 当 m<=2 时证明 f(x)>0。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0040.png
+      inspected: true
+      notes: 页图确认例题头、两问题干、解析和注意文字均在 page_0040；未见选项或图形。
+  source_context: 第二节开头的“指数与对数双切线同构”例题，用 h(t)=e^t-t-1 的非负性拆解 e^x-\ln(x+m)。
+  source_influence:
+    - 源页把 f(x) 重写为 h(x)+h(ln(x+m))+2-m，卡片保留这个同构拆分。
+    - 源页强调三个非负项不能同时取零，卡片把严格大于的取等条件写入关键步骤。
+  source_discrepancies: []
+original_problem:
+  stem: （2013 · 新课标 II T21）已知函数 f(x)=e^x-\ln(x+m)。
+  parts: *a1
+  choices: []
+  answer: (1) m=1，f(x) 在 (-1,0) 上单调递减，在 (0,+infty) 上单调递增； (2) 对定义域内的 x，f(x)>0。
+  fidelity_notes:
+    - 题中对数要求 x+m>0；当 m=1 时第 (1) 问定义域为 (-1,+infty)。
+solution:
+  source_solution_summary: 先由 f'(0)=0 求出 m=1，再把 f(x) 表成 h(x)+h(ln(x+1))+1 来判断单调性； 第 (2) 问用同一个 h(t)=e^t-t-1>=0 拆成两个非负同构项和 2-m，并检查取等条件不能同时成立。
+  key_steps:
+    - step_id: step_1
+      statement: 求导得 f'(x)=e^x-1/(x+m)。由 x=0 是极值点，f'(0)=1-1/m=0，所以 m=1。
+      formula_trace:
+        from: f'(0)=1-1/m=0
+        to: m=1
+        operation: 用极值点的必要条件 f'(0)=0 解参数
+        why: x=0 在定义域内部且为极值点，导数必须为 0。
+      source_ref: page_0040:例1解析(1)
+    - step_id: step_2
+      statement: 令 h(t)=e^t-t-1，则 h'(t)=e^t-1，h(t) 在 (-infty,0) 上递减、 在 (0,+infty) 上递增，且 h(t)>=0。
+      formula_trace:
+        from: h'(t)=e^t-1
+        to: h(t)>=0, equality only at t=0
+        operation: 用导数单调性确定 h 的全局最小值
+        why: h'(t) 在 0 左负右正，h(0)=0。
+      source_ref: page_0040:例1解析(1)-(2)
+    - step_id: step_3
+      statement: m=1 时，f(x)=h(x)+h(ln(x+1))+1；其中 h(x) 与 h(ln(x+1)) 在 (-1,0) 上都随 x 递减，在 (0,+infty) 上都随 x 递增。
+      formula_trace:
+        from: e^x-ln(x+1)
+        to: h(x)+h(ln(x+1))+1
+        operation: 补出 e^x-x-1 与 x+1-ln(x+1)-1 两个 h 型
+        why: e^{ln(x+1)}=x+1，可把指数项和对数项放到同一个 h 结构中。
+      source_ref: page_0040:例1解析(1)
+    - step_id: step_4
+      statement: 一般 m<=2 时， e^x-ln(x+m)=h(x)+h(ln(x+m))+2-m。前两项非负，2-m 非负； 若 m=2，h(x)=0 要求 x=0，而 h(ln(x+2))=0 要求 x=-1，不能同时成立， 所以 f(x)>0。
+      formula_trace:
+        from: e^x-ln(x+m)
+        to: h(x)+h(ln(x+m))+2-m
+        operation: 加减 x+1 与 x+m-1，拆成两个 h 非负项
+        why: 同构拆分后只需比较非负项，并用取等条件排除等号。
+      source_ref: page_0040:例1解析(2)
+teaching_card:
+  student_title: 把 e^x 和 ln(x+m) 拆成两个同构非负项
+  what_it_trains: 训练学生看到 e^x-\ln(x+m) 时，主动补出 h(x)=e^x-x-1 和 h(ln(x+m))=(x+m)-ln(x+m)-1，用同一个切线不等式完成单调性与证明。
+  recognition_cues:
+    - 同时出现 e^x 与 ln(x+m)。
+    - 参数条件 m<=2 正好能留下 2-m 这个非负常数。
+    - 要证明严格大于 0，需要检查多个非负项的取等条件。
+  normalization_moves:
+    - 设 h(t)=e^t-t-1，把指数切线不等式标准化。
+    - 把 ln(x+m) 的对象 x+m 写成 e^{ln(x+m)}。
+    - 拆完后单独检查 h(x)=0 与 h(ln(x+m))=0 是否能同时成立。
+  common_failures:
+    - 只写 h(t)>=0，却忘记说明为什么等号不能出现。
+    - 忽略定义域 x+m>0。
+    - 把 h(ln(x+m)) 误写成 h(x+m)，导致结构错位。
+  similar_practice_query: e^x 与 ln(x+a) 的同构拆分证明不等式，检查取等条件
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

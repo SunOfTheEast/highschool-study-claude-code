@@ -1,0 +1,194 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0042_section2_ex07
+content_revision_id: mst_p0042_section2_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0042_section2_ex07.card.yaml
+stem: |-
+  （2023 · 商丘三模 T11）已知函数 $f(x)=ae^x$，$g(x)=2x+b$，若 $f(x)\geqslant g(x)$ 恒成立，则 $\frac{b}{a}$ 的最大值是 (  )
+  A. $-1$
+  B. $1$
+  C. $2$
+  D. $\sqrt{2}$
+answer: |
+  B
+
+  若 $a\\le0$，则 $ae^x$ 不可能始终压住值域为 $\\mathbf R$ 的直线 $2x+b$，所以只需考虑 $a>0$。由 $ae^x\\ge2x+b$ 得 $e^{x+\ln a-\ln2}\\ge x+b/2$。指数切线 $e^u\\ge u+1$ 给出 $e^{x+\ln a-\ln2}\\ge x+\ln(a/2)+1$，相切取最优时 $b/2=\\ln(a/2)+1$，于是 $b/a=2\ln(ae/2)/a=e\\cdot\\ln(ae/2)/(ae/2)\\le1$，等号在 $ae/2=e$ 即 $a=2,b=2$ 时取得。法二令 $t=e^x$，由 $at-b\\ge2\ln t$，直线零点 $b/a$ 不超过 $\\ln t$ 的零点 1，也得 $b/a\\le1$。故选 B。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 先排除非正的 $a$。
+      max_score: 1
+    - step_id: step_2
+      description: 把斜率 2 归一到指数切线模板。
+      max_score: 1
+    - step_id: step_3
+      description: 用指数切线给出最优一次下界。
+      max_score: 1
+    - step_id: step_4
+      description: 把相切条件转成 $b/a$ 的函数。
+      max_score: 1
+    - step_id: step_5
+      description: 求最大值并给出取等参数。
+      max_score: 1
+    - step_id: step_6
+      description: 零点比大小路线给同一结论。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: item_1
+        goal: 极值最值
+        target: 求 $\frac ba$ 的最大值。
+        result: 见 source_solution_summary
+  method:
+    primary: 切线放缩与凹凸性
+    secondary:
+      - 数形结合
+      - 同构变形与换元法
+    subroute:
+      - 指数切线找点
+      - 零点比大小
+      - $\ln y/y$ 最大值
+  structure:
+    primary: 切线/公切线/切点量结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $ae^x\ge2x+b$ 经除以 2 变成 $e^{x+\ln a-\ln2}\ge x+b/2$。
+      - 相切时 $b/2=\ln(a/2)+1$，再化为 $b/a=e\,\ln(ae/2)/(ae/2)$。
+      - 令 $t=e^x$ 后可比较 $y=at-b$ 与 $y=2\ln t$ 的零点。
+    normalization_moves_used:
+      - $ae^x/2=e^{x+\ln a-\ln2}$。
+      - $y=ae/2$。
+      - $t=e^x$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生没有先排除 $a\le0$ 就使用 $\ln a$，回补函数三要素与定义域。
+      - 若学生不会把 $ae^x\ge2x+b$ 除以 2 后配成 $e^{x+\ln a-\ln2}\ge x+b/2$，回补指数对数基础。
+      - 若学生不知道 $\ln y/y$ 的最大值在 $y=e$ 处取得，回补导数单调极值基础。
+      - 若学生看不懂零点比较图中 $b/a\le1$ 的来源，回补函数性质与图像。
+  detail_terms:
+    - $ae^x\ge2x+b$
+    - $e^{x+\ln a-\ln2}\ge x+\frac b2$
+    - $\frac ba=e\frac{\ln(ae/2)}{ae/2}$
+    - $t=e^x$
+    - $b/a\le1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0042_section2_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0042
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0042/page_0042.md
+      role: problem_start
+      evidence: lines 27-42 give 例 7 题干、选项、两种解析、配图说明和答案 B。
+    - ref_id: page_0042_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0042/page_0042.md
+      role: local_context
+      evidence: lines 14-16 emphasize 指数切线构造和斜率为 1 的式子。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0042.png
+      inspected: true
+      notes: 已核对页图：例 7 题干、选项、法一/法二及示意图与 markdown 一致；图中直线 $y=at-b$ 与 $y=\ln t$ 用于零点比较。
+  source_context: 例 7 延续指数切线与零点比大小思想：$ae^x\ge2x+b$ 恒成立，本质是指数曲线与直线相切时 $b/a$ 取最大值。
+  source_influence:
+    - 源解先排除 $a<0$，再按相切取等计算最大值；卡片也补充 $a=0$ 不可能满足恒成立。
+    - 图谱把切线放缩作为主方法，零点比大小作为源解第二路线的子路由。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 商丘三模 T11）已知函数 $f(x)=ae^x$，$g(x)=2x+b$，若 $f(x)\geqslant g(x)$ 恒成立，则 $\frac{b}{a}$ 的最大值是 (  )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $-1$
+      text_latex: $-1$
+    - label: B
+      text_raw: $1$
+      text_latex: $1$
+    - label: C
+      text_raw: $2$
+      text_latex: $2$
+    - label: D
+      text_raw: $\sqrt{2}$
+      text_latex: $\sqrt{2}$
+  answer: B
+  fidelity_notes:
+    - 题干未显式限制 $a,b$，源解排除 $a<0$；$a=0$ 时 $0\ge2x+b$ 不可能对全体 $x$ 成立，因此可行情形为 $a>0$。
+    - 源解法一中写“当 $a>0$ 且 $b>0$”服务于最大值取等情形；最大值确在 $a=b=2$ 达到。
+solution:
+  source_solution_summary: |
+    若 $a\\le0$，则 $ae^x$ 不可能始终压住值域为 $\\mathbf R$ 的直线 $2x+b$，所以只需考虑 $a>0$。由 $ae^x\\ge2x+b$ 得 $e^{x+\ln a-\ln2}\\ge x+b/2$。指数切线 $e^u\\ge u+1$ 给出 $e^{x+\ln a-\ln2}\\ge x+\ln(a/2)+1$，相切取最优时 $b/2=\\ln(a/2)+1$，于是 $b/a=2\ln(ae/2)/a=e\\cdot\\ln(ae/2)/(ae/2)\\le1$，等号在 $ae/2=e$ 即 $a=2,b=2$ 时取得。法二令 $t=e^x$，由 $at-b\\ge2\ln t$，直线零点 $b/a$ 不超过 $\\ln t$ 的零点 1，也得 $b/a\\le1$。故选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 先排除非正的 $a$。
+      formula_trace:
+        from: $ae^x\ge2x+b\quad (x\in\mathbf R)$
+        to: $a>0$
+        operation: 当 $a<0$ 时左侧为负且随 $x$ 减小，右侧值域为 $\mathbf R$；当 $a=0$ 时 $0\ge2x+b$ 也不可能恒成立。
+        why: 后续需要使用 $\ln a$，也只有 $a>0$ 才可能有切线取等。
+      source_ref: page_0042
+    - step_id: step_2
+      statement: 把斜率 2 归一到指数切线模板。
+      formula_trace:
+        from: $ae^x\ge2x+b$
+        to: $e^{x+\ln a-\ln2}\ge x+\frac b2$
+        operation: 两边除以 2，并把 $ae^x/2$ 写成 $e^{x+\ln a-\ln2}$。
+        why: 这样右边一次项斜率为 1，可直接和 $e^u\ge u+1$ 对齐。
+      source_ref: page_0042
+    - step_id: step_3
+      statement: 用指数切线给出最优一次下界。
+      formula_trace:
+        from: $e^{x+\ln a-\ln2}$
+        to: $e^{x+\ln a-\ln2}\ge x+\ln\frac a2+1$
+        operation: 令 $u=x+\ln a-\ln2$，套 $e^u\ge u+1$。
+        why: 要让它压住 $x+b/2$，最大的 $b/2$ 来自切线右端的常数项。
+      source_ref: page_0042
+    - step_id: step_4
+      statement: 把相切条件转成 $b/a$ 的函数。
+      formula_trace:
+        from: $\frac b2=\ln\frac a2+1$
+        to: $\frac ba=\frac{2\ln\frac{ae}{2}}{a}=e\cdot\frac{\ln\frac{ae}{2}}{\frac{ae}{2}}$
+        operation: 由 $\ln(a/2)+1=\ln(ae/2)$，再配成 $\ln y/y$，其中 $y=ae/2$。
+        why: $\ln y/y$ 的最大值为 $1/e$，可直接锁定 $b/a$ 最大值。
+      source_ref: page_0042
+    - step_id: step_5
+      statement: 求最大值并给出取等参数。
+      formula_trace:
+        from: $e\cdot\frac{\ln y}{y}$
+        to: $\frac ba\le1$
+        operation: 用 $\ln y/y\le1/e$，等号在 $y=e$ 取到。
+        why: $y=e$ 对应 $a=2$，再由 $b/2=1$ 得 $b=2$，说明最大值 1 可取。
+      source_ref: page_0042
+    - step_id: step_6
+      statement: 零点比大小路线给同一结论。
+      formula_trace:
+        from: $ae^x-b\ge2x$
+        to: $at-b\ge2\ln t\quad (t=e^x>0)$
+        operation: 令 $t=e^x$，则 $x=\ln t$。
+        why: 直线 $at-b$ 在对数曲线上方时，其零点 $t_1=b/a$ 不超过 $\ln t$ 的零点 $t_2=1$。
+      source_ref: page_0042
+teaching_card:
+  student_title: 把斜率 2 的直线改成指数切线
+  what_it_trains: 训练把 $ae^x$ 压住直线的恒成立问题，先统一一次项斜率，再用指数切线取等点求参数比值的最值。
+  recognition_cues:
+    - 条件是 $ae^x\ge2x+b$ 对所有 $x$ 恒成立。
+    - 目标不是直接求 $a,b$，而是求 $b/a$ 的最大值。
+    - 斜率 2 提示先除以 2，让右侧变成 $x+b/2$。
+  normalization_moves:
+    - 先排除 $a\le0$。
+    - 把 $ae^x/2$ 写成 $e^{x+\ln a-\ln2}$。
+    - 用 $e^u\ge u+1$ 取相切常数。
+    - 把 $b/a$ 配成 $e\cdot\ln y/y$。
+  common_failures:
+    - 忘记讨论 $a$ 的符号，导致 $\ln a$ 没有意义。
+    - 把 $b/2=\ln(a/2)+1$ 当成任意条件，而不是最优取等条件。
+    - 不会把 $2\ln(ae/2)/a$ 化成 $e\ln y/y$。
+  similar_practice_query: ae^x 大于直线 恒成立 b/a 最大值 指数切线 零点比较
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0042 原图与 markdown 一致；源图只是辅助零点比较，不影响题干完整性。

@@ -1,0 +1,26 @@
+{
+  "name": "highschool-study-markdown",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "bun@1.3.14",
+  "scripts": {
+    "test": "bun test",
+    "typecheck": "tsc --noEmit",
+    "check": "bun run typecheck && bun test",
+    "start:mcp": "bun run server/src/index.ts",
+    "build:dist": "bun build server/src/index.ts --target=bun --outfile=dist/mcp-server.js --minify",
+    "rebuild:attention": "bun run scripts/rebuild-planner-attention.ts",
+    "validate:plugin": "claude plugin validate . --strict",
+    "release:check": "bun run build:dist && bun run check && bun run validate:plugin"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.29.0",
+    "yaml": "2.9.0",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/bun": "1.3.14",
+    "typescript": "7.0.2"
+  }
+}

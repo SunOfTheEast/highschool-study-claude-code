@@ -1,0 +1,238 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0143_abs_exp_function_compare_ex03
+content_revision_id: mst_p0143_abs_exp_function_compare_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0143_abs_exp_function_compare_ex03.card.yaml
+stem: |-
+  （2025·天津武清·模拟预测）已知定义在 $\\mathbf{R}$ 上的函数 $f(x)=x\\cdot e^{|x|}$，$a=f(\\log_3\\sqrt5)$，$b=-f\\left(\\log_3\\frac12\\right)$，$c=f(\\ln3)$，则 $a,b,c$ 的大小关系为（  ）
+  A. $c>b>a$
+  B. $b>c>a$
+  C. $a>b>c$
+  D. $c>a>b$
+answer: |
+  D
+
+  先看奇偶性：
+  \[
+  f(-x)=-x\cdot e^{|-x|}=-x\cdot e^{|x|}=-f(x),
+  \]
+  所以 $f$ 是奇函数，进而
+  \[
+  b=-f\left(\log_3\frac12\right)=f(\log_3 2).
+  \]
+  再看正半轴单调性：当 $x>0$ 时，$|x|=x$，故
+  \[
+  f(x)=xe^x,\quad f^{\prime}(x)=e^x(x+1)>0,
+  \]
+  所以 $f$ 在 $(0,+\infty)$ 上单调递增。
+  由
+  \[
+  \log_3 2<\log_3\sqrt5<1<\ln3
+  \]
+  得
+  \[
+  f(\log_3 2)<f(\log_3\sqrt5)<f(\ln3).
+  \]
+  即
+  \[
+  b<a<c\quad\Longleftrightarrow\quad c>a>b.
+  \]
+  故选 D。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 由绝对值结构判定 $f$ 为奇函数。
+      max_score: 1
+    - step_id: step_2
+      description: 把 $b$ 改写为同一函数在正半轴的取值。
+      max_score: 1
+    - step_id: step_3
+      description: 确定 $f$ 在 $(0,+\\infty)$ 上递增。
+      max_score: 1
+    - step_id: step_4
+      description: 按续页给出的参数链排序。
+      max_score: 1
+    - step_id: step_5
+      description: 回写到选项表达。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值求值
+        target: 比较 $a,b,c$ 三个函数值大小。
+        result: 见 source_solution_summary
+  method:
+    primary: 对称化与偏移
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 奇偶性锁定
+      - 正半轴单调比较
+      - 指数对数比大小
+  structure:
+    primary: Max/Min 与绝对值结构
+    secondary:
+      - 特殊幂函数与指数函数结构
+      - 抽象函数结构
+    evidence:
+      - 函数含 $|x|$，先做奇偶性归约是核心入口。
+      - $b$ 含负号与负对数参数，需先对称化为 $f(\\log_3 2)$。
+      - 归约后都落在 $f$ 的正半轴递增比较。
+    normalization_moves_used:
+      - $f(-x)=-f(x)$。
+      - $b=-f(\\log_3\\frac12)\\to f(\\log_3 2)$。
+      - 利用 $\\log_3 2<\\log_3\\sqrt5<1<\\ln3$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生无法由 $f(x)=x\\cdot e^{|x|}$ 判奇偶，回补函数性质与图像。
+      - 若学生在 $x>0$ 区间不会证明 $xe^x$ 递增，回补导数单调极值基础。
+      - 若学生不会比较 $\\log_3\\sqrt5$ 与 1、$\\ln3$，回补指数对数基础。
+  detail_terms:
+    - $f(x)=x\\cdot e^{|x|}$
+    - 奇函数
+    - $b=f(\\log_3 2)$
+    - $\\log_3 2<\\log_3\\sqrt5<1<\\ln3$
+    - 结论 $c>a>b$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0143_abs_exp_function_compare_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0143
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0143/page_0143.md
+      role: problem_start
+      evidence: 例3题干、A-D选项在page_0143，解析在页末截断于“故 $f(x)$ 在…”。
+    - ref_id: page_0143_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0143/page_0143.md
+      role: solution
+      evidence: 本页解析给出奇函数判定与 $b=-f(\\log_3\\frac12)=f(\\log_3 2)$。
+    - ref_id: page_0144_cont
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0144/page_0144.md
+      role: continuation
+      evidence: page_0144页首续完：在 $(0,+\\infty)$ 单调递增，且 $\\log_3 2<\\log_3\\sqrt5<1<\\ln3$，得 $c>a>b$，故选D。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0143.png
+      inspected: true
+      notes: 已核对页图：例3题干完整，解析跨页前半在本页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0144.png
+      inspected: true
+      notes: 已核对页图：页首是例3续解与结论，随后开始例4（不属本卡）。
+  source_context: 按页头归属，例3从page_0143起头，需跨到page_0144页首完成；page_0144后续新题例4不在本卡范围。
+  source_influence:
+    - 保留源解先用奇偶性把 $b$ 变形到正半轴。
+    - 保留“在 $x>0$ 时改写为 $f(x)=xe^x$ 并判增”的比较主线。
+    - 保留参数顺序链 $\\log_3 2<\\log_3\\sqrt5<1<\\ln3$。
+  source_discrepancies: []
+original_problem:
+  stem: （2025·天津武清·模拟预测）已知定义在 $\\mathbf{R}$ 上的函数 $f(x)=x\\cdot e^{|x|}$，$a=f(\\log_3\\sqrt5)$，$b=-f\\left(\\log_3\\frac12\\right)$，$c=f(\\ln3)$，则 $a,b,c$ 的大小关系为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $c>b>a$
+      text_latex: $c>b>a$
+    - label: B
+      text_raw: $b>c>a$
+      text_latex: $b>c>a$
+    - label: C
+      text_raw: $a>b>c$
+      text_latex: $a>b>c$
+    - label: D
+      text_raw: $c>a>b$
+      text_latex: $c>a>b$
+  answer: D
+  fidelity_notes:
+    - 例3题头在page_0143，解析跨到page_0144页首后结束。
+    - 本卡仅吸收page_0144中例3续解，不吸收后续例4。
+solution:
+  source_solution_summary: |
+    先看奇偶性：
+    \[
+    f(-x)=-x\cdot e^{|-x|}=-x\cdot e^{|x|}=-f(x),
+    \]
+    所以 $f$ 是奇函数，进而
+    \[
+    b=-f\left(\log_3\frac12\right)=f(\log_3 2).
+    \]
+    再看正半轴单调性：当 $x>0$ 时，$|x|=x$，故
+    \[
+    f(x)=xe^x,\quad f^{\prime}(x)=e^x(x+1)>0,
+    \]
+    所以 $f$ 在 $(0,+\infty)$ 上单调递增。
+    由
+    \[
+    \log_3 2<\log_3\sqrt5<1<\ln3
+    \]
+    得
+    \[
+    f(\log_3 2)<f(\log_3\sqrt5)<f(\ln3).
+    \]
+    即
+    \[
+    b<a<c\quad\Longleftrightarrow\quad c>a>b.
+    \]
+    故选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 由绝对值结构判定 $f$ 为奇函数。
+      formula_trace:
+        from: $f(x)=x\\cdot e^{|x|}$
+        to: $f(-x)=-f(x)$
+        operation: 代入 $-x$ 并利用 $|-x|=|x|$。
+        why: 用于把含负参数的 $b$ 转成正半轴函数值比较。
+      source_ref: page_0143_solution
+    - step_id: step_2
+      statement: 把 $b$ 改写为同一函数在正半轴的取值。
+      formula_trace:
+        from: $b=-f\\left(\\log_3\\frac12\\right)$
+        to: $b=f(\\log_3 2)$
+        operation: 利用 $\\log_3\\frac12=-\\log_3 2$ 与奇函数关系。
+        why: 三项统一成 $f(\\cdot)$ 后可直接按自变量顺序比较。
+      source_ref: page_0143_solution
+    - step_id: step_3
+      statement: 确定 $f$ 在 $(0,+\\infty)$ 上递增。
+      formula_trace:
+        from: $x>0$ 时 $f(x)=xe^x$
+        to: $f^{\\prime}(x)=e^x(x+1)>0$
+        operation: 求导判号。
+        why: 把“自变量大小规律”转成“函数值大小规律”。
+      source_ref: page_0144_cont
+    - step_id: step_4
+      statement: 按续页给出的参数链排序。
+      formula_trace:
+        from: $\\log_3 2<\\log_3\\sqrt5<1<\\ln3$
+        to: $f(\\log_3 2)<f(\\log_3\\sqrt5)<f(\\ln3)$
+        operation: 在递增函数上保序。
+        why: 直接得到 $b<a<c$。
+      source_ref: page_0144_cont
+    - step_id: step_5
+      statement: 回写到选项表达。
+      formula_trace:
+        from: $b<a<c$
+        to: $c>a>b$
+        operation: 等价改写。
+        why: 对应选项 D。
+      source_ref: page_0144_cont
+teaching_card:
+  student_title: 先用奇偶性消负号，再在正半轴排顺序
+  what_it_trains: 训练含绝对值指数函数的比较套路：先做对称化归约，再用单调性比较三个正参数函数值。
+  recognition_cues:
+    - 函数形如 $x\\cdot e^{|x|}$，天然有奇偶性信息。
+    - 某个量前面带负号，且参数是负对数。
+    - 候选顺序都可转成同一函数的取值比较。
+  normalization_moves:
+    - 先证奇函数，把 $b$ 改写为 $f(\\log_3 2)$。
+    - 在 $x>0$ 时改写为 $xe^x$ 并判增。
+    - 按参数链直接比较函数值。
+  common_failures:
+    - 把 $-f(\\log_3\\frac12)$ 误写成 $-f(\\log_3 2)$。
+    - 未区分 $x>0$ 与全实数区间就直接套 $xe^x$。
+    - 忽略 $1<\\ln3$ 造成中间次序错位。
+  similar_practice_query: 绝对值指数函数 奇偶性 比大小 对数参数排序
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

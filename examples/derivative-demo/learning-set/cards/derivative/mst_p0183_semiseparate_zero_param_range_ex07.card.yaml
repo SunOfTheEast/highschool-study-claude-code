@@ -1,0 +1,147 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0183_semiseparate_zero_param_range_ex07
+content_revision_id: mst_p0183_semiseparate_zero_param_range_ex07-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0183_semiseparate_zero_param_range_ex07.card.yaml
+stem: |-
+  （2023 · 朔州应县一中高二期末 T7）函数 $f(x)=x^2-x\ln(ax)-\frac{e^{x-1}}{a}\ (a>0)$ 在 $(0,+\infty)$ 内存在零点，则实数 $a$ 的取值范围是（  ）
+  A. $[e,+\infty)$
+  B. $[1,e)$
+  C. $(0,1]$
+  D. $[1,+\infty)$
+answer: |-
+  D
+
+  源解构造与 $f(x)$ 同零点的函数 $g(x)=x-\ln(ax)-\frac{e^{x-1}}{ax} =\ln\frac{e^x}{ax}-\frac1e\frac{e^x}{ax}$。令 $t=\frac{e^x}{ax}$，则 $g(t)=\ln t-\frac te$。 这个模块函数只有唯一零点 $t=e$，所以要使原函数有零点，只需 $\frac{e^x}{ax}=e$ 有解，即 $a=\frac{e^x}{ex}=\frac1e\frac{e^x}{x}$ 有解。 由于 $\frac{e^x}{x}$ 在 $x=1$ 处最小为 $e$，故 $a\ge1$，选 D。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 构造同零点函数。
+      max_score: 1
+    - step_id: step_2
+      description: 把指对组合压成模块变量。
+      max_score: 1
+    - step_id: step_3
+      description: 解模块零点并还原参数。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+    subroute:
+      - 参变半分离
+      - 同零点函数
+      - $t=\frac{e^x}{ax}$
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 非齐次结构
+    evidence:
+      - $\ln\frac{e^x}{ax}-\frac1e\frac{e^x}{ax}$
+      - $t=\frac{e^x}{ax}$
+      - $\ln t-\frac te$
+    normalization_moves_used:
+      - 除以正数 $x$ 保持零点。
+      - 把 $x-\ln(ax)$ 改写成对数商。
+      - 用模块函数唯一零点反推参数值域。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不敢除以 $x$，回补函数三要素与定义域。
+      - 若学生不会把 $x-\ln(ax)$ 合成 $\ln\frac{e^x}{ax}$，回补指数对数基础。
+      - 若学生不熟悉 $\frac{e^x}{x}$ 的最小值，回补导数单调极值基础。
+  detail_terms:
+    - $x^2-x\ln(ax)-\frac{e^{x-1}}a$
+    - $\frac{e^x}{ax}$
+    - $\ln t-\frac te$
+    - $a=\frac{e^x}{ex}$
+    - $a\ge1$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0183_semiseparate_zero_param_range_ex07
+source_evidence:
+  source_refs:
+    - ref_id: page_0183
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0183/page_0183.md
+      role: problem_start
+      evidence: "page_0183 contains 例7 statement, choices A-D, and solution: divide by $x$, construct $g(x)$ with the same zeros, let $t=\\frac{e^x}{ax}$, reduce to $g(t)=\\ln t-\\frac{t}{e}$, and obtain $a\\ge1$."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0183.png
+      inspected: true
+      notes: 页图核对通过：例7题干、选项和解析链与 markdown 一致，答案 D。
+  source_context: 本题进入“参变半分离与模块函数分析”，核心是把原零点转成模块函数零点。
+  source_influence:
+    - 保留源解把 $f(x)$ 与 $g(x)$ 设为同零点，再做 $t=\frac{e^x}{ax}$ 的换元。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 · 朔州应县一中高二期末 T7）函数 $f(x)=x^2-x\ln(ax)-\frac{e^{x-1}}{a}\ (a>0)$ 在 $(0,+\infty)$ 内存在零点，则实数 $a$ 的取值范围是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $[e,+\infty)$
+      text_latex: $[e,+\infty)$
+    - label: B
+      text_raw: $[1,e)$
+      text_latex: $[1,e)$
+    - label: C
+      text_raw: $(0,1]$
+      text_latex: $(0,1]$
+    - label: D
+      text_raw: $[1,+\infty)$
+      text_latex: $[1,+\infty)$
+  answer: D
+  fidelity_notes:
+    - 源题为单选题，选项 A-D 已完整保留。
+solution:
+  source_solution_summary: 源解构造与 $f(x)$ 同零点的函数 $g(x)=x-\ln(ax)-\frac{e^{x-1}}{ax} =\ln\frac{e^x}{ax}-\frac1e\frac{e^x}{ax}$。令 $t=\frac{e^x}{ax}$，则 $g(t)=\ln t-\frac te$。 这个模块函数只有唯一零点 $t=e$，所以要使原函数有零点，只需 $\frac{e^x}{ax}=e$ 有解，即 $a=\frac{e^x}{ex}=\frac1e\frac{e^x}{x}$ 有解。 由于 $\frac{e^x}{x}$ 在 $x=1$ 处最小为 $e$，故 $a\ge1$，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 构造同零点函数。
+      formula_trace:
+        from: $f(x)=x^2-x\ln(ax)-\frac{e^{x-1}}a$
+        to: $g(x)=x-\ln(ax)-\frac{e^{x-1}}{ax}$
+        operation: 在 $x>0$ 上除以 $x$，不改变零点。
+        why: 降低幂次后能出现统一的指对比值。
+      source_ref: page_0183
+    - step_id: step_2
+      statement: 把指对组合压成模块变量。
+      formula_trace:
+        from: $x-\ln(ax)-\frac{e^{x-1}}{ax}$
+        to: $\ln\frac{e^x}{ax}-\frac1e\frac{e^x}{ax}$
+        operation: 用 $x-\ln(ax)=\ln\frac{e^x}{ax}$，并整理指数项。
+        why: 两个部分都依赖同一个 $t=\frac{e^x}{ax}$。
+      source_ref: page_0183
+    - step_id: step_3
+      statement: 解模块零点并还原参数。
+      formula_trace:
+        from: $g(t)=\ln t-\frac te=0$
+        to: $t=e,\quad a=\frac{e^x}{ex}\ge1$
+        operation: 由模块函数唯一零点还原 $t=\frac{e^x}{ax}$。
+        why: 参数范围由 $\frac{e^x}{ex}$ 的值域给出。
+      source_ref: page_0183
+teaching_card:
+  student_title: 半分离后找同一个通配符
+  what_it_trains: 训练在参数藏在对数和指数里的题中，先除掉公共正因子，再把两块表达式合成同一个变量。
+  recognition_cues:
+    - 题目只问“存在零点”。
+    - 表达式有 $x\ln(ax)$ 和 $\frac{e^{x-1}}a$。
+    - 源解出现“零点相同”和 $t=\frac{e^x}{ax}$。
+  normalization_moves:
+    - 先除以 $x$。
+    - 把 $x-\ln(ax)$ 合成 $\ln\frac{e^x}{ax}$。
+    - 令 $t=\frac{e^x}{ax}$。
+  common_failures:
+    - 直接对原函数求导，参数和指数对数混在一起。
+    - 看不出 $x-\ln(ax)$ 的对数合并。
+    - 还原 $a=\frac{e^x}{ex}$ 后漏掉最小值。
+  similar_practice_query: 参变半分离 xln(ax) e^{x-1}/a 同零点 t=e^x/(ax)
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

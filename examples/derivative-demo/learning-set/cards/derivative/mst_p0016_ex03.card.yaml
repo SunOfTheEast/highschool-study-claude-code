@@ -1,0 +1,172 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0016_ex03
+content_revision_id: mst_p0016_ex03-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0016_ex03.card.yaml
+stem: |-
+  若正实数 $x_1$ 是函数 $f(x)=xe^x-x-e^2$ 的一个零点，$x_2$ 是函数 $g(x)=(x-e)(\ln x-1)-e^3$ 的一个大于 $e$ 的零点，则 $\frac{x_1(x_2-e)}{e^2}$ 的值为（ ）
+  A. $\frac{1}{e}$
+  B. $\frac{1}{e^2}$
+  C. $e$
+  D. $e^2$
+answer: |-
+  C；$\frac{x_1(x_2-e)}{e^2}=e$。
+
+  由 $f(x_1)=0$ 得 $x_1(e^{x_1}-1)=e^2$。由 $g(x_2)=0$ 且 $x_2>e$，令 $u=\ln(x_2/e)=\ln x_2-1>0$，则 $x_2/e=e^u$，并且 $(x_2-e)(\ln x_2-1)=e(e^u-1)u=e^3$，所以 $u(e^u-1)=e^2$。函数 $h(t)=t(e^t-1)$ 在 $(0,+\infty)$ 单调递增，因此 $x_1=u=\ln(x_2/e)$。于是 $x_2-e=e(e^{x_1}-1)$，目标值为 $x_1 e(e^{x_1}-1)/e^2=x_1(e^{x_1}-1)/e=e$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把 $f(x_1)=0$ 写成 $h(x_1)=e^2$。
+      max_score: 1
+    - step_id: step_2
+      description: 把 $g(x_2)=0$ 缩放到同一个 $h(t)$。
+      max_score: 1
+    - step_id: step_3
+      description: 令 $u=\ln(x_2/e)$，使用单调性得到 $x_1=u$。
+      max_score: 1
+    - step_id: step_4
+      description: 化简目标值。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值求值
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary: []
+    subroute:
+      - $x(e^x-1)$ 同构
+      - $x_2/e$ 缩放
+      - 零点条件同构配对
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $x_1(e^{x_1}-1)=e^2$ 与 $\ln(x_2/e)(x_2/e-1)=e^2$ 同形。
+      - $x_2/e=e^{x_1}$ 把目标式转回 $h(x_1)$。
+    normalization_moves_used:
+      - $x_1e^{x_1}-x_1-e^2=0\Rightarrow x_1(e^{x_1}-1)=e^2$。
+      - $\ln x_2-1=\ln(x_2/e)$。
+      - $x_2-e=e(x_2/e-1)$。
+      - 令 $u=\ln(x_2/e)$，使 $x_2/e=e^u$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $x_1e^{x_1}-x_1$ 提成 $x_1(e^{x_1}-1)$，回补代数恒等变形。
+      - 若学生不会把 $\ln x_2-1$ 写成 $\ln(x_2/e)$，回补指数对数基础。
+      - 若学生不知道 $h(t)=t(e^t-1)$ 在 $(0,+\infty)$ 上递增，回补导数单调极值基础。
+      - 若学生在 $x_2-e=e(e^{x_1}-1)$ 的回代中断裂，回补代数恒等变形。
+  detail_terms:
+    - $x(e^x-1)$
+    - $\ln(x_2/e)$
+    - $x_2/e=e^{x_1}$
+    - 零点条件
+    - $x_1(x_2-e)/e^2$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0016_ex03
+source_evidence:
+  source_refs:
+    - ref_id: page_0016
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0016/page_0016.md
+      role: problem_start
+      evidence: 例 3 题头和题干开头位于 page_0016 底部：$x_1$ 是 $f(x)=xe^x-x-e^2$ 的正零点，$x_2$ 是函数的零点，后半句跨页。
+    - ref_id: page_0017
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0017/page_0017.md
+      role: continuation
+      evidence: page_0017 顶部补全 $g(x)=(x-e)(\ln x-1)-e^3$ 的大于 $e$ 的零点、选项和完整解析。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0016.png
+      inspected: true
+      notes: 页图底部核对例 3 从 page_0016 起题，题干在“$x_2$ 是函数”处断页。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0017.png
+      inspected: true
+      notes: 页图顶部核对续页题干、四个选项和解析；解析中的标准化为 $\ln\frac{x_2}{e}(\frac{x_2}{e}-1)-e^2=0$。
+  source_context: 例 3 仍在“六大函数基本模型”的 $xe^x$ 同构区段，但同构对象变为 $h(t)=t(e^t-1)$。
+  source_influence:
+    - 题头在 page_0016，虽解析跨到 page_0017，本卡按 page_0016 例题接手。
+    - 源解把 $g(x_2)=0$ 缩放成 $\ln(x_2/e)(x_2/e-1)=e^2$，与 $x_1(e^{x_1}-1)=e^2$ 对齐。
+    - 最后目标式不是直接代入 $x_2$，而是借 $x_1=\ln(x_2/e)$ 与 $x_2-e=e(e^{x_1}-1)$ 化简。
+  source_discrepancies: []
+original_problem:
+  stem: 若正实数 $x_1$ 是函数 $f(x)=xe^x-x-e^2$ 的一个零点，$x_2$ 是函数 $g(x)=(x-e)(\ln x-1)-e^3$ 的一个大于 $e$ 的零点，则 $\frac{x_1(x_2-e)}{e^2}$ 的值为（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\frac{1}{e}$
+      text_latex: $\frac{1}{e}$
+    - label: B
+      text_raw: $\frac{1}{e^2}$
+      text_latex: $\frac{1}{e^2}$
+    - label: C
+      text_raw: $e$
+      text_latex: $e$
+    - label: D
+      text_raw: $e^2$
+      text_latex: $e^2$
+  answer: C；$\frac{x_1(x_2-e)}{e^2}=e$。
+  fidelity_notes:
+    - 本题跨页：page_0016 只有题干开头，page_0017 补全选项与解析。
+    - page_0017.png 已核对：$x_2$ 条件为“大于 $e$ 的零点”，目标分母为 $e^2$。
+solution:
+  source_solution_summary: 由 $f(x_1)=0$ 得 $x_1(e^{x_1}-1)=e^2$。由 $g(x_2)=0$ 且 $x_2>e$，令 $u=\ln(x_2/e)=\ln x_2-1>0$，则 $x_2/e=e^u$，并且 $(x_2-e)(\ln x_2-1)=e(e^u-1)u=e^3$，所以 $u(e^u-1)=e^2$。函数 $h(t)=t(e^t-1)$ 在 $(0,+\infty)$ 单调递增，因此 $x_1=u=\ln(x_2/e)$。于是 $x_2-e=e(e^{x_1}-1)$，目标值为 $x_1 e(e^{x_1}-1)/e^2=x_1(e^{x_1}-1)/e=e$。
+  key_steps:
+    - step_id: step_1
+      statement: 把 $f(x_1)=0$ 写成 $h(x_1)=e^2$。
+      formula_trace:
+        from: $x_1e^{x_1}-x_1-e^2=0$
+        to: $x_1(e^{x_1}-1)=e^2$
+        operation: 提取公因式 $x_1$ 并移项。
+        why: 这给出同构函数 $h(t)=t(e^t-1)$ 的第一个函数值。
+      source_ref: page_0017
+    - step_id: step_2
+      statement: 把 $g(x_2)=0$ 缩放到同一个 $h(t)$。
+      formula_trace:
+        from: $(x_2-e)(\ln x_2-1)-e^3=0$
+        to: $\ln\frac{x_2}{e}\left(\frac{x_2}{e}-1\right)=e^2$
+        operation: 用 $\ln x_2-1=\ln(x_2/e)$，并将 $x_2-e=e(\frac{x_2}{e}-1)$ 后同除以 $e$。
+        why: 把 $x_2$ 的零点条件转成与 $x_1(e^{x_1}-1)$ 同形。
+      source_ref: page_0017
+    - step_id: step_3
+      statement: 令 $u=\ln(x_2/e)$，使用单调性得到 $x_1=u$。
+      formula_trace:
+        from: $\ln\frac{x_2}{e}\left(\frac{x_2}{e}-1\right)=e^2$
+        to: $u(e^u-1)=e^2,\quad u=\ln\frac{x_2}{e}=x_1$
+        operation: 代入 $x_2/e=e^u$，再与 $x_1(e^{x_1}-1)=e^2$ 比较。
+        why: $x_1>0$ 且 $u>0$，$h(t)=t(e^t-1)$ 在正区间单调递增。
+      source_ref: page_0017
+    - step_id: step_4
+      statement: 化简目标值。
+      formula_trace:
+        from: $x_1=\ln\frac{x_2}{e},\quad x_1(e^{x_1}-1)=e^2$
+        to: $\frac{x_1(x_2-e)}{e^2}=e$
+        operation: 由 $x_2/e=e^{x_1}$ 得 $x_2-e=e(e^{x_1}-1)$，再代入 step_1。
+        why: 目标式正好含 $x_1$ 与 $x_2-e$，可还原成 $x_1(e^{x_1}-1)$。
+      source_ref: page_0017
+teaching_card:
+  student_title: 把两个零点条件缩成同一个 $x(e^x-1)$
+  what_it_trains: 训练处理跨表达式零点：先把两个零点方程都改成同一单调函数的函数值，再把目标式回代成这个函数值。
+  recognition_cues:
+    - 一个零点方程含 $xe^x-x$，另一个含 $(x-e)(\ln x-1)$。
+    - 条件给出 $x_2>e$，提示使用 $\ln(x_2/e)>0$。
+    - 目标式含 $x_2-e$，与 $x_2/e-1$ 的缩放直接相关。
+  normalization_moves:
+    - 先把 $xe^x-x$ 提成 $x(e^x-1)$。
+    - 把 $\ln x_2-1$ 改成 $\ln(x_2/e)$，把 $x_2-e$ 改成 $e(x_2/e-1)$。
+    - 令 $u=\ln(x_2/e)$，得到 $u(e^u-1)=e^2$。
+    - 用单调性得到 $u=x_1$ 后，再算目标式。
+  common_failures:
+    - 把 page_0017 顶部续页当成新题，漏掉 page_0016 的 $x_1$ 条件。
+    - 缩放时漏掉 $x_2-e=e(x_2/e-1)$ 中的 $e$。
+    - 没有使用 $x_2>e$，导致 $\ln(x_2/e)>0$ 的单调区间依据不清。
+    - 同构出 $x_1=\ln(x_2/e)$ 后，没有把 $x_2-e$ 回写成 $e(e^{x_1}-1)$。
+  similar_practice_query: $xe^x-x$ $(x-e)(\ln x-1)$ 零点 $x(e^x-1)$ 同构 数值求值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 本题跨 page_0016/page_0017，已核对两页页图；请 reviewer 特别确认断页拼接后的题干无漏字。
+    - 源解中 $h(x)=x(e^x-1)$ 单调递增未展开求导，本卡补出正区间单调性依据。
+    - Reviewer removed `对称化与偏移` and `复合函数与不动点结构`; this is same-function-value pairing under $x(e^x-1)$, not symmetry or fixed-point structure.

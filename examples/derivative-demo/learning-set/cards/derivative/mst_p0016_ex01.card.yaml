@@ -1,0 +1,165 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0016_ex01
+content_revision_id: mst_p0016_ex01-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0016_ex01.card.yaml
+stem: |-
+  设实数 $a>0$，若不等式 $ae^{ax}-1\geqslant \ln \frac{x}{e}$ 对任意 $x>0$ 恒成立，则 $a$ 的最小值为（ ）
+  A. $e$
+  B. $2e$
+  C. $\frac{1}{e}$
+  D. $\frac{1}{2e}$
+answer: |-
+  C；$a_{\min}=\frac1e$。
+
+  由 $ae^{ax}-1\ge\ln(x/e)$ 得 $ae^{ax}\ge\ln x$，再乘以 $x>0$ 得 $axe^{ax}\ge x\ln x=\ln x\,e^{\ln x}$。令 $F(t)=te^t$，则 $F(ax)\ge F(\ln x)$。因 $ax>0$，若 $\ln x<0$ 则 $ax\ge\ln x$ 自动成立；若 $\ln x\ge0$，$F$ 在非负区间递增，仍等价转向 $ax\ge\ln x$。所以需 $a\ge\ln x/x$ 对任意 $x>0$ 成立，而 $(\ln x/x)_{\max}=1/e$。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把原不等式先移项并乘以正数 $x$。
+      max_score: 1
+    - step_id: step_2
+      description: 引入同构函数 $F(t)=te^t$，把两边识别为 $F(ax)$ 与 $F(\ln x)$。
+      max_score: 1
+    - step_id: step_3
+      description: 由 $ax>0$ 推出控制条件为 $ax\ge\ln x$。
+      max_score: 1
+    - step_id: step_4
+      description: 求 $\ln x/x$ 的最大值。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 参变量分离
+    subroute:
+      - $xe^x$ 同构
+      - $\ln x/x$ 最大值
+      - 恒成立转参数下界
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 特殊幂函数与指数函数结构
+    evidence:
+      - $axe^{ax}$ 与 $\ln x\,e^{\ln x}$ 统一为 $F(t)=te^t$。
+      - 最终参数由 $\frac{\ln x}{x}$ 的最大值控制。
+    normalization_moves_used:
+      - $\ln(x/e)=\ln x-1$，把 $-1$ 移到左侧。
+      - 同乘 $x>0$，把 $ae^{ax}$ 变成 $axe^{ax}$。
+      - $x\ln x=\ln x\,e^{\ln x}$。
+      - $a\ge\ln x/x$ 后取右侧最大值。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\ln(x/e)$ 化成 $\ln x-1$ 并移项，回补指数对数基础。
+      - 若学生不会把 $x\ln x$ 写成 $\ln x\,e^{\ln x}$，回补同构前的代数恒等变形。
+      - 若学生不知道 $\frac{\ln x}{x}$ 在 $x=e$ 处取最大值 $\frac1e$，回补导数单调极值基础。
+      - 若学生把“对任意 $x>0$”漏成代入某个 $x$，回补不等式工具基础。
+  detail_terms:
+    - $ae^{ax}-1\ge\ln(x/e)$
+    - $F(t)=te^t$
+    - $x\ln x=\ln x\,e^{\ln x}$
+    - $\ln x/x$ 最大值
+    - $a_{\min}=1/e$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0016_ex01
+source_evidence:
+  source_refs:
+    - ref_id: page_0016
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0016/page_0016.md
+      role: problem_start
+      evidence: 例 1 题干、四个选项和解析均在 page_0016；前文给出同构函数 $f(x)=xe^x$ 与 $x\ln x$ 的基本模型。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0016.png
+      inspected: true
+      notes: 页图核对题干为 $ae^{ax}-1\geqslant\ln\frac{x}{e}$，选项 A-D 分别为 $e,2e,\frac1e,\frac1{2e}$；解析行与 markdown 一致。
+  source_context: 第 1 章第 1 节“同构函数的基础应用”，例 1 紧接 $f(x)=xe^x$ 和 $x\ln x=f(\ln x)$ 的基础模型。
+  source_influence:
+    - 必须保留“对任意 $x>0$ 恒成立”和“$a>0$”这两个条件。
+    - 源解的关键是把 $ae^{ax}-1\ge\ln(x/e)$ 改写为 $axe^{ax}\ge x\ln x$，再对齐 $f(ax)$ 与 $f(\ln x)$。
+    - 最终不是求一般范围展示，而是问最小值；答案应落到 $a\ge(\ln x/x)_{\max}=1/e$。
+  source_discrepancies: []
+original_problem:
+  stem: 设实数 $a>0$，若不等式 $ae^{ax}-1\geqslant \ln \frac{x}{e}$ 对任意 $x>0$ 恒成立，则 $a$ 的最小值为（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $e$
+      text_latex: $e$
+    - label: B
+      text_raw: $2e$
+      text_latex: $2e$
+    - label: C
+      text_raw: $\frac{1}{e}$
+      text_latex: $\frac{1}{e}$
+    - label: D
+      text_raw: $\frac{1}{2e}$
+      text_latex: $\frac{1}{2e}$
+  answer: C；$a_{\min}=\frac1e$。
+  fidelity_notes:
+    - page_0016.png 已核对：题干中的对数为 $\ln\frac{x}{e}$，不是 $\ln x/e$。
+    - page_0016.png 已核对：选项 C 为 $\frac1e$，选项 D 为 $\frac1{2e}$。
+solution:
+  source_solution_summary: 由 $ae^{ax}-1\ge\ln(x/e)$ 得 $ae^{ax}\ge\ln x$，再乘以 $x>0$ 得 $axe^{ax}\ge x\ln x=\ln x\,e^{\ln x}$。令 $F(t)=te^t$，则 $F(ax)\ge F(\ln x)$。因 $ax>0$，若 $\ln x<0$ 则 $ax\ge\ln x$ 自动成立；若 $\ln x\ge0$，$F$ 在非负区间递增，仍等价转向 $ax\ge\ln x$。所以需 $a\ge\ln x/x$ 对任意 $x>0$ 成立，而 $(\ln x/x)_{\max}=1/e$。
+  key_steps:
+    - step_id: step_1
+      statement: 把原不等式先移项并乘以正数 $x$。
+      formula_trace:
+        from: $ae^{ax}-1\geqslant\ln\frac{x}{e}$
+        to: $axe^{ax}\geqslant x\ln x=\ln x\,e^{\ln x}$
+        operation: 利用 $\ln(x/e)=\ln x-1$ 移项得 $ae^{ax}\ge\ln x$，再同乘 $x>0$。
+        why: 这样左右两边都能写成 $t e^t$ 的同构形式。
+      source_ref: page_0016
+    - step_id: step_2
+      statement: 引入同构函数 $F(t)=te^t$，把两边识别为 $F(ax)$ 与 $F(\ln x)$。
+      formula_trace:
+        from: $axe^{ax}\geqslant \ln x\,e^{\ln x}$
+        to: $F(ax)\geqslant F(\ln x)$
+        operation: 令 $F(t)=te^t$，分别代入 $t=ax$ 与 $t=\ln x$。
+        why: 源页前文已经给出 $te^t$ 的单调模型，可直接用于同构比较。
+      source_ref: page_0016
+    - step_id: step_3
+      statement: 由 $ax>0$ 推出控制条件为 $ax\ge\ln x$。
+      formula_trace:
+        from: $F(ax)\geqslant F(\ln x),\quad ax>0$
+        to: $a\geqslant\frac{\ln x}{x}$
+        operation: 当 $\ln x<0$ 时不等式自动满足 $ax\ge\ln x$；当 $\ln x\ge0$ 时用 $F$ 在 $(0,+\infty)$ 上递增。
+        why: 恒成立问题被转成 $a$ 对所有 $x>0$ 压住 $\ln x/x$。
+      source_ref: page_0016
+    - step_id: step_4
+      statement: 求 $\ln x/x$ 的最大值。
+      formula_trace:
+        from: $a\geqslant\frac{\ln x}{x}\quad(x>0)$
+        to: $a\geqslant\left(\frac{\ln x}{x}\right)_{\max}=\frac1e$
+        operation: 使用源页同构模型 $\frac{\ln x}{x}$ 在 $x=e$ 处取最大值 $1/e$。
+        why: 对任意 $x$ 恒成立时，参数最小值等于右侧函数的全局最大值。
+      source_ref: page_0016
+teaching_card:
+  student_title: 把 $ae^{ax}$ 配成 $xe^x$ 同构
+  what_it_trains: 训练把带参数的指数恒成立不等式，先乘正量补出 $te^t$，再分离成 $\ln x/x$ 最大值。
+  recognition_cues:
+    - 题干同时出现 $e^{ax}$ 和 $\ln(x/e)$。
+    - 参数 $a$ 与 $x$ 以 $ax$ 的形式进入指数。
+    - 恒成立问 $a$ 的最小值，通常要压住某个关于 $x$ 的最大值。
+  normalization_moves:
+    - 先用 $\ln(x/e)=\ln x-1$ 消掉常数项。
+    - 同乘 $x>0$，让左侧出现 $ax e^{ax}$。
+    - 把 $x\ln x$ 改写成 $\ln x e^{\ln x}$，和 $ax e^{ax}$ 对齐。
+    - 最后把参数条件写成 $a\ge \ln x/x$，再取最大值。
+  common_failures:
+    - 忘记乘以 $x>0$，导致看不出 $te^t$。
+    - 把 $\ln(x/e)$ 误写为 $\ln x/e$。
+    - 只记得 $xe^x$ 的最小值，却没有切到 $\ln x/x$ 的最大值。
+    - 没有说明恒成立要求取 $\ln x/x$ 的最大值。
+  similar_practice_query: $ae^{ax}$ $\ln(x/e)$ 恒成立 参数最小值 $xe^x$ 同构 $\ln x/x$ 最大值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0016 markdown 与页图；未发现题干或选项差异。

@@ -1,0 +1,196 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0037_ex34
+content_revision_id: mst_p0037_ex34-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0037_ex34.card.yaml
+stem: |-
+  若 $\left(\frac{x}{2}+1\right)y=e^x\cdot\ln\frac{ey}{2}$，其中 $x>0,\ y>2$，则 ( )
+  A. $e^x>y$
+  B. $e^{\frac{x}{2}}>y$
+  C. $4e^{\frac{x}{2}}<y$
+  D. $2e^x>y$
+answer: |
+  D
+
+  由题设除以正数 $ye^x$，得 $\frac{x/2+1}{e^x}=\frac{\ln(y/2)+1}{y}$。由于 $y>2$，有 $\frac{\ln(y/2)+1}{y}<\frac{\ln(y/2)+2}{y}$。构造 $g(u)=\frac{u/2+1}{e^u}$，则 $g'(u)=-(u+1)/(2e^u)<0$，所以 $g$ 在 $u>0$ 上递减。又 $g(\ln(y/2))=\frac{\ln(y/2)+2}{y}$，因此 $g(x)<g(\ln(y/2))$，递减性推出 $x>\ln(y/2)$，即 $e^x>y/2$，故 $2e^x>y$。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把题设除成左右同构的分式。
+      max_score: 1
+    - step_id: step_2
+      description: 构造一个更大的右侧同构值。
+      max_score: 1
+    - step_id: step_3
+      description: 证明 $g$ 在正数域上递减。
+      max_score: 1
+    - step_id: step_4
+      description: 计算比较点 $g(\ln(y/2))$。
+      max_score: 1
+    - step_id: step_5
+      description: 用递减性推出目标选项。
+      max_score: 1
+graph:
+  goal:
+    primary: 数值比较
+    part_level:
+      - part_id: item_1
+        goal: 数值比较
+        target: 由题设推出 $e^x$ 与 $y$ 的一侧比较。
+        result: 见 source_solution_summary
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 拟合与夹逼
+    subroute:
+      - 不完整同构上界
+      - $g(x)=(x/2+1)/e^x$ 递减
+      - $\\ln(y/2)$ 比较点
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - 题设给出 $g(x)=(\\ln(y/2)+1)/y$，而 $g(\\ln(y/2))=(\\ln(y/2)+2)/y$。
+      - 通过 $g(x)<g(\\ln(y/2))$ 与 $g$ 递减，得到 $x>\\ln(y/2)$。
+    normalization_moves_used:
+      - $\\ln(ey/2)$ 改写为 $1+\\ln(y/2)$。
+      - 构造 $g(u)=(u/2+1)/e^u$。
+      - 把 $g(\\ln(y/2))$ 化成 $(\\ln(y/2)+2)/y$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\\ln(ey/2)$ 拆成 $1+\\ln(y/2)$，回补指数对数基础。
+      - 若学生求不出 $g'(u)=-(u+1)/(2e^u)$，回补导数运算与几何意义。
+      - 若学生在递减函数中把 $g(x)<g(v)$ 错推成 $x<v$，回补函数性质与图像。
+  detail_terms:
+    - $g(u)=(u/2+1)/e^u$
+    - $g(\\ln(y/2))$
+    - 递减函数反向比较
+    - $2e^x>y$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0037_ex34
+source_evidence:
+  source_refs:
+    - ref_id: page_0037
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md
+      role: problem_start
+      evidence: "lines 26-31: 例 34 题干与 A-D 选项。"
+    - ref_id: page_0037_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md
+      role: solution
+      evidence: "line 33: 构造 $g(x)=(x/2+1)/e^x$，用递减性与 $g(\\\\ln(y/2))$ 比较，得到选项 D。"
+    - ref_id: page_0037_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md
+      role: local_context
+      evidence: "lines 22-24: 考点 8 为“不完整同构与不等式上下界构造”。"
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0037.png
+      inspected: true
+      notes: 已核对原图：例 34 题干、四个选项与答案 D 和 markdown 一致；原图中 $g'(x)$ 的分子写法不精确，但符号结论为负。
+  source_context: 本题是“考点 8：不完整同构与不等式上下界构造”的首题，源解将等式一边与略大的同构函数值比较，借递减性得到 $x$ 的下界。
+  source_influence:
+    - 题目要求选择必然成立的不等式，goal 取“数值比较”。
+    - 源解不是直接解 $x,y$，而是构造 $g(u)=(u/2+1)/e^u$ 并比较 $g(x)$ 与 $g(\\ln(y/2))$。
+    - 四个选项必须完整保留；答案为 D。
+  source_discrepancies:
+    - page_0037 原图和 markdown 中 $g'(x)$ 写成 $-(x/2+1)/e^x<0$；按求导应为 $-(x+1)/(2e^x)<0$。符号和结论不受影响。
+original_problem:
+  stem: 若 $\left(\frac{x}{2}+1\right)y=e^x\cdot\ln\frac{ey}{2}$，其中 $x>0,\ y>2$，则 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $e^x>y$
+      text_latex: $e^x>y$
+    - label: B
+      text_raw: $e^{\frac{x}{2}}>y$
+      text_latex: $e^{\frac{x}{2}}>y$
+    - label: C
+      text_raw: $4e^{\frac{x}{2}}<y$
+      text_latex: $4e^{\frac{x}{2}}<y$
+    - label: D
+      text_raw: $2e^x>y$
+      text_latex: $2e^x>y$
+  answer: D
+  fidelity_notes:
+    - 已核对 page_0037 原图，条件为 $x>0,y>2$，选项 C 为 $4e^{x/2}<y$。
+    - 源页 Reconstruction Markers 为“无”；导数小笔误由人工验算记录在 source_discrepancies。
+solution:
+  source_solution_summary: |
+    由题设除以正数 $ye^x$，得 $\frac{x/2+1}{e^x}=\frac{\ln(y/2)+1}{y}$。由于 $y>2$，有 $\frac{\ln(y/2)+1}{y}<\frac{\ln(y/2)+2}{y}$。构造 $g(u)=\frac{u/2+1}{e^u}$，则 $g'(u)=-(u+1)/(2e^u)<0$，所以 $g$ 在 $u>0$ 上递减。又 $g(\ln(y/2))=\frac{\ln(y/2)+2}{y}$，因此 $g(x)<g(\ln(y/2))$，递减性推出 $x>\ln(y/2)$，即 $e^x>y/2$，故 $2e^x>y$。
+  key_steps:
+    - step_id: step_1
+      statement: 把题设除成左右同构的分式。
+      formula_trace:
+        from: |
+          $\left(\frac x2+1\right)y=e^x\ln\frac{ey}{2}$
+        to: |
+          $\frac{x/2+1}{e^x}=\frac{\ln(y/2)+1}{y}$
+        operation: 两边除以 $ye^x$，并用 $\ln(ey/2)=1+\ln(y/2)$。
+        why: 左侧已经是 $g(x)$，右侧接近 $g(\ln(y/2))$。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md:33
+    - step_id: step_2
+      statement: 构造一个更大的右侧同构值。
+      formula_trace:
+        from: |
+          $\frac{\ln(y/2)+1}{y}$
+        to: |
+          $\frac{\ln(y/2)+1}{y}<\frac{\ln(y/2)+2}{y}$
+        operation: 在同一个正分母 $y$ 上比较分子。
+        why: 多出的 $1$ 正好来自 $g(\ln(y/2))$ 的分子结构。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md:33
+    - step_id: step_3
+      statement: 证明 $g$ 在正数域上递减。
+      formula_trace:
+        from: |
+          $g(u)=\frac{u/2+1}{e^u}$
+        to: |
+          $g'(u)=-\frac{u+1}{2e^u}<0\quad(u>0)$
+        operation: 用商法则或写成 $(u/2+1)e^{-u}$ 后求导。
+        why: 后面要由 $g(x)<g(v)$ 反推出 $x>v$。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md:33
+    - step_id: step_4
+      statement: 计算比较点 $g(\ln(y/2))$。
+      formula_trace:
+        from: |
+          $g\left(\ln\frac y2\right)=\frac{\frac12\ln(y/2)+1}{e^{\ln(y/2)}}$
+        to: |
+          $g\left(\ln\frac y2\right)=\frac{\ln(y/2)+2}{y}$
+        operation: 用 $e^{\ln(y/2)}=y/2$，分子分母同乘 $2$。
+        why: 这正好是上一步构造出的较大右侧。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md:33
+    - step_id: step_5
+      statement: 用递减性推出目标选项。
+      formula_trace:
+        from: |
+          $g(x)<g\left(\ln\frac y2\right)$
+        to: |
+          $x>\ln\frac y2\Rightarrow e^x>\frac y2\Rightarrow 2e^x>y$
+        operation: 递减函数函数值小，输入反而大；再对指数函数取值。
+        why: 得到选项 D。
+      source_ref: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0037/page_0037.md:33
+teaching_card:
+  student_title: 用递减同构拿到 $2e^x>y$
+  what_it_trains: 等式两边差一点同构时，不要硬解；把右侧补成一个更大的 $g(\ln(y/2))$，再利用 $g$ 递减，把函数值比较转成输入比较。
+  recognition_cues:
+    - 题干中有 $x/2+1$ 和 $\\ln(ey/2)=1+\\ln(y/2)$。
+    - 选项都在比较 $e^x$、$e^{x/2}$ 与 $y$。
+    - 把 $x$ 与 $\\ln(y/2)$ 比出来就能判断 D。
+  normalization_moves:
+    - 先除以 $ye^x$，整理成 $g(x)$。
+    - 把 $(\\ln(y/2)+1)/y$ 放大到 $(\\ln(y/2)+2)/y$。
+    - 算出 $g(\\ln(y/2))$，再用递减性反推 $x>\\ln(y/2)$。
+  common_failures:
+    - 把 $g$ 当成递增函数，比较方向反了。
+    - 不会把 $g(\\ln(y/2))$ 的分母化成 $y/2$。
+    - 得到 $e^x>y/2$ 后误选 A，而不是 D。
+  similar_practice_query: 不完整同构 上界构造 (x/2+1)/e^x ln(y/2) 递减
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - page_0037 原图与 markdown 对题干、选项、答案一致。
+    - 源解导数写法少了常数项的精确形式；修正为 $g'(u)=-(u+1)/(2e^u)<0$，不影响源解结论。

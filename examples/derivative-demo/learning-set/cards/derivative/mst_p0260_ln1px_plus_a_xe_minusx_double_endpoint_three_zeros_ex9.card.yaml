@@ -1,0 +1,227 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0260_ln1px_plus_a_xe_minusx_double_endpoint_three_zeros_ex9
+content_revision_id: mst_p0260_ln1px_plus_a_xe_minusx_double_endpoint_three_zeros_ex9-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0260_ln1px_plus_a_xe_minusx_double_endpoint_three_zeros_ex9.card.yaml
+stem: |-
+  （2022 · 乙卷理科）已知函数 $f(x)=\ln(1+x)+axe^{-x}$。
+  1. 当 $a=1$ 时，求曲线 $y=f(x)$ 在点 $(0,f(0))$ 处的切线方程。
+  2. 若 $f(x)$ 在区间 $(-1,0)$、$(0,+\infty)$ 各恰有一个零点，求 $a$ 的取值范围。
+answer: |-
+  第(1)问：$y=2x$。第(2)问：$a\in(-\infty,-1)$。
+
+  第(1)问当 $a=1$ 时， $f^\prime(x)=\frac1{1+x}+(1-x)e^{-x}$，所以 $f^\prime(0)=2$，且 $f(0)=0$，切线为 $y=2x$。第(2)问 $f^\prime(x)=\frac{e^x-ax^2+a}{(1+x)e^x}$，设 $g(x)=e^x-ax^2+a$。若 $a\ge0$，左侧 $f^\prime>0$， $(-1,0)$ 无零点；若 $-1\le a<0$，右侧 $g$ 递增且 $g(0)=1+a\ge0$，$(0,+\infty)$ 无零点。因此必须 $a<-1$。当 $a<-1$ 时，左侧 $g(-1)>0$、$g(0)<0$， 使 $f$ 在 $(-1,0)$ 先增后减并从负到正再回到 0，存在唯一零点； 右侧 $g(0)<0$、$g(1)>0$，使 $f$ 在 $(0,+\infty)$ 先减后增， 再由远处找点得到唯一零点。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 第(1)问：求 $x=0$ 处切线。
+      max_score: 1
+    - step_id: step_2
+      description: 第(2)问：把导数符号交给 $g(x)$。
+      max_score: 1
+    - step_id: step_3
+      description: 排除 $a\ge0$。
+      max_score: 1
+    - step_id: step_4
+      description: 排除 $-1\le a<0$。
+      max_score: 1
+    - step_id: step_5
+      description: 当 $a<-1$ 时，左侧先找导数零点。
+      max_score: 1
+    - step_id: step_6
+      description: 当 $a<-1$ 时，左侧用估计找函数零点。
+      max_score: 1
+    - step_id: step_7
+      description: 当 $a<-1$ 时，右侧同理找唯一零点。
+      max_score: 1
+    - step_id: step_8
+      description: 合并参数范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 几何量求解
+        target: 第 1 问
+        result: $y=2x$。
+      - part_id: "2"
+        goal: 求参数范围
+        target: 第 2 问
+        result: $a<-1$。
+  method:
+    primary: 显隐点探路
+    secondary:
+      - 充分/必要性探路
+      - 含参数分类讨论
+      - 数形结合
+    subroute:
+      - 中间零点 $x=0$
+      - 双端点效应
+      - 导数分子 $g(x)$
+      - 两侧分别找点
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 局部逼近结构
+      - 不等式工具结构
+    evidence:
+      - $\ln(1+x)+axe^{-x}$
+      - $f(0)=0$
+      - $g(x)=e^x-ax^2+a$
+      - $f^\prime(0)=1+a$
+    normalization_moves_used:
+      - 把中间显点 $x=0$ 作为突破口。
+      - 用 $g(x)$ 管住 $f^\prime$。
+      - 先排除不可能的参数段，再证明 $a<-1$ 可行。
+      - 左右两侧分别用单调性和找点完成唯一性。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求切线，回补导数运算与几何意义。
+      - 若学生不能从 $f(0)=0$ 看出中间显点，回补函数性质与图像。
+      - 若学生不会通分导数，回补代数恒等变形。
+      - 若学生不会用单调性证明唯一零点，回补导数单调极值基础。
+      - 若学生处理 $\ln(1+x)$ 定义域出错，回补函数三要素与定义域。
+  detail_terms:
+    - $\ln(1+x)+axe^{-x}$
+    - $x=0$ 中间零点
+    - 双端点效应
+    - $g(x)=e^x-ax^2+a$
+    - $a<-1$
+parts: &a1
+  - id: "1"
+    text: 当 $a=1$ 时，求曲线 $y=f(x)$ 在点 $(0,f(0))$ 处的切线方程。
+  - id: "2"
+    text: 若 $f(x)$ 在区间 $(-1,0)$、$(0,+\infty)$ 各恰有一个零点，求 $a$ 的取值范围。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0260_ln1px_plus_a_xe_minusx_double_endpoint_three_zeros_ex9
+source_evidence:
+  source_refs:
+    - ref_id: page_0260_ex9_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0260/page_0260.md
+      role: problem_start
+      evidence: page_0260 给出例9题头：$f(x)=\ln(1+x)+axe^{-x}$；第(1)问 $a=1$ 求切线，第(2)问在 $(-1,0)$、$(0,+\infty)$ 各恰有一个零点，求 $a$。
+    - ref_id: page_0260_ex9_analysis_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0260/page_0260.md
+      role: solution
+      evidence: page_0260 页底给出分析：$f(0)=0$，要让两侧各有零点，突破口是 $f^\prime(0)<0$，即 $a<-1$。
+    - ref_id: page_0261_ex9_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0261/page_0261.md
+      role: solution
+      evidence: page_0261 延续例9完整解析：第(1)问切线 $y=2x$；第(2)问排除 $a\ge0$ 与 $-1\le a<0$，证明 $a<-1$ 时两侧各有一个零点，结论 $(-\infty,-1)$。
+    - ref_id: page_0261_ex10_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0261/page_0261.md
+      role: local_context
+      evidence: page_0261 随后另起例10，说明例9在本页闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0260.png
+      inspected: true
+      notes: 已核对页图：例9题干和分析开头位于 page_0260 页底。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0261.png
+      inspected: true
+      notes: 已核对页图：page_0261 页首为例9续解，随后另起例10。
+  source_context: 本卡处理 page_0260 起头、page_0261 续完的例9；page_0261 例10排除。
+  source_influence:
+    - 保留 $f(0)=0$ 作为中间显点。
+    - 保留第(2)问通过 $f^\prime(0)=1+a$ 判定必要方向。
+    - 保留 $g(x)=e^x-ax^2+a$ 控制 $f^\prime$ 符号，再分别在左右区间找点。
+    - 保留 source 的找点估计：左侧用 $x=e^{ae}-1$，右侧用 $x=e^{-a/e}-1$。
+  source_discrepancies: []
+original_problem:
+  stem: （2022 · 乙卷理科）已知函数 $f(x)=\ln(1+x)+axe^{-x}$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问：$y=2x$。第(2)问：$a\in(-\infty,-1)$。
+  fidelity_notes:
+    - 无选项。
+    - 题目第(2)问是两侧各一个零点，不包括中间显点 $x=0$。
+solution:
+  source_solution_summary: 第(1)问当 $a=1$ 时， $f^\prime(x)=\frac1{1+x}+(1-x)e^{-x}$，所以 $f^\prime(0)=2$，且 $f(0)=0$，切线为 $y=2x$。第(2)问 $f^\prime(x)=\frac{e^x-ax^2+a}{(1+x)e^x}$，设 $g(x)=e^x-ax^2+a$。若 $a\ge0$，左侧 $f^\prime>0$， $(-1,0)$ 无零点；若 $-1\le a<0$，右侧 $g$ 递增且 $g(0)=1+a\ge0$，$(0,+\infty)$ 无零点。因此必须 $a<-1$。当 $a<-1$ 时，左侧 $g(-1)>0$、$g(0)<0$， 使 $f$ 在 $(-1,0)$ 先增后减并从负到正再回到 0，存在唯一零点； 右侧 $g(0)<0$、$g(1)>0$，使 $f$ 在 $(0,+\infty)$ 先减后增， 再由远处找点得到唯一零点。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问：求 $x=0$ 处切线。
+      formula_trace:
+        from: $a=1$，$f(x)=\ln(1+x)+xe^{-x}$
+        to: $f(0)=0,\ f^\prime(0)=2$
+        operation: 代入并求导。
+        why: 切线斜率和切点都已确定。
+      source_ref: page_0261_ex9_solution_continuation
+    - step_id: step_2
+      statement: 第(2)问：把导数符号交给 $g(x)$。
+      formula_trace:
+        from: $f^\prime(x)=\frac1{1+x}+\frac{a(1-x)}{e^x}$
+        to: $f^\prime(x)=\frac{g(x)}{(1+x)e^x}$，$g(x)=e^x-ax^2+a$
+        operation: 通分整理。
+        why: 在定义域上分母为正，所以 $f^\prime$ 的符号由 $g$ 决定。
+      source_ref: page_0260_ex9_analysis_start
+    - step_id: step_3
+      statement: 排除 $a\ge0$。
+      formula_trace:
+        from: $a\ge0$，$-1<x<0$
+        to: $f^\prime(x)>0$，所以 $f(x)<f(0)=0$
+        operation: 直接判两项导数都为正。
+        why: $(-1,0)$ 没有零点，不合题意。
+      source_ref: page_0261_ex9_solution_continuation
+    - step_id: step_4
+      statement: 排除 $-1\le a<0$。
+      formula_trace:
+        from: $0>a\ge-1$，$x>0$
+        to: $g^\prime(x)>0$ 且 $g(x)>g(0)=1+a\ge0$
+        operation: 用 $g^\prime(x)=e^x-2ax>0$ 判 $g$ 递增。
+        why: 右侧 $f^\prime>0$，$(0,+\infty)$ 没有零点。
+      source_ref: page_0261_ex9_solution_continuation
+    - step_id: step_5
+      statement: 当 $a<-1$ 时，左侧先找导数零点。
+      formula_trace:
+        from: $g(-1)=\frac1e>0,\ g(0)=1+a<0$
+        to: 存在 $n\in(-1,0)$，使 $g(n)=0$
+        operation: 结合 $g^\prime$ 在左侧先减后增。
+        why: 得到 $f$ 在左侧先增后减，峰值在 0 左侧。
+      source_ref: page_0261_ex9_solution_continuation
+    - step_id: step_6
+      statement: 当 $a<-1$ 时，左侧用估计找函数零点。
+      formula_trace:
+        from: $xe^{-x}\in(-e,0)$，$a<0$
+        to: $f(e^{ae}-1)<0$，且 $f(n)>0$
+        operation: 用 $axe^{-x}< -ae$ 构造一个负值点。
+        why: 配合单调性得到 $(-1,0)$ 唯一零点。
+      source_ref: page_0261_ex9_solution_continuation
+    - step_id: step_7
+      statement: 当 $a<-1$ 时，右侧同理找唯一零点。
+      formula_trace:
+        from: $g(0)<0,\ g(1)=e>0$
+        to: 存在 $m\in(0,1)$，$f$ 在 $(0,m)$ 递减、$(m,+\infty)$ 递增
+        operation: 用 $g$ 的零点控制 $f^\prime$ 符号。
+        why: 右侧最小值低于 0，远处再找正值点。
+      source_ref: page_0261_ex9_solution_continuation
+    - step_id: step_8
+      statement: 合并参数范围。
+      formula_trace:
+        from: 必须 $a<-1$，且 $a<-1$ 可行
+        to: $a\in(-\infty,-1)$
+        operation: 必要性和充分性合并。
+        why: 完成两侧各一个零点的求参。
+      source_ref: page_0261_ex9_solution_continuation
+teaching_card:
+  student_title: 中间零点在 $0$，两边各找一个零点
+  what_it_trains: 训练双端点效应里的三零点分析：先抓住已知零点 $x=0$，再用导数分子控制左右两侧的单调形状。
+  recognition_cues:
+    - 题目要求 $(-1,0)$ 和 $(0,+\infty)$ 各一个零点。
+    - 函数天然有 $f(0)=0$，这个零点不计入两个区间。
+    - 导数通分后出现 $g(x)=e^x-ax^2+a$。
+    - 关键阈值来自 $f^\prime(0)=1+a$。
+  normalization_moves:
+    - 先算 $f(0)$ 和 $f^\prime(0)$。
+    - 再用 $g(x)$ 判断 $f^\prime$ 在左右两侧的零点。
+    - 参数分段时先排除 $a\ge0$ 和 $-1\le a<0$。
+  common_failures:
+    - 把 $x=0$ 当成题目要求的零点之一。
+    - 只证明存在零点，没有用单调性证明唯一。
+    - 忽略左侧定义域是 $x>-1$。
+  similar_practice_query: 双端点效应 ln(1+x) axe^{-x} 中间零点 x=0 两侧各一个零点 参数范围
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

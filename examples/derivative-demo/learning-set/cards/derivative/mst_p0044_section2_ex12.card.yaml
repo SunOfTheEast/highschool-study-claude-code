@@ -1,0 +1,149 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0044_section2_ex12
+content_revision_id: mst_p0044_section2_ex12-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0044_section2_ex12.card.yaml
+stem: |-
+  已知 f(x)=xe^{ax}-\ln x-ax，若存在 x_0>0，使得 f(x_0)=1，则实数 a 的取值范围是（  ）
+  A. (-∞, 1/e)
+  B. [-1/e, +∞)
+  C. (-1/e, 0)
+  D. (0, 1/e]
+answer: |-
+  B
+
+  把 xe^{ax} 改写为 e^{ax+\ln x}，令 t=ax+\ln x，则 f(x)-1=e^t-t-1。由于 e^t-t-1\geqslant0 且等号在 t=0 取得，存在 f(x)=1 等价于存在 x>0 使 ax+\ln x=0，即 a=-\ln x/x。利用 \ln x/x\leqslant1/e 得 a\geqslant-1/e。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 先把同一个变量中的指数项与对数项合成一个量。
+      max_score: 1
+    - step_id: step_2
+      description: 利用 e^t-t-1 的最小值判定方程何时能取到 0。
+      max_score: 1
+    - step_id: step_3
+      description: 把存在性转成 a 的取值范围。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 切线放缩与凹凸性
+    subroute:
+      - xe^x 同构
+      - ln x / x 最大值
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 同构结构
+      - 不等式工具结构
+    evidence:
+      - xe^{ax}=e^{ax+\ln x}
+      - e^t-t-1\geqslant0
+      - a=-\ln x/x
+    normalization_moves_used:
+      - 把 xe^{ax} 统一到指数形式 e^{ax+\ln x}。
+      - 把 f(x)=1 改成 e^t-t-1=0 的等号问题。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 xe^{ax} 化成 e^{ax+\ln x}，回补指数对数基础。
+      - 若学生忽略 \ln x 的定义域限制，回补函数三要素与定义域。
+      - 若学生不知道 \ln x/x 的最大值是 1/e，回补导数单调极值基础。
+  detail_terms:
+    - e^t-t-1\geqslant0
+    - ax+\ln x=0
+    - -\ln x/x\geqslant-1/e
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0044_section2_ex12
+source_evidence:
+  source_refs:
+    - ref_id: page_0044
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0044/page_0044.md
+      role: problem_start
+      evidence: 例 12：已知 f(x)=xe^{ax}-\ln x-ax，若存在 x_0\in\mathbf{R}，使得 f(x_0)=1，求 a 的取值范围。
+    - ref_id: page_0044_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0044/page_0044.md
+      role: solution
+      evidence: 解析把 xe^{ax} 写成 e^{ax+\ln x}，由 e^t-t-1\geqslant0 取等得到 ax+\ln x=0，再化为 a=-\ln x/x\geqslant-1/e。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0044.png
+      inspected: true
+      notes: 页图已核对：题干确写 x_0\in R，同时函数含 \ln x；选项与解析结果均为 B。
+  source_context: page_0044 顶部是上一题 ex11 的解析续页，本卡从 page_0044 的例 12 题头开始。
+  source_influence: []
+  source_discrepancies:
+    - 源题干写存在 x_0\in R，但 f(x)=xe^{ax}-\ln x-ax 的定义域要求 x_0>0；用户已拍板最终卡面校正为 x_0>0。
+    - 解析中写“x=0 取等”应为套用 e^t-t-1\geqslant0 时 t=0 取等；不影响后续 ax+\ln x=0。
+original_problem:
+  stem: 已知 f(x)=xe^{ax}-\ln x-ax，若存在 x_0>0，使得 f(x_0)=1，则实数 a 的取值范围是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: (-∞, 1/e)
+      text_latex: \left(-\infty, \frac{1}{e}\right)
+    - label: B
+      text_raw: "[-1/e, +∞)"
+      text_latex: \left[-\frac{1}{e}, +\infty\right)
+    - label: C
+      text_raw: (-1/e, 0)
+      text_latex: \left(-\frac{1}{e}, 0\right)
+    - label: D
+      text_raw: (0, 1/e]
+      text_latex: \left(0, \frac{1}{e}\right]
+  answer: B
+  fidelity_notes:
+    - 源文写 x_0\in\mathbf{R}；用户已拍板按定义域校正为 x_0>0。
+solution:
+  source_solution_summary: 把 xe^{ax} 改写为 e^{ax+\ln x}，令 t=ax+\ln x，则 f(x)-1=e^t-t-1。由于 e^t-t-1\geqslant0 且等号在 t=0 取得，存在 f(x)=1 等价于存在 x>0 使 ax+\ln x=0，即 a=-\ln x/x。利用 \ln x/x\leqslant1/e 得 a\geqslant-1/e。
+  key_steps:
+    - step_id: step_1
+      statement: 先把同一个变量中的指数项与对数项合成一个量。
+      formula_trace:
+        from: xe^{ax}-\ln x-ax=1
+        to: e^{ax+\ln x}-(ax+\ln x)-1=0
+        operation: 用 x=e^{\ln x}（x>0）把 xe^{ax} 写成 e^{ax+\ln x}，并把 \ln x+ax 合并为同一个 t。
+        why: 这样能直接套用 e^t-t-1\geqslant0 的等号条件。
+      source_ref: page_0044_solution
+    - step_id: step_2
+      statement: 利用 e^t-t-1 的最小值判定方程何时能取到 0。
+      formula_trace:
+        from: e^{ax+\ln x}-(ax+\ln x)-1=0
+        to: ax+\ln x=0
+        operation: 令 t=ax+\ln x，由 e^t-t-1\geqslant0 且仅在 t=0 取等。
+        why: 原方程有解必须也只需 t=0 可达到。
+      source_ref: page_0044_solution
+    - step_id: step_3
+      statement: 把存在性转成 a 的取值范围。
+      formula_trace:
+        from: ax+\ln x=0
+        to: a=-\frac{\ln x}{x}\geqslant-\frac{1}{e}
+        operation: 分离参数，并用 \frac{\ln x}{x}\leqslant\frac{1}{e}（x>0，等号 x=e）取范围。
+        why: x 在正数范围内变化时，-\ln x/x 的最小值是 -1/e。
+      source_ref: page_0044_solution
+teaching_card:
+  student_title: 把 xe^{ax} 合成 e^{ax+\ln x} 求参数范围
+  what_it_trains: 训练看出 x 与 e^{ax} 可以合并成一个指数，从而把存在性问题降到 e^t-t-1 的等号条件。
+  recognition_cues:
+    - 式子里同时出现 xe^{ax}、\ln x、ax。
+    - 题目问存在 x 使函数值等于一个常数。
+    - 整理后能出现 e^t-t-1。
+  normalization_moves:
+    - 先设 t=ax+\ln x，而不是直接对原函数求导。
+    - 等号条件给出 ax+\ln x=0，再分离 a。
+  common_failures:
+    - 把题干的 x_0\in R 直接当成所有实数，忘记 \ln x 只允许 x>0。
+    - 只记住 e^t-t-1\geqslant0，却没有抓住等号 t=0。
+    - 把 -\ln x/x 的范围方向写反。
+  similar_practice_query: 含 xe^{ax} 与 \ln x 的存在性参数范围题，使用 e^t-t-1 等号条件
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 用户已拍板：最终卡面把题干校正为 x_0>0。
+    - 解析中的“x=0 取等”应读作 t=0 取等，数学链条已按 t=0 记录。

@@ -1,0 +1,145 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0183_piecewise_three_roots_m_range_ex06
+content_revision_id: mst_p0183_piecewise_three_roots_m_range_ex06-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0183_piecewise_three_roots_m_range_ex06.card.yaml
+stem: |-
+  （2025 · 南京金陵中学期中 T6）已知函数 $f(x)=\begin{cases}x^2+2x,&x\leqslant0\\ \frac{\ln(2x)}{x},&x>0\end{cases}$，若函数 $g(x)=f(x)-m$ 有 3 个零点，则实数 $m$ 的取值范围为（  ）
+  A. $\left[0,\frac2e\right)$
+  B. $\left(-1,\frac2e\right)$
+  C. $\left[0,\frac{\sqrt e}{e}\right)$
+  D. $\left(-1,\frac{\sqrt e}{e}\right)$
+answer: |-
+  B
+
+  $g(x)$ 有 3 个零点等价于水平线 $y=m$ 与 $f(x)$ 有 3 个交点。 当 $x\le0$ 时，$f(x)=x^2+2x$，最小值为 $-1$，且 $f(0)=0$； 当 $x>0$ 时，$f(x)=\frac{\ln(2x)}x=2\frac{\ln(2x)}{2x}$， 由同构函数可知在 $2x=e$ 即 $x=\frac e2$ 处取最大值 $\frac2e$。由图像可知三交点对应 $-1<m<\frac2e$，选 B。
+rubric:
+  max_score: 3
+  criteria:
+    - step_id: step_1
+      description: 把零点个数变成水平线交点数。
+      max_score: 1
+    - step_id: step_2
+      description: 分析左侧二次函数支。
+      max_score: 1
+    - step_id: step_3
+      description: 分析右侧指对同构支。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 数形结合
+    secondary:
+      - 同构变形与换元法
+    subroute:
+      - 水平线交点数
+      - $\frac{\ln u}{u}$ 同构模型
+  structure:
+    primary: 分段函数结构
+    secondary:
+      - 指对复合结构
+    evidence:
+      - $x^2+2x$
+      - $\frac{\ln(2x)}x$
+      - $-1<m<\frac2e$
+    normalization_moves_used:
+      - 把 $g(x)$ 零点转成 $f(x)=m$ 的水平线交点。
+      - 分别读取二次支下界和指对支上界。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $g(x)=0$ 转成 $f(x)=m$，回补函数性质与图像。
+      - 若学生不会求二次函数顶点，回补代数恒等变形。
+      - 若学生不熟悉 $\frac{\ln u}{u}$ 模型，回补指数对数基础。
+  detail_terms:
+    - $x^2+2x$
+    - $\frac{\ln(2x)}x$
+    - $x=\frac e2$
+    - $\frac2e$
+    - $-1<m<\frac2e$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0183_piecewise_three_roots_m_range_ex06
+source_evidence:
+  source_refs:
+    - ref_id: page_0183
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0183/page_0183.md
+      role: problem_start
+      evidence: "page_0183 contains 例6 full statement, choices A-D, graph, and solution: analyze the two branches of the piecewise function and read the horizontal-line range for three intersections."
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0183.png
+      inspected: true
+      notes: 页图核对通过：例6题干、选项、图像和答案 B 与 markdown 一致；图中标明 左支最小值 $-1$ 与右支最大值 $\frac2e$。
+  source_context: page_0183 顶部是 page_0182 例5续解，按页头归属规则跳过；本卡处理 page_0183 新起头例6。
+  source_influence:
+    - 保留源解分左右支分析函数图像，再由水平线 $y=m$ 读三交点。
+  source_discrepancies: []
+original_problem:
+  stem: （2025 · 南京金陵中学期中 T6）已知函数 $f(x)=\begin{cases}x^2+2x,&x\leqslant0\\ \frac{\ln(2x)}{x},&x>0\end{cases}$，若函数 $g(x)=f(x)-m$ 有 3 个零点，则实数 $m$ 的取值范围为（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\left[0,\frac2e\right)$
+      text_latex: $\left[0,\frac2e\right)$
+    - label: B
+      text_raw: $\left(-1,\frac2e\right)$
+      text_latex: $\left(-1,\frac2e\right)$
+    - label: C
+      text_raw: $\left[0,\frac{\sqrt e}{e}\right)$
+      text_latex: $\left[0,\frac{\sqrt e}{e}\right)$
+    - label: D
+      text_raw: $\left(-1,\frac{\sqrt e}{e}\right)$
+      text_latex: $\left(-1,\frac{\sqrt e}{e}\right)$
+  answer: B
+  fidelity_notes:
+    - 源题为单选题，选项 A-D 已完整保留。
+    - 源图是判断三交点区间的直接证据。
+solution:
+  source_solution_summary: $g(x)$ 有 3 个零点等价于水平线 $y=m$ 与 $f(x)$ 有 3 个交点。 当 $x\le0$ 时，$f(x)=x^2+2x$，最小值为 $-1$，且 $f(0)=0$； 当 $x>0$ 时，$f(x)=\frac{\ln(2x)}x=2\frac{\ln(2x)}{2x}$， 由同构函数可知在 $2x=e$ 即 $x=\frac e2$ 处取最大值 $\frac2e$。由图像可知三交点对应 $-1<m<\frac2e$，选 B。
+  key_steps:
+    - step_id: step_1
+      statement: 把零点个数变成水平线交点数。
+      formula_trace:
+        from: $g(x)=f(x)-m=0$
+        to: $f(x)=m$
+        operation: 移项。
+        why: 水平线 $y=m$ 与分段函数图像的交点数就是零点个数。
+      source_ref: page_0183
+    - step_id: step_2
+      statement: 分析左侧二次函数支。
+      formula_trace:
+        from: $f(x)=x^2+2x,\ x\le0$
+        to: $f_{\min}=f(-1)=-1,\quad f(0)=0$
+        operation: 配方或读抛物线顶点。
+        why: 左支决定下端开区间 $m>-1$。
+      source_ref: page_0183
+    - step_id: step_3
+      statement: 分析右侧指对同构支。
+      formula_trace:
+        from: $f(x)=\frac{\ln(2x)}x=2\frac{\ln(2x)}{2x}$
+        to: $f_{\max}=f(\frac e2)=\frac2e$
+        operation: 套用 $\frac{\ln u}{u}$ 在 $u=e$ 处取最大值。
+        why: 右支决定上端开区间 $m<\frac2e$。
+      source_ref: page_0183
+teaching_card:
+  student_title: 水平线扫两段函数找三零点
+  what_it_trains: 训练把分段函数零点个数转成水平线交点数，并快速读出每一段的关键极值。
+  recognition_cues:
+    - 题目问 $f(x)-m$ 有几个零点。
+    - 函数左边是二次函数，右边是 $\frac{\ln(2x)}x$。
+    - 配图直接给出水平线 $y=m$。
+  normalization_moves:
+    - 先画/读水平线 $y=m$。
+    - 左支找 $-1$ 和 $0$。
+    - 右支用 $2x=e$ 找 $\frac2e$。
+  common_failures:
+    - 把右支最大值误算成 $\frac{\sqrt e}{e}$。
+    - 边界 $m=-1$ 或 $m=\frac2e$ 时交点数变化，不能闭合。
+    - 漏看左侧 $x\le0$ 支。
+  similar_practice_query: 分段函数 f(x)-m 三个零点 ln(2x)/x 水平线
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

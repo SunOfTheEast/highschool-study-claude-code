@@ -1,0 +1,181 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0198_linear_exp_positive_integer_param_range_s5_ex05
+content_revision_id: mst_p0198_linear_exp_positive_integer_param_range_s5_ex05-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0198_linear_exp_positive_integer_param_range_s5_ex05.card.yaml
+stem: |-
+  （2024 · 西安模拟）已知函数 $f(x)=a(x+1)e^x-x$，若存在唯一的正整数 $x_0$，使得 $f(x_0)<0$，则实数 $a$ 的取值范围是（  ）
+  A. $\left[-\frac{1}{2e},\frac{3}{4e^3}\right)$
+  B. $\left[\frac{3}{4e^3},\frac{2}{3e^2}\right)$
+  C. $\left[\frac{2}{3e^2},\frac{1}{2e}\right)$
+  D. $\left[\frac{1}{2e},\frac{1}{2}\right)$
+answer: |-
+  C
+
+  由 $f(x)=a(x+1)e^x-x$，条件 $f(x_0)<0$ 等价于 $a(x+1)<\frac{x}{e^x}$。令 $h(x)=a(x+1)$， $g(x)=\frac{x}{e^x}$，则需“存在唯一正整数 $x$ 使 $h(x)<g(x)$”。 因 $g'(x)=\frac{1-x}{e^x}$，$g$ 在 $x=1$ 取最大值 $\frac1e$，且在 $(1,+\infty)$ 单调递减。若 $a\le0$，则对任意正整数 $x$ 有 $h(x)\le0<g(x)$，不满足唯一性，故 $a>0$。此时 $h$ 单调递增，要使仅 $x=1$ 满足不等式，需 $h(1)<g(1)$ 且 $h(2)\ge g(2)$，即 $2a<\frac1e,\ 3a\ge\frac2{e^2}$，得到 $\frac{2}{3e^2}\le a<\frac1{2e}$，故选 C。
+rubric:
+  max_score: 4
+  criteria:
+    - step_id: step_1
+      description: 把“唯一正整数使 $f(x)<0$”改写成函数大小比较。
+      max_score: 1
+    - step_id: step_2
+      description: 先定出 $g(x)$ 的单峰结构并排除 $a\le0$。
+      max_score: 1
+    - step_id: step_3
+      description: 在 $a>0$ 下把“唯一正整数”压成 $x=1,2$ 两个阈值条件。
+      max_score: 1
+    - step_id: step_4
+      description: 解阈值不等式得到参数区间。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level: []
+  method:
+    primary: 参变量分离
+    secondary:
+      - 数形结合
+      - 含参数分类讨论
+    subroute:
+      - 过定点直线
+      - 整点判定
+      - 斜率夹整数
+  structure:
+    primary: 特殊幂函数与指数函数结构
+    secondary:
+      - 指对复合结构
+      - 非齐次结构
+    evidence:
+      - $h(x)=a(x+1)$ 过定点 $C(-1,0)$
+      - $g(x)=\frac{x}{e^x}$ 在 $x=1$ 取最大值 $\frac1e$
+      - $A(1,\frac1e),\ B(2,\frac{2}{e^2})$ 对应斜率 $\frac1{2e},\frac{2}{3e^2}$
+      - $\frac{2}{3e^2}\le a<\frac1{2e}$
+    normalization_moves_used:
+      - 把 $f(x)<0$ 变形成 $a(x+1)<\frac{x}{e^x}$。
+      - 把“唯一正整数”转成 $x=1$ 成立、$x=2$ 起不成立。
+      - 用定点连线（或等价的整数点比较）读出参数端点。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会由 $g^{\prime}(x)=\frac{1-x}{e^x}$ 判断单峰，回补导数单调极值基础。
+      - 若学生无法把“唯一正整数”翻译成 $h(1)<g(1),\ h(2)\ge g(2)$，回补函数性质与图像。
+      - 若学生在不等式端点开闭上反复出错，回补不等式工具基础。
+      - 若学生看不出 $a\le0$ 会导致无穷多正整数满足条件，回补指数对数基础。
+  detail_terms:
+    - $f(x)=a(x+1)e^x-x$
+    - $h(x)=a(x+1)$
+    - $g(x)=\frac{x}{e^x}$
+    - $A(1,\frac1e),\ B(2,\frac{2}{e^2}),\ C(-1,0)$
+    - $\frac{2}{3e^2}\le a<\frac1{2e}$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0198_linear_exp_positive_integer_param_range_s5_ex05
+source_evidence:
+  source_refs:
+    - ref_id: page_0198_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0198/page_0198.md
+      role: problem_start
+      evidence: page_0198 行29-34给出例5题干与选项 A-D。
+    - ref_id: page_0198_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0198/page_0198.md
+      role: solution
+      evidence: page_0198 行36给出完整解析：设 $h(x)=a(x+1)$、$g(x)=\frac{x}{e^x}$，并由图与斜率比较得到 $\frac{2}{3e^2}\le a<\frac{1}{2e}$，结论选 C。
+    - ref_id: page_0197_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0197/page_0197.md
+      role: local_context
+      evidence: page_0197 行29起是例4；page_0198 顶部对应例4续解，按题头归属规则不在本卡新建。
+    - ref_id: page_0199_local_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0199/page_0199.md
+      role: local_context
+      evidence: page_0199 为第6章“放缩”讲解页，无本批次例题题头。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0198.png
+      inspected: true
+      notes: 已核对页图：例5题干、选项、解析与底部示意图完整可读，且 page_0198 顶部确为例4续解。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0199.png
+      inspected: true
+      notes: 已核对页图：page_0199 为下一章放缩公式讲解，无需在本批建卡。
+  source_context: 本卡仅处理 page_0198 新起头的例5；page_0198 顶部是 page_0197 例4续解，page_0199 起为第6章讲解，均不新建题卡。
+  source_influence:
+    - 保留源解“参变量分离”主线：$f(x_0)<0 \Leftrightarrow a(x+1)<\frac{x}{e^x}$。
+    - 保留源解“过定点直线 vs 单峰曲线”图像判定：直线过 $C(-1,0)$，并用 $A(1,\frac1e)$、$B(2,\frac{2}{e^2})$ 给出斜率阈值。
+    - 保留结论区间端点的开闭：$\frac{2}{3e^2}\le a<\frac{1}{2e}$。
+  source_discrepancies: []
+original_problem:
+  stem: （2024 · 西安模拟）已知函数 $f(x)=a(x+1)e^x-x$，若存在唯一的正整数 $x_0$，使得 $f(x_0)<0$，则实数 $a$ 的取值范围是（  ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: $\left[-\frac{1}{2e},\frac{3}{4e^3}\right)$
+      text_latex: $\left[-\frac{1}{2e},\frac{3}{4e^3}\right)$
+    - label: B
+      text_raw: $\left[\frac{3}{4e^3},\frac{2}{3e^2}\right)$
+      text_latex: $\left[\frac{3}{4e^3},\frac{2}{3e^2}\right)$
+    - label: C
+      text_raw: $\left[\frac{2}{3e^2},\frac{1}{2e}\right)$
+      text_latex: $\left[\frac{2}{3e^2},\frac{1}{2e}\right)$
+    - label: D
+      text_raw: $\left[\frac{1}{2e},\frac{1}{2}\right)$
+      text_latex: $\left[\frac{1}{2e},\frac{1}{2}\right)$
+  answer: C
+  fidelity_notes:
+    - 源题为单选题，A-D 选项已按原页完整转录。
+    - “唯一的正整数”是判定条件核心，后续用 $x=1,2$ 的分界实现唯一性。
+solution:
+  source_solution_summary: 由 $f(x)=a(x+1)e^x-x$，条件 $f(x_0)<0$ 等价于 $a(x+1)<\frac{x}{e^x}$。令 $h(x)=a(x+1)$， $g(x)=\frac{x}{e^x}$，则需“存在唯一正整数 $x$ 使 $h(x)<g(x)$”。 因 $g'(x)=\frac{1-x}{e^x}$，$g$ 在 $x=1$ 取最大值 $\frac1e$，且在 $(1,+\infty)$ 单调递减。若 $a\le0$，则对任意正整数 $x$ 有 $h(x)\le0<g(x)$，不满足唯一性，故 $a>0$。此时 $h$ 单调递增，要使仅 $x=1$ 满足不等式，需 $h(1)<g(1)$ 且 $h(2)\ge g(2)$，即 $2a<\frac1e,\ 3a\ge\frac2{e^2}$，得到 $\frac{2}{3e^2}\le a<\frac1{2e}$，故选 C。
+  key_steps:
+    - step_id: step_1
+      statement: 把“唯一正整数使 $f(x)<0$”改写成函数大小比较。
+      formula_trace:
+        from: $a(x+1)e^x-x<0$
+        to: $a(x+1)<\frac{x}{e^x}$
+        operation: 移项并除以恒正的 $e^x$，再记 $h(x)=a(x+1)$、$g(x)=\frac{x}{e^x}$。
+        why: 把含参数不等式转成“直线与曲线在整数点的相对位置”问题。
+      source_ref: page_0198_solution
+    - step_id: step_2
+      statement: 先定出 $g(x)$ 的单峰结构并排除 $a\le0$。
+      formula_trace:
+        from: $g^{\prime}(x)=\frac{1-x}{e^x}$
+        to: $g(1)=\frac1e,\ g\text{ 在 }(1,+\infty)\text{ 递减；且 }a\le0\Rightarrow h(x)\le0<g(x)$
+        operation: 用导数判单调与极大值，再比较符号。
+        why: 若 $a\le0$ 会有无穷多个正整数满足 $h(x)<g(x)$，与“唯一”矛盾。
+      source_ref: page_0198_solution
+    - step_id: step_3
+      statement: 在 $a>0$ 下把“唯一正整数”压成 $x=1,2$ 两个阈值条件。
+      formula_trace:
+        from: $a>0,\ h(x)=a(x+1)\text{ 递增},\ g(x)\text{ 在 }x\ge1\text{ 递减}$
+        to: $h(1)<g(1),\ h(2)\ge g(2)$
+        operation: 利用一增一减：若在 $x=1$ 成立且从 $x=2$ 起不成立，则仅 $x=1$ 命中。
+        why: 这正是“存在唯一正整数解”的充要整数判定。
+      source_ref: page_0198_solution
+    - step_id: step_4
+      statement: 解阈值不等式得到参数区间。
+      formula_trace:
+        from: $2a<\frac1e,\ 3a\ge\frac2{e^2}$
+        to: $\frac{2}{3e^2}\le a<\frac1{2e}$
+        operation: 分别解两个一次不等式并取交集。
+        why: 对应选项 C。
+      source_ref: page_0198_solution
+teaching_card:
+  student_title: 唯一正整数条件先卡住 $x=1,2$
+  what_it_trains: 训练把“唯一整数解”题先做参变量分离，再用一增一减图像在相邻整数点做阈值判定。
+  recognition_cues:
+    - 题干含“存在唯一的正整数 $x_0$”。
+    - 式子可整理成“线性函数 $a(x+1)$ 与 $x/e^x$ 比较”。
+    - 源图给出过定点直线与单峰曲线的相对位置。
+  normalization_moves:
+    - 先写 $a(x+1)<\frac{x}{e^x}$。
+    - 再判 $g(x)=x/e^x$ 的峰值位置 $x=1$。
+    - 在 $a>0$ 下用 $x=1,2$ 两个整数点锁定唯一性。
+    - 最后解出区间并核对端点开闭。
+  common_failures:
+    - 忘记先分 $a\le0$ 与 $a>0$。
+    - 把“唯一正整数”误写成“唯一实数解”。
+    - 只写 $h(1)<g(1)$，漏掉 $h(2)\ge g(2)$。
+    - 端点写成 $(\frac{2}{3e^2},\frac1{2e}]$，开闭反了。
+  similar_practice_query: 唯一正整数 参数范围 a(x+1) 与 x/e^x 比较 x=1 x=2 阈值
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []

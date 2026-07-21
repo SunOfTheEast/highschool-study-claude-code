@@ -1,0 +1,220 @@
+schema: highschool-study.problem-card.v1
+content_item_id: ex_mst_327
+content_revision_id: ex_mst_327-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/ex_mst_327.card.yaml
+stem: |-
+  已知函数 $f(x)=\frac{1}{2}x^2+m\ln(1-x)$，其中 $m\in\mathbf{R}$.
+  1. 求函数 $f(x)$ 的单调区间。
+  2. 若函数 $f(x)$ 存在两个极值点 $x_1,x_2$，且 $x_1<x_2$，证明：$\frac{1}{4}-\frac{1}{2}\ln2<\frac{f(x_1)}{x_2}<0$.
+answer: |-
+  第 (1) 问按 m 分类给出单调区间；第 (2) 问结论为 $\frac{1}{4}-\frac{1}{2}\ln2<\frac{f(x_1)}{x_2}<0$。
+
+  先由定义域 x<1 和导数 $f'(x)=\frac{x^2-x+m}{x-1}$ 分类讨论单调性。若有两个极值点，则必须 $0<m<1/4$，且 $0<x_1<1/2<x_2<1$、$x_1+x_2=1$、$x_1x_2=m$。把 $f(x_1)/x_2$ 中的 $m$ 与 $1-x_1$ 分别替换为 $x_1x_2$ 与 $x_2$，再令 $t=x_2$，得到 $g(t)=\frac12(t+\frac1t-2)+(1-t)\ln t$。利用 $-\ln t>1-t$ 或等价的 $-\ln t>-(t-1)$ 证明 $g'(t)>0$，于是 $g(t)$ 夹在端点极限 $g(1/2)=1/4-1/2\ln2$ 与 $g(1)=0$ 之间。
+rubric:
+  max_score: 6
+  criteria:
+    - step_id: step_1
+      description: 确定定义域与导数符号的控制量。
+      max_score: 1
+    - step_id: step_2
+      description: 第 (1) 问按二次方程 $x^2-x+m=0$ 的根在定义域内的位置分类。
+      max_score: 1
+    - step_id: step_3
+      description: 把“存在两个极值点”转成韦达关系和变量范围。
+      max_score: 1
+    - step_id: step_4
+      description: 将目标比值改写成只含 $x_2$ 的函数值。
+      max_score: 1
+    - step_id: step_5
+      description: 构造 $g(t)$ 并证明它在开区间上递增。
+      max_score: 1
+    - step_id: step_6
+      description: 由端点值得到严格夹逼。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式证明
+    part_level:
+      - part_id: "1"
+        goal: 零点/极值点分析
+        notes: 通过导函数零点分类得到单调区间。
+      - part_id: "2"
+        goal: 不等式证明
+        notes: 证明含两个极值点的比值范围。
+  method:
+    primary: 对称化与偏移
+    secondary:
+      - 自由度与主元
+      - 拟合与夹逼
+    subroute:
+      - 极值点方程韦达化
+      - 用 x_1+x_2=1 将 ln(1-x_1) 变成 ln x_2
+      - 构造单变量 g(t) 后用端点值夹逼
+  structure:
+    primary: 极值点偏移结构
+    secondary:
+      - 对称结构
+      - 非齐次结构
+    evidence:
+      - 两个极值点来自同一个二次方程 $x^2-x+m=0$。
+      - 韦达关系给出 $x_1+x_2=1$，极值点关于 $1/2$ 对称。
+      - 目标不是 $f(x_1)-f(x_2)$，而是 $f(x_1)/x_2$，需要比值归一化。
+    normalization_moves_used:
+      - 定义域先行：$x<1$ 使 $x-1<0$，导数符号与分子符号相反。
+      - 韦达替参：$m=x_1x_2$，$x_1+x_2=1$。
+      - 主元选择：取 $t=x_2\in(1/2,1)$，把 $x_1$ 改写为 $1-t$。
+      - 对数端点化：$\ln(1-x_1)=\ln x_2=\ln t$。
+      - 导数放缩：用 $\ln t<t-1$ 得 $g'(t)>0$。
+  fallback:
+    only_if_trace_shows:
+      - 若学生忘记先写定义域 $x<1$，或因此把 $x-1<0$ 的导数符号看反，回补函数三要素与定义域。
+      - 若学生不能根据 $f'(x)$ 的符号分类写出单调区间和两个极值点条件，回补导数单调极值基础。
+      - 若学生不能从 $x^2-x+m=0$ 得到 $x_1+x_2=1$、$x_1x_2=m$，回补方程根分布与韦达。
+      - 若学生不能把 $\ln(1-x_1)$ 借 $1-x_1=x_2$ 化为 $\ln x_2$，回补指数对数基础。
+      - 若学生在 $\frac{f(x_1)}{x_2}$ 化成 $g(t)$ 的代数整理中断裂，回补代数恒等变形。
+  detail_terms:
+    - ln(1-x)
+    - 两个极值点
+    - x_1+x_2=1
+    - x_1x_2=m
+    - f(x_1)/x_2
+    - t in (1/2,1)
+    - ln t < t-1
+parts: &a1
+  - part_id: "1"
+    text: 求函数 $f(x)$ 的单调区间。
+  - part_id: "2"
+    text: 若函数 $f(x)$ 存在两个极值点 $x_1,x_2$，且 $x_1<x_2$，证明：$\frac{1}{4}-\frac{1}{2}\ln2<\frac{f(x_1)}{x_2}<0$.
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: ex_mst_327
+source_evidence:
+  source_refs:
+    - ref_id: page_0337
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0337/page_0337.md
+      role: problem_start_and_context
+      evidence: 第 9 章导数与双变量；小节标题为“4. f(x_1)/x_2 型”；例 11（2023 · 成都模拟）给出题干和解析开头。
+    - ref_id: page_0338
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0338/page_0338.md
+      role: problem_continuation_and_solution
+      evidence: 承接例 11，完成单调性分类与第 (2) 问证明。
+    - ref_id: page_0336
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0336/page_0336.md
+      role: local_section_setup
+      evidence: 前文小节为“f(x_1)-lambda f(x_2) 型”和“f(x_1)-lambda x_2 型”，说明本题属于双极值点表达式改写系列。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0337.png
+      inspected: true
+      notes: 核对题干、分式 f(x_1)/x_2、下界 1/4-1/2 ln2，以及解析中 m>=1/4 的符号行。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0338.png
+      inspected: true
+      notes: 核对续页中 x_1x_2=m、g(t) 定义、g'(t) 放缩和端点区间。
+  source_context: 本题位于第 9 章“导数与双变量”，前后例题围绕两个极值点 x_1,x_2 产生的韦达关系，把含参双点表达式降为单变量函数。直接上位小节为“f(x_1)-lambda x_2 型”，本题小节标题明确为“f(x_1)/x_2 型”。
+  source_influence:
+    - 目标不是一般双变量不等式，而是由两个极值点的韦达关系把 f(x_1)/x_2 化成 t=x_2 上的单变量端点夹逼。
+    - 核心结构来自 f'(x)=0 的二次方程 x^2-x+m=0，给出 x_1+x_2=1、x_1x_2=m 和 0<x_1<1/2<x_2<1。
+    - 关键教学动作是用 x_1=1-x_2、m=x_1x_2 把 ln(1-x_1) 改写成 ln x_2，再证明 g(t) 在 (1/2,1) 上递增。
+  source_discrepancies:
+    - field: legacy.title
+      old_value: 对称化-ln(1±x)型-双变量证明-2023成都模拟例11
+      corrected_value: 源页小节为“f(x_1)/x_2 型”，更准确是双极值点韦达降元/偏移比值型，不是 ln(1±x) 对称化构造题。
+      evidence_ref: page_0337
+    - field: legacy.solution_hint.part_1.m_ge_1_4
+      old_value: m >= 1/4 时 f'(x) >= 0，f(x) 在 (-infty,1) 递增
+      corrected_value: 由 f'(x)=(x^2-x+m)/(x-1)，x<1 且 x^2-x+m>=0，得 f'(x)<=0，故 f(x) 在 (-infty,1) 单调递减。源页同处也印成 >=0/递增，应视为符号性笔误。
+      evidence_ref: page_0337 image and derivative sign
+    - field: legacy.classification_v2.features.problem_conditions
+      old_value: 极值点不可显式求解；零点不可显式求解
+      corrected_value: 极值点可由二次方程显式表示；证明中实际不需要零点不可显式求解，而是使用 x_1+x_2=1、x_1x_2=m 降元。
+      evidence_ref: page_0338
+    - field: source_solution.notation
+      old_value: 续页结尾写 g(x) 在 (1/2,1) 递增
+      corrected_value: 应为 g(t) 在 (1/2,1) 递增；page_0338 的 Reconstruction Markers 已标明此处原文印刷为 g(x)。
+      evidence_ref: page_0338
+original_problem:
+  stem: 已知函数 $f(x)=\frac{1}{2}x^2+m\ln(1-x)$，其中 $m\in\mathbf{R}$.
+  parts: *a1
+  choices: []
+  answer: 第 (1) 问按 m 分类给出单调区间；第 (2) 问结论为 $\frac{1}{4}-\frac{1}{2}\ln2<\frac{f(x_1)}{x_2}<0$。
+  fidelity_notes:
+    - 题干与源图 page_0337 一致，参数记为 m，两个极值点记为 x_1,x_2。
+    - 第 (1) 问源解析的 m>=1/4 符号行与导数表达式矛盾；本卡在解法中给出数学修正，并在 source_discrepancies 中记录。
+    - 第 (2) 问源页将 x_1x_2= 与下一行 m 断开；按续页语义合并为 x_1x_2=m。
+solution:
+  source_solution_summary: 先由定义域 x<1 和导数 $f'(x)=\frac{x^2-x+m}{x-1}$ 分类讨论单调性。若有两个极值点，则必须 $0<m<1/4$，且 $0<x_1<1/2<x_2<1$、$x_1+x_2=1$、$x_1x_2=m$。把 $f(x_1)/x_2$ 中的 $m$ 与 $1-x_1$ 分别替换为 $x_1x_2$ 与 $x_2$，再令 $t=x_2$，得到 $g(t)=\frac12(t+\frac1t-2)+(1-t)\ln t$。利用 $-\ln t>1-t$ 或等价的 $-\ln t>-(t-1)$ 证明 $g'(t)>0$，于是 $g(t)$ 夹在端点极限 $g(1/2)=1/4-1/2\ln2$ 与 $g(1)=0$ 之间。
+  key_steps:
+    - step_id: step_1
+      statement: 确定定义域与导数符号的控制量。
+      formula_trace:
+        from: $f(x)=\frac12x^2+m\ln(1-x)$
+        to: $x<1,\quad f'(x)=x-\frac{m}{1-x}=x+\frac{m}{x-1}=\frac{x^2-x+m}{x-1}$
+        operation: 对二次项和对数项分别求导，并通分。
+        why: 单调性和极值点都由 $f'(x)$ 的符号决定；由于 $x-1<0$，分子符号需要反向读入导数符号。
+      source_ref: page_0337
+    - step_id: step_2
+      statement: 第 (1) 问按二次方程 $x^2-x+m=0$ 的根在定义域内的位置分类。
+      formula_trace:
+        from: $\Delta=1-4m$ and $x<1$
+        to: "$m\\ge\\frac14$: 递减；$0<m<\\frac14$: 外侧递减、中间递增；$m=0$: $(-\\infty,0)$ 递减、$(0,1)$ 递增；$m<0$: $(-\\infty,\\frac{1-\\sqrt{1-4m}}2)$ 递减、$(\\frac{1-\\sqrt{1-4m}}2,1)$ 递增"
+        operation: 用判别式和根 $\frac{1\pm\sqrt{1-4m}}2$ 分类，并结合分母 $x-1<0$ 判号。
+        why: 当第二根不在定义域内时只保留左根；当两根都在定义域内时产生两个极值点。
+      source_ref: page_0337-page_0338
+    - step_id: step_3
+      statement: 把“存在两个极值点”转成韦达关系和变量范围。
+      formula_trace:
+        from: $f'(x_i)=0\ (i=1,2),\ x_1<x_2$
+        to: $0<m<\frac14,\quad 0<x_1<\frac12<x_2<1,\quad x_1+x_2=1,\quad x_1x_2=m$
+        operation: 把极值点视为方程 $x^2-x+m=0$ 的两根，并使用韦达定理。
+        why: 这是把双点含参表达式降到一个主元的入口。
+      source_ref: page_0338
+    - step_id: step_4
+      statement: 将目标比值改写成只含 $x_2$ 的函数值。
+      formula_trace:
+        from: $\frac{f(x_1)}{x_2}=\frac{\frac12x_1^2+m\ln(1-x_1)}{x_2}$
+        to: $\frac12\left(x_2+\frac1{x_2}-2\right)+(1-x_2)\ln x_2$
+        operation: 用 $x_1=1-x_2$、$m=x_1x_2$、$1-x_1=x_2$ 代换，并除以 $x_2$。
+        why: 目标中的 $x_1,m,\ln(1-x_1)$ 被统一到同一个变量 $x_2\in(1/2,1)$。
+      source_ref: page_0338
+    - step_id: step_5
+      statement: 构造 $g(t)$ 并证明它在开区间上递增。
+      formula_trace:
+        from: $g(t)=\frac12(t+\frac1t-2)+(1-t)\ln t,\quad \frac12<t<1$
+        to: $g'(t)=\frac12(1-\frac1{t^2})-\ln t+\frac1t-1>\frac12(1-\frac1{t^2})-(t-1)+\frac1t-1=\frac{(1-t^2)(2t-1)}{2t^2}>0$
+        operation: 求导后用 $\ln t<t-1$（$0<t<1$ 时严格成立）替换 $-\ln t>-(t-1)$。
+        why: 递增性把比值范围化为端点值范围。
+      source_ref: page_0338
+    - step_id: step_6
+      statement: 由端点值得到严格夹逼。
+      formula_trace:
+        from: $\frac12<t<1,\quad g'(t)>0$
+        to: $g(t)\in\left(g(\frac12),g(1)\right)=\left(\frac14-\frac12\ln2,0\right)$
+        operation: 代入端点并利用开区间上的严格单调性。
+        why: $t=x_2$，所以 $g(t)=f(x_1)/x_2$，即为所证不等式。
+      source_ref: page_0338
+teaching_card:
+  student_title: 双极值点比值题：先韦达，再把 $\ln(1-x_1)$ 推到 $x_2$
+  what_it_trains: 训练从导数零点的韦达关系中发现对称中心，并把含参、含双点、含对数的目标式降成一个可单调夹逼的单变量函数。
+  recognition_cues:
+    - 题目给出两个极值点 $x_1<x_2$，而导函数零点是二次方程。
+    - 目标式含 $f(x_1)$ 与另一个点 $x_2$ 的比值或混合项。
+    - 导函数零点能推出 $x_1+x_2$ 为常数，本题为 $x_1+x_2=1$。
+    - 函数中有 $\ln(1-x)$，而 $1-x_1=x_2$ 正好能把对数变成 $\ln x_2$。
+  normalization_moves:
+    - 先写定义域，避免把 $x-1<0$ 的导数符号看反。
+    - 由 $f'(x_i)=0$ 写出 $x_i^2-x_i+m=0$，立刻记录 $x_1+x_2=1$、$x_1x_2=m$。
+    - 遇到 $f(x_1)/x_2$，不要急着估计，先把 $m$、$x_1$、$1-x_1$ 全部换成 $x_2$。
+    - 把所得表达式命名为 $g(t)$，用端点 $t=1/2,1$ 读出目标上下界。
+  common_failures:
+    - 忽略定义域 $x<1$，导致 $m\ge1/4$ 时单调性方向写反。
+    - 只写出 $x_1,x_2$ 的显式根，却没有使用 $x_1+x_2=1$ 简化对数。
+    - 把 $g'(t)>0$ 的证明写成笼统“整理可得”，没有说明使用 $\ln t<t-1$。
+    - 把端点当作可取值，忘记 $x_2\in(1/2,1)$ 给出的是严格不等式。
+  similar_practice_query: 导数 双极值点 韦达 x1+x2=常数 f(x1)/x2 ln(1-x) 极值点偏移
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 源图已核对题干、续页公式和端点值。
+    - 唯一需注意的是源解析和 legacy solution_hint 都把 m>=1/4 时的单调方向写反；本卡已按导数符号修正并记录。
+    - Reviewer kept `only_if_trace_shows` as conditional remediation text rather than flattening it to bare fallback labels.

@@ -1,0 +1,243 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0273_log1px_quadratic_prefactor_extreme_dog_ex11
+content_revision_id: mst_p0273_log1px_quadratic_prefactor_extreme_dog_ex11-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0273_log1px_quadratic_prefactor_extreme_dog_ex11.card.yaml
+stem: |-
+  （2018 · 新课标Ⅲ）已知函数 $f(x)=(2+x+ax^2)\ln(1+x)-2x$。
+  1. 若 $a=0$，证明：当 $-1<x<0$ 时，$f(x)<0$；当 $x>0$ 时，$f(x)>0$。
+  2. 若 $x=0$ 是 $f(x)$ 的极大值点，求 $a$ 的值。
+answer: |-
+  第(1)问：成立。第(2)问：$a=-\frac16$。
+
+  第(1)问取 $a=0$，$f=(2+x)\ln(1+x)-2x$。 $f^\prime=\ln(1+x)-\frac{x}{1+x}$， $f^{\prime\prime}=\frac{x}{(1+x)^2}$，所以 $f^\prime$ 在 $(-1,0)$ 递减、在 $(0,+\infty)$ 递增， 且 $f^\prime(0)=0$，故 $f^\prime\ge0$，$f$ 全域递增。 又 $f(0)=0$，得到 0 左负右正。第(2)问直接法： $f^\prime=\frac{h(x)}{1+x}$，其中 $h=ax^2-x+(1+2ax)(1+x)\ln(1+x)$。要使 0 为极大值点， 需要 $h$ 在 0 左正右负；极点效应失效后令 $h^{\prime\prime}(0)=6a+1=0$，得 $a=-\frac16$，并验证其可行。 其他参数段会在 0 的某一侧让 $f$ 单调方向错误。对数单身狗法把 局部 $f(x)\le f(0)$ 转成 $\ln(1+x)-\frac{2x}{2+x+ax^2}\le0$，同样得到 $a=-\frac16$。
+rubric:
+  max_score: 8
+  criteria:
+    - step_id: step_1
+      description: 第(1)问：取 $a=0$ 并求导。
+      max_score: 1
+    - step_id: step_2
+      description: 第(1)问：由 $f^\prime\ge0$ 得符号。
+      max_score: 1
+    - step_id: step_3
+      description: 第(2)问：把 $f^\prime$ 写成分子 $h$。
+      max_score: 1
+    - step_id: step_4
+      description: 第(2)问：用高阶局部条件锁定 $a$。
+      max_score: 1
+    - step_id: step_5
+      description: 第(2)问：验证 $a=-\frac16$。
+      max_score: 1
+    - step_id: step_6
+      description: 第(2)问：排除 $-\frac16<a<0$ 和 $a<-\frac16$。
+      max_score: 1
+    - step_id: step_7
+      description: 对数单身狗路线：把极大值不等式改写。
+      max_score: 1
+    - step_id: step_8
+      description: 泰勒背景：解释答案来源。
+      max_score: 1
+graph:
+  goal:
+    primary: 求参数范围
+    part_level:
+      - part_id: "1"
+        goal: 不等式证明
+        target: 第 1 问
+        result: $a=0$ 时，$-1<x<0$ 有 $f(x)<0$，$x>0$ 有 $f(x)>0$。
+      - part_id: "2"
+        goal: 数值求值
+        target: 第 2 问
+        result: $a=-\frac16$。
+  method:
+    primary: 局部逼近与找点
+    secondary:
+      - 显隐点探路
+      - 高阶因式分解
+      - 充分/必要性探路
+    subroute:
+      - 对数单身狗恒等变形
+      - 极点效应失效
+      - 高阶导找变号
+      - 泰勒最低阶项锁参
+  structure:
+    primary: 指对复合结构
+    secondary:
+      - 局部逼近结构
+      - 非齐次结构
+      - 不等式工具结构
+    evidence:
+      - $(2+x+ax^2)\ln(1+x)-2x$
+      - $\ln(1+x)-\frac{2x}{2+x+ax^2}$
+      - $h^{\prime\prime}(0)=6a+1$
+      - $a=-\frac16$
+      - 三次项消失、四次项为负
+    normalization_moves_used:
+      - 把 $f^\prime$ 通分成分子 $h$。
+      - 用 $1+x>0$ 转移符号判断。
+      - 对数单身狗恒等变形：把 $\ln(1+x)$ 单独分离。
+      - 用高阶导和泰勒解释极大值条件。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会求 $\ln(1+x)$ 相关导数，回补导数运算与几何意义。
+      - 若学生不知道极大值需要左增右减，回补导数单调极值基础。
+      - 若学生通分和分子提取卡住，回补代数恒等变形。
+      - 若学生不理解对数单身狗，回补指数对数基础。
+      - 若学生高阶局部项判断混乱，回补函数性质与图像。
+  detail_terms:
+    - $(2+x+ax^2)\ln(1+x)-2x$
+    - 对数单身狗
+    - $\ln(1+x)-\frac{2x}{2+x+ax^2}$
+    - $h^{\prime\prime}(0)=6a+1$
+    - $a=-\frac16$
+    - 泰勒极值界定
+parts: &a1
+  - id: "1"
+    text: 若 $a=0$，证明：当 $-1<x<0$ 时，$f(x)<0$；当 $x>0$ 时，$f(x)>0$。
+  - id: "2"
+    text: 若 $x=0$ 是 $f(x)$ 的极大值点，求 $a$ 的值。
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0273_log1px_quadratic_prefactor_extreme_dog_ex11
+source_evidence:
+  source_refs:
+    - ref_id: page_0273_ex11_problem_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0273/page_0273.md
+      role: problem_start
+      evidence: page_0273 给出例11题头：$f(x)=(2+x+ax^2)\ln(1+x)-2x$；第(1)问 $a=0$ 时证明 0 两侧符号；第(2)问若 $x=0$ 是极大值点，求 $a$。
+    - ref_id: page_0273_ex11_solution_start
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0273/page_0273.md
+      role: solution
+      evidence: page_0273 例11解析开始第(1)问：$a=0$ 时 $f=(2+x)\ln(1+x)-2x$，求导得到 $f^\prime=\ln(1+x)-\frac{x}{1+x}$。
+    - ref_id: page_0274_ex11_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0274/page_0274.md
+      role: solution
+      evidence: page_0274 延续例11：完成第(1)问；第(2)问给出直接高阶导路线，令 $h=ax^2-x+(1+2ax)(1+x)\ln(1+x)$，得到 $a=-\frac16$，并用三种参数区间排除。随后给出“对数单身狗”路线。
+    - ref_id: page_0275_ex11_solution_continuation
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0275/page_0275.md
+      role: solution
+      evidence: page_0275 页首延续“对数单身狗”路线并得 $a=-\frac16$；随后用泰勒公式解释为什么直接法和对数单身狗答案一致。
+    - ref_id: page_0275_ex12_local_context_next
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0275/page_0275.md
+      role: local_context
+      evidence: page_0275 中下部另起例12，说明例11在 page_0275 中部闭合。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0273.png
+      inspected: true
+      notes: 已核对页图：例11题头与第(1)问解析起于 page_0273 页底。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0274.png
+      inspected: true
+      notes: 已核对页图：page_0274 为例11 第(1)(2)问主体解析。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0275.png
+      inspected: true
+      notes: 已核对页图：page_0275 页首继续例11，对数单身狗和泰勒背景结束后另起例12。
+  source_context: 本卡处理 page_0273 起头、page_0274/page_0275 续完的例11；page_0275 例12排除。
+  source_influence:
+    - 保留第(1)问：$a=0$ 时通过 $f^\prime$ 的单调性证明 $f$ 在 0 两侧异号。
+    - 保留第(2)问直接法：把 $f^\prime$ 的分子记为 $h$，用极点效应失效和 $h^{\prime\prime}(0)=0$ 得 $a=-\frac16$，再排除两侧参数。
+    - 保留第(2)问对数单身狗路线：局部把 $f\le f(0)$ 转成 $\ln(1+x)-\frac{2x}{2+x+ax^2}\le0$。
+    - 保留泰勒解释：$x^3$ 系数归零锁定 $a=-\frac16$，$x^4$ 系数为负保证极大值。
+  source_discrepancies:
+    - type: corrected_auxiliary_condition
+      source_ref: page_0275_ex11_solution_continuation
+      observed: page_0275 top appears to write $l^\prime(0)=0$ before deriving $a=-\frac16$.
+      resolved_as: use $l(0)=0$ for the auxiliary polynomial $l(x)=a^2x^2+4ax+6a+1$.
+      reason: $l(0)=6a+1=0$ gives $a=-\frac16$; $l^\prime(0)=4a=0$ would give $a=0$, contradicting the source conclusion and the rest of the proof.
+original_problem:
+  stem: （2018 · 新课标Ⅲ）已知函数 $f(x)=(2+x+ax^2)\ln(1+x)-2x$。
+  parts: *a1
+  choices: []
+  answer: 第(1)问：成立。第(2)问：$a=-\frac16$。
+  fidelity_notes:
+    - 定义域为 $x>-1$。
+    - source 同时给出直接高阶导法、对数单身狗法和泰勒背景解释。
+solution:
+  source_solution_summary: 第(1)问取 $a=0$，$f=(2+x)\ln(1+x)-2x$。 $f^\prime=\ln(1+x)-\frac{x}{1+x}$， $f^{\prime\prime}=\frac{x}{(1+x)^2}$，所以 $f^\prime$ 在 $(-1,0)$ 递减、在 $(0,+\infty)$ 递增， 且 $f^\prime(0)=0$，故 $f^\prime\ge0$，$f$ 全域递增。 又 $f(0)=0$，得到 0 左负右正。第(2)问直接法： $f^\prime=\frac{h(x)}{1+x}$，其中 $h=ax^2-x+(1+2ax)(1+x)\ln(1+x)$。要使 0 为极大值点， 需要 $h$ 在 0 左正右负；极点效应失效后令 $h^{\prime\prime}(0)=6a+1=0$，得 $a=-\frac16$，并验证其可行。 其他参数段会在 0 的某一侧让 $f$ 单调方向错误。对数单身狗法把 局部 $f(x)\le f(0)$ 转成 $\ln(1+x)-\frac{2x}{2+x+ax^2}\le0$，同样得到 $a=-\frac16$。
+  key_steps:
+    - step_id: step_1
+      statement: 第(1)问：取 $a=0$ 并求导。
+      formula_trace:
+        from: $f(x)=(2+x)\ln(1+x)-2x$
+        to: $f^\prime(x)=\ln(1+x)-\frac{x}{1+x}$，$f^{\prime\prime}(x)=\frac{x}{(1+x)^2}$
+        operation: 代入 $a=0$ 后求导。
+        why: 用 $f^\prime$ 的单调性判断 $f$ 在 0 两侧的符号。
+      source_ref: page_0273_ex11_solution_start
+    - step_id: step_2
+      statement: 第(1)问：由 $f^\prime\ge0$ 得符号。
+      formula_trace:
+        from: $f^\prime$ 在 $(-1,0)$ 递减、在 $(0,+\infty)$ 递增，$f^\prime(0)=0$
+        to: $f$ 在 $(-1,+\infty)$ 递增，且 $f(0)=0$
+        operation: 单调性合并。
+        why: 递增函数过原点，左侧负、右侧正。
+      source_ref: page_0274_ex11_solution_continuation
+    - step_id: step_3
+      statement: 第(2)问：把 $f^\prime$ 写成分子 $h$。
+      formula_trace:
+        from: $f^\prime(x)$
+        to: $f^\prime(x)=\frac{ax^2-x+(1+2ax)(1+x)\ln(1+x)}{1+x}$
+        operation: 通分并定义 $h$ 为分子。
+        why: 因为 $1+x>0$，$f^\prime$ 的符号由 $h$ 决定。
+      source_ref: page_0274_ex11_solution_continuation
+    - step_id: step_4
+      statement: 第(2)问：用高阶局部条件锁定 $a$。
+      formula_trace:
+        from: $h^\prime(0)=0$，$h^{\prime\prime}(0)=6a+1$
+        to: $6a+1=0$，$a=-\frac16$
+        operation: 极点效应失效后继续看二阶导。
+        why: 0 要成为 $h$ 的变号点，低阶非零项不能给错方向。
+      source_ref: page_0274_ex11_solution_continuation
+    - step_id: step_5
+      statement: 第(2)问：验证 $a=-\frac16$。
+      formula_trace:
+        from: $a=-\frac16$
+        to: $h^{\prime\prime}(x)>0$ on $(-1,0)$，$h^{\prime\prime}(x)<0$ on $(0,+\infty)$，故 $h$ 左正右负
+        operation: 判 $h^{\prime\prime}$、$h^\prime$、$h$ 的单调链。
+        why: 得到 $f^\prime$ 左正右负，所以 $x=0$ 是极大值点。
+      source_ref: page_0274_ex11_solution_continuation
+    - step_id: step_6
+      statement: 第(2)问：排除 $-\frac16<a<0$ 和 $a<-\frac16$。
+      formula_trace:
+        from: $h^{\prime\prime}(0)$ 的正负
+        to: 存在一侧小区间使 $f^\prime$ 符号与极大值要求相反
+        operation: 找点证明错误变号。
+        why: 说明 $a=-\frac16$ 是唯一值。
+      source_ref: page_0274_ex11_solution_continuation
+    - step_id: step_7
+      statement: 对数单身狗路线：把极大值不等式改写。
+      formula_trace:
+        from: $(2+x+ax^2)\ln(1+x)-2x\le0$
+        to: $\ln(1+x)-\frac{2x}{2+x+ax^2}\le0$
+        operation: 局部除以正的 $2+x+ax^2$。
+        why: 把对数单独拎出来，降低求导复杂度。
+      source_ref: page_0274_ex11_solution_continuation
+    - step_id: step_8
+      statement: 泰勒背景：解释答案来源。
+      formula_trace:
+        from: $(2+x+ax^2)\ln(1+x)-2x$ 的 0 附近展开
+        to: 三次项系数 $a-\frac12+\frac23=0$，四次项系数为 $-\frac1{12}<0$
+        operation: 展开到四阶。
+        why: 三次项必须消失，四次项为负才能在 0 处取极大值。
+      source_ref: page_0275_ex11_solution_continuation
+teaching_card:
+  student_title: 把对数单独拎出来，少算一层导数
+  what_it_trains: 训练极点效应失效后的高阶局部判断；对数单身狗只是第一眼破开式子的恒等变形，用来降低求导难度。
+  recognition_cues:
+    - 题面是 $(2+x+ax^2)\ln(1+x)-2x$。
+    - 第(2)问只关心 $x=0$ 是否为极大值点。
+    - 直接求导会出现复杂分子，高阶导很重，对数单身狗可以先把式子拆开。
+  normalization_moves:
+    - 第(1)问先证明 $a=0$ 时函数过 0 左负右正。
+    - 第(2)问直接法：提取 $f^\prime$ 分子 $h$。
+    - 先用恒等变形：把 $f\le f(0)$ 改成 $\ln(1+x)-\frac{2x}{2+x+ax^2}\le0$。
+    - 用 0 附近最低阶项锁定 $a=-\frac16$。
+  common_failures:
+    - 只算出 $h^{\prime\prime}(0)=0$，没有排除其他 $a$。
+    - 把 $2+x+ax^2$ 直接除掉时不说明局部为正。
+    - 把 page_0275 的辅助条件误读成 $l^\prime(0)=0$。
+    - 不会解释为什么对数单身狗不改变局部极值位置。
+  similar_practice_query: 对数单身狗 (2+x+ax^2)ln(1+x)-2x 极大值 a=-1/6 泰勒
+quality:
+  confidence: high
+  needs_review: false
+  review_notes: []
