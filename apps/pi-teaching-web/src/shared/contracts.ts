@@ -48,3 +48,45 @@ export type PlanWorkspaceSnapshot = {
   coach: { sessionKey: SessionKey; sessionId: string | null };
   lessons: LessonNode[];
 };
+
+export type ChatMessage = {
+  id: string;
+  role: 'student' | 'coach' | 'tutor';
+  text: string;
+  complete: boolean;
+};
+
+export type StudyViewEvent =
+  | { type: 'snapshot'; workspace: PlanWorkspaceSnapshot }
+  | { type: 'message'; sessionKey: SessionKey; message: ChatMessage }
+  | { type: 'message-delta'; sessionKey: SessionKey; messageId: string; delta: string }
+  | {
+    type: 'phase';
+    sessionKey: SessionKey;
+    phase: 'planning' | 'preparing' | 'waiting' | 'teaching' | 'paused' | 'reviewing';
+  }
+  | {
+    type: 'work-status';
+    sessionKey: SessionKey;
+    tool: string;
+    status: 'running' | 'done' | 'failed';
+    label: string;
+  }
+  | { type: 'activity'; lessonId: string; block: ActivityBlock }
+  | {
+    type: 'route-change';
+    lessonId: string;
+    action: 'insert' | 'skip' | 'move' | 'repeat';
+    blockId: string;
+    reason: string;
+  }
+  | {
+    type: 'ability-update';
+    methods: Array<{
+      method: string;
+      state: 'unobserved' | 'unstable' | 'steady';
+      evidence: number;
+      sources: string[];
+    }>;
+  }
+  | { type: 'session-error'; sessionKey: SessionKey; message: string };
