@@ -1,8 +1,8 @@
 # Pi 教学 Web 前端设计
 
-状态：父子 Session 修订已确认，等待文档复核
+状态：完整设计已确认，等待书面复核
 
-日期：2026-07-21
+日期：2026-07-21；2026-07-22 加入深度模式设计
 
 面向读者的中文说明：[Pi 教学前端：中文设计说明](../../zh-CN/Pi教学前端设计说明.md)
 
@@ -16,6 +16,8 @@ Highschool Study 增加一个由 Pi 启动的本地 Web 前端。前端不是通
 
 - Coach Agent：每个 Plan 一个持久 Session，负责方向讨论、课后复盘、进度解释和备课；备课是 Coach 按需加载的 Skill，不再单设 Designer Agent 或 Designer Session。
 - Tutor Agent：每个正式开始的 Lesson 一个持久 Session，只负责当前 Lesson 的多轮教学、课堂节点推进和 Trace 记录；尚未开始的 Lesson 先作为侧边栏子节点存在。
+
+Coach 与 Tutor 都可以在各自 Session 内开启“深度模式”。深度模式不是第三个用户可见 Agent，而是父 Agent 按需加载的动态工作流 Skill：它生成结构化任务图，由 `pi-subagents` 创建临时、隔离、默认只读的子 Session 并行执行。子 Session 不出现在 Plan 侧边栏、不拥有长期记忆，也不能直接写入学习集；Coach 或 Tutor 始终负责最终判断和正式写入。
 
 每个 Plan 在界面中表现为一个会话工作区：Coach Session 是根会话，Plan 的 `Lesson Index` 中每个 Lesson 是一个可进入的 Tutor 子会话。学生在同一个聊天外壳的侧边栏点击 Coach 或 Lesson 即可切换；结束 Lesson 后默认回到 Coach，也可以随时主动返回。这里的“父子”只表示 Plan 归属和导航关系，不表示上下文继承。Coach/Tutor 不复制彼此的聊天记录，只通过 learning set 文件和带来源的摘要交接。
 
@@ -33,6 +35,7 @@ Highschool Study 增加一个由 Pi 启动的本地 Web 前端。前端不是通
 - 默认只向学生返回 Student View；完整备课内容只在开发者启动模式中可见。
 - 断开或刷新后，可以使用 Pi Session 和 Markdown 文件恢复当前学习位置。
 - 用实时能力星图、动态课堂路线、课后回放和证据透镜呈现“为什么这样教、能力为什么变化”。
+- 允许 Coach 和 Tutor 以 Session 级深度模式执行多视角检索、分析和对抗检查，并在前端显示结构化工作流进度。
 - 允许人设驱动视觉皮肤和轻量阶段动画，但不让展示层改变教学事实。
 
 ### 2.2 首版非目标
@@ -43,6 +46,8 @@ Highschool Study 增加一个由 Pi 启动的本地 Web 前端。前端不是通
 - 移动端原生应用；
 - Obsidian 编辑器集成；
 - Claude Code、OpenCode 等多运行时适配；
+- 永久专家 Agent、专家长期记忆或自主写入学习状态的 Agent 团队；
+- 模型临时编写并执行任意 JavaScript 工作流；
 - 对拥有本机文件系统访问权的攻击者隐藏答案。
 
 首版的 Student/Teacher 隔离用于防止课堂界面意外剧透，而不是建立操作系统级安全边界。
@@ -58,6 +63,9 @@ flowchart LR
     Workspace --> Tutor["Tutor 子 AgentSession\n每个 Lesson 一个"]
     Coach --> Skills["召回、备课、复盘 Skills"]
     Tutor --> Teaching["上课、关闭课程 Skills"]
+    Coach --> Deep["深度模式 Skill\n结构化 Workflow Graph"]
+    Tutor --> Deep
+    Deep --> Subagents["pi-subagents\n临时只读子 Session"]
     Coach <--> Files["Markdown learning set"]
     Tutor <--> Files
     Coach <--> Tools["题卡 / Trace 原生工具"]
@@ -66,15 +74,17 @@ flowchart LR
     Tools --> Projector
     Coach --> Projector
     Tutor --> Projector
+    Subagents --> Projector
     Projector --> Server
 ```
 
-本地服务承担四项职责：
+本地服务承担五项职责：
 
 1. 从 Plan `Lesson Index` 建立 Coach 根节点和 Lesson 子节点，并创建、恢复、暂停或释放对应 `AgentSession`；
 2. 维护当前选中的会话，把浏览器输入只发送给该 Session；
 3. 把 Pi 事件、Lesson 变化和教学工具结果确定性映射为 `StudyViewEvent`；
-4. 为学生模式和开发者模式生成不同的数据投影。
+4. 把深度工作流的任务图和生命周期事件投影为可折叠任务轨道；
+5. 为学生模式和开发者模式生成不同的数据投影。
 
 它不拥有学习数据库，不复制 Roadmap、Plan、Lesson、Trace 或长期记忆。父子关系由 Plan、Lesson 和 runtime Session 绑定推导，不新增会话树数据库，也不向 Pi transcript 写入另一 Session 的历史。
 
@@ -136,7 +146,7 @@ Tutor Session 与一个 Lesson 一一绑定，并作为所属 Plan 下的逻辑�
 - 点击 `prepared` Lesson：展示无剧透摘要；学生明确开始后才创建或恢复 Tutor Session。
 - 点击 `active` 或 `paused` Lesson：恢复对应 Tutor Session 和课堂节点。
 - 点击 `closed` 或 `abandoned` Lesson：进入只读回放，不重新激活 Tutor。
-- 同一时刻只有当前选中的 Coach 或 Tutor Session 接收学生输入；其他 Session 可以持久存在，但不会后台继续生成。
+- 同一时刻只有当前选中的 Coach 或 Tutor Session 接收学生输入；其他 Coach/Tutor Session 可以持久存在，但不会后台继续生成。已经由学生确认启动的深度工作流可以在所属父 Session 下继续，切回该 Session 时恢复任务轨道。
 
 前端在 Lesson 正常关闭后默认把焦点返回 Coach。除此之外，导航权始终在学生手里，而不是由模型决定切换哪个 Agent。
 
@@ -175,6 +185,18 @@ sequenceDiagram
 ```
 
 Tutor 不接收 Coach transcript；Coach 恢复时也不接收 Tutor transcript。交接消息只包含真实 Lesson 路径、状态和“请读取相应摘要”的指令。侧边栏可以把这些 Session 排在同一棵树里，但这只是 UI 投影，不会把消息数组合并后发给模型。
+
+### 4.7 深度模式的 Session 边界
+
+深度模式是当前 Coach 或 Tutor Session 的本地开关。开启后，父 Agent 仍先判断现有信息是否已经足够；只有多视角结果可能改变下一步教学决策时，才创建工作流。临时子 Session：
+
+- 只属于触发它的父 Session，不成为 Plan 会话树节点；
+- 不继承完整父 transcript，只接收本任务的目标、来源句柄、允许读取范围、输出格式和预算；
+- 默认只读，不能调用 `trace_append`、`classroom_update` 或直接修改 Markdown；
+- 将结构化结果和原始 JSON 返回父 Agent，由父 Agent 选择是否采纳；
+- 生命周期与父 Session 绑定，但不参与 Coach/Tutor 长期记忆聚合。
+
+Coach/Tutor transcript 不复制给临时子 Session，临时子 Session 的 transcript 也不回填父 transcript。父 Agent 只接收最终综合、关键来源和可回读的 `workflow_id`，避免一次并行分析永久撑大上下文。
 
 ## 五、Pi 的记忆承载方式
 
@@ -215,6 +237,7 @@ Coach ResourceLoader 提供：
 - 当前 Plan 定位；
 - 负责读取学习集概述的进入 Skill，以及选中人设；
 - Roadmap/Plan 召回、进度检查、备课、复盘、纠正记录和 Plan 记忆聚合 Skills；
+- 深度模式 Skill 与 Coach 临时角色模板；
 - 四个题卡/Trace/来源原生工具。
 
 Tutor ResourceLoader 提供：
@@ -223,6 +246,7 @@ Tutor ResourceLoader 提供：
 - 当前 Lesson 定位；
 - 选中人设；
 - 教学召回、上课、关闭课程和纠正课堂记录 Skills；
+- 深度模式 Skill 与 Tutor 临时角色模板；
 - 课堂所需的题卡/Trace/来源原生工具；
 - 不提供备课 Skill，也不注入 `planner-attention.md`。
 
@@ -296,6 +320,8 @@ Coach、备课进度和 Tutor 课堂使用同一页面外壳。左侧是当前 P
 
 主区域采用对话流。结构化题目和材料作为消息流中的专用组件呈现；课堂节点抽屉提供可跳转的结构化回看，防止长课变成无法导航的消息瀑布。节点抽屉同时显示当前有效路线；节点插入、跳过、重排或重复时以动画更新，并展示学生安全的变更理由。
 
+深度模式运行时，主区域显示一个独立于聊天消息的可折叠任务轨道。它展示工作流目标、任务依赖、完成数量、当前运行节点、来源数量和取消操作；工作流结束后折叠成一行。原始子 Session 对话不进入消息流，也不因多个并行任务形成新的消息瀑布。
+
 能力星图可以作为可折叠侧栏随课堂更新。它不占据作答主区域，也不在学生正在思考时弹出带答案倾向的诊断。
 
 ### 6.3 备课本
@@ -313,11 +339,12 @@ Coach、备课进度和 Tutor 课堂使用同一页面外壳。左侧是当前 P
 
 ### 7.1 事件来源
 
-界面消费三种已有事实：
+界面消费四种已有事实：
 
 1. Pi `AgentSessionEvent`：消息流、工具开始/结束、Extension UI 请求、Session 状态；
 2. Lesson 快照与文件变化：当前 ActivityBlock、节点状态、Lesson 状态和证据链接；
-3. 教学工具结果：真实题卡、Trace、来源和写入确认。
+3. 教学工具结果：真实题卡、Trace、来源和写入确认；
+4. `pi-subagents` 生命周期记录：工作流、任务、依赖、状态和结构化最终输出。
 
 `Study Event Projector` 使用事件名、工具名和 Lesson 字段做确定性映射。它不调用另一个 LLM 推断应该渲染什么。
 
@@ -331,9 +358,11 @@ Coach、备课进度和 Tutor 课堂使用同一页面外壳。左侧是当前 P
 - `work-status`：搜索题卡、写入 Trace、加载材料等可折叠状态；
 - `notebook-node`：课堂节点被激活、完成、跳过或恢复；
 - `route-change`：课堂路线的插入、跳过、重排或重复；
-- `ability-update`：Trace 使一个或多个方法节点的掌握度投影发生变化。
+- `ability-update`：Trace 使一个或多个方法节点的掌握度投影发生变化；
+- `workflow`：深度工作流被提出、确认、运行、取消、中断或完成；
+- `workflow-task`：临时任务等待、运行、完成、失败或取消，以及安全的进度摘要和来源数量。
 
-这些事件只存在于内存和 WebSocket 流中，不持久化为新日志。页面刷新时，从 Pi Session JSONL、Lesson Markdown 和现有 Trace 重新投影。
+`StudyViewEvent` 本身只存在于内存和 WebSocket 流中，不持久化为新的教学日志。页面刷新时，普通课堂事件从 Pi Session JSONL、Lesson Markdown 和现有 Trace 重新投影；工作流事件从 `pi-subagents` 的 Session-owned lifecycle artifact 重新投影。
 
 ### 7.3 渲染规则
 
@@ -343,7 +372,9 @@ Coach、备课进度和 Tutor 课堂使用同一页面外壳。左侧是当前 P
 - Extension 的选择、确认和输入请求渲染为原生交互组件；
 - 工具调用默认折叠为人类可读状态，不显示完整参数或结果；
 - thinking、题卡答案、rubric、Teacher Control 和未揭示提示不进入学生事件；
-- Trace 写入成功只显示“已记录到当前课堂节点”，详细内容由证据视图按权限读取。
+- Trace 写入成功只显示“已记录到当前课堂节点”，详细内容由证据视图按权限读取；
+- `workflow-task` 只显示角色、任务、状态、来源数量和无剧透结果摘要；不显示思维链、未揭示答案或原始子 Session transcript；
+- Tutor 深度工作流中可能泄露答案的节点结果，在 Tutor 完成最终综合前不发送到学生投影。
 
 ## 八、Lesson 节点格式
 
@@ -442,6 +473,7 @@ Tutor 通过 session-local `classroom_update` 提交动作、真实 Block 别名
 - 题卡答案、完整解法、rubric 或未揭示步骤；
 - 备课搜索候选、废弃方案或完整工具结果；
 - Pi thinking；
+- 深度工作流中的原始子 Session 对话、未采纳结论或答案性中间结果；
 - 未来 ActivityBlock 的教学路线或答案性提示。
 
 这一边界由服务端 projection 函数实现。学生前端只接收安全 DTO，不接收完整 Lesson 或完整题卡后自行隐藏。
@@ -481,9 +513,21 @@ Tutor 通过 session-local `classroom_update` 提交动作、真实 Block 别名
 4. Coach 加载备课 Skill，写出使用新 ID 的 Lesson，并在 `Lesson Index` 中追加新条目；
 5. 旧条目继续提供回放，新条目等待学生点击开始，二者不复用 Tutor Session。
 
+### 10.5 深度模式
+
+1. 学生在当前 Coach 或 Tutor Session 开启深度模式；
+2. 父 Agent 在每次任务前选择直接处理、快速会诊或深度工作流；
+3. 快速会诊最多使用三个临时子 Session、单轮并行和固定小预算，可以直接开始；
+4. 多于三个任务、包含多轮依赖或对抗验证的工作流，先展示任务图、Token 上限和时间上限，等待学生确认；
+5. 深度模式 Skill 生成结构化 Workflow Graph，`pi-subagents` 执行并持续发送生命周期事件；
+6. 父 Agent 读取结构化结果和原始 JSON，完成最终综合；
+7. Coach 通过既有备课流程写 Lesson，Tutor 通过既有工具推进节点和写 Trace；临时子 Session 不直接写入；
+8. 前端折叠已完成的任务轨道，后续需要细节时由父 Agent 使用 `workflow_id` 回读。
+
 ## 十一、技术组成
 
 - Runtime：`@earendil-works/pi-coding-agent` 的 `AgentSession` SDK；
+- 动态执行：[`pi-subagents`](https://github.com/nicobailon/pi-subagents)，负责临时子 Session、并发、取消、恢复和生命周期记录；
 - 资源加载：每类 Agent 独立的 `DefaultResourceLoader`，负责 context files、Skills、人设和角色指令；
 - 教学工具：Pi extension 原生工具，复用现有题卡与 Trace 领域模块；
 - 课堂协调：仅 Tutor Session 可用的 `classroom_update`，负责节点状态和路线变更；
@@ -498,13 +542,15 @@ Tutor 通过 session-local `classroom_update` 提交动作、真实 Block 别名
 
 ## 十二、核心失败处理
 
-只处理会阻止正常学习的五类失败：
+只处理会阻止正常学习的七类失败：
 
 1. **Pi 没有可用模型或凭据**：显示配置提示，不创建 Session；
 2. **learning set 缺少必要文件**：列出真实缺失项，不猜测或自动生成学习事实；
 3. **Lesson 节点无法解析**：停止开课并返回 Coach 修复；尚未开课时原地修复，已经开课时创建新 Lesson，不把完整文件降级展示给学生；
 4. **模型或连接中断**：保留 Lesson、输入草稿和 Session，允许重连后继续；
-5. **没有合适题卡或来源**：展示真实空结果，让 Coach 缩减、替换材料或重新讨论目标，绝不编卡。
+5. **没有合适题卡或来源**：展示真实空结果，让 Coach 缩减、替换材料或重新讨论目标，绝不编卡；
+6. **单个深度工作流分支失败**：输出格式无效也按节点失败处理；其余节点继续，父 Agent 可以使用已有结果综合并明确缺少的分析视角，不启动复杂自动修复循环；
+7. **深度工作流被取消或中断**：停止未完成节点并保留已完成的运行记录，但不自动写入 Lesson、Trace 或长期记忆；中断后由学生选择恢复或重新运行。
 
 备课未成功写出可解析 Lesson 时，不创建 Tutor Session。
 
@@ -524,31 +570,41 @@ Tutor 通过 session-local `classroom_update` 提交动作、真实 Block 别名
 - `closed` 与 `abandoned` 子节点只能回放，不能继续追加课堂消息或 Trace；
 - 上传图片能保存到真实相对路径，并作为 Pi image content 发送；
 - 刷新后可由 Session JSONL 与 Markdown 重建课堂界面；
-- 题卡搜索空结果不会产生虚构题目或路径。
+- 题卡搜索空结果不会产生虚构题目或路径；
 - 能力聚合对主方法赋予较高权重、对次方法赋予较低权重，并排除已撤回 Trace；
 - Route Changes 能重建当前路线，每条变化都引用真实 Block 和来源；
 - 课堂回放在 Session JSONL 存在时显示完整时间线，缺失时明确降级为证据回放；
 - 证据透镜遇到断链时停止下钻，学生投影不会越权读取 Teacher Control；
-- 人设主题变化不改变 Agent 工具、Lesson、Trace、能力聚合或学生评价。
+- 人设主题变化不改变 Agent 工具、Lesson、Trace、能力聚合或学生评价；
+- 深度模式关闭或父 Agent 判断信息充分时，不创建临时子 Session；
+- 快速会诊不超过三个任务，深度工作流在启动前返回任务图、Token 上限和时间上限；
+- 临时子 Session 只收到声明的最小上下文和读取权限，不能调用正式写入工具；
+- 工作流生命周期事件能够确定性重建等待、运行、完成、失败、取消和中断状态；
+- 单个任务失败或用户取消时，不产生隐式 Lesson、Trace 或长期记忆写入；
+- Tutor 工作流的学生投影不包含答案性中间结果、思维链或原始子 Session transcript；
+- 题卡或 Trace 搜索为空时，临时子 Session 返回真实空结果，不生成虚构编号、路径或来源；
+- Plan 结束后的深度记忆聚合只生成候选差量，未经学生确认不能更新两份长期画像。
 
 ### 13.2 真实端到端验收
 
 使用仓库中的导数学习集完成一次真实模型流程：
 
 1. 打开学习集并恢复当前 Plan，侧边栏显示 Coach 根节点和已有 Lesson 子节点；
-2. Coach 复盘并加载备课 Skill；
-3. 生成包含多个课堂节点的下一课；
-4. 学生查看无剧透摘要；开课前让 Coach 原地调整一次安排，确认 Lesson ID 和侧边栏条目不变；
-5. 学生点击该 Lesson，确认输入被路由到独立 Tutor Session 并开始上课；
-6. Tutor 呈现真实题卡，接收文本、LaTeX 和手写图片；
-7. 完成至少一个证据活动并写入 Trace；
-8. 返回 Coach 请求重新备课，确认旧 Lesson 变为 `abandoned`、旧证据仍可回放，新 Lesson 使用新 ID 和新 Tutor Session；
-9. 进入新 Lesson，刷新页面，确认侧边栏、节点、消息和证据仍可恢复；
-10. 产生一次带来源的路线调整，并观察路线动画；
-11. 写入 Trace 后观察能力星图变化，并从节点下钻到原始证据；
-12. 学生主动结束，默认返回原 Coach Session 完成复盘；
-13. 打开课后回放，定位路线改变、手写图片与能力变化；
-14. 切换人设主题，确认教学内容和证据保持不变。
+2. 在 Coach Session 开启深度模式，由 Coach 判断需要会诊并展示备课工作流的任务、依赖和预算；
+3. 确认工作流，观察多个检索与审查节点实时推进，其中至少一个节点读取真实题卡及其绑定 Trace；
+4. Coach 综合工作流结果并加载备课 Skill，生成包含多个课堂节点的下一课；
+5. 学生查看无剧透摘要；开课前让 Coach 原地调整一次安排，确认 Lesson ID 和侧边栏条目不变；
+6. 学生点击该 Lesson，确认输入被路由到独立 Tutor Session 并开始上课；
+7. Tutor 呈现真实题卡，接收文本、LaTeX 和手写图片；
+8. 触发一次 Tutor 快速会诊，确认临时节点不会出现在 Plan 侧边栏，学生只能看到安全任务状态和 Tutor 最终回应；
+9. 完成至少一个证据活动并写入 Trace；
+10. 返回 Coach 请求重新备课，确认旧 Lesson 变为 `abandoned`、旧证据仍可回放，新 Lesson 使用新 ID 和新 Tutor Session；
+11. 进入新 Lesson，刷新页面，确认侧边栏、节点、消息、工作流轨道和证据仍可恢复；
+12. 产生一次带来源的路线调整，并观察路线动画；
+13. 写入 Trace 后观察能力星图变化，并从节点下钻到原始证据；
+14. 学生主动结束，默认返回原 Coach Session 完成复盘；
+15. 打开课后回放，定位路线改变、手写图片与能力变化；
+16. 切换人设主题，确认教学内容和证据保持不变。
 
 ### 13.3 首版成功标准
 
@@ -556,7 +612,7 @@ Tutor 通过 session-local `classroom_update` 提交动作、真实 Block 别名
 
 ## 十四、旗舰演示功能
 
-以下五项功能全部进入设计范围，但共用现有学习事实、来源链接和事件投影，不各自建立数据模型或后台。
+以下六项功能全部进入设计范围，但共用现有学习事实、来源链接和事件投影，不各自建立数据模型或后台。
 
 ### 14.1 实时能力星图
 
@@ -650,9 +706,101 @@ Roadmap 能力标准
 
 首版使用静态立绘加 CSS/Rive/Lottie 一类轻动效即可；Live2D 等更重的角色运行时属于可替换展示插件，不成为课堂主流程依赖。
 
-### 14.6 与三个现有页面的关系
+### 14.6 深度模式与动态工作流
 
-五项功能不增加新的顶级导航：
+深度模式把多视角教学分析变成 Coach 和 Tutor 都能使用的 Session 内能力。它不增加第三个顶级 Agent，也不让学生手动切换到临时专家。父 Agent 负责判断是否需要工作流、生成任务图、接受结果和执行正式写入；`pi-subagents` 只负责运行临时子 Session。
+
+#### 14.6.1 三级触发
+
+深度模式开启后，父 Agent 在每个任务前选择：
+
+1. **直接处理**：现有上下文已经足够，不创建工作流；
+2. **快速会诊**：最多三个子任务、单轮并行，默认总上限为 12,000 Token、45 秒，可以直接运行；
+3. **深度工作流**：任务更多、存在多轮依赖、对抗验证或后台执行时，先显示目标、任务图、最大并发、Token 上限和时间上限，学生确认后启动。
+
+是否启动不由关键词规则决定。父 Agent 只有在“至少存在两个可独立分析的视角，且结果可能改变下一步教学动作”时才使用工作流；否则继续普通对话。Session 开关表达的是允许使用，不是每轮强制并行。
+
+#### 14.6.2 动态角色
+
+Skill 提供一个小型角色模板库，但不把角色固化为长期 Agent：
+
+| 父 Agent | 常用临时角色 | 任务 |
+|---|---|---|
+| Coach | 证据检索员 | 搜索题卡、绑定 Trace、图谱和前序摘要 |
+| Coach | 学情分析员 | 从带来源课堂事实中提出当前薄弱点 |
+| Coach | 课堂设计员 | 组合题目、视频、互动讲解和小测节点 |
+| Coach | 防剧透审查员 | 检查学生可见内容是否提前泄露解法 |
+| Coach | 对抗审稿员 | 质疑教案是否真正服务 Plan 能力目标 |
+| Tutor | 作答分析员 | 阅读学生当前答案、草稿或图片过程 |
+| Tutor | 错因诊断员 | 区分概念、计算、表达和策略问题 |
+| Tutor | 提示设计员 | 设计不代替学生思考的下一层提示 |
+| Tutor | 讲法替换员 | 在原讲法无效时寻找另一种表示或路径 |
+| Tutor | 课堂审查员 | 检查剧透、难度跳跃和 Lesson 偏离 |
+
+Skill 可以按任务组合这些模板，也可以生成新的临时角色名称，但所有角色必须使用既有的只读权限模板和统一输出结构，不能自行扩大工具权限。
+
+#### 14.6.3 最小上下文包
+
+临时子 Session 不接收完整父对话。每个任务只接收：
+
+```yaml
+goal: 本次子任务
+lesson_step: 当前课堂节点或备课位置
+source_handles:
+  - 题卡别名与真实路径
+  - 绑定 Trace
+  - 前序摘要引用
+allowed_reads:
+  - 当前任务需要的目录或对象
+output_schema:
+  - findings
+  - evidence_refs
+  - recommended_action
+  - risks
+budget: 本任务 Token 与时间上限
+```
+
+普通 Markdown 和摘要由召回 Skill 在限定目录中搜索。题卡与 Trace 继续通过既有工具双向查询；读取一张题卡时附带其绑定 Trace，检索 Trace 时可以反查真实题卡。任何判断都必须返回 `evidence_refs`；找不到来源时返回空结果，不生成题卡编号或路径。
+
+#### 14.6.4 任务轨道
+
+前端把工作流渲染成一个可折叠任务轨道，而不是聊天消息：
+
+```text
+深度会诊 · 3/5 已完成 · 2 个正在运行                  [取消]
+
+✓ 查找相关题卡与 Trace                    找到 8 条来源
+● 分析可能的知识缺口                      正在分析
+● 设计下一步提示                          等待知识缺口分析
+✓ 检查是否提前剧透                        通过
+○ Coach / Tutor 最终综合                   尚未开始
+```
+
+每个任务只展示角色、任务、依赖、状态、来源数量和安全摘要。点击可以查看最终结构化结论和来源；学生模式不展示思维链、原始 transcript 或答案性中间结果。工作流完成后轨道折叠成一行，切换 Session 或刷新后由生命周期记录恢复。
+
+#### 14.6.5 数据与写入边界
+
+运行时只保存以下 Session-owned artifact：
+
+```text
+workflow_id
+parent_session_id
+workflow_graph
+lifecycle_events
+subagent_outputs
+final_synthesis
+status
+```
+
+它们不进入 learning set，也不新增 `workflows/` 目录。上下文压缩时，父 Agent 只保留工作流目标、最终结论、关键来源和 `workflow_id`；需要细节时再读取原始 JSON。
+
+正式教学事实仍只通过现有路径落地：Coach 写 Lesson，Tutor 推进课堂并写 Trace，Plan 结束时生成待学生确认的长期记忆差量。临时子 Session 不能直接写 Roadmap、Plan、Lesson、Trace、画像或 `planner-attention.md`。
+
+单个分支失败不阻止其他分支；父 Agent 使用有效结果并说明缺失视角。用户取消时停止未完成节点、保留已完成运行记录，但不产生正式写入。父 Session 删除时一并删除临时工作流记录；已经正式写入且有来源的教学事实不受影响。
+
+### 14.7 与三个现有页面的关系
+
+六项功能不增加新的顶级导航：
 
 | 功能 | 学习集首页 | Plan 会话页 | 备课本 |
 |---|---|---|---|
@@ -661,17 +809,19 @@ Roadmap 能力标准
 | 学习回放 | 最近回放入口 | 不占据当前课堂 | 完整时间轴 |
 | 证据透镜 | 从能力节点打开 | 从题目与 Trace 打开 | 从总结与路线变化打开 |
 | 二次元皮肤 | 学习集主题 | Coach/Tutor 状态 | 轻量主题，不遮挡文档 |
+| 深度模式 | 不常驻展示 | 实时任务轨道 | 查看备课工作流摘要与来源 |
 
 这些功能的目标不是装饰仪表盘，而是把“个性化教学正在发生”变成可观察、可解释、可回溯的体验。
 
 ## 十五、实施切片
 
-完整设计按依赖关系拆成五个可独立验收的切片，避免同时铺开所有界面：
+完整设计按依赖关系拆成六个可独立验收的切片，避免同时铺开所有界面：
 
 1. **Pi runtime 与安全投影**：Plan 父子 Session 工作区、Coach/Tutor ResourceLoader、原生四工具和 Student/Teacher DTO；
 2. **课堂核心界面**：三个页面、Plan 会话侧边栏、结构化事件、Lesson 节点、重备课、文本/LaTeX/图片输入和基础恢复；
-3. **证据可视化**：主次方法聚合、实时能力星图和证据透镜；
-4. **课堂时序**：Route Changes、动态路线和课后学习回放；
-5. **展示层收口**：二次元主题、轻量动画、完整导数学习集 E2E 与演示脚本。
+3. **深度模式纵向闭环**：Session 开关、动态工作流 Skill、`pi-subagents` 执行、任务轨道、父 Agent 独占写入和中断恢复；
+4. **证据可视化**：主次方法聚合、实时能力星图和证据透镜；
+5. **课堂时序**：Route Changes、动态路线和课后学习回放；
+6. **展示层收口**：二次元主题、轻量动画、完整导数学习集 E2E 与演示脚本。
 
-每个切片都必须在导数学习集上形成可运行的纵向闭环后才能进入下一片。后续实施计划按这些切片拆任务，不把它们实现成五套孤立的数据服务。
+每个切片都必须在导数学习集上形成可运行的纵向闭环后才能进入下一片。后续实施计划按这些切片拆任务，不把它们实现成六套孤立的数据服务。
