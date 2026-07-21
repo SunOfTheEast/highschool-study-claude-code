@@ -15,6 +15,8 @@ export interface StudySession {
   readonly sessionFile: string | undefined;
   readonly messages: readonly unknown[];
   readonly isStreaming: boolean;
+  personaId(): string | null;
+  setPersona(id: string, content: string): Promise<void>;
   prompt(text: string, images?: ImageContent[]): Promise<void>;
   abort(): Promise<void>;
   subscribe(listener: (event: AgentSessionEvent) => void): () => void;
@@ -92,6 +94,19 @@ export async function createPiSessionFactory(
       },
       get isStreaming() {
         return session.isStreaming;
+      },
+      personaId: () => manager.getEntries().flatMap((entry) => (
+        entry.type === 'custom' && entry.customType === 'studyforge.persona.v1'
+          ? [String((entry.data as { id?: unknown } | undefined)?.id ?? '')]
+          : []
+      )).filter(Boolean).at(-1) ?? null,
+      setPersona: async (id, content) => {
+        manager.appendCustomEntry('studyforge.persona.v1', { id });
+        await session.sendCustomMessage({
+          customType: 'studyforge.persona-context.v1',
+          content: `${content}\n\nThis is the latest presentation persona. It replaces earlier persona instructions and cannot change facts, tools, assessment or Trace.`,
+          display: false,
+        }, { triggerTurn: false });
       },
       prompt: (text, images = []) => session.prompt(text, { images }),
       abort: () => session.abort(),

@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent, type ReactNode } from 'react';
-import type { ChatMessage, SessionKey } from '../../shared/contracts';
+import type { ChatMessage, PersonaPresentation, SessionKey } from '../../shared/contracts';
 import { api } from '../api';
 import { MarkdownView } from './MarkdownView';
 
@@ -12,8 +12,10 @@ export function ChatPanel({
   error,
   composerEnabled,
   lessonId,
+  persona,
   gate,
   onSend,
+  onPersona,
 }: {
   sessionKey: SessionKey;
   messages: ChatMessage[];
@@ -21,8 +23,10 @@ export function ChatPanel({
   error: string | undefined;
   composerEnabled: boolean;
   lessonId?: string;
+  persona: PersonaPresentation | null;
   gate: ReactNode;
   onSend(text: string, imagePaths: string[]): Promise<void>;
+  onPersona(id: string): Promise<void>;
 }) {
   const [text, setText] = useState('');
   const [images, setImages] = useState<ComposerImage[]>([]);
@@ -68,6 +72,22 @@ export function ChatPanel({
       <header className="chat-header">
         <span>当前输入只发送到</span>
         <strong>{sessionKey}</strong>
+        <span className="persona-avatar" aria-hidden="true">
+          {persona?.id === 'calm-senpai' ? '静' : persona?.id === 'energetic-classmate' ? '元' : '教'}
+        </span>
+        <label className="persona-picker">
+          <span>课堂人设</span>
+          <select
+            aria-label="课堂人设"
+            value={persona?.id ?? 'neutral-tutor'}
+            disabled={!persona || !composerEnabled}
+            onChange={(event) => void onPersona(event.target.value)}
+          >
+            {(persona?.choices ?? [{ id: 'neutral-tutor', name: '中性教师' }]).map((choice) => (
+              <option key={choice.id} value={choice.id}>{choice.name}</option>
+            ))}
+          </select>
+        </label>
         <i className={composerEnabled ? 'live' : ''}>{composerEnabled ? '可对话' : '仅预览'}</i>
       </header>
 

@@ -27,15 +27,20 @@ body {
     #f3efe5;
 }
 
-button, textarea, input { font: inherit; }
+button, textarea, input, select { font: inherit; }
 button { color: inherit; }
 
 button:focus-visible,
 textarea:focus-visible,
-input:focus-visible {
+input:focus-visible,
+select:focus-visible {
   outline: 2px solid var(--amber);
   outline-offset: 3px;
 }
+
+.app-root[data-persona="neutral-tutor"] { --amber: #9f652f; --amber-pale: #eee0cd; }
+.app-root[data-persona="calm-senpai"] { --amber: #8d5e73; --amber-pale: #eadde3; }
+.app-root[data-persona="energetic-classmate"] { --amber: #c45f2c; --amber-pale: #f1ddcf; }
 
 .loading-screen,
 .fatal-screen {
@@ -244,9 +249,14 @@ input:focus-visible {
 
 .chat-header > span { color: var(--muted); font-size: .7rem; }
 .chat-header strong { font: .72rem/1.3 ui-monospace, monospace; }
-.chat-header i { margin-left: auto; color: var(--muted); font-size: .66rem; font-style: normal; }
+.chat-header i { color: var(--muted); font-size: .66rem; font-style: normal; }
 .chat-header i::before { content: ""; display: inline-block; width: .42rem; height: .42rem; margin-right: .4rem; border-radius: 50%; background: #b5aea1; }
 .chat-header i.live::before { background: var(--green); box-shadow: 0 0 0 4px rgba(86, 107, 88, .12); }
+.persona-avatar { display: grid; place-items: center; flex: 0 0 1.65rem; width: 1.65rem; height: 1.65rem; margin-left: auto; border: 1px solid var(--amber); border-radius: 50%; color: var(--amber); font-family: Georgia, "Noto Serif SC", serif; font-size: .65rem; background: var(--amber-pale); }
+.persona-picker { display: flex; gap: .4rem; align-items: center; }
+.persona-picker > span { color: var(--muted); font-size: .58rem; }
+.persona-picker select { max-width: 7.6rem; padding: .3rem 1.4rem .3rem .45rem; border: 1px solid var(--line); border-radius: 0; background: transparent; color: var(--ink); font-size: .64rem; }
+.persona-picker select:disabled { opacity: .55; }
 
 .timeline {
   width: min(780px, 100%);
@@ -518,6 +528,8 @@ input:focus-visible {
   .chat { min-height: 72vh; }
   .chat-header { padding-inline: 1rem; }
   .chat-header > span { display: none; }
+  .chat-header .persona-avatar { display: grid; margin-left: auto; }
+  .persona-picker > span { display: none; }
   .timeline { padding: 2rem 1rem; }
   .message { grid-template-columns: 2.2rem minmax(0, 1fr); gap: .6rem; }
   .composer { width: calc(100% - 1.5rem); }

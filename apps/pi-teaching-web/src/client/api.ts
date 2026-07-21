@@ -4,6 +4,7 @@ import type {
   EvidenceView,
   LearningSetSnapshot,
   LessonReplay,
+  PersonaPresentation,
   PlanWorkspaceSnapshot,
   SessionKey,
   StudentNotebook,
@@ -20,6 +21,16 @@ export const api = {
   abilities: () => json<AbilityProjection>('/api/abilities'),
   evidence: (source: string) => (
     json<EvidenceView>(`/api/evidence?source=${encodeURIComponent(source)}`)
+  ),
+  persona: (key: SessionKey) => (
+    json<PersonaPresentation>(`/api/persona?sessionKey=${encodeURIComponent(key)}`)
+  ),
+  setPersona: (key: SessionKey, id: string) => (
+    json<PersonaPresentation>(`/api/sessions/${encodeURIComponent(key)}/persona`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ id }),
+    })
   ),
   workspace: (planId: string) => (
     json<PlanWorkspaceSnapshot>(`/api/workspaces/${encodeURIComponent(planId)}`)

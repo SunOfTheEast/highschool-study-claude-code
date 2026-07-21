@@ -115,3 +115,25 @@ test('uploads classroom images and attaches them to a Session message', async ()
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test('keeps persona selection scoped to the requested Session', async () => {
+  let selected = 'calm-senpai';
+  const handler = createRequestHandler({
+    root: '/tmp/demo',
+    authoring: false,
+    hub: new EventHub(),
+    readLearningSet: () => learningSet,
+    registry: {
+      personaId: () => selected,
+      setPersona: async (_key: string, id: string) => { selected = id; },
+    } as never,
+  });
+  const before = await handler(new Request('http://local/api/persona?sessionKey=coach%3Ap1'));
+  expect(await before!.json()).toMatchObject({ id: 'calm-senpai' });
+  const changed = await handler(new Request('http://local/api/sessions/coach%3Ap1/persona', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ id: 'energetic-classmate' }),
+  }));
+  expect(await changed!.json()).toMatchObject({ id: 'energetic-classmate' });
+});

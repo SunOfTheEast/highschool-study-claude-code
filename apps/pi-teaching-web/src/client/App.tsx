@@ -4,6 +4,7 @@ import type {
   EvidenceView,
   LearningSetSnapshot,
   LessonReplay,
+  PersonaPresentation,
   LessonNode,
   SessionKey,
   StudentNotebook,
@@ -30,6 +31,7 @@ export function App() {
   const [replay, setReplay] = useState<LessonReplay | null>(null);
   const [abilities, setAbilities] = useState<AbilityProjection | null>(null);
   const [evidence, setEvidence] = useState<EvidenceView | null>(null);
+  const [persona, setPersona] = useState<PersonaPresentation | null>(null);
 
   useEffect(() => {
     void api.learningSet()
@@ -130,6 +132,17 @@ export function App() {
       .catch(() => setPageError('无法读取方法证据投影。'));
   }, [client.workspace?.plan.id]);
 
+  useEffect(() => {
+    let current = true;
+    setPersona(null);
+    if (client.selected) {
+      void api.persona(client.selected)
+        .then((value) => { if (current) setPersona(value); })
+        .catch(() => { if (current) setPageError('无法读取当前 Session 人设。'); });
+    }
+    return () => { current = false; };
+  }, [client.selected]);
+
   const openEvidence = async (source: string) => {
     setPageError(null);
     try {
@@ -193,6 +206,16 @@ export function App() {
     await api.message(client.selected, text, imagePaths);
   };
 
+  const changePersona = async (id: string) => {
+    if (!client.selected) return;
+    setPageError(null);
+    try {
+      setPersona(await api.setPersona(client.selected, id));
+    } catch {
+      setPageError('切换课堂人设失败。');
+    }
+  };
+
   const goHome = () => {
     setClient(initialClientState);
     setEvidence(null);
@@ -251,7 +274,7 @@ export function App() {
   }
 
   return (
-    <>
+    <div className="app-root" data-persona={persona?.id ?? 'neutral-tutor'}>
       {connection !== 'open' && (
         <div className="connection-banner" role="status">
           <span />{connection === 'connecting' ? '正在连接课堂事件流…' : '事件流已断开，正在重连…'}
@@ -272,14 +295,16 @@ export function App() {
           error={client.errors[selected]}
           composerEnabled={composerEnabled}
           {...(selectedLesson ? { lessonId: selectedLesson.id } : {})}
+          persona={persona}
           gate={gate}
           onSend={send}
+          onPersona={changePersona}
         />
         {isCoach
           ? <AbilityMap value={abilities} onOpen={(source) => void openEvidence(source)} />
           : <LessonNotebook lesson={selectedLesson} notebook={notebook} replay={replay} />}
       </div>
       {evidence && <EvidenceLens value={evidence} onClose={() => setEvidence(null)} />}
-    </>
+    </div>
   );
 }

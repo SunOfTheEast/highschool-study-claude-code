@@ -2,6 +2,7 @@ import type { ImageContent } from '@earendil-works/pi-ai';
 import type { ChatMessage, PlanWorkspaceSnapshot, SessionKey } from '../shared/contracts';
 import { readLearningSet, readPlanWorkspace } from '../study/read-workspace';
 import { setFrontmatterField } from '../study/write-workspace';
+import { resolvePersona } from '../study/persona';
 import type { StudySession, StudySessionFactory } from './session-factory';
 
 export type SessionFileLookup = (root: string, sessionId: string) => Promise<string | null>;
@@ -149,6 +150,18 @@ export class WorkspaceRegistry {
         }]
         : [];
     });
+  }
+
+  personaId(key: SessionKey): string {
+    return this.sessions.get(key)?.personaId() ?? resolvePersona(this.root).id;
+  }
+
+  async setPersona(key: SessionKey, id: string): Promise<void> {
+    const persona = resolvePersona(this.root, id);
+    const session = key.startsWith('coach:')
+      ? await this.openCoach(key.slice(6))
+      : await this.openTutor(key.slice(6));
+    await session.setPersona(persona.id, persona.content);
   }
 
   subscribe(

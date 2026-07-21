@@ -30,6 +30,12 @@ const imageTypes = {
   '.webp': 'image/webp',
 } as const;
 
+const personaChoices = [
+  { id: 'neutral-tutor', name: '中性教师' },
+  { id: 'calm-senpai', name: '冷静学姐' },
+  { id: 'energetic-classmate', name: '元气同桌' },
+];
+
 function readImageContent(root: string, path: string): ImageContent {
   const mimeType = imageTypes[extname(path).toLowerCase() as keyof typeof imageTypes];
   if (!mimeType) throw new Error(`UNSUPPORTED_IMAGE: ${path}`);
@@ -70,6 +76,20 @@ export function createRequestHandler(deps?: AppDependencies) {
       const source = url.searchParams.get('source');
       if (!source) return json({ error: 'SOURCE_REQUIRED' }, 400);
       return json(readEvidence(deps.root, source));
+    }
+
+    if (request.method === 'GET' && url.pathname === '/api/persona') {
+      const key = url.searchParams.get('sessionKey') as SessionKey | null;
+      if (!key) return json({ error: 'SESSION_KEY_REQUIRED' }, 400);
+      return json({ id: deps.registry.personaId(key), choices: personaChoices });
+    }
+
+    const persona = /^\/api\/sessions\/([^/]+)\/persona$/.exec(url.pathname);
+    if (request.method === 'POST' && persona) {
+      const key = decodeURIComponent(persona[1]!) as SessionKey;
+      const input = await request.json() as { id: string };
+      await deps.registry.setPersona(key, input.id);
+      return json({ id: deps.registry.personaId(key), choices: personaChoices });
     }
 
     const notebook = /^\/api\/lessons\/([^/]+)\/notebook$/.exec(url.pathname);

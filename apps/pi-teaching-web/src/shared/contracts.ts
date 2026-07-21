@@ -112,6 +112,11 @@ export type LessonReplay = {
   route: { initial: string[]; effective: string[] };
 };
 
+export type PersonaPresentation = {
+  id: string;
+  choices: Array<{ id: string; name: string }>;
+};
+
 export type ChatMessage = {
   id: string;
   role: 'student' | 'coach' | 'tutor';
