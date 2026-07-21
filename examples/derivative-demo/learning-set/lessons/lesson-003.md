@@ -4,124 +4,115 @@ kind: lesson
 plan_id: domain-integrity
 status: prepared
 ---
-# Lesson 003：阶段 1b — ln t/t 同构 + 定义域连续性核验
+# Lesson 003：阶段 1b — 定义域连续性与跨结构迁移核验
 
 ## Plan Link
 
-[定义域完整性的系统加固](../plans/domain-integrity.md) — 阶段 `1b`：再用一道含对数真数约束的题，连续第二次独立无遗漏。
+[定义域完整性的系统加固](../plans/domain-integrity.md) — 阶段 `1b`：用两道未见结构核验定义域能否连续独立无遗漏，并观察它是否真正参与边界判断。
 
 ## Capability Target
 
-面对含 `ln a` 和 `ln x` 的恒成立不等式，在无提示下独立写出 `a>0`，并在同构变形为 `f(t)=ln t/t` 的比较过程中，主动确认除量的正性、定义域对参数边界的约束以及开区间上确界的取等情况。
+面对含参数对数和开区间边界的恒成立不等式，在无提示下先写全定义域与正负条件，并在变形、参数分离和端点判断中主动使用这些条件。
 
-## Evidence Target
+## Lesson Configuration
 
-- **Primary (1b)**: 学生拿到题后独立写出 `a>0`，并在后续步骤中至少一次主动引用该约束（如确认除 `xae^x` 时符号不反向，或排除选项 A 的负数区间）。
-- **Secondary (isomorphism generalization)**: 观察学生能否在 `ln t/t` 外壳下识别同构结构；与 Lesson 001 的 `e^u/u` 和 Lesson 002 的 `te^t` 对比泛化程度。
+- Primary template: `assessment`
+- Reason: 本课需要确认阶段 `1b` 是否达标，并用第二种未见结构观察迁移；教学和提示不能先于验收证据。
+- Adjustment: 保留一个可选的历史题修复 Block；只有首题出现缺口或学生主动求助时使用。
+- Required unseen roles: continuity check、cross-structure transfer。
+- Optional seen role: trace-grounded remediation。
 
-## Source
+## Sources
 
-- Card: [mst_p0032_ex22](../cards/derivative/mst_p0032_ex22.card.yaml)（2025 江苏卓越联盟月考 T8）
-- Public source policy: [demo notes](../materials/demo-notes.md#source-policy)；原教材页未进入公开仓库。
+- Continuity check: [mst_p0032_ex22](../cards/derivative/mst_p0032_ex22.card.yaml)
+- Transfer check: [mst_p0030_ex16](../cards/derivative/mst_p0030_ex16.card.yaml)
+- Optional remediation: [mst_p0017_ex05](../cards/derivative/mst_p0017_ex05.card.yaml) and [Lesson 002 Trace](lesson-002.md#trace-event-001)
+- Public source policy: [demo notes](../materials/demo-notes.md#source-policy)
 
-## Prerequisites
+## Dependencies and control
 
-- Lesson 001（`e^u/u` 同构 + 定义域遗漏→自查纠正）
-- Lesson 002（`te^t` 同构 + `a>0` 独立写全）
-- 导数基础：`f(t)=ln t/t` 的单调性分析
-- 恒成立转参数范围的基本框架
-
----
-
-## Block warmup（可选，可跳过）
-
-**类型**: 交互回顾
-**预计时间**: 2-3 分钟
-**安全跳过条件**: 学生表示不需要回顾，或时间紧张
-
-快速回顾前两题的定义域要点：
-- Lesson 001 的 `mst_p0019_ex11`：`1+ln(2x)>0` → 左端点 `1/(2e)`
-- Lesson 002 的 `mst_p0017_ex05`：`ln a` → `a>0`，同乘 `x/a` 时用它保证不反向
-
-**目标**: 激活定义域优先的解题习惯，不做新教学。
+- `orientation` precedes both assessment Blocks.
+- `assessment-01` precedes `assessment-02`; `repair-optional` may be inserted between them.
+- `repair-optional` is skipped when the first response is independently complete.
+- The student may pause or close at any time. `reflection` may move earlier only after at least one evidence-bearing attempt.
 
 ---
 
-## Block explanation（推荐）
+## Block orientation（必做）
 
-**类型**: 讲解
-**预计时间**: 3-5 分钟
-**安全跳过条件**: 学生要求直接做题
+### Student View
 
-呈现题目并点明结构特征：
+本课先做两道不同结构的未见题。每题请先单独写出定义域、恒正或恒负条件，再开始等价变形；两题首次尝试都不提供提示。你可以随时暂停或结束。
 
-> 题干：$x^2 + x\ln a - ae^x\ln x > 0$ 对 $\forall x\in(0,1)$ 恒成立，求 $a$ 的范围。
->
-> 关键信号：
-> 1. 出现 `ln a` → 实数范围内要求 `a>0`（定义域第一步）
-> 2. $x^2 + x\ln a$ 可合并为 $x\ln(ae^x)$
-> 3. 与 $ae^x\ln x$ 并置→提示同除以正量 $xae^x$，凑出 $\frac{\ln t}{t}$ 形式的同构比较
-> 4. $f(t)=\frac{\ln t}{t}$ 在 $(0,e)$ 递增，在 $(e,+\infty)$ 递减；$f(1)=0$，$0<t<1$ 时 $f(t)<0$
-> 5. $x\in(0,1)$ 是开区间 → 上确界 $1/e$ 可取等（$a=1/e$ 仍满足严格不等式）
+### Teacher Control
 
-**注意**: 讲解只做结构导航，不给完整推导。学生需独立完成变形和判断。
-
-参考来源：[card solution](../cards/derivative/mst_p0032_ex22.card.yaml)
+- Role: capability-standard orientation。
+- Evidence target: 学生理解“先列合法域并在后续真正使用”，但不提前获知任何目标卡的方法。
+- Reveal: `zero`。
+- Do not name the target method or preview either card's transformation.
 
 ---
 
-## Block practice（必做）
+## Block assessment-01（必做）
 
-**类型**: 练习
-**预计时间**: 8-12 分钟
-**不可跳过**
+### Student View
 
-学生独立完成 `mst_p0032_ex22` 的完整求解。
+请独立完成题卡 `Q-DOMAIN-EX22`。教练只呈现真实题干和选项；请先写出所有合法性与符号条件，再给出完整理由和结论。
 
-**教练观察要点**（不做提示，只记录）:
-1. 是否在第一步独立写出 `a>0`
-2. 是否主动确认除 `xae^x` 时各项为正
-3. 同构识别：能否将不等式转化为 `f(ae^x) > f(x)` 形式
-4. `f(t)=ln t/t` 的单调性分析和符号判断
-5. 从 `ae^x > x` 到 `a ≥ 1/e` 的推导，开区间上确界的取等判断
-6. 最终选 D 而非 B（B 排除了 `a=1/e`，D 排除了 `a≤0` 的区间）
+### Teacher Control
 
-**卡点预案**（来自 card fallback）:
-- 未写 `a>0` → 回补函数三要素与定义域
-- 不会合并 `x^2 + x ln a` → 回补指数对数基础
-- 不会对 `f(t)=ln t/t` 求导判单调 → 回补导数单调极值基础
-- 把上确界误当作不可取 → 回补开区间恒成立中端点的处理
-
-Card reference: [mst_p0032_ex22](../cards/derivative/mst_p0032_ex22.card.yaml) rubric steps 1-5
+- Role: continuity check for Plan stage `1b`。
+- Evidence target: 定义域是否无提示写全，并在关键变形和开区间边界中被主动使用。
+- Reveal: `zero`。
+- Card evidence: Q-DOMAIN-EX22 `step_1` and `step_5`; inspect the remaining card steps privately only after the student's attempt.
+- If help is requested, record the unsupported or incomplete attempt, then offer `repair-optional`. Do not count the supported completion as independent `1b` evidence.
 
 ---
 
-## Block interaction（推荐，可在 practice 后合并）
+## Block repair-optional（可选）
 
-**类型**: 交互讨论
-**预计时间**: 3-5 分钟
-**安全跳过条件**: practice 中学生表现流畅且 self-check 完整
+### Student View
 
-讨论题：
-1. 这道题的定义域约束和上一题（`mst_p0017_ex05`）有什么相同和不同？
-2. `f(t)=ln t/t` 和之前见过的 `g(u)=e^u/u`、`F(t)=te^t` 三种同构外壳，你在识别时觉得哪个最难？为什么？
-3. 选项 A 和 B 都包含负数或零——只看选项能否先排除它们？这算不算定义域在帮你做题？
+如果你希望先修复卡点，我们回看已经做过的 `Q-DOMAIN-EX05`：只比较“哪些量必须先保证有意义或为正，以及这些条件后来在哪一步真正被使用”。不把旧题结果当成新验收证据。
 
-**目标**: 强化"定义域不是验算，是决策工具"的认识；收集同构泛化的学生自评。
+### Teacher Control
+
+- Role: trace-grounded remediation using a seen card.
+- Evidence target: connect the Lesson 002 domain success to the gap just observed.
+- Reveal: `ladder`.
+- Source: Lesson 002 Trace event-001 and Q-DOMAIN-EX05 `step_1`–`step_2`.
+- Reveal one level per consented turn. This block is not independent assessment evidence.
+
+---
+
+## Block assessment-02（必做）
+
+### Student View
+
+请独立完成另一张未见题卡 `Q-DOMAIN-EX16`。教练只呈现真实题干和选项；仍然先写合法域和符号条件，再决定如何推进。
+
+### Teacher Control
+
+- Role: cross-structure transfer; if repair ran, this is also the fresh unsupported retest.
+- Evidence target: 定义域、正量与开区间边界能否迁移到不同外壳，而不是复述上一题路线。
+- Reveal: `zero`.
+- Card evidence: Q-DOMAIN-EX16 `step_1` and `step_7`; inspect the remaining card steps privately only after the student's attempt.
+- Do not reuse a hint, intermediate result, or answer from assessment-01.
 
 ---
 
-## Block quiz（可选，快速收束）
+## Block reflection（必做）
 
-**类型**: 小测
-**预计时间**: 2 分钟
-**安全跳过条件**: practice 已充分展示 `1b` 证据
+### Student View
 
-口述或书写一句话总结：*这道题里，定义域在哪个步骤帮了你？*
+比较两次首次尝试：哪一个定义域或符号条件真正改变了你的变形合法性、参数边界或端点取舍？如果你认为今天已经够了，也可以在这里结束课程。
 
-**目标**: 快速确认学生是否形成了可表述的元认知。
+### Teacher Control
 
----
+- Role: evidence summary and student-controlled closure.
+- Evidence target: distinguish an independently used condition from a condition added only during checking.
+- Reveal: `zero`; summarize only evidence already produced by the student and active Trace.
+- Task completion is not capability attainment. Show supporting and conflicting evidence before reflection routing.
 
 ## Reflection
 
@@ -134,6 +125,8 @@ Card reference: [mst_p0032_ex22](../cards/derivative/mst_p0032_ex22.card.yaml) r
 ## Aliases
 
 - Q-DOMAIN-EX22: ../cards/derivative/mst_p0032_ex22.card.yaml
+- Q-DOMAIN-EX16: ../cards/derivative/mst_p0030_ex16.card.yaml
+- Q-DOMAIN-EX05: ../cards/derivative/mst_p0017_ex05.card.yaml
 
 ## Traces
 
