@@ -1,6 +1,7 @@
 import { expect, test } from 'bun:test';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { parse } from 'yaml';
 
 const repo = join(import.meta.dir, '../../../..');
 const demo = join(repo, 'examples/derivative-demo/learning-set');
@@ -20,6 +21,15 @@ function studentView(name: string) {
   );
   expect(match).not.toBeNull();
   return match![1]!;
+}
+
+function criterionDescription(cardPath: string, stepId: string) {
+  const card = parse(readFileSync(join(demo, cardPath), 'utf8')) as {
+    rubric: { criteria: Array<{ step_id: string; description: string }> };
+  };
+  const criterion = card.rubric.criteria.find(({ step_id }) => step_id === stepId);
+  expect(criterion).toBeDefined();
+  return criterion!.description;
 }
 
 test('lesson 003 is a multi-card assessment with private teacher control', () => {
@@ -48,6 +58,16 @@ test('lesson 003 is a multi-card assessment with private teacher control', () =>
     studentView('assessment-01'),
     studentView('assessment-02'),
   ];
+
+  expect(assessmentStudentViews[0]!.trim()).toBe(
+    '本课有两道不同结构的未见题。请独立作答；两题首次尝试都不提供提示。你可以随时暂停或结束。',
+  );
+  expect(assessmentStudentViews[1]!.trim()).toBe(
+    '请独立完成题卡 `Q-DOMAIN-EX22`。教练只呈现真实题干和选项；请给出完整的作答过程、理由和结论。',
+  );
+  expect(assessmentStudentViews[2]!.trim()).toBe(
+    '请独立完成另一张未见题卡 `Q-DOMAIN-EX16`。教练只呈现真实题干和选项；请给出完整的作答过程、理由和结论。',
+  );
 
   for (const view of assessmentStudentViews) {
     for (const capabilityCue of [
@@ -80,6 +100,27 @@ test('lesson 003 is a multi-card assessment with private teacher control', () =>
   expect(lesson).not.toContain('Q-DOMAIN-EX22 `step_1` and `step_5`');
   expect(lesson).toContain('Q-DOMAIN-EX16 `step_1` and `step_6`');
   expect(lesson).not.toContain('Q-DOMAIN-EX16 `step_1` and `step_7`');
+
+  const ex22Step2 = criterionDescription(
+    'cards/derivative/mst_p0032_ex22.card.yaml', 'step_2',
+  );
+  expect(ex22Step2).toContain('正量');
+  expect(ex22Step2).toContain('函数值比较');
+  const ex22Step5 = criterionDescription(
+    'cards/derivative/mst_p0032_ex22.card.yaml', 'step_5',
+  );
+  expect(ex22Step5).toContain('开区间');
+  expect(ex22Step5).toContain('确界');
+
+  const ex16Step1 = criterionDescription(
+    'cards/derivative/mst_p0030_ex16.card.yaml', 'step_1',
+  );
+  expect(ex16Step1).toContain('参数定义域');
+  const ex16Step6 = criterionDescription(
+    'cards/derivative/mst_p0030_ex16.card.yaml', 'step_6',
+  );
+  expect(ex16Step6).toContain('开端点');
+
   expect(lesson).toContain('not independent assessment evidence');
 
   expect(lesson).toContain(
