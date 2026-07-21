@@ -80,6 +80,8 @@ test('declares exact role tool boundaries', () => {
     'Read',
     'Glob',
     'Grep',
+    'WebSearch',
+    'WebFetch',
     'Agent',
     mcp.cardSearch,
     mcp.traceSearch,
@@ -241,4 +243,39 @@ test('ships adaptive classroom templates and one shared reveal policy', () => {
   expect(reveal).toContain('### Teacher Control');
   expect(reveal).toContain('one level per student-approved turn');
   expect(reveal).toContain('method recognition is itself the evidence target');
+});
+
+test('prepares from a template and role slots before searching cards', () => {
+  const prepare = read('skills/prepare-next-lesson/SKILL.md');
+  const designer = read('agents/lesson-designer.md');
+
+  expectInOrder(prepare, [
+    'Read `references/classroom-templates.md`',
+    'Choose one primary template',
+    'Derive the problem-role slots before the first `card_search`',
+    'Search separately for the required slots',
+    'Draft every problem-bearing block with `### Student View`',
+  ]);
+  expect(prepare).toContain('Do not stop at the first suitable card');
+  expect(prepare).toContain(
+    'title, URL, segment, purpose, follow-up question, and fallback',
+  );
+  expect(prepare).toContain('External URLs remain ordinary links');
+
+  expect(toolList(designer, 'tools')).toEqual([
+    'Read',
+    'Glob',
+    'Grep',
+    'WebSearch',
+    'WebFetch',
+    'Agent',
+    mcp.cardSearch,
+    mcp.traceSearch,
+    mcp.sourceResolve,
+  ]);
+  expect(designer).toContain('Keep `lesson-designer` persona-neutral');
+  expect(designer).toContain('Verify every external video');
+  expect(designer).toContain(
+    'Never use an external video to solve the target before its first attempt',
+  );
 });
