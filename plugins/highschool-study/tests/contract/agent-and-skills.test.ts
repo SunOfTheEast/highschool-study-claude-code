@@ -246,9 +246,17 @@ test('ships adaptive classroom templates and one shared reveal policy', () => {
 });
 
 test('prepares from a template and role slots before searching cards', () => {
+  const study = read('skills/study/SKILL.md');
   const prepare = read('skills/prepare-next-lesson/SKILL.md');
   const designer = read('agents/lesson-designer.md');
 
+  expectInOrder(study, [
+    'If the student explicitly asks to prepare directly',
+    'If a prepared next Lesson exists',
+  ]);
+  expect(study).toContain(
+    'route to `highschool-study:prepare-next-lesson` even when a prepared Lesson exists',
+  );
   expectInOrder(prepare, [
     'Read `references/classroom-templates.md`',
     'Choose one primary template',
