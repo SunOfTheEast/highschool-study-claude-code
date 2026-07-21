@@ -1,5 +1,5 @@
 import type { ImageContent } from '@earendil-works/pi-ai';
-import type { PlanWorkspaceSnapshot, SessionKey } from '../shared/contracts';
+import type { ChatMessage, PlanWorkspaceSnapshot, SessionKey } from '../shared/contracts';
 import { readLearningSet, readPlanWorkspace } from '../study/read-workspace';
 import { setFrontmatterField } from '../study/write-workspace';
 import type { StudySession, StudySessionFactory } from './session-factory';
@@ -115,6 +115,49 @@ export class WorkspaceRegistry {
     await coach.prompt(
       `学生要求重新备课。保留 ${lesson.path}，使用新的 Lesson ID 准备替代课程，并追加到 Plan Lesson Index。`,
     );
+  }
+
+  history(key: SessionKey): ChatMessage[] {
+    const session = this.sessions.get(key);
+    if (!session) return [];
+    return session.messages.flatMap((raw, index) => {
+      const message = raw as { role?: string; content?: unknown };
+      if (message.role !== 'user' && message.role !== 'assistant') return [];
+      const text = typeof message.content === 'string'
+        ? message.content
+        : Array.isArray(message.content)
+          ? message.content
+            .flatMap((part) => (
+              typeof part === 'object'
+                && part !== null
+                && (part as { type?: string }).type === 'text'
+                ? [String((part as { text?: unknown }).text ?? '')]
+                : []
+            ))
+            .join('')
+          : '';
+      return text
+        ? [{
+          id: `${key}:${index}`,
+          role: message.role === 'user'
+            ? 'student' as const
+            : key.startsWith('coach:')
+              ? 'coach' as const
+              : 'tutor' as const,
+          text,
+          complete: true,
+        }]
+        : [];
+    });
+  }
+
+  subscribe(
+    key: SessionKey,
+    listener: Parameters<StudySession['subscribe']>[0],
+  ): () => void {
+    const session = this.sessions.get(key);
+    if (!session) throw new Error(`SESSION_NOT_OPEN: ${key}`);
+    return session.subscribe(listener);
   }
 
   get(key: SessionKey): StudySession | undefined {

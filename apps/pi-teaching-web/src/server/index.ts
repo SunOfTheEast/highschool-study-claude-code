@@ -1,10 +1,43 @@
+import { resolve } from 'node:path';
+import { createPiSessionFactory } from '../runtime/session-factory';
+import { findPiSessionFile, WorkspaceRegistry } from '../runtime/workspace-registry';
 import { createRequestHandler } from './app';
+import { EventHub } from './event-hub';
 
-const port = Number.parseInt(process.env.STUDY_WEB_PORT ?? '65000', 10);
+const args = new Set(process.argv.slice(2));
+const valueAfter = (name: string) => {
+  const index = process.argv.indexOf(name);
+  return index >= 0 ? process.argv[index + 1] : undefined;
+};
+const root = resolve(valueAfter('--learning-set') ?? process.env.STUDY_LEARNING_SET ?? 'learning-set');
+const authoring = args.has('--authoring');
+const port = Number.parseInt(
+  valueAfter('--port') ?? process.env.STUDY_WEB_PORT ?? '65000',
+  10,
+);
+const hub = new EventHub();
+const factory = await createPiSessionFactory(root, () => new Date());
+const registry = new WorkspaceRegistry(root, factory, findPiSessionFile);
+const clients = new Set<{ send(data: string): void }>();
+hub.subscribe((event) => {
+  const data = JSON.stringify(event);
+  for (const client of clients) client.send(data);
+});
+const fetch = createRequestHandler({ root, authoring, registry, hub });
+
 const server = Bun.serve({
   hostname: '127.0.0.1',
   port,
-  fetch: createRequestHandler(),
+  fetch,
+  websocket: {
+    open(socket) {
+      clients.add(socket);
+    },
+    close(socket) {
+      clients.delete(socket);
+    },
+    message() {},
+  },
 });
 
 console.log(`StudyForge Pi Web: http://${server.hostname}:${server.port}`);
