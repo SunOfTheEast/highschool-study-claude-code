@@ -152,6 +152,18 @@ test('binds Trace to a flexible ActivityBlock ID when the exact H2 exists', () =
   expect(readActiveTraces(root)[0]?.blockId).toBe('assessment-01');
 });
 
+test('binds Trace to labeled ActivityBlock headings emitted by real Lessons', () => {
+  const root = makeLearningSetWithLesson();
+  const lessonPath = join(root, 'lessons/lesson-001.md');
+  const source = readFileSync(lessonPath, 'utf8')
+    .replace('## Block step-02', '## Block assessment-01（必做）');
+  writeFileSync(lessonPath, source);
+
+  appendTrace(root, { ...input, blockId: 'assessment-01' }, () => new Date('2026-07-21T02:00:00Z'));
+
+  expect(readActiveTraces(root)[0]?.blockId).toBe('assessment-01');
+});
+
 test('rejects aliases outside cards and files without the problem-card schema', () => {
   const invalidCards = [
     {

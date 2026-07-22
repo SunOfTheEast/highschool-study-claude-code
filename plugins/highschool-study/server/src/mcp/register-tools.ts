@@ -1,9 +1,9 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { searchCards } from '../cards';
+import { appendTraceWithProjection } from '../planner-attention';
 import { sourceResolve } from '../sources';
 import { searchTraces } from '../trace-search';
-import { appendTrace } from '../traces';
 
 export type StudyMcpDependencies = {
   learningSetRoot: string;
@@ -65,7 +65,7 @@ export function registerStudyTools(server: McpServer, deps: StudyMcpDependencies
   server.registerTool('trace_append', {
     description: 'Append one validated evidence Trace to its owning Lesson',
     inputSchema: traceAppendInput,
-  }, async (input) => output(appendTrace(deps.learningSetRoot, input, deps.now)));
+  }, async (input) => output(appendTraceWithProjection(deps.learningSetRoot, input, deps.now)));
 
   server.registerTool('source_resolve', {
     description: 'Resolve a learning-set source and optional fragment',

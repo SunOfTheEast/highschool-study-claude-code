@@ -97,7 +97,7 @@ export async function createPiSessionFactory(
     );
     const loader = await createRoleResourceLoader(root, role, ownerId, eventBus);
     const tools: ToolDefinition[] = [
-      ...createStudyTools(root, now),
+      ...createStudyTools(root, now, { role, ownerId }),
       ...(role === 'tutor' ? [createClassroomUpdateTool(root)] : []),
       createDeepWorkflowTool(workflowRuntime),
     ];

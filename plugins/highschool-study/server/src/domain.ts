@@ -12,6 +12,11 @@ export {
   type MethodSignal,
 } from './method-signals';
 export {
+  appendTraceWithProjection,
+  rebuildPlannerAttention,
+  renderPlannerAttention,
+} from './planner-attention';
+export {
   readMarkdownFile,
   type MarkdownDocument,
 } from './markdown';

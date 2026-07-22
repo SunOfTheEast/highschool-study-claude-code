@@ -33,6 +33,7 @@ export type TraceAppendInput = Omit<
 const assessments = new Set<TraceAssessment>(['correct', 'partially_correct', 'incorrect', 'incomplete']);
 const supports = new Set<TraceSupport>(['none', 'tutor', 'external']);
 const traceHeading = /^## Trace (event-\d+)[ \t]*$/gm;
+const blockHeading = /^## Block ([a-z0-9]+(?:-[a-z0-9]+)*)(?:（[^）]+）)?[ \t]*$/;
 
 function traceError(message: string): never {
   throw new Error(`INVALID_TRACE: ${message}`);
@@ -145,7 +146,7 @@ function hasExactBlock(source: string, blockId: string): boolean {
       fence = { marker: fenceMatch[1][0] as '`' | '~', length: fenceMatch[1].length };
       continue;
     }
-    if (line === `## Block ${blockId}`) return true;
+    if (blockHeading.exec(line)?.[1] === blockId) return true;
   }
   return false;
 }

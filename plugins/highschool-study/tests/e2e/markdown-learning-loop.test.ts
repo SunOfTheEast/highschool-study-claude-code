@@ -4,7 +4,6 @@ import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { cpSync, mkdtempSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { rebuildPlannerAttention } from '../../scripts/rebuild-planner-attention';
 import { createStudyMcpServer } from '../../server/src/mcp/create-server';
 
 const fixture = join(import.meta.dir, '../fixtures/learning-set');
@@ -120,7 +119,6 @@ test('proves the Markdown-only bidirectional learning loop', async () => {
     })) as { traces: Array<{ eventId: string }> };
     expect(finalReverse.traces.map((trace) => trace.eventId)).toEqual(['event-002']);
 
-    rebuildPlannerAttention(root);
     const attention = readFileSync(join(root, 'memory/planner-attention.md'), 'utf8');
     expect(attention).toContain('trace-event-002');
     expect(attention).not.toContain('trace-event-001');

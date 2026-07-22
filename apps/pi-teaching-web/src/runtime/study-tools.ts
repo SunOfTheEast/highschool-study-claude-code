@@ -1,6 +1,6 @@
 import { defineTool, type ToolDefinition } from '@earendil-works/pi-coding-agent';
 import {
-  appendTrace,
+  appendTraceWithProjection,
   searchCards,
   searchTraces,
   sourceResolve,
@@ -14,7 +14,16 @@ function result(kind: string, value: object) {
   };
 }
 
-export function createStudyTools(root: string, now: () => Date): ToolDefinition[] {
+export type StudyToolContext = {
+  role: 'coach' | 'tutor';
+  ownerId: string;
+};
+
+export function createStudyTools(
+  root: string,
+  now: () => Date,
+  context: StudyToolContext,
+): ToolDefinition[] {
   return [
     defineTool({
       name: 'card_search',
@@ -50,11 +59,10 @@ export function createStudyTools(root: string, now: () => Date): ToolDefinition[
       label: '记录课堂证据',
       description: 'Append one validated Trace to its owning Lesson.',
       parameters: Type.Object({
-        lessonPath: Type.String(),
         blockId: Type.String(),
-        cardAlias: Type.Union([Type.String(), Type.Null()]),
-        cardStepId: Type.Union([Type.String(), Type.Null()]),
-        materialPath: Type.Union([Type.String(), Type.Null()]),
+        cardAlias: Type.Optional(Type.String()),
+        cardStepId: Type.Optional(Type.String()),
+        materialPath: Type.Optional(Type.String()),
         assessment: Type.Union([
           Type.Literal('correct'),
           Type.Literal('partially_correct'),
@@ -67,9 +75,19 @@ export function createStudyTools(root: string, now: () => Date): ToolDefinition[
           Type.Literal('external'),
         ]),
         note: Type.String(),
-        supersedes: Type.Union([Type.String(), Type.Null()]),
+        supersedes: Type.Optional(Type.String()),
       }),
-      execute: async (_id, input) => result('trace-append', appendTrace(root, input, now)),
+      execute: async (_id, input) => result('trace-append', appendTraceWithProjection(root, {
+        lessonPath: `lessons/${context.ownerId}.md`,
+        blockId: input.blockId,
+        cardAlias: input.cardAlias ?? null,
+        cardStepId: input.cardStepId ?? null,
+        materialPath: input.materialPath ?? null,
+        assessment: input.assessment,
+        support: input.support,
+        note: input.note,
+        supersedes: input.supersedes ?? null,
+      }, now)),
     }),
     defineTool({
       name: 'source_resolve',
