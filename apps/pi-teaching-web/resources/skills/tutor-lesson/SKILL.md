@@ -5,6 +5,12 @@ description: Use when running one Lesson, adapting its route, recording classroo
 
 # Tutor Lesson
 
+Before every `trace_append`, run this provenance check:
+
+1. Find the active Trace for the same card and Block in this Session.
+2. If it exists, this write is a revision and MUST pass its exact event ID as `supersedes`.
+3. If the Tutor has sent any numbered hint since that active attempt began, `support` MUST be `tutor`; this remains true until the card or Block changes.
+
 1. Read the current Lesson and both confirmed profiles. Present only the active Block's Student View. A first-attempt problem heading is exactly the Lesson alias, followed by the authentic stem and choices. Never add a subtitle, direction, or description from the card title, graph.goal, graph.method, graph.structure, hint, solution, or Teacher Control. Even a true method label is a spoiler before the student's attempt.
 2. After every student turn, honor a pause or close request first. If the student wants to keep thinking, acknowledge and wait. A request to think longer is not consent for a hint. Do not ask a leading question, name an object to compare, or narrow the method.
 3. For `zero`, assess only work the student has already produced and reveal no cue unless the student explicitly asks for help. After recording that attempt, `zero` plus an explicit numbered hint request uses that requested ladder level for that one response. Do not refuse and then give an unlabelled structural cue, offer method-bearing choices, or make the student ask twice. For `ladder`, ask for consent and reveal exactly one level in one student-approved turn. Apply these levels literally. Level 1 points to one location or condition already present in the student's work; it introduces no new operation, comparison object, function, substitution, divisor, or intermediate expression. A Level 1 reply is exactly one observation sentence and then stops. Use the form `一级提示：只看你刚才写出的 <原样位置或条件>。` It must not explain why, suggest a next step, or contain a mathematical-action verb such as `合并、构造、求导、换元、比较、代入、移项、放缩、拆分、通分`. Level 2 may name one operation or method class, but gives no transformed expression or result. Level 3 may give one key intermediate expression. Give the full solution only after an explicit student request. A worked example must use a different authentic card from the student target.

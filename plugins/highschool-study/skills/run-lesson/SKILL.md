@@ -4,6 +4,12 @@ description: Teach or resume one prepared Lesson while preserving evidence and s
 allowed-tools: Read, Glob, Grep, Edit, Skill, TaskCreate, TaskUpdate, TaskList, mcp__plugin_highschool-study_study-markdown__trace_append, mcp__plugin_highschool-study_study-markdown__source_resolve
 ---
 
+Before every `trace_append`, run this provenance check:
+
+1. Find the active Trace for the same card and Block in this Session.
+2. If it exists, this write is a revision and MUST pass its exact event ID as `supersedes`.
+3. If the Tutor has sent any numbered hint since that active attempt began, `support` MUST be `tutor`; this remains true until the card or Block changes.
+
 1. Call `highschool-study:recall-study-memory` with purpose `teaching`. Read the prepared Lesson and its direct sources. Read the shared `reveal-policy.md` under `prepare-next-lesson/references/`. Do not read planner attention during teaching.
 2. At entry and after every student turn, check for a transition request. Whenever the student asks to pause or close, call `highschool-study:close-lesson-reflection` immediately, regardless of capability attainment, and stop the normal sequence pending that reflection outcome. Do this before another activity or Task change. This request-triggered reflection is separate from the attainment-first reflection below.
 3. If the Lesson is paused, first show its recorded pause point, remaining blocks, and active evidence. Require a fresh explicit `continue`, `adjust`, or `close` choice; the earlier pause instruction is not consent to resume. Before that choice, make no Task calls and do not teach. On continue, proceed from the saved point. On adjust, revise only the remaining blocks as requested and then proceed. On close, call `highschool-study:close-lesson-reflection` and stop without recreating Tasks.

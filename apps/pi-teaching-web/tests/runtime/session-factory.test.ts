@@ -186,6 +186,10 @@ test('defines the Tutor correction, hint ladder and tool-turn protocol literally
     expect(source).toContain(
       'When a later student turn completes or corrects the same card-and-Block attempt, the new Trace MUST set `supersedes` to the exact active incomplete or partially_correct event',
     );
+    expect(source).toContain('Before every `trace_append`, run this provenance check');
+    expect(source).toContain(
+      'If the Tutor has sent any numbered hint since that active attempt began, `support` MUST be `tutor`; this remains true until the card or Block changes',
+    );
   }
   expect(tutorSkill).toContain(
     "Level 1 points to one location or condition already present in the student's work",
