@@ -75,6 +75,45 @@ test('routes a message to the selected Session key', async () => {
   expect(sent).toEqual([['coach:p1', '继续学习', []]]);
 });
 
+test('publishes the active snapshot before starting the hidden Tutor turn', async () => {
+  const calls: string[] = [];
+  let releaseKickoff!: () => void;
+  const kickoffPending = new Promise<void>((resolve) => { releaseKickoff = resolve; });
+  const hub = new EventHub();
+  hub.subscribe((event) => {
+    if (event.type === 'snapshot') calls.push('snapshot');
+  });
+  const handler = createRequestHandler({
+    root: '/tmp/demo',
+    authoring: false,
+    hub,
+    readLearningSet: () => learningSet,
+    registry: {
+      startLesson: async () => { calls.push('start'); },
+      triggerLessonStart: async () => {
+        calls.push('kickoff');
+        await kickoffPending;
+      },
+      snapshot: () => workspace,
+      subscribe: () => {
+        calls.push('bind');
+        return () => {};
+      },
+      subscribeWorkflows: () => () => {},
+    } as never,
+  });
+
+  const response = await handler(new Request('http://local/api/lessons/lesson-003/start', {
+    method: 'POST',
+  }));
+  expect(response!.status).toBe(200);
+  expect(calls).toEqual(['start', 'bind', 'snapshot', 'kickoff']);
+  releaseKickoff();
+  await kickoffPending;
+  await Promise.resolve();
+  expect(calls).toEqual(['start', 'bind', 'snapshot', 'kickoff', 'snapshot']);
+});
+
 test('uploads classroom images and attaches them to a Session message', async () => {
   const root = mkdtempSync(join(tmpdir(), 'studyforge-images-'));
   const sent: unknown[] = [];

@@ -21,6 +21,7 @@ function fixture() {
 
 function idleWorkflowMethods() {
   return {
+    triggerLessonStart: async () => {},
     deepModeEnabled: () => false,
     setDeepMode: () => {},
     workflows: () => [],
@@ -56,6 +57,32 @@ test('creates Coach eagerly and Tutor only after start', async () => {
   await registry.startLesson('lesson-003');
   expect(created).toEqual(['coach:domain-integrity', 'tutor:lesson-003']);
   expect(registry.snapshot('domain-integrity').lessons[2]?.status).toBe('active');
+});
+
+test('starts a Lesson with one hidden Tutor kickoff and no student prompt', async () => {
+  const kickoffs: string[] = [];
+  const prompts: string[] = [];
+  const factory: StudySessionFactory = async ({ role, ownerId }) => ({
+    sessionId: `${role}-${ownerId}`,
+    sessionFile: `/tmp/${role}-${ownerId}.jsonl`,
+    messages: [],
+    isStreaming: false,
+    personaId: () => null,
+    setPersona: async () => {},
+    ...idleWorkflowMethods(),
+    triggerLessonStart: async () => { kickoffs.push(ownerId); },
+    prompt: async (text) => { prompts.push(text); },
+    abort: async () => {},
+    subscribe: () => () => {},
+    dispose: () => {},
+  });
+  const registry = new WorkspaceRegistry(fixture(), factory, async () => null);
+
+  await registry.startLesson('lesson-003');
+  await registry.triggerLessonStart('lesson-003');
+
+  expect(kickoffs).toEqual(['lesson-003']);
+  expect(prompts).toEqual([]);
 });
 
 test('abandons an already-started Lesson before asking Coach to reprepare', async () => {
@@ -132,6 +159,7 @@ test('keeps deep mode scoped and refuses to open a prepared Tutor', async () => 
       confirmWorkflow: async () => { throw new Error('WORKFLOW_NOT_FOUND'); },
       cancelWorkflow: () => {},
       subscribeWorkflows: () => () => {},
+      triggerLessonStart: async () => {},
       prompt: async () => {},
       abort: async () => {},
       subscribe: () => () => {},

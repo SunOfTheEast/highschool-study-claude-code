@@ -65,6 +65,11 @@ export class WorkspaceRegistry {
     return this.openTutor(lessonId);
   }
 
+  async triggerLessonStart(lessonId: string): Promise<void> {
+    const session = this.sessions.get(`tutor:${lessonId}`) ?? await this.openTutor(lessonId);
+    await session.triggerLessonStart();
+  }
+
   async openTutor(lessonId: string): Promise<StudySession> {
     const key = `tutor:${lessonId}`;
     const lesson = this.workspaceForLesson(lessonId).lessons.find((item) => item.id === lessonId);

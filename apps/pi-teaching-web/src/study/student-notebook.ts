@@ -46,8 +46,14 @@ export function readStudentNotebook(
   if (!planId) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
   const lesson = readPlanWorkspace(root, planId).lessons.find((item) => item.id === lessonId)!;
   const source = readFileSync(resolveInsideRoot(root, lesson.path), 'utf8');
+  const visibleAliases = new Set(
+    lesson.blocks
+      .filter((block) => block.status === 'active' || block.status === 'completed')
+      .flatMap((block) => block.uses),
+  );
   const cards: Record<string, StudentProblemCard> = {};
   for (const [alias, target] of aliases(source)) {
+    if (!visibleAliases.has(alias)) continue;
     cards[alias] = studentCard(root, lesson.path, target);
   }
   return {

@@ -29,6 +29,7 @@ export interface StudySession {
   confirmWorkflow(id: string): Promise<WorkflowSnapshot>;
   cancelWorkflow(id: string): void;
   subscribeWorkflows(listener: (snapshot: WorkflowSnapshot) => void): () => void;
+  triggerLessonStart(): Promise<void>;
   prompt(text: string, images?: ImageContent[]): Promise<void>;
   abort(): Promise<void>;
   subscribe(listener: (event: AgentSessionEvent) => void): () => void;
@@ -161,6 +162,21 @@ export async function createPiSessionFactory(
       confirmWorkflow: (id) => workflowRuntime.confirm(id),
       cancelWorkflow: (id) => workflowRuntime.cancel(id),
       subscribeWorkflows: (listener) => workflowRuntime.subscribe(listener),
+      triggerLessonStart: async () => {
+        const resuming = Boolean(sessionFile);
+        await session.sendCustomMessage({
+          customType: resuming
+            ? 'studyforge.lesson-resume.v1'
+            : 'studyforge.lesson-start.v1',
+          content: JSON.stringify({
+            lessonId: ownerId,
+            instruction: resuming
+              ? 'The student clicked Continue. Resume from the recorded active block without asking whether they are ready.'
+              : 'The student clicked Start. This is consent to begin. Activate orientation and present the first answerable Student View without asking whether they are ready.',
+          }),
+          display: false,
+        }, { triggerTurn: true });
+      },
       prompt: (text, images = []) => session.prompt(text, { images }),
       abort: () => session.abort(),
       subscribe: (listener) => session.subscribe(listener),

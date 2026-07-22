@@ -215,7 +215,8 @@ export function createRequestHandler(deps?: AppDependencies) {
     const lessonAction = /^\/api\/lessons\/([^/]+)\/(start|pause|reprepare)$/.exec(url.pathname);
     if (request.method === 'POST' && lessonAction) {
       const lessonId = decodeURIComponent(lessonAction[1]!);
-      if (lessonAction[2] === 'start') {
+      const startsLesson = lessonAction[2] === 'start';
+      if (startsLesson) {
         await deps.registry.startLesson(lessonId);
         bind(`tutor:${lessonId}`);
       }
@@ -225,6 +226,18 @@ export function createRequestHandler(deps?: AppDependencies) {
       }
       const snapshot = deps.registry.snapshot();
       deps.hub.publish({ type: 'snapshot', workspace: snapshot });
+      if (startsLesson) {
+        void deps.registry.triggerLessonStart(lessonId)
+          .then(() => deps.hub.publish({
+            type: 'snapshot',
+            workspace: deps.registry.snapshot(),
+          }))
+          .catch(() => deps.hub.publish({
+            type: 'session-error',
+            sessionKey: `tutor:${lessonId}`,
+            message: '模型调用失败，请检查 Pi 的模型与凭据配置后重试。',
+          }));
+      }
       return json(snapshot);
     }
 

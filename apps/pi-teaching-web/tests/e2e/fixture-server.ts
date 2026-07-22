@@ -1,12 +1,17 @@
 import { resolve } from 'node:path';
+import { cpSync, mkdtempSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import type { SessionKey } from '../../src/shared/contracts';
 import { readPlanWorkspace } from '../../src/study/read-workspace';
+import { setBlockStatus, setFrontmatterField } from '../../src/study/write-workspace';
 import { resolvePersona } from '../../src/study/persona';
 import { createRequestHandler } from '../../src/server/app';
 import { EventHub } from '../../src/server/event-hub';
 import type { WorkflowSnapshot, WorkflowTaskState } from '../../src/workflows/contracts';
 
-const root = resolve(import.meta.dir, '../../../../examples/derivative-demo/learning-set');
+const sourceRoot = resolve(import.meta.dir, '../../../../examples/derivative-demo/learning-set');
+const root = mkdtempSync(`${tmpdir()}/studyforge-e2e-`);
+cpSync(sourceRoot, root, { recursive: true });
 const hub = new EventHub();
 const coachKey: SessionKey = 'coach:domain-integrity';
 
@@ -138,7 +143,18 @@ const registry = {
     }
     notify(key, snapshot);
   },
-  startLesson: async () => ({}),
+  startLesson: async (lessonId: string) => {
+    const lesson = readPlanWorkspace(root, 'domain-integrity').lessons
+      .find((item) => item.id === lessonId);
+    if (!lesson) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
+    setFrontmatterField(root, lesson.path, 'status', 'active');
+    const orientation = lesson.blocks.find((block) => block.id === 'orientation');
+    const firstProblem = lesson.blocks.find((block) => block.kind === 'problem');
+    if (orientation) setBlockStatus(root, lesson.path, orientation.id, 'completed');
+    if (firstProblem) setBlockStatus(root, lesson.path, firstProblem.id, 'active');
+    return {};
+  },
+  triggerLessonStart: async () => {},
   pauseLesson: async () => {},
   abandonForReprepare: async () => {},
   send: async () => {},
