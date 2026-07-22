@@ -48,6 +48,16 @@ Freeze the target quantity and check its domain.
 
 - Q-FREEZE-01: ../cards/conics/freeze-variable-01.yaml
 `);
+  writeFileSync(join(root, 'graph/vocabulary.yaml'), `schema: highschool-study.taxonomy.v1
+nodes:
+  - node_id: method.freeze-variable
+    facet: method_cluster
+    canonical_name: 冻结变量法
+    aliases: [冻元法]
+  - node_id: method.parameterize
+    facet: method_cluster
+    canonical_name: 参数化与消元
+`);
   return root;
 }
 
@@ -68,6 +78,7 @@ export function makeLearningSetWithHistory(): string {
     support: 'none' as const,
     note: 'Used the freeze variable method and checked the domain.',
     supersedes: null,
+    methods: { primary: '冻结变量法', secondary: ['参数化与消元'] },
   };
   appendTrace(root, cardTrace, () => new Date('2026-07-21T02:00:00Z'));
   appendTrace(root, {

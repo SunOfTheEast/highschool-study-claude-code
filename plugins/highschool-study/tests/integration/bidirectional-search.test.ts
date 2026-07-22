@@ -27,6 +27,9 @@ test('joins cards and active Trace in both directions', () => {
   expect(Object.keys(traces.cardsByPath)).toEqual([
     'cards/conics/freeze-variable-01.yaml',
   ]);
+  expect(traces.cardsByPath['cards/conics/freeze-variable-01.yaml']?.traceHistory.map((trace) => trace.eventId))
+    .toEqual(['event-001', 'event-003']);
+  expect(traces.cardsByPath['cards/conics/freeze-variable-01.yaml']?.alternatives).toEqual([]);
   expect(traces.traces.some((trace) => trace.cardPath === null)).toBe(true);
 });
 

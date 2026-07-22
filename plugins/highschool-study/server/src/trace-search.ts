@@ -1,4 +1,5 @@
-import { readCard, type CardContent } from './cards';
+import { readActiveCardAlternatives } from './alternatives';
+import { readCard, type CardHit } from './cards';
 import { readActiveTraces, type TraceRecord } from './traces';
 
 export type TraceSearchInput = {
@@ -11,7 +12,7 @@ export type TraceSearchInput = {
 
 export type TraceSearchResult = {
   traces: TraceRecord[];
-  cardsByPath: Record<string, CardContent>;
+  cardsByPath: Record<string, CardHit>;
 };
 
 function compareTrace(left: TraceRecord, right: TraceRecord): number {
@@ -33,18 +34,25 @@ function matchesQuery(trace: TraceRecord, query: string | null): boolean {
 }
 
 export function searchTraces(root: string, input: TraceSearchInput): TraceSearchResult {
-  const traces = readActiveTraces(root)
+  const activeTraces = readActiveTraces(root);
+  const traces = activeTraces
     .filter((trace) => input.planId === null || trace.planId === input.planId)
     .filter((trace) => input.lessonId === null || trace.lessonId === input.lessonId)
     .filter((trace) => input.cardPath === null || trace.cardPath === input.cardPath)
     .filter((trace) => matchesQuery(trace, input.query))
     .sort(compareTrace)
     .slice(0, input.limit);
-  const cardsByPath: Record<string, CardContent> = {};
+  const cardsByPath: Record<string, CardHit> = {};
   const paths = [...new Set(traces.flatMap((trace) => trace.cardPath === null ? [] : [trace.cardPath]))].sort();
   for (const path of paths) {
     const card = readCard(root, path);
-    if (card !== null) cardsByPath[path] = card;
+    if (card !== null) {
+      cardsByPath[path] = {
+        ...card,
+        traceHistory: activeTraces.filter((trace) => trace.cardPath === path),
+        alternatives: readActiveCardAlternatives(root, path),
+      };
+    }
   }
   return { traces, cardsByPath };
 }

@@ -1,21 +1,27 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { extname, join, relative } from 'node:path';
 import { parse } from 'yaml';
+import { readActiveCardAlternatives, type CardAlternative } from './alternatives';
 import { resolveInsideRoot } from './learning-set';
 import { buildTraceIndex } from './trace-index';
 import { readActiveTraces, type TraceRecord } from './traces';
 
-export type CardHit = {
+type CardCore = {
   path: string;
   title: string;
   content: string;
   goal: string;
   methods: Array<{ name: string; role: 'primary' | 'secondary' }>;
   steps: Array<{ id: string; title: string }>;
-  traceHistory: TraceRecord[];
+  parts: string[];
 };
 
-export type CardContent = Omit<CardHit, 'traceHistory'>;
+export type CardHit = CardCore & {
+  traceHistory: TraceRecord[];
+  alternatives: CardAlternative[];
+};
+
+export type CardContent = CardCore;
 export type ActiveTraceReader = (root: string) => TraceRecord[];
 export type CardSearchInput = { query: string; limit: number };
 
@@ -67,6 +73,13 @@ function loadCard(root: string, path: string): LoadedCard | null {
     }
   }
   const stem = text(raw.stem);
+  const parts = (Array.isArray(raw.parts) ? raw.parts : [])
+    .flatMap((value) => {
+      if (typeof value === 'string' && value.trim()) return [value.trim()];
+      const part = record(value);
+      const id = text(part?.part_id);
+      return id ? [id] : [];
+    });
   const card: CardContent = {
     path,
     title: stem || text(raw.content_item_id),
@@ -79,6 +92,7 @@ function loadCard(root: string, path: string): LoadedCard | null {
       const title = text(criterion?.description);
       return id && title ? [{ id, title }] : [];
     }),
+    parts,
   };
   return { card, searchText: `${path}\n${source}`.toLowerCase() };
 }
@@ -89,7 +103,8 @@ export function readCard(root: string, path: string): CardContent | null {
 
 export function createCardSearcher(readTraces: ActiveTraceReader = readActiveTraces) {
   return (root: string, input: CardSearchInput): { cards: CardHit[] } => {
-    const index = buildTraceIndex(readTraces(root));
+    const activeTraces = readTraces(root);
+    const index = buildTraceIndex(activeTraces);
     const terms = input.query.trim().toLowerCase().split(/\s+/).filter(Boolean);
     if (terms.length === 0) return { cards: [] };
     const cards = cardPaths(root)
@@ -99,6 +114,7 @@ export function createCardSearcher(readTraces: ActiveTraceReader = readActiveTra
       .map(({ card }) => ({
         ...card,
         traceHistory: index.byCardPath.get(card.path) ?? [],
+        alternatives: readActiveCardAlternatives(root, card.path, activeTraces),
       }))
       .slice(0, input.limit);
     return { cards };

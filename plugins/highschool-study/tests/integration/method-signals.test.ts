@@ -78,6 +78,45 @@ test('averages active step evidence within one card attempt', () => {
   ]);
 });
 
+test('attributes evidence to actual Trace methods instead of card declarations', () => {
+  const root = makeLearningSetWithHistory();
+  const cardTrace = readActiveTraces(root).find((trace) => trace.cardPath !== null)!;
+
+  expect(aggregateMethodSignals(root, [{
+    ...cardTrace,
+    methods: { primary: '参数化与消元', secondary: [] },
+  }])).toEqual([expect.objectContaining({
+    method: '参数化与消元',
+    evidenceWeight: 2,
+    earnedWeight: 1,
+    attemptCount: 1,
+    distinctCardCount: 1,
+  })]);
+  expect(aggregateMethodSignals(root, [{ ...cardTrace, methods: null }])).toEqual([]);
+});
+
+test('promotes a method from secondary to primary within one attempt', () => {
+  const root = makeLearningSetWithHistory();
+  const cardTrace = readActiveTraces(root).find((trace) => trace.cardPath !== null)!;
+  const signals = aggregateMethodSignals(root, [
+    {
+      ...cardTrace,
+      methods: { primary: '冻结变量法', secondary: ['参数化与消元'] },
+    },
+    {
+      ...cardTrace,
+      eventId: 'event-promoted',
+      sourceAnchor: 'lessons/lesson-001.md#trace-event-promoted',
+      methods: { primary: '参数化与消元', secondary: [] },
+    },
+  ]);
+
+  expect(signals).toEqual([
+    expect.objectContaining({ method: '冻结变量法', evidenceWeight: 2, attemptCount: 1 }),
+    expect.objectContaining({ method: '参数化与消元', evidenceWeight: 2, attemptCount: 1 }),
+  ]);
+});
+
 test('combines assessment and support factors across distinct attempts', () => {
   const root = makeLearningSetWithHistory();
   const cardTrace = readActiveTraces(root).find((trace) => trace.cardPath !== null)!;

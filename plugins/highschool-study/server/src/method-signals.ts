@@ -1,4 +1,4 @@
-import { readCard, type CardContent } from './cards';
+import { readCard } from './cards';
 import type { TraceRecord } from './traces';
 
 export type MethodSignal = {
@@ -27,11 +27,12 @@ type MutableSignal = Omit<MethodSignal, 'score' | 'distinctCardCount'> & {
 type CardAttempt = {
   cardPath: string;
   factors: number[];
+  methods: Map<string, 'primary' | 'secondary'>;
   sourceRefs: string[];
 };
 
 export function aggregateMethodSignals(root: string, traces: TraceRecord[]): MethodSignal[] {
-  const cards = new Map<string, CardContent | null>();
+  const cards = new Map<string, boolean>();
   const signals = new Map<string, MutableSignal>();
   const attempts = new Map<string, CardAttempt>();
 
@@ -41,30 +42,38 @@ export function aggregateMethodSignals(root: string, traces: TraceRecord[]): Met
     const attempt = attempts.get(key) ?? {
       cardPath: trace.cardPath,
       factors: [],
+      methods: new Map<string, 'primary' | 'secondary'>(),
       sourceRefs: [],
     };
     attempt.factors.push(assessmentFactor[trace.assessment] * supportFactor[trace.support]);
+    if (trace.methods !== null) {
+      const primary = trace.methods.primary;
+      if (attempt.methods.get(primary) !== 'primary') attempt.methods.set(primary, 'primary');
+      for (const secondary of trace.methods.secondary) {
+        if (!attempt.methods.has(secondary)) attempt.methods.set(secondary, 'secondary');
+      }
+    }
     if (!attempt.sourceRefs.includes(trace.sourceAnchor)) attempt.sourceRefs.push(trace.sourceAnchor);
     attempts.set(key, attempt);
   }
 
   for (const attempt of attempts.values()) {
-    let card = cards.get(attempt.cardPath);
-    if (card === undefined) {
+    let cardExists = cards.get(attempt.cardPath);
+    if (cardExists === undefined) {
       try {
-        card = readCard(root, attempt.cardPath);
+        cardExists = readCard(root, attempt.cardPath) !== null;
       } catch {
-        card = null;
+        cardExists = false;
       }
-      cards.set(attempt.cardPath, card);
+      cards.set(attempt.cardPath, cardExists);
     }
-    if (card === null) continue;
+    if (!cardExists || attempt.methods.size === 0) continue;
 
     const factor = attempt.factors.reduce((sum, value) => sum + value, 0) / attempt.factors.length;
-    for (const method of card.methods) {
-      const weight = roleWeight[method.role];
-      const signal = signals.get(method.name) ?? {
-        method: method.name,
+    for (const [methodName, role] of attempt.methods) {
+      const weight = roleWeight[role];
+      const signal = signals.get(methodName) ?? {
+        method: methodName,
         evidenceWeight: 0,
         earnedWeight: 0,
         attemptCount: 0,
@@ -78,7 +87,7 @@ export function aggregateMethodSignals(root: string, traces: TraceRecord[]): Met
       for (const sourceRef of attempt.sourceRefs) {
         if (!signal.sourceRefs.includes(sourceRef)) signal.sourceRefs.push(sourceRef);
       }
-      signals.set(method.name, signal);
+      signals.set(methodName, signal);
     }
   }
 

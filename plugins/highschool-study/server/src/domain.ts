@@ -1,4 +1,10 @@
 export {
+  appendCardAlternative,
+  readActiveCardAlternatives,
+  type CardAlternative,
+  type CardAlternativeInput,
+} from './alternatives';
+export {
   createCardSearcher,
   readCard,
   searchCards,
