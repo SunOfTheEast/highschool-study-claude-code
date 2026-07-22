@@ -13,6 +13,7 @@ import { DeepWorkflowRuntime } from '../workflows/runtime';
 import { WorkflowStore } from '../workflows/store';
 import { createDeepWorkflowTool } from '../workflows/tool';
 import { createClassroomUpdateTool } from './classroom-update';
+import { createLessonCloseTool } from './lesson-close';
 import { createRoleResourceLoader } from './resource-loader';
 import type { SessionRole, StudySessionScope } from './session-scope';
 import { createStudyTools } from './study-tools';
@@ -102,6 +103,7 @@ export function roleToolNames(role: SessionRole): string[] {
       'trace_append',
       'source_resolve',
       'classroom_update',
+      'lesson_close',
     ];
 }
 
@@ -129,8 +131,10 @@ export async function createPiSessionFactory(
     );
     const loader = await createRoleResourceLoader(root, scope, eventBus);
     const tools: ToolDefinition[] = [
-      ...createStudyTools(root, now, { role, ownerId }),
-      ...(role === 'tutor' ? [createClassroomUpdateTool(root)] : []),
+      ...createStudyTools(root, now, scope),
+      ...(role === 'tutor'
+        ? [createClassroomUpdateTool(root, ownerPath), createLessonCloseTool(root, ownerPath)]
+        : []),
       createDeepWorkflowTool(workflowRuntime),
     ];
     const { session } = await createAgentSession({

@@ -31,6 +31,20 @@ status: prepared
 
 开始。
 
+## Block reflection（必做）
+
+### Node State
+
+- Kind: reflection
+- Required: true
+- Status: active
+- Depends on: orientation
+- Uses:
+
+### Student View
+
+复盘。
+
 ## Reflection
 
 （课堂结束后填写）
@@ -63,7 +77,21 @@ test('appends a sourced route change and closes the lesson', () => {
   const source = readFileSync(join(root, path), 'utf8');
   expect(source).toContain('### Route change route-001');
   expect(source).toContain('- Source: #trace-event-001');
+  expect(source).toContain('- Status: completed');
   expect(source).toContain('status: closed');
   expect(source).toContain('我会先检查定义域。');
   expect(source).toContain('独立完成诊断。');
+});
+
+test('leaves a lesson byte-for-byte unchanged when a required close section is missing', () => {
+  const { root, path } = fixture();
+  const absolute = join(root, path);
+  const before = readFileSync(absolute, 'utf8').replace('## Lesson Summary', '## Summary Missing');
+  writeFileSync(absolute, before);
+
+  expect(() => closeLesson(root, path, {
+    reflection: '不会写入。',
+    summary: '不会写入。',
+  })).toThrow('SECTION_NOT_FOUND: Lesson Summary');
+  expect(readFileSync(absolute, 'utf8')).toBe(before);
 });

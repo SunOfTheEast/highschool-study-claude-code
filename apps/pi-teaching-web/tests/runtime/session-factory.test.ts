@@ -58,6 +58,7 @@ test('keeps Coach and Tutor tool boundaries distinct', () => {
     'trace_append',
     'source_resolve',
     'classroom_update',
+    'lesson_close',
   ]);
   expect(readFileSync(join(resources, 'agents/coach.md'), 'utf8')).toContain('one Plan');
   expect(readFileSync(join(resources, 'agents/tutor.md'), 'utf8')).toContain('one Lesson');

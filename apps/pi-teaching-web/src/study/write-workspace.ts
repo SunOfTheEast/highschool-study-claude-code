@@ -19,15 +19,45 @@ function write(absolute: string, source: string): void {
   writeFileSync(absolute, source.endsWith('\n') ? source : `${source}\n`);
 }
 
-export function setFrontmatterField(root: string, path: string, key: string, value: string): void {
-  const document = read(root, path);
-  const match = /^(---\s*\n)([\s\S]*?)(\n---\s*\n)/.exec(document.source);
+function replaceFrontmatterField(
+  source: string,
+  path: string,
+  key: string,
+  value: string,
+): string {
+  const match = /^(---\s*\n)([\s\S]*?)(\n---\s*\n)/.exec(source);
   if (!match) throw new Error(`FRONTMATTER_REQUIRED: ${path}`);
   const line = new RegExp(`^${key}:.*$`, 'm');
   const body = line.test(match[2]!)
     ? match[2]!.replace(line, `${key}: ${value}`)
     : `${match[2]}\n${key}: ${value}`;
-  write(document.absolute, document.source.replace(match[0], `${match[1]}${body}${match[3]}`));
+  return source.replace(match[0], `${match[1]}${body}${match[3]}`);
+}
+
+export function setFrontmatterField(root: string, path: string, key: string, value: string): void {
+  const document = read(root, path);
+  write(document.absolute, replaceFrontmatterField(document.source, path, key, value));
+}
+
+function replaceBlockStatus(
+  source: string,
+  blockId: string,
+  status: 'pending' | 'active' | 'completed' | 'skipped',
+): string {
+  const heading = new RegExp(`^## Block ${blockId}(?:（[^）]+）)?\\s*$`, 'm');
+  const match = heading.exec(source);
+  if (!match) throw new Error(`BLOCK_NOT_FOUND: ${blockId}`);
+  const next = source.indexOf('\n## Block ', match.index + match[0].length);
+  const end = next < 0 ? source.length : next;
+  const block = source.slice(match.index, end);
+  const state = /### Node State\s*\n([\s\S]*?)(?=\n### |\n## |$)/.exec(block);
+  const replacement = state
+    ? block.replace(state[0], state[0].replace(/^- Status:.*$/m, `- Status: ${status}`))
+    : block.replace(
+      match[0],
+      `${match[0]}\n\n### Node State\n\n- Kind: dialogue\n- Required: true\n- Status: ${status}\n- Depends on:\n- Uses:`,
+    );
+  return source.slice(0, match.index) + replacement + source.slice(end);
 }
 
 export function setBlockStatus(
@@ -37,23 +67,7 @@ export function setBlockStatus(
   status: 'pending' | 'active' | 'completed' | 'skipped',
 ): void {
   const document = read(root, lessonPath);
-  const heading = new RegExp(`^## Block ${blockId}(?:（[^）]+）)?\\s*$`, 'm');
-  const match = heading.exec(document.source);
-  if (!match) throw new Error(`BLOCK_NOT_FOUND: ${blockId}`);
-  const next = document.source.indexOf('\n## Block ', match.index + match[0].length);
-  const end = next < 0 ? document.source.length : next;
-  const block = document.source.slice(match.index, end);
-  const state = /### Node State\s*\n([\s\S]*?)(?=\n### |\n## |$)/.exec(block);
-  const replacement = state
-    ? block.replace(state[0], state[0].replace(/^- Status:.*$/m, `- Status: ${status}`))
-    : block.replace(
-      match[0],
-      `${match[0]}\n\n### Node State\n\n- Kind: dialogue\n- Required: true\n- Status: ${status}\n- Depends on:\n- Uses:`,
-    );
-  write(
-    document.absolute,
-    document.source.slice(0, match.index) + replacement + document.source.slice(end),
-  );
+  write(document.absolute, replaceBlockStatus(document.source, blockId, status));
 }
 
 export function appendRouteChange(root: string, lessonPath: string, input: RouteChangeInput): void {
@@ -82,14 +96,29 @@ function replaceSection(source: string, heading: string, value: string): string 
   return source.replace(pattern, `$1\n${value.trim()}\n\n`);
 }
 
+function activeReflectionBlockId(source: string): string {
+  const headings = [...source.matchAll(/^## Block ([^（\s]+)(?:（[^）]+）)?\s*$/gm)];
+  const active = headings.flatMap((heading, index) => {
+    const body = source.slice(heading.index!, headings[index + 1]?.index ?? source.length);
+    return /^- Kind:\s*reflection\s*$/m.test(body)
+      && /^- Status:\s*active\s*$/m.test(body)
+      ? [heading[1]!]
+      : [];
+  });
+  if (active.length !== 1) throw new Error('ACTIVE_REFLECTION_REQUIRED');
+  return active[0]!;
+}
+
 export function closeLesson(
   root: string,
   lessonPath: string,
   input: { reflection: string; summary: string },
 ): void {
   const document = read(root, lessonPath);
-  let source = replaceSection(document.source, 'Reflection', input.reflection);
+  const reflectionBlockId = activeReflectionBlockId(document.source);
+  let source = replaceBlockStatus(document.source, reflectionBlockId, 'completed');
+  source = replaceSection(source, 'Reflection', input.reflection);
   source = replaceSection(source, 'Lesson Summary', input.summary);
+  source = replaceFrontmatterField(source, lessonPath, 'status', 'closed');
   write(document.absolute, source);
-  setFrontmatterField(root, lessonPath, 'status', 'closed');
 }

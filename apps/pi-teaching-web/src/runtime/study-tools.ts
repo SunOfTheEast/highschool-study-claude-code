@@ -6,6 +6,7 @@ import {
   sourceResolve,
 } from 'highschool-study-markdown/study-domain';
 import { Type } from 'typebox';
+import type { StudySessionScope } from './session-scope';
 
 function result(kind: string, value: object) {
   return {
@@ -14,10 +15,7 @@ function result(kind: string, value: object) {
   };
 }
 
-export type StudyToolContext = {
-  role: 'coach' | 'tutor';
-  ownerId: string;
-};
+export type StudyToolContext = StudySessionScope;
 
 export function createStudyTools(
   root: string,
@@ -61,7 +59,6 @@ export function createStudyTools(
       parameters: Type.Object({
         blockId: Type.String(),
         cardAlias: Type.Optional(Type.String()),
-        cardStepId: Type.Optional(Type.String()),
         materialPath: Type.Optional(Type.String()),
         assessment: Type.Union([
           Type.Literal('correct'),
@@ -78,10 +75,10 @@ export function createStudyTools(
         supersedes: Type.Optional(Type.String()),
       }),
       execute: async (_id, input) => result('trace-append', appendTraceWithProjection(root, {
-        lessonPath: `lessons/${context.ownerId}.md`,
+        lessonPath: context.ownerPath,
         blockId: input.blockId,
         cardAlias: input.cardAlias ?? null,
-        cardStepId: input.cardStepId ?? null,
+        cardStepId: null,
         materialPath: input.materialPath ?? null,
         assessment: input.assessment,
         support: input.support,
