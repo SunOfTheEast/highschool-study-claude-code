@@ -62,12 +62,20 @@ export function createStudyTools(
         blockId: Type.String(),
         cardAlias: Type.Optional(Type.String()),
         materialPath: Type.Optional(Type.String()),
-        methods: Type.Optional(Type.Object({
-          primary: methodName,
-          secondary: Type.Optional(Type.Array(methodName)),
-        }, {
-          description: 'Select only methods the student actually used. Omit this field when no exact canonical method applies; put route explanations in note.',
-        })),
+        methodStatus: Type.Union([
+          Type.Literal('unmapped'),
+          Type.Literal('student_confirmed'),
+        ], {
+          description: 'Use student_confirmed only after an explicit student confirmation turn; otherwise use unmapped.',
+        }),
+        methodRoute: Type.String({
+          minLength: 1,
+          description: 'Describe the student\'s decisive route without inventing a canonical label.',
+        }),
+        methodPrimary: Type.Optional(methodName),
+        methodSecondary: Type.Optional(Type.Array(methodName)),
+        methodDecisiveStep: Type.Optional(Type.String({ minLength: 1 })),
+        methodConfirmation: Type.Optional(Type.String({ minLength: 1 })),
         assessment: Type.Union([
           Type.Literal('correct'),
           Type.Literal('partially_correct'),
@@ -82,18 +90,39 @@ export function createStudyTools(
         note: Type.String(),
         supersedes: Type.Optional(Type.String()),
       }),
-      execute: async (_id, input) => result('trace-append', appendTraceWithProjection(root, {
-        lessonPath: context.ownerPath,
-        blockId: input.blockId,
-        cardAlias: input.cardAlias ?? null,
-        cardStepId: null,
-        materialPath: input.materialPath ?? null,
-        methods: input.methods ?? null,
-        assessment: input.assessment,
-        support: input.support,
-        note: input.note,
-        supersedes: input.supersedes ?? null,
-      }, now)),
+      execute: async (_id, input) => {
+        const methods = input.methodStatus === 'student_confirmed'
+          ? (() => {
+              if (
+                input.methodPrimary === undefined
+                || input.methodDecisiveStep?.trim() === ''
+                || input.methodDecisiveStep === undefined
+                || input.methodConfirmation?.trim() === ''
+                || input.methodConfirmation === undefined
+              ) {
+                throw new Error(
+                  'INVALID_METHOD_CONFIRMATION: student_confirmed requires methodPrimary, methodDecisiveStep and methodConfirmation',
+                );
+              }
+              return {
+                primary: input.methodPrimary,
+                secondary: input.methodSecondary ?? [],
+              };
+            })()
+          : null;
+        return result('trace-append', appendTraceWithProjection(root, {
+          lessonPath: context.ownerPath,
+          blockId: input.blockId,
+          cardAlias: input.cardAlias ?? null,
+          cardStepId: null,
+          materialPath: input.materialPath ?? null,
+          methods,
+          assessment: input.assessment,
+          support: input.support,
+          note: input.note,
+          supersedes: input.supersedes ?? null,
+        }, now));
+      },
     }),
     defineTool({
       name: 'source_resolve',

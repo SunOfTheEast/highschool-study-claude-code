@@ -13,7 +13,10 @@ export function createCardAlternativeAppendTool(
     description: 'Persist a verified alternative route against the current Lesson Trace.',
     parameters: Type.Object({
       sourceTraceId: Type.String({ minLength: 1 }),
-      question: Type.String({ minLength: 1 }),
+      question: Type.String({
+        minLength: 1,
+        description: 'For a card without parts, pass exactly `整题`; for multipart, pass the exact changed part label and never the stem.',
+      }),
       solution: Type.String({ minLength: 1 }),
     }),
     execute: async (_id, input) => {

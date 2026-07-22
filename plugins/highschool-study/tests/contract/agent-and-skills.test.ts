@@ -358,7 +358,7 @@ test('defines Tutor corrections, hint levels and tool turns literally', () => {
     "Before rejecting a non-reference route, reconstruct the student's complete chain and verify every decisive implication.",
   );
   expect(run).toContain(
-    'If the route is complete and correct, state that it is correct and stop; do not automatically present, compare, or pivot to the reference solution.',
+    'If the route is complete and correct, finish every required evidence write, then state only that it is correct and stop; do not automatically present, compare, or pivot to the reference solution.',
   );
   expect(run).toContain(
     'Give a hint, compare methods, or show a complete reference solution only when the student explicitly requests that action.',
@@ -367,6 +367,22 @@ test('defines Tutor corrections, hint levels and tool turns literally', () => {
     'Card-declared methods are candidates, not evidence that the student used them.',
   );
   expect(run).toContain('If `trace_append` returns any `unresolvedMethods`');
+  expect(run).toContain('A closest valid label is still false evidence');
+  expect(run).toContain(
+    'When an initial correct Trace has no confirmed method, ask the student before advancing the next Task',
+  );
+  expect(run).toContain(
+    'The student may confirm, replace, keep the route unbound, or defer',
+  );
+  expect(run).toContain(
+    'If the student rejects or replaces the proposal, append a superseding Trace that records that response before advancing',
+  );
+  expect(run).toContain(
+    '`含参数分类讨论` requires an actual split into parameter cases',
+  );
+  expect(run).toContain(
+    '`局部逼近与找点` requires an actual local approximation or chosen test point',
+  );
   expect(run).toContain(
     'MUST persist the trace-linked alternative before telling the student that it is an alternative',
   );
@@ -374,7 +390,20 @@ test('defines Tutor corrections, hint levels and tool turns literally', () => {
     'This also applies when the route becomes verifiable only in a later comparison turn.',
   );
   expect(run).toContain(
-    'A tool-use turn contains tool calls only. After the tool results arrive, send a separate Chinese student-facing message',
+    'A superseding Trace that changes the active assessment to correct must immediately re-run the alternative check',
+  );
+  expect(run).toContain(
+    'The correct-and-stop rule applies only after all required evidence writes finish',
+  );
+  expect(run).toContain(
+    'After `trace_append` returns the source Trace ID, call the alternative writer in the next tool-only turn',
+  );
+  expect(run).toContain(
+    'A dependent workflow may require consecutive tool-only turns',
+  );
+  expect(run).toContain('For a card without parts, pass the question exactly as `整题`');
+  expect(run).toContain(
+    'A tool-use turn contains tool calls only. A dependent workflow may require consecutive tool-only turns',
   );
   for (const source of [run, reveal]) {
     expect(source).toContain(

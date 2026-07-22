@@ -151,7 +151,7 @@ test('keeps Tutor zero mode student-controlled and Trace-grounded', () => {
     "Before rejecting a non-reference route, reconstruct the student's complete chain and verify every decisive implication.",
   );
   expect(tutorSkill).toContain(
-    'If the route is complete and correct, state that it is correct and stop; do not automatically present, compare, or pivot to the reference solution.',
+    'If the route is complete and correct, finish every required evidence write, then state only that it is correct and stop; do not automatically present, compare, or pivot to the reference solution.',
   );
   expect(tutorSkill).toContain(
     'Give a hint, compare methods, or show a complete reference solution only when the student explicitly requests that action.',
@@ -181,7 +181,7 @@ test('defines the Tutor correction, hint ladder and tool-turn protocol literally
   );
   for (const source of [tutorAgent, tutorSkill]) {
     expect(source).toContain(
-      'A tool-use turn contains tool calls only. After the tool results arrive, send a separate Chinese student-facing message',
+      'A tool-use turn contains tool calls only. A dependent workflow may require consecutive tool-only turns',
     );
     expect(source).toContain('Do not announce, preview, or narrate a tool call');
     expect(source).toContain(
@@ -199,6 +199,35 @@ test('requires canonical actual-method recovery and durable alternative recordin
   );
   expect(tutorSkill).toContain('If `trace_append` returns any `unresolvedMethods`');
   expect(tutorSkill).toContain('append one superseding Trace with exact canonical names');
+  expect(tutorSkill).toContain('A closest valid label is still false evidence');
+  for (const source of [tutorAgent, tutorSkill]) {
+    expect(source).toContain('Use `methodStatus: unmapped`');
+    expect(source).toContain(
+      'Use `methodStatus: student_confirmed` only after the student explicitly confirms the proposed canonical node',
+    );
+    expect(source).toContain('An unconfirmed proposal contributes no method evidence');
+    expect(source).toContain(
+      'When an initial correct Trace uses `methodStatus: unmapped`, ask the student before activating the next Block',
+    );
+    expect(source).toContain(
+      'The student may confirm, replace, keep the route unmapped, or defer',
+    );
+    expect(source).toContain(
+      'If the student rejects or replaces the proposal, append a superseding Trace that records that response before advancing',
+    );
+    expect(source).toContain(
+      'Re-append an existing verified alternative against the new active Trace before replying',
+    );
+    expect(source).toContain(
+      'A superseding Trace that changes the active assessment to correct must immediately re-run the alternative check',
+    );
+  }
+  expect(tutorSkill).toContain(
+    '`含参数分类讨论` requires an actual split into parameter cases',
+  );
+  expect(tutorSkill).toContain(
+    '`局部逼近与找点` requires an actual local approximation or chosen test point',
+  );
   for (const source of [tutorAgent, tutorSkill]) {
     expect(source).toContain(
       'MUST call `card_alternative_append` before telling the student that it is an alternative',
@@ -206,6 +235,16 @@ test('requires canonical actual-method recovery and durable alternative recordin
     expect(source).toContain(
       'This also applies when the route becomes verifiable only in a later comparison turn.',
     );
+    expect(source).toContain(
+      'The correct-and-stop rule applies only after all required evidence writes finish',
+    );
+    expect(source).toContain(
+      'After `trace_append` returns the source Trace ID, call `card_alternative_append` in the next tool-only turn',
+    );
+    expect(source).toContain(
+      'A dependent workflow may require consecutive tool-only turns',
+    );
+    expect(source).toContain('For a card without parts, pass `question` exactly as `整题`');
   }
 });
 

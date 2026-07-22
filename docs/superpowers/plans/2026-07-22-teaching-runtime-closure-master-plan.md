@@ -28,6 +28,14 @@
 - 保留工作区中用户已有的 `examples/derivative-demo/learning-set/plans/domain-integrity.md`、`.superpowers/` 和未跟踪三课计划；除隔离验收副本外不改真实学习运行数据。
 - 每个任务先写失败测试，再做最小实现；一个任务一个提交。并行执行必须遵守本计划的 lane 文件所有权，禁止两个 worker 同时改同一文件。
 
+## Execution Status（2026-07-23）
+
+- Task 0–10 已实施；Pi Web、插件、构建与 Playwright 的全量自动验证通过。
+- Task 11 已完成多轮隔离真实模型验收，但结果是 **PARTIAL / FAIL**，不能越过 Final Completion Gate。来源报告：`docs/audits/2026-07-22-teaching-runtime-closure-acceptance.md`。
+- 真实模型推翻了 Task 8 原先“由 Tutor 首次直接填写 `methods`”的假设：合法枚举只能防止虚构节点，不能防止把最接近的合法节点硬套到学生路线。最终契约改为扁平的 `methodStatus: unmapped | student_confirmed`；Tutor 先记录路线并提议，学生确认后才由 superseding Trace 写入方法证据。
+- 已验证通过：Session ownerPath、Tutor 窄参数、`lesson_close`、Coach `plan_update → read`、safe projection、能力快照刷新、URL 恢复、首次正确另解的 Trace→另解连续写入、学生异议与方法否定的 superseding Trace。
+- 剩余 P0：学生明确承认关键充分性证明尚未完成时，Tutor 仍可能擅自补全、写入错误推导并把 Trace 判为 `correct`。这属于课堂事实判断失败，不得被自动测试或方法节点确认掩盖。
+
 ---
 
 ## Current-state Baseline
@@ -799,15 +807,22 @@ git commit -m "feat: refresh ability projection after traces"
 
 - [ ] **Step 1: 写最终 Tutor schema 失败测试**
 
-`trace_append` 在 Task 2 基础上增加当前学习集动态规范方法枚举：
+`trace_append` 最终使用当前学习集动态规范方法枚举，但方法绑定必须经过学生确认。真实模型验收后采用以下扁平契约，替代最初计划的 optional nested `methods`：
 
 ```ts
 const methodName = Type.Enum(listCanonicalMethodNames(root));
-methods: Type.Optional(Type.Object({
-  primary: methodName,
-  secondary: Type.Optional(Type.Array(methodName)),
-}))
+methodStatus: Type.Union([
+  Type.Literal('unmapped'),
+  Type.Literal('student_confirmed'),
+]);
+methodRoute: Type.String();
+methodPrimary: Type.Optional(methodName);
+methodSecondary: Type.Optional(Type.Array(methodName));
+methodDecisiveStep: Type.Optional(Type.String());
+methodConfirmation: Type.Optional(Type.String());
 ```
+
+`student_confirmed` 缺少 primary、学生决定性步骤或确认摘要时拒绝整次写入；`unmapped` 一律持久化 `methods: null`。持久 Trace schema 不新增 resolution 对象。
 
 新增 Tutor-only：
 
@@ -830,7 +845,7 @@ bun test tests/runtime/study-tools.test.ts tests/runtime/session-factory.test.ts
 
 - [ ] **Step 3: 接通 domain adapter**
 
-`trace_append` 原样把 optional methods 传给 `appendTraceWithProjection`，并把 `unresolvedMethods` 返回 Tutor。合法 primary 不因非法 secondary 丢失；若存在未解析项，Tutor 只能在语义确证时用规范名称写 superseding Trace，否则保持未绑定。`card_alternative_append` 闭包调用：
+`trace_append` 只在 `student_confirmed` 且确认字段完整时把规范 methods 传给 `appendTraceWithProjection`；`unmapped` 传 `methods: null`。合法 primary 不因非法 secondary 丢失；若存在未解析项，Tutor 只能在语义确证且学生确认后用规范名称写 superseding Trace，否则保持未绑定。`card_alternative_append` 闭包调用：
 
 ```ts
 appendCardAlternative(root, scope.ownerPath, input, now);
@@ -1038,6 +1053,8 @@ Expected: Tasks 1–9 各自提交；status 只保留用户原有未提交文件
 - Create: `docs/audits/2026-07-22-teaching-runtime-closure-acceptance.md`
 - Do not modify: repository `examples/derivative-demo/learning-set/**`
 
+**Execution result:** PARTIAL / FAIL。自动回归通过，真实课堂的 Session/Trace/另解/投影/路由多数链路通过；但最终运行出现“学生明确缺少充分性证明，Tutor 却代补并判为正确”的 P0。另有“异议把 assessment 改为 correct 后立即补写另解”的最终提示词已增加自动 contract，尚缺同路径真实模型复验。因此本 Task 已形成审计报告，但未宣告验收通过。
+
 - [ ] **Step 1: 创建隔离副本并启动默认 safe runtime**
 
 ```bash
@@ -1090,6 +1107,8 @@ git commit -m "docs: verify teaching runtime closure"
 ---
 
 ## Final Completion Gate
+
+**当前状态：未满足。** 阻断项是 Task 11 的课堂事实判断 P0；自动测试通过不改变这一结论。
 
 只有同时满足以下条件才可宣告计划完成：
 

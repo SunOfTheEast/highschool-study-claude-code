@@ -1,6 +1,6 @@
 # 一题多解的实际方法证据与题卡另解设计
 
-状态：讨论定稿，书面自审完成，待用户复核
+状态：已实施；自动回归通过；真实模型闭环验收未整体通过，剩余 P0 见验收报告
 
 日期：2026-07-22
 
@@ -27,8 +27,8 @@
 ### 目标
 
 - `assessment` 只表示本次解答的正确性与完整性，不再承担方法归因。
-- Trace 保存学生本次实际使用的主方法和次方法。
-- Tutor 读取知识图谱的规范节点、aliases 与 metadata boundary，完成教学语义匹配。
+- Trace 只保存经过学生确认的本次实际主方法和次方法；未确认路线保持未映射。
+- Tutor 读取知识图谱的规范节点、aliases 与 metadata boundary，提出教学语义候选；学生确认它是否贴合自己的实际路线。
 - 运行时只做 alias 解析、规范节点真实性校验和来源绑定，不建立复杂规则引擎。
 - 能力投影只给本次实际使用的方法生成证据，并保留现有 attempt 聚合及主次方法权重。
 - 至少有一问采用完全不同、完整且正确的核心推理链时，才可写入题卡旁挂的 `*.alternatives.md`，并索引回来源 Trace。
@@ -60,7 +60,7 @@ Trace 是本次课堂尝试的事实来源。它分别记录：
 - `methods`：学生本次实际使用的主方法与次方法；
 - `note`：学生工作、Tutor 反馈和判断依据。
 
-方法绑定是可选事实。路线已经清楚时，即使答案错误，也应记录实际方法，使失败同样成为有意义的方法证据；路线尚不可识别时则不绑定方法。
+方法绑定是可选事实，而且学生是“这是不是我实际采用的方法”的最终确认者。首次 Trace 先保存正确性、支持情况和完整路线，不因 Tutor 找到一个相近合法节点就写入方法。Tutor 随后说明候选节点对应学生哪一个决定性步骤；学生确认后才用 superseding Trace 写入方法。学生否定、暂缓或认为词表没有精确节点时，active Trace 保持 `methods: null`，不产生方法能力证据。错误路线只有在学生已经明确识别或确认规范节点时才可带方法证据，不能由 Tutor 单方面归类。
 
 ### 3.3 题卡旁挂文件拥有生成另解
 
@@ -79,8 +79,10 @@ mst_p0032_ex22.alternatives.md
 学生提交解法
   → Tutor 判断正确性、完整性和实际路线
   → Tutor 读取 graph/vocabulary.yaml、aliases.yaml 与 metadata boundary
-  → Tutor 选择实际主方法与次方法
-  → trace_append 写入 assessment、support、actual methods 与 note
+  → trace_append 先写 assessment、support、完整路线与 methods=null
+  → Tutor 提出候选节点及其对应的学生决定性步骤
+  → 学生确认后，superseding Trace 才写 actual methods
+     学生否定、暂缓或无精确节点时，superseding Trace 保持 methods=null
   → 若至少一问完整、正确且核心推理链与已有解法完全不同
        → card_alternative_append 写入完整另解 Markdown
   → 能力投影只聚合 active Trace 中的 actual methods
@@ -95,8 +97,9 @@ mst_p0032_ex22.alternatives.md
 
 图谱匹配分为两层：
 
-1. **Tutor 负责语义判断**：根据学生完整推导，在规范 vocabulary、aliases 和节点 boundary 中寻找最符合实际路线的一个主方法及零个或多个次方法。Pi Tutor 的工具 schema 直接列出当前学习集的规范方法名；题卡声明的方法只是候选，不是学生实际使用方法的证据。
-2. **运行时负责真实性校验**：确认节点真实存在、把其他调用入口提交的唯一 alias 解析为规范节点名，并去除主次方法中的重复项。
+1. **Tutor 负责提出候选**：根据学生完整推导，在规范 vocabulary、aliases 和节点 boundary 中寻找一个可能贴合实际路线的主方法及必要次方法，并指出候选对应学生写出的哪一步。题卡声明的方法只是候选，不是学生实际使用方法的证据。
+2. **学生负责确认归属**：学生可以确认、改选、保留未映射或暂缓。未经学生明确确认的候选不进入 Trace methods，也不进入 BKT 投影。
+3. **运行时负责真实性校验**：确认节点真实存在、把其他调用入口提交的唯一 alias 解析为规范节点名，并去除主次方法中的重复项。Pi Tutor 的工具 schema 直接列出当前学习集的规范方法名。
 
 运行时不根据关键词自动猜方法，也不计算模糊匹配分数。规则层只能阻止不存在的节点被写入，不能推翻 Tutor 对教学语义的判断。
 
@@ -107,8 +110,9 @@ mst_p0032_ex22.alternatives.md
 alias 候选：参数分离、水平线交点
 metadata boundary：核心路线符合“参变量分离”
 
-实际主方法：参变量分离
-实际次方法：导数研究单调性
+Tutor 候选：参变量分离
+候选依据：学生把参数项单独移到一侧
+学生确认后：主方法=参变量分离，次方法=导数研究单调性
 ```
 
 ### 5.2 无法匹配时
@@ -123,27 +127,33 @@ metadata boundary：核心路线符合“参变量分离”
 
 ## 六、Trace 契约
 
-在 session-bound `trace_append` 的教学参数中增加一个可选方法对象：
+真实模型验收表明，嵌套联合对象容易被当前 Pi 模型序列化成字符串并连续传错参数；而让模型首次作答就直接填写合法枚举，又会诱发“找最近节点”的假证据。因此 session-bound `trace_append` 使用扁平、必填的状态与路线字段：
 
 ```ts
 {
   blockId: string;
   cardAlias?: string;
   materialPath?: string;
+  methodStatus: 'unmapped' | 'student_confirmed';
+  methodRoute: string;
+  methodPrimary?: string;
+  methodSecondary?: string[];
+  methodDecisiveStep?: string;
+  methodConfirmation?: string;
   assessment: 'correct' | 'partially_correct' | 'incorrect' | 'incomplete';
   support: 'none' | 'tutor' | 'external';
-  methods?: {
-    primary: string;
-    secondary?: string[];
-  };
   note: string;
   supersedes?: string;
 }
 ```
 
-Pi Tutor 只从当前学习集动态枚举的规范方法名中选择；底层 domain 与公共 MCP 仍可接受唯一 alias 并规范化。运行时继续从当前 Tutor Session 和 Lesson alias 绑定真实 Lesson、Block、题卡路径、Plan、Session、时间及来源锚点；模型不提交图谱路径、题卡路径或另解编号。
+`methodStatus: unmapped` 表示当前没有经过学生确认的精确节点；运行时忽略所有方法字段并持久化 `methods: null`。`methodStatus: student_confirmed` 必须同时提供动态枚举中的 `methodPrimary`、学生实际写出的决定性步骤和确认摘要，否则整次写入以 `INVALID_METHOD_CONFIRMATION` 失败。成功后仍只在持久 Trace 中保存既有 `methods` 事实，不新增第二套 method-resolution schema。
 
-成功解析后，Trace 持久化规范节点名，而不是原始 alias。若主方法合法而个别次方法无法解析，Trace 保留合法主方法及合法次方法，并在工具结果中返回未解析项；Tutor 随后可用规范名称写一条 superseding Trace。若主方法无法解析，则省略整个 `methods` 绑定，绝不自动猜测或提升次方法。无论哪种情况，assessment、support 与 note 都仍然写入。
+运行时继续从当前 Tutor Session 和 Lesson alias 绑定真实 Lesson、Block、题卡路径、Plan、Session、时间及来源锚点；模型不提交图谱路径、题卡路径或另解编号。底层 domain 与公共 MCP 仍可接受唯一 alias 并规范化。
+
+成功解析且经过学生确认后，Trace 持久化规范节点名，而不是原始 alias。若主方法合法而个别次方法无法解析，Trace 保留合法主方法及合法次方法，并在工具结果中返回未解析项；Tutor 只有再次得到语义确证与学生确认后才能写 superseding Trace。若主方法无法解析，则省略整个 `methods` 绑定，绝不自动猜测或提升次方法。无论哪种情况，assessment、support 与 note 都仍然写入。
+
+学生拒绝或改选候选时也必须写 superseding Trace：拒绝保持 `methods: null`，改选只有在确认规范节点后才写 methods。若旧 active Trace 已绑定另解，需以新 active Trace 重新旁挂该另解，保证能力投影与题卡读取都只依赖 active Trace。
 
 Trace 的 Markdown 表示保持可读，例如：
 
@@ -288,7 +298,8 @@ lessonPath + blockId + cardPath
 
 ## 十、最小失败处理
 
-- 图谱名称无法解析：课堂 Trace 仍写入；合法主方法及合法次方法继续保留，未解析项单独返回；主方法无法解析时才省略整个方法绑定。
+- 学生未确认、否定或暂缓：课堂 Trace 仍写入且保持 `methods: null`；不产生方法能力证据。
+- 图谱名称无法解析：课堂 Trace 仍写入；合法主方法及合法次方法只有在学生确认后才保留，未解析项单独返回；主方法无法解析时省略整个方法绑定。
 - 来源 Trace 不存在、不 active、没有题卡或 assessment 不是 `correct`：拒绝另解写入，保留原 Trace。
 - 同一来源 Trace 与题问重复写入：更新对应章节，保持幂等。
 - 找不到图谱节点：允许正确 Trace 和未归类另解，不产生方法投影。
@@ -301,8 +312,8 @@ lessonPath + blockId + cardPath
 `run-lesson` 需要明确：
 
 1. 评价学生工作时分别判断正确性、支持情况和实际方法，不用 `assessment` 代替方法判断。
-2. 路线可识别时从工具列出的规范节点中选择一个主方法及必要的次方法；题卡方法只作候选，路线不可识别时省略方法。
-3. 方法明确但做错时也写实际方法，使失败成为真实证据。
+2. 首次 Trace 使用扁平的 `methodStatus: unmapped` 保存实际路线；Tutor 在进入下一 Block 前提出至多一个候选并指出对应的学生步骤，学生确认后才用 superseding Trace 写规范方法。题卡方法只作候选，路线不可识别或学生不认可时保持未映射。
+3. 方法明确但做错时，只有学生已经明确识别或确认规范节点才写实际方法；否则保留失败路线但不制造方法绑定。
 4. 只有至少一问的完整核心推理链与该问参考解及已有 active 另解完全不同，才先写 Trace，再用返回的 Trace ID、题问和完整推导写入生成另解；无论当场还是后续比较时才确认，都必须先持久化再向学生承认这是另解。
 5. 方法节点和另解始终属于 Tutor 私有上下文，遵守现有 zero、ladder 和 Student View 防剧透规则。
 6. 接受学生异议时，先写 superseding Trace；后续能力信号和另解可见性只读取 active Trace。
@@ -313,16 +324,18 @@ Coach 的备课与进度检查 Skill 需要停止把题卡方法当作学生实�
 
 ### 12.1 Trace 与图谱绑定
 
-1. 规范节点名与合法 alias 均能持久化为规范节点名。
-2. 主次方法重复时只保留主方法角色。
-3. 合法 primary 不会因非法 secondary 丢失；非法项单独返回。primary 无法解析时不写入 Trace methods，但 assessment、support 与 note 保留。
-4. 方法明确但 assessment 为 `incorrect` 时，仍保存实际方法。
+1. `methodStatus` 与 `methodRoute` 为必填扁平字段；嵌套 method-resolution 对象不再出现在 Pi 工具契约中。
+2. 未经学生确认时持久化 `methods: null`；合法方法名本身不能绕过确认。
+3. `student_confirmed` 缺少主方法、决定性步骤或确认摘要时拒绝整次写入。
+4. 规范节点名与合法 alias 均能持久化为规范节点名，主次方法重复时只保留主方法角色。
+5. 合法 primary 不会因非法 secondary 丢失；非法项单独返回。primary 无法解析时不写入 Trace methods，但 assessment、support 与 note 保留。
+6. 学生确认、否定或改选均通过 superseding Trace 形成 correction closure；普通读取只使用 active Trace。
 
 ### 12.2 能力投影
 
 1. 学生使用题卡参考方法做对，只给实际绑定的方法生成正向证据。
 2. 学生使用其他已有图谱方法做对，只给另解方法生成正向证据，题卡预设方法不加分。
-3. 学生方法明确但做错，为该实际方法生成失败证据。
+3. 学生确认了实际方法但做错，为该实际方法生成失败证据；未经确认的失败路线保持未映射。
 4. 一次 attempt 有多条 Trace 时，每个实际方法最多计一次证据。
 5. 多个方法节点不会增加该 attempt 的题卡计数；`steady` 仍要求多个不同题卡。
 6. 没有 methods 的历史或新 Trace 不再从题卡预设方法获得推测性证据。
@@ -352,14 +365,15 @@ Coach 的备课与进度检查 Skill 需要停止把题卡方法当作学生实�
 题卡参考主方法：同构变形与换元法
 学生实际主方法：参变量分离
 学生实际次方法：导数研究单调性
+学生确认：上述节点贴合自己的实际路线
 assessment：correct
 support：none
 ```
 
 验收结果必须满足：
 
-- Trace 如实保存 `correct`；
-- 只给“参变量分离”和实际次方法生成能力证据；
+- Trace 如实保存 `correct`；首次方法未确认时保持未映射；
+- 学生确认后只给“参变量分离”和实际次方法生成能力证据；未确认时两个节点都不加分；
 - “同构变形与换元法”不因题卡声明而自动加分；
 - 题卡旁生成来源可追溯的另解；
 - 再次读取题卡时同时取得原始内容、Trace 与该另解；
