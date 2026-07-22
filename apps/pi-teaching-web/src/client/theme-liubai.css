@@ -1,0 +1,44 @@
+:root {
+  color: #1b1916;
+  background: #faf7f1;
+  color-scheme: light;
+  font-family: Inter, "Noto Sans SC", "PingFang SC", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+
+  --paper: #faf7f1;
+  --paper-deep: #f1ece1;
+  --ink: #1b1916;
+  --ink-soft: #4a463d;
+  --ink-faint: #9a917f;
+  --accent: #3f5b54;
+  --accent-deep: #314a44;
+  --accent-wash: rgba(63, 91, 84, .07);
+  --attention: #b6a06a;
+  --danger: #a8674f;
+  --success: #3f5b54;
+  --rule: rgba(27, 25, 22, .09);
+  --rule-soft: rgba(27, 25, 22, .06);
+  --overlay: rgba(27, 25, 22, .28);
+
+  --font-ui: Inter, "Noto Sans SC", "PingFang SC", sans-serif;
+  --font-display: "LXGW WenKai", "Kaiti SC", "STKaiti", "KaiTi", ui-serif, serif;
+  --font-reading: "Noto Serif SC", "Songti SC", ui-serif, serif;
+  --persona-accent: #3f5b54;
+  --persona-wash: rgba(63, 91, 84, .07);
+}
+
+.app-root[data-persona="neutral-tutor"] {
+  --persona-accent: #6f675b;
+  --persona-wash: rgba(111, 103, 91, .08);
+}
+
+.app-root[data-persona="calm-senpai"] {
+  --persona-accent: #76647a;
+  --persona-wash: rgba(118, 100, 122, .09);
+}
+
+.app-root[data-persona="energetic-classmate"] {
+  --persona-accent: #95644a;
+  --persona-wash: rgba(149, 100, 74, .09);
+}
