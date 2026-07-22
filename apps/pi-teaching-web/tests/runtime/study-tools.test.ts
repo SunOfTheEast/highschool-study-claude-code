@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { readTraceRecords } from 'highschool-study-markdown/study-domain';
 import { createClassroomUpdateTool } from '../../src/runtime/classroom-update';
 import { createLessonCloseTool } from '../../src/runtime/lesson-close';
+import { createPlanUpdateTool } from '../../src/runtime/plan-update';
 import { createStudyTools } from '../../src/runtime/study-tools';
 
 const root = join(import.meta.dir, '../../../../examples/derivative-demo/learning-set');
@@ -105,4 +106,19 @@ test('keeps runtime authority out of Tutor tool schemas', () => {
     properties: Record<string, unknown>;
   }).properties;
   expect(Object.keys(closeProperties)).toEqual(['reflection', 'summary']);
+});
+
+test('exposes one flat Coach plan_update contract without path authority', () => {
+  const tool = createPlanUpdateTool(root, 'plans/domain-integrity.md');
+  const properties = (tool.parameters as {
+    properties: Record<string, unknown>;
+  }).properties;
+  expect(Object.keys(properties)).toEqual([
+    'decision',
+    'lessonIndex',
+    'currentPosition',
+    'nextLessonCandidate',
+    'planSummary',
+  ]);
+  expect(JSON.stringify(tool.parameters)).not.toContain('planPath');
 });

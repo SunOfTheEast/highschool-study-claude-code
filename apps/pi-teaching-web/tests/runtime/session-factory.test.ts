@@ -47,6 +47,7 @@ test('keeps Coach and Tutor tool boundaries distinct', () => {
     'card_search',
     'trace_search',
     'source_resolve',
+    'plan_update',
   ]);
   expect(roleToolNames('tutor')).toEqual([
     'read',

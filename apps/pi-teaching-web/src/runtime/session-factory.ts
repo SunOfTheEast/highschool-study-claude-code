@@ -14,6 +14,7 @@ import { WorkflowStore } from '../workflows/store';
 import { createDeepWorkflowTool } from '../workflows/tool';
 import { createClassroomUpdateTool } from './classroom-update';
 import { createLessonCloseTool } from './lesson-close';
+import { createPlanUpdateTool } from './plan-update';
 import { createRoleResourceLoader } from './resource-loader';
 import type { SessionRole, StudySessionScope } from './session-scope';
 import { createStudyTools } from './study-tools';
@@ -92,6 +93,7 @@ export function roleToolNames(role: SessionRole): string[] {
       'card_search',
       'trace_search',
       'source_resolve',
+      'plan_update',
     ]
     : [
       'read',
@@ -134,7 +136,7 @@ export async function createPiSessionFactory(
       ...createStudyTools(root, now, scope),
       ...(role === 'tutor'
         ? [createClassroomUpdateTool(root, ownerPath), createLessonCloseTool(root, ownerPath)]
-        : []),
+        : [createPlanUpdateTool(root, ownerPath)]),
       createDeepWorkflowTool(workflowRuntime),
     ];
     const { session } = await createAgentSession({

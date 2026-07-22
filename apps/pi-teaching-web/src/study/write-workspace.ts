@@ -10,6 +10,16 @@ export type RouteChangeInput = {
   after?: string;
 };
 
+export type PlanDecision = 'active' | 'complete' | 'replan';
+
+export type PlanUpdateInput = {
+  decision: PlanDecision;
+  lessonIndex: string;
+  currentPosition: string;
+  nextLessonCandidate: string;
+  planSummary: string;
+};
+
 function read(root: string, path: string): { absolute: string; source: string } {
   const absolute = resolveInsideRoot(root, path);
   return { absolute, source: readFileSync(absolute, 'utf8') };
@@ -120,5 +130,16 @@ export function closeLesson(
   source = replaceSection(source, 'Reflection', input.reflection);
   source = replaceSection(source, 'Lesson Summary', input.summary);
   source = replaceFrontmatterField(source, lessonPath, 'status', 'closed');
+  write(document.absolute, source);
+}
+
+export function updatePlan(root: string, planPath: string, input: PlanUpdateInput): void {
+  const document = read(root, planPath);
+  const status = input.decision === 'complete' ? 'completed' : 'active';
+  let source = replaceSection(document.source, 'Lesson Index', input.lessonIndex);
+  source = replaceSection(source, 'Current Position', input.currentPosition);
+  source = replaceSection(source, 'Next Lesson Candidate', input.nextLessonCandidate);
+  source = replaceSection(source, 'Plan Summary', input.planSummary);
+  source = replaceFrontmatterField(source, planPath, 'status', status);
   write(document.absolute, source);
 }
