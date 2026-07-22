@@ -368,6 +368,9 @@ test('defines Tutor corrections, hint levels and tool turns literally', () => {
     );
   }
   expect(run).toContain('Do not announce, preview, or narrate a tool call');
+  expect(run).toContain(
+    'If any tool is still needed, the assistant content field is empty; emit only tool calls',
+  );
 });
 
 test('grounds preparation and Plan review in qualifying evidence', () => {
@@ -425,4 +428,10 @@ test('maps card dimensions and persists every final Plan audit before replying',
     'A tool-use turn contains tool calls only. After the tool results arrive, send a separate Chinese student-facing message',
   );
   expect(coach).toContain('Do not announce, preview, or narrate a tool call');
+  expect(coach).toContain(
+    'If any tool is still needed, the assistant content field is empty; emit only tool calls',
+  );
+  expect(coach).toContain(
+    'Do not send the temporary evidence matrix or any conclusion until all reads, writes, and rereads are finished',
+  );
 });

@@ -172,6 +172,9 @@ test('defines the Tutor correction, hint ladder and tool-turn protocol literally
       'A tool-use turn contains tool calls only. After the tool results arrive, send a separate Chinese student-facing message',
     );
     expect(source).toContain('Do not announce, preview, or narrate a tool call');
+    expect(source).toContain(
+      'If any tool is still needed, the assistant content field is empty; emit only tool calls',
+    );
   }
 });
 
@@ -221,5 +224,11 @@ test('maps Coach card dimensions and persists the final Plan audit before replyi
       'A tool-use turn contains tool calls only. After the tool results arrive, send a separate Chinese student-facing message',
     );
     expect(source).toContain('Do not announce, preview, or narrate a tool call');
+    expect(source).toContain(
+      'If any tool is still needed, the assistant content field is empty; emit only tool calls',
+    );
+    expect(source).toContain(
+      'Do not send the temporary evidence matrix or any conclusion until all reads, writes, and rereads are finished',
+    );
   }
 });
