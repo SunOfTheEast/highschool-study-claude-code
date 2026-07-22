@@ -330,6 +330,12 @@ test('keeps zero-mode teaching student-controlled and Trace-grounded', () => {
     expect(source).toContain('Do not ask a leading question');
     expect(source).toContain('A failed Trace write cannot support attainment');
     expect(source).toContain('same-card unsupported completion is recall, not unseen transfer');
+    expect(source).toContain(
+      '`zero` plus an explicit numbered hint request uses that requested ladder level for that one response',
+    );
+    expect(source).toContain(
+      'Do not refuse and then give an unlabelled structural cue',
+    );
   }
 });
 

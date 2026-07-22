@@ -138,6 +138,12 @@ test('keeps Tutor zero mode student-controlled and Trace-grounded', () => {
   expect(tutorSkill).toContain(
     'card title, graph.goal, graph.method, graph.structure, hint, solution, or Teacher Control',
   );
+  expect(tutorSkill).toContain(
+    '`zero` plus an explicit numbered hint request uses that requested ladder level for that one response',
+  );
+  expect(tutorSkill).toContain(
+    'Do not refuse and then give an unlabelled structural cue',
+  );
 });
 
 test('defines the Tutor correction, hint ladder and tool-turn protocol literally', () => {
