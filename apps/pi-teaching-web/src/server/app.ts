@@ -165,10 +165,16 @@ export function createRequestHandler(deps?: AppDependencies) {
 
     const history = /^\/api\/sessions\/([^/]+)\/history$/.exec(url.pathname);
     if (request.method === 'GET' && history) {
-      return json(deps.registry.history(
-        decodeURIComponent(history[1]!) as SessionKey,
-        projectionMode,
-      ));
+      const key = decodeURIComponent(history[1]!) as SessionKey;
+      if (key.startsWith('coach:')) {
+        await deps.registry.openCoach(key.slice(6));
+      } else if (key.startsWith('tutor:')) {
+        await deps.registry.openTutor(key.slice(6));
+      } else {
+        return json({ error: 'SESSION_NOT_FOUND' }, 404);
+      }
+      bind(key);
+      return json(deps.registry.history(key, projectionMode));
     }
 
     const deep = /^\/api\/sessions\/([^/]+)\/deep$/.exec(url.pathname);

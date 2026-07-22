@@ -43,12 +43,40 @@ test('refreshes the full ability map after a Tutor trace without reloading', asy
   await page.goto('/');
   await page.getByRole('button', { name: /定义域完整性的系统加固/ }).click();
   await page.getByRole('button', { name: /Lesson 003/ }).click();
-  await page.getByRole('button', { name: /开始上课/ }).click();
+  const start = page.getByRole('button', { name: /开始上课|继续上课/ });
+  if (await start.count()) await start.click();
   await page.getByPlaceholder('写下你的想法或解题过程…').fill('我尝试用链式法则。');
   await page.getByRole('button', { name: /发送/ }).click();
   await page.getByRole('button', { name: /Coach/ }).click();
   await expect(page.locator('.ability-nodes')).toContainText('链式求导');
   await expect(page.locator('.ability-nodes')).toContainText('2 条证据');
+});
+
+test('restores Coach and closed Lesson views from browser routes', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: /定义域完整性的系统加固/ }).click();
+  await expect(page).toHaveURL(/\/plan\/domain-integrity$/);
+  await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'coach');
+
+  await page.getByRole('button', { name: /Lesson 001/ }).click();
+  await expect(page).toHaveURL(/\/plan\/domain-integrity\/lesson\/lesson-001$/);
+  await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'replay');
+  await page.reload();
+  await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'replay');
+
+  await page.goBack();
+  await expect(page).toHaveURL(/\/plan\/domain-integrity$/);
+  await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'coach');
+  await page.goForward();
+  await expect(page).toHaveURL(/\/plan\/domain-integrity\/lesson\/lesson-001$/);
+  await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'replay');
+});
+
+test('returns invalid deep links to the learning-set home', async ({ page }) => {
+  await page.goto('/plan/does-not-exist');
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator('main.home')).toBeVisible();
+  await expect(page.getByRole('alert')).toContainText('无法恢复');
 });
 
 test('renders the liubai palette without horizontal overflow', async ({ page }) => {

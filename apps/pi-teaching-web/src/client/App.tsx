@@ -17,6 +17,11 @@ import { EvidenceLens } from './components/EvidenceLens';
 import { LearningSetHome } from './components/LearningSetHome';
 import { LessonNotebook } from './components/LessonNotebook';
 import { SessionTree } from './components/SessionTree';
+import {
+  formatBrowserRoute,
+  parseBrowserRoute,
+  type BrowserRoute,
+} from './routes';
 import { initialClientState, preferLiveMessages, reduceClientState } from './state';
 
 type ConnectionState = 'connecting' | 'open' | 'closed';
@@ -32,13 +37,6 @@ export function App() {
   const [abilities, setAbilities] = useState<AbilityProjection | null>(null);
   const [evidence, setEvidence] = useState<EvidenceView | null>(null);
   const [persona, setPersona] = useState<PersonaPresentation | null>(null);
-
-  useEffect(() => {
-    void api.learningSet()
-      .then(setLearningSet)
-      .catch(() => setPageError('无法读取学习集，请确认本地服务与学习集目录。'))
-      .finally(() => setLoading(false));
-  }, []);
 
   useEffect(() => {
     let disposed = false;
@@ -81,30 +79,94 @@ export function App() {
     };
   }, []);
 
-  const openPlan = async (planId: string) => {
+  type Navigation = 'push' | 'replace' | 'none';
+
+  const openRoute = async (route: BrowserRoute | null, navigation: Navigation = 'none') => {
     setLoading(true);
     setPageError(null);
     try {
-      const workspace = await api.workspace(planId);
-      const selected = workspace.coach.sessionKey;
-      const history = await api.history(selected);
+      if (!route) throw new Error('INVALID_ROUTE');
+      if (route.kind === 'home') {
+        setClient(initialClientState);
+        setEvidence(null);
+        if (navigation === 'push') window.history.pushState(null, '', formatBrowserRoute(route));
+        if (navigation === 'replace') window.history.replaceState(null, '', formatBrowserRoute(route));
+        return;
+      }
+
+      const workspace = await api.workspace(route.planId);
+      let selected: SessionKey;
+      let history: Awaited<ReturnType<typeof api.history>> | null = null;
+      if (route.kind === 'coach') {
+        selected = workspace.coach.sessionKey;
+        history = await api.history(selected);
+      } else {
+        const lesson = workspace.lessons.find((item) => item.id === route.lessonId);
+        if (!lesson || lesson.planId !== workspace.plan.id) throw new Error('LESSON_NOT_FOUND');
+        selected = lesson.sessionKey;
+        if (lesson.status === 'active' || lesson.status === 'paused') {
+          history = await api.history(selected);
+        }
+      }
+
       setClient((current) => ({
         ...current,
         workspace,
         selected,
-        messages: { ...current.messages, [selected]: history },
+        messages: history === null
+          ? { ...current.messages, [selected]: [] }
+          : { ...current.messages, [selected]: history },
       }));
+      if (navigation === 'push') window.history.pushState(null, '', formatBrowserRoute(route));
+      if (navigation === 'replace') window.history.replaceState(null, '', formatBrowserRoute(route));
     } catch {
-      setPageError('无法打开这个 Plan，请检查 Markdown 索引。');
+      setClient(initialClientState);
+      setEvidence(null);
+      setPageError(route ? '无法恢复这个学习位置，已返回学习集首页。' : '无效的学习路径，已返回学习集首页。');
+      window.history.replaceState(null, '', '/');
     } finally {
       setLoading(false);
     }
   };
 
+  useEffect(() => {
+    let current = true;
+    void api.learningSet()
+      .then((value) => {
+        if (!current) return;
+        setLearningSet(value);
+        return openRoute(parseBrowserRoute(window.location.pathname));
+      })
+      .catch(() => setPageError('无法读取学习集，请确认本地服务与学习集目录。'))
+      .finally(() => {
+        if (current) setLoading(false);
+      });
+    return () => { current = false; };
+  }, []);
+
+  useEffect(() => {
+    const onPopState = () => {
+      void openRoute(parseBrowserRoute(window.location.pathname));
+    };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
   const selectedLesson = useMemo(() => {
     if (!client.workspace || !client.selected?.startsWith('tutor:')) return null;
     return client.workspace.lessons.find((lesson) => lesson.sessionKey === client.selected) ?? null;
   }, [client.selected, client.workspace]);
+
+  useEffect(() => {
+    if (!client.workspace || !client.selected?.startsWith('coach:')) return;
+    const route = parseBrowserRoute(window.location.pathname);
+    if (route?.kind !== 'lesson' || route.planId !== client.workspace.plan.id) return;
+    window.history.replaceState(
+      null,
+      '',
+      formatBrowserRoute({ kind: 'coach', planId: client.workspace.plan.id }),
+    );
+  }, [client.selected, client.workspace?.plan.id]);
 
   const workflowSessionOpen = Boolean(
     client.selected?.startsWith('coach:')
@@ -180,7 +242,6 @@ export function App() {
 
   const selectSession = async (nextKey: SessionKey) => {
     if (!client.workspace || nextKey === client.selected) return;
-    setPageError(null);
     try {
       let workspace = client.workspace;
       const currentLesson = workspace.lessons.find(
@@ -190,18 +251,13 @@ export function App() {
         workspace = await api.lessonAction(currentLesson.id, 'pause');
       }
       const nextLesson = workspace.lessons.find((lesson) => lesson.sessionKey === nextKey);
-      const shouldLoadHistory = nextKey.startsWith('coach:')
-        || nextLesson?.status === 'active'
-        || nextLesson?.status === 'paused';
-      const history = shouldLoadHistory ? await api.history(nextKey) : null;
-      setClient((current) => ({
-        ...current,
-        workspace,
-        selected: nextKey,
-        messages: history === null
-          ? current.messages
-          : { ...current.messages, [nextKey]: history },
-      }));
+      const route: BrowserRoute | null = nextKey.startsWith('coach:')
+        ? { kind: 'coach', planId: workspace.plan.id }
+        : nextLesson
+          ? { kind: 'lesson', planId: workspace.plan.id, lessonId: nextLesson.id }
+          : null;
+      if (!route) throw new Error('SESSION_NOT_FOUND');
+      await openRoute(route, 'push');
     } catch {
       setPageError('切换 Session 失败，请稍后再试。');
     }
@@ -281,9 +337,7 @@ export function App() {
   };
 
   const goHome = () => {
-    setClient(initialClientState);
-    setEvidence(null);
-    setPageError(null);
+    void openRoute({ kind: 'home' }, 'push');
   };
 
   if (loading && !learningSet) {
@@ -296,7 +350,10 @@ export function App() {
     return (
       <>
         {pageError && <div className="page-alert" role="alert">{pageError}</div>}
-        <LearningSetHome value={learningSet} onOpen={(id) => void openPlan(id)} />
+        <LearningSetHome
+          value={learningSet}
+          onOpen={(id) => void openRoute({ kind: 'coach', planId: id }, 'push')}
+        />
       </>
     );
   }

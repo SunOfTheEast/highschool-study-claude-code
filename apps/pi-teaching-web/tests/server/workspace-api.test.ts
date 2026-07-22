@@ -47,6 +47,7 @@ test('returns learning-set and Plan snapshots', async () => {
 
 test('passes the configured message projection mode to history', async () => {
   const modes: unknown[] = [];
+  const calls: string[] = [];
   const handler = createRequestHandler({
     root: '/tmp/demo',
     authoring: false,
@@ -54,16 +55,45 @@ test('passes the configured message projection mode to history', async () => {
     hub: new EventHub(),
     readLearningSet: () => learningSet,
     registry: {
+      openCoach: async (planId: string) => { calls.push(`open:${planId}`); return { sessionId: 'coach-p1' }; },
       history: (_key: string, mode: unknown) => {
+        calls.push('history');
         modes.push(mode);
         return [];
       },
+      subscribe: () => () => {},
+      subscribeWorkflows: () => () => {},
     } as never,
   });
   const response = await handler(new Request('http://local/api/sessions/coach%3Ap1/history'));
   expect(response!.status).toBe(200);
   expect(await response!.json()).toEqual([]);
   expect(modes).toEqual(['raw-stream']);
+  expect(calls).toEqual(['open:p1', 'history']);
+});
+
+test('restores an active Tutor before reading its history', async () => {
+  const calls: string[] = [];
+  const handler = createRequestHandler({
+    root: '/tmp/demo',
+    authoring: false,
+    hub: new EventHub(),
+    registry: {
+      openTutor: async (lessonId: string) => {
+        calls.push(`open:${lessonId}`);
+        return { sessionId: 'tutor-l1' };
+      },
+      history: () => {
+        calls.push('history');
+        return [];
+      },
+      subscribe: () => () => {},
+      subscribeWorkflows: () => () => {},
+    } as never,
+  });
+  const response = await handler(new Request('http://local/api/sessions/tutor%3Al1/history'));
+  expect(response!.status).toBe(200);
+  expect(calls).toEqual(['open:l1', 'history']);
 });
 
 function traceProjectionHandler(events: unknown[], reader: () => AbilityProjection) {
