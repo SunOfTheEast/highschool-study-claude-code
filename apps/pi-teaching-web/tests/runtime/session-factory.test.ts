@@ -182,6 +182,11 @@ test('defines the Tutor correction, hint ladder and tool-turn protocol literally
   expect(tutorSkill).toContain(
     "When you accept a student's objection to an assessment, append a superseding Trace before Reflection or Lesson Summary",
   );
+  for (const source of [tutorAgent, tutorSkill]) {
+    expect(source).toContain(
+      'When a later student turn completes or corrects the same card-and-Block attempt, the new Trace MUST set `supersedes` to the exact active incomplete or partially_correct event',
+    );
+  }
   expect(tutorSkill).toContain(
     "Level 1 points to one location or condition already present in the student's work",
   );

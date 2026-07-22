@@ -367,6 +367,9 @@ test('defines Tutor corrections, hint levels and tool turns literally', () => {
     "When you accept a student's objection to an assessment, append a superseding Trace before Reflection or Lesson Summary",
   );
   expect(run).toContain(
+    'When a later student turn completes or corrects the same card-and-Block attempt, the new Trace MUST set `supersedes` to the exact active incomplete or partially_correct event',
+  );
+  expect(run).toContain(
     "Before rejecting a non-reference route, reconstruct the student's complete chain and verify every decisive implication.",
   );
   expect(run).toContain(
