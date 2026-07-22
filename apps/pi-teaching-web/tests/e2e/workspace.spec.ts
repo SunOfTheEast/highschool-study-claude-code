@@ -29,6 +29,9 @@ test('marks the approved theme and current learning surface', async ({ page }) =
 
   await page.getByRole('button', { name: /Lesson 003/ }).click();
   await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'tutor');
+
+  await page.getByRole('button', { name: /Lesson 001/ }).click();
+  await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'replay');
 });
 
 test('renders the liubai palette without horizontal overflow', async ({ page }) => {
