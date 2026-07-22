@@ -343,7 +343,14 @@ test('defines Tutor corrections, hint levels and tool turns literally', () => {
     );
     expect(source).toContain('Level 3 may give one key intermediate expression');
     expect(source).toContain('Give the full solution only after an explicit student request');
+    expect(source).toContain(
+      'A Level 1 reply is exactly one observation sentence and then stops',
+    );
+    expect(source).toContain(
+      '合并、构造、求导、换元、比较、代入、移项、放缩、拆分、通分',
+    );
   }
+  expect(run).toContain('Do not announce, preview, or narrate a tool call');
 });
 
 test('grounds preparation and Plan review in qualifying evidence', () => {
@@ -370,7 +377,16 @@ test('maps card dimensions and persists every final Plan audit before replying',
     expect(source).toContain('problem category = card_search.goal (graph.goal.primary)');
     expect(source).toContain('method shell = card_search.methods (graph.method)');
     expect(source).toContain('problem category (graph.goal.primary) | method shell (graph.method)');
+    expect(source).toContain(
+      'copy every non-empty category cell from `cardsByPath[cardPath].goal.primary`',
+    );
+    expect(source).toContain(
+      'two different method shells with one goal value still count as one problem category',
+    );
   }
+  expect(close).toContain(
+    'call `trace_search` once with the current `planId` and `limit: 100`',
+  );
   expect(prepare).toContain(
     'exclude already covered goal values before selecting another authentic card',
   );
@@ -391,4 +407,5 @@ test('maps card dimensions and persists every final Plan audit before replying',
   expect(coach).toContain(
     'A tool-use turn contains tool calls only. After the tool results arrive, send a separate Chinese student-facing message',
   );
+  expect(coach).toContain('Do not announce, preview, or narrate a tool call');
 });

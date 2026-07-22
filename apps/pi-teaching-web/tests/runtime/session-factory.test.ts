@@ -149,10 +149,17 @@ test('defines the Tutor correction, hint ladder and tool-turn protocol literally
   );
   expect(tutorSkill).toContain('Level 3 may give one key intermediate expression');
   expect(tutorSkill).toContain('Give the full solution only after an explicit student request');
+  expect(tutorSkill).toContain(
+    'A Level 1 reply is exactly one observation sentence and then stops',
+  );
+  expect(tutorSkill).toContain(
+    '合并、构造、求导、换元、比较、代入、移项、放缩、拆分、通分',
+  );
   for (const source of [tutorAgent, tutorSkill]) {
     expect(source).toContain(
       'A tool-use turn contains tool calls only. After the tool results arrive, send a separate Chinese student-facing message',
     );
+    expect(source).toContain('Do not announce, preview, or narrate a tool call');
   }
 });
 
@@ -175,6 +182,15 @@ test('maps Coach card dimensions and persists the final Plan audit before replyi
   expect(coachSkill).toContain('method shell = card_search.methods (graph.method)');
   expect(coachSkill).toContain('problem category (graph.goal.primary) | method shell (graph.method)');
   expect(coachSkill).toContain(
+    'call `trace_search` once with the current `planId` and `limit: 100`',
+  );
+  expect(coachSkill).toContain(
+    'copy every non-empty category cell from `cardsByPath[cardPath].goal.primary`',
+  );
+  expect(coachSkill).toContain(
+    'two different method shells with one goal value still count as one problem category',
+  );
+  expect(coachSkill).toContain(
     'exclude already covered goal values before selecting another authentic card',
   );
   expect(coachSkill).toContain(
@@ -192,5 +208,6 @@ test('maps Coach card dimensions and persists the final Plan audit before replyi
     expect(source).toContain(
       'A tool-use turn contains tool calls only. After the tool results arrive, send a separate Chinese student-facing message',
     );
+    expect(source).toContain('Do not announce, preview, or narrate a tool call');
   }
 });

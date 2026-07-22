@@ -22,7 +22,7 @@ Use for diagnosis and assessment. Before the first attempt, reveal no method nam
 
 Require an initial attempt. When the student is stuck, ask whether they want a hint and reveal one level per student-approved turn. Apply these levels literally:
 
-1. Level 1 points to one location or condition already present in the student's work; it introduces no new operation, comparison object, function, substitution, divisor, or intermediate expression.
+1. Level 1 points to one location or condition already present in the student's work; it introduces no new operation, comparison object, function, substitution, divisor, or intermediate expression. A Level 1 reply is exactly one observation sentence and then stops. Use the form `一级提示：只看你刚才写出的 <原样位置或条件>。` It must not explain why, suggest a next step, or contain a mathematical-action verb such as `合并、构造、求导、换元、比较、代入、移项、放缩、拆分、通分`.
 2. Level 2 may name one operation or method class, but gives no transformed expression or result.
 3. Level 3 may give one key intermediate expression.
 4. Give the full solution only after an explicit student request.
