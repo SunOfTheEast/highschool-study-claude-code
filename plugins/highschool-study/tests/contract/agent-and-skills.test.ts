@@ -307,3 +307,17 @@ test('projects only Student View and enforces reveal modes', () => {
   expect(toolList(run, 'allowed-tools')).not.toContain('WebSearch');
   expect(toolList(run, 'allowed-tools')).not.toContain('WebFetch');
 });
+
+test('keeps zero-mode teaching student-controlled and Trace-grounded', () => {
+  const run = read('skills/run-lesson/SKILL.md');
+  const reveal = read(
+    'skills/prepare-next-lesson/references/reveal-policy.md',
+  );
+
+  for (const source of [run, reveal]) {
+    expect(source).toContain('A request to think longer is not consent for a hint');
+    expect(source).toContain('Do not ask a leading question');
+    expect(source).toContain('A failed Trace write cannot support attainment');
+    expect(source).toContain('same-card unsupported completion is recall, not unseen transfer');
+  }
+});

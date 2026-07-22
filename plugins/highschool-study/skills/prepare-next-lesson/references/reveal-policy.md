@@ -16,7 +16,7 @@ Store the problem role, evidence target, reveal mode, card-step references, and 
 
 ## zero
 
-Use for diagnosis and assessment. Before the first attempt, reveal no method name, decisive transformation, intermediate conclusion, answer, option elimination, or rubric result. If the student asks for help, first record the real unsupported or incomplete attempt, then teach. Any later unsupported validation uses a different unseen card.
+Use for diagnosis and assessment. Before the first attempt, reveal no method name, decisive transformation, intermediate conclusion, answer, option elimination, or rubric result. Assess only work the student has already produced. If the student wants to keep thinking, acknowledge and wait. A request to think longer is not consent for a hint. Do not ask a leading question, name the object to compare, or narrow the method. If the student explicitly asks for help after an attempt, first record the real unsupported or incomplete attempt, then teach. A failed Trace write cannot support attainment. Retry once with the exact tool contract; if it still fails, say that evidence is unavailable and make no attainment claim. Record `support: tutor` after any Tutor hint. When complete `traceHistory` shows prior Tutor support, a same-card unsupported completion is recall, not unseen transfer. Any later unsupported validation uses a different unseen card.
 
 ## ladder
 

@@ -64,3 +64,12 @@ test('adds only the workflow proposal tool while deep mode is enabled', () => {
   expect(deepModeToolNames([...ordinary, 'deep_workflow_propose'], false)).toEqual(ordinary);
   expect(deepModeToolNames(ordinary, true)).not.toContain('subagent');
 });
+
+test('keeps Tutor zero mode student-controlled and Trace-grounded', () => {
+  const tutorSkill = readFileSync(join(resources, 'skills/tutor-lesson/SKILL.md'), 'utf8');
+
+  expect(tutorSkill).toContain('A request to think longer is not consent for a hint');
+  expect(tutorSkill).toContain('Do not ask a leading question');
+  expect(tutorSkill).toContain('A failed Trace write cannot support attainment');
+  expect(tutorSkill).toContain('same-card unsupported completion is recall, not unseen transfer');
+});
