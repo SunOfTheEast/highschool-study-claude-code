@@ -13,8 +13,10 @@ import { DeepWorkflowRuntime } from '../workflows/runtime';
 import { WorkflowStore } from '../workflows/store';
 import { createDeepWorkflowTool } from '../workflows/tool';
 import { createClassroomUpdateTool } from './classroom-update';
-import { createRoleResourceLoader, type SessionRole } from './resource-loader';
+import { createRoleResourceLoader } from './resource-loader';
+import type { SessionRole, StudySessionScope } from './session-scope';
 import { createStudyTools } from './study-tools';
+export type { SessionRole } from './session-scope';
 
 export interface StudySession {
   readonly sessionId: string;
@@ -36,9 +38,7 @@ export interface StudySession {
   dispose(): void;
 }
 
-export type SessionFactoryInput = {
-  role: SessionRole;
-  ownerId: string;
+export type SessionFactoryInput = StudySessionScope & {
   sessionFile: string | null;
 };
 
@@ -110,7 +110,8 @@ export async function createPiSessionFactory(
   now: () => Date,
 ): Promise<StudySessionFactory> {
   const modelRuntime = await ModelRuntime.create();
-  return async ({ role, ownerId, sessionFile }) => {
+  return async ({ role, ownerId, ownerPath, sessionFile }) => {
+    const scope = { role, ownerId, ownerPath } satisfies StudySessionScope;
     const eventBus = createEventBus();
     const manager = sessionFile
       ? SessionManager.open(sessionFile, undefined, root)
@@ -126,7 +127,7 @@ export async function createPiSessionFactory(
       new WorkflowStore(manager),
       now,
     );
-    const loader = await createRoleResourceLoader(root, role, ownerId, eventBus);
+    const loader = await createRoleResourceLoader(root, scope, eventBus);
     const tools: ToolDefinition[] = [
       ...createStudyTools(root, now, { role, ownerId }),
       ...(role === 'tutor' ? [createClassroomUpdateTool(root)] : []),

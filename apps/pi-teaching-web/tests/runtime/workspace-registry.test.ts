@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from 'bun:test';
-import { cpSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { StudySession, StudySessionFactory } from '../../src/runtime/session-factory';
@@ -17,6 +17,27 @@ function fixture() {
     recursive: true,
   });
   return root;
+}
+
+function moveLessonToNestedPath(root: string): void {
+  const flat = join(root, 'lessons/lesson-003.md');
+  const nestedDirectory = join(root, 'lessons/unit-a');
+  const nested = join(nestedDirectory, 'lesson-003.md');
+  mkdirSync(nestedDirectory, { recursive: true });
+  writeFileSync(
+    nested,
+    readFileSync(flat, 'utf8').replaceAll('../cards/', '../../cards/'),
+  );
+  rmSync(flat);
+
+  const planPath = join(root, 'plans/domain-integrity.md');
+  writeFileSync(
+    planPath,
+    readFileSync(planPath, 'utf8').replace(
+      '../lessons/lesson-003.md',
+      '../lessons/unit-a/lesson-003.md',
+    ),
+  );
 }
 
 function idleWorkflowMethods() {
@@ -57,6 +78,45 @@ test('creates Coach eagerly and Tutor only after start', async () => {
   await registry.startLesson('lesson-003');
   expect(created).toEqual(['coach:domain-integrity', 'tutor:lesson-003']);
   expect(registry.snapshot('domain-integrity').lessons[2]?.status).toBe('active');
+});
+
+test('passes canonical owner paths to Coach and Tutor factories', async () => {
+  const root = fixture();
+  moveLessonToNestedPath(root);
+  const created: Array<{ role: 'coach' | 'tutor'; ownerId: string; ownerPath: string }> = [];
+  const factory: StudySessionFactory = async ({ role, ownerId, ownerPath }) => {
+    created.push({ role, ownerId, ownerPath });
+    return {
+      sessionId: `${role}-${ownerId}`,
+      sessionFile: `/tmp/${role}-${ownerId}.jsonl`,
+      messages: [],
+      isStreaming: false,
+      personaId: () => null,
+      setPersona: async () => {},
+      ...idleWorkflowMethods(),
+      prompt: async () => {},
+      abort: async () => {},
+      subscribe: () => () => {},
+      dispose: () => {},
+    } satisfies StudySession;
+  };
+  const registry = new WorkspaceRegistry(root, factory, async () => null);
+
+  await registry.openCoach('domain-integrity');
+  await registry.startLesson('lesson-003');
+
+  expect(created).toEqual([
+    {
+      role: 'coach',
+      ownerId: 'domain-integrity',
+      ownerPath: 'plans/domain-integrity.md',
+    },
+    {
+      role: 'tutor',
+      ownerId: 'lesson-003',
+      ownerPath: 'lessons/unit-a/lesson-003.md',
+    },
+  ]);
 });
 
 test('starts a Lesson with one hidden Tutor kickoff and no student prompt', async () => {

@@ -49,7 +49,12 @@ export class WorkspaceRegistry {
     const sessionFile = snapshot.coach.sessionId
       ? await this.lookup(this.root, snapshot.coach.sessionId)
       : null;
-    const session = await this.factory({ role: 'coach', ownerId: planId, sessionFile });
+    const session = await this.factory({
+      role: 'coach',
+      ownerId: planId,
+      ownerPath: snapshot.plan.path,
+      sessionFile,
+    });
     this.sessions.set(key, session);
     setFrontmatterField(this.root, snapshot.plan.path, 'coach_session', session.sessionId);
     return session;
@@ -81,7 +86,12 @@ export class WorkspaceRegistry {
     const sessionFile = lesson.tutorSessionId
       ? await this.lookup(this.root, lesson.tutorSessionId)
       : null;
-    const session = await this.factory({ role: 'tutor', ownerId: lessonId, sessionFile });
+    const session = await this.factory({
+      role: 'tutor',
+      ownerId: lessonId,
+      ownerPath: lesson.path,
+      sessionFile,
+    });
     this.sessions.set(key, session);
     setFrontmatterField(this.root, lesson.path, 'tutor_session', session.sessionId);
     return session;
