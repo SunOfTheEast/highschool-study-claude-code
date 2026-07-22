@@ -26,7 +26,7 @@ export function renderPlannerAttention(signals: MethodSignal[]): string {
   ];
   for (const signal of signals) {
     lines.push(
-      `- ${signal.method}: ${signal.score.toFixed(3)} (earned ${signal.earnedWeight} / evidence ${signal.evidenceWeight})`,
+      `- ${signal.method}: ${signal.score.toFixed(3)} (earned ${signal.earnedWeight} / evidence ${signal.evidenceWeight}; attempts ${signal.attemptCount}; cards ${signal.distinctCardCount})`,
       `  Sources: ${signal.sourceRefs.map(sourceLink).join(', ')}`,
     );
   }

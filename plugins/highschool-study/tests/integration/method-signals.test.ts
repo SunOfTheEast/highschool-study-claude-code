@@ -8,7 +8,7 @@ import { makeLearningSetWithHistory } from '../helpers/learning-set';
 
 const packageRoot = join(import.meta.dir, '../..');
 
-test('weights every active card Trace by strongest card method role', () => {
+test('collapses active step Traces into one card attempt', () => {
   const root = makeLearningSetWithHistory();
   const active = readActiveTraces(root);
   const cardTrace = active.find((trace) => trace.cardPath !== null)!;
@@ -20,9 +20,11 @@ test('weights every active card Trace by strongest card method role', () => {
   expect(signals).toEqual([
     {
       method: '冻结变量法',
-      evidenceWeight: 4,
-      earnedWeight: 2,
+      evidenceWeight: 2,
+      earnedWeight: 1,
       score: 0.5,
+      attemptCount: 1,
+      distinctCardCount: 1,
       sourceRefs: [
         'lessons/lesson-001.md#trace-event-001',
         'lessons/lesson-001.md#trace-event-003',
@@ -30,9 +32,11 @@ test('weights every active card Trace by strongest card method role', () => {
     },
     {
       method: '参数化与消元',
-      evidenceWeight: 2,
-      earnedWeight: 1,
+      evidenceWeight: 1,
+      earnedWeight: 0.5,
       score: 0.5,
+      attemptCount: 1,
+      distinctCardCount: 1,
       sourceRefs: [
         'lessons/lesson-001.md#trace-event-001',
         'lessons/lesson-001.md#trace-event-003',
@@ -41,7 +45,40 @@ test('weights every active card Trace by strongest card method role', () => {
   ]);
 });
 
-test('combines assessment and support factors independently', () => {
+test('averages active step evidence within one card attempt', () => {
+  const root = makeLearningSetWithHistory();
+  const cardTrace = readActiveTraces(root).find((trace) => trace.cardPath !== null)!;
+  const variants = [
+    { assessment: 'correct' as const, support: 'none' as const },
+    { assessment: 'partially_correct' as const, support: 'tutor' as const },
+  ].map((variant, index) => ({
+    ...cardTrace,
+    ...variant,
+    eventId: `event-average-${index}`,
+    sourceAnchor: `lessons/lesson-001.md#trace-average-${index}`,
+  }));
+
+  expect(aggregateMethodSignals(root, variants)).toEqual([
+    expect.objectContaining({
+      method: '冻结变量法',
+      evidenceWeight: 2,
+      earnedWeight: 1.25,
+      score: 0.625,
+      attemptCount: 1,
+      distinctCardCount: 1,
+    }),
+    expect.objectContaining({
+      method: '参数化与消元',
+      evidenceWeight: 1,
+      earnedWeight: 0.625,
+      score: 0.625,
+      attemptCount: 1,
+      distinctCardCount: 1,
+    }),
+  ]);
+});
+
+test('combines assessment and support factors across distinct attempts', () => {
   const root = makeLearningSetWithHistory();
   const cardTrace = readActiveTraces(root).find((trace) => trace.cardPath !== null)!;
   const variants = [
@@ -54,12 +91,46 @@ test('combines assessment and support factors independently', () => {
     ...cardTrace,
     ...variant,
     eventId: `event-factor-${index}`,
+    blockId: `step-factor-${index}`,
     sourceAnchor: `lessons/lesson-001.md#trace-factor-${index}`,
   }));
 
   expect(aggregateMethodSignals(root, variants)).toEqual([
-    expect.objectContaining({ method: '冻结变量法', evidenceWeight: 10, earnedWeight: 4, score: 0.4 }),
-    expect.objectContaining({ method: '参数化与消元', evidenceWeight: 5, earnedWeight: 2, score: 0.4 }),
+    expect.objectContaining({
+      method: '冻结变量法',
+      evidenceWeight: 10,
+      earnedWeight: 4,
+      score: 0.4,
+      attemptCount: 5,
+      distinctCardCount: 1,
+    }),
+    expect.objectContaining({
+      method: '参数化与消元',
+      evidenceWeight: 5,
+      earnedWeight: 2,
+      score: 0.4,
+      attemptCount: 5,
+      distinctCardCount: 1,
+    }),
+  ]);
+});
+
+test('counts distinct card paths independently from attempts', () => {
+  const root = makeLearningSetWithHistory();
+  const cardTrace = readActiveTraces(root).find((trace) => trace.cardPath !== null)!;
+  const signals = aggregateMethodSignals(root, [
+    { ...cardTrace, assessment: 'correct', sourceAnchor: 'lessons/lesson-001.md#trace-card-1' },
+    {
+      ...cardTrace,
+      assessment: 'correct',
+      cardPath: 'cards/conics/freeze-variable-transfer-02.yaml',
+      sourceAnchor: 'lessons/lesson-001.md#trace-card-2',
+    },
+  ]);
+
+  expect(signals).toEqual([
+    expect.objectContaining({ method: '冻结变量法', attemptCount: 2, distinctCardCount: 2 }),
+    expect.objectContaining({ method: '参数化与消元', attemptCount: 2, distinctCardCount: 2 }),
   ]);
 });
 
@@ -81,6 +152,7 @@ test('rebuild script rewrites only planner attention with source links', () => {
   expect(planner).toContain('Uncalibrated preparation signal; not a mastery claim.');
   expect(planner).toContain('冻结变量法');
   expect(planner).toContain('参数化与消元');
+  expect(planner).toContain('attempts 1; cards 1');
   expect(planner).toContain('../lessons/lesson-001.md#trace-event-001');
   expect(planner).toContain('../lessons/lesson-001.md#trace-event-003');
   expect(planner).not.toContain('trace-event-002');
