@@ -20,12 +20,12 @@ Use for diagnosis and assessment. Before the first attempt, reveal no method nam
 
 ## ladder
 
-Require an initial attempt. When the student is stuck, ask whether they want a hint and reveal one level per student-approved turn:
+Require an initial attempt. When the student is stuck, ask whether they want a hint and reveal one level per student-approved turn. Apply these levels literally:
 
-1. name only the object, condition, or known information to inspect;
-2. identify a structural direction without the exact transformation;
-3. give one key step;
-4. give the full solution only after an explicit request.
+1. Level 1 points to one location or condition already present in the student's work; it introduces no new operation, comparison object, function, substitution, divisor, or intermediate expression.
+2. Level 2 may name one operation or method class, but gives no transformed expression or result.
+3. Level 3 may give one key intermediate expression.
+4. Give the full solution only after an explicit student request.
 
 Record actual support honestly. The existing Trace `support` remains `none`, `tutor`, or `external`; when useful, put the highest revealed ladder level in `note`.
 

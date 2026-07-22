@@ -322,6 +322,30 @@ test('keeps zero-mode teaching student-controlled and Trace-grounded', () => {
   }
 });
 
+test('defines Tutor corrections, hint levels and tool turns literally', () => {
+  const run = read('skills/run-lesson/SKILL.md');
+  const reveal = read(
+    'skills/prepare-next-lesson/references/reveal-policy.md',
+  );
+
+  expect(run).toContain(
+    "When you accept a student's objection to an assessment, append a superseding Trace before Reflection or Lesson Summary",
+  );
+  expect(run).toContain(
+    'A tool-use turn contains tool calls only. After the tool results arrive, send a separate Chinese student-facing message',
+  );
+  for (const source of [run, reveal]) {
+    expect(source).toContain(
+      "Level 1 points to one location or condition already present in the student's work",
+    );
+    expect(source).toContain(
+      'Level 2 may name one operation or method class, but gives no transformed expression or result',
+    );
+    expect(source).toContain('Level 3 may give one key intermediate expression');
+    expect(source).toContain('Give the full solution only after an explicit student request');
+  }
+});
+
 test('grounds preparation and Plan review in qualifying evidence', () => {
   const prepare = read('skills/prepare-next-lesson/SKILL.md');
   const close = read('skills/close-lesson-reflection/SKILL.md');

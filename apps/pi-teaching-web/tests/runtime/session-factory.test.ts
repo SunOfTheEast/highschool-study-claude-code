@@ -74,6 +74,28 @@ test('keeps Tutor zero mode student-controlled and Trace-grounded', () => {
   expect(tutorSkill).toContain('same-card unsupported completion is recall, not unseen transfer');
 });
 
+test('defines the Tutor correction, hint ladder and tool-turn protocol literally', () => {
+  const tutorAgent = readFileSync(join(resources, 'agents/tutor.md'), 'utf8');
+  const tutorSkill = readFileSync(join(resources, 'skills/tutor-lesson/SKILL.md'), 'utf8');
+
+  expect(tutorSkill).toContain(
+    "When you accept a student's objection to an assessment, append a superseding Trace before Reflection or Lesson Summary",
+  );
+  expect(tutorSkill).toContain(
+    "Level 1 points to one location or condition already present in the student's work",
+  );
+  expect(tutorSkill).toContain(
+    'Level 2 may name one operation or method class, but gives no transformed expression or result',
+  );
+  expect(tutorSkill).toContain('Level 3 may give one key intermediate expression');
+  expect(tutorSkill).toContain('Give the full solution only after an explicit student request');
+  for (const source of [tutorAgent, tutorSkill]) {
+    expect(source).toContain(
+      'A tool-use turn contains tool calls only. After the tool results arrive, send a separate Chinese student-facing message',
+    );
+  }
+});
+
 test('grounds Coach preparation and Plan review in qualifying evidence', () => {
   const coachSkill = readFileSync(join(resources, 'skills/coach-study/SKILL.md'), 'utf8');
 

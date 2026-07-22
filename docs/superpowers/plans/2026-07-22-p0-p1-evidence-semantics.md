@@ -87,7 +87,7 @@ git commit -m "fix: aggregate learning evidence by card attempt"
 - 修改：`apps/pi-teaching-web/resources/skills/tutor-lesson/SKILL.md`
 - 修改：`plugins/highschool-study/tests/contract/agent-and-skills.test.ts`
 - 修改：`plugins/highschool-study/skills/run-lesson/SKILL.md`
-- 修改：`plugins/highschool-study/skills/run-lesson/references/reveal-policy.md`
+- 修改：`plugins/highschool-study/skills/prepare-next-lesson/references/reveal-policy.md`
 
 ### 2.1 先写失败的 Skill/Agent 契约测试
 
@@ -121,7 +121,7 @@ cd plugins/highschool-study && bun test tests/contract/agent-and-skills.test.ts
 cd apps/pi-teaching-web && bun test tests/runtime/session-factory.test.ts
 cd plugins/highschool-study && bun test tests/contract/agent-and-skills.test.ts
 git diff --check
-git add apps/pi-teaching-web/tests/runtime/session-factory.test.ts apps/pi-teaching-web/resources/agents/tutor.md apps/pi-teaching-web/resources/skills/tutor-lesson/SKILL.md plugins/highschool-study/tests/contract/agent-and-skills.test.ts plugins/highschool-study/skills/run-lesson/SKILL.md plugins/highschool-study/skills/run-lesson/references/reveal-policy.md
+git add apps/pi-teaching-web/tests/runtime/session-factory.test.ts apps/pi-teaching-web/resources/agents/tutor.md apps/pi-teaching-web/resources/skills/tutor-lesson/SKILL.md plugins/highschool-study/tests/contract/agent-and-skills.test.ts plugins/highschool-study/skills/run-lesson/SKILL.md plugins/highschool-study/skills/prepare-next-lesson/references/reveal-policy.md
 git commit -m "fix: clarify tutor evidence and hint contracts"
 ```
 
