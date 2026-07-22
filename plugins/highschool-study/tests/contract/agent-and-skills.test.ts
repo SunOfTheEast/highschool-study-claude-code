@@ -352,6 +352,18 @@ test('defines Tutor corrections, hint levels and tool turns literally', () => {
   );
 
   expect(run).toContain(
+    "Before judging, freeze the evidence to mathematical claims the student explicitly supplied before this tool call",
+  );
+  expect(run).toContain(
+    'Never use a derivation, implication or conclusion first supplied by the Tutor to upgrade that same attempt',
+  );
+  expect(run).toContain(
+    'If a decisive proof obligation is still missing, keep the attempt incomplete',
+  );
+  expect(run).toContain(
+    'Tutor-provided work can change later support to tutor, but cannot become unsupported student evidence',
+  );
+  expect(run).toContain(
     "When you accept a student's objection to an assessment, append a superseding Trace before Reflection or Lesson Summary",
   );
   expect(run).toContain(

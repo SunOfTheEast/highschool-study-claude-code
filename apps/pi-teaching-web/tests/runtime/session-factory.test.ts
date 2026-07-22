@@ -162,6 +162,23 @@ test('defines the Tutor correction, hint ladder and tool-turn protocol literally
   const tutorAgent = readFileSync(join(resources, 'agents/tutor.md'), 'utf8');
   const tutorSkill = readFileSync(join(resources, 'skills/tutor-lesson/SKILL.md'), 'utf8');
 
+  for (const source of [tutorAgent, tutorSkill]) {
+    expect(source).toContain(
+      "Before judging, freeze the evidence to mathematical claims the student explicitly supplied before this tool call",
+    );
+    expect(source).toContain(
+      'Never use a derivation, implication or conclusion first supplied by the Tutor to upgrade that same attempt',
+    );
+  }
+  expect(tutorSkill).toContain(
+    'If a decisive proof obligation is still missing, record `assessment: incomplete`',
+  );
+  expect(tutorSkill).toContain(
+    'Validate what is established, name the missing obligation without solving it',
+  );
+  expect(tutorSkill).toContain(
+    'Method confirmation and alternative persistence begin only after the evidence-frozen active Trace is correct',
+  );
   expect(tutorSkill).toContain(
     "When you accept a student's objection to an assessment, append a superseding Trace before Reflection or Lesson Summary",
   );

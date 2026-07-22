@@ -81,7 +81,9 @@ export function createStudyTools(
           Type.Literal('partially_correct'),
           Type.Literal('incorrect'),
           Type.Literal('incomplete'),
-        ]),
+        ], {
+          description: "correct requires every decisive implication to be present in the student's own work before this tool call. Tutor-generated completions never count as student evidence.",
+        }),
         support: Type.Union([
           Type.Literal('none'),
           Type.Literal('tutor'),

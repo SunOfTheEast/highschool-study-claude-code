@@ -126,6 +126,15 @@ test('keeps runtime authority out of Tutor tool schemas', () => {
   expect(JSON.stringify(trace.parameters)).toContain('methodRoute');
   expect(JSON.stringify(trace.parameters)).not.toContain('methodResolution');
   expect(JSON.stringify(trace.parameters)).not.toContain('"methods"');
+  const traceProperties = (trace.parameters as {
+    properties: Record<string, { description?: string }>;
+  }).properties;
+  expect(traceProperties.assessment?.description).toContain(
+    "the student's own work before this tool call",
+  );
+  expect(traceProperties.assessment?.description).toContain(
+    'Tutor-generated completions never count as student evidence',
+  );
 });
 
 test('requires an explicit student-confirmed or unmapped method decision', () => {
