@@ -1,5 +1,7 @@
 # Session-bound Tools and Safe Projection Implementation Plan
 
+> **Execution status:** 已并入 `2026-07-22-teaching-runtime-closure-master-plan.md`。保留本文件作为 Session 工具与安全投影的细化来源；不要再把它作为独立计划执行。
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** 同一次改造中落地 Session-bound Tutor tools、Coach `plan_update` 与 `safe | raw-stream` 消息投影，使模型只填写教学判断，运行时绑定文件所有权，学生界面默认不显示混合工具回合文本。
