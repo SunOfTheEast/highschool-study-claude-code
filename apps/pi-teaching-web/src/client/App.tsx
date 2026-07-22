@@ -296,6 +296,9 @@ export function App() {
 
   const selected = client.selected;
   const isCoach = selected.startsWith('coach:');
+  const isReplay = selectedLesson?.status === 'closed'
+    || selectedLesson?.status === 'abandoned';
+  const view = isCoach ? 'coach' : isReplay ? 'replay' : 'tutor';
   const composerEnabled = isCoach || selectedLesson?.status === 'active';
   let gate: ReactNode = null;
 
@@ -331,7 +334,12 @@ export function App() {
   }
 
   return (
-    <div className="app-root" data-persona={persona?.id ?? 'neutral-tutor'}>
+    <div
+      className="app-root"
+      data-theme="liubai-xinzhongshi"
+      data-view={view}
+      data-persona={persona?.id ?? 'neutral-tutor'}
+    >
       {connection !== 'open' && (
         <div className="connection-banner" role="status">
           <span />{connection === 'connecting' ? '正在连接课堂事件流…' : '事件流已断开，正在重连…'}

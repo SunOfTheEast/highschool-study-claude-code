@@ -9,7 +9,7 @@ export function LearningSetHome({
   onOpen(id: string): void;
 }) {
   return (
-    <main className="home">
+    <main className="home" data-theme="liubai-xinzhongshi">
       <header className="home-heading">
         <p className="eyebrow">StudyForge · Learning Set</p>
         <h1>{value.title}</h1>
