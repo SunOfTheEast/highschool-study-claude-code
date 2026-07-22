@@ -17,7 +17,7 @@ import { EvidenceLens } from './components/EvidenceLens';
 import { LearningSetHome } from './components/LearningSetHome';
 import { LessonNotebook } from './components/LessonNotebook';
 import { SessionTree } from './components/SessionTree';
-import { initialClientState, reduceClientState } from './state';
+import { initialClientState, preferLiveMessages, reduceClientState } from './state';
 
 type ConnectionState = 'connecting' | 'open' | 'closed';
 
@@ -215,7 +215,13 @@ export function App() {
         ...current,
         workspace,
         selected: lesson.sessionKey,
-        messages: { ...current.messages, [lesson.sessionKey]: history },
+        messages: {
+          ...current.messages,
+          [lesson.sessionKey]: preferLiveMessages(
+            current.messages[lesson.sessionKey],
+            history,
+          ),
+        },
       }));
     } catch {
       setPageError('无法启动 Tutor Session，请检查 Pi 配置。');

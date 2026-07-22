@@ -1,5 +1,9 @@
 import { expect, test } from 'bun:test';
-import { initialClientState, reduceClientState } from '../../src/client/state';
+import {
+  initialClientState,
+  preferLiveMessages,
+  reduceClientState,
+} from '../../src/client/state';
 
 test('keeps messages separated by Session key', () => {
   let state = initialClientState;
@@ -47,4 +51,26 @@ test('keeps workflow updates separated by parent Session key', () => {
   });
   expect(state.workflows['coach:p1']).toEqual([{ ...workflow, status: 'completed' }]);
   expect(state.workflows['tutor:l1']?.[0]?.id).toBe('wf-2');
+});
+
+test('does not overwrite a live kickoff message with an earlier empty history response', () => {
+  const live = [{
+    id: 'tutor:l1:live',
+    role: 'tutor' as const,
+    text: '第一道题',
+    complete: true,
+  }];
+
+  expect(preferLiveMessages(live, [])).toEqual(live);
+});
+
+test('uses fetched history when no live message has arrived', () => {
+  const fetched = [{
+    id: 'tutor:l1:history',
+    role: 'tutor' as const,
+    text: '继续上次课堂',
+    complete: true,
+  }];
+
+  expect(preferLiveMessages([], fetched)).toEqual(fetched);
 });

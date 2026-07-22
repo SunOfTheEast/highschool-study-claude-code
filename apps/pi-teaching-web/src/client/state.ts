@@ -26,6 +26,13 @@ export const initialClientState: ClientState = {
   workflows: {},
 };
 
+export function preferLiveMessages(
+  live: ChatMessage[] | undefined,
+  fetched: ChatMessage[],
+): ChatMessage[] {
+  return live?.length ? live : fetched;
+}
+
 export function reduceClientState(state: ClientState, event: StudyViewEvent): ClientState {
   if (event.type === 'snapshot') return { ...state, workspace: event.workspace };
   if (event.type === 'message-delta') {
