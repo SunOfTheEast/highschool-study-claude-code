@@ -359,3 +359,36 @@ test('grounds preparation and Plan review in qualifying evidence', () => {
   expect(prepare).toContain('usedCardPaths');
   expect(prepare).toContain('criterion | lesson/block | cardPath | problem category');
 });
+
+test('maps card dimensions and persists every final Plan audit before replying', () => {
+  const coach = read('agents/study-coach.md');
+  const prepare = read('skills/prepare-next-lesson/SKILL.md');
+  const close = read('skills/close-lesson-reflection/SKILL.md');
+  const consolidate = read('skills/consolidate-plan-memory/SKILL.md');
+
+  for (const source of [prepare, close]) {
+    expect(source).toContain('problem category = card_search.goal (graph.goal.primary)');
+    expect(source).toContain('method shell = card_search.methods (graph.method)');
+    expect(source).toContain('problem category (graph.goal.primary) | method shell (graph.method)');
+  }
+  expect(prepare).toContain(
+    'exclude already covered goal values before selecting another authentic card',
+  );
+  expect(close).toContain(
+    'Map `complete` to `status: completed`; map `active` and `replan` to `status: active`',
+  );
+  expect(consolidate).toContain('Set Plan frontmatter to `status: completed`');
+  for (const source of [close, consolidate]) {
+    expectInOrder(source, [
+      'Update `## Lesson Index`',
+      'Update `## Current Position`',
+      'Update `## Next Lesson Candidate`',
+      'Update `## Plan Summary`',
+      'Reread the Plan',
+      'Only then send',
+    ]);
+  }
+  expect(coach).toContain(
+    'A tool-use turn contains tool calls only. After the tool results arrive, send a separate Chinese student-facing message',
+  );
+});

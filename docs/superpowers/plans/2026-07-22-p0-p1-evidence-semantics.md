@@ -135,8 +135,10 @@ git commit -m "fix: clarify tutor evidence and hint contracts"
 - 修改：`apps/pi-teaching-web/resources/agents/coach.md`
 - 修改：`apps/pi-teaching-web/resources/skills/coach-study/SKILL.md`
 - 修改：`plugins/highschool-study/tests/contract/agent-and-skills.test.ts`
+- 修改：`plugins/highschool-study/agents/study-coach.md`
 - 修改：`plugins/highschool-study/skills/prepare-next-lesson/SKILL.md`
 - 修改：`plugins/highschool-study/skills/close-lesson-reflection/SKILL.md`
+- 修改：`plugins/highschool-study/skills/consolidate-plan-memory/SKILL.md`
 
 ### 3.1 先写失败的映射与事务顺序测试
 
@@ -152,7 +154,7 @@ git commit -m "fix: clarify tutor evidence and hint contracts"
   2. Current Position
   3. Next Lesson Candidate
   4. Plan Summary
-- `replan` 仍写作 Plan 的 `status: active`，不发明新 schema 值。
+- `complete` 写作现有的 `status: completed`；`active` 与 `replan` 都写作 `status: active`，不发明新 schema 值。
 - 写完后重新读取 Plan，学生端结论只能依据重读后的内容陈述。
 
 运行并确认 RED：
@@ -176,7 +178,7 @@ cd plugins/highschool-study && bun test tests/contract/agent-and-skills.test.ts
 cd apps/pi-teaching-web && bun test tests/runtime/session-factory.test.ts
 cd plugins/highschool-study && bun test tests/contract/agent-and-skills.test.ts
 git diff --check
-git add apps/pi-teaching-web/tests/runtime/session-factory.test.ts apps/pi-teaching-web/resources/agents/coach.md apps/pi-teaching-web/resources/skills/coach-study/SKILL.md plugins/highschool-study/tests/contract/agent-and-skills.test.ts plugins/highschool-study/skills/prepare-next-lesson/SKILL.md plugins/highschool-study/skills/close-lesson-reflection/SKILL.md
+git add apps/pi-teaching-web/tests/runtime/session-factory.test.ts apps/pi-teaching-web/resources/agents/coach.md apps/pi-teaching-web/resources/skills/coach-study/SKILL.md plugins/highschool-study/tests/contract/agent-and-skills.test.ts plugins/highschool-study/agents/study-coach.md plugins/highschool-study/skills/prepare-next-lesson/SKILL.md plugins/highschool-study/skills/close-lesson-reflection/SKILL.md plugins/highschool-study/skills/consolidate-plan-memory/SKILL.md
 git commit -m "fix: persist coach decisions into plans"
 ```
 

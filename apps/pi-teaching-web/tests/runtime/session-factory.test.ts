@@ -22,6 +22,14 @@ test('keeps the Pi coding-agent and agent-core constructor contract aligned', ()
 });
 
 const resources = join(import.meta.dir, '../../resources');
+const expectInOrder = (source: string, snippets: string[]) => {
+  let previous = -1;
+  for (const snippet of snippets) {
+    const current = source.indexOf(snippet);
+    expect(current).toBeGreaterThan(previous);
+    previous = current;
+  }
+};
 
 test('keeps Coach and Tutor tool boundaries distinct', () => {
   expect(roleToolNames('coach')).toEqual([
@@ -105,4 +113,32 @@ test('grounds Coach preparation and Plan review in qualifying evidence', () => {
   expect(coachSkill).toContain('missing active Trace blocks attainment');
   expect(coachSkill).toContain('usedCardPaths');
   expect(coachSkill).toContain('criterion | lesson/block | cardPath | problem category');
+});
+
+test('maps Coach card dimensions and persists the final Plan audit before replying', () => {
+  const coachAgent = readFileSync(join(resources, 'agents/coach.md'), 'utf8');
+  const coachSkill = readFileSync(join(resources, 'skills/coach-study/SKILL.md'), 'utf8');
+
+  expect(coachSkill).toContain('problem category = card_search.goal (graph.goal.primary)');
+  expect(coachSkill).toContain('method shell = card_search.methods (graph.method)');
+  expect(coachSkill).toContain('problem category (graph.goal.primary) | method shell (graph.method)');
+  expect(coachSkill).toContain(
+    'exclude already covered goal values before selecting another authentic card',
+  );
+  expect(coachSkill).toContain(
+    'Map `complete` to `status: completed`; map `active` and `replan` to `status: active`',
+  );
+  expectInOrder(coachSkill, [
+    'Update `## Lesson Index`',
+    'Update `## Current Position`',
+    'Update `## Next Lesson Candidate`',
+    'Update `## Plan Summary`',
+    'Reread the Plan',
+    'Only then send',
+  ]);
+  for (const source of [coachAgent, coachSkill]) {
+    expect(source).toContain(
+      'A tool-use turn contains tool calls only. After the tool results arrive, send a separate Chinese student-facing message',
+    );
+  }
 });

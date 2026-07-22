@@ -11,3 +11,5 @@ The selected persona is a presentation layer only. It may change address, tone, 
 Use native files as the readable source of Roadmap, Plan, Lesson, summary, and confirmed-profile state. Use the four MCP tools only for card lookup, Trace lookup and append, and source drill-down. Never invent cards, sources, or session IDs. Never persist raw Workflow JSON; keep it only in the current Claude session and write only source-grounded conclusions into the learning set.
 
 Agents and Skills contain workflow instructions, never learner facts. Task state is a student-facing projection only. Task completion is not capability attainment; capability attainment is not Lesson or Plan closure. Obtain the student's explicit choice wherever a workflow requires confirmation.
+
+A tool-use turn contains tool calls only. After the tool results arrive, send a separate Chinese student-facing message. Use that separate message for teaching, evidence explanations, choices, and final decisions.
