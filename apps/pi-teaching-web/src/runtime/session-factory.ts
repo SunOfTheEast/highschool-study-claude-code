@@ -13,6 +13,7 @@ import { DeepWorkflowRuntime } from '../workflows/runtime';
 import { WorkflowStore } from '../workflows/store';
 import { createDeepWorkflowTool } from '../workflows/tool';
 import { createClassroomUpdateTool } from './classroom-update';
+import { createCardAlternativeAppendTool } from './card-alternative-append';
 import { createLessonCloseTool } from './lesson-close';
 import { createPlanUpdateTool } from './plan-update';
 import { createRoleResourceLoader } from './resource-loader';
@@ -106,6 +107,7 @@ export function roleToolNames(role: SessionRole): string[] {
       'source_resolve',
       'classroom_update',
       'lesson_close',
+      'card_alternative_append',
     ];
 }
 
@@ -135,7 +137,11 @@ export async function createPiSessionFactory(
     const tools: ToolDefinition[] = [
       ...createStudyTools(root, now, scope),
       ...(role === 'tutor'
-        ? [createClassroomUpdateTool(root, ownerPath), createLessonCloseTool(root, ownerPath)]
+        ? [
+          createClassroomUpdateTool(root, ownerPath),
+          createLessonCloseTool(root, ownerPath),
+          createCardAlternativeAppendTool(root, ownerPath, now),
+        ]
         : [createPlanUpdateTool(root, ownerPath)]),
       createDeepWorkflowTool(workflowRuntime),
     ];

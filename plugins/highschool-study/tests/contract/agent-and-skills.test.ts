@@ -355,6 +355,15 @@ test('defines Tutor corrections, hint levels and tool turns literally', () => {
     "When you accept a student's objection to an assessment, append a superseding Trace before Reflection or Lesson Summary",
   );
   expect(run).toContain(
+    "Before rejecting a non-reference route, reconstruct the student's complete chain and verify every decisive implication.",
+  );
+  expect(run).toContain(
+    'If the route is complete and correct, state that it is correct and stop; do not automatically present, compare, or pivot to the reference solution.',
+  );
+  expect(run).toContain(
+    'Give a hint, compare methods, or show a complete reference solution only when the student explicitly requests that action.',
+  );
+  expect(run).toContain(
     'A tool-use turn contains tool calls only. After the tool results arrive, send a separate Chinese student-facing message',
   );
   for (const source of [run, reveal]) {

@@ -60,6 +60,7 @@ test('keeps Coach and Tutor tool boundaries distinct', () => {
     'source_resolve',
     'classroom_update',
     'lesson_close',
+    'card_alternative_append',
   ]);
   expect(readFileSync(join(resources, 'agents/coach.md'), 'utf8')).toContain('one Plan');
   expect(readFileSync(join(resources, 'agents/tutor.md'), 'utf8')).toContain('one Lesson');
@@ -146,6 +147,15 @@ test('keeps Tutor zero mode student-controlled and Trace-grounded', () => {
   expect(tutorSkill).toContain(
     'Do not refuse and then give an unlabelled structural cue',
   );
+  expect(tutorSkill).toContain(
+    "Before rejecting a non-reference route, reconstruct the student's complete chain and verify every decisive implication.",
+  );
+  expect(tutorSkill).toContain(
+    'If the route is complete and correct, state that it is correct and stop; do not automatically present, compare, or pivot to the reference solution.',
+  );
+  expect(tutorSkill).toContain(
+    'Give a hint, compare methods, or show a complete reference solution only when the student explicitly requests that action.',
+  );
 });
 
 test('defines the Tutor correction, hint ladder and tool-turn protocol literally', () => {
@@ -219,6 +229,7 @@ test('maps Coach card dimensions and persists the final Plan audit before replyi
   expect(coachSkill).toContain(
     'Map `complete` to `status: completed`; map `active` and `replan` to `status: active`',
   );
+  expect(coachSkill).toContain('Trace methods are the only student-method evidence');
   expectInOrder(coachSkill, [
     'Update `## Lesson Index`',
     'Update `## Current Position`',

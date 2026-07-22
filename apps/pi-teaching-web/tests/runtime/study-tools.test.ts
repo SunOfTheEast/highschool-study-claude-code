@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { readTraceRecords } from 'highschool-study-markdown/study-domain';
 import { createClassroomUpdateTool } from '../../src/runtime/classroom-update';
+import { createCardAlternativeAppendTool } from '../../src/runtime/card-alternative-append';
 import { createLessonCloseTool } from '../../src/runtime/lesson-close';
 import { createPlanUpdateTool } from '../../src/runtime/plan-update';
 import { createStudyTools } from '../../src/runtime/study-tools';
@@ -39,13 +40,21 @@ test('binds a Tutor Trace to its Lesson and refreshes planner attention', async 
   const cardSearch = tools.find((tool) => tool.name === 'card_search')!;
   const traceSearch = tools.find((tool) => tool.name === 'trace_search')!;
 
-  await trace.execute('call-1', {
+  const appendResult = await trace.execute('call-1', {
     blockId: 'assessment-01',
     cardAlias: 'Q-DOMAIN-EX22',
     assessment: 'partially_correct',
     support: 'tutor',
     note: 'Used one structural hint after an incomplete attempt.',
+    methods: { primary: '参变量分离', secondary: ['同构变形与换元法'] },
   } as never, undefined, undefined, {} as never);
+
+  const appended = JSON.parse((appendResult.content[0] as { text: string }).text) as {
+    methods: { primary: string; secondary: string[] } | null;
+    unresolvedMethods: string[];
+  };
+  expect(appended.methods).toEqual({ primary: '参变量分离', secondary: ['同构变形与换元法'] });
+  expect(appended.unresolvedMethods).toEqual([]);
 
   expect(readTraceRecords(temporaryRoot, ['lessons/lesson-003.md']))
     .toEqual([expect.objectContaining({
@@ -106,6 +115,8 @@ test('keeps runtime authority out of Tutor tool schemas', () => {
     properties: Record<string, unknown>;
   }).properties;
   expect(Object.keys(closeProperties)).toEqual(['reflection', 'summary']);
+
+  expect(JSON.stringify(trace.parameters)).toContain('methods');
 });
 
 test('exposes one flat Coach plan_update contract without path authority', () => {
@@ -121,4 +132,16 @@ test('exposes one flat Coach plan_update contract without path authority', () =>
     'planSummary',
   ]);
   expect(JSON.stringify(tool.parameters)).not.toContain('planPath');
+});
+
+test('keeps alternative append Tutor-only and Session-bound', () => {
+  const tool = createCardAlternativeAppendTool(root, 'lessons/lesson-003.md', () => new Date());
+  expect(tool.name).toBe('card_alternative_append');
+  expect(JSON.stringify(tool.parameters)).not.toContain('lessonPath');
+  expect(JSON.stringify(tool.parameters)).not.toContain('cardPath');
+  expect(JSON.stringify(tool.parameters)).not.toContain('graphPath');
+  const properties = (tool.parameters as {
+    properties: Record<string, unknown>;
+  }).properties;
+  expect(Object.keys(properties)).toEqual(['sourceTraceId', 'question', 'solution']);
 });

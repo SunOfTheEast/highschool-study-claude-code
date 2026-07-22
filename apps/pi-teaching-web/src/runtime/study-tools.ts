@@ -60,6 +60,10 @@ export function createStudyTools(
         blockId: Type.String(),
         cardAlias: Type.Optional(Type.String()),
         materialPath: Type.Optional(Type.String()),
+        methods: Type.Optional(Type.Object({
+          primary: Type.String(),
+          secondary: Type.Optional(Type.Array(Type.String())),
+        })),
         assessment: Type.Union([
           Type.Literal('correct'),
           Type.Literal('partially_correct'),
@@ -80,6 +84,7 @@ export function createStudyTools(
         cardAlias: input.cardAlias ?? null,
         cardStepId: null,
         materialPath: input.materialPath ?? null,
+        methods: input.methods ?? null,
         assessment: input.assessment,
         support: input.support,
         note: input.note,
