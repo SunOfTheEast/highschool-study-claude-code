@@ -1,5 +1,9 @@
 import type { ImageContent } from '@earendil-works/pi-ai';
 import type { ChatMessage, PlanWorkspaceSnapshot, SessionKey } from '../shared/contracts';
+import {
+  projectStoredMessage,
+  type MessageProjectionMode,
+} from '../projection/message-policy';
 import type { WorkflowSnapshot } from '../workflows/contracts';
 import { readLearningSet, readPlanWorkspace } from '../study/read-workspace';
 import { setFrontmatterField } from '../study/write-workspace';
@@ -152,37 +156,12 @@ export class WorkspaceRegistry {
     );
   }
 
-  history(key: SessionKey): ChatMessage[] {
+  history(key: SessionKey, mode: MessageProjectionMode = 'safe'): ChatMessage[] {
     const session = this.sessions.get(key);
     if (!session) return [];
     return session.messages.flatMap((raw, index) => {
-      const message = raw as { role?: string; content?: unknown };
-      if (message.role !== 'user' && message.role !== 'assistant') return [];
-      const text = typeof message.content === 'string'
-        ? message.content
-        : Array.isArray(message.content)
-          ? message.content
-            .flatMap((part) => (
-              typeof part === 'object'
-                && part !== null
-                && (part as { type?: string }).type === 'text'
-                ? [String((part as { text?: unknown }).text ?? '')]
-                : []
-            ))
-            .join('')
-          : '';
-      return text
-        ? [{
-          id: `${key}:${index}`,
-          role: message.role === 'user'
-            ? 'student' as const
-            : key.startsWith('coach:')
-              ? 'coach' as const
-              : 'tutor' as const,
-          text,
-          complete: true,
-        }]
-        : [];
+      const message = projectStoredMessage(key, raw, index, mode);
+      return message ? [message] : [];
     });
   }
 

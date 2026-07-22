@@ -5,6 +5,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, extname, join } from 'node:path';
 import { resolveInsideRoot } from 'highschool-study-markdown/study-domain';
 import { projectSessionEvent } from '../projection/projector';
+import type { MessageProjectionMode } from '../projection/message-policy';
 import { projectWorkflow } from '../projection/workflow-projector';
 import type { WorkspaceRegistry } from '../runtime/workspace-registry';
 import type { SessionKey } from '../shared/contracts';
@@ -21,6 +22,7 @@ export type AppDependencies = {
   registry: WorkspaceRegistry;
   hub: EventHub;
   readLearningSet?: typeof readLearningSet;
+  messageProjection?: MessageProjectionMode;
 };
 
 const json = (value: unknown, status = 200) => Response.json(value, { status });
@@ -57,11 +59,14 @@ export function createRequestHandler(deps?: AppDependencies) {
       return json({ ok: true, runtime: 'pi' });
     }
     if (!deps) return new Response('Not found', { status: 404 });
+    const projectionMode = deps.messageProjection ?? 'safe';
     const learningSetReader = deps.readLearningSet ?? readLearningSet;
     const bind = (key: SessionKey) => {
       if (bound.has(key)) return;
       deps.registry.subscribe(key, (event) => {
-        for (const projected of projectSessionEvent(key, event)) deps.hub.publish(projected);
+        for (const projected of projectSessionEvent(key, event, projectionMode)) {
+          deps.hub.publish(projected);
+        }
       });
       deps.registry.subscribeWorkflows(key, (workflow) => {
         deps.hub.publish({
@@ -115,7 +120,11 @@ export function createRequestHandler(deps?: AppDependencies) {
       const lessonId = decodeURIComponent(replay[1]!);
       const lesson = deps.registry.snapshot().lessons.find((item) => item.id === lessonId);
       if (!lesson) return json({ error: 'LESSON_NOT_FOUND' }, 404);
-      return json(buildReplay(deps.root, lesson, deps.registry.history(lesson.sessionKey)));
+      return json(buildReplay(
+        deps.root,
+        lesson,
+        deps.registry.history(lesson.sessionKey, projectionMode),
+      ));
     }
 
     const imageUpload = /^\/api\/lessons\/([^/]+)\/images$/.exec(url.pathname);
@@ -144,7 +153,10 @@ export function createRequestHandler(deps?: AppDependencies) {
 
     const history = /^\/api\/sessions\/([^/]+)\/history$/.exec(url.pathname);
     if (request.method === 'GET' && history) {
-      return json(deps.registry.history(decodeURIComponent(history[1]!) as SessionKey));
+      return json(deps.registry.history(
+        decodeURIComponent(history[1]!) as SessionKey,
+        projectionMode,
+      ));
     }
 
     const deep = /^\/api\/sessions\/([^/]+)\/deep$/.exec(url.pathname);

@@ -44,6 +44,27 @@ test('returns learning-set and Plan snapshots', async () => {
     .toEqual(workspace);
 });
 
+test('passes the configured message projection mode to history', async () => {
+  const modes: unknown[] = [];
+  const handler = createRequestHandler({
+    root: '/tmp/demo',
+    authoring: false,
+    messageProjection: 'raw-stream',
+    hub: new EventHub(),
+    readLearningSet: () => learningSet,
+    registry: {
+      history: (_key: string, mode: unknown) => {
+        modes.push(mode);
+        return [];
+      },
+    } as never,
+  });
+  const response = await handler(new Request('http://local/api/sessions/coach%3Ap1/history'));
+  expect(response!.status).toBe(200);
+  expect(await response!.json()).toEqual([]);
+  expect(modes).toEqual(['raw-stream']);
+});
+
 test('routes a message to the selected Session key', async () => {
   const sent: unknown[] = [];
   const handler = createRequestHandler({

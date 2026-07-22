@@ -2,6 +2,19 @@
 
 这是 `highschool-study` Markdown 学习集的本地 Pi 前端。一个 Plan 对应一个长期 Coach Session；每节 Lesson 对应一个独立 Tutor Session。学生始终使用同一网页，但 Coach 与 Tutor 的历史不会互相复制，只通过 Lesson 文件、Trace 和带来源摘要交接。
 
+## Message projection
+
+Student sessions default to `safe`: assistant text is shown only after a pure-text
+message finishes, while messages containing tool calls are represented by structured
+work status. Pi's raw session JSONL is not modified.
+
+Use `raw-stream` only for local diagnostics because mixed tool-call text can be visible:
+
+`bun run start -- --message-projection raw-stream`
+
+The equivalent environment setting is
+`STUDYFORGE_MESSAGE_PROJECTION=raw-stream`.
+
 ## 视觉主题
 
 默认主题为“留白新中式”：暖白纸色、墨黑正文和低饱和青绿强调色组成同一套 Coach、Tutor 与 Replay 视觉语言。界面优先保留阅读空间和信息层级，不使用大面积渐变、浮空卡片或角色全局染色；二次元人设只影响头像及局部点缀，不改变教学状态的语义颜色。

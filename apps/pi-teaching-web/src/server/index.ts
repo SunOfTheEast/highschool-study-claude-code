@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { createPiSessionFactory } from '../runtime/session-factory';
 import { configureStudySubagentDirectory } from '../runtime/subagent-path';
 import { findPiSessionFile, WorkspaceRegistry } from '../runtime/workspace-registry';
+import { parseMessageProjectionMode } from '../projection/message-policy';
 import { createRequestHandler } from './app';
 import { EventHub } from './event-hub';
 
@@ -17,6 +18,9 @@ const port = Number.parseInt(
   valueAfter('--port') ?? process.env.STUDY_WEB_PORT ?? '65000',
   10,
 );
+const messageProjection = parseMessageProjectionMode(
+  valueAfter('--message-projection') ?? process.env.STUDYFORGE_MESSAGE_PROJECTION,
+);
 const hub = new EventHub();
 configureStudySubagentDirectory();
 const factory = await createPiSessionFactory(root, () => new Date());
@@ -27,7 +31,14 @@ hub.subscribe((event) => {
   const data = JSON.stringify(event);
   for (const client of clients) client.send(data);
 });
-const fetch = createRequestHandler({ root, authoring, registry, hub, staticRoot });
+const fetch = createRequestHandler({
+  root,
+  authoring,
+  registry,
+  hub,
+  staticRoot,
+  messageProjection,
+});
 
 const server = Bun.serve({
   hostname: '127.0.0.1',

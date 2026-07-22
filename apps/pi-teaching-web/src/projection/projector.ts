@@ -1,5 +1,9 @@
 import type { AgentSessionEvent } from '@earendil-works/pi-coding-agent';
 import type { SessionKey, StudyViewEvent } from '../shared/contracts';
+import {
+  visibleAssistantText,
+  type MessageProjectionMode,
+} from './message-policy';
 
 const labels: Record<string, string> = {
   card_search: '正在查找真实题卡',
@@ -7,14 +11,18 @@ const labels: Record<string, string> = {
   trace_append: '正在记录课堂证据',
   source_resolve: '正在核验来源',
   classroom_update: '正在更新课堂节点',
+  lesson_close: '正在整理课堂总结',
+  plan_update: '正在写回学习计划',
+  card_alternative_append: '正在登记已验证的另解',
 };
 
 export function projectSessionEvent(
   sessionKey: SessionKey,
   event: AgentSessionEvent,
+  mode: MessageProjectionMode = 'safe',
 ): StudyViewEvent[] {
   if (event.type === 'message_update') {
-    return event.assistantMessageEvent.type === 'text_delta'
+    return mode === 'raw-stream' && event.assistantMessageEvent.type === 'text_delta'
       ? [{
         type: 'message-delta',
         sessionKey,
@@ -24,9 +32,7 @@ export function projectSessionEvent(
       : [];
   }
   if (event.type === 'message_end' && event.message.role === 'assistant') {
-    const text = event.message.content
-      .flatMap((part) => part.type === 'text' ? [part.text] : [])
-      .join('');
+    const text = visibleAssistantText(event.message.content, mode);
     return text
       ? [{
         type: 'message',
