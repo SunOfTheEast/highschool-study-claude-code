@@ -39,6 +39,18 @@ test('marks the approved theme and current learning surface', async ({ page }) =
   await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'replay');
 });
 
+test('refreshes the full ability map after a Tutor trace without reloading', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: /定义域完整性的系统加固/ }).click();
+  await page.getByRole('button', { name: /Lesson 003/ }).click();
+  await page.getByRole('button', { name: /开始上课/ }).click();
+  await page.getByPlaceholder('写下你的想法或解题过程…').fill('我尝试用链式法则。');
+  await page.getByRole('button', { name: /发送/ }).click();
+  await page.getByRole('button', { name: /Coach/ }).click();
+  await expect(page.locator('.ability-nodes')).toContainText('链式求导');
+  await expect(page.locator('.ability-nodes')).toContainText('2 条证据');
+});
+
 test('renders the liubai palette without horizontal overflow', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');

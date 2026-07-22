@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { createRequestHandler } from '../../src/server/app';
 import { EventHub } from '../../src/server/event-hub';
+import type { AbilityProjection } from '../../src/shared/contracts';
 import type { WorkflowSnapshot } from '../../src/workflows/contracts';
 
 const learningSet = { title: 'Demo', overview: 'Overview', goal: 'Goal', plans: [] };
@@ -63,6 +64,90 @@ test('passes the configured message projection mode to history', async () => {
   expect(response!.status).toBe(200);
   expect(await response!.json()).toEqual([]);
   expect(modes).toEqual(['raw-stream']);
+});
+
+function traceProjectionHandler(events: unknown[], reader: () => AbilityProjection) {
+  let listener: ((event: unknown) => void) | undefined;
+  const hub = new EventHub();
+  hub.subscribe((event) => events.push(event));
+  const handler = createRequestHandler({
+    root: '/tmp/demo',
+    authoring: false,
+    hub,
+    readLearningSet: () => learningSet,
+    readAbilityProjection: reader,
+    registry: {
+      snapshot: () => workspace,
+      openTutor: async () => ({ sessionId: 'tutor-l1' }),
+      send: async () => {},
+      subscribe: (_key: string, next: (event: unknown) => void) => {
+        listener = next;
+        return () => {};
+      },
+      subscribeWorkflows: () => () => {},
+    } as never,
+  });
+  return {
+    handler,
+    emit: (event: unknown) => listener?.(event),
+  };
+}
+
+test('publishes one complete ability snapshot after a successful trace append', async () => {
+  const events: unknown[] = [];
+  const projection = {
+    nodes: [{
+      method: '链式求导',
+      state: 'unstable',
+      score: 0.7,
+      evidenceCount: 2,
+      sources: ['traces/trace-1.json'],
+    }],
+  } satisfies AbilityProjection;
+  const { handler, emit } = traceProjectionHandler(events, () => projection);
+  await handler(new Request('http://local/api/sessions/tutor%3Al1/messages', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ text: '继续' }),
+  }));
+
+  emit({
+    type: 'tool_execution_end',
+    toolName: 'trace_append',
+    isError: false,
+  });
+  expect(events.filter((event) => (
+    typeof event === 'object' && event !== null && 'type' in event
+      && (event as { type: string }).type === 'ability-update'
+  ))).toEqual([{
+    type: 'ability-update',
+    projection,
+  }]);
+  expect(events.slice(-2).map((event) => (
+    typeof event === 'object' && event !== null && 'type' in event
+      ? (event as { type: string }).type
+      : null
+  ))).toEqual(['work-status', 'ability-update']);
+});
+
+test('does not publish an ability snapshot for failed or non-trace tools', async () => {
+  for (const event of [
+    { type: 'tool_execution_end', toolName: 'trace_append', isError: true },
+    { type: 'tool_execution_end', toolName: 'classroom_update', isError: false },
+  ]) {
+    const events: unknown[] = [];
+    const { handler, emit } = traceProjectionHandler(events, () => ({ nodes: [] }));
+    await handler(new Request('http://local/api/sessions/tutor%3Al1/messages', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ text: '继续' }),
+    }));
+    emit(event);
+    expect(events.some((item) => (
+      typeof item === 'object' && item !== null && 'type' in item
+        && (item as { type: string }).type === 'ability-update'
+    ))).toBe(false);
+  }
 });
 
 test('routes a message to the selected Session key', async () => {

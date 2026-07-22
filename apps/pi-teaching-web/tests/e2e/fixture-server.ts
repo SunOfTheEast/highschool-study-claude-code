@@ -1,7 +1,7 @@
 import { resolve } from 'node:path';
 import { cpSync, mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import type { SessionKey } from '../../src/shared/contracts';
+import type { AbilityProjection, SessionKey } from '../../src/shared/contracts';
 import { readPlanWorkspace } from '../../src/study/read-workspace';
 import { setBlockStatus, setFrontmatterField } from '../../src/study/write-workspace';
 import { resolvePersona } from '../../src/study/persona';
@@ -83,6 +83,16 @@ const workflows = new Map<SessionKey, WorkflowSnapshot[]>([[coachKey, [
 ]]]);
 const deepMode = new Map<SessionKey, boolean>();
 const workflowListeners = new Map<SessionKey, Set<(snapshot: WorkflowSnapshot) => void>>();
+const sessionListeners = new Map<SessionKey, Set<(event: unknown) => void>>();
+const abilityProjection: AbilityProjection = {
+  nodes: [{
+    method: '链式求导',
+    state: 'unstable',
+    score: 0.7,
+    evidenceCount: 2,
+    sources: ['traces/fixture-trace.json'],
+  }],
+};
 
 function list(key: SessionKey): WorkflowSnapshot[] {
   return structuredClone(workflows.get(key) ?? []);
@@ -95,7 +105,12 @@ function notify(key: SessionKey, snapshot: WorkflowSnapshot): void {
 const registry = {
   snapshot: (planId = 'domain-integrity') => readPlanWorkspace(root, planId),
   history: () => [],
-  subscribe: () => () => {},
+  subscribe: (key: SessionKey, listener: (event: unknown) => void) => {
+    const current = sessionListeners.get(key) ?? new Set();
+    current.add(listener);
+    sessionListeners.set(key, current);
+    return () => current.delete(listener);
+  },
   subscribeWorkflows: (
     key: SessionKey,
     listener: (snapshot: WorkflowSnapshot) => void,
@@ -157,7 +172,16 @@ const registry = {
   triggerLessonStart: async () => {},
   pauseLesson: async () => {},
   abandonForReprepare: async () => {},
-  send: async () => {},
+  send: async (key: SessionKey) => {
+    if (!key.startsWith('tutor:')) return;
+    for (const listener of sessionListeners.get(key) ?? []) {
+      listener({
+        type: 'tool_execution_end',
+        toolName: 'trace_append',
+        isError: false,
+      });
+    }
+  },
 };
 const clients = new Set<{ send(data: string): void }>();
 hub.subscribe((event) => {
@@ -169,6 +193,7 @@ const fetch = createRequestHandler({
   authoring: false,
   registry: registry as never,
   hub,
+  readAbilityProjection: () => abilityProjection,
 });
 
 Bun.serve({

@@ -171,12 +171,7 @@ export type StudyViewEvent =
   }
   | {
     type: 'ability-update';
-    methods: Array<{
-      method: string;
-      state: 'unobserved' | 'unstable' | 'steady';
-      evidence: number;
-      sources: string[];
-    }>;
+    projection: AbilityProjection;
   }
   | { type: 'workflow'; sessionKey: SessionKey; workflow: WorkflowView }
   | { type: 'session-error'; sessionKey: SessionKey; message: string };

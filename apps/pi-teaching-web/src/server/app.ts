@@ -22,6 +22,7 @@ export type AppDependencies = {
   registry: WorkspaceRegistry;
   hub: EventHub;
   readLearningSet?: typeof readLearningSet;
+  readAbilityProjection?: typeof readAbilityProjection;
   messageProjection?: MessageProjectionMode;
 };
 
@@ -61,11 +62,22 @@ export function createRequestHandler(deps?: AppDependencies) {
     if (!deps) return new Response('Not found', { status: 404 });
     const projectionMode = deps.messageProjection ?? 'safe';
     const learningSetReader = deps.readLearningSet ?? readLearningSet;
+    const abilityReader = deps.readAbilityProjection ?? readAbilityProjection;
     const bind = (key: SessionKey) => {
       if (bound.has(key)) return;
       deps.registry.subscribe(key, (event) => {
         for (const projected of projectSessionEvent(key, event, projectionMode)) {
           deps.hub.publish(projected);
+        }
+        if (
+          event.type === 'tool_execution_end'
+          && event.toolName === 'trace_append'
+          && !event.isError
+        ) {
+          deps.hub.publish({
+            type: 'ability-update',
+            projection: abilityReader(deps.root),
+          });
         }
       });
       deps.registry.subscribeWorkflows(key, (workflow) => {

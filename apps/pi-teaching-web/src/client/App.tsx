@@ -53,6 +53,7 @@ export function App() {
       socket.onopen = () => setConnection('open');
       socket.onmessage = (message) => {
         const event = JSON.parse(String(message.data)) as StudyViewEvent;
+        if (event.type === 'ability-update') setAbilities(event.projection);
         setClient((current) => {
           const next = reduceClientState(current, event);
           if (event.type !== 'snapshot' || !current.selected?.startsWith('tutor:')) return next;
