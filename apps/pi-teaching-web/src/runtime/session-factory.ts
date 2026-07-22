@@ -44,6 +44,36 @@ export type SessionFactoryInput = {
 
 export type StudySessionFactory = (input: SessionFactoryInput) => Promise<StudySession>;
 
+export type AgentEndSource = Pick<StudySession, 'subscribe'>;
+
+export async function triggerAndWaitForAgentEnd(
+  source: AgentEndSource,
+  trigger: () => Promise<void>,
+): Promise<void> {
+  let unsubscribe = () => {};
+  let ended = false;
+  let resolveAgentEnd: () => void = () => {};
+  const agentEnd = new Promise<void>((resolve) => {
+    resolveAgentEnd = resolve;
+  });
+  const stop = source.subscribe((event) => {
+    if (event.type !== 'agent_end' || event.willRetry) return;
+    ended = true;
+    unsubscribe();
+    resolveAgentEnd();
+  });
+  unsubscribe = stop;
+  if (ended) unsubscribe();
+
+  try {
+    await trigger();
+    await agentEnd;
+  } catch (error) {
+    unsubscribe();
+    throw error;
+  }
+}
+
 export function deepModeToolNames(current: string[], enabled: boolean): string[] {
   const names = current.filter((name) => name !== 'deep_workflow_propose');
   return enabled ? [...names, 'deep_workflow_propose'] : names;
@@ -164,7 +194,7 @@ export async function createPiSessionFactory(
       subscribeWorkflows: (listener) => workflowRuntime.subscribe(listener),
       triggerLessonStart: async () => {
         const resuming = Boolean(sessionFile);
-        await session.sendCustomMessage({
+        await triggerAndWaitForAgentEnd(session, () => session.sendCustomMessage({
           customType: resuming
             ? 'studyforge.lesson-resume.v1'
             : 'studyforge.lesson-start.v1',
@@ -175,7 +205,7 @@ export async function createPiSessionFactory(
               : 'The student clicked Start. This is consent to begin. Activate orientation and present the first answerable Student View without asking whether they are ready.',
           }),
           display: false,
-        }, { triggerTurn: true });
+        }, { triggerTurn: true }));
       },
       prompt: (text, images = []) => session.prompt(text, { images }),
       abort: () => session.abort(),
