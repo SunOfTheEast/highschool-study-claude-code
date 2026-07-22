@@ -3,6 +3,7 @@ import { cpSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { readTraceRecords } from 'highschool-study-markdown/study-domain';
+import { Check } from 'typebox/value';
 import { createClassroomUpdateTool } from '../../src/runtime/classroom-update';
 import { createCardAlternativeAppendTool } from '../../src/runtime/card-alternative-append';
 import { createLessonCloseTool } from '../../src/runtime/lesson-close';
@@ -117,6 +118,37 @@ test('keeps runtime authority out of Tutor tool schemas', () => {
   expect(Object.keys(closeProperties)).toEqual(['reflection', 'summary']);
 
   expect(JSON.stringify(trace.parameters)).toContain('methods');
+});
+
+test('constrains Trace methods to canonical names from the current learning set', () => {
+  const trace = createStudyTools(root, () => new Date('2026-07-22T00:00:00Z'), {
+    role: 'tutor',
+    ownerId: 'lesson-003',
+    ownerPath: 'lessons/lesson-003.md',
+  }).find((tool) => tool.name === 'trace_append')!;
+  const base = {
+    blockId: 'assessment-01',
+    cardAlias: 'Q-DOMAIN-EX22',
+    assessment: 'correct',
+    support: 'none',
+    note: '学生实际采用参变量分离。',
+  };
+
+  expect(Check(trace.parameters, {
+    ...base,
+    methods: {
+      primary: '参变量分离',
+      secondary: ['同构变形与换元法'],
+    },
+  })).toBeTrue();
+  expect(Check(trace.parameters, {
+    ...base,
+    methods: {
+      primary: '参数单调性+极限必要性+端点验证',
+      secondary: ['参变量分离未使用'],
+    },
+  })).toBeFalse();
+  expect(Check(trace.parameters, base)).toBeTrue();
 });
 
 test('exposes one flat Coach plan_update contract without path authority', () => {

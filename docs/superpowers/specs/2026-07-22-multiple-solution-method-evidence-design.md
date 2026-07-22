@@ -95,8 +95,8 @@ mst_p0032_ex22.alternatives.md
 
 图谱匹配分为两层：
 
-1. **Tutor 负责语义判断**：根据学生完整推导，在规范 vocabulary、aliases 和节点 boundary 中寻找最符合实际路线的一个主方法及零个或多个次方法。
-2. **运行时负责真实性校验**：把 alias 解析为规范节点名，确认节点真实存在，并去除主次方法中的重复项。
+1. **Tutor 负责语义判断**：根据学生完整推导，在规范 vocabulary、aliases 和节点 boundary 中寻找最符合实际路线的一个主方法及零个或多个次方法。Pi Tutor 的工具 schema 直接列出当前学习集的规范方法名；题卡声明的方法只是候选，不是学生实际使用方法的证据。
+2. **运行时负责真实性校验**：确认节点真实存在、把其他调用入口提交的唯一 alias 解析为规范节点名，并去除主次方法中的重复项。
 
 运行时不根据关键词自动猜方法，也不计算模糊匹配分数。规则层只能阻止不存在的节点被写入，不能推翻 Tutor 对教学语义的判断。
 
@@ -141,9 +141,9 @@ metadata boundary：核心路线符合“参变量分离”
 }
 ```
 
-模型只提交方法名称或 alias。运行时继续从当前 Tutor Session 和 Lesson alias 绑定真实 Lesson、Block、题卡路径、Plan、Session、时间及来源锚点；模型不提交图谱路径、题卡路径或另解编号。
+Pi Tutor 只从当前学习集动态枚举的规范方法名中选择；底层 domain 与公共 MCP 仍可接受唯一 alias 并规范化。运行时继续从当前 Tutor Session 和 Lesson alias 绑定真实 Lesson、Block、题卡路径、Plan、Session、时间及来源锚点；模型不提交图谱路径、题卡路径或另解编号。
 
-成功解析后，Trace 持久化规范节点名，而不是原始 alias。若提交的方法对象存在无法解析的名称，本次 Trace 的 assessment、support 与 note 仍然写入，但整个 `methods` 绑定被省略，并在工具结果中返回未解析提示。缺失方法证据比错误方法证据更安全，也不会因为一个分类参数损失已经成立的课堂事实。
+成功解析后，Trace 持久化规范节点名，而不是原始 alias。若主方法合法而个别次方法无法解析，Trace 保留合法主方法及合法次方法，并在工具结果中返回未解析项；Tutor 随后可用规范名称写一条 superseding Trace。若主方法无法解析，则省略整个 `methods` 绑定，绝不自动猜测或提升次方法。无论哪种情况，assessment、support 与 note 都仍然写入。
 
 Trace 的 Markdown 表示保持可读，例如：
 
@@ -288,7 +288,7 @@ lessonPath + blockId + cardPath
 
 ## 十、最小失败处理
 
-- 图谱名称无法解析：课堂 Trace 仍写入，省略整个方法绑定，并返回未解析提示。
+- 图谱名称无法解析：课堂 Trace 仍写入；合法主方法及合法次方法继续保留，未解析项单独返回；主方法无法解析时才省略整个方法绑定。
 - 来源 Trace 不存在、不 active、没有题卡或 assessment 不是 `correct`：拒绝另解写入，保留原 Trace。
 - 同一来源 Trace 与题问重复写入：更新对应章节，保持幂等。
 - 找不到图谱节点：允许正确 Trace 和未归类另解，不产生方法投影。
@@ -301,9 +301,9 @@ lessonPath + blockId + cardPath
 `run-lesson` 需要明确：
 
 1. 评价学生工作时分别判断正确性、支持情况和实际方法，不用 `assessment` 代替方法判断。
-2. 路线可识别时读取图谱 metadata，选择一个主方法及必要的次方法；路线不可识别时省略方法。
+2. 路线可识别时从工具列出的规范节点中选择一个主方法及必要的次方法；题卡方法只作候选，路线不可识别时省略方法。
 3. 方法明确但做错时也写实际方法，使失败成为真实证据。
-4. 只有至少一问的完整核心推理链与该问参考解及已有 active 另解完全不同，才先写 Trace，再用返回的 Trace ID、题问和完整推导写入生成另解。
+4. 只有至少一问的完整核心推理链与该问参考解及已有 active 另解完全不同，才先写 Trace，再用返回的 Trace ID、题问和完整推导写入生成另解；无论当场还是后续比较时才确认，都必须先持久化再向学生承认这是另解。
 5. 方法节点和另解始终属于 Tutor 私有上下文，遵守现有 zero、ladder 和 Student View 防剧透规则。
 6. 接受学生异议时，先写 superseding Trace；后续能力信号和另解可见性只读取 active Trace。
 
@@ -315,7 +315,7 @@ Coach 的备课与进度检查 Skill 需要停止把题卡方法当作学生实�
 
 1. 规范节点名与合法 alias 均能持久化为规范节点名。
 2. 主次方法重复时只保留主方法角色。
-3. 无法解析的方法不会写入 Trace methods，但 assessment、support 与 note 保留。
+3. 合法 primary 不会因非法 secondary 丢失；非法项单独返回。primary 无法解析时不写入 Trace methods，但 assessment、support 与 note 保留。
 4. 方法明确但 assessment 为 `incorrect` 时，仍保存实际方法。
 
 ### 12.2 能力投影

@@ -190,6 +190,25 @@ test('defines the Tutor correction, hint ladder and tool-turn protocol literally
   }
 });
 
+test('requires canonical actual-method recovery and durable alternative recording', () => {
+  const tutorAgent = readFileSync(join(resources, 'agents/tutor.md'), 'utf8');
+  const tutorSkill = readFileSync(join(resources, 'skills/tutor-lesson/SKILL.md'), 'utf8');
+
+  expect(tutorSkill).toContain(
+    'Card-declared methods are candidates, not evidence that the student used them.',
+  );
+  expect(tutorSkill).toContain('If `trace_append` returns any `unresolvedMethods`');
+  expect(tutorSkill).toContain('append one superseding Trace with exact canonical names');
+  for (const source of [tutorAgent, tutorSkill]) {
+    expect(source).toContain(
+      'MUST call `card_alternative_append` before telling the student that it is an alternative',
+    );
+    expect(source).toContain(
+      'This also applies when the route becomes verifiable only in a later comparison turn.',
+    );
+  }
+});
+
 test('grounds Coach preparation and Plan review in qualifying evidence', () => {
   const coachSkill = readFileSync(join(resources, 'skills/coach-study/SKILL.md'), 'utf8');
 

@@ -1,6 +1,7 @@
 import { defineTool, type ToolDefinition } from '@earendil-works/pi-coding-agent';
 import {
   appendTraceWithProjection,
+  listCanonicalMethodNames,
   searchCards,
   searchTraces,
   sourceResolve,
@@ -22,6 +23,7 @@ export function createStudyTools(
   now: () => Date,
   context: StudyToolContext,
 ): ToolDefinition[] {
+  const methodName = Type.Enum(listCanonicalMethodNames(root));
   return [
     defineTool({
       name: 'card_search',
@@ -61,8 +63,10 @@ export function createStudyTools(
         cardAlias: Type.Optional(Type.String()),
         materialPath: Type.Optional(Type.String()),
         methods: Type.Optional(Type.Object({
-          primary: Type.String(),
-          secondary: Type.Optional(Type.Array(Type.String())),
+          primary: methodName,
+          secondary: Type.Optional(Type.Array(methodName)),
+        }, {
+          description: 'Select only methods the student actually used. Omit this field when no exact canonical method applies; put route explanations in note.',
         })),
         assessment: Type.Union([
           Type.Literal('correct'),

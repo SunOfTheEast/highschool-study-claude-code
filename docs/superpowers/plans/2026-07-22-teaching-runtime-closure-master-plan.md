@@ -799,12 +799,13 @@ git commit -m "feat: refresh ability projection after traces"
 
 - [ ] **Step 1: 写最终 Tutor schema 失败测试**
 
-`trace_append` 在 Task 2 基础上只增加：
+`trace_append` 在 Task 2 基础上增加当前学习集动态规范方法枚举：
 
 ```ts
+const methodName = Type.Enum(listCanonicalMethodNames(root));
 methods: Type.Optional(Type.Object({
-  primary: Type.String(),
-  secondary: Type.Optional(Type.Array(Type.String())),
+  primary: methodName,
+  secondary: Type.Optional(Type.Array(methodName)),
 }))
 ```
 
@@ -829,7 +830,7 @@ bun test tests/runtime/study-tools.test.ts tests/runtime/session-factory.test.ts
 
 - [ ] **Step 3: 接通 domain adapter**
 
-`trace_append` 原样把 optional methods 传给 `appendTraceWithProjection`，并把 `unresolvedMethods` 返回 Tutor。`card_alternative_append` 闭包调用：
+`trace_append` 原样把 optional methods 传给 `appendTraceWithProjection`，并把 `unresolvedMethods` 返回 Tutor。合法 primary 不因非法 secondary 丢失；若存在未解析项，Tutor 只能在语义确证时用规范名称写 superseding Trace，否则保持未绑定。`card_alternative_append` 闭包调用：
 
 ```ts
 appendCardAlternative(root, scope.ownerPath, input, now);
@@ -855,7 +856,7 @@ Tutor 必须分别判断 correctness/support/actual methods。路线清楚但做
 
 只有某一问的入口、决定性推理和收束链条形成一条完整、正确且与原解和已有 active alternatives 完全不同的核心推理链，才写另解。以下明确不算：换记号、改写措辞、拆并步骤、等价步骤重排、局部计算技巧、只换方法名。多问题只保存发生变化的那一问。
 
-顺序：先写 Trace → 使用返回 eventId 调用 `card_alternative_append`。学生首次作答前不得显示 methods、另解标题、摘要或推导。
+顺序：先写 Trace → 使用返回 eventId 调用 `card_alternative_append` → 再向学生确认这是另解。若到后续比较轮次才确认，也必须补写后再回复。学生首次作答前不得显示 methods、另解标题、摘要或推导。
 
 - [ ] **Step 6: 保留异议 supersede 协议并增强测试**
 
@@ -1061,7 +1062,7 @@ bun run start -- --learning-set ../../examples/derivative-demo/learning-set --po
 1. 路线正确：Tutor 先验证并承认，未被请求时不主动倾倒标准解或比较方法。
 2. 学生随后明确请求比较：Tutor 才私下读取参考/active alternatives 并比较。
 3. 只做同链改写：不写另解。
-4. 至少一问核心链完全不同：Trace 写实际 methods，随后写对应题问另解。
+4. 至少一问核心链完全不同：Trace 写实际 methods，随后写对应题问另解，最后才向学生确认；后续比较轮次才确认时同样补写。
 
 - [ ] **Step 4: 验收能力归因与实时刷新**
 

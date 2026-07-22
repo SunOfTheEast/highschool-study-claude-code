@@ -9,6 +9,7 @@ test('exports one shared study-domain entry for non-MCP runtimes', async () => {
     'sourceResolve',
     'readActiveTraces',
     'aggregateMethodSignals',
+    'listCanonicalMethodNames',
     'resolveTraceMethods',
     'readMarkdownFile',
     'resolveInsideRoot',

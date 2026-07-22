@@ -364,6 +364,16 @@ test('defines Tutor corrections, hint levels and tool turns literally', () => {
     'Give a hint, compare methods, or show a complete reference solution only when the student explicitly requests that action.',
   );
   expect(run).toContain(
+    'Card-declared methods are candidates, not evidence that the student used them.',
+  );
+  expect(run).toContain('If `trace_append` returns any `unresolvedMethods`');
+  expect(run).toContain(
+    'MUST persist the trace-linked alternative before telling the student that it is an alternative',
+  );
+  expect(run).toContain(
+    'This also applies when the route becomes verifiable only in a later comparison turn.',
+  );
+  expect(run).toContain(
     'A tool-use turn contains tool calls only. After the tool results arrive, send a separate Chinese student-facing message',
   );
   for (const source of [run, reveal]) {

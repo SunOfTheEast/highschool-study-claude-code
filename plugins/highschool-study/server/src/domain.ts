@@ -18,6 +18,7 @@ export {
   type MethodSignal,
 } from './method-signals';
 export {
+  listCanonicalMethodNames,
   resolveTraceMethods,
   type MethodResolution,
   type TraceMethodInput,

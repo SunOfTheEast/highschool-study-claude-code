@@ -112,27 +112,40 @@ function resolveOne(value: string, vocabularyData: MethodVocabulary): string | n
   return targets?.size === 1 ? [...targets][0]! : null;
 }
 
+export function listCanonicalMethodNames(root: string): string[] {
+  return [...vocabulary(root).canonical].sort((left, right) => left.localeCompare(right));
+}
+
 export function resolveTraceMethods(
   root: string,
   input: TraceMethodInput | null | undefined,
 ): MethodResolution {
   if (input === null || input === undefined) return { methods: null, unresolved: [] };
   const vocabularyData = vocabulary(root);
-  const raw = [input.primary, ...(input.secondary ?? [])];
   const unresolved: string[] = [];
-  const resolved: string[] = [];
-  for (const value of raw) {
+  const primary = typeof input.primary === 'string'
+    ? resolveOne(input.primary, vocabularyData)
+    : null;
+  if (primary === null && typeof input.primary === 'string') {
+    unresolved.push(input.primary.trim());
+  }
+
+  const secondary: string[] = [];
+  for (const value of input.secondary ?? []) {
     if (typeof value !== 'string' || !value.trim()) {
       if (typeof value === 'string') unresolved.push(value);
       continue;
     }
     const canonical = resolveOne(value, vocabularyData);
     if (canonical === null) unresolved.push(value.trim());
-    else if (!resolved.includes(canonical)) resolved.push(canonical);
+    else if (canonical !== primary && !secondary.includes(canonical)) secondary.push(canonical);
   }
-  if (unresolved.length > 0 || resolved.length === 0 || typeof input.primary !== 'string') {
+
+  if (primary === null) {
     return { methods: null, unresolved: [...new Set(unresolved)] };
   }
-  const [primary, ...secondary] = resolved;
-  return { methods: { primary: primary!, secondary }, unresolved: [] };
+  return {
+    methods: { primary, secondary },
+    unresolved: [...new Set(unresolved)],
+  };
 }

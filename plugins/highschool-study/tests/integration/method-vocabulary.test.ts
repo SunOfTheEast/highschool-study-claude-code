@@ -2,7 +2,10 @@ import { expect, test } from 'bun:test';
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { makeLearningSet } from '../helpers/learning-set';
-import { resolveTraceMethods } from '../../server/src/method-vocabulary';
+import {
+  listCanonicalMethodNames,
+  resolveTraceMethods,
+} from '../../server/src/method-vocabulary';
 
 function writeNodeVocabulary(root: string): void {
   writeFileSync(join(root, 'graph/vocabulary.yaml'), `schema: highschool-study.taxonomy.v1
@@ -58,6 +61,16 @@ test('resolves canonical names and node aliases across the taxonomy format', () 
   });
 });
 
+test('lists only canonical method names for the current learning set', () => {
+  const root = makeLearningSet();
+  writeDerivativeVocabulary(root);
+
+  expect(new Set(listCanonicalMethodNames(root))).toEqual(new Set([
+    '参变量分离',
+    '同构变形与换元法',
+  ]));
+});
+
 test('resolves unique derivative aliases and rejects ambiguous or unknown names', () => {
   const root = makeLearningSet();
   writeDerivativeVocabulary(root);
@@ -77,4 +90,20 @@ test('resolves unique derivative aliases and rejects ambiguous or unknown names'
   expect(resolveTraceMethods(root, {
     primary: '不存在的方法',
   })).toEqual({ methods: null, unresolved: ['不存在的方法'] });
+});
+
+test('preserves a valid primary and valid secondary when another secondary is unresolved', () => {
+  const root = makeLearningSet();
+  writeDerivativeVocabulary(root);
+
+  expect(resolveTraceMethods(root, {
+    primary: '参数分离',
+    secondary: ['同构变形与换元法', '定义域 a > 0'],
+  })).toEqual({
+    methods: {
+      primary: '参变量分离',
+      secondary: ['同构变形与换元法'],
+    },
+    unresolved: ['定义域 a > 0'],
+  });
 });
