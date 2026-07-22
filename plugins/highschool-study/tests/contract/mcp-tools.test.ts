@@ -1,6 +1,8 @@
 import { expect, test } from 'bun:test';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
+import { writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { makeLearningSetWithHistory } from '../helpers/learning-set';
 import { createStudyMcpServer } from '../../server/src/mcp/create-server';
 
@@ -21,6 +23,15 @@ function body(result: unknown): Record<string, unknown> {
 
 test('publishes and exercises exactly four study tools', async () => {
   const root = makeLearningSetWithHistory();
+  writeFileSync(join(root, 'graph/vocabulary.yaml'), `schema: highschool-study.taxonomy.v1
+nodes:
+  - node_id: method.freeze-variable
+    facet: method_cluster
+    canonical_name: 冻结变量法
+  - node_id: method.parameterize
+    facet: method_cluster
+    canonical_name: 参数化与消元
+`);
   const server = createStudyMcpServer({
     learningSetRoot: root,
     now: () => new Date('2026-07-21T10:00:00+08:00'),
@@ -53,11 +64,19 @@ test('publishes and exercises exactly four study tools', async () => {
         materialPath: null,
         assessment: 'correct',
         support: 'none',
+        methods: {
+          primary: '冻结变量法',
+          secondary: ['参数化与消元'],
+        },
         note: 'MCP appended domain evidence.',
         supersedes: null,
       },
-    })) as { eventId: string };
+    })) as { eventId: string; methods: { primary: string; secondary: string[] } | null };
     expect(appended.eventId).toBe('event-005');
+    expect(appended.methods).toEqual({
+      primary: '冻结变量法',
+      secondary: ['参数化与消元'],
+    });
 
     const refreshedCards = body(await client.callTool({
       name: 'card_search',

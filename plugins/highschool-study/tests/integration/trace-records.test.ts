@@ -36,7 +36,47 @@ test('stores canonical card bindings and closes supersession', () => {
     cardStepId: 'identify-freeze',
     sourceAnchor: 'lessons/lesson-001.md#trace-event-002',
     supersedes: 'event-001',
+    methods: null,
   })]);
+});
+
+test('stores canonical actual methods without changing an incorrect assessment', () => {
+  const root = makeLearningSetWithLesson();
+  writeFileSync(join(root, 'graph/vocabulary.yaml'), `schema: highschool-study.taxonomy.v1
+taxonomy_revision_id: taxonomy-conics-v1
+nodes:
+  - node_id: method.freeze-variable
+    facet: method_cluster
+    canonical_name: 冻结变量法
+    aliases: [冻元法]
+`);
+
+  const result = appendTrace(root, {
+    ...input,
+    assessment: 'incorrect',
+    methods: { primary: '冻元法', secondary: ['冻结变量法'] },
+  }, () => new Date('2026-07-21T02:00:00Z'));
+
+  expect(result).toMatchObject({
+    methods: { primary: '冻结变量法', secondary: [] },
+    unresolvedMethods: [],
+  });
+  expect(readActiveTraces(root)[0]).toMatchObject({
+    assessment: 'incorrect',
+    methods: { primary: '冻结变量法', secondary: [] },
+  });
+});
+
+test('keeps a Trace when actual method resolution fails and reports the names', () => {
+  const root = makeLearningSetWithLesson();
+  const result = appendTrace(root, {
+    ...input,
+    methods: { primary: '不存在的方法' },
+  }, () => new Date('2026-07-21T02:00:00Z'));
+
+  expect(result).toMatchObject({ methods: null, unresolvedMethods: ['不存在的方法'] });
+  expect(readActiveTraces(root)[0]?.methods).toBeNull();
+  expect(readActiveTraces(root)[0]?.assessment).toBe('partially_correct');
 });
 
 test('keeps cardless Trace records active and preserves multiline note content', () => {
@@ -85,6 +125,8 @@ test('uses max existing event number when allocating append-only event IDs', () 
       eventId: 'event-003',
       lessonPath: 'lessons/lesson-001.md',
       sourceAnchor: 'lessons/lesson-001.md#trace-event-003',
+      methods: null,
+      unresolvedMethods: [],
     });
 });
 
@@ -209,6 +251,8 @@ test('canonicalizes the owning Lesson path in results and records', () => {
     eventId: 'event-001',
     lessonPath: 'lessons/lesson-001.md',
     sourceAnchor: 'lessons/lesson-001.md#trace-event-001',
+    methods: null,
+    unresolvedMethods: [],
   });
   expect(readTraceRecords(root, ['lessons/../lessons/lesson-001.md'])[0]).toMatchObject({
     lessonPath: 'lessons/lesson-001.md',

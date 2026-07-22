@@ -9,6 +9,7 @@ test('exports one shared study-domain entry for non-MCP runtimes', async () => {
     'sourceResolve',
     'readActiveTraces',
     'aggregateMethodSignals',
+    'resolveTraceMethods',
     'readMarkdownFile',
     'resolveInsideRoot',
   ]) expect(domain[name as keyof typeof domain]).toBeFunction();

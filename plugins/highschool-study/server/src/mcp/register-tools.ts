@@ -36,6 +36,10 @@ const traceAppendInput = z.object({
   materialPath: z.string().nullable(),
   assessment: z.enum(['correct', 'partially_correct', 'incorrect', 'incomplete']),
   support: z.enum(['none', 'tutor', 'external']),
+  methods: z.object({
+    primary: z.string(),
+    secondary: z.array(z.string()).optional(),
+  }).strict().optional(),
   note: z.string(),
   supersedes: z.string().nullable(),
 }).strict();

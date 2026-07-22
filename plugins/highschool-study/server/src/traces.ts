@@ -3,6 +3,11 @@ import { extname, relative } from 'node:path';
 import { parse } from 'yaml';
 import { resolveInsideRoot } from './learning-set';
 import { readMarkdownFile } from './markdown';
+import {
+  resolveTraceMethods,
+  type TraceMethodInput,
+  type TraceMethods,
+} from './method-vocabulary';
 import { sourceResolve } from './sources';
 
 export type TraceAssessment = 'correct' | 'partially_correct' | 'incorrect' | 'incomplete';
@@ -19,6 +24,7 @@ export type TraceRecord = {
   materialPath: string | null;
   assessment: TraceAssessment;
   support: TraceSupport;
+  methods: TraceMethods | null;
   note: string;
   supersedes: string | null;
   sourceAnchor: string;
@@ -27,8 +33,8 @@ export type TraceRecord = {
 
 export type TraceAppendInput = Omit<
   TraceRecord,
-  'eventId' | 'lessonId' | 'planId' | 'cardPath' | 'sourceAnchor' | 'recordedAt'
-> & { cardAlias: string | null };
+  'eventId' | 'lessonId' | 'planId' | 'cardPath' | 'sourceAnchor' | 'recordedAt' | 'methods'
+> & { cardAlias: string | null; methods?: TraceMethodInput | null | undefined };
 
 const assessments = new Set<TraceAssessment>(['correct', 'partially_correct', 'incorrect', 'incomplete']);
 const supports = new Set<TraceSupport>(['none', 'tutor', 'external']);
@@ -81,6 +87,23 @@ function noteContent(content: string): string | null {
   }
 }
 
+function methodsContent(content: string): TraceMethods | null {
+  const primary = field(content, 'Primary method');
+  if (primary === null || !primary.trim()) return null;
+  const encoded = field(content, 'Secondary methods');
+  if (encoded === null) return { primary: primary.trim(), secondary: [] };
+  try {
+    const secondary: unknown = JSON.parse(encoded);
+    if (!Array.isArray(secondary) || !secondary.every((item) => typeof item === 'string')) return null;
+    return {
+      primary: primary.trim(),
+      secondary: secondary.map((item) => item.trim()).filter((item) => item.length > 0),
+    };
+  } catch {
+    return null;
+  }
+}
+
 function traceRecord(lessonPath: string, lessonId: string, planId: string, eventId: string, content: string): TraceRecord | null {
   const blockId = linkValue(field(content, 'Block'));
   const recordedAt = field(content, 'Recorded at');
@@ -104,6 +127,7 @@ function traceRecord(lessonPath: string, lessonId: string, planId: string, event
     materialPath: optionalField(field(content, 'Material')),
     assessment: assessment as TraceAssessment,
     support: support as TraceSupport,
+    methods: methodsContent(content),
     note,
     supersedes: linkValue(optionalField(field(content, 'Supersedes'))),
     sourceAnchor: `${lessonPath}#trace-${eventId}`,
@@ -200,6 +224,10 @@ function renderTrace(record: TraceRecord): string {
     `Assessment: ${record.assessment}`,
     `Support: ${record.support}`,
   );
+  if (record.methods !== null) {
+    lines.push(`Primary method: ${record.methods.primary}`);
+    lines.push(`Secondary methods: ${JSON.stringify(record.methods.secondary)}`);
+  }
   if (record.supersedes !== null) lines.push(`Supersedes: [${record.supersedes}](#trace-${record.supersedes})`);
   lines.push(`Note: ${encodeNote(record.note)}`, '');
   return lines.join('\n');
@@ -240,7 +268,13 @@ export function appendTrace(
   root: string,
   input: TraceAppendInput,
   now: () => Date,
-): { eventId: string; lessonPath: string; sourceAnchor: string } {
+): {
+  eventId: string;
+  lessonPath: string;
+  sourceAnchor: string;
+  methods: TraceMethods | null;
+  unresolvedMethods: string[];
+} {
   const lesson = lessonMetadata(root, input.lessonPath);
   const { lessonPath, lessonId, planId, source } = lesson;
   if (!lessonPath.startsWith('lessons/')) traceError('Trace must belong to a Lesson');
@@ -275,6 +309,8 @@ export function appendTrace(
     traceError('Superseded event does not exist in this Lesson');
   }
 
+  const methodResolution = resolveTraceMethods(root, input.methods);
+
   let maximumEventNumber = 0;
   for (const match of source.matchAll(/^## Trace event-(\d+)[ \t]*$/gm)) {
     maximumEventNumber = Math.max(maximumEventNumber, Number(match[1]));
@@ -292,6 +328,7 @@ export function appendTrace(
     materialPath: input.materialPath,
     assessment: input.assessment,
     support: input.support,
+    methods: methodResolution.methods,
     note: input.note,
     supersedes: input.supersedes,
     sourceAnchor,
@@ -299,5 +336,11 @@ export function appendTrace(
   };
 
   appendFileSync(resolveInsideRoot(root, lessonPath), renderTrace(record), 'utf8');
-  return { eventId, lessonPath, sourceAnchor };
+  return {
+    eventId,
+    lessonPath,
+    sourceAnchor,
+    methods: methodResolution.methods,
+    unresolvedMethods: methodResolution.unresolved,
+  };
 }

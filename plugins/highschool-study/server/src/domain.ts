@@ -12,6 +12,12 @@ export {
   type MethodSignal,
 } from './method-signals';
 export {
+  resolveTraceMethods,
+  type MethodResolution,
+  type TraceMethodInput,
+  type TraceMethods,
+} from './method-vocabulary';
+export {
   appendTraceWithProjection,
   rebuildPlannerAttention,
   renderPlannerAttention,
