@@ -321,3 +321,17 @@ test('keeps zero-mode teaching student-controlled and Trace-grounded', () => {
     expect(source).toContain('same-card unsupported completion is recall, not unseen transfer');
   }
 });
+
+test('grounds preparation and Plan review in qualifying evidence', () => {
+  const prepare = read('skills/prepare-next-lesson/SKILL.md');
+  const close = read('skills/close-lesson-reflection/SKILL.md');
+
+  for (const source of [prepare, close]) {
+    expect(source).toContain('same-card retry is practice, not unseen transfer');
+    expect(source).toContain('consecutive means adjacent evidence-bearing attempts');
+    expect(source).toContain('method structure is not a problem category');
+    expect(source).toContain('missing active Trace blocks attainment');
+  }
+  expect(prepare).toContain('usedCardPaths');
+  expect(prepare).toContain('criterion | lesson/block | cardPath | problem category');
+});

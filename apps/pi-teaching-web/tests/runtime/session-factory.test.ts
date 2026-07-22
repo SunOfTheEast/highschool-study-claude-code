@@ -73,3 +73,14 @@ test('keeps Tutor zero mode student-controlled and Trace-grounded', () => {
   expect(tutorSkill).toContain('A failed Trace write cannot support attainment');
   expect(tutorSkill).toContain('same-card unsupported completion is recall, not unseen transfer');
 });
+
+test('grounds Coach preparation and Plan review in qualifying evidence', () => {
+  const coachSkill = readFileSync(join(resources, 'skills/coach-study/SKILL.md'), 'utf8');
+
+  expect(coachSkill).toContain('same-card retry is practice, not unseen transfer');
+  expect(coachSkill).toContain('consecutive means adjacent evidence-bearing attempts');
+  expect(coachSkill).toContain('method structure is not a problem category');
+  expect(coachSkill).toContain('missing active Trace blocks attainment');
+  expect(coachSkill).toContain('usedCardPaths');
+  expect(coachSkill).toContain('criterion | lesson/block | cardPath | problem category');
+});
