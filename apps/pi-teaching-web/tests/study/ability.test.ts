@@ -33,6 +33,7 @@ test('requires evidence from two different cards before a method is steady', () 
     support: 'none',
     note: 'Completed an independent transfer attempt.',
     supersedes: null,
+    methods: { primary: '冻结变量法', secondary: ['参数化与消元'] },
   }, () => new Date('2026-07-22T01:00:00Z'));
 
   const projection = readAbilityProjection(root);
