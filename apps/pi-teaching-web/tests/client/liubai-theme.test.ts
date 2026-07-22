@@ -5,6 +5,9 @@ const theme = await themeFile.exists() ? await themeFile.text() : '';
 const main = await Bun.file(
   new URL('../../src/client/main.tsx', import.meta.url),
 ).text();
+const styles = await Bun.file(
+  new URL('../../src/client/styles.css', import.meta.url),
+).text();
 
 describe('liubai theme contract', () => {
   test('uses the approved palette as semantic tokens', () => {
@@ -27,5 +30,18 @@ describe('liubai theme contract', () => {
     expect(theme).not.toContain('--amber');
     expect(main.indexOf("import './theme-liubai.css';"))
       .toBeLessThan(main.indexOf("import './styles.css';"));
+  });
+
+  test('layout styles consume semantic tokens instead of the old amber palette', () => {
+    expect(styles).not.toContain('--amber');
+    expect(styles).not.toContain('#b86c28');
+    expect(styles).not.toContain('#f3efe5');
+    expect(styles).not.toContain('radial-gradient');
+    expect(styles).toContain('var(--accent)');
+    expect(styles).toContain('var(--attention)');
+    expect(styles).toContain('var(--danger)');
+    expect(styles).toContain('[data-view="coach"]');
+    expect(styles).toContain('[data-view="tutor"]');
+    expect(styles).toContain('[data-view="replay"]');
   });
 });
