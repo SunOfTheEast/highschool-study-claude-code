@@ -135,6 +135,18 @@ test('keeps runtime authority out of Tutor tool schemas', () => {
   expect(traceProperties.assessment?.description).toContain(
     'Tutor-generated completions never count as student evidence',
   );
+  expect(traceProperties.support?.description).toContain(
+    'any Tutor hint already given during this active card-and-Block attempt requires `tutor`',
+  );
+  expect(traceProperties.support?.description).toContain(
+    'A later independent-looking completion does not reset support to `none`',
+  );
+  expect(traceProperties.supersedes?.description).toContain(
+    'required when this is a later revision of the same card-and-Block attempt',
+  );
+  expect(traceProperties.supersedes?.description).toContain(
+    'exact active incomplete or partially_correct event ID',
+  );
 });
 
 test('requires an explicit student-confirmed or unmapped method decision', () => {

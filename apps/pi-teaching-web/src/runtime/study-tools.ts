@@ -88,9 +88,13 @@ export function createStudyTools(
           Type.Literal('none'),
           Type.Literal('tutor'),
           Type.Literal('external'),
-        ]),
+        ], {
+          description: 'Use the strongest support already present in this active card-and-Block attempt: any Tutor hint already given during this active card-and-Block attempt requires `tutor`. A later independent-looking completion does not reset support to `none`.',
+        }),
         note: Type.String(),
-        supersedes: Type.Optional(Type.String()),
+        supersedes: Type.Optional(Type.String({
+          description: 'This field is required when this is a later revision of the same card-and-Block attempt. Set it to the exact active incomplete or partially_correct event ID.',
+        })),
       }),
       execute: async (_id, input) => {
         const methods = input.methodStatus === 'student_confirmed'
