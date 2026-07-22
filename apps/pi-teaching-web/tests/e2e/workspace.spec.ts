@@ -30,3 +30,24 @@ test('marks the approved theme and current learning surface', async ({ page }) =
   await page.getByRole('button', { name: /Lesson 003/ }).click();
   await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'tutor');
 });
+
+test('renders the liubai palette without horizontal overflow', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+
+  const palette = await page.locator('main.home').evaluate((element) => {
+    const styles = getComputedStyle(element);
+    return {
+      paper: styles.getPropertyValue('--paper').trim(),
+      ink: styles.getPropertyValue('--ink').trim(),
+      accent: styles.getPropertyValue('--accent').trim(),
+    };
+  });
+  expect(palette).toEqual({ paper: '#faf7f1', ink: '#1b1916', accent: '#3f5b54' });
+
+  await page.getByRole('button', { name: /定义域完整性的系统加固/ }).click();
+  await expect(page.getByRole('navigation', { name: 'Plan sessions' })).toBeVisible();
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
+    390,
+  );
+});

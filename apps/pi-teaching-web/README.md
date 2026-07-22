@@ -2,6 +2,12 @@
 
 这是 `highschool-study` Markdown 学习集的本地 Pi 前端。一个 Plan 对应一个长期 Coach Session；每节 Lesson 对应一个独立 Tutor Session。学生始终使用同一网页，但 Coach 与 Tutor 的历史不会互相复制，只通过 Lesson 文件、Trace 和带来源摘要交接。
 
+## 视觉主题
+
+默认主题为“留白新中式”：暖白纸色、墨黑正文和低饱和青绿强调色组成同一套 Coach、Tutor 与 Replay 视觉语言。界面优先保留阅读空间和信息层级，不使用大面积渐变、浮空卡片或角色全局染色；二次元人设只影响头像及局部点缀，不改变教学状态的语义颜色。
+
+主题 token 集中在 `src/client/theme-liubai.css`，页面结构和状态样式保留在 `src/client/styles.css`。根视图通过 `data-theme="liubai-xinzhongshi"` 与 `data-view="coach | tutor | replay"` 标记当前界面，后续视觉调整应继续复用这些语义入口。
+
 ## 环境
 
 - Bun 1.3 或更新版本
