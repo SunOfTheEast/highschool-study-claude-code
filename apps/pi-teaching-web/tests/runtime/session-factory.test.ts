@@ -132,6 +132,12 @@ test('keeps Tutor zero mode student-controlled and Trace-grounded', () => {
   expect(tutorSkill).toContain('Do not ask a leading question');
   expect(tutorSkill).toContain('A failed Trace write cannot support attainment');
   expect(tutorSkill).toContain('same-card unsupported completion is recall, not unseen transfer');
+  expect(tutorSkill).toContain(
+    'A first-attempt problem heading is exactly the Lesson alias',
+  );
+  expect(tutorSkill).toContain(
+    'card title, graph.goal, graph.method, graph.structure, hint, solution, or Teacher Control',
+  );
 });
 
 test('defines the Tutor correction, hint ladder and tool-turn protocol literally', () => {

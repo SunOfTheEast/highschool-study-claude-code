@@ -290,6 +290,9 @@ test('prepares from a template and role slots before searching cards', () => {
 
 test('projects only Student View and enforces reveal modes', () => {
   const run = read('skills/run-lesson/SKILL.md');
+  const reveal = read(
+    'skills/prepare-next-lesson/references/reveal-policy.md',
+  );
 
   expectInOrder(run, [
     'Read the shared `reveal-policy.md`',
@@ -303,6 +306,14 @@ test('projects only Student View and enforces reveal modes', () => {
   expect(run).toContain('never quote or paraphrase `### Teacher Control`');
   expect(run).toContain('one level in one student-approved turn');
   expect(run).toContain('use a different unseen card');
+  for (const source of [run, reveal]) {
+    expect(source).toContain(
+      'A first-attempt problem heading is exactly the Lesson alias',
+    );
+    expect(source).toContain(
+      'card title, graph.goal, graph.method, graph.structure, hint, solution, or Teacher Control',
+    );
+  }
   expect(run).toContain('Task completion is not capability attainment');
   expect(toolList(run, 'allowed-tools')).not.toContain('WebSearch');
   expect(toolList(run, 'allowed-tools')).not.toContain('WebFetch');

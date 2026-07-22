@@ -1,6 +1,6 @@
 # Reveal Policy
 
-The preparation role may inspect complete cards and solutions. Student-visible teaching must follow the current block's reveal mode and must not dump the Lesson, Teacher Control, card answer, solution, or rubric.
+The preparation role may inspect complete cards and solutions. Student-visible teaching must follow the current block's reveal mode and must not dump the Lesson, Teacher Control, card answer, solution, or rubric. A first-attempt problem heading is exactly the Lesson alias, followed by the authentic stem and choices. Never add a subtitle, direction, or description from the card title, graph.goal, graph.method, graph.structure, hint, solution, or Teacher Control.
 
 ## Lesson block format
 
