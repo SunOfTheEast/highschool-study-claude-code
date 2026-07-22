@@ -7,11 +7,11 @@
 
 ## 一、结论
 
-Session 绑定工具、Plan/Lesson 写回、安全消息投影、能力快照刷新、浏览器路由恢复、首次正确另解落盘，以及学生异议/方法否定的 superseding Trace 均有自动测试或真实运行证据。
+Session 绑定工具、Plan/Lesson 写回、安全消息投影、能力快照刷新、浏览器路由恢复、学生异议/方法否定的 superseding Trace，以及“缺决定性充分性证明时保持 incomplete”均有自动测试和真实运行证据。
 
-整体验收仍未通过。最终真实课堂中，学生明确说“还没有写出充分性证明”，Tutor 却把自己补出的推理记成学生已经完成的证据，并写入 `assessment: correct`；补出的推理还包含错误极限与未经证明的正性结论。这是课堂事实真实性 P0，自动测试通过不能覆盖它。
+原课堂事实真实性 P0 已被修正：相同缺失充分性的回答现在先写 `incomplete + support:none`，Tutor 只指出缺口；学生独立补全后才以新 Trace supersede，并按 `Trace → alternative → reply` 顺序落盘整题另解。
 
-另有一条未完成的真实复验：当学生异议把 active Trace 从 `partially_correct` 更正为 `correct` 时，Tutor 应立即重新判断并落盘另解。Skill contract 已补齐，但该精确路径尚未在修订后重新跑通。
+整体验收仍未通过。提示支持来源仍不稳定：最终隔离复验中，学生明确请求并收到一级提示，确认语句没有制造正确证据，之后学生补全证明时 Tutor 正确 supersede 了 incomplete Trace，却错误写成 `support:none`。这会把受提示完成误投影为独立完成。纯 Agent/Skill/工具参数提示经过多轮收紧后仍未稳定解决，因此 Final Completion Gate 保持失败。
 
 ## 二、运行身份与隔离
 
@@ -22,7 +22,7 @@ Session 绑定工具、Plan/Lesson 写回、安全消息投影、能力快照刷
 - Provider：`xiaomi`
 - Model：`mimo-v2.5-pro-ultraspeed`
 - Pi 配置只记录 provider/model；本报告不包含 API key、认证内容、私密推理或完整课堂转录。
-- 所有课堂写入均发生在 `/tmp/studyforge-runtime-closure-*` 隔离副本；仓库中的 `examples/derivative-demo/learning-set/**` 未被验收运行修改。
+- 所有课堂写入均发生在 `/tmp/studyforge-runtime-closure-*` 或 `/tmp/studyforge-evidence-freeze-*` 隔离副本；仓库中的 `examples/derivative-demo/learning-set/**` 未被验收运行修改。
 
 `/tmp/studyforge-runtime-closure-fixed-20260722-mjER5F` 不计入证据。该运行被全局 Pi package 路径遮蔽，加载的 Skill 不来自隔离副本，且隔离 runtime 内没有对应原生 Session JSONL；它不满足来源隔离要求。
 
@@ -120,16 +120,77 @@ Runtime root：`/tmp/studyforge-runtime-closure-finalaccept-20260722-epxahM`
 | 首次 correct Trace → `整题`另解连续写入 | PASS | flatconfirm JSONL 与 alternatives 文件 |
 | 学生确认/否定方法节点 | PASS | methodsupersede `event-002 → event-003` |
 | accepted objection 写 superseding Trace | PASS | methodsupersede `event-001 → event-002` |
-| assessment 更正为 correct 后立即补写另解 | PARTIAL | contract 已补；同路径真实复验缺失 |
-| 不把 Tutor 补全冒充学生证据 | **FAIL / P0** | finalaccept Session 与错误 active Trace |
+| assessment 更正为 correct 后立即补写另解 | PASS | evidence-freeze `event-001 → event-002` 与 alternatives sidecar |
+| 不把 Tutor 补全冒充学生证据 | PASS | evidence-freeze 首轮 `incomplete` 与独立补全 Trace |
+| 提示后的完成保留 `support:tutor` | **FAIL / P0** | hint-final2 `event-002` 错写为 `support:none` |
 
 ## 六、下一步
 
-最小后续任务应只处理课堂证据边界，不再改 method schema：
+最小后续任务只剩提示支持来源，不再改 method schema 或 assessment 语义：
 
-- 学生明确承认决定性步骤、证明或结论尚缺失时，active assessment 不能由 Tutor 自行补成 `correct`。
-- Tutor 自己提供的补充只能算 Tutor 支持，不能倒灌为学生已经产出的 `support: none` 证据。
-- 先用一个失败 contract/真实模型样本固定该边界，再修改 Tutor Skill；不新增裁判 Agent、运行时数学规则或新持久字段。
-- 修订后重跑 finalaccept 场景，并顺带完成“异议更正为 correct 后补写另解”的缺失真实复验。
+- 当前“不要加运行时门”的约束下，Agent/Skill 和工具参数描述已明确 `support:tutor` 的沿袭规则，但真实模型仍会偶发写成 `none`。
+- 下一步需要在两个方向中明确选择：接受纯提示词方案的概率性误标，或重新授权一个极窄的确定性来源机制；在未选择前不继续堆叠提示词。
+- 无论选择哪条路，都应复用本节的固定脚本：一级提示 → “明白了”不产证据 → 学生补全 → active Trace 必须是 `correct + support:tutor + supersedes`。
 
-在这两个真实路径通过前，Task 11 与总计划 Final Completion Gate 保持未完成。
+在提示支持来源的真实路径通过前，Task 11 与总计划 Final Completion Gate 保持未完成。
+
+## 七、2026-07-23 Evidence Freeze Recheck
+
+### 7.1 实现身份
+
+- 初始证据冻结实现：`0d0721d`（`fix: freeze student evidence before tutor assessment`）
+- 同一 attempt 的 supersede 提示：`5495062`
+- `trace_append` 来源参数说明：`564c8c4`
+- 写 Trace 前置来源检查：`0afd748`
+- 未新增持久字段、裁判 Agent 或运行时数学判定；修订仅涉及 Agent/Skill 契约与既有工具参数描述。
+
+### 7.2 无提示独立补全：PASS
+
+Runtime root：`/tmp/studyforge-evidence-freeze-20260723-Ai7MKC`
+
+- Tutor Session：`pi-agent/sessions/--private-tmp-studyforge-evidence-freeze-20260723-Ai7MKC-examples-derivative-demo-learning-set--/2026-07-22T17-58-41-645Z_019f8afa-d2ed-751c-a448-13e1c3f9a7d4.jsonl`
+- 初始 Trace：`examples/derivative-demo/learning-set/lessons/lesson-003.md#trace-event-001`
+- 补全 Trace：`examples/derivative-demo/learning-set/lessons/lesson-003.md#trace-event-002`
+- 另解：`examples/derivative-demo/learning-set/cards/derivative/mst_p0032_ex22.card.alternatives.md`
+
+事实顺序：
+
+1. 学生明确缺少 `a=e^{-1}` 的充分性；Tutor 写 `assessment: incomplete`、`support: none`、`methodStatus: unmapped`，没有写另解、没有提议方法节点、没有推进下一 Block。
+2. Tutor 只确认已建立的必要性并指出缺失证明义务，没有补出充分性。
+3. 学生随后独立写出完整放缩链；Tutor 写 `event-002`，使用 `assessment: correct`、`support: none`、`supersedes: event-001`。
+4. 下一工具轮调用 `card_alternative_append`，`question` 精确为“整题”，source Trace 为 `event-002`；工具完成后才向学生确认正确并询问方法节点。
+
+### 7.3 提示支持分支：FAIL
+
+最终有效 Runtime root：`/tmp/studyforge-evidence-freeze-hint-final2-20260723-kOY6wU`
+
+- Tutor Session：`pi-agent/sessions/--private-tmp-studyforge-evidence-freeze-hint-final2-20260723-kOY6wU-examples-derivative-demo-learning-set--/2026-07-22T18-24-35-362Z_019f8b12-8822-701f-bb04-420bf9f80b0f.jsonl`
+- 初始 Trace：`examples/derivative-demo/learning-set/lessons/lesson-003.md#trace-event-001`
+- 提示后补全 Trace：`examples/derivative-demo/learning-set/lessons/lesson-003.md#trace-event-002`
+
+事实顺序：
+
+1. 初始缺证明回答正确写为 `incomplete + support:none`。
+2. 学生请求“一级提示”，Tutor 返回一条一级提示。
+3. 学生只回复“明白了”；此时仍只有一个 Trace，没有制造 `correct` 证据。
+4. 学生随后写出完整证明；Tutor 正确写 `assessment: correct` 与 `supersedes: event-001`，但错误写成 `support: none`，未保留本 attempt 已发生的 Tutor 提示来源。
+5. 发现失败后立即停止该运行，未把后续另解写入当作本分支通过证据。
+
+中间失败样本均保留在各自 `/tmp/studyforge-evidence-freeze-hint-*` 隔离目录；其中 `/tmp/studyforge-evidence-freeze-hint-final-20260723-wNxnwb` 在开场工具顺序即失效，不计入证据结论。
+
+### 7.4 自动回归与验收矩阵
+
+| 检查 | 结果 |
+|---|---|
+| Pi Web `bun run check` | PASS：86 tests，0 fail；typecheck/build exit 0 |
+| Plugin `bun run release:check` | PASS：59 tests，0 fail；strict validation exit 0 |
+| Pi Web `bun run test:e2e` | PASS：8 tests，0 fail |
+| 缺决定性证明保持 incomplete | PASS |
+| Tutor 不补出缺失证明 | PASS |
+| 无提示补全 supersede 为 `correct + support:none` | PASS |
+| correct Trace → 整题另解 → 回复/方法询问 | PASS |
+| 仅确认提示不制造 correct Trace | PASS |
+| 提示后补全 supersede active incomplete Trace | PASS |
+| 提示后补全保留 `support:tutor` | **FAIL** |
+
+本次复验不改变报告顶部状态：**PARTIAL / FAIL — 不满足 Final Completion Gate**。
