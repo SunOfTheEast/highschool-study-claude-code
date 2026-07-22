@@ -266,6 +266,12 @@ test('prepares from a template and role slots before searching cards', () => {
   ]);
   expect(prepare).toContain('Do not stop at the first suitable card');
   expect(prepare).toContain(
+    'Every prepared Lesson ends with the exact top-level headings `## Reflection`, `## Lesson Summary`, and `## Traces`',
+  );
+  expect(prepare).toContain(
+    'A Block named reflection does not replace these sections',
+  );
+  expect(prepare).toContain(
     'title, URL, segment, purpose, follow-up question, and fallback',
   );
   expect(prepare).toContain('External URLs remain ordinary links');

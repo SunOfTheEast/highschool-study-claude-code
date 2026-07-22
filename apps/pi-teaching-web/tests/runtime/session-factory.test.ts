@@ -187,6 +187,12 @@ test('grounds Coach preparation and Plan review in qualifying evidence', () => {
   expect(coachSkill).toContain('missing active Trace blocks attainment');
   expect(coachSkill).toContain('usedCardPaths');
   expect(coachSkill).toContain('criterion | lesson/block | cardPath | problem category');
+  expect(coachSkill).toContain(
+    'Every prepared Lesson ends with the exact top-level headings `## Reflection`, `## Lesson Summary`, and `## Traces`',
+  );
+  expect(coachSkill).toContain(
+    'A Block named reflection does not replace these sections',
+  );
 });
 
 test('maps Coach card dimensions and persists the final Plan audit before replying', () => {
