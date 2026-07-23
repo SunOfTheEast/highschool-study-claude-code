@@ -85,6 +85,24 @@ test('keeps workflow updates separated by parent Session key', () => {
   expect(state.workflows['tutor:l1']?.[0]?.id).toBe('wf-2');
 });
 
+test('tracks one running turn by Session key until it becomes idle', () => {
+  let state = reduceClientState(initialClientState, {
+    type: 'session-run',
+    sessionKey: 'tutor:l1',
+    status: 'running',
+    label: 'Tutor 正在启动',
+  });
+  expect(state.busy['tutor:l1']).toBe('Tutor 正在启动');
+
+  state = reduceClientState(state, {
+    type: 'session-run',
+    sessionKey: 'tutor:l1',
+    status: 'idle',
+    label: '',
+  });
+  expect(state.busy['tutor:l1']).toBe('');
+});
+
 test('does not overwrite a live kickoff message with an earlier empty history response', () => {
   const live = [{
     id: 'tutor:l1:live',

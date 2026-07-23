@@ -354,7 +354,9 @@ export function App() {
   const isReplay = selectedLesson?.status === 'closed'
     || selectedLesson?.status === 'abandoned';
   const view = isCoach ? 'coach' : isReplay ? 'replay' : 'tutor';
-  const composerEnabled = isCoach || selectedLesson?.status === 'active';
+  const sessionBusy = Boolean(client.busy[selected]);
+  const composerEnabled = (isCoach || selectedLesson?.status === 'active')
+    && !sessionBusy;
   let gate: ReactNode = null;
 
   if (selectedLesson?.status === 'prepared') {
@@ -411,7 +413,7 @@ export function App() {
         <ChatPanel
           sessionKey={selected}
           messages={client.messages[selected] ?? []}
-          work={client.work[selected] ?? ''}
+          work={client.work[selected] || client.busy[selected] || ''}
           error={client.errors[selected]}
           composerEnabled={composerEnabled}
           {...(selectedLesson ? { lessonId: selectedLesson.id } : {})}

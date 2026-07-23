@@ -32,7 +32,7 @@
 - Produces: `ClientState.busy: Partial<Record<SessionKey, string>>`.
 - Consumes: existing `EventHub`, Session promises, `client.work`, and Lesson status.
 
-- [ ] **Step 1: Write failing server and client tests**
+- [x] **Step 1: Write failing server and client tests**
 
 Extend the lesson-start test so it records `session-run:running` before the
 pending kickoff and `session-run:idle` only after release. Add a reducer test:
@@ -56,7 +56,7 @@ test('tracks one running turn by Session key until it becomes idle', () => {
 });
 ```
 
-- [ ] **Step 2: Run the focused tests and verify RED**
+- [x] **Step 2: Run the focused tests and verify RED**
 
 Run:
 
@@ -68,7 +68,7 @@ bun test tests/server/workspace-api.test.ts tests/client/state.test.ts
 Expected: type/runtime failures because `session-run` and `ClientState.busy`
 do not exist.
 
-- [ ] **Step 3: Implement the minimal transient event**
+- [x] **Step 3: Implement the minimal transient event**
 
 Add the `session-run` contract and reducer branch. In the server, publish
 `running` immediately before invoking each asynchronous Session turn and
@@ -82,7 +82,7 @@ const composerEnabled = (isCoach || selectedLesson?.status === 'active')
 
 Pass `client.work[selected] || client.busy[selected] || ''` to `ChatPanel`.
 
-- [ ] **Step 4: Run focused tests and verify GREEN**
+- [x] **Step 4: Run focused tests and verify GREEN**
 
 Run:
 
@@ -93,7 +93,7 @@ bun test tests/server/workspace-api.test.ts tests/client/state.test.ts
 
 Expected: all focused tests pass.
 
-- [ ] **Step 5: Run the full app verification**
+- [x] **Step 5: Run the full app verification**
 
 Run:
 
@@ -104,7 +104,7 @@ bun run check
 
 Expected: typecheck, all non-E2E tests, and Vite build pass.
 
-- [ ] **Step 6: Restart and run one real Lesson**
+- [x] **Step 6: Restart and run one real Lesson**
 
 Restart the existing isolated runtime at `http://127.0.0.1:65261`. From the
 visible Coach Session prepare the next Test 3 Lesson, start it through the
@@ -112,7 +112,7 @@ visible UI, verify the kickoff status blocks input, then complete and close a
 natural Tutor Session. Audit the Pi JSONL, Lesson, active Trace, Plan writeback,
 and ability projection.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add docs/superpowers/specs/2026-07-23-tutor-kickoff-run-state-design.md \
@@ -125,4 +125,3 @@ git add docs/superpowers/specs/2026-07-23-tutor-kickoff-run-state-design.md \
   apps/pi-teaching-web/src/client/App.tsx
 git commit -m "fix: block input during active session turns"
 ```
-

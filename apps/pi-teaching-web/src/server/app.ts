@@ -63,6 +63,32 @@ export function createRequestHandler(deps?: AppDependencies) {
     const projectionMode = deps.messageProjection ?? 'safe';
     const learningSetReader = deps.readLearningSet ?? readLearningSet;
     const abilityReader = deps.readAbilityProjection ?? readAbilityProjection;
+    const runSession = (
+      key: SessionKey,
+      label: string,
+      task: () => Promise<void>,
+      onSuccess?: () => void,
+    ) => {
+      deps.hub.publish({
+        type: 'session-run',
+        sessionKey: key,
+        status: 'running',
+        label,
+      });
+      void task()
+        .then(onSuccess)
+        .catch(() => deps.hub.publish({
+          type: 'session-error',
+          sessionKey: key,
+          message: '模型调用失败，请检查 Pi 的模型与凭据配置后重试。',
+        }))
+        .finally(() => deps.hub.publish({
+          type: 'session-run',
+          sessionKey: key,
+          status: 'idle',
+          label: '',
+        }));
+    };
     const bind = (key: SessionKey) => {
       if (bound.has(key)) return;
       deps.registry.subscribe(key, (event) => {
@@ -229,16 +255,17 @@ export function createRequestHandler(deps?: AppDependencies) {
           complete: true,
         },
       });
-      void deps.registry.send(key, input.text, images).then(() => {
-        const planId = key.startsWith('coach:')
-          ? key.slice(6)
-          : deps.registry.snapshot().plan.id;
-        deps.hub.publish({ type: 'snapshot', workspace: deps.registry.snapshot(planId) });
-      }).catch(() => deps.hub.publish({
-        type: 'session-error',
-        sessionKey: key,
-        message: '模型调用失败，请检查 Pi 的模型与凭据配置后重试。',
-      }));
+      runSession(
+        key,
+        key.startsWith('coach:') ? 'Coach 正在回应' : 'Tutor 正在回应',
+        () => deps.registry.send(key, input.text, images),
+        () => {
+          const planId = key.startsWith('coach:')
+            ? key.slice(6)
+            : deps.registry.snapshot().plan.id;
+          deps.hub.publish({ type: 'snapshot', workspace: deps.registry.snapshot(planId) });
+        },
+      );
       return json({ accepted: true, sessionId: session.sessionId }, 202);
     }
 
@@ -257,16 +284,15 @@ export function createRequestHandler(deps?: AppDependencies) {
       const snapshot = deps.registry.snapshot();
       deps.hub.publish({ type: 'snapshot', workspace: snapshot });
       if (startsLesson) {
-        void deps.registry.triggerLessonStart(lessonId)
-          .then(() => deps.hub.publish({
+        runSession(
+          `tutor:${lessonId}`,
+          'Tutor 正在启动',
+          () => deps.registry.triggerLessonStart(lessonId),
+          () => deps.hub.publish({
             type: 'snapshot',
             workspace: deps.registry.snapshot(),
-          }))
-          .catch(() => deps.hub.publish({
-            type: 'session-error',
-            sessionKey: `tutor:${lessonId}`,
-            message: '模型调用失败，请检查 Pi 的模型与凭据配置后重试。',
-          }));
+          }),
+        );
       }
       return json(snapshot);
     }

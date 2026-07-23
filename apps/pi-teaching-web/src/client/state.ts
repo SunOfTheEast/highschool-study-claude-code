@@ -11,6 +11,7 @@ export type ClientState = {
   selected: SessionKey | null;
   messages: Partial<Record<SessionKey, ChatMessage[]>>;
   work: Partial<Record<SessionKey, string>>;
+  busy: Partial<Record<SessionKey, string>>;
   errors: Partial<Record<SessionKey, string>>;
   deepMode: Partial<Record<SessionKey, boolean>>;
   workflows: Partial<Record<SessionKey, WorkflowView[]>>;
@@ -21,6 +22,7 @@ export const initialClientState: ClientState = {
   selected: null,
   messages: {},
   work: {},
+  busy: {},
   errors: {},
   deepMode: {},
   workflows: {},
@@ -83,6 +85,15 @@ export function reduceClientState(state: ClientState, event: StudyViewEvent): Cl
             message.id === event.message.id ? event.message : message
           ))
           : [...current, event.message],
+      },
+    };
+  }
+  if (event.type === 'session-run') {
+    return {
+      ...state,
+      busy: {
+        ...state.busy,
+        [event.sessionKey]: event.status === 'running' ? event.label : '',
       },
     };
   }

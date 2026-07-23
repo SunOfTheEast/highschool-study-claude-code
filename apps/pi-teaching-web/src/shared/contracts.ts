@@ -151,6 +151,12 @@ export type StudyViewEvent =
   | { type: 'message'; sessionKey: SessionKey; message: ChatMessage }
   | { type: 'message-delta'; sessionKey: SessionKey; messageId: string; delta: string }
   | {
+    type: 'session-run';
+    sessionKey: SessionKey;
+    status: 'running' | 'idle';
+    label: string;
+  }
+  | {
     type: 'phase';
     sessionKey: SessionKey;
     phase: 'planning' | 'preparing' | 'waiting' | 'teaching' | 'paused' | 'reviewing';

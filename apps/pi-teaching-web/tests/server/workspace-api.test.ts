@@ -211,13 +211,59 @@ test('routes a message to the selected Session key', async () => {
   expect(sent).toEqual([['coach:p1', '继续学习', []]]);
 });
 
+test('publishes running state until an accepted Session message finishes', async () => {
+  const calls: string[] = [];
+  let releaseSend!: () => void;
+  let resolveIdle!: () => void;
+  const sendPending = new Promise<void>((resolve) => { releaseSend = resolve; });
+  const idle = new Promise<void>((resolve) => { resolveIdle = resolve; });
+  const hub = new EventHub();
+  hub.subscribe((event) => {
+    if (event.type === 'session-run') calls.push(`run:${event.status}`);
+    if (event.type === 'session-run' && event.status === 'idle') resolveIdle();
+  });
+  const handler = createRequestHandler({
+    root: '/tmp/demo',
+    authoring: false,
+    hub,
+    readLearningSet: () => learningSet,
+    registry: {
+      snapshot: () => workspace,
+      send: async () => {
+        calls.push('send');
+        await sendPending;
+      },
+      openCoach: async () => ({ sessionId: 'coach-p1' }),
+      history: () => [],
+      subscribe: () => () => {},
+      subscribeWorkflows: () => () => {},
+    } as never,
+  });
+
+  const response = await handler(new Request('http://local/api/sessions/coach%3Ap1/messages', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ text: '继续学习' }),
+  }));
+  expect(response!.status).toBe(202);
+  expect(calls).toEqual(['run:running', 'send']);
+
+  releaseSend();
+  await idle;
+  expect(calls).toEqual(['run:running', 'send', 'run:idle']);
+});
+
 test('publishes the active snapshot before starting the hidden Tutor turn', async () => {
   const calls: string[] = [];
   let releaseKickoff!: () => void;
+  let resolveIdle!: () => void;
   const kickoffPending = new Promise<void>((resolve) => { releaseKickoff = resolve; });
+  const idle = new Promise<void>((resolve) => { resolveIdle = resolve; });
   const hub = new EventHub();
   hub.subscribe((event) => {
     if (event.type === 'snapshot') calls.push('snapshot');
+    if (event.type === 'session-run') calls.push(`run:${event.status}`);
+    if (event.type === 'session-run' && event.status === 'idle') resolveIdle();
   });
   const handler = createRequestHandler({
     root: '/tmp/demo',
@@ -243,11 +289,18 @@ test('publishes the active snapshot before starting the hidden Tutor turn', asyn
     method: 'POST',
   }));
   expect(response!.status).toBe(200);
-  expect(calls).toEqual(['start', 'bind', 'snapshot', 'kickoff']);
+  expect(calls).toEqual(['start', 'bind', 'snapshot', 'run:running', 'kickoff']);
   releaseKickoff();
-  await kickoffPending;
-  await Promise.resolve();
-  expect(calls).toEqual(['start', 'bind', 'snapshot', 'kickoff', 'snapshot']);
+  await idle;
+  expect(calls).toEqual([
+    'start',
+    'bind',
+    'snapshot',
+    'run:running',
+    'kickoff',
+    'snapshot',
+    'run:idle',
+  ]);
 });
 
 test('uploads classroom images and attaches them to a Session message', async () => {
