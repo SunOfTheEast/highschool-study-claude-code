@@ -1,7 +1,8 @@
 import { expect, test } from 'bun:test';
 import { Agent } from '@earendil-works/pi-agent-core';
-import type { AgentSessionEvent } from '@earendil-works/pi-coding-agent';
-import { readFileSync } from 'node:fs';
+import { SessionManager, type AgentSessionEvent } from '@earendil-works/pi-coding-agent';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import {
   bindStudyExtensions,
@@ -9,6 +10,11 @@ import {
   roleToolNames,
   triggerAndWaitForAgentEnd,
 } from '../../src/runtime/session-factory';
+import {
+  appendSessionOwner,
+  readSessionOwner,
+  sessionOwnerMatches,
+} from '../../src/runtime/session-owner';
 
 test('binds the headless extension context before delegated workflows run', async () => {
   let bindings: unknown = null;
@@ -36,6 +42,62 @@ test('keeps the Pi coding-agent and agent-core constructor contract aligned', ()
     version: string;
   };
   expect(corePackage.version).toBe('0.81.0');
+});
+
+test('persists exactly one machine-readable owner on a new Pi Session', () => {
+  const root = mkdtempSync(join(tmpdir(), 'study-session-owner-'));
+  try {
+    const manager = SessionManager.create(root, join(root, 'sessions'));
+    const owner = {
+      role: 'coach' as const,
+      ownerId: 'isomorphic-transformation',
+      ownerPath: 'plans/isomorphic-transformation.md',
+    };
+
+    appendSessionOwner(manager, owner);
+
+    expect(readSessionOwner(manager)).toEqual(owner);
+    expect(manager.getEntries().filter((entry) => (
+      entry.type === 'custom'
+      && entry.customType === 'studyforge.session-owner.v1'
+    ))).toHaveLength(1);
+    expect(sessionOwnerMatches(readSessionOwner(manager), owner)).toBe(true);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('rejects missing, duplicate, malformed and mismatched Session owners', () => {
+  const expected = {
+    role: 'tutor' as const,
+    ownerId: 'lesson-003',
+    ownerPath: 'lessons/lesson-003.md',
+  };
+  const entries: Array<{
+    type: 'custom';
+    customType: string;
+    data: unknown;
+  }> = [];
+  const manager = { getEntries: () => entries };
+
+  expect(readSessionOwner(manager)).toBeNull();
+  entries.push({
+    type: 'custom',
+    customType: 'studyforge.session-owner.v1',
+    data: { ...expected, role: 'teacher' },
+  });
+  expect(readSessionOwner(manager)).toBeNull();
+  entries[0]!.data = expected;
+  entries.push({
+    type: 'custom',
+    customType: 'studyforge.session-owner.v1',
+    data: expected,
+  });
+  expect(readSessionOwner(manager)).toBeNull();
+  expect(sessionOwnerMatches(
+    expected,
+    { ...expected, ownerPath: 'lessons/lesson-004.md' },
+  )).toBe(false);
 });
 
 test('keeps Coach and Tutor tool boundaries distinct', () => {

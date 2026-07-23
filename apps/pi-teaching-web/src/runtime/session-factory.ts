@@ -17,6 +17,7 @@ import { createCardAlternativeAppendTool } from './card-alternative-append';
 import { createLessonCloseTool } from './lesson-close';
 import { createPlanUpdateTool } from './plan-update';
 import { createRoleResourceLoader } from './resource-loader';
+import { appendSessionOwner } from './session-owner';
 import type { SessionRole, StudySessionScope } from './session-scope';
 import { createStudyTools } from './study-tools';
 export type { SessionRole } from './session-scope';
@@ -134,6 +135,7 @@ export async function createPiSessionFactory(
       : SessionManager.create(root);
     if (!sessionFile) {
       manager.appendSessionInfo(`${role === 'coach' ? 'Coach' : 'Tutor'} · ${ownerId}`);
+      appendSessionOwner(manager, scope);
     }
     const sessionKey = `${role}:${ownerId}` as SessionKey;
     const workflowRuntime = new DeepWorkflowRuntime(

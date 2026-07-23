@@ -3,6 +3,7 @@ import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } f
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { StudySession, StudySessionFactory } from '../../src/runtime/session-factory';
+import type { StudySessionScope } from '../../src/runtime/session-scope';
 import { WorkspaceRegistry } from '../../src/runtime/workspace-registry';
 
 const roots: string[] = [];
@@ -117,6 +118,80 @@ test('passes canonical owner paths to Coach and Tutor factories', async () => {
       ownerPath: 'lessons/unit-a/lesson-003.md',
     },
   ]);
+});
+
+test('checks persisted Session IDs against the canonical owner scope before reuse', async () => {
+  const root = fixture();
+  const planPath = join(root, 'plans/domain-integrity.md');
+  writeFileSync(
+    planPath,
+    readFileSync(planPath, 'utf8').replace(
+      'status: active',
+      'status: active\ncoach_session: foreign-coach-session',
+    ),
+  );
+  const lessonPath = join(root, 'lessons/lesson-003.md');
+  writeFileSync(
+    lessonPath,
+    readFileSync(lessonPath, 'utf8').replace(
+      'status: prepared',
+      'status: prepared\ntutor_session: foreign-tutor-session',
+    ),
+  );
+  const checked: Array<{ sessionId: string; expected: StudySessionScope }> = [];
+  const opened: Array<{ role: string; sessionFile: string | null }> = [];
+  const factory: StudySessionFactory = async ({ role, ownerId, sessionFile }) => {
+    opened.push({ role, sessionFile });
+    return {
+      sessionId: `fresh-${role}-${ownerId}`,
+      sessionFile: `/tmp/fresh-${role}-${ownerId}.jsonl`,
+      messages: [],
+      isStreaming: false,
+      personaId: () => null,
+      setPersona: async () => {},
+      ...idleWorkflowMethods(),
+      prompt: async () => {},
+      abort: async () => {},
+      subscribe: () => () => {},
+      dispose: () => {},
+    };
+  };
+  const registry = new WorkspaceRegistry(root, factory, async (_root, sessionId, expected) => {
+    checked.push({ sessionId, expected });
+    return null;
+  });
+
+  await registry.openCoach('domain-integrity');
+  await registry.startLesson('lesson-003');
+
+  expect(checked).toEqual([
+    {
+      sessionId: 'foreign-coach-session',
+      expected: {
+        role: 'coach',
+        ownerId: 'domain-integrity',
+        ownerPath: 'plans/domain-integrity.md',
+      },
+    },
+    {
+      sessionId: 'foreign-tutor-session',
+      expected: {
+        role: 'tutor',
+        ownerId: 'lesson-003',
+        ownerPath: 'lessons/lesson-003.md',
+      },
+    },
+  ]);
+  expect(opened).toEqual([
+    { role: 'coach', sessionFile: null },
+    { role: 'tutor', sessionFile: null },
+  ]);
+  expect(readFileSync(planPath, 'utf8')).toContain(
+    'coach_session: fresh-coach-domain-integrity',
+  );
+  expect(readFileSync(lessonPath, 'utf8')).toContain(
+    'tutor_session: fresh-tutor-lesson-003',
+  );
 });
 
 test('starts a Lesson with one hidden Tutor kickoff and no student prompt', async () => {

@@ -9,12 +9,21 @@ import { readLearningSet, readPlanWorkspace } from '../study/read-workspace';
 import { setFrontmatterField } from '../study/write-workspace';
 import { resolvePersona } from '../study/persona';
 import type { StudySession, StudySessionFactory } from './session-factory';
+import { readSessionOwner, sessionOwnerMatches } from './session-owner';
+import type { StudySessionScope } from './session-scope';
 
-export type SessionFileLookup = (root: string, sessionId: string) => Promise<string | null>;
+export type SessionFileLookup = (
+  root: string,
+  sessionId: string,
+  expected: StudySessionScope,
+) => Promise<string | null>;
 
-export const findPiSessionFile: SessionFileLookup = async (root, sessionId) => {
+export const findPiSessionFile: SessionFileLookup = async (root, sessionId, expected) => {
   const { SessionManager } = await import('@earendil-works/pi-coding-agent');
-  return (await SessionManager.list(root)).find((item) => item.id === sessionId)?.path ?? null;
+  const path = (await SessionManager.list(root)).find((item) => item.id === sessionId)?.path;
+  if (!path) return null;
+  const manager = SessionManager.open(path, undefined, root);
+  return sessionOwnerMatches(readSessionOwner(manager), expected) ? path : null;
 };
 
 export class WorkspaceRegistry {
@@ -50,13 +59,16 @@ export class WorkspaceRegistry {
     const cached = this.sessions.get(key);
     if (cached) return cached;
     const snapshot = readPlanWorkspace(this.root, planId);
-    const sessionFile = snapshot.coach.sessionId
-      ? await this.lookup(this.root, snapshot.coach.sessionId)
-      : null;
-    const session = await this.factory({
+    const scope = {
       role: 'coach',
       ownerId: planId,
       ownerPath: snapshot.plan.path,
+    } satisfies StudySessionScope;
+    const sessionFile = snapshot.coach.sessionId
+      ? await this.lookup(this.root, snapshot.coach.sessionId, scope)
+      : null;
+    const session = await this.factory({
+      ...scope,
       sessionFile,
     });
     this.sessions.set(key, session);
@@ -87,13 +99,16 @@ export class WorkspaceRegistry {
     }
     const cached = this.sessions.get(key);
     if (cached) return cached;
-    const sessionFile = lesson.tutorSessionId
-      ? await this.lookup(this.root, lesson.tutorSessionId)
-      : null;
-    const session = await this.factory({
+    const scope = {
       role: 'tutor',
       ownerId: lessonId,
       ownerPath: lesson.path,
+    } satisfies StudySessionScope;
+    const sessionFile = lesson.tutorSessionId
+      ? await this.lookup(this.root, lesson.tutorSessionId, scope)
+      : null;
+    const session = await this.factory({
+      ...scope,
       sessionFile,
     });
     this.sessions.set(key, session);
