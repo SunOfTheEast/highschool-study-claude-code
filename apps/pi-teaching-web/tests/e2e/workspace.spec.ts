@@ -63,6 +63,17 @@ test('restores Coach and closed Lesson views from browser routes', async ({ page
   await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'replay');
   await page.reload();
   await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'replay');
+  await expect(page.locator('.connection-banner')).toHaveCount(0);
+
+  await page.evaluate(async () => {
+    const response = await fetch('/api/lessons/lesson-003/start', { method: 'POST' });
+    if (!response.ok) throw new Error(`snapshot trigger failed: ${response.status}`);
+  });
+  await expect(
+    page.getByRole('button', { name: /Lesson 003/ }).getByText('上课中'),
+  ).toBeVisible();
+  await expect(page).toHaveURL(/\/plan\/domain-integrity\/lesson\/lesson-001$/);
+  await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'replay');
 
   await page.goBack();
   await expect(page).toHaveURL(/\/plan\/domain-integrity$/);

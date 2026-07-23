@@ -1,9 +1,41 @@
 import { expect, test } from 'bun:test';
+import type { LessonStatus, PlanWorkspaceSnapshot } from '../../src/shared/contracts';
 import {
   initialClientState,
   preferLiveMessages,
   reduceClientState,
 } from '../../src/client/state';
+
+function workspaceWithLesson(status: LessonStatus): PlanWorkspaceSnapshot {
+  const plan = {
+    id: 'p1',
+    title: 'Plan 1',
+    path: 'plans/p1.md',
+    status: 'active',
+    goal: 'goal',
+    capabilityStandard: 'standard',
+  };
+  return {
+    learningSet: {
+      title: 'Set',
+      overview: 'overview',
+      goal: 'goal',
+      plans: [plan],
+    },
+    plan,
+    coach: { sessionKey: 'coach:p1', sessionId: 'coach-session' },
+    lessons: [{
+      id: 'l1',
+      title: 'Lesson 1',
+      path: 'lessons/l1.md',
+      planId: 'p1',
+      status,
+      sessionKey: 'tutor:l1',
+      tutorSessionId: 'tutor-session',
+      blocks: [],
+    }],
+  };
+}
 
 test('keeps messages separated by Session key', () => {
   let state = initialClientState;
@@ -73,4 +105,25 @@ test('uses fetched history when no live message has arrived', () => {
   }];
 
   expect(preferLiveMessages([], fetched)).toEqual(fetched);
+});
+
+test('keeps an already closed Replay selected when another snapshot arrives', () => {
+  const workspace = workspaceWithLesson('closed');
+  const state = reduceClientState({
+    ...initialClientState,
+    workspace,
+    selected: 'tutor:l1',
+  }, { type: 'snapshot', workspace: workspaceWithLesson('closed') });
+
+  expect(state.selected).toBe('tutor:l1');
+});
+
+test('returns to Coach when the selected Lesson changes from open to closed', () => {
+  const state = reduceClientState({
+    ...initialClientState,
+    workspace: workspaceWithLesson('active'),
+    selected: 'tutor:l1',
+  }, { type: 'snapshot', workspace: workspaceWithLesson('closed') });
+
+  expect(state.selected).toBe('coach:p1');
 });

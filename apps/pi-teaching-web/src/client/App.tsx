@@ -52,16 +52,7 @@ export function App() {
       socket.onmessage = (message) => {
         const event = JSON.parse(String(message.data)) as StudyViewEvent;
         if (event.type === 'ability-update') setAbilities(event.projection);
-        setClient((current) => {
-          const next = reduceClientState(current, event);
-          if (event.type !== 'snapshot' || !current.selected?.startsWith('tutor:')) return next;
-          const selectedLesson = event.workspace.lessons.find(
-            (lesson) => lesson.sessionKey === current.selected,
-          );
-          return selectedLesson?.status === 'closed'
-            ? { ...next, selected: event.workspace.coach.sessionKey }
-            : next;
-        });
+        setClient((current) => reduceClientState(current, event));
       };
       socket.onerror = () => socket?.close();
       socket.onclose = () => {
