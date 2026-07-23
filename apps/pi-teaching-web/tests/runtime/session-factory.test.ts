@@ -194,6 +194,15 @@ test('defines the Tutor correction, hint ladder and tool-turn protocol literally
   expect(tutorSkill).toContain(
     'If the Tutor only repeats, locates or confirms content the student already produced, and the decisive content is student-produced, write `support: none`',
   );
+  expect(tutorSkill).toContain(
+    'An explicit student statement such as `采用你提示的` is conclusive positive attribution when it names a decisive item',
+  );
+  expect(tutorSkill).toContain(
+    'A mixed chain with even one Tutor-origin decisive item is `support: tutor`',
+  );
+  expect(tutorSkill).toContain(
+    'Before emitting any requested hint after an evidence-bearing attempt, first append that attempt and retain its exact active Trace ID',
+  );
   expect(tutorSkill).toContain('刚才的提示是否对你最终使用的关键步骤起了作用？');
   expect(tutorSkill).toContain(
     'Do not append the final correct Trace until the student answers this attribution question',

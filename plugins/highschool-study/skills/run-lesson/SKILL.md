@@ -4,14 +4,18 @@ description: Teach or resume one prepared Lesson while preserving evidence and s
 allowed-tools: Read, Glob, Grep, Edit, Skill, TaskCreate, TaskUpdate, TaskList, mcp__plugin_highschool-study_study-markdown__trace_append, mcp__plugin_highschool-study_study-markdown__source_resolve
 ---
 
+Before emitting any requested hint after an evidence-bearing attempt, first append that attempt and retain its exact active Trace ID. The hint response comes only after that tool result, so a later completion can supersede the recorded attempt.
+
 Before every final `trace_append`, attribute help with this A+C ladder:
 
 1. Treat `support` as actual dependence, not hint exposure. Extract the decisive method, operation, comparison object, transformation, intermediate expression and conclusion used in the student's final solution.
-2. Compare those items with Tutor messages sent after the active Trace for the same card and Block. If the final solution uses decisive content first supplied by the Tutor, write `support: tutor`.
-3. If the Tutor only repeats, locates or confirms content the student already produced, and the decisive content is student-produced, write `support: none`.
-4. If the Tutor supplied only a directional cue and its influence cannot be determined from content, ask exactly: `刚才的提示是否对你最终使用的关键步骤起了作用？` Do not append the final correct Trace until the student answers this attribution question. A yes answer means `support: tutor`; a no answer means `support: none`.
-5. Record one concise attribution reason in `note`. Student attribution resolves support only; it is not new mathematical evidence.
-6. If an active Trace already exists for this card and Block, the final write remains a revision and MUST pass its exact event ID as `supersedes`.
+2. An explicit student statement such as `采用你提示的` is conclusive positive attribution when it names a decisive item. Write `support: tutor`; do not erase that dependence because the student corrected surrounding commentary or assembled the rest of the chain.
+3. A mixed chain with even one Tutor-origin decisive item is `support: tutor`, even when every other decisive item and the final assembly are student-produced.
+4. Compare those items with Tutor messages sent after the active Trace for the same card and Block. If the final solution uses decisive content first supplied by the Tutor, write `support: tutor`.
+5. If the Tutor only repeats, locates or confirms content the student already produced, and the decisive content is student-produced, write `support: none`.
+6. If the Tutor supplied only a directional cue and its influence cannot be determined from content, ask exactly: `刚才的提示是否对你最终使用的关键步骤起了作用？` Do not append the final correct Trace until the student answers this attribution question. A yes answer means `support: tutor`; a no answer means `support: none`.
+7. Record one concise attribution reason in `note`. Student attribution resolves support only; it is not new mathematical evidence.
+8. If an active Trace already exists for this card and Block, the final write remains a revision and MUST pass its exact event ID as `supersedes`.
 
 1. Call `highschool-study:recall-study-memory` with purpose `teaching`. Read the prepared Lesson and its direct sources. Read the shared `reveal-policy.md` under `prepare-next-lesson/references/`. Do not read planner attention during teaching.
 2. At entry and after every student turn, check for a transition request. Whenever the student asks to pause or close, call `highschool-study:close-lesson-reflection` immediately, regardless of capability attainment, and stop the normal sequence pending that reflection outcome. Do this before another activity or Task change. This request-triggered reflection is separate from the attainment-first reflection below.

@@ -376,6 +376,15 @@ test('defines Tutor corrections, hint levels and tool turns literally', () => {
   expect(run).toContain(
     'If the Tutor only repeats, locates or confirms content the student already produced, and the decisive content is student-produced, write `support: none`',
   );
+  expect(run).toContain(
+    'An explicit student statement such as `采用你提示的` is conclusive positive attribution when it names a decisive item',
+  );
+  expect(run).toContain(
+    'A mixed chain with even one Tutor-origin decisive item is `support: tutor`',
+  );
+  expect(run).toContain(
+    'Before emitting any requested hint after an evidence-bearing attempt, first append that attempt and retain its exact active Trace ID',
+  );
   expect(run).toContain('刚才的提示是否对你最终使用的关键步骤起了作用？');
   expect(run).toContain(
     'Do not append the final correct Trace until the student answers this attribution question',
