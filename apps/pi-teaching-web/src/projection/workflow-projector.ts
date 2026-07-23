@@ -26,6 +26,7 @@ export function projectWorkflow(snapshot: WorkflowSnapshot): WorkflowView {
       dependsOn: task.dependsOn,
       status: task.status,
       sourceCount: task.result?.evidence_refs.length ?? task.sourceHandles.length,
+      cardCount: task.result?.card_index?.length ?? 0,
       progress: progress[task.status],
     })),
   };

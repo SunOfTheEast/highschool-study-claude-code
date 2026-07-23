@@ -55,7 +55,9 @@ export function TaskRail({
                     <em>{task.progress}</em>
                     <small>
                       {task.dependsOn.length > 0 ? `依赖 ${task.dependsOn.join(', ')}` : '无依赖'}
-                      {' · '}{task.sourceCount} 个来源
+                      {' · '}
+                      {task.cardCount > 0 ? `${task.cardCount} 张题卡 · ` : ''}
+                      {task.sourceCount} 个来源
                     </small>
                   </span>
                 </li>

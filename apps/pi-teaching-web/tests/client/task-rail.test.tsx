@@ -19,6 +19,7 @@ test('renders dependencies and budgets without child output', () => {
         dependsOn: [],
         status: 'queued',
         sourceCount: 4,
+        cardCount: 2,
         progress: '等待前序任务',
       },
       {
@@ -28,6 +29,7 @@ test('renders dependencies and budgets without child output', () => {
         dependsOn: ['evidence'],
         status: 'queued',
         sourceCount: 0,
+        cardCount: 0,
         progress: '等待前序任务',
       },
     ],
@@ -36,5 +38,8 @@ test('renders dependencies and budgets without child output', () => {
   expect(html).toContain('20,000 Token');
   expect(html).toContain('确认运行');
   expect(html).toContain('依赖 evidence');
+  expect(html).toContain('2 张题卡');
+  expect(html).toContain('4 个来源');
   expect(html).not.toContain('findings');
+  expect(html).not.toContain('隐藏题卡');
 });

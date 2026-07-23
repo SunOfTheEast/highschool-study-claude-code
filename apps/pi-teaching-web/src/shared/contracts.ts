@@ -131,6 +131,7 @@ export type WorkflowTaskView = {
   dependsOn: string[];
   status: 'queued' | 'running' | 'completed' | 'failed' | 'blocked' | 'cancelled';
   sourceCount: number;
+  cardCount: number;
   progress: string;
 };
 
