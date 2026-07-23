@@ -1,4 +1,10 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  writeFileSync,
+} from 'node:fs';
 import { dirname, posix } from 'node:path';
 import {
   readMarkdownFile,
@@ -18,7 +24,6 @@ export type PlanDecision = 'active' | 'complete' | 'replan';
 
 export type PlanUpdateInput = {
   decision: PlanDecision;
-  lessonIndex: string;
   currentPosition: string;
   nextLessonCandidate: string;
   planSummary: string;
@@ -138,7 +143,38 @@ function planTitle(body: string): string {
   return title;
 }
 
-function appendPlanGraphLink(source: string, path: string, title: string): string {
+function syncPlanGraphStatus(source: string, path: string, status: string): string {
+  const heading = /^## Plan Graph[ \t]*$/m.exec(source);
+  if (!heading) throw new Error('SECTION_NOT_FOUND: Plan Graph');
+  const sectionStart = heading.index + heading[0].length;
+  const nextHeading = /^## [^\n]+$/gm;
+  nextHeading.lastIndex = sectionStart;
+  const next = nextHeading.exec(source);
+  const sectionEnd = next?.index ?? source.length;
+  const section = source.slice(sectionStart, sectionEnd);
+  const line = new RegExp(
+    `^([ \\t]*-[ \\t]+\\[[^\\]]+\\]\\(${escapeRegExp(path)}\\))(?:[ \\t]+—[ \\t]+(.*))?$`,
+    'm',
+  );
+  const match = line.exec(section);
+  if (!match) throw new Error(`PLAN_NOT_REGISTERED: ${path}`);
+  const suffix = match[2]?.trim();
+  const statusPrefix = /^(?:active|completed)(.*)$/.exec(suffix ?? '');
+  const nextSuffix = statusPrefix
+    ? `${status}${statusPrefix[1]}`
+    : suffix
+      ? `${status}；${suffix}`
+      : `${status}。`;
+  const nextSection = section.replace(line, `$1 — ${nextSuffix}`);
+  return source.slice(0, sectionStart) + nextSection + source.slice(sectionEnd);
+}
+
+function appendPlanGraphLink(
+  source: string,
+  path: string,
+  title: string,
+  status: string,
+): string {
   const heading = /^## Plan Graph[ \t]*$/m.exec(source);
   if (!heading) throw new Error('SECTION_NOT_FOUND: Plan Graph');
   const sectionStart = heading.index + heading[0].length;
@@ -149,10 +185,10 @@ function appendPlanGraphLink(source: string, path: string, title: string): strin
   const section = source.slice(sectionStart, sectionEnd);
   const targets = [...section.matchAll(/\[[^\]]+\]\(([^)#]+\.md)\)/g)]
     .map((match) => match[1]);
-  if (targets.includes(path)) return source;
+  if (targets.includes(path)) return syncPlanGraphStatus(source, path, status);
   const before = source.slice(0, sectionEnd).trimEnd();
   const after = source.slice(sectionEnd);
-  return `${before}\n\n- [${title}](${path})\n${after.startsWith('\n') ? after : `\n${after}`}`;
+  return `${before}\n\n- [${title}](${path}) — ${status}。\n${after.startsWith('\n') ? after : `\n${after}`}`;
 }
 
 function escapeRegExp(value: string): string {
@@ -228,8 +264,11 @@ export function registerPlan(root: string, planId: string): RegisteredPlan {
   if (plan.frontmatter.kind !== 'plan') throw new Error('INVALID_PLAN_KIND');
   if (plan.id !== planId) throw new Error(`INVALID_PLAN_ID: ${plan.id}`);
   const title = planTitle(plan.body);
+  const status = typeof plan.frontmatter.status === 'string'
+    ? plan.frontmatter.status
+    : 'active';
   const roadmap = read(root, 'ROADMAP.md');
-  const next = appendPlanGraphLink(roadmap.source, path, title);
+  const next = appendPlanGraphLink(roadmap.source, path, title, status);
   if (next !== roadmap.source) write(roadmap.absolute, next);
 
   const canonicalPlan = readMarkdownFile(root, path);
@@ -287,13 +326,96 @@ export function closeLesson(
   write(document.absolute, source);
 }
 
+type LessonIndexEntry = {
+  path: string;
+  title: string;
+  status: string;
+  planId: string;
+};
+
+function sectionValue(source: string, heading: string): string {
+  const pattern = new RegExp(`^## ${heading}\\s*$\\n([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, 'm');
+  const match = pattern.exec(source);
+  if (!match) throw new Error(`SECTION_NOT_FOUND: ${heading}`);
+  return match[1]!.trim();
+}
+
+function lessonIndexEntry(root: string, lessonPath: string): LessonIndexEntry {
+  const lesson = readMarkdownFile(root, lessonPath);
+  if (lesson.frontmatter.kind !== 'lesson') {
+    throw new Error(`INVALID_LESSON_KIND: ${lessonPath}`);
+  }
+  const title = /^#\s+(.+?)\s*$/m.exec(lesson.body)?.[1]?.trim();
+  if (!title) throw new Error(`LESSON_TITLE_REQUIRED: ${lessonPath}`);
+  const planId = typeof lesson.frontmatter.plan_id === 'string'
+    ? lesson.frontmatter.plan_id
+    : '';
+  const status = typeof lesson.frontmatter.status === 'string'
+    ? lesson.frontmatter.status
+    : '';
+  if (!['prepared', 'active', 'paused', 'closed', 'abandoned'].includes(status)) {
+    throw new Error(`INVALID_LESSON_STATUS: ${lessonPath}`);
+  }
+  return { path: lessonPath, title, status, planId };
+}
+
+function deriveLessonIndex(
+  root: string,
+  planPath: string,
+  planId: string,
+  planSource: string,
+): string {
+  const linkedPaths = [
+    ...sectionValue(planSource, 'Lesson Index').matchAll(/\[[^\]]+\]\(([^)#]+\.md)\)/g),
+  ].map((match) => posix.normalize(posix.join(posix.dirname(planPath), match[1]!)));
+  const entries: LessonIndexEntry[] = [];
+  const seen = new Set<string>();
+
+  for (const lessonPath of linkedPaths) {
+    const entry = lessonIndexEntry(root, lessonPath);
+    if (entry.planId !== planId) {
+      throw new Error(`LESSON_PLAN_MISMATCH: ${lessonPath}`);
+    }
+    if (!seen.has(entry.path)) {
+      entries.push(entry);
+      seen.add(entry.path);
+    }
+  }
+
+  const lessonsDirectory = resolveInsideRoot(root, 'lessons');
+  if (existsSync(lessonsDirectory)) {
+    const discovered = readdirSync(lessonsDirectory, { withFileTypes: true })
+      .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
+      .map((entry) => `lessons/${entry.name}`)
+      .sort();
+    for (const lessonPath of discovered) {
+      if (seen.has(lessonPath)) continue;
+      const entry = lessonIndexEntry(root, lessonPath);
+      if (entry.planId !== planId) continue;
+      entries.push(entry);
+      seen.add(entry.path);
+    }
+  }
+
+  if (entries.length === 0) return '（暂无）';
+  return entries.map((entry, index) => {
+    const target = posix.relative(posix.dirname(planPath), entry.path);
+    return `${index + 1}. [${entry.title}](${target}) — ${entry.status}。`;
+  }).join('\n');
+}
+
 export function updatePlan(root: string, planPath: string, input: PlanUpdateInput): void {
   const document = read(root, planPath);
   const status = input.decision === 'complete' ? 'completed' : 'active';
-  let source = replaceSection(document.source, 'Lesson Index', input.lessonIndex);
+  const plan = readMarkdownFile(root, planPath);
+  const lessonIndex = deriveLessonIndex(root, planPath, plan.id, document.source);
+  let source = replaceSection(document.source, 'Lesson Index', lessonIndex);
   source = replaceSection(source, 'Current Position', input.currentPosition);
   source = replaceSection(source, 'Next Lesson Candidate', input.nextLessonCandidate);
   source = replaceSection(source, 'Plan Summary', input.planSummary);
   source = replaceFrontmatterField(source, planPath, 'status', status);
+  const roadmap = read(root, 'ROADMAP.md');
+  const nextRoadmap = syncPlanGraphStatus(roadmap.source, planPath, status);
   write(document.absolute, source);
+  if (nextRoadmap !== roadmap.source) write(roadmap.absolute, nextRoadmap);
 }

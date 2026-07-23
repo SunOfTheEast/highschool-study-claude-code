@@ -2,6 +2,7 @@ import { afterEach, expect, test } from 'bun:test';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { readPlanWorkspace } from '../../src/study/read-workspace';
 import {
   appendRouteChange,
   closeLesson,
@@ -59,18 +60,30 @@ status: prepared
   return { root, path: 'lesson.md' };
 }
 
-function planFixture(): { root: string; path: string } {
+function planFixture(): { root: string; path: string; roadmapPath: string } {
   const root = mkdtempSync(join(tmpdir(), 'study-plan-'));
   roots.push(root);
   const path = 'plans/p1.md';
   const absolute = join(root, path);
+  const roadmapPath = join(root, 'ROADMAP.md');
   mkdirSync(join(root, 'plans'), { recursive: true });
+  writeFileSync(roadmapPath, `---
+id: roadmap
+kind: roadmap
+status: active
+---
+# 测试 Roadmap
+
+## Plan Graph
+
+- [测试 Plan](plans/p1.md) — active；保留人工说明。
+`);
   writeFileSync(absolute, `---
 id: p1
 kind: plan
 status: prepared
 ---
-# Plan
+# Plan：测试 Plan
 
 ## Lesson Index
 
@@ -88,7 +101,7 @@ status: prepared
 
 旧总结。
 `);
-  return { root, path };
+  return { root, path, roadmapPath };
 }
 
 function registrationFixture(): { root: string; roadmapPath: string; planPath: string } {
@@ -186,21 +199,19 @@ test('updates all Plan audit sections in one write and maps the decision status'
   const { root, path } = planFixture();
   updatePlan(root, path, {
     decision: 'replan',
-    lessonIndex: '1. [Lesson 001](../lessons/lesson-001.md) — closed。',
     currentPosition: '- 已满足标准一。\n- 标准二仍缺证据。',
     nextLessonCandidate: '- 使用另一问题类别的真实题卡。',
     planSummary: '决定：继续，但重新安排下一课。',
   });
   let source = readFileSync(join(root, path), 'utf8');
   expect(source).toContain('status: active');
-  expect(source).toContain('Lesson 001');
+  expect(source).toContain('（暂无）');
   expect(source).toContain('标准二仍缺证据');
   expect(source).toContain('另一问题类别');
   expect(source).toContain('重新安排下一课');
 
   updatePlan(root, path, {
     decision: 'complete',
-    lessonIndex: '全部课程已完成。',
     currentPosition: '能力标准已满足。',
     nextLessonCandidate: '无。',
     planSummary: '决定：完成。',
@@ -209,20 +220,89 @@ test('updates all Plan audit sections in one write and maps the decision status'
   expect(source).toContain('status: completed');
 });
 
-test('leaves a Plan byte-for-byte unchanged when an audit section is missing', () => {
+test('derives the Lesson Index from real same-Plan files in stable order', () => {
   const { root, path } = planFixture();
+  mkdirSync(join(root, 'lessons'), { recursive: true });
+  writeFileSync(join(root, 'lessons/lesson-001.md'), `---
+id: lesson-001
+kind: lesson
+plan_id: p1
+status: closed
+---
+# 第一课
+`);
+  writeFileSync(join(root, 'lessons/lesson-002.md'), `---
+id: lesson-002
+kind: lesson
+plan_id: p1
+status: prepared
+---
+# 第二课
+`);
+  writeFileSync(join(root, 'lessons/lesson-other.md'), `---
+id: lesson-other
+kind: lesson
+plan_id: another-plan
+status: prepared
+---
+# 其他 Plan 的课
+`);
+  writeFileSync(
+    join(root, path),
+    readFileSync(join(root, path), 'utf8').replace(
+      '旧课程。',
+      '1. [旧标题](../lessons/lesson-002.md) — pending。',
+    ),
+  );
+
+  updatePlan(root, path, {
+    decision: 'active',
+    currentPosition: '继续诊断。',
+    nextLessonCandidate: '准备下一课。',
+    planSummary: '保留当前 Plan。',
+  });
+
+  const source = readFileSync(join(root, path), 'utf8');
+  expect(source.indexOf('[第二课](../lessons/lesson-002.md) — prepared。'))
+    .toBeLessThan(source.indexOf('[第一课](../lessons/lesson-001.md) — closed。'));
+  expect(source).not.toContain('其他 Plan 的课');
+  expect(readPlanWorkspace(root, 'p1').lessons.map(({ id, status }) => ({ id, status })))
+    .toEqual([
+      { id: 'lesson-002', status: 'prepared' },
+      { id: 'lesson-001', status: 'closed' },
+    ]);
+});
+
+test('synchronizes the Roadmap Plan status without dropping its human suffix', () => {
+  const { root, path, roadmapPath } = planFixture();
+
+  updatePlan(root, path, {
+    decision: 'complete',
+    currentPosition: '能力标准已满足。',
+    nextLessonCandidate: '无。',
+    planSummary: '决定：完成。',
+  });
+
+  expect(readFileSync(roadmapPath, 'utf8')).toContain(
+    '- [测试 Plan](plans/p1.md) — completed；保留人工说明。',
+  );
+});
+
+test('leaves a Plan byte-for-byte unchanged when an audit section is missing', () => {
+  const { root, path, roadmapPath } = planFixture();
   const absolute = join(root, path);
   const before = readFileSync(absolute, 'utf8').replace('## Plan Summary', '## Summary Missing');
+  const roadmapBefore = readFileSync(roadmapPath, 'utf8');
   writeFileSync(absolute, before);
 
   expect(() => updatePlan(root, path, {
     decision: 'active',
-    lessonIndex: '不会写入。',
     currentPosition: '不会写入。',
     nextLessonCandidate: '不会写入。',
     planSummary: '不会写入。',
   })).toThrow('SECTION_NOT_FOUND: Plan Summary');
   expect(readFileSync(absolute, 'utf8')).toBe(before);
+  expect(readFileSync(roadmapPath, 'utf8')).toBe(roadmapBefore);
 });
 
 test('registers a real Plan in the Roadmap exactly once', () => {

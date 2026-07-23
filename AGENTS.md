@@ -95,6 +95,13 @@ The runtime binds the Plan, paths, initial statuses, relative aliases, and Plan
 Lesson Index; the compiled Lesson Markdown remains the only durable source.
 Do not add a persistent Blueprint file or a fifth public MCP tool.
 
+`plan_update` accepts only `decision`, `currentPosition`,
+`nextLessonCandidate`, and `planSummary`. On every Plan audit, the runtime
+reconstructs Lesson Index from the real same-Plan Lesson files, preserves the
+existing linked order, appends missing Lessons, and synchronizes the matching
+Roadmap Plan Graph status. Model-authored text never owns these structural
+links or status projections.
+
 ## Teaching and evidence invariants
 
 - Student control is authoritative: pause immediately on request and close a

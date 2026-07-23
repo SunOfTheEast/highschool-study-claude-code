@@ -47,7 +47,7 @@ export type PlanUpdateInput = {
 };
 ```
 
-- [ ] **Step 1: Write the failing schema test**
+- [x] **Step 1: Write the failing schema test**
 
 Change the expected property list to:
 
@@ -61,7 +61,7 @@ expect(Object.keys(properties)).toEqual([
 expect(JSON.stringify(tool.parameters)).not.toContain('lessonIndex');
 ```
 
-- [ ] **Step 2: Run the focused test and verify RED**
+- [x] **Step 2: Run the focused test and verify RED**
 
 Run:
 
@@ -73,12 +73,12 @@ bun test tests/runtime/study-tools.test.ts --test-name-pattern \
 
 Expected: FAIL because `lessonIndex` is still exposed.
 
-- [ ] **Step 3: Remove the field from the TypeBox schema and TypeScript input**
+- [x] **Step 3: Remove the field from the TypeBox schema and TypeScript input**
 
 Delete `lessonIndex` from `createPlanUpdateTool().parameters` and
 `PlanUpdateInput`. Do not add a replacement model field.
 
-- [ ] **Step 4: Run the focused test and verify GREEN**
+- [x] **Step 4: Run the focused test and verify GREEN**
 
 Run the command from Step 2. Expected: PASS.
 
@@ -93,7 +93,7 @@ Run the command from Step 2. Expected: PASS.
 - Produces: a Plan whose `## Lesson Index` is derived from real Lesson Markdown,
   and a Roadmap whose matching Plan Graph entry carries the actual Plan status.
 
-- [ ] **Step 1: Write the failing structural regression test**
+- [x] **Step 1: Write the failing structural regression test**
 
 Create two real Lesson files for `p1`, leave only the first linked, then call:
 
@@ -114,7 +114,7 @@ order, uses each real status, excludes another Plan's Lesson, and that
 - [测试 Plan](plans/p1.md) — completed；
 ```
 
-- [ ] **Step 2: Run the focused write-workspace test and verify RED**
+- [x] **Step 2: Run the focused write-workspace test and verify RED**
 
 Run:
 
@@ -126,7 +126,7 @@ bun test tests/study/write-workspace.test.ts --test-name-pattern \
 
 Expected: FAIL because `updatePlan` still expects model-supplied Lesson Index.
 
-- [ ] **Step 3: Implement the minimal derivation**
+- [x] **Step 3: Implement the minimal derivation**
 
 Add internal helpers that:
 
@@ -149,11 +149,11 @@ Add one Plan Graph helper that updates the exact linked Plan's leading status
 token while retaining the remaining human suffix. Build both next documents
 before the first write.
 
-- [ ] **Step 4: Run the focused test and verify GREEN**
+- [x] **Step 4: Run the focused test and verify GREEN**
 
 Run the command from Step 2. Expected: PASS.
 
-- [ ] **Step 5: Run all affected unit tests**
+- [x] **Step 5: Run all affected unit tests**
 
 Run:
 
@@ -174,7 +174,7 @@ Expected: all tests pass.
 - Produces: documentation stating that `lesson_prepare` and the runtime own
   Lesson Index structure while Coach owns audit conclusions.
 
-- [ ] **Step 1: Update documentation**
+- [x] **Step 1: Update documentation**
 
 Document these exact rules:
 
@@ -184,7 +184,7 @@ Document these exact rules:
   by the model;
 - Plan status changes synchronize the Roadmap Plan Graph status token.
 
-- [ ] **Step 2: Run complete verification**
+- [x] **Step 2: Run complete verification**
 
 Run:
 
@@ -203,7 +203,7 @@ bun run release:check
 Expected: type checking, all tests, production build, bundle, and strict plugin
 validation pass.
 
-- [ ] **Step 3: Re-run the retained real workflow on a fresh learning-set copy**
+- [x] **Step 3: Re-run the retained real workflow on a fresh learning-set copy**
 
 Create a new Plan, prepare its first Lesson, and perform one `plan_update`.
 Assert:

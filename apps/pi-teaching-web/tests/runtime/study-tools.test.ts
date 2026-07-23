@@ -639,12 +639,12 @@ test('exposes one flat Coach plan_update contract without path authority', () =>
   }).properties;
   expect(Object.keys(properties)).toEqual([
     'decision',
-    'lessonIndex',
     'currentPosition',
     'nextLessonCandidate',
     'planSummary',
   ]);
   expect(JSON.stringify(tool.parameters)).not.toContain('planPath');
+  expect(JSON.stringify(tool.parameters)).not.toContain('lessonIndex');
 });
 
 test('keeps alternative append Tutor-only and Session-bound', () => {

@@ -13,7 +13,6 @@ export function createPlanUpdateTool(root: string, ownerPath: string) {
         Type.Literal('complete'),
         Type.Literal('replan'),
       ]),
-      lessonIndex: Type.String({ minLength: 1 }),
       currentPosition: Type.String({ minLength: 1 }),
       nextLessonCandidate: Type.String({ minLength: 1 }),
       planSummary: Type.String({ minLength: 1 }),
