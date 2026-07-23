@@ -72,9 +72,17 @@ Planner 先确定热身、核心、变式、迁移、补救或挑战等题目角
 
 题卡与 Trace 是双向关系：`card_search` 先读取 active Trace 一次，构建一次请求内 `Map<cardPath, TraceRecord[]>`，再把完整历史挂到候选卡；card limit 只限制卡片数量，不截断单卡历史。`trace_search` 先筛选 active Trace，再读取每个唯一题卡一次并生成去重的 `cardsByPath`。这个索引只存在于当前请求，不写入持久缓存、索引或数据库。
 
+题卡上的主/次方法只是参考解 metadata。课堂 Trace 记录学生本次实际路线；只有学生明确确认规范节点贴切时才写方法字段，否则保留未映射路线。方法投影按 `lessonPath + blockId + cardPath` 折叠为一次 attempt，主方法权重高于次方法，并要求不同题卡证据才能进入稳定状态。
+
+课堂评价先冻结学生在写 Trace 前亲自给出的内容。Tutor 不能把自己补出的推导倒灌成学生证据；缺决定性证明时使用 `incomplete`。`support` 表示最终答案实际依赖的帮助来源，而不是“是否见过提示”。学生异议成立或后续补全时，必须用准确 active event ID 追加 superseding Trace。
+
+真正另解要求至少一整题或一问的入口、决定性推理和收束链条都与参考解及已有 active 另解不同。换记号、等价重排、局部技巧或方法改名不算另解。另解写在题卡旁的 Markdown sidecar，并索引到 active Trace；来源被 supersede 后普通读取自动隐藏旧条目。
+
 长期偏好只在 Plan 层收敛：必须先有满足 observable capability standard 的直接证据，学生再明确选择完成 Plan。系统随后提出带原始来源的 `add / revise / delete` 差量；只有学生逐项确认后，才分别写入唯一 owner 的 `student-profile.md` 或 `teaching-profile.md`。Lesson closure、Task completion、方法分数或模型推断都不能绕过这道确认门。
 
 如果 `card_search` 返回空数组，立即停止题卡搜索并说明缺少的内容或资产；不得编造题卡、题目、来源或 session ID。
+
+完整的当前功能与 Pi 前端边界见 [`docs/zh-CN/完整说明书.md`](../../docs/zh-CN/完整说明书.md)。
 
 ## 验证与启动
 

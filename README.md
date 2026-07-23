@@ -5,8 +5,8 @@
 仓库同时提供：
 
 - 可从 Claude Code marketplace 直接安装的插件；
-- 9 个学习工作流 Skills、2 个 Agent 配置和 4 个窄 MCP 工具；
-- 完整的[中文说明书](docs/zh-CN/完整说明书.md)；
+- 10 个学习工作流 Skills、2 个 Agent 配置和 4 个窄 MCP 工具；
+- 当前实现的[完整中文功能说明](docs/zh-CN/完整说明书.md)；
 - 含 519 张导数题卡的[公开试用学习集](examples/derivative-demo/README.md)；
 - 已确认的[中英文设计稿与实施计划](docs/design/)。
 - 基于 Pi 的本地教学前端：Plan 级 Coach、Lesson 级 Tutor、结构化课堂本、证据回溯与人设主题。
@@ -77,6 +77,19 @@ pi
 
 进入 Pi 后运行 `/study-web`。浏览器会显示一个 Plan 级 Coach 父会话及其 Lesson 级 Tutor 子会话；未开始的 Lesson 只展示无剧透课堂本。完整安装、开发与真实模型 smoke 步骤见 [Pi 教学前端说明](apps/pi-teaching-web/README.md)。
 
+## 当前功能基线
+
+当前整合版已经打通完整教学闭环：
+
+- Coach 以 Plan 为周期，Tutor 以 Lesson 为周期，Session 历史隔离并通过 Markdown/Trace 交接；
+- 真实题卡搜索、题卡与 active Trace 双向查询、来源下钻和只追加更正；
+- 学生证据冻结、提示实际依赖归因、学生确认的实际方法证据；
+- 真正另解旁挂题卡，并随 active Trace 自动失效或重新绑定；
+- 结构化课堂节点、动态路线、Replay、能力图、证据透镜和浏览器路由恢复；
+- 默认安全消息投影，以及可选、可确认、可取消的 quick/deep 动态工作流。
+
+具体语义、边界和日常使用以[完整说明书](docs/zh-CN/完整说明书.md)为准；设计稿和实施计划保留为历史依据。
+
 ## 学习集概述与展示人设
 
 没有课堂 Trace 时，`study` 会展示 `ROADMAP.md` 的 Learning Set Overview；已有 Trace 时，只有用户要求才展开这份概述。
@@ -101,8 +114,9 @@ learning-set/
 
 - Roadmap 是长期目标，直接包含可依赖、并行和重排的多个 Plan。
 - Plan 是一个合适的学习周期，包含多个 Lesson。
-- Lesson 绑定一次 Claude Code 会话，由可自由组合的 ActivityBlock 构成。
-- Trace 是课堂事实和题卡绑定的唯一 owner；题卡搜索会一并返回该卡的有效 Trace 历史。
+- Lesson 绑定一次实际课堂，由可自由组合的 ActivityBlock 构成；Pi 中每个 started Lesson 绑定独立 Tutor Session。
+- Trace 是课堂事实和题卡绑定的唯一 owner；题卡搜索会一并返回该卡的完整 active Trace 历史。
+- 题卡方法只是参考 metadata；学生实际方法只有在本人确认贴切节点后才进入 Trace 与能力投影。
 - 长期画像只在 Plan 完成后汇总，并在学生逐项确认后更新。
 
 ## 四个 MCP 工具
@@ -143,6 +157,6 @@ bun run release:check
 
 ## 当前发布边界
 
-这是一个 Claude Code 学习插件，而不是完整教育产品。它刻意不包含 SQLite、向量数据库、后台服务、自动 Git 提交、统一上下文编译器或人类教师协作层。
+这是一个本地学习插件与教学前端，而不是完整教育 SaaS。它刻意不包含 SQLite、向量数据库、后台索引、账号系统、自动 Git 提交、统一上下文编译器或人类教师协作层。
 
 本仓库当前未指定开源许可证；代码与题卡可用于安装和试用，进一步再分发或商用前请先联系仓库所有者。

@@ -4,16 +4,13 @@
 
 ## Message projection
 
-Student sessions default to `safe`: assistant text is shown only after a pure-text
-message finishes, while messages containing tool calls are represented by structured
-work status. Pi's raw session JSONL is not modified.
+学生 Session 默认使用 `safe`：纯文本消息完成后才显示；包含工具调用的混合消息改为结构化工作状态。Pi 原始 Session JSONL 不会被修改。
 
-Use `raw-stream` only for local diagnostics because mixed tool-call text can be visible:
+`raw-stream` 只用于本地诊断，因为它可能显示混合工具文本：
 
 `bun run start -- --message-projection raw-stream`
 
-The equivalent environment setting is
-`STUDYFORGE_MESSAGE_PROJECTION=raw-stream`.
+等价环境变量为 `STUDYFORGE_MESSAGE_PROJECTION=raw-stream`。
 
 ## 视觉主题
 
@@ -113,6 +110,20 @@ pi
 
 右侧“方法证据”只是 Trace 的主/次方法加权投影。点击任一节点都能回到原始 Trace 和安全题卡元数据；它不是独立的掌握度事实。
 
+## Session、证据与重新备课
+
+- Coach Session 的 owner 是当前 Plan；最终 `active / complete / replan` 决定通过 `plan_update` 一次写回，再重读 Plan 后回复。
+- Tutor Session 的 owner 是当前 Lesson；模型不填写 `lessonPath`、`cardStepId` 或 Session ID。
+- Tutor 在评价前只冻结学生已经亲自给出的数学内容。缺决定性证明时写 `incomplete`，不能把 Tutor 的补全冒充成学生证据。
+- `support` 记录最终答案实际采用的帮助。提示出现但未提供/未被采用决定性内容时仍可为 `none`；采用 Tutor 首次给出的关键内容时为 `tutor`。
+- 题卡方法只是候选。学生确认节点贴切后才写实际方法；拒绝、无精确节点或暂不决定时保留未映射路线。
+- 只有某一整题或一问的完整核心路线真正不同才落盘另解；写入顺序是 active correct Trace → `card_alternative_append` → 学生回复。
+- 学生异议成立或后续补全同一 attempt 时，新的 Trace 必须 supersede 准确的 active event。
+
+仍为 `prepared` 的 Lesson 可以由 Coach 保持 ID 原地改写。Tutor 已启动后再要求重新备课，旧 Lesson 保留并标为 `abandoned`，Coach 使用新 ID 创建替代 Lesson。
+
+Trace 写入成功后，服务端主动发布完整能力 snapshot；刷新、前进/后退和 Plan/Lesson 深链会从 Markdown 与已绑定 Pi Session 恢复 Coach、Tutor 或 closed Replay。Replay 优先使用真实 Pi 历史；历史不可用时明确显示 evidence-only。
+
 ## 深度模式与动态工作流
 
 深度模式按 Coach/Tutor Session 单独开启，默认关闭。开启只是允许父 Agent 在确有两个独立视角、且结论可能改变下一步教学动作时发起会诊；信息足够时，直接回答仍是正常路径。
@@ -150,3 +161,5 @@ pi
 深度模式另行确认：先运行一次最多三个独立任务的 quick 会诊，再提出一次有依赖的 deep 工作流并由学生确认；启动第二个 deep 工作流后取消，确认任务轨保留已完成分支，而且临时子任务没有改动 learning-set 文件。
 
 遇到问题时先运行 `bun run check`；模型调用失败通常需要在 Pi 中用 `/login` 或环境变量配置提供商凭据。
+
+完整功能语义见 [`docs/zh-CN/完整说明书.md`](../../docs/zh-CN/完整说明书.md)。
