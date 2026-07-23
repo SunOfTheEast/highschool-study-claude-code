@@ -29,6 +29,20 @@ test('refetches the Roadmap after returning to the learning-set home', async ({ 
   await expect(page.getByRole('button', { name: /同构变形/ })).toBeVisible();
 });
 
+test('keeps the prepared gate and shows actionable admission issues', async ({ page }) => {
+  await page.goto('/');
+  await page.request.post('http://127.0.0.1:65000/__test/reject-next-lesson-start');
+  await page.getByRole('button', { name: /定义域完整性的系统加固/ }).click();
+  await page.getByRole('button', { name: /Lesson 003/ }).click();
+
+  await page.getByRole('button', { name: /开始上课/ }).click();
+
+  await expect(page.getByRole('alert')).toContainText('这节课还没备完整');
+  await expect(page.getByRole('alert')).toContainText('Q-MISSING');
+  await expect(page.getByRole('alert')).toContainText('请返回 Coach 修正');
+  await expect(page.getByRole('button', { name: /开始上课/ })).toBeVisible();
+});
+
 test('marks the approved theme and current learning surface', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('main.home')).toHaveAttribute(

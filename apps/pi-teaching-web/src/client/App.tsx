@@ -10,7 +10,7 @@ import type {
   StudentNotebook,
   StudyViewEvent,
 } from '../shared/contracts';
-import { api } from './api';
+import { api, ApiError } from './api';
 import { AbilityMap } from './components/AbilityMap';
 import { ChatPanel } from './components/ChatPanel';
 import { EvidenceLens } from './components/EvidenceLens';
@@ -272,8 +272,30 @@ export function App() {
           ),
         },
       }));
-    } catch {
-      setPageError('无法启动 Tutor Session，请检查 Pi 配置。');
+    } catch (error) {
+      if (
+        error instanceof ApiError
+        && error.status === 422
+        && error.body !== null
+        && typeof error.body === 'object'
+        && (error.body as { error?: unknown }).error === 'PREPARED_LESSON_INVALID'
+      ) {
+        const issues = (error.body as { issues?: unknown }).issues;
+        const messages = Array.isArray(issues)
+          ? issues.flatMap((issue) => (
+              issue !== null
+              && typeof issue === 'object'
+              && typeof (issue as { message?: unknown }).message === 'string'
+                ? [(issue as { message: string }).message]
+                : []
+            ))
+          : [];
+        setPageError(
+          `这节课还没备完整：${messages.join('；') || '存在无法执行的结构问题'}。请返回 Coach 修正。`,
+        );
+      } else {
+        setPageError('无法启动 Tutor Session，请检查 Pi 配置。');
+      }
     }
   };
 

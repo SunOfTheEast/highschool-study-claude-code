@@ -9,6 +9,7 @@ import {
   setFrontmatterField,
 } from '../../src/study/write-workspace';
 import { resolvePersona } from '../../src/study/persona';
+import { PreparedLessonValidationError } from '../../src/study/validate-prepared-lesson';
 import { createRequestHandler } from '../../src/server/app';
 import { EventHub } from '../../src/server/event-hub';
 import type { WorkflowSnapshot, WorkflowTaskState } from '../../src/workflows/contracts';
@@ -97,6 +98,7 @@ const abilityProjection: AbilityProjection = {
     sources: ['traces/fixture-trace.json'],
   }],
 };
+let rejectNextLessonStart = false;
 
 function list(key: SessionKey): WorkflowSnapshot[] {
   return structuredClone(workflows.get(key) ?? []);
@@ -163,6 +165,13 @@ const registry = {
     notify(key, snapshot);
   },
   startLesson: async (lessonId: string) => {
+    if (rejectNextLessonStart) {
+      rejectNextLessonStart = false;
+      throw new PreparedLessonValidationError([{
+        code: 'LESSON_ALIAS_MISSING',
+        message: 'Block assessment-01 的 Uses 缺少 alias：Q-MISSING',
+      }]);
+    }
     const lesson = readPlanWorkspace(root, 'domain-integrity').lessons
       .find((item) => item.id === lessonId);
     if (!lesson) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
@@ -219,6 +228,11 @@ coach_session: null
 识别同构结构。
 `);
       registerPlan(root, 'isomorphic-transformation');
+      return Response.json({ ok: true });
+    }
+    if (request.method === 'POST' && url.pathname === '/__test/reject-next-lesson-start') {
+      setFrontmatterField(root, 'lessons/lesson-003.md', 'status', 'prepared');
+      rejectNextLessonStart = true;
       return Response.json({ ok: true });
     }
     return appFetch(request, server);

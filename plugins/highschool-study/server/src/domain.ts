@@ -33,6 +33,7 @@ export {
   readMarkdownFile,
   type MarkdownDocument,
 } from './markdown';
+export { readLessonAliases } from './lesson-aliases';
 export { resolveInsideRoot } from './learning-set';
 export {
   sourceResolve,

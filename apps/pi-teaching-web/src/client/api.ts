@@ -11,9 +11,28 @@ import type {
   WorkflowView,
 } from '../shared/contracts';
 
+export class ApiError extends Error {
+  constructor(
+    readonly status: number,
+    readonly body: unknown,
+  ) {
+    super(`API_ERROR: ${status}`);
+    this.name = 'ApiError';
+  }
+}
+
 async function json<T>(input: RequestInfo | URL, init?: RequestInit): Promise<T> {
   const response = await fetch(input, init);
-  if (!response.ok) throw new Error(await response.text());
+  if (!response.ok) {
+    const text = await response.text();
+    let body: unknown = text;
+    try {
+      body = JSON.parse(text);
+    } catch {
+      // Preserve non-JSON server errors as text.
+    }
+    throw new ApiError(response.status, body);
+  }
   return response.json() as Promise<T>;
 }
 

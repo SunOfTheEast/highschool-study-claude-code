@@ -3,6 +3,7 @@ import { extname, relative } from 'node:path';
 import { parse } from 'yaml';
 import { resolveInsideRoot } from './learning-set';
 import { readMarkdownFile } from './markdown';
+import { readLessonAliases } from './lesson-aliases';
 import {
   resolveTraceMethods,
   type TraceMethodInput,
@@ -194,19 +195,6 @@ function encodeNote(note: string): string {
     .replaceAll('\u2029', '\\u2029');
 }
 
-function aliases(source: string): Map<string, string> {
-  const result = new Map<string, string>();
-  const lines = source.split(/\r?\n/);
-  const aliasesIndex = lines.findIndex((line) => /^## Aliases[ \t]*$/.test(line));
-  if (aliasesIndex < 0) return result;
-  for (const line of lines.slice(aliasesIndex + 1)) {
-    if (/^## /.test(line)) break;
-    const match = /^\s*[-*]\s*([^:]+):\s*(\S.*?)\s*$/.exec(line);
-    if (match?.[1] && match[2]) result.set(match[1].trim(), match[2].trim());
-  }
-  return result;
-}
-
 function renderTrace(record: TraceRecord): string {
   const lines = [
     '',
@@ -287,7 +275,7 @@ export function appendTrace(
   if (input.cardAlias === null) {
     if (input.cardStepId !== null) traceError('Card step requires a card alias');
   } else {
-    const target = aliases(source).get(input.cardAlias);
+    const target = readLessonAliases(source).get(input.cardAlias);
     if (target === undefined) traceError('Card alias is not defined by the Lesson');
     const card = sourceResolve(root, { fromPath: lessonPath, target });
     if (!card.valid || card.path === null || !isProblemCard(root, card.path)) {

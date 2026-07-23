@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { createRequestHandler } from '../../src/server/app';
 import { EventHub } from '../../src/server/event-hub';
 import type { AbilityProjection } from '../../src/shared/contracts';
+import { PreparedLessonValidationError } from '../../src/study/validate-prepared-lesson';
 import type { WorkflowSnapshot } from '../../src/workflows/contracts';
 
 const learningSet = { title: 'Demo', overview: 'Overview', goal: 'Goal', plans: [] };
@@ -301,6 +302,41 @@ test('publishes the active snapshot before starting the hidden Tutor turn', asyn
     'snapshot',
     'run:idle',
   ]);
+});
+
+test('returns actionable prepared Lesson issues without starting Tutor', async () => {
+  let subscribed = false;
+  const issue = {
+    code: 'LESSON_ALIAS_MISSING' as const,
+    message: 'Block Uses 引用了未声明的 alias：Q-MISSING',
+  };
+  const handler = createRequestHandler({
+    root: '/tmp/demo',
+    authoring: false,
+    hub: new EventHub(),
+    registry: {
+      startLesson: async () => {
+        throw new PreparedLessonValidationError([issue]);
+      },
+      snapshot: () => workspace,
+      subscribe: () => {
+        subscribed = true;
+        return () => {};
+      },
+      subscribeWorkflows: () => () => {},
+    } as never,
+  });
+
+  const response = await handler(new Request('http://local/api/lessons/lesson-003/start', {
+    method: 'POST',
+  }));
+
+  expect(response!.status).toBe(422);
+  expect(await response!.json()).toEqual({
+    error: 'PREPARED_LESSON_INVALID',
+    issues: [issue],
+  });
+  expect(subscribed).toBe(false);
 });
 
 test('uploads classroom images and attaches them to a Session message', async () => {

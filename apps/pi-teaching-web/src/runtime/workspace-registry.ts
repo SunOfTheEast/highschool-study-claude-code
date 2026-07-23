@@ -6,6 +6,7 @@ import {
 } from '../projection/message-policy';
 import type { WorkflowSnapshot } from '../workflows/contracts';
 import { readLearningSet, readPlanWorkspace } from '../study/read-workspace';
+import { validatePreparedLesson } from '../study/validate-prepared-lesson';
 import { setFrontmatterField } from '../study/write-workspace';
 import { resolvePersona } from '../study/persona';
 import type { StudySession, StudySessionFactory } from './session-factory';
@@ -74,7 +75,10 @@ export class WorkspaceRegistry {
     const workspace = this.workspaceForLesson(lessonId);
     const lesson = workspace.lessons.find((item) => item.id === lessonId);
     if (!lesson) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
-    if (lesson.status === 'prepared' || lesson.status === 'paused') {
+    if (lesson.status === 'prepared') {
+      validatePreparedLesson(this.root, lesson.path);
+      setFrontmatterField(this.root, lesson.path, 'status', 'active');
+    } else if (lesson.status === 'paused') {
       setFrontmatterField(this.root, lesson.path, 'status', 'active');
     }
     return this.openTutor(lessonId);

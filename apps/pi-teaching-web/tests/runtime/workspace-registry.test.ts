@@ -41,6 +41,12 @@ function moveLessonToNestedPath(root: string): void {
   );
 }
 
+function editLesson(root: string, edit: (source: string) => string): string {
+  const path = join(root, 'lessons/lesson-003.md');
+  writeFileSync(path, edit(readFileSync(path, 'utf8')));
+  return path;
+}
+
 function idleWorkflowMethods() {
   return {
     triggerLessonStart: async () => {},
@@ -311,4 +317,94 @@ test('keeps deep mode scoped and refuses to open a prepared Tutor', async () => 
   await registry.setDeepMode('coach:domain-integrity', false);
   expect(await registry.deepMode('coach:domain-integrity')).toBe(false);
   expect(await registry.deepMode('tutor:lesson-003')).toBe(true);
+});
+
+test.each([
+  [
+    'a required top-level section is missing',
+    (source: string) => source.replace('## Aliases', '## Alias Draft'),
+    'LESSON_SECTION_MISSING',
+  ],
+  [
+    'a used alias is undeclared',
+    (source: string) => source.replace(
+      '- Uses: Q-DOMAIN-EX22',
+      '- Uses: Q-NOT-DECLARED',
+    ),
+    'LESSON_ALIAS_MISSING',
+  ],
+  [
+    'a used alias does not resolve to a problem card',
+    (source: string) => source.replace(
+      '- Q-DOMAIN-EX22: ../cards/derivative/mst_p0032_ex22.card.yaml',
+      '- Q-DOMAIN-EX22: ../cards/derivative/does-not-exist.card.yaml',
+    ),
+    'LESSON_ALIAS_INVALID',
+  ],
+  [
+    'the reflection block has the wrong explicit Kind',
+    (source: string) => source.replace(
+      '## Block reflection（必做）\n\n### Node State\n\n- Kind: reflection',
+      '## Block reflection（必做）\n\n### Node State\n\n- Kind: dialogue',
+    ),
+    'LESSON_REFLECTION_COUNT',
+  ],
+] as const)('keeps a prepared Lesson unchanged when %s', async (_name, edit, code) => {
+  const root = fixture();
+  const path = editLesson(root, edit);
+  const before = readFileSync(path, 'utf8');
+  let factoryCalls = 0;
+  const factory: StudySessionFactory = async ({ role, ownerId }) => {
+    factoryCalls += 1;
+    return {
+      sessionId: `${role}-${ownerId}`,
+      sessionFile: `/tmp/${role}-${ownerId}.jsonl`,
+      messages: [],
+      isStreaming: false,
+      personaId: () => null,
+      setPersona: async () => {},
+      ...idleWorkflowMethods(),
+      prompt: async () => {},
+      abort: async () => {},
+      subscribe: () => () => {},
+      dispose: () => {},
+    };
+  };
+  const registry = new WorkspaceRegistry(root, factory, async () => null);
+
+  await expect(registry.startLesson('lesson-003')).rejects.toThrow(code);
+
+  expect(factoryCalls).toBe(0);
+  expect(readFileSync(path, 'utf8')).toBe(before);
+  expect(registry.snapshot('domain-integrity').lessons[2]?.status).toBe('prepared');
+});
+
+test('does not repeat prepared admission when resuming a paused Lesson', async () => {
+  const root = fixture();
+  editLesson(root, (source) => source
+    .replace('status: prepared', 'status: paused')
+    .replace('## Aliases', '## Alias Draft'));
+  let factoryCalls = 0;
+  const factory: StudySessionFactory = async ({ role, ownerId }) => {
+    factoryCalls += 1;
+    return {
+      sessionId: `${role}-${ownerId}`,
+      sessionFile: `/tmp/${role}-${ownerId}.jsonl`,
+      messages: [],
+      isStreaming: false,
+      personaId: () => null,
+      setPersona: async () => {},
+      ...idleWorkflowMethods(),
+      prompt: async () => {},
+      abort: async () => {},
+      subscribe: () => () => {},
+      dispose: () => {},
+    };
+  };
+  const registry = new WorkspaceRegistry(root, factory, async () => null);
+
+  await registry.startLesson('lesson-003');
+
+  expect(factoryCalls).toBe(1);
+  expect(registry.snapshot('domain-integrity').lessons[2]?.status).toBe('active');
 });

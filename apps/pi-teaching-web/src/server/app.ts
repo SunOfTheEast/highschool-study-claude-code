@@ -13,6 +13,7 @@ import { readAbilityProjection, readEvidence } from '../study/ability';
 import { readLearningSet } from '../study/read-workspace';
 import { buildReplay } from '../study/replay';
 import { readStudentNotebook } from '../study/student-notebook';
+import { PreparedLessonValidationError } from '../study/validate-prepared-lesson';
 import type { EventHub } from './event-hub';
 
 export type AppDependencies = {
@@ -274,7 +275,14 @@ export function createRequestHandler(deps?: AppDependencies) {
       const lessonId = decodeURIComponent(lessonAction[1]!);
       const startsLesson = lessonAction[2] === 'start';
       if (startsLesson) {
-        await deps.registry.startLesson(lessonId);
+        try {
+          await deps.registry.startLesson(lessonId);
+        } catch (error) {
+          if (error instanceof PreparedLessonValidationError) {
+            return json({ error: error.code, issues: error.issues }, 422);
+          }
+          throw error;
+        }
         bind(`tutor:${lessonId}`);
       }
       if (lessonAction[2] === 'pause') await deps.registry.pauseLesson(lessonId);
