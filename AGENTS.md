@@ -109,9 +109,11 @@ old record.
 - Student View never reveals Teacher Control, card answers, rubric text,
   unrevealed hints, private evidence matrices, or stored alternative
   solutions.
-- Deep workflow is optional and Session-scoped. Use it only when at least two
-  independent views can change the next teaching action. Parent Agents remain
-  the only writers of learning facts.
+- Deep workflow is optional and Session-scoped. One read-only Evidence Scout
+  may isolate a Plan-scale or cross-card retrieval question from the parent
+  context. Multiple workflow tasks require genuinely independent questions
+  that can change the next teaching action. Parent Agents remain the only
+  writers of learning facts.
 - Child raw JSON and artifacts stay private to the parent runtime. The UI may
   project goal, dependencies, progress, budgets, and source counts, not child
   conclusions.
@@ -137,7 +139,9 @@ old record.
 - Do not add compatibility layers, rule engines, new persistent fields, extra
   Agents, or defensive infrastructure without an explicit requirement.
 - When changing a teaching rule shared by both runtimes, update the Pi Skill
-  and public plugin Skill together, then update their contract tests.
+  and public plugin Skill together. Do not test Skill or Agent prose, exact
+  phrases, headings, or word lists; test only executable schemas, tools,
+  permissions, persistence, projections, and runtime behavior.
 - When changing a persistent schema or tool contract, first inspect the
   relevant schema design and every reader, writer, projection, fixture, and
   source link.

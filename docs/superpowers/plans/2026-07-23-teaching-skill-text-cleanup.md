@@ -38,8 +38,14 @@
 - `apps/pi-teaching-web/resources/subagents/tools/study-readonly-tools.ts`
 - `plugins/highschool-study/skills/run-lesson/references/evidence-protocol.md`
 
+## Files Deleted
+
+- `apps/pi-teaching-web/tests/runtime/deep-workflow-skill.test.ts`
+
 ## Files Modified
 
+- `AGENTS.md`
+- `docs/zh-CN/完整说明书.md`
 - `docs/superpowers/specs/2026-07-23-subagent-evidence-recall-design.md`
 - `apps/pi-teaching-web/src/runtime/study-tools.ts`
 - `apps/pi-teaching-web/src/workflows/contracts.ts`
@@ -428,6 +434,7 @@ git commit -m "refactor: simplify study routing and memory guidance"
 - Modify: `plugins/highschool-study/tests/contract/agent-and-skills.test.ts`
 - Modify: `apps/pi-teaching-web/tests/runtime/session-factory.test.ts`
 - Modify: `apps/pi-teaching-web/tests/runtime/subagent-path.test.ts`
+- Delete: `apps/pi-teaching-web/tests/runtime/deep-workflow-skill.test.ts`
 
 - [ ] **Step 1: Remove Skill and Agent body assertions**
 
@@ -483,9 +490,27 @@ git commit -m "test: stop locking teaching prose"
 
 ### Task 7: Final editorial verification
 
-**Files:** all Markdown files changed in Tasks 2–5.
+**Files:**
+- Modify: `AGENTS.md`
+- Modify: `docs/zh-CN/完整说明书.md`
+- Review: all Markdown files changed in Tasks 2–5.
 
-- [ ] **Step 1: Search for known stale instructions**
+- [ ] **Step 1: Update current repository guidance**
+
+In `AGENTS.md`:
+
+- permit one read-only Evidence Scout for Plan-scale context isolation without requiring two analytical views;
+- retain the two-independent-view requirement for genuinely multi-view workflows;
+- require paired Pi/plugin teaching-rule edits, but explicitly prohibit prose contract tests and require tests only for executable behavior.
+
+In `docs/zh-CN/完整说明书.md`:
+
+- document isolated Plan-scale Evidence Scout recall and compact `card_index` handoff;
+- keep whole-card `question=整题` normalization as Pi tool behavior, while keeping that parameter tutorial out of Tutor Skills;
+- replace rigid “correct then say only correct and stop” wording with “confirm correctness, follow student intent, and do not automatically dump the reference solution”;
+- describe Plan memory consolidation as summary-first with source drill-down instead of unconditional full-record loading.
+
+- [ ] **Step 2: Search for known stale instructions**
 
 Run:
 
@@ -499,7 +524,7 @@ rg -n \
 
 Expected: no match, except a statement in an intentionally retained historical design document outside these directories.
 
-- [ ] **Step 2: Check impossible plugin tools**
+- [ ] **Step 3: Check impossible plugin tools**
 
 Run:
 
@@ -509,7 +534,7 @@ rg -n 'card_alternative_append|alternative writer' plugins/highschool-study
 
 Expected: no Skill or Agent instruction claims the Claude plugin can call such a tool.
 
-- [ ] **Step 3: Measure, do not enforce, text reduction**
+- [ ] **Step 4: Measure, do not enforce, text reduction**
 
 Run:
 
@@ -523,7 +548,7 @@ wc -w \
 
 Review target: Tutor and `run-lesson` are roughly half their previous size; Coach and Deep Workflow contain no copied tool schema or evidence matrix. These are editorial observations, not test thresholds.
 
-- [ ] **Step 4: Read every changed Markdown file completely**
+- [ ] **Step 5: Read every changed Markdown file completely**
 
 Check:
 
@@ -535,7 +560,7 @@ Check:
 - no fixed student sentence or word blacklist remains;
 - student control, source truth, active Trace and confirmed-memory boundaries remain explicit.
 
-- [ ] **Step 5: Validate packaging**
+- [ ] **Step 6: Validate packaging**
 
 Run:
 
@@ -549,10 +574,11 @@ bun run build
 
 Expected: Claude plugin validation and Pi frontend build succeed.
 
-- [ ] **Step 6: Commit any final editorial corrections**
+- [ ] **Step 7: Commit any final editorial corrections**
 
 ```bash
-git add apps/pi-teaching-web/resources plugins/highschool-study
+git add AGENTS.md docs/zh-CN/完整说明书.md \
+  apps/pi-teaching-web/resources plugins/highschool-study
 git commit -m "docs: finish teaching skill cleanup"
 ```
 
