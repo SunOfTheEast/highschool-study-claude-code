@@ -136,10 +136,13 @@ test('keeps runtime authority out of Tutor tool schemas', () => {
     'Tutor-generated completions never count as student evidence',
   );
   expect(traceProperties.support?.description).toContain(
-    'any Tutor hint already given during this active card-and-Block attempt requires `tutor`',
+    'actual dependence on help used in this completed attempt',
   );
   expect(traceProperties.support?.description).toContain(
-    'A later independent-looking completion does not reset support to `none`',
+    'not whether a hint merely appeared in the Session',
+  );
+  expect(traceProperties.support?.description).not.toContain(
+    'any Tutor hint already given',
   );
   expect(traceProperties.supersedes?.description).toContain(
     'required when this is a later revision of the same card-and-Block attempt',

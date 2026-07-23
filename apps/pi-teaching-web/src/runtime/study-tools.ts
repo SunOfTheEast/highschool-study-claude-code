@@ -89,7 +89,7 @@ export function createStudyTools(
           Type.Literal('tutor'),
           Type.Literal('external'),
         ], {
-          description: 'Use the strongest support already present in this active card-and-Block attempt: any Tutor hint already given during this active card-and-Block attempt requires `tutor`. A later independent-looking completion does not reset support to `none`.',
+          description: 'Record actual dependence on help used in this completed attempt, not whether a hint merely appeared in the Session. Resolve ambiguous directional influence with the student before this tool call.',
         }),
         note: Type.String(),
         supersedes: Type.Optional(Type.String({

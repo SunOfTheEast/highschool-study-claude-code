@@ -186,9 +186,21 @@ test('defines the Tutor correction, hint ladder and tool-turn protocol literally
     expect(source).toContain(
       'When a later student turn completes or corrects the same card-and-Block attempt, the new Trace MUST set `supersedes` to the exact active incomplete or partially_correct event',
     );
-    expect(source).toContain('Before every `trace_append`, run this provenance check');
-    expect(source).toContain(
-      'If the Tutor has sent any numbered hint since that active attempt began, `support` MUST be `tutor`; this remains true until the card or Block changes',
+  }
+  expect(tutorSkill).toContain('Treat `support` as actual dependence, not hint exposure');
+  expect(tutorSkill).toContain(
+    'If the final solution uses decisive content first supplied by the Tutor, write `support: tutor`',
+  );
+  expect(tutorSkill).toContain(
+    'If the Tutor only repeats, locates or confirms content the student already produced, and the decisive content is student-produced, write `support: none`',
+  );
+  expect(tutorSkill).toContain('刚才的提示是否对你最终使用的关键步骤起了作用？');
+  expect(tutorSkill).toContain(
+    'Do not append the final correct Trace until the student answers this attribution question',
+  );
+  for (const source of [tutorAgent, tutorSkill]) {
+    expect(source).not.toContain(
+      'If the Tutor has sent any numbered hint since that active attempt began, `support` MUST be `tutor`',
     );
   }
   expect(tutorSkill).toContain(
