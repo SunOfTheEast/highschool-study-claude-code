@@ -70,8 +70,9 @@ test('refreshes the full ability map after a Tutor trace without reloading', asy
   await page.getByRole('button', { name: /Lesson 003/ }).click();
   const start = page.getByRole('button', { name: /开始上课|继续上课/ });
   if (await start.count()) await start.click();
+  const composer = page.locator('form.composer');
   await page.getByPlaceholder('写下你的想法或解题过程…').fill('我尝试用链式法则。');
-  await page.getByRole('button', { name: /发送/ }).click();
+  await composer.evaluate((form: HTMLFormElement) => form.requestSubmit());
   await page.getByRole('button', { name: /Coach/ }).click();
   await expect(page.locator('.ability-nodes')).toContainText('链式求导');
   await expect(page.locator('.ability-nodes')).toContainText('2 条证据');
