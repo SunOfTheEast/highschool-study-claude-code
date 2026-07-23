@@ -55,7 +55,8 @@ Lesson, active Trace, and source-linked summaries.
 
 Pi write authority is Session-bound:
 
-- Coach owns the current Plan and may use `plan_register` and `plan_update`;
+- Coach owns the current Plan and may use `lesson_prepare`, `plan_register`, and
+  `plan_update`;
 - Tutor owns the current Lesson and may use `trace_append`,
   `classroom_update`, `lesson_close`, and `card_alternative_append`;
 - model-generated arguments must not select or override `ownerPath`,
@@ -83,6 +84,11 @@ than Tutor search, guessing, substitution, or repeated calls.
 A prepared Lesson may be revised in place. Once it is active, paused, closed,
 or abandoned, re-preparation creates a replacement Lesson and preserves the
 old record.
+
+Normal Pi preparation uses the transient `lesson_prepare` Blueprint contract.
+The runtime binds the Plan, paths, initial statuses, relative aliases, and Plan
+Lesson Index; the compiled Lesson Markdown remains the only durable source.
+Do not add a persistent Blueprint file or a fifth public MCP tool.
 
 ## Teaching and evidence invariants
 

@@ -112,7 +112,7 @@ pi
 
 ## Session、证据与重新备课
 
-- Coach Session 的 owner 是当前 Plan；最终 `active / complete / replan` 决定通过 `plan_update` 一次写回，再重读 Plan 后回复。
+- Coach Session 的 owner 是当前 Plan；正常备课通过 `lesson_prepare` 提交一次性结构化课堂骨架，由运行时绑定路径、状态和 Lesson Index 并编译成 Markdown；最终 `active / complete / replan` 决定通过 `plan_update` 一次写回，再重读 Plan 后回复。
 - Tutor Session 的 owner 是当前 Lesson；模型不填写 `lessonPath`、`cardStepId` 或 Session ID。
 - Tutor 在评价前只冻结学生已经亲自给出的数学内容。缺决定性证明时写 `incomplete`，不能把 Tutor 的补全冒充成学生证据。
 - `support` 记录最终答案实际采用的帮助。提示出现但未提供/未被采用决定性内容时仍可为 `none`；采用 Tutor 首次给出的关键内容时为 `tutor`。
@@ -120,7 +120,7 @@ pi
 - 只有某一整题或一问的完整核心路线真正不同才落盘另解；写入顺序是 active correct Trace → `card_alternative_append` → 学生回复。
 - 学生异议成立或后续补全同一 attempt 时，新的 Trace 必须 supersede 准确的 active event。
 
-仍为 `prepared` 的 Lesson 可以由 Coach 保持 ID 原地改写。Tutor 已启动后再要求重新备课，旧 Lesson 保留并标为 `abandoned`，Coach 使用新 ID 创建替代 Lesson。
+`LessonBlueprint` 只存在于普通工具调用记录中，不是第二份学习状态；`lesson-xxx.md` 仍是 Tutor、Trace 和前端共同读取的唯一课堂事实。仍为 `prepared` 的 Lesson 可以由 Coach 保持 ID 原地重新编译。Tutor 已启动后再要求重新备课，旧 Lesson 保留并标为 `abandoned`，Coach 使用新 ID 创建替代 Lesson。
 
 Trace 写入成功后，服务端主动发布完整能力 snapshot；刷新、前进/后退和 Plan/Lesson 深链会从 Markdown 与已绑定 Pi Session 恢复 Coach、Tutor 或 closed Replay。Replay 优先使用真实 Pi 历史；历史不可用时明确显示 evidence-only。
 
@@ -152,7 +152,7 @@ pi
 依次确认：
 
 - 打开 Coach，读取并复盘上一节 Lesson；
-- 让 Coach 按需加载备课 Skill，准备一节至少含两张真实题卡且不剧透的 Lesson；
+- 让 Coach 按需加载备课 Skill，通过一次 `lesson_prepare` 准备一节至少含两张真实题卡且不剧透的 Lesson；
 - 启动 Tutor，确认它拥有独立 Session；
 - 分别提交文字与一张图片；
 - 让 Tutor 追加一条绑定题卡/课堂步骤的 Trace；
