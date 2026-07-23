@@ -126,13 +126,15 @@ Trace 写入成功后，服务端主动发布完整能力 snapshot；刷新、�
 
 ## 深度模式与动态工作流
 
-深度模式按 Coach/Tutor Session 单独开启，默认关闭。开启只是允许父 Agent 在确有两个独立视角、且结论可能改变下一步教学动作时发起会诊；信息足够时，直接回答仍是正常路径。
+深度模式按 Coach/Tutor Session 单独开启，默认关闭。信息足够时，父 Agent 仍直接回答；跨题卡、跨 Lesson 或 Plan 级检索会把大体量证据留在一个临时 Evidence Scout 中，多个任务只用于真正独立、且结论可能改变下一步教学动作的问题。
 
-- `quick` 最多三个无依赖任务，总上限为 12,000 Token 和 45 秒，可以直接运行；
+- `quick` 最多三个无依赖任务，最长 45 秒，可以直接运行；Token 总预算由父 Agent 显式声明，单个 Plan 级 Evidence Scout 约定使用 50,000，因为子任务输入和题卡/Trace 工具结果都计入预算；
 - `deep` 可以包含依赖波，但必须先在任务轨显示目标、并发、Token 与时间上限，由学生确认后才运行；
 - proposed/running 工作流可以取消；已经完成的分支结果会保留，未完成任务不会自动重试；
 - 任务状态保存在父 Pi Session JSONL 的 custom entries，Lesson、Trace、Plan 和画像等正式学习状态仍保存在 Markdown；
-- 子任务原始 JSON 与运行 artifact 只供父 Agent/runtime 检查，Student View 只收到状态、预算、依赖和来源数量；
+- 父 Agent 只向 Evidence Scout 传证据问题和范围，不先批量读取同一范围；子进程的 `card_search` / `trace_search` 只返回题卡路径、标题、目标、方法元数据和 active Trace，不返回题干正文或解析；
+- Quick 的紧凑结果直接回到当前父 Agent 工具调用；确认后的 Deep 通过隐藏的 `studyforge.workflow-result.v1` 消息恢复父 Agent 综合；
+- 子任务原始 JSON 与运行 artifact 只供父 Agent/runtime 检查，Student View 的任务轨只显示状态、预算、依赖、召回题卡数和来源数；
 - 本地 MVP 不宣称账号隔离或操作系统级沙箱。临时 `study-scout` 不具备写入工具，但学习集仍应视为本机可信文件。
 
 服务重启时，先前停在 running 的工作流会恢复为终态：有已完成结果则为 partial，否则为 failed；未完成任务标记为 cancelled。需要继续时由父 Agent 重新提出工作流，不会自动续跑。
@@ -158,7 +160,7 @@ pi
 - 由学生明确确认结束 Lesson；
 - 返回原 Coach Session 做课后复盘。
 
-深度模式另行确认：先运行一次最多三个独立任务的 quick 会诊，再提出一次有依赖的 deep 工作流并由学生确认；启动第二个 deep 工作流后取消，确认任务轨保留已完成分支，而且临时子任务没有改动 learning-set 文件。
+深度模式另行确认：先运行一次单 Evidence Scout 的 quick 证据召回，再提出一次有依赖的 deep 工作流并由学生确认；启动第二个 deep 工作流后取消，确认任务轨保留已完成分支，而且临时子任务没有改动 learning-set 文件。
 
 遇到问题时先运行 `bun run check`；模型调用失败通常需要在 Pi 中用 `/login` 或环境变量配置提供商凭据。
 

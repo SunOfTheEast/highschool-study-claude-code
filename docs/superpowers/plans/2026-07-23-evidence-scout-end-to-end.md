@@ -2,6 +2,8 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans and implement this plan sequentially. Do not dispatch subagents for this runtime wiring task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
+**Status:** Implemented and vertically accepted on 2026-07-23.
+
 **Goal:** Finish the approved isolated evidence-recall design so a Pi Coach or Tutor can run one Plan-scale Evidence Scout without parent prefetch, receive a compact source-linked result, and show the recalled-card count in the existing workflow rail.
 
 **Architecture:** Keep the existing `deep_workflow_propose` tool, Quick Workflow runtime, `study-scout` child Agent and Session JSONL store. Align the executable tool contract with the approved design, require `card_index` only for the exact `Evidence Scout` role, and return Quick results through the current tool result while confirmed Deep results continue through the hidden synthesis message. Do not add another public MCP tool, top-level Agent, learning-set field or persistence layer.
@@ -31,8 +33,24 @@
   - identifies an `Evidence Scout` task, builds its child prompt and requires a compact card index.
 - `apps/pi-teaching-web/src/workflows/tool.ts`
   - exposes the approved single-Scout Quick path through the existing executable tool schema.
+- `apps/pi-teaching-web/src/workflows/validate.ts`
+  - keeps the Quick timeout and task-shape limits without the obsolete 12,000-Token cap.
+- `apps/pi-teaching-web/src/workflows/delegation-client.ts`
+  - delegates a fresh child Session without the obsolete four-turn cap.
+- `apps/pi-teaching-web/src/runtime/session-factory.ts`
+  - makes the workflow tool available for deep-mode activation and binds the Pi extension context.
+- `apps/pi-teaching-web/src/runtime/subagent-path.ts`
+  - materializes the packaged child definition with an absolute child-only extension path.
+- `apps/pi-teaching-web/src/runtime/study-tools.ts`
+  - provides metadata-only card payloads to the child extension while retaining full parent tool behavior.
 - `apps/pi-teaching-web/resources/subagents/study-scout.md`
   - states that evidence retrieval returns `card_index`, including an empty array when no real card qualifies.
+- `apps/pi-teaching-web/resources/subagents/tools/study-readonly-tools.ts`
+  - registers the compact child-only read tools.
+- `apps/pi-teaching-web/resources/agents/coach.md`
+- `apps/pi-teaching-web/resources/skills/coach-study/SKILL.md`
+- `apps/pi-teaching-web/resources/skills/deep-workflow/SKILL.md`
+  - route an explicit or Plan-scale Evidence Scout before parent-side broad prefetch.
 - `apps/pi-teaching-web/src/shared/contracts.ts`
   - adds safe recalled-card count to the browser task DTO.
 - `apps/pi-teaching-web/src/projection/workflow-projector.ts`
@@ -48,6 +66,10 @@
 
 - `apps/pi-teaching-web/tests/workflows/runtime.test.ts`
 - `apps/pi-teaching-web/tests/workflows/tool.test.ts`
+- `apps/pi-teaching-web/tests/workflows/validate.test.ts`
+- `apps/pi-teaching-web/tests/runtime/session-factory.test.ts`
+- `apps/pi-teaching-web/tests/runtime/subagent-path.test.ts`
+- `apps/pi-teaching-web/tests/runtime/study-tools.test.ts`
 - `apps/pi-teaching-web/tests/projection/workflow-projector.test.ts`
 - `apps/pi-teaching-web/tests/client/task-rail.test.tsx`
 
@@ -78,7 +100,7 @@ export function parseTaskResult(
 - The exact role name `Evidence Scout` selects the evidence-recall contract.
 - `sourceHandles: []` is valid; the child discovers authentic cards and Trace inside declared roots.
 
-- [ ] **Step 1: Add failing runtime tests**
+- [x] **Step 1: Add failing runtime tests**
 
 Add tests that submit a one-task Quick graph with:
 
@@ -105,7 +127,7 @@ For the same role, completed JSON without `card_index` must become `INVALID_TASK
 
 Add a parser test whose child JSON contains extra `content`, `solution` and `transcript` properties. Assert the parsed result contains only the approved `card_index`, findings, references, recommendation and risks.
 
-- [ ] **Step 2: Run the runtime tests and observe RED**
+- [x] **Step 2: Run the runtime tests and observe RED**
 
 ```bash
 cd apps/pi-teaching-web
@@ -117,7 +139,7 @@ Expected failures:
 - the Evidence Scout result without `card_index` is currently accepted;
 - the captured prompt does not require an empty-or-populated `card_index`.
 
-- [ ] **Step 3: Implement the minimal role-sensitive contract**
+- [x] **Step 3: Implement the minimal role-sensitive contract**
 
 In `runtime.ts`:
 
@@ -158,7 +180,7 @@ Return card_index even when empty. Copy title, goal and methods from real card m
 
 Ordinary workflow prompts keep `card_index` optional.
 
-- [ ] **Step 4: Add failing executable-tool tests**
+- [x] **Step 4: Add failing executable-tool tests**
 
 In `tool.test.ts`, capture the graph passed to `runtime.propose` and execute a one-task Quick Evidence Scout request with empty `sourceHandles`.
 
@@ -172,7 +194,7 @@ Assert:
 
 Also inspect the registered tool's executable `description` and TypeBox field descriptions. They must allow one Evidence Scout and say not to prefetch broad cards/Trace. They must not retain the old two-view or “gather handles first” rule.
 
-- [ ] **Step 5: Run the tool tests and observe RED**
+- [x] **Step 5: Run the tool tests and observe RED**
 
 ```bash
 bun test tests/workflows/tool.test.ts
@@ -180,7 +202,7 @@ bun test tests/workflows/tool.test.ts
 
 Expected: schema-description assertions fail against the old multi-view/prefetch contract.
 
-- [ ] **Step 6: Align the existing tool schema**
+- [x] **Step 6: Align the existing tool schema**
 
 Keep the tool name `deep_workflow_propose`. Change its label to describe an isolated teaching workflow rather than a multi-view-only consultation.
 
@@ -196,7 +218,7 @@ Add TypeBox descriptions to `role`, `instruction`, `sourceHandles` and `readRoot
 
 Update `study-scout.md` editorially so an evidence task always emits `card_index`, with `[]` for no matching real cards. Do not add a prose test.
 
-- [ ] **Step 7: Verify Task 1**
+- [x] **Step 7: Verify Task 1**
 
 ```bash
 bun test tests/workflows/runtime.test.ts tests/workflows/tool.test.ts
@@ -205,7 +227,7 @@ bun run typecheck
 
 Expected: all targeted tests pass and TypeScript reports no errors.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add apps/pi-teaching-web/src/workflows \
@@ -239,7 +261,7 @@ export type WorkflowTaskView = {
 };
 ```
 
-- [ ] **Step 1: Add failing projection and component tests**
+- [x] **Step 1: Add failing projection and component tests**
 
 Extend the workflow fixture with two `card_index` entries and three `evidence_refs`.
 
@@ -254,7 +276,7 @@ expect(view.tasks[0]).toMatchObject({
 
 Render `TaskRail` and assert it includes `2 张题卡` and `3 个来源`, while still excluding child findings, recommendations, card titles and `runId`.
 
-- [ ] **Step 2: Run the tests and observe RED**
+- [x] **Step 2: Run the tests and observe RED**
 
 ```bash
 cd apps/pi-teaching-web
@@ -263,7 +285,7 @@ bun test tests/projection/workflow-projector.test.ts tests/client/task-rail.test
 
 Expected: `cardCount` is absent and the rendered rail has no recalled-card count.
 
-- [ ] **Step 3: Implement safe projection**
+- [x] **Step 3: Implement safe projection**
 
 Add `cardCount` to `WorkflowTaskView`.
 
@@ -275,7 +297,7 @@ cardCount: task.result?.card_index?.length ?? 0,
 
 In `TaskRail`, render `N 张题卡` only when `cardCount > 0`, followed by the existing source count. Do not render card titles, reasons, findings or recommendations.
 
-- [ ] **Step 4: Verify and commit**
+- [x] **Step 4: Verify and commit**
 
 ```bash
 bun test tests/projection/workflow-projector.test.ts tests/client/task-rail.test.tsx
@@ -303,7 +325,7 @@ git commit -m "feat: show evidence scout card counts"
 - Confirmed Deep: `studyforge.workflow-result.v1` hidden custom message triggers parent synthesis.
 - Both paths keep raw child artifacts outside learning-set Markdown and Student View.
 
-- [ ] **Step 1: Update current documentation**
+- [x] **Step 1: Update current documentation**
 
 In the design:
 
@@ -318,7 +340,7 @@ In the Pi README:
 - document `card_index` and task-rail card count;
 - keep Deep confirmation and cancellation behavior unchanged.
 
-- [ ] **Step 2: Run deterministic browser and package verification**
+- [x] **Step 2: Run deterministic browser and package verification**
 
 ```bash
 cd apps/pi-teaching-web
@@ -334,7 +356,7 @@ Expected:
 - both workflow/browser tests pass;
 - plugin release check and strict validation pass.
 
-- [ ] **Step 3: Prepare an isolated real-model learning set**
+- [x] **Step 3: Prepare an isolated real-model learning set**
 
 ```bash
 SMOKE=$(mktemp -d /tmp/studyforge-evidence-scout-XXXXXX)
@@ -352,7 +374,7 @@ $SMOKE/derivative-demo/learning-set
 
 Use a free localhost port. Open `coach:domain-integrity`, enable deep mode, then capture a second checksum baseline after Session binding but before sending the evidence question.
 
-- [ ] **Step 4: Run one natural single-Scout query**
+- [x] **Step 4: Run one natural single-Scout query**
 
 Send this student request through the normal Coach message API:
 
@@ -373,7 +395,7 @@ Verify from the HTTP workflow projection and parent Session JSONL:
 
 Verify every returned `cardPath` and `traceRef` against the copied learning set.
 
-- [ ] **Step 5: Verify read-only behavior**
+- [x] **Step 5: Verify read-only behavior**
 
 Recompute checksums after the Coach answer. Compare against the post-Session-binding baseline, not the pre-open baseline:
 
@@ -385,7 +407,7 @@ Expected: no learning-set file changed during the Evidence Scout query.
 
 Stop the server and retain only a concise sanitized report under `/tmp`; do not commit credentials, raw transcripts, Pi Session JSONL or the copied learning set.
 
-- [ ] **Step 6: Commit documentation**
+- [x] **Step 6: Commit documentation**
 
 ```bash
 git add apps/pi-teaching-web/README.md \
@@ -406,3 +428,7 @@ git commit -m "docs: mark evidence scout recall implemented"
 - Quick and confirmed-Deep delivery paths are documented truthfully.
 - The derivative real-model smoke proves one child task, resolvable sources, no parent prefetch and no learning-set mutations.
 - Pi checks, browser workflow tests and Claude-plugin release checks pass.
+
+## Implementation Result
+
+The real-model smoke used one Quick `Evidence Scout`, returned four resolvable cards and five sources in 38 seconds, kept full card content and the child transcript out of the parent result, and left learning-set fact files unchanged. Runtime acceptance also required binding Pi extensions, generating an absolute packaged child-extension path, removing the obsolete Quick token and four-turn caps, and using metadata-only card projections inside the child process.

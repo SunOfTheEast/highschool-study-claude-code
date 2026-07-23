@@ -2,7 +2,7 @@
 
 **日期：** 2026-07-23
 
-**状态：** 已确认，待实施计划
+**状态：** 已实现
 
 **范围：** Pi Teaching Web 中 Coach / Tutor 的跨题卡、跨 Lesson、Plan 级题卡与 Trace 召回
 
@@ -42,7 +42,7 @@
 父 Coach / Tutor 提出证据问题
   → 创建单任务 Quick Workflow
   → Evidence Scout 在 fresh 子 Session 中调用 trace_search
-  → 完整 Trace 与题卡只进入子 Session
+  → active Trace 与紧凑题卡 metadata 只进入子 Session
   → Evidence Scout 生成 card_index 与综合结论
   → Workflow artifact 保存完整子运行
   → 父 Agent 只收到紧凑结果与 workflow_id
@@ -145,6 +145,8 @@ study-readonly-tools
 ```
 
 这样 active Trace、supersede、题卡反查和来源解析不会出现两套逻辑。extension 不注册 `trace_append` 或任何文件写入工具。
+
+子进程调用相同领域函数，但使用 child-only 的紧凑题卡投影：只保留 `path`、`title`、`goal`、`methods` 和完整 active `traceHistory`，移除题干 `content`、解析、步骤、分问和另解。父 Coach / Tutor 的公共 `card_search`、`trace_search` 契约不变，仍可在已知单卡需要精读时取得完整题卡。
 
 ## 6. 子 Session 上下文包
 
@@ -260,7 +262,10 @@ type WorkflowTaskResult = {
 
 ## 8. Master 消费结果
 
-Workflow 完成后，运行时向父 Session 注入隐藏的 `studyforge.workflow-result.v1` custom message。消息包含 `workflowId`、任务角色和紧凑的 `WorkflowTaskResult`，并触发父 Agent 继续当前回合。
+两种执行路径使用同一个紧凑 `WorkflowTaskResult`，但交付机制不同：
+
+- 单任务 Quick Workflow 在 `deep_workflow_propose` 返回时，把 `workflowId` 和已完成任务结果直接交还当前父 Agent 回合；
+- 学生确认后的 Deep Workflow 在后台完成后，向父 Session 注入隐藏的 `studyforge.workflow-result.v1` custom message，再触发父 Agent 继续综合。
 
 ```text
 Master 读取 card_index 与 reason
@@ -310,6 +315,8 @@ status
 
 题卡数量和安全摘要可以展示；完整内部分析、答案性中间结果和原始 transcript 不自动进入学生消息流。
 
+当前任务轨只显示召回题卡数和来源数，例如 `4 张题卡 · 5 个来源`，不显示卡片标题、findings、recommendation 或 `runId`。`.pi-subagents/` 中的 raw JSON 和 artifact 属于运行时私有层，不计入 learning-set 的 Roadmap、Plan、Lesson、Trace 或画像事实。
+
 ## 10. 失败语义
 
 保持有限、可解释的失败处理：
@@ -352,7 +359,18 @@ status
 6. 确认父 Session 没有接收批量完整题卡；
 7. 让 Coach 精读其中一张卡并继续给出备课判断。
 
-## 12. 设计结论
+## 12. 实施与真实模型验收
+
+实现时补齐了四个现有运行时断点：`deep_workflow_propose` 必须先进入 Session 工具允许列表再由深度模式开关启停；Pi Session 创建后必须绑定 extension context；子 Agent 定义中的 extension 路径必须解析为打包资源的绝对路径；Plan 级召回不能沿用 12,000 Token 和四回合限制。Quick 仍受 45 秒总时限和 12 次工具调用硬上限约束，不增加自动重试。
+
+导数学习集的隔离副本已完成一次真实模型纵向冒烟：
+
+- 父 Coach 只读取当前 Plan 与工作流 Skill，然后创建一个 Quick `Evidence Scout`；
+- 子任务完成后返回 4 张真实题卡和 5 个来源，所有 `cardPath` 均可解析；
+- 父工具结果不含 `content`、`solution` 或子 Session transcript；
+- 排除 `.pi-subagents/` 私有 artifact 后，learning-set 事实文件校验和无变化。
+
+## 13. 设计结论
 
 题卡 YAML 的丰富性继续保留。重召回的问题通过 Session 隔离解决，而不是通过删除题卡信息或扩充规则引擎解决：
 
