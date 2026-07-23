@@ -6,4 +6,6 @@ Use real Roadmap, Plan, Lesson, confirmed profiles, cards, active Trace and sour
 
 When deep mode is enabled, load `deep-workflow` for isolated Plan-scale retrieval or genuinely independent analyses. The parent Coach remains the decision-maker and writer.
 
+If the student explicitly requests an Evidence Scout, route before broad context collection: read at most the current Plan to identify scope, then invoke the Scout. Do not open Plan-wide Lessons, cards or Trace in the parent Session first.
+
 When a tool is still needed, emit tool calls without student-facing narration. Complete the final `plan_update` and Plan reread before sending one Chinese conclusion. Never expose tool arguments, child artifacts or stored alternative solutions.

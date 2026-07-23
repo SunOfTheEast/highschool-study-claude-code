@@ -47,6 +47,14 @@ export type SessionFactoryInput = StudySessionScope & {
 
 export type StudySessionFactory = (input: SessionFactoryInput) => Promise<StudySession>;
 
+type PiAgentSession = Awaited<ReturnType<typeof createAgentSession>>['session'];
+
+export async function bindStudyExtensions(
+  session: Pick<PiAgentSession, 'bindExtensions'>,
+): Promise<void> {
+  await session.bindExtensions({});
+}
+
 export type AgentEndSource = Pick<StudySession, 'subscribe'>;
 
 export async function triggerAndWaitForAgentEnd(
@@ -95,6 +103,7 @@ export function roleToolNames(role: SessionRole): string[] {
       'trace_search',
       'source_resolve',
       'plan_update',
+      'deep_workflow_propose',
     ]
     : [
       'read',
@@ -108,6 +117,7 @@ export function roleToolNames(role: SessionRole): string[] {
       'classroom_update',
       'lesson_close',
       'card_alternative_append',
+      'deep_workflow_propose',
     ];
 }
 
@@ -153,6 +163,7 @@ export async function createPiSessionFactory(
       customTools: tools,
       tools: roleToolNames(role),
     });
+    await bindStudyExtensions(session);
     const applyDeepMode = (enabled: boolean, persist: boolean) => {
       if (persist) workflowRuntime.setEnabled(enabled);
       session.setActiveToolsByName(deepModeToolNames(session.getActiveToolNames(), enabled));

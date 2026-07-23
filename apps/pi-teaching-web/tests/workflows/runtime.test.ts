@@ -123,6 +123,29 @@ test('parses and preserves a compact evidence card index', () => {
   }]);
 });
 
+test('parses one fenced compact result even when the child adds outer narration', () => {
+  const result = parseTaskResult([
+    'Evidence collected.',
+    '```json',
+    JSON.stringify({
+      card_index: [],
+      findings: ['证据不足。'],
+      evidence_refs: ['lessons/l.md#trace-event-1'],
+      recommended_action: '继续验证。',
+      risks: [],
+    }),
+    '```',
+  ].join('\n'), { requireCardIndex: true });
+
+  expect(result).toEqual({
+    card_index: [],
+    findings: ['证据不足。'],
+    evidence_refs: ['lessons/l.md#trace-event-1'],
+    recommended_action: '继续验证。',
+    risks: [],
+  });
+});
+
 test('rejects a malformed evidence card index entry', () => {
   expect(() => parseTaskResult(JSON.stringify({
     card_index: [{
@@ -169,9 +192,10 @@ test('tells an Evidence Scout to discover sources and return a compact card inde
   let childPrompt = '';
   const subject = runtime(async (
     _bus: unknown,
-    input: { requestId: string; task: string },
+    input: { requestId: string; task: string; turnBudget?: unknown },
   ) => {
     childPrompt = input.task;
+    expect(input.turnBudget).toBeUndefined();
     return completed(input.requestId, JSON.stringify({
       card_index: [],
       findings: [],
@@ -188,6 +212,9 @@ test('tells an Evidence Scout to discover sources and return a compact card inde
   expect(childPrompt).toContain('["plans","lessons","cards","graph"]');
   expect(childPrompt).toContain('Discover authentic cards and active Trace');
   expect(childPrompt).toContain('Return card_index even when no real card qualifies');
+  expect(childPrompt).toContain('Start with one trace_search');
+  expect(childPrompt).toContain('"card_index":[{"cardPath"');
+  expect(childPrompt).toContain('evidence_refs contains source-handle strings only');
   expect(childPrompt).not.toContain('cards/a.yaml');
 });
 

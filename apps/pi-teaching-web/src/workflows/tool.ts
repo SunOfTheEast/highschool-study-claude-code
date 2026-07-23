@@ -37,8 +37,14 @@ export function createDeepWorkflowTool(
       goal: Type.String(),
       mode: Type.Union([Type.Literal('quick'), Type.Literal('deep')]),
       maxConcurrency: Type.Integer({ minimum: 1, maximum: 3 }),
-      tokenLimit: Type.Integer({ minimum: 1 }),
-      timeoutMs: Type.Integer({ minimum: 1 }),
+      tokenLimit: Type.Integer({
+        minimum: 1,
+        description: 'Total child budget, including card and Trace tool results. Use 50,000 for one Plan-scale Evidence Scout.',
+      }),
+      timeoutMs: Type.Integer({
+        minimum: 1,
+        description: 'Quick mode must use at most 45,000 ms. Deep mode may use a longer timeout.',
+      }),
       tasks: Type.Array(task),
     }),
     execute: async (_toolCallId, input, signal) => {

@@ -78,7 +78,7 @@ export function parseTaskResult(
 ): WorkflowTaskResult {
   if (!output) throw new Error('INVALID_TASK_RESULT');
   const trimmed = output.trim();
-  const fenced = /^```json\s*\n([\s\S]*?)\n```$/.exec(trimmed);
+  const fenced = /```json\s*\r?\n([\s\S]*?)\r?\n```/i.exec(trimmed);
   let value: unknown;
   try {
     value = JSON.parse(fenced?.[1] ?? trimmed);
@@ -251,10 +251,13 @@ export class DeepWorkflowRuntime {
     const evidenceInstructions = isEvidenceScout(task)
       ? [
         'Discover authentic cards and active Trace inside the declared roots; the parent intentionally did not prefetch the broad result.',
+        'For a Plan-scale task, Start with one trace_search scoped to the Plan; use its active Trace and cardsByPath before opening individual files.',
         'Return card_index even when no real card qualifies. Copy title, goal and methods from real card metadata and use real Trace source anchors.',
+        'Return exactly one unfenced JSON object with no extra fields: {"card_index":[{"cardPath":"...","title":null,"goal":null,"methods":{"primary":null,"secondary":[]},"reason":"...","traceRefs":["..."]}],"findings":["..."],"evidence_refs":["..."],"recommended_action":"...","risks":["..."]}. title, goal and methods.primary may be strings or null; evidence_refs contains source-handle strings only.',
       ]
       : [
         'For an ordinary analysis task, omit card_index unless cards directly participate in the result.',
+        'Return only one JSON object with string-array fields findings, evidence_refs, risks and string field recommended_action. Do not include thinking or a transcript.',
       ];
     return [
       `Dynamic role: ${task.role}`,
@@ -265,7 +268,6 @@ export class DeepWorkflowRuntime {
       `Direct dependency results: ${JSON.stringify(dependencies)}`,
       'Read only the declared roots and use only authentic source handles. If evidence is insufficient, return empty findings instead of inventing facts.',
       ...evidenceInstructions,
-      'Return only one JSON object with string-array fields findings, evidence_refs, risks and string field recommended_action. Do not include thinking or a transcript.',
     ].join('\n');
   }
 
@@ -341,7 +343,6 @@ export class DeepWorkflowRuntime {
               cwd: this.root,
               task: this.promptFor(snapshot, task),
               timeoutMs: remainingMs,
-              turnBudget: { maxTurns: 4 },
               toolBudget: { hard: 12 },
             }, controller.signal, (update) => {
               if (task.status !== 'running') return;

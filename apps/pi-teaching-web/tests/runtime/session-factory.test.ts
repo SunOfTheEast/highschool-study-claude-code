@@ -4,10 +4,22 @@ import type { AgentSessionEvent } from '@earendil-works/pi-coding-agent';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import {
+  bindStudyExtensions,
   deepModeToolNames,
   roleToolNames,
   triggerAndWaitForAgentEnd,
 } from '../../src/runtime/session-factory';
+
+test('binds the headless extension context before delegated workflows run', async () => {
+  let bindings: unknown = null;
+  await bindStudyExtensions({
+    bindExtensions: async (value) => {
+      bindings = value;
+    },
+  });
+
+  expect(bindings).toEqual({});
+});
 
 test('keeps the Pi coding-agent and agent-core constructor contract aligned', () => {
   const LegacyAgent = Agent as unknown as new (options: {
@@ -38,6 +50,7 @@ test('keeps Coach and Tutor tool boundaries distinct', () => {
     'trace_search',
     'source_resolve',
     'plan_update',
+    'deep_workflow_propose',
   ]);
   expect(roleToolNames('tutor')).toEqual([
     'read',
@@ -51,10 +64,11 @@ test('keeps Coach and Tutor tool boundaries distinct', () => {
     'classroom_update',
     'lesson_close',
     'card_alternative_append',
+    'deep_workflow_propose',
   ]);
   for (const role of ['coach', 'tutor'] as const) {
     expect(roleToolNames(role)).not.toContain('subagent');
-    expect(roleToolNames(role)).not.toContain('deep_workflow_propose');
+    expect(deepModeToolNames(roleToolNames(role), false)).not.toContain('deep_workflow_propose');
   }
 });
 

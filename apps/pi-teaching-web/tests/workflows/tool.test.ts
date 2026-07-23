@@ -109,6 +109,8 @@ test('describes one-Scout recall without a parent prefetch gate', () => {
   const tool = createDeepWorkflowTool({ propose: async () => ({}) } as never);
   const parameters = tool.parameters as {
     properties: {
+      tokenLimit: { description?: string };
+      timeoutMs: { description?: string };
       tasks: {
         items: {
           properties: {
@@ -133,5 +135,9 @@ test('describes one-Scout recall without a parent prefetch gate', () => {
   expect(taskFields.sourceHandles.description).toContain('empty');
   expect(taskFields.sourceHandles.description).toContain('do not prefetch');
   expect(taskFields.readRoots.description).toContain('learning-set');
+  expect(parameters.properties.tokenLimit.description).toContain('card and Trace tool results');
+  expect(parameters.properties.tokenLimit.description).toContain('50,000');
+  expect(parameters.properties.tokenLimit.description).not.toContain('12,000');
+  expect(parameters.properties.timeoutMs.description).toContain('45,000');
   expect(schemaText).not.toContain('two independent views');
 });

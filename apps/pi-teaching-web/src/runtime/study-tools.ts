@@ -18,7 +18,26 @@ function result(kind: string, value: object) {
 
 export type StudyToolContext = StudySessionScope;
 
-export function createReadOnlyStudyTools(root: string): ToolDefinition[] {
+export type ReadOnlyStudyToolOptions = {
+  compactCardPayloads?: boolean;
+};
+
+type SearchCard = ReturnType<typeof searchCards>['cards'][number];
+
+function compactCard(card: SearchCard) {
+  return {
+    path: card.path,
+    title: card.title,
+    goal: card.goal,
+    methods: card.methods,
+    traceHistory: card.traceHistory,
+  };
+}
+
+export function createReadOnlyStudyTools(
+  root: string,
+  options: ReadOnlyStudyToolOptions = {},
+): ToolDefinition[] {
   return [
     defineTool({
       name: 'card_search',
@@ -28,7 +47,12 @@ export function createReadOnlyStudyTools(root: string): ToolDefinition[] {
         query: Type.String(),
         limit: Type.Integer({ minimum: 1, maximum: 20 }),
       }),
-      execute: async (_id, input) => result('card-search', searchCards(root, input)),
+      execute: async (_id, input) => {
+        const value = searchCards(root, input);
+        return result('card-search', options.compactCardPayloads
+          ? { cards: value.cards.map(compactCard) }
+          : value);
+      },
     }),
     defineTool({
       name: 'trace_search',
@@ -41,13 +65,26 @@ export function createReadOnlyStudyTools(root: string): ToolDefinition[] {
         cardPath: Type.Optional(Type.String()),
         limit: Type.Integer({ minimum: 1, maximum: 100 }),
       }),
-      execute: async (_id, input) => result('trace-search', searchTraces(root, {
-        query: input.query ?? null,
-        planId: input.planId ?? null,
-        lessonId: input.lessonId ?? null,
-        cardPath: input.cardPath ?? null,
-        limit: input.limit,
-      })),
+      execute: async (_id, input) => {
+        const value = searchTraces(root, {
+          query: input.query ?? null,
+          planId: input.planId ?? null,
+          lessonId: input.lessonId ?? null,
+          cardPath: input.cardPath ?? null,
+          limit: input.limit,
+        });
+        return result('trace-search', options.compactCardPayloads
+          ? {
+              traces: value.traces,
+              cardsByPath: Object.fromEntries(
+                Object.entries(value.cardsByPath).map(([path, card]) => [
+                  path,
+                  compactCard(card),
+                ]),
+              ),
+            }
+          : value);
+      },
     }),
     defineTool({
       name: 'source_resolve',

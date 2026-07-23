@@ -13,7 +13,7 @@ export type StudyDelegationInput = {
   cwd: string;
   task: string;
   timeoutMs: number;
-  turnBudget: { maxTurns: number; graceTurns?: number };
+  turnBudget?: { maxTurns: number; graceTurns?: number };
   toolBudget: { hard: number; soft?: number };
 };
 
