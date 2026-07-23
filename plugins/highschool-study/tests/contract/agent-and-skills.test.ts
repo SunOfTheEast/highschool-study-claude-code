@@ -369,9 +369,19 @@ test('defines Tutor corrections, hint levels and tool turns literally', () => {
   expect(run).toContain(
     'When a later student turn completes or corrects the same card-and-Block attempt, the new Trace MUST set `supersedes` to the exact active incomplete or partially_correct event',
   );
-  expect(run).toContain('Before every `trace_append`, run this provenance check');
+  expect(run).toContain('Treat `support` as actual dependence, not hint exposure');
   expect(run).toContain(
-    'If the Tutor has sent any numbered hint since that active attempt began, `support` MUST be `tutor`; this remains true until the card or Block changes',
+    'If the final solution uses decisive content first supplied by the Tutor, write `support: tutor`',
+  );
+  expect(run).toContain(
+    'If the Tutor only repeats, locates or confirms content the student already produced, and the decisive content is student-produced, write `support: none`',
+  );
+  expect(run).toContain('刚才的提示是否对你最终使用的关键步骤起了作用？');
+  expect(run).toContain(
+    'Do not append the final correct Trace until the student answers this attribution question',
+  );
+  expect(run).not.toContain(
+    'If the Tutor has sent any numbered hint since that active attempt began, `support` MUST be `tutor`',
   );
   expect(run).toContain(
     "Before rejecting a non-reference route, reconstruct the student's complete chain and verify every decisive implication.",
