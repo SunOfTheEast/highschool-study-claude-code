@@ -12,6 +12,7 @@ const labels: Record<string, string> = {
   source_resolve: '正在核验来源',
   classroom_update: '正在更新课堂节点',
   lesson_close: '正在整理课堂总结',
+  lesson_prepare: '正在整理课堂结构',
   plan_update: '正在写回学习计划',
   card_alternative_append: '正在登记已验证的另解',
 };

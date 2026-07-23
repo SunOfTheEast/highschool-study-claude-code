@@ -89,3 +89,23 @@ test('projects tool names as status without raw arguments or answers', () => {
   }]);
   expect(JSON.stringify(events)).not.toContain('answer');
 });
+
+test('projects lesson preparation without leaking the Blueprint', () => {
+  const events = projectSessionEvent('coach:domain-integrity', {
+    type: 'tool_execution_start',
+    toolName: 'lesson_prepare',
+    toolCallId: 'prepare-1',
+    args: {
+      teacherControl: '隐藏内容',
+      cards: [{ cardPath: 'cards/private.card.yaml' }],
+    },
+  } as never);
+
+  expect(events).toEqual([expect.objectContaining({
+    type: 'work-status',
+    tool: 'lesson_prepare',
+    label: '正在整理课堂结构',
+  })]);
+  expect(JSON.stringify(events)).not.toContain('隐藏内容');
+  expect(JSON.stringify(events)).not.toContain('private.card.yaml');
+});
