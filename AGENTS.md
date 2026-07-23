@@ -81,6 +81,11 @@ Agents must not claim persistence from an error, empty result, or missing
 success receipt. `LESSON_*` errors require Coach to repair the source rather
 than Tutor search, guessing, substitution, or repeated calls.
 
+A card attempt is one `problem` Block, and every problem Block must bind
+exactly one authentic Lesson alias through `Uses`. Pi `trace_append` accepts
+the selected `blockId` and derives its card identity from the Session-owned
+Lesson; the public MCP remains explicit because it has no Pi Session owner.
+
 A prepared Lesson may be revised in place. Once it is active, paused, closed,
 or abandoned, re-preparation creates a replacement Lesson and preserves the
 old record.
