@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from 'bun:test';
-import { cpSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { readTraceRecords } from 'highschool-study-markdown/study-domain';
@@ -7,6 +7,7 @@ import { Check } from 'typebox/value';
 import { createClassroomUpdateTool } from '../../src/runtime/classroom-update';
 import { createCardAlternativeAppendTool } from '../../src/runtime/card-alternative-append';
 import { createLessonCloseTool } from '../../src/runtime/lesson-close';
+import { createPlanRegisterTool } from '../../src/runtime/plan-register';
 import { createPlanUpdateTool } from '../../src/runtime/plan-update';
 import * as studyToolModule from '../../src/runtime/study-tools';
 
@@ -28,6 +29,42 @@ test('registers the existing four domain contracts without renaming them', () =>
     ownerPath: 'plans/domain-integrity.md',
   }).map((tool) => tool.name))
     .toEqual(['card_search', 'trace_search', 'trace_append', 'source_resolve']);
+});
+
+test('registers a Plan with a canonical receipt and clears a foreign Coach Session', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-plan-register-tool-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  writeFileSync(join(temporaryRoot, 'plans/isomorphic-transformation.md'), `---
+id: isomorphic-transformation
+kind: plan
+status: active
+coach_session: foreign-session
+---
+# Plan：同构变形
+`);
+  const tool = createPlanRegisterTool(temporaryRoot);
+
+  const result = await tool.execute('register-1', {
+    planId: 'isomorphic-transformation',
+  }, undefined, undefined, {} as never);
+  const payload = JSON.parse((result.content[0] as { text: string }).text) as {
+    ok: boolean;
+    ownerPath: string;
+    factId: string;
+    status: string;
+  };
+
+  expect(payload).toEqual(expect.objectContaining({
+    ok: true,
+    ownerPath: 'plans/isomorphic-transformation.md',
+    factId: 'isomorphic-transformation',
+    status: 'registered',
+  }));
+  expect(readFileSync(
+    join(temporaryRoot, 'plans/isomorphic-transformation.md'),
+    'utf8',
+  )).toContain('coach_session: null');
 });
 
 test('exposes only read-only study tools for isolated child sessions', () => {

@@ -9,7 +9,7 @@ import { readLearningSet, readPlanWorkspace } from '../study/read-workspace';
 import { setFrontmatterField } from '../study/write-workspace';
 import { resolvePersona } from '../study/persona';
 import type { StudySession, StudySessionFactory } from './session-factory';
-import { readSessionOwner, sessionOwnerMatches } from './session-owner';
+import { findOwnedPiSessionFile } from './session-owner';
 import type { StudySessionScope } from './session-scope';
 
 export type SessionFileLookup = (
@@ -18,13 +18,7 @@ export type SessionFileLookup = (
   expected: StudySessionScope,
 ) => Promise<string | null>;
 
-export const findPiSessionFile: SessionFileLookup = async (root, sessionId, expected) => {
-  const { SessionManager } = await import('@earendil-works/pi-coding-agent');
-  const path = (await SessionManager.list(root)).find((item) => item.id === sessionId)?.path;
-  if (!path) return null;
-  const manager = SessionManager.open(path, undefined, root);
-  return sessionOwnerMatches(readSessionOwner(manager), expected) ? path : null;
-};
+export const findPiSessionFile: SessionFileLookup = findOwnedPiSessionFile;
 
 export class WorkspaceRegistry {
   private readonly sessions = new Map<string, StudySession>();

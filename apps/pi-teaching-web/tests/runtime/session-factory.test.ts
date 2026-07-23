@@ -111,6 +111,7 @@ test('keeps Coach and Tutor tool boundaries distinct', () => {
     'card_search',
     'trace_search',
     'source_resolve',
+    'plan_register',
     'plan_update',
     'deep_workflow_propose',
   ]);

@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import {
   appendRouteChange,
   closeLesson,
+  registerPlan,
   setBlockStatus,
   setFrontmatterField,
   updatePlan,
@@ -89,6 +90,42 @@ status: prepared
   return { root, path };
 }
 
+function registrationFixture(): { root: string; roadmapPath: string; planPath: string } {
+  const root = mkdtempSync(join(tmpdir(), 'study-register-plan-'));
+  roots.push(root);
+  mkdirSync(join(root, 'plans'), { recursive: true });
+  const roadmapPath = join(root, 'ROADMAP.md');
+  const planPath = join(root, 'plans/isomorphic-transformation.md');
+  writeFileSync(roadmapPath, `---
+id: roadmap
+kind: roadmap
+status: active
+---
+# 导数学习 Roadmap
+
+## Plan Graph
+
+- [原 Plan](plans/original.md) — active。
+
+## Change Log
+
+- 初始。
+`);
+  writeFileSync(planPath, `---
+id: isomorphic-transformation
+kind: plan
+status: active
+coach_session: null
+---
+# Plan：同构变形
+
+## Goal
+
+识别同构结构。
+`);
+  return { root, roadmapPath, planPath };
+}
+
 test('updates one frontmatter field and one block state', () => {
   const { root, path } = fixture();
   setFrontmatterField(root, path, 'tutor_session', 'session-1');
@@ -170,4 +207,62 @@ test('leaves a Plan byte-for-byte unchanged when an audit section is missing', (
     planSummary: '不会写入。',
   })).toThrow('SECTION_NOT_FOUND: Plan Summary');
   expect(readFileSync(absolute, 'utf8')).toBe(before);
+});
+
+test('registers a real Plan in the Roadmap exactly once', () => {
+  const { root, roadmapPath } = registrationFixture();
+
+  const registered = registerPlan(root, 'isomorphic-transformation');
+  const afterFirst = readFileSync(roadmapPath, 'utf8');
+  const repeated = registerPlan(root, 'isomorphic-transformation');
+
+  expect(registered).toEqual({
+    id: 'isomorphic-transformation',
+    title: '同构变形',
+    path: 'plans/isomorphic-transformation.md',
+    coachSessionId: null,
+  });
+  expect(repeated).toEqual(registered);
+  expect(afterFirst).toContain(
+    '- [同构变形](plans/isomorphic-transformation.md)',
+  );
+  expect(readFileSync(roadmapPath, 'utf8')).toBe(afterFirst);
+  expect(
+    afterFirst.match(/\]\(plans\/isomorphic-transformation\.md\)/g),
+  ).toHaveLength(1);
+});
+
+test('rejects invalid Plan registration without changing the Roadmap', () => {
+  const { root, roadmapPath, planPath } = registrationFixture();
+  const before = readFileSync(roadmapPath, 'utf8');
+
+  writeFileSync(
+    planPath,
+    readFileSync(planPath, 'utf8').replace('kind: plan', 'kind: lesson'),
+  );
+  expect(() => registerPlan(root, 'isomorphic-transformation')).toThrow(
+    'INVALID_PLAN_KIND',
+  );
+  expect(readFileSync(roadmapPath, 'utf8')).toBe(before);
+
+  writeFileSync(
+    planPath,
+    readFileSync(planPath, 'utf8').replace('id: isomorphic-transformation', 'id: wrong'),
+  );
+  expect(() => registerPlan(root, 'isomorphic-transformation')).toThrow();
+  expect(readFileSync(roadmapPath, 'utf8')).toBe(before);
+});
+
+test('requires the existing Plan Graph section before registration', () => {
+  const { root, roadmapPath } = registrationFixture();
+  const before = readFileSync(roadmapPath, 'utf8').replace(
+    '## Plan Graph',
+    '## Plans Missing',
+  );
+  writeFileSync(roadmapPath, before);
+
+  expect(() => registerPlan(root, 'isomorphic-transformation')).toThrow(
+    'SECTION_NOT_FOUND: Plan Graph',
+  );
+  expect(readFileSync(roadmapPath, 'utf8')).toBe(before);
 });

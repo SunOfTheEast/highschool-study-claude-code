@@ -78,6 +78,7 @@ export function App() {
     try {
       if (!route) throw new Error('INVALID_ROUTE');
       if (route.kind === 'home') {
+        setLearningSet(await api.learningSet());
         setClient(initialClientState);
         setEvidence(null);
         if (navigation === 'push') window.history.pushState(null, '', formatBrowserRoute(route));

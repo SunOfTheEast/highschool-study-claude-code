@@ -51,3 +51,15 @@ export function sessionOwnerMatches(
     && actual.ownerId === expected.ownerId
     && actual.ownerPath === expected.ownerPath;
 }
+
+export async function findOwnedPiSessionFile(
+  root: string,
+  sessionId: string,
+  expected: StudySessionScope,
+): Promise<string | null> {
+  const { SessionManager } = await import('@earendil-works/pi-coding-agent');
+  const path = (await SessionManager.list(root)).find((item) => item.id === sessionId)?.path;
+  if (!path) return null;
+  const manager = SessionManager.open(path, undefined, root);
+  return sessionOwnerMatches(readSessionOwner(manager), expected) ? path : null;
+}

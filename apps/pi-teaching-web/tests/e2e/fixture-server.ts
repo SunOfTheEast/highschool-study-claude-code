@@ -1,9 +1,13 @@
-import { resolve } from 'node:path';
-import { cpSync, mkdtempSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import { cpSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import type { AbilityProjection, SessionKey } from '../../src/shared/contracts';
 import { readPlanWorkspace } from '../../src/study/read-workspace';
-import { setBlockStatus, setFrontmatterField } from '../../src/study/write-workspace';
+import {
+  registerPlan,
+  setBlockStatus,
+  setFrontmatterField,
+} from '../../src/study/write-workspace';
 import { resolvePersona } from '../../src/study/persona';
 import { createRequestHandler } from '../../src/server/app';
 import { EventHub } from '../../src/server/event-hub';
@@ -188,7 +192,7 @@ hub.subscribe((event) => {
   const data = JSON.stringify(event);
   for (const client of clients) client.send(data);
 });
-const fetch = createRequestHandler({
+const appFetch = createRequestHandler({
   root,
   authoring: false,
   registry: registry as never,
@@ -199,7 +203,26 @@ const fetch = createRequestHandler({
 Bun.serve({
   hostname: '127.0.0.1',
   port: 65000,
-  fetch,
+  fetch(request, server) {
+    const url = new URL(request.url);
+    if (request.method === 'POST' && url.pathname === '/__test/register-plan') {
+      writeFileSync(join(root, 'plans/isomorphic-transformation.md'), `---
+id: isomorphic-transformation
+kind: plan
+status: active
+coach_session: null
+---
+# Plan：同构变形
+
+## Goal
+
+识别同构结构。
+`);
+      registerPlan(root, 'isomorphic-transformation');
+      return Response.json({ ok: true });
+    }
+    return appFetch(request, server);
+  },
   websocket: {
     open(socket) { clients.add(socket); },
     close(socket) { clients.delete(socket); },

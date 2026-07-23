@@ -1,5 +1,8 @@
 import { readFileSync, writeFileSync } from 'node:fs';
-import { resolveInsideRoot } from 'highschool-study-markdown/study-domain';
+import {
+  readMarkdownFile,
+  resolveInsideRoot,
+} from 'highschool-study-markdown/study-domain';
 
 export type RouteChangeInput = {
   action: 'insert' | 'skip' | 'move' | 'repeat';
@@ -18,6 +21,13 @@ export type PlanUpdateInput = {
   currentPosition: string;
   nextLessonCandidate: string;
   planSummary: string;
+};
+
+export type RegisteredPlan = {
+  id: string;
+  title: string;
+  path: string;
+  coachSessionId: string | null;
 };
 
 function read(root: string, path: string): { absolute: string; source: string } {
@@ -104,6 +114,58 @@ function replaceSection(source: string, heading: string, value: string): string 
   const pattern = new RegExp(`(^## ${heading}\\s*$\\n)([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, 'm');
   if (!pattern.test(source)) throw new Error(`SECTION_NOT_FOUND: ${heading}`);
   return source.replace(pattern, `$1\n${value.trim()}\n\n`);
+}
+
+function planTitle(body: string): string {
+  const heading = /^#\s+(.+?)\s*$/m.exec(body)?.[1]?.trim() ?? '';
+  const title = heading.replace(/^Plan[:：]\s*/, '');
+  if (!title) throw new Error('PLAN_TITLE_REQUIRED');
+  return title;
+}
+
+function appendPlanGraphLink(source: string, path: string, title: string): string {
+  const heading = /^## Plan Graph[ \t]*$/m.exec(source);
+  if (!heading) throw new Error('SECTION_NOT_FOUND: Plan Graph');
+  const sectionStart = heading.index + heading[0].length;
+  const nextHeading = /^## [^\n]+$/gm;
+  nextHeading.lastIndex = sectionStart;
+  const next = nextHeading.exec(source);
+  const sectionEnd = next?.index ?? source.length;
+  const section = source.slice(sectionStart, sectionEnd);
+  const targets = [...section.matchAll(/\[[^\]]+\]\(([^)#]+\.md)\)/g)]
+    .map((match) => match[1]);
+  if (targets.includes(path)) return source;
+  const before = source.slice(0, sectionEnd).trimEnd();
+  const after = source.slice(sectionEnd);
+  return `${before}\n\n- [${title}](${path})\n${after.startsWith('\n') ? after : `\n${after}`}`;
+}
+
+export function registerPlan(root: string, planId: string): RegisteredPlan {
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(planId)) {
+    throw new Error(`INVALID_PLAN_ID: ${planId}`);
+  }
+  const path = `plans/${planId}.md`;
+  const plan = readMarkdownFile(root, path);
+  if (plan.frontmatter.kind !== 'plan') throw new Error('INVALID_PLAN_KIND');
+  if (plan.id !== planId) throw new Error(`INVALID_PLAN_ID: ${plan.id}`);
+  const title = planTitle(plan.body);
+  const roadmap = read(root, 'ROADMAP.md');
+  const next = appendPlanGraphLink(roadmap.source, path, title);
+  if (next !== roadmap.source) write(roadmap.absolute, next);
+
+  const canonicalPlan = readMarkdownFile(root, path);
+  const canonicalRoadmap = readFileSync(roadmap.absolute, 'utf8');
+  if (!canonicalRoadmap.includes(`](${path})`)) {
+    throw new Error(`PLAN_REGISTRATION_FAILED: ${planId}`);
+  }
+  return {
+    id: canonicalPlan.id,
+    title: planTitle(canonicalPlan.body),
+    path,
+    coachSessionId: typeof canonicalPlan.frontmatter.coach_session === 'string'
+      ? canonicalPlan.frontmatter.coach_session
+      : null,
+  };
 }
 
 function activeReflectionBlockId(source: string): string {

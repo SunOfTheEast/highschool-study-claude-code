@@ -18,6 +18,17 @@ test('hides future cards and reveals only the first active problem after start',
   await expect(page.getByText(/D，即/)).toHaveCount(0);
 });
 
+test('refetches the Roadmap after returning to the learning-set home', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('button', { name: /同构变形/ })).toHaveCount(0);
+  await page.getByRole('button', { name: /定义域完整性的系统加固/ }).click();
+  await page.request.post('http://127.0.0.1:65000/__test/register-plan');
+
+  await page.getByRole('button', { name: /返回学习集/ }).click();
+
+  await expect(page.getByRole('button', { name: /同构变形/ })).toBeVisible();
+});
+
 test('marks the approved theme and current learning surface', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('main.home')).toHaveAttribute(
