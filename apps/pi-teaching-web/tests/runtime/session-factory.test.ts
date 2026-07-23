@@ -111,10 +111,12 @@ test('keeps Coach and Tutor tool boundaries distinct', () => {
     'card_search',
     'trace_search',
     'source_resolve',
+    'lesson_prepare',
     'plan_register',
     'plan_update',
     'deep_workflow_propose',
   ]);
+  expect(roleToolNames('tutor')).not.toContain('lesson_prepare');
   expect(roleToolNames('tutor')).toEqual([
     'read',
     'grep',

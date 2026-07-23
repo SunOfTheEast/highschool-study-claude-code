@@ -1,5 +1,12 @@
 import { afterEach, expect, test } from 'bun:test';
-import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  cpSync,
+  existsSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { readTraceRecords } from 'highschool-study-markdown/study-domain';
@@ -7,6 +14,7 @@ import { Check } from 'typebox/value';
 import { createClassroomUpdateTool } from '../../src/runtime/classroom-update';
 import { createCardAlternativeAppendTool } from '../../src/runtime/card-alternative-append';
 import { createLessonCloseTool } from '../../src/runtime/lesson-close';
+import { createLessonPrepareTool } from '../../src/runtime/lesson-prepare';
 import { createPlanRegisterTool } from '../../src/runtime/plan-register';
 import { createPlanUpdateTool } from '../../src/runtime/plan-update';
 import * as studyToolModule from '../../src/runtime/study-tools';
@@ -66,6 +74,106 @@ coach_session: foreign-session
     join(temporaryRoot, 'plans/isomorphic-transformation.md'),
     'utf8',
   )).toContain('coach_session: null');
+});
+
+test('prepares and rereads one Lesson with Plan authority bound by the Coach Session', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-lesson-prepare-tool-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const tool = createLessonPrepareTool(
+    temporaryRoot,
+    'domain-integrity',
+    'plans/domain-integrity.md',
+  );
+  const parameters = JSON.stringify(tool.parameters);
+  expect(parameters).not.toContain('planPath');
+  expect(parameters).not.toContain('lessonPath');
+  expect(parameters).not.toContain('status');
+  expect(parameters).not.toContain('sessionId');
+
+  const result = await tool.execute('prepare-1', {
+    lessonId: 'lesson-blueprint-001',
+    title: 'Blueprint 试验课',
+    planContext: '核验定义域迁移。',
+    capabilityTarget: '独立写全定义域并使用。',
+    primaryTemplate: 'assessment',
+    templateReason: '需要未见题证据。',
+    adjustments: [],
+    cards: [{
+      alias: 'Q-EX22',
+      cardPath: 'cards/derivative/mst_p0032_ex22.card.yaml',
+      role: '连续性核验',
+    }],
+    sources: [],
+    blocks: [
+      {
+        id: 'assessment-01',
+        kind: 'problem',
+        required: true,
+        dependsOn: [],
+        uses: ['Q-EX22'],
+        studentView: '请独立完成 `Q-EX22`。',
+        teacherControl: '首次采用 zero。',
+      },
+      {
+        id: 'reflection',
+        kind: 'reflection',
+        required: true,
+        dependsOn: ['assessment-01'],
+        uses: [],
+        studentView: '总结定义域的作用。',
+        teacherControl: '只引用已产生证据。',
+      },
+    ],
+  }, undefined, undefined, {} as never);
+  const receipt = JSON.parse((result.content[0] as { text: string }).text);
+
+  expect(receipt).toEqual({
+    ok: true,
+    ownerPath: 'plans/domain-integrity.md',
+    factId: 'lesson-blueprint-001',
+    status: 'prepared',
+    lessonPath: 'lessons/lesson-blueprint-001.md',
+    blockCount: 2,
+  });
+  expect(readFileSync(
+    join(temporaryRoot, 'plans/domain-integrity.md'),
+    'utf8',
+  )).toContain('../lessons/lesson-blueprint-001.md');
+});
+
+test('rejects a nonexistent card without writing or indexing a Lesson', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-lesson-prepare-invalid-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const tool = createLessonPrepareTool(
+    temporaryRoot,
+    'domain-integrity',
+    'plans/domain-integrity.md',
+  );
+  const before = readFileSync(join(temporaryRoot, 'plans/domain-integrity.md'), 'utf8');
+  await expect(tool.execute('prepare-invalid', {
+    lessonId: 'lesson-blueprint-invalid',
+    title: 'Invalid',
+    planContext: 'Invalid',
+    capabilityTarget: 'Invalid',
+    primaryTemplate: 'assessment',
+    templateReason: 'Invalid',
+    adjustments: [],
+    cards: [{ alias: 'FAKE', cardPath: 'cards/fake.card.yaml', role: 'fake' }],
+    sources: [],
+    blocks: [{
+      id: 'reflection',
+      kind: 'reflection',
+      required: true,
+      dependsOn: [],
+      uses: ['FAKE'],
+      studentView: '反思。',
+      teacherControl: '反思。',
+    }],
+  } as never, undefined, undefined, {} as never)).rejects.toThrow('题卡不存在');
+  expect(readFileSync(join(temporaryRoot, 'plans/domain-integrity.md'), 'utf8')).toBe(before);
+  expect(existsSync(join(temporaryRoot, 'lessons/lesson-blueprint-invalid.md'))).toBe(false);
 });
 
 test('exposes only read-only study tools for isolated child sessions', () => {

@@ -15,6 +15,7 @@ import { createDeepWorkflowTool } from '../workflows/tool';
 import { createClassroomUpdateTool } from './classroom-update';
 import { createCardAlternativeAppendTool } from './card-alternative-append';
 import { createLessonCloseTool } from './lesson-close';
+import { createLessonPrepareTool } from './lesson-prepare';
 import { createPlanRegisterTool } from './plan-register';
 import { createPlanUpdateTool } from './plan-update';
 import { createRoleResourceLoader } from './resource-loader';
@@ -104,6 +105,7 @@ export function roleToolNames(role: SessionRole): string[] {
       'card_search',
       'trace_search',
       'source_resolve',
+      'lesson_prepare',
       'plan_register',
       'plan_update',
       'deep_workflow_propose',
@@ -157,6 +159,7 @@ export async function createPiSessionFactory(
           createCardAlternativeAppendTool(root, ownerPath, now),
         ]
         : [
+          createLessonPrepareTool(root, ownerId, ownerPath),
           createPlanRegisterTool(root),
           createPlanUpdateTool(root, ownerPath),
         ]),
