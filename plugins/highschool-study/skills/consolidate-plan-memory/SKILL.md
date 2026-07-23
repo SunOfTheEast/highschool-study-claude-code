@@ -1,19 +1,18 @@
 ---
 name: consolidate-plan-memory
-description: Propose and confirm long-term profile changes only when a capable student explicitly completes a Plan.
+description: Use when evidence meets a Plan standard and the student explicitly chooses Plan completion.
 user-invocable: false
-allowed-tools: Read, Glob, Grep, Edit, mcp__plugin_highschool-study_study-markdown__trace_search, mcp__plugin_highschool-study_study-markdown__trace_append, mcp__plugin_highschool-study_study-markdown__source_resolve
+allowed-tools: Read, Glob, Grep, Edit, mcp__plugin_highschool-study_study-markdown__trace_search, mcp__plugin_highschool-study_study-markdown__source_resolve
 ---
 
-Run this Skill only after both gates are independently true: direct evidence meets the Plan's observable capability standard, and the student explicitly chooses to complete the Plan. Task completion is not capability attainment; capability attainment does not complete the Plan automatically.
+Run only after direct evidence meets the Plan's observable capability standard and the student chooses completion.
 
-1. Read the Plan standard, test, completion choice, every indexed Lesson in the Plan, and every Lesson Summary. Call `trace_search(planId=...)` once for the Plan's complete active Trace set. Read both current confirmed profiles in full.
-2. Resolve direct original sources for each durable preference under consideration. Separate observation from inference, show conflicts and counterexamples, and keep narrow scope conditions.
-3. Show a natural-language table of proposed `add / revise / delete` rows. Every row has proposed text, `student` or `teaching` owner, direct original sources, conflicts, and scope conditions. Each confirmed item has one owner only; never duplicate it across profiles.
-4. Invite the student to keep, rewrite, delete, or reject all rows in natural language. An empty confirmed delta is valid and never blocks Plan completion.
+1. Read the Plan standard, completion choice, indexed Lesson summaries and both confirmed profiles. Use summary source links and scoped active Trace to open a full Lesson or original only when a candidate memory depends on it.
+2. Separate observation from inference. For every durable preference candidate, retain direct sources, conflicts and narrow scope.
+3. Show a natural-language `add / revise / delete` table. Each row has one `student` or `teaching` owner and may be kept, rewritten or rejected. An empty confirmed delta is valid.
 
-Never edit either profile before explicit student confirmation. After confirmation, merge only the confirmed rows into `memory/student-profile.md` or `memory/teaching-profile.md`, preserving direct source links and current scope. Profiles contain durable current preferences only: no proposal status, confidence, confidence score, rejected-item list, retired version, or workflow payload.
+Do not edit a profile before item-by-item confirmation. Profiles contain only confirmed, durable, currently valid preferences with direct sources and narrow scope.
 
-If the student corrects a mistaken inference during review, append that objection with `trace_append` as a cardless Trace in the final Plan-reflection block, linked to the student utterance and relevant original evidence. Do not invent a card reference. Then rebuild the affected Plan Summary from active evidence and complete the Plan with its closure, attainment, and confirmed profile delta recorded as separate facts.
+If the student rejects an inference, remove or rewrite that proposal. A rejected memory proposal is not classroom Trace.
 
-After the confirmed profile merge and any correction, finish the persistence transaction. Set Plan frontmatter to `status: completed`. Update `## Lesson Index` with final Lesson states and sources. Update `## Current Position` with the met capability standard and remaining caveats. Update `## Next Lesson Candidate` with an explicit completed/no-next-lesson result. Update `## Plan Summary` with active evidence, closure, attainment, and the confirmed profile delta. Reread the Plan and both confirmed profiles after the write. Only then send the student the final completion conclusion. If the write or reread fails, say completion is not yet fully persisted and make no changed-state claim.
+After merging confirmed rows, persist Plan completion, evidence, caveats and profile delta as separate facts. Reread the Plan and both profiles before reporting completion; if persistence fails, do not claim the state changed.

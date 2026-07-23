@@ -1,37 +1,26 @@
 ---
 name: enter-learning-set
-description: Load the learning-set overview and exactly one presentation persona before routing study work.
+description: Use when a Session first enters a learning set, lacks entry context, or changes overview or persona.
 user-invocable: false
 allowed-tools: Read, Glob, Grep, Write, Edit
 ---
 
-Run this Skill before any Roadmap, Plan, Lesson, correction, or progress route. Return context to the caller; do not create another Agent or a persisted context object.
+Return entry context to `study`; do not create another Agent or persisted context object.
 
 ## Learning-set overview
 
-1. If `learning-set/ROADMAP.md` is absent, keep the overview context empty and continue through persona resolution; let `study` route to Roadmap creation. Do not block.
-2. Read `learning-set/ROADMAP.md` and extract `## Learning Set Overview` on every entry.
-3. Use `Grep` over `learning-set/lessons/*.md` for headings matching `^## Trace event-`.
-4. Present the overview to the student when no such Trace exists or when the student explicitly asks for the overview, including “show the overview.” Otherwise keep it as background and do not repeat it unprompted.
-5. If the overview section is absent, form one short fallback sentence from the Roadmap title, Goal, Plan Graph, and Observable Capability Standard. Do not block study.
+Read `learning-set/ROADMAP.md` when present and extract `## Learning Set Overview`. Present it on first Session entry or explicit request; otherwise keep it as background. If absent, use one short fallback from the Roadmap title, goal, Plan graph and observable capability standard. A missing Roadmap leaves overview empty so `study` can route its creation.
 
 ## Persona resolution
 
-Resolve in this exact order:
+Resolve one existing persona in this order: current Lesson's temporary choice, `CLAUDE.local.md` preference, `CLAUDE.md` default, then bundled `neutral-tutor`. A learning-set persona file overrides a bundled file with the same ID. A missing ID falls back visibly; never construct a path from free-form student text.
 
-1. an explicit temporary choice already made in the current Lesson Session;
-2. `Preferred persona` under `## Highschool Study Presentation` in `learning-set/CLAUDE.local.md`;
-3. `Default presentation persona` in `learning-set/CLAUDE.md`;
-4. the bundled `neutral-tutor`.
-
-Use `Glob` to enumerate `learning-set/.claude/personas/*.md` and this Skill's `references/personas/*.md`. Match an existing filename stem exactly. A learning-set file with the same stem overrides the bundled file. Do not construct a path from student text and do not invent a persona. If the requested ID is missing, tell the student and fall back to the learning-set default, then to `neutral-tutor` if necessary.
-
-Read exactly one final persona file. Treat "disable personas" as `neutral-tutor`. Apply the selected file only to student-visible wording. Never pass it to `lesson-designer`, and never write it into Trace, summaries, profiles, planner attention, capability judgments, card selection, assessments, or tests.
+Persona affects student-visible presentation only. It never changes or enters cards, evidence, assessment, summaries, profiles, capability, memory or the persona-neutral lesson designer.
 
 ## Switching
 
-- A request such as "for this lesson" or "temporarily" changes only the current Lesson Session. Do not write a temporary choice.
-- A request such as "for this learning set from now on" creates the `Preferred persona` bullet under `## Highschool Study Presentation` in `learning-set/CLAUDE.local.md` when absent; otherwise, update only the `Preferred persona` bullet and preserve every other line in that section and every other section:
+- A temporary choice changes only the current Lesson Session and is not written.
+- A persistent choice creates or updates only the `Preferred persona` bullet under `## Highschool Study Presentation` in `learning-set/CLAUDE.local.md`:
 
   ```markdown
   ## Highschool Study Presentation
@@ -39,6 +28,6 @@ Read exactly one final persona file. Treat "disable personas" as `neutral-tutor`
   - Preferred persona: `<existing-persona-id>`
   ```
 
-- "Restore the learning-set default" removes only the `Preferred persona` bullet and preserves every other line in that section and every other section. "Disable personas for this learning set" stores `neutral-tutor`.
+- Restoring the learning-set default removes only that bullet. Disabling personas stores `neutral-tutor`.
 
-Return the overview text, whether it should be presented, the selected persona ID/path/content, and any fallback notice to `study`.
+Return the overview presentation decision, selected persona and any fallback notice.
