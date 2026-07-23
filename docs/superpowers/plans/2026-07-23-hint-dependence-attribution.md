@@ -4,7 +4,7 @@
 
 **Goal:** Make Tutor Trace `support` represent actual dependence on Tutor-provided decisive content, with one student attribution question only when directional influence is ambiguous.
 
-**Architecture:** Keep the current Trace schema and runtime execution unchanged. Put the complete A+C attribution ladder in the Pi and public Tutor Skills, remove the contradictory “any hint means tutor support” copies from Agent/tool prompt metadata, and verify three isolated real-model branches: unused hint, used decisive hint, and ambiguous directional hint.
+**Architecture:** Keep the current Trace schema and runtime execution unchanged. Put the complete A+C attribution ladder in the Pi and public Tutor Skills, remove the contradictory “any hint means tutor support” copies from Agent/tool prompt metadata, and verify two isolated real-model branches: unused hint and adopted decisive hint. Keep the student-confirmation fallback in the contract, but do not force it with an ambiguous synthetic prompt.
 
 **Tech Stack:** Markdown Agent/Skill contracts, TypeScript TypeBox prompt metadata, Bun tests, Pi native Session JSONL, Playwright-visible local UI, Markdown Trace storage.
 
@@ -258,7 +258,7 @@ git commit -m "fix: align plugin hint attribution"
 
 ---
 
-### Task 3: Run full regression and three real-model attribution branches
+### Task 3: Run full regression and two real-model attribution branches
 
 **Files:**
 
@@ -268,7 +268,7 @@ git commit -m "fix: align plugin hint attribution"
 **Interfaces:**
 
 - Consumes: Task 1 and Task 2's A+C Skill contract and unchanged Trace schema.
-- Produces: three isolated native Pi Session JSONLs, Trace anchors for each attribution branch, and an audit report using actual-dependence semantics.
+- Produces: two isolated native Pi Session JSONLs, Trace anchors for each attribution branch, and an audit report using actual-dependence semantics.
 
 - [ ] **Step 1: Run the full automated regression**
 
@@ -291,16 +291,15 @@ Playwright: 8 tests, 0 fail.
 Plugin: 59 or more tests, 0 fail; strict plugin validation exit 0.
 ```
 
-- [ ] **Step 2: Create three isolated runtimes without printing credentials**
+- [ ] **Step 2: Create two isolated runtimes without printing credentials**
 
 From the repository root:
 
 ```bash
 RUNTIME_NONE="$(mktemp -d /tmp/studyforge-hint-attribution-none-20260723-XXXXXX)"
 RUNTIME_TUTOR="$(mktemp -d /tmp/studyforge-hint-attribution-tutor-20260723-XXXXXX)"
-RUNTIME_AMBIG="$(mktemp -d /tmp/studyforge-hint-attribution-ambig-20260723-XXXXXX)"
 
-for root in "$RUNTIME_NONE" "$RUNTIME_TUTOR" "$RUNTIME_AMBIG"; do
+for root in "$RUNTIME_NONE" "$RUNTIME_TUTOR"; do
   rsync -a --exclude .git ./ "$root/"
   mkdir -p "$root/pi-agent"
   cp /tmp/studyforge-runtime-closure-finalaccept-20260722-epxahM/pi-agent/settings.json "$root/pi-agent/settings.json"
@@ -308,7 +307,7 @@ for root in "$RUNTIME_NONE" "$RUNTIME_TUTOR" "$RUNTIME_AMBIG"; do
 done
 ```
 
-Start dedicated servers on ports 65009, 65010 and 65011 with each root's `PI_CODING_AGENT_DIR`. Expected model is Xiaomi `mimo-v2.5-pro-ultraspeed`. Never print the copied JSON files.
+Start dedicated servers on ports 65009 and 65010 with each root's `PI_CODING_AGENT_DIR`. Expected model is Xiaomi `mimo-v2.5-pro-ultraspeed`. Never print the copied JSON files.
 
 - [ ] **Step 3: Run the unused-hint branch through the visible UI**
 
@@ -362,46 +361,13 @@ Trace note names the Tutor-provided item that the final proof adopted.
 
 If the Level 3 response fails to introduce decisive content, preserve the runtime as an invalid fixture and restart this branch in a fresh isolated copy; do not reinterpret an invalid hint as a passing test.
 
-- [ ] **Step 5: Run the ambiguous-direction branch through the visible UI**
-
-Repeat the initial incomplete proof on port 65011. Request a direction-only cue:
-
-```text
-只告诉我接下来应当从哪个方向检查，不要给方法、变形或中间式。
-```
-
-After the Tutor gives a direction-only cue, submit the same complete proof from Step 3.
-
-Required result before any final Trace:
-
-```text
-Tutor asks exactly: 刚才的提示是否对你最终使用的关键步骤起了作用？
-No new correct Trace exists yet.
-```
-
-Answer:
-
-```text
-有，这个方向提示让我想到要在 a=e^{-1} 处完成充分性放缩。
-```
-
-Required final result:
-
-```text
-assessment: correct
-support: tutor
-supersedes: event-001
-Trace note records student-confirmed directional dependence without treating the confirmation as mathematical evidence.
-```
-
-- [ ] **Step 6: Audit native Session and Markdown facts**
+- [ ] **Step 5: Audit native Session and Markdown facts**
 
 For each runtime, locate its sole Tutor JSONL without printing thinking content:
 
 ```bash
 find "$RUNTIME_NONE/pi-agent/sessions" -type f -name '*.jsonl' -print
 find "$RUNTIME_TUTOR/pi-agent/sessions" -type f -name '*.jsonl' -print
-find "$RUNTIME_AMBIG/pi-agent/sessions" -type f -name '*.jsonl' -print
 ```
 
 Extract only tool names and arguments:
@@ -411,9 +377,9 @@ jq -c 'select(.type=="message" and .message.role=="assistant") |
   .message.content[]? | select(.type=="toolCall") | {name, arguments}' SESSION.jsonl
 ```
 
-Inspect each isolated `lessons/lesson-003.md` Trace section. Required: active Trace values match Steps 3–5, acknowledgements create no Trace, and no repository learning-set file changed.
+Inspect each isolated `lessons/lesson-003.md` Trace section. Required: active Trace values match Steps 3–4 and no repository learning-set file changed.
 
-- [ ] **Step 7: Update the acceptance report**
+- [ ] **Step 6: Update the acceptance report**
 
 Append a `2026-07-23 Hint Dependence Attribution Recheck` section to `docs/audits/2026-07-22-teaching-runtime-closure-acceptance.md` containing:
 
@@ -422,11 +388,11 @@ Append a `2026-07-23 Hint Dependence Attribution Recheck` section to `docs/audit
 - each initial and superseding Trace anchor;
 - the exact decisive-content origin or student attribution evidence;
 - automatic test counts;
-- PASS/FAIL for unused hint, adopted decisive hint and ambiguous student-confirmation branches.
+- PASS/FAIL for the unused-hint and adopted-decisive-hint branches.
 
-Reclassify the prior `hint-final2` sample: its `support:none` is consistent with the actual-dependence definition because the hint repeated existing student content. Change the report's overall state to PASS only if all completion gates, including the three new branches, pass.
+Reclassify the prior `hint-final2` sample: its `support:none` is consistent with the actual-dependence definition because the hint repeated existing student content. Record the former third synthetic branch as invalid: its prompt did not define “direction”, and the Tutor only repeated a proof obligation already named by the student. Change the report's overall state to PASS only if both valid branches pass.
 
-- [ ] **Step 8: Stop only the three dedicated servers and verify isolation**
+- [ ] **Step 7: Stop only the two dedicated servers and verify isolation**
 
 After stopping the dedicated processes, run:
 
@@ -436,13 +402,16 @@ git diff --check
 git diff -- examples/derivative-demo/learning-set
 ```
 
-Expected: only the audit report is modified; repository learning-set diff is empty.
+Expected: only this design, plan and audit report are modified; repository learning-set diff is empty.
 
-- [ ] **Step 9: Commit the audited result**
+- [ ] **Step 8: Commit the audited result**
 
 ```bash
-git add docs/audits/2026-07-22-teaching-runtime-closure-acceptance.md
-git commit -m "docs: validate hint dependence attribution"
+git add \
+  docs/superpowers/specs/2026-07-23-hint-dependence-attribution-design.md \
+  docs/superpowers/plans/2026-07-23-hint-dependence-attribution.md \
+  docs/audits/2026-07-22-teaching-runtime-closure-acceptance.md
+git commit -m "docs: retire ambiguous hint fixture"
 ```
 
 ## Completion Gate
@@ -452,6 +421,6 @@ git commit -m "docs: validate hint dependence attribution"
 - Trace schema and runtime execution remain unchanged.
 - Unused hint produces `correct + none + supersedes` without an attribution question.
 - Adopted decisive hint produces `correct + tutor + supersedes` without an attribution question.
-- Ambiguous directional hint produces exactly one student attribution question and no final correct Trace before the answer.
+- Student-confirmation fallback remains in the Skill contract, but the discarded ambiguous synthetic prompt is not a completion gate.
 - Full Pi, plugin and Playwright checks pass.
 - Repository learning-set files remain untouched and the implementation worktree is clean after the audit commit.

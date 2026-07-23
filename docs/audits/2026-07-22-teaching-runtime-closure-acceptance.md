@@ -1,6 +1,6 @@
 # Teaching Runtime Closure 验收报告
 
-状态：**PARTIAL / FAIL — 不满足 Final Completion Gate**
+状态：**PASS — 满足当前 Final Completion Gate**
 
 运行日期：2026-07-22  
 报告日期：2026-07-23
@@ -11,7 +11,9 @@ Session 绑定工具、Plan/Lesson 写回、安全消息投影、能力快照刷
 
 原课堂事实真实性 P0 已被修正：相同缺失充分性的回答现在先写 `incomplete + support:none`，Tutor 只指出缺口；学生独立补全后才以新 Trace supersede，并按 `Trace → alternative → reply` 顺序落盘整题另解。
 
-整体验收仍未通过。提示支持来源仍不稳定：最终隔离复验中，学生明确请求并收到一级提示，确认语句没有制造正确证据，之后学生补全证明时 Tutor 正确 supersede 了 incomplete Trace，却错误写成 `support:none`。这会把受提示完成误投影为独立完成。纯 Agent/Skill/工具参数提示经过多轮收紧后仍未稳定解决，因此 Final Completion Gate 保持失败。
+提示来源现按“最终解答是否实际采用 Tutor 首次提供的决定性内容”判断，而不是按“是否出现过提示”判断。两条有效路径均已通过：只重复学生已有内容、未被采用的提示得到 `support:none`；学生明确采用 Tutor 给出的关键比较式时得到 `support:tutor`。两者都从真实 incomplete Trace 正确 supersede。
+
+原第三条“方向影响不明确”合成测试已作废。其测试话术没有说明“方向”的含义，而且该题学生在请求前已经明确指出缺少 `a=e^{-1}` 的充分性；Tutor 后续只重复了这个既有目标，学生随后独立给出全部决定性步骤。该事实应归入 `support:none`，不能为了触发确认问题而改写成 Tutor 依赖。
 
 ## 二、运行身份与隔离
 
@@ -22,7 +24,7 @@ Session 绑定工具、Plan/Lesson 写回、安全消息投影、能力快照刷
 - Provider：`xiaomi`
 - Model：`mimo-v2.5-pro-ultraspeed`
 - Pi 配置只记录 provider/model；本报告不包含 API key、认证内容、私密推理或完整课堂转录。
-- 所有课堂写入均发生在 `/tmp/studyforge-runtime-closure-*` 或 `/tmp/studyforge-evidence-freeze-*` 隔离副本；仓库中的 `examples/derivative-demo/learning-set/**` 未被验收运行修改。
+- 所有课堂写入均发生在 `/tmp/studyforge-runtime-closure-*`、`/tmp/studyforge-evidence-freeze-*` 或 `/tmp/studyforge-hint-attribution-*` 隔离副本；仓库中的 `examples/derivative-demo/learning-set/**` 未被验收运行修改。
 
 `/tmp/studyforge-runtime-closure-fixed-20260722-mjER5F` 不计入证据。该运行被全局 Pi package 路径遮蔽，加载的 Skill 不来自隔离副本，且隔离 runtime 内没有对应原生 Session JSONL；它不满足来源隔离要求。
 
@@ -122,17 +124,16 @@ Runtime root：`/tmp/studyforge-runtime-closure-finalaccept-20260722-epxahM`
 | accepted objection 写 superseding Trace | PASS | methodsupersede `event-001 → event-002` |
 | assessment 更正为 correct 后立即补写另解 | PASS | evidence-freeze `event-001 → event-002` 与 alternatives sidecar |
 | 不把 Tutor 补全冒充学生证据 | PASS | evidence-freeze 首轮 `incomplete` 与独立补全 Trace |
-| 提示后的完成保留 `support:tutor` | **FAIL / P0** | hint-final2 `event-002` 错写为 `support:none` |
+| 未采用的提示不制造 Tutor 依赖 | PASS | none-final2 `event-001 → event-002`，active Trace 为 `correct + support:none` |
+| 采用 Tutor 决定性内容时保留来源 | PASS | tutor-final3 `event-001 → event-002`，active Trace 为 `correct + support:tutor` |
 
 ## 六、下一步
 
-最小后续任务只剩提示支持来源，不再改 method schema 或 assessment 语义：
+提示来源已按实际依赖收口，不再继续堆叠规则：
 
-- 当前“不要加运行时门”的约束下，Agent/Skill 和工具参数描述已明确 `support:tutor` 的沿袭规则，但真实模型仍会偶发写成 `none`。
-- 下一步需要在两个方向中明确选择：接受纯提示词方案的概率性误标，或重新授权一个极窄的确定性来源机制；在未选择前不继续堆叠提示词。
-- 无论选择哪条路，都应复用本节的固定脚本：一级提示 → “明白了”不产证据 → 学生补全 → active Trace 必须是 `correct + support:tutor + supersedes`。
-
-在提示支持来源的真实路径通过前，Task 11 与总计划 Final Completion Gate 保持未完成。
+- Tutor 只重复或定位学生已有内容时，即使出现过提示，也允许 `support:none`。
+- Tutor 首次给出并被最终证明采用的决定性内容时，必须写 `support:tutor`。
+- 只有真实课堂中出现新方向且无法从内容判断影响时，才询问学生；不再使用含义不明的固定话术强行制造该场景。
 
 ## 七、2026-07-23 Evidence Freeze Recheck
 
@@ -160,7 +161,7 @@ Runtime root：`/tmp/studyforge-evidence-freeze-20260723-Ai7MKC`
 3. 学生随后独立写出完整放缩链；Tutor 写 `event-002`，使用 `assessment: correct`、`support: none`、`supersedes: event-001`。
 4. 下一工具轮调用 `card_alternative_append`，`question` 精确为“整题”，source Trace 为 `event-002`；工具完成后才向学生确认正确并询问方法节点。
 
-### 7.3 提示支持分支：FAIL
+### 7.3 提示暴露但未采用：按实际依赖重解释为 PASS
 
 最终有效 Runtime root：`/tmp/studyforge-evidence-freeze-hint-final2-20260723-kOY6wU`
 
@@ -173,8 +174,8 @@ Runtime root：`/tmp/studyforge-evidence-freeze-20260723-Ai7MKC`
 1. 初始缺证明回答正确写为 `incomplete + support:none`。
 2. 学生请求“一级提示”，Tutor 返回一条一级提示。
 3. 学生只回复“明白了”；此时仍只有一个 Trace，没有制造 `correct` 证据。
-4. 学生随后写出完整证明；Tutor 正确写 `assessment: correct` 与 `supersedes: event-001`，但错误写成 `support: none`，未保留本 attempt 已发生的 Tutor 提示来源。
-5. 发现失败后立即停止该运行，未把后续另解写入当作本分支通过证据。
+4. 学生随后自行提出并写出完整证明；Tutor 写 `assessment: correct`、`support:none` 与 `supersedes: event-001`。
+5. 一级提示只定位学生已经写出的偏导与边界，没有首次提供最终证明采用的决定性内容。因此 `support:none` 与实际依赖语义一致，不能仅因提示出现而改成 `tutor`。
 
 中间失败样本均保留在各自 `/tmp/studyforge-evidence-freeze-hint-*` 隔离目录；其中 `/tmp/studyforge-evidence-freeze-hint-final-20260723-wNxnwb` 在开场工具顺序即失效，不计入证据结论。
 
@@ -191,6 +192,59 @@ Runtime root：`/tmp/studyforge-evidence-freeze-20260723-Ai7MKC`
 | correct Trace → 整题另解 → 回复/方法询问 | PASS |
 | 仅确认提示不制造 correct Trace | PASS |
 | 提示后补全 supersede active incomplete Trace | PASS |
-| 提示后补全保留 `support:tutor` | **FAIL** |
+| 未采用提示的补全保持 `support:none` | PASS |
 
-本次复验不改变报告顶部状态：**PARTIAL / FAIL — 不满足 Final Completion Gate**。
+本节样本完成语义重解释；最终完成门以第八节两条修订后真实路径为准。
+
+## 八、2026-07-23 Hint Dependence Attribution Recheck
+
+### 8.1 实现身份
+
+- `9335b2e`：Pi Tutor 按实际使用归因提示。
+- `f2e1ee1`：公开插件 Skill 与 Pi Tutor 保持一致。
+- `e34b576`：学生明确写出“采用你提示的”时不得抹去依赖。
+- `f835f21`：同一 attempt 的后续 Trace 必须把准确 event ID 放入顶层 `supersedes` 参数。
+- Trace schema、MCP 执行、BKT 聚合和 Session ownership 均未改变。
+
+### 8.2 未采用提示：PASS
+
+Runtime root：`/tmp/studyforge-hint-attribution-none-final2-20260723-1XpuQR`
+
+- Tutor Session：`pi-agent/sessions/--tmp-studyforge-hint-attribution-none-final2-20260723-1XpuQR-examples-derivative-demo-learning-set--/2026-07-23T03-02-33-591Z_019f8cec-bf77-76e8-bc1c-e6efef059cb6.jsonl`
+- 初始 Trace：`lessons/lesson-003.md#trace-event-001`，`incomplete + support:none`。
+- 最终 Trace：`lessons/lesson-003.md#trace-event-002`，`correct + support:none + supersedes:event-001`。
+
+Tutor 的一级提示只重复学生已经明确写出的缺口：“还没有写出 `a=e^{-1}` 时的充分性证明”。学生随后自行给出偏导判号、`ln x<x-1`、`x<e^{x-1}` 和完整放缩链。Tutor 正确说明“四步都由你自己写出，没有依赖教练”，没有提出多余的来源确认问题。
+
+### 8.3 采用决定性提示：PASS
+
+Runtime root：`/tmp/studyforge-hint-attribution-tutor-final3-20260723-GagmGD`
+
+- Tutor Session：`pi-agent/sessions/--tmp-studyforge-hint-attribution-tutor-final3-20260723-GagmGD-examples-derivative-demo-learning-set--/2026-07-23T02-50-07-201Z_019f8ce1-5be1-7b55-bf11-1be404d84633.jsonl`
+- 初始 Trace：`lessons/lesson-003.md#trace-event-001`，`incomplete + support:none`。
+- 最终数学 Trace：`lessons/lesson-003.md#trace-event-002`，`correct + support:tutor + supersedes:event-001`。
+
+Tutor 首次给出关键比较式 `ln(ae^x)/(ae^x) > ln x/x`。学生明确写出“我采用你给出的关键比较式”，并在最终证明中实际使用它。Trace note 精确记录该来源；后续保持方法未绑定的 `event-003` 继续 supersede `event-002`，且保留 `support:tutor`。
+
+### 8.4 作废的第三条测试
+
+原话术“只告诉我接下来应当从哪个方向检查，不要给方法、变形或中间式”没有定义“方向”。在实际对话里，Tutor 只重复学生此前已经写出的证明义务，没有提供新方法、变形、中间式或决定性判断；学生最终证明完全独立产生。该运行与 8.2 同属 `support:none`，不是独立的“方向影响不明确”验收路径。
+
+因此：
+
+- 不删除 Skill 中真正遇到来源不明时向学生确认的能力；
+- 删除第三条合成测试及其完成门；
+- 不再为了测试覆盖而要求 Tutor 对本题追问来源。
+
+### 8.5 自动回归与最终结论
+
+| 检查 | 结果 |
+|---|---|
+| Pi Web `bun run check` | PASS：86 tests，0 fail；typecheck/build exit 0 |
+| Plugin `bun run release:check` | PASS：59 tests，0 fail；strict validation exit 0 |
+| Pi Web `bun run test:e2e` | PASS：8 tests，0 fail |
+| 未采用提示 | PASS：`correct + none + supersedes` |
+| 采用决定性提示 | PASS：`correct + tutor + supersedes` |
+| 作废测试未被计入完成门 | PASS |
+
+最终状态：**PASS — 当前提示依赖语义与两条有效真实路径均满足完成门**。
