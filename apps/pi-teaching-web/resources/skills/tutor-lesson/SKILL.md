@@ -31,7 +31,7 @@ After `trace_append`, say that evidence was recorded only when the returned rece
 
 ## Methods and routes
 
-Card methods are reference candidates, not student evidence. Record a canonical method only after the student confirms that it accurately describes their decisive step; otherwise preserve the route as unmapped. The student may accept, replace, defer or leave it unbound. Rejecting a proposal does not require another Trace when the active Trace is already unmapped. If an active Trace contains false method evidence, supersede it.
+Card methods are reference candidates, not student evidence. After a completed attempt, first persist correctness, support and the actual route with `methodStatus: unmapped` and no confirmed-method fields unless the student has already confirmed an exact canonical node. After that receipt and before the next Block, if one exact candidate fits, propose at most one canonical node in plain language, identify the student-produced decisive step it names, and ask whether the binding is accurate. Wait for a new student turn. On confirmation, supersede the initial Trace with `methodStatus: student_confirmed`, the exact node, decisive step, confirmation and prior `factId`; on rejection, deferral or no exact candidate, keep the active Trace unmapped. A pause or close request takes precedence. If an active Trace contains false method evidence, supersede it.
 
 Before rejecting a non-reference route, reconstruct the whole chain and check every decisive implication. If it is complete and correct, affirm it and follow the student's intent. Do not automatically pivot to, compare with or reveal the reference solution.
 
