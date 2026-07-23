@@ -71,7 +71,18 @@ nodes:
         note: 'MCP appended domain evidence.',
         supersedes: null,
       },
-    })) as { eventId: string; methods: { primary: string; secondary: string[] } | null };
+    })) as {
+      ok: boolean;
+      ownerPath: string;
+      factId: string;
+      eventId: string;
+      methods: { primary: string; secondary: string[] } | null;
+    };
+    expect(appended).toEqual(expect.objectContaining({
+      ok: true,
+      ownerPath: 'lessons/lesson-001.md',
+      factId: 'event-005',
+    }));
     expect(appended.eventId).toBe('event-005');
     expect(appended.methods).toEqual({
       primary: '冻结变量法',

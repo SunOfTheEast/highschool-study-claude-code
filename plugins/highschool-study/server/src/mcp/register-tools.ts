@@ -69,7 +69,15 @@ export function registerStudyTools(server: McpServer, deps: StudyMcpDependencies
   server.registerTool('trace_append', {
     description: 'Append one validated evidence Trace to its owning Lesson',
     inputSchema: traceAppendInput,
-  }, async (input) => output(appendTraceWithProjection(deps.learningSetRoot, input, deps.now)));
+  }, async (input) => {
+    const trace = appendTraceWithProjection(deps.learningSetRoot, input, deps.now);
+    return output({
+      ok: true,
+      ownerPath: trace.lessonPath,
+      factId: trace.eventId,
+      ...trace,
+    });
+  });
 
   server.registerTool('source_resolve', {
     description: 'Resolve a learning-set source and optional fragment',
