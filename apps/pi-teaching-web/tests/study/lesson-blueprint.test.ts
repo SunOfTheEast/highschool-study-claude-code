@@ -82,6 +82,34 @@ test('renders one canonical prepared Lesson that passes source admission', () =>
   expect(() => validatePreparedLessonSource(root, context.lessonPath, source)).not.toThrow();
 });
 
+test.each([
+  ['no card', []],
+  ['multiple cards', ['Q-EX22', 'Q-EX16']],
+] as const)('rejects a problem Block with %s in a Blueprint', (_name, uses) => {
+  const invalid: LessonBlueprint = {
+    ...blueprint,
+    blocks: blueprint.blocks.map((block) => (
+      block.id === 'assessment-01' ? { ...block, uses: [...uses] } : block
+    )),
+  };
+
+  expect(() => validateLessonBlueprint(root, context, invalid))
+    .toThrow(/assessment-01.*恰好一张题卡/);
+});
+
+test.each([
+  ['no card', '- Uses:'],
+  ['multiple cards', '- Uses: Q-EX22, Q-EX16'],
+] as const)('rejects a prepared problem Block with %s', (_name, usesLine) => {
+  const source = renderPreparedLesson(context, blueprint).replace(
+    '- Uses: Q-EX22',
+    usesLine,
+  );
+
+  expect(() => validatePreparedLessonSource(root, context.lessonPath, source))
+    .toThrow(/LESSON_PROBLEM_CARD_COUNT/);
+});
+
 test('rejects duplicate Blocks, unknown aliases, false cards, and nested structural headings', () => {
   const invalid: LessonBlueprint = {
     ...blueprint,

@@ -11,6 +11,7 @@ export type PreparedLessonIssue = {
     | 'LESSON_SECTION_MISSING'
     | 'LESSON_ALIAS_MISSING'
     | 'LESSON_ALIAS_INVALID'
+    | 'LESSON_PROBLEM_CARD_COUNT'
     | 'LESSON_REFLECTION_COUNT';
   message: string;
 };
@@ -24,13 +25,13 @@ export class PreparedLessonValidationError extends Error {
   }
 }
 
-type RawBlock = {
+export type PreparedLessonBlock = {
   id: string;
   kind: string;
   uses: string[];
 };
 
-function rawBlocks(body: string): RawBlock[] {
+export function readPreparedLessonBlocks(body: string): PreparedLessonBlock[] {
   const headings = [...body.matchAll(/^## Block ([^（\s]+)(?:（[^）]+）)?[ \t]*$/gm)];
   return headings.map((heading, index) => {
     const source = body.slice(
@@ -79,7 +80,15 @@ function validatePreparedLessonBody(root: string, lessonPath: string, body: stri
   }
 
   const aliases = readLessonAliases(body);
-  const blocks = rawBlocks(body);
+  const blocks = readPreparedLessonBlocks(body);
+  for (const block of blocks) {
+    if (block.kind === 'problem' && block.uses.length !== 1) {
+      issues.push({
+        code: 'LESSON_PROBLEM_CARD_COUNT',
+        message: `Block ${block.id} 必须且只能 Uses 恰好一张题卡，当前为 ${block.uses.length} 张`,
+      });
+    }
+  }
   const usedAliases = [...new Set(blocks.flatMap((block) => block.uses))];
   for (const alias of usedAliases) {
     const target = aliases.get(alias);

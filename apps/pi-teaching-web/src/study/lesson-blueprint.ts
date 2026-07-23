@@ -106,6 +106,9 @@ export function validateLessonBlueprint(
         issues.push(`Block ${block.id} 的依赖无效：${dependency}`);
       }
     }
+    if (block.kind === 'problem' && block.uses.length !== 1) {
+      issues.push(`Block ${block.id} 必须且只能 Uses 恰好一张题卡`);
+    }
     for (const alias of block.uses) {
       if (!aliases.has(alias)) issues.push(`Block ${block.id} 使用未声明 alias：${alias}`);
     }

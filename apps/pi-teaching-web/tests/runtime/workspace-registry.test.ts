@@ -342,6 +342,22 @@ test.each([
     'LESSON_ALIAS_INVALID',
   ],
   [
+    'a problem block has no card',
+    (source: string) => source.replace(
+      '- Uses: Q-DOMAIN-EX22',
+      '- Uses:',
+    ),
+    'LESSON_PROBLEM_CARD_COUNT',
+  ],
+  [
+    'a problem block has multiple cards',
+    (source: string) => source.replace(
+      '- Uses: Q-DOMAIN-EX22',
+      '- Uses: Q-DOMAIN-EX22, Q-DOMAIN-EX16',
+    ),
+    'LESSON_PROBLEM_CARD_COUNT',
+  ],
+  [
     'the reflection block has the wrong explicit Kind',
     (source: string) => source.replace(
       '## Block reflection（必做）\n\n### Node State\n\n- Kind: reflection',
