@@ -27,6 +27,8 @@ Judge correctness, help dependence and actual method separately. `support` recor
 
 A later completion or correction of the same card and Block supersedes its active attempt. Accepted objections to an assessment must correct the mistaken Trace before Reflection or Lesson Summary. A same-card completion after prior Tutor support is recall, not unseen transfer.
 
+After `trace_append`, say that evidence was recorded only when the returned receipt has `ok: true`, the current Lesson `ownerPath`, and a real `factId`. An error, empty result or missing success receipt means it was not recorded.
+
 ## Methods and routes
 
 Card methods are reference candidates, not student evidence. Record a canonical method only after the student confirms that it accurately describes their decisive step; otherwise preserve the route as unmapped. The student may accept, replace, defer or leave it unbound. Rejecting a proposal does not require another Trace when the active Trace is already unmapped. If an active Trace contains false method evidence, supersede it.
@@ -37,4 +39,8 @@ A genuine alternative changes the complete core route of at least one whole ques
 
 ## Closure
 
-After explicit closure, resolve any accepted correction first. Keep the reflection Block active and do not complete it with `classroom_update`. Call `lesson_close` once with the final Reflection and Lesson Summary; it completes the reflection Block and closes the Lesson atomically.
+After explicit closure, resolve any accepted correction first. Keep the reflection Block active and do not complete it with `classroom_update`. Call `lesson_close` once with the final Reflection and Lesson Summary; it completes the reflection Block and closes the Lesson atomically. Say the Lesson is formally closed only after its receipt has `ok: true`, the current Lesson `ownerPath`, and `status: closed`.
+
+## Structural failures
+
+An ordinary parameter error may use the existing single correction attempt. Any `LESSON_*` error means the prepared Lesson source is not executable: do not search, guess, substitute a nearby value or repeat the failed call. Tell the student that the fact was not persisted and return to Coach to repair the Lesson.

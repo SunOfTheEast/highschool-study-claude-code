@@ -55,11 +55,30 @@ Lesson, active Trace, and source-linked summaries.
 
 Pi write authority is Session-bound:
 
-- Coach owns the current Plan and may use `plan_update`;
+- Coach owns the current Plan and may use `plan_register` and `plan_update`;
 - Tutor owns the current Lesson and may use `trace_append`,
   `classroom_update`, `lesson_close`, and `card_alternative_append`;
 - model-generated arguments must not select or override `ownerPath`,
   `lessonPath`, or a session ID.
+
+Every Pi Session carries exactly one `studyforge.session-owner.v1` custom
+entry containing `role`, `ownerId`, and `ownerPath`. A frontmatter Session ID
+is reused only when all three fields match. Missing, malformed, duplicate, or
+mismatched owner metadata creates a fresh Session; display names are not
+identity.
+
+A Coach-created Plan becomes available only after `plan_register` validates
+the file and idempotently links it under `ROADMAP.md / Plan Graph`. A
+`prepared` Lesson becomes `active` only after admission confirms its required
+top-level sections, every used problem-card alias, and exactly one explicit
+`Kind: reflection` Block. Admission failures do not change status or create a
+Tutor Session.
+
+Fact-writing tools return a minimal receipt with `ok: true` and `ownerPath`;
+Trace writes also return `factId`, and closure returns `status: closed`.
+Agents must not claim persistence from an error, empty result, or missing
+success receipt. `LESSON_*` errors require Coach to repair the source rather
+than Tutor search, guessing, substitution, or repeated calls.
 
 A prepared Lesson may be revised in place. Once it is active, paused, closed,
 or abandoned, re-preparation creates a replacement Lesson and preserves the
