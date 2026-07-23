@@ -2,8 +2,9 @@ import {
   readCard,
   readLessonAliases,
   readMarkdownFile,
-  sourceResolve,
+  resolveInsideRoot,
 } from 'highschool-study-markdown/study-domain';
+import { dirname, isAbsolute, join, relative } from 'node:path';
 
 export type PreparedLessonIssue = {
   code:
@@ -49,9 +50,24 @@ function rawBlocks(body: string): RawBlock[] {
   });
 }
 
-export function validatePreparedLesson(root: string, lessonPath: string): void {
-  const lesson = readMarkdownFile(root, lessonPath);
-  const body = lesson.body;
+function bodyFromSource(source: string): string {
+  const match = /^---[ \t]*\n[\s\S]*?\n---[ \t]*\n/.exec(source);
+  return match ? source.slice(match[0].length) : source;
+}
+
+function aliasResolvesToCard(root: string, lessonPath: string, target: string): boolean {
+  try {
+    const path = target.split('#', 1)[0]!;
+    if (!path || isAbsolute(path)) return false;
+    const absolute = resolveInsideRoot(root, join(dirname(lessonPath), path));
+    const canonical = relative(resolveInsideRoot(root, '.'), absolute).replaceAll('\\', '/');
+    return readCard(root, canonical) !== null;
+  } catch {
+    return false;
+  }
+}
+
+function validatePreparedLessonBody(root: string, lessonPath: string, body: string): void {
   const issues: PreparedLessonIssue[] = [];
   for (const section of ['Aliases', 'Reflection', 'Lesson Summary', 'Traces']) {
     if (!new RegExp(`^## ${section}[ \\t]*$`, 'm').test(body)) {
@@ -74,8 +90,7 @@ export function validatePreparedLesson(root: string, lessonPath: string): void {
       });
       continue;
     }
-    const resolved = sourceResolve(root, { fromPath: lessonPath, target });
-    if (!resolved.valid || resolved.path === null || readCard(root, resolved.path) === null) {
+    if (!aliasResolvesToCard(root, lessonPath, target)) {
       issues.push({
         code: 'LESSON_ALIAS_INVALID',
         message: `alias ${alias} 不能解析为真实题卡：${target}`,
@@ -92,4 +107,17 @@ export function validatePreparedLesson(root: string, lessonPath: string): void {
   }
 
   if (issues.length > 0) throw new PreparedLessonValidationError(issues);
+}
+
+export function validatePreparedLessonSource(
+  root: string,
+  lessonPath: string,
+  source: string,
+): void {
+  validatePreparedLessonBody(root, lessonPath, bodyFromSource(source));
+}
+
+export function validatePreparedLesson(root: string, lessonPath: string): void {
+  const lesson = readMarkdownFile(root, lessonPath);
+  validatePreparedLessonBody(root, lessonPath, lesson.body);
 }
