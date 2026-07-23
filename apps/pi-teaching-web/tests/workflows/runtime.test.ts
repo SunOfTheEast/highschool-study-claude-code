@@ -1,7 +1,7 @@
 import { expect, test } from 'bun:test';
 import { createEventBus, SessionManager } from '@earendil-works/pi-coding-agent';
 import type { WorkflowGraph, WorkflowSnapshot } from '../../src/workflows/contracts';
-import { DeepWorkflowRuntime } from '../../src/workflows/runtime';
+import { DeepWorkflowRuntime, parseTaskResult } from '../../src/workflows/runtime';
 import { WorkflowStore } from '../../src/workflows/store';
 
 const graph: WorkflowGraph = {
@@ -72,6 +72,104 @@ function completed(requestId: string, output?: string) {
     }),
   };
 }
+
+test('parses and preserves a compact evidence card index', () => {
+  const result = parseTaskResult(JSON.stringify({
+    card_index: [{
+      cardPath: 'cards/a.yaml',
+      title: '题目 A',
+      goal: '求参数范围',
+      methods: {
+        primary: '参变量分离',
+        secondary: ['同构变形与换元法'],
+      },
+      reason: '与当前迁移目标相关。',
+      traceRefs: ['lessons/l.md#trace-event-1'],
+    }],
+    findings: ['跨题证据仍不足。'],
+    evidence_refs: ['cards/a.yaml', 'lessons/l.md#trace-event-1'],
+    recommended_action: '下一课检验陌生题迁移。',
+    risks: [],
+  }));
+
+  expect(result.card_index).toEqual([{
+    cardPath: 'cards/a.yaml',
+    title: '题目 A',
+    goal: '求参数范围',
+    methods: {
+      primary: '参变量分离',
+      secondary: ['同构变形与换元法'],
+    },
+    reason: '与当前迁移目标相关。',
+    traceRefs: ['lessons/l.md#trace-event-1'],
+  }]);
+});
+
+test('rejects a malformed evidence card index entry', () => {
+  expect(() => parseTaskResult(JSON.stringify({
+    card_index: [{
+      cardPath: 'cards/a.yaml',
+      title: '题目 A',
+      goal: null,
+      methods: { primary: null, secondary: 'not-an-array' },
+      reason: '相关。',
+      traceRefs: [],
+    }],
+    findings: [],
+    evidence_refs: [],
+    recommended_action: '',
+    risks: [],
+  }))).toThrow('INVALID_TASK_RESULT');
+});
+
+test('keeps card index optional for ordinary workflow tasks', () => {
+  expect(parseTaskResult(JSON.stringify({
+    findings: [],
+    evidence_refs: [],
+    recommended_action: '',
+    risks: [],
+  }))).toEqual({
+    findings: [],
+    evidence_refs: [],
+    recommended_action: '',
+    risks: [],
+  });
+});
+
+test('persists and restores a completed compact evidence result', async () => {
+  const manager = SessionManager.inMemory('/tmp/study');
+  const store = new WorkflowStore(manager);
+  const subject = runtime(async (_bus: unknown, input: { requestId: string }) => (
+    completed(input.requestId, JSON.stringify({
+      card_index: [{
+        cardPath: 'cards/a.yaml',
+        title: null,
+        goal: null,
+        methods: { primary: null, secondary: [] },
+        reason: 'active Trace 命中。',
+        traceRefs: ['lessons/l.md#trace-event-1'],
+      }],
+      findings: [],
+      evidence_refs: ['cards/a.yaml'],
+      recommended_action: '',
+      risks: [],
+    }))
+  ), store);
+  const quick = {
+    ...graph,
+    id: 'wf-card-index',
+    mode: 'quick' as const,
+    tokenLimit: 12_000,
+    timeoutMs: 45_000,
+    tasks: [graph.tasks[0]!],
+  };
+
+  await subject.propose(quick);
+  const restored = runtime(async () => completed('unused'), store);
+
+  expect(restored.list()[0]?.tasks[0]?.result?.card_index?.[0]?.cardPath)
+    .toBe('cards/a.yaml');
+});
 
 test('waits for dependencies and runs only ready tasks in parallel', async () => {
   const timeline: string[] = [];

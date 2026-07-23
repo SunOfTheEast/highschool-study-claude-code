@@ -3,6 +3,7 @@ import type { SubagentDelegationResponse } from 'pi-subagents/delegation';
 import type { SessionKey } from '../shared/contracts';
 import { delegateStudyTask } from './delegation-client';
 import type {
+  EvidenceCardIndexEntry,
   WorkflowGraph,
   WorkflowSnapshot,
   WorkflowTaskResult,
@@ -22,6 +23,47 @@ function clone<T>(value: T): T {
 
 function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((item) => typeof item === 'string');
+}
+
+function isNullableString(value: unknown): value is string | null {
+  return value === null || typeof value === 'string';
+}
+
+function parseCardIndex(value: unknown): EvidenceCardIndexEntry[] | undefined {
+  if (value === undefined) return undefined;
+  if (!Array.isArray(value)) throw new Error('INVALID_TASK_RESULT');
+  return value.map((entry) => {
+    if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
+      throw new Error('INVALID_TASK_RESULT');
+    }
+    const candidate = entry as Record<string, unknown>;
+    const methods = candidate.methods;
+    if (
+      typeof candidate.cardPath !== 'string'
+      || !isNullableString(candidate.title)
+      || !isNullableString(candidate.goal)
+      || !methods
+      || typeof methods !== 'object'
+      || Array.isArray(methods)
+      || !isNullableString((methods as Record<string, unknown>).primary)
+      || !isStringArray((methods as Record<string, unknown>).secondary)
+      || typeof candidate.reason !== 'string'
+      || !isStringArray(candidate.traceRefs)
+    ) {
+      throw new Error('INVALID_TASK_RESULT');
+    }
+    return {
+      cardPath: candidate.cardPath,
+      title: candidate.title,
+      goal: candidate.goal,
+      methods: {
+        primary: (methods as { primary: string | null }).primary,
+        secondary: (methods as { secondary: string[] }).secondary,
+      },
+      reason: candidate.reason,
+      traceRefs: candidate.traceRefs,
+    };
+  });
 }
 
 export function parseTaskResult(output: string | undefined): WorkflowTaskResult {
@@ -44,7 +86,9 @@ export function parseTaskResult(output: string | undefined): WorkflowTaskResult 
     || !isStringArray(candidate.risks)) {
     throw new Error('INVALID_TASK_RESULT');
   }
+  const cardIndex = parseCardIndex(candidate.card_index);
   return {
+    ...(cardIndex === undefined ? {} : { card_index: cardIndex }),
     findings: candidate.findings,
     evidence_refs: candidate.evidence_refs,
     recommended_action: candidate.recommended_action,
@@ -200,7 +244,7 @@ export class DeepWorkflowRuntime {
       `Allowed read roots: ${JSON.stringify(task.readRoots)}`,
       `Direct dependency results: ${JSON.stringify(dependencies)}`,
       'Read only the declared roots and use only authentic source handles. If evidence is insufficient, return empty findings instead of inventing facts.',
-      'Return only one JSON object with string-array fields findings, evidence_refs, risks and string field recommended_action. Do not include thinking or a transcript.',
+      'Return only one JSON object with string-array fields findings, evidence_refs, risks and string field recommended_action. Evidence-retrieval tasks may also return a compact card_index; other tasks omit it. Do not include thinking or a transcript.',
     ].join('\n');
   }
 

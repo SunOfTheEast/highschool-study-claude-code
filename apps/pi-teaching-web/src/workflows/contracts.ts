@@ -36,7 +36,20 @@ export type WorkflowGraph = {
   tasks: WorkflowTask[];
 };
 
+export type EvidenceCardIndexEntry = {
+  cardPath: string;
+  title: string | null;
+  goal: string | null;
+  methods: {
+    primary: string | null;
+    secondary: string[];
+  };
+  reason: string;
+  traceRefs: string[];
+};
+
 export type WorkflowTaskResult = {
+  card_index?: EvidenceCardIndexEntry[];
   findings: string[];
   evidence_refs: string[];
   recommended_action: string;

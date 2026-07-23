@@ -18,12 +18,7 @@ function result(kind: string, value: object) {
 
 export type StudyToolContext = StudySessionScope;
 
-export function createStudyTools(
-  root: string,
-  now: () => Date,
-  context: StudyToolContext,
-): ToolDefinition[] {
-  const methodName = Type.Enum(listCanonicalMethodNames(root));
+export function createReadOnlyStudyTools(root: string): ToolDefinition[] {
   return [
     defineTool({
       name: 'card_search',
@@ -54,6 +49,26 @@ export function createStudyTools(
         limit: input.limit,
       })),
     }),
+    defineTool({
+      name: 'source_resolve',
+      label: '核验来源',
+      description: 'Resolve a learning-set-local source and optional fragment.',
+      parameters: Type.Object({ fromPath: Type.String(), target: Type.String() }),
+      execute: async (_id, input) => result('source-resolve', sourceResolve(root, input)),
+    }),
+  ];
+}
+
+export function createStudyTools(
+  root: string,
+  now: () => Date,
+  context: StudyToolContext,
+): ToolDefinition[] {
+  const methodName = Type.Enum(listCanonicalMethodNames(root));
+  const readOnly = createReadOnlyStudyTools(root);
+  return [
+    readOnly[0]!,
+    readOnly[1]!,
     defineTool({
       name: 'trace_append',
       label: '记录课堂证据',
@@ -130,12 +145,6 @@ export function createStudyTools(
         }, now));
       },
     }),
-    defineTool({
-      name: 'source_resolve',
-      label: '核验来源',
-      description: 'Resolve a learning-set-local source and optional fragment.',
-      parameters: Type.Object({ fromPath: Type.String(), target: Type.String() }),
-      execute: async (_id, input) => result('source-resolve', sourceResolve(root, input)),
-    }),
+    readOnly[2]!,
   ];
 }

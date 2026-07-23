@@ -8,7 +8,9 @@ import { createClassroomUpdateTool } from '../../src/runtime/classroom-update';
 import { createCardAlternativeAppendTool } from '../../src/runtime/card-alternative-append';
 import { createLessonCloseTool } from '../../src/runtime/lesson-close';
 import { createPlanUpdateTool } from '../../src/runtime/plan-update';
-import { createStudyTools } from '../../src/runtime/study-tools';
+import * as studyToolModule from '../../src/runtime/study-tools';
+
+const { createStudyTools } = studyToolModule;
 
 const root = join(import.meta.dir, '../../../../examples/derivative-demo/learning-set');
 const temporaryRoots: string[] = [];
@@ -26,6 +28,41 @@ test('registers the existing four domain contracts without renaming them', () =>
     ownerPath: 'plans/domain-integrity.md',
   }).map((tool) => tool.name))
     .toEqual(['card_search', 'trace_search', 'trace_append', 'source_resolve']);
+});
+
+test('exposes only read-only study tools for isolated child sessions', () => {
+  const factory = (studyToolModule as unknown as {
+    createReadOnlyStudyTools?: (root: string) => Array<{ name: string }>;
+  }).createReadOnlyStudyTools;
+  if (!factory) {
+    expect(factory).toBeFunction();
+    return;
+  }
+  expect(factory(root).map((tool) => tool.name))
+    .toEqual(['card_search', 'trace_search', 'source_resolve']);
+});
+
+test('registers the read-only tools through the child-only Pi extension', async () => {
+  const extensionPath = join(
+    import.meta.dir,
+    '../../resources/subagents/tools/study-readonly-tools.ts',
+  );
+  let loaded: { default: (pi: { registerTool(tool: { name: string }): void }) => void } | null = null;
+  try {
+    loaded = await import(extensionPath);
+  } catch {
+    // The assertion below is the RED failure before the extension exists.
+  }
+  expect(loaded).not.toBeNull();
+  if (!loaded) return;
+
+  const names: string[] = [];
+  loaded.default({
+    registerTool(tool) {
+      names.push(tool.name);
+    },
+  });
+  expect(names).toEqual(['card_search', 'trace_search', 'source_resolve']);
 });
 
 test('binds a Tutor Trace to its Lesson and refreshes planner attention', async () => {
