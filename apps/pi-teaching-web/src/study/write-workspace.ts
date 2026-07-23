@@ -1,4 +1,5 @@
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, posix } from 'node:path';
 import {
   readMarkdownFile,
   resolveInsideRoot,
@@ -28,6 +29,20 @@ export type RegisteredPlan = {
   title: string;
   path: string;
   coachSessionId: string | null;
+};
+
+export type PreparedLessonWrite = {
+  lessonId: string;
+  lessonPath: string;
+  lessonTitle: string;
+  source: string;
+};
+
+export type RegisteredLesson = {
+  id: string;
+  title: string;
+  path: string;
+  status: 'prepared';
 };
 
 function read(root: string, path: string): { absolute: string; source: string } {
@@ -138,6 +153,70 @@ function appendPlanGraphLink(source: string, path: string, title: string): strin
   const before = source.slice(0, sectionEnd).trimEnd();
   const after = source.slice(sectionEnd);
   return `${before}\n\n- [${title}](${path})\n${after.startsWith('\n') ? after : `\n${after}`}`;
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function registerLessonIndex(
+  planSource: string,
+  planPath: string,
+  lessonPath: string,
+  title: string,
+): string {
+  const heading = /^## Lesson Index[ \t]*$/m.exec(planSource);
+  if (!heading) throw new Error('SECTION_NOT_FOUND: Lesson Index');
+  const sectionStart = heading.index + heading[0].length;
+  const nextHeading = /^## [^\n]+$/gm;
+  nextHeading.lastIndex = sectionStart;
+  const sectionEnd = nextHeading.exec(planSource)?.index ?? planSource.length;
+  const section = planSource.slice(sectionStart, sectionEnd);
+  const target = posix.relative(posix.dirname(planPath), lessonPath);
+  const existing = new RegExp(
+    `^([ \\t]*\\d+\\.[ \\t]+)\\[[^\\]]+\\]\\(${escapeRegExp(target)}\\).*?$`,
+    'm',
+  );
+  if (existing.test(section)) {
+    const nextSection = section.replace(existing, `$1[${title}](${target}) — prepared。`);
+    return planSource.slice(0, sectionStart) + nextSection + planSource.slice(sectionEnd);
+  }
+  const numbers = [...section.matchAll(/^[ \t]*(\d+)\./gm)]
+    .map((match) => Number(match[1]));
+  const number = Math.max(0, ...numbers) + 1;
+  const before = planSource.slice(0, sectionEnd).trimEnd();
+  const after = planSource.slice(sectionEnd);
+  return `${before}\n${number}. [${title}](${target}) — prepared。\n\n${after.trimStart()}`;
+}
+
+export function writePreparedLesson(
+  root: string,
+  planPath: string,
+  input: PreparedLessonWrite,
+): RegisteredLesson {
+  const absolute = resolveInsideRoot(root, input.lessonPath);
+  if (existsSync(absolute)) {
+    const current = readMarkdownFile(root, input.lessonPath);
+    if (current.frontmatter.status !== 'prepared') {
+      throw new Error(`LESSON_REPREPARE_REQUIRES_NEW_ID: ${input.lessonId}`);
+    }
+  }
+  const plan = read(root, planPath);
+  const nextPlan = registerLessonIndex(
+    plan.source,
+    planPath,
+    input.lessonPath,
+    input.lessonTitle,
+  );
+  mkdirSync(dirname(absolute), { recursive: true });
+  write(absolute, input.source);
+  if (nextPlan !== plan.source) write(plan.absolute, nextPlan);
+  return {
+    id: input.lessonId,
+    title: input.lessonTitle,
+    path: input.lessonPath,
+    status: 'prepared',
+  };
 }
 
 export function registerPlan(root: string, planId: string): RegisteredPlan {

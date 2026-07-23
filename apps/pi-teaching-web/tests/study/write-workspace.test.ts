@@ -9,6 +9,7 @@ import {
   setBlockStatus,
   setFrontmatterField,
   updatePlan,
+  writePreparedLesson,
 } from '../../src/study/write-workspace';
 
 const roots: string[] = [];
@@ -280,4 +281,75 @@ test('requires the existing Plan Graph section before registration', () => {
     'SECTION_NOT_FOUND: Plan Graph',
   );
   expect(readFileSync(roadmapPath, 'utf8')).toBe(before);
+});
+
+test('writes and indexes a prepared Lesson exactly once', () => {
+  const { root, path: planPath } = planFixture();
+  mkdirSync(join(root, 'lessons'), { recursive: true });
+  const input = {
+    lessonId: 'lesson-blueprint-001',
+    lessonPath: 'lessons/lesson-blueprint-001.md',
+    lessonTitle: 'Blueprint 试验课',
+    source: `---
+id: lesson-blueprint-001
+kind: lesson
+plan_id: p1
+status: prepared
+---
+# Blueprint 试验课
+`,
+  };
+
+  const first = writePreparedLesson(root, planPath, input);
+  const afterFirst = readFileSync(join(root, planPath), 'utf8');
+  const second = writePreparedLesson(root, planPath, input);
+
+  expect(first).toEqual({
+    id: 'lesson-blueprint-001',
+    title: 'Blueprint 试验课',
+    path: 'lessons/lesson-blueprint-001.md',
+    status: 'prepared',
+  });
+  expect(second).toEqual(first);
+  expect(afterFirst.match(/\]\(\.\.\/lessons\/lesson-blueprint-001\.md\)/g)).toHaveLength(1);
+  expect(readFileSync(join(root, planPath), 'utf8')).toBe(afterFirst);
+});
+
+test('replaces prepared content but never overwrites a started Lesson', () => {
+  const { root, path: planPath } = planFixture();
+  mkdirSync(join(root, 'lessons'), { recursive: true });
+  const lessonPath = 'lessons/lesson-blueprint-001.md';
+  const prepared = `---
+id: lesson-blueprint-001
+kind: lesson
+plan_id: p1
+status: prepared
+---
+# First
+`;
+  writePreparedLesson(root, planPath, {
+    lessonId: 'lesson-blueprint-001',
+    lessonPath,
+    lessonTitle: 'First',
+    source: prepared,
+  });
+  writePreparedLesson(root, planPath, {
+    lessonId: 'lesson-blueprint-001',
+    lessonPath,
+    lessonTitle: 'Reprepared',
+    source: prepared.replace('# First', '# Reprepared'),
+  });
+  expect(readFileSync(join(root, lessonPath), 'utf8')).toContain('# Reprepared');
+
+  writeFileSync(
+    join(root, lessonPath),
+    readFileSync(join(root, lessonPath), 'utf8').replace('status: prepared', 'status: active'),
+  );
+  expect(() => writePreparedLesson(root, planPath, {
+    lessonId: 'lesson-blueprint-001',
+    lessonPath,
+    lessonTitle: 'Forbidden',
+    source: prepared,
+  })).toThrow('LESSON_REPREPARE_REQUIRES_NEW_ID');
+  expect(readFileSync(join(root, lessonPath), 'utf8')).toContain('status: active');
 });
