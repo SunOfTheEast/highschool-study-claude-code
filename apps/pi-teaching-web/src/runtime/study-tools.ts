@@ -2,11 +2,13 @@ import { defineTool, type ToolDefinition } from '@earendil-works/pi-coding-agent
 import {
   appendTraceWithProjection,
   listCanonicalMethodNames,
+  readMarkdownFile,
   searchCards,
   searchTraces,
   sourceResolve,
 } from 'highschool-study-markdown/study-domain';
 import { Type } from 'typebox';
+import { readPreparedLessonBlocks } from '../study/validate-prepared-lesson';
 import type { StudySessionScope } from './session-scope';
 
 function result(kind: string, value: object) {
@@ -32,6 +34,24 @@ function compactCard(card: SearchCard) {
     methods: card.methods,
     traceHistory: card.traceHistory,
   };
+}
+
+function cardAliasForBlock(
+  root: string,
+  lessonPath: string,
+  blockId: string,
+): string | null {
+  const lesson = readMarkdownFile(root, lessonPath);
+  const block = readPreparedLessonBlocks(lesson.body)
+    .find((candidate) => candidate.id === blockId);
+  if (block?.kind !== 'problem') return null;
+  if (block.uses.length !== 1) {
+    throw new Error(
+      `LESSON_PROBLEM_CARD_COUNT: block=${blockId}; count=${block.uses.length}; `
+      + '请返回 Coach 修正源文件',
+    );
+  }
+  return block.uses[0]!;
 }
 
 export function createReadOnlyStudyTools(
@@ -112,7 +132,6 @@ export function createStudyTools(
       description: 'Append one validated Trace to its owning Lesson.',
       parameters: Type.Object({
         blockId: Type.String(),
-        cardAlias: Type.Optional(Type.String()),
         materialPath: Type.Optional(Type.String()),
         methodStatus: Type.Union([
           Type.Literal('unmapped'),
@@ -171,7 +190,7 @@ export function createStudyTools(
         const trace = appendTraceWithProjection(root, {
           lessonPath: context.ownerPath,
           blockId: input.blockId,
-          cardAlias: input.cardAlias ?? null,
+          cardAlias: cardAliasForBlock(root, context.ownerPath, input.blockId),
           cardStepId: null,
           materialPath: input.materialPath ?? null,
           methods,

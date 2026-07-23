@@ -18,6 +18,7 @@ import { createLessonPrepareTool } from '../../src/runtime/lesson-prepare';
 import { createPlanRegisterTool } from '../../src/runtime/plan-register';
 import { createPlanUpdateTool } from '../../src/runtime/plan-update';
 import * as studyToolModule from '../../src/runtime/study-tools';
+import { readEvidence } from '../../src/study/ability';
 import { setBlockStatus } from '../../src/study/write-workspace';
 
 const { createStudyTools } = studyToolModule;
@@ -260,7 +261,6 @@ test('binds a Tutor Trace to its Lesson and refreshes planner attention', async 
 
   const appendResult = await trace.execute('call-1', {
     blockId: 'assessment-01',
-    cardAlias: 'Q-DOMAIN-EX22',
     assessment: 'partially_correct',
     support: 'tutor',
     note: 'Used one structural hint after an incomplete attempt.',
@@ -320,6 +320,64 @@ test('binds a Tutor Trace to its Lesson and refreshes planner attention', async 
   expect(tracePayload.traces.map((record) => record.eventId)).toEqual(['event-001']);
   expect(Object.keys(tracePayload.cardsByPath))
     .toContain('cards/derivative/mst_p0032_ex22.card.yaml');
+  expect(readEvidence(
+    temporaryRoot,
+    'lessons/lesson-003.md#trace-event-001',
+  ).card?.path).toBe('cards/derivative/mst_p0032_ex22.card.yaml');
+});
+
+test('ignores a stale cardAlias and binds the card owned by the selected Block', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-tools-cross-binding-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const trace = createStudyTools(temporaryRoot, () => new Date('2026-07-22T00:00:00Z'), {
+    role: 'tutor',
+    ownerId: 'lesson-003',
+    ownerPath: 'lessons/lesson-003.md',
+  }).find((tool) => tool.name === 'trace_append')!;
+
+  await trace.execute('stale-alias', {
+    blockId: 'assessment-01',
+    cardAlias: 'Q-DOMAIN-EX16',
+    assessment: 'correct',
+    support: 'none',
+    note: '独立完成。',
+    methodStatus: 'unmapped',
+    methodRoute: '独立完成当前题目。',
+  } as never, undefined, undefined, {} as never);
+
+  expect(readTraceRecords(temporaryRoot, ['lessons/lesson-003.md'])[0]?.cardPath)
+    .toBe('cards/derivative/mst_p0032_ex22.card.yaml');
+});
+
+test.each([
+  ['no card', '- Uses:'],
+  ['multiple cards', '- Uses: Q-DOMAIN-EX22, Q-DOMAIN-EX16'],
+] as const)('rejects a problem Block with %s before writing Trace', async (_name, usesLine) => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-tools-card-count-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const lessonPath = join(temporaryRoot, 'lessons/lesson-003.md');
+  writeFileSync(
+    lessonPath,
+    readFileSync(lessonPath, 'utf8').replace('- Uses: Q-DOMAIN-EX22', usesLine),
+  );
+  const trace = createStudyTools(temporaryRoot, () => new Date('2026-07-22T00:00:00Z'), {
+    role: 'tutor',
+    ownerId: 'lesson-003',
+    ownerPath: 'lessons/lesson-003.md',
+  }).find((tool) => tool.name === 'trace_append')!;
+
+  await expect(trace.execute('invalid-card-count', {
+    blockId: 'assessment-01',
+    assessment: 'incomplete',
+    support: 'none',
+    note: '未完成。',
+    methodStatus: 'unmapped',
+    methodRoute: '尚未形成路线。',
+  } as never, undefined, undefined, {} as never)).rejects
+    .toThrow(/LESSON_PROBLEM_CARD_COUNT.*assessment-01/);
+  expect(readTraceRecords(temporaryRoot, ['lessons/lesson-003.md'])).toEqual([]);
 });
 
 test('reports missing and invalid Lesson aliases as non-retryable structure errors', async () => {
@@ -333,13 +391,21 @@ test('reports missing and invalid Lesson aliases as non-retryable structure erro
   }).find((tool) => tool.name === 'trace_append')!;
   const input = {
     blockId: 'assessment-01',
-    cardAlias: 'Q-MISSING',
     assessment: 'incomplete',
     support: 'none',
     note: '未完成。',
     methodStatus: 'unmapped',
     methodRoute: '尚未形成路线。',
   };
+  const lessonPath = join(temporaryRoot, 'lessons/lesson-003.md');
+  const source = readFileSync(lessonPath, 'utf8');
+  writeFileSync(
+    lessonPath,
+    source.replace(
+      '- Uses: Q-DOMAIN-EX22',
+      '- Uses: Q-MISSING',
+    ),
+  );
 
   await expect(trace.execute(
     'missing-alias',
@@ -351,17 +417,16 @@ test('reports missing and invalid Lesson aliases as non-retryable structure erro
     /LESSON_ALIAS_MISSING.*Q-MISSING.*Q-DOMAIN-EX05.*Q-DOMAIN-EX16.*Q-DOMAIN-EX22.*不要搜索、猜测或重试/s,
   );
 
-  const lessonPath = join(temporaryRoot, 'lessons/lesson-003.md');
   writeFileSync(
     lessonPath,
-    readFileSync(lessonPath, 'utf8').replace(
+    source.replace(
       '- Q-DOMAIN-EX22: ../cards/derivative/mst_p0032_ex22.card.yaml',
       '- Q-DOMAIN-EX22: ../cards/derivative/does-not-exist.card.yaml',
     ),
   );
   await expect(trace.execute(
     'invalid-alias',
-    { ...input, cardAlias: 'Q-DOMAIN-EX22' } as never,
+    input as never,
     undefined,
     undefined,
     {} as never,
@@ -420,6 +485,7 @@ test('keeps runtime authority out of Tutor tool schemas', () => {
 
   expect(JSON.stringify(trace.parameters)).toContain('methodStatus');
   expect(JSON.stringify(trace.parameters)).toContain('methodRoute');
+  expect(JSON.stringify(trace.parameters)).not.toContain('cardAlias');
   expect(JSON.stringify(trace.parameters)).not.toContain('methodResolution');
   expect(JSON.stringify(trace.parameters)).not.toContain('"methods"');
   const traceProperties = (trace.parameters as {
@@ -456,7 +522,6 @@ test('requires an explicit student-confirmed or unmapped method decision', () =>
   }).find((tool) => tool.name === 'trace_append')!;
   const base = {
     blockId: 'assessment-01',
-    cardAlias: 'Q-DOMAIN-EX22',
     assessment: 'correct',
     support: 'none',
     note: '学生实际采用参变量分离。',
@@ -504,7 +569,6 @@ test('rejects a student-confirmed method without confirmation evidence', async (
 
   expect(trace.execute('call-invalid-confirmation', {
     blockId: 'assessment-01',
-    cardAlias: 'Q-DOMAIN-EX22',
     assessment: 'correct',
     support: 'none',
     note: '学生路线。',
@@ -528,7 +592,6 @@ test('persists no method evidence for an explicit unmapped decision', async () =
 
   const appendResult = await trace.execute('call-unmapped', {
     blockId: 'assessment-01',
-    cardAlias: 'Q-DOMAIN-EX22',
     assessment: 'correct',
     support: 'none',
     note: '学生使用参数单调性和边界验证，当前词表没有精确节点。',
@@ -541,6 +604,32 @@ test('persists no method evidence for an explicit unmapped decision', async () =
   };
   expect(appended.methods).toBeNull();
   expect(readTraceRecords(temporaryRoot, ['lessons/lesson-003.md'])[0]?.methods).toBeNull();
+});
+
+test('keeps non-problem Trace cardless', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-tools-cardless-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const trace = createStudyTools(temporaryRoot, () => new Date('2026-07-22T00:00:00Z'), {
+    role: 'tutor',
+    ownerId: 'lesson-003',
+    ownerPath: 'lessons/lesson-003.md',
+  }).find((tool) => tool.name === 'trace_append')!;
+
+  await trace.execute('cardless-reflection', {
+    blockId: 'reflection',
+    assessment: 'correct',
+    support: 'none',
+    note: '学生完成课后反思。',
+    methodStatus: 'unmapped',
+    methodRoute: '比较两次作答。',
+  } as never, undefined, undefined, {} as never);
+
+  expect(readTraceRecords(temporaryRoot, ['lessons/lesson-003.md']).at(-1))
+    .toEqual(expect.objectContaining({
+      blockId: 'reflection',
+      cardPath: null,
+    }));
 });
 
 test('exposes one flat Coach plan_update contract without path authority', () => {
