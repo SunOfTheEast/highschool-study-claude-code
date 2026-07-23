@@ -118,7 +118,7 @@ export function createStudyTools(
           Type.Literal('unmapped'),
           Type.Literal('student_confirmed'),
         ], {
-          description: 'Use student_confirmed only after an explicit student confirmation turn; otherwise use unmapped.',
+          description: 'Use student_confirmed only after an explicit student confirmation turn. The same call must include methodPrimary, methodDecisiveStep and methodConfirmation; otherwise use unmapped.',
         }),
         methodRoute: Type.String({
           minLength: 1,

@@ -37,4 +37,4 @@ A genuine alternative changes the complete core route of at least one whole ques
 
 ## Closure
 
-After explicit closure, resolve any accepted correction first, activate reflection, and call `lesson_close` once with the final Reflection and Lesson Summary.
+After explicit closure, resolve any accepted correction first. Keep the reflection Block active and do not complete it with `classroom_update`. Call `lesson_close` once with the final Reflection and Lesson Summary; it completes the reflection Block and closes the Lesson atomically.
