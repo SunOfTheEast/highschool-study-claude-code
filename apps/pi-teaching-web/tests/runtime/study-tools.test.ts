@@ -10,6 +10,7 @@ import { createLessonCloseTool } from '../../src/runtime/lesson-close';
 import { createPlanRegisterTool } from '../../src/runtime/plan-register';
 import { createPlanUpdateTool } from '../../src/runtime/plan-update';
 import * as studyToolModule from '../../src/runtime/study-tools';
+import { setBlockStatus } from '../../src/study/write-workspace';
 
 const { createStudyTools } = studyToolModule;
 
@@ -164,9 +165,18 @@ test('binds a Tutor Trace to its Lesson and refreshes planner attention', async 
   } as never, undefined, undefined, {} as never);
 
   const appended = JSON.parse((appendResult.content[0] as { text: string }).text) as {
+    ok: boolean;
+    ownerPath: string;
+    factId: string;
+    eventId: string;
     methods: { primary: string; secondary: string[] } | null;
     unresolvedMethods: string[];
   };
+  expect(appended).toEqual(expect.objectContaining({
+    ok: true,
+    ownerPath: 'lessons/lesson-003.md',
+    factId: appended.eventId,
+  }));
   expect(appended.methods).toEqual({ primary: '参变量分离', secondary: ['同构变形与换元法'] });
   expect(appended.unresolvedMethods).toEqual([]);
 
@@ -202,6 +212,76 @@ test('binds a Tutor Trace to its Lesson and refreshes planner attention', async 
   expect(tracePayload.traces.map((record) => record.eventId)).toEqual(['event-001']);
   expect(Object.keys(tracePayload.cardsByPath))
     .toContain('cards/derivative/mst_p0032_ex22.card.yaml');
+});
+
+test('reports missing and invalid Lesson aliases as non-retryable structure errors', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-tools-alias-errors-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const trace = createStudyTools(temporaryRoot, () => new Date('2026-07-22T00:00:00Z'), {
+    role: 'tutor',
+    ownerId: 'lesson-003',
+    ownerPath: 'lessons/lesson-003.md',
+  }).find((tool) => tool.name === 'trace_append')!;
+  const input = {
+    blockId: 'assessment-01',
+    cardAlias: 'Q-MISSING',
+    assessment: 'incomplete',
+    support: 'none',
+    note: '未完成。',
+    methodStatus: 'unmapped',
+    methodRoute: '尚未形成路线。',
+  };
+
+  await expect(trace.execute(
+    'missing-alias',
+    input as never,
+    undefined,
+    undefined,
+    {} as never,
+  )).rejects.toThrow(
+    /LESSON_ALIAS_MISSING.*Q-MISSING.*Q-DOMAIN-EX05.*Q-DOMAIN-EX16.*Q-DOMAIN-EX22.*不要搜索、猜测或重试/s,
+  );
+
+  const lessonPath = join(temporaryRoot, 'lessons/lesson-003.md');
+  writeFileSync(
+    lessonPath,
+    readFileSync(lessonPath, 'utf8').replace(
+      '- Q-DOMAIN-EX22: ../cards/derivative/mst_p0032_ex22.card.yaml',
+      '- Q-DOMAIN-EX22: ../cards/derivative/does-not-exist.card.yaml',
+    ),
+  );
+  await expect(trace.execute(
+    'invalid-alias',
+    { ...input, cardAlias: 'Q-DOMAIN-EX22' } as never,
+    undefined,
+    undefined,
+    {} as never,
+  )).rejects.toThrow(
+    /LESSON_ALIAS_INVALID.*Q-DOMAIN-EX22.*does-not-exist\.card\.yaml.*不要搜索、猜测或重试/s,
+  );
+});
+
+test('returns an owner receipt only after lesson_close persists closure', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-tools-close-receipt-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  setBlockStatus(temporaryRoot, 'lessons/lesson-003.md', 'reflection', 'active');
+  const close = createLessonCloseTool(temporaryRoot, 'lessons/lesson-003.md');
+
+  const result = await close.execute('close-1', {
+    reflection: '我会先检查定义域。',
+    summary: '本节课完成。',
+  }, undefined, undefined, {} as never);
+  const payload = JSON.parse((result.content[0] as { text: string }).text);
+
+  expect(payload).toEqual({
+    ok: true,
+    ownerPath: 'lessons/lesson-003.md',
+    status: 'closed',
+  });
+  expect(readFileSync(join(temporaryRoot, 'lessons/lesson-003.md'), 'utf8'))
+    .toContain('status: closed');
 });
 
 test('registers classroom_update separately from the public study tools', () => {

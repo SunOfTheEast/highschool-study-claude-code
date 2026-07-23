@@ -166,6 +166,21 @@ test('leaves a lesson byte-for-byte unchanged when a required close section is m
   expect(readFileSync(absolute, 'utf8')).toBe(before);
 });
 
+test('explains the active Block mismatch when reflection cannot close', () => {
+  const { root, path } = fixture();
+  setBlockStatus(root, path, 'reflection', 'pending');
+  setBlockStatus(root, path, 'orientation', 'active');
+  const before = readFileSync(join(root, path), 'utf8');
+
+  expect(() => closeLesson(root, path, {
+    reflection: '不会写入。',
+    summary: '不会写入。',
+  })).toThrow(
+    /LESSON_REFLECTION_NOT_ACTIVE.*orientation:dialogue.*恰好一个.*Kind: reflection.*Status: active/s,
+  );
+  expect(readFileSync(join(root, path), 'utf8')).toBe(before);
+});
+
 test('updates all Plan audit sections in one write and maps the decision status', () => {
   const { root, path } = planFixture();
   updatePlan(root, path, {

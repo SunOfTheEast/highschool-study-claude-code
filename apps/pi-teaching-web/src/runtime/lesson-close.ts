@@ -14,7 +14,10 @@ export function createLessonCloseTool(root: string, ownerPath: string) {
     execute: async (_id, input) => {
       closeLesson(root, ownerPath, input);
       return {
-        content: [{ type: 'text' as const, text: JSON.stringify({ ok: true, status: 'closed' }) }],
+        content: [{
+          type: 'text' as const,
+          text: JSON.stringify({ ok: true, ownerPath, status: 'closed' }),
+        }],
         details: { kind: 'lesson-close', lessonPath: ownerPath },
       };
     },

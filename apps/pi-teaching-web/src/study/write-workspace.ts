@@ -170,15 +170,28 @@ export function registerPlan(root: string, planId: string): RegisteredPlan {
 
 function activeReflectionBlockId(source: string): string {
   const headings = [...source.matchAll(/^## Block ([^（\s]+)(?:（[^）]+）)?\s*$/gm)];
-  const active = headings.flatMap((heading, index) => {
+  const blocks = headings.map((heading, index) => {
     const body = source.slice(heading.index!, headings[index + 1]?.index ?? source.length);
-    return /^- Kind:\s*reflection\s*$/m.test(body)
-      && /^- Status:\s*active\s*$/m.test(body)
-      ? [heading[1]!]
-      : [];
+    return {
+      id: heading[1]!,
+      kind: /^- Kind:\s*(.*?)\s*$/m.exec(body)?.[1] ?? 'unknown',
+      status: /^- Status:\s*(.*?)\s*$/m.exec(body)?.[1] ?? 'unknown',
+    };
   });
-  if (active.length !== 1) throw new Error('ACTIVE_REFLECTION_REQUIRED');
-  return active[0]!;
+  const reflections = blocks.filter((block) => (
+    block.kind === 'reflection' && block.status === 'active'
+  ));
+  if (reflections.length !== 1) {
+    const active = blocks
+      .filter((block) => block.status === 'active')
+      .map((block) => `${block.id}:${block.kind}`)
+      .join(', ') || '(none)';
+    throw new Error(
+      `LESSON_REFLECTION_NOT_ACTIVE: active=${active}; `
+      + '期望恰好一个 Block 同时为 Kind: reflection 且 Status: active',
+    );
+  }
+  return reflections[0]!.id;
 }
 
 export function closeLesson(

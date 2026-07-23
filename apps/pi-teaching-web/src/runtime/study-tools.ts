@@ -168,7 +168,7 @@ export function createStudyTools(
               };
             })()
           : null;
-        return result('trace-append', appendTraceWithProjection(root, {
+        const trace = appendTraceWithProjection(root, {
           lessonPath: context.ownerPath,
           blockId: input.blockId,
           cardAlias: input.cardAlias ?? null,
@@ -179,7 +179,13 @@ export function createStudyTools(
           support: input.support,
           note: input.note,
           supersedes: input.supersedes ?? null,
-        }, now));
+        }, now);
+        return result('trace-append', {
+          ok: true,
+          ownerPath: context.ownerPath,
+          factId: trace.eventId,
+          ...trace,
+        });
       },
     }),
     readOnly[2]!,

@@ -275,11 +275,21 @@ export function appendTrace(
   if (input.cardAlias === null) {
     if (input.cardStepId !== null) traceError('Card step requires a card alias');
   } else {
-    const target = readLessonAliases(source).get(input.cardAlias);
-    if (target === undefined) traceError('Card alias is not defined by the Lesson');
+    const lessonAliases = readLessonAliases(source);
+    const target = lessonAliases.get(input.cardAlias);
+    if (target === undefined) {
+      const allowed = [...lessonAliases.keys()].sort().join(', ') || '(none)';
+      throw new Error(
+        `LESSON_ALIAS_MISSING: requested=${input.cardAlias}; allowed=${allowed}; `
+        + '这是 Lesson 结构错误，不要搜索、猜测或重试，请返回 Coach 修正源文件',
+      );
+    }
     const card = sourceResolve(root, { fromPath: lessonPath, target });
     if (!card.valid || card.path === null || !isProblemCard(root, card.path)) {
-      traceError('Card alias cannot be resolved to a problem card');
+      throw new Error(
+        `LESSON_ALIAS_INVALID: alias=${input.cardAlias}; target=${target}; `
+        + '这是 Lesson 结构错误，不要搜索、猜测或重试，请返回 Coach 修正源文件',
+      );
     }
     cardPath = card.path;
     if (input.cardStepId !== null) {
