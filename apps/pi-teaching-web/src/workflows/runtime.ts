@@ -6,6 +6,7 @@ import type {
   EvidenceCardIndexEntry,
   WorkflowGraph,
   WorkflowSnapshot,
+  WorkflowTask,
   WorkflowTaskResult,
   WorkflowTaskState,
 } from './contracts';
@@ -16,6 +17,7 @@ export type WorkflowListener = (snapshot: WorkflowSnapshot) => void;
 export type WorkflowDelegator = typeof delegateStudyTask;
 
 const terminalTaskStatuses = new Set(['completed', 'failed', 'blocked', 'cancelled']);
+const EVIDENCE_SCOUT_ROLE = 'Evidence Scout';
 
 function clone<T>(value: T): T {
   return structuredClone(value);
@@ -27,6 +29,10 @@ function isStringArray(value: unknown): value is string[] {
 
 function isNullableString(value: unknown): value is string | null {
   return value === null || typeof value === 'string';
+}
+
+function isEvidenceScout(task: Pick<WorkflowTask, 'role'>): boolean {
+  return task.role.trim() === EVIDENCE_SCOUT_ROLE;
 }
 
 function parseCardIndex(value: unknown): EvidenceCardIndexEntry[] | undefined {
@@ -66,7 +72,10 @@ function parseCardIndex(value: unknown): EvidenceCardIndexEntry[] | undefined {
   });
 }
 
-export function parseTaskResult(output: string | undefined): WorkflowTaskResult {
+export function parseTaskResult(
+  output: string | undefined,
+  options: { requireCardIndex?: boolean } = {},
+): WorkflowTaskResult {
   if (!output) throw new Error('INVALID_TASK_RESULT');
   const trimmed = output.trim();
   const fenced = /^```json\s*\n([\s\S]*?)\n```$/.exec(trimmed);
@@ -87,6 +96,9 @@ export function parseTaskResult(output: string | undefined): WorkflowTaskResult 
     throw new Error('INVALID_TASK_RESULT');
   }
   const cardIndex = parseCardIndex(candidate.card_index);
+  if (options.requireCardIndex && cardIndex === undefined) {
+    throw new Error('INVALID_TASK_RESULT');
+  }
   return {
     ...(cardIndex === undefined ? {} : { card_index: cardIndex }),
     findings: candidate.findings,
@@ -236,6 +248,14 @@ export class DeepWorkflowRuntime {
       const dependency = snapshot.tasks.find((candidate) => candidate.id === id)!;
       return { taskId: id, result: dependency.result };
     });
+    const evidenceInstructions = isEvidenceScout(task)
+      ? [
+        'Discover authentic cards and active Trace inside the declared roots; the parent intentionally did not prefetch the broad result.',
+        'Return card_index even when no real card qualifies. Copy title, goal and methods from real card metadata and use real Trace source anchors.',
+      ]
+      : [
+        'For an ordinary analysis task, omit card_index unless cards directly participate in the result.',
+      ];
     return [
       `Dynamic role: ${task.role}`,
       `Workflow goal: ${snapshot.goal}`,
@@ -244,7 +264,8 @@ export class DeepWorkflowRuntime {
       `Allowed read roots: ${JSON.stringify(task.readRoots)}`,
       `Direct dependency results: ${JSON.stringify(dependencies)}`,
       'Read only the declared roots and use only authentic source handles. If evidence is insufficient, return empty findings instead of inventing facts.',
-      'Return only one JSON object with string-array fields findings, evidence_refs, risks and string field recommended_action. Evidence-retrieval tasks may also return a compact card_index; other tasks omit it. Do not include thinking or a transcript.',
+      ...evidenceInstructions,
+      'Return only one JSON object with string-array fields findings, evidence_refs, risks and string field recommended_action. Do not include thinking or a transcript.',
     ].join('\n');
   }
 
@@ -347,7 +368,9 @@ export class DeepWorkflowRuntime {
             task.status = 'cancelled';
           } else if (response.status === 'completed') {
             try {
-              task.result = parseTaskResult(response.output);
+              task.result = parseTaskResult(response.output, {
+                requireCardIndex: isEvidenceScout(task),
+              });
               task.status = 'completed';
               task.error = null;
             } catch {

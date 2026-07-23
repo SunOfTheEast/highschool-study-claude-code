@@ -44,6 +44,24 @@ const graph: WorkflowGraph = {
 
 const fixedNow = () => new Date('2026-07-22T00:00:00Z');
 
+const evidenceQuick: WorkflowGraph = {
+  id: 'wf-evidence-scout',
+  goal: '检查 domain-integrity Plan 的跨题卡证据',
+  mode: 'quick',
+  maxConcurrency: 1,
+  tokenLimit: 12_000,
+  timeoutMs: 45_000,
+  tasks: [{
+    id: 'evidence',
+    label: '检索 Plan 证据',
+    role: 'Evidence Scout',
+    instruction: 'Search Plan domain-integrity across cards and Lessons.',
+    dependsOn: [],
+    sourceHandles: [],
+    readRoots: ['plans', 'lessons', 'cards', 'graph'],
+  }],
+};
+
 function runtime(delegate: unknown, store = new WorkflowStore(SessionManager.inMemory('/tmp/study'))) {
   return new DeepWorkflowRuntime(
     'coach:p1',
@@ -134,6 +152,80 @@ test('keeps card index optional for ordinary workflow tasks', () => {
     recommended_action: '',
     risks: [],
   });
+});
+
+test('requires a card index from an Evidence Scout even when it is empty', async () => {
+  const subject = runtime(async (_bus: unknown, input: { requestId: string }) => (
+    completed(input.requestId)
+  ));
+
+  const result = await subject.propose(evidenceQuick);
+
+  expect(result.status).toBe('failed');
+  expect(result.tasks[0]?.error).toBe('INVALID_TASK_RESULT');
+});
+
+test('tells an Evidence Scout to discover sources and return a compact card index', async () => {
+  let childPrompt = '';
+  const subject = runtime(async (
+    _bus: unknown,
+    input: { requestId: string; task: string },
+  ) => {
+    childPrompt = input.task;
+    return completed(input.requestId, JSON.stringify({
+      card_index: [],
+      findings: [],
+      evidence_refs: [],
+      recommended_action: '',
+      risks: [],
+    }));
+  });
+
+  const result = await subject.propose(evidenceQuick);
+
+  expect(result.status).toBe('completed');
+  expect(childPrompt).toContain('Search Plan domain-integrity across cards and Lessons.');
+  expect(childPrompt).toContain('["plans","lessons","cards","graph"]');
+  expect(childPrompt).toContain('Discover authentic cards and active Trace');
+  expect(childPrompt).toContain('Return card_index even when no real card qualifies');
+  expect(childPrompt).not.toContain('cards/a.yaml');
+});
+
+test('drops unapproved card payload and transcript fields from parsed results', () => {
+  const result = parseTaskResult(JSON.stringify({
+    card_index: [{
+      cardPath: 'cards/a.yaml',
+      title: '题目 A',
+      goal: null,
+      methods: { primary: null, secondary: [] },
+      reason: '与当前问题相关。',
+      traceRefs: ['lessons/l.md#trace-event-1'],
+      content: 'full card yaml',
+      solution: 'hidden solution',
+    }],
+    findings: ['证据不足。'],
+    evidence_refs: ['cards/a.yaml'],
+    recommended_action: '换一张卡验证。',
+    risks: [],
+    transcript: 'raw child transcript',
+  }));
+
+  expect(result).toEqual({
+    card_index: [{
+      cardPath: 'cards/a.yaml',
+      title: '题目 A',
+      goal: null,
+      methods: { primary: null, secondary: [] },
+      reason: '与当前问题相关。',
+      traceRefs: ['lessons/l.md#trace-event-1'],
+    }],
+    findings: ['证据不足。'],
+    evidence_refs: ['cards/a.yaml'],
+    recommended_action: '换一张卡验证。',
+    risks: [],
+  });
+  expect(JSON.stringify(result)).not.toContain('hidden solution');
+  expect(JSON.stringify(result)).not.toContain('raw child transcript');
 });
 
 test('persists and restores a completed compact evidence result', async () => {

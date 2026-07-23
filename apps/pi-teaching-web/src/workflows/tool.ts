@@ -6,11 +6,19 @@ import type { DeepWorkflowRuntime } from './runtime';
 const task = Type.Object({
   id: Type.String(),
   label: Type.String(),
-  role: Type.String(),
-  instruction: Type.String(),
+  role: Type.String({
+    description: 'Use the exact role `Evidence Scout` for isolated cross-card, cross-Lesson or Plan-scale evidence recall.',
+  }),
+  instruction: Type.String({
+    description: 'State the evidence question and real Plan/Lesson scope. The child performs the broad search itself.',
+  }),
   dependsOn: Type.Array(Type.String()),
-  sourceHandles: Type.Array(Type.String()),
-  readRoots: Type.Array(Type.String()),
+  sourceHandles: Type.Array(Type.String(), {
+    description: 'Known narrow scope handles only. Use an empty array when the Evidence Scout must discover sources; do not prefetch broad card or Trace payloads.',
+  }),
+  readRoots: Type.Array(Type.String(), {
+    description: 'Roots under the learning-set that the child may read, such as plans, lessons, cards and graph.',
+  }),
 });
 
 export function createDeepWorkflowTool(
@@ -19,11 +27,11 @@ export function createDeepWorkflowTool(
 ) {
   return defineTool({
     name: 'deep_workflow_propose',
-    label: '发起多视角教学会诊',
+    label: '发起隔离式教学工作流',
     description: [
-      'Use only after the deep-workflow Skill confirms two independent views could change the next teaching action.',
-      'Gather authentic card and Trace handles first with card_search or trace_search.',
-      'Use quick for at most three independent views; deep requires student confirmation.',
+      'Use one Quick Evidence Scout for cross-card, cross-Lesson or Plan-scale recall when keeping broad results out of the parent context is useful.',
+      'Pass the evidence question and known scope only; the child discovers authentic cards and active Trace.',
+      'Use multiple tasks only for genuinely independent questions. Deep workflows require student confirmation.',
     ].join(' '),
     parameters: Type.Object({
       goal: Type.String(),
