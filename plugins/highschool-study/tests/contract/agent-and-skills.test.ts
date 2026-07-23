@@ -385,6 +385,12 @@ test('defines Tutor corrections, hint levels and tool turns literally', () => {
   expect(run).toContain(
     'Before emitting any requested hint after an evidence-bearing attempt, first append that attempt and retain its exact active Trace ID',
   );
+  expect(run).toContain(
+    'Put `supersedes` only in the top-level `trace_append` arguments, never in `note`, prose or tool-call markup',
+  );
+  expect(run).toContain(
+    'If you cannot name that exact event ID from the prior tool result, do not issue the `trace_append` tool yet',
+  );
   expect(run).toContain('刚才的提示是否对你最终使用的关键步骤起了作用？');
   expect(run).toContain(
     'Do not append the final correct Trace until the student answers this attribution question',
