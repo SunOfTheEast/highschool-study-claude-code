@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { extname, join, relative } from 'node:path';
 import { parse } from 'yaml';
-import { readActiveCardAlternatives, type CardAlternative } from './alternatives';
+import { readCardAlternatives, type CardAlternative } from './alternatives';
 import { resolveInsideRoot } from './learning-set';
 import { buildTraceIndex } from './trace-index';
 import { readActiveTraces, type TraceRecord } from './traces';
@@ -114,7 +114,7 @@ export function createCardSearcher(readTraces: ActiveTraceReader = readActiveTra
       .map(({ card }) => ({
         ...card,
         traceHistory: index.byCardPath.get(card.path) ?? [],
-        alternatives: readActiveCardAlternatives(root, card.path, activeTraces),
+        alternatives: readCardAlternatives(root, card.path),
       }))
       .slice(0, input.limit);
     return { cards };

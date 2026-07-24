@@ -1,4 +1,4 @@
-import { readActiveCardAlternatives } from './alternatives';
+import { readCardAlternatives } from './alternatives';
 import { readCard, type CardHit } from './cards';
 import { readActiveTraces, type TraceRecord } from './traces';
 
@@ -50,7 +50,7 @@ export function searchTraces(root: string, input: TraceSearchInput): TraceSearch
       cardsByPath[path] = {
         ...card,
         traceHistory: activeTraces.filter((trace) => trace.cardPath === path),
-        alternatives: readActiveCardAlternatives(root, path),
+        alternatives: readCardAlternatives(root, path),
       };
     }
   }

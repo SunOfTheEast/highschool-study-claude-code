@@ -1,15 +1,21 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { extname, join } from 'node:path';
+import { extname } from 'node:path';
 import { parse } from 'yaml';
 import { resolveInsideRoot } from './learning-set';
-import { readActiveTraces, type TraceRecord } from './traces';
+import { resolveTraceMethods } from './method-vocabulary';
+import {
+  readActiveTraces,
+  type TraceRecord,
+  type TraceSupport,
+} from './traces';
 
 export type CardAlternative = {
+  id: string;
   cardPath: string;
   sourceTrace: string;
   question: string;
-  primaryMethod: string | null;
-  secondaryMethods: string[];
+  method: string | null;
+  support: TraceSupport;
   solution: string;
   recordedAt: string;
 };
@@ -18,7 +24,11 @@ export type CardAlternativeInput = {
   sourceTraceId: string;
   question: string;
   solution: string;
+  method: string | null;
+  support: TraceSupport;
 };
+
+const supports = new Set<TraceSupport>(['none', 'tutor', 'external']);
 
 function record(value: unknown): Record<string, unknown> | null {
   return value !== null && typeof value === 'object' && !Array.isArray(value)
@@ -42,17 +52,6 @@ function cardParts(root: string, cardPath: string): string[] {
     .map((part) => record(part))
     .map((part) => text(part?.part_id))
     .filter(Boolean);
-}
-
-function cardMethods(root: string, cardPath: string): { primary: string | null; secondary: string[] } {
-  const raw = record(parse(readFileSync(resolveInsideRoot(root, cardPath), 'utf8')));
-  const graph = record(raw?.graph);
-  const method = record(graph?.method);
-  const primary = text(method?.primary);
-  const secondary = Array.isArray(method?.secondary)
-    ? method.secondary.filter((value): value is string => typeof value === 'string').map((value) => value.trim()).filter(Boolean)
-    : [];
-  return { primary: primary || null, secondary };
 }
 
 function normalizePart(value: string): string {
@@ -81,68 +80,67 @@ function unattribute(value: string): string {
 }
 
 function renderAlternative(alternative: CardAlternative): string {
-  const methods = alternative.primaryMethod === null
-    ? '未归类方法'
-    : alternative.primaryMethod;
   const lines = [
-    `<!-- studyforge-alternative source="${attribute(alternative.sourceTrace)}" question="${attribute(alternative.question)}" -->`,
-    `## 另解：${alternative.question}`,
+    `<!-- studyforge-alternative id="${attribute(alternative.id)}" question="${attribute(alternative.question)}" -->`,
+    `## ${alternative.id} · ${alternative.question}`,
     '',
     `- 来源 Trace: ${alternative.sourceTrace}`,
     `- 记录时间: ${alternative.recordedAt}`,
-    `- 主方法: ${methods}`,
+    `- 支持: ${alternative.support}`,
+    `- 方法: ${alternative.method ?? '未归类'}`,
   ];
-  if (alternative.secondaryMethods.length > 0) {
-    lines.push(`- 次方法: ${alternative.secondaryMethods.join('、')}`);
-  }
   lines.push('', '### 解法', '', alternative.solution.trim(), '');
   return lines.join('\n');
 }
 
-function replaceOrAppendSidecar(root: string, cardPath: string, alternative: CardAlternative): void {
+function appendSidecar(root: string, cardPath: string, alternative: CardAlternative): void {
   const sidecarPath = cardAlternativePath(cardPath);
   const absolute = resolveInsideRoot(root, sidecarPath);
   const existing = existsSync(absolute) ? readFileSync(absolute, 'utf8') : '# 题卡另解\n\n';
-  const marker = /^<!-- studyforge-alternative source="([^"]*)" question="([^"]*)" -->[ \t]*\n?/gm;
-  const matches = [...existing.matchAll(marker)];
-  const wantedSource = alternative.sourceTrace;
-  const wantedQuestion = alternative.question;
-  const wantedIndex = matches.findIndex((match) =>
-    unattribute(match[1] ?? '') === wantedSource && unattribute(match[2] ?? '') === wantedQuestion);
-  const section = renderAlternative(alternative);
-  let output: string;
-  if (wantedIndex >= 0) {
-    const start = matches[wantedIndex]!.index!;
-    const end = matches[wantedIndex + 1]?.index ?? existing.length;
-    output = `${existing.slice(0, start)}${section}${existing.slice(end)}`;
-  } else {
-    output = `${existing.replace(/\s*$/, '')}\n\n${section}`;
-  }
+  const output = `${existing.replace(/\s*$/, '')}\n\n${renderAlternative(alternative)}`;
   writeFileSync(absolute, output, 'utf8');
 }
 
 function parseAlternatives(source: string, cardPath: string): CardAlternative[] {
-  const marker = /^<!-- studyforge-alternative source="([^"]*)" question="([^"]*)" -->[ \t]*\n?/gm;
+  const marker = /^<!-- studyforge-alternative id="([^"]*)" question="([^"]*)" -->[ \t]*\n?/gm;
   const matches = [...source.matchAll(marker)];
   return matches.flatMap((match, index) => {
     const sectionStart = match.index!;
     const sectionEnd = matches[index + 1]?.index ?? source.length;
     const section = source.slice(sectionStart + match[0].length, sectionEnd);
     const solution = /^### 解法\s*\n([\s\S]*?)(?:\n\s*$|$)/m.exec(section)?.[1]?.trim() ?? '';
+    const sourceTrace = /^- 来源 Trace:\s*(.+)$/m.exec(section)?.[1]?.trim() ?? '';
     const recordedAt = /^- 记录时间:\s*(.+)$/m.exec(section)?.[1]?.trim() ?? '';
-    const primary = /^- 主方法:\s*(.+)$/m.exec(section)?.[1]?.trim() ?? '未归类方法';
-    const secondary = /^- 次方法:\s*(.+)$/m.exec(section)?.[1]?.trim() ?? '';
-    if (!solution || !recordedAt) return [];
+    const support = /^- 支持:\s*(.+)$/m.exec(section)?.[1]?.trim() ?? '';
+    const method = /^- 方法:\s*(.+)$/m.exec(section)?.[1]?.trim() ?? '';
+    const id = unattribute(match[1] ?? '');
+    if (
+      !/^alt-\d+$/.test(id)
+      || !solution
+      || !sourceTrace
+      || !recordedAt
+      || !supports.has(support as TraceSupport)
+      || !method
+    ) return [];
     return [{
+      id,
       cardPath,
-      sourceTrace: unattribute(match[1] ?? ''),
+      sourceTrace,
       question: unattribute(match[2] ?? ''),
-      primaryMethod: primary === '未归类方法' ? null : primary,
-      secondaryMethods: secondary ? secondary.split('、').map((value) => value.trim()).filter(Boolean) : [],
+      method: method === '未归类' ? null : method,
+      support: support as TraceSupport,
       solution,
       recordedAt,
     }];
   });
+}
+
+function nextAlternativeId(alternatives: CardAlternative[]): string {
+  const max = alternatives.reduce((current, alternative) => {
+    const value = /^alt-(\d+)$/.exec(alternative.id)?.[1];
+    return value === undefined ? current : Math.max(current, Number(value));
+  }, 0);
+  return `alt-${String(max + 1).padStart(3, '0')}`;
 }
 
 function activeSourceTrace(root: string, lessonPath: string, sourceTraceId: string): TraceRecord {
@@ -159,34 +157,37 @@ export function appendCardAlternative(
   now: () => Date,
 ): CardAlternative {
   if (!input.solution.trim()) throw new Error('INVALID_ALTERNATIVE: solution is required');
+  if (!supports.has(input.support)) throw new Error('INVALID_ALTERNATIVE: support is invalid');
   const trace = activeSourceTrace(root, lessonPath, input.sourceTraceId);
   if (trace.assessment !== 'correct') throw new Error('INVALID_ALTERNATIVE: source Trace must be correct');
   if (trace.cardPath === null) throw new Error('INVALID_ALTERNATIVE: source Trace must bind a card');
   const question = resolveQuestion(root, trace.cardPath, input.question);
-  const methods = trace.methods ?? { primary: null, secondary: [] };
+  const methodResolution = input.method === null
+    ? { methods: null, unresolved: [] }
+    : resolveTraceMethods(root, { primary: input.method });
+  if (input.method !== null && methodResolution.methods === null) {
+    throw new Error('INVALID_ALTERNATIVE: method is not a canonical graph node');
+  }
+  const current = readCardAlternatives(root, trace.cardPath);
   const alternative: CardAlternative = {
+    id: nextAlternativeId(current),
     cardPath: trace.cardPath,
     sourceTrace: trace.sourceAnchor,
     question,
-    primaryMethod: methods.primary,
-    secondaryMethods: methods.secondary,
+    method: methodResolution.methods?.primary ?? null,
+    support: input.support,
     solution: input.solution.trim(),
     recordedAt: now().toISOString(),
   };
-  replaceOrAppendSidecar(root, trace.cardPath, alternative);
+  appendSidecar(root, trace.cardPath, alternative);
   return alternative;
 }
 
-export function readActiveCardAlternatives(
+export function readCardAlternatives(
   root: string,
   cardPath: string,
-  activeTraces: TraceRecord[] = readActiveTraces(root),
 ): CardAlternative[] {
-  const activeSources = new Set(
-    activeTraces.filter((trace) => trace.cardPath === cardPath).map((trace) => trace.sourceAnchor),
-  );
   const absolute = resolveInsideRoot(root, cardAlternativePath(cardPath));
   if (!existsSync(absolute)) return [];
-  return parseAlternatives(readFileSync(absolute, 'utf8'), cardPath)
-    .filter((alternative) => activeSources.has(alternative.sourceTrace));
+  return parseAlternatives(readFileSync(absolute, 'utf8'), cardPath);
 }

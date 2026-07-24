@@ -1,6 +1,6 @@
 export {
   appendCardAlternative,
-  readActiveCardAlternatives,
+  readCardAlternatives,
   type CardAlternative,
   type CardAlternativeInput,
 } from './alternatives';

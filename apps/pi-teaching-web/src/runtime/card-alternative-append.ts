@@ -1,5 +1,8 @@
 import { defineTool } from '@earendil-works/pi-coding-agent';
-import { appendCardAlternative } from 'highschool-study-markdown/study-domain';
+import {
+  appendCardAlternative,
+  listCanonicalMethodNames,
+} from 'highschool-study-markdown/study-domain';
 import { Type } from 'typebox';
 
 export function createCardAlternativeAppendTool(
@@ -7,6 +10,7 @@ export function createCardAlternativeAppendTool(
   ownerPath: string,
   now: () => Date,
 ) {
+  const methodName = Type.Enum(listCanonicalMethodNames(root));
   return defineTool({
     name: 'card_alternative_append',
     label: '整理可追溯另解',
@@ -18,6 +22,14 @@ export function createCardAlternativeAppendTool(
         description: 'For a card without parts, pass exactly `整题`; for multipart, pass the exact changed part label and never the stem.',
       }),
       solution: Type.String({ minLength: 1 }),
+      method: Type.Union([methodName, Type.Null()], {
+        description: 'Pass one student-confirmed canonical node, or null when no exact node is confirmed.',
+      }),
+      support: Type.Union([
+        Type.Literal('none'),
+        Type.Literal('tutor'),
+        Type.Literal('external'),
+      ]),
     }),
     execute: async (_id, input) => {
       const alternative = appendCardAlternative(root, ownerPath, input, now);

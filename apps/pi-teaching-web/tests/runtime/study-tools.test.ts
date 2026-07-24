@@ -749,6 +749,19 @@ test('keeps alternative append Tutor-only and Session-bound', () => {
   const properties = (tool.parameters as {
     properties: Record<string, { description?: string }>;
   }).properties;
-  expect(Object.keys(properties)).toEqual(['sourceTraceId', 'question', 'solution']);
+  expect(Object.keys(properties)).toEqual([
+    'sourceTraceId',
+    'question',
+    'solution',
+    'method',
+    'support',
+  ]);
   expect(properties.question?.description).toContain('exactly `整题`');
+  const schema = JSON.stringify(tool.parameters);
+  expect(schema).toContain('参变量分离');
+  expect(schema).toContain('"null"');
+  expect(schema).toContain('"none"');
+  expect(schema).toContain('"tutor"');
+  expect(schema).toContain('"external"');
+  expect(schema).not.toContain('"id"');
 });
