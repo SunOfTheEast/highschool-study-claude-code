@@ -34,6 +34,15 @@ function studentCard(root: string, lessonPath: string, target: string): StudentP
   };
 }
 
+function lessonTemplate(source: string): string | null {
+  return /^-\s+Primary template:\s*`?([^`\n]+)`?\s*$/m
+    .exec(source)?.[1]?.trim() ?? null;
+}
+
+function blockIsVisible(status: string): boolean {
+  return status === 'active' || status === 'completed';
+}
+
 export function readStudentNotebook(
   root: string,
   lessonId: string,
@@ -48,12 +57,19 @@ export function readStudentNotebook(
   const source = readFileSync(resolveInsideRoot(root, lesson.path), 'utf8');
   const visibleAliases = new Set(
     lesson.blocks
-      .filter((block) => block.status === 'active' || block.status === 'completed')
+      .filter((block) => blockIsVisible(block.status))
       .flatMap((block) => block.uses),
+  );
+  const withheldAliases = new Set(
+    lessonTemplate(source) === 'assessment' && lesson.status !== 'closed'
+      ? lesson.blocks
+        .filter((block) => block.kind === 'problem' && !blockIsVisible(block.status))
+        .flatMap((block) => block.uses)
+      : [],
   );
   const cards: Record<string, StudentProblemCard> = {};
   for (const [alias, target] of aliases(source)) {
-    if (!visibleAliases.has(alias)) continue;
+    if (!visibleAliases.has(alias) || withheldAliases.has(alias)) continue;
     cards[alias] = studentCard(root, lesson.path, target);
   }
   return {

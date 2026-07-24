@@ -35,6 +35,25 @@ test('reveals cards only after their ActivityBlock becomes visible', () => {
     .toEqual(['Q-DOMAIN-EX22']);
 });
 
+test('withholds a shared assessment card until every related problem Block is visible', () => {
+  const root = fixture();
+  const lessonPath = join(root, 'lessons/lesson-003.md');
+  writeFileSync(
+    lessonPath,
+    readFileSync(lessonPath, 'utf8')
+      .replace('- Uses: Q-DOMAIN-EX16', '- Uses: Q-DOMAIN-EX22'),
+  );
+
+  setBlockStatus(root, 'lessons/lesson-003.md', 'orientation', 'completed');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'assessment-01', 'active');
+  expect(readStudentNotebook(root, 'lesson-003', false).cards).toEqual({});
+
+  setBlockStatus(root, 'lessons/lesson-003.md', 'assessment-01', 'completed');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'assessment-02', 'active');
+  expect(Object.keys(readStudentNotebook(root, 'lesson-003', false).cards))
+    .toEqual(['Q-DOMAIN-EX22']);
+});
+
 test('reveals only active and completed Student Views during an assessment', () => {
   const root = fixture();
   expect(readStudentNotebook(root, 'lesson-003', false).lesson.blocks
