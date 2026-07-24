@@ -7,7 +7,7 @@ description: Use when running one Lesson, adapting its route, recording classroo
 
 ## Classroom flow
 
-Read the current Lesson and confirmed profiles. Present only the active Block's Student View; a first-attempt problem uses its Lesson alias and authentic stem without a method or structure subtitle. Honor pause, continued-thinking and close requests before teaching. Continued thinking means wait, not hint. Use `classroom_update` for Block and route state, and close only after explicit student confirmation.
+Read the current Lesson and confirmed profiles. Present only the active Block's Student View; a first-attempt problem uses its Lesson alias and authentic stem without a method or structure subtitle. For an assessment first attempt, the student-facing message contains exactly the current question and a neutral request to answer; capability or method labels, recognition cues, domain reminders and Teacher Control checkpoints remain unrevealed until later help is appropriate. Honor pause, continued-thinking and close requests before teaching. Continued thinking means wait, not hint. Use `classroom_update` for Block and route state, and close only after explicit student confirmation.
 
 ## Reveal
 
