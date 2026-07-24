@@ -1,21 +1,18 @@
 ---
 name: run-lesson
-description: Use when teaching or resuming one prepared Lesson.
+description: Use when teaching, adapting, pausing, resuming, or closing one prepared Lesson.
 allowed-tools: Read, Glob, Grep, Edit, Skill, TaskCreate, TaskUpdate, TaskList, mcp__plugin_highschool-study_study-markdown__trace_append, mcp__plugin_highschool-study_study-markdown__source_resolve
 ---
 
 # Run Lesson
 
-1. Call `highschool-study:recall-study-memory` for teaching. Read the prepared Lesson, `prepare-next-lesson/references/reveal-policy.md`, this Skill's `references/evidence-protocol.md`, and only the direct sources needed by the current Block. Planner attention is preparation-only.
-2. Honor pause, continued-thinking and close requests before teaching or changing Tasks. A paused Lesson resumes only after a fresh continue, adjust or close choice.
-3. Project remaining ActivityBlocks as a coarse Task List after consent to proceed. Tasks may be skipped, reordered, repeated or adjusted when dependencies allow; they are interface state, not learning evidence. Before activating a different Block, complete or skip the current Block; never leave a traversed non-reflection Block active. At closure the reflection Block is the only active Block.
-4. Teach one Block at a time and show only its Student View. First-attempt problems use the Lesson alias and authentic stem without a method or structure subtitle. For an assessment first attempt, the student-facing message contains exactly the current question and a neutral request to answer; capability or method labels, recognition cues, domain reminders and Teacher Control checkpoints remain unrevealed until later help is appropriate. Teacher Control, future Blocks, answers, rubrics and unrevealed help stay private.
-5. Follow the selected reveal mode. Continued thinking means wait. After an evidence-bearing attempt, append the attempt before giving requested help so later work can supersede it.
-6. Apply the evidence protocol after every evidence-bearing activity. One problem Block is one independently assessed attempt: later completion, correction, repeat or method confirmation supersedes its exact active Trace, while a separately answered part uses another prepared problem Block even when it reuses the same card. Keep a missing decisive proof incomplete and record actual help dependence. After the initial unbound Trace succeeds, follow the candidate-confirmation sequence before the next Task whenever one exact canonical node fits the student's route. Bind it only after a new student turn confirms the proposed node; rejection, deferral or no exact candidate leaves the active Trace unbound. Accepted objections to recorded assessment or method evidence do require a superseding Trace before summaries. Say a Trace was recorded only after `trace_append` returns `ok: true`, the Lesson `ownerPath`, and a real `factId`.
-7. Before rejecting a non-reference route, reconstruct its complete chain. If correct, affirm it and follow the student's intent without automatically presenting the reference solution. A genuine alternative changes the complete entry, decisive reasoning and closing chain of at least one whole question or part; notation changes, reordered equivalent steps and local tricks do not. The Claude plugin has no alternative-persistence tool: preserve the route in active Trace evidence when useful, but never claim that a card alternative was durably stored.
-8. Keep Lesson working notes source-linked without replacing Trace. Task completion, elapsed time and one correct answer do not establish capability.
-9. When the student requests a transition, call `highschool-study:close-lesson-reflection`. When evidence first appears to meet a criterion, explain supporting and conflicting evidence and invite a transition; closure remains the student's choice.
+1. Recall teaching memory, then read the current Lesson, `prepare-next-lesson/references/reveal-policy.md`, `references/evidence-protocol.md`, and only the direct sources required by the active Block. Planner attention is preparation-only.
+2. Honor the student's current choice before the prepared sequence. Continued thinking means wait; pause keeps a resumable point; an explicit close request stops new teaching and reflection questions.
+3. After consent to proceed, project remaining Blocks as a coarse Task List. Task state is navigation, not evidence. Teach one Block at a time, and resolve the current non-reflection Block before moving to another.
+4. Show only the active Student View. For an assessment or diagnostic first attempt, send the authentic question and a neutral invitation to answer. Other Lesson types may name their purpose or method when useful, while Teacher Control, future Blocks, decisive target reasoning, answers, and unrevealed help remain private.
+5. Follow the selected reveal mode. Record an evidence-bearing attempt before requested help can change it. Apply the evidence protocol to assessment, actual support, corrections, method confirmation, and Block identity.
+6. Reconstruct a non-reference route before rejecting it. If correct, affirm it and follow the student's intent without automatically presenting the reference solution. Use the evidence protocol to decide whether it is genuinely different.
+7. The public plugin has no first-class alternative write tool. Preserve a useful route in active Trace evidence, but never claim that a card alternative was durably stored.
+8. When the student chooses a transition, use `highschool-study:close-lesson-reflection`. Reaching a criterion may justify explaining the evidence and offering the choice; it never removes the student's control over closure.
 
-Never edit confirmed profiles during teaching.
-
-An ordinary tool-parameter error may use one correction attempt. Any `LESSON_*` error is a Lesson-source failure: do not search, guess, substitute or repeat the call. State that the fact was not persisted and return to preparation to repair the source.
+Never edit confirmed profiles during teaching. Do not claim a write that the MCP result did not persist.
