@@ -35,7 +35,7 @@ Card methods are reference candidates, not student evidence. After a completed a
 
 Before rejecting a non-reference route, reconstruct the whole chain and check every decisive implication. If it is complete and correct, affirm it and follow the student's intent. Do not automatically pivot to, compare with or reveal the reference solution.
 
-A genuine alternative changes the complete core route of at least one whole question or part: its entry, decisive reasoning and closing chain differ from the reference and active alternatives. Notation changes, reordered equivalent steps and local tricks are not alternatives. After the correct active Trace exists, persist a verified alternative with `card_alternative_append`; its tool contract owns the storage labels. Stored alternatives remain private unless the student asks to compare methods.
+A genuine alternative changes the complete core route of at least one whole question or part: its entry, decisive reasoning and closing chain differ from the reference and stored alternatives. Notation changes, reordered equivalent steps and local tricks are not alternatives. After the correct active Trace exists, propose at most one canonical method node for the alternative in plain language and ask whether it fits. Wait for the student's answer: pass the confirmed node, or `null` after rejection, deferral or no exact match. Then call `card_alternative_append` with the route's actual support. Say it was saved only after a successful receipt. Stored alternatives remain private unless the student asks to compare methods.
 
 ## Closure
 

@@ -133,18 +133,23 @@ links or status projections.
 - A closest valid method name is still false evidence.
 - A genuine alternative solution requires a complete route for at least one
   whole question/part whose entry, decisive reasoning, and closing chain
-  differ from the reference and every active alternative. Changed notation,
+  differ from the reference and every stored alternative. Changed notation,
   reordered equivalent steps, or a local trick is not an alternative.
 - Persist a verified alternative only after its correct active Trace exists.
-  If that Trace is superseded, ordinary reads must ignore the old alternative
-  until it is rebound to a new active Trace.
+  The alternative owns a runtime ID, complete route, actual support, and one
+  student-confirmed canonical method or an unmapped value. Its source Trace is
+  provenance only: superseding that Trace does not hide or delete the
+  alternative.
 - A later correction of the same card-and-Block attempt must supersede the
   exact active event before summaries, reflection, method projection, or Plan
   review use it.
 - Ability projection aggregates once per
   `lessonPath + blockId + cardPath`. Primary methods carry more weight than
   secondary methods, and `steady` requires evidence from at least two distinct
-  cards. This is a planning signal, not an automatic mastery verdict.
+  cards. A bound alternative method joins its source attempt; the strongest
+  verified contribution for one method is used once, and multiple alternatives
+  on one card do not increase the distinct-card count. This is a planning
+  signal, not an automatic mastery verdict.
 - Coach final decisions must be persisted with `plan_update`, then reread from
   the Plan before being reported to the student.
 - Long-term profile changes happen only after Plan completion, source-linked
