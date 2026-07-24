@@ -1,5 +1,9 @@
+import { readCardAlternatives } from './alternatives';
 import { readCard } from './cards';
-import type { TraceRecord } from './traces';
+import {
+  readTraceRecords,
+  type TraceRecord,
+} from './traces';
 
 export type MethodSignal = {
   method: string;
@@ -26,9 +30,11 @@ type MutableSignal = Omit<MethodSignal, 'score' | 'distinctCardCount'> & {
 
 type CardAttempt = {
   cardPath: string;
-  factors: number[];
-  methods: Map<string, 'primary' | 'secondary'>;
-  sourceRefs: string[];
+  traceFactors: number[];
+  traceMethods: Map<string, 'primary' | 'secondary'>;
+  traceSourceRefs: string[];
+  alternativeFactors: Map<string, number>;
+  alternativeSourceRefs: Map<string, string[]>;
 };
 
 export function aggregateMethodSignals(root: string, traces: TraceRecord[]): MethodSignal[] {
@@ -41,20 +47,60 @@ export function aggregateMethodSignals(root: string, traces: TraceRecord[]): Met
     const key = `${trace.lessonPath}\u0000${trace.blockId}\u0000${trace.cardPath}`;
     const attempt = attempts.get(key) ?? {
       cardPath: trace.cardPath,
-      factors: [],
-      methods: new Map<string, 'primary' | 'secondary'>(),
-      sourceRefs: [],
+      traceFactors: [],
+      traceMethods: new Map<string, 'primary' | 'secondary'>(),
+      traceSourceRefs: [],
+      alternativeFactors: new Map<string, number>(),
+      alternativeSourceRefs: new Map<string, string[]>(),
     };
-    attempt.factors.push(assessmentFactor[trace.assessment] * supportFactor[trace.support]);
+    attempt.traceFactors.push(assessmentFactor[trace.assessment] * supportFactor[trace.support]);
     if (trace.methods !== null) {
       const primary = trace.methods.primary;
-      if (attempt.methods.get(primary) !== 'primary') attempt.methods.set(primary, 'primary');
+      if (attempt.traceMethods.get(primary) !== 'primary') {
+        attempt.traceMethods.set(primary, 'primary');
+      }
       for (const secondary of trace.methods.secondary) {
-        if (!attempt.methods.has(secondary)) attempt.methods.set(secondary, 'secondary');
+        if (!attempt.traceMethods.has(secondary)) {
+          attempt.traceMethods.set(secondary, 'secondary');
+        }
       }
     }
-    if (!attempt.sourceRefs.includes(trace.sourceAnchor)) attempt.sourceRefs.push(trace.sourceAnchor);
+    if (!attempt.traceSourceRefs.includes(trace.sourceAnchor)) {
+      attempt.traceSourceRefs.push(trace.sourceAnchor);
+    }
     attempts.set(key, attempt);
+  }
+
+  const lessonPaths = [...new Set(traces.map((trace) => trace.lessonPath))];
+  const traceRecords = lessonPaths.length === 0 ? [] : readTraceRecords(root, lessonPaths);
+  const tracesBySource = new Map(traceRecords.map((trace) => [trace.sourceAnchor, trace]));
+  const cardPaths = [...new Set(traceRecords.flatMap((trace) =>
+    trace.cardPath === null ? [] : [trace.cardPath]))];
+
+  for (const cardPath of cardPaths) {
+    for (const alternative of readCardAlternatives(root, cardPath)) {
+      if (alternative.method === null) continue;
+      const source = tracesBySource.get(alternative.sourceTrace);
+      if (source === undefined || source.cardPath !== alternative.cardPath) continue;
+      const key = `${source.lessonPath}\u0000${source.blockId}\u0000${source.cardPath}`;
+      const attempt = attempts.get(key) ?? {
+        cardPath: source.cardPath,
+        traceFactors: [],
+        traceMethods: new Map<string, 'primary' | 'secondary'>(),
+        traceSourceRefs: [],
+        alternativeFactors: new Map<string, number>(),
+        alternativeSourceRefs: new Map<string, string[]>(),
+      };
+      const factor = supportFactor[alternative.support];
+      attempt.alternativeFactors.set(
+        alternative.method,
+        Math.max(attempt.alternativeFactors.get(alternative.method) ?? 0, factor),
+      );
+      const sourceRefs = attempt.alternativeSourceRefs.get(alternative.method) ?? [];
+      if (!sourceRefs.includes(alternative.sourceTrace)) sourceRefs.push(alternative.sourceTrace);
+      attempt.alternativeSourceRefs.set(alternative.method, sourceRefs);
+      attempts.set(key, attempt);
+    }
   }
 
   for (const attempt of attempts.values()) {
@@ -67,10 +113,26 @@ export function aggregateMethodSignals(root: string, traces: TraceRecord[]): Met
       }
       cards.set(attempt.cardPath, cardExists);
     }
-    if (!cardExists || attempt.methods.size === 0) continue;
+    const methodNames = new Set([
+      ...attempt.traceMethods.keys(),
+      ...attempt.alternativeFactors.keys(),
+    ]);
+    if (!cardExists || methodNames.size === 0) continue;
 
-    const factor = attempt.factors.reduce((sum, value) => sum + value, 0) / attempt.factors.length;
-    for (const [methodName, role] of attempt.methods) {
+    const traceFactor = attempt.traceFactors.length === 0
+      ? null
+      : attempt.traceFactors.reduce((sum, value) => sum + value, 0)
+        / attempt.traceFactors.length;
+    for (const methodName of methodNames) {
+      const traceMethodRole = attempt.traceMethods.get(methodName);
+      const alternativeFactor = attempt.alternativeFactors.get(methodName) ?? null;
+      const factor = Math.max(
+        traceMethodRole === undefined ? 0 : traceFactor ?? 0,
+        alternativeFactor ?? 0,
+      );
+      const role = alternativeFactor !== null || traceMethodRole === 'primary'
+        ? 'primary'
+        : 'secondary';
       const weight = roleWeight[role];
       const signal = signals.get(methodName) ?? {
         method: methodName,
@@ -84,7 +146,11 @@ export function aggregateMethodSignals(root: string, traces: TraceRecord[]): Met
       signal.earnedWeight += weight * factor;
       signal.attemptCount += 1;
       signal.cardPaths.add(attempt.cardPath);
-      for (const sourceRef of attempt.sourceRefs) {
+      const sourceRefs = [
+        ...(traceMethodRole === undefined ? [] : attempt.traceSourceRefs),
+        ...(attempt.alternativeSourceRefs.get(methodName) ?? []),
+      ];
+      for (const sourceRef of sourceRefs) {
         if (!signal.sourceRefs.includes(sourceRef)) signal.sourceRefs.push(sourceRef);
       }
       signals.set(methodName, signal);

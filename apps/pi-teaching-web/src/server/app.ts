@@ -28,6 +28,7 @@ export type AppDependencies = {
 };
 
 const json = (value: unknown, status = 200) => Response.json(value, { status });
+const abilityWriters = new Set(['trace_append', 'card_alternative_append']);
 
 const imageTypes = {
   '.png': 'image/png',
@@ -98,7 +99,7 @@ export function createRequestHandler(deps?: AppDependencies) {
         }
         if (
           event.type === 'tool_execution_end'
-          && event.toolName === 'trace_append'
+          && abilityWriters.has(event.toolName)
           && !event.isError
         ) {
           deps.hub.publish({

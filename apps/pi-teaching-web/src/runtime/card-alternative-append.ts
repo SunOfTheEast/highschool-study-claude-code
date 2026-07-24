@@ -1,6 +1,6 @@
 import { defineTool } from '@earendil-works/pi-coding-agent';
 import {
-  appendCardAlternative,
+  appendCardAlternativeWithProjection,
   listCanonicalMethodNames,
 } from 'highschool-study-markdown/study-domain';
 import { Type } from 'typebox';
@@ -32,7 +32,7 @@ export function createCardAlternativeAppendTool(
       ]),
     }),
     execute: async (_id, input) => {
-      const alternative = appendCardAlternative(root, ownerPath, input, now);
+      const alternative = appendCardAlternativeWithProjection(root, ownerPath, input, now);
       return {
         content: [{ type: 'text' as const, text: JSON.stringify(alternative) }],
         details: {

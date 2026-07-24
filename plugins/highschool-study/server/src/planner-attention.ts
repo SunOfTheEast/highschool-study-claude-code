@@ -1,4 +1,8 @@
 import { writeFileSync } from 'node:fs';
+import {
+  appendCardAlternative,
+  type CardAlternativeInput,
+} from './alternatives';
 import { resolveInsideRoot } from './learning-set';
 import { aggregateMethodSignals, type MethodSignal } from './method-signals';
 import {
@@ -49,6 +53,17 @@ export function appendTraceWithProjection(
   now: () => Date,
 ) {
   const result = appendTrace(root, input, now);
+  rebuildPlannerAttention(root);
+  return result;
+}
+
+export function appendCardAlternativeWithProjection(
+  root: string,
+  lessonPath: string,
+  input: CardAlternativeInput,
+  now: () => Date,
+) {
+  const result = appendCardAlternative(root, lessonPath, input, now);
   rebuildPlannerAttention(root);
   return result;
 }

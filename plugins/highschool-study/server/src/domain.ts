@@ -25,6 +25,7 @@ export {
   type TraceMethods,
 } from './method-vocabulary';
 export {
+  appendCardAlternativeWithProjection,
   appendTraceWithProjection,
   rebuildPlannerAttention,
   renderPlannerAttention,

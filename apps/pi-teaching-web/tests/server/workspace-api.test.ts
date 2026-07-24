@@ -124,8 +124,7 @@ function traceProjectionHandler(events: unknown[], reader: () => AbilityProjecti
   };
 }
 
-test('publishes one complete ability snapshot after a successful trace append', async () => {
-  const events: unknown[] = [];
+test('publishes one complete ability snapshot after each successful ability fact write', async () => {
   const projection = {
     nodes: [{
       method: '链式求导',
@@ -135,35 +134,39 @@ test('publishes one complete ability snapshot after a successful trace append', 
       sources: ['traces/trace-1.json'],
     }],
   } satisfies AbilityProjection;
-  const { handler, emit } = traceProjectionHandler(events, () => projection);
-  await handler(new Request('http://local/api/sessions/tutor%3Al1/messages', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ text: '继续' }),
-  }));
+  for (const toolName of ['trace_append', 'card_alternative_append']) {
+    const events: unknown[] = [];
+    const { handler, emit } = traceProjectionHandler(events, () => projection);
+    await handler(new Request('http://local/api/sessions/tutor%3Al1/messages', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ text: '继续' }),
+    }));
 
-  emit({
-    type: 'tool_execution_end',
-    toolName: 'trace_append',
-    isError: false,
-  });
-  expect(events.filter((event) => (
-    typeof event === 'object' && event !== null && 'type' in event
-      && (event as { type: string }).type === 'ability-update'
-  ))).toEqual([{
-    type: 'ability-update',
-    projection,
-  }]);
-  expect(events.slice(-2).map((event) => (
-    typeof event === 'object' && event !== null && 'type' in event
-      ? (event as { type: string }).type
-      : null
-  ))).toEqual(['work-status', 'ability-update']);
+    emit({
+      type: 'tool_execution_end',
+      toolName,
+      isError: false,
+    });
+    expect(events.filter((event) => (
+      typeof event === 'object' && event !== null && 'type' in event
+        && (event as { type: string }).type === 'ability-update'
+    ))).toEqual([{
+      type: 'ability-update',
+      projection,
+    }]);
+    expect(events.slice(-2).map((event) => (
+      typeof event === 'object' && event !== null && 'type' in event
+        ? (event as { type: string }).type
+        : null
+    ))).toEqual(['work-status', 'ability-update']);
+  }
 });
 
 test('does not publish an ability snapshot for failed or non-trace tools', async () => {
   for (const event of [
     { type: 'tool_execution_end', toolName: 'trace_append', isError: true },
+    { type: 'tool_execution_end', toolName: 'card_alternative_append', isError: true },
     { type: 'tool_execution_end', toolName: 'classroom_update', isError: false },
   ]) {
     const events: unknown[] = [];

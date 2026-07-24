@@ -765,3 +765,43 @@ test('keeps alternative append Tutor-only and Session-bound', () => {
   expect(schema).toContain('"external"');
   expect(schema).not.toContain('"id"');
 });
+
+test('rebuilds planner attention after appending an independently bound alternative', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-alternative-projection-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const trace = createStudyTools(temporaryRoot, () => new Date('2026-07-22T00:00:00Z'), {
+    role: 'tutor',
+    ownerId: 'lesson-003',
+    ownerPath: 'lessons/lesson-003.md',
+  }).find((tool) => tool.name === 'trace_append')!;
+  await trace.execute('alternative-source', {
+    blockId: 'assessment-01',
+    assessment: 'correct',
+    support: 'none',
+    note: '学生独立完成一条真实替代路线。',
+    methodStatus: 'unmapped',
+    methodRoute: '学生先分离参数，再确定函数的取值边界。',
+  } as never, undefined, undefined, {} as never);
+
+  const alternative = createCardAlternativeAppendTool(
+    temporaryRoot,
+    'lessons/lesson-003.md',
+    () => new Date('2026-07-22T00:01:00Z'),
+  );
+  const result = await alternative.execute('alternative-append', {
+    sourceTraceId: 'event-001',
+    question: '整题',
+    solution: '分离参数后研究函数值域。',
+    method: '参变量分离',
+    support: 'none',
+  }, undefined, undefined, {} as never);
+  const payload = JSON.parse((result.content[0] as { text: string }).text) as {
+    id: string;
+    method: string | null;
+  };
+
+  expect(payload).toMatchObject({ id: 'alt-001', method: '参变量分离' });
+  expect(readFileSync(join(temporaryRoot, 'memory/planner-attention.md'), 'utf8'))
+    .toContain('参变量分离');
+});

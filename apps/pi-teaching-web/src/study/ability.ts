@@ -2,6 +2,7 @@ import {
   aggregateMethodSignals,
   readActiveTraces,
   readCard,
+  readTraceRecords,
 } from 'highschool-study-markdown/study-domain';
 import type { AbilityProjection, EvidenceView } from '../shared/contracts';
 
@@ -19,7 +20,7 @@ export function readAbilityProjection(root: string): AbilityProjection {
 }
 
 export function readEvidence(root: string, sourceAnchor: string): EvidenceView {
-  const trace = readActiveTraces(root).find((item) => item.sourceAnchor === sourceAnchor);
+  const trace = readTraceRecords(root).find((item) => item.sourceAnchor === sourceAnchor);
   if (!trace) throw new Error(`TRACE_NOT_FOUND: ${sourceAnchor}`);
   const card = trace.cardPath ? readCard(root, trace.cardPath) : null;
   return {

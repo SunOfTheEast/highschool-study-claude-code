@@ -2,9 +2,13 @@ import { expect, test } from 'bun:test';
 import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { appendCardAlternative } from '../../server/src/alternatives';
 import { aggregateMethodSignals } from '../../server/src/method-signals';
-import { readActiveTraces } from '../../server/src/traces';
-import { makeLearningSetWithHistory } from '../helpers/learning-set';
+import { appendTrace, readActiveTraces } from '../../server/src/traces';
+import {
+  makeLearningSetWithHistory,
+  makeLearningSetWithLesson,
+} from '../helpers/learning-set';
 
 const packageRoot = join(import.meta.dir, '../..');
 
@@ -170,6 +174,137 @@ test('counts distinct card paths independently from attempts', () => {
   expect(signals).toEqual([
     expect.objectContaining({ method: '冻结变量法', attemptCount: 2, distinctCardCount: 2 }),
     expect.objectContaining({ method: '参数化与消元', attemptCount: 2, distinctCardCount: 2 }),
+  ]);
+});
+
+test('projects an alternative own method and ignores an unmapped alternative', () => {
+  const root = makeLearningSetWithLesson();
+  appendTrace(root, {
+    lessonPath: 'lessons/lesson-001.md',
+    blockId: 'step-02',
+    cardAlias: 'Q-FREEZE-01',
+    cardStepId: null,
+    materialPath: null,
+    assessment: 'correct',
+    support: 'tutor',
+    note: 'Completed the reference route with Tutor support.',
+    supersedes: null,
+    methods: { primary: '冻结变量法', secondary: [] },
+  }, () => new Date('2026-07-21T02:00:00Z'));
+  appendCardAlternative(root, 'lessons/lesson-001.md', {
+    sourceTraceId: 'event-001',
+    question: '整题',
+    solution: '独立完成参数化与消元路线。',
+    method: '参数化与消元',
+    support: 'none',
+  }, () => new Date('2026-07-21T02:01:00Z'));
+  appendCardAlternative(root, 'lessons/lesson-001.md', {
+    sourceTraceId: 'event-001',
+    question: '整题',
+    solution: '另一条暂未归类的路线。',
+    method: null,
+    support: 'none',
+  }, () => new Date('2026-07-21T02:02:00Z'));
+
+  const signals = aggregateMethodSignals(root, readActiveTraces(root));
+  expect(signals).toHaveLength(2);
+  expect(signals).toEqual(expect.arrayContaining([
+    expect.objectContaining({
+      method: '参数化与消元',
+      evidenceWeight: 2,
+      earnedWeight: 2,
+      score: 1,
+      attemptCount: 1,
+      distinctCardCount: 1,
+    }),
+    expect.objectContaining({
+      method: '冻结变量法',
+      evidenceWeight: 2,
+      earnedWeight: 1,
+      score: 0.5,
+      attemptCount: 1,
+      distinctCardCount: 1,
+    }),
+  ]));
+});
+
+test('keeps one strongest method contribution per card attempt', () => {
+  const root = makeLearningSetWithLesson();
+  appendTrace(root, {
+    lessonPath: 'lessons/lesson-001.md',
+    blockId: 'step-02',
+    cardAlias: 'Q-FREEZE-01',
+    cardStepId: null,
+    materialPath: null,
+    assessment: 'correct',
+    support: 'tutor',
+    note: 'Completed one supported route.',
+    supersedes: null,
+    methods: { primary: '冻结变量法', secondary: [] },
+  }, () => new Date('2026-07-21T02:00:00Z'));
+  appendCardAlternative(root, 'lessons/lesson-001.md', {
+    sourceTraceId: 'event-001',
+    question: '整题',
+    solution: 'Tutor 支持下的另一路线。',
+    method: '冻结变量法',
+    support: 'tutor',
+  }, () => new Date('2026-07-21T02:01:00Z'));
+  appendCardAlternative(root, 'lessons/lesson-001.md', {
+    sourceTraceId: 'event-001',
+    question: '整题',
+    solution: '无提示完成的另一条路线。',
+    method: '冻结变量法',
+    support: 'none',
+  }, () => new Date('2026-07-21T02:02:00Z'));
+
+  expect(aggregateMethodSignals(root, readActiveTraces(root))).toEqual([
+    expect.objectContaining({
+      method: '冻结变量法',
+      evidenceWeight: 2,
+      earnedWeight: 2,
+      score: 1,
+      attemptCount: 1,
+      distinctCardCount: 1,
+    }),
+  ]);
+});
+
+test('keeps alternative method evidence after its source Trace is superseded', () => {
+  const root = makeLearningSetWithLesson();
+  const input = {
+    lessonPath: 'lessons/lesson-001.md',
+    blockId: 'step-02',
+    cardAlias: 'Q-FREEZE-01',
+    cardStepId: null,
+    materialPath: null,
+    assessment: 'correct' as const,
+    support: 'none' as const,
+    note: 'Completed an alternative route.',
+    supersedes: null,
+    methods: null,
+  };
+  appendTrace(root, input, () => new Date('2026-07-21T02:00:00Z'));
+  appendCardAlternative(root, 'lessons/lesson-001.md', {
+    sourceTraceId: 'event-001',
+    question: '整题',
+    solution: '参数化与消元的完整路线。',
+    method: '参数化与消元',
+    support: 'none',
+  }, () => new Date('2026-07-21T02:01:00Z'));
+  appendTrace(root, {
+    ...input,
+    note: 'Corrected the classroom observation without retracting the route.',
+    supersedes: 'event-001',
+  }, () => new Date('2026-07-21T02:02:00Z'));
+
+  expect(aggregateMethodSignals(root, readActiveTraces(root))).toEqual([
+    expect.objectContaining({
+      method: '参数化与消元',
+      attemptCount: 1,
+      distinctCardCount: 1,
+      score: 1,
+      sourceRefs: ['lessons/lesson-001.md#trace-event-001'],
+    }),
   ]);
 });
 
