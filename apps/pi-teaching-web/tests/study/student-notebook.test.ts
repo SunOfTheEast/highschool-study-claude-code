@@ -1,9 +1,15 @@
 import { afterEach, expect, test } from 'bun:test';
-import { cpSync, mkdtempSync, rmSync } from 'node:fs';
+import {
+  cpSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { readStudentNotebook } from '../../src/study/student-notebook';
-import { setBlockStatus } from '../../src/study/write-workspace';
+import { setBlockStatus, setFrontmatterField } from '../../src/study/write-workspace';
 
 const sourceRoot = join(import.meta.dir, '../../../../examples/derivative-demo/learning-set');
 const roots: string[] = [];
@@ -27,6 +33,43 @@ test('reveals cards only after their ActivityBlock becomes visible', () => {
   setBlockStatus(root, 'lessons/lesson-003.md', 'assessment-01', 'active');
   expect(Object.keys(readStudentNotebook(root, 'lesson-003', false).cards))
     .toEqual(['Q-DOMAIN-EX22']);
+});
+
+test('reveals only active and completed Student Views during an assessment', () => {
+  const root = fixture();
+  expect(readStudentNotebook(root, 'lesson-003', false).lesson.blocks
+    .map((block) => block.studentView))
+    .toEqual(['', '', '', '', '']);
+
+  setBlockStatus(root, 'lessons/lesson-003.md', 'orientation', 'completed');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'assessment-01', 'active');
+  const blocks = readStudentNotebook(root, 'lesson-003', false).lesson.blocks;
+
+  expect(blocks[0]?.studentView).toContain('两道不同结构的未见题');
+  expect(blocks[1]?.studentView).toContain('Q-DOMAIN-EX22');
+  expect(blocks.slice(2).map((block) => block.studentView)).toEqual(['', '', '']);
+});
+
+test('restores all assessment Student Views after closure', () => {
+  const root = fixture();
+  setFrontmatterField(root, 'lessons/lesson-003.md', 'status', 'closed');
+
+  expect(readStudentNotebook(root, 'lesson-003', false).lesson.blocks
+    .every((block) => block.studentView.length > 0))
+    .toBe(true);
+});
+
+test('keeps pending Student Views available for non-assessment previews', () => {
+  const root = fixture();
+  const lessonPath = join(root, 'lessons/lesson-003.md');
+  writeFileSync(
+    lessonPath,
+    readFileSync(lessonPath, 'utf8')
+      .replace('- Primary template: `assessment`', '- Primary template: `deliberate-practice`'),
+  );
+
+  expect(readStudentNotebook(root, 'lesson-003', false).lesson.blocks[1]?.studentView)
+    .toContain('Q-DOMAIN-EX22');
 });
 
 test('returns card stems without answer-bearing fields', () => {

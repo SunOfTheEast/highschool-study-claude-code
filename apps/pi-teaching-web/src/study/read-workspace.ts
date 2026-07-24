@@ -67,19 +67,36 @@ function nodeState(source: string): {
   };
 }
 
-function lessonBlocks(body: string): ActivityBlock[] {
+function lessonTemplate(body: string): string | null {
+  return /^-\s+Primary template:\s*`?([^`\n]+)`?\s*$/m
+    .exec(section(body, 'Lesson Configuration'))?.[1]?.trim() ?? null;
+}
+
+function projectedStudentView(
+  template: string | null,
+  lessonStatus: LessonStatus,
+  blockStatus: BlockStatus,
+  value: string,
+): string {
+  if (template !== 'assessment' || lessonStatus === 'closed') return value;
+  return blockStatus === 'active' || blockStatus === 'completed' ? value : '';
+}
+
+function lessonBlocks(body: string, lessonStatus: LessonStatus): ActivityBlock[] {
+  const template = lessonTemplate(body);
   const matches = [...body.matchAll(/^## Block ([^（\s]+)(?:（([^）]+)）)?\s*$/gm)];
   return matches.map((match, index) => {
     const source = body.slice(match.index! + match[0].length, matches[index + 1]?.index);
     const state = nodeState(section(`# x\n${source}`, 'Node State', 3));
     const inferredKind: ActivityKind = match[1] === 'reflection' ? 'reflection' : state.kind;
+    const studentView = section(`# x\n${source}`, 'Student View', 3);
     return {
       id: match[1]!,
       title: match[1]!,
       ...state,
       kind: inferredKind,
       required: match[2]?.includes('可选') ? false : state.required,
-      studentView: section(`# x\n${source}`, 'Student View', 3),
+      studentView: projectedStudentView(template, lessonStatus, state.status, studentView),
       evidence: [...section(`# x\n${source}`, 'Evidence', 3).matchAll(/\[[^\]]+\]\(([^)]+)\)/g)]
         .map((item) => item[1]!),
     };
@@ -93,15 +110,16 @@ function lessonNode(root: string, planPath: string, linkedPath: string): LessonN
   if (!['prepared', 'active', 'paused', 'closed', 'abandoned'].includes(status ?? '')) {
     throw new Error(`INVALID_LESSON_STATUS: ${lessonPath}`);
   }
+  const lessonStatus = status as LessonStatus;
   return {
     id: document.id,
     title: title(document.body),
     path: lessonPath,
     planId: scalar(document.frontmatter, 'plan_id') ?? '',
-    status: status as LessonStatus,
+    status: lessonStatus,
     sessionKey: `tutor:${document.id}`,
     tutorSessionId: scalar(document.frontmatter, 'tutor_session'),
-    blocks: lessonBlocks(document.body),
+    blocks: lessonBlocks(document.body, lessonStatus),
   };
 }
 

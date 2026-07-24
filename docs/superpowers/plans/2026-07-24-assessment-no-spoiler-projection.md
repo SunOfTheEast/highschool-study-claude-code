@@ -29,7 +29,7 @@
 - Consumes: Existing Lesson `## Lesson Configuration / Primary template`, Lesson status, and Block status.
 - Produces: `readPlanWorkspace(root, planId)` with template-aware `ActivityBlock.studentView` projection.
 
-- [ ] **Step 1: Write failing projection tests**
+- [x] **Step 1: Write failing projection tests**
 
 Change the prepared assessment assertion to:
 
@@ -42,7 +42,7 @@ Add notebook cases that activate one Block and assert that only active/completed
 Student Views are present, then change the template to `deliberate-practice`
 and assert that Pending Student Views remain present.
 
-- [ ] **Step 2: Run the focused tests and verify RED**
+- [x] **Step 2: Run the focused tests and verify RED**
 
 Run:
 
@@ -53,7 +53,7 @@ bun test tests/study/read-workspace.test.ts tests/study/student-notebook.test.ts
 Expected: the prepared assessment assertion fails because current code returns
 the Pending Block text.
 
-- [ ] **Step 3: Implement the minimal projection**
+- [x] **Step 3: Implement the minimal projection**
 
 Parse the existing template line and project Block text:
 
@@ -77,7 +77,7 @@ function studentViewFor(
 Pass the parsed Lesson status and template into `lessonBlocks` and apply
 `studentViewFor` to each Block.
 
-- [ ] **Step 4: Run focused tests and verify GREEN**
+- [x] **Step 4: Run focused tests and verify GREEN**
 
 Run:
 
@@ -97,7 +97,7 @@ Expected: all focused tests pass.
 - Consumes: The already selected `primaryTemplate` and problem Block count.
 - Produces: A readiness-only student announcement for assessment; existing behavior for other templates.
 
-- [ ] **Step 1: Add the Pi Coach output contract**
+- [x] **Step 1: Add the Pi Coach output contract**
 
 Extend the successful preparation rule with:
 
@@ -109,12 +109,12 @@ recognition targets, traps and card IDs inside the Lesson until Tutor activates
 the corresponding Block. Other templates may summarize their activity roles.
 ```
 
-- [ ] **Step 2: Mirror the contract in the Claude plugin Skill**
+- [x] **Step 2: Mirror the contract in the Claude plugin Skill**
 
 Add the same conditional output shape after the Lesson reread requirement in
 `prepare-next-lesson/SKILL.md`.
 
-- [ ] **Step 3: Verify the complete Pi surface**
+- [x] **Step 3: Verify the complete Pi surface**
 
 Run:
 
@@ -124,4 +124,3 @@ bun run check
 
 Expected: typecheck passes, every Bun test passes, and the production build
 finishes successfully.
-
