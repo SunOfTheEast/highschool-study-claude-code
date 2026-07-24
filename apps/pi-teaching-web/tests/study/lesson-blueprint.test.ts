@@ -97,6 +97,22 @@ test.each([
     .toThrow(/assessment-01.*恰好一张题卡/);
 });
 
+test('allows separately assessed parts to reuse one card alias in different problem Blocks', () => {
+  const repeatedCard: LessonBlueprint = {
+    ...blueprint,
+    blocks: blueprint.blocks.map((block) => (
+      block.id === 'assessment-02' ? { ...block, uses: ['Q-EX22'] } : block
+    )),
+  };
+
+  expect(() => validateLessonBlueprint(root, context, repeatedCard)).not.toThrow();
+  expect(() => validatePreparedLessonSource(
+    root,
+    context.lessonPath,
+    renderPreparedLesson(context, repeatedCard),
+  )).not.toThrow();
+});
+
 test.each([
   ['no card', '- Uses:'],
   ['multiple cards', '- Uses: Q-EX22, Q-EX16'],

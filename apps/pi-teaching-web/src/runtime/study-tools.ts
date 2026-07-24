@@ -2,6 +2,7 @@ import { defineTool, type ToolDefinition } from '@earendil-works/pi-coding-agent
 import {
   appendTraceWithProjection,
   listCanonicalMethodNames,
+  readActiveTraces,
   readMarkdownFile,
   searchCards,
   searchTraces,
@@ -52,6 +53,25 @@ function cardAliasForBlock(
     );
   }
   return block.uses[0]!;
+}
+
+function assertProblemAttemptBoundary(
+  root: string,
+  lessonPath: string,
+  blockId: string,
+  cardAlias: string | null,
+  supersedes: string | undefined,
+): void {
+  if (cardAlias === null) return;
+  const active = readActiveTraces(root, [lessonPath])
+    .filter((record) => record.blockId === blockId);
+  if (active.length === 0 || active.some((record) => record.eventId === supersedes)) return;
+  throw new Error(
+    `TRACE_ATTEMPT_ALREADY_ACTIVE: block=${blockId}; `
+    + `active=${active.map((record) => record.eventId).join(',')}; `
+    + '同一 problem Block 只表示一次独立作答。若是本次作答的补全或更正，'
+    + '请用 supersedes 修订当前 active Trace；若是另一题问，请返回 Coach 创建新的 problem Block',
+  );
 }
 
 export function createReadOnlyStudyTools(
@@ -164,7 +184,7 @@ export function createStudyTools(
         }),
         note: Type.String(),
         supersedes: Type.Optional(Type.String({
-          description: 'This field is required when this is a later revision of the same card-and-Block attempt. Set it to the exact active incomplete or partially_correct event ID.',
+          description: 'Required whenever the same card-and-Block attempt already has an active Trace, including later completion, correction or method confirmation. Set it to that exact active event ID. A different question or part requires a different problem Block.',
         })),
       }),
       execute: async (_id, input) => {
@@ -187,10 +207,18 @@ export function createStudyTools(
               };
             })()
           : null;
+        const cardAlias = cardAliasForBlock(root, context.ownerPath, input.blockId);
+        assertProblemAttemptBoundary(
+          root,
+          context.ownerPath,
+          input.blockId,
+          cardAlias,
+          input.supersedes,
+        );
         const trace = appendTraceWithProjection(root, {
           lessonPath: context.ownerPath,
           blockId: input.blockId,
-          cardAlias: cardAliasForBlock(root, context.ownerPath, input.blockId),
+          cardAlias,
           cardStepId: null,
           materialPath: input.materialPath ?? null,
           methods,

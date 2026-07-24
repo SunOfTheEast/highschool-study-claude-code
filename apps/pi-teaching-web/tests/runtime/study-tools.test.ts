@@ -326,6 +326,96 @@ test('binds a Tutor Trace to its Lesson and refreshes planner attention', async 
   ).card?.path).toBe('cards/derivative/mst_p0032_ex22.card.yaml');
 });
 
+test('rejects a second independent active Trace in the same problem Block', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-tools-attempt-boundary-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const trace = createStudyTools(temporaryRoot, () => new Date('2026-07-22T00:00:00Z'), {
+    role: 'tutor',
+    ownerId: 'lesson-003',
+    ownerPath: 'lessons/lesson-003.md',
+  }).find((tool) => tool.name === 'trace_append')!;
+  const firstAttempt = {
+    blockId: 'assessment-01',
+    assessment: 'correct',
+    support: 'none',
+    note: '学生独立完成当前题问。',
+    methodStatus: 'unmapped',
+    methodRoute: '学生完成当前题问的推理链。',
+  };
+
+  await trace.execute(
+    'first-attempt',
+    firstAttempt as never,
+    undefined,
+    undefined,
+    {} as never,
+  );
+  await expect(trace.execute('second-independent-attempt', {
+    ...firstAttempt,
+    note: '学生又完成了同一题卡中的另一问。',
+    methodRoute: '学生完成另一题问的独立推理链。',
+  } as never, undefined, undefined, {} as never)).rejects.toThrow(
+    /TRACE_ATTEMPT_ALREADY_ACTIVE.*assessment-01.*event-001.*新的 problem Block/s,
+  );
+
+  expect(readTraceRecords(temporaryRoot, ['lessons/lesson-003.md']))
+    .toHaveLength(1);
+
+  await trace.execute('same-attempt-revision', {
+    ...firstAttempt,
+    note: '学生补全了当前题问。',
+    supersedes: 'event-001',
+  } as never, undefined, undefined, {} as never);
+  expect(readTraceRecords(temporaryRoot, ['lessons/lesson-003.md']))
+    .toHaveLength(2);
+});
+
+test('allows separate problem Blocks to record independent parts from the same card', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-tools-part-blocks-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const lessonPath = join(temporaryRoot, 'lessons/lesson-003.md');
+  writeFileSync(
+    lessonPath,
+    readFileSync(lessonPath, 'utf8')
+      .replace('- Uses: Q-DOMAIN-EX16', '- Uses: Q-DOMAIN-EX22'),
+  );
+  const trace = createStudyTools(temporaryRoot, () => new Date('2026-07-22T00:00:00Z'), {
+    role: 'tutor',
+    ownerId: 'lesson-003',
+    ownerPath: 'lessons/lesson-003.md',
+  }).find((tool) => tool.name === 'trace_append')!;
+  const attempt = {
+    assessment: 'correct',
+    support: 'none',
+    note: '学生独立完成当前题问。',
+    methodStatus: 'unmapped',
+    methodRoute: '学生完成当前题问的推理链。',
+  };
+
+  await trace.execute('part-one', {
+    ...attempt,
+    blockId: 'assessment-01',
+  } as never, undefined, undefined, {} as never);
+  await trace.execute('part-two', {
+    ...attempt,
+    blockId: 'assessment-02',
+  } as never, undefined, undefined, {} as never);
+
+  expect(readTraceRecords(temporaryRoot, ['lessons/lesson-003.md']))
+    .toEqual([
+      expect.objectContaining({
+        blockId: 'assessment-01',
+        cardPath: 'cards/derivative/mst_p0032_ex22.card.yaml',
+      }),
+      expect.objectContaining({
+        blockId: 'assessment-02',
+        cardPath: 'cards/derivative/mst_p0032_ex22.card.yaml',
+      }),
+    ]);
+});
+
 test('ignores a stale cardAlias and binds the card owned by the selected Block', async () => {
   const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-tools-cross-binding-'));
   temporaryRoots.push(temporaryRoot);
@@ -507,10 +597,13 @@ test('keeps runtime authority out of Tutor tool schemas', () => {
     'any Tutor hint already given',
   );
   expect(traceProperties.supersedes?.description).toContain(
-    'required when this is a later revision of the same card-and-Block attempt',
+    'same card-and-Block attempt already has an active Trace',
   );
   expect(traceProperties.supersedes?.description).toContain(
-    'exact active incomplete or partially_correct event ID',
+    'exact active event ID',
+  );
+  expect(traceProperties.supersedes?.description).toContain(
+    'different problem Block',
   );
 });
 

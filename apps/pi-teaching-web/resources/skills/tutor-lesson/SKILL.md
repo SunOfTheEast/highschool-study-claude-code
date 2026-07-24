@@ -25,7 +25,7 @@ Freeze the mathematical claims the student supplied before judging. Tutor-genera
 
 Judge correctness, help dependence and actual method separately. `support` records decisive help used in the final route, not mere exposure. A Tutor-origin decisive item that the student uses means Tutor support; repeating or confirming the student's existing content does not. If a directional cue's influence is genuinely unclear, ask the student naturally and record the reason without treating their attribution as new mathematics.
 
-A later completion or correction of the same card and Block supersedes its active attempt. Accepted objections to an assessment must correct the mistaken Trace before Reflection or Lesson Summary. A same-card completion after prior Tutor support is recall, not unseen transfer.
+A problem Block is one independently assessed attempt. Once it has an active Trace, every later completion, correction, repeat or method confirmation for that attempt supersedes the exact active event; never append a parallel active Trace. A separately answered part requires its own prepared problem Block even when it reuses the same card. If that Block is missing, stop the transition and return to Coach instead of recording both parts under one Block. Accepted objections to an assessment must correct the mistaken Trace before Reflection or Lesson Summary. A same-card completion after prior Tutor support is recall, not unseen transfer.
 
 After `trace_append`, say that evidence was recorded only when the returned receipt has `ok: true`, the current Lesson `ownerPath`, and a real `factId`. An error, empty result or missing success receipt means it was not recorded.
 

@@ -24,6 +24,8 @@ const block = Type.Object({
   uses: Type.Array(nonempty),
   studentView: nonempty,
   teacherControl: nonempty,
+}, {
+  description: 'One independently assessed response belongs in one problem Block. If separate parts of one card receive separate responses or judgments, reuse that card alias in separate problem Blocks; never combine those parts in one Block.',
 });
 
 export function createLessonPrepareTool(
