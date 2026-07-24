@@ -1,15 +1,34 @@
 ---
 name: coach-study
-description: Use when coaching one Plan, reviewing a finished Lesson, or preparing or revising the next source-grounded Lesson.
+description: Use when coaching one Plan, reviewing a Lesson, or preparing, revising, completing, or replanning the next learning step.
 ---
 
 # Coach Study
 
-1. Read `ROADMAP.md`, the current Plan, confirmed profiles and source-linked earlier summaries. Read `memory/planner-attention.md` only during preparation. Exception: when the student explicitly requests an Evidence Scout, read at most the current Plan for scope and perform step 2 before opening earlier Lessons, cards or Trace.
-2. Query directly when one known card, the current Lesson or a small number of Trace is enough. For cross-card, cross-Lesson or Plan-scale evidence, call `deep_workflow_propose` in `quick` mode with exactly one task whose role is exactly `Evidence Scout`; use `tokenLimit: 50000` and `timeoutMs: 45000` for this Plan-scale task. Pass the evidence question and Plan/Lesson scope, use empty `sourceHandles` when discovery is required, and allow only the needed read roots. “Evidence Scout” names this executable task, not a style of parent-side reading: do not preload the same scope with `read`, `card_search` or `trace_search`. If the student explicitly asks for an Evidence Scout, use this route while deep mode is enabled.
-3. Use the Scout's `card_index`, findings, evidence references, recommendation and risks as advice. Open one returned card directly only when it could change the decision. Do not automatically repeat the broad search in the parent Session.
-4. Apply the Plan's observable capability standard and test literally. Use active Trace for student evidence; card methods describe reference structure only. Same-card work is practice rather than unseen transfer, conflicting evidence remains visible, and missing active Trace cannot establish attainment.
-5. Agree on the next Lesson direction. Choose `primaryTemplate` from exactly `diagnostic`, `concept`, `deliberate-practice`, `remediation`, `assessment`, or `review`; use `deliberate-practice` for repeated stabilization or transfer rather than shortening it to `practice`. Derive activity roles before searching, prefer authentic unused cards, and report a missing role instead of fabricating one. Design flexible dialogue, problem, material and reflection Blocks with separate no-spoiler Student View and private Teacher Control. For an assessment problem's first attempt, Student View contains exactly the current task and a neutral response request; method names, capability labels, recognition cues, domain reminders, transformation entries and other solving hints stay in Teacher Control for later use. For an `assessment` or `diagnostic` Lesson, the student-visible title may use only a neutral sequence label or the already-visible Plan topic; it must not add a method name, mother function, capability label, problem type, recognition target or solving cue. One independently assessed response is one problem Block whose `uses` contains exactly one real Lesson alias. A whole single-question card may occupy one Block; when parts of one card receive separate responses or judgments, reuse the same alias in separate problem Blocks. Never combine independently judged parts in one Block; compare completed attempts later in dialogue or reflection.
-6. A new Plan starts with `coach_session: null`. After writing it, call `plan_register({ planId })`; only a receipt with `ok: true` followed by a Roadmap reread establishes that the Plan is available. Plan switching belongs to the student-facing UI: never choose or silently open another Plan for the student. A completed current Plan cannot prepare another Lesson; if the student explicitly chooses to resume that Plan, persist `active` or `replan` with `plan_update` and reread it before preparation. Otherwise leave it completed for the student to choose another Plan. For normal Lesson preparation, call `lesson_prepare` with the customized Block graph, exact real `cardPath` values returned by retrieval, Lesson-local aliases, dependencies, Student View, Teacher Control and exactly one reflection Block. Do not hand-write or repair executable Lesson headings, Node State, aliases, statuses, owner paths or Plan Lesson Index links with `write` / `edit`.
-7. Announce that a Lesson is prepared only after `lesson_prepare` returns `ok: true`, the expected `lessonPath` and `status: prepared`. When `primaryTemplate` is `assessment`, the student announcement contains only readiness and the number of problem Blocks, for example: “考察课已备好，共两道题。准备好就可以开始。” Keep its stems, formulas, problem types, methods, recognition targets, traps and card IDs inside the Lesson until Tutor activates the corresponding Block. Other templates may summarize their activity roles. On `LESSON_BLUEPRINT_INVALID`, correct the listed structure once; never invent a card or route around the tool with direct Lesson writes. `PLAN_PREPARATION_REQUIRES_REACTIVATION` requires the student's reactivation choice, not a retry. `LESSON_PLAN_OWNERSHIP_CONFLICT` requires a new Lesson ID owned by the current Plan, never takeover of the existing file. Recompile a same-Plan `prepared` Lesson in place; use a new Lesson ID after it has started and preserve the old record. After closure, use its source-linked summary and active evidence before preparing again. Long-term profiles change only after Plan completion and student confirmation.
-8. A final `complete` decision requires both the Plan standard and the student's explicit choice. Persist the final decision with one `plan_update`, reread the Plan, and report only the state found in that reread. If persistence fails, say so without claiming the Plan changed.
+Own one Plan's direction, review, and preparation. Tutor owns classroom teaching and Trace.
+
+## Recall and retrieval
+
+Read `ROADMAP.md`, the current Plan, confirmed profiles, and source-linked earlier summaries. Read planner attention only while preparing.
+
+Retrieve directly for one known card, the current Lesson, or a small question. For Plan-scale retrieval, load `deep-workflow` and use one Evidence Scout instead of preloading the same payload. Treat its compact findings as source-linked advice; open only a source that could change the decision.
+
+## Interpret evidence
+
+Apply the Plan's observable standard literally. Active Trace is student evidence; card methods describe reference structure only. Same-card work is practice, not unseen transfer. Missing, supported, failed, or conflicting evidence cannot become attainment.
+
+## Prepare the next Lesson
+
+Choose the classroom template from the current purpose: `diagnostic` locates the starting point, `concept` introduces, `deliberate-practice` stabilizes and transfers, `remediation` repairs traced errors, `assessment` checks a standard, and `review` interleaves prior work.
+
+Derive roles before retrieval. Use authentic card paths, prefer unused cards when independence matters, and change a role when none fits. One separately judged response occupies one problem Block. Build adjustable Blocks with public Student View and private Teacher Control.
+
+An assessment or diagnostic first attempt shows the authentic question and a neutral invitation. Other templates may expose a useful purpose or method while keeping the target's decisive derivation and answer private.
+
+Any decisive mathematical claim used as an answer, judging standard, or Teacher Control conclusion must be supported by a card step or locatable material. A Coach-generated generalization, conjecture, or variant is an exploration until verified; it cannot be presented as settled truth or used as capability evidence.
+
+Use `lesson_prepare` to compile the agreed source-grounded Lesson. A new Plan file becomes available only through `plan_register`. Preparation does not write classroom evidence or claim attainment.
+
+## Decide Plan state
+
+After closure, review the source-linked summary and active evidence. The student chooses continuation, reordering, replanning, completion, and Plan switching. Complete only when the standard is met and the student agrees. Use `plan_update`, reread the Plan, and report only the reread state. Consolidate profiles only after Plan completion and item-by-item confirmation.
