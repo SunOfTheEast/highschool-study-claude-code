@@ -143,6 +143,50 @@ test('prepares and rereads one Lesson with Plan authority bound by the Coach Ses
   )).toContain('../lessons/lesson-blueprint-001.md');
 });
 
+test('accepts only the six canonical classroom template IDs', () => {
+  const tool = createLessonPrepareTool(
+    root,
+    'domain-integrity',
+    'plans/domain-integrity.md',
+  );
+  const input = {
+    lessonId: 'lesson-template-contract',
+    title: 'Template contract',
+    planContext: 'Current Plan context.',
+    capabilityTarget: 'Produce one observable response.',
+    primaryTemplate: 'assessment',
+    templateReason: 'Use one independent attempt.',
+    adjustments: [],
+    cards: [],
+    sources: [],
+    blocks: [{
+      id: 'reflection',
+      kind: 'reflection',
+      required: true,
+      dependsOn: [],
+      uses: [],
+      studentView: '回顾本节证据。',
+      teacherControl: '只使用已经形成的课堂证据。',
+    }],
+  };
+  const canonical = [
+    'diagnostic',
+    'concept',
+    'deliberate-practice',
+    'remediation',
+    'assessment',
+    'review',
+  ] as const;
+
+  for (const primaryTemplate of canonical) {
+    expect(Check(tool.parameters, { ...input, primaryTemplate })).toBeTrue();
+  }
+  expect(Check(tool.parameters, {
+    ...input,
+    primaryTemplate: 'practice',
+  })).toBeFalse();
+});
+
 test('rejects a nonexistent card without writing or indexing a Lesson', async () => {
   const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-lesson-prepare-invalid-'));
   temporaryRoots.push(temporaryRoot);

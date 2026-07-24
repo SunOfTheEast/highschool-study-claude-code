@@ -11,21 +11,48 @@ import { validatePreparedLessonSource } from '../study/validate-prepared-lesson'
 import { writePreparedLesson } from '../study/write-workspace';
 
 const nonempty = Type.String({ minLength: 1 });
+const classroomTemplate = Type.Union([
+  Type.Literal('diagnostic'),
+  Type.Literal('concept'),
+  Type.Literal('deliberate-practice'),
+  Type.Literal('remediation'),
+  Type.Literal('assessment'),
+  Type.Literal('review'),
+], {
+  description: 'Canonical classroom template selected for this Lesson. The ID chooses template defaults; adjustments record deliberate deviations.',
+});
 const block = Type.Object({
-  id: nonempty,
+  id: Type.String({
+    minLength: 1,
+    description: 'Lesson-local Block ID used by dependencies and later classroom tools.',
+  }),
   kind: Type.Union([
     Type.Literal('dialogue'),
     Type.Literal('problem'),
     Type.Literal('material'),
     Type.Literal('reflection'),
-  ]),
-  required: Type.Boolean(),
-  dependsOn: Type.Array(nonempty),
-  uses: Type.Array(nonempty),
-  studentView: nonempty,
-  teacherControl: nonempty,
+  ], {
+    description: 'Activity kind. A problem produces one independently assessed response; the Lesson must contain exactly one reflection Block.',
+  }),
+  required: Type.Boolean({
+    description: 'Whether the Lesson cannot complete normally without traversing this Block.',
+  }),
+  dependsOn: Type.Array(nonempty, {
+    description: 'Earlier Block IDs that must be resolved before this Block can activate.',
+  }),
+  uses: Type.Array(nonempty, {
+    description: 'Lesson-local aliases used by this Block. A problem Block must use exactly one authentic problem-card alias.',
+  }),
+  studentView: Type.String({
+    minLength: 1,
+    description: 'Content that may be shown when this Block is active.',
+  }),
+  teacherControl: Type.String({
+    minLength: 1,
+    description: 'Private role, source references, reveal mode, evidence target, and ordered teaching support for this Block.',
+  }),
 }, {
-  description: 'One independently assessed response belongs in one problem Block. If separate parts of one card receive separate responses or judgments, reuse that card alias in separate problem Blocks; never combine those parts in one Block.',
+  description: 'One adjustable Lesson activity. Put separately judged responses, including separately judged parts of one card, in separate problem Blocks.',
 });
 
 export function createLessonPrepareTool(
@@ -36,26 +63,68 @@ export function createLessonPrepareTool(
   return defineTool({
     name: 'lesson_prepare',
     label: '整理课堂结构',
-    description: 'Compile and publish one source-grounded prepared Lesson for the current Plan.',
+    description: 'Compile one source-grounded Blueprint into canonical Lesson Markdown and register it under the Coach Session-owned Plan. Call after selecting a canonical template, authentic card paths, and a complete Block graph; revise only a same-Plan Lesson that is still prepared. The runtime binds Plan ownership, validates sources and aliases, writes initial state and Plan links, and returns the prepared Lesson path and block count.',
     parameters: Type.Object({
-      lessonId: nonempty,
-      title: nonempty,
-      planContext: nonempty,
-      capabilityTarget: nonempty,
-      primaryTemplate: nonempty,
-      templateReason: nonempty,
-      adjustments: Type.Array(nonempty),
+      lessonId: Type.String({
+        minLength: 1,
+        description: 'New Lesson ID and lessons/<lessonId>.md filename stem.',
+      }),
+      title: Type.String({
+        minLength: 1,
+        description: 'Student-visible Lesson title appropriate to the selected reveal policy.',
+      }),
+      planContext: Type.String({
+        minLength: 1,
+        description: 'Brief source-linked account of where this Lesson sits in the current Plan.',
+      }),
+      capabilityTarget: Type.String({
+        minLength: 1,
+        description: 'Observable capability this Lesson teaches or checks; it does not assert attainment.',
+      }),
+      primaryTemplate: classroomTemplate,
+      templateReason: Type.String({
+        minLength: 1,
+        description: 'Why this template fits the current evidence and capability target.',
+      }),
+      adjustments: Type.Array(nonempty, {
+        description: 'Deliberate changes from the selected template defaults.',
+      }),
       cards: Type.Array(Type.Object({
-        alias: nonempty,
-        cardPath: nonempty,
-        role: nonempty,
-      })),
+        alias: Type.String({
+          minLength: 1,
+          description: 'Lesson-local short name referenced by Block uses.',
+        }),
+        cardPath: Type.String({
+          minLength: 1,
+          description: 'Exact learning-set-relative path returned by authentic card retrieval.',
+        }),
+        role: Type.String({
+          minLength: 1,
+          description: 'Instructional role this card serves in the Lesson.',
+        }),
+      }), {
+        description: 'Authentic problem cards available to this Lesson.',
+      }),
       sources: Type.Array(Type.Object({
-        label: nonempty,
-        target: nonempty,
-        note: nonempty,
-      })),
-      blocks: Type.Array(block, { minItems: 1 }),
+        label: Type.String({
+          minLength: 1,
+          description: 'Readable name for the material source.',
+        }),
+        target: Type.String({
+          minLength: 1,
+          description: 'Learning-set-local source target or source fragment.',
+        }),
+        note: Type.String({
+          minLength: 1,
+          description: 'What this source supports in the Lesson.',
+        }),
+      }), {
+        description: 'Non-card materials cited by the Lesson.',
+      }),
+      blocks: Type.Array(block, {
+        minItems: 1,
+        description: 'Ordered, dependency-aware activity graph compiled into the Lesson.',
+      }),
     }),
     execute: async (_id, input) => {
       const lessonPath = `lessons/${input.lessonId}.md`;
