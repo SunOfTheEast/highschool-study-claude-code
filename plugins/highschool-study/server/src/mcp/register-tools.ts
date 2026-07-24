@@ -16,47 +16,90 @@ const output = <T extends object>(value: T) => ({
 });
 
 const cardSearchInput = z.object({
-  query: z.string(),
-  limit: z.number().int().min(1).max(20),
+  query: z.string().describe(
+    'Natural-language topic, method, goal, title, or source text used to rank authentic cards.',
+  ),
+  limit: z.number().int().min(1).max(20).describe(
+    'Maximum card candidates; one returned card still includes its complete active Trace history.',
+  ),
 }).strict();
 
 const traceSearchInput = z.object({
-  query: z.string().optional(),
-  planId: z.string().optional(),
-  lessonId: z.string().optional(),
-  cardPath: z.string().optional(),
-  limit: z.number().int().min(1).max(100),
+  query: z.string().optional().describe(
+    'Optional text matched against active, non-superseded Trace.',
+  ),
+  planId: z.string().optional().describe('Optional exact Plan ID scope.'),
+  lessonId: z.string().optional().describe('Optional exact Lesson ID scope.'),
+  cardPath: z.string().optional().describe(
+    'Optional exact learning-set-relative card path for card-to-Trace lookup.',
+  ),
+  limit: z.number().int().min(1).max(100).describe(
+    'Maximum number of active Trace records returned.',
+  ),
 }).strict();
 
 const traceAppendInput = z.object({
-  lessonPath: z.string(),
-  blockId: z.string(),
-  cardAlias: z.string().nullable(),
-  cardStepId: z.string().nullable(),
-  materialPath: z.string().nullable(),
-  assessment: z.enum(['correct', 'partially_correct', 'incorrect', 'incomplete']),
-  support: z.enum(['none', 'tutor', 'external']),
+  lessonPath: z.string().describe(
+    'Exact learning-set-relative Lesson path that owns this classroom event.',
+  ),
+  blockId: z.string().describe(
+    'Exact Lesson Block ID whose activity produced the evidence.',
+  ),
+  cardAlias: z.string().nullable().describe(
+    'Exact alias declared by that Lesson, or null only for evidence not bound to a problem card.',
+  ),
+  cardStepId: z.string().nullable().describe(
+    'Exact stable step ID on the resolved card, or null when the event is not step-specific.',
+  ),
+  materialPath: z.string().nullable().describe(
+    'Learning-set-relative material source for non-card evidence, otherwise null.',
+  ),
+  assessment: z.enum([
+    'correct',
+    'partially_correct',
+    'incorrect',
+    'incomplete',
+  ]).describe(
+    'Completeness of the student-authored evidence; Tutor-generated work cannot upgrade the same attempt.',
+  ),
+  support: z.enum(['none', 'tutor', 'external']).describe(
+    'Help actually used in the final route, not mere exposure to a hint.',
+  ),
   methods: z.object({
-    primary: z.string(),
-    secondary: z.array(z.string()).optional(),
-  }).strict().optional(),
-  note: z.string(),
-  supersedes: z.string().nullable(),
+    primary: z.string().describe(
+      'Student-confirmed canonical primary method actually used.',
+    ),
+    secondary: z.array(z.string()).optional().describe(
+      'Student-confirmed canonical secondary methods actually used.',
+    ),
+  }).strict().optional().describe(
+    'Confirmed method evidence; omit when no exact canonical binding has been confirmed.',
+  ),
+  note: z.string().describe(
+    'Concise source-linked account of the evidence and unresolved obligations.',
+  ),
+  supersedes: z.string().nullable().describe(
+    'Exact earlier event ID corrected or replaced within the same Lesson, otherwise null.',
+  ),
 }).strict();
 
 const sourceResolveInput = z.object({
-  fromPath: z.string(),
-  target: z.string(),
+  fromPath: z.string().describe(
+    'Learning-set-relative path of the file making the reference.',
+  ),
+  target: z.string().describe(
+    'Relative or learning-set-local source target, optionally including a fragment.',
+  ),
 }).strict();
 
 export function registerStudyTools(server: McpServer, deps: StudyMcpDependencies): void {
   server.registerTool('card_search', {
-    description: 'Search real problem cards with complete active Trace history',
+    description: 'Search only real problem cards in the current learning set. Use for preparation or private route verification. Every card includes its complete active Trace history; an empty result is valid and must not be replaced with an invented card.',
     inputSchema: cardSearchInput,
   }, async (input) => output(searchCards(deps.learningSetRoot, input)));
 
   server.registerTool('trace_search', {
-    description: 'Search active Trace and reverse-resolve its unique problem cards',
+    description: 'Search active, non-superseded classroom Trace by optional Plan, Lesson, card, and text scopes, then reverse-resolve the unique authentic cards cited by the result.',
     inputSchema: traceSearchInput,
   }, async (input) => output(searchTraces(deps.learningSetRoot, {
     query: input.query ?? null,
@@ -67,7 +110,7 @@ export function registerStudyTools(server: McpServer, deps: StudyMcpDependencies
   })));
 
   server.registerTool('trace_append', {
-    description: 'Append one validated evidence Trace to its owning Lesson',
+    description: 'Append one validated evidence Trace to an explicit real Lesson. Use for an evidence-bearing activity or a later correction that supersedes an earlier event; runtime validation checks Lesson, Block, aliases, card steps, and provenance before returning the persisted fact.',
     inputSchema: traceAppendInput,
   }, async (input) => {
     const trace = appendTraceWithProjection(deps.learningSetRoot, input, deps.now);
@@ -80,7 +123,7 @@ export function registerStudyTools(server: McpServer, deps: StudyMcpDependencies
   });
 
   server.registerTool('source_resolve', {
-    description: 'Resolve a learning-set source and optional fragment',
+    description: 'Resolve and verify one learning-set-local source target or fragment relative to the file that cites it. This is read-only and returns canonical validity information.',
     inputSchema: sourceResolveInput,
   }, async (input) => output(sourceResolve(deps.learningSetRoot, input)));
 }
