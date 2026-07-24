@@ -114,46 +114,29 @@ existing linked order, appends missing Lessons, and synchronizes the matching
 Roadmap Plan Graph status. Model-authored text never owns these structural
 links or status projections.
 
-## Teaching and evidence invariants
+## Teaching authority map
 
-- Student control is authoritative: pause immediately on request and close a
-  Lesson only after explicit confirmation.
-- Freeze evidence before assessment. Tutor-generated derivations cannot be
-  credited as student work in the same attempt. A missing decisive proof is
-  `incomplete`, not `correct`.
-- `assessment`, `support`, and actual method are separate dimensions.
-- `support` records actual dependence in the final solution, not mere exposure
-  to a hint. A Tutor-origin decisive step that is used means `support:tutor`;
-  a repeated or unused hint does not.
-- Card-declared methods are reference metadata, never proof of the method a
-  student used.
-- Method evidence is written only after the student confirms an exact
-  canonical node. If no label is exact or the student rejects it, preserve the
-  route as unmapped.
-- A closest valid method name is still false evidence.
-- A genuine alternative solution requires a complete route for at least one
-  whole question/part whose entry, decisive reasoning, and closing chain
-  differ from the reference and every stored alternative. Changed notation,
-  reordered equivalent steps, or a local trick is not an alternative.
-- Persist a verified alternative only after its correct active Trace exists.
-  The alternative owns a runtime ID, complete route, actual support, and one
-  student-confirmed canonical method or an unmapped value. Its source Trace is
-  provenance only: superseding that Trace does not hide or delete the
-  alternative.
-- A later correction of the same card-and-Block attempt must supersede the
-  exact active event before summaries, reflection, method projection, or Plan
-  review use it.
-- Ability projection aggregates once per
-  `lessonPath + blockId + cardPath`. Primary methods carry more weight than
-  secondary methods, and `steady` requires evidence from at least two distinct
-  cards. A bound alternative method joins its source attempt; the strongest
-  verified contribution for one method is used once, and multiple alternatives
-  on one card do not increase the distinct-card count. This is a planning
-  signal, not an automatic mastery verdict.
-- Coach final decisions must be persisted with `plan_update`, then reread from
-  the Plan before being reported to the student.
-- Long-term profile changes happen only after Plan completion, source-linked
-  consolidation, and item-by-item student confirmation.
+Do not maintain a second full teaching protocol in this repository guide.
+Operational authorities are:
+
+- Pi Tutor judgment and classroom event triggers:
+  `apps/pi-teaching-web/resources/skills/tutor-lesson/SKILL.md`.
+- Pi Coach evidence, preparation, source, and Plan decisions:
+  `apps/pi-teaching-web/resources/skills/coach-study/SKILL.md`.
+- Claude plugin classroom evidence meaning:
+  `plugins/highschool-study/skills/run-lesson/references/evidence-protocol.md`.
+- Claude plugin reveal and template semantics:
+  `plugins/highschool-study/skills/prepare-next-lesson/references/`.
+- Tool purpose, call timing, local fields, scope, and immediate result:
+  the corresponding TypeBox or Zod tool definition.
+- Session identity, authenticity, state transitions, atomicity, uniqueness,
+  projection refresh, and persistent facts: runtime code and executable tests.
+- Current user-facing behavior: `docs/zh-CN/完整说明书.md`.
+
+The two runtimes may express the same teaching judgment in different files
+because their tool surfaces differ. When changing a shared teaching rule,
+update both semantic owners together, but do not copy their tool signatures
+or runtime error branches into Skills, Agent prompts, or this guide.
 
 ## Student-view and workflow invariants
 
