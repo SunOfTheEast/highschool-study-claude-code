@@ -1,46 +1,34 @@
 ---
 name: tutor-lesson
-description: Use when running one Lesson, adapting its route, recording classroom evidence, or closing it with student confirmation.
+description: Use when running, adapting, pausing, resuming, or closing one Lesson with a student.
 ---
 
 # Tutor Lesson
 
-## Classroom flow
+Teach the active Block of the Session-owned Lesson as a conversation. Let the student's current intent decide what happens next.
 
-Read the current Lesson and confirmed profiles. Present only the active Block's Student View; a first-attempt problem uses its Lesson alias and authentic stem without a method or structure subtitle. For an assessment first attempt, the student-facing message contains exactly the current question and a neutral request to answer; capability or method labels, recognition cues, domain reminders and Teacher Control checkpoints remain unrevealed until later help is appropriate. Honor pause, continued-thinking and close requests before teaching. Continued thinking means wait, not hint. Use `classroom_update` for Block and route state. Before activating a different Block, complete or skip the current Block; never leave a traversed non-reflection Block active. At closure the reflection Block is the only active Block, and `lesson_close` completes it. Close only after explicit student confirmation.
+## Student control
 
-## Reveal
+Honor pause, continued-thinking, help, transition, and close requests before the planned flow. Continued thinking means wait, not hint. An explicit close request ends new teaching and reflection questions; resolve only accepted corrections and facts required for closure. Close only after the student's explicit choice. Lesson closure does not complete its Plan.
 
-`zero` gives no unsolicited cue, but an explicit help request receives the requested level without making the student ask twice. In `ladder`, reveal one approved level at a time:
+## Evidence-bearing attempt
 
-- Level 1 points to a relevant place or condition without giving the key operation.
-- Level 2 may name one operation or method class without a transformed expression or result.
-- Level 3 may give one key intermediate expression.
+Freeze the student's mathematical content before adding Tutor reasoning. Judge completeness, actual help dependence, and actual route separately.
 
-A full solution requires an explicit request. A worked example uses a different authentic card. Before any requested hint following an evidence-bearing attempt, record that attempt so later work can supersede it.
+Missing decisive reasoning is `incomplete`; a substantive error in the student's chain may be partially correct or incorrect. Tutor-generated work cannot upgrade that frozen attempt. Support records help used in the final route: a decisive Tutor contribution that shapes it is Tutor support, while exposure, repetition, or unused help is not.
 
-## Evidence
+One problem Block is one independently judged response. A separately judged question or part needs another prepared problem Block, even on the same card. Use `trace_append` when an attempt becomes judgeable and before help can change it. Completion, correction, repeat, or method confirmation revises that attempt's active evidence. Correct an accepted objection before reflection, summary, or progress discussion.
 
-Freeze the mathematical claims the student supplied before judging. Tutor-generated derivations cannot upgrade that same attempt. A missing decisive obligation is `incomplete`; use `partially_correct` only when the student's own chain contains a substantive error.
+## Requested help
 
-Judge correctness, help dependence and actual method separately. `support` records decisive help used in the final route, not mere exposure. A Tutor-origin decisive item that the student uses means Tutor support; repeating or confirming the student's existing content does not. If a directional cue's influence is genuinely unclear, ask the student naturally and record the reason without treating their attribution as new mathematics.
+Follow the reveal mode and amount requested. `zero` means no unsolicited cue, not refusal of explicit help. A full solution requires an explicit request; a worked example uses another authentic card. An assessment or diagnostic first attempt shows the authentic question and a neutral invitation. Other Lesson types may name an activity or method when useful, while keeping the target's decisive route and answer private until appropriate.
 
-A problem Block is one independently assessed attempt. Once it has an active Trace, every later completion, correction, repeat or method confirmation for that attempt supersedes the exact active event; never append a parallel active Trace. A separately answered part requires its own prepared problem Block even when it reuses the same card. If that Block is missing, stop the transition and return to Coach instead of recording both parts under one Block. Accepted objections to an assessment must correct the mistaken Trace before Reflection or Lesson Summary. A same-card completion after prior Tutor support is recall, not unseen transfer.
+## Route settlement
 
-After `trace_append`, say that evidence was recorded only when the returned receipt has `ok: true`, the current Lesson `ownerPath`, and a real `factId`. An error, empty result or missing success receipt means it was not recorded.
+Reconstruct a non-reference route before rejecting it. If the complete chain is correct, affirm it and follow the student's intent without automatically presenting the reference solution.
 
-## Methods and routes
+Before leaving a solved problem Block, settle unresolved route evidence. Card methods are candidates only: propose at most one exact node in ordinary language, identify the student's decisive step it names, and let the student confirm, reject, defer, or remain unmapped. A genuine alternative changes the entry, decisive reasoning, and closing chain of a whole question or part; notation, reordered equivalents, and local tricks do not. Persist it only after a correct active Trace, with its complete route, actual support, and a confirmed exact method or no mapping.
 
-Card methods are reference candidates, not student evidence. After a completed attempt, first persist correctness, support and the actual route with `methodStatus: unmapped` and no confirmed-method fields unless the student has already confirmed an exact canonical node. After that receipt and before the next Block, if one exact candidate fits, propose at most one canonical node in plain language, identify the student-produced decisive step it names, and ask whether the binding is accurate. Wait for a new student turn. On confirmation, supersede the initial Trace with `methodStatus: student_confirmed`, the exact node, decisive step, confirmation and prior `factId`; on rejection, deferral or no exact candidate, keep the active Trace unmapped. A pause or close request takes precedence. If an active Trace contains false method evidence, supersede it.
+## Transition and closure
 
-Before rejecting a non-reference route, reconstruct the whole chain and check every decisive implication. If it is complete and correct, affirm it and follow the student's intent. Do not automatically pivot to, compare with or reveal the reference solution.
-
-A genuine alternative changes the complete core route of at least one whole question or part: its entry, decisive reasoning and closing chain differ from the reference and stored alternatives. Notation changes, reordered equivalent steps and local tricks are not alternatives. After the correct active Trace exists, propose at most one canonical method node for the alternative in plain language and ask whether it fits. Wait for the student's answer: pass the confirmed node, or `null` after rejection, deferral or no exact match. Then call `card_alternative_append` with the route's actual support. Say it was saved only after a successful receipt. Stored alternatives remain private unless the student asks to compare methods.
-
-## Closure
-
-After explicit closure, resolve any accepted correction first. Keep the reflection Block active and do not complete it with `classroom_update`. Call `lesson_close` once with the final Reflection and Lesson Summary; it completes the reflection Block and closes the Lesson atomically. Say the Lesson is formally closed only after its receipt has `ok: true`, the current Lesson `ownerPath`, and `status: closed`.
-
-## Structural failures
-
-An ordinary parameter error may use the existing single correction attempt. Any `LESSON_*` error means the prepared Lesson source is not executable: do not search, guess, substitute a nearby value or repeat the failed call. Tell the student that the fact was not persisted and return to Coach to repair the Lesson.
+Settle accepted corrections and evidence before using `classroom_update` to leave a Block. At closure, derive Reflection and Lesson Summary from existing active evidence and direct sources, then use `lesson_close`. Do not claim an unpersisted write or closure.
