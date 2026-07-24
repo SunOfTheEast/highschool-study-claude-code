@@ -98,7 +98,7 @@ export function readCardAlternatives(
 ): CardAlternative[];
 ```
 
-- [ ] **Step 1: Replace the integration expectations with the independent-fact contract**
+- [x] **Step 1: Replace the integration expectations with the independent-fact contract**
 
 Update `card-alternatives.test.ts` so the first successful append deliberately differs from its source Trace:
 
@@ -158,7 +158,7 @@ expect(() => appendCardAlternative(root, 'lessons/lesson-001.md', {
 
 Update every existing append fixture in this test file to pass explicit `method` and `support`.
 
-- [ ] **Step 2: Update search and Pi tool contract tests**
+- [x] **Step 2: Update search and Pi tool contract tests**
 
 In `bidirectional-search.test.ts`, append one alternative and assert both directions return its `id`, `method`, `support`, and source.
 
@@ -179,7 +179,7 @@ expect(JSON.stringify(tool.parameters)).not.toContain('id');
 
 Also assert the serialized schema contains one real derivative method name, `null`, and all three support literals.
 
-- [ ] **Step 3: Run the focused tests and verify RED**
+- [x] **Step 3: Run the focused tests and verify RED**
 
 Run:
 
@@ -199,7 +199,7 @@ bun test tests/runtime/study-tools.test.ts
 
 Expected: FAIL because `card_alternative_append` lacks `method` and `support`.
 
-- [ ] **Step 4: Implement the minimal sidecar contract**
+- [x] **Step 4: Implement the minimal sidecar contract**
 
 In `alternatives.ts`:
 
@@ -251,7 +251,7 @@ function nextAlternativeId(alternatives: CardAlternative[]): string {
 8. Export `readCardAlternatives(root, cardPath)` with no active Trace argument or filter.
 9. Parse only the new marker and fields. `未归类` becomes `method: null`.
 
-- [ ] **Step 5: Wire readers and the Pi schema**
+- [x] **Step 5: Wire readers and the Pi schema**
 
 Rename the shared export and update `cards.ts` plus `trace-search.ts` to use:
 
@@ -276,7 +276,7 @@ support: Type.Union([
 
 Keep `sourceTraceId`, `question`, and `solution` unchanged and Session-bound.
 
-- [ ] **Step 6: Run focused tests and typechecks to verify GREEN**
+- [x] **Step 6: Run focused tests and typechecks to verify GREEN**
 
 Run:
 
@@ -298,7 +298,7 @@ bun run typecheck
 
 Expected: selected runtime tests pass and TypeScript exits 0.
 
-- [ ] **Step 7: Commit Task 1**
+- [x] **Step 7: Commit Task 1**
 
 ```bash
 git add plugins/highschool-study/server/src/alternatives.ts \
@@ -344,7 +344,7 @@ export function appendCardAlternativeWithProjection(
 
 - Preserves `MethodSignal`, `AbilityProjection`, and the attempt key.
 
-- [ ] **Step 1: Add failing projection tests**
+- [x] **Step 1: Add failing projection tests**
 
 In `method-signals.test.ts`, create a correct source Trace whose method is `冻结变量法`, then append an alternative whose method is `参数化与消元`:
 
@@ -385,7 +385,7 @@ expect(signal).toMatchObject({
 
 Add a `method: null` case that does not create a signal. Add a supersession case showing a durable alternative still contributes after its source event is inactive.
 
-- [ ] **Step 2: Add failing rebuild, drill-down, and live-refresh tests**
+- [x] **Step 2: Add failing rebuild, drill-down, and live-refresh tests**
 
 In `card-alternatives.test.ts`, call the new projection-aware writer and assert `memory/planner-attention.md` contains the alternative method.
 
@@ -407,7 +407,7 @@ Keep failed `trace_append`, failed `card_alternative_append`, and successful unr
 
 In `study-tools.test.ts`, execute `card_alternative_append` against a temporary learning set and assert the Planner Attention file includes the separately supplied method.
 
-- [ ] **Step 3: Run focused tests and verify RED**
+- [x] **Step 3: Run focused tests and verify RED**
 
 Run:
 
@@ -427,7 +427,7 @@ bun test tests/study/ability.test.ts tests/runtime/study-tools.test.ts tests/ser
 
 Expected: FAIL because inactive source Trace drill-down and post-alternative ability refresh are not implemented.
 
-- [ ] **Step 4: Extend the attempt accumulator without adding a new domain layer**
+- [x] **Step 4: Extend the attempt accumulator without adding a new domain layer**
 
 In `method-signals.ts`, keep Trace factors and method roles separate:
 
@@ -475,7 +475,7 @@ const role = alternativeFactor !== null
 
 Use the existing role weights, signal counts, card sets, sorting, and source reference rendering. Attempts without alternatives retain byte-for-byte equivalent signal values.
 
-- [ ] **Step 5: Rebuild projections after alternative writes**
+- [x] **Step 5: Rebuild projections after alternative writes**
 
 In `planner-attention.ts`, add:
 
@@ -494,7 +494,7 @@ export function appendCardAlternativeWithProjection(
 
 Export it from `domain.ts`. Change the Pi runtime tool to call this wrapper.
 
-- [ ] **Step 6: Restore evidence drill-down and live ability refresh**
+- [x] **Step 6: Restore evidence drill-down and live ability refresh**
 
 In `ability.ts`, change only the evidence source lookup:
 
@@ -521,7 +521,7 @@ if (
 }
 ```
 
-- [ ] **Step 7: Run focused tests and typechecks to verify GREEN**
+- [x] **Step 7: Run focused tests and typechecks to verify GREEN**
 
 Run:
 
@@ -543,7 +543,7 @@ bun run typecheck
 
 Expected: selected tests pass and TypeScript exits 0.
 
-- [ ] **Step 8: Commit Task 2**
+- [x] **Step 8: Commit Task 2**
 
 ```bash
 git add plugins/highschool-study/server/src/method-signals.ts \
@@ -575,7 +575,7 @@ git commit -m "feat: project confirmed alternative methods"
 - Consumes: the implemented Task 1 tool contract and Task 2 projection semantics.
 - Produces: one consistent current rule across operational instructions and functional docs.
 
-- [ ] **Step 1: Update the Tutor Skill without prose tests**
+- [x] **Step 1: Update the Tutor Skill without prose tests**
 
 Replace the final alternative paragraph in `tutor-lesson/SKILL.md` with:
 
@@ -583,7 +583,7 @@ Replace the final alternative paragraph in `tutor-lesson/SKILL.md` with:
 A genuine alternative changes the complete core route of at least one whole question or part: its entry, decisive reasoning and closing chain differ from the reference and stored alternatives. Notation changes, reordered equivalent steps and local tricks are not alternatives. After the correct active Trace exists, propose at most one canonical method node for the alternative in plain language and ask whether it fits. Wait for the student's answer: pass the confirmed node, or `null` after rejection, deferral or no exact match. Then call `card_alternative_append` with the route's actual support. Say it was saved only after a successful receipt. Stored alternatives remain private unless the student asks to compare methods.
 ```
 
-- [ ] **Step 2: Update architecture and user-facing docs**
+- [x] **Step 2: Update architecture and user-facing docs**
 
 Apply the same facts to all current docs:
 
@@ -604,7 +604,7 @@ At the top of the 2026-07-22 design, add:
 > `2026-07-24-first-class-card-alternative-design.md` 修订；Trace 实际方法与题问级另解判断部分仍有效。
 ```
 
-- [ ] **Step 3: Scan for stale active-Trace lifecycle wording**
+- [x] **Step 3: Scan for stale active-Trace lifecycle wording**
 
 Run:
 
@@ -624,7 +624,7 @@ git diff --check
 
 Expected: no whitespace errors.
 
-- [ ] **Step 4: Commit Task 3**
+- [x] **Step 4: Commit Task 3**
 
 ```bash
 git add AGENTS.md \
@@ -646,7 +646,7 @@ git commit -m "docs: align alternative evidence lifecycle"
 - Consumes: the complete implementation.
 - Produces: fresh evidence that both packages typecheck, all non-browser tests pass, and the Web production build succeeds.
 
-- [ ] **Step 1: Run the complete shared plugin check**
+- [x] **Step 1: Run the complete shared plugin check**
 
 Run:
 
@@ -657,7 +657,7 @@ bun run check
 
 Expected: TypeScript exits 0 and all plugin tests pass with 0 failures.
 
-- [ ] **Step 2: Run the complete Pi Web check**
+- [x] **Step 2: Run the complete Pi Web check**
 
 Run:
 
@@ -668,7 +668,7 @@ bun run check
 
 Expected: TypeScript exits 0, all non-E2E Web tests pass with 0 failures, and Vite production build exits 0.
 
-- [ ] **Step 3: Verify repository state and requirement coverage**
+- [x] **Step 3: Verify repository state and requirement coverage**
 
 Run:
 
