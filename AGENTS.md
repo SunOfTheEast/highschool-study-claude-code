@@ -93,7 +93,14 @@ Session owner.
 
 A prepared Lesson may be revised in place. Once it is active, paused, closed,
 or abandoned, re-preparation creates a replacement Lesson and preserves the
-old record.
+old record. Its `plan_id` is immutable: another Plan cannot take over even a
+still-prepared Lesson with the same ID. A completed Plan cannot prepare a
+Lesson until an explicit `plan_update` reactivates or replans it.
+
+Plan switching is student-owned UI navigation. When the current Plan is
+completed, the frontend may list the other Roadmap Plans; it opens a target
+Coach Session only after the student clicks that Plan. Agents do not select or
+silently switch the active Plan.
 
 Normal Pi preparation uses the transient `lesson_prepare` Blueprint contract.
 The runtime binds the Plan, paths, initial statuses, relative aliases, and Plan

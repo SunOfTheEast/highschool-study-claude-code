@@ -230,9 +230,22 @@ export function writePreparedLesson(
   planPath: string,
   input: PreparedLessonWrite,
 ): RegisteredLesson {
+  const owner = readMarkdownFile(root, planPath);
+  if (owner.frontmatter.status === 'completed') {
+    throw new Error(`PLAN_PREPARATION_REQUIRES_REACTIVATION: ${owner.id}`);
+  }
   const absolute = resolveInsideRoot(root, input.lessonPath);
   if (existsSync(absolute)) {
     const current = readMarkdownFile(root, input.lessonPath);
+    const currentPlanId = typeof current.frontmatter.plan_id === 'string'
+      ? current.frontmatter.plan_id
+      : null;
+    if (currentPlanId !== owner.id) {
+      throw new Error(
+        `LESSON_PLAN_OWNERSHIP_CONFLICT: lesson=${input.lessonId}; `
+        + `existing=${currentPlanId ?? '(none)'}; requested=${owner.id}`,
+      );
+    }
     if (current.frontmatter.status !== 'prepared') {
       throw new Error(`LESSON_REPREPARE_REQUIRES_NEW_ID: ${input.lessonId}`);
     }

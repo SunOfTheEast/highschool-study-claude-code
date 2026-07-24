@@ -1,5 +1,12 @@
 import { afterEach, expect, test } from 'bun:test';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { readPlanWorkspace } from '../../src/study/read-workspace';
@@ -393,6 +400,99 @@ status: prepared
   expect(second).toEqual(first);
   expect(afterFirst.match(/\]\(\.\.\/lessons\/lesson-blueprint-001\.md\)/g)).toHaveLength(1);
   expect(readFileSync(join(root, planPath), 'utf8')).toBe(afterFirst);
+});
+
+test('rejects Lesson preparation from a completed Plan before writing anything', () => {
+  const { root, path: planPath } = planFixture();
+  const absolutePlan = join(root, planPath);
+  writeFileSync(
+    absolutePlan,
+    readFileSync(absolutePlan, 'utf8').replace('status: prepared', 'status: completed'),
+  );
+  const planBefore = readFileSync(absolutePlan, 'utf8');
+  const lessonPath = 'lessons/lesson-after-completion.md';
+
+  expect(() => writePreparedLesson(root, planPath, {
+    lessonId: 'lesson-after-completion',
+    lessonPath,
+    lessonTitle: '不应写入',
+    source: `---
+id: lesson-after-completion
+kind: lesson
+plan_id: p1
+status: prepared
+---
+# 不应写入
+`,
+  })).toThrow('PLAN_PREPARATION_REQUIRES_REACTIVATION');
+
+  expect(existsSync(join(root, lessonPath))).toBeFalse();
+  expect(readFileSync(absolutePlan, 'utf8')).toBe(planBefore);
+});
+
+test('never lets another Plan take ownership of an existing prepared Lesson', () => {
+  const { root, path: firstPlanPath } = planFixture();
+  const secondPlanPath = 'plans/p2.md';
+  writeFileSync(join(root, secondPlanPath), `---
+id: p2
+kind: plan
+status: active
+---
+# Plan：第二 Plan
+
+## Lesson Index
+
+（暂无）
+
+## Current Position
+
+尚未开始。
+
+## Next Lesson Candidate
+
+待定。
+
+## Plan Summary
+
+尚无。
+`);
+  const lessonPath = 'lessons/lesson-shared.md';
+  writePreparedLesson(root, firstPlanPath, {
+    lessonId: 'lesson-shared',
+    lessonPath,
+    lessonTitle: '第一 Plan 的课',
+    source: `---
+id: lesson-shared
+kind: lesson
+plan_id: p1
+status: prepared
+---
+# 第一 Plan 的课
+`,
+  });
+  const lessonBefore = readFileSync(join(root, lessonPath), 'utf8');
+  const firstPlanBefore = readFileSync(join(root, firstPlanPath), 'utf8');
+  const secondPlanBefore = readFileSync(join(root, secondPlanPath), 'utf8');
+
+  expect(() => writePreparedLesson(root, secondPlanPath, {
+    lessonId: 'lesson-shared',
+    lessonPath,
+    lessonTitle: '第二 Plan 试图抢占',
+    source: `---
+id: lesson-shared
+kind: lesson
+plan_id: p2
+status: prepared
+---
+# 第二 Plan 试图抢占
+`,
+  })).toThrow(
+    /LESSON_PLAN_OWNERSHIP_CONFLICT.*lesson-shared.*existing=p1.*requested=p2/s,
+  );
+
+  expect(readFileSync(join(root, lessonPath), 'utf8')).toBe(lessonBefore);
+  expect(readFileSync(join(root, firstPlanPath), 'utf8')).toBe(firstPlanBefore);
+  expect(readFileSync(join(root, secondPlanPath), 'utf8')).toBe(secondPlanBefore);
 });
 
 test('replaces prepared content but never overwrites a started Lesson', () => {

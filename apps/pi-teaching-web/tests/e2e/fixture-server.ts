@@ -7,6 +7,7 @@ import {
   registerPlan,
   setBlockStatus,
   setFrontmatterField,
+  updatePlan,
 } from '../../src/study/write-workspace';
 import { resolvePersona } from '../../src/study/persona';
 import { PreparedLessonValidationError } from '../../src/study/validate-prepared-lesson';
@@ -226,8 +227,33 @@ coach_session: null
 ## Goal
 
 识别同构结构。
+
+## Lesson Index
+
+（暂无）
+
+## Current Position
+
+等待开始。
+
+## Next Lesson Candidate
+
+待讨论。
+
+## Plan Summary
+
+尚无。
 `);
       registerPlan(root, 'isomorphic-transformation');
+      return Response.json({ ok: true });
+    }
+    if (request.method === 'POST' && url.pathname === '/__test/complete-isomorphic-plan') {
+      updatePlan(root, 'plans/isomorphic-transformation.md', {
+        decision: 'complete',
+        currentPosition: '本周期已完成。',
+        nextLessonCandidate: '由学生选择其他 Plan。',
+        planSummary: '测试用 completed Plan。',
+      });
       return Response.json({ ok: true });
     }
     if (request.method === 'POST' && url.pathname === '/__test/reject-next-lesson-start') {

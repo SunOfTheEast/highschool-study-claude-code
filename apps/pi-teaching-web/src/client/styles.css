@@ -209,6 +209,33 @@ select:focus-visible {
 .lesson-node-copy small[data-status="closed"] { color: var(--success); }
 .lesson-node-copy small[data-status="abandoned"] { color: var(--danger); }
 
+.plan-continuation {
+  margin: 2rem .5rem 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--ink);
+}
+.plan-continuation .tree-label { padding-inline: 0; }
+.plan-switch-nodes { display: grid; }
+.plan-switch-nodes button {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .7rem;
+  align-items: center;
+  width: 100%;
+  padding: .85rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: color .2s ease, transform .2s ease;
+}
+.plan-switch-nodes button:hover { color: var(--accent); transform: translateX(2px); }
+.plan-switch-nodes button > span { min-width: 0; display: grid; gap: .3rem; }
+.plan-switch-nodes b { overflow: hidden; font-size: .78rem; text-overflow: ellipsis; white-space: nowrap; }
+.plan-switch-nodes small { color: var(--ink-faint); font-size: .61rem; }
+.plan-switch-nodes i { color: var(--ink-faint); font-size: .72rem; font-style: normal; }
+
 .chat {
   min-width: 0;
   min-height: 100vh;

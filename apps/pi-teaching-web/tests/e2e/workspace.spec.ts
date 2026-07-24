@@ -68,6 +68,7 @@ test('refreshes the full ability map after a Tutor trace without reloading', asy
   await page.goto('/');
   await page.getByRole('button', { name: /定义域完整性的系统加固/ }).click();
   await page.getByRole('button', { name: /Lesson 003/ }).click();
+  await expect(page).toHaveURL(/\/plan\/domain-integrity\/lesson\/lesson-003$/);
   const start = page.getByRole('button', { name: /开始上课|继续上课/ });
   if (await start.count()) await start.click();
   const composer = page.locator('form.composer');
@@ -135,4 +136,23 @@ test('renders the liubai palette without horizontal overflow', async ({ page }) 
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
     390,
   );
+});
+
+test('switches Plans only after the student clicks another Plan', async ({ page }) => {
+  await page.request.post('http://127.0.0.1:65000/__test/register-plan');
+  await page.request.post('http://127.0.0.1:65000/__test/complete-isomorphic-plan');
+  await page.goto('/plan/isomorphic-transformation');
+
+  await expect(page).toHaveURL(/\/plan\/isomorphic-transformation$/);
+  await expect(page.getByText('继续其他 Plan', { exact: true })).toBeVisible();
+  const nextPlan = page.getByRole('button', {
+    name: /定义域完整性的系统加固.*打开 Coach/,
+  });
+  await expect(nextPlan).toBeVisible();
+
+  await nextPlan.click();
+
+  await expect(page).toHaveURL(/\/plan\/domain-integrity$/);
+  await expect(page.getByRole('navigation', { name: 'Plan sessions' }))
+    .toContainText('定义域完整性的系统加固');
 });

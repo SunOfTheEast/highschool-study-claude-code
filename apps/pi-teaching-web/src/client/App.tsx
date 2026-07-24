@@ -431,6 +431,9 @@ export function App() {
           workspace={client.workspace}
           selected={selected}
           onSelect={(key) => void selectSession(key)}
+          onPlanSelect={(planId) => {
+            void openRoute({ kind: 'coach', planId }, 'push');
+          }}
           onHome={goHome}
         />
         <ChatPanel

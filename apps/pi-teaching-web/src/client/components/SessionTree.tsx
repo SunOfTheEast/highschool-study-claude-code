@@ -12,13 +12,18 @@ export function SessionTree({
   workspace,
   selected,
   onSelect,
+  onPlanSelect,
   onHome,
 }: {
   workspace: PlanWorkspaceSnapshot;
   selected: SessionKey;
   onSelect(key: SessionKey): void;
+  onPlanSelect(planId: string): void;
   onHome(): void;
 }) {
+  const otherPlans = workspace.learningSet.plans
+    .filter((plan) => plan.id !== workspace.plan.id);
+
   return (
     <nav className="session-tree" aria-label="Plan sessions">
       <button className="brand-button" type="button" onClick={onHome}>
@@ -58,6 +63,27 @@ export function SessionTree({
           </button>
         ))}
       </div>
+
+      {workspace.plan.status === 'completed' && otherPlans.length > 0 && (
+        <div className="plan-continuation">
+          <p className="tree-label">继续其他 Plan</p>
+          <div className="plan-switch-nodes">
+            {otherPlans.map((plan) => (
+              <button
+                key={plan.id}
+                type="button"
+                onClick={() => onPlanSelect(plan.id)}
+              >
+                <span>
+                  <b>{plan.title}</b>
+                  <small>{plan.status} · 打开 Coach</small>
+                </span>
+                <i aria-hidden="true">↗</i>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
