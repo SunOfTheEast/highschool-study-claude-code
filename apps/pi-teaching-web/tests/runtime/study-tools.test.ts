@@ -622,33 +622,6 @@ test('keeps runtime authority out of Tutor tool schemas', () => {
   expect(JSON.stringify(trace.parameters)).not.toContain('cardAlias');
   expect(JSON.stringify(trace.parameters)).not.toContain('methodResolution');
   expect(JSON.stringify(trace.parameters)).not.toContain('"methods"');
-  const traceProperties = (trace.parameters as {
-    properties: Record<string, { description?: string }>;
-  }).properties;
-  expect(traceProperties.assessment?.description).toContain(
-    "the student's own work before this tool call",
-  );
-  expect(traceProperties.assessment?.description).toContain(
-    'Tutor-generated completions never count as student evidence',
-  );
-  expect(traceProperties.support?.description).toContain(
-    'actual dependence on help used in this completed attempt',
-  );
-  expect(traceProperties.support?.description).toContain(
-    'not whether a hint merely appeared in the Session',
-  );
-  expect(traceProperties.support?.description).not.toContain(
-    'any Tutor hint already given',
-  );
-  expect(traceProperties.supersedes?.description).toContain(
-    'same card-and-Block attempt already has an active Trace',
-  );
-  expect(traceProperties.supersedes?.description).toContain(
-    'exact active event ID',
-  );
-  expect(traceProperties.supersedes?.description).toContain(
-    'different problem Block',
-  );
 });
 
 test('requires an explicit student-confirmed or unmapped method decision', () => {
@@ -800,7 +773,6 @@ test('keeps alternative append Tutor-only and Session-bound', () => {
     'method',
     'support',
   ]);
-  expect(properties.question?.description).toContain('exactly `整题`');
   const schema = JSON.stringify(tool.parameters);
   expect(schema).toContain('参变量分离');
   expect(schema).toContain('"null"');

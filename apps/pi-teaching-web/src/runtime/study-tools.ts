@@ -82,10 +82,16 @@ export function createReadOnlyStudyTools(
     defineTool({
       name: 'card_search',
       label: '搜索真实题卡',
-      description: 'Search real problem cards and include every card\'s complete active Trace history.',
+      description: 'Search only real problem cards in the current learning set. Use for preparation or private route verification, not to manufacture a missing exercise. Every returned card includes its complete active Trace history; an empty cards array is a valid result.',
       parameters: Type.Object({
-        query: Type.String(),
-        limit: Type.Integer({ minimum: 1, maximum: 20 }),
+        query: Type.String({
+          description: 'Natural-language topic, method, goal, title, or source text used to rank authentic cards.',
+        }),
+        limit: Type.Integer({
+          minimum: 1,
+          maximum: 20,
+          description: 'Maximum number of card candidates; it never truncates one returned card\'s active Trace history.',
+        }),
       }),
       execute: async (_id, input) => {
         const value = searchCards(root, input);
@@ -97,13 +103,25 @@ export function createReadOnlyStudyTools(
     defineTool({
       name: 'trace_search',
       label: '搜索课堂 Trace',
-      description: 'Search active Trace and reverse-resolve unique real cards.',
+      description: 'Search active, non-superseded classroom Trace and reverse-resolve the unique real cards it cites. Use when the evidence question starts from a Plan, Lesson, card, or remembered classroom detail; combine optional scopes to narrow the result.',
       parameters: Type.Object({
-        query: Type.Optional(Type.String()),
-        planId: Type.Optional(Type.String()),
-        lessonId: Type.Optional(Type.String()),
-        cardPath: Type.Optional(Type.String()),
-        limit: Type.Integer({ minimum: 1, maximum: 100 }),
+        query: Type.Optional(Type.String({
+          description: 'Optional text matched against active Trace evidence.',
+        })),
+        planId: Type.Optional(Type.String({
+          description: 'Optional exact Plan ID scope.',
+        })),
+        lessonId: Type.Optional(Type.String({
+          description: 'Optional exact Lesson ID scope.',
+        })),
+        cardPath: Type.Optional(Type.String({
+          description: 'Optional exact learning-set-relative card path for card-to-Trace lookup.',
+        })),
+        limit: Type.Integer({
+          minimum: 1,
+          maximum: 100,
+          description: 'Maximum number of active Trace records returned.',
+        }),
       }),
       execute: async (_id, input) => {
         const value = searchTraces(root, {
@@ -129,8 +147,15 @@ export function createReadOnlyStudyTools(
     defineTool({
       name: 'source_resolve',
       label: '核验来源',
-      description: 'Resolve a learning-set-local source and optional fragment.',
-      parameters: Type.Object({ fromPath: Type.String(), target: Type.String() }),
+      description: 'Resolve and verify one learning-set-local source reference, optionally including a fragment. Use before relying on a relative file, heading, or card-step citation. The result reports the canonical path, fragment, and validity without changing files.',
+      parameters: Type.Object({
+        fromPath: Type.String({
+          description: 'Learning-set-relative path of the file that contains or is making the reference.',
+        }),
+        target: Type.String({
+          description: 'Relative or learning-set-local source target, optionally followed by a fragment.',
+        }),
+      }),
       execute: async (_id, input) => result('source-resolve', sourceResolve(root, input)),
     }),
   ];
@@ -141,7 +166,9 @@ export function createStudyTools(
   now: () => Date,
   context: StudyToolContext,
 ): ToolDefinition[] {
-  const methodName = Type.Enum(listCanonicalMethodNames(root));
+  const methodName = Type.Enum(listCanonicalMethodNames(root), {
+    description: 'Exact canonical method name from the current learning-set graph.',
+  });
   const readOnly = createReadOnlyStudyTools(root);
   return [
     readOnly[0]!,
@@ -149,42 +176,56 @@ export function createStudyTools(
     defineTool({
       name: 'trace_append',
       label: '记录课堂证据',
-      description: 'Append one validated Trace to its owning Lesson.',
+      description: 'Append or supersede one validated classroom-evidence Trace for the current Tutor Session-owned Lesson. Call when an evidence-bearing response, later completion, accepted correction, repeat, or student-confirmed method changes the active record for one Block attempt. The runtime derives Lesson and problem-card identity from the Session and Block, rejects parallel active attempts, refreshes projections, and returns the persisted fact receipt.',
       parameters: Type.Object({
-        blockId: Type.String(),
-        materialPath: Type.Optional(Type.String()),
+        blockId: Type.String({
+          description: 'Exact current Lesson Block ID whose activity produced this evidence. For a problem Block, the runtime derives its one card alias from Uses.',
+        }),
+        materialPath: Type.Optional(Type.String({
+          description: 'Learning-set-relative source path when the evidence came from material rather than the Block\'s problem card.',
+        })),
         methodStatus: Type.Union([
           Type.Literal('unmapped'),
           Type.Literal('student_confirmed'),
         ], {
-          description: 'Use student_confirmed only after an explicit student confirmation turn. The same call must include methodPrimary, methodDecisiveStep and methodConfirmation; otherwise use unmapped.',
+          description: 'Use student_confirmed only after the student explicitly accepts one exact canonical node for this route; otherwise preserve the route as unmapped.',
         }),
         methodRoute: Type.String({
           minLength: 1,
-          description: 'Describe the student\'s decisive route without inventing a canonical label.',
+          description: 'Plain-language account of the decisive route the student actually used, independent of any canonical label.',
         }),
         methodPrimary: Type.Optional(methodName),
-        methodSecondary: Type.Optional(Type.Array(methodName)),
-        methodDecisiveStep: Type.Optional(Type.String({ minLength: 1 })),
-        methodConfirmation: Type.Optional(Type.String({ minLength: 1 })),
+        methodSecondary: Type.Optional(Type.Array(methodName, {
+          description: 'Additional student-confirmed canonical nodes actually used by this route.',
+        })),
+        methodDecisiveStep: Type.Optional(Type.String({
+          minLength: 1,
+          description: 'Student-produced step that justifies the confirmed canonical method binding.',
+        })),
+        methodConfirmation: Type.Optional(Type.String({
+          minLength: 1,
+          description: 'Brief record of the student turn that confirmed the canonical method binding.',
+        })),
         assessment: Type.Union([
           Type.Literal('correct'),
           Type.Literal('partially_correct'),
           Type.Literal('incorrect'),
           Type.Literal('incomplete'),
         ], {
-          description: "correct requires every decisive implication to be present in the student's own work before this tool call. Tutor-generated completions never count as student evidence.",
+          description: 'Mathematical completeness of the student\'s own frozen work. Missing decisive reasoning is incomplete; Tutor-generated completion cannot make the same attempt correct.',
         }),
         support: Type.Union([
           Type.Literal('none'),
           Type.Literal('tutor'),
           Type.Literal('external'),
         ], {
-          description: 'Record actual dependence on help used in this completed attempt, not whether a hint merely appeared in the Session. Resolve ambiguous directional influence with the student before this tool call.',
+          description: 'Help actually used in the final route: none for independent work, tutor when Tutor-origin decisive content shaped the route, and external for other used help. Mere exposure or unused repetition is not dependence.',
         }),
-        note: Type.String(),
+        note: Type.String({
+          description: 'Concise source-linked evidence note describing what the student supplied and what remains unresolved.',
+        }),
         supersedes: Type.Optional(Type.String({
-          description: 'Required whenever the same card-and-Block attempt already has an active Trace, including later completion, correction or method confirmation. Set it to that exact active event ID. A different question or part requires a different problem Block.',
+          description: 'Exact active event ID replaced by a completion, correction, repeat, or method confirmation for this same Block attempt. A different independently judged question requires a different problem Block.',
         })),
       }),
       execute: async (_id, input) => {

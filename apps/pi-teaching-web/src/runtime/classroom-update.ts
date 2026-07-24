@@ -12,26 +12,40 @@ const action = Type.Union([
   Type.Literal('skip'),
   Type.Literal('route'),
   Type.Literal('pause'),
-]);
+], {
+  description: 'activate opens one Block; complete or skip resolves one Block; route records an insertion, skip, move, or repeat decision; pause marks the Lesson paused.',
+});
 
 export function createClassroomUpdateTool(root: string, ownerPath: string) {
   return defineTool({
     name: 'classroom_update',
     label: '推进课堂节点',
-    description: 'Update the current Lesson block, route, or pause state.',
+    description: 'Persist one classroom navigation change in the current Tutor Session-owned Lesson. Use ordinary Block actions for traversal, route for an explicit adaptive route decision, and pause for a student-requested pause. The runtime owns the Lesson path and returns the applied action.',
     parameters: Type.Object({
       action,
-      blockId: Type.Optional(Type.String()),
+      blockId: Type.Optional(Type.String({
+        description: 'Exact Lesson Block ID. Required for activate, complete, skip, and route; omitted only for pause.',
+      })),
       routeAction: Type.Optional(Type.Union([
         Type.Literal('insert'),
         Type.Literal('skip'),
         Type.Literal('move'),
         Type.Literal('repeat'),
-      ])),
-      before: Type.Optional(Type.String()),
-      after: Type.Optional(Type.String()),
-      reason: Type.Optional(Type.String()),
-      source: Type.Optional(Type.String()),
+      ], {
+        description: 'Kind of adaptive route change; required only when action is route.',
+      })),
+      before: Type.Optional(Type.String({
+        description: 'Optional Block ID before which the route target is placed.',
+      })),
+      after: Type.Optional(Type.String({
+        description: 'Optional Block ID after which the route target is placed.',
+      })),
+      reason: Type.Optional(Type.String({
+        description: 'Student-facing instructional reason for a route change; required when action is route.',
+      })),
+      source: Type.Optional(Type.String({
+        description: 'Evidence or student request that prompted the route change; required when action is route.',
+      })),
     }),
     execute: async (_id, input) => {
       if (input.action === 'pause') {

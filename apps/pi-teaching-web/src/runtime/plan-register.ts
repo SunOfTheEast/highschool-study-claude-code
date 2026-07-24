@@ -8,11 +8,11 @@ export function createPlanRegisterTool(root: string) {
   return defineTool({
     name: 'plan_register',
     label: '注册学习计划',
-    description: 'Register a completed Plan file in the Roadmap and return its canonical receipt.',
+    description: 'Validate an already written Plan file and register it idempotently in ROADMAP.md. Call after the Plan content exists; this tool does not author the Plan. It verifies the canonical Plan, repairs a foreign Coach Session link when necessary, and returns the registered Plan receipt.',
     parameters: Type.Object({
       planId: Type.String({
         minLength: 1,
-        description: 'Exact Plan ID and plans/<planId>.md filename stem.',
+        description: 'Exact ID from the Plan frontmatter and plans/<planId>.md filename stem.',
       }),
     }),
     execute: async (_id, input) => {
