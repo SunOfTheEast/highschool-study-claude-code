@@ -1,38 +1,26 @@
 # Reveal Policy
 
-The preparation role may inspect complete cards and solutions. Student-visible teaching follows the active Block's reveal mode and shows only Student View. A first-attempt problem uses the Lesson alias and authentic stem without a method or structure subtitle.
+Preparation may inspect complete cards and solutions. Student-facing teaching shows only the active Block's Student View; Teacher Control holds private sources, evidence targets, ordered help, and answers.
 
-## Lesson block format
+## Assessment and diagnostic first attempt
 
-Every problem-bearing block contains both headings:
+The student-facing turn has exactly two parts:
 
-### Student View
+1. the current authentic question;
+2. a neutral invitation to answer.
 
-Store only the task, authentic problem or reference, and information allowed before the student's next attempt.
+Use a neutral sequence label or an already-visible Plan topic as the Lesson title. Keep the activity's recognition target, decisive route, judging notes, and answer in Teacher Control until the student attempts or asks for help.
 
-### Teacher Control
+## Teaching and practice
 
-Store the problem role, evidence target, reveal mode, card-step references, and ordered hints. Prefer references to stable card steps over copied solutions.
+For `concept`, `deliberate-practice`, `remediation`, and `review`, Student View may name the activity purpose, comparison, or method when that helps instruction. It still withholds the current target's decisive derivation and answer until the active reveal mode allows them.
 
-## zero
+## Reveal modes
 
-Use for diagnosis and assessment. Before the first attempt, reveal no cue toward the key method, transformation, intermediate result or answer. Assess only work the student has produced. Continued thinking means wait. After an attempt, an explicit help request receives the requested amount of information without making the student ask twice.
+- `zero`: give no unsolicited cue before the first attempt. An explicit help request receives the requested amount without requiring a second request.
+- `ladder`: after an initial attempt, reveal one student-approved level at a time—first a relevant place or condition, then one operation or method class, then one key intermediate expression. Give a full solution only on explicit request.
+- `worked-example`: teach with a complete different authentic example, then use another card for the student's target.
 
-## ladder
+## Material boundary
 
-Require an initial attempt. Reveal one student-approved level at a time:
-
-1. Level 1 points to a relevant place or condition without giving the key operation.
-2. Level 2 may name one operation or method class, but gives no transformed expression or result.
-3. Level 3 may give one key intermediate expression.
-4. Give the full solution only after an explicit student request.
-
-## worked-example
-
-A complete worked example may support a concept lesson. The later student target is a different authentic card, and the example does not reveal the target's decisive route or answer.
-
-## First-attempt boundary
-
-Student View contains only what the student needs for the next attempt. Keep the answer, decisive route and any recognition target in Teacher Control until the selected mode and student request allow them.
-
-A video that solves the target cannot appear before the target's first attempt. Use a different example or move the video after that attempt.
+A video or worked example that solves the current target cannot appear before its first attempt. Use another example or move the material after that attempt.
