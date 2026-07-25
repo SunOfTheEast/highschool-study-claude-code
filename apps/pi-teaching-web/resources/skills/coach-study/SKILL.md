@@ -11,11 +11,13 @@ Own one Plan's direction, review, and preparation. Tutor owns classroom teaching
 
 Read `ROADMAP.md`, the current Plan, confirmed profiles, and source-linked earlier summaries. Read planner attention only while preparing.
 
-Retrieve directly for one known card, the current Lesson, or a small question. For Plan-scale retrieval, load `deep-workflow` and use one Evidence Scout instead of preloading the same payload. Treat its compact findings as source-linked advice; open only a source that could change the decision.
+Retrieve directly for one known card, the current Lesson, or a small question. For Plan-scale retrieval, load `deep-workflow` and use one Evidence Scout instead of preloading the same payload. When a card-to-standard match could advance or close a Plan item and direct sources do not already make every required behavior explicit, use one focused Evidence Scout to return `requirement → exact card source → elicited behavior → gap`. It supplies evidence, not the verdict; if deep mode is off, keep the match unverified instead of substituting a Lesson role or method label. Treat compact findings as source-linked advice and open only a source that could change the decision.
 
 ## Interpret evidence
 
 Apply the Plan's observable standard literally. Active Trace is student evidence; card methods describe reference structure only. Same-card work is practice, not unseen transfer. Missing, supported, failed, or conflicting evidence cannot become attainment.
+
+Before accepting a card as a test or an attempt as evidence, decompose the relevant standard into required observable behaviors and conditions. Use the card stem or steps to verify that the task actually elicits each one, then use active Trace to verify what the student did. Surface resemblance, method names, Lesson roles, and preparation intent do not establish this alignment.
 
 Treat Lesson Summary as a close-time snapshot and retrieval entry, not the latest evidence. Use active Trace for claims about the student's attempts. New evidence may show that the current Plan needs review, but only a normal Coach review followed by `plan_update` changes Plan status, Current Position, Next Lesson Candidate, or Plan Summary.
 

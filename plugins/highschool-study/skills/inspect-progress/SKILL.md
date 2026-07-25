@@ -8,4 +8,6 @@ This Skill is read-only. Read the relevant Roadmap, Plan, Lesson, summaries, and
 
 Use active Trace for classroom evidence. Trace methods are the student's method evidence; card methods are reference metadata only. Cardless Trace may explain learning history but cannot establish a card-bound method. Use `source_resolve` when the student asks why or a material detail requires the original.
 
+Before claiming that an attempt satisfies a Plan item, decompose the item's exact wording into required observable behaviors and conditions. Verify from the card stem or steps that the task elicits each one, then verify from active Trace what the student did. Structural resemblance, method names, and Lesson roles are not substitutes.
+
 Answer only the requested dimensions: Roadmap/Plan capability, Lesson state, method evidence, next work, or confirmed preferences. Keep capability evidence, closure state, Task projection, method attention and long-term preference distinct. Cite direct sources, name uncertainty and state what evidence would settle an open question. Do not write files or Trace.
