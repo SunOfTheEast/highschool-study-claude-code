@@ -133,7 +133,10 @@ export function appendRouteChange(root: string, lessonPath: string, input: Route
 function replaceSection(source: string, heading: string, value: string): string {
   const pattern = new RegExp(`(^## ${heading}\\s*$\\n)([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, 'm');
   if (!pattern.test(source)) throw new Error(`SECTION_NOT_FOUND: ${heading}`);
-  return source.replace(pattern, `$1\n${value.trim()}\n\n`);
+  return source.replace(
+    pattern,
+    (_match, sectionHeading: string) => `${sectionHeading}\n${value.trim()}\n\n`,
+  );
 }
 
 function planTitle(body: string): string {

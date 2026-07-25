@@ -311,6 +311,23 @@ test('updates all Plan audit sections in one write and maps the decision status'
   expect(source).toContain('status: completed');
 });
 
+test('writes dollar-prefixed math literally in Plan audit sections', () => {
+  const { root, path } = planFixture();
+  updatePlan(root, path, {
+    decision: 'complete',
+    currentPosition: '比较 $2^x$，再解 $1-1/x=0$。',
+    nextLessonCandidate: '保留字面量 $&。',
+    planSummary: '金额标记 $$ 也不得被替换。',
+  });
+
+  const source = readFileSync(join(root, path), 'utf8');
+  expect(source).toContain('比较 $2^x$，再解 $1-1/x=0$。');
+  expect(source).toContain('保留字面量 $&。');
+  expect(source).toContain('金额标记 $$ 也不得被替换。');
+  expect(source).not.toContain('旧位置。');
+  expect(source.match(/^## Current Position$/gm)).toHaveLength(1);
+});
+
 test('derives the Lesson Index from real same-Plan files in stable order', () => {
   const { root, path } = planFixture();
   mkdirSync(join(root, 'lessons'), { recursive: true });
