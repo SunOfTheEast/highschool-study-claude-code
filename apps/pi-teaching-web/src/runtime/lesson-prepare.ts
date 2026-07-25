@@ -2,6 +2,7 @@ import { defineTool } from '@earendil-works/pi-coding-agent';
 import { Type } from 'typebox';
 import { readMarkdownFile } from 'highschool-study-markdown/study-domain';
 import {
+  lessonIdPattern,
   renderPreparedLesson,
   validateLessonBlueprint,
   type LessonBlueprint,
@@ -67,7 +68,8 @@ export function createLessonPrepareTool(
     parameters: Type.Object({
       lessonId: Type.String({
         minLength: 1,
-        description: 'New Lesson ID and lessons/<lessonId>.md filename stem.',
+        pattern: lessonIdPattern.source,
+        description: 'New Lesson ID and lessons/<lessonId>.md filename stem. Start with lesson- and use only lowercase letters, digits, and hyphens; for example lesson-001.',
       }),
       title: Type.String({
         minLength: 1,

@@ -142,6 +142,49 @@ test('prepares and rereads one Lesson with Plan authority bound by the Coach Ses
   )).toContain('../lessons/lesson-blueprint-001.md');
 });
 
+test('exposes the canonical Lesson ID format in the lesson_prepare contract', () => {
+  const tool = createLessonPrepareTool(
+    root,
+    'domain-integrity',
+    'plans/domain-integrity.md',
+  );
+  const lessonIdSchema = (tool.parameters as {
+    properties: {
+      lessonId: {
+        description?: string;
+      };
+    };
+  }).properties.lessonId;
+  const baseInput = {
+    lessonId: 'lesson-001',
+    title: 'Lesson ID contract',
+    planContext: 'Current Plan context.',
+    capabilityTarget: 'Produce one observable response.',
+    primaryTemplate: 'assessment',
+    templateReason: 'Use one independent attempt.',
+    adjustments: [],
+    cards: [],
+    sources: [],
+    blocks: [{
+      id: 'reflection',
+      kind: 'reflection',
+      required: true,
+      dependsOn: [],
+      uses: [],
+      studentView: '回顾本节证据。',
+      teacherControl: '只使用已经形成的课堂证据。',
+    }],
+  };
+
+  expect(Check(tool.parameters, baseInput)).toBeTrue();
+  expect(Check(tool.parameters, { ...baseInput, lessonId: '1' })).toBeFalse();
+  expect(Check(tool.parameters, {
+    ...baseInput,
+    lessonId: 'domain-integrity-lesson1',
+  })).toBeFalse();
+  expect(lessonIdSchema.description).toContain('lesson-001');
+});
+
 test('accepts only the six canonical classroom template IDs', () => {
   const tool = createLessonPrepareTool(
     root,

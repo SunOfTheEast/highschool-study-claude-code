@@ -44,7 +44,7 @@ export type LessonRenderContext = {
 };
 
 const idPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const lessonIdPattern = /^lesson-[a-z0-9]+(?:-[a-z0-9]+)*$/;
+export const lessonIdPattern = /^lesson-[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const structuralHeading = /^#{1,3}\s/m;
 
 export class LessonBlueprintValidationError extends Error {
