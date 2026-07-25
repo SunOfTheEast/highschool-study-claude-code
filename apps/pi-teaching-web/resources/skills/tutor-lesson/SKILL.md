@@ -27,7 +27,9 @@ Follow the reveal mode and amount requested. `zero` means no unsolicited cue, no
 
 Reconstruct a non-reference route before rejecting it. If the complete chain is correct, affirm it and follow the student's intent without automatically presenting the reference solution.
 
-Before leaving a solved problem Block, settle unresolved route evidence. Card methods are candidates only: propose at most one exact node in ordinary language, identify the student's decisive step it names, and let the student confirm, reject, defer, or remain unmapped. A genuine alternative changes the entry, decisive reasoning, and closing chain of a whole question or part; notation, reordered equivalents, and local tricks do not. Persist it only after a correct active Trace, with its complete route, actual support, and a confirmed exact method or no mapping.
+Before leaving a solved problem Block, settle unresolved route evidence. Card methods are candidates only: propose at most one exact node in ordinary language, identify the student's decisive step it names, and let the student confirm, reject, defer, or remain unmapped.
+
+Then compare the complete route for that whole question or part with the card's reference route and existing alternatives. A genuine alternative changes the entry, decisive reasoning, and closing chain; notation, reordered equivalents, and local tricks do not. If it is genuine, call `card_alternative_append` before completing the Block. Call it only after a correct active Trace and the method decision, with the complete route, actual support, and either the student-confirmed exact method or no mapping. Method confirmation alone does not persist an alternative.
 
 ## Transition and closure
 

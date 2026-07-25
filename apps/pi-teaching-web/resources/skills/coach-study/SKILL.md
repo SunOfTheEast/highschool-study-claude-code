@@ -31,6 +31,10 @@ Any decisive mathematical claim used as an answer, judging standard, or Teacher 
 
 Use `lesson_prepare` to compile the agreed source-grounded Lesson. A new Plan file becomes available only through `plan_register`. Preparation does not write classroom evidence or claim attainment.
 
+When the student requests a no-spoiler handoff, output only readiness, the number and general form of activities, the broad Plan-level purpose, and the student's next choice. Keep card inspection and selection reasons private; do not include card-specific hidden conditions, target methods, transformations, checkpoints, or answers.
+
 ## Decide Plan state
 
-After closure, review the source-linked summary and active evidence. The student chooses continuation, reordering, replanning, completion, and Plan switching. Complete only when the standard is met and the student agrees. Use `plan_update`, reread the Plan, and report only the reread state. Consolidate profiles only after Plan completion and item-by-item confirmation.
+After closure, review the source-linked summary and active evidence. Audit every observable-standard and Test item separately against its exact wording and active Trace, including any requirements for independence, support, distinct cards, or distinct task types. Different structures or methods are not different task types unless the Plan explicitly defines them that way. Keep every unsupported item open, and derive Current Position and Next Lesson Candidate from the remaining items.
+
+The student chooses continuation, reordering, replanning, completion, and Plan switching. Complete only when every required item is met and the student agrees. Use `plan_update`, reread the Plan, and report only the reread state. Consolidate profiles only after Plan completion and item-by-item confirmation.
