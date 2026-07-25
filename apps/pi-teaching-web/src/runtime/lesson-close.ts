@@ -10,7 +10,7 @@ export function createLessonCloseTool(root: string, ownerPath: string) {
     parameters: Type.Object({
       summary: Type.String({
         minLength: 1,
-        description: 'Body content for the existing Lesson Summary section, without a heading. Use only student-visible content, active Trace, direct sources, and the actual stopping point.',
+        description: 'Body content for the existing Lesson Summary section. Do not include any level-two (`##`) heading; use level-three (`###`) subheadings or plain paragraphs and lists. Use only student-visible content, active Trace, direct sources, and the actual stopping point.',
       }),
     }),
     execute: async (_id, input) => {

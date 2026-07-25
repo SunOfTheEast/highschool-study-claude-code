@@ -96,6 +96,22 @@ test('projects the close-time Lesson Summary only for a closed Lesson', () => {
     .toBe('完成一题；另一题尚未进行。来源：#trace-event-001。');
 });
 
+test('keeps level-two headings inside a close-time Lesson Summary body', () => {
+  const root = fixture();
+  const path = join(root, 'lessons/lesson-003.md');
+  writeFileSync(
+    path,
+    readFileSync(path, 'utf8').replace(
+      /(^## Lesson Summary\s*$\n)([\s\S]*?)(?=^## |$(?![\s\S]))/m,
+      '$1\n## 完成情况\n\n完成一题；来源：#trace-event-001。\n\n',
+    ),
+  );
+  setFrontmatterField(root, 'lessons/lesson-003.md', 'status', 'closed');
+
+  expect(readStudentNotebook(root, 'lesson-003', false).lessonSummary)
+    .toBe('## 完成情况\n\n完成一题；来源：#trace-event-001。');
+});
+
 test('keeps pending Student Views available for non-assessment previews', () => {
   const root = fixture();
   const lessonPath = join(root, 'lessons/lesson-003.md');

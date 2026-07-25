@@ -203,6 +203,11 @@ Tutor 只有在学生明确选择结束 Lesson 后调用 `lesson_close`。调用
 1. 更新顶层 `## Lesson Summary`；
 2. 将 Lesson frontmatter `status` 设为 `closed`。
 
+模型只传入该 section 的正文；正文需要分段时使用 `###` 子标题，不再创建任何
+`##` 标题。学生投影以之后的 `## Aliases` / `## Traces` 结构区作为摘要边界，
+因此历史记录中误写的二级小结标题仍能完整回放，但新的 Skill 和 tool schema
+会直接约束正确层级。
+
 它不读取 Reflection Block 状态，也不修改任何 Block。已经 `closed` 或
 `abandoned` 的 Lesson 不再次执行关闭。
 

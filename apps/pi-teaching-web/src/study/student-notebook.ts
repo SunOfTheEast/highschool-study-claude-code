@@ -39,11 +39,12 @@ function lessonTemplate(source: string): string | null {
     .exec(source)?.[1]?.trim() ?? null;
 }
 
-function topLevelSection(source: string, heading: string): string {
-  return new RegExp(
-    `^## ${heading}\\s*$\\n([\\s\\S]*?)(?=^## |$(?![\\s\\S]))`,
-    'm',
-  ).exec(source)?.[1]?.trim() ?? '';
+function lessonSummary(source: string): string {
+  const heading = /^## Lesson Summary\s*$/m.exec(source);
+  if (!heading) return '';
+  const body = source.slice(heading.index + heading[0].length).replace(/^\r?\n/, '');
+  const nextStructuralSection = /^## (?:Aliases|Traces)\s*$/m.exec(body);
+  return body.slice(0, nextStructuralSection?.index ?? body.length).trim();
 }
 
 function blockIsVisible(status: string): boolean {
@@ -83,7 +84,7 @@ export function readStudentNotebook(
     lesson,
     cards,
     lessonSummary: lesson.status === 'closed'
-      ? topLevelSection(source, 'Lesson Summary') || null
+      ? lessonSummary(source) || null
       : null,
     ...(authoring ? { authoring: { source } } : {}),
   };
