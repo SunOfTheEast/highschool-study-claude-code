@@ -110,6 +110,34 @@ test('restores Coach and closed Lesson views from browser routes', async ({ page
   await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'replay');
 });
 
+test('keeps the closed Tutor replay until the student returns to Coach', async ({ page }) => {
+  try {
+    await page.goto('/plan/domain-integrity/lesson/lesson-003');
+    const start = page.getByRole('button', { name: /开始上课|继续上课/ });
+    const composer = page.locator('form.composer');
+    await expect(start.or(composer)).toBeVisible();
+    if (await start.isVisible()) {
+      await start.click();
+    }
+    await expect(composer).toBeVisible();
+    await expect(page.locator('.connection-banner')).toHaveCount(0);
+    await page.request.post('http://127.0.0.1:65000/__test/close-lesson');
+
+    await expect(page).toHaveURL(/\/plan\/domain-integrity\/lesson\/lesson-003$/);
+    await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'replay');
+    await expect(page.getByText('这节课先停在这里。')).toBeVisible();
+    await expect(page.getByText('完成第一项核验；第二项尚未进行。')).toBeVisible();
+    await expect(page.getByText('结束时所在节点')).toBeVisible();
+    await expect(page.locator('form.composer')).toHaveCount(0);
+
+    await page.getByRole('button', { name: /返回 Coach/ }).click();
+    await expect(page).toHaveURL(/\/plan\/domain-integrity$/);
+    await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'coach');
+  } finally {
+    await page.request.post('http://127.0.0.1:65000/__test/reset-close-lesson');
+  }
+});
+
 test('returns invalid deep links to the learning-set home', async ({ page }) => {
   await page.goto('/plan/does-not-exist');
   await expect(page).toHaveURL(/\/$/);

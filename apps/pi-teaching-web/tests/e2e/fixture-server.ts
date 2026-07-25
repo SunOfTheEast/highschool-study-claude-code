@@ -1,9 +1,10 @@
 import { join, resolve } from 'node:path';
-import { cpSync, mkdtempSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import type { AbilityProjection, SessionKey } from '../../src/shared/contracts';
+import type { AbilityProjection, ChatMessage, SessionKey } from '../../src/shared/contracts';
 import { readPlanWorkspace } from '../../src/study/read-workspace';
 import {
+  closeLesson,
   registerPlan,
   setBlockStatus,
   setFrontmatterField,
@@ -18,6 +19,8 @@ import type { WorkflowSnapshot, WorkflowTaskState } from '../../src/workflows/co
 const sourceRoot = resolve(import.meta.dir, '../../../../examples/derivative-demo/learning-set');
 const root = mkdtempSync(`${tmpdir()}/studyforge-e2e-`);
 cpSync(sourceRoot, root, { recursive: true });
+const lesson003Path = join(root, 'lessons/lesson-003.md');
+const lesson003Baseline = readFileSync(lesson003Path, 'utf8');
 const hub = new EventHub();
 const coachKey: SessionKey = 'coach:domain-integrity';
 
@@ -88,6 +91,7 @@ const workflows = new Map<SessionKey, WorkflowSnapshot[]>([[coachKey, [
   },
 ]]]);
 const deepMode = new Map<SessionKey, boolean>();
+const fixtureHistory = new Map<SessionKey, ChatMessage[]>();
 const workflowListeners = new Map<SessionKey, Set<(snapshot: WorkflowSnapshot) => void>>();
 const sessionListeners = new Map<SessionKey, Set<(event: unknown) => void>>();
 const abilityProjection: AbilityProjection = {
@@ -111,7 +115,7 @@ function notify(key: SessionKey, snapshot: WorkflowSnapshot): void {
 
 const registry = {
   snapshot: (planId = 'domain-integrity') => readPlanWorkspace(root, planId),
-  history: () => [],
+  history: (key: SessionKey) => structuredClone(fixtureHistory.get(key) ?? []),
   subscribe: (key: SessionKey, listener: (event: unknown) => void) => {
     const current = sessionListeners.get(key) ?? new Set();
     current.add(listener);
@@ -259,6 +263,33 @@ coach_session: null
     if (request.method === 'POST' && url.pathname === '/__test/reject-next-lesson-start') {
       setFrontmatterField(root, 'lessons/lesson-003.md', 'status', 'prepared');
       rejectNextLessonStart = true;
+      return Response.json({ ok: true });
+    }
+    if (request.method === 'POST' && url.pathname === '/__test/close-lesson') {
+      closeLesson(root, 'lessons/lesson-003.md', {
+        summary: '完成第一项核验；第二项尚未进行。来源：#trace-event-001。',
+      });
+      const message: ChatMessage = {
+        id: 'fixture-close-message',
+        role: 'tutor',
+        text: '这节课先停在这里。第一项已完成，第二项留到下次。',
+        complete: true,
+      };
+      fixtureHistory.set('tutor:lesson-003', [message]);
+      hub.publish({
+        type: 'message',
+        sessionKey: 'tutor:lesson-003',
+        message,
+      });
+      hub.publish({
+        type: 'snapshot',
+        workspace: readPlanWorkspace(root, 'domain-integrity'),
+      });
+      return Response.json({ ok: true });
+    }
+    if (request.method === 'POST' && url.pathname === '/__test/reset-close-lesson') {
+      writeFileSync(lesson003Path, lesson003Baseline);
+      fixtureHistory.delete('tutor:lesson-003');
       return Response.json({ ok: true });
     }
     return appFetch(request, server);

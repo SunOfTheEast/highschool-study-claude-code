@@ -37,20 +37,10 @@ export function preferLiveMessages(
 
 export function reduceClientState(state: ClientState, event: StudyViewEvent): ClientState {
   if (event.type === 'snapshot') {
-    const previousLesson = state.selected?.startsWith('tutor:')
-      ? state.workspace?.lessons.find((lesson) => lesson.sessionKey === state.selected)
-      : null;
-    const selectedLesson = state.selected?.startsWith('tutor:')
-      ? event.workspace.lessons.find((lesson) => lesson.sessionKey === state.selected)
-      : null;
-    const selectedJustClosed = (
-      previousLesson?.status === 'active'
-      || previousLesson?.status === 'paused'
-    ) && selectedLesson?.status === 'closed';
     return {
       ...state,
       workspace: event.workspace,
-      selected: selectedJustClosed ? event.workspace.coach.sessionKey : state.selected,
+      selected: state.selected,
     };
   }
   if (event.type === 'message-delta') {

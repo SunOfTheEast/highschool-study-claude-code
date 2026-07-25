@@ -136,12 +136,12 @@ test('keeps an already closed Replay selected when another snapshot arrives', ()
   expect(state.selected).toBe('tutor:l1');
 });
 
-test('returns to Coach when the selected Lesson changes from open to closed', () => {
+test('keeps Tutor replay selected when the current Lesson closes', () => {
   const state = reduceClientState({
     ...initialClientState,
     workspace: workspaceWithLesson('active'),
     selected: 'tutor:l1',
   }, { type: 'snapshot', workspace: workspaceWithLesson('closed') });
 
-  expect(state.selected).toBe('coach:p1');
+  expect(state.selected).toBe('tutor:l1');
 });
