@@ -9,7 +9,7 @@ const lesson = readFileSync(join(demo, 'lessons/lesson-003.md'), 'utf8');
 
 function block(name: string) {
   const match = lesson.match(new RegExp(
-    `## Block ${name}（[^\\n]+）\\n\\n([\\s\\S]*?)(?=\\n---\\n\\n## Block|\\n## Reflection)`,
+    `## Block ${name}（[^\\n]+）\\n\\n([\\s\\S]*?)(?=\\n---\\n\\n## Block|\\n## Lesson Summary)`,
   ));
   expect(match).not.toBeNull();
   return match![1]!;
