@@ -25,7 +25,9 @@ Block”，随后把该 Block 改为 `completed`，再写入顶层 `## Reflectio
 ### Lesson 生命周期与 Block 流程互不代替
 
 Reflection Block 与 problem、material、dialogue 一样，只是课程安排的一部分。
-`lesson_close` 是学生随时可以选择的 Lesson 生命周期动作。
+`lesson_close` 是学生在任何 active Tutor 对话轮次都可以选择的 Lesson 生命周期
+动作。paused Lesson 仍先恢复 Tutor Session；本设计不增加 paused 状态下的直接
+关课入口。
 
 因此：
 
@@ -60,7 +62,7 @@ Reflection Block 是学生实际参与的课堂活动，不是所有 Lesson 必�
 
 ## Trace、快照与纠错
 
-### 单一事实与读取优先级
+### 证据事实与 Plan 决策权
 
 课堂证据的权威事实是 active Trace。真实 Block 状态和 Lesson Session 是其
 过程来源。其余文字分别承担不同时间点的压缩或决定：
@@ -71,15 +73,21 @@ Reflection Block 是学生实际参与的课堂活动，不是所有 Lesson 必�
 - 长期记忆：Plan 完成后由学生逐项确认的历史结论；
 - BKT、Planner Attention 和能力节点：可从 active Trace 重建的投影。
 
-普通判断遵守：
+两类权限不能混成一条全局优先级：
 
 ```text
-active Trace > Lesson Summary > Plan 中较早的叙述
+证据判断：active Trace > Lesson Summary 等叙述性快照
+Plan 决定：当前 Plan 保持权威，直到 Coach 调用 plan_update
 ```
 
-Trace 被纠正后，不自动改写 Lesson Summary、Plan 或长期记忆。下一个拥有相应
+active Trace 决定“学生这次如何作答、用了什么支持和方法”等证据判断。新证据
+可以表明 Plan 需要复盘，但不能自行改变 Plan 的状态、Current Position 或下一课
+决定；只有 Coach 在正常复盘中调用 `plan_update` 才能更新这些内容。
+
+Trace 被纠正后，可以立即重建 BKT、Planner Attention 和能力节点等派生投影，
+但不自动改写 Lesson Summary、Plan、另解 sidecar 或长期记忆。下一个拥有相应
 决策权的正常工作流在需要时读取 active Trace，再决定是否更新自己的文件。这样
-一次证据纠正不会触发跨文件级联事务。
+既让最新证据进入备课视野，也避免一次纠正触发持久化快照的跨文件级联事务。
 
 ### 同一次 attempt 的修正
 
@@ -124,11 +132,15 @@ supersede 是安全阀，不是日常写入流程。Tutor 首次写 Trace 时：
 
 ### 投影不反向改写事实
 
-- BKT、能力节点和 Planner Attention 只聚合 active Trace；
+- BKT、能力节点和 Planner Attention 只聚合 active Trace，并可在 Trace 写入或
+  supersede 后立即重建；
 - 来源 Trace 已失效的另解不参与能力投影，但历史 sidecar 不被自动改写；
 - Lesson Summary 保留为关课快照；
 - Plan 保留为 Coach 上次确认的决定；
 - 长期记忆只在下一次 Plan 级聚合和学生确认时处理冲突。
+
+派生投影的重建不属于级联改写；被禁止的是自动重写 Lesson Summary、Plan、另解
+sidecar 和长期记忆等持久化快照或决定。
 
 极少数关课后才发现的历史误记，可以通过现有
 `highschool-study:correct-learning-record` maintenance Skill 明确追加
@@ -288,6 +300,9 @@ Skill 不描述 Runtime 错误恢复，不测试固定措辞。
   - 关闭时只持久化 Lesson Summary。
 - `plugins/highschool-study/skills/correct-learning-record/SKILL.md`
   - 删除自动重建 Lesson、Plan Summary 的要求。
+- `plugins/highschool-study/server/src/method-signals.ts`
+  - 另解只有在其来源 Trace 仍为 active 时才参与能力投影；
+  - 投影重建不修改历史 alternatives sidecar。
 - `apps/pi-teaching-web/src/client/components/LessonNotebook.tsx`
   - closed Lesson 的 active Block 显示“结束时所在节点”；
   - 显示唯一的 Lesson Summary。
@@ -342,8 +357,10 @@ Skill 不描述 Runtime 错误恢复，不测试固定措辞。
 2. 同卡的第二次独立作答位于新 Block，两条 Trace 都保持 active；
 3. `correct → incorrect` 的独立 attempts 被投影为不稳定，而不是覆盖第一次；
 4. BKT 和 Planner Attention 不读取 superseded Trace；
-5. 来源 Trace 失效的另解不参与能力投影；
-6. supersede 后 Lesson Summary section、Plan 文件和画像文件保持不变。
+5. `method-signals` 只投影来源 Trace 仍为 active 的另解；
+6. supersede 后 BKT、Planner Attention 和能力节点可以重建；
+7. 上述重建不修改 Lesson Summary section、Plan、alternatives sidecar 和画像
+   文件。
 
 ### 前端
 
@@ -379,7 +396,8 @@ Skill 不描述 Runtime 错误恢复，不测试固定措辞。
 - 固定顶层 `## Reflection` 与 `lesson_close.reflection` 被删除；
 - Lesson Summary 是 learning set 中唯一持久化关课摘要字段，不决定下一课；
 - 同一次 attempt 可以纠错，新的 attempt 不覆盖旧的真实证据；
-- active Trace 驱动 BKT、Planner Attention 和能力投影；
+- 证据判断由 active Trace 驱动，BKT、Planner Attention 和能力投影可随之重建；
+- Plan 决定只由 Coach 通过 `plan_update` 更新；
 - Trace 更正不级联改写 Lesson Summary、Plan、另解 sidecar 或长期记忆；
 - 学生看完结课记录后显式返回 Coach；
 - 不增加新工具、新 Agent、持久化字段、规则引擎或兼容层。
