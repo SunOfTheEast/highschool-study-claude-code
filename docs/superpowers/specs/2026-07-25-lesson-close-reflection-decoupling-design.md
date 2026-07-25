@@ -40,20 +40,43 @@ Reflection Block 是课程安排的一部分，与 problem、material、dialogue
 - Coach 根据真实 Block 状态、Trace 和 Lesson Summary 判断课程完成度；
 - Plan 是否完成仍由后续 Plan 审计决定。
 
-### 本次不重设计模板
+### Reflection Block 由模板提供可调整默认值
 
-当前 Blueprint 和 prepared admission 全局要求恰好一个 Reflection Block。
-该规则未来应由课堂模板语义单独审视，但它不是本次关课失败的必要修改。
+Reflection Block 是学生实际参与的课堂环节，不是每一种 Lesson 都必须具有的
+结构占位符。Blueprint 和 prepared admission 不再全局要求“恰好一个
+Reflection Block”，而是允许 0、1 或多个。
 
-本次保持以下内容不变：
+六种 canonical template 继续存在，但只提供备课起点：
 
-- 六种 canonical template；
-- `ActivityKind: reflection`；
-- “恰好一个 Reflection Block”的现有 Blueprint 与 admission 校验；
-- Block 的 `required`、依赖、顺序和路线语义；
-- 顶层 `## Reflection` 与 `## Lesson Summary` 两个持久化 section。
+| Template | Reflection Block 默认安排 |
+| --- | --- |
+| `diagnostic` | 默认 0 个；诊断证据由结课复盘汇总，需要学生自述时可增加 1 个 |
+| `concept` | 默认 1 个可调整的结尾反思；若 exit quiz 已承担收束作用可删除 |
+| `deliberate-practice` | 默认不设统一结尾反思；可在关键练习组后插入 1 个或多个局部反思 |
+| `remediation` | 默认在 unseen retest 后安排 1 个反思，用于说清修正后的判断依据 |
+| `assessment` | 默认 0 个，避免在独立作答中混入额外教学要求 |
+| `review` | 默认 1 个方法比较或总结反思，可按课堂节奏调整 |
 
-这样可以只验证关闭契约，不把模板重构混入同一次修改。
+这些是可调整默认值，不是 validator 规则、配额或隐藏状态机。Coach 可以根据
+能力目标、学生状态、题卡供给和学生讨论结果删除、增加、重排 Reflection
+Block，并用现有 `Lesson Configuration / Adjustment` 说明偏离默认安排的原因。
+不新增 `reflectionPolicy` 字段。
+
+Block 的 `required`、依赖、顺序和路线语义保持不变。某个 Reflection Block
+可以被标记为必做，用来表达正常课程安排；但学生仍可随时结束 Lesson，未完成
+状态会原样保留给 Coach 审计。
+
+### 区分两种名为 Reflection 的内容
+
+- `Kind: reflection` Block：学生参与的课堂活动，数量由模板默认与 Coach
+  调整共同决定。
+- 顶层 `## Reflection`：Tutor 在关课时根据已经发生的课堂事实写下的结课复盘，
+  不是学生完成 Reflection Block 的证明。
+
+顶层 `## Reflection` 与 `## Lesson Summary` 本次继续作为固定持久化 section。
+前者面向 Lesson 回放与学生复盘，记录本课实际发生了什么、尚缺什么证据；后者
+面向 Coach，提供紧凑交接。二者的消费者与详细程度不同。是否改名是独立的
+持久化 schema 议题，不与本次解耦一起扩大。
 
 ## 新的 `lesson_close` 契约
 
@@ -148,17 +171,31 @@ Skill 不描述运行时错误恢复，不要求模型维护 active Reflection �
 - `apps/pi-teaching-web/src/runtime/lesson-close.ts`
   - 工具描述删除 active Reflection 前置条件；
   - 参数与成功回执保持不变。
+- `apps/pi-teaching-web/src/study/lesson-blueprint.ts`
+  - 删除全局“恰好一个 reflection”校验；
+  - 继续支持 `kind: reflection`，并始终生成顶层 `## Reflection`。
+- `apps/pi-teaching-web/src/study/validate-prepared-lesson.ts`
+  - 删除 `LESSON_REFLECTION_COUNT`；
+  - admission 接受 0、1 或多个 Reflection Block；
+  - 继续要求顶层 `## Reflection` section。
+- `apps/pi-teaching-web/src/runtime/lesson-prepare.ts`
+  - 工具描述不再宣称 Lesson 必须恰好包含一个 Reflection Block。
 - `apps/pi-teaching-web/resources/skills/tutor-lesson/SKILL.md`
   - 关闭协议改为与 Block 无关。
+- `plugins/highschool-study/skills/prepare-next-lesson/SKILL.md`
+  - 删除“恰好一个 reflection Block”要求。
+- `plugins/highschool-study/skills/prepare-next-lesson/references/classroom-templates.md`
+  - 写明各模板的可调整 Reflection 默认安排。
 - `apps/pi-teaching-web/src/client/components/LessonNotebook.tsx`
   - closed Lesson 的 active Block 显示“结束时所在节点”。
 - 若仍被使用，`ActivityDrawer.tsx` 应采用相同投影规则。
+- `AGENTS.md` 与 `docs/zh-CN/完整说明书.md`
+  - 删除 admission 的全局 Reflection 数量要求，并说明模板默认值与结课复盘的
+    区别。
 - 对应 executable tests。
 
 不修改：
 
-- classroom template catalog；
-- Blueprint 与 prepared Lesson 的 Reflection 数量校验；
 - `classroom_update` schema；
 - Trace、能力投影、Plan 审计；
 - 公共 Claude Code MCP；
@@ -170,18 +207,23 @@ Skill 不描述运行时错误恢复，不要求模型维护 active Reflection �
 
 ### 持久化测试
 
-1. Reflection active 时关闭：
+1. 0、1、多个 Reflection Block 的 Blueprint 均可生成并通过 admission；
+   顶层 `## Reflection` 始终存在。
+2. Reflection active 时关闭：
    - Lesson 变为 closed；
    - Reflection Block 仍为 active；
    - 顶层 Reflection 与 Lesson Summary 正确写入。
-2. Reflection completed 时关闭：
+3. Reflection completed 时关闭：
    - 一次成功；
    - Reflection Block 仍为 completed。
-3. problem active 时提前关闭：
+4. problem active 且没有 Reflection Block 时提前关闭：
    - 一次成功；
    - problem 仍为 active；
-   - Reflection 和后续 Block 保持原状态。
-4. 缺少顶层 Reflection 或 Lesson Summary 时：
+   - 后续 Block 保持原状态。
+5. 多个 Reflection Block 时关闭：
+   - 不选择、不完成其中任何一个；
+   - 所有 Block 状态保持原样。
+6. 缺少顶层 Reflection 或 Lesson Summary 时：
    - 整次写入失败；
    - 文件字节不变。
 
@@ -191,6 +233,7 @@ Skill 不描述运行时错误恢复，不要求模型维护 active Reflection �
 2. schema 仍只有 `reflection` 与 `summary`，不暴露路径、Block ID 或关闭状态
    选择权。
 3. `classroom_update` 不参与关闭。
+4. `lesson_prepare` 不因 Reflection Block 为 0 个或多个而拒绝 Lesson。
 
 ### 前端测试
 
@@ -200,19 +243,22 @@ Skill 不描述运行时错误恢复，不要求模型维护 active Reflection �
 
 ### 真实模型验收
 
-在复制的 learning set 上至少覆盖三种对话：
+在复制的 learning set 上至少覆盖四种对话：
 
 1. Reflection 回答与结束请求在同一轮；
 2. Reflection 回答后，下一轮单独确认结束；
-3. problem Block 中提前结束。
+3. 没有 Reflection Block 的 Lesson 在 problem Block 中提前结束；
+4. 含多个局部 Reflection Block 的 Lesson 在中途结束。
 
-三种路径都必须只调用一次 `lesson_close`，没有为了关课而发生的
+所有路径都必须只调用一次 `lesson_close`，没有为了关课而发生的
 `classroom_update`，且最终文件保留真实 Block 状态。
 
 ## 成功标准
 
 - 学生在哪一轮、哪一个 Block 选择结束，不再影响 `lesson_close` 是否成功；
 - Lesson 关闭不再暗示 Reflection Block 完成；
-- 模板与 Block 仍表达正常课程安排；
+- Blueprint 与 admission 接受 0、1 或多个 Reflection Block；
+- 模板给出可调整的 Reflection 默认安排，Coach 的修改不需要绕过 validator；
+- 模板与 Block 仍表达正常课程安排，顶层结课复盘仍在每次关闭时生成；
 - Lesson Summary、Trace 和原始 Tutor Session 继续为 Coach 提供可上溯证据；
 - 不增加新字段、新工具、新 Agent、规则引擎或兼容层。
