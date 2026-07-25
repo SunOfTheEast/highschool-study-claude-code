@@ -1,9 +1,6 @@
 import { readCardAlternatives } from './alternatives';
 import { readCard } from './cards';
-import {
-  readTraceRecords,
-  type TraceRecord,
-} from './traces';
+import type { TraceRecord } from './traces';
 
 export type MethodSignal = {
   method: string;
@@ -71,10 +68,8 @@ export function aggregateMethodSignals(root: string, traces: TraceRecord[]): Met
     attempts.set(key, attempt);
   }
 
-  const lessonPaths = [...new Set(traces.map((trace) => trace.lessonPath))];
-  const traceRecords = lessonPaths.length === 0 ? [] : readTraceRecords(root, lessonPaths);
-  const tracesBySource = new Map(traceRecords.map((trace) => [trace.sourceAnchor, trace]));
-  const cardPaths = [...new Set(traceRecords.flatMap((trace) =>
+  const tracesBySource = new Map(traces.map((trace) => [trace.sourceAnchor, trace]));
+  const cardPaths = [...new Set(traces.flatMap((trace) =>
     trace.cardPath === null ? [] : [trace.cardPath]))];
 
   for (const cardPath of cardPaths) {

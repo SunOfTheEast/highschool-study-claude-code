@@ -1,9 +1,13 @@
 import { expect, test } from 'bun:test';
 import { spawnSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { appendCardAlternative } from '../../server/src/alternatives';
 import { aggregateMethodSignals } from '../../server/src/method-signals';
+import {
+  appendCardAlternativeWithProjection,
+  appendTraceWithProjection,
+} from '../../server/src/planner-attention';
 import { appendTrace, readActiveTraces } from '../../server/src/traces';
 import {
   makeLearningSetWithHistory,
@@ -269,8 +273,33 @@ test('keeps one strongest method contribution per card attempt', () => {
   ]);
 });
 
-test('keeps alternative method evidence after its source Trace is superseded', () => {
+test('keeps a superseded-source alternative in its sidecar but removes its projection', () => {
   const root = makeLearningSetWithLesson();
+  const lessonPath = join(root, 'lessons/lesson-001.md');
+  writeFileSync(
+    lessonPath,
+    `${readFileSync(lessonPath, 'utf8').trimEnd()}\n\n## Lesson Summary\n\n关课快照不变。\n`,
+  );
+  const planPath = join(root, 'plans/max-value.md');
+  writeFileSync(planPath, `---
+id: max-value
+kind: plan
+status: active
+---
+# Plan：最值
+
+## Current Position
+
+Coach 上次确认的位置。
+
+## Next Lesson Candidate
+
+保持原候选。
+
+## Plan Summary
+
+Coach 上次确认的决定。
+`);
   const input = {
     lessonPath: 'lessons/lesson-001.md',
     blockId: 'step-02',
@@ -283,29 +312,40 @@ test('keeps alternative method evidence after its source Trace is superseded', (
     supersedes: null,
     methods: null,
   };
-  appendTrace(root, input, () => new Date('2026-07-21T02:00:00Z'));
-  appendCardAlternative(root, 'lessons/lesson-001.md', {
+  appendTraceWithProjection(root, input, () => new Date('2026-07-21T02:00:00Z'));
+  appendCardAlternativeWithProjection(root, 'lessons/lesson-001.md', {
     sourceTraceId: 'event-001',
     question: '整题',
     solution: '参数化与消元的完整路线。',
     method: '参数化与消元',
     support: 'none',
   }, () => new Date('2026-07-21T02:01:00Z'));
-  appendTrace(root, {
+
+  const sidecarPath = join(root, 'cards/conics/freeze-variable-01.alternatives.md');
+  const studentPath = join(root, 'memory/student-profile.md');
+  const teachingPath = join(root, 'memory/teaching-profile.md');
+  const sidecarBefore = readFileSync(sidecarPath);
+  const planBefore = readFileSync(planPath);
+  const studentBefore = readFileSync(studentPath);
+  const teachingBefore = readFileSync(teachingPath);
+  expect(readFileSync(join(root, 'memory/planner-attention.md'), 'utf8'))
+    .toContain('参数化与消元');
+
+  appendTraceWithProjection(root, {
     ...input,
-    note: 'Corrected the classroom observation without retracting the route.',
+    note: 'Corrected the same attempt and withdrew the recorded route.',
     supersedes: 'event-001',
   }, () => new Date('2026-07-21T02:02:00Z'));
 
-  expect(aggregateMethodSignals(root, readActiveTraces(root))).toEqual([
-    expect.objectContaining({
-      method: '参数化与消元',
-      attemptCount: 1,
-      distinctCardCount: 1,
-      score: 1,
-      sourceRefs: ['lessons/lesson-001.md#trace-event-001'],
-    }),
-  ]);
+  const lesson = readFileSync(lessonPath, 'utf8');
+  expect(aggregateMethodSignals(root, readActiveTraces(root))).toEqual([]);
+  expect(readFileSync(join(root, 'memory/planner-attention.md'), 'utf8'))
+    .not.toContain('参数化与消元');
+  expect(readFileSync(sidecarPath)).toEqual(sidecarBefore);
+  expect(readFileSync(planPath)).toEqual(planBefore);
+  expect(readFileSync(studentPath)).toEqual(studentBefore);
+  expect(readFileSync(teachingPath)).toEqual(teachingBefore);
+  expect(lesson).toContain('## Lesson Summary\n\n关课快照不变。');
 });
 
 test('rebuild script rewrites only planner attention with source links', () => {
