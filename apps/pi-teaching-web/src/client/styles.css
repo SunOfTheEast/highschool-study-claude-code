@@ -461,6 +461,24 @@ select:focus-visible {
 .student-view > :first-child { margin-top: 0; }
 .student-view > :last-child { margin-bottom: 0; }
 .notebook-loading { margin: 1.5rem .35rem; color: var(--ink-faint); font-size: .72rem; }
+.lesson-close-summary {
+  margin: 1.8rem .35rem 0;
+  padding: 1.2rem 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-family: var(--font-reading);
+  font-size: .78rem;
+  line-height: 1.75;
+}
+.lesson-close-summary > span {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: .62rem;
+  font-weight: 750;
+  letter-spacing: .13em;
+}
+.lesson-close-summary > :last-child { margin-bottom: 0; }
 .notebook-cards { padding: 2rem .35rem 1rem; }
 .notebook-cards > span { color: var(--accent); font-size: .62rem; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; }
 .problem-card { margin: 1rem 0 1.8rem; padding-top: 1rem; border-top: 1px solid var(--ink); color: var(--ink-soft); font-family: var(--font-reading); font-size: .8rem; line-height: 1.65; }

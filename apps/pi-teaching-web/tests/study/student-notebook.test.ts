@@ -78,6 +78,24 @@ test('restores all assessment Student Views after closure', () => {
     .toBe(true);
 });
 
+test('projects the close-time Lesson Summary only for a closed Lesson', () => {
+  const root = fixture();
+  const path = join(root, 'lessons/lesson-003.md');
+  writeFileSync(
+    path,
+    readFileSync(path, 'utf8').replace(
+      /(^## Lesson Summary\s*$\n)([\s\S]*?)(?=^## |$(?![\s\S]))/m,
+      '$1\n完成一题；另一题尚未进行。来源：#trace-event-001。\n\n',
+    ),
+  );
+
+  expect(readStudentNotebook(root, 'lesson-003', false).lessonSummary).toBeNull();
+
+  setFrontmatterField(root, 'lessons/lesson-003.md', 'status', 'closed');
+  expect(readStudentNotebook(root, 'lesson-003', false).lessonSummary)
+    .toBe('完成一题；另一题尚未进行。来源：#trace-event-001。');
+});
+
 test('keeps pending Student Views available for non-assessment previews', () => {
   const root = fixture();
   const lessonPath = join(root, 'lessons/lesson-003.md');

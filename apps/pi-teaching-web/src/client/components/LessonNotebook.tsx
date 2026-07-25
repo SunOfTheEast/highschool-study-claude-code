@@ -15,6 +15,15 @@ const statusLabel = {
   skipped: '已跳过',
 } as const;
 
+function blockStatusLabel(
+  lessonStatus: LessonNode['status'],
+  blockStatus: keyof typeof statusLabel,
+): string {
+  return lessonStatus === 'closed' && blockStatus === 'active'
+    ? '结束时所在节点'
+    : statusLabel[blockStatus];
+}
+
 export function LessonNotebook({
   lesson,
   notebook,
@@ -50,7 +59,7 @@ export function LessonNotebook({
                 <summary>
                   <span className="activity-order">{String(index + 1).padStart(2, '0')}</span>
                   <span className="activity-copy">
-                    <small>{statusLabel[block.status]}</small>
+                    <small>{blockStatusLabel(notebook.lesson.status, block.status)}</small>
                     <b>{block.title}</b>
                   </span>
                   {!block.required && <em>可选</em>}
@@ -59,6 +68,12 @@ export function LessonNotebook({
               </details>
             ))}
           </div>
+          {notebook.lessonSummary && (
+            <section className="lesson-close-summary">
+              <span>结课时记录</span>
+              <MarkdownView>{notebook.lessonSummary}</MarkdownView>
+            </section>
+          )}
           {Object.keys(notebook.cards).length > 0 && (
             <section className="notebook-cards">
               <span>题目卡片</span>

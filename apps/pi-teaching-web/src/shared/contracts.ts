@@ -58,6 +58,7 @@ export type StudentProblemCard = {
 export type StudentNotebook = {
   lesson: Omit<LessonNode, 'blocks'> & { blocks: ActivityBlock[] };
   cards: Record<string, StudentProblemCard>;
+  lessonSummary: string | null;
   authoring?: { source: string };
 };
 

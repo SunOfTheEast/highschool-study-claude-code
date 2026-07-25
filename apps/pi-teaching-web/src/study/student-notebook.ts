@@ -39,6 +39,13 @@ function lessonTemplate(source: string): string | null {
     .exec(source)?.[1]?.trim() ?? null;
 }
 
+function topLevelSection(source: string, heading: string): string {
+  return new RegExp(
+    `^## ${heading}\\s*$\\n([\\s\\S]*?)(?=^## |$(?![\\s\\S]))`,
+    'm',
+  ).exec(source)?.[1]?.trim() ?? '';
+}
+
 function blockIsVisible(status: string): boolean {
   return status === 'active' || status === 'completed';
 }
@@ -75,6 +82,9 @@ export function readStudentNotebook(
   return {
     lesson,
     cards,
+    lessonSummary: lesson.status === 'closed'
+      ? topLevelSection(source, 'Lesson Summary') || null
+      : null,
     ...(authoring ? { authoring: { source } } : {}),
   };
 }
