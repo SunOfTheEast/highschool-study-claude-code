@@ -43,6 +43,8 @@ function task(
     runId: status === 'completed' ? `run-${id}` : null,
     tokens: status === 'completed' ? 200 : 0,
     durationMs: status === 'completed' ? 100 : 0,
+    toolCount: status === 'completed' ? 2 : 0,
+    currentTool: null,
     result: status === 'completed'
       ? {
         findings: [`private ${id} finding`],

@@ -56,7 +56,7 @@ export function validateWorkflowGraph(graph: WorkflowGraph): WorkflowGraph {
     if (graph.tasks.some((task) => task.dependsOn.length > 0)) {
       throw new Error('QUICK_REQUIRES_ONE_WAVE');
     }
-    if (graph.timeoutMs > 45_000) throw new Error('QUICK_TIMEOUT_LIMIT');
+    if (graph.timeoutMs > 180_000) throw new Error('QUICK_TIMEOUT_LIMIT');
   }
 
   return graph;

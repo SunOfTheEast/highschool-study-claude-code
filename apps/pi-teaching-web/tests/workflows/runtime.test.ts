@@ -50,7 +50,7 @@ const evidenceQuick: WorkflowGraph = {
   mode: 'quick',
   maxConcurrency: 1,
   tokenLimit: 12_000,
-  timeoutMs: 45_000,
+  timeoutMs: 180_000,
   tasks: [{
     id: 'evidence',
     label: '检索 Plan 证据',
@@ -216,6 +216,60 @@ test('tells an Evidence Scout to discover sources and return a compact card inde
   expect(childPrompt).toContain('"card_index":[{"cardPath"');
   expect(childPrompt).toContain('evidence_refs contains source-handle strings only');
   expect(childPrompt).not.toContain('cards/a.yaml');
+});
+
+test('publishes only safe telemetry while an Evidence Scout is running', async () => {
+  const published: WorkflowSnapshot[] = [];
+  const subject = runtime(async (
+    _bus: unknown,
+    input: { requestId: string },
+    _signal: AbortSignal,
+    onUpdate: (value: {
+      version: 1;
+      requestId: string;
+      durationMs: number;
+      tokens: number;
+      toolCount: number;
+      currentTool: string;
+      currentToolArgs: string;
+      recentOutput: string;
+    }) => void,
+  ) => {
+    onUpdate({
+      version: 1,
+      requestId: input.requestId,
+      durationMs: 42_000,
+      tokens: 3_777,
+      toolCount: 4,
+      currentTool: 'card_search',
+      currentToolArgs: '{"query":"hidden"}',
+      recentOutput: 'private partial answer',
+    });
+    return completed(input.requestId, JSON.stringify({
+      card_index: [],
+      findings: [],
+      evidence_refs: [],
+      recommended_action: '',
+      risks: [],
+    }));
+  });
+  subject.subscribe((snapshot) => published.push(snapshot));
+
+  await subject.propose(evidenceQuick);
+
+  const running = published.find((snapshot) => (
+    snapshot.tasks[0]?.status === 'running'
+    && snapshot.tasks[0]?.durationMs === 42_000
+  ));
+  expect(running?.tasks[0]).toMatchObject({
+    tokens: 3_777,
+    durationMs: 42_000,
+    toolCount: 4,
+    currentTool: 'card_search',
+  });
+  const serialized = JSON.stringify(running);
+  expect(serialized).not.toContain('hidden');
+  expect(serialized).not.toContain('private partial answer');
 });
 
 test('drops unapproved card payload and transcript fields from parsed results', () => {
@@ -425,6 +479,8 @@ test('restores interrupted running work as a terminal partial snapshot', () => {
         runId: 'run-evidence',
         tokens: 100,
         durationMs: 10,
+        toolCount: 2,
+        currentTool: null,
         result: {
           findings: ['kept'],
           evidence_refs: ['cards/a.yaml'],
@@ -439,6 +495,8 @@ test('restores interrupted running work as a terminal partial snapshot', () => {
         runId: 'run-spoiler',
         tokens: 20,
         durationMs: 5,
+        toolCount: 1,
+        currentTool: 'read',
         result: null,
         error: null,
       },

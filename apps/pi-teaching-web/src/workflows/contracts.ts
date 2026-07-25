@@ -61,6 +61,8 @@ export type WorkflowTaskState = WorkflowTask & {
   runId: string | null;
   tokens: number;
   durationMs: number;
+  toolCount: number;
+  currentTool: string | null;
   result: WorkflowTaskResult | null;
   error: string | null;
 };

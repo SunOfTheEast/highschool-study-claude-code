@@ -134,6 +134,10 @@ export type WorkflowTaskView = {
   sourceCount: number;
   cardCount: number;
   progress: string;
+  durationMs: number;
+  tokens: number;
+  toolCount: number;
+  currentActivity: string;
 };
 
 export type WorkflowView = {

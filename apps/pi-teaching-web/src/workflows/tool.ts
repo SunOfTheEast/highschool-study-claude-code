@@ -43,7 +43,7 @@ export function createDeepWorkflowTool(
       }),
       timeoutMs: Type.Integer({
         minimum: 1,
-        description: 'Quick mode must use at most 45,000 ms. Deep mode may use a longer timeout.',
+        description: 'Quick mode must use at most 180,000 ms. Deep mode may use a longer timeout.',
       }),
       tasks: Type.Array(task),
     }),

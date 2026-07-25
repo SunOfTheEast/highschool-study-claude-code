@@ -8,7 +8,7 @@ const quick: WorkflowGraph = {
   mode: 'quick',
   maxConcurrency: 3,
   tokenLimit: 50_000,
-  timeoutMs: 45_000,
+  timeoutMs: 180_000,
   tasks: [
     {
       id: 'diagnose',
@@ -64,5 +64,5 @@ test('rejects empty fields and budgets outside the minimal boundary', () => {
   expect(() => validateWorkflowGraph({ ...quick, tasks: [] })).toThrow('WORKFLOW_TASK_REQUIRED');
   expect(() => validateWorkflowGraph({ ...quick, maxConcurrency: 4 })).toThrow('INVALID_CONCURRENCY');
   expect(() => validateWorkflowGraph({ ...quick, tokenLimit: 0 })).toThrow('INVALID_TOKEN_LIMIT');
-  expect(() => validateWorkflowGraph({ ...quick, timeoutMs: 45_001 })).toThrow('QUICK_TIMEOUT_LIMIT');
+  expect(() => validateWorkflowGraph({ ...quick, timeoutMs: 180_001 })).toThrow('QUICK_TIMEOUT_LIMIT');
 });

@@ -52,13 +52,27 @@ export function TaskRail({
                     <small>{task.role}</small>
                   </span>
                   <span>
-                    <em>{task.progress}</em>
-                    <small>
-                      {task.dependsOn.length > 0 ? `依赖 ${task.dependsOn.join(', ')}` : '无依赖'}
-                      {' · '}
-                      {task.cardCount > 0 ? `${task.cardCount} 张题卡 · ` : ''}
-                      {task.sourceCount} 个来源
-                    </small>
+                    <em>{task.currentActivity}</em>
+                    {task.status === 'running' ? (
+                      <small>
+                        {`${Math.floor(task.durationMs / 1000)} / ${Math.ceil(workflow.timeoutMs / 1000)} 秒`}
+                        {' · '}
+                        {`${task.tokens.toLocaleString('en-US')} / ${workflow.tokenLimit.toLocaleString('en-US')} Token`}
+                        {' · '}
+                        {`${task.toolCount} 次工具 · 来源完成后汇总`}
+                      </small>
+                    ) : task.status === 'completed' ? (
+                      <small>
+                        {task.dependsOn.length > 0 ? `依赖 ${task.dependsOn.join(', ')}` : '无依赖'}
+                        {' · '}
+                        {task.cardCount > 0 ? `${task.cardCount} 张题卡 · ` : ''}
+                        {task.sourceCount} 个来源
+                      </small>
+                    ) : (
+                      <small>
+                        {task.dependsOn.length > 0 ? `依赖 ${task.dependsOn.join(', ')}` : '无依赖'}
+                      </small>
+                    )}
                   </span>
                 </li>
               ))}

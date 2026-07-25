@@ -25,6 +25,8 @@ test('projects lifecycle and source count without raw child conclusions', () => 
       runId: 'run-1',
       tokens: 500,
       durationMs: 1000,
+      toolCount: 2,
+      currentTool: null,
       result: {
         card_index: [
           {
@@ -69,4 +71,46 @@ test('projects lifecycle and source count without raw child conclusions', () => 
   expect(text).not.toContain('run-1');
   expect(text).not.toContain('隐藏题卡 A');
   expect(text).not.toContain('与当前目标相关');
+});
+
+test('projects safe live telemetry and maps tool names to student-facing activity', () => {
+  const view = projectWorkflow({
+    id: 'wf-live',
+    parentSessionKey: 'coach:p1',
+    goal: '检索跨课证据',
+    mode: 'quick',
+    status: 'running',
+    maxConcurrency: 1,
+    tokenLimit: 50_000,
+    timeoutMs: 180_000,
+    createdAt: '2026-07-25T00:00:00Z',
+    updatedAt: '2026-07-25T00:00:42Z',
+    tasks: [{
+      id: 'evidence',
+      label: '检索题卡证据',
+      role: 'Evidence Scout',
+      instruction: 'private instruction',
+      dependsOn: [],
+      sourceHandles: [],
+      readRoots: ['cards', 'lessons'],
+      status: 'running',
+      runId: 'run-private',
+      tokens: 3_777,
+      durationMs: 42_000,
+      toolCount: 4,
+      currentTool: 'card_search',
+      result: null,
+      error: null,
+    }],
+  });
+
+  expect(view.tasks[0]).toMatchObject({
+    durationMs: 42_000,
+    tokens: 3_777,
+    toolCount: 4,
+    currentActivity: '正在检索题卡',
+  });
+  const text = JSON.stringify(view);
+  expect(text).not.toContain('private instruction');
+  expect(text).not.toContain('run-private');
 });

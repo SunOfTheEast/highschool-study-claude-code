@@ -436,6 +436,8 @@ test('controls deep mode and projects workflow progress without child conclusion
       runId: 'child-run-secret',
       tokens: 100,
       durationMs: 20,
+      toolCount: 1,
+      currentTool: null,
       result: {
         findings: ['答案是 D'],
         evidence_refs: ['cards/a.yaml'],

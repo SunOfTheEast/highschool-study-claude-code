@@ -138,6 +138,6 @@ test('describes one-Scout recall without a parent prefetch gate', () => {
   expect(parameters.properties.tokenLimit.description).toContain('card and Trace tool results');
   expect(parameters.properties.tokenLimit.description).toContain('50,000');
   expect(parameters.properties.tokenLimit.description).not.toContain('12,000');
-  expect(parameters.properties.timeoutMs.description).toContain('45,000');
+  expect(parameters.properties.timeoutMs.description).toContain('180,000');
   expect(schemaText).not.toContain('two independent views');
 });

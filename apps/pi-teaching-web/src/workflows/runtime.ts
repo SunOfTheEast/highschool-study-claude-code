@@ -178,6 +178,8 @@ export class DeepWorkflowRuntime {
         runId: null,
         tokens: 0,
         durationMs: 0,
+        toolCount: 0,
+        currentTool: null,
         result: null,
         error: null,
       })),
@@ -348,6 +350,8 @@ export class DeepWorkflowRuntime {
               if (task.status !== 'running') return;
               task.tokens = update.tokens ?? task.tokens;
               task.durationMs = update.durationMs ?? task.durationMs;
+              task.toolCount = update.toolCount ?? task.toolCount;
+              task.currentTool = update.currentTool ?? task.currentTool;
               this.commit(snapshot, false);
               if (this.totalTokens(snapshot) >= snapshot.tokenLimit) stopForBudget();
             });
@@ -364,6 +368,8 @@ export class DeepWorkflowRuntime {
 
           task.tokens = response.tokens ?? task.tokens;
           task.durationMs = response.durationMs ?? task.durationMs;
+          task.toolCount = response.toolCount ?? task.toolCount;
+          task.currentTool = null;
           task.runId = response.runId ?? task.runId;
           if (this.explicitlyCancelled.has(snapshot.id)) {
             task.status = 'cancelled';
