@@ -76,7 +76,7 @@ Planner 先确定热身、核心、变式、迁移、补救或挑战等题目角
 
 课堂评价先冻结学生在写 Trace 前亲自给出的内容。Tutor 不能把自己补出的推导倒灌成学生证据；缺决定性证明时使用 `incomplete`。`support` 表示最终答案实际依赖的帮助来源，而不是“是否见过提示”。学生异议成立或后续补全时，必须用准确 active event ID 追加 superseding Trace。
 
-真正另解要求至少一整题或一问的入口、决定性推理和收束链条都与参考解及已有另解不同。换记号、等价重排、局部技巧或方法改名不算另解。另解以独立 `alt-NNN` 写在题卡旁的 Markdown sidecar，保存完整路线、实际 support、学生确认的一个规范方法节点或未归类值，并索引回来源 Trace。来源只负责追溯：被 supersede 后另解仍保留。绑定方法会合并进来源 attempt；同一方法只取最强有效贡献，同一题卡无论有多少另解仍只算一张题。
+真正另解要求至少一整题或一问的入口、决定性推理和收束链条都与参考解及已有另解不同。换记号、等价重排、局部技巧或方法改名不算另解。另解以独立 `alt-NNN` 写在题卡旁的 Markdown sidecar，保存完整路线、实际 support、学生确认的一个规范方法节点或未归类值，并索引回来源 Trace。来源被 supersede 后，另解条目仍保留在 sidecar 供审计和检索；只有来源 Trace 仍 active 时，它的方法才进入当前能力投影。绑定方法会合并进来源 attempt；同一方法只取最强有效贡献，同一题卡无论有多少另解仍只算一张题。
 
 长期偏好只在 Plan 层收敛：必须先有满足 observable capability standard 的直接证据，学生再明确选择完成 Plan。系统随后提出带原始来源的 `add / revise / delete` 差量；只有学生逐项确认后，才分别写入唯一 owner 的 `student-profile.md` 或 `teaching-profile.md`。Lesson closure、Task completion、方法分数或模型推断都不能绕过这道确认门。
 
@@ -103,5 +103,5 @@ STUDY_LEARNING_SET="$PWD/tests/fixtures/learning-set" bun run start:mcp
 - `为当前 Plan 准备下一课；只使用真实题卡，card_search 为空就停止。`
 - `开始当前 Lesson，逐个 block 教学，并把有证据的活动追加为 Trace。`
 - `查看当前进度，分开说明能力证据、Lesson/Plan 状态、方法信号和已确认偏好，并给出来源。`
-- `更正 event-001：保留原事件，用 Supersedes 追加更正并重建受影响摘要。`
+- `更正 event-001：保留原事件，用 Supersedes 追加更正并刷新派生投影；列出可能过时的摘要或决定，但不要自动改写。`
 - `如果 Plan 已达标，展示 profile 差量；未经我明确确认不要编辑两份 profile。`

@@ -106,7 +106,7 @@ pi
 3. 从侧边栏打开 Coach 生成的 Lesson；未开始前只有无剧透课堂本。
 4. 点击“开始上课”后才创建该 Lesson 的 Tutor Session。
 5. Tutor 推进结构化课堂节点，学生可以上传 PNG、JPEG 或 WebP 草稿。
-6. 学生确认结束后 Lesson 关闭，界面回到 Coach；课后可查看真实 Session/Trace 驱动的回放。
+6. 学生确认结束后，Tutor 写一份结课时 Lesson Summary 并关闭 Lesson；界面停留在只读 Tutor Replay，保留最终消息、真实停止节点和关课快照，直到学生明确点击“返回 Coach”。
 
 右侧“方法证据”只是 Trace 的主/次方法加权投影。点击任一节点都能回到原始 Trace 和安全题卡元数据；它不是独立的掌握度事实。
 
@@ -119,6 +119,8 @@ pi
 - 题卡方法只是候选。学生确认节点贴切后才写实际方法；拒绝、无精确节点或暂不决定时保留未映射路线。
 - 只有某一整题或一问的完整核心路线真正不同才落盘另解；写入顺序是 active correct Trace → `card_alternative_append` → 学生回复。
 - 学生异议成立或后续补全同一 attempt 时，新的 Trace 必须 supersede 准确的 active event。
+
+`lesson_close` 只接收一份学生可见的 Lesson Summary，写入该快照和 `status: closed`，不会完成、跳过或重排任何 Block。Lesson Summary 是结束时的检索入口，不取代 active Trace；更正 Trace 后可以重建能力图与 Planner Attention，但不会自动改写 Summary、Plan、另解 sidecar 或已确认画像。Plan 状态和复盘结论只由 Coach 正常审阅后调用 `plan_update` 改变。
 
 `LessonBlueprint` 只存在于普通工具调用记录中，不是第二份学习状态；`lesson-xxx.md` 仍是 Tutor、Trace 和前端共同读取的唯一课堂事实。仍为 `prepared` 的 Lesson 可以由 Coach 保持 ID 原地重新编译。Tutor 已启动后再要求重新备课，旧 Lesson 保留并标为 `abandoned`，Coach 使用新 ID 创建替代 Lesson。
 
@@ -158,7 +160,7 @@ pi
 - 让 Tutor 追加一条绑定题卡/课堂步骤的 Trace；
 - 暂停并继续同一个 Tutor Session；
 - 由学生明确确认结束 Lesson；
-- 返回原 Coach Session 做课后复盘。
+- 在原 Tutor Replay 查看结课快照，再明确返回原 Coach Session 做课后复盘。
 
 深度模式另行确认：先运行一次单 Evidence Scout 的 quick 证据召回，再提出一次有依赖的 deep 工作流并由学生确认；启动第二个 deep 工作流后取消，确认任务轨保留已完成分支，而且临时子任务没有改动 learning-set 文件。
 

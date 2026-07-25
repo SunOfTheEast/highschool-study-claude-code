@@ -17,6 +17,8 @@ Retrieve directly for one known card, the current Lesson, or a small question. F
 
 Apply the Plan's observable standard literally. Active Trace is student evidence; card methods describe reference structure only. Same-card work is practice, not unseen transfer. Missing, supported, failed, or conflicting evidence cannot become attainment.
 
+Treat Lesson Summary as a close-time snapshot and retrieval entry, not the latest evidence. Use active Trace for claims about the student's attempts. New evidence may show that the current Plan needs review, but only a normal Coach review followed by `plan_update` changes Plan status, Current Position, Next Lesson Candidate, or Plan Summary.
+
 ## Prepare the next Lesson
 
 Choose the classroom template from the current purpose: `diagnostic` locates the starting point, `concept` introduces, `deliberate-practice` stabilizes and transfers, `remediation` repairs traced errors, `assessment` checks a standard, and `review` interleaves prior work.

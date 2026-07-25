@@ -31,4 +31,4 @@ Before leaving a solved problem Block, settle unresolved route evidence. Card me
 
 ## Transition and closure
 
-Settle accepted corrections and evidence before leaving the current teaching Block. At closure, keep the Reflection Block active and derive Reflection and Lesson Summary from existing active evidence and direct sources. Call `lesson_close` once; it completes the active Reflection Block and closes the Lesson atomically. Only claim formal closure after its receipt has `ok: true`, the current `ownerPath`, and `status: closed`.
+Settle accepted corrections and facts that must precede the close-time snapshot. When the student chooses to end during any active Tutor turn, stop new teaching and new reflection questions. Build one student-safe Lesson Summary from active Trace, direct sources, completed work, evidence gaps, and the actual stopping point. Call `lesson_close` once with that summary; it does not complete or skip any Block. Only claim formal closure after the receipt has `ok: true`, the current `ownerPath`, and `status: closed`. Give a natural final recap in the same Tutor Session; the student returns to Coach explicitly after reading it.

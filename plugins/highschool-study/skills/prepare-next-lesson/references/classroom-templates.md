@@ -19,6 +19,7 @@ Read this catalog after memory recall and before the first card search. A templa
 - Default blocks: brief orientation, consecutive responses, reasoning probes, diagnostic summary.
 - Default problem roles: 3–5 short problems with different structures.
 - Default reveal: `zero`.
+- Reflection default: 0; add one only when student self-report changes the diagnosis.
 
 ## concept
 
@@ -26,6 +27,7 @@ Read this catalog after memory recall and before the first card search. A templa
 - Default blocks: local material or verified video, interaction, worked example, separate target practice, exit quiz.
 - Default problem roles: one taught example plus 2–3 student-answer problems; the example and target must be different authentic cards.
 - Default reveal: `worked-example` for the example and `ladder` for target practice.
+- Reflection default: 1 adjustable closing reflection; remove it when the exit quiz already closes the loop.
 
 ## deliberate-practice
 
@@ -33,6 +35,7 @@ Read this catalog after memory recall and before the first card search. A templa
 - Default blocks: retrieval warm-up, core set, variation, transfer, optional challenge.
 - Default problem roles: 4–8 authentic problems across difficulty or structural variation.
 - Default reveal: `ladder` after an initial attempt.
+- Reflection default: no shared closing reflection; optional local reflections may follow key practice groups.
 
 ## remediation
 
@@ -40,6 +43,7 @@ Read this catalog after memory recall and before the first card search. A templa
 - Default blocks: Trace review, contrast pair, targeted practice, unseen retest.
 - Default problem roles: one contrast pair, 1–2 repair problems, one fresh retest.
 - Default reveal: `ladder` during repair and `zero` on the fresh retest.
+- Reflection default: 1 after the unseen retest.
 
 ## assessment
 
@@ -47,6 +51,7 @@ Read this catalog after memory recall and before the first card search. A templa
 - Default blocks: standard, consecutive unseen responses, necessary reasoning probes, evidence summary.
 - Default problem roles: 2–4 representative unseen problems.
 - Default reveal: `zero`. Do not place a teaching video before the assessed attempts.
+- Reflection default: 0, so independent responses gain no extra teaching requirement.
 
 ## review
 
@@ -54,3 +59,4 @@ Read this catalog after memory recall and before the first card search. A templa
 - Default blocks: mixed retrieval, interleaved set, method comparison, summary.
 - Default problem roles: 4–6 mixed authentic problems.
 - Default reveal: begin with `zero`; move to `ladder` only after the unsupported evidence has been recorded.
+- Reflection default: 1 method-comparison or summary reflection.

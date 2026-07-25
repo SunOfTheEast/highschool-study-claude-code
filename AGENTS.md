@@ -71,15 +71,21 @@ identity.
 A Coach-created Plan becomes available only after `plan_register` validates
 the file and idempotently links it under `ROADMAP.md / Plan Graph`. A
 `prepared` Lesson becomes `active` only after admission confirms its required
-top-level sections, every used problem-card alias, and exactly one explicit
-`Kind: reflection` Block. Admission failures do not change status or create a
-Tutor Session.
+top-level `Aliases`, `Lesson Summary`, and `Traces` sections plus every used
+problem-card alias. A template may provide zero, one, or multiple
+`Kind: reflection` Blocks; their count is not an admission rule. Admission
+failures do not change status or create a Tutor Session.
 
 Fact-writing tools return a minimal receipt with `ok: true` and `ownerPath`;
 Trace writes also return `factId`, and closure returns `status: closed`.
 Agents must not claim persistence from an error, empty result, or missing
 success receipt. `LESSON_*` errors require Coach to repair the source rather
 than Tutor search, guessing, substitution, or repeated calls.
+
+`lesson_close` accepts one student-safe summary. It writes the top-level
+`Lesson Summary` and `status: closed` while preserving every Block state.
+Closed Lessons remain in the Tutor replay until the student explicitly
+returns to Coach.
 
 One independently assessed response is one `problem` Block, and every problem
 Block must bind exactly one authentic Lesson alias through `Uses`. If parts of
@@ -96,6 +102,13 @@ or abandoned, re-preparation creates a replacement Lesson and preserves the
 old record. Its `plan_id` is immutable: another Plan cannot take over even a
 still-prepared Lesson with the same ID. A completed Plan cannot prepare a
 Lesson until an explicit `plan_update` reactivates or replans it.
+
+Active Trace is the authority for claims about student attempts and for
+derived evidence projections. A superseding correction may rebuild Planner
+Attention, ability nodes, and other evidence projections, but it does not
+automatically rewrite a Lesson Summary, Plan, alternatives sidecar, or
+confirmed profile. Only normal Coach review followed by `plan_update` changes
+Plan status, Current Position, Next Lesson Candidate, or Plan Summary.
 
 Plan switching is student-owned UI navigation. When the current Plan is
 completed, the frontend may list the other Roadmap Plans; it opens a target
