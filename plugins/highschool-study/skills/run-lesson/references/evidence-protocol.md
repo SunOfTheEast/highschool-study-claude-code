@@ -5,6 +5,7 @@ Use active, non-superseded Trace as classroom evidence.
 ## Freeze and assess
 
 - Freeze the student's mathematical claims before Tutor explanation. Tutor-generated work cannot upgrade that same attempt.
+- Seeing the question, staying silent, pausing, or closing before any mathematical claim is not an attempt. Record the stopping point, but do not append a Trace.
 - Keep assessment, actual help dependence, and actual method separate.
 - Missing decisive reasoning is incomplete. Use partially correct or incorrect only for a substantive error in the student's own chain.
 - Support records decisive help used in the final route, not mere exposure. Tutor-origin content that shapes the decisive route is Tutor support; repeated, already-known, or unused help is not.
