@@ -10,7 +10,7 @@ export function createLessonCloseTool(root: string, ownerPath: string) {
     parameters: Type.Object({
       summary: Type.String({
         minLength: 1,
-        description: 'Student-safe close-time snapshot grounded in active Trace, direct sources, and the actual stopping point.',
+        description: 'Body content for the existing Lesson Summary section, without a heading. Use only student-visible content, active Trace, direct sources, and the actual stopping point.',
       }),
     }),
     execute: async (_id, input) => {
