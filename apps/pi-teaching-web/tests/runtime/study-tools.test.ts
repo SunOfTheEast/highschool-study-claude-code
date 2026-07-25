@@ -19,7 +19,6 @@ import { createPlanRegisterTool } from '../../src/runtime/plan-register';
 import { createPlanUpdateTool } from '../../src/runtime/plan-update';
 import * as studyToolModule from '../../src/runtime/study-tools';
 import { readEvidence } from '../../src/study/ability';
-import { setBlockStatus } from '../../src/study/write-workspace';
 
 const { createStudyTools } = studyToolModule;
 
@@ -573,12 +572,10 @@ test('returns an owner receipt only after lesson_close persists closure', async 
   const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-tools-close-receipt-'));
   temporaryRoots.push(temporaryRoot);
   cpSync(root, temporaryRoot, { recursive: true });
-  setBlockStatus(temporaryRoot, 'lessons/lesson-003.md', 'reflection', 'active');
   const close = createLessonCloseTool(temporaryRoot, 'lessons/lesson-003.md');
 
   const result = await close.execute('close-1', {
-    reflection: '我会先检查定义域。',
-    summary: '本节课完成。',
+    summary: '本节课完成；仍缺一次未见题迁移证据。',
   }, undefined, undefined, {} as never);
   const payload = JSON.parse((result.content[0] as { text: string }).text);
 
@@ -615,7 +612,10 @@ test('keeps runtime authority out of Tutor tool schemas', () => {
   const closeProperties = (close.parameters as {
     properties: Record<string, unknown>;
   }).properties;
-  expect(Object.keys(closeProperties)).toEqual(['reflection', 'summary']);
+  expect(Object.keys(closeProperties)).toEqual(['summary']);
+  expect(JSON.stringify(close.parameters)).not.toContain('reflection');
+  expect(JSON.stringify(close.parameters)).not.toContain('lessonPath');
+  expect(JSON.stringify(close.parameters)).not.toContain('blockId');
 
   expect(JSON.stringify(trace.parameters)).toContain('methodStatus');
   expect(JSON.stringify(trace.parameters)).toContain('methodRoute');

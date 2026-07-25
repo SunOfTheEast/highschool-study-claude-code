@@ -299,42 +299,21 @@ export function registerPlan(root: string, planId: string): RegisteredPlan {
   };
 }
 
-function activeReflectionBlockId(source: string): string {
-  const headings = [...source.matchAll(/^## Block ([^（\s]+)(?:（[^）]+）)?\s*$/gm)];
-  const blocks = headings.map((heading, index) => {
-    const body = source.slice(heading.index!, headings[index + 1]?.index ?? source.length);
-    return {
-      id: heading[1]!,
-      kind: /^- Kind:\s*(.*?)\s*$/m.exec(body)?.[1] ?? 'unknown',
-      status: /^- Status:\s*(.*?)\s*$/m.exec(body)?.[1] ?? 'unknown',
-    };
-  });
-  const reflections = blocks.filter((block) => (
-    block.kind === 'reflection' && block.status === 'active'
-  ));
-  if (reflections.length !== 1) {
-    const active = blocks
-      .filter((block) => block.status === 'active')
-      .map((block) => `${block.id}:${block.kind}`)
-      .join(', ') || '(none)';
-    throw new Error(
-      `LESSON_REFLECTION_NOT_ACTIVE: active=${active}; `
-      + '期望恰好一个 Block 同时为 Kind: reflection 且 Status: active',
-    );
-  }
-  return reflections[0]!.id;
-}
+export type LessonCloseInput = {
+  summary: string;
+};
 
 export function closeLesson(
   root: string,
   lessonPath: string,
-  input: { reflection: string; summary: string },
+  input: LessonCloseInput,
 ): void {
   const document = read(root, lessonPath);
-  const reflectionBlockId = activeReflectionBlockId(document.source);
-  let source = replaceBlockStatus(document.source, reflectionBlockId, 'completed');
-  source = replaceSection(source, 'Reflection', input.reflection);
-  source = replaceSection(source, 'Lesson Summary', input.summary);
+  const status = readMarkdownFile(root, lessonPath).frontmatter.status;
+  if (status === 'closed' || status === 'abandoned') {
+    throw new Error(`LESSON_ALREADY_TERMINAL: ${status}`);
+  }
+  let source = replaceSection(document.source, 'Lesson Summary', input.summary);
   source = replaceFrontmatterField(source, lessonPath, 'status', 'closed');
   write(document.absolute, source);
 }

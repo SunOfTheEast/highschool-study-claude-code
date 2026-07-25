@@ -32,7 +32,7 @@ function fixture(): { root: string; path: string } {
   writeFileSync(path, `---
 id: lesson
 kind: lesson
-status: prepared
+status: active
 ---
 # Lesson
 
@@ -56,15 +56,34 @@ status: prepared
 
 复盘。
 
-## Reflection
-
-（课堂结束后填写）
-
 ## Lesson Summary
 
 （课堂结束后填写）
 `);
   return { root, path: 'lesson.md' };
+}
+
+function closureFixture(
+  blocks: string,
+  status: 'active' | 'closed' | 'abandoned' = 'active',
+): { root: string; path: string } {
+  const root = mkdtempSync(join(tmpdir(), 'study-close-'));
+  roots.push(root);
+  const path = 'lesson.md';
+  writeFileSync(join(root, path), `---
+id: lesson-close
+kind: lesson
+status: ${status}
+---
+# Lesson Close
+
+${blocks}
+
+## Lesson Summary
+
+（课堂结束后填写）
+`);
+  return { root, path };
 }
 
 function planFixture(): { root: string; path: string; roadmapPath: string } {
@@ -156,7 +175,7 @@ test('updates one frontmatter field and one block state', () => {
   expect(source).toContain('- Status: active');
 });
 
-test('appends a sourced route change and closes the lesson', () => {
+test('appends a sourced route change and closes without completing a Block', () => {
   const { root, path } = fixture();
   appendRouteChange(root, path, {
     action: 'skip',
@@ -164,14 +183,14 @@ test('appends a sourced route change and closes the lesson', () => {
     reason: '学生已完成诊断。',
     source: '#trace-event-001',
   });
-  closeLesson(root, path, { reflection: '我会先检查定义域。', summary: '独立完成诊断。' });
+  closeLesson(root, path, { summary: '独立完成诊断。' });
   const source = readFileSync(join(root, path), 'utf8');
   expect(source).toContain('### Route change route-001');
   expect(source).toContain('- Source: #trace-event-001');
-  expect(source).toContain('- Status: completed');
+  expect(source).toContain('- Status: active');
   expect(source).toContain('status: closed');
-  expect(source).toContain('我会先检查定义域。');
   expect(source).toContain('独立完成诊断。');
+  expect(source).not.toContain('## Reflection');
 });
 
 test('leaves a lesson byte-for-byte unchanged when a required close section is missing', () => {
@@ -180,27 +199,92 @@ test('leaves a lesson byte-for-byte unchanged when a required close section is m
   const before = readFileSync(absolute, 'utf8').replace('## Lesson Summary', '## Summary Missing');
   writeFileSync(absolute, before);
 
-  expect(() => closeLesson(root, path, {
-    reflection: '不会写入。',
-    summary: '不会写入。',
-  })).toThrow('SECTION_NOT_FOUND: Lesson Summary');
+  expect(() => closeLesson(root, path, { summary: '不会写入。' }))
+    .toThrow('SECTION_NOT_FOUND: Lesson Summary');
   expect(readFileSync(absolute, 'utf8')).toBe(before);
 });
 
-test('explains the active Block mismatch when reflection cannot close', () => {
-  const { root, path } = fixture();
-  setBlockStatus(root, path, 'reflection', 'pending');
-  setBlockStatus(root, path, 'orientation', 'active');
-  const before = readFileSync(join(root, path), 'utf8');
+const closureScenarios = [
+  ['active problem', `## Block problem-01
 
-  expect(() => closeLesson(root, path, {
-    reflection: '不会写入。',
-    summary: '不会写入。',
-  })).toThrow(
-    /LESSON_REFLECTION_NOT_ACTIVE.*orientation:dialogue.*恰好一个.*Kind: reflection.*Status: active/s,
-  );
-  expect(readFileSync(join(root, path), 'utf8')).toBe(before);
-});
+### Node State
+
+- Kind: problem
+- Required: true
+- Status: active
+- Depends on:
+- Uses: Q-1`],
+  ['completed reflection', `## Block reflection-01
+
+### Node State
+
+- Kind: reflection
+- Required: true
+- Status: completed
+- Depends on:
+- Uses:`],
+  ['no reflection', `## Block dialogue-01
+
+### Node State
+
+- Kind: dialogue
+- Required: true
+- Status: active
+- Depends on:
+- Uses:`],
+  ['multiple reflections', `## Block reflection-01
+
+### Node State
+
+- Kind: reflection
+- Required: false
+- Status: completed
+- Depends on:
+- Uses:
+
+## Block reflection-02
+
+### Node State
+
+- Kind: reflection
+- Required: false
+- Status: active
+- Depends on: reflection-01
+- Uses:`],
+] as const;
+
+test.each(closureScenarios)(
+  'closes from %s without changing any Block state',
+  (_name, blocks) => {
+    const { root, path } = closureFixture(blocks);
+    const before = readFileSync(join(root, path), 'utf8')
+      .match(/^- Status: .*$/gm);
+
+    closeLesson(root, path, {
+      summary: '关课时证据仍有空缺；来源见 #trace-event-001。',
+    });
+
+    const after = readFileSync(join(root, path), 'utf8');
+    expect(after).toContain('status: closed');
+    expect(after).toContain('关课时证据仍有空缺');
+    expect(after.match(/^- Status: .*$/gm)).toEqual(before);
+    expect(after).not.toContain('## Reflection');
+  },
+);
+
+test.each(['closed', 'abandoned'] as const)(
+  'rejects closing a terminal %s Lesson without changing the file',
+  (status) => {
+    const { root, path } = closureFixture('', status);
+    const absolute = join(root, path);
+    const before = readFileSync(absolute, 'utf8');
+
+    expect(() => closeLesson(root, path, {
+      summary: '不得覆盖旧快照。',
+    })).toThrow(`LESSON_ALREADY_TERMINAL: ${status}`);
+    expect(readFileSync(absolute, 'utf8')).toBe(before);
+  },
+);
 
 test('updates all Plan audit sections in one write and maps the decision status', () => {
   const { root, path } = planFixture();

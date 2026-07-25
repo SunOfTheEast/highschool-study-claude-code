@@ -6,15 +6,11 @@ export function createLessonCloseTool(root: string, ownerPath: string) {
   return defineTool({
     name: 'lesson_close',
     label: '结束本节课',
-    description: 'Atomically finish the current Tutor Session-owned Lesson after the student has explicitly chosen to close it. Call with a reflection and summary derived from existing active evidence; the tool completes the active reflection Block and closes the Lesson, then returns closed status.',
+    description: 'Atomically finish the current Tutor Session-owned Lesson after the student has explicitly chosen to close it. Write one student-safe close-time summary and closed status without completing, skipping, or otherwise changing any classroom Block.',
     parameters: Type.Object({
-      reflection: Type.String({
-        minLength: 1,
-        description: 'Source-linked account of what the Lesson established, what remains uncertain, and what support was actually used.',
-      }),
       summary: Type.String({
         minLength: 1,
-        description: 'Compact Lesson handoff for the Coach, grounded in active Trace and direct sources.',
+        description: 'Student-safe close-time snapshot grounded in active Trace, direct sources, and the actual stopping point.',
       }),
     }),
     execute: async (_id, input) => {
