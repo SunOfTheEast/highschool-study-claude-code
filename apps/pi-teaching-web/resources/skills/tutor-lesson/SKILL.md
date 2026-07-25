@@ -31,4 +31,4 @@ Before leaving a solved problem Block, settle unresolved route evidence. Card me
 
 ## Transition and closure
 
-Settle accepted corrections and evidence before using `classroom_update` to leave a Block. At closure, derive Reflection and Lesson Summary from existing active evidence and direct sources, then use `lesson_close`. Do not claim an unpersisted write or closure.
+Settle accepted corrections and evidence before leaving the current teaching Block. At closure, keep the Reflection Block active and derive Reflection and Lesson Summary from existing active evidence and direct sources. Call `lesson_close` once; it completes the active Reflection Block and closes the Lesson atomically. Only claim formal closure after its receipt has `ok: true`, the current `ownerPath`, and `status: closed`.
