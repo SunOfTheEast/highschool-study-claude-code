@@ -68,6 +68,37 @@ const blueprint: LessonBlueprint = {
   ],
 };
 
+const reflection = blueprint.blocks.find((block) => block.kind === 'reflection')!;
+const reflectionVariants: Array<[string, LessonBlueprint['blocks']]> = [
+  ['zero', blueprint.blocks.filter((block) => block.kind !== 'reflection')],
+  ['one', blueprint.blocks],
+  ['multiple', [
+    ...blueprint.blocks,
+    {
+      ...reflection,
+      id: 'reflection-midway',
+      required: false,
+      dependsOn: ['assessment-01'],
+    },
+  ]],
+];
+
+test.each(reflectionVariants)(
+  'accepts %s Reflection Blocks and emits no top-level Reflection section',
+  (_name, blocks) => {
+    const value = { ...blueprint, blocks };
+    expect(() => validateLessonBlueprint(root, context, value)).not.toThrow();
+    const source = renderPreparedLesson(context, value);
+    expect(source).not.toMatch(/^## Reflection$/m);
+    expect(source).toMatch(/^## Lesson Summary$/m);
+    expect(() => validatePreparedLessonSource(
+      root,
+      context.lessonPath,
+      source,
+    )).not.toThrow();
+  },
+);
+
 test('renders one canonical prepared Lesson that passes source admission', () => {
   validateLessonBlueprint(root, context, blueprint);
   const source = renderPreparedLesson(context, blueprint);
@@ -150,6 +181,5 @@ test('rejects duplicate Blocks, unknown aliases, false cards, and nested structu
     expect(issues).toContain('未声明 alias');
     expect(issues).toContain('题卡不存在');
     expect(issues).toContain('一级到三级标题');
-    expect(issues).toContain('恰好一个 reflection');
   }
 });

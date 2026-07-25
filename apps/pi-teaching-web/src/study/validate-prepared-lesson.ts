@@ -11,8 +11,7 @@ export type PreparedLessonIssue = {
     | 'LESSON_SECTION_MISSING'
     | 'LESSON_ALIAS_MISSING'
     | 'LESSON_ALIAS_INVALID'
-    | 'LESSON_PROBLEM_CARD_COUNT'
-    | 'LESSON_REFLECTION_COUNT';
+    | 'LESSON_PROBLEM_CARD_COUNT';
   message: string;
 };
 
@@ -70,7 +69,7 @@ function aliasResolvesToCard(root: string, lessonPath: string, target: string): 
 
 function validatePreparedLessonBody(root: string, lessonPath: string, body: string): void {
   const issues: PreparedLessonIssue[] = [];
-  for (const section of ['Aliases', 'Reflection', 'Lesson Summary', 'Traces']) {
+  for (const section of ['Aliases', 'Lesson Summary', 'Traces']) {
     if (!new RegExp(`^## ${section}[ \\t]*$`, 'm').test(body)) {
       issues.push({
         code: 'LESSON_SECTION_MISSING',
@@ -105,14 +104,6 @@ function validatePreparedLessonBody(root: string, lessonPath: string, body: stri
         message: `alias ${alias} 不能解析为真实题卡：${target}`,
       });
     }
-  }
-
-  const reflections = blocks.filter((block) => block.kind === 'reflection');
-  if (reflections.length !== 1) {
-    issues.push({
-      code: 'LESSON_REFLECTION_COUNT',
-      message: `需要恰好一个显式 Kind: reflection Block，当前为 ${reflections.length} 个`,
-    });
   }
 
   if (issues.length > 0) throw new PreparedLessonValidationError(issues);

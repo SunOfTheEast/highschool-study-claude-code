@@ -154,10 +154,6 @@ status: prepared
 - Reveal: `zero`; summarize only evidence already produced by the student and active Trace.
 - Task completion is not capability attainment. Show supporting and conflicting evidence before reflection routing.
 
-## Reflection
-
-（课堂结束后填写）
-
 ## Lesson Summary
 
 （课堂结束后填写）

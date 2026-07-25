@@ -123,10 +123,6 @@ export function validateLessonBlueprint(
     }
   }
 
-  const reflections = blueprint.blocks.filter((block) => block.kind === 'reflection');
-  if (reflections.length !== 1) {
-    issues.push(`需要恰好一个 reflection，当前为 ${reflections.length}`);
-  }
   if (issues.length > 0) throw new LessonBlueprintValidationError(issues);
 }
 
@@ -209,10 +205,6 @@ ${controls.join('\n')}
 ---
 
 ${blocks.join('\n\n---\n\n')}
-
-## Reflection
-
-（课堂结束后填写）
 
 ## Lesson Summary
 

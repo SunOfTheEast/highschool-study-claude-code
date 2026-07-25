@@ -32,7 +32,7 @@ const block = Type.Object({
     Type.Literal('material'),
     Type.Literal('reflection'),
   ], {
-    description: 'Activity kind. A problem produces one independently assessed response; the Lesson must contain exactly one reflection Block.',
+    description: 'Activity kind. A problem produces one independently assessed response; reflection is an optional, repeatable classroom activity selected by the template and Coach.',
   }),
   required: Type.Boolean({
     description: 'Whether the Lesson cannot complete normally without traversing this Block.',

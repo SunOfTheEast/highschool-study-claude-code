@@ -357,14 +357,6 @@ test.each([
     ),
     'LESSON_PROBLEM_CARD_COUNT',
   ],
-  [
-    'the reflection block has the wrong explicit Kind',
-    (source: string) => source.replace(
-      '## Block reflection（必做）\n\n### Node State\n\n- Kind: reflection',
-      '## Block reflection（必做）\n\n### Node State\n\n- Kind: dialogue',
-    ),
-    'LESSON_REFLECTION_COUNT',
-  ],
 ] as const)('keeps a prepared Lesson unchanged when %s', async (_name, edit, code) => {
   const root = fixture();
   const path = editLesson(root, edit);
@@ -393,6 +385,37 @@ test.each([
   expect(factoryCalls).toBe(0);
   expect(readFileSync(path, 'utf8')).toBe(before);
   expect(registry.snapshot('domain-integrity').lessons[2]?.status).toBe('prepared');
+});
+
+test('starts a prepared Lesson with zero Reflection Blocks', async () => {
+  const root = fixture();
+  editLesson(root, (source) => source.replace(
+    '## Block reflection（必做）\n\n### Node State\n\n- Kind: reflection',
+    '## Block reflection（必做）\n\n### Node State\n\n- Kind: dialogue',
+  ));
+  let factoryCalls = 0;
+  const factory: StudySessionFactory = async ({ role, ownerId }) => {
+    factoryCalls += 1;
+    return {
+      sessionId: `${role}-${ownerId}`,
+      sessionFile: `/tmp/${role}-${ownerId}.jsonl`,
+      messages: [],
+      isStreaming: false,
+      personaId: () => null,
+      setPersona: async () => {},
+      ...idleWorkflowMethods(),
+      prompt: async () => {},
+      abort: async () => {},
+      subscribe: () => () => {},
+      dispose: () => {},
+    };
+  };
+  const registry = new WorkspaceRegistry(root, factory, async () => null);
+
+  await registry.startLesson('lesson-003');
+
+  expect(factoryCalls).toBe(1);
+  expect(registry.snapshot('domain-integrity').lessons[2]?.status).toBe('active');
 });
 
 test('does not repeat prepared admission when resuming a paused Lesson', async () => {
