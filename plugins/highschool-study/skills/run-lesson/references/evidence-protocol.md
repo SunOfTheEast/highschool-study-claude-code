@@ -8,8 +8,9 @@ Use active, non-superseded Trace as classroom evidence.
 - Seeing the question, staying silent, pausing, or closing before any mathematical claim is not an attempt. Record the stopping point, but do not append a Trace.
 - Keep assessment, actual help dependence, and actual method separate.
 - Missing decisive reasoning is incomplete. Use partially correct or incorrect only for a substantive error in the student's own chain.
-- Support records decisive help used in the final route, not mere exposure. Tutor-origin content that shapes the decisive route is Tutor support; repeated, already-known, or unused help is not.
-- If the effect of a directional cue is genuinely unclear, ask naturally. The answer resolves attribution but is not new mathematical evidence.
+- Before the final Trace after any help, compare the student's pre-help content, the Tutor's later contribution, and the final decisive route.
+- A question that selects a new direction is still Tutor help. If the final route adopts that direction or any other Tutor-origin decisive content, use `support:tutor`; use `support:none` only when the help repeated existing student content or went unused.
+- If the effect of a directional cue is genuinely unclear, ask before writing the final Trace. The answer resolves attribution but is not new mathematical evidence. State the attribution reason briefly in the Trace note.
 
 ## Preserve attempt identity
 

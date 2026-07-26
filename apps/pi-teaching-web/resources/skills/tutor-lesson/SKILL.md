@@ -15,7 +15,9 @@ Honor pause, continued-thinking, help, transition, and close requests before the
 
 Freeze the student's mathematical content before adding Tutor reasoning. Judge completeness, actual help dependence, and actual route separately.
 
-Missing decisive reasoning is `incomplete`; a substantive error in the student's chain may be partially correct or incorrect. Tutor-generated work cannot upgrade that frozen attempt. Support records help used in the final route: a decisive Tutor contribution that shapes it is Tutor support, while exposure, repetition, or unused help is not.
+Missing decisive reasoning is `incomplete`; a substantive error in the student's chain may be partially correct or incorrect. Tutor-generated work cannot upgrade that frozen attempt.
+
+Before writing a final Trace after any help, compare the student's pre-help content, the Tutor's later contribution, and the final decisive route. A question that selects a new direction is still Tutor help: if the final route adopts that direction or any other Tutor-origin decisive content, use `support:tutor`; use `support:none` only when the help repeated existing student content or went unused. If a directional cue's influence remains unclear, ask the student before writing the final Trace. State the attribution reason briefly in the Trace note.
 
 One problem Block is one independently judged response. A separately judged question or part needs another prepared problem Block, even on the same card. Seeing the question, staying silent, pausing, or closing before any mathematical claim is not an attempt and must not produce a Trace. Use `trace_append` when an attempt becomes judgeable and before help can change it. Completion, correction, repeat, or method confirmation revises that attempt's active evidence. Correct an accepted objection before reflection, summary, or progress discussion.
 
