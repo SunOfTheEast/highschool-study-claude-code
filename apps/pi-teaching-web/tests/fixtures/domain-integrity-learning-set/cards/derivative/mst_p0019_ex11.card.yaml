@@ -1,0 +1,190 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0019_ex11
+content_revision_id: mst_p0019_ex11-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0019_ex11.card.yaml
+stem: |-
+  (2024 港口区月考 T8) 已知函数 $f(x)=\frac{4\mathrm e x^2}{1+\ln 2x}$， 则不等式 $f(x)>\mathrm e^{2x}$ 的解集是 ( )
+  A. $(0,1)$
+  B. $\left(\frac1{2\mathrm e},\frac14\right)$
+  C. $\left(\frac1{\mathrm e},1\right)$
+  D. $\left(\frac1{2\mathrm e},\frac12\right)$
+answer: |-
+  D. $\left(\frac1{2\mathrm e},\frac12\right)$
+
+  原不等式可化为 $\frac{2ex}{1+\ln2x}>\frac{e^{2x}}{2x}$。令 $g(u)=e^u/u$，则左侧为 $g(1+\ln2x)$，右侧为 $g(2x)$。由 $z-1\ge\ln z$ 得 $1+\ln2x\le2x$，等号仅在 $x=1/2$。当 $1/(2e)<x<1/2$ 时，$0<1+\ln2x<2x<1$，而 $g$ 在 $(0,1)$ 递减， 所以 $g(1+\ln2x)>g(2x)$。当 $x>1/2$ 时，两输入都大于 1 且 $1+\ln2x<2x$，$g$ 递增，原不等式不成立。故解集为 $(1/(2e),1/2)$，选 D。
+rubric:
+  max_score: 5
+  criteria:
+    - step_id: step_1
+      description: 把原不等式改写成同一个函数 g 的两个输入比较。
+      max_score: 1
+    - step_id: step_2
+      description: 定义同构函数并确定单调性。
+      max_score: 1
+    - step_id: step_3
+      description: 用切线不等式比较两个输入。
+      max_score: 1
+    - step_id: step_4
+      description: 讨论两个输入都落在 (0,1) 的情况。
+      max_score: 1
+    - step_id: step_5
+      description: 排除 x 大于 1/2 的情况并写出答案。
+      max_score: 1
+graph:
+  goal:
+    primary: 不等式求解
+    part_level: []
+  method:
+    primary: 同构变形与换元法
+    secondary:
+      - 切线放缩与凹凸性
+    subroute:
+      - e^x / x 单调性
+      - g(1+ln2x) 与 g(2x) 比较
+      - x-1>=ln x 切线不等式
+  structure:
+    primary: 同构结构
+    secondary:
+      - 指对复合结构
+      - 不等式工具结构
+    evidence:
+      - $\frac{2ex}{1+\ln2x}=g(1+\ln2x)$，$\frac{e^{2x}}{2x}=g(2x)$。
+      - 两个输入围绕 g 的极小点 1 分区讨论。
+    normalization_moves_used:
+      - 两边除以 $2x$，配出 $g(u)=e^u/u$。
+      - 用 $e^{1+\ln2x}=2ex$ 识别左侧。
+      - 用 $z-1\ge\ln z$ 比较 $1+\ln2x$ 与 $2x$。
+      - 按 $x<1/2$ 和 $x>1/2$ 判断两个输入位于 g 的哪段单调区间。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会把 $\frac{2ex}{1+\ln2x}$ 识别为 $g(1+\ln2x)$，回补指数对数基础。
+      - 若学生忘记要求 $1+\ln2x>0$ 才能进入 $g(u)=e^u/u$ 的正定义域，回补函数三要素与定义域。
+      - 若学生不知道 $e^u/u$ 在 $(0,1)$ 递减、在 $(1,+\infty)$ 递增，回补导数单调极值基础。
+      - 若学生不能由 $z-1\ge\ln z$ 推出 $1+\ln2x\le2x$，回补不等式工具基础。
+      - 若学生在 $x<1/2$ 与 $x>1/2$ 两段中把 g 的单调方向用反，回补函数性质与图像。
+  detail_terms:
+    - 4ex^2/(1+ln2x)
+    - g(u)=e^u/u
+    - 1+ln2x
+    - 2x
+    - x-1>=ln x
+    - (1/(2e),1/2)
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0019_ex11
+source_evidence:
+  source_refs:
+    - ref_id: page_0019_problem
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0019/page_0019.md
+      role: problem_start
+      evidence: page_0019 例 11 给出 f(x)=4ex^2/(1+ln 2x)，求不等式 f(x)>e^{2x} 的解集，并列出 A-D。
+    - ref_id: page_0019_solution
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0019/page_0019.md
+      role: solution
+      evidence: 同页解析整理为 g(1+ln2x)>g(2x)，其中 g(x)=e^x/x，并按 x<1/2 与 x>1/2 讨论，结论为 D。
+    - ref_id: page_0018_context
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0018/page_0018.md
+      role: local_context
+      evidence: page_0018 图 5 说明 g(x)=e^x/x 在 (0,1) 单调递减、在 (1,+infty) 单调递增，x=1 时取最小值 e。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0019.png
+      inspected: true
+      notes: 核对例 11 题干、四个选项、g(1+ln2x)>g(2x) 转化、答案 D；末段存在疑似印刷方向错误，已记录。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0018.png
+      inspected: true
+      notes: 核对前页 e^x/x 模型单调性。
+  source_context: 本题把不等式两侧改写成同一函数 g(u)=e^u/u 的两个函数输入，再利用 g 在 1 两侧的单调方向和切线不等式比较输入。
+  source_influence:
+    - 原题不是常规求导解不等式，而是把两边看成 g 的函数值比较。
+    - 关键限制来自 $1+\ln2x>0$、两个输入是否同在 (0,1) 或 (1,+infty)。
+  source_discrepancies:
+    - field: source_solution.case_x_greater_than_half_relation
+      old_value: page_0019 解析末段写作：当 x>1/2 时，1+ln2x>1，2x>1，所以 1+ln2x>2x，不成立。
+      corrected_value: 由切线不等式 z-1>=ln z 取 z=2x，应为 1+ln2x<=2x，且 x>1/2 时严格小于；因为 g 在 (1,+infty) 递增，所以 g(1+ln2x)<g(2x)，不满足原不等式。
+      evidence_ref: page_0019_solution
+original_problem:
+  stem: (2024 港口区月考 T8) 已知函数 $f(x)=\frac{4\mathrm e x^2}{1+\ln 2x}$， 则不等式 $f(x)>\mathrm e^{2x}$ 的解集是 ( )
+  parts: *a1
+  choices:
+    - label: A
+      text: $(0,1)$
+    - label: B
+      text: $\left(\frac1{2\mathrm e},\frac14\right)$
+    - label: C
+      text: $\left(\frac1{\mathrm e},1\right)$
+    - label: D
+      text: $\left(\frac1{2\mathrm e},\frac12\right)$
+  answer: D. $\left(\frac1{2\mathrm e},\frac12\right)$
+  fidelity_notes:
+    - 题头、题干和完整解析均在 page_0019。
+    - 源图与 markdown 对题干分母 $1+\ln 2x$、选项 B 的 $1/4$、选项 D 的 $1/2$ 一致。
+    - 解析末段关于 $x>1/2$ 的输入大小关系疑似印刷错误，本卡按切线不等式修正逻辑并保留 review 标记。
+solution:
+  source_solution_summary: 原不等式可化为 $\frac{2ex}{1+\ln2x}>\frac{e^{2x}}{2x}$。令 $g(u)=e^u/u$，则左侧为 $g(1+\ln2x)$，右侧为 $g(2x)$。由 $z-1\ge\ln z$ 得 $1+\ln2x\le2x$，等号仅在 $x=1/2$。当 $1/(2e)<x<1/2$ 时，$0<1+\ln2x<2x<1$，而 $g$ 在 $(0,1)$ 递减， 所以 $g(1+\ln2x)>g(2x)$。当 $x>1/2$ 时，两输入都大于 1 且 $1+\ln2x<2x$，$g$ 递增，原不等式不成立。故解集为 $(1/(2e),1/2)$，选 D。
+  key_steps:
+    - step_id: step_1
+      statement: 把原不等式改写成同一个函数 g 的两个输入比较。
+      formula_trace:
+        from: $\frac{4ex^2}{1+\ln2x}>e^{2x}$
+        to: $\frac{2ex}{1+\ln2x}>\frac{e^{2x}}{2x}$
+        operation: 两边同除以正数 $2x$，并把左侧预留成 $e^{1+\ln2x}/(1+\ln2x)$。
+        why: 这样能把两边分别识别为 $g(1+\ln2x)$ 与 $g(2x)$。
+      source_ref: page_0019_solution
+    - step_id: step_2
+      statement: 定义同构函数并确定单调性。
+      formula_trace:
+        from: $g(u)=\frac{e^u}{u}$
+        to: $g(1+\ln2x)>g(2x),\quad g\ \text{在 }(0,1)\text{递减，在 }(1,+\infty)\text{递增}$
+        operation: 用 $e^{1+\ln2x}=2ex$ 将左侧写为 $g(1+\ln2x)$。
+        why: 比较 g 值要先判断两个输入落在 1 的哪一侧。
+      source_ref: page_0019_solution
+    - step_id: step_3
+      statement: 用切线不等式比较两个输入。
+      formula_trace:
+        from: $z-1\ge\ln z\quad(z>0)$
+        to: $1+\ln2x\le2x$
+        operation: 令 $z=2x$，得到 $2x-1\ge\ln2x$。
+        why: 输入大小决定在同一单调区间内哪一个 g 值更大。
+      source_ref: page_0019_solution
+    - step_id: step_4
+      statement: 讨论两个输入都落在 (0,1) 的情况。
+      formula_trace:
+        from: $0<x<\frac12,\quad 1+\ln2x>0$
+        to: $\frac1{2e}<x<\frac12,\quad 0<1+\ln2x<2x<1$
+        operation: 由 $1+\ln2x>0$ 得 $x>1/(2e)$，再结合 $1+\ln2x<2x$。
+        why: 在 $(0,1)$ 上 g 递减，较小输入给出较大函数值，所以原不等式成立。
+      source_ref: page_0019_solution
+    - step_id: step_5
+      statement: 排除 x 大于 1/2 的情况并写出答案。
+      formula_trace:
+        from: $x>\frac12,\quad 1<1+\ln2x<2x$
+        to: $g(1+\ln2x)<g(2x)$，原不等式不成立；解集为 $\left(\frac1{2e},\frac12\right)$
+        operation: 利用 g 在 $(1,+\infty)$ 上递增，输入小则函数值小。
+        why: 严格不等式排除 $x=1/2$，而 $x\le1/(2e)$ 时 $1+\ln2x\le0$ 不在 g 的正定义域且原不等式不成立。
+      source_ref: page_0019_solution
+teaching_card:
+  student_title: 把两边都看成 $g(u)=\frac{e^u}{u}$ 的函数值
+  what_it_trains: 训练把复杂指数对数不等式改写成同一函数的两个输入比较，并按极小点两侧的单调性解区间。
+  recognition_cues:
+    - 左侧有 $1+\ln2x$ 在分母，右侧有 $e^{2x}$，容易配成 $e^u/u$。
+    - 出现 $1+\ln2x$ 与 $2x$，提示使用 $z-1\ge\ln z$。
+    - 选项端点含 $1/(2e)$ 和 $1/2$，分别来自 $1+\ln2x=0$ 与 $2x=1$。
+  normalization_moves:
+    - 先除以 $2x$，把右侧写成 $g(2x)$。
+    - 用 $e^{1+\ln2x}=2ex$，把左侧写成 $g(1+\ln2x)$。
+    - 先保证两个输入为正，再按是否小于 1 分段。
+  common_failures:
+    - 直接交叉相乘而没有注意 $1+\ln2x$ 的符号。
+    - 把 $g$ 在 $(0,1)$ 上的递减性用成递增。
+    - 在 $x>1/2$ 段误写 $1+\ln2x>2x$，与切线不等式矛盾。
+    - 把端点 $x=1/2$ 放入答案，忽略原不等式为严格大于。
+  similar_practice_query: e^x/x 同构 1+ln2x 2x 切线不等式 解集
+quality:
+  confidence: medium
+  needs_review: false
+  review_notes:
+    - page_0019 图像已核对；源解析末段疑似印刷错误：x>1/2 时应有 1+ln2x<2x，而非 >。
+    - 本卡按数学正确关系修正论证，答案仍与源页 D 一致。
+    - Reviewer confirmed this is `不等式求解`, not `抽象函数性质`; removed `数形结合` because the route is same-function comparison plus tangent inequality.
