@@ -1,7 +1,9 @@
 # 高中数学教学质量 Frame 设计
 
-状态：设计通过，进入实施
+状态：已实施；真实模型 A/B 验收结论为 `INCONCLUSIVE`
 日期：2026-07-27
+
+验收报告：[高中数学教学 Frame 真实模型 A/B 验收](../../audits/2026-07-27-high-school-math-teaching-frame-ab.md)
 
 ## 一、结论
 

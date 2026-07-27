@@ -498,15 +498,15 @@ git commit -m "docs: explain math teaching frames"
 - The student responds only to visible content. Do not tell either arm which teaching move, tool call, Trace, or score is expected.
 - Do not patch product or Prompt during either arm.
 
-- [ ] **Step 1: Record immutable run identities**
+- [x] **Step 1: Record immutable run identities**
 
 Before feature commits, save the pre-implementation commit as `baselineCommit`. After Task 6, save `candidateCommit`. Record both commits and dirty states in the report.
 
-- [ ] **Step 2: Create isolated A and B copies**
+- [x] **Step 2: Create isolated A and B copies**
 
 Use detached code worktrees and separate `/tmp/studyforge-math-frame-ab-*` learning-set and Pi runtime roots. Copy the matching commit's derivative demo into each root. Use separate free ports and Session directories. Never print or copy credentials.
 
-- [ ] **Step 3: Run paired Scenario 1**
+- [x] **Step 3: Run paired Scenario 1**
 
 Send the same natural student goal to each Coach:
 
@@ -517,15 +517,15 @@ Send the same natural student goal to each Coach:
 
 Enter the resulting Tutor Lesson and answer naturally from student-visible material. Use the same student disposition in both arms: state the current idea first, preserve a plausible misconception until the Tutor responds, and attempt the final transfer independently.
 
-- [ ] **Step 4: Run paired Scenario 2**
+- [x] **Step 4: Run paired Scenario 2**
 
 Start both arms from fresh copies. Use the same request for a lesson that distinguishes structural recognition from mechanical calculation. In Tutor, offer a mathematically plausible non-reference route, ask for one limited hint only if blocked, and explicitly choose when to end.
 
-- [ ] **Step 5: Produce blinded comparison packets**
+- [x] **Step 5: Produce blinded comparison packets**
 
 Export/sanitize the four student-visible transcripts into the temporary runtime only. Randomly label each pair `X` and `Y`; keep the mapping unread until the evidence table is complete. Exclude system prompts, Teacher Control, tool arguments, credentials, hidden answers, and raw private reasoning.
 
-- [ ] **Step 6: Judge six teaching dimensions**
+- [x] **Step 6: Judge six teaching dimensions**
 
 For each pair, mark `X better`, `same`, or `Y better`, with exact turn references:
 
@@ -540,11 +540,11 @@ For each pair, mark `X better`, `same`, or `Y better`, with exact turn reference
 
 Unblind only after all judgments are written. “Clearly improved” requires B to improve at least four dimensions in both pairs, with no safety/fact regression and no dimension consistently worse. Otherwise report `INCONCLUSIVE` or `REGRESSION`.
 
-- [ ] **Step 7: Audit non-quality invariants**
+- [x] **Step 7: Audit non-quality invariants**
 
 For every arm, verify real cards, student-view secrecy, role/session ownership, active Trace meaning, and student-controlled closure from the exact Session and durable files. Tool success is a gate, not part of the quality score.
 
-- [ ] **Step 8: Write and commit the sanitized report**
+- [x] **Step 8: Write and commit the sanitized report**
 
 The report must contain:
 
@@ -572,15 +572,15 @@ git commit -m "test: compare math teaching frame quality"
 
 ## Final Completion Gate
 
-- [ ] The public demo baseline test is green and its old failure is not attributed to this feature.
-- [ ] Pi loads one shared teaching core before each role context.
-- [ ] Public Claude roles load the equivalent shared core Skill.
-- [ ] Coach and Tutor semantic owners express the approved frames without duplicating runtime protocol.
-- [ ] The template and derivative demo both ship `LEARNING_GUIDE.md`.
-- [ ] Pi API and home expose only public learning principles.
-- [ ] Missing guides remain valid and empty.
-- [ ] No Skill/Agent prose-string tests were added.
-- [ ] Public MCP tool count remains exactly four.
-- [ ] Plugin release checks and Pi unit/build/E2E checks pass.
-- [ ] A real-model, two-pair, blinded A/B comparison reports `CLEAR IMPROVEMENT`, `INCONCLUSIVE`, or `REGRESSION` from preserved evidence.
-- [ ] The repository example learning set remains unmodified by live acceptance.
+- [x] The public demo baseline test is green and its old failure is not attributed to this feature.
+- [x] Pi loads one shared teaching core before each role context.
+- [x] Public Claude roles load the equivalent shared core Skill.
+- [x] Coach and Tutor semantic owners express the approved frames without duplicating runtime protocol.
+- [x] The template and derivative demo both ship `LEARNING_GUIDE.md`.
+- [x] Pi API and home expose only public learning principles.
+- [x] Missing guides remain valid and empty.
+- [x] No Skill/Agent prose-string tests were added.
+- [x] Public MCP tool count remains exactly four.
+- [x] Plugin release checks and Pi unit/build/E2E checks pass.
+- [x] A real-model, two-pair, blinded A/B comparison reports `CLEAR IMPROVEMENT`, `INCONCLUSIVE`, or `REGRESSION` from preserved evidence.
+- [x] The repository example learning set remains unmodified by live acceptance.
