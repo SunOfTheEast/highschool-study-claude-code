@@ -16,6 +16,13 @@ Use Lesson Summary as a retrieval entry and active Trace for claims about studen
 performance. Read planner attention only as a preparation signal. Do not bulk-load
 old Lessons; open a source only when it could change the decision.
 
+When sources disagree, active Trace owns attempt outcome, support, actual method and
+recorded time. A source-linked Lesson or Plan Summary is the compact retrieval index,
+not permission to override conflicting original facts. Planner Attention is a
+rebuildable preparation signal. Do not use a hand-authored or explicitly prototype
+HEATMAP as current learner evidence. Open the decisive original source before choosing
+between Plans when a conflict could change the direction.
+
 Reconstruct change over time: independence, support, transfer, retention, recurring
 student reasoning, and response to prior teaching moves. A score or method label can
 locate a question but cannot explain its cause.
@@ -56,17 +63,24 @@ preserving the original Planning Basis. Create a new Plan only when the decision
 starts a new learning cycle.
 
 Only after explicit confirmation, write the canonical plans/<plan-id>.md inside the
-real learning-set root.
-Include Goal, Observable Capability Standard, Test, Planning Basis, Lesson Index,
-Current Position, Next Lesson Candidate, and Plan Summary. Planning Basis must contain:
+real learning-set root. Every Plan must contain exactly one non-empty Goal, Observable
+Capability Standard, Test, Planning Basis, Lesson Index, Current Position, Next Lesson
+Candidate and Plan Summary section. The shared reader rejects the whole Plan when any
+required section is missing, empty or duplicated.
+
+After writing, call `source_resolve` from `ROADMAP.md` to `plans/<plan-id>.md` and
+require `valid: true`. Repair the same file and retry when validation fails; do not
+link the Plan or report success before it validates.
+
+Planning Basis must contain:
 
 - the current judgment and why this direction matters now;
 - direct source links that actually changed the choice;
 - a validation or replanning signal.
 
-Use natural prose or a short list; do not force unused fields. Add the canonical Plan
-link under ROADMAP.md / Plan Graph, reread both files, and report only the persisted
-state.
+Use natural prose or a short list; do not force unused fields. After validation, add
+the canonical Plan link under ROADMAP.md / Plan Graph, reread both files, and report
+only the persisted state.
 
 At Plan completion, compare its Planning Basis with active evidence in Plan Summary.
 State an intervention effect only when classroom evidence supports it. Preserve

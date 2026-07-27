@@ -326,10 +326,20 @@ Coach 在方向可能变化时读取 Roadmap、相关 Plan Summary、已确认�
 Plan，而不是机械选择最低方法信号。
 
 学生确认后，新 Plan 以普通 Markdown `## Planning Basis` 保存当前判断、
-真正改变选择的直接来源，以及验证或重规划信号。读取层把该小节视为可选，
-所以旧 Plan 无须迁移。Plan 结束时，现有 Plan Summary 对照 active evidence
-回看初始判断与教学作用；没有课堂来源时，干预效果、迁移和保持继续标为
-未验证。
+真正改变选择的直接来源，以及验证或重规划信号。每份 Plan 都使用当前八
+小节契约：`Goal`、`Observable Capability Standard`、`Test`、
+`Planning Basis`、`Lesson Index`、`Current Position`、
+`Next Lesson Candidate` 和 `Plan Summary` 必须各出现一次且内容非空。
+共享读取器会在学习集打开或 Plan 注册前拒绝旧版或不完整 Plan。系统不自动
+迁移；使用新运行时前应保留原内容和来源，手工补全缺失小节。
+
+来源冲突时按 `active Trace → 带来源的 Lesson/Plan Summary → Planner Attention`
+判断。active Trace 决定作答结果、支持程度、实际方法和记录时间；带来源摘要
+只是紧凑检索索引，Planner Attention 只是可重建的备课提示。手工维护或明确
+标为 prototype 的 HEATMAP 不属于当前学情证据。
+
+Plan 结束时，现有 Plan Summary 对照 active evidence 回看初始判断与教学
+作用；没有课堂来源时，干预效果、迁移和保持继续标为未验证。
 
 ```text
 confirmed profiles = 经学生确认、跨课仍有效的偏好

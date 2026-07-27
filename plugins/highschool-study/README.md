@@ -98,7 +98,7 @@ Planner 先确定热身、核心、变式、迁移、补救或挑战等题目角
 ## 长期学情研判
 
 当累计证据可能改变当前方向、没有 active Plan，或学生询问下一阶段时，
-`study` 把决定路由给 `plan-next-cycle`。Coach 先用旧 Plan Summary
+`study` 把决定路由给 `plan-next-cycle`。Coach 先用前序 Plan Summary
 重建独立性、提示依赖、迁移、保持和既往教学反应；只有某条事实会改变
 决定时，才沿来源打开 Lesson、active Trace 或题卡。信息足够时直接完成，
 历史广或冲突时才把一到三个真正独立的问题交给只读
@@ -109,6 +109,17 @@ Planner 先确定热身、核心、变式、迁移、补救或挑战等题目角
 Planning Basis，在 Current Position、Next Lesson Candidate 和 Plan Summary
 记录修订。Plan 结束时，Plan Summary 再用 active evidence 判断初始假设
 得到支持、被推翻还是仍未验证，不能凭模板宣称某种干预有效。
+
+来源冲突时按 `active Trace → 带来源的 Lesson/Plan Summary → Planner Attention`
+判断。active Trace 决定作答结果、支持程度、实际方法和记录时间；摘要是
+可下钻的检索索引，Planner Attention 是可重建的备课提示。手工维护或明确
+标为 prototype 的 HEATMAP 不属于当前学情证据。
+
+每份 Plan 都使用当前八小节契约：`Goal`、`Observable Capability Standard`、
+`Test`、`Planning Basis`、`Lesson Index`、`Current Position`、
+`Next Lesson Candidate` 和 `Plan Summary` 必须各出现一次且内容非空。共享
+读取器会在 Plan 被解析时拒绝旧版或不完整 Plan。系统不自动迁移；使用新版
+前应保留原内容和来源，手工补全缺失小节。
 
 ```text
 confirmed profiles = 经学生确认、跨课仍有效的偏好

@@ -15,6 +15,13 @@ Use Lesson Summary as a retrieval entry and active Trace for claims about studen
 performance. Read planner attention only as a preparation signal. Do not bulk-load
 old Lessons; open a source only when it could change the decision.
 
+When sources disagree, active Trace owns attempt outcome, support, actual method and
+recorded time. A source-linked Lesson or Plan Summary is the compact retrieval index,
+not permission to override conflicting original facts. Planner Attention is a
+rebuildable preparation signal. Do not use a hand-authored or explicitly prototype
+HEATMAP as current learner evidence. Open the decisive original source before choosing
+between Plans when a conflict could change the direction.
+
 Reconstruct change over time: independence, support, transfer, retention, recurring
 student reasoning, and response to prior teaching moves. A score or method label can
 locate a question but cannot explain its cause.
@@ -53,15 +60,20 @@ move, use plan_update and preserve the original Planning Basis. Record the revis
 judgment in Current Position and Plan Summary so the initial hypothesis remains
 auditable. Create a new Plan only when the decision starts a new learning cycle.
 
-Only after explicit confirmation, write the canonical plans/<plan-id>.md. Include
-Goal, Observable Capability Standard, Test, Planning Basis, Lesson Index, Current
-Position, Next Lesson Candidate, and Plan Summary. Planning Basis must contain:
+Only after explicit confirmation, write the canonical plans/<plan-id>.md. Every Plan
+must contain exactly one non-empty Goal, Observable Capability Standard, Test,
+Planning Basis, Lesson Index, Current Position, Next Lesson Candidate and Plan Summary
+section. `plan_register` rejects the whole Plan when any required section is missing,
+empty or duplicated. Repair the same file and retry; do not report success until the
+returned Plan has a non-empty `planningBasis`.
+
+Planning Basis must contain:
 
 - the current judgment and why this direction matters now;
 - direct source links that actually changed the choice;
 - a validation or replanning signal.
 
-Use natural prose or a short list; do not force unused fields. Call plan_register,
+Use natural prose or a short list; do not force unused fields. Call `plan_register`,
 reread the Plan and Roadmap, and report only the persisted state.
 
 At Plan completion, compare its Planning Basis with active evidence in Plan Summary.

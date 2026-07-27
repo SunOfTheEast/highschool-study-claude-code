@@ -293,10 +293,23 @@ automatic choice of the lowest method signal.
 
 After student confirmation, each newly selected cycle stores its working judgment,
 decision-changing sources, and validation or replanning signal in an ordinary
-`## Planning Basis` section. Readers treat the section as optional, so old Plans need
-no migration. At completion, the existing Plan Summary compares that initial judgment
-with active evidence. Intervention effects, transfer, and retention remain unverified
-unless classroom sources support them.
+`## Planning Basis` section. Every Plan uses the current eight-section contract:
+`Goal`, `Observable Capability Standard`, `Test`, `Planning Basis`, `Lesson Index`,
+`Current Position`, `Next Lesson Candidate`, and `Plan Summary` each occur exactly once
+with non-empty content. The shared reader rejects an old or incomplete Plan before the
+learning set opens or the Plan is registered. There is no automatic migration: add
+missing sections manually while preserving the original content and sources.
+
+When sources conflict, authority descends as
+`active Trace → source-linked Lesson/Plan Summary → Planner Attention`. Active Trace
+owns attempt outcome, support, actual method, and recorded time. A source-linked
+summary is a compact retrieval index, while Planner Attention is a rebuildable
+preparation signal. A hand-maintained or explicitly prototype HEATMAP is not current
+learner evidence.
+
+At completion, the existing Plan Summary compares the initial judgment with active
+evidence. Intervention effects, transfer, and retention remain unverified unless
+classroom sources support them.
 
 ```text
 confirmed profiles = student-approved preferences that remain useful across Lessons

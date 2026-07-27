@@ -147,8 +147,12 @@ Trace 写入成功后，服务端主动发布完整能力 snapshot；刷新、�
 按需加载 `plan-next-cycle`。普通课后复盘和已选 Plan 内的备课不经过这条
 重流程。
 
-- 旧 Plan Summary 是长期轨迹的索引；只有某条事实可能改变决定时，才沿
+- 前序 Plan Summary 是长期轨迹的索引；只有某条事实可能改变决定时，才沿
   来源打开完整 Lesson 或 active Trace；
+- 来源冲突时按 `active Trace → 带来源的 Lesson/Plan Summary → Planner Attention`
+  判断：active Trace 决定作答结果、支持程度、实际方法和记录时间，摘要只是
+  检索索引，Planner Attention 只是可重建的备课提示；手工维护或明确标为
+  prototype 的 HEATMAP 不属于当前学情证据；
 - Coach 同时读取已确认画像和 `LEARNING_GUIDE.md`，但不把偏好、方法信号
   或单次成绩直接当作瓶颈结论；
 - 信息清楚时直接研判；历史广、相互冲突或会改变方向时，才选择一到三个
@@ -157,7 +161,13 @@ Trace 写入成功后，服务端主动发布完整能力 snapshot；刷新、�
   学生确认后才创建并注册下一 Plan；
 - 新 Plan 的 `Planning Basis` 保存这次工作判断，Plan 结束时由
   `Plan Summary` 对照真实结果回看。当前 Plan 页面以“为什么这样安排”
-  展示该依据；旧 Plan 没有这个小节时不显示空区域。
+  展示该依据。
+
+每份 Plan 都使用当前八小节契约：`Goal`、`Observable Capability Standard`、
+`Test`、`Planning Basis`、`Lesson Index`、`Current Position`、
+`Next Lesson Candidate` 和 `Plan Summary` 必须各出现一次且内容非空。共享
+读取器会在学习集打开或 Plan 注册前拒绝旧版或不完整 Plan。系统不自动迁移；
+使用新运行时前应保留原内容和来源，手工补全缺失小节。
 
 这条闭环不增加数据库、能力分数或自动选 Plan 的规则引擎。Planning Basis
 仍是普通 Markdown，Coach 仍是唯一决策者。
