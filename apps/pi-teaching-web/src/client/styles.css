@@ -188,6 +188,30 @@ select:focus-visible {
 
 .tree-context { padding: 2rem .5rem 1.8rem; }
 .tree-context h2 { margin: .55rem 0 0; font-family: var(--font-display); font-size: 1.2rem; font-weight: 500; line-height: 1.35; }
+.plan-rationale {
+  margin: 0 .5rem 1.2rem;
+  padding: 1rem 0 1.15rem;
+  border-block: 1px solid var(--rule);
+}
+.plan-rationale > span {
+  color: var(--accent);
+  font: .62rem/1.4 ui-monospace, monospace;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.plan-rationale h3 {
+  margin: .45rem 0 .65rem;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 500;
+}
+.plan-rationale-copy {
+  color: var(--ink-soft);
+  font-size: .74rem;
+  line-height: 1.7;
+}
+.plan-rationale-copy p { margin: .45rem 0 0; }
+.plan-rationale-copy a { color: var(--accent); }
 .tree-label { padding: 0 .5rem .65rem; color: var(--ink-faint); font-size: .62rem; }
 .lesson-label { margin-top: 2rem; }
 .lesson-nodes { display: grid; gap: .2rem; }

@@ -1,4 +1,5 @@
 import type { PlanWorkspaceSnapshot, SessionKey } from '../../shared/contracts';
+import { PlanRationale } from './PlanRationale';
 
 const statusLabel = {
   prepared: '待开始',
@@ -35,6 +36,8 @@ export function SessionTree({
         <span>当前 Plan</span>
         <h2>{workspace.plan.title}</h2>
       </div>
+
+      <PlanRationale value={workspace.plan.planningBasis} />
 
       <p className="tree-label">父会话</p>
       <button

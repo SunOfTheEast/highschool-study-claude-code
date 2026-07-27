@@ -64,6 +64,14 @@ test('marks the approved theme and current learning surface', async ({ page }) =
   await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'replay');
 });
 
+test('shows the current Plan planning rationale', async ({ page }) => {
+  await page.goto('/plan/domain-integrity');
+  const rationale = page.getByRole('region', { name: '为什么这样安排' });
+  await expect(rationale).toBeVisible();
+  await expect(rationale).toContainText('定义域遗漏已经成为稳定阻塞点');
+  await expect(rationale).not.toContainText('Teacher Control');
+});
+
 test('refreshes the full ability map after a Tutor trace without reloading', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: /定义域完整性的系统加固/ }).click();
