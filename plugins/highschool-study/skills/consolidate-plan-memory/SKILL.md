@@ -15,4 +15,8 @@ Do not edit a profile before item-by-item confirmation. Profiles contain only co
 
 If the student rejects an inference, remove or rewrite that proposal. A rejected memory proposal is not classroom Trace.
 
+When Planning Basis exists, compare its initial judgment with active evidence in the
+persisted Plan Summary. Distinguish supported, refuted and still-unverified claims,
+and describe an intervention effect only when Lesson or Trace sources support it.
+
 After merging confirmed rows, persist Plan completion, evidence, caveats and profile delta as separate facts. Reread the Plan and both profiles before reporting completion; if persistence fails, do not claim the state changed.

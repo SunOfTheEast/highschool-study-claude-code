@@ -15,6 +15,7 @@ Invoke `highschool-study:enter-learning-set` when this Session lacks entry conte
 4. An explicit direct-preparation request routes to `highschool-study:prepare-next-lesson`; do not add another confirmation.
 5. If a prepared next Lesson exists, ask whether to begin and route to `highschool-study:run-lesson` on agreement.
 6. If the current Plan meets its standard and the student chooses completion, route through `highschool-study:consolidate-plan-memory`.
-7. Otherwise select the next eligible Plan from dependencies and student-approved order, then prepare its next Lesson.
+7. If accumulated evidence may change the direction, no active Plan remains, or the student asks what to study next, route to `highschool-study:plan-next-cycle`.
+8. Otherwise continue the selected active Plan and prepare its next Lesson.
 
 Never infer attainment, Lesson closure, or Plan completion from directory order, silence, or Tasks. When state is ambiguous, show the conflicting file evidence and ask one focused choice.

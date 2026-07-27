@@ -8,6 +8,7 @@ test('ships the minimal Markdown template', () => {
   for (const path of [
     '.claude-plugin/plugin.json',
     '.mcp.json',
+    'skills/plan-next-cycle/SKILL.md',
     'learning-set-template/ROADMAP.md',
     'learning-set-template/LEARNING_GUIDE.md',
     'learning-set-template/memory/student-profile.md',

@@ -66,10 +66,19 @@ test('keeps evidence writers out of read-only and consolidation routes', () => {
     'skills/correct-learning-record/SKILL.md',
     'allowed-tools',
   );
+  const nextCycle = toolList(
+    'skills/plan-next-cycle/SKILL.md',
+    'allowed-tools',
+  );
 
   expect(designer).not.toContain('Write');
   expect(designer).not.toContain('Edit');
   expect(designer).not.toContain(mcp.traceAppend);
   expect(consolidate).not.toContain(mcp.traceAppend);
   expect(correct).toContain(mcp.traceAppend);
+  expect(nextCycle).toContain('Write');
+  expect(nextCycle).toContain('Edit');
+  expect(nextCycle).toContain(mcp.traceSearch);
+  expect(nextCycle).toContain(mcp.sourceResolve);
+  expect(nextCycle).not.toContain(mcp.traceAppend);
 });

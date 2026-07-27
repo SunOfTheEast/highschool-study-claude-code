@@ -10,3 +10,6 @@ allowed-tools: Read, Glob, Grep, Write, Edit
 4. Show the proposed Markdown diff in student language. Create or edit Roadmap/Plan files only after the student approves it. A new Plan starts with `coach_session: null`; after writing it, add its canonical `plans/<plan-id>.md` link under `ROADMAP.md / Plan Graph`, then reread both files before saying the Plan exists. Do not announce creation from an unregistered file. Any later reordering is student-approved reordering: preserve the previous Change Log entry, reason, and affected dependencies.
 
 Planning writes no learner facts into Agents or Skills. A standard describes what evidence would demonstrate capability; merely writing or checking off the Plan does not demonstrate it or close anything.
+
+This Skill owns the first long-term goal and explicit Roadmap restructuring;
+evidence-driven next-cycle selection belongs to `plan-next-cycle`.
