@@ -141,6 +141,27 @@ Trace 写入成功后，服务端主动发布完整能力 snapshot；刷新、�
 
 服务重启时，先前停在 running 的工作流会恢复为终态：有已完成结果则为 partial，否则为 failed；未完成任务标记为 cancelled。需要继续时由父 Agent 重新提出工作流，不会自动续跑。
 
+## 长期学情研判
+
+当累计记录可能改变学习方向，或学生询问“下一阶段学什么”时，Coach
+按需加载 `plan-next-cycle`。普通课后复盘和已选 Plan 内的备课不经过这条
+重流程。
+
+- 旧 Plan Summary 是长期轨迹的索引；只有某条事实可能改变决定时，才沿
+  来源打开完整 Lesson 或 active Trace；
+- Coach 同时读取已确认画像和 `LEARNING_GUIDE.md`，但不把偏好、方法信号
+  或单次成绩直接当作瓶颈结论；
+- 信息清楚时直接研判；历史广、相互冲突或会改变方向时，才选择一到三个
+  真正独立的 Evidence Scout 问题；
+- Coach 先向学生说明判断、关键来源、不确定性和可能推翻判断的后续表现；
+  学生确认后才创建并注册下一 Plan；
+- 新 Plan 的 `Planning Basis` 保存这次工作判断，Plan 结束时由
+  `Plan Summary` 对照真实结果回看。当前 Plan 页面以“为什么这样安排”
+  展示该依据；旧 Plan 没有这个小节时不显示空区域。
+
+这条闭环不增加数据库、能力分数或自动选 Plan 的规则引擎。Planning Basis
+仍是普通 Markdown，Coach 仍是唯一决策者。
+
 ## 真实模型 smoke checklist
 
 建议先复制示例，避免测试写入仓库样例：

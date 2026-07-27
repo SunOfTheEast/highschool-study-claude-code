@@ -277,6 +277,44 @@ Learner-side preferences belong only to `student-profile.md`; requirements for t
 
 The consolidation is a delta merge rather than a rewrite from all historical Plans. Later preparation and teaching read both compact profiles in full, expanding a source only when a preference needs verification.
 
+### Longitudinal planning and `Planning Basis`
+
+Preference consolidation answers which student-approved learning requirements should
+remain resident. `plan-next-cycle` answers which learning cycle is now most useful
+given the student's longitudinal change. It does not introduce another memory layer.
+
+When direction may change, Coach reads the Roadmap, relevant Plan Summaries, confirmed
+profiles, and `LEARNING_GUIDE.md`, then follows summary links to a Lesson, active Trace,
+or card only when that source could change the decision. Coach reconstructs
+independence, support, transfer, retention, recurring reasoning, and response to prior
+teaching. It compares alternative explanations only when they imply materially
+different Plans; unresolved evidence produces a short diagnostic Plan rather than an
+automatic choice of the lowest method signal.
+
+After student confirmation, each newly selected cycle stores its working judgment,
+decision-changing sources, and validation or replanning signal in an ordinary
+`## Planning Basis` section. Readers treat the section as optional, so old Plans need
+no migration. At completion, the existing Plan Summary compares that initial judgment
+with active evidence. Intervention effects, transfer, and retention remain unverified
+unless classroom sources support them.
+
+```text
+confirmed profiles = student-approved preferences that remain useful across Lessons
+active Trace = facts about concrete classroom performance
+Planner Attention = rebuildable preparation signal
+Planning Basis = one Plan's source-linked working judgment
+Plan Summary = outcome review and retrieval index
+```
+
+```text
+Planning Basis → Lesson / active Trace → Plan Summary → plan-next-cycle
+```
+
+Coach decides directly when evidence is sufficient. Only broad, conflicting, or
+direction-changing history may select one to three genuinely independent Evidence
+Scout questions. Scouts return findings and sources; they never choose or write the
+Plan.
+
 ## Card-authenticity fence
 
 Card authenticity has two controls only:

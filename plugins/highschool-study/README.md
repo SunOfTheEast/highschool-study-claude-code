@@ -95,6 +95,35 @@ Planner 先确定热身、核心、变式、迁移、补救或挑战等题目角
 
 如果 `card_search` 返回空数组，立即停止题卡搜索并说明缺少的内容或资产；不得编造题卡、题目、来源或 session ID。
 
+## 长期学情研判
+
+当累计证据可能改变当前方向、没有 active Plan，或学生询问下一阶段时，
+`study` 把决定路由给 `plan-next-cycle`。Coach 先用旧 Plan Summary
+重建独立性、提示依赖、迁移、保持和既往教学反应；只有某条事实会改变
+决定时，才沿来源打开 Lesson、active Trace 或题卡。信息足够时直接完成，
+历史广或冲突时才把一到三个真正独立的问题交给只读
+`lesson-designer`，最终判断和写入仍归 Coach。
+
+学生确认前只讨论建议。新学习周期确认后，Coach 写入并登记包含
+`Planning Basis` 的 Plan；如果只是调整当前 Plan，则保留原始
+Planning Basis，在 Current Position、Next Lesson Candidate 和 Plan Summary
+记录修订。Plan 结束时，Plan Summary 再用 active evidence 判断初始假设
+得到支持、被推翻还是仍未验证，不能凭模板宣称某种干预有效。
+
+```text
+confirmed profiles = 经学生确认、跨课仍有效的偏好
+active Trace = 具体课堂表现事实
+Planner Attention = 可重建的备课提示
+Planning Basis = 当前 Plan 带来源的工作判断
+Plan Summary = 结果回看与后续召回索引
+```
+
+完整闭环是：
+
+```text
+Planning Basis → Lesson / active Trace → Plan Summary → plan-next-cycle
+```
+
 完整的当前功能与 Pi 前端边界见 [`docs/zh-CN/完整说明书.md`](../../docs/zh-CN/完整说明书.md)。
 
 ## 验证与启动

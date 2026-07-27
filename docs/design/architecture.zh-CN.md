@@ -314,6 +314,39 @@ Plan 进行中，课堂事实只写入 Lesson Trace；同一 Plan 的后续 Less
 
 Plan 结束后的压缩是差量合并，不是从全部历史重写画像。后续备课和上课完整读取两份短画像；只有需要验证某条偏好时，才沿其来源链接下钻。
 
+### 10.1 跨周期学情研判与 `Planning Basis`
+
+长期偏好压缩回答“哪些学习要求应常驻”，`plan-next-cycle` 回答“结合长期
+变化，此刻最值得进入哪个学习周期”。两者不合并成新的记忆层。
+
+Coach 在方向可能变化时读取 Roadmap、相关 Plan Summary、已确认画像和
+`LEARNING_GUIDE.md`，再按需沿摘要来源打开 Lesson、active Trace 或题卡。
+它重建独立性、支持、迁移、保持、反复出现的认知动作和既往教学反应。
+只有多个解释会导向实质不同的 Plan 时才比较它们；证据不足时创建短诊断
+Plan，而不是机械选择最低方法信号。
+
+学生确认后，新 Plan 以普通 Markdown `## Planning Basis` 保存当前判断、
+真正改变选择的直接来源，以及验证或重规划信号。读取层把该小节视为可选，
+所以旧 Plan 无须迁移。Plan 结束时，现有 Plan Summary 对照 active evidence
+回看初始判断与教学作用；没有课堂来源时，干预效果、迁移和保持继续标为
+未验证。
+
+```text
+confirmed profiles = 经学生确认、跨课仍有效的偏好
+active Trace = 具体课堂表现事实
+Planner Attention = 可重建的备课提示
+Planning Basis = 当前 Plan 带来源的工作判断
+Plan Summary = 结果回看与后续召回索引
+```
+
+```text
+Planning Basis → Lesson / active Trace → Plan Summary → plan-next-cycle
+```
+
+信息充分时 Coach 直接研判。只有历史广、冲突或可能改变方向时，才选择一到
+三个真正独立的 Evidence Scout 问题；子任务只返回来源与发现，不决定或写入
+Plan。
+
 ## 十一、题卡真实性 fence
 
 题卡真实性只使用两层控制：
