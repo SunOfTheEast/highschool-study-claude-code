@@ -19,10 +19,11 @@ import { createPlanRegisterTool } from '../../src/runtime/plan-register';
 import { createPlanUpdateTool } from '../../src/runtime/plan-update';
 import * as studyToolModule from '../../src/runtime/study-tools';
 import { readEvidence } from '../../src/study/ability';
+import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
 
 const { createStudyTools } = studyToolModule;
 
-const root = join(import.meta.dir, '../../../../examples/derivative-demo/learning-set');
+const root = domainIntegrityFixtureRoot;
 const temporaryRoots: string[] = [];
 
 afterEach(() => {

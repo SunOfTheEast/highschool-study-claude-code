@@ -1,4 +1,4 @@
-import { join, resolve } from 'node:path';
+import { join } from 'node:path';
 import { cpSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import type { AbilityProjection, ChatMessage, SessionKey } from '../../src/shared/contracts';
@@ -15,8 +15,9 @@ import { PreparedLessonValidationError } from '../../src/study/validate-prepared
 import { createRequestHandler } from '../../src/server/app';
 import { EventHub } from '../../src/server/event-hub';
 import type { WorkflowSnapshot, WorkflowTaskState } from '../../src/workflows/contracts';
+import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
 
-const sourceRoot = resolve(import.meta.dir, '../../../../examples/derivative-demo/learning-set');
+const sourceRoot = domainIntegrityFixtureRoot;
 const root = mkdtempSync(`${tmpdir()}/studyforge-e2e-`);
 cpSync(sourceRoot, root, { recursive: true });
 const lesson003Path = join(root, 'lessons/lesson-003.md');

@@ -1,8 +1,8 @@
 import { expect, test } from 'bun:test';
-import { join } from 'node:path';
 import { readLearningSet, readPlanWorkspace } from '../../src/study/read-workspace';
+import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
 
-const root = join(import.meta.dir, '../../../../examples/derivative-demo/learning-set');
+const root = domainIntegrityFixtureRoot;
 
 test('reads the derivative Roadmap and Plan lesson index', () => {
   const learningSet = readLearningSet(root);
