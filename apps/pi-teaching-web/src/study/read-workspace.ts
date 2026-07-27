@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import { dirname, relative, resolve } from 'node:path';
 import { readMarkdownFile } from 'highschool-study-markdown/study-domain';
 import type {
@@ -24,6 +25,12 @@ function section(body: string, heading: string, level = 2): string {
 
 function title(body: string): string {
   return /^#\s+(.+)$/m.exec(body)?.[1]?.trim() ?? '';
+}
+
+function studentLearningPrinciples(root: string): string {
+  if (!existsSync(resolve(root, 'LEARNING_GUIDE.md'))) return '';
+  const guide = readMarkdownFile(root, 'LEARNING_GUIDE.md');
+  return section(guide.body, 'Student Learning Principles');
 }
 
 function canonical(root: string, absolute: string): string {
@@ -130,6 +137,7 @@ export function readLearningSet(root: string): LearningSetSnapshot {
   return {
     title: title(roadmap.body),
     overview: section(roadmap.body, 'Learning Set Overview'),
+    learningPrinciples: studentLearningPrinciples(root),
     goal: section(roadmap.body, 'Goal'),
     plans: planPaths.map((path) => planSummary(root, path)),
   };

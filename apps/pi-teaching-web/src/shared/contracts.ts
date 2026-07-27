@@ -38,6 +38,7 @@ export type PlanSummary = {
 export type LearningSetSnapshot = {
   title: string;
   overview: string;
+  learningPrinciples: string;
   goal: string;
   plans: PlanSummary[];
 };

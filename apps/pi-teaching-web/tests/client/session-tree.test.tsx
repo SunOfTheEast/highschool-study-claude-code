@@ -16,6 +16,7 @@ function workspace(status: string): PlanWorkspaceSnapshot {
     learningSet: {
       title: '测试学习集',
       overview: '概述',
+      learningPrinciples: '',
       goal: '总目标',
       plans: [
         current,

@@ -8,6 +8,8 @@ test('reads the derivative Roadmap and Plan lesson index', () => {
   const learningSet = readLearningSet(root);
   expect(learningSet.title).toBe('导数学习 Roadmap');
   expect(learningSet.overview).toContain('把定义域、同构变形和参数分离');
+  expect(learningSet.learningPrinciples).toContain('PUBLIC LEARNING PRINCIPLE');
+  expect(learningSet.learningPrinciples).not.toContain('PRIVATE TEACHING NOTE');
   expect(learningSet.plans.map((plan) => plan.id)).toEqual(['domain-integrity']);
 
   const workspace = readPlanWorkspace(root, 'domain-integrity');

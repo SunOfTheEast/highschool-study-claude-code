@@ -8,7 +8,13 @@ import type { AbilityProjection } from '../../src/shared/contracts';
 import { PreparedLessonValidationError } from '../../src/study/validate-prepared-lesson';
 import type { WorkflowSnapshot } from '../../src/workflows/contracts';
 
-const learningSet = { title: 'Demo', overview: 'Overview', goal: 'Goal', plans: [] };
+const learningSet = {
+  title: 'Demo',
+  overview: 'Overview',
+  learningPrinciples: '',
+  goal: 'Goal',
+  plans: [],
+};
 const workspace = {
   learningSet,
   plan: {

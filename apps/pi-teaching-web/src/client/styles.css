@@ -93,6 +93,25 @@ select:focus-visible {
 
 .home-overview p { margin: 0; }
 
+.home-principles {
+  max-width: 34rem;
+  margin-top: 2rem;
+  padding: 1rem 0 0 1.1rem;
+  border-left: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  color: var(--ink-soft);
+  font-family: var(--font-reading);
+  font-size: .92rem;
+  line-height: 1.75;
+}
+
+.home-principles .section-label {
+  margin-bottom: .65rem;
+  padding: 0;
+}
+
+.home-principles p { margin: 0; }
+.home-principles ul { margin: .45rem 0 0; padding-left: 1.25rem; }
+
 .plan-list { border-top: 1px solid var(--ink); }
 .section-label { padding: 1rem 0 2.2rem; color: var(--ink-faint); }
 

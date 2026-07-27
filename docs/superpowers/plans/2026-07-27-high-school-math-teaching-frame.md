@@ -136,7 +136,7 @@ export type LearningSetSnapshot = {
 };
 ```
 
-- [ ] **Step 1: Add failing parser and rendering tests**
+- [x] **Step 1: Add failing parser and rendering tests**
 
 Give the domain-integrity fixture a synthetic guide containing distinct public and internal markers. Extend `read-workspace.test.ts`:
 
@@ -147,7 +147,7 @@ expect(learningSet.learningPrinciples).not.toContain('PRIVATE TEACHING NOTE');
 
 Create `learning-set-home.test.tsx` with a synthetic snapshot and assert that the rendered HTML contains the public marker and not the private marker. Add `learningPrinciples: ''` to unrelated snapshot fixtures so TypeScript exposes every caller.
 
-- [ ] **Step 2: Run the focused tests and verify red**
+- [x] **Step 2: Run the focused tests and verify red**
 
 ```bash
 cd apps/pi-teaching-web
@@ -157,7 +157,7 @@ bun run typecheck
 
 Expected: FAIL because the contract, reader, and UI do not yet expose learning principles.
 
-- [ ] **Step 3: Implement the optional guide reader**
+- [x] **Step 3: Implement the optional guide reader**
 
 In `read-workspace.ts`, read only the fixed root file when present:
 
@@ -174,7 +174,7 @@ function studentLearningPrinciples(root: string): string {
 
 Return it as `learningPrinciples` from `readLearningSet()`. Do not expose the full guide through the API.
 
-- [ ] **Step 4: Render a restrained “研习要领” section**
+- [x] **Step 4: Render a restrained “研习要领” section**
 
 After the overview, render the section only when non-empty:
 
@@ -189,7 +189,7 @@ After the overview, render the section only when non-empty:
 
 Add only local typography and spacing styles that fit the current 留白新中式 theme.
 
-- [ ] **Step 5: Verify the projection boundary and commit**
+- [x] **Step 5: Verify the projection boundary and commit**
 
 ```bash
 bun test tests/study/read-workspace.test.ts \

@@ -16,6 +16,12 @@ export function LearningSetHome({
         <div className="home-overview">
           <MarkdownView>{value.overview}</MarkdownView>
         </div>
+        {value.learningPrinciples && (
+          <section className="home-principles" aria-label="研习要领">
+            <p className="section-label">研习要领</p>
+            <MarkdownView>{value.learningPrinciples}</MarkdownView>
+          </section>
+        )}
       </header>
 
       <section className="plan-list" aria-label="学习计划">

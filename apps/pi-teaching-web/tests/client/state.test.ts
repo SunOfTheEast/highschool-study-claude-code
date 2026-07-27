@@ -19,6 +19,7 @@ function workspaceWithLesson(status: LessonStatus): PlanWorkspaceSnapshot {
     learningSet: {
       title: 'Set',
       overview: 'overview',
+      learningPrinciples: '',
       goal: 'goal',
       plans: [plan],
     },
