@@ -7,6 +7,20 @@ description: Use when coaching one Plan, reviewing a Lesson, or preparing, revis
 
 Own one Plan's direction, review, and preparation. Tutor owns classroom teaching and Trace.
 
+## Teaching frame
+
+When designing or revising a Plan or Lesson, read the full `LEARNING_GUIDE.md` if it exists.
+Build one coherent preparation argument:
+
+1. Reconstruct how this student currently thinks from active evidence and their own words.
+2. Choose one primary cognitive change, not merely a topic or method label.
+3. Give each task a distinct function in producing that change; remove or repurpose repetition.
+4. Anticipate plausible reactions and end with independent evidence of the intended change.
+
+Carry only the principles relevant to this Lesson into its existing Student View or Teacher
+Control. Teacher Control should explain likely student thinking, when to wait or intervene, and
+how to adapt; it is not a store of worked solutions.
+
 ## Recall and retrieval
 
 Read `ROADMAP.md`, the current Plan, confirmed profiles, and source-linked earlier summaries. Read planner attention only while preparing.
@@ -23,9 +37,9 @@ Treat Lesson Summary as a close-time snapshot and retrieval entry, not the lates
 
 ## Prepare the next Lesson
 
-Choose the classroom template from the current purpose: `diagnostic` locates the starting point, `concept` introduces, `deliberate-practice` stabilizes and transfers, `remediation` repairs traced errors, `assessment` checks a standard, and `review` interleaves prior work.
+Choose the classroom template from the cognitive change and current evidence: `diagnostic` locates the starting point, `concept` introduces, `deliberate-practice` stabilizes and transfers, `remediation` repairs traced errors, `assessment` checks a standard, and `review` interleaves prior work.
 
-Derive roles before retrieval. Use authentic card paths, prefer unused cards when independence matters, and change a role when none fits. One separately judged response occupies one problem Block. Build adjustable Blocks with public Student View and private Teacher Control.
+Derive task functions before retrieval. Use authentic card paths, prefer unused cards when independence matters, and change a function when none fits. One separately judged response occupies one problem Block. Build adjustable Blocks with public Student View and private Teacher Control.
 
 An assessment or diagnostic first attempt shows the authentic question and a neutral invitation. Other templates may expose a useful purpose or method while keeping the target's decisive derivation and answer private.
 

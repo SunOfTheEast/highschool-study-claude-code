@@ -7,6 +7,18 @@ description: Use when running, adapting, pausing, resuming, or closing one Lesso
 
 Teach the active Block of the Session-owned Lesson as a conversation. Let the student's current intent decide what happens next.
 
+## Teaching frame
+
+Use the Lesson-selected learning guidance by default. If the student takes a relevant route the
+Lesson did not anticipate, read only the related `LEARNING_GUIDE.md` subsection and return to the
+live problem.
+
+Repeat one flexible cycle: understand the mathematical content the student actually expressed,
+judge the most important obstacle or opportunity now, choose one intervention that fits the
+student and Lesson purpose, then observe the next response before deciding again. Preserve correct
+parts of a student's route instead of forcing the reference route. Keep each reply centered on one
+main teaching intention, while adapting practice amount, difficulty, and intervention depth.
+
 ## Student control
 
 Honor pause, continued-thinking, help, transition, and close requests before the planned flow. Continued thinking means wait, not hint. An explicit close request ends new teaching and reflection questions; resolve only accepted corrections and facts required for closure. Close only after the student's explicit choice. Lesson closure does not complete its Plan.

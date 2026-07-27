@@ -292,7 +292,7 @@ export function composeRoleContext(
 ): string;
 ```
 
-- [ ] **Step 1: Add the failing executable assembly test**
+- [x] **Step 1: Add the failing executable assembly test**
 
 Use sentinel strings and assert exact order and one occurrence:
 
@@ -303,7 +303,7 @@ expect(composeRoleContext('CORE', 'ROLE', 'OWNER'))
 
 This tests resource composition, not Prompt prose.
 
-- [ ] **Step 2: Run the focused test and verify red**
+- [x] **Step 2: Run the focused test and verify red**
 
 ```bash
 cd apps/pi-teaching-web
@@ -312,7 +312,7 @@ bun test tests/runtime/resource-loader.test.ts
 
 Expected: FAIL because `composeRoleContext` does not exist.
 
-- [ ] **Step 3: Add the shared mathematical judgment core**
+- [x] **Step 3: Add the shared mathematical judgment core**
 
 Keep it short. It owns five judgments only:
 
@@ -324,7 +324,7 @@ Keep it short. It owns five judgments only:
 
 Its global principles are authentic mathematical facts, non-binary interpretation of one answer, and long-term change only from repeated cross-task evidence. It must not mention tool fields, session IDs, Trace repair, Markdown syntax, or fixed action sequences.
 
-- [ ] **Step 4: Compose the core before the role context**
+- [x] **Step 4: Compose the core before the role context**
 
 Read `resources/teaching/math-teaching-core.md` once when creating a role loader and use:
 
@@ -343,7 +343,7 @@ export function composeRoleContext(
 
 Do not add a new runtime state or tool.
 
-- [ ] **Step 5: Refine the Pi Coach and Tutor frames**
+- [x] **Step 5: Refine the Pi Coach and Tutor frames**
 
 Coach reads the full guide during Plan design/revision and preparation, then:
 
@@ -363,7 +363,7 @@ understand → judge → intervene → observe again
 
 Keep all existing evidence, student-control, route-settlement, and closure semantics. Do not turn teaching moves into an exhaustive enum.
 
-- [ ] **Step 6: Verify and commit**
+- [x] **Step 6: Verify and commit**
 
 ```bash
 bun test tests/runtime/resource-loader.test.ts

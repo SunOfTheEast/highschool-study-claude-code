@@ -13,6 +13,17 @@ export type { SessionRole } from './session-scope';
 
 const resourceRoot = join(dirname(fileURLToPath(import.meta.url)), '../../resources');
 
+export function composeRoleContext(
+  teachingCore: string,
+  roleContext: string,
+  ownerContext: string,
+): string {
+  return [teachingCore, roleContext, ownerContext]
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .join('\n\n');
+}
+
 export async function createRoleResourceLoader(
   root: string,
   scope: StudySessionScope,
@@ -22,6 +33,10 @@ export async function createRoleResourceLoader(
   const skillName = role === 'coach' ? 'coach-study' : 'tutor-lesson';
   const skillPath = join(resourceRoot, 'skills', skillName, 'SKILL.md');
   const deepWorkflowSkillPath = join(resourceRoot, 'skills', 'deep-workflow', 'SKILL.md');
+  const teachingCore = readFileSync(
+    join(resourceRoot, 'teaching', 'math-teaching-core.md'),
+    'utf8',
+  );
   const roleContext = readFileSync(join(resourceRoot, 'agents', `${role}.md`), 'utf8');
   const persona = resolvePersona(root);
   const loader = new DefaultResourceLoader({
@@ -35,7 +50,11 @@ export async function createRoleResourceLoader(
         ...current.agentsFiles,
         {
           path: `/virtual/studyforge-${role}.md`,
-          content: `${roleContext}\n\n${formatSessionOwnerContext(root, scope)}`,
+          content: composeRoleContext(
+            teachingCore,
+            roleContext,
+            formatSessionOwnerContext(root, scope),
+          ),
         },
         {
           path: `/virtual/studyforge-persona-${persona.id}.md`,
