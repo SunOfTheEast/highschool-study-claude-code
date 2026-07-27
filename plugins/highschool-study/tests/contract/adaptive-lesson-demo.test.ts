@@ -4,8 +4,12 @@ import { join } from 'node:path';
 import { parse } from 'yaml';
 
 const repo = join(import.meta.dir, '../../../..');
-const demo = join(repo, 'examples/derivative-demo/learning-set');
-const lesson = readFileSync(join(demo, 'lessons/lesson-003.md'), 'utf8');
+const regression = join(
+  repo,
+  'apps/pi-teaching-web/tests/fixtures/domain-integrity-learning-set',
+);
+const publicDemo = join(repo, 'examples/derivative-demo');
+const lesson = readFileSync(join(regression, 'lessons/lesson-003.md'), 'utf8');
 
 function block(name: string) {
   const match = lesson.match(new RegExp(
@@ -24,7 +28,7 @@ function studentView(name: string) {
 }
 
 function criterionDescription(cardPath: string, stepId: string) {
-  const card = parse(readFileSync(join(demo, cardPath), 'utf8')) as {
+  const card = parse(readFileSync(join(regression, cardPath), 'utf8')) as {
     rubric: { criteria: Array<{ step_id: string; description: string }> };
   };
   const criterion = card.rubric.criteria.find(({ step_id }) => step_id === stepId);
@@ -41,7 +45,7 @@ test('lesson 003 is a multi-card assessment with private teacher control', () =>
     'cards/derivative/mst_p0017_ex05.card.yaml',
     'cards/derivative/mst_p0032_ex22.card.yaml',
     'cards/derivative/mst_p0030_ex16.card.yaml',
-  ]) expect(existsSync(join(demo, path))).toBe(true);
+  ]) expect(existsSync(join(regression, path))).toBe(true);
 
   expect(lesson).toContain(
     '- Q-DOMAIN-EX22: ../cards/derivative/mst_p0032_ex22.card.yaml',
@@ -165,7 +169,7 @@ test('documents adaptive templates and reveal boundaries', () => {
     join(repo, 'docs/zh-CN/完整说明书.md'), 'utf8',
   );
   const demoReadme = readFileSync(
-    join(repo, 'examples/derivative-demo/README.md'), 'utf8',
+    join(publicDemo, 'README.md'), 'utf8',
   );
 
   for (const doc of [pluginReadme, manual, demoReadme]) {
@@ -178,15 +182,4 @@ test('documents adaptive templates and reveal boundaries', () => {
     expect(doc).toContain('ladder');
     expect(doc).toContain('worked-example');
   }
-
-  expect(demoReadme).toContain(
-    'Lesson 003 由 orientation、两道未见验收题、按需插入的可选修复和 reflection 组成。',
-  );
-  expect(demoReadme).toContain('这些 Block 是按依赖组织的课堂积木');
-  expect(demoReadme).toContain(
-    '你可以随时选择是否进入可选修复，并可暂停或结束。',
-  );
-  expect(demoReadme).not.toContain(
-    'Lesson 003 由热身、结构导航、独立练习、互动讨论和可选小测组成。',
-  );
 });

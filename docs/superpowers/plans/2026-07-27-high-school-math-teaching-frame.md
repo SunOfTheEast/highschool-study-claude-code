@@ -68,8 +68,9 @@
 **Files:**
 
 - Modify: `plugins/highschool-study/tests/contract/public-demo.test.ts`
+- Modify: `plugins/highschool-study/tests/contract/adaptive-lesson-demo.test.ts`
 
-- [ ] **Step 1: Confirm the known stale assertion**
+- [x] **Step 1: Confirm the known stale assertion**
 
 Run:
 
@@ -78,9 +79,10 @@ cd plugins/highschool-study
 bun test tests/contract/public-demo.test.ts
 ```
 
-Expected: the old `定义域完整性` assertion fails because the public demo is now intentionally clean.
+Expected: the old `定义域完整性` assertion fails, and the adaptive-Lesson contract errors
+because both still address classroom state intentionally removed from the public demo.
 
-- [ ] **Step 2: Replace only the obsolete expectation**
+- [x] **Step 2: Replace only the obsolete expectation**
 
 Keep the orientation and persona assertions. Replace the old topic-specific line with the clean public state:
 
@@ -89,11 +91,16 @@ expect(roadmap).toContain('## Plan Graph');
 expect(roadmap).toContain('（尚未创建学习阶段）');
 ```
 
-- [ ] **Step 3: Verify and commit the baseline repair**
+Point the adaptive-Lesson contract at
+`apps/pi-teaching-web/tests/fixtures/domain-integrity-learning-set`, where that frozen
+Lesson and its cards now live. Remove only the three assertions that require the clean public
+demo README to narrate Lesson 003; retain the generic template and reveal-boundary contract.
+
+- [x] **Step 3: Verify and commit the baseline repair**
 
 ```bash
-bun test tests/contract/public-demo.test.ts
-git add tests/contract/public-demo.test.ts
+bun test tests/contract/public-demo.test.ts tests/contract/adaptive-lesson-demo.test.ts
+git add tests/contract/public-demo.test.ts tests/contract/adaptive-lesson-demo.test.ts
 git commit -m "test: align public demo with clean learning state"
 ```
 

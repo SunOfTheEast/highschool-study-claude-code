@@ -19,7 +19,8 @@ test('ships an oriented derivative demo with a set-scoped persona', () => {
   const tutorial = read('README.md');
 
   expect(roadmap).toContain('## Learning Set Overview');
-  expect(roadmap).toContain('定义域完整性');
+  expect(roadmap).toContain('## Plan Graph');
+  expect(roadmap).toContain('（尚未创建学习阶段）');
   expect(config).toContain(
     '- Default presentation persona: `calm-senpai`',
   );
