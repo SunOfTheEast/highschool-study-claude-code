@@ -5,9 +5,37 @@ status: ready
 ---
 # Transfer Plan
 
+## Goal
+
+Transfer the established method to an unfamiliar conic setting.
+
 ## Observable Capability Standard
 
 Transfer the method to an unseen conic family and defend boundary feasibility without hints.
+
+## Test
+
+Complete one unseen conic transfer card without hints and explain boundary feasibility.
+
+## Planning Basis
+
+The completed Max Value Plan supports a focused transfer check. Source: [Max Value Plan Summary](max-value.md#plan-summary).
+
+## Lesson Index
+
+No Lesson has been prepared.
+
+## Current Position
+
+Ready to begin.
+
+## Next Lesson Candidate
+
+Prepare one unfamiliar conic transfer Lesson.
+
+## Plan Summary
+
+No classroom result yet.
 
 ## Recall Inputs
 

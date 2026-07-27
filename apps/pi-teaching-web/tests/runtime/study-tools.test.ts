@@ -52,6 +52,38 @@ status: active
 coach_session: foreign-session
 ---
 # Plan：同构变形
+
+## Goal
+
+完成当前测试 Plan。
+
+## Observable Capability Standard
+
+满足本测试声明的可观察行为。
+
+## Test
+
+完成一次与该能力标准对应的验证。
+
+## Planning Basis
+
+当前测试需要一份完整 Plan。来源：[Roadmap](../ROADMAP.md#plan-graph)。
+
+## Lesson Index
+
+尚未创建 Lesson。
+
+## Current Position
+
+等待开始。
+
+## Next Lesson Candidate
+
+由当前测试决定。
+
+## Plan Summary
+
+尚无课堂结果。
 `);
   const tool = createPlanRegisterTool(temporaryRoot);
 
@@ -71,6 +103,12 @@ coach_session: foreign-session
     factId: 'isomorphic-transformation',
     status: 'registered',
   }));
+  expect(JSON.parse((result.content[0] as { text: string }).text))
+    .toMatchObject({
+      plan: {
+        planningBasis: expect.stringContaining('完整 Plan'),
+      },
+    });
   expect(readFileSync(
     join(temporaryRoot, 'plans/isomorphic-transformation.md'),
     'utf8',

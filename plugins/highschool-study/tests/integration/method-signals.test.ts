@@ -288,6 +288,26 @@ status: active
 ---
 # Plan：最值
 
+## Goal
+
+完成当前测试 Plan。
+
+## Observable Capability Standard
+
+满足本测试声明的可观察行为。
+
+## Test
+
+完成一次与该能力标准对应的验证。
+
+## Planning Basis
+
+当前测试需要一份完整 Plan。来源：[Roadmap](../ROADMAP.md#plan-graph)。
+
+## Lesson Index
+
+尚未创建 Lesson。
+
 ## Current Position
 
 Coach 上次确认的位置。

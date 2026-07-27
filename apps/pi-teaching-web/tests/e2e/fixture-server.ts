@@ -235,6 +235,18 @@ coach_session: null
 
 识别同构结构。
 
+## Observable Capability Standard
+
+在陌生外壳中独立说明同构结构。
+
+## Test
+
+完成一张未见题的首次尝试。
+
+## Planning Basis
+
+当前测试需要一份完整 Plan。来源：[Roadmap](../ROADMAP.md#plan-graph)。
+
 ## Lesson Index
 
 （暂无）

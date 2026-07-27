@@ -1,4 +1,13 @@
 import { expect, test } from 'bun:test';
+import {
+  cpSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { readLearningSet, readPlanWorkspace } from '../../src/study/read-workspace';
 import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
 
@@ -37,4 +46,22 @@ test('reads the derivative Roadmap and Plan lesson index', () => {
     { id: 'assessment-02', kind: 'problem', required: true, dependsOn: ['assessment-01'], uses: ['Q-DOMAIN-EX16'] },
     { id: 'reflection', kind: 'reflection', required: true, dependsOn: ['assessment-02'], uses: [] },
   ]);
+});
+
+test('rejects a linked legacy Plan instead of projecting an empty rationale', () => {
+  const copy = mkdtempSync(join(tmpdir(), 'study-strict-read-'));
+  try {
+    cpSync(root, copy, { recursive: true });
+    const path = join(copy, 'plans/domain-integrity.md');
+    writeFileSync(
+      path,
+      readFileSync(path, 'utf8')
+        .replace(/\n## Planning Basis[\s\S]*?(?=\n## Lesson Index)/, ''),
+    );
+    expect(() => readLearningSet(copy)).toThrow(
+      'PLAN_SECTION_REQUIRED: plans/domain-integrity.md#planning-basis',
+    );
+  } finally {
+    rmSync(copy, { recursive: true, force: true });
+  }
 });

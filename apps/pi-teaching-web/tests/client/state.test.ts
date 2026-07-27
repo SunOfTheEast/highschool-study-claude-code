@@ -14,7 +14,7 @@ function workspaceWithLesson(status: LessonStatus): PlanWorkspaceSnapshot {
     status: 'active',
     goal: 'goal',
     capabilityStandard: 'standard',
-    planningBasis: '',
+    planningBasis: '当前测试 Plan 的公开安排依据。',
   };
   return {
     learningSet: {

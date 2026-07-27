@@ -107,9 +107,25 @@ status: active
   writeFileSync(absolute, `---
 id: p1
 kind: plan
-status: prepared
+status: active
 ---
 # Plan：测试 Plan
+
+## Goal
+
+完成当前测试 Plan。
+
+## Observable Capability Standard
+
+满足本测试声明的可观察行为。
+
+## Test
+
+完成一次与该能力标准对应的验证。
+
+## Planning Basis
+
+当前测试需要一份完整 Plan。来源：[Roadmap](../ROADMAP.md#plan-graph)。
 
 ## Lesson Index
 
@@ -162,6 +178,34 @@ coach_session: null
 ## Goal
 
 识别同构结构。
+
+## Observable Capability Standard
+
+在陌生外壳中独立说明同构结构。
+
+## Test
+
+完成一张未见题的首次尝试。
+
+## Planning Basis
+
+当前需要区分结构识别与计算执行。来源：[Roadmap](../ROADMAP.md#goal)。
+
+## Lesson Index
+
+尚未创建 Lesson。
+
+## Current Position
+
+等待开始。
+
+## Next Lesson Candidate
+
+准备一节诊断课。
+
+## Plan Summary
+
+尚无课堂结果。
 `);
   return { root, roadmapPath, planPath };
 }
@@ -408,7 +452,7 @@ test('leaves a Plan byte-for-byte unchanged when an audit section is missing', (
     currentPosition: '不会写入。',
     nextLessonCandidate: '不会写入。',
     planSummary: '不会写入。',
-  })).toThrow('SECTION_NOT_FOUND: Plan Summary');
+  })).toThrow('PLAN_SECTION_REQUIRED: plans/p1.md#plan-summary');
   expect(readFileSync(absolute, 'utf8')).toBe(before);
   expect(readFileSync(roadmapPath, 'utf8')).toBe(roadmapBefore);
 });
@@ -455,6 +499,22 @@ test('rejects invalid Plan registration without changing the Roadmap', () => {
   );
   expect(() => registerPlan(root, 'isomorphic-transformation')).toThrow();
   expect(readFileSync(roadmapPath, 'utf8')).toBe(before);
+});
+
+test('rejects an incomplete Plan before changing the Roadmap', () => {
+  const { root, roadmapPath, planPath } = registrationFixture();
+  const incomplete = readFileSync(planPath, 'utf8')
+    .replace(/\n## Planning Basis[\s\S]*?(?=\n## Lesson Index)/, '')
+    .replace(/\n## Lesson Index[\s\S]*?(?=\n## Current Position)/, '');
+  writeFileSync(planPath, incomplete);
+  const planBefore = readFileSync(planPath, 'utf8');
+  const roadmapBefore = readFileSync(roadmapPath, 'utf8');
+
+  expect(() => registerPlan(root, 'isomorphic-transformation')).toThrow(
+    'PLAN_SECTION_REQUIRED: plans/isomorphic-transformation.md#planning-basis',
+  );
+  expect(readFileSync(planPath, 'utf8')).toBe(planBefore);
+  expect(readFileSync(roadmapPath, 'utf8')).toBe(roadmapBefore);
 });
 
 test('requires the existing Plan Graph section before registration', () => {
@@ -508,7 +568,7 @@ test('rejects Lesson preparation from a completed Plan before writing anything',
   const absolutePlan = join(root, planPath);
   writeFileSync(
     absolutePlan,
-    readFileSync(absolutePlan, 'utf8').replace('status: prepared', 'status: completed'),
+    readFileSync(absolutePlan, 'utf8').replace('status: active', 'status: completed'),
   );
   const planBefore = readFileSync(absolutePlan, 'utf8');
   const lessonPath = 'lessons/lesson-after-completion.md';
@@ -540,6 +600,22 @@ kind: plan
 status: active
 ---
 # Plan：第二 Plan
+
+## Goal
+
+完成当前测试 Plan。
+
+## Observable Capability Standard
+
+满足本测试声明的可观察行为。
+
+## Test
+
+完成一次与该能力标准对应的验证。
+
+## Planning Basis
+
+当前测试需要一份完整 Plan。来源：[Roadmap](../ROADMAP.md#plan-graph)。
 
 ## Lesson Index
 

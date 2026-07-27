@@ -3,6 +3,7 @@ import { basename, extname, relative } from 'node:path';
 import { parse } from 'yaml';
 import { StudyError } from './errors';
 import { resolveInsideRoot } from './learning-set';
+import { validatePlanDocument } from './plan-document';
 
 export type MarkdownDocument = {
   path: string;
@@ -143,6 +144,9 @@ export function readMarkdownFile(root: string, relativePath: string): MarkdownDo
   const isPlanOrLesson = /^(?:plans|lessons)\//.test(normalizedPath);
   const fileStem = basename(absolutePath, extname(absolutePath));
   if (isPlanOrLesson && id !== fileStem) throw new StudyError('INVALID_DOCUMENT_ID');
+  if (/^plans\/[^/]+\.md$/.test(normalizedPath)) {
+    validatePlanDocument(normalizedPath, frontmatter, body);
+  }
 
   return {
     path: absolutePath,

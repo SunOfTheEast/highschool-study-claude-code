@@ -5,6 +5,10 @@ status: completed
 ---
 # Max Value Plan
 
+## Goal
+
+Strengthen independent freeze-variable reasoning and boundary verification.
+
 ## Observable Capability Standard
 
 Independently freeze a useful combination, eliminate the remaining variable, and verify the domain and equality condition on an unseen problem.
@@ -13,11 +17,23 @@ Independently freeze a useful combination, eliminate the remaining variable, and
 
 Complete one no-hint transfer card and explain why its boundary is attainable.
 
+## Planning Basis
+
+Prior Lessons show that the domain must be stated before the final boundary check. Sources: [Lesson 001](../lessons/lesson-001.md), [Lesson 002](../lessons/lesson-002.md), and [Lesson 003](../lessons/lesson-003.md).
+
 ## Lesson Index
 
 1. [Lesson 001](../lessons/lesson-001.md) — closed.
 2. [Lesson 002](../lessons/lesson-002.md) — closed.
 3. [Lesson 003](../lessons/lesson-003.md) — closed.
+
+## Current Position
+
+The observable capability standard is met.
+
+## Next Lesson Candidate
+
+Proceed to a new transfer Plan chosen by the student.
 
 ## Capability and Completion
 
