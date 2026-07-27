@@ -7,10 +7,18 @@ type ComposeRoleContext = (
   ownerContext: string,
 ) => string;
 
+type RoleSkillNames = (role: 'coach' | 'tutor') => string[];
+
 function composeRoleContext(): ComposeRoleContext {
   const compose = (resourceLoader as Record<string, unknown>).composeRoleContext;
   expect(compose).toBeFunction();
   return compose as ComposeRoleContext;
+}
+
+function roleSkillNames(): RoleSkillNames {
+  const value = (resourceLoader as Record<string, unknown>).roleSkillNames;
+  expect(value).toBeFunction();
+  return value as RoleSkillNames;
 }
 
 test('composes the shared teaching core before role and owner context', () => {
@@ -25,4 +33,16 @@ test('composes the shared teaching core before role and owner context', () => {
 test('drops empty context fragments without adding blank envelopes', () => {
   expect(composeRoleContext()(' CORE ', '', ' OWNER '))
     .toBe('CORE\n\nOWNER');
+});
+
+test('offers next-cycle planning only to Coach', () => {
+  expect(roleSkillNames()('coach')).toEqual([
+    'coach-study',
+    'plan-next-cycle',
+    'deep-workflow',
+  ]);
+  expect(roleSkillNames()('tutor')).toEqual([
+    'tutor-lesson',
+    'deep-workflow',
+  ]);
 });

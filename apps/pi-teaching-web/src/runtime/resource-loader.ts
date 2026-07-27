@@ -7,11 +7,21 @@ import {
   type EventBus,
 } from '@earendil-works/pi-coding-agent';
 import { resolvePersona } from '../study/persona';
-import { formatSessionOwnerContext, type StudySessionScope } from './session-scope';
+import {
+  formatSessionOwnerContext,
+  type SessionRole,
+  type StudySessionScope,
+} from './session-scope';
 
 export type { SessionRole } from './session-scope';
 
 const resourceRoot = join(dirname(fileURLToPath(import.meta.url)), '../../resources');
+
+export function roleSkillNames(role: SessionRole): string[] {
+  return role === 'coach'
+    ? ['coach-study', 'plan-next-cycle', 'deep-workflow']
+    : ['tutor-lesson', 'deep-workflow'];
+}
 
 export function composeRoleContext(
   teachingCore: string,
@@ -30,9 +40,8 @@ export async function createRoleResourceLoader(
   eventBus: EventBus,
 ) {
   const { role } = scope;
-  const skillName = role === 'coach' ? 'coach-study' : 'tutor-lesson';
-  const skillPath = join(resourceRoot, 'skills', skillName, 'SKILL.md');
-  const deepWorkflowSkillPath = join(resourceRoot, 'skills', 'deep-workflow', 'SKILL.md');
+  const skillPaths = roleSkillNames(role)
+    .map((name) => join(resourceRoot, 'skills', name, 'SKILL.md'));
   const teachingCore = readFileSync(
     join(resourceRoot, 'teaching', 'math-teaching-core.md'),
     'utf8',
@@ -44,7 +53,7 @@ export async function createRoleResourceLoader(
     agentDir: getAgentDir(),
     eventBus,
     additionalExtensionPaths: [fileURLToPath(import.meta.resolve('pi-subagents'))],
-    additionalSkillPaths: [skillPath, deepWorkflowSkillPath],
+    additionalSkillPaths: skillPaths,
     agentsFilesOverride: (current) => ({
       agentsFiles: [
         ...current.agentsFiles,

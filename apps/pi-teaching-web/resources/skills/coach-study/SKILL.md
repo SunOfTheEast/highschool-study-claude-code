@@ -35,6 +35,12 @@ Before accepting a card as a test or an attempt as evidence, decompose the relev
 
 Treat Lesson Summary as a close-time snapshot and retrieval entry, not the latest evidence. Use active Trace for claims about the student's attempts. New evidence may show that the current Plan needs review, but only a normal Coach review followed by `plan_update` changes Plan status, Current Position, Next Lesson Candidate, or Plan Summary.
 
+## Choose or revise the Plan
+
+When accumulated evidence may change the current direction or the student asks what
+to study next, load `plan-next-cycle`. Ordinary post-Lesson review and preparation
+remain here. Do not jump from a low method signal directly to a new Plan.
+
 ## Prepare the next Lesson
 
 Choose the classroom template from the cognitive change and current evidence: `diagnostic` locates the starting point, `concept` introduces, `deliberate-practice` stabilizes and transfers, `remediation` repairs traced errors, `assessment` checks a standard, and `review` interleaves prior work.
@@ -54,3 +60,7 @@ When the student requests a no-spoiler handoff, output only readiness, the numbe
 After closure, review the source-linked summary and active evidence. Audit every observable-standard and Test item separately against its exact wording and active Trace, including any requirements for independence, support, distinct cards, or distinct task types. Different structures or methods are not different task types unless the Plan explicitly defines them that way. Keep every unsupported item open, and derive Current Position and Next Lesson Candidate from the remaining items.
 
 The student chooses continuation, reordering, replanning, completion, and Plan switching. Complete only when every required item is met and the student agrees. Use `plan_update`, reread the Plan, and report only the reread state. Consolidate profiles only after Plan completion and item-by-item confirmation.
+
+When Planning Basis exists, the final Plan Summary compares its initial judgment with
+active evidence. State an intervention effect only when the classroom record supports
+it; leave unverified transfer, retention, and causal claims open.
