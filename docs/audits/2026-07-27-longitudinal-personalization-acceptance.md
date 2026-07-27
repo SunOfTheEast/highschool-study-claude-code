@@ -1,8 +1,9 @@
 # 纵向个性化规划验收记录
 
 日期：2026-07-27  
-中间结论：`NO_EFFECT`  
-说明：这里的 `NO_EFFECT` 是预注册验收协议的失败等级，表示“尚不能把个性化规划能力判为稳定有效”，不表示四次规划完全没有表现出历史区分。
+中间结论：`PLANNING_ONLY`（2026-07-28 严格契约重跑）
+说明：前文保留的 `NO_EFFECT` 是第一次运行的历史结论；当前结论以文末
+Strict-contract rerun 为准。
 
 ## Run Identity
 
@@ -156,3 +157,138 @@ Task 7 按门槛停止，未运行 `A-matched`、`A-mismatched`、`B-matched`、
 2. 明确当前 Trace / Planner Attention 高于手工旧 HEATMAP 的来源优先级；
 3. 让 Plan 注册或写入前结构检查拒绝缺少 `Planning Basis` 的新 Plan；
 4. 用同一四根、同一交换设计重跑 stage one；只有两对均通过后才进入 Task 7。
+
+---
+
+## Strict-contract rerun（2026-07-28）
+
+本节记录对前次三个阻塞点的原位重跑。前文 `NO_EFFECT` 结论保留为历史
+结果；本节使用新的隔离根、纠正后的两天时间窗、共享严格 Plan 读取边界和
+新的真实模型 Session。
+
+### Run Identity
+
+- 冻结候选提交：`ade47a8e0cd0577acb015d09790d0c30b2995c78`
+- 冻结前工作区：clean
+- 验收根：`/tmp/studyforge-strict-personalization-5Jlin8`
+- Provider：`deepseek`
+- Model：`deepseek-v4-pro`
+- Thinking：`high`
+- Persona：`calm-senpai`
+- Deep mode：关闭
+- 消息投影：safe
+- 端口：`65431`、`65432`、`65433`、`65434`
+- 四次请求继续使用完全相同的推荐提示与确认提示。
+
+| Run | Session | Owner | History |
+| --- | --- | --- | --- |
+| `red-1` | `019fa511-fb2c-78b1-b9a6-2c75c9bde28f` | `coach / cycle-03 / plans/cycle-03.md` | A |
+| `blue-1` | `019fa511-fb2e-7cfb-b4b9-51fc445f8032` | `coach / cycle-03 / plans/cycle-03.md` | B |
+| `red-2` | `019fa511-fb2a-7086-896f-85e75102aec9` | `coach / cycle-03 / plans/cycle-03.md` | B |
+| `blue-2` | `019fa511-fb2c-797c-8187-1aae5ae7968e` | `coach / cycle-03 / plans/cycle-03.md` | A |
+
+四个 JSONL 均记录相同 provider、model、thinking 与 owner；推荐和确认阶段
+均无浏览器 console error。
+
+### Corrected controls
+
+- 每根均为 3 个 completed 严格 Plan、6 个 closed Lesson、6 个 active Trace。
+- 每个历史仍为 4 次 correct、2 次 partially correct、2 次 Tutor support，
+  且使用同一 6 张真实题卡。
+- Lesson 005 为 `2026-03-02T09:00:00.000Z`，Lesson 006 为
+  `2026-03-04T09:00:00.000Z`，严格相隔 2 天；因此“延迟保持未验证”不再与
+  原始时间戳冲突。
+- Planner Attention 四根哈希仍为
+  `18ef729bf804c9afffacf075cb3bf1eb08118b2c399f3ade06eee0a77dd7a91f`。
+- 共享资产清单哈希：
+  `748e0e8822dd8a7a27d35dd2237a5e5240af8889b1b6f9f45af187840e9d7eb3`。
+- 控制摘要哈希：
+  `da69fc0e0fc44e5cd43cda64b8257759cea090f83cc15b789ca1c94707a1b014`。
+- 模型流量前不存在 `cycle-04`；三个预置 Plan 均满足当前八节契约。
+- `graph/HEATMAP.md` 仍作为相同静态资产存在，但没有一次推荐或最终
+  Planning Basis 把该手工 prototype 当作当前学情证据。
+
+### Strict persistence audit
+
+四个 `cycle-04.md` 均满足：
+
+- `Goal`、`Observable Capability Standard`、`Test`、`Planning Basis`、
+  `Lesson Index`、`Current Position`、`Next Lesson Candidate`、
+  `Plan Summary` 各出现一次且内容非空；
+- 最终 `plan_register` 成功，回执中的 `planningBasis` 非空；
+- Roadmap 仅出现一次对应 Plan 链接；
+- Coach 在最终成功注册后重新读取 Plan 与 Roadmap；
+- 所有决定性 Markdown 来源都可解析；
+- 所有模型写入都位于各自隔离根。
+
+严格契约真实拦截了三次初稿错误：
+
+| Run | `plan_register` 次数 | 第一次结果 | 最终结果 |
+| --- | ---: | --- | --- |
+| `red-1` | 2 | `PLAN_SECTION_REQUIRED: plans/cycle-04.md#lesson-index` | success |
+| `blue-1` | 2 | `PLAN_SECTION_REQUIRED: plans/cycle-04.md#lesson-index` | success |
+| `red-2` | 1 | success | success |
+| `blue-2` | 2 | `PLAN_SECTION_REQUIRED: plans/cycle-04.md#lesson-index` | success |
+
+三次失败都在同一 turn 内修复同一文件；没有错误状态被当成最终成功，也没有
+人工提示 Coach 如何补写。
+
+### History-swap result
+
+| Run | History | 最终主要认知动作 |
+| --- | --- | --- |
+| `red-1` | A | 区分陌生外壳下的结构感知阻塞与方法映射阻塞 |
+| `blue-1` | B | 验证书面条件检查点的延迟保持，并首次诊断方法边界 |
+| `red-2` | B | 验证书面条件检查点的延迟保持，并首次诊断方法边界 |
+| `blue-2` | A | 区分陌生外壳下的结构感知阻塞与方法映射阻塞 |
+
+结果再次跟随 History，而不是颜色或运行序号。A 的关键来源是两次陌生外壳
+均需方法启动提示、提示后计算独立；B 的关键来源是口头提醒未迁移、书面
+检查点在两次近时不同外壳中成功，而延迟保持仍无证据。
+
+### Blinded scores
+
+匿名包在评分前随机换名，映射文件保持 `0600` 且未读取。评估器使用新的
+ephemeral、无工具、无 Skill、无扩展、无项目上下文 Session。匿名包只包含
+safe 建议、核心 Plan 字段、来源路径和严格注册审计。
+
+解盲映射：
+
+```text
+pair 1: 青黛 = blue-1 (History B), 月白 = red-1 (History A)
+pair 2: 竹青 = red-2 (History B), 秋香 = blue-2 (History A)
+```
+
+| Pair | Candidate scores | Material difference | History causation | Verdict |
+| --- | --- | --- | --- | --- |
+| 1 | `13/14`, `13/14` | yes | yes | `PASS` |
+| 2 | `14/14`, `14/14` | yes | yes | `PASS` |
+
+Pair 1 对“严格持久化”各给 1/2，但独立运行时审计已确认两份 Plan 都是八节
+完整、注册成功并重读；该扣分来自盲包没有展示八节正文全文，不是落盘缺失。
+两位盲评都确认主要认知动作实质不同，且差异可由相应历史解释。
+
+### Intermediate Result
+
+`PLANNING_ONLY`
+
+严格规划门通过：
+
+- 两次历史交换都复现了对应方向；
+- 决定性来源不再存在时间冲突，也没有引用 prototype HEATMAP；
+- 四份 Plan 全部满足严格持久化门，且错误初稿不能污染 Roadmap；
+- 两对盲评分均通过。
+
+这个等级只确认“长期历史能够稳定改变下一 Plan”，尚未确认 matched Plan
+会带来更好的真实课堂结果。按照预注册协议，可以进入两 Lesson
+matched/mismatched cross-treatment。
+
+### Frozen treatment inputs
+
+| Treatment source | Plan hash |
+| --- | --- |
+| History A / `red-1` | `b7effb95718df9d5c9bf7a4ce9d6f45c0f03d4c4b01dcfce6cc780fe0ef5dc58` |
+| History B / `blue-1` | `7324023e229f4fa0ede406a8dd99f83ec013a6b1a005c122c6468224b9b9a79e` |
+
+下一阶段只复制这两份冻结 Plan；不再修改候选 Plan、受控历史、产品代码或
+Skill。
