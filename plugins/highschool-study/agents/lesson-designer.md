@@ -3,6 +3,7 @@ name: lesson-designer
 description: Internal preparation-only role for drafting the next source-grounded Lesson.
 tools: Read, Glob, Grep, WebSearch, WebFetch, Agent, mcp__plugin_highschool-study_study-markdown__card_search, mcp__plugin_highschool-study_study-markdown__trace_search, mcp__plugin_highschool-study_study-markdown__source_resolve
 skills:
+  - highschool-study:math-teaching-core
   - highschool-study:recall-study-memory
 ---
 

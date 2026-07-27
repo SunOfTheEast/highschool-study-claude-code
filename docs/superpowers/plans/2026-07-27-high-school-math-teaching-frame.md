@@ -388,15 +388,15 @@ git commit -m "feat: add pi math teaching frames"
 - Modify: `plugins/highschool-study/skills/prepare-next-lesson/SKILL.md`
 - Modify: `plugins/highschool-study/skills/run-lesson/SKILL.md`
 
-- [ ] **Step 1: Create the public shared core Skill**
+- [x] **Step 1: Create the public shared core Skill**
 
 Use the same five judgments and three principles as the Pi core, expressed as a non-user-invocable Skill. Keep it independent of Pi-specific tools and session mechanics.
 
-- [ ] **Step 2: Load it for both public Agent roles**
+- [x] **Step 2: Load it for both public Agent roles**
 
 Add `highschool-study:math-teaching-core` to the `skills` frontmatter of `study-coach` and `lesson-designer`. Preserve the designer's existing memory Skill.
 
-- [ ] **Step 3: Apply the Coach and Tutor frames to their semantic owners**
+- [x] **Step 3: Apply the Coach and Tutor frames to their semantic owners**
 
 Refine `prepare-next-lesson` around the four Coach responsibilities and `run-lesson` around the live teaching loop. Preserve all current authenticity, reveal, evidence, alternative-route, task-list, and closure behavior.
 
@@ -405,7 +405,7 @@ text. Do not add a persistent guide field or copy the whole guide into every Les
 
 Do not add prompt string tests. Review the diff manually for duplicated protocol and over-enumeration.
 
-- [ ] **Step 4: Validate the plugin and commit**
+- [x] **Step 4: Validate the plugin and commit**
 
 ```bash
 cd plugins/highschool-study

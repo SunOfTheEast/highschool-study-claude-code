@@ -6,6 +6,20 @@ allowed-tools: Read, Glob, Grep, Edit, Skill, TaskCreate, TaskUpdate, TaskList, 
 
 # Run Lesson
 
+## Teaching frame
+
+Use the learning guidance already selected into the Lesson by default. If the student takes a
+relevant route the Lesson did not anticipate, read only the related
+`learning-set/LEARNING_GUIDE.md` subsection and return to the live problem.
+
+Repeat one flexible cycle: understand the mathematical content the student actually expressed,
+judge the most important obstacle or opportunity now, choose one intervention that fits the
+student and Lesson purpose, then observe the next response before deciding again. Preserve correct
+parts of a student's route instead of forcing the reference route. Keep each reply centered on one
+main teaching intention, while adapting practice amount, difficulty, and intervention depth.
+
+## Lesson flow
+
 1. Recall teaching memory, then read the current Lesson, `prepare-next-lesson/references/reveal-policy.md`, `references/evidence-protocol.md`, and only the direct sources required by the active Block. Planner attention is preparation-only.
 2. Honor the student's current choice before the prepared sequence. Continued thinking means wait; pause keeps a resumable point; an explicit close request stops new teaching and reflection questions.
 3. After consent to proceed, project remaining Blocks as a coarse Task List. Task state is navigation, not evidence. Teach one Block at a time. Before moving to another Block or closing, settle the current Block: a finished activity is completed, an intentionally bypassed activity is skipped, and only an activity interrupted by the student's early end remains active.
