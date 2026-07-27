@@ -116,17 +116,17 @@ The learning set is invalid until its Plan files are manually corrected.
 
 1. resolves `plans/<planId>.md`;
 2. runs the canonical strict Plan validator;
-3. performs any existing Coach Session ownership cleanup;
-4. rereads the strict Plan;
-5. only then adds or updates its Roadmap Plan Graph entry;
+3. adds or updates its Roadmap Plan Graph entry only for that valid Plan;
+4. performs the existing Coach Session ownership cleanup, if needed;
+5. strictly rereads and idempotently registers the resulting Plan;
 6. rereads both Plan and Roadmap and returns the canonical receipt.
 
 If validation fails, Roadmap and Plan remain byte-for-byte unchanged. Registration
 must never return `ok: true` with an empty `planningBasis`.
 
-Session cleanup must not create a partial transaction. If a foreign `coach_session`
-needs clearing, validation occurs before that write, and the final strict reread must
-succeed before Roadmap registration.
+If a foreign `coach_session` needs clearing, the initial validation occurs before any
+Plan or Roadmap write. The final receipt is returned only after strict reread and
+idempotent registration succeed.
 
 ### Existing repository fixtures
 
