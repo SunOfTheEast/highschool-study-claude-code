@@ -33,6 +33,7 @@ export type PlanSummary = {
   status: string;
   goal: string;
   capabilityStandard: string;
+  planningBasis: string;
 };
 
 export type LearningSetSnapshot = {

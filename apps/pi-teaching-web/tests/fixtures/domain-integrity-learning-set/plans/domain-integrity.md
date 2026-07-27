@@ -19,6 +19,15 @@ status: active
 2. 跨题型：在不等式、恒成立参数或零点分析中，至少两类题主动用定义域确定答案边界。
 3. 迁移：在非常规嵌套约束题中首次尝试一次通过。
 
+## Planning Basis
+
+当前判断是定义域遗漏已经成为稳定阻塞点，而不是一次计算失误。
+
+关键来源：[Lesson 001](../lessons/lesson-001.md#trace-event-001)、
+[Lesson 002](../lessons/lesson-002.md#trace-event-001)。
+
+若连续独立核验仍出现遗漏，就重新检查是否需要更基础的函数条件诊断。
+
 ## Lesson Index
 
 1. [Lesson 001：冷启动诊断](../lessons/lesson-001.md) — closed；原 run 为 unplanned，作为本 Plan 的诊断起点登记。

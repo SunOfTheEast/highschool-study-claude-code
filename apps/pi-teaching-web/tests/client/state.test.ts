@@ -14,6 +14,7 @@ function workspaceWithLesson(status: LessonStatus): PlanWorkspaceSnapshot {
     status: 'active',
     goal: 'goal',
     capabilityStandard: 'standard',
+    planningBasis: '',
   };
   return {
     learningSet: {

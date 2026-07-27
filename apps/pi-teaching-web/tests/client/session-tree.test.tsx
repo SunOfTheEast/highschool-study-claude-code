@@ -11,6 +11,7 @@ function workspace(status: string): PlanWorkspaceSnapshot {
     status,
     goal: '完成当前周期。',
     capabilityStandard: '可以独立完成。',
+    planningBasis: '',
   };
   return {
     learningSet: {
@@ -27,6 +28,7 @@ function workspace(status: string): PlanWorkspaceSnapshot {
           status: 'active',
           goal: '进入下一周期。',
           capabilityStandard: '完成迁移。',
+          planningBasis: '',
         },
       ],
     },

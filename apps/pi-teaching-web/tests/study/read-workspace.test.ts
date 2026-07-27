@@ -14,6 +14,10 @@ test('reads the derivative Roadmap and Plan lesson index', () => {
 
   const workspace = readPlanWorkspace(root, 'domain-integrity');
   expect(workspace.coach.sessionKey).toBe('coach:domain-integrity');
+  expect(workspace.plan.planningBasis)
+    .toContain('定义域遗漏已经成为稳定阻塞点');
+  expect(learningSet.plans[0]?.planningBasis)
+    .toBe(workspace.plan.planningBasis);
   expect(workspace.lessons.map((lesson) => [lesson.id, lesson.status])).toEqual([
     ['lesson-001', 'closed'],
     ['lesson-002', 'closed'],

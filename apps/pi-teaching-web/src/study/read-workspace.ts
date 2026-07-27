@@ -50,6 +50,7 @@ function planSummary(root: string, planPath: string): PlanSummary {
     status: scalar(document.frontmatter, 'status') ?? 'unknown',
     goal: section(document.body, 'Goal'),
     capabilityStandard: section(document.body, 'Observable Capability Standard'),
+    planningBasis: section(document.body, 'Planning Basis'),
   };
 }
 
