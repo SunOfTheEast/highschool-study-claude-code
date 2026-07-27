@@ -1,4 +1,3 @@
-import { resolve } from 'node:path';
 import { cpSync, mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import type { SessionKey } from '../../src/shared/contracts';
@@ -8,8 +7,9 @@ import { resolvePersona } from '../../src/study/persona';
 import { createRequestHandler } from '../../src/server/app';
 import { EventHub } from '../../src/server/event-hub';
 import type { WorkflowSnapshot, WorkflowTaskState } from '../../src/workflows/contracts';
+import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
 
-const sourceRoot = resolve(import.meta.dir, '../../../../examples/derivative-demo/learning-set');
+const sourceRoot = domainIntegrityFixtureRoot;
 const root = mkdtempSync(`${tmpdir()}/studyforge-e2e-`);
 cpSync(sourceRoot, root, { recursive: true });
 const hub = new EventHub();

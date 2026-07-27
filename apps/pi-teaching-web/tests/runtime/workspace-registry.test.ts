@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { StudySession, StudySessionFactory } from '../../src/runtime/session-factory';
 import { WorkspaceRegistry } from '../../src/runtime/workspace-registry';
+import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
 
 const roots: string[] = [];
 afterEach(() => {
@@ -13,9 +14,7 @@ afterEach(() => {
 function fixture() {
   const root = mkdtempSync(join(tmpdir(), 'study-registry-'));
   roots.push(root);
-  cpSync(join(import.meta.dir, '../../../../examples/derivative-demo/learning-set'), root, {
-    recursive: true,
-  });
+  cpSync(domainIntegrityFixtureRoot, root, { recursive: true });
   return root;
 }
 

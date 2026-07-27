@@ -5,8 +5,9 @@ import { join } from 'node:path';
 import { readTraceRecords } from 'highschool-study-markdown/study-domain';
 import { createClassroomUpdateTool } from '../../src/runtime/classroom-update';
 import { createStudyTools } from '../../src/runtime/study-tools';
+import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
 
-const root = join(import.meta.dir, '../../../../examples/derivative-demo/learning-set');
+const root = domainIntegrityFixtureRoot;
 const temporaryRoots: string[] = [];
 
 afterEach(() => {

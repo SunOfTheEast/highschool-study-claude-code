@@ -4,8 +4,9 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { readStudentNotebook } from '../../src/study/student-notebook';
 import { setBlockStatus } from '../../src/study/write-workspace';
+import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
 
-const sourceRoot = join(import.meta.dir, '../../../../examples/derivative-demo/learning-set');
+const sourceRoot = domainIntegrityFixtureRoot;
 const roots: string[] = [];
 
 afterEach(() => {
