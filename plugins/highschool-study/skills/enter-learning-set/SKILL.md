@@ -11,6 +11,13 @@ Return entry context to `study`; do not create another Agent or persisted contex
 
 Read `learning-set/ROADMAP.md` when present and extract `## Learning Set Overview`. Present it on first Session entry or explicit request; otherwise keep it as background. If absent, use one short fallback from the Roadmap title, goal, Plan graph and observable capability standard. A missing Roadmap leaves overview empty so `study` can route its creation.
 
+## Learning principles
+
+Read optional `learning-set/LEARNING_GUIDE.md`. On first entry or an explicit overview request,
+present `## Student Learning Principles` after the learning-set overview. Treat a missing or empty
+section as no learning-set-specific advice. Never expose `## Internal Teaching Notes` through the
+entry response.
+
 ## Persona resolution
 
 Resolve one existing persona in this order: current Lesson's temporary choice, `CLAUDE.local.md` preference, `CLAUDE.md` default, then bundled `neutral-tutor`. A learning-set persona file overrides a bundled file with the same ID. A missing ID falls back visibly; never construct a path from free-form student text.

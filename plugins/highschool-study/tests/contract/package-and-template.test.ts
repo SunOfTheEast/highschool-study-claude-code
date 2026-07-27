@@ -9,6 +9,7 @@ test('ships the minimal Markdown template', () => {
     '.claude-plugin/plugin.json',
     '.mcp.json',
     'learning-set-template/ROADMAP.md',
+    'learning-set-template/LEARNING_GUIDE.md',
     'learning-set-template/memory/student-profile.md',
     'learning-set-template/memory/teaching-profile.md',
     'learning-set-template/memory/planner-attention.md',

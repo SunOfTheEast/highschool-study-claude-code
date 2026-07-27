@@ -217,11 +217,11 @@ Expected: public principles render; internal notes never enter `LearningSetSnaps
 - Modify: `plugins/highschool-study/tests/contract/package-and-template.test.ts`
 - Modify: `plugins/highschool-study/tests/contract/public-demo.test.ts`
 
-- [ ] **Step 1: Add packaging tests for the guide files**
+- [x] **Step 1: Add packaging tests for the guide files**
 
 Assert only that both distributable roots contain `LEARNING_GUIDE.md`. Do not test headings or prose.
 
-- [ ] **Step 2: Run the contract tests and verify red**
+- [x] **Step 2: Run the contract tests and verify red**
 
 ```bash
 cd plugins/highschool-study
@@ -230,7 +230,7 @@ bun test tests/contract/package-and-template.test.ts tests/contract/public-demo.
 
 Expected: FAIL because the two guide assets do not exist.
 
-- [ ] **Step 3: Create the compact template**
+- [x] **Step 3: Create the compact template**
 
 Use exactly the approved public/private split:
 
@@ -250,15 +250,15 @@ Use exactly the approved public/private split:
 
 Keep placeholders short and useful to a learning-set author.
 
-- [ ] **Step 4: Write the derivative guide**
+- [x] **Step 4: Write the derivative guide**
 
 The public section should teach structure-before-calculation, method-choice explanation, transfer across different problem shells, and error-type distinction. Internal notes should keep the main line on structural recognition, method choice, execution, and transfer; they should explicitly prevent domain-integrity corner cases from crowding out the advanced method graph. Include no card answer or hidden Lesson content.
 
-- [ ] **Step 5: Update entry semantics**
+- [x] **Step 5: Update entry semantics**
 
 `enter-learning-set` reads the optional guide, presents only `Student Learning Principles`, and treats a missing guide as empty. It returns no internal notes to the student.
 
-- [ ] **Step 6: Verify and commit**
+- [x] **Step 6: Verify and commit**
 
 ```bash
 bun test tests/contract/package-and-template.test.ts tests/contract/public-demo.test.ts

@@ -11,6 +11,7 @@ const root = resolve(
 test('keeps the public derivative demo clean and asset-complete', () => {
   const learningSet = readLearningSet(root);
   expect(learningSet.title).toBe('高阶导数学习');
+  expect(learningSet.learningPrinciples.length).toBeGreaterThan(0);
   expect(learningSet.plans).toEqual([]);
 
   expect(readdirSync(join(root, 'plans')).filter((name) => name.endsWith('.md')))
@@ -25,6 +26,7 @@ test('keeps the public derivative demo clean and asset-complete', () => {
 
   for (const path of [
     'graph/VOCABULARY.md',
+    'LEARNING_GUIDE.md',
     'materials/demo-notes.md',
     '.claude/personas/.gitkeep',
     'memory/student-profile.md',

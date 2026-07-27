@@ -9,6 +9,7 @@ const read = (path: string) => readFileSync(join(demo, path), 'utf8');
 test('ships an oriented derivative demo with a set-scoped persona', () => {
   for (const path of [
     'learning-set/CLAUDE.md',
+    'learning-set/LEARNING_GUIDE.md',
     'learning-set/.gitignore',
     'learning-set/.claude/personas/.gitkeep',
   ]) expect(existsSync(join(demo, path))).toBe(true);
