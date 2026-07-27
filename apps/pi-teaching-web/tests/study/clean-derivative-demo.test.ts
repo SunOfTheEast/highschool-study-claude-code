@@ -39,4 +39,14 @@ test('keeps the public derivative demo clean and asset-complete', () => {
   );
   expect(plannerAttention).not.toContain('lessons/lesson-');
   expect(plannerAttention).toContain('尚无课堂表现可供整理');
+
+  const tutorial = readFileSync(resolve(root, '../README.md'), 'utf8');
+  for (const stale of [
+    '定义域完整性的系统加固',
+    'Lesson 003',
+    'mst_p0032_ex22',
+  ]) {
+    expect(tutorial).not.toContain(stale);
+  }
+  expect(tutorial).toContain('尚未建立个性化学习阶段');
 });
