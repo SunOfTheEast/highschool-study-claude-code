@@ -44,6 +44,19 @@ export STUDY_LEARNING_SET=/path/to/project/learning-set
 
 学习集可以在 `.claude/personas/<id>.md` 添加专属人设，或用同名文件覆盖内置人设。临时人设选择不写文件；持久选择写入 Git 忽略的 `CLAUDE.local.md`。人设只改变面向学生的表达，绝不改变能力判断、题卡、Trace、测试或备课。
 
+## 数学教学 Frame 与学习指南
+
+教学质量由四份短资产共同决定：
+
+1. 共享数学教学内核要求每次关键决定都看目标、起点、任务、介入和证成；
+2. Coach Frame 把备课收束为学生当前思路、一个主要认知变化、具有不同作用的任务和独立结束证据；
+3. Tutor Frame 使用“听懂—判断—介入—再观察”的现场循环；
+4. 每个学习集的 `LEARNING_GUIDE.md` 保存该主题独有的高效学习原则和教研取舍。
+
+学生入口只展示 `Student Learning Principles`。Coach 在制定或修订 Plan、准备 Lesson 时读取全文，并只把本课相关原则放进现有 Lesson/Teacher Control；Tutor 默认使用这些已选原则，遇到备课未预料但相关的学生路线时才按需读取一个内部小节。指南缺失时保持为空，不由 Agent 临时编造。
+
+每完成一个 Plan，或积累 3–5 节真课后，再判断问题应修改题卡/图谱/指南、Coach Frame 还是 Tutor Frame。单次模型失误只保留为案例，避免 Prompt 随边角问题无限膨胀。
+
 ### 自适应课堂与防剧透
 
 备课会根据当前目标和 Trace 选择一个主模板：诊断课、概念新授课、专项训练课、错因修复课、能力验收课或复习整合课。模板只是 ActivityBlock 的默认组合，学生仍可增删、跳过和重排。

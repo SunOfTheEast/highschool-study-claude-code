@@ -431,7 +431,7 @@ Expected: strict validation passes and the public MCP tool count remains four.
 - Modify: `examples/derivative-demo/README.md`
 - Modify: `docs/zh-CN/完整说明书.md`
 
-- [ ] **Step 1: Document the user-facing model**
+- [x] **Step 1: Document the user-facing model**
 
 Explain:
 
@@ -444,7 +444,7 @@ Explain:
 
 Keep implementation details in the full manual and keep the two READMEs task-oriented.
 
-- [ ] **Step 2: Run the complete plugin checks**
+- [x] **Step 2: Run the complete plugin checks**
 
 ```bash
 cd plugins/highschool-study
@@ -454,7 +454,7 @@ bun run release:check
 
 Expected: bundle, typecheck, all tests, strict plugin validation, and four-tool contract pass.
 
-- [ ] **Step 3: Run the complete Pi checks**
+- [x] **Step 3: Run the complete Pi checks**
 
 ```bash
 cd apps/pi-teaching-web
@@ -465,7 +465,7 @@ bun run test:e2e
 
 Expected: typecheck, unit tests, production build, and browser E2E pass.
 
-- [ ] **Step 4: Check boundaries and commit documentation**
+- [x] **Step 4: Check boundaries and commit documentation**
 
 ```bash
 git diff --check

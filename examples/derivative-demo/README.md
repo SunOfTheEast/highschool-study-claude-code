@@ -44,6 +44,7 @@ claude
 当前示例状态：
 
 - 519 张题卡与高级方法图谱已经就绪；
+- `LEARNING_GUIDE.md` 已提供公开研习原则和内部导数教研要领；
 - Roadmap 尚未建立个性化学习阶段；
 - `plans/` 与 `lessons/` 为空；
 - 两份长期偏好画像和备课关注列表均为空；
@@ -84,6 +85,10 @@ claude
 ## 8. 学习集概述与展示人设
 
 首次进入、且没有课堂 Trace 时，`study` 会先展示 `ROADMAP.md` 中的 Learning Set Overview；已有 Trace 时，只有你要求时才会展开这份概述。
+
+入口还会展示 `learning-set/LEARNING_GUIDE.md` 的 `Student Learning Principles`。它提醒你先看结构再运算、说明方法选择、区分不同失误，并用陌生题检验迁移。该文件的 `Internal Teaching Notes` 只供备课和必要的课堂判断使用，不会作为学生说明直接展开。
+
+Coach 会结合这些导数教研要领、当前 Plan 和真实课堂记录确定本课最值得改变的认知；Tutor 再根据你现场写出的路线决定等待、追问、提示或讲解，不要求每节课走固定流程。
 
 本学习集默认使用冷静学姐（`calm-senpai`）。人设只会改变面向学生的表达，不会改变能力判断、题卡选择、Trace、测试或备课。
 
