@@ -138,6 +138,23 @@ pi
 
 Trace 写入成功后，服务端主动发布完整能力 snapshot；刷新、前进/后退和 Plan/Lesson 深链会从 Markdown 与已绑定 Pi Session 恢复 Coach、Tutor 或 closed Replay。Replay 优先使用真实 Pi 历史；历史不可用时明确显示 evidence-only。
 
+## Coach 问诊与教学判断
+
+首次 Roadmap 规划、Plan 完成后的下一周期规划，以及每节 Lesson 备课前，Coach
+都会先和学生做一段简短商议：每轮只问一个问题，通常连续问几个真正会改变安排
+的问题。下一问从学生刚说的模糊处继续，先问清是哪类题、什么情境、卡在哪一步、
+最近的具体例子或当时先试了什么，再讨论原因；它不是固定问卷，也不会把 Coach
+尚未验证的判断塞进问题里。
+
+历史记录可以减少重复追问，但不能替代学生此刻的理解、意图和限制。Coach 会先
+复述自己的理解和暂定判断，让学生纠正；备课时还会给出无剧透的课堂意图，学生
+确认或调整后才检索题卡并写出 Lesson。一个有效判断必须有学生原话或学习来源，
+实际改变 Plan 或 Lesson，并说明什么后续表现会支持或推翻它。学生可以随时要求
+结束问诊，由 Coach 带着明确的不确定性继续。
+
+具体执行分别由 `roadmap-study`、`plan-next-cycle` 和 `coach-study` 三份 Skill
+负责，不增加问卷 schema、诊断分数或新的 Agent。
+
 ## 长期记忆与界面偏好
 
 completed Plan 的学习顾问可以把带来源的 `add / revise / delete` 长期记忆候选放进原聊天时间线。候选默认都不选择；学生逐项采用、改写后采用或不采用，也可以稍后处理。提交只表示决定已保存并交回同一个 Plan Coach，不表示画像已经更新；学习顾问应用选择、重读 `student-profile.md` 与 `teaching-profile.md` 后，才能报告最终结果。Roadmap Coach、课堂导师和未完成 Plan 不能提出这张确认卡。
@@ -173,8 +190,9 @@ completed Plan 的学习顾问可以把带来源的 `add / revise / delete` 长�
   prototype 的 HEATMAP 不属于当前学情证据；
 - Coach 同时读取已确认画像和 `LEARNING_GUIDE.md`，但不把偏好、方法信号
   或单次成绩直接当作瓶颈结论；
-- 信息清楚时直接研判；历史广、相互冲突或会改变方向时，才选择一到三个
-  真正独立的 Evidence Scout 问题；
+- 信息清楚时直接完成证据重建而不启动 Scout，但仍向学生复诊当前理解和意图；
+  历史广、相互冲突或会改变方向时，才选择一到三个真正独立的 Evidence Scout
+  问题；
 - Coach 先向学生说明判断、关键来源、不确定性和可能推翻判断的后续表现；
   学生确认后才创建并注册下一 Plan；
 - 新 Plan 的 `Planning Basis` 保存这次工作判断，Plan 结束时由

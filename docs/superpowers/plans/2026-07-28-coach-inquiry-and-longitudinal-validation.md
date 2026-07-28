@@ -52,7 +52,7 @@
 - Modify:
   `plugins/highschool-study/skills/prepare-next-lesson/SKILL.md`
 
-- [ ] **Step 1: Read the Skill-writing constraints and re-open all six owners**
+- [x] **Step 1: Read the Skill-writing constraints and re-open all six owners**
 
 Read `superpowers:writing-skills` completely before editing. Re-open all six
 files and confirm that:
@@ -62,7 +62,7 @@ files and confirm that:
 - Plan Coach / prepare-next-lesson own ordinary Lesson preparation;
 - Tutor Skills are out of scope.
 
-- [ ] **Step 2: Add first-cycle inquiry to Pi Roadmap Study**
+- [x] **Step 2: Add first-cycle inquiry to Pi Roadmap Study**
 
 In
 `apps/pi-teaching-web/resources/skills/roadmap-study/SKILL.md`, place a compact
@@ -100,7 +100,7 @@ Do not use a stable personality label or a generic “practice more” restateme
 Keep existing goal, capability standard, direct test, registration, and scope
 rules intact.
 
-- [ ] **Step 3: Add cross-Plan re-inquiry to Pi Plan Next Cycle**
+- [x] **Step 3: Add cross-Plan re-inquiry to Pi Plan Next Cycle**
 
 In
 `apps/pi-teaching-web/resources/skills/plan-next-cycle/SKILL.md`, add an inquiry
@@ -120,7 +120,7 @@ Require the Roadmap Coach to:
 Keep Evidence Scout optional and read-only. Do not make “evidence is sufficient”
 a reason to skip current-student inquiry.
 
-- [ ] **Step 4: Insert Lesson-preparation inquiry into the Pi Coach sequence**
+- [x] **Step 4: Insert Lesson-preparation inquiry into the Pi Coach sequence**
 
 In
 `apps/pi-teaching-web/resources/skills/coach-study/SKILL.md`, preserve the
@@ -155,7 +155,7 @@ function/pace/support/test, and state what later response would overturn it.
 Move task-function derivation and broad card retrieval after the student's
 no-spoiler approval.
 
-- [ ] **Step 5: Add the same teaching semantics to the Claude plugin owners**
+- [x] **Step 5: Add the same teaching semantics to the Claude plugin owners**
 
 Update the three plugin Skills with the same behavior:
 
@@ -173,7 +173,7 @@ Do not copy Pi-only names such as `lesson_prepare`, Session owner errors, or
 runtime receipts into the plugin Skills. Do not add plugin-only MCP signatures
 to Pi Skills.
 
-- [ ] **Step 6: Review the six-file semantic matrix**
+- [x] **Step 6: Review the six-file semantic matrix**
 
 Run:
 
@@ -199,7 +199,7 @@ Reject the edit if it introduces fixed question counts, bundled questions,
 diagnosis-first leading prompts, personality labels, or a generic “strengthen
 the weak point” judgment.
 
-- [ ] **Step 7: Check formatting**
+- [x] **Step 7: Check formatting**
 
 Run:
 
@@ -209,7 +209,7 @@ git diff --check
 
 Expected: exit code 0 with no output.
 
-- [ ] **Step 8: Commit the six semantic owners together**
+- [x] **Step 8: Commit the six semantic owners together**
 
 ```bash
 git add \
@@ -232,7 +232,7 @@ git commit -m "feat: add Coach inquiry before learning decisions"
 - Modify: `plugins/highschool-study/README.md`
 - Modify: `docs/zh-CN/完整说明书.md`
 
-- [ ] **Step 1: Update the Pi frontend guide**
+- [x] **Step 1: Update the Pi frontend guide**
 
 In `apps/pi-teaching-web/README.md`, add a concise subsection near “长期学情研判”
 that explains:
@@ -251,7 +251,7 @@ that explains:
 Point to the three Pi Skills for operational details instead of copying their
 full protocol.
 
-- [ ] **Step 2: Update the Claude plugin guide**
+- [x] **Step 2: Update the Claude plugin guide**
 
 In `plugins/highschool-study/README.md`, add the same student-visible behavior
 near the teaching frame:
@@ -265,7 +265,7 @@ near the teaching frame:
 
 Do not imply a form, score, automatic diagnosis, or new tool.
 
-- [ ] **Step 3: Update the current Chinese feature reference**
+- [x] **Step 3: Update the current Chinese feature reference**
 
 In `docs/zh-CN/完整说明书.md`, add one authoritative subsection,
 `### Coach 问诊与教学判断`, in the section that explains Roadmap/Plan/Lesson
@@ -282,7 +282,7 @@ behavior. Cover:
 
 Keep implementation details in the Skills and existing runtime/tool sections.
 
-- [ ] **Step 4: Review for protocol duplication and over-enumeration**
+- [x] **Step 4: Review for protocol duplication and over-enumeration**
 
 Run:
 
@@ -298,7 +298,7 @@ The README additions should describe behavior, not reproduce every Skill rule.
 The full manual may be more explicit, but it must still avoid a fixed question
 list.
 
-- [ ] **Step 5: Commit documentation**
+- [x] **Step 5: Commit documentation**
 
 ```bash
 git add \
@@ -316,7 +316,7 @@ git commit -m "docs: explain adaptive Coach inquiry"
 
 - Verify only; no new prose tests.
 
-- [ ] **Step 1: Verify the Claude plugin**
+- [x] **Step 1: Verify the Claude plugin**
 
 ```bash
 cd plugins/highschool-study
@@ -331,7 +331,7 @@ Expected:
 - strict Claude plugin validation passes;
 - the public MCP tool count remains exactly four.
 
-- [ ] **Step 2: Verify the Pi app**
+- [x] **Step 2: Verify the Pi app**
 
 ```bash
 cd apps/pi-teaching-web
@@ -350,7 +350,7 @@ route, projection, component, Session owner, or runtime behavior changed. The
 formal real-model browser run below covers the affected conversational
 behavior.
 
-- [ ] **Step 3: Confirm the public demo and unrelated files are untouched**
+- [x] **Step 3: Confirm the public demo and unrelated files are untouched**
 
 From the repository root:
 
@@ -772,4 +772,3 @@ Report:
 - any remaining real issue, separated from harmless model variation;
 - clickable links to the design, plan, six semantic owners, current manual,
   and acceptance audit.
-
