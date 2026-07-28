@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { ROADMAP_COACH_SESSION_KEY } from '../shared/contracts';
 import type {
   AbilityProjection,
   EvidenceView,
   LearningSetSnapshot,
   LessonReplay,
-  PersonaPresentation,
   LessonNode,
+  PersonaPresentation,
+  RoadmapWorkspaceSnapshot,
   SessionKey,
   StudentNotebook,
   StudyViewEvent,
@@ -16,6 +18,7 @@ import { ChatPanel } from './components/ChatPanel';
 import { EvidenceLens } from './components/EvidenceLens';
 import { LearningSetHome } from './components/LearningSetHome';
 import { LessonNotebook } from './components/LessonNotebook';
+import { RoadmapCoachShell } from './components/RoadmapCoachShell';
 import { SessionTree } from './components/SessionTree';
 import {
   formatBrowserRoute,
@@ -28,6 +31,8 @@ type ConnectionState = 'connecting' | 'open' | 'closed';
 
 export function App() {
   const [learningSet, setLearningSet] = useState<LearningSetSnapshot | null>(null);
+  const [roadmapWorkspace, setRoadmapWorkspace] =
+    useState<RoadmapWorkspaceSnapshot | null>(null);
   const [client, setClient] = useState(initialClientState);
   const [connection, setConnection] = useState<ConnectionState>('connecting');
   const [loading, setLoading] = useState(true);
@@ -52,6 +57,13 @@ export function App() {
       socket.onmessage = (message) => {
         const event = JSON.parse(String(message.data)) as StudyViewEvent;
         if (event.type === 'ability-update') setAbilities(event.projection);
+        if (event.type === 'learning-set') {
+          setLearningSet(event.value);
+          setRoadmapWorkspace((current) => (
+            current ? { ...current, learningSet: event.value } : current
+          ));
+          return;
+        }
         setClient((current) => reduceClientState(current, event));
       };
       socket.onerror = () => socket?.close();
@@ -79,6 +91,7 @@ export function App() {
       if (!route) throw new Error('INVALID_ROUTE');
       if (route.kind === 'home') {
         setLearningSet(await api.learningSet());
+        setRoadmapWorkspace(null);
         setClient(initialClientState);
         setEvidence(null);
         if (navigation === 'push') window.history.pushState(null, '', formatBrowserRoute(route));
@@ -86,6 +99,26 @@ export function App() {
         return;
       }
 
+      if (route.kind === 'roadmap') {
+        const workspace = await api.roadmapWorkspace();
+        const selected = workspace.coach.sessionKey;
+        const history = await api.history(selected);
+        setLearningSet(workspace.learningSet);
+        setRoadmapWorkspace(workspace);
+        setClient({
+          ...initialClientState,
+          selected,
+          messages: { [selected]: history },
+        });
+        if (navigation === 'push') {
+          window.history.pushState(null, '', formatBrowserRoute(route));
+        }
+        if (navigation === 'replace') {
+          window.history.replaceState(null, '', formatBrowserRoute(route));
+        }
+        return;
+      }
+      setRoadmapWorkspace(null);
       const workspace = await api.workspace(route.planId);
       let selected: SessionKey;
       let history: Awaited<ReturnType<typeof api.history>> | null = null;
@@ -112,6 +145,7 @@ export function App() {
       if (navigation === 'push') window.history.pushState(null, '', formatBrowserRoute(route));
       if (navigation === 'replace') window.history.replaceState(null, '', formatBrowserRoute(route));
     } catch {
+      setRoadmapWorkspace(null);
       setClient(initialClientState);
       setEvidence(null);
       setPageError(route ? '无法恢复这个学习位置，已返回学习集首页。' : '无效的学习路径，已返回学习集首页。');
@@ -359,6 +393,52 @@ export function App() {
   }
   if (!learningSet) {
     return <main className="fatal-screen"><b>StudyForge</b><p>{pageError}</p></main>;
+  }
+  if (
+    roadmapWorkspace
+    && client.selected === ROADMAP_COACH_SESSION_KEY
+  ) {
+    const selected = ROADMAP_COACH_SESSION_KEY;
+    const sessionBusy = Boolean(client.busy[selected]);
+    return (
+      <div
+        className="app-root"
+        data-theme="liubai-xinzhongshi"
+        data-view="roadmap"
+        data-persona={persona?.id ?? 'neutral-tutor'}
+      >
+        {connection !== 'open' && (
+          <div className="connection-banner" role="status">
+            <span />
+            {connection === 'connecting'
+              ? '正在连接规划事件流…'
+              : '事件流已断开，正在重连…'}
+          </div>
+        )}
+        {pageError && <div className="page-alert" role="alert">{pageError}</div>}
+        <RoadmapCoachShell
+          learningSet={roadmapWorkspace.learningSet}
+          onHome={goHome}
+        >
+          <ChatPanel
+            sessionKey={selected}
+            messages={client.messages[selected] ?? []}
+            work={client.work[selected] || client.busy[selected] || ''}
+            error={client.errors[selected]}
+            composerEnabled={!sessionBusy}
+            persona={persona}
+            deepMode={client.deepMode[selected] ?? false}
+            workflows={client.workflows[selected] ?? []}
+            workflowControlsEnabled
+            gate={null}
+            onSend={send}
+            onPersona={changePersona}
+            onDeepMode={changeDeepMode}
+            onWorkflowAction={actOnWorkflow}
+          />
+        </RoadmapCoachShell>
+      </div>
+    );
   }
   if (!client.workspace || !client.selected) {
     return (

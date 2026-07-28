@@ -1,5 +1,6 @@
 export type BrowserRoute =
   | { kind: 'home' }
+  | { kind: 'roadmap' }
   | { kind: 'coach'; planId: string }
   | { kind: 'lesson'; planId: string; lessonId: string };
 
@@ -14,6 +15,7 @@ function decodeId(value: string): string | null {
 
 export function parseBrowserRoute(pathname: string): BrowserRoute | null {
   if (pathname === '/') return { kind: 'home' };
+  if (pathname === '/roadmap') return { kind: 'roadmap' };
   if (!pathname.startsWith('/') || pathname.endsWith('/')) return null;
   const parts = pathname.slice(1).split('/');
   if (parts.length === 2 && parts[0] === 'plan') {
@@ -30,6 +32,7 @@ export function parseBrowserRoute(pathname: string): BrowserRoute | null {
 
 export function formatBrowserRoute(route: BrowserRoute): string {
   if (route.kind === 'home') return '/';
+  if (route.kind === 'roadmap') return '/roadmap';
   const plan = encodeURIComponent(route.planId);
   return route.kind === 'coach'
     ? `/plan/${plan}`

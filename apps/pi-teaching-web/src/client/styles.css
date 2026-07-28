@@ -618,6 +618,72 @@ select:focus-visible {
 .connection-banner span { display: inline-block; width: .42rem; height: .42rem; margin-right: .45rem; border-radius: 50%; background: var(--accent); animation: breathe 1.2s ease-in-out infinite; }
 .page-alert { top: auto; bottom: .8rem; background: var(--danger); }
 
+.roadmap-workspace {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(260px, 34vw) minmax(430px, 1fr);
+  border-top: 3px solid var(--ink);
+  background: var(--paper);
+  animation: page-in .42s ease-out both;
+}
+
+.roadmap-context {
+  min-height: 100vh;
+  padding: clamp(1.35rem, 4vw, 3.5rem);
+  border-right: 1px solid var(--rule);
+  background: var(--paper-deep);
+}
+
+.roadmap-home {
+  width: 100%;
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+  padding: 0 0 1.3rem;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.roadmap-home > span:last-child {
+  display: grid;
+  gap: .15rem;
+}
+
+.roadmap-home b {
+  font-family: var(--font-display);
+  font-size: .92rem;
+}
+
+.roadmap-home small,
+.roadmap-cycle-count {
+  color: var(--ink-faint);
+  font-size: .65rem;
+}
+
+.roadmap-context h1 {
+  margin: .8rem 0 1.2rem;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4.2vw, 4.5rem);
+  font-weight: 500;
+  letter-spacing: -.045em;
+  line-height: 1;
+}
+
+.roadmap-goal {
+  color: var(--ink-soft);
+  font-family: var(--font-reading);
+  line-height: 1.8;
+}
+
+.roadmap-cycle-count {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+}
+
 .app-root[data-view="coach"] .chat-header strong,
 .app-root[data-view="coach"] .activities header span {
   color: var(--accent-deep);
@@ -701,6 +767,17 @@ select:focus-visible {
   .activities { padding: 1.4rem 1rem 2rem; }
   .activity-list { grid-template-columns: 1fr; }
   .activity-row:nth-child(odd) { border-right: 0; }
+  .roadmap-workspace { display: block; }
+  .roadmap-context {
+    min-height: auto;
+    padding: 1rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .roadmap-context .section-label,
+  .roadmap-goal,
+  .roadmap-cycle-count { display: none; }
+  .roadmap-context h1 { margin: 1rem 0 0; font-size: 1.6rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

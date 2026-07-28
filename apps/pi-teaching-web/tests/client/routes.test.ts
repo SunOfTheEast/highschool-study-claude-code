@@ -4,6 +4,7 @@ import { formatBrowserRoute, parseBrowserRoute } from '../../src/client/routes';
 test('round-trips home, Coach and Lesson routes', () => {
   const routes = [
     { kind: 'home' as const },
+    { kind: 'roadmap' as const },
     { kind: 'coach' as const, planId: 'domain integrity' },
     { kind: 'lesson' as const, planId: '微积分 / 导数', lessonId: 'lesson 003' },
   ];
@@ -27,6 +28,7 @@ test('rejects empty, extra, malformed and invalid URI paths', () => {
 });
 
 test('does not accept trailing slashes or empty decoded IDs', () => {
+  expect(parseBrowserRoute('/roadmap/')).toBeNull();
   expect(parseBrowserRoute('/plan/domain-integrity/')).toBeNull();
   expect(parseBrowserRoute('/plan/%20')).toBeNull();
   expect(parseBrowserRoute('/plan/domain-integrity/lesson/%20')).toBeNull();
