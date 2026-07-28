@@ -4,6 +4,8 @@ import { randomUUID } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, extname, join } from 'node:path';
 import { resolveInsideRoot } from 'highschool-study-markdown/study-domain';
+import type { MemoryReviewDecision } from '../memory-review/contracts';
+import { submittedMemoryReview } from '../memory-review/store';
 import { projectSessionEvent } from '../projection/projector';
 import type { MessageProjectionMode } from '../projection/message-policy';
 import { projectWorkflow } from '../projection/workflow-projector';
@@ -110,6 +112,13 @@ export function createRequestHandler(deps?: AppDependencies) {
             projection: abilityReader(deps.root),
           });
         }
+        if (event.type === 'agent_end' && !event.willRetry) {
+          deps.hub.publish({
+            type: 'conversation-snapshot',
+            sessionKey: key,
+            items: deps.registry.history(key, projectionMode),
+          });
+        }
       });
       deps.registry.subscribeWorkflows(key, (workflow) => {
         deps.hub.publish({
@@ -170,7 +179,9 @@ export function createRequestHandler(deps?: AppDependencies) {
       return json(buildReplay(
         deps.root,
         lesson,
-        deps.registry.history(lesson.sessionKey, projectionMode),
+        deps.registry.history(lesson.sessionKey, projectionMode).flatMap((item) => (
+          item.kind === 'message' ? [item.message] : []
+        )),
       ));
     }
 
@@ -207,6 +218,64 @@ export function createRequestHandler(deps?: AppDependencies) {
       await deps.registry.openSession(key);
       bind(key);
       return json(deps.registry.history(key, projectionMode));
+    }
+
+    const memoryReview = /^\/api\/sessions\/([^/]+)\/memory-review$/.exec(url.pathname);
+    if (request.method === 'GET' && memoryReview) {
+      const key = decodeURIComponent(memoryReview[1]!) as SessionKey;
+      if (!key.startsWith('coach:') || key === ROADMAP_COACH_SESSION_KEY) {
+        return json({ error: 'MEMORY_REVIEW_PLAN_COACH_ONLY' }, 403);
+      }
+      try {
+        return json(await deps.registry.memoryReview(key));
+      } catch (error) {
+        const code = error instanceof Error ? error.message : 'MEMORY_REVIEW_FAILED';
+        if (code === 'MEMORY_REVIEW_PLAN_COACH_ONLY') return json({ error: code }, 403);
+        throw error;
+      }
+    }
+
+    const memoryReviewSubmit = (
+      /^\/api\/sessions\/([^/]+)\/memory-review\/([^/]+)\/submit$/.exec(url.pathname)
+    );
+    if (request.method === 'POST' && memoryReviewSubmit) {
+      const key = decodeURIComponent(memoryReviewSubmit[1]!) as SessionKey;
+      const reviewId = decodeURIComponent(memoryReviewSubmit[2]!);
+      if (!key.startsWith('coach:') || key === ROADMAP_COACH_SESSION_KEY) {
+        return json({ error: 'MEMORY_REVIEW_PLAN_COACH_ONLY' }, 403);
+      }
+      const input = await request.json() as { decisions?: unknown };
+      if (!Array.isArray(input.decisions)) {
+        return json({ error: 'MEMORY_REVIEW_DECISIONS_REQUIRED' }, 400);
+      }
+      const decisions = input.decisions as MemoryReviewDecision[];
+      let submitted;
+      try {
+        submitted = submittedMemoryReview(
+          await deps.registry.memoryReview(key),
+          reviewId,
+          decisions,
+        );
+      } catch (error) {
+        const code = error instanceof Error ? error.message : 'MEMORY_REVIEW_FAILED';
+        if (code === 'MEMORY_REVIEW_PLAN_COACH_ONLY') return json({ error: code }, 403);
+        if (code === 'MEMORY_REVIEW_NOT_FOUND') return json({ error: code }, 404);
+        if (code.startsWith('MEMORY_REVIEW_')) return json({ error: code }, 400);
+        throw error;
+      }
+      bind(key);
+      runSession(
+        key,
+        '学习顾问正在整理长期记忆',
+        async () => {
+          await deps.registry.submitMemoryReview(key, reviewId, decisions);
+        },
+        () => deps.hub.publish({
+          type: 'snapshot',
+          workspace: deps.registry.snapshot(key.slice(6)),
+        }),
+      );
+      return json(submitted, 202);
     }
 
     const deep = /^\/api\/sessions\/([^/]+)\/deep$/.exec(url.pathname);

@@ -4,6 +4,10 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { createRequestHandler } from '../../src/server/app';
 import { EventHub } from '../../src/server/event-hub';
+import type {
+  MemoryReviewDecision,
+  MemoryReviewSnapshot,
+} from '../../src/memory-review/contracts';
 import type { AbilityProjection } from '../../src/shared/contracts';
 import { PreparedLessonValidationError } from '../../src/study/validate-prepared-lesson';
 import type { WorkflowSnapshot } from '../../src/workflows/contracts';
@@ -32,6 +36,23 @@ const roadmapWorkspace = {
   learningSet,
   coach: { sessionKey: 'coach:@roadmap', sessionId: null },
 } as const;
+const proposedMemoryReview = {
+  id: 'review-1',
+  planId: 'p1',
+  status: 'proposed',
+  items: [{
+    id: 'item-1',
+    operation: 'add',
+    owner: 'student',
+    currentText: null,
+    proposedText: '先独立尝试。',
+    sources: ['lessons/lesson-001.md#lesson-summary'],
+    rationale: '多次出现。',
+    counterEvidence: '暂无。',
+    scope: '训练课。',
+  }],
+  decisions: [],
+} satisfies MemoryReviewSnapshot;
 
 test('returns learning-set, Roadmap and Plan snapshots', async () => {
   const handler = createRequestHandler({
@@ -113,6 +134,165 @@ test('restores an active Tutor before reading its history', async () => {
   const response = await handler(new Request('http://local/api/sessions/tutor%3Al1/history'));
   expect(response!.status).toBe(200);
   expect(calls).toEqual(['open:tutor:l1', 'history']);
+});
+
+test('keeps memory review scoped to a Plan Coach Session', async () => {
+  const handler = createRequestHandler({
+    root: '/tmp/demo',
+    authoring: false,
+    hub: new EventHub(),
+    registry: {
+      memoryReview: async () => proposedMemoryReview,
+    } as never,
+  });
+
+  const tutor = await handler(new Request(
+    'http://local/api/sessions/tutor%3Alesson-1/memory-review',
+  ));
+  expect(tutor!.status).toBe(403);
+  expect(await tutor!.json()).toEqual({ error: 'MEMORY_REVIEW_PLAN_COACH_ONLY' });
+
+  const roadmap = await handler(new Request(
+    'http://local/api/sessions/coach%3A%40roadmap/memory-review',
+  ));
+  expect(roadmap!.status).toBe(403);
+
+  const coach = await handler(new Request(
+    'http://local/api/sessions/coach%3Ap1/memory-review',
+  ));
+  expect(coach!.status).toBe(200);
+  expect(await coach!.json()).toEqual(proposedMemoryReview);
+});
+
+test('rejects incomplete memory decisions before starting the Coach turn', async () => {
+  let submitted = false;
+  const handler = createRequestHandler({
+    root: '/tmp/demo',
+    authoring: false,
+    hub: new EventHub(),
+    registry: {
+      memoryReview: async () => proposedMemoryReview,
+      submitMemoryReview: async () => {
+        submitted = true;
+        return proposedMemoryReview;
+      },
+    } as never,
+  });
+
+  const response = await handler(new Request(
+    'http://local/api/sessions/coach%3Ap1/memory-review/review-1/submit',
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ decisions: [] }),
+    },
+  ));
+
+  expect(response!.status).toBe(400);
+  expect(await response!.json()).toEqual({
+    error: 'MEMORY_REVIEW_DECISIONS_INCOMPLETE',
+  });
+  expect(submitted).toBe(false);
+});
+
+test('accepts complete memory decisions and launches the same Coach Session once', async () => {
+  const calls: unknown[] = [];
+  let resolveIdle!: () => void;
+  const idle = new Promise<void>((resolve) => { resolveIdle = resolve; });
+  const decisions: MemoryReviewDecision[] = [{
+    itemId: 'item-1',
+    action: 'accept',
+    text: null,
+  }];
+  const submitted = {
+    ...proposedMemoryReview,
+    status: 'submitted',
+    decisions,
+  } satisfies MemoryReviewSnapshot;
+  const hub = new EventHub();
+  hub.subscribe((event) => {
+    if (event.type === 'session-run' && event.status === 'idle') resolveIdle();
+  });
+  const handler = createRequestHandler({
+    root: '/tmp/demo',
+    authoring: false,
+    hub,
+    registry: {
+      memoryReview: async (key: string) => {
+        calls.push(['get', key]);
+        return proposedMemoryReview;
+      },
+      submitMemoryReview: async (
+        key: string,
+        reviewId: string,
+        input: MemoryReviewDecision[],
+      ) => {
+        calls.push(['submit', key, reviewId, input]);
+        return submitted;
+      },
+      subscribe: () => () => {},
+      subscribeWorkflows: () => () => {},
+      history: () => [],
+      snapshot: () => workspace,
+    } as never,
+  });
+
+  const response = await handler(new Request(
+    'http://local/api/sessions/coach%3Ap1/memory-review/review-1/submit',
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ decisions }),
+    },
+  ));
+
+  expect(response!.status).toBe(202);
+  expect(await response!.json()).toEqual(submitted);
+  await idle;
+  expect(calls).toEqual([
+    ['get', 'coach:p1'],
+    ['submit', 'coach:p1', 'review-1', decisions],
+  ]);
+});
+
+test('reconciles the complete conversation after a non-retrying agent end', async () => {
+  let listener: ((event: unknown) => void) | undefined;
+  const items = [{
+    kind: 'message',
+    message: {
+      id: 'coach:p1:1',
+      role: 'coach',
+      text: '已完成',
+      complete: true,
+    },
+  }] as const;
+  const events: unknown[] = [];
+  const hub = new EventHub();
+  hub.subscribe((event) => events.push(event));
+  const handler = createRequestHandler({
+    root: '/tmp/demo',
+    authoring: false,
+    hub,
+    registry: {
+      openSession: async () => ({ sessionId: 'coach-p1' }),
+      history: () => items,
+      subscribe: (_key: string, next: (event: unknown) => void) => {
+        listener = next;
+        return () => {};
+      },
+      subscribeWorkflows: () => () => {},
+    } as never,
+  });
+  await handler(new Request('http://local/api/sessions/coach%3Ap1/history'));
+
+  listener?.({ type: 'agent_end', messages: [], willRetry: true });
+  expect(events).toEqual([]);
+  listener?.({ type: 'agent_end', messages: [], willRetry: false });
+  expect(events).toEqual([{
+    type: 'conversation-snapshot',
+    sessionKey: 'coach:p1',
+    items,
+  }]);
 });
 
 test('publishes a fresh learning-set snapshot after a Roadmap Coach turn', async () => {

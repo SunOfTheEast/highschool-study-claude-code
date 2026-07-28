@@ -1,6 +1,6 @@
 import type {
   AbilityProjection,
-  ChatMessage,
+  ConversationItem,
   EvidenceView,
   LearningSetSnapshot,
   LessonReplay,
@@ -11,6 +11,10 @@ import type {
   StudentNotebook,
   WorkflowView,
 } from '../shared/contracts';
+import type {
+  MemoryReviewDecision,
+  MemoryReviewSnapshot,
+} from '../memory-review/contracts';
 
 export class ApiError extends Error {
   constructor(
@@ -60,7 +64,26 @@ export const api = {
     json<RoadmapWorkspaceSnapshot>('/api/workspaces/roadmap')
   ),
   history: (key: SessionKey) => (
-    json<ChatMessage[]>(`/api/sessions/${encodeURIComponent(key)}/history`)
+    json<ConversationItem[]>(`/api/sessions/${encodeURIComponent(key)}/history`)
+  ),
+  memoryReview: (key: SessionKey) => (
+    json<MemoryReviewSnapshot | null>(
+      `/api/sessions/${encodeURIComponent(key)}/memory-review`,
+    )
+  ),
+  submitMemoryReview: (
+    key: SessionKey,
+    reviewId: string,
+    decisions: MemoryReviewDecision[],
+  ) => json<MemoryReviewSnapshot>(
+    `/api/sessions/${encodeURIComponent(key)}/memory-review/${
+      encodeURIComponent(reviewId)
+    }/submit`,
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ decisions }),
+    },
   ),
   deep: (key: SessionKey) => (
     json<{ enabled: boolean; workflows: WorkflowView[] }>(

@@ -1,3 +1,5 @@
+import type { MemoryReviewSnapshot } from '../memory-review/contracts';
+
 export type LessonStatus = 'prepared' | 'active' | 'paused' | 'closed' | 'abandoned';
 export type BlockStatus = 'pending' | 'active' | 'completed' | 'skipped';
 export type ActivityKind = 'dialogue' | 'problem' | 'material' | 'reflection';
@@ -136,6 +138,10 @@ export type ChatMessage = {
   complete: boolean;
 };
 
+export type ConversationItem =
+  | { kind: 'message'; message: ChatMessage }
+  | { kind: 'memory-review'; review: MemoryReviewSnapshot };
+
 export type WorkflowTaskView = {
   id: string;
   label: string;
@@ -167,6 +173,11 @@ export type StudyViewEvent =
   | { type: 'learning-set'; value: LearningSetSnapshot }
   | { type: 'message'; sessionKey: SessionKey; message: ChatMessage }
   | { type: 'message-delta'; sessionKey: SessionKey; messageId: string; delta: string }
+  | {
+    type: 'conversation-snapshot';
+    sessionKey: SessionKey;
+    items: ConversationItem[];
+  }
   | {
     type: 'session-run';
     sessionKey: SessionKey;

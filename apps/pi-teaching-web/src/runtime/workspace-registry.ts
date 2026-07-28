@@ -1,15 +1,13 @@
 import type { ImageContent } from '@earendil-works/pi-ai';
 import {
   ROADMAP_COACH_SESSION_KEY,
-  type ChatMessage,
+  type ConversationItem,
   type PlanWorkspaceSnapshot,
   type RoadmapWorkspaceSnapshot,
   type SessionKey,
 } from '../shared/contracts';
-import {
-  projectStoredMessage,
-  type MessageProjectionMode,
-} from '../projection/message-policy';
+import type { MessageProjectionMode } from '../projection/message-policy';
+import { projectConversationEntries } from '../projection/conversation-projector';
 import type { WorkflowSnapshot } from '../workflows/contracts';
 import type {
   MemoryReviewDecision,
@@ -229,13 +227,10 @@ export class WorkspaceRegistry {
     );
   }
 
-  history(key: SessionKey, mode: MessageProjectionMode = 'safe'): ChatMessage[] {
+  history(key: SessionKey, mode: MessageProjectionMode = 'safe'): ConversationItem[] {
     const session = this.sessions.get(key);
     if (!session) return [];
-    return session.messages.flatMap((raw, index) => {
-      const message = projectStoredMessage(key, raw, index, mode);
-      return message ? [message] : [];
-    });
+    return projectConversationEntries(key, session.entries, mode);
   }
 
   personaId(key: SessionKey): string {
