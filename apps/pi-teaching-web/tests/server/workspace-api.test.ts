@@ -11,6 +11,7 @@ import type {
 import type { AbilityProjection } from '../../src/shared/contracts';
 import { PreparedLessonValidationError } from '../../src/study/validate-prepared-lesson';
 import type { WorkflowSnapshot } from '../../src/workflows/contracts';
+import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
 
 const learningSet = {
   title: 'Demo',
@@ -78,6 +79,30 @@ test('returns learning-set, Roadmap and Plan snapshots', async () => {
     .toEqual(roadmapWorkspace);
   expect(await (await handler(new Request('http://local/api/workspaces/p1')))!.json())
     .toEqual(workspace);
+});
+
+test('returns source-linked context for one Plan Coach', async () => {
+  const handler = createRequestHandler({
+    root: domainIntegrityFixtureRoot,
+    authoring: false,
+    hub: new EventHub(),
+    registry: {} as never,
+  });
+
+  const response = await handler(new Request(
+    'http://local/api/plans/domain-integrity/context',
+  ));
+  expect(response!.status).toBe(200);
+  expect(await response!.json()).toMatchObject({
+    currentPosition: expect.stringContaining('阶段 `1a` 已通过'),
+    priorLessons: [
+      expect.objectContaining({
+        lessonId: 'lesson-001',
+        source: 'lessons/lesson-001.md#lesson-summary',
+      }),
+      expect.objectContaining({ lessonId: 'lesson-002' }),
+    ],
+  });
 });
 
 test('passes the configured message projection mode to history', async () => {
@@ -309,6 +334,9 @@ test('publishes a fresh learning-set snapshot after a Roadmap Coach turn', async
       goal: 'Goal',
       capabilityStandard: 'Can do',
       planningBasis: 'Student confirmed',
+      currentPosition: 'Current',
+      nextLessonCandidate: 'Next',
+      planSummary: 'Summary',
     }],
   };
   const hub = new EventHub();

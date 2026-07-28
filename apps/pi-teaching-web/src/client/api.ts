@@ -1,5 +1,6 @@
 import type {
   AbilityProjection,
+  CoachContextView,
   ConversationItem,
   EvidenceView,
   LearningSetSnapshot,
@@ -59,6 +60,9 @@ export const api = {
   ),
   workspace: (planId: string) => (
     json<PlanWorkspaceSnapshot>(`/api/workspaces/${encodeURIComponent(planId)}`)
+  ),
+  coachContext: (planId: string) => (
+    json<CoachContextView>(`/api/plans/${encodeURIComponent(planId)}/context`)
   ),
   roadmapWorkspace: () => (
     json<RoadmapWorkspaceSnapshot>('/api/workspaces/roadmap')

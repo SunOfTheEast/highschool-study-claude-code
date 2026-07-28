@@ -12,13 +12,16 @@ const glyph = {
 export function TaskRail({
   workflows,
   onAction,
+  embedded = false,
 }: {
   workflows: WorkflowView[];
   onAction(id: string, action: 'confirm' | 'cancel'): Promise<void>;
+  embedded?: boolean;
 }) {
   if (workflows.length === 0) return null;
+  const Root = embedded ? 'div' : 'aside';
   return (
-    <aside className="task-rail" aria-label="深度工作流">
+    <Root className={embedded ? 'task-rail embedded' : 'task-rail'} aria-label="深度工作流">
       {workflows.map((workflow) => {
         const completed = workflow.tasks.filter((task) => task.status === 'completed').length;
         const running = workflow.tasks.filter((task) => task.status === 'running').length;
@@ -100,6 +103,6 @@ export function TaskRail({
           </details>
         );
       })}
-    </aside>
+    </Root>
   );
 }

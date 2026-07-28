@@ -18,6 +18,7 @@ import { readAbilityProjection, readEvidence } from '../study/ability';
 import { readLearningSet } from '../study/read-workspace';
 import { buildReplay } from '../study/replay';
 import { readStudentNotebook } from '../study/student-notebook';
+import { readCoachContext } from '../study/coach-context';
 import { PreparedLessonValidationError } from '../study/validate-prepared-lesson';
 import type { EventHub } from './event-hub';
 
@@ -140,6 +141,11 @@ export function createRequestHandler(deps?: AppDependencies) {
 
     if (request.method === 'GET' && url.pathname === '/api/abilities') {
       return json(readAbilityProjection(deps.root));
+    }
+
+    const planContext = /^\/api\/plans\/([^/]+)\/context$/.exec(url.pathname);
+    if (request.method === 'GET' && planContext) {
+      return json(readCoachContext(deps.root, decodeURIComponent(planContext[1]!)));
     }
 
     if (request.method === 'GET' && url.pathname === '/api/evidence') {

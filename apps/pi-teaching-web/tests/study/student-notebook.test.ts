@@ -36,7 +36,7 @@ test('reveals cards only after their ActivityBlock becomes visible', () => {
     .toEqual(['Q-DOMAIN-EX22']);
 });
 
-test('withholds a shared assessment card until every related problem Block is visible', () => {
+test('reveals a shared card once an active Block uses it without duplicating it', () => {
   const root = fixture();
   const lessonPath = join(root, 'lessons/lesson-003.md');
   writeFileSync(
@@ -47,7 +47,8 @@ test('withholds a shared assessment card until every related problem Block is vi
 
   setBlockStatus(root, 'lessons/lesson-003.md', 'orientation', 'completed');
   setBlockStatus(root, 'lessons/lesson-003.md', 'assessment-01', 'active');
-  expect(readStudentNotebook(root, 'lesson-003', false).cards).toEqual({});
+  expect(Object.keys(readStudentNotebook(root, 'lesson-003', false).cards))
+    .toEqual(['Q-DOMAIN-EX22']);
 
   setBlockStatus(root, 'lessons/lesson-003.md', 'assessment-01', 'completed');
   setBlockStatus(root, 'lessons/lesson-003.md', 'assessment-02', 'active');
@@ -70,12 +71,12 @@ test('reveals only active and completed Student Views during an assessment', () 
   expect(blocks.slice(2).map((block) => block.studentView)).toEqual(['', '', '']);
 });
 
-test('restores all assessment Student Views after closure', () => {
+test('keeps pending Student Views hidden after closure', () => {
   const root = fixture();
   setFrontmatterField(root, 'lessons/lesson-003.md', 'status', 'closed');
 
   expect(readStudentNotebook(root, 'lesson-003', false).lesson.blocks
-    .every((block) => block.studentView.length > 0))
+    .every((block) => block.studentView.length === 0))
     .toBe(true);
 });
 
@@ -113,7 +114,7 @@ test('keeps level-two headings inside a close-time Lesson Summary body', () => {
     .toBe('## 完成情况\n\n完成一题；来源：#trace-event-001。');
 });
 
-test('keeps pending Student Views available for non-assessment previews', () => {
+test('keeps pending Student Views hidden for every template', () => {
   const root = fixture();
   const lessonPath = join(root, 'lessons/lesson-003.md');
   writeFileSync(
@@ -123,7 +124,7 @@ test('keeps pending Student Views available for non-assessment previews', () => 
   );
 
   expect(readStudentNotebook(root, 'lesson-003', false).lesson.blocks[1]?.studentView)
-    .toContain('Q-DOMAIN-EX22');
+    .toBe('');
 });
 
 test('returns card stems without answer-bearing fields', () => {
@@ -136,4 +137,19 @@ test('returns card stems without answer-bearing fields', () => {
   for (const forbidden of ['source_solution_summary', 'rubric', 'Teacher Control', 'answer']) {
     expect(text).not.toContain(forbidden);
   }
+});
+
+test('returns only current-Lesson active Trace as recent learning records', () => {
+  const root = fixture();
+  const notebook = readStudentNotebook(root, 'lesson-001', false);
+
+  expect(notebook.recentRecords).toHaveLength(1);
+  expect(notebook.recentRecords[0]).toMatchObject({
+    lessonId: 'lesson-001',
+    blockId: 'step-02',
+    assessment: 'partially_correct',
+    support: 'tutor',
+  });
+  expect(notebook.recentRecords.every((record) => record.lessonId === 'lesson-001')).toBe(true);
+  expect(JSON.stringify(notebook.recentRecords)).not.toContain('lesson-002');
 });

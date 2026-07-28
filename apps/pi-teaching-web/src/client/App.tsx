@@ -6,6 +6,7 @@ import type {
 } from '../memory-review/contracts';
 import type {
   AbilityProjection,
+  CoachContextView,
   EvidenceView,
   LearningSetSnapshot,
   LessonReplay,
@@ -17,11 +18,11 @@ import type {
   StudyViewEvent,
 } from '../shared/contracts';
 import { api, ApiError } from './api';
-import { AbilityMap } from './components/AbilityMap';
 import { ChatPanel } from './components/ChatPanel';
+import { ContextStack } from './components/ContextStack';
+import { CurrentActivityStage } from './components/CurrentActivityStage';
 import { EvidenceLens } from './components/EvidenceLens';
 import { LearningSetHome } from './components/LearningSetHome';
-import { LessonNotebook } from './components/LessonNotebook';
 import { MemoryReviewPanel } from './components/MemoryReviewPanel';
 import { RoadmapCoachShell } from './components/RoadmapCoachShell';
 import { SessionTree } from './components/SessionTree';
@@ -49,6 +50,7 @@ export function App() {
   const [notebook, setNotebook] = useState<StudentNotebook | null>(null);
   const [replay, setReplay] = useState<LessonReplay | null>(null);
   const [abilities, setAbilities] = useState<AbilityProjection | null>(null);
+  const [coachContext, setCoachContext] = useState<CoachContextView | null>(null);
   const [evidence, setEvidence] = useState<EvidenceView | null>(null);
   const [persona, setPersona] = useState<PersonaPresentation | null>(null);
   const [memoryReview, setMemoryReview] = useState<MemoryReviewSnapshot | null>(null);
@@ -257,6 +259,24 @@ export function App() {
       .then(setAbilities)
       .catch(() => setPageError('无法读取方法证据投影。'));
   }, [client.workspace?.plan.id]);
+
+  useEffect(() => {
+    let current = true;
+    setCoachContext(null);
+    if (!client.workspace || client.selected !== client.workspace.coach.sessionKey) {
+      return () => { current = false; };
+    }
+    void api.coachContext(client.workspace.plan.id)
+      .then((value) => { if (current) setCoachContext(value); })
+      .catch(() => { if (current) setCoachContext(null); });
+    return () => { current = false; };
+  }, [
+    client.selected,
+    client.workspace?.plan.id,
+    client.workspace?.plan.currentPosition,
+    client.workspace?.plan.nextLessonCandidate,
+    client.workspace?.plan.planSummary,
+  ]);
 
   useEffect(() => {
     let current = true;
@@ -469,6 +489,7 @@ export function App() {
             deepMode={client.deepMode[selected] ?? false}
             workflows={client.workflows[selected] ?? []}
             workflowControlsEnabled
+            workflowRailInline
             gate={null}
             onSend={send}
             onPersona={changePersona}
@@ -510,15 +531,6 @@ export function App() {
         <h2>{selectedLesson.title}</h2>
         <p>先查看课堂积木。开始后 Tutor 才会创建独立 Session，并且只展开当前节点。</p>
         <button type="button" onClick={() => void startLesson(selectedLesson)}>开始上课 <i>↗</i></button>
-      </div>
-    );
-  } else if (selectedLesson?.status === 'paused') {
-    gate = (
-      <div className="lesson-gate paused-gate">
-        <span>Lesson 已暂停</span>
-        <h2>上下文仍保留在这个 Tutor Session</h2>
-        <p>继续后再恢复输入，Coach 的对话不会被复制进来。</p>
-        <button type="button" onClick={() => void startLesson(selectedLesson)}>继续上课 <i>↗</i></button>
       </div>
     );
   } else if (selectedLesson?.status === 'closed' || selectedLesson?.status === 'abandoned') {
@@ -569,15 +581,32 @@ export function App() {
           workflows={client.workflows[selected] ?? []}
           workflowControlsEnabled={workflowSessionOpen}
           gate={gate}
+          stage={selectedLesson && (
+            selectedLesson.status === 'active' || selectedLesson.status === 'paused'
+          ) ? (
+            <CurrentActivityStage
+              notebook={notebook}
+              paused={selectedLesson.status === 'paused'}
+              onResume={() => void startLesson(selectedLesson)}
+            />
+          ) : null}
           onSend={send}
           onPersona={changePersona}
           onDeepMode={changeDeepMode}
           onWorkflowAction={actOnWorkflow}
           onMemoryReview={setMemoryReview}
         />
-        {isCoach
-          ? <AbilityMap value={abilities} onOpen={(source) => void openEvidence(source)} />
-          : <LessonNotebook lesson={selectedLesson} notebook={notebook} replay={replay} />}
+        <ContextStack
+          view={view}
+          coachContext={isCoach ? coachContext : null}
+          lesson={selectedLesson}
+          notebook={notebook}
+          replay={replay}
+          abilities={abilities}
+          workflows={client.workflows[selected] ?? []}
+          onEvidence={(source) => void openEvidence(source)}
+          onWorkflowAction={actOnWorkflow}
+        />
       </div>
       {evidence && <EvidenceLens value={evidence} onClose={() => setEvidence(null)} />}
       {memoryReview?.status === 'proposed' && (

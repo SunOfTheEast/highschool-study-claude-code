@@ -28,17 +28,24 @@ export function LessonNotebook({
   lesson,
   notebook,
   replay,
+  embedded = false,
+  omitActiveBody = false,
+  showCards = true,
 }: {
   lesson: LessonNode | null;
   notebook: StudentNotebookValue | null;
   replay: LessonReplay | null;
+  embedded?: boolean;
+  omitActiveBody?: boolean;
+  showCards?: boolean;
 }) {
+  const Root = embedded ? 'div' : 'aside';
   return (
-    <aside className="activities lesson-notebook">
-      <header>
+    <Root className={embedded ? 'lesson-notebook embedded' : 'activities lesson-notebook'}>
+      {!embedded && <header>
         <span>Lesson notebook</span>
         <h2>{lesson ? '课堂节点' : '学习工作台'}</h2>
-      </header>
+      </header>}
       {!lesson && (
         <div className="coach-note">
           <span aria-hidden="true">✦</span>
@@ -64,7 +71,9 @@ export function LessonNotebook({
                   </span>
                   {!block.required && <em>可选</em>}
                 </summary>
-                {block.studentView && <div className="student-view"><MarkdownView>{block.studentView}</MarkdownView></div>}
+                {block.studentView && !(omitActiveBody && block.status === 'active') && (
+                  <div className="student-view"><MarkdownView>{block.studentView}</MarkdownView></div>
+                )}
               </details>
             ))}
           </div>
@@ -74,7 +83,7 @@ export function LessonNotebook({
               <MarkdownView>{notebook.lessonSummary}</MarkdownView>
             </section>
           )}
-          {Object.keys(notebook.cards).length > 0 && (
+          {showCards && Object.keys(notebook.cards).length > 0 && (
             <section className="notebook-cards">
               <span>题目卡片</span>
               {Object.entries(notebook.cards).map(([alias, card]) => (
@@ -96,6 +105,6 @@ export function LessonNotebook({
           )}
         </>
       )}
-    </aside>
+    </Root>
   );
 }

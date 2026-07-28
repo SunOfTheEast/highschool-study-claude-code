@@ -12,6 +12,9 @@ function workspace(status: string): PlanWorkspaceSnapshot {
     goal: '完成当前周期。',
     capabilityStandard: '可以独立完成。',
     planningBasis: '当前测试 Plan 的公开安排依据。',
+    currentPosition: '当前进度。',
+    nextLessonCandidate: '下一步。',
+    planSummary: '阶段摘要。',
   };
   return {
     learningSet: {
@@ -29,6 +32,9 @@ function workspace(status: string): PlanWorkspaceSnapshot {
           goal: '进入下一周期。',
           capabilityStandard: '完成迁移。',
           planningBasis: '当前测试 Plan 的公开安排依据。',
+          currentPosition: '等待开始。',
+          nextLessonCandidate: '待讨论。',
+          planSummary: '尚无。',
         },
       ],
     },

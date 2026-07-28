@@ -53,6 +53,9 @@ function planSummary(root: string, planPath: string): PlanSummary {
     goal: section(document.body, 'Goal'),
     capabilityStandard: section(document.body, 'Observable Capability Standard'),
     planningBasis: section(document.body, 'Planning Basis'),
+    currentPosition: section(document.body, 'Current Position'),
+    nextLessonCandidate: section(document.body, 'Next Lesson Candidate'),
+    planSummary: section(document.body, 'Plan Summary'),
   };
 }
 
@@ -77,23 +80,14 @@ function nodeState(source: string): {
   };
 }
 
-function lessonTemplate(body: string): string | null {
-  return /^-\s+Primary template:\s*`?([^`\n]+)`?\s*$/m
-    .exec(section(body, 'Lesson Configuration'))?.[1]?.trim() ?? null;
-}
-
 function projectedStudentView(
-  template: string | null,
-  lessonStatus: LessonStatus,
   blockStatus: BlockStatus,
   value: string,
 ): string {
-  if (template !== 'assessment' || lessonStatus === 'closed') return value;
   return blockStatus === 'active' || blockStatus === 'completed' ? value : '';
 }
 
 function lessonBlocks(body: string, lessonStatus: LessonStatus): ActivityBlock[] {
-  const template = lessonTemplate(body);
   const matches = [...body.matchAll(/^## Block ([^（\s]+)(?:（([^）]+)）)?\s*$/gm)];
   return matches.map((match, index) => {
     const source = body.slice(match.index! + match[0].length, matches[index + 1]?.index);
@@ -102,11 +96,11 @@ function lessonBlocks(body: string, lessonStatus: LessonStatus): ActivityBlock[]
     const studentView = section(`# x\n${source}`, 'Student View', 3);
     return {
       id: match[1]!,
-      title: match[1]!,
+      title: match[2]?.trim() || match[1]!,
       ...state,
       kind: inferredKind,
       required: match[2]?.includes('可选') ? false : state.required,
-      studentView: projectedStudentView(template, lessonStatus, state.status, studentView),
+      studentView: projectedStudentView(state.status, studentView),
       evidence: [...section(`# x\n${source}`, 'Evidence', 3).matchAll(/\[[^\]]+\]\(([^)]+)\)/g)]
         .map((item) => item[1]!),
     };

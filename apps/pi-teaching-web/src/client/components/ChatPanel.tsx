@@ -24,7 +24,9 @@ export function ChatPanel({
   deepMode,
   workflows,
   workflowControlsEnabled,
+  workflowRailInline = false,
   gate,
+  stage,
   onSend,
   onPersona,
   onDeepMode,
@@ -41,7 +43,9 @@ export function ChatPanel({
   deepMode: boolean;
   workflows: WorkflowView[];
   workflowControlsEnabled: boolean;
+  workflowRailInline?: boolean;
   gate: ReactNode;
+  stage?: ReactNode;
   onSend(text: string, imagePaths: string[]): Promise<void>;
   onPersona(id: string): Promise<void>;
   onDeepMode(enabled: boolean): Promise<void>;
@@ -114,10 +118,11 @@ export function ChatPanel({
         <i className={composerEnabled ? 'live' : ''}>{composerEnabled ? '可对话' : '仅预览'}</i>
       </header>
 
-      {workflowControlsEnabled && (
+      {workflowControlsEnabled && workflowRailInline && (
         <TaskRail workflows={workflows} onAction={onWorkflowAction} />
       )}
 
+      {stage}
       <div className="timeline">
         {gate}
         {items.map((item) => item.kind === 'message' ? (

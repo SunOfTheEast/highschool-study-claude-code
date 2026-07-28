@@ -66,6 +66,9 @@ test('keeps Roadmap planning quiet after Plans exist', () => {
         goal: '目标',
         capabilityStandard: '标准',
         planningBasis: '依据',
+        currentPosition: '当前位置',
+        nextLessonCandidate: '下一步',
+        planSummary: '摘要',
       }])}
       onOpen={() => {}}
       onRoadmapOpen={() => {}}

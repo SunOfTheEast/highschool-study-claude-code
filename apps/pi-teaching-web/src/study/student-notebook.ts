@@ -1,6 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join, normalize } from 'node:path';
-import { resolveInsideRoot } from 'highschool-study-markdown/study-domain';
+import {
+  readActiveTraces,
+  resolveInsideRoot,
+} from 'highschool-study-markdown/study-domain';
 import { parse } from 'yaml';
 import type { StudentNotebook, StudentProblemCard } from '../shared/contracts';
 import { readPlanWorkspace } from './read-workspace';
@@ -13,9 +16,11 @@ function aliases(source: string): Map<string, string> {
   );
 }
 
-function studentCard(root: string, lessonPath: string, target: string): StudentProblemCard {
-  const relativePath = normalize(join(dirname(lessonPath), target)).replaceAll('\\', '/');
-  const absolute = resolveInsideRoot(root, relativePath);
+export function readStudentProblemCard(
+  root: string,
+  cardPath: string,
+): StudentProblemCard {
+  const absolute = resolveInsideRoot(root, cardPath);
   const raw = parse(readFileSync(absolute, 'utf8')) as Record<string, unknown>;
   const original = raw.original_problem as Record<string, unknown> | undefined;
   const choices = Array.isArray(original?.choices)
@@ -28,15 +33,15 @@ function studentCard(root: string, lessonPath: string, target: string): StudentP
     })
     : [];
   return {
-    path: String(raw.storage_uri ?? target),
+    path: String(raw.storage_uri ?? cardPath),
     stem: String(raw.stem ?? original?.stem ?? ''),
     choices,
   };
 }
 
-function lessonTemplate(source: string): string | null {
-  return /^-\s+Primary template:\s*`?([^`\n]+)`?\s*$/m
-    .exec(source)?.[1]?.trim() ?? null;
+function studentCard(root: string, lessonPath: string, target: string): StudentProblemCard {
+  const relativePath = normalize(join(dirname(lessonPath), target)).replaceAll('\\', '/');
+  return readStudentProblemCard(root, relativePath);
 }
 
 function lessonSummary(source: string): string {
@@ -68,21 +73,25 @@ export function readStudentNotebook(
       .filter((block) => blockIsVisible(block.status))
       .flatMap((block) => block.uses),
   );
-  const withheldAliases = new Set(
-    lessonTemplate(source) === 'assessment' && lesson.status !== 'closed'
-      ? lesson.blocks
-        .filter((block) => block.kind === 'problem' && !blockIsVisible(block.status))
-        .flatMap((block) => block.uses)
-      : [],
-  );
   const cards: Record<string, StudentProblemCard> = {};
   for (const [alias, target] of aliases(source)) {
-    if (!visibleAliases.has(alias) || withheldAliases.has(alias)) continue;
+    if (!visibleAliases.has(alias)) continue;
     cards[alias] = studentCard(root, lesson.path, target);
   }
+  const recentRecords = readActiveTraces(root, [lesson.path])
+    .sort((left, right) => right.recordedAt.localeCompare(left.recordedAt))
+    .map((trace) => ({
+      source: trace.sourceAnchor,
+      lessonId: trace.lessonId,
+      blockId: trace.blockId,
+      assessment: trace.assessment,
+      support: trace.support,
+      note: trace.note,
+    }));
   return {
     lesson,
     cards,
+    recentRecords,
     lessonSummary: lesson.status === 'closed'
       ? lessonSummary(source) || null
       : null,

@@ -29,6 +29,9 @@ test('reads the derivative Roadmap and Plan lesson index', () => {
   expect(workspace.coach.sessionKey).toBe('coach:domain-integrity');
   expect(workspace.plan.planningBasis)
     .toContain('定义域遗漏已经成为稳定阻塞点');
+  expect(workspace.plan.currentPosition).toContain('阶段 `1a` 已通过');
+  expect(workspace.plan.nextLessonCandidate).toContain('mst_p0032_ex22');
+  expect(workspace.plan.planSummary).toContain('定义域意识');
   expect(learningSet.plans[0]?.planningBasis)
     .toBe(workspace.plan.planningBasis);
   expect(workspace.lessons.map((lesson) => [lesson.id, lesson.status])).toEqual([

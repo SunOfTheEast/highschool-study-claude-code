@@ -9,16 +9,19 @@ const stateLabel = {
 export function AbilityMap({
   value,
   onOpen,
+  embedded = false,
 }: {
   value: AbilityProjection | null;
   onOpen(source: string): void;
+  embedded?: boolean;
 }) {
+  const Root = embedded ? 'div' : 'aside';
   return (
-    <aside className="activities ability-map">
-      <header>
+    <Root className={embedded ? 'ability-map embedded' : 'activities ability-map'}>
+      {!embedded && <header>
         <span>Evidence map</span>
         <h2>方法证据</h2>
-      </header>
+      </header>}
       {!value && <p className="notebook-loading">正在聚合 Trace…</p>}
       {value?.nodes.length === 0 && (
         <div className="coach-note"><span>○</span><p>还没有可聚合的题卡 Trace。课堂产生证据后，这里会出现方法节点。</p></div>
@@ -42,6 +45,6 @@ export function AbilityMap({
         ))}
       </div>
       <p className="ability-footnote">分数只用于排序注意力；点击节点可回到原始 Trace。</p>
-    </aside>
+    </Root>
   );
 }

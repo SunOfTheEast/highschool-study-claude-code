@@ -311,8 +311,73 @@ select:focus-visible {
   min-width: 0;
   min-height: 100vh;
   display: grid;
-  grid-template-rows: auto auto 1fr auto auto;
+  grid-template-rows: auto auto auto 1fr auto auto;
   background: var(--paper);
+}
+
+.current-activity-stage {
+  position: sticky;
+  z-index: 4;
+  top: 0;
+  width: min(840px, calc(100% - 2.5rem));
+  margin: 1.1rem auto 0;
+  border: 1px solid var(--ink);
+  border-top: 3px solid var(--accent);
+  background: color-mix(in srgb, var(--paper) 96%, var(--accent-wash));
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--ink) 7%, transparent);
+  animation: stage-in .3s ease-out both;
+}
+.current-activity-stage > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: .7rem 1rem;
+  border-bottom: 1px solid var(--rule);
+}
+.current-activity-stage > header span {
+  color: var(--accent);
+  font-size: .64rem;
+  font-weight: 750;
+  letter-spacing: .14em;
+}
+.current-activity-stage > header small {
+  color: var(--ink-faint);
+  font: .58rem/1.4 ui-monospace, monospace;
+}
+.stage-content,
+.stage-orientation { padding: 1.15rem 1.25rem 1.3rem; }
+.stage-content h2,
+.stage-orientation h2 {
+  margin: 0 0 .75rem;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 500;
+}
+.stage-content > div,
+.stage-orientation p {
+  color: var(--ink-soft);
+  font-family: var(--font-reading);
+  font-size: .86rem;
+  line-height: 1.7;
+}
+.stage-content .problem-card { margin-bottom: .2rem; }
+.current-activity-stage > footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: .7rem 1rem;
+  border-top: 1px solid var(--rule);
+  background: var(--accent-wash);
+}
+.current-activity-stage > footer span { color: var(--ink-soft); font-size: .68rem; }
+.current-activity-stage > footer button {
+  padding: .5rem .7rem;
+  border: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: .68rem;
+  cursor: pointer;
 }
 
 .chat-header {
@@ -774,6 +839,89 @@ select:focus-visible {
   background: var(--paper-deep);
 }
 
+.context-stack { padding-inline: .9rem; }
+.context-stack > header { margin-inline: .25rem; }
+.context-section { border-bottom: 1px solid var(--rule); }
+.context-section > summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .5rem;
+  align-items: baseline;
+  padding: .9rem .35rem;
+  cursor: pointer;
+  list-style: none;
+}
+.context-section > summary::-webkit-details-marker { display: none; }
+.context-section > summary::after {
+  content: "+";
+  grid-column: 2;
+  grid-row: 1;
+  color: var(--ink-faint);
+}
+.context-section[open] > summary::after { content: "−"; }
+.context-section > summary span {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: .86rem;
+  font-weight: 600;
+}
+.context-section > summary small {
+  grid-column: 1;
+  color: var(--ink-faint);
+  font-size: .56rem;
+}
+.context-section-body {
+  padding: .2rem .35rem 1.2rem;
+  color: var(--ink-soft);
+  font-size: .7rem;
+  line-height: 1.65;
+}
+.context-section-body .activity-list { display: block; }
+.context-section-body .activity-row { border-right: 0; }
+.context-section-body .activity-row > summary { padding-inline: 0; }
+.context-section-body .student-view { padding-left: 2.55rem; }
+.context-section-body .ability-nodes { padding-top: 0; }
+.context-section-body .ability-nodes > button { padding-inline: 0; }
+.context-section-body .ability-footnote { margin-inline: 0; }
+.coach-context-copy h3 {
+  margin: 1.1rem 0 .35rem;
+  color: var(--accent);
+  font-size: .6rem;
+  letter-spacing: .08em;
+}
+.coach-context-copy h3:first-child { margin-top: 0; }
+.context-unavailable { color: var(--ink-faint); }
+.prior-lessons,
+.recent-records { margin: 0; padding: 0; list-style: none; }
+.prior-lessons li,
+.recent-records li { padding: .8rem 0; border-top: 1px dotted var(--rule); }
+.prior-lessons li:first-child,
+.recent-records li:first-child { border-top: 0; }
+.prior-lessons b { color: var(--ink); font-size: .7rem; }
+.prior-lessons code,
+.recent-records button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: .55rem/1.5 ui-monospace, monospace;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.recent-records small { color: var(--accent); font-size: .56rem; }
+.recent-records p { margin: .35rem 0; font-family: var(--font-reading); }
+.recent-records button { cursor: pointer; }
+.context-section-body .task-rail { width: 100%; margin: 0; padding: 0; }
+.context-section-body .workflow-summary {
+  grid-template-columns: 2.6rem minmax(0, 1fr);
+}
+.context-section-body .workflow-summary small { grid-column: 2; }
+.context-section-body .workflow-budget { padding-left: 3.3rem; }
+.context-section-body .workflow-task {
+  grid-template-columns: 2.6rem minmax(0, 1fr);
+}
+.context-section-body .workflow-task > span:last-child { grid-column: 2; }
+
 .activities header { padding: .2rem .35rem 1.8rem; border-bottom: 1px solid var(--ink); }
 .activities header h2 { margin: .45rem 0 0; font-family: var(--font-display); font-size: 1.45rem; font-weight: 500; }
 .activity-list { display: grid; }
@@ -1020,6 +1168,11 @@ select:focus-visible {
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes stage-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes breathe {
   0%, 100% { opacity: .45; }
   50% { opacity: 1; }
@@ -1058,6 +1211,12 @@ select:focus-visible {
   .deep-toggle { padding-inline: .45rem; }
   .persona-picker > span { display: none; }
   .timeline { padding: 2rem 1rem; }
+  .current-activity-stage {
+    position: relative;
+    top: auto;
+    width: calc(100% - 1.5rem);
+    margin-top: .75rem;
+  }
   .task-rail { padding-inline: 1rem; }
   .workflow-summary { grid-template-columns: 2.8rem minmax(0, 1fr); }
   .workflow-summary small { grid-column: 2; }

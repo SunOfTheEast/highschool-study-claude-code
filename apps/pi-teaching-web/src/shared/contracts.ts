@@ -37,6 +37,9 @@ export type PlanSummary = {
   goal: string;
   capabilityStandard: string;
   planningBasis: string;
+  currentPosition: string;
+  nextLessonCandidate: string;
+  planSummary: string;
 };
 
 export type LearningSetSnapshot = {
@@ -68,11 +71,34 @@ export type StudentProblemCard = {
   choices: Array<{ label: string; text: string }>;
 };
 
+export type LearningRecordSummary = {
+  source: string;
+  lessonId: string;
+  blockId: string;
+  assessment: string;
+  support: string;
+  note: string;
+};
+
 export type StudentNotebook = {
   lesson: Omit<LessonNode, 'blocks'> & { blocks: ActivityBlock[] };
   cards: Record<string, StudentProblemCard>;
+  recentRecords: LearningRecordSummary[];
   lessonSummary: string | null;
   authoring?: { source: string };
+};
+
+export type CoachContextView = {
+  currentPosition: string;
+  nextLessonCandidate: string;
+  planSummary: string;
+  plannerAttention: string;
+  priorLessons: Array<{
+    lessonId: string;
+    title: string;
+    summary: string;
+    source: string;
+  }>;
 };
 
 export type AbilityNode = {
