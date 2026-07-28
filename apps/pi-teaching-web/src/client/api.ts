@@ -6,6 +6,7 @@ import type {
   LessonReplay,
   PersonaPresentation,
   PlanWorkspaceSnapshot,
+  RoadmapWorkspaceSnapshot,
   SessionKey,
   StudentNotebook,
   WorkflowView,
@@ -54,6 +55,9 @@ export const api = {
   ),
   workspace: (planId: string) => (
     json<PlanWorkspaceSnapshot>(`/api/workspaces/${encodeURIComponent(planId)}`)
+  ),
+  roadmapWorkspace: () => (
+    json<RoadmapWorkspaceSnapshot>('/api/workspaces/roadmap')
   ),
   history: (key: SessionKey) => (
     json<ChatMessage[]>(`/api/sessions/${encodeURIComponent(key)}/history`)

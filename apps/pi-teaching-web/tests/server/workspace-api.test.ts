@@ -28,14 +28,19 @@ const workspace = {
   coach: { sessionKey: 'coach:p1', sessionId: null },
   lessons: [],
 } as const;
+const roadmapWorkspace = {
+  learningSet,
+  coach: { sessionKey: 'coach:@roadmap', sessionId: null },
+} as const;
 
-test('returns learning-set and Plan snapshots', async () => {
+test('returns learning-set, Roadmap and Plan snapshots', async () => {
   const handler = createRequestHandler({
     root: '/tmp/demo',
     authoring: false,
     hub: new EventHub(),
     readLearningSet: () => learningSet,
     registry: {
+      roadmapSnapshot: () => roadmapWorkspace,
       snapshot: () => workspace,
       send: async () => {},
       startLesson: async () => ({}),
@@ -48,6 +53,8 @@ test('returns learning-set and Plan snapshots', async () => {
   });
   expect(await (await handler(new Request('http://local/api/learning-set')))!.json())
     .toEqual(learningSet);
+  expect(await (await handler(new Request('http://local/api/workspaces/roadmap')))!.json())
+    .toEqual(roadmapWorkspace);
   expect(await (await handler(new Request('http://local/api/workspaces/p1')))!.json())
     .toEqual(workspace);
 });
@@ -62,7 +69,10 @@ test('passes the configured message projection mode to history', async () => {
     hub: new EventHub(),
     readLearningSet: () => learningSet,
     registry: {
-      openCoach: async (planId: string) => { calls.push(`open:${planId}`); return { sessionId: 'coach-p1' }; },
+      openSession: async (key: string) => {
+        calls.push(`open:${key}`);
+        return { sessionId: 'roadmap-session' };
+      },
       history: (_key: string, mode: unknown) => {
         calls.push('history');
         modes.push(mode);
@@ -72,11 +82,13 @@ test('passes the configured message projection mode to history', async () => {
       subscribeWorkflows: () => () => {},
     } as never,
   });
-  const response = await handler(new Request('http://local/api/sessions/coach%3Ap1/history'));
+  const response = await handler(new Request(
+    'http://local/api/sessions/coach%3A%40roadmap/history',
+  ));
   expect(response!.status).toBe(200);
   expect(await response!.json()).toEqual([]);
   expect(modes).toEqual(['raw-stream']);
-  expect(calls).toEqual(['open:p1', 'history']);
+  expect(calls).toEqual(['open:coach:@roadmap', 'history']);
 });
 
 test('restores an active Tutor before reading its history', async () => {
@@ -86,8 +98,8 @@ test('restores an active Tutor before reading its history', async () => {
     authoring: false,
     hub: new EventHub(),
     registry: {
-      openTutor: async (lessonId: string) => {
-        calls.push(`open:${lessonId}`);
+      openSession: async (key: string) => {
+        calls.push(`open:${key}`);
         return { sessionId: 'tutor-l1' };
       },
       history: () => {
@@ -100,7 +112,61 @@ test('restores an active Tutor before reading its history', async () => {
   });
   const response = await handler(new Request('http://local/api/sessions/tutor%3Al1/history'));
   expect(response!.status).toBe(200);
-  expect(calls).toEqual(['open:l1', 'history']);
+  expect(calls).toEqual(['open:tutor:l1', 'history']);
+});
+
+test('publishes a fresh learning-set snapshot after a Roadmap Coach turn', async () => {
+  const events: unknown[] = [];
+  let resolveIdle!: () => void;
+  const idle = new Promise<void>((resolve) => { resolveIdle = resolve; });
+  const updated = {
+    ...learningSet,
+    plans: [{
+      id: 'p1',
+      title: 'Plan',
+      path: 'plans/p1.md',
+      status: 'active',
+      goal: 'Goal',
+      capabilityStandard: 'Can do',
+      planningBasis: 'Student confirmed',
+    }],
+  };
+  const hub = new EventHub();
+  hub.subscribe((event) => {
+    events.push(event);
+    if (event.type === 'session-run' && event.status === 'idle') resolveIdle();
+  });
+  const handler = createRequestHandler({
+    root: '/tmp/demo',
+    authoring: false,
+    hub,
+    readLearningSet: () => updated,
+    registry: {
+      openSession: async () => ({ sessionId: 'roadmap-session' }),
+      send: async () => {},
+      subscribe: () => () => {},
+      subscribeWorkflows: () => () => {},
+    } as never,
+  });
+
+  const response = await handler(new Request(
+    'http://local/api/sessions/coach%3A%40roadmap/messages',
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ text: '我确认建立这个学习周期' }),
+    },
+  ));
+  expect(response!.status).toBe(202);
+  await idle;
+
+  expect(events).toContainEqual({ type: 'learning-set', value: updated });
+  expect(events.some((event) => (
+    typeof event === 'object'
+    && event !== null
+    && 'type' in event
+    && (event as { type: string }).type === 'snapshot'
+  ))).toBe(false);
 });
 
 function traceProjectionHandler(events: unknown[], reader: () => AbilityProjection) {
@@ -115,7 +181,7 @@ function traceProjectionHandler(events: unknown[], reader: () => AbilityProjecti
     readAbilityProjection: reader,
     registry: {
       snapshot: () => workspace,
-      openTutor: async () => ({ sessionId: 'tutor-l1' }),
+      openSession: async () => ({ sessionId: 'tutor-l1' }),
       send: async () => {},
       subscribe: (_key: string, next: (event: unknown) => void) => {
         listener = next;
@@ -205,8 +271,7 @@ test('routes a message to the selected Session key', async () => {
       startLesson: async () => ({}),
       pauseLesson: async () => {},
       abandonForReprepare: async () => {},
-      openCoach: async () => ({ sessionId: 'coach-p1' }),
-      openTutor: async () => ({ sessionId: 'tutor-l1' }),
+      openSession: async () => ({ sessionId: 'coach-p1' }),
       history: () => [],
       subscribe: () => () => {},
       subscribeWorkflows: () => () => {},
@@ -243,7 +308,7 @@ test('publishes running state until an accepted Session message finishes', async
         calls.push('send');
         await sendPending;
       },
-      openCoach: async () => ({ sessionId: 'coach-p1' }),
+      openSession: async () => ({ sessionId: 'coach-p1' }),
       history: () => [],
       subscribe: () => () => {},
       subscribeWorkflows: () => () => {},
@@ -360,8 +425,7 @@ test('uploads classroom images and attaches them to a Session message', async ()
       registry: {
         snapshot: () => workspace,
         send: async (...args: unknown[]) => { sent.push(args); },
-        openCoach: async () => ({ sessionId: 'coach-p1' }),
-        openTutor: async () => ({ sessionId: 'tutor-l1' }),
+        openSession: async () => ({ sessionId: 'coach-p1' }),
         history: () => [],
         subscribe: () => () => {},
         subscribeWorkflows: () => () => {},

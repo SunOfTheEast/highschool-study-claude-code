@@ -8,7 +8,10 @@ import { projectSessionEvent } from '../projection/projector';
 import type { MessageProjectionMode } from '../projection/message-policy';
 import { projectWorkflow } from '../projection/workflow-projector';
 import type { WorkspaceRegistry } from '../runtime/workspace-registry';
-import type { SessionKey } from '../shared/contracts';
+import {
+  ROADMAP_COACH_SESSION_KEY,
+  type SessionKey,
+} from '../shared/contracts';
 import { readAbilityProjection, readEvidence } from '../study/ability';
 import { readLearningSet } from '../study/read-workspace';
 import { buildReplay } from '../study/replay';
@@ -122,6 +125,10 @@ export function createRequestHandler(deps?: AppDependencies) {
       return json(learningSetReader(deps.root));
     }
 
+    if (request.method === 'GET' && url.pathname === '/api/workspaces/roadmap') {
+      return json(deps.registry.roadmapSnapshot());
+    }
+
     if (request.method === 'GET' && url.pathname === '/api/abilities') {
       return json(readAbilityProjection(deps.root));
     }
@@ -194,13 +201,10 @@ export function createRequestHandler(deps?: AppDependencies) {
     const history = /^\/api\/sessions\/([^/]+)\/history$/.exec(url.pathname);
     if (request.method === 'GET' && history) {
       const key = decodeURIComponent(history[1]!) as SessionKey;
-      if (key.startsWith('coach:')) {
-        await deps.registry.openCoach(key.slice(6));
-      } else if (key.startsWith('tutor:')) {
-        await deps.registry.openTutor(key.slice(6));
-      } else {
+      if (!key.startsWith('coach:') && !key.startsWith('tutor:')) {
         return json({ error: 'SESSION_NOT_FOUND' }, 404);
       }
+      await deps.registry.openSession(key);
       bind(key);
       return json(deps.registry.history(key, projectionMode));
     }
@@ -243,9 +247,7 @@ export function createRequestHandler(deps?: AppDependencies) {
       const key = decodeURIComponent(messages[1]!) as SessionKey;
       const input = await request.json() as { text: string; imagePaths?: string[] };
       const images = (input.imagePaths ?? []).map((path) => readImageContent(deps.root, path));
-      const session = key.startsWith('coach:')
-        ? await deps.registry.openCoach(key.slice(6))
-        : await deps.registry.openTutor(key.slice(6));
+      const session = await deps.registry.openSession(key);
       bind(key);
       deps.hub.publish({
         type: 'message',
@@ -262,6 +264,10 @@ export function createRequestHandler(deps?: AppDependencies) {
         key.startsWith('coach:') ? 'Coach 正在回应' : 'Tutor 正在回应',
         () => deps.registry.send(key, input.text, images),
         () => {
+          if (key === ROADMAP_COACH_SESSION_KEY) {
+            deps.hub.publish({ type: 'learning-set', value: learningSetReader(deps.root) });
+            return;
+          }
           const planId = key.startsWith('coach:')
             ? key.slice(6)
             : deps.registry.snapshot().plan.id;

@@ -164,6 +164,7 @@ export type WorkflowView = {
 
 export type StudyViewEvent =
   | { type: 'snapshot'; workspace: PlanWorkspaceSnapshot }
+  | { type: 'learning-set'; value: LearningSetSnapshot }
   | { type: 'message'; sessionKey: SessionKey; message: ChatMessage }
   | { type: 'message-delta'; sessionKey: SessionKey; messageId: string; delta: string }
   | {
