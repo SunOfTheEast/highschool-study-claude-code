@@ -1,6 +1,14 @@
 import { join } from 'node:path';
-import { cpSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import {
+  cpSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
+import { appendTrace } from 'highschool-study-markdown/study-domain';
 import { ROADMAP_COACH_SESSION_KEY } from '../../src/shared/contracts';
 import type {
   AbilityProjection,
@@ -35,6 +43,8 @@ const root = mkdtempSync(`${tmpdir()}/studyforge-e2e-`);
 cpSync(sourceRoot, root, { recursive: true });
 const lesson003Path = join(root, 'lessons/lesson-003.md');
 const lesson003Baseline = readFileSync(lesson003Path, 'utf8');
+const planPath = join(root, 'plans/domain-integrity.md');
+const planBaseline = readFileSync(planPath, 'utf8');
 const hub = new EventHub();
 const coachKey: SessionKey = 'coach:domain-integrity';
 const roadmapKey: SessionKey = ROADMAP_COACH_SESSION_KEY;
@@ -108,6 +118,7 @@ const workflows = new Map<SessionKey, WorkflowSnapshot[]>([[coachKey, [
   },
 ]]]);
 const deepMode = new Map<SessionKey, boolean>();
+const personaSelections = new Map<SessionKey, string>();
 const proposedMemoryReview = {
   id: 'fixture-memory-review',
   planId: 'domain-integrity',
@@ -234,8 +245,11 @@ const registry = {
     workflowListeners.set(key, current);
     return () => current.delete(listener);
   },
-  personaId: () => resolvePersona(root).id,
-  setPersona: async () => {},
+  personaId: (key: SessionKey) => personaSelections.get(key) ?? resolvePersona(root).id,
+  setPersona: async (key: SessionKey, id: string) => {
+    resolvePersona(root, id);
+    personaSelections.set(key, id);
+  },
   openSession: async (key: SessionKey) => ({
     sessionId: key === roadmapKey ? 'fixture-roadmap-coach' : `fixture-${key}`,
   }),
@@ -292,7 +306,12 @@ const registry = {
     return {};
   },
   triggerLessonStart: async () => {},
-  pauseLesson: async () => {},
+  pauseLesson: async (lessonId: string) => {
+    const lesson = readPlanWorkspace(root, 'domain-integrity').lessons
+      .find((item) => item.id === lessonId);
+    if (!lesson) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
+    setFrontmatterField(root, lesson.path, 'status', 'paused');
+  },
   abandonForReprepare: async () => {},
   send: async (key: SessionKey) => {
     if (!key.startsWith('tutor:')) return;
@@ -318,11 +337,112 @@ const appFetch = createRequestHandler({
   readAbilityProjection: () => abilityProjection,
 });
 
+function createPanelFlowFixture(): void {
+  writeFileSync(planPath, planBaseline);
+  for (const id of ['lesson-004', 'lesson-005', 'lesson-006']) {
+    rmSync(join(root, 'lessons', `${id}.md`), { force: true });
+  }
+  const copyLesson = (
+    id: string,
+    status: 'active' | 'paused' | 'abandoned',
+    title: string,
+  ) => {
+    const source = lesson003Baseline
+      .replace('id: lesson-003', `id: ${id}`)
+      .replace('status: prepared', `status: ${status}`)
+      .replace(
+        '# Lesson 003：阶段 1b — 定义域连续性与跨结构迁移核验',
+        `# ${title}`,
+      );
+    const path = `lessons/${id}.md`;
+    writeFileSync(join(root, path), source);
+    setBlockStatus(root, path, 'orientation', 'completed');
+    setBlockStatus(root, path, 'assessment-01', 'active');
+  };
+  copyLesson('lesson-004', 'active', 'Lesson 004：正在进行的连续性核验');
+  copyLesson('lesson-005', 'paused', 'Lesson 005：已暂停的迁移练习');
+  copyLesson('lesson-006', 'abandoned', 'Lesson 006：已归档的旧安排');
+
+  writeFileSync(
+    planPath,
+    readFileSync(planPath, 'utf8').replace(
+      '\n## Current Position',
+      [
+        '4. [Lesson 004：正在进行的连续性核验](../lessons/lesson-004.md) — active。',
+        '5. [Lesson 005：已暂停的迁移练习](../lessons/lesson-005.md) — paused。',
+        '6. [Lesson 006：已归档的旧安排](../lessons/lesson-006.md) — abandoned。',
+        '',
+        '## Current Position',
+      ].join('\n'),
+    ),
+  );
+
+  appendTrace(root, {
+    lessonPath: 'lessons/lesson-004.md',
+    blockId: 'assessment-01',
+    cardAlias: 'Q-DOMAIN-EX22',
+    cardStepId: 'step_2',
+    materialPath: null,
+    assessment: 'incomplete',
+    support: 'tutor',
+    note: 'unique-superseded-term：旧判断，等待学生补充。',
+    supersedes: null,
+    methods: { primary: '同构变形与换元法', secondary: ['参变量分离'] },
+  }, () => new Date('2026-07-28T08:00:00Z'));
+  appendTrace(root, {
+    lessonPath: 'lessons/lesson-004.md',
+    blockId: 'assessment-01',
+    cardAlias: 'Q-DOMAIN-EX22',
+    cardStepId: 'step_2',
+    materialPath: null,
+    assessment: 'partially_correct',
+    support: 'none',
+    note: 'unique-active-term：已独立写出定义域，参数边界仍需核验。',
+    supersedes: 'event-001',
+    methods: { primary: '同构变形与换元法', secondary: ['参变量分离'] },
+  }, () => new Date('2026-07-28T08:01:00Z'));
+
+  mkdirSync(join(root, 'materials'), { recursive: true });
+  writeFileSync(
+    join(root, 'materials/panel-flow-note.md'),
+    '# 公开研习材料\n\npanel-material-term：只包含学生可见的复习说明。',
+  );
+  mkdirSync(join(root, '.claude/personas'), { recursive: true });
+  writeFileSync(join(root, '.claude/personas/custom-guide.md'), `# Custom Guide
+
+- ID: \`custom-guide\`
+- Display name: 青黛学伴
+- Student preview: 温和而利落，先听清你的路线再回应。
+- Glyph: 黛
+- Accent: #48636f
+
+- INTERNAL: this line is prompt-only
+`);
+}
+
+function resetPanelFlowFixture(): void {
+  writeFileSync(planPath, planBaseline);
+  for (const id of ['lesson-004', 'lesson-005', 'lesson-006']) {
+    rmSync(join(root, 'lessons', `${id}.md`), { force: true });
+  }
+  rmSync(join(root, 'materials/panel-flow-note.md'), { force: true });
+  rmSync(join(root, '.claude/personas/custom-guide.md'), { force: true });
+  personaSelections.clear();
+}
+
 Bun.serve({
   hostname: '127.0.0.1',
   port: 65000,
   fetch(request, server) {
     const url = new URL(request.url);
+    if (request.method === 'POST' && url.pathname === '/__test/panel-flow/start') {
+      createPanelFlowFixture();
+      return Response.json({ ok: true });
+    }
+    if (request.method === 'POST' && url.pathname === '/__test/panel-flow/reset') {
+      resetPanelFlowFixture();
+      return Response.json({ ok: true });
+    }
     if (request.method === 'POST' && url.pathname === '/__test/register-plan') {
       writeFileSync(join(root, 'plans/isomorphic-transformation.md'), `---
 id: isomorphic-transformation

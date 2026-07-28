@@ -32,5 +32,23 @@
 
 ## 发布检查
 
-最终提交前运行应用 `bun run check`、Playwright E2E、插件 `bun run release:check`，
-并记录实际通过数量。验收记录不包含凭据、隐藏提示或课堂全文。
+最终收口实际运行：
+
+```text
+apps/pi-teaching-web
+  bun run check
+  → TypeScript PASS
+  → 229 tests PASS
+  → production build PASS
+
+  bun run test:e2e -- --reporter=line
+  → 16 Playwright tests PASS
+
+plugins/highschool-study
+  bun run release:check
+  → 55 tests PASS
+  → claude plugin validate --strict PASS
+  → public MCP tools: exactly 4
+```
+
+验收记录不包含凭据、隐藏提示或课堂全文。

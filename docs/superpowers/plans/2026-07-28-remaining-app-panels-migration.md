@@ -1,6 +1,8 @@
 # Remaining App Panels Migration Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+>
+> **Status (2026-07-28):** Implemented and accepted on the current branch. The checkboxes below remain the reproducible execution recipe rather than mutable project state.
 
 **Goal:** Reimplement the four valuable product-panel slices from the stale app branch on current `main`: a pinned classroom stage and context rail, safe asset exploration, a continue-first home, and a persona/display drawer.
 

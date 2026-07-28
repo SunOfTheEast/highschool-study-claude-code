@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
 
 test('toggles deep mode and confirms a workflow without adding sidebar agents', async ({ page }) => {
-  await page.goto('/');
-  await page.getByRole('button', { name: /定义域完整性的系统加固/ }).click();
-  await page.getByRole('button', { name: /深度模式/ }).click();
-  await expect(page.getByText('深度模式已允许')).toBeVisible();
+  await page.goto('/plan/domain-integrity');
+  await page.getByRole('button', { name: /深入查找/ }).click();
+  await expect(page.getByText('已允许深入查找')).toBeVisible();
+  await page.locator('.context-section').filter({ hasText: '深入查找' })
+    .locator(':scope > summary').click();
   const workflow = page.locator('.workflow').filter({ hasText: '备课多视角检查' });
   await expect(workflow).toBeVisible();
   await expect(workflow.getByText('20,000 Token')).toBeVisible();
@@ -16,8 +17,9 @@ test('toggles deep mode and confirms a workflow without adding sidebar agents', 
 });
 
 test('cancels unfinished work and keeps a completed branch visible', async ({ page }) => {
-  await page.goto('/');
-  await page.getByRole('button', { name: /定义域完整性的系统加固/ }).click();
+  await page.goto('/plan/domain-integrity');
+  await page.locator('.context-section').filter({ hasText: '深入查找' })
+    .locator(':scope > summary').click();
   const workflow = page.locator('.workflow').filter({ hasText: '可取消会诊' });
   await expect(workflow.getByText('分析完成')).toBeVisible();
   await workflow.getByRole('button', { name: '取消' }).click();
