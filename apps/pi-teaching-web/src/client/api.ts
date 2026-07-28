@@ -1,6 +1,7 @@
 import type {
   AbilityProjection,
   CoachContextView,
+  ContentSearchResult,
   ConversationItem,
   EvidenceView,
   LearningSetSnapshot,
@@ -63,6 +64,13 @@ export const api = {
   ),
   coachContext: (planId: string) => (
     json<CoachContextView>(`/api/plans/${encodeURIComponent(planId)}/context`)
+  ),
+  contentSearch: (key: SessionKey, query: string, limit = 20) => (
+    json<ContentSearchResult>(
+      `/api/content-search?query=${encodeURIComponent(query)}&sessionKey=${
+        encodeURIComponent(key)
+      }&limit=${limit}`,
+    )
   ),
   roadmapWorkspace: () => (
     json<RoadmapWorkspaceSnapshot>('/api/workspaces/roadmap')

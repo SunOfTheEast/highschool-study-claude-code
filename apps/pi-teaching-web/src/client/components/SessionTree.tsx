@@ -15,12 +15,16 @@ export function SessionTree({
   onSelect,
   onPlanSelect,
   onHome,
+  explorerEnabled,
+  onExplore,
 }: {
   workspace: PlanWorkspaceSnapshot;
   selected: SessionKey;
   onSelect(key: SessionKey): void;
   onPlanSelect(planId: string): void;
   onHome(): void;
+  explorerEnabled: boolean;
+  onExplore(): void;
 }) {
   const otherPlans = workspace.learningSet.plans
     .filter((plan) => plan.id !== workspace.plan.id);
@@ -38,6 +42,13 @@ export function SessionTree({
       </div>
 
       <PlanRationale value={workspace.plan.planningBasis} />
+
+      {explorerEnabled && (
+        <button className="library-entry" type="button" onClick={onExplore}>
+          <span aria-hidden="true">⌕</span>
+          <span><b>研习资料</b><small>查找题卡、方法与学习记录</small></span>
+        </button>
+      )}
 
       <p className="tree-label">父会话</p>
       <button

@@ -101,6 +101,24 @@ export type CoachContextView = {
   }>;
 };
 
+export type ContentSearchHit = {
+  kind: 'card' | 'method' | 'material';
+  id: string;
+  title: string;
+  subtitle: string;
+  source: string;
+  matchedBy: 'asset' | 'trace';
+  matchReason: string;
+  traceHistory: LearningRecordSummary[];
+  card: StudentProblemCard | null;
+  preview: string | null;
+};
+
+export type ContentSearchResult = {
+  query: string;
+  hits: ContentSearchHit[];
+};
+
 export type AbilityNode = {
   method: string;
   state: 'unobserved' | 'unstable' | 'steady';

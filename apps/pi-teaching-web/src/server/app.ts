@@ -19,6 +19,7 @@ import { readLearningSet } from '../study/read-workspace';
 import { buildReplay } from '../study/replay';
 import { readStudentNotebook } from '../study/student-notebook';
 import { readCoachContext } from '../study/coach-context';
+import { searchStudentContent } from '../study/content-explorer';
 import { PreparedLessonValidationError } from '../study/validate-prepared-lesson';
 import type { EventHub } from './event-hub';
 
@@ -141,6 +142,33 @@ export function createRequestHandler(deps?: AppDependencies) {
 
     if (request.method === 'GET' && url.pathname === '/api/abilities') {
       return json(readAbilityProjection(deps.root));
+    }
+
+    if (request.method === 'GET' && url.pathname === '/api/content-search') {
+      const query = url.searchParams.get('query') ?? '';
+      const key = url.searchParams.get('sessionKey') as SessionKey | null;
+      if (!key) return json({ error: 'CONTENT_SEARCH_SESSION_REQUIRED' }, 400);
+      const requestedLimit = Number(url.searchParams.get('limit') ?? 20);
+      const limit = Number.isFinite(requestedLimit) ? requestedLimit : 20;
+      try {
+        return json(searchStudentContent(deps.root, {
+          query,
+          sessionKey: key,
+          limit,
+        }));
+      } catch (error) {
+        const code = error instanceof Error ? error.message : 'CONTENT_SEARCH_FAILED';
+        if (code === 'CONTENT_SEARCH_ROADMAP_UNAVAILABLE') {
+          return json({ error: code }, 403);
+        }
+        if (code === 'CONTENT_SEARCH_TUTOR_NOT_STARTED') {
+          return json({ error: code }, 409);
+        }
+        if (code === 'CONTENT_SEARCH_SESSION_NOT_FOUND' || code.startsWith('PLAN_NOT_FOUND')) {
+          return json({ error: code }, 404);
+        }
+        throw error;
+      }
     }
 
     const planContext = /^\/api\/plans\/([^/]+)\/context$/.exec(url.pathname);

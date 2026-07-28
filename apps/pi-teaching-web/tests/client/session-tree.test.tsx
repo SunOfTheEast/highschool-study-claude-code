@@ -52,6 +52,8 @@ function render(status: string): string {
       onSelect={() => {}}
       onPlanSelect={() => {}}
       onHome={() => {}}
+      explorerEnabled
+      onExplore={() => {}}
     />,
   );
 }

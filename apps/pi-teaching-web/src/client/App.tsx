@@ -19,6 +19,7 @@ import type {
 } from '../shared/contracts';
 import { api, ApiError } from './api';
 import { ChatPanel } from './components/ChatPanel';
+import { ContentExplorer } from './components/ContentExplorer';
 import { ContextStack } from './components/ContextStack';
 import { CurrentActivityStage } from './components/CurrentActivityStage';
 import { EvidenceLens } from './components/EvidenceLens';
@@ -55,6 +56,7 @@ export function App() {
   const [persona, setPersona] = useState<PersonaPresentation | null>(null);
   const [memoryReview, setMemoryReview] = useState<MemoryReviewSnapshot | null>(null);
   const [submittingMemoryReview, setSubmittingMemoryReview] = useState(false);
+  const [contentExplorerOpen, setContentExplorerOpen] = useState(false);
 
   useEffect(() => {
     let disposed = false;
@@ -101,6 +103,7 @@ export function App() {
     setLoading(true);
     setPageError(null);
     setMemoryReview(null);
+    setContentExplorerOpen(false);
     try {
       if (!route) throw new Error('INVALID_ROUTE');
       if (route.kind === 'home') {
@@ -568,6 +571,8 @@ export function App() {
             void openRoute({ kind: 'coach', planId }, 'push');
           }}
           onHome={goHome}
+          explorerEnabled={isCoach || selectedLesson?.status !== 'prepared'}
+          onExplore={() => setContentExplorerOpen(true)}
         />
         <ChatPanel
           sessionKey={selected}
@@ -608,7 +613,13 @@ export function App() {
           onWorkflowAction={actOnWorkflow}
         />
       </div>
-      {evidence && <EvidenceLens value={evidence} onClose={() => setEvidence(null)} />}
+      {contentExplorerOpen && (
+        <ContentExplorer
+          onClose={() => setContentExplorerOpen(false)}
+          onEvidence={(source) => void openEvidence(source)}
+          onSearch={(query) => api.contentSearch(selected, query)}
+        />
+      )}
       {memoryReview?.status === 'proposed' && (
         <MemoryReviewPanel
           review={memoryReview}
@@ -618,6 +629,7 @@ export function App() {
           onSubmit={submitMemoryReview}
         />
       )}
+      {evidence && <EvidenceLens value={evidence} onClose={() => setEvidence(null)} />}
     </div>
   );
 }

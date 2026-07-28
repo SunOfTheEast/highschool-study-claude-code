@@ -105,6 +105,38 @@ test('returns source-linked context for one Plan Coach', async () => {
   });
 });
 
+test('exposes student-safe content search from the real Session scope', async () => {
+  const handler = createRequestHandler({
+    root: domainIntegrityFixtureRoot,
+    authoring: false,
+    hub: new EventHub(),
+    registry: {} as never,
+  });
+
+  const missing = await handler(new Request(
+    'http://local/api/content-search?query=&sessionKey=coach%3Adomain-integrity',
+  ));
+  expect(missing!.status).toBe(200);
+  expect(await missing!.json()).toEqual({ query: '', hits: [] });
+
+  const roadmap = await handler(new Request(
+    'http://local/api/content-search?query=domain&sessionKey=coach%3A%40roadmap',
+  ));
+  expect(roadmap!.status).toBe(403);
+  expect(await roadmap!.json()).toEqual({ error: 'CONTENT_SEARCH_ROADMAP_UNAVAILABLE' });
+
+  const coach = await handler(new Request(
+    'http://local/api/content-search?query=mst_p0032_ex22&sessionKey=coach%3Adomain-integrity',
+  ));
+  expect(coach!.status).toBe(200);
+  expect(await coach!.json()).toMatchObject({
+    hits: [expect.objectContaining({
+      kind: 'card',
+      source: 'cards/derivative/mst_p0032_ex22.card.yaml',
+    })],
+  });
+});
+
 test('passes the configured message projection mode to history', async () => {
   const modes: unknown[] = [];
   const calls: string[] = [];
