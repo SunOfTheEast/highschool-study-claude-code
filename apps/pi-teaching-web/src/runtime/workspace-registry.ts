@@ -1,17 +1,30 @@
 import type { ImageContent } from '@earendil-works/pi-ai';
-import type { ChatMessage, PlanWorkspaceSnapshot, SessionKey } from '../shared/contracts';
+import {
+  ROADMAP_COACH_SESSION_KEY,
+  type ChatMessage,
+  type PlanWorkspaceSnapshot,
+  type RoadmapWorkspaceSnapshot,
+  type SessionKey,
+} from '../shared/contracts';
 import {
   projectStoredMessage,
   type MessageProjectionMode,
 } from '../projection/message-policy';
 import type { WorkflowSnapshot } from '../workflows/contracts';
-import { readLearningSet, readPlanWorkspace } from '../study/read-workspace';
+import {
+  readLearningSet,
+  readPlanWorkspace,
+  readRoadmapWorkspace,
+} from '../study/read-workspace';
 import { validatePreparedLesson } from '../study/validate-prepared-lesson';
 import { setFrontmatterField } from '../study/write-workspace';
 import { resolvePersona } from '../study/persona';
 import type { StudySession, StudySessionFactory } from './session-factory';
 import { findOwnedPiSessionFile } from './session-owner';
-import type { StudySessionScope } from './session-scope';
+import {
+  ROADMAP_COACH_SCOPE,
+  type StudySessionScope,
+} from './session-scope';
 
 export type SessionFileLookup = (
   root: string,
@@ -35,6 +48,10 @@ export class WorkspaceRegistry {
     if (!planId) throw new Error('PLAN_NOT_SELECTED');
     this.planId = planId;
     return readPlanWorkspace(this.root, planId);
+  }
+
+  roadmapSnapshot(): RoadmapWorkspaceSnapshot {
+    return readRoadmapWorkspace(this.root);
   }
 
   private workspaceForLesson(lessonId: string): PlanWorkspaceSnapshot {
@@ -68,6 +85,27 @@ export class WorkspaceRegistry {
     });
     this.sessions.set(key, session);
     setFrontmatterField(this.root, snapshot.plan.path, 'coach_session', session.sessionId);
+    return session;
+  }
+
+  async openRoadmapCoach(): Promise<StudySession> {
+    const cached = this.sessions.get(ROADMAP_COACH_SESSION_KEY);
+    if (cached) return cached;
+    const snapshot = readRoadmapWorkspace(this.root);
+    const sessionFile = snapshot.coach.sessionId
+      ? await this.lookup(this.root, snapshot.coach.sessionId, ROADMAP_COACH_SCOPE)
+      : null;
+    const session = await this.factory({
+      ...ROADMAP_COACH_SCOPE,
+      sessionFile,
+    });
+    this.sessions.set(ROADMAP_COACH_SESSION_KEY, session);
+    setFrontmatterField(
+      this.root,
+      ROADMAP_COACH_SCOPE.ownerPath,
+      'roadmap_coach_session',
+      session.sessionId,
+    );
     return session;
   }
 
@@ -184,9 +222,7 @@ export class WorkspaceRegistry {
 
   async setPersona(key: SessionKey, id: string): Promise<void> {
     const persona = resolvePersona(this.root, id);
-    const session = key.startsWith('coach:')
-      ? await this.openCoach(key.slice(6))
-      : await this.openTutor(key.slice(6));
+    const session = await this.openSession(key);
     await session.setPersona(persona.id, persona.content);
   }
 
@@ -217,7 +253,8 @@ export class WorkspaceRegistry {
     this.sessions.clear();
   }
 
-  private openSession(key: SessionKey): Promise<StudySession> {
+  openSession(key: SessionKey): Promise<StudySession> {
+    if (key === ROADMAP_COACH_SESSION_KEY) return this.openRoadmapCoach();
     return key.startsWith('coach:')
       ? this.openCoach(key.slice(6))
       : this.openTutor(key.slice(6));

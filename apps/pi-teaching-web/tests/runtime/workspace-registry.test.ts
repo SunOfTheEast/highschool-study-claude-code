@@ -86,6 +86,94 @@ test('creates Coach eagerly and Tutor only after start', async () => {
   expect(registry.snapshot('domain-integrity').lessons[2]?.status).toBe('active');
 });
 
+test('creates one canonical Roadmap Coach and writes its Session back to ROADMAP.md', async () => {
+  const root = fixture();
+  const created: Array<{
+    role: 'coach' | 'tutor';
+    ownerId: string;
+    ownerPath: string;
+    sessionFile: string | null;
+  }> = [];
+  const factory: StudySessionFactory = async (scope) => {
+    created.push(scope);
+    return {
+      sessionId: 'roadmap-session-new',
+      sessionFile: '/tmp/roadmap-session-new.jsonl',
+      messages: [],
+      isStreaming: false,
+      personaId: () => null,
+      setPersona: async () => {},
+      ...idleWorkflowMethods(),
+      prompt: async () => {},
+      abort: async () => {},
+      subscribe: () => () => {},
+      dispose: () => {},
+    };
+  };
+  const registry = new WorkspaceRegistry(root, factory, async () => null);
+
+  expect(registry.roadmapSnapshot().coach.sessionId).toBeNull();
+  const opened = await registry.openRoadmapCoach();
+  expect(await registry.openRoadmapCoach()).toBe(opened);
+  expect(await registry.openSession('coach:@roadmap')).toBe(opened);
+
+  expect(created).toEqual([{
+    role: 'coach',
+    ownerId: '@roadmap',
+    ownerPath: 'ROADMAP.md',
+    sessionFile: null,
+  }]);
+  expect(readFileSync(join(root, 'ROADMAP.md'), 'utf8'))
+    .toContain('roadmap_coach_session: roadmap-session-new');
+  expect(registry.roadmapSnapshot().coach.sessionId).toBe('roadmap-session-new');
+});
+
+test('reuses a persisted Roadmap Session only after canonical owner validation', async () => {
+  const root = fixture();
+  const roadmapPath = join(root, 'ROADMAP.md');
+  writeFileSync(
+    roadmapPath,
+    readFileSync(roadmapPath, 'utf8').replace(
+      'status: active',
+      'status: active\nroadmap_coach_session: saved-roadmap-session',
+    ),
+  );
+  const checked: Array<{ sessionId: string; expected: StudySessionScope }> = [];
+  const opened: Array<{ sessionFile: string | null }> = [];
+  const factory: StudySessionFactory = async ({ sessionFile }) => {
+    opened.push({ sessionFile });
+    return {
+      sessionId: 'saved-roadmap-session',
+      sessionFile: sessionFile ?? '/tmp/fresh-roadmap-session.jsonl',
+      messages: [],
+      isStreaming: false,
+      personaId: () => null,
+      setPersona: async () => {},
+      ...idleWorkflowMethods(),
+      prompt: async () => {},
+      abort: async () => {},
+      subscribe: () => () => {},
+      dispose: () => {},
+    };
+  };
+  const registry = new WorkspaceRegistry(root, factory, async (_root, sessionId, expected) => {
+    checked.push({ sessionId, expected });
+    return '/tmp/saved-roadmap-session.jsonl';
+  });
+
+  await registry.openRoadmapCoach();
+
+  expect(checked).toEqual([{
+    sessionId: 'saved-roadmap-session',
+    expected: {
+      role: 'coach',
+      ownerId: '@roadmap',
+      ownerPath: 'ROADMAP.md',
+    },
+  }]);
+  expect(opened).toEqual([{ sessionFile: '/tmp/saved-roadmap-session.jsonl' }]);
+});
+
 test('passes canonical owner paths to Coach and Tutor factories', async () => {
   const root = fixture();
   moveLessonToNestedPath(root);
