@@ -447,6 +447,7 @@ export function App() {
         <LearningSetHome
           value={learningSet}
           onOpen={(id) => void openRoute({ kind: 'coach', planId: id }, 'push')}
+          onRoadmapOpen={() => void openRoute({ kind: 'roadmap' }, 'push')}
         />
       </>
     );

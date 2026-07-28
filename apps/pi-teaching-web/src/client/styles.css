@@ -139,6 +139,34 @@ select:focus-visible {
 .plan-arrow { font-size: 1.15rem; transition: transform .2s ease; }
 .plan-list > button:hover .plan-arrow { transform: translate(3px, -3px); }
 
+.plan-list > .roadmap-entry.primary {
+  margin-top: .35rem;
+  padding: 1.5rem 1.25rem;
+  color: var(--paper);
+  background: var(--accent-deep);
+}
+
+.plan-list > .roadmap-entry.primary .plan-number,
+.plan-list > .roadmap-entry.primary .plan-copy small,
+.plan-list > .roadmap-entry.primary .plan-copy > span {
+  color: color-mix(in srgb, var(--paper) 72%, transparent);
+}
+
+.plan-list > .roadmap-entry.primary:hover {
+  padding-left: 1.7rem;
+  color: var(--paper);
+}
+
+.plan-list > .roadmap-entry.quiet {
+  margin-top: 1rem;
+  color: var(--ink-soft);
+  border-top: 1px solid var(--ink);
+}
+
+.plan-list > .roadmap-entry.quiet strong {
+  font-size: 1.05rem;
+}
+
 .workspace-shell {
   min-height: 100vh;
   display: grid;
