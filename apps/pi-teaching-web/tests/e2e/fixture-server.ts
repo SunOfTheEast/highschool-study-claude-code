@@ -1,8 +1,12 @@
 import { join } from 'node:path';
 import { cpSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
+import { ROADMAP_COACH_SESSION_KEY } from '../../src/shared/contracts';
 import type { AbilityProjection, ChatMessage, SessionKey } from '../../src/shared/contracts';
-import { readPlanWorkspace } from '../../src/study/read-workspace';
+import {
+  readPlanWorkspace,
+  readRoadmapWorkspace,
+} from '../../src/study/read-workspace';
 import {
   closeLesson,
   registerPlan,
@@ -24,6 +28,7 @@ const lesson003Path = join(root, 'lessons/lesson-003.md');
 const lesson003Baseline = readFileSync(lesson003Path, 'utf8');
 const hub = new EventHub();
 const coachKey: SessionKey = 'coach:domain-integrity';
+const roadmapKey: SessionKey = ROADMAP_COACH_SESSION_KEY;
 
 function task(
   id: string,
@@ -95,6 +100,12 @@ const workflows = new Map<SessionKey, WorkflowSnapshot[]>([[coachKey, [
 ]]]);
 const deepMode = new Map<SessionKey, boolean>();
 const fixtureHistory = new Map<SessionKey, ChatMessage[]>();
+fixtureHistory.set(roadmapKey, [{
+  id: 'fixture-roadmap-message',
+  role: 'coach',
+  text: '这里用于回看整个学习集，并在你确认后开启新的学习周期。',
+  complete: true,
+}]);
 const workflowListeners = new Map<SessionKey, Set<(snapshot: WorkflowSnapshot) => void>>();
 const sessionListeners = new Map<SessionKey, Set<(event: unknown) => void>>();
 const abilityProjection: AbilityProjection = {
@@ -117,6 +128,7 @@ function notify(key: SessionKey, snapshot: WorkflowSnapshot): void {
 }
 
 const registry = {
+  roadmapSnapshot: () => readRoadmapWorkspace(root),
   snapshot: (planId = 'domain-integrity') => readPlanWorkspace(root, planId),
   history: (key: SessionKey) => structuredClone(fixtureHistory.get(key) ?? []),
   subscribe: (key: SessionKey, listener: (event: unknown) => void) => {
@@ -136,8 +148,9 @@ const registry = {
   },
   personaId: () => resolvePersona(root).id,
   setPersona: async () => {},
-  openCoach: async () => ({ sessionId: 'fixture-coach' }),
-  openTutor: async () => ({ sessionId: 'fixture-tutor' }),
+  openSession: async (key: SessionKey) => ({
+    sessionId: key === roadmapKey ? 'fixture-roadmap-coach' : `fixture-${key}`,
+  }),
   setDeepMode: async (key: SessionKey, enabled: boolean) => { deepMode.set(key, enabled); },
   deepMode: async (key: SessionKey) => deepMode.get(key) ?? false,
   workflows: async (key: SessionKey) => list(key),

@@ -1,5 +1,30 @@
 import { expect, test } from '@playwright/test';
 
+test('keeps global planning available without turning it into the home workspace', async ({ page }) => {
+  await page.goto('/');
+
+  const entry = page.getByRole('button', { name: /总览与规划/ });
+  await expect(entry).toBeVisible();
+  await expect(entry).toHaveClass(/quiet/);
+  await expect(page.getByRole('button', { name: /定义域完整性的系统加固/ }))
+    .toBeVisible();
+
+  await entry.click();
+  await expect(page).toHaveURL(/\/roadmap$/);
+  await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'roadmap');
+  await expect(page.getByText('这里用于回看整个学习集')).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Plan sessions' })).toHaveCount(0);
+
+  await page.reload();
+  await expect(page).toHaveURL(/\/roadmap$/);
+  await expect(page.getByText('这里用于回看整个学习集')).toBeVisible();
+
+  await page.getByRole('button', { name: /返回学习集/ }).click();
+  await expect(page).toHaveURL('/');
+  await expect(page.getByRole('button', { name: /定义域完整性的系统加固/ }))
+    .toBeVisible();
+});
+
 test('hides future cards and reveals only the first active problem after start', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: '导数学习 Roadmap' })).toBeVisible();
