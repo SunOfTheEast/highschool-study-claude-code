@@ -1,9 +1,9 @@
 # 纵向个性化规划验收记录
 
 日期：2026-07-27  
-中间结论：`PLANNING_ONLY`（2026-07-28 严格契约重跑）
+最终结论：`PLANNING_ONLY`（2026-07-28 严格契约与交叉授课重跑）
 说明：前文保留的 `NO_EFFECT` 是第一次运行的历史结论；当前结论以文末
-Strict-contract rerun 为准。
+Two-Lesson cross-treatment 为准。
 
 ## Run Identity
 
@@ -292,3 +292,144 @@ matched/mismatched cross-treatment。
 
 下一阶段只复制这两份冻结 Plan；不再修改候选 Plan、受控历史、产品代码或
 Skill。
+
+---
+
+## Two-Lesson cross-treatment（2026-07-28）
+
+本节从上面的两个冻结 Plan 继续执行预注册的 2×2 交叉授课。每个处理根保留
+同一份受控历史，只交换 `cycle-04` Plan；没有复制规划或课堂 Session。
+
+### Treatment identity
+
+- 处理根：`/tmp/studyforge-strict-personalization-5Jlin8/treatment`
+- Provider：`deepseek`
+- Model：`deepseek-v4-pro`
+- Thinking：`high`
+- Persona：`calm-senpai`
+- Deep mode：关闭
+- 消息投影：safe
+- 端口：`65441`、`65442`、`65443`、`65444`
+
+| Root | History | Frozen Plan | Coach Session |
+| --- | --- | --- | --- |
+| `A-matched` | A | A | `019fa533-4184-7871-aeb9-23c45a878db8` |
+| `A-mismatched` | A | B | `019fa533-41a2-703a-9454-325317f44c4a` |
+| `B-matched` | B | B | `019fa533-419f-7822-a77a-195448f04de6` |
+| `B-mismatched` | B | A | `019fa533-419e-70ed-aaf4-356498d6cc3d` |
+
+每个 Coach 都在原 `coach / cycle-04 / plans/cycle-04.md` Session 中备完
+Lesson 007；Lesson 007 关闭后，同一个 Coach Session 读取当前 Plan、
+Lesson Summary 和 active Trace，再准备 Lesson 008。
+
+| Root | Lesson 007 Tutor | Lesson 008 Tutor |
+| --- | --- | --- |
+| `A-matched` | `019fa53c-789d-7b98-84a2-a94a0dc5f16f` | `019fa6ad-cebc-7957-8f9f-36321918b1b7` |
+| `A-mismatched` | `019fa53c-7888-797a-938c-2d4f3a534be6` | `019fa6ad-ce99-7a78-9c45-ff99394aa01e` |
+| `B-matched` | `019fa53c-7887-7f54-b4e2-733c3a3b58fc` | `019fa6ad-ceb6-7046-8703-4a04f9f986ac` |
+| `B-mismatched` | `019fa53c-78a7-7cad-8c00-b26adb8389ca` | `019fa6ad-ceb9-72f1-9f16-305d94db32f0` |
+
+### Student simulation control
+
+课堂只使用学生可见页面作答；Lesson 关闭前不读取题卡答案或 Teacher
+Control。
+
+- History A：方法入口明确后计算流畅；陌生外壳不会故意失败，但不会为了
+  配合实验主动声称看见一个尚未识别的模板。
+- History B：能独立判断大方向；既往书面检查点已在近时两题中有效，因此
+  任务明确要求条件检查时不强行制造遗漏。
+- 匹配组和错配组使用同一历史的同一行为原则；没有为了让匹配组胜出而改写
+  学生能力。
+
+### Lesson execution
+
+| Root | Lesson 007 | Lesson 008 | Support |
+| --- | --- | --- | --- |
+| `A-matched` | 双变量陌生外壳；未说出预设比值结构，但独立用主元求导正确完成 | 根据首课 Trace 换成必须先对齐结构的题；独立发现同构并正确完成 | 两课均 `none` |
+| `A-mismatched` | 延迟保持题；独立用参变量分离与凸性完成 | 跨方法切线题；独立设切点并用判别式完成 | 两课均 `none` |
+| `B-matched` | 主动先写 `a>0`，延迟保持通过；独立用充分/必要性与切线放缩完成 | 根据首课额外信号转向跨方法题；完整检查定义域、端点和参数三段 | 两课均 `none` |
+| `B-mismatched` | 分步诊断结构识别与方法选择，两步均独立 | 换成分段函数、切线几何外壳再次分步诊断，两步均独立 | 两课均 `none` |
+
+四个 Lesson 007 和四个 Lesson 008 最终全部为 `closed`。每根 Plan 都只出现
+一次 Lesson 007 和 Lesson 008 链接；每个 problem Block 恰好绑定一张真实
+存在的题卡。四根的 Lesson JSONL owner 都与实际 Lesson 路径一致，最终页面
+快照的 console error 总数为 0。
+
+批量启动 Lesson 008 时，临时 Playwright harness 有一页未在 30 秒内重新显示
+composer，导致 `Promise.all` 退出。事实审计显示四份 Lesson 已经是 `active`，
+四个 Tutor Session 均已落盘且最终 assistant stop reason 为 `stop`；重新打开
+同一路由后四页 composer 全部可见。因此没有重放 `lesson_start`，也没有把该
+harness 重绘竞态计作产品失败。
+
+### First-Lesson adaptation audit
+
+四个 Coach 都读取了第一课事实并改变第二课安排：
+
+- `A-matched` 根据 Lesson 007 的替代正确路线，把“不会识别结构”修正为待
+  核验假设，第二课选择没有直接求导绕路的同构题。第二课独立识别后，Coach
+  不再维持首课的窄判断，而是定位为“有替代计算入口时会绕过结构观察”。
+- `A-mismatched` 把“条件检查保持、但未走同构路线”解释为跨方法诊断信号，
+  第二课改用过定点切线题。
+- `B-matched` 确认书面条件检查点的延迟保持，并利用学生没有机械套用同构的
+  额外信号，第二课进入不同方法家族。
+- `B-mismatched` 在第一张新壳题结构与方法均独立后，按 Plan 要求再用不同
+  方法谱系题卡作一次核验。
+
+这说明 Lesson Summary 和 active Trace 不只被读取，也确实改变了下一 Lesson
+的题卡与课堂结构。
+
+### Blinded outcome scores
+
+两个匿名包分别包含：同一处理前历史、冻结 Plan 核心字段、两节完整学生可见
+对话、Lesson Summary、Trace，以及第一节后的 Coach 复盘。候选在评分前随机
+换名；映射文件保持 `0600`，两次评分均结束后才解盲。评估器为新的 ephemeral
+DeepSeek Session，禁用工具、Skill、扩展、项目上下文和上下文文件。
+
+解盲映射：
+
+```text
+pair 1: 云岫 = A-mismatched, 星槎 = A-matched
+pair 2: 松烟 = B-mismatched, 晴岚 = B-matched
+```
+
+| Pair | Mismatched | Matched | Better | Material improvement | Verdict |
+| --- | ---: | ---: | --- | --- | --- |
+| History A | `13/14` | `14/14` | matched | yes | `PASS` |
+| History B | `14/14` | `14/14` | tie | no | `TIE` |
+
+History A 的盲评认为匹配方案形成了更严密的假设—检验链：第一课暴露“存在
+替代路线时跳过目标结构”，第二课堵住绕路后验证结构识别能力本身完好，因此
+比错配方案产生了更细、可操作的诊断结论。
+
+History B 的两套方案都完整、节制且有事实支撑。匹配方案验证了条件检查延迟
+保持并转向跨方法诊断；错配方案用两张不同外壳题验证结构—方法连接。由于
+学生在四次课堂 attempt 中都独立正确，盲评认为两者主要证明“学生本来会”，
+没有观察到一方造成额外能力改善，故判持平。
+
+### Final result
+
+`PLANNING_ONLY`
+
+预注册升级条件要求 History A 和 History B 的 matched 方案都优于各自
+mismatched 方案。本轮只有 History A 满足；History B 持平，因此不能升级为
+`PERSONALIZATION_CONFIRMED`。
+
+已确认的能力边界是：
+
+- 长期历史能稳定改变下一 Plan；
+- 第一课 Summary / active Trace 能改变同 Plan 的下一 Lesson；
+- 匹配方案在 History A 上产生了更高价值的诊断进展；
+- 当前实验尚不能证明这种优势对两类历史都稳定，也不能证明已造成新的能力
+  增益。
+
+### Remaining uncertainty
+
+1. History B 出现明显天花板效应：匹配与错配的四次 attempt 都为
+   `correct / support:none`，当前两课设计对强表现学生缺乏区分度。
+2. `A-matched` 第一课 Trace 写了“结构识别：需提示”，但课堂实际上没有
+   给结构提示，权威 `Support` 仍是 `none`。其真实含义是“未说出预设目标
+   结构”，措辞存在歧义；第二课已用独立核验修正结论，但未来更适合写成
+   “未命中目标结构”。
+3. 本轮是受控模型学生，不是长期真人样本。下一次若要升级结论，应保持同样
+   的交叉设计，但选择能避免全对天花板的转移任务，或直接使用真实学生的
+   延迟表现。
