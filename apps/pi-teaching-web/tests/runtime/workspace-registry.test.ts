@@ -5,6 +5,10 @@ import { join } from 'node:path';
 import type { StudySession, StudySessionFactory } from '../../src/runtime/session-factory';
 import type { StudySessionScope } from '../../src/runtime/session-scope';
 import { WorkspaceRegistry } from '../../src/runtime/workspace-registry';
+import type {
+  MemoryReviewDecision,
+  MemoryReviewSnapshot,
+} from '../../src/memory-review/contracts';
 import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
 
 const roots: string[] = [];
@@ -48,15 +52,89 @@ function editLesson(root: string, edit: (source: string) => string): string {
 
 function idleWorkflowMethods() {
   return {
+    entries: [],
     triggerLessonStart: async () => {},
     deepModeEnabled: () => false,
     setDeepMode: () => {},
     workflows: () => [],
+    memoryReview: () => null,
+    submitMemoryReview: async () => { throw new Error('MEMORY_REVIEW_NOT_FOUND'); },
     confirmWorkflow: async () => { throw new Error('WORKFLOW_NOT_FOUND'); },
     cancelWorkflow: () => {},
     subscribeWorkflows: () => () => {},
   };
 }
+
+test('keeps memory review owned by one Plan Coach Session', async () => {
+  const root = fixture();
+  const planPath = join(root, 'plans/domain-integrity.md');
+  writeFileSync(
+    planPath,
+    readFileSync(planPath, 'utf8').replace('status: active', 'status: completed'),
+  );
+  const proposed = {
+    id: 'review-1',
+    planId: 'domain-integrity',
+    status: 'proposed',
+    items: [{
+      id: 'preference-1',
+      operation: 'add',
+      owner: 'student',
+      currentText: null,
+      proposedText: '先独立尝试。',
+      sources: ['lessons/lesson-001.md#trace-event-001'],
+      rationale: '重复出现。',
+      counterEvidence: '暂无。',
+      scope: '训练课。',
+    }],
+    decisions: [],
+  } satisfies MemoryReviewSnapshot;
+  const submittedCalls: Array<{
+    id: string;
+    decisions: MemoryReviewDecision[];
+  }> = [];
+  const factory: StudySessionFactory = async ({ role, ownerId }) => ({
+    sessionId: `${role}-${ownerId}`,
+    sessionFile: `/tmp/${role}-${ownerId}.jsonl`,
+    messages: [],
+    isStreaming: false,
+    personaId: () => null,
+    setPersona: async () => {},
+    ...idleWorkflowMethods(),
+    memoryReview: () => role === 'coach' && ownerId === 'domain-integrity'
+      ? proposed
+      : null,
+    submitMemoryReview: async (id, decisions) => {
+      submittedCalls.push({ id, decisions });
+      return { ...proposed, status: 'submitted', decisions };
+    },
+    prompt: async () => {},
+    abort: async () => {},
+    subscribe: () => () => {},
+    dispose: () => {},
+  });
+  const beforeStudent = readFileSync(join(root, 'memory/student-profile.md'), 'utf8');
+  const registry = new WorkspaceRegistry(root, factory, async () => null);
+
+  expect(await registry.memoryReview('coach:domain-integrity')).toEqual(proposed);
+  await expect(registry.memoryReview('coach:@roadmap'))
+    .rejects.toThrow('MEMORY_REVIEW_PLAN_COACH_ONLY');
+  await expect(registry.memoryReview('tutor:lesson-003'))
+    .rejects.toThrow('MEMORY_REVIEW_PLAN_COACH_ONLY');
+
+  const decisions: MemoryReviewDecision[] = [{
+    itemId: 'preference-1',
+    action: 'accept',
+    text: null,
+  }];
+  expect(await registry.submitMemoryReview(
+    'coach:domain-integrity',
+    'review-1',
+    decisions,
+  )).toMatchObject({ status: 'submitted', decisions });
+  expect(submittedCalls).toEqual([{ id: 'review-1', decisions }]);
+  expect(readFileSync(join(root, 'memory/student-profile.md'), 'utf8')).toBe(beforeStudent);
+});
 
 test('creates Coach eagerly and Tutor only after start', async () => {
   const created: string[] = [];
@@ -378,12 +456,15 @@ test('keeps deep mode scoped and refuses to open a prepared Tutor', async () => 
       sessionId: `${role}-${ownerId}`,
       sessionFile: `/tmp/${role}-${ownerId}.jsonl`,
       messages: [],
+      entries: [],
       isStreaming: false,
       personaId: () => null,
       setPersona: async () => {},
       deepModeEnabled: () => enabled.get(key) ?? false,
       setDeepMode: (value) => { enabled.set(key, value); },
       workflows: () => [],
+      memoryReview: () => null,
+      submitMemoryReview: async () => { throw new Error('MEMORY_REVIEW_NOT_FOUND'); },
       confirmWorkflow: async () => { throw new Error('WORKFLOW_NOT_FOUND'); },
       cancelWorkflow: () => {},
       subscribeWorkflows: () => () => {},

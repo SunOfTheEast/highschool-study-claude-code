@@ -5,8 +5,18 @@ import {
   ModelRuntime,
   SessionManager,
   type AgentSessionEvent,
+  type SessionEntry,
   type ToolDefinition,
 } from '@earendil-works/pi-coding-agent';
+import type {
+  MemoryReviewDecision,
+  MemoryReviewSnapshot,
+} from '../memory-review/contracts';
+import {
+  MemoryReviewStore,
+  submittedMemoryReview,
+} from '../memory-review/store';
+import { createMemoryReviewProposeTool } from '../memory-review/tool';
 import type { SessionKey } from '../shared/contracts';
 import type { WorkflowSnapshot } from '../workflows/contracts';
 import { DeepWorkflowRuntime } from '../workflows/runtime';
@@ -32,12 +42,18 @@ export interface StudySession {
   readonly sessionId: string;
   readonly sessionFile: string | undefined;
   readonly messages: readonly unknown[];
+  readonly entries: readonly SessionEntry[];
   readonly isStreaming: boolean;
   personaId(): string | null;
   setPersona(id: string, content: string): Promise<void>;
   deepModeEnabled(): boolean;
   setDeepMode(enabled: boolean): void;
   workflows(): WorkflowSnapshot[];
+  memoryReview(): MemoryReviewSnapshot | null;
+  submitMemoryReview(
+    id: string,
+    decisions: MemoryReviewDecision[],
+  ): Promise<MemoryReviewSnapshot>;
   confirmWorkflow(id: string): Promise<WorkflowSnapshot>;
   cancelWorkflow(id: string): void;
   subscribeWorkflows(listener: (snapshot: WorkflowSnapshot) => void): () => void;
@@ -97,6 +113,26 @@ export function deepModeToolNames(current: string[], enabled: boolean): string[]
   return enabled ? [...names, 'deep_workflow_propose'] : names;
 }
 
+export function memoryReviewDecisionMessage(snapshot: MemoryReviewSnapshot) {
+  return {
+    customType: 'studyforge.memory-review-decisions.v1',
+    content: JSON.stringify({
+      reviewId: snapshot.id,
+      planId: snapshot.planId,
+      instruction: [
+        'For accept, apply the candidate operation.',
+        'For rewrite, use the student text; rewriting a delete means retain and replace the old row.',
+        'For reject, make no profile change.',
+        'Edit only the matching confirmed profile Markdown.',
+        'Reread both profile files and report only the reread state.',
+      ],
+      items: snapshot.items,
+      decisions: snapshot.decisions,
+    }),
+    display: false,
+  } as const;
+}
+
 export function roleToolNames(role: SessionRole): string[] {
   return role === 'coach'
     ? [
@@ -112,6 +148,7 @@ export function roleToolNames(role: SessionRole): string[] {
       'lesson_prepare',
       'plan_register',
       'plan_update',
+      'memory_review_propose',
       'deep_workflow_propose',
     ]
     : [
@@ -170,6 +207,7 @@ export async function createPiSessionFactory(
       new WorkflowStore(manager),
       now,
     );
+    const memoryReviewStore = new MemoryReviewStore(manager);
     const loader = await createRoleResourceLoader(root, scope, eventBus);
     const ownerTools: ToolDefinition[] = role === 'tutor'
       ? [
@@ -183,6 +221,12 @@ export async function createPiSessionFactory(
           createLessonPrepareTool(root, ownerId, ownerPath),
           createPlanRegisterTool(root),
           createPlanUpdateTool(root, ownerPath),
+          createMemoryReviewProposeTool(
+            root,
+            ownerId,
+            ownerPath,
+            memoryReviewStore,
+          ),
         ];
     const tools: ToolDefinition[] = [
       ...createStudyTools(root, now, scope),
@@ -228,6 +272,9 @@ export async function createPiSessionFactory(
       get messages() {
         return session.messages;
       },
+      get entries() {
+        return manager.getBranch();
+      },
       get isStreaming() {
         return session.isStreaming;
       },
@@ -247,6 +294,23 @@ export async function createPiSessionFactory(
       deepModeEnabled: () => workflowRuntime.enabled(),
       setDeepMode: (enabled) => applyDeepMode(enabled, true),
       workflows: () => workflowRuntime.list(),
+      memoryReview: () => (
+        role === 'coach' && !isRoadmapCoachScope(scope)
+          ? memoryReviewStore.latest()
+          : null
+      ),
+      submitMemoryReview: async (id, decisions) => {
+        if (role !== 'coach' || isRoadmapCoachScope(scope)) {
+          throw new Error('MEMORY_REVIEW_PLAN_COACH_ONLY');
+        }
+        const submitted = submittedMemoryReview(memoryReviewStore.latest(), id, decisions);
+        memoryReviewStore.save(submitted);
+        await triggerAndWaitForAgentEnd(session, () => session.sendCustomMessage(
+          memoryReviewDecisionMessage(submitted),
+          { triggerTurn: true },
+        ));
+        return submitted;
+      },
       confirmWorkflow: (id) => workflowRuntime.confirm(id),
       cancelWorkflow: (id) => workflowRuntime.cancel(id),
       subscribeWorkflows: (listener) => workflowRuntime.subscribe(listener),

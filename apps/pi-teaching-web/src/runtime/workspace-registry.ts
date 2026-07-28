@@ -11,6 +11,10 @@ import {
   type MessageProjectionMode,
 } from '../projection/message-policy';
 import type { WorkflowSnapshot } from '../workflows/contracts';
+import type {
+  MemoryReviewDecision,
+  MemoryReviewSnapshot,
+} from '../memory-review/contracts';
 import {
   readLearningSet,
   readPlanWorkspace,
@@ -167,6 +171,24 @@ export class WorkspaceRegistry {
 
   async workflows(key: SessionKey): Promise<WorkflowSnapshot[]> {
     return (await this.openSession(key)).workflows();
+  }
+
+  async memoryReview(key: SessionKey): Promise<MemoryReviewSnapshot | null> {
+    if (!key.startsWith('coach:') || key === ROADMAP_COACH_SESSION_KEY) {
+      throw new Error('MEMORY_REVIEW_PLAN_COACH_ONLY');
+    }
+    return (await this.openCoach(key.slice(6))).memoryReview();
+  }
+
+  async submitMemoryReview(
+    key: SessionKey,
+    id: string,
+    decisions: MemoryReviewDecision[],
+  ): Promise<MemoryReviewSnapshot> {
+    if (!key.startsWith('coach:') || key === ROADMAP_COACH_SESSION_KEY) {
+      throw new Error('MEMORY_REVIEW_PLAN_COACH_ONLY');
+    }
+    return (await this.openCoach(key.slice(6))).submitMemoryReview(id, decisions);
   }
 
   async confirmWorkflow(key: SessionKey, id: string): Promise<WorkflowSnapshot> {

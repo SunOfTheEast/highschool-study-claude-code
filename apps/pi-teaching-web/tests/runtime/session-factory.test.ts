@@ -7,10 +7,12 @@ import { dirname, join } from 'node:path';
 import {
   bindStudyExtensions,
   deepModeToolNames,
+  memoryReviewDecisionMessage,
   roleToolNames,
   scopeToolNames,
   triggerAndWaitForAgentEnd,
 } from '../../src/runtime/session-factory';
+import type { MemoryReviewSnapshot } from '../../src/memory-review/contracts';
 import {
   appendSessionOwner,
   readSessionOwner,
@@ -115,6 +117,7 @@ test('keeps Coach and Tutor tool boundaries distinct', () => {
     'lesson_prepare',
     'plan_register',
     'plan_update',
+    'memory_review_propose',
     'deep_workflow_propose',
   ]);
   expect(roleToolNames('tutor')).not.toContain('lesson_prepare');
@@ -160,6 +163,45 @@ test('keeps Roadmap Coach active tools global but non-instructional', () => {
   expect(tools).not.toContain('plan_update');
   expect(tools).not.toContain('lesson_prepare');
   expect(tools).not.toContain('trace_append');
+  expect(tools).not.toContain('memory_review_propose');
+});
+
+test('builds one hidden structured continuation for submitted memory decisions', () => {
+  const submitted = {
+    id: 'review-1',
+    planId: 'domain-integrity',
+    status: 'submitted',
+    items: [{
+      id: 'preference-1',
+      operation: 'delete',
+      owner: 'student',
+      currentText: '喜欢每一步都确认。',
+      proposedText: null,
+      sources: ['lessons/lesson-001.md#trace-event-001'],
+      rationale: '当前记录不再支持。',
+      counterEvidence: '暂无。',
+      scope: '导数专题。',
+    }],
+    decisions: [{
+      itemId: 'preference-1',
+      action: 'rewrite',
+      text: '复杂题只在关键节点确认。',
+    }],
+  } satisfies MemoryReviewSnapshot;
+
+  const message = memoryReviewDecisionMessage(submitted);
+  expect(message).toMatchObject({
+    customType: 'studyforge.memory-review-decisions.v1',
+    display: false,
+  });
+  const content = JSON.parse(String(message.content)) as Record<string, unknown>;
+  expect(content).toMatchObject({
+    reviewId: 'review-1',
+    planId: 'domain-integrity',
+    items: submitted.items,
+    decisions: submitted.decisions,
+  });
+  expect(JSON.stringify(content)).toContain('rewriting a delete means retain and replace');
 });
 
 test('adds only the workflow proposal tool while deep mode is enabled', () => {
