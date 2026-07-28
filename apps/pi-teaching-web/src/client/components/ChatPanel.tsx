@@ -28,7 +28,7 @@ export function ChatPanel({
   gate,
   stage,
   onSend,
-  onPersona,
+  onPersonaOpen,
   onDeepMode,
   onWorkflowAction,
   onMemoryReview,
@@ -47,7 +47,7 @@ export function ChatPanel({
   gate: ReactNode;
   stage?: ReactNode;
   onSend(text: string, imagePaths: string[]): Promise<void>;
-  onPersona(id: string): Promise<void>;
+  onPersonaOpen(): void;
   onDeepMode(enabled: boolean): Promise<void>;
   onWorkflowAction(id: string, action: 'confirm' | 'cancel'): Promise<void>;
   onMemoryReview(review: Extract<ConversationItem, { kind: 'memory-review' }>['review']): void;
@@ -56,6 +56,7 @@ export function ChatPanel({
   const [images, setImages] = useState<ComposerImage[]>([]);
   const [uploading, setUploading] = useState(false);
   const [imageError, setImageError] = useState('');
+  const currentPersona = persona?.choices.find((choice) => choice.id === persona.id);
 
   const selectImages = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = [...(event.target.files ?? [])];
@@ -99,22 +100,18 @@ export function ChatPanel({
         {workflowControlsEnabled && (
           <DeepModeToggle enabled={deepMode} onChange={onDeepMode} />
         )}
-        <span className="persona-avatar" aria-hidden="true">
-          {persona?.id === 'calm-senpai' ? '静' : persona?.id === 'energetic-classmate' ? '元' : '教'}
-        </span>
-        <label className="persona-picker">
-          <span>课堂人设</span>
-          <select
-            aria-label="课堂人设"
-            value={persona?.id ?? 'neutral-tutor'}
-            disabled={!persona || !composerEnabled}
-            onChange={(event) => void onPersona(event.target.value)}
-          >
-            {(persona?.choices ?? [{ id: 'neutral-tutor', name: '中性教师' }]).map((choice) => (
-              <option key={choice.id} value={choice.id}>{choice.name}</option>
-            ))}
-          </select>
-        </label>
+        <button
+          type="button"
+          className="persona-avatar"
+          aria-label="打开陪伴风格"
+          title={currentPersona?.name ?? '陪伴风格'}
+          disabled={!persona}
+          onClick={onPersonaOpen}
+        >
+          {currentPersona?.portraitUrl
+            ? <img src={currentPersona.portraitUrl} alt="" />
+            : currentPersona?.glyph ?? '伴'}
+        </button>
         <i className={composerEnabled ? 'live' : ''}>{composerEnabled ? '可对话' : '仅预览'}</i>
       </header>
 
@@ -130,7 +127,7 @@ export function ChatPanel({
             <span className="message-role">
               {item.message.role === 'student'
                 ? '你'
-                : item.message.role === 'coach' ? 'Coach' : 'Tutor'}
+                : item.message.role === 'coach' ? '学习顾问' : '课堂导师'}
             </span>
             <div><MarkdownView>{item.message.text}</MarkdownView></div>
           </article>

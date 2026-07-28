@@ -18,7 +18,7 @@ test('shows compact learning-set context around the Roadmap chat', () => {
     </RoadmapCoachShell>,
   );
 
-  expect(html).toContain('总览与规划');
+  expect(html).toContain('学习总览');
   expect(html).toContain('导数高阶研习');
   expect(html).toContain('建立可迁移的结构判断');
   expect(html).toContain('尚未建立学习周期');

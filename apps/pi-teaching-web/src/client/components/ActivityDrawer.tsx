@@ -30,7 +30,7 @@ export function ActivityDrawer({ lesson }: { lesson: LessonNode | null }) {
       ) : (
         <div className="coach-note">
           <span aria-hidden="true">✦</span>
-          <p>Coach 模式用于讨论方向、备课和课后复盘。开始 Lesson 后，这里会变成实时课堂节点。</p>
+          <p>学习顾问用于讨论方向、备课和课后复盘。开始课程后，这里会变成实时课堂节点。</p>
         </div>
       )}
     </aside>

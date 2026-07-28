@@ -190,9 +190,23 @@ export type LessonReplay = {
   route: { initial: string[]; effective: string[] };
 };
 
+export type PersonaChoice = {
+  id: string;
+  name: string;
+  description: string;
+  glyph: string;
+  accent: string;
+  portraitUrl: string | null;
+};
+
 export type PersonaPresentation = {
   id: string;
-  choices: Array<{ id: string; name: string }>;
+  choices: PersonaChoice[];
+};
+
+export type PresentationPreferences = {
+  motion: 'gentle' | 'reduced';
+  completionFeedback: boolean;
 };
 
 export type ChatMessage = {

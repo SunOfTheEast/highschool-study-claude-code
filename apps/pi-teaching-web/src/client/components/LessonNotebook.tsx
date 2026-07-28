@@ -49,7 +49,7 @@ export function LessonNotebook({
       {!lesson && (
         <div className="coach-note">
           <span aria-hidden="true">✦</span>
-          <p>Coach 模式用于讨论方向、备课和课后复盘。开始 Lesson 后，这里会变成安全的学生课堂本。</p>
+          <p>学习顾问用于讨论方向、备课和课后复盘。开始课程后，这里会变成安全的学生课堂本。</p>
         </div>
       )}
       {lesson && !notebook && <p className="notebook-loading">正在展开课堂节点…</p>}

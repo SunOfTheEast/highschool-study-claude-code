@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { createRequestHandler } from '../../src/server/app';
@@ -737,6 +737,51 @@ test('keeps persona selection scoped to the requested Session', async () => {
     body: JSON.stringify({ id: 'energetic-classmate' }),
   }));
   expect(await changed!.json()).toMatchObject({ id: 'energetic-classmate' });
+});
+
+test('returns public persona metadata and serves only a discovered local portrait', async () => {
+  const root = mkdtempSync(join(tmpdir(), 'studyforge-persona-api-'));
+  try {
+    const personaDirectory = join(root, '.claude/personas');
+    const portraitDirectory = join(personaDirectory, 'assets');
+    mkdirSync(portraitDirectory, { recursive: true });
+    writeFileSync(join(portraitDirectory, 'custom.webp'), new Uint8Array([1, 2, 3]));
+    writeFileSync(join(personaDirectory, 'custom.md'), `# Custom
+
+- ID: \`custom\`
+- Display name: 自定义
+- Student preview: 一条公开简介。
+- Portrait: \`.claude/personas/assets/custom.webp\`
+`);
+    const handler = createRequestHandler({
+      root,
+      authoring: false,
+      hub: new EventHub(),
+      registry: { personaId: () => 'custom' } as never,
+    });
+    const presentation = await handler(new Request(
+      'http://local/api/persona?sessionKey=coach%3Ap1',
+    ));
+    expect(await presentation!.json()).toMatchObject({
+      id: 'custom',
+      choices: expect.arrayContaining([
+        expect.objectContaining({
+          id: 'custom',
+          description: '一条公开简介。',
+          portraitUrl: '/api/personas/custom/portrait',
+        }),
+      ]),
+    });
+
+    const portrait = await handler(new Request(
+      'http://local/api/personas/custom/portrait',
+    ));
+    expect(portrait!.status).toBe(200);
+    expect(portrait!.headers.get('content-type')).toBe('image/webp');
+    expect([...new Uint8Array(await portrait!.arrayBuffer())]).toEqual([1, 2, 3]);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });
 
 test('controls deep mode and projects workflow progress without child conclusions', async () => {

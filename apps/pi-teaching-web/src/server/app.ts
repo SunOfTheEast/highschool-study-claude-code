@@ -21,6 +21,7 @@ import { readStudentNotebook } from '../study/student-notebook';
 import { readCoachContext } from '../study/coach-context';
 import { searchStudentContent } from '../study/content-explorer';
 import { readHomeSnapshot } from '../study/home';
+import { personaChoices, personaPortraitPath } from '../study/persona';
 import { PreparedLessonValidationError } from '../study/validate-prepared-lesson';
 import type { EventHub } from './event-hub';
 
@@ -44,12 +45,6 @@ const imageTypes = {
   '.jpeg': 'image/jpeg',
   '.webp': 'image/webp',
 } as const;
-
-const personaChoices = [
-  { id: 'neutral-tutor', name: '中性教师' },
-  { id: 'calm-senpai', name: '冷静学姐' },
-  { id: 'energetic-classmate', name: '元气同桌' },
-];
 
 function readImageContent(root: string, path: string): ImageContent {
   const mimeType = imageTypes[extname(path).toLowerCase() as keyof typeof imageTypes];
@@ -190,7 +185,18 @@ export function createRequestHandler(deps?: AppDependencies) {
     if (request.method === 'GET' && url.pathname === '/api/persona') {
       const key = url.searchParams.get('sessionKey') as SessionKey | null;
       if (!key) return json({ error: 'SESSION_KEY_REQUIRED' }, 400);
-      return json({ id: deps.registry.personaId(key), choices: personaChoices });
+      return json({ id: deps.registry.personaId(key), choices: personaChoices(deps.root) });
+    }
+
+    const personaPortrait = /^\/api\/personas\/([^/]+)\/portrait$/.exec(url.pathname);
+    if (request.method === 'GET' && personaPortrait) {
+      const path = personaPortraitPath(deps.root, decodeURIComponent(personaPortrait[1]!));
+      if (!path) return new Response('Not found', { status: 404 });
+      return new Response(Bun.file(path), {
+        headers: {
+          'content-type': imageTypes[extname(path).toLowerCase() as keyof typeof imageTypes],
+        },
+      });
     }
 
     const persona = /^\/api\/sessions\/([^/]+)\/persona$/.exec(url.pathname);
@@ -198,7 +204,7 @@ export function createRequestHandler(deps?: AppDependencies) {
       const key = decodeURIComponent(persona[1]!) as SessionKey;
       const input = await request.json() as { id: string };
       await deps.registry.setPersona(key, input.id);
-      return json({ id: deps.registry.personaId(key), choices: personaChoices });
+      return json({ id: deps.registry.personaId(key), choices: personaChoices(deps.root) });
     }
 
     const notebook = /^\/api\/lessons\/([^/]+)\/notebook$/.exec(url.pathname);
@@ -369,7 +375,7 @@ export function createRequestHandler(deps?: AppDependencies) {
       });
       runSession(
         key,
-        key.startsWith('coach:') ? 'Coach 正在回应' : 'Tutor 正在回应',
+        key.startsWith('coach:') ? '学习顾问正在回应' : '课堂导师正在回应',
         () => deps.registry.send(key, input.text, images),
         () => {
           if (key === ROADMAP_COACH_SESSION_KEY) {
@@ -409,7 +415,7 @@ export function createRequestHandler(deps?: AppDependencies) {
       if (startsLesson) {
         runSession(
           `tutor:${lessonId}`,
-          'Tutor 正在启动',
+          '课堂导师正在启动',
           () => deps.registry.triggerLessonStart(lessonId),
           () => deps.hub.publish({
             type: 'snapshot',

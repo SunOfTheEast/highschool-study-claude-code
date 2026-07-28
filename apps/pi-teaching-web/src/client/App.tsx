@@ -1,4 +1,11 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from 'react';
 import { ROADMAP_COACH_SESSION_KEY } from '../shared/contracts';
 import { resolveContinuePath } from '../shared/home';
 import type {
@@ -14,6 +21,7 @@ import type {
   LessonReplay,
   LessonNode,
   PersonaPresentation,
+  PresentationPreferences,
   RoadmapWorkspaceSnapshot,
   SessionKey,
   StudentNotebook,
@@ -27,6 +35,7 @@ import { CurrentActivityStage } from './components/CurrentActivityStage';
 import { EvidenceLens } from './components/EvidenceLens';
 import { LearningSetHome } from './components/LearningSetHome';
 import { MemoryReviewPanel } from './components/MemoryReviewPanel';
+import { PersonaDrawer } from './components/PersonaDrawer';
 import { RoadmapCoachShell } from './components/RoadmapCoachShell';
 import { SessionTree } from './components/SessionTree';
 import {
@@ -39,6 +48,10 @@ import {
   preferLiveConversation,
   reduceClientState,
 } from './state';
+import {
+  readPresentationPreferences,
+  writePresentationPreferences,
+} from './presentation';
 
 type ConnectionState = 'connecting' | 'open' | 'closed';
 
@@ -60,6 +73,16 @@ export function App() {
   const [memoryReview, setMemoryReview] = useState<MemoryReviewSnapshot | null>(null);
   const [submittingMemoryReview, setSubmittingMemoryReview] = useState(false);
   const [contentExplorerOpen, setContentExplorerOpen] = useState(false);
+  const [personaDrawerOpen, setPersonaDrawerOpen] = useState(false);
+  const systemReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const [presentation, setPresentation] = useState<PresentationPreferences>(() => (
+    readPresentationPreferences(localStorage, systemReducedMotion)
+  ));
+  const [completionFeedback, setCompletionFeedback] = useState('');
+  const priorNotebook = useRef<{
+    lessonId: string;
+    statuses: Record<string, string>;
+  } | null>(null);
 
   useEffect(() => {
     let disposed = false;
@@ -107,6 +130,7 @@ export function App() {
     setPageError(null);
     setMemoryReview(null);
     setContentExplorerOpen(false);
+    setPersonaDrawerOpen(false);
     try {
       if (!route) throw new Error('INVALID_ROUTE');
       if (route.kind === 'home') {
@@ -281,13 +305,39 @@ export function App() {
   }, [selectedLesson]);
 
   useEffect(() => {
+    if (!notebook) return;
+    const current = {
+      lessonId: notebook.lesson.id,
+      statuses: Object.fromEntries(notebook.lesson.blocks.map((block) => [block.id, block.status])),
+    };
+    const prior = priorNotebook.current;
+    if (
+      prior?.lessonId === current.lessonId
+      && presentation.completionFeedback
+      && notebook.lesson.status !== 'closed'
+    ) {
+      const completed = notebook.lesson.blocks.find((block) => (
+        prior.statuses[block.id] === 'active' && block.status === 'completed'
+      ));
+      if (completed) setCompletionFeedback(`已完成：${completed.title}`);
+    }
+    priorNotebook.current = current;
+  }, [notebook, presentation.completionFeedback]);
+
+  useEffect(() => {
+    if (!completionFeedback) return;
+    const timeout = window.setTimeout(() => setCompletionFeedback(''), 1800);
+    return () => window.clearTimeout(timeout);
+  }, [completionFeedback]);
+
+  useEffect(() => {
     if (!client.workspace) {
       setAbilities(null);
       return;
     }
     void api.abilities()
       .then(setAbilities)
-      .catch(() => setPageError('无法读取方法证据投影。'));
+      .catch(() => setPageError('无法读取方法进展。'));
   }, [client.workspace?.plan.id]);
 
   useEffect(() => {
@@ -324,7 +374,7 @@ export function App() {
     try {
       setEvidence(await api.evidence(source));
     } catch {
-      setPageError('这条证据的原始 Trace 已不可用。');
+      setPageError('这条学习记录的原始来源已不可用。');
     }
   };
 
@@ -387,10 +437,10 @@ export function App() {
             ))
           : [];
         setPageError(
-          `这节课还没备完整：${messages.join('；') || '存在无法执行的结构问题'}。请返回 Coach 修正。`,
+          `这节课还没备完整：${messages.join('；') || '存在无法执行的结构问题'}。请返回学习顾问修正。`,
         );
       } else {
-        setPageError('无法启动 Tutor Session，请检查 Pi 配置。');
+        setPageError('无法启动课堂导师会话，请检查 Pi 配置。');
       }
     }
   };
@@ -409,9 +459,16 @@ export function App() {
     setPageError(null);
     try {
       setPersona(await api.setPersona(client.selected, id));
-    } catch {
-      setPageError('切换课堂人设失败。');
+    } catch (error) {
+      setPageError('切换陪伴风格失败。');
+      throw error;
     }
+  };
+
+  const changePresentation = (value: PresentationPreferences) => {
+    const next = systemReducedMotion ? { ...value, motion: 'reduced' as const } : value;
+    writePresentationPreferences(localStorage, next);
+    setPresentation(next);
   };
 
   const changeDeepMode = async (enabled: boolean) => {
@@ -489,12 +546,18 @@ export function App() {
   ) {
     const selected = ROADMAP_COACH_SESSION_KEY;
     const sessionBusy = Boolean(client.busy[selected]);
+    const currentPersona = persona?.choices.find((choice) => choice.id === persona.id);
     return (
       <div
         className="app-root"
         data-theme="liubai-xinzhongshi"
         data-view="roadmap"
         data-persona={persona?.id ?? 'neutral-tutor'}
+        data-motion={presentation.motion}
+        data-completion-feedback={presentation.completionFeedback ? 'on' : 'off'}
+        style={{
+          '--persona-accent': currentPersona?.accent,
+        } as CSSProperties}
       >
         {connection !== 'open' && (
           <div className="connection-banner" role="status">
@@ -522,12 +585,21 @@ export function App() {
             workflowRailInline
             gate={null}
             onSend={send}
-            onPersona={changePersona}
+            onPersonaOpen={() => setPersonaDrawerOpen(true)}
             onDeepMode={changeDeepMode}
             onWorkflowAction={actOnWorkflow}
             onMemoryReview={setMemoryReview}
           />
         </RoadmapCoachShell>
+        {personaDrawerOpen && persona && (
+          <PersonaDrawer
+            value={persona}
+            preferences={presentation}
+            onClose={() => setPersonaDrawerOpen(false)}
+            onSelect={changePersona}
+            onPreferences={changePresentation}
+          />
+        )}
       </div>
     );
   }
@@ -561,6 +633,7 @@ export function App() {
   const sessionBusy = Boolean(client.busy[selected]);
   const composerEnabled = (isCoach || selectedLesson?.status === 'active')
     && !sessionBusy;
+  const currentPersona = persona?.choices.find((choice) => choice.id === persona.id);
   let gate: ReactNode = null;
 
   if (selectedLesson?.status === 'prepared') {
@@ -568,7 +641,7 @@ export function App() {
       <div className="lesson-gate prepared-gate">
         <span>Lesson 已备好</span>
         <h2>{selectedLesson.title}</h2>
-        <p>先查看课堂积木。开始后 Tutor 才会创建独立 Session，并且只展开当前节点。</p>
+        <p>先查看课堂节点。开始后课堂导师才会创建独立会话，并且只展开当前节点。</p>
         <button type="button" onClick={() => void startLesson(selectedLesson)}>开始上课 <i>↗</i></button>
       </div>
     );
@@ -577,9 +650,9 @@ export function App() {
       <div className="lesson-gate archive-gate">
         <span>{selectedLesson.status === 'closed' ? 'Lesson 已完成' : 'Lesson 已归档'}</span>
         <h2>{selectedLesson.title}</h2>
-        <p>这份课堂记录保持只读。返回 Coach 可以复盘，并决定下一节课或重新备课。</p>
+        <p>这份课堂记录保持只读。返回学习顾问可以复盘，并决定下一节课或重新备课。</p>
         <button type="button" onClick={() => void selectSession(client.workspace!.coach.sessionKey)}>
-          返回 Coach <i>↗</i>
+          返回学习顾问 <i>↗</i>
         </button>
       </div>
     );
@@ -591,6 +664,11 @@ export function App() {
       data-theme="liubai-xinzhongshi"
       data-view={view}
       data-persona={persona?.id ?? 'neutral-tutor'}
+      data-motion={presentation.motion}
+      data-completion-feedback={presentation.completionFeedback ? 'on' : 'off'}
+      style={{
+        '--persona-accent': currentPersona?.accent,
+      } as CSSProperties}
     >
       {connection !== 'open' && (
         <div className="connection-banner" role="status">
@@ -632,7 +710,7 @@ export function App() {
             />
           ) : null}
           onSend={send}
-          onPersona={changePersona}
+          onPersonaOpen={() => setPersonaDrawerOpen(true)}
           onDeepMode={changeDeepMode}
           onWorkflowAction={actOnWorkflow}
           onMemoryReview={setMemoryReview}
@@ -649,6 +727,18 @@ export function App() {
           onWorkflowAction={actOnWorkflow}
         />
       </div>
+      {completionFeedback && (
+        <div className="completion-feedback" role="status">{completionFeedback}</div>
+      )}
+      {personaDrawerOpen && persona && (
+        <PersonaDrawer
+          value={persona}
+          preferences={presentation}
+          onClose={() => setPersonaDrawerOpen(false)}
+          onSelect={changePersona}
+          onPreferences={changePresentation}
+        />
+      )}
       {contentExplorerOpen && (
         <ContentExplorer
           onClose={() => setContentExplorerOpen(false)}

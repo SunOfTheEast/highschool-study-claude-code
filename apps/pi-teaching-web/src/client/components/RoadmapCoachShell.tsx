@@ -18,7 +18,7 @@ export function RoadmapCoachShell({
           <span className="brand-mark">SF</span>
           <span><b>返回学习集</b><small>StudyForge</small></span>
         </button>
-        <p className="section-label">总览与规划</p>
+        <p className="section-label">学习总览</p>
         <h1>{learningSet.title}</h1>
         <div className="roadmap-goal">
           <MarkdownView>{learningSet.goal}</MarkdownView>

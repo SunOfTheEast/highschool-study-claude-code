@@ -57,7 +57,7 @@ export function SessionTree({
         onClick={() => onSelect(workspace.coach.sessionKey)}
       >
         <span className="node-dot" aria-hidden="true" />
-        <span><b>Coach</b><small>方向、备课与复盘</small></span>
+        <span><b>学习顾问</b><small>方向、备课与复盘</small></span>
       </button>
 
       <p className="tree-label lesson-label">Lesson 子会话</p>
@@ -90,7 +90,7 @@ export function SessionTree({
               >
                 <span>
                   <b>{plan.title}</b>
-                  <small>{plan.status} · 打开 Coach</small>
+                  <small>{plan.status} · 打开学习顾问</small>
                 </span>
                 <i aria-hidden="true">↗</i>
               </button>

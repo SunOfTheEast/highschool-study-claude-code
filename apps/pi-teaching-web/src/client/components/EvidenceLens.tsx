@@ -9,17 +9,17 @@ const assessmentLabel: Record<string, string> = {
 
 const supportLabel: Record<string, string> = {
   none: '独立完成',
-  tutor: 'Tutor 支持',
+  tutor: '课堂导师支持',
   external: '外部支持',
 };
 
 export function EvidenceLens({ value, onClose }: { value: EvidenceView; onClose(): void }) {
   return (
-    <section className="evidence-lens" role="dialog" aria-modal="true" aria-label="证据来源">
-      <button type="button" className="lens-scrim" aria-label="关闭证据" onClick={onClose} />
+    <section className="evidence-lens" role="dialog" aria-modal="true" aria-label="记录来源">
+      <button type="button" className="lens-scrim" aria-label="关闭记录来源" onClick={onClose} />
       <article>
         <header>
-          <span>Evidence lens</span>
+          <span>记录来源</span>
           <button type="button" onClick={onClose}>关闭</button>
         </header>
         <p className="source-anchor">{value.source}</p>

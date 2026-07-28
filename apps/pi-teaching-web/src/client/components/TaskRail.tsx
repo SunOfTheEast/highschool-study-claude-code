@@ -21,7 +21,7 @@ export function TaskRail({
   if (workflows.length === 0) return null;
   const Root = embedded ? 'div' : 'aside';
   return (
-    <Root className={embedded ? 'task-rail embedded' : 'task-rail'} aria-label="深度工作流">
+    <Root className={embedded ? 'task-rail embedded' : 'task-rail'} aria-label="深入查找">
       {workflows.map((workflow) => {
         const completed = workflow.tasks.filter((task) => task.status === 'completed').length;
         const running = workflow.tasks.filter((task) => task.status === 'running').length;
@@ -34,7 +34,7 @@ export function TaskRail({
             key={workflow.id}
           >
             <summary className="workflow-summary">
-              <span>{workflow.mode === 'quick' ? 'Quick' : 'Deep'}</span>
+              <span>{workflow.mode === 'quick' ? '快速' : '深入'}</span>
               <strong>{workflow.goal}</strong>
               <small>
                 {completed}/{workflow.tasks.length} 已完成

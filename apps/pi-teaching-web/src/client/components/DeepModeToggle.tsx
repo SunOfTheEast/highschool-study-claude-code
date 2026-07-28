@@ -13,7 +13,7 @@ export function DeepModeToggle({
       onClick={() => void onChange(!enabled)}
     >
       <span aria-hidden="true" />
-      {enabled ? '深度模式已允许' : '启用深度模式'}
+      {enabled ? '已允许深入查找' : '允许深入查找'}
     </button>
   );
 }
