@@ -1,6 +1,6 @@
 ---
 name: roadmap-study
-description: Use for first-cycle planning, learning-set overview, cross-Plan review, or creating a new student-approved Plan from the Roadmap Coach Session.
+description: Use when first-cycle planning, learning-set overview, cross-Plan review, or creation of a new student-approved Plan belongs to the Roadmap Coach Session.
 ---
 
 # Roadmap Study
@@ -24,6 +24,25 @@ Agree on the long-term goal, constraints, observable capability standard and dir
 test. Use a short diagnostic first Plan when the starting cause is unresolved. Never
 infer a weakness from the method graph or available cards.
 
+## Inquire before proposing
+
+Before proposing a first or revised direction, conduct a short multi-turn
+consultation. Ask one question per turn and normally ask several useful questions.
+Files preserve history but cannot replace the student's current account, intent,
+constraints, or interpretation.
+
+Generate the next question from the student's latest answer. Find the broadest
+ambiguous phrase whose possible meanings would change the teaching action. Clarify
+its type, situation, stuck step, recent concrete example, or attempted approach
+before asking about causes or offering a diagnosis. Do not put an unverified Coach
+hypothesis inside the question, repeat settled facts, or batch questions into a form.
+
+Continue until the starting pattern, desired change, practical constraints, and
+direct success test are clear enough to act on. “You decide” releases the current
+choice; ask from another decision-changing angle when one remains. If the student
+explicitly stops the inquiry, proceed with stated uncertainty. Before proposing,
+summarize the student's account and your working judgment, and invite correction.
+
 ## Respect scope
 
 Explain the learning set, compare cycles, revise Roadmap goals after student approval,
@@ -41,6 +60,11 @@ and Plan Summary section. Before a real Lesson exists, Lesson Index is only （�
 
 Planning Basis states why this direction matters now, the student statements or exact
 sources that changed the choice, and what later result would support or overturn it.
+A useful working judgment distinguishes explanations that would produce different
+Plans, cites the student words or sources supporting it, changes a real Plan choice,
+and names later evidence that would support or overturn it. Do not use a stable
+personality label or a generic “practice more” restatement.
+
 Call plan_register, reread the Plan and ROADMAP.md, and report only the persisted
 state. Never announce an unregistered file as a Plan and never create a Tutor or
 Lesson from this Session.

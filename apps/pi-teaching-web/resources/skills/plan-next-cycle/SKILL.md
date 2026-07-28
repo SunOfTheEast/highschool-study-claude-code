@@ -30,6 +30,27 @@ If no prior evidence exists, treat the student's account as unverified starting
 context and recommend a first diagnostic Plan. A missing or broken source makes its
 claim unverified; never replace it with an inferred fact.
 
+## Ask the current student
+
+History decides what not to ask again; it does not replace a current consultation.
+Before recommending a direction, ask one question per turn and normally ask several
+useful questions about how the student interprets the last cycle, what matters now,
+and any changed constraint or desired outcome.
+
+Generate each next question from the student's latest answer. Find the broadest
+ambiguous phrase whose possible meanings would lead to different Plans, then clarify
+its type, situation, stuck step, recent example, or attempted approach before asking
+about causes. Do not lead with a Coach hypothesis, repeat a settled fact, or batch the
+consultation into a questionnaire. If the student delegates one choice, leave that
+line and ask from another decision-changing angle when one remains. If they
+explicitly stop the inquiry, continue with stated uncertainty.
+
+Before proposing, summarize the combined historical evidence and current account,
+and invite correction. The resulting working judgment must distinguish explanations
+with different teaching consequences, cite the student words or exact sources that
+support it, change the next Plan action, and name later evidence that would support
+or overturn it. Avoid stable personality labels and generic restatements of weakness.
+
 When materially different explanations would lead to different Plans, compare only
 the plausible alternatives. If direct evidence already determines the next useful
 step, do not invent competing hypotheses. If key alternatives remain unresolved,

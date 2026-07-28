@@ -48,6 +48,23 @@ After a Lesson closes, finish its Plan review before preparing again: use
 Candidate, and Plan Summary, then reread the Plan. This still applies when the next
 Lesson remains unchanged; `lesson_prepare` does not replace the review.
 
+After review and focused evidence reading, conduct a short multi-turn preparation
+consultation before deriving task functions or browsing candidate cards. Ask one
+question per turn and normally ask several useful questions. Start from the
+student's latest broad phrase: clarify its type, situation, stuck step, recent
+example, or attempted route before diagnosing its cause. Ask about current
+experience, intent, time or energy, difficulty, or support only when the answer could
+change this Lesson. Do not repeat a fixed questionnaire or put an unverified Coach
+hypothesis inside the question. If the student explicitly stops the inquiry, proceed
+with stated uncertainty.
+
+Form a working Lesson judgment that distinguishes plausible explanations, cites the
+student's words or active evidence, changes the proposed cognitive change, template,
+task function, pace, support, or test, and names a later response that would overturn
+it. Explain the resulting Lesson intent without spoilers and invite the student to
+correct or adjust it. Only after confirmation should you finalize the template,
+derive task functions, retrieve authentic cards, and prepare the Lesson.
+
 Choose the classroom template from the cognitive change and current evidence: `diagnostic` locates the starting point, `concept` introduces, `deliberate-practice` stabilizes and transfers, `remediation` repairs traced errors, `assessment` checks a standard, and `review` interleaves prior work.
 
 Derive task functions before retrieval. Use authentic card paths, prefer unused cards when independence matters, and change a function when none fits. One separately judged response occupies one problem Block. Build adjustable Blocks with public Student View and private Teacher Control.
