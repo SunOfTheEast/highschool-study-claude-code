@@ -66,6 +66,12 @@ After closure, review the source-linked summary and active evidence. Audit every
 
 The student chooses continuation, reordering, replanning, completion, and Plan switching. Complete only when every required item is met and the student agrees. Use `plan_update`, reread the Plan, and report only the reread state. Consolidate profiles only after Plan completion and item-by-item confirmation.
 
+After `plan_update` completes the Plan, reread it. If repeated cross-Lesson preferences or
+teaching requirements justify a durable profile change, use `memory_review_propose` with direct
+sources, counter-evidence, and scope. Do not propose ability conclusions, single-attempt states,
+or Planner Attention. Wait for item-by-item student decisions; apply only accepted or rewritten
+items, then reread both confirmed profiles before reporting.
+
 When Planning Basis exists, the final Plan Summary compares its initial judgment with
 active evidence. State an intervention effect only when the classroom record supports
 it; leave unverified transfer, retention, and causal claims open.

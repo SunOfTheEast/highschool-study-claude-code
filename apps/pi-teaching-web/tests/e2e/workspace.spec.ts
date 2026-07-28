@@ -25,6 +25,36 @@ test('keeps global planning available without turning it into the home workspace
     .toBeVisible();
 });
 
+test('restores and submits one Plan memory review without duplicating its chat card', async ({ page }) => {
+  await page.goto('/plan/domain-integrity');
+
+  const card = page.locator('article.memory-review-card');
+  await expect(card).toHaveCount(1);
+  await expect(card).toContainText('长期记忆待确认');
+  await expect(page.getByText('这个学习周期已经结束。')).toBeVisible();
+
+  await card.getByRole('button', { name: '稍后处理' }).click();
+  await expect(card).toHaveCount(1);
+  await expect(card.getByRole('button', { name: /逐条确认/ })).toBeVisible();
+
+  await page.reload();
+  await expect(card).toHaveCount(1);
+  await card.getByRole('button', { name: /逐条确认/ }).click();
+
+  const items = page.locator('.memory-review-items > li');
+  await expect(items).toHaveCount(3);
+  await items.nth(0).getByText('采用', { exact: true }).click();
+  await items.nth(1).getByText('改写后采用', { exact: true }).click();
+  await items.nth(1).getByRole('textbox').fill('先让我完整说出判断依据，再决定是否提示。');
+  await items.nth(2).getByText('不采用', { exact: true }).click();
+
+  await page.getByRole('button', { name: '提交给学习顾问' }).click();
+  await expect(page.getByRole('dialog', { name: '确认长期记忆' })).toHaveCount(0);
+  await expect(card).toHaveCount(1);
+  await expect(card).toContainText('已提交');
+  await expect(card).not.toContainText('已应用');
+});
+
 test('hides future cards and reveals only the first active problem after start', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: '导数学习 Roadmap' })).toBeVisible();

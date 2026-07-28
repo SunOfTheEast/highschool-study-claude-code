@@ -2,7 +2,16 @@ import { join } from 'node:path';
 import { cpSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { ROADMAP_COACH_SESSION_KEY } from '../../src/shared/contracts';
-import type { AbilityProjection, ChatMessage, SessionKey } from '../../src/shared/contracts';
+import type {
+  AbilityProjection,
+  ChatMessage,
+  ConversationItem,
+  SessionKey,
+} from '../../src/shared/contracts';
+import type {
+  MemoryReviewDecision,
+  MemoryReviewSnapshot,
+} from '../../src/memory-review/contracts';
 import {
   readPlanWorkspace,
   readRoadmapWorkspace,
@@ -99,12 +108,65 @@ const workflows = new Map<SessionKey, WorkflowSnapshot[]>([[coachKey, [
   },
 ]]]);
 const deepMode = new Map<SessionKey, boolean>();
-const fixtureHistory = new Map<SessionKey, ChatMessage[]>();
+const proposedMemoryReview = {
+  id: 'fixture-memory-review',
+  planId: 'domain-integrity',
+  status: 'proposed',
+  items: [{
+    id: 'preference-add',
+    operation: 'add',
+    owner: 'student',
+    currentText: null,
+    proposedText: '先独立尝试，再请求方向性提示。',
+    sources: ['lessons/lesson-001.md#lesson-summary'],
+    rationale: '在本周期多节训练中反复出现。',
+    counterEvidence: '新概念首次接触时可能需要示范。',
+    scope: '复习与专项训练。',
+  }, {
+    id: 'teaching-revise',
+    operation: 'revise',
+    owner: 'teaching',
+    currentText: '立即指出错误位置。',
+    proposedText: '先请学生说明判断依据，再决定是否指出错误位置。',
+    sources: ['lessons/lesson-002.md#lesson-summary'],
+    rationale: '学生先表达依据时，后续修正更稳定。',
+    counterEvidence: '时间紧张的验收课不一定适用。',
+    scope: '常规互动讲解。',
+  }, {
+    id: 'preference-delete',
+    operation: 'delete',
+    owner: 'student',
+    currentText: '每一步都需要确认。',
+    proposedText: null,
+    sources: ['plans/domain-integrity.md#plan-summary'],
+    rationale: '后续独立作答已不支持这条旧记录。',
+    counterEvidence: '复杂新题仍可能主动请求核对。',
+    scope: '本学习周期。',
+  }],
+  decisions: [],
+} satisfies MemoryReviewSnapshot;
+let currentMemoryReview: MemoryReviewSnapshot = proposedMemoryReview;
+const fixtureHistory = new Map<SessionKey, ConversationItem[]>();
 fixtureHistory.set(roadmapKey, [{
-  id: 'fixture-roadmap-message',
-  role: 'coach',
-  text: '这里用于回看整个学习集，并在你确认后开启新的学习周期。',
-  complete: true,
+  kind: 'message',
+  message: {
+    id: 'fixture-roadmap-message',
+    role: 'coach',
+    text: '这里用于回看整个学习集，并在你确认后开启新的学习周期。',
+    complete: true,
+  },
+}]);
+fixtureHistory.set(coachKey, [{
+  kind: 'message',
+  message: {
+    id: 'fixture-memory-intro',
+    role: 'coach',
+    text: '这个学习周期已经结束。我从课堂记录中整理了三条长期记忆候选，请你逐项确认。',
+    complete: true,
+  },
+}, {
+  kind: 'memory-review',
+  review: currentMemoryReview,
 }]);
 const workflowListeners = new Map<SessionKey, Set<(snapshot: WorkflowSnapshot) => void>>();
 const sessionListeners = new Map<SessionKey, Set<(event: unknown) => void>>();
@@ -131,6 +193,32 @@ const registry = {
   roadmapSnapshot: () => readRoadmapWorkspace(root),
   snapshot: (planId = 'domain-integrity') => readPlanWorkspace(root, planId),
   history: (key: SessionKey) => structuredClone(fixtureHistory.get(key) ?? []),
+  memoryReview: async (key: SessionKey) => (
+    key === coachKey ? structuredClone(currentMemoryReview) : null
+  ),
+  submitMemoryReview: async (
+    key: SessionKey,
+    reviewId: string,
+    decisions: MemoryReviewDecision[],
+  ) => {
+    if (key !== coachKey || reviewId !== currentMemoryReview.id) {
+      throw new Error('MEMORY_REVIEW_NOT_FOUND');
+    }
+    currentMemoryReview = {
+      ...currentMemoryReview,
+      status: 'submitted',
+      decisions: structuredClone(decisions),
+    };
+    fixtureHistory.set(coachKey, (fixtureHistory.get(coachKey) ?? []).map((item) => (
+      item.kind === 'memory-review' && item.review.id === reviewId
+        ? { kind: 'memory-review', review: currentMemoryReview }
+        : item
+    )));
+    for (const listener of sessionListeners.get(key) ?? []) {
+      listener({ type: 'agent_end', messages: [], willRetry: false });
+    }
+    return structuredClone(currentMemoryReview);
+  },
   subscribe: (key: SessionKey, listener: (event: unknown) => void) => {
     const current = sessionListeners.get(key) ?? new Set();
     current.add(listener);
@@ -303,7 +391,7 @@ coach_session: null
         text: '这节课先停在这里。第一项已完成，第二项留到下次。',
         complete: true,
       };
-      fixtureHistory.set('tutor:lesson-003', [message]);
+      fixtureHistory.set('tutor:lesson-003', [{ kind: 'message', message }]);
       hub.publish({
         type: 'message',
         sessionKey: 'tutor:lesson-003',
