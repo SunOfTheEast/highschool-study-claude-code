@@ -46,12 +46,15 @@ session ID.
 
 The web runtime has two durable Agent roles:
 
-- one Coach Session per Plan;
+- one Roadmap-scoped Coach Session per learning set;
+- one Plan-scoped Coach Session per entered Plan;
 - one Tutor Session per started Lesson.
 
-Coach prepares and reviews; Tutor teaches and records classroom facts. Their
-histories are not copied into each other. They hand off through the Plan,
-Lesson, active Trace, and source-linked summaries.
+Roadmap Coach owns global direction, cross-Plan review and creation of a new
+student-approved Plan. It may register a new Plan but does not receive
+`plan_update` or `lesson_prepare`. Plan Coach owns the current Plan and may use
+`lesson_prepare`, `plan_register`, and `plan_update`; Tutor owns the current
+Lesson and classroom fact tools.
 
 Pi write authority is Session-bound:
 
@@ -67,6 +70,10 @@ entry containing `role`, `ownerId`, and `ownerPath`. A frontmatter Session ID
 is reused only when all three fields match. Missing, malformed, duplicate, or
 mismatched owner metadata creates a fresh Session; display names are not
 identity.
+
+The Roadmap Coach uses `role: coach`, `ownerId: @roadmap`,
+`ownerPath: ROADMAP.md`, and persists its Session ID as
+`roadmap_coach_session`.
 
 A Coach-created Plan becomes available only after `plan_register` validates
 the file and idempotently links it under `ROADMAP.md / Plan Graph`. A
