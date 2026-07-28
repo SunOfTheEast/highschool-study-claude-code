@@ -10,7 +10,9 @@ import type {
   LessonStatus,
   PlanSummary,
   PlanWorkspaceSnapshot,
+  RoadmapWorkspaceSnapshot,
 } from '../shared/contracts';
+import { ROADMAP_COACH_SESSION_KEY } from '../shared/contracts';
 
 function section(body: string, heading: string, level = 2): string {
   const lines = body.split(/\r?\n/);
@@ -141,6 +143,17 @@ export function readLearningSet(root: string): LearningSetSnapshot {
     learningPrinciples: studentLearningPrinciples(root),
     goal: section(roadmap.body, 'Goal'),
     plans: planPaths.map((path) => planSummary(root, path)),
+  };
+}
+
+export function readRoadmapWorkspace(root: string): RoadmapWorkspaceSnapshot {
+  const roadmap = readMarkdownFile(root, 'ROADMAP.md');
+  return {
+    learningSet: readLearningSet(root),
+    coach: {
+      sessionKey: ROADMAP_COACH_SESSION_KEY,
+      sessionId: scalar(roadmap.frontmatter, 'roadmap_coach_session'),
+    },
   };
 }
 

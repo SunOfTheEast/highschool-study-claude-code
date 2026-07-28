@@ -2,6 +2,7 @@ export type LessonStatus = 'prepared' | 'active' | 'paused' | 'closed' | 'abando
 export type BlockStatus = 'pending' | 'active' | 'completed' | 'skipped';
 export type ActivityKind = 'dialogue' | 'problem' | 'material' | 'reflection';
 export type SessionKey = `coach:${string}` | `tutor:${string}`;
+export const ROADMAP_COACH_SESSION_KEY = 'coach:@roadmap' as const;
 
 export type ActivityBlock = {
   id: string;
@@ -42,6 +43,14 @@ export type LearningSetSnapshot = {
   learningPrinciples: string;
   goal: string;
   plans: PlanSummary[];
+};
+
+export type RoadmapWorkspaceSnapshot = {
+  learningSet: LearningSetSnapshot;
+  coach: {
+    sessionKey: typeof ROADMAP_COACH_SESSION_KEY;
+    sessionId: string | null;
+  };
 };
 
 export type PlanWorkspaceSnapshot = {

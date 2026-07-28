@@ -8,7 +8,11 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { readLearningSet, readPlanWorkspace } from '../../src/study/read-workspace';
+import {
+  readLearningSet,
+  readPlanWorkspace,
+  readRoadmapWorkspace,
+} from '../../src/study/read-workspace';
 import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
 
 const root = domainIntegrityFixtureRoot;
@@ -46,6 +50,38 @@ test('reads the derivative Roadmap and Plan lesson index', () => {
     { id: 'assessment-02', kind: 'problem', required: true, dependsOn: ['assessment-01'], uses: ['Q-DOMAIN-EX16'] },
     { id: 'reflection', kind: 'reflection', required: true, dependsOn: ['assessment-02'], uses: [] },
   ]);
+});
+
+test('reads the optional Roadmap Coach Session without inventing one', () => {
+  expect(readRoadmapWorkspace(root)).toEqual({
+    learningSet: readLearningSet(root),
+    coach: {
+      sessionKey: 'coach:@roadmap',
+      sessionId: null,
+    },
+  });
+});
+
+test('reads a persisted Roadmap Coach Session ID', () => {
+  const copy = mkdtempSync(join(tmpdir(), 'study-roadmap-workspace-'));
+  try {
+    cpSync(root, copy, { recursive: true });
+    const path = join(copy, 'ROADMAP.md');
+    writeFileSync(
+      path,
+      readFileSync(path, 'utf8').replace(
+        'status: active',
+        'status: active\nroadmap_coach_session: roadmap-session-001',
+      ),
+    );
+
+    expect(readRoadmapWorkspace(copy).coach).toEqual({
+      sessionKey: 'coach:@roadmap',
+      sessionId: 'roadmap-session-001',
+    });
+  } finally {
+    rmSync(copy, { recursive: true, force: true });
+  }
 });
 
 test('rejects a linked legacy Plan instead of projecting an empty rationale', () => {
