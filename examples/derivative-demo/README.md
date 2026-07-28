@@ -72,7 +72,7 @@ claude
 /highschool-study:correct-learning-record
 ```
 
-旧 Trace 不会被覆盖；系统追加带 `Supersedes` 的新事件，再重建受影响的摘要和备课提醒。
+旧 Trace 不会被覆盖；系统追加带 `Supersedes` 的新事件，再刷新方法投影和备课提醒，并列出可能已经过时的摘要或决定。系统不会自动改写已经落盘的 Lesson Summary、Plan 或长期画像。
 
 ## 6. Plan 结束与长期记忆
 
@@ -82,7 +82,7 @@ claude
 
 题卡保留了原迁移数据中的来源元数据，但公开仓库不附教材图片或整书原文，因此部分外部教材路径会显示为缺失。这不影响题卡搜索、题卡步骤解析、Trace 双向查询与完整学习闭环。`materials/demo-notes.md` 是本示例课堂记录的公开、去标识化来源。
 
-## 8. 学习集概述与展示人设
+## 8. 学习集概述与陪伴风格
 
 首次进入、且没有课堂 Trace 时，`study` 会先展示 `ROADMAP.md` 中的 Learning Set Overview；已有 Trace 时，只有你要求时才会展开这份概述。
 

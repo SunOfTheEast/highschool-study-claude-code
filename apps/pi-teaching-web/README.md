@@ -1,6 +1,6 @@
 # StudyForge Pi 教学前端
 
-这是 `highschool-study` Markdown 学习集的本地 Pi 前端。一个 Plan 对应一个长期 Coach Session；每节 Lesson 对应一个独立 Tutor Session。学生始终使用同一网页，但 Coach 与 Tutor 的历史不会互相复制，只通过 Lesson 文件、Trace 和带来源摘要交接。
+这是 `highschool-study` Markdown 学习集的本地 Pi 前端。学生界面使用三层术语：Roadmap 是“学习总览”，Plan Coach 是“学习顾问”，Lesson Tutor 是“课堂导师”。底层仍保留 Coach/Tutor 技术角色：每个学习集可以有一个 Roadmap Coach Session，每个进入过的 Plan 对应一个长期 Coach Session，每节已开始 Lesson 对应一个独立 Tutor Session。各 Session 的历史不会互相复制，只通过 Roadmap、Plan、Lesson、active Trace 和带来源摘要交接。
 
 ## Message projection
 
@@ -14,9 +14,18 @@
 
 ## 视觉主题
 
-默认主题为“留白新中式”：暖白纸色、墨黑正文和低饱和青绿强调色组成同一套 Coach、Tutor 与 Replay 视觉语言。界面优先保留阅读空间和信息层级，不使用大面积渐变、浮空卡片或角色全局染色；二次元人设只影响头像及局部点缀，不改变教学状态的语义颜色。
+默认主题为“留白新中式”：暖白纸色、墨黑正文和低饱和青绿强调色组成同一套学习总览、学习顾问、课堂导师与 Replay 视觉语言。界面优先保留阅读空间和信息层级，不使用大面积渐变、浮空卡片或角色全局染色；陪伴风格只影响头像及局部点缀，不改变教学状态的语义颜色。
 
-主题 token 集中在 `src/client/theme-liubai.css`，页面结构和状态样式保留在 `src/client/styles.css`。根视图通过 `data-theme="liubai-xinzhongshi"` 与 `data-view="coach | tutor | replay"` 标记当前界面，后续视觉调整应继续复用这些语义入口。
+主题 token 集中在 `src/client/theme-liubai.css`，页面结构和状态样式保留在 `src/client/styles.css`。根视图通过 `data-theme="liubai-xinzhongshi"` 与 `data-view="roadmap | coach | tutor | replay"` 标记当前界面，后续视觉调整应继续复用这些语义入口。
+
+## 当前界面与路由
+
+- `/` 是续学优先首页。页面只保留一个“从上次的位置继续”主入口：先按 Roadmap 顺序选择第一个含可续 Lesson 的未完成 Plan（若没有，则选择第一个未完成 Plan），再在该 Plan 内按 `active Lesson → paused Lesson → prepared Lesson → 学习顾问` 选择目标；没有未完成 Plan 时才进入学习总览。学习集概述、研习要领、其他 Plan、最近回放和学习总览都保持为次级入口。
+- `/roadmap` 是“学习总览”，对应 Roadmap-scoped Coach Session，用于首次目标商议、跨 Plan 回看和开启新学习周期，不承担具体 Plan 的日常备课。
+- `/plan/<planId>` 是该 Plan 的“学习顾问”。左侧会话树把它作为父会话，并列出 Lesson 课堂导师子会话。
+- `/plan/<planId>/lesson/<lessonId>` 根据 Lesson 状态显示待开始课堂、active/paused 课堂导师或 closed/abandoned 只读 Replay。刷新、后退、前进和深链都会从 Markdown 状态与 owner 匹配的 Pi Session 恢复。
+
+课堂进行时，唯一 active ActivityBlock 的 Student View 和已揭示题卡固定在聊天上方；未开始内容不会随聊天提前出现。右侧 `ContextStack` 是一列文档式情境：课堂导师下显示课堂脉络、方法进展、近期学习记录和深入查找，学习顾问与 Replay 使用同一结构显示各自需要的上下文。研习资料、陪伴风格和证据来源以 overlay 打开；长期记忆确认卡留在原聊天时间线。它们都不会创建第二套路由，也不会替换当前 Session。
 
 ## 环境
 
@@ -101,19 +110,22 @@ pi
 
 ## 学生使用流程
 
-1. 首页阅读 Roadmap 概述并进入一个 Plan。
-2. 在父级 Coach Session 讨论方向、复盘旧课或请求备课。
-3. 从侧边栏打开 Coach 生成的 Lesson；未开始前只有无剧透课堂本。
-4. 点击“开始上课”后才创建该 Lesson 的 Tutor Session。
-5. Tutor 推进结构化课堂节点，学生可以上传 PNG、JPEG 或 WebP 草稿。
-6. 学生确认结束后，Tutor 写一份结课时 Lesson Summary 并关闭 Lesson；界面停留在只读 Tutor Replay，保留最终消息、真实停止节点和关课快照，直到学生明确点击“返回 Coach”。
+1. 从首页唯一的续学主入口回到原位置；查看学习集概述、研习要领或学习总览不会覆盖这个位置。
+2. 在 Plan 的“学习顾问”中讨论方向、复盘旧课或请求备课；没有 Plan 或需要跨 Plan 规划时，进入“学习总览”。
+3. 从会话树打开已准备的 Lesson；开始前只显示无剧透课堂本，通过机械准入后才创建或恢复独立的课堂导师 Session。
+4. 上课时，当前 active ActivityBlock 固定在聊天上方，课堂导师只推进已经揭示的 Student View。右侧课堂情境保留整节课的文档脉络，学生也可以上传 PNG、JPEG 或 WebP 草稿。
+5. “研习资料”搜索真实题卡、方法、材料和学习记录。active/paused 课堂导师只能访问当前已揭示资产与本课允许的 active Trace；学习顾问和 closed/abandoned Replay 可以访问完整的学生安全资产集；未启动 Tutor 和学习总览不开放这项搜索。
+6. 在 Plan 会话树中从 active 课堂导师切到学习顾问或其他 Session 时，前端先把 Lesson 暂停；重新打开后沿原 ActivityBlock 和原 Session 继续。
+7. 学生确认结束后，课堂导师写入结课时 Lesson Summary 并关闭 Lesson。页面停留在只读 Replay，保留最终消息、真实停止节点和关课快照；只有学生点击“返回学习顾问”才进入复盘。closed Replay 可以通过 URL 恢复，但不会覆盖首页保存的 active、paused 或 prepared 续学位置。
 
-右侧“方法证据”只是 Trace 的主/次方法加权投影。点击任一节点都能回到原始 Trace 和安全题卡元数据；它不是独立的掌握度事实。
+“方法进展”只是 Trace 主/次方法的加权投影。点击任一节点都能回到原始 Trace 和安全题卡元数据；它不是独立的掌握度事实。
 
 ## Session、证据与重新备课
 
-- Coach Session 的 owner 是当前 Plan；正常备课通过 `lesson_prepare` 提交一次性结构化课堂骨架，由运行时绑定路径、状态和 Lesson Index 并编译成 Markdown；最终 `active / complete / replan` 决定通过 `plan_update` 一次写回，再重读 Plan 后回复。
-- Tutor Session 的 owner 是当前 Lesson；模型不填写 `lessonPath`、`cardStepId` 或 Session ID。
+- Roadmap Coach Session 的 owner 是 `@roadmap` / `ROADMAP.md`；它在学生界面显示为“学习总览”，只负责全局方向、跨 Plan 回看和注册学生确认的新 Plan。
+- Plan Coach Session 的 owner 是当前 Plan；它在学生界面显示为“学习顾问”。正常备课通过 `lesson_prepare` 提交一次性结构化课堂骨架，由运行时绑定路径、状态和 Lesson Index 并编译成 Markdown；最终 `active / complete / replan` 决定通过 `plan_update` 一次写回，再重读 Plan 后回复。
+- Tutor Session 的 owner 是当前 Lesson；它在学生界面显示为“课堂导师”。模型不填写 `lessonPath`、`cardStepId` 或 Session ID。
+- 每个 Pi Session 只有一条 `studyforge.session-owner.v1`，由 `role + ownerId + ownerPath` 决定身份；只有三项完全匹配才复用 frontmatter 中的 Session ID，Coach/Tutor 展示名不参与身份判断。
 - Tutor 在评价前只冻结学生已经亲自给出的数学内容。缺决定性证明时写 `incomplete`，不能把 Tutor 的补全冒充成学生证据。
 - `support` 记录最终答案实际采用的帮助。提示出现但未提供/未被采用决定性内容时仍可为 `none`；采用 Tutor 首次给出的关键内容时为 `tutor`。
 - 题卡方法只是候选。学生确认节点贴切后才写实际方法；拒绝、无精确节点或暂不决定时保留未映射路线。
@@ -125,6 +137,12 @@ pi
 `LessonBlueprint` 只存在于普通工具调用记录中，不是第二份学习状态；`lesson-xxx.md` 仍是 Tutor、Trace 和前端共同读取的唯一课堂事实。仍为 `prepared` 的 Lesson 可以由 Coach 保持 ID 原地重新编译。Tutor 已启动后再要求重新备课，旧 Lesson 保留并标为 `abandoned`，Coach 使用新 ID 创建替代 Lesson。
 
 Trace 写入成功后，服务端主动发布完整能力 snapshot；刷新、前进/后退和 Plan/Lesson 深链会从 Markdown 与已绑定 Pi Session 恢复 Coach、Tutor 或 closed Replay。Replay 优先使用真实 Pi 历史；历史不可用时明确显示 evidence-only。
+
+## 长期记忆与界面偏好
+
+completed Plan 的学习顾问可以把带来源的 `add / revise / delete` 长期记忆候选放进原聊天时间线。候选默认都不选择；学生逐项采用、改写后采用或不采用，也可以稍后处理。提交只表示决定已保存并交回同一个 Plan Coach，不表示画像已经更新；学习顾问应用选择、重读 `student-profile.md` 与 `teaching-profile.md` 后，才能报告最终结果。Roadmap Coach、课堂导师和未完成 Plan 不能提出这张确认卡。
+
+“陪伴风格”按 Coach/Tutor Session 单独保存到 Pi Session custom entry，不复制到其他 Session，也不改变题卡、评价、Trace 或学习标准。柔和动效与完成反馈只保存在当前浏览器的 `studyforge.presentation.v1`，不会进入 learning set、Session 或模型上下文；系统要求减少动态效果时优先关闭动效。
 
 ## 深度模式与动态工作流
 
@@ -184,14 +202,14 @@ pi
 
 依次确认：
 
-- 打开 Coach，读取并复盘上一节 Lesson；
-- 让 Coach 按需加载备课 Skill，通过一次 `lesson_prepare` 准备一节至少含两张真实题卡且不剧透的 Lesson；
-- 启动 Tutor，确认它拥有独立 Session；
+- 打开学习顾问（Plan Coach），读取并复盘上一节 Lesson；
+- 让学习顾问按需加载备课 Skill，通过一次 `lesson_prepare` 准备一节至少含两张真实题卡且不剧透的 Lesson；
+- 启动课堂导师（Tutor），确认它拥有独立 Session；
 - 分别提交文字与一张图片；
-- 让 Tutor 追加一条绑定题卡/课堂步骤的 Trace；
+- 让课堂导师追加一条绑定题卡/课堂步骤的 Trace；
 - 暂停并继续同一个 Tutor Session；
 - 由学生明确确认结束 Lesson；
-- 在原 Tutor Replay 查看结课快照，再明确返回原 Coach Session 做课后复盘。
+- 在原 Tutor Replay 查看结课快照，再明确返回原学习顾问（Plan Coach）Session 做课后复盘。
 
 深度模式另行确认：先运行一次单 Evidence Scout 的 quick 证据召回，再提出一次有依赖的 deep 工作流并由学生确认；启动第二个 deep 工作流后取消，确认任务轨保留已完成分支，而且临时子任务没有改动 learning-set 文件。
 

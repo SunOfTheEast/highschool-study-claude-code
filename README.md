@@ -1,45 +1,94 @@
-# Highschool Study for Claude Code
+# StudyForge · Highschool Study
 
-一个面向高中个性化学习的 Claude Code 插件。Roadmap、Plan、Lesson、课堂 Trace 与学生确认过的长期偏好都保存在可读的 Markdown learning set 中；题卡和知识图谱使用 YAML。没有数据库，也不需要额外的学习应用。
+一套 Markdown-first 的高中个性化学习系统，同时提供 Claude Code 插件和本地 Pi
+教学前端。两种入口共用同一个 `learning-set/`：Roadmap、Plan、Lesson、课堂
+Trace 与学生确认过的长期偏好都是可以直接打开、修改和审查的文件；题卡与方法词表
+使用 YAML，方法骨架也可以保留为 Markdown。
 
-仓库同时提供：
+系统不把学习状态藏进数据库。摘要、能力图、首页续学位置和课堂界面都是从
+Markdown/YAML、active Trace 与对应 Pi Session 重建的投影，可以继续下钻到原始
+Lesson、题卡或材料。
 
-- 可从 Claude Code marketplace 直接安装的插件；
-- 10 个学习工作流 Skills、2 个 Agent 配置和 4 个窄 MCP 工具；
-- 当前实现的[完整中文功能说明](docs/zh-CN/完整说明书.md)；
-- 含 519 张导数题卡的[公开试用学习集](examples/derivative-demo/README.md)；
-- 已确认的[中英文设计稿与实施计划](docs/design/)。
-- 基于 Pi 的本地教学前端：Plan 级 Coach、Lesson 级 Tutor、结构化课堂本、证据回溯与人设主题。
+## 两种使用入口
 
-## 一分钟安装
+### Claude Code 插件
 
-前置条件：近期版本的 Claude Code、Git，以及可在终端运行的 Bun。
+- 12 个学习 Skills，统一入口是 `/highschool-study:study`；
+- 2 个 Agent：`study-coach` 与 `lesson-designer`；
+- 4 个公共 MCP 工具：`card_search`、`trace_search`、`trace_append`、
+  `source_resolve`；
+- 支持规划、备课、授课、进度检查、记录更正与 Plan 级长期记忆整理。
+
+题卡搜索只返回真实文件；没有命中就是有效结果，Agent 不能编造题卡、路径或来源。
+Trace 采用只追加与 `Supersedes` 更正，旧记录保留审计，当前投影只使用 active
+Trace。
+
+### Pi 本地教学前端
+
+Pi 把同一学习闭环组织成三个清楚的会话范围：
+
+- **Roadmap Coach**：讨论长期方向、跨 Plan 回顾和新的学习周期；
+- **Plan 学习顾问**：负责当前 Plan 的复盘、下一步判断和备课；
+- **Lesson 课堂导师**：只推进当前 Lesson，并把作答与方法证据写回课堂记录。
+
+当前前端已经包括：
+
+- **续学优先首页**：用一个主入口回到仍可继续的 Lesson 或 Coach Session；
+- **固定当前课堂**：聊天上方只固定当前 active Block，未揭示内容继续收起；
+- **文档式课堂情境**：用连续、可折叠的小节呈现课堂脉络、方法进展、近期记录和深入查找；
+- **研习资料**：在当前 Session 权限内搜索真实题卡、方法、材料与学习记录；
+- **长期记忆确认卡**：Plan 完成后逐条采用、改写或不采用带来源的长期偏好候选；
+- **陪伴风格**：按 Coach/Tutor Session 选择，只改变表达，不改变学习事实；
+- **路由恢复**：刷新、前进后退或打开 Plan/Lesson 深链时，恢复 owner 匹配的原会话；
+- **课堂回放与安全投影**：保留真实停止点，学生视图不展示工具参数、
+  Teacher Control、未揭示答案或子任务内部结果。
+
+可选的 quick/deep 工作流可以把跨题卡、跨 Lesson 的证据检索交给只读
+Evidence Scout；Plan、Lesson、Trace 和长期画像仍只由父 Coach/Tutor 通过原有窄
+工具写入。
+
+## 快速开始
+
+需要 Git、Bun，以及近期版本的 Claude Code。仓库包含 Claude Code marketplace
+配置，可用下面的命令安装插件：
 
 ```bash
 claude plugin marketplace add SunOfTheEast/highschool-study-claude-code --scope user
 claude plugin install highschool-study@studyforge-learning --scope user
 ```
 
-启动或重新进入 Claude Code 后，可以先检查：
-
-```bash
-claude plugin list
-claude mcp list
-```
-
-进入一个包含 `learning-set/` 的项目，在 Claude Code 中运行：
+进入一个包含 `learning-set/` 的项目，启动 Claude Code 后运行：
 
 ```text
 /highschool-study:study
 ```
 
-如果安装发生在已经打开的 Claude Code 会话中，再运行：
+若插件安装于已经打开的 Claude Code 会话，再运行 `/reload-plugins`。
 
-```text
-/reload-plugins
+### 启动 Pi 前端
+
+Pi 前端从本仓库本地构建和安装：
+
+```bash
+cd apps/pi-teaching-web
+bun install --frozen-lockfile
+bun run build
+pi install "$PWD"
 ```
 
+然后进入包含 `learning-set/` 的目录，启动 Pi 并运行：
+
+```text
+/study-web
+```
+
+Pi 的安装、模型配置和开发启动方式见
+[Pi 教学前端说明](apps/pi-teaching-web/README.md)。
+
 ## 试用导数学习集
+
+仓库内的[公开试用学习集](examples/derivative-demo/README.md)包含 519 张导数题卡、
+方法图谱、学习指南和一份尚未建立个性化 Plan/Lesson/Trace 的空白学习治理框架：
 
 ```bash
 git clone https://github.com/SunOfTheEast/highschool-study-claude-code.git
@@ -54,53 +103,14 @@ claude
 /highschool-study:study
 ```
 
-然后可以直接说：
+公开示例不包含原教材 PNG、整书文本或旧系统快照。
 
-```text
-继续“定义域完整性的系统加固”这个 Plan。
-先读取 Roadmap、当前 Plan、前三节 Lesson 和已有 Trace，
-告诉我目前学到哪里，再和我讨论下一步怎么上。
-```
-
-试用集包含全部 519 张迁移题卡和知识图谱，但不包含原教材 PNG、整书文本或旧 StudyForge 快照。公开课堂记录已经去标识化。
-
-## Pi 教学前端
-
-```bash
-cd apps/pi-teaching-web
-bun install
-bun run check
-pi install "$PWD"
-cd ../../examples/derivative-demo
-pi
-```
-
-进入 Pi 后运行 `/study-web`。浏览器会显示一个 Plan 级 Coach 父会话及其 Lesson 级 Tutor 子会话；未开始的 Lesson 只展示无剧透课堂本。完整安装、开发与真实模型 smoke 步骤见 [Pi 教学前端说明](apps/pi-teaching-web/README.md)。
-
-## 当前功能基线
-
-当前整合版已经打通完整教学闭环：
-
-- Coach 以 Plan 为周期，Tutor 以 Lesson 为周期，Session 历史隔离并通过 Markdown/Trace 交接；
-- 真实题卡搜索、题卡与 active Trace 双向查询、来源下钻和只追加更正；
-- 学生证据冻结、提示实际依赖归因、学生确认的实际方法证据；
-- 真正另解旁挂题卡，并随 active Trace 自动失效或重新绑定；
-- 结构化课堂节点、动态路线、Replay、能力图、证据透镜和浏览器路由恢复；
-- 默认安全消息投影，以及可选、可确认、可取消的 quick/deep 动态工作流。
-
-具体语义、边界和日常使用以[完整说明书](docs/zh-CN/完整说明书.md)为准；设计稿和实施计划保留为历史依据。
-
-## 学习集概述与展示人设
-
-没有课堂 Trace 时，`study` 会展示 `ROADMAP.md` 的 Learning Set Overview；已有 Trace 时，只有用户要求才展开这份概述。
-
-学习集可以在 `.claude/personas/<id>.md` 添加专属人设，或用同名文件覆盖内置人设。临时切换不写文件；持久选择写入 Git 忽略的 `CLAUDE.local.md`。人设只改变面向学生的表达，绝不改变能力判断、题卡、Trace、测试或备课。
-
-## 核心结构
+## Learning set
 
 ```text
 learning-set/
 ├── ROADMAP.md
+├── LEARNING_GUIDE.md
 ├── plans/
 ├── lessons/
 ├── memory/
@@ -112,51 +122,43 @@ learning-set/
 └── materials/
 ```
 
-- Roadmap 是长期目标，直接包含可依赖、并行和重排的多个 Plan。
-- Plan 是一个合适的学习周期，包含多个 Lesson。
-- Lesson 绑定一次实际课堂，由可自由组合的 ActivityBlock 构成；Pi 中每个 started Lesson 绑定独立 Tutor Session。
-- Trace 是课堂事实和题卡绑定的唯一 owner；题卡搜索会一并返回该卡的完整 active Trace 历史。
-- 题卡方法只是参考 metadata；学生实际方法只有在本人确认贴切节点后才进入 Trace 与能力投影。
-- 长期画像只在 Plan 完成后汇总，并在学生逐项确认后更新。
+- **Roadmap** 保存长期目标和可依赖、并行或重排的多个 Plan。
+- **Plan** 是一个学习周期，保存能力标准、Lesson 索引、当前位置与带来源摘要。
+- **Lesson** 是一次实际课堂，由可组合、跳过和重排的 ActivityBlock 构成。
+- **Trace** 是作答、支持程度和学生实际方法的课堂证据；更正通过追加新事件完成。
+- `student-profile.md` 与 `teaching-profile.md` 只保存学生确认过的稳定偏好。
+- `planner-attention.md`、能力节点、摘要和任务轨都可重建，不是第二套学习事实。
 
-## 四个 MCP 工具
+## 能力与边界
 
-- `card_search`：搜索真实存在的题卡，并附带每张卡的完整 active Trace。
-- `trace_search`：搜索 active Trace，并反查、去重关联题卡。
-- `trace_append`：向 Lesson 只追加新的课堂 Trace。
-- `source_resolve`：验证 learning set 内的文件、Markdown 锚点或题卡步骤。
+当前实现覆盖 Roadmap → Plan → Lesson 的学习治理、真实题卡与 active Trace
+双向检索、自适应课堂、防剧透 Student View、学生证据冻结、实际方法确认、真正另解、
+课堂回放和带来源的长期学情研判。
 
-找不到真实题卡时，工具返回空结果；Agent 必须停止找卡，不能编造题卡、路径或来源。
+它仍是一套本地学习插件与教学前端，不是教育 SaaS：不包含 SQLite、向量数据库、
+后台索引、账号与班级管理、云同步、自动 Git 提交或统一上下文数据库。Pi Session
+JSONL 保存原始会话历史，但不取代 learning set 中的学习事实。
 
-## 文档
+## 文档与开发
 
 - [完整中文说明书](docs/zh-CN/完整说明书.md)
-- [Pi 教学前端中文设计说明](docs/zh-CN/Pi教学前端设计说明.md)
+- [Pi 教学前端说明](apps/pi-teaching-web/README.md)
+- [Claude Code 插件说明](plugins/highschool-study/README.md)
 - [导数学习集试用教程](examples/derivative-demo/README.md)
-- [中文架构设计](docs/design/architecture.zh-CN.md)
-- [English architecture](docs/design/architecture.en.md)
-- [中文实施计划](docs/design/implementation-plan.zh-CN.md)
-- [English implementation plan](docs/design/implementation-plan.en.md)
-- [学习集概述与可切换人设实施计划](docs/superpowers/plans/2026-07-21-learning-set-orientation-personas.zh-CN.md)
-- [Learning-set orientation and selectable personas plan](docs/superpowers/plans/2026-07-21-learning-set-orientation-personas.en.md)
-- [自适应课堂模板与防剧透设计](docs/superpowers/specs/2026-07-21-adaptive-lesson-templates-and-reveal-policy-design.md)
-- [自适应课堂模板与防剧透实施计划](docs/superpowers/plans/2026-07-21-adaptive-lesson-templates-and-reveal-policy.md)
-- [插件源码说明](plugins/highschool-study/README.md)
 
-Claude Code 官方参考：[发现和安装插件](https://code.claude.com/docs/en/discover-plugins)、[创建和分发 marketplace](https://code.claude.com/docs/en/plugin-marketplaces)。
-
-## 开发与验证
+验证 Claude Code 插件：
 
 ```bash
 cd plugins/highschool-study
-bun install
+bun install --frozen-lockfile
 bun run release:check
 ```
 
-`release:check` 会重新生成自包含 MCP bundle，然后运行 TypeScript 检查、全部测试和 Claude Code 严格插件验证。公开安装不需要执行 `bun install`；安装包已经包含 bundle，但运行 MCP 仍需要系统能找到 `bun`。
+验证 Pi 前端：
 
-## 当前发布边界
-
-这是一个本地学习插件与教学前端，而不是完整教育 SaaS。它刻意不包含 SQLite、向量数据库、后台索引、账号系统、自动 Git 提交、统一上下文编译器或人类教师协作层。
-
-本仓库当前未指定开源许可证；代码与题卡可用于安装和试用，进一步再分发或商用前请先联系仓库所有者。
+```bash
+cd apps/pi-teaching-web
+bun install --frozen-lockfile
+bun run check
+bun run test:e2e
+```

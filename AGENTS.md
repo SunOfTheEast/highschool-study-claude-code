@@ -12,16 +12,22 @@ feature was reached; they are not the current product contract.
 
 ## Source-of-truth hierarchy
 
-1. `learning-set/ROADMAP.md`, `plans/`, `lessons/`, and confirmed `memory/`
-   files are durable learning facts.
+1. `learning-set/ROADMAP.md`, `plans/`, `lessons/`, and confirmed profile
+   files are durable learning facts. Only `memory/student-profile.md` and
+   `memory/teaching-profile.md` are confirmed long-term memory;
+   `memory/planner-attention.md` remains a rebuildable projection.
 2. Problem cards and the method vocabulary live under `cards/` and `graph/`.
 3. Active Trace is append-only Lesson evidence. A later event corrects an
    earlier one through `Supersedes`; ordinary search and projection ignore
    superseded events.
-4. Pi Session JSONL is the raw conversation/tool history. It may explain how a
-   fact was produced, but it is not a second learning-state database.
-5. Summaries, planner attention, ability nodes, task lists, replay, and other
-   UI views are projections. They must remain traceable to the facts above.
+4. Pi Session JSONL owns raw conversation/tool history and Session-local custom
+   artifacts such as workflow state, persona selection, and Plan memory-review
+   candidates and decisions. It may explain how a fact was produced, but it is
+   neither confirmed long-term memory nor a second learning-state database.
+5. Summaries, planner attention, ability nodes, task lists, replay, the
+   continue-first home, pinned classroom, Context Stack, content explorer, and
+   other UI views are rebuildable projections. They must remain traceable to
+   the facts above and never become fact owners.
 
 Do not add a database, background index, vector store, or unified
 `study_context_get` unless the user explicitly changes this architecture.
@@ -53,17 +59,25 @@ The web runtime has two durable Agent roles:
 Roadmap Coach owns global direction, cross-Plan review and creation of a new
 student-approved Plan. It may register a new Plan but does not receive
 `plan_update` or `lesson_prepare`. Plan Coach owns the current Plan and may use
-`lesson_prepare`, `plan_register`, and `plan_update`; Tutor owns the current
-Lesson and classroom fact tools.
+`lesson_prepare`, `plan_register`, and `plan_update`; only after its
+Session-owned Plan is completed and reread may it use `memory_review_propose`.
+Tutor owns the current Lesson and classroom fact tools. Roadmap Coach and Tutor
+never receive `memory_review_propose`.
 
-Pi write authority is Session-bound:
+Pi fact-write authority is Session-bound:
 
-- Coach owns the current Plan and may use `lesson_prepare`, `plan_register`, and
-  `plan_update`;
+- Plan Coach owns the current Plan and may use `lesson_prepare`,
+  `plan_register`, and `plan_update`;
 - Tutor owns the current Lesson and may use `trace_append`,
   `classroom_update`, `lesson_close`, and `card_alternative_append`;
 - model-generated arguments must not select or override `ownerPath`,
   `lessonPath`, or a session ID.
+
+`memory_review_propose` does not write long-term memory. Candidates and
+item-by-item decisions stay as append-only custom entries in the owning Plan
+Coach Session. Submission wakes that same Coach, which may apply only accepted
+or rewritten items and must reread both confirmed profiles before reporting;
+the frontend never edits those profiles or relabels `submitted` as `applied`.
 
 Every Pi Session carries exactly one `studyforge.session-owner.v1` custom
 entry containing `role`, `ownerId`, and `ownerPath`. A frontmatter Session ID
@@ -166,6 +180,24 @@ or runtime error branches into Skills, Agent prompts, or this guide.
 - Student View never reveals Teacher Control, card answers, rubric text,
   unrevealed hints, private evidence matrices, or stored alternative
   solutions.
+- Home continuation is recalculated from Roadmap, Plan, Lesson, and active
+  Trace state. The browser may remember only a successfully opened unfinished
+  Plan Coach or `active` / `paused` / `prepared` Lesson route; stale,
+  completed, closed, abandoned, Home, and Roadmap routes fall back to the
+  deterministic projection instead of becoming learning state.
+- The pinned classroom, Context Stack, content explorer, and method progress
+  are read-only projections. Their expanded sections, overlay state, filters,
+  and search terms are page-local; route changes remain Lesson facts and
+  method evidence remains owned by active Trace.
+- Content-explorer scope comes from the real Session key. An active or paused
+  Tutor's eligible assets derive only from revealed Blocks and current-Lesson
+  active Trace; Plan Coach and closed Replay receive the full student-safe
+  scope. Roadmap Coach has no content explorer in this release, and the client
+  cannot request a broader scope.
+- Companion persona selection belongs to one Pi Session and affects
+  presentation only. Motion and completion-feedback preferences belong only
+  to browser key `studyforge.presentation.v1`; they never enter Session,
+  learning-set facts, or model context.
 - Deep workflow is optional and Session-scoped. One read-only Evidence Scout
   may isolate a Plan-scale or cross-card retrieval question from the parent
   context. Multiple workflow tasks require genuinely independent questions
@@ -184,6 +216,21 @@ or runtime error branches into Skills, Agent prompts, or this guide.
 - `apps/pi-teaching-web/src/study/`: Markdown workspace reads, writes, replay,
   routes, and ability projection.
 - `apps/pi-teaching-web/src/projection/`: safe/raw message and workflow views.
+- Plan memory review: `apps/pi-teaching-web/src/memory-review/`,
+  `apps/pi-teaching-web/src/runtime/session-factory.ts`,
+  `apps/pi-teaching-web/src/runtime/workspace-registry.ts`, and
+  `apps/pi-teaching-web/src/projection/conversation-projector.ts`.
+- Home continuation: `apps/pi-teaching-web/src/study/home.ts`,
+  `apps/pi-teaching-web/src/shared/home.ts`,
+  `apps/pi-teaching-web/src/client/routes.ts`, and
+  `apps/pi-teaching-web/src/client/App.tsx`.
+- Student-safe panels: `apps/pi-teaching-web/src/study/student-notebook.ts`,
+  `apps/pi-teaching-web/src/study/coach-context.ts`,
+  `apps/pi-teaching-web/src/study/content-explorer.ts`, and the matching
+  components under `apps/pi-teaching-web/src/client/components/`.
+- Persona and display state: `apps/pi-teaching-web/src/study/persona.ts`,
+  `apps/pi-teaching-web/src/runtime/session-factory.ts`, and
+  `apps/pi-teaching-web/src/client/presentation.ts`.
 - `apps/pi-teaching-web/resources/`: Pi Coach/Tutor prompts and Skills.
 - `docs/zh-CN/完整说明书.md`: current functional reference.
 - `docs/audits/`: evidence for completed acceptance runs.

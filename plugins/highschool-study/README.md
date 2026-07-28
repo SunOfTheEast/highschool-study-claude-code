@@ -7,14 +7,14 @@
 1. **Markdown learning set**：`ROADMAP.md`、`plans/`、`lessons/` 和 `memory/` 是学习状态的事实来源；Lesson 内的 Trace 只追加，更正通过 `Supersedes` 关闭旧事件。
 2. **原生 Agent / Skills / Tasks**：`study-coach` 是唯一面向学生的入口；Skills 负责规划、备课、教学、反思、进度和更正；Task List 只是当前 Lesson block 的界面投影，不代表能力达标或完成。
 3. **四工具 MCP**：只负责严格、可验证的数据边界——搜索真实题卡、搜索 active Trace、追加 Trace、解析来源。它不预编译整套学习上下文。
-4. **可选 Dynamic Workflow**：仅在直接证据不足、且至少有两项互相独立的搜索可并行时使用。分支原始 JSON 留在当前会话；只有被采用且带来源的结论可以写回 Lesson。
+4. **可选 Evidence Scout / Dynamic Workflow**：直接证据不足时，一个只读 Scout 可以隔离一项大范围检索；只有多个问题彼此独立、且答案可能改变下一步教学动作时才并行。分支原始 JSON 留在当前会话；只有被采用且带来源的结论可以写回 Lesson。
 
 ## 安装与初始化
 
-在插件目录安装依赖：
+从仓库根目录进入插件目录并安装依赖：
 
 ```bash
-cd highschool-study-markdown
+cd plugins/highschool-study
 bun install
 ```
 
@@ -38,7 +38,7 @@ export STUDY_LEARNING_SET=/path/to/project/learning-set
 
 不存在 `study_context_get`。召回由原生文件读取与这四个窄工具共同完成。
 
-## Learning Set Overview 与展示人设
+## Learning Set Overview 与陪伴风格
 
 没有课堂 Trace 时，`study` 会展示 `ROADMAP.md` 的 Learning Set Overview；已有 Trace 时，只有学生要求才展开这份概述。
 
@@ -140,7 +140,7 @@ Planning Basis → Lesson / active Trace → Plan Summary → plan-next-cycle
 ## 验证与启动
 
 ```bash
-cd highschool-study-markdown
+cd plugins/highschool-study
 bun install
 bun run release:check
 STUDY_LEARNING_SET="$PWD/tests/fixtures/learning-set" bun run start:mcp
