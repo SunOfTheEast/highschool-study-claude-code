@@ -67,6 +67,11 @@ section. `plan_register` rejects the whole Plan when any required section is mis
 empty or duplicated. Repair the same file and retry; do not report success until the
 returned Plan has a non-empty `planningBasis`.
 
+Before any real Lesson exists, Lesson Index contains only `（暂无）`. Put prospective
+Lesson functions in Next Lesson Candidate or Plan Summary; never describe an uncreated
+Lesson as `prepared` or give it a numbered Lesson Index entry. `lesson_prepare` adds
+the real indexed link after the Lesson exists.
+
 Planning Basis must contain:
 
 - the current judgment and why this direction matters now;

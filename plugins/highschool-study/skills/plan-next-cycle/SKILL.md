@@ -68,6 +68,11 @@ Capability Standard, Test, Planning Basis, Lesson Index, Current Position, Next 
 Candidate and Plan Summary section. The shared reader rejects the whole Plan when any
 required section is missing, empty or duplicated.
 
+Before any real Lesson exists, Lesson Index contains only `（暂无）`. Put prospective
+Lesson functions in Next Lesson Candidate or Plan Summary; never describe an uncreated
+Lesson as `prepared` or give it a numbered Lesson Index entry. Add an indexed link only
+after the Lesson file exists.
+
 After writing, call `source_resolve` from `ROADMAP.md` to `plans/<plan-id>.md` and
 require `valid: true`. Repair the same file and retry when validation fails; do not
 link the Plan or report success before it validates.

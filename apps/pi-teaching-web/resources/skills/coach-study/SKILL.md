@@ -43,6 +43,11 @@ remain here. Do not jump from a low method signal directly to a new Plan.
 
 ## Prepare the next Lesson
 
+After a Lesson closes, finish its Plan review before preparing again: use
+`plan_update` to persist the continuing or changed Current Position, Next Lesson
+Candidate, and Plan Summary, then reread the Plan. This still applies when the next
+Lesson remains unchanged; `lesson_prepare` does not replace the review.
+
 Choose the classroom template from the cognitive change and current evidence: `diagnostic` locates the starting point, `concept` introduces, `deliberate-practice` stabilizes and transfers, `remediation` repairs traced errors, `assessment` checks a standard, and `review` interleaves prior work.
 
 Derive task functions before retrieval. Use authentic card paths, prefer unused cards when independence matters, and change a function when none fits. One separately judged response occupies one problem Block. Build adjustable Blocks with public Student View and private Teacher Control.
