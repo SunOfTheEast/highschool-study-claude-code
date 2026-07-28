@@ -1,0 +1,77 @@
+import { randomUUID } from 'node:crypto';
+import { defineTool } from '@earendil-works/pi-coding-agent';
+import { readMarkdownFile } from 'highschool-study-markdown/study-domain';
+import { Type } from 'typebox';
+import type { MemoryReviewItem, MemoryReviewSnapshot } from './contracts';
+import { validateMemoryReviewItems } from './source-validation';
+import type { MemoryReviewStore } from './store';
+
+const nullableText = Type.Union([
+  Type.String({ minLength: 1 }),
+  Type.Null(),
+]);
+
+const itemSchema = Type.Object({
+  id: Type.String({ minLength: 1 }),
+  operation: Type.Union([
+    Type.Literal('add'),
+    Type.Literal('revise'),
+    Type.Literal('delete'),
+  ]),
+  owner: Type.Union([
+    Type.Literal('student'),
+    Type.Literal('teaching'),
+  ]),
+  currentText: nullableText,
+  proposedText: nullableText,
+  sources: Type.Array(Type.String({ minLength: 1 }), { minItems: 1 }),
+  rationale: Type.String({ minLength: 1 }),
+  counterEvidence: Type.String({ minLength: 1 }),
+  scope: Type.String({ minLength: 1 }),
+});
+
+export function createMemoryReviewProposeTool(
+  root: string,
+  planId: string,
+  ownerPath: string,
+  store: MemoryReviewStore,
+  createId: () => string = () => `review-${randomUUID()}`,
+) {
+  return defineTool({
+    name: 'memory_review_propose',
+    label: '整理待确认长期记忆',
+    description: 'After the Session-owned Plan is completed and reread, propose source-linked profile changes for explicit item-by-item student review. This stores a Coach Session artifact only and does not edit profiles.',
+    parameters: Type.Object({
+      items: Type.Array(itemSchema, { minItems: 1 }),
+    }),
+    execute: async (_toolCallId, input) => {
+      const plan = readMarkdownFile(root, ownerPath);
+      if (plan.id !== planId || plan.frontmatter.kind !== 'plan') {
+        throw new Error('MEMORY_REVIEW_OWNER_MISMATCH');
+      }
+      if (plan.frontmatter.status !== 'completed') {
+        throw new Error('MEMORY_REVIEW_PLAN_NOT_COMPLETED');
+      }
+      validateMemoryReviewItems(root, planId, ownerPath, input.items as MemoryReviewItem[]);
+      const snapshot: MemoryReviewSnapshot = {
+        id: createId(),
+        planId,
+        status: 'proposed',
+        items: input.items as MemoryReviewItem[],
+        decisions: [],
+      };
+      store.save(snapshot);
+      return {
+        content: [{
+          type: 'text' as const,
+          text: JSON.stringify({
+            ok: true,
+            reviewId: snapshot.id,
+            itemCount: snapshot.items.length,
+          }),
+        }],
+        details: { kind: 'memory-review', reviewId: snapshot.id },
+      };
+    },
+  });
+}
