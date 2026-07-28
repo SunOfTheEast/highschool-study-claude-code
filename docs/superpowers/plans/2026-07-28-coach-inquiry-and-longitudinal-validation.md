@@ -375,7 +375,7 @@ Expected:
 - Runtime-only copy:
   `/tmp/studyforge-coach-inquiry-20260728-*/learning-set`
 
-- [ ] **Step 1: Record the frozen implementation commit**
+- [x] **Step 1: Record the frozen implementation commit**
 
 From the repository root:
 
@@ -388,7 +388,7 @@ Record the commit in the eventual audit. Do not begin if any implementation
 file is uncommitted. The two known unrelated untracked paths do not enter the
 run.
 
-- [ ] **Step 2: Create the clean copy**
+- [x] **Step 2: Create the clean copy**
 
 ```bash
 ACCEPT_ROOT="$(mktemp -d /tmp/studyforge-coach-inquiry-20260728-XXXXXX)"
@@ -408,7 +408,7 @@ find examples/derivative-demo/learning-set -type f -print0 \
   | shasum -a 256
 ```
 
-- [ ] **Step 3: Confirm the fixed model without exposing credentials**
+- [x] **Step 3: Confirm the fixed model without exposing credentials**
 
 Use the existing local Pi provider configuration. Record only:
 
@@ -424,7 +424,7 @@ If the currently configured DeepSeek model name differs, choose one available
 DeepSeek model once, record it, and keep it unchanged for the whole run. Never
 print or copy the credential value.
 
-- [ ] **Step 4: Start the frozen app on an unused port**
+- [x] **Step 4: Start the frozen app on an unused port**
 
 ```bash
 cd apps/pi-teaching-web
@@ -442,7 +442,7 @@ StudyForge Pi Web: http://127.0.0.1:65328
 If `65328` is occupied, select one other unused port, record it once, and use
 that port for the complete run.
 
-- [ ] **Step 5: Open the normal student interface**
+- [x] **Step 5: Open the normal student interface**
 
 Open:
 
@@ -466,7 +466,7 @@ student's information.
   `$ACCEPT_ROOT/learning-set/lessons/*.md`
   `$ACCEPT_ROOT/learning-set/memory/*.md`
 
-- [ ] **Step 1: Start the fictional student from one sentence**
+- [x] **Step 1: Start the fictional student from one sentence**
 
 In the Roadmap Coach, send only:
 
@@ -489,7 +489,7 @@ Do not inject those hidden properties into any Agent or file. Reveal the wish
 for an approximately six-Lesson first cycle only if the Coach naturally asks
 about schedule.
 
-- [ ] **Step 2: Audit the first Roadmap inquiry before confirming**
+- [x] **Step 2: Audit the first Roadmap inquiry before confirming**
 
 Continue naturally until the Coach proposes a first Plan. Record only compact
 student-safe evidence that shows:
@@ -506,7 +506,7 @@ student-safe evidence that shows:
 Reject or correct any misreading naturally. Confirm only a proposal that the
 student would genuinely accept.
 
-- [ ] **Step 3: Verify Plan 1 persistence**
+- [x] **Step 3: Verify Plan 1 persistence**
 
 After confirmation, verify through normal UI plus read-only filesystem
 inspection:
@@ -520,7 +520,7 @@ rg -n "^## (Goal|Observable Capability Standard|Test|Planning Basis|Lesson Index
 Expected: one registered active Plan with each required section exactly once,
 a non-empty Planning Basis, and no pre-created Lesson.
 
-- [ ] **Step 4: Run Lesson cycles 1–6**
+- [x] **Step 4: Run Lesson cycles 1–6**
 
 For each Lesson, use this complete loop:
 
@@ -556,7 +556,7 @@ The student may ask to keep thinking, refuse a premature hint, challenge a
 misreading, or end early when naturally appropriate. Do not manufacture
 mistakes solely to satisfy the hidden profile.
 
-- [ ] **Step 5: Handle runtime and model failures without corrupting the run**
+- [x] **Step 5: Handle runtime and model failures without corrupting the run**
 
 Apply these rules throughout:
 
@@ -571,7 +571,7 @@ Apply these rules throughout:
   Restart the affected cycle from a documented clean point after a verified
   fix; do not splice discontinuous traffic into one passing run.
 
-- [ ] **Step 6: Audit Plan 1 completion honestly**
+- [x] **Step 6: Audit Plan 1 completion honestly**
 
 After Lesson 6, make the Plan Coach audit every original capability-standard
 and Test item against active Trace.周亦航 confirms completion only if the
@@ -600,12 +600,12 @@ If the standard is met:
 
 - Runtime facts only under `$ACCEPT_ROOT/learning-set/**`
 
-- [ ] **Step 1: Return to the original Roadmap Coach Session**
+- [x] **Step 1: Return to the original Roadmap Coach Session**
 
 Navigate back to `/roadmap` and verify that the original Roadmap conversation
 is restored without copying the Plan Coach or Tutor transcript.
 
-- [ ] **Step 2: Run a genuine cross-Plan inquiry**
+- [x] **Step 2: Run a genuine cross-Plan inquiry**
 
 The evaluator privately keeps these possible directions:
 
@@ -628,7 +628,7 @@ and desired next change. Verify that it:
 
 Confirm only after correcting any material misunderstanding.
 
-- [ ] **Step 3: Verify Plan 2 and its independent Plan Coach Session**
+- [x] **Step 3: Verify Plan 2 and its independent Plan Coach Session**
 
 Verify:
 
@@ -638,7 +638,7 @@ Verify:
 - entering it creates/restores a different Plan Coach Session;
 - no old transcript is copied into the new Session.
 
-- [ ] **Step 4: Run three full Plan 2 Lesson cycles**
+- [x] **Step 4: Run three full Plan 2 Lesson cycles**
 
 Repeat the normal preparation-inquiry, no-spoiler approval, Tutor Lesson,
 Trace/close, and Plan review loop three times.
@@ -662,7 +662,7 @@ Plan 2 need not complete after three Lessons.
 - Create:
   `docs/audits/2026-07-28-coach-inquiry-longitudinal-acceptance.md`
 
-- [ ] **Step 1: Write the compact audit**
+- [x] **Step 1: Write the compact audit**
 
 Include:
 
@@ -681,7 +681,7 @@ Include:
 Do not include credentials, hidden system prompts, raw Pi Session JSONL,
 Teacher Control, private child output, or full transcripts.
 
-- [ ] **Step 2: Grade against the design**
+- [x] **Step 2: Grade against the design**
 
 Use the four result dimensions:
 
@@ -702,7 +702,7 @@ result may not be `PASS` if:
 - Student View leaks Teacher Control or answers;
 - the model changes mid-run.
 
-- [ ] **Step 3: Verify repository and source-demo integrity**
+- [x] **Step 3: Verify repository and source-demo integrity**
 
 From repository root:
 
@@ -718,7 +718,7 @@ git status --short
 
 The final hash must match the pre-run hash.
 
-- [ ] **Step 4: Commit the audit**
+- [x] **Step 4: Commit the audit**
 
 ```bash
 git add docs/audits/2026-07-28-coach-inquiry-longitudinal-acceptance.md
@@ -733,7 +733,7 @@ git commit -m "test: record Coach inquiry longitudinal acceptance"
 
 - Verify all files changed by this plan.
 
-- [ ] **Step 1: Re-run deterministic checks on final HEAD**
+- [x] **Step 1: Re-run deterministic checks on final HEAD**
 
 ```bash
 cd plugins/highschool-study
@@ -743,7 +743,7 @@ cd ../../apps/pi-teaching-web
 bun run check
 ```
 
-- [ ] **Step 2: Review the final commit range**
+- [x] **Step 2: Review the final commit range**
 
 From repository root:
 
@@ -762,7 +762,7 @@ Expected:
 - the only unrelated untracked paths are the two pre-existing paths named in
   Global Constraints.
 
-- [ ] **Step 3: Report the outcome**
+- [x] **Step 3: Report the outcome**
 
 Report:
 
