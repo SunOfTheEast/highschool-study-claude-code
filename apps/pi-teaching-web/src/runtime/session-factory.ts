@@ -20,7 +20,11 @@ import { createPlanRegisterTool } from './plan-register';
 import { createPlanUpdateTool } from './plan-update';
 import { createRoleResourceLoader } from './resource-loader';
 import { appendSessionOwner } from './session-owner';
-import type { SessionRole, StudySessionScope } from './session-scope';
+import {
+  isRoadmapCoachScope,
+  type SessionRole,
+  type StudySessionScope,
+} from './session-scope';
 import { createStudyTools } from './study-tools';
 export type { SessionRole } from './session-scope';
 
@@ -126,6 +130,23 @@ export function roleToolNames(role: SessionRole): string[] {
     ];
 }
 
+export function scopeToolNames(scope: StudySessionScope): string[] {
+  if (!isRoadmapCoachScope(scope)) return roleToolNames(scope.role);
+  return [
+    'read',
+    'grep',
+    'find',
+    'ls',
+    'write',
+    'edit',
+    'card_search',
+    'trace_search',
+    'source_resolve',
+    'plan_register',
+    'deep_workflow_propose',
+  ];
+}
+
 export async function createPiSessionFactory(
   root: string,
   now: () => Date,
@@ -150,19 +171,22 @@ export async function createPiSessionFactory(
       now,
     );
     const loader = await createRoleResourceLoader(root, scope, eventBus);
-    const tools: ToolDefinition[] = [
-      ...createStudyTools(root, now, scope),
-      ...(role === 'tutor'
-        ? [
-          createClassroomUpdateTool(root, ownerPath),
-          createLessonCloseTool(root, ownerPath),
-          createCardAlternativeAppendTool(root, ownerPath, now),
-        ]
+    const ownerTools: ToolDefinition[] = role === 'tutor'
+      ? [
+        createClassroomUpdateTool(root, ownerPath),
+        createLessonCloseTool(root, ownerPath),
+        createCardAlternativeAppendTool(root, ownerPath, now),
+      ]
+      : isRoadmapCoachScope(scope)
+        ? [createPlanRegisterTool(root)]
         : [
           createLessonPrepareTool(root, ownerId, ownerPath),
           createPlanRegisterTool(root),
           createPlanUpdateTool(root, ownerPath),
-        ]),
+        ];
+    const tools: ToolDefinition[] = [
+      ...createStudyTools(root, now, scope),
+      ...ownerTools,
       createDeepWorkflowTool(workflowRuntime),
     ];
     const { session } = await createAgentSession({
@@ -171,7 +195,7 @@ export async function createPiSessionFactory(
       resourceLoader: loader,
       sessionManager: manager,
       customTools: tools,
-      tools: roleToolNames(role),
+      tools: scopeToolNames(scope),
     });
     await bindStudyExtensions(session);
     const applyDeepMode = (enabled: boolean, persist: boolean) => {

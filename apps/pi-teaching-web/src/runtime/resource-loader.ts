@@ -9,6 +9,7 @@ import {
 import { resolvePersona } from '../study/persona';
 import {
   formatSessionOwnerContext,
+  isRoadmapCoachScope,
   type SessionRole,
   type StudySessionScope,
 } from './session-scope';
@@ -21,6 +22,13 @@ export function roleSkillNames(role: SessionRole): string[] {
   return role === 'coach'
     ? ['coach-study', 'plan-next-cycle', 'deep-workflow']
     : ['tutor-lesson', 'deep-workflow'];
+}
+
+export function skillNamesForScope(scope: StudySessionScope): string[] {
+  if (isRoadmapCoachScope(scope)) {
+    return ['roadmap-study', 'plan-next-cycle', 'deep-workflow'];
+  }
+  return roleSkillNames(scope.role);
 }
 
 export function composeRoleContext(
@@ -40,13 +48,17 @@ export async function createRoleResourceLoader(
   eventBus: EventBus,
 ) {
   const { role } = scope;
-  const skillPaths = roleSkillNames(role)
+  const skillPaths = skillNamesForScope(scope)
     .map((name) => join(resourceRoot, 'skills', name, 'SKILL.md'));
   const teachingCore = readFileSync(
     join(resourceRoot, 'teaching', 'math-teaching-core.md'),
     'utf8',
   );
-  const roleContext = readFileSync(join(resourceRoot, 'agents', `${role}.md`), 'utf8');
+  const roleContextName = isRoadmapCoachScope(scope) ? 'roadmap-coach' : role;
+  const roleContext = readFileSync(
+    join(resourceRoot, 'agents', `${roleContextName}.md`),
+    'utf8',
+  );
   const persona = resolvePersona(root);
   const loader = new DefaultResourceLoader({
     cwd: root,

@@ -8,6 +8,7 @@ import {
   bindStudyExtensions,
   deepModeToolNames,
   roleToolNames,
+  scopeToolNames,
   triggerAndWaitForAgentEnd,
 } from '../../src/runtime/session-factory';
 import {
@@ -135,6 +136,30 @@ test('keeps Coach and Tutor tool boundaries distinct', () => {
     expect(roleToolNames(role)).not.toContain('subagent');
     expect(deepModeToolNames(roleToolNames(role), false)).not.toContain('deep_workflow_propose');
   }
+});
+
+test('keeps Roadmap Coach active tools global but non-instructional', () => {
+  const tools = scopeToolNames({
+    role: 'coach',
+    ownerId: '@roadmap',
+    ownerPath: 'ROADMAP.md',
+  });
+  expect(tools).toEqual([
+    'read',
+    'grep',
+    'find',
+    'ls',
+    'write',
+    'edit',
+    'card_search',
+    'trace_search',
+    'source_resolve',
+    'plan_register',
+    'deep_workflow_propose',
+  ]);
+  expect(tools).not.toContain('plan_update');
+  expect(tools).not.toContain('lesson_prepare');
+  expect(tools).not.toContain('trace_append');
 });
 
 test('adds only the workflow proposal tool while deep mode is enabled', () => {
