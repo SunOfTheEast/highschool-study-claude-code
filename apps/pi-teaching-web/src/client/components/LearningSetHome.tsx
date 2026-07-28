@@ -1,66 +1,133 @@
-import type { LearningSetSnapshot } from '../../shared/contracts';
+import type { HomeSnapshot } from '../../shared/contracts';
 import { MarkdownView } from './MarkdownView';
 
 export function LearningSetHome({
   value,
+  continuePath,
+  onContinue,
   onOpen,
   onRoadmapOpen,
 }: {
-  value: LearningSetSnapshot;
+  value: HomeSnapshot;
+  continuePath: string;
+  onContinue(path: string): void;
   onOpen(id: string): void;
   onRoadmapOpen(): void;
 }) {
+  const otherPlans = value.learningSet.plans.filter(
+    (plan) => plan.id !== value.currentPlan?.id,
+  );
   return (
-    <main className="home" data-theme="liubai-xinzhongshi">
+    <main className="home continue-home" data-theme="liubai-xinzhongshi">
       <header className="home-heading">
         <p className="eyebrow">StudyForge · Learning Set</p>
-        <h1>{value.title}</h1>
+        <h1>{value.learningSet.title}</h1>
         <div className="home-overview">
-          <MarkdownView>{value.overview}</MarkdownView>
+          <MarkdownView>{value.learningSet.overview}</MarkdownView>
         </div>
-        {value.learningPrinciples && (
-          <section className="home-principles" aria-label="研习要领">
-            <p className="section-label">研习要领</p>
-            <MarkdownView>{value.learningPrinciples}</MarkdownView>
-          </section>
-        )}
       </header>
 
-      <section className="plan-list" aria-label="学习计划">
-        <p className="section-label">
-          {value.plans.length === 0 ? '从这里开始' : '选择当前学习周期'}
-        </p>
-        {value.plans.map((plan, index) => (
-          <button key={plan.id} type="button" onClick={() => onOpen(plan.id)}>
-            <span className="plan-number">{String(index + 1).padStart(2, '0')}</span>
-            <span className="plan-copy">
-              <small>{plan.status}</small>
-              <strong>{plan.title}</strong>
-              <span>{plan.capabilityStandard}</span>
-            </span>
-            <span className="plan-arrow" aria-hidden="true">↗</span>
+      <div className="home-continuation">
+        <p className="section-label">从上次的位置继续</p>
+        <button
+          className="continue-entry"
+          type="button"
+          onClick={() => onContinue(continuePath)}
+        >
+          <small>
+            继续学习{value.currentPlan ? ` · ${value.currentPlan.title}` : ''}
+          </small>
+          <strong>{value.continueTarget.title}</strong>
+          <span>{value.continueTarget.detail}</span>
+          <i aria-hidden="true">↗</i>
+        </button>
+
+        {value.currentPlan && (
+          <section className="home-stage" aria-label="当前阶段">
+            <header>
+              <span>当前阶段</span>
+              <b>
+                {value.lessonProgress.completed}/{value.lessonProgress.total} 节
+              </b>
+            </header>
+            <p>{value.currentPlan.currentPosition}</p>
+            {value.coachNote && (
+              <blockquote>
+                <small>学习顾问写下的下一步</small>
+                <MarkdownView>{value.coachNote}</MarkdownView>
+              </blockquote>
+            )}
+          </section>
+        )}
+
+        {value.signals.length > 0 && (
+          <section className="home-signals" aria-label="最近学习信号">
+            <p className="section-label">最近变化</p>
+            {value.signals.map((signal) => (
+              <article key={`${signal.label}:${signal.source ?? signal.value}`}>
+                <small>{signal.label}</small>
+                <p>{signal.value}</p>
+                {signal.source && <code>{signal.source}</code>}
+              </article>
+            ))}
+          </section>
+        )}
+
+        {value.recentReplay && (
+          <button
+            type="button"
+            className="recent-replay-entry"
+            onClick={() => onContinue(value.recentReplay!.route)}
+          >
+            <span><small>最近课堂回放</small><b>{value.recentReplay.title}</b></span>
+            <i aria-hidden="true">↗</i>
           </button>
-        ))}
+        )}
+
+        {otherPlans.length > 0 && (
+          <section className="plan-list secondary-plans" aria-label="其他学习周期">
+            <p className="section-label">其他 Plan</p>
+            {otherPlans.map((plan, index) => (
+              <button key={plan.id} type="button" onClick={() => onOpen(plan.id)}>
+                <span className="plan-number">{String(index + 1).padStart(2, '0')}</span>
+                <span className="plan-copy">
+                  <small>{plan.status}</small>
+                  <strong>{plan.title}</strong>
+                  <span>{plan.capabilityStandard}</span>
+                </span>
+                <span className="plan-arrow" aria-hidden="true">↗</span>
+              </button>
+            ))}
+          </section>
+        )}
+
         <button
           type="button"
-          className={`roadmap-entry ${value.plans.length === 0 ? 'primary' : 'quiet'}`}
+          className="roadmap-entry quiet home-roadmap-entry"
           onClick={onRoadmapOpen}
         >
-          <span className="plan-number">{value.plans.length === 0 ? '始' : '策'}</span>
+          <span className="plan-number">览</span>
           <span className="plan-copy">
-            <small>{value.plans.length === 0 ? '学习商议' : '学习集'}</small>
-            <strong>
-              {value.plans.length === 0 ? '建立第一个学习周期' : '总览与规划'}
-            </strong>
-            <span>
-              {value.plans.length === 0
-                ? '先说说你的目标、现状与时间安排。'
-                : '回看全局 · 开启新的学习周期'}
-            </span>
+            <small>学习集</small>
+            <strong>学习总览</strong>
+            <span>回看全局 · 讨论新的学习周期</span>
           </span>
           <span className="plan-arrow" aria-hidden="true">↗</span>
         </button>
-      </section>
+
+        <section className="home-reference">
+          <details>
+            <summary>学习集概述</summary>
+            <MarkdownView>{value.learningSet.goal}</MarkdownView>
+          </details>
+          {value.learningSet.learningPrinciples && (
+            <details>
+              <summary>研习要领</summary>
+              <MarkdownView>{value.learningSet.learningPrinciples}</MarkdownView>
+            </details>
+          )}
+        </section>
+      </div>
     </main>
   );
 }

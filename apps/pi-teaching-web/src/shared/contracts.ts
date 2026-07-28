@@ -119,6 +119,26 @@ export type ContentSearchResult = {
   hits: ContentSearchHit[];
 };
 
+export type HomeContinueTarget = {
+  route: string;
+  kind: 'roadmap' | 'coach' | 'lesson';
+  planId: string | null;
+  lessonId: string | null;
+  title: string;
+  detail: string;
+};
+
+export type HomeSnapshot = {
+  learningSet: LearningSetSnapshot;
+  currentPlan: PlanSummary | null;
+  eligibleContinueRoutes: string[];
+  continueTarget: HomeContinueTarget;
+  lessonProgress: { completed: number; total: number };
+  coachNote: string;
+  signals: Array<{ label: string; value: string; source: string | null }>;
+  recentReplay: null | { lessonId: string; title: string; route: string };
+};
+
 export type AbilityNode = {
   method: string;
   state: 'unobserved' | 'unstable' | 'steady';

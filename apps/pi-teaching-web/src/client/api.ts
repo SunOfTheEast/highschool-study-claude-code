@@ -4,6 +4,7 @@ import type {
   ContentSearchResult,
   ConversationItem,
   EvidenceView,
+  HomeSnapshot,
   LearningSetSnapshot,
   LessonReplay,
   PersonaPresentation,
@@ -44,6 +45,7 @@ async function json<T>(input: RequestInfo | URL, init?: RequestInit): Promise<T>
 }
 
 export const api = {
+  home: () => json<HomeSnapshot>('/api/home'),
   learningSet: () => json<LearningSetSnapshot>('/api/learning-set'),
   abilities: () => json<AbilityProjection>('/api/abilities'),
   evidence: (source: string) => (

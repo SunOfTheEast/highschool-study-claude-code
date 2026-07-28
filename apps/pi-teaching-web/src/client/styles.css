@@ -112,6 +112,117 @@ select:focus-visible {
 .home-principles p { margin: 0; }
 .home-principles ul { margin: .45rem 0 0; padding-left: 1.25rem; }
 
+.home-continuation { border-top: 1px solid var(--ink); }
+.continue-entry {
+  position: relative;
+  width: 100%;
+  display: grid;
+  gap: .65rem;
+  padding: 1.6rem 3.2rem 1.7rem 1.4rem;
+  border: 0;
+  border-bottom: 2px solid var(--ink);
+  background: var(--accent-deep);
+  color: var(--paper);
+  text-align: left;
+  cursor: pointer;
+  transition: transform .2s ease, background .2s ease;
+}
+.continue-entry:hover { transform: translateY(-2px); background: var(--accent); }
+.continue-entry small {
+  color: color-mix(in srgb, var(--paper) 72%, transparent);
+  font-size: .64rem;
+  font-weight: 700;
+  letter-spacing: .11em;
+}
+.continue-entry strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.65rem, 3.4vw, 2.65rem);
+  font-weight: 500;
+  line-height: 1.12;
+}
+.continue-entry > span {
+  max-width: 34rem;
+  color: color-mix(in srgb, var(--paper) 78%, transparent);
+  font-family: var(--font-reading);
+  font-size: .82rem;
+  line-height: 1.65;
+}
+.continue-entry i {
+  position: absolute;
+  right: 1.3rem;
+  top: 50%;
+  font-size: 1.1rem;
+  font-style: normal;
+  transform: translateY(-50%);
+}
+.home-stage { padding: 1.3rem 0 1.5rem; border-bottom: 1px solid var(--ink); }
+.home-stage > header { display: flex; justify-content: space-between; align-items: baseline; }
+.home-stage > header span { color: var(--accent); font-size: .63rem; font-weight: 750; letter-spacing: .12em; }
+.home-stage > header b { color: var(--ink-faint); font: 500 .62rem/1 ui-monospace, monospace; }
+.home-stage > p {
+  margin: .85rem 0 1.2rem;
+  color: var(--ink-soft);
+  font-family: var(--font-reading);
+  line-height: 1.75;
+}
+.home-stage blockquote { margin: 0; padding: .9rem 0 0 1rem; border-left: 2px solid var(--accent); }
+.home-stage blockquote small { color: var(--accent); font-size: .6rem; letter-spacing: .08em; }
+.home-stage blockquote > div {
+  color: var(--ink-soft);
+  font-family: var(--font-reading);
+  font-size: .78rem;
+  line-height: 1.65;
+}
+.home-stage blockquote p { margin: .45rem 0 0; }
+.home-signals { padding-bottom: 1rem; border-bottom: 1px solid var(--rule); }
+.home-signals .section-label { padding-bottom: .7rem; }
+.home-signals article { padding: .8rem 0; border-top: 1px dotted var(--rule); }
+.home-signals article small { color: var(--accent); font-size: .58rem; }
+.home-signals article p { margin: .35rem 0; color: var(--ink-soft); font-size: .76rem; line-height: 1.55; }
+.home-signals article code { color: var(--ink-faint); font: .55rem/1.4 ui-monospace, monospace; overflow-wrap: anywhere; }
+.recent-replay-entry,
+.home-roadmap-entry {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.recent-replay-entry > span { display: grid; gap: .3rem; }
+.recent-replay-entry small { color: var(--accent); font-size: .58rem; }
+.recent-replay-entry b { font-family: var(--font-display); font-size: .9rem; }
+.recent-replay-entry i,
+.home-roadmap-entry .plan-arrow { color: var(--ink-faint); font-style: normal; }
+.secondary-plans { margin-top: 1.2rem; }
+.home-roadmap-entry {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr auto;
+  align-items: start;
+}
+.home-roadmap-entry .plan-copy { display: grid; gap: .35rem; }
+.home-reference { margin-top: 1.5rem; border-top: 1px solid var(--ink); }
+.home-reference details { border-bottom: 1px solid var(--rule); }
+.home-reference summary {
+  padding: .8rem 0;
+  color: var(--ink-soft);
+  font-family: var(--font-display);
+  font-size: .82rem;
+  cursor: pointer;
+}
+.home-reference details > div {
+  padding: 0 0 1rem;
+  color: var(--ink-soft);
+  font-family: var(--font-reading);
+  font-size: .75rem;
+  line-height: 1.7;
+}
+
 .plan-list { border-top: 1px solid var(--ink); }
 .section-label { padding: 1rem 0 2.2rem; color: var(--ink-faint); }
 

@@ -20,6 +20,7 @@ import { buildReplay } from '../study/replay';
 import { readStudentNotebook } from '../study/student-notebook';
 import { readCoachContext } from '../study/coach-context';
 import { searchStudentContent } from '../study/content-explorer';
+import { readHomeSnapshot } from '../study/home';
 import { PreparedLessonValidationError } from '../study/validate-prepared-lesson';
 import type { EventHub } from './event-hub';
 
@@ -134,6 +135,10 @@ export function createRequestHandler(deps?: AppDependencies) {
 
     if (request.method === 'GET' && url.pathname === '/api/learning-set') {
       return json(learningSetReader(deps.root));
+    }
+
+    if (request.method === 'GET' && url.pathname === '/api/home') {
+      return json(readHomeSnapshot(deps.root));
     }
 
     if (request.method === 'GET' && url.pathname === '/api/workspaces/roadmap') {

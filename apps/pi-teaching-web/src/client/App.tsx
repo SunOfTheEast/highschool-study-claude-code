@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { ROADMAP_COACH_SESSION_KEY } from '../shared/contracts';
+import { resolveContinuePath } from '../shared/home';
 import type {
   MemoryReviewDecision,
   MemoryReviewSnapshot,
@@ -8,6 +9,7 @@ import type {
   AbilityProjection,
   CoachContextView,
   EvidenceView,
+  HomeSnapshot,
   LearningSetSnapshot,
   LessonReplay,
   LessonNode,
@@ -42,6 +44,7 @@ type ConnectionState = 'connecting' | 'open' | 'closed';
 
 export function App() {
   const [learningSet, setLearningSet] = useState<LearningSetSnapshot | null>(null);
+  const [homeSnapshot, setHomeSnapshot] = useState<HomeSnapshot | null>(null);
   const [roadmapWorkspace, setRoadmapWorkspace] =
     useState<RoadmapWorkspaceSnapshot | null>(null);
   const [client, setClient] = useState(initialClientState);
@@ -107,7 +110,9 @@ export function App() {
     try {
       if (!route) throw new Error('INVALID_ROUTE');
       if (route.kind === 'home') {
-        setLearningSet(await api.learningSet());
+        const home = await api.home();
+        setHomeSnapshot(home);
+        setLearningSet(home.learningSet);
         setRoadmapWorkspace(null);
         setClient(initialClientState);
         setEvidence(null);
@@ -117,6 +122,7 @@ export function App() {
       }
 
       if (route.kind === 'roadmap') {
+        setHomeSnapshot(null);
         const workspace = await api.roadmapWorkspace();
         const selected = workspace.coach.sessionKey;
         const history = await api.history(selected);
@@ -135,6 +141,7 @@ export function App() {
         }
         return;
       }
+      setHomeSnapshot(null);
       setRoadmapWorkspace(null);
       const workspace = await api.workspace(route.planId);
       let selected: SessionKey;
@@ -161,10 +168,30 @@ export function App() {
       }));
       if (navigation === 'push') window.history.pushState(null, '', formatBrowserRoute(route));
       if (navigation === 'replace') window.history.replaceState(null, '', formatBrowserRoute(route));
+      const savedPath = formatBrowserRoute(route);
+      const selectedLesson = route.kind === 'lesson'
+        ? workspace.lessons.find((candidate) => candidate.id === route.lessonId)
+        : null;
+      if (
+        (route.kind === 'coach' && workspace.plan.status !== 'completed')
+        || (
+          selectedLesson
+          && ['active', 'paused', 'prepared'].includes(selectedLesson.status)
+        )
+      ) {
+        localStorage.setItem('studyforge.lastVisitedRoute', savedPath);
+      }
     } catch {
       setRoadmapWorkspace(null);
       setClient(initialClientState);
       setEvidence(null);
+      try {
+        const home = await api.home();
+        setHomeSnapshot(home);
+        setLearningSet(home.learningSet);
+      } catch {
+        setHomeSnapshot(null);
+      }
       setPageError(route ? '无法恢复这个学习位置，已返回学习集首页。' : '无效的学习路径，已返回学习集首页。');
       window.history.replaceState(null, '', '/');
     } finally {
@@ -505,11 +532,20 @@ export function App() {
     );
   }
   if (!client.workspace || !client.selected) {
+    if (!homeSnapshot) {
+      return <main className="loading-screen"><span>SF</span><p>正在整理继续位置…</p></main>;
+    }
+    const continuePath = resolveContinuePath(
+      homeSnapshot,
+      localStorage.getItem('studyforge.lastVisitedRoute'),
+    );
     return (
       <>
         {pageError && <div className="page-alert" role="alert">{pageError}</div>}
         <LearningSetHome
-          value={learningSet}
+          value={homeSnapshot}
+          continuePath={continuePath}
+          onContinue={(path) => void openRoute(parseBrowserRoute(path), 'push')}
           onOpen={(id) => void openRoute({ kind: 'coach', planId: id }, 'push')}
           onRoadmapOpen={() => void openRoute({ kind: 'roadmap' }, 'push')}
         />

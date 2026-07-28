@@ -1,5 +1,7 @@
 import { expect, test } from 'bun:test';
 import { formatBrowserRoute, parseBrowserRoute } from '../../src/client/routes';
+import type { HomeSnapshot } from '../../src/shared/contracts';
+import { resolveContinuePath } from '../../src/shared/home';
 
 test('round-trips home, Coach and Lesson routes', () => {
   const routes = [
@@ -32,4 +34,16 @@ test('does not accept trailing slashes or empty decoded IDs', () => {
   expect(parseBrowserRoute('/plan/domain-integrity/')).toBeNull();
   expect(parseBrowserRoute('/plan/%20')).toBeNull();
   expect(parseBrowserRoute('/plan/domain-integrity/lesson/%20')).toBeNull();
+});
+
+test('restores only a route listed by the deterministic Home snapshot', () => {
+  const home = {
+    eligibleContinueRoutes: ['/plan/p1', '/plan/p1/lesson/l1'],
+    continueTarget: { route: '/plan/p1/lesson/l1' },
+  } as HomeSnapshot;
+
+  expect(resolveContinuePath(home, '/plan/p1')).toBe('/plan/p1');
+  expect(resolveContinuePath(home, '/plan/p1/lesson/closed')).toBe(
+    '/plan/p1/lesson/l1',
+  );
 });

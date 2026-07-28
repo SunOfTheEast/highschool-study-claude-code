@@ -81,6 +81,26 @@ test('returns learning-set, Roadmap and Plan snapshots', async () => {
     .toEqual(workspace);
 });
 
+test('returns one deterministic continue-first Home snapshot', async () => {
+  const handler = createRequestHandler({
+    root: domainIntegrityFixtureRoot,
+    authoring: false,
+    hub: new EventHub(),
+    registry: {} as never,
+  });
+
+  const response = await handler(new Request('http://local/api/home'));
+  expect(response!.status).toBe(200);
+  expect(await response!.json()).toMatchObject({
+    continueTarget: {
+      kind: 'lesson',
+      lessonId: 'lesson-003',
+      route: '/plan/domain-integrity/lesson/lesson-003',
+    },
+    lessonProgress: { completed: 2, total: 3 },
+  });
+});
+
 test('returns source-linked context for one Plan Coach', async () => {
   const handler = createRequestHandler({
     root: domainIntegrityFixtureRoot,
