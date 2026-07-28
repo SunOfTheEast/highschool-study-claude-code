@@ -1,5 +1,5 @@
 import type {
-  ChatMessage,
+  ConversationItem,
   PlanWorkspaceSnapshot,
   SessionKey,
   StudyViewEvent,
@@ -9,7 +9,7 @@ import type {
 export type ClientState = {
   workspace: PlanWorkspaceSnapshot | null;
   selected: SessionKey | null;
-  messages: Partial<Record<SessionKey, ChatMessage[]>>;
+  conversations: Partial<Record<SessionKey, ConversationItem[]>>;
   work: Partial<Record<SessionKey, string>>;
   busy: Partial<Record<SessionKey, string>>;
   errors: Partial<Record<SessionKey, string>>;
@@ -20,7 +20,7 @@ export type ClientState = {
 export const initialClientState: ClientState = {
   workspace: null,
   selected: null,
-  messages: {},
+  conversations: {},
   work: {},
   busy: {},
   errors: {},
@@ -28,10 +28,10 @@ export const initialClientState: ClientState = {
   workflows: {},
 };
 
-export function preferLiveMessages(
-  live: ChatMessage[] | undefined,
-  fetched: ChatMessage[],
-): ChatMessage[] {
+export function preferLiveConversation(
+  live: ConversationItem[] | undefined,
+  fetched: ConversationItem[],
+): ConversationItem[] {
   return live?.length ? live : fetched;
 }
 
@@ -44,37 +44,63 @@ export function reduceClientState(state: ClientState, event: StudyViewEvent): Cl
     };
   }
   if (event.type === 'message-delta') {
-    const messages = [...(state.messages[event.sessionKey] ?? [])];
-    const index = messages.findIndex((message) => message.id === event.messageId);
+    const conversation = [...(state.conversations[event.sessionKey] ?? [])];
+    const index = conversation.findIndex((item) => (
+      item.kind === 'message' && item.message.id === event.messageId
+    ));
     if (index < 0) {
-      messages.push({
-        id: event.messageId,
-        role: event.sessionKey.startsWith('coach:') ? 'coach' : 'tutor',
-        text: event.delta,
-        complete: false,
+      conversation.push({
+        kind: 'message',
+        message: {
+          id: event.messageId,
+          role: event.sessionKey.startsWith('coach:') ? 'coach' : 'tutor',
+          text: event.delta,
+          complete: false,
+        },
       });
     } else {
-      messages[index] = {
-        ...messages[index]!,
-        text: messages[index]!.text + event.delta,
+      const current = conversation[index]!;
+      if (current.kind !== 'message') return state;
+      conversation[index] = {
+        kind: 'message',
+        message: {
+          ...current.message,
+          text: current.message.text + event.delta,
+        },
       };
     }
     return {
       ...state,
-      messages: { ...state.messages, [event.sessionKey]: messages },
+      conversations: {
+        ...state.conversations,
+        [event.sessionKey]: conversation,
+      },
     };
   }
   if (event.type === 'message') {
-    const current = state.messages[event.sessionKey] ?? [];
+    const current = state.conversations[event.sessionKey] ?? [];
     return {
       ...state,
-      messages: {
-        ...state.messages,
-        [event.sessionKey]: current.some((message) => message.id === event.message.id)
-          ? current.map((message) => (
-            message.id === event.message.id ? event.message : message
+      conversations: {
+        ...state.conversations,
+        [event.sessionKey]: current.some((item) => (
+          item.kind === 'message' && item.message.id === event.message.id
+        ))
+          ? current.map((item) => (
+            item.kind === 'message' && item.message.id === event.message.id
+              ? { kind: 'message', message: event.message }
+              : item
           ))
-          : [...current, event.message],
+          : [...current, { kind: 'message', message: event.message }],
+      },
+    };
+  }
+  if (event.type === 'conversation-snapshot') {
+    return {
+      ...state,
+      conversations: {
+        ...state.conversations,
+        [event.sessionKey]: event.items,
       },
     };
   }

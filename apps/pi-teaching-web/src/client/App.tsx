@@ -1,6 +1,10 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { ROADMAP_COACH_SESSION_KEY } from '../shared/contracts';
 import type {
+  MemoryReviewDecision,
+  MemoryReviewSnapshot,
+} from '../memory-review/contracts';
+import type {
   AbilityProjection,
   EvidenceView,
   LearningSetSnapshot,
@@ -18,6 +22,7 @@ import { ChatPanel } from './components/ChatPanel';
 import { EvidenceLens } from './components/EvidenceLens';
 import { LearningSetHome } from './components/LearningSetHome';
 import { LessonNotebook } from './components/LessonNotebook';
+import { MemoryReviewPanel } from './components/MemoryReviewPanel';
 import { RoadmapCoachShell } from './components/RoadmapCoachShell';
 import { SessionTree } from './components/SessionTree';
 import {
@@ -25,7 +30,11 @@ import {
   parseBrowserRoute,
   type BrowserRoute,
 } from './routes';
-import { initialClientState, preferLiveMessages, reduceClientState } from './state';
+import {
+  initialClientState,
+  preferLiveConversation,
+  reduceClientState,
+} from './state';
 
 type ConnectionState = 'connecting' | 'open' | 'closed';
 
@@ -42,6 +51,8 @@ export function App() {
   const [abilities, setAbilities] = useState<AbilityProjection | null>(null);
   const [evidence, setEvidence] = useState<EvidenceView | null>(null);
   const [persona, setPersona] = useState<PersonaPresentation | null>(null);
+  const [memoryReview, setMemoryReview] = useState<MemoryReviewSnapshot | null>(null);
+  const [submittingMemoryReview, setSubmittingMemoryReview] = useState(false);
 
   useEffect(() => {
     let disposed = false;
@@ -87,6 +98,7 @@ export function App() {
   const openRoute = async (route: BrowserRoute | null, navigation: Navigation = 'none') => {
     setLoading(true);
     setPageError(null);
+    setMemoryReview(null);
     try {
       if (!route) throw new Error('INVALID_ROUTE');
       if (route.kind === 'home') {
@@ -108,7 +120,7 @@ export function App() {
         setClient({
           ...initialClientState,
           selected,
-          messages: { [selected]: history },
+          conversations: { [selected]: history },
         });
         if (navigation === 'push') {
           window.history.pushState(null, '', formatBrowserRoute(route));
@@ -138,9 +150,9 @@ export function App() {
         ...current,
         workspace,
         selected,
-        messages: history === null
-          ? { ...current.messages, [selected]: [] }
-          : { ...current.messages, [selected]: history },
+        conversations: history === null
+          ? { ...current.conversations, [selected]: [] }
+          : { ...current.conversations, [selected]: history },
       }));
       if (navigation === 'push') window.history.pushState(null, '', formatBrowserRoute(route));
       if (navigation === 'replace') window.history.replaceState(null, '', formatBrowserRoute(route));
@@ -298,10 +310,10 @@ export function App() {
         ...current,
         workspace,
         selected: lesson.sessionKey,
-        messages: {
-          ...current.messages,
-          [lesson.sessionKey]: preferLiveMessages(
-            current.messages[lesson.sessionKey],
+        conversations: {
+          ...current.conversations,
+          [lesson.sessionKey]: preferLiveConversation(
+            current.conversations[lesson.sessionKey],
             history,
           ),
         },
@@ -384,6 +396,33 @@ export function App() {
     }
   };
 
+  const submitMemoryReview = async (decisions: MemoryReviewDecision[]) => {
+    if (!client.selected || !memoryReview) return;
+    const selected = client.selected;
+    const reviewId = memoryReview.id;
+    setSubmittingMemoryReview(true);
+    setPageError(null);
+    try {
+      const submitted = await api.submitMemoryReview(selected, reviewId, decisions);
+      setClient((current) => ({
+        ...current,
+        conversations: {
+          ...current.conversations,
+          [selected]: (current.conversations[selected] ?? []).map((item) => (
+            item.kind === 'memory-review' && item.review.id === reviewId
+              ? { kind: 'memory-review', review: submitted }
+              : item
+          )),
+        },
+      }));
+      setMemoryReview(null);
+    } catch {
+      setPageError('长期记忆确认未能提交，原候选仍然保留。');
+    } finally {
+      setSubmittingMemoryReview(false);
+    }
+  };
+
   const goHome = () => {
     void openRoute({ kind: 'home' }, 'push');
   };
@@ -422,7 +461,7 @@ export function App() {
         >
           <ChatPanel
             sessionKey={selected}
-            messages={client.messages[selected] ?? []}
+            items={client.conversations[selected] ?? []}
             work={client.work[selected] || client.busy[selected] || ''}
             error={client.errors[selected]}
             composerEnabled={!sessionBusy}
@@ -435,6 +474,7 @@ export function App() {
             onPersona={changePersona}
             onDeepMode={changeDeepMode}
             onWorkflowAction={actOnWorkflow}
+            onMemoryReview={setMemoryReview}
           />
         </RoadmapCoachShell>
       </div>
@@ -519,7 +559,7 @@ export function App() {
         />
         <ChatPanel
           sessionKey={selected}
-          messages={client.messages[selected] ?? []}
+          items={client.conversations[selected] ?? []}
           work={client.work[selected] || client.busy[selected] || ''}
           error={client.errors[selected]}
           composerEnabled={composerEnabled}
@@ -533,12 +573,22 @@ export function App() {
           onPersona={changePersona}
           onDeepMode={changeDeepMode}
           onWorkflowAction={actOnWorkflow}
+          onMemoryReview={setMemoryReview}
         />
         {isCoach
           ? <AbilityMap value={abilities} onOpen={(source) => void openEvidence(source)} />
           : <LessonNotebook lesson={selectedLesson} notebook={notebook} replay={replay} />}
       </div>
       {evidence && <EvidenceLens value={evidence} onClose={() => setEvidence(null)} />}
+      {memoryReview?.status === 'proposed' && (
+        <MemoryReviewPanel
+          review={memoryReview}
+          submitting={submittingMemoryReview}
+          onClose={() => setMemoryReview(null)}
+          onSource={(source) => void openEvidence(source)}
+          onSubmit={submitMemoryReview}
+        />
+      )}
     </div>
   );
 }

@@ -2,7 +2,7 @@ import { expect, test } from 'bun:test';
 import type { LessonStatus, PlanWorkspaceSnapshot } from '../../src/shared/contracts';
 import {
   initialClientState,
-  preferLiveMessages,
+  preferLiveConversation,
   reduceClientState,
 } from '../../src/client/state';
 
@@ -39,7 +39,7 @@ function workspaceWithLesson(status: LessonStatus): PlanWorkspaceSnapshot {
   };
 }
 
-test('keeps messages separated by Session key', () => {
+test('keeps conversation messages separated by Session key', () => {
   let state = initialClientState;
   state = reduceClientState(state, {
     type: 'message-delta',
@@ -53,8 +53,76 @@ test('keeps messages separated by Session key', () => {
     messageId: 'streaming',
     delta: '题目',
   });
-  expect(state.messages['coach:p1']?.[0]?.text).toBe('复盘');
-  expect(state.messages['tutor:l1']?.[0]?.text).toBe('题目');
+  expect(state.conversations['coach:p1']?.[0]).toMatchObject({
+    kind: 'message',
+    message: { text: '复盘' },
+  });
+  expect(state.conversations['tutor:l1']?.[0]).toMatchObject({
+    kind: 'message',
+    message: { text: '题目' },
+  });
+});
+
+test('reconciles one Session conversation without removing cards from other Sessions', () => {
+  const review = {
+    id: 'review-1',
+    planId: 'p1',
+    status: 'proposed' as const,
+    items: [],
+    decisions: [],
+  };
+  const coachItems = [{ kind: 'memory-review' as const, review }];
+  const tutorItems = [{
+    kind: 'message' as const,
+    message: {
+      id: 'tutor:l1:1',
+      role: 'tutor' as const,
+      text: '保留',
+      complete: true,
+    },
+  }];
+  const next = reduceClientState({
+    ...initialClientState,
+    conversations: { 'tutor:l1': tutorItems },
+  }, {
+    type: 'conversation-snapshot',
+    sessionKey: 'coach:p1',
+    items: coachItems,
+  });
+
+  expect(next.conversations['coach:p1']).toEqual(coachItems);
+  expect(next.conversations['tutor:l1']).toEqual(tutorItems);
+});
+
+test('live message updates preserve an existing memory review card', () => {
+  const reviewItem = {
+    kind: 'memory-review' as const,
+    review: {
+      id: 'review-1',
+      planId: 'p1',
+      status: 'proposed' as const,
+      items: [],
+      decisions: [],
+    },
+  };
+  const next = reduceClientState({
+    ...initialClientState,
+    conversations: { 'coach:p1': [reviewItem] },
+  }, {
+    type: 'message',
+    sessionKey: 'coach:p1',
+    message: {
+      id: 'coach:p1:2',
+      role: 'coach',
+      text: '继续',
+      complete: true,
+    },
+  });
+
+  expect(next.conversations['coach:p1']).toEqual([
+    reviewItem,
+    expect.objectContaining({ kind: 'message' }),
+  ]);
 });
 
 test('keeps workflow updates separated by parent Session key', () => {
@@ -113,7 +181,10 @@ test('does not overwrite a live kickoff message with an earlier empty history re
     complete: true,
   }];
 
-  expect(preferLiveMessages(live, [])).toEqual(live);
+  expect(preferLiveConversation(
+    live.map((message) => ({ kind: 'message' as const, message })),
+    [],
+  )).toEqual(live.map((message) => ({ kind: 'message', message })));
 });
 
 test('uses fetched history when no live message has arrived', () => {
@@ -124,7 +195,10 @@ test('uses fetched history when no live message has arrived', () => {
     complete: true,
   }];
 
-  expect(preferLiveMessages([], fetched)).toEqual(fetched);
+  expect(preferLiveConversation(
+    [],
+    fetched.map((message) => ({ kind: 'message' as const, message })),
+  )).toEqual(fetched.map((message) => ({ kind: 'message', message })));
 });
 
 test('keeps an already closed Replay selected when another snapshot arrives', () => {

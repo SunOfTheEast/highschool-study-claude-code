@@ -424,6 +424,280 @@ select:focus-visible {
 .message pre { max-width: 100%; overflow: auto; padding: 1rem; background: var(--ink); color: var(--paper); font-family: ui-monospace, monospace; font-size: .82rem; }
 .message code { font-family: ui-monospace, monospace; }
 
+.memory-review-card {
+  margin: .3rem 0 2.7rem 4.2rem;
+  padding: 1.3rem 1.4rem 1.15rem;
+  border: 1px solid var(--ink);
+  border-left: 3px solid var(--accent);
+  background:
+    linear-gradient(135deg, var(--accent-wash), transparent 48%),
+    var(--paper);
+  animation: message-in .28s ease-out both;
+}
+.memory-review-card[data-focused="false"] { opacity: .76; }
+.memory-review-card header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: .75rem;
+  border-bottom: 1px solid var(--rule);
+}
+.memory-review-card header span {
+  color: var(--accent);
+  font-size: .66rem;
+  font-weight: 750;
+  letter-spacing: .13em;
+}
+.memory-review-card header b {
+  color: var(--ink-faint);
+  font: 500 .66rem/1 ui-monospace, monospace;
+}
+.memory-review-card h3 {
+  margin: 1.15rem 0 .65rem;
+  font-family: var(--font-display);
+  font-size: 1.28rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+.memory-review-card > p {
+  max-width: 37rem;
+  margin: 0;
+  color: var(--ink-soft);
+  font-family: var(--font-reading);
+  font-size: .83rem;
+  line-height: 1.75;
+}
+.memory-review-counts {
+  display: flex;
+  gap: 1.4rem;
+  margin-top: 1.15rem;
+  color: var(--ink-faint);
+  font-size: .66rem;
+}
+.memory-review-counts strong {
+  margin-left: .25rem;
+  color: var(--ink);
+  font: 500 .7rem/1 ui-monospace, monospace;
+}
+.memory-review-card footer {
+  display: flex;
+  gap: .55rem;
+  align-items: center;
+  margin-top: 1.25rem;
+}
+.memory-review-card footer button {
+  padding: .62rem .75rem;
+  border: 1px solid var(--rule);
+  background: transparent;
+  font-size: .68rem;
+  cursor: pointer;
+}
+.memory-review-card footer button:hover { border-color: var(--accent); color: var(--accent); }
+.memory-review-card footer .memory-review-primary {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+.memory-review-card footer .memory-review-primary:hover {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--paper);
+}
+.memory-review-card footer i { margin-left: .35rem; font-style: normal; }
+.memory-review-submitted {
+  color: var(--success);
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+
+.memory-review-overlay {
+  position: fixed;
+  z-index: 30;
+  inset: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+.memory-review-scrim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  border: 0;
+  background: var(--overlay);
+  cursor: default;
+}
+.memory-review-panel {
+  position: relative;
+  width: min(680px, 96vw);
+  height: 100%;
+  overflow-y: auto;
+  padding: 2rem clamp(1.25rem, 4vw, 3rem) 2.5rem;
+  background: var(--paper);
+  box-shadow: -12px 0 34px rgba(27, 25, 22, .12);
+  animation: lens-in .28s ease-out both;
+}
+.memory-review-panel > header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: start;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--ink);
+}
+.memory-review-panel > header span {
+  color: var(--accent);
+  font-size: .65rem;
+  font-weight: 750;
+  letter-spacing: .13em;
+}
+.memory-review-panel > header h2 {
+  margin: .45rem 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.7rem);
+  font-weight: 500;
+}
+.memory-review-panel > header button {
+  border: 0;
+  background: transparent;
+  color: var(--ink-faint);
+  font-size: .68rem;
+  cursor: pointer;
+}
+.memory-review-intro {
+  max-width: 36rem;
+  margin: 1.35rem 0 2rem;
+  color: var(--ink-soft);
+  font-family: var(--font-reading);
+  line-height: 1.75;
+}
+.memory-review-items { margin: 0; padding: 0; list-style: none; }
+.memory-review-items > li {
+  padding: 1.5rem 0 1.8rem;
+  border-top: 1px solid var(--rule);
+}
+.memory-review-item-heading {
+  display: grid;
+  grid-template-columns: 2.3rem minmax(0, 1fr);
+  gap: .7rem;
+}
+.memory-review-item-heading > span {
+  color: var(--ink-faint);
+  font: .65rem/1.7 ui-monospace, monospace;
+}
+.memory-review-item-heading small {
+  color: var(--accent);
+  font-size: .62rem;
+  font-weight: 700;
+}
+.memory-review-item-heading h3 {
+  margin: .45rem 0 0;
+  font-family: var(--font-reading);
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.6;
+}
+.memory-review-items dl {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr);
+  margin: 1.2rem 0;
+  border-top: 1px dotted var(--rule);
+}
+.memory-review-items dt,
+.memory-review-items dd {
+  margin: 0;
+  padding: .55rem 0;
+  border-bottom: 1px dotted var(--rule);
+}
+.memory-review-items dt { color: var(--ink-faint); font-size: .62rem; }
+.memory-review-items dd {
+  color: var(--ink-soft);
+  font-family: var(--font-reading);
+  font-size: .76rem;
+  line-height: 1.6;
+}
+.memory-review-sources { display: grid; gap: .35rem; }
+.memory-review-sources code,
+.memory-review-sources button {
+  width: fit-content;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: .6rem/1.5 ui-monospace, monospace;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.memory-review-sources button { cursor: pointer; text-decoration: underline; }
+.memory-review-items fieldset {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  border: 0;
+}
+.memory-review-items legend {
+  width: 100%;
+  margin-bottom: .45rem;
+  color: var(--ink-faint);
+  font-size: .62rem;
+}
+.memory-review-items fieldset label {
+  padding: .5rem .65rem;
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-size: .68rem;
+  cursor: pointer;
+}
+.memory-review-items fieldset label:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+  color: var(--accent-deep);
+}
+.memory-review-items fieldset input {
+  width: 1px;
+  height: 1px;
+  position: absolute;
+  opacity: 0;
+}
+.memory-review-rewrite {
+  display: grid;
+  gap: .45rem;
+  margin-top: 1rem;
+}
+.memory-review-rewrite span { color: var(--ink-faint); font-size: .62rem; }
+.memory-review-rewrite textarea {
+  width: 100%;
+  resize: vertical;
+  padding: .75rem;
+  border: 1px solid var(--rule);
+  background: var(--paper-deep);
+  color: var(--ink);
+  line-height: 1.55;
+}
+.memory-review-panel > footer {
+  position: sticky;
+  bottom: -2.5rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  margin: 1rem calc(-1 * clamp(1.25rem, 4vw, 3rem)) -2.5rem;
+  padding: 1rem clamp(1.25rem, 4vw, 3rem);
+  border-top: 1px solid var(--ink);
+  background: var(--paper);
+}
+.memory-review-panel > footer span { color: var(--ink-faint); font-size: .65rem; }
+.memory-review-panel > footer button {
+  padding: .7rem .85rem;
+  border: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: .7rem;
+  cursor: pointer;
+}
+.memory-review-panel > footer button:disabled { cursor: not-allowed; opacity: .35; }
+
 .empty-conversation { max-width: 31rem; margin: 12vh auto 0; text-align: center; }
 .empty-conversation span { color: var(--accent); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; }
 .empty-conversation p { color: var(--ink-faint); font-family: var(--font-reading); font-size: 1.25rem; line-height: 1.7; }
@@ -791,6 +1065,11 @@ select:focus-visible {
   .workflow-task { grid-template-columns: 2.8rem minmax(0, 1fr); }
   .workflow-task > span:last-child { grid-column: 2; }
   .message { grid-template-columns: 2.2rem minmax(0, 1fr); gap: .6rem; }
+  .memory-review-card { margin-left: 2.8rem; padding: 1.1rem; }
+  .memory-review-panel { width: 100vw; }
+  .memory-review-items dl { grid-template-columns: 1fr; }
+  .memory-review-items dt { padding-bottom: .15rem; border-bottom: 0; }
+  .memory-review-items dd { padding-top: .15rem; }
   .composer { width: calc(100% - 1.5rem); }
   .activities { padding: 1.4rem 1rem 2rem; }
   .activity-list { grid-template-columns: 1fr; }

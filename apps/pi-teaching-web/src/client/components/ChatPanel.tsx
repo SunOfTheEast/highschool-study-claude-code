@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent, type ReactNode } from 'react';
 import type {
-  ChatMessage,
+  ConversationItem,
   PersonaPresentation,
   SessionKey,
   WorkflowView,
@@ -8,13 +8,14 @@ import type {
 import { api } from '../api';
 import { DeepModeToggle } from './DeepModeToggle';
 import { MarkdownView } from './MarkdownView';
+import { MemoryReviewCard } from './MemoryReviewCard';
 import { TaskRail } from './TaskRail';
 
 type ComposerImage = { id: string; name: string; preview: string; path?: string };
 
 export function ChatPanel({
   sessionKey,
-  messages,
+  items,
   work,
   error,
   composerEnabled,
@@ -28,9 +29,10 @@ export function ChatPanel({
   onPersona,
   onDeepMode,
   onWorkflowAction,
+  onMemoryReview,
 }: {
   sessionKey: SessionKey;
-  messages: ChatMessage[];
+  items: ConversationItem[];
   work: string;
   error: string | undefined;
   composerEnabled: boolean;
@@ -44,6 +46,7 @@ export function ChatPanel({
   onPersona(id: string): Promise<void>;
   onDeepMode(enabled: boolean): Promise<void>;
   onWorkflowAction(id: string, action: 'confirm' | 'cancel'): Promise<void>;
+  onMemoryReview(review: Extract<ConversationItem, { kind: 'memory-review' }>['review']): void;
 }) {
   const [text, setText] = useState('');
   const [images, setImages] = useState<ComposerImage[]>([]);
@@ -117,15 +120,23 @@ export function ChatPanel({
 
       <div className="timeline">
         {gate}
-        {messages.map((message) => (
-          <article key={message.id} className={`message ${message.role}`}>
+        {items.map((item) => item.kind === 'message' ? (
+          <article key={item.message.id} className={`message ${item.message.role}`}>
             <span className="message-role">
-              {message.role === 'student' ? '你' : message.role === 'coach' ? 'Coach' : 'Tutor'}
+              {item.message.role === 'student'
+                ? '你'
+                : item.message.role === 'coach' ? 'Coach' : 'Tutor'}
             </span>
-            <div><MarkdownView>{message.text}</MarkdownView></div>
+            <div><MarkdownView>{item.message.text}</MarkdownView></div>
           </article>
+        ) : (
+          <MemoryReviewCard
+            key={item.review.id}
+            review={item.review}
+            onOpen={() => onMemoryReview(item.review)}
+          />
         ))}
-        {!gate && messages.length === 0 && (
+        {!gate && items.length === 0 && (
           <div className="empty-conversation">
             <span>从这里开始</span>
             <p>说说你现在的目标、卡住的地方，或者想先复盘哪一节课。</p>
