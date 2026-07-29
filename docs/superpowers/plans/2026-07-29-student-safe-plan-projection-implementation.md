@@ -505,7 +505,7 @@ Verify manually that:
 - no raw Markdown or Pi JSONL fact was deleted;
 - the only new runtime concept is a rebuildable reader/projection.
 
-- [ ] **Step 7: Commit Task 5**
+- [x] **Step 7: Commit Task 5**
 
 ```bash
 git add AGENTS.md \
@@ -515,7 +515,7 @@ git add AGENTS.md \
 git commit -m "docs: define student-safe plan display boundary"
 ```
 
-- [ ] **Step 8: Final verification after all commits**
+- [x] **Step 8: Final verification after all commits**
 
 Run fresh:
 
