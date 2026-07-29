@@ -192,10 +192,17 @@ or runtime error branches into Skills, Agent prompts, or this guide.
 - Default message projection is `safe`. Mixed tool-call text and arguments are
   replaced by structured status; raw Pi JSONL remains untouched.
 - After a successful `lesson_prepare`, `safe` replaces the Coach's following
-  free-form final with one structured readiness card containing only activity
-  count and kinds. The prepared Lesson's true title is hidden in the sidebar
-  and admission gate until the student starts it. `raw-stream` and raw JSONL
-  retain the original final and full receipt for local diagnosis.
+  free-form final with one structured readiness card. Home, Context Stack,
+  prepared gates, sidebar labels, and the readiness card share one rebuildable
+  student Plan projection: real progress, template-safe purpose, activity shape,
+  and optional card `content_item_id` values. Assessment and diagnostic purposes
+  stay generic; other templates may show the Lesson Capability Target. The
+  prepared Lesson's true title is hidden until the student starts it.
+- The student Plan projection never owns facts and never falls back to raw
+  `Next Lesson Candidate`, active `Plan Summary`, Teacher Control, pending
+  Student View, card paths, or inferred filenames. Missing optional metadata is
+  omitted. Plan Coach, Authoring, `raw-stream`, and raw JSONL retain complete
+  source content for review and local diagnosis.
 - Roadmap may privately use `card_search` only after the student-approved Plan
   is complete. In `safe`, its premature free final is replaced by a fixed
   recovery message; a successful `plan_register` emits one ordinary

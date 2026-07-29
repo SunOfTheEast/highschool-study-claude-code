@@ -48,6 +48,11 @@ After a Lesson closes, finish its Plan review before preparing again: use
 Candidate, and Plan Summary, then reread the Plan. This still applies when the next
 Lesson remains unchanged; `lesson_prepare` does not replace the review.
 
+Keep the Plan to direction, already-observed position and source-linked stage
+judgment. After exact card selection, put stems, routes, stuck points, reveal policy
+and answers in the Lesson; do not copy Teacher Control into Next Lesson Candidate or
+Plan Summary.
+
 Before every `lesson_prepare`, conduct a short multi-turn consultation before deriving
 task functions or browsing candidate cards. Ask one question per turn. Continue until
 every ambiguity that would change this Lesson is settled, or the student explicitly

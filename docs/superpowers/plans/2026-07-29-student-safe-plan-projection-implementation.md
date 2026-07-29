@@ -31,7 +31,7 @@
 - Create: `apps/pi-teaching-web/tests/study/student-plan-projection.test.ts`
 - Modify: `apps/pi-teaching-web/src/shared/contracts.ts`
 
-- [ ] **Step 1: Add failing projection tests**
+- [x] **Step 1: Add failing projection tests**
 
 Create fixture-copy tests for the existing `domain-integrity` Plan. Assert that a prepared assessment projects:
 
@@ -67,7 +67,7 @@ Also cover:
 
 Use unique marker strings in raw `Next Lesson Candidate`, `Plan Summary`, `Sources`, Teacher Control, and pending Student View, then assert `JSON.stringify(projection)` contains none of them.
 
-- [ ] **Step 2: Run the new test and verify the expected red state**
+- [x] **Step 2: Run the new test and verify the expected red state**
 
 Run:
 
@@ -78,7 +78,7 @@ bun test tests/study/student-plan-projection.test.ts
 
 Expected: FAIL because the projection module and contract do not exist.
 
-- [ ] **Step 3: Add explicit student-facing contracts**
+- [x] **Step 3: Add explicit student-facing contracts**
 
 In `src/shared/contracts.ts`, add:
 
@@ -114,7 +114,7 @@ export type StudentPlanProjection = {
 
 This type is a rebuildable view only; do not add it to Markdown or Session storage.
 
-- [ ] **Step 4: Implement deterministic projection readers**
+- [x] **Step 4: Implement deterministic projection readers**
 
 Implement:
 
@@ -141,7 +141,7 @@ The implementation must:
 7. catch optional card/metadata failures and omit those IDs;
 8. never inspect `Next Lesson Candidate`, active `Plan Summary`, Sources prose, Teacher Control, or pending Student View to construct the preview.
 
-- [ ] **Step 5: Run the projection tests green**
+- [x] **Step 5: Run the projection tests green**
 
 Run:
 
@@ -152,7 +152,7 @@ bun test tests/study/student-plan-projection.test.ts
 
 Expected: PASS.
 
-- [ ] **Step 6: Commit Task 1**
+- [x] **Step 6: Commit Task 1**
 
 ```bash
 git add apps/pi-teaching-web/src/shared/contracts.ts \
@@ -174,7 +174,7 @@ git commit -m "feat: add student-safe plan projection"
 - Modify: `apps/pi-teaching-web/tests/client/context-stack.test.tsx`
 - Modify: `apps/pi-teaching-web/tests/server/workspace-api.test.ts`
 
-- [ ] **Step 1: Rewrite Coach context tests to express the safety boundary**
+- [x] **Step 1: Rewrite Coach context tests to express the safety boundary**
 
 Change `CoachContextView` from three raw Plan strings to:
 
@@ -199,7 +199,7 @@ Before production edits, update the tests so they:
 - keep Planner Attention and prior Lesson summaries intact;
 - keep the completed Learning Review behavior.
 
-- [ ] **Step 2: Run focused tests and verify red**
+- [x] **Step 2: Run focused tests and verify red**
 
 Run:
 
@@ -212,7 +212,7 @@ bun test tests/study/coach-context.test.ts \
 
 Expected: FAIL because Coach context still exposes raw future-facing Plan fields.
 
-- [ ] **Step 3: Route the Context Stack through `readStudentPlanProjection`**
+- [x] **Step 3: Route the Context Stack through `readStudentPlanProjection`**
 
 Update `readCoachContext` to return:
 
@@ -234,13 +234,13 @@ Update `ContextStack` to render:
 
 Do not pass through raw `nextLessonCandidate` or `planSummary`.
 
-- [ ] **Step 4: Run the focused tests green**
+- [x] **Step 4: Run the focused tests green**
 
 Run the Step 2 command again.
 
 Expected: PASS and no serialized/rendered leak markers.
 
-- [ ] **Step 5: Commit Task 2**
+- [x] **Step 5: Commit Task 2**
 
 ```bash
 git add apps/pi-teaching-web/src/shared/contracts.ts \
@@ -265,7 +265,7 @@ git commit -m "fix: project safe plan context for students"
 - Modify: `apps/pi-teaching-web/tests/client/learning-set-home.test.tsx`
 - Modify: `apps/pi-teaching-web/tests/client/session-tree.test.tsx` only if the shared contract requires fixture updates
 
-- [ ] **Step 1: Add failing Home leak and continuity tests**
+- [x] **Step 1: Add failing Home leak and continuity tests**
 
 Assert that:
 
@@ -277,7 +277,7 @@ Assert that:
 - active/paused continuation still uses the real started Lesson title and existing route;
 - route priority and saved-route eligibility do not change.
 
-- [ ] **Step 2: Run Home tests and verify red**
+- [x] **Step 2: Run Home tests and verify red**
 
 Run:
 
@@ -290,7 +290,7 @@ bun test tests/study/home.test.ts \
 
 Expected: FAIL because Home still reads raw Plan copy and prepared Lesson title.
 
-- [ ] **Step 3: Replace `coachNote` with the shared projection**
+- [x] **Step 3: Replace `coachNote` with the shared projection**
 
 Update `HomeSnapshot` to carry:
 
@@ -308,13 +308,13 @@ Remove `coachNote`. In `readHomeSnapshot`:
 Update `LearningSetHome` to render only `studentPlan.currentPosition`,
 `studentPlan.progress`, and `studentPlan.nextLesson`.
 
-- [ ] **Step 4: Run Home tests green**
+- [x] **Step 4: Run Home tests green**
 
 Run the Step 2 command again.
 
 Expected: PASS.
 
-- [ ] **Step 5: Commit Task 3**
+- [x] **Step 5: Commit Task 3**
 
 ```bash
 git add apps/pi-teaching-web/src/shared/contracts.ts \
@@ -342,7 +342,7 @@ git commit -m "fix: use safe plan projection on home"
 - Modify: `apps/pi-teaching-web/tests/server/workspace-api.test.ts`
 - Modify: `apps/pi-teaching-web/tests/e2e/workspace.spec.ts` only for the readiness-card expectations
 
-- [ ] **Step 1: Add failing cross-path parity tests**
+- [x] **Step 1: Add failing cross-path parity tests**
 
 Extend `LessonReadyNotice` with:
 
@@ -362,7 +362,7 @@ Tests must require:
 - `LessonReadyCard` renders purpose and optional source numbers without rendering paths, real prepared title, or private Coach final;
 - `raw-stream` still preserves the original Coach text and full tool result.
 
-- [ ] **Step 2: Run focused readiness tests and verify red**
+- [x] **Step 2: Run focused readiness tests and verify red**
 
 Run:
 
@@ -376,7 +376,7 @@ bun test tests/runtime/lesson-prepare.test.ts \
 
 Expected: FAIL because receipts and cards do not yet carry the unified safe fields.
 
-- [ ] **Step 3: Generate the receipt from the same helper**
+- [x] **Step 3: Generate the receipt from the same helper**
 
 After the prepared Lesson has been written and reread, call:
 
@@ -388,13 +388,13 @@ Return only the preview-safe fields plus the existing ownership/fact receipt. Do
 
 Update the conversation projector validator and `LessonReadyCard` to consume those fields. Optional source-number display should be ordinary source labels, not links or paths.
 
-- [ ] **Step 4: Run focused readiness tests green**
+- [x] **Step 4: Run focused readiness tests green**
 
 Run the Step 2 command again.
 
 Expected: PASS.
 
-- [ ] **Step 5: Run the targeted E2E readiness path**
+- [x] **Step 5: Run the targeted E2E readiness path**
 
 Run:
 
@@ -405,7 +405,7 @@ bunx playwright test tests/e2e/workspace.spec.ts --grep "prepared|ready|Lesson"
 
 Expected: the ready card remains the only safe post-prepare surface and survives refresh/history reconstruction.
 
-- [ ] **Step 6: Commit Task 4**
+- [x] **Step 6: Commit Task 4**
 
 ```bash
 git add apps/pi-teaching-web/src/shared/contracts.ts \
@@ -431,7 +431,7 @@ git commit -m "fix: unify safe lesson readiness projection"
 - Modify: `docs/zh-CN/完整说明书.md`
 - Modify: `docs/superpowers/specs/2026-07-29-student-safe-plan-projection-design.md`
 
-- [ ] **Step 1: Make the minimal Coach Skill clarification**
+- [x] **Step 1: Make the minimal Coach Skill clarification**
 
 Add one concise boundary near Plan update/preparation guidance:
 
@@ -439,7 +439,7 @@ Add one concise boundary near Plan update/preparation guidance:
 
 Do not add runtime branches, error enumerations, or tests for this prose.
 
-- [ ] **Step 2: Update current contract documentation**
+- [x] **Step 2: Update current contract documentation**
 
 Update `AGENTS.md` and `docs/zh-CN/完整说明书.md` so they state:
 
@@ -453,7 +453,7 @@ Update `AGENTS.md` and `docs/zh-CN/完整说明书.md` so they state:
 
 Mark the design status as implemented only after verification succeeds.
 
-- [ ] **Step 3: Run static searches for forbidden consumer paths**
+- [x] **Step 3: Run static searches for forbidden consumer paths**
 
 Run:
 
@@ -466,7 +466,7 @@ rg -n "nextLessonCandidate|planSummary|coachNote" \
 
 Expected: no student-rendering use of raw `nextLessonCandidate`, active `planSummary`, or removed `coachNote`.
 
-- [ ] **Step 4: Run the complete Pi web verification**
+- [x] **Step 4: Run the complete Pi web verification**
 
 Run:
 
@@ -477,7 +477,7 @@ bun run check
 
 Expected: typecheck, all non-E2E tests, and production build pass.
 
-- [ ] **Step 5: Run the complete browser E2E suite**
+- [x] **Step 5: Run the complete browser E2E suite**
 
 Run:
 
@@ -488,7 +488,7 @@ bun run test:e2e
 
 Expected: all browser flows pass.
 
-- [ ] **Step 6: Inspect the final diff and fact preservation**
+- [x] **Step 6: Inspect the final diff and fact preservation**
 
 Run:
 

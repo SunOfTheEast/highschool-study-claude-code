@@ -359,10 +359,7 @@ export function App() {
     return () => { current = false; };
   }, [
     client.selected,
-    client.workspace?.plan.id,
-    client.workspace?.plan.currentPosition,
-    client.workspace?.plan.nextLessonCandidate,
-    client.workspace?.plan.planSummary,
+    client.workspace,
   ]);
 
   useEffect(() => {
