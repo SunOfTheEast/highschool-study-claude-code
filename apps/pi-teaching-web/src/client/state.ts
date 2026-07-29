@@ -5,6 +5,7 @@ import type {
   StudyViewEvent,
   WorkflowView,
 } from '../shared/contracts';
+import type { MemoryReviewSnapshot } from '../memory-review/contracts';
 
 export type ClientState = {
   workspace: PlanWorkspaceSnapshot | null;
@@ -27,6 +28,22 @@ export const initialClientState: ClientState = {
   deepMode: {},
   workflows: {},
 };
+
+const memoryReviewRank = {
+  proposed: 0,
+  submitted: 1,
+  applied: 2,
+} as const;
+
+export function laterMemoryReview(
+  current: MemoryReviewSnapshot,
+  incoming: MemoryReviewSnapshot,
+): MemoryReviewSnapshot {
+  if (current.id !== incoming.id) return incoming;
+  return memoryReviewRank[incoming.status] >= memoryReviewRank[current.status]
+    ? incoming
+    : current;
+}
 
 export function preferLiveConversation(
   live: ConversationItem[] | undefined,

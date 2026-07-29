@@ -2,9 +2,11 @@ import { expect, test } from 'bun:test';
 import type { LessonStatus, PlanWorkspaceSnapshot } from '../../src/shared/contracts';
 import {
   initialClientState,
+  laterMemoryReview,
   preferLiveConversation,
   reduceClientState,
 } from '../../src/client/state';
+import type { MemoryReviewSnapshot } from '../../src/memory-review/contracts';
 
 function workspaceWithLesson(status: LessonStatus): PlanWorkspaceSnapshot {
   const plan = {
@@ -224,4 +226,39 @@ test('keeps Tutor replay selected when the current Lesson closes', () => {
   }, { type: 'snapshot', workspace: workspaceWithLesson('closed') });
 
   expect(state.selected).toBe('tutor:l1');
+});
+
+test('never lets a late HTTP submitted response overwrite an applied review', () => {
+  const proposed = {
+    id: 'review-1',
+    planId: 'p1',
+    status: 'proposed',
+    items: [],
+    decisions: [],
+  } satisfies MemoryReviewSnapshot;
+  const submitted = {
+    ...proposed,
+    status: 'submitted',
+  } satisfies MemoryReviewSnapshot;
+  const applied = {
+    ...submitted,
+    status: 'applied',
+    receipt: {
+      reviewId: 'review-1',
+      appliedItems: [],
+      unchangedItems: [],
+      profilePaths: {
+        student: 'memory/student-profile.md',
+        teaching: 'memory/teaching-profile.md',
+      },
+    },
+  } satisfies MemoryReviewSnapshot;
+
+  expect(laterMemoryReview(proposed, submitted)).toEqual(submitted);
+  expect(laterMemoryReview(applied, submitted)).toEqual(applied);
+  expect(laterMemoryReview(submitted, applied)).toEqual(applied);
+  expect(laterMemoryReview(applied, { ...proposed, id: 'review-2' })).toEqual({
+    ...proposed,
+    id: 'review-2',
+  });
 });

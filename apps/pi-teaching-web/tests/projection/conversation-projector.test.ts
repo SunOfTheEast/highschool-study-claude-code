@@ -27,6 +27,20 @@ const submitted = {
   decisions: [{ itemId: 'item-1', action: 'accept', text: null }],
 } satisfies MemoryReviewSnapshot;
 
+const applied = {
+  ...submitted,
+  status: 'applied',
+  receipt: {
+    reviewId: 'review-1',
+    appliedItems: ['item-1'],
+    unchangedItems: [],
+    profilePaths: {
+      student: 'memory/student-profile.md',
+      teaching: 'memory/teaching-profile.md',
+    },
+  },
+} satisfies MemoryReviewSnapshot;
+
 function entry(
   id: string,
   value:
@@ -147,6 +161,31 @@ test('places a proposal at the history end when no visible Coach explanation fol
     kind: 'memory-review',
     review: { id: 'review-1', status: 'proposed' },
   });
+});
+
+test('projects only the latest applied state for one memory review', () => {
+  const items = projectConversationEntries('coach:p1', [
+    entry('proposed', {
+      type: 'custom',
+      customType: 'studyforge.memory-review.v1',
+      data: proposed,
+    }),
+    entry('submitted', {
+      type: 'custom',
+      customType: 'studyforge.memory-review.v1',
+      data: submitted,
+    }),
+    entry('applied', {
+      type: 'custom',
+      customType: 'studyforge.memory-review.v1',
+      data: applied,
+    }),
+  ], 'safe');
+
+  expect(items).toEqual([{
+    kind: 'memory-review',
+    review: applied,
+  }]);
 });
 
 test('replaces the post-prepare Coach final with one spoiler-safe Lesson notice', () => {

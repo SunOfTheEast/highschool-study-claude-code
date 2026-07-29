@@ -97,3 +97,38 @@ test('requires one valid decision per item before submission', () => {
     'delete-1': { itemId: 'delete-1', action: 'reject', text: null },
   })).toBe(true);
 });
+
+test('renders an applied review as a read-only receipt', () => {
+  const html = renderToStaticMarkup(
+    <MemoryReviewPanel
+      review={{
+        ...review,
+        status: 'applied',
+        decisions: review.items.map((item) => ({
+          itemId: item.id,
+          action: 'accept',
+          text: null,
+        })),
+        receipt: {
+          reviewId: 'review-1',
+          appliedItems: review.items.map((item) => item.id),
+          unchangedItems: [],
+          profilePaths: {
+            student: 'memory/student-profile.md',
+            teaching: 'memory/teaching-profile.md',
+          },
+        },
+      }}
+      submitting={false}
+      onClose={() => {}}
+      onSource={() => {}}
+      onSubmit={async () => {
+        throw new Error('applied review must not submit');
+      }}
+    />,
+  );
+
+  expect(html).toContain('已写入长期画像');
+  expect(html).toContain('disabled=""');
+  expect(html).not.toContain('提交给学习顾问');
+});

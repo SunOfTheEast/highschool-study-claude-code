@@ -11,6 +11,8 @@ export function MemoryReviewCard({
   const [focused, setFocused] = useState(true);
   const studentCount = review.items.filter((item) => item.owner === 'student').length;
   const teachingCount = review.items.length - studentCount;
+  const applied = review.status === 'applied';
+  const submitted = review.status === 'submitted';
 
   return (
     <article
@@ -19,22 +21,39 @@ export function MemoryReviewCard({
       data-focused={focused ? 'true' : 'false'}
     >
       <header>
-        <span>{review.status === 'submitted' ? '长期记忆确认单' : '长期记忆待确认'}</span>
+        <span>
+          {applied
+            ? '长期记忆回执'
+            : submitted ? '长期记忆确认单' : '长期记忆待确认'}
+        </span>
         <b>{review.items.length.toString().padStart(2, '0')}</b>
       </header>
       <h3>
-        {review.status === 'submitted'
-          ? '你的选择已提交给学习顾问'
-          : '哪些内容值得陪你走到下一个学习周期？'}
+        {applied
+          ? '已写入长期画像'
+          : submitted
+            ? '你的选择已确认，正在等待写入'
+            : '哪些内容值得陪你走到下一个学习周期？'}
       </h3>
       <p>
-        {review.status === 'submitted'
-          ? '学习顾问会按这份选择整理画像；最终结果以随后重读画像后的回复为准。'
-          : '这些是从本周期课堂记录中整理出的候选，不会在你确认前写入长期画像。'}
+        {applied
+          ? '学习顾问已经按你的决定更新画像；后续规划会读取这份确认后的记录。'
+          : submitted
+            ? '决定已经保存。若写入未完成，可直接在当前学习顾问对话中请它重试。'
+            : '这些是从本周期课堂记录中整理出的候选，不会在你确认前写入长期画像。'}
       </p>
       <div className="memory-review-counts">
-        <span>学习偏好 <strong>{studentCount}</strong></span>
-        <span>教学方式 <strong>{teachingCount}</strong></span>
+        {applied ? (
+          <>
+            <span>写入 <strong>{review.receipt.appliedItems.length}</strong></span>
+            <span>未更改 <strong>{review.receipt.unchangedItems.length}</strong></span>
+          </>
+        ) : (
+          <>
+            <span>学习偏好 <strong>{studentCount}</strong></span>
+            <span>教学方式 <strong>{teachingCount}</strong></span>
+          </>
+        )}
       </div>
       <footer>
         {review.status === 'proposed' ? (
@@ -46,8 +65,10 @@ export function MemoryReviewCard({
               稍后处理
             </button>
           </>
+        ) : applied ? (
+          <span className="memory-review-submitted">写入完成</span>
         ) : (
-          <span className="memory-review-submitted">已提交</span>
+          <span className="memory-review-submitted">已确认，待写入</span>
         )}
       </footer>
     </article>

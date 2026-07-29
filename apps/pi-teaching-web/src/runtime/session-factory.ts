@@ -16,6 +16,7 @@ import {
   MemoryReviewStore,
   submittedMemoryReview,
 } from '../memory-review/store';
+import { createMemoryReviewApplyTool } from '../memory-review/apply-tool';
 import { createMemoryReviewProposeTool } from '../memory-review/tool';
 import type { SessionKey } from '../shared/contracts';
 import type { WorkflowSnapshot } from '../workflows/contracts';
@@ -120,11 +121,9 @@ export function memoryReviewDecisionMessage(snapshot: MemoryReviewSnapshot) {
       reviewId: snapshot.id,
       planId: snapshot.planId,
       instruction: [
-        'For accept, apply the candidate operation.',
-        'For rewrite, use the student text; rewriting a delete means retain and replace the old row.',
-        'For reject, make no profile change.',
-        'Edit only the matching confirmed profile Markdown.',
-        'Reread both profile files and report only the reread state.',
+        'Call memory_review_apply with this reviewId.',
+        'Do not edit either profile directly.',
+        'After a successful receipt, reread memory/student-profile.md and memory/teaching-profile.md and report only that reread state.',
       ],
       items: snapshot.items,
       decisions: snapshot.decisions,
@@ -140,8 +139,6 @@ export function roleToolNames(role: SessionRole): string[] {
       'grep',
       'find',
       'ls',
-      'write',
-      'edit',
       'card_search',
       'trace_search',
       'source_resolve',
@@ -149,6 +146,7 @@ export function roleToolNames(role: SessionRole): string[] {
       'plan_register',
       'plan_update',
       'memory_review_propose',
+      'memory_review_apply',
       'deep_workflow_propose',
     ]
     : [
@@ -222,6 +220,12 @@ export async function createPiSessionFactory(
           createPlanRegisterTool(root),
           createPlanUpdateTool(root, ownerPath),
           createMemoryReviewProposeTool(
+            root,
+            ownerId,
+            ownerPath,
+            memoryReviewStore,
+          ),
+          createMemoryReviewApplyTool(
             root,
             ownerId,
             ownerPath,

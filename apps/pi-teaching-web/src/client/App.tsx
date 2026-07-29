@@ -46,6 +46,7 @@ import {
 } from './routes';
 import {
   initialClientState,
+  laterMemoryReview,
   preferLiveConversation,
   reduceClientState,
 } from './state';
@@ -548,7 +549,10 @@ export function App() {
           ...current.conversations,
           [selected]: (current.conversations[selected] ?? []).map((item) => (
             item.kind === 'memory-review' && item.review.id === reviewId
-              ? { kind: 'memory-review', review: submitted }
+              ? {
+                kind: 'memory-review',
+                review: laterMemoryReview(item.review, submitted),
+              }
               : item
           )),
         },

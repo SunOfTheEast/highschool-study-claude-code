@@ -59,7 +59,39 @@ test('renders submitted state without claiming profile application', () => {
     />,
   );
 
-  expect(html).toContain('已提交');
+  expect(html).toContain('已确认，待写入');
   expect(html).not.toContain('逐条确认');
-  expect(html).not.toContain('已应用');
+  expect(html).not.toContain('已写入长期画像');
+});
+
+test('renders the applied receipt without offering another submission', () => {
+  const html = renderToStaticMarkup(
+    <MemoryReviewCard
+      review={{
+        ...proposed,
+        status: 'applied',
+        decisions: proposed.items.map((item, index) => ({
+          itemId: item.id,
+          action: index === 0 ? 'accept' : 'reject',
+          text: null,
+        })),
+        receipt: {
+          reviewId: 'review-1',
+          appliedItems: ['student-1'],
+          unchangedItems: ['teaching-1'],
+          profilePaths: {
+            student: 'memory/student-profile.md',
+            teaching: 'memory/teaching-profile.md',
+          },
+        },
+      }}
+      onOpen={() => {}}
+    />,
+  );
+
+  expect(html).toContain('已写入长期画像');
+  expect(html).toContain('写入 <strong>1</strong>');
+  expect(html).toContain('未更改 <strong>1</strong>');
+  expect(html).not.toContain('逐条确认');
+  expect(html).not.toContain('稍后处理');
 });

@@ -332,6 +332,152 @@ test('accepts complete memory decisions and launches the same Coach Session once
   ]);
 });
 
+test('returns submitted immediately, then publishes and restores the applied review', async () => {
+  const decisions: MemoryReviewDecision[] = [{
+    itemId: 'item-1',
+    action: 'accept',
+    text: null,
+  }];
+  const submitted = {
+    ...proposedMemoryReview,
+    status: 'submitted',
+    decisions,
+  } satisfies MemoryReviewSnapshot;
+  const applied = {
+    ...submitted,
+    status: 'applied',
+    receipt: {
+      reviewId: 'review-1',
+      appliedItems: ['item-1'],
+      unchangedItems: [],
+      profilePaths: {
+        student: 'memory/student-profile.md',
+        teaching: 'memory/teaching-profile.md',
+      },
+    },
+  } satisfies MemoryReviewSnapshot;
+  let latest: MemoryReviewSnapshot = proposedMemoryReview;
+  let listener: ((event: unknown) => void) | undefined;
+  let resolveIdle!: () => void;
+  const idle = new Promise<void>((resolve) => { resolveIdle = resolve; });
+  const events: unknown[] = [];
+  const hub = new EventHub();
+  hub.subscribe((event) => {
+    events.push(event);
+    if (event.type === 'session-run' && event.status === 'idle') resolveIdle();
+  });
+  const handler = createRequestHandler({
+    root: '/tmp/demo',
+    authoring: false,
+    hub,
+    registry: {
+      memoryReview: async () => latest,
+      submitMemoryReview: async () => {
+        latest = submitted;
+        latest = applied;
+        listener?.({ type: 'agent_end', messages: [], willRetry: false });
+        return latest;
+      },
+      subscribe: (_key: string, next: (event: unknown) => void) => {
+        listener = next;
+        return () => {};
+      },
+      subscribeWorkflows: () => () => {},
+      history: () => [{ kind: 'memory-review', review: latest }],
+      snapshot: () => workspace,
+    } as never,
+  });
+
+  const response = await handler(new Request(
+    'http://local/api/sessions/coach%3Ap1/memory-review/review-1/submit',
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ decisions }),
+    },
+  ));
+
+  expect(response!.status).toBe(202);
+  expect(await response!.json()).toEqual(submitted);
+  await idle;
+  expect(events).toContainEqual({
+    type: 'conversation-snapshot',
+    sessionKey: 'coach:p1',
+    items: [{ kind: 'memory-review', review: applied }],
+  });
+
+  const refreshed = await handler(new Request(
+    'http://local/api/sessions/coach%3Ap1/memory-review',
+  ));
+  expect(await refreshed!.json()).toEqual(applied);
+});
+
+test('keeps a failed memory application submitted instead of claiming success', async () => {
+  const decisions: MemoryReviewDecision[] = [{
+    itemId: 'item-1',
+    action: 'accept',
+    text: null,
+  }];
+  const submitted = {
+    ...proposedMemoryReview,
+    status: 'submitted',
+    decisions,
+  } satisfies MemoryReviewSnapshot;
+  let latest: MemoryReviewSnapshot = proposedMemoryReview;
+  let resolveIdle!: () => void;
+  const idle = new Promise<void>((resolve) => { resolveIdle = resolve; });
+  const events: unknown[] = [];
+  const hub = new EventHub();
+  hub.subscribe((event) => {
+    events.push(event);
+    if (event.type === 'session-run' && event.status === 'idle') resolveIdle();
+  });
+  const handler = createRequestHandler({
+    root: '/tmp/demo',
+    authoring: false,
+    hub,
+    registry: {
+      memoryReview: async () => latest,
+      submitMemoryReview: async () => {
+        latest = submitted;
+        throw new Error('provider stopped before apply');
+      },
+      subscribe: () => () => {},
+      subscribeWorkflows: () => () => {},
+      history: () => [{ kind: 'memory-review', review: latest }],
+      snapshot: () => workspace,
+    } as never,
+  });
+
+  const response = await handler(new Request(
+    'http://local/api/sessions/coach%3Ap1/memory-review/review-1/submit',
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ decisions }),
+    },
+  ));
+  expect(response!.status).toBe(202);
+  expect(await response!.json()).toEqual(submitted);
+  await idle;
+  expect(events).toContainEqual({
+    type: 'session-error',
+    sessionKey: 'coach:p1',
+    message: '模型调用失败，请检查 Pi 的模型与凭据配置后重试。',
+  });
+  expect(events.some((event) => (
+    typeof event === 'object'
+    && event !== null
+    && 'type' in event
+    && event.type === 'conversation-snapshot'
+  ))).toBe(false);
+
+  const refreshed = await handler(new Request(
+    'http://local/api/sessions/coach%3Ap1/memory-review',
+  ));
+  expect(await refreshed!.json()).toEqual(submitted);
+});
+
 test('reconciles the complete conversation after a non-retrying agent end', async () => {
   let listener: ((event: unknown) => void) | undefined;
   const items = [{

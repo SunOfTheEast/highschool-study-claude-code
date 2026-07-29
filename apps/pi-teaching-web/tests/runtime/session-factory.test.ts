@@ -109,8 +109,6 @@ test('keeps Coach and Tutor tool boundaries distinct', () => {
     'grep',
     'find',
     'ls',
-    'write',
-    'edit',
     'card_search',
     'trace_search',
     'source_resolve',
@@ -118,6 +116,7 @@ test('keeps Coach and Tutor tool boundaries distinct', () => {
     'plan_register',
     'plan_update',
     'memory_review_propose',
+    'memory_review_apply',
     'deep_workflow_propose',
   ]);
   expect(roleToolNames('tutor')).not.toContain('lesson_prepare');
@@ -139,6 +138,19 @@ test('keeps Coach and Tutor tool boundaries distinct', () => {
     expect(roleToolNames(role)).not.toContain('subagent');
     expect(deepModeToolNames(roleToolNames(role), false)).not.toContain('deep_workflow_propose');
   }
+  const planCoach = scopeToolNames({
+    role: 'coach',
+    ownerId: 'p1',
+    ownerPath: 'plans/p1.md',
+  });
+  expect(planCoach).toContain('memory_review_apply');
+  expect(planCoach).not.toContain('write');
+  expect(planCoach).not.toContain('edit');
+  expect(scopeToolNames({
+    role: 'tutor',
+    ownerId: 'lesson-1',
+    ownerPath: 'lessons/lesson-1.md',
+  })).not.toContain('memory_review_apply');
 });
 
 test('keeps Roadmap Coach active tools global but non-instructional', () => {
@@ -164,6 +176,7 @@ test('keeps Roadmap Coach active tools global but non-instructional', () => {
   expect(tools).not.toContain('lesson_prepare');
   expect(tools).not.toContain('trace_append');
   expect(tools).not.toContain('memory_review_propose');
+  expect(tools).not.toContain('memory_review_apply');
 });
 
 test('builds one hidden structured continuation for submitted memory decisions', () => {
@@ -201,7 +214,9 @@ test('builds one hidden structured continuation for submitted memory decisions',
     items: submitted.items,
     decisions: submitted.decisions,
   });
-  expect(JSON.stringify(content)).toContain('rewriting a delete means retain and replace');
+  expect(JSON.stringify(content)).toContain('Call memory_review_apply with this reviewId');
+  expect(JSON.stringify(content)).toContain('Do not edit either profile directly');
+  expect(JSON.stringify(content)).not.toContain('Edit only the matching confirmed profile');
 });
 
 test('adds only the workflow proposal tool while deep mode is enabled', () => {

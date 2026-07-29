@@ -29,8 +29,12 @@ const ownerLabel = {
   teaching: '教学方式',
 } as const;
 
-function initialDrafts(items: MemoryReviewItem[]): MemoryReviewDrafts {
-  return Object.fromEntries(items.map((item) => [item.id, null]));
+function initialDrafts(review: MemoryReviewSnapshot): MemoryReviewDrafts {
+  const decisions = new Map(review.decisions.map((decision) => [decision.itemId, decision]));
+  return Object.fromEntries(review.items.map((item) => [
+    item.id,
+    review.status === 'proposed' ? null : decisions.get(item.id) ?? null,
+  ]));
 }
 
 export function MemoryReviewPanel({
@@ -46,7 +50,8 @@ export function MemoryReviewPanel({
   onSource(source: string): void;
   onSubmit(decisions: MemoryReviewDecision[]): Promise<void>;
 }) {
-  const [drafts, setDrafts] = useState<MemoryReviewDrafts>(() => initialDrafts(review.items));
+  const editable = review.status === 'proposed';
+  const [drafts, setDrafts] = useState<MemoryReviewDrafts>(() => initialDrafts(review));
   const complete = memoryReviewComplete(review.items, drafts);
 
   const choose = (
@@ -82,12 +87,18 @@ export function MemoryReviewPanel({
         <header>
           <div>
             <span>Plan 完成复盘</span>
-            <h2 id="memory-review-title">确认长期记忆</h2>
+            <h2 id="memory-review-title">
+              {review.status === 'applied' ? '已写入长期画像' : '确认长期记忆'}
+            </h2>
           </div>
           <button type="button" onClick={onClose}>关闭</button>
         </header>
         <p className="memory-review-intro">
-          每一条都来自本周期的原始记录。先逐项决定，再交给学习顾问整理画像。
+          {review.status === 'applied'
+            ? `已写入 ${review.receipt.appliedItems.length} 条，未更改 ${review.receipt.unchangedItems.length} 条。你仍可查看每条记录的来源。`
+            : review.status === 'submitted'
+              ? '你的决定已经保存，学习顾问正在把它们写入长期画像。'
+              : '每一条都来自本周期的原始记录。先逐项决定，再交给学习顾问整理画像。'}
         </p>
         <ol className="memory-review-items">
           {review.items.map((item, index) => {
@@ -145,6 +156,7 @@ export function MemoryReviewPanel({
                         type="radio"
                         name={`memory-review-${item.id}`}
                         checked={draft?.action === action}
+                        disabled={!editable}
                         onChange={() => choose(item, action)}
                       />
                       {label}
@@ -157,6 +169,7 @@ export function MemoryReviewPanel({
                     <textarea
                       rows={3}
                       value={draft.text ?? ''}
+                      disabled={!editable}
                       onChange={(event) => setDrafts((current) => ({
                         ...current,
                         [item.id]: {
@@ -173,18 +186,26 @@ export function MemoryReviewPanel({
           })}
         </ol>
         <footer>
-          <span>{complete ? '全部条目已确认' : '请先处理全部条目'}</span>
-          <button
-            type="button"
-            disabled={!complete || submitting}
-            onClick={() => {
-              if (!complete) return;
-              const decisions = review.items.map((item) => drafts[item.id]!);
-              void onSubmit(decisions);
-            }}
-          >
-            {submitting ? '正在提交…' : '提交给学习顾问'}
-          </button>
+          {editable ? (
+            <>
+              <span>{complete ? '全部条目已确认' : '请先处理全部条目'}</span>
+              <button
+                type="button"
+                disabled={!complete || submitting}
+                onClick={() => {
+                  if (!complete) return;
+                  const decisions = review.items.map((item) => drafts[item.id]!);
+                  void onSubmit(decisions);
+                }}
+              >
+                {submitting ? '正在提交…' : '提交给学习顾问'}
+              </button>
+            </>
+          ) : (
+            <span>
+              {review.status === 'applied' ? '这份确认已经生效' : '已确认，待写入'}
+            </span>
+          )}
         </footer>
       </section>
     </div>

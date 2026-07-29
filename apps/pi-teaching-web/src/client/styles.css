@@ -881,6 +881,18 @@ select:focus-visible {
   font-weight: 700;
   letter-spacing: .08em;
 }
+.memory-review-card[data-status="submitted"] .memory-review-submitted {
+  color: var(--ink-faint);
+}
+.memory-review-card[data-status="applied"] {
+  border-left-color: var(--success);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--success) 9%, transparent), transparent 48%),
+    var(--paper);
+}
+.memory-review-card[data-status="applied"] header span {
+  color: var(--success);
+}
 
 .memory-review-overlay {
   position: fixed;
