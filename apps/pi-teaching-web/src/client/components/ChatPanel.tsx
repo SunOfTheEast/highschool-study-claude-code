@@ -6,6 +6,7 @@ import {
 } from 'react';
 import type {
   ConversationItem,
+  LessonStatus,
   PersonaPresentation,
   SessionKey,
   WorkflowView,
@@ -13,6 +14,7 @@ import type {
 import { api } from '../api';
 import { DeepModeToggle } from './DeepModeToggle';
 import { MarkdownView } from './MarkdownView';
+import { LessonReadyCard } from './LessonReadyCard';
 import { MemoryReviewCard } from './MemoryReviewCard';
 import { TaskRail } from './TaskRail';
 
@@ -35,6 +37,9 @@ export function ChatPanel({
   prefill,
   onSend,
   onPrefillConsumed,
+  lessonStatus,
+  onLessonReadyPrimary,
+  onLessonReadyDiscuss,
   onPersonaOpen,
   onDeepMode,
   onWorkflowAction,
@@ -56,6 +61,9 @@ export function ChatPanel({
   prefill: { id: string; text: string } | null;
   onSend(text: string, imagePaths: string[]): Promise<void>;
   onPrefillConsumed(id: string): void;
+  lessonStatus(lessonId: string): LessonStatus | null;
+  onLessonReadyPrimary(lessonId: string): void;
+  onLessonReadyDiscuss(): void;
   onPersonaOpen(): void;
   onDeepMode(enabled: boolean): Promise<void>;
   onWorkflowAction(id: string, action: 'confirm' | 'cancel'): Promise<void>;
@@ -137,7 +145,7 @@ export function ChatPanel({
       {stage}
       <div className="timeline">
         {gate}
-        {items.map((item) => item.kind === 'message' ? (
+        {items.map((item, index) => item.kind === 'message' ? (
           <article key={item.message.id} className={`message ${item.message.role}`}>
             <span className="message-role">
               {item.message.role === 'student'
@@ -146,6 +154,14 @@ export function ChatPanel({
             </span>
             <div><MarkdownView>{item.message.text}</MarkdownView></div>
           </article>
+        ) : item.kind === 'lesson-ready' ? (
+          <LessonReadyCard
+            key={`lesson-ready:${item.lesson.lessonPath}:${index}`}
+            value={item.lesson}
+            status={lessonStatus(item.lesson.lessonId)}
+            onPrimary={onLessonReadyPrimary}
+            onDiscuss={onLessonReadyDiscuss}
+          />
         ) : (
           <MemoryReviewCard
             key={item.review.id}

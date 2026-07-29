@@ -231,8 +231,16 @@ export type ChatMessage = {
   complete: boolean;
 };
 
+export type LessonReadyNotice = {
+  lessonId: string;
+  lessonPath: string;
+  blockCount: number;
+  blockKinds: ActivityKind[];
+};
+
 export type ConversationItem =
   | { kind: 'message'; message: ChatMessage }
+  | { kind: 'lesson-ready'; lesson: LessonReadyNotice }
   | { kind: 'memory-review'; review: MemoryReviewSnapshot };
 
 export type WorkflowTaskView = {

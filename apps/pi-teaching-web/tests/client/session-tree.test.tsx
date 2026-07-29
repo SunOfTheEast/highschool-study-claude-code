@@ -70,3 +70,66 @@ test('offers other Plans only after the current Plan is completed', () => {
   expect(completed).toContain('下一个 Plan');
   expect(completed.match(/第一阶段 Plan/g)).toHaveLength(1);
 });
+
+test('hides a prepared Lesson title and shows only its safe shape', () => {
+  const value = workspace('active');
+  value.lessons.push({
+    id: 'lesson-secret',
+    title: '冻结变量法绝密综合诊断',
+    path: 'lessons/lesson-secret.md',
+    planId: 'p1',
+    status: 'prepared',
+    sessionKey: 'tutor:lesson-secret',
+    tutorSessionId: null,
+    blocks: [
+      {
+        id: 'orientation',
+        title: '定向',
+        kind: 'dialogue',
+        required: true,
+        status: 'pending',
+        dependsOn: [],
+        uses: [],
+        studentView: '',
+        evidence: [],
+      },
+      {
+        id: 'problem-01',
+        title: '尝试',
+        kind: 'problem',
+        required: true,
+        status: 'pending',
+        dependsOn: ['orientation'],
+        uses: [],
+        studentView: '',
+        evidence: [],
+      },
+      {
+        id: 'reflection',
+        title: '小结',
+        kind: 'reflection',
+        required: true,
+        status: 'pending',
+        dependsOn: ['problem-01'],
+        uses: [],
+        studentView: '',
+        evidence: [],
+      },
+    ],
+  });
+  const html = renderToStaticMarkup(
+    <SessionTree
+      workspace={value}
+      selected="coach:p1"
+      onSelect={() => {}}
+      onPlanSelect={() => {}}
+      onHome={() => {}}
+      explorerEnabled
+      onExplore={() => {}}
+    />,
+  );
+
+  expect(html).toContain('待开始课程');
+  expect(html).toContain('3 个环节');
+  expect(html).not.toContain('冻结变量法绝密综合诊断');
+});

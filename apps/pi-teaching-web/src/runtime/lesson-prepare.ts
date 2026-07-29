@@ -156,6 +156,7 @@ export function createLessonPrepareTool(
       if (!lesson || lesson.path !== lessonPath || lesson.status !== 'prepared') {
         throw new Error(`LESSON_PREPARE_COMMIT_FAILED: ${input.lessonId}`);
       }
+      const blockKinds = [...new Set(lesson.blocks.map((candidate) => candidate.kind))];
       const value = {
         ok: true as const,
         ownerPath,
@@ -163,6 +164,7 @@ export function createLessonPrepareTool(
         status: 'prepared' as const,
         lessonPath: lesson.path,
         blockCount: lesson.blocks.length,
+        blockKinds,
       };
       return {
         content: [{ type: 'text' as const, text: JSON.stringify(value) }],

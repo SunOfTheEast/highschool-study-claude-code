@@ -405,7 +405,7 @@ export function App() {
     }
   };
 
-  const startLesson = async (lesson: LessonNode) => {
+  const startLesson = async (lesson: LessonNode): Promise<boolean> => {
     setPageError(null);
     try {
       const workspace = await api.lessonAction(lesson.id, 'start');
@@ -422,6 +422,7 @@ export function App() {
           ),
         },
       }));
+      return true;
     } catch (error) {
       if (
         error instanceof ApiError
@@ -446,7 +447,33 @@ export function App() {
       } else {
         setPageError('无法启动课堂导师会话，请检查 Pi 配置。');
       }
+      return false;
     }
+  };
+
+  const openReadyLesson = async (lessonId: string) => {
+    const lesson = client.workspace?.lessons.find((candidate) => candidate.id === lessonId);
+    if (!lesson || !client.workspace) {
+      setPageError('这节课暂时无法打开，请让学习顾问重新确认。');
+      return;
+    }
+    if (lesson.status === 'prepared') {
+      if (await startLesson(lesson)) {
+        const route = formatBrowserRoute({
+          kind: 'lesson',
+          planId: client.workspace.plan.id,
+          lessonId,
+        });
+        window.history.pushState(null, '', route);
+        localStorage.setItem('studyforge.lastVisitedRoute', route);
+      }
+      return;
+    }
+    await openRoute({
+      kind: 'lesson',
+      planId: client.workspace.plan.id,
+      lessonId,
+    }, 'push');
   };
 
   const send = async (text: string, imagePaths: string[]) => {
@@ -591,6 +618,9 @@ export function App() {
             prefill={null}
             onSend={send}
             onPrefillConsumed={() => {}}
+            lessonStatus={() => null}
+            onLessonReadyPrimary={() => {}}
+            onLessonReadyDiscuss={() => {}}
             onPersonaOpen={() => setPersonaDrawerOpen(true)}
             onDeepMode={changeDeepMode}
             onWorkflowAction={actOnWorkflow}
@@ -645,9 +675,11 @@ export function App() {
   if (selectedLesson?.status === 'prepared') {
     gate = (
       <div className="lesson-gate prepared-gate">
-        <span>Lesson 已备好</span>
-        <h2>{selectedLesson.title}</h2>
-        <p>先查看课堂节点。开始后课堂导师才会创建独立会话，并且只展开当前节点。</p>
+        <span>课程已备好</span>
+        <h2>待开始课程</h2>
+        <p>
+          已安排 {selectedLesson.blocks.length} 个课堂环节。开始后，课堂导师会逐步展开具体内容。
+        </p>
         <button type="button" onClick={() => void startLesson(selectedLesson)}>开始上课 <i>↗</i></button>
       </div>
     );
@@ -729,6 +761,11 @@ export function App() {
           onPrefillConsumed={(id) => setComposerPrefill((current) => (
             current?.id === id ? null : current
           ))}
+          lessonStatus={(lessonId) => (
+            client.workspace?.lessons.find((lesson) => lesson.id === lessonId)?.status ?? null
+          )}
+          onLessonReadyPrimary={(lessonId) => void openReadyLesson(lessonId)}
+          onLessonReadyDiscuss={() => void selectSession(client.workspace!.coach.sessionKey)}
           onPersonaOpen={() => setPersonaDrawerOpen(true)}
           onDeepMode={changeDeepMode}
           onWorkflowAction={actOnWorkflow}

@@ -1,6 +1,9 @@
 import type { AgentSessionEvent } from '@earendil-works/pi-coding-agent';
 import type { SessionKey, StudyViewEvent } from '../shared/contracts';
 import {
+  lessonReadyNoticeFromToolResult,
+} from './conversation-projector';
+import {
   visibleAssistantText,
   type MessageProjectionMode,
 } from './message-policy';
@@ -66,4 +69,42 @@ export function projectSessionEvent(
     }];
   }
   return [];
+}
+
+export function createLiveSessionEventProjector(
+  sessionKey: SessionKey,
+  mode: MessageProjectionMode = 'safe',
+): (event: AgentSessionEvent) => StudyViewEvent[] {
+  let preparedInCurrentTurn = false;
+  return (event) => {
+    const projected = projectSessionEvent(sessionKey, event, mode);
+    if (mode !== 'safe') return projected;
+
+    if (event.type === 'tool_execution_end') {
+      const result = event.result as { details?: unknown } | null | undefined;
+      const lesson = lessonReadyNoticeFromToolResult({
+        role: 'toolResult',
+        toolName: event.toolName,
+        isError: event.isError,
+        details: result?.details,
+      });
+      if (lesson) preparedInCurrentTurn = true;
+      return projected;
+    }
+
+    if (
+      preparedInCurrentTurn
+      && event.type === 'message_end'
+      && event.message.role === 'assistant'
+      && projected.some((item) => item.type === 'message')
+    ) {
+      preparedInCurrentTurn = false;
+      return projected.filter((item) => item.type !== 'message');
+    }
+
+    if (event.type === 'agent_end' && !event.willRetry) {
+      preparedInCurrentTurn = false;
+    }
+    return projected;
+  };
 }

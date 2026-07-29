@@ -752,6 +752,59 @@ select:focus-visible {
     var(--paper);
   animation: message-in .28s ease-out both;
 }
+
+.lesson-ready-card {
+  margin: 1rem 0 1rem 3.9rem;
+  padding: 1.2rem 1.25rem;
+  border-top: 2px solid var(--accent);
+  border-bottom: 1px solid var(--ink);
+  background: color-mix(in srgb, var(--paper) 96%, var(--accent-wash));
+}
+.lesson-ready-card > span {
+  color: var(--accent);
+  font-size: .62rem;
+  font-weight: 750;
+  letter-spacing: .12em;
+}
+.lesson-ready-card h3 {
+  margin: .55rem 0 .35rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+.lesson-ready-card > p {
+  margin: .35rem 0 0;
+  color: var(--ink-soft);
+  font-size: .72rem;
+  line-height: 1.65;
+}
+.lesson-ready-card .lesson-ready-kinds { color: var(--accent); }
+.lesson-ready-card footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-top: 1rem;
+}
+.lesson-ready-card footer button {
+  padding: .52rem .7rem;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  font-size: .64rem;
+  cursor: pointer;
+}
+.lesson-ready-card footer button + button {
+  border-color: var(--rule);
+  background: transparent;
+  color: var(--ink-soft);
+}
+.lesson-ready-card footer button:hover,
+.lesson-ready-card footer button:focus-visible {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--paper);
+  outline: 0;
+}
 .memory-review-card[data-focused="false"] { opacity: .76; }
 .memory-review-card header {
   display: flex;
@@ -1799,6 +1852,7 @@ select:focus-visible {
   .workflow-task > span:last-child { grid-column: 2; }
   .message { grid-template-columns: 2.2rem minmax(0, 1fr); gap: .6rem; }
   .memory-review-card { margin-left: 2.8rem; padding: 1.1rem; }
+  .lesson-ready-card { margin-left: 2.8rem; padding: 1rem; }
   .memory-review-panel { width: 100vw; }
   .content-explorer-overlay { padding: 0; }
   .content-explorer { width: 100vw; height: 100vh; }

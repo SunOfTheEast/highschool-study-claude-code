@@ -372,6 +372,93 @@ test('reconciles the complete conversation after a non-retrying agent end', asyn
   }]);
 });
 
+test('never publishes the free Coach final after a successful Lesson prepare in safe mode', async () => {
+  let listener: ((event: unknown) => void) | undefined;
+  const items = [{
+    kind: 'lesson-ready',
+    lesson: {
+      lessonId: 'lesson-007',
+      lessonPath: 'lessons/lesson-007.md',
+      blockCount: 5,
+      blockKinds: ['dialogue', 'problem', 'reflection'],
+    },
+  }] as const;
+  const events: unknown[] = [];
+  const hub = new EventHub();
+  hub.subscribe((event) => events.push(event));
+  const handler = createRequestHandler({
+    root: '/tmp/demo',
+    authoring: false,
+    hub,
+    registry: {
+      openSession: async () => ({ sessionId: 'coach-p1' }),
+      history: () => items,
+      subscribe: (_key: string, next: (event: unknown) => void) => {
+        listener = next;
+        return () => {};
+      },
+      subscribeWorkflows: () => () => {},
+    } as never,
+  });
+  await handler(new Request('http://local/api/sessions/coach%3Ap1/history'));
+
+  listener?.({
+    type: 'tool_execution_end',
+    toolName: 'lesson_prepare',
+    toolCallId: 'prepare-1',
+    isError: false,
+    result: {
+      details: {
+        kind: 'lesson-prepare',
+        value: {
+          ok: true,
+          factId: 'lesson-007',
+          lessonPath: 'lessons/lesson-007.md',
+          blockCount: 5,
+          blockKinds: ['dialogue', 'problem', 'reflection'],
+        },
+      },
+    },
+  });
+  listener?.({
+    type: 'message_end',
+    message: {
+      role: 'assistant',
+      timestamp: 126,
+      content: [{ type: 'text', text: '绝密题名和冻结变量法。' }],
+    },
+  });
+  expect(JSON.stringify(events)).not.toContain('绝密题名');
+
+  listener?.({ type: 'agent_end', messages: [], willRetry: false });
+  expect(events.at(-1)).toEqual({
+    type: 'conversation-snapshot',
+    sessionKey: 'coach:p1',
+    items,
+  });
+
+  events.splice(0);
+  listener?.({
+    type: 'tool_execution_end',
+    toolName: 'lesson_prepare',
+    toolCallId: 'prepare-2',
+    isError: true,
+    result: { details: { kind: 'lesson-prepare' } },
+  });
+  listener?.({
+    type: 'message_end',
+    message: {
+      role: 'assistant',
+      timestamp: 127,
+      content: [{ type: 'text', text: '备课失败，我们继续讨论。' }],
+    },
+  });
+  expect(events).toContainEqual(expect.objectContaining({
+    type: 'message',
+    message: expect.objectContaining({ text: '备课失败，我们继续讨论。' }),
+  }));
+});
+
 test('publishes a fresh learning-set snapshot after a Roadmap Coach turn', async () => {
   const events: unknown[] = [];
   let resolveIdle!: () => void;

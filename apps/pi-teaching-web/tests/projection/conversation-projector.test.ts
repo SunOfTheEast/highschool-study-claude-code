@@ -61,6 +61,28 @@ function message(
   });
 }
 
+function lessonPrepareResult(isError = false): SessionEntry {
+  return entry('prepare-result', {
+    type: 'message',
+    message: {
+      role: 'toolResult',
+      toolName: 'lesson_prepare',
+      isError,
+      content: [{ type: 'text', text: '{"ok":true}' }],
+      details: isError ? undefined : {
+        kind: 'lesson-prepare',
+        value: {
+          ok: true,
+          factId: 'lesson-007',
+          lessonPath: 'lessons/lesson-007.md',
+          blockCount: 5,
+          blockKinds: ['dialogue', 'problem', 'reflection'],
+        },
+      },
+    },
+  });
+}
+
 test('places one latest review card after the Coach explanation that follows its proposal', () => {
   const entries = [
     message('student-1', 'user', '开始复盘'),
@@ -125,4 +147,53 @@ test('places a proposal at the history end when no visible Coach explanation fol
     kind: 'memory-review',
     review: { id: 'review-1', status: 'proposed' },
   });
+});
+
+test('replaces the post-prepare Coach final with one spoiler-safe Lesson notice', () => {
+  const entries = [
+    entry('prepare-call', {
+      type: 'message',
+      message: {
+        role: 'assistant',
+        content: [
+          { type: 'text', text: '内部选卡理由：使用冻结变量法。' },
+          {
+            type: 'toolCall',
+            id: 'prepare-1',
+            name: 'lesson_prepare',
+            arguments: { title: '绝密题名' },
+          },
+        ],
+      },
+    }),
+    lessonPrepareResult(),
+    message('coach-final', 'assistant', '课已备好：绝密题名，核心方法是冻结变量法。'),
+  ];
+
+  expect(projectConversationEntries('coach:p1', entries, 'safe')).toEqual([{
+    kind: 'lesson-ready',
+    lesson: {
+      lessonId: 'lesson-007',
+      lessonPath: 'lessons/lesson-007.md',
+      blockCount: 5,
+      blockKinds: ['dialogue', 'problem', 'reflection'],
+    },
+  }]);
+  const raw = projectConversationEntries('coach:p1', entries, 'raw-stream');
+  expect(raw.some((item) => item.kind === 'message')).toBe(true);
+  expect(JSON.stringify(raw)).toContain('冻结变量法');
+});
+
+test('does not suppress a Coach final after a failed Lesson preparation', () => {
+  const items = projectConversationEntries('coach:p1', [
+    lessonPrepareResult(true),
+    message('coach-final', 'assistant', '这次没有写成，请继续讨论。'),
+  ], 'safe');
+
+  expect(items).toEqual([
+    expect.objectContaining({
+      kind: 'message',
+      message: expect.objectContaining({ text: '这次没有写成，请继续讨论。' }),
+    }),
+  ]);
 });

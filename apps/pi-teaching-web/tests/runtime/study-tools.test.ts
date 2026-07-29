@@ -174,6 +174,7 @@ test('prepares and rereads one Lesson with Plan authority bound by the Coach Ses
     status: 'prepared',
     lessonPath: 'lessons/lesson-blueprint-001.md',
     blockCount: 2,
+    blockKinds: ['problem', 'reflection'],
   });
   expect(readFileSync(
     join(temporaryRoot, 'plans/domain-integrity.md'),

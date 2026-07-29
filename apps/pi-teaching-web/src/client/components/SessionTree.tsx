@@ -71,8 +71,16 @@ export function SessionTree({
           >
             <span className="lesson-index">{String(index + 1).padStart(2, '0')}</span>
             <span className="lesson-node-copy">
-              <b>{lesson.title.replace(/^Lesson:\s*/i, '')}</b>
-              <small data-status={lesson.status}>{statusLabel[lesson.status]}</small>
+              <b>
+                {lesson.status === 'prepared'
+                  ? '待开始课程'
+                  : lesson.title.replace(/^Lesson:\s*/i, '')}
+              </b>
+              <small data-status={lesson.status}>
+                {lesson.status === 'prepared'
+                  ? `${lesson.blocks.length} 个环节 · ${statusLabel[lesson.status]}`
+                  : statusLabel[lesson.status]}
+              </small>
             </span>
           </button>
         ))}

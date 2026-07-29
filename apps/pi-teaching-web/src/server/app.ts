@@ -6,7 +6,7 @@ import { dirname, extname, join } from 'node:path';
 import { resolveInsideRoot } from 'highschool-study-markdown/study-domain';
 import type { MemoryReviewDecision } from '../memory-review/contracts';
 import { submittedMemoryReview } from '../memory-review/store';
-import { projectSessionEvent } from '../projection/projector';
+import { createLiveSessionEventProjector } from '../projection/projector';
 import type { MessageProjectionMode } from '../projection/message-policy';
 import { projectWorkflow } from '../projection/workflow-projector';
 import type { WorkspaceRegistry } from '../runtime/workspace-registry';
@@ -96,8 +96,9 @@ export function createRequestHandler(deps?: AppDependencies) {
     };
     const bind = (key: SessionKey) => {
       if (bound.has(key)) return;
+      const projectEvent = createLiveSessionEventProjector(key, projectionMode);
       deps.registry.subscribe(key, (event) => {
-        for (const projected of projectSessionEvent(key, event, projectionMode)) {
+        for (const projected of projectEvent(event)) {
           deps.hub.publish(projected);
         }
         if (

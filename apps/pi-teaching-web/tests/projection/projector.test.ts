@@ -1,5 +1,8 @@
 import { expect, test } from 'bun:test';
-import { projectSessionEvent } from '../../src/projection/projector';
+import {
+  createLiveSessionEventProjector,
+  projectSessionEvent,
+} from '../../src/projection/projector';
 
 test('keeps text deltas only in explicit raw-stream mode', () => {
   expect(projectSessionEvent('coach:plan', {
@@ -108,4 +111,43 @@ test('projects lesson preparation without leaking the Blueprint', () => {
   })]);
   expect(JSON.stringify(events)).not.toContain('隐藏内容');
   expect(JSON.stringify(events)).not.toContain('private.card.yaml');
+});
+
+test('suppresses only the safe post-prepare final within the current turn', () => {
+  const safe = createLiveSessionEventProjector('coach:plan', 'safe');
+  const receipt = {
+    type: 'tool_execution_end',
+    toolName: 'lesson_prepare',
+    toolCallId: 'prepare-1',
+    isError: false,
+    result: {
+      details: {
+        kind: 'lesson-prepare',
+        value: {
+          ok: true,
+          factId: 'lesson-007',
+          lessonPath: 'lessons/lesson-007.md',
+          blockCount: 5,
+          blockKinds: ['dialogue', 'problem', 'reflection'],
+        },
+      },
+    },
+  } as never;
+  const final = {
+    type: 'message_end',
+    message: {
+      role: 'assistant',
+      timestamp: 126,
+      content: [{ type: 'text', text: '绝密题名和冻结变量法。' }],
+    },
+  } as never;
+
+  expect(safe(receipt)).toEqual([expect.objectContaining({ type: 'work-status' })]);
+  expect(safe(final)).toEqual([]);
+  safe({ type: 'agent_end', messages: [], willRetry: false } as never);
+  expect(safe(final)).toEqual([expect.objectContaining({ type: 'message' })]);
+
+  const raw = createLiveSessionEventProjector('coach:plan', 'raw-stream');
+  raw(receipt);
+  expect(raw(final)).toEqual([expect.objectContaining({ type: 'message' })]);
 });
