@@ -1,5 +1,9 @@
 import { expect, test } from '@playwright/test';
 
+const fixtureOrigin = `http://127.0.0.1:${
+  process.env.STUDYFORGE_E2E_API_PORT ?? 65000
+}`;
+
 test('keeps global planning available without turning it into the home workspace', async ({ page }) => {
   await page.goto('/');
 
@@ -51,8 +55,8 @@ test('restores and submits one Plan memory review without duplicating its chat c
   await page.getByRole('button', { name: '提交给学习顾问' }).click();
   await expect(page.getByRole('dialog', { name: '确认长期记忆' })).toHaveCount(0);
   await expect(card).toHaveCount(1);
-  await expect(card).toContainText('已提交');
-  await expect(card).not.toContainText('已应用');
+  await expect(card).toContainText('已确认，待写入');
+  await expect(card).not.toContainText('已写入长期画像');
 });
 
 test('hides future cards and reveals only the first active problem after start', async ({ page }) => {
@@ -60,8 +64,8 @@ test('hides future cards and reveals only the first active problem after start',
   await expect(page.getByRole('heading', { name: '导数学习 Roadmap' })).toBeVisible();
   await page.goto('/plan/domain-integrity');
   await expect(page.getByRole('navigation', { name: 'Plan sessions' })).toContainText('学习顾问');
-  await expect(page.getByRole('navigation', { name: 'Plan sessions' })).toContainText('Lesson 003');
-  await page.getByRole('button', { name: /Lesson 003/ }).click();
+  await expect(page.getByRole('navigation', { name: 'Plan sessions' })).toContainText('待开始课程');
+  await page.getByRole('button', { name: /待开始课程/ }).click();
   await expect(page.locator('article.problem-card')).toHaveCount(0);
   await page.getByRole('button', { name: /开始上课/ }).click();
   await expect(
@@ -77,7 +81,7 @@ test('refetches the Roadmap after returning to the learning-set home', async ({ 
   await page.goto('/');
   await expect(page.getByRole('button', { name: /同构变形/ })).toHaveCount(0);
   await page.goto('/plan/domain-integrity');
-  await page.request.post('http://127.0.0.1:65000/__test/register-plan');
+  await page.request.post(`${fixtureOrigin}/__test/register-plan`);
 
   await page.getByRole('button', { name: /返回学习集/ }).click();
 
@@ -85,9 +89,9 @@ test('refetches the Roadmap after returning to the learning-set home', async ({ 
 });
 
 test('keeps the prepared gate and shows actionable admission issues', async ({ page }) => {
-  await page.request.post('http://127.0.0.1:65000/__test/reject-next-lesson-start');
+  await page.request.post(`${fixtureOrigin}/__test/reject-next-lesson-start`);
   await page.goto('/plan/domain-integrity');
-  await page.getByRole('button', { name: /Lesson 003/ }).click();
+  await page.getByRole('button', { name: /待开始课程/ }).click();
 
   await page.getByRole('button', { name: /开始上课/ }).click();
 
@@ -111,7 +115,7 @@ test('marks the approved theme and current learning surface', async ({ page }) =
   );
   await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'coach');
 
-  await page.getByRole('button', { name: /Lesson 003/ }).click();
+  await page.getByRole('button', { name: /待开始课程/ }).click();
   await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'tutor');
 
   await page.getByRole('button', { name: /Lesson 001/ }).click();
@@ -128,7 +132,7 @@ test('shows the current Plan planning rationale', async ({ page }) => {
 
 test('refreshes the full ability map after a Tutor trace without reloading', async ({ page }) => {
   await page.goto('/plan/domain-integrity');
-  await page.getByRole('button', { name: /Lesson 003/ }).click();
+  await page.getByRole('button', { name: /待开始课程/ }).click();
   await expect(page).toHaveURL(/\/plan\/domain-integrity\/lesson\/lesson-003$/);
   const start = page.getByRole('button', { name: /开始上课|继续上课/ });
   if (await start.count()) await start.click();
@@ -181,7 +185,7 @@ test('keeps the closed Tutor replay until the student returns to Coach', async (
     }
     await expect(composer).toBeVisible();
     await expect(page.locator('.connection-banner')).toHaveCount(0);
-    await page.request.post('http://127.0.0.1:65000/__test/close-lesson');
+    await page.request.post(`${fixtureOrigin}/__test/close-lesson`);
 
     await expect(page).toHaveURL(/\/plan\/domain-integrity\/lesson\/lesson-003$/);
     await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'replay');
@@ -194,13 +198,13 @@ test('keeps the closed Tutor replay until the student returns to Coach', async (
     await expect(page).toHaveURL(/\/plan\/domain-integrity$/);
     await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'coach');
   } finally {
-    await page.request.post('http://127.0.0.1:65000/__test/reset-close-lesson');
+    await page.request.post(`${fixtureOrigin}/__test/reset-close-lesson`);
   }
 });
 
 test('connects the four product panels without leaking pending classroom content', async ({ page }) => {
   test.setTimeout(40_000);
-  await page.request.post('http://127.0.0.1:65000/__test/panel-flow/start');
+  await page.request.post(`${fixtureOrigin}/__test/panel-flow/start`);
   try {
     await page.goto('/');
 
@@ -256,7 +260,9 @@ test('connects the four product panels without leaking pending classroom content
     await expect(page.locator('.app-root')).toHaveAttribute('data-persona', 'custom-guide');
     await expect(stage).toContainText('Q-DOMAIN-EX22');
 
-    await page.getByRole('button', { name: /学习顾问/ }).click();
+    await page.getByRole('navigation', { name: 'Plan sessions' })
+      .getByRole('button', { name: /学习顾问/ })
+      .click();
     await expect(page).toHaveURL(/\/plan\/domain-integrity$/);
     await page.getByRole('button', { name: /Lesson 004/ }).click();
     await expect(page).toHaveURL(/\/plan\/domain-integrity\/lesson\/lesson-004$/);
@@ -279,7 +285,7 @@ test('connects the four product panels without leaking pending classroom content
     await page.getByRole('button', { name: /返回学习集/ }).click();
     await expect(page.locator('.continue-entry')).toContainText('Lesson 004');
   } finally {
-    await page.request.post('http://127.0.0.1:65000/__test/panel-flow/reset');
+    await page.request.post(`${fixtureOrigin}/__test/panel-flow/reset`);
   }
 });
 
@@ -312,8 +318,8 @@ test('renders the liubai palette without horizontal overflow', async ({ page }) 
 });
 
 test('switches Plans only after the student clicks another Plan', async ({ page }) => {
-  await page.request.post('http://127.0.0.1:65000/__test/register-plan');
-  await page.request.post('http://127.0.0.1:65000/__test/complete-isomorphic-plan');
+  await page.request.post(`${fixtureOrigin}/__test/register-plan`);
+  await page.request.post(`${fixtureOrigin}/__test/complete-isomorphic-plan`);
   await page.goto('/plan/isomorphic-transformation');
 
   await expect(page).toHaveURL(/\/plan\/isomorphic-transformation$/);
@@ -328,4 +334,93 @@ test('switches Plans only after the student clicks another Plan', async ({ page 
   await expect(page).toHaveURL(/\/plan\/domain-integrity$/);
   await expect(page.getByRole('navigation', { name: 'Plan sessions' }))
     .toContainText('定义域完整性的系统加固');
+});
+
+test('keeps the preparation handoff safe and the completed review source-linked', async ({ page }) => {
+  test.setTimeout(40_000);
+  const fixture = await page.request.post(
+    `${fixtureOrigin}/__test/student-safe-flow/start`,
+  );
+  expect(fixture.ok()).toBe(true);
+  let sentMessages = 0;
+  page.on('request', (request) => {
+    if (
+      request.method() === 'POST'
+      && /\/api\/sessions\/[^/]+\/messages$/.test(new URL(request.url()).pathname)
+    ) {
+      sentMessages += 1;
+    }
+  });
+
+  try {
+    await page.goto('/plan/domain-integrity');
+    const secretTitle = '绝密参数边界综合题';
+    const ready = page.locator('article.lesson-ready-card');
+    await expect(ready).toBeVisible();
+    await expect(ready).toContainText('这一节已经准备好');
+    await expect(ready).toContainText('5 个课堂环节');
+    await expect(page.locator('.app-root')).not.toContainText(secretTitle);
+    await expect(page.getByRole('navigation', { name: 'Plan sessions' }))
+      .toContainText('待开始课程');
+
+    await page.reload();
+    await expect(ready).toBeVisible();
+    await expect(page.locator('.app-root')).not.toContainText(secretTitle);
+    await ready.getByRole('button', { name: '开始上课' }).click();
+    await expect(page).toHaveURL(/\/plan\/domain-integrity\/lesson\/lesson-003$/);
+    await expect(page.getByRole('navigation', { name: 'Plan sessions' }))
+      .toContainText(secretTitle);
+
+    const completed = await page.request.post(
+      `${fixtureOrigin}/__test/student-safe-flow/complete`,
+    );
+    expect(completed.ok()).toBe(true);
+    await expect(
+      page.getByRole('button', { name: new RegExp(secretTitle) }).getByText('已完成'),
+    ).toBeVisible();
+    await page.getByRole('navigation', { name: 'Plan sessions' })
+      .getByRole('button', { name: /学习顾问/ })
+      .click();
+
+    const review = page.getByRole('region', { name: '阶段学习回顾' });
+    await expect(review).toContainText('已经能独立把定义域用于参数边界判断');
+    await expect(review).toContainText('两道本周期导数题');
+    await expect(review).toContainText('下一周期再检查陌生嵌套结构');
+    await review.getByText('为什么这样判断').click();
+    await expect(review).toContainText('最能说明这一点');
+    await expect(review).toContainText('可以作为参考');
+    await expect(review).toContainText('还需要再看看');
+
+    await review.getByRole('button', { name: '查看这次表现' }).first().click();
+    const source = page.getByRole('dialog', { name: '记录来源' });
+    await expect(source).toContainText('独立完成定义域与参数边界判断');
+    await source.getByRole('button', { name: '关闭', exact: true }).click();
+
+    const beforeDispute = sentMessages;
+    await review.getByRole('button', {
+      name: '这和我的实际情况不一样',
+    }).first().click();
+    await expect(page.getByPlaceholder('写下你的想法或解题过程…')).toHaveValue(
+      /我对这条学习回顾有不同看法[\s\S]+我的补充：/,
+    );
+    expect(sentMessages).toBe(beforeDispute);
+
+    const memory = page.locator('article.memory-review-card');
+    await expect(memory).toHaveCount(1);
+    await expect(memory).toContainText('已写入长期画像');
+    await expect(memory).toContainText('写入 2');
+    await expect(memory).toContainText('未更改 1');
+
+    const raw = await page.request.get(
+      `${fixtureOrigin}/__test/student-safe-flow/raw-history`,
+    );
+    expect(raw.ok()).toBe(true);
+    expect(JSON.stringify(await raw.json())).toContain(
+      '绝密参数边界综合题使用冻结变量法',
+    );
+  } finally {
+    await page.request.post(
+      `${fixtureOrigin}/__test/student-safe-flow/reset`,
+    );
+  }
 });

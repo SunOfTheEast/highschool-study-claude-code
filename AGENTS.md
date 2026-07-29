@@ -58,16 +58,21 @@ The web runtime has two durable Agent roles:
 
 Roadmap Coach owns global direction, cross-Plan review and creation of a new
 student-approved Plan. It may register a new Plan but does not receive
-`plan_update` or `lesson_prepare`. Plan Coach owns the current Plan and may use
-`lesson_prepare`, `plan_register`, and `plan_update`; only after its
-Session-owned Plan is completed and reread may it use `memory_review_propose`.
-Tutor owns the current Lesson and classroom fact tools. Roadmap Coach and Tutor
-never receive `memory_review_propose`.
+`plan_update` or `lesson_prepare`. Before registering the first Plan, it must
+confirm, persist, and reread non-placeholder Roadmap `Goal`,
+`Observable Capability Standard`, and `Test`. Plan Coach owns the current Plan
+and may use `lesson_prepare`, `plan_register`, and `plan_update`; only after its
+Session-owned Plan is completed and reread may it use
+`memory_review_propose`. Tutor owns the current Lesson and classroom fact
+tools. Roadmap Coach and Tutor never receive memory-review tools.
 
 Pi fact-write authority is Session-bound:
 
 - Plan Coach owns the current Plan and may use `lesson_prepare`,
-  `plan_register`, and `plan_update`;
+  `plan_register`, `plan_update`, and the Pi-only `memory_review_apply`; it
+  does not receive generic `write` or `edit`;
+- Roadmap Coach alone retains generic `write` and `edit` for the Roadmap and
+  student-approved Plan creation;
 - Tutor owns the current Lesson and may use `trace_append`,
   `classroom_update`, `lesson_close`, and `card_alternative_append`;
 - model-generated arguments must not select or override `ownerPath`,
@@ -75,9 +80,15 @@ Pi fact-write authority is Session-bound:
 
 `memory_review_propose` does not write long-term memory. Candidates and
 item-by-item decisions stay as append-only custom entries in the owning Plan
-Coach Session. Submission wakes that same Coach, which may apply only accepted
-or rewritten items and must reread both confirmed profiles before reporting;
-the frontend never edits those profiles or relabels `submitted` as `applied`.
+Coach Session. Submission wakes that same Coach, which calls
+`memory_review_apply` with only the submitted review ID. The runtime applies
+only accepted or rewritten items, assigns stable `S*` / `T*` IDs, and installs
+both confirmed profiles as one rollback-safe operation. Each entry in
+`## Active Preferences` has exactly `Content`, `Scope`, `Sources`,
+`Rationale`, and `Counter-evidence`; older free-form entries are not guessed or
+migrated. Only a successful receipt records `applied`. The Coach then rereads
+both profiles before reporting; the frontend never edits them or relabels
+`submitted` as `applied`.
 
 Every Pi Session carries exactly one `studyforge.session-owner.v1` custom
 entry containing `role`, `ownerId`, and `ownerPath`. A frontmatter Session ID
@@ -141,12 +152,16 @@ The runtime binds the Plan, paths, initial statuses, relative aliases, and Plan
 Lesson Index; the compiled Lesson Markdown remains the only durable source.
 Do not add a persistent Blueprint file or a fifth public MCP tool.
 
-`plan_update` accepts only `decision`, `currentPosition`,
-`nextLessonCandidate`, and `planSummary`. On every Plan audit, the runtime
-reconstructs Lesson Index from the real same-Plan Lesson files, preserves the
-existing linked order, appends missing Lessons, and synchronizes the matching
-Roadmap Plan Graph status. Model-authored text never owns these structural
-links or status projections.
+`plan_update` is a strict decision union. `active` and `replan` require
+`currentPosition`, `nextLessonCandidate`, and free `planSummary`; `complete`
+requires those first two fields plus a structured `learningReview` and rejects
+`planSummary`. A completed Learning Review contains conclusion, boundary,
+next step, key evidence, supporting evidence with limitations, and open
+questions. Key evidence must be an active, independent, correct assessment
+Trace from the same Plan. On every audit, the runtime reconstructs Lesson
+Index from real same-Plan Lesson files, preserves linked order, appends missing
+Lessons, and synchronizes the matching Roadmap Plan Graph status.
+Model-authored text never owns these structural links or status projections.
 
 ## Teaching authority map
 
@@ -176,6 +191,11 @@ or runtime error branches into Skills, Agent prompts, or this guide.
 
 - Default message projection is `safe`. Mixed tool-call text and arguments are
   replaced by structured status; raw Pi JSONL remains untouched.
+- After a successful `lesson_prepare`, `safe` replaces the Coach's following
+  free-form final with one structured readiness card containing only activity
+  count and kinds. The prepared Lesson's true title is hidden in the sidebar
+  and admission gate until the student starts it. `raw-stream` and raw JSONL
+  retain the original final and full receipt for local diagnosis.
 - `raw-stream` is a local diagnostic option, not the student default.
 - Student View never reveals Teacher Control, card answers, rubric text,
   unrevealed hints, private evidence matrices, or stored alternative
@@ -198,11 +218,13 @@ or runtime error branches into Skills, Agent prompts, or this guide.
   presentation only. Motion and completion-feedback preferences belong only
   to browser key `studyforge.presentation.v1`; they never enter Session,
   learning-set facts, or model context.
-- Deep workflow is optional and Session-scoped. One read-only Evidence Scout
-  may isolate a Plan-scale or cross-card retrieval question from the parent
-  context. Multiple workflow tasks require genuinely independent questions
-  that can change the next teaching action. Parent Agents remain the only
-  writers of learning facts.
+- Deep workflow is normally optional and Session-scoped. Even with the toggle
+  off, Plan Coach retains exactly one 50,000-token / 180-second Quick Evidence
+  Scout before its first completion decision. It checks proposed conclusions,
+  boundaries, sources, conflicts, omissions, and unreadable writes without
+  issuing a verdict; failure narrows the boundary rather than silently
+  approving completion. Other Plan, Roadmap, and Tutor workflow use still
+  follow the toggle. Parent Agents remain the only writers and decision owners.
 - Child raw JSON and artifacts stay private to the parent runtime. The UI may
   project goal, dependencies, progress, budgets, and source counts, not child
   conclusions.

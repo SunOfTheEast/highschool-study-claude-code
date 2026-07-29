@@ -1,4 +1,5 @@
 import { join } from 'node:path';
+import type { SessionEntry } from '@earendil-works/pi-coding-agent';
 import {
   cpSync,
   mkdirSync,
@@ -35,6 +36,7 @@ import { resolvePersona } from '../../src/study/persona';
 import { PreparedLessonValidationError } from '../../src/study/validate-prepared-lesson';
 import { createRequestHandler } from '../../src/server/app';
 import { EventHub } from '../../src/server/event-hub';
+import { projectConversationEntries } from '../../src/projection/conversation-projector';
 import type { WorkflowSnapshot, WorkflowTaskState } from '../../src/workflows/contracts';
 import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
 
@@ -45,6 +47,8 @@ const lesson003Path = join(root, 'lessons/lesson-003.md');
 const lesson003Baseline = readFileSync(lesson003Path, 'utf8');
 const planPath = join(root, 'plans/domain-integrity.md');
 const planBaseline = readFileSync(planPath, 'utf8');
+const roadmapPath = join(root, 'ROADMAP.md');
+const roadmapBaseline = readFileSync(roadmapPath, 'utf8');
 const hub = new EventHub();
 const coachKey: SessionKey = 'coach:domain-integrity';
 const roadmapKey: SessionKey = ROADMAP_COACH_SESSION_KEY;
@@ -156,6 +160,89 @@ const proposedMemoryReview = {
   }],
   decisions: [],
 } satisfies MemoryReviewSnapshot;
+const appliedMemoryReview = {
+  ...proposedMemoryReview,
+  status: 'applied',
+  decisions: [{
+    itemId: 'preference-add',
+    action: 'accept',
+    text: null,
+  }, {
+    itemId: 'teaching-revise',
+    action: 'rewrite',
+    text: '先让我完整说出判断依据，再决定是否提示。',
+  }, {
+    itemId: 'preference-delete',
+    action: 'reject',
+    text: null,
+  }],
+  receipt: {
+    reviewId: 'fixture-memory-review',
+    appliedItems: ['preference-add', 'teaching-revise'],
+    unchangedItems: ['preference-delete'],
+    profilePaths: {
+      student: 'memory/student-profile.md',
+      teaching: 'memory/teaching-profile.md',
+    },
+  },
+} satisfies MemoryReviewSnapshot;
+
+const rawPreparationEntries = [{
+  id: 'fixture-prepare-call',
+  parentId: null,
+  timestamp: '2026-07-29T09:00:00Z',
+  type: 'message',
+  message: {
+    role: 'assistant',
+    content: [{
+      type: 'text',
+      text: '内部选卡：绝密参数边界综合题使用冻结变量法。',
+    }, {
+      type: 'toolCall',
+      id: 'fixture-prepare-tool',
+      name: 'lesson_prepare',
+      arguments: { title: '绝密参数边界综合题' },
+    }],
+  },
+}, {
+  id: 'fixture-prepare-result',
+  parentId: null,
+  timestamp: '2026-07-29T09:00:01Z',
+  type: 'message',
+  message: {
+    role: 'toolResult',
+    toolName: 'lesson_prepare',
+    isError: false,
+    content: [{ type: 'text', text: '{"ok":true}' }],
+    details: {
+      kind: 'lesson-prepare',
+      value: {
+        ok: true,
+        factId: 'lesson-003',
+        lessonPath: 'lessons/lesson-003.md',
+        blockCount: 5,
+        blockKinds: ['dialogue', 'problem', 'reflection'],
+      },
+    },
+  },
+}, {
+  id: 'fixture-prepare-final',
+  parentId: null,
+  timestamp: '2026-07-29T09:00:02Z',
+  type: 'message',
+  message: {
+    role: 'assistant',
+    content: [{
+      type: 'text',
+      text: '课已备好：绝密参数边界综合题使用冻结变量法。',
+    }],
+  },
+}] as SessionEntry[];
+
+function safePreparationHistory(): ConversationItem[] {
+  return projectConversationEntries(coachKey, rawPreparationEntries, 'safe');
+}
+
 let currentMemoryReview: MemoryReviewSnapshot = proposedMemoryReview;
 const fixtureHistory = new Map<SessionKey, ConversationItem[]>();
 fixtureHistory.set(roadmapKey, [{
@@ -179,6 +266,7 @@ fixtureHistory.set(coachKey, [{
   kind: 'memory-review',
   review: currentMemoryReview,
 }]);
+const coachHistoryBaseline = structuredClone(fixtureHistory.get(coachKey)!);
 const workflowListeners = new Map<SessionKey, Set<(snapshot: WorkflowSnapshot) => void>>();
 const sessionListeners = new Map<SessionKey, Set<(event: unknown) => void>>();
 const abilityProjection: AbilityProjection = {
@@ -430,9 +518,116 @@ function resetPanelFlowFixture(): void {
   personaSelections.clear();
 }
 
+function createStudentSafeFlowFixture(): void {
+  writeFileSync(roadmapPath, roadmapBaseline);
+  writeFileSync(planPath, planBaseline);
+  writeFileSync(
+    lesson003Path,
+    lesson003Baseline.replace(
+      '# Lesson 003：阶段 1b — 定义域连续性与跨结构迁移核验',
+      '# 绝密参数边界综合题',
+    ),
+  );
+  currentMemoryReview = proposedMemoryReview;
+  fixtureHistory.set(coachKey, safePreparationHistory());
+  fixtureHistory.delete('tutor:lesson-003');
+  rejectNextLessonStart = false;
+}
+
+function completeStudentSafeFlowFixture(): {
+  keySource: string;
+  supportingSource: string;
+} {
+  setBlockStatus(root, 'lessons/lesson-003.md', 'orientation', 'completed');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'assessment-01', 'completed');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'repair-optional', 'skipped');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'assessment-02', 'completed');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'reflection', 'completed');
+  const key = appendTrace(root, {
+    lessonPath: 'lessons/lesson-003.md',
+    blockId: 'assessment-01',
+    cardAlias: 'Q-DOMAIN-EX22',
+    cardStepId: 'step_2',
+    materialPath: null,
+    assessment: 'correct',
+    support: 'none',
+    note: '独立完成定义域与参数边界判断。',
+    supersedes: null,
+  }, () => new Date('2026-07-29T09:10:00Z'));
+  const supporting = appendTrace(root, {
+    lessonPath: 'lessons/lesson-003.md',
+    blockId: 'assessment-02',
+    cardAlias: 'Q-DOMAIN-EX16',
+    cardStepId: 'step_1',
+    materialPath: null,
+    assessment: 'correct',
+    support: 'tutor',
+    note: '在一次方向性提示后完成跨结构迁移。',
+    supersedes: null,
+  }, () => new Date('2026-07-29T09:11:00Z'));
+  closeLesson(root, 'lessons/lesson-003.md', {
+    summary: '完成两道参数边界题；第一题独立完成，第二题使用一次方向性提示。',
+  });
+  updatePlan(root, 'plans/domain-integrity.md', {
+    decision: 'complete',
+    currentPosition: '本周期核验已经完成。',
+    nextLessonCandidate: '下一周期再检查陌生嵌套结构。',
+    learningReview: {
+      conclusion: '已经能独立把定义域用于参数边界判断。',
+      boundary: '两道本周期导数题；尚未覆盖长期保持和更陌生的嵌套结构。',
+      nextStep: '下一周期再检查陌生嵌套结构。',
+      keyEvidence: [{
+        claim: '第一道评估题无提示完成定义域与参数边界判断。',
+        source: key.sourceAnchor,
+      }],
+      supportingEvidence: [{
+        claim: '第二道不同结构题最终完成了迁移。',
+        source: supporting.sourceAnchor,
+        limitation: '使用过一次方向性提示，只作为参考。',
+      }],
+      openQuestions: [{
+        question: '换成更陌生的嵌套结构后还能否保持独立？',
+        nextCheck: '下一 Plan 安排一题未见嵌套约束题。',
+      }],
+    },
+  });
+  currentMemoryReview = appliedMemoryReview;
+  fixtureHistory.set(coachKey, [
+    ...safePreparationHistory(),
+    { kind: 'memory-review', review: currentMemoryReview },
+  ]);
+  fixtureHistory.set('tutor:lesson-003', [{
+    kind: 'message',
+    message: {
+      id: 'fixture-student-safe-close',
+      role: 'tutor',
+      text: '这节课已经收好，回到学习顾问可以查看带来源的阶段回顾。',
+      complete: true,
+    },
+  }]);
+  hub.publish({
+    type: 'snapshot',
+    workspace: readPlanWorkspace(root, 'domain-integrity'),
+  });
+  return {
+    keySource: key.sourceAnchor,
+    supportingSource: supporting.sourceAnchor,
+  };
+}
+
+function resetStudentSafeFlowFixture(): void {
+  writeFileSync(roadmapPath, roadmapBaseline);
+  writeFileSync(planPath, planBaseline);
+  writeFileSync(lesson003Path, lesson003Baseline);
+  currentMemoryReview = proposedMemoryReview;
+  fixtureHistory.set(coachKey, structuredClone(coachHistoryBaseline));
+  fixtureHistory.delete('tutor:lesson-003');
+  rejectNextLessonStart = false;
+}
+
 Bun.serve({
   hostname: '127.0.0.1',
-  port: 65000,
+  port: Number(process.env.STUDYFORGE_E2E_API_PORT ?? 65000),
   fetch(request, server) {
     const url = new URL(request.url);
     if (request.method === 'POST' && url.pathname === '/__test/panel-flow/start') {
@@ -441,6 +636,24 @@ Bun.serve({
     }
     if (request.method === 'POST' && url.pathname === '/__test/panel-flow/reset') {
       resetPanelFlowFixture();
+      return Response.json({ ok: true });
+    }
+    if (request.method === 'POST' && url.pathname === '/__test/student-safe-flow/start') {
+      createStudentSafeFlowFixture();
+      return Response.json({ ok: true });
+    }
+    if (request.method === 'POST' && url.pathname === '/__test/student-safe-flow/complete') {
+      return Response.json(completeStudentSafeFlowFixture());
+    }
+    if (request.method === 'GET' && url.pathname === '/__test/student-safe-flow/raw-history') {
+      return Response.json(projectConversationEntries(
+        coachKey,
+        rawPreparationEntries,
+        'raw-stream',
+      ));
+    }
+    if (request.method === 'POST' && url.pathname === '/__test/student-safe-flow/reset') {
+      resetStudentSafeFlowFixture();
       return Response.json({ ok: true });
     }
     if (request.method === 'POST' && url.pathname === '/__test/register-plan') {

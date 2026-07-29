@@ -4,7 +4,7 @@
 
 ## Message projection
 
-学生 Session 默认使用 `safe`：纯文本消息完成后才显示；包含工具调用的混合消息改为结构化工作状态。Pi 原始 Session JSONL 不会被修改。
+学生 Session 默认使用 `safe`：纯文本消息完成后才显示；包含工具调用的混合消息改为结构化工作状态。`lesson_prepare` 成功后，Coach 随后的自由回复会被一张课程就绪卡替代，只显示课堂环节数量和类型，不显示真实课题、题目、方法或选卡理由。Pi 原始 Session JSONL 不会被修改。
 
 `raw-stream` 只用于本地诊断，因为它可能显示混合工具文本：
 
@@ -112,7 +112,7 @@ pi
 
 1. 从首页唯一的续学主入口回到原位置；查看学习集概述、研习要领或学习总览不会覆盖这个位置。
 2. 在 Plan 的“学习顾问”中讨论方向、复盘旧课或请求备课；没有 Plan 或需要跨 Plan 规划时，进入“学习总览”。
-3. 从会话树打开已准备的 Lesson；开始前只显示无剧透课堂本，通过机械准入后才创建或恢复独立的课堂导师 Session。
+3. 备课完成后，Coach 对话中出现无剧透课程就绪卡。prepared Lesson 在会话树和开始页都只使用通用名称；学生点击“开始上课”、通过机械准入并创建或恢复独立课堂导师 Session 后，真实课题才出现。
 4. 上课时，当前 active ActivityBlock 固定在聊天上方，课堂导师只推进已经揭示的 Student View。右侧课堂情境保留整节课的文档脉络，学生也可以上传 PNG、JPEG 或 WebP 草稿。
 5. “研习资料”搜索真实题卡、方法、材料和学习记录。active/paused 课堂导师只能访问当前已揭示资产与本课允许的 active Trace；学习顾问和 closed/abandoned Replay 可以访问完整的学生安全资产集；未启动 Tutor 和学习总览不开放这项搜索。
 6. 在 Plan 会话树中从 active 课堂导师切到学习顾问或其他 Session 时，前端先把 Lesson 暂停；重新打开后沿原 ActivityBlock 和原 Session 继续。
@@ -122,8 +122,8 @@ pi
 
 ## Session、证据与重新备课
 
-- Roadmap Coach Session 的 owner 是 `@roadmap` / `ROADMAP.md`；它在学生界面显示为“学习总览”，只负责全局方向、跨 Plan 回看和注册学生确认的新 Plan。
-- Plan Coach Session 的 owner 是当前 Plan；它在学生界面显示为“学习顾问”。正常备课通过 `lesson_prepare` 提交一次性结构化课堂骨架，由运行时绑定路径、状态和 Lesson Index 并编译成 Markdown；最终 `active / complete / replan` 决定通过 `plan_update` 一次写回，再重读 Plan 后回复。
+- Roadmap Coach Session 的 owner 是 `@roadmap` / `ROADMAP.md`；它在学生界面显示为“学习总览”，只负责全局方向、跨 Plan 回看和注册学生确认的新 Plan。建立第一个 Plan 前，它会和学生确认并写回 Roadmap 的长期目标、可观察能力标准和测试，再重读确认。
+- Plan Coach Session 的 owner 是当前 Plan；它在学生界面显示为“学习顾问”。正常备课通过 `lesson_prepare` 提交一次性结构化课堂骨架，由运行时绑定路径、状态和 Lesson Index 并编译成 Markdown。Plan Coach 没有通用文件写入工具：`active / replan` 使用带自由摘要的 `plan_update`，`complete` 必须改用结构化 Learning Review，再重读 Plan 后回复。
 - Tutor Session 的 owner 是当前 Lesson；它在学生界面显示为“课堂导师”。模型不填写 `lessonPath`、`cardStepId` 或 Session ID。
 - 每个 Pi Session 只有一条 `studyforge.session-owner.v1`，由 `role + ownerId + ownerPath` 决定身份；只有三项完全匹配才复用 frontmatter 中的 Session ID，Coach/Tutor 展示名不参与身份判断。
 - Tutor 在评价前只冻结学生已经亲自给出的数学内容。缺决定性证明时写 `incomplete`，不能把 Tutor 的补全冒充成学生证据。
@@ -133,6 +133,8 @@ pi
 - 学生异议成立或后续补全同一 attempt 时，新的 Trace 必须 supersede 准确的 active event。
 
 `lesson_close` 只接收一份学生可见的 Lesson Summary，写入该快照和 `status: closed`，不会完成、跳过或重排任何 Block。Lesson Summary 是结束时的检索入口，不取代 active Trace；更正 Trace 后可以重建能力图与 Planner Attention，但不会自动改写 Summary、Plan、另解 sidecar 或已确认画像。Plan 状态和复盘结论只由 Coach 正常审阅后调用 `plan_update` 改变。
+
+Plan 完成后，页面首先显示阶段结论、适用范围和下一步；展开“为什么这样判断”后，记录分为“最能说明这一点”“可以作为参考”“还需要再看看”三层。前两层的来源按钮会打开现有证据透镜，回到对应 active Trace；“这和我的实际情况不一样”只把带来源的异议模板填进输入框，学生仍可修改并自行发送，不会暗中发出请求。
 
 `LessonBlueprint` 只存在于普通工具调用记录中，不是第二份学习状态；`lesson-xxx.md` 仍是 Tutor、Trace 和前端共同读取的唯一课堂事实。仍为 `prepared` 的 Lesson 可以由 Coach 保持 ID 原地重新编译。Tutor 已启动后再要求重新备课，旧 Lesson 保留并标为 `abandoned`，Coach 使用新 ID 创建替代 Lesson。
 
@@ -152,18 +154,28 @@ Trace 写入成功后，服务端主动发布完整能力 snapshot；刷新、�
 实际改变 Plan 或 Lesson，并说明什么后续表现会支持或推翻它。学生可以随时要求
 结束问诊，由 Coach 带着明确的不确定性继续。
 
-具体执行分别由 `roadmap-study`、`plan-next-cycle` 和 `coach-study` 三份 Skill
-负责，不增加问卷 schema、诊断分数或新的 Agent。
+首次建立学习集时，Roadmap Coach 还会把双方确认的 Goal、Observable Capability
+Standard 和 Test 写回并重读，避免第一个 Plan 建立在模板占位上。具体执行分别由
+`roadmap-study`、`plan-next-cycle` 和 `coach-study` 三份 Skill 负责，不增加问卷
+schema、诊断分数或新的 Agent。
 
 ## 长期记忆与界面偏好
 
-completed Plan 的学习顾问可以把带来源的 `add / revise / delete` 长期记忆候选放进原聊天时间线。候选默认都不选择；学生逐项采用、改写后采用或不采用，也可以稍后处理。提交只表示决定已保存并交回同一个 Plan Coach，不表示画像已经更新；学习顾问应用选择、重读 `student-profile.md` 与 `teaching-profile.md` 后，才能报告最终结果。Roadmap Coach、课堂导师和未完成 Plan 不能提出这张确认卡。
+completed Plan 的学习顾问可以把带来源的 `add / revise / delete` 长期记忆候选放进原聊天时间线。候选默认都不选择；学生逐项采用、改写后采用或不采用，也可以稍后处理。状态依次是：
+
+- `proposed`：待学生逐条确认；
+- `submitted`：选择已经保存，正在等待写入；失败时仍停在这里，可以在同一 Coach 对话重试；
+- `applied`：运行时已经用回滚安全的双文件操作更新两份画像，并保存了写入回执。
+
+画像条目使用稳定 `S*` / `T*` ID，并保存 Content、Scope、Sources、Rationale 和 Counter-evidence。Plan Coach 只能把 review ID 交给专用写入工具，不能通用编辑画像；成功后还要重读 `student-profile.md` 与 `teaching-profile.md` 才能报告。Roadmap Coach、课堂导师和未完成 Plan 不能提出或应用这张确认卡。
 
 “陪伴风格”按 Coach/Tutor Session 单独保存到 Pi Session custom entry，不复制到其他 Session，也不改变题卡、评价、Trace 或学习标准。柔和动效与完成反馈只保存在当前浏览器的 `studyforge.presentation.v1`，不会进入 learning set、Session 或模型上下文；系统要求减少动态效果时优先关闭动效。
 
 ## 深度模式与动态工作流
 
 深度模式按 Coach/Tutor Session 单独开启，默认关闭。信息足够时，父 Agent 仍直接回答；跨题卡、跨 Lesson 或 Plan 级检索会把大体量证据留在一个临时 Evidence Scout 中，多个任务只用于真正独立、且结论可能改变下一步教学动作的问题。
+
+唯一例外是 Plan 第一次准备判定 `complete`：即使开关关闭，学习顾问也会运行一次单任务 Quick Evidence Scout，用 50,000 token、最多 180 秒检查拟定结论、适用范围和来源中的冲突、遗漏或无法重读项。它只返回核对材料，不替 Coach 判定完成；失败或超时会让 Coach 收窄结论边界并留下待检问题。前端显示进度，子任务原始结论仍不直接面向学生。
 
 - `quick` 最多三个无依赖任务，最长 180 秒，可以直接运行；Token 总预算由父 Agent 显式声明，单个 Plan 级 Evidence Scout 约定使用 50,000，因为子任务输入和题卡/Trace 工具结果都计入预算；
 - `deep` 可以包含依赖波，但必须先在任务轨显示目标、并发、Token 与时间上限，由学生确认后才运行；
