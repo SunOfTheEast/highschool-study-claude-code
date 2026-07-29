@@ -36,6 +36,7 @@ import { EvidenceLens } from './components/EvidenceLens';
 import { LearningSetHome } from './components/LearningSetHome';
 import { MemoryReviewPanel } from './components/MemoryReviewPanel';
 import { PersonaDrawer } from './components/PersonaDrawer';
+import { PlanLearningReview } from './components/PlanLearningReview';
 import { RoadmapCoachShell } from './components/RoadmapCoachShell';
 import { SessionTree } from './components/SessionTree';
 import {
@@ -79,6 +80,8 @@ export function App() {
     readPresentationPreferences(localStorage, systemReducedMotion)
   ));
   const [completionFeedback, setCompletionFeedback] = useState('');
+  const [composerPrefill, setComposerPrefill] =
+    useState<{ id: string; text: string } | null>(null);
   const priorNotebook = useRef<{
     lessonId: string;
     statuses: Record<string, string>;
@@ -129,6 +132,7 @@ export function App() {
     setLoading(true);
     setPageError(null);
     setMemoryReview(null);
+    setComposerPrefill(null);
     setContentExplorerOpen(false);
     setPersonaDrawerOpen(false);
     try {
@@ -584,7 +588,9 @@ export function App() {
             workflowControlsEnabled
             workflowRailInline
             gate={null}
+            prefill={null}
             onSend={send}
+            onPrefillConsumed={() => {}}
             onPersonaOpen={() => setPersonaDrawerOpen(true)}
             onDeepMode={changeDeepMode}
             onWorkflowAction={actOnWorkflow}
@@ -700,16 +706,29 @@ export function App() {
           workflows={client.workflows[selected] ?? []}
           workflowControlsEnabled={workflowSessionOpen}
           gate={gate}
-          stage={selectedLesson && (
-            selectedLesson.status === 'active' || selectedLesson.status === 'paused'
-          ) ? (
-            <CurrentActivityStage
-              notebook={notebook}
-              paused={selectedLesson.status === 'paused'}
-              onResume={() => void startLesson(selectedLesson)}
+          stage={isCoach && coachContext?.learningReview ? (
+            <PlanLearningReview
+              value={coachContext.learningReview}
+              onEvidence={(source) => void openEvidence(source)}
+              onDisputePrefill={(text) => setComposerPrefill({
+                id: crypto.randomUUID(),
+                text,
+              })}
             />
-          ) : null}
+          ) : selectedLesson && (
+              selectedLesson.status === 'active' || selectedLesson.status === 'paused'
+            ) ? (
+              <CurrentActivityStage
+                notebook={notebook}
+                paused={selectedLesson.status === 'paused'}
+                onResume={() => void startLesson(selectedLesson)}
+              />
+            ) : null}
+          prefill={composerPrefill}
           onSend={send}
+          onPrefillConsumed={(id) => setComposerPrefill((current) => (
+            current?.id === id ? null : current
+          ))}
           onPersonaOpen={() => setPersonaDrawerOpen(true)}
           onDeepMode={changeDeepMode}
           onWorkflowAction={actOnWorkflow}

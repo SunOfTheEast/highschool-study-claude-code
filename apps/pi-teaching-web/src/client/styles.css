@@ -517,6 +517,109 @@ select:focus-visible {
   cursor: pointer;
 }
 
+.plan-learning-review {
+  width: min(840px, calc(100% - 2.5rem));
+  margin: 1.1rem auto 0;
+  padding: 1.4rem 1.45rem 0;
+  border-top: 3px solid var(--accent);
+  border-bottom: 1px solid var(--ink);
+  background: color-mix(in srgb, var(--paper) 97%, var(--accent-wash));
+  animation: stage-in .3s ease-out both;
+}
+.plan-learning-review > header span {
+  color: var(--accent);
+  font-size: .64rem;
+  font-weight: 750;
+  letter-spacing: .13em;
+}
+.plan-learning-review > header h2 {
+  max-width: 38rem;
+  margin: .65rem 0 .8rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.7vw, 2rem);
+  font-weight: 500;
+  line-height: 1.35;
+}
+.learning-review-boundary {
+  max-width: 42rem;
+  margin: 0;
+  color: var(--ink-soft);
+  font-family: var(--font-reading);
+  font-size: .82rem;
+  line-height: 1.75;
+}
+.learning-review-next {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr);
+  gap: .8rem;
+  align-items: baseline;
+  margin-top: 1.1rem;
+  padding: .85rem 0;
+  border-top: 1px solid var(--rule);
+}
+.learning-review-next small {
+  color: var(--accent);
+  font-size: .61rem;
+  letter-spacing: .1em;
+}
+.learning-review-next p { margin: 0; font-size: .78rem; line-height: 1.6; }
+.plan-learning-review-details { border-top: 1px solid var(--rule); }
+.plan-learning-review-details > summary {
+  padding: .9rem 0;
+  color: var(--ink-soft);
+  font-size: .68rem;
+  cursor: pointer;
+  list-style-position: inside;
+}
+.plan-learning-review-details > section {
+  padding: .4rem 0 1rem;
+  border-top: 1px dotted var(--rule);
+}
+.plan-learning-review-details h3 {
+  margin: .5rem 0;
+  color: var(--accent);
+  font-size: .64rem;
+  letter-spacing: .08em;
+}
+.plan-learning-review-details article {
+  padding: .75rem 0;
+  border-top: 1px solid var(--rule);
+}
+.plan-learning-review-details article:first-of-type { border-top: 0; }
+.plan-learning-review-details article p {
+  margin: 0;
+  font-family: var(--font-reading);
+  font-size: .78rem;
+  line-height: 1.65;
+}
+.plan-learning-review-details article > small {
+  display: block;
+  margin-top: .35rem;
+  color: var(--ink-faint);
+  font-size: .63rem;
+  line-height: 1.55;
+}
+.learning-review-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  margin-top: .65rem;
+}
+.learning-review-actions button {
+  padding: .4rem .55rem;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: .61rem;
+  cursor: pointer;
+}
+.learning-review-actions button:hover,
+.learning-review-actions button:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+  outline: 0;
+}
+
 .chat-header {
   min-height: 4.6rem;
   display: flex;
@@ -1681,6 +1784,13 @@ select:focus-visible {
     width: calc(100% - 1.5rem);
     margin-top: .75rem;
   }
+  .plan-learning-review {
+    width: calc(100% - 1.5rem);
+    margin-top: .75rem;
+    padding-inline: 1rem;
+    overflow-wrap: anywhere;
+  }
+  .learning-review-next { grid-template-columns: 1fr; gap: .25rem; }
   .task-rail { padding-inline: 1rem; }
   .workflow-summary { grid-template-columns: 2.8rem minmax(0, 1fr); }
   .workflow-summary small { grid-column: 2; }

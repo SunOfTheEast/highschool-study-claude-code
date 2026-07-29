@@ -1,4 +1,9 @@
-import { useState, type ChangeEvent, type ReactNode } from 'react';
+import {
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type ReactNode,
+} from 'react';
 import type {
   ConversationItem,
   PersonaPresentation,
@@ -27,7 +32,9 @@ export function ChatPanel({
   workflowRailInline = false,
   gate,
   stage,
+  prefill,
   onSend,
+  onPrefillConsumed,
   onPersonaOpen,
   onDeepMode,
   onWorkflowAction,
@@ -46,7 +53,9 @@ export function ChatPanel({
   workflowRailInline?: boolean;
   gate: ReactNode;
   stage?: ReactNode;
+  prefill: { id: string; text: string } | null;
   onSend(text: string, imagePaths: string[]): Promise<void>;
+  onPrefillConsumed(id: string): void;
   onPersonaOpen(): void;
   onDeepMode(enabled: boolean): Promise<void>;
   onWorkflowAction(id: string, action: 'confirm' | 'cancel'): Promise<void>;
@@ -57,6 +66,12 @@ export function ChatPanel({
   const [uploading, setUploading] = useState(false);
   const [imageError, setImageError] = useState('');
   const currentPersona = persona?.choices.find((choice) => choice.id === persona.id);
+
+  useEffect(() => {
+    if (!prefill) return;
+    setText(prefill.text);
+    onPrefillConsumed(prefill.id);
+  }, [prefill?.id]);
 
   const selectImages = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = [...(event.target.files ?? [])];

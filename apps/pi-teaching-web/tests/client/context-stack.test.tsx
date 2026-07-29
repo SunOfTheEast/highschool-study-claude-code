@@ -2,6 +2,7 @@ import { expect, test } from 'bun:test';
 import { renderToStaticMarkup } from 'react-dom/server';
 import type {
   CoachContextView,
+  LearningReview,
   LessonNode,
   LessonReplay,
   StudentNotebook,
@@ -20,6 +21,17 @@ const context: CoachContextView = {
     summary: '前课摘要',
     source: 'lessons/lesson-1.md#lesson-summary',
   }],
+};
+const learningReview: LearningReview = {
+  conclusion: '已经形成阶段结论。',
+  boundary: '只覆盖当前题型。',
+  nextStep: '下一步检查迁移。',
+  keyEvidence: [{
+    claim: '不应在右栏重复出现的关键判断。',
+    source: 'lessons/lesson-1.md#trace-event-001',
+  }],
+  supportingEvidence: [],
+  openQuestions: [],
 };
 const lesson: LessonNode = {
   id: 'lesson-1',
@@ -81,4 +93,29 @@ test('composes distinct ordered context sections for Coach, Tutor, and Replay', 
   for (const value of [coach, tutor, replayHtml]) {
     expect(value.match(/open=""/g)?.length).toBe(1);
   }
+});
+
+test('does not repeat a completed structured review in the Coach context stack', () => {
+  const completed = renderToStaticMarkup(
+    <ContextStack
+      view="coach"
+      coachContext={{
+        ...context,
+        currentPosition: '不应重复出现的原始位置。',
+        planSummary: '不应展开的原始结构。',
+        learningReview,
+      }}
+      lesson={null}
+      notebook={null}
+      replay={null}
+      abilities={{ nodes: [] }}
+      workflows={[]}
+      onEvidence={() => {}}
+      onWorkflowAction={async () => {}}
+    />,
+  );
+
+  expect(completed).toContain('阶段回顾已整理，请在对话区查看。');
+  expect(completed).not.toContain('不应重复出现的原始位置。');
+  expect(completed).not.toContain('不应在右栏重复出现的关键判断。');
 });
