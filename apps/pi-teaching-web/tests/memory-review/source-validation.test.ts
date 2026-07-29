@@ -10,6 +10,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { appendTrace } from 'highschool-study-markdown/study-domain';
 import type { MemoryReviewItem } from '../../src/memory-review/contracts';
+import { renderProfileDocument } from '../../src/memory-review/profile-document';
 import { validateMemoryReviewItems } from '../../src/memory-review/source-validation';
 import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
 
@@ -28,14 +29,32 @@ function completedFixture(): string {
     planPath,
     readFileSync(planPath, 'utf8').replace('status: active', 'status: completed'),
   );
-  writeFileSync(
-    join(root, 'memory/student-profile.md'),
-    `${readFileSync(join(root, 'memory/student-profile.md'), 'utf8')}\n- 喜欢每一步都确认。\n`,
-  );
-  writeFileSync(
-    join(root, 'memory/teaching-profile.md'),
-    `${readFileSync(join(root, 'memory/teaching-profile.md'), 'utf8')}\n- 先给完整讲解。\n`,
-  );
+  const studentPath = join(root, 'memory/student-profile.md');
+  writeFileSync(studentPath, renderProfileDocument(
+    readFileSync(studentPath, 'utf8'),
+    'student',
+    [{
+      id: 'S1',
+      content: '喜欢每一步都确认。',
+      scope: '导数专题。',
+      sources: ['plans/domain-integrity.md#plan-summary'],
+      rationale: '旧阶段观察。',
+      counterEvidence: '暂无。',
+    }],
+  ));
+  const teachingPath = join(root, 'memory/teaching-profile.md');
+  writeFileSync(teachingPath, renderProfileDocument(
+    readFileSync(teachingPath, 'utf8'),
+    'teaching',
+    [{
+      id: 'T1',
+      content: '先给完整讲解。',
+      scope: '训练和测评。',
+      sources: ['lessons/lesson-001.md#lesson-summary'],
+      rationale: '旧阶段观察。',
+      counterEvidence: '暂无。',
+    }],
+  ));
   return root;
 }
 
@@ -146,5 +165,27 @@ test('rejects invalid operation shapes and profile text that is not current', ()
     'domain-integrity',
     'plans/domain-integrity.md',
     [{ ...items[1]!, currentText: '不存在的旧画像条目' }],
-  )).toThrow('MEMORY_REVIEW_CURRENT_TEXT_NOT_FOUND');
+  )).toThrow('MEMORY_REVIEW_CURRENT_TEXT_MISMATCH');
+
+  expect(() => validateMemoryReviewItems(
+    root,
+    'domain-integrity',
+    'plans/domain-integrity.md',
+    [{ ...items[0]!, proposedText: '喜欢每一步都确认。' }],
+  )).toThrow('MEMORY_REVIEW_CONTENT_DUPLICATE');
+});
+
+test('rejects a source value with prose attached to an otherwise valid path', () => {
+  const root = completedFixture();
+  const item = validItems()[0]!;
+
+  expect(() => validateMemoryReviewItems(
+    root,
+    'domain-integrity',
+    'plans/domain-integrity.md',
+    [{
+      ...item,
+      sources: ['lessons/lesson-001.md#trace-event-001（关键表现）'],
+    }],
+  )).toThrow('MEMORY_REVIEW_SOURCE_INVALID');
 });

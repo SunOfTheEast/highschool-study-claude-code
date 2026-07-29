@@ -66,6 +66,36 @@ test('restores only the latest review snapshot from the active Pi Session branch
   expect(store.latest()).toEqual({ ...proposed, status: 'submitted', decisions });
 });
 
+test('retains the applied receipt as the latest append-only snapshot', () => {
+  const manager = SessionManager.inMemory('/tmp/study');
+  const store = new MemoryReviewStore(manager);
+  const decisions: MemoryReviewDecision[] = proposed.items.map((item) => ({
+    itemId: item.id,
+    action: 'reject',
+    text: null,
+  }));
+  const receipt = {
+    reviewId: proposed.id,
+    appliedItems: [],
+    unchangedItems: proposed.items.map((item) => item.id),
+    profilePaths: {
+      student: 'memory/student-profile.md' as const,
+      teaching: 'memory/teaching-profile.md' as const,
+    },
+  };
+
+  store.save(proposed);
+  store.save({ ...proposed, status: 'submitted', decisions });
+  store.save({ ...proposed, status: 'applied', decisions, receipt });
+
+  expect(store.latest()).toEqual({
+    ...proposed,
+    status: 'applied',
+    decisions,
+    receipt,
+  });
+});
+
 test('requires one valid explicit decision for every candidate', () => {
   expect(() => submittedMemoryReview(proposed, 'review-1', []))
     .toThrow('MEMORY_REVIEW_DECISIONS_INCOMPLETE');

@@ -7,6 +7,7 @@ import {
 } from 'highschool-study-markdown/study-domain';
 import { readPlanWorkspace } from '../study/read-workspace';
 import type { MemoryReviewItem } from './contracts';
+import { parseProfileDocument } from './profile-document';
 
 function invalidSource(source: string): never {
   throw new Error(`MEMORY_REVIEW_SOURCE_INVALID: ${source}`);
@@ -34,13 +35,19 @@ function validateShape(item: MemoryReviewItem): void {
 }
 
 function validateCurrentText(root: string, item: MemoryReviewItem): void {
-  if (item.currentText === null) return;
   const path = item.owner === 'student'
     ? 'memory/student-profile.md'
     : 'memory/teaching-profile.md';
   const source = readFileSync(resolveInsideRoot(root, path), 'utf8');
-  if (!source.includes(item.currentText.trim())) {
-    throw new Error(`MEMORY_REVIEW_CURRENT_TEXT_NOT_FOUND: ${item.id}`);
+  const entries = parseProfileDocument(source, item.owner);
+  if (item.operation === 'add') {
+    if (entries.some((entry) => entry.content === item.proposedText?.trim())) {
+      throw new Error(`MEMORY_REVIEW_CONTENT_DUPLICATE: ${item.id}`);
+    }
+    return;
+  }
+  if (!entries.some((entry) => entry.content === item.currentText?.trim())) {
+    throw new Error(`MEMORY_REVIEW_CURRENT_TEXT_MISMATCH: ${item.id}`);
   }
 }
 
@@ -81,6 +88,13 @@ export function validateMemoryReviewItems(
 
     if (item.sources.length === 0) throw new Error(`MEMORY_REVIEW_SOURCE_REQUIRED: ${id}`);
     for (const source of item.sources) {
+      if (
+        source !== source.trim()
+        || !/^(?:plans|lessons)\/[A-Za-z0-9][A-Za-z0-9._/-]*\.md(?:#[A-Za-z0-9][A-Za-z0-9._=-]*)?$/
+          .test(source)
+      ) {
+        invalidSource(source);
+      }
       const [path, fragment] = source.split('#', 2);
       if (!path || !allowedPaths.has(path)) invalidSource(source);
       const resolved = sourceResolve(root, { fromPath: 'ROADMAP.md', target: source });

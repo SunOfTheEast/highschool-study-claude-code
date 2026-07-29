@@ -4,6 +4,7 @@ import type {
 } from '@earendil-works/pi-coding-agent';
 import {
   MEMORY_REVIEW_ENTRY,
+  type MemoryReviewApplyReceipt,
   type MemoryReviewDecision,
   type MemoryReviewSnapshot,
 } from './contracts';
@@ -25,6 +26,22 @@ export class MemoryReviewStore {
     );
     return entries.at(-1)?.data ?? null;
   }
+}
+
+export function appliedMemoryReview(
+  current: MemoryReviewSnapshot | null,
+  reviewId: string,
+  receipt: MemoryReviewApplyReceipt,
+): MemoryReviewSnapshot {
+  if (!current || current.id !== reviewId) throw new Error('MEMORY_REVIEW_NOT_FOUND');
+  if (current.status === 'applied') return current;
+  if (current.status !== 'submitted') throw new Error('MEMORY_REVIEW_NOT_SUBMITTED');
+  if (receipt.reviewId !== reviewId) throw new Error('MEMORY_REVIEW_RECEIPT_MISMATCH');
+  return {
+    ...current,
+    status: 'applied',
+    receipt,
+  };
 }
 
 export function submittedMemoryReview(

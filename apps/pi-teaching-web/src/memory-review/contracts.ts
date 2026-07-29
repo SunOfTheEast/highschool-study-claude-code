@@ -18,10 +18,26 @@ export type MemoryReviewDecision = {
   text: string | null;
 };
 
-export type MemoryReviewSnapshot = {
+export type MemoryReviewApplyReceipt = {
+  reviewId: string;
+  appliedItems: string[];
+  unchangedItems: string[];
+  profilePaths: {
+    student: 'memory/student-profile.md';
+    teaching: 'memory/teaching-profile.md';
+  };
+};
+
+type MemoryReviewSnapshotBase = {
   id: string;
   planId: string;
-  status: 'proposed' | 'submitted';
   items: MemoryReviewItem[];
   decisions: MemoryReviewDecision[];
 };
+
+export type MemoryReviewSnapshot =
+  | (MemoryReviewSnapshotBase & { status: 'proposed' | 'submitted' })
+  | (MemoryReviewSnapshotBase & {
+    status: 'applied';
+    receipt: MemoryReviewApplyReceipt;
+  });
