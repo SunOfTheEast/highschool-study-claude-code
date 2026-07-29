@@ -1,6 +1,6 @@
 import { defineTool } from '@earendil-works/pi-coding-agent';
 import { Type } from 'typebox';
-import { updatePlan } from '../study/write-workspace';
+import { updatePlan, type PlanUpdateInput } from '../study/write-workspace';
 
 const text = Type.String({ minLength: 1 });
 const currentPosition = Type.String({
@@ -35,32 +35,42 @@ export function createPlanUpdateTool(root: string, ownerPath: string) {
     name: 'plan_update',
     label: '写回学习计划',
     description: 'Persist the Coach\'s final audit of the current Session-owned Plan. Call after reviewing active evidence and obtaining any student choice required for completion or replanning. The runtime rebuilds Lesson Index and Roadmap status from real files; reread the Plan before reporting the result.',
-    parameters: Type.Union([
-      Type.Object({
-        decision: Type.Union([
-          Type.Literal('active'),
-          Type.Literal('replan'),
-        ], {
-          description: 'Continue the Plan or reactivate it around a revised route.',
-        }),
-        currentPosition,
-        nextLessonCandidate,
-        planSummary: Type.String({
-          minLength: 1,
-          description: 'Compact Plan-level synthesis of active evidence, decision, and unresolved work.',
-        }),
-      }, { additionalProperties: false }),
-      Type.Object({
-        decision: Type.Literal('complete', {
-          description: 'Complete the Plan with student agreement and a bounded review.',
-        }),
-        currentPosition,
-        nextLessonCandidate,
-        learningReview,
-      }, { additionalProperties: false }),
-    ]),
+    parameters: Type.Object({
+      decision: Type.Union([
+        Type.Literal('active'),
+        Type.Literal('replan'),
+        Type.Literal('complete'),
+      ], {
+        description: 'Continue the Plan, reactivate it around a revised route, or complete it with student agreement.',
+      }),
+      currentPosition,
+      nextLessonCandidate,
+      planSummary: Type.Optional(Type.String({
+        minLength: 1,
+        description: 'Required for active or replan; compact synthesis of active evidence, decision, and unresolved work.',
+      })),
+      learningReview: Type.Optional(learningReview),
+    }, {
+      additionalProperties: false,
+      oneOf: [
+        {
+          properties: {
+            decision: { enum: ['active', 'replan'] },
+          },
+          required: ['planSummary'],
+          not: { required: ['learningReview'] },
+        },
+        {
+          properties: {
+            decision: { const: 'complete' },
+          },
+          required: ['learningReview'],
+          not: { required: ['planSummary'] },
+        },
+      ],
+    }),
     execute: async (_id, input) => {
-      updatePlan(root, ownerPath, input);
+      updatePlan(root, ownerPath, input as PlanUpdateInput);
       return {
         content: [{ type: 'text' as const, text: JSON.stringify({ ok: true, decision: input.decision }) }],
         details: { kind: 'plan-update', planPath: ownerPath, decision: input.decision },

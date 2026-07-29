@@ -906,6 +906,17 @@ test('keeps non-problem Trace cardless', async () => {
     }));
 });
 
+test('exposes plan_update through a provider-compatible object root', () => {
+  const tool = createPlanUpdateTool(root, 'plans/domain-integrity.md');
+  const schema = tool.parameters as {
+    type?: string;
+    oneOf?: unknown[];
+  };
+
+  expect(schema.type).toBe('object');
+  expect(schema.oneOf).toHaveLength(2);
+});
+
 test('exposes exclusive progress and complete plan_update contracts without path authority', () => {
   const tool = createPlanUpdateTool(root, 'plans/domain-integrity.md');
   const common = {
