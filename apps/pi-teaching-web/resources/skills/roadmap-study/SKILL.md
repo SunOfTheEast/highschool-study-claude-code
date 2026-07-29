@@ -71,6 +71,19 @@ coach_session: null. It must contain exactly one non-empty Goal, Observable Capa
 Standard, Test, Planning Basis, Lesson Index, Current Position, Next Lesson Candidate
 and Plan Summary section. Before a real Lesson exists, Lesson Index is only （暂无）.
 
+Finish that complete Plan from the student-approved draft before searching cards. In
+Next Lesson Candidate, you may reserve one non-semantic short source number and mark it
+“仅供 Plan Coach 复核，不代表已经选定”. Only after the Plan is complete may you privately
+use `card_search` to check whether authentic material can support it. Then replace or
+remove only the reserved number line and call `plan_register` immediately. An empty
+search removes the unverified number; it does not invalidate the approved Plan.
+
+The short number is a source locator such as `mst_p0276`, not a semantic filename or a
+Lesson binding. Keep the card stem, answer, methods, decisive structure and selection
+reason out of the Plan and student reply. After private search, let the runtime's
+deterministic registration or recovery message end the turn instead of writing a
+free-form card summary.
+
 Planning Basis states why this direction matters now, the student statements or exact
 sources that changed the choice, and what later result would support or overturn it.
 A useful working judgment distinguishes explanations that would produce different

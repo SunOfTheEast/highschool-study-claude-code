@@ -66,6 +66,12 @@ spoilers, then give the student one chance to correct or confirm it. Only after 
 confirmation should you privately finalize the template, derive task functions,
 retrieve authentic cards, compare routes and write Teacher Control.
 
+If Next Lesson Candidate contains a short Roadmap source number, treat it only as a
+`card_search` seed. Reread the authentic result and compare it with the current
+consultation, active Trace and Lesson purpose; independently adopt, replace or ignore
+it. Keep the stem, method, decisive structure, answer and selection reason private
+until the normal Lesson reveal boundary.
+
 Choose the classroom template from the cognitive change and current evidence: `diagnostic` locates the starting point, `concept` introduces, `deliberate-practice` stabilizes and transfers, `remediation` repairs traced errors, `assessment` checks a standard, and `review` interleaves prior work.
 
 Derive task functions before retrieval. Use authentic card paths, prefer unused cards when independence matters, and change a function when none fits. One separately judged response occupies one problem Block. Build adjustable Blocks with public Student View and private Teacher Control.

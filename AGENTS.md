@@ -196,6 +196,13 @@ or runtime error branches into Skills, Agent prompts, or this guide.
   count and kinds. The prepared Lesson's true title is hidden in the sidebar
   and admission gate until the student starts it. `raw-stream` and raw JSONL
   retain the original final and full receipt for local diagnosis.
+- Roadmap may privately use `card_search` only after the student-approved Plan
+  is complete. In `safe`, its premature free final is replaced by a fixed
+  recovery message; a successful `plan_register` emits one ordinary
+  deterministic Coach message and suppresses the model final. The existing
+  Plan may carry a card hint only as a non-binding short source number for
+  Plan Coach to re-search. This adds no readiness card, handoff store, or
+  shared UI contract; `raw-stream` and raw JSONL retain the private exchange.
 - `raw-stream` is a local diagnostic option, not the student default.
 - Student View never reveals Teacher Control, card answers, rubric text,
   unrevealed hints, private evidence matrices, or stored alternative
