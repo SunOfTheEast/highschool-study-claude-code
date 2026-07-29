@@ -31,7 +31,7 @@
 - Consumes: Pi stored `toolResult` messages for `card_search` (`details.kind === "card-search"`) and `plan_register` (`details.kind === "plan-register"` with `value.ok === true`).
 - Produces: `roadmapPrivateToolResult(raw): "card-search" | "plan-register" | null`, fixed student-safe Coach messages, and Roadmap-only behavior in `projectConversationEntries`.
 
-- [ ] **Step 1: Add failing stored-history tests**
+- [x] **Step 1: Add failing stored-history tests**
 
 Add helpers that create successful tool results:
 
@@ -100,7 +100,7 @@ test('replaces a registered Roadmap post-search final with one ordinary ready me
 
 Also assert that `coach:plan` remains unchanged, failed `card_search` does not activate privacy state, and `raw-stream` retains the original final.
 
-- [ ] **Step 2: Run the stored projection tests and verify RED**
+- [x] **Step 2: Run the stored projection tests and verify RED**
 
 Run:
 
@@ -111,7 +111,7 @@ bun test tests/projection/conversation-projector.test.ts
 
 Expected: the new Roadmap cases fail because the current projector exposes the pure assistant final and produces no deterministic Plan-ready message.
 
-- [ ] **Step 3: Implement the minimal stored state**
+- [x] **Step 3: Implement the minimal stored state**
 
 Add compact receipt recognition:
 
@@ -154,7 +154,7 @@ For `safe` history on `coach:@roadmap`:
 - a later student message clears an unfinished turn-local state;
 - every other Session and `raw-stream` follows existing behavior.
 
-- [ ] **Step 4: Run the stored projection tests and verify GREEN**
+- [x] **Step 4: Run the stored projection tests and verify GREEN**
 
 Run:
 
@@ -177,7 +177,7 @@ Expected: all stored conversation projection tests pass.
 - Consumes: `roadmapPrivateToolResult`, fixed message builders/text from Task 1, and existing `AgentSessionEvent`.
 - Produces: live `work-status` plus deterministic ordinary `message` events with the same visible sequence as stored history.
 
-- [ ] **Step 1: Add failing live-event tests**
+- [x] **Step 1: Add failing live-event tests**
 
 Construct successful `tool_execution_end` events with the same `details.kind` values used by stored history. Verify:
 
@@ -198,7 +198,7 @@ Then verify `card_search → plan_register → spoiler final` emits one fixed re
 
 Update the status-label test so Roadmap `card_search` displays `正在核对课程素材`, while non-Roadmap `card_search` keeps `正在查找真实题卡`.
 
-- [ ] **Step 2: Run the live projection tests and verify RED**
+- [x] **Step 2: Run the live projection tests and verify RED**
 
 Run:
 
@@ -209,7 +209,7 @@ bun test tests/projection/projector.test.ts
 
 Expected: the Roadmap final remains visible, no Plan-ready message is emitted, and the Roadmap-specific status label is absent.
 
-- [ ] **Step 3: Implement the live state without new contracts**
+- [x] **Step 3: Implement the live state without new contracts**
 
 Use the same three explicit states as stored history:
 
@@ -226,7 +226,7 @@ non-retrying `agent_end`.
 Keep the existing `preparedInCurrentTurn` behavior independent. Do not generalize
 both features into a rule engine.
 
-- [ ] **Step 4: Run both projection suites and verify GREEN**
+- [x] **Step 4: Run both projection suites and verify GREEN**
 
 Run:
 
@@ -252,7 +252,7 @@ Expected: both live and stored tests pass with matching safe behavior.
 - Consumes: existing Plan Markdown sections, existing `card_search`, and existing `plan_register`.
 - Produces: one authoring order for Roadmap and one non-binding retrieval interpretation for Plan Coach.
 
-- [ ] **Step 1: Add the compact Roadmap authoring contract**
+- [x] **Step 1: Add the compact Roadmap authoring contract**
 
 In `roadmap-study / Publish a new cycle`, state:
 
@@ -271,7 +271,7 @@ reply.
 An empty search leaves the approved Plan valid and removes the unverified number
 instead of inventing one.
 
-- [ ] **Step 2: Add the compact Plan Coach interpretation**
+- [x] **Step 2: Add the compact Plan Coach interpretation**
 
 In `coach-study / Prepare the next Lesson`, state that a Roadmap short source number
 is only a search seed. Plan Coach must rerun `card_search`, compare the real card
@@ -279,7 +279,7 @@ against current inquiry, Trace, and Lesson purpose, and may adopt, replace, or i
 it. It must not reveal the stem, method, decisive structure, answer, or selection
 reason before `lesson_prepare`.
 
-- [ ] **Step 3: Update durable and user-facing documentation**
+- [x] **Step 3: Update durable and user-facing documentation**
 
 Add one concise invariant to `AGENTS.md`: after Roadmap private card search, safe
 projection replaces free model output with a deterministic ordinary Coach message;
@@ -293,7 +293,7 @@ Keep the design spec aligned with the audited minimal implementation: ordinary
 message, no `agent_end` recovery protocol, no frontend/shared-contract changes, and
 60–120 expected production lines.
 
-- [ ] **Step 4: Run focused static checks**
+- [x] **Step 4: Run focused static checks**
 
 Run:
 
@@ -309,7 +309,7 @@ rg -n "card_search|plan_register|非语义|search seed|普通.*Coach" \
 Expected: no whitespace errors; each responsibility appears in its semantic owner.
 Do not add exact-prose tests.
 
-- [ ] **Step 5: Run the complete Pi verification**
+- [x] **Step 5: Run the complete Pi verification**
 
 Run:
 
@@ -320,7 +320,7 @@ bun run check
 
 Expected: TypeScript typecheck passes, all Bun tests pass, and the production build completes.
 
-- [ ] **Step 6: Verify scope did not expand**
+- [x] **Step 6: Verify scope did not expand**
 
 Run:
 

@@ -223,7 +223,7 @@ Roadmap 不编造题号。Plan 仍可正常注册，`Next Lesson Candidate` 只�
 - 相应的 projection 测试和真实模型验收。
 
 不增加数据库、文件类型、公共工具、共享前端契约、前端组件或跨 Session 存储。服务端
-现有 Roadmap turn 完成后的 learning-set 刷新保持不变。生产代码预计约 60–120 行，
+现有 Roadmap turn 完成后的 learning-set 刷新保持不变。生产代码预计约 60–140 行，
 主要影响两份 Skill 和两个 projector，测试集中在两个 projection 测试文件。
 
 运行时只确定性保证聊天投影不泄露检索结果。Plan 正文“先写完整草案、搜题后只改短题号”
