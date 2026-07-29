@@ -181,6 +181,53 @@ test('prepares and rereads one Lesson with Plan authority bound by the Coach Ses
   )).toContain('../lessons/lesson-blueprint-001.md');
 });
 
+test('defaults omitted lesson adjustments to an empty list', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-lesson-adjustments-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const tool = createLessonPrepareTool(
+    temporaryRoot,
+    'domain-integrity',
+    'plans/domain-integrity.md',
+  );
+  const input = {
+    lessonId: 'lesson-no-adjustments',
+    title: '无额外调整的课',
+    planContext: '核验默认课堂模板。',
+    capabilityTarget: '完成一次独立作答。',
+    primaryTemplate: 'assessment',
+    templateReason: '本课不需要偏离模板。',
+    cards: [{
+      alias: 'Q-EX22',
+      cardPath: 'cards/derivative/mst_p0032_ex22.card.yaml',
+      role: '独立核验',
+    }],
+    sources: [],
+    blocks: [{
+      id: 'assessment-01',
+      kind: 'problem',
+      required: true,
+      dependsOn: [],
+      uses: ['Q-EX22'],
+      studentView: '请独立完成。',
+      teacherControl: '不提供提示。',
+    }],
+  };
+
+  expect(Check(tool.parameters, input)).toBeTrue();
+  await tool.execute(
+    'prepare-no-adjustments',
+    input as never,
+    undefined,
+    undefined,
+    {} as never,
+  );
+  expect(readFileSync(
+    join(temporaryRoot, 'lessons/lesson-no-adjustments.md'),
+    'utf8',
+  )).toContain('- Adjustment: 无额外调整。');
+});
+
 test('exposes the canonical Lesson ID format in the lesson_prepare contract', () => {
   const tool = createLessonPrepareTool(
     root,
@@ -674,6 +721,38 @@ test('registers classroom_update separately from the public study tools', () => 
   expect(createClassroomUpdateTool(root, 'lessons/lesson-003.md').name).toBe('classroom_update');
 });
 
+test('constrains Tutor Block arguments to the current Lesson', () => {
+  const trace = createStudyTools(root, () => new Date(), {
+    role: 'tutor',
+    ownerId: 'lesson-003',
+    ownerPath: 'lessons/lesson-003.md',
+  }).find((tool) => tool.name === 'trace_append')!;
+  const classroom = createClassroomUpdateTool(root, 'lessons/lesson-003.md');
+  const traceInput = {
+    blockId: 'assessment-01',
+    assessment: 'correct',
+    support: 'none',
+    note: '学生独立完成。',
+    methodStatus: 'unmapped',
+    methodRoute: '学生使用一条未归类路线。',
+  };
+
+  expect(Check(trace.parameters, traceInput)).toBeTrue();
+  expect(Check(trace.parameters, {
+    ...traceInput,
+    blockId: 'invented-block',
+  })).toBeFalse();
+  expect(Check(classroom.parameters, { action: 'pause' })).toBeTrue();
+  expect(Check(classroom.parameters, {
+    action: 'activate',
+    blockId: 'assessment-01',
+  })).toBeTrue();
+  expect(Check(classroom.parameters, {
+    action: 'activate',
+    blockId: 'invented-block',
+  })).toBeFalse();
+});
+
 test('keeps runtime authority out of Tutor tool schemas', () => {
   const context = {
     role: 'tutor' as const,
@@ -688,7 +767,9 @@ test('keeps runtime authority out of Tutor tool schemas', () => {
   expect(JSON.stringify(trace.parameters)).not.toContain('cardStepId');
   expect(JSON.stringify(trace.parameters)).not.toContain('lessonPath');
   expect(JSON.stringify(classroom.parameters)).not.toContain('lessonPath');
-  expect(JSON.stringify(classroom.parameters)).not.toContain('reflection');
+  expect(Object.keys((classroom.parameters as {
+    properties: Record<string, unknown>;
+  }).properties)).not.toContain('reflection');
   expect(JSON.stringify(classroom.parameters)).not.toContain('summary');
   expect(JSON.stringify(classroom.parameters)).not.toContain('"close"');
   const closeProperties = (close.parameters as {
@@ -850,7 +931,6 @@ test('keeps alternative append Tutor-only and Session-bound', () => {
   }).properties;
   expect(Object.keys(properties)).toEqual([
     'sourceTraceId',
-    'question',
     'solution',
     'method',
     'support',
@@ -889,7 +969,6 @@ test('rebuilds planner attention after appending an independently bound alternat
   );
   const result = await alternative.execute('alternative-append', {
     sourceTraceId: 'event-001',
-    question: '整题',
     solution: '分离参数后研究函数值域。',
     method: '参变量分离',
     support: 'none',
@@ -902,4 +981,105 @@ test('rebuilds planner attention after appending an independently bound alternat
   expect(payload).toMatchObject({ id: 'alt-001', method: '参变量分离' });
   expect(readFileSync(join(temporaryRoot, 'memory/planner-attention.md'), 'utf8'))
     .toContain('参变量分离');
+});
+
+test('offers real part labels but validates them against the selected Trace card', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-alternative-parts-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const cardPath = join(
+    temporaryRoot,
+    'cards/derivative/mst_p0032_ex22.card.yaml',
+  );
+  writeFileSync(
+    cardPath,
+    readFileSync(cardPath, 'utf8').replace(
+      'parts: &a1 []',
+      [
+        'parts: &a1',
+        '  - part_id: 第（1）问',
+        '  - part_id: 第（2）问',
+      ].join('\n'),
+    ),
+  );
+  const trace = createStudyTools(temporaryRoot, () => new Date(), {
+    role: 'tutor',
+    ownerId: 'lesson-003',
+    ownerPath: 'lessons/lesson-003.md',
+  }).find((tool) => tool.name === 'trace_append')!;
+  await trace.execute('part-source', {
+    blockId: 'assessment-01',
+    assessment: 'correct',
+    support: 'none',
+    note: '学生独立完成第一问。',
+    methodStatus: 'unmapped',
+    methodRoute: '学生完成了第一问的不同路线。',
+  } as never, undefined, undefined, {} as never);
+  const alternative = createCardAlternativeAppendTool(
+    temporaryRoot,
+    'lessons/lesson-003.md',
+    () => new Date(),
+  );
+  const valid = {
+    sourceTraceId: 'event-001',
+    question: '第（1）问',
+    solution: '这是第一问的完整另解。',
+    method: null,
+    support: 'none',
+  };
+
+  expect(Check(alternative.parameters, valid)).toBeTrue();
+  expect(Check(alternative.parameters, {
+    ...valid,
+    question: '随便一问',
+  })).toBeFalse();
+  expect(Check(alternative.parameters, {
+    sourceTraceId: 'event-001',
+    solution: '缺少分问。',
+    method: null,
+    support: 'none',
+  })).toBeTrue();
+  const stored = await alternative.execute(
+    'valid-part',
+    valid,
+    undefined,
+    undefined,
+    {} as never,
+  );
+  expect(JSON.parse((stored.content[0] as { text: string }).text))
+    .toMatchObject({ question: '第（1）问' });
+  await expect(alternative.execute(
+    'missing-part',
+    {
+      sourceTraceId: 'event-001',
+      solution: '缺少分问。',
+      method: null,
+      support: 'none',
+    } as never,
+    undefined,
+    undefined,
+    {} as never,
+  )).rejects.toThrow('ALTERNATIVE_QUESTION_REQUIRED');
+
+  await trace.execute('whole-card-source', {
+    blockId: 'assessment-02',
+    assessment: 'correct',
+    support: 'none',
+    note: '学生独立完成整题。',
+    methodStatus: 'unmapped',
+    methodRoute: '学生完成了整题的不同路线。',
+  } as never, undefined, undefined, {} as never);
+  await expect(alternative.execute(
+    'part-from-another-card',
+    {
+      sourceTraceId: 'event-002',
+      question: '第（1）问',
+      solution: '错误地借用了另一题的分问标签。',
+      method: null,
+      support: 'none',
+    },
+    undefined,
+    undefined,
+    {} as never,
+  )).rejects.toThrow('ALTERNATIVE_QUESTION_MUST_BE_OMITTED');
 });

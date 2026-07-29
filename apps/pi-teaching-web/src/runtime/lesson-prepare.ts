@@ -88,9 +88,9 @@ export function createLessonPrepareTool(
         minLength: 1,
         description: 'Why this template fits the current evidence and capability target.',
       }),
-      adjustments: Type.Array(nonempty, {
+      adjustments: Type.Optional(Type.Array(nonempty, {
         description: 'Deliberate changes from the selected template defaults.',
-      }),
+      })),
       cards: Type.Array(Type.Object({
         alias: Type.String({
           minLength: 1,
@@ -137,7 +137,10 @@ export function createLessonPrepareTool(
       const planTitle = /^#\s+(.+)$/m.exec(plan.body)?.[1]
         ?.replace(/^Plan[:：]\s*/, '').trim();
       if (!planTitle) throw new Error(`PLAN_TITLE_REQUIRED: ${ownerPath}`);
-      const blueprint = input as LessonBlueprint;
+      const blueprint: LessonBlueprint = {
+        ...input,
+        adjustments: input.adjustments ?? [],
+      };
       const context = { planId: ownerId, planPath: ownerPath, planTitle, lessonPath };
       validateLessonBlueprint(root, context, blueprint);
       const source = renderPreparedLesson(context, blueprint);

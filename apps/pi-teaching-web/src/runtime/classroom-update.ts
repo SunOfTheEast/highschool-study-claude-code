@@ -5,6 +5,7 @@ import {
   setBlockStatus,
   setFrontmatterField,
 } from '../study/write-workspace';
+import { lessonBlockIdSchema } from './lesson-tool-contracts';
 
 const action = Type.Union([
   Type.Literal('activate'),
@@ -23,9 +24,7 @@ export function createClassroomUpdateTool(root: string, ownerPath: string) {
     description: 'Persist one classroom navigation change in the current Tutor Session-owned Lesson. Use ordinary Block actions for traversal, route for an explicit adaptive route decision, and pause for a student-requested pause. The runtime owns the Lesson path and returns the applied action.',
     parameters: Type.Object({
       action,
-      blockId: Type.Optional(Type.String({
-        description: 'Exact Lesson Block ID. Required for activate, complete, skip, and route; omitted only for pause.',
-      })),
+      blockId: Type.Optional(lessonBlockIdSchema(root, ownerPath)),
       routeAction: Type.Optional(Type.Union([
         Type.Literal('insert'),
         Type.Literal('skip'),

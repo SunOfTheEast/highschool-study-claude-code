@@ -10,6 +10,7 @@ import {
 } from 'highschool-study-markdown/study-domain';
 import { Type } from 'typebox';
 import { readPreparedLessonBlocks } from '../study/validate-prepared-lesson';
+import { lessonBlockIdSchema } from './lesson-tool-contracts';
 import type { StudySessionScope } from './session-scope';
 
 function result(kind: string, value: object) {
@@ -178,9 +179,11 @@ export function createStudyTools(
       label: '记录课堂证据',
       description: 'Append or supersede one validated classroom-evidence Trace for the current Tutor Session-owned Lesson. Call when an evidence-bearing response, later completion, accepted correction, repeat, or student-confirmed method changes the active record for one Block attempt. The runtime derives Lesson and problem-card identity from the Session and Block, rejects parallel active attempts, refreshes projections, and returns the persisted fact receipt.',
       parameters: Type.Object({
-        blockId: Type.String({
-          description: 'Exact current Lesson Block ID whose activity produced this evidence. For a problem Block, the runtime derives its one card alias from Uses.',
-        }),
+        blockId: context.role === 'tutor'
+          ? lessonBlockIdSchema(root, context.ownerPath)
+          : Type.String({
+            description: 'Exact current Lesson Block ID whose activity produced this evidence.',
+          }),
         materialPath: Type.Optional(Type.String({
           description: 'Learning-set-relative source path when the evidence came from material rather than the Block\'s problem card.',
         })),

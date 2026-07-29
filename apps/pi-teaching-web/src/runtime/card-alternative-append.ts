@@ -2,8 +2,11 @@ import { defineTool } from '@earendil-works/pi-coding-agent';
 import {
   appendCardAlternativeWithProjection,
   listCanonicalMethodNames,
+  readActiveTraces,
+  readCard,
 } from 'highschool-study-markdown/study-domain';
 import { Type } from 'typebox';
+import { lessonPartQuestionSchema } from './lesson-tool-contracts';
 
 export function createCardAlternativeAppendTool(
   root: string,
@@ -13,6 +16,7 @@ export function createCardAlternativeAppendTool(
   const methodName = Type.Enum(listCanonicalMethodNames(root), {
     description: 'Exact canonical method name from the current learning-set graph.',
   });
+  const question = lessonPartQuestionSchema(root, ownerPath);
   return defineTool({
     name: 'card_alternative_append',
     label: '整理可追溯另解',
@@ -22,10 +26,7 @@ export function createCardAlternativeAppendTool(
         minLength: 1,
         description: 'Event ID of the correct active Trace that proves this route occurred in the current Lesson.',
       }),
-      question: Type.String({
-        minLength: 1,
-        description: 'Exact scope whose complete route differs: use `整题` for a card without parts, otherwise the exact changed part label rather than the stem.',
-      }),
+      ...(question ? { question: Type.Optional(question) } : {}),
       solution: Type.String({
         minLength: 1,
         description: 'Complete entry, decisive reasoning, and closing chain of the verified alternative route.',
@@ -40,9 +41,31 @@ export function createCardAlternativeAppendTool(
       ], {
         description: 'Help actually used in this alternative route, using the same dependence meaning as classroom Trace.',
       }),
-    }),
+    }, { additionalProperties: false }),
     execute: async (_id, input) => {
-      const alternative = appendCardAlternativeWithProjection(root, ownerPath, input, now);
+      const selectedTrace = readActiveTraces(root, [ownerPath])
+        .find((trace) => trace.eventId === input.sourceTraceId);
+      const selectedCard = selectedTrace?.cardPath
+        ? readCard(root, selectedTrace.cardPath)
+        : null;
+      const requestedQuestion = 'question' in input
+        && typeof input.question === 'string'
+        ? input.question
+        : undefined;
+      let resolvedQuestion: string;
+      if (selectedCard?.parts.length) {
+        if (!requestedQuestion) throw new Error('ALTERNATIVE_QUESTION_REQUIRED');
+        resolvedQuestion = requestedQuestion;
+      } else {
+        if (requestedQuestion !== undefined) {
+          throw new Error('ALTERNATIVE_QUESTION_MUST_BE_OMITTED');
+        }
+        resolvedQuestion = '整题';
+      }
+      const alternative = appendCardAlternativeWithProjection(root, ownerPath, {
+        ...input,
+        question: resolvedQuestion,
+      }, now);
       return {
         content: [{ type: 'text' as const, text: JSON.stringify(alternative) }],
         details: {
