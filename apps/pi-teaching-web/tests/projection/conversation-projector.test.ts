@@ -97,6 +97,25 @@ function lessonPrepareResult(isError = false): SessionEntry {
   });
 }
 
+function toolResult(
+  id: string,
+  toolName: 'card_search' | 'plan_register',
+  kind: 'card-search' | 'plan-register',
+  value: object,
+  isError = false,
+): SessionEntry {
+  return entry(id, {
+    type: 'message',
+    message: {
+      role: 'toolResult',
+      toolName,
+      isError,
+      content: [{ type: 'text', text: JSON.stringify(value) }],
+      details: isError ? undefined : { kind, value },
+    },
+  });
+}
+
 test('places one latest review card after the Coach explanation that follows its proposal', () => {
   const entries = [
     message('student-1', 'user', '开始复盘'),
@@ -235,4 +254,80 @@ test('does not suppress a Coach final after a failed Lesson preparation', () => 
       message: expect.objectContaining({ text: '这次没有写成，请继续讨论。' }),
     }),
   ]);
+});
+
+test('replaces a Roadmap post-search final with a fixed recovery message', () => {
+  const items = projectConversationEntries('coach:@roadmap', [
+    toolResult('search', 'card_search', 'card-search', {
+      cards: [{ stem: '绝密题面', answer: '绝密答案' }],
+    }),
+    message('coach-final', 'assistant', '绝密题面的关键是冻结变量法。'),
+  ], 'safe');
+
+  expect(items).toEqual([expect.objectContaining({
+    kind: 'message',
+    message: expect.objectContaining({
+      role: 'coach',
+      text: '课程素材已经核对，但学习周期尚未登记。可以继续完成当前计划。',
+    }),
+  })]);
+  expect(JSON.stringify(items)).not.toContain('绝密');
+  expect(JSON.stringify(items)).not.toContain('冻结变量法');
+});
+
+test('replaces a registered Roadmap post-search final with one ordinary ready message', () => {
+  const items = projectConversationEntries('coach:@roadmap', [
+    toolResult('search', 'card_search', 'card-search', { cards: [] }),
+    toolResult('register', 'plan_register', 'plan-register', {
+      ok: true,
+      factId: 'route-choice',
+    }),
+    message('coach-final', 'assistant', '这题的决定性因式是秘密。'),
+  ], 'safe');
+
+  expect(items).toEqual([expect.objectContaining({
+    kind: 'message',
+    message: expect.objectContaining({
+      role: 'coach',
+      text: '学习周期已建立。具体素材会由学习顾问在备课时重新核对。',
+    }),
+  })]);
+  expect(JSON.stringify(items)).not.toContain('秘密');
+});
+
+test('keeps card-search finals outside a successful safe Roadmap search unchanged', () => {
+  const successfulSearch = toolResult(
+    'search',
+    'card_search',
+    'card-search',
+    { cards: [] },
+  );
+  const final = message('coach-final', 'assistant', '普通备课讨论。');
+
+  expect(projectConversationEntries('coach:p1', [
+    successfulSearch,
+    final,
+  ], 'safe')).toEqual([expect.objectContaining({
+    kind: 'message',
+    message: expect.objectContaining({ text: '普通备课讨论。' }),
+  })]);
+
+  expect(projectConversationEntries('coach:@roadmap', [
+    toolResult('failed-search', 'card_search', 'card-search', {}, true),
+    final,
+  ], 'safe')).toEqual([expect.objectContaining({
+    kind: 'message',
+    message: expect.objectContaining({ text: '普通备课讨论。' }),
+  })]);
+});
+
+test('keeps the original Roadmap post-search final in raw-stream history', () => {
+  const items = projectConversationEntries('coach:@roadmap', [
+    toolResult('search', 'card_search', 'card-search', {
+      cards: [{ stem: '原始题面' }],
+    }),
+    message('coach-final', 'assistant', '原始题面和原始方法。'),
+  ], 'raw-stream');
+
+  expect(JSON.stringify(items)).toContain('原始题面和原始方法。');
 });

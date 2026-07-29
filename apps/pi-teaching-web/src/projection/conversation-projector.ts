@@ -3,11 +3,12 @@ import {
   MEMORY_REVIEW_ENTRY,
   type MemoryReviewSnapshot,
 } from '../memory-review/contracts';
-import type {
-  ActivityKind,
-  ConversationItem,
-  LessonReadyNotice,
-  SessionKey,
+import {
+  ROADMAP_COACH_SESSION_KEY,
+  type ActivityKind,
+  type ConversationItem,
+  type LessonReadyNotice,
+  type SessionKey,
 } from '../shared/contracts';
 import {
   projectStoredMessage,
@@ -31,6 +32,33 @@ const activityKinds = new Set<ActivityKind>([
   'material',
   'reflection',
 ]);
+
+export const ROADMAP_PLAN_READY_TEXT =
+  '学习周期已建立。具体素材会由学习顾问在备课时重新核对。';
+export const ROADMAP_PLAN_RECOVERY_TEXT =
+  '课程素材已经核对，但学习周期尚未登记。可以继续完成当前计划。';
+
+export type RoadmapPrivateToolResult = 'card-search' | 'plan-register';
+
+export function roadmapPrivateToolResult(raw: unknown): RoadmapPrivateToolResult | null {
+  if (raw === null || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  const message = raw as Record<string, unknown>;
+  if (message.role !== 'toolResult' || message.isError !== false) return null;
+  const details = message.details;
+  if (details === null || typeof details !== 'object' || Array.isArray(details)) return null;
+  const detail = details as Record<string, unknown>;
+  if (message.toolName === 'card_search' && detail.kind === 'card-search') {
+    return 'card-search';
+  }
+  if (message.toolName !== 'plan_register' || detail.kind !== 'plan-register') return null;
+  const value = detail.value;
+  return value !== null
+    && typeof value === 'object'
+    && !Array.isArray(value)
+    && (value as Record<string, unknown>).ok === true
+    ? 'plan-register'
+    : null;
+}
 
 export function lessonReadyNoticeFromToolResult(raw: unknown): LessonReadyNotice | null {
   if (raw === null || typeof raw !== 'object' || Array.isArray(raw)) return null;
@@ -88,6 +116,8 @@ export function projectConversationEntries(
   const pending: string[] = [];
   const queued = new Set<string>();
   const pendingLessons: LessonReadyNotice[] = [];
+  const protectsRoadmapSearch = mode === 'safe' && key === ROADMAP_COACH_SESSION_KEY;
+  let roadmapPrivateState: 'idle' | 'searching' | 'registered' = 'idle';
 
   const flushReviews = () => {
     for (const reviewId of pending.splice(0)) {
@@ -110,6 +140,26 @@ export function projectConversationEntries(
     }
 
     if (entry.type !== 'message') return;
+    if (protectsRoadmapSearch) {
+      const result = roadmapPrivateToolResult(entry.message);
+      if (result === 'card-search') {
+        roadmapPrivateState = 'searching';
+        return;
+      }
+      if (result === 'plan-register' && roadmapPrivateState === 'searching') {
+        items.push({
+          kind: 'message',
+          message: {
+            id: `${key}:${index}:plan-ready`,
+            role: 'coach',
+            text: ROADMAP_PLAN_READY_TEXT,
+            complete: true,
+          },
+        });
+        roadmapPrivateState = 'registered';
+        return;
+      }
+    }
     if (mode === 'safe') {
       const lesson = lessonReadyNoticeFromToolResult(entry.message);
       if (lesson) {
@@ -119,6 +169,22 @@ export function projectConversationEntries(
     }
     const message = projectStoredMessage(key, entry.message, index, mode);
     if (!message) return;
+    if (protectsRoadmapSearch && message.role === 'student') {
+      roadmapPrivateState = 'idle';
+    } else if (protectsRoadmapSearch && message.role === 'coach') {
+      if (roadmapPrivateState === 'registered') {
+        roadmapPrivateState = 'idle';
+        return;
+      }
+      if (roadmapPrivateState === 'searching') {
+        items.push({
+          kind: 'message',
+          message: { ...message, text: ROADMAP_PLAN_RECOVERY_TEXT },
+        });
+        roadmapPrivateState = 'idle';
+        return;
+      }
+    }
     if (pendingLessons.length > 0) {
       if (message.role === 'coach') {
         flushLessons();
