@@ -147,6 +147,30 @@ test('omits a missing card content ID instead of guessing from its path', () => 
   expect(JSON.stringify(projection)).not.toContain('mst_p0032_ex22');
 });
 
+test('accepts source numbers only from authentic problem-card metadata', () => {
+  const root = fixture();
+  const cardPath = join(
+    root,
+    'cards/derivative/mst_p0032_ex22.card.yaml',
+  );
+  writeFileSync(
+    cardPath,
+    readFileSync(cardPath, 'utf8')
+      .replace(
+        'schema: highschool-study.problem-card.v1',
+        'schema: unrelated.material.v1',
+      )
+      .replace(
+        'content_item_id: mst_p0032_ex22',
+        'content_item_id: LEAK_NON_CARD_ID',
+      ),
+  );
+
+  const projection = readStudentPlanProjection(root, 'domain-integrity');
+
+  expect(projection.nextLesson?.sourceNumbers).not.toContain('LEAK_NON_CARD_ID');
+});
+
 test('projects discussing, active and paused states from real Lesson status', () => {
   const root = fixture();
   setFrontmatterField(root, 'lessons/lesson-003.md', 'status', 'abandoned');

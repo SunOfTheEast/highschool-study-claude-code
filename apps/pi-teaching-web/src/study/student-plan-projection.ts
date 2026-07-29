@@ -50,7 +50,8 @@ function contentItemId(root: string, lessonPath: string, target: string): string
   if (canonical === '..' || canonical.startsWith('../')) return null;
   try {
     const raw = record(parse(readFileSync(resolveInsideRoot(root, canonical), 'utf8')));
-    return typeof raw?.content_item_id === 'string' && raw.content_item_id.trim()
+    if (raw?.schema !== 'highschool-study.problem-card.v1') return null;
+    return typeof raw.content_item_id === 'string' && raw.content_item_id.trim()
       ? raw.content_item_id.trim()
       : null;
   } catch {
