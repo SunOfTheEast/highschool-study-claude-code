@@ -14,6 +14,13 @@ import { ReplayTimeline } from './ReplayTimeline';
 import { RouteMap } from './RouteMap';
 import { TaskRail } from './TaskRail';
 
+const activityKindLabel = {
+  dialogue: '讨论',
+  problem: '尝试',
+  material: '材料',
+  reflection: '小结',
+} as const;
+
 export function ContextStack({
   view,
   coachContext,
@@ -36,22 +43,50 @@ export function ContextStack({
   onWorkflowAction(id: string, action: 'confirm' | 'cancel'): Promise<void>;
 }) {
   if (view === 'coach') {
+    const plan = coachContext?.plan ?? null;
+    const nextLesson = plan?.nextLesson ?? null;
     return (
       <aside className="activities context-stack" aria-label="学习顾问情境">
         <header><span>学习情境</span><h2>本周期</h2></header>
         <ContextSection
           title="本阶段"
-          summary={coachContext?.learningReview ? '阶段回顾已整理' : '当前位置与下一步'}
+          summary={plan?.learningReview ? '阶段回顾已整理' : '当前位置与下一步'}
           open
         >
           {coachContext ? (
-            coachContext.learningReview
+            plan?.learningReview
               ? <p className="context-unavailable">阶段回顾已整理，请在对话区查看。</p>
               : (
                 <div className="coach-context-copy">
-                  <h3>当前位置</h3><MarkdownView>{coachContext.currentPosition}</MarkdownView>
-                  <h3>下一课候选</h3><MarkdownView>{coachContext.nextLessonCandidate}</MarkdownView>
-                  <h3>阶段摘要</h3><MarkdownView>{coachContext.planSummary}</MarkdownView>
+                  <h3>当前位置</h3><MarkdownView>{plan?.currentPosition ?? ''}</MarkdownView>
+                  <p>
+                    <b>{plan?.progress.closedLessons ?? 0}/{plan?.progress.registeredLessons ?? 0}</b>
+                    {' '}节课堂已完成
+                  </p>
+                  {nextLesson ? (
+                    <>
+                      <h3>{nextLesson.publicTitle}</h3>
+                      {nextLesson.publicPurpose && (
+                        <MarkdownView>{nextLesson.publicPurpose}</MarkdownView>
+                      )}
+                      <p>
+                        {nextLesson.blockCount} 个课堂环节
+                        {nextLesson.blockKinds.length > 0
+                          ? ` · ${nextLesson.blockKinds
+                            .map((kind) => activityKindLabel[kind])
+                            .join(' · ')}`
+                          : ''}
+                      </p>
+                      {nextLesson.sourceNumbers.length > 0 && (
+                        <p>题号：{nextLesson.sourceNumbers.join('、')}</p>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <h3>下一步</h3>
+                      <p>正在与学习顾问商议下一课。</p>
+                    </>
+                  )}
                 </div>
               )
           ) : <p className="context-unavailable">本阶段信息暂不可用。</p>}

@@ -742,9 +742,9 @@ export function App() {
           workflows={client.workflows[selected] ?? []}
           workflowControlsEnabled={workflowSessionOpen}
           gate={gate}
-          stage={isCoach && coachContext?.learningReview ? (
+          stage={isCoach && coachContext?.plan.learningReview ? (
             <PlanLearningReview
-              value={coachContext.learningReview}
+              value={coachContext.plan.learningReview}
               onEvidence={(source) => void openEvidence(source)}
               onDisputePrefill={(text) => setComposerPrefill({
                 id: crypto.randomUUID(),

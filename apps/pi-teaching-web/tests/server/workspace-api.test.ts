@@ -1,5 +1,12 @@
 import { expect, test } from 'bun:test';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  cpSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { createRequestHandler } from '../../src/server/app';
@@ -102,27 +109,49 @@ test('returns one deterministic continue-first Home snapshot', async () => {
 });
 
 test('returns source-linked context for one Plan Coach', async () => {
-  const handler = createRequestHandler({
-    root: domainIntegrityFixtureRoot,
-    authoring: false,
-    hub: new EventHub(),
-    registry: {} as never,
-  });
+  const root = mkdtempSync(join(tmpdir(), 'safe-context-api-'));
+  try {
+    cpSync(domainIntegrityFixtureRoot, root, { recursive: true });
+    const planPath = join(root, 'plans/domain-integrity.md');
+    writeFileSync(
+      planPath,
+      readFileSync(planPath, 'utf8')
+        .replace('- [mst_p0032_ex22]', '- LEAK_NEXT_API [mst_p0032_ex22]')
+        .replace('两节课显示定义域意识', 'LEAK_SUMMARY_API 两节课显示定义域意识'),
+    );
+    const handler = createRequestHandler({
+      root,
+      authoring: false,
+      hub: new EventHub(),
+      registry: {} as never,
+    });
 
-  const response = await handler(new Request(
-    'http://local/api/plans/domain-integrity/context',
-  ));
-  expect(response!.status).toBe(200);
-  expect(await response!.json()).toMatchObject({
-    currentPosition: expect.stringContaining('阶段 `1a` 已通过'),
-    priorLessons: [
-      expect.objectContaining({
-        lessonId: 'lesson-001',
-        source: 'lessons/lesson-001.md#lesson-summary',
-      }),
-      expect.objectContaining({ lessonId: 'lesson-002' }),
-    ],
-  });
+    const response = await handler(new Request(
+      'http://local/api/plans/domain-integrity/context',
+    ));
+    expect(response!.status).toBe(200);
+    const body = await response!.json();
+    expect(body).toMatchObject({
+      plan: {
+        currentPosition: expect.stringContaining('阶段 `1a` 已通过'),
+        nextLesson: {
+          publicPurpose: '完成一次独立能力检验',
+          sourceNumbers: expect.arrayContaining(['mst_p0032_ex22']),
+        },
+      },
+      priorLessons: [
+        expect.objectContaining({
+          lessonId: 'lesson-001',
+          source: 'lessons/lesson-001.md#lesson-summary',
+        }),
+        expect.objectContaining({ lessonId: 'lesson-002' }),
+      ],
+    });
+    expect(JSON.stringify(body)).not.toContain('LEAK_NEXT_API');
+    expect(JSON.stringify(body)).not.toContain('LEAK_SUMMARY_API');
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });
 
 test('exposes student-safe content search from the real Session scope', async () => {

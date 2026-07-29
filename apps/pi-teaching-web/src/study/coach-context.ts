@@ -2,6 +2,7 @@ import { existsSync } from 'node:fs';
 import { readMarkdownFile } from 'highschool-study-markdown/study-domain';
 import type { CoachContextView } from '../shared/contracts';
 import { readPlanWorkspace } from './read-workspace';
+import { readStudentPlanProjection } from './student-plan-projection';
 
 function section(body: string, heading: string): string {
   const lines = body.split(/\r?\n/);
@@ -30,10 +31,7 @@ export function readCoachContext(root: string, planId: string): CoachContextView
       }] : [];
     });
   return {
-    currentPosition: workspace.plan.currentPosition,
-    nextLessonCandidate: workspace.plan.nextLessonCandidate,
-    planSummary: workspace.plan.planSummary,
-    learningReview: workspace.plan.learningReview,
+    plan: readStudentPlanProjection(root, planId),
     plannerAttention,
     priorLessons,
   };

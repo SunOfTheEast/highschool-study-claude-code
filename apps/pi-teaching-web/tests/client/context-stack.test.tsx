@@ -10,10 +10,24 @@ import type {
 import { ContextStack } from '../../src/client/components/ContextStack';
 
 const context: CoachContextView = {
-  currentPosition: '当前位置',
-  nextLessonCandidate: '下一课',
-  planSummary: '阶段摘要',
-  learningReview: null,
+  plan: {
+    currentPosition: '当前位置',
+    progress: {
+      closedLessons: 2,
+      registeredLessons: 3,
+      state: 'prepared',
+    },
+    nextLesson: {
+      lessonId: 'lesson-2',
+      status: 'prepared',
+      publicTitle: '下一节课堂',
+      publicPurpose: '完成一次独立能力检验',
+      blockCount: 4,
+      blockKinds: ['dialogue', 'problem', 'reflection'],
+      sourceNumbers: ['source-17', 'source-32'],
+    },
+    learningReview: null,
+  },
   plannerAttention: '备课提醒',
   priorLessons: [{
     lessonId: 'lesson-1',
@@ -74,6 +88,11 @@ function html(view: 'coach' | 'tutor' | 'replay') {
 test('composes distinct ordered context sections for Coach, Tutor, and Replay', () => {
   const coach = html('coach');
   expect(coach).toContain('本阶段');
+  expect(coach).toContain('当前位置');
+  expect(coach).toContain('2/3');
+  expect(coach).toContain('完成一次独立能力检验');
+  expect(coach).toContain('4 个课堂环节');
+  expect(coach).toContain('source-17');
   expect(coach).toContain('备课提醒');
   expect(coach).toContain('前课摘录');
   expect(coach).not.toContain('课堂脉络');
@@ -101,9 +120,11 @@ test('does not repeat a completed structured review in the Coach context stack',
       view="coach"
       coachContext={{
         ...context,
-        currentPosition: '不应重复出现的原始位置。',
-        planSummary: '不应展开的原始结构。',
-        learningReview,
+        plan: {
+          ...context.plan,
+          currentPosition: '不应重复出现的原始位置。',
+          learningReview,
+        },
       }}
       lesson={null}
       notebook={null}
@@ -118,4 +139,15 @@ test('does not repeat a completed structured review in the Coach context stack',
   expect(completed).toContain('阶段回顾已整理，请在对话区查看。');
   expect(completed).not.toContain('不应重复出现的原始位置。');
   expect(completed).not.toContain('不应在右栏重复出现的关键判断。');
+});
+
+test('renders only safe next-Lesson fields from Coach context', () => {
+  const rendered = html('coach');
+
+  expect(rendered).toContain('下一节课堂');
+  expect(rendered).toContain('讨论');
+  expect(rendered).toContain('尝试');
+  expect(rendered).toContain('小结');
+  expect(rendered).not.toContain('LEAK_NEXT_CANDIDATE');
+  expect(rendered).not.toContain('LEAK_ACTIVE_SUMMARY');
 });

@@ -131,10 +131,7 @@ export type StudentNotebook = {
 };
 
 export type CoachContextView = {
-  currentPosition: string;
-  nextLessonCandidate: string;
-  planSummary: string;
-  learningReview: LearningReview | null;
+  plan: StudentPlanProjection;
   plannerAttention: string;
   priorLessons: Array<{
     lessonId: string;
