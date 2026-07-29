@@ -50,13 +50,24 @@ export function LearningSetHome({
                 {value.lessonProgress.completed}/{value.lessonProgress.total} 节
               </b>
             </header>
-            <p>{value.currentPlan.currentPosition}</p>
-            {value.coachNote && (
+            <p>{value.studentPlan?.currentPosition}</p>
+            {value.studentPlan?.nextLesson ? (
               <blockquote>
-                <small>学习顾问写下的下一步</small>
-                <MarkdownView>{value.coachNote}</MarkdownView>
+                <small>{value.studentPlan.nextLesson.publicTitle}</small>
+                {value.studentPlan.nextLesson.publicPurpose && (
+                  <MarkdownView>{value.studentPlan.nextLesson.publicPurpose}</MarkdownView>
+                )}
+                <p>
+                  {value.studentPlan.nextLesson.blockCount} 个课堂环节
+                  {value.studentPlan.nextLesson.blockKinds.length > 0
+                    ? ` · ${value.studentPlan.nextLesson.blockKinds.length} 类活动`
+                    : ''}
+                </p>
+                {value.studentPlan.nextLesson.sourceNumbers.length > 0 && (
+                  <p>题号：{value.studentPlan.nextLesson.sourceNumbers.join('、')}</p>
+                )}
               </blockquote>
-            )}
+            ) : <p>正在与学习顾问商议下一课。</p>}
           </section>
         )}
 

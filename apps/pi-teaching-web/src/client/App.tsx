@@ -17,6 +17,7 @@ import type {
   CoachContextView,
   EvidenceView,
   HomeSnapshot,
+  HomeLearningSetSnapshot,
   LearningSetSnapshot,
   LessonReplay,
   LessonNode,
@@ -58,7 +59,8 @@ import {
 type ConnectionState = 'connecting' | 'open' | 'closed';
 
 export function App() {
-  const [learningSet, setLearningSet] = useState<LearningSetSnapshot | null>(null);
+  const [learningSet, setLearningSet] =
+    useState<LearningSetSnapshot | HomeLearningSetSnapshot | null>(null);
   const [homeSnapshot, setHomeSnapshot] = useState<HomeSnapshot | null>(null);
   const [roadmapWorkspace, setRoadmapWorkspace] =
     useState<RoadmapWorkspaceSnapshot | null>(null);

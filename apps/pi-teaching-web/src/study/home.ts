@@ -1,13 +1,16 @@
 import { readActiveTraces } from 'highschool-study-markdown/study-domain';
 import type {
   HomeContinueTarget,
+  HomePlanSummary,
   HomeSnapshot,
   LessonNode,
   PlanWorkspaceSnapshot,
+  StudentPlanProjection,
 } from '../shared/contracts';
 import { resolveContinuePath } from '../shared/home';
 import { readAbilityProjection } from './ability';
 import { readLearningSet, readPlanWorkspace } from './read-workspace';
+import { readStudentPlanProjection } from './student-plan-projection';
 
 export { resolveContinuePath };
 
@@ -29,7 +32,11 @@ function prioritizedLesson(workspace: PlanWorkspaceSnapshot): LessonNode | null 
   return null;
 }
 
-function lessonTarget(planId: string, lesson: LessonNode): HomeContinueTarget {
+function lessonTarget(
+  planId: string,
+  lesson: LessonNode,
+  studentPlan: StudentPlanProjection,
+): HomeContinueTarget {
   const detail = lesson.status === 'active'
     ? '课堂进行中，从当前节点继续。'
     : lesson.status === 'paused'
@@ -42,24 +49,39 @@ function lessonTarget(planId: string, lesson: LessonNode): HomeContinueTarget {
     kind: 'lesson',
     planId,
     lessonId: lesson.id,
-    title: lesson.title,
+    title: lesson.status === 'prepared'
+      ? studentPlan.nextLesson?.publicTitle ?? '下一节课堂'
+      : lesson.title,
     detail,
   };
 }
 
+function homePlan(plan: PlanWorkspaceSnapshot['plan']): HomePlanSummary {
+  return {
+    id: plan.id,
+    title: plan.title,
+    status: plan.status,
+    goal: plan.goal,
+    capabilityStandard: plan.capabilityStandard,
+  };
+}
+
 export function readHomeSnapshot(root: string): HomeSnapshot {
-  const learningSet = readLearningSet(root);
-  const workspaces = learningSet.plans.map((plan) => readPlanWorkspace(root, plan.id));
+  const rawLearningSet = readLearningSet(root);
+  const workspaces = rawLearningSet.plans.map((plan) => readPlanWorkspace(root, plan.id));
   const unfinished = workspaces.filter((workspace) => workspace.plan.status !== 'completed');
   const currentWorkspace = unfinished.find((workspace) => prioritizedLesson(workspace))
     ?? unfinished[0]
     ?? null;
-  const currentPlan = currentWorkspace?.plan ?? null;
+  const currentPlan = currentWorkspace ? homePlan(currentWorkspace.plan) : null;
+  const studentPlan = currentWorkspace
+    ? readStudentPlanProjection(root, currentWorkspace.plan.id)
+    : null;
 
   let continueTarget: HomeContinueTarget;
   const lesson = currentWorkspace ? prioritizedLesson(currentWorkspace) : null;
-  if (currentWorkspace && lesson) {
-    continueTarget = lessonTarget(currentWorkspace.plan.id, lesson);
+  if (currentWorkspace && lesson && studentPlan) {
+    continueTarget = lessonTarget(currentWorkspace.plan.id, lesson, studentPlan);
   } else if (currentWorkspace) {
     continueTarget = {
       route: coachRoute(currentWorkspace.plan.id),
@@ -75,8 +97,8 @@ export function readHomeSnapshot(root: string): HomeSnapshot {
       kind: 'roadmap',
       planId: null,
       lessonId: null,
-      title: learningSet.plans.length === 0 ? '建立第一个学习周期' : '规划下一阶段',
-      detail: learningSet.plans.length === 0
+      title: rawLearningSet.plans.length === 0 ? '建立第一个学习周期' : '规划下一阶段',
+      detail: rawLearningSet.plans.length === 0
         ? '先和学习总览明确目标与第一个 Plan。'
         : '现有学习周期已经完成，回到学习总览选择下一阶段。',
     };
@@ -120,7 +142,13 @@ export function readHomeSnapshot(root: string): HomeSnapshot {
   const latestClosed = closed.at(-1);
 
   return {
-    learningSet,
+    learningSet: {
+      title: rawLearningSet.title,
+      overview: rawLearningSet.overview,
+      learningPrinciples: rawLearningSet.learningPrinciples,
+      goal: rawLearningSet.goal,
+      plans: rawLearningSet.plans.map(homePlan),
+    },
     currentPlan,
     eligibleContinueRoutes,
     continueTarget,
@@ -128,9 +156,7 @@ export function readHomeSnapshot(root: string): HomeSnapshot {
       completed: progressLessons.filter((candidate) => candidate.status === 'closed').length,
       total: progressLessons.length,
     },
-    coachNote: currentPlan
-      ? currentPlan.nextLessonCandidate || currentPlan.currentPosition || currentPlan.planSummary
-      : '',
+    studentPlan,
     signals: signals.slice(0, 2),
     recentReplay: latestClosed ? {
       lessonId: latestClosed.lesson.id,

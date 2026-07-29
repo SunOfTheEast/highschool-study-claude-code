@@ -48,7 +48,24 @@ function home(overrides: Partial<HomeSnapshot> = {}): HomeSnapshot {
       detail: '从上次的位置继续。',
     },
     lessonProgress: { completed: 1, total: 3 },
-    coachNote: '下一步先完成迁移题。',
+    studentPlan: {
+      currentPosition: '当前位置',
+      progress: {
+        closedLessons: 1,
+        registeredLessons: 3,
+        state: 'prepared',
+      },
+      nextLesson: {
+        lessonId: 'lesson-2',
+        status: 'prepared',
+        publicTitle: '下一节课堂',
+        publicPurpose: '练习公开的路线比较能力。',
+        blockCount: 4,
+        blockKinds: ['dialogue', 'problem', 'reflection'],
+        sourceNumbers: ['source-17', 'source-32'],
+      },
+      learningReview: null,
+    },
     signals: [],
     recentReplay: null,
     ...overrides,
@@ -67,11 +84,13 @@ function render(value: HomeSnapshot = home()): string {
   );
 }
 
-test('renders one dominant continuation with stage and Coach note', () => {
+test('renders one dominant continuation with the safe Plan projection', () => {
   const html = render();
   expect(html.match(/class="continue-entry"/g)).toHaveLength(1);
   expect(html).toContain('当前位置');
-  expect(html).toContain('下一步先完成迁移题');
+  expect(html).toContain('练习公开的路线比较能力');
+  expect(html).toContain('4 个课堂环节');
+  expect(html).toContain('source-17');
   expect(html).toContain('1/3');
   expect(html).toContain('学习总览');
   expect(html).not.toContain('ability-nodes');
@@ -121,11 +140,29 @@ test('uses the Roadmap as the primary continuation before the first Plan', () =>
       detail: '先讨论目标。',
     },
     lessonProgress: { completed: 0, total: 0 },
-    coachNote: '',
+    studentPlan: null,
   });
   const html = render(value);
 
   expect(html).toContain('建立第一个学习周期');
   expect(html.match(/class="continue-entry"/g)).toHaveLength(1);
   expect(html).not.toContain('当前阶段');
+});
+
+test('does not render raw future-facing Plan fields from the Home contract', () => {
+  const unsafe = {
+    ...home(),
+    currentPlan: {
+      ...plan,
+      currentPosition: 'RAW_POSITION_SHOULD_NOT_RENDER',
+      nextLessonCandidate: 'LEAK_NEXT_HOME_COMPONENT',
+      planSummary: 'LEAK_SUMMARY_HOME_COMPONENT',
+    },
+  } as unknown as HomeSnapshot;
+  const html = render(unsafe);
+
+  expect(html).toContain('当前位置');
+  expect(html).not.toContain('RAW_POSITION_SHOULD_NOT_RENDER');
+  expect(html).not.toContain('LEAK_NEXT_HOME_COMPONENT');
+  expect(html).not.toContain('LEAK_SUMMARY_HOME_COMPONENT');
 });

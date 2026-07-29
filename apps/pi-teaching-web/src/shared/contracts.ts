@@ -168,13 +168,22 @@ export type HomeContinueTarget = {
   detail: string;
 };
 
+export type HomePlanSummary = Pick<
+  PlanSummary,
+  'id' | 'title' | 'status' | 'goal' | 'capabilityStandard'
+>;
+
+export type HomeLearningSetSnapshot = Omit<LearningSetSnapshot, 'plans'> & {
+  plans: HomePlanSummary[];
+};
+
 export type HomeSnapshot = {
-  learningSet: LearningSetSnapshot;
-  currentPlan: PlanSummary | null;
+  learningSet: HomeLearningSetSnapshot;
+  currentPlan: HomePlanSummary | null;
   eligibleContinueRoutes: string[];
   continueTarget: HomeContinueTarget;
   lessonProgress: { completed: number; total: number };
-  coachNote: string;
+  studentPlan: StudentPlanProjection | null;
   signals: Array<{ label: string; value: string; source: string | null }>;
   recentReplay: null | { lessonId: string; title: string; route: string };
 };
