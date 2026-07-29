@@ -488,11 +488,77 @@ coach_session: null
       return Response.json({ ok: true });
     }
     if (request.method === 'POST' && url.pathname === '/__test/complete-isomorphic-plan') {
+      const lessonPath = 'lessons/isomorphic-evidence.md';
+      writeFileSync(join(root, lessonPath), `---
+id: isomorphic-evidence
+kind: lesson
+plan_id: isomorphic-transformation
+status: closed
+---
+# 同构评估证据
+
+## Lesson Configuration
+
+- Primary template: \`assessment\`
+
+## Block assessment-01（必做）
+
+### Node State
+
+- Kind: problem
+- Required: true
+- Status: completed
+- Depends on:
+- Uses:
+
+### Student View
+
+独立完成评估。
+
+## Lesson Summary
+
+学生独立完成评估。
+
+## Aliases
+
+（本课不使用题卡别名）
+
+## Traces
+`);
+      const isomorphicPlanPath = join(root, 'plans/isomorphic-transformation.md');
+      writeFileSync(
+        isomorphicPlanPath,
+        readFileSync(isomorphicPlanPath, 'utf8').replace(
+          '（暂无）',
+          '1. [同构评估证据](../lessons/isomorphic-evidence.md) — closed。',
+        ),
+      );
+      const trace = appendTrace(root, {
+        lessonPath,
+        blockId: 'assessment-01',
+        cardAlias: null,
+        cardStepId: null,
+        materialPath: null,
+        assessment: 'correct',
+        support: 'none',
+        note: '学生无提示独立完成评估。',
+        supersedes: null,
+      }, () => new Date('2026-07-29T08:00:00Z'));
       updatePlan(root, 'plans/isomorphic-transformation.md', {
         decision: 'complete',
         currentPosition: '本周期已完成。',
         nextLessonCandidate: '由学生选择其他 Plan。',
-        planSummary: '测试用 completed Plan。',
+        learningReview: {
+          conclusion: '已完成测试 Plan。',
+          boundary: '只用于 E2E 路由验收，不代表真实能力结论。',
+          nextStep: '由学生选择其他 Plan。',
+          keyEvidence: [{
+            claim: '无提示独立完成测试评估。',
+            source: trace.sourceAnchor,
+          }],
+          supportingEvidence: [],
+          openQuestions: [],
+        },
       });
       return Response.json({ ok: true });
     }

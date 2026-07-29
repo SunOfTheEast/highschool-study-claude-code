@@ -9,7 +9,9 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { appendTrace } from 'highschool-study-markdown/study-domain';
 import { readPlanWorkspace } from '../../src/study/read-workspace';
+import type { LearningReview } from '../../src/shared/contracts';
 import {
   appendRouteChange,
   closeLesson,
@@ -144,6 +146,78 @@ status: active
 旧总结。
 `);
   return { root, path, roadmapPath };
+}
+
+function addAssessmentEvidence(root: string, planPath: string): LearningReview {
+  mkdirSync(join(root, 'lessons'), { recursive: true });
+  writeFileSync(join(root, 'lessons/lesson-evidence.md'), `---
+id: lesson-evidence
+kind: lesson
+plan_id: p1
+status: closed
+---
+# 证据课
+
+## Lesson Configuration
+
+- Primary template: \`assessment\`
+
+## Block assessment-01（必做）
+
+### Node State
+
+- Kind: problem
+- Required: true
+- Status: completed
+- Depends on:
+- Uses:
+
+### Student View
+
+独立完成评估。
+
+## Lesson Summary
+
+学生独立完成了评估。
+
+## Aliases
+
+（本课不使用题卡别名）
+
+## Traces
+`);
+  writeFileSync(
+    join(root, planPath),
+    readFileSync(join(root, planPath), 'utf8').replace(
+      /(^## Lesson Index\s*$\n)([\s\S]*?)(?=^## )/m,
+      '$1\n1. [证据课](../lessons/lesson-evidence.md) — closed。\n\n',
+    ),
+  );
+  const trace = appendTrace(root, {
+    lessonPath: 'lessons/lesson-evidence.md',
+    blockId: 'assessment-01',
+    cardAlias: null,
+    cardStepId: null,
+    materialPath: null,
+    assessment: 'correct',
+    support: 'none',
+    note: '学生无提示独立完成评估。',
+    supersedes: null,
+  }, () => new Date('2026-07-29T08:00:00Z'));
+  return {
+    conclusion: '能在当前题型中独立完成目标任务。',
+    boundary: '当前只由一节评估课支持，跨题型迁移尚未验证。',
+    nextStep: '回到 Roadmap 讨论跨题型迁移。',
+    keyEvidence: [{
+      claim: '无提示独立完成评估。',
+      source: trace.sourceAnchor,
+    }],
+    supportingEvidence: [],
+    openQuestions: [{
+      question: '换一种题型后是否仍能独立完成？',
+      nextCheck: '下一 Plan 安排跨题型评估。',
+    }],
+  };
 }
 
 function registrationFixture(): { root: string; roadmapPath: string; planPath: string } {
@@ -345,20 +419,24 @@ test('updates all Plan audit sections in one write and maps the decision status'
   expect(source).toContain('另一问题类别');
   expect(source).toContain('重新安排下一课');
 
+  const learningReview = addAssessmentEvidence(root, path);
   updatePlan(root, path, {
     decision: 'complete',
     currentPosition: '能力标准已满足。',
     nextLessonCandidate: '无。',
-    planSummary: '决定：完成。',
+    learningReview,
   });
   source = readFileSync(join(root, path), 'utf8');
   expect(source).toContain('status: completed');
+  expect(source).toContain('### 阶段结论');
+  expect(source).toContain('当前只由一节评估课支持');
+  expect(source).toContain(learningReview.keyEvidence[0]!.source);
 });
 
 test('writes dollar-prefixed math literally in Plan audit sections', () => {
   const { root, path } = planFixture();
   updatePlan(root, path, {
-    decision: 'complete',
+    decision: 'active',
     currentPosition: '比较 $2^x$，再解 $1-1/x=0$。',
     nextLessonCandidate: '保留字面量 $&。',
     planSummary: '金额标记 $$ 也不得被替换。',
@@ -427,17 +505,35 @@ status: prepared
 
 test('synchronizes the Roadmap Plan status without dropping its human suffix', () => {
   const { root, path, roadmapPath } = planFixture();
+  const learningReview = addAssessmentEvidence(root, path);
 
   updatePlan(root, path, {
     decision: 'complete',
     currentPosition: '能力标准已满足。',
     nextLessonCandidate: '无。',
-    planSummary: '决定：完成。',
+    learningReview,
   });
 
   expect(readFileSync(roadmapPath, 'utf8')).toContain(
     '- [测试 Plan](plans/p1.md) — completed；保留人工说明。',
   );
+});
+
+test('rejects an unqualified completed review before changing Plan or Roadmap', () => {
+  const { root, path, roadmapPath } = planFixture();
+  const learningReview = addAssessmentEvidence(root, path);
+  learningReview.keyEvidence[0]!.source = 'lessons/lesson-evidence.md#trace-event-999';
+  const planBefore = readFileSync(join(root, path), 'utf8');
+  const roadmapBefore = readFileSync(roadmapPath, 'utf8');
+
+  expect(() => updatePlan(root, path, {
+    decision: 'complete',
+    currentPosition: '不会写入。',
+    nextLessonCandidate: '不会写入。',
+    learningReview,
+  })).toThrow('LEARNING_REVIEW_SOURCE_NOT_ACTIVE');
+  expect(readFileSync(join(root, path), 'utf8')).toBe(planBefore);
+  expect(readFileSync(roadmapPath, 'utf8')).toBe(roadmapBefore);
 });
 
 test('leaves a Plan byte-for-byte unchanged when an audit section is missing', () => {

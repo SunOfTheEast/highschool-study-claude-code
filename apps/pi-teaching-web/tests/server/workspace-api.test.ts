@@ -389,6 +389,7 @@ test('publishes a fresh learning-set snapshot after a Roadmap Coach turn', async
       currentPosition: 'Current',
       nextLessonCandidate: 'Next',
       planSummary: 'Summary',
+      learningReview: null,
     }],
   };
   const hub = new EventHub();

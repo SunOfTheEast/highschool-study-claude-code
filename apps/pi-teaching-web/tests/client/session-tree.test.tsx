@@ -15,6 +15,7 @@ function workspace(status: string): PlanWorkspaceSnapshot {
     currentPosition: '当前进度。',
     nextLessonCandidate: '下一步。',
     planSummary: '阶段摘要。',
+    learningReview: null,
   };
   return {
     learningSet: {
@@ -35,6 +36,7 @@ function workspace(status: string): PlanWorkspaceSnapshot {
           currentPosition: '等待开始。',
           nextLessonCandidate: '待讨论。',
           planSummary: '尚无。',
+          learningReview: null,
         },
       ],
     },

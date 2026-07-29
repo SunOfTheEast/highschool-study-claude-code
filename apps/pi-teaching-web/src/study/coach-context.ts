@@ -33,6 +33,7 @@ export function readCoachContext(root: string, planId: string): CoachContextView
     currentPosition: workspace.plan.currentPosition,
     nextLessonCandidate: workspace.plan.nextLessonCandidate,
     planSummary: workspace.plan.planSummary,
+    learningReview: workspace.plan.learningReview,
     plannerAttention,
     priorLessons,
   };

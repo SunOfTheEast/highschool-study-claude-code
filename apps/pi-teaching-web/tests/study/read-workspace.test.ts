@@ -13,6 +13,8 @@ import {
   readPlanWorkspace,
   readRoadmapWorkspace,
 } from '../../src/study/read-workspace';
+import type { LearningReview } from '../../src/shared/contracts';
+import { renderLearningReview } from '../../src/study/learning-review';
 import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
 
 const root = domainIntegrityFixtureRoot;
@@ -32,6 +34,7 @@ test('reads the derivative Roadmap and Plan lesson index', () => {
   expect(workspace.plan.currentPosition).toContain('阶段 `1a` 已通过');
   expect(workspace.plan.nextLessonCandidate).toContain('mst_p0032_ex22');
   expect(workspace.plan.planSummary).toContain('定义域意识');
+  expect(workspace.plan.learningReview).toBeNull();
   expect(learningSet.plans[0]?.planningBasis)
     .toBe(workspace.plan.planningBasis);
   expect(workspace.lessons.map((lesson) => [lesson.id, lesson.status])).toEqual([
@@ -53,6 +56,38 @@ test('reads the derivative Roadmap and Plan lesson index', () => {
     { id: 'assessment-02', kind: 'problem', required: true, dependsOn: ['assessment-01'], uses: ['Q-DOMAIN-EX16'] },
     { id: 'reflection', kind: 'reflection', required: true, dependsOn: ['assessment-02'], uses: [] },
   ]);
+});
+
+test('projects a structured completed Learning Review without hiding its Markdown', () => {
+  const copy = mkdtempSync(join(tmpdir(), 'study-learning-review-read-'));
+  const review: LearningReview = {
+    conclusion: '能独立比较两条路线。',
+    boundary: '只在当前题型中验证。',
+    nextStep: '检查跨题型迁移。',
+    keyEvidence: [{
+      claim: '无提示完成评估。',
+      source: 'lessons/lesson-003.md#trace-event-001',
+    }],
+    supportingEvidence: [],
+    openQuestions: [],
+  };
+  try {
+    cpSync(root, copy, { recursive: true });
+    const path = join(copy, 'plans/domain-integrity.md');
+    writeFileSync(
+      path,
+      readFileSync(path, 'utf8').replace(
+        /(^## Plan Summary\s*$\n)([\s\S]*?)(?=^## |$(?![\s\S]))/m,
+        `$1\n${renderLearningReview(review)}`,
+      ),
+    );
+
+    const plan = readPlanWorkspace(copy, 'domain-integrity').plan;
+    expect(plan.learningReview).toEqual(review);
+    expect(plan.planSummary).toContain('### 阶段结论');
+  } finally {
+    rmSync(copy, { recursive: true, force: true });
+  }
 });
 
 test('reads the optional Roadmap Coach Session without inventing one', () => {

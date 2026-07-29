@@ -13,6 +13,7 @@ import type {
   RoadmapWorkspaceSnapshot,
 } from '../shared/contracts';
 import { ROADMAP_COACH_SESSION_KEY } from '../shared/contracts';
+import { parseLearningReview } from './learning-review';
 
 function section(body: string, heading: string, level = 2): string {
   const lines = body.split(/\r?\n/);
@@ -45,6 +46,7 @@ function scalar(frontmatter: Record<string, unknown>, key: string): string | nul
 
 function planSummary(root: string, planPath: string): PlanSummary {
   const document = readMarkdownFile(root, planPath);
+  const summary = section(document.body, 'Plan Summary');
   return {
     id: document.id,
     title: title(document.body).replace(/^Plan[:：]\s*/, ''),
@@ -55,7 +57,8 @@ function planSummary(root: string, planPath: string): PlanSummary {
     planningBasis: section(document.body, 'Planning Basis'),
     currentPosition: section(document.body, 'Current Position'),
     nextLessonCandidate: section(document.body, 'Next Lesson Candidate'),
-    planSummary: section(document.body, 'Plan Summary'),
+    planSummary: summary,
+    learningReview: parseLearningReview(summary),
   };
 }
 

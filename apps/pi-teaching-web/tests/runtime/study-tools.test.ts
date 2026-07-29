@@ -905,17 +905,44 @@ test('keeps non-problem Trace cardless', async () => {
     }));
 });
 
-test('exposes one flat Coach plan_update contract without path authority', () => {
+test('exposes exclusive progress and complete plan_update contracts without path authority', () => {
   const tool = createPlanUpdateTool(root, 'plans/domain-integrity.md');
-  const properties = (tool.parameters as {
-    properties: Record<string, unknown>;
-  }).properties;
-  expect(Object.keys(properties)).toEqual([
-    'decision',
-    'currentPosition',
-    'nextLessonCandidate',
-    'planSummary',
-  ]);
+  const common = {
+    currentPosition: '本周期已完成。',
+    nextLessonCandidate: '回到 Roadmap 讨论下一阶段。',
+  };
+  const learningReview = {
+    conclusion: '能在限定题型中独立比较路线。',
+    boundary: '当前只覆盖一张无提示评估题，迁移尚未验证。',
+    nextStep: '讨论跨题型迁移。',
+    keyEvidence: [{
+      claim: '独立完成评估题。',
+      source: 'lessons/lesson-003.md#trace-event-001',
+    }],
+    supportingEvidence: [],
+    openQuestions: [],
+  };
+
+  expect(Check(tool.parameters, {
+    decision: 'complete',
+    ...common,
+    learningReview,
+  })).toBeTrue();
+  expect(Check(tool.parameters, {
+    decision: 'complete',
+    ...common,
+    planSummary: '旧式完成总结。',
+  })).toBeFalse();
+  expect(Check(tool.parameters, {
+    decision: 'active',
+    ...common,
+    planSummary: '继续进行。',
+  })).toBeTrue();
+  expect(Check(tool.parameters, {
+    decision: 'active',
+    ...common,
+    learningReview,
+  })).toBeFalse();
   expect(JSON.stringify(tool.parameters)).not.toContain('planPath');
   expect(JSON.stringify(tool.parameters)).not.toContain('lessonIndex');
 });

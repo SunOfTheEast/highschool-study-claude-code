@@ -29,6 +29,19 @@ export type LessonNode = {
   blocks: ActivityBlock[];
 };
 
+export type LearningReview = {
+  conclusion: string;
+  boundary: string;
+  nextStep: string;
+  keyEvidence: Array<{ claim: string; source: string }>;
+  supportingEvidence: Array<{
+    claim: string;
+    source: string;
+    limitation: string;
+  }>;
+  openQuestions: Array<{ question: string; nextCheck: string }>;
+};
+
 export type PlanSummary = {
   id: string;
   title: string;
@@ -40,6 +53,7 @@ export type PlanSummary = {
   currentPosition: string;
   nextLessonCandidate: string;
   planSummary: string;
+  learningReview: LearningReview | null;
 };
 
 export type LearningSetSnapshot = {
@@ -92,6 +106,7 @@ export type CoachContextView = {
   currentPosition: string;
   nextLessonCandidate: string;
   planSummary: string;
+  learningReview: LearningReview | null;
   plannerAttention: string;
   priorLessons: Array<{
     lessonId: string;

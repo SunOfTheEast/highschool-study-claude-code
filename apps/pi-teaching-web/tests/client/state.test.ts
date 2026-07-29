@@ -18,6 +18,7 @@ function workspaceWithLesson(status: LessonStatus): PlanWorkspaceSnapshot {
     currentPosition: '当前位置',
     nextLessonCandidate: '下一步',
     planSummary: '阶段摘要',
+    learningReview: null,
   };
   return {
     learningSet: {

@@ -18,6 +18,7 @@ const plan: PlanSummary = {
   currentPosition: '当前位置',
   nextLessonCandidate: '下一步',
   planSummary: '摘要',
+  learningReview: null,
 };
 
 function learningSet(

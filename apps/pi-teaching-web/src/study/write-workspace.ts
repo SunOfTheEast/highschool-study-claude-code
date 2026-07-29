@@ -10,6 +10,11 @@ import {
   readMarkdownFile,
   resolveInsideRoot,
 } from 'highschool-study-markdown/study-domain';
+import type { LearningReview } from '../shared/contracts';
+import {
+  renderLearningReview,
+  validateLearningReviewSources,
+} from './learning-review';
 
 export type RouteChangeInput = {
   action: 'insert' | 'skip' | 'move' | 'repeat';
@@ -22,12 +27,21 @@ export type RouteChangeInput = {
 
 export type PlanDecision = 'active' | 'complete' | 'replan';
 
-export type PlanUpdateInput = {
-  decision: PlanDecision;
+type PlanProgressUpdate = {
+  decision: Exclude<PlanDecision, 'complete'>;
   currentPosition: string;
   nextLessonCandidate: string;
   planSummary: string;
 };
+
+type PlanCompleteUpdate = {
+  decision: 'complete';
+  currentPosition: string;
+  nextLessonCandidate: string;
+  learningReview: LearningReview;
+};
+
+export type PlanUpdateInput = PlanProgressUpdate | PlanCompleteUpdate;
 
 export type RegisteredPlan = {
   id: string;
@@ -403,11 +417,17 @@ export function updatePlan(root: string, planPath: string, input: PlanUpdateInpu
   const document = read(root, planPath);
   const status = input.decision === 'complete' ? 'completed' : 'active';
   const plan = readMarkdownFile(root, planPath);
+  if (input.decision === 'complete') {
+    validateLearningReviewSources(root, planPath, input.learningReview);
+  }
+  const summary = input.decision === 'complete'
+    ? renderLearningReview(input.learningReview)
+    : input.planSummary;
   const lessonIndex = deriveLessonIndex(root, planPath, plan.id, document.source);
   let source = replaceSection(document.source, 'Lesson Index', lessonIndex);
   source = replaceSection(source, 'Current Position', input.currentPosition);
   source = replaceSection(source, 'Next Lesson Candidate', input.nextLessonCandidate);
-  source = replaceSection(source, 'Plan Summary', input.planSummary);
+  source = replaceSection(source, 'Plan Summary', summary);
   source = replaceFrontmatterField(source, planPath, 'status', status);
   const roadmap = read(root, 'ROADMAP.md');
   const nextRoadmap = syncPlanGraphStatus(roadmap.source, planPath, status);

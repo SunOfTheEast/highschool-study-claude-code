@@ -12,6 +12,7 @@ const context: CoachContextView = {
   currentPosition: '当前位置',
   nextLessonCandidate: '下一课',
   planSummary: '阶段摘要',
+  learningReview: null,
   plannerAttention: '备课提醒',
   priorLessons: [{
     lessonId: 'lesson-1',
