@@ -79,6 +79,34 @@ export type PlanWorkspaceSnapshot = {
   lessons: LessonNode[];
 };
 
+export type StudentPlanState =
+  | 'discussing'
+  | 'prepared'
+  | 'active'
+  | 'paused'
+  | 'completed';
+
+export type StudentLessonPreview = {
+  lessonId: string;
+  status: 'prepared' | 'active' | 'paused';
+  publicTitle: string;
+  publicPurpose: string | null;
+  blockCount: number;
+  blockKinds: ActivityKind[];
+  sourceNumbers: string[];
+};
+
+export type StudentPlanProjection = {
+  progress: {
+    closedLessons: number;
+    registeredLessons: number;
+    state: StudentPlanState;
+  };
+  currentPosition: string;
+  nextLesson: StudentLessonPreview | null;
+  learningReview: LearningReview | null;
+};
+
 export type StudentProblemCard = {
   path: string;
   stem: string;
