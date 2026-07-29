@@ -136,16 +136,16 @@ Roadmap 的候选不会进入 Lesson。只有 Plan Coach 提交并通过 `lesson
 ### 6.2 Plan 注册完成
 
 成功的 `plan_register` 成为 Roadmap 私有检索 turn 的学生可见终点。运行时从注册
-回执生成确定性 Plan 就绪消息，不使用模型的后续自由总结：
+回执生成一条普通的确定性 Coach 消息，不使用模型的后续自由总结，也不新增
+Plan-ready 卡片、`ConversationItem` 类型或前端组件：
 
 ```text
 学习周期已建立
-第一节将使用未见的真实题卡。
-学习顾问会在备课时重新核对素材。
+具体素材会由学习顾问在备课时重新核对。
 ```
 
-Plan 就绪消息可以提供已注册的 Plan ID 或普通显示名称，但不得读取并展示题号以外的
-题卡内容。Roadmap 随后生成的自由 final 继续被抑制。
+这条消息不读取或展示题卡内容。Roadmap 随后生成的自由 final 继续被抑制；注册完成后
+服务端现有的 learning-set 刷新负责让新 Plan 出现在界面中。
 
 ### 6.3 调试模式
 
@@ -194,17 +194,17 @@ Roadmap 不编造题号。Plan 仍可正常注册，`Next Lesson Candidate` 只�
 
 `safe` 投影丢弃该自由回复。原始 JSONL 保留，便于审计模型行为。
 
-### 8.4 搜题后未注册 Plan
+### 8.4 搜题后提前生成自由回复
 
-不循环调用模型。运行结束时若已经发生 Roadmap `card_search`、却没有成功
-`plan_register`，学生看到固定恢复消息：
+不循环调用模型。若 Roadmap `card_search` 成功后、`plan_register` 尚未成功时模型先
+生成了纯文本 final，`safe` 投影用固定恢复消息替换该 final：
 
 ```text
-素材核对已经完成，但学习周期尚未登记。可以继续完成当前计划。
+课程素材已经核对，但学习周期尚未登记。可以继续完成当前计划。
 ```
 
-同一 Session 保持可恢复。学生继续后，Roadmap 应完成既有 Plan，而不是重新问诊或
-重复搜题。
+同一 Session 保持可恢复。完全没有 assistant final 的空 turn 沿用现有通用运行状态和
+历史重建，不为本次问题增加 custom entry、持久恢复状态或专用 `agent_end` 协议。
 
 ### 8.5 Plan 注册失败
 
@@ -218,11 +218,15 @@ Roadmap 不编造题号。Plan 仍可正常注册，`Next Lesson Candidate` 只�
 - Roadmap 与 Plan Coach 的 Skill 文本；
 - live safe projector；
 - stored conversation projector；
-- Plan 注册回执的确定性学生投影；
-- 相应的 projection、server 和真实模型验收。
+- Plan 注册回执到普通 Coach 消息的确定性投影；
+- 相应的 projection 测试和真实模型验收。
 
-不增加数据库、文件类型、公共工具或跨 Session 存储。生产代码预计约 150–250 行，
-测试代码数量相近，影响约 5–8 个文件。
+不增加数据库、文件类型、公共工具、共享前端契约、前端组件或跨 Session 存储。服务端
+现有 Roadmap turn 完成后的 learning-set 刷新保持不变。生产代码预计约 60–120 行，
+主要影响两份 Skill 和两个 projector，测试集中在两个 projection 测试文件。
+
+运行时只确定性保证聊天投影不泄露检索结果。Plan 正文“先写完整草案、搜题后只改短题号”
+由 Skill 顺序契约和真实模型验收保证；本次不增加 Plan diff guard 或语义剧透检查器。
 
 ## 十、验证
 
@@ -232,7 +236,7 @@ Roadmap 不编造题号。Plan 仍可正常注册，`Next Lesson Candidate` 只�
 2. 同一历史重建：safe history 不包含该消息。
 3. `card_search → plan_register → 自由 final`：学生只收到一个 Plan 就绪投影。
 4. 搜索为空且 Plan 合法：Plan 正常注册，没有伪造题号。
-5. 搜题后无 `plan_register`：显示固定恢复消息，不显示剧透文本。
+5. 搜题后在 `plan_register` 前出现纯文本 final：用固定恢复消息替换，不显示剧透文本。
 6. `raw-stream` 继续显示原始文本。
 7. 原始 Pi Session JSONL 保留完整工具结果和模型回复。
 8. 工具列表、Plan schema、Lesson schema 与公共 MCP 工具数量不变。
