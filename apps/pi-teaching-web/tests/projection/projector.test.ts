@@ -91,6 +91,16 @@ test('projects tool names as status without raw arguments or answers', () => {
     label: '正在查找真实题卡',
   }]);
   expect(JSON.stringify(events)).not.toContain('answer');
+
+  expect(projectSessionEvent('coach:@roadmap', {
+    type: 'tool_execution_start',
+    toolName: 'card_search',
+    toolCallId: 'roadmap-search',
+    args: { query: 'private diagnostic' },
+  } as never)).toEqual([expect.objectContaining({
+    type: 'work-status',
+    label: '正在核对课程素材',
+  })]);
 });
 
 test('projects lesson preparation without leaking the Blueprint', () => {
@@ -150,4 +160,111 @@ test('suppresses only the safe post-prepare final within the current turn', () =
   const raw = createLiveSessionEventProjector('coach:plan', 'raw-stream');
   raw(receipt);
   expect(raw(final)).toEqual([expect.objectContaining({ type: 'message' })]);
+});
+
+test('replaces a live Roadmap post-search final with a fixed recovery message', () => {
+  const safe = createLiveSessionEventProjector('coach:@roadmap', 'safe');
+  const receipt = {
+    type: 'tool_execution_end',
+    toolName: 'card_search',
+    toolCallId: 'search-1',
+    isError: false,
+    result: {
+      details: {
+        kind: 'card-search',
+        value: { cards: [{ stem: '绝密题面', answer: '绝密答案' }] },
+      },
+    },
+  } as never;
+  const final = {
+    type: 'message_end',
+    message: {
+      role: 'assistant',
+      timestamp: 127,
+      content: [{ type: 'text', text: '绝密题面的关键是冻结变量法。' }],
+    },
+  } as never;
+
+  expect(safe(receipt)).toEqual([expect.objectContaining({ type: 'work-status' })]);
+  const visible = safe(final);
+  expect(visible).toEqual([expect.objectContaining({
+    type: 'message',
+    message: expect.objectContaining({
+      text: '课程素材已经核对，但学习周期尚未登记。可以继续完成当前计划。',
+    }),
+  })]);
+  expect(JSON.stringify(visible)).not.toContain('绝密');
+  expect(JSON.stringify(visible)).not.toContain('冻结变量法');
+});
+
+test('emits one ordinary ready message after live Roadmap registration', () => {
+  const safe = createLiveSessionEventProjector('coach:@roadmap', 'safe');
+  const search = {
+    type: 'tool_execution_end',
+    toolName: 'card_search',
+    toolCallId: 'search-1',
+    isError: false,
+    result: { details: { kind: 'card-search', value: { cards: [] } } },
+  } as never;
+  const register = {
+    type: 'tool_execution_end',
+    toolName: 'plan_register',
+    toolCallId: 'register-1',
+    isError: false,
+    result: {
+      details: {
+        kind: 'plan-register',
+        value: { ok: true, factId: 'route-choice' },
+      },
+    },
+  } as never;
+  const final = {
+    type: 'message_end',
+    message: {
+      role: 'assistant',
+      timestamp: 128,
+      content: [{ type: 'text', text: '绝密题面和方法。' }],
+    },
+  } as never;
+
+  safe(search);
+  const registered = safe(register);
+  expect(registered.filter((event) => event.type === 'message')).toEqual([
+    expect.objectContaining({
+      type: 'message',
+      message: expect.objectContaining({
+        text: '学习周期已建立。具体素材会由学习顾问在备课时重新核对。',
+      }),
+    }),
+  ]);
+  expect(safe(final)).toEqual([]);
+});
+
+test('keeps live Roadmap card-search privacy scoped to safe Roadmap projection', () => {
+  const search = {
+    type: 'tool_execution_end',
+    toolName: 'card_search',
+    toolCallId: 'search-1',
+    isError: false,
+    result: { details: { kind: 'card-search', value: { cards: [] } } },
+  } as never;
+  const final = {
+    type: 'message_end',
+    message: {
+      role: 'assistant',
+      timestamp: 129,
+      content: [{ type: 'text', text: '普通检索说明。' }],
+    },
+  } as never;
+
+  const plan = createLiveSessionEventProjector('coach:plan', 'safe');
+  plan(search);
+  expect(plan(final)).toEqual([expect.objectContaining({ type: 'message' })]);
+
+  const raw = createLiveSessionEventProjector('coach:@roadmap', 'raw-stream');
+  raw(search);
+  expect(raw(final)).toEqual([expect.objectContaining({
+    type: 'message',
+    message: expect.objectContaining({ text: '普通检索说明。' }),
+  })]);
 });

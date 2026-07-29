@@ -1,8 +1,15 @@
 import type { AgentSessionEvent } from '@earendil-works/pi-coding-agent';
-import type { SessionKey, StudyViewEvent } from '../shared/contracts';
 import {
   lessonReadyNoticeFromToolResult,
+  roadmapPrivateToolResult,
+  ROADMAP_PLAN_READY_TEXT,
+  ROADMAP_PLAN_RECOVERY_TEXT,
 } from './conversation-projector';
+import {
+  ROADMAP_COACH_SESSION_KEY,
+  type SessionKey,
+  type StudyViewEvent,
+} from '../shared/contracts';
 import {
   visibleAssistantText,
   type MessageProjectionMode,
@@ -19,6 +26,13 @@ const labels: Record<string, string> = {
   plan_update: '正在写回学习计划',
   card_alternative_append: '正在登记已验证的另解',
 };
+
+function toolLabel(sessionKey: SessionKey, toolName: string, fallback: string): string {
+  if (sessionKey === ROADMAP_COACH_SESSION_KEY && toolName === 'card_search') {
+    return '正在核对课程素材';
+  }
+  return labels[toolName] ?? fallback;
+}
 
 export function projectSessionEvent(
   sessionKey: SessionKey,
@@ -56,7 +70,7 @@ export function projectSessionEvent(
       sessionKey,
       tool: event.toolName,
       status: 'running',
-      label: labels[event.toolName] ?? '正在处理',
+      label: toolLabel(sessionKey, event.toolName, '正在处理'),
     }];
   }
   if (event.type === 'tool_execution_end') {
@@ -65,7 +79,7 @@ export function projectSessionEvent(
       sessionKey,
       tool: event.toolName,
       status: event.isError ? 'failed' : 'done',
-      label: labels[event.toolName] ?? '处理完成',
+      label: toolLabel(sessionKey, event.toolName, '处理完成'),
     }];
   }
   return [];
@@ -76,12 +90,41 @@ export function createLiveSessionEventProjector(
   mode: MessageProjectionMode = 'safe',
 ): (event: AgentSessionEvent) => StudyViewEvent[] {
   let preparedInCurrentTurn = false;
+  const protectsRoadmapSearch =
+    mode === 'safe' && sessionKey === ROADMAP_COACH_SESSION_KEY;
+  let roadmapPrivateState: 'idle' | 'searching' | 'registered' = 'idle';
   return (event) => {
     const projected = projectSessionEvent(sessionKey, event, mode);
     if (mode !== 'safe') return projected;
 
     if (event.type === 'tool_execution_end') {
       const result = event.result as { details?: unknown } | null | undefined;
+      if (protectsRoadmapSearch) {
+        const privateResult = roadmapPrivateToolResult({
+          role: 'toolResult',
+          toolName: event.toolName,
+          isError: event.isError,
+          details: result?.details,
+        });
+        if (privateResult === 'card-search') {
+          roadmapPrivateState = 'searching';
+        } else if (
+          privateResult === 'plan-register'
+          && roadmapPrivateState === 'searching'
+        ) {
+          roadmapPrivateState = 'registered';
+          return [...projected, {
+            type: 'message',
+            sessionKey,
+            message: {
+              id: `${sessionKey}:${event.toolCallId}:plan-ready`,
+              role: 'coach',
+              text: ROADMAP_PLAN_READY_TEXT,
+              complete: true,
+            },
+          }];
+        }
+      }
       const lesson = lessonReadyNoticeFromToolResult({
         role: 'toolResult',
         toolName: event.toolName,
@@ -90,6 +133,27 @@ export function createLiveSessionEventProjector(
       });
       if (lesson) preparedInCurrentTurn = true;
       return projected;
+    }
+
+    if (
+      protectsRoadmapSearch
+      && event.type === 'message_end'
+      && event.message.role === 'assistant'
+      && projected.some((item) => item.type === 'message')
+    ) {
+      if (roadmapPrivateState === 'registered') {
+        roadmapPrivateState = 'idle';
+        return projected.filter((item) => item.type !== 'message');
+      }
+      if (roadmapPrivateState === 'searching') {
+        roadmapPrivateState = 'idle';
+        return projected.map((item) => item.type === 'message'
+          ? {
+              ...item,
+              message: { ...item.message, text: ROADMAP_PLAN_RECOVERY_TEXT },
+            }
+          : item);
+      }
     }
 
     if (
@@ -104,6 +168,7 @@ export function createLiveSessionEventProjector(
 
     if (event.type === 'agent_end' && !event.willRetry) {
       preparedInCurrentTurn = false;
+      roadmapPrivateState = 'idle';
     }
     return projected;
   };
