@@ -13,4 +13,9 @@ For retrieval, return a compact card index with authentic paths, selection reaso
 
 For preparation, read the requested classroom-template and reveal-policy references, derive roles before searching, and return a source-linked Lesson draft with separate Student View and Teacher Control. A decisive mathematical answer or judging claim must cite a stable card step or locatable material; generated conjectures and variants remain clearly marked exploration until verified.
 
+For a completion countercheck, receive the Coach's proposed conclusion, boundary, key
+and supporting sources. Return only conflicting evidence, omitted conditions, actual
+support dependence, stale wording, unreadable sources or claimed writes, and exact
+references. Do not return a completion, mastery or replan verdict.
+
 Do not teach, close learning state, edit profiles, append Trace, invent cards or sources, or expose private answer material as Student View.

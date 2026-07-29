@@ -69,6 +69,16 @@ category. Scouts return findings and exact sources; they never select the Plan.
 If a workflow returns only partial results, use them only when the remaining evidence
 is sufficient; otherwise keep the decision diagnostic or unresolved.
 
+## Countercheck completion once
+
+When the proposed decision is this Plan's first completion attempt, load
+`deep-workflow` and run its mandatory Quick Evidence Scout even when deep mode is off.
+Give it the proposed conclusion, exact boundary, key sources and supporting sources;
+ask for conflicts, omitted conditions, support dependence, stale wording and
+unreadable sources or writes, not a verdict. Recheck at most once if its findings
+change the key-source set. On failure or timeout, narrow the boundary and keep an open
+question.
+
 ## Discuss and persist
 
 Present one recommended next Plan or diagnostic Plan in student language. Explain the
@@ -104,4 +114,6 @@ reread the Plan and Roadmap, and report only the persisted state.
 
 At Plan completion, compare its Planning Basis with active evidence in Plan Summary.
 State an intervention effect only when classroom evidence supports it. Preserve
-unverified transfer, retention, and causal claims as open.
+unverified transfer, retention, and causal claims as open. Persist the conclusion,
+boundary, key evidence, supporting evidence, open questions and next step as the
+structured Learning Review, then reread it before speaking to the student.

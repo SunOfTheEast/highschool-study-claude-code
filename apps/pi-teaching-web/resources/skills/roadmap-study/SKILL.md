@@ -43,6 +43,19 @@ choice; ask from another decision-changing angle when one remains. If the studen
 explicitly stops the inquiry, proceed with stated uncertainty. Before proposing,
 summarize the student's account and your working judgment, and invite correction.
 
+## Synchronize the first long-term contract
+
+Before the first `plan_register`, confirm three Roadmap-level facts one question at a
+time: the long-term Goal, an Observable Capability Standard stated as visible student
+performance, and a direct Test that samples the whole goal. Show the three together
+for correction, then use the Roadmap Coach's retained write access to replace all
+three template placeholders. A local Plan goal is a bounded next cycle and must not
+overwrite this long-term contract.
+
+After the first Plan exists, change these Roadmap fields only when the student says
+the long-term direction itself has changed. A new Plan, new diagnosis or local
+replanning is not by itself such a change.
+
 ## Respect scope
 
 Explain the learning set, compare cycles, revise Roadmap goals after student approval,
@@ -65,6 +78,7 @@ Plans, cites the student words or sources supporting it, changes a real Plan cho
 and names later evidence that would support or overturn it. Do not use a stable
 personality label or a generic “practice more” restatement.
 
-Call plan_register, reread the Plan and ROADMAP.md, and report only the persisted
-state. Never announce an unregistered file as a Plan and never create a Tutor or
-Lesson from this Session.
+Call plan_register, then reread the Plan and ROADMAP.md, including the confirmed
+Goal, Observable Capability Standard and Test, and report only the persisted state.
+Never announce an unregistered file as a Plan and never create a Tutor or Lesson from
+this Session.

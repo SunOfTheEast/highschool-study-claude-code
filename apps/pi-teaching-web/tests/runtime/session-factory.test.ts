@@ -136,7 +136,6 @@ test('keeps Coach and Tutor tool boundaries distinct', () => {
   ]);
   for (const role of ['coach', 'tutor'] as const) {
     expect(roleToolNames(role)).not.toContain('subagent');
-    expect(deepModeToolNames(roleToolNames(role), false)).not.toContain('deep_workflow_propose');
   }
   const planCoach = scopeToolNames({
     role: 'coach',
@@ -221,13 +220,61 @@ test('builds one hidden structured continuation for submitted memory decisions',
 
 test('adds only the workflow proposal tool while deep mode is enabled', () => {
   const ordinary = ['read', 'card_search'];
-  expect(deepModeToolNames(ordinary, true)).toEqual([
+  expect(deepModeToolNames(ordinary, true, { mandatoryQuickScout: false })).toEqual([
     'read',
     'card_search',
     'deep_workflow_propose',
   ]);
-  expect(deepModeToolNames([...ordinary, 'deep_workflow_propose'], false)).toEqual(ordinary);
-  expect(deepModeToolNames(ordinary, true)).not.toContain('subagent');
+  expect(deepModeToolNames(
+    [...ordinary, 'deep_workflow_propose'],
+    false,
+    { mandatoryQuickScout: false },
+  )).toEqual(ordinary);
+  expect(deepModeToolNames(
+    ordinary,
+    true,
+    { mandatoryQuickScout: false },
+  )).not.toContain('subagent');
+});
+
+test('keeps one Quick Scout reachable only for a Plan Coach when deep mode is off', () => {
+  const planCoach = scopeToolNames({
+    role: 'coach',
+    ownerId: 'p1',
+    ownerPath: 'plans/p1.md',
+  });
+  const roadmapCoach = scopeToolNames({
+    role: 'coach',
+    ownerId: '@roadmap',
+    ownerPath: 'ROADMAP.md',
+  });
+  const tutor = scopeToolNames({
+    role: 'tutor',
+    ownerId: 'lesson-1',
+    ownerPath: 'lessons/lesson-1.md',
+  });
+  expect(deepModeToolNames(
+    planCoach,
+    false,
+    { mandatoryQuickScout: true },
+  )).toContain('deep_workflow_propose');
+  expect(deepModeToolNames(
+    roadmapCoach,
+    false,
+    { mandatoryQuickScout: false },
+  )).not.toContain('deep_workflow_propose');
+  expect(deepModeToolNames(
+    tutor,
+    false,
+    { mandatoryQuickScout: false },
+  )).not.toContain('deep_workflow_propose');
+  for (const current of [planCoach, roadmapCoach, tutor]) {
+    expect(deepModeToolNames(
+      current,
+      true,
+      { mandatoryQuickScout: false },
+    )).toContain('deep_workflow_propose');
+  }
 });
 
 test('keeps lesson kickoff pending until the triggered agent emits agent_end', async () => {

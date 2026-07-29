@@ -50,6 +50,11 @@ test('ships the learning-set orientation envelope', () => {
 
   expect(roadmap).toContain('## Learning Set Overview');
   expect(roadmap).toContain('- What this teaches:');
+  for (const heading of ['Goal', 'Observable Capability Standard', 'Test']) {
+    expect(roadmap).toMatch(new RegExp(
+      `## ${heading}\\n\\n（[^\\n]+）`,
+    ));
+  }
   expect(instructions).toContain(
     '- Default presentation persona: `neutral-tutor`',
   );

@@ -109,9 +109,15 @@ export async function triggerAndWaitForAgentEnd(
   }
 }
 
-export function deepModeToolNames(current: string[], enabled: boolean): string[] {
+export function deepModeToolNames(
+  current: string[],
+  enabled: boolean,
+  options: { mandatoryQuickScout: boolean },
+): string[] {
   const names = current.filter((name) => name !== 'deep_workflow_propose');
-  return enabled ? [...names, 'deep_workflow_propose'] : names;
+  return enabled || options.mandatoryQuickScout
+    ? [...names, 'deep_workflow_propose']
+    : names;
 }
 
 export function memoryReviewDecisionMessage(snapshot: MemoryReviewSnapshot) {
@@ -248,7 +254,13 @@ export async function createPiSessionFactory(
     await bindStudyExtensions(session);
     const applyDeepMode = (enabled: boolean, persist: boolean) => {
       if (persist) workflowRuntime.setEnabled(enabled);
-      session.setActiveToolsByName(deepModeToolNames(session.getActiveToolNames(), enabled));
+      session.setActiveToolsByName(deepModeToolNames(
+        session.getActiveToolNames(),
+        enabled,
+        {
+          mandatoryQuickScout: role === 'coach' && !isRoadmapCoachScope(scope),
+        },
+      ));
     };
     applyDeepMode(workflowRuntime.enabled(), false);
     workflowRuntime.setSynthesisSink(async (workflow) => {

@@ -71,6 +71,16 @@ It cannot write learning facts or select the Plan.
 If delegation returns only partial results, use them only when the remaining evidence
 is sufficient; otherwise keep the decision diagnostic or unresolved.
 
+## Countercheck completion once
+
+Before the first decision that would complete the current Plan, delegate one focused
+counter-evidence audit to `Agent(highschool-study:lesson-designer)`. Give it the
+proposed conclusion, exact boundary, key sources and supporting sources. Ask only for
+conflicts, omitted conditions, actual support dependence, stale wording and sources
+or claimed writes that cannot be reread; the delegate does not decide completion.
+Repeat at most once if its findings change the key-source set. If the audit fails,
+narrow the boundary and retain an open question.
+
 ## Discuss and persist
 
 Present one recommended next Plan or diagnostic Plan in student language. Explain the
@@ -110,4 +120,6 @@ only the persisted state.
 
 At Plan completion, compare its Planning Basis with active evidence in Plan Summary.
 State an intervention effect only when classroom evidence supports it. Preserve
-unverified transfer, retention, and causal claims as open.
+unverified transfer, retention, and causal claims as open. State the conclusion,
+boundary, key evidence, supporting evidence, open questions and next step in
+student-readable language, then reread the persisted result before reporting it.
