@@ -554,8 +554,11 @@ test('never publishes the free Coach final after a successful Lesson prepare in 
     lesson: {
       lessonId: 'lesson-007',
       lessonPath: 'lessons/lesson-007.md',
+      publicTitle: '下一节课堂',
+      publicPurpose: '完成一次独立能力检验',
       blockCount: 5,
       blockKinds: ['dialogue', 'problem', 'reflection'],
+      sourceNumbers: ['source-17'],
     },
   }] as const;
   const events: unknown[] = [];
@@ -589,8 +592,11 @@ test('never publishes the free Coach final after a successful Lesson prepare in 
           ok: true,
           factId: 'lesson-007',
           lessonPath: 'lessons/lesson-007.md',
+          publicTitle: '下一节课堂',
+          publicPurpose: '完成一次独立能力检验',
           blockCount: 5,
           blockKinds: ['dialogue', 'problem', 'reflection'],
+          sourceNumbers: ['source-17'],
         },
       },
     },

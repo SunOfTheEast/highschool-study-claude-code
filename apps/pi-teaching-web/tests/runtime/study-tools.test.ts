@@ -19,6 +19,8 @@ import { createPlanRegisterTool } from '../../src/runtime/plan-register';
 import { createPlanUpdateTool } from '../../src/runtime/plan-update';
 import * as studyToolModule from '../../src/runtime/study-tools';
 import { readEvidence } from '../../src/study/ability';
+import { readPlanWorkspace } from '../../src/study/read-workspace';
+import { readStudentLessonPreview } from '../../src/study/student-plan-projection';
 import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
 
 const { createStudyTools } = studyToolModule;
@@ -173,8 +175,22 @@ test('prepares and rereads one Lesson with Plan authority bound by the Coach Ses
     factId: 'lesson-blueprint-001',
     status: 'prepared',
     lessonPath: 'lessons/lesson-blueprint-001.md',
+    publicTitle: '下一节课堂',
+    publicPurpose: '完成一次独立能力检验',
     blockCount: 2,
     blockKinds: ['problem', 'reflection'],
+    sourceNumbers: ['mst_p0032_ex22'],
+  });
+  const lesson = readPlanWorkspace(temporaryRoot, 'domain-integrity').lessons
+    .find((candidate) => candidate.id === 'lesson-blueprint-001');
+  expect(lesson).toBeDefined();
+  const preview = readStudentLessonPreview(temporaryRoot, lesson!);
+  expect(receipt).toMatchObject({
+    publicTitle: preview.publicTitle,
+    publicPurpose: preview.publicPurpose,
+    blockCount: preview.blockCount,
+    blockKinds: preview.blockKinds,
+    sourceNumbers: preview.sourceNumbers,
   });
   expect(readFileSync(
     join(temporaryRoot, 'plans/domain-integrity.md'),

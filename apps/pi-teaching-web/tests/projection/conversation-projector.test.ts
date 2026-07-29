@@ -1,7 +1,10 @@
 import { expect, test } from 'bun:test';
 import type { SessionEntry } from '@earendil-works/pi-coding-agent';
 import type { MemoryReviewSnapshot } from '../../src/memory-review/contracts';
-import { projectConversationEntries } from '../../src/projection/conversation-projector';
+import {
+  lessonReadyNoticeFromToolResult,
+  projectConversationEntries,
+} from '../../src/projection/conversation-projector';
 
 const proposed = {
   id: 'review-1',
@@ -89,8 +92,11 @@ function lessonPrepareResult(isError = false): SessionEntry {
           ok: true,
           factId: 'lesson-007',
           lessonPath: 'lessons/lesson-007.md',
+          publicTitle: '下一节课堂',
+          publicPurpose: '完成一次独立能力检验',
           blockCount: 5,
           blockKinds: ['dialogue', 'problem', 'reflection'],
+          sourceNumbers: ['source-17', 'source-32'],
         },
       },
     },
@@ -233,13 +239,34 @@ test('replaces the post-prepare Coach final with one spoiler-safe Lesson notice'
     lesson: {
       lessonId: 'lesson-007',
       lessonPath: 'lessons/lesson-007.md',
+      publicTitle: '下一节课堂',
+      publicPurpose: '完成一次独立能力检验',
       blockCount: 5,
       blockKinds: ['dialogue', 'problem', 'reflection'],
+      sourceNumbers: ['source-17', 'source-32'],
     },
   }]);
   const raw = projectConversationEntries('coach:p1', entries, 'raw-stream');
   expect(raw.some((item) => item.kind === 'message')).toBe(true);
   expect(JSON.stringify(raw)).toContain('冻结变量法');
+});
+
+test('rejects a Lesson readiness receipt missing its safe projection fields', () => {
+  expect(lessonReadyNoticeFromToolResult({
+    role: 'toolResult',
+    toolName: 'lesson_prepare',
+    isError: false,
+    details: {
+      kind: 'lesson-prepare',
+      value: {
+        ok: true,
+        factId: 'lesson-007',
+        lessonPath: 'lessons/lesson-007.md',
+        blockCount: 5,
+        blockKinds: ['problem'],
+      },
+    },
+  })).toBeNull();
 });
 
 test('does not suppress a Coach final after a failed Lesson preparation', () => {

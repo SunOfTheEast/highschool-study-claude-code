@@ -8,6 +8,7 @@ import {
   type LessonBlueprint,
 } from '../study/lesson-blueprint';
 import { readPlanWorkspace } from '../study/read-workspace';
+import { readStudentLessonPreview } from '../study/student-plan-projection';
 import { validatePreparedLessonSource } from '../study/validate-prepared-lesson';
 import { writePreparedLesson } from '../study/write-workspace';
 
@@ -156,15 +157,18 @@ export function createLessonPrepareTool(
       if (!lesson || lesson.path !== lessonPath || lesson.status !== 'prepared') {
         throw new Error(`LESSON_PREPARE_COMMIT_FAILED: ${input.lessonId}`);
       }
-      const blockKinds = [...new Set(lesson.blocks.map((candidate) => candidate.kind))];
+      const preview = readStudentLessonPreview(root, lesson);
       const value = {
         ok: true as const,
         ownerPath,
         factId: lesson.id,
         status: 'prepared' as const,
         lessonPath: lesson.path,
-        blockCount: lesson.blocks.length,
-        blockKinds,
+        publicTitle: preview.publicTitle,
+        publicPurpose: preview.publicPurpose,
+        blockCount: preview.blockCount,
+        blockKinds: preview.blockKinds,
+        sourceNumbers: preview.sourceNumbers,
       };
       return {
         content: [{ type: 'text' as const, text: JSON.stringify(value) }],

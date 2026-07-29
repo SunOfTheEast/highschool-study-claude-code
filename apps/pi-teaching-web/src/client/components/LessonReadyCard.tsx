@@ -32,10 +32,15 @@ export function LessonReadyCard({
   return (
     <article className="lesson-ready-card">
       <span>这一节已经准备好</span>
-      <h3>共 {value.blockCount} 个课堂环节</h3>
+      <h3>{value.publicTitle}</h3>
+      {value.publicPurpose && <p>{value.publicPurpose}</p>}
+      <p>共 {value.blockCount} 个课堂环节</p>
       <p className="lesson-ready-kinds">
         {value.blockKinds.map((kind) => kindLabel[kind]).join(' · ')}
       </p>
+      {value.sourceNumbers.length > 0 && (
+        <p>题号：{value.sourceNumbers.join('、')}</p>
+      )}
       <p>具体题目会由课堂导师逐步展开。</p>
       <footer>
         <button type="button" onClick={() => onPrimary(value.lessonId)}>

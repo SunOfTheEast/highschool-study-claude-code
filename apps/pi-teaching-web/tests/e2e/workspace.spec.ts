@@ -358,7 +358,9 @@ test('keeps the preparation handoff safe and the completed review source-linked'
     const ready = page.locator('article.lesson-ready-card');
     await expect(ready).toBeVisible();
     await expect(ready).toContainText('这一节已经准备好');
+    await expect(ready).toContainText('完成一次独立能力检验');
     await expect(ready).toContainText('5 个课堂环节');
+    await expect(ready).toContainText('mst_p0032_ex22');
     await expect(page.locator('.app-root')).not.toContainText(secretTitle);
     await expect(page.getByRole('navigation', { name: 'Plan sessions' }))
       .toContainText('待开始课程');

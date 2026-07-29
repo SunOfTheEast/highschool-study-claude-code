@@ -268,8 +268,11 @@ export type ChatMessage = {
 export type LessonReadyNotice = {
   lessonId: string;
   lessonPath: string;
+  publicTitle: string;
+  publicPurpose: string | null;
   blockCount: number;
   blockKinds: ActivityKind[];
+  sourceNumbers: string[];
 };
 
 export type ConversationItem =

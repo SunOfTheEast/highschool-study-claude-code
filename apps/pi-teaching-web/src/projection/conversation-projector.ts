@@ -83,6 +83,12 @@ export function lessonReadyNoticeFromToolResult(raw: unknown): LessonReadyNotice
     || !receipt.factId
     || typeof receipt.lessonPath !== 'string'
     || !receipt.lessonPath
+    || typeof receipt.publicTitle !== 'string'
+    || !receipt.publicTitle
+    || !(
+      receipt.publicPurpose === null
+      || (typeof receipt.publicPurpose === 'string' && receipt.publicPurpose.length > 0)
+    )
     || typeof receipt.blockCount !== 'number'
     || !Number.isInteger(receipt.blockCount)
     || receipt.blockCount < 0
@@ -90,14 +96,21 @@ export function lessonReadyNoticeFromToolResult(raw: unknown): LessonReadyNotice
     || !receipt.blockKinds.every((kind) => (
       typeof kind === 'string' && activityKinds.has(kind as ActivityKind)
     ))
+    || !Array.isArray(receipt.sourceNumbers)
+    || !receipt.sourceNumbers.every((source) => (
+      typeof source === 'string' && source.length > 0
+    ))
   ) {
     return null;
   }
   return {
     lessonId: receipt.factId,
     lessonPath: receipt.lessonPath,
+    publicTitle: receipt.publicTitle,
+    publicPurpose: receipt.publicPurpose as string | null,
     blockCount: receipt.blockCount,
     blockKinds: receipt.blockKinds as ActivityKind[],
+    sourceNumbers: receipt.sourceNumbers as string[],
   };
 }
 
