@@ -174,6 +174,26 @@ test('round-trips canonical trees and allocates the next parent-local handle', (
   expect(nextCandidateHandle(tree)).toBe('lesson-candidate-003');
 });
 
+test('renders an empty tree with a non-empty canonical placeholder', () => {
+  const tree: ChildTree = {
+    kind: 'lesson',
+    entries: [],
+  };
+  const rendered = renderChildTree(
+    'Lesson Tree',
+    tree,
+    'plans/plan-001.md',
+  );
+
+  expect(rendered).toContain('（尚未编排 Lesson。）');
+  expect(parseChildTree(
+    rendered,
+    'Lesson Tree',
+    'lesson',
+    'plans/plan-001.md',
+  )).toEqual(tree);
+});
+
 test('patches candidates without mutating materialized children', () => {
   const original = parseChildTree(
     lessonTree,

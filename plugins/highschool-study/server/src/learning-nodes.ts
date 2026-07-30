@@ -348,7 +348,10 @@ export function renderChildTree(
   const entries = tree.entries.map((entry) => renderEntry(entry, parentPath));
   return [
     `## ${heading}`,
-    ...(entries.length > 0 ? ['', entries.join('\n\n')] : []),
+    '',
+    entries.length > 0
+      ? entries.join('\n\n')
+      : `（尚未编排 ${tree.kind === 'plan' ? 'Plan' : 'Lesson'}。）`,
     '',
   ].join('\n');
 }
