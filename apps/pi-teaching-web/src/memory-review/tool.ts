@@ -12,6 +12,11 @@ const nullableText = Type.Union([
   Type.Null(),
 ]);
 
+const planClaimSource = Type.String({
+  minLength: 1,
+  description: 'Copy an exact Claim handle from the just-reread completed Plan Handoff: claim:<current-plan-id>/handoff#learner-cN for student memory, or claim:<current-plan-id>/handoff#teaching-tN for teaching memory. Child Lesson Claims, trace:, handoff:, session:, paths, and reconstructed IDs are invalid here.',
+});
+
 const itemSchema = Type.Object({
   id: Type.String({ minLength: 1 }),
   operation: Type.Union([
@@ -26,7 +31,10 @@ const itemSchema = Type.Object({
   currentId: nullableText,
   currentText: nullableText,
   proposedText: nullableText,
-  sources: Type.Array(Type.String({ minLength: 1 }), { minItems: 1 }),
+  sources: Type.Array(planClaimSource, {
+    minItems: 1,
+    description: 'One or more canonical Claims owned by this completed Plan Handoff. The Claim kind must match owner.',
+  }),
   rationale: Type.String({ minLength: 1 }),
   counterEvidence: Type.String({ minLength: 1 }),
   scope: Type.String({ minLength: 1 }),
@@ -42,7 +50,7 @@ export function createMemoryReviewProposeTool(
   return defineTool({
     name: 'memory_review_propose',
     label: '整理待确认长期记忆',
-    description: 'After the Session-owned Plan is completed and reread, propose source-linked profile changes for explicit item-by-item student review. This stores a Coach Session artifact only and does not edit profiles.',
+    description: 'After plan_update completed the Session-owned Plan, first reread that exact Plan, then propose source-linked profile changes for explicit item-by-item student review. Every source must be an exact Claim owned by the current completed Plan Handoff (claim:<plan-id>/handoff#learner-cN for student, teaching-cN for teaching); never pass child Lesson Claims, trace:, handoff:, session:, paths, or reconstructed IDs. This stores a Coach Session artifact only and does not edit profiles.',
     parameters: Type.Object({
       items: Type.Array(itemSchema, { minItems: 1 }),
     }),

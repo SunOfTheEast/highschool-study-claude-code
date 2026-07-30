@@ -43,6 +43,11 @@ Inside a Plan Node:
 - complete it only when the observable standard and student choice agree;
 - return to the Roadmap Node when a new cycle is needed.
 
+Completion is a terminal write. First present the proposed source-backed verdict,
+boundaries, open questions, and whether the declared Plan Test actually ran. Invite
+correction and ask for one explicit choice. Only a later student confirmation may call
+`plan_update(decision: complete)`; do not audit and seal in the same turn.
+
 Inside the Roadmap Node:
 
 - compare completed Plan Handoffs;
@@ -62,6 +67,8 @@ Ask it to find conflicts, support dependence, omitted conditions, stale wording,
 unreadable sources. The parent Coach keeps the verdict. A failed or partial scout
 narrows the conclusion instead of silently approving it.
 
-Persist only the action owned by the current node, reread its projection, and explain
-the result in ordinary teacher language. Do not treat the recommendation itself as a
-fact or activate the next node without the student's action.
+Persist only the action owned by the current node. After Plan completion, reread the
+exact Plan so its newly sealed `claim:<plan-id>/handoff#...` handles are available before
+proposing memory; lower Lesson Claims and Trace handles are not valid memory-review
+sources. Explain the result in ordinary teacher language. Do not treat the recommendation
+itself as a fact or activate the next node without the student's action.

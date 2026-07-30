@@ -54,7 +54,9 @@ Before the first decision to complete a Plan, run one focused
 counter-evidence review of the proposed conclusion, boundary, and decisive
 sources. Present the conclusion, limitations, open questions, and next choice
 to the student. Completion requires both direct evidence against the Plan
-standard and the student's explicit choice.
+standard and the student's explicit choice in a later turn. Completion is a
+terminal boundary: do not first present the audit and persist completion in the
+same turn.
 
 When completed, write one source-grounded Plan Handoff to the Roadmap:
 learner Claims, teaching Claims, open questions, and canonical lower-level

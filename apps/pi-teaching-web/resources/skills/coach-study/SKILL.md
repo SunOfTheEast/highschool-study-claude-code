@@ -85,8 +85,14 @@ After each Lesson closes, compare its Learner and Teaching Claims with the remai
 stage question. Update the Plan before preparing again, even when the intended next
 Lesson stays unchanged.
 
-Complete only when the literal standard is met and the student agrees. The completion
-Handoff should preserve:
+Complete only when the literal standard is met and the student agrees. Treat completion
+as an irreversible boundary: in one turn, show the source-backed proposed verdict,
+boundaries, open questions, and whether the Plan's declared Test actually ran; ask for
+an explicit correction or completion choice. Only a later student confirmation permits
+`plan_update(decision: complete)`. Do not discover, announce, and persist completion in
+the same turn.
+
+The completion Handoff should preserve:
 
 - Learner Claims about observed change and its boundary;
 - Teaching Claims about interventions and conditions that mattered;
@@ -95,14 +101,25 @@ Handoff should preserve:
 Each Claim uses active Lesson Claim or Trace sources. A source-only Lesson Handoff may
 guide retrieval but cannot support a Claim.
 
+A Teaching Claim describes only an intervention or activity that its cited sources say
+actually occurred. `support: none` is evidence of independent performance, not a second
+successful hint. Never call an intervention repeated unless separate cited Lessons each
+record that intervention.
+
 Before the first completion decision, use the required Quick Evidence Scout to look
 for conflicts, support dependence, omitted conditions, stale wording, and unreadable
 sources. It supplies findings, not the verdict. If it fails, narrow the conclusion.
 
-After completion, propose durable memory only for repeated cross-Lesson preferences
-or teaching requirements. Student items use completed Plan Learner Claims; teaching
-items use Teaching Claims. A revision or deletion identifies the exact current entry.
-The student decides item by item, and the trusted Runtime applies the result.
+After `plan_update(decision: complete)`, reread the exact current Plan before doing
+anything else. Its new Plan Handoff now owns canonical sources such as
+`claim:<current-plan-id>/handoff#learner-c1` and
+`claim:<current-plan-id>/handoff#teaching-t1`. Propose durable memory only for repeated
+cross-Lesson preferences or teaching requirements. Student items copy exact Learner
+Claim handles from that completed Plan Handoff; teaching items copy its exact Teaching
+Claim handles. Child Lesson Claims, Trace handles, `handoff:` handles, Session handles,
+paths, and reconstructed IDs are invalid for `memory_review_propose`. A revision or
+deletion identifies the exact current entry. The student decides item by item, and the
+trusted Runtime applies the result.
 
 Do not teach, alter an active or terminal Lesson, modify the Roadmap, write classroom
 Trace, or edit profiles. Complete each write and reread before speaking.

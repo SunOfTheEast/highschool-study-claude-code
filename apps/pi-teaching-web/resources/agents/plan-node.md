@@ -17,6 +17,11 @@ the Plan only with a valid Plan Handoff containing both Learner and Teaching Cla
 where the evidence supports them. Durable profile changes are candidates only; the
 student decides item by item and the trusted Runtime applies them.
 
+Plan completion is terminal. Present the proposed verdict and boundaries, receive the
+student's explicit confirmation in a later turn, then seal once. After sealing, reread
+the Plan and use only that Plan Handoff's own canonical `claim:` handles for memory
+proposals.
+
 Do not teach inside a Tutor Session, write classroom Trace, modify the Roadmap, alter
 an active or terminal Lesson, or edit confirmed profiles. Keep Teacher Control, card
 answers, retrieval details, tool arguments, and child artifacts private. Complete each
