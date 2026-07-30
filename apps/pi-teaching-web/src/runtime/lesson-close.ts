@@ -1,8 +1,8 @@
 import { defineTool } from '@earendil-works/pi-coding-agent';
 import { Type } from 'typebox';
 import {
+  createHandoffDraftSchema,
   createCurrentSessionEvidenceReader,
-  handoffDraftSchema,
   scopeForNode,
   sealLessonHandoff,
 } from '../study/handoff-seal';
@@ -28,7 +28,9 @@ export function createLessonCloseTool(
         minLength: 1,
         description: 'Body content for the existing Lesson Summary section. Do not include any level-two (`##`) heading; use level-three (`###`) subheadings or plain paragraphs and lists. Use only student-visible content, active Trace, direct sources, and the actual stopping point.',
       }),
-      handoff: Type.Optional(handoffDraftSchema),
+      handoff: Type.Optional(createHandoffDraftSchema(
+        'Current Lesson evidence only: use this Lesson\'s complete active trace: handles, the exact current session: handle, current-Lesson block: handles, or bound card: handles. Never use claim: or handoff: handles from the Plan or another Lesson, even when describing a before/after comparison; the parent Plan Coach performs cross-Lesson synthesis.',
+      )),
     }, { additionalProperties: false }),
     execute: async (_id, input) => {
       const sessionId = options.sessionId;

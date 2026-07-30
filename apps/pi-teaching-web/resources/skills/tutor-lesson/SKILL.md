@@ -73,6 +73,11 @@ Frame or tool receipt—especially the complete `sourceRef` returned by
 not available, omit the Claim; a source-only Handoff is better than a falsely linked
 Claim and must not block closure.
 
+Do not put a prior Lesson's `claim:` or `handoff:` handle anywhere in
+`lesson_close.handoff.sources`, even when the reflection compares before and after.
+State only what happened in the current Lesson and its boundary; the parent Plan Coach
+will read both Lesson Handoffs and make the comparison.
+
 Do not alter Plan, Roadmap, or profiles. Never show Teacher Control, answers,
 unrevealed help, internal matrices, tool arguments, or raw results. Speak naturally
 after durable actions have succeeded.

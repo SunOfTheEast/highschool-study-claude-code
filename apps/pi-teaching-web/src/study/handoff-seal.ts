@@ -20,27 +20,34 @@ const sourceHandle = Type.String({
   minLength: 1,
   description: 'Exact canonical source handle copied verbatim from a Node Frame or tool receipt. Never shorten, reconstruct, or prettify an ID.',
 });
-const sources = Type.Array(sourceHandle, { minItems: 1 });
 
-const claimSchema = Type.Object({
-  statement: text,
-  scope: text,
-  sources,
-  boundary: text,
-  nextUse: text,
-}, { additionalProperties: false });
+export function createHandoffDraftSchema(sourceDescription?: string) {
+  const sources = Type.Array(
+    sourceHandle,
+    sourceDescription === undefined
+      ? { minItems: 1 }
+      : { minItems: 1, description: sourceDescription },
+  );
+  const claimSchema = Type.Object({
+    statement: text,
+    scope: text,
+    sources,
+    boundary: text,
+    nextUse: text,
+  }, { additionalProperties: false });
+  const openQuestionSchema = Type.Object({
+    question: text,
+    sources,
+    nextCheck: text,
+  }, { additionalProperties: false });
+  return Type.Object({
+    learnerClaims: Type.Array(claimSchema),
+    teachingClaims: Type.Array(claimSchema),
+    openQuestions: Type.Array(openQuestionSchema),
+  }, { additionalProperties: false });
+}
 
-const openQuestionSchema = Type.Object({
-  question: text,
-  sources,
-  nextCheck: text,
-}, { additionalProperties: false });
-
-export const handoffDraftSchema = Type.Object({
-  learnerClaims: Type.Array(claimSchema),
-  teachingClaims: Type.Array(claimSchema),
-  openQuestions: Type.Array(openQuestionSchema),
-}, { additionalProperties: false });
+export const handoffDraftSchema = createHandoffDraftSchema();
 
 export type HandoffSealResult = {
   id: string;
