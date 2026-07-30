@@ -38,6 +38,19 @@ function title(body: string): string {
   return /^#\s+(.+)$/m.exec(body)?.[1]?.trim() ?? '';
 }
 
+function publicPurpose(body: string): string | null {
+  const heading = /^#\s+.+$/m.exec(body);
+  if (!heading || heading.index === undefined) return null;
+  const firstContentLine = body
+    .slice(heading.index + heading[0].length)
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .find(Boolean);
+  if (!firstContentLine?.startsWith('>')) return null;
+  const value = firstContentLine.replace(/^>\s*/, '').trim();
+  return value || null;
+}
+
 function studentLearningPrinciples(root: string): string {
   if (!existsSync(resolve(root, 'LEARNING_GUIDE.md'))) return '';
   const guide = readMarkdownFile(root, 'LEARNING_GUIDE.md');
@@ -93,7 +106,12 @@ function childDocument(
   if (!childTitle) {
     throw new Error(`${kind.toUpperCase()}_TITLE_REQUIRED: ${entry.childPath}`);
   }
-  return { document, status: status as NodeLifecycleStatus, title: childTitle };
+  return {
+    document,
+    status: status as NodeLifecycleStatus,
+    title: childTitle,
+    publicPurpose: publicPurpose(document.body),
+  };
 }
 
 function projectTree(
@@ -129,7 +147,7 @@ function projectTree(
       nodeId: entry.childId,
       path: entry.childPath,
       title: child.title.replace(/^Plan[:：]\s*/, ''),
-      publicPurpose: entry.publicPurpose,
+      publicPurpose: child.publicPurpose ?? entry.publicPurpose,
       after: entry.after,
       dependsOn: [...entry.dependsOn],
       status: child.status,

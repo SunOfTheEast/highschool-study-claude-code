@@ -31,7 +31,7 @@ test('reads the derivative Roadmap and hierarchical Plan/Lesson trees', () => {
       handle: 'plan-candidate-001',
       nodeId: 'domain-integrity',
       status: 'active',
-      publicPurpose: '让定义域从附加检查变成解题导航。',
+      publicPurpose: '让定义域从“容易遗漏的附加条件”变成导数解题的第一步和导航工具。',
     }),
   ]);
 
@@ -132,6 +132,32 @@ test('reads a persisted Roadmap Coach Session ID', () => {
     expect(readRoadmapWorkspace(copy).coach).toEqual({
       sessionKey: 'coach:@roadmap',
       sessionId: 'roadmap-session-001',
+    });
+  } finally {
+    rmSync(copy, { recursive: true, force: true });
+  }
+});
+
+test('uses the materialized child public purpose instead of its frozen candidate text', () => {
+  const copy = mkdtempSync(join(tmpdir(), 'study-child-public-purpose-'));
+  try {
+    cpSync(root, copy, { recursive: true });
+    const path = join(copy, 'lessons/lesson-003.md');
+    writeFileSync(
+      path,
+      readFileSync(path, 'utf8').replace(
+        '# Lesson 003：阶段 1b — 定义域连续性与跨结构迁移核验',
+        '# 独立检验\n\n> 独立完成一次陌生综合问题，确认当前解题习惯能否自然延续',
+      ),
+    );
+
+    expect(
+      readPlanWorkspace(copy, 'domain-integrity').lessonTree
+        .find((entry) => entry.handle === 'lesson-candidate-003'),
+    ).toMatchObject({
+      title: '独立检验',
+      publicPurpose: '独立完成一次陌生综合问题，确认当前解题习惯能否自然延续',
+      status: 'prepared',
     });
   } finally {
     rmSync(copy, { recursive: true, force: true });
