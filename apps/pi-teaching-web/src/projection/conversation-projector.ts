@@ -36,9 +36,9 @@ const activityKinds = new Set<ActivityKind>([
 export const ROADMAP_PLAN_READY_TEXT =
   '学习周期已建立。具体素材会由学习顾问在备课时重新核对。';
 export const ROADMAP_PLAN_RECOVERY_TEXT =
-  '课程素材已经核对，但学习周期尚未登记。可以继续完成当前计划。';
+  '课程素材已经核对，但学习周期尚未建立。可以继续完成当前计划。';
 
-export type RoadmapPrivateToolResult = 'card-search' | 'plan-register';
+export type RoadmapPrivateToolResult = 'card-search' | 'plan-prepare';
 
 export function roadmapPrivateToolResult(raw: unknown): RoadmapPrivateToolResult | null {
   if (raw === null || typeof raw !== 'object' || Array.isArray(raw)) return null;
@@ -50,13 +50,13 @@ export function roadmapPrivateToolResult(raw: unknown): RoadmapPrivateToolResult
   if (message.toolName === 'card_search' && detail.kind === 'card-search') {
     return 'card-search';
   }
-  if (message.toolName !== 'plan_register' || detail.kind !== 'plan-register') return null;
+  if (message.toolName !== 'plan_prepare' || detail.kind !== 'plan-prepare') return null;
   const value = detail.value;
   return value !== null
     && typeof value === 'object'
     && !Array.isArray(value)
     && (value as Record<string, unknown>).ok === true
-    ? 'plan-register'
+    ? 'plan-prepare'
     : null;
 }
 
@@ -130,7 +130,7 @@ export function projectConversationEntries(
   const queued = new Set<string>();
   const pendingLessons: LessonReadyNotice[] = [];
   const protectsRoadmapSearch = mode === 'safe' && key === ROADMAP_COACH_SESSION_KEY;
-  let roadmapPrivateState: 'idle' | 'searching' | 'registered' = 'idle';
+  let roadmapPrivateState: 'idle' | 'searching' | 'prepared' = 'idle';
 
   const flushReviews = () => {
     for (const reviewId of pending.splice(0)) {
@@ -159,7 +159,7 @@ export function projectConversationEntries(
         roadmapPrivateState = 'searching';
         return;
       }
-      if (result === 'plan-register' && roadmapPrivateState === 'searching') {
+      if (result === 'plan-prepare' && roadmapPrivateState === 'searching') {
         items.push({
           kind: 'message',
           message: {
@@ -169,7 +169,7 @@ export function projectConversationEntries(
             complete: true,
           },
         });
-        roadmapPrivateState = 'registered';
+        roadmapPrivateState = 'prepared';
         return;
       }
     }
@@ -185,7 +185,7 @@ export function projectConversationEntries(
     if (protectsRoadmapSearch && message.role === 'student') {
       roadmapPrivateState = 'idle';
     } else if (protectsRoadmapSearch && message.role === 'coach') {
-      if (roadmapPrivateState === 'registered') {
+      if (roadmapPrivateState === 'prepared') {
         roadmapPrivateState = 'idle';
         return;
       }

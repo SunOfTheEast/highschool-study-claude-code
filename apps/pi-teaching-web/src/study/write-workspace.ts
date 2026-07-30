@@ -1,18 +1,11 @@
 import {
-  existsSync,
   readFileSync,
   writeFileSync,
 } from 'node:fs';
 import {
-  parseChildTree,
   readMarkdownFile,
   resolveInsideRoot,
 } from 'highschool-study-markdown/study-domain';
-import type { LearningReview } from '../shared/contracts';
-import {
-  renderLearningReview,
-  validateLearningReviewSources,
-} from './learning-review';
 import {
   appendRouteChangeSource,
   transitionClassroomSource,
@@ -26,45 +19,6 @@ export type RouteChangeInput = {
   source: string;
   before?: string;
   after?: string;
-};
-
-export type PlanDecision = 'active' | 'complete' | 'replan';
-
-type PlanProgressUpdate = {
-  decision: Exclude<PlanDecision, 'complete'>;
-  currentPosition: string;
-  nextLessonCandidate: string;
-  planSummary: string;
-};
-
-type PlanCompleteUpdate = {
-  decision: 'complete';
-  currentPosition: string;
-  nextLessonCandidate: string;
-  learningReview: LearningReview;
-};
-
-export type PlanUpdateInput = PlanProgressUpdate | PlanCompleteUpdate;
-
-export type RegisteredPlan = {
-  id: string;
-  title: string;
-  path: string;
-  coachSessionId: string | null;
-};
-
-export type PreparedLessonWrite = {
-  lessonId: string;
-  lessonPath: string;
-  lessonTitle: string;
-  source: string;
-};
-
-export type RegisteredLesson = {
-  id: string;
-  title: string;
-  path: string;
-  status: 'prepared';
 };
 
 function read(root: string, path: string): { absolute: string; source: string } {
@@ -186,82 +140,6 @@ function replaceSection(
   );
 }
 
-function planTitle(body: string): string {
-  const heading = /^#\s+(.+?)\s*$/m.exec(body)?.[1]?.trim() ?? '';
-  const value = heading.replace(/^Plan[:：]\s*/, '');
-  if (!value) throw new Error('PLAN_TITLE_REQUIRED');
-  return value;
-}
-
-export function writePreparedLesson(
-  root: string,
-  planPath: string,
-  input: PreparedLessonWrite,
-): RegisteredLesson {
-  const owner = readMarkdownFile(root, planPath);
-  if (owner.frontmatter.status === 'completed') {
-    throw new Error(`PLAN_PREPARATION_REQUIRES_REACTIVATION: ${owner.id}`);
-  }
-  const tree = parseChildTree(
-    owner.body,
-    'Lesson Tree',
-    'lesson',
-    planPath,
-  );
-  const child = tree.entries.find((entry) => (
-    entry.state === 'materialized'
-    && entry.childId === input.lessonId
-    && entry.childPath === input.lessonPath
-  ));
-  if (!child) throw new Error(`LESSON_CANDIDATE_REQUIRED: ${input.lessonId}`);
-
-  const absolute = resolveInsideRoot(root, input.lessonPath);
-  if (existsSync(absolute)) {
-    const current = readMarkdownFile(root, input.lessonPath);
-    if (
-      current.frontmatter.parent_id !== owner.id
-      || current.frontmatter.parent_path !== planPath
-    ) {
-      throw new Error(`LESSON_PLAN_OWNERSHIP_CONFLICT: ${input.lessonId}`);
-    }
-    if (current.frontmatter.status !== 'prepared') {
-      throw new Error(`LESSON_REPREPARE_REQUIRES_PREPARED: ${input.lessonId}`);
-    }
-  }
-  write(absolute, input.source);
-  return {
-    id: input.lessonId,
-    title: input.lessonTitle,
-    path: input.lessonPath,
-    status: 'prepared',
-  };
-}
-
-export function registerPlan(root: string, planId: string): RegisteredPlan {
-  const roadmap = readMarkdownFile(root, 'ROADMAP.md');
-  const tree = parseChildTree(
-    roadmap.body,
-    'Plan Tree',
-    'plan',
-    'ROADMAP.md',
-  );
-  const child = tree.entries.find((entry) => (
-    entry.state === 'materialized' && entry.childId === planId
-  ));
-  if (!child || child.state !== 'materialized') {
-    throw new Error(`PLAN_CANDIDATE_REQUIRED: ${planId}`);
-  }
-  const plan = readMarkdownFile(root, child.childPath);
-  return {
-    id: plan.id,
-    title: planTitle(plan.body),
-    path: child.childPath,
-    coachSessionId: typeof plan.frontmatter.coach_session === 'string'
-      ? plan.frontmatter.coach_session
-      : null,
-  };
-}
-
 export type LessonCloseInput = {
   summary: string;
 };
@@ -278,28 +156,5 @@ export function closeLesson(
   }
   let source = replaceSection(document.source, 'Lesson Summary', input.summary);
   source = replaceFrontmatterField(source, lessonPath, 'status', 'closed');
-  write(document.absolute, source);
-}
-
-export function updatePlan(
-  root: string,
-  planPath: string,
-  input: PlanUpdateInput,
-): void {
-  const document = read(root, planPath);
-  const status = input.decision === 'complete' ? 'completed' : 'active';
-  if (input.decision === 'complete') {
-    validateLearningReviewSources(root, planPath, input.learningReview);
-  }
-  const summary = input.decision === 'complete'
-    ? renderLearningReview(input.learningReview)
-    : input.planSummary;
-  let source = replaceSection(
-    document.source,
-    'Current Position',
-    input.currentPosition,
-  );
-  source = replaceSection(source, 'Plan Summary', summary);
-  source = replaceFrontmatterField(source, planPath, 'status', status);
   write(document.absolute, source);
 }

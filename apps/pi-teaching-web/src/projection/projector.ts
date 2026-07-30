@@ -23,6 +23,8 @@ const labels: Record<string, string> = {
   classroom_update: '正在更新课堂节点',
   lesson_close: '正在整理课堂总结',
   lesson_prepare: '正在整理课堂结构',
+  plan_prepare: '正在建立学习周期',
+  roadmap_update: '正在更新长期学习路径',
   plan_update: '正在写回学习计划',
   card_alternative_append: '正在登记已验证的另解',
 };
@@ -92,7 +94,7 @@ export function createLiveSessionEventProjector(
   let preparedInCurrentTurn = false;
   const protectsRoadmapSearch =
     mode === 'safe' && sessionKey === ROADMAP_COACH_SESSION_KEY;
-  let roadmapPrivateState: 'idle' | 'searching' | 'registered' = 'idle';
+  let roadmapPrivateState: 'idle' | 'searching' | 'prepared' = 'idle';
   return (event) => {
     const projected = projectSessionEvent(sessionKey, event, mode);
     if (mode !== 'safe') return projected;
@@ -109,10 +111,10 @@ export function createLiveSessionEventProjector(
         if (privateResult === 'card-search') {
           roadmapPrivateState = 'searching';
         } else if (
-          privateResult === 'plan-register'
+          privateResult === 'plan-prepare'
           && roadmapPrivateState === 'searching'
         ) {
-          roadmapPrivateState = 'registered';
+          roadmapPrivateState = 'prepared';
           return [...projected, {
             type: 'message',
             sessionKey,
@@ -141,7 +143,7 @@ export function createLiveSessionEventProjector(
       && event.message.role === 'assistant'
       && projected.some((item) => item.type === 'message')
     ) {
-      if (roadmapPrivateState === 'registered') {
+      if (roadmapPrivateState === 'prepared') {
         roadmapPrivateState = 'idle';
         return projected.filter((item) => item.type !== 'message');
       }

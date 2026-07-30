@@ -27,8 +27,9 @@ import { createClassroomUpdateTool } from './classroom-update';
 import { createCardAlternativeAppendTool } from './card-alternative-append';
 import { createLessonCloseTool } from './lesson-close';
 import { createLessonPrepareTool } from './lesson-prepare';
-import { createPlanRegisterTool } from './plan-register';
+import { createPlanPrepareTool } from './plan-prepare';
 import { createPlanUpdateTool } from './plan-update';
+import { createRoadmapUpdateTool } from './roadmap-update';
 import { createRoleResourceLoader } from './resource-loader';
 import { appendSessionOwner } from './session-owner';
 import {
@@ -149,7 +150,6 @@ export function roleToolNames(role: SessionRole): string[] {
       'trace_search',
       'source_resolve',
       'lesson_prepare',
-      'plan_register',
       'plan_update',
       'memory_review_propose',
       'memory_review_apply',
@@ -178,12 +178,11 @@ export function scopeToolNames(scope: StudySessionScope): string[] {
     'grep',
     'find',
     'ls',
-    'write',
-    'edit',
     'card_search',
     'trace_search',
     'source_resolve',
-    'plan_register',
+    'roadmap_update',
+    'plan_prepare',
     'deep_workflow_propose',
   ];
 }
@@ -220,10 +219,12 @@ export async function createPiSessionFactory(
         createCardAlternativeAppendTool(root, ownerPath, now),
       ]
       : isRoadmapCoachScope(scope)
-        ? [createPlanRegisterTool(root)]
+        ? [
+          createRoadmapUpdateTool(root),
+          createPlanPrepareTool(root),
+        ]
         : [
           createLessonPrepareTool(root, ownerId, ownerPath),
-          createPlanRegisterTool(root),
           createPlanUpdateTool(root, ownerPath),
           createMemoryReviewProposeTool(
             root,

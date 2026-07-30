@@ -1,0 +1,62 @@
+import { afterEach, expect, test } from 'bun:test';
+import {
+  cpSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { createRoadmapUpdateTool } from '../../src/runtime/roadmap-update';
+import { readLearningSet } from '../../src/study/read-workspace';
+import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
+
+const roots: string[] = [];
+afterEach(() => {
+  for (const root of roots.splice(0)) {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+function fixture(): string {
+  const root = mkdtempSync(join(tmpdir(), 'roadmap-update-'));
+  roots.push(root);
+  cpSync(domainIntegrityFixtureRoot, root, { recursive: true });
+  return root;
+}
+
+test('updates Roadmap milestones and candidate tree in one tool call', async () => {
+  const root = fixture();
+  const tool = createRoadmapUpdateTool(root);
+  const response = await tool.execute('call-1', {
+    goal: '建立可迁移的导数结构判断。',
+    capabilityStandard: '能在陌生综合题中解释选路依据。',
+    test: '独立完成一题跨章节迁移任务。',
+    candidateChanges: [{
+      action: 'add',
+      candidate: {
+        publicPurpose: '训练跨章节选路。',
+        after: 'plan-candidate-001',
+        dependsOn: ['plan-candidate-001'],
+        considerWhen: '定义域 Plan 完成后。',
+        sources: ['trace:trace-fixture-002'],
+        privateNote: '先比较路线，不直接训练整题速度。',
+      },
+    }],
+  } as never, undefined, undefined, {} as never);
+  const value = JSON.parse(
+    (response.content[0] as { text: string }).text,
+  ) as { ok: boolean; candidateHandles: string[] };
+  expect(value).toEqual({
+    ok: true,
+    candidateHandles: ['plan-candidate-001', 'plan-candidate-002'],
+  });
+  expect(readLearningSet(root).planTree.at(-1)).toMatchObject({
+    handle: 'plan-candidate-002',
+    status: 'candidate',
+    publicPurpose: '训练跨章节选路。',
+  });
+  const source = readFileSync(join(root, 'ROADMAP.md'), 'utf8');
+  expect(source).toContain('建立可迁移的导数结构判断。');
+  expect(source).not.toContain('## Plan Graph');
+});

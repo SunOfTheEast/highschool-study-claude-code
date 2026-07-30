@@ -105,8 +105,8 @@ function lessonPrepareResult(isError = false): SessionEntry {
 
 function toolResult(
   id: string,
-  toolName: 'card_search' | 'plan_register',
-  kind: 'card-search' | 'plan-register',
+  toolName: 'card_search' | 'plan_prepare',
+  kind: 'card-search' | 'plan-prepare',
   value: object,
   isError = false,
 ): SessionEntry {
@@ -295,17 +295,17 @@ test('replaces a Roadmap post-search final with a fixed recovery message', () =>
     kind: 'message',
     message: expect.objectContaining({
       role: 'coach',
-      text: '课程素材已经核对，但学习周期尚未登记。可以继续完成当前计划。',
+      text: '课程素材已经核对，但学习周期尚未建立。可以继续完成当前计划。',
     }),
   })]);
   expect(JSON.stringify(items)).not.toContain('绝密');
   expect(JSON.stringify(items)).not.toContain('冻结变量法');
 });
 
-test('replaces a registered Roadmap post-search final with one ordinary ready message', () => {
+test('replaces a prepared Roadmap post-search final with one ordinary ready message', () => {
   const items = projectConversationEntries('coach:@roadmap', [
     toolResult('search', 'card_search', 'card-search', { cards: [] }),
-    toolResult('register', 'plan_register', 'plan-register', {
+    toolResult('prepare', 'plan_prepare', 'plan-prepare', {
       ok: true,
       factId: 'route-choice',
     }),

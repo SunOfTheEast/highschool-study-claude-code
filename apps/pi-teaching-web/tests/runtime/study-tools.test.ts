@@ -18,9 +18,9 @@ import { createClassroomUpdateTool } from '../../src/runtime/classroom-update';
 import { createCardAlternativeAppendTool } from '../../src/runtime/card-alternative-append';
 import { createLessonCloseTool } from '../../src/runtime/lesson-close';
 import { createLessonPrepareTool } from '../../src/runtime/lesson-prepare';
-import { createPlanRegisterTool } from '../../src/runtime/plan-register';
 import { createPlanUpdateTool } from '../../src/runtime/plan-update';
 import * as studyToolModule from '../../src/runtime/study-tools';
+import { updateParentDocument } from '../../src/runtime/tree-mutations';
 import { readEvidence } from '../../src/study/ability';
 import { readPlanWorkspace } from '../../src/study/read-workspace';
 import { readStudentLessonPreview } from '../../src/study/student-plan-projection';
@@ -46,79 +46,81 @@ test('registers the existing four domain contracts without renaming them', () =>
     .toEqual(['card_search', 'trace_search', 'trace_append', 'source_resolve']);
 });
 
-test('registers a Plan with a canonical receipt and clears a foreign Coach Session', async () => {
-  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-plan-register-tool-'));
-  temporaryRoots.push(temporaryRoot);
-  cpSync(root, temporaryRoot, { recursive: true });
-  writeFileSync(join(temporaryRoot, 'plans/isomorphic-transformation.md'), `---
-id: isomorphic-transformation
-kind: plan
-status: active
-coach_session: foreign-session
----
-# Plan：同构变形
-
-## Goal
-
-完成当前测试 Plan。
-
-## Observable Capability Standard
-
-满足本测试声明的可观察行为。
-
-## Test
-
-完成一次与该能力标准对应的验证。
-
-## Planning Basis
-
-当前测试需要一份完整 Plan。来源：[Roadmap](../ROADMAP.md#plan-graph)。
-
-## Lesson Index
-
-尚未创建 Lesson。
-
-## Current Position
-
-等待开始。
-
-## Next Lesson Candidate
-
-由当前测试决定。
-
-## Plan Summary
-
-尚无课堂结果。
-`);
-  const tool = createPlanRegisterTool(temporaryRoot);
-
-  const result = await tool.execute('register-1', {
-    planId: 'isomorphic-transformation',
-  }, undefined, undefined, {} as never);
-  const payload = JSON.parse((result.content[0] as { text: string }).text) as {
-    ok: boolean;
-    ownerPath: string;
-    factId: string;
-    status: string;
-  };
-
-  expect(payload).toEqual(expect.objectContaining({
-    ok: true,
-    ownerPath: 'plans/isomorphic-transformation.md',
-    factId: 'isomorphic-transformation',
-    status: 'registered',
-  }));
-  expect(JSON.parse((result.content[0] as { text: string }).text))
-    .toMatchObject({
-      plan: {
-        planningBasis: expect.stringContaining('完整 Plan'),
+function addLessonCandidate(learningSetRoot: string): void {
+  updateParentDocument(learningSetRoot, {
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
+    childKind: 'lesson',
+    candidateChanges: [{
+      action: 'add',
+      candidate: {
+        publicPurpose: '完成一次独立能力检验。',
+        after: 'lesson-candidate-003',
+        dependsOn: ['lesson-candidate-003'],
+        considerWhen: '需要继续核验迁移表现。',
+        sources: ['trace:trace-fixture-002'],
+        privateNote: '只改变题型外壳。',
       },
-    });
-  expect(readFileSync(
-    join(temporaryRoot, 'plans/isomorphic-transformation.md'),
-    'utf8',
-  )).toContain('coach_session: null');
-});
+    }],
+    sections: {},
+    frontmatter: {},
+  });
+}
+
+function activation() {
+  return {
+    parentSources: ['trace:trace-fixture-002'],
+    selectedMemory: [],
+    contentBoundary: ['首次尝试前不提示方法。'],
+    adaptation: {
+      workingJudgment: '定义域连续性已有正证据，迁移尚未确认。',
+      sources: ['trace:trace-fixture-002'],
+      designConsequence: '只改变题型外壳。',
+      reviseIf: '学生无法识别新题的合法域。',
+    },
+  };
+}
+
+function lessonPrepareInput() {
+  return {
+    candidateHandle: 'lesson-candidate-004',
+    blueprint: {
+      title: 'Blueprint 试验课',
+      publicPurpose: '完成一次独立能力检验。',
+      capabilityTarget: '独立写全定义域并使用。',
+      primaryTemplate: 'assessment',
+      templateReason: '需要未见题证据。',
+      adjustments: [] as string[],
+      activation: activation(),
+      cards: [{
+        alias: 'Q-EX22',
+        cardPath: 'cards/derivative/mst_p0032_ex22.card.yaml',
+        role: '连续性核验',
+      }],
+      sources: [] as Array<{ label: string; target: string; note: string }>,
+      blocks: [
+        {
+          localAlias: 'attempt',
+          kind: 'problem',
+          required: true,
+          dependsOn: [] as string[],
+          uses: ['Q-EX22'],
+          studentView: '请独立完成 `Q-EX22`。',
+          teacherControl: '首次采用 zero。',
+        },
+        {
+          localAlias: 'reflection',
+          kind: 'reflection',
+          required: true,
+          dependsOn: ['attempt'],
+          uses: [] as string[],
+          studentView: '总结定义域的作用。',
+          teacherControl: '只引用已产生证据。',
+        },
+      ],
+    },
+  };
+}
 
 test('prepares and rereads one Lesson with Plan authority bound by the Coach Session', async () => {
   const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-lesson-prepare-tool-'));
@@ -129,55 +131,31 @@ test('prepares and rereads one Lesson with Plan authority bound by the Coach Ses
     'domain-integrity',
     'plans/domain-integrity.md',
   );
+  addLessonCandidate(temporaryRoot);
   const parameters = JSON.stringify(tool.parameters);
   expect(parameters).not.toContain('planPath');
   expect(parameters).not.toContain('lessonPath');
+  expect(parameters).not.toContain('lessonId');
+  expect(parameters).not.toContain('planContext');
   expect(parameters).not.toContain('status');
   expect(parameters).not.toContain('sessionId');
 
-  const result = await tool.execute('prepare-1', {
-    lessonId: 'lesson-blueprint-001',
-    title: 'Blueprint 试验课',
-    planContext: '核验定义域迁移。',
-    capabilityTarget: '独立写全定义域并使用。',
-    primaryTemplate: 'assessment',
-    templateReason: '需要未见题证据。',
-    adjustments: [],
-    cards: [{
-      alias: 'Q-EX22',
-      cardPath: 'cards/derivative/mst_p0032_ex22.card.yaml',
-      role: '连续性核验',
-    }],
-    sources: [],
-    blocks: [
-      {
-        id: 'assessment-01',
-        kind: 'problem',
-        required: true,
-        dependsOn: [],
-        uses: ['Q-EX22'],
-        studentView: '请独立完成 `Q-EX22`。',
-        teacherControl: '首次采用 zero。',
-      },
-      {
-        id: 'reflection',
-        kind: 'reflection',
-        required: true,
-        dependsOn: ['assessment-01'],
-        uses: [],
-        studentView: '总结定义域的作用。',
-        teacherControl: '只引用已产生证据。',
-      },
-    ],
-  }, undefined, undefined, {} as never);
+  const result = await tool.execute(
+    'prepare-1',
+    lessonPrepareInput() as never,
+    undefined,
+    undefined,
+    {} as never,
+  );
   const receipt = JSON.parse((result.content[0] as { text: string }).text);
 
   expect(receipt).toEqual({
     ok: true,
     ownerPath: 'plans/domain-integrity.md',
-    factId: 'lesson-blueprint-001',
+    factId: 'lesson-004',
+    candidateHandle: 'lesson-candidate-004',
     status: 'prepared',
-    lessonPath: 'lessons/lesson-blueprint-001.md',
+    lessonPath: 'lessons/lesson-004.md',
     publicTitle: '下一节课堂',
     publicPurpose: '完成一次独立能力检验',
     blockCount: 2,
@@ -185,7 +163,7 @@ test('prepares and rereads one Lesson with Plan authority bound by the Coach Ses
     sourceNumbers: ['mst_p0032_ex22'],
   });
   const lesson = readPlanWorkspace(temporaryRoot, 'domain-integrity').lessons
-    .find((candidate) => candidate.id === 'lesson-blueprint-001');
+    .find((candidate) => candidate.id === 'lesson-004');
   expect(lesson).toBeDefined();
   const preview = readStudentLessonPreview(temporaryRoot, lesson!);
   expect(receipt).toMatchObject({
@@ -198,7 +176,7 @@ test('prepares and rereads one Lesson with Plan authority bound by the Coach Ses
   expect(readFileSync(
     join(temporaryRoot, 'plans/domain-integrity.md'),
     'utf8',
-  )).toContain('../lessons/lesson-blueprint-001.md');
+  )).toContain('../lessons/lesson-004.md');
 });
 
 test('defaults omitted lesson adjustments to an empty list', async () => {
@@ -210,29 +188,9 @@ test('defaults omitted lesson adjustments to an empty list', async () => {
     'domain-integrity',
     'plans/domain-integrity.md',
   );
-  const input = {
-    lessonId: 'lesson-no-adjustments',
-    title: '无额外调整的课',
-    planContext: '核验默认课堂模板。',
-    capabilityTarget: '完成一次独立作答。',
-    primaryTemplate: 'assessment',
-    templateReason: '本课不需要偏离模板。',
-    cards: [{
-      alias: 'Q-EX22',
-      cardPath: 'cards/derivative/mst_p0032_ex22.card.yaml',
-      role: '独立核验',
-    }],
-    sources: [],
-    blocks: [{
-      id: 'assessment-01',
-      kind: 'problem',
-      required: true,
-      dependsOn: [],
-      uses: ['Q-EX22'],
-      studentView: '请独立完成。',
-      teacherControl: '不提供提示。',
-    }],
-  };
+  addLessonCandidate(temporaryRoot);
+  const input = lessonPrepareInput();
+  delete (input.blueprint as { adjustments?: string[] }).adjustments;
 
   expect(Check(tool.parameters, input)).toBeTrue();
   await tool.execute(
@@ -243,52 +201,26 @@ test('defaults omitted lesson adjustments to an empty list', async () => {
     {} as never,
   );
   expect(readFileSync(
-    join(temporaryRoot, 'lessons/lesson-no-adjustments.md'),
+    join(temporaryRoot, 'lessons/lesson-004.md'),
     'utf8',
   )).toContain('- Adjustment: 无额外调整。');
 });
 
-test('exposes the canonical Lesson ID format in the lesson_prepare contract', () => {
+test('keeps Lesson identity runtime-owned in the lesson_prepare contract', () => {
   const tool = createLessonPrepareTool(
     root,
     'domain-integrity',
     'plans/domain-integrity.md',
   );
-  const lessonIdSchema = (tool.parameters as {
-    properties: {
-      lessonId: {
-        description?: string;
-      };
-    };
-  }).properties.lessonId;
-  const baseInput = {
-    lessonId: 'lesson-001',
-    title: 'Lesson ID contract',
-    planContext: 'Current Plan context.',
-    capabilityTarget: 'Produce one observable response.',
-    primaryTemplate: 'assessment',
-    templateReason: 'Use one independent attempt.',
-    adjustments: [],
-    cards: [],
-    sources: [],
-    blocks: [{
-      id: 'reflection',
-      kind: 'reflection',
-      required: true,
-      dependsOn: [],
-      uses: [],
-      studentView: '回顾本节证据。',
-      teacherControl: '只使用已经形成的课堂证据。',
-    }],
-  };
-
-  expect(Check(tool.parameters, baseInput)).toBeTrue();
-  expect(Check(tool.parameters, { ...baseInput, lessonId: '1' })).toBeFalse();
+  const input = lessonPrepareInput();
+  expect(Check(tool.parameters, input)).toBeTrue();
   expect(Check(tool.parameters, {
-    ...baseInput,
-    lessonId: 'domain-integrity-lesson1',
+    ...input,
+    lessonId: 'lesson-manual',
   })).toBeFalse();
-  expect(lessonIdSchema.description).toContain('lesson-001');
+  expect(Object.keys((tool.parameters as {
+    properties: Record<string, unknown>;
+  }).properties)).toEqual(['candidateHandle', 'blueprint']);
 });
 
 test('accepts only the six canonical classroom template IDs', () => {
@@ -297,26 +229,7 @@ test('accepts only the six canonical classroom template IDs', () => {
     'domain-integrity',
     'plans/domain-integrity.md',
   );
-  const input = {
-    lessonId: 'lesson-template-contract',
-    title: 'Template contract',
-    planContext: 'Current Plan context.',
-    capabilityTarget: 'Produce one observable response.',
-    primaryTemplate: 'assessment',
-    templateReason: 'Use one independent attempt.',
-    adjustments: [],
-    cards: [],
-    sources: [],
-    blocks: [{
-      id: 'reflection',
-      kind: 'reflection',
-      required: true,
-      dependsOn: [],
-      uses: [],
-      studentView: '回顾本节证据。',
-      teacherControl: '只使用已经形成的课堂证据。',
-    }],
-  };
+  const input = lessonPrepareInput();
   const canonical = [
     'diagnostic',
     'concept',
@@ -327,11 +240,14 @@ test('accepts only the six canonical classroom template IDs', () => {
   ] as const;
 
   for (const primaryTemplate of canonical) {
-    expect(Check(tool.parameters, { ...input, primaryTemplate })).toBeTrue();
+    expect(Check(tool.parameters, {
+      ...input,
+      blueprint: { ...input.blueprint, primaryTemplate },
+    })).toBeTrue();
   }
   expect(Check(tool.parameters, {
     ...input,
-    primaryTemplate: 'practice',
+    blueprint: { ...input.blueprint, primaryTemplate: 'practice' },
   })).toBeFalse();
 });
 
@@ -344,29 +260,20 @@ test('rejects a nonexistent card without writing or indexing a Lesson', async ()
     'domain-integrity',
     'plans/domain-integrity.md',
   );
+  addLessonCandidate(temporaryRoot);
   const before = readFileSync(join(temporaryRoot, 'plans/domain-integrity.md'), 'utf8');
+  const input = lessonPrepareInput();
+  input.blueprint.cards = [{
+    alias: 'FAKE',
+    cardPath: 'cards/fake.card.yaml',
+    role: 'fake',
+  }];
+  input.blueprint.blocks[0]!.uses = ['FAKE'];
   await expect(tool.execute('prepare-invalid', {
-    lessonId: 'lesson-blueprint-invalid',
-    title: 'Invalid',
-    planContext: 'Invalid',
-    capabilityTarget: 'Invalid',
-    primaryTemplate: 'assessment',
-    templateReason: 'Invalid',
-    adjustments: [],
-    cards: [{ alias: 'FAKE', cardPath: 'cards/fake.card.yaml', role: 'fake' }],
-    sources: [],
-    blocks: [{
-      id: 'reflection',
-      kind: 'reflection',
-      required: true,
-      dependsOn: [],
-      uses: ['FAKE'],
-      studentView: '反思。',
-      teacherControl: '反思。',
-    }],
+    ...input,
   } as never, undefined, undefined, {} as never)).rejects.toThrow('题卡不存在');
   expect(readFileSync(join(temporaryRoot, 'plans/domain-integrity.md'), 'utf8')).toBe(before);
-  expect(existsSync(join(temporaryRoot, 'lessons/lesson-blueprint-invalid.md'))).toBe(false);
+  expect(existsSync(join(temporaryRoot, 'lessons/lesson-004.md'))).toBe(false);
 });
 
 test('rejects a missing Lesson source without writing or indexing a Lesson', async () => {
@@ -378,35 +285,24 @@ test('rejects a missing Lesson source without writing or indexing a Lesson', asy
     'domain-integrity',
     'plans/domain-integrity.md',
   );
+  addLessonCandidate(temporaryRoot);
   const planAbsolute = join(temporaryRoot, 'plans/domain-integrity.md');
   const planBefore = readFileSync(planAbsolute, 'utf8');
-
-  await expect(tool.execute('prepare-invalid-source', {
-    lessonId: 'lesson-blueprint-source',
-    title: 'Invalid source',
-    planContext: 'Invalid source',
-    capabilityTarget: 'Invalid source',
-    primaryTemplate: 'assessment',
-    templateReason: 'Invalid source',
-    adjustments: [],
-    cards: [],
-    sources: [{
-      label: '不存在材料',
-      target: 'materials/missing.md#missing',
-      note: '不应写入。',
-    }],
-    blocks: [{
-      id: 'reflection',
-      kind: 'reflection',
-      required: true,
-      dependsOn: [],
-      uses: [],
-      studentView: '反思。',
-      teacherControl: '反思。',
-    }],
-  } as never, undefined, undefined, {} as never))
+  const input = lessonPrepareInput();
+  input.blueprint.sources = [{
+    label: '不存在材料',
+    target: 'materials/missing.md#missing',
+    note: '不应写入。',
+  }];
+  await expect(tool.execute(
+    'prepare-invalid-source',
+    input as never,
+    undefined,
+    undefined,
+    {} as never,
+  ))
     .rejects.toThrow(/LESSON_BLUEPRINT_INVALID.*MISSING_FILE/);
-  expect(existsSync(join(temporaryRoot, 'lessons/lesson-blueprint-source.md')))
+  expect(existsSync(join(temporaryRoot, 'lessons/lesson-004.md')))
     .toBe(false);
   expect(readFileSync(planAbsolute, 'utf8')).toBe(planBefore);
 });
@@ -528,7 +424,7 @@ test('binds a Tutor Trace to its Lesson and refreshes planner attention', async 
   const traceSearch = tools.find((tool) => tool.name === 'trace_search')!;
 
   const appendResult = await trace.execute('call-1', {
-    blockId: 'assessment-01',
+    blockId: 'block-002',
     assessment: 'partially_correct',
     support: 'tutor',
     note: 'Used one structural hint after an incomplete attempt.',
@@ -545,6 +441,7 @@ test('binds a Tutor Trace to its Lesson and refreshes planner attention', async 
     ownerPath: string;
     factId: string;
     traceId: string;
+    sourceRef: string;
     methods: { primary: string; secondary: string[] } | null;
     unresolvedMethods: string[];
   };
@@ -559,13 +456,13 @@ test('binds a Tutor Trace to its Lesson and refreshes planner attention', async 
   expect(readTraceRecords(temporaryRoot, ['lessons/lesson-003.md']))
     .toEqual([expect.objectContaining({
       lessonPath: 'lessons/lesson-003.md',
-      blockId: 'assessment-01',
+      blockId: 'block-002',
       cardPath: 'cards/derivative/mst_p0032_ex22.card.yaml',
       cardStepId: null,
       support: 'tutor',
     })]);
   expect(readFileSync(join(temporaryRoot, 'memory/planner-attention.md'), 'utf8'))
-    .toContain('lessons/lesson-003.md#trace-event-001');
+    .toContain(appended.sourceRef);
 
   const cardResult = await cardSearch.execute('call-2', {
     query: 'mst_p0032_ex22',
@@ -575,7 +472,7 @@ test('binds a Tutor Trace to its Lesson and refreshes planner attention', async 
     cards: Array<{ path: string; traceHistory: Array<{ traceId: string }> }>;
   };
   expect(cardPayload.cards.find((card) => card.path === 'cards/derivative/mst_p0032_ex22.card.yaml')
-    ?.traceHistory.map((record) => record.traceId)).toEqual(['event-001']);
+    ?.traceHistory.map((record) => record.traceId)).toEqual([appended.traceId]);
 
   const traceResult = await traceSearch.execute('call-3', {
     lessonId: 'lesson-003',
@@ -585,12 +482,12 @@ test('binds a Tutor Trace to its Lesson and refreshes planner attention', async 
     traces: Array<{ traceId: string }>;
     cardsByPath: Record<string, unknown>;
   };
-  expect(tracePayload.traces.map((record) => record.traceId)).toEqual(['event-001']);
+  expect(tracePayload.traces.map((record) => record.traceId)).toEqual([appended.traceId]);
   expect(Object.keys(tracePayload.cardsByPath))
     .toContain('cards/derivative/mst_p0032_ex22.card.yaml');
   expect(readEvidence(
     temporaryRoot,
-    'lessons/lesson-003.md#trace-event-001',
+    appended.sourceRef,
   ).card?.path).toBe('cards/derivative/mst_p0032_ex22.card.yaml');
 });
 
@@ -604,7 +501,7 @@ test('rejects a second independent active Trace in the same problem Block', asyn
     ownerPath: 'lessons/lesson-003.md',
   }).find((tool) => tool.name === 'trace_append')!;
   const firstAttempt = {
-    blockId: 'assessment-01',
+    blockId: 'block-002',
     assessment: 'correct',
     support: 'none',
     note: '学生独立完成当前题问。',
@@ -612,19 +509,27 @@ test('rejects a second independent active Trace in the same problem Block', asyn
     methodRoute: '学生完成当前题问的推理链。',
   };
 
-  await trace.execute(
+  const firstResult = await trace.execute(
     'first-attempt',
     firstAttempt as never,
     undefined,
     undefined,
     {} as never,
   );
+  const firstTraceId = (
+    JSON.parse((firstResult.content[0] as { text: string }).text) as {
+      traceId: string;
+    }
+  ).traceId;
   await expect(trace.execute('second-independent-attempt', {
     ...firstAttempt,
     note: '学生又完成了同一题卡中的另一问。',
     methodRoute: '学生完成另一题问的独立推理链。',
   } as never, undefined, undefined, {} as never)).rejects.toThrow(
-    /TRACE_ATTEMPT_ALREADY_ACTIVE.*assessment-01.*event-001.*新的 problem Block/s,
+    new RegExp(
+      `TRACE_ATTEMPT_ALREADY_ACTIVE.*block-002.*${firstTraceId}.*新的 problem Block`,
+      's',
+    ),
   );
 
   expect(readTraceRecords(temporaryRoot, ['lessons/lesson-003.md']))
@@ -633,7 +538,7 @@ test('rejects a second independent active Trace in the same problem Block', asyn
   await trace.execute('same-attempt-revision', {
     ...firstAttempt,
     note: '学生补全了当前题问。',
-    supersedes: 'event-001',
+    supersedes: firstTraceId,
   } as never, undefined, undefined, {} as never);
   expect(readTraceRecords(temporaryRoot, ['lessons/lesson-003.md']))
     .toHaveLength(2);
@@ -656,16 +561,21 @@ test('rejects a supersede target when the selected Block has no active attempt',
     methodRoute: '学生完成一条推理链。',
   };
 
-  await trace.execute('first', {
+  const first = await trace.execute('first', {
     ...attempt,
-    blockId: 'assessment-01',
+    blockId: 'block-002',
   } as never, undefined, undefined, {} as never);
+  const firstTraceId = (
+    JSON.parse((first.content[0] as { text: string }).text) as {
+      traceId: string;
+    }
+  ).traceId;
   await expect(trace.execute('cross-block', {
     ...attempt,
-    blockId: 'assessment-02',
-    supersedes: 'event-001',
+    blockId: 'block-004',
+    supersedes: firstTraceId,
   } as never, undefined, undefined, {} as never))
-    .rejects.toThrow(/TRACE_SUPERSEDES_WITHOUT_ACTIVE_ATTEMPT.*assessment-02/);
+    .rejects.toThrow(/TRACE_SUPERSEDES_WITHOUT_ACTIVE_ATTEMPT.*block-004/);
   expect(readTraceRecords(temporaryRoot, ['lessons/lesson-003.md'])).toHaveLength(1);
 });
 
@@ -694,24 +604,24 @@ test('allows separate problem Blocks to record independent parts from the same c
 
   await trace.execute('part-one', {
     ...attempt,
-    blockId: 'assessment-01',
+    blockId: 'block-002',
   } as never, undefined, undefined, {} as never);
   await trace.execute('part-two', {
     ...attempt,
-    blockId: 'assessment-02',
+    blockId: 'block-004',
   } as never, undefined, undefined, {} as never);
 
   expect(readTraceRecords(temporaryRoot, ['lessons/lesson-003.md']))
-    .toEqual([
+    .toEqual(expect.arrayContaining([
       expect.objectContaining({
-        blockId: 'assessment-01',
+        blockId: 'block-002',
         cardPath: 'cards/derivative/mst_p0032_ex22.card.yaml',
       }),
       expect.objectContaining({
-        blockId: 'assessment-02',
+        blockId: 'block-004',
         cardPath: 'cards/derivative/mst_p0032_ex22.card.yaml',
       }),
-    ]);
+    ]));
 });
 
 test('ignores a stale cardAlias and binds the card owned by the selected Block', async () => {
@@ -725,7 +635,7 @@ test('ignores a stale cardAlias and binds the card owned by the selected Block',
   }).find((tool) => tool.name === 'trace_append')!;
 
   await trace.execute('stale-alias', {
-    blockId: 'assessment-01',
+    blockId: 'block-002',
     cardAlias: 'Q-DOMAIN-EX16',
     assessment: 'correct',
     support: 'none',
@@ -757,14 +667,14 @@ test.each([
   }).find((tool) => tool.name === 'trace_append')!;
 
   await expect(trace.execute('invalid-card-count', {
-    blockId: 'assessment-01',
+    blockId: 'block-002',
     assessment: 'incomplete',
     support: 'none',
     note: '未完成。',
     methodStatus: 'unmapped',
     methodRoute: '尚未形成路线。',
   } as never, undefined, undefined, {} as never)).rejects
-    .toThrow(/LESSON_PROBLEM_CARD_COUNT.*assessment-01/);
+    .toThrow(/LESSON_PROBLEM_CARD_COUNT.*block-002/);
   expect(readTraceRecords(temporaryRoot, ['lessons/lesson-003.md'])).toEqual([]);
 });
 
@@ -778,7 +688,7 @@ test('reports missing and invalid Lesson aliases as non-retryable structure erro
     ownerPath: 'lessons/lesson-003.md',
   }).find((tool) => tool.name === 'trace_append')!;
   const input = {
-    blockId: 'assessment-01',
+    blockId: 'block-002',
     assessment: 'incomplete',
     support: 'none',
     note: '未完成。',
@@ -855,7 +765,7 @@ test('constrains Tutor Block arguments to the current Lesson', () => {
   }).find((tool) => tool.name === 'trace_append')!;
   const classroom = createClassroomUpdateTool(root, 'lessons/lesson-003.md');
   const traceInput = {
-    blockId: 'assessment-01',
+    blockId: 'block-002',
     assessment: 'correct',
     support: 'none',
     note: '学生独立完成。',
@@ -871,7 +781,7 @@ test('constrains Tutor Block arguments to the current Lesson', () => {
   expect(Check(classroom.parameters, { action: 'pause' })).toBeTrue();
   expect(Check(classroom.parameters, {
     action: 'activate',
-    blockId: 'assessment-01',
+    blockId: 'block-002',
   })).toBeTrue();
   expect(Check(classroom.parameters, {
     action: 'activate',
@@ -880,26 +790,26 @@ test('constrains Tutor Block arguments to the current Lesson', () => {
   expect(Check(classroom.parameters, {
     action: 'route',
     routeAction: 'move',
-    blockId: 'assessment-02',
-    before: 'reflection',
+    blockId: 'block-004',
+    before: 'block-005',
     reason: '学生决定先做迁移。',
     source: '#trace-event-001',
   })).toBeTrue();
   expect(Check(classroom.parameters, {
     action: 'route',
-    blockId: 'assessment-02',
+    blockId: 'block-004',
   })).toBeFalse();
   expect(Check(classroom.parameters, {
     action: 'route',
     routeAction: 'move',
-    blockId: 'assessment-02',
+    blockId: 'block-004',
     before: 'invented-block',
     reason: '非法锚点。',
     source: '#trace-event-001',
   })).toBeFalse();
   expect(Check(classroom.parameters, {
     action: 'pause',
-    blockId: 'orientation',
+    blockId: 'block-001',
   })).toBeFalse();
 });
 
@@ -914,16 +824,16 @@ test('leaves the Lesson unchanged when classroom transition validation fails', a
   );
   const classroom = createClassroomUpdateTool(temporaryRoot, 'lessons/lesson-003.md');
 
-  await classroom.execute('activate-orientation', {
+  await classroom.execute('activate-first-block', {
     action: 'activate',
-    blockId: 'orientation',
+    blockId: 'block-001',
   } as never, undefined, undefined, {} as never);
   const before = readFileSync(lessonPath, 'utf8');
   await expect(classroom.execute('activate-second', {
     action: 'activate',
-    blockId: 'assessment-01',
+    blockId: 'block-002',
   } as never, undefined, undefined, {} as never))
-    .rejects.toThrow(/CLASSROOM_ACTIVE_BLOCK_EXISTS.*orientation/);
+    .rejects.toThrow(/CLASSROOM_ACTIVE_BLOCK_EXISTS.*block-001/);
   expect(readFileSync(lessonPath, 'utf8')).toBe(before);
 });
 
@@ -968,7 +878,7 @@ test('requires an explicit student-confirmed or unmapped method decision', () =>
     ownerPath: 'lessons/lesson-003.md',
   }).find((tool) => tool.name === 'trace_append')!;
   const base = {
-    blockId: 'assessment-01',
+    blockId: 'block-002',
     assessment: 'correct',
     support: 'none',
     note: '学生实际采用参变量分离。',
@@ -1015,7 +925,7 @@ test('rejects a student-confirmed method without confirmation evidence', async (
   }).find((tool) => tool.name === 'trace_append')!;
 
   expect(trace.execute('call-invalid-confirmation', {
-    blockId: 'assessment-01',
+    blockId: 'block-002',
     assessment: 'correct',
     support: 'none',
     note: '学生路线。',
@@ -1038,7 +948,7 @@ test('persists no method evidence for an explicit unmapped decision', async () =
   }).find((tool) => tool.name === 'trace_append')!;
 
   const appendResult = await trace.execute('call-unmapped', {
-    blockId: 'assessment-01',
+    blockId: 'block-002',
     assessment: 'correct',
     support: 'none',
     note: '学生使用参数单调性和边界验证，当前词表没有精确节点。',
@@ -1064,7 +974,7 @@ test('keeps non-problem Trace cardless', async () => {
   }).find((tool) => tool.name === 'trace_append')!;
 
   await trace.execute('cardless-reflection', {
-    blockId: 'reflection',
+    blockId: 'block-005',
     assessment: 'correct',
     support: 'none',
     note: '学生完成课后反思。',
@@ -1074,7 +984,7 @@ test('keeps non-problem Trace cardless', async () => {
 
   expect(readTraceRecords(temporaryRoot, ['lessons/lesson-003.md']).at(-1))
     .toEqual(expect.objectContaining({
-      blockId: 'reflection',
+      blockId: 'block-005',
       cardPath: null,
     }));
 });
@@ -1083,109 +993,97 @@ test('exposes plan_update through a provider-compatible object root', () => {
   const tool = createPlanUpdateTool(root, 'plans/domain-integrity.md');
   const schema = tool.parameters as {
     type?: string;
-    oneOf?: unknown[];
+    properties?: Record<string, unknown>;
   };
 
   expect(schema.type).toBe('object');
-  expect(schema.oneOf).toHaveLength(2);
+  expect(Object.keys(schema.properties ?? {})).toEqual([
+    'decision',
+    'currentPosition',
+    'planSummary',
+    'candidateChanges',
+  ]);
 });
 
-test('exposes exclusive progress and complete plan_update contracts without path authority', () => {
+test('exposes only active and replan plan_update decisions without path authority', () => {
   const tool = createPlanUpdateTool(root, 'plans/domain-integrity.md');
   const common = {
-    currentPosition: '本周期已完成。',
-    nextLessonCandidate: '回到 Roadmap 讨论下一阶段。',
-  };
-  const learningReview = {
-    conclusion: '能在限定题型中独立比较路线。',
-    boundary: '当前只覆盖一张无提示评估题，迁移尚未验证。',
-    nextStep: '讨论跨题型迁移。',
-    keyEvidence: [{
-      claim: '独立完成评估题。',
-      source: 'lessons/lesson-003.md#trace-event-001',
-    }],
-    supportingEvidence: [],
-    openQuestions: [],
+    currentPosition: '本周期继续。',
+    planSummary: '继续进行。',
+    candidateChanges: [],
   };
 
   expect(Check(tool.parameters, {
-    decision: 'complete',
+    decision: 'active',
     ...common,
-    learningReview,
+  })).toBeTrue();
+  expect(Check(tool.parameters, {
+    decision: 'replan',
+    ...common,
   })).toBeTrue();
   expect(Check(tool.parameters, {
     decision: 'complete',
     ...common,
-    planSummary: '旧式完成总结。',
   })).toBeFalse();
   expect(Check(tool.parameters, {
     decision: 'active',
     ...common,
-    planSummary: '继续进行。',
-  })).toBeTrue();
-  expect(Check(tool.parameters, {
-    decision: 'active',
-    ...common,
-    learningReview,
+    nextLessonCandidate: '旧字段。',
   })).toBeFalse();
   expect(JSON.stringify(tool.parameters)).not.toContain('planPath');
-  expect(JSON.stringify(tool.parameters)).not.toContain('lessonIndex');
-  expect(JSON.stringify(tool.parameters)).toContain('support:none');
-  expect(JSON.stringify(tool.parameters)).toContain('assessment Lesson');
+  expect(JSON.stringify(tool.parameters)).not.toContain('learningReview');
+  expect(JSON.stringify(tool.parameters)).not.toContain('nextLessonCandidate');
 });
 
-test('returns eligible key anchors without changing Plan or Roadmap', async () => {
-  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-plan-key-evidence-'));
+test('updates Plan summary and unmaterialized Lesson candidates in one call', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-plan-update-tree-'));
   temporaryRoots.push(temporaryRoot);
   cpSync(root, temporaryRoot, { recursive: true });
-  appendTrace(temporaryRoot, {
-    lessonPath: 'lessons/lesson-003.md',
-    blockId: 'assessment-01',
-    cardAlias: 'Q-DOMAIN-EX22',
-    cardStepId: null,
-    materialPath: null,
-    assessment: 'correct',
-    support: 'none',
-    note: '学生独立完成。',
-    supersedes: null,
-  }, () => new Date('2026-07-30T08:00:00Z'));
-  appendTrace(temporaryRoot, {
-    lessonPath: 'lessons/lesson-003.md',
-    blockId: 'assessment-02',
-    cardAlias: 'Q-DOMAIN-EX16',
-    cardStepId: null,
-    materialPath: null,
-    assessment: 'correct',
-    support: 'tutor',
-    note: '学生在提示后完成。',
-    supersedes: null,
-  }, () => new Date('2026-07-30T08:05:00Z'));
-  const tool = createPlanUpdateTool(temporaryRoot, 'plans/domain-integrity.md');
-  const planAbsolute = join(temporaryRoot, 'plans/domain-integrity.md');
-  const roadmapAbsolute = join(temporaryRoot, 'ROADMAP.md');
-  const planBefore = readFileSync(planAbsolute, 'utf8');
-  const roadmapBefore = readFileSync(roadmapAbsolute, 'utf8');
-
-  await expect(tool.execute('complete-invalid-key', {
-    decision: 'complete',
-    currentPosition: '准备完成。',
-    nextLessonCandidate: '回到 Roadmap。',
-    learningReview: {
-      conclusion: '在当前题型中完成。',
-      boundary: '关键来源使用过 Tutor 提示。',
-      nextStep: '重新选择关键来源。',
-      keyEvidence: [{
-        claim: '提示后完成第二题。',
-        source: 'lessons/lesson-003.md#trace-event-002',
-      }],
-      supportingEvidence: [],
-      openQuestions: [],
-    },
-  } as never, undefined, undefined, {} as never)).rejects.toThrow(
-    /LEARNING_REVIEW_KEY_SUPPORT_REQUIRED_NONE: .*eligible=lessons\/lesson-003\.md#trace-event-001/,
+  const roadmapBefore = readFileSync(join(temporaryRoot, 'ROADMAP.md'), 'utf8');
+  const tool = createPlanUpdateTool(
+    temporaryRoot,
+    'plans/domain-integrity.md',
   );
-  expect(readFileSync(planAbsolute, 'utf8')).toBe(planBefore);
-  expect(readFileSync(roadmapAbsolute, 'utf8')).toBe(roadmapBefore);
+  const result = await tool.execute('plan-replan', {
+    decision: 'replan',
+    currentPosition: '第三节之后需要检查跨题型迁移。',
+    planSummary: '保留已有课堂，只增加一项迁移候选。',
+    candidateChanges: [{
+      action: 'add',
+      candidate: {
+        publicPurpose: '检查跨题型迁移。',
+        after: 'lesson-candidate-003',
+        dependsOn: ['lesson-candidate-003'],
+        considerWhen: '当前连续性核验完成后。',
+        sources: ['trace:trace-fixture-002'],
+        privateNote: '只改变题型外壳。',
+      },
+    }],
+  } as never, undefined, undefined, {} as never);
+  const payload = JSON.parse(
+    (result.content[0] as { text: string }).text,
+  ) as { candidateHandles: string[] };
+
+  expect(payload.candidateHandles).toContain('lesson-candidate-004');
+  expect(readPlanWorkspace(temporaryRoot, 'domain-integrity')).toMatchObject({
+    plan: {
+      status: 'active',
+      currentPosition: '第三节之后需要检查跨题型迁移。',
+      planSummary: '保留已有课堂，只增加一项迁移候选。',
+    },
+    lessonTree: [
+      {},
+      {},
+      {},
+      {
+        handle: 'lesson-candidate-004',
+        status: 'candidate',
+        path: null,
+      },
+    ],
+  });
+  expect(readFileSync(join(temporaryRoot, 'ROADMAP.md'), 'utf8'))
+    .toBe(roadmapBefore);
 });
 
 test('keeps alternative append Tutor-only and Session-bound', () => {
@@ -1221,14 +1119,19 @@ test('rebuilds planner attention after appending an independently bound alternat
     ownerId: 'lesson-003',
     ownerPath: 'lessons/lesson-003.md',
   }).find((tool) => tool.name === 'trace_append')!;
-  await trace.execute('alternative-source', {
-    blockId: 'assessment-01',
+  const traceResult = await trace.execute('alternative-source', {
+    blockId: 'block-002',
     assessment: 'correct',
     support: 'none',
     note: '学生独立完成一条真实替代路线。',
     methodStatus: 'unmapped',
     methodRoute: '学生先分离参数，再确定函数的取值边界。',
   } as never, undefined, undefined, {} as never);
+  const sourceTraceId = (
+    JSON.parse((traceResult.content[0] as { text: string }).text) as {
+      traceId: string;
+    }
+  ).traceId;
 
   const alternative = createCardAlternativeAppendTool(
     temporaryRoot,
@@ -1236,7 +1139,7 @@ test('rebuilds planner attention after appending an independently bound alternat
     () => new Date('2026-07-22T00:01:00Z'),
   );
   const result = await alternative.execute('alternative-append', {
-    sourceTraceId: 'event-001',
+    sourceTraceId,
     solution: '分离参数后研究函数值域。',
     method: '参变量分离',
     support: 'none',
@@ -1275,21 +1178,26 @@ test('offers real part labels but validates them against the selected Trace card
     ownerId: 'lesson-003',
     ownerPath: 'lessons/lesson-003.md',
   }).find((tool) => tool.name === 'trace_append')!;
-  await trace.execute('part-source', {
-    blockId: 'assessment-01',
+  const partTraceResult = await trace.execute('part-source', {
+    blockId: 'block-002',
     assessment: 'correct',
     support: 'none',
     note: '学生独立完成第一问。',
     methodStatus: 'unmapped',
     methodRoute: '学生完成了第一问的不同路线。',
   } as never, undefined, undefined, {} as never);
+  const partTraceId = (
+    JSON.parse((partTraceResult.content[0] as { text: string }).text) as {
+      traceId: string;
+    }
+  ).traceId;
   const alternative = createCardAlternativeAppendTool(
     temporaryRoot,
     'lessons/lesson-003.md',
     () => new Date(),
   );
   const valid = {
-    sourceTraceId: 'event-001',
+    sourceTraceId: partTraceId,
     question: '第（1）问',
     solution: '这是第一问的完整另解。',
     method: null,
@@ -1302,7 +1210,7 @@ test('offers real part labels but validates them against the selected Trace card
     question: '随便一问',
   })).toBeFalse();
   expect(Check(alternative.parameters, {
-    sourceTraceId: 'event-001',
+    sourceTraceId: partTraceId,
     solution: '缺少分问。',
     method: null,
     support: 'none',
@@ -1319,7 +1227,7 @@ test('offers real part labels but validates them against the selected Trace card
   await expect(alternative.execute(
     'missing-part',
     {
-      sourceTraceId: 'event-001',
+      sourceTraceId: partTraceId,
       solution: '缺少分问。',
       method: null,
       support: 'none',
@@ -1329,18 +1237,23 @@ test('offers real part labels but validates them against the selected Trace card
     {} as never,
   )).rejects.toThrow('ALTERNATIVE_QUESTION_REQUIRED');
 
-  await trace.execute('whole-card-source', {
-    blockId: 'assessment-02',
+  const wholeTraceResult = await trace.execute('whole-card-source', {
+    blockId: 'block-004',
     assessment: 'correct',
     support: 'none',
     note: '学生独立完成整题。',
     methodStatus: 'unmapped',
     methodRoute: '学生完成了整题的不同路线。',
   } as never, undefined, undefined, {} as never);
+  const wholeTraceId = (
+    JSON.parse((wholeTraceResult.content[0] as { text: string }).text) as {
+      traceId: string;
+    }
+  ).traceId;
   await expect(alternative.execute(
     'part-from-another-card',
     {
-      sourceTraceId: 'event-002',
+      sourceTraceId: wholeTraceId,
       question: '第（1）问',
       solution: '错误地借用了另一题的分问标签。',
       method: null,

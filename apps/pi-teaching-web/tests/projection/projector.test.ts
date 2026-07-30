@@ -193,14 +193,14 @@ test('replaces a live Roadmap post-search final with a fixed recovery message', 
   expect(visible).toEqual([expect.objectContaining({
     type: 'message',
     message: expect.objectContaining({
-      text: '课程素材已经核对，但学习周期尚未登记。可以继续完成当前计划。',
+      text: '课程素材已经核对，但学习周期尚未建立。可以继续完成当前计划。',
     }),
   })]);
   expect(JSON.stringify(visible)).not.toContain('绝密');
   expect(JSON.stringify(visible)).not.toContain('冻结变量法');
 });
 
-test('emits one ordinary ready message after live Roadmap registration', () => {
+test('emits one ordinary ready message after live Roadmap preparation', () => {
   const safe = createLiveSessionEventProjector('coach:@roadmap', 'safe');
   const search = {
     type: 'tool_execution_end',
@@ -209,14 +209,14 @@ test('emits one ordinary ready message after live Roadmap registration', () => {
     isError: false,
     result: { details: { kind: 'card-search', value: { cards: [] } } },
   } as never;
-  const register = {
+  const prepare = {
     type: 'tool_execution_end',
-    toolName: 'plan_register',
-    toolCallId: 'register-1',
+    toolName: 'plan_prepare',
+    toolCallId: 'prepare-1',
     isError: false,
     result: {
       details: {
-        kind: 'plan-register',
+        kind: 'plan-prepare',
         value: { ok: true, factId: 'route-choice' },
       },
     },
@@ -231,8 +231,8 @@ test('emits one ordinary ready message after live Roadmap registration', () => {
   } as never;
 
   safe(search);
-  const registered = safe(register);
-  expect(registered.filter((event) => event.type === 'message')).toEqual([
+  const prepared = safe(prepare);
+  expect(prepared.filter((event) => event.type === 'message')).toEqual([
     expect.objectContaining({
       type: 'message',
       message: expect.objectContaining({

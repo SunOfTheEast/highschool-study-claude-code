@@ -2,7 +2,6 @@ import { defineTool } from '@earendil-works/pi-coding-agent';
 import { Type } from 'typebox';
 import { readMarkdownFile } from 'highschool-study-markdown/study-domain';
 import {
-  lessonIdPattern,
   renderPreparedLesson,
   validateLessonBlueprint,
   type LessonBlueprint,
@@ -10,7 +9,7 @@ import {
 import { readPlanWorkspace } from '../study/read-workspace';
 import { readStudentLessonPreview } from '../study/student-plan-projection';
 import { validatePreparedLessonSource } from '../study/validate-prepared-lesson';
-import { writePreparedLesson } from '../study/write-workspace';
+import { materializeChild } from './tree-mutations';
 
 const nonempty = Type.String({ minLength: 1 });
 const classroomTemplate = Type.Union([
@@ -21,41 +20,63 @@ const classroomTemplate = Type.Union([
   Type.Literal('assessment'),
   Type.Literal('review'),
 ], {
-  description: 'Canonical classroom template selected for this Lesson. The ID chooses template defaults; adjustments record deliberate deviations.',
+  description: 'Canonical classroom template selected for this Lesson.',
 });
 const block = Type.Object({
   localAlias: Type.String({
     minLength: 1,
-    description: 'Blueprint-local Block alias used only to express dependencies. Runtime maps aliases to block-001, block-002, and so on.',
+    description: 'Blueprint-local alias. Runtime maps it to block-001, block-002, and so on.',
   }),
   kind: Type.Union([
     Type.Literal('dialogue'),
     Type.Literal('problem'),
     Type.Literal('material'),
     Type.Literal('reflection'),
-  ], {
-    description: 'Activity kind. A problem produces one independently assessed response; reflection is an optional, repeatable classroom activity selected by the template and Coach.',
-  }),
-  required: Type.Boolean({
-    description: 'Whether the Lesson cannot complete normally without traversing this Block.',
-  }),
-  dependsOn: Type.Array(nonempty, {
-    description: 'Earlier Blueprint-local aliases that must be resolved before this Block can activate.',
-  }),
-  uses: Type.Array(nonempty, {
-    description: 'Lesson-local aliases used by this Block. A problem Block must use exactly one authentic problem-card alias.',
-  }),
-  studentView: Type.String({
-    minLength: 1,
-    description: 'Content that may be shown when this Block is active.',
-  }),
-  teacherControl: Type.String({
-    minLength: 1,
-    description: 'Private role, source references, reveal mode, evidence target, and ordered teaching support. Keep anticipated student reactions and failures conditional; ground mathematical judging claims in the selected card or source.',
-  }),
-}, {
-  description: 'One adjustable Lesson activity. Put separately judged responses, including separately judged parts of one card, in separate problem Blocks.',
-});
+  ]),
+  required: Type.Boolean(),
+  dependsOn: Type.Array(nonempty),
+  uses: Type.Array(nonempty),
+  studentView: nonempty,
+  teacherControl: nonempty,
+}, { additionalProperties: false });
+const activation = Type.Object({
+  parentSources: Type.Array(nonempty, { minItems: 1 }),
+  selectedMemory: Type.Array(nonempty),
+  contentBoundary: Type.Array(nonempty, { minItems: 1 }),
+  adaptation: Type.Object({
+    workingJudgment: nonempty,
+    sources: Type.Array(nonempty, { minItems: 1 }),
+    designConsequence: nonempty,
+    reviseIf: nonempty,
+  }, { additionalProperties: false }),
+}, { additionalProperties: false });
+const blueprintSchema = Type.Object({
+  title: nonempty,
+  publicPurpose: nonempty,
+  capabilityTarget: nonempty,
+  primaryTemplate: classroomTemplate,
+  templateReason: nonempty,
+  adjustments: Type.Optional(Type.Array(nonempty)),
+  activation,
+  cards: Type.Array(Type.Object({
+    alias: nonempty,
+    cardPath: nonempty,
+    role: nonempty,
+  }, { additionalProperties: false })),
+  sources: Type.Array(Type.Object({
+    label: nonempty,
+    target: nonempty,
+    note: nonempty,
+  }, { additionalProperties: false })),
+  blocks: Type.Array(block, { minItems: 1 }),
+}, { additionalProperties: false });
+
+function title(body: string, ownerPath: string): string {
+  const value = /^#\s+(.+?)\s*$/m.exec(body)?.[1]
+    ?.replace(/^Plan[:：]\s*/, '').trim();
+  if (!value) throw new Error(`PLAN_TITLE_REQUIRED: ${ownerPath}`);
+  return value;
+}
 
 export function createLessonPrepareTool(
   root: string,
@@ -65,136 +86,65 @@ export function createLessonPrepareTool(
   return defineTool({
     name: 'lesson_prepare',
     label: '整理课堂结构',
-    description: 'Compile one source-grounded Blueprint into canonical Lesson Markdown and register it under the Coach Session-owned Plan. Call after selecting a canonical template, authentic card paths, and a complete Block graph; revise only a same-Plan Lesson that is still prepared. The runtime binds Plan ownership, validates sources and aliases, writes initial state and Plan links, and returns the prepared Lesson path and block count.',
+    description: 'Materialize or reprepare one candidate owned by the current Plan. Runtime allocates Lesson identity and path, binds parent ownership, compiles block aliases, and returns the canonical prepared receipt.',
     parameters: Type.Object({
-      lessonId: Type.String({
-        minLength: 1,
-        pattern: lessonIdPattern.source,
-        description: 'New Lesson ID and lessons/<lessonId>.md filename stem. Start with lesson- and use only lowercase letters, digits, and hyphens; for example lesson-001.',
-      }),
-      title: Type.String({
-        minLength: 1,
-        description: 'Student-visible Lesson title appropriate to the selected reveal policy.',
-      }),
-      publicPurpose: Type.String({
-        minLength: 1,
-        description: 'Student-safe account of why this Lesson belongs in the current Plan.',
-      }),
-      capabilityTarget: Type.String({
-        minLength: 1,
-        description: 'Observable capability this Lesson teaches or checks; it does not assert attainment.',
-      }),
-      primaryTemplate: classroomTemplate,
-      templateReason: Type.String({
-        minLength: 1,
-        description: 'Why this template fits the current evidence and capability target.',
-      }),
-      adjustments: Type.Optional(Type.Array(nonempty, {
-        description: 'Deliberate changes from the selected template defaults.',
-      })),
-      activation: Type.Object({
-        parentSources: Type.Array(nonempty, {
-          minItems: 1,
-          description: 'Canonical evidence handles selected from the parent Plan context.',
-        }),
-        selectedMemory: Type.Array(nonempty, {
-          description: 'Confirmed memory handles only; never copy profile prose here.',
-        }),
-        contentBoundary: Type.Array(nonempty, {
-          minItems: 1,
-          description: 'Student-facing reveal and content boundaries for this Lesson.',
-        }),
-        adaptation: Type.Object({
-          workingJudgment: nonempty,
-          sources: Type.Array(nonempty, { minItems: 1 }),
-          designConsequence: nonempty,
-          reviseIf: nonempty,
-        }, { additionalProperties: false }),
-      }, { additionalProperties: false }),
-      cards: Type.Array(Type.Object({
-        alias: Type.String({
-          minLength: 1,
-          description: 'Lesson-local short name referenced by Block uses.',
-        }),
-        cardPath: Type.String({
-          minLength: 1,
-          description: 'Exact learning-set-relative path returned by authentic card retrieval.',
-        }),
-        role: Type.String({
-          minLength: 1,
-          description: 'Instructional role this card serves in the Lesson.',
-        }),
-      }), {
-        description: 'Authentic problem cards available to this Lesson.',
-      }),
-      sources: Type.Array(Type.Object({
-        label: Type.String({
-          minLength: 1,
-          description: 'Readable name for the material source.',
-        }),
-        target: Type.String({
-          minLength: 1,
-          description: 'Learning-set-local source target or source fragment.',
-        }),
-        note: Type.String({
-          minLength: 1,
-          description: 'What this source supports in the Lesson.',
-        }),
-      }), {
-        description: 'Non-card materials cited by the Lesson.',
-      }),
-      blocks: Type.Array(block, {
-        minItems: 1,
-        description: 'Ordered, dependency-aware activity graph compiled into the Lesson.',
-      }),
-    }),
+      candidateHandle: nonempty,
+      blueprint: blueprintSchema,
+    }, { additionalProperties: false }),
     execute: async (_id, input) => {
-      const lessonPath = `lessons/${input.lessonId}.md`;
       const plan = readMarkdownFile(root, ownerPath);
-      if (plan.id !== ownerId || plan.frontmatter.kind !== 'plan') {
+      if (
+        plan.id !== ownerId
+        || plan.frontmatter.kind !== 'plan'
+        || ownerPath !== `plans/${ownerId}.md`
+      ) {
         throw new Error(`PLAN_OWNER_MISMATCH: ${ownerPath}`);
       }
-      const planTitle = /^#\s+(.+)$/m.exec(plan.body)?.[1]
-        ?.replace(/^Plan[:：]\s*/, '').trim();
-      if (!planTitle) throw new Error(`PLAN_TITLE_REQUIRED: ${ownerPath}`);
+      if (plan.frontmatter.status === 'completed') {
+        throw new Error(`PLAN_PREPARATION_REQUIRES_REACTIVATION: ${ownerId}`);
+      }
       const blueprint: LessonBlueprint = {
-        title: input.title,
-        publicPurpose: input.publicPurpose,
-        capabilityTarget: input.capabilityTarget,
-        primaryTemplate: input.primaryTemplate,
-        templateReason: input.templateReason,
-        adjustments: input.adjustments ?? [],
-        activation: input.activation,
-        cards: input.cards,
-        sources: input.sources,
-        blocks: input.blocks,
+        ...input.blueprint,
+        adjustments: input.blueprint.adjustments ?? [],
       };
-      const context = {
-        planId: ownerId,
-        planPath: ownerPath,
-        planTitle,
-        lessonId: input.lessonId,
-        lessonPath,
-      };
-      validateLessonBlueprint(root, context, blueprint);
-      const source = renderPreparedLesson(context, blueprint);
-      validatePreparedLessonSource(root, lessonPath, source);
-      writePreparedLesson(root, ownerPath, {
-        lessonId: input.lessonId,
-        lessonPath,
-        lessonTitle: input.title,
-        source,
+      const planTitle = title(plan.body, ownerPath);
+      const result = materializeChild(root, {
+        parentId: ownerId,
+        parentPath: ownerPath,
+        childKind: 'lesson',
+        candidateHandle: input.candidateHandle,
+        title: blueprint.title,
+        render: ({ childId, childPath }) => {
+          const context = {
+            planId: ownerId,
+            planPath: ownerPath,
+            planTitle,
+            lessonId: childId,
+            lessonPath: childPath,
+          };
+          validateLessonBlueprint(root, context, blueprint);
+          return renderPreparedLesson(context, blueprint);
+        },
+        validate: (childPath, source) => {
+          validatePreparedLessonSource(root, childPath, source);
+        },
       });
-      const lesson = readPlanWorkspace(root, ownerId).lessons
-        .find((candidate) => candidate.id === input.lessonId);
-      if (!lesson || lesson.path !== lessonPath || lesson.status !== 'prepared') {
-        throw new Error(`LESSON_PREPARE_COMMIT_FAILED: ${input.lessonId}`);
+      const lesson = readPlanWorkspace(root, ownerId).lessons.find(
+        (candidate) => candidate.id === result.childId,
+      );
+      if (
+        lesson === undefined
+        || lesson.path !== result.childPath
+        || lesson.status !== 'prepared'
+      ) {
+        throw new Error(`LESSON_PREPARE_COMMIT_FAILED: ${result.childId}`);
       }
       const preview = readStudentLessonPreview(root, lesson);
       const value = {
         ok: true as const,
         ownerPath,
         factId: lesson.id,
+        candidateHandle: result.handle,
         status: 'prepared' as const,
         lessonPath: lesson.path,
         publicTitle: preview.publicTitle,

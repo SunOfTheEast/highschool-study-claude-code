@@ -113,7 +113,6 @@ test('keeps Coach and Tutor tool boundaries distinct', () => {
     'trace_search',
     'source_resolve',
     'lesson_prepare',
-    'plan_register',
     'plan_update',
     'memory_review_propose',
     'memory_review_apply',
@@ -163,12 +162,11 @@ test('keeps Roadmap Coach active tools global but non-instructional', () => {
     'grep',
     'find',
     'ls',
-    'write',
-    'edit',
     'card_search',
     'trace_search',
     'source_resolve',
-    'plan_register',
+    'roadmap_update',
+    'plan_prepare',
     'deep_workflow_propose',
   ]);
   expect(tools).not.toContain('plan_update');

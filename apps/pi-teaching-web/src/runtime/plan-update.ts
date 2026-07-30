@@ -1,85 +1,55 @@
 import { defineTool } from '@earendil-works/pi-coding-agent';
 import { Type } from 'typebox';
-import { updatePlan, type PlanUpdateInput } from '../study/write-workspace';
+import { readMarkdownFile } from 'highschool-study-markdown/study-domain';
+import {
+  candidateChangesSchema,
+  updateParentDocument,
+} from './tree-mutations';
 
 const text = Type.String({ minLength: 1 });
-const keyEvidenceSource = Type.String({
-  minLength: 1,
-  description: 'Exact active Trace anchor from this Plan. Key evidence must be '
-    + 'correct, support:none, and belong to a problem Block in an assessment Lesson. '
-    + 'This is objective eligibility, not an automatic completion verdict.',
-});
-const currentPosition = Type.String({
-  minLength: 1,
-  description: 'Source-linked account of met, unmet, and conflicting capability evidence.',
-});
-const nextLessonCandidate = Type.String({
-  minLength: 1,
-  description: 'Grounded next-Lesson direction, or an explicit statement that no next Lesson is currently proposed.',
-});
-const learningReview = Type.Object({
-  conclusion: text,
-  boundary: text,
-  nextStep: text,
-  keyEvidence: Type.Array(Type.Object({
-    claim: text,
-    source: keyEvidenceSource,
-  }, { additionalProperties: false }), { minItems: 1 }),
-  supportingEvidence: Type.Array(Type.Object({
-    claim: text,
-    source: text,
-    limitation: text,
-  }, { additionalProperties: false })),
-  openQuestions: Type.Array(Type.Object({
-    question: text,
-    nextCheck: text,
-  }, { additionalProperties: false })),
-}, { additionalProperties: false });
 
 export function createPlanUpdateTool(root: string, ownerPath: string) {
   return defineTool({
     name: 'plan_update',
     label: '写回学习计划',
-    description: 'Persist the Coach\'s final audit of the current Session-owned Plan. Call after reviewing active evidence and obtaining any student choice required for completion or replanning. Child status is derived from the canonical Lesson Tree; reread the Plan before reporting the result.',
+    description: 'Persist an active or replanned decision for the current Session-owned Plan and patch only its unmaterialized Lesson candidates. Plan completion is sealed through the handoff tool, not this update.',
     parameters: Type.Object({
       decision: Type.Union([
         Type.Literal('active'),
         Type.Literal('replan'),
-        Type.Literal('complete'),
-      ], {
-        description: 'Continue the Plan, reactivate it around a revised route, or complete it with student agreement.',
-      }),
-      currentPosition,
-      nextLessonCandidate,
-      planSummary: Type.Optional(Type.String({
-        minLength: 1,
-        description: 'Required for active or replan; compact synthesis of active evidence, decision, and unresolved work.',
-      })),
-      learningReview: Type.Optional(learningReview),
-    }, {
-      additionalProperties: false,
-      oneOf: [
-        {
-          properties: {
-            decision: { enum: ['active', 'replan'] },
-          },
-          required: ['planSummary'],
-          not: { required: ['learningReview'] },
-        },
-        {
-          properties: {
-            decision: { const: 'complete' },
-          },
-          required: ['learningReview'],
-          not: { required: ['planSummary'] },
-        },
-      ],
-    }),
+      ]),
+      currentPosition: text,
+      planSummary: text,
+      candidateChanges: candidateChangesSchema,
+    }, { additionalProperties: false }),
     execute: async (_id, input) => {
-      updatePlan(root, ownerPath, input as PlanUpdateInput);
+      const plan = readMarkdownFile(root, ownerPath);
+      if (
+        plan.frontmatter.kind !== 'plan'
+        || ownerPath !== `plans/${plan.id}.md`
+      ) {
+        throw new Error(`PLAN_OWNER_MISMATCH: ${ownerPath}`);
+      }
+      const tree = updateParentDocument(root, {
+        parentId: plan.id,
+        parentPath: ownerPath,
+        childKind: 'lesson',
+        candidateChanges: input.candidateChanges,
+        sections: {
+          'Current Position': input.currentPosition,
+          'Plan Summary': input.planSummary,
+        },
+        frontmatter: { status: 'active' },
+      });
+      const value = {
+        ok: true as const,
+        ownerPath,
+        decision: input.decision,
+        candidateHandles: tree.entries.map((entry) => entry.handle),
+      };
       return {
-        content: [{ type: 'text' as const, text: JSON.stringify({ ok: true, decision: input.decision }) }],
-        details: { kind: 'plan-update', planPath: ownerPath, decision: input.decision },
+        content: [{ type: 'text' as const, text: JSON.stringify(value) }],
+        details: { kind: 'plan-update', value },
       };
     },
   });

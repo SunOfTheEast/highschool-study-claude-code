@@ -27,11 +27,10 @@ import {
 } from '../../src/study/read-workspace';
 import {
   closeLesson,
-  registerPlan,
   setBlockStatus,
   setFrontmatterField,
-  updatePlan,
 } from '../../src/study/write-workspace';
+import { renderLearningReview } from '../../src/study/learning-review';
 import { resolvePersona } from '../../src/study/persona';
 import { PreparedLessonValidationError } from '../../src/study/validate-prepared-lesson';
 import { createRequestHandler } from '../../src/server/app';
@@ -52,6 +51,46 @@ const roadmapBaseline = readFileSync(roadmapPath, 'utf8');
 const hub = new EventHub();
 const coachKey: SessionKey = 'coach:domain-integrity';
 const roadmapKey: SessionKey = ROADMAP_COACH_SESSION_KEY;
+
+function replaceFixtureSection(
+  source: string,
+  heading: string,
+  value: string,
+): string {
+  const pattern = new RegExp(
+    `(^## ${heading}\\s*$\\n)([\\s\\S]*?)(?=^## |(?![\\s\\S]))`,
+    'm',
+  );
+  return source.replace(
+    pattern,
+    (_match, sectionHeading: string) => (
+      `${sectionHeading}\n${value.trim()}\n\n`
+    ),
+  );
+}
+
+function updateFixturePlan(
+  planRelativePath: string,
+  input: {
+    currentPosition: string;
+    learningReview: Parameters<typeof renderLearningReview>[0];
+  },
+): void {
+  const absolute = join(root, planRelativePath);
+  let source = readFileSync(absolute, 'utf8');
+  source = replaceFixtureSection(
+    source,
+    'Current Position',
+    input.currentPosition,
+  );
+  source = replaceFixtureSection(
+    source,
+    'Plan Summary',
+    renderLearningReview(input.learningReview),
+  );
+  source = source.replace(/^status:.*$/m, 'status: completed');
+  writeFileSync(absolute, source);
+}
 
 function task(
   id: string,
@@ -574,10 +613,8 @@ function completeStudentSafeFlowFixture(): {
   closeLesson(root, 'lessons/lesson-003.md', {
     summary: '完成两道参数边界题；第一题独立完成，第二题使用一次方向性提示。',
   });
-  updatePlan(root, 'plans/domain-integrity.md', {
-    decision: 'complete',
+  updateFixturePlan('plans/domain-integrity.md', {
     currentPosition: '本周期核验已经完成。',
-    nextLessonCandidate: '下一周期再检查陌生嵌套结构。',
     learningReview: {
       conclusion: '已经能独立把定义域用于参数边界判断。',
       boundary: '两道本周期导数题；尚未覆盖长期保持和更陌生的嵌套结构。',
@@ -703,7 +740,6 @@ coach_session: null
 
 尚无。
 `);
-      registerPlan(root, 'isomorphic-transformation');
       return Response.json({ ok: true });
     }
     if (request.method === 'POST' && url.pathname === '/__test/complete-isomorphic-plan') {
@@ -763,10 +799,8 @@ status: closed
         note: '学生无提示独立完成评估。',
         supersedes: null,
       }, () => new Date('2026-07-29T08:00:00Z'));
-      updatePlan(root, 'plans/isomorphic-transformation.md', {
-        decision: 'complete',
+      updateFixturePlan('plans/isomorphic-transformation.md', {
         currentPosition: '本周期已完成。',
-        nextLessonCandidate: '由学生选择其他 Plan。',
         learningReview: {
           conclusion: '已完成测试 Plan。',
           boundary: '只用于 E2E 路由验收，不代表真实能力结论。',
