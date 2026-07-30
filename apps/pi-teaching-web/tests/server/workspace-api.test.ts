@@ -237,17 +237,12 @@ test('passes the configured message projection mode to history', async () => {
     hub: new EventHub(),
     readLearningSet: () => learningSet,
     registry: {
-      openSession: async (key: string) => {
-        calls.push(`open:${key}`);
-        return { sessionId: 'roadmap-session' };
-      },
-      history: (_key: string, mode: unknown) => {
-        calls.push('history');
+      readHistory: async (_key: string, mode: unknown) => {
+        calls.push('read-history');
         modes.push(mode);
         return [];
       },
-      subscribe: () => () => {},
-      subscribeWorkflows: () => () => {},
+      get: () => undefined,
     } as never,
   });
   const response = await handler(new Request(
@@ -256,31 +251,26 @@ test('passes the configured message projection mode to history', async () => {
   expect(response!.status).toBe(200);
   expect(await response!.json()).toEqual([]);
   expect(modes).toEqual(['raw-stream']);
-  expect(calls).toEqual(['open:coach:@roadmap', 'history']);
+  expect(calls).toEqual(['read-history']);
 });
 
-test('restores an active Tutor before reading its history', async () => {
+test('reads active Tutor history without opening or activating an Agent', async () => {
   const calls: string[] = [];
   const handler = createRequestHandler({
     root: '/tmp/demo',
     authoring: false,
     hub: new EventHub(),
     registry: {
-      openSession: async (key: string) => {
-        calls.push(`open:${key}`);
-        return { sessionId: 'tutor-l1' };
-      },
-      history: () => {
-        calls.push('history');
+      readHistory: async () => {
+        calls.push('read-history');
         return [];
       },
-      subscribe: () => () => {},
-      subscribeWorkflows: () => () => {},
+      get: () => undefined,
     } as never,
   });
   const response = await handler(new Request('http://local/api/sessions/tutor%3Al1/history'));
   expect(response!.status).toBe(200);
-  expect(calls).toEqual(['open:tutor:l1', 'history']);
+  expect(calls).toEqual(['read-history']);
 });
 
 test('keeps memory review scoped to a Plan Coach Session', async () => {
@@ -567,7 +557,8 @@ test('reconciles the complete conversation after a non-retrying agent end', asyn
     authoring: false,
     hub,
     registry: {
-      openSession: async () => ({ sessionId: 'coach-p1' }),
+      readHistory: async () => items,
+      get: () => ({ sessionId: 'coach-p1' }),
       history: () => items,
       subscribe: (_key: string, next: (event: unknown) => void) => {
         listener = next;
@@ -610,7 +601,8 @@ test('never publishes the free Coach final after a successful Lesson prepare in 
     authoring: false,
     hub,
     registry: {
-      openSession: async () => ({ sessionId: 'coach-p1' }),
+      readHistory: async () => items,
+      get: () => ({ sessionId: 'coach-p1' }),
       history: () => items,
       subscribe: (_key: string, next: (event: unknown) => void) => {
         listener = next;
@@ -895,6 +887,75 @@ test('publishes running state until an accepted Session message finishes', async
   releaseSend();
   await idle;
   expect(calls).toEqual(['run:running', 'send', 'run:idle']);
+});
+
+test('starts a prepared Plan only through the explicit student action', async () => {
+  const calls: string[] = [];
+  const events: unknown[] = [];
+  const hub = new EventHub();
+  hub.subscribe((event) => events.push(event));
+  const handler = createRequestHandler({
+    root: '/tmp/demo',
+    authoring: false,
+    hub,
+    readLearningSet: () => learningSet,
+    registry: {
+      startPlan: async (planId: string) => {
+        calls.push(`start:${planId}`);
+      },
+      snapshot: (planId: string) => {
+        calls.push(`snapshot:${planId}`);
+        return workspace;
+      },
+      subscribe: () => {
+        calls.push('bind');
+        return () => {};
+      },
+      subscribeWorkflows: () => () => {},
+    } as never,
+  });
+
+  const response = await handler(new Request(
+    'http://local/api/plans/p1/start',
+    { method: 'POST' },
+  ));
+
+  expect(response!.status).toBe(200);
+  expect(await response!.json()).toEqual(workspace);
+  expect(calls).toEqual(['start:p1', 'bind', 'snapshot:p1']);
+  expect(events).toContainEqual({ type: 'snapshot', workspace });
+});
+
+test('rejects messages to a terminal node before publishing student text', async () => {
+  const events: unknown[] = [];
+  const hub = new EventHub();
+  hub.subscribe((event) => events.push(event));
+  const handler = createRequestHandler({
+    root: '/tmp/demo',
+    authoring: false,
+    hub,
+    readLearningSet: () => learningSet,
+    registry: {
+      openSession: async () => {
+        throw new Error('PLAN_SESSION_NOT_ACTIVE: completed');
+      },
+    } as never,
+  });
+
+  const response = await handler(new Request(
+    'http://local/api/sessions/coach%3Ap1/messages',
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ text: '继续修改已经结束的周期' }),
+    },
+  ));
+
+  expect(response!.status).toBe(409);
+  expect(await response!.json()).toEqual({
+    error: 'PLAN_SESSION_NOT_ACTIVE: completed',
+  });
+  expect(events).toEqual([]);
 });
 
 test('publishes the active snapshot before starting the hidden Tutor turn', async () => {

@@ -39,9 +39,11 @@ afterEach(() => {
 
 test('registers the existing four domain contracts without renaming them', () => {
   expect(createStudyTools(root, () => new Date('2026-07-22T00:00:00Z'), {
-    role: 'coach',
-    ownerId: 'domain-integrity',
-    ownerPath: 'plans/domain-integrity.md',
+    nodeKind: 'plan',
+    nodeId: 'domain-integrity',
+    nodePath: 'plans/domain-integrity.md',
+    parentId: 'roadmap',
+    parentPath: 'ROADMAP.md',
   }).map((tool) => tool.name))
     .toEqual(['card_search', 'trace_search', 'trace_append', 'source_resolve']);
 });
@@ -378,9 +380,11 @@ test('keeps child card and Trace search payloads metadata-only', async () => {
 
 test('keeps Plan Coach card and Trace search payloads metadata-only', async () => {
   const tools = createStudyTools(root, () => new Date('2026-07-22T00:00:00Z'), {
-    role: 'coach',
-    ownerId: 'domain-integrity',
-    ownerPath: 'plans/domain-integrity.md',
+    nodeKind: 'plan',
+    nodeId: 'domain-integrity',
+    nodePath: 'plans/domain-integrity.md',
+    parentId: 'roadmap',
+    parentPath: 'ROADMAP.md',
   });
   const cardSearch = tools.find((tool) => tool.name === 'card_search')!;
   const traceSearch = tools.find((tool) => tool.name === 'trace_search')!;
@@ -415,9 +419,11 @@ test('binds a Tutor Trace to its Lesson and refreshes planner attention', async 
   temporaryRoots.push(temporaryRoot);
   cpSync(root, temporaryRoot, { recursive: true });
   const tools = createStudyTools(temporaryRoot, () => new Date('2026-07-22T00:00:00Z'), {
-    role: 'tutor',
-    ownerId: 'lesson-003',
-    ownerPath: 'lessons/lesson-003.md',
+    nodeKind: 'lesson',
+    nodeId: 'lesson-003',
+    nodePath: 'lessons/lesson-003.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
   });
   const trace = tools.find((tool) => tool.name === 'trace_append')!;
   const cardSearch = tools.find((tool) => tool.name === 'card_search')!;
@@ -496,9 +502,11 @@ test('rejects a second independent active Trace in the same problem Block', asyn
   temporaryRoots.push(temporaryRoot);
   cpSync(root, temporaryRoot, { recursive: true });
   const trace = createStudyTools(temporaryRoot, () => new Date('2026-07-22T00:00:00Z'), {
-    role: 'tutor',
-    ownerId: 'lesson-003',
-    ownerPath: 'lessons/lesson-003.md',
+    nodeKind: 'lesson',
+    nodeId: 'lesson-003',
+    nodePath: 'lessons/lesson-003.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
   }).find((tool) => tool.name === 'trace_append')!;
   const firstAttempt = {
     blockId: 'block-002',
@@ -549,9 +557,11 @@ test('rejects a supersede target when the selected Block has no active attempt',
   temporaryRoots.push(temporaryRoot);
   cpSync(root, temporaryRoot, { recursive: true });
   const trace = createStudyTools(temporaryRoot, () => new Date('2026-07-30T00:00:00Z'), {
-    role: 'tutor',
-    ownerId: 'lesson-003',
-    ownerPath: 'lessons/lesson-003.md',
+    nodeKind: 'lesson',
+    nodeId: 'lesson-003',
+    nodePath: 'lessons/lesson-003.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
   }).find((tool) => tool.name === 'trace_append')!;
   const attempt = {
     assessment: 'correct',
@@ -590,9 +600,11 @@ test('allows separate problem Blocks to record independent parts from the same c
       .replace('- Uses: Q-DOMAIN-EX16', '- Uses: Q-DOMAIN-EX22'),
   );
   const trace = createStudyTools(temporaryRoot, () => new Date('2026-07-22T00:00:00Z'), {
-    role: 'tutor',
-    ownerId: 'lesson-003',
-    ownerPath: 'lessons/lesson-003.md',
+    nodeKind: 'lesson',
+    nodeId: 'lesson-003',
+    nodePath: 'lessons/lesson-003.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
   }).find((tool) => tool.name === 'trace_append')!;
   const attempt = {
     assessment: 'correct',
@@ -629,9 +641,11 @@ test('ignores a stale cardAlias and binds the card owned by the selected Block',
   temporaryRoots.push(temporaryRoot);
   cpSync(root, temporaryRoot, { recursive: true });
   const trace = createStudyTools(temporaryRoot, () => new Date('2026-07-22T00:00:00Z'), {
-    role: 'tutor',
-    ownerId: 'lesson-003',
-    ownerPath: 'lessons/lesson-003.md',
+    nodeKind: 'lesson',
+    nodeId: 'lesson-003',
+    nodePath: 'lessons/lesson-003.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
   }).find((tool) => tool.name === 'trace_append')!;
 
   await trace.execute('stale-alias', {
@@ -661,9 +675,11 @@ test.each([
     readFileSync(lessonPath, 'utf8').replace('- Uses: Q-DOMAIN-EX22', usesLine),
   );
   const trace = createStudyTools(temporaryRoot, () => new Date('2026-07-22T00:00:00Z'), {
-    role: 'tutor',
-    ownerId: 'lesson-003',
-    ownerPath: 'lessons/lesson-003.md',
+    nodeKind: 'lesson',
+    nodeId: 'lesson-003',
+    nodePath: 'lessons/lesson-003.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
   }).find((tool) => tool.name === 'trace_append')!;
 
   await expect(trace.execute('invalid-card-count', {
@@ -683,9 +699,11 @@ test('reports missing and invalid Lesson aliases as non-retryable structure erro
   temporaryRoots.push(temporaryRoot);
   cpSync(root, temporaryRoot, { recursive: true });
   const trace = createStudyTools(temporaryRoot, () => new Date('2026-07-22T00:00:00Z'), {
-    role: 'tutor',
-    ownerId: 'lesson-003',
-    ownerPath: 'lessons/lesson-003.md',
+    nodeKind: 'lesson',
+    nodeId: 'lesson-003',
+    nodePath: 'lessons/lesson-003.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
   }).find((tool) => tool.name === 'trace_append')!;
   const input = {
     blockId: 'block-002',
@@ -759,9 +777,11 @@ test('registers classroom_update separately from the public study tools', () => 
 
 test('constrains Tutor Block arguments to the current Lesson', () => {
   const trace = createStudyTools(root, () => new Date(), {
-    role: 'tutor',
-    ownerId: 'lesson-003',
-    ownerPath: 'lessons/lesson-003.md',
+    nodeKind: 'lesson',
+    nodeId: 'lesson-003',
+    nodePath: 'lessons/lesson-003.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
   }).find((tool) => tool.name === 'trace_append')!;
   const classroom = createClassroomUpdateTool(root, 'lessons/lesson-003.md');
   const traceInput = {
@@ -839,14 +859,16 @@ test('leaves the Lesson unchanged when classroom transition validation fails', a
 
 test('keeps runtime authority out of Tutor tool schemas', () => {
   const context = {
-    role: 'tutor' as const,
-    ownerId: 'not-the-file-name',
-    ownerPath: 'lessons/lesson-003.md',
+    nodeKind: 'lesson' as const,
+    nodeId: 'not-the-file-name',
+    nodePath: 'lessons/lesson-003.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
   };
   const trace = createStudyTools(root, () => new Date('2026-07-22T00:00:00Z'), context)
     .find((tool) => tool.name === 'trace_append')!;
-  const classroom = createClassroomUpdateTool(root, context.ownerPath);
-  const close = createLessonCloseTool(root, context.ownerPath);
+  const classroom = createClassroomUpdateTool(root, context.nodePath);
+  const close = createLessonCloseTool(root, context.nodePath);
 
   expect(JSON.stringify(trace.parameters)).not.toContain('cardStepId');
   expect(JSON.stringify(trace.parameters)).not.toContain('lessonPath');
@@ -873,9 +895,11 @@ test('keeps runtime authority out of Tutor tool schemas', () => {
 
 test('requires an explicit student-confirmed or unmapped method decision', () => {
   const trace = createStudyTools(root, () => new Date('2026-07-22T00:00:00Z'), {
-    role: 'tutor',
-    ownerId: 'lesson-003',
-    ownerPath: 'lessons/lesson-003.md',
+    nodeKind: 'lesson',
+    nodeId: 'lesson-003',
+    nodePath: 'lessons/lesson-003.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
   }).find((tool) => tool.name === 'trace_append')!;
   const base = {
     blockId: 'block-002',
@@ -919,9 +943,11 @@ test('requires an explicit student-confirmed or unmapped method decision', () =>
 
 test('rejects a student-confirmed method without confirmation evidence', async () => {
   const trace = createStudyTools(root, () => new Date('2026-07-22T00:00:00Z'), {
-    role: 'tutor',
-    ownerId: 'lesson-003',
-    ownerPath: 'lessons/lesson-003.md',
+    nodeKind: 'lesson',
+    nodeId: 'lesson-003',
+    nodePath: 'lessons/lesson-003.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
   }).find((tool) => tool.name === 'trace_append')!;
 
   expect(trace.execute('call-invalid-confirmation', {
@@ -942,9 +968,11 @@ test('persists no method evidence for an explicit unmapped decision', async () =
   temporaryRoots.push(temporaryRoot);
   cpSync(root, temporaryRoot, { recursive: true });
   const trace = createStudyTools(temporaryRoot, () => new Date('2026-07-22T00:00:00Z'), {
-    role: 'tutor',
-    ownerId: 'lesson-003',
-    ownerPath: 'lessons/lesson-003.md',
+    nodeKind: 'lesson',
+    nodeId: 'lesson-003',
+    nodePath: 'lessons/lesson-003.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
   }).find((tool) => tool.name === 'trace_append')!;
 
   const appendResult = await trace.execute('call-unmapped', {
@@ -968,9 +996,11 @@ test('keeps non-problem Trace cardless', async () => {
   temporaryRoots.push(temporaryRoot);
   cpSync(root, temporaryRoot, { recursive: true });
   const trace = createStudyTools(temporaryRoot, () => new Date('2026-07-22T00:00:00Z'), {
-    role: 'tutor',
-    ownerId: 'lesson-003',
-    ownerPath: 'lessons/lesson-003.md',
+    nodeKind: 'lesson',
+    nodeId: 'lesson-003',
+    nodePath: 'lessons/lesson-003.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
   }).find((tool) => tool.name === 'trace_append')!;
 
   await trace.execute('cardless-reflection', {
@@ -1115,9 +1145,11 @@ test('rebuilds planner attention after appending an independently bound alternat
   temporaryRoots.push(temporaryRoot);
   cpSync(root, temporaryRoot, { recursive: true });
   const trace = createStudyTools(temporaryRoot, () => new Date('2026-07-22T00:00:00Z'), {
-    role: 'tutor',
-    ownerId: 'lesson-003',
-    ownerPath: 'lessons/lesson-003.md',
+    nodeKind: 'lesson',
+    nodeId: 'lesson-003',
+    nodePath: 'lessons/lesson-003.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
   }).find((tool) => tool.name === 'trace_append')!;
   const traceResult = await trace.execute('alternative-source', {
     blockId: 'block-002',
@@ -1174,9 +1206,11 @@ test('offers real part labels but validates them against the selected Trace card
     ),
   );
   const trace = createStudyTools(temporaryRoot, () => new Date(), {
-    role: 'tutor',
-    ownerId: 'lesson-003',
-    ownerPath: 'lessons/lesson-003.md',
+    nodeKind: 'lesson',
+    nodeId: 'lesson-003',
+    nodePath: 'lessons/lesson-003.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
   }).find((tool) => tool.name === 'trace_append')!;
   const partTraceResult = await trace.execute('part-source', {
     blockId: 'block-002',

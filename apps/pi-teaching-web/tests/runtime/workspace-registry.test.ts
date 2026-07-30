@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { StudySession, StudySessionFactory } from '../../src/runtime/session-factory';
 import { appendSessionOwner } from '../../src/runtime/session-owner';
-import type { StudySessionScope } from '../../src/runtime/session-scope';
+import type { NodeSessionScope } from '../../src/runtime/session-scope';
 import { WorkspaceRegistry } from '../../src/runtime/workspace-registry';
 import type {
   MemoryReviewDecision,
@@ -52,6 +52,12 @@ function editLesson(root: string, edit: (source: string) => string): string {
   return path;
 }
 
+function editPlan(root: string, edit: (source: string) => string): string {
+  const path = join(root, 'plans/domain-integrity.md');
+  writeFileSync(path, edit(readFileSync(path, 'utf8')));
+  return path;
+}
+
 function idleWorkflowMethods() {
   return {
     entries: [],
@@ -69,11 +75,6 @@ function idleWorkflowMethods() {
 
 test('keeps memory review owned by one Plan Coach Session', async () => {
   const root = fixture();
-  const planPath = join(root, 'plans/domain-integrity.md');
-  writeFileSync(
-    planPath,
-    readFileSync(planPath, 'utf8').replace('status: active', 'status: completed'),
-  );
   const proposed = {
     id: 'review-1',
     planId: 'domain-integrity',
@@ -166,6 +167,49 @@ test('creates Coach eagerly and Tutor only after start', async () => {
   expect(registry.snapshot('domain-integrity').lessons[2]?.status).toBe('active');
 });
 
+test('keeps a prepared Plan sessionless until the explicit start action', async () => {
+  const root = fixture();
+  editPlan(root, (source) => source
+    .replace('status: active', 'status: prepared')
+    .replace(
+      'Activated at: 2026-07-21T08:00:00.000Z',
+      'Activated at: pending',
+    ));
+  let factoryCalls = 0;
+  const factory: StudySessionFactory = async ({ role, ownerId }) => {
+    factoryCalls += 1;
+    return {
+      sessionId: `${role}-${ownerId}`,
+      sessionFile: `/tmp/${role}-${ownerId}.jsonl`,
+      messages: [],
+      isStreaming: false,
+      personaId: () => null,
+      setPersona: async () => {},
+      ...idleWorkflowMethods(),
+      prompt: async () => {},
+      abort: async () => {},
+      subscribe: () => () => {},
+      dispose: () => {},
+    };
+  };
+  const registry = new WorkspaceRegistry(root, factory, async () => null);
+
+  expect(registry.snapshot('domain-integrity').plan.status).toBe('prepared');
+  expect(await registry.readHistory('coach:domain-integrity')).toEqual([]);
+  await expect(registry.openCoach('domain-integrity'))
+    .rejects.toThrow('PLAN_SESSION_NOT_ACTIVE: prepared');
+  expect(factoryCalls).toBe(0);
+
+  const receipt = await registry.startPlan('domain-integrity');
+  expect(receipt).toMatchObject({
+    nodeKind: 'plan',
+    sessionKey: 'coach:domain-integrity',
+    shouldKickoff: true,
+  });
+  expect(factoryCalls).toBe(1);
+  expect(registry.snapshot('domain-integrity').plan.status).toBe('active');
+});
+
 test('coalesces concurrent starts into one Tutor Session and one kickoff leader', async () => {
   const root = fixture();
   let tutorCreations = 0;
@@ -194,6 +238,39 @@ test('coalesces concurrent starts into one Tutor Session and one kickoff leader'
 
   expect(tutorCreations).toBe(1);
   expect(starts.map((start) => start.shouldKickoff)).toEqual([true, false]);
+  expect(registry.snapshot('domain-integrity').lessons[2]).toMatchObject({
+    status: 'active',
+    tutorSessionId: 'tutor-lesson-003',
+  });
+});
+
+test('resumes a paused Lesson with the same live Tutor Session', async () => {
+  const root = fixture();
+  let tutorCreations = 0;
+  const factory: StudySessionFactory = async ({ role, ownerId }) => {
+    if (role === 'tutor') tutorCreations += 1;
+    return {
+      sessionId: `${role}-${ownerId}`,
+      sessionFile: `/tmp/${role}-${ownerId}.jsonl`,
+      messages: [],
+      isStreaming: false,
+      personaId: () => null,
+      setPersona: async () => {},
+      ...idleWorkflowMethods(),
+      prompt: async () => {},
+      abort: async () => {},
+      subscribe: () => () => {},
+      dispose: () => {},
+    };
+  };
+  const registry = new WorkspaceRegistry(root, factory, async () => null);
+
+  await registry.startLesson('lesson-003');
+  await registry.pauseLesson('lesson-003');
+  const resumed = await registry.startLesson('lesson-003');
+
+  expect(resumed.shouldKickoff).toBe(true);
+  expect(tutorCreations).toBe(1);
   expect(registry.snapshot('domain-integrity').lessons[2]).toMatchObject({
     status: 'active',
     tutorSessionId: 'tutor-lesson-003',
@@ -271,9 +348,11 @@ test('restores terminal Lesson history from its owned Pi JSONL without creating 
   const root = fixture();
   const manager = SessionManager.create(root, join(root, 'pi-sessions'));
   appendSessionOwner(manager, {
-    role: 'tutor',
-    ownerId: 'lesson-003',
-    ownerPath: 'lessons/lesson-003.md',
+    nodeKind: 'lesson',
+    nodeId: 'lesson-003',
+    nodePath: 'lessons/lesson-003.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
   });
   manager.appendMessage({
     role: 'user',
@@ -305,10 +384,9 @@ test('restores terminal Lesson history from its owned Pi JSONL without creating 
   });
   const sessionFile = manager.getSessionFile();
   if (!sessionFile) throw new Error('TEST_SESSION_NOT_PERSISTED');
-  editLesson(root, (source) => source.replace(
-    'status: prepared',
-    `status: closed\ntutor_session: ${manager.getSessionId()}`,
-  ));
+  editLesson(root, (source) => source
+    .replace('status: prepared', 'status: closed')
+    .replace('tutor_session: null', `tutor_session: ${manager.getSessionId()}`));
   let factoryCalls = 0;
   const registry = new WorkspaceRegistry(
     root,
@@ -319,9 +397,11 @@ test('restores terminal Lesson history from its owned Pi JSONL without creating 
     async (_root, sessionId, expected) => {
       expect(sessionId).toBe(manager.getSessionId());
       expect(expected).toEqual({
-        role: 'tutor',
-        ownerId: 'lesson-003',
-        ownerPath: 'lessons/lesson-003.md',
+        nodeKind: 'lesson',
+        nodeId: 'lesson-003',
+        nodePath: 'lessons/lesson-003.md',
+        parentId: 'domain-integrity',
+        parentPath: 'plans/domain-integrity.md',
       });
       return sessionFile;
     },
@@ -350,6 +430,67 @@ test('restores terminal Lesson history from its owned Pi JSONL without creating 
   ]);
 });
 
+test('reads terminal Plan history but never reopens it for writing', async () => {
+  const root = fixture();
+  const manager = SessionManager.create(root, join(root, 'pi-plan-sessions'));
+  appendSessionOwner(manager, {
+    nodeKind: 'plan',
+    nodeId: 'domain-integrity',
+    nodePath: 'plans/domain-integrity.md',
+    parentId: 'roadmap',
+    parentPath: 'ROADMAP.md',
+  });
+  manager.appendMessage({
+    role: 'assistant',
+    content: [{ type: 'text', text: '周期已经封存。' }],
+    api: 'openai-completions',
+    provider: 'test',
+    model: 'test-model',
+    usage: {
+      input: 0,
+      output: 0,
+      cacheRead: 0,
+      cacheWrite: 0,
+      totalTokens: 0,
+      cost: {
+        input: 0,
+        output: 0,
+        cacheRead: 0,
+        cacheWrite: 0,
+        total: 0,
+      },
+    },
+    stopReason: 'stop',
+    timestamp: Date.now(),
+  });
+  const sessionFile = manager.getSessionFile();
+  if (!sessionFile) throw new Error('TEST_SESSION_NOT_PERSISTED');
+  editPlan(root, (source) => source
+    .replace('status: active', 'status: completed')
+    .replace('coach_session: null', `coach_session: ${manager.getSessionId()}`));
+  let factoryCalls = 0;
+  const registry = new WorkspaceRegistry(
+    root,
+    async () => {
+      factoryCalls += 1;
+      throw new Error('terminal Plan must stay cold');
+    },
+    async () => sessionFile,
+  );
+
+  expect(await registry.readHistory('coach:domain-integrity'))
+    .toEqual([{
+      kind: 'message',
+      message: expect.objectContaining({
+        role: 'coach',
+        text: '周期已经封存。',
+      }),
+    }]);
+  await expect(registry.send('coach:domain-integrity', '继续'))
+    .rejects.toThrow('PLAN_SESSION_NOT_ACTIVE: completed');
+  expect(factoryCalls).toBe(0);
+});
+
 test('leaves every non-active Lesson unchanged when pause is requested', async () => {
   for (const status of ['prepared', 'paused', 'closed', 'abandoned'] as const) {
     const root = fixture();
@@ -373,6 +514,11 @@ test('leaves every non-active Lesson unchanged when pause is requested', async (
 test('creates one canonical Roadmap Coach and writes its Session back to ROADMAP.md', async () => {
   const root = fixture();
   const created: Array<{
+    nodeKind: 'roadmap' | 'plan' | 'lesson';
+    nodeId: string;
+    nodePath: string;
+    parentId: string | null;
+    parentPath: string | null;
     role: 'coach' | 'tutor';
     ownerId: string;
     ownerPath: string;
@@ -402,8 +548,13 @@ test('creates one canonical Roadmap Coach and writes its Session back to ROADMAP
   expect(await registry.openSession('coach:@roadmap')).toBe(opened);
 
   expect(created).toEqual([{
+    nodeKind: 'roadmap',
+    nodeId: 'roadmap',
+    nodePath: 'ROADMAP.md',
+    parentId: null,
+    parentPath: null,
     role: 'coach',
-    ownerId: '@roadmap',
+    ownerId: 'roadmap',
     ownerPath: 'ROADMAP.md',
     sessionFile: null,
   }]);
@@ -422,7 +573,7 @@ test('reuses a persisted Roadmap Session only after canonical owner validation',
       'status: active\nroadmap_coach_session: saved-roadmap-session',
     ),
   );
-  const checked: Array<{ sessionId: string; expected: StudySessionScope }> = [];
+  const checked: Array<{ sessionId: string; expected: NodeSessionScope }> = [];
   const opened: Array<{ sessionFile: string | null }> = [];
   const factory: StudySessionFactory = async ({ sessionFile }) => {
     opened.push({ sessionFile });
@@ -450,9 +601,11 @@ test('reuses a persisted Roadmap Session only after canonical owner validation',
   expect(checked).toEqual([{
     sessionId: 'saved-roadmap-session',
     expected: {
-      role: 'coach',
-      ownerId: '@roadmap',
-      ownerPath: 'ROADMAP.md',
+      nodeKind: 'roadmap',
+      nodeId: 'roadmap',
+      nodePath: 'ROADMAP.md',
+      parentId: null,
+      parentPath: null,
     },
   }]);
   expect(opened).toEqual([{ sessionFile: '/tmp/saved-roadmap-session.jsonl' }]);
@@ -502,20 +655,16 @@ test('checks persisted Session IDs against the canonical owner scope before reus
   const planPath = join(root, 'plans/domain-integrity.md');
   writeFileSync(
     planPath,
-    readFileSync(planPath, 'utf8').replace(
-      'status: active',
-      'status: active\ncoach_session: foreign-coach-session',
-    ),
+    readFileSync(planPath, 'utf8')
+      .replace('coach_session: null', 'coach_session: foreign-coach-session'),
   );
   const lessonPath = join(root, 'lessons/lesson-003.md');
   writeFileSync(
     lessonPath,
-    readFileSync(lessonPath, 'utf8').replace(
-      'status: prepared',
-      'status: prepared\ntutor_session: foreign-tutor-session',
-    ),
+    readFileSync(lessonPath, 'utf8')
+      .replace('tutor_session: null', 'tutor_session: foreign-tutor-session'),
   );
-  const checked: Array<{ sessionId: string; expected: StudySessionScope }> = [];
+  const checked: Array<{ sessionId: string; expected: NodeSessionScope }> = [];
   const opened: Array<{ role: string; sessionFile: string | null }> = [];
   const factory: StudySessionFactory = async ({ role, ownerId, sessionFile }) => {
     opened.push({ role, sessionFile });
@@ -545,17 +694,11 @@ test('checks persisted Session IDs against the canonical owner scope before reus
     {
       sessionId: 'foreign-coach-session',
       expected: {
-        role: 'coach',
-        ownerId: 'domain-integrity',
-        ownerPath: 'plans/domain-integrity.md',
-      },
-    },
-    {
-      sessionId: 'foreign-tutor-session',
-      expected: {
-        role: 'tutor',
-        ownerId: 'lesson-003',
-        ownerPath: 'lessons/lesson-003.md',
+        nodeKind: 'plan',
+        nodeId: 'domain-integrity',
+        nodePath: 'plans/domain-integrity.md',
+        parentId: 'roadmap',
+        parentPath: 'ROADMAP.md',
       },
     },
   ]);
@@ -684,7 +827,8 @@ test('keeps deep mode scoped and refuses to open a prepared Tutor', async () => 
   const registry = new WorkspaceRegistry(root, factory, async () => null);
   await registry.setDeepMode('coach:domain-integrity', true);
   expect(await registry.deepMode('coach:domain-integrity')).toBe(true);
-  await expect(registry.setDeepMode('tutor:lesson-003', true)).rejects.toThrow('LESSON_NOT_OPEN');
+  await expect(registry.setDeepMode('tutor:lesson-003', true))
+    .rejects.toThrow('LESSON_SESSION_NOT_ACTIVE: prepared');
 
   await registry.startLesson('lesson-003');
   await registry.setDeepMode('tutor:lesson-003', true);
@@ -796,6 +940,7 @@ test('does not repeat prepared admission when resuming a paused Lesson', async (
   const root = fixture();
   editLesson(root, (source) => source
     .replace('status: prepared', 'status: paused')
+    .replace('Activated at: pending', 'Activated at: 2026-07-30T00:00:00.000Z')
     .replace('## Aliases', '## Alias Draft'));
   let factoryCalls = 0;
   const factory: StudySessionFactory = async ({ role, ownerId }) => {

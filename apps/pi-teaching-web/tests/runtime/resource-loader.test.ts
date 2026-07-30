@@ -9,9 +9,11 @@ type ComposeRoleContext = (
 
 type RoleSkillNames = (role: 'coach' | 'tutor') => string[];
 type SkillNamesForScope = (scope: {
-  role: 'coach' | 'tutor';
-  ownerId: string;
-  ownerPath: string;
+  nodeKind: 'roadmap' | 'plan' | 'lesson';
+  nodeId: string;
+  nodePath: string;
+  parentId: string | null;
+  parentPath: string | null;
 }) => string[];
 
 function composeRoleContext(): ComposeRoleContext {
@@ -60,18 +62,22 @@ test('offers next-cycle planning only to Coach', () => {
 
 test('loads Roadmap planning resources only for the Roadmap Coach scope', () => {
   expect(skillNamesForScope()({
-    role: 'coach',
-    ownerId: '@roadmap',
-    ownerPath: 'ROADMAP.md',
+    nodeKind: 'roadmap',
+    nodeId: 'roadmap',
+    nodePath: 'ROADMAP.md',
+    parentId: null,
+    parentPath: null,
   })).toEqual([
     'roadmap-study',
     'plan-next-cycle',
     'deep-workflow',
   ]);
   expect(skillNamesForScope()({
-    role: 'coach',
-    ownerId: 'domain-integrity',
-    ownerPath: 'plans/domain-integrity.md',
+    nodeKind: 'plan',
+    nodeId: 'domain-integrity',
+    nodePath: 'plans/domain-integrity.md',
+    parentId: 'roadmap',
+    parentPath: 'ROADMAP.md',
   })).toEqual([
     'coach-study',
     'plan-next-cycle',

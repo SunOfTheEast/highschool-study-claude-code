@@ -177,6 +177,17 @@ export function createRequestHandler(deps?: AppDependencies) {
       return json(readCoachContext(deps.root, decodeURIComponent(planContext[1]!)));
     }
 
+    const planStart = /^\/api\/plans\/([^/]+)\/start$/.exec(url.pathname);
+    if (request.method === 'POST' && planStart) {
+      const planId = decodeURIComponent(planStart[1]!);
+      await deps.registry.startPlan(planId);
+      const key = `coach:${planId}` as SessionKey;
+      bind(key);
+      const snapshot = deps.registry.snapshot(planId);
+      deps.hub.publish({ type: 'snapshot', workspace: snapshot });
+      return json(snapshot);
+    }
+
     if (request.method === 'GET' && url.pathname === '/api/evidence') {
       const source = url.searchParams.get('source');
       if (!source) return json({ error: 'SOURCE_REQUIRED' }, 400);
@@ -262,9 +273,9 @@ export function createRequestHandler(deps?: AppDependencies) {
       if (!key.startsWith('coach:') && !key.startsWith('tutor:')) {
         return json({ error: 'SESSION_NOT_FOUND' }, 404);
       }
-      await deps.registry.openSession(key);
-      bind(key);
-      return json(deps.registry.history(key, projectionMode));
+      const items = await deps.registry.readHistory(key, projectionMode);
+      if (deps.registry.get(key)) bind(key);
+      return json(items);
     }
 
     const memoryReview = /^\/api\/sessions\/([^/]+)\/memory-review$/.exec(url.pathname);
@@ -363,7 +374,19 @@ export function createRequestHandler(deps?: AppDependencies) {
       const key = decodeURIComponent(messages[1]!) as SessionKey;
       const input = await request.json() as { text: string; imagePaths?: string[] };
       const images = (input.imagePaths ?? []).map((path) => readImageContent(deps.root, path));
-      const session = await deps.registry.openSession(key);
+      let session;
+      try {
+        session = await deps.registry.openSession(key);
+      } catch (error) {
+        const code = error instanceof Error ? error.message : 'SESSION_NOT_WRITABLE';
+        if (
+          code.startsWith('PLAN_SESSION_NOT_ACTIVE:')
+          || code.startsWith('LESSON_SESSION_NOT_ACTIVE:')
+        ) {
+          return json({ error: code }, 409);
+        }
+        throw error;
+      }
       bind(key);
       deps.hub.publish({
         type: 'message',

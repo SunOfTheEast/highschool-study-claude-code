@@ -11,7 +11,10 @@ import {
 import { Type } from 'typebox';
 import { readPreparedLessonBlocks } from '../study/validate-prepared-lesson';
 import { lessonBlockIdSchema } from './lesson-tool-contracts';
-import type { StudySessionScope } from './session-scope';
+import {
+  roleForNode,
+  type NodeSessionScope,
+} from './session-scope';
 
 function result(kind: string, value: object) {
   return {
@@ -20,7 +23,7 @@ function result(kind: string, value: object) {
   };
 }
 
-export type StudyToolContext = StudySessionScope;
+export type StudyToolContext = NodeSessionScope;
 
 export type ReadOnlyStudyToolOptions = {
   compactCardPayloads?: boolean;
@@ -190,11 +193,13 @@ export function createStudyTools(
   now: () => Date,
   context: StudyToolContext,
 ): ToolDefinition[] {
+  const role = roleForNode(context.nodeKind);
+  const ownerPath = context.nodePath;
   const methodName = Type.Enum(listCanonicalMethodNames(root), {
     description: 'Exact canonical method name from the current learning-set graph.',
   });
   const readOnly = createReadOnlyStudyTools(root, {
-    compactCardPayloads: context.role === 'coach',
+    compactCardPayloads: role === 'coach',
   });
   return [
     readOnly[0]!,
@@ -204,8 +209,8 @@ export function createStudyTools(
       label: '记录课堂证据',
       description: 'Append or supersede one validated classroom-evidence Trace for the current Tutor Session-owned Lesson. Call when an evidence-bearing response, later completion, accepted correction, repeat, or student-confirmed method changes the active record for one Block attempt. The runtime derives Lesson and problem-card identity from the Session and Block, rejects parallel active attempts, refreshes projections, and returns the persisted fact receipt.',
       parameters: Type.Object({
-        blockId: context.role === 'tutor'
-          ? lessonBlockIdSchema(root, context.ownerPath)
+        blockId: role === 'tutor'
+          ? lessonBlockIdSchema(root, ownerPath)
           : Type.String({
             description: 'Exact current Lesson Block ID whose activity produced this evidence.',
           }),
@@ -276,16 +281,16 @@ export function createStudyTools(
               };
             })()
           : null;
-        const cardAlias = cardAliasForBlock(root, context.ownerPath, input.blockId);
+        const cardAlias = cardAliasForBlock(root, ownerPath, input.blockId);
         assertProblemAttemptBoundary(
           root,
-          context.ownerPath,
+          ownerPath,
           input.blockId,
           cardAlias,
           input.supersedes,
         );
         const trace = appendTraceWithProjection(root, {
-          lessonPath: context.ownerPath,
+          lessonPath: ownerPath,
           blockId: input.blockId,
           cardAlias,
           cardStepId: null,
@@ -298,7 +303,7 @@ export function createStudyTools(
         }, now);
         return result('trace-append', {
           ok: true,
-          ownerPath: context.ownerPath,
+          ownerPath,
           factId: trace.traceId,
           ...trace,
         });

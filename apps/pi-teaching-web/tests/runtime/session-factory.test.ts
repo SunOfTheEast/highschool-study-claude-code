@@ -18,6 +18,30 @@ import {
   readSessionOwner,
   sessionOwnerMatches,
 } from '../../src/runtime/session-owner';
+import {
+  ROADMAP_COACH_SCOPE,
+  type NodeSessionScope,
+} from '../../src/runtime/session-scope';
+
+function planScope(nodeId = 'p1'): NodeSessionScope {
+  return {
+    nodeKind: 'plan',
+    nodeId,
+    nodePath: `plans/${nodeId}.md`,
+    parentId: 'roadmap',
+    parentPath: 'ROADMAP.md',
+  };
+}
+
+function lessonScope(nodeId = 'lesson-1'): NodeSessionScope {
+  return {
+    nodeKind: 'lesson',
+    nodeId,
+    nodePath: `lessons/${nodeId}.md`,
+    parentId: 'p1',
+    parentPath: 'plans/p1.md',
+  };
+}
 
 test('binds the headless extension context before delegated workflows run', async () => {
   let bindings: unknown = null;
@@ -51,18 +75,14 @@ test('persists exactly one machine-readable owner on a new Pi Session', () => {
   const root = mkdtempSync(join(tmpdir(), 'study-session-owner-'));
   try {
     const manager = SessionManager.create(root, join(root, 'sessions'));
-    const owner = {
-      role: 'coach' as const,
-      ownerId: 'isomorphic-transformation',
-      ownerPath: 'plans/isomorphic-transformation.md',
-    };
+    const owner = planScope('isomorphic-transformation');
 
     appendSessionOwner(manager, owner);
 
     expect(readSessionOwner(manager)).toEqual(owner);
     expect(manager.getEntries().filter((entry) => (
       entry.type === 'custom'
-      && entry.customType === 'studyforge.session-owner.v1'
+      && entry.customType === 'studyforge.session-owner.v2'
     ))).toHaveLength(1);
     expect(sessionOwnerMatches(readSessionOwner(manager), owner)).toBe(true);
   } finally {
@@ -72,9 +92,9 @@ test('persists exactly one machine-readable owner on a new Pi Session', () => {
 
 test('rejects missing, duplicate, malformed and mismatched Session owners', () => {
   const expected = {
-    role: 'tutor' as const,
-    ownerId: 'lesson-003',
-    ownerPath: 'lessons/lesson-003.md',
+    ...lessonScope('lesson-003'),
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
   };
   const entries: Array<{
     type: 'custom';
@@ -87,19 +107,22 @@ test('rejects missing, duplicate, malformed and mismatched Session owners', () =
   entries.push({
     type: 'custom',
     customType: 'studyforge.session-owner.v1',
-    data: { ...expected, role: 'teacher' },
+    data: expected,
   });
+  expect(readSessionOwner(manager)).toBeNull();
+  entries[0]!.customType = 'studyforge.session-owner.v2';
+  entries[0]!.data = { ...expected, parentPath: null };
   expect(readSessionOwner(manager)).toBeNull();
   entries[0]!.data = expected;
   entries.push({
     type: 'custom',
-    customType: 'studyforge.session-owner.v1',
+    customType: 'studyforge.session-owner.v2',
     data: expected,
   });
   expect(readSessionOwner(manager)).toBeNull();
   expect(sessionOwnerMatches(
     expected,
-    { ...expected, ownerPath: 'lessons/lesson-004.md' },
+    { ...expected, parentPath: 'plans/another-plan.md' },
   )).toBe(false);
 });
 
@@ -136,27 +159,16 @@ test('keeps Coach and Tutor tool boundaries distinct', () => {
   for (const role of ['coach', 'tutor'] as const) {
     expect(roleToolNames(role)).not.toContain('subagent');
   }
-  const planCoach = scopeToolNames({
-    role: 'coach',
-    ownerId: 'p1',
-    ownerPath: 'plans/p1.md',
-  });
+  const planCoach = scopeToolNames(planScope());
   expect(planCoach).toContain('memory_review_apply');
   expect(planCoach).not.toContain('write');
   expect(planCoach).not.toContain('edit');
-  expect(scopeToolNames({
-    role: 'tutor',
-    ownerId: 'lesson-1',
-    ownerPath: 'lessons/lesson-1.md',
-  })).not.toContain('memory_review_apply');
+  expect(scopeToolNames(lessonScope()))
+    .not.toContain('memory_review_apply');
 });
 
 test('keeps Roadmap Coach active tools global but non-instructional', () => {
-  const tools = scopeToolNames({
-    role: 'coach',
-    ownerId: '@roadmap',
-    ownerPath: 'ROADMAP.md',
-  });
+  const tools = scopeToolNames(ROADMAP_COACH_SCOPE);
   expect(tools).toEqual([
     'read',
     'grep',
@@ -236,21 +248,9 @@ test('adds only the workflow proposal tool while deep mode is enabled', () => {
 });
 
 test('keeps one Quick Scout reachable only for a Plan Coach when deep mode is off', () => {
-  const planCoach = scopeToolNames({
-    role: 'coach',
-    ownerId: 'p1',
-    ownerPath: 'plans/p1.md',
-  });
-  const roadmapCoach = scopeToolNames({
-    role: 'coach',
-    ownerId: '@roadmap',
-    ownerPath: 'ROADMAP.md',
-  });
-  const tutor = scopeToolNames({
-    role: 'tutor',
-    ownerId: 'lesson-1',
-    ownerPath: 'lessons/lesson-1.md',
-  });
+  const planCoach = scopeToolNames(planScope());
+  const roadmapCoach = scopeToolNames(ROADMAP_COACH_SCOPE);
+  const tutor = scopeToolNames(lessonScope());
   expect(deepModeToolNames(
     planCoach,
     false,

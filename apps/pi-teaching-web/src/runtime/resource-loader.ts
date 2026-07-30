@@ -10,8 +10,9 @@ import { resolvePersona } from '../study/persona';
 import {
   formatSessionOwnerContext,
   isRoadmapCoachScope,
+  roleForNode,
+  type NodeSessionScope,
   type SessionRole,
-  type StudySessionScope,
 } from './session-scope';
 
 export type { SessionRole } from './session-scope';
@@ -24,11 +25,11 @@ export function roleSkillNames(role: SessionRole): string[] {
     : ['tutor-lesson', 'deep-workflow'];
 }
 
-export function skillNamesForScope(scope: StudySessionScope): string[] {
+export function skillNamesForScope(scope: NodeSessionScope): string[] {
   if (isRoadmapCoachScope(scope)) {
     return ['roadmap-study', 'plan-next-cycle', 'deep-workflow'];
   }
-  return roleSkillNames(scope.role);
+  return roleSkillNames(roleForNode(scope.nodeKind));
 }
 
 export function composeRoleContext(
@@ -44,10 +45,10 @@ export function composeRoleContext(
 
 export async function createRoleResourceLoader(
   root: string,
-  scope: StudySessionScope,
+  scope: NodeSessionScope,
   eventBus: EventBus,
 ) {
-  const { role } = scope;
+  const role = roleForNode(scope.nodeKind);
   const skillPaths = skillNamesForScope(scope)
     .map((name) => join(resourceRoot, 'skills', name, 'SKILL.md'));
   const teachingCore = readFileSync(

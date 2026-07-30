@@ -18,7 +18,6 @@ import {
 } from '../memory-review/store';
 import { createMemoryReviewApplyTool } from '../memory-review/apply-tool';
 import { createMemoryReviewProposeTool } from '../memory-review/tool';
-import type { SessionKey } from '../shared/contracts';
 import type { WorkflowSnapshot } from '../workflows/contracts';
 import { DeepWorkflowRuntime } from '../workflows/runtime';
 import { WorkflowStore } from '../workflows/store';
@@ -34,8 +33,10 @@ import { createRoleResourceLoader } from './resource-loader';
 import { appendSessionOwner } from './session-owner';
 import {
   isRoadmapCoachScope,
+  roleForNode,
+  sessionKeyForNode,
+  type NodeSessionScope,
   type SessionRole,
-  type StudySessionScope,
 } from './session-scope';
 import { createStudyTools } from './study-tools';
 export type { SessionRole } from './session-scope';
@@ -66,11 +67,27 @@ export interface StudySession {
   dispose(): void;
 }
 
-export type SessionFactoryInput = StudySessionScope & {
+export type SessionFactoryInput = NodeSessionScope & {
+  readonly role: SessionRole;
+  readonly ownerId: string;
+  readonly ownerPath: string;
   sessionFile: string | null;
 };
 
 export type StudySessionFactory = (input: SessionFactoryInput) => Promise<StudySession>;
+
+export function sessionFactoryInput(
+  scope: NodeSessionScope,
+  sessionFile: string | null,
+): SessionFactoryInput {
+  return {
+    ...scope,
+    role: roleForNode(scope.nodeKind),
+    ownerId: scope.nodeId,
+    ownerPath: scope.nodePath,
+    sessionFile,
+  };
+}
 
 type PiAgentSession = Awaited<ReturnType<typeof createAgentSession>>['session'];
 
@@ -171,8 +188,10 @@ export function roleToolNames(role: SessionRole): string[] {
     ];
 }
 
-export function scopeToolNames(scope: StudySessionScope): string[] {
-  if (!isRoadmapCoachScope(scope)) return roleToolNames(scope.role);
+export function scopeToolNames(scope: NodeSessionScope): string[] {
+  if (!isRoadmapCoachScope(scope)) {
+    return roleToolNames(roleForNode(scope.nodeKind));
+  }
   return [
     'read',
     'grep',
@@ -192,8 +211,16 @@ export async function createPiSessionFactory(
   now: () => Date,
 ): Promise<StudySessionFactory> {
   const modelRuntime = await ModelRuntime.create();
-  return async ({ role, ownerId, ownerPath, sessionFile }) => {
-    const scope = { role, ownerId, ownerPath } satisfies StudySessionScope;
+  return async ({
+    sessionFile,
+    role: _derivedRole,
+    ownerId: _derivedOwnerId,
+    ownerPath: _derivedOwnerPath,
+    ...scope
+  }) => {
+    const role = roleForNode(scope.nodeKind);
+    const ownerId = scope.nodeId;
+    const ownerPath = scope.nodePath;
     const eventBus = createEventBus();
     const manager = sessionFile
       ? SessionManager.open(sessionFile, undefined, root)
@@ -202,7 +229,7 @@ export async function createPiSessionFactory(
       manager.appendSessionInfo(`${role === 'coach' ? 'Coach' : 'Tutor'} · ${ownerId}`);
       appendSessionOwner(manager, scope);
     }
-    const sessionKey = `${role}:${ownerId}` as SessionKey;
+    const sessionKey = sessionKeyForNode(scope);
     const workflowRuntime = new DeepWorkflowRuntime(
       sessionKey,
       root,

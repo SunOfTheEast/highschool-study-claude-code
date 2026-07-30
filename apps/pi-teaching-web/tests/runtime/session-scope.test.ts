@@ -3,33 +3,46 @@ import {
   formatSessionOwnerContext,
   isRoadmapCoachScope,
   ROADMAP_COACH_SCOPE,
+  roleForNode,
 } from '../../src/runtime/session-scope';
 
-test('formats the canonical owner file for each role', () => {
+test('derives the role and formats the canonical owner file for each node', () => {
+  expect(roleForNode('roadmap')).toBe('coach');
+  expect(roleForNode('plan')).toBe('coach');
+  expect(roleForNode('lesson')).toBe('tutor');
+
   expect(formatSessionOwnerContext('/set', {
-    role: 'tutor',
-    ownerId: 'not-the-file-name',
-    ownerPath: 'lessons/unit-a/custom-name.md',
+    nodeKind: 'lesson',
+    nodeId: 'not-the-file-name',
+    nodePath: 'lessons/unit-a/custom-name.md',
+    parentId: 'plan-001',
+    parentPath: 'plans/plan-001.md',
   })).toContain('Current Lesson file: lessons/unit-a/custom-name.md');
 
   expect(formatSessionOwnerContext('/set', {
-    role: 'coach',
-    ownerId: 'domain-integrity',
-    ownerPath: 'plans/domain-integrity.md',
+    nodeKind: 'plan',
+    nodeId: 'domain-integrity',
+    nodePath: 'plans/domain-integrity.md',
+    parentId: 'roadmap',
+    parentPath: 'ROADMAP.md',
   })).toContain('Current Plan file: plans/domain-integrity.md');
 });
 
 test('recognizes the canonical Roadmap Coach owner only', () => {
   expect(ROADMAP_COACH_SCOPE).toEqual({
-    role: 'coach',
-    ownerId: '@roadmap',
-    ownerPath: 'ROADMAP.md',
+    nodeKind: 'roadmap',
+    nodeId: 'roadmap',
+    nodePath: 'ROADMAP.md',
+    parentId: null,
+    parentPath: null,
   });
   expect(isRoadmapCoachScope(ROADMAP_COACH_SCOPE)).toBe(true);
   expect(isRoadmapCoachScope({
-    role: 'coach',
-    ownerId: 'domain-integrity',
-    ownerPath: 'plans/domain-integrity.md',
+    nodeKind: 'plan',
+    nodeId: 'domain-integrity',
+    nodePath: 'plans/domain-integrity.md',
+    parentId: 'roadmap',
+    parentPath: 'ROADMAP.md',
   })).toBe(false);
   expect(formatSessionOwnerContext('/set', ROADMAP_COACH_SCOPE))
     .toContain('Current Roadmap file: ROADMAP.md');

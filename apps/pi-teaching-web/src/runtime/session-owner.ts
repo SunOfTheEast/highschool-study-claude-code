@@ -1,7 +1,7 @@
 import type { SessionEntry } from '@earendil-works/pi-coding-agent';
-import type { StudySessionScope } from './session-scope';
+import type { NodeSessionScope } from './session-scope';
 
-export const SESSION_OWNER_TYPE = 'studyforge.session-owner.v1';
+export const SESSION_OWNER_TYPE = 'studyforge.session-owner.v2';
 
 type SessionOwnerWriter = {
   appendCustomEntry(customType: string, data?: unknown): unknown;
@@ -11,26 +11,48 @@ type SessionOwnerReader = {
   getEntries(): readonly unknown[];
 };
 
-function isSessionOwner(value: unknown): value is StudySessionScope {
-  if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+function nonempty(value: unknown): value is string {
+  return typeof value === 'string' && value.length > 0;
+}
+
+function hasValidParent(
+  owner: Record<string, unknown>,
+  kind: NodeSessionScope['nodeKind'],
+): boolean {
+  if (kind === 'roadmap') {
+    return owner.parentId === null && owner.parentPath === null;
+  }
+  return nonempty(owner.parentId) && nonempty(owner.parentPath);
+}
+
+function isSessionOwner(value: unknown): value is NodeSessionScope {
+  if (value === null || typeof value !== 'object' || Array.isArray(value)) {
+    return false;
+  }
   const owner = value as Record<string, unknown>;
-  return (owner.role === 'coach' || owner.role === 'tutor')
-    && typeof owner.ownerId === 'string'
-    && owner.ownerId.length > 0
-    && typeof owner.ownerPath === 'string'
-    && owner.ownerPath.length > 0;
+  const kind = owner.nodeKind;
+  return (
+    (kind === 'roadmap' || kind === 'plan' || kind === 'lesson')
+    && nonempty(owner.nodeId)
+    && nonempty(owner.nodePath)
+    && hasValidParent(owner, kind)
+  );
 }
 
 export function appendSessionOwner(
   manager: SessionOwnerWriter,
-  owner: StudySessionScope,
+  owner: NodeSessionScope,
 ): void {
   manager.appendCustomEntry(SESSION_OWNER_TYPE, owner);
 }
 
-export function readSessionOwner(manager: SessionOwnerReader): StudySessionScope | null {
+export function readSessionOwner(
+  manager: SessionOwnerReader,
+): NodeSessionScope | null {
   const owners = manager.getEntries().flatMap((entry) => {
-    if (entry === null || typeof entry !== 'object' || Array.isArray(entry)) return [];
+    if (entry === null || typeof entry !== 'object' || Array.isArray(entry)) {
+      return [];
+    }
     const value = entry as Record<string, unknown>;
     return value.type === 'custom'
       && value.customType === SESSION_OWNER_TYPE
@@ -44,22 +66,25 @@ export function readSessionOwner(manager: SessionOwnerReader): StudySessionScope
 }
 
 export function sessionOwnerMatches(
-  actual: StudySessionScope | null,
-  expected: StudySessionScope,
+  actual: NodeSessionScope | null,
+  expected: NodeSessionScope,
 ): boolean {
   return actual !== null
-    && actual.role === expected.role
-    && actual.ownerId === expected.ownerId
-    && actual.ownerPath === expected.ownerPath;
+    && actual.nodeKind === expected.nodeKind
+    && actual.nodeId === expected.nodeId
+    && actual.nodePath === expected.nodePath
+    && actual.parentId === expected.parentId
+    && actual.parentPath === expected.parentPath;
 }
 
 export async function findOwnedPiSessionFile(
   root: string,
   sessionId: string,
-  expected: StudySessionScope,
+  expected: NodeSessionScope,
 ): Promise<string | null> {
   const { SessionManager } = await import('@earendil-works/pi-coding-agent');
-  const path = (await SessionManager.list(root)).find((item) => item.id === sessionId)?.path;
+  const path = (await SessionManager.list(root))
+    .find((item) => item.id === sessionId)?.path;
   if (!path) return null;
   const manager = SessionManager.open(path, undefined, root);
   return sessionOwnerMatches(readSessionOwner(manager), expected) ? path : null;

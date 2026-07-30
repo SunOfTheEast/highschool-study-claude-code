@@ -19,28 +19,29 @@ import {
   readPlanWorkspace,
   readRoadmapWorkspace,
 } from '../study/read-workspace';
-import { validatePreparedLesson } from '../study/validate-prepared-lesson';
 import { setFrontmatterField } from '../study/write-workspace';
 import { resolvePersona } from '../study/persona';
-import type { StudySession, StudySessionFactory } from './session-factory';
+import {
+  sessionFactoryInput,
+  type StudySession,
+  type StudySessionFactory,
+} from './session-factory';
 import {
   findOwnedPiSessionFile,
   readPiSessionBranch,
 } from './session-owner';
 import {
   ROADMAP_COACH_SCOPE,
-  type StudySessionScope,
+  type NodeSessionScope,
 } from './session-scope';
+import {
+  NodeActivationService,
+  type ActivationReceipt,
+  type SessionFileLookup,
+} from './node-activation';
 
-export type SessionFileLookup = (
-  root: string,
-  sessionId: string,
-  expected: StudySessionScope,
-) => Promise<string | null>;
-
-export type LessonStartResult = {
-  shouldKickoff: boolean;
-};
+export type { SessionFileLookup } from './node-activation';
+export type LessonStartResult = Pick<ActivationReceipt, 'shouldKickoff'>;
 
 export type SessionBranchReader = (
   root: string,
@@ -51,7 +52,7 @@ export const findPiSessionFile: SessionFileLookup = findOwnedPiSessionFile;
 
 export class WorkspaceRegistry {
   private readonly sessions = new Map<string, StudySession>();
-  private readonly lessonStarts = new Map<string, Promise<void>>();
+  private readonly activation: NodeActivationService;
   private planId: string | null = null;
 
   constructor(
@@ -59,7 +60,14 @@ export class WorkspaceRegistry {
     private readonly factory: StudySessionFactory,
     private readonly lookup: SessionFileLookup = findPiSessionFile,
     private readonly readSessionBranch: SessionBranchReader = readPiSessionBranch,
-  ) {}
+  ) {
+    this.activation = new NodeActivationService({
+      root,
+      factory,
+      lookup,
+      sessions: this.sessions,
+    });
+  }
 
   snapshot(planId: string | null = this.planId): PlanWorkspaceSnapshot {
     if (!planId) throw new Error('PLAN_NOT_SELECTED');
@@ -84,25 +92,22 @@ export class WorkspaceRegistry {
 
   async openCoach(planId: string): Promise<StudySession> {
     this.planId = planId;
+    const snapshot = readPlanWorkspace(this.root, planId);
+    if (snapshot.plan.status !== 'active') {
+      throw new Error(`PLAN_SESSION_NOT_ACTIVE: ${snapshot.plan.status}`);
+    }
     const key = `coach:${planId}`;
     const cached = this.sessions.get(key);
     if (cached) return cached;
-    const snapshot = readPlanWorkspace(this.root, planId);
-    const scope = {
-      role: 'coach',
-      ownerId: planId,
-      ownerPath: snapshot.plan.path,
-    } satisfies StudySessionScope;
-    const sessionFile = snapshot.coach.sessionId
-      ? await this.lookup(this.root, snapshot.coach.sessionId, scope)
-      : null;
-    const session = await this.factory({
-      ...scope,
-      sessionFile,
-    });
-    this.sessions.set(key, session);
-    setFrontmatterField(this.root, snapshot.plan.path, 'coach_session', session.sessionId);
+    await this.activation.activatePlan(planId);
+    const session = this.sessions.get(key);
+    if (!session) throw new Error(`PLAN_SESSION_OPEN_FAILED: ${planId}`);
     return session;
+  }
+
+  async startPlan(planId: string): Promise<ActivationReceipt> {
+    this.planId = planId;
+    return this.activation.activatePlan(planId);
   }
 
   async openRoadmapCoach(): Promise<StudySession> {
@@ -112,14 +117,13 @@ export class WorkspaceRegistry {
     const sessionFile = snapshot.coach.sessionId
       ? await this.lookup(this.root, snapshot.coach.sessionId, ROADMAP_COACH_SCOPE)
       : null;
-    const session = await this.factory({
-      ...ROADMAP_COACH_SCOPE,
-      sessionFile,
-    });
+    const session = await this.factory(
+      sessionFactoryInput(ROADMAP_COACH_SCOPE, sessionFile),
+    );
     this.sessions.set(ROADMAP_COACH_SESSION_KEY, session);
     setFrontmatterField(
       this.root,
-      ROADMAP_COACH_SCOPE.ownerPath,
+      ROADMAP_COACH_SCOPE.nodePath,
       'roadmap_coach_session',
       session.sessionId,
     );
@@ -127,45 +131,9 @@ export class WorkspaceRegistry {
   }
 
   async startLesson(lessonId: string): Promise<LessonStartResult> {
-    const workspace = this.workspaceForLesson(lessonId);
-    const lesson = workspace.lessons.find((item) => item.id === lessonId);
-    if (!lesson) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
-    if (lesson.status === 'active') {
-      await this.createTutorSession(lessonId, lesson);
-      return { shouldKickoff: false };
-    }
-    if (lesson.status === 'prepared') {
-      validatePreparedLesson(this.root, lesson.path);
-    } else if (lesson.status !== 'paused') {
-      throw new Error(`LESSON_NOT_OPEN: ${lessonId}`);
-    }
-
-    const pending = this.lessonStarts.get(lessonId);
-    if (pending) {
-      await pending;
-      return { shouldKickoff: false };
-    }
-
-    const starting = this.activateLesson(lessonId, lesson);
-    this.lessonStarts.set(lessonId, starting);
-    try {
-      await starting;
-      return { shouldKickoff: true };
-    } finally {
-      if (this.lessonStarts.get(lessonId) === starting) {
-        this.lessonStarts.delete(lessonId);
-      }
-    }
-  }
-
-  private async activateLesson(
-    lessonId: string,
-    lesson: PlanWorkspaceSnapshot['lessons'][number],
-  ): Promise<void> {
-    await this.createTutorSession(lessonId, lesson);
-    if (lesson.status !== 'active') {
-      setFrontmatterField(this.root, lesson.path, 'status', 'active');
-    }
+    this.workspaceForLesson(lessonId);
+    const receipt = await this.activation.activateLesson(lessonId);
+    return { shouldKickoff: receipt.shouldKickoff };
   }
 
   async triggerLessonStart(lessonId: string): Promise<void> {
@@ -175,33 +143,16 @@ export class WorkspaceRegistry {
 
   async openTutor(lessonId: string): Promise<StudySession> {
     const lesson = this.workspaceForLesson(lessonId).lessons.find((item) => item.id === lessonId);
-    if (!lesson || !['active', 'paused'].includes(lesson.status)) {
-      throw new Error(`LESSON_NOT_OPEN: ${lessonId}`);
+    if (!lesson) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
+    if (lesson.status !== 'active') {
+      throw new Error(`LESSON_SESSION_NOT_ACTIVE: ${lesson.status}`);
     }
-    return this.createTutorSession(lessonId, lesson);
-  }
-
-  private async createTutorSession(
-    lessonId: string,
-    lesson: PlanWorkspaceSnapshot['lessons'][number],
-  ): Promise<StudySession> {
     const key = `tutor:${lessonId}`;
     const cached = this.sessions.get(key);
     if (cached) return cached;
-    const scope = {
-      role: 'tutor',
-      ownerId: lessonId,
-      ownerPath: lesson.path,
-    } satisfies StudySessionScope;
-    const sessionFile = lesson.tutorSessionId
-      ? await this.lookup(this.root, lesson.tutorSessionId, scope)
-      : null;
-    const session = await this.factory({
-      ...scope,
-      sessionFile,
-    });
-    this.sessions.set(key, session);
-    setFrontmatterField(this.root, lesson.path, 'tutor_session', session.sessionId);
+    await this.activation.activateLesson(lessonId);
+    const session = this.sessions.get(key);
+    if (!session) throw new Error(`LESSON_SESSION_OPEN_FAILED: ${lessonId}`);
     return session;
   }
 
@@ -287,31 +238,42 @@ export class WorkspaceRegistry {
     return projectConversationEntries(key, session.entries, mode);
   }
 
+  async readHistory(
+    key: SessionKey,
+    mode: MessageProjectionMode = 'safe',
+  ): Promise<ConversationItem[]> {
+    const cached = this.sessions.get(key);
+    if (cached) {
+      return projectConversationEntries(key, cached.entries, mode);
+    }
+    const owner = this.sessionOwnerForKey(key);
+    if (owner.sessionId === null) return [];
+    const sessionFile = await this.lookup(
+      this.root,
+      owner.sessionId,
+      owner.scope,
+    );
+    if (!sessionFile) return [];
+    return projectConversationEntries(
+      key,
+      await this.readSessionBranch(this.root, sessionFile),
+      mode,
+    );
+  }
+
   async replayHistory(
     lessonId: string,
     mode: MessageProjectionMode = 'safe',
   ): Promise<ConversationItem[]> {
     const lesson = this.workspaceForLesson(lessonId).lessons.find((item) => item.id === lessonId);
     if (!lesson) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
-    const cached = this.sessions.get(lesson.sessionKey);
-    if (cached) {
-      return projectConversationEntries(lesson.sessionKey, cached.entries, mode);
-    }
     if (
       !['closed', 'abandoned'].includes(lesson.status)
       || !lesson.tutorSessionId
     ) {
       return [];
     }
-    const scope = {
-      role: 'tutor',
-      ownerId: lessonId,
-      ownerPath: lesson.path,
-    } satisfies StudySessionScope;
-    const sessionFile = await this.lookup(this.root, lesson.tutorSessionId, scope);
-    if (!sessionFile) return [];
-    const entries = await this.readSessionBranch(this.root, sessionFile);
-    return projectConversationEntries(lesson.sessionKey, entries, mode);
+    return this.readHistory(lesson.sessionKey, mode);
   }
 
   personaId(key: SessionKey): string {
@@ -356,5 +318,48 @@ export class WorkspaceRegistry {
     return key.startsWith('coach:')
       ? this.openCoach(key.slice(6))
       : this.openTutor(key.slice(6));
+  }
+
+  private sessionOwnerForKey(key: SessionKey): {
+    scope: NodeSessionScope;
+    sessionId: string | null;
+  } {
+    if (key === ROADMAP_COACH_SESSION_KEY) {
+      return {
+        scope: ROADMAP_COACH_SCOPE,
+        sessionId: this.roadmapSnapshot().coach.sessionId,
+      };
+    }
+    if (key.startsWith('coach:')) {
+      const workspace = readPlanWorkspace(this.root, key.slice(6));
+      return {
+        scope: {
+          nodeKind: 'plan',
+          nodeId: workspace.plan.id,
+          nodePath: workspace.plan.path,
+          parentId: 'roadmap',
+          parentPath: 'ROADMAP.md',
+        },
+        sessionId: workspace.plan.status === 'prepared'
+          ? null
+          : workspace.coach.sessionId,
+      };
+    }
+    const lessonId = key.slice(6);
+    const workspace = this.workspaceForLesson(lessonId);
+    const lesson = workspace.lessons.find((item) => item.id === lessonId);
+    if (!lesson) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
+    return {
+      scope: {
+        nodeKind: 'lesson',
+        nodeId: lesson.id,
+        nodePath: lesson.path,
+        parentId: workspace.plan.id,
+        parentPath: workspace.plan.path,
+      },
+      sessionId: lesson.status === 'prepared'
+        ? null
+        : lesson.tutorSessionId,
+    };
   }
 }

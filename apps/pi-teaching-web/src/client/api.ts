@@ -67,6 +67,11 @@ export const api = {
   coachContext: (planId: string) => (
     json<CoachContextView>(`/api/plans/${encodeURIComponent(planId)}/context`)
   ),
+  startPlan: (planId: string) => (
+    json<PlanWorkspaceSnapshot>(`/api/plans/${encodeURIComponent(planId)}/start`, {
+      method: 'POST',
+    })
+  ),
   contentSearch: (key: SessionKey, query: string, limit = 20) => (
     json<ContentSearchResult>(
       `/api/content-search?query=${encodeURIComponent(query)}&sessionKey=${
