@@ -24,9 +24,9 @@ const classroomTemplate = Type.Union([
   description: 'Canonical classroom template selected for this Lesson. The ID chooses template defaults; adjustments record deliberate deviations.',
 });
 const block = Type.Object({
-  id: Type.String({
+  localAlias: Type.String({
     minLength: 1,
-    description: 'Lesson-local Block ID used by dependencies and later classroom tools.',
+    description: 'Blueprint-local Block alias used only to express dependencies. Runtime maps aliases to block-001, block-002, and so on.',
   }),
   kind: Type.Union([
     Type.Literal('dialogue'),
@@ -40,7 +40,7 @@ const block = Type.Object({
     description: 'Whether the Lesson cannot complete normally without traversing this Block.',
   }),
   dependsOn: Type.Array(nonempty, {
-    description: 'Earlier Block IDs that must be resolved before this Block can activate.',
+    description: 'Earlier Blueprint-local aliases that must be resolved before this Block can activate.',
   }),
   uses: Type.Array(nonempty, {
     description: 'Lesson-local aliases used by this Block. A problem Block must use exactly one authentic problem-card alias.',
@@ -76,9 +76,9 @@ export function createLessonPrepareTool(
         minLength: 1,
         description: 'Student-visible Lesson title appropriate to the selected reveal policy.',
       }),
-      planContext: Type.String({
+      publicPurpose: Type.String({
         minLength: 1,
-        description: 'Brief source-linked account of where this Lesson sits in the current Plan.',
+        description: 'Student-safe account of why this Lesson belongs in the current Plan.',
       }),
       capabilityTarget: Type.String({
         minLength: 1,
@@ -92,6 +92,25 @@ export function createLessonPrepareTool(
       adjustments: Type.Optional(Type.Array(nonempty, {
         description: 'Deliberate changes from the selected template defaults.',
       })),
+      activation: Type.Object({
+        parentSources: Type.Array(nonempty, {
+          minItems: 1,
+          description: 'Canonical evidence handles selected from the parent Plan context.',
+        }),
+        selectedMemory: Type.Array(nonempty, {
+          description: 'Confirmed memory handles only; never copy profile prose here.',
+        }),
+        contentBoundary: Type.Array(nonempty, {
+          minItems: 1,
+          description: 'Student-facing reveal and content boundaries for this Lesson.',
+        }),
+        adaptation: Type.Object({
+          workingJudgment: nonempty,
+          sources: Type.Array(nonempty, { minItems: 1 }),
+          designConsequence: nonempty,
+          reviseIf: nonempty,
+        }, { additionalProperties: false }),
+      }, { additionalProperties: false }),
       cards: Type.Array(Type.Object({
         alias: Type.String({
           minLength: 1,
@@ -139,10 +158,24 @@ export function createLessonPrepareTool(
         ?.replace(/^Plan[:：]\s*/, '').trim();
       if (!planTitle) throw new Error(`PLAN_TITLE_REQUIRED: ${ownerPath}`);
       const blueprint: LessonBlueprint = {
-        ...input,
+        title: input.title,
+        publicPurpose: input.publicPurpose,
+        capabilityTarget: input.capabilityTarget,
+        primaryTemplate: input.primaryTemplate,
+        templateReason: input.templateReason,
         adjustments: input.adjustments ?? [],
+        activation: input.activation,
+        cards: input.cards,
+        sources: input.sources,
+        blocks: input.blocks,
       };
-      const context = { planId: ownerId, planPath: ownerPath, planTitle, lessonPath };
+      const context = {
+        planId: ownerId,
+        planPath: ownerPath,
+        planTitle,
+        lessonId: input.lessonId,
+        lessonPath,
+      };
       validateLessonBlueprint(root, context, blueprint);
       const source = renderPreparedLesson(context, blueprint);
       validatePreparedLessonSource(root, lessonPath, source);

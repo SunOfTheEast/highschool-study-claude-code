@@ -81,7 +81,7 @@ function aliasResolvesToCard(root: string, lessonPath: string, target: string): 
 
 function validatePreparedLessonBody(root: string, lessonPath: string, body: string): void {
   const issues: PreparedLessonIssue[] = [];
-  for (const section of ['Aliases', 'Lesson Summary', 'Traces']) {
+  for (const section of ['Activation Snapshot', 'Aliases', 'Lesson Summary', 'Handoff']) {
     if (!new RegExp(`^## ${section}[ \\t]*$`, 'm').test(body)) {
       issues.push({
         code: 'LESSON_SECTION_MISSING',

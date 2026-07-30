@@ -14,6 +14,7 @@ import {
   type LessonBlueprint,
   type LessonRenderContext,
 } from '../../src/study/lesson-blueprint';
+import { parseActivationSnapshot } from '../../src/study/activation-snapshot';
 import { validatePreparedLessonSource } from '../../src/study/validate-prepared-lesson';
 
 const fixtureRoot = join(import.meta.dir, '../../../../examples/derivative-demo/learning-set');
@@ -40,16 +41,27 @@ const context: LessonRenderContext = {
   planId: 'domain-integrity',
   planPath: 'plans/domain-integrity.md',
   planTitle: '定义域完整性的系统加固',
+  lessonId: 'lesson-blueprint-001',
   lessonPath: 'lessons/lesson-blueprint-001.md',
 };
 const blueprint: LessonBlueprint = {
-  lessonId: 'lesson-blueprint-001',
   title: 'Lesson Blueprint 试验课',
-  planContext: '用两张真实卡核验定义域迁移。',
+  publicPurpose: '用两张真实卡核验定义域迁移。',
   capabilityTarget: '无提示写全定义域，并在参数边界中使用。',
   primaryTemplate: 'assessment',
   templateReason: '需要获得两次独立证据。',
   adjustments: ['首题失败时插入一个可选修复节点。'],
+  activation: {
+    parentSources: ['card:cards/derivative/mst_p0032_ex22.card.yaml'],
+    selectedMemory: [],
+    contentBoundary: ['课前不展示题解与方法名称。'],
+    adaptation: {
+      workingJudgment: '需要区分定义域完整性与一般计算失误。',
+      sources: ['card:cards/derivative/mst_p0032_ex22.card.yaml'],
+      designConsequence: '先用同结构题检查，再做迁移。',
+      reviseIf: '学生第一题已经能稳定独立处理全部边界。',
+    },
+  },
   cards: [
     {
       alias: 'Q-EX22',
@@ -65,7 +77,7 @@ const blueprint: LessonBlueprint = {
   sources: [],
   blocks: [
     {
-      id: 'assessment-01',
+      localAlias: 'assessment-01',
       kind: 'problem',
       required: true,
       dependsOn: [],
@@ -74,7 +86,7 @@ const blueprint: LessonBlueprint = {
       teacherControl: '首次尝试采用 `zero`，不提前给出方法。',
     },
     {
-      id: 'assessment-02',
+      localAlias: 'assessment-02',
       kind: 'problem',
       required: true,
       dependsOn: ['assessment-01'],
@@ -83,7 +95,7 @@ const blueprint: LessonBlueprint = {
       teacherControl: '核验跨结构迁移，不复用上一题提示。',
     },
     {
-      id: 'reflection',
+      localAlias: 'reflection',
       kind: 'reflection',
       required: true,
       dependsOn: ['assessment-02'],
@@ -102,7 +114,7 @@ const reflectionVariants: Array<[string, LessonBlueprint['blocks']]> = [
     ...blueprint.blocks,
     {
       ...reflection,
-      id: 'reflection-midway',
+      localAlias: 'reflection-midway',
       required: false,
       dependsOn: ['assessment-01'],
     },
@@ -130,12 +142,20 @@ test('renders one canonical prepared Lesson that passes source admission', () =>
   const source = renderPreparedLesson(context, blueprint);
 
   expect(source).toContain('id: lesson-blueprint-001');
-  expect(source).toContain('plan_id: domain-integrity');
+  expect(source).toContain('parent_id: domain-integrity');
+  expect(source).toContain('parent_path: plans/domain-integrity.md');
+  expect(source).toContain('tutor_session: null');
   expect(source).toContain('status: prepared');
-  expect(source).toContain('## Block assessment-01（必做）');
-  expect(source).toContain('- Depends on: assessment-01');
+  expect(source).toContain('## Block block-001（必做）');
+  expect(source).toContain('- Depends on: block-001');
   expect(source).toContain('- Q-EX22: ../cards/derivative/mst_p0032_ex22.card.yaml');
   expect(source.match(/- Status: pending/g)).toHaveLength(3);
+  expect(source).toContain('## Handoff\n\n（尚未封存）');
+  expect(source).not.toContain('## Traces');
+  expect(parseActivationSnapshot(source)).toMatchObject({
+    parent: 'plan:domain-integrity',
+    activatedAt: 'pending',
+  });
   expect(() => validatePreparedLessonSource(root, context.lessonPath, source)).not.toThrow();
 });
 
@@ -146,7 +166,7 @@ test.each([
   const invalid: LessonBlueprint = {
     ...blueprint,
     blocks: blueprint.blocks.map((block) => (
-      block.id === 'assessment-01' ? { ...block, uses: [...uses] } : block
+      block.localAlias === 'assessment-01' ? { ...block, uses: [...uses] } : block
     )),
   };
 
@@ -158,7 +178,7 @@ test('allows separately assessed parts to reuse one card alias in different prob
   const repeatedCard: LessonBlueprint = {
     ...blueprint,
     blocks: blueprint.blocks.map((block) => (
-      block.id === 'assessment-02' ? { ...block, uses: ['Q-EX22'] } : block
+      block.localAlias === 'assessment-02' ? { ...block, uses: ['Q-EX22'] } : block
     )),
   };
 
@@ -203,7 +223,7 @@ test('rejects duplicate Blocks, unknown aliases, false cards, and nested structu
     validateLessonBlueprint(root, context, invalid);
   } catch (error) {
     const issues = (error as LessonBlueprintValidationError).issues.join('\n');
-    expect(issues).toContain('Block ID 重复');
+    expect(issues).toContain('Block localAlias 重复');
     expect(issues).toContain('未声明 alias');
     expect(issues).toContain('题卡不存在');
     expect(issues).toContain('一级到三级标题');
