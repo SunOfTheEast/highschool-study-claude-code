@@ -33,6 +33,12 @@ const traceSearchInput = z.object({
   cardPath: z.string().optional().describe(
     'Optional exact learning-set-relative card path for card-to-Trace lookup.',
   ),
+  occurredAfter: z.iso.datetime().optional().describe(
+    'Optional inclusive lower ISO timestamp boundary.',
+  ),
+  occurredBefore: z.iso.datetime().optional().describe(
+    'Optional inclusive upper ISO timestamp boundary.',
+  ),
   limit: z.number().int().min(1).max(100).describe(
     'Maximum number of active Trace records returned.',
   ),
@@ -79,7 +85,7 @@ const traceAppendInput = z.object({
     'Concise source-linked account identifying the exact student-supplied claim behind the assessment and separating Tutor contributions or retracted Tutor judgments from student work. Predicted failures are not observed evidence.',
   ),
   supersedes: z.string().nullable().describe(
-    'Exact earlier event ID corrected or replaced within the same Lesson, otherwise null.',
+    'Exact earlier Trace ID corrected or replaced within the same Lesson and Block, otherwise null.',
   ),
 }).strict();
 
@@ -106,6 +112,8 @@ export function registerStudyTools(server: McpServer, deps: StudyMcpDependencies
     planId: input.planId ?? null,
     lessonId: input.lessonId ?? null,
     cardPath: input.cardPath ?? null,
+    occurredAfter: input.occurredAfter ?? null,
+    occurredBefore: input.occurredBefore ?? null,
     limit: input.limit,
   })));
 
@@ -117,8 +125,8 @@ export function registerStudyTools(server: McpServer, deps: StudyMcpDependencies
     return output({
       ok: true,
       ownerPath: trace.lessonPath,
-      factId: trace.eventId,
-      ...trace,
+      factId: trace.traceId,
+      sourceRef: trace.sourceRef,
     });
   });
 

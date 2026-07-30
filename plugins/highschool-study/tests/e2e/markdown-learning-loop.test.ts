@@ -52,11 +52,11 @@ test('proves the Markdown-only bidirectional learning loop', async () => {
     const initial = body(await client.callTool({
       name: 'card_search',
       arguments: { query: '冻结变量', limit: 3 },
-    })) as { cards: Array<{ path: string; traceHistory: Array<{ eventId: string }> }> };
+    })) as { cards: Array<{ path: string; traceHistory: Array<{ traceId: string }> }> };
     expect(initial.cards).toHaveLength(2);
     expect(initial.cards.map((card) => card.traceHistory)).toEqual([[], []]);
 
-    expect(body(await client.callTool({
+    const firstAppend = body(await client.callTool({
       name: 'trace_append',
       arguments: {
         lessonPath: 'lessons/lesson-001.md',
@@ -70,27 +70,32 @@ test('proves the Markdown-only bidirectional learning loop', async () => {
         note: 'Identified the frozen quantity but needed a domain recheck.',
         supersedes: null,
       },
-    }))).toMatchObject({ eventId: 'event-001' });
+    })) as { factId: string; sourceRef: string };
+    expect(firstAppend.factId).toMatch(/^trace-[0-9a-f-]+$/);
+    expect(firstAppend.sourceRef).toMatch(/^trace:trace-[0-9a-f-]+$/);
+    expect(firstAppend.sourceRef).toBe(`trace:${firstAppend.factId}`);
 
     const afterFirst = body(await client.callTool({
       name: 'card_search',
       arguments: { query: '冻结变量', limit: 3 },
-    })) as { cards: Array<{ path: string; traceHistory: Array<{ eventId: string }> }> };
-    expect(afterFirst.cards.map((card) => card.traceHistory.map((trace) => trace.eventId)))
-      .toEqual([['event-001'], []]);
+    })) as { cards: Array<{ path: string; traceHistory: Array<{ traceId: string }> }> };
+    expect(afterFirst.cards.map((card) => card.traceHistory.map((trace) => trace.traceId)))
+      .toEqual([[firstAppend.factId], []]);
     const firstReverse = body(await client.callTool({
       name: 'trace_search',
       arguments: {
         cardPath: 'cards/conics/freeze-variable-01.yaml',
         limit: 20,
       },
-    })) as { traces: Array<{ eventId: string }>; cardsByPath: Record<string, unknown> };
-    expect(firstReverse.traces.map((trace) => trace.eventId)).toEqual(['event-001']);
+    })) as { traces: Array<{ traceId: string }>; cardsByPath: Record<string, unknown> };
+    expect(firstReverse.traces.map((trace) => trace.traceId)).toEqual([
+      firstAppend.factId,
+    ]);
     expect(Object.keys(firstReverse.cardsByPath)).toEqual([
       'cards/conics/freeze-variable-01.yaml',
     ]);
 
-    expect(body(await client.callTool({
+    const secondAppend = body(await client.callTool({
       name: 'trace_append',
       arguments: {
         lessonPath: 'lessons/lesson-001.md',
@@ -102,28 +107,31 @@ test('proves the Markdown-only bidirectional learning loop', async () => {
         support: 'none',
         methods: { primary: '冻结变量法', secondary: ['参数化与消元'] },
         note: 'Corrected the domain and equality condition independently.',
-        supersedes: 'event-001',
+        supersedes: firstAppend.factId,
       },
-    }))).toMatchObject({ eventId: 'event-002' });
+    })) as { factId: string; sourceRef: string };
+    expect(secondAppend.sourceRef).toBe(`trace:${secondAppend.factId}`);
 
     const finalCards = body(await client.callTool({
       name: 'card_search',
       arguments: { query: '冻结变量', limit: 3 },
-    })) as { cards: Array<{ traceHistory: Array<{ eventId: string }> }> };
-    expect(finalCards.cards.map((card) => card.traceHistory.map((trace) => trace.eventId)))
-      .toEqual([['event-002'], []]);
+    })) as { cards: Array<{ traceHistory: Array<{ traceId: string }> }> };
+    expect(finalCards.cards.map((card) => card.traceHistory.map((trace) => trace.traceId)))
+      .toEqual([[secondAppend.factId], []]);
     const finalReverse = body(await client.callTool({
       name: 'trace_search',
       arguments: {
         cardPath: 'cards/conics/freeze-variable-01.yaml',
         limit: 20,
       },
-    })) as { traces: Array<{ eventId: string }> };
-    expect(finalReverse.traces.map((trace) => trace.eventId)).toEqual(['event-002']);
+    })) as { traces: Array<{ traceId: string }> };
+    expect(finalReverse.traces.map((trace) => trace.traceId)).toEqual([
+      secondAppend.factId,
+    ]);
 
     const attention = readFileSync(join(root, 'memory/planner-attention.md'), 'utf8');
-    expect(attention).toContain('trace-event-002');
-    expect(attention).not.toContain('trace-event-001');
+    expect(attention).toContain(`../traces/${secondAppend.factId}.md`);
+    expect(attention).not.toContain(`../traces/${firstAppend.factId}.md`);
     expect(persistenceFiles(root)).toEqual([]);
   } finally {
     await client.close();

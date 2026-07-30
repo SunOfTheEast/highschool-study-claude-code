@@ -5,6 +5,10 @@ import { appendTrace } from '../../server/src/traces';
 
 const packageRoot = join(import.meta.dir, '../..');
 
+export function traceUuid(index: number): string {
+  return `${String(index).padStart(8, '0')}-1111-4111-8111-111111111111`;
+}
+
 export function makeLearningSet(): string {
   const root = mkdtempSync(join(tmpdir(), 'highschool-study-learning-set-'));
   cpSync(join(packageRoot, 'learning-set-template'), root, { recursive: true });
@@ -16,7 +20,8 @@ export function makeLearningSet(): string {
   writeFileSync(join(root, 'lessons/lesson-001.md'), `---
 id: lesson-001
 kind: lesson
-plan_id: max-value
+parent_id: max-value
+parent_path: plans/max-value.md
 ---
 # Lesson 001
 
@@ -32,7 +37,8 @@ export function makeLearningSetWithLesson(): string {
   writeFileSync(join(root, 'lessons/lesson-001.md'), `---
 id: lesson-001
 kind: lesson
-plan_id: max-value
+parent_id: max-value
+parent_path: plans/max-value.md
 ---
 # Lesson 001
 
@@ -80,17 +86,22 @@ export function makeLearningSetWithHistory(): string {
     supersedes: null,
     methods: { primary: '冻结变量法', secondary: ['参数化与消元'] },
   };
-  appendTrace(root, cardTrace, () => new Date('2026-07-21T02:00:00Z'));
-  appendTrace(root, {
+  appendTrace(
+    root,
+    cardTrace,
+    () => new Date('2026-07-21T02:00:00Z'),
+    () => traceUuid(1),
+  );
+  const incorrect = appendTrace(root, {
     ...cardTrace,
     assessment: 'incorrect',
     note: 'First domain check was incorrect.',
-  }, () => new Date('2026-07-21T02:05:00Z'));
+  }, () => new Date('2026-07-21T02:05:00Z'), () => traceUuid(2));
   appendTrace(root, {
     ...cardTrace,
     note: 'Revised the domain check using the card evidence.',
-    supersedes: 'event-002',
-  }, () => new Date('2026-07-21T02:10:00Z'));
+    supersedes: incorrect.traceId,
+  }, () => new Date('2026-07-21T02:10:00Z'), () => traceUuid(3));
   appendTrace(root, {
     ...cardTrace,
     cardAlias: null,
@@ -98,6 +109,6 @@ export function makeLearningSetWithHistory(): string {
     assessment: 'incomplete',
     support: 'external',
     note: 'Cardless question about the domain boundary.',
-  }, () => new Date('2026-07-21T02:15:00Z'));
+  }, () => new Date('2026-07-21T02:15:00Z'), () => traceUuid(4));
   return root;
 }

@@ -12,7 +12,7 @@ import {
 export type CardAlternative = {
   id: string;
   cardPath: string;
-  sourceTrace: string;
+  sourceTrace: TraceRecord['sourceRef'];
   question: string;
   method: string | null;
   support: TraceSupport;
@@ -117,7 +117,7 @@ function parseAlternatives(source: string, cardPath: string): CardAlternative[] 
     if (
       !/^alt-\d+$/.test(id)
       || !solution
-      || !sourceTrace
+      || !/^trace:trace-[0-9a-f-]+$/i.test(sourceTrace)
       || !recordedAt
       || !supports.has(support as TraceSupport)
       || !method
@@ -125,7 +125,7 @@ function parseAlternatives(source: string, cardPath: string): CardAlternative[] 
     return [{
       id,
       cardPath,
-      sourceTrace,
+      sourceTrace: sourceTrace as TraceRecord['sourceRef'],
       question: unattribute(match[2] ?? ''),
       method: method === '未归类' ? null : method,
       support: support as TraceSupport,
@@ -145,7 +145,7 @@ function nextAlternativeId(alternatives: CardAlternative[]): string {
 
 function activeSourceTrace(root: string, lessonPath: string, sourceTraceId: string): TraceRecord {
   const active = readActiveTraces(root, [lessonPath]);
-  const trace = active.find((item) => item.eventId === sourceTraceId);
+  const trace = active.find((item) => item.traceId === sourceTraceId);
   if (trace === undefined) throw new Error('INVALID_ALTERNATIVE: source Trace is not active in this Lesson');
   return trace;
 }
@@ -172,7 +172,7 @@ export function appendCardAlternative(
   const alternative: CardAlternative = {
     id: nextAlternativeId(current),
     cardPath: trace.cardPath,
-    sourceTrace: trace.sourceAnchor,
+    sourceTrace: trace.sourceRef,
     question,
     method: methodResolution.methods?.primary ?? null,
     support: input.support,

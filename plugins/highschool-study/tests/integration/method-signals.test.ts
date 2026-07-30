@@ -12,9 +12,12 @@ import { appendTrace, readActiveTraces } from '../../server/src/traces';
 import {
   makeLearningSetWithHistory,
   makeLearningSetWithLesson,
+  traceUuid,
 } from '../helpers/learning-set';
 
 const packageRoot = join(import.meta.dir, '../..');
+const historyTraceId = (index: number) => `trace-${traceUuid(index)}`;
+const historySourceRef = (index: number) => `trace:${historyTraceId(index)}`;
 
 test('collapses active step Traces into one card attempt', () => {
   const root = makeLearningSetWithHistory();
@@ -22,7 +25,11 @@ test('collapses active step Traces into one card attempt', () => {
   const cardTrace = active.find((trace) => trace.cardPath !== null)!;
   const signals = aggregateMethodSignals(root, [
     ...active,
-    { ...cardTrace, cardPath: 'cards/conics/missing.yaml', sourceAnchor: 'lessons/missing.md#trace-event-999' },
+    {
+      ...cardTrace,
+      cardPath: 'cards/conics/missing.yaml',
+      sourceRef: 'trace:trace-missing',
+    },
   ]);
 
   expect(signals).toEqual([
@@ -34,8 +41,8 @@ test('collapses active step Traces into one card attempt', () => {
       attemptCount: 1,
       distinctCardCount: 1,
       sourceRefs: [
-        'lessons/lesson-001.md#trace-event-001',
-        'lessons/lesson-001.md#trace-event-003',
+        historySourceRef(1),
+        historySourceRef(3),
       ],
     },
     {
@@ -46,8 +53,8 @@ test('collapses active step Traces into one card attempt', () => {
       attemptCount: 1,
       distinctCardCount: 1,
       sourceRefs: [
-        'lessons/lesson-001.md#trace-event-001',
-        'lessons/lesson-001.md#trace-event-003',
+        historySourceRef(1),
+        historySourceRef(3),
       ],
     },
   ]);
@@ -62,8 +69,8 @@ test('averages active step evidence within one card attempt', () => {
   ].map((variant, index) => ({
     ...cardTrace,
     ...variant,
-    eventId: `event-average-${index}`,
-    sourceAnchor: `lessons/lesson-001.md#trace-average-${index}`,
+    traceId: `event-average-${index}`,
+    sourceRef: `trace:trace-average-${index}` as const,
   }));
 
   expect(aggregateMethodSignals(root, variants)).toEqual([
@@ -113,8 +120,8 @@ test('promotes a method from secondary to primary within one attempt', () => {
     },
     {
       ...cardTrace,
-      eventId: 'event-promoted',
-      sourceAnchor: 'lessons/lesson-001.md#trace-event-promoted',
+      traceId: 'event-promoted',
+      sourceRef: 'trace:trace-promoted',
       methods: { primary: '参数化与消元', secondary: [] },
     },
   ]);
@@ -137,9 +144,9 @@ test('combines assessment and support factors across distinct attempts', () => {
   ].map((variant, index) => ({
     ...cardTrace,
     ...variant,
-    eventId: `event-factor-${index}`,
+    traceId: `event-factor-${index}`,
     blockId: `step-factor-${index}`,
-    sourceAnchor: `lessons/lesson-001.md#trace-factor-${index}`,
+    sourceRef: `trace:trace-factor-${index}` as const,
   }));
 
   expect(aggregateMethodSignals(root, variants)).toEqual([
@@ -166,12 +173,12 @@ test('counts distinct card paths independently from attempts', () => {
   const root = makeLearningSetWithHistory();
   const cardTrace = readActiveTraces(root).find((trace) => trace.cardPath !== null)!;
   const signals = aggregateMethodSignals(root, [
-    { ...cardTrace, assessment: 'correct', sourceAnchor: 'lessons/lesson-001.md#trace-card-1' },
+    { ...cardTrace, assessment: 'correct', sourceRef: 'trace:trace-card-1' },
     {
       ...cardTrace,
       assessment: 'correct',
       cardPath: 'cards/conics/freeze-variable-transfer-02.yaml',
-      sourceAnchor: 'lessons/lesson-001.md#trace-card-2',
+      sourceRef: 'trace:trace-card-2',
     },
   ]);
 
@@ -183,7 +190,7 @@ test('counts distinct card paths independently from attempts', () => {
 
 test('projects an alternative own method and ignores an unmapped alternative', () => {
   const root = makeLearningSetWithLesson();
-  appendTrace(root, {
+  const sourceTrace = appendTrace(root, {
     lessonPath: 'lessons/lesson-001.md',
     blockId: 'step-02',
     cardAlias: 'Q-FREEZE-01',
@@ -196,14 +203,14 @@ test('projects an alternative own method and ignores an unmapped alternative', (
     methods: { primary: '冻结变量法', secondary: [] },
   }, () => new Date('2026-07-21T02:00:00Z'));
   appendCardAlternative(root, 'lessons/lesson-001.md', {
-    sourceTraceId: 'event-001',
+    sourceTraceId: sourceTrace.traceId,
     question: '整题',
     solution: '独立完成参数化与消元路线。',
     method: '参数化与消元',
     support: 'none',
   }, () => new Date('2026-07-21T02:01:00Z'));
   appendCardAlternative(root, 'lessons/lesson-001.md', {
-    sourceTraceId: 'event-001',
+    sourceTraceId: sourceTrace.traceId,
     question: '整题',
     solution: '另一条暂未归类的路线。',
     method: null,
@@ -234,7 +241,7 @@ test('projects an alternative own method and ignores an unmapped alternative', (
 
 test('keeps one strongest method contribution per card attempt', () => {
   const root = makeLearningSetWithLesson();
-  appendTrace(root, {
+  const sourceTrace = appendTrace(root, {
     lessonPath: 'lessons/lesson-001.md',
     blockId: 'step-02',
     cardAlias: 'Q-FREEZE-01',
@@ -247,14 +254,14 @@ test('keeps one strongest method contribution per card attempt', () => {
     methods: { primary: '冻结变量法', secondary: [] },
   }, () => new Date('2026-07-21T02:00:00Z'));
   appendCardAlternative(root, 'lessons/lesson-001.md', {
-    sourceTraceId: 'event-001',
+    sourceTraceId: sourceTrace.traceId,
     question: '整题',
     solution: 'Tutor 支持下的另一路线。',
     method: '冻结变量法',
     support: 'tutor',
   }, () => new Date('2026-07-21T02:01:00Z'));
   appendCardAlternative(root, 'lessons/lesson-001.md', {
-    sourceTraceId: 'event-001',
+    sourceTraceId: sourceTrace.traceId,
     question: '整题',
     solution: '无提示完成的另一条路线。',
     method: '冻结变量法',
@@ -332,9 +339,13 @@ Coach 上次确认的决定。
     supersedes: null,
     methods: null,
   };
-  appendTraceWithProjection(root, input, () => new Date('2026-07-21T02:00:00Z'));
+  const sourceTrace = appendTraceWithProjection(
+    root,
+    input,
+    () => new Date('2026-07-21T02:00:00Z'),
+  );
   appendCardAlternativeWithProjection(root, 'lessons/lesson-001.md', {
-    sourceTraceId: 'event-001',
+    sourceTraceId: sourceTrace.traceId,
     question: '整题',
     solution: '参数化与消元的完整路线。',
     method: '参数化与消元',
@@ -354,7 +365,7 @@ Coach 上次确认的决定。
   appendTraceWithProjection(root, {
     ...input,
     note: 'Corrected the same attempt and withdrew the recorded route.',
-    supersedes: 'event-001',
+    supersedes: sourceTrace.traceId,
   }, () => new Date('2026-07-21T02:02:00Z'));
 
   const lesson = readFileSync(lessonPath, 'utf8');
@@ -387,9 +398,9 @@ test('rebuild script rewrites only planner attention with source links', () => {
   expect(planner).toContain('冻结变量法');
   expect(planner).toContain('参数化与消元');
   expect(planner).toContain('attempts 1; cards 1');
-  expect(planner).toContain('../lessons/lesson-001.md#trace-event-001');
-  expect(planner).toContain('../lessons/lesson-001.md#trace-event-003');
-  expect(planner).not.toContain('trace-event-002');
+  expect(planner).toContain(`../traces/${historyTraceId(1)}.md`);
+  expect(planner).toContain(`../traces/${historyTraceId(3)}.md`);
+  expect(planner).not.toContain(`../traces/${historyTraceId(2)}.md`);
   expect(readFileSync(studentPath)).toEqual(studentBefore);
   expect(readFileSync(teachingPath)).toEqual(teachingBefore);
 });

@@ -12,7 +12,10 @@ import {
 } from './traces';
 
 function sourceLink(sourceRef: string): string {
-  return `[${sourceRef}](../${sourceRef})`;
+  const traceId = /^trace:(trace-[A-Za-z0-9-]+)$/.exec(sourceRef)?.[1];
+  return traceId === undefined
+    ? sourceRef
+    : `[${sourceRef}](../traces/${traceId}.md)`;
 }
 
 export function renderPlannerAttention(signals: MethodSignal[]): string {

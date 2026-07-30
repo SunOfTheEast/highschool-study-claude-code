@@ -3,12 +3,12 @@ import type { TraceRecord } from './traces';
 export type TraceIndex = { byCardPath: Map<string, TraceRecord[]> };
 
 function compareTrace(left: TraceRecord, right: TraceRecord): number {
-  return left.recordedAt < right.recordedAt ? -1
-    : left.recordedAt > right.recordedAt ? 1
+  return left.occurredAt < right.occurredAt ? -1
+    : left.occurredAt > right.occurredAt ? 1
       : left.lessonPath < right.lessonPath ? -1
         : left.lessonPath > right.lessonPath ? 1
-          : left.eventId < right.eventId ? -1
-            : left.eventId > right.eventId ? 1
+          : left.traceId < right.traceId ? -1
+            : left.traceId > right.traceId ? 1
               : 0;
 }
 

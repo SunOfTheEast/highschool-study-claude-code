@@ -51,7 +51,7 @@ nodes:
     const initialCards = body(await client.callTool({
       name: 'card_search',
       arguments: { query: '冻结变量', limit: 3 },
-    })) as { cards: Array<{ traceHistory: Array<{ eventId: string }> }> };
+    })) as { cards: Array<{ traceHistory: Array<{ traceId: string }> }> };
     expect(initialCards.cards[0]?.traceHistory).toBeArray();
 
     const appended = body(await client.callTool({
@@ -75,26 +75,23 @@ nodes:
       ok: boolean;
       ownerPath: string;
       factId: string;
-      eventId: string;
-      methods: { primary: string; secondary: string[] } | null;
+      sourceRef: string;
     };
     expect(appended).toEqual(expect.objectContaining({
       ok: true,
       ownerPath: 'lessons/lesson-001.md',
-      factId: 'event-005',
+      factId: expect.stringMatching(/^trace-[0-9a-f-]+$/),
+      sourceRef: expect.stringMatching(/^trace:trace-[0-9a-f-]+$/),
     }));
-    expect(appended.eventId).toBe('event-005');
-    expect(appended.methods).toEqual({
-      primary: '冻结变量法',
-      secondary: ['参数化与消元'],
-    });
+    const appendedTraceId = appended.factId;
+    expect(appended.sourceRef).toBe(`trace:${appendedTraceId}`);
 
     const refreshedCards = body(await client.callTool({
       name: 'card_search',
       arguments: { query: '冻结变量', limit: 3 },
-    })) as { cards: Array<{ traceHistory: Array<{ eventId: string }> }> };
-    expect(refreshedCards.cards[0]?.traceHistory.map((trace) => trace.eventId))
-      .toContain('event-005');
+    })) as { cards: Array<{ traceHistory: Array<{ traceId: string }> }> };
+    expect(refreshedCards.cards[0]?.traceHistory.map((trace) => trace.traceId))
+      .toContain(appendedTraceId);
 
     const reverse = body(await client.callTool({
       name: 'trace_search',
@@ -104,7 +101,7 @@ nodes:
       'cards/conics/freeze-variable-01.yaml',
     ]);
 
-    body(await client.callTool({
+    const cardlessAppend = body(await client.callTool({
       name: 'trace_append',
       arguments: {
         lessonPath: 'lessons/lesson-001.md',
@@ -117,13 +114,13 @@ nodes:
         note: 'Cardless MCP reflection keyword.',
         supersedes: null,
       },
-    }));
+    })) as { factId: string };
     const cardless = body(await client.callTool({
       name: 'trace_search',
       arguments: { query: 'cardless MCP reflection', limit: 20 },
-    })) as { traces: Array<{ eventId: string; cardPath: string | null }>; cardsByPath: Record<string, unknown> };
+    })) as { traces: Array<{ traceId: string; cardPath: string | null }>; cardsByPath: Record<string, unknown> };
     expect(cardless.traces).toEqual([
-      expect.objectContaining({ eventId: 'event-006', cardPath: null }),
+      expect.objectContaining({ traceId: cardlessAppend.factId, cardPath: null }),
     ]);
     expect(cardless.cardsByPath).toEqual({});
 

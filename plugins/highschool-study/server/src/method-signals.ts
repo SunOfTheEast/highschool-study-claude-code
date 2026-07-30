@@ -62,13 +62,13 @@ export function aggregateMethodSignals(root: string, traces: TraceRecord[]): Met
         }
       }
     }
-    if (!attempt.traceSourceRefs.includes(trace.sourceAnchor)) {
-      attempt.traceSourceRefs.push(trace.sourceAnchor);
+    if (!attempt.traceSourceRefs.includes(trace.sourceRef)) {
+      attempt.traceSourceRefs.push(trace.sourceRef);
     }
     attempts.set(key, attempt);
   }
 
-  const tracesBySource = new Map(traces.map((trace) => [trace.sourceAnchor, trace]));
+  const tracesBySource = new Map(traces.map((trace) => [trace.sourceRef, trace]));
   const cardPaths = [...new Set(traces.flatMap((trace) =>
     trace.cardPath === null ? [] : [trace.cardPath]))];
 

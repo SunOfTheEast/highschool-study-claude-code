@@ -64,6 +64,7 @@ export {
   readActiveTraces,
   readTraceRecords,
   type TraceAppendInput,
+  type TraceAppendResult,
   type TraceAssessment,
   type TraceRecord,
   type TraceSupport,

@@ -1,7 +1,8 @@
 ---
 id: lesson-002
 kind: lesson
-plan_id: max-value
+parent_id: max-value
+parent_path: plans/max-value.md
 status: closed
 ---
 # Lesson 002

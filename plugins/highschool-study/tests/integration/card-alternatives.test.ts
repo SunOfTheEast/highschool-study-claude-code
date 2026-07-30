@@ -4,7 +4,9 @@ import { join } from 'node:path';
 import { appendCardAlternative, readCardAlternatives } from '../../server/src/alternatives';
 import { searchCards } from '../../server/src/cards';
 import { appendTrace, readActiveTraces } from '../../server/src/traces';
-import { makeLearningSetWithLesson } from '../helpers/learning-set';
+import { makeLearningSetWithLesson, traceUuid } from '../helpers/learning-set';
+
+const testTraceId = `trace-${traceUuid(1)}`;
 
 const traceInput = {
   lessonPath: 'lessons/lesson-001.md',
@@ -21,10 +23,15 @@ const traceInput = {
 
 test('writes and reads a card-bound alternative through its active Trace', () => {
   const root = makeLearningSetWithLesson();
-  appendTrace(root, traceInput, () => new Date('2026-07-21T02:00:00Z'));
+  appendTrace(
+    root,
+    traceInput,
+    () => new Date('2026-07-21T02:00:00Z'),
+    () => traceUuid(1),
+  );
 
   const alternative = appendCardAlternative(root, 'lessons/lesson-001.md', {
-    sourceTraceId: 'event-001',
+    sourceTraceId: testTraceId,
     question: '整题',
     solution: '先作代换，再从约束中消去参数。',
     method: '参数化与消元',
@@ -34,7 +41,7 @@ test('writes and reads a card-bound alternative through its active Trace', () =>
   expect(alternative).toMatchObject({
     id: 'alt-001',
     cardPath: 'cards/conics/freeze-variable-01.yaml',
-    sourceTrace: 'lessons/lesson-001.md#trace-event-001',
+    sourceTrace: `trace:${testTraceId}`,
     question: '整题',
     method: '参数化与消元',
     support: 'external',
@@ -48,16 +55,21 @@ test('writes and reads a card-bound alternative through its active Trace', () =>
 
 test('appends same-source alternatives with stable IDs and keeps them after Trace supersession', () => {
   const root = makeLearningSetWithLesson();
-  appendTrace(root, traceInput, () => new Date('2026-07-21T02:00:00Z'));
+  appendTrace(
+    root,
+    traceInput,
+    () => new Date('2026-07-21T02:00:00Z'),
+    () => traceUuid(1),
+  );
   const first = appendCardAlternative(root, 'lessons/lesson-001.md', {
-    sourceTraceId: 'event-001',
+    sourceTraceId: testTraceId,
     question: '整题',
     solution: '第一条路线。',
     method: '冻结变量法',
     support: 'tutor',
   }, () => new Date('2026-07-21T02:01:00Z'));
   const second = appendCardAlternative(root, 'lessons/lesson-001.md', {
-    sourceTraceId: 'event-001',
+    sourceTraceId: testTraceId,
     question: '整题',
     solution: '第二条路线。',
     method: null,
@@ -71,8 +83,8 @@ test('appends same-source alternatives with stable IDs and keeps them after Trac
     ...traceInput,
     assessment: 'correct',
     note: 'Superseding observation.',
-    supersedes: 'event-001',
-  }, () => new Date('2026-07-21T02:03:00Z'));
+    supersedes: testTraceId,
+  }, () => new Date('2026-07-21T02:03:00Z'), () => traceUuid(2));
   expect(readCardAlternatives(root, first.cardPath).map((item) => item.id))
     .toEqual(['alt-001', 'alt-002']);
   expect(readFileSync(join(root, 'cards/conics/freeze-variable-01.alternatives.md'), 'utf8'))
@@ -82,16 +94,21 @@ test('appends same-source alternatives with stable IDs and keeps them after Trac
 test('rejects alternatives without an active correct card Trace', () => {
   const root = makeLearningSetWithLesson();
   expect(() => appendCardAlternative(root, 'lessons/lesson-001.md', {
-    sourceTraceId: 'event-001',
+    sourceTraceId: testTraceId,
     question: '整题',
     solution: '无证据。',
     method: null,
     support: 'none',
   }, () => new Date())).toThrow();
 
-  appendTrace(root, { ...traceInput, assessment: 'partially_correct' }, () => new Date());
+  appendTrace(
+    root,
+    { ...traceInput, assessment: 'partially_correct' },
+    () => new Date(),
+    () => traceUuid(1),
+  );
   expect(() => appendCardAlternative(root, 'lessons/lesson-001.md', {
-    sourceTraceId: 'event-001',
+    sourceTraceId: testTraceId,
     question: '整题',
     solution: '非完整解。',
     method: null,
@@ -101,9 +118,14 @@ test('rejects alternatives without an active correct card Trace', () => {
 
 test('normalizes a unique method alias and rejects an unknown method', () => {
   const root = makeLearningSetWithLesson();
-  appendTrace(root, traceInput, () => new Date('2026-07-21T02:00:00Z'));
+  appendTrace(
+    root,
+    traceInput,
+    () => new Date('2026-07-21T02:00:00Z'),
+    () => traceUuid(1),
+  );
   expect(appendCardAlternative(root, 'lessons/lesson-001.md', {
-    sourceTraceId: 'event-001',
+    sourceTraceId: testTraceId,
     question: '整题',
     solution: '使用别名对应的路线。',
     method: '冻元法',
@@ -111,7 +133,7 @@ test('normalizes a unique method alias and rejects an unknown method', () => {
   }, () => new Date()).method).toBe('冻结变量法');
 
   expect(() => appendCardAlternative(root, 'lessons/lesson-001.md', {
-    sourceTraceId: 'event-001',
+    sourceTraceId: testTraceId,
     question: '整题',
     solution: '伪节点路线。',
     method: '不存在的方法',
@@ -125,9 +147,14 @@ test('resolves a concrete part when the card declares parts', () => {
   const root = makeLearningSetWithLesson();
   const cardPath = join(root, 'cards/conics/freeze-variable-01.yaml');
   writeFileSync(cardPath, `${readFileSync(cardPath, 'utf8').replace('parts: []', 'parts:\n  - part_id: (1)\n    stem: 第一问\n  - part_id: (2)\n    stem: 第二问\n')}`);
-  appendTrace(root, traceInput, () => new Date('2026-07-21T02:00:00Z'));
+  appendTrace(
+    root,
+    traceInput,
+    () => new Date('2026-07-21T02:00:00Z'),
+    () => traceUuid(1),
+  );
   expect(appendCardAlternative(root, 'lessons/lesson-001.md', {
-    sourceTraceId: 'event-001',
+    sourceTraceId: testTraceId,
     question: '(2)',
     solution: '只解第二问。',
     method: null,

@@ -1,8 +1,18 @@
 import { expect, test } from 'bun:test';
-import { copyFileSync, readFileSync, writeFileSync } from 'node:fs';
+import {
+  copyFileSync,
+  existsSync,
+  readFileSync,
+  readdirSync,
+  writeFileSync,
+} from 'node:fs';
 import { join } from 'node:path';
 import { makeLearningSetWithLesson } from '../helpers/learning-set';
-import { appendTrace, readActiveTraces, readTraceRecords } from '../../server/src/traces';
+import {
+  appendTrace,
+  readActiveTraces,
+  readTraceRecords,
+} from '../../server/src/traces';
 
 const input = {
   lessonPath: 'lessons/lesson-001.md',
@@ -15,6 +25,15 @@ const input = {
   note: 'Selected the frozen quantity but missed the domain.',
   supersedes: null,
 };
+
+function uuid(index: number): string {
+  return `${String(index).padStart(8, '0')}-1111-4111-8111-111111111111`;
+}
+
+function traceFiles(root: string): string[] {
+  const directory = join(root, 'traces');
+  return existsSync(directory) ? readdirSync(directory).sort() : [];
+}
 
 function addSecondProblemBlock(root: string): void {
   copyFileSync(
@@ -58,89 +77,113 @@ Observe transfer.
   writeFileSync(lessonPath, source);
 }
 
-test('stores canonical card bindings and closes supersession', () => {
+test('writes one immutable global Trace file without modifying the Lesson', () => {
   const root = makeLearningSetWithLesson();
-  appendTrace(root, input, () => new Date('2026-07-21T02:00:00Z'));
-  appendTrace(root, {
+  const lessonPath = join(root, 'lessons/lesson-001.md');
+  const lessonBefore = readFileSync(lessonPath, 'utf8');
+  const id = uuid(1);
+
+  const trace = appendTrace(
+    root,
+    input,
+    () => new Date('2026-07-30T12:00:00.000Z'),
+    () => id,
+  );
+
+  expect(trace.traceId).toBe(`trace-${id}`);
+  expect(trace.sourceRef).toBe(`trace:trace-${id}`);
+  expect(trace.tracePath).toBe(`traces/trace-${id}.md`);
+  expect(existsSync(join(root, trace.tracePath))).toBe(true);
+  expect(readFileSync(lessonPath, 'utf8')).toBe(lessonBefore);
+  expect(readTraceRecords(root)).toEqual([expect.objectContaining({
+    traceId: `trace-${id}`,
+    planId: 'max-value',
+    planPath: 'plans/max-value.md',
+    lessonId: 'lesson-001',
+    lessonPath: 'lessons/lesson-001.md',
+    blockId: 'step-02',
+    cardPath: 'cards/conics/freeze-variable-01.yaml',
+    cardStepId: 'identify-freeze',
+    occurredAt: '2026-07-30T12:00:00.000Z',
+  })]);
+});
+
+test('reads only the global pool and ignores legacy Lesson Trace sections', () => {
+  const root = makeLearningSetWithLesson();
+  const lessonPath = join(root, 'lessons/lesson-001.md');
+  writeFileSync(
+    lessonPath,
+    `${readFileSync(lessonPath, 'utf8')}
+
+## Trace event-001
+
+Recorded at: 2026-07-20T00:00:00.000Z
+Assessment: correct
+`,
+  );
+  expect(readTraceRecords(root)).toEqual([]);
+});
+
+test('supersedes only the current active Trace from the same Lesson, Block and card', () => {
+  const root = makeLearningSetWithLesson();
+  const original = appendTrace(
+    root,
+    input,
+    () => new Date('2026-07-30T00:00:00Z'),
+    () => uuid(1),
+  );
+  const correction = appendTrace(root, {
     ...input,
     assessment: 'correct',
     support: 'none',
     note: 'Rechecked the domain and equality condition.',
-    supersedes: 'event-001',
-  }, () => new Date('2026-07-21T02:05:00Z'));
+    supersedes: original.traceId,
+  }, () => new Date('2026-07-30T00:05:00Z'), () => uuid(2));
 
   expect(readTraceRecords(root)).toHaveLength(2);
   expect(readActiveTraces(root)).toEqual([expect.objectContaining({
-    eventId: 'event-002',
-    lessonId: 'lesson-001',
-    planId: 'max-value',
-    cardPath: 'cards/conics/freeze-variable-01.yaml',
-    cardStepId: 'identify-freeze',
-    sourceAnchor: 'lessons/lesson-001.md#trace-event-002',
-    supersedes: 'event-001',
-    methods: null,
+    traceId: correction.traceId,
+    supersedes: original.traceId,
   })]);
+
+  expect(() => appendTrace(root, {
+    ...input,
+    supersedes: original.traceId,
+  }, () => new Date('2026-07-30T00:10:00Z'), () => uuid(3)))
+    .toThrow(/INVALID_TRACE.*active/);
+  expect(readTraceRecords(root)).toHaveLength(2);
 });
 
-test('rejects superseding an active Trace from another Block', () => {
+test('rejects cross-Block and changed-card corrections', () => {
   const root = makeLearningSetWithLesson();
   addSecondProblemBlock(root);
-  appendTrace(root, input, () => new Date('2026-07-30T00:00:00Z'));
+  const original = appendTrace(
+    root,
+    input,
+    () => new Date('2026-07-30T00:00:00Z'),
+    () => uuid(1),
+  );
 
   expect(() => appendTrace(root, {
     ...input,
     blockId: 'step-03',
     cardAlias: 'Q-FREEZE-02',
     cardStepId: null,
-    supersedes: 'event-001',
-  }, () => new Date('2026-07-30T00:05:00Z')))
-    .toThrow(/INVALID_TRACE.*same Block/);
-  expect(readTraceRecords(root)).toHaveLength(1);
-});
-
-test('rejects superseding an active Trace with another card binding', () => {
-  const root = makeLearningSetWithLesson();
-  addSecondProblemBlock(root);
-  appendTrace(root, input, () => new Date('2026-07-30T00:00:00Z'));
+    supersedes: original.traceId,
+  }, () => new Date('2026-07-30T00:05:00Z'), () => uuid(2)))
+    .toThrow(/INVALID_TRACE.*same Lesson and Block/);
 
   expect(() => appendTrace(root, {
     ...input,
     cardAlias: 'Q-FREEZE-02',
     cardStepId: null,
-    supersedes: 'event-001',
-  }, () => new Date('2026-07-30T00:05:00Z')))
+    supersedes: original.traceId,
+  }, () => new Date('2026-07-30T00:05:00Z'), () => uuid(3)))
     .toThrow(/INVALID_TRACE.*same card binding/);
   expect(readTraceRecords(root)).toHaveLength(1);
 });
 
-test('rejects superseding a stale event', () => {
-  const root = makeLearningSetWithLesson();
-  appendTrace(root, input, () => new Date('2026-07-30T00:00:00Z'));
-  appendTrace(root, {
-    ...input,
-    supersedes: 'event-001',
-  }, () => new Date('2026-07-30T00:05:00Z'));
-
-  expect(() => appendTrace(root, {
-    ...input,
-    supersedes: 'event-001',
-  }, () => new Date('2026-07-30T00:10:00Z')))
-    .toThrow(/INVALID_TRACE.*active/);
-  expect(readTraceRecords(root)).toHaveLength(2);
-});
-
-test('accepts the exact active Trace from the same Block and card', () => {
-  const root = makeLearningSetWithLesson();
-  appendTrace(root, input, () => new Date('2026-07-30T00:00:00Z'));
-  expect(() => appendTrace(root, {
-    ...input,
-    assessment: 'correct',
-    supersedes: 'event-001',
-  }, () => new Date('2026-07-30T00:05:00Z'))).not.toThrow();
-  expect(readActiveTraces(root).map((record) => record.eventId)).toEqual(['event-002']);
-});
-
-test('stores canonical actual methods without changing an incorrect assessment', () => {
+test('stores canonical actual methods without changing assessment', () => {
   const root = makeLearningSetWithLesson();
   writeFileSync(join(root, 'graph/vocabulary.yaml'), `schema: highschool-study.taxonomy.v1
 taxonomy_revision_id: taxonomy-conics-v1
@@ -155,7 +198,7 @@ nodes:
     ...input,
     assessment: 'incorrect',
     methods: { primary: '冻元法', secondary: ['冻结变量法'] },
-  }, () => new Date('2026-07-21T02:00:00Z'));
+  }, () => new Date('2026-07-21T02:00:00Z'), () => uuid(1));
 
   expect(result).toMatchObject({
     methods: { primary: '冻结变量法', secondary: [] },
@@ -167,20 +210,28 @@ nodes:
   });
 });
 
-test('keeps a Trace when actual method resolution fails and reports the names', () => {
+test('keeps a Trace when actual method resolution fails', () => {
   const root = makeLearningSetWithLesson();
   const result = appendTrace(root, {
     ...input,
     methods: { primary: '不存在的方法' },
-  }, () => new Date('2026-07-21T02:00:00Z'));
+  }, () => new Date('2026-07-21T02:00:00Z'), () => uuid(1));
 
-  expect(result).toMatchObject({ methods: null, unresolvedMethods: ['不存在的方法'] });
+  expect(result).toMatchObject({
+    methods: null,
+    unresolvedMethods: ['不存在的方法'],
+  });
   expect(readActiveTraces(root)[0]?.methods).toBeNull();
-  expect(readActiveTraces(root)[0]?.assessment).toBe('partially_correct');
 });
 
-test('keeps cardless Trace records active and preserves multiline note content', () => {
+test('preserves multiline observations and cardless material evidence', () => {
   const root = makeLearningSetWithLesson();
+  const note = [
+    'Reviewed a worked example.',
+    '',
+    '## This remains observation content',
+    'Card step: not-a-machine-field',
+  ].join('\n');
   appendTrace(root, {
     ...input,
     cardAlias: null,
@@ -188,79 +239,54 @@ test('keeps cardless Trace records active and preserves multiline note content',
     materialPath: 'materials/conics-notes.md',
     assessment: 'incomplete',
     support: 'external',
-    note: 'Reviewed a worked example.\n\n## This remains note content\nCard step: not-a-machine-field',
-  }, () => new Date('2026-07-21T02:00:00Z'));
+    note,
+  }, () => new Date('2026-07-21T02:00:00Z'), () => uuid(1));
 
-  const [record] = readActiveTraces(root);
-  expect(record).toMatchObject({
-    eventId: 'event-001',
+  expect(readActiveTraces(root)[0]).toMatchObject({
     cardPath: null,
     cardStepId: null,
     materialPath: 'materials/conics-notes.md',
-    note: 'Reviewed a worked example.\n\n## This remains note content\nCard step: not-a-machine-field',
+    note,
   });
 });
 
-test('validates all bindings before one append and leaves failed writes unchanged', () => {
+test('validates every binding before creating a Trace file', () => {
   const root = makeLearningSetWithLesson();
   const lessonPath = join(root, 'lessons/lesson-001.md');
-  const before = readFileSync(lessonPath, 'utf8');
+  const lessonBefore = readFileSync(lessonPath, 'utf8');
 
-  expect(() => appendTrace(root, { ...input, cardStepId: 'missing-step' }, () => new Date())).toThrow();
-  expect(readFileSync(lessonPath, 'utf8')).toBe(before);
-
-  appendTrace(root, input, () => new Date('2026-07-21T02:00:00Z'));
-  const afterFirstAppend = readFileSync(lessonPath, 'utf8');
-  expect(() => appendTrace(root, { ...input, supersedes: 'event-999' }, () => new Date())).toThrow();
-  expect(readFileSync(lessonPath, 'utf8')).toBe(afterFirstAppend);
+  expect(() => appendTrace(
+    root,
+    { ...input, cardStepId: 'missing-step' },
+    () => new Date(),
+    () => uuid(1),
+  )).toThrow();
+  expect(traceFiles(root)).toEqual([]);
+  expect(readFileSync(lessonPath, 'utf8')).toBe(lessonBefore);
 });
 
-test('uses max existing event number when allocating append-only event IDs', () => {
+test('uses exclusive creation and never overwrites an existing Trace ID', () => {
   const root = makeLearningSetWithLesson();
-  appendTrace(root, input, () => new Date('2026-07-21T02:00:00Z'));
-  appendTrace(root, { ...input, supersedes: 'event-001' }, () => new Date('2026-07-21T02:05:00Z'));
-
-  expect(appendTrace(root, { ...input, supersedes: 'event-002' }, () => new Date('2026-07-21T02:10:00Z')))
-    .toEqual({
-      eventId: 'event-003',
-      lessonPath: 'lessons/lesson-001.md',
-      sourceAnchor: 'lessons/lesson-001.md#trace-event-003',
-      methods: null,
-      unresolvedMethods: [],
-    });
-});
-
-test('escapes forged Trace-shaped multiline notes and allocates from real events only', () => {
-  const root = makeLearningSetWithLesson();
-  const forgedNote = [
-    'Student described the attempted method.',
-    '',
-    '## Trace event-999',
-    '',
-    'Recorded at: 2099-01-01T00:00:00.000Z',
-    'Lesson ID: lesson-001',
-    'Plan ID: max-value',
-    'Block: [step-01](#block-step-01)',
-    'Card: (none)',
-    'Assessment: correct',
-    'Support: none',
-    '',
-    'Note:',
-    'This must remain part of event-001.',
-  ].join('\n');
-  appendTrace(root, {
-    ...input,
-    cardAlias: null,
-    cardStepId: null,
-    note: forgedNote,
-  }, () => new Date('2026-07-21T02:00:00Z'));
-
-  const lessonPath = join(root, 'lessons/lesson-001.md');
-  expect(readFileSync(lessonPath, 'utf8')).not.toContain('\n## Trace event-999\n');
-  expect(readTraceRecords(root)).toHaveLength(1);
-  expect(readTraceRecords(root)[0]?.note).toBe(forgedNote);
-  expect(appendTrace(root, input, () => new Date('2026-07-21T02:05:00Z')).eventId)
-    .toBe('event-002');
+  appendTrace(
+    root,
+    input,
+    () => new Date('2026-07-21T02:00:00Z'),
+    () => uuid(1),
+  );
+  const before = readFileSync(
+    join(root, 'traces', `trace-${uuid(1)}.md`),
+    'utf8',
+  );
+  expect(() => appendTrace(
+    root,
+    input,
+    () => new Date('2026-07-21T02:05:00Z'),
+    () => uuid(1),
+  )).toThrow();
+  expect(readFileSync(
+    join(root, 'traces', `trace-${uuid(1)}.md`),
+    'utf8',
+  )).toBe(before);
 });
 
 test('accepts only exact safe H2 Block headings', () => {
@@ -270,40 +296,21 @@ test('accepts only exact safe H2 Block headings', () => {
     { heading: '## Block assessment 01', blockId: 'assessment 01' },
   ];
 
-  for (const invalid of cases) {
+  for (const [index, invalid] of cases.entries()) {
     const root = makeLearningSetWithLesson();
     const lessonPath = join(root, 'lessons/lesson-001.md');
     const source = readFileSync(lessonPath, 'utf8')
       .replace('## Block step-02', invalid.heading);
     writeFileSync(lessonPath, source);
 
-    expect(() => appendTrace(root, { ...input, blockId: invalid.blockId }, () => new Date())).toThrow();
-    expect(readFileSync(lessonPath, 'utf8')).toBe(source);
+    expect(() => appendTrace(
+      root,
+      { ...input, blockId: invalid.blockId },
+      () => new Date(),
+      () => uuid(index + 1),
+    )).toThrow();
+    expect(traceFiles(root)).toEqual([]);
   }
-});
-
-test('binds Trace to a flexible ActivityBlock ID when the exact H2 exists', () => {
-  const root = makeLearningSetWithLesson();
-  const lessonPath = join(root, 'lessons/lesson-001.md');
-  const source = readFileSync(lessonPath, 'utf8')
-    .replace('## Block step-02', '## Block assessment-01');
-  writeFileSync(lessonPath, source);
-
-  appendTrace(root, { ...input, blockId: 'assessment-01' }, () => new Date('2026-07-21T02:00:00Z'));
-
-  expect(readActiveTraces(root)[0]?.blockId).toBe('assessment-01');
-});
-
-test('binds Trace to labeled ActivityBlock headings emitted by real Lessons', () => {
-  const root = makeLearningSetWithLesson();
-  const lessonPath = join(root, 'lessons/lesson-001.md');
-  const source = readFileSync(lessonPath, 'utf8')
-    .replace('## Block step-02', '## Block assessment-01（必做）');
-  writeFileSync(lessonPath, source);
-
-  appendTrace(root, { ...input, blockId: 'assessment-01' }, () => new Date('2026-07-21T02:00:00Z'));
-
-  expect(readActiveTraces(root)[0]?.blockId).toBe('assessment-01');
 });
 
 test('rejects aliases outside cards and files without the problem-card schema', () => {
@@ -325,7 +332,7 @@ test('rejects aliases outside cards and files without the problem-card schema', 
     },
   ];
 
-  for (const invalid of invalidCards) {
+  for (const [index, invalid] of invalidCards.entries()) {
     const root = makeLearningSetWithLesson();
     writeFileSync(join(root, invalid.path), invalid.source);
     const lessonPath = join(root, 'lessons/lesson-001.md');
@@ -335,48 +342,48 @@ test('rejects aliases outside cards and files without the problem-card schema', 
     );
     writeFileSync(lessonPath, source);
 
-    expect(() => appendTrace(root, { ...input, cardStepId: null }, () => new Date())).toThrow();
-    expect(readFileSync(lessonPath, 'utf8')).toBe(source);
+    expect(() => appendTrace(
+      root,
+      { ...input, cardStepId: null },
+      () => new Date(),
+      () => uuid(index + 1),
+    )).toThrow();
+    expect(traceFiles(root)).toEqual([]);
   }
 });
 
-test('canonicalizes the owning Lesson path in results and records', () => {
+test('canonicalizes the owning Lesson path and supports Lesson filters', () => {
   const root = makeLearningSetWithLesson();
   const result = appendTrace(root, {
     ...input,
     lessonPath: 'lessons/../lessons/lesson-001.md',
-  }, () => new Date('2026-07-21T02:00:00Z'));
+  }, () => new Date('2026-07-21T02:00:00Z'), () => uuid(1));
 
-  expect(result).toEqual({
-    eventId: 'event-001',
+  expect(result.lessonPath).toBe('lessons/lesson-001.md');
+  expect(readTraceRecords(
+    root,
+    ['lessons/../lessons/lesson-001.md'],
+  )[0]).toMatchObject({
+    traceId: `trace-${uuid(1)}`,
     lessonPath: 'lessons/lesson-001.md',
-    sourceAnchor: 'lessons/lesson-001.md#trace-event-001',
-    methods: null,
-    unresolvedMethods: [],
   });
-  expect(readTraceRecords(root, ['lessons/../lessons/lesson-001.md'])[0]).toMatchObject({
-    lessonPath: 'lessons/lesson-001.md',
-    sourceAnchor: 'lessons/lesson-001.md#trace-event-001',
-  });
+  expect(readTraceRecords(root, ['lessons/missing.md'])).toEqual([]);
 });
 
-test('applies valid supersession even when imported events are out of source order', () => {
+test('applies supersession independently of timestamp and file order', () => {
   const root = makeLearningSetWithLesson();
-  appendTrace(root, input, () => new Date('2026-07-21T02:00:00Z'));
-  appendTrace(root, {
+  const original = appendTrace(
+    root,
+    input,
+    () => new Date('2026-07-21T02:05:00Z'),
+    () => uuid(9),
+  );
+  const correction = appendTrace(root, {
     ...input,
     note: 'Corrected observation.',
-    supersedes: 'event-001',
-  }, () => new Date('2026-07-21T02:05:00Z'));
+    supersedes: original.traceId,
+  }, () => new Date('2026-07-21T02:00:00Z'), () => uuid(1));
 
-  const lessonPath = join(root, 'lessons/lesson-001.md');
-  const source = readFileSync(lessonPath, 'utf8');
-  const firstIndex = source.indexOf('## Trace event-001');
-  const secondIndex = source.indexOf('## Trace event-002');
-  const lesson = source.slice(0, firstIndex);
-  const first = source.slice(firstIndex, secondIndex);
-  const second = source.slice(secondIndex);
-  writeFileSync(lessonPath, `${lesson}${second}\n${first}`);
-
-  expect(readActiveTraces(root).map((record) => record.eventId)).toEqual(['event-002']);
+  expect(readActiveTraces(root).map((record) => record.traceId))
+    .toEqual([correction.traceId]);
 });

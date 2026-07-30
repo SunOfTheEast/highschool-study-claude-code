@@ -7,6 +7,8 @@ export type TraceSearchInput = {
   planId: string | null;
   lessonId: string | null;
   cardPath: string | null;
+  occurredAfter: string | null;
+  occurredBefore: string | null;
   limit: number;
 };
 
@@ -16,12 +18,12 @@ export type TraceSearchResult = {
 };
 
 function compareTrace(left: TraceRecord, right: TraceRecord): number {
-  return left.recordedAt < right.recordedAt ? -1
-    : left.recordedAt > right.recordedAt ? 1
+  return left.occurredAt < right.occurredAt ? -1
+    : left.occurredAt > right.occurredAt ? 1
       : left.lessonPath < right.lessonPath ? -1
         : left.lessonPath > right.lessonPath ? 1
-          : left.eventId < right.eventId ? -1
-            : left.eventId > right.eventId ? 1
+          : left.traceId < right.traceId ? -1
+            : left.traceId > right.traceId ? 1
               : 0;
 }
 
@@ -39,6 +41,12 @@ export function searchTraces(root: string, input: TraceSearchInput): TraceSearch
     .filter((trace) => input.planId === null || trace.planId === input.planId)
     .filter((trace) => input.lessonId === null || trace.lessonId === input.lessonId)
     .filter((trace) => input.cardPath === null || trace.cardPath === input.cardPath)
+    .filter((trace) => (
+      input.occurredAfter === null || trace.occurredAt >= input.occurredAfter
+    ))
+    .filter((trace) => (
+      input.occurredBefore === null || trace.occurredAt <= input.occurredBefore
+    ))
     .filter((trace) => matchesQuery(trace, input.query))
     .sort(compareTrace)
     .slice(0, input.limit);
