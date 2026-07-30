@@ -251,6 +251,9 @@ export class WorkspaceRegistry {
   async pauseLesson(lessonId: string): Promise<void> {
     const lesson = this.workspaceForLesson(lessonId).lessons.find((item) => item.id === lessonId);
     if (!lesson) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
+    if (lesson.status !== 'active') {
+      throw new Error(`LESSON_NOT_ACTIVE: ${lesson.status}`);
+    }
     const tutor = this.sessions.get(`tutor:${lessonId}`);
     if (tutor?.isStreaming) await tutor.abort();
     setFrontmatterField(this.root, lesson.path, 'status', 'paused');

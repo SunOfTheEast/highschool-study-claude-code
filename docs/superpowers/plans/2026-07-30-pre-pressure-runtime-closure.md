@@ -66,9 +66,9 @@ bun test tests/runtime/workspace-registry.test.ts tests/server/workspace-api.tes
 - Modify: `apps/pi-teaching-web/src/runtime/workspace-registry.ts`
 - Test: `apps/pi-teaching-web/tests/runtime/workspace-registry.test.ts`
 
-- [ ] 为 `prepared`、`paused`、`closed`、`abandoned` 写文件不变的失败测试。
-- [ ] 在任何 abort / 写入前要求 Lesson 状态为 `active`。
-- [ ] 运行定向 registry 测试。
+- [x] 为 `prepared`、`paused`、`closed`、`abandoned` 写文件不变的失败测试。
+- [x] 在任何 abort / 写入前要求 Lesson 状态为 `active`。
+- [x] 运行定向 registry 测试。
 
 ---
 

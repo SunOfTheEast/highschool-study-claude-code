@@ -350,6 +350,26 @@ test('restores terminal Lesson history from its owned Pi JSONL without creating 
   ]);
 });
 
+test('leaves every non-active Lesson unchanged when pause is requested', async () => {
+  for (const status of ['prepared', 'paused', 'closed', 'abandoned'] as const) {
+    const root = fixture();
+    if (status !== 'prepared') {
+      editLesson(root, (source) => source.replace('status: prepared', `status: ${status}`));
+    }
+    const lessonPath = join(root, 'lessons/lesson-003.md');
+    const before = readFileSync(lessonPath, 'utf8');
+    const registry = new WorkspaceRegistry(
+      root,
+      async () => { throw new Error('pause must not create a Session'); },
+      async () => null,
+    );
+
+    await expect(registry.pauseLesson('lesson-003'))
+      .rejects.toThrow(`LESSON_NOT_ACTIVE: ${status}`);
+    expect(readFileSync(lessonPath, 'utf8')).toBe(before);
+  }
+});
+
 test('creates one canonical Roadmap Coach and writes its Session back to ROADMAP.md', async () => {
   const root = fixture();
   const created: Array<{
