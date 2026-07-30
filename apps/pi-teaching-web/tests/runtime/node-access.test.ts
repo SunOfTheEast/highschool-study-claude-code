@@ -76,6 +76,7 @@ test('resolves legal sealed Handoffs and refuses an unrelated raw child document
   const context = compileNodeContext(domainIntegrityFixtureRoot, planScope());
   const policy = new NodeAccessPolicy(domainIntegrityFixtureRoot, context);
 
+  expect(policy.allows('handoff:domain-integrity/handoff')).toBe(true);
   expect(policy.allows('handoff:lesson-001/handoff')).toBe(true);
   expect(policy.resolve('handoff:lesson-001/handoff')).toMatchObject({
     valid: true,

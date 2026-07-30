@@ -226,7 +226,9 @@ export class NodeAccessPolicy {
     }
     const customHandoff = handoffId(source);
     if (customHandoff !== null) {
-      return this.initial.has(source) || this.granted.has(source);
+      return customHandoff === `${this.context.scope.nodeId}/handoff`
+        || this.initial.has(source)
+        || this.granted.has(source);
     }
     let handle: SourceHandle;
     try {

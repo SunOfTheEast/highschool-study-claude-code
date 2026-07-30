@@ -1453,10 +1453,24 @@ test('completes a Plan only after sealing one valid source-linked Handoff', asyn
   const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-plan-complete-handoff-'));
   temporaryRoots.push(temporaryRoot);
   cpSync(root, temporaryRoot, { recursive: true });
+  const scope = {
+    nodeKind: 'plan' as const,
+    nodeId: 'domain-integrity',
+    nodePath: 'plans/domain-integrity.md',
+    parentId: 'roadmap',
+    parentPath: 'ROADMAP.md',
+  };
+  const accessPolicy = new NodeAccessPolicy(
+    temporaryRoot,
+    compileNodeContext(temporaryRoot, scope),
+  );
   const tool = createPlanUpdateTool(
     temporaryRoot,
     'plans/domain-integrity.md',
-    { now: () => new Date('2026-08-05T11:00:00.000Z') },
+    {
+      now: () => new Date('2026-08-05T11:00:00.000Z'),
+      accessPolicy,
+    },
   );
   const handoff = {
     learnerClaims: [{
@@ -1491,6 +1505,12 @@ test('completes a Plan only after sealing one valid source-linked Handoff', asyn
   expect(source).toContain('status: completed');
   expect(parseHandoff(source).learnerClaims[0]?.sources)
     .toEqual(['trace:trace-fixture-002']);
+  expect(accessPolicy.resolve('handoff:domain-integrity/handoff')).toMatchObject({
+    valid: true,
+    source: 'handoff:domain-integrity/handoff',
+    kind: 'handoff',
+    path: 'plans/domain-integrity.md',
+  });
 });
 
 test('keeps a Plan active when its completion Handoff source is invalid', async () => {

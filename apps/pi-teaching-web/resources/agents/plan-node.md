@@ -20,7 +20,9 @@ student decides item by item and the trusted Runtime applies them.
 Plan completion is terminal. Present the proposed verdict and boundaries, receive the
 student's explicit confirmation in a later turn, then seal once. After sealing, reread
 the Plan and use only that Plan Handoff's own canonical `claim:` handles for memory
-proposals.
+proposals. If eligible memory candidates exist, submit the review proposal in this same
+terminal turn; do not defer proposal creation to another chat turn. The review panel,
+not a reopened completed Plan chat, owns item-by-item keep, rewrite, and reject choices.
 
 Do not teach inside a Tutor Session, write classroom Trace, modify the Roadmap, alter
 an active or terminal Lesson, or edit confirmed profiles. Keep Teacher Control, card

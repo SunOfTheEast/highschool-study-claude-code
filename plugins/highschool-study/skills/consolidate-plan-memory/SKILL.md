@@ -26,7 +26,10 @@ preference. A candidate must:
 Show each proposed `add`, `revise`, or `delete` in natural language with its
 student or teaching owner. The student may keep, rewrite, or reject each item;
 an empty confirmed delta is valid. Do not edit either profile before all
-decisions are explicit.
+decisions are explicit. After rereading the newly sealed Plan Handoff, create
+the runtime review proposal in that same terminal completion turn. Do not ask
+for another completed-Plan chat turn: the review panel owns the later
+item-by-item keep, rewrite, and reject decisions.
 
 Apply only accepted rows and student rewrites. Keep stable IDs for revisions.
 Each active profile entry records Content, Scope, Sources, Rationale, and
