@@ -366,6 +366,48 @@ test('rejects a nonexistent card without writing or indexing a Lesson', async ()
   expect(existsSync(join(temporaryRoot, 'lessons/lesson-blueprint-invalid.md'))).toBe(false);
 });
 
+test('rejects a missing Lesson source without writing or indexing a Lesson', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-lesson-source-invalid-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const tool = createLessonPrepareTool(
+    temporaryRoot,
+    'domain-integrity',
+    'plans/domain-integrity.md',
+  );
+  const planAbsolute = join(temporaryRoot, 'plans/domain-integrity.md');
+  const planBefore = readFileSync(planAbsolute, 'utf8');
+
+  await expect(tool.execute('prepare-invalid-source', {
+    lessonId: 'lesson-blueprint-source',
+    title: 'Invalid source',
+    planContext: 'Invalid source',
+    capabilityTarget: 'Invalid source',
+    primaryTemplate: 'assessment',
+    templateReason: 'Invalid source',
+    adjustments: [],
+    cards: [],
+    sources: [{
+      label: '不存在材料',
+      target: 'materials/missing.md#missing',
+      note: '不应写入。',
+    }],
+    blocks: [{
+      id: 'reflection',
+      kind: 'reflection',
+      required: true,
+      dependsOn: [],
+      uses: [],
+      studentView: '反思。',
+      teacherControl: '反思。',
+    }],
+  } as never, undefined, undefined, {} as never))
+    .rejects.toThrow(/LESSON_BLUEPRINT_INVALID.*MISSING_FILE/);
+  expect(existsSync(join(temporaryRoot, 'lessons/lesson-blueprint-source.md')))
+    .toBe(false);
+  expect(readFileSync(planAbsolute, 'utf8')).toBe(planBefore);
+});
+
 test('exposes only read-only study tools for isolated child sessions', () => {
   const factory = (studyToolModule as unknown as {
     createReadOnlyStudyTools?: (root: string) => Array<{ name: string }>;

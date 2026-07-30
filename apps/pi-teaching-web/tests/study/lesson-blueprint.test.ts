@@ -1,4 +1,11 @@
-import { expect, test } from 'bun:test';
+import { afterEach, beforeEach, expect, test } from 'bun:test';
+import {
+  cpSync,
+  mkdtempSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
   LessonBlueprintValidationError,
@@ -9,7 +16,26 @@ import {
 } from '../../src/study/lesson-blueprint';
 import { validatePreparedLessonSource } from '../../src/study/validate-prepared-lesson';
 
-const root = join(import.meta.dir, '../../../../examples/derivative-demo/learning-set');
+const fixtureRoot = join(import.meta.dir, '../../../../examples/derivative-demo/learning-set');
+let root = '';
+
+beforeEach(() => {
+  root = mkdtempSync(join(tmpdir(), 'lesson-blueprint-'));
+  cpSync(fixtureRoot, root, { recursive: true });
+  writeFileSync(
+    join(root, 'materials/blueprint-source.md'),
+    '# Blueprint Source\n\n## Local fact\n\nA locatable teaching fact.\n',
+  );
+  writeFileSync(
+    join(root, 'plans/domain-integrity.md'),
+    '# Plan：定义域完整性的系统加固\n',
+  );
+});
+
+afterEach(() => {
+  rmSync(root, { recursive: true, force: true });
+});
+
 const context: LessonRenderContext = {
   planId: 'domain-integrity',
   planPath: 'plans/domain-integrity.md',
@@ -183,3 +209,61 @@ test('rejects duplicate Blocks, unknown aliases, false cards, and nested structu
     expect(issues).toContain('一级到三级标题');
   }
 });
+
+test('accepts a locatable learning-set material source', () => {
+  const value: LessonBlueprint = {
+    ...blueprint,
+    sources: [{
+      label: '本地材料',
+      target: 'materials/blueprint-source.md#local-fact',
+      note: '支持本课的本地判断。',
+    }],
+  };
+
+  expect(() => validateLessonBlueprint(root, context, value)).not.toThrow();
+  expect(renderPreparedLesson(context, value))
+    .toContain('../materials/blueprint-source.md#local-fact');
+});
+
+test.each([
+  ['missing file', 'materials/missing.md', 'MISSING_FILE'],
+  ['outside learning set', '../../private.md', 'OUTSIDE_LEARNING_SET'],
+  ['missing fragment', 'materials/blueprint-source.md#missing', 'MISSING_FRAGMENT'],
+] as const)('rejects %s in Lesson sources', (_name, target, error) => {
+  const value: LessonBlueprint = {
+    ...blueprint,
+    sources: [{ label: '无效来源', target, note: '测试。' }],
+  };
+  expect(() => validateLessonBlueprint(root, context, value))
+    .toThrow(new RegExp(`来源.*${error}`));
+});
+
+test('accepts a syntactically valid external source without fetching it', () => {
+  const value: LessonBlueprint = {
+    ...blueprint,
+    sources: [{
+      label: '外部视频',
+      target: 'https://example.com/lesson/video',
+      note: '课堂中播放。',
+    }],
+  };
+  expect(() => validateLessonBlueprint(root, context, value)).not.toThrow();
+  expect(renderPreparedLesson(context, value))
+    .toContain('(https://example.com/lesson/video)');
+});
+
+test.each(['https://', 'https:example.com'])(
+  'rejects a malformed external URL: %s',
+  (target) => {
+    const value: LessonBlueprint = {
+      ...blueprint,
+      sources: [{
+        label: '错误链接',
+        target,
+        note: '不能解析。',
+      }],
+    };
+    expect(() => validateLessonBlueprint(root, context, value))
+      .toThrow(/外部来源 URL 非法/);
+  },
+);

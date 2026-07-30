@@ -1,5 +1,8 @@
 import { posix } from 'node:path';
-import { readCard } from 'highschool-study-markdown/study-domain';
+import {
+  readCard,
+  sourceResolve,
+} from 'highschool-study-markdown/study-domain';
 
 export type LessonCardBinding = {
   alias: string;
@@ -61,13 +64,44 @@ function nonempty(value: string): boolean {
 }
 
 function relativeTarget(lessonPath: string, target: string): string {
-  if (/^https?:\/\//.test(target)) return target;
+  if (/^https?:\/\//i.test(target)) return target;
   return posix.relative(posix.dirname(lessonPath), target);
+}
+
+function validateLessonSource(
+  root: string,
+  context: LessonRenderContext,
+  source: LessonSource,
+): string | null {
+  if (/^https?:/i.test(source.target)) {
+    if (!/^https?:\/\//i.test(source.target)) {
+      return `外部来源 URL 非法：${source.target}`;
+    }
+    try {
+      const url = new URL(source.target);
+      return ['http:', 'https:'].includes(url.protocol) && Boolean(url.host)
+        ? null
+        : `外部来源 URL 非法：${source.target}`;
+    } catch {
+      return `外部来源 URL 非法：${source.target}`;
+    }
+  }
+  const target = posix.relative(posix.dirname(context.planPath), source.target);
+  const resolved = sourceResolve(root, {
+    fromPath: context.planPath,
+    target,
+  });
+  const declaredPath = source.target.split('#', 1)[0]!;
+  if (resolved.valid && resolved.path === declaredPath) return null;
+  const reason = resolved.valid
+    ? `NON_CANONICAL_PATH:${resolved.path ?? '(none)'}`
+    : resolved.error;
+  return `来源无法定位：${source.target}（${reason}）`;
 }
 
 export function validateLessonBlueprint(
   root: string,
-  _context: LessonRenderContext,
+  context: LessonRenderContext,
   blueprint: LessonBlueprint,
 ): void {
   const issues: string[] = [];
@@ -98,6 +132,15 @@ export function validateLessonBlueprint(
     } catch {
       issues.push(`题卡不存在：${card.cardPath}`);
     }
+  }
+
+  for (const source of blueprint.sources) {
+    if (!nonempty(source.label) || !nonempty(source.target) || !nonempty(source.note)) {
+      issues.push('来源 label、target 与 note 均不能为空');
+      continue;
+    }
+    const issue = validateLessonSource(root, context, source);
+    if (issue) issues.push(issue);
   }
 
   for (const block of blueprint.blocks) {
