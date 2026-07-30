@@ -1,4 +1,3 @@
-import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -8,7 +7,10 @@ import {
 } from '@earendil-works/pi-coding-agent';
 import { resolvePersona } from '../study/persona';
 import {
-  formatSessionOwnerContext,
+  compileNodeContext,
+  renderCompiledNodeContext,
+} from './node-context';
+import {
   isRoadmapCoachScope,
   roleForNode,
   type NodeSessionScope,
@@ -32,34 +34,16 @@ export function skillNamesForScope(scope: NodeSessionScope): string[] {
   return roleSkillNames(roleForNode(scope.nodeKind));
 }
 
-export function composeRoleContext(
-  teachingCore: string,
-  roleContext: string,
-  ownerContext: string,
-): string {
-  return [teachingCore, roleContext, ownerContext]
-    .map((part) => part.trim())
-    .filter(Boolean)
-    .join('\n\n');
-}
-
 export async function createRoleResourceLoader(
   root: string,
   scope: NodeSessionScope,
   eventBus: EventBus,
+  options: { sessionId?: string | null } = {},
 ) {
   const role = roleForNode(scope.nodeKind);
   const skillPaths = skillNamesForScope(scope)
     .map((name) => join(resourceRoot, 'skills', name, 'SKILL.md'));
-  const teachingCore = readFileSync(
-    join(resourceRoot, 'teaching', 'math-teaching-core.md'),
-    'utf8',
-  );
-  const roleContextName = isRoadmapCoachScope(scope) ? 'roadmap-coach' : role;
-  const roleContext = readFileSync(
-    join(resourceRoot, 'agents', `${roleContextName}.md`),
-    'utf8',
-  );
+  const context = compileNodeContext(root, scope, options);
   const persona = resolvePersona(root);
   const loader = new DefaultResourceLoader({
     cwd: root,
@@ -72,11 +56,7 @@ export async function createRoleResourceLoader(
         ...current.agentsFiles,
         {
           path: `/virtual/studyforge-${role}.md`,
-          content: composeRoleContext(
-            teachingCore,
-            roleContext,
-            formatSessionOwnerContext(root, scope),
-          ),
+          content: renderCompiledNodeContext(context),
         },
         {
           path: `/virtual/studyforge-persona-${persona.id}.md`,

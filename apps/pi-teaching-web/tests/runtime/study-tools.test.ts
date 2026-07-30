@@ -361,8 +361,10 @@ test('keeps child card and Trace search payloads metadata-only', async () => {
     cards: Array<Record<string, unknown>>;
   };
   expect(Object.keys(cardPayload.cards[0]!).sort()).toEqual([
-    'goal', 'methods', 'path', 'title', 'traceHistory',
+    'goal', 'methods', 'path', 'source', 'title', 'traceHistory',
   ]);
+  expect(cardPayload.cards[0]?.source)
+    .toMatch(/^card:cards\/.+\.ya?ml$/);
 
   const traceResult = await traceSearch.execute('compact-trace', {
     planId: 'domain-integrity',
@@ -373,7 +375,7 @@ test('keeps child card and Trace search payloads metadata-only', async () => {
   };
   for (const card of Object.values(tracePayload.cardsByPath)) {
     expect(Object.keys(card).sort()).toEqual([
-      'goal', 'methods', 'path', 'title', 'traceHistory',
+      'goal', 'methods', 'path', 'source', 'title', 'traceHistory',
     ]);
   }
 });
@@ -397,7 +399,7 @@ test('keeps Plan Coach card and Trace search payloads metadata-only', async () =
     cards: Array<Record<string, unknown>>;
   };
   expect(Object.keys(cardPayload.cards[0]!).sort()).toEqual([
-    'goal', 'methods', 'path', 'title', 'traceHistory',
+    'goal', 'methods', 'path', 'source', 'title', 'traceHistory',
   ]);
 
   const traceResult = await traceSearch.execute('coach-trace', {
@@ -409,9 +411,103 @@ test('keeps Plan Coach card and Trace search payloads metadata-only', async () =
   };
   for (const card of Object.values(tracePayload.cardsByPath)) {
     expect(Object.keys(card).sort()).toEqual([
-      'goal', 'methods', 'path', 'title', 'traceHistory',
+      'goal', 'methods', 'path', 'source', 'title', 'traceHistory',
     ]);
   }
+});
+
+test('binds source_resolve to one source and removes model-owned origin paths', () => {
+  const plan = createStudyTools(root, () => new Date(), {
+    nodeKind: 'plan',
+    nodeId: 'domain-integrity',
+    nodePath: 'plans/domain-integrity.md',
+    parentId: 'roadmap',
+    parentPath: 'ROADMAP.md',
+  });
+  const resolver = plan.find((tool) => tool.name === 'source_resolve')!;
+  const properties = (resolver.parameters as {
+    properties: Record<string, unknown>;
+  }).properties;
+
+  expect(Object.keys(properties)).toEqual(['source']);
+  expect(JSON.stringify(resolver.parameters)).not.toContain('fromPath');
+  expect(JSON.stringify(resolver.parameters)).not.toContain('target');
+});
+
+test('forces Trace search to the current Plan or Lesson scope', async () => {
+  const planTools = createStudyTools(root, () => new Date(), {
+    nodeKind: 'plan',
+    nodeId: 'domain-integrity',
+    nodePath: 'plans/domain-integrity.md',
+    parentId: 'roadmap',
+    parentPath: 'ROADMAP.md',
+  });
+  const planSearch = planTools.find((tool) => tool.name === 'trace_search')!;
+  const planProperties = (planSearch.parameters as {
+    properties: Record<string, unknown>;
+  }).properties;
+  expect(Object.keys(planProperties)).not.toContain('planId');
+  expect(Object.keys(planProperties)).toContain('lessonId');
+
+  const lessonSearch = createStudyTools(root, () => new Date(), {
+    nodeKind: 'lesson',
+    nodeId: 'lesson-002',
+    nodePath: 'lessons/lesson-002.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
+  }).find((tool) => tool.name === 'trace_search')!;
+  const lessonProperties = (lessonSearch.parameters as {
+    properties: Record<string, unknown>;
+  }).properties;
+  expect(Object.keys(lessonProperties)).not.toContain('planId');
+  expect(Object.keys(lessonProperties)).not.toContain('lessonId');
+
+  const result = await lessonSearch.execute('lesson-traces', {
+    limit: 100,
+  } as never, undefined, undefined, {} as never);
+  const payload = JSON.parse((result.content[0] as { text: string }).text) as {
+    traces: Array<{ lessonId: string }>;
+  };
+  expect(payload.traces).not.toHaveLength(0);
+  expect(payload.traces.every((trace) => trace.lessonId === 'lesson-002')).toBe(true);
+});
+
+test('keeps card, Trace and source reads free of access facts', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-read-no-access-fact-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const before = readTraceRecords(temporaryRoot);
+  const tools = createStudyTools(temporaryRoot, () => new Date(), {
+    nodeKind: 'plan',
+    nodeId: 'domain-integrity',
+    nodePath: 'plans/domain-integrity.md',
+    parentId: 'roadmap',
+    parentPath: 'ROADMAP.md',
+  });
+
+  await tools.find((tool) => tool.name === 'card_search')!.execute(
+    'read-card',
+    { query: '定义域', limit: 5 },
+    undefined,
+    undefined,
+    {} as never,
+  );
+  await tools.find((tool) => tool.name === 'trace_search')!.execute(
+    'read-trace',
+    { limit: 20 },
+    undefined,
+    undefined,
+    {} as never,
+  );
+  await tools.find((tool) => tool.name === 'source_resolve')!.execute(
+    'read-source',
+    { source: 'trace:trace-fixture-002' },
+    undefined,
+    undefined,
+    {} as never,
+  );
+
+  expect(readTraceRecords(temporaryRoot)).toEqual(before);
 });
 
 test('binds a Tutor Trace to its Lesson and refreshes planner attention', async () => {

@@ -23,6 +23,43 @@ export function roleForNode(kind: NodeKind): SessionRole {
   return kind === 'lesson' ? 'tutor' : 'coach';
 }
 
+export function roleToolNames(role: SessionRole): string[] {
+  return role === 'coach'
+    ? [
+      'card_search',
+      'trace_search',
+      'source_resolve',
+      'lesson_prepare',
+      'plan_update',
+      'memory_review_propose',
+      'deep_workflow_propose',
+    ]
+    : [
+      'card_search',
+      'trace_search',
+      'source_resolve',
+      'trace_append',
+      'classroom_update',
+      'lesson_close',
+      'card_alternative_append',
+      'deep_workflow_propose',
+    ];
+}
+
+export function scopeToolNames(scope: NodeSessionScope): string[] {
+  if (!isRoadmapCoachScope(scope)) {
+    return roleToolNames(roleForNode(scope.nodeKind));
+  }
+  return [
+    'card_search',
+    'trace_search',
+    'source_resolve',
+    'roadmap_update',
+    'plan_prepare',
+    'deep_workflow_propose',
+  ];
+}
+
 export function sessionKeyForNode(scope: NodeSessionScope): SessionKey {
   if (scope.nodeKind === 'roadmap') return 'coach:@roadmap';
   return `${roleForNode(scope.nodeKind)}:${scope.nodeId}`;

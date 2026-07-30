@@ -12,6 +12,12 @@ import { Type } from 'typebox';
 import { readPreparedLessonBlocks } from '../study/validate-prepared-lesson';
 import { lessonBlockIdSchema } from './lesson-tool-contracts';
 import {
+  NodeAccessPolicy,
+  type NodeAccessPolicyOptions,
+  type NodeSourceResolution,
+} from './node-access';
+import { compileNodeContext } from './node-context';
+import {
   roleForNode,
   type NodeSessionScope,
 } from './session-scope';
@@ -27,6 +33,8 @@ export type StudyToolContext = NodeSessionScope;
 
 export type ReadOnlyStudyToolOptions = {
   compactCardPayloads?: boolean;
+  scope?: NodeSessionScope;
+  accessPolicy?: NodeAccessPolicy;
 };
 
 type SearchCard = ReturnType<typeof searchCards>['cards'][number];
@@ -34,10 +42,71 @@ type SearchCard = ReturnType<typeof searchCards>['cards'][number];
 function compactCard(card: SearchCard) {
   return {
     path: card.path,
+    source: `card:${card.path}`,
     title: card.title,
     goal: card.goal,
     methods: card.methods,
     traceHistory: card.traceHistory,
+  };
+}
+
+function searchableCard(card: SearchCard): SearchCard & { source: string } {
+  return { ...card, source: `card:${card.path}` };
+}
+
+function unboundSourceResolve(
+  root: string,
+  source: string,
+): NodeSourceResolution {
+  if (source.startsWith('card:')) {
+    const target = source.slice('card:'.length);
+    const resolved = sourceResolve(root, { fromPath: 'ROADMAP.md', target });
+    return resolved.valid
+      ? {
+        valid: true,
+        source,
+        kind: 'card',
+        path: resolved.path,
+        excerpt: resolved.excerpt,
+        error: null,
+      }
+      : {
+        valid: false,
+        source,
+        kind: null,
+        path: null,
+        excerpt: null,
+        error: 'SOURCE_NOT_FOUND',
+      };
+  }
+  if (source.startsWith('trace:')) {
+    const trace = readActiveTraces(root)
+      .find((candidate) => candidate.sourceRef === source);
+    return trace
+      ? {
+        valid: true,
+        source,
+        kind: 'trace',
+        path: `traces/${trace.traceId}.md`,
+        excerpt: JSON.stringify(trace),
+        error: null,
+      }
+      : {
+        valid: false,
+        source,
+        kind: null,
+        path: null,
+        excerpt: null,
+        error: 'SOURCE_NOT_FOUND',
+      };
+  }
+  return {
+    valid: false,
+    source,
+    kind: null,
+    path: null,
+    excerpt: null,
+    error: 'SOURCE_NOT_ALLOWED',
   };
 }
 
@@ -114,9 +183,11 @@ export function createReadOnlyStudyTools(
       }),
       execute: async (_id, input) => {
         const value = searchCards(root, input);
+        const cards = value.cards.map(searchableCard);
+        options.accessPolicy?.grant(cards.map((card) => card.source));
         return result('card-search', options.compactCardPayloads
-          ? { cards: value.cards.map(compactCard) }
-          : value);
+          ? { cards: cards.map(compactCard) }
+          : { cards });
       },
     }),
     defineTool({
@@ -127,12 +198,24 @@ export function createReadOnlyStudyTools(
         query: Type.Optional(Type.String({
           description: 'Optional text matched against active Trace evidence.',
         })),
-        planId: Type.Optional(Type.String({
-          description: 'Optional exact Plan ID scope.',
-        })),
-        lessonId: Type.Optional(Type.String({
-          description: 'Optional exact Lesson ID scope.',
-        })),
+        ...(
+          options.scope === undefined || options.scope.nodeKind === 'roadmap'
+            ? {
+              planId: Type.Optional(Type.String({
+                description: 'Optional exact Plan ID scope.',
+              })),
+            }
+            : {}
+        ),
+        ...(
+          options.scope === undefined || options.scope.nodeKind !== 'lesson'
+            ? {
+              lessonId: Type.Optional(Type.String({
+                description: 'Optional exact Lesson ID scope inside the allowed branch.',
+              })),
+            }
+            : {}
+        ),
         cardPath: Type.Optional(Type.String({
           description: 'Optional exact learning-set-relative card path for card-to-Trace lookup.',
         })),
@@ -149,57 +232,91 @@ export function createReadOnlyStudyTools(
         }),
       }),
       execute: async (_id, input) => {
+        const scopedInput = input as typeof input & {
+          planId?: string;
+          lessonId?: string;
+        };
+        const forcedPlanId = options.scope?.nodeKind === 'plan'
+          ? options.scope.nodeId
+          : options.scope?.nodeKind === 'lesson'
+            ? options.scope.parentId
+            : scopedInput.planId ?? null;
+        const forcedLessonId = options.scope?.nodeKind === 'lesson'
+          ? options.scope.nodeId
+          : scopedInput.lessonId ?? null;
         const value = searchTraces(root, {
           query: input.query ?? null,
-          planId: input.planId ?? null,
-          lessonId: input.lessonId ?? null,
+          planId: forcedPlanId,
+          lessonId: forcedLessonId,
           cardPath: input.cardPath ?? null,
           occurredAfter: input.occurredAfter ?? null,
           occurredBefore: input.occurredBefore ?? null,
           limit: input.limit,
         });
+        const cardsByPath = Object.fromEntries(
+          Object.entries(value.cardsByPath).map(([path, card]) => [
+            path,
+            options.compactCardPayloads
+              ? compactCard(card)
+              : searchableCard(card),
+          ]),
+        );
+        options.accessPolicy?.grant([
+          ...value.traces.map((trace) => trace.sourceRef),
+          ...Object.keys(value.cardsByPath).map((path) => `card:${path}`),
+        ]);
         return result('trace-search', options.compactCardPayloads
           ? {
               traces: value.traces,
-              cardsByPath: Object.fromEntries(
-                Object.entries(value.cardsByPath).map(([path, card]) => [
-                  path,
-                  compactCard(card),
-                ]),
-              ),
+              cardsByPath,
             }
-          : value);
+          : { traces: value.traces, cardsByPath });
       },
     }),
     defineTool({
       name: 'source_resolve',
       label: '核验来源',
-      description: 'Resolve and verify one learning-set-local source reference, optionally including a fragment. Use before relying on a relative file, heading, or card-step citation. The result reports the canonical path, fragment, and validity without changing files.',
+      description: 'Resolve one canonical source already allowed by this Node Session or returned by a real search. The runtime owns the node, file boundary and origin; pass only the source handle.',
       parameters: Type.Object({
-        fromPath: Type.String({
-          description: 'Learning-set-relative path of the file that contains or is making the reference.',
+        source: Type.String({
+          description: 'Canonical source handle or allowlisted learning-set source.',
         }),
-        target: Type.String({
-          description: 'Relative or learning-set-local source target, optionally followed by a fragment.',
-        }),
-      }),
-      execute: async (_id, input) => result('source-resolve', sourceResolve(root, input)),
+      }, { additionalProperties: false }),
+      execute: async (_id, input) => result(
+        'source-resolve',
+        options.accessPolicy?.resolve(input.source)
+          ?? unboundSourceResolve(root, input.source),
+      ),
     }),
   ];
 }
+
+export type StudyToolsRuntimeOptions = NodeAccessPolicyOptions;
 
 export function createStudyTools(
   root: string,
   now: () => Date,
   context: StudyToolContext,
+  options: StudyToolsRuntimeOptions = {},
 ): ToolDefinition[] {
   const role = roleForNode(context.nodeKind);
   const ownerPath = context.nodePath;
   const methodName = Type.Enum(listCanonicalMethodNames(root), {
     description: 'Exact canonical method name from the current learning-set graph.',
   });
+  const accessPolicy = new NodeAccessPolicy(
+    root,
+    compileNodeContext(
+      root,
+      context,
+      options.sessionId === undefined ? {} : { sessionId: options.sessionId },
+    ),
+    options,
+  );
   const readOnly = createReadOnlyStudyTools(root, {
     compactCardPayloads: role === 'coach',
+    scope: context,
+    accessPolicy,
   });
   return [
     readOnly[0]!,

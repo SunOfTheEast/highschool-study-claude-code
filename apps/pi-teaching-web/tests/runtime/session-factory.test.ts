@@ -128,29 +128,20 @@ test('rejects missing, duplicate, malformed and mismatched Session owners', () =
 
 test('keeps Coach and Tutor tool boundaries distinct', () => {
   expect(roleToolNames('coach')).toEqual([
-    'read',
-    'grep',
-    'find',
-    'ls',
     'card_search',
     'trace_search',
     'source_resolve',
     'lesson_prepare',
     'plan_update',
     'memory_review_propose',
-    'memory_review_apply',
     'deep_workflow_propose',
   ]);
   expect(roleToolNames('tutor')).not.toContain('lesson_prepare');
   expect(roleToolNames('tutor')).toEqual([
-    'read',
-    'grep',
-    'find',
-    'ls',
     'card_search',
     'trace_search',
-    'trace_append',
     'source_resolve',
+    'trace_append',
     'classroom_update',
     'lesson_close',
     'card_alternative_append',
@@ -160,7 +151,7 @@ test('keeps Coach and Tutor tool boundaries distinct', () => {
     expect(roleToolNames(role)).not.toContain('subagent');
   }
   const planCoach = scopeToolNames(planScope());
-  expect(planCoach).toContain('memory_review_apply');
+  expect(planCoach).not.toContain('memory_review_apply');
   expect(planCoach).not.toContain('write');
   expect(planCoach).not.toContain('edit');
   expect(scopeToolNames(lessonScope()))
@@ -170,10 +161,6 @@ test('keeps Coach and Tutor tool boundaries distinct', () => {
 test('keeps Roadmap Coach active tools global but non-instructional', () => {
   const tools = scopeToolNames(ROADMAP_COACH_SCOPE);
   expect(tools).toEqual([
-    'read',
-    'grep',
-    'find',
-    'ls',
     'card_search',
     'trace_search',
     'source_resolve',

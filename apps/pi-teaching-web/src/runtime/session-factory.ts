@@ -34,6 +34,8 @@ import { appendSessionOwner } from './session-owner';
 import {
   isRoadmapCoachScope,
   roleForNode,
+  roleToolNames,
+  scopeToolNames,
   sessionKeyForNode,
   type NodeSessionScope,
   type SessionRole,
@@ -156,55 +158,7 @@ export function memoryReviewDecisionMessage(snapshot: MemoryReviewSnapshot) {
   } as const;
 }
 
-export function roleToolNames(role: SessionRole): string[] {
-  return role === 'coach'
-    ? [
-      'read',
-      'grep',
-      'find',
-      'ls',
-      'card_search',
-      'trace_search',
-      'source_resolve',
-      'lesson_prepare',
-      'plan_update',
-      'memory_review_propose',
-      'memory_review_apply',
-      'deep_workflow_propose',
-    ]
-    : [
-      'read',
-      'grep',
-      'find',
-      'ls',
-      'card_search',
-      'trace_search',
-      'trace_append',
-      'source_resolve',
-      'classroom_update',
-      'lesson_close',
-      'card_alternative_append',
-      'deep_workflow_propose',
-    ];
-}
-
-export function scopeToolNames(scope: NodeSessionScope): string[] {
-  if (!isRoadmapCoachScope(scope)) {
-    return roleToolNames(roleForNode(scope.nodeKind));
-  }
-  return [
-    'read',
-    'grep',
-    'find',
-    'ls',
-    'card_search',
-    'trace_search',
-    'source_resolve',
-    'roadmap_update',
-    'plan_prepare',
-    'deep_workflow_propose',
-  ];
-}
+export { roleToolNames, scopeToolNames } from './session-scope';
 
 export async function createPiSessionFactory(
   root: string,
@@ -238,7 +192,9 @@ export async function createPiSessionFactory(
       now,
     );
     const memoryReviewStore = new MemoryReviewStore(manager);
-    const loader = await createRoleResourceLoader(root, scope, eventBus);
+    const loader = await createRoleResourceLoader(root, scope, eventBus, {
+      sessionId: manager.getSessionId(),
+    });
     const ownerTools: ToolDefinition[] = role === 'tutor'
       ? [
         createClassroomUpdateTool(root, ownerPath),
@@ -267,7 +223,10 @@ export async function createPiSessionFactory(
           ),
         ];
     const tools: ToolDefinition[] = [
-      ...createStudyTools(root, now, scope),
+      ...createStudyTools(root, now, scope, {
+        sessionId: manager.getSessionId(),
+        sessionEntries: () => manager.getBranch(),
+      }),
       ...ownerTools,
       createDeepWorkflowTool(workflowRuntime),
     ];
@@ -349,10 +308,19 @@ export async function createPiSessionFactory(
         }
         const submitted = submittedMemoryReview(memoryReviewStore.latest(), id, decisions);
         memoryReviewStore.save(submitted);
-        await triggerAndWaitForAgentEnd(session, () => session.sendCustomMessage(
-          memoryReviewDecisionMessage(submitted),
-          { triggerTurn: true },
-        ));
+        const previousTools = session.getActiveToolNames();
+        session.setActiveToolsByName([
+          ...previousTools,
+          'memory_review_apply',
+        ]);
+        try {
+          await triggerAndWaitForAgentEnd(session, () => session.sendCustomMessage(
+            memoryReviewDecisionMessage(submitted),
+            { triggerTurn: true },
+          ));
+        } finally {
+          session.setActiveToolsByName(previousTools);
+        }
         return submitted;
       },
       confirmWorkflow: (id) => workflowRuntime.confirm(id),

@@ -1,11 +1,8 @@
 import { expect, test } from 'bun:test';
+import { compileNodeContext } from '../../src/runtime/node-context';
 import * as resourceLoader from '../../src/runtime/resource-loader';
-
-type ComposeRoleContext = (
-  teachingCore: string,
-  roleContext: string,
-  ownerContext: string,
-) => string;
+import { renderCompiledNodeContext } from '../../src/runtime/node-context';
+import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
 
 type RoleSkillNames = (role: 'coach' | 'tutor') => string[];
 type SkillNamesForScope = (scope: {
@@ -15,12 +12,6 @@ type SkillNamesForScope = (scope: {
   parentId: string | null;
   parentPath: string | null;
 }) => string[];
-
-function composeRoleContext(): ComposeRoleContext {
-  const compose = (resourceLoader as Record<string, unknown>).composeRoleContext;
-  expect(compose).toBeFunction();
-  return compose as ComposeRoleContext;
-}
 
 function roleSkillNames(): RoleSkillNames {
   const value = (resourceLoader as Record<string, unknown>).roleSkillNames;
@@ -34,18 +25,22 @@ function skillNamesForScope(): SkillNamesForScope {
   return value as SkillNamesForScope;
 }
 
-test('composes the shared teaching core before role and owner context', () => {
-  const context = composeRoleContext()('CORE', 'ROLE', 'OWNER');
+test('renders the compiled page table instead of duplicating role fragments', () => {
+  const context = compileNodeContext(domainIntegrityFixtureRoot, {
+    nodeKind: 'plan',
+    nodeId: 'domain-integrity',
+    nodePath: 'plans/domain-integrity.md',
+    parentId: 'roadmap',
+    parentPath: 'ROADMAP.md',
+  }, { sessionId: 'session-plan' });
+  const rendered = renderCompiledNodeContext(context);
 
-  expect(context).toBe('CORE\n\nROLE\n\nOWNER');
-  expect(context.match(/CORE/g)).toHaveLength(1);
-  expect(context.match(/ROLE/g)).toHaveLength(1);
-  expect(context.match(/OWNER/g)).toHaveLength(1);
-});
-
-test('drops empty context fragments without adding blank envelopes', () => {
-  expect(composeRoleContext()(' CORE ', '', ' OWNER '))
-    .toBe('CORE\n\nOWNER');
+  expect(rendered).toContain('# StudyForge Node Context Frame');
+  expect(rendered).toContain('## RESIDENT · Shared Math Teaching Core');
+  expect(rendered).toContain('## FROZEN · Activation Snapshot');
+  expect(rendered).toContain('## LOCAL · Current plan node');
+  expect(rendered).toContain('Source: session:session-plan');
+  expect(rendered.match(/# High-School Mathematics Teaching Core/g)).toHaveLength(1);
 });
 
 test('offers next-cycle planning only to Coach', () => {
