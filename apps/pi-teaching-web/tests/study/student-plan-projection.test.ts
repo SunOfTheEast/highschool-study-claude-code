@@ -44,6 +44,17 @@ function replaceSection(
   writeFileSync(absolute, source.replace(pattern, `$1\n${value.trim()}\n\n`));
 }
 
+function setPrimaryTemplate(root: string, template: string): void {
+  const lessonPath = join(root, 'lessons/lesson-003.md');
+  writeFileSync(
+    lessonPath,
+    readFileSync(lessonPath, 'utf8').replace(
+      /Primary template: `[^`]+`/,
+      `Primary template: \`${template}\``,
+    ),
+  );
+}
+
 test('projects a prepared assessment from safe structural facts only', () => {
   const root = fixture();
   replaceSection(
@@ -83,7 +94,7 @@ test('projects a prepared assessment from safe structural facts only', () => {
       publicPurpose: '完成一次独立能力检验',
       blockCount: 5,
       blockKinds: ['dialogue', 'problem', 'reflection'],
-      sourceNumbers: ['mst_p0017_ex05', 'mst_p0030_ex16', 'mst_p0032_ex22'],
+      sourceNumbers: [],
     },
     learningReview: null,
   });
@@ -112,9 +123,11 @@ test('uses template-aware public purposes without filtering free text', () => {
         'PRIVATE_DIAGNOSTIC_TARGET',
       ),
   );
-  expect(
-    readStudentPlanProjection(root, 'domain-integrity').nextLesson?.publicPurpose,
-  ).toBe('确认当前真实起点');
+  expect(readStudentPlanProjection(root, 'domain-integrity').nextLesson)
+    .toMatchObject({
+      publicPurpose: '确认当前真实起点',
+      sourceNumbers: [],
+    });
 
   writeFileSync(
     lessonPath,
@@ -129,6 +142,7 @@ test('uses template-aware public purposes without filtering free text', () => {
 
 test('omits a missing card content ID instead of guessing from its path', () => {
   const root = fixture();
+  setPrimaryTemplate(root, 'deliberate-practice');
   const cardPath = join(
     root,
     'cards/derivative/mst_p0032_ex22.card.yaml',
@@ -149,6 +163,7 @@ test('omits a missing card content ID instead of guessing from its path', () => 
 
 test('accepts source numbers only from authentic problem-card metadata', () => {
   const root = fixture();
+  setPrimaryTemplate(root, 'deliberate-practice');
   const cardPath = join(
     root,
     'cards/derivative/mst_p0032_ex22.card.yaml',

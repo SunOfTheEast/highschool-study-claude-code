@@ -44,7 +44,7 @@ test('builds student-safe Coach context without deleting raw Plan facts', () => 
         publicTitle: '下一节课堂',
         publicPurpose: '完成一次独立能力检验',
         blockCount: 5,
-        sourceNumbers: expect.arrayContaining(['mst_p0032_ex22']),
+        sourceNumbers: [],
       },
       learningReview: null,
     });

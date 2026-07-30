@@ -37,6 +37,10 @@ function publicPurpose(template: string, capabilityTarget: string): string | nul
   return capabilityTarget || null;
 }
 
+function revealsSourceNumbers(template: string): boolean {
+  return template !== 'assessment' && template !== 'diagnostic';
+}
+
 function record(value: unknown): Record<string, unknown> | null {
   return value !== null && typeof value === 'object' && !Array.isArray(value)
     ? value as Record<string, unknown>
@@ -94,7 +98,9 @@ export function readStudentLessonPreview(
         template,
         section(document.body, 'Capability Target'),
       ),
-      sourceNumbers: sourceNumbers(root, lesson.path, document.body),
+      sourceNumbers: revealsSourceNumbers(template)
+        ? sourceNumbers(root, lesson.path, document.body)
+        : [],
     };
   } catch {
     return fallback;

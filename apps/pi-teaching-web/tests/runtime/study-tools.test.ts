@@ -166,7 +166,7 @@ test('prepares and rereads one Lesson with Plan authority bound by the Coach Ses
     publicPurpose: '完成一次独立能力检验',
     blockCount: 2,
     blockKinds: ['problem', 'reflection'],
-    sourceNumbers: ['mst_p0032_ex22'],
+    sourceNumbers: [],
   });
   const lesson = readPlanWorkspace(temporaryRoot, 'domain-integrity').lessons
     .find((candidate) => candidate.id === 'lesson-004');
