@@ -1,7 +1,9 @@
 ---
 id: transfer
 kind: plan
-status: ready
+status: prepared
+parent_id: roadmap
+parent_path: ROADMAP.md
 ---
 # Transfer Plan
 
@@ -19,28 +21,51 @@ Complete one unseen conic transfer card without hints and explain boundary feasi
 
 ## Planning Basis
 
-The completed Max Value Plan supports a focused transfer check. Source: [Max Value Plan Summary](max-value.md#plan-summary).
+The completed Max Value Plan supports a focused transfer check. Source: `claim:max-value/handoff#learner-c1`.
 
-## Lesson Index
+## Activation Snapshot
 
-No Lesson has been prepared.
+- Parent: roadmap:roadmap
+- Activated at: pending
+
+### Selected Context
+
+- claim:max-value/handoff#learner-c1
+- memory:student/S1
+- memory:teaching/T1
+
+### Content Boundary
+
+- Do not reveal the unfamiliar conic family or decisive transformation before activation.
+
+### Adaptation Brief
+
+- Working judgment: The method is stable enough for one narrow transfer cycle.
+- Sources:
+  - claim:max-value/handoff#learner-c1
+- Design consequence: Keep the domain checkpoint and change the conic family.
+- Revise if: The student cannot identify a useful frozen quantity without a worked example.
+
+## Lesson Tree
+
+### Candidate lesson-candidate-001
+
+- Public purpose: Complete one unfamiliar conic transfer check.
+- After:
+- Depends on:
+- Consider when: The student activates this Plan and confirms the current constraints.
+- Sources:
+  - claim:max-value/handoff#learner-c1
+- Private note: Materialize only the next Lesson after the Plan consultation.
 
 ## Current Position
 
-Ready to begin.
-
-## Next Lesson Candidate
-
-Prepare one unfamiliar conic transfer Lesson.
+Prepared for student activation; no Lesson has been materialized.
 
 ## Plan Summary
 
-No classroom result yet.
+No classroom result yet. The completed prior Plan Handoff is the compact entry point.
 
-## Recall Inputs
+## Handoff
 
-- Read [Student Profile](../memory/student-profile.md) in full.
-- Read [Teaching Profile](../memory/teaching-profile.md) in full.
-- Read the relevant prior [Max Value Plan Summary](max-value.md#plan-summary).
-
-The compact profiles and relevant Plan Summary are sufficient for this Plan entry; old Lesson files are not bulk-loaded.
+（尚未封存）

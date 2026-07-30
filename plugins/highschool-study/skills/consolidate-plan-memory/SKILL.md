@@ -1,34 +1,35 @@
 ---
 name: consolidate-plan-memory
-description: Use when evidence meets a Plan standard and the student explicitly chooses Plan completion.
+description: Use when a completed Plan Handoff may justify student-confirmed long-term preference changes.
 user-invocable: false
 allowed-tools: Read, Glob, Grep, Edit, mcp__plugin_highschool-study_study-markdown__trace_search, mcp__plugin_highschool-study_study-markdown__source_resolve
 ---
 
-Run only after direct evidence meets the Plan's observable capability standard and the student chooses completion.
+# Consolidate Plan Memory
 
-1. Read the Plan standard, completion choice, indexed Lesson summaries and both confirmed profiles. Use summary source links and scoped active Trace to open a full Lesson or original only when a candidate memory depends on it.
-2. Separate observation from inference. For every durable preference candidate, retain direct sources, conflicts and narrow scope.
-3. Show a natural-language `add / revise / delete` table. Each row has one `student` or `teaching` owner and may be kept, rewritten or rejected. An empty confirmed delta is valid.
+Run only after the Plan meets its observable standard, has a sealed Plan
+Handoff, and the student explicitly chooses completion.
 
-Do not edit a profile before item-by-item confirmation. Profiles contain only confirmed, durable, currently valid preferences with direct sources and narrow scope.
+Read the completed Plan Handoff, its lower Claim/Trace sources, and both
+confirmed profiles. Separate observed learning behavior from inferred durable
+preference. A candidate must:
 
-If the student rejects an inference, remove or rewrite that proposal. A rejected memory proposal is not classroom Trace.
+- remain useful beyond one Lesson;
+- have a narrow scope and counter-evidence;
+- cite one or more active Claims from the completed Plan Handoff;
+- match an existing profile ID and content exactly when revising or deleting.
 
-When Planning Basis exists, compare its initial judgment with active evidence in the
-persisted Plan Summary. Distinguish supported, refuted and still-unverified claims,
-and describe an intervention effect only when Lesson or Trace sources support it.
+Show each proposed `add`, `revise`, or `delete` in natural language with its
+student or teaching owner. The student may keep, rewrite, or reject each item;
+an empty confirmed delta is valid. Do not edit either profile before all
+decisions are explicit.
 
-After confirmation, apply only accepted rows and student rewrites to the canonical
-`learning-set/memory/student-profile.md` and
-`learning-set/memory/teaching-profile.md`. Keep stable `S…` and `T…` identifiers for
-revisions. Every active entry records Content, Scope, direct Sources, Rationale and
-Counter-evidence; rejecting a row leaves the profile unchanged, while rewriting a
-proposed delete retains that entry with the student's replacement text. Do not write
-capability conclusions, single-attempt states or Planner Attention into either
-profile.
+Apply only accepted rows and student rewrites. Keep stable IDs for revisions.
+Each active profile entry records Content, Scope, Sources, Rationale, and
+Counter-evidence. Do not store capability, one-attempt state, subject-specific
+weakness, or Planner Attention as a global preference.
 
-Persist Plan completion, evidence, caveats and the confirmed profile delta as
-separate facts. Reread the Plan and both complete profile files before reporting
-their actual state. If either write fails, report the failure and do not claim that
-the confirmed delta was applied.
+Persist Plan completion, Plan Handoff, and confirmed profile delta as separate
+facts. Reread the completed Plan and both full profile files before reporting
+what changed. If any write fails, preserve the confirmed proposal and report
+that application remains incomplete.

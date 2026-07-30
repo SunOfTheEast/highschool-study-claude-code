@@ -5,6 +5,7 @@ import { cpSync, mkdtempSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { createStudyMcpServer } from '../../server/src/mcp/create-server';
+import { parseChildTree, parseHandoff } from '../../server/src/domain';
 
 const fixture = join(import.meta.dir, '../fixtures/learning-set');
 const readFixture = (path: string) => readFileSync(join(fixture, path), 'utf8');
@@ -140,17 +141,48 @@ test('proves the Markdown-only bidirectional learning loop', async () => {
 });
 
 test('fixes Plan consolidation inputs, confirmation, and profile ownership', () => {
+  const roadmap = readFixture('ROADMAP.md');
   const plan = readFixture('plans/max-value.md');
   const student = readFixture('memory/student-profile.md');
   const teaching = readFixture('memory/teaching-profile.md');
   const nextPlan = readFixture('plans/transfer.md');
 
+  expect(parseChildTree(roadmap, 'Plan Tree', 'plan', 'ROADMAP.md').entries)
+    .toHaveLength(2);
+  expect(parseChildTree(
+    plan,
+    'Lesson Tree',
+    'lesson',
+    'plans/max-value.md',
+  ).entries).toHaveLength(3);
+  expect(parseChildTree(
+    nextPlan,
+    'Lesson Tree',
+    'lesson',
+    'plans/transfer.md',
+  ).entries).toHaveLength(1);
+  expect(parseHandoff(plan).identity.id).toBe('max-value/handoff');
+
+  expect(roadmap).toContain('## Plan Tree');
+  expect(roadmap).not.toContain('## Plan Graph');
+  expect(plan).toContain('## Lesson Tree');
+  expect(plan).not.toContain('## Lesson Index');
+  expect(plan).not.toContain('## Next Lesson Candidate');
+
   for (const id of ['001', '002', '003']) {
     const lesson = readFixture(`lessons/lesson-${id}.md`);
+    expect(parseHandoff(lesson).identity.id).toBe(`lesson-${id}/handoff`);
     expect(lesson).toContain('status: closed');
     expect(lesson).toContain('## Block step-');
     expect(lesson).toContain('## Lesson Summary');
+    expect(lesson).toContain('## Handoff');
+    expect(lesson).not.toContain('## Traces');
   }
+  expect(readFixture('lessons/lesson-001.md'))
+    .toContain('block:lesson-001/step-02');
+  expect(readFixture('lessons/lesson-002.md'))
+    .toContain('block:lesson-002/step-02');
+  expect(readFixture('traces/.gitkeep').trim()).toBe('');
   const candidates = plan.split('\n').filter((line) => /^\| (add|revise|delete) \|/.test(line));
   expect(candidates.map((line) => line.split('|')[1]?.trim())).toEqual([
     'add',
@@ -174,9 +206,9 @@ test('fixes Plan consolidation inputs, confirmation, and profile ownership', () 
     expect(profile).not.toContain(deletedPreference);
     expect(profile).not.toContain(rejectedRequirement);
   }
-  expect(nextPlan).toContain('../memory/student-profile.md');
-  expect(nextPlan).toContain('../memory/teaching-profile.md');
-  expect(nextPlan).toContain('max-value.md#plan-summary');
+  expect(nextPlan).toContain('memory:student/S1');
+  expect(nextPlan).toContain('memory:teaching/T1');
+  expect(nextPlan).toContain('claim:max-value/handoff#learner-c1');
   expect(nextPlan).not.toContain('../lessons/lesson-');
   expect(persistenceFiles(fixture)).toEqual([]);
 });

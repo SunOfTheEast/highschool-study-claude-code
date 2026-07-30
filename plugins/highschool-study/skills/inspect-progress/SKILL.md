@@ -1,13 +1,26 @@
 ---
 name: inspect-progress
-description: Use when explaining current progress from source-linked Markdown and active Trace.
+description: Use when explaining current node progress, learning evidence, open questions, or confirmed preferences.
 allowed-tools: Read, Glob, Grep, mcp__plugin_highschool-study_study-markdown__trace_search, mcp__plugin_highschool-study_study-markdown__source_resolve
 ---
 
-This Skill is read-only. Read the relevant Roadmap, Plan, Lesson, summaries, and both confirmed profiles directly, then answer the student's actual scope. Never read or rely on `memory/planner-attention.md`; it is preparation-only.
+# Inspect Progress
 
-Use active Trace for classroom evidence. Trace methods are the student's method evidence; card methods are reference metadata only. Cardless Trace may explain learning history but cannot establish a card-bound method. Use `source_resolve` when the student asks why or a material detail requires the original.
+This Skill is read-only. Follow the public tree from Roadmap to Plan to Lesson
+and answer only the scope the student asked about.
 
-Before claiming that an attempt satisfies a Plan item, decompose the item's exact wording into required observable behaviors and conditions. Verify from the card stem or steps that the task elicits each one, then verify from active Trace what the student did. Structural resemblance, method names, and Lesson roles are not substitutes.
+Use child status for lifecycle, Handoff Claims for compact conclusions, and
+active global Trace for attempts, support, and actual method evidence. Descend
+from a Claim to its original only when the explanation needs it. An invalidated
+or missing source keeps the historical text visible but weakens the current
+claim. A source-only Handoff is an index, not a finding.
 
-Answer only the requested dimensions: Roadmap/Plan capability, Lesson state, method evidence, next work, or confirmed preferences. Keep capability evidence, closure state, Task projection, method attention and long-term preference distinct. Cite direct sources, name uncertainty and state what evidence would settle an open question. Do not write files or Trace.
+Before saying an attempt satisfies a capability standard, decompose the exact
+required behaviors and conditions, verify the card or material elicited them,
+then verify what the active Trace records. Card metadata, structural
+resemblance, method labels, Task state, and node closure are not substitutes.
+
+Keep capability, lifecycle, Block navigation, method-attention projection, and
+confirmed preference separate. Cite direct sources, name uncertainty, and say
+what future observation would settle an open question. Do not read Planner
+Attention and do not write files or Trace.

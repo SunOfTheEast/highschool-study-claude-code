@@ -25,7 +25,7 @@ roadmap_coach_session: null
 
 尚未建立。随第一个 Plan 的能力标准一起确定。
 
-## Plan Graph
+## Plan Tree
 
 （尚未创建学习阶段）
 

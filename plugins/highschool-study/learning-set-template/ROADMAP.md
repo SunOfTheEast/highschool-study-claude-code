@@ -23,6 +23,8 @@ kind: roadmap
 
 （与学生确认后，填写用于判断 Roadmap 长期目标是否达成的综合任务。）
 
-## Plan Graph
+## Plan Tree
+
+（尚未建立学习周期。由学生与 Coach 先完成问诊，再加入 Plan Candidate。）
 
 ## Change Log

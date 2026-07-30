@@ -1,21 +1,58 @@
 ---
 name: start-or-revise-roadmap
-description: Use when creating or revising a student-approved Roadmap and Plan graph in Markdown.
+description: Use when creating or revising a student-approved long-term Roadmap and its Plan branches.
 allowed-tools: Read, Glob, Grep, Write, Edit
 ---
 
 # Start or Revise Roadmap
 
-1. Read the current Roadmap and Plan files, if present. Treat them as history, not a substitute for the student's current account.
-2. Conduct a short multi-turn consultation before drafting. Ask one question per turn and normally ask several useful questions. Generate each next question from the student's latest answer: find the broadest ambiguous phrase whose possible meanings would change the learning action, then clarify its type, situation, stuck step, recent concrete example, or attempted approach before asking about causes. Do not put an unverified Coach hypothesis inside the question, repeat settled facts, or batch questions into a form.
-3. Continue until the goal, starting pattern, desired change, constraints, and direct success test are clear enough to act on. “You decide” releases the current choice; ask from another decision-changing angle when one remains. If the student explicitly stops, proceed with stated uncertainty. Summarize the student's account and your working judgment, then invite correction before showing a proposal.
-4. Make the working judgment useful: distinguish explanations that require different Plans, cite the student words or sources supporting it, change a real Plan choice, and name later evidence that would support or overturn it. Do not use a stable personality label or a generic “practice more” restatement.
-5. Before creating the first Plan, confirm the Roadmap's long-term Goal, Observable Capability Standard, and whole-goal Test one question at a time. Show all three together for correction, then replace all three template placeholders before writing the Plan. A local Plan goal is a bounded next cycle and must not overwrite this long-term contract. After the first Plan exists, revise these fields only when the student says the long-term direction itself changed.
-6. For each Plan milestone, record its own observable capability standard, test conditions, support allowed, transfer or retention check, and limitation.
-7. Show the Plan graph explicitly: real prerequisite dependencies, groups that can proceed in parallel, and choices that can be reordered. Presentation order alone is not a dependency.
-8. Show the proposed Markdown diff in student language. Create or edit Roadmap/Plan files only after the student approves it. A new Plan starts with `coach_session: null`; after writing it, add its canonical `plans/<plan-id>.md` link under `ROADMAP.md / Plan Graph`, then reread both files and the confirmed Roadmap Goal, capability standard, and Test before saying the Plan exists. Do not announce creation from an unregistered file. Any later reordering is student-approved reordering: preserve the previous Change Log entry, reason, and affected dependencies.
+## Consultation
 
-Planning writes no learner facts into Agents or Skills. A standard describes what evidence would demonstrate capability; merely writing or checking off the Plan does not demonstrate it or close anything.
+Read the current Roadmap, Plan Handoffs, and confirmed profiles as history.
+Then ask one decision-changing question per turn. Clarify broad phrases by
+asking which type, situation, stuck step, recent example, or attempted route
+the student means. Normally ask several useful questions, but stop when the
+goal, current pattern, constraints, desired change, and direct success test are
+clear enough—or when the student explicitly ends the inquiry.
 
-This Skill owns the first long-term goal and explicit Roadmap restructuring;
-evidence-driven next-cycle selection belongs to `plan-next-cycle`.
+Summarize the student's account and your working judgment before proposing a
+write. A useful judgment distinguishes explanations that would produce
+different Plans, cites the student's words or direct sources, changes a real
+planning choice, and names evidence that could overturn it.
+
+## Roadmap contract
+
+Confirm together:
+
+- one long-term `Goal`;
+- one observable capability standard;
+- one whole-goal `Test`.
+
+The Roadmap owns `## Plan Tree`. Each entry is either:
+
+- `### Candidate <handle>`: a future branch with public purpose, order,
+  dependencies, consideration condition, sources, and private note, but no
+  Plan file;
+- `### Child <handle>`: the same parent-owned scheduling fields plus one
+  canonical `plans/<id>.md` link.
+
+Order is not dependency. Show real dependencies, parallel branches, and
+reorderable choices explicitly.
+
+## Write boundary
+
+Show the proposal in student language and write only after approval. Add a
+Candidate when the direction is plausible but not yet chosen. Materialize a
+Plan only when it is the approved next working branch: create one `prepared`
+Plan with `parent_id: roadmap`, `parent_path: ROADMAP.md`, required Plan
+sections, an empty or candidate-only `Lesson Tree`, and a frozen Activation
+Snapshot; replace the matching Candidate with a Child link in the same write.
+
+The Roadmap may arrange Candidate or prepared Plan branches. It does not edit
+an activated Plan's local judgment, Lesson tree, Session work, Handoff, or
+status, whether that Plan is active, paused, or terminal. Revise long-term
+Goal, capability standard, and Test only when the student says the long-term
+direction changed.
+
+Reread the Roadmap and every materialized Plan link before reporting success.
+Planning creates no classroom Trace and proves no capability.

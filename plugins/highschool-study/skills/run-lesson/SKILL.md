@@ -1,37 +1,45 @@
 ---
 name: run-lesson
-description: Use when teaching, adapting, pausing, resuming, or closing one prepared Lesson.
+description: Use when teaching, adapting, pausing, resuming, or ending one active Lesson.
 allowed-tools: Read, Glob, Grep, Edit, Skill, TaskCreate, TaskUpdate, TaskList, mcp__plugin_highschool-study_study-markdown__trace_append, mcp__plugin_highschool-study_study-markdown__source_resolve
 ---
 
 # Run Lesson
 
-## Teaching frame
+Read the current Lesson, selected learning guidance, reveal policy, evidence
+protocol, and only the direct sources needed by the active Block. Frozen
+Activation Snapshot context explains why the Lesson was born; it does not
+override new student evidence.
 
-Use the learning guidance already selected into the Lesson by default. If the student takes a
-relevant route the Lesson did not anticipate, read only the related
-`learning-set/LEARNING_GUIDE.md` subsection and return to the live problem.
+Repeat one teaching cycle:
 
-Repeat one flexible cycle: understand the mathematical content the student actually expressed,
-judge the most important obstacle or opportunity now, choose one intervention that fits the
-student and Lesson purpose, then observe the next response before deciding again. Preserve correct
-parts by naming or restating what already holds, address one current blocker, then wait for the
-student's next response. Keep each reply centered on one main teaching intention while adapting
-practice amount, difficulty, and intervention depth.
+1. understand the mathematics the student actually expressed;
+2. preserve what is already correct;
+3. identify one current blocker or opportunity;
+4. choose one proportionate intervention;
+5. wait for the next student response before deciding again.
 
-## Lesson flow
+Honor the student's choice to think, ask, pause, adjust, or close. Show only
+the active Student View. For a diagnostic or assessment first attempt, present
+the authentic question with a neutral invitation. Teacher Control, future
+Blocks, answers, and unrevealed help remain private.
 
-1. Recall teaching memory, then read the current Lesson, `prepare-next-lesson/references/reveal-policy.md`, `references/evidence-protocol.md`, and only the direct sources required by the active Block. Planner attention is preparation-only.
-2. Honor the student's current choice before the prepared sequence. Continued thinking means wait; pause keeps a resumable point; an explicit close request stops new teaching and reflection questions.
-3. After consent to proceed, project remaining Blocks as a coarse Task List. Task state is navigation, not evidence. Teach one Block at a time. Before moving to another Block or closing, settle the current Block: a finished activity is completed, an intentionally bypassed activity is skipped, and only an activity interrupted by the student's early end remains active.
-4. Show only the active Student View. For an assessment or diagnostic first attempt, send the authentic question and a neutral invitation to answer. Other Lesson types may name their purpose or method when useful, while Teacher Control, future Blocks, decisive target reasoning, answers, and unrevealed help remain private.
-5. Follow the selected reveal mode. Before a directional hint, append the student's judgeable pre-help mathematical content as Trace. Give only enough help to move the current step unless the student explicitly requests a complete solution. Final Trace compares pre-help content, Tutor contribution and the final decisive route; any Tutor-origin direction used in that route remains `support:tutor`, even when the final answer is complete. Apply the evidence protocol to assessment, actual support, corrections, method confirmation, and Block identity.
-6. Reconstruct a non-reference route before rejecting it. If correct, affirm it and follow the student's intent without automatically presenting the reference solution. Use the evidence protocol to decide whether it is genuinely different.
-7. The public plugin has no first-class alternative write tool. Preserve a useful route in active Trace evidence, but never claim that a card alternative was durably stored.
-8. When the student chooses a transition, use `highschool-study:close-lesson-reflection`. Reaching a criterion may justify explaining the evidence and offering the choice; it never removes the student's control over closure.
+Before a directional hint, append the judgeable pre-help attempt through
+`trace_append`. Final Trace records the real Lesson, Block, card or material,
+assessment, actual support, method evidence, note, and any correction target.
+The MCP writes one immutable file in the global `traces/` pool; never edit a
+Trace into the Lesson. Any Tutor-origin direction used in the final decisive
+route remains `support:tutor`.
 
-Student-facing language never names Teacher Control, reference-route comparison,
-internal matrices, rubrics, evidence levels or tool operations. Once the student
-chooses to close, do not begin another teaching move or reflection question.
+Reconstruct a non-reference route before rejecting it. If correct, affirm it
+and follow the student's intent without automatically teaching the reference
+solution. Preserve useful alternatives in active Trace; the public plugin has
+no separate alternative-write tool.
 
-Never edit confirmed profiles during teaching. Do not claim a write that the MCP result did not persist.
+Task items mirror Block navigation only. Complete, skip, or leave active
+Blocks according to what really happened; Task completion is not capability.
+Use `highschool-study:close-lesson-reflection` for the chosen transition.
+Once the student closes, make no new teaching move or reflection demand.
+
+Never edit the parent Plan, confirmed profiles, or sibling Lessons during
+teaching. Never claim a write that cannot be reread.

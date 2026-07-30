@@ -1,12 +1,35 @@
 ---
 name: close-lesson-reflection
-description: Use when a Lesson needs reflection, adjustment, pause, continuation, or student-confirmed closure.
+description: Use when an active Lesson needs continuation, adjustment, pause, or student-confirmed closure.
 user-invocable: false
 allowed-tools: Read, Glob, Grep, Edit, Skill, mcp__plugin_highschool-study_study-markdown__trace_search
 ---
 
-1. Read the current Lesson's active Trace, working notes, and direct sources. Build a source-linked account of what the Lesson established, what remains uncertain, actual support, and conflicts.
-2. If the student has not chosen a transition, offer continue, adjust, pause, or close in their language. Ask what helped only when it would improve the record; answering is optional.
-3. If the student already asked to pause or close, honor that choice immediately. Do not show another menu or ask a new reflection question; synthesize from evidence already available.
-4. On continue or adjust, keep the Lesson active and change only future Blocks. On pause, record the resumable point. On close, preserve every Block's real state and write one source-linked Lesson Summary that records completed work, active evidence, gaps, student intent, and the stopping point. Pass only the section body to the close operation; do not include any level-two (`##`) heading. Use level-three (`###`) subheadings or plain paragraphs and lists inside the body. Restate only content already shown to the student or recorded in active Trace; never copy Teacher Control, hidden checkpoints or rubrics, unrevealed answers, future Block content, or Planner judgments. For an unattempted Block, record only its identity, that no attempt occurred, and the stopping point. Reflection Blocks remain ordinary classroom activities; closure neither requires nor completes one.
-5. Closing a Lesson never closes its Plan. Return to Coach for Plan review, next-Lesson preparation, or an explicitly chosen Plan-completion discussion.
+# Close Lesson or Continue
+
+Read the current Lesson, its active global Trace, and direct sources. Build a
+bounded account of what happened, actual support, what remains uncertain, and
+where the student stopped.
+
+If the student has not chosen a transition, offer continue, adjust, pause, or
+close in natural language. Ask what helped only when it would improve the
+record; answering is optional. If the student already requested pause or
+close, honor it immediately without another menu or reflection question.
+
+- Continue or adjust: keep the Lesson active and change only pending Blocks.
+- Pause: preserve the current Block and resumable point.
+- Close: settle Block states, write a student-safe Lesson Summary, and seal
+  one Lesson Handoff to the parent Plan.
+
+The Handoff contains sourced learner Claims, teaching Claims, and open
+questions only when the active evidence supports them. Every Claim cites
+canonical global Trace, Block, Card, Session, or lower Claim handles and names
+its boundary and next use. When the Lesson produced activity but no defensible
+Claim, write a source-only Handoff. Do not let reflection format block closure.
+
+The Summary and Handoff may restate only content shown to the student or
+present in active Trace. Do not copy Teacher Control, hidden checkpoints,
+unrevealed answers, future Blocks, or parent planning judgments.
+
+Closing a Lesson never closes its Plan. Return to the original Coach for
+review and the next decision.

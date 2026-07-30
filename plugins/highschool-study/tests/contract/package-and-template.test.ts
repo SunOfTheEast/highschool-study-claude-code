@@ -1,6 +1,7 @@
 import { expect, test } from 'bun:test';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { parseChildTree } from '../../server/src/domain';
 
 const root = join(import.meta.dir, '../..');
 
@@ -11,6 +12,12 @@ test('ships the minimal Markdown template', () => {
     'skills/plan-next-cycle/SKILL.md',
     'learning-set-template/ROADMAP.md',
     'learning-set-template/LEARNING_GUIDE.md',
+    'learning-set-template/plans/.gitkeep',
+    'learning-set-template/lessons/.gitkeep',
+    'learning-set-template/traces/.gitkeep',
+    'learning-set-template/cards/.gitkeep',
+    'learning-set-template/graph/.gitkeep',
+    'learning-set-template/materials/.gitkeep',
     'learning-set-template/memory/student-profile.md',
     'learning-set-template/memory/teaching-profile.md',
     'learning-set-template/memory/planner-attention.md',
@@ -49,6 +56,10 @@ test('ships the learning-set orientation envelope', () => {
   );
 
   expect(roadmap).toContain('## Learning Set Overview');
+  expect(roadmap).toContain('## Plan Tree');
+  expect(roadmap).not.toContain('## Plan Graph');
+  expect(parseChildTree(roadmap, 'Plan Tree', 'plan', 'ROADMAP.md').entries)
+    .toEqual([]);
   expect(roadmap).toContain('- What this teaches:');
   for (const heading of ['Goal', 'Observable Capability Standard', 'Test']) {
     expect(roadmap).toMatch(new RegExp(
