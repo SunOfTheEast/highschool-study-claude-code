@@ -25,6 +25,20 @@ export {
   type TraceMethods,
 } from './method-vocabulary';
 export {
+  applyCandidateChanges,
+  nextCandidateHandle,
+  parseChildTree,
+  renderChildTree,
+  type CandidateChange,
+  type CandidateContent,
+  type CandidateDraft,
+  type CandidateEntry,
+  type ChildKind,
+  type ChildTree,
+  type ChildTreeEntry,
+  type MaterializedEntry,
+} from './learning-nodes';
+export {
   appendCardAlternativeWithProjection,
   appendTraceWithProjection,
   rebuildPlannerAttention,
