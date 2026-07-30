@@ -8,7 +8,9 @@ import {
 } from '../study/handoff-seal';
 import { createPiSessionEvidenceReader } from './session-owner';
 import {
+  assertCandidateSourcesAllowed,
   candidateChangesSchema,
+  type CandidateSourcePolicy,
   updateParentDocument,
 } from './tree-mutations';
 
@@ -17,6 +19,7 @@ const milestone = Type.String({ minLength: 1 });
 export type RoadmapUpdateOptions = {
   now?: () => Date;
   sessions?: SessionEvidenceReader;
+  accessPolicy?: CandidateSourcePolicy;
 };
 
 function sectionBody(source: string, heading: string): string {
@@ -43,6 +46,10 @@ export function createRoadmapUpdateTool(
       checkpoint: Type.Optional(handoffDraftSchema),
     }, { additionalProperties: false }),
     execute: async (_id, input) => {
+      assertCandidateSourcesAllowed(
+        input.candidateChanges,
+        options.accessPolicy,
+      );
       const sections: Record<string, string> = {};
       if (input.goal !== undefined) sections.Goal = input.goal;
       if (input.capabilityStandard !== undefined) {

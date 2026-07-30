@@ -62,6 +62,11 @@ Frame or returned by retrieval. `ROADMAP.md`, `LEARNING_GUIDE.md`, `roadmap`, an
 other file paths or prose labels are context, not Activation evidence handles.
 Adaptation sources must be a non-empty subset of the selected Activation sources.
 
+For a later cycle, cite the relevant `claim:` handle from the completed Plan
+Handoff. Do not copy that Claim's nested Plan `session:` or lower `trace:` source
+into a Roadmap candidate; those remain available only by following the Claim's
+evidence tree.
+
 The prepared Plan contains an observable standard and direct test. It remains
 sessionless until the student starts it.
 

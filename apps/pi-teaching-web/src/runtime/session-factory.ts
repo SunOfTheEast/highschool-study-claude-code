@@ -223,7 +223,7 @@ export async function createPiSessionFactory(
       ]
       : isRoadmapCoachScope(scope)
         ? [
-          createRoadmapUpdateTool(root, { now }),
+          createRoadmapUpdateTool(root, { now, accessPolicy }),
           createPlanPrepareTool(root, {
             activationSources: [
               ...nodeContext.resolvableSources,
@@ -238,7 +238,7 @@ export async function createPiSessionFactory(
               ...nodeContext.pages.map((page) => page.source),
             ],
           }),
-          createPlanUpdateTool(root, ownerPath, { now }),
+          createPlanUpdateTool(root, ownerPath, { now, accessPolicy }),
           createMemoryReviewProposeTool(
             root,
             ownerId,

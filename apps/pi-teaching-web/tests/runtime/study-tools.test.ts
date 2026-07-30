@@ -1648,6 +1648,44 @@ test('updates Plan summary and unmaterialized Lesson candidates in one call', as
     .toBe(roadmapBefore);
 });
 
+test('rejects a Lesson candidate source outside the current Plan boundary', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-plan-source-boundary-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const path = join(temporaryRoot, 'plans/domain-integrity.md');
+  const before = readFileSync(path, 'utf8');
+  const tool = createPlanUpdateTool(
+    temporaryRoot,
+    'plans/domain-integrity.md',
+    {
+      accessPolicy: {
+        allows: (source) => source === 'trace:trace-fixture-002',
+      },
+    },
+  );
+
+  await expect(tool.execute('invalid-source', {
+    decision: 'active',
+    currentPosition: '不应写入。',
+    planSummary: '不应写入。',
+    candidateChanges: [{
+      action: 'add',
+      candidate: {
+        publicPurpose: '不应创建。',
+        after: 'lesson-candidate-003',
+        dependsOn: ['lesson-candidate-003'],
+        considerWhen: '下一节。',
+        sources: ['session:child-lesson-session'],
+        privateNote: '错误地绕过了封存 Handoff。',
+      },
+    }],
+  } as never, undefined, undefined, {} as never))
+    .rejects.toThrow(
+      'NODE_CANDIDATE_SOURCE_NOT_ALLOWED: session:child-lesson-session',
+    );
+  expect(readFileSync(path, 'utf8')).toBe(before);
+});
+
 test('keeps alternative append Tutor-only and Session-bound', () => {
   const tool = createCardAlternativeAppendTool(root, 'lessons/lesson-003.md', () => new Date());
   expect(tool.name).toBe('card_alternative_append');

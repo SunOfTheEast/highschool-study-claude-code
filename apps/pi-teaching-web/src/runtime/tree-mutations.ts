@@ -58,6 +58,25 @@ export const candidateChangeSchema = Type.Union([
 
 export const candidateChangesSchema = Type.Array(candidateChangeSchema);
 
+export type CandidateSourcePolicy = {
+  allows(source: string): boolean;
+};
+
+export function assertCandidateSourcesAllowed(
+  changes: CandidateChange[],
+  policy?: CandidateSourcePolicy,
+): void {
+  if (!policy) return;
+  for (const change of changes) {
+    if (change.action === 'remove') continue;
+    for (const source of change.candidate.sources) {
+      if (!policy.allows(source)) {
+        throw new Error(`NODE_CANDIDATE_SOURCE_NOT_ALLOWED: ${source}`);
+      }
+    }
+  }
+}
+
 export type TreeMutationFileOps = {
   exists(path: string): boolean;
   read(path: string): string;

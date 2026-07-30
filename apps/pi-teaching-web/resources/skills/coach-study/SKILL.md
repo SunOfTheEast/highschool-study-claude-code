@@ -48,6 +48,13 @@ real retrieval result. Valid evidence uses `session:`, `claim:`, `trace:`, `card
 an evidence handle. `activation.adaptation.sources` must be a non-empty subset of
 the handles already selected by that Activation Snapshot.
 
+When a child Handoff supports a Lesson candidate, cite the relevant canonical
+`claim:` handle from that Handoff. Do not replace it with the Claim's nested
+child `session:` or `trace:` source; those belong to deeper evidence traversal
+and do not cross the parent boundary by themselves. A directly retrieved,
+Plan-scoped Trace may still be cited when that Trace fact itself changes the
+design.
+
 Give every Block one teaching function. Use authentic cards for problem Blocks and
 keep one separately judged response in one problem Block. If no real card fits, change
 the activity or leave the candidate unmaterialized; never invent a card or problem

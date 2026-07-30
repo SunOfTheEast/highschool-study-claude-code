@@ -8,7 +8,9 @@ import {
 } from '../study/handoff-seal';
 import { createPiSessionEvidenceReader } from './session-owner';
 import {
+  assertCandidateSourcesAllowed,
   candidateChangesSchema,
+  type CandidateSourcePolicy,
   updateParentDocument,
 } from './tree-mutations';
 
@@ -17,6 +19,7 @@ const text = Type.String({ minLength: 1 });
 export type PlanUpdateOptions = {
   now?: () => Date;
   sessions?: SessionEvidenceReader;
+  accessPolicy?: CandidateSourcePolicy;
 };
 
 export function createPlanUpdateTool(
@@ -59,6 +62,10 @@ export function createPlanUpdateTool(
       ) {
         throw new Error(`PLAN_OWNER_MISMATCH: ${ownerPath}`);
       }
+      assertCandidateSourcesAllowed(
+        input.candidateChanges,
+        options.accessPolicy,
+      );
       const sealed = input.decision === 'complete'
         ? sealPlanHandoff(
           root,

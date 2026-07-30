@@ -60,3 +60,32 @@ test('updates Roadmap milestones and candidate tree in one tool call', async () 
   expect(source).toContain('建立可迁移的导数结构判断。');
   expect(source).not.toContain('## Plan Graph');
 });
+
+test('rejects a Plan candidate source outside the Roadmap boundary', async () => {
+  const root = fixture();
+  const path = join(root, 'ROADMAP.md');
+  const before = readFileSync(path, 'utf8');
+  const tool = createRoadmapUpdateTool(root, {
+    accessPolicy: {
+      allows: (source) => source.startsWith('claim:'),
+    },
+  });
+
+  await expect(tool.execute('invalid-source', {
+    candidateChanges: [{
+      action: 'add',
+      candidate: {
+        publicPurpose: '不应创建。',
+        after: 'plan-candidate-001',
+        dependsOn: ['plan-candidate-001'],
+        considerWhen: '下个周期。',
+        sources: ['session:child-plan-session'],
+        privateNote: '错误地绕过了封存 Handoff。',
+      },
+    }],
+  } as never, undefined, undefined, {} as never))
+    .rejects.toThrow(
+      'NODE_CANDIDATE_SOURCE_NOT_ALLOWED: session:child-plan-session',
+    );
+  expect(readFileSync(path, 'utf8')).toBe(before);
+});

@@ -38,6 +38,12 @@ Position, Plan Summary, and the still-unactivated Lesson candidates. Do not
 rewrite an activated Lesson, whether it is active, paused, or terminal. Do not
 describe a Candidate as prepared.
 
+Use the relevant `claim:` handle from a child Handoff as a parent candidate's
+source. Do not copy the Claim's nested child `session:` or `trace:` source into
+the parent tree; follow those only when auditing the Claim. A directly
+retrieved Plan-scoped Trace may be cited when that Trace fact itself changes
+the design.
+
 Materialize only the approved next Lesson during preparation. Multiple
 Candidates may remain, be reordered, or be removed; dependencies must refer to
 real handles in the same Lesson Tree.
