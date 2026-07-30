@@ -6,38 +6,22 @@ import {
   type PlanBlueprint,
 } from '../study/plan-blueprint';
 import { readLearningSet } from '../study/read-workspace';
+import { createActivationInputSchema } from './activation-tool-schema';
 import { materializeChild } from './tree-mutations';
 
 const nonempty = Type.String({ minLength: 1 });
-const activation = Type.Object({
-  parentSources: Type.Array(nonempty, {
-    minItems: 1,
-    description: 'Canonical evidence handles copied exactly from the Node Frame or a search result. On the first Roadmap cycle, use the current Roadmap Session handle shown as session:<id>. Plain paths such as ROADMAP.md or LEARNING_GUIDE.md, and labels such as roadmap, are not evidence handles.',
-  }),
-  selectedMemory: Type.Array(nonempty, {
-    description: 'Optional memory:<student|teaching>/<entry-id> handles copied exactly from the Node Frame.',
-  }),
-  contentBoundary: Type.Array(nonempty, { minItems: 1 }),
-  adaptation: Type.Object({
-    workingJudgment: nonempty,
-    sources: Type.Array(nonempty, {
-      minItems: 1,
-      description: 'A non-empty subset copied exactly from activation.parentSources and activation.selectedMemory. Do not put file paths or new labels here.',
-    }),
-    designConsequence: nonempty,
-    reviseIf: nonempty,
-  }, { additionalProperties: false }),
-}, { additionalProperties: false });
 
-const blueprintSchema = Type.Object({
-  title: nonempty,
-  publicPurpose: nonempty,
-  goal: nonempty,
-  capabilityStandard: nonempty,
-  test: nonempty,
-  planningBasis: nonempty,
-  activation,
-}, { additionalProperties: false });
+function blueprintSchema(activationSources?: readonly string[]) {
+  return Type.Object({
+    title: nonempty,
+    publicPurpose: nonempty,
+    goal: nonempty,
+    capabilityStandard: nonempty,
+    test: nonempty,
+    planningBasis: nonempty,
+    activation: createActivationInputSchema(activationSources),
+  }, { additionalProperties: false });
+}
 
 function section(body: string, heading: string): string {
   const pattern = new RegExp(
@@ -65,14 +49,17 @@ function assertRoadmapMilestones(root: string): void {
   }
 }
 
-export function createPlanPrepareTool(root: string) {
+export function createPlanPrepareTool(
+  root: string,
+  options: { activationSources?: readonly string[] } = {},
+) {
   return defineTool({
     name: 'plan_prepare',
     label: '准备学习周期',
     description: 'Materialize one Roadmap-owned Plan candidate after the student-approved Roadmap milestones are complete. Runtime allocates the Plan identity, path, ownership and prepared state. Activation evidence must use canonical handles already shown in the Node Frame; for a first-cycle diagnosis, cite the current session:<id> rather than ROADMAP.md.',
     parameters: Type.Object({
       candidateHandle: nonempty,
-      blueprint: blueprintSchema,
+      blueprint: blueprintSchema(options.activationSources),
     }, { additionalProperties: false }),
     execute: async (_id, input) => {
       assertRoadmapMilestones(root);

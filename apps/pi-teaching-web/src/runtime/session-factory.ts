@@ -192,11 +192,12 @@ export async function createPiSessionFactory(
       now,
     );
     const memoryReviewStore = new MemoryReviewStore(manager);
+    const nodeContext = compileNodeContext(root, scope, {
+      sessionId: manager.getSessionId(),
+    });
     const accessPolicy = new NodeAccessPolicy(
       root,
-      compileNodeContext(root, scope, {
-        sessionId: manager.getSessionId(),
-      }),
+      nodeContext,
       {
         sessionId: manager.getSessionId(),
         sessionEntries: () => manager.getBranch(),
@@ -218,10 +219,20 @@ export async function createPiSessionFactory(
       : isRoadmapCoachScope(scope)
         ? [
           createRoadmapUpdateTool(root, { now }),
-          createPlanPrepareTool(root),
+          createPlanPrepareTool(root, {
+            activationSources: [
+              ...nodeContext.resolvableSources,
+              ...nodeContext.pages.map((page) => page.source),
+            ],
+          }),
         ]
         : [
-          createLessonPrepareTool(root, ownerId, ownerPath),
+          createLessonPrepareTool(root, ownerId, ownerPath, {
+            activationSources: [
+              ...nodeContext.resolvableSources,
+              ...nodeContext.pages.map((page) => page.source),
+            ],
+          }),
           createPlanUpdateTool(root, ownerPath, { now }),
           createMemoryReviewProposeTool(
             root,
