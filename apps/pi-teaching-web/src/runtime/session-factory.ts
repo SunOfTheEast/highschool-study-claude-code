@@ -152,8 +152,9 @@ export function memoryReviewAppliedMessage(
       receipt: snapshot.receipt,
       instruction: [
         'The trusted runtime has already applied exactly the student decisions below.',
+        'It parsed both complete profile files before and after the atomic write.',
         'Do not reconsider, repropose, or modify this review.',
-        'Reread memory/student-profile.md and memory/teaching-profile.md, then explain only the confirmed current state and this receipt.',
+        'Do not call tools or attempt another profile read; explain only the exact applied decisions and this receipt.',
       ],
       items: snapshot.items,
       decisions: snapshot.decisions,

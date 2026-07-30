@@ -222,7 +222,9 @@ test('builds one hidden read-only continuation after trusted memory application'
     receipt: applied.receipt,
   });
   expect(JSON.stringify(content)).toContain('trusted runtime has already applied');
+  expect(JSON.stringify(content)).toContain('parsed both complete profile files');
   expect(JSON.stringify(content)).toContain('Do not reconsider, repropose, or modify');
+  expect(JSON.stringify(content)).not.toContain('Reread memory/student-profile.md');
   expect(JSON.stringify(content)).not.toContain('memory_review_apply');
 });
 
