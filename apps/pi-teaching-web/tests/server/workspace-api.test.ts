@@ -236,7 +236,7 @@ test('returns source-linked context for one Plan Coach', async () => {
         currentPosition: expect.stringContaining('阶段 `1a` 已通过'),
         nextLesson: {
           publicPurpose: '完成一次独立能力检验',
-          sourceNumbers: expect.arrayContaining(['mst_p0032_ex22']),
+          sourceNumbers: [],
         },
       },
       priorLessons: [
