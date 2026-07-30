@@ -1355,6 +1355,49 @@ test('exposes plan_update through a provider-compatible object root', () => {
   ]);
 });
 
+test('keeps candidate ordering fields handle-only in the provider schema', () => {
+  const tool = createPlanUpdateTool(root, 'plans/domain-integrity.md');
+  const candidate = {
+    publicPurpose: '检查下一阶段。',
+    after: 'lesson-candidate-001',
+    dependsOn: ['lesson-candidate-001'],
+    considerWhen: '第一节完成后。',
+    sources: ['trace:trace-fixture-002'],
+    privateNote: '根据前课证据调整。',
+  };
+  const input = {
+    decision: 'active',
+    currentPosition: '继续学习。',
+    planSummary: '保留两个候选。',
+    candidateChanges: [{
+      action: 'add',
+      candidate,
+    }],
+  };
+
+  expect(Check(tool.parameters, input)).toBeTrue();
+  expect(Check(tool.parameters, {
+    ...input,
+    candidateChanges: [{
+      action: 'add',
+      candidate: {
+        ...candidate,
+        after: '第一节完成后',
+      },
+    }],
+  })).toBeFalse();
+  expect(Check(tool.parameters, {
+    ...input,
+    candidateChanges: [{
+      action: 'add',
+      candidate: {
+        ...candidate,
+        dependsOn: ['完成第一节'],
+      },
+    }],
+  })).toBeFalse();
+});
+
 test('requires a Handoff only for a complete plan_update decision', () => {
   const tool = createPlanUpdateTool(root, 'plans/domain-integrity.md');
   const common = {

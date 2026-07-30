@@ -22,11 +22,19 @@ import { Type } from 'typebox';
 import { parse } from 'yaml';
 
 const nonempty = Type.String({ minLength: 1 });
+const candidateHandle = Type.String({
+  pattern: '^(?:plan|lesson)-candidate-\\d{3,}$',
+  description: 'Exact parent-tree handle such as lesson-candidate-001. Never use prose, a title, a file path, or a time condition.',
+});
 
 export const candidateDraftSchema = Type.Object({
   publicPurpose: nonempty,
-  after: Type.Union([nonempty, Type.Null()]),
-  dependsOn: Type.Array(nonempty),
+  after: Type.Union([candidateHandle, Type.Null()], {
+    description: 'Exact existing predecessor handle, or null. Put natural-language timing in considerWhen. When linking newly added candidates, add the predecessor first and use the handle returned by that completed update.',
+  }),
+  dependsOn: Type.Array(candidateHandle, {
+    description: 'Exact existing parent-tree handles only. Put conditions or explanations in considerWhen.',
+  }),
   considerWhen: nonempty,
   sources: Type.Array(nonempty),
   privateNote: nonempty,
