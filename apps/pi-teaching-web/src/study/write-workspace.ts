@@ -145,9 +145,18 @@ function dynamicAlias(
     resolveInsideRoot(root, cardPath),
   ).replaceAll('\\', '/');
   const aliases = readLessonAliases(source);
+  const usedProblemAliases = new Set(
+    readPreparedLessonBlocks(source)
+      .filter((block) => block.kind === 'problem')
+      .flatMap((block) => block.uses),
+  );
   for (const [alias, target] of aliases) {
     const resolved = sourceResolve(root, { fromPath: lessonPath, target });
-    if (resolved.valid && resolved.path === canonicalCardPath) {
+    if (
+      resolved.valid
+      && resolved.path === canonicalCardPath
+      && !usedProblemAliases.has(alias)
+    ) {
       return { alias, source };
     }
   }

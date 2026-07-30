@@ -594,13 +594,19 @@ test('inserts a searched problem card as a new pending runtime-owned Block', asy
     reason: '同一张真实题卡用于另一个独立问题 Block。',
     source: 'student-request',
   } as never, undefined, undefined, {} as never);
-  expect(JSON.parse((reused.content[0] as { text: string }).text).factId)
-    .toBe('block-007');
+  expect(JSON.parse((reused.content[0] as { text: string }).text)).toMatchObject({
+    factId: 'block-007',
+    cardAlias: 'Q-DYNAMIC-002',
+  });
   const reusedLesson = readFileSync(lessonPath, 'utf8');
   expect(reusedLesson.match(
     /- Q-DYNAMIC-001: \.\.\/cards\/derivative\/mst_p0019_ex11\.card\.yaml/g,
   )).toHaveLength(1);
-  expect(reusedLesson.match(/- Uses: Q-DYNAMIC-001/g)).toHaveLength(2);
+  expect(reusedLesson.match(
+    /- Q-DYNAMIC-002: \.\.\/cards\/derivative\/mst_p0019_ex11\.card\.yaml/g,
+  )).toHaveLength(1);
+  expect(reusedLesson.match(/- Uses: Q-DYNAMIC-001/g)).toHaveLength(1);
+  expect(reusedLesson.match(/- Uses: Q-DYNAMIC-002/g)).toHaveLength(1);
 });
 
 test('refuses an unsearched problem card without changing the active Lesson', async () => {

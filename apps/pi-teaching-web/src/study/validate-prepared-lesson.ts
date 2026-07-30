@@ -12,6 +12,7 @@ export type PreparedLessonIssue = {
     | 'LESSON_ALIAS_MISSING'
     | 'LESSON_ALIAS_INVALID'
     | 'LESSON_PROBLEM_CARD_COUNT'
+    | 'LESSON_CARD_ALIAS_REUSED'
     | 'LESSON_NON_PROBLEM_CARD_COUNT'
     | 'LESSON_BLOCK_ID_DUPLICATE'
     | 'LESSON_BLOCK_KIND_INVALID'
@@ -98,6 +99,7 @@ function validatePreparedLessonBody(root: string, lessonPath: string, body: stri
   const aliases = readLessonAliases(body);
   const blocks = readPreparedLessonBlocks(body);
   const ids = new Set<string>();
+  const problemAliasOwners = new Map<string, string>();
   for (const block of blocks) {
     if (ids.has(block.id)) {
       issues.push({
@@ -117,6 +119,18 @@ function validatePreparedLessonBody(root: string, lessonPath: string, body: stri
         code: 'LESSON_PROBLEM_CARD_COUNT',
         message: `Block ${block.id} 必须且只能 Uses 恰好一张题卡，当前为 ${block.uses.length} 张`,
       });
+    }
+    if (block.kind === 'problem' && block.uses.length === 1) {
+      const alias = block.uses[0]!;
+      const previous = problemAliasOwners.get(alias);
+      if (previous !== undefined) {
+        issues.push({
+          code: 'LESSON_CARD_ALIAS_REUSED',
+          message: `题卡 alias ${alias} 同时属于 ${previous} 与 ${block.id}；独立题问必须声明不同 alias`,
+        });
+      } else {
+        problemAliasOwners.set(alias, block.id);
+      }
     }
     if (block.kind !== 'problem' && block.uses.length > 0) {
       issues.push({

@@ -189,6 +189,7 @@ export function validateLessonBlueprint(
 
   if (blueprint.blocks.length === 0) issues.push('至少需要一个 Block');
   const blockAliases = new Set<string>();
+  const problemAliasOwners = new Map<string, string>();
   for (const block of blueprint.blocks) {
     if (!idPattern.test(block.localAlias)) {
       issues.push(`Block localAlias 非法：${block.localAlias}`);
@@ -243,6 +244,18 @@ export function validateLessonBlueprint(
     }
     if (block.kind === 'problem' && block.uses.length !== 1) {
       issues.push(`Block ${block.localAlias} 必须且只能 Uses 恰好一张题卡`);
+    }
+    if (block.kind === 'problem' && block.uses.length === 1) {
+      const alias = block.uses[0]!;
+      const previous = problemAliasOwners.get(alias);
+      if (previous !== undefined) {
+        issues.push(
+          `题卡 alias ${alias} 只能属于一个完整作答 Block；`
+          + `${previous} 与 ${block.localAlias} 如为独立题问，必须声明不同 alias`,
+        );
+      } else {
+        problemAliasOwners.set(alias, block.localAlias);
+      }
     }
     for (const alias of block.uses) {
       if (!aliases.has(alias)) {

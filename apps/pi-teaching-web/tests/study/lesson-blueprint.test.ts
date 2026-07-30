@@ -174,7 +174,7 @@ test.each([
     .toThrow(/assessment-01.*恰好一张题卡/);
 });
 
-test('allows separately assessed parts to reuse one card alias in different problem Blocks', () => {
+test('rejects reuse of one card alias across problem Blocks', () => {
   const repeatedCard: LessonBlueprint = {
     ...blueprint,
     blocks: blueprint.blocks.map((block) => (
@@ -182,11 +182,38 @@ test('allows separately assessed parts to reuse one card alias in different prob
     )),
   };
 
-  expect(() => validateLessonBlueprint(root, context, repeatedCard)).not.toThrow();
+  expect(() => validateLessonBlueprint(root, context, repeatedCard))
+    .toThrow(/题卡 alias Q-EX22.*只能属于一个完整作答 Block/);
   expect(() => validatePreparedLessonSource(
     root,
     context.lessonPath,
     renderPreparedLesson(context, repeatedCard),
+  )).toThrow(/LESSON_CARD_ALIAS_REUSED/);
+});
+
+test('allows separately assessed card parts when each part has its own alias', () => {
+  const separateParts: LessonBlueprint = {
+    ...blueprint,
+    cards: [
+      ...blueprint.cards,
+      {
+        alias: 'Q-EX22-PART-2',
+        cardPath: 'cards/derivative/mst_p0032_ex22.card.yaml',
+        role: '同卡独立第二问',
+      },
+    ],
+    blocks: blueprint.blocks.map((block) => (
+      block.localAlias === 'assessment-02'
+        ? { ...block, uses: ['Q-EX22-PART-2'] }
+        : block
+    )),
+  };
+
+  expect(() => validateLessonBlueprint(root, context, separateParts)).not.toThrow();
+  expect(() => validatePreparedLessonSource(
+    root,
+    context.lessonPath,
+    renderPreparedLesson(context, separateParts),
   )).not.toThrow();
 });
 
