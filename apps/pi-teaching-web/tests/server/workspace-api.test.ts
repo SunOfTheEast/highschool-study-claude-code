@@ -16,6 +16,7 @@ import type {
   MemoryReviewSnapshot,
 } from '../../src/memory-review/contracts';
 import type { AbilityProjection } from '../../src/shared/contracts';
+import { readPlanWorkspace } from '../../src/study/read-workspace';
 import { PreparedLessonValidationError } from '../../src/study/validate-prepared-lesson';
 import type { WorkflowSnapshot } from '../../src/workflows/contracts';
 import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
@@ -106,6 +107,44 @@ test('returns one deterministic continue-first Home snapshot', async () => {
     },
     lessonProgress: { completed: 2, total: 3 },
   });
+});
+
+test('uses cold-restored Tutor history for Lesson replay', async () => {
+  const calls: unknown[][] = [];
+  const handler = createRequestHandler({
+    root: domainIntegrityFixtureRoot,
+    authoring: false,
+    hub: new EventHub(),
+    registry: {
+      snapshot: () => readPlanWorkspace(domainIntegrityFixtureRoot, 'domain-integrity'),
+      replayHistory: async (...args: unknown[]) => {
+        calls.push(args);
+        return [{
+          kind: 'message',
+          message: {
+            id: 'restored-student-message',
+            role: 'student',
+            text: '从 Pi JSONL 恢复的课堂消息',
+            complete: true,
+          },
+        }];
+      },
+    } as never,
+  });
+
+  const response = await handler(new Request(
+    'http://local/api/lessons/lesson-003/replay',
+  ));
+  const body = await response!.json();
+
+  expect(response!.status).toBe(200);
+  expect(calls).toEqual([['lesson-003', 'safe']]);
+  expect(body.mode).toBe('full');
+  expect(body.items).toContainEqual(expect.objectContaining({
+    id: 'restored-student-message',
+    kind: 'message',
+    detail: '从 Pi JSONL 恢复的课堂消息',
+  }));
 });
 
 test('returns source-linked context for one Plan Coach', async () => {

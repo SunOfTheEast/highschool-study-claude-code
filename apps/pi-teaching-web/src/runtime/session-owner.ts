@@ -1,3 +1,4 @@
+import type { SessionEntry } from '@earendil-works/pi-coding-agent';
 import type { StudySessionScope } from './session-scope';
 
 export const SESSION_OWNER_TYPE = 'studyforge.session-owner.v1';
@@ -62,4 +63,12 @@ export async function findOwnedPiSessionFile(
   if (!path) return null;
   const manager = SessionManager.open(path, undefined, root);
   return sessionOwnerMatches(readSessionOwner(manager), expected) ? path : null;
+}
+
+export async function readPiSessionBranch(
+  root: string,
+  sessionFile: string,
+): Promise<readonly SessionEntry[]> {
+  const { SessionManager } = await import('@earendil-works/pi-coding-agent');
+  return SessionManager.open(sessionFile, undefined, root).getBranch();
 }

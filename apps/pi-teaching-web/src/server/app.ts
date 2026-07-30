@@ -222,10 +222,11 @@ export function createRequestHandler(deps?: AppDependencies) {
       const lessonId = decodeURIComponent(replay[1]!);
       const lesson = deps.registry.snapshot().lessons.find((item) => item.id === lessonId);
       if (!lesson) return json({ error: 'LESSON_NOT_FOUND' }, 404);
+      const history = await deps.registry.replayHistory(lessonId, projectionMode);
       return json(buildReplay(
         deps.root,
         lesson,
-        deps.registry.history(lesson.sessionKey, projectionMode).flatMap((item) => (
+        history.flatMap((item) => (
           item.kind === 'message' ? [item.message] : []
         )),
       ));

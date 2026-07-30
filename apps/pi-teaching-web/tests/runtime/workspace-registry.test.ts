@@ -1,8 +1,10 @@
 import { afterEach, expect, test } from 'bun:test';
+import { SessionManager } from '@earendil-works/pi-coding-agent';
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { StudySession, StudySessionFactory } from '../../src/runtime/session-factory';
+import { appendSessionOwner } from '../../src/runtime/session-owner';
 import type { StudySessionScope } from '../../src/runtime/session-scope';
 import { WorkspaceRegistry } from '../../src/runtime/workspace-registry';
 import type {
@@ -263,6 +265,89 @@ test('leaves a prepared Lesson unchanged when Tutor Session creation fails', asy
     status: 'prepared',
     tutorSessionId: null,
   });
+});
+
+test('restores terminal Lesson history from its owned Pi JSONL without creating an Agent', async () => {
+  const root = fixture();
+  const manager = SessionManager.create(root, join(root, 'pi-sessions'));
+  appendSessionOwner(manager, {
+    role: 'tutor',
+    ownerId: 'lesson-003',
+    ownerPath: 'lessons/lesson-003.md',
+  });
+  manager.appendMessage({
+    role: 'user',
+    content: '这是进程重启前保留下来的作答。',
+    timestamp: Date.now(),
+  });
+  manager.appendMessage({
+    role: 'assistant',
+    content: [{ type: 'text', text: '这条反馈也应当被恢复。' }],
+    api: 'openai-completions',
+    provider: 'test',
+    model: 'test-model',
+    usage: {
+      input: 0,
+      output: 0,
+      cacheRead: 0,
+      cacheWrite: 0,
+      totalTokens: 0,
+      cost: {
+        input: 0,
+        output: 0,
+        cacheRead: 0,
+        cacheWrite: 0,
+        total: 0,
+      },
+    },
+    stopReason: 'stop',
+    timestamp: Date.now(),
+  });
+  const sessionFile = manager.getSessionFile();
+  if (!sessionFile) throw new Error('TEST_SESSION_NOT_PERSISTED');
+  editLesson(root, (source) => source.replace(
+    'status: prepared',
+    `status: closed\ntutor_session: ${manager.getSessionId()}`,
+  ));
+  let factoryCalls = 0;
+  const registry = new WorkspaceRegistry(
+    root,
+    async () => {
+      factoryCalls += 1;
+      throw new Error('replay must not create an Agent Session');
+    },
+    async (_root, sessionId, expected) => {
+      expect(sessionId).toBe(manager.getSessionId());
+      expect(expected).toEqual({
+        role: 'tutor',
+        ownerId: 'lesson-003',
+        ownerPath: 'lessons/lesson-003.md',
+      });
+      return sessionFile;
+    },
+  );
+
+  const history = await registry.replayHistory('lesson-003');
+
+  expect(factoryCalls).toBe(0);
+  expect(history).toEqual([
+    {
+      kind: 'message',
+      message: expect.objectContaining({
+        role: 'student',
+        text: '这是进程重启前保留下来的作答。',
+        complete: true,
+      }),
+    },
+    {
+      kind: 'message',
+      message: expect.objectContaining({
+        role: 'tutor',
+        text: '这条反馈也应当被恢复。',
+        complete: true,
+      }),
+    },
+  ]);
 });
 
 test('creates one canonical Roadmap Coach and writes its Session back to ROADMAP.md', async () => {

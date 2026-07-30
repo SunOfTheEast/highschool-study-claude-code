@@ -1,4 +1,5 @@
 import type { ImageContent } from '@earendil-works/pi-ai';
+import type { SessionEntry } from '@earendil-works/pi-coding-agent';
 import {
   ROADMAP_COACH_SESSION_KEY,
   type ConversationItem,
@@ -22,7 +23,10 @@ import { validatePreparedLesson } from '../study/validate-prepared-lesson';
 import { setFrontmatterField } from '../study/write-workspace';
 import { resolvePersona } from '../study/persona';
 import type { StudySession, StudySessionFactory } from './session-factory';
-import { findOwnedPiSessionFile } from './session-owner';
+import {
+  findOwnedPiSessionFile,
+  readPiSessionBranch,
+} from './session-owner';
 import {
   ROADMAP_COACH_SCOPE,
   type StudySessionScope,
@@ -38,6 +42,11 @@ export type LessonStartResult = {
   shouldKickoff: boolean;
 };
 
+export type SessionBranchReader = (
+  root: string,
+  sessionFile: string,
+) => Promise<readonly SessionEntry[]>;
+
 export const findPiSessionFile: SessionFileLookup = findOwnedPiSessionFile;
 
 export class WorkspaceRegistry {
@@ -49,6 +58,7 @@ export class WorkspaceRegistry {
     private readonly root: string,
     private readonly factory: StudySessionFactory,
     private readonly lookup: SessionFileLookup = findPiSessionFile,
+    private readonly readSessionBranch: SessionBranchReader = readPiSessionBranch,
   ) {}
 
   snapshot(planId: string | null = this.planId): PlanWorkspaceSnapshot {
@@ -272,6 +282,33 @@ export class WorkspaceRegistry {
     const session = this.sessions.get(key);
     if (!session) return [];
     return projectConversationEntries(key, session.entries, mode);
+  }
+
+  async replayHistory(
+    lessonId: string,
+    mode: MessageProjectionMode = 'safe',
+  ): Promise<ConversationItem[]> {
+    const lesson = this.workspaceForLesson(lessonId).lessons.find((item) => item.id === lessonId);
+    if (!lesson) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
+    const cached = this.sessions.get(lesson.sessionKey);
+    if (cached) {
+      return projectConversationEntries(lesson.sessionKey, cached.entries, mode);
+    }
+    if (
+      !['closed', 'abandoned'].includes(lesson.status)
+      || !lesson.tutorSessionId
+    ) {
+      return [];
+    }
+    const scope = {
+      role: 'tutor',
+      ownerId: lessonId,
+      ownerPath: lesson.path,
+    } satisfies StudySessionScope;
+    const sessionFile = await this.lookup(this.root, lesson.tutorSessionId, scope);
+    if (!sessionFile) return [];
+    const entries = await this.readSessionBranch(this.root, sessionFile);
+    return projectConversationEntries(lesson.sessionKey, entries, mode);
   }
 
   personaId(key: SessionKey): string {

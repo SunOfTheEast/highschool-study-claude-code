@@ -295,6 +295,9 @@ const registry = {
   roadmapSnapshot: () => readRoadmapWorkspace(root),
   snapshot: (planId = 'domain-integrity') => readPlanWorkspace(root, planId),
   history: (key: SessionKey) => structuredClone(fixtureHistory.get(key) ?? []),
+  replayHistory: async (lessonId: string) => (
+    structuredClone(fixtureHistory.get(`tutor:${lessonId}` as SessionKey) ?? [])
+  ),
   memoryReview: async (key: SessionKey) => (
     key === coachKey ? structuredClone(currentMemoryReview) : null
   ),

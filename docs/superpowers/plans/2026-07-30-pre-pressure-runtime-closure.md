@@ -48,11 +48,11 @@ bun test tests/runtime/workspace-registry.test.ts tests/server/workspace-api.tes
 - Test: `apps/pi-teaching-web/tests/runtime/workspace-registry.test.ts`
 - Test: `apps/pi-teaching-web/tests/server/workspace-api.test.ts`
 
-- [ ] 用真实 `SessionManager` 写一个带 Tutor owner 和学生消息的临时 JSONL。
-- [ ] 用全新 Registry 读取 Replay，确认当前实现只得到空 history。
-- [ ] 增加 owner 校验后的 branch reader 与 `replayHistory`；不得调用 Session factory。
-- [ ] 让 Replay API await 冷恢复结果，并保留 owner 缺失时的 evidence-only fallback。
-- [ ] 运行：
+- [x] 用真实 `SessionManager` 写一个带 Tutor owner 和学生消息的临时 JSONL。
+- [x] 用全新 Registry 读取 Replay，确认当前实现只得到空 history。
+- [x] 增加 owner 校验后的 branch reader 与 `replayHistory`；不得调用 Session factory。
+- [x] 让 Replay API await 冷恢复结果，并保留 owner 缺失时的 evidence-only fallback。
+- [x] 运行：
 
 ```bash
 bun test tests/runtime/workspace-registry.test.ts tests/server/workspace-api.test.ts
