@@ -56,6 +56,7 @@ const proposedMemoryReview = {
     id: 'item-1',
     operation: 'add',
     owner: 'student',
+    currentId: null,
     currentText: null,
     proposedText: '先独立尝试。',
     sources: ['lessons/lesson-001.md#lesson-summary'],
@@ -530,7 +531,7 @@ test('returns submitted immediately, then publishes and restores the applied rev
   expect(await refreshed!.json()).toEqual(applied);
 });
 
-test('keeps a failed memory application submitted instead of claiming success', async () => {
+test('keeps a failed trusted memory application submitted instead of claiming success', async () => {
   const decisions: MemoryReviewDecision[] = [{
     itemId: 'item-1',
     action: 'accept',
@@ -558,7 +559,86 @@ test('keeps a failed memory application submitted instead of claiming success', 
       memoryReview: async () => latest,
       submitMemoryReview: async () => {
         latest = submitted;
-        throw new Error('provider stopped before apply');
+        throw new Error('MEMORY_REVIEW_APPLY_FAILED: profile install failed before receipt');
+      },
+      subscribe: () => () => {},
+      subscribeWorkflows: () => () => {},
+      history: () => [{ kind: 'memory-review', review: latest }],
+      snapshot: () => workspace,
+    } as never,
+  });
+
+  const response = await handler(new Request(
+    'http://local/api/sessions/coach%3Ap1/memory-review/review-1/submit',
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ decisions }),
+    },
+  ));
+  expect(response!.status).toBe(202);
+  expect(await response!.json()).toEqual(submitted);
+  await idle;
+  expect(events).toContainEqual({
+    type: 'session-error',
+    sessionKey: 'coach:p1',
+    message: '长期记忆写入失败，已确认内容尚未进入画像；可以稍后重试。',
+  });
+  expect(events.some((event) => (
+    typeof event === 'object'
+    && event !== null
+    && 'type' in event
+    && event.type === 'conversation-snapshot'
+  ))).toBe(false);
+
+  const refreshed = await handler(new Request(
+    'http://local/api/sessions/coach%3Ap1/memory-review',
+  ));
+  expect(await refreshed!.json()).toEqual(submitted);
+});
+
+test('keeps an applied receipt when the later Coach explanation fails', async () => {
+  const decisions: MemoryReviewDecision[] = [{
+    itemId: 'item-1',
+    action: 'accept',
+    text: null,
+  }];
+  const submitted = {
+    ...proposedMemoryReview,
+    status: 'submitted',
+    decisions,
+  } satisfies MemoryReviewSnapshot;
+  const applied = {
+    ...submitted,
+    status: 'applied',
+    receipt: {
+      reviewId: 'review-1',
+      appliedItems: ['item-1'],
+      unchangedItems: [],
+      profilePaths: {
+        student: 'memory/student-profile.md',
+        teaching: 'memory/teaching-profile.md',
+      },
+    },
+  } satisfies MemoryReviewSnapshot;
+  let latest: MemoryReviewSnapshot = proposedMemoryReview;
+  let resolveIdle!: () => void;
+  const idle = new Promise<void>((resolve) => { resolveIdle = resolve; });
+  const events: unknown[] = [];
+  const hub = new EventHub();
+  hub.subscribe((event) => {
+    events.push(event);
+    if (event.type === 'session-run' && event.status === 'idle') resolveIdle();
+  });
+  const handler = createRequestHandler({
+    root: '/tmp/demo',
+    authoring: false,
+    hub,
+    registry: {
+      memoryReview: async () => latest,
+      submitMemoryReview: async () => {
+        latest = applied;
+        throw new Error('provider stopped while explaining applied receipt');
       },
       subscribe: () => () => {},
       subscribeWorkflows: () => () => {},
@@ -583,17 +663,10 @@ test('keeps a failed memory application submitted instead of claiming success', 
     sessionKey: 'coach:p1',
     message: '模型调用失败，请检查 Pi 的模型与凭据配置后重试。',
   });
-  expect(events.some((event) => (
-    typeof event === 'object'
-    && event !== null
-    && 'type' in event
-    && event.type === 'conversation-snapshot'
-  ))).toBe(false);
-
   const refreshed = await handler(new Request(
     'http://local/api/sessions/coach%3Ap1/memory-review',
   ));
-  expect(await refreshed!.json()).toEqual(submitted);
+  expect(await refreshed!.json()).toEqual(applied);
 });
 
 test('reconciles the complete conversation after a non-retrying agent end', async () => {

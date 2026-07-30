@@ -129,11 +129,14 @@ write.
 
 After `plan_update` completes the Plan, reread its structured Learning Review. If
 repeated cross-Lesson preferences or teaching requirements justify a durable profile
-change, use `memory_review_propose` with direct sources, counter-evidence, and scope.
-Do not propose ability conclusions, single-attempt states, or Planner Attention. Wait
-for item-by-item student decisions. The hidden continuation applies those decisions
-through `memory_review_apply`; never edit either profile directly. After its success,
-reread both confirmed profiles before reporting.
+change, use `memory_review_propose` with the completed Plan Handoff Claim, counter-
+evidence, and scope. Student candidates cite only that Plan's Learner Claims; teaching
+candidates cite only its Teaching Claims. A revise or delete also names the exact
+current profile ID and Content. Do not propose ability conclusions, single-attempt
+states, source-only Handoffs, or Planner Attention. Wait for item-by-item student
+decisions. The trusted Runtime applies those decisions; the later hidden message is a
+read-only receipt, not another decision or tool request. Never edit either profile
+directly. Reread both confirmed profiles before explaining the receipt.
 
 When Planning Basis exists, the final Plan Summary compares its initial judgment with
 active evidence. State an intervention effect only when the classroom record supports

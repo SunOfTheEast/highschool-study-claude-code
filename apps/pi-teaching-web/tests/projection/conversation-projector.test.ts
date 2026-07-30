@@ -14,6 +14,7 @@ const proposed = {
     id: 'item-1',
     operation: 'add',
     owner: 'student',
+    currentId: null,
     currentText: null,
     proposedText: '先独立尝试。',
     sources: ['lessons/lesson-001.md#lesson-summary'],

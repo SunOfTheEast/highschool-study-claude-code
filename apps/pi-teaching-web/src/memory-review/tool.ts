@@ -5,6 +5,7 @@ import { Type } from 'typebox';
 import type { MemoryReviewItem, MemoryReviewSnapshot } from './contracts';
 import { validateMemoryReviewItems } from './source-validation';
 import type { MemoryReviewStore } from './store';
+import { createPiSessionEvidenceReader } from '../runtime/session-owner';
 
 const nullableText = Type.Union([
   Type.String({ minLength: 1 }),
@@ -22,6 +23,7 @@ const itemSchema = Type.Object({
     Type.Literal('student'),
     Type.Literal('teaching'),
   ]),
+  currentId: nullableText,
   currentText: nullableText,
   proposedText: nullableText,
   sources: Type.Array(Type.String({ minLength: 1 }), { minItems: 1 }),
@@ -52,7 +54,13 @@ export function createMemoryReviewProposeTool(
       if (plan.frontmatter.status !== 'completed') {
         throw new Error('MEMORY_REVIEW_PLAN_NOT_COMPLETED');
       }
-      validateMemoryReviewItems(root, planId, ownerPath, input.items as MemoryReviewItem[]);
+      validateMemoryReviewItems(
+        root,
+        planId,
+        ownerPath,
+        input.items as MemoryReviewItem[],
+        await createPiSessionEvidenceReader(root),
+      );
       const snapshot: MemoryReviewSnapshot = {
         id: createId(),
         planId,

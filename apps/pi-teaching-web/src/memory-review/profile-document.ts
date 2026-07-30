@@ -43,16 +43,20 @@ function singleLine(value: string): string {
 
 function sourcePath(value: string): string {
   const result = singleLine(value);
-  const match = /^(?:lessons|plans)\/[A-Za-z0-9][A-Za-z0-9._/-]*\.md(?:#[A-Za-z0-9][A-Za-z0-9._=-]*)?$/
+  const pathMatch = /^(?:lessons|plans)\/[A-Za-z0-9][A-Za-z0-9._/-]*\.md(?:#[A-Za-z0-9][A-Za-z0-9._=-]*)?$/
     .exec(result);
-  const path = result.split('#', 1)[0]!;
-  if (
-    !match
-    || path.split('/').some((segment) => !segment || segment === '.' || segment === '..')
-  ) {
-    invalid();
+  if (pathMatch) {
+    const path = result.split('#', 1)[0]!;
+    if (path.split('/').some((segment) => !segment || segment === '.' || segment === '..')) {
+      invalid();
+    }
+    return result;
   }
-  return result;
+  if (
+    /^claim:[A-Za-z0-9@][A-Za-z0-9@._-]*\/handoff#(?:learner-c|teaching-t)[1-9]\d*$/
+      .test(result)
+  ) return result;
+  return invalid();
 }
 
 function expectedPrefix(owner: ProfileOwner): 'S' | 'T' {

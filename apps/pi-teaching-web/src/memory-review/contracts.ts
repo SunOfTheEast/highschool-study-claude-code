@@ -4,6 +4,7 @@ export type MemoryReviewItem = {
   id: string;
   operation: 'add' | 'revise' | 'delete';
   owner: 'student' | 'teaching';
+  currentId: string | null;
   currentText: string | null;
   proposedText: string | null;
   sources: string[];

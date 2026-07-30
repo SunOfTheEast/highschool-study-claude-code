@@ -9,14 +9,9 @@ import {
   type ToolDefinition,
 } from '@earendil-works/pi-coding-agent';
 import type {
-  MemoryReviewDecision,
   MemoryReviewSnapshot,
 } from '../memory-review/contracts';
-import {
-  MemoryReviewStore,
-  submittedMemoryReview,
-} from '../memory-review/store';
-import { createMemoryReviewApplyTool } from '../memory-review/apply-tool';
+import { MemoryReviewStore } from '../memory-review/store';
 import { createMemoryReviewProposeTool } from '../memory-review/tool';
 import type { WorkflowSnapshot } from '../workflows/contracts';
 import { DeepWorkflowRuntime } from '../workflows/runtime';
@@ -57,10 +52,10 @@ export interface StudySession {
   setDeepMode(enabled: boolean): void;
   workflows(): WorkflowSnapshot[];
   memoryReview(): MemoryReviewSnapshot | null;
-  submitMemoryReview(
-    id: string,
-    decisions: MemoryReviewDecision[],
-  ): Promise<MemoryReviewSnapshot>;
+  saveMemoryReview(snapshot: MemoryReviewSnapshot): void;
+  notifyMemoryReviewApplied(
+    snapshot: Extract<MemoryReviewSnapshot, { status: 'applied' }>,
+  ): Promise<void>;
   confirmWorkflow(id: string): Promise<WorkflowSnapshot>;
   cancelWorkflow(id: string): void;
   subscribeWorkflows(listener: (snapshot: WorkflowSnapshot) => void): () => void;
@@ -142,16 +137,19 @@ export function deepModeToolNames(
     : names;
 }
 
-export function memoryReviewDecisionMessage(snapshot: MemoryReviewSnapshot) {
+export function memoryReviewAppliedMessage(
+  snapshot: Extract<MemoryReviewSnapshot, { status: 'applied' }>,
+) {
   return {
-    customType: 'studyforge.memory-review-decisions.v1',
+    customType: 'studyforge.memory-review-applied.v1',
     content: JSON.stringify({
       reviewId: snapshot.id,
       planId: snapshot.planId,
+      receipt: snapshot.receipt,
       instruction: [
-        'Call memory_review_apply with this reviewId.',
-        'Do not edit either profile directly.',
-        'After a successful receipt, reread memory/student-profile.md and memory/teaching-profile.md and report only that reread state.',
+        'The trusted runtime has already applied exactly the student decisions below.',
+        'Do not reconsider, repropose, or modify this review.',
+        'Reread memory/student-profile.md and memory/teaching-profile.md, then explain only the confirmed current state and this receipt.',
       ],
       items: snapshot.items,
       decisions: snapshot.decisions,
@@ -226,12 +224,6 @@ export async function createPiSessionFactory(
           createLessonPrepareTool(root, ownerId, ownerPath),
           createPlanUpdateTool(root, ownerPath, { now }),
           createMemoryReviewProposeTool(
-            root,
-            ownerId,
-            ownerPath,
-            memoryReviewStore,
-          ),
-          createMemoryReviewApplyTool(
             root,
             ownerId,
             ownerPath,
@@ -319,26 +311,34 @@ export async function createPiSessionFactory(
           ? memoryReviewStore.latest()
           : null
       ),
-      submitMemoryReview: async (id, decisions) => {
+      saveMemoryReview: (snapshot) => {
         if (role !== 'coach' || isRoadmapCoachScope(scope)) {
           throw new Error('MEMORY_REVIEW_PLAN_COACH_ONLY');
         }
-        const submitted = submittedMemoryReview(memoryReviewStore.latest(), id, decisions);
-        memoryReviewStore.save(submitted);
+        if (snapshot.planId !== ownerId) {
+          throw new Error('MEMORY_REVIEW_OWNER_MISMATCH');
+        }
+        memoryReviewStore.save(snapshot);
+      },
+      notifyMemoryReviewApplied: async (snapshot) => {
+        if (role !== 'coach' || isRoadmapCoachScope(scope)) {
+          throw new Error('MEMORY_REVIEW_PLAN_COACH_ONLY');
+        }
+        if (snapshot.planId !== ownerId || snapshot.status !== 'applied') {
+          throw new Error('MEMORY_REVIEW_OWNER_MISMATCH');
+        }
         const previousTools = session.getActiveToolNames();
-        session.setActiveToolsByName([
-          ...previousTools,
-          'memory_review_apply',
-        ]);
+        session.setActiveToolsByName(previousTools.filter(
+          (name) => name !== 'memory_review_propose',
+        ));
         try {
           await triggerAndWaitForAgentEnd(session, () => session.sendCustomMessage(
-            memoryReviewDecisionMessage(submitted),
+            memoryReviewAppliedMessage(snapshot),
             { triggerTurn: true },
           ));
         } finally {
           session.setActiveToolsByName(previousTools);
         }
-        return submitted;
       },
       confirmWorkflow: (id) => workflowRuntime.confirm(id),
       cancelWorkflow: (id) => workflowRuntime.cancel(id),

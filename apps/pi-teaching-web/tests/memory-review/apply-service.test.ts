@@ -12,9 +12,9 @@ import {
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
-  createMemoryReviewApplyTool,
+  applyMemoryReview,
   type ProfileFileOps,
-} from '../../src/memory-review/apply-tool';
+} from '../../src/memory-review/apply-service';
 import type {
   MemoryReviewDecision,
   MemoryReviewItem,
@@ -69,6 +69,7 @@ function add(
     id,
     operation: 'add',
     owner,
+    currentId: null,
     currentText: null,
     proposedText,
     sources: ['lessons/lesson-003.md#lesson-summary'],
@@ -92,25 +93,19 @@ function submitted(
   };
 }
 
-async function execute(
+function execute(
   root: string,
   store: MemoryReviewStore,
   reviewId = 'review-1',
   fileOps?: ProfileFileOps,
 ) {
-  const tool = createMemoryReviewApplyTool(
+  return applyMemoryReview(
     root,
     'domain-integrity',
     'plans/domain-integrity.md',
     store,
+    reviewId,
     fileOps,
-  );
-  return tool.execute(
-    'apply-1',
-    { reviewId },
-    new AbortController().signal,
-    undefined,
-    {} as never,
   );
 }
 
@@ -134,7 +129,7 @@ test('allocates stable S/T IDs for accepted additions and persists an applied re
     text: null,
   }))));
 
-  const result = await execute(root, store);
+  const result = execute(root, store);
   expect(entries(root, 'student')).toEqual([
     expect.objectContaining({ id: 'S1', content: items[0]!.proposedText }),
   ]);
@@ -149,11 +144,9 @@ test('allocates stable S/T IDs for accepted additions and persists an applied re
       unchangedItems: [],
     },
   });
-  const content = result.content[0];
-  if (content?.type !== 'text') throw new Error('Expected text receipt');
-  expect(JSON.parse(content.text)).toMatchObject({
-    ok: true,
+  expect(result).toMatchObject({
     reviewId: 'review-1',
+    appliedItems: ['student-add', 'teaching-add'],
   });
 });
 
@@ -190,17 +183,20 @@ test('applies revise/delete/rewrite semantics and leaves rejected candidates unc
     {
       ...add('revise-teaching', 'teaching', '先等待学生完整尝试。'),
       operation: 'revise',
+      currentId: 'T1',
       currentText: '先给完整讲解。',
     },
     {
       ...add('delete-student', 'student', 'unused'),
       operation: 'delete',
+      currentId: 'S1',
       currentText: '喜欢每一步都确认。',
       proposedText: null,
     },
     {
       ...add('rewrite-delete', 'student', 'unused'),
       operation: 'delete',
+      currentId: 'S2',
       currentText: '希望保留自己的解法。',
       proposedText: null,
     },
@@ -213,7 +209,7 @@ test('applies revise/delete/rewrite semantics and leaves rejected candidates unc
     { itemId: 'reject-add', action: 'reject', text: null },
   ]));
 
-  await execute(root, store);
+  execute(root, store);
   expect(entries(root, 'student').map(({ id, content }) => ({ id, content }))).toEqual([
     { id: 'S2', content: '希望先比较自己的解法。' },
   ]);
@@ -244,6 +240,7 @@ test('uses the student rewrite text for add and revise operations', async () => 
     {
       ...add('rewrite-revise', 'teaching', '模型原提议。'),
       operation: 'revise',
+      currentId: 'T1',
       currentText: '先给完整讲解。',
     },
   ];
@@ -252,7 +249,7 @@ test('uses the student rewrite text for add and revise operations', async () => 
     { itemId: 'rewrite-revise', action: 'rewrite', text: '学生改成先问卡点。' },
   ]));
 
-  await execute(root, store);
+  execute(root, store);
   expect(entries(root, 'student')[0]?.content).toBe('学生改成先独立尝试。');
   expect(entries(root, 'teaching')[0]?.content).toBe('学生改成先问卡点。');
 });
@@ -270,6 +267,7 @@ test('rejects a stale exact current text before changing either profile', async 
   const item: MemoryReviewItem = {
     ...add('stale-revise', 'teaching', '新内容。'),
     operation: 'revise',
+    currentId: 'T1',
     currentText: '已经过期的内容。',
   };
   store.save(submitted(
@@ -281,8 +279,8 @@ test('rejects a stale exact current text before changing either profile', async 
   const beforeStudent = readFileSync(studentPath, 'utf8');
   const beforeTeaching = readFileSync(teachingPath, 'utf8');
 
-  await expect(execute(root, store))
-    .rejects.toThrow('MEMORY_REVIEW_CURRENT_TEXT_MISMATCH: stale-revise');
+  expect(() => execute(root, store))
+    .toThrow('MEMORY_REVIEW_CURRENT_ENTRY_MISMATCH: stale-revise');
   expect(readFileSync(studentPath, 'utf8')).toBe(beforeStudent);
   expect(readFileSync(teachingPath, 'utf8')).toBe(beforeTeaching);
 });
@@ -292,27 +290,21 @@ test('is idempotent after application and rejects a non-latest or foreign review
   const store = new MemoryReviewStore(SessionManager.inMemory(root));
   const item = add('student-add', 'student', '先独立尝试。');
   store.save(submitted([item], [{ itemId: item.id, action: 'accept', text: null }]));
-  const first = await execute(root, store);
+  const first = execute(root, store);
   const before = readFileSync(join(root, 'memory/student-profile.md'), 'utf8');
-  const second = await execute(root, store);
-  expect(second.content).toEqual(first.content);
+  const second = execute(root, store);
+  expect(second).toEqual(first);
   expect(readFileSync(join(root, 'memory/student-profile.md'), 'utf8')).toBe(before);
 
-  await expect(execute(root, store, 'review-older'))
-    .rejects.toThrow('MEMORY_REVIEW_NOT_FOUND');
-  const foreign = createMemoryReviewApplyTool(
+  expect(() => execute(root, store, 'review-older'))
+    .toThrow('MEMORY_REVIEW_NOT_FOUND');
+  expect(() => applyMemoryReview(
     root,
     'another-plan',
     'plans/domain-integrity.md',
     store,
-  );
-  await expect(foreign.execute(
-    'foreign',
-    { reviewId: 'review-1' },
-    new AbortController().signal,
-    undefined,
-    {} as never,
-  )).rejects.toThrow('MEMORY_REVIEW_OWNER_MISMATCH');
+    'review-1',
+  )).toThrow('MEMORY_REVIEW_OWNER_MISMATCH');
 });
 
 test('restores both profile files when installing the second target fails', async () => {
@@ -344,9 +336,64 @@ test('restores both profile files when installing the second target fails', asyn
     exists: existsSync,
   };
 
-  await expect(execute(root, store, 'review-1', fileOps))
-    .rejects.toThrow('INJECTED_SECOND_RENAME_FAILURE');
+  expect(() => execute(root, store, 'review-1', fileOps))
+    .toThrow('INJECTED_SECOND_RENAME_FAILURE');
   expect(readFileSync(studentPath, 'utf8')).toBe(beforeStudent);
   expect(readFileSync(teachingPath, 'utf8')).toBe(beforeTeaching);
   expect(store.latest()?.status).toBe('submitted');
+});
+
+test('restores both profiles when the applied receipt cannot be persisted', () => {
+  const root = fixture();
+  const item = add('student-add', 'student', '先独立尝试。');
+  const current = submitted(
+    [item],
+    [{ itemId: item.id, action: 'accept', text: null }],
+  );
+  const persistence = {
+    latest: () => current,
+    save: () => {
+      throw new Error('INJECTED_RECEIPT_SAVE_FAILURE');
+    },
+  };
+  const studentPath = join(root, 'memory/student-profile.md');
+  const teachingPath = join(root, 'memory/teaching-profile.md');
+  const beforeStudent = readFileSync(studentPath, 'utf8');
+  const beforeTeaching = readFileSync(teachingPath, 'utf8');
+
+  expect(() => applyMemoryReview(
+    root,
+    'domain-integrity',
+    'plans/domain-integrity.md',
+    persistence,
+    'review-1',
+  )).toThrow('INJECTED_RECEIPT_SAVE_FAILURE');
+  expect(readFileSync(studentPath, 'utf8')).toBe(beforeStudent);
+  expect(readFileSync(teachingPath, 'utf8')).toBe(beforeTeaching);
+});
+
+test('does not write profiles before a complete submitted review exists', () => {
+  const root = fixture();
+  const item = add('student-add', 'student', '先独立尝试。');
+  const proposed: MemoryReviewSnapshot = {
+    id: 'review-1',
+    planId: 'domain-integrity',
+    status: 'proposed',
+    items: [item],
+    decisions: [],
+  };
+  const studentPath = join(root, 'memory/student-profile.md');
+  const before = readFileSync(studentPath, 'utf8');
+
+  expect(() => applyMemoryReview(
+    root,
+    'domain-integrity',
+    'plans/domain-integrity.md',
+    {
+      latest: () => proposed,
+      save: () => {},
+    },
+    'review-1',
+  )).toThrow('MEMORY_REVIEW_NOT_SUBMITTED');
+  expect(readFileSync(studentPath, 'utf8')).toBe(before);
 });

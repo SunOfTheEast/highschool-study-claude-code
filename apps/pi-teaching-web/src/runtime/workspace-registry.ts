@@ -14,6 +14,8 @@ import type {
   MemoryReviewDecision,
   MemoryReviewSnapshot,
 } from '../memory-review/contracts';
+import { applyMemoryReview } from '../memory-review/apply-service';
+import { submittedMemoryReview } from '../memory-review/store';
 import {
   readLearningSet,
   readPlanWorkspace,
@@ -173,11 +175,33 @@ export class WorkspaceRegistry {
     return (await this.openSession(key)).workflows();
   }
 
+  private async memoryReviewCoach(planId: string): Promise<StudySession> {
+    const key = `coach:${planId}`;
+    const cached = this.sessions.get(key);
+    if (cached) return cached;
+    const snapshot = readPlanWorkspace(this.root, planId);
+    if (snapshot.plan.status !== 'completed') return this.openCoach(planId);
+    const scope = {
+      nodeKind: 'plan',
+      nodeId: planId,
+      nodePath: snapshot.plan.path,
+      parentId: 'roadmap',
+      parentPath: 'ROADMAP.md',
+    } as const satisfies NodeSessionScope;
+    const sessionId = snapshot.coach.sessionId;
+    if (!sessionId) throw new Error('MEMORY_REVIEW_SESSION_NOT_FOUND');
+    const sessionFile = await this.lookup(this.root, sessionId, scope);
+    if (!sessionFile) throw new Error('MEMORY_REVIEW_SESSION_NOT_FOUND');
+    const session = await this.factory(sessionFactoryInput(scope, sessionFile));
+    this.sessions.set(key, session);
+    return session;
+  }
+
   async memoryReview(key: SessionKey): Promise<MemoryReviewSnapshot | null> {
     if (!key.startsWith('coach:') || key === ROADMAP_COACH_SESSION_KEY) {
       throw new Error('MEMORY_REVIEW_PLAN_COACH_ONLY');
     }
-    return (await this.openCoach(key.slice(6))).memoryReview();
+    return (await this.memoryReviewCoach(key.slice(6))).memoryReview();
   }
 
   async submitMemoryReview(
@@ -188,7 +212,37 @@ export class WorkspaceRegistry {
     if (!key.startsWith('coach:') || key === ROADMAP_COACH_SESSION_KEY) {
       throw new Error('MEMORY_REVIEW_PLAN_COACH_ONLY');
     }
-    return (await this.openCoach(key.slice(6))).submitMemoryReview(id, decisions);
+    const planId = key.slice(6);
+    const session = await this.memoryReviewCoach(planId);
+    const submitted = submittedMemoryReview(session.memoryReview(), id, decisions);
+    try {
+      session.saveMemoryReview(submitted);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'unknown error';
+      throw new Error(`MEMORY_REVIEW_APPLY_FAILED: ${message}`);
+    }
+    const plan = readPlanWorkspace(this.root, planId).plan;
+    try {
+      applyMemoryReview(
+        this.root,
+        planId,
+        plan.path,
+        {
+          latest: () => session.memoryReview(),
+          save: (snapshot) => session.saveMemoryReview(snapshot),
+        },
+        id,
+      );
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'unknown error';
+      throw new Error(`MEMORY_REVIEW_APPLY_FAILED: ${message}`);
+    }
+    const applied = session.memoryReview();
+    if (!applied || applied.status !== 'applied') {
+      throw new Error('MEMORY_REVIEW_APPLY_RECEIPT_MISSING');
+    }
+    await session.notifyMemoryReviewApplied(applied);
+    return applied;
   }
 
   async confirmWorkflow(key: SessionKey, id: string): Promise<WorkflowSnapshot> {

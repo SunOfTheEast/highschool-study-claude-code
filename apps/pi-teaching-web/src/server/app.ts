@@ -74,6 +74,7 @@ export function createRequestHandler(deps?: AppDependencies) {
       label: string,
       task: () => Promise<void>,
       onSuccess?: () => void,
+      errorMessage?: (error: unknown) => string,
     ) => {
       deps.hub.publish({
         type: 'session-run',
@@ -83,10 +84,11 @@ export function createRequestHandler(deps?: AppDependencies) {
       });
       void task()
         .then(onSuccess)
-        .catch(() => deps.hub.publish({
+        .catch((error) => deps.hub.publish({
           type: 'session-error',
           sessionKey: key,
-          message: '模型调用失败，请检查 Pi 的模型与凭据配置后重试。',
+          message: errorMessage?.(error)
+            ?? '模型调用失败，请检查 Pi 的模型与凭据配置后重试。',
         }))
         .finally(() => deps.hub.publish({
           type: 'session-run',
@@ -328,7 +330,7 @@ export function createRequestHandler(deps?: AppDependencies) {
       bind(key);
       runSession(
         key,
-        '学习顾问正在整理长期记忆',
+        '正在写入并整理已确认的长期记忆',
         async () => {
           await deps.registry.submitMemoryReview(key, reviewId, decisions);
         },
@@ -336,6 +338,12 @@ export function createRequestHandler(deps?: AppDependencies) {
           type: 'snapshot',
           workspace: deps.registry.snapshot(key.slice(6)),
         }),
+        (error) => (
+          error instanceof Error
+          && error.message.startsWith('MEMORY_REVIEW_APPLY_FAILED')
+            ? '长期记忆写入失败，已确认内容尚未进入画像；可以稍后重试。'
+            : '模型调用失败，请检查 Pi 的模型与凭据配置后重试。'
+        ),
       );
       return json(submitted, 202);
     }

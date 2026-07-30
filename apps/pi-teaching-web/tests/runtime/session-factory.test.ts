@@ -7,7 +7,7 @@ import { dirname, join } from 'node:path';
 import {
   bindStudyExtensions,
   deepModeToolNames,
-  memoryReviewDecisionMessage,
+  memoryReviewAppliedMessage,
   roleToolNames,
   scopeToolNames,
   triggerAndWaitForAgentEnd,
@@ -175,18 +175,19 @@ test('keeps Roadmap Coach active tools global but non-instructional', () => {
   expect(tools).not.toContain('memory_review_apply');
 });
 
-test('builds one hidden structured continuation for submitted memory decisions', () => {
-  const submitted = {
+test('builds one hidden read-only continuation after trusted memory application', () => {
+  const applied = {
     id: 'review-1',
     planId: 'domain-integrity',
-    status: 'submitted',
+    status: 'applied',
     items: [{
       id: 'preference-1',
       operation: 'delete',
       owner: 'student',
+      currentId: 'S1',
       currentText: '喜欢每一步都确认。',
       proposedText: null,
-      sources: ['lessons/lesson-001.md#trace-event-001'],
+      sources: ['claim:domain-integrity/handoff#learner-c1'],
       rationale: '当前记录不再支持。',
       counterEvidence: '暂无。',
       scope: '导数专题。',
@@ -196,23 +197,33 @@ test('builds one hidden structured continuation for submitted memory decisions',
       action: 'rewrite',
       text: '复杂题只在关键节点确认。',
     }],
+    receipt: {
+      reviewId: 'review-1',
+      appliedItems: ['preference-1'],
+      unchangedItems: [],
+      profilePaths: {
+        student: 'memory/student-profile.md',
+        teaching: 'memory/teaching-profile.md',
+      },
+    },
   } satisfies MemoryReviewSnapshot;
 
-  const message = memoryReviewDecisionMessage(submitted);
+  const message = memoryReviewAppliedMessage(applied);
   expect(message).toMatchObject({
-    customType: 'studyforge.memory-review-decisions.v1',
+    customType: 'studyforge.memory-review-applied.v1',
     display: false,
   });
   const content = JSON.parse(String(message.content)) as Record<string, unknown>;
   expect(content).toMatchObject({
     reviewId: 'review-1',
     planId: 'domain-integrity',
-    items: submitted.items,
-    decisions: submitted.decisions,
+    items: applied.items,
+    decisions: applied.decisions,
+    receipt: applied.receipt,
   });
-  expect(JSON.stringify(content)).toContain('Call memory_review_apply with this reviewId');
-  expect(JSON.stringify(content)).toContain('Do not edit either profile directly');
-  expect(JSON.stringify(content)).not.toContain('Edit only the matching confirmed profile');
+  expect(JSON.stringify(content)).toContain('trusted runtime has already applied');
+  expect(JSON.stringify(content)).toContain('Do not reconsider, repropose, or modify');
+  expect(JSON.stringify(content)).not.toContain('memory_review_apply');
 });
 
 test('adds only the workflow proposal tool while deep mode is enabled', () => {

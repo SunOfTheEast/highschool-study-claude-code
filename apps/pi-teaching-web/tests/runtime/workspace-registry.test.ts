@@ -3,6 +3,7 @@ import { SessionManager } from '@earendil-works/pi-coding-agent';
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { renderHandoff } from 'highschool-study-markdown/study-domain';
 import type { StudySession, StudySessionFactory } from '../../src/runtime/session-factory';
 import { appendSessionOwner } from '../../src/runtime/session-owner';
 import type { NodeSessionScope } from '../../src/runtime/session-scope';
@@ -58,6 +59,31 @@ function editPlan(root: string, edit: (source: string) => string): string {
   return path;
 }
 
+function completePlanForMemoryReview(root: string): void {
+  editPlan(root, (source) => {
+    const handoff = renderHandoff({
+      id: 'domain-integrity/handoff',
+      from: 'plan:domain-integrity',
+      to: 'roadmap:roadmap',
+      sealedAt: '2026-08-06T10:00:00.000Z',
+    }, {
+      learnerClaims: [{
+        statement: '学生更适合先独立尝试。',
+        scope: '训练课。',
+        sources: ['trace:trace-fixture-002'],
+        boundary: '新概念课尚未核验。',
+        nextUse: '作为学生偏好候选。',
+      }],
+      teachingClaims: [],
+      openQuestions: [],
+    });
+    return `${source
+      .replace('status: active', 'status: completed')
+      .replace(/\n## Handoff[\s\S]*$/, '')
+      .trimEnd()}\n\n${handoff}`;
+  });
+}
+
 function idleWorkflowMethods() {
   return {
     entries: [],
@@ -66,16 +92,17 @@ function idleWorkflowMethods() {
     setDeepMode: () => {},
     workflows: () => [],
     memoryReview: () => null,
-    submitMemoryReview: async () => { throw new Error('MEMORY_REVIEW_NOT_FOUND'); },
+    saveMemoryReview: () => {},
+    notifyMemoryReviewApplied: async () => {},
     confirmWorkflow: async () => { throw new Error('WORKFLOW_NOT_FOUND'); },
     cancelWorkflow: () => {},
     subscribeWorkflows: () => () => {},
   };
 }
 
-test('keeps memory review owned by one Plan Coach Session', async () => {
+test('applies student-confirmed memory in trusted Runtime and notifies the same Plan Coach', async () => {
   const root = fixture();
-  const proposed = {
+  let latest: MemoryReviewSnapshot = {
     id: 'review-1',
     planId: 'domain-integrity',
     status: 'proposed',
@@ -83,19 +110,18 @@ test('keeps memory review owned by one Plan Coach Session', async () => {
       id: 'preference-1',
       operation: 'add',
       owner: 'student',
+      currentId: null,
       currentText: null,
       proposedText: '先独立尝试。',
-      sources: ['lessons/lesson-001.md#trace-event-001'],
+      sources: ['claim:domain-integrity/handoff#learner-c1'],
       rationale: '重复出现。',
       counterEvidence: '暂无。',
       scope: '训练课。',
     }],
     decisions: [],
   } satisfies MemoryReviewSnapshot;
-  const submittedCalls: Array<{
-    id: string;
-    decisions: MemoryReviewDecision[];
-  }> = [];
+  const saved: MemoryReviewSnapshot['status'][] = [];
+  const notified: MemoryReviewSnapshot[] = [];
   const factory: StudySessionFactory = async ({ role, ownerId }) => ({
     sessionId: `${role}-${ownerId}`,
     sessionFile: `/tmp/${role}-${ownerId}.jsonl`,
@@ -105,11 +131,14 @@ test('keeps memory review owned by one Plan Coach Session', async () => {
     setPersona: async () => {},
     ...idleWorkflowMethods(),
     memoryReview: () => role === 'coach' && ownerId === 'domain-integrity'
-      ? proposed
+      ? latest
       : null,
-    submitMemoryReview: async (id, decisions) => {
-      submittedCalls.push({ id, decisions });
-      return { ...proposed, status: 'submitted', decisions };
+    saveMemoryReview: (snapshot) => {
+      latest = snapshot;
+      saved.push(snapshot.status);
+    },
+    notifyMemoryReviewApplied: async (snapshot) => {
+      notified.push(snapshot);
     },
     prompt: async () => {},
     abort: async () => {},
@@ -118,8 +147,10 @@ test('keeps memory review owned by one Plan Coach Session', async () => {
   });
   const beforeStudent = readFileSync(join(root, 'memory/student-profile.md'), 'utf8');
   const registry = new WorkspaceRegistry(root, factory, async () => null);
+  await registry.openCoach('domain-integrity');
+  completePlanForMemoryReview(root);
 
-  expect(await registry.memoryReview('coach:domain-integrity')).toEqual(proposed);
+  expect(await registry.memoryReview('coach:domain-integrity')).toEqual(latest);
   await expect(registry.memoryReview('coach:@roadmap'))
     .rejects.toThrow('MEMORY_REVIEW_PLAN_COACH_ONLY');
   await expect(registry.memoryReview('tutor:lesson-003'))
@@ -130,13 +161,90 @@ test('keeps memory review owned by one Plan Coach Session', async () => {
     action: 'accept',
     text: null,
   }];
-  expect(await registry.submitMemoryReview(
+  const applied = await registry.submitMemoryReview(
     'coach:domain-integrity',
     'review-1',
     decisions,
-  )).toMatchObject({ status: 'submitted', decisions });
-  expect(submittedCalls).toEqual([{ id: 'review-1', decisions }]);
-  expect(readFileSync(join(root, 'memory/student-profile.md'), 'utf8')).toBe(beforeStudent);
+  );
+  expect(applied).toMatchObject({
+    status: 'applied',
+    decisions,
+    receipt: { appliedItems: ['preference-1'] },
+  });
+  expect(saved).toEqual(['submitted', 'applied']);
+  expect(notified).toEqual([applied]);
+  expect(readFileSync(join(root, 'memory/student-profile.md'), 'utf8'))
+    .not.toBe(beforeStudent);
+  expect(readFileSync(join(root, 'memory/student-profile.md'), 'utf8'))
+    .toContain('先独立尝试。');
+});
+
+test('restores the owned completed Plan Session only for trusted memory confirmation', async () => {
+  const root = fixture();
+  editPlan(root, (source) => source.replace(
+    'coach_session: null',
+    'coach_session: session-memory-review',
+  ));
+  completePlanForMemoryReview(root);
+  let latest: MemoryReviewSnapshot = {
+    id: 'review-restore',
+    planId: 'domain-integrity',
+    status: 'proposed',
+    items: [{
+      id: 'preference-restore',
+      operation: 'add',
+      owner: 'student',
+      currentId: null,
+      currentText: null,
+      proposedText: '先自己比较两条路线。',
+      sources: ['claim:domain-integrity/handoff#learner-c1'],
+      rationale: 'Plan 结论支持。',
+      counterEvidence: '新概念课尚未核验。',
+      scope: '训练课。',
+    }],
+    decisions: [],
+  };
+  const opened: Array<string | null> = [];
+  const factory: StudySessionFactory = async (input) => {
+    opened.push(input.sessionFile);
+    return {
+      sessionId: 'session-memory-review',
+      sessionFile: input.sessionFile ?? undefined,
+      messages: [],
+      isStreaming: false,
+      personaId: () => null,
+      setPersona: async () => {},
+      ...idleWorkflowMethods(),
+      memoryReview: () => latest,
+      saveMemoryReview: (snapshot) => { latest = snapshot; },
+      notifyMemoryReviewApplied: async () => {},
+      prompt: async () => {},
+      abort: async () => {},
+      subscribe: () => () => {},
+      dispose: () => {},
+    };
+  };
+  const registry = new WorkspaceRegistry(
+    root,
+    factory,
+    async (_root, sessionId, scope) => {
+      expect(sessionId).toBe('session-memory-review');
+      expect(scope).toMatchObject({
+        nodeKind: 'plan',
+        nodeId: 'domain-integrity',
+        nodePath: 'plans/domain-integrity.md',
+      });
+      return '/tmp/session-memory-review.jsonl';
+    },
+  );
+
+  expect(await registry.memoryReview('coach:domain-integrity')).toEqual(latest);
+  expect(opened).toEqual(['/tmp/session-memory-review.jsonl']);
+  expect(await registry.submitMemoryReview(
+    'coach:domain-integrity',
+    'review-restore',
+    [{ itemId: 'preference-restore', action: 'accept', text: null }],
+  )).toMatchObject({ status: 'applied' });
 });
 
 test('creates Coach eagerly and Tutor only after start', async () => {
@@ -813,7 +921,8 @@ test('keeps deep mode scoped and refuses to open a prepared Tutor', async () => 
       setDeepMode: (value) => { enabled.set(key, value); },
       workflows: () => [],
       memoryReview: () => null,
-      submitMemoryReview: async () => { throw new Error('MEMORY_REVIEW_NOT_FOUND'); },
+      saveMemoryReview: () => {},
+      notifyMemoryReviewApplied: async () => {},
       confirmWorkflow: async () => { throw new Error('WORKFLOW_NOT_FOUND'); },
       cancelWorkflow: () => {},
       subscribeWorkflows: () => () => {},

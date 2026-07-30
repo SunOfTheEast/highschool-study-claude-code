@@ -1,4 +1,3 @@
-import { defineTool } from '@earendil-works/pi-coding-agent';
 import {
   existsSync,
   readFileSync,
@@ -11,11 +10,11 @@ import {
   readMarkdownFile,
   resolveInsideRoot,
 } from 'highschool-study-markdown/study-domain';
-import { Type } from 'typebox';
 import type {
   MemoryReviewApplyReceipt,
   MemoryReviewDecision,
   MemoryReviewItem,
+  MemoryReviewSnapshot,
 } from './contracts';
 import {
   parseProfileDocument,
@@ -25,8 +24,12 @@ import {
 } from './profile-document';
 import {
   appliedMemoryReview,
-  type MemoryReviewStore,
 } from './store';
+
+export type MemoryReviewPersistence = {
+  latest(): MemoryReviewSnapshot | null;
+  save(snapshot: MemoryReviewSnapshot): void;
+};
 
 export type ProfileFileOps = {
   read(path: string): string;
@@ -100,10 +103,13 @@ function replacementEntry(
 
 function exactCurrent(entries: ProfileEntry[], item: MemoryReviewItem): number {
   const indexes = entries.flatMap((entry, index) => (
-    entry.content === item.currentText?.trim() ? [index] : []
+    entry.id === item.currentId
+      && entry.content === item.currentText?.trim()
+      ? [index]
+      : []
   ));
   if (indexes.length !== 1) {
-    throw new Error(`MEMORY_REVIEW_CURRENT_TEXT_MISMATCH: ${item.id}`);
+    throw new Error(`MEMORY_REVIEW_CURRENT_ENTRY_MISMATCH: ${item.id}`);
   }
   return indexes[0]!;
 }
@@ -227,93 +233,64 @@ function installProfiles(
   }
 }
 
-function toolReceipt(receipt: MemoryReviewApplyReceipt) {
-  return {
-    ok: true as const,
-    reviewId: receipt.reviewId,
-    appliedItems: receipt.appliedItems,
-    unchangedItems: receipt.unchangedItems,
-    profilePaths: receipt.profilePaths,
-  };
-}
-
-export function createMemoryReviewApplyTool(
+export function applyMemoryReview(
   root: string,
   planId: string,
   ownerPath: string,
-  store: MemoryReviewStore,
+  store: MemoryReviewPersistence,
+  reviewId: string,
   fileOps: ProfileFileOps = nodeFileOps,
-) {
-  return defineTool({
-    name: 'memory_review_apply',
-    label: '写入已确认长期画像',
-    description: 'Atomically apply the latest submitted memory review for this Session-owned completed Plan. IDs and both profile files are runtime-owned; pass only the review ID returned by the confirmed review.',
-    parameters: Type.Object({
-      reviewId: Type.String({ minLength: 1 }),
-    }, { additionalProperties: false }),
-    execute: async (_toolCallId, input) => {
-      const plan = readMarkdownFile(root, ownerPath);
-      if (
-        plan.id !== planId
-        || plan.frontmatter.kind !== 'plan'
-        || plan.frontmatter.status !== 'completed'
-      ) {
-        throw new Error('MEMORY_REVIEW_OWNER_MISMATCH');
-      }
-      const latest = store.latest();
-      if (!latest || latest.id !== input.reviewId) {
-        throw new Error('MEMORY_REVIEW_NOT_FOUND');
-      }
-      if (latest.status === 'applied') {
-        const value = toolReceipt(latest.receipt);
-        return {
-          content: [{ type: 'text' as const, text: JSON.stringify(value) }],
-          details: { kind: 'memory-review-apply', value },
-        };
-      }
-      if (latest.status !== 'submitted') throw new Error('MEMORY_REVIEW_NOT_SUBMITTED');
-      if (latest.planId !== planId) throw new Error('MEMORY_REVIEW_OWNER_MISMATCH');
+): MemoryReviewApplyReceipt {
+  const plan = readMarkdownFile(root, ownerPath);
+  if (
+    plan.id !== planId
+    || plan.frontmatter.kind !== 'plan'
+    || plan.frontmatter.status !== 'completed'
+  ) {
+    throw new Error('MEMORY_REVIEW_OWNER_MISMATCH');
+  }
+  const latest = store.latest();
+  if (!latest || latest.id !== reviewId) {
+    throw new Error('MEMORY_REVIEW_NOT_FOUND');
+  }
+  if (latest.status === 'applied') return latest.receipt;
+  if (latest.status !== 'submitted') throw new Error('MEMORY_REVIEW_NOT_SUBMITTED');
+  if (latest.planId !== planId) throw new Error('MEMORY_REVIEW_OWNER_MISMATCH');
 
-      const targets = {
-        student: resolveInsideRoot(root, profilePaths.student),
-        teaching: resolveInsideRoot(root, profilePaths.teaching),
-      };
-      const originals = {
-        student: fileOps.read(targets.student),
-        teaching: fileOps.read(targets.teaching),
-      };
-      const current = {
-        student: parseProfileDocument(originals.student, 'student'),
-        teaching: parseProfileDocument(originals.teaching, 'teaching'),
-      };
-      const applied = applyItems(current, latest.items, latest.decisions);
-      const rendered = {
-        student: renderProfileDocument(originals.student, 'student', applied.entries.student),
-        teaching: renderProfileDocument(originals.teaching, 'teaching', applied.entries.teaching),
-      };
-      parseProfileDocument(rendered.student, 'student');
-      parseProfileDocument(rendered.teaching, 'teaching');
-      installProfiles(fileOps, targets, originals, rendered, latest.id);
+  const targets = {
+    student: resolveInsideRoot(root, profilePaths.student),
+    teaching: resolveInsideRoot(root, profilePaths.teaching),
+  };
+  const originals = {
+    student: fileOps.read(targets.student),
+    teaching: fileOps.read(targets.teaching),
+  };
+  const current = {
+    student: parseProfileDocument(originals.student, 'student'),
+    teaching: parseProfileDocument(originals.teaching, 'teaching'),
+  };
+  const applied = applyItems(current, latest.items, latest.decisions);
+  const rendered = {
+    student: renderProfileDocument(originals.student, 'student', applied.entries.student),
+    teaching: renderProfileDocument(originals.teaching, 'teaching', applied.entries.teaching),
+  };
+  parseProfileDocument(rendered.student, 'student');
+  parseProfileDocument(rendered.teaching, 'teaching');
+  installProfiles(fileOps, targets, originals, rendered, latest.id);
 
-      const receipt: MemoryReviewApplyReceipt = {
-        reviewId: latest.id,
-        appliedItems: applied.appliedItems,
-        unchangedItems: applied.unchangedItems,
-        profilePaths,
-      };
-      const snapshot = appliedMemoryReview(latest, latest.id, receipt);
-      try {
-        store.save(snapshot);
-      } catch (error) {
-        fileOps.write(targets.student, originals.student);
-        fileOps.write(targets.teaching, originals.teaching);
-        throw error;
-      }
-      const value = toolReceipt(receipt);
-      return {
-        content: [{ type: 'text' as const, text: JSON.stringify(value) }],
-        details: { kind: 'memory-review-apply', value },
-      };
-    },
-  });
+  const receipt: MemoryReviewApplyReceipt = {
+    reviewId: latest.id,
+    appliedItems: applied.appliedItems,
+    unchangedItems: applied.unchangedItems,
+    profilePaths,
+  };
+  const snapshot = appliedMemoryReview(latest, latest.id, receipt);
+  try {
+    store.save(snapshot);
+  } catch (error) {
+    fileOps.write(targets.student, originals.student);
+    fileOps.write(targets.teaching, originals.teaching);
+    throw error;
+  }
+  return receipt;
 }

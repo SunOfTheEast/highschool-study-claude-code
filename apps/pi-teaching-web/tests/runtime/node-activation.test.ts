@@ -56,9 +56,8 @@ function idleSession(
     setDeepMode: () => {},
     workflows: () => [],
     memoryReview: () => null,
-    submitMemoryReview: async () => {
-      throw new Error('MEMORY_REVIEW_NOT_FOUND');
-    },
+    saveMemoryReview: () => {},
+    notifyMemoryReviewApplied: async () => {},
     confirmWorkflow: async () => {
       throw new Error('WORKFLOW_NOT_FOUND');
     },
