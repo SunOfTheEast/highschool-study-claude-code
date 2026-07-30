@@ -1,4 +1,5 @@
 import { expect, test } from 'bun:test';
+import { createEventBus } from '@earendil-works/pi-coding-agent';
 import { compileNodeContext } from '../../src/runtime/node-context';
 import * as resourceLoader from '../../src/runtime/resource-loader';
 import { renderCompiledNodeContext } from '../../src/runtime/node-context';
@@ -12,6 +13,7 @@ type SkillNamesForScope = (scope: {
   parentId: string | null;
   parentPath: string | null;
 }) => string[];
+type RolePromptFile = (scope: Parameters<SkillNamesForScope>[0]) => string;
 
 function roleSkillNames(): RoleSkillNames {
   const value = (resourceLoader as Record<string, unknown>).roleSkillNames;
@@ -23,6 +25,12 @@ function skillNamesForScope(): SkillNamesForScope {
   const value = (resourceLoader as Record<string, unknown>).skillNamesForScope;
   expect(value).toBeFunction();
   return value as SkillNamesForScope;
+}
+
+function rolePromptFile(): RolePromptFile {
+  const value = (resourceLoader as Record<string, unknown>).rolePromptFile;
+  expect(value).toBeFunction();
+  return value as RolePromptFile;
 }
 
 test('renders the compiled page table instead of duplicating role fragments', () => {
@@ -78,4 +86,62 @@ test('loads Roadmap planning resources only for the Roadmap Coach scope', () => 
     'plan-next-cycle',
     'deep-workflow',
   ]);
+});
+
+test('selects one explicit Node Role Prompt by node kind', () => {
+  expect(rolePromptFile()({
+    nodeKind: 'roadmap',
+    nodeId: 'roadmap',
+    nodePath: 'ROADMAP.md',
+    parentId: null,
+    parentPath: null,
+  })).toEndWith('/resources/agents/roadmap-node.md');
+  expect(rolePromptFile()({
+    nodeKind: 'plan',
+    nodeId: 'domain-integrity',
+    nodePath: 'plans/domain-integrity.md',
+    parentId: 'roadmap',
+    parentPath: 'ROADMAP.md',
+  })).toEndWith('/resources/agents/plan-node.md');
+  expect(rolePromptFile()({
+    nodeKind: 'lesson',
+    nodeId: 'lesson-003',
+    nodePath: 'lessons/lesson-003.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
+  })).toEndWith('/resources/agents/lesson-node.md');
+});
+
+test('compiles Teaching Core, Node Role, dynamic frame and presentation persona in order', async () => {
+  const loader = await resourceLoader.createRoleResourceLoader(
+    domainIntegrityFixtureRoot,
+    {
+      nodeKind: 'plan',
+      nodeId: 'domain-integrity',
+      nodePath: 'plans/domain-integrity.md',
+      parentId: 'roadmap',
+      parentPath: 'ROADMAP.md',
+    },
+    createEventBus(),
+    { sessionId: 'session-current-plan' },
+  );
+  const files = loader.getAgentsFiles().agentsFiles.filter(
+    (file) => file.path.startsWith('/virtual/studyforge-'),
+  );
+  expect(files.map((file) => file.path)).toEqual([
+    '/virtual/studyforge-teaching-core.md',
+    '/virtual/studyforge-plan-node.md',
+    '/virtual/studyforge-node-frame.md',
+    expect.stringMatching(/^\/virtual\/studyforge-persona-.+\.md$/),
+  ]);
+  expect(files[0]!.content).toContain('# High-School Mathematics Teaching Core');
+  expect(files[1]!.content).toContain('# Plan Node');
+  expect(files[2]!.content).toContain('# StudyForge Node Context Frame');
+  expect(files[2]!.content).not.toContain('# High-School Mathematics Teaching Core');
+  expect(files[2]!.content).not.toContain('# Plan Node');
+  expect(files.at(-1)!.content).toContain('Presentation only');
+
+  const serialized = files.map((file) => file.content).join('\n');
+  expect(serialized).not.toContain('session-lesson-001');
+  expect(serialized).not.toContain('session-lesson-002');
 });

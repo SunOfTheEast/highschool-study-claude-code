@@ -17,8 +17,6 @@ import {
 import { parseActivationSnapshot } from '../study/activation-snapshot';
 import {
   formatSessionOwnerContext,
-  isRoadmapCoachScope,
-  roleForNode,
   scopeToolNames,
   type NodeSessionScope,
 } from './session-scope';
@@ -206,11 +204,11 @@ function sessionIdFromNode(
   return typeof value === 'string' && value ? value : null;
 }
 
-function rolePromptPath(scope: NodeSessionScope): string {
+export function rolePromptFile(scope: NodeSessionScope): string {
   return join(
     resourceRoot,
     'agents',
-    `${isRoadmapCoachScope(scope) ? 'roadmap-coach' : roleForNode(scope.nodeKind)}.md`,
+    `${scope.nodeKind}-node.md`,
   );
 }
 
@@ -269,7 +267,7 @@ export function compileNodeContext(
       kind: 'resident',
       label: `${scope.nodeKind} role prompt`,
       source: `resource:agent/${scope.nodeKind}`,
-      content: readFileSync(rolePromptPath(scope), 'utf8').trim(),
+      content: readFileSync(rolePromptFile(scope), 'utf8').trim(),
     },
     {
       kind: 'resident',

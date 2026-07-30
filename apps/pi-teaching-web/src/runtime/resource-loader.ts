@@ -9,6 +9,7 @@ import { resolvePersona } from '../study/persona';
 import {
   compileNodeContext,
   renderCompiledNodeContext,
+  type CompiledNodeContext,
 } from './node-context';
 import {
   isRoadmapCoachScope,
@@ -18,6 +19,7 @@ import {
 } from './session-scope';
 
 export type { SessionRole } from './session-scope';
+export { rolePromptFile } from './node-context';
 
 const resourceRoot = join(dirname(fileURLToPath(import.meta.url)), '../../resources');
 
@@ -34,13 +36,31 @@ export function skillNamesForScope(scope: NodeSessionScope): string[] {
   return roleSkillNames(roleForNode(scope.nodeKind));
 }
 
+function page(
+  context: CompiledNodeContext,
+  source: string,
+): string {
+  const content = context.pages.find((candidate) => candidate.source === source)?.content;
+  if (!content) throw new Error(`NODE_PROMPT_LAYER_MISSING: ${source}`);
+  return content;
+}
+
+function dynamicFrame(context: CompiledNodeContext): string {
+  return renderCompiledNodeContext({
+    ...context,
+    pages: context.pages.filter((candidate) => (
+      candidate.source !== 'resource:teaching-core'
+      && !candidate.source.startsWith('resource:agent/')
+    )),
+  });
+}
+
 export async function createRoleResourceLoader(
   root: string,
   scope: NodeSessionScope,
   eventBus: EventBus,
   options: { sessionId?: string | null } = {},
 ) {
-  const role = roleForNode(scope.nodeKind);
   const skillPaths = skillNamesForScope(scope)
     .map((name) => join(resourceRoot, 'skills', name, 'SKILL.md'));
   const context = compileNodeContext(root, scope, options);
@@ -51,12 +71,19 @@ export async function createRoleResourceLoader(
     eventBus,
     additionalExtensionPaths: [fileURLToPath(import.meta.resolve('pi-subagents'))],
     additionalSkillPaths: skillPaths,
-    agentsFilesOverride: (current) => ({
+    agentsFilesOverride: () => ({
       agentsFiles: [
-        ...current.agentsFiles,
         {
-          path: `/virtual/studyforge-${role}.md`,
-          content: renderCompiledNodeContext(context),
+          path: '/virtual/studyforge-teaching-core.md',
+          content: page(context, 'resource:teaching-core'),
+        },
+        {
+          path: `/virtual/studyforge-${scope.nodeKind}-node.md`,
+          content: page(context, `resource:agent/${scope.nodeKind}`),
+        },
+        {
+          path: '/virtual/studyforge-node-frame.md',
+          content: dynamicFrame(context),
         },
         {
           path: `/virtual/studyforge-persona-${persona.id}.md`,

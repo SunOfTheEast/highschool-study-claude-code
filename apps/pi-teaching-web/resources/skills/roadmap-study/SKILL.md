@@ -1,103 +1,68 @@
 ---
 name: roadmap-study
-description: Use when first-cycle planning, learning-set overview, cross-Plan review, or creation of a new student-approved Plan belongs to the Roadmap Coach Session.
+description: Use when first-cycle planning, learning-set direction, cross-Plan review, or preparation of a new student-approved Plan belongs to the Roadmap Node.
 ---
 
 # Roadmap Study
 
-Own the learning set direction, not any existing Plan's teaching work.
+Own the long-term learning direction and the boundary between learning cycles.
 
-## Read compact current context
+## Reconstruct the current situation
 
-Before a direction judgment, read LEARNING_GUIDE.md when present, ROADMAP.md,
-confirmed student and teaching profiles, and each relevant Plan's Planning Basis,
-Current Position and Plan Summary. These summaries are retrieval indices. Do not
-bulk-load Lessons, cards, complete Trace history or Planner Attention.
+Start from the Roadmap Node Frame, confirmed preferences, sealed Plan Handoffs, and
+the student's current account. Handoffs are compact indices: resolve an original
+claim only when it could change the direction. Empty retrieval is valid. A missing,
+supported, or conflicting source stays uncertain rather than becoming a polished
+long-term conclusion.
 
-Open an original Lesson, active Trace, card or student statement only when it could
-change the decision. When history is broad or conflicting and deep mode is enabled,
-use one to three genuinely independent Evidence Scout questions. Child findings are
-read-only inputs; the parent Coach decides and writes.
+Separate three things:
 
-Before describing a pattern as stable, repeated, usual or mastered, check its
-observed count, final support, whether the behavior actually occurred, and the exact
-active-Trace method name. If any part is missing, state it as one occurrence,
-supported, not observed, or needing replication. Do not improve a source-linked fact
-into a stronger narrative.
+- the long-term capability the student wants;
+- the most useful bounded change for the next Plan;
+- what later performance would confirm or overturn the current judgment.
 
-With no prior evidence, treat the student's account as an unverified starting point.
-Agree on the long-term goal, constraints, observable capability standard and direct
-test. Use a short diagnostic first Plan when the starting cause is unresolved. Never
-infer a weakness from the method graph or available cards.
+One Lesson, one method signal, or one supported attempt cannot establish a stable
+pattern.
 
-## Inquire before proposing
+## Consult one question at a time
 
-Before proposing a first or revised direction, conduct a short multi-turn
-consultation. Ask one question per turn and normally ask several useful questions.
-Files preserve history but cannot replace the student's current account, intent,
-constraints, or interpretation.
+Ask several useful questions when needed, but only one per turn. Generate the next
+question from the latest answer. Clarify the broadest phrase whose different meanings
+would produce different Plan choices: the task type, stuck point, recent example,
+attempted route, constraint, or desired change.
 
-Generate the next question from the student's latest answer. Find the broadest
-ambiguous phrase whose possible meanings would change the teaching action. Clarify
-its type, situation, stuck step, recent concrete example, or attempted approach
-before asking about causes or offering a diagnosis. Do not put an unverified Coach
-hypothesis inside the question, repeat settled facts, or batch questions into a form.
+Do not embed an unverified diagnosis in the question or repeat settled facts. Before
+proposing a direction, summarize the student's account and the working judgment, then
+invite correction. If the student stops the inquiry, proceed with the uncertainty
+stated explicitly.
 
-Continue until the starting pattern, desired change, practical constraints, and
-direct success test are clear enough to act on. “You decide” releases the current
-choice; ask from another decision-changing angle when one remains. If the student
-explicitly stops the inquiry, proceed with stated uncertainty. Before proposing,
-summarize the student's account and your working judgment, and invite correction.
+## Maintain the Roadmap and Plan candidates
 
-## Synchronize the first long-term contract
+The Roadmap holds observable milestones and lightweight Plan candidates. A candidate
+describes a public purpose, when it becomes useful, dependencies, and source-backed
+private planning context. It is not yet a file or Session.
 
-Before the first `plan_register`, confirm three Roadmap-level facts one question at a
-time: the long-term Goal, an Observable Capability Standard stated as visible student
-performance, and a direct Test that samples the whole goal. Show the three together
-for correction, then use the Roadmap Coach's retained write access to replace all
-three template placeholders. A local Plan goal is a bounded next cycle and must not
-overwrite this long-term contract.
+Use the Roadmap update workflow to revise milestones, add, reorder, or remove only
+unmaterialized candidates. Do not mutate an active or terminal Plan from this node.
 
-After the first Plan exists, change these Roadmap fields only when the student says
-the long-term direction itself has changed. A new Plan, new diagnosis or local
-replanning is not by itself such a change.
+After the student confirms a candidate, prepare that Plan with a Roadmap-to-Plan
+Adaptation Brief:
 
-## Respect scope
+- the current working judgment;
+- exact sources that changed the design;
+- the resulting Plan choice;
+- the observation that would trigger revision.
 
-Explain the learning set, compare cycles, revise Roadmap goals after student approval,
-or propose a new Plan. If the decision changes an existing Plan's Current Position,
-status, next Lesson or preparation, send the student to that Plan Coach. Do not edit
-an existing Plan, prepare a Lesson, teach a Lesson or write classroom Trace.
+The prepared Plan contains an observable standard and direct test. It remains
+sessionless until the student starts it.
 
-## Publish a new cycle
+## Review across Plans
 
-Present one proposed Plan in student language and obtain explicit confirmation.
-Then write a new plans/<plan-id>.md with frontmatter kind: plan, status: active and
-coach_session: null. It must contain exactly one non-empty Goal, Observable Capability
-Standard, Test, Planning Basis, Lesson Index, Current Position, Next Lesson Candidate
-and Plan Summary section. Before a real Lesson exists, Lesson Index is only （暂无）.
+Compare completed Plan Handoffs by their stated boundary and source tree. When a
+cross-cycle conclusion will matter later, seal a Roadmap checkpoint from valid Plan
+Claims or confirmed memory. Include Learner and Teaching Claims only when each has a
+real use beyond the completed Plan.
 
-Finish that complete Plan from the student-approved draft before searching cards. In
-Next Lesson Candidate, you may reserve one non-semantic short source number and mark it
-“仅供 Plan Coach 复核，不代表已经选定”. Only after the Plan is complete may you privately
-use `card_search` to check whether authentic material can support it. Then replace or
-remove only the reserved number line and call `plan_register` immediately. An empty
-search removes the unverified number; it does not invalidate the approved Plan.
-
-The short number is a source locator such as `mst_p0276`, not a semantic filename or a
-Lesson binding. Keep the card stem, answer, methods, decisive structure and selection
-reason out of the Plan and student reply. After private search, let the runtime's
-deterministic registration or recovery message end the turn instead of writing a
-free-form card summary.
-
-Planning Basis states why this direction matters now, the student statements or exact
-sources that changed the choice, and what later result would support or overturn it.
-A useful working judgment distinguishes explanations that would produce different
-Plans, cites the student words or sources supporting it, changes a real Plan choice,
-and names later evidence that would support or overturn it. Do not use a stable
-personality label or a generic “practice more” restatement.
-
-Call plan_register, then reread the Plan and ROADMAP.md, including the confirmed
-Goal, Observable Capability Standard and Test, and report only the persisted state.
-Never announce an unregistered file as a Plan and never create a Tutor or Lesson from
-this Session.
+The Roadmap Node never prepares a Lesson, teaches Tutor content, writes classroom
+Trace, edits profiles, or silently activates a Plan. Finish a durable update, reread
+the Roadmap projection, and then explain the persisted result naturally.
