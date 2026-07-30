@@ -74,7 +74,7 @@ bun test tests/runtime/workspace-registry.test.ts tests/server/workspace-api.tes
 
 ### Task 4: 完整验收与提交
 
-- [ ] 运行：
+- [x] 运行：
 
 ```bash
 bun run check
@@ -82,5 +82,5 @@ bun run test:e2e
 git diff --check
 ```
 
-- [ ] 审查 diff 只包含三项局部修复及其文档 / 测试。
-- [ ] 提交到 `codex/pre-pressure-runtime-closure`，等待合并决定。
+- [x] 审查 diff 只包含三项局部修复及其文档 / 测试。
+- [x] 提交到 `codex/pre-pressure-runtime-closure`，等待合并决定。
