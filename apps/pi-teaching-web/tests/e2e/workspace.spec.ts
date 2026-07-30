@@ -4,13 +4,20 @@ const fixtureOrigin = `http://127.0.0.1:${
   process.env.STUDYFORGE_E2E_API_PORT ?? 65000
 }`;
 
+test.beforeEach(async ({ request }) => {
+  const response = await request.post(
+    `${fixtureOrigin}/__test/hierarchical-flow/reset`,
+  );
+  expect(response.ok()).toBe(true);
+});
+
 test('keeps global planning available without turning it into the home workspace', async ({ page }) => {
   await page.goto('/');
 
   const entry = page.getByRole('button', { name: /学习总览/ });
   await expect(entry).toBeVisible();
-  await expect(entry).toHaveClass(/quiet/);
-  await expect(page.getByRole('button', { name: /定义域完整性的系统加固/ }))
+  await expect(entry).toHaveClass(/roadmap-tree-entry/);
+  await expect(page.locator('[data-node="plan-candidate-001"]'))
     .toBeVisible();
 
   await entry.click();
@@ -25,7 +32,7 @@ test('keeps global planning available without turning it into the home workspace
 
   await page.getByRole('button', { name: /返回学习集/ }).click();
   await expect(page).toHaveURL('/');
-  await expect(page.getByRole('button', { name: /定义域完整性的系统加固/ }))
+  await expect(page.locator('[data-node="plan-candidate-001"]'))
     .toBeVisible();
 });
 
@@ -64,10 +71,10 @@ test('hides future cards and reveals only the first active problem after start',
   await expect(page.getByRole('heading', { name: '导数学习 Roadmap' })).toBeVisible();
   await page.goto('/plan/domain-integrity');
   await expect(page.getByRole('navigation', { name: 'Plan sessions' })).toContainText('学习顾问');
-  await expect(page.getByRole('navigation', { name: 'Plan sessions' })).toContainText('待开始课程');
-  await page.getByRole('button', { name: /待开始课程/ }).click();
+  const prepared = page.locator('[data-node="lesson-candidate-003"]');
+  await expect(prepared).toContainText('待开始');
   await expect(page.locator('article.problem-card')).toHaveCount(0);
-  await page.getByRole('button', { name: /开始上课/ }).click();
+  await prepared.click();
   await expect(
     page.locator('article.problem-card').getByText('Q-DOMAIN-EX22', { exact: true }),
   ).toBeVisible();
@@ -91,14 +98,15 @@ test('refetches the Roadmap after returning to the learning-set home', async ({ 
 test('keeps the prepared gate and shows actionable admission issues', async ({ page }) => {
   await page.request.post(`${fixtureOrigin}/__test/reject-next-lesson-start`);
   await page.goto('/plan/domain-integrity');
-  await page.getByRole('button', { name: /待开始课程/ }).click();
-
-  await page.getByRole('button', { name: /开始上课/ }).click();
+  await page.locator('[data-node="lesson-candidate-003"]').click();
 
   await expect(page.getByRole('alert')).toContainText('这节课还没备完整');
   await expect(page.getByRole('alert')).toContainText('Q-MISSING');
   await expect(page.getByRole('alert')).toContainText('请返回学习顾问修正');
-  await expect(page.getByRole('button', { name: /开始上课/ })).toBeVisible();
+  await expect(page).toHaveURL(/\/plan\/domain-integrity$/);
+  await expect(page.locator('[data-node="lesson-candidate-003"]')).toContainText(
+    '待开始',
+  );
 });
 
 test('marks the approved theme and current learning surface', async ({ page }) => {
@@ -115,10 +123,10 @@ test('marks the approved theme and current learning surface', async ({ page }) =
   );
   await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'coach');
 
-  await page.getByRole('button', { name: /待开始课程/ }).click();
+  await page.locator('[data-node="lesson-candidate-003"]').click();
   await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'tutor');
 
-  await page.getByRole('button', { name: /Lesson 001/ }).click();
+  await page.locator('[data-session-node="tutor:lesson-001"]').click();
   await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'replay');
 });
 
@@ -132,10 +140,8 @@ test('shows the current Plan planning rationale', async ({ page }) => {
 
 test('refreshes the full ability map after a Tutor trace without reloading', async ({ page }) => {
   await page.goto('/plan/domain-integrity');
-  await page.getByRole('button', { name: /待开始课程/ }).click();
+  await page.locator('[data-node="lesson-candidate-003"]').click();
   await expect(page).toHaveURL(/\/plan\/domain-integrity\/lesson\/lesson-003$/);
-  const start = page.getByRole('button', { name: /开始上课|继续上课/ });
-  if (await start.count()) await start.click();
   const composer = page.locator('form.composer');
   await page.getByPlaceholder('写下你的想法或解题过程…').fill('我尝试用链式法则。');
   await composer.evaluate((form: HTMLFormElement) => form.requestSubmit());
@@ -149,7 +155,7 @@ test('restores Coach and closed Lesson views from browser routes', async ({ page
   await expect(page).toHaveURL(/\/plan\/domain-integrity$/);
   await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'coach');
 
-  await page.getByRole('button', { name: /Lesson 001/ }).click();
+  await page.locator('[data-session-node="tutor:lesson-001"]').click();
   await expect(page).toHaveURL(/\/plan\/domain-integrity\/lesson\/lesson-001$/);
   await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'replay');
   await page.reload();
@@ -161,7 +167,7 @@ test('restores Coach and closed Lesson views from browser routes', async ({ page
     if (!response.ok) throw new Error(`snapshot trigger failed: ${response.status}`);
   });
   await expect(
-    page.getByRole('button', { name: /Lesson 003/ }).getByText('上课中'),
+    page.locator('[data-node="lesson-candidate-003"]').getByText('正在学习'),
   ).toBeVisible();
   await expect(page).toHaveURL(/\/plan\/domain-integrity\/lesson\/lesson-001$/);
   await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'replay');
@@ -240,7 +246,7 @@ test('connects the four product panels without leaking pending classroom content
 
     await explorer.locator('.content-traces button').click();
     const source = page.getByRole('dialog', { name: '记录来源' });
-    await expect(source).toContainText('lesson-004 · assessment-01');
+    await expect(source).toContainText('lesson-004 · block-001');
     await source.getByRole('button', { name: '关闭', exact: true }).click();
     await expect(explorer).toBeVisible();
     await expect(explorer.getByRole('searchbox')).toHaveValue('unique-active-term');
@@ -264,7 +270,7 @@ test('connects the four product panels without leaking pending classroom content
       .getByRole('button', { name: /学习顾问/ })
       .click();
     await expect(page).toHaveURL(/\/plan\/domain-integrity$/);
-    await page.getByRole('button', { name: /Lesson 004/ }).click();
+    await page.locator('[data-session-node="tutor:lesson-004"]').click();
     await expect(page).toHaveURL(/\/plan\/domain-integrity\/lesson\/lesson-004$/);
     await expect(page.getByRole('button', { name: '继续上课' })).toBeVisible();
     await expect(stage).toContainText('Q-DOMAIN-EX22');
@@ -274,7 +280,7 @@ test('connects the four product panels without leaking pending classroom content
 
     const saved = await page.evaluate(() => localStorage.getItem('studyforge.lastVisitedRoute'));
     expect(saved).toBe('/plan/domain-integrity/lesson/lesson-004');
-    await page.getByRole('button', { name: /Lesson 001/ }).click();
+    await page.locator('[data-session-node="tutor:lesson-001"]').click();
     await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'replay');
     await page.reload();
     await expect(page.locator('.app-root')).toHaveAttribute('data-view', 'replay');
@@ -339,7 +345,7 @@ test('renders the liubai palette without horizontal overflow', async ({ page }) 
   });
   expect(palette).toEqual({ paper: '#faf7f1', ink: '#1b1916', accent: '#3f5b54' });
 
-  await page.getByRole('button', { name: /定义域完整性的系统加固/ }).click();
+  await page.locator('[data-node="plan-candidate-001"]').click();
   await expect(page.getByRole('navigation', { name: 'Plan sessions' })).toBeVisible();
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
     390,
@@ -347,11 +353,12 @@ test('renders the liubai palette without horizontal overflow', async ({ page }) 
 });
 
 test('switches Plans only after the student clicks another Plan', async ({ page }) => {
-  await page.request.post(`${fixtureOrigin}/__test/register-plan`);
+  const registered = await page.request.post(`${fixtureOrigin}/__test/register-plan`);
+  const { planId } = await registered.json() as { planId: string };
   await page.request.post(`${fixtureOrigin}/__test/complete-isomorphic-plan`);
-  await page.goto('/plan/isomorphic-transformation');
+  await page.goto(`/plan/${planId}`);
 
-  await expect(page).toHaveURL(/\/plan\/isomorphic-transformation$/);
+  await expect(page).toHaveURL(new RegExp(`/plan/${planId}$`));
   await expect(page.getByText('继续其他 Plan', { exact: true })).toBeVisible();
   const nextPlan = page.getByRole('button', {
     name: /定义域完整性的系统加固.*打开学习顾问/,
@@ -391,8 +398,8 @@ test('keeps the preparation handoff safe and the completed review source-linked'
     await expect(ready).toContainText('5 个课堂环节');
     await expect(ready).toContainText('mst_p0032_ex22');
     await expect(page.locator('.app-root')).not.toContainText(secretTitle);
-    await expect(page.getByRole('navigation', { name: 'Plan sessions' }))
-      .toContainText('待开始课程');
+    await expect(page.locator('[data-node="lesson-candidate-003"]'))
+      .toContainText('待开始');
 
     await page.reload();
     await expect(ready).toBeVisible();

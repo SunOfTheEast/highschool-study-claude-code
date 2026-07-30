@@ -5,7 +5,7 @@ import { listCanonicalMethodNames } from 'highschool-study-markdown/study-domain
 import { readLearningSet, readPlanWorkspace } from '../../src/study/read-workspace';
 import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
 
-test('keeps the old domain-integrity state in an isolated regression fixture', () => {
+test('keeps a canonical hierarchical domain-integrity regression fixture', () => {
   const learningSet = readLearningSet(domainIntegrityFixtureRoot);
   expect(learningSet.plans.map((plan) => plan.id)).toEqual(['domain-integrity']);
 
@@ -31,13 +31,26 @@ test('keeps the old domain-integrity state in an isolated regression fixture', (
     ]),
   );
 
-  for (const path of [
-    'plans/domain-integrity.md',
-    'lessons/lesson-001.md',
-    'lessons/lesson-002.md',
-    'lessons/lesson-003.md',
-  ]) {
-    expect(readFileSync(join(domainIntegrityFixtureRoot, path), 'utf8'))
-      .not.toMatch(/^(coach_session|tutor_session):/m);
+  const plan = readFileSync(
+    join(domainIntegrityFixtureRoot, 'plans/domain-integrity.md'),
+    'utf8',
+  );
+  expect(plan).toContain('## Lesson Tree');
+  expect(plan).not.toContain('## Lesson Index');
+  expect(plan).not.toContain('## Next Lesson Candidate');
+
+  for (const id of ['001', '002', '003']) {
+    const lesson = readFileSync(
+      join(domainIntegrityFixtureRoot, `lessons/lesson-${id}.md`),
+      'utf8',
+    );
+    expect(lesson).toContain('parent_id: domain-integrity');
+    expect(lesson).toContain('parent_path: plans/domain-integrity.md');
+    expect(lesson).toContain('## Handoff');
+    expect(lesson).not.toContain('## Traces');
   }
+  expect(readdirSync(join(domainIntegrityFixtureRoot, 'traces')).sort()).toEqual([
+    'trace-fixture-001.md',
+    'trace-fixture-002.md',
+  ]);
 });

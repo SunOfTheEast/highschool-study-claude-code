@@ -590,6 +590,21 @@ export function App() {
     void openRoute({ kind: 'home' }, 'push');
   };
 
+  const openPlan = async (planId: string): Promise<void> => {
+    setPageError(null);
+    try {
+      const entry = learningSet?.planTree.find(
+        (candidate) => candidate.nodeId === planId,
+      );
+      if (entry?.status === 'prepared') {
+        await api.startPlan(planId);
+      }
+      await openRoute({ kind: 'coach', planId }, 'push');
+    } catch {
+      setPageError('这个学习周期暂时无法启动，请回到学习总览确认当前安排。');
+    }
+  };
+
   if (loading && !learningSet) {
     return <main className="loading-screen"><span>SF</span><p>正在展开学习集…</p></main>;
   }
@@ -679,7 +694,7 @@ export function App() {
           value={homeSnapshot}
           continuePath={continuePath}
           onContinue={(path) => void openRoute(parseBrowserRoute(path), 'push')}
-          onOpen={(id) => void openRoute({ kind: 'coach', planId: id }, 'push')}
+          onOpen={(id) => void openPlan(id)}
           onLessonOpen={(planId, lessonId) => {
             void openTreeLesson(planId, lessonId);
           }}
@@ -754,7 +769,7 @@ export function App() {
           selected={selected}
           onSelect={(key) => void selectSession(key)}
           onPlanSelect={(planId) => {
-            void openRoute({ kind: 'coach', planId }, 'push');
+            void openPlan(planId);
           }}
           onRoadmapSelect={() => {
             void openRoute({ kind: 'roadmap' }, 'push');

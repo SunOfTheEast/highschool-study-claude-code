@@ -1,5 +1,9 @@
 import { join } from 'node:path';
-import type { SessionEntry } from '@earendil-works/pi-coding-agent';
+import {
+  SessionManager,
+  type SessionEntry,
+  type ToolDefinition,
+} from '@earendil-works/pi-coding-agent';
 import {
   cpSync,
   mkdirSync,
@@ -9,7 +13,10 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { appendTrace } from 'highschool-study-markdown/study-domain';
+import {
+  appendTrace,
+  parseHandoff,
+} from 'highschool-study-markdown/study-domain';
 import { ROADMAP_COACH_SESSION_KEY } from '../../src/shared/contracts';
 import type {
   AbilityProjection,
@@ -30,9 +37,28 @@ import {
   setBlockStatus,
   setFrontmatterField,
 } from '../../src/study/write-workspace';
+import { readLearningSet } from '../../src/study/read-workspace';
 import { renderLearningReview } from '../../src/study/learning-review';
 import { resolvePersona } from '../../src/study/persona';
 import { PreparedLessonValidationError } from '../../src/study/validate-prepared-lesson';
+import { createRoadmapUpdateTool } from '../../src/runtime/roadmap-update';
+import { createPlanPrepareTool } from '../../src/runtime/plan-prepare';
+import { createPlanUpdateTool } from '../../src/runtime/plan-update';
+import { createLessonPrepareTool } from '../../src/runtime/lesson-prepare';
+import { createClassroomUpdateTool } from '../../src/runtime/classroom-update';
+import { createLessonCloseTool } from '../../src/runtime/lesson-close';
+import { createStudyTools } from '../../src/runtime/study-tools';
+import { NodeActivationService } from '../../src/runtime/node-activation';
+import type {
+  StudySession,
+  StudySessionFactory,
+} from '../../src/runtime/session-factory';
+import { createMemoryReviewProposeTool } from '../../src/memory-review/tool';
+import {
+  MemoryReviewStore,
+  submittedMemoryReview,
+} from '../../src/memory-review/store';
+import { applyMemoryReview } from '../../src/memory-review/apply-service';
 import { createRequestHandler } from '../../src/server/app';
 import { EventHub } from '../../src/server/event-hub';
 import { projectConversationEntries } from '../../src/projection/conversation-projector';
@@ -325,8 +351,939 @@ const abilityProjection: AbilityProjection = {
 };
 let rejectNextLessonStart = false;
 
+type HierarchicalFlowState = {
+  planId: string | null;
+  firstLessonId: string | null;
+  secondLessonId: string | null;
+  firstClaim: string | null;
+  firstTrace: string | null;
+  replacementTrace: string | null;
+  memoryReviewId: string | null;
+  sourceOnlyClosed: boolean;
+  parallelPlansObserved: boolean;
+  checkpointId: string | null;
+};
+
+function emptyHierarchicalFlowState(): HierarchicalFlowState {
+  return {
+    planId: null,
+    firstLessonId: null,
+    secondLessonId: null,
+    firstClaim: null,
+    firstTrace: null,
+    replacementTrace: null,
+    memoryReviewId: null,
+    sourceOnlyClosed: false,
+    parallelPlansObserved: false,
+    checkpointId: null,
+  };
+}
+
+let hierarchicalFlow = emptyHierarchicalFlowState();
+let selectedPlanId = 'domain-integrity';
+let hierarchicalSessionCounter = 0;
+let hierarchicalClock = 0;
+let registeredPlanId: string | null = null;
+const hierarchicalSessions = new Map<string, StudySession>();
+let hierarchicalManager = SessionManager.inMemory(root);
+let hierarchicalMemory = new MemoryReviewStore(hierarchicalManager);
+
+function hierarchicalSession(sessionId: string): StudySession {
+  return {
+    sessionId,
+    sessionFile: `/tmp/${sessionId}.jsonl`,
+    messages: [],
+    entries: [],
+    isStreaming: false,
+    personaId: () => null,
+    setPersona: async () => {},
+    deepModeEnabled: () => false,
+    setDeepMode: () => {},
+    workflows: () => [],
+    memoryReview: () => hierarchicalMemory.latest(),
+    saveMemoryReview: (snapshot) => hierarchicalMemory.save(snapshot),
+    notifyMemoryReviewApplied: async () => {},
+    confirmWorkflow: async () => {
+      throw new Error('WORKFLOW_NOT_FOUND');
+    },
+    cancelWorkflow: () => {},
+    subscribeWorkflows: () => () => {},
+    triggerLessonStart: async () => {},
+    prompt: async () => {},
+    abort: async () => {},
+    subscribe: () => () => {},
+    dispose: () => {},
+  };
+}
+
+const hierarchicalSessionFactory: StudySessionFactory = async (input) => (
+  hierarchicalSession(
+    `hierarchical-${input.nodeKind}-${input.nodeId}-${
+      ++hierarchicalSessionCounter
+    }`,
+  )
+);
+
+const hierarchicalActivation = new NodeActivationService({
+  root,
+  factory: hierarchicalSessionFactory,
+  lookup: async () => null,
+  sessions: hierarchicalSessions,
+  now: () => new Date(
+    Date.UTC(2026, 6, 31, 10, 0, hierarchicalClock++),
+  ),
+});
+
+async function toolValue(
+  tool: ToolDefinition,
+  id: string,
+  input: object,
+): Promise<Record<string, unknown>> {
+  const result = await tool.execute(
+    id,
+    input as never,
+    undefined,
+    undefined,
+    {} as never,
+  );
+  const first = result.content[0];
+  if (first?.type !== 'text') throw new Error('TOOL_TEXT_RESULT_REQUIRED');
+  return JSON.parse(first.text) as Record<string, unknown>;
+}
+
+function hierarchicalPlanId(): string {
+  if (!hierarchicalFlow.planId) throw new Error('HIERARCHICAL_PLAN_REQUIRED');
+  return hierarchicalFlow.planId;
+}
+
+function hierarchicalLessonId(which: 'first' | 'second'): string {
+  const id = which === 'first'
+    ? hierarchicalFlow.firstLessonId
+    : hierarchicalFlow.secondLessonId;
+  if (!id) throw new Error(`HIERARCHICAL_${which.toUpperCase()}_LESSON_REQUIRED`);
+  return id;
+}
+
+function hierarchicalPlanPath(): string {
+  return `plans/${hierarchicalPlanId()}.md`;
+}
+
+function hierarchicalLessonPath(which: 'first' | 'second'): string {
+  return `lessons/${hierarchicalLessonId(which)}.md`;
+}
+
+function resetHierarchicalFlow(): void {
+  for (const session of hierarchicalSessions.values()) session.dispose();
+  hierarchicalSessions.clear();
+  rmSync(root, { recursive: true, force: true });
+  cpSync(sourceRoot, root, { recursive: true });
+  hierarchicalFlow = emptyHierarchicalFlowState();
+  selectedPlanId = 'domain-integrity';
+  hierarchicalSessionCounter = 0;
+  hierarchicalClock = 0;
+  registeredPlanId = null;
+  hierarchicalManager = SessionManager.inMemory(root);
+  hierarchicalMemory = new MemoryReviewStore(hierarchicalManager);
+  fixtureHistory.clear();
+  fixtureHistory.set(roadmapKey, [{
+    kind: 'message',
+    message: {
+      id: 'fixture-roadmap-message',
+      role: 'coach',
+      text: '这里用于回看整个学习集，并在你确认后开启新的学习周期。',
+      complete: true,
+    },
+  }]);
+  fixtureHistory.set(coachKey, structuredClone(coachHistoryBaseline));
+  currentMemoryReview = proposedMemoryReview;
+  rejectNextLessonStart = false;
+  personaSelections.clear();
+  deepMode.clear();
+}
+
+async function addHierarchicalPlanCandidate(): Promise<HierarchicalFlowState> {
+  await toolValue(
+    createRoadmapUpdateTool(root),
+    'hierarchical-add-plan',
+    {
+      candidateChanges: [{
+        action: 'add',
+        candidate: {
+          publicPurpose: '训练跨结构判断。',
+          after: 'plan-candidate-001',
+          dependsOn: [],
+          considerWhen: '学生希望把已有方法迁移到陌生结构。',
+          sources: ['trace:trace-fixture-002'],
+          privateNote: 'PRIVATE_BRANCH_ONLY：保留陌生题型和方法候选。',
+        },
+      }],
+    },
+  );
+  return structuredClone(hierarchicalFlow);
+}
+
+async function prepareHierarchicalPlan(): Promise<HierarchicalFlowState> {
+  const value = await toolValue(
+    createPlanPrepareTool(root),
+    'hierarchical-prepare-plan',
+    {
+      candidateHandle: 'plan-candidate-002',
+      blueprint: {
+        title: '跨结构判断周期',
+        publicPurpose: '训练跨结构判断。',
+        goal: '把已有定义域意识迁移到陌生结构。',
+        capabilityStandard: '连续两次在陌生结构中先写出并使用合法域。',
+        test: '完成一次无提示跨结构判断并说明边界。',
+        planningBasis: '已有一次独立正证据，但尚未形成跨结构连续性。',
+        activation: {
+          parentSources: ['trace:trace-fixture-002'],
+          selectedMemory: [],
+          contentBoundary: ['不公开 SECRET_METHOD_ROUTE。'],
+          adaptation: {
+            workingJudgment: '当前关键是跨结构迁移而不是重复同类计算。',
+            sources: ['trace:trace-fixture-002'],
+            designConsequence: '先只改变结构外壳，再根据第一课表现决定下一步。',
+            reviseIf: '学生在第一课无法主动写出合法域。',
+          },
+        },
+      },
+    },
+  );
+  hierarchicalFlow.planId = String(value.factId);
+  return structuredClone(hierarchicalFlow);
+}
+
+async function addHierarchicalLessonCandidates(): Promise<HierarchicalFlowState> {
+  await toolValue(
+    createPlanUpdateTool(root, hierarchicalPlanPath()),
+    'hierarchical-add-lessons',
+    {
+      decision: 'active',
+      currentPosition: '准备第一节跨结构判断课。',
+      planSummary: '尚未产生本周期课堂结果。',
+      candidateChanges: [{
+        action: 'add',
+        candidate: {
+          publicPurpose: '完成第一轮跨结构判断。',
+          after: null,
+          dependsOn: [],
+          considerWhen: '学生确认开始本周期。',
+          sources: ['trace:trace-fixture-002'],
+          privateNote: 'SECRET_METHOD_ROUTE：使用一张未见参数题。',
+        },
+      }, {
+        action: 'add',
+        candidate: {
+          publicPurpose: '根据第一课表现继续迁移。',
+          after: 'lesson-candidate-001',
+          dependsOn: ['lesson-candidate-001'],
+          considerWhen: '第一课已经关闭。',
+          sources: ['trace:trace-fixture-002'],
+          privateNote: 'PRIVATE_BRANCH_ONLY：第二课内容只在物化后冻结。',
+        },
+      }],
+    },
+  );
+  return structuredClone(hierarchicalFlow);
+}
+
+function firstLessonBlueprint() {
+  return {
+    title: 'HIERARCHICAL_FIRST_TRUE_TITLE',
+    publicPurpose: '完成第一轮跨结构判断。',
+    capabilityTarget: '独立写出并使用全部合法域。',
+    primaryTemplate: 'assessment',
+    templateReason: '需要一份未见结构的首次作答记录。',
+    adjustments: [],
+    activation: {
+      parentSources: ['trace:trace-fixture-002'],
+      selectedMemory: [],
+      contentBoundary: ['首次作答前不公开方法候选。'],
+      adaptation: {
+        workingJudgment: '定义域主动性已经出现，跨结构连续性尚未确认。',
+        sources: ['trace:trace-fixture-002'],
+        designConsequence: '只改变题型外壳并保留无提示首次尝试。',
+        reviseIf: '学生需要方向性提示才能写出合法域。',
+      },
+    },
+    cards: [{
+      alias: 'Q-HIER-1',
+      cardPath: 'cards/derivative/mst_p0032_ex22.card.yaml',
+      role: '跨结构核验',
+    }],
+    sources: [],
+    blocks: [{
+      localAlias: 'attempt',
+      kind: 'problem',
+      required: true,
+      dependsOn: [],
+      uses: ['Q-HIER-1'],
+      studentView: '请独立完成这次跨结构判断。',
+      teacherControl: 'SECRET_METHOD_ROUTE；只观察首次作答。',
+    }, {
+      localAlias: 'reflection',
+      kind: 'reflection',
+      required: true,
+      dependsOn: ['attempt'],
+      uses: [],
+      studentView: '说明哪个合法域条件真正改变了推导。',
+      teacherControl: '只总结学生已经表达的内容。',
+    }],
+  };
+}
+
+function secondLessonBlueprint() {
+  return {
+    title: 'HIERARCHICAL_SECOND_TRUE_TITLE',
+    publicPurpose: '根据第一课表现继续迁移。',
+    capabilityTarget: '复核第一课更正后的边界。',
+    primaryTemplate: 'review',
+    templateReason: '本课只做短复盘并允许无结论关闭。',
+    adjustments: [],
+    activation: {
+      parentSources: [
+        hierarchicalFlow.replacementTrace
+          ?? hierarchicalFlow.firstTrace
+          ?? 'trace:trace-fixture-002',
+      ],
+      selectedMemory: [],
+      contentBoundary: ['不复制第一课完整对话。'],
+      adaptation: {
+        workingJudgment: '需要确认更正后的记录如何影响下一步。',
+        sources: [
+          hierarchicalFlow.replacementTrace
+            ?? hierarchicalFlow.firstTrace
+            ?? 'trace:trace-fixture-002',
+        ],
+        designConsequence: '进行一次短复盘，不强迫形成新能力结论。',
+        reviseIf: '学生选择继续做新的独立评估。',
+      },
+    },
+    cards: [],
+    sources: [],
+    blocks: [{
+      localAlias: 'review',
+      kind: 'dialogue',
+      required: true,
+      dependsOn: [],
+      uses: [],
+      studentView: '比较第一课原记录与更正后的边界。',
+      teacherControl: 'PRIVATE_BRANCH_ONLY：不引入新的方法判断。',
+    }, {
+      localAlias: 'reflection',
+      kind: 'reflection',
+      required: false,
+      dependsOn: ['review'],
+      uses: [],
+      studentView: '如果今天到这里就够了，可以直接结束。',
+      teacherControl: '不把反思变成关课门槛。',
+    }],
+  };
+}
+
+async function prepareFirstHierarchicalLesson(): Promise<HierarchicalFlowState> {
+  const value = await toolValue(
+    createLessonPrepareTool(
+      root,
+      hierarchicalPlanId(),
+      hierarchicalPlanPath(),
+    ),
+    'hierarchical-prepare-first',
+    {
+      candidateHandle: 'lesson-candidate-001',
+      blueprint: firstLessonBlueprint(),
+    },
+  );
+  hierarchicalFlow.firstLessonId = String(value.factId);
+  return structuredClone(hierarchicalFlow);
+}
+
+async function prepareSecondHierarchicalLesson(): Promise<HierarchicalFlowState> {
+  const value = await toolValue(
+    createLessonPrepareTool(
+      root,
+      hierarchicalPlanId(),
+      hierarchicalPlanPath(),
+    ),
+    'hierarchical-prepare-second',
+    {
+      candidateHandle: 'lesson-candidate-002',
+      blueprint: secondLessonBlueprint(),
+    },
+  );
+  hierarchicalFlow.secondLessonId = String(value.factId);
+  return structuredClone(hierarchicalFlow);
+}
+
+async function completeFirstHierarchicalLesson(): Promise<HierarchicalFlowState> {
+  const lessonId = hierarchicalLessonId('first');
+  const lessonPath = hierarchicalLessonPath('first');
+  const classroom = createClassroomUpdateTool(root, lessonPath);
+  await toolValue(classroom, 'first-activate', {
+    action: 'activate',
+    blockId: 'block-001',
+  });
+  const traceTool = createStudyTools(
+    root,
+    () => new Date('2026-07-31T10:20:00.000Z'),
+    {
+      nodeKind: 'lesson',
+      nodeId: lessonId,
+      nodePath: lessonPath,
+      parentId: hierarchicalPlanId(),
+      parentPath: hierarchicalPlanPath(),
+    },
+  ).find((tool) => tool.name === 'trace_append');
+  if (!traceTool) throw new Error('TRACE_APPEND_TOOL_REQUIRED');
+  const trace = await toolValue(traceTool, 'first-trace', {
+    blockId: 'block-001',
+    assessment: 'correct',
+    support: 'none',
+    note: '学生首次独立写出并使用全部合法域。',
+    methodStatus: 'unmapped',
+    methodRoute: '学生先检查合法域，再完成边界判断。',
+  });
+  hierarchicalFlow.firstTrace = String(trace.sourceRef);
+  await toolValue(classroom, 'first-complete', {
+    action: 'complete',
+    blockId: 'block-001',
+  });
+  await toolValue(classroom, 'reflection-activate', {
+    action: 'activate',
+    blockId: 'block-002',
+  });
+  await toolValue(classroom, 'reflection-complete', {
+    action: 'complete',
+    blockId: 'block-002',
+  });
+  const lesson = readPlanWorkspace(root, hierarchicalPlanId()).lessons.find(
+    (item) => item.id === lessonId,
+  );
+  if (!lesson?.tutorSessionId) throw new Error('FIRST_LESSON_SESSION_REQUIRED');
+  await toolValue(
+    createLessonCloseTool(root, lessonPath, {
+      sessionId: lesson.tutorSessionId,
+      sessionEntries: () => [],
+      now: () => new Date('2026-07-31T10:25:00.000Z'),
+    }),
+    'close-first',
+    {
+      summary: '第一课完成一次独立跨结构判断。',
+      handoff: {
+        learnerClaims: [{
+          statement: '学生在第一课独立写出并使用了全部合法域。',
+          scope: '本课的一次未见结构。',
+          sources: [hierarchicalFlow.firstTrace],
+          boundary: '仍需核查记录更正与下一课迁移。',
+          nextUse: '下一课先检查这条记录是否仍然有效。',
+        }],
+        teachingClaims: [],
+        openQuestions: [],
+      },
+    },
+  );
+  hierarchicalFlow.firstClaim =
+    `claim:${lessonId}/handoff#learner-c1`;
+  fixtureHistory.set(`tutor:${lessonId}`, [{
+    kind: 'message',
+    message: {
+      id: 'hierarchical-first-close',
+      role: 'tutor',
+      text: '第一课已经结束，可以回到学习顾问复盘。',
+      complete: true,
+    },
+  }]);
+  hub.publish({
+    type: 'snapshot',
+    workspace: readPlanWorkspace(root, hierarchicalPlanId()),
+  });
+  return structuredClone(hierarchicalFlow);
+}
+
+async function supersedeFirstHierarchicalTrace(): Promise<HierarchicalFlowState> {
+  const active = hierarchicalFlow.firstTrace?.replace(/^trace:/, '');
+  if (!active) throw new Error('FIRST_TRACE_REQUIRED');
+  const replacement = appendTrace(root, {
+    lessonPath: hierarchicalLessonPath('first'),
+    blockId: 'block-001',
+    cardAlias: 'Q-HIER-1',
+    cardStepId: null,
+    materialPath: null,
+    assessment: 'partially_correct',
+    support: 'none',
+    note: '复核后发现边界说明仍缺一个条件；原独立完成结论被更正。',
+    supersedes: active,
+  }, () => new Date('2026-07-31T10:30:00.000Z'));
+  hierarchicalFlow.replacementTrace = replacement.sourceRef;
+  await prepareSecondHierarchicalLesson();
+  return structuredClone(hierarchicalFlow);
+}
+
+async function closeSecondHierarchicalLesson(): Promise<HierarchicalFlowState> {
+  const lessonId = hierarchicalLessonId('second');
+  const lessonPath = hierarchicalLessonPath('second');
+  const classroom = createClassroomUpdateTool(root, lessonPath);
+  await toolValue(classroom, 'second-activate', {
+    action: 'activate',
+    blockId: 'block-001',
+  });
+  await toolValue(classroom, 'second-complete', {
+    action: 'complete',
+    blockId: 'block-001',
+  });
+  const lesson = readPlanWorkspace(root, hierarchicalPlanId()).lessons.find(
+    (item) => item.id === lessonId,
+  );
+  if (!lesson?.tutorSessionId) throw new Error('SECOND_LESSON_SESSION_REQUIRED');
+  const value = await toolValue(
+    createLessonCloseTool(root, lessonPath, {
+      sessionId: lesson.tutorSessionId,
+      sessionEntries: () => [],
+      now: () => new Date('2026-07-31T10:40:00.000Z'),
+    }),
+    'close-second',
+    {
+      summary: '本课完成记录复核，但没有形成新的能力结论。',
+    },
+  );
+  hierarchicalFlow.sourceOnlyClosed = (
+    value.handoff as { mode?: string } | undefined
+  )?.mode === 'source-only';
+  fixtureHistory.set(`tutor:${lessonId}`, [{
+    kind: 'message',
+    message: {
+      id: 'hierarchical-second-close',
+      role: 'tutor',
+      text: '第二课按你的选择结束，没有强行生成新的能力结论。',
+      complete: true,
+    },
+  }]);
+  return structuredClone(hierarchicalFlow);
+}
+
+async function completeHierarchicalPlanAndProposeMemory(): Promise<HierarchicalFlowState> {
+  if (
+    !hierarchicalFlow.firstClaim
+    || !hierarchicalFlow.replacementTrace
+  ) {
+    throw new Error('HIERARCHICAL_COMPLETION_SOURCES_REQUIRED');
+  }
+  const review = renderLearningReview({
+    conclusion: '本周期完成了跨结构判断，并保留了更正后的真实边界。',
+    boundary: '两节短课；第一课的原始结论后来被更正。',
+    nextStep: '下一周期再检查更陌生的结构。',
+    keyEvidence: [{
+      claim: '更正后的课堂记录仍保留了合法域判断的有效部分。',
+      source: hierarchicalFlow.replacementTrace,
+    }],
+    supportingEvidence: [{
+      claim: '第一课曾封存一条更强的阶段认识。',
+      source: hierarchicalFlow.firstClaim,
+      limitation: '底层记录后来被更正，只用于说明证据演进。',
+    }],
+    openQuestions: [{
+      question: '更陌生结构中能否再次独立完成？',
+      nextCheck: '下一 Plan 使用新的结构外壳。',
+    }],
+  });
+  await toolValue(
+    createPlanUpdateTool(
+      root,
+      hierarchicalPlanPath(),
+      { now: () => new Date('2026-07-31T10:45:00.000Z') },
+    ),
+    'complete-hierarchical-plan',
+    {
+      decision: 'complete',
+      currentPosition: '本周期已经完成。',
+      planSummary: review,
+      candidateChanges: [],
+      handoff: {
+        learnerClaims: [{
+          statement: '学生保留了跨结构判断能力，但结论必须采用更正后的边界。',
+          scope: '本周期两节课。',
+          sources: [hierarchicalFlow.replacementTrace],
+          boundary: '尚未覆盖更陌生的嵌套结构。',
+          nextUse: '下一 Plan 使用不同结构继续核验。',
+        }],
+        teachingClaims: [],
+        openQuestions: [],
+      },
+    },
+  );
+  const planClaim =
+    `claim:${hierarchicalPlanId()}/handoff#learner-c1`;
+  const proposed = await toolValue(
+    createMemoryReviewProposeTool(
+      root,
+      hierarchicalPlanId(),
+      hierarchicalPlanPath(),
+      hierarchicalMemory,
+      () => 'hierarchical-memory-review',
+    ),
+    'propose-hierarchical-memory',
+    {
+      items: [{
+        id: 'hierarchical-preference',
+        operation: 'add',
+        owner: 'student',
+        currentId: null,
+        currentText: null,
+        proposedText: '先保留原始判断，再根据后续核验收窄结论。',
+        sources: [planClaim],
+        rationale: '本周期真实发生了证据更正并被学生接受。',
+        counterEvidence: '只有一个周期，适用范围仍需保持狭窄。',
+        scope: '需要多轮核验的专题训练。',
+      }],
+    },
+  );
+  hierarchicalFlow.memoryReviewId = String(proposed.reviewId);
+  hub.publish({
+    type: 'snapshot',
+    workspace: readPlanWorkspace(root, hierarchicalPlanId()),
+  });
+  return structuredClone(hierarchicalFlow);
+}
+
+async function writeHierarchicalRoadmapCheckpoint(): Promise<HierarchicalFlowState> {
+  const value = await toolValue(
+    createRoadmapUpdateTool(root, {
+      now: () => new Date('2026-07-31T10:50:00.000Z'),
+    }),
+    'hierarchical-roadmap-checkpoint',
+    {
+      candidateChanges: [],
+      checkpoint: {
+        learnerClaims: [{
+          statement: '跨结构判断周期已经结束，并采用更正后的边界。',
+          scope: '当前 Roadmap。',
+          sources: [
+            `claim:${hierarchicalPlanId()}/handoff#learner-c1`,
+          ],
+          boundary: '尚未覆盖更陌生结构。',
+          nextUse: '下一 Plan 继续核验。',
+        }],
+        teachingClaims: [],
+        openQuestions: [],
+      },
+    },
+  );
+  hierarchicalFlow.checkpointId = String(
+    (value.checkpoint as { id?: string }).id,
+  );
+  hub.publish({
+    type: 'learning-set',
+    value: readLearningSet(root),
+  });
+  return structuredClone(hierarchicalFlow);
+}
+
+async function checkHierarchicalParentAuthority(): Promise<{
+  roadmap: string;
+  plan: string;
+}> {
+  const candidate = {
+    publicPurpose: '不应改写。',
+    after: null,
+    dependsOn: [],
+    considerWhen: '不应发生。',
+    sources: ['trace:trace-fixture-002'],
+    privateNote: '不应写入。',
+  };
+  let roadmap = '';
+  let plan = '';
+  try {
+    await toolValue(createRoadmapUpdateTool(root), 'illegal-roadmap-revise', {
+      candidateChanges: [{
+        action: 'revise',
+        handle: 'plan-candidate-002',
+        candidate,
+      }],
+    });
+  } catch (error) {
+    roadmap = error instanceof Error ? error.message : String(error);
+  }
+  try {
+    await toolValue(
+      createPlanUpdateTool(root, hierarchicalPlanPath()),
+      'illegal-plan-revise',
+      {
+        decision: 'active',
+        currentPosition: '不应写入。',
+        planSummary: '不应写入。',
+        candidateChanges: [{
+          action: 'revise',
+          handle: 'lesson-candidate-001',
+          candidate,
+        }],
+      },
+    );
+  } catch (error) {
+    plan = error instanceof Error ? error.message : String(error);
+  }
+  return { roadmap, plan };
+}
+
+async function registerFixturePlan(): Promise<{ planId: string }> {
+  if (registeredPlanId !== null) {
+    const existing = readLearningSet(root).plans.find(
+      (plan) => plan.id === registeredPlanId,
+    );
+    if (existing) return { planId: registeredPlanId };
+    registeredPlanId = null;
+  }
+
+  const update = await toolValue(
+    createRoadmapUpdateTool(root),
+    'fixture-register-plan-candidate',
+    {
+      candidateChanges: [{
+        action: 'add',
+        candidate: {
+          publicPurpose: '识别陌生外壳中的同构结构。',
+          after: 'plan-candidate-001',
+          dependsOn: [],
+          considerWhen: '学生准备进入另一个独立学习周期。',
+          sources: ['trace:trace-fixture-002'],
+          privateNote: 'E2E fixture：只验证学生主动切换 Plan。',
+        },
+      }],
+    },
+  );
+  const handles = update.candidateHandles;
+  if (!Array.isArray(handles) || typeof handles.at(-1) !== 'string') {
+    throw new Error('FIXTURE_PLAN_CANDIDATE_REQUIRED');
+  }
+  const prepared = await toolValue(
+    createPlanPrepareTool(root),
+    'fixture-register-plan',
+    {
+      candidateHandle: handles.at(-1),
+      blueprint: {
+        title: '同构变形',
+        publicPurpose: '识别陌生外壳中的同构结构。',
+        goal: '识别同构结构。',
+        capabilityStandard: '在陌生外壳中独立说明同构结构。',
+        test: '完成一张未见题的首次尝试。',
+        planningBasis: '当前测试需要第二个完整、可切换的 Plan。',
+        activation: {
+          parentSources: ['trace:trace-fixture-002'],
+          selectedMemory: [],
+          contentBoundary: ['不在公开 Plan 中写入私有备课路线。'],
+          adaptation: {
+            workingJudgment: '需要验证多个 Plan 由学生主动切换。',
+            sources: ['trace:trace-fixture-002'],
+            designConsequence: '保留独立 Plan Session，不自动跳转。',
+            reviseIf: '学生没有选择进入这个 Plan。',
+          },
+        },
+      },
+    },
+  );
+  registeredPlanId = String(prepared.factId);
+  await hierarchicalActivation.activatePlan(registeredPlanId);
+  fixtureHistory.set(`coach:${registeredPlanId}`, [{
+    kind: 'message',
+    message: {
+      id: 'fixture-isomorphic-plan-message',
+      role: 'coach',
+      text: '这个学习周期用于验证学生主动切换 Plan。',
+      complete: true,
+    },
+  }]);
+  return { planId: registeredPlanId };
+}
+
+async function completeFixturePlan(): Promise<{ planId: string }> {
+  const { planId } = await registerFixturePlan();
+  const plan = readLearningSet(root).plans.find((item) => item.id === planId);
+  if (!plan) throw new Error(`PLAN_NOT_FOUND: ${planId}`);
+  if (plan.status !== 'completed') {
+    const updated = await toolValue(
+      createPlanUpdateTool(root, plan.path),
+      'fixture-add-isomorphic-lesson',
+      {
+        decision: 'active',
+        currentPosition: '准备一节最小评估课。',
+        planSummary: '尚未形成课堂结论。',
+        candidateChanges: [{
+          action: 'add',
+          candidate: {
+            publicPurpose: '完成一次同构结构判断。',
+            after: null,
+            dependsOn: [],
+            considerWhen: '学生进入这个测试 Plan。',
+            sources: ['trace:trace-fixture-002'],
+            privateNote: 'E2E fixture：形成一条本 Plan 自有来源。',
+          },
+        }],
+      },
+    );
+    const handles = updated.candidateHandles;
+    if (!Array.isArray(handles) || typeof handles.at(-1) !== 'string') {
+      throw new Error('FIXTURE_PLAN_LESSON_CANDIDATE_REQUIRED');
+    }
+    const prepared = await toolValue(
+      createLessonPrepareTool(root, planId, plan.path),
+      'fixture-prepare-isomorphic-lesson',
+      {
+        candidateHandle: handles.at(-1),
+        blueprint: {
+          title: '同构结构最小评估',
+          publicPurpose: '完成一次同构结构判断。',
+          capabilityTarget: '独立指出陌生外壳中的同构关系。',
+          primaryTemplate: 'assessment',
+          templateReason: '为 Plan 完成态建立一条真实、可回溯的来源。',
+          adjustments: [],
+          activation: {
+            parentSources: ['trace:trace-fixture-002'],
+            selectedMemory: [],
+            contentBoundary: ['不公开内部路由说明。'],
+            adaptation: {
+              workingJudgment: '只需要一条本 Plan 自有的最小评估记录。',
+              sources: ['trace:trace-fixture-002'],
+              designConsequence: '完成一个独立问题 Block 后结束。',
+              reviseIf: '学生选择不进入本 Plan。',
+            },
+          },
+          cards: [{
+            alias: 'Q-ISOMORPHIC',
+            cardPath: 'cards/derivative/mst_p0032_ex22.card.yaml',
+            role: '最小评估来源',
+          }],
+          sources: [],
+          blocks: [{
+            localAlias: 'assessment',
+            kind: 'problem',
+            required: true,
+            dependsOn: [],
+            uses: ['Q-ISOMORPHIC'],
+            studentView: '独立说明这道题中的同构结构。',
+            teacherControl: '只记录首次判断。',
+          }],
+        },
+      },
+    );
+    const lessonId = String(prepared.factId);
+    const lessonPath = String(prepared.lessonPath);
+    await hierarchicalActivation.activateLesson(lessonId);
+    const classroom = createClassroomUpdateTool(root, lessonPath);
+    await toolValue(classroom, 'fixture-isomorphic-block-active', {
+      action: 'activate',
+      blockId: 'block-001',
+    });
+    const trace = appendTrace(root, {
+      lessonPath,
+      blockId: 'block-001',
+      cardAlias: 'Q-ISOMORPHIC',
+      cardStepId: null,
+      materialPath: null,
+      assessment: 'correct',
+      support: 'none',
+      note: '学生无提示独立完成测试评估。',
+      supersedes: null,
+    }, () => new Date('2026-07-29T08:05:00.000Z'));
+    await toolValue(classroom, 'fixture-isomorphic-block-complete', {
+      action: 'complete',
+      blockId: 'block-001',
+    });
+    const lesson = readPlanWorkspace(root, planId).lessons.find(
+      (item) => item.id === lessonId,
+    );
+    if (!lesson?.tutorSessionId) {
+      throw new Error('FIXTURE_PLAN_LESSON_SESSION_REQUIRED');
+    }
+    await toolValue(
+      createLessonCloseTool(root, lessonPath, {
+        sessionId: lesson.tutorSessionId,
+        sessionEntries: () => [],
+        now: () => new Date('2026-07-29T08:10:00.000Z'),
+      }),
+      'fixture-close-isomorphic-lesson',
+      {
+        summary: '学生完成一次同构结构判断。',
+        handoff: {
+          learnerClaims: [{
+            statement: '学生无提示完成一次同构结构判断。',
+            scope: '本测试 Lesson。',
+            sources: [trace.sourceRef],
+            boundary: '只用于路由 E2E，不代表稳定能力。',
+            nextUse: '完成当前测试 Plan。',
+          }],
+          teachingClaims: [],
+          openQuestions: [],
+        },
+      },
+    );
+    await toolValue(
+      createPlanUpdateTool(
+        root,
+        plan.path,
+        { now: () => new Date('2026-07-29T08:00:00.000Z') },
+      ),
+      'fixture-complete-plan',
+      {
+        decision: 'complete',
+        currentPosition: '本测试周期已完成。',
+        planSummary: renderLearningReview({
+          conclusion: '已完成测试 Plan。',
+          boundary: '只用于 E2E 路由验收，不代表真实能力结论。',
+          nextStep: '由学生选择其他 Plan。',
+          keyEvidence: [{
+            claim: '完成一条本 Plan 自有的最小评估记录。',
+            source: trace.sourceRef,
+          }],
+          supportingEvidence: [],
+          openQuestions: [],
+        }),
+        candidateChanges: [],
+        handoff: {
+          learnerClaims: [{
+            statement: '当前测试 Plan 已完成。',
+            scope: '本测试 Plan。',
+            sources: [`claim:${lessonId}/handoff#learner-c1`],
+            boundary: '只验证 Plan 切换与来源链。',
+            nextUse: '由学生选择其他 Plan。',
+          }],
+          teachingClaims: [],
+          openQuestions: [],
+        },
+      },
+    );
+  }
+  hub.publish({
+    type: 'learning-set',
+    value: readLearningSet(root),
+  });
+  return { planId };
+}
+
 function list(key: SessionKey): WorkflowSnapshot[] {
   return structuredClone(workflows.get(key) ?? []);
+}
+
+function fixtureConversation(key: SessionKey): ConversationItem[] {
+  if (
+    hierarchicalFlow.planId
+    && key === `coach:${hierarchicalFlow.planId}`
+  ) {
+    const review = hierarchicalMemory.latest();
+    return [
+      {
+        kind: 'message',
+        message: {
+          id: 'hierarchical-plan-message',
+          role: 'coach',
+          text: review
+            ? '本周期已完成，请逐条确认这次形成的长期记忆候选。'
+            : '这个 Plan 只读取自己的 Lesson Handoff 和当前周期记录。',
+          complete: true,
+        },
+      },
+      ...(review ? [{ kind: 'memory-review' as const, review }] : []),
+    ];
+  }
+  return structuredClone(fixtureHistory.get(key) ?? []);
 }
 
 function notify(key: SessionKey, snapshot: WorkflowSnapshot): void {
@@ -335,19 +1292,48 @@ function notify(key: SessionKey, snapshot: WorkflowSnapshot): void {
 
 const registry = {
   roadmapSnapshot: () => readRoadmapWorkspace(root),
-  snapshot: (planId = 'domain-integrity') => readPlanWorkspace(root, planId),
-  history: (key: SessionKey) => structuredClone(fixtureHistory.get(key) ?? []),
+  snapshot: (planId = selectedPlanId) => readPlanWorkspace(root, planId),
+  history: (key: SessionKey) => fixtureConversation(key),
+  readHistory: async (key: SessionKey) => fixtureConversation(key),
   replayHistory: async (lessonId: string) => (
     structuredClone(fixtureHistory.get(`tutor:${lessonId}` as SessionKey) ?? [])
   ),
-  memoryReview: async (key: SessionKey) => (
-    key === coachKey ? structuredClone(currentMemoryReview) : null
-  ),
+  memoryReview: async (key: SessionKey) => {
+    if (
+      hierarchicalFlow.planId
+      && key === `coach:${hierarchicalFlow.planId}`
+    ) {
+      return structuredClone(hierarchicalMemory.latest());
+    }
+    return key === coachKey ? structuredClone(currentMemoryReview) : null;
+  },
   submitMemoryReview: async (
     key: SessionKey,
     reviewId: string,
     decisions: MemoryReviewDecision[],
   ) => {
+    if (
+      hierarchicalFlow.planId
+      && key === `coach:${hierarchicalFlow.planId}`
+    ) {
+      const submitted = submittedMemoryReview(
+        hierarchicalMemory.latest(),
+        reviewId,
+        decisions,
+      );
+      hierarchicalMemory.save(submitted);
+      applyMemoryReview(
+        root,
+        hierarchicalFlow.planId,
+        `plans/${hierarchicalFlow.planId}.md`,
+        hierarchicalMemory,
+        reviewId,
+      );
+      for (const listener of sessionListeners.get(key) ?? []) {
+        listener({ type: 'agent_end', messages: [], willRetry: false });
+      }
+      return structuredClone(hierarchicalMemory.latest()!);
+    }
     if (key !== coachKey || reviewId !== currentMemoryReview.id) {
       throw new Error('MEMORY_REVIEW_NOT_FOUND');
     }
@@ -389,6 +1375,7 @@ const registry = {
   openSession: async (key: SessionKey) => ({
     sessionId: key === roadmapKey ? 'fixture-roadmap-coach' : `fixture-${key}`,
   }),
+  get: (key: SessionKey) => hierarchicalSessions.get(key),
   setDeepMode: async (key: SessionKey, enabled: boolean) => { deepMode.set(key, enabled); },
   deepMode: async (key: SessionKey) => deepMode.get(key) ?? false,
   workflows: async (key: SessionKey) => list(key),
@@ -423,7 +1410,26 @@ const registry = {
     }
     notify(key, snapshot);
   },
+  startPlan: async (planId: string) => {
+    const receipt = await hierarchicalActivation.activatePlan(planId);
+    selectedPlanId = planId;
+    const activePlans = readLearningSet(root).plans.filter(
+      (plan) => plan.status === 'active',
+    );
+    if (activePlans.length > 1) {
+      hierarchicalFlow.parallelPlansObserved = true;
+    }
+    return receipt;
+  },
   startLesson: async (lessonId: string) => {
+    if (
+      lessonId === hierarchicalFlow.firstLessonId
+      || lessonId === hierarchicalFlow.secondLessonId
+    ) {
+      const receipt = await hierarchicalActivation.activateLesson(lessonId);
+      selectedPlanId = hierarchicalPlanId();
+      return { shouldKickoff: receipt.shouldKickoff };
+    }
     if (rejectNextLessonStart) {
       rejectNextLessonStart = false;
       throw new PreparedLessonValidationError([{
@@ -473,49 +1479,121 @@ const appFetch = createRequestHandler({
   readAbilityProjection: () => abilityProjection,
 });
 
-function createPanelFlowFixture(): void {
-  writeFileSync(planPath, planBaseline);
-  for (const id of ['lesson-004', 'lesson-005', 'lesson-006']) {
-    rmSync(join(root, 'lessons', `${id}.md`), { force: true });
-  }
-  const copyLesson = (
-    id: string,
-    status: 'active' | 'paused' | 'abandoned',
-    title: string,
-  ) => {
-    const source = lesson003Baseline
-      .replace('id: lesson-003', `id: ${id}`)
-      .replace('status: prepared', `status: ${status}`)
-      .replace(
-        '# Lesson 003：阶段 1b — 定义域连续性与跨结构迁移核验',
-        `# ${title}`,
-      );
-    const path = `lessons/${id}.md`;
-    writeFileSync(join(root, path), source);
-    setBlockStatus(root, path, 'orientation', 'completed');
-    setBlockStatus(root, path, 'assessment-01', 'active');
-  };
-  copyLesson('lesson-004', 'active', 'Lesson 004：正在进行的连续性核验');
-  copyLesson('lesson-005', 'paused', 'Lesson 005：已暂停的迁移练习');
-  copyLesson('lesson-006', 'abandoned', 'Lesson 006：已归档的旧安排');
+function resetFixtureTraces(): void {
+  rmSync(join(root, 'traces'), { recursive: true, force: true });
+  cpSync(join(sourceRoot, 'traces'), join(root, 'traces'), { recursive: true });
+}
 
-  writeFileSync(
-    planPath,
-    readFileSync(planPath, 'utf8').replace(
-      '\n## Current Position',
-      [
-        '4. [Lesson 004：正在进行的连续性核验](../lessons/lesson-004.md) — active。',
-        '5. [Lesson 005：已暂停的迁移练习](../lessons/lesson-005.md) — paused。',
-        '6. [Lesson 006：已归档的旧安排](../lessons/lesson-006.md) — abandoned。',
-        '',
-        '## Current Position',
+async function createPanelFlowFixture(): Promise<void> {
+  writeFileSync(planPath, planBaseline);
+  writeFileSync(lesson003Path, lesson003Baseline);
+  rmSync(join(root, 'lessons/lesson-004.md'), { force: true });
+  resetFixtureTraces();
+
+  const updated = await toolValue(
+    createPlanUpdateTool(root, 'plans/domain-integrity.md'),
+    'fixture-panel-add-lesson',
+    {
+      decision: 'active',
+      currentPosition: [
+        '阶段 `1a` 已通过。',
+        'Lesson 004 正在进行连续性核验。',
       ].join('\n'),
+      planSummary: '当前只验证学生视图、课堂状态与来源回看。',
+      candidateChanges: [{
+        action: 'add',
+        candidate: {
+          publicPurpose: '继续完成定义域与边界的独立核验。',
+          after: 'lesson-candidate-003',
+          dependsOn: [],
+          considerWhen: '需要验证当前课堂面板。',
+          sources: ['trace:trace-fixture-002'],
+          privateNote: 'E2E fixture：未来课堂内容不得提前投影。',
+        },
+      }],
+    },
+  );
+  const handles = updated.candidateHandles;
+  if (!Array.isArray(handles) || typeof handles.at(-1) !== 'string') {
+    throw new Error('FIXTURE_LESSON_CANDIDATE_REQUIRED');
+  }
+  const prepared = await toolValue(
+    createLessonPrepareTool(
+      root,
+      'domain-integrity',
+      'plans/domain-integrity.md',
+    ),
+    'fixture-panel-prepare-lesson',
+    {
+      candidateHandle: handles.at(-1),
+      blueprint: {
+        title: 'Lesson 004：正在进行的连续性核验',
+        publicPurpose: '继续完成定义域与边界的独立核验。',
+        capabilityTarget: '独立写出并使用全部合法域。',
+        primaryTemplate: 'assessment',
+        templateReason: '验证当前课堂、资料回看和会话恢复。',
+        adjustments: [],
+        activation: {
+          parentSources: ['trace:trace-fixture-002'],
+          selectedMemory: [],
+          contentBoundary: ['只公开当前 Block，不投影未来课堂内容。'],
+          adaptation: {
+            workingJudgment: '需要一节稳定、可恢复的当前课堂。',
+            sources: ['trace:trace-fixture-002'],
+            designConsequence: '只激活一张题卡并保留来源链。',
+            reviseIf: '学生选择返回学习顾问。',
+          },
+        },
+        cards: [{
+          alias: 'Q-DOMAIN-EX22',
+          cardPath: 'cards/derivative/mst_p0032_ex22.card.yaml',
+          role: '当前独立核验',
+        }],
+        sources: [],
+        blocks: [{
+          localAlias: 'assessment',
+          kind: 'problem',
+          required: true,
+          dependsOn: [],
+          uses: ['Q-DOMAIN-EX22'],
+          studentView: '请独立完成当前核验题。',
+          teacherControl: '只呈现当前题卡，不公开后续内容。',
+        }, {
+          localAlias: 'reflection',
+          kind: 'reflection',
+          required: false,
+          dependsOn: ['assessment'],
+          uses: [],
+          studentView: '需要时再回看这次判断。',
+          teacherControl: '只总结学生已经产生的内容。',
+        }],
+      },
+    },
+  );
+  const lessonId = String(prepared.factId);
+  const lessonPath = String(prepared.lessonPath);
+  if (lessonId !== 'lesson-004' || lessonPath !== 'lessons/lesson-004.md') {
+    throw new Error(`FIXTURE_LESSON_ID_UNEXPECTED: ${lessonId}`);
+  }
+  setFrontmatterField(root, lessonPath, 'status', 'active');
+  setFrontmatterField(
+    root,
+    lessonPath,
+    'tutor_session',
+    'session-panel-lesson-004',
+  );
+  writeFileSync(
+    join(root, lessonPath),
+    readFileSync(join(root, lessonPath), 'utf8').replace(
+      '- Activated at: pending',
+      '- Activated at: 2026-07-28T08:00:00.000Z',
     ),
   );
+  setBlockStatus(root, lessonPath, 'block-001', 'active');
 
-  appendTrace(root, {
-    lessonPath: 'lessons/lesson-004.md',
-    blockId: 'assessment-01',
+  const first = appendTrace(root, {
+    lessonPath,
+    blockId: 'block-001',
     cardAlias: 'Q-DOMAIN-EX22',
     cardStepId: 'step_2',
     materialPath: null,
@@ -526,15 +1604,15 @@ function createPanelFlowFixture(): void {
     methods: { primary: '同构变形与换元法', secondary: ['参变量分离'] },
   }, () => new Date('2026-07-28T08:00:00Z'));
   appendTrace(root, {
-    lessonPath: 'lessons/lesson-004.md',
-    blockId: 'assessment-01',
+    lessonPath,
+    blockId: 'block-001',
     cardAlias: 'Q-DOMAIN-EX22',
     cardStepId: 'step_2',
     materialPath: null,
     assessment: 'partially_correct',
     support: 'none',
     note: 'unique-active-term：已独立写出定义域，参数边界仍需核验。',
-    supersedes: 'event-001',
+    supersedes: first.traceId,
     methods: { primary: '同构变形与换元法', secondary: ['参变量分离'] },
   }, () => new Date('2026-07-28T08:01:00Z'));
 
@@ -558,11 +1636,12 @@ function createPanelFlowFixture(): void {
 
 function resetPanelFlowFixture(): void {
   writeFileSync(planPath, planBaseline);
-  for (const id of ['lesson-004', 'lesson-005', 'lesson-006']) {
-    rmSync(join(root, 'lessons', `${id}.md`), { force: true });
-  }
+  writeFileSync(lesson003Path, lesson003Baseline);
+  rmSync(join(root, 'lessons/lesson-004.md'), { force: true });
+  resetFixtureTraces();
   rmSync(join(root, 'materials/panel-flow-note.md'), { force: true });
   rmSync(join(root, '.claude/personas/custom-guide.md'), { force: true });
+  fixtureHistory.delete('tutor:lesson-004');
   personaSelections.clear();
 }
 
@@ -586,14 +1665,14 @@ function completeStudentSafeFlowFixture(): {
   keySource: string;
   supportingSource: string;
 } {
-  setBlockStatus(root, 'lessons/lesson-003.md', 'orientation', 'completed');
-  setBlockStatus(root, 'lessons/lesson-003.md', 'assessment-01', 'completed');
-  setBlockStatus(root, 'lessons/lesson-003.md', 'repair-optional', 'skipped');
-  setBlockStatus(root, 'lessons/lesson-003.md', 'assessment-02', 'completed');
-  setBlockStatus(root, 'lessons/lesson-003.md', 'reflection', 'completed');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'block-001', 'completed');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'block-002', 'completed');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'block-003', 'skipped');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'block-004', 'completed');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'block-005', 'completed');
   const key = appendTrace(root, {
     lessonPath: 'lessons/lesson-003.md',
-    blockId: 'assessment-01',
+    blockId: 'block-002',
     cardAlias: 'Q-DOMAIN-EX22',
     cardStepId: 'step_2',
     materialPath: null,
@@ -604,7 +1683,7 @@ function completeStudentSafeFlowFixture(): {
   }, () => new Date('2026-07-29T09:10:00Z'));
   const supporting = appendTrace(root, {
     lessonPath: 'lessons/lesson-003.md',
-    blockId: 'assessment-02',
+    blockId: 'block-004',
     cardAlias: 'Q-DOMAIN-EX16',
     cardStepId: 'step_1',
     materialPath: null,
@@ -674,10 +1753,89 @@ function resetStudentSafeFlowFixture(): void {
 Bun.serve({
   hostname: '127.0.0.1',
   port: Number(process.env.STUDYFORGE_E2E_API_PORT ?? 65000),
-  fetch(request, server) {
+  async fetch(request, server) {
     const url = new URL(request.url);
+    if (
+      request.method === 'POST'
+      && url.pathname === '/__test/hierarchical-flow/reset'
+    ) {
+      resetHierarchicalFlow();
+      return Response.json(hierarchicalFlow);
+    }
+    if (
+      request.method === 'GET'
+      && url.pathname === '/__test/hierarchical-flow/state'
+    ) {
+      return Response.json(hierarchicalFlow);
+    }
+    if (
+      request.method === 'POST'
+      && url.pathname === '/__test/hierarchical-flow/add-plan-candidate'
+    ) {
+      return Response.json(await addHierarchicalPlanCandidate());
+    }
+    if (
+      request.method === 'POST'
+      && url.pathname === '/__test/hierarchical-flow/prepare-plan'
+    ) {
+      return Response.json(await prepareHierarchicalPlan());
+    }
+    if (
+      request.method === 'POST'
+      && url.pathname === '/__test/hierarchical-flow/add-lesson-candidates'
+    ) {
+      return Response.json(await addHierarchicalLessonCandidates());
+    }
+    if (
+      request.method === 'POST'
+      && url.pathname === '/__test/hierarchical-flow/prepare-first-lesson'
+    ) {
+      return Response.json(await prepareFirstHierarchicalLesson());
+    }
+    if (
+      request.method === 'POST'
+      && url.pathname === '/__test/hierarchical-flow/prepare-second-lesson'
+    ) {
+      return Response.json(await prepareSecondHierarchicalLesson());
+    }
+    if (
+      request.method === 'POST'
+      && url.pathname === '/__test/hierarchical-flow/check-parent-authority'
+    ) {
+      return Response.json(await checkHierarchicalParentAuthority());
+    }
+    if (
+      request.method === 'POST'
+      && url.pathname === '/__test/hierarchical-flow/complete-first-lesson'
+    ) {
+      return Response.json(await completeFirstHierarchicalLesson());
+    }
+    if (
+      request.method === 'POST'
+      && url.pathname === '/__test/hierarchical-flow/supersede-first-trace'
+    ) {
+      return Response.json(await supersedeFirstHierarchicalTrace());
+    }
+    if (
+      request.method === 'POST'
+      && url.pathname === '/__test/hierarchical-flow/close-second-source-only'
+    ) {
+      return Response.json(await closeSecondHierarchicalLesson());
+    }
+    if (
+      request.method === 'POST'
+      && url.pathname === '/__test/hierarchical-flow/complete-plan-and-propose-memory'
+    ) {
+      return Response.json(await completeHierarchicalPlanAndProposeMemory());
+    }
+    if (
+      request.method === 'POST'
+      && url.pathname === '/__test/hierarchical-flow/write-roadmap-checkpoint'
+    ) {
+      return Response.json(await writeHierarchicalRoadmapCheckpoint());
+    }
     if (request.method === 'POST' && url.pathname === '/__test/panel-flow/start') {
-      createPanelFlowFixture();
+      await createPanelFlowFixture();
       return Response.json({ ok: true });
     }
     if (request.method === 'POST' && url.pathname === '/__test/panel-flow/reset') {
@@ -703,120 +1861,10 @@ Bun.serve({
       return Response.json({ ok: true });
     }
     if (request.method === 'POST' && url.pathname === '/__test/register-plan') {
-      writeFileSync(join(root, 'plans/isomorphic-transformation.md'), `---
-id: isomorphic-transformation
-kind: plan
-status: active
-coach_session: null
----
-# Plan：同构变形
-
-## Goal
-
-识别同构结构。
-
-## Observable Capability Standard
-
-在陌生外壳中独立说明同构结构。
-
-## Test
-
-完成一张未见题的首次尝试。
-
-## Planning Basis
-
-当前测试需要一份完整 Plan。来源：[Roadmap](../ROADMAP.md#plan-graph)。
-
-## Lesson Index
-
-（暂无）
-
-## Current Position
-
-等待开始。
-
-## Next Lesson Candidate
-
-待讨论。
-
-## Plan Summary
-
-尚无。
-`);
-      return Response.json({ ok: true });
+      return Response.json(await registerFixturePlan());
     }
     if (request.method === 'POST' && url.pathname === '/__test/complete-isomorphic-plan') {
-      const lessonPath = 'lessons/isomorphic-evidence.md';
-      writeFileSync(join(root, lessonPath), `---
-id: isomorphic-evidence
-kind: lesson
-plan_id: isomorphic-transformation
-status: closed
----
-# 同构评估证据
-
-## Lesson Configuration
-
-- Primary template: \`assessment\`
-
-## Block assessment-01（必做）
-
-### Node State
-
-- Kind: problem
-- Required: true
-- Status: completed
-- Depends on:
-- Uses:
-
-### Student View
-
-独立完成评估。
-
-## Lesson Summary
-
-学生独立完成评估。
-
-## Aliases
-
-（本课不使用题卡别名）
-
-## Traces
-`);
-      const isomorphicPlanPath = join(root, 'plans/isomorphic-transformation.md');
-      writeFileSync(
-        isomorphicPlanPath,
-        readFileSync(isomorphicPlanPath, 'utf8').replace(
-          '（暂无）',
-          '1. [同构评估证据](../lessons/isomorphic-evidence.md) — closed。',
-        ),
-      );
-      const trace = appendTrace(root, {
-        lessonPath,
-        blockId: 'assessment-01',
-        cardAlias: null,
-        cardStepId: null,
-        materialPath: null,
-        assessment: 'correct',
-        support: 'none',
-        note: '学生无提示独立完成评估。',
-        supersedes: null,
-      }, () => new Date('2026-07-29T08:00:00Z'));
-      updateFixturePlan('plans/isomorphic-transformation.md', {
-        currentPosition: '本周期已完成。',
-        learningReview: {
-          conclusion: '已完成测试 Plan。',
-          boundary: '只用于 E2E 路由验收，不代表真实能力结论。',
-          nextStep: '由学生选择其他 Plan。',
-          keyEvidence: [{
-            claim: '无提示独立完成测试评估。',
-            source: trace.sourceRef,
-          }],
-          supportingEvidence: [],
-          openQuestions: [],
-        },
-      });
-      return Response.json({ ok: true });
+      return Response.json(await completeFixturePlan());
     }
     if (request.method === 'POST' && url.pathname === '/__test/reject-next-lesson-start') {
       setFrontmatterField(root, 'lessons/lesson-003.md', 'status', 'prepared');
