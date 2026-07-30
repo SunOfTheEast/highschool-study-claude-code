@@ -798,6 +798,54 @@ test('constrains Tutor Block arguments to the current Lesson', () => {
     action: 'activate',
     blockId: 'invented-block',
   })).toBeFalse();
+  expect(Check(classroom.parameters, {
+    action: 'route',
+    routeAction: 'move',
+    blockId: 'assessment-02',
+    before: 'reflection',
+    reason: '学生决定先做迁移。',
+    source: '#trace-event-001',
+  })).toBeTrue();
+  expect(Check(classroom.parameters, {
+    action: 'route',
+    blockId: 'assessment-02',
+  })).toBeFalse();
+  expect(Check(classroom.parameters, {
+    action: 'route',
+    routeAction: 'move',
+    blockId: 'assessment-02',
+    before: 'invented-block',
+    reason: '非法锚点。',
+    source: '#trace-event-001',
+  })).toBeFalse();
+  expect(Check(classroom.parameters, {
+    action: 'pause',
+    blockId: 'orientation',
+  })).toBeFalse();
+});
+
+test('leaves the Lesson unchanged when classroom transition validation fails', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-classroom-transition-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const lessonPath = join(temporaryRoot, 'lessons/lesson-003.md');
+  writeFileSync(
+    lessonPath,
+    readFileSync(lessonPath, 'utf8').replace('status: prepared', 'status: active'),
+  );
+  const classroom = createClassroomUpdateTool(temporaryRoot, 'lessons/lesson-003.md');
+
+  await classroom.execute('activate-orientation', {
+    action: 'activate',
+    blockId: 'orientation',
+  } as never, undefined, undefined, {} as never);
+  const before = readFileSync(lessonPath, 'utf8');
+  await expect(classroom.execute('activate-second', {
+    action: 'activate',
+    blockId: 'assessment-01',
+  } as never, undefined, undefined, {} as never))
+    .rejects.toThrow(/CLASSROOM_ACTIVE_BLOCK_EXISTS.*orientation/);
+  expect(readFileSync(lessonPath, 'utf8')).toBe(before);
 });
 
 test('keeps runtime authority out of Tutor tool schemas', () => {

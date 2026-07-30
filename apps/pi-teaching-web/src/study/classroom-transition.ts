@@ -1,0 +1,193 @@
+import {
+  readPreparedLessonBlocks,
+  type PreparedLessonBlock,
+} from './validate-prepared-lesson';
+
+type BlockStatus = PreparedLessonBlock['status'];
+type RouteAction = 'insert' | 'skip' | 'move' | 'repeat';
+
+export type ClassroomTransitionInput =
+  | { action: 'activate'; blockId: string }
+  | { action: 'complete'; blockId: string }
+  | { action: 'skip'; blockId: string }
+  | {
+      action: 'route';
+      routeAction: RouteAction;
+      blockId: string;
+      before?: string;
+      after?: string;
+      reason: string;
+      source: string;
+    };
+
+export type RouteChangeSourceInput = {
+  action: RouteAction;
+  blockId: string;
+  before?: string;
+  after?: string;
+  reason: string;
+  source: string;
+};
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function lessonStatus(source: string): string | null {
+  const frontmatter = /^---[ \t]*\n([\s\S]*?)\n---[ \t]*\n/.exec(source)?.[1] ?? '';
+  return /^status:[ \t]*(.+?)[ \t]*$/m.exec(frontmatter)?.[1] ?? null;
+}
+
+function replaceBlockStatus(
+  source: string,
+  blockId: string,
+  status: BlockStatus,
+): string {
+  const heading = new RegExp(
+    `^## Block ${escapeRegExp(blockId)}(?:（[^）]+）)?[ \\t]*$`,
+    'm',
+  );
+  const match = heading.exec(source);
+  if (!match) throw new Error(`BLOCK_NOT_FOUND: ${blockId}`);
+  const next = source.indexOf('\n## Block ', match.index + match[0].length);
+  const end = next < 0 ? source.length : next;
+  const block = source.slice(match.index, end);
+  const state = /^### Node State[ \t]*$\n([\s\S]*?)(?=^### |^## |$(?![\s\S]))/m
+    .exec(block);
+  if (!state || !/^- Status:.*$/m.test(state[0])) {
+    throw new Error(`CLASSROOM_NODE_STATE_INVALID: ${blockId}`);
+  }
+  const replacement = block.replace(
+    state[0],
+    state[0].replace(/^- Status:.*$/m, `- Status: ${status}`),
+  );
+  return source.slice(0, match.index) + replacement + source.slice(end);
+}
+
+export function appendRouteChangeSource(
+  source: string,
+  input: RouteChangeSourceInput,
+): string {
+  const ids = [...source.matchAll(/^### Route change route-(\d+)$/gm)]
+    .map((match) => Number(match[1]));
+  const id = `route-${String(Math.max(0, ...ids) + 1).padStart(3, '0')}`;
+  const heading = source.includes('\n## Route Changes\n') ? '' : '\n## Route Changes\n';
+  const placement = input.before
+    ? `\n- Before: ${input.before}`
+    : input.after
+      ? `\n- After: ${input.after}`
+      : '';
+  return `${source.trimEnd()}${heading}\n### Route change ${id}\n\n`
+    + `- Action: ${input.action}\n`
+    + `- Block: ${input.blockId}${placement}\n`
+    + `- Reason: ${input.reason}\n`
+    + `- Source: ${input.source}\n`;
+}
+
+function applyRouteTransition(
+  source: string,
+  blocks: PreparedLessonBlock[],
+  input: Extract<ClassroomTransitionInput, { action: 'route' }>,
+): string {
+  const byId = new Map(blocks.map((block) => [block.id, block]));
+  const active = blocks.filter((block) => block.status === 'active');
+  const block = byId.get(input.blockId);
+  if (!block) throw new Error(`BLOCK_NOT_FOUND: ${input.blockId}`);
+  if (input.before && input.after) throw new Error('ROUTE_PLACEMENT_AMBIGUOUS');
+  for (const anchor of [input.before, input.after].filter(
+    (value): value is string => Boolean(value),
+  )) {
+    if (!byId.has(anchor)) throw new Error(`ROUTE_ANCHOR_NOT_FOUND: ${anchor}`);
+    if (anchor === input.blockId) throw new Error(`ROUTE_SELF_ANCHOR: ${anchor}`);
+  }
+
+  const expected: Record<RouteAction, BlockStatus[]> = {
+    move: ['pending'],
+    skip: ['pending'],
+    insert: ['skipped'],
+    repeat: ['completed', 'skipped'],
+  };
+  if (!expected[input.routeAction].includes(block.status)) {
+    throw new Error(
+      `ROUTE_BLOCK_STATUS_INVALID: action=${input.routeAction}; `
+      + `block=${block.id}; status=${block.status}`,
+    );
+  }
+  if (input.routeAction === 'repeat' && active.length > 0) {
+    throw new Error(`ROUTE_REPEAT_WHILE_ACTIVE: ${active[0]!.id}`);
+  }
+
+  const nextStatus: Partial<Record<RouteAction, BlockStatus>> = {
+    skip: 'skipped',
+    insert: 'pending',
+    repeat: 'pending',
+  };
+  const status = nextStatus[input.routeAction];
+  const next = status === undefined
+    ? source
+    : replaceBlockStatus(source, block.id, status);
+  return appendRouteChangeSource(next, {
+    action: input.routeAction,
+    blockId: input.blockId,
+    reason: input.reason,
+    source: input.source,
+    ...(input.before ? { before: input.before } : {}),
+    ...(input.after ? { after: input.after } : {}),
+  });
+}
+
+export function transitionClassroomSource(
+  source: string,
+  input: ClassroomTransitionInput,
+): string {
+  const status = lessonStatus(source);
+  if (status !== 'active') {
+    throw new Error(`CLASSROOM_LESSON_NOT_ACTIVE: ${status ?? '(missing)'}`);
+  }
+  const blocks = readPreparedLessonBlocks(source);
+  const byId = new Map(blocks.map((block) => [block.id, block]));
+  const active = blocks.filter((block) => block.status === 'active');
+  if (active.length > 1) {
+    throw new Error(
+      `CLASSROOM_ACTIVE_BLOCK_CONFLICT: ${active.map((block) => block.id).join(',')}`,
+    );
+  }
+  const block = byId.get(input.blockId);
+  if (!block) throw new Error(`BLOCK_NOT_FOUND: ${input.blockId}`);
+
+  if (input.action === 'activate') {
+    if (active.length > 0) {
+      throw new Error(`CLASSROOM_ACTIVE_BLOCK_EXISTS: ${active[0]!.id}`);
+    }
+    if (block.status !== 'pending') {
+      throw new Error(`CLASSROOM_ACTIVATE_REQUIRES_PENDING: ${block.id}`);
+    }
+    const unresolved = block.dependsOn.filter((id) => {
+      const dependency = byId.get(id);
+      return !dependency || !['completed', 'skipped'].includes(dependency.status);
+    });
+    if (unresolved.length > 0) {
+      throw new Error(
+        `CLASSROOM_DEPENDENCY_UNRESOLVED: block=${block.id}; `
+        + `dependsOn=${unresolved.join(',')}`,
+      );
+    }
+    return replaceBlockStatus(source, block.id, 'active');
+  }
+
+  if (input.action === 'complete' || input.action === 'skip') {
+    if (active.length !== 1 || active[0]!.id !== block.id) {
+      throw new Error(
+        `CLASSROOM_BLOCK_NOT_ACTIVE: requested=${block.id}; `
+        + `active=${active[0]?.id ?? '(none)'}`,
+      );
+    }
+    return replaceBlockStatus(
+      source,
+      block.id,
+      input.action === 'complete' ? 'completed' : 'skipped',
+    );
+  }
+
+  return applyRouteTransition(source, blocks, input);
+}

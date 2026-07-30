@@ -20,7 +20,7 @@ export function RouteMap({ replay }: { replay: LessonReplay }) {
     <section className="route-map">
       <span>课堂路线</span>
       <RouteRow label="初始" values={replay.route.initial} />
-      <RouteRow label="实际" values={replay.route.effective} accent />
+      <RouteRow label="调整后" values={replay.route.effective} accent />
     </section>
   );
 }

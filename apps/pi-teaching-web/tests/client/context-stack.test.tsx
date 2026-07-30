@@ -105,7 +105,10 @@ test('composes distinct ordered context sections for Coach, Tutor, and Replay', 
 
   const replayHtml = html('replay');
   expect(replayHtml).toContain('回放定位');
-  expect(replayHtml).toContain('原定路线与实际路线');
+  expect(replayHtml).toContain('原定路线与调整后路线');
+  expect(replayHtml).toContain('初始');
+  expect(replayHtml).toContain('调整后');
+  expect(replayHtml).not.toContain('实际路线');
   expect(replayHtml).toContain('学习记录来源');
   expect(replayHtml).not.toContain('前课摘录');
 

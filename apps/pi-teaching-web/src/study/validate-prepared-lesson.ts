@@ -27,6 +27,9 @@ export class PreparedLessonValidationError extends Error {
 export type PreparedLessonBlock = {
   id: string;
   kind: string;
+  required: boolean;
+  status: 'pending' | 'active' | 'completed' | 'skipped';
+  dependsOn: string[];
   uses: string[];
 };
 
@@ -42,9 +45,18 @@ export function readPreparedLessonBlocks(body: string): PreparedLessonBlock[] {
     const field = (name: string) => (
       new RegExp(`^- ${name}:[ \\t]*(.*?)[ \\t]*$`, 'm').exec(state)?.[1]?.trim() ?? ''
     );
+    const status = field('Status');
     return {
       id: heading[1]!,
       kind: field('Kind'),
+      required: field('Required') !== 'false',
+      status: ['pending', 'active', 'completed', 'skipped'].includes(status)
+        ? status as PreparedLessonBlock['status']
+        : 'pending',
+      dependsOn: field('Depends on')
+        .split(',')
+        .map((value) => value.trim())
+        .filter(Boolean),
       uses: field('Uses').split(',').map((value) => value.trim()).filter(Boolean),
     };
   });

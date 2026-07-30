@@ -1,60 +1,99 @@
 import { defineTool } from '@earendil-works/pi-coding-agent';
+import { readMarkdownFile } from 'highschool-study-markdown/study-domain';
 import { Type } from 'typebox';
 import {
-  appendRouteChange,
-  setBlockStatus,
+  applyClassroomTransition,
   setFrontmatterField,
 } from '../study/write-workspace';
 import { lessonBlockIdSchema } from './lesson-tool-contracts';
 
-const action = Type.Union([
-  Type.Literal('activate'),
-  Type.Literal('complete'),
-  Type.Literal('skip'),
-  Type.Literal('route'),
-  Type.Literal('pause'),
-], {
-  description: 'activate opens one Block; complete or skip resolves one Block; route records an insertion, skip, move, or repeat decision; pause marks the Lesson paused.',
-});
-
 export function createClassroomUpdateTool(root: string, ownerPath: string) {
+  const blockId = lessonBlockIdSchema(root, ownerPath);
+  const parameters = Type.Object({
+    action: Type.Union([
+      Type.Literal('activate'),
+      Type.Literal('complete'),
+      Type.Literal('skip'),
+      Type.Literal('route'),
+      Type.Literal('pause'),
+    ], {
+      description: 'activate opens one Block; complete or skip resolves the active Block; route records an adaptive decision and its deterministic Block state; pause marks the Lesson paused.',
+    }),
+    blockId: Type.Optional(blockId),
+    routeAction: Type.Optional(Type.Union([
+      Type.Literal('insert'),
+      Type.Literal('skip'),
+      Type.Literal('move'),
+      Type.Literal('repeat'),
+    ], {
+      description: 'Adaptive route action; present only when action is route.',
+    })),
+    before: Type.Optional(blockId),
+    after: Type.Optional(blockId),
+    reason: Type.Optional(Type.String({
+      minLength: 1,
+      description: 'Student-facing instructional reason for a route change.',
+    })),
+    source: Type.Optional(Type.String({
+      minLength: 1,
+      description: 'Evidence or student request that prompted the route change.',
+    })),
+  }, {
+    additionalProperties: false,
+    oneOf: [
+      {
+        properties: { action: { const: 'pause' } },
+        not: {
+          anyOf: [
+            { required: ['blockId'] },
+            { required: ['routeAction'] },
+            { required: ['before'] },
+            { required: ['after'] },
+            { required: ['reason'] },
+            { required: ['source'] },
+          ],
+        },
+      },
+      {
+        properties: { action: { enum: ['activate', 'complete', 'skip'] } },
+        required: ['blockId'],
+        not: {
+          anyOf: [
+            { required: ['routeAction'] },
+            { required: ['before'] },
+            { required: ['after'] },
+            { required: ['reason'] },
+            { required: ['source'] },
+          ],
+        },
+      },
+      {
+        properties: { action: { const: 'route' } },
+        required: ['blockId', 'routeAction', 'reason', 'source'],
+        not: { required: ['before', 'after'] },
+      },
+    ],
+  });
+
   return defineTool({
     name: 'classroom_update',
     label: '推进课堂节点',
     description: 'Persist one classroom navigation change in the current Tutor Session-owned Lesson. Use ordinary Block actions for traversal, route for an explicit adaptive route decision, and pause for a student-requested pause. The runtime owns the Lesson path and returns the applied action.',
-    parameters: Type.Object({
-      action,
-      blockId: Type.Optional(lessonBlockIdSchema(root, ownerPath)),
-      routeAction: Type.Optional(Type.Union([
-        Type.Literal('insert'),
-        Type.Literal('skip'),
-        Type.Literal('move'),
-        Type.Literal('repeat'),
-      ], {
-        description: 'Kind of adaptive route change; required only when action is route.',
-      })),
-      before: Type.Optional(Type.String({
-        description: 'Optional Block ID before which the route target is placed.',
-      })),
-      after: Type.Optional(Type.String({
-        description: 'Optional Block ID after which the route target is placed.',
-      })),
-      reason: Type.Optional(Type.String({
-        description: 'Student-facing instructional reason for a route change; required when action is route.',
-      })),
-      source: Type.Optional(Type.String({
-        description: 'Evidence or student request that prompted the route change; required when action is route.',
-      })),
-    }),
+    parameters,
     execute: async (_id, input) => {
       if (input.action === 'pause') {
+        const lesson = readMarkdownFile(root, ownerPath);
+        if (lesson.frontmatter.status !== 'active') {
+          throw new Error(`CLASSROOM_LESSON_NOT_ACTIVE: ${lesson.frontmatter.status}`);
+        }
         setFrontmatterField(root, ownerPath, 'status', 'paused');
       } else if (input.action === 'route') {
         if (!input.blockId || !input.routeAction || !input.reason || !input.source) {
           throw new Error('ROUTE_FIELDS_REQUIRED');
         }
-        appendRouteChange(root, ownerPath, {
-          action: input.routeAction,
+        applyClassroomTransition(root, ownerPath, {
+          action: 'route',
+          routeAction: input.routeAction,
           blockId: input.blockId,
           reason: input.reason,
           source: input.source,
@@ -63,12 +102,10 @@ export function createClassroomUpdateTool(root: string, ownerPath: string) {
         });
       } else {
         if (!input.blockId) throw new Error('BLOCK_ID_REQUIRED');
-        const status = input.action === 'activate'
-          ? 'active'
-          : input.action === 'complete'
-            ? 'completed'
-            : 'skipped';
-        setBlockStatus(root, ownerPath, input.blockId, status);
+        applyClassroomTransition(root, ownerPath, {
+          action: input.action,
+          blockId: input.blockId,
+        });
       }
       return {
         content: [{ type: 'text' as const, text: JSON.stringify({ ok: true, action: input.action }) }],

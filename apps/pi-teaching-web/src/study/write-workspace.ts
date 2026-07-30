@@ -15,6 +15,11 @@ import {
   renderLearningReview,
   validateLearningReviewSources,
 } from './learning-review';
+import {
+  appendRouteChangeSource,
+  transitionClassroomSource,
+  type ClassroomTransitionInput,
+} from './classroom-transition';
 
 export type RouteChangeInput = {
   action: 'insert' | 'skip' | 'move' | 'repeat';
@@ -129,19 +134,17 @@ export function appendRouteChange(root: string, lessonPath: string, input: Route
   if (!document.source.includes(`## Block ${input.blockId}`)) {
     throw new Error(`BLOCK_NOT_FOUND: ${input.blockId}`);
   }
-  const ids = [...document.source.matchAll(/^### Route change route-(\d+)$/gm)]
-    .map((match) => Number(match[1]));
-  const id = `route-${String(Math.max(0, ...ids) + 1).padStart(3, '0')}`;
-  const heading = document.source.includes('\n## Route Changes\n') ? '' : '\n## Route Changes\n';
-  const placement = input.before
-    ? `\n- Before: ${input.before}`
-    : input.after
-      ? `\n- After: ${input.after}`
-      : '';
-  write(
-    document.absolute,
-    `${document.source.trimEnd()}${heading}\n### Route change ${id}\n\n- Action: ${input.action}\n- Block: ${input.blockId}${placement}\n- Reason: ${input.reason}\n- Source: ${input.source}\n`,
-  );
+  write(document.absolute, appendRouteChangeSource(document.source, input));
+}
+
+export function applyClassroomTransition(
+  root: string,
+  lessonPath: string,
+  input: ClassroomTransitionInput,
+): void {
+  const document = read(root, lessonPath);
+  const next = transitionClassroomSource(document.source, input);
+  write(document.absolute, next);
 }
 
 function replaceSection(source: string, heading: string, value: string): string {

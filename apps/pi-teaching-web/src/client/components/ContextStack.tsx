@@ -129,7 +129,7 @@ export function ContextStack({
             ? <MarkdownView>{notebook.lessonSummary}</MarkdownView>
             : <p className="context-unavailable">没有结课摘要。</p>}
         </ContextSection>
-        <ContextSection title="原定路线与实际路线" summary="节点推进变化" open={false}>
+        <ContextSection title="原定路线与调整后路线" summary="节点推进变化" open={false}>
           {replay ? <RouteMap replay={replay} /> : <p className="context-unavailable">路线不可用。</p>}
         </ContextSection>
         <ContextSection title="方法进展变化" summary="当前方法投影" open={false}>
