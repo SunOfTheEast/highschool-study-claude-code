@@ -37,6 +37,15 @@ reorderable only while pending. Give each Block:
 - private Teacher Control describing likely thinking, wait/intervene
   conditions, and safe adaptations.
 
+Keep one response's whole attempt in that problem Block: presentation, route
+comparison, hints, execution, assessment, and Trace stay together even when
+the interaction changes phase. Never move the same card attempt into a
+dialogue or second problem Block, because that separates earlier support from
+the final evidence. Use dialogue Blocks only for cardless discussion outside
+a judged response. Distinct parts of one card may use separate problem Blocks
+only when they are independently answered and judged, with each Block bound
+to its own real part.
+
 A decisive answer or judging claim cites a stable card step or locatable
 material. Generated variants remain exploration until verified.
 

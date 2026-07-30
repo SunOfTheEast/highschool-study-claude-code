@@ -54,6 +54,14 @@ the activity or leave the candidate unmaterialized; never invent a card or probl
 binding. Put private routes, answers, likely errors, and intervention conditions in
 Teacher Control, not in the public Plan.
 
+Keep the whole attempt on that response in the same problem Block: presentation,
+route comparison, hints, execution, assessment, and Trace must not be split merely
+because the interaction enters a new phase. Do not use a dialogue Block to continue
+the same card attempt; that would detach earlier support from the final evidence.
+Use dialogue Blocks only for cardless discussion outside a judged response. Distinct
+parts of one card may use separate problem Blocks only when they are independently
+answered and judged, with each Block bound to its own real part.
+
 Private retrieval does not create a second preview round. If the available material
 cannot satisfy an agreed public constraint, tell the student only which public
 constraint cannot be met and ask whether that constraint may change. Do not quote or
