@@ -40,6 +40,15 @@ reorderable only while pending. Give each Block:
 A decisive answer or judging claim cites a stable card step or locatable
 material. Generated variants remain exploration until verified.
 
+Private retrieval does not create a second preview round. If no authentic
+source satisfies an agreed public constraint, tell the student only which
+public constraint cannot be met and ask whether that constraint may change.
+Do not quote or summarize a candidate stem, formula, card identity, route
+count, method, difficulty point, decisive condition, or selection rationale.
+A disclosed diagnostic or assessment candidate is no longer an unseen first
+attempt; choose another authentic source or change the activity with the
+student's agreement.
+
 ## Materialize the selected Candidate
 
 Write one `prepared` Lesson with:

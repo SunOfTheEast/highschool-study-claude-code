@@ -54,6 +54,14 @@ the activity or leave the candidate unmaterialized; never invent a card or probl
 binding. Put private routes, answers, likely errors, and intervention conditions in
 Teacher Control, not in the public Plan.
 
+Private retrieval does not create a second preview round. If the available material
+cannot satisfy an agreed public constraint, tell the student only which public
+constraint cannot be met and ask whether that constraint may change. Do not quote or
+summarize a candidate stem, formula, card identity, route count, method, difficulty
+point, decisive condition, or selection rationale. A disclosed diagnostic or
+assessment candidate is no longer an unseen first attempt; choose another authentic
+source or change the activity with the student's agreement.
+
 The preparation receipt is the handoff. Do not add a free-form preview after it.
 
 ## Review and complete the Plan
