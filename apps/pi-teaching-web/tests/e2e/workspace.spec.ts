@@ -289,6 +289,35 @@ test('connects the four product panels without leaking pending classroom content
   }
 });
 
+test('keeps the composer clickable when the current problem is taller than the viewport', async ({ page }) => {
+  await page.request.post(`${fixtureOrigin}/__test/panel-flow/start`);
+  try {
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await page.goto('/plan/domain-integrity/lesson/lesson-004');
+
+    const stage = page.getByRole('region', { name: '当前课堂' });
+    const submit = page.locator('form.composer button[type="submit"]');
+    await expect(stage).toBeVisible();
+    await expect(submit).toBeVisible();
+
+    await page.locator('.problem-card').evaluate((card) => {
+      (card as HTMLElement).style.minHeight = '70rem';
+    });
+    await submit.scrollIntoViewIfNeeded();
+
+    expect(await submit.evaluate((button) => {
+      const rect = button.getBoundingClientRect();
+      const hit = document.elementFromPoint(
+        rect.left + rect.width / 2,
+        rect.top + rect.height / 2,
+      );
+      return hit === button || hit?.closest('button') === button;
+    })).toBe(true);
+  } finally {
+    await page.request.post(`${fixtureOrigin}/__test/panel-flow/reset`);
+  }
+});
+
 test('returns invalid deep links to the learning-set home', async ({ page }) => {
   await page.goto('/plan/does-not-exist');
   await expect(page).toHaveURL(/\/$/);

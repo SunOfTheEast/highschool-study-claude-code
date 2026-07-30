@@ -18,7 +18,8 @@ argument:
 
 Carry only the principles relevant to this Lesson into its existing Student View or Teacher
 Control. Teacher Control should describe likely student thinking, when to wait or intervene, and
-how to adapt; it is not a store of worked solutions.
+how to adapt; it is not a store of worked solutions. Anticipated reactions, card common failures
+and fallbacks remain conditional hypotheses until the student's own work exhibits them.
 
 ## Preparation workflow
 

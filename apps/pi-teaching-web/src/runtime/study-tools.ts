@@ -185,7 +185,9 @@ export function createStudyTools(
   const methodName = Type.Enum(listCanonicalMethodNames(root), {
     description: 'Exact canonical method name from the current learning-set graph.',
   });
-  const readOnly = createReadOnlyStudyTools(root);
+  const readOnly = createReadOnlyStudyTools(root, {
+    compactCardPayloads: context.role === 'coach',
+  });
   return [
     readOnly[0]!,
     readOnly[1]!,
@@ -240,7 +242,7 @@ export function createStudyTools(
           description: 'Help actually used in the final route: none for independent work, tutor when Tutor-origin decisive content shaped the route, and external for other used help. Mere exposure or unused repetition is not dependence.',
         }),
         note: Type.String({
-          description: 'Concise source-linked evidence note describing what the student supplied and what remains unresolved.',
+          description: 'Concise source-linked evidence note identifying the exact student-supplied claim behind the assessment and distinguishing any Tutor contribution or retracted Tutor judgment from student work. Predicted failures are not observed evidence.',
         }),
         supersedes: Type.Optional(Type.String({
           description: 'Exact active event ID replaced by a completion, correction, repeat, or method confirmation for this same Block attempt. A different independently judged question requires a different problem Block.',

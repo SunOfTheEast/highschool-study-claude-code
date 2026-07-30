@@ -76,7 +76,7 @@ const traceAppendInput = z.object({
     'Confirmed method evidence; omit when no exact canonical binding has been confirmed.',
   ),
   note: z.string().describe(
-    'Concise source-linked account of the evidence and unresolved obligations.',
+    'Concise source-linked account identifying the exact student-supplied claim behind the assessment and separating Tutor contributions or retracted Tutor judgments from student work. Predicted failures are not observed evidence.',
   ),
   supersedes: z.string().nullable().describe(
     'Exact earlier event ID corrected or replaced within the same Lesson, otherwise null.',

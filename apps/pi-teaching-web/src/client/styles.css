@@ -456,6 +456,10 @@ select:focus-visible {
   position: sticky;
   z-index: 4;
   top: 0;
+  max-height: calc(100vh - 12rem);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
   width: min(840px, calc(100% - 2.5rem));
   margin: 1.1rem auto 0;
   border: 1px solid var(--ink);
@@ -482,7 +486,12 @@ select:focus-visible {
   font: .58rem/1.4 ui-monospace, monospace;
 }
 .stage-content,
-.stage-orientation { padding: 1.15rem 1.25rem 1.3rem; }
+.stage-orientation {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1.15rem 1.25rem 1.3rem;
+}
 .stage-content h2,
 .stage-orientation h2 {
   margin: 0 0 .75rem;
@@ -1846,9 +1855,14 @@ select:focus-visible {
   .current-activity-stage {
     position: relative;
     top: auto;
+    max-height: none;
+    display: block;
+    overflow: visible;
     width: calc(100% - 1.5rem);
     margin-top: .75rem;
   }
+  .stage-content,
+  .stage-orientation { overflow: visible; }
   .plan-learning-review {
     width: calc(100% - 1.5rem);
     margin-top: .75rem;

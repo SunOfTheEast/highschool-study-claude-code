@@ -8,6 +8,7 @@ Use active, non-superseded Trace as classroom evidence.
 - Seeing the question, staying silent, pausing, or closing before any mathematical claim is not an attempt. Record the stopping point, but do not append a Trace.
 - Keep assessment, actual help dependence, and actual method separate.
 - Missing decisive reasoning is incomplete. Use partially correct or incorrect only for a substantive error in the student's own chain.
+- Teacher Control, rubrics, reference solutions, common failures and fallbacks are judging aids, not observations. A negative assessment identifies an exact student-produced claim that is wrong; if the suspected error lies in an unshown step, ask the student to expand it before writing that assessment.
 - Before the final Trace after any help, compare the student's pre-help content, the Tutor's later contribution, and the final decisive route.
 - A question that selects a new direction is still Tutor help. If the final route adopts that direction or any other Tutor-origin decisive content, use `support:tutor`; use `support:none` only when the help repeated existing student content or went unused.
 - If the effect of a directional cue is genuinely unclear, ask before writing the final Trace. The answer resolves attribution but is not new mathematical evidence. State the attribution reason briefly in the Trace note.
@@ -17,7 +18,7 @@ Use active, non-superseded Trace as classroom evidence.
 - One problem Block is one independently judged response.
 - Completion, correction, repeat, or method confirmation revises that Block attempt's active evidence.
 - A separately judged question or part uses another problem Block, even when both Blocks use the same card.
-- Correct an accepted objection before reflection, summary, or progress review.
+- When the Tutor retracts a judgment or accepts an objection, the next action is a superseding Trace before any further teaching question. Record the student's correction and the Tutor's retraction separately. A Tutor claim the student correctly rejects is not adopted decisive content and does not by itself create `support:tutor`; if a later Tutor prompt changes the final route, supersede again and scope that support in the note.
 
 ## Settle the route
 

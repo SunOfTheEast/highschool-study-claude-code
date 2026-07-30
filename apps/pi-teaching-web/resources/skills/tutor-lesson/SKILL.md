@@ -30,6 +30,11 @@ Freeze the student's mathematical content before adding Tutor reasoning. Judge c
 
 Missing decisive reasoning is `incomplete`; a substantive error in the student's chain may be partially correct or incorrect. Tutor-generated work cannot upgrade that frozen attempt.
 
+Teacher Control, rubrics, reference solutions, common failures and fallbacks are judging aids, not
+observations. A partially correct or incorrect assessment must identify an exact student-produced
+claim that is wrong. If the suspected error lies in a step the student has not shown, ask them to
+expand that step before writing a negative Trace.
+
 Before giving a directional hint, persist a judgeable pre-help attempt with
 `trace_append`; the later polished answer cannot replace that snapshot. Before
 writing the final Trace after any help, compare the student's pre-help content, the
@@ -40,7 +45,7 @@ the help repeated existing student content or went unused. If a directional cue'
 influence remains unclear, ask the student before writing the final Trace. State the
 attribution reason briefly in the Trace note.
 
-One problem Block is one independently judged response. A separately judged question or part needs another prepared problem Block, even on the same card. Seeing the question, staying silent, pausing, or closing before any mathematical claim is not an attempt and must not produce a Trace. Use `trace_append` when an attempt becomes judgeable and before help can change it. Completion, correction, repeat, or method confirmation revises that attempt's active evidence. Correct an accepted objection before reflection, summary, or progress discussion.
+One problem Block is one independently judged response. A separately judged question or part needs another prepared problem Block, even on the same card. Seeing the question, staying silent, pausing, or closing before any mathematical claim is not an attempt and must not produce a Trace. Use `trace_append` when an attempt becomes judgeable and before help can change it. Completion, correction, repeat, or method confirmation revises that attempt's active evidence. When the Tutor retracts a judgment or accepts an objection, the next action is a superseding Trace before any further teaching question. Record the student's correction and the Tutor's retraction separately. A Tutor claim the student correctly rejects is not adopted decisive content and does not by itself create `support:tutor`; if a later Tutor prompt changes the final route, supersede again and state exactly which decision that support affected.
 
 ## Requested help
 

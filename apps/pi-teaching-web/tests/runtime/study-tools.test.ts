@@ -480,6 +480,40 @@ test('keeps child card and Trace search payloads metadata-only', async () => {
   }
 });
 
+test('keeps Plan Coach card and Trace search payloads metadata-only', async () => {
+  const tools = createStudyTools(root, () => new Date('2026-07-22T00:00:00Z'), {
+    role: 'coach',
+    ownerId: 'domain-integrity',
+    ownerPath: 'plans/domain-integrity.md',
+  });
+  const cardSearch = tools.find((tool) => tool.name === 'card_search')!;
+  const traceSearch = tools.find((tool) => tool.name === 'trace_search')!;
+
+  const cardResult = await cardSearch.execute('coach-card', {
+    query: 'mst_p0019_ex11',
+    limit: 2,
+  } as never, undefined, undefined, {} as never);
+  const cardPayload = JSON.parse((cardResult.content[0] as { text: string }).text) as {
+    cards: Array<Record<string, unknown>>;
+  };
+  expect(Object.keys(cardPayload.cards[0]!).sort()).toEqual([
+    'goal', 'methods', 'path', 'title', 'traceHistory',
+  ]);
+
+  const traceResult = await traceSearch.execute('coach-trace', {
+    planId: 'domain-integrity',
+    limit: 20,
+  } as never, undefined, undefined, {} as never);
+  const tracePayload = JSON.parse((traceResult.content[0] as { text: string }).text) as {
+    cardsByPath: Record<string, Record<string, unknown>>;
+  };
+  for (const card of Object.values(tracePayload.cardsByPath)) {
+    expect(Object.keys(card).sort()).toEqual([
+      'goal', 'methods', 'path', 'title', 'traceHistory',
+    ]);
+  }
+});
+
 test('binds a Tutor Trace to its Lesson and refreshes planner attention', async () => {
   const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-tools-'));
   temporaryRoots.push(temporaryRoot);

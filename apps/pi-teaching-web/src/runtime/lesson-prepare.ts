@@ -51,7 +51,7 @@ const block = Type.Object({
   }),
   teacherControl: Type.String({
     minLength: 1,
-    description: 'Private role, source references, reveal mode, evidence target, and ordered teaching support for this Block.',
+    description: 'Private role, source references, reveal mode, evidence target, and ordered teaching support. Keep anticipated student reactions and failures conditional; ground mathematical judging claims in the selected card or source.',
   }),
 }, {
   description: 'One adjustable Lesson activity. Put separately judged responses, including separately judged parts of one card, in separate problem Blocks.',
