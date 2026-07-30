@@ -584,11 +584,11 @@ function completeStudentSafeFlowFixture(): {
       nextStep: '下一周期再检查陌生嵌套结构。',
       keyEvidence: [{
         claim: '第一道评估题无提示完成定义域与参数边界判断。',
-        source: key.sourceAnchor,
+        source: key.sourceRef,
       }],
       supportingEvidence: [{
         claim: '第二道不同结构题最终完成了迁移。',
-        source: supporting.sourceAnchor,
+        source: supporting.sourceRef,
         limitation: '使用过一次方向性提示，只作为参考。',
       }],
       openQuestions: [{
@@ -616,8 +616,8 @@ function completeStudentSafeFlowFixture(): {
     workspace: readPlanWorkspace(root, 'domain-integrity'),
   });
   return {
-    keySource: key.sourceAnchor,
-    supportingSource: supporting.sourceAnchor,
+    keySource: key.sourceRef,
+    supportingSource: supporting.sourceRef,
   };
 }
 
@@ -773,7 +773,7 @@ status: closed
           nextStep: '由学生选择其他 Plan。',
           keyEvidence: [{
             claim: '无提示独立完成测试评估。',
-            source: trace.sourceAnchor,
+            source: trace.sourceRef,
           }],
           supportingEvidence: [],
           openQuestions: [],

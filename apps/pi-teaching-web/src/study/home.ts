@@ -115,7 +115,7 @@ export function readHomeSnapshot(root: string): HomeSnapshot {
   const progressLessons = currentWorkspace?.lessons
     .filter((candidate) => candidate.status !== 'abandoned') ?? [];
   const traces = readActiveTraces(root)
-    .sort((left, right) => right.recordedAt.localeCompare(left.recordedAt));
+    .sort((left, right) => right.occurredAt.localeCompare(left.occurredAt));
   const abilities = readAbilityProjection(root).nodes;
   const signals: HomeSnapshot['signals'] = [];
   const newestTrace = traces[0];
@@ -123,7 +123,7 @@ export function readHomeSnapshot(root: string): HomeSnapshot {
     signals.push({
       label: '最近学习记录',
       value: newestTrace.note,
-      source: newestTrace.sourceAnchor,
+      source: newestTrace.sourceRef,
     });
   }
   const ability = abilities[0];

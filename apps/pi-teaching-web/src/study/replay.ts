@@ -18,11 +18,11 @@ export function buildReplay(
       source: null,
     })),
     ...traces.map((trace) => ({
-      id: trace.eventId,
+      id: trace.traceId,
       kind: 'trace' as const,
       label: `${trace.assessment} · ${trace.support}`,
       detail: trace.note,
-      source: trace.sourceAnchor,
+      source: trace.sourceRef,
     })),
     ...routes.map((route) => ({
       id: route.id,

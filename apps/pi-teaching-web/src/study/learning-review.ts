@@ -204,7 +204,7 @@ export function listEligibleKeyEvidence(
       return readPreparedLessonBlocks(lesson.body)
         .some((block) => block.id === trace.blockId && block.kind === 'problem');
     })
-    .map((trace) => trace.sourceAnchor)
+    .map((trace) => trace.sourceRef)
     .sort();
 }
 
@@ -242,9 +242,12 @@ export function validateLearningReviewSources(
   }
 
   const allowedLessonPaths = new Set(workspace.lessons.map((lesson) => lesson.path));
-  const activeTraces = new Map(
+  const activeTraces = new Map<
+    string,
+    ReturnType<typeof readActiveTraces>[number]
+  >(
     readActiveTraces(root, workspace.lessons.map((lesson) => lesson.path))
-      .map((trace) => [trace.sourceAnchor, trace]),
+      .map((trace) => [trace.sourceRef, trace]),
   );
   const keySources = new Set(review.keyEvidence.map((item) => item.source));
   for (const item of review.supportingEvidence) {

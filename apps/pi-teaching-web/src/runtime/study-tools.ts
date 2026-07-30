@@ -78,13 +78,13 @@ function assertProblemAttemptBoundary(
   if (active.length > 1) {
     throw new Error(
       `TRACE_ATTEMPT_ACTIVE_CONFLICT: block=${blockId}; `
-      + `active=${active.map((record) => record.eventId).join(',')}`,
+      + `active=${active.map((record) => record.traceId).join(',')}`,
     );
   }
-  if (supersedes === active[0]!.eventId) return;
+  if (supersedes === active[0]!.traceId) return;
   throw new Error(
     `TRACE_ATTEMPT_ALREADY_ACTIVE: block=${blockId}; `
-    + `active=${active[0]!.eventId}; `
+    + `active=${active[0]!.traceId}; `
     + '同一 problem Block 只表示一次独立作答。补全、更正或方法确认必须 '
     + 'supersede 当前 active Trace；另一题问需要新的 problem Block',
   );
@@ -133,6 +133,12 @@ export function createReadOnlyStudyTools(
         cardPath: Type.Optional(Type.String({
           description: 'Optional exact learning-set-relative card path for card-to-Trace lookup.',
         })),
+        occurredAfter: Type.Optional(Type.String({
+          description: 'Optional inclusive ISO timestamp lower bound.',
+        })),
+        occurredBefore: Type.Optional(Type.String({
+          description: 'Optional inclusive ISO timestamp upper bound.',
+        })),
         limit: Type.Integer({
           minimum: 1,
           maximum: 100,
@@ -145,6 +151,8 @@ export function createReadOnlyStudyTools(
           planId: input.planId ?? null,
           lessonId: input.lessonId ?? null,
           cardPath: input.cardPath ?? null,
+          occurredAfter: input.occurredAfter ?? null,
+          occurredBefore: input.occurredBefore ?? null,
           limit: input.limit,
         });
         return result('trace-search', options.compactCardPayloads
@@ -245,7 +253,7 @@ export function createStudyTools(
           description: 'Concise source-linked evidence note identifying the exact student-supplied claim behind the assessment and distinguishing any Tutor contribution or retracted Tutor judgment from student work. Predicted failures are not observed evidence.',
         }),
         supersedes: Type.Optional(Type.String({
-          description: 'Exact active event ID replaced by a completion, correction, repeat, or method confirmation for this same Block attempt. A different independently judged question requires a different problem Block.',
+          description: 'Exact active Trace ID replaced by a completion, correction, repeat, or method confirmation for this same Block attempt. A different independently judged question requires a different problem Block.',
         })),
       }),
       execute: async (_id, input) => {
@@ -291,7 +299,7 @@ export function createStudyTools(
         return result('trace-append', {
           ok: true,
           ownerPath: context.ownerPath,
-          factId: trace.eventId,
+          factId: trace.traceId,
           ...trace,
         });
       },

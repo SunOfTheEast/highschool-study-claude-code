@@ -44,7 +44,7 @@ function canonicalTarget(lessonPath: string, target: string): string {
 
 function traceSummary(trace: TraceRecord): LearningRecordSummary {
   return {
-    source: trace.sourceAnchor,
+    source: trace.sourceRef,
     lessonId: trace.lessonId,
     blockId: trace.blockId,
     assessment: trace.assessment,
@@ -193,7 +193,7 @@ export function searchStudentContent(
         ? `题卡内容命中“${query}”`
         : `相关学习记录命中“${query}”`,
       traceHistory: (tracesByCard.get(path) ?? [])
-        .sort((left, right) => right.recordedAt.localeCompare(left.recordedAt))
+        .sort((left, right) => right.occurredAt.localeCompare(left.occurredAt))
         .map(traceSummary),
       card: readStudentProblemCard(root, path),
       preview: null,

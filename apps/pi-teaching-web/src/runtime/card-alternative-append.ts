@@ -24,7 +24,7 @@ export function createCardAlternativeAppendTool(
     parameters: Type.Object({
       sourceTraceId: Type.String({
         minLength: 1,
-        description: 'Event ID of the correct active Trace that proves this route occurred in the current Lesson.',
+        description: 'Trace ID of the correct active Trace that proves this route occurred in the current Lesson.',
       }),
       ...(question ? { question: Type.Optional(question) } : {}),
       solution: Type.String({
@@ -44,7 +44,7 @@ export function createCardAlternativeAppendTool(
     }, { additionalProperties: false }),
     execute: async (_id, input) => {
       const selectedTrace = readActiveTraces(root, [ownerPath])
-        .find((trace) => trace.eventId === input.sourceTraceId);
+        .find((trace) => trace.traceId === input.sourceTraceId);
       const selectedCard = selectedTrace?.cardPath
         ? readCard(root, selectedTrace.cardPath)
         : null;

@@ -66,9 +66,9 @@ export function validateMemoryReviewItems(
     ownerPath,
     ...workspace.lessons.map((lesson) => lesson.path),
   ]);
-  const activeTraceSources = new Set(
+  const activeTraceSources = new Set<string>(
     readActiveTraces(root, workspace.lessons.map((lesson) => lesson.path))
-      .map((trace) => trace.sourceAnchor),
+      .map((trace) => trace.sourceRef),
   );
 
   for (const item of items) {

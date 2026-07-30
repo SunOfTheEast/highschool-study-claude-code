@@ -210,7 +210,7 @@ status: closed
     nextStep: '回到 Roadmap 讨论跨题型迁移。',
     keyEvidence: [{
       claim: '无提示独立完成评估。',
-      source: trace.sourceAnchor,
+      source: trace.sourceRef,
     }],
     supportingEvidence: [],
     openQuestions: [{

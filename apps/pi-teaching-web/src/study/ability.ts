@@ -19,12 +19,12 @@ export function readAbilityProjection(root: string): AbilityProjection {
   };
 }
 
-export function readEvidence(root: string, sourceAnchor: string): EvidenceView {
-  const trace = readTraceRecords(root).find((item) => item.sourceAnchor === sourceAnchor);
-  if (!trace) throw new Error(`TRACE_NOT_FOUND: ${sourceAnchor}`);
+export function readEvidence(root: string, sourceRef: string): EvidenceView {
+  const trace = readTraceRecords(root).find((item) => item.sourceRef === sourceRef);
+  if (!trace) throw new Error(`TRACE_NOT_FOUND: ${sourceRef}`);
   const card = trace.cardPath ? readCard(root, trace.cardPath) : null;
   return {
-    source: sourceAnchor,
+    source: sourceRef,
     trace: {
       lessonId: trace.lessonId,
       blockId: trace.blockId,

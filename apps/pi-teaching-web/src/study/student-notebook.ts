@@ -79,9 +79,9 @@ export function readStudentNotebook(
     cards[alias] = studentCard(root, lesson.path, target);
   }
   const recentRecords = readActiveTraces(root, [lesson.path])
-    .sort((left, right) => right.recordedAt.localeCompare(left.recordedAt))
+    .sort((left, right) => right.occurredAt.localeCompare(left.occurredAt))
     .map((trace) => ({
-      source: trace.sourceAnchor,
+      source: trace.sourceRef,
       lessonId: trace.lessonId,
       blockId: trace.blockId,
       assessment: trace.assessment,

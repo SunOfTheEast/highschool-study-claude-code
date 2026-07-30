@@ -544,14 +544,14 @@ test('binds a Tutor Trace to its Lesson and refreshes planner attention', async 
     ok: boolean;
     ownerPath: string;
     factId: string;
-    eventId: string;
+    traceId: string;
     methods: { primary: string; secondary: string[] } | null;
     unresolvedMethods: string[];
   };
   expect(appended).toEqual(expect.objectContaining({
     ok: true,
     ownerPath: 'lessons/lesson-003.md',
-    factId: appended.eventId,
+    factId: appended.traceId,
   }));
   expect(appended.methods).toEqual({ primary: '参变量分离', secondary: ['同构变形与换元法'] });
   expect(appended.unresolvedMethods).toEqual([]);
@@ -572,20 +572,20 @@ test('binds a Tutor Trace to its Lesson and refreshes planner attention', async 
     limit: 5,
   } as never, undefined, undefined, {} as never);
   const cardPayload = JSON.parse((cardResult.content[0] as { text: string }).text) as {
-    cards: Array<{ path: string; traceHistory: Array<{ eventId: string }> }>;
+    cards: Array<{ path: string; traceHistory: Array<{ traceId: string }> }>;
   };
   expect(cardPayload.cards.find((card) => card.path === 'cards/derivative/mst_p0032_ex22.card.yaml')
-    ?.traceHistory.map((record) => record.eventId)).toEqual(['event-001']);
+    ?.traceHistory.map((record) => record.traceId)).toEqual(['event-001']);
 
   const traceResult = await traceSearch.execute('call-3', {
     lessonId: 'lesson-003',
     limit: 20,
   } as never, undefined, undefined, {} as never);
   const tracePayload = JSON.parse((traceResult.content[0] as { text: string }).text) as {
-    traces: Array<{ eventId: string }>;
+    traces: Array<{ traceId: string }>;
     cardsByPath: Record<string, unknown>;
   };
-  expect(tracePayload.traces.map((record) => record.eventId)).toEqual(['event-001']);
+  expect(tracePayload.traces.map((record) => record.traceId)).toEqual(['event-001']);
   expect(Object.keys(tracePayload.cardsByPath))
     .toContain('cards/derivative/mst_p0032_ex22.card.yaml');
   expect(readEvidence(
