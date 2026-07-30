@@ -2256,11 +2256,11 @@ git commit -m "docs: document hierarchical learning node runtime"
 - Create: `docs/audits/2026-08-01-hierarchical-node-runtime-acceptance.md`
 - Modify only if a verified defect is found: files named by the defect
 
-- [ ] **Step 1: 使用专用验收 Skill**
+- [x] **Step 1: 使用专用验收 Skill**
 
 执行者必须读取并使用 `studyclaw-e2e-validation`。在导数学习集副本和独立 Pi 凭据目录运行，不修改公开示范集事实。
 
-- [ ] **Step 2: 跑生命周期 Smoke**
+- [x] **Step 2: 跑生命周期 Smoke**
 
 至少覆盖：
 
@@ -2273,7 +2273,7 @@ git commit -m "docs: document hierarchical learning node runtime"
 - Plan 根据 Handoff 调整未激活 sibling；
 - 完成 Plan 后返回 Roadmap，并保留另一个可选 Plan。
 
-- [ ] **Step 3: 跑个性化对照**
+- [x] **Step 3: 跑个性化对照**
 
 资产、目标和题卡相同，只改变历史：
 
@@ -2296,7 +2296,7 @@ git commit -m "docs: document hierarchical learning node runtime"
 - 差异可沿 Handoff → Trace / Session 回溯；
 - 不是只换开场话术后继续同一课堂。
 
-- [ ] **Step 4: 跑 Tutor 真实情境**
+- [x] **Step 4: 跑 Tutor 真实情境**
 
 至少模拟：
 
@@ -2311,7 +2311,7 @@ git commit -m "docs: document hierarchical learning node runtime"
 
 检查 support、Block、Trace、Handoff 和关课主动权是否正确。
 
-- [ ] **Step 5: 只修验收证实的问题**
+- [x] **Step 5: 只修验收证实的问题**
 
 若真实模型失败：
 
@@ -2321,7 +2321,7 @@ git commit -m "docs: document hierarchical learning node runtime"
 4. Skill 文案问题只改 Skill，不写脆弱文本测试；
 5. 每个修复单独定向测试、提交并在同一情境重跑。
 
-- [ ] **Step 6: 写验收报告**
+- [x] **Step 6: 写验收报告**
 
 报告必须记录：
 
@@ -2335,7 +2335,7 @@ git commit -m "docs: document hierarchical learning node runtime"
 - 长期记忆确认；
 - 通过、失败、边界和未证明内容。
 
-- [ ] **Step 7: 最终自动验证**
+- [x] **Step 7: 最终自动验证**
 
 ```bash
 cd plugins/highschool-study
@@ -2359,7 +2359,7 @@ Expected:
 - 没有计划外文件；
 - 验收报告不含 API key、完整系统 prompt 或逐字私人课堂记录。
 
-- [ ] **Step 8: 提交**
+- [x] **Step 8: 提交**
 
 ```bash
 git add docs/audits/2026-08-01-hierarchical-node-runtime-acceptance.md
@@ -2370,20 +2370,20 @@ git commit -m "docs: record hierarchical node runtime acceptance"
 
 ## Final Acceptance Checklist
 
-- [ ] Roadmap、Plan、Lesson 是真实控制权树，不是线性列表换皮。
-- [ ] Candidate 没有文件和 Session；prepared 才有完整子文件。
-- [ ] 学生点击后原子激活；父节点不能修改 active child。
-- [ ] 多 Plan 可并行；每 Plan 最多一个 active / paused Lesson；每 Lesson 最多一个 active Block。
-- [ ] Node、Block、Trace、Handoff、Claim、路径、时间和 Session Owner 均由 Runtime 绑定。
-- [ ] 子 Session 只拿 Resident / Frozen / Local / Index 页，不复制父或兄弟 Session。
-- [ ] 文件读取受 NodeAccessPolicy 约束，不再暴露学习集级原生 read / grep / find / ls / write / edit。
-- [ ] `traces/*.md` 可按 card、Plan、Lesson、Block 和时间双向查询。
-- [ ] Handoff 可从 Roadmap Claim 回溯到 Plan、Lesson、Trace、Session、Card 和 Block。
-- [ ] supersede 不级联重写历史，但会让依赖来源确定失效。
-- [ ] Lesson 关课不被 Reflection 或 Claim 格式阻塞。
-- [ ] 长期记忆只经 completed Plan Handoff、学生逐项确认和 Runtime 原子应用产生。
-- [ ] Adaptation Brief 说明历史如何具体改变目标、任务、顺序或介入。
-- [ ] Tutor 仍可灵活调整 pending Block，并如实记录提示依赖。
-- [ ] 前端只展示公开学习树、安全上下文页和可解释证据。
-- [ ] Claude Code plugin 仍只有四个公共 MCP。
-- [ ] 没有数据库、向量库、规则引擎、后台调度器、兼容层或 Skill 文案测试。
+- [x] Roadmap、Plan、Lesson 是真实控制权树，不是线性列表换皮。
+- [x] Candidate 没有文件和 Session；prepared 才有完整子文件。
+- [x] 学生点击后原子激活；父节点不能修改 active child。
+- [x] 多 Plan 可并行；每 Plan 最多一个 active / paused Lesson；每 Lesson 最多一个 active Block。
+- [x] Node、Block、Trace、Handoff、Claim、路径、时间和 Session Owner 均由 Runtime 绑定。
+- [x] 子 Session 只拿 Resident / Frozen / Local / Index 页，不复制父或兄弟 Session。
+- [x] 文件读取受 NodeAccessPolicy 约束，不再暴露学习集级原生 read / grep / find / ls / write / edit。
+- [x] `traces/*.md` 可按 card、Plan、Lesson、Block 和时间双向查询。
+- [x] Handoff 可从 Roadmap Claim 回溯到 Plan、Lesson、Trace、Session、Card 和 Block。
+- [x] supersede 不级联重写历史，但会让依赖来源确定失效。
+- [x] Lesson 关课不被 Reflection 或 Claim 格式阻塞。
+- [x] 长期记忆只经 completed Plan Handoff、学生逐项确认和 Runtime 原子应用产生。
+- [x] Adaptation Brief 说明历史如何具体改变目标、任务、顺序或介入。
+- [x] Tutor 仍可灵活调整 pending Block，并如实记录提示依赖。
+- [x] 前端只展示公开学习树、安全上下文页和可解释证据。
+- [x] Claude Code plugin 仍只有四个公共 MCP。
+- [x] 没有数据库、向量库、规则引擎、后台调度器、兼容层或 Skill 文案测试。

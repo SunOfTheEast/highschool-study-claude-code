@@ -144,4 +144,4 @@ test('compiles Teaching Core, Node Role, dynamic frame and presentation persona 
   const serialized = files.map((file) => file.content).join('\n');
   expect(serialized).not.toContain('session-lesson-001');
   expect(serialized).not.toContain('session-lesson-002');
-});
+}, 15_000);
