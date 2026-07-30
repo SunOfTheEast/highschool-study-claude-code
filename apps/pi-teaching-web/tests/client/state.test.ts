@@ -2,6 +2,7 @@ import { expect, test } from 'bun:test';
 import type { LessonStatus, PlanWorkspaceSnapshot } from '../../src/shared/contracts';
 import {
   initialClientState,
+  buildPublicContextPages,
   laterMemoryReview,
   preferLiveConversation,
   reduceClientState,
@@ -227,6 +228,44 @@ test('keeps Tutor replay selected when the current Lesson closes', () => {
   }, { type: 'snapshot', workspace: workspaceWithLesson('closed') });
 
   expect(state.selected).toBe('tutor:l1');
+});
+
+test('builds four public context page classes without raw private content', () => {
+  const workspace = workspaceWithLesson('active');
+  const pages = buildPublicContextPages({
+    view: 'tutor',
+    workspace,
+    coachContext: null,
+    notebook: {
+      lesson: workspace.lessons[0]!,
+      cards: {
+        SECRET: {
+          path: 'cards/private/secret.card.yaml',
+          stem: 'PRIVATE_STEM',
+          choices: [],
+        },
+      },
+      recentRecords: [{
+        source: 'trace:trace-1',
+        lessonId: 'l1',
+        blockId: 'problem-1',
+        assessment: 'correct',
+        support: 'none',
+        note: '公开课堂观察。',
+      }],
+      lessonSummary: null,
+    },
+  });
+
+  expect(pages.map((page) => page.kind)).toEqual([
+    'resident',
+    'frozen',
+    'current',
+    'on-demand',
+  ]);
+  expect(JSON.stringify(pages)).toContain('课堂记录 l1 / problem-1');
+  expect(JSON.stringify(pages)).not.toContain('cards/private/secret.card.yaml');
+  expect(JSON.stringify(pages)).not.toContain('PRIVATE_STEM');
 });
 
 test('never lets a late HTTP submitted response overwrite an applied review', () => {

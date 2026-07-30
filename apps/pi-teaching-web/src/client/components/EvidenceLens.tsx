@@ -1,7 +1,7 @@
 import type {
   EvidenceView,
-  HandoffEvidenceNode,
 } from '../../shared/contracts';
+import { HandoffTree } from './HandoffTree';
 
 const assessmentLabel: Record<string, string> = {
   correct: '正确',
@@ -16,35 +16,20 @@ const supportLabel: Record<string, string> = {
   external: '外部支持',
 };
 
-function EvidenceBranch({ node }: { node: HandoffEvidenceNode }) {
-  return (
-    <li>
-      <strong>{node.label}</strong>
-      <span>{node.state}</span>
-      {node.children.length > 0 && (
-        <ul>
-          {node.children.map((child) => (
-            <EvidenceBranch key={child.source} node={child} />
-          ))}
-        </ul>
-      )}
-    </li>
-  );
-}
-
 export function EvidenceLens({ value, onClose }: { value: EvidenceView; onClose(): void }) {
   if (value.kind === 'handoff') {
     return (
-      <aside className="evidence-lens">
-        <button type="button" onClick={onClose}>关闭</button>
-        <p className="eyebrow">阶段认识 · {value.state}</p>
-        <h2>{value.node.label}</h2>
-        <ul>
-          {value.node.children.map((node) => (
-            <EvidenceBranch key={node.source} node={node} />
-          ))}
-        </ul>
-      </aside>
+      <section className="evidence-lens" role="dialog" aria-modal="true" aria-label="阶段认识来源">
+        <button type="button" className="lens-scrim" aria-label="关闭阶段认识来源" onClick={onClose} />
+        <article>
+          <header>
+            <span>阶段认识来源</span>
+            <button type="button" onClick={onClose}>关闭</button>
+          </header>
+          <p className="eyebrow">可逐层回到课堂记录</p>
+          <HandoffTree value={value.node} />
+        </article>
+      </section>
     );
   }
   return (

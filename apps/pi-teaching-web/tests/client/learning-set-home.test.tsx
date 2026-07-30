@@ -29,7 +29,17 @@ function learningSet(
     overview: '学习集概述',
     learningPrinciples,
     goal: '学习目标',
-    planTree: [],
+    planTree: plans.map((item) => ({
+      handle: item.id,
+      kind: 'plan',
+      nodeId: item.id,
+      path: item.path,
+      title: item.title,
+      publicPurpose: item.goal,
+      after: null,
+      dependsOn: [],
+      status: item.status === 'completed' ? 'completed' : 'active',
+    })),
     plans,
   };
 }
@@ -48,6 +58,17 @@ function home(overrides: Partial<HomeSnapshot> = {}): HomeSnapshot {
       detail: '从上次的位置继续。',
     },
     lessonProgress: { completed: 1, total: 3 },
+    currentLessonTree: [{
+      handle: 'lesson-next',
+      kind: 'lesson',
+      nodeId: null,
+      path: null,
+      title: null,
+      publicPurpose: '可能根据下一次表现安排迁移。',
+      after: null,
+      dependsOn: [],
+      status: 'candidate',
+    }],
     studentPlan: {
       currentPosition: '当前位置',
       progress: {
@@ -79,6 +100,7 @@ function render(value: HomeSnapshot = home()): string {
       continuePath={value.continueTarget.route}
       onContinue={() => {}}
       onOpen={() => {}}
+      onLessonOpen={() => {}}
       onRoadmapOpen={() => {}}
     />,
   );
@@ -93,6 +115,8 @@ test('renders one dominant continuation with the safe Plan projection', () => {
   expect(html).toContain('source-17');
   expect(html).toContain('1/3');
   expect(html).toContain('学习总览');
+  expect(html).toContain('课程学习树');
+  expect(html).toContain('可能根据下一次表现安排迁移');
   expect(html).not.toContain('ability-nodes');
   expect(html).not.toContain('task-rail');
 });
@@ -140,6 +164,7 @@ test('uses the Roadmap as the primary continuation before the first Plan', () =>
       detail: '先讨论目标。',
     },
     lessonProgress: { completed: 0, total: 0 },
+    currentLessonTree: [],
     studentPlan: null,
   });
   const html = render(value);

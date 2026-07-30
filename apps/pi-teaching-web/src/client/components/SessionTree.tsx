@@ -1,4 +1,5 @@
 import type { PlanWorkspaceSnapshot, SessionKey } from '../../shared/contracts';
+import { LearningTree } from './LearningTree';
 import { PlanRationale } from './PlanRationale';
 
 const statusLabel = {
@@ -14,6 +15,8 @@ export function SessionTree({
   selected,
   onSelect,
   onPlanSelect,
+  onRoadmapSelect,
+  onLessonOpen,
   onHome,
   explorerEnabled,
   onExplore,
@@ -22,12 +25,17 @@ export function SessionTree({
   selected: SessionKey;
   onSelect(key: SessionKey): void;
   onPlanSelect(planId: string): void;
+  onRoadmapSelect(): void;
+  onLessonOpen(planId: string, lessonId: string): void;
   onHome(): void;
   explorerEnabled: boolean;
   onExplore(): void;
 }) {
   const otherPlans = workspace.learningSet.plans
     .filter((plan) => plan.id !== workspace.plan.id);
+  const sessionLessons = workspace.lessons.filter(
+    (lesson) => lesson.tutorSessionId !== null,
+  );
 
   return (
     <nav className="session-tree" aria-label="Plan sessions">
@@ -43,6 +51,19 @@ export function SessionTree({
 
       <PlanRationale value={workspace.plan.planningBasis} />
 
+      <LearningTree
+        roadmapTitle={workspace.learningSet.title}
+        planTree={workspace.learningSet.planTree}
+        currentPlanId={workspace.plan.id}
+        lessonTree={workspace.lessonTree}
+        selectedKey={selected.startsWith('coach:')
+          ? `plan:${workspace.plan.id}`
+          : `lesson:${selected.slice(6)}`}
+        onRoadmap={onRoadmapSelect}
+        onPlan={onPlanSelect}
+        onLesson={onLessonOpen}
+      />
+
       {explorerEnabled && (
         <button className="library-entry" type="button" onClick={onExplore}>
           <span aria-hidden="true">⌕</span>
@@ -53,6 +74,7 @@ export function SessionTree({
       <p className="tree-label">父会话</p>
       <button
         type="button"
+        data-session-node={workspace.coach.sessionKey}
         className={`session-node coach-node ${selected === workspace.coach.sessionKey ? 'selected' : ''}`}
         onClick={() => onSelect(workspace.coach.sessionKey)}
       >
@@ -62,10 +84,11 @@ export function SessionTree({
 
       <p className="tree-label lesson-label">Lesson 子会话</p>
       <div className="lesson-nodes">
-        {workspace.lessons.map((lesson, index) => (
+        {sessionLessons.map((lesson, index) => (
           <button
             key={lesson.id}
             type="button"
+            data-session-node={lesson.sessionKey}
             className={`session-node ${selected === lesson.sessionKey ? 'selected' : ''}`}
             onClick={() => onSelect(lesson.sessionKey)}
           >

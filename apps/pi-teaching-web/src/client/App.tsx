@@ -46,6 +46,7 @@ import {
   type BrowserRoute,
 } from './routes';
 import {
+  buildPublicContextPages,
   initialClientState,
   laterMemoryReview,
   preferLiveConversation,
@@ -476,6 +477,27 @@ export function App() {
     }, 'push');
   };
 
+  const openTreeLesson = async (planId: string, lessonId: string) => {
+    setPageError(null);
+    try {
+      const workspace = client.workspace?.plan.id === planId
+        ? client.workspace
+        : await api.workspace(planId);
+      const lesson = workspace.lessons.find((candidate) => candidate.id === lessonId);
+      if (!lesson) throw new Error('LESSON_NOT_FOUND');
+      if (lesson.status === 'prepared') {
+        if (!await startLesson(lesson)) return;
+        const route = formatBrowserRoute({ kind: 'lesson', planId, lessonId });
+        window.history.pushState(null, '', route);
+        localStorage.setItem('studyforge.lastVisitedRoute', route);
+        return;
+      }
+      await openRoute({ kind: 'lesson', planId, lessonId }, 'push');
+    } catch {
+      setPageError('这节课暂时无法打开，请回到学习顾问确认当前安排。');
+    }
+  };
+
   const send = async (text: string, imagePaths: string[]) => {
     if (!client.selected) return;
     setClient((current) => ({
@@ -658,6 +680,9 @@ export function App() {
           continuePath={continuePath}
           onContinue={(path) => void openRoute(parseBrowserRoute(path), 'push')}
           onOpen={(id) => void openRoute({ kind: 'coach', planId: id }, 'push')}
+          onLessonOpen={(planId, lessonId) => {
+            void openTreeLesson(planId, lessonId);
+          }}
           onRoadmapOpen={() => void openRoute({ kind: 'roadmap' }, 'push')}
         />
       </>
@@ -669,6 +694,12 @@ export function App() {
   const isReplay = selectedLesson?.status === 'closed'
     || selectedLesson?.status === 'abandoned';
   const view = isCoach ? 'coach' : isReplay ? 'replay' : 'tutor';
+  const contextPages = buildPublicContextPages({
+    view,
+    workspace: client.workspace,
+    coachContext: isCoach ? coachContext : null,
+    notebook,
+  });
   const sessionBusy = Boolean(client.busy[selected]);
   const composerEnabled = (isCoach || selectedLesson?.status === 'active')
     && !sessionBusy;
@@ -724,6 +755,12 @@ export function App() {
           onSelect={(key) => void selectSession(key)}
           onPlanSelect={(planId) => {
             void openRoute({ kind: 'coach', planId }, 'push');
+          }}
+          onRoadmapSelect={() => {
+            void openRoute({ kind: 'roadmap' }, 'push');
+          }}
+          onLessonOpen={(planId, lessonId) => {
+            void openTreeLesson(planId, lessonId);
           }}
           onHome={goHome}
           explorerEnabled={isCoach || selectedLesson?.status !== 'prepared'}
@@ -782,6 +819,7 @@ export function App() {
           replay={replay}
           abilities={abilities}
           workflows={client.workflows[selected] ?? []}
+          contextPages={contextPages}
           onEvidence={(source) => void openEvidence(source)}
           onWorkflowAction={actOnWorkflow}
         />

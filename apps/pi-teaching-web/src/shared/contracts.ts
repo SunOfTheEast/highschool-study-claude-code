@@ -201,12 +201,27 @@ export type HomeLearningSetSnapshot = Omit<LearningSetSnapshot, 'plans'> & {
 export type HomeSnapshot = {
   learningSet: HomeLearningSetSnapshot;
   currentPlan: HomePlanSummary | null;
+  currentLessonTree: PublicTreeEntry[];
   eligibleContinueRoutes: string[];
   continueTarget: HomeContinueTarget;
   lessonProgress: { completed: number; total: number };
   studentPlan: StudentPlanProjection | null;
   signals: Array<{ label: string; value: string; source: string | null }>;
   recentReplay: null | { lessonId: string; title: string; route: string };
+};
+
+export type PublicContextPageKind =
+  | 'resident'
+  | 'frozen'
+  | 'current'
+  | 'on-demand';
+
+export type PublicContextPage = {
+  kind: PublicContextPageKind;
+  label: string;
+  purpose: string;
+  sourceCount: number;
+  sources: string[];
 };
 
 export type AbilityNode = {

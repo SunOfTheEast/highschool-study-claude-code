@@ -154,6 +154,7 @@ export function readHomeSnapshot(root: string): HomeSnapshot {
       plans: rawLearningSet.plans.map(homePlan),
     },
     currentPlan,
+    currentLessonTree: currentWorkspace?.lessonTree ?? [],
     eligibleContinueRoutes,
     continueTarget,
     lessonProgress: {

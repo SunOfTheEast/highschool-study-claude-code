@@ -1,4 +1,5 @@
 import type { HomeSnapshot } from '../../shared/contracts';
+import { LearningTree } from './LearningTree';
 import { MarkdownView } from './MarkdownView';
 
 export function LearningSetHome({
@@ -6,17 +7,21 @@ export function LearningSetHome({
   continuePath,
   onContinue,
   onOpen,
+  onLessonOpen,
   onRoadmapOpen,
 }: {
   value: HomeSnapshot;
   continuePath: string;
   onContinue(path: string): void;
   onOpen(id: string): void;
+  onLessonOpen(planId: string, lessonId: string): void;
   onRoadmapOpen(): void;
 }) {
-  const otherPlans = value.learningSet.plans.filter(
-    (plan) => plan.id !== value.currentPlan?.id,
-  );
+  const selectedKey = value.continueTarget.kind === 'lesson'
+    ? `lesson:${value.continueTarget.lessonId}`
+    : value.continueTarget.kind === 'coach'
+      ? `plan:${value.continueTarget.planId}`
+      : 'roadmap';
   return (
     <main className="home continue-home" data-theme="liubai-xinzhongshi">
       <header className="home-heading">
@@ -95,36 +100,19 @@ export function LearningSetHome({
           </button>
         )}
 
-        {otherPlans.length > 0 && (
-          <section className="plan-list secondary-plans" aria-label="其他学习周期">
-            <p className="section-label">其他 Plan</p>
-            {otherPlans.map((plan, index) => (
-              <button key={plan.id} type="button" onClick={() => onOpen(plan.id)}>
-                <span className="plan-number">{String(index + 1).padStart(2, '0')}</span>
-                <span className="plan-copy">
-                  <small>{plan.status}</small>
-                  <strong>{plan.title}</strong>
-                  <span>{plan.capabilityStandard}</span>
-                </span>
-                <span className="plan-arrow" aria-hidden="true">↗</span>
-              </button>
-            ))}
-          </section>
-        )}
-
-        <button
-          type="button"
-          className="roadmap-entry quiet home-roadmap-entry"
-          onClick={onRoadmapOpen}
-        >
-          <span className="plan-number">览</span>
-          <span className="plan-copy">
-            <small>学习集</small>
-            <strong>学习总览</strong>
-            <span>回看全局 · 讨论新的学习周期</span>
-          </span>
-          <span className="plan-arrow" aria-hidden="true">↗</span>
-        </button>
+        <section className="home-learning-tree" aria-labelledby="home-learning-tree-title">
+          <p className="section-label" id="home-learning-tree-title">课程学习树</p>
+          <LearningTree
+            roadmapTitle={value.learningSet.title}
+            planTree={value.learningSet.planTree}
+            currentPlanId={value.currentPlan?.id ?? null}
+            lessonTree={value.currentLessonTree}
+            selectedKey={selectedKey}
+            onRoadmap={onRoadmapOpen}
+            onPlan={onOpen}
+            onLesson={onLessonOpen}
+          />
+        </section>
 
         <section className="home-reference">
           <details>

@@ -79,6 +79,36 @@ function html(view: 'coach' | 'tutor' | 'replay') {
       replay={view === 'replay' ? replay : null}
       abilities={{ nodes: [] }}
       workflows={[]}
+      contextPages={[
+        {
+          kind: 'resident',
+          label: '常驻基础',
+          purpose: '本学习集稳定使用的原则。',
+          sourceCount: 2,
+          sources: ['研习要领'],
+        },
+        {
+          kind: 'frozen',
+          label: '冻结交接',
+          purpose: '激活时由父节点交付。',
+          sourceCount: 1,
+          sources: ['父节点交接快照'],
+        },
+        {
+          kind: 'current',
+          label: '当前节点',
+          purpose: '当前节点与会话。',
+          sourceCount: 2,
+          sources: ['当前学习周期'],
+        },
+        {
+          kind: 'on-demand',
+          label: '按需来源',
+          purpose: '需要时才回读。',
+          sourceCount: view === 'coach' ? 1 : 0,
+          sources: view === 'coach' ? ['前课摘录'] : [],
+        },
+      ]}
       onEvidence={() => {}}
       onWorkflowAction={async () => {}}
     />,
@@ -95,6 +125,12 @@ test('composes distinct ordered context sections for Coach, Tutor, and Replay', 
   expect(coach).toContain('source-17');
   expect(coach).toContain('备课提醒');
   expect(coach).toContain('前课摘录');
+  expect(coach).toContain('上下文页表');
+  expect(coach).toContain('常驻基础');
+  expect(coach).toContain('冻结交接');
+  expect(coach).toContain('当前节点');
+  expect(coach).toContain('按需来源');
+  expect(coach).not.toContain('Teacher Control');
   expect(coach).not.toContain('课堂脉络');
 
   const tutor = html('tutor');
@@ -134,6 +170,7 @@ test('does not repeat a completed structured review in the Coach context stack',
       replay={null}
       abilities={{ nodes: [] }}
       workflows={[]}
+      contextPages={[]}
       onEvidence={() => {}}
       onWorkflowAction={async () => {}}
     />,

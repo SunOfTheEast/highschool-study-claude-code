@@ -1,7 +1,10 @@
 import type {
+  CoachContextView,
   ConversationItem,
   PlanWorkspaceSnapshot,
+  PublicContextPage,
   SessionKey,
+  StudentNotebook,
   StudyViewEvent,
   WorkflowView,
 } from '../shared/contracts';
@@ -28,6 +31,77 @@ export const initialClientState: ClientState = {
   deepMode: {},
   workflows: {},
 };
+
+export function buildPublicContextPages({
+  view,
+  workspace,
+  coachContext,
+  notebook,
+}: {
+  view: 'coach' | 'tutor' | 'replay';
+  workspace: PlanWorkspaceSnapshot;
+  coachContext: CoachContextView | null;
+  notebook: StudentNotebook | null;
+}): PublicContextPage[] {
+  const lesson = notebook?.lesson ?? null;
+  const residentSources = [
+    '共享数学教学原则',
+    '本学习集研习要领',
+    '经学生确认的相关偏好',
+  ];
+  const frozenSources = [
+    view === 'coach' ? 'Roadmap 交接快照' : 'Plan 交接快照',
+  ];
+  const currentSources = view === 'coach'
+    ? [
+      `当前学习周期 · ${workspace.plan.title}`,
+      '当前学习顾问会话',
+    ]
+    : [
+      lesson?.status === 'prepared'
+        ? '准备好的下一课'
+        : `当前课堂 · ${lesson?.title ?? '课堂记录'}`,
+      ...(lesson?.tutorSessionId ? ['当前课堂会话'] : []),
+    ];
+  const onDemandSources = view === 'coach'
+    ? (coachContext?.priorLessons ?? []).map(
+      (item) => `前课摘录 · ${item.title}`,
+    )
+    : (notebook?.recentRecords ?? []).map(
+      (record) => `课堂记录 ${record.lessonId} / ${record.blockId}`,
+    );
+
+  return [
+    {
+      kind: 'resident',
+      label: '常驻基础',
+      purpose: '每轮稳定使用的教学原则与已确认偏好。',
+      sourceCount: residentSources.length,
+      sources: residentSources,
+    },
+    {
+      kind: 'frozen',
+      label: '冻结交接',
+      purpose: '节点激活时由父节点交付，当前 Session 中保持不变。',
+      sourceCount: frozenSources.length,
+      sources: frozenSources,
+    },
+    {
+      kind: 'current',
+      label: '当前节点',
+      purpose: '只属于当前学习周期或课堂的工作内容。',
+      sourceCount: currentSources.length,
+      sources: currentSources,
+    },
+    {
+      kind: 'on-demand',
+      label: '按需来源',
+      purpose: '需要核查时才回读的前课与课堂记录。',
+      sourceCount: onDemandSources.length,
+      sources: onDemandSources,
+    },
+  ];
+}
 
 const memoryReviewRank = {
   proposed: 0,

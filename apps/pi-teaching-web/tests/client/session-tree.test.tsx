@@ -22,7 +22,17 @@ function workspace(status: string): PlanWorkspaceSnapshot {
       overview: '概述',
       learningPrinciples: '',
       goal: '总目标',
-      planTree: [],
+      planTree: [{
+        handle: 'p1',
+        kind: 'plan',
+        nodeId: 'p1',
+        path: 'plans/p1.md',
+        title: '第一阶段 Plan',
+        publicPurpose: '完成当前周期。',
+        after: null,
+        dependsOn: [],
+        status: status === 'completed' ? 'completed' : 'active',
+      }],
       plans: [
         current,
         {
@@ -53,6 +63,8 @@ function render(status: string): string {
       selected="coach:p1"
       onSelect={() => {}}
       onPlanSelect={() => {}}
+      onRoadmapSelect={() => {}}
+      onLessonOpen={() => {}}
       onHome={() => {}}
       explorerEnabled
       onExplore={() => {}}
@@ -68,11 +80,22 @@ test('offers other Plans only after the current Plan is completed', () => {
   const completed = render('completed');
   expect(completed).toContain('继续其他 Plan');
   expect(completed).toContain('下一个 Plan');
-  expect(completed.match(/第一阶段 Plan/g)).toHaveLength(1);
+  expect(completed.match(/第一阶段 Plan/g)).toHaveLength(2);
 });
 
 test('hides a prepared Lesson title and shows only its safe shape', () => {
   const value = workspace('active');
+  value.lessonTree.push({
+    handle: 'lesson-secret',
+    kind: 'lesson',
+    nodeId: 'lesson-secret',
+    path: 'lessons/lesson-secret.md',
+    title: '冻结变量法绝密综合诊断',
+    publicPurpose: '完成一节公开的路线练习。',
+    after: null,
+    dependsOn: [],
+    status: 'prepared',
+  });
   value.lessons.push({
     id: 'lesson-secret',
     title: '冻结变量法绝密综合诊断',
@@ -123,13 +146,79 @@ test('hides a prepared Lesson title and shows only its safe shape', () => {
       selected="coach:p1"
       onSelect={() => {}}
       onPlanSelect={() => {}}
+      onRoadmapSelect={() => {}}
+      onLessonOpen={() => {}}
       onHome={() => {}}
       explorerEnabled
       onExplore={() => {}}
     />,
   );
 
-  expect(html).toContain('待开始课程');
-  expect(html).toContain('3 个环节');
+  expect(html).toContain('准备好的下一课');
+  expect(html).toContain('完成一节公开的路线练习');
   expect(html).not.toContain('冻结变量法绝密综合诊断');
+});
+
+test('lists candidates only in the learning tree and Sessions only after they exist', () => {
+  const value = workspace('active');
+  value.lessonTree = [{
+    handle: 'lesson-candidate',
+    kind: 'lesson',
+    nodeId: null,
+    path: null,
+    title: null,
+    publicPurpose: '根据前课表现再决定。',
+    after: null,
+    dependsOn: [],
+    status: 'candidate',
+  }, {
+    handle: 'lesson-prepared',
+    kind: 'lesson',
+    nodeId: 'lesson-prepared',
+    path: 'lessons/lesson-prepared.md',
+    title: 'SECRET_PREPARED_TITLE',
+    publicPurpose: '完成一次公开检验。',
+    after: null,
+    dependsOn: [],
+    status: 'prepared',
+  }];
+  value.lessons.push({
+    id: 'lesson-prepared',
+    title: 'SECRET_PREPARED_TITLE',
+    path: 'lessons/lesson-prepared.md',
+    planId: 'p1',
+    status: 'prepared',
+    sessionKey: 'tutor:lesson-prepared',
+    tutorSessionId: null,
+    blocks: [],
+  }, {
+    id: 'lesson-active',
+    title: '正在进行的课堂',
+    path: 'lessons/lesson-active.md',
+    planId: 'p1',
+    status: 'active',
+    sessionKey: 'tutor:lesson-active',
+    tutorSessionId: 'session-active',
+    blocks: [],
+  });
+
+  const html = renderToStaticMarkup(
+    <SessionTree
+      workspace={value}
+      selected="coach:p1"
+      onSelect={() => {}}
+      onPlanSelect={() => {}}
+      onRoadmapSelect={() => {}}
+      onLessonOpen={() => {}}
+      onHome={() => {}}
+      explorerEnabled
+      onExplore={() => {}}
+    />,
+  );
+
+  expect(html).toContain('根据前课表现再决定');
+  expect(html).toContain('准备好的下一课');
+  expect(html).toContain('正在进行的课堂');
+  expect(html).not.toContain('SECRET_PREPARED_TITLE');
+  expect(html.match(/data-session-node=/g)).toHaveLength(2);
 });

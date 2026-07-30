@@ -1,3 +1,5 @@
+import type { PublicTreeEntry } from '../shared/contracts';
+
 export type BrowserRoute =
   | { kind: 'home' }
   | { kind: 'roadmap' }
@@ -37,4 +39,21 @@ export function formatBrowserRoute(route: BrowserRoute): string {
   return route.kind === 'coach'
     ? `/plan/${plan}`
     : `/plan/${plan}/lesson/${encodeURIComponent(route.lessonId)}`;
+}
+
+export function routeForPublicTreeEntry(
+  entry: PublicTreeEntry,
+  parentPlanId: string | null,
+): BrowserRoute | null {
+  if (entry.status === 'candidate' || entry.nodeId === null) return null;
+  if (entry.kind === 'plan') {
+    return { kind: 'coach', planId: entry.nodeId };
+  }
+  return parentPlanId === null
+    ? null
+    : {
+      kind: 'lesson',
+      planId: parentPlanId,
+      lessonId: entry.nodeId,
+    };
 }

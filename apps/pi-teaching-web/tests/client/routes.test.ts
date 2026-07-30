@@ -1,5 +1,9 @@
 import { expect, test } from 'bun:test';
-import { formatBrowserRoute, parseBrowserRoute } from '../../src/client/routes';
+import {
+  formatBrowserRoute,
+  parseBrowserRoute,
+  routeForPublicTreeEntry,
+} from '../../src/client/routes';
 import type { HomeSnapshot } from '../../src/shared/contracts';
 import { resolveContinuePath } from '../../src/shared/home';
 
@@ -46,4 +50,33 @@ test('restores only a route listed by the deterministic Home snapshot', () => {
   expect(resolveContinuePath(home, '/plan/p1/lesson/closed')).toBe(
     '/plan/p1/lesson/l1',
   );
+});
+
+test('never invents a route for a candidate tree entry', () => {
+  expect(routeForPublicTreeEntry({
+    handle: 'future',
+    kind: 'lesson',
+    nodeId: null,
+    path: null,
+    title: null,
+    publicPurpose: '未来分支',
+    after: null,
+    dependsOn: [],
+    status: 'candidate',
+  }, 'p1')).toBeNull();
+  expect(routeForPublicTreeEntry({
+    handle: 'lesson-1',
+    kind: 'lesson',
+    nodeId: 'lesson-1',
+    path: 'lessons/lesson-1.md',
+    title: 'Lesson 1',
+    publicPurpose: '当前课堂',
+    after: null,
+    dependsOn: [],
+    status: 'active',
+  }, 'p1')).toEqual({
+    kind: 'lesson',
+    planId: 'p1',
+    lessonId: 'lesson-1',
+  });
 });

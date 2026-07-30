@@ -41,7 +41,13 @@ export function LessonReadyCard({
       {value.sourceNumbers.length > 0 && (
         <p>题号：{value.sourceNumbers.join('、')}</p>
       )}
-      <p>具体题目会由课堂导师逐步展开。</p>
+      <p>
+        {status === 'closed' || status === 'abandoned'
+          ? '课堂记录与来源已经保留，可以随时回看。'
+          : status === 'active' || status === 'paused'
+            ? '继续时会回到原来的课堂 Session。'
+            : '具体题目会由课堂导师逐步展开，开始时间由你决定。'}
+      </p>
       <footer>
         <button type="button" onClick={() => onPrimary(value.lessonId)}>
           {actionLabel(status)}

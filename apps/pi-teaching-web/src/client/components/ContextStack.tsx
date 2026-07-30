@@ -3,6 +3,7 @@ import type {
   CoachContextView,
   LessonNode,
   LessonReplay,
+  PublicContextPage,
   StudentNotebook,
   WorkflowView,
 } from '../../shared/contracts';
@@ -21,6 +22,31 @@ const activityKindLabel = {
   reflection: '小结',
 } as const;
 
+function ContextPageTable({ pages }: { pages: PublicContextPage[] }) {
+  if (pages.length === 0) return null;
+  return (
+    <section className="context-page-table" aria-labelledby="context-page-table-title">
+      <p id="context-page-table-title">上下文页表</p>
+      <ol>
+        {pages.map((page) => (
+          <li key={page.kind} data-page-kind={page.kind}>
+            <header>
+              <strong>{page.label}</strong>
+              <small>{page.sourceCount} 处来源</small>
+            </header>
+            <p>{page.purpose}</p>
+            {page.sources.length > 0 && (
+              <ul>
+                {page.sources.map((source) => <li key={source}>{source}</li>)}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
 export function ContextStack({
   view,
   coachContext,
@@ -29,6 +55,7 @@ export function ContextStack({
   replay,
   abilities,
   workflows,
+  contextPages,
   onEvidence,
   onWorkflowAction,
 }: {
@@ -39,6 +66,7 @@ export function ContextStack({
   replay: LessonReplay | null;
   abilities: AbilityProjection | null;
   workflows: WorkflowView[];
+  contextPages: PublicContextPage[];
   onEvidence(source: string): void;
   onWorkflowAction(id: string, action: 'confirm' | 'cancel'): Promise<void>;
 }) {
@@ -48,6 +76,7 @@ export function ContextStack({
     return (
       <aside className="activities context-stack" aria-label="学习顾问情境">
         <header><span>学习情境</span><h2>本周期</h2></header>
+        <ContextPageTable pages={contextPages} />
         <ContextSection
           title="本阶段"
           summary={plan?.learningReview ? '阶段回顾已整理' : '当前位置与下一步'}
@@ -124,6 +153,7 @@ export function ContextStack({
     return (
       <aside className="activities context-stack" aria-label="课堂回放情境">
         <header><span>课堂回放</span><h2>{lesson?.title ?? '课堂记录'}</h2></header>
+        <ContextPageTable pages={contextPages} />
         <ContextSection title="回放定位" summary="结课时的课堂位置" open>
           {notebook?.lessonSummary
             ? <MarkdownView>{notebook.lessonSummary}</MarkdownView>
@@ -149,6 +179,7 @@ export function ContextStack({
   return (
     <aside className="activities context-stack" aria-label="课堂导师情境">
       <header><span>课堂情境</span><h2>{lesson?.title ?? '当前课堂'}</h2></header>
+      <ContextPageTable pages={contextPages} />
       <ContextSection title="课堂脉络" summary="全部节点与当前停止点" open>
         <LessonNotebook
           embedded
