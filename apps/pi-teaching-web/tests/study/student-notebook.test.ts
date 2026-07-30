@@ -30,8 +30,8 @@ test('reveals cards only after their ActivityBlock becomes visible', () => {
   const root = fixture();
   expect(readStudentNotebook(root, 'lesson-003', false).cards).toEqual({});
 
-  setBlockStatus(root, 'lessons/lesson-003.md', 'orientation', 'completed');
-  setBlockStatus(root, 'lessons/lesson-003.md', 'assessment-01', 'active');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'block-001', 'completed');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'block-002', 'active');
   expect(Object.keys(readStudentNotebook(root, 'lesson-003', false).cards))
     .toEqual(['Q-DOMAIN-EX22']);
 });
@@ -45,13 +45,13 @@ test('reveals a shared card once an active Block uses it without duplicating it'
       .replace('- Uses: Q-DOMAIN-EX16', '- Uses: Q-DOMAIN-EX22'),
   );
 
-  setBlockStatus(root, 'lessons/lesson-003.md', 'orientation', 'completed');
-  setBlockStatus(root, 'lessons/lesson-003.md', 'assessment-01', 'active');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'block-001', 'completed');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'block-002', 'active');
   expect(Object.keys(readStudentNotebook(root, 'lesson-003', false).cards))
     .toEqual(['Q-DOMAIN-EX22']);
 
-  setBlockStatus(root, 'lessons/lesson-003.md', 'assessment-01', 'completed');
-  setBlockStatus(root, 'lessons/lesson-003.md', 'assessment-02', 'active');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'block-002', 'completed');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'block-004', 'active');
   expect(Object.keys(readStudentNotebook(root, 'lesson-003', false).cards))
     .toEqual(['Q-DOMAIN-EX22']);
 });
@@ -62,8 +62,8 @@ test('reveals only active and completed Student Views during an assessment', () 
     .map((block) => block.studentView))
     .toEqual(['', '', '', '', '']);
 
-  setBlockStatus(root, 'lessons/lesson-003.md', 'orientation', 'completed');
-  setBlockStatus(root, 'lessons/lesson-003.md', 'assessment-01', 'active');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'block-001', 'completed');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'block-002', 'active');
   const blocks = readStudentNotebook(root, 'lesson-003', false).lesson.blocks;
 
   expect(blocks[0]?.studentView).toContain('两道不同结构的未见题');
@@ -129,7 +129,7 @@ test('keeps pending Student Views hidden for every template', () => {
 
 test('returns card stems without answer-bearing fields', () => {
   const root = fixture();
-  setBlockStatus(root, 'lessons/lesson-003.md', 'assessment-01', 'active');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'block-002', 'active');
   const notebook = readStudentNotebook(root, 'lesson-003', false);
   const text = JSON.stringify(notebook);
   expect(text).toContain('mst_p0032_ex22');
@@ -146,7 +146,7 @@ test('returns only current-Lesson active Trace as recent learning records', () =
   expect(notebook.recentRecords).toHaveLength(1);
   expect(notebook.recentRecords[0]).toMatchObject({
     lessonId: 'lesson-001',
-    blockId: 'step-02',
+    blockId: 'block-002',
     assessment: 'partially_correct',
     support: 'tutor',
   });

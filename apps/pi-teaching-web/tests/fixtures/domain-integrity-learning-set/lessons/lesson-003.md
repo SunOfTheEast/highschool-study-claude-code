@@ -51,7 +51,7 @@ tutor_session: null
 
 - Continuity check: [mst_p0032_ex22](../cards/derivative/mst_p0032_ex22.card.yaml)
 - Transfer check: [mst_p0030_ex16](../cards/derivative/mst_p0030_ex16.card.yaml)
-- Optional remediation: [mst_p0017_ex05](../cards/derivative/mst_p0017_ex05.card.yaml) and [Lesson 002 Trace](lesson-002.md#trace-event-001)
+- Optional remediation: [mst_p0017_ex05](../cards/derivative/mst_p0017_ex05.card.yaml) and `trace:trace-fixture-002`
 - Public source policy: [demo notes](../materials/demo-notes.md#source-policy)
 
 ## Dependencies and control
@@ -106,7 +106,7 @@ tutor_session: null
 - Evidence target: 定义域是否无提示写全，并在关键变形和开区间边界中被主动使用。
 - Reveal: `zero`。
 - Card evidence: Q-DOMAIN-EX22 `step_2` and `step_5`; inspect the remaining card steps privately only after the student's attempt.
-- If help is requested, record the unsupported or incomplete attempt, then offer `repair-optional`. Do not count the supported completion as independent `1b` evidence.
+- If help is requested, record the unsupported or incomplete attempt, then offer `block-003`. Do not count the supported completion as independent `1b` evidence.
 
 ---
 
@@ -129,7 +129,7 @@ tutor_session: null
 - Role: trace-grounded remediation using a seen card.
 - Evidence target: connect the Lesson 002 domain success to the gap just observed.
 - Reveal: `ladder`.
-- Source: Lesson 002 Trace event-001 and Q-DOMAIN-EX05 `step_1`–`step_2`.
+- Source: `trace:trace-fixture-002` and Q-DOMAIN-EX05 `step_1`–`step_2`.
 - Reveal one level per consented turn. This block is not independent assessment evidence.
 
 ---
@@ -150,11 +150,11 @@ tutor_session: null
 
 ### Teacher Control
 
-- Role: cross-structure transfer; if assessment-01 received any tutor or external support, this is also the fresh unsupported retest whether or not repair-optional ran.
+- Role: cross-structure transfer; if `block-002` received any tutor or external support, this is also the fresh unsupported retest whether or not `block-003` ran.
 - Evidence target: 定义域、正量与开区间边界能否迁移到不同外壳，而不是复述上一题路线。
 - Reveal: `zero`.
 - Card evidence: Q-DOMAIN-EX16 `step_1` and `step_6`; inspect the remaining card steps privately only after the student's attempt.
-- Do not reuse a hint, intermediate result, or answer from assessment-01.
+- Do not reuse a hint, intermediate result, or answer from `block-002`.
 
 ---
 

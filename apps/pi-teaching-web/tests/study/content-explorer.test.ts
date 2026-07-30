@@ -29,8 +29,8 @@ function fixture(): string {
 test('limits an active Tutor to revealed assets and current-Lesson Trace permissions', () => {
   const root = fixture();
   setFrontmatterField(root, 'lessons/lesson-003.md', 'status', 'active');
-  setBlockStatus(root, 'lessons/lesson-003.md', 'orientation', 'completed');
-  setBlockStatus(root, 'lessons/lesson-003.md', 'assessment-01', 'active');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'block-001', 'completed');
+  setBlockStatus(root, 'lessons/lesson-003.md', 'block-002', 'active');
 
   const visible = searchStudentContent(root, {
     query: 'mst_p0032_ex22',
@@ -56,14 +56,14 @@ test('maps Trace matches back to a real card with complete active history only',
   const root = fixture();
   appendTrace(root, {
     lessonPath: 'lessons/lesson-001.md',
-    blockId: 'step-02',
+    blockId: 'block-002',
     cardAlias: 'Q-DOMAIN-EX11',
     cardStepId: 'step_4',
     materialPath: null,
     assessment: 'correct',
     support: 'none',
     note: 'unique-trace-term corrected observation',
-    supersedes: 'event-001',
+    supersedes: 'trace-fixture-001',
     methods: null,
   }, () => new Date('2026-07-28T01:00:00Z'));
 

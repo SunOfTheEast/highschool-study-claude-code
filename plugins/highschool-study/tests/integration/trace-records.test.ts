@@ -32,7 +32,9 @@ function uuid(index: number): string {
 
 function traceFiles(root: string): string[] {
   const directory = join(root, 'traces');
-  return existsSync(directory) ? readdirSync(directory).sort() : [];
+  return existsSync(directory)
+    ? readdirSync(directory).filter((entry) => entry.endsWith('.md')).sort()
+    : [];
 }
 
 function addSecondProblemBlock(root: string): void {

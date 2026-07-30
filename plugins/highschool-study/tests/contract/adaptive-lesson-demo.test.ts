@@ -58,9 +58,9 @@ test('lesson 003 is a multi-card assessment with private teacher control', () =>
   );
 
   const assessmentStudentViews = [
-    studentView('orientation'),
-    studentView('assessment-01'),
-    studentView('assessment-02'),
+    studentView('block-001'),
+    studentView('block-002'),
+    studentView('block-004'),
   ];
 
   expect(assessmentStudentViews[0]!.trim()).toBe(
@@ -86,8 +86,8 @@ test('lesson 003 is a multi-card assessment with private teacher control', () =>
 
   const studentViews = [
     ...assessmentStudentViews,
-    studentView('repair-optional'),
-    studentView('reflection'),
+    studentView('block-003'),
+    studentView('block-005'),
   ].join('\n');
 
   for (const spoiler of [
@@ -128,37 +128,37 @@ test('lesson 003 is a multi-card assessment with private teacher control', () =>
   expect(lesson).toContain('not independent assessment evidence');
 
   expect(lesson).toContain(
-    '`assessment-01` precedes `assessment-02`; `repair-optional` may be inserted between them.',
+    '`block-002` precedes `block-004`; `block-003` may be inserted between them.',
   );
 
-  expect(block('orientation')).toContain(
+  expect(block('block-001')).toContain(
     '- Role: capability-standard orientation。',
   );
-  expect(block('orientation')).toContain('- Reveal: `zero`。');
+  expect(block('block-001')).toContain('- Reveal: `zero`。');
 
-  expect(block('assessment-01')).toContain(
+  expect(block('block-002')).toContain(
     '- Role: continuity check for Plan stage `1b`。',
   );
-  expect(block('assessment-01')).toContain('- Reveal: `zero`。');
+  expect(block('block-002')).toContain('- Reveal: `zero`。');
 
-  expect(block('repair-optional')).toContain(
+  expect(block('block-003')).toContain(
     '- Role: trace-grounded remediation using a seen card.',
   );
-  expect(block('repair-optional')).toContain('- Reveal: `ladder`.');
-  expect(block('repair-optional')).toContain(
+  expect(block('block-003')).toContain('- Reveal: `ladder`.');
+  expect(block('block-003')).toContain(
     'not independent assessment evidence',
   );
 
-  expect(block('assessment-02')).toContain('- Role: cross-structure transfer');
-  expect(block('assessment-02')).toContain('- Reveal: `zero`.');
-  expect(block('assessment-02')).toContain(
-    '- Role: cross-structure transfer; if assessment-01 received any tutor or external support, this is also the fresh unsupported retest whether or not repair-optional ran.',
+  expect(block('block-004')).toContain('- Role: cross-structure transfer');
+  expect(block('block-004')).toContain('- Reveal: `zero`.');
+  expect(block('block-004')).toContain(
+    '- Role: cross-structure transfer; if `block-002` received any tutor or external support, this is also the fresh unsupported retest whether or not `block-003` ran.',
   );
 
-  expect(block('reflection')).toContain(
+  expect(block('block-005')).toContain(
     '- Role: evidence summary and student-controlled closure.',
   );
-  expect(block('reflection')).toContain('- Reveal: `zero`;');
+  expect(block('block-005')).toContain('- Reveal: `zero`;');
 });
 
 test('documents adaptive templates and reveal boundaries', () => {

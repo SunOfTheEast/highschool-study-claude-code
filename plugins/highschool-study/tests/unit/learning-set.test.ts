@@ -10,10 +10,11 @@ const requiredPlanSections = [
   'Observable Capability Standard',
   'Test',
   'Planning Basis',
-  'Lesson Index',
+  'Activation Snapshot',
+  'Lesson Tree',
   'Current Position',
-  'Next Lesson Candidate',
   'Plan Summary',
+  'Handoff',
 ] as const;
 
 function strictPlanSource(options: {
@@ -153,7 +154,7 @@ test('rejects duplicate Plan structure and invalid frontmatter', () => {
     'INVALID_PLAN_KIND: plans/strict-plan.md',
   );
 
-  writeFileSync(path, strictPlanSource({ status: 'prepared' }));
+  writeFileSync(path, strictPlanSource({ status: 'closed' }));
   expect(() => readMarkdownFile(root, 'plans/strict-plan.md')).toThrow(
     'INVALID_PLAN_STATUS: plans/strict-plan.md',
   );
