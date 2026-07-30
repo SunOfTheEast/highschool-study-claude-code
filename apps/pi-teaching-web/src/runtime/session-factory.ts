@@ -22,7 +22,10 @@ import { createCardAlternativeAppendTool } from './card-alternative-append';
 import { createLessonCloseTool } from './lesson-close';
 import { createLessonPrepareTool } from './lesson-prepare';
 import { NodeAccessPolicy } from './node-access';
-import { compileNodeContext } from './node-context';
+import {
+  compileNodeContext,
+  newlyResolvableContextIndexes,
+} from './node-context';
 import { createPlanPrepareTool } from './plan-prepare';
 import { createPlanUpdateTool } from './plan-update';
 import { createRoadmapUpdateTool } from './roadmap-update';
@@ -46,6 +49,7 @@ export interface StudySession {
   readonly messages: readonly unknown[];
   readonly entries: readonly SessionEntry[];
   readonly isStreaming: boolean;
+  refreshNodeContext?(): Promise<void>;
   personaId(): string | null;
   setPersona(id: string, content: string): Promise<void>;
   deepModeEnabled(): boolean;
@@ -195,6 +199,7 @@ export async function createPiSessionFactory(
     const nodeContext = compileNodeContext(root, scope, {
       sessionId: manager.getSessionId(),
     });
+    const knownResolvableSources = new Set(nodeContext.resolvableSources);
     const accessPolicy = new NodeAccessPolicy(
       root,
       nodeContext,
@@ -300,6 +305,36 @@ export async function createPiSessionFactory(
       },
       get isStreaming() {
         return session.isStreaming;
+      },
+      refreshNodeContext: async () => {
+        const refreshed = compileNodeContext(root, scope, {
+          sessionId: manager.getSessionId(),
+        });
+        const indexes = newlyResolvableContextIndexes(
+          [...knownResolvableSources],
+          refreshed,
+        );
+        const newSources = refreshed.resolvableSources.filter(
+          (source) => !knownResolvableSources.has(source),
+        );
+        if (newSources.length === 0) return;
+
+        accessPolicy.grant(newSources);
+        for (const source of newSources) knownResolvableSources.add(source);
+        if (indexes.length === 0) return;
+
+        await session.sendCustomMessage({
+          customType: 'studyforge.node-context-refresh.v1',
+          content: JSON.stringify({
+            instruction: [
+              'New sealed child Handoffs became available after this parent Session began.',
+              'Resolve the handoff handle before reviewing the child or updating the parent.',
+              'Use its Claims to distinguish independent work, supported work, boundaries, and open questions; do not infer the whole lesson from Trace alone.',
+            ],
+            indexes: indexes.map(({ label, source }) => ({ label, source })),
+          }),
+          display: false,
+        }, { triggerTurn: false });
       },
       personaId: () => manager.getEntries().flatMap((entry) => (
         entry.type === 'custom' && entry.customType === 'studyforge.persona.v1'

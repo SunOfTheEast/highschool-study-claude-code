@@ -41,6 +41,19 @@ export type CompileNodeContextOptions = {
   sessionId?: string | null;
 };
 
+export function newlyResolvableContextIndexes(
+  previousSources: readonly string[],
+  next: CompiledNodeContext,
+): ContextPage[] {
+  const previous = new Set(previousSources);
+  const resolvable = new Set(next.resolvableSources);
+  return next.pages.filter((page) => (
+    page.kind === 'index'
+    && resolvable.has(page.source)
+    && !previous.has(page.source)
+  ));
+}
+
 const resourceRoot = join(dirname(fileURLToPath(import.meta.url)), '../../resources');
 
 function unique(values: string[]): string[] {

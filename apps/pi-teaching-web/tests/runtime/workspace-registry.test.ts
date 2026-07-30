@@ -100,6 +100,34 @@ function idleWorkflowMethods() {
   };
 }
 
+test('refreshes a cached parent Session before the next turn', async () => {
+  const root = fixture();
+  const refreshed: string[] = [];
+  const factory: StudySessionFactory = async ({ role, ownerId }) => ({
+    sessionId: `${role}-${ownerId}`,
+    sessionFile: `/tmp/${role}-${ownerId}.jsonl`,
+    messages: [],
+    isStreaming: false,
+    personaId: () => null,
+    setPersona: async () => {},
+    ...idleWorkflowMethods(),
+    refreshNodeContext: async () => {
+      refreshed.push(`${role}:${ownerId}`);
+    },
+    prompt: async () => {},
+    abort: async () => {},
+    subscribe: () => () => {},
+    dispose: () => {},
+  });
+  const registry = new WorkspaceRegistry(root, factory, async () => null);
+
+  await registry.openCoach('domain-integrity');
+  expect(refreshed).toEqual([]);
+
+  await registry.openCoach('domain-integrity');
+  expect(refreshed).toEqual(['coach:domain-integrity']);
+});
+
 test('applies student-confirmed memory in trusted Runtime and notifies the same Plan Coach', async () => {
   const root = fixture();
   let latest: MemoryReviewSnapshot = {

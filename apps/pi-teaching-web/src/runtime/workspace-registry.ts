@@ -100,7 +100,10 @@ export class WorkspaceRegistry {
     }
     const key = `coach:${planId}`;
     const cached = this.sessions.get(key);
-    if (cached) return cached;
+    if (cached) {
+      await cached.refreshNodeContext?.();
+      return cached;
+    }
     await this.activation.activatePlan(planId);
     const session = this.sessions.get(key);
     if (!session) throw new Error(`PLAN_SESSION_OPEN_FAILED: ${planId}`);
@@ -114,7 +117,10 @@ export class WorkspaceRegistry {
 
   async openRoadmapCoach(): Promise<StudySession> {
     const cached = this.sessions.get(ROADMAP_COACH_SESSION_KEY);
-    if (cached) return cached;
+    if (cached) {
+      await cached.refreshNodeContext?.();
+      return cached;
+    }
     const snapshot = readRoadmapWorkspace(this.root);
     const sessionFile = snapshot.coach.sessionId
       ? await this.lookup(this.root, snapshot.coach.sessionId, ROADMAP_COACH_SCOPE)

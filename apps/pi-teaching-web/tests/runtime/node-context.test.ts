@@ -11,6 +11,7 @@ import { join } from 'node:path';
 import { renderProfileDocument } from '../../src/memory-review/profile-document';
 import {
   compileNodeContext,
+  newlyResolvableContextIndexes,
   type CompiledNodeContext,
 } from '../../src/runtime/node-context';
 import {
@@ -153,4 +154,24 @@ test('indexes sealed child Handoffs without copying parent or sibling Session me
   expect(serialized).not.toContain('session-lesson-002');
   expect(serialized).not.toContain('PARENT RAW SESSION MESSAGE');
   expect(serialized).not.toContain('SIBLING RAW SESSION MESSAGE');
+});
+
+test('projects newly available child Handoffs as resolvable indexes', () => {
+  const context = compileNodeContext(
+    domainIntegrityFixtureRoot,
+    planScope(),
+    { sessionId: 'session-current-plan' },
+  );
+  const previous = context.resolvableSources.filter(
+    (source) => !source.includes('lesson-002/handoff'),
+  );
+
+  const indexes = newlyResolvableContextIndexes(previous, context);
+
+  expect(indexes).toContainEqual(expect.objectContaining({
+    source: 'handoff:lesson-002/handoff',
+    label: 'Sealed lesson:lesson-002 Handoff',
+  }));
+  expect(indexes.every((page) => page.kind === 'index')).toBe(true);
+  expect(indexes.some((page) => page.source.startsWith('tool:'))).toBe(false);
 });
