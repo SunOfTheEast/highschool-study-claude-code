@@ -11,6 +11,7 @@ import {
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
+  assertCandidateSourcesAllowed,
   materializeChild,
   updateParentDocument,
   type TreeMutationFileOps,
@@ -46,6 +47,29 @@ const candidate = {
   sources: ['trace:trace-fixture-002'],
   privateNote: '只改变题型外壳。',
 };
+
+test('explains the parent-safe Claim handles after rejecting a child Session source', () => {
+  expect(() => assertCandidateSourcesAllowed(
+    [{
+      action: 'add',
+      candidate: {
+        ...candidate,
+        sources: ['session:child-lesson-session'],
+      },
+    }],
+    {
+      allows: (source) => source.startsWith('claim:lesson-001/handoff#'),
+      allowedSources: () => [
+        'claim:lesson-001/handoff#learner-c2',
+        'claim:lesson-001/handoff#teaching-t1',
+      ],
+    },
+  )).toThrow(
+    'Child Session evidence must be cited through a sealed Handoff claim. '
+    + 'Allowed candidate sources: claim:lesson-001/handoff#learner-c2, '
+    + 'claim:lesson-001/handoff#teaching-t1',
+  );
+});
 
 test('adds, revises and removes only candidate entries with runtime handles', () => {
   const root = fixture();

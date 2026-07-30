@@ -26,6 +26,10 @@ const candidateHandle = Type.String({
   pattern: '^(?:plan|lesson)-candidate-\\d{3,}$',
   description: 'Exact parent-tree handle such as lesson-candidate-001. Never use prose, a title, a file path, or a time condition.',
 });
+const candidateSource = Type.String({
+  minLength: 1,
+  description: 'A source already available to the current parent node. Cite child evidence with its sealed Handoff claim: handle; never cite a child session: handle directly.',
+});
 
 export const candidateDraftSchema = Type.Object({
   publicPurpose: nonempty,
@@ -36,7 +40,9 @@ export const candidateDraftSchema = Type.Object({
     description: 'Exact existing parent-tree handles only. Put conditions or explanations in considerWhen.',
   }),
   considerWhen: nonempty,
-  sources: Type.Array(nonempty),
+  sources: Type.Array(candidateSource, {
+    description: 'Evidence for this candidate. For prior child learning, use the exact claim: handles exposed by that child Handoff.',
+  }),
   privateNote: nonempty,
 }, { additionalProperties: false });
 
@@ -60,6 +66,7 @@ export const candidateChangesSchema = Type.Array(candidateChangeSchema);
 
 export type CandidateSourcePolicy = {
   allows(source: string): boolean;
+  allowedSources?(): readonly string[];
 };
 
 export function assertCandidateSourcesAllowed(
@@ -71,7 +78,17 @@ export function assertCandidateSourcesAllowed(
     if (change.action === 'remove') continue;
     for (const source of change.candidate.sources) {
       if (!policy.allows(source)) {
-        throw new Error(`NODE_CANDIDATE_SOURCE_NOT_ALLOWED: ${source}`);
+        const allowed = policy.allowedSources?.()
+          .filter((candidate) => policy.allows(candidate)) ?? [];
+        const guidance = source.startsWith('session:')
+          ? ' Child Session evidence must be cited through a sealed Handoff claim.'
+          : ' Use a source available to the current parent node.';
+        const examples = allowed.length > 0
+          ? ` Allowed candidate sources: ${allowed.join(', ')}`
+          : '';
+        throw new Error(
+          `NODE_CANDIDATE_SOURCE_NOT_ALLOWED: ${source}.${guidance}${examples}`,
+        );
       }
     }
   }

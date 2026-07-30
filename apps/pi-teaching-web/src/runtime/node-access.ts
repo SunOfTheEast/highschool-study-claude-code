@@ -153,6 +153,28 @@ export class NodeAccessPolicy {
     return this.granted.has(source);
   }
 
+  allowedSources(): string[] {
+    const sources = new Set([
+      ...this.initial,
+      ...this.granted,
+      ...(this.sessionId === null ? [] : [`session:${this.sessionId}`]),
+    ]);
+    const priority = (source: string): number => {
+      if (source.startsWith('claim:')) return 0;
+      if (source.startsWith('handoff:')) return 1;
+      if (source.startsWith('trace:')) return 2;
+      if (source.startsWith('memory:')) return 3;
+      if (source.startsWith('session:')) return 4;
+      return 5;
+    };
+    return [...sources]
+      .filter((source) => this.allows(source))
+      .sort((left, right) => (
+        priority(left) - priority(right)
+        || left.localeCompare(right)
+      ));
+  }
+
   private isPublicPath(path: string): boolean {
     return path === 'LEARNING_GUIDE.md'
       || path.startsWith('cards/')
