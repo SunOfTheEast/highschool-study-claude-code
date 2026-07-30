@@ -9,7 +9,10 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { readTraceRecords } from 'highschool-study-markdown/study-domain';
+import {
+  appendTrace,
+  readTraceRecords,
+} from 'highschool-study-markdown/study-domain';
 import { Check } from 'typebox/value';
 import { createClassroomUpdateTool } from '../../src/runtime/classroom-update';
 import { createCardAlternativeAppendTool } from '../../src/runtime/card-alternative-append';
@@ -1093,6 +1096,62 @@ test('exposes exclusive progress and complete plan_update contracts without path
   })).toBeFalse();
   expect(JSON.stringify(tool.parameters)).not.toContain('planPath');
   expect(JSON.stringify(tool.parameters)).not.toContain('lessonIndex');
+  expect(JSON.stringify(tool.parameters)).toContain('support:none');
+  expect(JSON.stringify(tool.parameters)).toContain('assessment Lesson');
+});
+
+test('returns eligible key anchors without changing Plan or Roadmap', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-plan-key-evidence-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  appendTrace(temporaryRoot, {
+    lessonPath: 'lessons/lesson-003.md',
+    blockId: 'assessment-01',
+    cardAlias: 'Q-DOMAIN-EX22',
+    cardStepId: null,
+    materialPath: null,
+    assessment: 'correct',
+    support: 'none',
+    note: '学生独立完成。',
+    supersedes: null,
+  }, () => new Date('2026-07-30T08:00:00Z'));
+  appendTrace(temporaryRoot, {
+    lessonPath: 'lessons/lesson-003.md',
+    blockId: 'assessment-02',
+    cardAlias: 'Q-DOMAIN-EX16',
+    cardStepId: null,
+    materialPath: null,
+    assessment: 'correct',
+    support: 'tutor',
+    note: '学生在提示后完成。',
+    supersedes: null,
+  }, () => new Date('2026-07-30T08:05:00Z'));
+  const tool = createPlanUpdateTool(temporaryRoot, 'plans/domain-integrity.md');
+  const planAbsolute = join(temporaryRoot, 'plans/domain-integrity.md');
+  const roadmapAbsolute = join(temporaryRoot, 'ROADMAP.md');
+  const planBefore = readFileSync(planAbsolute, 'utf8');
+  const roadmapBefore = readFileSync(roadmapAbsolute, 'utf8');
+
+  await expect(tool.execute('complete-invalid-key', {
+    decision: 'complete',
+    currentPosition: '准备完成。',
+    nextLessonCandidate: '回到 Roadmap。',
+    learningReview: {
+      conclusion: '在当前题型中完成。',
+      boundary: '关键来源使用过 Tutor 提示。',
+      nextStep: '重新选择关键来源。',
+      keyEvidence: [{
+        claim: '提示后完成第二题。',
+        source: 'lessons/lesson-003.md#trace-event-002',
+      }],
+      supportingEvidence: [],
+      openQuestions: [],
+    },
+  } as never, undefined, undefined, {} as never)).rejects.toThrow(
+    /LEARNING_REVIEW_KEY_SUPPORT_REQUIRED_NONE: .*eligible=lessons\/lesson-003\.md#trace-event-001/,
+  );
+  expect(readFileSync(planAbsolute, 'utf8')).toBe(planBefore);
+  expect(readFileSync(roadmapAbsolute, 'utf8')).toBe(roadmapBefore);
 });
 
 test('keeps alternative append Tutor-only and Session-bound', () => {

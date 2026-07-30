@@ -3,6 +3,12 @@ import { Type } from 'typebox';
 import { updatePlan, type PlanUpdateInput } from '../study/write-workspace';
 
 const text = Type.String({ minLength: 1 });
+const keyEvidenceSource = Type.String({
+  minLength: 1,
+  description: 'Exact active Trace anchor from this Plan. Key evidence must be '
+    + 'correct, support:none, and belong to a problem Block in an assessment Lesson. '
+    + 'This is objective eligibility, not an automatic completion verdict.',
+});
 const currentPosition = Type.String({
   minLength: 1,
   description: 'Source-linked account of met, unmet, and conflicting capability evidence.',
@@ -17,7 +23,7 @@ const learningReview = Type.Object({
   nextStep: text,
   keyEvidence: Type.Array(Type.Object({
     claim: text,
-    source: text,
+    source: keyEvidenceSource,
   }, { additionalProperties: false }), { minItems: 1 }),
   supportingEvidence: Type.Array(Type.Object({
     claim: text,

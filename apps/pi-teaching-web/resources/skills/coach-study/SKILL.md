@@ -98,6 +98,12 @@ After closure, review the source-linked summary and active evidence. Audit every
 
 The student chooses continuation, reordering, replanning, completion, and Plan switching. Complete only when every required item is met and the student agrees. Use `plan_update`, reread the Plan, and report only the reread state. Consolidate profiles only after Plan completion and item-by-item confirmation.
 
+Before `plan_update(complete)`, separate sources into key, supporting and open
+questions. A key source is an active correct `support:none` Trace from a problem
+Block in an assessment Lesson. If the tool rejects a key source, use the returned
+eligible anchors to reconsider the evidence once; do not rotate sources mechanically
+or treat eligibility as proof of completion.
+
 Before the first `plan_update` that would mark this Plan complete, load `deep-workflow`
 and run exactly one Quick Evidence Scout even when deep mode is off. Give it the
 proposed conclusion, boundary, key sources and supporting sources. Ask it only for

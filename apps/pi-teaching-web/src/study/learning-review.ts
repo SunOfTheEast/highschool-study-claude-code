@@ -183,18 +183,62 @@ function primaryTemplate(body: string): string | null {
     .exec(body)?.[1]?.trim() ?? null;
 }
 
+export function listEligibleKeyEvidence(
+  root: string,
+  planPath: string,
+): string[] {
+  const plan = readMarkdownFile(root, planPath);
+  const workspace = readPlanWorkspace(root, plan.id);
+  if (plan.frontmatter.kind !== 'plan' || workspace.plan.path !== planPath) {
+    throw new Error('LEARNING_REVIEW_OWNER_MISMATCH');
+  }
+  const lessons = new Map(workspace.lessons.map((lesson) => [
+    lesson.path,
+    readMarkdownFile(root, lesson.path),
+  ]));
+  return readActiveTraces(root, workspace.lessons.map((lesson) => lesson.path))
+    .filter((trace) => {
+      if (trace.support !== 'none' || trace.assessment !== 'correct') return false;
+      const lesson = lessons.get(trace.lessonPath);
+      if (!lesson || primaryTemplate(lesson.body) !== 'assessment') return false;
+      return readPreparedLessonBlocks(lesson.body)
+        .some((block) => block.id === trace.blockId && block.kind === 'problem');
+    })
+    .map((trace) => trace.sourceAnchor)
+    .sort();
+}
+
+function keyEvidenceError(
+  code: string,
+  source: string | null,
+  reason: string,
+  eligible: string[],
+): never {
+  const candidates = eligible.slice(0, 5).join(',') || '(none)';
+  throw new Error(
+    `${code}: source=${source ?? '(none)'}; reason=${reason}; eligible=${candidates}`,
+  );
+}
+
 export function validateLearningReviewSources(
   root: string,
   planPath: string,
   review: LearningReview,
 ): void {
-  if (review.keyEvidence.length === 0) {
-    throw new Error('LEARNING_REVIEW_KEY_EVIDENCE_REQUIRED');
-  }
   const plan = readMarkdownFile(root, planPath);
   const workspace = readPlanWorkspace(root, plan.id);
   if (plan.frontmatter.kind !== 'plan' || workspace.plan.path !== planPath) {
     throw new Error('LEARNING_REVIEW_OWNER_MISMATCH');
+  }
+  const eligible = listEligibleKeyEvidence(root, planPath);
+  const eligibleSet = new Set(eligible);
+  if (review.keyEvidence.length === 0) {
+    keyEvidenceError(
+      'LEARNING_REVIEW_KEY_EVIDENCE_REQUIRED',
+      null,
+      'at-least-one-key-source-required',
+      eligible,
+    );
   }
 
   const allowedLessonPaths = new Set(workspace.lessons.map((lesson) => lesson.path));
@@ -216,13 +260,37 @@ export function validateLearningReviewSources(
     for (const item of items) {
       const path = sourcePath(item.source);
       if (path === null) {
+        if (tier === 'key') {
+          keyEvidenceError(
+            'LEARNING_REVIEW_SOURCE_INVALID',
+            item.source,
+            'invalid-format',
+            eligible,
+          );
+        }
         throw new Error(`LEARNING_REVIEW_SOURCE_INVALID: ${item.source}`);
       }
       if (!allowedLessonPaths.has(path)) {
+        if (tier === 'key') {
+          keyEvidenceError(
+            'LEARNING_REVIEW_SOURCE_OUTSIDE_PLAN',
+            item.source,
+            'outside-plan',
+            eligible,
+          );
+        }
         throw new Error(`LEARNING_REVIEW_SOURCE_OUTSIDE_PLAN: ${item.source}`);
       }
       const trace = activeTraces.get(item.source);
       if (trace === undefined) {
+        if (tier === 'key') {
+          keyEvidenceError(
+            'LEARNING_REVIEW_SOURCE_NOT_ACTIVE',
+            item.source,
+            'not-active',
+            eligible,
+          );
+        }
         throw new Error(`LEARNING_REVIEW_SOURCE_NOT_ACTIVE: ${item.source}`);
       }
       const resolved = sourceResolve(root, {
@@ -230,21 +298,44 @@ export function validateLearningReviewSources(
         target: item.source,
       });
       if (!resolved.valid || resolved.path !== path) {
+        if (tier === 'key') {
+          keyEvidenceError(
+            'LEARNING_REVIEW_SOURCE_INVALID',
+            item.source,
+            `source-resolution:${resolved.error ?? 'path-mismatch'}`,
+            eligible,
+          );
+        }
         throw new Error(`LEARNING_REVIEW_SOURCE_INVALID: ${item.source}`);
       }
       if (tier === 'supporting') continue;
+      if (eligibleSet.has(item.source)) continue;
       if (trace.support !== 'none') {
-        throw new Error(`LEARNING_REVIEW_KEY_SUPPORT_REQUIRED_NONE: ${item.source}`);
+        keyEvidenceError(
+          'LEARNING_REVIEW_KEY_SUPPORT_REQUIRED_NONE',
+          item.source,
+          `support:${trace.support}`,
+          eligible,
+        );
       }
       if (trace.assessment !== 'correct') {
-        throw new Error(`LEARNING_REVIEW_KEY_CORRECT_REQUIRED: ${item.source}`);
+        keyEvidenceError(
+          'LEARNING_REVIEW_KEY_CORRECT_REQUIRED',
+          item.source,
+          `assessment:${trace.assessment}`,
+          eligible,
+        );
       }
       const lesson = readMarkdownFile(root, path);
       const block = readPreparedLessonBlocks(lesson.body)
         .find((candidate) => candidate.id === trace.blockId);
-      if (primaryTemplate(lesson.body) !== 'assessment' || block?.kind !== 'problem') {
-        throw new Error(`LEARNING_REVIEW_KEY_NOT_ASSESSMENT: ${item.source}`);
-      }
+      keyEvidenceError(
+        'LEARNING_REVIEW_KEY_NOT_ASSESSMENT',
+        item.source,
+        `template:${primaryTemplate(lesson.body) ?? '(missing)'},`
+        + `block-kind:${block?.kind ?? '(missing)'}`,
+        eligible,
+      );
     }
   }
 }

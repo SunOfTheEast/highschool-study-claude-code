@@ -27,6 +27,7 @@ type LearningReview = {
 type LearningReviewModule = {
   renderLearningReview(review: LearningReview): string;
   parseLearningReview(source: string): LearningReview | null;
+  listEligibleKeyEvidence(root: string, planPath: string): string[];
   validateLearningReviewSources(
     root: string,
     planPath: string,
@@ -74,7 +75,9 @@ function review(
   };
 }
 
-function tracedFixture(): string {
+function tracedFixture(
+  firstAssessment: 'correct' | 'incorrect' = 'correct',
+): string {
   const root = mkdtempSync(join(tmpdir(), 'learning-review-'));
   temporaryRoots.push(root);
   cpSync(domainIntegrityFixtureRoot, root, { recursive: true });
@@ -84,7 +87,7 @@ function tracedFixture(): string {
     cardAlias: 'Q-DOMAIN-EX22',
     cardStepId: null,
     materialPath: null,
-    assessment: 'correct',
+    assessment: firstAssessment,
     support: 'none',
     note: '学生独立完成第一道评估题。',
     supersedes: null,
@@ -102,6 +105,58 @@ function tracedFixture(): string {
   }, () => new Date('2026-07-29T08:05:00Z'));
   return root;
 }
+
+test('lists only active independent correct assessment problem Traces', async () => {
+  const value = await moduleUnderTest();
+  expect(value).not.toBeNull();
+  if (!value) return;
+  const root = tracedFixture();
+
+  expect(value.listEligibleKeyEvidence(root, 'plans/domain-integrity.md'))
+    .toEqual(['lessons/lesson-003.md#trace-event-001']);
+});
+
+test('excludes incorrect and non-assessment Traces from key evidence candidates', async () => {
+  const value = await moduleUnderTest();
+  expect(value).not.toBeNull();
+  if (!value) return;
+  const incorrectRoot = tracedFixture('incorrect');
+  expect(value.listEligibleKeyEvidence(incorrectRoot, 'plans/domain-integrity.md'))
+    .toEqual([]);
+
+  const nonAssessmentRoot = tracedFixture();
+  const lessonPath = join(nonAssessmentRoot, 'lessons/lesson-003.md');
+  writeFileSync(
+    lessonPath,
+    readFileSync(lessonPath, 'utf8').replace(
+      '- Primary template: `assessment`',
+      '- Primary template: `deliberate-practice`',
+    ),
+  );
+  expect(value.listEligibleKeyEvidence(nonAssessmentRoot, 'plans/domain-integrity.md'))
+    .toEqual([]);
+});
+
+test('lists the active eligible revision instead of its superseded source', async () => {
+  const value = await moduleUnderTest();
+  expect(value).not.toBeNull();
+  if (!value) return;
+  const root = tracedFixture();
+  appendTrace(root, {
+    lessonPath: 'lessons/lesson-003.md',
+    blockId: 'assessment-01',
+    cardAlias: 'Q-DOMAIN-EX22',
+    cardStepId: null,
+    materialPath: null,
+    assessment: 'correct',
+    support: 'none',
+    note: '学生更正了第一题的记录。',
+    supersedes: 'event-001',
+  }, () => new Date('2026-07-29T08:10:00Z'));
+
+  expect(value.listEligibleKeyEvidence(root, 'plans/domain-integrity.md'))
+    .toEqual(['lessons/lesson-003.md#trace-event-003']);
+});
 
 test('round-trips one bounded learning review through Plan Summary Markdown', async () => {
   const value = await moduleUnderTest();
@@ -151,7 +206,9 @@ test('rejects stale, cross-Plan, supported, and non-assessment key evidence', as
       }],
       supportingEvidence: [],
     },
-  )).toThrow('LEARNING_REVIEW_KEY_SUPPORT_REQUIRED_NONE');
+  )).toThrow(
+    /LEARNING_REVIEW_KEY_SUPPORT_REQUIRED_NONE: .*reason=support:tutor; eligible=lessons\/lesson-003\.md#trace-event-001/,
+  );
 
   appendTrace(root, {
     lessonPath: 'lessons/lesson-003.md',
@@ -185,7 +242,9 @@ test('rejects stale, cross-Plan, supported, and non-assessment key evidence', as
       ...review('lessons/lesson-003.md#trace-event-003'),
       supportingEvidence: [],
     },
-  )).toThrow('LEARNING_REVIEW_KEY_NOT_ASSESSMENT');
+  )).toThrow(
+    /LEARNING_REVIEW_KEY_NOT_ASSESSMENT: .*reason=template:concept,block-kind:problem; eligible=\(none\)/,
+  );
 
   const foreignPath = join(root, 'lessons/lesson-foreign.md');
   writeFileSync(
