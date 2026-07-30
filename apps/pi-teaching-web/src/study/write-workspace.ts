@@ -1,12 +1,10 @@
 import {
   existsSync,
-  mkdirSync,
   readFileSync,
-  readdirSync,
   writeFileSync,
 } from 'node:fs';
-import { dirname, posix } from 'node:path';
 import {
+  parseChildTree,
   readMarkdownFile,
   resolveInsideRoot,
 } from 'highschool-study-markdown/study-domain';
@@ -93,9 +91,17 @@ function replaceFrontmatterField(
   return source.replace(match[0], `${match[1]}${body}${match[3]}`);
 }
 
-export function setFrontmatterField(root: string, path: string, key: string, value: string): void {
+export function setFrontmatterField(
+  root: string,
+  path: string,
+  key: string,
+  value: string,
+): void {
   const document = read(root, path);
-  write(document.absolute, replaceFrontmatterField(document.source, path, key, value));
+  write(
+    document.absolute,
+    replaceFrontmatterField(document.source, path, key, value),
+  );
 }
 
 function replaceBlockStatus(
@@ -103,19 +109,22 @@ function replaceBlockStatus(
   blockId: string,
   status: 'pending' | 'active' | 'completed' | 'skipped',
 ): string {
-  const heading = new RegExp(`^## Block ${blockId}(?:（[^）]+）)?\\s*$`, 'm');
+  const escaped = blockId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const heading = new RegExp(
+    `^## Block ${escaped}(?:（[^）]+）)?\\s*$`,
+    'm',
+  );
   const match = heading.exec(source);
   if (!match) throw new Error(`BLOCK_NOT_FOUND: ${blockId}`);
   const next = source.indexOf('\n## Block ', match.index + match[0].length);
   const end = next < 0 ? source.length : next;
   const block = source.slice(match.index, end);
   const state = /### Node State\s*\n([\s\S]*?)(?=\n### |\n## |$)/.exec(block);
-  const replacement = state
-    ? block.replace(state[0], state[0].replace(/^- Status:.*$/m, `- Status: ${status}`))
-    : block.replace(
-      match[0],
-      `${match[0]}\n\n### Node State\n\n- Kind: dialogue\n- Required: true\n- Status: ${status}\n- Depends on:\n- Uses:`,
-    );
+  if (!state) throw new Error(`BLOCK_STATE_REQUIRED: ${blockId}`);
+  const replacement = block.replace(
+    state[0],
+    state[0].replace(/^- Status:.*$/m, `- Status: ${status}`),
+  );
   return source.slice(0, match.index) + replacement + source.slice(end);
 }
 
@@ -126,15 +135,25 @@ export function setBlockStatus(
   status: 'pending' | 'active' | 'completed' | 'skipped',
 ): void {
   const document = read(root, lessonPath);
-  write(document.absolute, replaceBlockStatus(document.source, blockId, status));
+  write(
+    document.absolute,
+    replaceBlockStatus(document.source, blockId, status),
+  );
 }
 
-export function appendRouteChange(root: string, lessonPath: string, input: RouteChangeInput): void {
+export function appendRouteChange(
+  root: string,
+  lessonPath: string,
+  input: RouteChangeInput,
+): void {
   const document = read(root, lessonPath);
   if (!document.source.includes(`## Block ${input.blockId}`)) {
     throw new Error(`BLOCK_NOT_FOUND: ${input.blockId}`);
   }
-  write(document.absolute, appendRouteChangeSource(document.source, input));
+  write(
+    document.absolute,
+    appendRouteChangeSource(document.source, input),
+  );
 }
 
 export function applyClassroomTransition(
@@ -143,106 +162,35 @@ export function applyClassroomTransition(
   input: ClassroomTransitionInput,
 ): void {
   const document = read(root, lessonPath);
-  const next = transitionClassroomSource(document.source, input);
-  write(document.absolute, next);
+  write(
+    document.absolute,
+    transitionClassroomSource(document.source, input),
+  );
 }
 
-function replaceSection(source: string, heading: string, value: string): string {
-  const pattern = new RegExp(`(^## ${heading}\\s*$\\n)([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, 'm');
+function replaceSection(
+  source: string,
+  heading: string,
+  value: string,
+): string {
+  const pattern = new RegExp(
+    `(^## ${heading}\\s*$\\n)([\\s\\S]*?)(?=^## |(?![\\s\\S]))`,
+    'm',
+  );
   if (!pattern.test(source)) throw new Error(`SECTION_NOT_FOUND: ${heading}`);
   return source.replace(
     pattern,
-    (_match, sectionHeading: string) => `${sectionHeading}\n${value.trim()}\n\n`,
+    (_match, sectionHeading: string) => (
+      `${sectionHeading}\n${value.trim()}\n\n`
+    ),
   );
 }
 
 function planTitle(body: string): string {
   const heading = /^#\s+(.+?)\s*$/m.exec(body)?.[1]?.trim() ?? '';
-  const title = heading.replace(/^Plan[:：]\s*/, '');
-  if (!title) throw new Error('PLAN_TITLE_REQUIRED');
-  return title;
-}
-
-function syncPlanGraphStatus(source: string, path: string, status: string): string {
-  const heading = /^## Plan Graph[ \t]*$/m.exec(source);
-  if (!heading) throw new Error('SECTION_NOT_FOUND: Plan Graph');
-  const sectionStart = heading.index + heading[0].length;
-  const nextHeading = /^## [^\n]+$/gm;
-  nextHeading.lastIndex = sectionStart;
-  const next = nextHeading.exec(source);
-  const sectionEnd = next?.index ?? source.length;
-  const section = source.slice(sectionStart, sectionEnd);
-  const line = new RegExp(
-    `^([ \\t]*-[ \\t]+\\[[^\\]]+\\]\\(${escapeRegExp(path)}\\))(?:[ \\t]+—[ \\t]+(.*))?$`,
-    'm',
-  );
-  const match = line.exec(section);
-  if (!match) throw new Error(`PLAN_NOT_REGISTERED: ${path}`);
-  const suffix = match[2]?.trim();
-  const statusPrefix = /^(?:active|completed)(.*)$/.exec(suffix ?? '');
-  const nextSuffix = statusPrefix
-    ? `${status}${statusPrefix[1]}`
-    : suffix
-      ? `${status}；${suffix}`
-      : `${status}。`;
-  const nextSection = section.replace(line, `$1 — ${nextSuffix}`);
-  return source.slice(0, sectionStart) + nextSection + source.slice(sectionEnd);
-}
-
-function appendPlanGraphLink(
-  source: string,
-  path: string,
-  title: string,
-  status: string,
-): string {
-  const heading = /^## Plan Graph[ \t]*$/m.exec(source);
-  if (!heading) throw new Error('SECTION_NOT_FOUND: Plan Graph');
-  const sectionStart = heading.index + heading[0].length;
-  const nextHeading = /^## [^\n]+$/gm;
-  nextHeading.lastIndex = sectionStart;
-  const next = nextHeading.exec(source);
-  const sectionEnd = next?.index ?? source.length;
-  const section = source.slice(sectionStart, sectionEnd);
-  const targets = [...section.matchAll(/\[[^\]]+\]\(([^)#]+\.md)\)/g)]
-    .map((match) => match[1]);
-  if (targets.includes(path)) return syncPlanGraphStatus(source, path, status);
-  const before = source.slice(0, sectionEnd).trimEnd();
-  const after = source.slice(sectionEnd);
-  return `${before}\n\n- [${title}](${path}) — ${status}。\n${after.startsWith('\n') ? after : `\n${after}`}`;
-}
-
-function escapeRegExp(value: string): string {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-function registerLessonIndex(
-  planSource: string,
-  planPath: string,
-  lessonPath: string,
-  title: string,
-): string {
-  const heading = /^## Lesson Index[ \t]*$/m.exec(planSource);
-  if (!heading) throw new Error('SECTION_NOT_FOUND: Lesson Index');
-  const sectionStart = heading.index + heading[0].length;
-  const nextHeading = /^## [^\n]+$/gm;
-  nextHeading.lastIndex = sectionStart;
-  const sectionEnd = nextHeading.exec(planSource)?.index ?? planSource.length;
-  const section = planSource.slice(sectionStart, sectionEnd);
-  const target = posix.relative(posix.dirname(planPath), lessonPath);
-  const existing = new RegExp(
-    `^([ \\t]*\\d+\\.[ \\t]+)\\[[^\\]]+\\]\\(${escapeRegExp(target)}\\).*?$`,
-    'm',
-  );
-  if (existing.test(section)) {
-    const nextSection = section.replace(existing, `$1[${title}](${target}) — prepared。`);
-    return planSource.slice(0, sectionStart) + nextSection + planSource.slice(sectionEnd);
-  }
-  const numbers = [...section.matchAll(/^[ \t]*(\d+)\./gm)]
-    .map((match) => Number(match[1]));
-  const number = Math.max(0, ...numbers) + 1;
-  const before = planSource.slice(0, sectionEnd).trimEnd();
-  const after = planSource.slice(sectionEnd);
-  return `${before}\n${number}. [${title}](${target}) — prepared。\n\n${after.trimStart()}`;
+  const value = heading.replace(/^Plan[:：]\s*/, '');
+  if (!value) throw new Error('PLAN_TITLE_REQUIRED');
+  return value;
 }
 
 export function writePreparedLesson(
@@ -254,32 +202,33 @@ export function writePreparedLesson(
   if (owner.frontmatter.status === 'completed') {
     throw new Error(`PLAN_PREPARATION_REQUIRES_REACTIVATION: ${owner.id}`);
   }
+  const tree = parseChildTree(
+    owner.body,
+    'Lesson Tree',
+    'lesson',
+    planPath,
+  );
+  const child = tree.entries.find((entry) => (
+    entry.state === 'materialized'
+    && entry.childId === input.lessonId
+    && entry.childPath === input.lessonPath
+  ));
+  if (!child) throw new Error(`LESSON_CANDIDATE_REQUIRED: ${input.lessonId}`);
+
   const absolute = resolveInsideRoot(root, input.lessonPath);
   if (existsSync(absolute)) {
     const current = readMarkdownFile(root, input.lessonPath);
-    const currentPlanId = typeof current.frontmatter.plan_id === 'string'
-      ? current.frontmatter.plan_id
-      : null;
-    if (currentPlanId !== owner.id) {
-      throw new Error(
-        `LESSON_PLAN_OWNERSHIP_CONFLICT: lesson=${input.lessonId}; `
-        + `existing=${currentPlanId ?? '(none)'}; requested=${owner.id}`,
-      );
+    if (
+      current.frontmatter.parent_id !== owner.id
+      || current.frontmatter.parent_path !== planPath
+    ) {
+      throw new Error(`LESSON_PLAN_OWNERSHIP_CONFLICT: ${input.lessonId}`);
     }
     if (current.frontmatter.status !== 'prepared') {
-      throw new Error(`LESSON_REPREPARE_REQUIRES_NEW_ID: ${input.lessonId}`);
+      throw new Error(`LESSON_REPREPARE_REQUIRES_PREPARED: ${input.lessonId}`);
     }
   }
-  const plan = read(root, planPath);
-  const nextPlan = registerLessonIndex(
-    plan.source,
-    planPath,
-    input.lessonPath,
-    input.lessonTitle,
-  );
-  mkdirSync(dirname(absolute), { recursive: true });
   write(absolute, input.source);
-  if (nextPlan !== plan.source) write(plan.absolute, nextPlan);
   return {
     id: input.lessonId,
     title: input.lessonTitle,
@@ -289,32 +238,26 @@ export function writePreparedLesson(
 }
 
 export function registerPlan(root: string, planId: string): RegisteredPlan {
-  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(planId)) {
-    throw new Error(`INVALID_PLAN_ID: ${planId}`);
+  const roadmap = readMarkdownFile(root, 'ROADMAP.md');
+  const tree = parseChildTree(
+    roadmap.body,
+    'Plan Tree',
+    'plan',
+    'ROADMAP.md',
+  );
+  const child = tree.entries.find((entry) => (
+    entry.state === 'materialized' && entry.childId === planId
+  ));
+  if (!child || child.state !== 'materialized') {
+    throw new Error(`PLAN_CANDIDATE_REQUIRED: ${planId}`);
   }
-  const path = `plans/${planId}.md`;
-  const plan = readMarkdownFile(root, path);
-  if (plan.frontmatter.kind !== 'plan') throw new Error('INVALID_PLAN_KIND');
-  if (plan.id !== planId) throw new Error(`INVALID_PLAN_ID: ${plan.id}`);
-  const title = planTitle(plan.body);
-  const status = typeof plan.frontmatter.status === 'string'
-    ? plan.frontmatter.status
-    : 'active';
-  const roadmap = read(root, 'ROADMAP.md');
-  const next = appendPlanGraphLink(roadmap.source, path, title, status);
-  if (next !== roadmap.source) write(roadmap.absolute, next);
-
-  const canonicalPlan = readMarkdownFile(root, path);
-  const canonicalRoadmap = readFileSync(roadmap.absolute, 'utf8');
-  if (!canonicalRoadmap.includes(`](${path})`)) {
-    throw new Error(`PLAN_REGISTRATION_FAILED: ${planId}`);
-  }
+  const plan = readMarkdownFile(root, child.childPath);
   return {
-    id: canonicalPlan.id,
-    title: planTitle(canonicalPlan.body),
-    path,
-    coachSessionId: typeof canonicalPlan.frontmatter.coach_session === 'string'
-      ? canonicalPlan.frontmatter.coach_session
+    id: plan.id,
+    title: planTitle(plan.body),
+    path: child.childPath,
+    coachSessionId: typeof plan.frontmatter.coach_session === 'string'
+      ? plan.frontmatter.coach_session
       : null,
   };
 }
@@ -338,102 +281,25 @@ export function closeLesson(
   write(document.absolute, source);
 }
 
-type LessonIndexEntry = {
-  path: string;
-  title: string;
-  status: string;
-  planId: string;
-};
-
-function sectionValue(source: string, heading: string): string {
-  const pattern = new RegExp(`^## ${heading}\\s*$\\n([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, 'm');
-  const match = pattern.exec(source);
-  if (!match) throw new Error(`SECTION_NOT_FOUND: ${heading}`);
-  return match[1]!.trim();
-}
-
-function lessonIndexEntry(root: string, lessonPath: string): LessonIndexEntry {
-  const lesson = readMarkdownFile(root, lessonPath);
-  if (lesson.frontmatter.kind !== 'lesson') {
-    throw new Error(`INVALID_LESSON_KIND: ${lessonPath}`);
-  }
-  const title = /^#\s+(.+?)\s*$/m.exec(lesson.body)?.[1]?.trim();
-  if (!title) throw new Error(`LESSON_TITLE_REQUIRED: ${lessonPath}`);
-  const planId = typeof lesson.frontmatter.plan_id === 'string'
-    ? lesson.frontmatter.plan_id
-    : '';
-  const status = typeof lesson.frontmatter.status === 'string'
-    ? lesson.frontmatter.status
-    : '';
-  if (!['prepared', 'active', 'paused', 'closed', 'abandoned'].includes(status)) {
-    throw new Error(`INVALID_LESSON_STATUS: ${lessonPath}`);
-  }
-  return { path: lessonPath, title, status, planId };
-}
-
-function deriveLessonIndex(
+export function updatePlan(
   root: string,
   planPath: string,
-  planId: string,
-  planSource: string,
-): string {
-  const linkedPaths = [
-    ...sectionValue(planSource, 'Lesson Index').matchAll(/\[[^\]]+\]\(([^)#]+\.md)\)/g),
-  ].map((match) => posix.normalize(posix.join(posix.dirname(planPath), match[1]!)));
-  const entries: LessonIndexEntry[] = [];
-  const seen = new Set<string>();
-
-  for (const lessonPath of linkedPaths) {
-    const entry = lessonIndexEntry(root, lessonPath);
-    if (entry.planId !== planId) {
-      throw new Error(`LESSON_PLAN_MISMATCH: ${lessonPath}`);
-    }
-    if (!seen.has(entry.path)) {
-      entries.push(entry);
-      seen.add(entry.path);
-    }
-  }
-
-  const lessonsDirectory = resolveInsideRoot(root, 'lessons');
-  if (existsSync(lessonsDirectory)) {
-    const discovered = readdirSync(lessonsDirectory, { withFileTypes: true })
-      .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
-      .map((entry) => `lessons/${entry.name}`)
-      .sort();
-    for (const lessonPath of discovered) {
-      if (seen.has(lessonPath)) continue;
-      const entry = lessonIndexEntry(root, lessonPath);
-      if (entry.planId !== planId) continue;
-      entries.push(entry);
-      seen.add(entry.path);
-    }
-  }
-
-  if (entries.length === 0) return '（暂无）';
-  return entries.map((entry, index) => {
-    const target = posix.relative(posix.dirname(planPath), entry.path);
-    return `${index + 1}. [${entry.title}](${target}) — ${entry.status}。`;
-  }).join('\n');
-}
-
-export function updatePlan(root: string, planPath: string, input: PlanUpdateInput): void {
+  input: PlanUpdateInput,
+): void {
   const document = read(root, planPath);
   const status = input.decision === 'complete' ? 'completed' : 'active';
-  const plan = readMarkdownFile(root, planPath);
   if (input.decision === 'complete') {
     validateLearningReviewSources(root, planPath, input.learningReview);
   }
   const summary = input.decision === 'complete'
     ? renderLearningReview(input.learningReview)
     : input.planSummary;
-  const lessonIndex = deriveLessonIndex(root, planPath, plan.id, document.source);
-  let source = replaceSection(document.source, 'Lesson Index', lessonIndex);
-  source = replaceSection(source, 'Current Position', input.currentPosition);
-  source = replaceSection(source, 'Next Lesson Candidate', input.nextLessonCandidate);
+  let source = replaceSection(
+    document.source,
+    'Current Position',
+    input.currentPosition,
+  );
   source = replaceSection(source, 'Plan Summary', summary);
   source = replaceFrontmatterField(source, planPath, 'status', status);
-  const roadmap = read(root, 'ROADMAP.md');
-  const nextRoadmap = syncPlanGraphStatus(roadmap.source, planPath, status);
   write(document.absolute, source);
-  if (nextRoadmap !== roadmap.source) write(roadmap.absolute, nextRoadmap);
 }

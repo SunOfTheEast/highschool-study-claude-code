@@ -19,20 +19,27 @@ import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
 
 const root = domainIntegrityFixtureRoot;
 
-test('reads the derivative Roadmap and Plan lesson index', () => {
+test('reads the derivative Roadmap and hierarchical Plan/Lesson trees', () => {
   const learningSet = readLearningSet(root);
   expect(learningSet.title).toBe('导数学习 Roadmap');
   expect(learningSet.overview).toContain('把定义域、同构变形和参数分离');
   expect(learningSet.learningPrinciples).toContain('PUBLIC LEARNING PRINCIPLE');
   expect(learningSet.learningPrinciples).not.toContain('PRIVATE TEACHING NOTE');
   expect(learningSet.plans.map((plan) => plan.id)).toEqual(['domain-integrity']);
+  expect(learningSet.planTree).toEqual([
+    expect.objectContaining({
+      handle: 'plan-candidate-001',
+      nodeId: 'domain-integrity',
+      status: 'active',
+      publicPurpose: '让定义域从附加检查变成解题导航。',
+    }),
+  ]);
 
   const workspace = readPlanWorkspace(root, 'domain-integrity');
   expect(workspace.coach.sessionKey).toBe('coach:domain-integrity');
   expect(workspace.plan.planningBasis)
     .toContain('定义域遗漏已经成为稳定阻塞点');
   expect(workspace.plan.currentPosition).toContain('阶段 `1a` 已通过');
-  expect(workspace.plan.nextLessonCandidate).toContain('mst_p0032_ex22');
   expect(workspace.plan.planSummary).toContain('定义域意识');
   expect(workspace.plan.learningReview).toBeNull();
   expect(learningSet.plans[0]?.planningBasis)
@@ -42,19 +49,28 @@ test('reads the derivative Roadmap and Plan lesson index', () => {
     ['lesson-002', 'closed'],
     ['lesson-003', 'prepared'],
   ]);
+  expect(workspace.lessonTree.map(({ handle, nodeId, status }) => ({
+    handle,
+    nodeId,
+    status,
+  }))).toEqual([
+    { handle: 'lesson-candidate-001', nodeId: 'lesson-001', status: 'closed' },
+    { handle: 'lesson-candidate-002', nodeId: 'lesson-002', status: 'closed' },
+    { handle: 'lesson-candidate-003', nodeId: 'lesson-003', status: 'prepared' },
+  ]);
   expect(workspace.lessons[2]?.blocks.map((block) => block.id)).toEqual([
-    'orientation', 'assessment-01', 'repair-optional', 'assessment-02', 'reflection',
+    'block-001', 'block-002', 'block-003', 'block-004', 'block-005',
   ]);
   expect(workspace.lessons[2]?.blocks.map((block) => block.studentView))
     .toEqual(['', '', '', '', '']);
   expect(workspace.lessons[2]?.blocks.map(({ id, kind, required, dependsOn, uses }) => ({
     id, kind, required, dependsOn, uses,
   }))).toEqual([
-    { id: 'orientation', kind: 'dialogue', required: true, dependsOn: [], uses: [] },
-    { id: 'assessment-01', kind: 'problem', required: true, dependsOn: ['orientation'], uses: ['Q-DOMAIN-EX22'] },
-    { id: 'repair-optional', kind: 'problem', required: false, dependsOn: ['assessment-01'], uses: ['Q-DOMAIN-EX05'] },
-    { id: 'assessment-02', kind: 'problem', required: true, dependsOn: ['assessment-01'], uses: ['Q-DOMAIN-EX16'] },
-    { id: 'reflection', kind: 'reflection', required: true, dependsOn: ['assessment-02'], uses: [] },
+    { id: 'block-001', kind: 'dialogue', required: true, dependsOn: [], uses: [] },
+    { id: 'block-002', kind: 'problem', required: true, dependsOn: ['block-001'], uses: ['Q-DOMAIN-EX22'] },
+    { id: 'block-003', kind: 'problem', required: false, dependsOn: ['block-002'], uses: ['Q-DOMAIN-EX05'] },
+    { id: 'block-004', kind: 'problem', required: true, dependsOn: ['block-002'], uses: ['Q-DOMAIN-EX16'] },
+    { id: 'block-005', kind: 'reflection', required: true, dependsOn: ['block-004'], uses: [] },
   ]);
 });
 
@@ -122,7 +138,7 @@ test('reads a persisted Roadmap Coach Session ID', () => {
   }
 });
 
-test('rejects a linked legacy Plan instead of projecting an empty rationale', () => {
+test('rejects a linked Plan missing one canonical tree-era section', () => {
   const copy = mkdtempSync(join(tmpdir(), 'study-strict-read-'));
   try {
     cpSync(root, copy, { recursive: true });
@@ -130,7 +146,7 @@ test('rejects a linked legacy Plan instead of projecting an empty rationale', ()
     writeFileSync(
       path,
       readFileSync(path, 'utf8')
-        .replace(/\n## Planning Basis[\s\S]*?(?=\n## Lesson Index)/, ''),
+        .replace(/\n## Planning Basis[\s\S]*?(?=\n## Activation Snapshot)/, ''),
     );
     expect(() => readLearningSet(copy)).toThrow(
       'PLAN_SECTION_REQUIRED: plans/domain-integrity.md#planning-basis',

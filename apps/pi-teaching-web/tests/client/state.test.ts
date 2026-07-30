@@ -18,7 +18,6 @@ function workspaceWithLesson(status: LessonStatus): PlanWorkspaceSnapshot {
     capabilityStandard: 'standard',
     planningBasis: '当前测试 Plan 的公开安排依据。',
     currentPosition: '当前位置',
-    nextLessonCandidate: '下一步',
     planSummary: '阶段摘要',
     learningReview: null,
   };
@@ -28,9 +27,11 @@ function workspaceWithLesson(status: LessonStatus): PlanWorkspaceSnapshot {
       overview: 'overview',
       learningPrinciples: '',
       goal: 'goal',
+      planTree: [],
       plans: [plan],
     },
     plan,
+    lessonTree: [],
     coach: { sessionKey: 'coach:p1', sessionId: 'coach-session' },
     lessons: [{
       id: 'l1',

@@ -10,6 +10,7 @@ test('shows compact learning-set context around the Roadmap chat', () => {
         overview: '学习集概述',
         learningPrinciples: '研习原则',
         goal: '建立可迁移的结构判断。',
+        planTree: [],
         plans: [],
       }}
       onHome={() => {}}

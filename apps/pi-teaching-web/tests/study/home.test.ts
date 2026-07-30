@@ -101,8 +101,8 @@ test('uses Roadmap setup when no Plan exists and next-stage planning when all ar
   writeFileSync(
     roadmapPath,
     readFileSync(roadmapPath, 'utf8').replace(
-      /## Plan Graph[\s\S]*?(?=\n## Change Log)/,
-      '## Plan Graph\n\n（暂无）\n',
+      /## Plan Tree[\s\S]*?(?=\n## Change Log)/,
+      '## Plan Tree\n\n',
     ),
   );
   expect(readHomeSnapshot(empty).continueTarget).toMatchObject({
@@ -131,7 +131,7 @@ test('accepts a saved route only when it remains eligible', () => {
   expect(resolveContinuePath(
     home,
     '/plan/domain-integrity/lesson/lesson-001',
-  )).toBe(home.continueTarget.route);
-  expect(resolveContinuePath(home, '/roadmap')).toBe(home.continueTarget.route);
+  )).toBe('/plan/domain-integrity/lesson/lesson-001');
+  expect(resolveContinuePath(home, '/roadmap')).toBe('/roadmap');
   expect(resolveContinuePath(home, '/plan/missing')).toBe(home.continueTarget.route);
 });

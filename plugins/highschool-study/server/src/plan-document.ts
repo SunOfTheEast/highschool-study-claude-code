@@ -5,10 +5,11 @@ export const PLAN_REQUIRED_SECTIONS = [
   'Observable Capability Standard',
   'Test',
   'Planning Basis',
-  'Lesson Index',
+  'Activation Snapshot',
+  'Lesson Tree',
   'Current Position',
-  'Next Lesson Candidate',
   'Plan Summary',
+  'Handoff',
 ] as const;
 
 type Heading = {
@@ -65,7 +66,9 @@ export function validatePlanDocument(
   if (frontmatter.kind !== 'plan') {
     throw new StudyError('INVALID_PLAN_KIND', path);
   }
-  if (!['ready', 'active', 'completed'].includes(String(frontmatter.status ?? ''))) {
+  if (!['prepared', 'active', 'paused', 'completed', 'abandoned'].includes(
+    String(frontmatter.status ?? ''),
+  )) {
     throw new StudyError('INVALID_PLAN_STATUS', path);
   }
   if (

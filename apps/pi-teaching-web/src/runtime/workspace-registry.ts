@@ -277,7 +277,7 @@ export class WorkspaceRegistry {
       this.sessions.delete(`tutor:${lessonId}`);
     }
     await coach.prompt(
-      `学生要求重新备课。保留 ${lesson.path}，使用新的 Lesson ID 准备替代课程，并追加到 Plan Lesson Index。`,
+      `学生要求重新备课。保留 ${lesson.path}，由当前 Plan 修订或新增一个 Lesson candidate 后再物化替代课程。`,
     );
   }
 

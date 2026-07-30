@@ -26,6 +26,7 @@ const learningSet = {
   overview: 'Overview',
   learningPrinciples: '',
   goal: 'Goal',
+  planTree: [],
   plans: [],
 };
 const workspace = {
@@ -38,6 +39,7 @@ const workspace = {
     goal: 'Goal',
     capabilityStandard: 'Can do',
   },
+  lessonTree: [],
   coach: { sessionKey: 'coach:p1', sessionId: null },
   lessons: [],
 } as const;
@@ -694,7 +696,6 @@ test('publishes a fresh learning-set snapshot after a Roadmap Coach turn', async
       capabilityStandard: 'Can do',
       planningBasis: 'Student confirmed',
       currentPosition: 'Current',
-      nextLessonCandidate: 'Next',
       planSummary: 'Summary',
       learningReview: null,
     }],

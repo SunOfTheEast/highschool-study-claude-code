@@ -1,42 +1,105 @@
 ---
 id: lesson-001
 kind: lesson
-plan_id: domain-integrity
 status: closed
+parent_id: domain-integrity
+parent_path: plans/domain-integrity.md
+tutor_session: session-lesson-001
 ---
 # Lesson 001：冷启动诊断
 
-## Block step-01
+> 找到定义域遗漏的真实起点。
 
-学生主动提出想用一道导数题强化定义域意识。原 StudyForge run 没有绑定 Plan；迁移时将其登记为 `domain-integrity` 的诊断 Lesson，不改变原始记录。
+## Activation Snapshot
 
-来源：[公开去标识化课堂说明](../materials/demo-notes.md#lesson-001)。
+- Parent: plan:domain-integrity
+- Activated at: 2026-06-09T06:20:00.000Z
 
-## Block step-02
+### Selected Context
 
-练习 `mst_p0019_ex11`：学生正确识别同构函数 `g(u)=e^u/u`，第一次选择 C；经追问推导过程后发现遗漏 `1+ln(2x)>0`，自行改为 D。
+- card:cards/derivative/mst_p0019_ex11.card.yaml
 
-## Block step-03
+### Content Boundary
 
-学生总结：“定义域不是附加条件，是解题的一部分。”后续计划据此转向定义域完整性的连续核验。
+- 首次尝试前不提示定义域。
+
+### Adaptation Brief
+
+- Working judgment: 需要区分定义域遗漏与一般计算失误。
+- Sources:
+  - card:cards/derivative/mst_p0019_ex11.card.yaml
+- Design consequence: 使用一题冷启动诊断观察首次作答。
+- Revise if: 学生能首次完整写出并使用全部合法域。
+
+## Block block-001（必做）
+
+### Node State
+
+- Kind: dialogue
+- Required: true
+- Status: completed
+- Depends on:
+- Uses:
+
+### Student View
+
+先说明这次想强化的能力。
+
+### Teacher Control
+
+只确认目标，不提示方法。
+
+## Block block-002（必做）
+
+### Node State
+
+- Kind: problem
+- Required: true
+- Status: completed
+- Depends on: block-001
+- Uses: Q-DOMAIN-EX11
+
+### Student View
+
+独立完成题卡。
+
+### Teacher Control
+
+记录首次作答中的定义域使用情况。
+
+## Block block-003（必做）
+
+### Node State
+
+- Kind: reflection
+- Required: true
+- Status: completed
+- Depends on: block-002
+- Uses:
+
+### Student View
+
+总结定义域在哪一步改变了结论。
+
+### Teacher Control
+
+只总结已产生的证据。
+
+## Lesson Summary
+
+同构识别和切线放缩较流畅；主要证据是定义域遗漏直接造成左端点错误，但学生能在追问后自查纠正。
 
 ## Aliases
 
 - Q-DOMAIN-EX11: ../cards/derivative/mst_p0019_ex11.card.yaml
 
-## Trace event-001
+## Handoff
 
-Recorded at: 2026-06-09T06:40:03.478Z
-Lesson ID: lesson-001
-Plan ID: domain-integrity
-Block: [step-02](#block-step-02)
-Card: cards/derivative/mst_p0019_ex11.card.yaml
-Card step: step_4
-Material: materials/demo-notes.md#lesson-001
-Assessment: partially_correct
-Support: tutor
-Note: "同构识别与切线不等式使用正确；初答遗漏 ln 真数约束，经追问后自行纠正答案边界。"
+- ID: lesson-001/handoff
+- From: lesson:lesson-001
+- To: plan:domain-integrity
+- Sealed at: 2026-06-09T06:45:00.000Z
 
-## Lesson Summary
+### Source Index
 
-同构识别和切线放缩在本题较流畅；主要证据是定义域遗漏直接造成左端点错误，但学生能在追问后自查纠正，并形成“定义域参与解题”的明确认识。该结论来自一次诊断，不升级为长期画像。
+- trace:trace-fixture-001

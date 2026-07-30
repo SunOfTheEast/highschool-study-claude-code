@@ -1,6 +1,14 @@
 import type { MemoryReviewSnapshot } from '../memory-review/contracts';
 
 export type LessonStatus = 'prepared' | 'active' | 'paused' | 'closed' | 'abandoned';
+export type NodeLifecycleStatus =
+  | 'candidate'
+  | 'prepared'
+  | 'active'
+  | 'paused'
+  | 'closed'
+  | 'completed'
+  | 'abandoned';
 export type BlockStatus = 'pending' | 'active' | 'completed' | 'skipped';
 export type ActivityKind = 'dialogue' | 'problem' | 'material' | 'reflection';
 export type SessionKey = `coach:${string}` | `tutor:${string}`;
@@ -51,9 +59,20 @@ export type PlanSummary = {
   capabilityStandard: string;
   planningBasis: string;
   currentPosition: string;
-  nextLessonCandidate: string;
   planSummary: string;
   learningReview: LearningReview | null;
+};
+
+export type PublicTreeEntry = {
+  handle: string;
+  kind: 'plan' | 'lesson';
+  nodeId: string | null;
+  path: string | null;
+  title: string | null;
+  publicPurpose: string;
+  after: string | null;
+  dependsOn: string[];
+  status: NodeLifecycleStatus;
 };
 
 export type LearningSetSnapshot = {
@@ -61,6 +80,7 @@ export type LearningSetSnapshot = {
   overview: string;
   learningPrinciples: string;
   goal: string;
+  planTree: PublicTreeEntry[];
   plans: PlanSummary[];
 };
 
@@ -75,6 +95,7 @@ export type RoadmapWorkspaceSnapshot = {
 export type PlanWorkspaceSnapshot = {
   learningSet: LearningSetSnapshot;
   plan: PlanSummary;
+  lessonTree: PublicTreeEntry[];
   coach: { sessionKey: SessionKey; sessionId: string | null };
   lessons: LessonNode[];
 };

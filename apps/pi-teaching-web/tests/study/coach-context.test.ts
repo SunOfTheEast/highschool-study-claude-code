@@ -23,8 +23,8 @@ test('builds student-safe Coach context without deleting raw Plan facts', () => 
       path,
       readFileSync(path, 'utf8')
         .replace(
-          '- [mst_p0032_ex22]',
-          '- LEAK_NEXT_CANDIDATE [mst_p0032_ex22]',
+          '用未见结构检查定义域连续性和跨结构迁移。',
+          'LEAK_NEXT_CANDIDATE 用未见结构检查定义域连续性和跨结构迁移。',
         )
         .replace(
           '两节课显示定义域意识',
@@ -62,8 +62,8 @@ test('builds student-safe Coach context without deleting raw Plan facts', () => 
     expect(context.priorLessons.every((lesson) => lesson.summary.length > 0)).toBe(true);
 
     const raw = readPlanWorkspace(root, 'domain-integrity').plan;
-    expect(raw.nextLessonCandidate).toContain('LEAK_NEXT_CANDIDATE');
     expect(raw.planSummary).toContain('LEAK_ACTIVE_SUMMARY');
+    expect(readFileSync(path, 'utf8')).toContain('LEAK_NEXT_CANDIDATE');
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

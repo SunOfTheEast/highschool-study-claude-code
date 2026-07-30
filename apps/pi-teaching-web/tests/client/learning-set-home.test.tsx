@@ -16,7 +16,6 @@ const plan: PlanSummary = {
   capabilityStandard: '标准',
   planningBasis: '依据',
   currentPosition: '当前位置',
-  nextLessonCandidate: '下一步',
   planSummary: '摘要',
   learningReview: null,
 };
@@ -30,6 +29,7 @@ function learningSet(
     overview: '学习集概述',
     learningPrinciples,
     goal: '学习目标',
+    planTree: [],
     plans,
   };
 }

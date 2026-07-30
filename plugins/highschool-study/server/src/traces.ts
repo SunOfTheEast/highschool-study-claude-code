@@ -71,8 +71,9 @@ const assessments = new Set<TraceAssessment>([
 const supports = new Set<TraceSupport>(['none', 'tutor', 'external']);
 const blockHeading =
   /^## Block ([a-z0-9]+(?:-[a-z0-9]+)*)(?:（[^）]+）)?[ \t]*$/;
-const traceIdPattern =
+const generatedTraceIdPattern =
   /^trace-[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const persistedTraceIdPattern = /^trace-[A-Za-z0-9][A-Za-z0-9._-]*$/;
 
 function traceError(message: string): never {
   throw new Error(`INVALID_TRACE: ${message}`);
@@ -206,7 +207,7 @@ function readTraceFile(root: string, tracePath: string): TraceRecord {
   const traceId = requiredString(frontmatter, 'id');
   const normalizedTracePath = canonicalPath(root, tracePath);
   if (
-    !traceIdPattern.test(traceId)
+    !persistedTraceIdPattern.test(traceId)
     || basename(normalizedTracePath, '.md') !== traceId
     || normalizedTracePath !== `traces/${traceId}.md`
   ) {
@@ -519,7 +520,9 @@ export function appendTrace(
   );
   const methodResolution = resolveTraceMethods(root, input.methods);
   const traceId = `trace-${idFactory()}`;
-  if (!traceIdPattern.test(traceId)) traceError('Generated Trace ID is invalid');
+  if (!generatedTraceIdPattern.test(traceId)) {
+    traceError('Generated Trace ID is invalid');
+  }
   const tracePath = `traces/${traceId}.md`;
   const record: TraceRecord = {
     traceId,

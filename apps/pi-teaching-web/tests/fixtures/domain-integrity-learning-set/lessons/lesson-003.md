@@ -1,14 +1,39 @@
 ---
 id: lesson-003
 kind: lesson
-plan_id: domain-integrity
 status: prepared
+parent_id: domain-integrity
+parent_path: plans/domain-integrity.md
+tutor_session: null
 ---
 # Lesson 003：阶段 1b — 定义域连续性与跨结构迁移核验
 
 ## Plan Link
 
 [定义域完整性的系统加固](../plans/domain-integrity.md) — 阶段 `1b`：用两道未见结构核验定义域能否连续独立无遗漏，并观察它是否真正参与边界判断。
+
+## Activation Snapshot
+
+- Parent: plan:domain-integrity
+- Activated at: pending
+
+### Selected Context
+
+- trace:trace-fixture-002
+- card:cards/derivative/mst_p0032_ex22.card.yaml
+- card:cards/derivative/mst_p0030_ex16.card.yaml
+
+### Content Boundary
+
+- 首次尝试前不公开候选方法名、变形或答案。
+
+### Adaptation Brief
+
+- Working judgment: 定义域主动性已有一次正证据，但连续性和跨结构迁移尚未确认。
+- Sources:
+  - trace:trace-fixture-002
+- Design consequence: 先做无提示连续性核验，再更换题型外壳。
+- Revise if: 第一题已经显示定义域再次遗漏或学生主动要求修复。
 
 ## Capability Target
 
@@ -31,14 +56,14 @@ status: prepared
 
 ## Dependencies and control
 
-- `orientation` precedes both assessment Blocks.
-- `assessment-01` precedes `assessment-02`; `repair-optional` may be inserted between them.
-- `repair-optional` is skipped when the first response is independently complete.
-- The student may pause or close at any time. `reflection` may move earlier only after at least one evidence-bearing attempt.
+- `block-001` precedes both assessment Blocks.
+- `block-002` precedes `block-004`; `block-003` may be inserted between them.
+- `block-003` is skipped when the first response is independently complete.
+- The student may pause or close at any time. `block-005` may move earlier only after at least one evidence-bearing attempt.
 
 ---
 
-## Block orientation（必做）
+## Block block-001（必做）
 
 ### Node State
 
@@ -61,14 +86,14 @@ status: prepared
 
 ---
 
-## Block assessment-01（必做）
+## Block block-002（必做）
 
 ### Node State
 
 - Kind: problem
 - Required: true
 - Status: pending
-- Depends on: orientation
+- Depends on: block-001
 - Uses: Q-DOMAIN-EX22
 
 ### Student View
@@ -85,14 +110,14 @@ status: prepared
 
 ---
 
-## Block repair-optional（可选）
+## Block block-003（可选）
 
 ### Node State
 
 - Kind: problem
 - Required: false
 - Status: pending
-- Depends on: assessment-01
+- Depends on: block-002
 - Uses: Q-DOMAIN-EX05
 
 ### Student View
@@ -109,14 +134,14 @@ status: prepared
 
 ---
 
-## Block assessment-02（必做）
+## Block block-004（必做）
 
 ### Node State
 
 - Kind: problem
 - Required: true
 - Status: pending
-- Depends on: assessment-01
+- Depends on: block-002
 - Uses: Q-DOMAIN-EX16
 
 ### Student View
@@ -133,14 +158,14 @@ status: prepared
 
 ---
 
-## Block reflection（必做）
+## Block block-005（必做）
 
 ### Node State
 
 - Kind: reflection
 - Required: true
 - Status: pending
-- Depends on: assessment-02
+- Depends on: block-004
 - Uses:
 
 ### Student View
@@ -164,6 +189,6 @@ status: prepared
 - Q-DOMAIN-EX16: ../cards/derivative/mst_p0030_ex16.card.yaml
 - Q-DOMAIN-EX05: ../cards/derivative/mst_p0017_ex05.card.yaml
 
-## Traces
+## Handoff
 
-（课堂中通过 trace_append 追加）
+（尚未封存）

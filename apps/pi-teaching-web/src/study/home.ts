@@ -69,7 +69,10 @@ function homePlan(plan: PlanWorkspaceSnapshot['plan']): HomePlanSummary {
 export function readHomeSnapshot(root: string): HomeSnapshot {
   const rawLearningSet = readLearningSet(root);
   const workspaces = rawLearningSet.plans.map((plan) => readPlanWorkspace(root, plan.id));
-  const unfinished = workspaces.filter((workspace) => workspace.plan.status !== 'completed');
+  const unfinished = workspaces.filter((workspace) => (
+    workspace.plan.status !== 'completed'
+    && workspace.plan.status !== 'abandoned'
+  ));
   const currentWorkspace = unfinished.find((workspace) => prioritizedLesson(workspace))
     ?? unfinished[0]
     ?? null;
@@ -104,14 +107,14 @@ export function readHomeSnapshot(root: string): HomeSnapshot {
     };
   }
 
-  const eligibleContinueRoutes = unfinished.flatMap((workspace) => [
-    coachRoute(workspace.plan.id),
-    ...workspace.lessons
-      .filter((candidate) => lessonPriority.includes(
-        candidate.status as typeof lessonPriority[number],
-      ))
-      .map((candidate) => lessonRoute(workspace.plan.id, candidate.id)),
-  ]);
+  const eligibleContinueRoutes = [
+    '/roadmap',
+    ...workspaces.flatMap((workspace) => [
+      coachRoute(workspace.plan.id),
+      ...workspace.lessons
+        .map((candidate) => lessonRoute(workspace.plan.id, candidate.id)),
+    ]),
+  ];
   const progressLessons = currentWorkspace?.lessons
     .filter((candidate) => candidate.status !== 'abandoned') ?? [];
   const traces = readActiveTraces(root)
@@ -147,6 +150,7 @@ export function readHomeSnapshot(root: string): HomeSnapshot {
       overview: rawLearningSet.overview,
       learningPrinciples: rawLearningSet.learningPrinciples,
       goal: rawLearningSet.goal,
+      planTree: rawLearningSet.planTree,
       plans: rawLearningSet.plans.map(homePlan),
     },
     currentPlan,

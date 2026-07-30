@@ -40,7 +40,7 @@ export function createPlanUpdateTool(root: string, ownerPath: string) {
   return defineTool({
     name: 'plan_update',
     label: '写回学习计划',
-    description: 'Persist the Coach\'s final audit of the current Session-owned Plan. Call after reviewing active evidence and obtaining any student choice required for completion or replanning. The runtime rebuilds Lesson Index and Roadmap status from real files; reread the Plan before reporting the result.',
+    description: 'Persist the Coach\'s final audit of the current Session-owned Plan. Call after reviewing active evidence and obtaining any student choice required for completion or replanning. Child status is derived from the canonical Lesson Tree; reread the Plan before reporting the result.',
     parameters: Type.Object({
       decision: Type.Union([
         Type.Literal('active'),
