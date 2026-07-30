@@ -18,6 +18,20 @@ export {
   type MethodSignal,
 } from './method-signals';
 export {
+  parseHandoff,
+  parseSourceHandle,
+  renderHandoff,
+  renderSourceOnlyHandoff,
+  type Handoff,
+  type HandoffClaim,
+  type HandoffClaimDraft,
+  type HandoffDraft,
+  type HandoffIdentity,
+  type OpenQuestion,
+  type OpenQuestionDraft,
+  type SourceHandle,
+} from './handoffs';
+export {
   listCanonicalMethodNames,
   resolveTraceMethods,
   type MethodResolution,
