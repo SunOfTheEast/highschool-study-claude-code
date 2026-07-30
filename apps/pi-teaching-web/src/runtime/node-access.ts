@@ -149,6 +149,10 @@ export class NodeAccessPolicy {
     }
   }
 
+  wasGranted(source: string): boolean {
+    return this.granted.has(source);
+  }
+
   private isPublicPath(path: string): boolean {
     return path === 'LEARNING_GUIDE.md'
       || path.startsWith('cards/')

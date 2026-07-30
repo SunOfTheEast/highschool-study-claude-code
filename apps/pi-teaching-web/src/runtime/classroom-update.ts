@@ -6,37 +6,85 @@ import {
   setFrontmatterField,
 } from '../study/write-workspace';
 import { lessonBlockIdSchema } from './lesson-tool-contracts';
+import type { NodeAccessPolicy } from './node-access';
 
-export function createClassroomUpdateTool(root: string, ownerPath: string) {
+export type ClassroomUpdateOptions = {
+  accessPolicy?: NodeAccessPolicy;
+};
+
+export function createClassroomUpdateTool(
+  root: string,
+  ownerPath: string,
+  options: ClassroomUpdateOptions = {},
+) {
   const blockId = lessonBlockIdSchema(root, ownerPath);
+  const commonBlockFields = {
+    required: Type.Boolean({
+      description: 'Whether the inserted Block is required for this Lesson.',
+    }),
+    dependsOn: Type.Array(blockId, {
+      description: 'Existing Block IDs that must resolve before activation.',
+    }),
+    studentView: Type.String({
+      minLength: 1,
+      description: 'Student-visible activity instruction without private control notes.',
+    }),
+    teacherControl: Type.String({
+      minLength: 1,
+      description: 'Private Tutor control for this activity.',
+    }),
+  };
+  const dynamicBlock = Type.Union([
+    Type.Object({
+      kind: Type.Literal('dialogue'),
+      ...commonBlockFields,
+    }, { additionalProperties: false }),
+    Type.Object({
+      kind: Type.Literal('material'),
+      ...commonBlockFields,
+    }, { additionalProperties: false }),
+    Type.Object({
+      kind: Type.Literal('reflection'),
+      ...commonBlockFields,
+    }, { additionalProperties: false }),
+    Type.Object({
+      kind: Type.Literal('problem'),
+      ...commonBlockFields,
+      cardSource: Type.String({
+        pattern: '^card:cards/.+\\.ya?ml$',
+        description: 'Exact card:<path> returned by card_search in this Session.',
+      }),
+    }, { additionalProperties: false }),
+  ]);
   const parameters = Type.Object({
     action: Type.Union([
       Type.Literal('activate'),
       Type.Literal('complete'),
       Type.Literal('skip'),
       Type.Literal('route'),
+      Type.Literal('insert'),
       Type.Literal('pause'),
     ], {
-      description: 'activate opens one Block; complete or skip resolves the active Block; route records an adaptive decision and its deterministic Block state; pause marks the Lesson paused.',
+      description: 'Traverse one existing Block, adapt pending order, insert one new pending Block, or pause the Lesson.',
     }),
     blockId: Type.Optional(blockId),
     routeAction: Type.Optional(Type.Union([
-      Type.Literal('insert'),
       Type.Literal('skip'),
       Type.Literal('move'),
       Type.Literal('repeat'),
     ], {
-      description: 'Adaptive route action; present only when action is route.',
+      description: 'Adaptive action for one existing Block; present only for route.',
     })),
     before: Type.Optional(blockId),
-    after: Type.Optional(blockId),
+    after: Type.Optional(Type.Union([blockId, Type.Null()])),
+    block: Type.Optional(dynamicBlock),
     reason: Type.Optional(Type.String({
       minLength: 1,
-      description: 'Student-facing instructional reason for a route change.',
+      description: 'Student-facing instructional reason for the adaptation.',
     })),
     source: Type.Optional(Type.String({
       minLength: 1,
-      description: 'Evidence or student request that prompted the route change.',
+      description: 'Evidence or student request that prompted the adaptation.',
     })),
   }, {
     additionalProperties: false,
@@ -49,6 +97,7 @@ export function createClassroomUpdateTool(root: string, ownerPath: string) {
             { required: ['routeAction'] },
             { required: ['before'] },
             { required: ['after'] },
+            { required: ['block'] },
             { required: ['reason'] },
             { required: ['source'] },
           ],
@@ -62,6 +111,7 @@ export function createClassroomUpdateTool(root: string, ownerPath: string) {
             { required: ['routeAction'] },
             { required: ['before'] },
             { required: ['after'] },
+            { required: ['block'] },
             { required: ['reason'] },
             { required: ['source'] },
           ],
@@ -70,15 +120,47 @@ export function createClassroomUpdateTool(root: string, ownerPath: string) {
       {
         properties: { action: { const: 'route' } },
         required: ['blockId', 'routeAction', 'reason', 'source'],
-        not: { required: ['before', 'after'] },
+        not: {
+          anyOf: [
+            { required: ['block'] },
+            { required: ['after', 'before'] },
+          ],
+        },
+      },
+      {
+        properties: { action: { const: 'insert' } },
+        required: ['after', 'block', 'reason', 'source'],
+        not: {
+          anyOf: [
+            { required: ['blockId'] },
+            { required: ['routeAction'] },
+            { required: ['before'] },
+          ],
+        },
       },
     ],
+  });
+  const response = (
+    action: string,
+    payload: object,
+    factId: string | null = null,
+  ) => ({
+    content: [{
+      type: 'text' as const,
+      text: JSON.stringify(payload),
+    }],
+    details: {
+      kind: 'classroom-update',
+      lessonPath: ownerPath,
+      action,
+      factId,
+    },
   });
 
   return defineTool({
     name: 'classroom_update',
     label: '推进课堂节点',
-    description: 'Persist one classroom navigation change in the current Tutor Session-owned Lesson. Use ordinary Block actions for traversal, route for an explicit adaptive route decision, and pause for a student-requested pause. The runtime owns the Lesson path and returns the applied action.',
+    description: 'Persist one classroom navigation change in the current Tutor Session-owned Lesson. Existing active or completed Block content is immutable. Pending Blocks may be skipped, moved or repeated, and one searched real card may become a new pending problem Block. The runtime owns the Lesson path, Block ID and card alias.',
     parameters,
     execute: async (_id, input) => {
       if (input.action === 'pause') {
@@ -87,7 +169,53 @@ export function createClassroomUpdateTool(root: string, ownerPath: string) {
           throw new Error(`CLASSROOM_LESSON_NOT_ACTIVE: ${lesson.frontmatter.status}`);
         }
         setFrontmatterField(root, ownerPath, 'status', 'paused');
-      } else if (input.action === 'route') {
+        return response(input.action, { ok: true, action: input.action });
+      }
+
+      if (input.action === 'insert') {
+        if (
+          input.after === undefined
+          || input.block === undefined
+          || !input.reason
+          || !input.source
+        ) {
+          throw new Error('INSERT_FIELDS_REQUIRED');
+        }
+        let cardPath: string | null = null;
+        const block = {
+          kind: input.block.kind,
+          required: input.block.required,
+          dependsOn: input.block.dependsOn,
+          studentView: input.block.studentView,
+          teacherControl: input.block.teacherControl,
+        };
+        if (input.block.kind === 'problem') {
+          if (!options.accessPolicy?.wasGranted(input.block.cardSource)) {
+            throw new Error(`DYNAMIC_CARD_NOT_SEARCHED: ${input.block.cardSource}`);
+          }
+          const resolved = options.accessPolicy.resolve(input.block.cardSource);
+          if (!resolved.valid || resolved.kind !== 'card' || resolved.path === null) {
+            throw new Error(`DYNAMIC_CARD_INVALID: ${input.block.cardSource}`);
+          }
+          cardPath = resolved.path;
+        }
+        const receipt = applyClassroomTransition(root, ownerPath, {
+          action: 'insert',
+          after: input.after,
+          block,
+          cardPath,
+          reason: input.reason,
+          source: input.source,
+        });
+        return response(input.action, {
+          ok: true,
+          action: input.action,
+          factId: receipt.blockId,
+          cardAlias: receipt.cardAlias,
+        }, receipt.blockId);
+      }
+
+      if (input.action === 'route') {
         if (!input.blockId || !input.routeAction || !input.reason || !input.source) {
           throw new Error('ROUTE_FIELDS_REQUIRED');
         }
@@ -98,7 +226,7 @@ export function createClassroomUpdateTool(root: string, ownerPath: string) {
           reason: input.reason,
           source: input.source,
           ...(input.before ? { before: input.before } : {}),
-          ...(input.after ? { after: input.after } : {}),
+          ...(typeof input.after === 'string' ? { after: input.after } : {}),
         });
       } else {
         if (!input.blockId) throw new Error('BLOCK_ID_REQUIRED');
@@ -107,14 +235,7 @@ export function createClassroomUpdateTool(root: string, ownerPath: string) {
           blockId: input.blockId,
         });
       }
-      return {
-        content: [{ type: 'text' as const, text: JSON.stringify({ ok: true, action: input.action }) }],
-        details: {
-          kind: 'classroom-update',
-          lessonPath: ownerPath,
-          action: input.action,
-        },
-      };
+      return response(input.action, { ok: true, action: input.action });
     },
   });
 }

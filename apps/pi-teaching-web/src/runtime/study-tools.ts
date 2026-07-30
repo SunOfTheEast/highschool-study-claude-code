@@ -1,14 +1,18 @@
 import { defineTool, type ToolDefinition } from '@earendil-works/pi-coding-agent';
 import {
-  appendTraceWithProjection,
+  appendTrace,
   listCanonicalMethodNames,
   readActiveTraces,
   readMarkdownFile,
+  rebuildPlannerAttention,
   searchCards,
   searchTraces,
   sourceResolve,
+  type TraceAppendResult,
 } from 'highschool-study-markdown/study-domain';
 import { Type } from 'typebox';
+import { readAbilityProjection, readEvidence } from '../study/ability';
+import { readPlanWorkspace } from '../study/read-workspace';
 import { readPreparedLessonBlocks } from '../study/validate-prepared-lesson';
 import { lessonBlockIdSchema } from './lesson-tool-contracts';
 import {
@@ -291,7 +295,42 @@ export function createReadOnlyStudyTools(
   ];
 }
 
-export type StudyToolsRuntimeOptions = NodeAccessPolicyOptions;
+export type TraceProjectionRefresh = {
+  abilityNodeCount: number;
+  planId: string;
+  cardTraceCount: number | null;
+  evidenceSource: string;
+};
+
+export type TraceProjectionRefresher = (
+  root: string,
+  trace: TraceAppendResult,
+) => TraceProjectionRefresh;
+
+function refreshTraceProjections(
+  root: string,
+  trace: TraceAppendResult,
+): TraceProjectionRefresh {
+  rebuildPlannerAttention(root);
+  const ability = readAbilityProjection(root);
+  const workspace = readPlanWorkspace(root, trace.planId);
+  const card = trace.cardPath === null
+    ? null
+    : searchCards(root, { query: trace.cardPath, limit: 20 }).cards
+      .find((candidate) => candidate.path === trace.cardPath) ?? null;
+  const evidence = readEvidence(root, trace.sourceRef);
+  return {
+    abilityNodeCount: ability.nodes.length,
+    planId: workspace.plan.id,
+    cardTraceCount: card?.traceHistory.length ?? null,
+    evidenceSource: evidence.source,
+  };
+}
+
+export type StudyToolsRuntimeOptions = NodeAccessPolicyOptions & {
+  accessPolicy?: NodeAccessPolicy;
+  refreshTraceProjections?: TraceProjectionRefresher;
+};
 
 export function createStudyTools(
   root: string,
@@ -304,7 +343,7 @@ export function createStudyTools(
   const methodName = Type.Enum(listCanonicalMethodNames(root), {
     description: 'Exact canonical method name from the current learning-set graph.',
   });
-  const accessPolicy = new NodeAccessPolicy(
+  const accessPolicy = options.accessPolicy ?? new NodeAccessPolicy(
     root,
     compileNodeContext(
       root,
@@ -331,9 +370,6 @@ export function createStudyTools(
           : Type.String({
             description: 'Exact current Lesson Block ID whose activity produced this evidence.',
           }),
-        materialPath: Type.Optional(Type.String({
-          description: 'Learning-set-relative source path when the evidence came from material rather than the Block\'s problem card.',
-        })),
         methodStatus: Type.Union([
           Type.Literal('unmapped'),
           Type.Literal('student_confirmed'),
@@ -406,22 +442,37 @@ export function createStudyTools(
           cardAlias,
           input.supersedes,
         );
-        const trace = appendTraceWithProjection(root, {
+        const trace = appendTrace(root, {
           lessonPath: ownerPath,
           blockId: input.blockId,
           cardAlias,
           cardStepId: null,
-          materialPath: input.materialPath ?? null,
+          materialPath: null,
           methods,
           assessment: input.assessment,
           support: input.support,
           note: input.note,
           supersedes: input.supersedes ?? null,
         }, now);
+        let projectionRefreshed = true;
+        let projectionError: string | null = null;
+        let projection: TraceProjectionRefresh | null = null;
+        try {
+          projection = (
+            options.refreshTraceProjections ?? refreshTraceProjections
+          )(root, trace);
+        } catch (error) {
+          projectionRefreshed = false;
+          projectionError = error instanceof Error ? error.message : String(error);
+        }
         return result('trace-append', {
           ok: true,
           ownerPath,
           factId: trace.traceId,
+          factPersisted: true,
+          projectionRefreshed,
+          projectionError,
+          projection,
           ...trace,
         });
       },

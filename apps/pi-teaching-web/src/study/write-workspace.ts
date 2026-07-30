@@ -4,21 +4,45 @@ import {
 } from 'node:fs';
 import {
   readMarkdownFile,
+  readLessonAliases,
   resolveInsideRoot,
+  sourceResolve,
 } from 'highschool-study-markdown/study-domain';
+import { dirname, relative } from 'node:path';
 import {
   appendRouteChangeSource,
   transitionClassroomSource,
   type ClassroomTransitionInput,
+  type DynamicBlockDraft,
 } from './classroom-transition';
+import {
+  readPreparedLessonBlocks,
+  validatePreparedLessonSource,
+} from './validate-prepared-lesson';
 
 export type RouteChangeInput = {
-  action: 'insert' | 'skip' | 'move' | 'repeat';
+  action: 'skip' | 'move' | 'repeat';
   blockId: string;
   reason: string;
   source: string;
   before?: string;
   after?: string;
+};
+
+export type ClassroomWriteInput =
+  | Exclude<ClassroomTransitionInput, { action: 'insert' }>
+  | {
+      action: 'insert';
+      after: string | null;
+      block: Omit<DynamicBlockDraft, 'uses'>;
+      cardPath: string | null;
+      reason: string;
+      source: string;
+    };
+
+export type ClassroomTransitionReceipt = {
+  blockId: string;
+  cardAlias: string | null;
 };
 
 function read(root: string, path: string): { absolute: string; source: string } {
@@ -110,16 +134,85 @@ export function appendRouteChange(
   );
 }
 
+function dynamicAlias(
+  root: string,
+  lessonPath: string,
+  source: string,
+  cardPath: string,
+): { alias: string; source: string } {
+  const canonicalCardPath = relative(
+    resolveInsideRoot(root, '.'),
+    resolveInsideRoot(root, cardPath),
+  ).replaceAll('\\', '/');
+  const aliases = readLessonAliases(source);
+  for (const [alias, target] of aliases) {
+    const resolved = sourceResolve(root, { fromPath: lessonPath, target });
+    if (resolved.valid && resolved.path === canonicalCardPath) {
+      return { alias, source };
+    }
+  }
+
+  const maximum = [...aliases.keys()]
+    .map((alias) => /^Q-DYNAMIC-(\d+)$/.exec(alias)?.[1])
+    .filter((value): value is string => value !== undefined)
+    .map(Number)
+    .reduce((current, value) => Math.max(current, value), 0);
+  const alias = `Q-DYNAMIC-${String(maximum + 1).padStart(3, '0')}`;
+  const target = relative(
+    dirname(resolveInsideRoot(root, lessonPath)),
+    resolveInsideRoot(root, canonicalCardPath),
+  ).replaceAll('\\', '/');
+  const pattern = /(^## Aliases[ \t]*$\n)([\s\S]*?)(?=^## |$(?![\s\S]))/m;
+  if (!pattern.test(source)) throw new Error('SECTION_NOT_FOUND: Aliases');
+  const updated = source.replace(
+    pattern,
+    (_match, heading: string, body: string) => (
+      `${heading}${body.trimEnd()}\n- ${alias}: ${target}\n\n`
+    ),
+  );
+  return { alias, source: updated };
+}
+
 export function applyClassroomTransition(
   root: string,
   lessonPath: string,
-  input: ClassroomTransitionInput,
-): void {
+  input: ClassroomWriteInput,
+): ClassroomTransitionReceipt {
   const document = read(root, lessonPath);
-  write(
-    document.absolute,
-    transitionClassroomSource(document.source, input),
-  );
+  if (input.action !== 'insert') {
+    const next = transitionClassroomSource(document.source, input);
+    validatePreparedLessonSource(root, lessonPath, next);
+    write(document.absolute, next);
+    return { blockId: input.blockId, cardAlias: null };
+  }
+
+  if (input.block.kind === 'problem' && input.cardPath === null) {
+    throw new Error('DYNAMIC_PROBLEM_CARD_REQUIRED');
+  }
+  if (input.block.kind !== 'problem' && input.cardPath !== null) {
+    throw new Error(`DYNAMIC_NON_PROBLEM_CARD_FORBIDDEN: ${input.block.kind}`);
+  }
+  const bound = input.cardPath === null
+    ? { alias: null, source: document.source }
+    : dynamicAlias(root, lessonPath, document.source, input.cardPath);
+  const existingIds = readPreparedLessonBlocks(bound.source)
+    .map((block) => /^block-(\d+)$/.exec(block.id)?.[1])
+    .filter((value): value is string => value !== undefined)
+    .map(Number);
+  const blockId = `block-${String(Math.max(0, ...existingIds) + 1).padStart(3, '0')}`;
+  const next = transitionClassroomSource(bound.source, {
+    action: 'insert',
+    after: input.after,
+    block: {
+      ...input.block,
+      uses: bound.alias === null ? [] : [bound.alias],
+    },
+    reason: input.reason,
+    source: input.source,
+  });
+  validatePreparedLessonSource(root, lessonPath, next);
+  write(document.absolute, next);
+  return { blockId, cardAlias: bound.alias };
 }
 
 function replaceSection(

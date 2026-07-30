@@ -140,7 +140,7 @@ test('requires resolved dependencies before activation', () => {
   expect(blockStatus(activated, 'repair')).toBe('active');
 });
 
-test('applies route skip and insert with their Block status in one string', () => {
+test('applies route skip and inserts a new pending Block in one string', () => {
   const completed = transitionClassroomSource(source, {
     action: 'complete',
     blockId: 'problem-a',
@@ -157,17 +157,85 @@ test('applies route skip and insert with their Block status in one string', () =
   expect(skipped).toContain('- Action: skip');
 
   const inserted = transitionClassroomSource(skipped, {
-    action: 'route',
-    routeAction: 'insert',
-    blockId: 'repair',
+    action: 'insert',
     after: 'problem-a',
+    block: {
+      kind: 'dialogue',
+      required: false,
+      dependsOn: ['problem-a'],
+      uses: [],
+      studentView: 'Compare the two routes.',
+      teacherControl: 'Observe the student comparison.',
+    },
     reason: '学生要求补一次迁移。',
     source: '#trace-event-002',
   });
-  expect(blockStatus(inserted, 'repair')).toBe('pending');
+  expect(blockStatus(inserted, 'block-001')).toBe('pending');
+  expect(inserted).toContain('## Block block-001（可选）');
+  expect(inserted.indexOf('## Block block-001'))
+    .toBeLessThan(inserted.indexOf('## Block repair'));
   expect(inserted).toContain('### Route change route-002');
   expect(inserted).toContain('- Action: insert');
   expect(inserted).toContain('- After: problem-a');
+});
+
+test('inserts a problem Block with exactly one runtime-bound card alias', () => {
+  const inserted = transitionClassroomSource(source, {
+    action: 'insert',
+    after: 'problem-a',
+    block: {
+      kind: 'problem',
+      required: true,
+      dependsOn: ['problem-a'],
+      uses: ['Q-C'],
+      studentView: 'Solve C.',
+      teacherControl: 'Observe C.',
+    },
+    reason: '需要一题新的迁移。',
+    source: 'trace:trace-new',
+  });
+  expect(inserted).toContain('## Block block-001（必做）');
+  expect(inserted).toContain('- Uses: Q-C');
+  expect(() => transitionClassroomSource(source, {
+    action: 'insert',
+    after: 'problem-a',
+    block: {
+      kind: 'problem',
+      required: true,
+      dependsOn: ['problem-a'],
+      uses: [],
+      studentView: 'Invalid.',
+      teacherControl: 'Invalid.',
+    },
+    reason: '非法问题块。',
+    source: 'test',
+  })).toThrow('DYNAMIC_PROBLEM_CARD_COUNT');
+});
+
+test('physically moves only a pending Block while preserving its content', () => {
+  const completed = transitionClassroomSource(source, {
+    action: 'complete',
+    blockId: 'problem-a',
+  });
+  const beforeBlock = completed.slice(
+    completed.indexOf('## Block repair'),
+    completed.indexOf('## Block problem-b'),
+  ).trim();
+  const moved = transitionClassroomSource(completed, {
+    action: 'route',
+    routeAction: 'move',
+    blockId: 'repair',
+    after: 'problem-b',
+    reason: '先做迁移题。',
+    source: 'student-request',
+  });
+  expect(moved.indexOf('## Block repair'))
+    .toBeGreaterThan(moved.indexOf('## Block problem-b'));
+  const movedBlock = moved.slice(
+    moved.indexOf('## Block repair'),
+    moved.indexOf('\n## ', moved.indexOf('## Block repair') + 1),
+  ).trim();
+  expect(movedBlock).toBe(beforeBlock);
 });
 
 test('reopens one resolved Block for repeat only when no Block is active', () => {

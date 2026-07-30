@@ -26,6 +26,8 @@ import { createClassroomUpdateTool } from './classroom-update';
 import { createCardAlternativeAppendTool } from './card-alternative-append';
 import { createLessonCloseTool } from './lesson-close';
 import { createLessonPrepareTool } from './lesson-prepare';
+import { NodeAccessPolicy } from './node-access';
+import { compileNodeContext } from './node-context';
 import { createPlanPrepareTool } from './plan-prepare';
 import { createPlanUpdateTool } from './plan-update';
 import { createRoadmapUpdateTool } from './roadmap-update';
@@ -192,12 +194,22 @@ export async function createPiSessionFactory(
       now,
     );
     const memoryReviewStore = new MemoryReviewStore(manager);
+    const accessPolicy = new NodeAccessPolicy(
+      root,
+      compileNodeContext(root, scope, {
+        sessionId: manager.getSessionId(),
+      }),
+      {
+        sessionId: manager.getSessionId(),
+        sessionEntries: () => manager.getBranch(),
+      },
+    );
     const loader = await createRoleResourceLoader(root, scope, eventBus, {
       sessionId: manager.getSessionId(),
     });
     const ownerTools: ToolDefinition[] = role === 'tutor'
       ? [
-        createClassroomUpdateTool(root, ownerPath),
+        createClassroomUpdateTool(root, ownerPath, { accessPolicy }),
         createLessonCloseTool(root, ownerPath),
         createCardAlternativeAppendTool(root, ownerPath, now),
       ]
@@ -224,6 +236,7 @@ export async function createPiSessionFactory(
         ];
     const tools: ToolDefinition[] = [
       ...createStudyTools(root, now, scope, {
+        accessPolicy,
         sessionId: manager.getSessionId(),
         sessionEntries: () => manager.getBranch(),
       }),

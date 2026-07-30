@@ -19,6 +19,8 @@ import { createCardAlternativeAppendTool } from '../../src/runtime/card-alternat
 import { createLessonCloseTool } from '../../src/runtime/lesson-close';
 import { createLessonPrepareTool } from '../../src/runtime/lesson-prepare';
 import { createPlanUpdateTool } from '../../src/runtime/plan-update';
+import { NodeAccessPolicy } from '../../src/runtime/node-access';
+import { compileNodeContext } from '../../src/runtime/node-context';
 import * as studyToolModule from '../../src/runtime/study-tools';
 import { updateParentDocument } from '../../src/runtime/tree-mutations';
 import { readEvidence } from '../../src/study/ability';
@@ -510,6 +512,140 @@ test('keeps card, Trace and source reads free of access facts', async () => {
   expect(readTraceRecords(temporaryRoot)).toEqual(before);
 });
 
+test('inserts a searched problem card as a new pending runtime-owned Block', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-dynamic-problem-block-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const lessonPath = join(temporaryRoot, 'lessons/lesson-003.md');
+  writeFileSync(
+    lessonPath,
+    readFileSync(lessonPath, 'utf8').replace('status: prepared', 'status: active'),
+  );
+  const scope = {
+    nodeKind: 'lesson' as const,
+    nodeId: 'lesson-003',
+    nodePath: 'lessons/lesson-003.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
+  };
+  const accessPolicy = new NodeAccessPolicy(
+    temporaryRoot,
+    compileNodeContext(temporaryRoot, scope),
+  );
+  const tools = createStudyTools(
+    temporaryRoot,
+    () => new Date('2026-07-30T00:00:00Z'),
+    scope,
+    { accessPolicy },
+  );
+  await tools.find((tool) => tool.name === 'card_search')!.execute(
+    'search-new-card',
+    { query: 'mst_p0019_ex11', limit: 5 },
+    undefined,
+    undefined,
+    {} as never,
+  );
+  const classroom = createClassroomUpdateTool(
+    temporaryRoot,
+    scope.nodePath,
+    { accessPolicy },
+  );
+  const result = await classroom.execute('insert-problem', {
+    action: 'insert',
+    after: 'block-002',
+    block: {
+      kind: 'problem',
+      required: false,
+      dependsOn: ['block-002'],
+      studentView: '请完成新增迁移题。',
+      teacherControl: '观察是否主动使用定义域。',
+      cardSource: 'card:cards/derivative/mst_p0019_ex11.card.yaml',
+    },
+    reason: '学生已经完成当前题，需要补一项迁移。',
+    source: 'trace:trace-fixture-002',
+  } as never, undefined, undefined, {} as never);
+  const payload = JSON.parse((result.content[0] as { text: string }).text);
+  const lesson = readFileSync(lessonPath, 'utf8');
+
+  expect(payload).toMatchObject({
+    ok: true,
+    action: 'insert',
+    factId: 'block-006',
+  });
+  expect(lesson).toContain('## Block block-006（可选）');
+  expect(lesson).toContain('- Q-DYNAMIC-001: ../cards/derivative/mst_p0019_ex11.card.yaml');
+  expect(lesson).toContain('- Uses: Q-DYNAMIC-001');
+  expect(lesson.indexOf('## Block block-006'))
+    .toBeLessThan(lesson.indexOf('## Block block-003'));
+
+  const reused = await classroom.execute('reuse-problem-card', {
+    action: 'insert',
+    after: 'block-002',
+    block: {
+      kind: 'problem',
+      required: false,
+      dependsOn: ['block-002'],
+      studentView: '请用另一种活动方式复看同一题。',
+      teacherControl: '只观察新的独立作答。',
+      cardSource: 'card:cards/derivative/mst_p0019_ex11.card.yaml',
+    },
+    reason: '同一张真实题卡用于另一个独立问题 Block。',
+    source: 'student-request',
+  } as never, undefined, undefined, {} as never);
+  expect(JSON.parse((reused.content[0] as { text: string }).text).factId)
+    .toBe('block-007');
+  const reusedLesson = readFileSync(lessonPath, 'utf8');
+  expect(reusedLesson.match(
+    /- Q-DYNAMIC-001: \.\.\/cards\/derivative\/mst_p0019_ex11\.card\.yaml/g,
+  )).toHaveLength(1);
+  expect(reusedLesson.match(/- Uses: Q-DYNAMIC-001/g)).toHaveLength(2);
+});
+
+test('refuses an unsearched problem card without changing the active Lesson', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-dynamic-unsearched-card-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const lessonPath = join(temporaryRoot, 'lessons/lesson-003.md');
+  writeFileSync(
+    lessonPath,
+    readFileSync(lessonPath, 'utf8').replace('status: prepared', 'status: active'),
+  );
+  const scope = {
+    nodeKind: 'lesson' as const,
+    nodeId: 'lesson-003',
+    nodePath: 'lessons/lesson-003.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
+  };
+  const accessPolicy = new NodeAccessPolicy(
+    temporaryRoot,
+    compileNodeContext(temporaryRoot, scope),
+  );
+  const classroom = createClassroomUpdateTool(
+    temporaryRoot,
+    scope.nodePath,
+    { accessPolicy },
+  );
+  const before = readFileSync(lessonPath, 'utf8');
+
+  await expect(classroom.execute('insert-unsearched', {
+    action: 'insert',
+    after: null,
+    block: {
+      kind: 'problem',
+      required: true,
+      dependsOn: [],
+      studentView: '不应写入。',
+      teacherControl: '不应写入。',
+      cardSource: 'card:cards/derivative/mst_p0019_ex11.card.yaml',
+    },
+    reason: '未检索。',
+    source: 'student-request',
+  } as never, undefined, undefined, {} as never))
+    .rejects.toThrow('DYNAMIC_CARD_NOT_SEARCHED');
+  expect(readFileSync(lessonPath, 'utf8')).toBe(before);
+});
+
 test('binds a Tutor Trace to its Lesson and refreshes planner attention', async () => {
   const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-tools-'));
   temporaryRoots.push(temporaryRoot);
@@ -591,6 +727,50 @@ test('binds a Tutor Trace to its Lesson and refreshes planner attention', async 
     temporaryRoot,
     appended.sourceRef,
   ).card?.path).toBe('cards/derivative/mst_p0032_ex22.card.yaml');
+});
+
+test('keeps one persisted Trace when projection refresh fails', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-tools-projection-failure-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const before = readTraceRecords(temporaryRoot).length;
+  const trace = createStudyTools(
+    temporaryRoot,
+    () => new Date('2026-07-22T00:00:00Z'),
+    {
+      nodeKind: 'lesson',
+      nodeId: 'lesson-003',
+      nodePath: 'lessons/lesson-003.md',
+      parentId: 'domain-integrity',
+      parentPath: 'plans/domain-integrity.md',
+    },
+    {
+      refreshTraceProjections: () => {
+        throw new Error('projection offline');
+      },
+    },
+  ).find((tool) => tool.name === 'trace_append')!;
+
+  const response = await trace.execute('persist-before-projection', {
+    blockId: 'block-002',
+    assessment: 'correct',
+    support: 'none',
+    note: '学生独立完成。',
+    methodStatus: 'unmapped',
+    methodRoute: '学生完成一条暂未映射的方法路线。',
+  } as never, undefined, undefined, {} as never);
+  const payload = JSON.parse((response.content[0] as { text: string }).text);
+
+  expect(payload).toMatchObject({
+    ok: true,
+    factPersisted: true,
+    projectionRefreshed: false,
+    projectionError: 'projection offline',
+  });
+  expect(readTraceRecords(temporaryRoot)).toHaveLength(before + 1);
+  expect(readTraceRecords(temporaryRoot).filter(
+    (record) => record.traceId === payload.factId,
+  )).toHaveLength(1);
 });
 
 test('rejects a second independent active Trace in the same problem Block', async () => {
@@ -927,6 +1107,34 @@ test('constrains Tutor Block arguments to the current Lesson', () => {
     action: 'pause',
     blockId: 'block-001',
   })).toBeFalse();
+  expect(Check(classroom.parameters, {
+    action: 'insert',
+    after: 'block-002',
+    block: {
+      kind: 'problem',
+      required: false,
+      dependsOn: ['block-002'],
+      studentView: '新增一题。',
+      teacherControl: '观察迁移。',
+      cardSource: 'card:cards/derivative/mst_p0019_ex11.card.yaml',
+    },
+    reason: '补一次迁移。',
+    source: 'student-request',
+  })).toBeTrue();
+  expect(Check(classroom.parameters, {
+    action: 'insert',
+    after: null,
+    block: {
+      kind: 'dialogue',
+      required: false,
+      dependsOn: [],
+      studentView: '讨论。',
+      teacherControl: '观察。',
+      cardSource: 'card:cards/derivative/mst_p0019_ex11.card.yaml',
+    },
+    reason: '补讨论。',
+    source: 'student-request',
+  })).toBeFalse();
 });
 
 test('leaves the Lesson unchanged when classroom transition validation fails', async () => {
@@ -967,6 +1175,7 @@ test('keeps runtime authority out of Tutor tool schemas', () => {
   const close = createLessonCloseTool(root, context.nodePath);
 
   expect(JSON.stringify(trace.parameters)).not.toContain('cardStepId');
+  expect(JSON.stringify(trace.parameters)).not.toContain('materialPath');
   expect(JSON.stringify(trace.parameters)).not.toContain('lessonPath');
   expect(JSON.stringify(classroom.parameters)).not.toContain('lessonPath');
   expect(Object.keys((classroom.parameters as {

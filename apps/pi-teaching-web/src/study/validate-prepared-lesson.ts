@@ -11,7 +11,12 @@ export type PreparedLessonIssue = {
     | 'LESSON_SECTION_MISSING'
     | 'LESSON_ALIAS_MISSING'
     | 'LESSON_ALIAS_INVALID'
-    | 'LESSON_PROBLEM_CARD_COUNT';
+    | 'LESSON_PROBLEM_CARD_COUNT'
+    | 'LESSON_NON_PROBLEM_CARD_COUNT'
+    | 'LESSON_BLOCK_ID_DUPLICATE'
+    | 'LESSON_BLOCK_KIND_INVALID'
+    | 'LESSON_BLOCK_DEPENDENCY_INVALID'
+    | 'LESSON_ACTIVE_BLOCK_CONFLICT';
   message: string;
 };
 
@@ -92,13 +97,49 @@ function validatePreparedLessonBody(root: string, lessonPath: string, body: stri
 
   const aliases = readLessonAliases(body);
   const blocks = readPreparedLessonBlocks(body);
+  const ids = new Set<string>();
   for (const block of blocks) {
+    if (ids.has(block.id)) {
+      issues.push({
+        code: 'LESSON_BLOCK_ID_DUPLICATE',
+        message: `Block ID 重复：${block.id}`,
+      });
+    }
+    ids.add(block.id);
+    if (!['dialogue', 'material', 'problem', 'reflection'].includes(block.kind)) {
+      issues.push({
+        code: 'LESSON_BLOCK_KIND_INVALID',
+        message: `Block ${block.id} 的 Kind 非法：${block.kind || '(missing)'}`,
+      });
+    }
     if (block.kind === 'problem' && block.uses.length !== 1) {
       issues.push({
         code: 'LESSON_PROBLEM_CARD_COUNT',
         message: `Block ${block.id} 必须且只能 Uses 恰好一张题卡，当前为 ${block.uses.length} 张`,
       });
     }
+    if (block.kind !== 'problem' && block.uses.length > 0) {
+      issues.push({
+        code: 'LESSON_NON_PROBLEM_CARD_COUNT',
+        message: `非 problem Block ${block.id} 不能绑定题卡`,
+      });
+    }
+  }
+  for (const block of blocks) {
+    const invalid = block.dependsOn.filter((id) => id === block.id || !ids.has(id));
+    if (invalid.length > 0) {
+      issues.push({
+        code: 'LESSON_BLOCK_DEPENDENCY_INVALID',
+        message: `Block ${block.id} 的依赖非法：${invalid.join(', ')}`,
+      });
+    }
+  }
+  const active = blocks.filter((block) => block.status === 'active');
+  if (active.length > 1) {
+    issues.push({
+      code: 'LESSON_ACTIVE_BLOCK_CONFLICT',
+      message: `同时存在多个 active Block：${active.map((block) => block.id).join(', ')}`,
+    });
   }
   const usedAliases = [...new Set(blocks.flatMap((block) => block.uses))];
   for (const alias of usedAliases) {

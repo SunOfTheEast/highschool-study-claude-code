@@ -8,6 +8,7 @@ import {
 import {
   appendCardAlternative,
   appendTrace,
+  readActiveTraces,
 } from 'highschool-study-markdown/study-domain';
 import { readAbilityProjection, readEvidence } from '../../src/study/ability';
 
@@ -25,8 +26,9 @@ test('requires evidence from two different cards before a method is steady', () 
   writeFileSync(
     lessonPath,
     readFileSync(lessonPath, 'utf8').replace(
-      '\n## Trace event-001',
-      '\n- Q-TRANSFER-02: ../cards/conics/freeze-variable-transfer-02.yaml\n\n## Trace event-001',
+      '- Q-FREEZE-01: ../cards/conics/freeze-variable-01.yaml',
+      '- Q-FREEZE-01: ../cards/conics/freeze-variable-01.yaml\n'
+      + '- Q-TRANSFER-02: ../cards/conics/freeze-variable-transfer-02.yaml',
     ),
   );
   appendTrace(root, {
@@ -55,7 +57,8 @@ test('requires evidence from two different cards before a method is steady', () 
 
 test('drills one ability source back to its Trace and safe card metadata', () => {
   const root = makeLearningSetWithHistory();
-  const evidence = readEvidence(root, 'lessons/lesson-001.md#trace-event-001');
+  const source = readActiveTraces(root)[0]!.sourceRef;
+  const evidence = readEvidence(root, source);
   expect(evidence.trace.lessonId).toBe('lesson-001');
   expect(evidence.card?.methods).toContainEqual({ name: '冻结变量法', role: 'primary' });
   expect(JSON.stringify(evidence)).not.toContain('rubric');
@@ -63,7 +66,7 @@ test('drills one ability source back to its Trace and safe card metadata', () =>
 
 test('projects a confirmed alternative method into the ability map', () => {
   const root = makeLearningSetWithLesson();
-  appendTrace(root, {
+  const trace = appendTrace(root, {
     lessonPath: 'lessons/lesson-001.md',
     blockId: 'step-02',
     cardAlias: 'Q-FREEZE-01',
@@ -76,7 +79,7 @@ test('projects a confirmed alternative method into the ability map', () => {
     methods: null,
   }, () => new Date('2026-07-22T01:00:00Z'));
   appendCardAlternative(root, 'lessons/lesson-001.md', {
-    sourceTraceId: 'event-001',
+    sourceTraceId: trace.traceId,
     question: '整题',
     solution: '参数化与消元的完整路线。',
     method: '参数化与消元',
@@ -107,9 +110,13 @@ test('drills a durable alternative source after its Trace is superseded', () => 
     supersedes: null,
     methods: null,
   };
-  appendTrace(root, traceInput, () => new Date('2026-07-22T01:00:00Z'));
+  const trace = appendTrace(
+    root,
+    traceInput,
+    () => new Date('2026-07-22T01:00:00Z'),
+  );
   const alternative = appendCardAlternative(root, 'lessons/lesson-001.md', {
-    sourceTraceId: 'event-001',
+    sourceTraceId: trace.traceId,
     question: '整题',
     solution: '参数化与消元的完整路线。',
     method: '参数化与消元',
@@ -118,7 +125,7 @@ test('drills a durable alternative source after its Trace is superseded', () => 
   appendTrace(root, {
     ...traceInput,
     note: 'Corrected the classroom observation.',
-    supersedes: 'event-001',
+    supersedes: trace.traceId,
   }, () => new Date('2026-07-22T01:02:00Z'));
 
   expect(readEvidence(root, alternative.sourceTrace).trace.blockId).toBe('step-02');

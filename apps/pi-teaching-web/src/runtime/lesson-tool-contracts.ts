@@ -18,10 +18,16 @@ function literalUnion(values: string[], description: string): TString {
 
 export function lessonBlockIdSchema(root: string, lessonPath: string): TString {
   const lesson = readMarkdownFile(root, lessonPath);
-  return literalUnion(
-    readPreparedLessonBlocks(lesson.body).map((block) => block.id),
-    'Exact Block ID from the current Session-owned Lesson.',
-  );
+  const ids = readPreparedLessonBlocks(lesson.body).map((block) => block.id);
+  if (ids.some((id) => !/^block-\d{3,}$/.test(id))) {
+    throw new Error(`LESSON_BLOCK_ID_INVALID: ${ids.join(',')}`);
+  }
+  return Type.String({
+    pattern: '^block-[0-9]{3,}$',
+    description: `Canonical Block ID in the current Session-owned Lesson. Current IDs: ${
+      ids.join(', ') || '(none)'
+    }. Runtime-created IDs remain valid in this same Session and are checked against the live Lesson at execution.`,
+  });
 }
 
 export function lessonPartQuestionSchema(

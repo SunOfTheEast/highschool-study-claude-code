@@ -43,8 +43,9 @@ test('binds Block IDs to the current Session-owned Lesson', async () => {
     'lessons/lesson-003.md',
   );
 
-  expect(Check(schema, 'assessment-01')).toBeTrue();
-  expect(Check(schema, 'reflection')).toBeTrue();
+  expect(Check(schema, 'block-002')).toBeTrue();
+  expect(Check(schema, 'block-005')).toBeTrue();
+  expect(Check(schema, 'block-006')).toBeTrue();
   expect(Check(schema, 'invented-block')).toBeFalse();
 });
 
