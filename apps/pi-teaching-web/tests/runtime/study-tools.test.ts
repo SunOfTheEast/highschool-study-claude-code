@@ -560,6 +560,36 @@ test('rejects a second independent active Trace in the same problem Block', asyn
     .toHaveLength(2);
 });
 
+test('rejects a supersede target when the selected Block has no active attempt', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-tools-cross-block-supersede-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const trace = createStudyTools(temporaryRoot, () => new Date('2026-07-30T00:00:00Z'), {
+    role: 'tutor',
+    ownerId: 'lesson-003',
+    ownerPath: 'lessons/lesson-003.md',
+  }).find((tool) => tool.name === 'trace_append')!;
+  const attempt = {
+    assessment: 'correct',
+    support: 'none',
+    note: '学生独立完成。',
+    methodStatus: 'unmapped',
+    methodRoute: '学生完成一条推理链。',
+  };
+
+  await trace.execute('first', {
+    ...attempt,
+    blockId: 'assessment-01',
+  } as never, undefined, undefined, {} as never);
+  await expect(trace.execute('cross-block', {
+    ...attempt,
+    blockId: 'assessment-02',
+    supersedes: 'event-001',
+  } as never, undefined, undefined, {} as never))
+    .rejects.toThrow(/TRACE_SUPERSEDES_WITHOUT_ACTIVE_ATTEMPT.*assessment-02/);
+  expect(readTraceRecords(temporaryRoot, ['lessons/lesson-003.md'])).toHaveLength(1);
+});
+
 test('allows separate problem Blocks to record independent parts from the same card', async () => {
   const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-tools-part-blocks-'));
   temporaryRoots.push(temporaryRoot);

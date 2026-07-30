@@ -252,6 +252,32 @@ export function readActiveTraces(root: string, lessonPaths?: string[]): TraceRec
   return records.filter((record) => !closed.has(`${record.lessonPath}:${record.eventId}`));
 }
 
+function validateSupersedes(
+  currentRecords: TraceRecord[],
+  activeRecords: TraceRecord[],
+  input: Pick<TraceAppendInput, 'blockId' | 'supersedes'>,
+  cardPath: string | null,
+): void {
+  if (input.supersedes === null) return;
+  const target = currentRecords.find((record) => record.eventId === input.supersedes);
+  if (!target) traceError('Superseded event does not exist in this Lesson');
+  if (!activeRecords.some((record) => record.eventId === target.eventId)) {
+    traceError(`Superseded event must be active: ${target.eventId}`);
+  }
+  if (target.blockId !== input.blockId) {
+    traceError(
+      `Superseded event must belong to the same Block: `
+      + `requested=${input.blockId}; target=${target.blockId}`,
+    );
+  }
+  if (target.cardPath !== cardPath) {
+    traceError(
+      `Superseded event must keep the same card binding: `
+      + `requested=${cardPath ?? '(none)'}; target=${target.cardPath ?? '(none)'}`,
+    );
+  }
+}
+
 export function appendTrace(
   root: string,
   input: TraceAppendInput,
@@ -303,9 +329,12 @@ export function appendTrace(
   }
 
   const currentRecords = readTraceRecords(root, [lessonPath]);
-  if (input.supersedes !== null && !currentRecords.some((record) => record.eventId === input.supersedes)) {
-    traceError('Superseded event does not exist in this Lesson');
-  }
+  validateSupersedes(
+    currentRecords,
+    readActiveTraces(root, [lessonPath]),
+    input,
+    cardPath,
+  );
 
   const methodResolution = resolveTraceMethods(root, input.methods);
 

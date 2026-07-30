@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { copyFileSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { makeLearningSetWithLesson } from '../helpers/learning-set';
 import { appendTrace, readActiveTraces, readTraceRecords } from '../../server/src/traces';
@@ -15,6 +15,48 @@ const input = {
   note: 'Selected the frozen quantity but missed the domain.',
   supersedes: null,
 };
+
+function addSecondProblemBlock(root: string): void {
+  copyFileSync(
+    join(
+      import.meta.dir,
+      '../../subject-packs/highschool-math/cards/conics/freeze-variable-transfer-02.yaml',
+    ),
+    join(root, 'cards/conics/freeze-variable-transfer-02.yaml'),
+  );
+  const lessonPath = join(root, 'lessons/lesson-001.md');
+  const source = readFileSync(lessonPath, 'utf8')
+    .replace(
+      '- Q-FREEZE-01: ../cards/conics/freeze-variable-01.yaml',
+      [
+        '- Q-FREEZE-01: ../cards/conics/freeze-variable-01.yaml',
+        '- Q-FREEZE-02: ../cards/conics/freeze-variable-transfer-02.yaml',
+      ].join('\n'),
+    )
+    .replace(
+      '## Aliases',
+      `## Block step-03
+
+### Node State
+
+- Kind: problem
+- Required: true
+- Status: pending
+- Depends on: step-02
+- Uses: Q-FREEZE-02
+
+### Student View
+
+Complete the transfer problem.
+
+### Teacher Control
+
+Observe transfer.
+
+## Aliases`,
+    );
+  writeFileSync(lessonPath, source);
+}
 
 test('stores canonical card bindings and closes supersession', () => {
   const root = makeLearningSetWithLesson();
@@ -38,6 +80,64 @@ test('stores canonical card bindings and closes supersession', () => {
     supersedes: 'event-001',
     methods: null,
   })]);
+});
+
+test('rejects superseding an active Trace from another Block', () => {
+  const root = makeLearningSetWithLesson();
+  addSecondProblemBlock(root);
+  appendTrace(root, input, () => new Date('2026-07-30T00:00:00Z'));
+
+  expect(() => appendTrace(root, {
+    ...input,
+    blockId: 'step-03',
+    cardAlias: 'Q-FREEZE-02',
+    cardStepId: null,
+    supersedes: 'event-001',
+  }, () => new Date('2026-07-30T00:05:00Z')))
+    .toThrow(/INVALID_TRACE.*same Block/);
+  expect(readTraceRecords(root)).toHaveLength(1);
+});
+
+test('rejects superseding an active Trace with another card binding', () => {
+  const root = makeLearningSetWithLesson();
+  addSecondProblemBlock(root);
+  appendTrace(root, input, () => new Date('2026-07-30T00:00:00Z'));
+
+  expect(() => appendTrace(root, {
+    ...input,
+    cardAlias: 'Q-FREEZE-02',
+    cardStepId: null,
+    supersedes: 'event-001',
+  }, () => new Date('2026-07-30T00:05:00Z')))
+    .toThrow(/INVALID_TRACE.*same card binding/);
+  expect(readTraceRecords(root)).toHaveLength(1);
+});
+
+test('rejects superseding a stale event', () => {
+  const root = makeLearningSetWithLesson();
+  appendTrace(root, input, () => new Date('2026-07-30T00:00:00Z'));
+  appendTrace(root, {
+    ...input,
+    supersedes: 'event-001',
+  }, () => new Date('2026-07-30T00:05:00Z'));
+
+  expect(() => appendTrace(root, {
+    ...input,
+    supersedes: 'event-001',
+  }, () => new Date('2026-07-30T00:10:00Z')))
+    .toThrow(/INVALID_TRACE.*active/);
+  expect(readTraceRecords(root)).toHaveLength(2);
+});
+
+test('accepts the exact active Trace from the same Block and card', () => {
+  const root = makeLearningSetWithLesson();
+  appendTrace(root, input, () => new Date('2026-07-30T00:00:00Z'));
+  expect(() => appendTrace(root, {
+    ...input,
+    assessment: 'correct',
+    supersedes: 'event-001',
+  }, () => new Date('2026-07-30T00:05:00Z'))).not.toThrow();
+  expect(readActiveTraces(root).map((record) => record.eventId)).toEqual(['event-002']);
 });
 
 test('stores canonical actual methods without changing an incorrect assessment', () => {

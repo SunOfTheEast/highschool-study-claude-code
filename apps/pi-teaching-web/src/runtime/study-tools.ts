@@ -66,12 +66,27 @@ function assertProblemAttemptBoundary(
   if (cardAlias === null) return;
   const active = readActiveTraces(root, [lessonPath])
     .filter((record) => record.blockId === blockId);
-  if (active.length === 0 || active.some((record) => record.eventId === supersedes)) return;
+  if (active.length === 0) {
+    if (supersedes !== undefined) {
+      throw new Error(
+        `TRACE_SUPERSEDES_WITHOUT_ACTIVE_ATTEMPT: block=${blockId}; `
+        + `requested=${supersedes}`,
+      );
+    }
+    return;
+  }
+  if (active.length > 1) {
+    throw new Error(
+      `TRACE_ATTEMPT_ACTIVE_CONFLICT: block=${blockId}; `
+      + `active=${active.map((record) => record.eventId).join(',')}`,
+    );
+  }
+  if (supersedes === active[0]!.eventId) return;
   throw new Error(
     `TRACE_ATTEMPT_ALREADY_ACTIVE: block=${blockId}; `
-    + `active=${active.map((record) => record.eventId).join(',')}; `
-    + '同一 problem Block 只表示一次独立作答。若是本次作答的补全或更正，'
-    + '请用 supersedes 修订当前 active Trace；若是另一题问，请返回 Coach 创建新的 problem Block',
+    + `active=${active[0]!.eventId}; `
+    + '同一 problem Block 只表示一次独立作答。补全、更正或方法确认必须 '
+    + 'supersede 当前 active Trace；另一题问需要新的 problem Block',
   );
 }
 
