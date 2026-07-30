@@ -22,10 +22,15 @@ close, honor it immediately without another menu or reflection question.
   one Lesson Handoff to the parent Plan.
 
 The Handoff contains sourced learner Claims, teaching Claims, and open
-questions only when the active evidence supports them. Every Claim cites
-canonical global Trace, Block, Card, Session, or lower Claim handles and names
-its boundary and next use. When the Lesson produced activity but no defensible
-Claim, write a source-only Handoff. Do not let reflection format block closure.
+questions only when the active evidence supports them. Keep it at current-Lesson
+scope: inherited Plan Claims and sibling-Lesson Claims may guide teaching but cannot
+be cited or restated as this Lesson's evidence; the parent Plan owns cross-Lesson
+synthesis. Every Claim cites the current Lesson's canonical global Trace, Block,
+Card, or Session handle and names its boundary and next use. Copy complete handles
+verbatim from the Node Frame or tool receipt, especially the full `sourceRef`
+returned by `trace_append`; never shorten or reconstruct an ID. When the Lesson
+produced activity but no defensible Claim, write a source-only Handoff. Do not let
+reflection format block closure.
 
 The Summary and Handoff may restate only content shown to the student or
 present in active Trace. Do not copy Teacher Control, hidden checkpoints,

@@ -63,8 +63,15 @@ Handoff draft with:
 - Teaching Claims about an intervention and the condition under which it helped;
 - unresolved questions that genuinely matter next.
 
-Use only sources available to this Lesson. If a Claim is invalid, the Runtime may seal
-a source-only Handoff; that must not block closure.
+Keep the Handoff at Lesson scope. Prior-Lesson Claims in the frozen Plan brief may
+shape this Lesson, but do not cite or restate them as this Lesson's evidence;
+cross-Lesson synthesis belongs to the parent Plan Coach. Cite only evidence created
+or directly observed in the current Lesson: its active Trace, current Session or
+message, Block, and bound Card. Copy every canonical handle verbatim from the Node
+Frame or tool receipt—especially the complete `sourceRef` returned by
+`trace_append`. Never shorten, reconstruct, or prettify an ID. If the exact source is
+not available, omit the Claim; a source-only Handoff is better than a falsely linked
+Claim and must not block closure.
 
 Do not alter Plan, Roadmap, or profiles. Never show Teacher Control, answers,
 unrevealed help, internal matrices, tool arguments, or raw results. Speak naturally

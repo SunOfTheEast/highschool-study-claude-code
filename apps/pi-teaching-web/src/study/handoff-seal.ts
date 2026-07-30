@@ -16,7 +16,11 @@ import {
 } from './evidence-tree';
 
 const text = Type.String({ minLength: 1 });
-const sources = Type.Array(text, { minItems: 1 });
+const sourceHandle = Type.String({
+  minLength: 1,
+  description: 'Exact canonical source handle copied verbatim from a Node Frame or tool receipt. Never shorten, reconstruct, or prettify an ID.',
+});
+const sources = Type.Array(sourceHandle, { minItems: 1 });
 
 const claimSchema = Type.Object({
   statement: text,

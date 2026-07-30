@@ -22,7 +22,7 @@ export function createLessonCloseTool(
   return defineTool({
     name: 'lesson_close',
     label: '结束本节课',
-    description: 'Atomically finish the current Tutor Session-owned Lesson after the student has explicitly chosen to close it. Write one student-safe close-time summary and closed status without completing, skipping, or otherwise changing any classroom Block.',
+    description: 'Atomically finish the current Tutor Session-owned Lesson after the student has explicitly chosen to close it. Write one student-safe close-time summary and closed status without completing, skipping, or otherwise changing any classroom Block. Handoff Claims are current-Lesson facts only: copy complete Trace sourceRef or current Session handles verbatim; never shorten an ID or cite inherited Plan / sibling-Lesson claim handles.',
     parameters: Type.Object({
       summary: Type.String({
         minLength: 1,
