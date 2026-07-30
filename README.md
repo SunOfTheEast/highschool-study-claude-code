@@ -1,7 +1,7 @@
 # StudyForge · Highschool Study
 
 一套 Markdown-first 的高中个性化学习系统，同时提供 Claude Code 插件和本地 Pi
-教学前端。两种入口共用同一个 `learning-set/`：Roadmap、Plan、Lesson、课堂
+教学前端。两种入口共用同一个 `learning-set/`：Roadmap、Plan、Lesson、全局课堂
 Trace 与学生确认过的长期偏好都是可以直接打开、修改和审查的文件；题卡与方法词表
 使用 YAML，方法骨架也可以保留为 Markdown。
 
@@ -31,9 +31,15 @@ Pi 把同一学习闭环组织成三个清楚的会话范围：
 - **Plan 学习顾问**：负责当前 Plan 的复盘、下一步判断和备课；
 - **Lesson 课堂导师**：只推进当前 Lesson，并把作答与方法证据写回课堂记录。
 
+Roadmap、Plan 和 Lesson 不是三个松散列表，而是一棵控制树。父节点只编排尚未
+激活的候选子节点；学生点击后，Runtime 才创建或恢复子 Session，并冻结父节点交给
+它的上下文。Plan 可以并行存在，但同一 Plan 同时只运行一节 Lesson。
+
 当前前端已经包括：
 
 - **续学优先首页**：用一个主入口回到仍可继续的 Lesson 或 Coach Session；
+- **课程学习树**：直接看到 Roadmap → Plan → Lesson 的候选、待开始、学习中和
+  已完成状态；
 - **固定当前课堂**：聊天上方只固定当前 active Block，未揭示内容继续收起；
 - **文档式课堂情境**：用连续、可折叠的小节呈现课堂脉络、方法进展、近期记录和深入查找；
 - **研习资料**：在当前 Session 权限内搜索真实题卡、方法、材料与学习记录；
@@ -42,6 +48,8 @@ Pi 把同一学习闭环组织成三个清楚的会话范围：
 - **路由恢复**：刷新、前进后退或打开 Plan/Lesson 深链时，恢复 owner 匹配的原会话；
 - **课堂回放与安全投影**：保留真实停止点，学生视图不展示工具参数、
   Teacher Control、未揭示答案或子任务内部结果。
+- **证据回溯**：从 Roadmap/Plan/Lesson 的阶段认识下钻到 Handoff、Trace、
+  Block、题卡和原 Session。
 
 可选的 quick/deep 工作流可以把跨题卡、跨 Lesson 的证据检索交给只读
 Evidence Scout；Plan、Lesson、Trace 和长期画像仍只由父 Coach/Tutor 通过原有窄
@@ -113,6 +121,7 @@ learning-set/
 ├── LEARNING_GUIDE.md
 ├── plans/
 ├── lessons/
+├── traces/
 ├── memory/
 │   ├── student-profile.md
 │   ├── teaching-profile.md
@@ -122,10 +131,15 @@ learning-set/
 └── materials/
 ```
 
-- **Roadmap** 保存长期目标和可依赖、并行或重排的多个 Plan。
-- **Plan** 是一个学习周期，保存能力标准、Lesson 索引、当前位置与带来源摘要。
-- **Lesson** 是一次实际课堂，由可组合、跳过和重排的 ActivityBlock 构成。
-- **Trace** 是作答、支持程度和学生实际方法的课堂证据；更正通过追加新事件完成。
+- **Roadmap** 保存长期目标和 `Plan Tree`；候选 Plan 没有文件或 Session。
+- **Plan** 是一个学习周期，保存能力标准、`Lesson Tree`、当前位置、阶段摘要与
+  面向 Roadmap 的 Handoff。
+- **Lesson** 是一次实际课堂，由可组合、跳过和重排的 ActivityBlock 构成，并在
+  激活时冻结本课上下文。
+- **Trace** 存在 `traces/*.md` 全局池中，是作答、支持程度和学生实际方法的课堂
+  事实；每条都反向绑定 Plan、Lesson、Block 与题卡/材料，更正只追加新文件。
+- **Handoff** 是三层节点间带来源的压缩交接，可一路回到 Trace、题卡、Block 或
+  Session，不复制整段历史对话。
 - `student-profile.md` 与 `teaching-profile.md` 只保存学生确认过的稳定偏好。
 - `planner-attention.md`、能力节点、摘要和任务轨都可重建，不是第二套学习事实。
 
@@ -133,7 +147,7 @@ learning-set/
 
 当前实现覆盖 Roadmap → Plan → Lesson 的学习治理、真实题卡与 active Trace
 双向检索、自适应课堂、防剧透 Student View、学生证据冻结、实际方法确认、真正另解、
-课堂回放和带来源的长期学情研判。
+课堂回放、节点级上下文权限、证据树和带来源的长期学情研判。
 
 它仍是一套本地学习插件与教学前端，不是教育 SaaS：不包含 SQLite、向量数据库、
 后台索引、账号与班级管理、云同步、自动 Git 提交或统一上下文数据库。Pi Session
@@ -142,6 +156,7 @@ JSONL 保存原始会话历史，但不取代 learning set 中的学习事实。
 ## 文档与开发
 
 - [完整中文说明书](docs/zh-CN/完整说明书.md)
+- [学习节点树与证据继承协议](docs/zh-CN/学习节点树与证据继承.md)
 - [Pi 教学前端说明](apps/pi-teaching-web/README.md)
 - [Claude Code 插件说明](plugins/highschool-study/README.md)
 - [导数学习集试用教程](examples/derivative-demo/README.md)

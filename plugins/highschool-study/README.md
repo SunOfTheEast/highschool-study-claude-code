@@ -4,7 +4,9 @@
 
 ## 四层职责
 
-1. **Markdown learning set**：`ROADMAP.md`、`plans/`、`lessons/` 和 `memory/` 是学习状态的事实来源；Lesson 内的 Trace 只追加，更正通过 `Supersedes` 关闭旧事件。
+1. **Markdown learning set**：`ROADMAP.md / Plan Tree`、各 Plan 的 `Lesson Tree`、
+   `lessons/`、全局 `traces/` 和已确认 `memory/` 是学习事实；Trace 只追加，
+   更正通过 `Supersedes` 关闭旧事件。
 2. **原生 Agent / Skills / Tasks**：`study-coach` 是唯一面向学生的入口；Skills 负责规划、备课、教学、反思、进度和更正；Task List 只是当前 Lesson block 的界面投影，不代表能力达标或完成。
 3. **四工具 MCP**：只负责严格、可验证的数据边界——搜索真实题卡、搜索 active Trace、追加 Trace、解析来源。它不预编译整套学习上下文。
 4. **可选 Evidence Scout / Dynamic Workflow**：直接证据不足时，一个只读 Scout 可以隔离一项大范围检索；只有多个问题彼此独立、且答案可能改变下一步教学动作时才并行。分支原始 JSON 留在当前会话；只有被采用且带来源的结论可以写回 Lesson。
@@ -33,7 +35,9 @@ export STUDY_LEARNING_SET=/path/to/project/learning-set
 
 - `card_search`：按真实题卡路径、内容和 metadata 做确定性词法搜索；每个 CardHit 都携带该卡完整的 active `traceHistory`。
 - `trace_search`：过滤 active Trace，并在 `cardsByPath` 中反向解析、去重实际引用的题卡；cardless Trace 仍可按文本命中。
-- `trace_append`：验证 Lesson、精确 block、Lesson-local alias、题卡、可选 card step 和同 Lesson supersession 后，只追加一个 Trace event。
+- `trace_append`：验证 Lesson、精确 Block、Lesson-local alias、题卡、可选 card
+  step 和同一作答的 supersession 后，在 `traces/*.md` 追加一份绑定
+  Plan/Lesson/Block 的 Trace 文件。
 - `source_resolve`：解析 learning-set 内的 Markdown heading 或 YAML card step，并拒绝越界、缺失文件和缺失 fragment。
 
 不存在 `study_context_get`。召回由原生文件读取与这四个窄工具共同完成。
@@ -83,9 +87,9 @@ Planner 先确定热身、核心、变式、迁移、补救或挑战等题目角
 
 `recall-study-memory` 按以下顺序工作：
 
-1. 用 `Glob` / `Grep` / `Read` 定位 Roadmap、目标 Plan 和当前或下一 Lesson；
-2. 按索引读取同一 Plan 中较早的 closed Lesson Summaries；
-3. 只读取与当前依赖、方法或决策相关的 earlier Plan Summaries；
+1. 读取 `ROADMAP.md / Plan Tree`、目标 Plan 的 `Lesson Tree` 与当前节点；
+2. 先读当前父节点已经封存的子 Handoff 与 Claim；
+3. 只有某条 Claim 会改变决定时，才沿来源回到 earlier Lesson/Plan、Trace 或 Session；
 4. 备课和教学都完整读取 `student-profile.md` 与 `teaching-profile.md`；
 5. 仅备课读取可重建的 `planner-attention.md`；
 6. 题卡候选使用 `card_search`，跨题卡或其他证据问题使用 `trace_search`；
@@ -109,42 +113,41 @@ Planner 先确定热身、核心、变式、迁移、补救或挑战等题目角
 
 ## 长期学情研判
 
-当累计证据可能改变当前方向、没有 active Plan，或学生询问下一阶段时，
-`study` 把决定路由给 `plan-next-cycle`。Coach 先用前序 Plan Summary
-重建独立性、提示依赖、迁移、保持和既往教学反应；只有某条事实会改变
-决定时，才沿来源打开 Lesson、active Trace 或题卡。信息足够时直接完成证据
-重建而不委托检索，但仍向学生询问当前理解和意图；历史广或冲突时才把一到三个
-真正独立的问题交给只读 `lesson-designer`，最终判断和写入仍归 Coach。
+当累计证据可能改变当前方向、没有合适的 active Plan，或学生询问下一阶段时，
+`study` 把决定路由给 `plan-next-cycle`。Coach 先读 Roadmap 下已经完成的 Plan
+Handoff；只有某条 Claim 会改变决定时，才继续下钻 Lesson Handoff、active Trace、
+Session 或题卡。信息足够时不委托检索，但仍向学生询问此刻的理解和意图；历史广
+或冲突时才把真正独立的问题交给只读 `lesson-designer`，最终判断仍归 Coach。
 
-学生确认前只讨论建议。新学习周期确认后，Coach 写入并登记包含
-`Planning Basis` 的 Plan；如果只是调整当前 Plan，则保留原始
-Planning Basis，在 Current Position、Next Lesson Candidate 和 Plan Summary
-记录修订。Plan 结束时，Plan Summary 再用 active evidence 判断初始假设
-得到支持、被推翻还是仍未验证，不能凭模板宣称某种干预有效。
+学生确认前只讨论建议。Coach 先在 Roadmap 中增加 Plan Candidate；Candidate 只有
+本地 handle、公开目的、依赖、使用条件、来源和私有备注，没有 Plan 文件或 Session。
+学生确认后才物化完整 Plan。Plan Coach 同理先编排 Lesson Candidate，再只准备近期
+Lesson。父节点只修改尚未物化的候选；已经物化的节点作为历史保留。
 
-来源冲突时按 `active Trace → 带来源的 Lesson/Plan Summary → Planner Attention`
-判断。active Trace 决定作答结果、支持程度、实际方法和记录时间；摘要是
-可下钻的检索索引，Planner Attention 是可重建的备课提示。手工维护或明确
-标为 prototype 的 HEATMAP 不属于当前学情证据。
+Plan 结束时必须同时封存面向 Roadmap 的 Handoff。阶段结论不能只靠漂亮摘要：
+Claim 必须引用本 Plan 的 active Trace 或子 Lesson Handoff Claim。来源冲突时以
+active Trace 为作答事实，Handoff Claim 作为可下钻的压缩索引，
+Planner Attention 只作为可重建提醒。
 
-每份 Plan 都使用当前八小节契约：`Goal`、`Observable Capability Standard`、
-`Test`、`Planning Basis`、`Lesson Index`、`Current Position`、
-`Next Lesson Candidate` 和 `Plan Summary` 必须各出现一次且内容非空。共享
-读取器会在 Plan 被解析时拒绝旧版或不完整 Plan。系统不自动迁移；使用新版
-前应保留原内容和来源，手工补全缺失小节。
+每份 Plan 至少包含 `Goal`、`Observable Capability Standard`、`Test`、
+`Planning Basis`、`Activation Snapshot`、`Lesson Tree`、`Current Position`、
+`Plan Summary` 和 `Handoff`。旧的线性 Plan/Lesson 文档不做自动兼容；迁移时应先
+保留原始来源，再按当前树契约重建。
 
 ```text
 confirmed profiles = 经学生确认、跨课仍有效的偏好
 active Trace = 具体课堂表现事实
 Planner Attention = 可重建的备课提示
 Planning Basis = 当前 Plan 带来源的工作判断
-Plan Summary = 结果回看与后续召回索引
+Handoff Claim = 能回到原始证据的跨节点压缩
+Plan Summary = 学生可读的阶段回看
 ```
 
 完整闭环是：
 
 ```text
-Planning Basis → Lesson / active Trace → Plan Summary → plan-next-cycle
+Planning Basis → Lesson / active Trace → Lesson Handoff
+→ Plan Handoff → Roadmap checkpoint / next Plan
 ```
 
 完整的当前功能与 Pi 前端边界见 [`docs/zh-CN/完整说明书.md`](../../docs/zh-CN/完整说明书.md)。

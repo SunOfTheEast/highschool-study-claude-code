@@ -1,309 +1,237 @@
 # StudyForge repository guide
 
-This repository contains two front ends over one Markdown-first learning domain:
+StudyForge is one Markdown-first learning domain with two runtimes:
 
 - `plugins/highschool-study/` is the distributable Claude Code plugin.
-- `apps/pi-teaching-web/` is the local Pi runtime and student web interface.
-- `examples/derivative-demo/` is the public derivative learning set used for demos and acceptance tests.
+- `apps/pi-teaching-web/` is the local Pi runtime and student web app.
+- `examples/derivative-demo/` is the public derivative learning set.
 
-The current user-facing feature reference is
-`docs/zh-CN/完整说明书.md`. Historical designs, plans, and audits explain how a
-feature was reached; they are not the current product contract.
+The current user-facing reference is `docs/zh-CN/完整说明书.md`. Historical
+designs, plans and audits explain why the system changed; they are not current
+runtime contracts.
 
-## Source-of-truth hierarchy
+## Durable facts
 
-1. `learning-set/ROADMAP.md`, `plans/`, `lessons/`, and confirmed profile
-   files are durable learning facts. Only `memory/student-profile.md` and
-   `memory/teaching-profile.md` are confirmed long-term memory;
-   `memory/planner-attention.md` remains a rebuildable projection.
-2. Problem cards and the method vocabulary live under `cards/` and `graph/`.
-3. Active Trace is append-only Lesson evidence. A later event corrects an
-   earlier one through `Supersedes`; ordinary search and projection ignore
-   superseded events.
-4. Pi Session JSONL owns raw conversation/tool history and Session-local custom
-   artifacts such as workflow state, persona selection, and Plan memory-review
-   candidates and decisions. It may explain how a fact was produced, but it is
-   neither confirmed long-term memory nor a second learning-state database.
-5. Summaries, planner attention, ability nodes, task lists, replay, the
-   continue-first home, pinned classroom, Context Stack, content explorer, and
-   other UI views are rebuildable projections. They must remain traceable to
-   the facts above and never become fact owners.
+The learning set is a control tree:
 
-Do not add a database, background index, vector store, or unified
-`study_context_get` unless the user explicitly changes this architecture.
+```text
+ROADMAP.md
+└── Plan Tree
+    └── plans/<plan-id>.md
+        └── Lesson Tree
+            └── lessons/<lesson-id>.md
+```
 
-## Runtime boundaries
+Its durable facts are:
 
-### Claude Code plugin
+1. `ROADMAP.md` owns long-term milestones and the Plan Tree.
+2. Each Plan owns its goal, observable standard, test, current position,
+   summary, Lesson Tree and sealed Handoff.
+3. Each Lesson owns its frozen Activation Snapshot, classroom Blocks, aliases,
+   summary and sealed Handoff.
+4. `traces/*.md` is one global append-only classroom-event pool. Every Trace
+   freezes its Plan, Lesson, Block, card/material, time, judgment, support and
+   optional method binding. A correction appends a new Trace with
+   `supersedes`; it never edits the old file.
+5. `memory/student-profile.md` and `memory/teaching-profile.md` contain only
+   student-confirmed long-term preferences. `memory/planner-attention.md`,
+   ability nodes, summaries, home continuation and UI panels are projections.
+6. Pi Session JSONL owns raw conversation and tool history plus Session-local
+   custom entries. It can be cited as evidence, but it is not a second learning
+   database.
 
-The public plugin exposes exactly four MCP tools:
+Cards and method vocabulary remain under `cards/` and `graph/`. Do not add a
+database, vector store, background index, rule engine or unified context API
+unless the user explicitly changes the architecture.
+
+## Node lifecycle and authority
+
+A tree entry starts as a Candidate. A Candidate has a local handle and planning
+metadata, but no child file and no Session. The Runtime materializes it into a
+`prepared` child, allocating the child ID/path, binding `parent_id` and
+`parent_path`, and rendering a complete child document.
+
+Only an explicit student action activates a prepared Plan or Lesson. Activation
+atomically:
+
+- validates the child and its dependencies;
+- seals `Activation Snapshot / Activated at`;
+- writes the owner-matched Session ID;
+- changes status to active;
+- creates or restores exactly one owned Session.
+
+Plan terminal states are `completed` and `abandoned`; Lesson terminal states are
+`closed` and `abandoned`. Terminal nodes are read-only replay. Plans may run in
+parallel, but one Plan may have at most one active or paused Lesson. One Lesson
+may have at most one active Block.
+
+Parent writers may add, revise, remove or reorder only Candidate entries. A
+materialized tree entry is structural history and cannot be rewritten by the
+parent. A prepared child may be re-prepared in place through its dedicated
+prepare tool. Once a child is active, paused or terminal, replacement creates a
+new sibling and preserves the old node.
+
+## Session ownership, context and tools
+
+Every Pi Session has exactly one `studyforge.session-owner.v2` custom entry:
+
+```text
+nodeKind + nodeId + nodePath + parentId + parentPath
+```
+
+A frontmatter Session ID is reusable only when all five values match. Missing,
+malformed, duplicate or mismatched owner metadata creates a fresh Session.
+Display names never determine identity.
+
+Node prompts are assembled in this order:
+
+1. shared teaching core;
+2. Roadmap, Plan or Lesson role prompt;
+3. dynamic Context Frame;
+4. node-scoped Skills;
+5. presentation-only persona.
+
+The Context Frame has four page classes:
+
+- **Resident**: teaching core, role, learning-set principles, selected confirmed
+  preferences and Runtime capabilities;
+- **Frozen**: the Activation Snapshot inherited from the parent;
+- **Local**: the current node file and current Session;
+- **Index**: child Handoffs, Claims and scoped search entry points.
+
+Plan and Lesson Sessions do not receive copied parent or sibling transcripts.
+They may resolve only sources named in their frozen context, their own scope,
+their child Handoffs or a successful scoped search. File access is limited to
+the current node, `LEARNING_GUIDE.md`, public cards/graph/materials, and
+Roadmap-only confirmed profiles. Native learning-set-wide file read/write
+tools are not exposed.
+
+Pi model-callable tools are scope-specific:
+
+- Roadmap: `roadmap_update`, `plan_prepare`, search/resolve and optional deep
+  workflow;
+- Plan: `lesson_prepare`, `plan_update`, `memory_review_propose`,
+  search/resolve and optional deep workflow;
+- Lesson: `trace_append`, `classroom_update`, `lesson_close`,
+  `card_alternative_append`, search/resolve and optional deep workflow.
+
+Plan/Lesson activation and confirmed-memory application are Runtime-only
+actions. Model arguments never choose owner paths, parent identity, Session
+identity or Runtime-allocated node IDs.
+
+The Claude Code plugin continues to expose exactly four public MCP tools:
 
 - `card_search`
 - `trace_search`
 - `trace_append`
 - `source_resolve`
 
-Keep this public tool surface narrow. Card search must return only real cards
-and their complete active Trace history. Empty search results are a valid
-authenticity fence; never compensate by inventing a card, path, source, or
-session ID.
+An empty search result is an authenticity fence. Never invent a card, path,
+source, Session ID or Trace to fill a gap.
 
-### Pi teaching runtime
+## Trace, Handoff and memory
 
-The web runtime has two durable Agent roles:
+One independently judged student response is one problem Block and one active
+Trace revision chain. A problem Block binds one authentic Lesson alias.
+Multi-part cards use separate Blocks when the parts receive separate responses
+or judgments.
 
-- one Roadmap-scoped Coach Session per learning set;
-- one Plan-scoped Coach Session per entered Plan;
-- one Tutor Session per started Lesson.
+`trace_append` is fact-first. Pi derives Plan, Lesson, path and card identity
+from the current Session and Block. The public MCP accepts explicit paths
+because it has no Pi Session owner. A superseding Trace must target the current
+active Trace for the same Plan/Lesson/Block/card binding.
 
-Roadmap Coach owns global direction, cross-Plan review and creation of a new
-student-approved Plan. It may register a new Plan but does not receive
-`plan_update` or `lesson_prepare`. Before registering the first Plan, it must
-confirm, persist, and reread non-placeholder Roadmap `Goal`,
-`Observable Capability Standard`, and `Test`. Plan Coach owns the current Plan
-and may use `lesson_prepare`, `plan_register`, and `plan_update`; only after its
-Session-owned Plan is completed and reread may it use
-`memory_review_propose`. Tutor owns the current Lesson and classroom fact
-tools. Roadmap Coach and Tutor never receive memory-review tools.
+`classroom_update` owns legal Block transitions and pending-Block routing.
+`lesson_close` is student-controlled and does not require a Reflection Block or
+a model-authored Claim. It preserves the real stop point, writes the summary,
+seals a claims Handoff when valid, and otherwise seals a source-only Handoff.
 
-Pi fact-write authority is Session-bound:
+Handoffs are the compressed evidence tree:
 
-- Plan Coach owns the current Plan and may use `lesson_prepare`,
-  `plan_register`, `plan_update`, and the Pi-only `memory_review_apply`; it
-  does not receive generic `write` or `edit`;
-- Roadmap Coach alone retains generic `write` and `edit` for the Roadmap and
-  student-approved Plan creation;
-- Tutor owns the current Lesson and may use `trace_append`,
-  `classroom_update`, `lesson_close`, and `card_alternative_append`;
-- model-generated arguments must not select or override `ownerPath`,
-  `lessonPath`, or a session ID.
+```text
+Roadmap checkpoint Claim
+  → Plan Handoff Claim
+    → Lesson Handoff Claim
+      → Trace / Block / Card / Session
+```
 
-`memory_review_propose` does not write long-term memory. Candidates and
-item-by-item decisions stay as append-only custom entries in the owning Plan
-Coach Session. Submission wakes that same Coach, which calls
-`memory_review_apply` with only the submitted review ID. The runtime applies
-only accepted or rewritten items, assigns stable `S*` / `T*` IDs, and installs
-both confirmed profiles as one rollback-safe operation. Each entry in
-`## Active Preferences` has exactly `Content`, `Scope`, `Sources`,
-`Rationale`, and `Counter-evidence`; older free-form entries are not guessed or
-migrated. Only a successful receipt records `applied`. The Coach then rereads
-both profiles before reporting; the frontend never edits them or relabels
-`submitted` as `applied`.
+Claims never replace their sources. Evidence resolution reports active,
+superseded, invalidated, missing or forbidden state. Superseding a Trace does
+not cascade rewrites through summaries or Handoffs; dependent Claims become
+invalidated when read, and a later normal review may create a new decision.
 
-Every Pi Session carries exactly one `studyforge.session-owner.v1` custom
-entry containing `role`, `ownerId`, and `ownerPath`. A frontmatter Session ID
-is reused only when all three fields match. Missing, malformed, duplicate, or
-mismatched owner metadata creates a fresh Session; display names are not
-identity.
+Long-term memory is proposed only from a completed Plan Handoff. The student
+accepts, rewrites or rejects every item. The Runtime validates the submitted
+review, atomically applies accepted items to both profile files, records a
+receipt in the same Plan Session, and then the Coach rereads the profiles.
+There is no model-callable memory-apply tool.
 
-The Roadmap Coach uses `role: coach`, `ownerId: @roadmap`,
-`ownerPath: ROADMAP.md`, and persists its Session ID as
-`roadmap_coach_session`.
+## Student projection
 
-A Coach-created Plan becomes available only after `plan_register` validates
-the file and idempotently links it under `ROADMAP.md / Plan Graph`. A
-`prepared` Lesson becomes `active` only after admission confirms its required
-top-level `Aliases`, `Lesson Summary`, and `Traces` sections plus every used
-problem-card alias. A template may provide zero, one, or multiple
-`Kind: reflection` Blocks; their count is not an admission rule. Admission
-failures do not change status or create a Tutor Session.
+The student UI is a projection, never a fact owner:
 
-Fact-writing tools return a minimal receipt with `ok: true` and `ownerPath`;
-Trace writes also return `factId`, and closure returns `status: closed`.
-Agents must not claim persistence from an error, empty result, or missing
-success receipt. `LESSON_*` errors require Coach to repair the source rather
-than Tutor search, guessing, substitution, or repeated calls.
+- the course tree shows Roadmap → Plans → Lessons and Candidate/prepared/active/
+  terminal state;
+- Candidates have no chat action; prepared nodes expose the student start
+  action; only materialized nodes with real Sessions appear in Session history;
+- prepared Lesson title, Teacher Control, private notes, answers, methods and
+  unrevealed Blocks remain private;
+- safe message projection replaces tool chatter with structured events while
+  raw Pi JSONL remains available for local diagnosis;
+- Home, routes, replay, Context pages, content search, evidence lens and ability
+  views are rebuilt from current facts;
+- refresh restores the selected valid route without silently activating or
+  switching nodes;
+- a completed Plan may show other Plans, but switching remains a student click.
 
-`lesson_close` accepts one student-safe summary. It writes the top-level
-`Lesson Summary` and `status: closed` while preserving every Block state.
-Closed Lessons remain in the Tutor replay until the student explicitly
-returns to Coach.
+## Teaching authority
 
-One independently assessed response is one `problem` Block, and every problem
-Block must bind exactly one authentic Lesson alias through `Uses`. If parts of
-one card receive separate responses or judgments, separate Blocks reuse the
-same alias; they must not share one Block. Pi `trace_append` accepts the
-selected `blockId`, derives its card identity from the Session-owned Lesson,
-and rejects a second parallel active Trace for that attempt. Completion,
-correction, repeat, and method confirmation supersede its active Trace. The
-public MCP remains explicit and may retain card-step Trace because it has no Pi
-Session owner.
+Do not duplicate a full teaching protocol here. Semantic owners are:
 
-A superseding Trace must replace the current active event from the same Block
-and canonical card binding; a stale or cross-Block event is never a valid
-correction target.
+- Pi Roadmap behavior: `apps/pi-teaching-web/resources/skills/roadmap-study/`.
+- Pi Plan inquiry, preparation and decisions:
+  `apps/pi-teaching-web/resources/skills/coach-study/`.
+- Pi Lesson teaching and closure:
+  `apps/pi-teaching-web/resources/skills/tutor-lesson/`.
+- Shared mathematics principles:
+  `apps/pi-teaching-web/resources/teaching/math-teaching-core.md`.
+- Claude plugin learning workflows: `plugins/highschool-study/skills/`.
+- Tool fields and timing: the corresponding TypeBox or Zod definition.
+- Identity, permissions, state transitions and persistence: Runtime code and
+  executable tests.
 
-`classroom_update` permits at most one active Block, enforces declared
-dependencies and legal local status transitions, and applies a route decision
-plus its deterministic Block status effect in one Lesson write. Route Changes
-remain an auditable adjusted-route projection, not an automatic scheduler or a
-second Block state.
-
-A prepared Lesson may be revised in place. Once it is active, paused, closed,
-or abandoned, re-preparation creates a replacement Lesson and preserves the
-old record. Its `plan_id` is immutable: another Plan cannot take over even a
-still-prepared Lesson with the same ID. A completed Plan cannot prepare a
-Lesson until an explicit `plan_update` reactivates or replans it.
-
-Active Trace is the authority for claims about student attempts and for
-derived evidence projections. A superseding correction may rebuild Planner
-Attention, ability nodes, and other evidence projections, but it does not
-automatically rewrite a Lesson Summary, Plan, alternatives sidecar, or
-confirmed profile. Only normal Coach review followed by `plan_update` changes
-Plan status, Current Position, Next Lesson Candidate, or Plan Summary.
-
-Plan switching is student-owned UI navigation. When the current Plan is
-completed, the frontend may list the other Roadmap Plans; it opens a target
-Coach Session only after the student clicks that Plan. Agents do not select or
-silently switch the active Plan.
-
-Normal Pi preparation uses the transient `lesson_prepare` Blueprint contract.
-The runtime binds the Plan, paths, initial statuses, relative aliases, and Plan
-Lesson Index; the compiled Lesson Markdown remains the only durable source.
-Do not add a persistent Blueprint file or a fifth public MCP tool.
-
-`plan_update` is a strict decision union. `active` and `replan` require
-`currentPosition`, `nextLessonCandidate`, and free `planSummary`; `complete`
-requires those first two fields plus a structured `learningReview` and rejects
-`planSummary`. A completed Learning Review contains conclusion, boundary,
-next step, key evidence, supporting evidence with limitations, and open
-questions. Key evidence must be an active, independent, correct assessment
-Trace from the same Plan. On every audit, the runtime reconstructs Lesson
-Index from real same-Plan Lesson files, preserves linked order, appends missing
-Lessons, and synchronizes the matching Roadmap Plan Graph status.
-Model-authored text never owns these structural links or status projections.
-
-## Teaching authority map
-
-Do not maintain a second full teaching protocol in this repository guide.
-Operational authorities are:
-
-- Pi Tutor judgment and classroom event triggers:
-  `apps/pi-teaching-web/resources/skills/tutor-lesson/SKILL.md`.
-- Pi Coach evidence, preparation, source, and Plan decisions:
-  `apps/pi-teaching-web/resources/skills/coach-study/SKILL.md`.
-- Claude plugin classroom evidence meaning:
-  `plugins/highschool-study/skills/run-lesson/references/evidence-protocol.md`.
-- Claude plugin reveal and template semantics:
-  `plugins/highschool-study/skills/prepare-next-lesson/references/`.
-- Tool purpose, call timing, local fields, scope, and immediate result:
-  the corresponding TypeBox or Zod tool definition.
-- Session identity, authenticity, state transitions, atomicity, uniqueness,
-  projection refresh, and persistent facts: runtime code and executable tests.
-- Current user-facing behavior: `docs/zh-CN/完整说明书.md`.
-
-The two runtimes may express the same teaching judgment in different files
-because their tool surfaces differ. When changing a shared teaching rule,
-update both semantic owners together, but do not copy their tool signatures
-or runtime error branches into Skills, Agent prompts, or this guide.
-
-## Student-view and workflow invariants
-
-- Default message projection is `safe`. Mixed tool-call text and arguments are
-  replaced by structured status; raw Pi JSONL remains untouched.
-- After a successful `lesson_prepare`, `safe` replaces the Coach's following
-  free-form final with one structured readiness card. Home, Context Stack,
-  prepared gates, sidebar labels, and the readiness card share one rebuildable
-  student Plan projection: real progress, template-safe purpose, activity shape,
-  and optional card `content_item_id` values. Assessment and diagnostic purposes
-  stay generic; other templates may show the Lesson Capability Target. The
-  prepared Lesson's true title is hidden until the student starts it.
-- The student Plan projection never owns facts and never falls back to raw
-  `Next Lesson Candidate`, active `Plan Summary`, Teacher Control, pending
-  Student View, card paths, or inferred filenames. Missing optional metadata is
-  omitted. Plan Coach, Authoring, `raw-stream`, and raw JSONL retain complete
-  source content for review and local diagnosis.
-- Roadmap may privately use `card_search` only after the student-approved Plan
-  is complete. In `safe`, its premature free final is replaced by a fixed
-  recovery message; a successful `plan_register` emits one ordinary
-  deterministic Coach message and suppresses the model final. The existing
-  Plan may carry a card hint only as a non-binding short source number for
-  Plan Coach to re-search. This adds no readiness card, handoff store, or
-  shared UI contract; `raw-stream` and raw JSONL retain the private exchange.
-- `raw-stream` is a local diagnostic option, not the student default.
-- Student View never reveals Teacher Control, card answers, rubric text,
-  unrevealed hints, private evidence matrices, or stored alternative
-  solutions.
-- Home continuation is recalculated from Roadmap, Plan, Lesson, and active
-  Trace state. The browser may remember only a successfully opened unfinished
-  Plan Coach or `active` / `paused` / `prepared` Lesson route; stale,
-  completed, closed, abandoned, Home, and Roadmap routes fall back to the
-  deterministic projection instead of becoming learning state.
-- The pinned classroom, Context Stack, content explorer, and method progress
-  are read-only projections. Their expanded sections, overlay state, filters,
-  and search terms are page-local; route changes remain Lesson facts and
-  method evidence remains owned by active Trace.
-- Content-explorer scope comes from the real Session key. An active or paused
-  Tutor's eligible assets derive only from revealed Blocks and current-Lesson
-  active Trace; Plan Coach and closed Replay receive the full student-safe
-  scope. Roadmap Coach has no content explorer in this release, and the client
-  cannot request a broader scope.
-- Companion persona selection belongs to one Pi Session and affects
-  presentation only. Motion and completion-feedback preferences belong only
-  to browser key `studyforge.presentation.v1`; they never enter Session,
-  learning-set facts, or model context.
-- Deep workflow is normally optional and Session-scoped. Even with the toggle
-  off, Plan Coach retains exactly one 50,000-token / 180-second Quick Evidence
-  Scout before its first completion decision. It checks proposed conclusions,
-  boundaries, sources, conflicts, omissions, and unreadable writes without
-  issuing a verdict; failure narrows the boundary rather than silently
-  approving completion. Other Plan, Roadmap, and Tutor workflow use still
-  follow the toggle. Parent Agents remain the only writers and decision owners.
-- Child raw JSON and artifacts stay private to the parent runtime. The UI may
-  project goal, dependencies, progress, budgets, and source counts, not child
-  conclusions.
+Skills express teaching judgment. Runtime code owns identity, authenticity,
+atomicity, permissions and facts. Do not use prompt prose to compensate for a
+Runtime ownership defect, and do not add brittle tests for Skill wording.
 
 ## Repository map
 
-- `plugins/highschool-study/server/src/`: shared card, Trace, source, method,
-  alternative, and projection domain logic.
-- `plugins/highschool-study/skills/`: Claude Code learning workflows.
-- `apps/pi-teaching-web/src/runtime/`: Session ownership and role-scoped tools.
-- `apps/pi-teaching-web/src/study/`: Markdown workspace reads, writes, replay,
-  routes, and ability projection.
-- `apps/pi-teaching-web/src/projection/`: safe/raw message and workflow views.
-- Plan memory review: `apps/pi-teaching-web/src/memory-review/`,
-  `apps/pi-teaching-web/src/runtime/session-factory.ts`,
-  `apps/pi-teaching-web/src/runtime/workspace-registry.ts`, and
-  `apps/pi-teaching-web/src/projection/conversation-projector.ts`.
-- Home continuation: `apps/pi-teaching-web/src/study/home.ts`,
-  `apps/pi-teaching-web/src/shared/home.ts`,
-  `apps/pi-teaching-web/src/client/routes.ts`, and
-  `apps/pi-teaching-web/src/client/App.tsx`.
-- Student-safe panels: `apps/pi-teaching-web/src/study/student-notebook.ts`,
-  `apps/pi-teaching-web/src/study/coach-context.ts`,
-  `apps/pi-teaching-web/src/study/content-explorer.ts`, and the matching
-  components under `apps/pi-teaching-web/src/client/components/`.
-- Persona and display state: `apps/pi-teaching-web/src/study/persona.ts`,
-  `apps/pi-teaching-web/src/runtime/session-factory.ts`, and
-  `apps/pi-teaching-web/src/client/presentation.ts`.
-- `apps/pi-teaching-web/resources/`: Pi Coach/Tutor prompts and Skills.
+- `plugins/highschool-study/server/src/`: card, Trace, source, method and
+  projection domain logic.
+- `apps/pi-teaching-web/src/runtime/`: tree mutation, activation, Session
+  ownership, Context compilation, access policy and scoped tools.
+- `apps/pi-teaching-web/src/study/`: node readers, Handoffs, evidence,
+  projections, routes and replay.
+- `apps/pi-teaching-web/src/memory-review/`: proposal, confirmation and trusted
+  profile application.
+- `apps/pi-teaching-web/src/client/`: student-safe workspace.
+- `docs/zh-CN/学习节点树与证据继承.md`: developer protocol.
 - `docs/zh-CN/完整说明书.md`: current functional reference.
-- `docs/audits/`: evidence for completed acceptance runs.
-- `docs/superpowers/specs/` and `docs/superpowers/plans/`: historical design
-  and implementation records.
 
 ## Change discipline
 
-- Prefer the smallest change that preserves the Markdown-first architecture.
-- Do not add compatibility layers, rule engines, new persistent fields, extra
-  Agents, or defensive infrastructure without an explicit requirement.
-- When changing a teaching rule shared by both runtimes, update the Pi Skill
-  and public plugin Skill together. Do not test Skill or Agent prose, exact
-  phrases, headings, or word lists; test only executable schemas, tools,
-  permissions, persistence, projections, and runtime behavior.
-- When changing a persistent schema or tool contract, first inspect the
-  relevant schema design and every reader, writer, projection, fixture, and
-  source link.
-- Run real-model or mutation-heavy acceptance only on a copied learning set,
-  never directly against `examples/derivative-demo/learning-set`.
-- Never commit credentials, provider tokens, local Pi Session files,
-  `CLAUDE.local.md`, or generated private classroom transcripts.
-- Preserve unrelated dirty files and existing user changes.
+- Prefer the smallest change that preserves the Markdown-first tree.
+- Do not add compatibility paths for pre-tree learning sets.
+- Do not add new persistent fields, tools, Agents or defensive infrastructure
+  without a demonstrated requirement.
+- Before changing a schema, inspect every reader, writer, projection, fixture
+  and source resolver.
+- Run mutation-heavy or real-model acceptance on a copied learning set.
+- Never commit credentials, provider tokens, local Session files, private
+  transcripts, `CLAUDE.local.md` or generated test output.
+- Preserve unrelated user changes.
 
 ## Verification
-
-Run the suites that cover the changed surface:
 
 ```bash
 cd plugins/highschool-study
@@ -318,7 +246,6 @@ bun run check
 bun run test:e2e
 ```
 
-`release:check` must keep the public MCP tool count at four and pass strict
-Claude plugin validation. `check` must pass type checking, unit tests, and the
-production build. Browser-sensitive routing, replay, ability refresh, and
-student-view changes also require Playwright E2E.
+Plugin release checks must keep the public MCP count at four. Browser routing,
+activation, replay, evidence and student-projection changes require Playwright
+E2E in addition to unit tests and a production build.

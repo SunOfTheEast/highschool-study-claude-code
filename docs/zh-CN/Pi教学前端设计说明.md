@@ -50,19 +50,32 @@
 - **学习顾问**：Plan 层，负责当前周期的方向、复盘、进度解释和备课；
 - **课堂导师**：Lesson 层，负责当前课堂的多轮教学、提示、评价、节点推进和 Trace 写入。
 
-底层仍只有 Coach 与 Tutor 两种技术角色。Roadmap 与 Plan 都使用 Coach，但 Session owner 不同；Lesson 使用 Tutor。每个 Session 只有一条 `studyforge.session-owner.v1`，由 `role + ownerId + ownerPath` 决定身份。Roadmap Coach 绑定 `@roadmap` / `ROADMAP.md`，Plan Coach 绑定当前 Plan，Tutor 绑定当前 Lesson；展示名称不参与 Session 复用判断。
+底层仍只有 Coach 与 Tutor 两种技术角色。Roadmap 与 Plan 都使用 Coach，但 Session
+owner 不同；Lesson 使用 Tutor。每个 Session 只有一条
+`studyforge.session-owner.v2`，由
+`nodeKind + nodeId + nodePath + parentId + parentPath` 决定身份。Roadmap Coach
+绑定 `roadmap / ROADMAP.md`，Plan Coach 绑定当前 Plan，Tutor 绑定当前 Lesson；
+展示名称不参与 Session 复用判断。
 
-每个 Plan 显示为一棵很小的会话树：
+每个 Plan 同时显示课程学习树和已经真实建立的 Session：
 
 ```text
-定义域完整性 Plan
-├── 学习顾问 · 方向、备课与复盘
-├── Lesson 001 · 已完成（课堂回放）
-├── Lesson 002 · 已暂停（课堂导师）
-└── Lesson 003 · 待开始
+Roadmap
+└── 定义域完整性 Plan
+    ├── Lesson 001 · 已完成
+    ├── Lesson 002 · 已暂停
+    └── Lesson 003 · 待开始
+
+Session 历史
+├── 学习顾问
+├── Lesson 001 · 课堂回放
+└── Lesson 002 · 课堂导师
 ```
 
-学习顾问是父 Session；Plan 的 `Lesson Index` 中每个已开始 Lesson 对应一个 Tutor 子 Session。学生始终使用同一个聊天外壳，从侧边栏点击学习顾问或某一节 Lesson 即可切换。点击只改变当前输入被发送到哪里，不会合并聊天历史。
+Plan 是 Lesson 的父节点；只有已经激活并拥有 owner 匹配 Session 的 Lesson 才进入
+Session 历史。Candidate 没有文件或 Session，prepared Lesson 只留在课程树和就绪
+入口。学生始终使用同一个聊天外壳，从侧边栏点击学习顾问或某一节已开始 Lesson
+即可切换；点击只改变当前输入被发送到哪里，不会合并聊天历史。
 
 这里的“父子”表示归属和导航，不表示上下文继承。Tutor 不读取 Coach transcript，Coach 也不读取 Tutor transcript；两者只通过 Lesson 文件、课堂摘要和带来源的 Trace 交接。在 Plan 会话树中离开 active 课堂导师时，前端先把 Lesson 暂停，之后可沿原 Block 和原 Session 继续。Lesson 关闭后页面停留在只读 Replay，不自动返回学习顾问；学生明确点击“返回学习顾问”后才进入复盘。
 
