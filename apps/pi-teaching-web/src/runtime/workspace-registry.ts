@@ -117,11 +117,14 @@ export class WorkspaceRegistry {
     if (!lesson) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
     if (lesson.status === 'prepared') {
       validatePreparedLesson(this.root, lesson.path);
-      setFrontmatterField(this.root, lesson.path, 'status', 'active');
-    } else if (lesson.status === 'paused') {
+    } else if (!['active', 'paused'].includes(lesson.status)) {
+      throw new Error(`LESSON_NOT_OPEN: ${lessonId}`);
+    }
+    const session = await this.createTutorSession(lessonId, lesson);
+    if (lesson.status !== 'active') {
       setFrontmatterField(this.root, lesson.path, 'status', 'active');
     }
-    return this.openTutor(lessonId);
+    return session;
   }
 
   async triggerLessonStart(lessonId: string): Promise<void> {
@@ -130,11 +133,18 @@ export class WorkspaceRegistry {
   }
 
   async openTutor(lessonId: string): Promise<StudySession> {
-    const key = `tutor:${lessonId}`;
     const lesson = this.workspaceForLesson(lessonId).lessons.find((item) => item.id === lessonId);
     if (!lesson || !['active', 'paused'].includes(lesson.status)) {
       throw new Error(`LESSON_NOT_OPEN: ${lessonId}`);
     }
+    return this.createTutorSession(lessonId, lesson);
+  }
+
+  private async createTutorSession(
+    lessonId: string,
+    lesson: PlanWorkspaceSnapshot['lessons'][number],
+  ): Promise<StudySession> {
+    const key = `tutor:${lessonId}`;
     const cached = this.sessions.get(key);
     if (cached) return cached;
     const scope = {

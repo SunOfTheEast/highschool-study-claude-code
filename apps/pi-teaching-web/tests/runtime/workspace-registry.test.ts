@@ -164,6 +164,73 @@ test('creates Coach eagerly and Tutor only after start', async () => {
   expect(registry.snapshot('domain-integrity').lessons[2]?.status).toBe('active');
 });
 
+test('keeps a prepared Lesson prepared until its Tutor Session exists', async () => {
+  const root = fixture();
+  let notifyTutorEntered!: () => void;
+  let releaseTutor!: () => void;
+  const tutorEntered = new Promise<void>((resolve) => {
+    notifyTutorEntered = resolve;
+  });
+  const tutorReleased = new Promise<void>((resolve) => {
+    releaseTutor = resolve;
+  });
+  const factory: StudySessionFactory = async ({ role, ownerId }) => {
+    if (role === 'tutor') {
+      notifyTutorEntered();
+      await tutorReleased;
+    }
+    return {
+      sessionId: `${role}-${ownerId}`,
+      sessionFile: `/tmp/${role}-${ownerId}.jsonl`,
+      messages: [],
+      isStreaming: false,
+      personaId: () => null,
+      setPersona: async () => {},
+      ...idleWorkflowMethods(),
+      prompt: async () => {},
+      abort: async () => {},
+      subscribe: () => () => {},
+      dispose: () => {},
+    };
+  };
+  const registry = new WorkspaceRegistry(root, factory, async () => null);
+
+  const starting = registry.startLesson('lesson-003');
+  await tutorEntered;
+
+  expect(registry.snapshot('domain-integrity').lessons[2]).toMatchObject({
+    status: 'prepared',
+    tutorSessionId: null,
+  });
+
+  releaseTutor();
+  await starting;
+
+  expect(registry.snapshot('domain-integrity').lessons[2]).toMatchObject({
+    status: 'active',
+    tutorSessionId: 'tutor-lesson-003',
+  });
+});
+
+test('leaves a prepared Lesson unchanged when Tutor Session creation fails', async () => {
+  const root = fixture();
+  const lessonPath = join(root, 'lessons/lesson-003.md');
+  const before = readFileSync(lessonPath, 'utf8');
+  const factory: StudySessionFactory = async () => {
+    throw new Error('tutor factory failed');
+  };
+  const registry = new WorkspaceRegistry(root, factory, async () => null);
+
+  await expect(registry.startLesson('lesson-003'))
+    .rejects.toThrow('tutor factory failed');
+
+  expect(readFileSync(lessonPath, 'utf8')).toBe(before);
+  expect(registry.snapshot('domain-integrity').lessons[2]).toMatchObject({
+    status: 'prepared',
+    tutorSessionId: null,
+  });
+});
+
 test('creates one canonical Roadmap Coach and writes its Session back to ROADMAP.md', async () => {
   const root = fixture();
   const created: Array<{
