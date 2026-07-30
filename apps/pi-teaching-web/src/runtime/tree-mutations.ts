@@ -72,6 +72,7 @@ export type ParentDocumentUpdate = {
   childKind: ChildKind;
   candidateChanges: CandidateChange[];
   sections: Record<string, string>;
+  appendMissingSections?: string[];
   frontmatter: Record<string, string>;
 };
 
@@ -239,6 +240,7 @@ function renderUpdatedParent(
   childKind: ChildKind,
   tree: ChildTree,
   sections: Record<string, string>,
+  appendMissingSections: ReadonlySet<string>,
   frontmatter: Record<string, string>,
 ): string {
   const heading = treeHeading(childKind);
@@ -249,7 +251,20 @@ function renderUpdatedParent(
     true,
   );
   for (const [section, value] of Object.entries(sections)) {
-    next = replaceSection(next, section, value);
+    try {
+      next = replaceSection(next, section, value);
+    } catch (error) {
+      if (
+        !(error instanceof Error)
+        || error.message !== `SECTION_NOT_FOUND: ${section}`
+        || !appendMissingSections.has(section)
+      ) {
+        throw error;
+      }
+      next = normalized(
+        `${next.trimEnd()}\n\n## ${section}\n\n${value.trim()}\n`,
+      );
+    }
   }
   for (const [key, value] of Object.entries(frontmatter)) {
     next = replaceFrontmatterField(next, parentPath, key, value);
@@ -285,6 +300,7 @@ export function updateParentDocument(
     input.childKind,
     tree,
     input.sections,
+    new Set(input.appendMissingSections ?? []),
     input.frontmatter,
   );
   writeFileSync(absolute, next);
@@ -485,6 +501,7 @@ export function materializeChild(
     input.childKind,
     nextTree,
     {},
+    new Set(),
     {},
   );
   const childAbsolute = lexicalWorkspacePath(root, identity.childPath);

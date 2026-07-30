@@ -219,8 +219,19 @@ export type AbilityNode = {
 
 export type AbilityProjection = { nodes: AbilityNode[] };
 
-export type EvidenceView = {
+export type EvidenceState = 'active' | 'invalidated' | 'missing' | 'forbidden';
+
+export type HandoffEvidenceNode = {
   source: string;
+  label: string;
+  state: EvidenceState;
+  children: HandoffEvidenceNode[];
+};
+
+export type EvidenceView = {
+  kind: 'trace';
+  source: string;
+  state: EvidenceState;
   trace: {
     lessonId: string;
     blockId: string;
@@ -234,6 +245,11 @@ export type EvidenceView = {
     goal: string;
     methods: Array<{ name: string; role: 'primary' | 'secondary' }>;
   };
+} | {
+  kind: 'handoff';
+  source: string;
+  state: EvidenceState;
+  node: HandoffEvidenceNode;
 };
 
 export type RouteChange = {

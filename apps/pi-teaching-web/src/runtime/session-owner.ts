@@ -1,4 +1,5 @@
 import type { SessionEntry } from '@earendil-works/pi-coding-agent';
+import type { SessionEvidenceReader } from '../study/evidence-tree';
 import type { NodeSessionScope } from './session-scope';
 
 export const SESSION_OWNER_TYPE = 'studyforge.session-owner.v2';
@@ -96,4 +97,32 @@ export async function readPiSessionBranch(
 ): Promise<readonly SessionEntry[]> {
   const { SessionManager } = await import('@earendil-works/pi-coding-agent');
   return SessionManager.open(sessionFile, undefined, root).getBranch();
+}
+
+export async function createPiSessionEvidenceReader(
+  root: string,
+): Promise<SessionEvidenceReader> {
+  const { SessionManager } = await import('@earendil-works/pi-coding-agent');
+  const sessions = new Map<
+    string,
+    NonNullable<ReturnType<SessionEvidenceReader['read']>>
+  >();
+  for (const item of await SessionManager.list(root)) {
+    try {
+      const manager = SessionManager.open(item.path, undefined, root);
+      const owner = readSessionOwner(manager);
+      if (owner === null) continue;
+      const messages = new Set(manager.getBranch().flatMap((entry) => (
+        typeof entry.id === 'string' ? [entry.id] : []
+      )));
+      sessions.set(item.id, {
+        owner,
+        messages,
+        label: `${owner.nodeId} session`,
+      });
+    } catch {
+      continue;
+    }
+  }
+  return { read: (sessionId) => sessions.get(sessionId) ?? null };
 }

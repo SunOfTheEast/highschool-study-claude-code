@@ -59,6 +59,8 @@ test('drills one ability source back to its Trace and safe card metadata', () =>
   const root = makeLearningSetWithHistory();
   const source = readActiveTraces(root)[0]!.sourceRef;
   const evidence = readEvidence(root, source);
+  expect(evidence.kind).toBe('trace');
+  if (evidence.kind !== 'trace') throw new Error('TRACE_EVIDENCE_EXPECTED');
   expect(evidence.trace.lessonId).toBe('lesson-001');
   expect(evidence.card?.methods).toContainEqual({ name: '冻结变量法', role: 'primary' });
   expect(JSON.stringify(evidence)).not.toContain('rubric');
@@ -128,5 +130,8 @@ test('drills a durable alternative source after its Trace is superseded', () => 
     supersedes: trace.traceId,
   }, () => new Date('2026-07-22T01:02:00Z'));
 
-  expect(readEvidence(root, alternative.sourceTrace).trace.blockId).toBe('step-02');
+  const evidence = readEvidence(root, alternative.sourceTrace);
+  expect(evidence.kind).toBe('trace');
+  if (evidence.kind !== 'trace') throw new Error('TRACE_EVIDENCE_EXPECTED');
+  expect(evidence.trace.blockId).toBe('step-02');
 });

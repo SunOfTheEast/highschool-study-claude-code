@@ -9,6 +9,7 @@ import {
 } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
+import { renderHandoff } from 'highschool-study-markdown/study-domain';
 import { createRequestHandler } from '../../src/server/app';
 import { EventHub } from '../../src/server/event-hub';
 import type {
@@ -109,6 +110,63 @@ test('returns one deterministic continue-first Home snapshot', async () => {
     },
     lessonProgress: { completed: 2, total: 3 },
   });
+});
+
+test('returns trace and Handoff evidence through one API', async () => {
+  const root = mkdtempSync(join(tmpdir(), 'study-evidence-api-'));
+  try {
+    cpSync(domainIntegrityFixtureRoot, root, { recursive: true });
+    const lessonPath = join(root, 'lessons/lesson-002.md');
+    const handoff = renderHandoff({
+      id: 'lesson-002/handoff',
+      from: 'lesson:lesson-002',
+      to: 'plan:domain-integrity',
+      sealedAt: '2026-08-05T12:00:00.000Z',
+    }, {
+      learnerClaims: [{
+        statement: '学生在本课主动写出定义域。',
+        scope: 'Lesson 002。',
+        sources: ['trace:trace-fixture-002'],
+        boundary: '尚未跨结构核验。',
+        nextUse: '下一课继续检查。',
+      }],
+      teachingClaims: [],
+      openQuestions: [],
+    });
+    writeFileSync(
+      lessonPath,
+      readFileSync(lessonPath, 'utf8').replace(/^## Handoff[\s\S]*$/m, handoff.trim()),
+    );
+    const handler = createRequestHandler({
+      root,
+      authoring: false,
+      hub: new EventHub(),
+      registry: {} as never,
+    });
+
+    const trace = await handler(new Request(
+      'http://local/api/evidence?source=trace%3Atrace-fixture-002',
+    ));
+    expect(await trace!.json()).toMatchObject({
+      kind: 'trace',
+      state: 'active',
+      trace: { lessonId: 'lesson-002' },
+    });
+
+    const claim = await handler(new Request(
+      'http://local/api/evidence?source=claim%3Alesson-002%2Fhandoff%23learner-c1',
+    ));
+    expect(await claim!.json()).toMatchObject({
+      kind: 'handoff',
+      state: 'active',
+      node: {
+        source: 'claim:lesson-002/handoff#learner-c1',
+        children: [{ source: 'trace:trace-fixture-002', state: 'active' }],
+      },
+    });
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });
 
 test('uses cold-restored Tutor history for Lesson replay', async () => {

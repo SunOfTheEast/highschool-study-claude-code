@@ -11,6 +11,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
   appendTrace,
+  parseHandoff,
   readTraceRecords,
 } from 'highschool-study-markdown/study-domain';
 import { Check } from 'typebox/value';
@@ -19,6 +20,7 @@ import { createCardAlternativeAppendTool } from '../../src/runtime/card-alternat
 import { createLessonCloseTool } from '../../src/runtime/lesson-close';
 import { createLessonPrepareTool } from '../../src/runtime/lesson-prepare';
 import { createPlanUpdateTool } from '../../src/runtime/plan-update';
+import { createRoadmapUpdateTool } from '../../src/runtime/roadmap-update';
 import { NodeAccessPolicy } from '../../src/runtime/node-access';
 import { compileNodeContext } from '../../src/runtime/node-context';
 import * as studyToolModule from '../../src/runtime/study-tools';
@@ -723,10 +725,13 @@ test('binds a Tutor Trace to its Lesson and refreshes planner attention', async 
   expect(tracePayload.traces.map((record) => record.traceId)).toEqual([appended.traceId]);
   expect(Object.keys(tracePayload.cardsByPath))
     .toContain('cards/derivative/mst_p0032_ex22.card.yaml');
-  expect(readEvidence(
+  const evidence = readEvidence(
     temporaryRoot,
     appended.sourceRef,
-  ).card?.path).toBe('cards/derivative/mst_p0032_ex22.card.yaml');
+  );
+  expect(evidence.kind).toBe('trace');
+  if (evidence.kind !== 'trace') throw new Error('TRACE_EVIDENCE_EXPECTED');
+  expect(evidence.card?.path).toBe('cards/derivative/mst_p0032_ex22.card.yaml');
 });
 
 test('keeps one persisted Trace when projection refresh fails', async () => {
@@ -1031,7 +1036,11 @@ test('returns an owner receipt only after lesson_close persists closure', async 
   const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-tools-close-receipt-'));
   temporaryRoots.push(temporaryRoot);
   cpSync(root, temporaryRoot, { recursive: true });
-  const close = createLessonCloseTool(temporaryRoot, 'lessons/lesson-003.md');
+  const close = createLessonCloseTool(temporaryRoot, 'lessons/lesson-003.md', {
+    sessionId: 'session-close-test',
+    sessionEntries: () => [],
+    now: () => new Date('2026-08-05T10:00:00.000Z'),
+  });
 
   const result = await close.execute('close-1', {
     summary: '本节课完成；仍缺一次未见题迁移证据。',
@@ -1042,6 +1051,11 @@ test('returns an owner receipt only after lesson_close persists closure', async 
     ok: true,
     ownerPath: 'lessons/lesson-003.md',
     status: 'closed',
+    handoff: {
+      id: 'lesson-003/handoff',
+      mode: 'source-only',
+      rejectedIssues: ['HANDOFF_DRAFT_MISSING'],
+    },
   });
   expect(readFileSync(join(temporaryRoot, 'lessons/lesson-003.md'), 'utf8'))
     .toContain('status: closed');
@@ -1186,7 +1200,7 @@ test('keeps runtime authority out of Tutor tool schemas', () => {
   const closeProperties = (close.parameters as {
     properties: Record<string, unknown>;
   }).properties;
-  expect(Object.keys(closeProperties)).toEqual(['summary']);
+  expect(Object.keys(closeProperties)).toEqual(['summary', 'handoff']);
   expect(JSON.stringify(close.parameters)).not.toContain('reflection');
   expect(JSON.stringify(close.parameters)).not.toContain('lessonPath');
   expect(JSON.stringify(close.parameters)).not.toContain('blockId');
@@ -1337,10 +1351,11 @@ test('exposes plan_update through a provider-compatible object root', () => {
     'currentPosition',
     'planSummary',
     'candidateChanges',
+    'handoff',
   ]);
 });
 
-test('exposes only active and replan plan_update decisions without path authority', () => {
+test('requires a Handoff only for a complete plan_update decision', () => {
   const tool = createPlanUpdateTool(root, 'plans/domain-integrity.md');
   const common = {
     currentPosition: '本周期继续。',
@@ -1361,6 +1376,21 @@ test('exposes only active and replan plan_update decisions without path authorit
     ...common,
   })).toBeFalse();
   expect(Check(tool.parameters, {
+    decision: 'complete',
+    ...common,
+    handoff: {
+      learnerClaims: [{
+        statement: '本周期形成了一项阶段认识。',
+        scope: '本 Plan。',
+        sources: ['trace:trace-fixture-002'],
+        boundary: '仍需跨题迁移。',
+        nextUse: '下一 Plan 继续观察。',
+      }],
+      teachingClaims: [],
+      openQuestions: [],
+    },
+  })).toBeTrue();
+  expect(Check(tool.parameters, {
     decision: 'active',
     ...common,
     nextLessonCandidate: '旧字段。',
@@ -1368,6 +1398,160 @@ test('exposes only active and replan plan_update decisions without path authorit
   expect(JSON.stringify(tool.parameters)).not.toContain('planPath');
   expect(JSON.stringify(tool.parameters)).not.toContain('learningReview');
   expect(JSON.stringify(tool.parameters)).not.toContain('nextLessonCandidate');
+});
+
+test('completes a Plan only after sealing one valid source-linked Handoff', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-plan-complete-handoff-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const tool = createPlanUpdateTool(
+    temporaryRoot,
+    'plans/domain-integrity.md',
+    { now: () => new Date('2026-08-05T11:00:00.000Z') },
+  );
+  const handoff = {
+    learnerClaims: [{
+      statement: '学生已能主动使用定义域条件。',
+      scope: '本 Plan 的两节已完成课堂。',
+      sources: ['trace:trace-fixture-002'],
+      boundary: '跨结构稳定性仍待确认。',
+      nextUse: '下一 Plan 使用不同题型复核。',
+    }],
+    teachingClaims: [],
+    openQuestions: [],
+  };
+
+  const result = await tool.execute('complete-plan', {
+    decision: 'complete',
+    currentPosition: '本周期结束。',
+    planSummary: '完成定义域专项周期。',
+    candidateChanges: [],
+    handoff,
+  } as never, undefined, undefined, {} as never);
+  const payload = JSON.parse((result.content[0] as { text: string }).text);
+  const source = readFileSync(
+    join(temporaryRoot, 'plans/domain-integrity.md'),
+    'utf8',
+  );
+
+  expect(payload).toMatchObject({
+    ok: true,
+    decision: 'complete',
+    handoff: { id: 'domain-integrity/handoff', mode: 'claims' },
+  });
+  expect(source).toContain('status: completed');
+  expect(parseHandoff(source).learnerClaims[0]?.sources)
+    .toEqual(['trace:trace-fixture-002']);
+});
+
+test('keeps a Plan active when its completion Handoff source is invalid', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-plan-invalid-handoff-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const path = join(temporaryRoot, 'plans/domain-integrity.md');
+  const before = readFileSync(path, 'utf8');
+  const tool = createPlanUpdateTool(temporaryRoot, 'plans/domain-integrity.md');
+
+  await expect(tool.execute('invalid-complete', {
+    decision: 'complete',
+    currentPosition: '不应写入。',
+    planSummary: '不应写入。',
+    candidateChanges: [],
+    handoff: {
+      learnerClaims: [{
+        statement: '无来源结论。',
+        scope: '本 Plan。',
+        sources: ['trace:trace-does-not-exist'],
+        boundary: '无。',
+        nextUse: '无。',
+      }],
+      teachingClaims: [],
+      openQuestions: [],
+    },
+  } as never, undefined, undefined, {} as never))
+    .rejects.toThrow('HANDOFF_SOURCE_MISSING');
+  expect(readFileSync(path, 'utf8')).toBe(before);
+});
+
+test('appends a Roadmap checkpoint only from a completed Plan claim', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-roadmap-checkpoint-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const handoff = {
+    learnerClaims: [{
+      statement: '学生已形成阶段性定义域意识。',
+      scope: '本 Plan。',
+      sources: ['trace:trace-fixture-002'],
+      boundary: '仍需跨题确认。',
+      nextUse: '下一周期继续检查。',
+    }],
+    teachingClaims: [],
+    openQuestions: [],
+  };
+  await createPlanUpdateTool(
+    temporaryRoot,
+    'plans/domain-integrity.md',
+    { now: () => new Date('2026-08-05T11:00:00.000Z') },
+  ).execute('complete', {
+    decision: 'complete',
+    currentPosition: '周期结束。',
+    planSummary: '完成。',
+    candidateChanges: [],
+    handoff,
+  } as never, undefined, undefined, {} as never);
+
+  const roadmap = createRoadmapUpdateTool(temporaryRoot, {
+    now: () => new Date('2026-08-05T12:00:00.000Z'),
+  });
+  const result = await roadmap.execute('checkpoint', {
+    candidateChanges: [],
+    checkpoint: {
+      learnerClaims: [{
+        statement: 'Roadmap 进入下一周期。',
+        scope: '当前 Roadmap。',
+        sources: ['claim:domain-integrity/handoff#learner-c1'],
+        boundary: '只代表已完成周期。',
+        nextUse: '规划下一 Plan。',
+      }],
+      teachingClaims: [],
+      openQuestions: [],
+    },
+  } as never, undefined, undefined, {} as never);
+  const payload = JSON.parse((result.content[0] as { text: string }).text);
+  const source = readFileSync(join(temporaryRoot, 'ROADMAP.md'), 'utf8');
+
+  expect(payload).toMatchObject({
+    ok: true,
+    checkpoint: { id: 'checkpoint-001' },
+  });
+  expect(source).toContain('## Handoff Checkpoints');
+  expect(source).toContain('### Checkpoint checkpoint-001');
+  expect(source).toContain('claim:domain-integrity/handoff#learner-c1');
+});
+
+test('rejects a Roadmap checkpoint from an active Plan without changing Roadmap', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-roadmap-invalid-checkpoint-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const roadmapPath = join(temporaryRoot, 'ROADMAP.md');
+  const before = readFileSync(roadmapPath, 'utf8');
+
+  await expect(createRoadmapUpdateTool(temporaryRoot).execute('invalid', {
+    candidateChanges: [],
+    checkpoint: {
+      learnerClaims: [{
+        statement: '不应写入。',
+        scope: 'Roadmap。',
+        sources: ['claim:domain-integrity/handoff#learner-c1'],
+        boundary: 'Plan 未完成。',
+        nextUse: '不应使用。',
+      }],
+      teachingClaims: [],
+      openQuestions: [],
+    },
+  } as never, undefined, undefined, {} as never))
+    .rejects.toThrow('HANDOFF_SOURCE_FORBIDDEN');
+  expect(readFileSync(roadmapPath, 'utf8')).toBe(before);
 });
 
 test('updates Plan summary and unmaterialized Lesson candidates in one call', async () => {

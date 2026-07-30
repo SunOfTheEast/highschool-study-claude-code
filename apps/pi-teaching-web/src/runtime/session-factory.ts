@@ -210,17 +210,21 @@ export async function createPiSessionFactory(
     const ownerTools: ToolDefinition[] = role === 'tutor'
       ? [
         createClassroomUpdateTool(root, ownerPath, { accessPolicy }),
-        createLessonCloseTool(root, ownerPath),
+        createLessonCloseTool(root, ownerPath, {
+          sessionId: manager.getSessionId(),
+          sessionEntries: () => manager.getBranch(),
+          now,
+        }),
         createCardAlternativeAppendTool(root, ownerPath, now),
       ]
       : isRoadmapCoachScope(scope)
         ? [
-          createRoadmapUpdateTool(root),
+          createRoadmapUpdateTool(root, { now }),
           createPlanPrepareTool(root),
         ]
         : [
           createLessonPrepareTool(root, ownerId, ownerPath),
-          createPlanUpdateTool(root, ownerPath),
+          createPlanUpdateTool(root, ownerPath, { now }),
           createMemoryReviewProposeTool(
             root,
             ownerId,

@@ -221,7 +221,7 @@ function replaceSection(
   value: string,
 ): string {
   const pattern = new RegExp(
-    `(^## ${heading}\\s*$\\n)([\\s\\S]*?)(?=^## |(?![\\s\\S]))`,
+    `(^## ${heading}[ \\t]*$\\n)([\\s\\S]*?)(?=^## |(?![\\s\\S]))`,
     'm',
   );
   if (!pattern.test(source)) throw new Error(`SECTION_NOT_FOUND: ${heading}`);
@@ -235,6 +235,7 @@ function replaceSection(
 
 export type LessonCloseInput = {
   summary: string;
+  handoffSource?: string;
 };
 
 export function closeLesson(
@@ -248,6 +249,13 @@ export function closeLesson(
     throw new Error(`LESSON_ALREADY_TERMINAL: ${status}`);
   }
   let source = replaceSection(document.source, 'Lesson Summary', input.summary);
+  if (input.handoffSource !== undefined) {
+    source = replaceSection(
+      source,
+      'Handoff',
+      input.handoffSource.replace(/^## Handoff[ \t]*\n\n/, ''),
+    );
+  }
   source = replaceFrontmatterField(source, lessonPath, 'status', 'closed');
   write(document.absolute, source);
 }

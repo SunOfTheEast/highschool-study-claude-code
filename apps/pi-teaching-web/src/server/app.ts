@@ -15,6 +15,7 @@ import {
   type SessionKey,
 } from '../shared/contracts';
 import { readAbilityProjection, readEvidence } from '../study/ability';
+import { createPiSessionEvidenceReader } from '../runtime/session-owner';
 import { readLearningSet } from '../study/read-workspace';
 import { buildReplay } from '../study/replay';
 import { readStudentNotebook } from '../study/student-notebook';
@@ -191,7 +192,10 @@ export function createRequestHandler(deps?: AppDependencies) {
     if (request.method === 'GET' && url.pathname === '/api/evidence') {
       const source = url.searchParams.get('source');
       if (!source) return json({ error: 'SOURCE_REQUIRED' }, 400);
-      return json(readEvidence(deps.root, source));
+      const options = source.startsWith('claim:')
+        ? { sessions: await createPiSessionEvidenceReader(deps.root) }
+        : {};
+      return json(readEvidence(deps.root, source, options));
     }
 
     if (request.method === 'GET' && url.pathname === '/api/persona') {
