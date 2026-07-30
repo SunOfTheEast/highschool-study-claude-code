@@ -30,9 +30,9 @@ graph:
   method:
     primary: 逆向构造法
     secondary:
-      - 高阶因式分解
       - 数形结合
     subroute:
+      - 高阶因式分解
       - 不动点
       - 稳定点
       - 用已知因式降阶

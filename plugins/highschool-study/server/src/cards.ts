@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { extname, join, relative } from 'node:path';
+import { basename, extname, join, relative } from 'node:path';
 import { parse } from 'yaml';
 import { readCardAlternatives, type CardAlternative } from './alternatives';
 import { resolveInsideRoot } from './learning-set';
@@ -14,6 +14,13 @@ type CardCore = {
   methods: Array<{ name: string; role: 'primary' | 'secondary' }>;
   steps: Array<{ id: string; title: string }>;
   parts: string[];
+  materials: CardMaterialRef[];
+};
+
+export type CardMaterialRef = {
+  path: string;
+  label: string;
+  kind: 'text' | 'image' | 'media';
 };
 
 export type CardHit = CardCore & {
@@ -35,6 +42,33 @@ function record(value: unknown): Record<string, unknown> | null {
 
 function text(value: unknown): string {
   return typeof value === 'string' ? value : '';
+}
+
+function sourcePath(value: unknown): string | null {
+  const object = record(value);
+  const candidate = typeof value === 'string'
+    ? value
+    : typeof object?.path === 'string'
+      ? object.path
+      : '';
+  const path = candidate.trim().replace(/:\d+(?:-\d+)?$/, '');
+  return path.startsWith('materials/')
+    && !path.split('/').some((segment) => (
+      segment === '' || segment === '.' || segment === '..'
+    ))
+    ? path
+    : null;
+}
+
+function materialKind(path: string): CardMaterialRef['kind'] {
+  const extension = extname(path).toLowerCase();
+  if (['.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg'].includes(extension)) {
+    return 'image';
+  }
+  if (['.md', '.txt', '.html', '.htm', '.pdf'].includes(extension)) {
+    return 'text';
+  }
+  return 'media';
 }
 
 function cardPaths(root: string): string[] {
@@ -73,6 +107,16 @@ function loadCard(root: string, path: string): LoadedCard | null {
     }
   }
   const stem = text(raw.stem);
+  const sourceEvidence = record(raw.source_evidence);
+  const materialPaths = [
+    ...(Array.isArray(sourceEvidence?.source_refs) ? sourceEvidence.source_refs : []),
+    ...(Array.isArray(sourceEvidence?.source_images) ? sourceEvidence.source_images : []),
+  ].map(sourcePath).filter((path): path is string => path !== null);
+  const materials = [...new Set(materialPaths)].map((path) => ({
+    path,
+    label: basename(path),
+    kind: materialKind(path),
+  }));
   const parts = (Array.isArray(raw.parts) ? raw.parts : [])
     .flatMap((value) => {
       if (typeof value === 'string' && value.trim()) return [value.trim()];
@@ -93,12 +137,19 @@ function loadCard(root: string, path: string): LoadedCard | null {
       return id && title ? [{ id, title }] : [];
     }),
     parts,
+    materials,
   };
   return { card, searchText: `${path}\n${source}`.toLowerCase() };
 }
 
 export function readCard(root: string, path: string): CardContent | null {
   return loadCard(root, path)?.card ?? null;
+}
+
+export function listCards(root: string): CardContent[] {
+  return cardPaths(root)
+    .map((path) => loadCard(root, path)?.card ?? null)
+    .filter((card): card is CardContent => card !== null);
 }
 
 export function createCardSearcher(readTraces: ActiveTraceReader = readActiveTraces) {

@@ -17,6 +17,7 @@ test('ships the minimal Markdown template', () => {
     'learning-set-template/traces/.gitkeep',
     'learning-set-template/cards/.gitkeep',
     'learning-set-template/graph/.gitkeep',
+    'learning-set-template/graph/method_tree.yaml',
     'learning-set-template/materials/.gitkeep',
     'learning-set-template/memory/student-profile.md',
     'learning-set-template/memory/teaching-profile.md',

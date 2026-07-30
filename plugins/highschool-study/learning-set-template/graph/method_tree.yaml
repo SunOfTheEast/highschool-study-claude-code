@@ -1,0 +1,3 @@
+schema: studyforge.method_tree.v1
+nodes:
+  - { id: methods, root_label: 方法体系, parent_id: null }

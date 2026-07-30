@@ -1,0 +1,19 @@
+schema: studyforge.method_tree.v1
+nodes:
+  - { id: derivative-methods, root_label: 导数方法体系, parent_id: null }
+  - { id: preservation, method: 保值性与分治, parent_id: derivative-methods }
+  - { id: necessity, method: 充分/必要性探路, parent_id: derivative-methods }
+  - { id: tangent, method: 切线放缩与凹凸性, parent_id: derivative-methods }
+  - { id: parameter, method: 参变量分离, parent_id: derivative-methods }
+  - { id: isomorphic, method: 同构变形与换元法, parent_id: derivative-methods }
+  - { id: classification, method: 含参数分类讨论, parent_id: derivative-methods }
+  - { id: symmetry-offset, method: 对称化与偏移, parent_id: derivative-methods }
+  - { id: symmetry-fit, method: 对称性配凑, parent_id: derivative-methods }
+  - { id: local-approximation, method: 局部逼近与找点, parent_id: derivative-methods }
+  - { id: fitting, method: 拟合与夹逼, parent_id: derivative-methods }
+  - { id: sequence-sum, method: 数列和转化, parent_id: derivative-methods }
+  - { id: graph, method: 数形结合, parent_id: derivative-methods }
+  - { id: visible-hidden, method: 显隐点探路, parent_id: derivative-methods }
+  - { id: principal, method: 自由度与主元, parent_id: derivative-methods }
+  - { id: reverse, method: 逆向构造法, parent_id: derivative-methods }
+  - { id: recurrence, method: 递推转化, parent_id: derivative-methods }

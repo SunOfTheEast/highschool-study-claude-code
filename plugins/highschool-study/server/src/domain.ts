@@ -6,13 +6,20 @@ export {
 } from './alternatives';
 export {
   createCardSearcher,
+  listCards,
   readCard,
   searchCards,
   type ActiveTraceReader,
+  type CardMaterialRef,
   type CardContent,
   type CardHit,
   type CardSearchInput,
 } from './cards';
+export {
+  readMethodTree,
+  type MethodTree,
+  type MethodTreeNode,
+} from './method-tree';
 export {
   aggregateMethodSignals,
   type MethodSignal,

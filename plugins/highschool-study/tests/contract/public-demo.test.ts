@@ -1,7 +1,12 @@
 import { expect, test } from 'bun:test';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { parseChildTree } from '../../server/src/domain';
+import {
+  listCanonicalMethodNames,
+  listCards,
+  parseChildTree,
+  readMethodTree,
+} from '../../server/src/domain';
 
 const repo = join(import.meta.dir, '../../../..');
 const demo = join(repo, 'examples/derivative-demo');
@@ -38,4 +43,15 @@ test('ships an oriented derivative demo with a set-scoped persona', () => {
   expect(readdirSync(join(demo, 'learning-set/traces'))).toEqual(['.gitkeep']);
   expect(readdirSync(join(demo, 'learning-set/cards/derivative')))
     .toHaveLength(519);
+
+  const learningSet = join(demo, 'learning-set');
+  const treeMethods = new Set(
+    readMethodTree(learningSet).nodes.slice(1).map((node) => node.name),
+  );
+  expect(treeMethods).toEqual(new Set(listCanonicalMethodNames(learningSet)));
+  for (const card of listCards(learningSet)) {
+    for (const method of card.methods) {
+      expect(treeMethods.has(method.name)).toBe(true);
+    }
+  }
 });
