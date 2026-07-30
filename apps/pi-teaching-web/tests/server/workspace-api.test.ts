@@ -875,7 +875,10 @@ test('publishes the active snapshot before starting the hidden Tutor turn', asyn
     hub,
     readLearningSet: () => learningSet,
     registry: {
-      startLesson: async () => { calls.push('start'); },
+      startLesson: async () => {
+        calls.push('start');
+        return { shouldKickoff: true };
+      },
       triggerLessonStart: async () => {
         calls.push('kickoff');
         await kickoffPending;
@@ -905,6 +908,38 @@ test('publishes the active snapshot before starting the hidden Tutor turn', asyn
     'snapshot',
     'run:idle',
   ]);
+});
+
+test('starts the hidden Tutor turn only for the Lesson start leader', async () => {
+  let startCalls = 0;
+  let kickoffCalls = 0;
+  const handler = createRequestHandler({
+    root: '/tmp/demo',
+    authoring: false,
+    hub: new EventHub(),
+    readLearningSet: () => learningSet,
+    registry: {
+      startLesson: async () => ({
+        shouldKickoff: (startCalls += 1) === 1,
+      }),
+      triggerLessonStart: async () => {
+        kickoffCalls += 1;
+      },
+      snapshot: () => workspace,
+      subscribe: () => () => {},
+      subscribeWorkflows: () => () => {},
+    } as never,
+  });
+
+  const responses = await Promise.all([
+    handler(new Request('http://local/api/lessons/lesson-003/start', { method: 'POST' })),
+    handler(new Request('http://local/api/lessons/lesson-003/start', { method: 'POST' })),
+  ]);
+  await Promise.resolve();
+
+  expect(responses.map((response) => response?.status)).toEqual([200, 200]);
+  expect(startCalls).toBe(2);
+  expect(kickoffCalls).toBe(1);
 });
 
 test('returns actionable prepared Lesson issues without starting Tutor', async () => {

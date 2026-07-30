@@ -394,7 +394,7 @@ const registry = {
     const firstProblem = lesson.blocks.find((block) => block.kind === 'problem');
     if (orientation) setBlockStatus(root, lesson.path, orientation.id, 'completed');
     if (firstProblem) setBlockStatus(root, lesson.path, firstProblem.id, 'active');
-    return {};
+    return { shouldKickoff: true };
   },
   triggerLessonStart: async () => {},
   pauseLesson: async (lessonId: string) => {

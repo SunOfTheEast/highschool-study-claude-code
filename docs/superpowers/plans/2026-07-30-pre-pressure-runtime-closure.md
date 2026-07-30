@@ -27,11 +27,11 @@
 - Test: `apps/pi-teaching-web/tests/server/workspace-api.test.ts`
 - Test fixture: `apps/pi-teaching-web/tests/e2e/fixture-server.ts`
 
-- [ ] 写并发 registry 与 HTTP start 回归测试，确认当前实现创建 / 开场两次。
-- [ ] 新增内存 `lessonStarts`，让 leader 返回 `shouldKickoff: true`，其余请求返回
+- [x] 写并发 registry 与 HTTP start 回归测试，确认当前实现创建 / 开场两次。
+- [x] 新增内存 `lessonStarts`，让 leader 返回 `shouldKickoff: true`，其余请求返回
   `false`。
-- [ ] 服务端只为 leader 调用 `triggerLessonStart`，更新测试 fixture 的返回契约。
-- [ ] 运行：
+- [x] 服务端只为 leader 调用 `triggerLessonStart`，更新测试 fixture 的返回契约。
+- [x] 运行：
 
 ```bash
 bun test tests/runtime/workspace-registry.test.ts tests/server/workspace-api.test.ts

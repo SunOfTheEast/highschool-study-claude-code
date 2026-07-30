@@ -396,9 +396,10 @@ export function createRequestHandler(deps?: AppDependencies) {
     if (request.method === 'POST' && lessonAction) {
       const lessonId = decodeURIComponent(lessonAction[1]!);
       const startsLesson = lessonAction[2] === 'start';
+      let shouldKickoff = false;
       if (startsLesson) {
         try {
-          await deps.registry.startLesson(lessonId);
+          ({ shouldKickoff } = await deps.registry.startLesson(lessonId));
         } catch (error) {
           if (error instanceof PreparedLessonValidationError) {
             return json({ error: error.code, issues: error.issues }, 422);
@@ -413,7 +414,7 @@ export function createRequestHandler(deps?: AppDependencies) {
       }
       const snapshot = deps.registry.snapshot();
       deps.hub.publish({ type: 'snapshot', workspace: snapshot });
-      if (startsLesson) {
+      if (startsLesson && shouldKickoff) {
         runSession(
           `tutor:${lessonId}`,
           '课堂导师正在启动',

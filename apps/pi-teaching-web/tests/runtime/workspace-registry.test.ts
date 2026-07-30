@@ -164,6 +164,40 @@ test('creates Coach eagerly and Tutor only after start', async () => {
   expect(registry.snapshot('domain-integrity').lessons[2]?.status).toBe('active');
 });
 
+test('coalesces concurrent starts into one Tutor Session and one kickoff leader', async () => {
+  const root = fixture();
+  let tutorCreations = 0;
+  const factory: StudySessionFactory = async ({ role, ownerId }) => {
+    if (role === 'tutor') tutorCreations += 1;
+    return {
+      sessionId: `${role}-${ownerId}`,
+      sessionFile: `/tmp/${role}-${ownerId}.jsonl`,
+      messages: [],
+      isStreaming: false,
+      personaId: () => null,
+      setPersona: async () => {},
+      ...idleWorkflowMethods(),
+      prompt: async () => {},
+      abort: async () => {},
+      subscribe: () => () => {},
+      dispose: () => {},
+    };
+  };
+  const registry = new WorkspaceRegistry(root, factory, async () => null);
+
+  const starts = await Promise.all([
+    registry.startLesson('lesson-003'),
+    registry.startLesson('lesson-003'),
+  ]);
+
+  expect(tutorCreations).toBe(1);
+  expect(starts.map((start) => start.shouldKickoff)).toEqual([true, false]);
+  expect(registry.snapshot('domain-integrity').lessons[2]).toMatchObject({
+    status: 'active',
+    tutorSessionId: 'tutor-lesson-003',
+  });
+});
+
 test('keeps a prepared Lesson prepared until its Tutor Session exists', async () => {
   const root = fixture();
   let notifyTutorEntered!: () => void;

@@ -34,10 +34,15 @@ export type SessionFileLookup = (
   expected: StudySessionScope,
 ) => Promise<string | null>;
 
+export type LessonStartResult = {
+  shouldKickoff: boolean;
+};
+
 export const findPiSessionFile: SessionFileLookup = findOwnedPiSessionFile;
 
 export class WorkspaceRegistry {
   private readonly sessions = new Map<string, StudySession>();
+  private readonly lessonStarts = new Map<string, Promise<void>>();
   private planId: string | null = null;
 
   constructor(
@@ -111,20 +116,46 @@ export class WorkspaceRegistry {
     return session;
   }
 
-  async startLesson(lessonId: string): Promise<StudySession> {
+  async startLesson(lessonId: string): Promise<LessonStartResult> {
     const workspace = this.workspaceForLesson(lessonId);
     const lesson = workspace.lessons.find((item) => item.id === lessonId);
     if (!lesson) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
+    if (lesson.status === 'active') {
+      await this.createTutorSession(lessonId, lesson);
+      return { shouldKickoff: false };
+    }
     if (lesson.status === 'prepared') {
       validatePreparedLesson(this.root, lesson.path);
-    } else if (!['active', 'paused'].includes(lesson.status)) {
+    } else if (lesson.status !== 'paused') {
       throw new Error(`LESSON_NOT_OPEN: ${lessonId}`);
     }
-    const session = await this.createTutorSession(lessonId, lesson);
+
+    const pending = this.lessonStarts.get(lessonId);
+    if (pending) {
+      await pending;
+      return { shouldKickoff: false };
+    }
+
+    const starting = this.activateLesson(lessonId, lesson);
+    this.lessonStarts.set(lessonId, starting);
+    try {
+      await starting;
+      return { shouldKickoff: true };
+    } finally {
+      if (this.lessonStarts.get(lessonId) === starting) {
+        this.lessonStarts.delete(lessonId);
+      }
+    }
+  }
+
+  private async activateLesson(
+    lessonId: string,
+    lesson: PlanWorkspaceSnapshot['lessons'][number],
+  ): Promise<void> {
+    await this.createTutorSession(lessonId, lesson);
     if (lesson.status !== 'active') {
       setFrontmatterField(this.root, lesson.path, 'status', 'active');
     }
-    return session;
   }
 
   async triggerLessonStart(lessonId: string): Promise<void> {
