@@ -129,6 +129,16 @@ correction, repeat, and method confirmation supersede its active Trace. The
 public MCP remains explicit and may retain card-step Trace because it has no Pi
 Session owner.
 
+A superseding Trace must replace the current active event from the same Block
+and canonical card binding; a stale or cross-Block event is never a valid
+correction target.
+
+`classroom_update` permits at most one active Block, enforces declared
+dependencies and legal local status transitions, and applies a route decision
+plus its deterministic Block status effect in one Lesson write. Route Changes
+remain an auditable adjusted-route projection, not an automatic scheduler or a
+second Block state.
+
 A prepared Lesson may be revised in place. Once it is active, paused, closed,
 or abandoned, re-preparation creates a replacement Lesson and preserves the
 old record. Its `plan_id` is immutable: another Plan cannot take over even a

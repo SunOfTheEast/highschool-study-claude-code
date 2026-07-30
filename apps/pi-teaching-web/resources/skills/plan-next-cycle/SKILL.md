@@ -22,6 +22,12 @@ rebuildable preparation signal. Do not use a hand-authored or explicitly prototy
 HEATMAP as current learner evidence. Open the decisive original source before choosing
 between Plans when a conflict could change the direction.
 
+Before describing a pattern as stable, repeated, usual or mastered, check its
+observed count, final support, whether the behavior actually occurred, and the exact
+active-Trace method name. If any part is missing, state it as one occurrence,
+supported, not observed, or needing replication. Do not improve a source-linked fact
+into a stronger narrative.
+
 Reconstruct change over time: independence, support, transfer, retention, recurring
 student reasoning, and response to prior teaching moves. A score or method label can
 locate a question but cannot explain its cause.

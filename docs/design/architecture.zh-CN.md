@@ -1,5 +1,9 @@
 # Markdown 优先的高中学习插件设计
 
+> 本文记录 Claude Code 插件的原始 Markdown-first 重写原则。当前 Pi 运行时、
+> Session-bound 写入与学生前端契约以 `AGENTS.md`、`docs/zh-CN/完整说明书.md`
+> 和可执行 runtime 为准；本文不是 Pi 的逐项技术契约。
+
 状态：正式设计已确认；已纳入双向题卡/Trace 搜索、Plan 级长期记忆压缩、学习集概述注入与可切换人设
 
 日期：2026-07-21
