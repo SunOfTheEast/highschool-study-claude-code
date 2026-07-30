@@ -48,6 +48,13 @@ real retrieval result. Valid evidence uses `session:`, `claim:`, `trace:`, `card
 an evidence handle. `activation.adaptation.sources` must be a non-empty subset of
 the handles already selected by that Activation Snapshot.
 
+Keep `lesson_prepare.blueprint.sources` separate from Activation evidence. It is only
+for optional student-visible Lesson resource links, so each target must be a canonical
+learning-set-relative file path (optionally with an anchor) or an HTTP(S) URL. Put
+Session, Claim, Trace, Card, Block, and Memory handles in `activation.*.sources`;
+put problem cards in `cards`; use `sources: []` when the Lesson has no separate visible
+resource link.
+
 When a child Handoff supports a Lesson candidate, cite the relevant canonical
 `claim:` handle from that Handoff. Do not replace it with the Claim's nested
 child `session:` or `trace:` source; those belong to deeper evidence traversal

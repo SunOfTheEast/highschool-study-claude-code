@@ -55,10 +55,21 @@ function blueprintSchema(activationSources?: readonly string[]) {
       role: nonempty,
     }, { additionalProperties: false })),
     sources: Type.Array(Type.Object({
-      label: nonempty,
-      target: nonempty,
-      note: nonempty,
-    }, { additionalProperties: false })),
+      label: Type.String({
+        minLength: 1,
+        description: 'Student-visible label for an optional Lesson resource link.',
+      }),
+      target: Type.String({
+        minLength: 1,
+        description: 'Canonical learning-set-relative file path (optionally with an anchor) or an http(s) URL. Do not use session:, claim:, trace:, card:, block:, or memory: evidence handles here.',
+      }),
+      note: Type.String({
+        minLength: 1,
+        description: 'Student-visible note explaining how this linked resource is used.',
+      }),
+    }, { additionalProperties: false }), {
+      description: 'Optional student-visible resource links rendered in the Lesson. Use [] when none are needed. Activation evidence belongs in activation.*.sources, while problem cards belong in cards.',
+    }),
     blocks: Type.Array(block, { minItems: 1 }),
   }, { additionalProperties: false });
 }
