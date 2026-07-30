@@ -40,12 +40,20 @@ const block = Type.Object({
   teacherControl: nonempty,
 }, { additionalProperties: false });
 const activation = Type.Object({
-  parentSources: Type.Array(nonempty, { minItems: 1 }),
-  selectedMemory: Type.Array(nonempty),
+  parentSources: Type.Array(nonempty, {
+    minItems: 1,
+    description: 'Canonical evidence handles copied exactly from the Plan Node Frame, a sealed Handoff, or a real search result. Use session:, claim:, trace:, card:, or block: handles; plain Markdown paths and prose labels are invalid.',
+  }),
+  selectedMemory: Type.Array(nonempty, {
+    description: 'Optional memory:<student|teaching>/<entry-id> handles copied exactly from the frozen Plan context.',
+  }),
   contentBoundary: Type.Array(nonempty, { minItems: 1 }),
   adaptation: Type.Object({
     workingJudgment: nonempty,
-    sources: Type.Array(nonempty, { minItems: 1 }),
+    sources: Type.Array(nonempty, {
+      minItems: 1,
+      description: 'A non-empty subset copied exactly from activation.parentSources and activation.selectedMemory. Do not put file paths or new labels here.',
+    }),
     designConsequence: nonempty,
     reviseIf: nonempty,
   }, { additionalProperties: false }),
@@ -86,7 +94,7 @@ export function createLessonPrepareTool(
   return defineTool({
     name: 'lesson_prepare',
     label: '整理课堂结构',
-    description: 'Materialize or reprepare one candidate owned by the current Plan. Runtime allocates Lesson identity and path, binds parent ownership, compiles block aliases, and returns the canonical prepared receipt.',
+    description: 'Materialize or reprepare one candidate owned by the current Plan. Runtime allocates Lesson identity and path, binds parent ownership, compiles block aliases, and returns the canonical prepared receipt. Activation evidence must use canonical handles copied from the current Node Frame or a real retrieval result.',
     parameters: Type.Object({
       candidateHandle: nonempty,
       blueprint: blueprintSchema,

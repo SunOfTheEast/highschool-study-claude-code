@@ -53,6 +53,15 @@ Adaptation Brief:
 - the resulting Plan choice;
 - the observation that would trigger revision.
 
+For the first cycle, the student's diagnosis normally lives in the current Roadmap
+Session. Copy its canonical `session:<id>` handle exactly from the Node Frame into
+`activation.parentSources`, and reuse that same handle in
+`activation.adaptation.sources`. Later cycles may instead use canonical `claim:`,
+`trace:`, `card:`, `block:`, or selected `memory:` handles already present in the
+Frame or returned by retrieval. `ROADMAP.md`, `LEARNING_GUIDE.md`, `roadmap`, and
+other file paths or prose labels are context, not Activation evidence handles.
+Adaptation sources must be a non-empty subset of the selected Activation sources.
+
 The prepared Plan contains an observable standard and direct test. It remains
 sessionless until the student starts it.
 

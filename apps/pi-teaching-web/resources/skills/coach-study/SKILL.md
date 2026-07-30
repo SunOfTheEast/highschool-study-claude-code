@@ -42,6 +42,12 @@ student confirms one public purpose, prepare it with a Plan-to-Lesson Adaptation
 - the concrete change to material, sequence, pace, support, or test;
 - the later response that would trigger revision.
 
+Copy Activation sources exactly from the Plan Node Frame, a sealed Handoff, or a
+real retrieval result. Valid evidence uses `session:`, `claim:`, `trace:`, `card:`,
+`block:`, or selected `memory:` handles; a Plan Markdown path or a prose label is not
+an evidence handle. `activation.adaptation.sources` must be a non-empty subset of
+the handles already selected by that Activation Snapshot.
+
 Give every Block one teaching function. Use authentic cards for problem Blocks and
 keep one separately judged response in one problem Block. If no real card fits, change
 the activity or leave the candidate unmaterialized; never invent a card or problem
