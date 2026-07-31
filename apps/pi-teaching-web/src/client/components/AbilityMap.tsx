@@ -40,11 +40,11 @@ export function AbilityMap({
               <small>{stateLabel[node.state]} · {node.evidenceCount} 条记录</small>
               <b>{node.method}</b>
             </span>
-            <i>{Math.round(node.score * 100)}</i>
+            <i aria-hidden="true">›</i>
           </button>
         ))}
       </div>
-      <p className="ability-footnote">分数只用于排列关注顺序；点击节点可回到原始课堂记录。</p>
+      <p className="ability-footnote">这里只概括学习记录；点击节点可回到原始课堂来源。</p>
     </Root>
   );
 }

@@ -788,13 +788,62 @@ export function App() {
           onPreferences={changePresentation}
         />
       )}
+      {contentExplorerOpen && client.selected && (
+        <ContentExplorer
+          onClose={() => setContentExplorerOpen(false)}
+          onEvidence={(source) => void openEvidence(source)}
+          onSearch={(query) => api.contentSearch(client.selected!, query)}
+        />
+      )}
     </AppShell>
   );
 
   if (activeView === 'knowledge') {
+    const query = browserRoute.kind === 'knowledge'
+      ? browserRoute.query
+      : queryForRoute(browserRoute);
     return withAppShell(
       views.knowledge.value
-        ? <KnowledgePage value={views.knowledge.value} />
+        ? (
+          <KnowledgePage
+            value={views.knowledge.value}
+            onSelectMethod={(node) => void openRoute({
+              kind: 'knowledge',
+              query: {
+                ...query,
+                methodName: node.label,
+                cardPath: null,
+                evidenceSource: null,
+              },
+            }, 'push')}
+            onSelectCard={(cardPath, methodName) => void openRoute({
+              kind: 'knowledge',
+              query: {
+                ...query,
+                methodName,
+                cardPath,
+                evidenceSource: null,
+              },
+            }, 'push')}
+            onSelectMaterial={() => setContentExplorerOpen(true)}
+            onFilter={(patch) => void openRoute({
+              kind: 'knowledge',
+              query: { ...query, ...patch },
+            }, 'replace')}
+            onCourse={(route) => {
+              const url = new URL(route, window.location.origin);
+              void openRoute(parseBrowserRoute(url.pathname, url.search), 'push');
+            }}
+            onMemory={(source) => void openRoute({
+              kind: 'memory',
+              query: {
+                ...query,
+                evidenceSource: source,
+                topicId: null,
+              },
+            }, 'push')}
+          />
+        )
         : (
           <main className="coordinate-page knowledge-page" aria-label="知识山河">
             <p>正在整理知识山河…</p>
@@ -1040,13 +1089,6 @@ export function App() {
       {completionFeedback && (
         <div className="completion-feedback" role="status">{completionFeedback}</div>
       )}
-      {contentExplorerOpen && (
-        <ContentExplorer
-          onClose={() => setContentExplorerOpen(false)}
-          onEvidence={(source) => void openEvidence(source)}
-          onSearch={(query) => api.contentSearch(selected, query)}
-        />
-      )}
       {memoryReview?.status === 'proposed' && (
         <MemoryReviewPanel
           review={memoryReview}
@@ -1083,13 +1125,6 @@ export function App() {
         />
         {completionFeedback && (
           <div className="completion-feedback" role="status">{completionFeedback}</div>
-        )}
-        {contentExplorerOpen && (
-          <ContentExplorer
-            onClose={() => setContentExplorerOpen(false)}
-            onEvidence={(source) => void openEvidence(source)}
-            onSearch={(query) => api.contentSearch(selected, query)}
-          />
         )}
         {memoryReview?.status === 'proposed' && (
           <MemoryReviewPanel
