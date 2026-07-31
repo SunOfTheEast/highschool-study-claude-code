@@ -1,5 +1,4 @@
 import type { PlanWorkspaceSnapshot, SessionKey } from '../../shared/contracts';
-import { LearningTree } from './LearningTree';
 import { PlanRationale } from './PlanRationale';
 
 const statusLabel = {
@@ -15,8 +14,6 @@ export function SessionTree({
   selected,
   onSelect,
   onPlanSelect,
-  onRoadmapSelect,
-  onLessonOpen,
   onHome,
   explorerEnabled,
   onExplore,
@@ -25,8 +22,6 @@ export function SessionTree({
   selected: SessionKey;
   onSelect(key: SessionKey): void;
   onPlanSelect(planId: string): void;
-  onRoadmapSelect(): void;
-  onLessonOpen(planId: string, lessonId: string): void;
   onHome(): void;
   explorerEnabled: boolean;
   onExplore(): void;
@@ -50,19 +45,6 @@ export function SessionTree({
       </div>
 
       <PlanRationale value={workspace.plan.planningBasis} />
-
-      <LearningTree
-        roadmapTitle={workspace.learningSet.title}
-        planTree={workspace.learningSet.planTree}
-        currentPlanId={workspace.plan.id}
-        lessonTree={workspace.lessonTree}
-        selectedKey={selected.startsWith('coach:')
-          ? `plan:${workspace.plan.id}`
-          : `lesson:${selected.slice(6)}`}
-        onRoadmap={onRoadmapSelect}
-        onPlan={onPlanSelect}
-        onLesson={onLessonOpen}
-      />
 
       {explorerEnabled && (
         <button className="library-entry" type="button" onClick={onExplore}>

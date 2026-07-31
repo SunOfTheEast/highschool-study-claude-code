@@ -1,17 +1,59 @@
 import type { ReactNode } from 'react';
-import type { CourseViewProjection } from '../../shared/view-contracts';
+import type {
+  CourseTreeNode,
+  CourseViewProjection,
+} from '../../shared/view-contracts';
+import { CourseInspector, type LessonCourseAction } from '../components/CourseInspector';
+import { CourseTree } from '../components/CourseTree';
+import { PlanStage } from '../components/PlanStage';
+
+function findNode(
+  root: CourseTreeNode,
+  key: string | null,
+): CourseTreeNode | null {
+  if (root.key === key) return root;
+  for (const child of root.children) {
+    const found = findNode(child, key);
+    if (found) return found;
+  }
+  return null;
+}
 
 export type CoursePageProps = {
   value: CourseViewProjection;
-  children?: ReactNode;
+  coachPanel?: ReactNode;
+  selectedKey?: string | null;
+  onNodeSelect?(node: CourseTreeNode): void;
+  onLessonAction?(action: LessonCourseAction): void;
+  onKnowledge?(): void;
+  onMemory?(): void;
 };
 
-export function CoursePage({ value, children }: CoursePageProps) {
+export function CoursePage({
+  value,
+  coachPanel = null,
+  selectedKey = null,
+  onNodeSelect = () => {},
+  onLessonAction = () => {},
+  onKnowledge = () => {},
+  onMemory = () => {},
+}: CoursePageProps) {
+  const selected = findNode(value.roadmap, selectedKey) ?? value.roadmap;
   return (
-    <main className="coordinate-page course-page" aria-label="课程脉络">
-      <h1>{value.learningSet.title}</h1>
-      <p>{value.learningSet.overview}</p>
-      {children}
+    <main className="coordinate-page course-page course-workspace" aria-label="课程脉络">
+      <CourseTree
+        root={value.roadmap}
+        selectedKey={selected.key}
+        onSelect={onNodeSelect}
+      />
+      <PlanStage value={value} coachPanel={coachPanel} />
+      <CourseInspector
+        value={value}
+        selected={selected}
+        onLessonAction={onLessonAction}
+        onKnowledge={onKnowledge}
+        onMemory={onMemory}
+      />
     </main>
   );
 }

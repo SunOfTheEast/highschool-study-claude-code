@@ -63,8 +63,6 @@ function render(status: string): string {
       selected="coach:p1"
       onSelect={() => {}}
       onPlanSelect={() => {}}
-      onRoadmapSelect={() => {}}
-      onLessonOpen={() => {}}
       onHome={() => {}}
       explorerEnabled
       onExplore={() => {}}
@@ -80,7 +78,7 @@ test('offers other Plans only after the current Plan is completed', () => {
   const completed = render('completed');
   expect(completed).toContain('继续其他 Plan');
   expect(completed).toContain('下一个 Plan');
-  expect(completed.match(/第一阶段 Plan/g)).toHaveLength(2);
+  expect(completed.match(/第一阶段 Plan/g)).toHaveLength(1);
 });
 
 test('hides a prepared Lesson title and shows only its safe shape', () => {
@@ -146,20 +144,19 @@ test('hides a prepared Lesson title and shows only its safe shape', () => {
       selected="coach:p1"
       onSelect={() => {}}
       onPlanSelect={() => {}}
-      onRoadmapSelect={() => {}}
-      onLessonOpen={() => {}}
       onHome={() => {}}
       explorerEnabled
       onExplore={() => {}}
     />,
   );
 
-  expect(html).toContain('准备好的下一课');
-  expect(html).toContain('完成一节公开的路线练习');
+  expect(html).not.toContain('准备好的下一课');
+  expect(html).not.toContain('完成一节公开的路线练习');
   expect(html).not.toContain('冻结变量法绝密综合诊断');
+  expect(html.match(/data-session-node=/g)).toHaveLength(1);
 });
 
-test('lists candidates only in the learning tree and Sessions only after they exist', () => {
+test('lists only materialized Sessions and leaves course branches to CourseTree', () => {
   const value = workspace('active');
   value.lessonTree = [{
     handle: 'lesson-candidate',
@@ -208,16 +205,14 @@ test('lists candidates only in the learning tree and Sessions only after they ex
       selected="coach:p1"
       onSelect={() => {}}
       onPlanSelect={() => {}}
-      onRoadmapSelect={() => {}}
-      onLessonOpen={() => {}}
       onHome={() => {}}
       explorerEnabled
       onExplore={() => {}}
     />,
   );
 
-  expect(html).toContain('根据前课表现再决定');
-  expect(html).toContain('准备好的下一课');
+  expect(html).not.toContain('根据前课表现再决定');
+  expect(html).not.toContain('准备好的下一课');
   expect(html).toContain('正在进行的课堂');
   expect(html).not.toContain('SECRET_PREPARED_TITLE');
   expect(html.match(/data-session-node=/g)).toHaveLength(2);

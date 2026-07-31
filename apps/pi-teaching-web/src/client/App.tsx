@@ -10,7 +10,6 @@ import {
   type ReactNode,
 } from 'react';
 import { ROADMAP_COACH_SESSION_KEY } from '../shared/contracts';
-import { resolveContinuePath } from '../shared/home';
 import type {
   MemoryReviewDecision,
   MemoryReviewSnapshot,
@@ -19,7 +18,6 @@ import type {
   AbilityProjection,
   CoachContextView,
   EvidenceView,
-  HomeSnapshot,
   HomeLearningSetSnapshot,
   LearningSetSnapshot,
   LessonReplay,
@@ -31,15 +29,18 @@ import type {
   StudentNotebook,
   StudyViewEvent,
 } from '../shared/contracts';
-import type { ViewQuery } from '../shared/view-contracts';
+import type {
+  CourseTreeNode,
+  ViewQuery,
+} from '../shared/view-contracts';
 import { api, ApiError } from './api';
 import { AppShell } from './components/AppShell';
+import type { LessonCourseAction } from './components/CourseInspector';
 import { ChatPanel } from './components/ChatPanel';
 import { ContentExplorer } from './components/ContentExplorer';
 import { ContextStack } from './components/ContextStack';
 import { CurrentActivityStage } from './components/CurrentActivityStage';
 import { EvidenceLens } from './components/EvidenceLens';
-import { LearningSetHome } from './components/LearningSetHome';
 import { MemoryReviewPanel } from './components/MemoryReviewPanel';
 import { PersonaDrawer } from './components/PersonaDrawer';
 import { PlanLearningReview } from './components/PlanLearningReview';
@@ -101,7 +102,6 @@ function queryForRoute(route: BrowserRoute): ViewQuery {
 export function App() {
   const [learningSet, setLearningSet] =
     useState<LearningSetSnapshot | HomeLearningSetSnapshot | null>(null);
-  const [homeSnapshot, setHomeSnapshot] = useState<HomeSnapshot | null>(null);
   const [roadmapWorkspace, setRoadmapWorkspace] =
     useState<RoadmapWorkspaceSnapshot | null>(null);
   const [client, setClient] = useState(initialClientState);
@@ -135,6 +135,7 @@ export function App() {
   ));
   const [views, dispatchViews] = useReducer(reduceViewState, initialViewState);
   const [visibleRevision, setVisibleRevision] = useState(0);
+  const [courseSelectedKey, setCourseSelectedKey] = useState<string | null>(null);
 
   const loadProjection = async (route: BrowserRoute) => {
     const view = primaryViewForRoute(route);
@@ -231,6 +232,13 @@ export function App() {
     try {
       if (!route) throw new Error('INVALID_ROUTE');
       setBrowserRoute(route);
+      if (route.kind === 'course') {
+        setCourseSelectedKey('roadmap:@roadmap');
+      } else if (route.kind === 'course-plan') {
+        setCourseSelectedKey(`plan:${route.planId}`);
+      } else if (route.kind === 'course-lesson') {
+        setCourseSelectedKey(`lesson:${route.lessonId}`);
+      }
       await loadProjection(route);
       if (route.kind === 'knowledge' || route.kind === 'memory') {
         const path = formatBrowserRoute(route);
@@ -239,7 +247,6 @@ export function App() {
         return;
       }
       if (route.kind === 'course') {
-        setHomeSnapshot(null);
         const workspace = await api.roadmapWorkspace();
         const selected = workspace.coach.sessionKey;
         const history = await api.history(selected);
@@ -258,7 +265,6 @@ export function App() {
         }
         return;
       }
-      setHomeSnapshot(null);
       setRoadmapWorkspace(null);
       const workspace = await api.workspace(route.planId);
       let selected: SessionKey;
@@ -300,15 +306,7 @@ export function App() {
       }
     } catch {
       setRoadmapWorkspace(null);
-      setClient(initialClientState);
       setEvidence(null);
-      try {
-        const home = await api.home();
-        setHomeSnapshot(home);
-        setLearningSet(home.learningSet);
-      } catch {
-        setHomeSnapshot(null);
-      }
       setPageError(route ? '无法恢复这个学习位置，已返回学习集首页。' : '无效的学习路径，已返回学习集首页。');
       setBrowserRoute({ kind: 'course' });
       window.history.replaceState(null, '', '/course');
@@ -576,27 +574,6 @@ export function App() {
     }, 'push');
   };
 
-  const openTreeLesson = async (planId: string, lessonId: string) => {
-    setPageError(null);
-    try {
-      const workspace = client.workspace?.plan.id === planId
-        ? client.workspace
-        : await api.workspace(planId);
-      const lesson = workspace.lessons.find((candidate) => candidate.id === lessonId);
-      if (!lesson) throw new Error('LESSON_NOT_FOUND');
-      if (lesson.status === 'prepared') {
-        if (!await startLesson(lesson)) return;
-        const route = formatBrowserRoute({ kind: 'course-lesson', planId, lessonId });
-        window.history.pushState(null, '', route);
-        localStorage.setItem('studyforge.lastVisitedRoute', route);
-        return;
-      }
-      await openRoute({ kind: 'course-lesson', planId, lessonId }, 'push');
-    } catch {
-      setPageError('这节课暂时无法打开，请回到学习顾问确认当前安排。');
-    }
-  };
-
   const send = async (text: string, imagePaths: string[]) => {
     if (!client.selected) return;
     setClient((current) => ({
@@ -702,6 +679,47 @@ export function App() {
     } catch {
       setPageError('这个学习周期暂时无法启动，请回到学习总览确认当前安排。');
     }
+  };
+
+  const selectCourseNode = (node: CourseTreeNode) => {
+    setCourseSelectedKey(node.key);
+    if (!node.route) return;
+    const url = new URL(node.route, window.location.origin);
+    void openRoute(parseBrowserRoute(url.pathname, url.search), 'push');
+  };
+
+  const openPrimaryView = (view: PrimaryView) => {
+    void openRoute(
+      routeForPrimaryView(view, selectionFromRoute(browserRoute)),
+      'push',
+    );
+  };
+
+  const actOnCourseLesson = async (action: LessonCourseAction) => {
+    if (
+      browserRoute.kind !== 'course-lesson'
+      || !client.workspace
+    ) return;
+    const lesson = client.workspace.lessons.find(
+      (candidate) => candidate.id === browserRoute.lessonId,
+    );
+    if (!lesson) return;
+    if (action === 'start') {
+      await openReadyLesson(lesson.id);
+      return;
+    }
+    if (action === 'reprepare') {
+      await api.lessonAction(lesson.id, 'reprepare');
+      await openRoute({
+        kind: 'course-plan',
+        planId: client.workspace.plan.id,
+      }, 'replace');
+      return;
+    }
+    if (action === 'continue' && lesson.status === 'paused') {
+      if (!await startLesson(lesson)) return;
+    }
+    await openRoute(browserRoute, 'none');
   };
 
   const activeView = primaryViewForRoute(browserRoute);
@@ -851,37 +869,35 @@ export function App() {
     );
     return withAppShell(
       views.course.value
-        ? <CoursePage value={views.course.value}>{roadmapContent}</CoursePage>
+        ? (
+          <CoursePage
+            value={views.course.value}
+            coachPanel={roadmapContent}
+            selectedKey={courseSelectedKey}
+            onNodeSelect={selectCourseNode}
+            onLessonAction={(action) => void actOnCourseLesson(action)}
+            onKnowledge={() => openPrimaryView('knowledge')}
+            onMemory={() => openPrimaryView('memory')}
+          />
+        )
         : roadmapContent,
     );
   }
   if (!client.workspace || !client.selected) {
-    if (!homeSnapshot) {
-      return <main className="loading-screen"><span>SF</span><p>正在整理继续位置…</p></main>;
-    }
-    const continuePath = resolveContinuePath(
-      homeSnapshot,
-      localStorage.getItem('studyforge.lastVisitedRoute'),
-    );
-    const homeContent = (
-      <>
-        {pageError && <div className="page-alert" role="alert">{pageError}</div>}
-        <LearningSetHome
-          value={homeSnapshot}
-          continuePath={continuePath}
-          onContinue={(path) => void openRoute(parseBrowserRoute(path, ''), 'push')}
-          onOpen={(id) => void openPlan(id)}
-          onLessonOpen={(planId, lessonId) => {
-            void openTreeLesson(planId, lessonId);
-          }}
-          onRoadmapOpen={() => void openRoute({ kind: 'course' }, 'push')}
-        />
-      </>
-    );
     return withAppShell(
       views.course.value
-        ? <CoursePage value={views.course.value}>{homeContent}</CoursePage>
-        : homeContent,
+        ? (
+          <CoursePage
+            value={views.course.value}
+            coachPanel={<p>{pageError ?? '正在打开学习顾问…'}</p>}
+            selectedKey={courseSelectedKey}
+            onNodeSelect={selectCourseNode}
+            onLessonAction={(action) => void actOnCourseLesson(action)}
+            onKnowledge={() => openPrimaryView('knowledge')}
+            onMemory={() => openPrimaryView('memory')}
+          />
+        )
+        : <p className="workspace-notice">正在整理课程脉络…</p>,
     );
   }
 
@@ -951,12 +967,6 @@ export function App() {
           onSelect={(key) => void selectSession(key)}
           onPlanSelect={(planId) => {
             void openPlan(planId);
-          }}
-          onRoadmapSelect={() => {
-            void openRoute({ kind: 'course' }, 'push');
-          }}
-          onLessonOpen={(planId, lessonId) => {
-            void openTreeLesson(planId, lessonId);
           }}
           onHome={goHome}
           explorerEnabled={isCoach || selectedLesson?.status !== 'prepared'}
@@ -1049,7 +1059,17 @@ export function App() {
   }
   return withAppShell(
     views.course.value
-      ? <CoursePage value={views.course.value}>{workspaceContent}</CoursePage>
+      ? (
+        <CoursePage
+          value={views.course.value}
+          coachPanel={workspaceContent}
+          selectedKey={courseSelectedKey}
+          onNodeSelect={selectCourseNode}
+          onLessonAction={(action) => void actOnCourseLesson(action)}
+          onKnowledge={() => openPrimaryView('knowledge')}
+          onMemory={() => openPrimaryView('memory')}
+        />
+      )
       : workspaceContent,
   );
 }
