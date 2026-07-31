@@ -7,7 +7,11 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { Check } from 'typebox/value';
+import { NodeAccessPolicy } from '../../src/runtime/node-access';
+import { compileNodeContext } from '../../src/runtime/node-context';
 import { createRoadmapUpdateTool } from '../../src/runtime/roadmap-update';
+import { ROADMAP_COACH_SCOPE } from '../../src/runtime/session-scope';
 import { readLearningSet } from '../../src/study/read-workspace';
 import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
 
@@ -72,6 +76,43 @@ test('updates Roadmap milestones and candidate tree in one tool call', async () 
   expect(source).not.toContain('## Plan Graph');
 });
 
+test('adds the current Roadmap Session to candidates without model input', async () => {
+  const root = fixture();
+  const accessPolicy = new NodeAccessPolicy(
+    root,
+    compileNodeContext(root, ROADMAP_COACH_SCOPE, {
+      sessionId: 'session-current-roadmap',
+    }),
+    { sessionId: 'session-current-roadmap' },
+  );
+  const tool = createRoadmapUpdateTool(root, { accessPolicy });
+  const candidate = {
+    publicPurpose: '训练跨章节选路。',
+    after: 'plan-candidate-001',
+    dependsOn: ['plan-candidate-001'],
+    considerWhen: '定义域 Plan 完成后。',
+    sources: ['trace:trace-fixture-002'],
+    privateNote: '先比较路线。',
+  };
+
+  expect(Check(tool.parameters, {
+    candidateChanges: [{
+      action: 'add',
+      candidate: {
+        ...candidate,
+        sources: ['session:model-supplied'],
+      },
+    }],
+  })).toBeFalse();
+
+  await tool.execute('runtime-session', {
+    candidateChanges: [{ action: 'add', candidate }],
+  } as never, undefined, undefined, {} as never);
+
+  expect(readFileSync(join(root, 'ROADMAP.md'), 'utf8'))
+    .toContain('session:session-current-roadmap');
+});
+
 test('rejects a Plan candidate source outside the Roadmap boundary', async () => {
   const root = fixture();
   const path = join(root, 'ROADMAP.md');
@@ -96,7 +137,7 @@ test('rejects a Plan candidate source outside the Roadmap boundary', async () =>
     }],
   } as never, undefined, undefined, {} as never))
     .rejects.toThrow(
-      'NODE_CANDIDATE_SOURCE_NOT_ALLOWED: session:child-plan-session',
+      'NODE_CANDIDATE_SESSION_SOURCE_RUNTIME_OWNED: session:child-plan-session',
     );
   expect(readFileSync(path, 'utf8')).toBe(before);
 });

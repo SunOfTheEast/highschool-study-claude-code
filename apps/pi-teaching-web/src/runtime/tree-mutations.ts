@@ -28,7 +28,8 @@ const candidateHandle = Type.String({
 });
 const candidateSource = Type.String({
   minLength: 1,
-  description: 'A source already available to the current parent node. Cite child evidence with its sealed Handoff claim: handle; never cite a child session: handle directly.',
+  pattern: '^(?!session:).+$',
+  description: 'A non-Session source already available to the current parent node. Runtime adds the current parent Session automatically. Cite child evidence with its sealed Handoff claim: handle.',
 });
 
 export const candidateDraftSchema = Type.Object({
@@ -67,7 +68,46 @@ export const candidateChangesSchema = Type.Array(candidateChangeSchema);
 export type CandidateSourcePolicy = {
   allows(source: string): boolean;
   allowedSources?(): readonly string[];
+  currentSessionSource?(): string | null;
 };
+
+export function withRuntimeCandidateSources(
+  changes: CandidateChange[],
+  policy?: CandidateSourcePolicy,
+): CandidateChange[] {
+  for (const change of changes) {
+    if (change.action === 'remove') continue;
+    const supplied = change.candidate.sources.find((source) => (
+      source.startsWith('session:')
+    ));
+    if (supplied !== undefined) {
+      throw new Error(
+        `NODE_CANDIDATE_SESSION_SOURCE_RUNTIME_OWNED: ${supplied}`,
+      );
+    }
+  }
+
+  const sessionSource = policy?.currentSessionSource?.() ?? null;
+  if (sessionSource === null) return changes;
+  const parsed = parseSourceHandle(sessionSource);
+  if (parsed.kind !== 'session' || parsed.messageId !== null) {
+    throw new Error(`NODE_CURRENT_SESSION_SOURCE_INVALID: ${sessionSource}`);
+  }
+  return changes.map((change) => (
+    change.action === 'remove'
+      ? change
+      : {
+        ...change,
+        candidate: {
+          ...change.candidate,
+          sources: [...new Set([
+            ...change.candidate.sources,
+            sessionSource,
+          ])],
+        },
+      }
+  ));
+}
 
 export function assertCandidateSourcesAllowed(
   changes: CandidateChange[],

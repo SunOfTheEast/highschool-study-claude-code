@@ -153,6 +153,10 @@ export class NodeAccessPolicy {
     return this.granted.has(source);
   }
 
+  currentSessionSource(): string | null {
+    return this.sessionId === null ? null : `session:${this.sessionId}`;
+  }
+
   allowedSources(): string[] {
     const sources = new Set([
       ...this.initial,

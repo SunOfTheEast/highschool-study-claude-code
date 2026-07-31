@@ -12,6 +12,7 @@ import {
   candidateChangesSchema,
   type CandidateSourcePolicy,
   updateParentDocument,
+  withRuntimeCandidateSources,
 } from './tree-mutations';
 
 const milestone = Type.String({ minLength: 1 });
@@ -49,8 +50,12 @@ export function createRoadmapUpdateTool(
       )),
     }, { additionalProperties: false }),
     execute: async (_id, input) => {
-      assertCandidateSourcesAllowed(
+      const candidateChanges = withRuntimeCandidateSources(
         input.candidateChanges,
+        options.accessPolicy,
+      );
+      assertCandidateSourcesAllowed(
+        candidateChanges,
         options.accessPolicy,
       );
       const sections: Record<string, string> = {};
@@ -79,7 +84,7 @@ export function createRoadmapUpdateTool(
         parentId: 'roadmap',
         parentPath: 'ROADMAP.md',
         childKind: 'plan',
-        candidateChanges: input.candidateChanges,
+        candidateChanges,
         sections,
         appendMissingSections: ['Handoff Checkpoints'],
         frontmatter: {},

@@ -1402,6 +1402,16 @@ test('keeps candidate ordering fields handle-only in the provider schema', () =>
       },
     }],
   })).toBeFalse();
+  expect(Check(tool.parameters, {
+    ...input,
+    candidateChanges: [{
+      action: 'add',
+      candidate: {
+        ...candidate,
+        sources: ['session:model-supplied'],
+      },
+    }],
+  })).toBeFalse();
 });
 
 test('requires a Handoff only for a complete plan_update decision', () => {
@@ -1674,6 +1684,53 @@ test('updates Plan summary and unmaterialized Lesson candidates in one call', as
     .toBe(roadmapBefore);
 });
 
+test('adds the current Plan Session to Lesson candidates without model input', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-plan-runtime-session-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  const scope = {
+    nodeKind: 'plan' as const,
+    nodeId: 'domain-integrity',
+    nodePath: 'plans/domain-integrity.md',
+    parentId: 'roadmap',
+    parentPath: 'ROADMAP.md',
+  };
+  const accessPolicy = new NodeAccessPolicy(
+    temporaryRoot,
+    compileNodeContext(temporaryRoot, scope, {
+      sessionId: 'session-current-plan',
+    }),
+    { sessionId: 'session-current-plan' },
+  );
+  const tool = createPlanUpdateTool(
+    temporaryRoot,
+    'plans/domain-integrity.md',
+    { accessPolicy },
+  );
+
+  await tool.execute('runtime-session', {
+    decision: 'active',
+    currentPosition: '继续学习。',
+    planSummary: '增加下一节候选。',
+    candidateChanges: [{
+      action: 'add',
+      candidate: {
+        publicPurpose: '检查跨题型迁移。',
+        after: 'lesson-candidate-003',
+        dependsOn: ['lesson-candidate-003'],
+        considerWhen: '当前连续性核验完成后。',
+        sources: ['trace:trace-fixture-002'],
+        privateNote: '只改变题型外壳。',
+      },
+    }],
+  } as never, undefined, undefined, {} as never);
+
+  expect(readFileSync(
+    join(temporaryRoot, 'plans/domain-integrity.md'),
+    'utf8',
+  )).toContain('session:session-current-plan');
+});
+
 test('rejects a Lesson candidate source outside the current Plan boundary', async () => {
   const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-plan-source-boundary-'));
   temporaryRoots.push(temporaryRoot);
@@ -1707,7 +1764,7 @@ test('rejects a Lesson candidate source outside the current Plan boundary', asyn
     }],
   } as never, undefined, undefined, {} as never))
     .rejects.toThrow(
-      'NODE_CANDIDATE_SOURCE_NOT_ALLOWED: session:child-lesson-session',
+      'NODE_CANDIDATE_SESSION_SOURCE_RUNTIME_OWNED: session:child-lesson-session',
     );
   expect(readFileSync(path, 'utf8')).toBe(before);
 });
