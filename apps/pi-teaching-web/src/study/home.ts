@@ -17,11 +17,11 @@ export { resolveContinuePath };
 const lessonPriority = ['active', 'paused', 'prepared'] as const;
 
 function lessonRoute(planId: string, lessonId: string): string {
-  return `/plan/${encodeURIComponent(planId)}/lesson/${encodeURIComponent(lessonId)}`;
+  return `/course/plan/${encodeURIComponent(planId)}/lesson/${encodeURIComponent(lessonId)}`;
 }
 
 function coachRoute(planId: string): string {
-  return `/plan/${encodeURIComponent(planId)}`;
+  return `/course/plan/${encodeURIComponent(planId)}`;
 }
 
 function prioritizedLesson(workspace: PlanWorkspaceSnapshot): LessonNode | null {
@@ -96,7 +96,7 @@ export function readHomeSnapshot(root: string): HomeSnapshot {
     };
   } else {
     continueTarget = {
-      route: '/roadmap',
+      route: '/course',
       kind: 'roadmap',
       planId: null,
       lessonId: null,
@@ -108,7 +108,7 @@ export function readHomeSnapshot(root: string): HomeSnapshot {
   }
 
   const eligibleContinueRoutes = [
-    '/roadmap',
+    '/course',
     ...workspaces.flatMap((workspace) => [
       coachRoute(workspace.plan.id),
       ...workspace.lessons

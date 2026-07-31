@@ -41,7 +41,7 @@ test('prioritizes active, paused and prepared Lessons before an unfinished Plan 
       title: '下一节课堂',
       kind: 'lesson',
       lessonId: 'lesson-003',
-      route: '/plan/domain-integrity/lesson/lesson-003',
+      route: '/course/plan/domain-integrity/lesson/lesson-003',
     },
   });
 
@@ -49,7 +49,7 @@ test('prioritizes active, paused and prepared Lessons before an unfinished Plan 
   expect(readHomeSnapshot(root).continueTarget).toMatchObject({
     kind: 'lesson',
     lessonId: 'lesson-003',
-    route: '/plan/domain-integrity/lesson/lesson-003',
+    route: '/course/plan/domain-integrity/lesson/lesson-003',
     title: expect.stringContaining('阶段 1b'),
     detail: expect.stringContaining('暂停'),
   });
@@ -68,7 +68,7 @@ test('prioritizes active, paused and prepared Lessons before an unfinished Plan 
     },
     continueTarget: {
       kind: 'coach',
-      route: '/plan/domain-integrity',
+      route: '/course/plan/domain-integrity',
     },
   });
 });
@@ -107,7 +107,7 @@ test('uses Roadmap setup when no Plan exists and next-stage planning when all ar
   );
   expect(readHomeSnapshot(empty).continueTarget).toMatchObject({
     kind: 'roadmap',
-    route: '/roadmap',
+    route: '/course',
   });
   expect(readHomeSnapshot(empty).continueTarget.title).toContain('第一个');
 
@@ -115,7 +115,7 @@ test('uses Roadmap setup when no Plan exists and next-stage planning when all ar
   setFrontmatterField(completed, 'plans/domain-integrity.md', 'status', 'completed');
   expect(readHomeSnapshot(completed).continueTarget).toMatchObject({
     kind: 'roadmap',
-    route: '/roadmap',
+    route: '/course',
   });
   expect(readHomeSnapshot(completed).continueTarget.title).toContain('下一阶段');
 });
@@ -123,15 +123,17 @@ test('uses Roadmap setup when no Plan exists and next-stage planning when all ar
 test('accepts a saved route only when it remains eligible', () => {
   const home = readHomeSnapshot(fixture());
 
-  expect(resolveContinuePath(home, '/plan/domain-integrity')).toBe('/plan/domain-integrity');
+  expect(resolveContinuePath(home, '/course/plan/domain-integrity')).toBe(
+    '/course/plan/domain-integrity',
+  );
   expect(resolveContinuePath(
     home,
-    '/plan/domain-integrity/lesson/lesson-003',
-  )).toBe('/plan/domain-integrity/lesson/lesson-003');
+    '/course/plan/domain-integrity/lesson/lesson-003',
+  )).toBe('/course/plan/domain-integrity/lesson/lesson-003');
   expect(resolveContinuePath(
     home,
-    '/plan/domain-integrity/lesson/lesson-001',
-  )).toBe('/plan/domain-integrity/lesson/lesson-001');
-  expect(resolveContinuePath(home, '/roadmap')).toBe('/roadmap');
-  expect(resolveContinuePath(home, '/plan/missing')).toBe(home.continueTarget.route);
+    '/course/plan/domain-integrity/lesson/lesson-001',
+  )).toBe('/course/plan/domain-integrity/lesson/lesson-001');
+  expect(resolveContinuePath(home, '/course')).toBe('/course');
+  expect(resolveContinuePath(home, '/course/plan/missing')).toBe(home.continueTarget.route);
 });

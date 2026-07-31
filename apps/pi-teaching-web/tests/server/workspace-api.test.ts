@@ -107,7 +107,7 @@ test('returns one deterministic continue-first Home snapshot', async () => {
     continueTarget: {
       kind: 'lesson',
       lessonId: 'lesson-003',
-      route: '/plan/domain-integrity/lesson/lesson-003',
+      route: '/course/plan/domain-integrity/lesson/lesson-003',
     },
     lessonProgress: { completed: 2, total: 3 },
   });
@@ -1421,7 +1421,7 @@ test('serves the built client shell for local browser routes', async () => {
       hub: new EventHub(),
       registry: {} as never,
     });
-    const response = await handler(new Request('http://local/plan/domain-integrity'));
+    const response = await handler(new Request('http://local/course/plan/domain-integrity'));
     expect(response!.status).toBe(200);
     expect(await response!.text()).toContain('StudyForge shell');
   } finally {

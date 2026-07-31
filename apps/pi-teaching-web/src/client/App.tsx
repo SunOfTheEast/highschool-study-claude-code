@@ -141,19 +141,7 @@ export function App() {
     setPersonaDrawerOpen(false);
     try {
       if (!route) throw new Error('INVALID_ROUTE');
-      if (route.kind === 'home') {
-        const home = await api.home();
-        setHomeSnapshot(home);
-        setLearningSet(home.learningSet);
-        setRoadmapWorkspace(null);
-        setClient(initialClientState);
-        setEvidence(null);
-        if (navigation === 'push') window.history.pushState(null, '', formatBrowserRoute(route));
-        if (navigation === 'replace') window.history.replaceState(null, '', formatBrowserRoute(route));
-        return;
-      }
-
-      if (route.kind === 'roadmap') {
+      if (route.kind === 'course') {
         setHomeSnapshot(null);
         const workspace = await api.roadmapWorkspace();
         const selected = workspace.coach.sessionKey;
@@ -173,12 +161,15 @@ export function App() {
         }
         return;
       }
+      if (route.kind === 'knowledge' || route.kind === 'memory') {
+        throw new Error('COORDINATE_VIEW_NOT_MOUNTED');
+      }
       setHomeSnapshot(null);
       setRoadmapWorkspace(null);
       const workspace = await api.workspace(route.planId);
       let selected: SessionKey;
       let history: Awaited<ReturnType<typeof api.history>> | null = null;
-      if (route.kind === 'coach') {
+      if (route.kind === 'course-plan') {
         selected = workspace.coach.sessionKey;
         history = await api.history(selected);
       } else {
@@ -201,11 +192,11 @@ export function App() {
       if (navigation === 'push') window.history.pushState(null, '', formatBrowserRoute(route));
       if (navigation === 'replace') window.history.replaceState(null, '', formatBrowserRoute(route));
       const savedPath = formatBrowserRoute(route);
-      const selectedLesson = route.kind === 'lesson'
+      const selectedLesson = route.kind === 'course-lesson'
         ? workspace.lessons.find((candidate) => candidate.id === route.lessonId)
         : null;
       if (
-        (route.kind === 'coach' && workspace.plan.status !== 'completed')
+        (route.kind === 'course-plan' && workspace.plan.status !== 'completed')
         || (
           selectedLesson
           && ['active', 'paused', 'prepared'].includes(selectedLesson.status)
@@ -225,7 +216,7 @@ export function App() {
         setHomeSnapshot(null);
       }
       setPageError(route ? '无法恢复这个学习位置，已返回学习集首页。' : '无效的学习路径，已返回学习集首页。');
-      window.history.replaceState(null, '', '/');
+      window.history.replaceState(null, '', '/course');
     } finally {
       setLoading(false);
     }
@@ -237,7 +228,11 @@ export function App() {
       .then((value) => {
         if (!current) return;
         setLearningSet(value);
-        return openRoute(parseBrowserRoute(window.location.pathname));
+        const route = parseBrowserRoute(
+          window.location.pathname,
+          window.location.search,
+        );
+        return openRoute(route ?? { kind: 'course' }, route ? 'none' : 'replace');
       })
       .catch(() => setPageError('无法读取学习集，请确认本地服务与学习集目录。'))
       .finally(() => {
@@ -248,7 +243,10 @@ export function App() {
 
   useEffect(() => {
     const onPopState = () => {
-      void openRoute(parseBrowserRoute(window.location.pathname));
+      void openRoute(parseBrowserRoute(
+        window.location.pathname,
+        window.location.search,
+      ) ?? { kind: 'course' }, 'replace');
     };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
@@ -262,11 +260,14 @@ export function App() {
   useEffect(() => {
     if (!client.workspace || !client.selected?.startsWith('coach:')) return;
     const route = parseBrowserRoute(window.location.pathname);
-    if (route?.kind !== 'lesson' || route.planId !== client.workspace.plan.id) return;
+    if (
+      route?.kind !== 'course-lesson'
+      || route.planId !== client.workspace.plan.id
+    ) return;
     window.history.replaceState(
       null,
       '',
-      formatBrowserRoute({ kind: 'coach', planId: client.workspace.plan.id }),
+      formatBrowserRoute({ kind: 'course-plan', planId: client.workspace.plan.id }),
     );
   }, [client.selected, client.workspace?.plan.id]);
 
@@ -386,18 +387,16 @@ export function App() {
   const selectSession = async (nextKey: SessionKey) => {
     if (!client.workspace || nextKey === client.selected) return;
     try {
-      let workspace = client.workspace;
-      const currentLesson = workspace.lessons.find(
-        (lesson) => lesson.sessionKey === client.selected,
-      );
-      if (currentLesson?.status === 'active') {
-        workspace = await api.lessonAction(currentLesson.id, 'pause');
-      }
+      const workspace = client.workspace;
       const nextLesson = workspace.lessons.find((lesson) => lesson.sessionKey === nextKey);
       const route: BrowserRoute | null = nextKey.startsWith('coach:')
-        ? { kind: 'coach', planId: workspace.plan.id }
+        ? { kind: 'course-plan', planId: workspace.plan.id }
         : nextLesson
-          ? { kind: 'lesson', planId: workspace.plan.id, lessonId: nextLesson.id }
+          ? {
+            kind: 'course-lesson',
+            planId: workspace.plan.id,
+            lessonId: nextLesson.id,
+          }
           : null;
       if (!route) throw new Error('SESSION_NOT_FOUND');
       await openRoute(route, 'push');
@@ -461,7 +460,7 @@ export function App() {
     if (lesson.status === 'prepared') {
       if (await startLesson(lesson)) {
         const route = formatBrowserRoute({
-          kind: 'lesson',
+          kind: 'course-lesson',
           planId: client.workspace.plan.id,
           lessonId,
         });
@@ -471,7 +470,7 @@ export function App() {
       return;
     }
     await openRoute({
-      kind: 'lesson',
+      kind: 'course-lesson',
       planId: client.workspace.plan.id,
       lessonId,
     }, 'push');
@@ -487,12 +486,12 @@ export function App() {
       if (!lesson) throw new Error('LESSON_NOT_FOUND');
       if (lesson.status === 'prepared') {
         if (!await startLesson(lesson)) return;
-        const route = formatBrowserRoute({ kind: 'lesson', planId, lessonId });
+        const route = formatBrowserRoute({ kind: 'course-lesson', planId, lessonId });
         window.history.pushState(null, '', route);
         localStorage.setItem('studyforge.lastVisitedRoute', route);
         return;
       }
-      await openRoute({ kind: 'lesson', planId, lessonId }, 'push');
+      await openRoute({ kind: 'course-lesson', planId, lessonId }, 'push');
     } catch {
       setPageError('这节课暂时无法打开，请回到学习顾问确认当前安排。');
     }
@@ -587,7 +586,7 @@ export function App() {
   };
 
   const goHome = () => {
-    void openRoute({ kind: 'home' }, 'push');
+    void openRoute({ kind: 'course' }, 'push');
   };
 
   const openPlan = async (planId: string): Promise<void> => {
@@ -599,7 +598,7 @@ export function App() {
       if (entry?.status === 'prepared') {
         await api.startPlan(planId);
       }
-      await openRoute({ kind: 'coach', planId }, 'push');
+      await openRoute({ kind: 'course-plan', planId }, 'push');
     } catch {
       setPageError('这个学习周期暂时无法启动，请回到学习总览确认当前安排。');
     }
@@ -693,12 +692,12 @@ export function App() {
         <LearningSetHome
           value={homeSnapshot}
           continuePath={continuePath}
-          onContinue={(path) => void openRoute(parseBrowserRoute(path), 'push')}
+          onContinue={(path) => void openRoute(parseBrowserRoute(path, ''), 'push')}
           onOpen={(id) => void openPlan(id)}
           onLessonOpen={(planId, lessonId) => {
             void openTreeLesson(planId, lessonId);
           }}
-          onRoadmapOpen={() => void openRoute({ kind: 'roadmap' }, 'push')}
+          onRoadmapOpen={() => void openRoute({ kind: 'course' }, 'push')}
         />
       </>
     );
@@ -772,7 +771,7 @@ export function App() {
             void openPlan(planId);
           }}
           onRoadmapSelect={() => {
-            void openRoute({ kind: 'roadmap' }, 'push');
+            void openRoute({ kind: 'course' }, 'push');
           }}
           onLessonOpen={(planId, lessonId) => {
             void openTreeLesson(planId, lessonId);

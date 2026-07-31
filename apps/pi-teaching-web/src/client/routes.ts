@@ -1,44 +1,70 @@
 import type { PublicTreeEntry } from '../shared/contracts';
+import type { ViewQuery } from '../shared/view-contracts';
+import {
+  formatViewQuery,
+  normalizeViewId,
+  readViewQuery,
+} from '../study/views/view-query';
 
 export type BrowserRoute =
-  | { kind: 'home' }
-  | { kind: 'roadmap' }
-  | { kind: 'coach'; planId: string }
-  | { kind: 'lesson'; planId: string; lessonId: string };
+  | { kind: 'course' }
+  | { kind: 'course-plan'; planId: string }
+  | { kind: 'course-lesson'; planId: string; lessonId: string }
+  | { kind: 'knowledge'; query: ViewQuery }
+  | { kind: 'memory'; query: ViewQuery };
 
 function decodeId(value: string): string | null {
   try {
-    const decoded = decodeURIComponent(value);
-    return decoded.trim() ? decoded : null;
+    return normalizeViewId(decodeURIComponent(value));
   } catch {
     return null;
   }
 }
 
-export function parseBrowserRoute(pathname: string): BrowserRoute | null {
-  if (pathname === '/') return { kind: 'home' };
-  if (pathname === '/roadmap') return { kind: 'roadmap' };
+export function parseBrowserRoute(
+  pathname: string,
+  search = '',
+): BrowserRoute | null {
+  if (pathname === '/course') return { kind: 'course' };
+  if (pathname === '/knowledge' || pathname === '/memory') {
+    const query = readViewQuery(new URLSearchParams(search));
+    return pathname === '/knowledge'
+      ? { kind: 'knowledge', query }
+      : { kind: 'memory', query };
+  }
   if (!pathname.startsWith('/') || pathname.endsWith('/')) return null;
   const parts = pathname.slice(1).split('/');
-  if (parts.length === 2 && parts[0] === 'plan') {
-    const planId = decodeId(parts[1]!);
-    return planId ? { kind: 'coach', planId } : null;
+  if (parts.length === 3 && parts[0] === 'course' && parts[1] === 'plan') {
+    const planId = decodeId(parts[2]!);
+    return planId ? { kind: 'course-plan', planId } : null;
   }
-  if (parts.length === 4 && parts[0] === 'plan' && parts[2] === 'lesson') {
-    const planId = decodeId(parts[1]!);
-    const lessonId = decodeId(parts[3]!);
-    return planId && lessonId ? { kind: 'lesson', planId, lessonId } : null;
+  if (
+    parts.length === 5
+    && parts[0] === 'course'
+    && parts[1] === 'plan'
+    && parts[3] === 'lesson'
+  ) {
+    const planId = decodeId(parts[2]!);
+    const lessonId = decodeId(parts[4]!);
+    return planId && lessonId
+      ? { kind: 'course-lesson', planId, lessonId }
+      : null;
   }
   return null;
 }
 
 export function formatBrowserRoute(route: BrowserRoute): string {
-  if (route.kind === 'home') return '/';
-  if (route.kind === 'roadmap') return '/roadmap';
-  const plan = encodeURIComponent(route.planId);
-  return route.kind === 'coach'
-    ? `/plan/${plan}`
-    : `/plan/${plan}/lesson/${encodeURIComponent(route.lessonId)}`;
+  if (route.kind === 'course') return '/course';
+  if (route.kind === 'course-plan') {
+    return `/course/plan/${encodeURIComponent(route.planId)}`;
+  }
+  if (route.kind === 'course-lesson') {
+    return `/course/plan/${encodeURIComponent(route.planId)}/lesson/${
+      encodeURIComponent(route.lessonId)
+    }`;
+  }
+  const path = route.kind === 'knowledge' ? '/knowledge' : '/memory';
+  return `${path}${formatViewQuery(route.query)}`;
 }
 
 export function routeForPublicTreeEntry(
@@ -47,12 +73,12 @@ export function routeForPublicTreeEntry(
 ): BrowserRoute | null {
   if (entry.status === 'candidate' || entry.nodeId === null) return null;
   if (entry.kind === 'plan') {
-    return { kind: 'coach', planId: entry.nodeId };
+    return { kind: 'course-plan', planId: entry.nodeId };
   }
   return parentPlanId === null
     ? null
     : {
-      kind: 'lesson',
+      kind: 'course-lesson',
       planId: parentPlanId,
       lessonId: entry.nodeId,
     };
