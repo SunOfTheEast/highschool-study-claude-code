@@ -16,6 +16,9 @@ test('keeps the three equal primary views visible during loading', () => {
       connection="connecting"
       viewLoading={true}
       viewError={null}
+      personaId="neutral-tutor"
+      motion="gentle"
+      completionFeedback={true}
       personaControl={<button type="button">陪伴风格</button>}
       onNavigate={() => {}}
       onReturnCourse={() => {}}

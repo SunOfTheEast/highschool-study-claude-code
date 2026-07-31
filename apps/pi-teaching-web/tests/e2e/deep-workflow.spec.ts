@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('toggles deep mode and confirms a workflow without adding sidebar agents', async ({ page }) => {
-  await page.goto('/plan/domain-integrity');
+  await page.goto('/course/plan/domain-integrity');
   await page.getByRole('button', { name: /深入查找/ }).click();
   await expect(page.getByText('已允许深入查找')).toBeVisible();
   await page.locator('.context-section').filter({ hasText: '深入查找' })
@@ -17,7 +17,7 @@ test('toggles deep mode and confirms a workflow without adding sidebar agents', 
 });
 
 test('cancels unfinished work and keeps a completed branch visible', async ({ page }) => {
-  await page.goto('/plan/domain-integrity');
+  await page.goto('/course/plan/domain-integrity');
   await page.locator('.context-section').filter({ hasText: '深入查找' })
     .locator(':scope > summary').click();
   const workflow = page.locator('.workflow').filter({ hasText: '可取消会诊' });

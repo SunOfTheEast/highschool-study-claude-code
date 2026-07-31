@@ -12,7 +12,6 @@ export type FocusedClassroomPageProps = {
   replay: LessonReplay | null;
   stage: ReactNode;
   chatPanel: ReactNode;
-  onStart(): void;
   onPause(): void;
   onReprepare(): void;
 };
@@ -23,7 +22,6 @@ export function FocusedClassroomPage({
   replay,
   stage,
   chatPanel,
-  onStart,
   onPause,
   onReprepare,
 }: FocusedClassroomPageProps) {
@@ -45,11 +43,6 @@ export function FocusedClassroomPage({
         </header>
         {stage}
         <div className="classroom-actions">
-          {(lesson.status === 'prepared' || lesson.status === 'paused') && (
-            <button type="button" onClick={onStart}>
-              {lesson.status === 'paused' ? '继续上课' : '开始上课'}
-            </button>
-          )}
           {lesson.status === 'active' && (
             <button type="button" onClick={onPause}>暂停课堂</button>
           )}

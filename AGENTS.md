@@ -170,18 +170,37 @@ There is no model-callable memory-apply tool.
 
 The student UI is a projection, never a fact owner:
 
+- `Course`, `Knowledge` and `Memory` are equal primary views inside one
+  persistent App Shell. `/course` is the default entry; a focused classroom is
+  a child route at `/course/plan/<plan-id>/lesson/<lesson-id>`;
 - the course tree shows Roadmap → Plans → Lessons and Candidate/prepared/active/
-  terminal state;
+  terminal state. Candidates have no file, Session or start action; prepared
+  nodes start only on an explicit student action; active/paused nodes continue;
+  terminal nodes open read-only replay;
 - Candidates have no chat action; prepared nodes expose the student start
   action; only materialized nodes with real Sessions appear in Session history;
 - prepared Lesson title, Teacher Control, private notes, answers, methods and
   unrevealed Blocks remain private;
+- Knowledge renders the formal Method Tree from `graph/` and overlays only
+  active personal Trace signals. Card `primary`/`secondary` links remain edge
+  roles, not invented graph nodes. It shows distinct-card evidence semantics,
+  never a mastery percentage or automatic completion decision;
+- Memory separates confirmed preferences, stage findings, open questions,
+  source-only records and invalidated history. “Object” only routes the student
+  to the owning Coach with a draft; no fact changes until the student sends,
+  the Coach reviews and a scoped tool returns a receipt;
 - safe message projection replaces tool chatter with structured events while
-  raw Pi JSONL remains available for local diagnosis;
-- Home, routes, replay, Context pages, content search, evidence lens and ability
-  views are rebuilt from current facts;
-- refresh restores the selected valid route without silently activating or
-  switching nodes;
+  `raw-stream` and raw Pi JSONL remain local diagnostic surfaces;
+- Course, Knowledge and Memory projections come from read-only
+  `GET /api/views/{course,knowledge,memory}` endpoints. Query coordinates may
+  narrow the current Plan, Lesson, method, card or source, but never widen node
+  or source permissions;
+- routes, replay, Context pages, search, evidence detail and method overlays are
+  rebuilt from current facts. Switching primary views does not pause, close,
+  recreate or copy a Tutor Session;
+- refresh restores the selected valid route and owner-matched Session without
+  silently activating or switching nodes. Narrow Knowledge uses the textual
+  method-list fallback rather than an unreadable miniature graph;
 - a completed Plan may show other Plans, but switching remains a student click.
 
 ## Teaching authority
@@ -212,6 +231,14 @@ Runtime ownership defect, and do not add brittle tests for Skill wording.
   ownership, Context compilation, access policy and scoped tools.
 - `apps/pi-teaching-web/src/study/`: node readers, Handoffs, evidence,
   projections, routes and replay.
+- Three-coordinate views:
+  - `apps/pi-teaching-web/src/study/views/`: read-only Course, Knowledge and
+    Memory projectors;
+  - `apps/pi-teaching-web/src/shared/view-contracts.ts`: student-safe view
+    contracts and shared selection coordinates;
+  - `apps/pi-teaching-web/src/client/pages/`: the three primary pages and
+    focused classroom;
+  - `GET /api/views/{course,knowledge,memory}`: read-only projection endpoints.
 - `apps/pi-teaching-web/src/memory-review/`: proposal, confirmation and trusted
   profile application.
 - `apps/pi-teaching-web/src/client/`: student-safe workspace.

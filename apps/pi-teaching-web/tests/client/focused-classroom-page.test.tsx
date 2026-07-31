@@ -7,7 +7,6 @@ test('prioritizes Lesson navigation, Tutor dialogue and the safe notebook', () =
   const html = renderToStaticMarkup(
     <FocusedClassroomPage
       {...classroomPageFixture()}
-      onStart={() => {}}
       onPause={() => {}}
       onReprepare={() => {}}
     />,

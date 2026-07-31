@@ -18,7 +18,7 @@ export function PrimaryViewNav({
   onNavigate,
 }: PrimaryViewNavProps) {
   return (
-    <nav className="primary-view-nav" aria-label="学习视图">
+    <nav className="primary-view-nav" aria-label="主视图">
       {(Object.keys(labels) as PrimaryView[]).map((view) => (
         <a
           key={view}

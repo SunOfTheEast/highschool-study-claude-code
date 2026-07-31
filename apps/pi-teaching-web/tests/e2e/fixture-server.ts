@@ -77,6 +77,7 @@ const roadmapBaseline = readFileSync(roadmapPath, 'utf8');
 const hub = new EventHub();
 const coachKey: SessionKey = 'coach:domain-integrity';
 const roadmapKey: SessionKey = ROADMAP_COACH_SESSION_KEY;
+let factWriteCount = 0;
 
 function replaceFixtureSection(
   source: string,
@@ -90,7 +91,7 @@ function replaceFixtureSection(
   return source.replace(
     pattern,
     (_match, sectionHeading: string) => (
-      `${sectionHeading}\n${value.trim()}\n\n`
+      `${sectionHeading.trimEnd()}\n\n${value.trim()}\n\n`
     ),
   );
 }
@@ -100,6 +101,7 @@ function updateFixturePlan(
   input: {
     currentPosition: string;
     learningReview: Parameters<typeof renderLearningReview>[0];
+    handoffSources?: string[];
   },
 ): void {
   const absolute = join(root, planRelativePath);
@@ -114,6 +116,22 @@ function updateFixturePlan(
     'Plan Summary',
     renderLearningReview(input.learningReview),
   );
+  if (input.handoffSources) {
+    source = replaceFixtureSection(
+      source,
+      'Handoff',
+      [
+        '- ID: domain-integrity/handoff',
+        '- From: plan:domain-integrity',
+        '- To: roadmap:roadmap',
+        '- Sealed at: 2026-07-29T09:15:00.000Z',
+        '',
+        '### Source Index',
+        '',
+        ...input.handoffSources.map((item) => `- ${item}`),
+      ].join('\n'),
+    );
+  }
   source = source.replace(/^status:.*$/m, 'status: completed');
   writeFileSync(absolute, source);
 }
@@ -497,6 +515,7 @@ function resetHierarchicalFlow(): void {
   fixtureHistory.set(coachKey, structuredClone(coachHistoryBaseline));
   currentMemoryReview = proposedMemoryReview;
   rejectNextLessonStart = false;
+  factWriteCount = 0;
   personaSelections.clear();
   deepMode.clear();
 }
@@ -1295,6 +1314,10 @@ const registry = {
   snapshot: (planId = selectedPlanId) => readPlanWorkspace(root, planId),
   history: (key: SessionKey) => fixtureConversation(key),
   readHistory: async (key: SessionKey) => fixtureConversation(key),
+  sessionEvidenceReader: async () => ({
+    readSession: () => null,
+    readMessage: () => null,
+  }),
   replayHistory: async (lessonId: string) => (
     structuredClone(fixtureHistory.get(`tutor:${lessonId}` as SessionKey) ?? [])
   ),
@@ -1457,6 +1480,7 @@ const registry = {
   abandonForReprepare: async () => {},
   send: async (key: SessionKey) => {
     if (!key.startsWith('tutor:')) return;
+    factWriteCount += 1;
     for (const listener of sessionListeners.get(key) ?? []) {
       listener({
         type: 'tool_execution_end',
@@ -1715,6 +1739,7 @@ function completeStudentSafeFlowFixture(): {
         nextCheck: '下一 Plan 安排一题未见嵌套约束题。',
       }],
     },
+    handoffSources: [key.sourceRef, supporting.sourceRef],
   });
   currentMemoryReview = appliedMemoryReview;
   fixtureHistory.set(coachKey, [
@@ -1748,6 +1773,7 @@ function resetStudentSafeFlowFixture(): void {
   fixtureHistory.set(coachKey, structuredClone(coachHistoryBaseline));
   fixtureHistory.delete('tutor:lesson-003');
   rejectNextLessonStart = false;
+  factWriteCount = 0;
 }
 
 Bun.serve({
@@ -1755,6 +1781,12 @@ Bun.serve({
   port: Number(process.env.STUDYFORGE_E2E_API_PORT ?? 65000),
   async fetch(request, server) {
     const url = new URL(request.url);
+    if (
+      request.method === 'GET'
+      && url.pathname === '/api/test/fact-write-count'
+    ) {
+      return Response.json({ count: factWriteCount });
+    }
     if (
       request.method === 'POST'
       && url.pathname === '/__test/hierarchical-flow/reset'

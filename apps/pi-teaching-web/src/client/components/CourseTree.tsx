@@ -19,7 +19,9 @@ function Branch({
         <small>
           {node.status === 'candidate' ? '可能的下一步' : node.publicPurpose}
         </small>
-        <strong>{node.title}</strong>
+        <strong>
+          {node.status === 'candidate' ? node.publicPurpose : node.title}
+        </strong>
       </button>
       {node.dependsOn.length > 0 && (
         <p className="course-dependencies">

@@ -591,13 +591,11 @@ export function App() {
     }
     if (lesson.status === 'prepared') {
       if (await startLesson(lesson)) {
-        const route = formatBrowserRoute({
+        await openRoute({
           kind: 'course-lesson',
           planId: client.workspace.plan.id,
           lessonId,
-        });
-        window.history.pushState(null, '', route);
-        localStorage.setItem('studyforge.lastVisitedRoute', route);
+        }, 'push');
       }
       return;
     }
@@ -717,6 +715,10 @@ export function App() {
 
   const selectCourseNode = (node: CourseTreeNode) => {
     setCourseSelectedKey(node.key);
+    if (node.kind === 'plan' && node.nodeId && node.status === 'prepared') {
+      void openPlan(node.nodeId);
+      return;
+    }
     if (!node.route) return;
     const url = new URL(node.route, window.location.origin);
     void openRoute(parseBrowserRoute(url.pathname, url.search), 'push');
@@ -774,7 +776,17 @@ export function App() {
       selectionLabel={selectionLabel}
       connection={connection}
       viewLoading={activeSlot.loading}
-      viewError={activeSlot.error}
+      viewError={pageError ?? activeSlot.error}
+      personaId={persona?.id ?? 'neutral-tutor'}
+      {...(persona?.choices.find((choice) => choice.id === persona.id)?.accent
+        ? {
+            personaAccent: persona.choices.find(
+              (choice) => choice.id === persona.id,
+            )!.accent,
+          }
+        : {})}
+      motion={presentation.motion}
+      completionFeedback={presentation.completionFeedback}
       personaControl={(
         <button
           type="button"
@@ -1067,7 +1079,7 @@ export function App() {
       deepMode={client.deepMode[selected] ?? false}
       workflows={client.workflows[selected] ?? []}
       workflowControlsEnabled={workflowSessionOpen}
-      gate={gate}
+      gate={browserRoute.kind === 'course-lesson' ? null : gate}
       stage={isCoach && coachContext?.plan.learningReview ? (
         <PlanLearningReview
           value={coachContext.plan.learningReview}
@@ -1171,7 +1183,6 @@ export function App() {
           replay={replay}
           stage={classroomStage}
           chatPanel={sessionChatPanel}
-          onStart={() => void startLesson(selectedLesson)}
           onPause={() => void pauseLesson(selectedLesson.id)}
           onReprepare={() => void reprepareLesson(selectedLesson.id)}
         />

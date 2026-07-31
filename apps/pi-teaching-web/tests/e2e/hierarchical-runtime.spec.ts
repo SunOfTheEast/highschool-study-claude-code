@@ -51,16 +51,17 @@ test.describe.serial('hierarchical learning runtime', () => {
 
   test('moves a Roadmap candidate into one student-started Plan and keeps the next Lesson private', async ({ page }) => {
     await post(page, '/__test/hierarchical-flow/add-plan-candidate');
-    await page.goto('/');
+    await page.goto('/course');
 
     const planCandidate = page.locator(
-      '[data-node="plan-candidate-002"]',
-    );
+      '.course-tree li[data-status="candidate"]',
+    ).filter({ hasText: '训练跨结构判断' });
     await expect(planCandidate).toContainText('训练跨结构判断');
-    await expect(planCandidate).not.toHaveJSProperty('tagName', 'BUTTON');
-    await expect(
-      page.locator('button[data-node="plan-candidate-002"]'),
-    ).toHaveCount(0);
+    await planCandidate.getByRole('button').click();
+    await expect(page).toHaveURL(/\/course$/);
+    await expect(page.getByLabel('课程节点详情')).toContainText(
+      '这一分支还在讨论中',
+    );
 
     state = await post<FlowState>(
       page,
@@ -70,7 +71,7 @@ test.describe.serial('hierarchical learning runtime', () => {
     await page.reload();
 
     await page.getByRole('button', { name: /跨结构判断周期/ }).click();
-    await expect(page).toHaveURL(new RegExp(`/plan/${state.planId}$`));
+    await expect(page).toHaveURL(new RegExp(`/course/plan/${state.planId}$`));
     await expect(page.locator('.app-root')).toHaveAttribute(
       'data-view',
       'coach',
@@ -84,21 +85,21 @@ test.describe.serial('hierarchical learning runtime', () => {
     await page.reload();
 
     const prepared = page.locator(
-      'button[data-node="lesson-candidate-001"]',
-    );
-    await expect(prepared).toContainText('准备好的下一课');
+      '.course-tree li[data-status="prepared"]',
+    ).filter({ hasText: '待开始课程' });
+    await expect(prepared).toContainText('待开始课程');
     await expect(prepared).not.toContainText('HIERARCHICAL_FIRST_TRUE_TITLE');
     const candidate = page.locator(
-      '[data-node="lesson-candidate-002"]',
-    );
+      '.course-tree li[data-status="candidate"]',
+    ).filter({ hasText: '根据第一课表现继续迁移' });
     await expect(candidate).toContainText('根据第一课表现继续迁移');
-    await expect(
-      page.locator('button[data-node="lesson-candidate-002"]'),
-    ).toHaveCount(0);
-    await expect(
-      page.getByRole('navigation', { name: 'Plan sessions' })
-        .locator('.lesson-nodes > button'),
-    ).toHaveCount(0);
+    await candidate.getByRole('button').click();
+    await expect(page).toHaveURL(
+      new RegExp(`/course/plan/${state.planId}$`),
+    );
+    await expect(page.getByLabel('课程节点详情')).toContainText(
+      '这一分支还在讨论中',
+    );
     await expect(page.locator('.app-root')).not.toContainText(
       'PRIVATE_BRANCH_ONLY',
     );
@@ -112,15 +113,23 @@ test.describe.serial('hierarchical learning runtime', () => {
 
   test('enforces child ownership, closes two Lessons, and invalidates an old Claim after correction', async ({ page }) => {
     state = await readState(page);
-    await page.goto(`/plan/${state.planId}`);
-    await page.locator(
-      'button[data-node="lesson-candidate-001"]',
-    ).click();
+    await page.goto(`/course/plan/${state.planId}`);
+    await page.locator('.course-tree li[data-status="prepared"] button')
+      .click();
     await expect(page).toHaveURL(
-      new RegExp(`/plan/${state.planId}/lesson/${state.firstLessonId}$`),
+      new RegExp(
+        `/course/plan/${state.planId}/lesson/${state.firstLessonId}$`,
+      ),
     );
-    await expect(page.locator('.app-root')).toContainText(
+    await expect(page.getByTestId('session-owner')).toContainText(
       'HIERARCHICAL_FIRST_TRUE_TITLE',
+    );
+    await page.getByLabel('课堂节点')
+      .getByRole('button', { name: /开始上课/ })
+      .click();
+    await expect(page.getByLabel('专注课堂')).toHaveAttribute(
+      'data-lesson-status',
+      'active',
     );
 
     state = await post<FlowState>(
@@ -139,20 +148,21 @@ test.describe.serial('hierarchical learning runtime', () => {
     expect(authority.roadmap).toContain('MATERIALIZED_IMMUTABLE');
     expect(authority.plan).toContain('MATERIALIZED_IMMUTABLE');
 
-    const context = page.getByRole('complementary', {
-      name: '课堂导师情境',
-    });
-    await expect(context).not.toContainText('PRIVATE_BRANCH_ONLY');
-    await expect(context).not.toContainText('HIERARCHICAL_SECOND_TRUE_TITLE');
+    await expect(page.locator('.workspace-shell')).not.toContainText(
+      'PRIVATE_BRANCH_ONLY',
+    );
+    await expect(page.locator('.workspace-shell')).not.toContainText(
+      'HIERARCHICAL_SECOND_TRUE_TITLE',
+    );
 
     state = await post<FlowState>(
       page,
       '/__test/hierarchical-flow/complete-first-lesson',
     );
     await page.reload();
-    await expect(page.locator('.app-root')).toHaveAttribute(
-      'data-view',
-      'replay',
+    await expect(page.getByLabel('专注课堂')).toHaveAttribute(
+      'data-lesson-status',
+      'closed',
     );
     await expect(page.locator('form.composer')).toHaveCount(0);
 
@@ -189,7 +199,7 @@ test.describe.serial('hierarchical learning runtime', () => {
       page,
       '/__test/hierarchical-flow/complete-plan-and-propose-memory',
     );
-    await page.goto(`/plan/${state.planId}`);
+    await page.goto(`/course/plan/${state.planId}`);
     await expect(
       page.getByRole('region', { name: '阶段学习回顾' }),
     ).toBeVisible();
@@ -200,7 +210,7 @@ test.describe.serial('hierarchical learning runtime', () => {
 
   test('applies confirmed memory, drills through the evidence tree, and restores terminal routes', async ({ page }) => {
     state = await readState(page);
-    await page.goto(`/plan/${state.planId}`);
+    await page.goto(`/course/plan/${state.planId}`);
 
     const card = page.locator('article.memory-review-card');
     await card.getByRole('button', { name: /逐条确认/ }).click();
@@ -219,28 +229,30 @@ test.describe.serial('hierarchical learning runtime', () => {
     const review = page.getByRole('region', { name: '阶段学习回顾' });
     await review.getByText('为什么这样判断').click();
     await review.getByRole('button', { name: '查看这次表现' }).nth(1).click();
-    const lens = page.getByRole('dialog', { name: '阶段认识来源' });
-    await expect(lens).toContainText('底层记录后来被更正');
-    await lens.getByRole('button', { name: '关闭', exact: true }).click();
+    await expect(page.getByLabel('研习留痕')).toBeVisible();
+    await expect(page.getByLabel('来源详情')).toContainText(
+      '来源后来被修正',
+    );
+    await page.goto(`/course/plan/${state.planId}`);
 
-    await page.locator(
-      'button[data-node="lesson-candidate-001"]',
-    ).click();
-    await expect(page.locator('.app-root')).toHaveAttribute(
-      'data-view',
-      'replay',
+    await page.locator('.course-tree button')
+      .filter({ hasText: 'HIERARCHICAL_FIRST_TRUE_TITLE' })
+      .click();
+    await expect(page.getByLabel('专注课堂')).toHaveAttribute(
+      'data-lesson-status',
+      'closed',
     );
     await page.reload();
-    await expect(page.locator('.app-root')).toHaveAttribute(
-      'data-view',
-      'replay',
+    await expect(page.getByLabel('专注课堂')).toHaveAttribute(
+      'data-lesson-status',
+      'closed',
     );
     await expect(page.locator('form.composer')).toHaveCount(0);
 
-    await page.getByRole('button', { name: /学习总览/ }).click();
-    await expect(page).toHaveURL(/\/roadmap$/);
+    await page.goto('/course');
+    await expect(page).toHaveURL(/\/course$/);
     await page.reload();
-    await expect(page).toHaveURL(/\/roadmap$/);
+    await expect(page).toHaveURL(/\/course$/);
 
     state = await readState(page);
     expect(state.parallelPlansObserved).toBe(true);

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { CurrentSelectionChip } from './CurrentSelectionChip';
 import { PrimaryViewNav } from './PrimaryViewNav';
 import type { PrimaryView } from '../view-state';
@@ -11,6 +11,10 @@ export type AppShellProps = {
   connection: 'open' | 'connecting' | 'closed';
   viewLoading: boolean;
   viewError: string | null;
+  personaId: string;
+  personaAccent?: string;
+  motion: string;
+  completionFeedback: boolean;
   personaControl: ReactNode;
   onNavigate(view: PrimaryView): void;
   onReturnCourse(): void;
@@ -25,13 +29,25 @@ export function AppShell({
   connection,
   viewLoading,
   viewError,
+  personaId,
+  personaAccent,
+  motion,
+  completionFeedback,
   personaControl,
   onNavigate,
   onReturnCourse,
   children,
 }: AppShellProps) {
   return (
-    <div className="workspace-shell" data-primary-view={activeView}>
+    <div
+      className="workspace-shell"
+      data-primary-view={activeView}
+      data-theme="liubai-xinzhongshi"
+      data-persona={personaId}
+      data-motion={motion}
+      data-completion-feedback={completionFeedback ? 'on' : 'off'}
+      style={{ '--persona-accent': personaAccent } as CSSProperties}
+    >
       <header className="workspace-header">
         <a
           className="workspace-brand"
