@@ -257,7 +257,7 @@ Expected: tracked tree clean；仍只有三个已知生成目录未跟踪。
 
 ---
 
-### Task 3: 审计 `744a980` 三项教学小修仍然生效
+### Task 3: 审计 `744a980` 三项教学小修在当前语义所有者中仍然生效
 
 **Files:**
 
@@ -293,19 +293,21 @@ bun test tests/contract/mcp-tools.test.ts tests/e2e/markdown-learning-loop.test.
 
 Expected: 两个测试文件全部通过；公共工具集合恰好为四个，空搜索仍是真实性边界。
 
-- [ ] **Step 3: 逐条核对 Tutor 归因与撤回语义仍存在**
+- [ ] **Step 3: 逐条核对当前 Skill 与 tool schema 共同保留归因和撤回语义**
 
 ```bash
 NODE=/Users/yangrundong/Documents/GitHub/highschool-study-claude-code/.worktrees/studyforge-node-workspace
 
-rg -F 'Treat search results as compact indexes' "$NODE/apps/pi-teaching-web/resources/skills/coach-study/SKILL.md"
-rg -F 'A Tutor claim the student correctly rejects is not adopted decisive content' "$NODE/apps/pi-teaching-web/resources/skills/tutor-lesson/SKILL.md"
-rg -F 'the next action is a superseding Trace before any further teaching question' "$NODE/apps/pi-teaching-web/resources/skills/tutor-lesson/SKILL.md"
+rg -F 'A Handoff is an index; resolve its' "$NODE/apps/pi-teaching-web/resources/skills/coach-study/SKILL.md"
+rg -F "Card metadata describes the task, not the student's route." "$NODE/apps/pi-teaching-web/resources/skills/coach-study/SKILL.md"
+rg -F 'Corrections supersede the active record for that' "$NODE/apps/pi-teaching-web/resources/skills/tutor-lesson/SKILL.md"
+rg -F 'Help actually used in the final route' "$NODE/apps/pi-teaching-web/src/runtime/study-tools.ts"
+rg -F 'identifying the exact student-supplied claim behind the assessment' "$NODE/apps/pi-teaching-web/src/runtime/study-tools.ts"
 rg -F 'Teacher Control, rubrics, reference solutions, common failures and fallbacks are judging aids, not observations.' "$NODE/plugins/highschool-study/skills/run-lesson/references/evidence-protocol.md"
-rg -F 'Card metadata describes reference structure' "$NODE/plugins/highschool-study/skills/prepare-next-lesson/SKILL.md"
+rg -F 'A Tutor claim the student correctly rejects is not adopted decisive content' "$NODE/plugins/highschool-study/skills/run-lesson/references/evidence-protocol.md"
 ```
 
-Expected: 五个检索各命中现行语义所有者；不新增 Skill 文本快照测试。
+Expected: 七个检索各命中现行语义所有者。紧凑检索由 Step 1 的 Runtime 测试验证；Pi Tutor 的时序规则与 `trace_append` schema 共同约束归因；Claude 插件由 evidence protocol 承载同一含义。不把 `744a980` 的历史原句当成永久接口，也不新增 Skill 文本快照测试。
 
 - [ ] **Step 4: 单独验证超长题面下 composer 可点击**
 
