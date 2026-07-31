@@ -17,7 +17,6 @@ import type {
 import type {
   AbilityProjection,
   CoachContextView,
-  EvidenceView,
   HomeLearningSetSnapshot,
   LearningSetSnapshot,
   LessonReplay,
@@ -31,6 +30,7 @@ import type {
 } from '../shared/contracts';
 import type {
   CourseTreeNode,
+  PublicObjectionTarget,
   ViewQuery,
 } from '../shared/view-contracts';
 import { api, ApiError } from './api';
@@ -40,7 +40,6 @@ import { ChatPanel } from './components/ChatPanel';
 import { ContentExplorer } from './components/ContentExplorer';
 import { ContextStack } from './components/ContextStack';
 import { CurrentActivityStage } from './components/CurrentActivityStage';
-import { EvidenceLens } from './components/EvidenceLens';
 import { MemoryReviewPanel } from './components/MemoryReviewPanel';
 import { PersonaDrawer } from './components/PersonaDrawer';
 import { PlanLearningReview } from './components/PlanLearningReview';
@@ -112,7 +111,6 @@ export function App() {
   const [replay, setReplay] = useState<LessonReplay | null>(null);
   const [abilities, setAbilities] = useState<AbilityProjection | null>(null);
   const [coachContext, setCoachContext] = useState<CoachContextView | null>(null);
-  const [evidence, setEvidence] = useState<EvidenceView | null>(null);
   const [persona, setPersona] = useState<PersonaPresentation | null>(null);
   const [memoryReview, setMemoryReview] = useState<MemoryReviewSnapshot | null>(null);
   const [submittingMemoryReview, setSubmittingMemoryReview] = useState(false);
@@ -306,7 +304,6 @@ export function App() {
       }
     } catch {
       setRoadmapWorkspace(null);
-      setEvidence(null);
       setPageError(route ? '无法恢复这个学习位置，已返回学习集首页。' : '无效的学习路径，已返回学习集首页。');
       setBrowserRoute({ kind: 'course' });
       window.history.replaceState(null, '', '/course');
@@ -473,13 +470,35 @@ export function App() {
     return () => { current = false; };
   }, [client.selected]);
 
-  const openEvidence = async (source: string) => {
-    setPageError(null);
-    try {
-      setEvidence(await api.evidence(source));
-    } catch {
-      setPageError('这条学习记录的原始来源已不可用。');
+  const openEvidence = (source: string) => {
+    const query = queryForRoute(browserRoute);
+    void openRoute({
+      kind: 'memory',
+      query: {
+        ...query,
+        evidenceSource: source,
+        topicId: null,
+      },
+    }, 'push');
+  };
+
+  const openObjection = async (target: PublicObjectionTarget): Promise<void> => {
+    const url = new URL(target.route, window.location.origin);
+    const route = parseBrowserRoute(url.pathname, url.search);
+    const expectedSession = route?.kind === 'course'
+      ? ROADMAP_COACH_SESSION_KEY
+      : route?.kind === 'course-plan'
+        ? `coach:${route.planId}` as SessionKey
+        : null;
+    if (!route || expectedSession !== target.sessionKey) {
+      setPageError('这条异议暂时找不到可写入的学习顾问会话。');
+      return;
     }
+    await openRoute(route, 'push');
+    setComposerPrefill({
+      id: crypto.randomUUID(),
+      text: target.prefill,
+    });
   };
 
   const selectSession = async (nextKey: SessionKey) => {
@@ -852,9 +871,43 @@ export function App() {
     );
   }
   if (activeView === 'memory') {
+    const query = browserRoute.kind === 'memory'
+      ? browserRoute.query
+      : queryForRoute(browserRoute);
     return withAppShell(
       views.memory.value
-        ? <MemoryPage value={views.memory.value} />
+        ? (
+          <MemoryPage
+            value={views.memory.value}
+            onSelectSource={(source) => void openRoute({
+              kind: 'memory',
+              query: { ...query, evidenceSource: source },
+            }, 'push')}
+            onFilter={(patch) => void openRoute({
+              kind: 'memory',
+              query: { ...query, ...patch },
+            }, 'replace')}
+            onCourse={(planId, lessonId) => {
+              const route: BrowserRoute = planId && lessonId
+                ? { kind: 'course-lesson', planId, lessonId }
+                : planId
+                  ? { kind: 'course-plan', planId }
+                  : { kind: 'course' };
+              void openRoute(route, 'push');
+            }}
+            onKnowledge={(methodName, cardPath) => void openRoute({
+              kind: 'knowledge',
+              query: {
+                ...query,
+                methodName,
+                cardPath,
+                evidenceSource: null,
+                topicId: null,
+              },
+            }, 'push')}
+            onObject={(target) => void openObjection(target)}
+          />
+        )
         : (
           <main className="coordinate-page memory-page" aria-label="研习留痕">
             <p>正在整理研习留痕…</p>
@@ -1098,7 +1151,6 @@ export function App() {
           onSubmit={submitMemoryReview}
         />
       )}
-      {evidence && <EvidenceLens value={evidence} onClose={() => setEvidence(null)} />}
     </div>
   );
   if (browserRoute.kind === 'course-lesson' && selectedLesson) {
@@ -1135,7 +1187,6 @@ export function App() {
             onSubmit={submitMemoryReview}
           />
         )}
-        {evidence && <EvidenceLens value={evidence} onClose={() => setEvidence(null)} />}
       </>,
     );
   }
