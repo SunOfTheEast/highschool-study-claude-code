@@ -4,6 +4,13 @@ import type {
   KnowledgeViewProjection,
   MemoryViewProjection,
 } from '../../src/shared/view-contracts';
+import type {
+  LessonNode,
+  StudentNotebook,
+} from '../../src/shared/contracts';
+import type {
+  FocusedClassroomPageProps,
+} from '../../src/client/pages/FocusedClassroomPage';
 
 export function courseProjectionFixture(): CourseViewProjection {
   const lesson: CourseTreeNode = {
@@ -269,5 +276,44 @@ export function memoryProjectionFixture(): MemoryViewProjection {
       planId: 'domain-integrity',
       lessonId: null,
     },
+  };
+}
+
+export function classroomPageFixture(): Omit<
+  FocusedClassroomPageProps,
+  'onStart' | 'onPause' | 'onReprepare'
+> {
+  const lesson: LessonNode = {
+    id: 'lesson-001',
+    title: '路线比较',
+    path: 'lessons/lesson-001.md',
+    planId: 'domain-integrity',
+    status: 'active',
+    sessionKey: 'tutor:lesson-001',
+    tutorSessionId: 'session-local',
+    blocks: [{
+      id: 'block-001',
+      title: '先独立观察',
+      kind: 'problem',
+      required: true,
+      status: 'active',
+      dependsOn: [],
+      uses: ['Q1'],
+      studentView: '比较两条路线的第一步。',
+      evidence: [],
+    }],
+  };
+  const notebook: StudentNotebook = {
+    lesson,
+    cards: {},
+    recentRecords: [],
+    lessonSummary: null,
+  };
+  return {
+    lesson,
+    notebook,
+    replay: null,
+    stage: <p>当前节点 · 先独立观察</p>,
+    chatPanel: <div className="chat">TUTOR_DIALOGUE</div>,
   };
 }

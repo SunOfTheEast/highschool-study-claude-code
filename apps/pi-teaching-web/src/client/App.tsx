@@ -549,6 +549,21 @@ export function App() {
     }
   };
 
+  const pauseLesson = async (lessonId: string): Promise<void> => {
+    const workspace = await api.lessonAction(lessonId, 'pause');
+    setClient((current) => ({ ...current, workspace }));
+    await loadProjection(browserRoute);
+  };
+
+  const reprepareLesson = async (lessonId: string): Promise<void> => {
+    const workspace = await api.lessonAction(lessonId, 'reprepare');
+    setClient((current) => ({ ...current, workspace }));
+    await openRoute({
+      kind: 'course-plan',
+      planId: workspace.plan.id,
+    }, 'replace');
+  };
+
   const openReadyLesson = async (lessonId: string) => {
     const lesson = client.workspace?.lessons.find((candidate) => candidate.id === lessonId);
     if (!lesson || !client.workspace) {
@@ -709,11 +724,7 @@ export function App() {
       return;
     }
     if (action === 'reprepare') {
-      await api.lessonAction(lesson.id, 'reprepare');
-      await openRoute({
-        kind: 'course-plan',
-        planId: client.workspace.plan.id,
-      }, 'replace');
+      await reprepareLesson(lesson.id);
       return;
     }
     if (action === 'continue' && lesson.status === 'paused') {
@@ -942,6 +953,46 @@ export function App() {
     );
   }
 
+  const sessionChatPanel = (
+    <ChatPanel
+      sessionKey={selected}
+      items={client.conversations[selected] ?? []}
+      work={client.work[selected] || client.busy[selected] || ''}
+      error={client.errors[selected]}
+      composerEnabled={composerEnabled}
+      {...(selectedLesson ? { lessonId: selectedLesson.id } : {})}
+      persona={persona}
+      deepMode={client.deepMode[selected] ?? false}
+      workflows={client.workflows[selected] ?? []}
+      workflowControlsEnabled={workflowSessionOpen}
+      gate={gate}
+      stage={isCoach && coachContext?.plan.learningReview ? (
+        <PlanLearningReview
+          value={coachContext.plan.learningReview}
+          onEvidence={(source) => void openEvidence(source)}
+          onDisputePrefill={(text) => setComposerPrefill({
+            id: crypto.randomUUID(),
+            text,
+          })}
+        />
+      ) : null}
+      prefill={composerPrefill}
+      onSend={send}
+      onPrefillConsumed={(id) => setComposerPrefill((current) => (
+        current?.id === id ? null : current
+      ))}
+      lessonStatus={(lessonId) => (
+        client.workspace?.lessons.find((lesson) => lesson.id === lessonId)?.status ?? null
+      )}
+      onLessonReadyPrimary={(lessonId) => void openReadyLesson(lessonId)}
+      onLessonReadyDiscuss={() => void selectSession(client.workspace!.coach.sessionKey)}
+      onPersonaOpen={() => setPersonaDrawerOpen(true)}
+      onDeepMode={changeDeepMode}
+      onWorkflowAction={actOnWorkflow}
+      onMemoryReview={setMemoryReview}
+    />
+  );
+
   const workspaceContent = (
     <div
       className="app-root"
@@ -972,51 +1023,7 @@ export function App() {
           explorerEnabled={isCoach || selectedLesson?.status !== 'prepared'}
           onExplore={() => setContentExplorerOpen(true)}
         />
-        <ChatPanel
-          sessionKey={selected}
-          items={client.conversations[selected] ?? []}
-          work={client.work[selected] || client.busy[selected] || ''}
-          error={client.errors[selected]}
-          composerEnabled={composerEnabled}
-          {...(selectedLesson ? { lessonId: selectedLesson.id } : {})}
-          persona={persona}
-          deepMode={client.deepMode[selected] ?? false}
-          workflows={client.workflows[selected] ?? []}
-          workflowControlsEnabled={workflowSessionOpen}
-          gate={gate}
-          stage={isCoach && coachContext?.plan.learningReview ? (
-            <PlanLearningReview
-              value={coachContext.plan.learningReview}
-              onEvidence={(source) => void openEvidence(source)}
-              onDisputePrefill={(text) => setComposerPrefill({
-                id: crypto.randomUUID(),
-                text,
-              })}
-            />
-          ) : selectedLesson && (
-              selectedLesson.status === 'active' || selectedLesson.status === 'paused'
-            ) ? (
-              <CurrentActivityStage
-                notebook={notebook}
-                paused={selectedLesson.status === 'paused'}
-                onResume={() => void startLesson(selectedLesson)}
-              />
-            ) : null}
-          prefill={composerPrefill}
-          onSend={send}
-          onPrefillConsumed={(id) => setComposerPrefill((current) => (
-            current?.id === id ? null : current
-          ))}
-          lessonStatus={(lessonId) => (
-            client.workspace?.lessons.find((lesson) => lesson.id === lessonId)?.status ?? null
-          )}
-          onLessonReadyPrimary={(lessonId) => void openReadyLesson(lessonId)}
-          onLessonReadyDiscuss={() => void selectSession(client.workspace!.coach.sessionKey)}
-          onPersonaOpen={() => setPersonaDrawerOpen(true)}
-          onDeepMode={changeDeepMode}
-          onWorkflowAction={actOnWorkflow}
-          onMemoryReview={setMemoryReview}
-        />
+        {sessionChatPanel}
         <ContextStack
           view={view}
           coachContext={isCoach ? coachContext : null}
@@ -1052,9 +1059,49 @@ export function App() {
       {evidence && <EvidenceLens value={evidence} onClose={() => setEvidence(null)} />}
     </div>
   );
-  if (browserRoute.kind === 'course-lesson') {
+  if (browserRoute.kind === 'course-lesson' && selectedLesson) {
+    const classroomStage = (
+      selectedLesson.status === 'active' || selectedLesson.status === 'paused'
+    ) ? (
+      <CurrentActivityStage
+        notebook={notebook}
+        paused={selectedLesson.status === 'paused'}
+        onResume={() => void startLesson(selectedLesson)}
+      />
+    ) : gate;
     return withAppShell(
-      <FocusedClassroomPage>{workspaceContent}</FocusedClassroomPage>,
+      <>
+        <FocusedClassroomPage
+          lesson={selectedLesson}
+          notebook={notebook}
+          replay={replay}
+          stage={classroomStage}
+          chatPanel={sessionChatPanel}
+          onStart={() => void startLesson(selectedLesson)}
+          onPause={() => void pauseLesson(selectedLesson.id)}
+          onReprepare={() => void reprepareLesson(selectedLesson.id)}
+        />
+        {completionFeedback && (
+          <div className="completion-feedback" role="status">{completionFeedback}</div>
+        )}
+        {contentExplorerOpen && (
+          <ContentExplorer
+            onClose={() => setContentExplorerOpen(false)}
+            onEvidence={(source) => void openEvidence(source)}
+            onSearch={(query) => api.contentSearch(selected, query)}
+          />
+        )}
+        {memoryReview?.status === 'proposed' && (
+          <MemoryReviewPanel
+            review={memoryReview}
+            submitting={submittingMemoryReview}
+            onClose={() => setMemoryReview(null)}
+            onSource={(source) => void openEvidence(source)}
+            onSubmit={submitMemoryReview}
+          />
+        )}
+        {evidence && <EvidenceLens value={evidence} onClose={() => setEvidence(null)} />}
+      </>,
     );
   }
   return withAppShell(

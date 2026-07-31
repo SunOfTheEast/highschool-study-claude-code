@@ -11,6 +11,18 @@ test.beforeEach(async ({ request }) => {
   expect(response.ok()).toBe(true);
 });
 
+test('leaving the classroom for Knowledge does not pause or recreate it', async ({ page }) => {
+  await page.goto('/course/plan/domain-integrity/lesson/lesson-001');
+  await expect(page.getByLabel('课堂对话')).toBeVisible();
+  const owner = page.getByTestId('session-owner');
+  const session = await owner.getAttribute('data-session-key');
+  await page.getByRole('link', { name: '知识山河' }).click();
+  await page.getByRole('link', { name: '课程脉络' }).click();
+  await expect(page).toHaveURL('/course/plan/domain-integrity/lesson/lesson-001');
+  await expect(owner).toHaveAttribute('data-session-key', session!);
+  await expect(page.getByText('已暂停，可以继续')).toHaveCount(0);
+});
+
 test('keeps global planning available without turning it into the home workspace', async ({ page }) => {
   await page.goto('/');
 
