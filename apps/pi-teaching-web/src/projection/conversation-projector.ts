@@ -159,7 +159,7 @@ export function projectConversationEntries(
         roadmapPrivateState = 'searching';
         return;
       }
-      if (result === 'plan-prepare' && roadmapPrivateState === 'searching') {
+      if (result === 'plan-prepare') {
         items.push({
           kind: 'message',
           message: {

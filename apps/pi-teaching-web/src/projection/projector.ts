@@ -110,10 +110,7 @@ export function createLiveSessionEventProjector(
         });
         if (privateResult === 'card-search') {
           roadmapPrivateState = 'searching';
-        } else if (
-          privateResult === 'plan-prepare'
-          && roadmapPrivateState === 'searching'
-        ) {
+        } else if (privateResult === 'plan-prepare') {
           roadmapPrivateState = 'prepared';
           return [...projected, {
             type: 'message',

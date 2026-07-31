@@ -323,6 +323,32 @@ test('replaces a prepared Roadmap post-search final with one ordinary ready mess
   expect(JSON.stringify(items)).not.toContain('秘密');
 });
 
+test('protects stored Roadmap preparation when retrieval happened in an earlier turn', () => {
+  const items = projectConversationEntries('coach:@roadmap', [
+    message('student-confirmation', 'user', '就按这个目标建立学习周期。'),
+    toolResult('prepare', 'plan_prepare', 'plan-prepare', {
+      ok: true,
+      factId: 'route-choice',
+    }),
+    message('coach-final', 'assistant', '绝密题面、方法和卡号。'),
+  ], 'safe');
+
+  expect(items).toEqual([
+    expect.objectContaining({
+      kind: 'message',
+      message: expect.objectContaining({ role: 'student' }),
+    }),
+    expect.objectContaining({
+      kind: 'message',
+      message: expect.objectContaining({
+        role: 'coach',
+        text: '学习周期已建立。具体素材会由学习顾问在备课时重新核对。',
+      }),
+    }),
+  ]);
+  expect(JSON.stringify(items)).not.toContain('绝密');
+});
+
 test('keeps card-search finals outside a successful safe Roadmap search unchanged', () => {
   const successfulSearch = toolResult(
     'search',

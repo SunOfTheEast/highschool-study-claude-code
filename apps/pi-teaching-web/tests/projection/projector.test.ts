@@ -243,6 +243,41 @@ test('emits one ordinary ready message after live Roadmap preparation', () => {
   expect(safe(final)).toEqual([]);
 });
 
+test('protects live Roadmap preparation even when retrieval happened in an earlier turn', () => {
+  const safe = createLiveSessionEventProjector('coach:@roadmap', 'safe');
+  const prepare = {
+    type: 'tool_execution_end',
+    toolName: 'plan_prepare',
+    toolCallId: 'prepare-later',
+    isError: false,
+    result: {
+      details: {
+        kind: 'plan-prepare',
+        value: { ok: true, factId: 'route-choice' },
+      },
+    },
+  } as never;
+  const final = {
+    type: 'message_end',
+    message: {
+      role: 'assistant',
+      timestamp: 129,
+      content: [{ type: 'text', text: '绝密题面、方法和卡号。' }],
+    },
+  } as never;
+
+  const prepared = safe(prepare);
+  expect(prepared.filter((event) => event.type === 'message')).toEqual([
+    expect.objectContaining({
+      type: 'message',
+      message: expect.objectContaining({
+        text: '学习周期已建立。具体素材会由学习顾问在备课时重新核对。',
+      }),
+    }),
+  ]);
+  expect(safe(final)).toEqual([]);
+});
+
 test('keeps live Roadmap card-search privacy scoped to safe Roadmap projection', () => {
   const search = {
     type: 'tool_execution_end',
