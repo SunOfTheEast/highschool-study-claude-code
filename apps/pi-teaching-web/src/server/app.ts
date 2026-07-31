@@ -24,6 +24,10 @@ import { searchStudentContent } from '../study/content-explorer';
 import { readHomeSnapshot } from '../study/home';
 import { personaChoices, personaPortraitPath } from '../study/persona';
 import { PreparedLessonValidationError } from '../study/validate-prepared-lesson';
+import { readCourseView } from '../study/views/course-view';
+import { readKnowledgeView } from '../study/views/knowledge-view';
+import { readMemoryView } from '../study/views/memory-view';
+import { readViewQuery } from '../study/views/view-query';
 import type { EventHub } from './event-hub';
 
 export type AppDependencies = {
@@ -34,11 +38,24 @@ export type AppDependencies = {
   hub: EventHub;
   readLearningSet?: typeof readLearningSet;
   readAbilityProjection?: typeof readAbilityProjection;
+  readCourseView?: typeof readCourseView;
+  readKnowledgeView?: typeof readKnowledgeView;
+  readMemoryView?: typeof readMemoryView;
   messageProjection?: MessageProjectionMode;
 };
 
 const json = (value: unknown, status = 200) => Response.json(value, { status });
 const abilityWriters = new Set(['trace_append', 'card_alternative_append']);
+const viewWriters = new Set([
+  'plan_prepare',
+  'plan_update',
+  'lesson_prepare',
+  'classroom_update',
+  'trace_append',
+  'card_alternative_append',
+  'lesson_close',
+  'memory_review_propose',
+]);
 
 const imageTypes = {
   '.png': 'image/png',
@@ -69,6 +86,13 @@ export function createRequestHandler(deps?: AppDependencies) {
     const projectionMode = deps.messageProjection ?? 'safe';
     const learningSetReader = deps.readLearningSet ?? readLearningSet;
     const abilityReader = deps.readAbilityProjection ?? readAbilityProjection;
+    const courseViewReader = deps.readCourseView ?? readCourseView;
+    const knowledgeViewReader = deps.readKnowledgeView ?? readKnowledgeView;
+    const memoryViewReader = deps.readMemoryView ?? readMemoryView;
+    const invalidateViews = () => deps.hub.publish({
+      type: 'views-invalidated',
+      views: ['course', 'knowledge', 'memory'],
+    });
     const runSession = (
       key: SessionKey,
       label: string,
@@ -114,6 +138,13 @@ export function createRequestHandler(deps?: AppDependencies) {
             projection: abilityReader(deps.root),
           });
         }
+        if (
+          event.type === 'tool_execution_end'
+          && viewWriters.has(event.toolName)
+          && !event.isError
+        ) {
+          invalidateViews();
+        }
         if (event.type === 'agent_end' && !event.willRetry) {
           deps.hub.publish({
             type: 'conversation-snapshot',
@@ -138,6 +169,26 @@ export function createRequestHandler(deps?: AppDependencies) {
 
     if (request.method === 'GET' && url.pathname === '/api/home') {
       return json(readHomeSnapshot(deps.root));
+    }
+
+    const view = /^\/api\/views\/(course|knowledge|memory)$/.exec(url.pathname);
+    if (request.method === 'GET' && view) {
+      const query = readViewQuery(url.searchParams);
+      try {
+        if (view[1] === 'course') {
+          return json(courseViewReader(deps.root, query));
+        }
+        if (view[1] === 'knowledge') {
+          return json(knowledgeViewReader(deps.root, query));
+        }
+        return json(memoryViewReader(
+          deps.root,
+          query,
+          await deps.registry.sessionEvidenceReader(),
+        ));
+      } catch {
+        return json({ error: 'VIEW_UNAVAILABLE' }, 422);
+      }
     }
 
     if (request.method === 'GET' && url.pathname === '/api/workspaces/roadmap') {
@@ -188,6 +239,7 @@ export function createRequestHandler(deps?: AppDependencies) {
       bind(key);
       const snapshot = deps.registry.snapshot(planId);
       deps.hub.publish({ type: 'snapshot', workspace: snapshot });
+      invalidateViews();
       return json(snapshot);
     }
 
@@ -334,10 +386,13 @@ export function createRequestHandler(deps?: AppDependencies) {
         async () => {
           await deps.registry.submitMemoryReview(key, reviewId, decisions);
         },
-        () => deps.hub.publish({
-          type: 'snapshot',
-          workspace: deps.registry.snapshot(key.slice(6)),
-        }),
+        () => {
+          deps.hub.publish({
+            type: 'snapshot',
+            workspace: deps.registry.snapshot(key.slice(6)),
+          });
+          invalidateViews();
+        },
         (error) => (
           error instanceof Error
           && error.message.startsWith('MEMORY_REVIEW_APPLY_FAILED')
@@ -450,6 +505,7 @@ export function createRequestHandler(deps?: AppDependencies) {
       }
       const snapshot = deps.registry.snapshot();
       deps.hub.publish({ type: 'snapshot', workspace: snapshot });
+      invalidateViews();
       if (startsLesson && shouldKickoff) {
         runSession(
           `tutor:${lessonId}`,

@@ -919,11 +919,11 @@ test('publishes one complete ability snapshot after each successful ability fact
       type: 'ability-update',
       projection,
     }]);
-    expect(events.slice(-2).map((event) => (
+    expect(events.slice(-3).map((event) => (
       typeof event === 'object' && event !== null && 'type' in event
         ? (event as { type: string }).type
         : null
-    ))).toEqual(['work-status', 'ability-update']);
+    ))).toEqual(['work-status', 'ability-update', 'views-invalidated']);
   }
 });
 

@@ -398,5 +398,9 @@ export type StudyViewEvent =
     type: 'ability-update';
     projection: AbilityProjection;
   }
+  | {
+    type: 'views-invalidated';
+    views: Array<'course' | 'knowledge' | 'memory'>;
+  }
   | { type: 'workflow'; sessionKey: SessionKey; workflow: WorkflowView }
   | { type: 'session-error'; sessionKey: SessionKey; message: string };

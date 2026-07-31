@@ -18,6 +18,13 @@ import type {
   MemoryReviewDecision,
   MemoryReviewSnapshot,
 } from '../memory-review/contracts';
+import type {
+  CourseViewProjection,
+  KnowledgeViewProjection,
+  MemoryViewProjection,
+  ViewQuery,
+} from '../shared/view-contracts';
+import { formatViewQuery } from '../study/views/view-query';
 
 export class ApiError extends Error {
   constructor(
@@ -47,6 +54,15 @@ async function json<T>(input: RequestInfo | URL, init?: RequestInit): Promise<T>
 export const api = {
   home: () => json<HomeSnapshot>('/api/home'),
   learningSet: () => json<LearningSetSnapshot>('/api/learning-set'),
+  courseView: (query: ViewQuery) => (
+    json<CourseViewProjection>(`/api/views/course${formatViewQuery(query)}`)
+  ),
+  knowledgeView: (query: ViewQuery) => (
+    json<KnowledgeViewProjection>(`/api/views/knowledge${formatViewQuery(query)}`)
+  ),
+  memoryView: (query: ViewQuery) => (
+    json<MemoryViewProjection>(`/api/views/memory${formatViewQuery(query)}`)
+  ),
   abilities: () => json<AbilityProjection>('/api/abilities'),
   evidence: (source: string) => (
     json<EvidenceView>(`/api/evidence?source=${encodeURIComponent(source)}`)
