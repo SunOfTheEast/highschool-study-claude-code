@@ -1,6 +1,9 @@
 import {
+  lazy,
+  Suspense,
   useEffect,
   useMemo,
+  useReducer,
   useRef,
   useState,
   type CSSProperties,
@@ -28,7 +31,9 @@ import type {
   StudentNotebook,
   StudyViewEvent,
 } from '../shared/contracts';
+import type { ViewQuery } from '../shared/view-contracts';
 import { api, ApiError } from './api';
+import { AppShell } from './components/AppShell';
 import { ChatPanel } from './components/ChatPanel';
 import { ContentExplorer } from './components/ContentExplorer';
 import { ContextStack } from './components/ContextStack';
@@ -46,6 +51,15 @@ import {
   type BrowserRoute,
 } from './routes';
 import {
+  routeForPrimaryView,
+  selectionFromRoute,
+} from './view-selection';
+import {
+  initialViewState,
+  reduceViewState,
+  type PrimaryView,
+} from './view-state';
+import {
   buildPublicContextPages,
   initialClientState,
   laterMemoryReview,
@@ -58,6 +72,31 @@ import {
 } from './presentation';
 
 type ConnectionState = 'connecting' | 'open' | 'closed';
+
+const CoursePage = lazy(() => import('./pages/CoursePage'));
+const FocusedClassroomPage = lazy(() => import('./pages/FocusedClassroomPage'));
+const KnowledgePage = lazy(() => import('./pages/KnowledgePage'));
+const MemoryPage = lazy(() => import('./pages/MemoryPage'));
+
+function primaryViewForRoute(route: BrowserRoute): PrimaryView {
+  if (route.kind === 'knowledge') return 'knowledge';
+  if (route.kind === 'memory') return 'memory';
+  return 'course';
+}
+
+function queryForRoute(route: BrowserRoute): ViewQuery {
+  if (route.kind === 'knowledge' || route.kind === 'memory') return route.query;
+  const selection = selectionFromRoute(route);
+  return {
+    planId: selection.planId,
+    lessonId: selection.lessonId,
+    methodName: selection.methodName,
+    cardPath: selection.cardPath,
+    evidenceSource: selection.evidenceSource,
+    topicId: null,
+    timeRange: 'all',
+  };
+}
 
 export function App() {
   const [learningSet, setLearningSet] =
@@ -90,6 +129,45 @@ export function App() {
     lessonId: string;
     statuses: Record<string, string>;
   } | null>(null);
+  const [browserRoute, setBrowserRoute] = useState<BrowserRoute>(() => (
+    parseBrowserRoute(window.location.pathname, window.location.search)
+      ?? { kind: 'course' }
+  ));
+  const [views, dispatchViews] = useReducer(reduceViewState, initialViewState);
+  const [visibleRevision, setVisibleRevision] = useState(0);
+
+  const loadProjection = async (route: BrowserRoute) => {
+    const view = primaryViewForRoute(route);
+    const query = queryForRoute(route);
+    dispatchViews({ type: 'loading', view });
+    try {
+      if (view === 'course') {
+        dispatchViews({
+          type: 'loaded',
+          view,
+          value: await api.courseView(query),
+        });
+      } else if (view === 'knowledge') {
+        dispatchViews({
+          type: 'loaded',
+          view,
+          value: await api.knowledgeView(query),
+        });
+      } else {
+        dispatchViews({
+          type: 'loaded',
+          view,
+          value: await api.memoryView(query),
+        });
+      }
+    } catch {
+      dispatchViews({
+        type: 'failed',
+        view,
+        error: '当前页面暂时无法整理，请稍后重试。',
+      });
+    }
+  };
 
   useEffect(() => {
     let disposed = false;
@@ -101,9 +179,20 @@ export function App() {
       setConnection('connecting');
       const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
       socket = new WebSocket(`${protocol}//${location.host}/events`);
-      socket.onopen = () => setConnection('open');
+      socket.onopen = () => {
+        setConnection('open');
+        setVisibleRevision((value) => value + 1);
+      };
       socket.onmessage = (message) => {
         const event = JSON.parse(String(message.data)) as StudyViewEvent;
+        if (event.type === 'views-invalidated') {
+          dispatchViews({
+            type: 'invalidated',
+            views: event.views,
+          });
+          setVisibleRevision((value) => value + 1);
+          return;
+        }
         if (event.type === 'ability-update') setAbilities(event.projection);
         if (event.type === 'learning-set') {
           setLearningSet(event.value);
@@ -141,6 +230,14 @@ export function App() {
     setPersonaDrawerOpen(false);
     try {
       if (!route) throw new Error('INVALID_ROUTE');
+      setBrowserRoute(route);
+      await loadProjection(route);
+      if (route.kind === 'knowledge' || route.kind === 'memory') {
+        const path = formatBrowserRoute(route);
+        if (navigation === 'push') window.history.pushState(null, '', path);
+        if (navigation === 'replace') window.history.replaceState(null, '', path);
+        return;
+      }
       if (route.kind === 'course') {
         setHomeSnapshot(null);
         const workspace = await api.roadmapWorkspace();
@@ -148,11 +245,11 @@ export function App() {
         const history = await api.history(selected);
         setLearningSet(workspace.learningSet);
         setRoadmapWorkspace(workspace);
-        setClient({
-          ...initialClientState,
+        setClient((current) => ({
+          ...current,
           selected,
-          conversations: { [selected]: history },
-        });
+          conversations: { ...current.conversations, [selected]: history },
+        }));
         if (navigation === 'push') {
           window.history.pushState(null, '', formatBrowserRoute(route));
         }
@@ -160,9 +257,6 @@ export function App() {
           window.history.replaceState(null, '', formatBrowserRoute(route));
         }
         return;
-      }
-      if (route.kind === 'knowledge' || route.kind === 'memory') {
-        throw new Error('COORDINATE_VIEW_NOT_MOUNTED');
       }
       setHomeSnapshot(null);
       setRoadmapWorkspace(null);
@@ -216,6 +310,7 @@ export function App() {
         setHomeSnapshot(null);
       }
       setPageError(route ? '无法恢复这个学习位置，已返回学习集首页。' : '无效的学习路径，已返回学习集首页。');
+      setBrowserRoute({ kind: 'course' });
       window.history.replaceState(null, '', '/course');
     } finally {
       setLoading(false);
@@ -242,11 +337,16 @@ export function App() {
   }, []);
 
   useEffect(() => {
+    if (visibleRevision === 0) return;
+    void loadProjection(browserRoute);
+  }, [visibleRevision]);
+
+  useEffect(() => {
     const onPopState = () => {
       void openRoute(parseBrowserRoute(
         window.location.pathname,
         window.location.search,
-      ) ?? { kind: 'course' }, 'replace');
+      ) ?? { kind: 'course' });
     };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
@@ -604,6 +704,87 @@ export function App() {
     }
   };
 
+  const activeView = primaryViewForRoute(browserRoute);
+  const viewSelection = selectionFromRoute(browserRoute);
+  const viewHrefs: Record<PrimaryView, string> = {
+    course: formatBrowserRoute(routeForPrimaryView('course', viewSelection)),
+    knowledge: formatBrowserRoute(routeForPrimaryView('knowledge', viewSelection)),
+    memory: formatBrowserRoute(routeForPrimaryView('memory', viewSelection)),
+  };
+  viewHrefs[activeView] = formatBrowserRoute(browserRoute);
+  const activeSlot = views[activeView];
+  const selectionLabel = viewSelection.lessonId
+    ? `Lesson ${viewSelection.lessonId.replace(/^lesson-?/i, '')}`
+    : viewSelection.planId
+      ? views.course.value?.selectedPlan?.title ?? viewSelection.planId
+      : '学习总览';
+  const withAppShell = (children: ReactNode) => (
+    <AppShell
+      title={learningSet?.title ?? views.course.value?.learningSet.title ?? 'StudyForge'}
+      activeView={activeView}
+      viewHrefs={viewHrefs}
+      selectionLabel={selectionLabel}
+      connection={connection}
+      viewLoading={activeSlot.loading}
+      viewError={activeSlot.error}
+      personaControl={(
+        <button
+          type="button"
+          disabled={!client.selected}
+          onClick={() => setPersonaDrawerOpen(true)}
+        >
+          {persona?.choices.find((choice) => choice.id === persona.id)?.name ?? '陪伴风格'}
+        </button>
+      )}
+      onNavigate={(view) => {
+        const route = view === activeView
+          ? browserRoute
+          : routeForPrimaryView(view, viewSelection);
+        void openRoute(route, 'push');
+      }}
+      onReturnCourse={() => {
+        const url = new URL(viewSelection.courseReturnRoute, window.location.origin);
+        void openRoute(parseBrowserRoute(url.pathname, url.search), 'push');
+      }}
+    >
+      <Suspense fallback={<p className="workspace-notice">正在展开当前页面…</p>}>
+        {children}
+      </Suspense>
+      {personaDrawerOpen && persona && (
+        <PersonaDrawer
+          value={persona}
+          preferences={presentation}
+          onClose={() => setPersonaDrawerOpen(false)}
+          onSelect={changePersona}
+          onPreferences={changePresentation}
+        />
+      )}
+    </AppShell>
+  );
+
+  if (activeView === 'knowledge') {
+    return withAppShell(
+      views.knowledge.value
+        ? <KnowledgePage value={views.knowledge.value} />
+        : (
+          <main className="coordinate-page knowledge-page" aria-label="知识山河">
+            <p>正在整理知识山河…</p>
+          </main>
+        ),
+    );
+  }
+  if (activeView === 'memory') {
+    return withAppShell(
+      views.memory.value
+        ? <MemoryPage value={views.memory.value} />
+        : (
+          <main className="coordinate-page memory-page" aria-label="研习留痕">
+            <p>正在整理研习留痕…</p>
+          </main>
+        ),
+    );
+  }
+
   if (loading && !learningSet) {
     return <main className="loading-screen"><span>SF</span><p>正在展开学习集…</p></main>;
   }
@@ -617,7 +798,7 @@ export function App() {
     const selected = ROADMAP_COACH_SESSION_KEY;
     const sessionBusy = Boolean(client.busy[selected]);
     const currentPersona = persona?.choices.find((choice) => choice.id === persona.id);
-    return (
+    const roadmapContent = (
       <div
         className="app-root"
         data-theme="liubai-xinzhongshi"
@@ -666,16 +847,12 @@ export function App() {
             onMemoryReview={setMemoryReview}
           />
         </RoadmapCoachShell>
-        {personaDrawerOpen && persona && (
-          <PersonaDrawer
-            value={persona}
-            preferences={presentation}
-            onClose={() => setPersonaDrawerOpen(false)}
-            onSelect={changePersona}
-            onPreferences={changePresentation}
-          />
-        )}
       </div>
+    );
+    return withAppShell(
+      views.course.value
+        ? <CoursePage value={views.course.value}>{roadmapContent}</CoursePage>
+        : roadmapContent,
     );
   }
   if (!client.workspace || !client.selected) {
@@ -686,7 +863,7 @@ export function App() {
       homeSnapshot,
       localStorage.getItem('studyforge.lastVisitedRoute'),
     );
-    return (
+    const homeContent = (
       <>
         {pageError && <div className="page-alert" role="alert">{pageError}</div>}
         <LearningSetHome
@@ -700,6 +877,11 @@ export function App() {
           onRoadmapOpen={() => void openRoute({ kind: 'course' }, 'push')}
         />
       </>
+    );
+    return withAppShell(
+      views.course.value
+        ? <CoursePage value={views.course.value}>{homeContent}</CoursePage>
+        : homeContent,
     );
   }
 
@@ -744,7 +926,7 @@ export function App() {
     );
   }
 
-  return (
+  const workspaceContent = (
     <div
       className="app-root"
       data-theme="liubai-xinzhongshi"
@@ -841,15 +1023,6 @@ export function App() {
       {completionFeedback && (
         <div className="completion-feedback" role="status">{completionFeedback}</div>
       )}
-      {personaDrawerOpen && persona && (
-        <PersonaDrawer
-          value={persona}
-          preferences={presentation}
-          onClose={() => setPersonaDrawerOpen(false)}
-          onSelect={changePersona}
-          onPreferences={changePresentation}
-        />
-      )}
       {contentExplorerOpen && (
         <ContentExplorer
           onClose={() => setContentExplorerOpen(false)}
@@ -868,5 +1041,15 @@ export function App() {
       )}
       {evidence && <EvidenceLens value={evidence} onClose={() => setEvidence(null)} />}
     </div>
+  );
+  if (browserRoute.kind === 'course-lesson') {
+    return withAppShell(
+      <FocusedClassroomPage>{workspaceContent}</FocusedClassroomPage>,
+    );
+  }
+  return withAppShell(
+    views.course.value
+      ? <CoursePage value={views.course.value}>{workspaceContent}</CoursePage>
+      : workspaceContent,
   );
 }
