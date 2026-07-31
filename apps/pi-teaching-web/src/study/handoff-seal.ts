@@ -23,7 +23,10 @@ const sourceHandle = Type.String({
   description: 'Exact canonical source handle copied verbatim from a Node Frame or tool receipt. Never shorten, reconstruct, or prettify an ID.',
 });
 
-export function createHandoffDraftSchema(sourceDescription?: string) {
+export function createHandoffDraftSchema(
+  sourceDescription?: string,
+  draftDescription?: string,
+) {
   const sources = Type.Array(
     sourceHandle,
     sourceDescription === undefined
@@ -46,7 +49,10 @@ export function createHandoffDraftSchema(sourceDescription?: string) {
     learnerClaims: Type.Array(claimSchema),
     teachingClaims: Type.Array(claimSchema),
     openQuestions: Type.Array(openQuestionSchema),
-  }, { additionalProperties: false });
+  }, {
+    additionalProperties: false,
+    ...(draftDescription === undefined ? {} : { description: draftDescription }),
+  });
 }
 
 export const handoffDraftSchema = createHandoffDraftSchema();

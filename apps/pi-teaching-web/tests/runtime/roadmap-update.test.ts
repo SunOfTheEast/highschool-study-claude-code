@@ -25,6 +25,17 @@ function fixture(): string {
   return root;
 }
 
+test('tells first-cycle callers to omit the cross-cycle checkpoint', () => {
+  const tool = createRoadmapUpdateTool(fixture());
+  const checkpoint = (tool.parameters as {
+    properties: { checkpoint: { description?: string } };
+  }).properties.checkpoint;
+
+  expect(tool.description).toContain('omit checkpoint entirely');
+  expect(checkpoint.description).toContain('completed Plan');
+  expect(checkpoint.description).toContain('omit checkpoint entirely');
+});
+
 test('updates Roadmap milestones and candidate tree in one tool call', async () => {
   const root = fixture();
   const tool = createRoadmapUpdateTool(root);

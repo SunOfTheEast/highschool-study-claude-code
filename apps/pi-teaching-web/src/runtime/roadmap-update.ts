@@ -3,7 +3,7 @@ import { Type } from 'typebox';
 import { readMarkdownFile } from 'highschool-study-markdown/study-domain';
 import type { SessionEvidenceReader } from '../study/evidence-tree';
 import {
-  handoffDraftSchema,
+  createHandoffDraftSchema,
   sealRoadmapCheckpoint,
 } from '../study/handoff-seal';
 import { createPiSessionEvidenceReader } from './session-owner';
@@ -37,13 +37,16 @@ export function createRoadmapUpdateTool(
   return defineTool({
     name: 'roadmap_update',
     label: '更新长期学习路径',
-    description: 'Update the Roadmap milestones and its still-unmaterialized Plan candidates. Runtime owns ROADMAP.md and candidate handles; materialized Plans are immutable from this tool.',
+    description: 'Update Roadmap milestones and still-unmaterialized Plan candidates. On first-cycle planning, omit checkpoint entirely. A checkpoint is only for cross-cycle conclusions backed by completed Plan claims or confirmed memory. Runtime owns ROADMAP.md and candidate handles; materialized Plans are immutable from this tool.',
     parameters: Type.Object({
       goal: Type.Optional(milestone),
       capabilityStandard: Type.Optional(milestone),
       test: Type.Optional(milestone),
       candidateChanges: candidateChangesSchema,
-      checkpoint: Type.Optional(handoffDraftSchema),
+      checkpoint: Type.Optional(createHandoffDraftSchema(
+        'Use only exact claim: handles from completed Plan Handoffs or confirmed memory: handles available to this Roadmap.',
+        'Cross-cycle evidence only. On first-cycle planning, or whenever no completed Plan claim is available, omit checkpoint entirely; never send an empty checkpoint draft.',
+      )),
     }, { additionalProperties: false }),
     execute: async (_id, input) => {
       assertCandidateSourcesAllowed(
