@@ -364,7 +364,7 @@ export function createStudyTools(
     defineTool({
       name: 'trace_append',
       label: '记录课堂证据',
-      description: 'Append or supersede one validated classroom-evidence Trace for the current Tutor Session-owned Lesson. Call when an evidence-bearing response, later completion, accepted correction, repeat, or student-confirmed method changes the active record for one Block attempt. The runtime derives Lesson and problem-card identity from the Session and Block, rejects parallel active attempts, refreshes projections, and returns the persisted fact receipt.',
+      description: 'Append or supersede one validated classroom-evidence Trace for the current Tutor Session-owned Lesson. Call when an evidence-bearing response, later completion, accepted correction, repeat, or student-confirmed method changes the active record for one Block attempt. The runtime derives Lesson and problem-card identity from the Session and Block, rejects parallel active attempts, refreshes projections, and returns the persisted fact receipt. This tool never changes Block state; complete or skip the current Block explicitly with classroom_update before activating another Block.',
       parameters: Type.Object({
         blockId: role === 'tutor'
           ? lessonBlockIdSchema(root, ownerPath)
@@ -475,6 +475,7 @@ export function createStudyTools(
           projectionError,
           projection,
           ...trace,
+          blockState: 'unchanged' as const,
         });
       },
     }),

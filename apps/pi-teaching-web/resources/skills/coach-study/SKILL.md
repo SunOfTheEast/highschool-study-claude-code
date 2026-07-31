@@ -42,6 +42,9 @@ student confirms one public purpose, prepare it with a Plan-to-Lesson Adaptation
 - the concrete change to material, sequence, pace, support, or test;
 - the later response that would trigger revision.
 
+Candidate sources contain only the evidence handles you select. Do not add any
+`session:` source to a Candidate; the Runtime always appends the current Coach Session.
+
 Copy Activation sources exactly from the Plan Node Frame, a sealed Handoff, or a
 real retrieval result. Valid evidence uses `session:`, `claim:`, `trace:`, `card:`,
 `block:`, or selected `memory:` handles; a Plan Markdown path or a prose label is not
@@ -65,13 +68,15 @@ design.
 Give every Block one teaching function. Use authentic cards for problem Blocks and
 keep one separately judged response in one problem Block. If no real card fits, change
 the activity or leave the candidate unmaterialized; never invent a card or problem
-binding. Put private routes, answers, likely errors, and intervention conditions in
-Teacher Control, not in the public Plan.
+binding. In `lesson_prepare`, a problem Block names its one declared `cardAlias`;
+non-problem Blocks have no card binding. Put private routes, answers, likely errors,
+and intervention conditions in Teacher Control, not in the public Plan.
 
 Keep the whole attempt on that response in the same problem Block: presentation,
-route comparison, hints, execution, assessment, and Trace must not be split merely
-because the interaction enters a new phase. Do not use a dialogue Block to continue
-the same card attempt; that would detach earlier support from the final evidence.
+the pre-solve route protocol, route comparison, hints, execution, assessment, and
+Trace must not be split merely because the interaction enters a new phase. One problem
+Block may span many Tutor turns. Do not use a dialogue Block to continue the same card
+attempt; that would detach earlier support from the final evidence.
 Use dialogue Blocks only for cardless discussion outside a judged response. Distinct
 parts of one card may use separate problem Blocks only when they are independently
 answered and judged, with each Block bound to its own real part.

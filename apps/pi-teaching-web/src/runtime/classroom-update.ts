@@ -65,7 +65,7 @@ export function createClassroomUpdateTool(
       Type.Literal('insert'),
       Type.Literal('pause'),
     ], {
-      description: 'Traverse one existing Block, adapt pending order, insert one new pending Block, or pause the Lesson.',
+      description: 'Traverse one existing Block, adapt pending order, insert one new pending Block, or pause the Lesson. activate requires no other active Block; complete or skip the current active Block first.',
     }),
     blockId: Type.Optional(blockId),
     routeAction: Type.Optional(Type.Union([
@@ -160,7 +160,7 @@ export function createClassroomUpdateTool(
   return defineTool({
     name: 'classroom_update',
     label: '推进课堂节点',
-    description: 'Persist one classroom navigation change in the current Tutor Session-owned Lesson. Existing active or completed Block content is immutable. Pending Blocks may be skipped, moved or repeated, and one searched real card may become a new pending problem Block. The runtime owns the Lesson path, Block ID and card alias.',
+    description: 'Persist one classroom navigation change in the current Tutor Session-owned Lesson. Existing active or completed Block content is immutable. Pending Blocks may be skipped, moved or repeated, and one searched real card may become a new pending problem Block. Activating a new Block requires completing or skipping the current active Block first; trace_append does not perform either transition. The runtime owns the Lesson path, Block ID and card alias.',
     parameters,
     execute: async (_id, input) => {
       if (input.action === 'pause') {

@@ -31,6 +31,11 @@ A later unsupported check needs a new problem Block. It does not retroactively e
 support from the earlier attempt. Corrections supersede the active record for that
 same Block; another independently judged response belongs to another Block.
 
+One problem Block may span many conversation turns, from presentation and pre-solve
+route discussion through hints, execution, judgment, and Trace. `trace_append` records
+evidence but leaves the Block state unchanged. When the activity is finished, call
+`classroom_update` to complete or skip the current Block before activating the next.
+
 ## Adapt the pending classroom
 
 Keep the Lesson capability target fixed while responding to the live student. Pending

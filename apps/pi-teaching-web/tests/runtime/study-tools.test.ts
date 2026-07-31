@@ -810,6 +810,7 @@ test('binds a Tutor Trace to its Lesson and refreshes planner attention', async 
     factId: string;
     traceId: string;
     sourceRef: string;
+    blockState: string;
     methods: { primary: string; secondary: string[] } | null;
     unresolvedMethods: string[];
   };
@@ -817,6 +818,7 @@ test('binds a Tutor Trace to its Lesson and refreshes planner attention', async 
     ok: true,
     ownerPath: 'lessons/lesson-003.md',
     factId: appended.traceId,
+    blockState: 'unchanged',
   }));
   expect(appended.methods).toEqual({ primary: '参变量分离', secondary: ['同构变形与换元法'] });
   expect(appended.unresolvedMethods).toEqual([]);
