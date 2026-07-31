@@ -131,3 +131,16 @@ Course、Knowledge、Memory 都从同一组 Markdown / Trace 事实读取：
 ## 候选结论
 
 自动发布门、复制学习集真实短课、Trace 更正、Lesson Handoff、终态 Replay、三坐标来源下钻与只读刷新全部通过。节点化候选可进入主线切换。
+
+## 主线切换与本地安装
+
+- `main` 从 `a4f0c126fcfffb88bc4c3fe4ec5d5d8e2eed5260` 以 `git merge --ff-only codex/studyforge-node-workspace` 快进到候选验收提交 `6227c50aeb10e857940a59631e52f429076ec248`，没有生成额外 merge commit。
+- 在新 `main` 目录重新执行插件 `release:check`：72 pass、0 fail，strict plugin validation 通过。
+- 在新 `main` 目录重新执行 Pi `check`：397 pass、0 fail，TypeScript 与 production build 通过。
+- `pi install` 成功，本地 StudyForge package 来源为 `/Users/yangrundong/Documents/GitHub/highschool-study-claude-code/apps/pi-teaching-web`。
+- 从新主线使用同一复制学习集在 65440 启动 production server；`/api/health`、`/course`、`/knowledge`、`/memory` 均返回 200。
+- 浏览器确认默认 Course 能看到真实 Roadmap 与 Plan；课堂深链仍为 closed Replay，刷新不恢复输入框；Knowledge 仍能看到主方法及“后来修正 / 当前记录”；Memory 仍能展开到 `plan-001 / lesson-001 / block-002 / mst_p0042_section2_ex08.card.yaml`。
+- 主线浏览前后仍为 4 个 Trace、3 个 Pi Session，没有新写入。
+- 主工作树原有 `.superpowers/` 与 `docs/superpowers/plans/2026-07-22-three-lesson-teaching-quality-optimization.md` 两个未跟踪入口仍保留。
+
+StudyForge 主线已切换到节点化 Runtime，旧线性 Runtime 不再是开发基线。
