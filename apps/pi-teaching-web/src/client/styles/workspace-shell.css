@@ -1,0 +1,137 @@
+:root {
+  --workspace-header-height: 4.35rem;
+}
+
+.workspace-shell {
+  min-height: 100dvh;
+  overflow-x: clip;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.workspace-header {
+  position: sticky;
+  z-index: 40;
+  top: 0;
+  min-height: var(--workspace-header-height);
+  display: grid;
+  grid-template-columns: minmax(14rem, 1fr) auto auto auto;
+  gap: 1.2rem;
+  align-items: center;
+  padding: .72rem clamp(1rem, 2.4vw, 2.2rem);
+  border-top: 3px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--paper) 94%, transparent);
+  backdrop-filter: blur(18px);
+}
+
+.workspace-brand {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.primary-view-nav {
+  display: flex;
+  align-items: center;
+  gap: .18rem;
+  padding: .2rem;
+  border: 1px solid var(--rule);
+  background: var(--paper-deep);
+}
+
+.primary-view-nav a {
+  position: relative;
+  padding: .58rem .82rem;
+  color: var(--ink-faint);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-decoration: none;
+}
+
+.primary-view-nav a:hover {
+  color: var(--ink);
+}
+
+.primary-view-nav a[aria-current="page"] {
+  color: var(--paper);
+  background: var(--accent-deep);
+}
+
+.current-selection-chip,
+.persona-control > button {
+  min-width: 0;
+  padding: .52rem .72rem;
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  background: transparent;
+  font: 650 .68rem/1.2 var(--font-ui);
+  cursor: pointer;
+}
+
+.current-selection-chip {
+  max-width: 12rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.current-selection-chip:hover,
+.persona-control > button:hover {
+  border-color: var(--accent);
+  color: var(--accent-deep);
+}
+
+.persona-control > button:disabled {
+  opacity: .5;
+  cursor: default;
+}
+
+.connection-state {
+  position: absolute;
+  right: .45rem;
+  bottom: -.95rem;
+  padding: .18rem .42rem;
+  border: 1px solid var(--rule);
+  color: var(--ink-faint);
+  background: var(--paper);
+  font-size: .52rem;
+  letter-spacing: .08em;
+}
+
+.connection-state[data-state="open"]::before {
+  content: "";
+  display: inline-block;
+  width: .38rem;
+  height: .38rem;
+  margin-right: .32rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.workspace-notice {
+  position: relative;
+  z-index: 20;
+  margin: 0;
+  padding: .65rem clamp(1rem, 2.4vw, 2.2rem);
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink-soft);
+  background: var(--paper-deep);
+  font-size: .72rem;
+}
+
+.coordinate-page {
+  animation: coordinate-reveal .3s ease-out both;
+}
+
+@keyframes coordinate-reveal {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}

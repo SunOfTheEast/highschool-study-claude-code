@@ -1,0 +1,201 @@
+.course-workspace {
+  display: grid;
+  grid-template-columns: minmax(15rem, .8fr) minmax(30rem, 2fr) minmax(18rem, 1fr);
+  min-height: calc(100dvh - var(--workspace-header-height));
+}
+
+.course-tree,
+.course-inspector {
+  min-width: 0;
+  padding: 2rem clamp(1rem, 2vw, 1.8rem);
+  background: var(--paper-deep);
+}
+
+.course-tree {
+  border-right: 1px solid var(--rule);
+}
+
+.course-tree ol {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.course-tree ol ol {
+  margin-left: 1rem;
+  padding-left: 1rem;
+  border-left: 1px solid color-mix(in srgb, var(--accent) 28%, var(--rule));
+}
+
+.course-tree li {
+  position: relative;
+  padding: .28rem 0;
+}
+
+.course-tree ol ol > li::before {
+  content: "";
+  position: absolute;
+  top: 1.55rem;
+  right: 100%;
+  width: 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--accent) 28%, var(--rule));
+}
+
+.course-tree button {
+  width: 100%;
+  display: grid;
+  gap: .28rem;
+  padding: .72rem .78rem;
+  border: 0;
+  border-left: 2px solid transparent;
+  color: var(--ink-soft);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.course-tree button:hover {
+  background: color-mix(in srgb, var(--paper) 72%, transparent);
+}
+
+.course-tree button[aria-current="page"] {
+  border-left-color: var(--cinnabar);
+  color: var(--ink);
+  background: var(--paper);
+}
+
+.course-tree button small {
+  color: var(--ink-faint);
+  font-size: .58rem;
+  line-height: 1.4;
+}
+
+.course-tree button strong {
+  font-family: var(--font-reading);
+  font-size: .82rem;
+  line-height: 1.45;
+}
+
+.course-tree li[data-status="candidate"] > button {
+  margin-block: .28rem;
+  border: 1px dashed color-mix(in srgb, var(--attention) 70%, var(--rule));
+  color: var(--ink-soft);
+  background: color-mix(in srgb, var(--paper) 62%, transparent);
+}
+
+.course-tree li[data-status="completed"] > button,
+.course-tree li[data-status="closed"] > button {
+  opacity: .72;
+}
+
+.course-dependencies {
+  margin: .1rem .8rem .45rem;
+  color: var(--ink-faint);
+  font-size: .54rem;
+}
+
+.plan-stage {
+  min-width: 0;
+  padding: clamp(1.4rem, 3vw, 3rem);
+  border-right: 1px solid var(--rule);
+}
+
+.plan-stage > header {
+  max-width: 54rem;
+  margin: 0 auto 1.8rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--ink);
+}
+
+.plan-stage > header > small,
+.course-inspector > small {
+  color: var(--cinnabar);
+  font-size: .6rem;
+  font-weight: 750;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.plan-stage h2,
+.course-inspector h2 {
+  margin: .5rem 0;
+  font-family: var(--font-display);
+  font-weight: 650;
+}
+
+.plan-stage > header > p {
+  max-width: 48rem;
+  color: var(--ink-soft);
+  font-family: var(--font-reading);
+  line-height: 1.75;
+}
+
+.plan-stage dl,
+.course-inspector dl {
+  display: grid;
+  gap: .7rem;
+  margin: 1.2rem 0 0;
+}
+
+.plan-stage dl {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.plan-stage dl div,
+.course-inspector dl div {
+  padding-top: .55rem;
+  border-top: 1px solid var(--rule);
+}
+
+.plan-stage dt,
+.course-inspector dt {
+  color: var(--ink-faint);
+  font-size: .58rem;
+}
+
+.plan-stage dd,
+.course-inspector dd {
+  margin: .3rem 0 0;
+  color: var(--ink-soft);
+  font-size: .72rem;
+  line-height: 1.55;
+}
+
+.coach-surface {
+  min-width: 0;
+  max-width: 66rem;
+  margin: 0 auto;
+}
+
+.course-inspector {
+  border-left: 0;
+}
+
+.course-inspector > p {
+  color: var(--ink-soft);
+  font-family: var(--font-reading);
+  line-height: 1.7;
+}
+
+.course-actions,
+.coordinate-actions {
+  display: grid;
+  gap: .55rem;
+  margin-top: 1.2rem;
+}
+
+.course-actions button,
+.coordinate-actions button {
+  padding: .65rem .8rem;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.course-actions button:first-child {
+  color: var(--paper);
+  background: var(--accent-deep);
+}

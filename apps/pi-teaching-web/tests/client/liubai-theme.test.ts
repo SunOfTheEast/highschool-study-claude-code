@@ -8,6 +8,21 @@ const main = await Bun.file(
 const styles = await Bun.file(
   new URL('../../src/client/styles.css', import.meta.url),
 ).text();
+const layoutStyleNames = [
+  'workspace-shell.css',
+  'course.css',
+  'classroom.css',
+  'knowledge.css',
+  'memory.css',
+  'responsive.css',
+];
+const allLayoutStyles = [
+  styles,
+  ...await Promise.all(layoutStyleNames.map(async (name) => {
+    const file = Bun.file(new URL(`../../src/client/styles/${name}`, import.meta.url));
+    return await file.exists() ? file.text() : '';
+  })),
+].join('\n');
 
 describe('liubai theme contract', () => {
   test('uses the approved palette as semantic tokens', () => {
@@ -18,6 +33,7 @@ describe('liubai theme contract', () => {
     expect(theme).toContain('--ink-faint: #9a917f;');
     expect(theme).toContain('--accent: #3f5b54;');
     expect(theme).toContain('--accent-deep: #314a44;');
+    expect(theme).toContain('--cinnabar: #9c493f;');
     expect(theme).toContain('--attention: #b6a06a;');
     expect(theme).toContain('--danger: #a8674f;');
     expect(theme).toContain('--rule: rgba(27, 25, 22, .09);');
@@ -33,15 +49,16 @@ describe('liubai theme contract', () => {
   });
 
   test('layout styles consume semantic tokens instead of the old amber palette', () => {
-    expect(styles).not.toContain('--amber');
-    expect(styles).not.toContain('#b86c28');
-    expect(styles).not.toContain('#f3efe5');
-    expect(styles).not.toContain('radial-gradient');
-    expect(styles).toContain('var(--accent)');
-    expect(styles).toContain('var(--attention)');
-    expect(styles).toContain('var(--danger)');
-    expect(styles).toContain('[data-view="coach"]');
-    expect(styles).toContain('[data-view="tutor"]');
-    expect(styles).toContain('[data-view="replay"]');
+    expect(allLayoutStyles).not.toContain('--amber');
+    expect(allLayoutStyles).not.toContain('#b86c28');
+    expect(allLayoutStyles).not.toContain('#f3efe5');
+    expect(allLayoutStyles).not.toContain('radial-gradient');
+    expect(allLayoutStyles).not.toContain('particle');
+    expect(allLayoutStyles).toContain('var(--accent)');
+    expect(allLayoutStyles).toContain('var(--attention)');
+    expect(allLayoutStyles).toContain('var(--danger)');
+    expect(allLayoutStyles).toContain('[data-view="coach"]');
+    expect(allLayoutStyles).toContain('[data-view="tutor"]');
+    expect(allLayoutStyles).toContain('[data-view="replay"]');
   });
 });

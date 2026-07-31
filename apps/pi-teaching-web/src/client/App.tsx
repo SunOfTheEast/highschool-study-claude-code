@@ -1113,7 +1113,7 @@ export function App() {
         </div>
       )}
       {pageError && <div className="page-alert" role="alert">{pageError}</div>}
-      <div className="workspace-shell">
+      <div className="session-workspace">
         <SessionTree
           workspace={client.workspace}
           selected={selected}

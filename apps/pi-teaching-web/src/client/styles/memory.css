@@ -1,0 +1,231 @@
+.memory-workspace {
+  display: grid;
+  grid-template-columns: minmax(15rem, .8fr) minmax(30rem, 2fr) minmax(18rem, 1fr);
+  min-height: calc(100dvh - var(--workspace-header-height));
+}
+
+.memory-directory,
+.evidence-detail {
+  min-width: 0;
+  overflow-y: auto;
+  padding: 2rem clamp(1rem, 2vw, 1.8rem);
+  background: var(--paper-deep);
+}
+
+.memory-directory {
+  border-right: 1px solid var(--rule);
+}
+
+.memory-directory > label {
+  display: grid;
+  gap: .35rem;
+  color: var(--ink-faint);
+  font-size: .58rem;
+}
+
+.memory-directory select {
+  padding: .55rem;
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  background: var(--paper);
+}
+
+.memory-directory section {
+  margin-top: 1.4rem;
+}
+
+.memory-directory h2 {
+  margin: 0 0 .65rem;
+  padding-bottom: .55rem;
+  border-bottom: 1px solid var(--ink);
+  font-family: var(--font-display);
+  font-size: .88rem;
+}
+
+.memory-directory h3 {
+  margin: .8rem 0 .4rem;
+  color: var(--ink-faint);
+  font-size: .56rem;
+  letter-spacing: .08em;
+}
+
+.memory-directory ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.memory-directory li {
+  display: grid;
+  gap: .3rem;
+  padding: .58rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.memory-directory li[data-state="invalidated"] {
+  opacity: .6;
+}
+
+.memory-directory button {
+  padding: 0;
+  border: 0;
+  color: var(--ink);
+  background: transparent;
+  font-family: var(--font-reading);
+  line-height: 1.55;
+  text-align: left;
+  cursor: pointer;
+}
+
+.memory-directory li > p,
+.memory-directory li > small {
+  margin: 0;
+  color: var(--ink-faint);
+  font-size: .58rem;
+  line-height: 1.5;
+}
+
+.source-only-indexes {
+  margin-top: 1.2rem;
+  color: var(--ink-faint);
+  font-size: .62rem;
+}
+
+.lineage-column {
+  min-width: 0;
+  overflow: auto;
+  padding: clamp(1.5rem, 3vw, 3rem);
+}
+
+.evidence-lineage,
+.evidence-lineage ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.evidence-lineage ol {
+  margin-left: 1.35rem;
+  padding-left: 1.35rem;
+  border-left: 1px solid color-mix(in srgb, var(--accent) 34%, var(--rule));
+}
+
+.evidence-lineage li {
+  position: relative;
+  padding: .38rem 0;
+}
+
+.evidence-lineage ol > li::before {
+  content: "";
+  position: absolute;
+  top: 1.45rem;
+  right: 100%;
+  width: 1.35rem;
+  border-top: 1px solid color-mix(in srgb, var(--accent) 34%, var(--rule));
+}
+
+.evidence-lineage button {
+  width: min(100%, 28rem);
+  display: grid;
+  gap: .25rem;
+  padding: .72rem .8rem;
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  background: var(--paper);
+  text-align: left;
+  cursor: pointer;
+}
+
+.evidence-lineage button[aria-current="true"] {
+  border-left: 3px solid var(--cinnabar);
+}
+
+.evidence-lineage li[data-state="invalidated"] > button {
+  opacity: .62;
+  border-style: dashed;
+}
+
+.evidence-lineage li[data-state="missing"] > button,
+.evidence-lineage li[data-state="forbidden"] > button {
+  color: var(--ink-faint);
+  background: transparent;
+}
+
+.evidence-lineage strong {
+  font-family: var(--font-reading);
+  font-size: .78rem;
+}
+
+.evidence-lineage small {
+  color: var(--ink-faint);
+  font-size: .54rem;
+}
+
+.evidence-detail {
+  border-left: 1px solid var(--rule);
+}
+
+.evidence-detail > small {
+  color: var(--cinnabar);
+  font-size: .6rem;
+  letter-spacing: .12em;
+}
+
+.evidence-detail h2 {
+  margin: .45rem 0;
+  font-family: var(--font-display);
+}
+
+.evidence-detail > p,
+.evidence-detail blockquote {
+  font-family: var(--font-reading);
+  line-height: 1.7;
+}
+
+.evidence-detail blockquote {
+  margin: 1rem 0;
+  padding: .7rem 0 .7rem 1rem;
+  border-left: 2px solid var(--cinnabar);
+  color: var(--ink-soft);
+}
+
+.evidence-state {
+  color: var(--accent) !important;
+  font-size: .62rem;
+}
+
+.evidence-detail-actions {
+  display: grid;
+  gap: .5rem;
+  margin: 1rem 0;
+}
+
+.evidence-detail-actions button {
+  padding: .58rem .68rem;
+  border: 1px solid var(--rule);
+  color: var(--accent-deep);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.evidence-detail details {
+  margin-top: 1.2rem;
+  padding-top: .8rem;
+  border-top: 1px solid var(--rule);
+  color: var(--ink-faint);
+  font-size: .58rem;
+}
+
+.evidence-detail dl div {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr);
+  gap: .5rem;
+  padding: .35rem 0;
+}
+
+.evidence-detail dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
