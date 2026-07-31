@@ -110,7 +110,7 @@ function lessonPrepareInput() {
           kind: 'problem',
           required: true,
           dependsOn: [] as string[],
-          uses: ['Q-EX22'],
+          cardAlias: 'Q-EX22',
           studentView: '请独立完成 `Q-EX22`。',
           teacherControl: '首次采用 zero。',
         },
@@ -119,7 +119,6 @@ function lessonPrepareInput() {
           kind: 'reflection',
           required: true,
           dependsOn: ['attempt'],
-          uses: [] as string[],
           studentView: '总结定义域的作用。',
           teacherControl: '只引用已产生证据。',
         },
@@ -227,6 +226,33 @@ test('keeps Lesson identity runtime-owned in the lesson_prepare contract', () =>
   expect(Object.keys((tool.parameters as {
     properties: Record<string, unknown>;
   }).properties)).toEqual(['candidateHandle', 'blueprint']);
+
+  const problem = input.blueprint.blocks[0]!;
+  const { cardAlias: _cardAlias, ...problemWithoutCardAlias } = problem;
+  expect(Check(tool.parameters, {
+    ...input,
+    blueprint: {
+      ...input.blueprint,
+      blocks: [problemWithoutCardAlias, input.blueprint.blocks[1]],
+    },
+  })).toBeFalse();
+  expect(Check(tool.parameters, {
+    ...input,
+    blueprint: {
+      ...input.blueprint,
+      blocks: [{ ...problem, uses: ['Q-EX22'] }, input.blueprint.blocks[1]],
+    },
+  })).toBeFalse();
+  expect(Check(tool.parameters, {
+    ...input,
+    blueprint: {
+      ...input.blueprint,
+      blocks: [
+        problem,
+        { ...input.blueprint.blocks[1], cardAlias: 'Q-EX22' },
+      ],
+    },
+  })).toBeFalse();
 });
 
 test('accepts only the six canonical classroom template IDs', () => {
@@ -274,7 +300,7 @@ test('rejects a nonexistent card without writing or indexing a Lesson', async ()
     cardPath: 'cards/fake.card.yaml',
     role: 'fake',
   }];
-  input.blueprint.blocks[0]!.uses = ['FAKE'];
+  (input.blueprint.blocks[0] as { cardAlias: string }).cardAlias = 'FAKE';
   await expect(tool.execute('prepare-invalid', {
     ...input,
   } as never, undefined, undefined, {} as never)).rejects.toThrow('题卡不存在');
@@ -436,6 +462,102 @@ test('binds source_resolve to one source and removes model-owned origin paths', 
   expect(Object.keys(properties)).toEqual(['source']);
   expect(JSON.stringify(resolver.parameters)).not.toContain('fromPath');
   expect(JSON.stringify(resolver.parameters)).not.toContain('target');
+});
+
+test('records only successful source_resolve results in the current Node policy', async () => {
+  const scope = {
+    nodeKind: 'plan' as const,
+    nodeId: 'domain-integrity',
+    nodePath: 'plans/domain-integrity.md',
+    parentId: 'roadmap',
+    parentPath: 'ROADMAP.md',
+  };
+  const accessPolicy = new NodeAccessPolicy(
+    root,
+    compileNodeContext(root, scope),
+  );
+  const resolver = createStudyTools(root, () => new Date(), scope, {
+    accessPolicy,
+  }).find((tool) => tool.name === 'source_resolve')!;
+  const cardSource = 'card:cards/derivative/mst_p0032_ex22.card.yaml';
+
+  expect(accessPolicy.wasResolved(cardSource)).toBe(false);
+  await resolver.execute('resolve-card', {
+    source: cardSource,
+  } as never, undefined, undefined, {} as never);
+  expect(accessPolicy.wasResolved(cardSource)).toBe(true);
+
+  const missing = 'card:cards/derivative/missing.card.yaml';
+  await resolver.execute('resolve-missing', {
+    source: missing,
+  } as never, undefined, undefined, {} as never);
+  expect(accessPolicy.wasResolved(missing)).toBe(false);
+});
+
+test('prepares a problem Lesson only after resolving its selected card', async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), 'study-lesson-resolved-card-'));
+  temporaryRoots.push(temporaryRoot);
+  cpSync(root, temporaryRoot, { recursive: true });
+  addLessonCandidate(temporaryRoot);
+  const scope = {
+    nodeKind: 'plan' as const,
+    nodeId: 'domain-integrity',
+    nodePath: 'plans/domain-integrity.md',
+    parentId: 'roadmap',
+    parentPath: 'ROADMAP.md',
+  };
+  const accessPolicy = new NodeAccessPolicy(
+    temporaryRoot,
+    compileNodeContext(temporaryRoot, scope),
+  );
+  const tools = createStudyTools(
+    temporaryRoot,
+    () => new Date('2026-07-31T00:00:00Z'),
+    scope,
+    { accessPolicy },
+  );
+  const search = tools.find((tool) => tool.name === 'card_search')!;
+  const resolve = tools.find((tool) => tool.name === 'source_resolve')!;
+  const prepare = createLessonPrepareTool(
+    temporaryRoot,
+    'domain-integrity',
+    'plans/domain-integrity.md',
+    { accessPolicy },
+  );
+  const selected = 'card:cards/derivative/mst_p0032_ex22.card.yaml';
+  const other = 'card:cards/derivative/mst_p0019_ex11.card.yaml';
+  const planPath = join(temporaryRoot, 'plans/domain-integrity.md');
+  const before = readFileSync(planPath, 'utf8');
+
+  await search.execute('search-selected', {
+    query: 'mst_p0032_ex22',
+    limit: 5,
+  } as never, undefined, undefined, {} as never);
+  await expect(prepare.execute('prepare-unresolved', {
+    ...lessonPrepareInput(),
+  } as never, undefined, undefined, {} as never))
+    .rejects.toThrow(`LESSON_CARD_NOT_RESOLVED: ${selected}`);
+  expect(readFileSync(planPath, 'utf8')).toBe(before);
+  expect(existsSync(join(temporaryRoot, 'lessons/lesson-004.md'))).toBe(false);
+
+  await resolve.execute('resolve-other', {
+    source: other,
+  } as never, undefined, undefined, {} as never);
+  await expect(prepare.execute('prepare-wrong-resolution', {
+    ...lessonPrepareInput(),
+  } as never, undefined, undefined, {} as never))
+    .rejects.toThrow(`LESSON_CARD_NOT_RESOLVED: ${selected}`);
+
+  await resolve.execute('resolve-selected', {
+    source: selected,
+  } as never, undefined, undefined, {} as never);
+  await expect(prepare.execute('prepare-resolved', {
+    ...lessonPrepareInput(),
+  } as never, undefined, undefined, {} as never)).resolves.toBeDefined();
+  expect(readFileSync(
+    join(temporaryRoot, 'lessons/lesson-004.md'),
+    'utf8',
+  )).toContain('- Uses: Q-EX22');
 });
 
 test('forces Trace search to the current Plan or Lesson scope', async () => {

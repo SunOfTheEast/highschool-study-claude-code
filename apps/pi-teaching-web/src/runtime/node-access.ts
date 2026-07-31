@@ -127,6 +127,7 @@ function sessionEntryId(entry: unknown): string | null {
 
 export class NodeAccessPolicy {
   private readonly granted = new Set<string>();
+  private readonly resolved = new Set<string>();
   private readonly initial: Set<string>;
   private readonly sessionId: string | null;
 
@@ -151,6 +152,22 @@ export class NodeAccessPolicy {
 
   wasGranted(source: string): boolean {
     return this.granted.has(source);
+  }
+
+  recordResolution(resolution: NodeSourceResolution): void {
+    if (!resolution.valid) return;
+    this.resolved.add(resolution.source);
+    if (
+      resolution.path !== null
+      && resolution.path.startsWith('cards/')
+      && /\.ya?ml$/.test(resolution.path)
+    ) {
+      this.resolved.add(`card:${resolution.path}`);
+    }
+  }
+
+  wasResolved(source: string): boolean {
+    return this.resolved.has(source);
   }
 
   currentSessionSource(): string | null {

@@ -88,3 +88,20 @@ test('resolves legal sealed Handoffs and refuses an unrelated raw child document
     error: 'SOURCE_NOT_ALLOWED',
   });
 });
+
+test('tracks only explicitly recorded successful resolutions', () => {
+  const context = compileNodeContext(domainIntegrityFixtureRoot, planScope());
+  const policy = new NodeAccessPolicy(domainIntegrityFixtureRoot, context);
+  const card = 'card:cards/derivative/mst_p0032_ex22.card.yaml';
+  const resolution = policy.resolve(card);
+
+  expect(resolution.valid).toBe(true);
+  expect(policy.wasResolved(card)).toBe(false);
+  policy.recordResolution(resolution);
+  expect(policy.wasResolved(card)).toBe(true);
+
+  const missing = policy.resolve('card:cards/derivative/missing.card.yaml');
+  expect(missing.valid).toBe(false);
+  policy.recordResolution(missing);
+  expect(policy.wasResolved(missing.source)).toBe(false);
+});

@@ -286,11 +286,12 @@ export function createReadOnlyStudyTools(
           description: 'Canonical source handle or allowlisted learning-set source.',
         }),
       }, { additionalProperties: false }),
-      execute: async (_id, input) => result(
-        'source-resolve',
-        options.accessPolicy?.resolve(input.source)
-          ?? unboundSourceResolve(root, input.source),
-      ),
+      execute: async (_id, input) => {
+        const resolution = options.accessPolicy?.resolve(input.source)
+          ?? unboundSourceResolve(root, input.source);
+        options.accessPolicy?.recordResolution(resolution);
+        return result('source-resolve', resolution);
+      },
     }),
   ];
 }

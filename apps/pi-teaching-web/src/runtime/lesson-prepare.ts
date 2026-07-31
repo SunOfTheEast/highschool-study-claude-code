@@ -10,6 +10,7 @@ import { readPlanWorkspace } from '../study/read-workspace';
 import { readStudentLessonPreview } from '../study/student-plan-projection';
 import { validatePreparedLessonSource } from '../study/validate-prepared-lesson';
 import { createActivationInputSchema } from './activation-tool-schema';
+import type { NodeAccessPolicy } from './node-access';
 import { materializeChild } from './tree-mutations';
 
 const nonempty = Type.String({ minLength: 1 });
@@ -23,23 +24,38 @@ const classroomTemplate = Type.Union([
 ], {
   description: 'Canonical classroom template selected for this Lesson.',
 });
-const block = Type.Object({
+const commonBlockFields = {
   localAlias: Type.String({
     minLength: 1,
     description: 'Blueprint-local alias. Runtime maps it to block-001, block-002, and so on.',
   }),
-  kind: Type.Union([
-    Type.Literal('dialogue'),
-    Type.Literal('problem'),
-    Type.Literal('material'),
-    Type.Literal('reflection'),
-  ]),
   required: Type.Boolean(),
   dependsOn: Type.Array(nonempty),
-  uses: Type.Array(nonempty),
   studentView: nonempty,
   teacherControl: nonempty,
-}, { additionalProperties: false });
+};
+const block = Type.Union([
+  Type.Object({
+    kind: Type.Literal('dialogue'),
+    ...commonBlockFields,
+  }, { additionalProperties: false }),
+  Type.Object({
+    kind: Type.Literal('material'),
+    ...commonBlockFields,
+  }, { additionalProperties: false }),
+  Type.Object({
+    kind: Type.Literal('reflection'),
+    ...commonBlockFields,
+  }, { additionalProperties: false }),
+  Type.Object({
+    kind: Type.Literal('problem'),
+    ...commonBlockFields,
+    cardAlias: Type.String({
+      minLength: 1,
+      description: 'Exactly one alias declared in blueprint.cards. Runtime compiles it into this problem Block\'s Uses binding.',
+    }),
+  }, { additionalProperties: false }),
+]);
 function blueprintSchema(activationSources?: readonly string[]) {
   return Type.Object({
     title: nonempty,
@@ -85,7 +101,10 @@ export function createLessonPrepareTool(
   root: string,
   ownerId: string,
   ownerPath: string,
-  options: { activationSources?: readonly string[] } = {},
+  options: {
+    activationSources?: readonly string[];
+    accessPolicy?: Pick<NodeAccessPolicy, 'wasResolved'>;
+  } = {},
 ) {
   return defineTool({
     name: 'lesson_prepare',
@@ -107,10 +126,40 @@ export function createLessonPrepareTool(
       if (plan.frontmatter.status === 'completed') {
         throw new Error(`PLAN_PREPARATION_REQUIRES_REACTIVATION: ${ownerId}`);
       }
-      const blueprint = {
-        ...input.blueprint,
+      const blueprint: LessonBlueprint = {
+        title: input.blueprint.title,
+        publicPurpose: input.blueprint.publicPurpose,
+        capabilityTarget: input.blueprint.capabilityTarget,
+        primaryTemplate: input.blueprint.primaryTemplate,
+        templateReason: input.blueprint.templateReason,
         adjustments: input.blueprint.adjustments ?? [],
-      } as LessonBlueprint;
+        activation: input.blueprint.activation as LessonBlueprint['activation'],
+        cards: input.blueprint.cards,
+        sources: input.blueprint.sources,
+        blocks: input.blueprint.blocks.map((candidate) => ({
+          localAlias: candidate.localAlias,
+          kind: candidate.kind,
+          required: candidate.required,
+          dependsOn: candidate.dependsOn,
+          uses: candidate.kind === 'problem' ? [candidate.cardAlias] : [],
+          studentView: candidate.studentView,
+          teacherControl: candidate.teacherControl,
+        })),
+      };
+      if (options.accessPolicy !== undefined) {
+        const cardPaths = new Map(
+          blueprint.cards.map((card) => [card.alias, card.cardPath]),
+        );
+        for (const candidate of blueprint.blocks) {
+          if (candidate.kind !== 'problem') continue;
+          const cardPath = cardPaths.get(candidate.uses[0]!);
+          if (cardPath === undefined) continue;
+          const source = `card:${cardPath}`;
+          if (!options.accessPolicy.wasResolved(source)) {
+            throw new Error(`LESSON_CARD_NOT_RESOLVED: ${source}`);
+          }
+        }
+      }
       const planTitle = title(plan.body, ownerPath);
       const result = materializeChild(root, {
         parentId: ownerId,

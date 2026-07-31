@@ -234,6 +234,7 @@ export async function createPiSessionFactory(
         ]
         : [
           createLessonPrepareTool(root, ownerId, ownerPath, {
+            accessPolicy,
             activationSources: [
               ...nodeContext.resolvableSources,
               ...nodeContext.pages.map((page) => page.source),
