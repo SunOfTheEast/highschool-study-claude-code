@@ -155,6 +155,8 @@ JSONL 保存原始会话历史，但不取代 learning set 中的学习事实。
 
 ## 文档与开发
 
+- **知页通用多书学习 App 已迁移至本地独立仓库：
+  `/Users/yangrundong/Documents/GitHub/zhiye`。**
 - [完整中文说明书](docs/zh-CN/完整说明书.md)
 - [学习节点树与证据继承协议](docs/zh-CN/学习节点树与证据继承.md)
 - [Pi 教学前端说明](apps/pi-teaching-web/README.md)
