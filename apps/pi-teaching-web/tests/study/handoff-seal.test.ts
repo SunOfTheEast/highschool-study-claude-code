@@ -69,7 +69,17 @@ for (const item of cases) {
       );
       const close = createLessonCloseTool(root, 'lessons/lesson-003.md', {
         sessionId: 'session-lesson-003',
-        sessionEntries: () => [{ id: 'message-001' }],
+        sessionEntries: () => [{
+          id: 'message-001',
+          type: 'message',
+          parentId: null,
+          timestamp: '2026-08-05T09:59:00.000Z',
+          message: {
+            role: 'user',
+            content: '我想在这里结束课程。',
+            timestamp: Date.parse('2026-08-05T09:59:00.000Z'),
+          },
+        }],
         now: () => new Date('2026-08-05T10:00:00.000Z'),
       });
 

@@ -1,4 +1,6 @@
 import type { SessionEntry } from '@earendil-works/pi-coding-agent';
+import { projectConversationEntries } from '../projection/conversation-projector';
+import type { SessionKey } from '../shared/contracts';
 import type { SessionEvidenceReader } from '../study/evidence-tree';
 import type { NodeSessionScope } from './session-scope';
 
@@ -99,30 +101,79 @@ export async function readPiSessionBranch(
   return SessionManager.open(sessionFile, undefined, root).getBranch();
 }
 
+function sessionKey(owner: NodeSessionScope): SessionKey {
+  return owner.nodeKind === 'roadmap'
+    ? 'coach:@roadmap'
+    : owner.nodeKind === 'plan'
+      ? `coach:${owner.nodeId}`
+      : `tutor:${owner.nodeId}`;
+}
+
+export function createSessionEvidenceReader(
+  records: Array<{
+    sessionId: string;
+    owner: NodeSessionScope;
+    entries: readonly SessionEntry[];
+  }>,
+): SessionEvidenceReader {
+  const sessions = new Map<
+    `session:${string}`,
+    { sessionId: string; ownerId: string; ownerPath: string }
+  >();
+  const messages = new Map<
+    `session:${string}#message:${string}`,
+    { role: 'student' | 'coach' | 'tutor'; text: string }
+  >();
+  for (const record of records) {
+    const source = `session:${record.sessionId}` as const;
+    sessions.set(source, {
+      sessionId: record.sessionId,
+      ownerId: record.owner.nodeId,
+      ownerPath: record.owner.nodePath,
+    });
+    const key = sessionKey(record.owner);
+    for (const item of projectConversationEntries(key, record.entries, 'safe')) {
+      if (item.kind !== 'message') continue;
+      const prefix = `${key}:`;
+      if (!item.message.id.startsWith(prefix)) continue;
+      const indexSource = item.message.id.slice(prefix.length);
+      if (!/^\d+$/.test(indexSource)) continue;
+      const entry = record.entries[Number(indexSource)];
+      if (!entry || typeof entry.id !== 'string') continue;
+      messages.set(`${source}#message:${entry.id}`, {
+        role: item.message.role,
+        text: item.message.text,
+      });
+    }
+  }
+  return {
+    readSession: (source) => sessions.get(source) ?? null,
+    readMessage: (source) => messages.get(source) ?? null,
+  };
+}
+
 export async function createPiSessionEvidenceReader(
   root: string,
 ): Promise<SessionEvidenceReader> {
   const { SessionManager } = await import('@earendil-works/pi-coding-agent');
-  const sessions = new Map<
-    string,
-    NonNullable<ReturnType<SessionEvidenceReader['read']>>
-  >();
+  const records: Array<{
+    sessionId: string;
+    owner: NodeSessionScope;
+    entries: readonly SessionEntry[];
+  }> = [];
   for (const item of await SessionManager.list(root)) {
     try {
       const manager = SessionManager.open(item.path, undefined, root);
       const owner = readSessionOwner(manager);
       if (owner === null) continue;
-      const messages = new Set(manager.getBranch().flatMap((entry) => (
-        typeof entry.id === 'string' ? [entry.id] : []
-      )));
-      sessions.set(item.id, {
+      records.push({
+        sessionId: item.id,
         owner,
-        messages,
-        label: `${owner.nodeId} session`,
+        entries: manager.getBranch(),
       });
     } catch {
       continue;
     }
   }
-  return { read: (sessionId) => sessions.get(sessionId) ?? null };
+  return createSessionEvidenceReader(records);
 }

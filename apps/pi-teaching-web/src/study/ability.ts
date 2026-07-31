@@ -37,7 +37,10 @@ const roadmapScope = {
   parentPath: null,
 } as const satisfies NodeSessionScope;
 
-const noSessions: SessionEvidenceReader = { read: () => null };
+const noSessions: SessionEvidenceReader = {
+  readSession: () => null,
+  readMessage: () => null,
+};
 
 export function readEvidence(
   root: string,

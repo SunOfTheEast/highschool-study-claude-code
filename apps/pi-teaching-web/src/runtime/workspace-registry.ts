@@ -29,9 +29,11 @@ import {
   type StudySessionFactory,
 } from './session-factory';
 import {
+  createSessionEvidenceReader,
   findOwnedPiSessionFile,
   readPiSessionBranch,
 } from './session-owner';
+import type { SessionEvidenceReader } from '../study/evidence-tree';
 import {
   ROADMAP_COACH_SCOPE,
   type NodeSessionScope,
@@ -334,6 +336,82 @@ export class WorkspaceRegistry {
       return [];
     }
     return this.readHistory(lesson.sessionKey, mode);
+  }
+
+  async sessionEvidenceReader(): Promise<SessionEvidenceReader> {
+    const owners: Array<{
+      key: SessionKey;
+      sessionId: string;
+      scope: NodeSessionScope;
+    }> = [];
+    const roadmap = this.roadmapSnapshot();
+    if (roadmap.coach.sessionId !== null) {
+      owners.push({
+        key: ROADMAP_COACH_SESSION_KEY,
+        sessionId: roadmap.coach.sessionId,
+        scope: ROADMAP_COACH_SCOPE,
+      });
+    }
+    for (const plan of readLearningSet(this.root).plans) {
+      const workspace = readPlanWorkspace(this.root, plan.id);
+      const planScope = {
+        nodeKind: 'plan',
+        nodeId: plan.id,
+        nodePath: plan.path,
+        parentId: 'roadmap',
+        parentPath: 'ROADMAP.md',
+      } as const satisfies NodeSessionScope;
+      if (workspace.coach.sessionId !== null) {
+        owners.push({
+          key: `coach:${plan.id}`,
+          sessionId: workspace.coach.sessionId,
+          scope: planScope,
+        });
+      }
+      for (const lesson of workspace.lessons) {
+        if (lesson.tutorSessionId === null) continue;
+        owners.push({
+          key: lesson.sessionKey,
+          sessionId: lesson.tutorSessionId,
+          scope: {
+            nodeKind: 'lesson',
+            nodeId: lesson.id,
+            nodePath: lesson.path,
+            parentId: plan.id,
+            parentPath: plan.path,
+          },
+        });
+      }
+    }
+
+    const records: Parameters<typeof createSessionEvidenceReader>[0] = [];
+    for (const owner of owners) {
+      const cached = this.sessions.get(owner.key);
+      if (cached?.sessionId === owner.sessionId) {
+        records.push({
+          sessionId: owner.sessionId,
+          owner: owner.scope,
+          entries: cached.entries,
+        });
+        continue;
+      }
+      const sessionFile = await this.lookup(
+        this.root,
+        owner.sessionId,
+        owner.scope,
+      );
+      if (sessionFile === null) continue;
+      try {
+        records.push({
+          sessionId: owner.sessionId,
+          owner: owner.scope,
+          entries: await this.readSessionBranch(this.root, sessionFile),
+        });
+      } catch {
+        continue;
+      }
+    }
+    return createSessionEvidenceReader(records);
   }
 
   personaId(key: SessionKey): string {

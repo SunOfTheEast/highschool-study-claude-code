@@ -531,6 +531,7 @@ test('restores terminal Lesson history from its owned Pi JSONL without creating 
       throw new Error('replay must not create an Agent Session');
     },
     async (_root, sessionId, expected) => {
+      if (sessionId !== manager.getSessionId()) return null;
       expect(sessionId).toBe(manager.getSessionId());
       expect(expected).toEqual({
         nodeKind: 'lesson',
@@ -564,6 +565,128 @@ test('restores terminal Lesson history from its owned Pi JSONL without creating 
       }),
     },
   ]);
+});
+
+test('builds read-only safe Session evidence for a historical Lesson message', async () => {
+  const root = fixture();
+  const manager = SessionManager.create(root, join(root, 'pi-evidence-sessions'));
+  appendSessionOwner(manager, {
+    nodeKind: 'lesson',
+    nodeId: 'lesson-003',
+    nodePath: 'lessons/lesson-003.md',
+    parentId: 'domain-integrity',
+    parentPath: 'plans/domain-integrity.md',
+  });
+  manager.appendMessage({
+    role: 'user',
+    content: '我先检查定义域，再比较两条路线。',
+    timestamp: Date.now(),
+  });
+  manager.appendMessage({
+    role: 'assistant',
+    content: [{
+      type: 'text',
+      text: 'PRIVATE_TOOL_PREAMBLE',
+    }, {
+      type: 'toolCall',
+      id: 'tool-1',
+      name: 'trace_search',
+      arguments: {},
+    }],
+    api: 'openai-completions',
+    provider: 'test',
+    model: 'test-model',
+    usage: {
+      input: 0,
+      output: 0,
+      cacheRead: 0,
+      cacheWrite: 0,
+      totalTokens: 0,
+      cost: {
+        input: 0,
+        output: 0,
+        cacheRead: 0,
+        cacheWrite: 0,
+        total: 0,
+      },
+    },
+    stopReason: 'toolUse',
+    timestamp: Date.now(),
+  });
+  const message = manager.getBranch().find((entry) => (
+    entry.type === 'message'
+    && (entry.message as { role?: unknown }).role === 'user'
+  ));
+  const hiddenAssistant = manager.getBranch().find((entry) => (
+    entry.type === 'message'
+    && (entry.message as { role?: unknown }).role === 'assistant'
+  ));
+  if (!message || !hiddenAssistant) throw new Error('TEST_MESSAGE_NOT_PERSISTED');
+  const sessionFile = manager.getSessionFile();
+  if (!sessionFile) throw new Error('TEST_SESSION_NOT_PERSISTED');
+  editLesson(root, (source) => source
+    .replace('status: prepared', 'status: closed')
+    .replace('tutor_session: null', `tutor_session: ${manager.getSessionId()}`));
+  let factoryCalls = 0;
+  const registry = new WorkspaceRegistry(
+    root,
+    async () => {
+      factoryCalls += 1;
+      throw new Error('evidence reads must not create an Agent Session');
+    },
+    async (_root, sessionId, expected) => {
+      if (sessionId !== manager.getSessionId()) return null;
+      expect(sessionId).toBe(manager.getSessionId());
+      expect(expected).toMatchObject({
+        nodeKind: 'lesson',
+        nodeId: 'lesson-003',
+        nodePath: 'lessons/lesson-003.md',
+      });
+      return sessionFile;
+    },
+  );
+
+  const reader = await registry.sessionEvidenceReader();
+  expect(factoryCalls).toBe(0);
+  expect(reader.readSession(`session:${manager.getSessionId()}`)).toEqual({
+    sessionId: manager.getSessionId(),
+    ownerId: 'lesson-003',
+    ownerPath: 'lessons/lesson-003.md',
+  });
+  expect(reader.readMessage(
+    `session:${manager.getSessionId()}#message:${message.id}`,
+  )).toEqual({
+    role: 'student',
+    text: '我先检查定义域，再比较两条路线。',
+  });
+  expect(reader.readMessage(
+    `session:${manager.getSessionId()}#message:${hiddenAssistant.id}`,
+  )).toBeNull();
+});
+
+test('omits Session evidence when the owner-checked lookup rejects the node', async () => {
+  const root = fixture();
+  editLesson(root, (source) => source
+    .replace('status: prepared', 'status: closed')
+    .replace('tutor_session: null', 'tutor_session: mismatched-session'));
+  let lookupCalls = 0;
+  const registry = new WorkspaceRegistry(
+    root,
+    async () => {
+      throw new Error('evidence reads must not create an Agent Session');
+    },
+    async (_root, sessionId, expected) => {
+      if (sessionId !== 'mismatched-session') return null;
+      lookupCalls += 1;
+      expect(sessionId).toBe('mismatched-session');
+      expect(expected.nodeId).toBe('lesson-003');
+      return null;
+    },
+  );
+
+  const reader = await registry.sessionEvidenceReader();
+  expect(lookupCalls).toBe(1);
+  expect(reader.readSession('session:mismatched-session')).toBeNull();
 });
 
 test('reads terminal Plan history but never reopens it for writing', async () => {

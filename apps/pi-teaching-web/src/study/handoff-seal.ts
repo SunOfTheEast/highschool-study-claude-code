@@ -9,6 +9,8 @@ import {
   type SourceHandle,
 } from 'highschool-study-markdown/study-domain';
 import { Type } from 'typebox';
+import type { SessionEntry } from '@earendil-works/pi-coding-agent';
+import { createSessionEvidenceReader } from '../runtime/session-owner';
 import {
   resolveEvidenceTree,
   type NodeSessionScope,
@@ -356,21 +358,11 @@ export function createCurrentSessionEvidenceReader(
   sessionId: string,
   entries: () => readonly unknown[],
 ): SessionEvidenceReader {
-  return {
-    read: (requested) => {
-      if (requested !== sessionId) return null;
-      const messages = new Set(entries().flatMap((entry) => {
-        if (entry === null || typeof entry !== 'object' || Array.isArray(entry)) return [];
-        const id = (entry as { id?: unknown }).id;
-        return typeof id === 'string' ? [id] : [];
-      }));
-      return {
-        owner: scope,
-        messages,
-        label: `${scope.nodeId} session`,
-      };
-    },
-  };
+  return createSessionEvidenceReader([{
+    sessionId,
+    owner: scope,
+    entries: entries() as readonly SessionEntry[],
+  }]);
 }
 
 export function scopeForNode(root: string, nodePath: string): NodeSessionScope {

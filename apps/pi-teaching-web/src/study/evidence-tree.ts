@@ -1,4 +1,9 @@
-import { existsSync, readFileSync } from 'node:fs';
+import {
+  existsSync,
+  readFileSync,
+  readdirSync,
+} from 'node:fs';
+import { join, relative } from 'node:path';
 import {
   parseHandoff,
   parseSourceHandle,
@@ -9,6 +14,8 @@ import {
   type SourceHandle,
 } from 'highschool-study-markdown/study-domain';
 import { parse } from 'yaml';
+import { parseProfileDocument } from '../memory-review/profile-document';
+import { readRoadmapCheckpoints } from './roadmap-checkpoints';
 
 export type NodeSessionScope = {
   nodeKind: 'roadmap' | 'plan' | 'lesson';
@@ -18,14 +25,16 @@ export type NodeSessionScope = {
   parentPath: string | null;
 };
 
-export type SessionEvidence = {
-  owner: NodeSessionScope;
-  messages: ReadonlySet<string>;
-  label: string;
-};
-
 export type SessionEvidenceReader = {
-  read(sessionId: string): SessionEvidence | null;
+  readSession(source: `session:${string}`): {
+    sessionId: string;
+    ownerId: string;
+    ownerPath: string;
+  } | null;
+  readMessage(source: `session:${string}#message:${string}`): {
+    role: 'student' | 'coach' | 'tutor';
+    text: string;
+  } | null;
 };
 
 export type EvidenceState = 'active' | 'invalidated' | 'missing' | 'forbidden';
@@ -63,21 +72,20 @@ function stringField(
     : null;
 }
 
-function nodeDocument(
-  root: string,
-  nodeKind: NodeSessionScope['nodeKind'],
-  nodeId: string,
-): NodeDocument | null {
-  const nodePath = nodeKind === 'roadmap'
-    ? 'ROADMAP.md'
-    : `${nodeKind === 'plan' ? 'plans' : 'lessons'}/${nodeId}.md`;
+function nodeDocumentAt(root: string, nodePath: string): NodeDocument | null {
   const absolute = resolveInsideRoot(root, nodePath);
   if (!existsSync(absolute)) return null;
   const source = readFileSync(absolute, 'utf8');
   const fields = frontmatter(source);
+  const nodeId = stringField(fields, 'id');
+  const nodeKind = stringField(fields, 'kind');
   if (
-    stringField(fields, 'id') !== nodeId
-    || stringField(fields, 'kind') !== nodeKind
+    nodeId === null
+    || (
+      nodeKind !== 'roadmap'
+      && nodeKind !== 'plan'
+      && nodeKind !== 'lesson'
+    )
   ) {
     return null;
   }
@@ -86,7 +94,7 @@ function nodeDocument(
     try {
       handoff = parseHandoff(source);
     } catch {
-      return null;
+      handoff = null;
     }
   }
   return {
@@ -106,10 +114,57 @@ function nodeDocument(
   };
 }
 
+function nodePaths(
+  root: string,
+  kind: NodeSessionScope['nodeKind'],
+): string[] {
+  if (kind === 'roadmap') return ['ROADMAP.md'];
+  const rootPath = resolveInsideRoot(root, '.');
+  const paths: string[] = [];
+  const absolute = resolveInsideRoot(root, kind === 'plan' ? 'plans' : 'lessons');
+  if (existsSync(absolute)) {
+    const visit = (directory: string) => {
+      for (const entry of readdirSync(directory, { withFileTypes: true })) {
+        const path = join(directory, entry.name);
+        if (entry.isDirectory()) visit(path);
+        else if (entry.isFile() && entry.name.endsWith('.md')) {
+          paths.push(relative(rootPath, path).replaceAll('\\', '/'));
+        }
+      }
+    };
+    visit(absolute);
+  }
+  return paths.sort();
+}
+
+function findNodeDocument(
+  root: string,
+  kind: NodeSessionScope['nodeKind'],
+  nodeId: string,
+): NodeDocument | null {
+  for (const path of nodePaths(root, kind)) {
+    const document = nodeDocumentAt(root, path);
+    if (
+      document?.scope.nodeKind === kind
+      && document.scope.nodeId === nodeId
+    ) {
+      return document;
+    }
+  }
+  return null;
+}
+
 function handoffDocument(root: string, handoffId: string): NodeDocument | null {
+  const checkpoint = readRoadmapCheckpoints(root).find((handoff) => (
+    handoff.identity.id === handoffId
+  ));
+  if (checkpoint !== undefined) {
+    const roadmap = nodeDocumentAt(root, 'ROADMAP.md');
+    return roadmap === null ? null : { ...roadmap, handoff: checkpoint };
+  }
   const nodeId = handoffId.replace(/\/handoff$/, '');
   for (const kind of ['lesson', 'plan', 'roadmap'] as const) {
-    const document = nodeDocument(root, kind, nodeId);
+    const document = findNodeDocument(root, kind, nodeId);
     if (document?.handoff?.identity.id === handoffId) return document;
   }
   return null;
@@ -146,8 +201,8 @@ function traceAllowed(
 
 function combine(children: EvidenceNode[]): EvidenceState {
   if (children.some((child) => child.state === 'forbidden')) return 'forbidden';
-  if (children.some((child) => child.state === 'invalidated')) return 'invalidated';
   if (children.some((child) => child.state === 'missing')) return 'missing';
+  if (children.some((child) => child.state === 'invalidated')) return 'invalidated';
   return 'active';
 }
 
@@ -188,6 +243,39 @@ function memoryLabel(
   return /^- Content: (.+)$/m.exec(body)?.[1]?.trim() ?? entryId;
 }
 
+function memoryEntry(
+  root: string,
+  owner: 'student' | 'teaching',
+  entryId: string,
+) {
+  const path = owner === 'student'
+    ? 'memory/student-profile.md'
+    : 'memory/teaching-profile.md';
+  const absolute = resolveInsideRoot(root, path);
+  if (!existsSync(absolute)) return null;
+  try {
+    return parseProfileDocument(readFileSync(absolute, 'utf8'), owner)
+      .find((entry) => entry.id === entryId) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function documentSource(
+  root: string,
+  source: string,
+  requester: NodeSessionScope,
+): EvidenceNode | null {
+  const match = /^((?:plans|lessons)\/[A-Za-z0-9][A-Za-z0-9._/-]*\.md)(?:#[A-Za-z0-9][A-Za-z0-9._=-]*)?$/
+    .exec(source);
+  if (!match?.[1]) return null;
+  const document = nodeDocumentAt(root, match[1]);
+  if (!document) return result(source, '来源文档不存在', 'missing');
+  return canAccess(requester, document.scope)
+    ? result(source, document.scope.nodeId, 'active')
+    : result(source, '来源文档不属于当前学习分支', 'forbidden');
+}
+
 function resolveHandle(
   root: string,
   source: string,
@@ -222,18 +310,34 @@ function resolveHandle(
   }
 
   if (handle.kind === 'session') {
-    const session = sessions.read(handle.sessionId);
+    const sessionSource = `session:${handle.sessionId}` as const;
+    const session = sessions.readSession(sessionSource);
     if (!session) return result(source, '课堂会话不存在', 'missing');
+    const ownerDocument = nodeDocumentAt(root, session.ownerPath);
     if (
-      !canAccess(requester, session.owner)
-      || (expectedOwner !== null && !sameScope(expectedOwner, session.owner))
+      ownerDocument === null
+      || ownerDocument.scope.nodeId !== session.ownerId
+    ) {
+      return result(source, '课堂会话归属不可验证', 'missing');
+    }
+    if (
+      !canAccess(requester, ownerDocument.scope)
+      || (
+        expectedOwner !== null
+        && !sameScope(expectedOwner, ownerDocument.scope)
+      )
     ) {
       return result(source, '课堂会话不属于当前节点', 'forbidden');
     }
-    if (handle.messageId !== null && !session.messages.has(handle.messageId)) {
-      return result(source, '课堂消息不存在', 'missing');
+    if (handle.messageId !== null) {
+      const message = sessions.readMessage(
+        `${sessionSource}#message:${handle.messageId}`,
+      );
+      return message === null
+        ? result(source, '课堂消息不存在', 'missing')
+        : result(source, message.text, 'active');
     }
-    return result(source, session.label, 'active');
+    return result(source, `${session.ownerId} 会话`, 'active');
   }
 
   if (handle.kind === 'card') {
@@ -244,7 +348,7 @@ function resolveHandle(
   }
 
   if (handle.kind === 'block') {
-    const document = nodeDocument(root, 'lesson', handle.lessonId);
+    const document = findNodeDocument(root, 'lesson', handle.lessonId);
     if (!document) return result(source, '课堂节点不存在', 'missing');
     if (
       !canAccess(requester, document.scope)
@@ -258,10 +362,23 @@ function resolveHandle(
   }
 
   if (handle.kind === 'memory') {
-    const label = memoryLabel(root, handle.owner, handle.entryId);
-    return label === null
-      ? result(source, '长期记忆不存在', 'missing')
-      : result(source, label, 'active');
+    const entry = memoryEntry(root, handle.owner, handle.entryId);
+    const label = entry?.content
+      ?? memoryLabel(root, handle.owner, handle.entryId);
+    if (label === null) return result(source, '长期记忆不存在', 'missing');
+    if (stack.has(source)) return result(source, '长期记忆存在循环引用', 'forbidden');
+    if (entry === null) return result(source, label, 'active');
+    const nextStack = new Set(stack);
+    nextStack.add(source);
+    const children = entry.sources.map((childSource) => resolveSource(
+      root,
+      childSource,
+      requester,
+      sessions,
+      nextStack,
+      null,
+    ));
+    return result(source, label, combine(children), children);
   }
 
   const document = handoffDocument(root, handle.handoffId);
@@ -297,6 +414,8 @@ function resolveSource(
   stack: Set<string>,
   expectedOwner: NodeSessionScope | null,
 ): EvidenceNode {
+  const file = documentSource(root, source, requester);
+  if (file !== null) return file;
   let handle: SourceHandle;
   try {
     handle = parseSourceHandle(source);

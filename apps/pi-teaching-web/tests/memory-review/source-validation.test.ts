@@ -20,7 +20,10 @@ import type { SessionEvidenceReader } from '../../src/study/evidence-tree';
 import { domainIntegrityFixtureRoot } from '../support/fixture-paths';
 
 const roots: string[] = [];
-const noSessions: SessionEvidenceReader = { read: () => null };
+const noSessions: SessionEvidenceReader = {
+  readSession: () => null,
+  readMessage: () => null,
+};
 
 afterEach(() => {
   for (const root of roots.splice(0)) rmSync(root, { recursive: true, force: true });

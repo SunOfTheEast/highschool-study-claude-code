@@ -170,21 +170,19 @@ status: active
 ## Active Preferences
 `);
 
-  const lessonOwner = {
-    nodeKind: 'lesson',
-    nodeId: 'lesson-001',
-    nodePath: 'lessons/lesson-001.md',
-    parentId: 'plan-a',
-    parentPath: 'plans/plan-a.md',
-  } satisfies NodeSessionScope;
   const sessions: SessionEvidenceReader = {
-    read: (sessionId) => sessionId === 'session-001'
+    readSession: (source) => source === 'session:session-001'
       ? {
-        owner: lessonOwner,
-        messages: new Set(['message-009']),
-        label: 'Lesson 001 classroom session',
+        sessionId: 'session-001',
+        ownerId: 'lesson-001',
+        ownerPath: 'lessons/lesson-001.md',
       }
       : null,
+    readMessage: (source) => (
+      source === 'session:session-001#message:message-009'
+        ? { role: 'student', text: '我比较后自行换了路线。' }
+        : null
+    ),
   };
   return {
     root,
