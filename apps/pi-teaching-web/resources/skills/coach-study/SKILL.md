@@ -76,15 +76,19 @@ Use dialogue Blocks only for cardless discussion outside a judged response. Dist
 parts of one card may use separate problem Blocks only when they are independently
 answered and judged, with each Block bound to its own real part.
 
-Private retrieval does not create a second preview round. If the available material
-cannot satisfy an agreed public constraint, tell the student only which public
-constraint cannot be met and ask whether that constraint may change. Do not quote or
-summarize a candidate stem, formula, card identity, route count, method, difficulty
-point, decisive condition, or selection rationale. A disclosed diagnostic or
-assessment candidate is no longer an unseen first attempt; choose another authentic
-source or change the activity with the student's agreement.
+Private retrieval has only two valid turn shapes:
 
-The preparation receipt is the handoff. Do not add a free-form preview after it.
+1. A fitting card exists: `card_search` → required `source_resolve` checks →
+   `lesson_prepare`. Emit no assistant text between the first private search result
+   and the preparation receipt. The receipt is the complete student-facing handoff.
+2. No fitting card exists: create no Lesson, name only the unmet public constraint,
+   and ask whether that constraint may change.
+
+There is no card-approval or second preview turn. Candidate stems, formulas, card
+identity, route count, methods, difficulty points, decisive conditions and selection
+rationale stay private. A disclosed diagnostic or assessment candidate is no longer
+an unseen first attempt; choose another authentic source or change the activity with
+the student's agreement.
 
 ## Review and complete the Plan
 
