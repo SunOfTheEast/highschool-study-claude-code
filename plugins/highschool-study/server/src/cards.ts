@@ -161,7 +161,14 @@ export function createCardSearcher(readTraces: ActiveTraceReader = readActiveTra
     const cards = cardPaths(root)
       .map((path) => loadCard(root, path))
       .filter((value): value is LoadedCard => value !== null)
-      .filter(({ searchText }) => terms.every((term) => searchText.includes(term)))
+      .map((value) => ({
+        ...value,
+        score: terms.filter((term) => value.searchText.includes(term)).length,
+      }))
+      .filter(({ score }) => score > 0)
+      .sort((left, right) => (
+        right.score - left.score || left.card.path.localeCompare(right.card.path)
+      ))
       .map(({ card }) => ({
         ...card,
         traceHistory: index.byCardPath.get(card.path) ?? [],

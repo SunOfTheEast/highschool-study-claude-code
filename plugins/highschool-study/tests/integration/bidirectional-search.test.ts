@@ -77,6 +77,20 @@ test('joins cards and active Trace in both directions', () => {
   }).traces.map((trace) => trace.traceId)).toEqual([appended.traceId]);
 });
 
+test('ranks cards by partial query-term matches instead of requiring every term', () => {
+  const root = makeLearningSetWithHistory();
+
+  const cards = searchCards(root, {
+    query: 'freeze transfer absent',
+    limit: 3,
+  }).cards;
+
+  expect(cards.map((card) => card.path)).toEqual([
+    'cards/conics/freeze-variable-transfer-02.yaml',
+    'cards/conics/freeze-variable-01.yaml',
+  ]);
+});
+
 test('scans active Trace once for three card hits', () => {
   const root = makeLearningSetWithHistory();
   copyFileSync(
