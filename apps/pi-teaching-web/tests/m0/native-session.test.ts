@@ -50,7 +50,7 @@ function fakeSession(id: string, file = `/sessions/${id}.jsonl`): StudySession {
   };
 }
 
-test('assembles only static teaching resources and native file tools', () => {
+test('assembles static teaching resources and node-scoped model tools', () => {
   const root = copyFixture();
   const resources = loadStaticNodeResources(root, {
     nodeKind: 'plan',
@@ -61,7 +61,9 @@ test('assembles only static teaching resources and native file tools', () => {
   });
   const assembled = resources.agentsFiles.map((file) => file.content).join('\n');
 
-  expect(resources.tools).toEqual(['read', 'grep', 'find', 'ls', 'edit', 'write']);
+  expect(resources.tools).toEqual([
+    'read', 'grep', 'find', 'ls', 'edit', 'write', 'subagent',
+  ]);
   expect(resources.agentsFiles).toContainEqual(expect.objectContaining({
     path: join(root, 'LEARNING_GUIDE.md'),
   }));
@@ -112,8 +114,36 @@ test('injects one canonical document contract into every node session', () => {
     expect(contracts[0]?.content).toContain('session_id: null');
     expect(contracts[0]?.content).toContain('- [plan-001 | 阶段标题](plans/plan-001.md)');
     expect(contracts[0]?.content).toContain('write 完整子文件');
-    expect(resources.tools).toEqual(['read', 'grep', 'find', 'ls', 'edit', 'write']);
+    expect(resources.tools).toEqual(scope.nodeKind === 'plan'
+      ? ['read', 'grep', 'find', 'ls', 'edit', 'write', 'subagent']
+      : ['read', 'grep', 'find', 'ls', 'edit', 'write']);
   }
+});
+
+test('loads the explicit subagent extension only for Plan nodes', async () => {
+  const root = copyFixture();
+  const planLoader = await createRoleResourceLoader(root, {
+    nodeKind: 'plan',
+    nodeId: 'plan-001',
+    nodePath: 'plans/plan-001.md',
+    parentId: 'roadmap',
+    parentPath: 'ROADMAP.md',
+  }, createEventBus());
+  const lessonLoader = await createRoleResourceLoader(root, {
+    nodeKind: 'lesson',
+    nodeId: 'lesson-001',
+    nodePath: 'lessons/lesson-001.md',
+    parentId: 'plan-001',
+    parentPath: 'plans/plan-001.md',
+  }, createEventBus());
+  const extensionToolNames = (loader: typeof planLoader) => (
+    loader.getExtensions().extensions.flatMap((extension) => (
+      Array.from(extension.tools.keys())
+    ))
+  );
+
+  expect(extensionToolNames(planLoader)).toContain('subagent');
+  expect(extensionToolNames(lessonLoader)).not.toContain('subagent');
 });
 
 test('loads only the M0 skills selected for the current node', async () => {

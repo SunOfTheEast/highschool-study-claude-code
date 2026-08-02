@@ -6,7 +6,11 @@ import {
   getAgentDir,
   type EventBus,
 } from '@earendil-works/pi-coding-agent';
-import { M0_MODEL_TOOLS, formatSessionOwnerContext, type NodeSessionScope } from './session-scope';
+import {
+  formatSessionOwnerContext,
+  modelToolsForNode,
+  type NodeSessionScope,
+} from './session-scope';
 
 const resourceRoot = join(dirname(fileURLToPath(import.meta.url)), '../../resources');
 
@@ -69,7 +73,7 @@ export function loadStaticNodeResources(
     ],
     skillPaths: roleSkills[scope.nodeKind]
       .map((name) => join(resourceRoot, 'skills', name, 'SKILL.md')),
-    tools: M0_MODEL_TOOLS,
+    tools: modelToolsForNode(scope.nodeKind),
   };
 }
 
@@ -83,6 +87,9 @@ export async function createRoleResourceLoader(
     cwd: root,
     agentDir: getAgentDir(),
     eventBus,
+    additionalExtensionPaths: scope.nodeKind === 'plan'
+      ? [fileURLToPath(import.meta.resolve('pi-subagents'))]
+      : [],
     additionalSkillPaths: resources.skillPaths,
     noExtensions: true,
     noSkills: true,

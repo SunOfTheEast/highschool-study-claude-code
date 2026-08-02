@@ -9,7 +9,8 @@ import {
 } from '@earendil-works/pi-coding-agent';
 import { createRoleResourceLoader } from './resource-loader';
 import { appendSessionOwner } from './session-owner';
-import { M0_MODEL_TOOLS, type NodeSessionScope } from './session-scope';
+import { modelToolsForNode, type NodeSessionScope } from './session-scope';
+import { configureStudySubagentDirectory } from './subagent-path';
 
 export interface StudySession {
   readonly sessionId: string;
@@ -45,6 +46,7 @@ export async function bindStudyExtensions(
 }
 
 export async function createPiSessionFactory(root: string): Promise<StudySessionFactory> {
+  configureStudySubagentDirectory();
   const modelRuntime = await ModelRuntime.create();
   return async ({ sessionFile, ...scope }) => {
     const eventBus = createEventBus();
@@ -62,7 +64,7 @@ export async function createPiSessionFactory(root: string): Promise<StudySession
       resourceLoader,
       sessionManager: manager,
       customTools: [],
-      tools: [...M0_MODEL_TOOLS],
+      tools: [...modelToolsForNode(scope.nodeKind)],
     });
     await bindStudyExtensions(session);
     return {
