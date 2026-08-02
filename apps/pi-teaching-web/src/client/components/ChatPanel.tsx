@@ -1,236 +1,87 @@
-import {
-  useEffect,
-  useState,
-  type ChangeEvent,
-  type ReactNode,
-} from 'react';
-import type {
-  ConversationItem,
-  LessonStatus,
-  PersonaPresentation,
-  SessionKey,
-  WorkflowView,
-} from '../../shared/contracts';
-import { api } from '../api';
-import { DeepModeToggle } from './DeepModeToggle';
+import { useState, type FormEvent } from 'react';
+import type { ConversationItem, SessionKey } from '../../shared/contracts';
 import { MarkdownView } from './MarkdownView';
-import { LessonReadyCard } from './LessonReadyCard';
-import { MemoryReviewCard } from './MemoryReviewCard';
-import { TaskRail } from './TaskRail';
 
-type ComposerImage = { id: string; name: string; preview: string; path?: string };
+const toolStatus = {
+  running: '进行中',
+  done: '已完成',
+  error: '失败',
+} as const;
 
 export function ChatPanel({
   sessionKey,
   items,
-  work,
+  running,
   error,
-  composerEnabled,
-  lessonId,
-  persona,
-  deepMode,
-  workflows,
-  workflowControlsEnabled,
-  workflowRailInline = false,
-  gate,
-  stage,
-  prefill,
+  enabled,
   onSend,
-  onPrefillConsumed,
-  lessonStatus,
-  onLessonReadyPrimary,
-  onLessonReadyDiscuss,
-  onPersonaOpen,
-  onDeepMode,
-  onWorkflowAction,
-  onMemoryReview,
 }: {
   sessionKey: SessionKey;
   items: ConversationItem[];
-  work: string;
-  error: string | undefined;
-  composerEnabled: boolean;
-  lessonId?: string;
-  persona: PersonaPresentation | null;
-  deepMode: boolean;
-  workflows: WorkflowView[];
-  workflowControlsEnabled: boolean;
-  workflowRailInline?: boolean;
-  gate: ReactNode;
-  stage?: ReactNode;
-  prefill: { id: string; text: string } | null;
-  onSend(text: string, imagePaths: string[]): Promise<void>;
-  onPrefillConsumed(id: string): void;
-  lessonStatus(lessonId: string): LessonStatus | null;
-  onLessonReadyPrimary(lessonId: string): void;
-  onLessonReadyDiscuss(): void;
-  onPersonaOpen(): void;
-  onDeepMode(enabled: boolean): Promise<void>;
-  onWorkflowAction(id: string, action: 'confirm' | 'cancel'): Promise<void>;
-  onMemoryReview(review: Extract<ConversationItem, { kind: 'memory-review' }>['review']): void;
+  running: boolean;
+  error: string | null;
+  enabled: boolean;
+  onSend(text: string): Promise<void>;
 }) {
   const [text, setText] = useState('');
-  const [images, setImages] = useState<ComposerImage[]>([]);
-  const [uploading, setUploading] = useState(false);
-  const [imageError, setImageError] = useState('');
-  const currentPersona = persona?.choices.find((choice) => choice.id === persona.id);
 
-  useEffect(() => {
-    if (!prefill) return;
-    setText(prefill.text);
-    onPrefillConsumed(prefill.id);
-  }, [prefill?.id]);
-
-  const selectImages = async (event: ChangeEvent<HTMLInputElement>) => {
-    const files = [...(event.target.files ?? [])];
-    event.target.value = '';
-    if (!lessonId || files.length === 0) return;
-    const pending = files.map((file) => ({
-      id: crypto.randomUUID(),
-      name: file.name,
-      preview: URL.createObjectURL(file),
-      file,
-    }));
-    setImages((current) => [...current, ...pending]);
-    setUploading(true);
-    setImageError('');
-    try {
-      const uploaded = await Promise.all(
-        pending.map(async (item) => ({ id: item.id, ...(await api.uploadImage(lessonId, item.file)) })),
-      );
-      const paths = new Map<string, string>(uploaded.map((item) => [item.id, item.path]));
-      setImages((current) => current.map((item) => {
-        const path = paths.get(item.id);
-        return path ? { ...item, path } : item;
-      }));
-    } catch {
-      setImageError('图片上传失败，请重新选择。');
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const clearImages = () => {
-    for (const image of images) URL.revokeObjectURL(image.preview);
-    setImages([]);
+  const submit = (event: FormEvent) => {
+    event.preventDefault();
+    const value = text.trim();
+    if (!value || running || !enabled) return;
+    setText('');
+    void onSend(value).catch(() => setText(value));
   };
 
   return (
-    <section className="chat">
+    <section className="chat" aria-label="课堂对话">
       <header className="chat-header">
-        <span>当前输入只发送到</span>
-        <strong>{sessionKey}</strong>
-        {workflowControlsEnabled && (
-          <DeepModeToggle enabled={deepMode} onChange={onDeepMode} />
-        )}
-        <button
-          type="button"
-          className="persona-avatar"
-          aria-label="打开陪伴风格"
-          title={currentPersona?.name ?? '陪伴风格'}
-          disabled={!persona}
-          onClick={onPersonaOpen}
-        >
-          {currentPersona?.portraitUrl
-            ? <img src={currentPersona.portraitUrl} alt="" />
-            : currentPersona?.glyph ?? '伴'}
-        </button>
-        <i className={composerEnabled ? 'live' : ''}>{composerEnabled ? '可对话' : '仅预览'}</i>
+        <span>{sessionKey.startsWith('lesson:') ? '课堂对话' : '学习讨论'}</span>
+        <code>{sessionKey}</code>
       </header>
-
-      {workflowControlsEnabled && workflowRailInline && (
-        <TaskRail workflows={workflows} onAction={onWorkflowAction} />
-      )}
-
-      {stage}
-      <div className="timeline">
-        {gate}
-        {items.map((item, index) => item.kind === 'message' ? (
-          <article key={item.message.id} className={`message ${item.message.role}`}>
-            <span className="message-role">
-              {item.message.role === 'student'
-                ? '你'
-                : item.message.role === 'coach' ? '学习顾问' : '课堂导师'}
-            </span>
-            <div><MarkdownView>{item.message.text}</MarkdownView></div>
-          </article>
-        ) : item.kind === 'lesson-ready' ? (
-          <LessonReadyCard
-            key={`lesson-ready:${item.lesson.lessonPath}:${index}`}
-            value={item.lesson}
-            status={lessonStatus(item.lesson.lessonId)}
-            onPrimary={onLessonReadyPrimary}
-            onDiscuss={onLessonReadyDiscuss}
-          />
+      <div className="timeline" aria-live="polite">
+        {items.map((item) => item.kind === 'tool' ? (
+          <details className="tool-activity" key={item.id}>
+            <summary>
+              <span>{item.name}</span>
+              <small data-status={item.status}>{toolStatus[item.status]}</small>
+            </summary>
+            <pre>{JSON.stringify(item.detail, null, 2)}</pre>
+          </details>
         ) : (
-          <MemoryReviewCard
-            key={item.review.id}
-            review={item.review}
-            onOpen={() => onMemoryReview(item.review)}
-          />
+          <article className={`message ${item.kind}`} key={item.id}>
+            <span className="message-role">{item.kind === 'user' ? '你' : '老师'}</span>
+            <div><MarkdownView>{item.text}</MarkdownView></div>
+          </article>
         ))}
-        {!gate && items.length === 0 && (
+        {items.length === 0 && (
           <div className="empty-conversation">
-            <span>从这里开始</span>
-            <p>说说你现在的目标、卡住的地方，或者想先复盘哪一节课。</p>
+            <span>从这里继续</span>
+            <p>可以说说目标、具体卡点，或请老师先介绍这个学习集。</p>
           </div>
         )}
       </div>
-
-      <div className="chat-feedback" aria-live="polite">
-        {work && <p className="work-status"><span />{work}</p>}
-        {(error || imageError) && <p className="session-error" role="alert">{error || imageError}</p>}
+      <div className="chat-feedback">
+        {running && <p className="work-status"><span />老师正在思考…</p>}
+        {error && <p className="session-error" role="alert">{error}</p>}
       </div>
-
-      {composerEnabled && (
-        <form
-          className="composer"
-          onSubmit={(event) => {
-            event.preventDefault();
-            const value = text.trim();
-            const imagePaths = images.flatMap((image) => image.path ? [image.path] : []);
-            if (uploading || (!value && imagePaths.length === 0)) return;
-            void onSend(value || '请查看我附上的图片。', imagePaths).then(() => {
-              setText('');
-              clearImages();
-            });
-          }}
-        >
-          <textarea
-            value={text}
-            onChange={(event) => setText(event.target.value)}
-            placeholder="写下你的想法或解题过程…"
-            rows={3}
-          />
-          {images.length > 0 && (
-            <div className="image-previews">
-              {images.map((image) => (
-                <figure key={image.id}>
-                  <img src={image.preview} alt={image.name} />
-                  <figcaption>{image.path ? '已就绪' : '上传中'}</figcaption>
-                </figure>
-              ))}
-            </div>
-          )}
-          <div className="composer-footer">
-            <span className="composer-tools">
-              {lessonId && (
-                <label>
-                  <input
-                    type="file"
-                    accept="image/png,image/jpeg,image/webp"
-                    multiple
-                    onChange={(event) => void selectImages(event)}
-                  />
-                  ＋ 图片
-                </label>
-              )}
-              <small>Markdown · LaTeX</small>
-            </span>
-            <button type="submit" disabled={uploading}>发送 <i aria-hidden="true">↗</i></button>
-          </div>
-        </form>
-      )}
+      <form className="composer" onSubmit={submit}>
+        <textarea
+          value={text}
+          onChange={(event) => setText(event.target.value)}
+          placeholder={enabled ? '写下你的想法或解题过程…' : '开始这个节点后即可对话'}
+          disabled={!enabled}
+          rows={3}
+        />
+        <footer>
+          <small>Markdown · LaTeX</small>
+          <button type="submit" disabled={!enabled || running || !text.trim()}>
+            发送 <span aria-hidden="true">↗</span>
+          </button>
+        </footer>
+      </form>
     </section>
   );
 }
+
+export default ChatPanel;

@@ -1,36 +1,12 @@
 import type {
-  AbilityProjection,
-  CoachContextView,
-  ContentSearchResult,
   ConversationItem,
-  EvidenceView,
-  HomeSnapshot,
-  LearningSetSnapshot,
-  LessonReplay,
-  PersonaPresentation,
-  PlanWorkspaceSnapshot,
-  RoadmapWorkspaceSnapshot,
+  CourseSnapshot,
+  KnowledgeSnapshot,
   SessionKey,
-  StudentNotebook,
-  WorkflowView,
 } from '../shared/contracts';
-import type {
-  MemoryReviewDecision,
-  MemoryReviewSnapshot,
-} from '../memory-review/contracts';
-import type {
-  CourseViewProjection,
-  KnowledgeViewProjection,
-  MemoryViewProjection,
-  ViewQuery,
-} from '../shared/view-contracts';
-import { formatViewQuery } from '../study/views/view-query';
 
 export class ApiError extends Error {
-  constructor(
-    readonly status: number,
-    readonly body: unknown,
-  ) {
+  constructor(readonly status: number, readonly body: unknown) {
     super(`API_ERROR: ${status}`);
     this.name = 'ApiError';
   }
@@ -44,129 +20,41 @@ async function json<T>(input: RequestInfo | URL, init?: RequestInit): Promise<T>
     try {
       body = JSON.parse(text);
     } catch {
-      // Preserve non-JSON server errors as text.
+      // Local server errors may be plain text.
     }
     throw new ApiError(response.status, body);
   }
   return response.json() as Promise<T>;
 }
 
+const post = <T>(path: string, body?: unknown) => json<T>(path, {
+  method: 'POST',
+  headers: body === undefined ? undefined : { 'content-type': 'application/json' },
+  body: body === undefined ? undefined : JSON.stringify(body),
+});
+
 export const api = {
-  home: () => json<HomeSnapshot>('/api/home'),
-  learningSet: () => json<LearningSetSnapshot>('/api/learning-set'),
-  courseView: (query: ViewQuery) => (
-    json<CourseViewProjection>(`/api/views/course${formatViewQuery(query)}`)
+  course: (selected?: string | null) => json<CourseSnapshot>(
+    `/api/course${selected ? `?selected=${encodeURIComponent(selected)}` : ''}`,
   ),
-  knowledgeView: (query: ViewQuery) => (
-    json<KnowledgeViewProjection>(`/api/views/knowledge${formatViewQuery(query)}`)
+  knowledge: () => json<KnowledgeSnapshot>('/api/knowledge'),
+  history: (key: SessionKey) => json<ConversationItem[]>(
+    `/api/sessions/${encodeURIComponent(key)}/history`,
   ),
-  memoryView: (query: ViewQuery) => (
-    json<MemoryViewProjection>(`/api/views/memory${formatViewQuery(query)}`)
+  send: (key: SessionKey, text: string) => post<{ accepted: true }>(
+    `/api/sessions/${encodeURIComponent(key)}/messages`,
+    { text },
   ),
-  abilities: () => json<AbilityProjection>('/api/abilities'),
-  evidence: (source: string) => (
-    json<EvidenceView>(`/api/evidence?source=${encodeURIComponent(source)}`)
+  startPlan: (id: string) => post<{ route: string; sessionKey: SessionKey }>(
+    `/api/plans/${encodeURIComponent(id)}/start`,
   ),
-  persona: (key: SessionKey) => (
-    json<PersonaPresentation>(`/api/persona?sessionKey=${encodeURIComponent(key)}`)
+  completePlan: (id: string) => post<{ route: string }>(
+    `/api/plans/${encodeURIComponent(id)}/complete`,
   ),
-  setPersona: (key: SessionKey, id: string) => (
-    json<PersonaPresentation>(`/api/sessions/${encodeURIComponent(key)}/persona`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ id }),
-    })
+  startLesson: (id: string) => post<{ route: string; sessionKey: SessionKey }>(
+    `/api/lessons/${encodeURIComponent(id)}/start`,
   ),
-  workspace: (planId: string) => (
-    json<PlanWorkspaceSnapshot>(`/api/workspaces/${encodeURIComponent(planId)}`)
-  ),
-  coachContext: (planId: string) => (
-    json<CoachContextView>(`/api/plans/${encodeURIComponent(planId)}/context`)
-  ),
-  startPlan: (planId: string) => (
-    json<PlanWorkspaceSnapshot>(`/api/plans/${encodeURIComponent(planId)}/start`, {
-      method: 'POST',
-    })
-  ),
-  contentSearch: (key: SessionKey, query: string, limit = 20) => (
-    json<ContentSearchResult>(
-      `/api/content-search?query=${encodeURIComponent(query)}&sessionKey=${
-        encodeURIComponent(key)
-      }&limit=${limit}`,
-    )
-  ),
-  roadmapWorkspace: () => (
-    json<RoadmapWorkspaceSnapshot>('/api/workspaces/roadmap')
-  ),
-  history: (key: SessionKey) => (
-    json<ConversationItem[]>(`/api/sessions/${encodeURIComponent(key)}/history`)
-  ),
-  memoryReview: (key: SessionKey) => (
-    json<MemoryReviewSnapshot | null>(
-      `/api/sessions/${encodeURIComponent(key)}/memory-review`,
-    )
-  ),
-  submitMemoryReview: (
-    key: SessionKey,
-    reviewId: string,
-    decisions: MemoryReviewDecision[],
-  ) => json<MemoryReviewSnapshot>(
-    `/api/sessions/${encodeURIComponent(key)}/memory-review/${
-      encodeURIComponent(reviewId)
-    }/submit`,
-    {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ decisions }),
-    },
-  ),
-  deep: (key: SessionKey) => (
-    json<{ enabled: boolean; workflows: WorkflowView[] }>(
-      `/api/sessions/${encodeURIComponent(key)}/deep`,
-    )
-  ),
-  setDeep: (key: SessionKey, enabled: boolean) => (
-    json<{ enabled: boolean; workflows: WorkflowView[] }>(
-      `/api/sessions/${encodeURIComponent(key)}/deep`,
-      {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ enabled }),
-      },
-    )
-  ),
-  workflowAction: (
-    key: SessionKey,
-    id: string,
-    action: 'confirm' | 'cancel',
-  ) => json<WorkflowView>(
-    `/api/sessions/${encodeURIComponent(key)}/workflows/${encodeURIComponent(id)}/${action}`,
-    { method: 'POST' },
-  ),
-  notebook: (lessonId: string) => (
-    json<StudentNotebook>(`/api/lessons/${encodeURIComponent(lessonId)}/notebook`)
-  ),
-  replay: (lessonId: string) => (
-    json<LessonReplay>(`/api/lessons/${encodeURIComponent(lessonId)}/replay`)
-  ),
-  uploadImage: async (lessonId: string, image: File) => {
-    const body = new FormData();
-    body.set('image', image);
-    return json<{ path: string }>(`/api/lessons/${encodeURIComponent(lessonId)}/images`, {
-      method: 'POST',
-      body,
-    });
-  },
-  message: (key: SessionKey, text: string, imagePaths: string[] = []) => (
-    json<{ accepted: true }>(`/api/sessions/${encodeURIComponent(key)}/messages`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ text, imagePaths }),
-    })
-  ),
-  lessonAction: (lessonId: string, action: 'start' | 'pause' | 'reprepare') => (
-    json<PlanWorkspaceSnapshot>(`/api/lessons/${encodeURIComponent(lessonId)}/${action}`, {
-      method: 'POST',
-    })
+  closeLesson: (id: string) => post<{ route: string }>(
+    `/api/lessons/${encodeURIComponent(id)}/close`,
   ),
 };

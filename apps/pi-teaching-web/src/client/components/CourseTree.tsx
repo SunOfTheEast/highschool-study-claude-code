@@ -1,40 +1,41 @@
-import type { CourseTreeNode } from '../../shared/view-contracts';
+import type { CourseTreeNode } from '../../shared/contracts';
+
+const statusLabel = {
+  prepared: '待开始',
+  active: '进行中',
+  completed: '已完成',
+  closed: '已结束',
+} as const;
 
 function Branch({
   node,
-  selectedKey,
+  selectedPath,
   onSelect,
 }: {
   node: CourseTreeNode;
-  selectedKey: string | null;
+  selectedPath: string;
   onSelect(node: CourseTreeNode): void;
 }) {
   return (
     <li data-kind={node.kind} data-status={node.status}>
       <button
         type="button"
-        aria-current={node.key === selectedKey ? 'page' : undefined}
+        aria-current={node.path === selectedPath ? 'page' : undefined}
         onClick={() => onSelect(node)}
       >
-        <small>
-          {node.status === 'candidate' ? '可能的下一步' : node.publicPurpose}
-        </small>
-        <strong>
-          {node.status === 'candidate' ? node.publicPurpose : node.title}
-        </strong>
+        <small>{statusLabel[node.status]}</small>
+        <strong>{node.title}</strong>
       </button>
       {node.dependsOn.length > 0 && (
-        <p className="course-dependencies">
-          承接：{node.dependsOn.join('、')}
-        </p>
+        <p className="course-dependencies">承接：{node.dependsOn.join('、')}</p>
       )}
       {node.children.length > 0 && (
         <ol>
           {node.children.map((child) => (
             <Branch
-              key={child.key}
+              key={child.path}
               node={child}
-              selectedKey={selectedKey}
+              selectedPath={selectedPath}
               onSelect={onSelect}
             />
           ))}
@@ -46,18 +47,16 @@ function Branch({
 
 export function CourseTree({
   root,
-  selectedKey,
+  selectedPath,
   onSelect,
 }: {
   root: CourseTreeNode;
-  selectedKey: string | null;
+  selectedPath: string;
   onSelect(node: CourseTreeNode): void;
 }) {
   return (
     <nav className="course-tree" aria-label="课程组织">
-      <ol>
-        <Branch node={root} selectedKey={selectedKey} onSelect={onSelect} />
-      </ol>
+      <ol><Branch node={root} selectedPath={selectedPath} onSelect={onSelect} /></ol>
     </nav>
   );
 }
