@@ -51,6 +51,10 @@ export function loadStaticNodeResources(
         content: file(join(resourceRoot, 'teaching', 'math-teaching-core.md')),
       },
       {
+        path: '/virtual/studyforge-m0-document-contract.md',
+        content: file(join(resourceRoot, 'contracts', 'm0-document-contract.md')),
+      },
+      {
         path: `/virtual/studyforge-m0-${roleFile}`,
         content: `Role resource: ${roleFile}\n\n${file(join(resourceRoot, 'agents', roleFile))}`,
       },

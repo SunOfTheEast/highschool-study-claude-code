@@ -52,18 +52,16 @@ A good Plan is a bounded stage problem, not a chapter label. Give it:
 - a public initial teaching arc in `Next Lesson Arrangement` that the Plan Session can
   turn into real Lessons.
 
-A Roadmap Session creates the prepared Plan file but does not create Lesson files or
-place future Lesson links in its `Lesson Tree`. Leave that tree empty. A Lesson Tree
-entry means the linked Lesson file already exists and can be parsed; only the Plan
-Session may establish that pair. The agreed number or sequence of lessons belongs in
-the Plan's prose until the Plan Session has prepared the actual child documents.
-"Empty" means there is no text at all between `## Lesson Tree` and the following
-heading: do not insert a parenthetical note, placeholder, comment, or future filename.
+A Roadmap Session creates a complete prepared Plan by following the injected canonical
+document contract. It does not create Lesson files or materialize their links. Keep the
+agreed number, sequence, and purpose of future Lessons in the Plan's public arrangement
+prose until the Plan Session has prepared those real child documents.
 
 Discuss the public purpose with the student before creating it. Roadmap edits may
 reorder, add, or remove only future Plans with `status: prepared`. Active and completed
 Plans are historical facts. Starting or completing a Plan belongs to the student's UI.
 
-After writing, reread `ROADMAP.md` and any Plan you created. Explain what is now true,
-what remains uncertain, and what the student can choose next. Do not manufacture a
-score, hidden profile, or permanent preference.
+After writing, follow the contract's child-first linking order and reread `ROADMAP.md`
+and any Plan you created. Explain what is now true, what remains uncertain, and what
+the student can choose next. Do not manufacture a score, hidden profile, or permanent
+preference.

@@ -1,4 +1,10 @@
-import { cpSync, mkdtempSync, rmSync } from 'node:fs';
+import {
+  cpSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { AgentSessionEvent, SessionEntry } from '@earendil-works/pi-coding-agent';
@@ -6,9 +12,13 @@ import { createRequestHandler } from '../../src/server/app';
 import { EventHub } from '../../src/server/event-hub';
 import type { SessionKey } from '../../src/shared/contracts';
 
-const source = join(import.meta.dir, '../../../../examples/derivative-m0/learning-set');
+const source = join(import.meta.dir, '../fixtures/m0-learning-set');
 const root = mkdtempSync(join(tmpdir(), 'studyforge-m0-e2e-'));
 cpSync(source, root, { recursive: true });
+for (const path of ['plans/plan-001.md', 'lessons/lesson-001.md']) {
+  const absolute = join(root, path);
+  writeFileSync(absolute, readFileSync(absolute, 'utf8').replace(/^status: active$/m, 'status: prepared'));
+}
 
 const histories = new Map<SessionKey, SessionEntry[]>();
 const listeners = new Map<SessionKey, Set<(event: AgentSessionEvent) => void>>();

@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test('completes the M0 Roadmap, Plan, Lesson and Knowledge browser cycle', async ({ page }) => {
   await page.goto('/course');
 
-  await expect(page.getByRole('heading', { name: '高阶导数结构学习路线' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '导数结构学习路线' })).toBeVisible();
   await page.getByPlaceholder('写下你的想法或解题过程…').fill('我觉得恒成立问题比较棘手。');
   await page.getByRole('button', { name: /发送/ }).click();
   await expect(page.getByText('我觉得恒成立问题比较棘手。', { exact: true })).toBeVisible();
@@ -14,24 +14,24 @@ test('completes the M0 Roadmap, Plan, Lesson and Knowledge browser cycle', async
   await expect(page.locator('details.tool-activity')).toContainText('read');
 
   await page.getByRole('button', { name: '展开课程树' }).click();
-  await page.getByRole('button', { name: /建立真实学习起点/ }).click();
+  await page.getByRole('button', { name: /恒成立问题选路/ }).click();
   await expect(page).toHaveURL(/\/course\/plan\/plan-001$/);
   await page.getByRole('button', { name: '开始这一阶段' }).click();
   await expect(page.getByRole('button', { name: '完成这一阶段' })).toBeVisible();
 
-  await page.getByRole('button', { name: /找到真正的停点/ }).click();
+  await page.getByRole('button', { name: /真实停点问诊/ }).click();
   await expect(page).toHaveURL(/\/course\/plan\/plan-001\/lesson\/lesson-001$/);
   await page.getByRole('button', { name: '开始本课' }).click();
   await expect(page.getByRole('button', { name: '结束本课' })).toBeVisible();
   await page.getByRole('button', { name: '展开节点原文' }).click();
-  await expect(page.getByRole('complementary', { name: '课堂节点' })).toContainText('从具体经历开始');
-  await expect(page.getByRole('complementary', { name: '课堂节点' })).toContainText('确认下一步值得改变什么');
+  await expect(page.getByRole('complementary', { name: '课堂节点' })).toContainText('具体问诊');
+  await expect(page.getByRole('complementary', { name: '课堂节点' })).toContainText('入口练习');
 
   await page.getByRole('button', { name: '结束本课' }).click();
   await expect(page).toHaveURL(/\/course\/plan\/plan-001$/);
   await page.reload();
   await expect(page).toHaveURL(/\/course\/plan\/plan-001$/);
-  await expect(page.getByRole('heading', { name: 'Plan 001：建立真实学习起点' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Plan 001：恒成立问题选路' })).toBeVisible();
 
   await page.getByRole('button', { name: '完成这一阶段' }).click();
   await expect(page).toHaveURL(/\/course$/);

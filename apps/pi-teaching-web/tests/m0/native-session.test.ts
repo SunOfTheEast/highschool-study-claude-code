@@ -73,6 +73,49 @@ test('assembles only static teaching resources and native file tools', () => {
   expect(assembled).not.toContain('cards/sample.card.yaml');
 });
 
+test('injects one canonical document contract into every node session', () => {
+  const root = copyFixture();
+  const scopes = [
+    {
+      nodeKind: 'roadmap',
+      nodeId: 'roadmap',
+      nodePath: 'ROADMAP.md',
+      parentId: null,
+      parentPath: null,
+    },
+    {
+      nodeKind: 'plan',
+      nodeId: 'plan-001',
+      nodePath: 'plans/plan-001.md',
+      parentId: 'roadmap',
+      parentPath: 'ROADMAP.md',
+    },
+    {
+      nodeKind: 'lesson',
+      nodeId: 'lesson-001',
+      nodePath: 'lessons/lesson-001.md',
+      parentId: 'plan-001',
+      parentPath: 'plans/plan-001.md',
+    },
+  ] as const;
+
+  for (const scope of scopes) {
+    const resources = loadStaticNodeResources(root, scope);
+    const contracts = resources.agentsFiles.filter(
+      (resource) => resource.path === '/virtual/studyforge-m0-document-contract.md',
+    );
+
+    expect(contracts).toHaveLength(1);
+    expect(contracts[0]?.content).toContain('## Stage Goal');
+    expect(contracts[0]?.content).toContain('## Lesson Tree');
+    expect(contracts[0]?.content).toContain('## Block block-001：活动名称');
+    expect(contracts[0]?.content).toContain('session_id: null');
+    expect(contracts[0]?.content).toContain('- [plan-001 | 阶段标题](plans/plan-001.md)');
+    expect(contracts[0]?.content).toContain('write 完整子文件');
+    expect(resources.tools).toEqual(['read', 'grep', 'find', 'ls', 'edit', 'write']);
+  }
+});
+
 test('loads only the M0 skills selected for the current node', async () => {
   const root = copyFixture();
   const staleSkill = join(root, '.pi/skills/roadmap-study');
