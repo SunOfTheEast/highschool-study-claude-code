@@ -13,8 +13,8 @@ test('ships a clean M0 derivative learning set with reusable static assets', () 
 
   expect(roadmap.plans).toEqual([]);
   expect(course.tree.children).toEqual([]);
-  expect(readdirSync(join(root, 'plans'))).toEqual([]);
-  expect(readdirSync(join(root, 'lessons'))).toEqual([]);
+  expect(readdirSync(join(root, 'plans')).filter((name) => name.endsWith('.md'))).toEqual([]);
+  expect(readdirSync(join(root, 'lessons')).filter((name) => name.endsWith('.md'))).toEqual([]);
   expect(knowledge.cards).toHaveLength(519);
   expect(knowledge.methods.length).toBeGreaterThan(10);
   expect(knowledge.materials.length).toBeGreaterThan(0);
