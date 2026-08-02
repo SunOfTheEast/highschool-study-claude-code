@@ -12,8 +12,8 @@ the Plan context for every later Lesson.
 This change isolates only that disposable search work. Three temporary read-only
 Material Scouts search the same learning set from different angles in fresh Pi
 contexts, then return short candidate indexes. The Plan Coach waits for all three,
-merges their results, keeps all teaching authority, reads the selected asset itself,
-writes the Lesson, and updates the Plan.
+merges their results, keeps all teaching authority, reads the selected asset set
+required by the agreed Lesson Blocks, writes the Lesson, and updates the Plan.
 
 ## 2. Scope
 
@@ -28,10 +28,12 @@ It must:
   fresh context, read-only file tools, and a distinct search lane;
 - search static `cards/`, `graph/`, and `materials/` assets plus the exact Plan/Lesson
   paths named by the parent task;
-- return at most two concise, source-grounded candidates per lane and at most six
-  candidates before parent-side deduplication;
-- let the Plan Coach make the final selection and read only the selected asset in the
-  parent Session;
+- let each lane search until its lane-specific shortlist has semantically converged,
+  without a fixed candidate count or StudyForge wall-clock cutoff;
+- return a concise, source-grounded index rather than full card contents or search
+  transcripts;
+- let the Plan Coach make the final selection, derive its material count from the
+  agreed Lesson Blocks, and read only those selected assets in the parent Session;
 - preserve the current child-first Lesson write, reread, Plan-link, reread sequence;
 - reuse the current collapsed native-tool rendering without adding a new page or task
   rail.
@@ -141,8 +143,10 @@ The lane instruction then narrows how that copy searches:
    boundary, then look for a novel source and workload that fits the diagnosed student.
 
 These are search perspectives, not new agent roles or persistent workflow nodes. The
-same packaged agent runs all three. Each lane stops after finding one or two credible
-candidates; it does not try to exhaust the corpus.
+same packaged agent runs all three. Each lane searches until further work from that
+perspective is no longer producing materially different candidates relevant to the
+brief. This semantic convergence is not a fixed candidate count and does not require
+exhaustively enumerating the corpus.
 
 The Scout may inspect the named Plan/Lessons to check novelty, but those reads remain
 inside the child context. It searches only the learning-set root and returns one JSON
@@ -165,9 +169,9 @@ object:
 }
 ```
 
-Each result contains at most two candidates. It does not reproduce full stems,
-solutions, decisive transformations, answers, rejected-card contents, or a transcript
-of its search. If no real asset qualifies, `candidates` is empty and
+Each result contains a variable-length stable shortlist. It does not reproduce full
+stems, solutions, decisive transformations, answers, rejected-card contents, or a
+transcript of its search. If no real asset qualifies, `candidates` is empty and
 `search_boundary` briefly states what was checked. The parent receives all three lane
 results in one native tool result, deduplicates by `asset_path`, and does not persist
 the indexes.
@@ -184,8 +188,10 @@ After diagnosis and direct Lesson review, the Coach follows this decision rule:
 3. Wait for all lanes to settle, merge and deduplicate their compact indexes, and
    choose based on the current Plan and student conversation. Agreement between lanes
    is useful evidence but is not an automatic score or selection rule.
-4. Read the full selected asset in the parent Session and verify its content before
-   use.
+4. Derive the required material count from the agreed Lesson structure. Read and
+   verify every selected full asset needed by its Blocks, and no rejected full asset.
+   One judged problem Block may select one card; a Lesson with several problem Blocks
+   may select several cards.
 5. Write and reread the prepared Lesson, link it from the Plan, reread the Plan, and
    then send the existing public preparation summary.
 
@@ -237,7 +243,8 @@ read Plan and closed Lessons
 → optional first-use subagent(action: list)
 → subagent(tasks: graph-first + card-text-first + teaching-fit-first, fresh)
 → wait for all three compact indexes
-→ read one selected asset
+→ choose the material set required by the agreed Lesson Blocks
+→ read only those selected assets
 → write Lesson
 → read Lesson
 → edit Plan
@@ -252,9 +259,10 @@ An upgrade-era Session whose history predates the Scout is not evidence for or a
 the new path.
 
 Acceptance fails if the parent performs exploratory bulk card search before or after
-the Scouts, if rejected cards are opened in the parent Session, if any lane is cut off
-by a StudyForge wall-clock deadline, if the student-visible message leaks a stem or
+the Scouts, if rejected cards are opened in the parent Session, if the selected asset
+count silently falls below the agreed Lesson structure, if any lane is cut off by a
+StudyForge wall-clock deadline, if the student-visible message leaks a stem or
 teaching route, or if a Scout writes a learning-set file. The report records each
-lane's completion, total wall time, and parent Session context growth so the change is
-judged against both the failed 180-second single-Scout run and the observed seven-
-minute inline preparation.
+lane's completion, total wall time, selected asset count, and parent Session context
+growth so the change is judged against both the failed 180-second single-Scout run and
+the observed seven-minute inline preparation.

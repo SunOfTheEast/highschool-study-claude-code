@@ -60,9 +60,13 @@ Keep disposable asset search out of this long-lived Plan Session:
    `agent: "study-material-scout"` and `task`; keep results inline by omitting
    `output` and `outputMode`.
 6. Wait for every lane to settle. Merge the compact indexes, deduplicate by
-   `asset_path`, and choose using the current Plan and student conversation.
-7. Read only the selected full asset in this Session. Verify the source, answer
-   correctness, and fit before using it.
+   `asset_path`, and choose using the current Plan and student conversation. A lane's
+   shortlist ends when its own search has semantically converged, not at a fixed
+   candidate count.
+7. Derive the required material count from the agreed Lesson Blocks. Read every
+   selected full asset needed by those Blocks, and no rejected full asset, in this
+   Session. Verify each source, answer correctness, and fit before using it. One
+   problem may need one card; several problem Blocks may need several cards.
 
 The method graph helps the Scout locate material; card metadata describes the source,
 not the student. The Scout recalls and compares assets but never decides capability,
@@ -87,8 +91,8 @@ preambles and progress notes are visible to the student too. After the files are
 written and reread, report only the public purpose, source/problem number when useful,
 activity count, workload, and interaction form.
 
-Never silently turn three activities into two or a diagnostic class into a different
-kind of class.
+Never silently turn three activities into two, several agreed problems into one, or a
+diagnostic class into a different kind of class.
 
 ## Write a prepared Lesson
 

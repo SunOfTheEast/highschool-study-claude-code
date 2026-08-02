@@ -4,7 +4,7 @@
 
 **Goal:** Replace the failed single timed Plan material search with one foreground, three-lane, fresh-context Scout fan-out that preserves the parent Coach's final judgment and student-facing continuity.
 
-**Architecture:** Keep the existing Plan-only `subagent` runtime and the single packaged read-only `study-material-scout`; change only its usage contract. One native parallel call runs graph-first, card-text-first, and teaching-fit-first copies with no StudyForge wall-clock deadline, waits for all lanes, then lets the parent deduplicate compact indexes and read one selected asset. No workflow store, background task, retry loop, fallback search, new persistence, or frontend projection is introduced.
+**Architecture:** Keep the existing Plan-only `subagent` runtime and the single packaged read-only `study-material-scout`; change only its usage contract. One native parallel call runs graph-first, card-text-first, and teaching-fit-first copies with no StudyForge wall-clock deadline, waits for every lane to reach semantic convergence, then lets the parent deduplicate compact indexes and read only the selected asset set required by the agreed Lesson Blocks. No workflow store, background task, retry loop, fallback search, new persistence, or frontend projection is introduced.
 
 **Tech Stack:** Pi native Sessions, `pi-subagents@0.35.1`, Markdown Agent/Skill resources, Bun tests, Playwright browser smoke tests.
 
@@ -15,7 +15,8 @@
 - Use one foreground parallel call with `context: "fresh"`, `async: false`, `includeProgress: false`, `artifacts: false`, `agentScope: "user"`, and `concurrency: 3`.
 - Omit `timeoutMs` and `maxRuntimeMs`; provider and network transport failures remain infrastructure errors.
 - Run three copies of the same packaged read-only Scout: `graph-first`, `card-text-first`, and `teaching-fit-first`.
-- Return at most two candidates per lane; the parent deduplicates by `asset_path` and reads only one selected full asset.
+- Let each lane return a variable-length shortlist after semantic convergence; do not use a fixed candidate-count cap.
+- The parent deduplicates by `asset_path`, derives the required material count from the agreed Lesson Blocks, and reads only those selected full assets. A multi-problem Lesson may therefore open several cards.
 - A failed lane does not cancel successful siblings. If all lanes fail or yield no fit, create no Lesson, do not retry automatically, and do not fall back to inline bulk search.
 - Do not add a workflow store, task rail, background monitor, Handoff, memory pool, index, vector store, database, or frontend safety projection.
 - Do not add exact-wording tests for Skill prose. Validate mechanical resource assembly and use a fresh natural-language real-model Plan Session as the behavioral evaluation.
@@ -58,9 +59,9 @@ Replace the single-Scout paragraph in `AGENTS.md` with the exact architectural f
 A Plan Session additionally has `subagent` for three concurrent fresh-context copies
 of one packaged read-only `study-material-scout`: graph-first, card-text-first, and
 teaching-fit-first. The parent waits for all lanes, merges their compact indexes,
-chooses the material, and reads only the selected full asset. Scouts use only `read`,
-`grep`, `find`, and `ls`; they cannot write teaching facts. Roadmap and Lesson Sessions
-do not receive `subagent`.
+chooses the material set required by the agreed Lesson Blocks, and reads only those
+selected full assets. Scouts use only `read`, `grep`, `find`, and `ls`; they cannot
+write teaching facts. Roadmap and Lesson Sessions do not receive `subagent`.
 ```
 
 Extend the Material Scout ownership paragraph to state that StudyForge sets no Scout wall-clock deadline, does not automatically retry a failed fan-out, and does not fall back to parent-side bulk asset search.
@@ -85,7 +86,7 @@ In `apps/pi-teaching-web/resources/agents/plan-node.md`, replace the old `180-se
 }
 ```
 
-The surrounding prose must say: call `subagent(action: "list")` only on first use if discovery is needed; send the same Plan path, closed Lesson paths, public purpose, activity/count/workload constraints, avoid-list, and relevant student preferences to all lanes; wait for all three to settle; merge and deduplicate by `asset_path`; read only one selected full asset; tolerate one failed lane when siblings provide a fit; create no Lesson if the merged result has no fit. During the whole private preparation turn, emit tool calls only and never narrate lane progress or failure to the student.
+The surrounding prose must say: call `subagent(action: "list")` only on first use if discovery is needed; send the same Plan path, closed Lesson paths, public purpose, activity/count/workload constraints, avoid-list, and relevant student preferences to all lanes; wait for all three to settle; let each lane return a variable-length shortlist after semantic convergence; merge and deduplicate by `asset_path`; derive the selected asset count from the agreed Lesson Blocks; read every selected full asset and no rejected one; tolerate one failed lane when siblings can still fill the agreed Lesson; create no Lesson if the merged result cannot do so. During the whole private preparation turn, emit tool calls only and never narrate lane progress or failure to the student.
 
 - [ ] **Step 4: Make the Coach Skill match the same contract**
 
@@ -95,7 +96,7 @@ In `apps/pi-teaching-web/resources/skills/coach-study/SKILL.md`, replace the old
 exact agreed path → parent reads directly
 exploratory comparison → one three-task foreground fan-out
 all lanes settle → parent deduplicates compact indexes
-fit exists → parent reads one selected full asset and verifies it
+fit exists → parent reads the selected full asset set required by the Lesson and verifies it
 no fit → no Lesson, no automatic retry, no inline bulk search
 ```
 
@@ -130,7 +131,7 @@ Change the result contract to:
 }
 ```
 
-Limit each lane to at most two candidates and instruct it to stop after one or two credible results rather than exhaust the corpus. Preserve the current read-only tool list and prohibitions on invented assets, full stems, answers, decisive transformations, rejected-card contents, search transcript, student judgment, or persistence decisions.
+Let each lane return a variable-length stable shortlist. Define convergence semantically: stop when further searching from that lane is no longer producing materially different candidates relevant to the brief. Do not use a fixed candidate count or a StudyForge wall-clock cutoff, and do not enumerate the corpus merely for completeness. Preserve the current read-only tool list and prohibitions on invented assets, full stems, answers, decisive transformations, rejected-card contents, search transcript, student judgment, or persistence decisions.
 
 - [ ] **Step 6: Review the edited resources as one assembled behavior contract**
 
@@ -144,7 +145,7 @@ git diff -- AGENTS.md \
   apps/pi-teaching-web/resources/subagents/study-material-scout.md
 ```
 
-Expected: no whitespace errors; all four files agree on three lanes, `concurrency: 3`, no StudyForge deadline, no automatic retry, no inline fallback, parent selection, and two candidates per lane.
+Expected: no whitespace errors; all four files agree on three lanes, `concurrency: 3`, semantic convergence without a fixed candidate cap, no StudyForge deadline, no automatic retry, no inline fallback, and parent selection of the material set required by the Lesson.
 
 - [ ] **Step 7: Commit the contract change**
 
@@ -251,7 +252,8 @@ read Plan and every relevant closed Lesson
 → optional first-use subagent(action: list)
 → one subagent call with three tasks, concurrency 3, fresh context, no timeout fields
 → all three lane results settle
-→ parent deduplicates indexes and reads one selected full asset
+→ parent deduplicates indexes and derives the required material count from the agreed Lesson Blocks
+→ parent reads every selected full asset and no rejected one
 → parent writes and rereads one prepared Lesson
 → parent updates and rereads the Plan
 → one ordinary student-visible preparation summary
@@ -275,7 +277,7 @@ Create `docs/audits/2026-08-03-parallel-material-scout-acceptance.md` with:
 ## Observed sequence
 - parent read/review sequence
 - three lane names and settled status
-- selected asset path
+- agreed problem/activity count and selected asset paths
 - Lesson and Plan write/reread result
 
 ## Isolation and latency

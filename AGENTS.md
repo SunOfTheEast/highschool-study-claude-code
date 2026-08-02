@@ -61,11 +61,12 @@ Every node has the native `read`, `grep`, `find`, `ls`, `edit`, and `write` tool
 Plan Session additionally has `subagent` for three concurrent fresh-context copies of
 one packaged read-only `study-material-scout`: graph-first, card-text-first, and
 teaching-fit-first. The parent waits for all lanes, merges their compact indexes,
-chooses the material, and reads only the selected full asset. Scouts use only `read`,
-`grep`, `find`, and `ls`; they cannot write teaching facts. Roadmap and Lesson Sessions
-do not receive `subagent`. Node activation and completion are student UI actions
-handled by Runtime code. Do not replace these actions with prompt conventions or
-model tool calls.
+chooses the material set required by the agreed Lesson Blocks, and reads only those
+selected full assets. A one-problem Lesson may need one card; a multi-problem Lesson
+may need several. Scouts use only `read`, `grep`, `find`, and `ls`; they cannot write
+teaching facts. Roadmap and Lesson Sessions do not receive `subagent`. Node activation
+and completion are student UI actions handled by Runtime code. Do not replace these
+actions with prompt conventions or model tool calls.
 
 ## Teaching behavior owners
 

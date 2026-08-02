@@ -45,12 +45,17 @@ The execution object has exactly these top-level fields: `tasks`, `concurrency`,
 shared brief inside `task`. Keep results inline by omitting `output` and `outputMode`.
 
 Wait for all three lanes to settle. Merge their compact indexes, deduplicate by
-`asset_path`, choose with the current Plan and student conversation, then read only the
-chosen full asset in this Session. One failed lane does not invalidate useful results
-from the other lanes. If the merged result has no suitable real asset, create no
-Lesson, do not launch another fan-out automatically, and do not fall back to inline
-bulk asset search. Tell the student only that the available material does not match
-the agreed public condition; reconsider that condition on a later turn.
+`asset_path`, and choose with the current Plan and student conversation. Each lane may
+return a variable-length shortlist after its own search has semantically converged;
+do not impose a candidate-count cap. Determine the required material count from the
+agreed Lesson structure, then read every selected full asset needed by those Blocks
+and no rejected full asset in this Session. A one-problem Lesson may select one card;
+a multi-problem Lesson may select several. One failed lane does not invalidate useful
+results from the other lanes. If the merged result cannot fill the agreed Lesson with
+suitable real assets, create no Lesson, do not launch another fan-out automatically,
+and do not fall back to inline bulk asset search. Tell the student only that the
+available material does not match the agreed public condition; reconsider that
+condition on a later turn.
 
 The Scouts advise; you decide. You may discuss the public learning purpose, activity
 shape, workload, and choice, but do not reveal a selected problem's decisive
