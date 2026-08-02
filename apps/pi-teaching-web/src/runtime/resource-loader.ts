@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -5,92 +6,85 @@ import {
   getAgentDir,
   type EventBus,
 } from '@earendil-works/pi-coding-agent';
-import { resolvePersona } from '../study/persona';
-import {
-  compileNodeContext,
-  renderCompiledNodeContext,
-  type CompiledNodeContext,
-} from './node-context';
-import {
-  isRoadmapCoachScope,
-  roleForNode,
-  type NodeSessionScope,
-  type SessionRole,
-} from './session-scope';
-
-export type { SessionRole } from './session-scope';
-export { rolePromptFile } from './node-context';
+import { M0_MODEL_TOOLS, formatSessionOwnerContext, type NodeSessionScope } from './session-scope';
 
 const resourceRoot = join(dirname(fileURLToPath(import.meta.url)), '../../resources');
 
-export function roleSkillNames(role: SessionRole): string[] {
-  return role === 'coach'
-    ? ['coach-study', 'plan-next-cycle', 'deep-workflow']
-    : ['tutor-lesson', 'deep-workflow'];
+const roleFiles = {
+  roadmap: 'roadmap-node.md',
+  plan: 'plan-node.md',
+  lesson: 'lesson-node.md',
+} as const;
+
+const roleSkills = {
+  roadmap: ['roadmap-study', 'plan-next-cycle'],
+  plan: ['coach-study', 'plan-next-cycle'],
+  lesson: ['tutor-lesson'],
+} as const;
+
+export type StaticNodeResources = {
+  agentsFiles: Array<{ path: string; content: string }>;
+  skillPaths: string[];
+  tools: readonly string[];
+};
+
+function file(path: string): string {
+  return readFileSync(path, 'utf8');
 }
 
-export function skillNamesForScope(scope: NodeSessionScope): string[] {
-  if (isRoadmapCoachScope(scope)) {
-    return ['roadmap-study', 'plan-next-cycle', 'deep-workflow'];
-  }
-  return roleSkillNames(roleForNode(scope.nodeKind));
-}
-
-function page(
-  context: CompiledNodeContext,
-  source: string,
-): string {
-  const content = context.pages.find((candidate) => candidate.source === source)?.content;
-  if (!content) throw new Error(`NODE_PROMPT_LAYER_MISSING: ${source}`);
-  return content;
-}
-
-function dynamicFrame(context: CompiledNodeContext): string {
-  return renderCompiledNodeContext({
-    ...context,
-    pages: context.pages.filter((candidate) => (
-      candidate.source !== 'resource:teaching-core'
-      && !candidate.source.startsWith('resource:agent/')
-    )),
-  });
+export function loadStaticNodeResources(
+  root: string,
+  scope: NodeSessionScope,
+): StaticNodeResources {
+  const roleFile = roleFiles[scope.nodeKind];
+  const owner = [
+    formatSessionOwnerContext(root, scope),
+    '',
+    'Read the current node file before making a teaching or planning decision.',
+    'Read child documents and learning assets directly when they are needed.',
+    'Do not assume another node transcript has been copied into this Session.',
+  ].join('\n');
+  return {
+    agentsFiles: [
+      {
+        path: '/virtual/studyforge-m0-teaching-core.md',
+        content: file(join(resourceRoot, 'teaching', 'math-teaching-core.md')),
+      },
+      {
+        path: `/virtual/studyforge-m0-${roleFile}`,
+        content: `Role resource: ${roleFile}\n\n${file(join(resourceRoot, 'agents', roleFile))}`,
+      },
+      {
+        path: '/virtual/studyforge-m0-learning-guide.md',
+        content: file(join(root, 'LEARNING_GUIDE.md')),
+      },
+      {
+        path: '/virtual/studyforge-m0-current-node.md',
+        content: owner,
+      },
+    ],
+    skillPaths: roleSkills[scope.nodeKind]
+      .map((name) => join(resourceRoot, 'skills', name, 'SKILL.md')),
+    tools: M0_MODEL_TOOLS,
+  };
 }
 
 export async function createRoleResourceLoader(
   root: string,
   scope: NodeSessionScope,
   eventBus: EventBus,
-  options: { sessionId?: string | null } = {},
 ) {
-  const skillPaths = skillNamesForScope(scope)
-    .map((name) => join(resourceRoot, 'skills', name, 'SKILL.md'));
-  const context = compileNodeContext(root, scope, options);
-  const persona = resolvePersona(root);
+  const resources = loadStaticNodeResources(root, scope);
   const loader = new DefaultResourceLoader({
     cwd: root,
     agentDir: getAgentDir(),
     eventBus,
-    additionalExtensionPaths: [fileURLToPath(import.meta.resolve('pi-subagents'))],
-    additionalSkillPaths: skillPaths,
-    agentsFilesOverride: () => ({
-      agentsFiles: [
-        {
-          path: '/virtual/studyforge-teaching-core.md',
-          content: page(context, 'resource:teaching-core'),
-        },
-        {
-          path: `/virtual/studyforge-${scope.nodeKind}-node.md`,
-          content: page(context, `resource:agent/${scope.nodeKind}`),
-        },
-        {
-          path: '/virtual/studyforge-node-frame.md',
-          content: dynamicFrame(context),
-        },
-        {
-          path: `/virtual/studyforge-persona-${persona.id}.md`,
-          content: `${persona.content}\n\nPresentation only: never change tools, facts, assessment, Trace or capability standards.`,
-        },
-      ],
-    }),
+    additionalSkillPaths: resources.skillPaths,
+    noExtensions: true,
+    noPromptTemplates: true,
+    noThemes: true,
+    noContextFiles: true,
+    agentsFilesOverride: () => ({ agentsFiles: resources.agentsFiles }),
   });
   await loader.reload();
   return loader;

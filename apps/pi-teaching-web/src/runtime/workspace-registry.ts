@@ -1,503 +1,172 @@
 import type { ImageContent } from '@earendil-works/pi-ai';
-import type { SessionEntry } from '@earendil-works/pi-coding-agent';
-import {
-  ROADMAP_COACH_SESSION_KEY,
-  type ConversationItem,
-  type PlanWorkspaceSnapshot,
-  type RoadmapWorkspaceSnapshot,
-  type SessionKey,
-} from '../shared/contracts';
-import type { MessageProjectionMode } from '../projection/message-policy';
-import { projectConversationEntries } from '../projection/conversation-projector';
-import type { WorkflowSnapshot } from '../workflows/contracts';
+import type { AgentSessionEvent, SessionEntry } from '@earendil-works/pi-coding-agent';
 import type {
-  MemoryReviewDecision,
-  MemoryReviewSnapshot,
-} from '../memory-review/contracts';
-import { applyMemoryReview } from '../memory-review/apply-service';
-import { submittedMemoryReview } from '../memory-review/store';
-import {
-  readLearningSet,
-  readPlanWorkspace,
-  readRoadmapWorkspace,
-} from '../study/read-workspace';
-import { setFrontmatterField } from '../study/write-workspace';
-import { resolvePersona } from '../study/persona';
+  CourseTreeNode,
+  LessonDocument,
+  PlanDocument,
+  RoadmapDocument,
+  SessionKey,
+} from '../shared/contracts';
+import { readCourseTree, readLesson, readPlan, readRoadmap } from '../study/markdown';
+import { setFrontmatterField } from './frontmatter';
 import {
   sessionFactoryInput,
   type StudySession,
   type StudySessionFactory,
 } from './session-factory';
-import {
-  createSessionEvidenceReader,
-  findOwnedPiSessionFile,
-  readPiSessionBranch,
-} from './session-owner';
-import type { SessionEvidenceReader } from '../study/evidence-tree';
-import {
-  ROADMAP_COACH_SCOPE,
-  type NodeSessionScope,
-} from './session-scope';
-import {
-  NodeActivationService,
-  type ActivationReceipt,
-  type SessionFileLookup,
-} from './node-activation';
+import { findOwnedPiSessionFile, readPiSessionBranch } from './session-owner';
+import { type NodeSessionScope } from './session-scope';
 
-export type { SessionFileLookup } from './node-activation';
-export type LessonStartResult = Pick<ActivationReceipt, 'shouldKickoff'>;
+export type SessionFileLookup = (
+  root: string,
+  sessionId: string,
+  scope: NodeSessionScope,
+) => Promise<string | null>;
 
 export type SessionBranchReader = (
   root: string,
   sessionFile: string,
 ) => Promise<readonly SessionEntry[]>;
 
-export const findPiSessionFile: SessionFileLookup = findOwnedPiSessionFile;
+type OwnedNode = {
+  tree: CourseTreeNode;
+  parent: CourseTreeNode | null;
+  document: RoadmapDocument | PlanDocument | LessonDocument;
+  scope: NodeSessionScope;
+};
+
+function findNode(
+  node: CourseTreeNode,
+  kind: CourseTreeNode['kind'],
+  id: string,
+  parent: CourseTreeNode | null = null,
+): { tree: CourseTreeNode; parent: CourseTreeNode | null } | null {
+  if (node.kind === kind && node.id === id) return { tree: node, parent };
+  for (const child of node.children) {
+    const found = findNode(child, kind, id, node);
+    if (found) return found;
+  }
+  return null;
+}
+
+function parseSessionKey(key: SessionKey): { kind: CourseTreeNode['kind']; id: string } {
+  const separator = key.indexOf(':');
+  const kind = key.slice(0, separator);
+  const id = key.slice(separator + 1);
+  if (!['roadmap', 'plan', 'lesson'].includes(kind) || !id) {
+    throw new Error(`SESSION_KEY_INVALID: ${key}`);
+  }
+  return { kind: kind as CourseTreeNode['kind'], id };
+}
 
 export class WorkspaceRegistry {
-  private readonly sessions = new Map<string, StudySession>();
-  private readonly activation: NodeActivationService;
-  private planId: string | null = null;
+  private readonly sessions = new Map<SessionKey, StudySession>();
+  private readonly opening = new Map<SessionKey, Promise<StudySession>>();
+  private readonly turnTails = new Map<SessionKey, Promise<void>>();
 
   constructor(
     private readonly root: string,
     private readonly factory: StudySessionFactory,
-    private readonly lookup: SessionFileLookup = findPiSessionFile,
-    private readonly readSessionBranch: SessionBranchReader = readPiSessionBranch,
-  ) {
-    this.activation = new NodeActivationService({
-      root,
-      factory,
-      lookup,
-      sessions: this.sessions,
-    });
+    private readonly lookup: SessionFileLookup = findOwnedPiSessionFile,
+    private readonly readBranch: SessionBranchReader = readPiSessionBranch,
+  ) {}
+
+  private owner(key: SessionKey): OwnedNode {
+    const { kind, id } = parseSessionKey(key);
+    const course = readCourseTree(this.root);
+    const located = findNode(course.tree, kind, id);
+    if (!located) throw new Error(`SESSION_NODE_NOT_FOUND: ${key}`);
+    const document = kind === 'roadmap'
+      ? readRoadmap(this.root)
+      : kind === 'plan'
+        ? readPlan(this.root, located.tree.path)
+        : readLesson(this.root, located.tree.path);
+    return {
+      ...located,
+      document,
+      scope: {
+        nodeKind: kind,
+        nodeId: id,
+        nodePath: located.tree.path,
+        parentId: located.parent?.id ?? null,
+        parentPath: located.parent?.path ?? null,
+      },
+    };
   }
 
-  snapshot(planId: string | null = this.planId): PlanWorkspaceSnapshot {
-    if (!planId) throw new Error('PLAN_NOT_SELECTED');
-    this.planId = planId;
-    return readPlanWorkspace(this.root, planId);
-  }
-
-  roadmapSnapshot(): RoadmapWorkspaceSnapshot {
-    return readRoadmapWorkspace(this.root);
-  }
-
-  private workspaceForLesson(lessonId: string): PlanWorkspaceSnapshot {
-    for (const plan of readLearningSet(this.root).plans) {
-      const workspace = readPlanWorkspace(this.root, plan.id);
-      if (workspace.lessons.some((lesson) => lesson.id === lessonId)) {
-        this.planId = plan.id;
-        return workspace;
-      }
-    }
-    throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
-  }
-
-  async openCoach(planId: string): Promise<StudySession> {
-    this.planId = planId;
-    const snapshot = readPlanWorkspace(this.root, planId);
-    if (snapshot.plan.status !== 'active') {
-      throw new Error(`PLAN_SESSION_NOT_ACTIVE: ${snapshot.plan.status}`);
-    }
-    const key = `coach:${planId}`;
-    const cached = this.sessions.get(key);
-    if (cached) {
-      await cached.refreshNodeContext?.();
-      return cached;
-    }
-    await this.activation.activatePlan(planId);
-    const session = this.sessions.get(key);
-    if (!session) throw new Error(`PLAN_SESSION_OPEN_FAILED: ${planId}`);
-    return session;
-  }
-
-  async startPlan(planId: string): Promise<ActivationReceipt> {
-    this.planId = planId;
-    return this.activation.activatePlan(planId);
-  }
-
-  async openRoadmapCoach(): Promise<StudySession> {
-    const cached = this.sessions.get(ROADMAP_COACH_SESSION_KEY);
-    if (cached) {
-      await cached.refreshNodeContext?.();
-      return cached;
-    }
-    const snapshot = readRoadmapWorkspace(this.root);
-    const sessionFile = snapshot.coach.sessionId
-      ? await this.lookup(this.root, snapshot.coach.sessionId, ROADMAP_COACH_SCOPE)
-      : null;
-    const session = await this.factory(
-      sessionFactoryInput(ROADMAP_COACH_SCOPE, sessionFile),
-    );
-    this.sessions.set(ROADMAP_COACH_SESSION_KEY, session);
-    setFrontmatterField(
-      this.root,
-      ROADMAP_COACH_SCOPE.nodePath,
-      'roadmap_coach_session',
-      session.sessionId,
-    );
-    return session;
-  }
-
-  async startLesson(lessonId: string): Promise<LessonStartResult> {
-    this.workspaceForLesson(lessonId);
-    const receipt = await this.activation.activateLesson(lessonId);
-    return { shouldKickoff: receipt.shouldKickoff };
-  }
-
-  async triggerLessonStart(lessonId: string): Promise<void> {
-    const session = this.sessions.get(`tutor:${lessonId}`) ?? await this.openTutor(lessonId);
-    await session.triggerLessonStart();
-  }
-
-  async openTutor(lessonId: string): Promise<StudySession> {
-    const lesson = this.workspaceForLesson(lessonId).lessons.find((item) => item.id === lessonId);
-    if (!lesson) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
-    if (lesson.status !== 'active') {
-      throw new Error(`LESSON_SESSION_NOT_ACTIVE: ${lesson.status}`);
-    }
-    const key = `tutor:${lessonId}`;
+  async open(key: SessionKey): Promise<StudySession> {
     const cached = this.sessions.get(key);
     if (cached) return cached;
-    await this.activation.activateLesson(lessonId);
-    const session = this.sessions.get(key);
-    if (!session) throw new Error(`LESSON_SESSION_OPEN_FAILED: ${lessonId}`);
-    return session;
+    const underway = this.opening.get(key);
+    if (underway) return underway;
+    const opening = this.openNew(key);
+    this.opening.set(key, opening);
+    try {
+      return await opening;
+    } finally {
+      this.opening.delete(key);
+    }
   }
 
-  async send(key: SessionKey, text: string, images: ImageContent[] = []): Promise<void> {
-    const session = await this.openSession(key);
-    await session.prompt(text, images);
-  }
-
-  async setDeepMode(key: SessionKey, enabled: boolean): Promise<void> {
-    (await this.openSession(key)).setDeepMode(enabled);
-  }
-
-  async deepMode(key: SessionKey): Promise<boolean> {
-    return (await this.openSession(key)).deepModeEnabled();
-  }
-
-  async workflows(key: SessionKey): Promise<WorkflowSnapshot[]> {
-    return (await this.openSession(key)).workflows();
-  }
-
-  private async memoryReviewCoach(planId: string): Promise<StudySession> {
-    const key = `coach:${planId}`;
-    const cached = this.sessions.get(key);
-    if (cached) return cached;
-    const snapshot = readPlanWorkspace(this.root, planId);
-    if (snapshot.plan.status !== 'completed') return this.openCoach(planId);
-    const scope = {
-      nodeKind: 'plan',
-      nodeId: planId,
-      nodePath: snapshot.plan.path,
-      parentId: 'roadmap',
-      parentPath: 'ROADMAP.md',
-    } as const satisfies NodeSessionScope;
-    const sessionId = snapshot.coach.sessionId;
-    if (!sessionId) throw new Error('MEMORY_REVIEW_SESSION_NOT_FOUND');
-    const sessionFile = await this.lookup(this.root, sessionId, scope);
-    if (!sessionFile) throw new Error('MEMORY_REVIEW_SESSION_NOT_FOUND');
-    const session = await this.factory(sessionFactoryInput(scope, sessionFile));
+  private async openNew(key: SessionKey): Promise<StudySession> {
+    const owner = this.owner(key);
+    if (owner.document.status !== 'active') {
+      throw new Error(`SESSION_NODE_NOT_ACTIVE: ${key}:${owner.document.status}`);
+    }
+    const sessionFile = owner.document.sessionId === null
+      ? null
+      : await this.lookup(this.root, owner.document.sessionId, owner.scope);
+    if (owner.document.sessionId !== null && sessionFile === null) {
+      throw new Error(`SESSION_FILE_NOT_FOUND: ${owner.document.sessionId}`);
+    }
+    const session = await this.factory(sessionFactoryInput(owner.scope, sessionFile));
+    if (owner.document.sessionId === null) {
+      setFrontmatterField(this.root, owner.document.path, 'session_id', session.sessionId, null);
+    }
     this.sessions.set(key, session);
     return session;
   }
 
-  async memoryReview(key: SessionKey): Promise<MemoryReviewSnapshot | null> {
-    if (!key.startsWith('coach:') || key === ROADMAP_COACH_SESSION_KEY) {
-      throw new Error('MEMORY_REVIEW_PLAN_COACH_ONLY');
-    }
-    return (await this.memoryReviewCoach(key.slice(6))).memoryReview();
-  }
-
-  async submitMemoryReview(
-    key: SessionKey,
-    id: string,
-    decisions: MemoryReviewDecision[],
-  ): Promise<MemoryReviewSnapshot> {
-    if (!key.startsWith('coach:') || key === ROADMAP_COACH_SESSION_KEY) {
-      throw new Error('MEMORY_REVIEW_PLAN_COACH_ONLY');
-    }
-    const planId = key.slice(6);
-    const session = await this.memoryReviewCoach(planId);
-    const submitted = submittedMemoryReview(session.memoryReview(), id, decisions);
+  async send(key: SessionKey, text: string, images: ImageContent[] = []): Promise<void> {
+    const previous = this.turnTails.get(key) ?? Promise.resolve();
+    const next = previous.catch(() => {}).then(async () => {
+      const session = await this.open(key);
+      await session.prompt(text, images);
+    });
+    this.turnTails.set(key, next);
     try {
-      session.saveMemoryReview(submitted);
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'unknown error';
-      throw new Error(`MEMORY_REVIEW_APPLY_FAILED: ${message}`);
+      await next;
+    } finally {
+      if (this.turnTails.get(key) === next) this.turnTails.delete(key);
     }
-    const plan = readPlanWorkspace(this.root, planId).plan;
-    try {
-      applyMemoryReview(
-        this.root,
-        planId,
-        plan.path,
-        {
-          latest: () => session.memoryReview(),
-          save: (snapshot) => session.saveMemoryReview(snapshot),
-        },
-        id,
-      );
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'unknown error';
-      throw new Error(`MEMORY_REVIEW_APPLY_FAILED: ${message}`);
-    }
-    const applied = session.memoryReview();
-    if (!applied || applied.status !== 'applied') {
-      throw new Error('MEMORY_REVIEW_APPLY_RECEIPT_MISSING');
-    }
-    await session.notifyMemoryReviewApplied(applied);
-    return applied;
   }
 
-  async confirmWorkflow(key: SessionKey, id: string): Promise<WorkflowSnapshot> {
-    return (await this.openSession(key)).confirmWorkflow(id);
-  }
-
-  async cancelWorkflow(key: SessionKey, id: string): Promise<void> {
-    (await this.openSession(key)).cancelWorkflow(id);
-  }
-
-  async pauseLesson(lessonId: string): Promise<void> {
-    const lesson = this.workspaceForLesson(lessonId).lessons.find((item) => item.id === lessonId);
-    if (!lesson) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
-    if (lesson.status !== 'active') {
-      throw new Error(`LESSON_NOT_ACTIVE: ${lesson.status}`);
-    }
-    const tutor = this.sessions.get(`tutor:${lessonId}`);
-    if (tutor?.isStreaming) await tutor.abort();
-    setFrontmatterField(this.root, lesson.path, 'status', 'paused');
-  }
-
-  async abandonForReprepare(lessonId: string): Promise<void> {
-    const lesson = this.workspaceForLesson(lessonId).lessons.find((item) => item.id === lessonId);
-    if (!lesson) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
-    const coach = await this.openCoach(lesson.planId);
-    if (lesson.status === 'prepared') {
-      await coach.prompt(
-        `学生要求重新备课。Tutor 尚未开始；请在学生确认方向后原地修改 ${lesson.path}，保持 Lesson ID 不变。`,
-      );
-      return;
-    }
-    setFrontmatterField(this.root, lesson.path, 'status', 'abandoned');
-    const tutor = this.sessions.get(`tutor:${lessonId}`);
-    if (tutor) {
-      await tutor.abort();
-      tutor.dispose();
-      this.sessions.delete(`tutor:${lessonId}`);
-    }
-    await coach.prompt(
-      `学生要求重新备课。保留 ${lesson.path}，由当前 Plan 修订或新增一个 Lesson candidate 后再物化替代课程。`,
-    );
-  }
-
-  history(key: SessionKey, mode: MessageProjectionMode = 'safe'): ConversationItem[] {
-    const session = this.sessions.get(key);
-    if (!session) return [];
-    return projectConversationEntries(key, session.entries, mode);
-  }
-
-  async readHistory(
-    key: SessionKey,
-    mode: MessageProjectionMode = 'safe',
-  ): Promise<ConversationItem[]> {
+  async readHistory(key: SessionKey): Promise<readonly SessionEntry[]> {
     const cached = this.sessions.get(key);
-    if (cached) {
-      return projectConversationEntries(key, cached.entries, mode);
-    }
-    const owner = this.sessionOwnerForKey(key);
-    if (owner.sessionId === null) return [];
-    const sessionFile = await this.lookup(
-      this.root,
-      owner.sessionId,
-      owner.scope,
-    );
-    if (!sessionFile) return [];
-    return projectConversationEntries(
-      key,
-      await this.readSessionBranch(this.root, sessionFile),
-      mode,
-    );
+    if (cached) return cached.entries;
+    const owner = this.owner(key);
+    if (owner.document.sessionId === null) return [];
+    const sessionFile = await this.lookup(this.root, owner.document.sessionId, owner.scope);
+    if (!sessionFile) throw new Error(`SESSION_FILE_NOT_FOUND: ${owner.document.sessionId}`);
+    return this.readBranch(this.root, sessionFile);
   }
 
-  async replayHistory(
-    lessonId: string,
-    mode: MessageProjectionMode = 'safe',
-  ): Promise<ConversationItem[]> {
-    const lesson = this.workspaceForLesson(lessonId).lessons.find((item) => item.id === lessonId);
-    if (!lesson) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
-    if (
-      !['closed', 'abandoned'].includes(lesson.status)
-      || !lesson.tutorSessionId
-    ) {
-      return [];
-    }
-    return this.readHistory(lesson.sessionKey, mode);
-  }
-
-  async sessionEvidenceReader(): Promise<SessionEvidenceReader> {
-    const owners: Array<{
-      key: SessionKey;
-      sessionId: string;
-      scope: NodeSessionScope;
-    }> = [];
-    const roadmap = this.roadmapSnapshot();
-    if (roadmap.coach.sessionId !== null) {
-      owners.push({
-        key: ROADMAP_COACH_SESSION_KEY,
-        sessionId: roadmap.coach.sessionId,
-        scope: ROADMAP_COACH_SCOPE,
-      });
-    }
-    for (const plan of readLearningSet(this.root).plans) {
-      const workspace = readPlanWorkspace(this.root, plan.id);
-      const planScope = {
-        nodeKind: 'plan',
-        nodeId: plan.id,
-        nodePath: plan.path,
-        parentId: 'roadmap',
-        parentPath: 'ROADMAP.md',
-      } as const satisfies NodeSessionScope;
-      if (workspace.coach.sessionId !== null) {
-        owners.push({
-          key: `coach:${plan.id}`,
-          sessionId: workspace.coach.sessionId,
-          scope: planScope,
-        });
-      }
-      for (const lesson of workspace.lessons) {
-        if (lesson.tutorSessionId === null) continue;
-        owners.push({
-          key: lesson.sessionKey,
-          sessionId: lesson.tutorSessionId,
-          scope: {
-            nodeKind: 'lesson',
-            nodeId: lesson.id,
-            nodePath: lesson.path,
-            parentId: plan.id,
-            parentPath: plan.path,
-          },
-        });
-      }
-    }
-
-    const records: Parameters<typeof createSessionEvidenceReader>[0] = [];
-    for (const owner of owners) {
-      const cached = this.sessions.get(owner.key);
-      if (cached?.sessionId === owner.sessionId) {
-        records.push({
-          sessionId: owner.sessionId,
-          owner: owner.scope,
-          entries: cached.entries,
-        });
-        continue;
-      }
-      const sessionFile = await this.lookup(
-        this.root,
-        owner.sessionId,
-        owner.scope,
-      );
-      if (sessionFile === null) continue;
-      try {
-        records.push({
-          sessionId: owner.sessionId,
-          owner: owner.scope,
-          entries: await this.readSessionBranch(this.root, sessionFile),
-        });
-      } catch {
-        continue;
-      }
-    }
-    return createSessionEvidenceReader(records);
-  }
-
-  personaId(key: SessionKey): string {
-    return this.sessions.get(key)?.personaId() ?? resolvePersona(this.root).id;
-  }
-
-  async setPersona(key: SessionKey, id: string): Promise<void> {
-    const persona = resolvePersona(this.root, id);
-    const session = await this.openSession(key);
-    await session.setPersona(persona.id, persona.content);
-  }
-
-  subscribe(
+  async subscribe(
     key: SessionKey,
-    listener: Parameters<StudySession['subscribe']>[0],
-  ): () => void {
-    const session = this.sessions.get(key);
-    if (!session) throw new Error(`SESSION_NOT_OPEN: ${key}`);
-    return session.subscribe(listener);
+    listener: (event: AgentSessionEvent) => void,
+  ): Promise<() => void> {
+    return (await this.open(key)).subscribe(listener);
   }
 
-  subscribeWorkflows(
-    key: SessionKey,
-    listener: Parameters<StudySession['subscribeWorkflows']>[0],
-  ): () => void {
+  async abort(key: SessionKey): Promise<void> {
     const session = this.sessions.get(key);
-    if (!session) throw new Error(`SESSION_NOT_OPEN: ${key}`);
-    return session.subscribeWorkflows(listener);
-  }
-
-  get(key: SessionKey): StudySession | undefined {
-    return this.sessions.get(key);
+    if (session?.isStreaming) await session.abort();
   }
 
   dispose(): void {
     for (const session of this.sessions.values()) session.dispose();
     this.sessions.clear();
-  }
-
-  openSession(key: SessionKey): Promise<StudySession> {
-    if (key === ROADMAP_COACH_SESSION_KEY) return this.openRoadmapCoach();
-    return key.startsWith('coach:')
-      ? this.openCoach(key.slice(6))
-      : this.openTutor(key.slice(6));
-  }
-
-  private sessionOwnerForKey(key: SessionKey): {
-    scope: NodeSessionScope;
-    sessionId: string | null;
-  } {
-    if (key === ROADMAP_COACH_SESSION_KEY) {
-      return {
-        scope: ROADMAP_COACH_SCOPE,
-        sessionId: this.roadmapSnapshot().coach.sessionId,
-      };
-    }
-    if (key.startsWith('coach:')) {
-      const workspace = readPlanWorkspace(this.root, key.slice(6));
-      return {
-        scope: {
-          nodeKind: 'plan',
-          nodeId: workspace.plan.id,
-          nodePath: workspace.plan.path,
-          parentId: 'roadmap',
-          parentPath: 'ROADMAP.md',
-        },
-        sessionId: workspace.plan.status === 'prepared'
-          ? null
-          : workspace.coach.sessionId,
-      };
-    }
-    const lessonId = key.slice(6);
-    const workspace = this.workspaceForLesson(lessonId);
-    const lesson = workspace.lessons.find((item) => item.id === lessonId);
-    if (!lesson) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
-    return {
-      scope: {
-        nodeKind: 'lesson',
-        nodeId: lesson.id,
-        nodePath: lesson.path,
-        parentId: workspace.plan.id,
-        parentPath: workspace.plan.path,
-      },
-      sessionId: lesson.status === 'prepared'
-        ? null
-        : lesson.tutorSessionId,
-    };
+    this.opening.clear();
+    this.turnTails.clear();
   }
 }

@@ -1,0 +1,143 @@
+import { afterEach, expect, test } from 'bun:test';
+import { cpSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import type { AgentSessionEvent, SessionEntry } from '@earendil-works/pi-coding-agent';
+import {
+  loadStaticNodeResources,
+} from '../../src/runtime/resource-loader';
+import {
+  sessionFactoryInput,
+  type StudySession,
+  type StudySessionFactory,
+} from '../../src/runtime/session-factory';
+import { WorkspaceRegistry } from '../../src/runtime/workspace-registry';
+
+const fixture = join(import.meta.dir, '../fixtures/m0-learning-set');
+const roots: string[] = [];
+
+function copyFixture(): string {
+  const root = mkdtempSync(join(tmpdir(), 'studyforge-m0-session-'));
+  cpSync(fixture, root, { recursive: true });
+  roots.push(root);
+  return root;
+}
+
+afterEach(() => {
+  while (roots.length > 0) rmSync(roots.pop()!, { recursive: true, force: true });
+});
+
+function fakeSession(id: string, file = `/sessions/${id}.jsonl`): StudySession {
+  const listeners = new Set<(event: AgentSessionEvent) => void>();
+  return {
+    sessionId: id,
+    sessionFile: file,
+    messages: [],
+    entries: [] as SessionEntry[],
+    isStreaming: false,
+    prompt: async () => {},
+    abort: async () => {},
+    subscribe: (listener) => {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    },
+    dispose: () => listeners.clear(),
+  };
+}
+
+test('assembles only static teaching resources and native file tools', () => {
+  const root = copyFixture();
+  const resources = loadStaticNodeResources(root, {
+    nodeKind: 'plan',
+    nodeId: 'plan-001',
+    nodePath: 'plans/plan-001.md',
+    parentId: 'roadmap',
+    parentPath: 'ROADMAP.md',
+  });
+  const assembled = resources.agentsFiles.map((file) => file.content).join('\n');
+
+  expect(resources.tools).toEqual(['read', 'grep', 'find', 'ls', 'edit', 'write']);
+  expect(assembled).toContain('导数结构学习集');
+  expect(assembled).toContain('Current node file: plans/plan-001.md');
+  expect(assembled).toContain('plan-node.md');
+  expect(assembled).not.toContain('第一节课正在进行');
+  expect(assembled).not.toContain('10:03 学生');
+  expect(assembled).not.toContain('cards/sample.card.yaml');
+});
+
+test('keeps factory input node-scoped without cross-session transcripts', () => {
+  const input = sessionFactoryInput({
+    nodeKind: 'lesson',
+    nodeId: 'lesson-001',
+    nodePath: 'lessons/lesson-001.md',
+    parentId: 'plan-001',
+    parentPath: 'plans/plan-001.md',
+  }, null);
+
+  expect(input).toEqual({
+    nodeKind: 'lesson',
+    nodeId: 'lesson-001',
+    nodePath: 'lessons/lesson-001.md',
+    parentId: 'plan-001',
+    parentPath: 'plans/plan-001.md',
+    sessionFile: null,
+  });
+  expect('messages' in input).toBe(false);
+  expect('context' in input).toBe(false);
+});
+
+test('reuses one session per node and never shares sessions across nodes', async () => {
+  const root = copyFixture();
+  const inputs: Parameters<StudySessionFactory>[0][] = [];
+  const factory: StudySessionFactory = async (input) => {
+    inputs.push(input);
+    return fakeSession(`session-${input.nodeKind}-${input.nodeId}`);
+  };
+  const registry = new WorkspaceRegistry(root, factory, async () => null);
+
+  const firstPlan = await registry.open('plan:plan-001');
+  const samePlan = await registry.open('plan:plan-001');
+  const lesson = await registry.open('lesson:lesson-001');
+
+  expect(samePlan).toBe(firstPlan);
+  expect(lesson).not.toBe(firstPlan);
+  expect(inputs.map((input) => input.nodePath)).toEqual([
+    'plans/plan-001.md',
+    'lessons/lesson-001.md',
+  ]);
+  expect(readFileSync(join(root, 'plans/plan-001.md'), 'utf8'))
+    .toContain('session_id: session-plan-plan-001');
+  expect(readFileSync(join(root, 'lessons/lesson-001.md'), 'utf8'))
+    .toContain('session_id: session-lesson-lesson-001');
+});
+
+test('restores the persisted owner session without copying another branch', async () => {
+  const root = copyFixture();
+  const first = new WorkspaceRegistry(
+    root,
+    async (input) => fakeSession(`saved-${input.nodeId}`, `/sessions/saved-${input.nodeId}.jsonl`),
+    async () => null,
+  );
+  await first.open('plan:plan-001');
+  first.dispose();
+
+  const restoredInputs: Parameters<StudySessionFactory>[0][] = [];
+  const second = new WorkspaceRegistry(
+    root,
+    async (input) => {
+      restoredInputs.push(input);
+      return fakeSession('saved-plan-001', input.sessionFile ?? undefined);
+    },
+    async (_root, sessionId, scope) => (
+      sessionId === 'saved-plan-001' && scope.nodeId === 'plan-001'
+        ? '/sessions/saved-plan-001.jsonl'
+        : null
+    ),
+  );
+  await second.open('plan:plan-001');
+
+  expect(restoredInputs).toHaveLength(1);
+  expect(restoredInputs[0]?.sessionFile).toBe('/sessions/saved-plan-001.jsonl');
+  expect(restoredInputs[0]).not.toHaveProperty('entries');
+  expect(restoredInputs[0]).not.toHaveProperty('messages');
+});
