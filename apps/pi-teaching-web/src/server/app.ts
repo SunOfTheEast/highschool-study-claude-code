@@ -1,536 +1,187 @@
-import type { ImageContent } from '@earendil-works/pi-ai';
+import { existsSync } from 'node:fs';
+import { extname, join, normalize } from 'node:path';
 import type { Server } from 'bun';
-import { randomUUID } from 'node:crypto';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { dirname, extname, join } from 'node:path';
-import { resolveInsideRoot } from 'highschool-study-markdown/study-domain';
-import type { MemoryReviewDecision } from '../memory-review/contracts';
-import { submittedMemoryReview } from '../memory-review/store';
-import { createLiveSessionEventProjector } from '../projection/projector';
-import type { MessageProjectionMode } from '../projection/message-policy';
-import { projectWorkflow } from '../projection/workflow-projector';
+import type { AgentSessionEvent } from '@earendil-works/pi-coding-agent';
+import { projectConversationEntries, projectLiveSessionEvent } from '../projection/conversation';
+import { NodeLifecycleService } from '../runtime/node-lifecycle';
 import type { WorkspaceRegistry } from '../runtime/workspace-registry';
-import {
-  ROADMAP_COACH_SESSION_KEY,
-  type SessionKey,
-} from '../shared/contracts';
-import { readAbilityProjection, readEvidence } from '../study/ability';
-import { createPiSessionEvidenceReader } from '../runtime/session-owner';
-import { readLearningSet } from '../study/read-workspace';
-import { buildReplay } from '../study/replay';
-import { readStudentNotebook } from '../study/student-notebook';
-import { readCoachContext } from '../study/coach-context';
-import { searchStudentContent } from '../study/content-explorer';
-import { readHomeSnapshot } from '../study/home';
-import { personaChoices, personaPortraitPath } from '../study/persona';
-import { PreparedLessonValidationError } from '../study/validate-prepared-lesson';
-import { readCourseView } from '../study/views/course-view';
-import { readKnowledgeView } from '../study/views/knowledge-view';
-import { readMemoryView } from '../study/views/memory-view';
-import { readViewQuery } from '../study/views/view-query';
+import type { SessionKey } from '../shared/contracts';
+import { readKnowledge } from '../study/knowledge';
+import { StudyDocumentError } from '../study/markdown';
+import { readWorkspace } from '../study/workspace';
 import type { EventHub } from './event-hub';
+
+type Lifecycle = Pick<
+  NodeLifecycleService,
+  'startPlan' | 'completePlan' | 'startLesson' | 'closeLesson'
+>;
+
+type Registry = Pick<
+  WorkspaceRegistry,
+  'readHistory' | 'send' | 'subscribe' | 'open' | 'abort' | 'release'
+>;
 
 export type AppDependencies = {
   root: string;
-  authoring: boolean;
-  staticRoot?: string;
-  registry: WorkspaceRegistry;
+  registry: Registry;
   hub: EventHub;
-  readLearningSet?: typeof readLearningSet;
-  readAbilityProjection?: typeof readAbilityProjection;
-  readCourseView?: typeof readCourseView;
-  readKnowledgeView?: typeof readKnowledgeView;
-  readMemoryView?: typeof readMemoryView;
-  messageProjection?: MessageProjectionMode;
+  lifecycle?: Lifecycle;
+  staticRoot?: string;
+  readCourse?: typeof readWorkspace;
+  readKnowledge?: typeof readKnowledge;
 };
 
 const json = (value: unknown, status = 200) => Response.json(value, { status });
-const abilityWriters = new Set(['trace_append', 'card_alternative_append']);
-const viewWriters = new Set([
-  'plan_prepare',
-  'plan_update',
-  'lesson_prepare',
-  'classroom_update',
-  'trace_append',
-  'card_alternative_append',
-  'lesson_close',
-  'memory_review_propose',
-]);
 
-const imageTypes = {
-  '.png': 'image/png',
-  '.jpg': 'image/jpeg',
-  '.jpeg': 'image/jpeg',
-  '.webp': 'image/webp',
-} as const;
+function errorResponse(error: unknown): Response {
+  if (error instanceof StudyDocumentError) {
+    return json({ error: 'STUDY_DOCUMENT_INVALID', path: error.path, reason: error.reason }, 422);
+  }
+  const message = error instanceof Error ? error.message : String(error);
+  const status = /NOT_FOUND/.test(message) ? 404 : /NOT_ACTIVE|NOT_ALLOWED|INVALID/.test(message) ? 409 : 500;
+  return json({ error: message }, status);
+}
 
-function readImageContent(root: string, path: string): ImageContent {
-  const mimeType = imageTypes[extname(path).toLowerCase() as keyof typeof imageTypes];
-  if (!mimeType) throw new Error(`UNSUPPORTED_IMAGE: ${path}`);
-  return {
-    type: 'image',
-    data: readFileSync(resolveInsideRoot(root, path)).toString('base64'),
-    mimeType,
-  };
+function sessionKey(value: string): SessionKey | null {
+  try {
+    const decoded = decodeURIComponent(value);
+    return /^(roadmap|plan|lesson):[A-Za-z0-9][A-Za-z0-9._-]*$/.test(decoded)
+      ? decoded as SessionKey
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+function nodeId(value: string): string | null {
+  try {
+    const decoded = decodeURIComponent(value);
+    return /^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(decoded) ? decoded : null;
+  } catch {
+    return null;
+  }
+}
+
+function safeStaticPath(root: string, pathname: string): string | null {
+  const requested = normalize(pathname.replace(/^\/+/, ''));
+  if (requested.startsWith('..')) return null;
+  const direct = join(root, requested);
+  if (extname(direct) && existsSync(direct)) return direct;
+  const index = join(root, 'index.html');
+  return existsSync(index) ? index : null;
 }
 
 export function createRequestHandler(deps?: AppDependencies) {
-  const bound = new Set<SessionKey>();
+  const bound = new Map<SessionKey, () => void>();
 
-  return async (request: Request, server?: Server<undefined>): Promise<Response | undefined> => {
+  return async (
+    request: Request,
+    server?: Server<undefined>,
+  ): Promise<Response | undefined> => {
     const url = new URL(request.url);
     if (request.method === 'GET' && url.pathname === '/api/health') {
-      return json({ ok: true, runtime: 'pi' });
+      return json({ ok: true, runtime: 'pi-m0' });
     }
     if (!deps) return new Response('Not found', { status: 404 });
-    const projectionMode = deps.messageProjection ?? 'safe';
-    const learningSetReader = deps.readLearningSet ?? readLearningSet;
-    const abilityReader = deps.readAbilityProjection ?? readAbilityProjection;
-    const courseViewReader = deps.readCourseView ?? readCourseView;
-    const knowledgeViewReader = deps.readKnowledgeView ?? readKnowledgeView;
-    const memoryViewReader = deps.readMemoryView ?? readMemoryView;
-    const invalidateViews = () => deps.hub.publish({
-      type: 'views-invalidated',
-      views: ['course', 'knowledge', 'memory'],
-    });
-    const runSession = (
-      key: SessionKey,
-      label: string,
-      task: () => Promise<void>,
-      onSuccess?: () => void,
-      errorMessage?: (error: unknown) => string,
-    ) => {
-      deps.hub.publish({
-        type: 'session-run',
-        sessionKey: key,
-        status: 'running',
-        label,
-      });
-      void task()
-        .then(onSuccess)
-        .catch((error) => deps.hub.publish({
-          type: 'session-error',
-          sessionKey: key,
-          message: errorMessage?.(error)
-            ?? '模型调用失败，请检查 Pi 的模型与凭据配置后重试。',
-        }))
-        .finally(() => deps.hub.publish({
-          type: 'session-run',
-          sessionKey: key,
-          status: 'idle',
-          label: '',
-        }));
-    };
-    const bind = (key: SessionKey) => {
+    const lifecycle = deps.lifecycle ?? new NodeLifecycleService(deps.root, deps.registry);
+    const courseReader = deps.readCourse ?? readWorkspace;
+    const knowledgeReader = deps.readKnowledge ?? readKnowledge;
+
+    const bind = async (key: SessionKey) => {
       if (bound.has(key)) return;
-      const projectEvent = createLiveSessionEventProjector(key, projectionMode);
-      deps.registry.subscribe(key, (event) => {
-        for (const projected of projectEvent(event)) {
+      const unsubscribe = await deps.registry.subscribe(key, (event: AgentSessionEvent) => {
+        for (const projected of projectLiveSessionEvent(key, event)) {
           deps.hub.publish(projected);
         }
         if (
           event.type === 'tool_execution_end'
-          && abilityWriters.has(event.toolName)
           && !event.isError
+          && (event.toolName === 'edit' || event.toolName === 'write')
         ) {
-          deps.hub.publish({
-            type: 'ability-update',
-            projection: abilityReader(deps.root),
-          });
-        }
-        if (
-          event.type === 'tool_execution_end'
-          && viewWriters.has(event.toolName)
-          && !event.isError
-        ) {
-          invalidateViews();
+          deps.hub.publish({ type: 'course-invalidated' });
+          deps.hub.publish({ type: 'knowledge-invalidated' });
         }
         if (event.type === 'agent_end' && !event.willRetry) {
-          deps.hub.publish({
-            type: 'conversation-snapshot',
-            sessionKey: key,
-            items: deps.registry.history(key, projectionMode),
+          void deps.registry.readHistory(key).then((entries) => {
+            deps.hub.publish({
+              type: 'conversation-snapshot',
+              sessionKey: key,
+              items: projectConversationEntries(key, entries),
+            });
           });
         }
       });
-      deps.registry.subscribeWorkflows(key, (workflow) => {
-        deps.hub.publish({
-          type: 'workflow',
-          sessionKey: key,
-          workflow: projectWorkflow(workflow),
-        });
-      });
-      bound.add(key);
+      bound.set(key, unsubscribe);
     };
 
-    if (request.method === 'GET' && url.pathname === '/api/learning-set') {
-      return json(learningSetReader(deps.root));
-    }
+    try {
+      if (request.method === 'GET' && url.pathname === '/api/course') {
+        return json(courseReader(deps.root, url.searchParams.get('selected')));
+      }
+      if (request.method === 'GET' && url.pathname === '/api/knowledge') {
+        return json(knowledgeReader(deps.root));
+      }
+      if (request.method === 'GET' && url.pathname === '/events') {
+        if (!server || !server.upgrade(request)) return json({ error: 'WEBSOCKET_UPGRADE_REQUIRED' }, 426);
+        return undefined;
+      }
 
-    if (request.method === 'GET' && url.pathname === '/api/home') {
-      return json(readHomeSnapshot(deps.root));
-    }
+      const history = /^\/api\/sessions\/([^/]+)\/history$/.exec(url.pathname);
+      if (request.method === 'GET' && history) {
+        const key = sessionKey(history[1]!);
+        if (!key) return json({ error: 'SESSION_KEY_INVALID' }, 400);
+        return json(projectConversationEntries(key, await deps.registry.readHistory(key)));
+      }
 
-    const view = /^\/api\/views\/(course|knowledge|memory)$/.exec(url.pathname);
-    if (request.method === 'GET' && view) {
-      const query = readViewQuery(url.searchParams);
-      try {
-        if (view[1] === 'course') {
-          return json(courseViewReader(deps.root, query));
+      const messages = /^\/api\/sessions\/([^/]+)\/messages$/.exec(url.pathname);
+      if (request.method === 'POST' && messages) {
+        const key = sessionKey(messages[1]!);
+        if (!key) return json({ error: 'SESSION_KEY_INVALID' }, 400);
+        const body = await request.json() as { text?: unknown };
+        if (typeof body.text !== 'string' || body.text.trim().length === 0) {
+          return json({ error: 'MESSAGE_TEXT_REQUIRED' }, 400);
         }
-        if (view[1] === 'knowledge') {
-          return json(knowledgeViewReader(deps.root, query));
-        }
-        return json(memoryViewReader(
-          deps.root,
-          query,
-          await deps.registry.sessionEvidenceReader(),
-        ));
-      } catch {
-        return json({ error: 'VIEW_UNAVAILABLE' }, 422);
+        await bind(key);
+        deps.hub.publish({ type: 'session-run', sessionKey: key, status: 'running' });
+        void deps.registry.send(key, body.text.trim())
+          .catch((error) => deps.hub.publish({
+            type: 'session-error',
+            sessionKey: key,
+            message: error instanceof Error ? error.message : String(error),
+          }))
+          .finally(() => deps.hub.publish({
+            type: 'session-run',
+            sessionKey: key,
+            status: 'idle',
+          }));
+        return json({ accepted: true }, 202);
       }
-    }
 
-    if (request.method === 'GET' && url.pathname === '/api/workspaces/roadmap') {
-      return json(deps.registry.roadmapSnapshot());
-    }
-
-    if (request.method === 'GET' && url.pathname === '/api/abilities') {
-      return json(readAbilityProjection(deps.root));
-    }
-
-    if (request.method === 'GET' && url.pathname === '/api/content-search') {
-      const query = url.searchParams.get('query') ?? '';
-      const key = url.searchParams.get('sessionKey') as SessionKey | null;
-      if (!key) return json({ error: 'CONTENT_SEARCH_SESSION_REQUIRED' }, 400);
-      const requestedLimit = Number(url.searchParams.get('limit') ?? 20);
-      const limit = Number.isFinite(requestedLimit) ? requestedLimit : 20;
-      try {
-        return json(searchStudentContent(deps.root, {
-          query,
-          sessionKey: key,
-          limit,
-        }));
-      } catch (error) {
-        const code = error instanceof Error ? error.message : 'CONTENT_SEARCH_FAILED';
-        if (code === 'CONTENT_SEARCH_ROADMAP_UNAVAILABLE') {
-          return json({ error: code }, 403);
-        }
-        if (code === 'CONTENT_SEARCH_TUTOR_NOT_STARTED') {
-          return json({ error: code }, 409);
-        }
-        if (code === 'CONTENT_SEARCH_SESSION_NOT_FOUND' || code.startsWith('PLAN_NOT_FOUND')) {
-          return json({ error: code }, 404);
-        }
-        throw error;
+      const action = /^\/api\/(plans|lessons)\/([^/]+)\/(start|complete|close)$/.exec(url.pathname);
+      if (request.method === 'POST' && action) {
+        const id = nodeId(action[2]!);
+        if (!id) return json({ error: 'NODE_ID_INVALID' }, 400);
+        let result: unknown;
+        if (action[1] === 'plans' && action[3] === 'start') result = await lifecycle.startPlan(id);
+        else if (action[1] === 'plans' && action[3] === 'complete') {
+          result = await lifecycle.completePlan(id);
+        } else if (action[1] === 'lessons' && action[3] === 'start') {
+          result = await lifecycle.startLesson(id);
+        } else if (action[1] === 'lessons' && action[3] === 'close') {
+          result = await lifecycle.closeLesson(id);
+        } else return json({ error: 'LIFECYCLE_ACTION_INVALID' }, 404);
+        deps.hub.publish({ type: 'course-invalidated' });
+        return json(result);
       }
-    }
 
-    const planContext = /^\/api\/plans\/([^/]+)\/context$/.exec(url.pathname);
-    if (request.method === 'GET' && planContext) {
-      return json(readCoachContext(deps.root, decodeURIComponent(planContext[1]!)));
-    }
-
-    const planStart = /^\/api\/plans\/([^/]+)\/start$/.exec(url.pathname);
-    if (request.method === 'POST' && planStart) {
-      const planId = decodeURIComponent(planStart[1]!);
-      await deps.registry.startPlan(planId);
-      const key = `coach:${planId}` as SessionKey;
-      bind(key);
-      const snapshot = deps.registry.snapshot(planId);
-      deps.hub.publish({ type: 'snapshot', workspace: snapshot });
-      invalidateViews();
-      return json(snapshot);
-    }
-
-    if (request.method === 'GET' && url.pathname === '/api/evidence') {
-      const source = url.searchParams.get('source');
-      if (!source) return json({ error: 'SOURCE_REQUIRED' }, 400);
-      const options = source.startsWith('claim:')
-        ? { sessions: await createPiSessionEvidenceReader(deps.root) }
-        : {};
-      return json(readEvidence(deps.root, source, options));
-    }
-
-    if (request.method === 'GET' && url.pathname === '/api/persona') {
-      const key = url.searchParams.get('sessionKey') as SessionKey | null;
-      if (!key) return json({ error: 'SESSION_KEY_REQUIRED' }, 400);
-      return json({ id: deps.registry.personaId(key), choices: personaChoices(deps.root) });
-    }
-
-    const personaPortrait = /^\/api\/personas\/([^/]+)\/portrait$/.exec(url.pathname);
-    if (request.method === 'GET' && personaPortrait) {
-      const path = personaPortraitPath(deps.root, decodeURIComponent(personaPortrait[1]!));
-      if (!path) return new Response('Not found', { status: 404 });
-      return new Response(Bun.file(path), {
-        headers: {
-          'content-type': imageTypes[extname(path).toLowerCase() as keyof typeof imageTypes],
-        },
-      });
-    }
-
-    const persona = /^\/api\/sessions\/([^/]+)\/persona$/.exec(url.pathname);
-    if (request.method === 'POST' && persona) {
-      const key = decodeURIComponent(persona[1]!) as SessionKey;
-      const input = await request.json() as { id: string };
-      await deps.registry.setPersona(key, input.id);
-      return json({ id: deps.registry.personaId(key), choices: personaChoices(deps.root) });
-    }
-
-    const notebook = /^\/api\/lessons\/([^/]+)\/notebook$/.exec(url.pathname);
-    if (request.method === 'GET' && notebook) {
-      return json(readStudentNotebook(
-        deps.root,
-        decodeURIComponent(notebook[1]!),
-        deps.authoring,
-      ));
-    }
-
-    const replay = /^\/api\/lessons\/([^/]+)\/replay$/.exec(url.pathname);
-    if (request.method === 'GET' && replay) {
-      const lessonId = decodeURIComponent(replay[1]!);
-      const lesson = deps.registry.snapshot().lessons.find((item) => item.id === lessonId);
-      if (!lesson) return json({ error: 'LESSON_NOT_FOUND' }, 404);
-      const history = await deps.registry.replayHistory(lessonId, projectionMode);
-      return json(buildReplay(
-        deps.root,
-        lesson,
-        history.flatMap((item) => (
-          item.kind === 'message' ? [item.message] : []
-        )),
-      ));
-    }
-
-    const imageUpload = /^\/api\/lessons\/([^/]+)\/images$/.exec(url.pathname);
-    if (request.method === 'POST' && imageUpload) {
-      const lessonId = decodeURIComponent(imageUpload[1]!);
-      const form = await request.formData();
-      const image = form.get('image');
-      if (!(image instanceof File)) return json({ error: 'IMAGE_REQUIRED' }, 400);
-      const extension = {
-        'image/png': '.png',
-        'image/jpeg': '.jpg',
-        'image/webp': '.webp',
-      }[image.type];
-      if (!extension) return json({ error: 'UNSUPPORTED_IMAGE' }, 415);
-      const path = `materials/classroom/${lessonId}/${randomUUID()}${extension}`;
-      const absolute = resolveInsideRoot(deps.root, path);
-      mkdirSync(dirname(absolute), { recursive: true });
-      writeFileSync(absolute, Buffer.from(await image.arrayBuffer()));
-      return json({ path });
-    }
-
-    const workspace = /^\/api\/workspaces\/([^/]+)$/.exec(url.pathname);
-    if (request.method === 'GET' && workspace) {
-      return json(deps.registry.snapshot(decodeURIComponent(workspace[1]!)));
-    }
-
-    const history = /^\/api\/sessions\/([^/]+)\/history$/.exec(url.pathname);
-    if (request.method === 'GET' && history) {
-      const key = decodeURIComponent(history[1]!) as SessionKey;
-      if (!key.startsWith('coach:') && !key.startsWith('tutor:')) {
-        return json({ error: 'SESSION_NOT_FOUND' }, 404);
+      if (url.pathname.startsWith('/api/')) return json({ error: 'NOT_FOUND' }, 404);
+      if (request.method === 'GET' && deps.staticRoot) {
+        const path = safeStaticPath(deps.staticRoot, url.pathname);
+        if (path) return new Response(Bun.file(path));
       }
-      const items = await deps.registry.readHistory(key, projectionMode);
-      if (deps.registry.get(key)) bind(key);
-      return json(items);
+      return new Response('Not found', { status: 404 });
+    } catch (error) {
+      return errorResponse(error);
     }
-
-    const memoryReview = /^\/api\/sessions\/([^/]+)\/memory-review$/.exec(url.pathname);
-    if (request.method === 'GET' && memoryReview) {
-      const key = decodeURIComponent(memoryReview[1]!) as SessionKey;
-      if (!key.startsWith('coach:') || key === ROADMAP_COACH_SESSION_KEY) {
-        return json({ error: 'MEMORY_REVIEW_PLAN_COACH_ONLY' }, 403);
-      }
-      try {
-        return json(await deps.registry.memoryReview(key));
-      } catch (error) {
-        const code = error instanceof Error ? error.message : 'MEMORY_REVIEW_FAILED';
-        if (code === 'MEMORY_REVIEW_PLAN_COACH_ONLY') return json({ error: code }, 403);
-        throw error;
-      }
-    }
-
-    const memoryReviewSubmit = (
-      /^\/api\/sessions\/([^/]+)\/memory-review\/([^/]+)\/submit$/.exec(url.pathname)
-    );
-    if (request.method === 'POST' && memoryReviewSubmit) {
-      const key = decodeURIComponent(memoryReviewSubmit[1]!) as SessionKey;
-      const reviewId = decodeURIComponent(memoryReviewSubmit[2]!);
-      if (!key.startsWith('coach:') || key === ROADMAP_COACH_SESSION_KEY) {
-        return json({ error: 'MEMORY_REVIEW_PLAN_COACH_ONLY' }, 403);
-      }
-      const input = await request.json() as { decisions?: unknown };
-      if (!Array.isArray(input.decisions)) {
-        return json({ error: 'MEMORY_REVIEW_DECISIONS_REQUIRED' }, 400);
-      }
-      const decisions = input.decisions as MemoryReviewDecision[];
-      let submitted;
-      try {
-        submitted = submittedMemoryReview(
-          await deps.registry.memoryReview(key),
-          reviewId,
-          decisions,
-        );
-      } catch (error) {
-        const code = error instanceof Error ? error.message : 'MEMORY_REVIEW_FAILED';
-        if (code === 'MEMORY_REVIEW_PLAN_COACH_ONLY') return json({ error: code }, 403);
-        if (code === 'MEMORY_REVIEW_NOT_FOUND') return json({ error: code }, 404);
-        if (code.startsWith('MEMORY_REVIEW_')) return json({ error: code }, 400);
-        throw error;
-      }
-      bind(key);
-      runSession(
-        key,
-        '正在写入并整理已确认的长期记忆',
-        async () => {
-          await deps.registry.submitMemoryReview(key, reviewId, decisions);
-        },
-        () => {
-          deps.hub.publish({
-            type: 'snapshot',
-            workspace: deps.registry.snapshot(key.slice(6)),
-          });
-          invalidateViews();
-        },
-        (error) => (
-          error instanceof Error
-          && error.message.startsWith('MEMORY_REVIEW_APPLY_FAILED')
-            ? '长期记忆写入失败，已确认内容尚未进入画像；可以稍后重试。'
-            : '模型调用失败，请检查 Pi 的模型与凭据配置后重试。'
-        ),
-      );
-      return json(submitted, 202);
-    }
-
-    const deep = /^\/api\/sessions\/([^/]+)\/deep$/.exec(url.pathname);
-    if (deep) {
-      const key = decodeURIComponent(deep[1]!) as SessionKey;
-      if (request.method === 'POST') {
-        const input = await request.json() as { enabled: boolean };
-        await deps.registry.setDeepMode(key, input.enabled);
-      } else if (request.method !== 'GET') {
-        return new Response('Method not allowed', { status: 405 });
-      }
-      const enabled = await deps.registry.deepMode(key);
-      const workflows = await deps.registry.workflows(key);
-      bind(key);
-      return json({ enabled, workflows: workflows.map(projectWorkflow) });
-    }
-
-    const workflowAction = /^\/api\/sessions\/([^/]+)\/workflows\/([^/]+)\/(confirm|cancel)$/.exec(
-      url.pathname,
-    );
-    if (request.method === 'POST' && workflowAction) {
-      const key = decodeURIComponent(workflowAction[1]!) as SessionKey;
-      const workflowId = decodeURIComponent(workflowAction[2]!);
-      await deps.registry.workflows(key);
-      bind(key);
-      if (workflowAction[3] === 'confirm') {
-        return json(projectWorkflow(await deps.registry.confirmWorkflow(key, workflowId)));
-      }
-      await deps.registry.cancelWorkflow(key, workflowId);
-      const snapshot = (await deps.registry.workflows(key))
-        .find((workflow) => workflow.id === workflowId);
-      if (!snapshot) return json({ error: 'WORKFLOW_NOT_FOUND' }, 404);
-      return json(projectWorkflow(snapshot));
-    }
-
-    const messages = /^\/api\/sessions\/([^/]+)\/messages$/.exec(url.pathname);
-    if (request.method === 'POST' && messages) {
-      const key = decodeURIComponent(messages[1]!) as SessionKey;
-      const input = await request.json() as { text: string; imagePaths?: string[] };
-      const images = (input.imagePaths ?? []).map((path) => readImageContent(deps.root, path));
-      let session;
-      try {
-        session = await deps.registry.openSession(key);
-      } catch (error) {
-        const code = error instanceof Error ? error.message : 'SESSION_NOT_WRITABLE';
-        if (
-          code.startsWith('PLAN_SESSION_NOT_ACTIVE:')
-          || code.startsWith('LESSON_SESSION_NOT_ACTIVE:')
-        ) {
-          return json({ error: code }, 409);
-        }
-        throw error;
-      }
-      bind(key);
-      deps.hub.publish({
-        type: 'message',
-        sessionKey: key,
-        message: {
-          id: `${key}:student:${Date.now()}`,
-          role: 'student',
-          text: input.text,
-          complete: true,
-        },
-      });
-      runSession(
-        key,
-        key.startsWith('coach:') ? '学习顾问正在回应' : '课堂导师正在回应',
-        () => deps.registry.send(key, input.text, images),
-        () => {
-          if (key === ROADMAP_COACH_SESSION_KEY) {
-            deps.hub.publish({ type: 'learning-set', value: learningSetReader(deps.root) });
-            return;
-          }
-          const planId = key.startsWith('coach:')
-            ? key.slice(6)
-            : deps.registry.snapshot().plan.id;
-          deps.hub.publish({ type: 'snapshot', workspace: deps.registry.snapshot(planId) });
-        },
-      );
-      return json({ accepted: true, sessionId: session.sessionId }, 202);
-    }
-
-    const lessonAction = /^\/api\/lessons\/([^/]+)\/(start|pause|reprepare)$/.exec(url.pathname);
-    if (request.method === 'POST' && lessonAction) {
-      const lessonId = decodeURIComponent(lessonAction[1]!);
-      const startsLesson = lessonAction[2] === 'start';
-      let shouldKickoff = false;
-      if (startsLesson) {
-        try {
-          ({ shouldKickoff } = await deps.registry.startLesson(lessonId));
-        } catch (error) {
-          if (error instanceof PreparedLessonValidationError) {
-            return json({ error: error.code, issues: error.issues }, 422);
-          }
-          throw error;
-        }
-        bind(`tutor:${lessonId}`);
-      }
-      if (lessonAction[2] === 'pause') await deps.registry.pauseLesson(lessonId);
-      if (lessonAction[2] === 'reprepare') {
-        await deps.registry.abandonForReprepare(lessonId);
-      }
-      const snapshot = deps.registry.snapshot();
-      deps.hub.publish({ type: 'snapshot', workspace: snapshot });
-      invalidateViews();
-      if (startsLesson && shouldKickoff) {
-        runSession(
-          `tutor:${lessonId}`,
-          '课堂导师正在启动',
-          () => deps.registry.triggerLessonStart(lessonId),
-          () => deps.hub.publish({
-            type: 'snapshot',
-            workspace: deps.registry.snapshot(),
-          }),
-        );
-      }
-      return json(snapshot);
-    }
-
-    if (url.pathname === '/events' && server?.upgrade(request)) return;
-    if (deps.staticRoot && request.method === 'GET') {
-      const asset = url.pathname.startsWith('/assets/') ? url.pathname.slice(1) : null;
-      const shell = url.pathname === '/'
-        || (!url.pathname.startsWith('/api/') && !url.pathname.includes('.'));
-      const path = asset ?? (shell ? 'index.html' : null);
-      if (path) {
-        const file = Bun.file(join(deps.staticRoot, path));
-        if (await file.exists()) return new Response(file);
-      }
-    }
-    return new Response('Not found', { status: 404 });
   };
 }

@@ -147,6 +147,12 @@ export type SessionRunState = {
 export type StudyEvent =
   | { type: 'conversation-item'; sessionKey: SessionKey; item: ConversationItem }
   | { type: 'conversation-snapshot'; sessionKey: SessionKey; items: ConversationItem[] }
+  | {
+    type: 'assistant-delta';
+    sessionKey: SessionKey;
+    messageId: string;
+    delta: string;
+  }
   | { type: 'session-run'; sessionKey: SessionKey; status: 'idle' | 'running' }
   | { type: 'session-error'; sessionKey: SessionKey; message: string }
   | { type: 'course-invalidated' }
