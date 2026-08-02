@@ -1,38 +1,25 @@
-import type { PublicTreeEntry } from '../shared/contracts';
-import type { ViewQuery } from '../shared/view-contracts';
-import {
-  formatViewQuery,
-  normalizeViewId,
-  readViewQuery,
-} from '../study/views/view-query';
+import type { CourseTreeNode } from '../shared/contracts';
 
 export type BrowserRoute =
   | { kind: 'course' }
   | { kind: 'course-plan'; planId: string }
   | { kind: 'course-lesson'; planId: string; lessonId: string }
-  | { kind: 'knowledge'; query: ViewQuery }
-  | { kind: 'memory'; query: ViewQuery };
+  | { kind: 'knowledge' };
 
 function decodeId(value: string): string | null {
   try {
-    return normalizeViewId(decodeURIComponent(value));
+    const decoded = decodeURIComponent(value);
+    return /^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(decoded) ? decoded : null;
   } catch {
     return null;
   }
 }
 
-export function parseBrowserRoute(
-  pathname: string,
-  search = '',
-): BrowserRoute | null {
+export function parseBrowserRoute(pathname: string): BrowserRoute | null {
   if (pathname === '/course') return { kind: 'course' };
-  if (pathname === '/knowledge' || pathname === '/memory') {
-    const query = readViewQuery(new URLSearchParams(search));
-    return pathname === '/knowledge'
-      ? { kind: 'knowledge', query }
-      : { kind: 'memory', query };
-  }
+  if (pathname === '/knowledge') return { kind: 'knowledge' };
   if (!pathname.startsWith('/') || pathname.endsWith('/')) return null;
+
   const parts = pathname.slice(1).split('/');
   if (parts.length === 3 && parts[0] === 'course' && parts[1] === 'plan') {
     const planId = decodeId(parts[2]!);
@@ -55,31 +42,22 @@ export function parseBrowserRoute(
 
 export function formatBrowserRoute(route: BrowserRoute): string {
   if (route.kind === 'course') return '/course';
+  if (route.kind === 'knowledge') return '/knowledge';
   if (route.kind === 'course-plan') {
     return `/course/plan/${encodeURIComponent(route.planId)}`;
   }
-  if (route.kind === 'course-lesson') {
-    return `/course/plan/${encodeURIComponent(route.planId)}/lesson/${
-      encodeURIComponent(route.lessonId)
-    }`;
-  }
-  const path = route.kind === 'knowledge' ? '/knowledge' : '/memory';
-  return `${path}${formatViewQuery(route.query)}`;
+  return `/course/plan/${encodeURIComponent(route.planId)}/lesson/${
+    encodeURIComponent(route.lessonId)
+  }`;
 }
 
-export function routeForPublicTreeEntry(
-  entry: PublicTreeEntry,
+export function routeForCourseNode(
+  node: Pick<CourseTreeNode, 'kind' | 'id'>,
   parentPlanId: string | null,
 ): BrowserRoute | null {
-  if (entry.status === 'candidate' || entry.nodeId === null) return null;
-  if (entry.kind === 'plan') {
-    return { kind: 'course-plan', planId: entry.nodeId };
-  }
+  if (node.kind === 'roadmap') return { kind: 'course' };
+  if (node.kind === 'plan') return { kind: 'course-plan', planId: node.id };
   return parentPlanId === null
     ? null
-    : {
-      kind: 'course-lesson',
-      planId: parentPlanId,
-      lessonId: entry.nodeId,
-    };
+    : { kind: 'course-lesson', planId: parentPlanId, lessonId: node.id };
 }

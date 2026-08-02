@@ -1,7 +1,6 @@
-import type { SessionKey } from '../shared/contracts';
+import type { NodeKind, SessionKey } from '../shared/contracts';
 
-export type SessionRole = 'coach' | 'tutor';
-export type NodeKind = 'roadmap' | 'plan' | 'lesson';
+export type SessionRole = 'roadmap' | 'planner' | 'tutor';
 
 export type NodeSessionScope = {
   nodeKind: NodeKind;
@@ -11,7 +10,16 @@ export type NodeSessionScope = {
   parentPath: string | null;
 };
 
-export const ROADMAP_COACH_SCOPE = {
+export const M0_MODEL_TOOLS = [
+  'read',
+  'grep',
+  'find',
+  'ls',
+  'edit',
+  'write',
+] as const;
+
+export const ROADMAP_SCOPE = {
   nodeKind: 'roadmap',
   nodeId: 'roadmap',
   nodePath: 'ROADMAP.md',
@@ -20,73 +28,25 @@ export const ROADMAP_COACH_SCOPE = {
 } as const satisfies NodeSessionScope;
 
 export function roleForNode(kind: NodeKind): SessionRole {
-  return kind === 'lesson' ? 'tutor' : 'coach';
-}
-
-export function roleToolNames(role: SessionRole): string[] {
-  return role === 'coach'
-    ? [
-      'card_search',
-      'trace_search',
-      'source_resolve',
-      'lesson_prepare',
-      'plan_update',
-      'memory_review_propose',
-      'deep_workflow_propose',
-    ]
-    : [
-      'card_search',
-      'trace_search',
-      'source_resolve',
-      'trace_append',
-      'classroom_update',
-      'lesson_close',
-      'card_alternative_append',
-      'deep_workflow_propose',
-    ];
-}
-
-export function scopeToolNames(scope: NodeSessionScope): string[] {
-  if (!isRoadmapCoachScope(scope)) {
-    return roleToolNames(roleForNode(scope.nodeKind));
-  }
-  return [
-    'card_search',
-    'trace_search',
-    'source_resolve',
-    'roadmap_update',
-    'plan_prepare',
-    'deep_workflow_propose',
-  ];
+  if (kind === 'roadmap') return 'roadmap';
+  return kind === 'plan' ? 'planner' : 'tutor';
 }
 
 export function sessionKeyForNode(scope: NodeSessionScope): SessionKey {
-  if (scope.nodeKind === 'roadmap') return 'coach:@roadmap';
-  return `${roleForNode(scope.nodeKind)}:${scope.nodeId}`;
-}
-
-export function isRoadmapCoachScope(
-  scope: NodeSessionScope,
-): scope is typeof ROADMAP_COACH_SCOPE {
-  return scope.nodeKind === ROADMAP_COACH_SCOPE.nodeKind
-    && scope.nodeId === ROADMAP_COACH_SCOPE.nodeId
-    && scope.nodePath === ROADMAP_COACH_SCOPE.nodePath
-    && scope.parentId === null
-    && scope.parentPath === null;
+  return `${scope.nodeKind}:${scope.nodeId}`;
 }
 
 export function formatSessionOwnerContext(
   root: string,
   scope: NodeSessionScope,
 ): string {
-  const role = roleForNode(scope.nodeKind);
-  const owner = scope.nodeKind === 'roadmap'
-    ? `Current Coach: ${scope.nodeId}\nCurrent Roadmap file: ${scope.nodePath}`
-    : role === 'coach'
-      ? `Current Coach: ${scope.nodeId}\nCurrent Plan file: ${scope.nodePath}`
-      : `Current Tutor: ${scope.nodeId}\nCurrent Lesson file: ${scope.nodePath}`;
-  const parent = scope.parentId === null
+  const parent = scope.parentPath === null
     ? ''
     : `\nParent node: ${scope.parentId}\nParent file: ${scope.parentPath}`;
-  return `Learning set root: ${root}\n${owner}${parent}`;
+  return [
+    `Learning set root: ${root}`,
+    `Current node kind: ${scope.nodeKind}`,
+    `Current node ID: ${scope.nodeId}`,
+    `Current node file: ${scope.nodePath}${parent}`,
+  ].join('\n');
 }

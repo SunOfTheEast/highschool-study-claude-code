@@ -1,4 +1,4 @@
-import type { PrimaryView } from '../view-state';
+import { PRIMARY_VIEWS, type PrimaryView } from '../view-state';
 
 export type PrimaryViewNavProps = {
   active: PrimaryView;
@@ -9,7 +9,6 @@ export type PrimaryViewNavProps = {
 const labels: Record<PrimaryView, string> = {
   course: '课程脉络',
   knowledge: '知识山河',
-  memory: '研习留痕',
 };
 
 export function PrimaryViewNav({
@@ -19,7 +18,7 @@ export function PrimaryViewNav({
 }: PrimaryViewNavProps) {
   return (
     <nav className="primary-view-nav" aria-label="主视图">
-      {(Object.keys(labels) as PrimaryView[]).map((view) => (
+      {PRIMARY_VIEWS.map((view) => (
         <a
           key={view}
           href={hrefs[view]}
