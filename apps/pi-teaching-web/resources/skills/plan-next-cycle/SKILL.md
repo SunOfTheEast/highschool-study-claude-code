@@ -1,74 +1,40 @@
 ---
 name: plan-next-cycle
-description: Use when accumulated learning history may change whether the student continues, replans, closes the current Plan, or discusses a new Plan at the Roadmap Node.
+description: Use when direct Plan and Lesson records may change whether to continue, revise, complete, or begin another learning cycle.
 ---
 
 # Plan Next Cycle
 
-Use history to sharpen a current consultation, not to replace it.
+Use learning history to sharpen a conversation, not to replace one.
 
-## Reconstruct change over time
+## Reconstruct what changed
 
-Start with the current node, sealed child Handoffs, confirmed preferences, and the
-student's present account. Follow a source handle only when it could change the
-decision. Active Trace owns attempt outcome and support; Handoffs own compressed
-stage claims and their boundaries.
+At a Plan node, read the Plan and all of its closed Lessons. At the Roadmap node, read
+the relevant completed Plans and open their Lessons when the Plan text is not enough.
+Compare actual classroom moments across time:
 
-Compare:
+- what the student could do before help;
+- what kind of help changed the work;
+- whether an idea transferred to a different task;
+- where hesitation or error returned;
+- what the student now thinks is important.
 
-- independence and help dependence;
-- transfer across genuinely different tasks;
-- recurring student reasoning;
-- response to previous teaching moves;
-- uncertainty that still changes the next action.
+Source documents can be incomplete or inconsistent. Keep the uncertainty and read a
+deeper Block log when it matters. Do not infer a cause from a score, a method label, or
+one successful answer.
 
-A score, method node, available card, or single success can locate a question but
-cannot explain its cause or choose the next Plan.
+## Decide at the correct level
 
-## Ask before deciding
+Continue the current Plan when its stage problem is still the right unit. Revise its
+future prepared Lessons when the goal is right but the route is not. Recommend
+completion only when the observable standard has actually been checked. Return to the
+Roadmap when the next useful change is a new stage problem.
 
-Ask one question per turn about how the student interprets the last cycle, what
-matters now, and what constraints changed. Clarify ambiguous phrases whose meanings
-would lead to different actions. Do not repeat settled history or insert a diagnosis
-into the question.
+Before recommending, summarize the relevant history and the student's current view in
+plain Chinese. Ask for correction when there is a meaningful ambiguity. The student
+starts and completes nodes through the UI.
 
-Before recommending, summarize the source-backed history and the student's current
-account, including disagreement or missing evidence. Invite correction.
-
-## Choose the correct owner action
-
-Inside a Plan Node:
-
-- continue or replan that Plan when the stage problem remains the right unit;
-- complete it only when the observable standard and student choice agree;
-- return to the Roadmap Node when a new cycle is needed.
-
-Completion is a terminal write. First present the proposed source-backed verdict,
-boundaries, open questions, and whether the declared Plan Test actually ran. Invite
-correction and ask for one explicit choice. Only a later student confirmation may call
-`plan_update(decision: complete)`; do not audit and seal in the same turn.
-
-Inside the Roadmap Node:
-
-- compare completed Plan Handoffs;
-- choose one leverage point that matters to the long-term capability;
-- maintain a lightweight Plan candidate;
-- prepare the candidate only after student confirmation and a sourced Adaptation
-  Brief.
-
-Do not create competing hypotheses when direct evidence already determines the next
-useful step. When materially different explanations remain plausible, prefer a short
-diagnostic cycle.
-
-## Countercheck important completion
-
-For the first completion decision of a Plan, use the required Quick Evidence Scout.
-Ask it to find conflicts, support dependence, omitted conditions, stale wording, and
-unreadable sources. The parent Coach keeps the verdict. A failed or partial scout
-narrows the conclusion instead of silently approving it.
-
-Persist only the action owned by the current node. After Plan completion, reread the
-exact Plan so its newly sealed `claim:<plan-id>/handoff#...` handles are available before
-proposing memory; lower Lesson Claims and Trace handles are not valid memory-review
-sources. Explain the result in ordinary teacher language. Do not treat the recommendation
-itself as a fact or activate the next node without the student's action.
+Persist only what the current node owns. A Plan may update its own next arrangement
+and prepared Lessons. A Roadmap may arrange future prepared Plans. Earlier active or
+completed documents remain intact so later decisions can be traced back to the class
+where they arose.

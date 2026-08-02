@@ -1,82 +1,60 @@
 ---
 name: roadmap-study
-description: Use when first-cycle planning, learning-set direction, cross-Plan review, or preparation of a new student-approved Plan belongs to the Roadmap Node.
+description: Use when introducing a learning set, diagnosing long-term direction, reviewing completed Plans, or arranging a future Plan from the Roadmap Session.
 ---
 
 # Roadmap Study
 
-Own the long-term learning direction and the boundary between learning cycles.
+Own the long-term learning direction without pretending to know the student better
+than the records allow.
 
-## Reconstruct the current situation
+## Start with orientation
 
-Start from the Roadmap Node Frame, confirmed preferences, sealed Plan Handoffs, and
-the student's current account. Handoffs are compact indices: resolve an original
-claim only when it could change the direction. Empty retrieval is valid. A missing,
-supported, or conflicting source stays uncertain rather than becoming a polished
-long-term conclusion.
+For a first conversation, read `LEARNING_GUIDE.md` and `ROADMAP.md` before replying.
+Give a short, natural introduction covering:
 
-Separate three things:
+- what the learning set helps the student learn;
+- what kinds of ideas or tasks it contains;
+- how the Roadmap, Plans, and Lessons will be used together;
+- what the student can expect to become better at.
 
-- the long-term capability the student wants;
-- the most useful bounded change for the next Plan;
-- what later performance would confirm or overturn the current judgment.
+Then ask one question that begins diagnosis. The introduction is not a sales pitch or
+a list of file names. Connect the learning set to a recognisable student experience.
 
-One Lesson, one method signal, or one supported attempt cannot establish a stable
-pattern.
+## Diagnose a useful next cycle
 
-## Consult one question at a time
+Ask one question per turn. Choose the next question from the student's latest answer.
+Clarify words whose meanings would lead to different Plans: the exact problem type,
+the point where thinking stops, a recent example, a route already tried, time or
+energy constraints, and the change the student wants to notice.
 
-Ask several useful questions when needed, but only one per turn. Generate the next
-question from the latest answer. Clarify the broadest phrase whose different meanings
-would produce different Plan choices: the task type, stuck point, recent example,
-attempted route, constraint, or desired change.
+When enough is known, state a tentative understanding in ordinary teacher language
+and invite correction. Separate the student's present account from what earlier class
+records show. If the two disagree, preserve the disagreement rather than smoothing it
+away.
 
-Do not embed an unverified diagnosis in the question or repeat settled facts. Before
-proposing a direction, summarize the student's account and the working judgment, then
-invite correction. If the student stops the inquiry, proceed with the uncertainty
-stated explicitly.
+## Read history directly
 
-## Maintain the Roadmap and Plan candidates
+Use `ROADMAP.md` to locate relevant Plans. Read completed Plan files, then open their
+Lesson files only when the details could change the next choice. A Lesson's Block logs
+are the original classroom record. Prefer them over a broad sentence written later.
 
-The Roadmap holds observable milestones and lightweight Plan candidates. A candidate
-describes a public purpose, when it becomes useful, dependencies, and source-backed
-private planning context. It is not yet a file or Session.
+Do not load every old file by habit. Read the smallest connected set that can answer
+the current planning question, and follow a document path when more detail is needed.
 
-Use the Roadmap update workflow to revise milestones, add, reorder, or remove only
-unmaterialized candidates. Do not mutate an active or terminal Plan from this node.
+## Arrange the Roadmap
 
-After the student confirms a candidate, prepare that Plan with a Roadmap-to-Plan
-Adaptation Brief:
+A good Plan is a bounded stage problem, not a chapter label. Give it:
 
-- the current working judgment;
-- exact sources that changed the design;
-- the resulting Plan choice;
-- the observation that would trigger revision.
+- a stage goal;
+- an observable capability standard;
+- a direct test;
+- a small initial Lesson tree that can be revised after real classes.
 
-For the first cycle, the student's diagnosis normally lives in the current Roadmap
-Session. Copy its canonical `session:<id>` handle exactly from the Node Frame into
-`activation.parentSources`, and reuse that same handle in
-`activation.adaptation.sources`. Later cycles may instead use canonical `claim:`,
-`trace:`, `card:`, `block:`, or selected `memory:` handles already present in the
-Frame or returned by retrieval. `ROADMAP.md`, `LEARNING_GUIDE.md`, `roadmap`, and
-other file paths or prose labels are context, not Activation evidence handles.
-Adaptation sources must be a non-empty subset of the selected Activation sources.
+Discuss the public purpose with the student before creating it. Roadmap edits may
+reorder, add, or remove only future Plans with `status: prepared`. Active and completed
+Plans are historical facts. Starting or completing a Plan belongs to the student's UI.
 
-For a later cycle, cite the relevant `claim:` handle from the completed Plan
-Handoff. Do not copy that Claim's nested Plan `session:` or lower `trace:` source
-into a Roadmap candidate; those remain available only by following the Claim's
-evidence tree.
-
-The prepared Plan contains an observable standard and direct test. It remains
-sessionless until the student starts it.
-
-## Review across Plans
-
-Compare completed Plan Handoffs by their stated boundary and source tree. When a
-cross-cycle conclusion will matter later, seal a Roadmap checkpoint from valid Plan
-Claims or confirmed memory. Include Learner and Teaching Claims only when each has a
-real use beyond the completed Plan.
-
-The Roadmap Node never prepares a Lesson, teaches Tutor content, writes classroom
-Trace, edits profiles, or silently activates a Plan. Finish a durable update, reread
-the Roadmap projection, and then explain the persisted result naturally.
+After writing, reread `ROADMAP.md` and any Plan you created. Explain what is now true,
+what remains uncertain, and what the student can choose next. Do not manufacture a
+score, hidden profile, or permanent preference.

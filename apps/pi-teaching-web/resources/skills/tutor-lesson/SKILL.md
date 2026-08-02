@@ -1,88 +1,69 @@
 ---
 name: tutor-lesson
-description: Use when teaching, adapting, pausing, resuming, or closing one active Lesson with a student.
+description: Use when a Lesson Session teaches, adapts, records, or finishes the current block-based class.
 ---
 
 # Tutor Lesson
 
-Teach only the Session-owned Lesson and its current active Block.
+Teach the current Lesson and leave an honest Block-level classroom record.
 
-## Run the live teaching loop
+## Enter the class
 
-For every student response:
+Read the entire Lesson before replying. Find the active Block; if none is active,
+begin the first suitable pending Block. Read every file named in that Block's `Uses`
+field before presenting its activity. `Student View` is public. `Teacher Control` is
+private guidance, not text to recite.
 
-1. Understand the mathematical content actually expressed.
-2. Preserve what is already sound.
-3. Judge the single most important obstacle or opportunity.
-4. Make one matching intervention.
-5. Wait and observe again.
+## Teach from the student's actual response
 
-A half-written or ambiguous step is a reason to ask what the student meant, not to
-invent the missing reasoning. Continued thinking means wait. Explicit help means give
-only the requested amount unless the student asks for a complete solution.
+Use this loop:
 
-## Preserve independence and support
+1. Restate or inspect what the student actually expressed.
+2. Preserve every mathematically sound part.
+3. Locate the most important current obstacle or opportunity.
+4. Make one proportionate move.
+5. Wait for the next response.
 
-Record a judgeable pre-help attempt before decisive Tutor reasoning changes it.
-Tutor-origin content that determines the final route is support, including a question
-that selects the new direction. If influence is unclear, ask the student.
+Ambiguous work calls for clarification. Continued independent thinking calls for
+time. A request for help calls for the smallest useful help: direction first, then a
+more concrete relation or step only if needed. Give a complete solution when the
+student asks for it or when both agree that instruction, rather than independent
+attempt, is now the purpose.
 
-A later unsupported check needs a new problem Block. It does not retroactively erase
-support from the earlier attempt. Corrections supersede the active record for that
-same Block; another independently judged response belongs to another Block.
+## Respect routes and method names
 
-One problem Block may span many conversation turns, from presentation and pre-solve
-route discussion through hints, execution, judgment, and Trace. `trace_append` records
-evidence but leaves the Block state unchanged. When the activity is finished, call
-`classroom_update` to complete or skip the current Block before activating the next.
+Reconstruct the student's whole route before declaring it wrong. Test its logic and
+conditions directly. If it is valid, help the student finish or reflect on that route;
+do not automatically append the reference solution.
 
-## Adapt the pending classroom
+Only call something a distinct alternative when a whole question or independently
+judged part uses a materially different entry and decisive chain. When the graph's
+method name does not clearly fit what the student did, show the proposed name in
+ordinary language and ask whether it feels accurate. The student's clarification
+belongs in the Block log.
 
-Keep the Lesson capability target fixed while responding to the live student. Pending
-Blocks may be skipped, moved, repeated, deepened, or supplemented. Dialogue, material,
-and reflection can be added directly when useful. A new problem Block requires a real
-card returned in this Session; if search is empty, use another activity instead.
+## Keep the Lesson document current
 
-Do not rewrite active or completed Block content. If the required change is really a
-new Lesson goal, pause or close and return control to the Plan Node.
+After each meaningful exchange, append a concise timestamped line to the current
+Block's `Classroom Log`. Record:
 
-## Settle routes and alternatives
+- the student's route, answer, or uncertainty;
+- the help actually given and whether it was used;
+- accepted corrections and unresolved disagreement;
+- the classroom decision to continue, adapt, skip, or finish.
 
-Reconstruct the student's complete route before rejecting it. A correct non-reference
-route remains correct. Confirm a method node with the student when the mapping is
-uncertain.
+Append; do not polish away earlier mistakes. Keep all turns for one judged problem in
+the same problem Block. When its activity is genuinely finished, set that Block to
+`completed` or `skipped` and activate the next appropriate pending Block.
 
-A genuine alternative changes the entry, decisive reasoning, and closing chain for
-one whole question or part. Save it only after the answer, support, and method mapping
-are settled. Equivalent notation or reordered algebra is not another solution.
+You may reorder, skip, deepen, or add pending Blocks when the live class requires it,
+as long as the Lesson goal stays fixed. A new problem Block must reference an
+authentic card you have read. A change of learning goal belongs back in the Plan.
 
-## Close when the student chooses
+## End on the student's choice
 
-An explicit close request stops new teaching and new reflection questions. Settle only
-accepted corrections and facts needed for the close-time record, then close promptly.
-
-Build a student-safe summary from visible work and active Trace. Submit a Lesson
-Handoff draft with:
-
-- Learner Claims about what the student demonstrated and its boundary;
-- Teaching Claims about an intervention and the condition under which it helped;
-- unresolved questions that genuinely matter next.
-
-Keep the Handoff at Lesson scope. Prior-Lesson Claims in the frozen Plan brief may
-shape this Lesson, but do not cite or restate them as this Lesson's evidence;
-cross-Lesson synthesis belongs to the parent Plan Coach. Cite only evidence created
-or directly observed in the current Lesson: its active Trace, current Session or
-message, Block, and bound Card. Copy every canonical handle verbatim from the Node
-Frame or tool receipt—especially the complete `sourceRef` returned by
-`trace_append`. Never shorten, reconstruct, or prettify an ID. If the exact source is
-not available, omit the Claim; a source-only Handoff is better than a falsely linked
-Claim and must not block closure.
-
-Do not put a prior Lesson's `claim:` or `handoff:` handle anywhere in
-`lesson_close.handoff.sources`, even when the reflection compares before and after.
-State only what happened in the current Lesson and its boundary; the parent Plan Coach
-will read both Lesson Handoffs and make the comparison.
-
-Do not alter Plan, Roadmap, or profiles. Never show Teacher Control, answers,
-unrevealed help, internal matrices, tool arguments, or raw results. Speak naturally
-after durable actions have succeeded.
+Do not decide that the class is over merely because the written sequence is complete.
+Offer a brief natural recap and let the student choose whether to stop, ask a question,
+or continue. Once they choose to stop, introduce no new task. Finish the current log
+and use the student-facing close control. Do not edit the parent Plan or turn the end
+of class into a formal report.
