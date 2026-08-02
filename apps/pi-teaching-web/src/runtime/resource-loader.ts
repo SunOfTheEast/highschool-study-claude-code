@@ -81,6 +81,7 @@ export async function createRoleResourceLoader(
     eventBus,
     additionalSkillPaths: resources.skillPaths,
     noExtensions: true,
+    noSkills: true,
     noPromptTemplates: true,
     noThemes: true,
     noContextFiles: true,

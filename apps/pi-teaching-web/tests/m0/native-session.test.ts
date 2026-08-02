@@ -1,9 +1,14 @@
 import { afterEach, expect, test } from 'bun:test';
-import { cpSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import type { AgentSessionEvent, SessionEntry } from '@earendil-works/pi-coding-agent';
 import {
+  createEventBus,
+  type AgentSessionEvent,
+  type SessionEntry,
+} from '@earendil-works/pi-coding-agent';
+import {
+  createRoleResourceLoader,
   loadStaticNodeResources,
 } from '../../src/runtime/resource-loader';
 import {
@@ -66,6 +71,33 @@ test('assembles only static teaching resources and native file tools', () => {
   expect(assembled).not.toContain('第一节课正在进行');
   expect(assembled).not.toContain('10:03 学生');
   expect(assembled).not.toContain('cards/sample.card.yaml');
+});
+
+test('loads only the M0 skills selected for the current node', async () => {
+  const root = copyFixture();
+  const staleSkill = join(root, '.pi/skills/roadmap-study');
+  mkdirSync(staleSkill, { recursive: true });
+  writeFileSync(join(staleSkill, 'SKILL.md'), [
+    '---',
+    'name: roadmap-study',
+    'description: stale project skill',
+    '---',
+    '',
+    '# Stale Roadmap Skill',
+  ].join('\n'));
+  const scope = {
+    nodeKind: 'roadmap',
+    nodeId: 'roadmap',
+    nodePath: 'ROADMAP.md',
+    parentId: null,
+    parentPath: null,
+  } as const;
+  const expected = loadStaticNodeResources(root, scope).skillPaths;
+
+  const loader = await createRoleResourceLoader(root, scope, createEventBus());
+
+  expect(loader.getSkills().skills.map((skill) => skill.filePath).sort())
+    .toEqual([...expected].sort());
 });
 
 test('keeps factory input node-scoped without cross-session transcripts', () => {
