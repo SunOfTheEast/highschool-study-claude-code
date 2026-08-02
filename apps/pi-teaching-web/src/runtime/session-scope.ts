@@ -19,6 +19,12 @@ export const M0_MODEL_TOOLS = [
   'write',
 ] as const;
 
+export const PLAN_MODEL_TOOLS = [...M0_MODEL_TOOLS, 'subagent'] as const;
+
+export function modelToolsForNode(kind: NodeKind): readonly string[] {
+  return kind === 'plan' ? PLAN_MODEL_TOOLS : M0_MODEL_TOOLS;
+}
+
 export const ROADMAP_SCOPE = {
   nodeKind: 'roadmap',
   nodeId: 'roadmap',

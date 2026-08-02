@@ -5,6 +5,7 @@ import {
 } from '../../src/shared/contracts';
 import {
   M0_MODEL_TOOLS,
+  modelToolsForNode,
   sessionKeyForNode,
 } from '../../src/runtime/session-scope';
 import {
@@ -20,6 +21,9 @@ test('exposes only the M0 node lifecycle and native model tools', () => {
   expect(PLAN_STATUSES).toEqual(['prepared', 'active', 'completed']);
   expect(LESSON_STATUSES).toEqual(['prepared', 'active', 'closed']);
   expect(M0_MODEL_TOOLS).toEqual(['read', 'grep', 'find', 'ls', 'edit', 'write']);
+  expect(modelToolsForNode('roadmap')).toEqual(M0_MODEL_TOOLS);
+  expect(modelToolsForNode('lesson')).toEqual(M0_MODEL_TOOLS);
+  expect(modelToolsForNode('plan')).toEqual([...M0_MODEL_TOOLS, 'subagent']);
 
   expect(sessionKeyForNode({
     nodeKind: 'roadmap',
