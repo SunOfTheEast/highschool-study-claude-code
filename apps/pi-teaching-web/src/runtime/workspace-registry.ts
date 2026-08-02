@@ -163,6 +163,14 @@ export class WorkspaceRegistry {
     if (session?.isStreaming) await session.abort();
   }
 
+  async release(key: SessionKey): Promise<void> {
+    await this.abort(key);
+    this.sessions.get(key)?.dispose();
+    this.sessions.delete(key);
+    this.opening.delete(key);
+    this.turnTails.delete(key);
+  }
+
   dispose(): void {
     for (const session of this.sessions.values()) session.dispose();
     this.sessions.clear();
