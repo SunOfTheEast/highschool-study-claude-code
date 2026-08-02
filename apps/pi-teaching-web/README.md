@@ -68,7 +68,7 @@ NODE_EXTRA_CA_CERTS=/path/to/ca.pem bunx playwright install chromium
 
 ```bash
 cd apps/pi-teaching-web
-STUDY_LEARNING_SET="$PWD/../../examples/derivative-demo/learning-set" bun run start
+STUDY_LEARNING_SET="$PWD/../../examples/derivative-m0/learning-set" bun run start
 ```
 
 打开 <http://127.0.0.1:65000>。服务只监听本机，Bun 同时提供 API、WebSocket 事件流和构建后的前端。
@@ -76,7 +76,7 @@ STUDY_LEARNING_SET="$PWD/../../examples/derivative-demo/learning-set" bun run st
 开发模式使用两个进程：
 
 ```bash
-STUDY_LEARNING_SET="$PWD/../../examples/derivative-demo/learning-set" bun run dev:server
+STUDY_LEARNING_SET="$PWD/../../examples/derivative-m0/learning-set" bun run dev:server
 bun run dev:client
 ```
 
@@ -110,7 +110,7 @@ pi
 也可以指定学习集路径：
 
 ```text
-/study-web ./examples/derivative-demo/learning-set
+/study-web ./examples/derivative-m0/learning-set
 ```
 
 该命令启动本地服务、打开浏览器，并在 Pi Session 结束时关闭服务进程。
@@ -244,7 +244,7 @@ Counter-evidence。候选必须来自 completed Plan Handoff 的有效 Claim；�
 建议先复制示例，避免测试写入仓库样例：
 
 ```bash
-cp -R examples/derivative-demo /tmp/studyforge-derivative-smoke
+cp -R examples/derivative-m0 /tmp/studyforge-derivative-smoke
 cd /tmp/studyforge-derivative-smoke
 pi
 ```

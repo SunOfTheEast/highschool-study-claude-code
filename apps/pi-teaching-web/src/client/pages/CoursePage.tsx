@@ -38,7 +38,7 @@ function DocumentContext({
   document: RoadmapDocument | PlanDocument | LessonDocument;
 }) {
   if (document.kind === 'lesson') return <ActivityDrawer lesson={document} />;
-  const rows = document.kind === 'roadmap'
+  const rows: Array<[string, string]> = document.kind === 'roadmap'
     ? [
       ['长期目标', document.longTermGoal],
       ['能力标准', document.capabilityStandard],
@@ -59,7 +59,7 @@ function DocumentContext({
         {rows.map(([label, value]) => (
           <div key={label}>
             <dt>{label}</dt>
-            <dd><MarkdownView>{value}</MarkdownView></dd>
+            <dd><MarkdownView children={value} /></dd>
           </div>
         ))}
       </dl>

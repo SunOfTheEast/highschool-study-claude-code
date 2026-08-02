@@ -27,11 +27,16 @@ async function json<T>(input: RequestInfo | URL, init?: RequestInit): Promise<T>
   return response.json() as Promise<T>;
 }
 
-const post = <T>(path: string, body?: unknown) => json<T>(path, {
-  method: 'POST',
-  headers: body === undefined ? undefined : { 'content-type': 'application/json' },
-  body: body === undefined ? undefined : JSON.stringify(body),
-});
+const post = <T>(path: string, body?: unknown) => json<T>(
+  path,
+  body === undefined
+    ? { method: 'POST' }
+    : {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body),
+    },
+);
 
 export const api = {
   course: (selected?: string | null) => json<CourseSnapshot>(

@@ -38,7 +38,7 @@ export function projectConversationEntries(
   const toolPositions = new Map<string, number>();
   for (const entry of entries) {
     if (entry.type !== 'message') continue;
-    const message = entry.message as Record<string, unknown>;
+    const message = entry.message as unknown as Record<string, unknown>;
     if (message.role === 'user') {
       const text = contentText(message.content);
       if (text) items.push({ id: entry.id, kind: 'user', text, at: entry.timestamp });

@@ -202,7 +202,10 @@ test('streams one accepted turn and invalidates course after a native edit', asy
   ));
   expect(response?.status).toBe(202);
   await idle;
-  expect(sent).toEqual(['plan:plan-001', '我想先说说具体卡点。']);
+  expect(sent as [SessionKey, string] | null).toEqual([
+    'plan:plan-001',
+    '我想先说说具体卡点。',
+  ]);
   expect(events).toContainEqual(expect.objectContaining({
     type: 'conversation-item',
     item: expect.objectContaining({ id: 'edit-1', kind: 'tool', status: 'running' }),
