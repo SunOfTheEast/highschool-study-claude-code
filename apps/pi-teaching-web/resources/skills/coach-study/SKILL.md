@@ -89,6 +89,11 @@ You may create or edit only a Lesson with `status: prepared`. Pending Blocks can
 a useful initial route without trying to predict every classroom turn. Starting the
 Lesson belongs to the student.
 
+When adding a Lesson, write and reread the complete Lesson file before adding its
+entry to the current Plan's `Lesson Tree`. Never leave a tree entry pointing to a file
+that does not yet exist. A longer agreed teaching arc may stay in `Next Lesson
+Arrangement`; materialize only the prepared Lessons that are actually ready to open.
+
 ## Review after class
 
 When a Lesson closes, read it again in full and compare the actual class with the Plan

@@ -49,7 +49,14 @@ A good Plan is a bounded stage problem, not a chapter label. Give it:
 - a stage goal;
 - an observable capability standard;
 - a direct test;
-- a small initial Lesson tree that can be revised after real classes.
+- a public initial teaching arc in `Next Lesson Arrangement` that the Plan Session can
+  turn into real Lessons.
+
+A Roadmap Session creates the prepared Plan file but does not create Lesson files or
+place future Lesson links in its `Lesson Tree`. Leave that tree empty. A Lesson Tree
+entry means the linked Lesson file already exists and can be parsed; only the Plan
+Session may establish that pair. The agreed number or sequence of lessons belongs in
+the Plan's prose until the Plan Session has prepared the actual child documents.
 
 Discuss the public purpose with the student before creating it. Roadmap edits may
 reorder, add, or remove only future Plans with `status: prepared`. Active and completed
