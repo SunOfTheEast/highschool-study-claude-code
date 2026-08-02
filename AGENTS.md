@@ -57,9 +57,13 @@ The model receives only:
 4. current node identity/path instructions;
 5. the role's Skills.
 
-Model-callable tools are exactly `read`, `grep`, `find`, `ls`, `edit`, and `write`.
-Node activation and completion are student UI actions handled by Runtime code. Do not
-replace these actions with prompt conventions or model tool calls.
+Every node has the native `read`, `grep`, `find`, `ls`, `edit`, and `write` tools. A
+Plan Session additionally has `subagent` for one packaged read-only
+`study-material-scout`. The Scout uses fresh context and only `read`, `grep`, `find`,
+and `ls`; it returns a compact asset index and cannot write teaching facts. Roadmap and
+Lesson Sessions do not receive `subagent`. Node activation and completion are student
+UI actions handled by Runtime code. Do not replace these actions with prompt
+conventions or model tool calls.
 
 ## Teaching behavior owners
 
@@ -77,6 +81,9 @@ replace these actions with prompt conventions or model tool calls.
 Skills own teaching judgment and natural language. Runtime owns document parsing,
 Session identity, lifecycle transitions, transport, and persistence. Do not add exact-
 wording tests for Skill prose; validate assembled resources plus real class behavior.
+The Material Scout is disposable working memory for asset search, not a Handoff,
+teaching-fact store, planner, or post-Lesson reviewer. The parent Plan Coach keeps final
+selection and every persistent write.
 
 ## App surface
 
@@ -99,6 +106,8 @@ items. The normal Lesson view shows `Student View` and Block progress, not
 - `apps/pi-teaching-web/src/study/`: strict M0 Markdown and static knowledge readers.
 - `apps/pi-teaching-web/src/runtime/`: node ownership, resource assembly, Session
   registry, frontmatter edits, and lifecycle.
+- `apps/pi-teaching-web/resources/subagents/`: packaged read-only asset Scout used only
+  by Plan Sessions.
 - `apps/pi-teaching-web/src/server/`: minimal HTTP/WebSocket transport.
 - `apps/pi-teaching-web/src/client/`: Course/Knowledge App.
 - `apps/pi-teaching-web/tests/m0/`: current executable contract.

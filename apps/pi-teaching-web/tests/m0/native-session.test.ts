@@ -146,6 +146,20 @@ test('loads the explicit subagent extension only for Plan nodes', async () => {
   expect(extensionToolNames(lessonLoader)).not.toContain('subagent');
 });
 
+test('packages a read-only material Scout', () => {
+  const scout = readFileSync(
+    join(import.meta.dir, '../../resources/subagents/study-material-scout.md'),
+    'utf8',
+  );
+  const toolsLine = scout.match(/^tools:.*$/m)?.[0] ?? '';
+
+  expect(scout).toContain('name: study-material-scout');
+  expect(toolsLine).toBe('tools: read, grep, find, ls');
+  for (const forbidden of ['write', 'edit', 'bash', 'subagent']) {
+    expect(toolsLine).not.toContain(forbidden);
+  }
+});
+
 test('loads only the M0 skills selected for the current node', async () => {
   const root = copyFixture();
   const staleSkill = join(root, '.pi/skills/roadmap-study');

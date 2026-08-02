@@ -40,20 +40,46 @@ revealing an unseen problem, then ask whether it fits.
 
 ## Select material privately
 
-Inspect `cards/`, `graph/`, and `materials/` with native file search and read tools.
-The method graph helps locate material; card metadata describes the source, not the
-student. Check the full card before using it, including answer correctness and whether
-its structure matches the public purpose.
+Keep disposable asset search out of this long-lived Plan Session:
+
+1. If the exact asset path is already agreed and no comparison is needed, read it
+   directly.
+2. If finding material would require exploratory `ls`, `grep`, `find`, or opening
+   several candidates, call `study-material-scout` once instead. Do not preload its
+   evidence or run a parent search first.
+3. Run it in the foreground with `context: "fresh"`, `async: false`,
+   `includeProgress: false`, `maxRuntimeMs: 180000`, `artifacts: false`, and
+   `agentScope: "user"`.
+4. Its task must name the current Plan path, relevant closed Lesson paths, public
+   purpose, requested asset or activity kind, count and workload, structures or recent
+   assets to avoid, and student preferences that change fit.
+5. Choose from its compact index, then read only the selected full asset in this
+   Session. Verify the source, answer correctness, and fit before using it.
+
+The method graph helps the Scout locate material; card metadata describes the source,
+not the student. The Scout recalls and compares assets but never decides capability,
+teaching sequence, Lesson structure, hint policy, Plan completion, or persistent facts.
+Post-class review is not a Scout task: read the closed Lesson directly.
+
+If the Scout fails or returns no suitable real material, one fresh retry with a
+corrected task is allowed. Do not fall back to inline bulk search. After a second
+failure, create no Lesson; tell the student which public condition cannot be met and
+ask what they want to change.
 
 Student-facing preparation may name the lesson purpose, source or problem number,
 activity count, workload, and interaction form. Keep decisive transformations,
 answers, hidden route comparisons, expected traps, and intervention timing inside
 `Teacher Control` until the class needs them.
 
-If suitable material cannot satisfy an agreed condition, create no misleading Lesson.
-Tell the student which public condition cannot currently be met and ask what they want
-to change. Never silently turn three activities into two or a diagnostic class into a
-different kind of class.
+This privacy rule applies to the whole preparation turn, not only the Lesson file.
+While searching cards or writing the Lesson, call tools without narrating candidate
+card IDs, stems, answers, correct routes, route-to-Block mappings, expected traps, or
+rejection reasons in assistant text. Tool preambles and progress notes are visible to
+the student too. After the files are written and reread, report only the public purpose,
+source/problem number when useful, activity count, workload, and interaction form.
+
+Never silently turn three activities into two or a diagnostic class into a different
+kind of class.
 
 ## Write a prepared Lesson
 
