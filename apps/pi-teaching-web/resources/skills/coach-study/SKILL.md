@@ -45,26 +45,30 @@ Keep disposable asset search out of this long-lived Plan Session:
 1. If the exact asset path is already agreed and no comparison is needed, read it
    directly.
 2. If finding material would require exploratory `ls`, `grep`, `find`, or opening
-   several candidates, call `study-material-scout` once instead. Do not preload its
-   evidence or run a parent search first.
-3. Run it in the foreground with `context: "fresh"`, `async: false`,
-   `includeProgress: false`, `maxRuntimeMs: 180000`, `artifacts: false`, and
-   `agentScope: "user"`.
-4. Its task must name the current Plan path, relevant closed Lesson paths, public
-   purpose, requested asset or activity kind, count and workload, structures or recent
-   assets to avoid, and student preferences that change fit.
-5. Choose from its compact index, then read only the selected full asset in this
-   Session. Verify the source, answer correctness, and fit before using it.
+   several candidates, make one foreground `subagent` call with three tasks. Do not
+   preload its evidence or run a parent search first.
+3. Give all three tasks the same compact teaching brief: current Plan path, relevant
+   closed Lesson paths, public purpose, requested asset or activity kind, count and
+   workload, structures or recent assets to avoid, and student preferences that
+   change fit. Use the lane names `graph-first`, `card-text-first`, and
+   `teaching-fit-first`.
+4. Run the three copies of `study-material-scout` with `concurrency: 3`,
+   `context: "fresh"`, `async: false`, `includeProgress: false`, `artifacts: false`,
+   and `agentScope: "user"`. Do not set `timeoutMs` or `maxRuntimeMs`.
+5. Wait for every lane to settle. Merge the compact indexes, deduplicate by
+   `asset_path`, and choose using the current Plan and student conversation.
+6. Read only the selected full asset in this Session. Verify the source, answer
+   correctness, and fit before using it.
 
 The method graph helps the Scout locate material; card metadata describes the source,
 not the student. The Scout recalls and compares assets but never decides capability,
 teaching sequence, Lesson structure, hint policy, Plan completion, or persistent facts.
 Post-class review is not a Scout task: read the closed Lesson directly.
 
-If the Scout fails or returns no suitable real material, one fresh retry with a
-corrected task is allowed. Do not fall back to inline bulk search. After a second
-failure, create no Lesson; tell the student which public condition cannot be met and
-ask what they want to change.
+If one lane fails, keep any suitable results returned by the other lanes. If the merged
+result has no suitable real material, create no Lesson, do not automatically repeat
+the fan-out, and do not fall back to inline bulk search. Tell the student which public
+condition cannot be met and ask what they want to change on a later turn.
 
 Student-facing preparation may name the lesson purpose, source or problem number,
 activity count, workload, and interaction form. Keep decisive transformations,
@@ -72,11 +76,12 @@ answers, hidden route comparisons, expected traps, and intervention timing insid
 `Teacher Control` until the class needs them.
 
 This privacy rule applies to the whole preparation turn, not only the Lesson file.
-While searching cards or writing the Lesson, call tools without narrating candidate
-card IDs, stems, answers, correct routes, route-to-Block mappings, expected traps, or
-rejection reasons in assistant text. Tool preambles and progress notes are visible to
-the student too. After the files are written and reread, report only the public purpose,
-source/problem number when useful, activity count, workload, and interaction form.
+While searching cards or writing the Lesson, call tools without narrating lane
+progress or failures, candidate card IDs, stems, answers, correct routes,
+route-to-Block mappings, expected traps, or rejection reasons in assistant text. Tool
+preambles and progress notes are visible to the student too. After the files are
+written and reread, report only the public purpose, source/problem number when useful,
+activity count, workload, and interaction form.
 
 Never silently turn three activities into two or a diagnostic class into a different
 kind of class.

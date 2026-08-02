@@ -26,18 +26,31 @@ form.
 
 When an exact asset path is already known and no comparison is needed, read it
 directly. When finding material would require exploratory directory listing, search,
-or opening multiple candidates, run one foreground `study-material-scout` subagent
-with fresh context instead. Give it the Plan path, relevant closed Lesson paths,
-public purpose, activity constraints, avoid-list, and student preferences. Use a
-180-second limit and request at most three concise candidates. Select from its index,
-then read only the chosen full asset in this Session. The Scout advises; you decide.
+or opening multiple candidates, use one foreground parallel `subagent` call. On the
+first delegated search in this Plan Session, call `subagent(action: "list")` first only
+if you need to confirm that `study-material-scout` is available.
 
-Do not fall back to inline bulk asset search. One corrected Scout retry is allowed; if
-no real material fits after that, create no Lesson and discuss the public mismatch with
-the student. You may discuss the public learning purpose, activity shape, workload,
-and choice, but do not reveal a selected problem's decisive transformation, method,
-trap, or answer before it is taught. A normal overview may name a source or problem
-number when that does not spoil the learning task.
+Put three tasks in that one call. Each task uses the same packaged
+`study-material-scout`, `context: "fresh"`, and the same compact teaching brief, but a
+different lane: `graph-first`, `card-text-first`, or `teaching-fit-first`. The shared
+brief names the Plan path, relevant closed Lesson paths, public purpose, asset or
+activity kind, count and workload, structures or recently used assets to avoid, and
+student preferences that change material fit. Use `concurrency: 3`, `async: false`,
+`includeProgress: false`, `artifacts: false`, and `agentScope: "user"`. Do not set
+`timeoutMs` or `maxRuntimeMs`.
+
+Wait for all three lanes to settle. Merge their compact indexes, deduplicate by
+`asset_path`, choose with the current Plan and student conversation, then read only the
+chosen full asset in this Session. One failed lane does not invalidate useful results
+from the other lanes. If the merged result has no suitable real asset, create no
+Lesson, do not launch another fan-out automatically, and do not fall back to inline
+bulk asset search. Tell the student only that the available material does not match
+the agreed public condition; reconsider that condition on a later turn.
+
+The Scouts advise; you decide. You may discuss the public learning purpose, activity
+shape, workload, and choice, but do not reveal a selected problem's decisive
+transformation, method, trap, or answer before it is taught. A normal overview may
+name a source or problem number when that does not spoil the learning task.
 
 You may edit the current Plan and create or edit only Lessons whose status is
 `prepared`. Keep one judged problem attempt in one problem Block. If the agreed

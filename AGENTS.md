@@ -58,12 +58,14 @@ The model receives only:
 5. the role's Skills.
 
 Every node has the native `read`, `grep`, `find`, `ls`, `edit`, and `write` tools. A
-Plan Session additionally has `subagent` for one packaged read-only
-`study-material-scout`. The Scout uses fresh context and only `read`, `grep`, `find`,
-and `ls`; it returns a compact asset index and cannot write teaching facts. Roadmap and
-Lesson Sessions do not receive `subagent`. Node activation and completion are student
-UI actions handled by Runtime code. Do not replace these actions with prompt
-conventions or model tool calls.
+Plan Session additionally has `subagent` for three concurrent fresh-context copies of
+one packaged read-only `study-material-scout`: graph-first, card-text-first, and
+teaching-fit-first. The parent waits for all lanes, merges their compact indexes,
+chooses the material, and reads only the selected full asset. Scouts use only `read`,
+`grep`, `find`, and `ls`; they cannot write teaching facts. Roadmap and Lesson Sessions
+do not receive `subagent`. Node activation and completion are student UI actions
+handled by Runtime code. Do not replace these actions with prompt conventions or
+model tool calls.
 
 ## Teaching behavior owners
 
@@ -83,7 +85,9 @@ Session identity, lifecycle transitions, transport, and persistence. Do not add 
 wording tests for Skill prose; validate assembled resources plus real class behavior.
 The Material Scout is disposable working memory for asset search, not a Handoff,
 teaching-fact store, planner, or post-Lesson reviewer. The parent Plan Coach keeps final
-selection and every persistent write.
+selection and every persistent write. StudyForge sets no wall-clock deadline for a
+Scout fan-out, does not retry a failed fan-out automatically, and does not fall back to
+parent-side bulk asset search.
 
 ## App surface
 
