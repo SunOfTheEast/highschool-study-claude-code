@@ -1,0 +1,9 @@
+schema: highschool-study.problem-card.v1
+content_item_id: sample-card
+storage_uri: cards/sample.card.yaml
+stem: 设函数 $f(x)=e^x-ax$，讨论其最小值。
+graph:
+  method:
+    primary: 参变量分离
+    secondary:
+      - 同构变形与换元法
