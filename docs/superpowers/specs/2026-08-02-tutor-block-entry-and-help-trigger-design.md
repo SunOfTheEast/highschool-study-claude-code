@@ -23,13 +23,14 @@ Session 恢复和 Markdown 解析；不需要新增状态机、工具、投影�
 
 ```text
 read Lesson 与 Uses
-→ edit：pending 改为 active，并在该 Block 的 Classroom Log 追加开场记录
+→ edit：只把当前 Block 的 pending 改为 active
 → read Lesson，确认状态已经落盘
 → 呈现 Student View
 ```
 
-日志里写“已激活”不能替代 `Node State` 的真实状态。已有 active Block 时继续该 Block，
-不得同时激活第二个。
+激活编辑不与 `Classroom Log` 追加合并，避免为了匹配空日志而跨过下一个 Block 标题。
+第一次有意义交流后再按原规则追加日志。日志里写“已激活”不能替代 `Node State` 的真实
+状态。已有 active Block 时继续该 Block，不得同时激活第二个。
 
 ### 2. 帮助触发条件
 
