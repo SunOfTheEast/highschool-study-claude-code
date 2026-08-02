@@ -152,12 +152,13 @@ function oneSection(
   sections: MarkdownSection[],
   heading: string,
   path: string,
+  allowEmpty = false,
 ): string {
   const matches = sections.filter((section) => section.heading === heading);
   if (matches.length !== 1) {
     throw new StudyDocumentError(path, `expected exactly one "${heading}" section`);
   }
-  if (matches[0]!.content.length === 0) {
+  if (!allowEmpty && matches[0]!.content.length === 0) {
     throw new StudyDocumentError(path, `section "${heading}" cannot be empty`);
   }
   return matches[0]!.content;
@@ -337,7 +338,7 @@ export function readRoadmap(root: string): RoadmapDocument {
     longTermGoal: oneSection(sections, 'Long-term Goal', source.path),
     capabilityStandard: oneSection(sections, 'Observable Capability Standard', source.path),
     test: oneSection(sections, 'Test', source.path),
-    plans: parseTree(oneSection(sections, 'Plan Tree', source.path), source.path, 'plan'),
+    plans: parseTree(oneSection(sections, 'Plan Tree', source.path, true), source.path, 'plan'),
     currentPosition: oneSection(sections, 'Current Position', source.path),
     raw: source.raw,
   };
@@ -360,7 +361,7 @@ export function readPlan(root: string, requestedPath: string): PlanDocument {
     stageGoal: oneSection(sections, 'Stage Goal', source.path),
     capabilityStandard: oneSection(sections, 'Observable Capability Standard', source.path),
     test: oneSection(sections, 'Test', source.path),
-    lessons: parseTree(oneSection(sections, 'Lesson Tree', source.path), source.path, 'lesson'),
+    lessons: parseTree(oneSection(sections, 'Lesson Tree', source.path, true), source.path, 'lesson'),
     currentPosition: oneSection(sections, 'Current Position', source.path),
     nextLessonArrangement: oneSection(sections, 'Next Lesson Arrangement', source.path),
     raw: source.raw,

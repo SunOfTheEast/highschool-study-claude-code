@@ -111,6 +111,29 @@ test('reads child status only from child frontmatter', () => {
   expect(readPlan(root, 'plans/plan-001.md').raw).not.toContain('closed');
 });
 
+test('allows a Roadmap or Plan to begin without materialized children', () => {
+  const root = copyFixture();
+  const roadmapPath = join(root, 'ROADMAP.md');
+  const planPath = join(root, 'plans/plan-001.md');
+  writeFileSync(
+    roadmapPath,
+    readFileSync(roadmapPath, 'utf8').replace(
+      /## Plan Tree\n\n[\s\S]*?\n## Current Position/,
+      '## Plan Tree\n\n## Current Position',
+    ),
+  );
+  writeFileSync(
+    planPath,
+    readFileSync(planPath, 'utf8').replace(
+      /## Lesson Tree\n\n[\s\S]*?\n## Current Position/,
+      '## Lesson Tree\n\n## Current Position',
+    ),
+  );
+
+  expect(readRoadmap(root).plans).toEqual([]);
+  expect(readPlan(root, 'plans/plan-001.md').lessons).toEqual([]);
+});
+
 test('reports the source file and reason for malformed or legacy documents', () => {
   const cases = [
     ['missing section', (source: string) => source.replace('## Lesson Goal', '## Goal')],

@@ -29,11 +29,7 @@ session_id: null
 
 ## Plan Tree
 
-- [plan-001 | 建立真实学习起点](plans/plan-001.md)
-  - After:
-  - Depends on:
-
 ## Current Position
 
-学习集已经准备好一个不预设弱点的起点阶段。先由学生开始 Plan，通过具体问诊
-确定第一条真正值得训练的主线。
+尚未建立第一个学习阶段。先在 Roadmap Session 中介绍学习集，并通过具体问诊与
+学生共同确定一个有边界、可检验的首个 Plan；不预先替陌生学生指定薄弱点。

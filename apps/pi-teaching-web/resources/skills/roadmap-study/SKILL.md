@@ -57,6 +57,8 @@ place future Lesson links in its `Lesson Tree`. Leave that tree empty. A Lesson 
 entry means the linked Lesson file already exists and can be parsed; only the Plan
 Session may establish that pair. The agreed number or sequence of lessons belongs in
 the Plan's prose until the Plan Session has prepared the actual child documents.
+"Empty" means there is no text at all between `## Lesson Tree` and the following
+heading: do not insert a parenthetical note, placeholder, comment, or future filename.
 
 Discuss the public purpose with the student before creating it. Roadmap edits may
 reorder, add, or remove only future Plans with `status: prepared`. Active and completed
