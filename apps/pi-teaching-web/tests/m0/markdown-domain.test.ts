@@ -115,7 +115,7 @@ test('reports the source file and reason for malformed or legacy documents', () 
   const cases = [
     ['missing section', (source: string) => source.replace('## Lesson Goal', '## Goal')],
     ['invalid status', (source: string) => source.replace('status: active', 'status: paused')],
-    ['legacy section', (source: string) => `${source}\n## Handoff\n\nOld summary.\n`],
+    ['unsupported section', (source: string) => `${source}\n## Retired Section\n\nOld summary.\n`],
   ] as const;
 
   for (const [label, mutate] of cases) {

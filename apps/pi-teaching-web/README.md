@@ -1,44 +1,34 @@
-# StudyForge Pi 教学前端
+# StudyForge M0 本地教学 App
 
-这是 `highschool-study` Markdown 学习集的本地 Pi 前端。学生界面使用三层术语：
-Roadmap 是“学习总览”，Plan Coach 是“学习顾问”，Lesson Tutor 是“课堂导师”。
-Roadmap、Plan、Lesson 组成一棵控制树；每个激活过的节点拥有独立 Session。各
-Session 的历史不会互相复制，只通过冻结的 Activation Snapshot、子节点 Handoff
-和全局 active Trace 交接。
+这是 StudyForge 的干净 M0：一个 Markdown-first、单人、本地运行的 Pi 教学工作台。
+它保留 Roadmap、Plan、Lesson 三级课程治理和 Block 课堂流程，删除了旧版独立记忆、
+对象化课堂事实、派生能力层、专用教学工具与子任务工作流。
 
-## Message projection
+## 运行结构
 
-学生 Session 默认使用 `safe`：纯文本消息完成后才显示；包含工具调用的混合消息改为结构化工作状态。`lesson_prepare` 成功后，Coach 随后的自由回复会被一张课程就绪卡替代，只显示课堂环节数量和类型，不显示真实课题、题目、方法或选卡理由。Pi 原始 Session JSONL 不会被修改。
+```text
+Roadmap Session
+  └── Plan Session
+      └── Lesson Session
 
-`raw-stream` 只用于本地诊断，因为它可能显示混合工具文本：
+父节点需要历史
+  → read 对应子文档
+  → 必要时继续读具体 Lesson Block
+  → 作出下一步教学决定
+```
 
-`bun run start -- --message-projection raw-stream`
+每个节点拥有独立原生 Pi Session。不同 Session 不复制聊天历史；Lesson 中真实发生的
+对话、提示、纠正和决定直接追加到对应 Block 的 `Classroom Log`，下一次备课时由
+Plan Session 重新读取。
 
-等价环境变量为 `STUDYFORGE_MESSAGE_PROJECTION=raw-stream`。
-
-## 视觉主题
-
-默认主题为“留白新中式”：暖白纸色、墨黑正文和低饱和青绿强调色组成同一套学习总览、学习顾问、课堂导师与 Replay 视觉语言。界面优先保留阅读空间和信息层级，不使用大面积渐变、浮空卡片或角色全局染色；陪伴风格只影响头像及局部点缀，不改变教学状态的语义颜色。
-
-主题 token 集中在 `src/client/theme-liubai.css`，页面结构和状态样式保留在 `src/client/styles.css`。根视图通过 `data-theme="liubai-xinzhongshi"` 与 `data-view="roadmap | coach | tutor | replay"` 标记当前界面，后续视觉调整应继续复用这些语义入口。
-
-## 当前界面与路由
-
-- `/` 是续学优先首页，同时投影 Roadmap → Plan → Lesson 课程树。Candidate
-  只是父节点内的建议，没有文件、Session 或聊天入口；prepared 节点只有显式
-  “开始”动作，不会因为浏览或刷新而启动模型。
-- `/roadmap` 是“学习总览”，对应 Roadmap-scoped Coach Session，用于首次目标商议、跨 Plan 回看和开启新学习周期，不承担具体 Plan 的日常备课。
-- `/plan/<planId>` 是该 Plan 的“学习顾问”。课程树列出所有 Candidate 与已物化
-  Lesson；Session 历史只列出已经激活并拥有 owner 匹配 Session 的课堂。
-- `/plan/<planId>/lesson/<lessonId>` 根据 Lesson 状态显示待开始课堂、active/paused 课堂导师或 closed/abandoned 只读 Replay。刷新、后退、前进和深链都会从 Markdown 状态与 owner 匹配的 Pi Session 恢复。
-
-课堂进行时，唯一 active ActivityBlock 的 Student View 和已揭示题卡固定在聊天上方；未开始内容不会随聊天提前出现。右侧 `ContextStack` 是一列文档式情境：课堂导师下显示课堂脉络、方法进展、近期学习记录和深入查找，学习顾问与 Replay 使用同一结构显示各自需要的上下文。研习资料、陪伴风格和证据来源以 overlay 打开；长期记忆确认卡留在原聊天时间线。它们都不会创建第二套路由，也不会替换当前 Session。
+模型只看到共享教学原则、当前角色、学习指南和节点身份，并且只调用六个 Pi 原生
+文件工具：`read`、`grep`、`find`、`ls`、`edit`、`write`。
 
 ## 环境
 
-- Bun 1.3 或更新版本
-- Pi（本仓库当前使用 `@earendil-works/pi-coding-agent`）
-- 已配置的 Pi 模型；只浏览学习集和运行无模型测试时不需要模型凭据
+- Bun 1.3+
+- Pi `@earendil-works/pi-coding-agent`
+- 已在 Pi 中配置可用模型
 
 安装 Pi：
 
@@ -46,225 +36,168 @@ Session 的历史不会互相复制，只通过冻结的 Activation Snapshot、�
 npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 ```
 
-## 安装与验证
-
-从仓库根目录执行：
+安装 App 依赖并验证：
 
 ```bash
 cd apps/pi-teaching-web
 bun install
 bun run check
-bunx playwright install chromium
-bunx playwright test
+bun run test:e2e -- tests/e2e/m0-cycle.spec.ts
 ```
 
-如果网络使用额外 CA，可把本机 CA 文件传给 Chromium 安装命令：
+## 直接启动
 
-```bash
-NODE_EXTRA_CA_CERTS=/path/to/ca.pem bunx playwright install chromium
-```
-
-## 直接启动网页
+先构建前端，再指定 learning set：
 
 ```bash
 cd apps/pi-teaching-web
+bun run build
 STUDY_LEARNING_SET="$PWD/../../examples/derivative-m0/learning-set" bun run start
 ```
 
-打开 <http://127.0.0.1:65000>。服务只监听本机，Bun 同时提供 API、WebSocket 事件流和构建后的前端。
+打开 <http://127.0.0.1:65000>。服务只监听 `127.0.0.1`。
 
-开发模式使用两个进程：
+开发模式：
 
 ```bash
 STUDY_LEARNING_SET="$PWD/../../examples/derivative-m0/learning-set" bun run dev:server
 bun run dev:client
 ```
 
-前端地址为 <http://127.0.0.1:65001>。需要查看完整 Lesson 源文档时，可给服务端命令增加 `--authoring`；普通学生模式永远不返回 Teacher Control、答案、rubric 或解法字段。
+前端默认为 <http://127.0.0.1:65001>，并代理本地 API 与 WebSocket。
 
-## 作为 Pi Package 安装
-
-本地路径安装不会复制项目，因此先保留仓库并安装依赖、构建前端：
+## 作为 Pi Package 使用
 
 ```bash
 cd /path/to/highschool-study-claude-code/apps/pi-teaching-web
 bun install
 bun run build
 pi install "$PWD"
-pi list
 ```
 
-进入包含 `learning-set/` 的目录：
-
-```bash
-cd /path/to/study-project
-pi
-```
-
-然后在 Pi 中运行：
+进入包含 `learning-set/` 的目录并启动 Pi，然后运行：
 
 ```text
 /study-web
 ```
 
-也可以指定学习集路径：
+也可以传入路径：
 
 ```text
-/study-web ./examples/derivative-m0/learning-set
+/study-web /path/to/learning-set
 ```
 
-该命令启动本地服务、打开浏览器，并在 Pi Session 结束时关闭服务进程。
+## 学生流程
 
-## 学生使用流程
+1. Roadmap Session 先介绍学习集的目的、范围与价值，再逐步问诊。
+2. 学生打开一个 `prepared` Plan 并点击“开始这一阶段”。
+3. Plan Session 读取当前 Plan 和已关闭 Lesson，讨论并准备下一课。
+4. 学生打开一个 `prepared` Lesson 并点击“开始本课”。
+5. Tutor 按 Block 教学，把真实过程追加到当前 Block 日志。
+6. 学生决定结束本课，页面回到父 Plan 复盘。
+7. 达到阶段标准后，由学生完成 Plan 并回到 Roadmap 商议下一周期。
 
-1. 从首页课程树或“继续学习”入口回到原位置；查看学习集概述、研习要领或学习总览不会覆盖这个位置。
-2. 没有 Plan 或需要跨 Plan 规划时，Roadmap Coach 先增加 Plan Candidate。学生选择后 Runtime 才物化 prepared Plan，再由学生点击激活独立 Plan Session。
-3. 在 Plan 的“学习顾问”中讨论方向、复盘前课 Handoff 或请求备课。Coach 先增加 Lesson Candidate，再只物化近期 Lesson。
-4. 备课完成后，Coach 对话中出现无剧透课程就绪卡。prepared Lesson 在课程树和开始页都只使用通用名称；学生点击“开始上课”、通过机械准入并创建或恢复独立课堂导师 Session 后，真实课题才出现。
-5. 上课时，当前 active ActivityBlock 固定在聊天上方，课堂导师只推进已经揭示的 Student View。右侧课堂情境保留整节课的文档脉络，学生也可以上传 PNG、JPEG 或 WebP 草稿。
-6. “研习资料”搜索真实题卡、方法、材料和学习记录。active/paused 课堂导师只能访问当前已揭示资产与本课允许的 active Trace；学习顾问和 closed/abandoned Replay 可以访问完整的学生安全资产集；未启动 Tutor 和学习总览不开放这项搜索。
-7. 在 Session 历史中从 active 课堂导师切到学习顾问或其他 Session 时，前端先把 Lesson 暂停；重新打开后沿原 ActivityBlock 和原 Session 继续。
-8. 学生确认结束后，课堂导师写入 Lesson Summary 和带来源 Handoff 并关闭 Lesson。合法 Claim 无法形成时使用 source-only Handoff，不阻塞结课。页面停留在只读 Replay；只有学生点击“返回学习顾问”才进入复盘。
+浏览或刷新不会改变生命周期。Plan 状态只有
+`prepared → active → completed`，Lesson 状态只有
+`prepared → active → closed`；终态节点不重新打开，后续学习使用新的子节点。
 
-“方法进展”只是 Trace 主/次方法的加权投影。点击任一节点都能回到原始 Trace 和安全题卡元数据；它不是独立的掌握度事实。
+## 页面与路由
 
-## Session、证据与重新备课
+只有两个主页面：
 
-- Roadmap Coach 绑定 `roadmap / ROADMAP.md`，负责长期方向、Plan Candidate 和 Roadmap checkpoint。`plan_prepare` 由 Runtime 分配 Plan ID、路径和父子关系；Roadmap 不修改已物化 Plan。
-- Plan Coach 绑定当前 Plan，负责 Lesson Candidate、当前 Plan 决定和 Plan Handoff。`lesson_prepare` 由 Runtime 分配 Lesson ID、路径、Block 与 alias；Plan 不修改 active 或 terminal Lesson。
-- Tutor 绑定当前 Lesson，负责 Block、全局 Trace、Lesson Summary/Handoff 和另解。模型不填写 owner path、父节点、Session ID、Runtime 分配的节点 ID 或 Block ID。
-- 每个 Pi Session 只有一条 `studyforge.session-owner.v2`，由
-  `nodeKind + nodeId + nodePath + parentId + parentPath` 决定身份；五项全部匹配
-  才复用 frontmatter 中的 Session ID，展示名称不参与身份判断。
-- 三类 Node Session 都没有面向整个 learning set 的通用文件写入工具。Plan/Lesson
-  激活和长期记忆应用是 Runtime-only 动作。
-- Tutor 在评价前只冻结学生已经亲自给出的数学内容。缺决定性证明时写 `incomplete`，不能把 Tutor 的补全冒充成学生证据。
-- `support` 记录最终答案实际采用的帮助。提示出现但未提供/未被采用决定性内容时仍可为 `none`；采用 Tutor 首次给出的关键内容时为 `tutor`。
-- 题卡方法只是候选。学生确认节点贴切后才写实际方法；拒绝、无精确节点或暂不决定时保留未映射路线。
-- 只有某一整题或一问的完整核心路线真正不同才落盘另解；写入顺序是 active correct Trace → `card_alternative_append` → 学生回复。
-- 学生异议成立或后续补全同一 attempt 时，新的 Trace 必须 supersede 准确的 active event。
+- **课程脉络**：课程树、中央对话、节点原文或课堂 Block。左右栏默认收起，让对话
+  成为主要工作区。
+- **知识山河**：浏览静态方法图谱、题卡和材料，不显示个人掌握或学习建议。
 
-`lesson_close` 写入学生可见 Lesson Summary、`status: closed` 和 Handoff，不会完成、
-跳过或重排任何 Block。Handoff Claim 是可下钻的压缩索引，不取代 active Trace；
-更正 Trace 后可以重建能力图与 Planner Attention，但不会级联改写 Summary、
-Handoff、Plan、另解 sidecar 或已确认画像。依赖旧 revision 的 Claim 在读取时标为
-invalidated。
+```text
+/course
+/course/plan/:planId
+/course/plan/:planId/lesson/:lessonId
+/knowledge
+```
 
-Plan 完成后，页面首先显示阶段结论、适用范围和下一步；展开“为什么这样判断”后，记录分为“最能说明这一点”“可以作为参考”“还需要再看看”三层。前两层的来源按钮会打开现有证据透镜，回到对应 active Trace；“这和我的实际情况不一样”只把带来源的异议模板填进输入框，学生仍可修改并自行发送，不会暗中发出请求。
+URL 是当前节点选择的来源。刷新、前进后退和深链会恢复同一节点，并从 frontmatter
+中的 `session_id` 恢复 owner 匹配的 Pi Session。
 
-`PlanBlueprint` / `LessonBlueprint` 只存在于普通工具调用记录中，不是第二份学习
-状态；物化后的 Markdown 才是课程节点事实。仍为 `prepared` 的子节点可以沿同一
-Candidate handle 原地重备；active、paused 或 terminal 子节点保留历史，父节点新建
-替代 sibling。
+## Learning set 契约
 
-Trace 写入成功后，服务端主动发布完整能力 snapshot；刷新、前进/后退和 Plan/Lesson 深链会从 Markdown 与已绑定 Pi Session 恢复 Coach、Tutor 或 closed Replay。Replay 优先使用真实 Pi 历史；历史不可用时明确显示 evidence-only。
+```text
+learning-set/
+├── LEARNING_GUIDE.md
+├── ROADMAP.md
+├── plans/
+├── lessons/
+├── cards/
+├── graph/
+└── materials/
+```
 
-## Coach 问诊与教学判断
+Roadmap 必须包含 `Overview`、`Long-term Goal`、可观察能力标准、`Test`、Plan Tree 和
+当前位置。Plan 必须包含阶段目标、可观察能力标准、`Test`、Lesson Tree、当前位置和
+下一课安排。Lesson 至少包含一个 Block：
 
-首次 Roadmap 规划、Plan 完成后的下一周期规划，以及每节 Lesson 备课前，Coach
-都会先和学生做一段简短商议：每轮只问一个问题，通常连续问几个真正会改变安排
-的问题。下一问从学生刚说的模糊处继续，先问清是哪类题、什么情境、卡在哪一步、
-最近的具体例子或当时先试了什么，再讨论原因；它不是固定问卷，也不会把 Coach
-尚未验证的判断塞进问题里。
+```markdown
+## Block block-001：活动名称
 
-历史记录可以减少重复追问，但不能替代学生此刻的理解、意图和限制。Coach 会先
-复述自己的理解和暂定判断，让学生纠正；备课时还会给出无剧透的课堂意图，学生
-确认或调整后才检索题卡并写出 Lesson。一个有效判断必须有学生原话或学习来源，
-实际改变 Plan 或 Lesson，并说明什么后续表现会支持或推翻它。学生可以随时要求
-结束问诊，由 Coach 带着明确的不确定性继续。
+### Node State
 
-首次建立学习集时，Roadmap Coach 还会把双方确认的 Goal、Observable Capability
-Standard 和 Test 写回并重读，避免第一个 Plan 建立在模板占位上。具体执行分别由
-`roadmap-study`、`plan-next-cycle` 和 `coach-study` 三份 Skill 负责，不增加问卷
-schema、诊断分数或新的 Agent。
+- Kind: dialogue | problem | material | reflection
+- Required: true | false
+- Status: pending | active | completed | skipped
+- Depends on:
+- Uses:
 
-## 长期记忆与界面偏好
+### Student View
 
-completed Plan 的学习顾问可以把带来源的 `add / revise / delete` 长期记忆候选放进原聊天时间线。候选默认都不选择；学生逐项采用、改写后采用或不采用，也可以稍后处理。状态依次是：
+学生当前可以看到的内容。
 
-- `proposed`：待学生逐条确认；
-- `submitted`：选择已经保存，正在等待写入；失败时仍停在这里，可以在同一 Coach 对话重试；
-- `applied`：运行时已经用回滚安全的双文件操作更新两份画像，并保存了写入回执。
+### Teacher Control
 
-画像条目使用稳定 `S*` / `T*` ID，并保存 Content、Scope、Sources、Rationale 和
-Counter-evidence。候选必须来自 completed Plan Handoff 的有效 Claim；学生逐项确认
-后，Runtime 校验 review ID 和当前画像，以回滚安全的双文件操作写入并保存 receipt。
-模型没有记忆应用工具，也不能通用编辑画像。Coach 成功后重读
-`student-profile.md` 与 `teaching-profile.md` 再报告。
+教师备课说明；普通课堂面板不展示。
 
-“陪伴风格”按 Coach/Tutor Session 单独保存到 Pi Session custom entry，不复制到其他 Session，也不改变题卡、评价、Trace 或学习标准。柔和动效与完成反馈只保存在当前浏览器的 `studyforge.presentation.v1`，不会进入 learning set、Session 或模型上下文；系统要求减少动态效果时优先关闭动效。
+### Classroom Log
 
-## 深度模式与动态工作流
+- 课堂中真实发生的一条记录。
+```
 
-深度模式按 Coach/Tutor Session 单独开启，默认关闭。信息足够时，父 Agent 仍直接回答；跨题卡、跨 Lesson 或 Plan 级检索会把大体量证据留在一个临时 Evidence Scout 中，多个任务只用于真正独立、且结论可能改变下一步教学动作的问题。
+严格解析器拒绝路径逃逸、父子身份不一致、重复 ID、非法状态和旧版 Lesson 区块；
+它不自动兼容旧 learning set。
 
-唯一例外是 Plan 第一次准备判定 `complete`：即使开关关闭，学习顾问也会运行一次单任务 Quick Evidence Scout，用 50,000 token、最多 180 秒检查拟定结论、适用范围和来源中的冲突、遗漏或无法重读项。它只返回核对材料，不替 Coach 判定完成；失败或超时会让 Coach 收窄结论边界并留下待检问题。前端显示进度，子任务原始结论仍不直接面向学生。
+## Agent 职责
 
-- `quick` 最多三个无依赖任务，最长 180 秒，可以直接运行；Token 总预算由父 Agent 显式声明，单个 Plan 级 Evidence Scout 约定使用 50,000，因为子任务输入和题卡/Trace 工具结果都计入预算；
-- `deep` 可以包含依赖波，但必须先在任务轨显示目标、并发、Token 与时间上限，由学生确认后才运行；
-- proposed/running 工作流可以取消；已经完成的分支结果会保留，未完成任务不会自动重试；
-- 任务状态保存在父 Pi Session JSONL 的 custom entries，Lesson、Trace、Plan 和画像等正式学习状态仍保存在 Markdown；
-- 父 Agent 只向 Evidence Scout 传证据问题和范围，不先批量读取同一范围；子进程的 `card_search` / `trace_search` 只返回题卡路径、标题、目标、方法元数据和 active Trace，不返回题干正文或解析；
-- Quick 的紧凑结果直接回到当前父 Agent 工具调用；确认后的 Deep 通过隐藏的 `studyforge.workflow-result.v1` 消息恢复父 Agent 综合；
-- 子任务原始 JSON 与运行 artifact 只供父 Agent/runtime 检查；Student View 运行中只显示安全化活动名、耗时、Token 和工具次数，完成后才显示召回题卡数与来源数；
-- 本地 MVP 不宣称账号隔离或操作系统级沙箱。临时 `study-scout` 不具备写入工具，但学习集仍应视为本机可信文件。
+- **Roadmap**：首次先介绍学习集，再一问一答地找到有价值的长期方向；只安排未来
+  `prepared` Plan。
+- **Plan**：每次备课前读取本 Plan 与所有已关闭 Lesson，把宽泛问题追问到具体
+  结构、题型和停点；私下检索题卡，不提前泄露决定性解法，也不静默缩减商定内容。
+- **Lesson**：按学生实际回答逐级提示，先验证不同路线；对方法名称没把握时询问
+  学生；不在正确另解后自动倾倒标准解。
 
-服务重启时，先前停在 running 的工作流会恢复为终态：有已完成结果则为 partial，否则为 failed；未完成任务标记为 cancelled。需要继续时由父 Agent 重新提出工作流，不会自动续跑。
+教学文本位于 `resources/agents/`、`resources/skills/` 和
+`resources/teaching/math-teaching-core.md`。
 
-## 长期学情研判
+## API 与事件
 
-当累计记录可能改变学习方向，或学生询问“下一阶段学什么”时，Coach
-按需加载 `plan-next-cycle`。普通课后复盘和已选 Plan 内的备课不经过这条
-重流程。
+M0 HTTP API 只提供：
 
-- 前序 Plan Handoff 是长期轨迹的索引；只有某条 Claim 可能改变决定时，才沿
-  来源下钻 Lesson Handoff、active Trace、Block、题卡或 Session；
-- 来源冲突时，active Trace 决定具体作答事实，Handoff Claim 是带范围和边界的
-  压缩索引，Planner Attention 只是可重建的备课提示；
-- Coach 同时读取已确认画像和 `LEARNING_GUIDE.md`，但不把偏好、方法信号
-  或单次成绩直接当作瓶颈结论；
-- 信息清楚时直接完成证据重建而不启动 Scout，但仍向学生复诊当前理解和意图；
-  历史广、相互冲突或会改变方向时，才选择一到三个真正独立的 Evidence Scout
-  问题；
-- Coach 先向学生说明判断、关键来源、不确定性和可能推翻判断的后续表现；
-  学生确认后先创建 Plan Candidate，选择后才物化和激活；
-- 新 Plan 的 `Planning Basis` 与 `Activation Snapshot / Adaptation Brief` 保存
-  这次工作判断；Plan 完成时由 `Plan Summary + Handoff` 对照真实结果回看。
+- `GET /api/health`
+- `GET /api/course`
+- `GET /api/knowledge`
+- `GET /api/sessions/:key/history`
+- `POST /api/sessions/:key/messages`
+- Plan/Lesson 的四个 student lifecycle action
 
-每份 Plan 使用当前树节点契约：`Goal`、`Observable Capability Standard`、
-`Test`、`Planning Basis`、`Activation Snapshot`、`Lesson Tree`、
-`Current Position`、`Plan Summary` 和 `Handoff`。旧的线性 Plan/Lesson 不自动
-兼容；应保留原来源后再按当前协议重建。
+`/events` 通过 WebSocket 传输原始教师文本、原生工具活动、运行状态、错误和文档
+失效通知。教师最终文本不经改写；工具调用作为默认折叠的独立活动项显示。
 
-这条闭环不增加数据库、能力分数或自动选 Plan 的规则引擎。Planning Basis
-仍是普通 Markdown，Coach 仍是唯一决策者。
+## 验收
 
-## 真实模型 smoke checklist
-
-建议先复制示例，避免测试写入仓库样例：
+确定性 E2E 覆盖 Roadmap 对话、Plan/Lesson 启停、Block 面板、工具活动、刷新恢复、
+Knowledge 和旧入口 404：
 
 ```bash
-cp -R examples/derivative-m0 /tmp/studyforge-derivative-smoke
-cd /tmp/studyforge-derivative-smoke
-pi
+bun run test:e2e -- tests/e2e/m0-cycle.spec.ts
 ```
 
-依次确认：
-
-- 从 Roadmap 增加一个 Plan Candidate，选择后物化 prepared Plan，并由学生显式
-  激活独立 Plan Session；
-- 让学习顾问读取上一节 Lesson Handoff，增加至少两个 Lesson Candidate，但只用
-  `lesson_prepare` 物化下一节；
-- 启动课堂导师，确认它拥有独立 Session 和冻结的 Activation Snapshot；
-- 分别提交文字与一张图片；
-- 让课堂导师在全局 `traces/` 池追加一条绑定 Plan/Lesson/Block/题卡的 Trace；
-- 暂停并继续同一个 Tutor Session；
-- 由学生明确确认结束 Lesson，检查带来源 Claim 或 source-only Handoff；
-- 在原 Tutor Replay 查看结课快照，再明确返回原 Plan Session 做课后复盘；
-- 完成 Plan 时同时封存 Plan Handoff，逐项确认记忆候选并验证 Runtime 写入 receipt。
-
-深度模式另行确认：先运行一次单 Evidence Scout 的 quick 证据召回，再提出一次有依赖的 deep 工作流并由学生确认；启动第二个 deep 工作流后取消，确认任务轨保留已完成分支，而且临时子任务没有改动 learning-set 文件。
-
-遇到问题时先运行 `bun run check`；模型调用失败通常需要在 Pi 中用 `/login` 或环境变量配置提供商凭据。
-
-完整功能语义见 [`docs/zh-CN/完整说明书.md`](../../docs/zh-CN/完整说明书.md)。
+自动化通过后，仍应在复制出的学习集上跑真实模型课程。M0 的下一阶段不是立即添加
+复杂记忆，而是完成一个 6 Lesson Plan 和第二个 2–3 Lesson Plan；只有直接读取子文档
+在多节真实课中反复失败，才设计 M1。

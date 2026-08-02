@@ -372,17 +372,9 @@ export function readLesson(root: string, requestedPath: string): LessonDocument 
   requireLiteral(source.frontmatter, 'kind', 'lesson', source.path);
   const status = requiredEnum<LessonStatus>(source.frontmatter, 'status', LESSON_STATUSES, source.path);
   const sections = splitSections(source.body, 2);
-  const forbidden = new Set([
-    'Activation Snapshot',
-    'Selected Context',
-    'Content Boundary',
-    'Adaptation Brief',
-    'Lesson Summary',
-    'Handoff',
-  ]);
   for (const section of sections) {
-    if (forbidden.has(section.heading)) {
-      throw new StudyDocumentError(source.path, `legacy section "${section.heading}" is not valid in M0`);
+    if (section.heading !== 'Lesson Goal' && !section.heading.startsWith('Block ')) {
+      throw new StudyDocumentError(source.path, `unsupported Lesson section "${section.heading}"`);
     }
   }
   const blockSections = sections.filter((section) => section.heading.startsWith('Block '));

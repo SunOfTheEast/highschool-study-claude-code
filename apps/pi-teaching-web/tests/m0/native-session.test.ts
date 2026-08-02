@@ -57,6 +57,9 @@ test('assembles only static teaching resources and native file tools', () => {
   const assembled = resources.agentsFiles.map((file) => file.content).join('\n');
 
   expect(resources.tools).toEqual(['read', 'grep', 'find', 'ls', 'edit', 'write']);
+  expect(resources.agentsFiles).toContainEqual(expect.objectContaining({
+    path: join(root, 'LEARNING_GUIDE.md'),
+  }));
   expect(assembled).toContain('导数结构学习集');
   expect(assembled).toContain('Current node file: plans/plan-001.md');
   expect(assembled).toContain('plan-node.md');

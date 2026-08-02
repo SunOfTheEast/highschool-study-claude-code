@@ -55,7 +55,7 @@ export function loadStaticNodeResources(
         content: `Role resource: ${roleFile}\n\n${file(join(resourceRoot, 'agents', roleFile))}`,
       },
       {
-        path: '/virtual/studyforge-m0-learning-guide.md',
+        path: join(root, 'LEARNING_GUIDE.md'),
         content: file(join(root, 'LEARNING_GUIDE.md')),
       },
       {

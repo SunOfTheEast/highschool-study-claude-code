@@ -17,7 +17,7 @@ test('renders the static method graph, cards and materials without personal over
   expect(markup).toContain('参变量分离');
   expect(markup).toContain('sample-card');
   expect(markup).toContain('materials/note.md');
-  expect(markup).not.toMatch(/掌握度|能力证据|BKT|Trace|稳定能力|学习建议/i);
+  expect(markup).not.toMatch(/个人掌握|能力评分|作答次数|稳定能力|学习建议/i);
 });
 
 test('filters static assets only by their own metadata', () => {
