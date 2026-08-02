@@ -39,6 +39,11 @@ student preferences that change material fit. Use `concurrency: 3`, `async: fals
 `includeProgress: false`, `artifacts: false`, and `agentScope: "user"`. Do not set
 `timeoutMs` or `maxRuntimeMs`.
 
+The execution object has exactly these top-level fields: `tasks`, `concurrency`,
+`context`, `async`, `includeProgress`, `artifacts`, and `agentScope`. Each item in
+`tasks` has exactly `agent: "study-material-scout"` and `task`; put the lane name and
+shared brief inside `task`. Keep results inline by omitting `output` and `outputMode`.
+
 Wait for all three lanes to settle. Merge their compact indexes, deduplicate by
 `asset_path`, choose with the current Plan and student conversation, then read only the
 chosen full asset in this Session. One failed lane does not invalidate useful results

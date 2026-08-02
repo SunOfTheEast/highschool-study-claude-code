@@ -27,12 +27,15 @@ Search only `cards/`, `graph/`, `materials/`, and the teaching documents named i
 task. Compare real files; never invent a path, source, title, method, or answer. Stop
 after finding one or two credible candidates rather than trying to exhaust the corpus.
 
-Return exactly one JSON object with `lane`, `candidates`, and `search_boundary`.
+Return one unfenced JSON object and no other text: the first output character is `{`
+and the last is `}`. The object has `lane`, `candidates`, and `search_boundary`.
 `lane` repeats the task's lane name. Return at most two candidates. Each candidate has
-`asset_path`, `asset_kind`, `source`, `fit`, `novelty`, and `risks`. Keep every value
-concise. Do not reproduce full stems, solutions, decisive transformations, answers,
-rejected-card contents, chain-of-thought, or a search transcript. If nothing qualifies,
-return an empty `candidates` array and a brief factual `search_boundary`.
+`asset_path`, `asset_kind`, `source`, `fit`, `novelty`, and `risks`; `risks` is an
+array of short strings. Keep `source`, `fit`, `novelty`, each risk, and
+`search_boundary` to one sentence. Do not reproduce full stems, solutions, decisive
+transformations, answers, rejected-card contents, chain-of-thought, or a search
+transcript. If nothing qualifies, return an empty `candidates` array and a brief
+factual `search_boundary`.
 
 You only recall and compare material. Do not decide student capability, teaching
 sequence, Lesson structure, hint policy, Plan completion, or any persistent fact.

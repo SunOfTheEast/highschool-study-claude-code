@@ -55,9 +55,13 @@ Keep disposable asset search out of this long-lived Plan Session:
 4. Run the three copies of `study-material-scout` with `concurrency: 3`,
    `context: "fresh"`, `async: false`, `includeProgress: false`, `artifacts: false`,
    and `agentScope: "user"`. Do not set `timeoutMs` or `maxRuntimeMs`.
-5. Wait for every lane to settle. Merge the compact indexes, deduplicate by
+5. Use exactly seven top-level fields: `tasks`, `concurrency`, `context`, `async`,
+   `includeProgress`, `artifacts`, and `agentScope`. Each task item contains exactly
+   `agent: "study-material-scout"` and `task`; keep results inline by omitting
+   `output` and `outputMode`.
+6. Wait for every lane to settle. Merge the compact indexes, deduplicate by
    `asset_path`, and choose using the current Plan and student conversation.
-6. Read only the selected full asset in this Session. Verify the source, answer
+7. Read only the selected full asset in this Session. Verify the source, answer
    correctness, and fit before using it.
 
 The method graph helps the Scout locate material; card metadata describes the source,
