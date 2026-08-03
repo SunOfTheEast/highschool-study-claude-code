@@ -21,6 +21,12 @@ Roadmap Session
 对话、提示、纠正和决定直接追加到对应 Block 的 `Classroom Log`，下一次备课时由
 Plan Session 重新读取。
 
+长 Plan Session 不等待百万 token 窗口接近耗尽才整理上下文。当一次回复已经完整结束、
+本轮成功写入 `lessons/*.md`，且当前上下文达到 20 万 token 时，运行时调用 Pi 原生
+compaction。压缩摘要只负责帮助同一个 Plan Session 接着工作，不是新的教学事实或
+Handoff；需要细节时仍重新读取原始 Markdown，Pi JSONL 中的原始历史也不会被删除。
+Roadmap、Lesson、失败写入以及仅修改 Plan 的回合都不触发这条规则。
+
 模型只看到共享教学原则、当前角色、学习指南和节点身份，并且只调用六个 Pi 原生
 文件工具：`read`、`grep`、`find`、`ls`、`edit`、`write`。
 

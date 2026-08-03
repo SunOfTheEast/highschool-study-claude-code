@@ -49,6 +49,13 @@ Every Roadmap, Plan, and Lesson has one node-owned native Pi Session. Ownership 
 `nodeKind + nodeId + nodePath + parentId + parentPath`; display labels do not identify
 a Session. Parent and sibling transcripts are never copied into a new node Session.
 
+A long Plan Session uses Pi's native compaction only at a semantic boundary: the
+settled turn successfully edited or wrote `lessons/*.md`, and active context usage is
+at least 200,000 tokens. The compaction summary is a working Session index, not a
+teaching fact or Handoff. Markdown remains authoritative, the parent rereads original
+documents when detail matters, and the append-only Pi JSONL keeps the raw history.
+Roadmap and Lesson Sessions do not use this StudyForge threshold.
+
 The model receives only:
 
 1. shared mathematics teaching principles;
