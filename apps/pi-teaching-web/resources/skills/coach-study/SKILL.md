@@ -38,6 +38,29 @@ A useful question changes material, sequence, pace, or support. Avoid generic su
 When the picture is clear, describe the intended change and activity shape without
 revealing an unseen problem, then ask whether it fits.
 
+## Choose one teaching shape on demand
+
+Choose the Lesson's main teaching purpose before searching for material:
+
+```text
+clear Lesson purpose → read the matching file in references/lesson-templates/
+unclear Lesson purpose → read references/lesson-templates/INDEX.md, choose, then read one file
+→ adapt its teaching functions to this student
+→ agree the public activity shape
+→ derive material slots only for Blocks that need external assets
+```
+
+Select by the change the Lesson should produce, not by its chapter or surface topic.
+Use one main template even when a few Blocks serve secondary needs; mixed needs do
+not create a new Lesson type. Keep stage consolidation on the current Plan's progress
+chain and spaced retrieval on the forgetting-time chain.
+
+The template is preparation guidance, not persistent state. Do not write its name as
+a field or ask Tutor to read the template library. Translate every decision Tutor
+needs into the existing Lesson Goal, Student View, Teacher Control, dependencies, and
+required or optional Blocks. If an agreed required material role remains unfilled,
+prepare no Lesson and return to the student rather than silently shrinking the class.
+
 ## Select material privately
 
 Keep disposable asset search out of this long-lived Plan Session:

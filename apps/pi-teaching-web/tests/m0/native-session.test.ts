@@ -1,5 +1,13 @@
 import { afterEach, expect, test } from 'bun:test';
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  cpSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
@@ -157,6 +165,28 @@ test('packages a read-only material Scout', () => {
   expect(toolsLine).toBe('tools: read, grep, find, ls');
   for (const forbidden of ['write', 'edit', 'bash', 'subagent']) {
     expect(toolsLine).not.toContain(forbidden);
+  }
+});
+
+test('packages the complete Coach lesson-template reference set', () => {
+  const directory = join(
+    import.meta.dir,
+    '../../resources/skills/coach-study/references/lesson-templates',
+  );
+  const expected = [
+    'INDEX.md',
+    'assessment.md',
+    'concept-construction.md',
+    'deliberate-practice.md',
+    'diagnostic.md',
+    'remediation.md',
+    'review-spaced-retrieval.md',
+    'review-stage-consolidation.md',
+  ];
+
+  expect(readdirSync(directory).sort()).toEqual(expected);
+  for (const name of expected) {
+    expect(readFileSync(join(directory, name), 'utf8').trim().length).toBeGreaterThan(0);
   }
 });
 
