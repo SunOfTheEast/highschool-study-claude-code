@@ -7,6 +7,29 @@ description: Use when direct Plan and Lesson records may change whether to conti
 
 Use learning history to sharpen a conversation, not to replace one.
 
+## Use one adaptive cycle grammar
+
+Plan from evidence in this order:
+
+```text
+bounded Goal + observable standard + direct test
+→ enough starting evidence
+→ one main reference in references/plan-cycles/
+→ a concrete public teaching arc
+→ closed Lesson evidence
+→ continue, repair, rediagnose, or independently verify
+```
+
+The selected archetype is disposable planning guidance. A phase names a teaching
+function, not a persisted node, Lesson count, or runtime state. Translate the useful
+functions into the Plan's existing prose and later treat that prose plus the original
+Lessons as authoritative. Do not store the template name or a phase cursor.
+
+When the stage problem makes the cycle obvious, read that one reference directly.
+When it does not, read `references/plan-cycles/INDEX.md`, choose, then read one. At a
+Plan node, do not reread generic cycle guidance on every turn: use it again only when
+the observed Lessons require the future arc to be reinterpreted or reordered.
+
 ## Reconstruct what changed
 
 At a Plan node, read the Plan and all of its closed Lessons. At the Roadmap node, read
@@ -38,3 +61,8 @@ Persist only what the current node owns. A Plan may update its own next arrangem
 and prepared Lessons. A Roadmap may arrange future prepared Plans. Earlier active or
 completed documents remain intact so later decisions can be traced back to the class
 where they arose.
+
+Keep two review chains distinct. Stage consolidation belongs to progress within the
+current Plan. A systematic-review cycle makes review the Plan's main goal. A future
+spaced-retrieval queue only places candidates on the Coach's desk; Coach may choose
+none, a warm-up Block, a review Lesson, or a review Plan.

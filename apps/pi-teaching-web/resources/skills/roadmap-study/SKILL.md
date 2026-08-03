@@ -52,6 +52,13 @@ A good Plan is a bounded stage problem, not a chapter label. Give it:
 - a public initial teaching arc in `Next Lesson Arrangement` that the Plan Session can
   turn into real Lessons.
 
+Fix the stage problem, standard, and direct test before choosing activities. Then use
+the shared `plan-next-cycle` references to choose one main cycle after diagnosis and
+translate its useful teaching functions into ordinary, student-readable arrangement
+prose. Do not copy a template name into the Plan. The arc is a revisable hypothesis:
+state meaningful uncertainty, invite the student to change it, and let later closed
+Lessons confirm, skip, repeat, merge, or reorder future functions.
+
 A Roadmap Session creates a complete prepared Plan by following the injected canonical
 document contract. It does not create Lesson files or materialize their links. Keep the
 agreed number, sequence, and purpose of future Lessons in the Plan's public arrangement

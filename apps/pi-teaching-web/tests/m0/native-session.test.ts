@@ -190,6 +190,26 @@ test('packages the complete Coach lesson-template reference set', () => {
   }
 });
 
+test('packages the complete shared Plan-cycle reference set', () => {
+  const directory = join(
+    import.meta.dir,
+    '../../resources/skills/plan-next-cycle/references/plan-cycles',
+  );
+  const expected = [
+    'INDEX.md',
+    'capability-construction.md',
+    'diagnostic.md',
+    'remediation.md',
+    'strategy-strengthening.md',
+    'systematic-review.md',
+  ];
+
+  expect(readdirSync(directory).sort()).toEqual(expected);
+  for (const name of expected) {
+    expect(readFileSync(join(directory, name), 'utf8').trim().length).toBeGreaterThan(0);
+  }
+});
+
 test('loads only the M0 skills selected for the current node', async () => {
   const root = copyFixture();
   const staleSkill = join(root, '.pi/skills/roadmap-study');

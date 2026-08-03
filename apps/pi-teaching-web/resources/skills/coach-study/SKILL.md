@@ -38,6 +38,21 @@ A useful question changes material, sequence, pace, or support. Avoid generic su
 When the picture is clear, describe the intended change and activity shape without
 revealing an unseen problem, then ask whether it fits.
 
+## Locate the next function in the Plan arc
+
+Before choosing a Lesson shape, compare all closed Lessons with the Plan's Goal,
+observable standard, and direct test. Decide which teaching function is now needed.
+Normally continue from the concrete `Next Lesson Arrangement`; the Plan and original
+Lesson logs are more authoritative than a generic cycle file.
+
+Read the `plan-next-cycle` index or one cycle reference again only when new classroom
+evidence makes the remaining arc need reinterpretation or reordering. Future
+functions may be skipped, repeated, merged, or reordered while the same stage problem
+and standard still hold. Discuss a consequential change with the student, then update
+`Current Position` and the future arrangement before preparing the next mature
+Lesson. If the stage problem itself has changed, return the decision to Roadmap. Do
+not edit closed Lessons or invent a phase-state field.
+
 ## Choose one teaching shape on demand
 
 Choose the Lesson's main teaching purpose before searching for material:
