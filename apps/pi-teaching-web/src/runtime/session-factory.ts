@@ -7,6 +7,7 @@ import {
   type AgentSessionEvent,
   type SessionEntry,
 } from '@earendil-works/pi-coding-agent';
+import { createPlanCompactionPrompt } from './plan-compaction';
 import { createRoleResourceLoader } from './resource-loader';
 import { appendSessionOwner } from './session-owner';
 import { modelToolsForNode, type NodeSessionScope } from './session-scope';
@@ -67,6 +68,7 @@ export async function createPiSessionFactory(root: string): Promise<StudySession
       tools: [...modelToolsForNode(scope.nodeKind)],
     });
     await bindStudyExtensions(session);
+    const compaction = createPlanCompactionPrompt(session, scope);
     return {
       get sessionId() {
         return session.sessionId;
@@ -83,10 +85,13 @@ export async function createPiSessionFactory(root: string): Promise<StudySession
       get isStreaming() {
         return session.isStreaming;
       },
-      prompt: (text, images = []) => session.prompt(text, { images }),
+      prompt: compaction.prompt,
       abort: () => session.abort(),
       subscribe: (listener) => session.subscribe(listener),
-      dispose: () => session.dispose(),
+      dispose: () => {
+        compaction.dispose();
+        session.dispose();
+      },
     };
   };
 }
