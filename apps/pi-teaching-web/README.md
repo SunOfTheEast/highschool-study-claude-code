@@ -28,7 +28,8 @@ Handoff；需要细节时仍重新读取原始 Markdown，Pi JSONL 中的原始�
 Roadmap、Lesson、失败写入以及仅修改 Plan 的回合都不触发这条规则。
 
 模型只看到共享教学原则、当前角色、学习指南和节点身份，并且只调用六个 Pi 原生
-文件工具：`read`、`grep`、`find`、`ls`、`edit`、`write`。
+文件工具：`read`、`grep`、`find`、`ls`、`edit`、`write`。启动时还可以给三个面向
+学生的节点统一装载一个人格表现层；人格只改变表达，不改变教学职责和文档事实。
 
 ## 环境
 
@@ -62,6 +63,21 @@ STUDY_LEARNING_SET="$PWD/../../examples/derivative-m0/learning-set" bun run star
 ```
 
 打开 <http://127.0.0.1:65000>。服务只监听 `127.0.0.1`。
+
+### 可选教师人格
+
+第一份可选人格是五条悟式导师。它让 Roadmap、Plan 和 Lesson 保持同一种轻松、
+自信而有判断力的表达气质：
+
+```bash
+STUDY_PERSONA=gojo \
+STUDY_LEARNING_SET="$PWD/../../examples/derivative-m0/learning-set" \
+bun run start
+```
+
+不设置 `STUDY_PERSONA` 时继续使用简洁的中性教师语气。第一版没有前端人格选择器，
+也不把人格偏好写进学习集或学生记忆；更换启动配置只影响之后新建或重新装载的
+Session 资源。
 
 开发模式：
 

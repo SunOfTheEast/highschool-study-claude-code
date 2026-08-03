@@ -58,11 +58,21 @@ Roadmap and Lesson Sessions do not use this StudyForge threshold.
 
 The model receives only:
 
-1. shared mathematics teaching principles;
-2. the node-role prompt;
-3. `LEARNING_GUIDE.md`;
-4. current node identity/path instructions;
-5. the role's Skills.
+1. the canonical document contract;
+2. `LEARNING_GUIDE.md`;
+3. shared mathematics teaching principles;
+4. the node-role prompt;
+5. an optional selected persona overlay;
+6. current node identity/path instructions;
+7. the role's Skills.
+
+Shared teacher agency has one semantic owner:
+`apps/pi-teaching-web/resources/teaching/math-teaching-core.md`. Role prompts apply it
+only at decisions specific to Roadmap, Plan, or Lesson. Optional files under
+`apps/pi-teaching-web/resources/personas/` change expression, rhythm, humour, and
+metaphor only; they never override mathematics, role authority, learning-set principles,
+or student agency. `STUDY_PERSONA=<id>` selects one overlay for all three student-facing
+node Sessions. The internal material Scout receives no persona or user-facing role-play.
 
 Every node has the native `read`, `grep`, `find`, `ls`, `edit`, and `write` tools. A
 Plan Session additionally has `subagent` for fresh-context copies of one packaged
@@ -121,6 +131,8 @@ items. The normal Lesson view shows `Student View` and Block progress, not
   registry, frontmatter edits, and lifecycle.
 - `apps/pi-teaching-web/resources/subagents/`: packaged read-only asset Scout used only
   by Plan Sessions.
+- `apps/pi-teaching-web/resources/personas/`: optional expression overlays shared by
+  Roadmap, Plan, and Lesson Sessions.
 - `apps/pi-teaching-web/src/server/`: minimal HTTP/WebSocket transport.
 - `apps/pi-teaching-web/src/client/`: Course/Knowledge App.
 - `apps/pi-teaching-web/tests/m0/`: current executable contract.

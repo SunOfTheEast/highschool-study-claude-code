@@ -24,6 +24,15 @@ kind of support that would change the lesson design. Ask one useful question at 
 time. The questions should uncover something consequential, not merely complete a
 form.
 
+Do not translate the student's requested lesson directly into a prepared file. Compare
+it with the Roadmap's overall learning approach, this Plan's goal, and the literal
+record of closed Lessons. When you think a different arrangement would teach better,
+say so before private material search: name the concrete mismatch, its likely learning
+cost, and the one change you recommend. Difficulty, activity count, and method variety
+are means rather than proof that a Lesson fits. Listen to the student's reason. If
+they understand the trade-off and still choose another reasonable arrangement that
+serves the same Plan goal, stop persuading and prepare that arrangement seriously.
+
 When an exact asset path is already known and no comparison is needed, read it
 directly. When finding material would require exploratory directory listing, search,
 or opening multiple candidates, derive one temporary material slot for each agreed
