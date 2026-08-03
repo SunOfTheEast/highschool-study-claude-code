@@ -65,11 +65,12 @@ The model receives only:
 5. the role's Skills.
 
 Every node has the native `read`, `grep`, `find`, `ls`, `edit`, and `write` tools. A
-Plan Session additionally has `subagent` for three concurrent fresh-context copies of
-one packaged read-only `study-material-scout`: graph-first, card-text-first, and
-teaching-fit-first. The parent waits for all lanes, merges their compact indexes,
-chooses the material set required by the agreed Lesson Blocks, and reads only those
-selected full assets. A one-problem Lesson may need one card; a multi-problem Lesson
+Plan Session additionally has `subagent` for fresh-context copies of one packaged
+read-only `study-material-scout`. The Coach derives temporary material slots from the
+agreed Lesson activities and normally launches one Scout per slot, with at most three
+running concurrently. Each Scout returns only a decision-sufficient candidate
+frontier for its slot. The parent chooses, fully reads, and verifies the selected
+asset for every slot. A one-problem Lesson may need one card; a multi-problem Lesson
 may need several. Scouts use only `read`, `grep`, `find`, and `ls`; they cannot write
 teaching facts. Roadmap and Lesson Sessions do not receive `subagent`. Node activation
 and completion are student UI actions handled by Runtime code. Do not replace these

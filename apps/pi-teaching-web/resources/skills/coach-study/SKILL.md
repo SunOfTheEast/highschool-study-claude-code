@@ -45,38 +45,47 @@ Keep disposable asset search out of this long-lived Plan Session:
 1. If the exact asset path is already agreed and no comparison is needed, read it
    directly.
 2. If finding material would require exploratory `ls`, `grep`, `find`, or opening
-   several candidates, make one foreground `subagent` call with three tasks. Do not
-   preload its evidence or run a parent search first.
-3. Give all three tasks the same compact teaching brief: current Plan path, relevant
-   closed Lesson paths, public purpose, requested asset or activity kind, count and
-   workload, structures or recent assets to avoid, and student preferences that
-   change fit. Use the lane names `graph-first`, `card-text-first`, and
-   `teaching-fit-first`.
-4. Run the three copies of `study-material-scout` with `concurrency: 3`,
+   several candidates, derive a temporary material slot for each agreed Block that
+   still needs an external asset. One problem Block normally yields one problem-card
+   slot; video and reading Blocks may yield their own slots; a discussion or
+   reflection Block without an external asset yields none. Slots exist only for the
+   current preparation call and are not written as new Lesson objects.
+3. Give every slot one compact brief: a slot name, one `search_start` hint
+   (`graph-first` or `card-text-first`), current Plan path, relevant closed Lesson
+   paths, public purpose, asset kind, workload, structures or recent assets to avoid,
+   and student preferences that change fit. The Coach already owns the student
+   conversation, Plan, and closed-Lesson context, so package those fit conditions
+   into each brief; there is no `teaching-fit-first` Scout.
+4. Normally make one fresh `study-material-scout` task per slot. Add a second
+   perspective for one slot only when you can name a concrete unresolved uncertainty
+   that could change the choice; give it the other search start and state that
+   uncertainty in its task. Do not preload Scout evidence or run a parent bulk search
+   first.
+5. Run all slot tasks in one foreground call with `concurrency: 3` as the maximum,
    `context: "fresh"`, `async: false`, `includeProgress: false`, `artifacts: false`,
    and `agentScope: "user"`. Do not set `timeoutMs` or `maxRuntimeMs`.
-5. Use exactly seven top-level fields: `tasks`, `concurrency`, `context`, `async`,
+6. Use exactly seven top-level fields: `tasks`, `concurrency`, `context`, `async`,
    `includeProgress`, `artifacts`, and `agentScope`. Each task item contains exactly
-   `agent: "study-material-scout"` and `task`; keep results inline by omitting
-   `output` and `outputMode`.
-6. Wait for every lane to settle. Merge the compact indexes, deduplicate by
-   `asset_path`, and choose using the current Plan and student conversation. A lane's
-   shortlist ends when its own search has semantically converged, not at a fixed
-   candidate count.
-7. Derive the required material count from the agreed Lesson Blocks. Read every
-   selected full asset needed by those Blocks, and no rejected full asset, in this
-   Session. Verify each source, answer correctness, and fit before using it. One
-   problem may need one card; several problem Blocks may need several cards.
+   `agent`, `task`, and `acceptance`: use `agent: "study-material-scout"`, keep the
+   slot brief in `task`, and set `acceptance` to
+   `{"level":"none","reason":"read-only candidate recall"}`. Keep results inline by
+   omitting `output` and `outputMode`.
+7. Wait for every slot task to settle. Merge the candidate frontiers and deduplicate
+   by `asset_path`, then choose using the current Plan and student conversation.
+   Fully read and verify the current selected asset for every slot. If one fails
+   source, mathematical, or teaching-fit verification, try the next existing
+   frontier item for that slot without launching another fan-out.
 
 The method graph helps the Scout locate material; card metadata describes the source,
 not the student. The Scout recalls and compares assets but never decides capability,
 teaching sequence, Lesson structure, hint policy, Plan completion, or persistent facts.
 Post-class review is not a Scout task: read the closed Lesson directly.
 
-If one lane fails, keep any suitable results returned by the other lanes. If the merged
-result has no suitable real material, create no Lesson, do not automatically repeat
-the fan-out, and do not fall back to inline bulk search. Tell the student which public
-condition cannot be met and ask what they want to change on a later turn.
+If one task fails, keep suitable results for the other slots. If any required slot has
+no suitable real material, create no Lesson, do not silently reduce the agreed
+activity count, do not automatically repeat the fan-out, and do not fall back to
+inline bulk search. Tell the student which public condition cannot be met and ask what
+they want to change on a later turn.
 
 Student-facing preparation may name the lesson purpose, source or problem number,
 activity count, workload, and interaction form. Keep decisive transformations,
@@ -84,7 +93,7 @@ answers, hidden route comparisons, expected traps, and intervention timing insid
 `Teacher Control` until the class needs them.
 
 This privacy rule applies to the whole preparation turn, not only the Lesson file.
-While searching cards or writing the Lesson, call tools without narrating lane
+While searching cards or writing the Lesson, call tools without narrating search
 progress or failures, candidate card IDs, stems, answers, correct routes,
 route-to-Block mappings, expected traps, or rejection reasons in assistant text. Tool
 preambles and progress notes are visible to the student too. After the files are

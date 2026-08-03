@@ -26,35 +26,45 @@ form.
 
 When an exact asset path is already known and no comparison is needed, read it
 directly. When finding material would require exploratory directory listing, search,
-or opening multiple candidates, use one foreground parallel `subagent` call. On the
-first delegated search in this Plan Session, call `subagent(action: "list")` first only
-if you need to confirm that `study-material-scout` is available.
+or opening multiple candidates, derive one temporary material slot for each agreed
+Block that still needs an external asset. One problem Block normally produces one
+problem-card slot; a video or reading Block may produce its own slot; discussion and
+reflection Blocks that need no external asset produce no slot. Slots organize this
+preparation call only and are not persisted in the Lesson.
 
-Put three tasks in that one call. Each task uses the same packaged
-`study-material-scout`, `context: "fresh"`, and the same compact teaching brief, but a
-different lane: `graph-first`, `card-text-first`, or `teaching-fit-first`. The shared
-brief names the Plan path, relevant closed Lesson paths, public purpose, asset or
-activity kind, count and workload, structures or recently used assets to avoid, and
-student preferences that change material fit. Use `concurrency: 3`, `async: false`,
+Use one foreground parallel `subagent` call with one fresh `study-material-scout`
+task per slot. On the first delegated search in this Plan Session, call
+`subagent(action: "list")` first only if you need to confirm that the packaged Scout
+is available. Give every task a slot name, one `search_start` hint (`graph-first` or
+`card-text-first`), the Plan path, relevant closed Lesson paths, public purpose, asset
+kind, workload, exclusions, and student preferences that change fit. You already own
+the student and Lesson context, so package those fit conditions into the slot brief;
+there is no separate teaching-fit search.
+
+Normally launch one task per slot. Add a second search perspective for one slot only
+when you can name a concrete unresolved uncertainty that could change the selection;
+put that uncertainty and a different `search_start` in the second task. Use
+`concurrency: 3` as the maximum, `context: "fresh"`, `async: false`,
 `includeProgress: false`, `artifacts: false`, and `agentScope: "user"`. Do not set
 `timeoutMs` or `maxRuntimeMs`.
 
 The execution object has exactly these top-level fields: `tasks`, `concurrency`,
 `context`, `async`, `includeProgress`, `artifacts`, and `agentScope`. Each item in
-`tasks` has exactly `agent: "study-material-scout"` and `task`; put the lane name and
-shared brief inside `task`. Keep results inline by omitting `output` and `outputMode`.
+`tasks` has exactly `agent`, `task`, and `acceptance`. Set
+`agent: "study-material-scout"`; put the slot brief and search start inside `task`;
+and set `acceptance` to
+`{"level":"none","reason":"read-only candidate recall"}`. Keep results inline by
+omitting `output` and `outputMode`.
 
-Wait for all three lanes to settle. Merge their compact indexes, deduplicate by
-`asset_path`, and choose with the current Plan and student conversation. Each lane may
-return a variable-length shortlist after its own search has semantically converged;
-do not impose a candidate-count cap. Determine the required material count from the
-agreed Lesson structure, then read every selected full asset needed by those Blocks
-and no rejected full asset in this Session. A one-problem Lesson may select one card;
-a multi-problem Lesson may select several. One failed lane does not invalidate useful
-results from the other lanes. If the merged result cannot fill the agreed Lesson with
-suitable real assets, create no Lesson, do not launch another fan-out automatically,
-and do not fall back to inline bulk asset search. Tell the student only that the
-available material does not match the agreed public condition; reconsider that
+Wait for all slot tasks to settle. Merge their candidate frontiers, deduplicate by
+`asset_path`, and choose with the current Plan and student conversation. Then fully
+read and verify the current selected asset for every slot. If a selected asset fails
+source, mathematics, or teaching-fit verification, try the next existing frontier
+item for that slot without launching a new fan-out. One failed task does not discard
+useful results for other slots. If any required slot remains unfilled, create no
+Lesson, do not silently reduce the activity count, do not launch another fan-out
+automatically, and do not fall back to inline bulk asset search. Tell the student only
+which public condition the available material could not meet; reconsider that
 condition on a later turn.
 
 The Scouts advise; you decide. You may discuss the public learning purpose, activity
