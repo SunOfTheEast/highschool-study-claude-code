@@ -83,6 +83,69 @@ test('assembles static teaching resources and node-scoped model tools', () => {
   expect(assembled).not.toContain('cards/sample.card.yaml');
 });
 
+test('loads one selected persona after the role for every student-facing node', () => {
+  const root = copyFixture();
+  const scopes = [
+    {
+      nodeKind: 'roadmap',
+      nodeId: 'roadmap',
+      nodePath: 'ROADMAP.md',
+      parentId: null,
+      parentPath: null,
+    },
+    {
+      nodeKind: 'plan',
+      nodeId: 'plan-001',
+      nodePath: 'plans/plan-001.md',
+      parentId: 'roadmap',
+      parentPath: 'ROADMAP.md',
+    },
+    {
+      nodeKind: 'lesson',
+      nodeId: 'lesson-001',
+      nodePath: 'lessons/lesson-001.md',
+      parentId: 'plan-001',
+      parentPath: 'plans/plan-001.md',
+    },
+  ] as const;
+
+  for (const scope of scopes) {
+    const resources = loadStaticNodeResources(root, scope, 'gojo');
+    const paths = resources.agentsFiles.map((resource) => resource.path);
+    const personaPath = '/virtual/studyforge-m0-persona-gojo.md';
+    const roleIndex = paths.findIndex((path) => (
+      path.includes(`${scope.nodeKind}-node.md`)
+    ));
+    const personaIndex = paths.indexOf(personaPath);
+    const ownerIndex = paths.indexOf('/virtual/studyforge-m0-current-node.md');
+
+    expect(resources.agentsFiles.filter(
+      (resource) => resource.path === personaPath,
+    )).toHaveLength(1);
+    expect(personaIndex).toBeGreaterThan(roleIndex);
+    expect(ownerIndex).toBeGreaterThan(personaIndex);
+  }
+});
+
+test('keeps neutral assembly without a persona and rejects unknown persona ids', () => {
+  const root = copyFixture();
+  const scope = {
+    nodeKind: 'roadmap',
+    nodeId: 'roadmap',
+    nodePath: 'ROADMAP.md',
+    parentId: null,
+    parentPath: null,
+  } as const;
+
+  expect(loadStaticNodeResources(root, scope).agentsFiles.some(
+    (resource) => resource.path.includes('persona-'),
+  )).toBe(false);
+  expect(() => loadStaticNodeResources(root, scope, '../gojo'))
+    .toThrow('STUDY_PERSONA_INVALID: ../gojo');
+  expect(() => loadStaticNodeResources(root, scope, 'missing'))
+    .toThrow('STUDY_PERSONA_NOT_FOUND: missing');
+});
+
 test('injects one canonical document contract into every node session', () => {
   const root = copyFixture();
   const scopes = [

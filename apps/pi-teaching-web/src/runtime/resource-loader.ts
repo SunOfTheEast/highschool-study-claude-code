@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -36,9 +36,24 @@ function file(path: string): string {
   return readFileSync(path, 'utf8');
 }
 
+function loadPersonaResource(personaId: string | undefined) {
+  const id = personaId?.trim();
+  if (!id) return [];
+  if (!/^[a-z0-9-]+$/.test(id)) {
+    throw new Error(`STUDY_PERSONA_INVALID: ${id}`);
+  }
+  const path = join(resourceRoot, 'personas', `${id}.md`);
+  if (!existsSync(path)) throw new Error(`STUDY_PERSONA_NOT_FOUND: ${id}`);
+  return [{
+    path: `/virtual/studyforge-m0-persona-${id}.md`,
+    content: file(path),
+  }];
+}
+
 export function loadStaticNodeResources(
   root: string,
   scope: NodeSessionScope,
+  personaId?: string,
 ): StaticNodeResources {
   const roleFile = roleFiles[scope.nodeKind];
   const owner = [
@@ -51,21 +66,22 @@ export function loadStaticNodeResources(
   return {
     agentsFiles: [
       {
-        path: '/virtual/studyforge-m0-teaching-core.md',
-        content: file(join(resourceRoot, 'teaching', 'math-teaching-core.md')),
-      },
-      {
         path: '/virtual/studyforge-m0-document-contract.md',
         content: file(join(resourceRoot, 'contracts', 'm0-document-contract.md')),
-      },
-      {
-        path: `/virtual/studyforge-m0-${roleFile}`,
-        content: `Role resource: ${roleFile}\n\n${file(join(resourceRoot, 'agents', roleFile))}`,
       },
       {
         path: join(root, 'LEARNING_GUIDE.md'),
         content: file(join(root, 'LEARNING_GUIDE.md')),
       },
+      {
+        path: '/virtual/studyforge-m0-teaching-core.md',
+        content: file(join(resourceRoot, 'teaching', 'math-teaching-core.md')),
+      },
+      {
+        path: `/virtual/studyforge-m0-${roleFile}`,
+        content: `Role resource: ${roleFile}\n\n${file(join(resourceRoot, 'agents', roleFile))}`,
+      },
+      ...loadPersonaResource(personaId),
       {
         path: '/virtual/studyforge-m0-current-node.md',
         content: owner,
@@ -81,8 +97,9 @@ export async function createRoleResourceLoader(
   root: string,
   scope: NodeSessionScope,
   eventBus: EventBus,
+  personaId: string | undefined = process.env.STUDY_PERSONA,
 ) {
-  const resources = loadStaticNodeResources(root, scope);
+  const resources = loadStaticNodeResources(root, scope, personaId);
   const loader = new DefaultResourceLoader({
     cwd: root,
     agentDir: getAgentDir(),
