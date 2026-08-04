@@ -76,6 +76,10 @@ test('exposes exactly two path-bound object schemas with branch-specific fields'
     'classroom_log_append',
     'classroom_update',
   ]);
+  expect(tools.map((tool) => tool.executionMode)).toEqual([
+    'sequential',
+    'sequential',
+  ]);
   const schemas = JSON.stringify(tools.map((tool) => tool.parameters));
   for (const forbidden of ['lessonPath', 'sessionId', 'timestamp', 'currentBlockId']) {
     expect(schemas).not.toContain(forbidden);

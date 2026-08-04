@@ -253,6 +253,10 @@ function validateDraftUses(
   }
 }
 
+function validateBlockUses(root: string, path: string, block: ActivityBlock): void {
+  for (const use of block.uses) validateUsePath(root, path, use);
+}
+
 function renderBlock(
   id: string,
   draft: LessonBlockDraft,
@@ -436,6 +440,7 @@ export function applyClassroomChange(
     if (!dependenciesResolved(target, before)) {
       throw new StudyDocumentError(path, `Block ${target.id} has unresolved dependencies`);
     }
+    validateBlockUses(root, path, target);
     candidate = replaceBlockStatus(path, source, target.id, 'active');
   } else if (change.command === 'advance') {
     if (!active) throw new StudyDocumentError(path, 'advance requires one active Block');
@@ -452,6 +457,7 @@ export function applyClassroomChange(
       if (!dependenciesResolved(target, intermediate)) {
         throw new StudyDocumentError(path, `Block ${target.id} has unresolved dependencies`);
       }
+      validateBlockUses(root, path, target);
       candidate = replaceBlockStatus(path, candidate, target.id, 'active');
     }
   } else if (change.command === 'insert') {

@@ -82,6 +82,7 @@ export function createLessonTools(root: string, lessonPath: string) {
     name: 'classroom_log_append',
     label: '记录课堂事实',
     description: 'Append one decision-relevant classroom fact to the current active Block.',
+    executionMode: 'sequential',
     parameters: Type.Object({
       note: Type.String({
         minLength: 1,
@@ -115,6 +116,7 @@ export function createLessonTools(root: string, lessonPath: string) {
     name: 'classroom_update',
     label: '更新课堂活动',
     description: 'Apply one Block start, advance, or pending-route adaptation in the current Lesson.',
+    executionMode: 'sequential',
     parameters: classroomUpdateParameters,
     execute: async (_toolCallId, { change }) => {
       const receipt = mutateDocumentAtomically(

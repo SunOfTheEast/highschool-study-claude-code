@@ -109,6 +109,15 @@ test('starts only an eligible pending Block when no Block is active', () => {
     command: 'start',
     blockId: 'block-002',
   })).toThrow('active Block already exists');
+
+  const escapedUse = source.replace(
+    '- Uses: cards/sample.card.yaml',
+    '- Uses: ../outside.card.yaml',
+  );
+  expect(() => applyClassroomChange(root, lessonPath, escapedUse, {
+    command: 'start',
+    blockId: 'block-002',
+  })).toThrow('Uses path');
 });
 
 test('advances the current Block and starts its chosen successor atomically', () => {
