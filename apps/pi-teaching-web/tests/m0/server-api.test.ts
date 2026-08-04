@@ -211,6 +211,60 @@ test('streams one accepted turn and invalidates course after a native edit', asy
     item: expect.objectContaining({ id: 'edit-1', kind: 'tool', status: 'running' }),
   }));
   expect(events).toContainEqual({ type: 'course-invalidated' });
+  expect(events).toContainEqual({ type: 'knowledge-invalidated' });
+});
+
+test('invalidates only Course after a successful Lesson custom write', async () => {
+  const root = copyFixture();
+  const hub = new EventHub();
+  const events: StudyEvent[] = [];
+  hub.subscribe((event) => events.push(event));
+  let listener: ((event: AgentSessionEvent) => void) | null = null;
+  let resolveIdle!: () => void;
+  const idle = new Promise<void>((resolve) => { resolveIdle = resolve; });
+  hub.subscribe((event) => {
+    if (event.type === 'session-run' && event.status === 'idle') resolveIdle();
+  });
+  const handler = createRequestHandler({
+    root,
+    hub,
+    registry: fakeRegistry({
+      subscribe: async (_key: SessionKey, value: (event: AgentSessionEvent) => void) => {
+        listener = value;
+        return () => {};
+      },
+      send: async () => {
+        listener?.({
+          type: 'tool_execution_end',
+          toolCallId: 'log-1',
+          toolName: 'classroom_log_append',
+          result: { details: { kind: 'lesson-write' } },
+          isError: false,
+        });
+        listener?.({
+          type: 'tool_execution_end',
+          toolCallId: 'update-failed',
+          toolName: 'classroom_update',
+          result: { details: { kind: 'lesson-write' } },
+          isError: true,
+        });
+        listener?.({ type: 'agent_end', messages: [], willRetry: false });
+      },
+    }) as never,
+  });
+
+  const response = await handler(new Request(
+    'http://local/api/sessions/lesson%3Alesson-001/messages',
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ text: '我想继续做。' }),
+    },
+  ));
+  expect(response?.status).toBe(202);
+  await idle;
+  expect(events.filter((event) => event.type === 'course-invalidated')).toHaveLength(1);
+  expect(events.filter((event) => event.type === 'knowledge-invalidated')).toHaveLength(0);
 });
 
 test('routes student lifecycle actions without generating teaching messages', async () => {

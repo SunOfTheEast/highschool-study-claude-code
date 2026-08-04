@@ -8,6 +8,7 @@ import {
   type SessionEntry,
 } from '@earendil-works/pi-coding-agent';
 import { createPlanCompactionPrompt } from './plan-compaction';
+import { createLessonTools } from './lesson-tools';
 import { createRoleResourceLoader } from './resource-loader';
 import { appendSessionOwner } from './session-owner';
 import { modelToolsForNode, type NodeSessionScope } from './session-scope';
@@ -38,6 +39,12 @@ export function sessionFactoryInput(
   return { ...scope, sessionFile };
 }
 
+export function customToolsForNode(root: string, scope: NodeSessionScope) {
+  return scope.nodeKind === 'lesson'
+    ? createLessonTools(root, scope.nodePath)
+    : [];
+}
+
 type PiAgentSession = Awaited<ReturnType<typeof createAgentSession>>['session'];
 
 export async function bindStudyExtensions(
@@ -59,12 +66,13 @@ export async function createPiSessionFactory(root: string): Promise<StudySession
       appendSessionOwner(manager, scope);
     }
     const resourceLoader = await createRoleResourceLoader(root, scope, eventBus);
+    const customTools = customToolsForNode(root, scope);
     const { session } = await createAgentSession({
       cwd: root,
       modelRuntime,
       resourceLoader,
       sessionManager: manager,
-      customTools: [],
+      customTools,
       tools: [...modelToolsForNode(scope.nodeKind)],
     });
     await bindStudyExtensions(session);

@@ -21,7 +21,17 @@ export const M0_MODEL_TOOLS = [
 
 export const PLAN_MODEL_TOOLS = [...M0_MODEL_TOOLS, 'subagent'] as const;
 
+export const LESSON_MODEL_TOOLS = [
+  'read',
+  'grep',
+  'find',
+  'ls',
+  'classroom_log_append',
+  'classroom_update',
+] as const;
+
 export function modelToolsForNode(kind: NodeKind): readonly string[] {
+  if (kind === 'lesson') return LESSON_MODEL_TOOLS;
   return kind === 'plan' ? PLAN_MODEL_TOOLS : M0_MODEL_TOOLS;
 }
 

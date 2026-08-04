@@ -101,6 +101,16 @@ export function createRequestHandler(deps?: AppDependencies) {
           deps.hub.publish({ type: 'course-invalidated' });
           deps.hub.publish({ type: 'knowledge-invalidated' });
         }
+        if (
+          event.type === 'tool_execution_end'
+          && !event.isError
+          && (
+            event.toolName === 'classroom_log_append'
+            || event.toolName === 'classroom_update'
+          )
+        ) {
+          deps.hub.publish({ type: 'course-invalidated' });
+        }
         if (event.type === 'agent_end' && !event.willRetry) {
           void deps.registry.readHistory(key).then((entries) => {
             deps.hub.publish({
