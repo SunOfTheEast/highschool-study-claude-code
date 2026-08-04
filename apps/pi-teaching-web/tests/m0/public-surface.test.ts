@@ -4,6 +4,7 @@ import {
   PLAN_STATUSES,
 } from '../../src/shared/contracts';
 import {
+  LESSON_MODEL_TOOLS,
   M0_MODEL_TOOLS,
   modelToolsForNode,
   sessionKeyForNode,
@@ -17,12 +18,20 @@ import {
   PRIMARY_VIEWS,
 } from '../../src/client/view-state';
 
-test('exposes only the M0 node lifecycle and native model tools', () => {
+test('exposes only the M0 node lifecycle and role-scoped model tools', () => {
   expect(PLAN_STATUSES).toEqual(['prepared', 'active', 'completed']);
   expect(LESSON_STATUSES).toEqual(['prepared', 'active', 'closed']);
   expect(M0_MODEL_TOOLS).toEqual(['read', 'grep', 'find', 'ls', 'edit', 'write']);
   expect(modelToolsForNode('roadmap')).toEqual(M0_MODEL_TOOLS);
-  expect(modelToolsForNode('lesson')).toEqual(M0_MODEL_TOOLS);
+  expect(modelToolsForNode('lesson')).toEqual(LESSON_MODEL_TOOLS);
+  expect(LESSON_MODEL_TOOLS).toEqual([
+    'read',
+    'grep',
+    'find',
+    'ls',
+    'classroom_log_append',
+    'classroom_update',
+  ]);
   expect(modelToolsForNode('plan')).toEqual([...M0_MODEL_TOOLS, 'subagent']);
 
   expect(sessionKeyForNode({
