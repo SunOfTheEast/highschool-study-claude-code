@@ -28,8 +28,12 @@ Roadmap 讨论整个学习集中的长期能力、总体学法和下一个 Plan�
 Roadmap 会面”“Roadmap Session 中的 Plan 制定”以及“已确认 Plan 的首次进入与草案式
 共同备课”“课后复盘与后续 Lesson 共备”“Plan 阶段结束与父级回读”以及“Lesson 课堂
 执行与适应”以及”已批准设计的 Plan/Lesson 准备交付”；并经 2026-08-04 校正审计并入
-“约束负荷与决策点原则”和”Plan Session 的阶段路由”。长期跨 Plan 复诊、各类特殊教学
-技巧、连续受挫学生、作业闭环与长间隔回归的具体 reference 在后续章节继续设计。
+“约束负荷与决策点原则”和”Plan Session 的阶段路由”。Lesson 特殊教学技巧已根据
+60 次真实模型运行收缩为四个按需 reference，并补入 Lesson Session 的证据、公开输出、
+生命周期与日志边界。第一次长周期验收又证明通用 `edit` 不能稳定承担高频 Lesson
+结构写入，因此按 M0 预留的失败退路补回两个像原生 `edit` 一样使用、但由 Runtime 绑定
+事实与保证原子性的课堂工具；这不恢复旧 Trace、Handoff 或工具化教学工作流。长期跨
+Plan 复诊、连续受挫学生、作业闭环与长间隔回归的具体 reference 在后续章节继续设计。
 
 ## 资源分层原则
 
@@ -263,9 +267,11 @@ Plan 的 Plan Session 中。二者不能因为都谈到“下一步”而混为�
   调整阶段内的推进，并共同制定下一节 Lesson；
 - Plan Session 可以把新的证据和建议交还 Roadmap，但不能越权替学生决定下一个 Plan。
 
-首次 Roadmap 会面不一定要把所有长期方向讨论得同样细。只要长期方向和总体学法已经
-足够支持当前选择，就详细制定第一个 Plan。后续 Plan 则在上一个阶段完成、学生主动
-要求转向，或现有证据表明 Roadmap 需要重新选择阶段方向时讨论。
+首次 Roadmap 会面不一定要把所有长期方向讨论得同样细。Plan Tree 为空、且长期方向和
+总体学法已经足够支持当前选择时，就详细制定第一个 Plan。后续 Plan 只在 Plan Tree 中
+最新已链接 Plan 自身的 frontmatter 已为 `completed` 时制定。学生在 `prepared` 或
+`active` Plan 中主动转向，或现有证据表明阶段目标可能选错时，先回当前 Plan Session
+讨论“选择结束”与收口；学生通过界面完成当前 Plan 后，Roadmap 才复诊并制定后继。
 
 ### Plan 的定义与粒度
 
@@ -294,8 +300,10 @@ Plan 不是教材章节名、若干知识点的容器，也不是一节课要完
 
 ### 第一个 Plan 与后续 Plan
 
-第一个 Plan 从学生初次会面的真实诉求、总体学法、学习集实际提供的材料和当前可支持的
-判断中推出。没有证据时可以保留假设，但不能为了让 Plan 显得完整而发明学生的薄弱点。
+第一个 Plan 从学生初次会面的真实诉求、总体学法、`LEARNING_GUIDE.md` 声明的学习集
+范围和当前可支持的判断中推出。Roadmap 不为此枚举或读取具体卡片、材料和知识图谱；
+具体材料选择属于后续备课。没有证据时可以保留假设，但不能为了让 Plan 显得完整而发明
+学生的薄弱点。
 当关键不确定性会导向完全不同的首个阶段时，可按前述规则进行现场短探针，或先共同建立
 一个正式诊断 Plan。
 
@@ -386,13 +394,13 @@ Plan 并连接到 `Plan Tree`。未来 Plan 只能保留为 Roadmap 中的暂定
 
 ```text
 Lesson Tree 为空且没有当前 Lesson
-→ 首次进入（references/first-entry.md，待后续切片）
+→ 首次进入（references/first-entry.md）
 
 最新 Lesson 已 closed，且没有 prepared/active 的下一课
 → 课后复盘（references/post-lesson-review.md）
 
 学生主动提出结束，或教师在复盘后认为已有达标可能
-→ Plan 收口（references/plan-closure.md，待后续切片）
+→ Plan 收口（references/plan-closure.md）
 
 已有 prepared/active Lesson
 → 不创建另一课
@@ -592,7 +600,7 @@ Plan 的结束讨论可以由教师或学生发起：
   专业判断，不是结构触发条件；
 - 预计 Lesson 数量、预设弧线已经走完或教材章节已经讲完，都不能自动触发完成。
 
-收口工作流住在 `plan-dialogue/references/plan-closure.md`（待后续切片）；进入收口
+收口工作流住在 `plan-dialogue/references/plan-closure.md`；进入收口
 的路由条件只有学生主动提出结束，或教师在复盘后认为已有达标可能。
 
 无论谁发起，Plan 教师都先重新读取当前 Plan 与相关已链接 Lesson，并与学生公开复盘
@@ -672,6 +680,12 @@ Roadmap 制定后续 Plan
 父节点先使用直属子节点能够提供的最粗粒度信息；只有某项当前决策无法负责地作出时，才
 继续下钻。需要比较更早阶段时，Roadmap 也只能沿自己的 Plan Tree 读取相关历史 Plan，
 再按同样规则下钻。不能枚举 `plans/`、`lessons/` 或其他目录来发现“可能有关”的记录。
+Tree 条目中的路径依照 M0 文档契约始终从学习集根目录解析；Lesson 链接即使写在
+`plans/*.md` 中，也不能相对于 `plans/` 再拼接一次。
+Roadmap 下钻到 Lesson 时只使用其中的 Block 与 Classroom Log，不沿 Block `Uses` 读取
+卡片或材料；`Uses` 说明备课时安排过什么资源，资源内容本身不能证明学生实际看过、做过
+或形成了何种能力。Roadmap 只从 `LEARNING_GUIDE.md` 了解学习集范围，具体资源检索留给
+后续 Lesson 备课。
 
 事实由发生它的最低真实节点持有：Block/Classroom Log 保存课堂事实，Lesson 保存本课
 设计和课堂记录，Plan 保存阶段目标与 Plan 级判断，Roadmap 保存长期方向与 Roadmap 级
@@ -684,11 +698,18 @@ Roadmap 制定后续 Plan
 证据与权限不变量，应放在相应 Agent 的常驻系统设定中。以下工作流属于对应 Dialogue
 Skill 的结构触发 references，不在根 Skill 常驻：
 
-- `plan-dialogue/references/`：课后复盘（post-lesson-review）、Plan 收口
-  （plan-closure，待后续切片）；
-- `roadmap-dialogue/references/`：完成 Plan 后回读、按需下钻、重新诊断并制定下一个
-  Plan（待后续切片）；
+- `plan-dialogue/references/`：首次进入（first-entry）、课后复盘
+  （post-lesson-review）、Plan 收口（plan-closure）；
+- `roadmap-dialogue/references/`：初次会面与现场短探针（`diagnosis/first-roadmap.md`、
+  `diagnosis/live-diagnostic-probes.md`）；完成 Plan 后回读、按需下钻、重新诊断并制定
+  下一个 Plan（`next-plan.md`）；
 - 具体怎样解释不同证据组合，可继续放在两个 Skill 的阶段复盘 references 中。
+
+`first-roadmap.md` 与 `next-plan.md` 是互斥阶段 reference：前者在自身亮线中完成首个
+Plan 的逆向制定，不再跳读后者；后者只对最新已链接 `completed` Plan 生效。Plan Tree
+非空时必须先读取最新链接子节点自身的 frontmatter，不能从 Roadmap 正文猜测状态。
+阶段 reference 只使用根 `roadmap-dialogue` 已声明的共享 reference 入口，不自行计算
+跨目录路径；路由命中后直接读取明确路径，不通过 `find` 或 `ls` 发现 Skill 文件。
 
 不新增 Handoff、结束原因 enum、能力状态字段或新的 Plan 状态。长期跨多个 Plan 的信息
 压缩、复诊策略和更长周期记忆仍留给后续模块；本节只固定真实父子树上的直接回读边界。
@@ -814,13 +835,198 @@ tutor-lesson/SKILL.md
 
 tutor-lesson/references/teaching-techniques/
 ├── INDEX.md
-└── 只在真实反应需要时读取的一个匹配技巧
+├── concept-boundary-repair.md
+├── method-comparison.md
+├── independent-transfer-check.md
+└── frustration-and-pause.md
 ```
 
-`Teacher Control` 是当前课堂的首要准备指导。只有学生反应超出已有准备，且某个特殊技巧
-确实能改善当前一步时，Tutor 才读取技巧索引并加载一个最匹配的 reference；不能预加载
-整套技巧库，也不能借技巧选择改变 Lesson Goal。后续可逐项细化新概念讲解、卡顿支架、
-误解修复、对照与反例、方法比较、独立迁移检查和挫败情绪处理等 references。
+`Teacher Control` 是当前课堂的首要准备指导。Tutor 先使用核心课堂循环；只有某个按需
+技巧能决定当前这一个教学动作、而 Teacher Control 与核心循环不能充分决定时，才读取
+一个匹配 reference。每个 reference 经过单独 RED/GREEN 后才接入根 Skill；目录存在不
+构成启用。任一 reference 都不能改变 `Lesson Goal`，也不能在同一学生回应中跳读第二个
+reference。
+
+### Lesson Session 的四条常驻系统契约
+
+以下约束决定 Lesson Session 能看什么、能写什么以及学生实际会看到什么，必须放在
+`lesson-node.md` 与 `tutor-lesson/SKILL.md` 的常驻边界中，不下放给低频技巧各自重复。
+
+1. **证据范围**：Tutor 每轮从当前 Lesson 和当前唯一正在教授或即将激活的 Block 开始，
+   只读取该 Block `Uses` 明确绑定的资源。父 Plan、Roadmap、兄弟 Lesson、未链接文件和
+   目录枚举都不属于当前 Lesson 的课堂证据。现有信息不足时，向学生澄清其真实做法，
+   或停止扩张并把目标问题交回 Plan；不通过 `ls`、`find`、全局 `grep` 或猜测路径补上下文。
+   Lesson frontmatter 的 `parent_path` 只表达所有权，不构成读取父节点的许可。
+2. **一次公开回复**：先完成当前必要的读取和日志写入，再输出一段面向学生的课堂回应，
+   随后等待。工具调用段只包含工具调用，不包含“我来读取”“按路由规则”“先记录一下”
+   等公开文本。M0 继续原样投影 assistant 文本，因此这个输出形态由 Lesson Agent 常驻
+   契约承担；若同情境 5 次 GREEN 仍不能稳定守住，再单独设计 Runtime 缓冲或过滤，不能
+   继续叠加同义提示。
+3. **生命周期归 Runtime**：Tutor 可以更新 Block 状态和 Classroom Log；Lesson 顶层
+   `prepared → active → closed` 只由学生界面与 Runtime 原子操作改变。学生选择暂停或
+   结束时，Tutor 停止加题、补齐已有记录并把控制权交还界面。Lesson Session 不再装载
+   通用 `edit/write`，Tutor 不能修改 Lesson 顶层 `status`，也不能用文字宣称已经替学生
+   关闭。
+4. **日志按追加顺序表达时间**：Classroom Log 使用 Markdown 列表按发生顺序追加关键
+   证据；M0 的 Session JSONL 已保存真实时间，因此日志条目不要求模型生成钟点或日期。
+   Tutor 不搜索其他 Lesson 模仿格式，也不猜测时间。每轮先记录学生真实表现和实际帮助，
+   再产生唯一的学生可见回应。
+
+### Lesson 结构化写入内核
+
+#### 失败证据与恢复边界
+
+M0 曾有意删除 `trace_append`、`classroom_update`、`lesson_close` 等旧工具，让 Agent 直接
+编辑 Markdown；同时预先规定：只有真实运行证明普通编辑经常损坏文件时，才增加一个最小
+确定性写入工具，不能恢复旧工具集。第一次从 Roadmap 走向完整首个 Plan 的长周期验收在
+首节课命中该条件：Tutor 为当前 Block 追加第一条 Classroom Log 时，通用 `edit` 同时
+删除了后续 Block；工具报告成功，但严格解析器随后发现 Lesson 结构已损坏，课堂无法关闭。
+
+旧验收也提供了另一半证据：结构化 `classroom_update` 能稳定保护多节课堂结构，旧系统的
+主要负担来自 Trace、Projection、Handoff、来源别名和调用顺序等多套语义治理，不来自
+Runtime 绑定路径与执行状态转换本身。因此只恢复机械写入内核：Lesson Markdown 继续是
+唯一课堂事实，教学判断继续由 Tutor Skill 和自然对话承担，不新增第二事实存储。
+
+#### 两个像原生 edit 一样使用的工具
+
+Lesson Session 创建时直接注册 `classroom_log_append` 和 `classroom_update`，并移除通用
+`edit/write`。Roadmap、Plan、Prepare 和 Tutor 的只读工具面不在本模块中顺带改变。工具
+在 Session 创建时绑定当前 `nodePath`、学习集根目录和 Lesson 所有权；模型不能填写文件
+路径、Session、时间或身份。
+
+这两个工具是 Runtime 能力，不是新 Skill、按需 reference 或教学状态机。Agent 常驻层
+只声明写权限，Tutor Skill 只保留三条亮线路由：
+
+```text
+发生会影响后续判断的事实 → classroom_log_append
+当前活动真正结束或需要开始活动 → classroom_update 的 start / advance
+现有 pending 路线明显不再适合 → classroom_update 的适应命令
+其余教学轮次 → 不调用写入工具
+```
+
+详细参数只由工具 Schema 持有，不在 Agent、根 Skill 和技巧 reference 中换词重复。模型
+先正常理解学生并作出教学判断，确实需要落盘时才像调用原生 `edit` 一样自然调用；不进入
+“状态管理模式”，不制定额外工具计划，也不向学生讲解内部写入。成功回执直接提供最新
+游标，不要求为了仪式再次回读全文。
+
+#### `classroom_log_append`
+
+模型契约只有一个不可为空的自然语言字段：
+
+```text
+classroom_log_append({ note: string })
+```
+
+`note` 表达一条会影响后续判断的真实课堂事实，可以包含多句话、公式和必要换行。Runtime
+自动绑定当前唯一 active Block，并把内容安全渲染为该 Block `Classroom Log` 的一个
+Markdown 列表项；换行只能成为该条目的缩进续行，不能形成标题或逃出当前 Block。
+
+Lesson 已关闭、当前没有 active Block、存在多个 active Block 或原文件本身无法解析时，
+工具拒绝写入且保持文件不变。它不猜测应写入哪个 pending、completed 或 skipped Block，
+不创建 Trace ID、时间字段或第二份事件记录。日志保持追加语义；早先记录有误时，Tutor
+追加更正或后续证据，不润色、覆盖或删除旧记录。Runtime 不用关键词审查“掌握”“独立”
+等教学语义，事实是否诚实仍由 Tutor Skill 负责。
+
+#### `classroom_update`
+
+`classroom_update` 使用有明确判别字段的命令分支；每个分支只暴露自身必需字段，不提供一
+大组含义随命令改变的可选参数：
+
+1. **`start`**：Lesson 没有 active Block 时，模型选择一个 pending Block。Runtime 检查
+   依赖已经满足，再将它激活。
+2. **`advance`**：模型选择当前 Block 的结果 `completed | skipped`，以及下一 Block ID
+   或 `null`。Runtime 派生当前 active Block，在一次原子修改中结束它并按需激活合法
+   后继；当前 Block 至少已有一条 Classroom Log 才能推进，日志是否充分仍由 Tutor 判断。
+3. **`insert`**：模型提供新活动的标题、现有 `Kind`、`Required`、依赖、`Uses`、
+   `Student View`、`Teacher Control` 及相对现有 Block 的位置。Runtime 生成新 Block ID，
+   固定创建为 `pending` 并生成空 Classroom Log。
+4. **`revise`**：模型完整替换一个 pending Block 的公开活动与教师控制内容；不能修改
+   ID、状态或日志。完整草案代替含义不清的零碎 patch。
+5. **`move`**：模型选择一个 pending Block、锚点和前后位置；Runtime 保持内容不变并
+   验证依赖图。
+6. **`skip_pending`**：只把尚未开始的 Block 标为 `skipped`。决定原因记录在当时 active
+   Block 的 Classroom Log；没有 active Block 时不能凭空跳过，应先进入相关活动并记录
+   实际决定。
+
+模型选择目标或后继 Block，因为这是教学判断；Runtime 派生当前 Block、生成新 ID，并
+验证唯一 active、状态转换、依赖存在且无环、精确 `Uses` 路径和来源边界。新插入 Block
+的 `Uses` 只能取自当前 active Block 已有 `Uses`；修改 pending Block 时可以保留其原有
+`Uses`，新增路径仍只能取自当前 active Block。没有 active Block 时不能引入新的 `Uses`
+路径。Runtime 还检查这些精确路径确实存在且类型合法。除另一个工具向 active Block
+追加 Classroom Log 外，active、completed、skipped Block 的标题和教学内容不可回写，
+`Lesson Goal`、frontmatter 和其他 Block 不能发生额外变化。
+
+本模块不恢复 `pause`、`repeat`、`delete`、Route Change 或 `lesson_close`。再次练习通过
+新增 pending Block 表达，保留第一次课堂事实；跳过代替删除，保留准备路线与真实课堂的
+差异。成功回执只返回新建 ID、当前 active Block 与合法后继，不形成新的持久事实。
+
+#### Runtime 原子修改与失败语义
+
+所有会写 Lesson 的 Runtime 路径，包括 Session ID 绑定、学生激活或关闭、上述两个工具，
+共享同一个按 Lesson 串行的修改入口。一次写入依次完成：
+
+1. 进入当前 Lesson 的写入队列并读取、解析最新文件；
+2. 检查 Session 所有权、Lesson 生命周期和实时 Block 游标；
+3. 在内存中产生候选文档；
+4. 重新解析候选文档，并验证本次差异没有越权；
+5. 写入同目录临时文件，确认操作期间的原版本没有改变；
+6. 原子替换正式文件，成功后才发布界面失效通知并返回最新游标。
+
+Lesson 已被关闭或游标已经改变时拒绝操作并返回当前状态；命令、依赖或目标非法时说明
+当前可执行边界；原文件损坏时只报告解析错误，不自动猜测修复；候选验证、磁盘写入或
+替换失败时正式文件保持不变。Runtime 不隐藏重试或改选另一命令，Tutor 可以像处理一次
+失败的原生 `edit` 一样，根据最新状态重新判断。任何失败都只能表现为“本次没有写入”，
+不能出现工具宣称成功而 Lesson 部分损坏。
+
+### 七个候选技巧的收缩决定
+
+2026-08-04 审计使用同一真实模型档位完成 35 次候选正向运行、10 次未命中反例和 15 次
+核心对照。反例中，局部算术失误 5/5、尚未完成路线 5/5 都没有误加载技巧，说明“默认
+不读 reference”的总闸门成立；但七个候选整体启用仍产生目录搜索、跨层读取、内部过程
+泄露和生命周期越权。
+
+比较过三种组织方式：继续保留七个文件会保留重叠路由与互相跳读；全部并入根 Skill 会
+让低频技巧常驻并增加同一决策点的负荷；最终采用“四个按需 reference + 一条核心帮助
+阶梯”。被合并或改名的旧候选路径直接删除，不保留兼容别名或互链；方法比较与独立迁移
+两个保留名称的文件原地重写，不沿用旧内容。
+
+1. **概念边界修复 `concept-boundary-repair.md`**：合并新概念讲解、首次概念误解和解释
+   后仍未修复的边界分歧。文件内部先根据已经观察到的状态只选一种动作：缺概念时做
+   有边界讲解；错误模型已确认时重建路线并修复决定性分歧；已有解释失败时只用一个
+   对照或反例。三条分支都以学生亲手完成一个小步骤结束，不再读取其他技巧。局部计算、
+   书写失误、未完成表达和仍在有效思考不命中本文件。
+2. **方法比较 `method-comparison.md`**：只在学生已经完成并核验一条合法路线、比较确有
+   教学价值时读取。第一轮只做“明确有效性 → 请学生说入口、关键一步和代价 → 等待”；
+   收到学生复述后的新一轮，才比较最多一个替代并由学生判断取舍。路线尚未完成时继续
+   原路线，不提前读取本文件。比较只使用当前 Lesson 已记录的路线；细节不足时询问学生，
+   不读取 Plan、图谱、卡片或材料来猜。
+3. **独立迁移检查 `independent-transfer-check.md`**：只在讲解或提示后需要区分“听懂”与
+   “独立表现”时读取。优先收回支架并复用当前题的一个决定性步骤或当前 Block `Uses`
+   已绑定的短任务。没有合适现成任务时，Tutor 可以现场生成一个严格位于当前 Lesson
+   Goal 内、答案已自检、几步内完成的微型题；不得为此搜索父节点或目录。日志把它标明为
+   教师现场微题，只把学生首次表现作为证据，不把题目来源伪装成学习集材料。
+4. **挫败与暂停 `frustration-and-pause.md`**：先按学生是否已经明确要求暂停或结束分流。
+   已明确停止时只接住状态、在有帮助时用一条真实课堂证据校准自我否定、记录选择并停止，
+   不提供小任务或继续选项。尚未要求停止时，才采用“接住状态 → 用真实证据恢复正常感
+   → 提供一个可选小入口或暂停选项 → 等待学生选择”。本文件不改变生命周期状态。
+
+根 `tutor-lesson` 使用一条固定优先级路由，不先读取 INDEX 再分类：
+
+1. 学生明确暂停、结束，或当下挫败已经成为本轮首要障碍 → 挫败与暂停；
+2. 学生在讲解或提示后表示理解，但独立表现尚未出现 → 独立迁移检查；
+3. 学生已经独立完成并核验一条合法路线，且比较确有价值 → 方法比较；
+4. 已确认存在必要概念缺口、错误模型或同一解释无效 → 概念边界修复；
+5. 其余情况不读取 reference，直接使用 Teacher Control 和核心课堂循环。
+
+一次学生回应只命中第一条成立的分支。执行一个技巧动作并回应学生后立即等待；支持方式
+需要改变时，只能依据下一次学生表现重新路由。`INDEX.md` 只列出已通过验收的文件与触发
+摘要，Tutor 不把它作为一次额外读取步骤。
+
+卡顿支架的“最小方向 → 更具体关系 → 具体步骤 → 有边界讲解”属于每次帮助都可能使用的
+核心强度阶梯，保留在 `tutor-lesson/SKILL.md`，不再作为按需 reference。旧
+`misconception-repair.md`、`new-concept-explanation.md`、`stuck-scaffolding.md`、
+`contrast-and-counterexample.md` 和 `frustration-response.md` 删除；有价值的教学事实已经
+合并到上述新主人，不保留会把模型拉回旧路的文件名或交叉链接。
 
 ## 已批准设计的 Plan 与 Lesson 准备交付
 
@@ -918,7 +1124,7 @@ Prepare 不通过自动删除或更换 ID 掩盖交付失败：
 以下内容明确保留在同一总设计文档中继续讨论，当前章节不预判答案：
 
 - Roadmap 在多个历史 Plan 间的长期复诊、信息压缩与跨 Plan 课程记忆；
-- Lesson 各类特殊教学技巧 reference 的逐项细化与真实情境验证；
+- 四个已定 Lesson reference 之外的新技巧；只有新的重复真实课堂证据出现后才继续拆分；
 - 连续受挫学生（连续错误、疲劳、提示依赖）下的 Tutor 纠错与分级帮助；
 - 课后作业的布置、收缴与讲评闭环；
 - 长间隔回归时的热身与轻量复验；
@@ -1063,8 +1269,58 @@ Lesson 课堂执行与适应还至少覆盖以下真实情境：
    不把日志写成逐字稿，也不把受帮助成功润色成掌握。
 8. **不同收尾状态**：已有独立证据时不重复测验；只有提示后成功时邀请小复验但不强迫；
    学生立即结束时停止加题，且 `closed` 不被解释为能力达标。
-9. **未命中与命中特殊技巧**：常规反应只使用 Teacher Control 和核心课堂循环；超出准备
-   时最多按需读取一个匹配 reference，不预加载技巧库或让技巧反过来支配课程目标。
+9. **四个按需技巧独立接入**：概念边界修复、方法比较、独立迁移检查、挫败与暂停分别
+   进行“未命中、命中、状态转变”同情境 RED/GREEN；一个未通过不能借其他技巧通过而
+   整库启用。卡顿时只使用核心帮助阶梯，不读取第五个 reference。
+10. **Lesson 系统契约**：所有情境都检查 Tutor 只读取当前 Lesson 与当前 Block `Uses`，
+    不读取父 Plan/Roadmap、不枚举目录；必要工具结束后只产生一次学生可见回应；日志不
+    猜测时间；学生要求结束后 Lesson 顶层状态仍由 Runtime 保持和转换。
+11. **结构化写入近乎隐形**：普通教学轮次不多余调用工具；关键证据、Block 边界和真实
+    路线调整首次就选择正确命令；Tutor 不公开谈论状态管理，也不因工具存在而提前结束
+    Block、机械播放教案或增加学生等待。
+
+### Lesson 结构化写入专项验收
+
+第一层使用确定性 Runtime 测试覆盖两个工具的全部命令及其拒绝路径。多行日志、Markdown
+标题和列表内容不能逃出当前日志项；非法状态、依赖环、来源越界、越权修改和损坏的原文件
+全部拒绝；任意失败后正式文件逐字不变。Tutor 写入与学生关闭并发时只能产生一种合法
+顺序，不能丢失更新。Lesson Session 必须恰有两个结构化写工具且没有 `edit/write`，其他
+节点工具面保持原样；实际运行使用的模型提供方必须能接受工具 Schema，不能只通过本地
+类型检查。
+
+第二层使用短情境真实模型运行，分别观察：普通教学轮次不乱调用状态工具；出现关键证据
+时首次正确追加；Block 真正结束时首次正确推进；真实反应迫使调整路线时能更新 pending
+结构；学生突然停止时不越权关闭 Lesson；工具拒绝时不向学生倾倒内部过程或陷入重复
+调用。这里检验的是首击行为和学生体验，不靠用户提醒模型纠正。
+
+第三层使用这次失败时相同的模型档位和一份干净学习集，模拟真实学生，从 Roadmap 诊断、
+讨论与确认开始，完成第一个 Plan 的制定、逐课共备、准备、教学、界面关闭和 Plan 收口。
+Lesson 数量由真实学习情况动态决定，不为验收硬凑固定课次；过程中不允许人工编辑
+Markdown、提醒模型遵守工具或替它修正状态。全程保留工作区、原生 Session 和 CoT，失败
+时据此定位模型判断、工具参数、Runtime 或界面层。
+
+长周期通过需要同时满足：每次课程快照都能被严格解析；没有模型越权改变顶层生命周期；
+Classroom Log 忠实区分首次表现、实际帮助和帮助后表现；对话仍然自然，模型没有变成
+状态管理员；第一个 Plan 中实际安排的 Lesson 均已由学生关闭，并完成 Plan 收口与界面
+完成操作。最终判断以学生体验和 Roadmap、Plan、Lesson 产物为主，推理 token 与工具次数
+只作为故障诊断材料。
+
+四个 reference 的专项验收至少包括：
+
+- **概念边界修复**：明确缺概念、首次确认错误模型、已有解释仍无变化各自命中正确分支；
+  局部算术错和仍在形成的想法不命中；每轮只使用一个讲解、对照或反例，不跳读第二文件。
+- **方法比较**：已完成合法路线时先等待学生复述，再于下一轮比较一个替代；路线未完成时
+  继续当前路线，不能因参考答案不同提前比较，也不能搜索学习集补全学生路线。
+- **独立迁移检查**：提示后安排一个无提示小动作，首次表现与后续帮助分开记录；现场微题
+  明确是教师生成且位于当前 Goal 内，不能读取父节点、未链接卡片或材料寻找题目。
+- **挫败与暂停**：表达挫败但愿意继续时提供选择；明确“今天不做了”时 5/5 不再加题、
+  不修改 Lesson 顶层状态，也不把日志处理过程说给学生。
+
+每项 wording micro-test 使用同一模型、同一学习集和同一学生输入至少 5 个独立 Session，
+保留无该 reference 的对照，并人工阅读所有命中或疑似失败的 CoT。只有首击守住率达到
+5/5、且没有证据越界、公开过程泄露或生命周期越权，才把该文件加入运行时 INDEX 路由。
+流程形态通过不能抵消学生可见的数学错误。若通用核验边界已经明确后仍只出现个别措辞
+不严谨，把它记录为模型档位的残余风险；不为单句波动继续叠加路由或工具规则。
 
 验收关注 Tutor 是否始终根据学生当前真实反应选择一个成比例的下一动作，是否保持
 `Lesson Goal` 稳定并让 Block 结构可调整，是否把关键课堂证据写回其最低真实节点。任何
