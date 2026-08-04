@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from 'bun:test';
-import { cpSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { setFrontmatterField } from '../../src/runtime/frontmatter';
@@ -60,6 +60,32 @@ test('rejects reverse, skipped and mismatched transitions without changing the b
   transitionNode(root, lessonPath, 'active', 'closed');
   expect(body(readFileSync(join(root, lessonPath), 'utf8'))).toBe(body(originalLesson));
   expect(body(readFileSync(join(root, planPath), 'utf8'))).toBe(body(originalPlan));
+});
+
+test('validates the complete Lesson before any frontmatter replacement', () => {
+  const root = copyFixture();
+  const lessonPath = 'lessons/lesson-001.md';
+  const absolute = join(root, lessonPath);
+  const malformed = readFileSync(absolute, 'utf8')
+    .replace('## Block block-002', '## Missing block-002');
+  writeFileSync(absolute, malformed);
+
+  expect(() => setFrontmatterField(root, lessonPath, 'session_id', 'session-new', null))
+    .toThrow(StudyDocumentError);
+  expect(readFileSync(absolute, 'utf8')).toBe(malformed);
+});
+
+test('changes Lesson frontmatter without changing any Block source', () => {
+  const root = copyFixture();
+  const lessonPath = 'lessons/lesson-001.md';
+  const absolute = join(root, lessonPath);
+  const before = readFileSync(absolute, 'utf8');
+
+  setFrontmatterField(root, lessonPath, 'session_id', 'session-new', null);
+
+  const after = readFileSync(absolute, 'utf8');
+  expect(body(after)).toBe(body(before));
+  expect(readLesson(root, lessonPath).sessionId).toBe('session-new');
 });
 
 test('student lifecycle opens sessions without synthesized turns and returns to the parent', async () => {

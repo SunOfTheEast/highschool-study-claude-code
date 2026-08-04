@@ -1,27 +1,14 @@
-import { readFileSync, writeFileSync } from 'node:fs';
-import { isAbsolute, resolve, sep } from 'node:path';
 import { stringify as stringifyYaml } from 'yaml';
-import { StudyDocumentError } from '../study/markdown';
+import { parseLessonSource, StudyDocumentError } from '../study/markdown';
+import { mutateDocumentAtomically } from './atomic-document';
 
-function fileInside(root: string, path: string): string {
-  if (!path || isAbsolute(path)) throw new StudyDocumentError(path, 'path must be learning-set-relative');
-  const base = resolve(root);
-  const target = resolve(base, path);
-  if (target !== base && !target.startsWith(`${base}${sep}`)) {
-    throw new StudyDocumentError(path, 'path escapes the learning set');
-  }
-  return target;
-}
-
-export function setFrontmatterField(
-  root: string,
+export function replaceFrontmatterField(
+  source: string,
   path: string,
   field: string,
   value: unknown,
   expected?: unknown,
-): void {
-  const absolute = fileInside(root, path);
-  const source = readFileSync(absolute, 'utf8');
+): string {
   const match = /^(---\r?\n)([\s\S]*?)(\r?\n---(?:\r?\n|$))/.exec(source);
   if (!match) throw new StudyDocumentError(path, 'missing YAML frontmatter');
   const lines = match[2]!.split(/\r?\n/);
@@ -35,6 +22,28 @@ export function setFrontmatterField(
     }
   }
   lines[index] = `${field}: ${stringifyYaml(value).trim()}`;
-  const frontmatter = `${match[1]}${lines.join('\n')}${match[3]}`;
-  writeFileSync(absolute, `${frontmatter}${source.slice(match[0].length)}`);
+  const newline = match[1]!.includes('\r\n') ? '\r\n' : '\n';
+  const frontmatter = `${match[1]}${lines.join(newline)}${match[3]}`;
+  return `${frontmatter}${source.slice(match[0].length)}`;
+}
+
+export function setFrontmatterField(
+  root: string,
+  path: string,
+  field: string,
+  value: unknown,
+  expected?: unknown,
+): void {
+  const validate = path.startsWith('lessons/')
+    ? (source: string) => parseLessonSource(path, source)
+    : () => undefined;
+  mutateDocumentAtomically(
+    root,
+    path,
+    (source) => ({
+      source: replaceFrontmatterField(source, path, field, value, expected),
+      value: undefined,
+    }),
+    validate,
+  );
 }
