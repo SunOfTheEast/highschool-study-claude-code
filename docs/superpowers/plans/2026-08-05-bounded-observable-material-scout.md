@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Make the material Scout perform canonical feature recall plus stem-level screening, keep route-level verification in the Plan Coach, show students safe live progress, and export exact parent/child load metrics for A/B acceptance.
+**Goal:** Make the material Scout perform canonical feature recall plus stem-level screening from a safe file sidecar, keep route-level verification in the Plan Coach, show students safe live progress, and export exact parent/child load metrics for A/B acceptance.
 
-**Architecture:** Keep the existing Plan-only foreground `subagent` call and its persisted child Sessions. A focused projection module converts only safe progress facts into a dedicated `material-search` conversation item; the regular tool item remains unchanged for native file tools. The existing CoT exporter reads final parent `toolResult.details` for metrics and optionally follows persisted child Session paths for full local audit.
+**Architecture:** Keep the existing Plan-only foreground `subagent` call and its persisted child Sessions. For problem cards, generate one deterministic JSONL file that co-locates only safe canonical metadata and the public stem; Scout greps that ordinary file while non-card assets keep their free-text path. A focused projection module converts only safe progress facts into a dedicated `material-search` conversation item; the regular tool item remains unchanged for native file tools. The existing CoT exporter reads final parent `toolResult.details` for metrics and optionally follows persisted child Session paths for full local audit.
 
 **Tech Stack:** Pi native Sessions and events, `pi-subagents@0.35.1`, TypeScript 7, React 19, Bun tests, Vite, Playwright, Markdown Agent/Skill resources.
 
@@ -13,12 +13,21 @@
 - Work only in `/Users/yangrundong/Documents/GitHub/highschool-study-claude-code/.worktrees/gentle-judgment-isomorphic-acceptance` on `codex/gentle-judgment-isomorphic-acceptance`.
 - Preserve the current `thinking: medium`, Plan-only `subagent`, fresh foreground child Sessions, `concurrency: 3`, and the Scout tool allowlist `read, grep, find, ls`.
 - Do not modify `pi-subagents`, Roadmap/Plan/Lesson schema, lifecycle, course Runtime, card format, graph format, or old Workflow Runtime.
-- Do not add a sidecar, database, vector index, structured retrieval tool, hard timeout, tool budget, fixed search budget, or fixed candidate quota.
+- Add only the approved safe JSONL card sidecar. Do not add a database, vector index, structured retrieval tool, hard timeout, tool budget, fixed search budget, or fixed candidate quota.
 - Keep non-card material retrieval valid; a free-text-only video or reading task must not be forced through the problem-card graph vocabulary.
 - Never send tokens, cost, model, task brief, search terms, paths, tool arguments, recent output, candidate content, child Session path, CoT, or raw errors to the student UI.
 - Do not add exact-wording assertions for Agent or Skill prose. Use the preserved long-cycle Sessions as behavioral RED and real-model replay as GREEN.
 - Test mutations and real-model runs use a copied learning set under `/tmp`; never mutate the public example or commit credentials, Session JSONL, copied cards, or full private CoT.
 - The worktree already contains user-owned changes. Stage only the files named by the current task; `AGENTS.md` has pre-existing edits, so do not commit the whole file merely to capture this task's small guide update.
+
+## Execution checkpoint
+
+- Complete: shallow Scout/Coach responsibility split (`20b9d98`).
+- Complete: safe native progress projection and UI (`2e50b5c`).
+- Complete: child load and CoT export (`af59ab9`).
+- Complete: deterministic suite before sidecar (82 tests, 401 assertions, typecheck and build) and one M0 Playwright cycle.
+- Failed experiment: prompt-only B reduced the preserved five-call wall time from 933 to 704 seconds but used 164 tools versus A's 162; a current-format one-slot brief still took 137 seconds and read past the stem despite only 15 tools.
+- Current: implement the sidecar activated by that evidence, then repeat the micro comparison before the longitudinal run.
 
 ---
 
@@ -463,14 +472,98 @@ git add scripts/export-pi-cot.ts tests/m0/export-pi-cot.test.ts
 git commit -m "feat: export subagent load metrics"
 ```
 
+### Task 4A: Generate and consume a safe card recall sidecar
+
+**Files:**
+- Create: `apps/pi-teaching-web/scripts/build-card-recall-index.ts`
+- Create: `apps/pi-teaching-web/tests/m0/card-recall-index.test.ts`
+- Create: `examples/derivative-m0/learning-set/graph/card-recall-index.jsonl`
+- Modify: `apps/pi-teaching-web/resources/subagents/study-material-scout.md`
+- Modify: `apps/pi-teaching-web/resources/skills/prepare-approved-lesson/references/material-preparation.md`
+
+**Interfaces:**
+- Generator: `bun run scripts/build-card-recall-index.ts <learning-set-root> [output-path]`.
+- JSONL row keys, in stable order: `path`, `content_revision_id`, `goal`, `method`, `structure`, `stem`, `choice_count`, `part_count`.
+- Scout: one literal `grep` of the most selective supplied term against `graph/card-recall-index.jsonl`, then in-line AND/OR and stem screening; no candidate card read before return.
+
+- [ ] **Step 1: Write the failing index contract test**
+
+Create a test that imports `buildCardRecallIndex`, generates from the example derivative learning set in memory, and asserts:
+
+- output equals the committed sidecar byte-for-byte;
+- 519 source cards produce 519 path-sorted JSON lines;
+- every row has exactly the eight allowed keys and a real card path;
+- canonical arrays contain strings, `stem` is non-empty, and counts are non-negative integers;
+- serialized rows contain no answer, rubric, solution, route, evidence, teacher conclusion, or source-solution field;
+- representative choice and free-response cards retain their public stem and visible counts without leaking answers.
+
+Run:
+
+```bash
+cd apps/pi-teaching-web
+bun test tests/m0/card-recall-index.test.ts
+```
+
+Expected: FAIL because the generator and committed sidecar do not exist.
+
+- [ ] **Step 2: Implement the deterministic generator**
+
+Parse `cards/**/*.card.yaml` with the existing `yaml` dependency. Preserve primary-before-secondary order while deduplicating `goal`, `method`, and `structure`; include part-level goals but exclude method subroutes and structure evidence. Read the public top-level `stem`, visible choice/part counts, path, and content revision only. Sort by relative path and emit one `JSON.stringify` result per line with a final newline. Refuse malformed cards rather than silently emitting partial rows.
+
+The CLI defaults its output to `<learning-set-root>/graph/card-recall-index.jsonl`; creating the parent directory is allowed. Importing the module in tests must not execute the CLI.
+
+- [ ] **Step 3: Generate the example sidecar and reach GREEN**
+
+```bash
+cd apps/pi-teaching-web
+bun run scripts/build-card-recall-index.ts ../../../examples/derivative-m0/learning-set
+bun test tests/m0/card-recall-index.test.ts
+```
+
+Expected: 519 deterministic safe rows and PASS. Re-run the generator and use `git diff --exit-code` on the sidecar to prove idempotence.
+
+- [ ] **Step 4: Switch problem-card recall to the sidecar**
+
+Update the Scout bright line:
+
+```text
+read graph/vocabulary.yaml (and aliases only when needed)
+→ literal grep the most selective requested term once in graph/card-recall-index.jsonl
+→ evaluate every remaining requested field, stem term, avoid item, and visible workload on returned complete rows
+→ stop at the first no-risk candidate, or one genuinely distinct reserve only for a visible risk
+→ return unfenced JSON with honest matched / inspected
+```
+
+Do not open candidate card files, list directories, grep answers, infer routes, or add synonyms not supplied by the brief/alias map. If the index is missing, retain the bounded direct-field `grep` plus first-six-lines fallback. Keep non-card material on the existing free-text path. Add one sentence to the Coach material reference making the sidecar a recall aid, never final evidence.
+
+- [ ] **Step 5: Verify and commit the sidecar slice**
+
+```bash
+cd apps/pi-teaching-web
+bun test tests/m0/card-recall-index.test.ts tests/m0/native-session.test.ts
+bun run typecheck
+git diff --check -- \
+  scripts/build-card-recall-index.ts \
+  tests/m0/card-recall-index.test.ts \
+  resources/subagents/study-material-scout.md \
+  resources/skills/prepare-approved-lesson/references/material-preparation.md \
+  ../../../examples/derivative-m0/learning-set/graph/card-recall-index.jsonl
+```
+
+Stage only those five paths and commit `feat: add safe card recall index`.
+
+- [ ] **Step 6: Re-run the current-format diagnostic before the five-brief B**
+
+Copy the generated sidecar into the existing temporary A/B learning-set snapshots. Re-run the same current-format absolute-value slot brief and export the child transcript. Require structural GREEN before continuing: no `ls`/`find`, no card/answer/rubric read, no stale vocabulary, unfenced JSON, and a scoped empty result or a real metadata/stem match. Record wall time, usage, and tool distribution without inventing a fixed speed threshold.
+
 ### Task 5: Run deterministic verification and a live UI smoke
 
 **Files:**
-- Verify: all files from Tasks 1–4
+- Verify: all files from Tasks 1–4A
 - Do not create tracked browser artifacts
 
 **Interfaces:**
-- Consumes: revised prompt, safe projection, UI component, and exporter.
+- Consumes: safe sidecar, revised prompt, safe projection, UI component, and exporter.
 - Produces: deterministic proof that the normal Course lifecycle and build still work, plus one live check that native progress reaches the browser without leaks.
 
 - [ ] **Step 1: Run the focused suite**
@@ -537,7 +630,7 @@ Use the parent and child Sessions recorded by `docs/audits/2026-08-05-determinis
 
 - [ ] **Step 2: Replay the same five briefs against B**
 
-Use the same model, thinking level, learning-set copy, task briefs, concurrency, and foreground options. Do not add a timeout or expected card to the prompt. Export every parent invocation with:
+Use the same model, thinking level, learning-set copy, task briefs, concurrency, foreground options, and the generated sidecar. Do not add a timeout or expected card to the prompt. Export every parent invocation with:
 
 ```bash
 RED_SESSION_ROOT=/tmp/studyforge-deterministic-long-cycle.oQ3sv0/pi-agent/sessions/--tmp-studyforge-deterministic-long-cycle.oQ3sv0-learning-set--
