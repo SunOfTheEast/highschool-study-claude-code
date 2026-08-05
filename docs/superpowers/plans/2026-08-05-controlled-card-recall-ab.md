@@ -4,7 +4,7 @@
 
 **Goal:** Run a 16-session controlled comparison that determines whether the safe TSV sidecar reduces current Material Scout load without reducing usable problem-card recall quality.
 
-**Architecture:** Freeze four structured briefs and hidden gold cards, then run the same current Scout prompt against two read-only learning-set snapshots: A excludes the sidecar and exercises direct-field fallback; B includes the sidecar. Run fresh paired real-model Sessions at medium thinking, preserve raw evidence under `/tmp`, score quality before speed, and commit only a sanitized report.
+**Architecture:** Freeze four structured briefs and hidden gold cards, then run the same current Scout prompt against two read-only learning-set snapshots: A excludes the sidecar and exercises direct-field fallback; B includes the sidecar. Run fresh paired real-model Sessions at the model's supported high thinking level, preserve raw evidence under `/tmp`, score quality before speed, and commit only a sanitized report.
 
 **Tech Stack:** Pi CLI 0.81.0, DeepSeek `deepseek-v4-flash`, native `read/grep/find/ls`, Bash, Bun, Pi Session JSONL, existing `export-pi-cot.ts`.
 
@@ -12,7 +12,7 @@
 
 - Work only in `/Users/yangrundong/Documents/GitHub/highschool-study-claude-code/.worktrees/gentle-judgment-isomorphic-acceptance` on `codex/gentle-judgment-isomorphic-acceptance`.
 - Follow `docs/superpowers/specs/2026-08-05-controlled-card-recall-ab-design.md` exactly; do not edit questions, query terms, gold cards, scoring, Scout prompt, sidecar, or source cards during the run.
-- Use provider/model `deepseek/deepseek-v4-flash` and `--thinking medium`; stop rather than substitute.
+- Use provider/model `deepseek/deepseek-v4-flash` and `--thinking high`; stop rather than substitute. The first smoke pair requested medium but Pi deterministically clamped both arms to high, so it remains valid under the documented protocol amendment.
 - Use fresh Sessions, paired A/B execution, maximum experiment concurrency 2, and exactly two repetitions per task.
 - A and B use the same current Scout prompt. A is `direct-fallback`, not the historical deep Scout.
 - Never expose target paths, IDs, answers, intersection counts, or expected outputs to a Scout.
@@ -154,7 +154,7 @@ T1_BRIEF=$'槽位：T1-非齐次构造短题\n公开教学目的：训练学生�
   STARTED_AT="$(date +%s)"
   cd "$EXPERIMENT_ROOT/learning-set-a"
   PI_CODING_AGENT_DIR="$EXPERIMENT_ROOT/pi-agent" pi \
-    --provider deepseek --model deepseek-v4-flash --thinking medium \
+      --provider deepseek --model deepseek-v4-flash --thinking high \
     --mode json --print --tools read,grep,find,ls \
     --no-extensions --no-skills --no-prompt-templates --no-context-files \
     --system-prompt "$SCOUT_PROMPT_TEXT" \
@@ -173,7 +173,7 @@ A_PID="$!"
   STARTED_AT="$(date +%s)"
   cd "$EXPERIMENT_ROOT/learning-set-b"
   PI_CODING_AGENT_DIR="$EXPERIMENT_ROOT/pi-agent" pi \
-    --provider deepseek --model deepseek-v4-flash --thinking medium \
+      --provider deepseek --model deepseek-v4-flash --thinking high \
     --mode json --print --tools read,grep,find,ls \
     --no-extensions --no-skills --no-prompt-templates --no-context-files \
     --system-prompt "$SCOUT_PROMPT_TEXT" \
@@ -207,13 +207,13 @@ Parse both Session JSONL files and require:
 ```text
 provider = deepseek
 model = deepseek-v4-flash
-thinkingLevel = medium
+thinkingLevel = high
 enabled tool calls are only read/grep/find/ls
 final assistant text exists
 no target path appeared in the user message
 ```
 
-Also require B never opens a formal card and A reads at most the first six lines of intersection cards. If model or thinking differs, stop and report BLOCKED rather than running 14 invalid calls.
+Also require B never opens a formal card and A reads at most the first six lines of intersection cards. If model or effective high thinking differs, stop and report BLOCKED rather than running 14 invalid calls. Preserve the first smoke pair as T1 repetition 1 because both arms were already clamped to the same effective high level before any request was sent.
 
 ### Task 4: Run the remaining paired real-model Sessions
 

@@ -2,11 +2,11 @@
 
 日期：2026-08-05
 
-状态：已批准，等待运行
+状态：已批准并开始运行；thinking 档位在首对 smoke 后按模型能力做了一次透明修订
 
 ## 目标
 
-回答一个窄问题：在相同规范 brief、相同当前 Scout、相同模型和 thinking 下，使用
+回答一个窄问题：在相同规范 brief、相同当前 Scout、相同模型和有效 thinking 下，使用
 `graph/card-recall-index.tsv` 是否在降低检索负担的同时保持最终可用题卡质量。
 
 本轮不把“模糊教学需求如何翻译成规范词”与“规范词如何召回题卡”混在一起。真实产品路径
@@ -35,7 +35,7 @@ A 不是历史深读版 Scout，不能在报告中写成“旧 Scout”。它是
 - Agent：同一份 `apps/pi-teaching-web/resources/subagents/study-material-scout.md`。
 - Pi CLI：`0.81.0`。
 - Provider / model：`deepseek / deepseek-v4-flash`；不可用时停止，不替换模型。
-- Thinking：`medium`；每个 Session 必须从 JSONL 核对，若实际不是 medium，该次无效。
+- Thinking：`high`；每个 Session 必须从 JSONL 核对，若实际不是 high，该次无效。
 - 工具：`read,grep,find,ls`；禁用扩展、Skills、上下文文件和 prompt templates。
 - 每次运行都是 fresh Session；同一道题每臂运行两次，共 16 次。
 - A/B 成对运行，单对并发，避免一臂系统性落在不同时间窗口；实验最大并发为 2。
@@ -168,3 +168,25 @@ A 不是历史深读版 Scout，不能在报告中写成“旧 Scout”。它是
 - Git 报告只写脱敏聚合指标、候选相对路径、命令版本和失败分类。
 - 不提交 `auth.json`、模型密钥、完整 CoT、完整答案、Session 文件或临时学习集。
 - 验收期间不修改 Scout、sidecar 或题卡；发现问题只记录，结束后另开修复轮次。
+
+## 首对 smoke 后的协议修订
+
+首对命令按原设计显式传入 `--thinking medium`，但 A、B 两份 Session 都记录为
+`thinkingLevel: high`。本地 Pi 0.81.0 模型目录显示：
+
+```json
+{
+  "minimal": null,
+  "low": null,
+  "medium": null,
+  "high": "high",
+  "max": "max"
+}
+```
+
+Pi 的 `clampThinkingLevel()` 会从请求档位向上选择第一个受支持档位，所以 medium 对
+`deepseek-v4-flash` 确定性地夹为 high。这不是一臂独有的配置漂移，也不是结果出现后选择
+更有利的档位。修订只把冻结条件改成模型真实支持的 high；模型、Agent、brief、题目、判分
+与两臂数据均不改变。首对实际已经在 high 下对称运行，因此保留为 `T1-*-r1`；余下调用显式
+使用 `--thinking high`。Agent frontmatter 的 `thinking: medium` 对该模型不生效，作为独立
+产品事实写入最终报告，本轮不修改它。
