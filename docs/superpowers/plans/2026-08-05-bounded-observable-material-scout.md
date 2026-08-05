@@ -484,7 +484,7 @@ git commit -m "feat: export subagent load metrics"
 **Interfaces:**
 - Generator: `bun run scripts/build-card-recall-index.ts <learning-set-root> [output-path]`.
 - JSONL row keys, in stable order: `path`, `content_revision_id`, `goal`, `method`, `structure`, `stem`, `choice_count`, `part_count`.
-- Scout: one literal `grep` of the most selective supplied term against `graph/card-recall-index.jsonl`, then in-line AND/OR and stem screening; no candidate card read before return.
+- Scout: choose the most selective required field as the anchor, literal-`grep` each OR alternative in that field against `graph/card-recall-index.jsonl` (normally one call), then perform the remaining AND/OR and stem screening in-line; no candidate card read before return.
 
 - [ ] **Step 1: Write the failing index contract test**
 
@@ -516,7 +516,7 @@ The CLI defaults its output to `<learning-set-root>/graph/card-recall-index.json
 
 ```bash
 cd apps/pi-teaching-web
-bun run scripts/build-card-recall-index.ts ../../../examples/derivative-m0/learning-set
+bun run scripts/build-card-recall-index.ts ../../examples/derivative-m0/learning-set
 bun test tests/m0/card-recall-index.test.ts
 ```
 
@@ -528,7 +528,7 @@ Update the Scout bright line:
 
 ```text
 read graph/vocabulary.yaml (and aliases only when needed)
-→ literal grep the most selective requested term once in graph/card-recall-index.jsonl
+→ choose the most selective required field and literal grep each of its OR terms in graph/card-recall-index.jsonl
 → evaluate every remaining requested field, stem term, avoid item, and visible workload on returned complete rows
 → stop at the first no-risk candidate, or one genuinely distinct reserve only for a visible risk
 → return unfenced JSON with honest matched / inspected
@@ -547,7 +547,7 @@ git diff --check -- \
   tests/m0/card-recall-index.test.ts \
   resources/subagents/study-material-scout.md \
   resources/skills/prepare-approved-lesson/references/material-preparation.md \
-  ../../../examples/derivative-m0/learning-set/graph/card-recall-index.jsonl
+  ../../examples/derivative-m0/learning-set/graph/card-recall-index.jsonl
 ```
 
 Stage only those five paths and commit `feat: add safe card recall index`.
