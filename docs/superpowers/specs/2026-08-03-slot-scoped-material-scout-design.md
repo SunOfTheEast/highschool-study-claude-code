@@ -1,5 +1,11 @@
 # 按课堂素材槽位收敛的 Material Scout 设计
 
+> **状态说明（2026-08-05）**：本文保留 2026-08-03 的槽位拆分、历史基线与根因判断。
+> 当前 Material Scout 的读取深度、输出契约、Coach 分工、学生可见进度、可观测性和
+> A/B 验收以
+> [`2026-08-04-session-specific-teaching-skill-tree-design.md` 的“Material Scout 检索分工、实时进度与负担验收”章节](./2026-08-04-session-specific-teaching-skill-tree-design.md#material-scout-检索分工实时进度与负担验收)
+> 为准；本文第 6—13 节与该章节冲突的内容已经被取代，不再作为实施依据。
+
 ## 1. 目的
 
 StudyForge 已经证明临时 Scout 可以把题卡检索过程隔离在 Plan Session 之外，
