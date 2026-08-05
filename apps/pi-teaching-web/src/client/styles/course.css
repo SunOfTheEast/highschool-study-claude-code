@@ -157,6 +157,42 @@
 .tool-activity summary small[data-status="error"] { color: var(--danger); }
 .tool-activity pre { max-height: 14rem; margin: 0 0 .8rem; padding: .75rem; overflow: auto; color: var(--ink-soft); background: var(--paper-deep); font-size: .62rem; line-height: 1.55; }
 
+.material-search-activity,
+.subagent-activity {
+  margin: .2rem 0 .45rem 4rem;
+  border-top: 1px dotted var(--rule);
+  color: var(--ink-faint);
+}
+.material-search-activity {
+  display: grid;
+  grid-template-columns: .48rem minmax(0, 1fr);
+  gap: .62rem;
+  align-items: start;
+  padding: .7rem 0 .75rem;
+}
+.material-search-pulse {
+  width: .42rem;
+  height: .42rem;
+  margin-top: .17rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.material-search-activity[data-status="running"] .material-search-pulse {
+  animation: pulse-dot 1s ease-in-out infinite;
+}
+.material-search-activity[data-status="error"] .material-search-pulse { background: var(--danger); }
+.material-search-copy { display: grid; gap: .28rem; min-width: 0; }
+.material-search-copy strong { color: var(--ink-soft); font: 600 .68rem/1.35 var(--font-reading); }
+.material-search-copy small { font: .56rem/1.45 ui-monospace, monospace; }
+.subagent-activity {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .55rem 0;
+  font: .58rem/1.3 ui-monospace, monospace;
+}
+.subagent-activity small[data-status="error"] { color: var(--danger); }
+
 .empty-conversation { display: grid; place-content: center; min-height: 15rem; color: var(--ink-faint); text-align: center; }
 .empty-conversation span { color: var(--accent); font: 550 1.1rem/1.2 var(--font-display); }
 .empty-conversation p { max-width: 26rem; margin: .65rem auto 0; font: .82rem/1.7 var(--font-reading); }

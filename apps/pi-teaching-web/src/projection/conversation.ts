@@ -1,5 +1,15 @@
 import type { AgentSessionEvent, SessionEntry } from '@earendil-works/pi-coding-agent';
-import type { ConversationItem, SessionKey, StudyEvent } from '../shared/contracts';
+import type {
+  ConversationItem,
+  MaterialSearchConversationItem,
+  SessionKey,
+  StudyEvent,
+} from '../shared/contracts';
+import {
+  materialSearchEnd,
+  materialSearchStart,
+  materialSearchUpdate,
+} from './material-search';
 
 function contentText(content: unknown): string {
   if (typeof content === 'string') return content;
@@ -49,12 +59,15 @@ export function projectConversationEntries(
       if (text) items.push({ id: entry.id, kind: 'assistant', text, at: entry.timestamp });
       for (const call of toolCalls(message.content)) {
         toolPositions.set(call.id, items.length);
-        items.push({
+        const material = call.name === 'subagent'
+          ? materialSearchStart(call.id, call.arguments, entry.timestamp)
+          : null;
+        items.push(material ?? {
           id: call.id,
           kind: 'tool',
           name: call.name,
           status: 'running',
-          detail: call.arguments,
+          detail: call.name === 'subagent' ? null : call.arguments,
           at: entry.timestamp,
         });
       }
@@ -65,15 +78,30 @@ export function projectConversationEntries(
       && typeof message.toolCallId === 'string'
       && typeof message.toolName === 'string'
     ) {
-      const item: ConversationItem = {
+      const position = toolPositions.get(message.toolCallId);
+      const previous = position === undefined ? undefined : items[position];
+      const started = previous?.kind === 'material-search'
+        ? previous as MaterialSearchConversationItem
+        : undefined;
+      const material = message.toolName === 'subagent'
+        ? materialSearchEnd(
+          message.toolCallId,
+          { details: message.details },
+          message.isError === true,
+          entry.timestamp,
+          started,
+        )
+        : null;
+      const item: ConversationItem = material ?? {
         id: message.toolCallId,
         kind: 'tool',
         name: message.toolName,
         status: message.isError === true ? 'error' : 'done',
-        detail: message.details ?? contentText(message.content),
+        detail: message.toolName === 'subagent'
+          ? null
+          : (message.details ?? contentText(message.content)),
         at: entry.timestamp,
       };
-      const position = toolPositions.get(message.toolCallId);
       if (position === undefined) {
         toolPositions.set(message.toolCallId, items.length);
         items.push(item);
@@ -88,6 +116,7 @@ export function projectConversationEntries(
 export function projectLiveSessionEvent(
   sessionKey: SessionKey,
   event: AgentSessionEvent,
+  at = new Date().toISOString(),
 ): StudyEvent[] {
   if (
     event.type === 'message_update'
@@ -117,31 +146,51 @@ export function projectLiveSessionEvent(
     }];
   }
   if (event.type === 'tool_execution_start') {
+    const material = event.toolName === 'subagent'
+      ? materialSearchStart(event.toolCallId, event.args, at)
+      : null;
     return [{
       type: 'conversation-item',
       sessionKey,
-      item: {
+      item: material ?? {
         id: event.toolCallId,
         kind: 'tool',
         name: event.toolName,
         status: 'running',
-        detail: event.args,
-        at: new Date().toISOString(),
+        detail: event.toolName === 'subagent' ? null : event.args,
+        at,
       },
     }];
   }
+  if (event.type === 'tool_execution_update') {
+    if (event.toolName !== 'subagent') return [];
+    const material = materialSearchUpdate(
+      event.toolCallId,
+      event.args,
+      event.partialResult,
+      at,
+    );
+    return material ? [{
+      type: 'conversation-item',
+      sessionKey,
+      item: material,
+    }] : [];
+  }
   if (event.type === 'tool_execution_end') {
     const result = event.result as { details?: unknown } | null | undefined;
+    const material = event.toolName === 'subagent'
+      ? materialSearchEnd(event.toolCallId, event.result, event.isError, at)
+      : null;
     return [{
       type: 'conversation-item',
       sessionKey,
-      item: {
+      item: material ?? {
         id: event.toolCallId,
         kind: 'tool',
         name: event.toolName,
         status: event.isError ? 'error' : 'done',
-        detail: result?.details ?? result,
-        at: new Date().toISOString(),
+        detail: event.toolName === 'subagent' ? null : (result?.details ?? result),
+        at,
       },
     }];
   }

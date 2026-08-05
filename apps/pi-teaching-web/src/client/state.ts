@@ -1,8 +1,10 @@
 import type {
   ConversationItem,
+  MaterialSearchConversationItem,
   SessionKey,
   StudyEvent,
 } from '../shared/contracts';
+import { mergeMaterialSearchItem } from '../projection/material-search';
 
 export type ClientState = {
   conversations: Partial<Record<SessionKey, ConversationItem[]>>;
@@ -20,7 +22,27 @@ function upsert(items: ConversationItem[], incoming: ConversationItem): Conversa
   const index = items.findIndex((item) => item.id === incoming.id);
   if (index < 0) return [...items, incoming];
   const next = [...items];
-  next[index] = incoming;
+  const existing = items[index]!;
+  if (existing.kind === 'material-search' && incoming.kind === 'material-search') {
+    next[index] = mergeMaterialSearchItem(existing, incoming);
+  } else if (
+    existing.kind === 'material-search'
+    && incoming.kind === 'tool'
+    && incoming.name === 'subagent'
+    && incoming.status !== 'running'
+  ) {
+    const terminal: MaterialSearchConversationItem = {
+      ...existing,
+      status: incoming.status,
+      phase: incoming.status === 'error' ? 'adjusting' : 'done',
+      completed: incoming.status === 'done' ? existing.total : existing.completed,
+      at: incoming.at,
+      updatedAt: incoming.at,
+    };
+    next[index] = mergeMaterialSearchItem(existing, terminal);
+  } else {
+    next[index] = incoming;
+  }
   return next;
 }
 

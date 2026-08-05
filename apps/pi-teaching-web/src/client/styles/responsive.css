@@ -39,7 +39,9 @@
   .node-primary-action { justify-self: start; }
   .node-summary { grid-column: 1; }
   .message { grid-template-columns: 2.25rem minmax(0, 1fr); gap: .65rem; }
-  .tool-activity { margin-left: 2.9rem; }
+  .tool-activity,
+  .material-search-activity,
+  .subagent-activity { margin-left: 2.9rem; }
   .rail-toggle { margin: .45rem .38rem; }
 }
 

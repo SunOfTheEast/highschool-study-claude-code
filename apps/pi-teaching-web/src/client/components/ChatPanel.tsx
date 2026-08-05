@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import type { ConversationItem, SessionKey } from '../../shared/contracts';
 import { MarkdownView } from './MarkdownView';
+import { MaterialSearchActivity } from './MaterialSearchActivity';
 
 const toolStatus = {
   running: '进行中',
@@ -24,6 +25,9 @@ export function ChatPanel({
   onSend(text: string): Promise<void>;
 }) {
   const [text, setText] = useState('');
+  const materialSearchRunning = items.some((item) => (
+    item.kind === 'material-search' && item.status === 'running'
+  ));
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
@@ -40,20 +44,36 @@ export function ChatPanel({
         <code>{sessionKey}</code>
       </header>
       <div className="timeline" aria-live="polite">
-        {items.map((item) => item.kind === 'tool' ? (
-          <details className="tool-activity" key={item.id}>
-            <summary>
-              <span>{item.name}</span>
-              <small data-status={item.status}>{toolStatus[item.status]}</small>
-            </summary>
-            <pre>{JSON.stringify(item.detail, null, 2)}</pre>
-          </details>
-        ) : (
-          <article className={`message ${item.kind}`} key={item.id}>
-            <span className="message-role">{item.kind === 'user' ? '你' : '老师'}</span>
-            <div><MarkdownView>{item.text}</MarkdownView></div>
-          </article>
-        ))}
+        {items.map((item) => {
+          if (item.kind === 'material-search') {
+            return <MaterialSearchActivity item={item} key={item.id} />;
+          }
+          if (item.kind === 'tool' && item.name === 'subagent') {
+            return (
+              <div className="subagent-activity" key={item.id}>
+                <span>后台任务</span>
+                <small data-status={item.status}>{toolStatus[item.status]}</small>
+              </div>
+            );
+          }
+          if (item.kind === 'tool') {
+            return (
+              <details className="tool-activity" key={item.id}>
+                <summary>
+                  <span>{item.name}</span>
+                  <small data-status={item.status}>{toolStatus[item.status]}</small>
+                </summary>
+                <pre>{JSON.stringify(item.detail, null, 2)}</pre>
+              </details>
+            );
+          }
+          return (
+            <article className={`message ${item.kind}`} key={item.id}>
+              <span className="message-role">{item.kind === 'user' ? '你' : '老师'}</span>
+              <div><MarkdownView>{item.text}</MarkdownView></div>
+            </article>
+          );
+        })}
         {items.length === 0 && (
           <div className="empty-conversation">
             <span>从这里继续</span>
@@ -62,7 +82,9 @@ export function ChatPanel({
         )}
       </div>
       <div className="chat-feedback">
-        {running && <p className="work-status"><span />老师正在思考…</p>}
+        {running && !materialSearchRunning && (
+          <p className="work-status"><span />老师正在思考…</p>
+        )}
         {error && <p className="session-error" role="alert">{error}</p>}
       </div>
       <form className="composer" onSubmit={submit}>

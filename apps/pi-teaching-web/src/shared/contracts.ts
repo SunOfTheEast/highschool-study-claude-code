@@ -127,9 +127,31 @@ export type KnowledgeSnapshot = {
   materials: KnowledgeMaterial[];
 };
 
+export type MaterialSearchPhase =
+  | 'starting'
+  | 'filtering'
+  | 'inspecting'
+  | 'comparing'
+  | 'done'
+  | 'adjusting';
+
+export type MaterialSearchConversationItem = {
+  id: string;
+  kind: 'material-search';
+  status: 'running' | 'done' | 'error';
+  phase: MaterialSearchPhase;
+  completed: number;
+  total: number;
+  toolCount: number;
+  elapsedMs: number;
+  at: string;
+  updatedAt: string;
+};
+
 export type ConversationItem =
   | { id: string; kind: 'user'; text: string; at: string }
   | { id: string; kind: 'assistant'; text: string; at: string }
+  | MaterialSearchConversationItem
   | {
     id: string;
     kind: 'tool';
