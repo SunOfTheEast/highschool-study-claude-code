@@ -16,17 +16,15 @@
 每个槽位 brief 包含：
 
 - 槽位名称；
-- 当前 Plan 路径；
-- 相关 closed Lesson 路径；
 - 公开教学目的；
 - 材料种类与工作量；
-- 应避免的结构或近期已用材料；
+- 应避免的结构，以及需要避开的既用材料精确路径或 ID；
 - 会改变适配判断的学生事实；
 - 可选的建议检索词；
 - 只有精确组合可能过窄时才提供的放宽顺序。
 
-只允许把实际 `status: closed` 的 Lesson 写入“相关 closed Lesson”。不得把 active、
-prepared 或尚未完成的 Lesson 伪装成 closed 证据。
+Coach 已经沿当前 Plan Tree 读取了可用课程证据。把真正会改变选材的结论和既用材料压进
+brief；不要把 Plan/Lesson 路径交给 Scout，让它重新解释父子文档或扩大证据范围。
 
 建议检索词只负责召回，不代表最终适配。题卡优先使用学习集冻结词表中的规范词；自由文本
 使用短而不特殊的字面入口，并可列出常见符号变体：
@@ -42,8 +40,11 @@ prepared 或尚未完成的 Lesson 伪装成 closed 证据。
 ```
 
 非题卡材料可以只写素材类型和自由文本，不为满足格式编造 `goal`、`method` 或
-`structure`。Coach 已经拥有学生对话、Plan 和已关闭 Lesson；把会改变选材的事实压进 brief，
-不要让 Scout 再读取这些文档重做教学判断。
+`structure`。brief 不要求候选数量、完整路线、数学结论、穷尽证明或搜索起点；这些旧要求
+会与 Scout 的浅召回边界冲突。
+
+题卡 Scout 会优先使用学习集的 `graph/card-recall-index.jsonl` 做召回；它只是把公开题面和
+规范特征排在同一行的安全 sidecar，不是选材证据，也不替代 Coach 对正式题卡的完整核验。
 
 ## 调用材料 Scout
 
