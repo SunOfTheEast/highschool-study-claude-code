@@ -43,7 +43,7 @@ brief；不要把 Plan/Lesson 路径交给 Scout，让它重新解释父子文�
 `structure`。brief 不要求候选数量、完整路线、数学结论、穷尽证明或搜索起点；这些旧要求
 会与 Scout 的浅召回边界冲突。
 
-题卡 Scout 会优先使用学习集的 `graph/card-recall-index.jsonl` 做召回；它只是把公开题面和
+题卡 Scout 会优先使用学习集的 `graph/card-recall-index.tsv` 做召回；它只是把公开题面和
 规范特征排在同一行的安全 sidecar，不是选材证据，也不替代 Coach 对正式题卡的完整核验。
 
 ## 调用材料 Scout

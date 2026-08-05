@@ -4,13 +4,12 @@ import { parse as parseYaml } from 'yaml';
 
 export type CardRecallIndexRow = {
   path: string;
-  content_revision_id: string;
   goal: string[];
   method: string[];
   structure: string[];
-  stem: string;
   choice_count: number;
   part_count: number;
+  stem: string;
 };
 
 type UnknownRecord = Record<string, unknown>;
@@ -83,18 +82,25 @@ function cardToRecallRow(card: unknown, path: string): CardRecallIndexRow {
 
   return {
     path,
-    content_revision_id: requiredString(
-      root.content_revision_id,
-      'content_revision_id',
-      path,
-    ),
     goal: goals,
     method: methods,
     structure: structures,
-    stem: requiredString(root.stem, 'stem', path),
     choice_count: countArray(originalProblem.choices) || countArray(root.choices),
     part_count: partLevel.length || explicitPartCount || 1,
+    stem: requiredString(root.stem, 'stem', path),
   };
+}
+
+function renderRow(row: CardRecallIndexRow): string {
+  return [
+    row.path,
+    JSON.stringify(row.goal),
+    JSON.stringify(row.method),
+    JSON.stringify(row.structure),
+    String(row.choice_count),
+    String(row.part_count),
+    row.stem.replace(/\s*\n\s*/g, ' ').replaceAll('\t', ' '),
+  ].join('\t');
 }
 
 export async function buildCardRecallIndex(learningSetRoot: string): Promise<string> {
@@ -116,7 +122,11 @@ export async function buildCardRecallIndex(learningSetRoot: string): Promise<str
     return cardToRecallRow(card, path);
   });
 
-  return `${rows.map((row) => JSON.stringify(row)).join('\n')}\n`;
+  return [
+    'path\tgoal\tmethod\tstructure\tchoice_count\tpart_count\tstem',
+    ...rows.map(renderRow),
+    '',
+  ].join('\n');
 }
 
 if (import.meta.main) {
@@ -130,10 +140,10 @@ if (import.meta.main) {
   const resolvedRoot = resolve(learningSetRoot);
   const outputPath = process.argv[3]
     ? resolve(process.argv[3])
-    : join(resolvedRoot, 'graph/card-recall-index.jsonl');
+    : join(resolvedRoot, 'graph/card-recall-index.tsv');
   const index = await buildCardRecallIndex(resolvedRoot);
 
   mkdirSync(dirname(outputPath), { recursive: true });
   writeFileSync(outputPath, index);
-  process.stdout.write(`Wrote ${index.trimEnd().split('\n').length} rows to ${outputPath}\n`);
+  process.stdout.write(`Wrote ${index.trimEnd().split('\n').length - 1} rows to ${outputPath}\n`);
 }

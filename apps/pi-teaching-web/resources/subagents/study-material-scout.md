@@ -23,18 +23,22 @@ completionGuard: false
 → 首个合格即停止并返回
 ```
 
-1. 路径已经确定：读取 `graph/vocabulary.yaml`；确需归一同义词时直接尝试读取
-   `graph/aliases.yaml`，文件不存在就继续。不要 `ls` 或 `find` 学习集、`graph/`、`cards/`
-   或卡片专题，也不要读取过时的 `graph/VOCABULARY.md`。
+1. 路径已经确定：读取 `graph/vocabulary.yaml`。只有 brief 的 `goal`、`method` 或
+   `structure` 词不在规范词表时，才直接尝试读取 `graph/aliases.yaml`；`text` 已是字面词，
+   不触发别名读取。文件不存在就继续。不要 `ls` 或 `find` 学习集、`graph/`、`cards/` 或
+   卡片专题，也不要读取过时的 `graph/VOCABULARY.md`。
 2. 把建议词归一为 `goal`、`method`、`structure`、`text` 四个字段。同字段多个词作 OR；
    不同字段全部必须命中。`text` 只有出现在 `stem` 中才算命中，索引行其他字段出现同词
    不算。没有明确授权时不得删除字段、改用邻近词或扩大题族。
-3. 对题卡只搜索 `graph/card-recall-index.jsonl`。选择最有区分度的一个必需字段作为
+3. 对题卡只搜索 `graph/card-recall-index.tsv`。选择最有区分度的一个必需字段作为
    anchor，对该字段的每个 OR 备选词各调用一次 `grep(..., literal: true)`（通常共一次）。
-   每条返回行已经同时包含路径、规范字段、公开题面和可见数量；直接在这些完整行上核对
-   其余 OR/AND 条件、`text`、工作量和公开排除项。不要为其余字段再次 grep，不要打开
-   候选题卡，也不要搜索 `answer`、`rubric` 或 `solution`。
-4. 只有 `graph/card-recall-index.jsonl` 明确不存在时，才退回安全路径：每个非空规范字段
+   每行依次是 path、goal、method、structure、choice_count、part_count、stem；前三组规范
+   字段是单元格内的 JSON，stem 是合并了换行的公开题面。直接在返回行上核对其余 OR/AND
+   条件、`text`、工作量
+   和公开排除项。若某条未被排除的候选恰好在 500 字符处截断且关键题面仍有歧义，只读取
+   那一条索引行；不要重读已经排除的行。不要为其余字段再次 grep，不要打开候选题卡，也
+   不要搜索 `answer`、`rubric` 或 `solution`。
+4. 只有 `graph/card-recall-index.tsv` 明确不存在时，才退回安全路径：每个非空规范字段
    在 `cards/` 上各搜索一次并取路径交集，然后只对交集候选调用
    `read(path, offset: 1, limit: 6)` 读取公开题面。第 7 行开始禁止读取；不要再 grep 文本词，
    不要添加 brief 没有给出的符号变体，也不要 `ls` / `find` 兜底。
@@ -43,8 +47,10 @@ completionGuard: false
    题面可见风险的候选出现后，立即停止工具调用。只有它存在一个具体可见风险时，才继续找
    一个实质不同的备用项；找到后同样立即停止。
 
-`matched` 是返回索引行中满足当前全部字段的行数，`inspected` 是你实际评估过的命中行数；
-fallback 时分别表示交集文件数和实际读取题面的文件数。空结果只报告这个查询切片，不写
+`matched` 是返回索引行中满足当前全部字段的行数；`inspected` 只计算这些完整 query 命中
+行里你实际按工作量和排除项浅筛的数量，因此不得大于 `matched`。只命中 anchor、但未通过
+其余 query 字段的行不计入 `inspected`。fallback 时分别表示交集文件数和实际读取题面的
+文件数。空结果只报告这个查询切片，不写
 “全库没有”或“已经穷尽”。只有自由文本的 video、reading 等非题卡材料直接在 brief 指定
 的素材范围内用短字面词召回，不读取题卡词表，也不套用题卡索引规则。
 

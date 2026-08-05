@@ -9,23 +9,21 @@ const learningSetRoot = join(
 );
 const committedIndexPath = join(
   learningSetRoot,
-  'graph/card-recall-index.jsonl',
+  'graph/card-recall-index.tsv',
 );
 
-const allowedKeys = [
+const columns = [
   'path',
-  'content_revision_id',
   'goal',
   'method',
   'structure',
-  'stem',
   'choice_count',
   'part_count',
+  'stem',
 ] as const;
 
 type RecallRow = {
   path: string;
-  content_revision_id: string;
   goal: string[];
   method: string[];
   structure: string[];
@@ -34,8 +32,24 @@ type RecallRow = {
   part_count: number;
 };
 
-function parseRows(jsonl: string): RecallRow[] {
-  return jsonl.trimEnd().split('\n').map((line) => JSON.parse(line) as RecallRow);
+function parseRows(tsv: string): RecallRow[] {
+  const [header, ...lines] = tsv.trimEnd().split('\n');
+  expect(header).toBe(columns.join('\t'));
+
+  return lines.map((line) => {
+    const cells = line.split('\t');
+    expect(cells).toHaveLength(columns.length);
+    const [path, goal, method, structure, choiceCount, partCount, stem] = cells;
+    return {
+      path: path!,
+      goal: JSON.parse(goal!) as string[],
+      method: JSON.parse(method!) as string[],
+      structure: JSON.parse(structure!) as string[],
+      choice_count: Number(choiceCount),
+      part_count: Number(partCount),
+      stem: stem!,
+    };
+  });
 }
 
 describe('safe problem-card recall index', () => {
@@ -45,6 +59,7 @@ describe('safe problem-card recall index', () => {
     expect(existsSync(committedIndexPath)).toBe(true);
     expect(generated).toBe(readFileSync(committedIndexPath, 'utf8'));
 
+    const lines = generated.trimEnd().split('\n').slice(1);
     const rows = parseRows(generated);
     expect(rows).toHaveLength(519);
     expect(rows.map((row) => row.path)).toEqual(
@@ -52,10 +67,8 @@ describe('safe problem-card recall index', () => {
     );
 
     for (const row of rows) {
-      expect(Object.keys(row)).toEqual([...allowedKeys]);
       expect(row.path).toMatch(/^cards\/.+\.card\.yaml$/);
       expect(existsSync(join(learningSetRoot, row.path))).toBe(true);
-      expect(row.content_revision_id.length).toBeGreaterThan(0);
       expect(row.goal.length).toBeGreaterThan(0);
       expect(row.method.length).toBeGreaterThan(0);
       expect(row.structure.length).toBeGreaterThan(0);
@@ -68,6 +81,12 @@ describe('safe problem-card recall index', () => {
       expect(Number.isInteger(row.part_count)).toBe(true);
       expect(row.part_count).toBeGreaterThanOrEqual(0);
     }
+
+    const metadataPrefixLengths = lines.map((line) => (
+      `${line.split('\t').slice(0, 6).join('\t')}\t`.length
+    ));
+    expect(Math.max(...metadataPrefixLengths)).toBeLessThanOrEqual(232);
+    expect(lines.filter((line) => line.length <= 500).length).toBeGreaterThanOrEqual(496);
 
     const multi = rows.find((row) => row.path.includes(
       'mst_p0178_product_max_candidates_ex34_multi.card.yaml',

@@ -4,7 +4,7 @@
 
 **Goal:** Make the material Scout perform canonical feature recall plus stem-level screening from a safe file sidecar, keep route-level verification in the Plan Coach, show students safe live progress, and export exact parent/child load metrics for A/B acceptance.
 
-**Architecture:** Keep the existing Plan-only foreground `subagent` call and its persisted child Sessions. For problem cards, generate one deterministic JSONL file that co-locates only safe canonical metadata and the public stem; Scout greps that ordinary file while non-card assets keep their free-text path. A focused projection module converts only safe progress facts into a dedicated `material-search` conversation item; the regular tool item remains unchanged for native file tools. The existing CoT exporter reads final parent `toolResult.details` for metrics and optionally follows persisted child Session paths for full local audit.
+**Architecture:** Keep the existing Plan-only foreground `subagent` call and its persisted child Sessions. For problem cards, generate one deterministic compact TSV file that co-locates only safe canonical metadata and the public stem within the native grep tool's 500-character preview; Scout greps that ordinary file while non-card assets keep their free-text path. A focused projection module converts only safe progress facts into a dedicated `material-search` conversation item; the regular tool item remains unchanged for native file tools. The existing CoT exporter reads final parent `toolResult.details` for metrics and optionally follows persisted child Session paths for full local audit.
 
 **Tech Stack:** Pi native Sessions and events, `pi-subagents@0.35.1`, TypeScript 7, React 19, Bun tests, Vite, Playwright, Markdown Agent/Skill resources.
 
@@ -13,7 +13,7 @@
 - Work only in `/Users/yangrundong/Documents/GitHub/highschool-study-claude-code/.worktrees/gentle-judgment-isomorphic-acceptance` on `codex/gentle-judgment-isomorphic-acceptance`.
 - Preserve the current `thinking: medium`, Plan-only `subagent`, fresh foreground child Sessions, `concurrency: 3`, and the Scout tool allowlist `read, grep, find, ls`.
 - Do not modify `pi-subagents`, Roadmap/Plan/Lesson schema, lifecycle, course Runtime, card format, graph format, or old Workflow Runtime.
-- Add only the approved safe JSONL card sidecar. Do not add a database, vector index, structured retrieval tool, hard timeout, tool budget, fixed search budget, or fixed candidate quota.
+- Add only the approved safe TSV card sidecar. Do not add a database, vector index, structured retrieval tool, hard timeout, tool budget, fixed search budget, or fixed candidate quota.
 - Keep non-card material retrieval valid; a free-text-only video or reading task must not be forced through the problem-card graph vocabulary.
 - Never send tokens, cost, model, task brief, search terms, paths, tool arguments, recent output, candidate content, child Session path, CoT, or raw errors to the student UI.
 - Do not add exact-wording assertions for Agent or Skill prose. Use the preserved long-cycle Sessions as behavioral RED and real-model replay as GREEN.
@@ -27,7 +27,7 @@
 - Complete: child load and CoT export (`af59ab9`).
 - Complete: deterministic suite before sidecar (82 tests, 401 assertions, typecheck and build) and one M0 Playwright cycle.
 - Failed experiment: prompt-only B reduced the preserved five-call wall time from 933 to 704 seconds but used 164 tools versus A's 162; a current-format one-slot brief still took 137 seconds and read past the stem despite only 15 tools.
-- Current: implement the sidecar activated by that evidence, then repeat the micro comparison before the longitudinal run.
+- Current: compact the sidecar after its first real run proved the safety boundary but exposed native grep's 500-character line truncation, then repeat the micro comparison before the longitudinal run.
 
 ---
 
@@ -477,14 +477,14 @@ git commit -m "feat: export subagent load metrics"
 **Files:**
 - Create: `apps/pi-teaching-web/scripts/build-card-recall-index.ts`
 - Create: `apps/pi-teaching-web/tests/m0/card-recall-index.test.ts`
-- Create: `examples/derivative-m0/learning-set/graph/card-recall-index.jsonl`
+- Create: `examples/derivative-m0/learning-set/graph/card-recall-index.tsv`
 - Modify: `apps/pi-teaching-web/resources/subagents/study-material-scout.md`
 - Modify: `apps/pi-teaching-web/resources/skills/prepare-approved-lesson/references/material-preparation.md`
 
 **Interfaces:**
 - Generator: `bun run scripts/build-card-recall-index.ts <learning-set-root> [output-path]`.
-- JSONL row keys, in stable order: `path`, `content_revision_id`, `goal`, `method`, `structure`, `stem`, `choice_count`, `part_count`.
-- Scout: choose the most selective required field as the anchor, literal-`grep` each OR alternative in that field against `graph/card-recall-index.jsonl` (normally one call), then perform the remaining AND/OR and stem screening in-line; no candidate card read before return.
+- TSV columns, in stable order: `path`, `goal`, `method`, `structure`, `choice_count`, `part_count`, `stem`; the three canonical arrays use JSON encoding inside their cells, while the public stem is plain text with internal newlines and tabs flattened to spaces.
+- Scout: choose the most selective required field as the anchor, literal-`grep` each OR alternative in that field against `graph/card-recall-index.tsv` (normally one call), then perform the remaining AND/OR and stem screening in-line; no candidate card read before return.
 
 - [ ] **Step 1: Write the failing index contract test**
 
@@ -492,7 +492,7 @@ Create a test that imports `buildCardRecallIndex`, generates from the example de
 
 - output equals the committed sidecar byte-for-byte;
 - 519 source cards produce 519 path-sorted JSON lines;
-- every row has exactly the eight allowed keys and a real card path;
+- every row has exactly the seven declared columns and a real card path;
 - canonical arrays contain strings, `stem` is non-empty, and counts are non-negative integers;
 - serialized rows contain no answer, rubric, solution, route, evidence, teacher conclusion, or source-solution field;
 - representative choice and free-response cards retain their public stem and visible counts without leaking answers.
@@ -510,7 +510,7 @@ Expected: FAIL because the generator and committed sidecar do not exist.
 
 Parse `cards/**/*.card.yaml` with the existing `yaml` dependency. Preserve primary-before-secondary order while deduplicating `goal`, `method`, and `structure`; include part-level goals but exclude method subroutes and structure evidence. Read the public top-level `stem`, visible choice/part counts, path, and content revision only. Sort by relative path and emit one `JSON.stringify` result per line with a final newline. Refuse malformed cards rather than silently emitting partial rows.
 
-The CLI defaults its output to `<learning-set-root>/graph/card-recall-index.jsonl`; creating the parent directory is allowed. Importing the module in tests must not execute the CLI.
+The CLI defaults its output to `<learning-set-root>/graph/card-recall-index.tsv`; creating the parent directory is allowed. Importing the module in tests must not execute the CLI. Keep the metadata prefix below 233 characters and report test statistics proving that at least 496 of 519 full rows fit the native grep tool's 500-character line preview.
 
 - [ ] **Step 3: Generate the example sidecar and reach GREEN**
 
@@ -528,7 +528,7 @@ Update the Scout bright line:
 
 ```text
 read graph/vocabulary.yaml (and aliases only when needed)
-→ choose the most selective required field and literal grep each of its OR terms in graph/card-recall-index.jsonl
+→ choose the most selective required field and literal grep each of its OR terms in graph/card-recall-index.tsv
 → evaluate every remaining requested field, stem term, avoid item, and visible workload on returned complete rows
 → stop at the first no-risk candidate, or one genuinely distinct reserve only for a visible risk
 → return unfenced JSON with honest matched / inspected
@@ -547,7 +547,7 @@ git diff --check -- \
   tests/m0/card-recall-index.test.ts \
   resources/subagents/study-material-scout.md \
   resources/skills/prepare-approved-lesson/references/material-preparation.md \
-  ../../examples/derivative-m0/learning-set/graph/card-recall-index.jsonl
+  ../../examples/derivative-m0/learning-set/graph/card-recall-index.tsv
 ```
 
 Stage only those five paths and commit `feat: add safe card recall index`.
