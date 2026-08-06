@@ -22,7 +22,7 @@ write 完整子文件
 Roadmap 的 `## Plan Tree` 使用：
 
 ```markdown
-- [plan-001 | 阶段标题](plans/plan-001.md)
+- [plan-001 | 阶段标题](plans/plan-001/PLAN.md)
   - After:
   - Depends on:
 ```
@@ -30,14 +30,15 @@ Roadmap 的 `## Plan Tree` 使用：
 Plan 的 `## Lesson Tree` 使用：
 
 ```markdown
-- [lesson-001 | 课程标题](lessons/lesson-001.md)
+- [lesson-001 | 课程标题](plans/plan-001/lessons/lesson-001.md)
   - After:
   - Depends on:
 ```
 
 `After` 为空或填写一个前序同级节点 ID；`Depends on` 为空或填写用英文逗号分隔的
 同级节点 ID。链接 ID 必须与子文件 frontmatter 的 `id` 完全相同。路径从学习集根目录
-开始，Plan 放在 `plans/`，Lesson 放在 `lessons/`。
+开始。每个 Plan 使用 `plans/<plan-id>/` 目录，Plan 文档固定为其中的 `PLAN.md`；该
+Plan 的 Lesson 放在同一目录的 `lessons/` 下，Lesson ID 只需在当前 Plan 内唯一。
 
 ## 新 Plan 模板
 
@@ -93,7 +94,7 @@ id: lesson-001
 kind: lesson
 status: prepared
 parent_id: plan-001
-parent_path: plans/plan-001.md
+parent_path: plans/plan-001/PLAN.md
 session_id: null
 ---
 

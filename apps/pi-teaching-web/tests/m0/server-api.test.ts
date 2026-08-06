@@ -1,5 +1,11 @@
 import { afterEach, expect, test } from 'bun:test';
-import { cpSync, mkdtempSync, rmSync } from 'node:fs';
+import {
+  cpSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { AgentSessionEvent, SessionEntry } from '@earendil-works/pi-coding-agent';
@@ -48,7 +54,7 @@ function entries(): SessionEntry[] {
             type: 'toolCall',
             id: 'tool-1',
             name: 'read',
-            arguments: { path: 'plans/plan-001.md' },
+            arguments: { path: 'plans/plan-001/PLAN.md' },
           },
         ],
         api: 'openai-completions',
@@ -76,7 +82,7 @@ function entries(): SessionEntry[] {
         toolCallId: 'tool-1',
         toolName: 'read',
         content: [{ type: 'text', text: 'file content' }],
-        details: { path: 'plans/plan-001.md' },
+        details: { path: 'plans/plan-001/PLAN.md' },
         isError: false,
         timestamp: 3,
       },
@@ -101,7 +107,9 @@ test('serves only the M0 course and static knowledge snapshots', async () => {
     registry: fakeRegistry() as never,
   });
 
-  const course = await handler(new Request('http://local/api/course?selected=lessons%2Flesson-001.md'));
+  const course = await handler(new Request(
+    'http://local/api/course?selected=plans%2Fplan-001%2Flessons%2Flesson-001.md',
+  ));
   expect(course?.status).toBe(200);
   expect(await course?.json()).toMatchObject({
     selected: { kind: 'lesson', id: 'lesson-001' },
@@ -120,6 +128,69 @@ test('serves only the M0 course and static knowledge snapshots', async () => {
 
   for (const path of ['/api/views/memory', '/api/abilities', '/api/evidence']) {
     expect((await handler(new Request(`http://local${path}`)))?.status).toBe(404);
+  }
+});
+
+test('serves a reread-on-open handout with only selected public Lesson content', async () => {
+  const root = copyFixture();
+  const handler = createRequestHandler({
+    root,
+    hub: new EventHub(),
+    registry: fakeRegistry() as never,
+  });
+  const url = [
+    'http://local/api/plans/plan-001/lessons/lesson-001/handout/',
+    'block-002,block-001',
+  ].join('');
+
+  const response = await handler(new Request(url));
+  expect(response?.status).toBe(200);
+  const handout = await response?.json();
+  expect(handout).toMatchObject({
+    kind: 'lesson-handout',
+    planId: 'plan-001',
+    lessonId: 'lesson-001',
+    blocks: [
+      { id: 'block-002', studentView: expect.stringContaining('先观察这道题') },
+      { id: 'block-001', studentView: expect.stringContaining('最近遇到哪一种') },
+    ],
+  });
+  const serialized = JSON.stringify(handout);
+  for (const privateValue of [
+    '追问具体结构',
+    '10:03 学生',
+    'cards/sample.card.yaml',
+    'Teacher Control',
+    'Classroom Log',
+    'session_id',
+    'raw',
+  ]) {
+    expect(serialized).not.toContain(privateValue);
+  }
+
+  const lessonPath = join(root, 'plans/plan-001/lessons/lesson-001.md');
+  writeFileSync(
+    lessonPath,
+    readFileSync(lessonPath, 'utf8').replace('status: active', 'status: closed'),
+  );
+  expect((await handler(new Request(url)))?.status).toBe(200);
+});
+
+test('rejects malformed or out-of-tree handout API targets', async () => {
+  const root = copyFixture();
+  const handler = createRequestHandler({
+    root,
+    hub: new EventHub(),
+    registry: fakeRegistry() as never,
+  });
+  const cases = [
+    ['/api/plans/plan-001/lessons/lesson-001/handout/block-001,block-001', 400],
+    ['/api/plans/plan-001/lessons/lesson-001/handout/block-001,,block-002', 400],
+    ['/api/plans/plan-001/lessons/lesson-404/handout/block-001', 422],
+    ['/api/plans/plan-404/lessons/lesson-001/handout/block-001', 422],
+  ] as const;
+  for (const [path, status] of cases) {
+    expect((await handler(new Request(`http://local${path}`)))?.status).toBe(status);
   }
 });
 
@@ -148,7 +219,7 @@ test('returns unmodified assistant text and inspectable native tool activity', a
     kind: 'tool',
     name: 'read',
     status: 'done',
-    detail: { path: 'plans/plan-001.md' },
+    detail: { path: 'plans/plan-001/PLAN.md' },
   }));
 });
 
@@ -178,7 +249,7 @@ test('streams one accepted turn and invalidates course after a native edit', asy
           type: 'tool_execution_start',
           toolCallId: 'edit-1',
           toolName: 'edit',
-          args: { path: 'plans/plan-001.md' },
+          args: { path: 'plans/plan-001/PLAN.md' },
         });
         listener?.({
           type: 'tool_execution_end',
@@ -211,6 +282,60 @@ test('streams one accepted turn and invalidates course after a native edit', asy
     item: expect.objectContaining({ id: 'edit-1', kind: 'tool', status: 'running' }),
   }));
   expect(events).toContainEqual({ type: 'course-invalidated' });
+  expect(events).toContainEqual({ type: 'knowledge-invalidated' });
+});
+
+test('invalidates only Course after a successful Lesson custom write', async () => {
+  const root = copyFixture();
+  const hub = new EventHub();
+  const events: StudyEvent[] = [];
+  hub.subscribe((event) => events.push(event));
+  let listener: ((event: AgentSessionEvent) => void) | null = null;
+  let resolveIdle!: () => void;
+  const idle = new Promise<void>((resolve) => { resolveIdle = resolve; });
+  hub.subscribe((event) => {
+    if (event.type === 'session-run' && event.status === 'idle') resolveIdle();
+  });
+  const handler = createRequestHandler({
+    root,
+    hub,
+    registry: fakeRegistry({
+      subscribe: async (_key: SessionKey, value: (event: AgentSessionEvent) => void) => {
+        listener = value;
+        return () => {};
+      },
+      send: async () => {
+        listener?.({
+          type: 'tool_execution_end',
+          toolCallId: 'log-1',
+          toolName: 'classroom_log_append',
+          result: { details: { kind: 'lesson-write' } },
+          isError: false,
+        });
+        listener?.({
+          type: 'tool_execution_end',
+          toolCallId: 'update-failed',
+          toolName: 'classroom_update',
+          result: { details: { kind: 'lesson-write' } },
+          isError: true,
+        });
+        listener?.({ type: 'agent_end', messages: [], willRetry: false });
+      },
+    }) as never,
+  });
+
+  const response = await handler(new Request(
+    'http://local/api/sessions/lesson%3Aplan-001%3Alesson-001/messages',
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ text: '我想继续做。' }),
+    },
+  ));
+  expect(response?.status).toBe(202);
+  await idle;
+  expect(events.filter((event) => event.type === 'course-invalidated')).toHaveLength(1);
+  expect(events.filter((event) => event.type === 'knowledge-invalidated')).toHaveLength(0);
 });
 
 test('routes student lifecycle actions without generating teaching messages', async () => {
@@ -229,21 +354,24 @@ test('routes student lifecycle actions without generating teaching messages', as
         calls.push(`complete-plan:${id}`);
         return { route: '/course' as const };
       },
-      startLesson: async (id: string) => {
-        calls.push(`start-lesson:${id}`);
-        return { route: `/course/plan/plan-001/lesson/${id}`, sessionKey: `lesson:${id}` as SessionKey };
+      startLesson: async (planId: string, id: string) => {
+        calls.push(`start-lesson:${planId}:${id}`);
+        return {
+          route: `/course/plan/${planId}/lesson/${id}`,
+          sessionKey: `lesson:${planId}:${id}` as SessionKey,
+        };
       },
-      closeLesson: async (id: string) => {
-        calls.push(`close-lesson:${id}`);
-        return { route: '/course/plan/plan-001' };
+      closeLesson: async (planId: string, id: string) => {
+        calls.push(`close-lesson:${planId}:${id}`);
+        return { route: `/course/plan/${planId}` };
       },
     },
   });
 
   for (const path of [
     '/api/plans/plan-001/start',
-    '/api/lessons/lesson-001/start',
-    '/api/lessons/lesson-001/close',
+    '/api/plans/plan-001/lessons/lesson-001/start',
+    '/api/plans/plan-001/lessons/lesson-001/close',
     '/api/plans/plan-001/complete',
   ]) {
     expect((await handler(new Request(`http://local${path}`, { method: 'POST' })))?.status)
@@ -251,8 +379,8 @@ test('routes student lifecycle actions without generating teaching messages', as
   }
   expect(calls).toEqual([
     'start-plan:plan-001',
-    'start-lesson:lesson-001',
-    'close-lesson:lesson-001',
+    'start-lesson:plan-001:lesson-001',
+    'close-lesson:plan-001:lesson-001',
     'complete-plan:plan-001',
   ]);
 });

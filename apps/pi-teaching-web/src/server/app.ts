@@ -6,7 +6,9 @@ import { projectConversationEntries, projectLiveSessionEvent } from '../projecti
 import { NodeLifecycleService } from '../runtime/node-lifecycle';
 import type { WorkspaceRegistry } from '../runtime/workspace-registry';
 import type { SessionKey } from '../shared/contracts';
+import { parseHandoutBlockSegment } from '../shared/handout-route';
 import { readKnowledge } from '../study/knowledge';
+import { readLessonHandout } from '../study/lesson-handout';
 import { StudyDocumentError } from '../study/markdown';
 import { readWorkspace } from '../study/workspace';
 import type { EventHub } from './event-hub';
@@ -45,7 +47,8 @@ function errorResponse(error: unknown): Response {
 function sessionKey(value: string): SessionKey | null {
   try {
     const decoded = decodeURIComponent(value);
-    return /^(roadmap|plan|lesson):[A-Za-z0-9][A-Za-z0-9._-]*$/.test(decoded)
+    const id = '[A-Za-z0-9][A-Za-z0-9._-]*';
+    return new RegExp(`^(?:(?:roadmap|plan):${id}|lesson:${id}:${id})$`).test(decoded)
       ? decoded as SessionKey
       : null;
   } catch {
@@ -100,6 +103,16 @@ export function createRequestHandler(deps?: AppDependencies) {
         ) {
           deps.hub.publish({ type: 'course-invalidated' });
           deps.hub.publish({ type: 'knowledge-invalidated' });
+        }
+        if (
+          event.type === 'tool_execution_end'
+          && !event.isError
+          && (
+            event.toolName === 'classroom_log_append'
+            || event.toolName === 'classroom_update'
+          )
+        ) {
+          deps.hub.publish({ type: 'course-invalidated' });
         }
         if (event.type === 'agent_end' && !event.willRetry) {
           void deps.registry.readHistory(key).then((entries) => {
@@ -157,19 +170,40 @@ export function createRequestHandler(deps?: AppDependencies) {
         return json({ accepted: true }, 202);
       }
 
-      const action = /^\/api\/(plans|lessons)\/([^/]+)\/(start|complete|close)$/.exec(url.pathname);
-      if (request.method === 'POST' && action) {
-        const id = nodeId(action[2]!);
+      const handout = /^\/api\/plans\/([^/]+)\/lessons\/([^/]+)\/handout\/([^/]+)$/.exec(
+        url.pathname,
+      );
+      if (request.method === 'GET' && handout) {
+        const planId = nodeId(handout[1]!);
+        const lessonId = nodeId(handout[2]!);
+        const blockIds = parseHandoutBlockSegment(handout[3]!);
+        if (!planId || !lessonId || !blockIds) {
+          return json({ error: 'HANDOUT_ROUTE_INVALID' }, 400);
+        }
+        return json(readLessonHandout(deps.root, planId, lessonId, blockIds));
+      }
+
+      const lessonAction = /^\/api\/plans\/([^/]+)\/lessons\/([^/]+)\/(start|close)$/.exec(
+        url.pathname,
+      );
+      if (request.method === 'POST' && lessonAction) {
+        const planId = nodeId(lessonAction[1]!);
+        const lessonId = nodeId(lessonAction[2]!);
+        if (!planId || !lessonId) return json({ error: 'NODE_ID_INVALID' }, 400);
+        const result = lessonAction[3] === 'start'
+          ? await lifecycle.startLesson(planId, lessonId)
+          : await lifecycle.closeLesson(planId, lessonId);
+        deps.hub.publish({ type: 'course-invalidated' });
+        return json(result);
+      }
+
+      const planAction = /^\/api\/plans\/([^/]+)\/(start|complete)$/.exec(url.pathname);
+      if (request.method === 'POST' && planAction) {
+        const id = nodeId(planAction[1]!);
         if (!id) return json({ error: 'NODE_ID_INVALID' }, 400);
-        let result: unknown;
-        if (action[1] === 'plans' && action[3] === 'start') result = await lifecycle.startPlan(id);
-        else if (action[1] === 'plans' && action[3] === 'complete') {
-          result = await lifecycle.completePlan(id);
-        } else if (action[1] === 'lessons' && action[3] === 'start') {
-          result = await lifecycle.startLesson(id);
-        } else if (action[1] === 'lessons' && action[3] === 'close') {
-          result = await lifecycle.closeLesson(id);
-        } else return json({ error: 'LIFECYCLE_ACTION_INVALID' }, 404);
+        const result = planAction[2] === 'start'
+          ? await lifecycle.startPlan(id)
+          : await lifecycle.completePlan(id);
         deps.hub.publish({ type: 'course-invalidated' });
         return json(result);
       }

@@ -80,6 +80,22 @@ export type LessonDocument = {
   raw: string;
 };
 
+export type LessonHandoutBlock = {
+  id: string;
+  title: string;
+  kind: ActivityKind;
+  studentView: string;
+};
+
+export type LessonHandout = {
+  kind: 'lesson-handout';
+  planId: string;
+  lessonId: string;
+  title: string;
+  lessonGoal: string;
+  blocks: LessonHandoutBlock[];
+};
+
 export type CourseTreeNode = {
   kind: NodeKind;
   id: string;
@@ -127,9 +143,51 @@ export type KnowledgeSnapshot = {
   materials: KnowledgeMaterial[];
 };
 
+export type MaterialSearchPhase =
+  | 'starting'
+  | 'filtering'
+  | 'inspecting'
+  | 'comparing'
+  | 'done'
+  | 'adjusting';
+
+export type MaterialSearchConversationItem = {
+  id: string;
+  kind: 'material-search';
+  status: 'running' | 'done' | 'error';
+  phase: MaterialSearchPhase;
+  completed: number;
+  total: number;
+  toolCount: number;
+  elapsedMs: number;
+  at: string;
+  updatedAt: string;
+};
+
+export type LessonReviewConversationItem = {
+  id: string;
+  kind: 'lesson-review';
+  status: 'running' | 'done' | 'error';
+  elapsedMs: number;
+  at: string;
+  updatedAt: string;
+};
+
+export type LessonHandoutConversationItem = {
+  id: string;
+  kind: 'lesson-handout';
+  status: 'running' | 'done' | 'error';
+  title: string | null;
+  url: string | null;
+  at: string;
+};
+
 export type ConversationItem =
   | { id: string; kind: 'user'; text: string; at: string }
   | { id: string; kind: 'assistant'; text: string; at: string }
+  | MaterialSearchConversationItem
+  | LessonReviewConversationItem
+  | LessonHandoutConversationItem
   | {
     id: string;
     kind: 'tool';

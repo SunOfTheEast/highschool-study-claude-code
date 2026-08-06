@@ -1,5 +1,18 @@
 import type { AgentSessionEvent, SessionEntry } from '@earendil-works/pi-coding-agent';
-import type { ConversationItem, SessionKey, StudyEvent } from '../shared/contracts';
+import type {
+  ConversationItem,
+  LessonReviewConversationItem,
+  MaterialSearchConversationItem,
+  SessionKey,
+  StudyEvent,
+} from '../shared/contracts';
+import {
+  materialSearchEnd,
+  materialSearchStart,
+  materialSearchUpdate,
+} from './material-search';
+import { lessonReviewEnd, lessonReviewStart } from './lesson-review';
+import { lessonHandoutEnd, lessonHandoutStart } from './lesson-handout';
 
 function contentText(content: unknown): string {
   if (typeof content === 'string') return content;
@@ -49,12 +62,22 @@ export function projectConversationEntries(
       if (text) items.push({ id: entry.id, kind: 'assistant', text, at: entry.timestamp });
       for (const call of toolCalls(message.content)) {
         toolPositions.set(call.id, items.length);
-        items.push({
+        if (call.name === 'artifact_export') {
+          items.push(lessonHandoutStart(call.id, entry.timestamp));
+          continue;
+        }
+        const material = call.name === 'subagent'
+          ? materialSearchStart(call.id, call.arguments, entry.timestamp)
+          : null;
+        const review = call.name === 'subagent'
+          ? lessonReviewStart(call.id, call.arguments, entry.timestamp)
+          : null;
+        items.push(material ?? review ?? {
           id: call.id,
           kind: 'tool',
           name: call.name,
           status: 'running',
-          detail: call.arguments,
+          detail: call.name === 'subagent' ? null : call.arguments,
           at: entry.timestamp,
         });
       }
@@ -65,15 +88,57 @@ export function projectConversationEntries(
       && typeof message.toolCallId === 'string'
       && typeof message.toolName === 'string'
     ) {
-      const item: ConversationItem = {
+      const position = toolPositions.get(message.toolCallId);
+      const previous = position === undefined ? undefined : items[position];
+      if (message.toolName === 'artifact_export') {
+        const item = lessonHandoutEnd(
+          message.toolCallId,
+          { details: message.details },
+          message.isError === true,
+          entry.timestamp,
+        );
+        if (position === undefined) {
+          toolPositions.set(message.toolCallId, items.length);
+          items.push(item);
+        } else {
+          items[position] = item;
+        }
+        continue;
+      }
+      const started = previous?.kind === 'material-search'
+        ? previous as MaterialSearchConversationItem
+        : undefined;
+      const reviewStarted = previous?.kind === 'lesson-review'
+        ? previous as LessonReviewConversationItem
+        : undefined;
+      const material = message.toolName === 'subagent'
+        ? materialSearchEnd(
+          message.toolCallId,
+          { details: message.details },
+          message.isError === true,
+          entry.timestamp,
+          started,
+        )
+        : null;
+      const review = message.toolName === 'subagent'
+        ? lessonReviewEnd(
+          message.toolCallId,
+          { details: message.details },
+          message.isError === true,
+          entry.timestamp,
+          reviewStarted,
+        )
+        : null;
+      const item: ConversationItem = material ?? review ?? {
         id: message.toolCallId,
         kind: 'tool',
         name: message.toolName,
         status: message.isError === true ? 'error' : 'done',
-        detail: message.details ?? contentText(message.content),
+        detail: message.toolName === 'subagent'
+          ? null
+          : (message.details ?? contentText(message.content)),
         at: entry.timestamp,
       };
-      const position = toolPositions.get(message.toolCallId);
       if (position === undefined) {
         toolPositions.set(message.toolCallId, items.length);
         items.push(item);
@@ -88,6 +153,7 @@ export function projectConversationEntries(
 export function projectLiveSessionEvent(
   sessionKey: SessionKey,
   event: AgentSessionEvent,
+  at = new Date().toISOString(),
 ): StudyEvent[] {
   if (
     event.type === 'message_update'
@@ -117,31 +183,76 @@ export function projectLiveSessionEvent(
     }];
   }
   if (event.type === 'tool_execution_start') {
+    if (event.toolName === 'artifact_export') {
+      return [{
+        type: 'conversation-item',
+        sessionKey,
+        item: lessonHandoutStart(event.toolCallId, at),
+      }];
+    }
+    const material = event.toolName === 'subagent'
+      ? materialSearchStart(event.toolCallId, event.args, at)
+      : null;
+    const review = event.toolName === 'subagent'
+      ? lessonReviewStart(event.toolCallId, event.args, at)
+      : null;
     return [{
       type: 'conversation-item',
       sessionKey,
-      item: {
+      item: material ?? review ?? {
         id: event.toolCallId,
         kind: 'tool',
         name: event.toolName,
         status: 'running',
-        detail: event.args,
-        at: new Date().toISOString(),
+        detail: event.toolName === 'subagent' ? null : event.args,
+        at,
       },
     }];
   }
+  if (event.type === 'tool_execution_update') {
+    if (event.toolName !== 'subagent') return [];
+    const material = materialSearchUpdate(
+      event.toolCallId,
+      event.args,
+      event.partialResult,
+      at,
+    );
+    return material ? [{
+      type: 'conversation-item',
+      sessionKey,
+      item: material,
+    }] : [];
+  }
   if (event.type === 'tool_execution_end') {
+    if (event.toolName === 'artifact_export') {
+      return [{
+        type: 'conversation-item',
+        sessionKey,
+        item: lessonHandoutEnd(
+          event.toolCallId,
+          event.result,
+          event.isError,
+          at,
+        ),
+      }];
+    }
     const result = event.result as { details?: unknown } | null | undefined;
+    const material = event.toolName === 'subagent'
+      ? materialSearchEnd(event.toolCallId, event.result, event.isError, at)
+      : null;
+    const review = event.toolName === 'subagent'
+      ? lessonReviewEnd(event.toolCallId, event.result, event.isError, at)
+      : null;
     return [{
       type: 'conversation-item',
       sessionKey,
-      item: {
+      item: material ?? review ?? {
         id: event.toolCallId,
         kind: 'tool',
         name: event.toolName,
         status: event.isError ? 'error' : 'done',
-        detail: result?.details ?? result,
-        at: new Date().toISOString(),
+        detail: event.toolName === 'subagent' ? null : (result?.details ?? result),
+        at,
       },
     }];
   }

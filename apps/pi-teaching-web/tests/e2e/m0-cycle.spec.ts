@@ -1,6 +1,51 @@
 import { expect, test } from '@playwright/test';
 
+test('publishes and restores a printable handout only after the student asks for it', async ({ page }) => {
+  await page.goto('/course/plan/plan-001');
+  await expect(page.getByText('本地已连接')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Plan 001：恒成立问题选路' })).toBeVisible();
+  await expect(page.getByRole('link', { name: '查看并打印讲义' })).toHaveCount(0);
+
+  const response = await page.request.post(
+    '/api/sessions/plan%3Aplan-001/messages',
+    { data: { text: '要讲义' } },
+  );
+  expect(response.status()).toBe(202);
+  const handoutLink = page.getByRole('link', { name: '查看并打印讲义' });
+  await expect(handoutLink).toBeVisible();
+
+  await page.reload();
+  await expect(page.getByRole('link', { name: '查看并打印讲义' })).toBeVisible();
+  await page.getByRole('link', { name: '查看并打印讲义' }).click();
+  await expect(page).toHaveURL(
+    /\/course\/plan\/plan-001\/lesson\/lesson-001\/handout\/block-002,block-001$/,
+  );
+  await expect(page.getByText('先观察这道题的参数位置')).toBeVisible();
+  await expect(page.getByText('追问具体结构')).toHaveCount(0);
+
+  await page.evaluate(() => {
+    window.print = () => document.body.setAttribute('data-print-called', 'true');
+  });
+  await page.getByRole('button', { name: '打印 / 另存为 PDF' }).click();
+  await expect(page.locator('body')).toHaveAttribute('data-print-called', 'true');
+
+  await page.getByRole('link', { name: '返回本课' }).click();
+  await expect(page.getByRole('button', { name: '开始本课' })).toBeVisible();
+});
+
 test('completes the M0 Roadmap, Plan, Lesson and Knowledge browser cycle', async ({ page }) => {
+  let delayClosedLessonReload = false;
+  await page.route('**/api/course?selected=*', async (route) => {
+    const selected = new URL(route.request().url()).searchParams.get('selected');
+    if (
+      delayClosedLessonReload
+      && selected === 'plans/plan-001/lessons/lesson-001.md'
+    ) {
+      await new Promise((resolve) => setTimeout(resolve, 250));
+    }
+    await route.continue();
+  });
+
   await page.goto('/course');
 
   await expect(page.getByRole('heading', { name: '导数结构学习路线' })).toBeVisible();
@@ -27,8 +72,11 @@ test('completes the M0 Roadmap, Plan, Lesson and Knowledge browser cycle', async
   await expect(page.getByRole('complementary', { name: '课堂节点' })).toContainText('具体问诊');
   await expect(page.getByRole('complementary', { name: '课堂节点' })).toContainText('入口练习');
 
+  delayClosedLessonReload = true;
   await page.getByRole('button', { name: '结束本课' }).click();
   await expect(page).toHaveURL(/\/course\/plan\/plan-001$/);
+  await page.waitForTimeout(400);
+  await expect(page.getByRole('heading', { name: 'Plan 001：恒成立问题选路' })).toBeVisible();
   await page.reload();
   await expect(page).toHaveURL(/\/course\/plan\/plan-001$/);
   await expect(page.getByRole('heading', { name: 'Plan 001：恒成立问题选路' })).toBeVisible();
@@ -44,4 +92,20 @@ test('completes the M0 Roadmap, Plan, Lesson and Knowledge browser cycle', async
   await page.goto('/memory');
   await expect(page).toHaveURL(/\/course$/);
   await expect(page.getByRole('link', { name: '记忆' })).toHaveCount(0);
+});
+
+test('opens a standalone printable Lesson handout from its canonical URL', async ({ page }) => {
+  await page.goto(
+    '/course/plan/plan-001/lesson/lesson-001/handout/block-002,block-001',
+  );
+
+  await expect(page.getByRole('heading', { name: 'Lesson 001：真实停点问诊' }))
+    .toBeVisible();
+  await expect(page.getByRole('button', { name: '打印 / 另存为 PDF' })).toBeVisible();
+  await expect(page.getByText('先观察这道题的参数位置')).toBeVisible();
+  await expect(page.getByText('最近遇到哪一种恒成立问题')).toBeVisible();
+  await expect(page.getByLabel('课程组织')).toHaveCount(0);
+  await expect(page.getByLabel('课堂对话')).toHaveCount(0);
+  await expect(page.getByText('Teacher Control')).toHaveCount(0);
+  await expect(page.getByText('追问具体结构')).toHaveCount(0);
 });

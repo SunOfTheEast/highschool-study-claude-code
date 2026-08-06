@@ -22,7 +22,7 @@ Roadmap Session
 Plan Session 重新读取。
 
 长 Plan Session 不等待百万 token 窗口接近耗尽才整理上下文。当一次回复已经完整结束、
-本轮成功写入 `lessons/*.md`，且当前上下文达到 20 万 token 时，运行时调用 Pi 原生
+本轮成功写入 `plans/*/lessons/*.md`，且当前上下文达到 20 万 token 时，运行时调用 Pi 原生
 compaction。压缩摘要只负责帮助同一个 Plan Session 接着工作，不是新的教学事实或
 Handoff；需要细节时仍重新读取原始 Markdown，Pi JSONL 中的原始历史也不会被删除。
 Roadmap、Lesson、失败写入以及仅修改 Plan 的回合都不触发这条规则。
@@ -148,7 +148,9 @@ learning-set/
 ├── LEARNING_GUIDE.md
 ├── ROADMAP.md
 ├── plans/
-├── lessons/
+│   └── <plan-id>/
+│       ├── PLAN.md
+│       └── lessons/<lesson-id>.md
 ├── cards/
 ├── graph/
 └── materials/
@@ -182,7 +184,9 @@ Roadmap 必须包含 `Overview`、`Long-term Goal`、可观察能力标准、`Te
 - 课堂中真实发生的一条记录。
 ```
 
-严格解析器拒绝路径逃逸、父子身份不一致、重复 ID、非法状态和旧版 Lesson 区块；
+Plan ID 在 Roadmap 内唯一，Lesson ID 在所属 Plan 内唯一；Lesson Session key 使用
+`lesson:<plan-id>:<lesson-id>`。严格解析器拒绝路径逃逸、父子身份不一致、同级重复 ID、
+非法状态和旧版 Lesson 区块；
 它不自动兼容旧 learning set。
 
 ## Agent 职责
@@ -206,7 +210,8 @@ M0 HTTP API 只提供：
 - `GET /api/knowledge`
 - `GET /api/sessions/:key/history`
 - `POST /api/sessions/:key/messages`
-- Plan/Lesson 的四个 student lifecycle action
+- `POST /api/plans/:planId/start|complete`
+- `POST /api/plans/:planId/lessons/:lessonId/start|close`
 
 `/events` 通过 WebSocket 传输原始教师文本、原生工具活动、运行状态、错误和文档
 失效通知。教师最终文本不经改写；工具调用作为默认折叠的独立活动项显示。

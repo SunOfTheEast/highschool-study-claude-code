@@ -18,6 +18,7 @@ import {
   type PlanStatus,
   type RoadmapDocument,
 } from '../shared/contracts';
+import { lessonNodePath, lessonSessionKey, planNodePath } from './node-paths';
 
 type Frontmatter = Record<string, unknown>;
 
@@ -48,21 +49,14 @@ function normalizedRelativePath(root: string, requestedPath: string): string {
   return relative(absoluteRoot, absolutePath).split(sep).join('/');
 }
 
-function readSource(root: string, requestedPath: string): {
+type MarkdownSource = {
   path: string;
   raw: string;
   frontmatter: Frontmatter;
   body: string;
-} {
-  const path = normalizedRelativePath(root, requestedPath);
-  let raw: string;
-  try {
-    raw = readFileSync(resolve(root, path), 'utf8');
-  } catch (error) {
-    const detail = error instanceof Error ? error.message : 'unable to read file';
-    throw new StudyDocumentError(path, detail);
-  }
+};
 
+function parseSource(path: string, raw: string): MarkdownSource {
   const match = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(raw);
   if (!match) throw new StudyDocumentError(path, 'missing YAML frontmatter');
   let frontmatter: unknown;
@@ -81,6 +75,18 @@ function readSource(root: string, requestedPath: string): {
     frontmatter: frontmatter as Frontmatter,
     body: raw.slice(match[0].length),
   };
+}
+
+function readSource(root: string, requestedPath: string): MarkdownSource {
+  const path = normalizedRelativePath(root, requestedPath);
+  let raw: string;
+  try {
+    raw = readFileSync(resolve(root, path), 'utf8');
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : 'unable to read file';
+    throw new StudyDocumentError(path, detail);
+  }
+  return parseSource(path, raw);
 }
 
 function requiredString(
@@ -368,8 +374,7 @@ export function readPlan(root: string, requestedPath: string): PlanDocument {
   };
 }
 
-export function readLesson(root: string, requestedPath: string): LessonDocument {
-  const source = readSource(root, requestedPath);
+function parseLesson(source: MarkdownSource): LessonDocument {
   requireLiteral(source.frontmatter, 'kind', 'lesson', source.path);
   const status = requiredEnum<LessonStatus>(source.frontmatter, 'status', LESSON_STATUSES, source.path);
   const sections = splitSections(source.body, 2);
@@ -393,6 +398,20 @@ export function readLesson(root: string, requestedPath: string): LessonDocument 
       }
     }
   }
+  const byId = new Map(blocks.map((block) => [block.id, block]));
+  const visiting = new Set<string>();
+  const visited = new Set<string>();
+  const visit = (blockId: string): void => {
+    if (visiting.has(blockId)) {
+      throw new StudyDocumentError(source.path, `dependency cycle includes ${blockId}`);
+    }
+    if (visited.has(blockId)) return;
+    visiting.add(blockId);
+    for (const dependency of byId.get(blockId)!.dependsOn) visit(dependency);
+    visiting.delete(blockId);
+    visited.add(blockId);
+  };
+  for (const block of blocks) visit(block.id);
   return {
     id: requiredString(source.frontmatter, 'id', source.path),
     kind: 'lesson',
@@ -406,6 +425,14 @@ export function readLesson(root: string, requestedPath: string): LessonDocument 
     blocks,
     raw: source.raw,
   };
+}
+
+export function parseLessonSource(path: string, raw: string): LessonDocument {
+  return parseLesson(parseSource(path, raw));
+}
+
+export function readLesson(root: string, requestedPath: string): LessonDocument {
+  return parseLesson(readSource(root, requestedPath));
 }
 
 function readGuide(root: string): CourseSnapshot['guide'] {
@@ -425,6 +452,9 @@ export function readCourseTree(root: string): CourseSnapshot {
     if (plan.id !== reference.id) {
       throw new StudyDocumentError(reference.path, `tree id ${reference.id} does not match child id ${plan.id}`);
     }
+    if (reference.path !== planNodePath(plan.id)) {
+      throw new StudyDocumentError(reference.path, `Plan path must be ${planNodePath(plan.id)}`);
+    }
     if (plan.parentId !== roadmap.id || plan.parentPath !== roadmap.path) {
       throw new StudyDocumentError(reference.path, 'Plan parent does not match ROADMAP.md');
     }
@@ -438,20 +468,22 @@ export function readCourseTree(root: string): CourseSnapshot {
           `tree id ${lessonReference.id} does not match child id ${lesson.id}`,
         );
       }
+      if (lessonReference.path !== lessonNodePath(plan.id, lesson.id)) {
+        throw new StudyDocumentError(
+          lessonReference.path,
+          `Lesson path must be ${lessonNodePath(plan.id, lesson.id)}`,
+        );
+      }
       if (lesson.parentId !== plan.id || lesson.parentPath !== plan.path) {
         throw new StudyDocumentError(lessonReference.path, `Lesson parent does not match ${plan.path}`);
       }
-      if (seenNodeIds.has(lesson.id)) {
-        throw new StudyDocumentError(lessonReference.path, `duplicate node id ${lesson.id}`);
-      }
-      seenNodeIds.add(lesson.id);
       return {
         kind: 'lesson',
         id: lesson.id,
         path: lesson.path,
         title: lessonReference.title,
         status: lesson.status,
-        sessionKey: `lesson:${lesson.id}`,
+        sessionKey: lessonSessionKey(plan.id, lesson.id),
         after: lessonReference.after,
         dependsOn: lessonReference.dependsOn,
         children: [],

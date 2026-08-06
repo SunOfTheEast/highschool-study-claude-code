@@ -1,5 +1,6 @@
 import type { CourseTreeNode, SessionKey } from '../shared/contracts';
 import { readCourseTree, readLesson, readPlan, StudyDocumentError } from '../study/markdown';
+import { isLessonNodePath, isPlanNodePath } from '../study/node-paths';
 import { setFrontmatterField } from './frontmatter';
 
 type LifecycleStatus = 'prepared' | 'active' | 'closed' | 'completed';
@@ -17,9 +18,9 @@ export function transitionNode(
   expected: LifecycleStatus,
   next: LifecycleStatus,
 ): void {
-  const kind = path.startsWith('plans/')
+  const kind = isPlanNodePath(path)
     ? 'plan'
-    : path.startsWith('lessons/')
+    : isLessonNodePath(path)
       ? 'lesson'
       : null;
   if (!kind) throw new StudyDocumentError(path, 'only Plan and Lesson nodes have lifecycle transitions');
@@ -68,6 +69,23 @@ export class NodeLifecycleService {
     return located;
   }
 
+  private lesson(
+    planId: string,
+    lessonId: string,
+  ): { node: CourseTreeNode; parent: CourseTreeNode } {
+    const { node: plan } = this.node('plan', planId);
+    const lesson = plan.children.find((candidate) => (
+      candidate.kind === 'lesson' && candidate.id === lessonId
+    ));
+    if (!lesson) {
+      throw new StudyDocumentError(
+        `${planId}/${lessonId}`,
+        'lesson is not linked from the specified Plan',
+      );
+    }
+    return { node: lesson, parent: plan };
+  }
+
   async startPlan(planId: string): Promise<{ route: string; sessionKey: SessionKey }> {
     const { node } = this.node('plan', planId);
     transitionNode(this.root, node.path, 'prepared', 'active');
@@ -85,12 +103,13 @@ export class NodeLifecycleService {
     return { route: '/course' };
   }
 
-  async startLesson(lessonId: string): Promise<{ route: string; sessionKey: SessionKey }> {
-    const { node, parent } = this.node('lesson', lessonId);
-    const planId = parent?.kind === 'plan' ? parent.id : null;
-    if (!planId) throw new StudyDocumentError(node.path, 'Lesson is missing its parent Plan');
+  async startLesson(
+    planId: string,
+    lessonId: string,
+  ): Promise<{ route: string; sessionKey: SessionKey }> {
+    const { node } = this.lesson(planId, lessonId);
     transitionNode(this.root, node.path, 'prepared', 'active');
-    const sessionKey = `lesson:${lessonId}` as const;
+    const sessionKey = node.sessionKey;
     await this.sessions.open(sessionKey);
     return {
       route: `/course/plan/${encodeURIComponent(planId)}/lesson/${encodeURIComponent(lessonId)}`,
@@ -98,11 +117,9 @@ export class NodeLifecycleService {
     };
   }
 
-  async closeLesson(lessonId: string): Promise<{ route: string }> {
-    const { node, parent } = this.node('lesson', lessonId);
-    const planId = parent?.kind === 'plan' ? parent.id : null;
-    if (!planId) throw new StudyDocumentError(node.path, 'Lesson is missing its parent Plan');
-    const sessionKey = `lesson:${lessonId}` as const;
+  async closeLesson(planId: string, lessonId: string): Promise<{ route: string }> {
+    const { node } = this.lesson(planId, lessonId);
+    const sessionKey = node.sessionKey;
     await this.sessions.abort(sessionKey);
     transitionNode(this.root, node.path, 'active', 'closed');
     await this.sessions.release(sessionKey);

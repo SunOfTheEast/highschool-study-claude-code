@@ -1,9 +1,19 @@
 import type { CourseTreeNode } from '../shared/contracts';
+import {
+  formatLessonHandoutPath,
+  parseHandoutBlockSegment,
+} from '../shared/handout-route';
 
 export type BrowserRoute =
   | { kind: 'course' }
   | { kind: 'course-plan'; planId: string }
   | { kind: 'course-lesson'; planId: string; lessonId: string }
+  | {
+    kind: 'lesson-handout';
+    planId: string;
+    lessonId: string;
+    blockIds: string[];
+  }
   | { kind: 'knowledge' };
 
 function decodeId(value: string): string | null {
@@ -26,6 +36,20 @@ export function parseBrowserRoute(pathname: string): BrowserRoute | null {
     return planId ? { kind: 'course-plan', planId } : null;
   }
   if (
+    parts.length === 7
+    && parts[0] === 'course'
+    && parts[1] === 'plan'
+    && parts[3] === 'lesson'
+    && parts[5] === 'handout'
+  ) {
+    const planId = decodeId(parts[2]!);
+    const lessonId = decodeId(parts[4]!);
+    const blockIds = parseHandoutBlockSegment(parts[6]!);
+    return planId && lessonId && blockIds
+      ? { kind: 'lesson-handout', planId, lessonId, blockIds }
+      : null;
+  }
+  if (
     parts.length === 5
     && parts[0] === 'course'
     && parts[1] === 'plan'
@@ -45,6 +69,9 @@ export function formatBrowserRoute(route: BrowserRoute): string {
   if (route.kind === 'knowledge') return '/knowledge';
   if (route.kind === 'course-plan') {
     return `/course/plan/${encodeURIComponent(route.planId)}`;
+  }
+  if (route.kind === 'lesson-handout') {
+    return formatLessonHandoutPath(route.planId, route.lessonId, route.blockIds);
   }
   return `/course/plan/${encodeURIComponent(route.planId)}/lesson/${
     encodeURIComponent(route.lessonId)

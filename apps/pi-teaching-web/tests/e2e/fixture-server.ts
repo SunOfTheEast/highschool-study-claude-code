@@ -15,7 +15,7 @@ import type { SessionKey } from '../../src/shared/contracts';
 const source = join(import.meta.dir, '../fixtures/m0-learning-set');
 const root = mkdtempSync(join(tmpdir(), 'studyforge-m0-e2e-'));
 cpSync(source, root, { recursive: true });
-for (const path of ['plans/plan-001.md', 'lessons/lesson-001.md']) {
+for (const path of ['plans/plan-001/PLAN.md', 'plans/plan-001/lessons/lesson-001.md']) {
   const absolute = join(root, path);
   writeFileSync(absolute, readFileSync(absolute, 'utf8').replace(/^status: active$/m, 'status: prepared'));
 }
@@ -84,6 +84,90 @@ const registry = {
     histories.set(key, entries);
     publish(key, { type: 'message_end', message: user.message } as AgentSessionEvent);
 
+    if (key === 'plan:plan-001' && text.trim() === '要讲义') {
+      const toolCallId = `handout-${sequence}`;
+      sequence += 1;
+      const toolCall = {
+        type: 'message',
+        id: `assistant-tool-${sequence}`,
+        parentId: user.id,
+        timestamp: new Date().toISOString(),
+        message: {
+          role: 'assistant',
+          content: [{
+            type: 'toolCall',
+            id: toolCallId,
+            name: 'artifact_export',
+            arguments: {
+              kind: 'lesson-handout',
+              lessonId: 'lesson-001',
+              blockIds: ['block-002', 'block-001'],
+            },
+          }],
+          api: 'openai-completions',
+          provider: 'fixture',
+          model: 'fixture',
+          usage: {
+            input: 0,
+            output: 0,
+            cacheRead: 0,
+            cacheWrite: 0,
+            totalTokens: 0,
+            cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, total: 0 },
+          },
+          stopReason: 'toolUse',
+          timestamp: Date.now(),
+        },
+      } as MessageEntry;
+      sequence += 1;
+      const details = {
+        kind: 'lesson-handout',
+        planId: 'plan-001',
+        lessonId: 'lesson-001',
+        blockIds: ['block-002', 'block-001'],
+        title: 'Lesson 001：真实停点问诊',
+        url: '/course/plan/plan-001/lesson/lesson-001/handout/block-002,block-001',
+      };
+      const toolResult = {
+        type: 'message',
+        id: `tool-result-${sequence}`,
+        parentId: toolCall.id,
+        timestamp: new Date().toISOString(),
+        message: {
+          role: 'toolResult',
+          toolCallId,
+          toolName: 'artifact_export',
+          content: [{ type: 'text', text: JSON.stringify({ ok: true, url: details.url }) }],
+          details,
+          isError: false,
+          timestamp: Date.now(),
+        },
+      } as MessageEntry;
+      entries.push(toolCall, toolResult);
+      publish(key, {
+        type: 'tool_execution_start',
+        toolCallId,
+        toolName: 'artifact_export',
+        args: {
+          kind: 'lesson-handout',
+          lessonId: 'lesson-001',
+          blockIds: ['block-002', 'block-001'],
+        },
+      } as AgentSessionEvent);
+      publish(key, {
+        type: 'tool_execution_end',
+        toolCallId,
+        toolName: 'artifact_export',
+        result: { details },
+        isError: false,
+      } as AgentSessionEvent);
+      const assistant = messageEntry('assistant', '讲义已经整理好，课程仍然可以直接开始。', toolResult.id);
+      entries.push(assistant);
+      publish(key, { type: 'message_end', message: assistant.message } as AgentSessionEvent);
+      publish(key, { type: 'agent_end', messages: [], willRetry: false } as AgentSessionEvent);
+      return;
+    }
+
     const toolCallId = `read-${sequence}`;
     sequence += 1;
     const toolCall = {
@@ -97,7 +181,7 @@ const registry = {
           type: 'toolCall',
           id: toolCallId,
           name: 'read',
-          arguments: { path: key.startsWith('roadmap:') ? 'ROADMAP.md' : 'plans/plan-001.md' },
+          arguments: { path: key.startsWith('roadmap:') ? 'ROADMAP.md' : 'plans/plan-001/PLAN.md' },
         }],
         api: 'openai-completions',
         provider: 'fixture',
@@ -136,7 +220,7 @@ const registry = {
       type: 'tool_execution_start',
       toolCallId,
       toolName: 'read',
-      args: { path: key.startsWith('roadmap:') ? 'ROADMAP.md' : 'plans/plan-001.md' },
+      args: { path: key.startsWith('roadmap:') ? 'ROADMAP.md' : 'plans/plan-001/PLAN.md' },
     } as AgentSessionEvent);
     publish(key, {
       type: 'tool_execution_end',

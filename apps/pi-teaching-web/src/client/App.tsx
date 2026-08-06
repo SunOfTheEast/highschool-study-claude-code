@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useReducer, useState } from 'react';
+import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import type {
   CourseSnapshot,
   CourseTreeNode,
   KnowledgeSnapshot,
+  LessonHandout,
   SessionKey,
   StudyEvent,
 } from '../shared/contracts';
@@ -19,6 +20,7 @@ import {
 } from './state';
 import { CoursePage, type NodeLifecycleAction } from './pages/CoursePage';
 import { KnowledgePage } from './pages/KnowledgePage';
+import { LessonHandoutPage } from './pages/LessonHandoutPage';
 import type { PrimaryView } from './view-state';
 
 type ConnectionState = 'open' | 'connecting' | 'closed';
@@ -35,10 +37,10 @@ function findNode(
   return null;
 }
 
-function parentPlan(root: CourseTreeNode, lessonId: string): CourseTreeNode | null {
+function parentPlan(root: CourseTreeNode, lessonPath: string): CourseTreeNode | null {
   for (const plan of root.children) {
     if (plan.kind !== 'plan') continue;
-    if (plan.children.some((lesson) => lesson.kind === 'lesson' && lesson.id === lessonId)) {
+    if (plan.children.some((lesson) => lesson.kind === 'lesson' && lesson.path === lessonPath)) {
       return plan;
     }
   }
@@ -48,18 +50,24 @@ function parentPlan(root: CourseTreeNode, lessonId: string): CourseTreeNode | nu
 function routePath(route: BrowserRoute, base: CourseSnapshot): string {
   if (route.kind === 'course') return 'ROADMAP.md';
   if (route.kind === 'knowledge') return 'ROADMAP.md';
-  const node = findNode(base.tree, (candidate) => (
-    route.kind === 'course-plan'
-      ? candidate.kind === 'plan' && candidate.id === route.planId
-      : candidate.kind === 'lesson' && candidate.id === route.lessonId
-  ));
+  const node = route.kind === 'course-plan'
+    ? base.tree.children.find((candidate) => (
+      candidate.kind === 'plan' && candidate.id === route.planId
+    )) ?? null
+    : base.tree.children
+      .find((candidate) => candidate.kind === 'plan' && candidate.id === route.planId)
+      ?.children.find((candidate) => (
+        candidate.kind === 'lesson' && candidate.id === route.lessonId
+      )) ?? null;
   if (!node) throw new Error('ROUTE_NODE_NOT_FOUND');
   return node.path;
 }
 
 function keyForCourse(course: CourseSnapshot): SessionKey {
   const document = course.selected ?? course.roadmap;
-  return `${document.kind}:${document.id}`;
+  const node = findNode(course.tree, (candidate) => candidate.path === document.path);
+  if (!node) throw new Error('COURSE_SESSION_NODE_NOT_FOUND');
+  return node.sessionKey;
 }
 
 function errorText(error: unknown): string {
@@ -77,17 +85,44 @@ export function App() {
   ));
   const [course, setCourse] = useState<CourseSnapshot | null>(null);
   const [knowledge, setKnowledge] = useState<KnowledgeSnapshot | null>(null);
+  const [handout, setHandout] = useState<LessonHandout | null>(null);
+  const [handoutError, setHandoutError] = useState<string | null>(null);
+  const [handoutLoading, setHandoutLoading] = useState(route.kind === 'lesson-handout');
   const [client, dispatch] = useReducer(reduceClientState, initialClientState);
   const [connection, setConnection] = useState<ConnectionState>('connecting');
   const [notice, setNotice] = useState<string | null>('正在打开学习集…');
   const [leftOpen, setLeftOpen] = useState(false);
   const [rightOpen, setRightOpen] = useState(false);
+  const routeLoadRevision = useRef(0);
 
   const loadRoute = async (next: BrowserRoute) => {
+    const revision = ++routeLoadRevision.current;
+    if (next.kind === 'lesson-handout') {
+      setRoute(next);
+      setHandout(null);
+      setHandoutError(null);
+      setHandoutLoading(true);
+      setNotice(null);
+      try {
+        const value = await api.lessonHandout(next.planId, next.lessonId, next.blockIds);
+        if (revision !== routeLoadRevision.current) return;
+        setHandout(value);
+      } catch (error) {
+        if (revision === routeLoadRevision.current) setHandoutError(errorText(error));
+      } finally {
+        if (revision === routeLoadRevision.current) setHandoutLoading(false);
+      }
+      return;
+    }
+    setHandout(null);
+    setHandoutError(null);
+    setHandoutLoading(false);
     setNotice('正在读取当前节点…');
     try {
       if (next.kind === 'knowledge') {
-        setKnowledge(await api.knowledge());
+        const value = await api.knowledge();
+        if (revision !== routeLoadRevision.current) return;
+        setKnowledge(value);
         setRoute(next);
         setNotice(null);
         return;
@@ -99,12 +134,13 @@ export function App() {
         : await api.course(selectedPath);
       const key = keyForCourse(value);
       const history = await api.history(key);
+      if (revision !== routeLoadRevision.current) return;
       setCourse(value);
       setRoute(next);
       dispatch({ type: 'conversation-snapshot', sessionKey: key, items: history });
       setNotice(null);
     } catch (error) {
-      setNotice(errorText(error));
+      if (revision === routeLoadRevision.current) setNotice(errorText(error));
     }
   };
 
@@ -130,6 +166,7 @@ export function App() {
   }, []);
 
   useEffect(() => {
+    if (route.kind === 'lesson-handout') return undefined;
     let disposed = false;
     let socket: WebSocket | null = null;
     let retry: number | null = null;
@@ -141,12 +178,15 @@ export function App() {
       socket.onopen = () => setConnection('open');
       socket.onmessage = (message) => {
         const event = JSON.parse(String(message.data)) as StudyEvent;
+        const currentRoute = parseBrowserRoute(window.location.pathname) ?? { kind: 'course' };
         if (event.type === 'course-invalidated') {
-          if (route.kind !== 'knowledge') void loadRoute(route);
+          if (currentRoute.kind !== 'knowledge' && currentRoute.kind !== 'lesson-handout') {
+            void loadRoute(currentRoute);
+          }
           return;
         }
         if (event.type === 'knowledge-invalidated') {
-          if (route.kind === 'knowledge') void api.knowledge().then(setKnowledge);
+          if (currentRoute.kind === 'knowledge') void loadRoute(currentRoute);
           return;
         }
         dispatch(event);
@@ -177,21 +217,27 @@ export function App() {
   const nodeRoute = (node: CourseTreeNode): BrowserRoute => {
     if (node.kind === 'roadmap') return { kind: 'course' };
     if (node.kind === 'plan') return { kind: 'course-plan', planId: node.id };
-    const plan = course ? parentPlan(course.tree, node.id) : null;
+    const plan = course ? parentPlan(course.tree, node.path) : null;
     if (!plan) throw new Error('LESSON_PARENT_NOT_FOUND');
     return { kind: 'course-lesson', planId: plan.id, lessonId: node.id };
   };
 
-  const lifecycle = async (action: NodeLifecycleAction, id: string) => {
+  const lifecycle = async (action: NodeLifecycleAction, node: CourseTreeNode) => {
     setNotice('正在更新学习位置…');
     try {
       const result = action === 'start-plan'
-        ? await api.startPlan(id)
+        ? await api.startPlan(node.id)
         : action === 'complete-plan'
-          ? await api.completePlan(id)
+          ? await api.completePlan(node.id)
           : action === 'start-lesson'
-            ? await api.startLesson(id)
-            : await api.closeLesson(id);
+            ? await api.startLesson(
+              parentPlan(course!.tree, node.path)!.id,
+              node.id,
+            )
+            : await api.closeLesson(
+              parentPlan(course!.tree, node.path)!.id,
+              node.id,
+            );
       const url = new URL(result.route, window.location.origin);
       navigate(parseBrowserRoute(url.pathname) ?? { kind: 'course' });
     } catch (error) {
@@ -234,6 +280,22 @@ export function App() {
     leftOpen,
     rightOpen,
   ]);
+
+  if (route.kind === 'lesson-handout') {
+    return (
+      <LessonHandoutPage
+        value={handout}
+        error={handoutError}
+        loading={handoutLoading}
+        backHref={formatBrowserRoute({
+          kind: 'course-lesson',
+          planId: route.planId,
+          lessonId: route.lessonId,
+        })}
+        onPrint={() => window.print()}
+      />
+    );
+  }
 
   return (
     <AppShell

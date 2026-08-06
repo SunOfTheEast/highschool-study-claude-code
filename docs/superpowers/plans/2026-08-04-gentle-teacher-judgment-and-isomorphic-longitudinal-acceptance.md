@@ -6,7 +6,7 @@
 
 **Architecture:** Keep the change prompt-only: the shared mathematics teaching core owns the decision policy, while Plan, Lesson, and Gojo resources apply it in their narrower roles. Deterministic checks protect the existing runtime; real-model acceptance uses isolated copies of learning sets and the normal HTTP/lifecycle APIs, so no test dialogue or acceptance state enters production files.
 
-**Tech Stack:** Markdown agent resources, Bun 1.3, TypeScript 7, React/Vite, Pi native Sessions, `deepseek/deepseek-v4-flash`, curl/jq, local Markdown learning sets.
+**Tech Stack:** Markdown agent resources, Bun 1.3, TypeScript 7, React/Vite, Pi native Sessions, a controlled `deepseek-v4-flash`/`deepseek-v4-pro` short comparison, `deepseek/deepseek-v4-pro` for the longitudinal cycle, curl/jq, local Markdown learning sets.
 
 ## Global Constraints
 
@@ -33,7 +33,7 @@
 - Modify `apps/pi-teaching-web/resources/agents/plan-node.md`: apply the policy before private preparation.
 - Modify `apps/pi-teaching-web/resources/agents/lesson-node.md`: adapt ordinary classroom preferences without manufacturing a dispute.
 - Modify `apps/pi-teaching-web/resources/personas/gojo.md`: keep confidence from becoming performative opposition.
-- Create `docs/audits/2026-08-04-gentle-teacher-judgment-acceptance.md`: record deterministic checks and five-copy short real-model results.
+- Create `docs/audits/2026-08-04-gentle-teacher-judgment-acceptance.md`: record deterministic checks and the user-requested Flash/Pro short comparison.
 - Create `docs/audits/2026-08-04-isomorphic-plan-longitudinal-acceptance.md`: record the complete natural-student learning cycle and its bounded conclusions.
 
 ### Task 1: Implement the shared gentle-judgment policy
@@ -211,8 +211,8 @@ schema、工具、Agent、前端门禁或提示词固定措辞测试。
 
 ## 五副本短回合
 
-Task 3 完成后补入五次隔离运行的模型、输入、墙钟时间、reasoning tokens、行为分类
-和代表性复验。本节在真实数据产生前不作通过结论。
+Task 3 完成后补入 Flash 与 Pro 两次隔离运行的模型、输入、墙钟时间、reasoning
+tokens 和行为分类。本节在真实数据产生前不作通过结论。
 
 ## 结论边界
 
@@ -230,25 +230,24 @@ git commit -m "docs: record gentle judgment deterministic checks"
 
 Expected: one documentation-only commit.
 
-### Task 3: Run the five-copy short real-model acceptance
+### Task 3: Compare Flash and Pro on the same short negotiation
 
 **Files:**
 - Modify: `docs/audits/2026-08-04-gentle-teacher-judgment-acceptance.md`
 - Read only: `apps/pi-teaching-web/tests/fixtures/m0-learning-set/**`
-- Runtime artifacts: `/tmp/studyforge-gentle-judge-*/learning-set`, `/tmp/studyforge-gentle-judge-*/server.log`, and native Pi JSONL files.
+- Runtime artifacts: `/tmp/studyforge-gentle-judge-*/learning-set`, isolated Pi configuration, and native Pi JSONL files.
 
 **Interfaces:**
-- Consumes: `POST /api/sessions/:key/messages`, `GET /api/sessions/:key/history`, `STUDY_PERSONA=gojo`, and the locally configured `deepseek/deepseek-v4-flash` default.
-- Produces: five independent samples with `wall_seconds`, `reasoning_tokens`, teacher action, premature-future-branch flag, and a representative persistence follow-up.
+- Consumes: `POST /api/sessions/:key/messages`, `GET /api/sessions/:key/history`, `STUDY_PERSONA=gojo`, and isolated configs selecting `deepseek-v4-flash` or `deepseek-v4-pro` at high thinking.
+- Produces: one Flash and one Pro sample with first-visible latency, parent reasoning, teacher action, and premature-future-branch classification.
 
-- [ ] **Step 1: Build once and create five clean fixture copies**
+- [ ] **Step 1: Build once and create two clean fixture copies**
 
 Run from `apps/pi-teaching-web`:
 
 ```bash
 bun run build
-BASE="$(mktemp -d /tmp/studyforge-gentle-judge-base-XXXXXX)"
-for index in 1 2 3 4 5; do
+for index in flash pro; do
   root="$(mktemp -d /tmp/studyforge-gentle-judge-${index}-XXXXXX)"
   mkdir -p "$root/learning-set"
   cp -R tests/fixtures/m0-learning-set/. "$root/learning-set/"
@@ -256,95 +255,55 @@ for index in 1 2 3 4 5; do
     "$root/learning-set/ROADMAP.md" \
     "$root/learning-set/plans/plan-001.md" \
     "$root/learning-set/lessons/lesson-001.md"
-  printf '%s\n' "$root" >> "$BASE/roots.txt"
 done
 ```
 
-Expected: `roots.txt` contains five distinct roots; each node has `session_id: null`.
+Expected: two distinct roots; each node has `session_id: null`.
 
-- [ ] **Step 2: Define bounded polling without imposing a model timeout**
+- [ ] **Step 2: Run the unchanged Flash sample to natural completion**
 
-Use server-side completion, not a fixed model execution timeout. The observation loop may wait until a new assistant item appears or the server emits an error. For each root, choose the first free port from `65483` upward, then run:
-
-```bash
-STUDY_PERSONA=gojo \
-STUDY_LEARNING_SET="$root/learning-set" \
-STUDY_WEB_PORT="$port" \
-bun run start >"$root/server.log" 2>&1 &
-server_pid=$!
-until curl -fsS "http://127.0.0.1:$port/api/health" >/dev/null; do sleep 1; done
-```
-
-Do not kill or reuse a port owned by another process; increment until `/api/health` belongs to the newly started PID.
-
-- [ ] **Step 3: Send the exact baseline input once per isolated Plan**
-
-For each copy, record `started_at`, the initial assistant count, and send exactly:
+Use the existing local default config and send exactly:
 
 ```text
 下一节别做问诊了，直接给我五道最难的题，方法越多越好。我就想这么练。
 ```
 
-Use:
+Let the first turn complete even if it launches material search. Record time to first visible reply, full parent reasoning/output, tool count, child-Scout use, final public action, and whether the Coach asked about the material ambiguity.
 
-```bash
-url="http://127.0.0.1:$port/api/sessions/plan%3Aplan-001"
-before="$(curl -fsS "$url/history" | jq '[.[] | select(.kind == "assistant")] | length')"
-started_at="$(date +%s)"
-jq -n --arg text '下一节别做问诊了，直接给我五道最难的题，方法越多越好。我就想这么练。' '{text:$text}' \
-  | curl -fsS -X POST "$url/messages" -H 'content-type: application/json' --data-binary @- \
-  | jq -e '.accepted == true' >/dev/null
-while true; do
-  curl -fsS "$url/history" > "$root/history.json"
-  now="$(jq '[.[] | select(.kind == "assistant")] | length' "$root/history.json")"
-  test "$now" -gt "$before" && break
-  grep -q 'session-error' "$root/server.log" && break
-  sleep 2
-done
-finished_at="$(date +%s)"
-jq -n --argjson seconds "$((finished_at-started_at))" '{wall_seconds:$seconds}' > "$root/measurement.json"
+- [ ] **Step 3: Create a credential-safe isolated Pro configuration**
+
+Create a temporary `PI_CODING_AGENT_DIR`, copy only the local `auth.json` and model catalog needed to use the already configured provider, and derive `settings.json` with:
+
+```json
+{"defaultProvider":"deepseek","defaultModel":"deepseek-v4-pro","packages":[]}
 ```
 
-Expected: every copy produces one new student-visible Coach reply or a documented runtime/provider error. Do not silently discard failures.
+Preserve every unrelated setting outside those three keys, chmod the temporary directory to `700`, chmod credentials to `600`, and never print or commit credential values.
 
-- [ ] **Step 4: Extract raw-session evidence and classify each turn**
+- [ ] **Step 4: Run Pro with the identical product state and input**
 
-Read the new `session_id` from each copied `plans/plan-001.md`, locate the owner-matched JSONL using the same lookup behavior as `findOwnedPiSessionFile`, and record:
-
-- model/provider and `thinkingLevel`;
-- user timestamp, final assistant timestamp, and wall time;
-- output and reasoning token counts from the final assistant entry;
-- whether the Coach recovered the intended benefit;
-- whether it asked at most one consequential clarification or used one reversible adjustment;
-- whether it invented “show all methods first” as a student instruction;
-- whether CoT repeatedly reopened oppose/comply after deciding the action;
-- whether CoT prematurely planned Lesson/search/write branches.
-
-Store only derived counts and short compliant excerpts in the report. Keep complete JSONL local and record its absolute path; do not copy private reasoning into git.
-
-- [ ] **Step 5: Run one representative persistence follow-up**
-
-Choose the median-reasoning successful copy and send exactly:
+Start the second copy with `PI_CODING_AGENT_DIR` pointing to the isolated Pro config. Confirm the new native Session records:
 
 ```text
-我就是想先看完整的多解全景。
+model_change: deepseek/deepseek-v4-pro
+thinking_level_change: high
 ```
 
-Observe only until the Coach accepts and either reads `coach-study` or begins its first normal preparation tool action. Then stop that server; do not wait for all material Scouts or a completed Lesson. Classify failure if the Coach reopens the same persuasion without new evidence.
+Send the same student sentence. Stop after the first visible teacher reply and the immediately adjacent tool action; this comparison asks whether the larger model resolves the judgment quickly, not whether five Scouts can finish. Record the same parent metrics as the Flash run.
 
-- [ ] **Step 6: Finish the short acceptance report with measured results**
+- [ ] **Step 5: Finish the model-comparison report**
 
 Add:
 
-- a five-row table containing run root, Session ID, wall seconds, reasoning tokens, public action, and premature-branch result;
-- median wall time and median reasoning tokens;
-- comparison with the 52-second/4226-reasoning-token baseline;
-- the representative follow-up behavior;
-- a bounded verdict against the target: median reasoning `<= 1200`, ordinary negotiation median around 20 seconds, with high remaining latency classified as provider delay only if reasoning has already fallen materially.
+- one row per model with Session ID, first-visible wall seconds, parent reasoning tokens, tool count, public action, and ambiguity handling;
+- the exact boundary that Flash ran to full turn completion while Pro was stopped after its first visible acceptance;
+- whether a larger model reduced repetitive reasoning;
+- whether either model actually obeyed the intended material-ambiguity rule;
+- the decision to use Pro for the natural longitudinal cycle without claiming that model substitution repaired the prompt semantics.
 
 Do not claim that this short test proves teaching quality.
 
-- [ ] **Step 7: Commit the real-model report update**
+- [ ] **Step 6: Commit the real-model report update**
 
 Run:
 
@@ -363,7 +322,7 @@ Expected: no `/tmp` artifacts, credentials, or full CoT enter the commit.
 - Runtime artifacts: `/tmp/studyforge-isomorphic-long-*/learning-set`, server log, projected histories, and native Pi JSONL files.
 
 **Interfaces:**
-- Consumes: the real Roadmap/Plan/Lesson lifecycle, all packaged teaching resources and templates, real cards/graph assets, and the locally configured model.
+- Consumes: the real Roadmap/Plan/Lesson lifecycle, all packaged teaching resources and templates, real cards/graph assets, and the isolated `deepseek/deepseek-v4-pro` high-thinking configuration from Task 3.
 - Produces: one closed multi-Lesson first Plan whose own documents demonstrate or honestly fail to demonstrate the intended isomorphic-transformation capability.
 
 - [ ] **Step 1: Create one clean derivative learning-set copy**
@@ -596,4 +555,4 @@ If any item fails, report it as a bounded residual instead of patching a new mec
 
 - [ ] **Step 4: Prepare a concise handoff**
 
-Report the prompt files changed, deterministic results, five-copy latency/reasoning medians, actual Lesson count, whether the isomorphism goal completed, the two or three most important observed teaching strengths, and every P0/P1 residual. Include absolute links to both audit reports and the final commit. Do not require the resting user to reconstruct the result from commentary.
+Report the prompt files changed, deterministic results, Flash/Pro comparison, actual Lesson count, whether the isomorphism goal completed, the two or three most important observed teaching strengths, and every P0/P1 residual. Include absolute links to both audit reports and the final commit. Do not require the resting user to reconstruct the result from commentary.

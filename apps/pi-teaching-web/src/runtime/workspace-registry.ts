@@ -37,26 +37,15 @@ type OwnedNode = {
 
 function findNode(
   node: CourseTreeNode,
-  kind: CourseTreeNode['kind'],
-  id: string,
+  key: SessionKey,
   parent: CourseTreeNode | null = null,
 ): { tree: CourseTreeNode; parent: CourseTreeNode | null } | null {
-  if (node.kind === kind && node.id === id) return { tree: node, parent };
+  if (node.sessionKey === key) return { tree: node, parent };
   for (const child of node.children) {
-    const found = findNode(child, kind, id, node);
+    const found = findNode(child, key, node);
     if (found) return found;
   }
   return null;
-}
-
-function parseSessionKey(key: SessionKey): { kind: CourseTreeNode['kind']; id: string } {
-  const separator = key.indexOf(':');
-  const kind = key.slice(0, separator);
-  const id = key.slice(separator + 1);
-  if (!['roadmap', 'plan', 'lesson'].includes(kind) || !id) {
-    throw new Error(`SESSION_KEY_INVALID: ${key}`);
-  }
-  return { kind: kind as CourseTreeNode['kind'], id };
 }
 
 export class WorkspaceRegistry {
@@ -72,10 +61,11 @@ export class WorkspaceRegistry {
   ) {}
 
   private owner(key: SessionKey): OwnedNode {
-    const { kind, id } = parseSessionKey(key);
     const course = readCourseTree(this.root);
-    const located = findNode(course.tree, kind, id);
+    const located = findNode(course.tree, key);
     if (!located) throw new Error(`SESSION_NODE_NOT_FOUND: ${key}`);
+    const kind = located.tree.kind;
+    const id = located.tree.id;
     const document = kind === 'roadmap'
       ? readRoadmap(this.root)
       : kind === 'plan'

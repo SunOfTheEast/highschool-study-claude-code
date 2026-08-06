@@ -25,7 +25,7 @@ session_id: null
 
 ## Plan Tree
 
-- [plan-001 | 恒成立问题选路](plans/plan-001.md)
+- [plan-001 | 恒成立问题选路](plans/plan-001/PLAN.md)
   - After:
   - Depends on:
 

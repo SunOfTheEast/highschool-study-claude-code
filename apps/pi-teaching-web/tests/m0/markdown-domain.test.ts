@@ -1,5 +1,12 @@
 import { afterEach, expect, test } from 'bun:test';
-import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  cpSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
@@ -22,6 +29,42 @@ function copyFixture(): string {
   return root;
 }
 
+function arrangeTwoPlanDirectories(root: string): void {
+  const firstDirectory = join(root, 'plans/plan-001');
+  const firstPlanPath = 'plans/plan-001/PLAN.md';
+  const firstLessonPath = 'plans/plan-001/lessons/lesson-001.md';
+  writeFileSync(
+    join(root, 'ROADMAP.md'),
+    readFileSync(join(root, 'ROADMAP.md'), 'utf8')
+      .replace(
+        '## Current Position',
+        '- [plan-002 | 主动换路](plans/plan-002/PLAN.md)\n'
+        + '  - After: plan-001\n'
+        + '  - Depends on: plan-001\n\n'
+        + '## Current Position',
+      ),
+  );
+  const firstPlan = readFileSync(join(firstDirectory, 'PLAN.md'), 'utf8');
+  const firstLesson = readFileSync(join(root, firstLessonPath), 'utf8');
+
+  const secondDirectory = join(root, 'plans/plan-002');
+  mkdirSync(join(secondDirectory, 'lessons'), { recursive: true });
+  writeFileSync(
+    join(secondDirectory, 'PLAN.md'),
+    firstPlan
+      .replaceAll('plan-001', 'plan-002')
+      .replaceAll('plans/plan-001', 'plans/plan-002')
+      .replace('恒成立问题选路', '主动换路'),
+  );
+  writeFileSync(
+    join(secondDirectory, 'lessons/lesson-001.md'),
+    firstLesson
+      .replace('parent_id: plan-001', 'parent_id: plan-002')
+      .replaceAll('plans/plan-001', 'plans/plan-002')
+      .replace('真实停点问诊', '复杂目标改写'),
+  );
+}
+
 afterEach(() => {
   while (roots.length > 0) rmSync(roots.pop()!, { recursive: true, force: true });
 });
@@ -29,13 +72,13 @@ afterEach(() => {
 test('reads canonical Roadmap, Plan, Lesson and block-local classroom facts', () => {
   const root = copyFixture();
   const roadmap = readRoadmap(root);
-  const plan = readPlan(root, 'plans/plan-001.md');
-  const lesson = readLesson(root, 'lessons/lesson-001.md');
+  const plan = readPlan(root, 'plans/plan-001/PLAN.md');
+  const lesson = readLesson(root, 'plans/plan-001/lessons/lesson-001.md');
   const course = readCourseTree(root);
 
   expect(roadmap.plans).toEqual([{
     id: 'plan-001',
-    path: 'plans/plan-001.md',
+    path: 'plans/plan-001/PLAN.md',
     title: '恒成立问题选路',
     after: null,
     dependsOn: [],
@@ -57,12 +100,33 @@ test('reads canonical Roadmap, Plan, Lesson and block-local classroom facts', ()
   expect(course.tree.children[0]?.children[0]?.status).toBe('active');
 });
 
+test('scopes repeated Lesson IDs and Session keys to their parent Plan directory', () => {
+  const root = copyFixture();
+  arrangeTwoPlanDirectories(root);
+
+  const course = readCourseTree(root);
+  const [first, second] = course.tree.children;
+
+  expect(first?.path).toBe('plans/plan-001/PLAN.md');
+  expect(second?.path).toBe('plans/plan-002/PLAN.md');
+  expect(first?.children[0]).toMatchObject({
+    id: 'lesson-001',
+    path: 'plans/plan-001/lessons/lesson-001.md',
+    sessionKey: 'lesson:plan-001:lesson-001',
+  });
+  expect(second?.children[0]).toMatchObject({
+    id: 'lesson-001',
+    path: 'plans/plan-002/lessons/lesson-001.md',
+    sessionKey: 'lesson:plan-002:lesson-001',
+  });
+});
+
 test('selects a document without compiling it into another node', () => {
   const root = copyFixture();
-  const workspace = readWorkspace(root, 'lessons/lesson-001.md');
+  const workspace = readWorkspace(root, 'plans/plan-001/lessons/lesson-001.md');
 
   expect(workspace.selected?.kind).toBe('lesson');
-  expect(workspace.selected?.path).toBe('lessons/lesson-001.md');
+  expect(workspace.selected?.path).toBe('plans/plan-001/lessons/lesson-001.md');
   expect(workspace.roadmap.raw).not.toContain('10:03 学生');
 });
 
@@ -102,19 +166,19 @@ test('reads static method, card and material assets without personal evidence', 
 
 test('reads child status only from child frontmatter', () => {
   const root = copyFixture();
-  const lessonPath = join(root, 'lessons/lesson-001.md');
+  const lessonPath = join(root, 'plans/plan-001/lessons/lesson-001.md');
   const source = readFileSync(lessonPath, 'utf8');
   writeFileSync(lessonPath, source.replace('status: active', 'status: closed'));
 
   const course = readCourseTree(root);
   expect(course.tree.children[0]?.children[0]?.status).toBe('closed');
-  expect(readPlan(root, 'plans/plan-001.md').raw).not.toContain('closed');
+  expect(readPlan(root, 'plans/plan-001/PLAN.md').raw).not.toContain('closed');
 });
 
 test('allows a Roadmap or Plan to begin without materialized children', () => {
   const root = copyFixture();
   const roadmapPath = join(root, 'ROADMAP.md');
-  const planPath = join(root, 'plans/plan-001.md');
+  const planPath = join(root, 'plans/plan-001/PLAN.md');
   writeFileSync(
     roadmapPath,
     readFileSync(roadmapPath, 'utf8').replace(
@@ -131,7 +195,7 @@ test('allows a Roadmap or Plan to begin without materialized children', () => {
   );
 
   expect(readRoadmap(root).plans).toEqual([]);
-  expect(readPlan(root, 'plans/plan-001.md').lessons).toEqual([]);
+  expect(readPlan(root, 'plans/plan-001/PLAN.md').lessons).toEqual([]);
 });
 
 test('reports the source file and reason for malformed or legacy documents', () => {
@@ -143,7 +207,7 @@ test('reports the source file and reason for malformed or legacy documents', () 
 
   for (const [label, mutate] of cases) {
     const root = copyFixture();
-    const relative = 'lessons/lesson-001.md';
+    const relative = 'plans/plan-001/lessons/lesson-001.md';
     const path = join(root, relative);
     writeFileSync(path, mutate(readFileSync(path, 'utf8')));
     try {
@@ -168,13 +232,13 @@ test('rejects path escape, duplicate tree ids and mismatched child identity', ()
     roadmapPath,
     roadmap.replace(
       '## Current Position',
-      '- [plan-001 | Duplicate](plans/plan-001.md)\n  - After:\n  - Depends on:\n\n## Current Position',
+      '- [plan-001 | Duplicate](plans/plan-001/PLAN.md)\n  - After:\n  - Depends on:\n\n## Current Position',
     ),
   );
   expect(() => readRoadmap(duplicated)).toThrow(StudyDocumentError);
 
   const mismatch = copyFixture();
-  const planPath = join(mismatch, 'plans/plan-001.md');
+  const planPath = join(mismatch, 'plans/plan-001/PLAN.md');
   writeFileSync(
     planPath,
     readFileSync(planPath, 'utf8').replace('id: plan-001', 'id: wrong-plan'),

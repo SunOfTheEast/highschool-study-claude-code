@@ -2,8 +2,10 @@ import type {
   ConversationItem,
   CourseSnapshot,
   KnowledgeSnapshot,
+  LessonHandout,
   SessionKey,
 } from '../shared/contracts';
+import { formatLessonHandoutApiPath } from '../shared/handout-route';
 
 export class ApiError extends Error {
   constructor(readonly status: number, readonly body: unknown) {
@@ -43,6 +45,11 @@ export const api = {
     `/api/course${selected ? `?selected=${encodeURIComponent(selected)}` : ''}`,
   ),
   knowledge: () => json<KnowledgeSnapshot>('/api/knowledge'),
+  lessonHandout: (
+    planId: string,
+    lessonId: string,
+    blockIds: readonly string[],
+  ) => json<LessonHandout>(formatLessonHandoutApiPath(planId, lessonId, blockIds)),
   history: (key: SessionKey) => json<ConversationItem[]>(
     `/api/sessions/${encodeURIComponent(key)}/history`,
   ),
@@ -56,10 +63,10 @@ export const api = {
   completePlan: (id: string) => post<{ route: string }>(
     `/api/plans/${encodeURIComponent(id)}/complete`,
   ),
-  startLesson: (id: string) => post<{ route: string; sessionKey: SessionKey }>(
-    `/api/lessons/${encodeURIComponent(id)}/start`,
+  startLesson: (planId: string, id: string) => post<{ route: string; sessionKey: SessionKey }>(
+    `/api/plans/${encodeURIComponent(planId)}/lessons/${encodeURIComponent(id)}/start`,
   ),
-  closeLesson: (id: string) => post<{ route: string }>(
-    `/api/lessons/${encodeURIComponent(id)}/close`,
+  closeLesson: (planId: string, id: string) => post<{ route: string }>(
+    `/api/plans/${encodeURIComponent(planId)}/lessons/${encodeURIComponent(id)}/close`,
   ),
 };

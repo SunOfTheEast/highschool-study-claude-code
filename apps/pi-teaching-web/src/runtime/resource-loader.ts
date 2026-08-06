@@ -11,6 +11,7 @@ import {
   modelToolsForNode,
   type NodeSessionScope,
 } from './session-scope';
+import { studySubagentGuard } from './study-subagent-guard';
 
 const resourceRoot = join(dirname(fileURLToPath(import.meta.url)), '../../resources');
 
@@ -21,8 +22,8 @@ const roleFiles = {
 } as const;
 
 const roleSkills = {
-  roadmap: ['roadmap-study', 'plan-next-cycle'],
-  plan: ['coach-study', 'plan-next-cycle'],
+  roadmap: ['roadmap-dialogue', 'prepare-approved-plan'],
+  plan: ['plan-dialogue', 'prepare-approved-lesson'],
   lesson: ['tutor-lesson'],
 } as const;
 
@@ -106,6 +107,13 @@ export async function createRoleResourceLoader(
     eventBus,
     additionalExtensionPaths: scope.nodeKind === 'plan'
       ? [fileURLToPath(import.meta.resolve('pi-subagents'))]
+      : [],
+    extensionFactories: scope.nodeKind === 'plan'
+      ? [{
+        name: 'study-subagent-guard',
+        factory: studySubagentGuard,
+        hidden: true,
+      }]
       : [],
     additionalSkillPaths: resources.skillPaths,
     noExtensions: true,

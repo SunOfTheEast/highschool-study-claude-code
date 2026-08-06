@@ -103,13 +103,13 @@ export function CoursePage({
   rightOpen: boolean;
   onNodeSelect(node: CourseTreeNode): void;
   onSend(text: string): Promise<void>;
-  onLifecycle(action: NodeLifecycleAction, id: string): Promise<void>;
+  onLifecycle(action: NodeLifecycleAction, node: CourseTreeNode): Promise<void>;
   onToggleLeft(): void;
   onToggleRight(): void;
 }) {
   const document = value.selected ?? value.roadmap;
   const selectedNode = findNode(value.tree, document.path) ?? value.tree;
-  const sessionKey = `${document.kind}:${document.id}` as SessionKey;
+  const sessionKey = selectedNode.sessionKey as SessionKey;
   const action = actionFor(document);
   const activeBlock = document.kind === 'lesson'
     ? document.blocks.find((block) => block.status === 'active') ?? null
@@ -145,7 +145,7 @@ export function CoursePage({
             <button
               type="button"
               className="node-primary-action"
-              onClick={() => void onLifecycle(action.action, document.id)}
+              onClick={() => void onLifecycle(action.action, selectedNode)}
             >
               {action.label}
             </button>
