@@ -6,6 +6,7 @@ import {
 
 export type BrowserRoute =
   | { kind: 'course' }
+  | { kind: 'course-roadmap' }
   | { kind: 'course-plan'; planId: string }
   | { kind: 'course-lesson'; planId: string; lessonId: string }
   | {
@@ -27,6 +28,7 @@ function decodeId(value: string): string | null {
 
 export function parseBrowserRoute(pathname: string): BrowserRoute | null {
   if (pathname === '/course') return { kind: 'course' };
+  if (pathname === '/course/roadmap') return { kind: 'course-roadmap' };
   if (pathname === '/knowledge') return { kind: 'knowledge' };
   if (!pathname.startsWith('/') || pathname.endsWith('/')) return null;
 
@@ -66,6 +68,7 @@ export function parseBrowserRoute(pathname: string): BrowserRoute | null {
 
 export function formatBrowserRoute(route: BrowserRoute): string {
   if (route.kind === 'course') return '/course';
+  if (route.kind === 'course-roadmap') return '/course/roadmap';
   if (route.kind === 'knowledge') return '/knowledge';
   if (route.kind === 'course-plan') {
     return `/course/plan/${encodeURIComponent(route.planId)}`;
@@ -82,7 +85,7 @@ export function routeForCourseNode(
   node: Pick<CourseTreeNode, 'kind' | 'id'>,
   parentPlanId: string | null,
 ): BrowserRoute | null {
-  if (node.kind === 'roadmap') return { kind: 'course' };
+  if (node.kind === 'roadmap') return { kind: 'course-roadmap' };
   if (node.kind === 'plan') return { kind: 'course-plan', planId: node.id };
   return parentPlanId === null
     ? null

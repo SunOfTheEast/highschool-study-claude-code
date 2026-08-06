@@ -49,6 +49,10 @@ test('completes the M0 Roadmap, Plan, Lesson and Knowledge browser cycle', async
   await page.goto('/course');
 
   await expect(page.getByRole('heading', { name: '导数结构学习路线' })).toBeVisible();
+  await expect(page.getByText('继续学习', { exact: true })).toBeVisible();
+  await expect(page.getByPlaceholder('写下你的想法或解题过程…')).toHaveCount(0);
+  await page.getByRole('link', { name: /与老师讨论路线/ }).click();
+  await expect(page).toHaveURL(/\/course\/roadmap$/);
   await page.getByPlaceholder('写下你的想法或解题过程…').fill('我觉得恒成立问题比较棘手。');
   await page.getByRole('button', { name: /发送/ }).click();
   await expect(page.getByText('我觉得恒成立问题比较棘手。', { exact: true })).toBeVisible();
@@ -91,6 +95,7 @@ test('completes the M0 Roadmap, Plan, Lesson and Knowledge browser cycle', async
   expect((await page.request.get('/api/views/memory')).status()).toBe(404);
   await page.goto('/memory');
   await expect(page).toHaveURL(/\/course$/);
+  await expect(page.getByRole('heading', { name: '导数结构学习路线' })).toBeVisible();
   await expect(page.getByRole('link', { name: '记忆' })).toHaveCount(0);
 });
 

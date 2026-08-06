@@ -19,6 +19,7 @@ import {
   reduceClientState,
 } from './state';
 import { CoursePage, type NodeLifecycleAction } from './pages/CoursePage';
+import { CourseOverviewPage } from './pages/CourseOverviewPage';
 import { KnowledgePage } from './pages/KnowledgePage';
 import { LessonHandoutPage } from './pages/LessonHandoutPage';
 import type { PrimaryView } from './view-state';
@@ -48,7 +49,7 @@ function parentPlan(root: CourseTreeNode, lessonPath: string): CourseTreeNode | 
 }
 
 function routePath(route: BrowserRoute, base: CourseSnapshot): string {
-  if (route.kind === 'course') return 'ROADMAP.md';
+  if (route.kind === 'course' || route.kind === 'course-roadmap') return 'ROADMAP.md';
   if (route.kind === 'knowledge') return 'ROADMAP.md';
   const node = route.kind === 'course-plan'
     ? base.tree.children.find((candidate) => (
@@ -128,6 +129,13 @@ export function App() {
         return;
       }
       const base = await api.course();
+      if (next.kind === 'course') {
+        if (revision !== routeLoadRevision.current) return;
+        setCourse(base);
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
       const selectedPath = routePath(next, base);
       const value = selectedPath === 'ROADMAP.md'
         ? base
@@ -215,7 +223,7 @@ export function App() {
   const activeView: PrimaryView = route.kind === 'knowledge' ? 'knowledge' : 'course';
 
   const nodeRoute = (node: CourseTreeNode): BrowserRoute => {
-    if (node.kind === 'roadmap') return { kind: 'course' };
+    if (node.kind === 'roadmap') return { kind: 'course-roadmap' };
     if (node.kind === 'plan') return { kind: 'course-plan', planId: node.id };
     const plan = course ? parentPlan(course.tree, node.path) : null;
     if (!plan) throw new Error('LESSON_PARENT_NOT_FOUND');
@@ -254,6 +262,9 @@ export function App() {
     if (!course || !selectedKey) {
       return <div className="loading-screen"><b>正在读取课程节点</b></div>;
     }
+    if (route.kind === 'course') {
+      return <CourseOverviewPage value={course} onNavigate={navigate} />;
+    }
     return (
       <CoursePage
         value={course}
@@ -271,6 +282,7 @@ export function App() {
     );
   }, [
     activeView,
+    route,
     knowledge,
     course,
     selectedKey,
