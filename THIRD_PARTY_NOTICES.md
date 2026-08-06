@@ -20,6 +20,7 @@ StudyForge source code and project-authored documentation are released under Apa
 | `yaml` | 2.9.0 | ISC | [eemeli/yaml](https://github.com/eemeli/yaml) |
 | `vite` | 8.1.5 | MIT | [vitejs/vite](https://github.com/vitejs/vite) |
 | `@vitejs/plugin-react` | 6.0.3 | MIT | [vitejs/vite-plugin-react](https://github.com/vitejs/vite-plugin-react) |
+| `typebox` | 1.1.38 | MIT | [sinclairzx81/typebox](https://github.com/sinclairzx81/typebox) |
 | `typescript` | 7.0.2 | Apache-2.0 | [microsoft/TypeScript](https://github.com/microsoft/TypeScript) |
 | `@playwright/test` | 1.61.1 | Apache-2.0 | [microsoft/playwright](https://github.com/microsoft/playwright) |
 | `@types/bun` | 1.3.14 | MIT | [DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped) |

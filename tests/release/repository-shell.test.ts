@@ -23,6 +23,7 @@ test('exposes one StudyForge workspace from the repository root', () => {
     'test:e2e': 'bun run --cwd apps/studyforge test:e2e',
   });
   expect(app.name).toBe('@studyforge/app');
+  expect(app.devDependencies.typebox).toBe('1.1.38');
   expect(existsSync(join(root, 'apps/studyforge/src/server/index.ts'))).toBe(true);
   expect(existsSync(join(root, 'apps/pi-teaching-web'))).toBe(false);
   expect(existsSync(join(root, 'bun.lock'))).toBe(true);
