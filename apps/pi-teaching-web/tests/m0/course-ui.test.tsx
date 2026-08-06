@@ -248,6 +248,12 @@ test('makes dialogue the central workspace and hides Teacher Control from class 
   );
 
   expect(markup).toContain('class="course-workspace"');
+  expect(markup).toContain('data-node-kind="lesson"');
+  expect(markup).toContain('class="workspace-breadcrumbs"');
+  expect(markup).toContain('href="/course"');
+  expect(markup).toContain('href="/course/plan/plan-001"');
+  expect(markup).toContain('class="progress-line"');
+  expect(markup).toContain('必做进度');
   expect(markup).toContain('aria-label="课程组织"');
   expect(markup).toContain('aria-label="课堂对话"');
   expect(markup).toContain('aria-label="课堂节点"');
@@ -259,7 +265,48 @@ test('makes dialogue the central workspace and hides Teacher Control from class 
   expect(markup).toContain('结束本课');
 
   const css = readFileSync(join(import.meta.dir, '../../src/client/styles/course.css'), 'utf8');
-  expect(css).toContain('minmax(32rem, 1.9fr)');
+  expect(css).toContain('264px minmax(0, 1fr) 308px');
+  expect(css).toContain('.workspace-breadcrumbs');
+  expect(css).toContain('background: var(--paper-mid)');
+});
+
+test('keeps a closed Lesson transcript visible in an explicit read-only state', () => {
+  const value = readWorkspace(fixture, 'plans/plan-001/lessons/lesson-001.md');
+  const plan = value.tree.children[0]!;
+  const lesson = plan.children[0]!;
+  const closed = {
+    ...value,
+    selected: value.selected?.kind === 'lesson'
+      ? { ...value.selected, status: 'closed' as const }
+      : value.selected,
+    tree: {
+      ...value.tree,
+      children: [{
+        ...plan,
+        children: [{ ...lesson, status: 'closed' as const }],
+      }],
+    },
+  };
+  const markup = renderToStaticMarkup(
+    <CoursePage
+      value={closed}
+      items={items}
+      running={false}
+      error={null}
+      leftOpen
+      rightOpen
+      onNodeSelect={() => {}}
+      onSend={async () => {}}
+      onLifecycle={async () => {}}
+      onToggleLeft={() => {}}
+      onToggleRight={() => {}}
+    />,
+  );
+
+  expect(markup).toContain('已结束 · 只读');
+  expect(markup).toContain('具体是哪一种结构让你最犹豫？');
+  expect(markup).toContain('<textarea');
+  expect(markup).toContain('disabled=""');
 });
 
 test('reconciles streaming text, final messages and tool status by id', () => {

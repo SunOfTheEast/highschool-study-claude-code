@@ -11,6 +11,7 @@ import { ActivityDrawer } from '../components/ActivityDrawer';
 import { ChatPanel } from '../components/ChatPanel';
 import { CourseTree } from '../components/CourseTree';
 import { MarkdownView } from '../components/MarkdownView';
+import { WorkspaceBreadcrumbs } from '../components/WorkspaceBreadcrumbs';
 
 export type NodeLifecycleAction =
   | 'start-plan'
@@ -118,9 +119,11 @@ export function CoursePage({
   return (
     <main
       className="course-workspace"
+      data-node-kind={document.kind}
       data-left={leftOpen ? 'open' : 'closed'}
       data-right={rightOpen ? 'open' : 'closed'}
     >
+      <WorkspaceBreadcrumbs value={value} selectedNode={selectedNode} />
       <aside className="course-rail" data-open={leftOpen}>
         <button type="button" className="rail-toggle" onClick={onToggleLeft}>
           <span aria-hidden="true">{leftOpen ? '‹' : '›'}</span>

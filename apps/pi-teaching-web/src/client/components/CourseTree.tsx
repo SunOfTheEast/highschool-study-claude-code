@@ -1,4 +1,6 @@
 import type { CourseTreeNode } from '../../shared/contracts';
+import { planProgress } from '../course-navigation';
+import { ProgressLine } from './ProgressLine';
 
 const statusLabel = {
   prepared: '待开始',
@@ -16,6 +18,7 @@ function Branch({
   selectedPath: string;
   onSelect(node: CourseTreeNode): void;
 }) {
+  const progress = node.kind === 'plan' ? planProgress(node) : null;
   return (
     <li data-kind={node.kind} data-status={node.status}>
       <button
@@ -25,6 +28,13 @@ function Branch({
       >
         <small>{statusLabel[node.status]}</small>
         <strong>{node.title}</strong>
+        {progress && progress.total > 0 && (
+          <ProgressLine
+            value={progress.settled}
+            max={progress.total}
+            label="课次进度"
+          />
+        )}
       </button>
       {node.dependsOn.length > 0 && (
         <p className="course-dependencies">承接：{node.dependsOn.join('、')}</p>
