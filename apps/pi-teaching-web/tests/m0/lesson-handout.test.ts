@@ -43,7 +43,13 @@ test('projects selected Student Views in requested order and nothing private', (
         id: 'block-002',
         title: '入口练习',
         kind: 'problem',
-        studentView: '先观察这道题的参数位置，说说你准备从哪里切入。',
+        studentView: [
+          '先观察这道题的参数位置，说说你准备从哪里切入。',
+          '',
+          '\\[',
+          '\\frac{x^2-1}{x-1}=x+1',
+          '\\]',
+        ].join('\n'),
       },
       {
         id: 'block-001',

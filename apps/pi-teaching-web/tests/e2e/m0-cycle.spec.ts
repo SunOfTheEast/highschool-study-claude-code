@@ -72,6 +72,28 @@ test('completes the M0 Roadmap, Plan, Lesson and Knowledge browser cycle', async
   await expect(page).toHaveURL(/\/course\/plan\/plan-001\/lesson\/lesson-001$/);
   await page.getByRole('button', { name: '开始本课' }).click();
   await expect(page.getByRole('button', { name: '结束本课' })).toBeVisible();
+  await page.getByPlaceholder('写下你的想法或解题过程…').fill('我先观察参数出现的位置。');
+  await page.getByRole('button', { name: /发送/ }).click();
+  await expect(page.getByText('我先观察参数出现的位置。', { exact: true })).toBeVisible();
+  const displayFormula = page.locator('.katex-display').first();
+  await expect(displayFormula).toBeVisible();
+  await page.setViewportSize({ width: 375, height: 812 });
+  await displayFormula.locator('.katex').evaluate((element) => {
+    (element as HTMLElement).style.display = 'inline-block';
+    (element as HTMLElement).style.minWidth = '720px';
+  });
+  const overflow = await page.evaluate(() => {
+    const formula = document.querySelector('.katex-display') as HTMLElement;
+    return {
+      documentWidth: document.documentElement.scrollWidth,
+      viewportWidth: document.documentElement.clientWidth,
+      formulaWidth: formula.scrollWidth,
+      formulaViewport: formula.clientWidth,
+    };
+  });
+  expect(overflow.documentWidth).toBe(overflow.viewportWidth);
+  expect(overflow.formulaWidth).toBeGreaterThan(overflow.formulaViewport);
+  await page.setViewportSize({ width: 1280, height: 800 });
   await page.getByRole('button', { name: '展开节点原文' }).click();
   await expect(page.getByRole('complementary', { name: '课堂节点' })).toContainText('具体问诊');
   await expect(page.getByRole('complementary', { name: '课堂节点' })).toContainText('入口练习');
@@ -81,6 +103,11 @@ test('completes the M0 Roadmap, Plan, Lesson and Knowledge browser cycle', async
   await expect(page).toHaveURL(/\/course\/plan\/plan-001$/);
   await page.waitForTimeout(400);
   await expect(page.getByRole('heading', { name: 'Plan 001：恒成立问题选路' })).toBeVisible();
+  await page.goto('/course/plan/plan-001/lesson/lesson-001');
+  await expect(page.getByText('已结束 · 只读')).toBeVisible();
+  await expect(page.getByPlaceholder('开始这个节点后即可对话')).toBeDisabled();
+  await expect(page.getByText('我先观察参数出现的位置。', { exact: true })).toBeVisible();
+  await page.goto('/course/plan/plan-001');
   await page.reload();
   await expect(page).toHaveURL(/\/course\/plan\/plan-001$/);
   await expect(page.getByRole('heading', { name: 'Plan 001：恒成立问题选路' })).toBeVisible();
