@@ -16,7 +16,7 @@ ROADMAP.md
 
 Roadmap, Plan, and Lesson are different conversation scales. A student explicitly confirms a proposal before a child node is written. Parents read evidence only through the linked tree; an unlinked file is never treated as learner history.
 
-`graph/`, `cards/`, and `materials/` are three independent optional static-asset slices. Static assets accelerate Knowledge browsing and lesson preparation; they are not the course model. Course, Session, and Lesson continue from the required Markdown and classroom process, while Knowledge has a stable empty state when every optional slice is absent or empty.
+`graph/`, `cards/`, and `materials/` are three independent optional static-asset slices. Static assets accelerate Knowledge browsing and lesson preparation; they are not the course model. Course, Session, and Lesson continue from the required Markdown and classroom process, while Knowledge has a stable empty state when every optional slice is absent or empty. Any optional slice that is present must pass strict parsing; present-invalid content fails startup instead of being treated as absent.
 
 ## Run locally
 

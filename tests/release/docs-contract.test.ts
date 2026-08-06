@@ -17,13 +17,45 @@ const activePublicDocs = [
 const privateLearningSetCommand =
   'STUDY_LEARNING_SET=examples/derivative-m0/learning-set bun run start:demo';
 
-const describesAsOptional = (content: string, slice: 'graph/' | 'cards/' | 'materials/') => {
-  const flattened = content.replace(/\s+/g, ' ');
-  const escaped = slice.replace('/', '\\/');
-  return new RegExp(
-    `(?:${escaped}.{0,160}(?:optional|可选)|(?:optional|可选).{0,160}${escaped})`,
-    'i',
-  ).test(flattened);
+const semanticUnits = (content: string) =>
+  content
+    .split(/\n\s*\n/)
+    .map((unit) => unit.replace(/\s+/g, ' ').trim())
+    .filter(Boolean);
+
+const expectPublicDefaultStarter = (content: string) => {
+  const starterUnit = semanticUnits(content).find((unit) =>
+    unit.includes('math-starter-m0'),
+  );
+  expect(starterUnit).toBeDefined();
+  expect(starterUnit!).toMatch(/(?:public|公开)/i);
+  expect(starterUnit!).toMatch(/(?:default|默认)/i);
+};
+
+const expectIndependentOptionalSlices = (content: string) => {
+  const units = semanticUnits(content);
+  for (const slice of ['graph/', 'cards/', 'materials/']) {
+    expect(
+      units.some((unit) => unit.includes(slice) && /(?:optional|可选)/i.test(unit)),
+    ).toBe(true);
+  }
+  expect(
+    units.some(
+      (unit) =>
+        /(?:independent|彼此独立)/i.test(unit) &&
+        (['graph/', 'cards/', 'materials/'].every((slice) => unit.includes(slice)) ||
+          /(?:three|三个|三者)[^\n.。]*(?:slices|切片)/i.test(unit)),
+    ),
+  ).toBe(true);
+  expect(content).not.toMatch(
+    /(?:graph\/|cards\/|materials\/)[^\n.。]*(?:required|必需|必须存在)/i,
+  );
+};
+
+const expectPresentInvalidFails = (content: string) => {
+  expect(content).toMatch(
+    /(?:present[\s-]*invalid[^.。\n]*(?:fail|error)|(?:存在|已存在|一旦存在)[^.。\n]*(?:无效|格式错误)[^.。\n]*(?:失败|报错))/i,
+  );
 };
 
 test('ships the required public product and governance documents', () => {
@@ -75,42 +107,82 @@ test('ships a public cardless math starter under CC BY 4.0', () => {
   expect(starterReadme).toContain('no preloaded graph, cards, or materials');
 });
 
-test('active public docs make the cardless starter and optional asset contract explicit', () => {
+test('every active public doc identifies the public default and complete opt-in contract', () => {
   for (const path of activePublicDocs) {
     const content = read(path);
-    expect(content).toContain('math-starter-m0');
-    expect(describesAsOptional(content, 'graph/')).toBe(true);
-    expect(describesAsOptional(content, 'cards/')).toBe(true);
-    expect(describesAsOptional(content, 'materials/')).toBe(true);
+    expectPublicDefaultStarter(content);
+    expectIndependentOptionalSlices(content);
+    expect(content).toContain(privateLearningSetCommand);
   }
-
-  const active = activePublicDocs.map(read).join('\n');
-  expect(active).toContain(privateLearningSetCommand);
 });
 
-test('documents the minimum writable Learning Set and stable empty Knowledge behavior', () => {
-  const agentContract = read('AGENTS.md');
-  expect(agentContract).toMatch(/LEARNING_GUIDE\.md[\s\S]*ROADMAP\.md/);
-  expect(agentContract).toMatch(/(?:writable|write access)/i);
-  expect(agentContract).toMatch(/present[\s-]*invalid[\s\S]*fail/i);
-
-  const learningSetGuide = read('docs/guides/learning-set.zh-CN.md');
-  expect(learningSetGuide).toMatch(/LEARNING_GUIDE\.md[\s\S]*ROADMAP\.md/);
-  expect(learningSetGuide).toMatch(/Plan[\s\S]{0,100}(?:随后|之后|需要时|later)/i);
-  expect(learningSetGuide).toMatch(/缺失[\s\S]{0,160}空[\s\S]{0,160}无效[\s\S]{0,160}失败/);
-  expect(learningSetGuide).toMatch(/Knowledge[\s\S]{0,100}(?:稳定|不变)[\s\S]{0,100}空状态/);
-});
-
-test('keeps static Knowledge independent from the course model', () => {
+test('README pair describes acceleration, course-model independence, and invalid assets', () => {
   for (const path of ['README.md', 'README.en.md']) {
     const content = read(path);
-    expect(content).toMatch(/(?:静态资产|static assets)[\s\S]{0,160}(?:加速|accelerat)/i);
-    expect(content).toMatch(/(?:不是|not)[\s\S]{0,80}(?:课程模型|course model)/i);
+    const assetContract = semanticUnits(content).find(
+      (unit) =>
+        /(?:静态资产|static assets)/i.test(unit) && /(?:加速|accelerat)/i.test(unit),
+    );
+    expect(assetContract).toBeDefined();
+    expect(assetContract!).toMatch(/(?:不是课程模型|not the course model)/i);
+    expectPresentInvalidFails(content);
   }
+});
 
+test('AGENTS defines the minimum writable set and present-only strict parsing', () => {
+  const agentContract = read('AGENTS.md');
+  expect(agentContract).toMatch(/LEARNING_GUIDE\.md[\s\S]*ROADMAP\.md/);
+  expect(agentContract).toMatch(
+    /minimum Learning Set is a writable root containing exactly the two required/i,
+  );
+  expect(agentContract).toMatch(
+    /every static asset that is present passed[\s\n]+strict parsing/i,
+  );
+  expect(agentContract).toMatch(/missing or empty optional slices are valid/i);
+  expectPresentInvalidFails(agentContract);
+});
+
+test('architecture marks optional directories and decouples course state from Knowledge', () => {
   const architecture = read('docs/architecture/m0-runtime.zh-CN.md');
-  expect(architecture).toMatch(/Course[\s\S]{0,120}Session[\s\S]{0,120}Lesson/);
-  expect(architecture).toMatch(/不依赖[\s\S]{0,120}Knowledge/);
+  for (const path of ['plans/<plan-id>/?', 'graph/?', 'cards/?', 'materials/?']) {
+    expect(architecture).toContain(path);
+  }
+  expect(architecture).toMatch(
+    /Course、Session 与 Lesson[^。\n]*不依赖 Knowledge 内容/,
+  );
+  expectPresentInvalidFails(architecture);
+});
+
+test('setup guide presents public default before separate private and custom choices', () => {
+  const setup = read('docs/guides/agent-assisted-setup.zh-CN.md');
+  const firstDemoCommand = setup.indexOf('bun run start:demo');
+  const publicDefault = setup.indexOf('examples/math-starter-m0/learning-set');
+  const privateChoice = setup.indexOf(privateLearningSetCommand);
+  const customChoice = setup.indexOf('STUDY_LEARNING_SET=/absolute/path/to/learning-set');
+
+  expect(firstDemoCommand).toBeGreaterThanOrEqual(0);
+  expect(publicDefault).toBeGreaterThan(firstDemoCommand);
+  expect(privateChoice).toBeGreaterThan(publicDefault);
+  expect(customChoice).toBeGreaterThan(privateChoice);
+  expect(setup).toMatch(/## 私有 beta 明确选择/);
+  expect(setup).toMatch(/## 自定义 Learning Set/);
+  expectPresentInvalidFails(setup);
+});
+
+test('Learning Set guide keeps the minimum tree minimal and defines slice outcomes', () => {
+  const learningSetGuide = read('docs/guides/learning-set.zh-CN.md');
+  const minimumTree = learningSetGuide.match(
+    /## 最小目录\s+```text\n([\s\S]*?)```/,
+  )?.[1];
+
+  expect(minimumTree).toBeDefined();
+  expect(minimumTree!).toContain('LEARNING_GUIDE.md');
+  expect(minimumTree!).toContain('ROADMAP.md');
+  expect(minimumTree!).not.toMatch(/plans\/|graph\/|cards\/|materials\//);
+  expect(learningSetGuide).toMatch(/Plan[^。\n]*(?:之后|随后|需要时)[^。\n]*创建/i);
+  expect(learningSetGuide).toMatch(/缺失时返回空切片[^。\n]*目录为空时也返回空切片/);
+  expectPresentInvalidFails(learningSetGuide);
+  expect(learningSetGuide).toMatch(/Knowledge[^。\n]*(?:稳定|不变)[^。\n]*空状态/);
 });
 
 const markdownFiles = [

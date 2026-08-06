@@ -15,7 +15,7 @@ ROADMAP.md                         长周期能力方向 · Roadmap Session
 
 Roadmap、Plan、Lesson 是三种不同的会话尺度。学生必须明确确认课程方向和将被物化的子节点；浏览页面、继续做题或模型回复都不会被解释成批准。父节点需要历史时只沿已链接的课程树读取原始 Markdown，不扫描目录猜测“学生以前说过什么”。
 
-`graph/`、`cards/` 和 `materials/` 是三个彼此独立的可选静态资产切片。它们可以加速知识浏览和备课检索，但不是课程模型；Course、Session 与 Lesson 仍由必需 Markdown 和课堂过程驱动。三类切片都缺失或为空时，Knowledge 显示稳定空状态。
+`graph/`、`cards/` 和 `materials/` 是三个彼此独立的可选静态资产切片。它们可以加速知识浏览和备课检索，但不是课程模型；Course、Session 与 Lesson 仍由必需 Markdown 和课堂过程驱动。三类切片都缺失或为空时，Knowledge 显示稳定空状态。任一可选切片一旦存在就必须通过严格解析；内容无效时启动失败，而不是按缺失处理。
 
 ## 快速开始
 
