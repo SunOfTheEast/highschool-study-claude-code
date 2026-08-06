@@ -170,6 +170,30 @@ function oneSection(
   return matches[0]!.content;
 }
 
+function validateConsolidatedLearningTraces(content: string, path: string): void {
+  const sections = splitSections(content, 3);
+  const firstHeading = /^###\s+/m.exec(content);
+  if (!firstHeading || content.slice(0, firstHeading.index).trim().length > 0) {
+    throw new StudyDocumentError(
+      path,
+      'Consolidated Learning Traces must begin with a stable Trace heading',
+    );
+  }
+  const ids = new Set<string>();
+  for (const section of sections) {
+    if (!/^trace-[A-Za-z0-9][A-Za-z0-9._-]*$/.test(section.heading)) {
+      throw new StudyDocumentError(path, `invalid Trace heading "${section.heading}"`);
+    }
+    if (section.content.length === 0) {
+      throw new StudyDocumentError(path, `Trace ${section.heading} cannot be empty`);
+    }
+    if (ids.has(section.heading)) {
+      throw new StudyDocumentError(path, `duplicate Trace id ${section.heading}`);
+    }
+    ids.add(section.heading);
+  }
+}
+
 function parseCommaList(value: string): string[] {
   return value
     .split(',')
@@ -408,6 +432,9 @@ function parseLesson(source: MarkdownSource): LessonDocument {
   const consolidatedLearningTraces = traceSections.length === 0
     ? null
     : oneSection(sections, 'Consolidated Learning Traces', source.path);
+  if (consolidatedLearningTraces !== null) {
+    validateConsolidatedLearningTraces(consolidatedLearningTraces, source.path);
+  }
   const blockSections = sections.filter((section) => section.heading.startsWith('Block '));
   if (blockSections.length === 0) throw new StudyDocumentError(source.path, 'Lesson requires at least one Block');
   const blocks = blockSections.map((section) => parseBlock(section, source.path));

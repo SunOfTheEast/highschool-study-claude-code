@@ -83,7 +83,7 @@ export function createRequestHandler(deps?: AppDependencies) {
   ): Promise<Response | undefined> => {
     const url = new URL(request.url);
     if (request.method === 'GET' && url.pathname === '/api/health') {
-      return json({ ok: true, runtime: 'pi-m0' });
+      return json({ ok: true, runtime: 'pi-m1' });
     }
     if (!deps) return new Response('Not found', { status: 404 });
     const lifecycle = deps.lifecycle ?? new NodeLifecycleService(deps.root, deps.registry);

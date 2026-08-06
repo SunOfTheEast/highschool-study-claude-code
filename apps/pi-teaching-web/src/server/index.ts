@@ -40,4 +40,4 @@ const server = Bun.serve({
   },
 });
 
-console.log(`StudyForge M0: http://${server.hostname}:${server.port}`);
+console.log(`StudyForge M1: http://${server.hostname}:${server.port}`);

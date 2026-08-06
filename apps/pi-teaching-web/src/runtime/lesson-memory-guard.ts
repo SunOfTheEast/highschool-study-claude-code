@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, lstatSync, readFileSync } from 'node:fs';
 import { isAbsolute, relative, resolve, sep } from 'node:path';
 import type {
   EditToolInput,
@@ -45,8 +45,17 @@ function normalizedPath(root: string, value: unknown): string | null {
 
 function tutorOwnedMemoryPath(path: string): boolean {
   if (path === 'memory/INDEX.md') return true;
-  return /^memory\/(?:indexes|objects|preferences)\/[A-Za-z0-9][A-Za-z0-9._/-]*\.md$/
+  return /^memory\/(?:indexes|objects|preferences)\/[A-Za-z0-9][A-Za-z0-9._-]*\.md$/
     .test(path);
+}
+
+function pathContainsSymbolicLink(root: string, path: string): boolean {
+  let current = resolve(root);
+  for (const segment of path.split('/')) {
+    current = resolve(current, segment);
+    if (existsSync(current) && lstatSync(current).isSymbolicLink()) return true;
+  }
+  return false;
 }
 
 function editInput(value: unknown): EditToolInput | null {
@@ -124,6 +133,9 @@ export function validateLessonMemoryWrite(
   if (!input) return blocked(`invalid ${call.toolName} input`);
   const path = normalizedPath(root, input.path);
   if (!path) return blocked('path must stay relative to the learning set');
+  if (pathContainsSymbolicLink(root, path)) {
+    return blocked('write path cannot contain a symbolic link');
+  }
 
   if (path === scope.nodePath) {
     return call.toolName === 'edit'

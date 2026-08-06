@@ -269,4 +269,4 @@ const cleanup = () => {
 process.once('SIGINT', cleanup);
 process.once('SIGTERM', cleanup);
 
-console.log(`StudyForge M0 fixture: http://${server.hostname}:${server.port}`);
+console.log(`StudyForge M1 fixture: http://${server.hostname}:${server.port}`);

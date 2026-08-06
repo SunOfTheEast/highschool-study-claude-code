@@ -134,6 +134,9 @@ test('requires the consolidated learning trace section to be unique, non-empty, 
     ),
     (source: string) => `${source.trimEnd()}\n\n## Consolidated Learning Traces\n\n`,
     (source: string) => `${source.trimEnd()}\n\n## Consolidated Learning Traces\n\n### trace-one\n\n- 情境：一。\n\n## Consolidated Learning Traces\n\n### trace-two\n\n- 情境：二。\n`,
+    (source: string) => `${source.trimEnd()}\n\n## Consolidated Learning Traces\n\n只有散文，没有稳定 Trace 标题。\n`,
+    (source: string) => `${source.trimEnd()}\n\n## Consolidated Learning Traces\n\n### 非稳定标题\n\n- 情境：一。\n`,
+    (source: string) => `${source.trimEnd()}\n\n## Consolidated Learning Traces\n\n### trace-duplicate\n\n- 情境：一。\n\n### trace-duplicate\n\n- 情境：二。\n`,
   ];
 
   for (const mutate of mutations) {

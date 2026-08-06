@@ -2,9 +2,12 @@ import { afterEach, expect, test } from 'bun:test';
 import type { ExtensionAPI } from '@earendil-works/pi-coding-agent';
 import {
   cpSync,
+  mkdirSync,
   mkdtempSync,
   readFileSync,
   rmSync,
+  symlinkSync,
+  writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -62,6 +65,24 @@ test('allows one valid trace append to the current Lesson', () => {
     input: {
       path: scope.nodePath,
       edits: [{ oldText, newText: oldText + trace }],
+    },
+  })).toBeNull();
+});
+
+test('allows a correction trace to append after the first consolidation', () => {
+  const root = copyFixture();
+  const path = join(root, scope.nodePath);
+  const first = `${readFileSync(path, 'utf8')}\n## Consolidated Learning Traces\n\n`
+    + '### trace-plan-001-lesson-001-01\n\n- 情境：首次总结\n';
+  writeFileSync(path, first);
+  const oldText = '- 情境：首次总结\n';
+  const correction = '\n### trace-plan-001-lesson-001-02\n\n- 情境：学生纠正首次总结\n';
+
+  expect(validateLessonMemoryWrite(root, scope, {
+    toolName: 'edit',
+    input: {
+      path: scope.nodePath,
+      edits: [{ oldText, newText: oldText + correction }],
     },
   })).toBeNull();
 });
@@ -134,6 +155,31 @@ test('blocks lifecycle, evidence, capability, sibling, and escaped writes', () =
     expect(validateLessonMemoryWrite(root, scope, call))
       .toContain('LESSON_MEMORY_WRITE_BLOCKED');
   }
+});
+
+test('blocks nested memory layouts and symbolic-link write targets', () => {
+  const root = copyFixture();
+  const outside = mkdtempSync(join(tmpdir(), 'studyforge-m1-outside-'));
+  roots.push(outside);
+  mkdirSync(join(root, 'memory/objects'), { recursive: true });
+  const outsideFile = join(outside, 'outside.md');
+  writeFileSync(outsideFile, '# Outside\n');
+  symlinkSync(outsideFile, join(root, 'memory/objects/obj-link.md'));
+
+  expect(validateLessonMemoryWrite(root, scope, {
+    toolName: 'edit',
+    input: {
+      path: 'memory/objects/obj-link.md',
+      edits: [{ oldText: '# Outside', newText: '# Changed' }],
+    },
+  })).toContain('symbolic link');
+  expect(validateLessonMemoryWrite(root, scope, {
+    toolName: 'write',
+    input: {
+      path: 'memory/objects/nested/obj-001.md',
+      content: '# Nested',
+    },
+  })).toContain('LESSON_MEMORY_WRITE_BLOCKED');
 });
 
 test('blocks rejected native writes before execution', async () => {

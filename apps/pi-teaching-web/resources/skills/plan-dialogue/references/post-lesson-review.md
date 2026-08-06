@@ -9,7 +9,7 @@
 ## 1. 读固化结果
 
 读取当前 Plan，并沿 Lesson Tree 定位刚关闭的 Lesson。先读其
-`Consolidated Learning Traces`，再沿 Trace 与 `memory/INDEX.md` 的精确链接按需读取
+`Consolidated Learning Traces`，再重新读取 `memory/INDEX.md`，沿 Trace 与根索引中的精确链接按需读取
 相关对象记忆；只有会改变阶段判断时才展开已有能力假设；只有会改变互动与负担时才展开
 当前偏好。压缩结果足够时到此停止。
 

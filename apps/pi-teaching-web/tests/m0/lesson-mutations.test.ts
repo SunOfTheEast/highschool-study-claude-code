@@ -70,6 +70,37 @@ test('appends multiline evidence inside one log item without swallowing the next
   expect(next).toContain('  - Status: completed');
 });
 
+test('appends a student correction without disturbing already consolidated traces', () => {
+  const trace = [
+    '',
+    '## Consolidated Learning Traces',
+    '',
+    '### trace-plan-001-lesson-001-01',
+    '',
+    '- 情境：课末首次总结',
+    '- 首次表现：需要提示',
+    '- 实际帮助：比较共同结构',
+    '- 后续表现：提示后完成',
+    '- 关联对象：obj-001',
+    '- 来源证据：本课 Classroom Log',
+    '',
+  ].join('\n');
+  const source = fixtureSource() + trace;
+
+  const next = appendClassroomLogSource(
+    lessonPath,
+    source,
+    '学生纠正：刚才第一步其实是在提示前独立完成。',
+  );
+  const lesson = parseLessonSource(lessonPath, next);
+
+  expect(lesson.blocks[1]?.classroomLog).toEqual([
+    '学生纠正：刚才第一步其实是在提示前独立完成。',
+  ]);
+  expect(lesson.consolidatedLearningTraces)
+    .toBe(parseLessonSource(lessonPath, source).consolidatedLearningTraces);
+});
+
 test('rejects log writes outside one active Lesson Block', () => {
   const source = fixtureSource();
   expect(() => appendClassroomLogSource(

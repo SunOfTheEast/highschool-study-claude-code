@@ -100,6 +100,7 @@ test('makes Plan consume consolidated memory before drilling into classroom evid
   expect(review).toContain('高影响判断');
   expect(review).not.toContain('哪里真的顺了、\n哪里还不踏实');
   expect(review).toContain('不重复进行整课反思');
+  expect(review).toContain('重新读取 `memory/INDEX.md`');
 });
 
 test('lets Plan form a working capability hypothesis only across different objects', () => {
@@ -149,6 +150,7 @@ test('makes Roadmap review one completed Plan through summaries and routed memor
   expect(nextPlan).toContain('高影响');
   expect(nextPlan).toContain('证据冲突');
   expect(nextPlan).toContain('不重做逐课提取');
+  expect(nextPlan).toContain('重新读取 `memory/INDEX.md`');
 });
 
 test('calibrates one capability chain across Plans without erasing history', () => {

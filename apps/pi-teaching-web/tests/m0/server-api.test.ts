@@ -99,6 +99,12 @@ function fakeRegistry(overrides: Record<string, unknown> = {}) {
   };
 }
 
+test('reports the supported M1 runtime from health', async () => {
+  const response = await createRequestHandler()(new Request('http://local/api/health'));
+  expect(response?.status).toBe(200);
+  expect(await response?.json()).toEqual({ ok: true, runtime: 'pi-m1' });
+});
+
 test('serves only the M0 course and static knowledge snapshots', async () => {
   const root = copyFixture();
   const handler = createRequestHandler({
