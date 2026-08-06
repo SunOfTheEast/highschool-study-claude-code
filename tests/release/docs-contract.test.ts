@@ -5,6 +5,27 @@ import { dirname, join, resolve } from 'node:path';
 const root = resolve(import.meta.dir, '../..');
 const read = (path: string) => readFileSync(join(root, path), 'utf8');
 
+const activePublicDocs = [
+  'README.md',
+  'README.en.md',
+  'AGENTS.md',
+  'docs/architecture/m0-runtime.zh-CN.md',
+  'docs/guides/agent-assisted-setup.zh-CN.md',
+  'docs/guides/learning-set.zh-CN.md',
+];
+
+const privateLearningSetCommand =
+  'STUDY_LEARNING_SET=examples/derivative-m0/learning-set bun run start:demo';
+
+const describesAsOptional = (content: string, slice: 'graph/' | 'cards/' | 'materials/') => {
+  const flattened = content.replace(/\s+/g, ' ');
+  const escaped = slice.replace('/', '\\/');
+  return new RegExp(
+    `(?:${escaped}.{0,160}(?:optional|可选)|(?:optional|可选).{0,160}${escaped})`,
+    'i',
+  ).test(flattened);
+};
+
 test('ships the required public product and governance documents', () => {
   for (const path of [
     'README.md',
@@ -54,13 +75,46 @@ test('ships a public cardless math starter under CC BY 4.0', () => {
   expect(starterReadme).toContain('no preloaded graph, cards, or materials');
 });
 
+test('active public docs make the cardless starter and optional asset contract explicit', () => {
+  for (const path of activePublicDocs) {
+    const content = read(path);
+    expect(content).toContain('math-starter-m0');
+    expect(describesAsOptional(content, 'graph/')).toBe(true);
+    expect(describesAsOptional(content, 'cards/')).toBe(true);
+    expect(describesAsOptional(content, 'materials/')).toBe(true);
+  }
+
+  const active = activePublicDocs.map(read).join('\n');
+  expect(active).toContain(privateLearningSetCommand);
+});
+
+test('documents the minimum writable Learning Set and stable empty Knowledge behavior', () => {
+  const agentContract = read('AGENTS.md');
+  expect(agentContract).toMatch(/LEARNING_GUIDE\.md[\s\S]*ROADMAP\.md/);
+  expect(agentContract).toMatch(/(?:writable|write access)/i);
+  expect(agentContract).toMatch(/present[\s-]*invalid[\s\S]*fail/i);
+
+  const learningSetGuide = read('docs/guides/learning-set.zh-CN.md');
+  expect(learningSetGuide).toMatch(/LEARNING_GUIDE\.md[\s\S]*ROADMAP\.md/);
+  expect(learningSetGuide).toMatch(/Plan[\s\S]{0,100}(?:随后|之后|需要时|later)/i);
+  expect(learningSetGuide).toMatch(/缺失[\s\S]{0,160}空[\s\S]{0,160}无效[\s\S]{0,160}失败/);
+  expect(learningSetGuide).toMatch(/Knowledge[\s\S]{0,100}(?:稳定|不变)[\s\S]{0,100}空状态/);
+});
+
+test('keeps static Knowledge independent from the course model', () => {
+  for (const path of ['README.md', 'README.en.md']) {
+    const content = read(path);
+    expect(content).toMatch(/(?:静态资产|static assets)[\s\S]{0,160}(?:加速|accelerat)/i);
+    expect(content).toMatch(/(?:不是|not)[\s\S]{0,80}(?:课程模型|course model)/i);
+  }
+
+  const architecture = read('docs/architecture/m0-runtime.zh-CN.md');
+  expect(architecture).toMatch(/Course[\s\S]{0,120}Session[\s\S]{0,120}Lesson/);
+  expect(architecture).toMatch(/不依赖[\s\S]{0,120}Knowledge/);
+});
+
 const markdownFiles = [
-  'README.md',
-  'README.en.md',
-  'AGENTS.md',
-  'docs/architecture/m0-runtime.zh-CN.md',
-  'docs/guides/agent-assisted-setup.zh-CN.md',
-  'docs/guides/learning-set.zh-CN.md',
+  ...activePublicDocs,
   'docs/vision/cognitive-outcome-agent.zh-CN.md',
 ];
 

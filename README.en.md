@@ -2,11 +2,12 @@
 
 StudyForge is a local, Markdown-first tutoring agent that manages a learning process instead of merely answering prompts. M0 implements a complete Roadmap → Plan → Plan-local Lesson loop, one native Pi Session per node, student-owned lifecycle controls, inspectable classroom evidence, bounded material search, and a focused web workspace. The first teaching pack and the current UI are Chinese-first.
 
-> **Screenshot / demo slot:** a privacy-safe image will be added when the clean public repository is exported. The private beta repository does not ship screenshots containing real course state or proprietary cards.
+> **Screenshot / demo slot:** a privacy-safe image may be added if a clean public export is prepared. The private beta repository does not ship screenshots containing real course state or proprietary cards.
 
 ## Course model
 
 ```text
+LEARNING_GUIDE.md
 ROADMAP.md
 └── plans/<plan-id>/PLAN.md
     └── lessons/<lesson-id>.md
@@ -14,6 +15,8 @@ ROADMAP.md
 ```
 
 Roadmap, Plan, and Lesson are different conversation scales. A student explicitly confirms a proposal before a child node is written. Parents read evidence only through the linked tree; an unlinked file is never treated as learner history.
+
+`graph/`, `cards/`, and `materials/` are three independent optional static-asset slices. Static assets accelerate Knowledge browsing and lesson preparation; they are not the course model. Course, Session, and Lesson continue from the required Markdown and classroom process, while Knowledge has a stable empty state when every optional slice is absent or empty.
 
 ## Run locally
 
@@ -25,7 +28,15 @@ bun run doctor
 bun run start:demo
 ```
 
-Open <http://127.0.0.1:65000>. The read-only doctor checks `platform`, `bun`, `app`, `learning-set`, `write`, `model`, and `port` without printing credential values or authentication paths. Set `STUDY_LEARNING_SET=/absolute/path/to/learning-set` to use an authorized pack.
+Open <http://127.0.0.1:65000>. By default, `start:demo` selects the public, cardless `examples/math-starter-m0`. Its minimum Learning Set is a writable root containing only `LEARNING_GUIDE.md` and `ROADMAP.md`; Plan directories can be created after student agreement. The read-only doctor checks `platform`, `bun`, `app`, `learning-set`, `write`, `model`, and `port` without printing credential values or authentication paths.
+
+The private beta corpus requires explicit opt-in and remains subject to the license warning below:
+
+```bash
+STUDY_LEARNING_SET=examples/derivative-m0/learning-set bun run start:demo
+```
+
+Set `STUDY_LEARNING_SET=/absolute/path/to/learning-set` to use another authorized pack.
 
 An agent may install repository dependencies, run the doctor, explain failures, and start the foreground server. It must not read credentials, change global Pi configuration without approval, or expose the server beyond loopback. The Chinese [agent-assisted setup guide](docs/guides/agent-assisted-setup.zh-CN.md) contains a copy-paste prompt.
 

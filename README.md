@@ -2,23 +2,20 @@
 
 StudyForge 是一个本地运行、Markdown-first 的一对一教学 Agent：它不只回答一道题，而是和学生共同确认长期方向、阶段计划与每节课，在真实课堂中留下可复查的过程证据，再据此调整下一步。M0 已实现从 Roadmap 到 Plan-local Lesson 的完整课程闭环、节点独立 Pi Session、受控材料检索、确定性课堂写入与学生掌握启停权的 Web 工作台。
 
-> **截图 / Demo 位**：公开仓库切出时补充不含私有题卡、学生记录与模型凭证的演示图。当前私有 beta 仓库不提交真实课程截图。
+> **截图 / Demo 位**：未来若准备公开导出，将补充不含私有题卡、学生记录与模型凭证的演示图。当前私有 beta 仓库不提交真实课程截图。
 
 ## 一个课程，不是一串聊天
 
 ```text
+LEARNING_GUIDE.md                  学习集教学原则
 ROADMAP.md                         长周期能力方向 · Roadmap Session
-└── plans/<plan-id>/PLAN.md        一个可调整的学习周期 · Plan Session
+└── plans/<plan-id>/PLAN.md        讨论确认后创建 · Plan Session
     └── lessons/<lesson-id>.md     Plan-local 一对一课堂 · Lesson Session
-        ├── Student View
-        ├── Teacher Control
-        └── Classroom Log
-
-cards/ + graph/ + materials/       静态学习资产
-Pi Session JSONL                   每个节点自己的原始对话与工具历史
 ```
 
 Roadmap、Plan、Lesson 是三种不同的会话尺度。学生必须明确确认课程方向和将被物化的子节点；浏览页面、继续做题或模型回复都不会被解释成批准。父节点需要历史时只沿已链接的课程树读取原始 Markdown，不扫描目录猜测“学生以前说过什么”。
+
+`graph/`、`cards/` 和 `materials/` 是三个彼此独立的可选静态资产切片。它们可以加速知识浏览和备课检索，但不是课程模型；Course、Session 与 Lesson 仍由必需 Markdown 和课堂过程驱动。三类切片都缺失或为空时，Knowledge 显示稳定空状态。
 
 ## 快速开始
 
@@ -30,9 +27,15 @@ bun run doctor
 bun run start:demo
 ```
 
-打开 <http://127.0.0.1:65000>。`doctor` 只读检查平台、Bun、App、Learning Set、写权限、Pi 可用模型和端口；不会打印凭证内容或认证文件路径。默认 `start:demo` 使用私有 beta 评估集，公开源码导出前会由独立的数据清洗计划替换它。
+打开 <http://127.0.0.1:65000>。默认 `start:demo` 使用公开、无预置题卡的 `examples/math-starter-m0`；它只需 `LEARNING_GUIDE.md`、`ROADMAP.md` 与可写目录即可开始，Plan 会在学生确认后创建。`doctor` 只读检查平台、Bun、App、Learning Set、写权限、Pi 可用模型和端口；不会打印凭证内容或认证文件路径。
 
-需要指定自己的学习集时：
+需要显式使用仓库中不获公开再分发许可的私有 beta 评估集时：
+
+```bash
+STUDY_LEARNING_SET=examples/derivative-m0/learning-set bun run start:demo
+```
+
+需要指定自己有权使用的学习集时：
 
 ```bash
 STUDY_LEARNING_SET=/absolute/path/to/learning-set bun run doctor

@@ -8,13 +8,15 @@ M0 的目标不是把聊天记录包装成课程，而是让课程事实、会�
 learning-set/
 ├── LEARNING_GUIDE.md
 ├── ROADMAP.md
-├── plans/<plan-id>/
+├── plans/<plan-id>/?
 │   ├── PLAN.md
 │   └── lessons/<lesson-id>.md
-├── cards/
-├── graph/
-└── materials/
+├── graph/?                         可选
+├── cards/?                         可选
+└── materials/?                     可选
 ```
+
+公开默认 `examples/math-starter-m0` 证明最小 Learning Set 只需两个必需 Markdown 文件和可写根目录；`plans/` 会在学生确认 Plan 后出现。`graph/`、`cards/` 和 `materials/` 是彼此独立的可选切片，缺失或为空都投影为空；一旦存在则严格解析，无效内容直接失败。
 
 Lesson 是严格的 Plan-local 子节点：规范路径是 `plans/<plan-id>/lessons/<lesson-id>.md`。Plan ID 在 Roadmap 中唯一；Lesson ID 只需在所属 Plan 中唯一。父节点读取证据时只能沿自己的 Tree 链接下钻。空 Lesson Tree 就表示没有课堂证据，目录里未链接的文件不得被扫描、引用或冒充历史。
 
@@ -65,6 +67,12 @@ Plan 可以调用两个打包的只读子 Agent：
 Bun 服务固定绑定 `127.0.0.1`。生产页面同源；Vite 开发 Origin 必须显式声明。所有非 GET 请求以及 `/events` WebSocket 都在任何副作用前校验 Origin。没有 Origin 的本地 CLI 与测试请求仍可使用。
 
 课程 Markdown 位于用户选择的 Learning Set。Pi 管理模型认证与 Session JSONL。浏览器显示原始教师最终文本，工具活动单独折叠；Lesson 普通视图不展示 `Teacher Control`。StudyForge 不提供云同步、远程访问或多用户隔离。
+
+Course、Session 与 Lesson 的创建、恢复和推进不依赖 Knowledge 内容。Knowledge 只是可选静态资产的投影：三个切片都缺失或为空时保持稳定空状态；静态资产可以加速浏览与备课，但不定义课程模型。私有 beta 语料仅可显式选择：
+
+```bash
+STUDY_LEARNING_SET=examples/derivative-m0/learning-set bun run start:demo
+```
 
 ## M0 明确没有什么
 

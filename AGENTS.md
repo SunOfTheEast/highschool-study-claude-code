@@ -1,6 +1,7 @@
 # StudyForge M0 repository guide
 
 `apps/studyforge/` is the current StudyForge M0 runtime and local student App.
+`examples/math-starter-m0/` is the public cardless starter and the default demo.
 `examples/derivative-m0/` is the private beta evaluation corpus. It is not licensed for
 public redistribution and must be removed or replaced before a clean public export.
 The old Claude Code plugin and historical documents remain for comparison; they are
@@ -18,12 +19,20 @@ bun run doctor
 bun run start:demo
 ```
 
+The default selects `examples/math-starter-m0/`. The private beta corpus is never an
+implicit default; selecting it requires this explicit command:
+
+```bash
+STUDY_LEARNING_SET=examples/derivative-m0/learning-set bun run start:demo
+```
+
 Interpret the seven Doctor checks literally:
 
 - `platform`: macOS and Linux are validated; another platform is a warning.
 - `bun`: Bun 1.3.0 or newer is required.
 - `app`: `apps/studyforge/package.json` must exist.
-- `learning-set`: strict Roadmap, Plan-local Lesson, and static-asset parsing succeeded.
+- `learning-set`: the required Markdown and every static asset that is present passed
+  strict parsing; missing or empty optional slices are valid.
 - `write`: the selected Learning Set can persist local course state.
 - `model`: Pi reports at least one already configured model provider.
 - `port`: the selected loopback port is valid and free.
@@ -34,9 +43,11 @@ verify `http://127.0.0.1:65000/api/health`; do not expose the service beyond loo
 
 ## Durable domain
 
-M0 has one Plan-local Markdown control tree:
+The minimum Learning Set is a writable root containing exactly the two required
+Markdown entry points; Plan directories may appear later after student agreement:
 
 ```text
+LEARNING_GUIDE.md
 ROADMAP.md
 └── plans/<plan-id>/
     ├── PLAN.md
@@ -44,9 +55,11 @@ ROADMAP.md
         └── Block Classroom Logs
 ```
 
-`LEARNING_GUIDE.md` supplies learning-set-specific teaching principles. `cards/`,
-`graph/`, and `materials/` are static source assets. Pi Session JSONL stores each
-node's raw conversation and native tool history.
+`LEARNING_GUIDE.md` supplies learning-set-specific teaching principles. `graph/`,
+`cards/`, and `materials/` are independent optional static-asset slices: missing or
+empty returns an empty slice, while present-invalid content must fail strict parsing.
+Static assets can accelerate browsing and preparation but do not define the course
+model. Pi Session JSONL stores each node's raw conversation and native tool history.
 
 There is no second teaching-fact store. Do not add a memory pool, classroom-event
 objects, derived mastery state, handoff documents, background index, vector store, or
@@ -153,6 +166,9 @@ prepared material; it does not choose the lesson or write teaching facts.
 
 The only primary views are Course and Knowledge.
 
+Course, Session, and Lesson behavior does not depend on Knowledge contents. With all
+three optional slices missing or empty, Knowledge renders its stable empty state.
+
 - Course routes: `/course`, `/course/plan/:id`,
   `/course/plan/:id/lesson/:id`.
 - Knowledge route: `/knowledge`.
@@ -178,6 +194,7 @@ items. The normal Lesson view shows `Student View` and Block progress, not
 - `apps/studyforge/src/client/`: Course/Knowledge App.
 - `apps/studyforge/tests/m0/`: current executable contract.
 - `apps/studyforge/tests/e2e/m0-cycle.spec.ts`: deterministic browser closure.
+- `examples/math-starter-m0/`: public cardless default Learning Set.
 - `examples/derivative-m0/`: private beta evaluation corpus; not a public example.
 
 ## Change discipline

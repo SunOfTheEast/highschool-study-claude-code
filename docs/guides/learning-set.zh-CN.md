@@ -2,22 +2,17 @@
 
 Learning Set 是课程事实与静态学习资产的本地目录。M0 使用严格解析：路径、父子身份、状态、Tree 元数据或 Lesson 区块不符合契约时直接报错，不猜测、不兼容旧格式。
 
+公开、无预置题卡的 `examples/math-starter-m0` 是默认示例，也是这份最小契约的可执行参考。
+
 ## 最小目录
 
 ```text
 learning-set/
 ├── LEARNING_GUIDE.md
-├── ROADMAP.md
-├── plans/
-│   └── <plan-id>/
-│       ├── PLAN.md
-│       └── lessons/<lesson-id>.md
-├── cards/
-├── graph/
-└── materials/
+└── ROADMAP.md
 ```
 
-Lesson 必须位于所属 Plan 的 `lessons/` 内。不要再建立根级 `lessons/`。父节点只读取 Tree 中明确链接的子文档；把文件放进目录但不挂到 Tree，不会让它成为课程记忆。
+这两个必需 Markdown 文件加上可写根目录就是最小 Learning Set。`plans/<plan-id>/PLAN.md` 会在 Roadmap 与学生讨论、确认之后创建；Lesson 必须位于所属 Plan 的 `lessons/` 内。不要预建空 Plan 树，也不要再建立根级 `lessons/`。父节点只读取 Tree 中明确链接的子文档；把文件放进目录但不挂到 Tree，不会让它成为课程记忆。
 
 ID 使用字母或数字开头，后续可含字母、数字、点、下划线和连字符。Plan ID 在 Roadmap 中唯一；Lesson ID 在所属 Plan 中唯一。路径不能是绝对路径、不能包含反斜杠或逃逸 Learning Set。
 
@@ -109,14 +104,22 @@ Lesson 状态只有 `prepared → active → closed`。正文先写一级标题�
 ## 静态学习资产
 
 - `LEARNING_GUIDE.md` 给出本学习集的目标、范围与教学原则。
-- `cards/` 保存 `highschool-study.problem-card.v1` YAML；`graph` 字段可为 Material Scout 提供规范目标、方法和结构特征。
-- `graph/method_tree.yaml` 使用 `studyforge.method_tree.v1`，且必须只有一个根节点。
-- `materials/` 可保存 Markdown、PDF、图片或媒体。进入课程前仍需核对来源、许可证和教学风险。
+- `graph/` 是可选知识图切片；存在时 `graph/method_tree.yaml` 使用 `studyforge.method_tree.v1`，且必须只有一个根节点。
+- `cards/` 是可选题卡切片，保存 `highschool-study.problem-card.v1` YAML；`graph` 字段可为 Material Scout 提供规范目标、方法和结构特征。
+- `materials/` 是可选原始材料切片，可保存 Markdown、PDF、图片或媒体。进入课程前仍需核对来源、许可证和教学风险。
 
-静态资产本身不是学生掌握证据。题卡被放进目录、被 Scout 看到或被写入 `Uses`，都不代表学生已经做过或学会。
+三个切片彼此独立，分别遵守同一条边界：缺失时返回空切片，目录为空时也返回空切片，存在但内容无效时严格解析失败。任何一种切片都不要求另外两种存在。三者都缺失或为空时，Knowledge 保持稳定的空状态，而 Course、Session 与 Lesson 仍可正常创建、恢复和推进。
+
+静态资产可以加速 Knowledge 浏览、材料召回和备课，但不是课程模型，也不是学生掌握证据。题卡被放进目录、被 Scout 看到或被写入 `Uses`，都不代表学生已经做过或学会。
 
 ## 隐私、来源与版本控制
 
 公开 Git 中只放可再分发、来源可追溯的学习资产。每个题目、图片、教材节选和生成资产都要记录 provenance 与许可证。真实未成年学生记录、可识别课堂转录、Pi Session、模型凭证和派生画像必须留在访问受控的私有存储，不进入公开 commit、Issue、fixture 或示例包。
 
 当前私有 beta 评估集不是公开模板；法律边界见[第三方说明](../../THIRD_PARTY_NOTICES.md)。创建新学习集时从最小空树开始，让 Roadmap 与学生先讨论，再物化第一个 Plan。
+
+需要在有权访问的私有仓库中显式选择该语料时，命令是：
+
+```bash
+STUDY_LEARNING_SET=examples/derivative-m0/learning-set bun run start:demo
+```

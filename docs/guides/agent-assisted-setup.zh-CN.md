@@ -6,7 +6,8 @@
 
 - macOS 或 Linux；其他平台当前只给出未验收警告。
 - Git 与 Bun 1.3.0 或更高版本。
-- 一个来源与许可边界清楚、允许本地写入的 Learning Set。
+- 一个来源与许可边界清楚、允许本地写入的 Learning Set。默认使用公开无题卡的
+  `examples/math-starter-m0`。
 - 至少一个已经通过 Pi OAuth 或 API Key 配置的模型提供商。
 
 ## 标准流程
@@ -25,7 +26,7 @@ Doctor 是只读检查，不创建探针文件、不访问模型网络，也不�
 | `platform` | 当前是已验收的 macOS/Linux | 其他平台是 `warn`；可继续实验，但不要宣称受支持 |
 | `bun` | Bun ≥ 1.3.0 | 由用户安装或升级 Bun，再冻结安装 |
 | `app` | `apps/studyforge/package.json` 存在 | 确认进入了仓库根目录且检出完整 |
-| `learning-set` | Roadmap、Plan-local Lesson 与静态资产通过严格解析 | 根据错误修正文档，不跳过解析器 |
+| `learning-set` | 两个必需 Markdown 与所有已存在的静态资产通过严格解析 | 根据错误修正文档，不跳过解析器 |
 | `write` | Learning Set 目录可保存课程状态 | 修正目录权限或选择可写副本 |
 | `model` | Pi 已发现至少一个本地可用提供商 | 用户自行打开 Pi 的认证流程完成 OAuth/API Key 配置 |
 | `port` | 回环端口有效且空闲 | 停止占用进程，或设置另一个 `STUDY_WEB_PORT` |
@@ -38,6 +39,11 @@ Doctor 通过后启动：
 bun run start:demo
 ```
 
+默认命令选择 `examples/math-starter-m0/learning-set`。最小 Learning Set 只有
+`LEARNING_GUIDE.md`、`ROADMAP.md` 与可写根目录；Plan 目录会在后续获得学生确认时创建。
+`graph/`、`cards/` 和 `materials/` 是彼此独立的可选切片：缺失或为空可正常启动，
+Knowledge 保持稳定空状态；已存在但无效的资产会让 Doctor 失败。
+
 启动器会再次诊断、构建前端，然后在前台运行服务。它不会自动打开浏览器，也不会静默驻留后台。另开终端验证：
 
 ```bash
@@ -45,6 +51,14 @@ curl http://127.0.0.1:65000/api/health
 ```
 
 预期得到包含 `"ok":true` 的 JSON。浏览器打开 <http://127.0.0.1:65000>。用 `Ctrl-C` 停止，信号会转发给子进程。
+
+## 私有 beta 明确选择
+
+私有评估语料不是默认示例，也不获公开再分发许可。仅在你有权访问且确实需要它时显式运行：
+
+```bash
+STUDY_LEARNING_SET=examples/derivative-m0/learning-set bun run start:demo
+```
 
 ## 自定义 Learning Set、端口和表达层
 
@@ -54,6 +68,8 @@ STUDY_WEB_PORT=65100 \
 STUDY_PERSONA=confident-mentor \
 bun run start:demo
 ```
+
+自定义路径也必须指向你有权使用的可写 Learning Set。可选静态资产能加速 Knowledge 浏览和备课，但不定义 Course、Session 或 Lesson 的课程模型。
 
 `confident-mentor` 只改变表达，不改变教学职责、数学事实、学生确认门或停止权。服务始终只应绑定回环地址；不要用反向代理或端口映射把 M0 暴露给其他机器。
 
