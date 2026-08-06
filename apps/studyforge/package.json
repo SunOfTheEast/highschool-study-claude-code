@@ -8,7 +8,7 @@
     "skills": ["./resources/skills"]
   },
   "scripts": {
-    "dev:server": "bun --watch src/server/index.ts",
+    "dev:server": "STUDYFORGE_DEV_ORIGIN=http://127.0.0.1:65001 bun --watch src/server/index.ts",
     "dev:client": "vite",
     "dev": "bun run --parallel dev:server dev:client",
     "start": "bun run src/server/index.ts",

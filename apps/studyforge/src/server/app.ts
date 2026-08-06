@@ -12,6 +12,7 @@ import { readLessonHandout } from '../study/lesson-handout';
 import { StudyDocumentError } from '../study/markdown';
 import { readWorkspace } from '../study/workspace';
 import type { EventHub } from './event-hub';
+import { isBrowserOriginAllowed, type BrowserOriginPolicy } from './origin-policy';
 
 type Lifecycle = Pick<
   NodeLifecycleService,
@@ -27,6 +28,7 @@ export type AppDependencies = {
   root: string;
   registry: Registry;
   hub: EventHub;
+  originPolicy: BrowserOriginPolicy;
   lifecycle?: Lifecycle;
   staticRoot?: string;
   readCourse?: typeof readWorkspace;
@@ -86,6 +88,10 @@ export function createRequestHandler(deps?: AppDependencies) {
       return json({ ok: true, runtime: 'pi-m0' });
     }
     if (!deps) return new Response('Not found', { status: 404 });
+    const browserProtected = request.method !== 'GET' || url.pathname === '/events';
+    if (browserProtected && !isBrowserOriginAllowed(request, deps.originPolicy)) {
+      return json({ error: 'ORIGIN_NOT_ALLOWED' }, 403);
+    }
     const lifecycle = deps.lifecycle ?? new NodeLifecycleService(deps.root, deps.registry);
     const courseReader = deps.readCourse ?? readWorkspace;
     const knowledgeReader = deps.readKnowledge ?? readKnowledge;

@@ -10,6 +10,7 @@ import { join } from 'node:path';
 import type { AgentSessionEvent, SessionEntry } from '@earendil-works/pi-coding-agent';
 import { createRequestHandler } from '../../src/server/app';
 import { EventHub } from '../../src/server/event-hub';
+import { createLoopbackOriginPolicy } from '../../src/server/origin-policy';
 import type { SessionKey } from '../../src/shared/contracts';
 
 const source = join(import.meta.dir, '../fixtures/m0-learning-set');
@@ -245,8 +246,18 @@ hub.subscribe((event) => {
   for (const client of clients) client.send(data);
 });
 
-const handler = createRequestHandler({ root, registry: registry as never, hub });
 const port = Number(process.env.STUDYFORGE_E2E_API_PORT ?? 65000);
+const clientPort = Number(process.env.STUDYFORGE_E2E_CLIENT_PORT ?? 65001);
+const originPolicy = createLoopbackOriginPolicy(
+  port,
+  `http://127.0.0.1:${clientPort}`,
+);
+const handler = createRequestHandler({
+  root,
+  registry: registry as never,
+  hub,
+  originPolicy,
+});
 const server = Bun.serve({
   hostname: '127.0.0.1',
   port,

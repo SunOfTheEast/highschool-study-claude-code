@@ -4,6 +4,7 @@ import { createPiSessionFactory } from '../runtime/session-factory';
 import { WorkspaceRegistry } from '../runtime/workspace-registry';
 import { createRequestHandler } from './app';
 import { EventHub } from './event-hub';
+import { createLoopbackOriginPolicy } from './origin-policy';
 
 const valueAfter = (name: string) => {
   const index = process.argv.indexOf(name);
@@ -17,13 +18,17 @@ const factory = await createPiSessionFactory(root);
 const registry = new WorkspaceRegistry(root, factory);
 const staticRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../../dist');
 const clients = new Set<{ send(data: string): void }>();
+const originPolicy = createLoopbackOriginPolicy(
+  port,
+  process.env.STUDYFORGE_DEV_ORIGIN,
+);
 
 hub.subscribe((event) => {
   const data = JSON.stringify(event);
   for (const client of clients) client.send(data);
 });
 
-const fetch = createRequestHandler({ root, registry, hub, staticRoot });
+const fetch = createRequestHandler({ root, registry, hub, staticRoot, originPolicy });
 
 const server = Bun.serve({
   hostname: '127.0.0.1',

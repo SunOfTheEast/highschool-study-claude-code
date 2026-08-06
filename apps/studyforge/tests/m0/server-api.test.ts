@@ -11,10 +11,12 @@ import { join } from 'node:path';
 import type { AgentSessionEvent, SessionEntry } from '@earendil-works/pi-coding-agent';
 import { createRequestHandler } from '../../src/server/app';
 import { EventHub } from '../../src/server/event-hub';
+import { createLoopbackOriginPolicy } from '../../src/server/origin-policy';
 import type { SessionKey, StudyEvent } from '../../src/shared/contracts';
 
 const fixture = join(import.meta.dir, '../fixtures/m0-learning-set');
 const roots: string[] = [];
+const originPolicy = createLoopbackOriginPolicy(65000);
 
 function copyFixture(): string {
   const root = mkdtempSync(join(tmpdir(), 'studyforge-m0-api-'));
@@ -103,6 +105,7 @@ test('serves only the M0 course and static knowledge snapshots', async () => {
   const root = copyFixture();
   const handler = createRequestHandler({
     root,
+    originPolicy,
     hub: new EventHub(),
     registry: fakeRegistry() as never,
   });
@@ -135,6 +138,7 @@ test('serves a reread-on-open handout with only selected public Lesson content',
   const root = copyFixture();
   const handler = createRequestHandler({
     root,
+    originPolicy,
     hub: new EventHub(),
     registry: fakeRegistry() as never,
   });
@@ -180,6 +184,7 @@ test('rejects malformed or out-of-tree handout API targets', async () => {
   const root = copyFixture();
   const handler = createRequestHandler({
     root,
+    originPolicy,
     hub: new EventHub(),
     registry: fakeRegistry() as never,
   });
@@ -198,6 +203,7 @@ test('returns unmodified assistant text and inspectable native tool activity', a
   const root = copyFixture();
   const handler = createRequestHandler({
     root,
+    originPolicy,
     hub: new EventHub(),
     registry: fakeRegistry() as never,
   });
@@ -237,6 +243,7 @@ test('streams one accepted turn and invalidates course after a native edit', asy
   });
   const handler = createRequestHandler({
     root,
+    originPolicy,
     hub,
     registry: fakeRegistry({
       subscribe: async (_key: SessionKey, value: (event: AgentSessionEvent) => void) => {
@@ -298,6 +305,7 @@ test('invalidates only Course after a successful Lesson custom write', async () 
   });
   const handler = createRequestHandler({
     root,
+    originPolicy,
     hub,
     registry: fakeRegistry({
       subscribe: async (_key: SessionKey, value: (event: AgentSessionEvent) => void) => {
@@ -343,6 +351,7 @@ test('routes student lifecycle actions without generating teaching messages', as
   const calls: string[] = [];
   const handler = createRequestHandler({
     root,
+    originPolicy,
     hub: new EventHub(),
     registry: fakeRegistry() as never,
     lifecycle: {
