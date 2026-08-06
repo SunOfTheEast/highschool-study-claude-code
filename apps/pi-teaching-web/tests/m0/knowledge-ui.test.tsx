@@ -17,6 +17,8 @@ test('renders the static method graph, cards and materials without personal over
   expect(markup).toContain('参变量分离');
   expect(markup).toContain('sample-card');
   expect(markup).toContain('materials/note.md');
+  expect(markup).toContain('class="knowledge-workspace"');
+  expect(markup).toContain('aria-label="题卡资产"');
   expect(markup).not.toMatch(/个人掌握|能力评分|作答次数|稳定能力|学习建议/i);
 });
 

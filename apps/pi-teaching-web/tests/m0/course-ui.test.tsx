@@ -409,6 +409,8 @@ test('renders a standalone public A4 Lesson handout without application chrome',
   );
 
   expect(markup).toContain('class="lesson-handout-page"');
+  expect(markup).toContain('class="handout-paper"');
+  expect(markup).toContain('StudyForge · Lesson Handout');
   expect(markup).toContain('参数选路练习讲义');
   expect(markup).toContain('判断');
   expect(markup).toContain('姓名');

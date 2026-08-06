@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 const client = join(import.meta.dir, '../../src/client');
@@ -32,4 +32,32 @@ test('ports the Kimi brand seal and overview anchor selectors', () => {
   expect(shell).toContain('.brand-seal');
   expect(shell).toContain('.course-overview');
   expect(overview).toContain('overview-continue');
+});
+
+test('does not hide teaching information in sub-11px literal font sizes', () => {
+  const styleFiles = [
+    join(client, 'styles.css'),
+    join(client, 'theme-liubai.css'),
+    ...readdirSync(join(client, 'styles'))
+      .filter((name) => name.endsWith('.css'))
+      .map((name) => join(client, 'styles', name)),
+  ];
+  const violations: string[] = [];
+
+  for (const path of styleFiles) {
+    const source = readFileSync(path, 'utf8');
+    const patterns = [
+      /font-size\s*:\s*(\d*\.?\d+)(px|rem)\b/g,
+      /\bfont\s*:[^;{}]*?\s(\d*\.?\d+)(px|rem)\s*\//g,
+    ];
+    for (const pattern of patterns) {
+      for (const match of source.matchAll(pattern)) {
+        const numeric = Number(match[1]);
+        const pixels = match[2] === 'rem' ? numeric * 16 : numeric;
+        if (pixels < 11) violations.push(`${path}:${match[0]}`);
+      }
+    }
+  }
+
+  expect(violations).toEqual([]);
 });
