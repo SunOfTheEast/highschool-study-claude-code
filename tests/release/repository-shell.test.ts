@@ -27,3 +27,16 @@ test('exposes one StudyForge workspace from the repository root', () => {
   expect(existsSync(join(root, 'apps/pi-teaching-web'))).toBe(false);
   expect(existsSync(join(root, 'bun.lock'))).toBe(true);
 });
+
+test('runs public verification without model credentials', () => {
+  for (const path of [
+    '.github/workflows/ci.yml',
+    '.github/workflows/release-candidate.yml',
+  ]) {
+    const workflow = readFileSync(join(root, path), 'utf8');
+    expect(workflow).toContain('oven-sh/setup-bun@v2');
+    expect(workflow).toContain('bun install --frozen-lockfile');
+    expect(workflow).toContain('bun run check');
+    expect(workflow).toContain('bun run test:e2e');
+  }
+});
