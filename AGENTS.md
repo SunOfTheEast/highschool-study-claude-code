@@ -11,7 +11,8 @@ M0 has one Markdown control tree:
 
 ```text
 ROADMAP.md
-└── plans/<plan-id>.md
+└── plans/<plan-id>/
+    ├── PLAN.md
     └── lessons/<lesson-id>.md
         └── Block Classroom Logs
 ```
@@ -45,12 +46,14 @@ historical facts.
 
 ## Sessions and lifecycle
 
-Every Roadmap, Plan, and Lesson has one node-owned native Pi Session. Ownership is
+Every Roadmap, Plan, and Lesson has one node-owned native Pi Session. Plan IDs are
+Roadmap-global; Lesson IDs are local to their parent Plan, so a Lesson Session key is
+`lesson:<plan-id>:<lesson-id>`. Ownership is
 `nodeKind + nodeId + nodePath + parentId + parentPath`; display labels do not identify
 a Session. Parent and sibling transcripts are never copied into a new node Session.
 
 A long Plan Session uses Pi's native compaction only at a semantic boundary: the
-settled turn successfully edited or wrote `lessons/*.md`, and active context usage is
+settled turn successfully edited or wrote `plans/*/lessons/*.md`, and active context usage is
 at least 200,000 tokens. The compaction summary is a working Session index, not a
 teaching fact or Handoff. Markdown remains authoritative, the parent rereads original
 documents when detail matters, and the append-only Pi JSONL keeps the raw history.
@@ -74,26 +77,35 @@ metaphor only; they never override mathematics, role authority, learning-set pri
 or student agency. `STUDY_PERSONA=<id>` selects one overlay for all three student-facing
 node Sessions. The internal material Scout receives no persona or user-facing role-play.
 
-Every node has the native `read`, `grep`, `find`, `ls`, `edit`, and `write` tools. A
-Plan Session additionally has `subagent` for fresh-context copies of one packaged
-read-only `study-material-scout`. The Coach derives temporary material slots from the
+Roadmap keeps the native `read`, `grep`, `find`, `ls`, `edit`, and `write` tools. Plan
+keeps those tools and additionally has `subagent` for fresh-context copies of one
+packaged read-only `study-material-scout`. Lesson has native `read`, `grep`, `find`,
+and `ls`, plus the node-bound `classroom_log_append` and `classroom_update`; it does
+not receive native `edit/write`. The Coach derives temporary material slots from the
 agreed Lesson activities and normally launches one Scout per slot, with at most three
-running concurrently. Each Scout returns only a decision-sufficient candidate
-frontier for its slot. The parent chooses, fully reads, and verifies the selected
-asset for every slot. A one-problem Lesson may need one card; a multi-problem Lesson
-may need several. Scouts use only `read`, `grep`, `find`, and `ls`; they cannot write
-teaching facts. Roadmap and Lesson Sessions do not receive `subagent`. Node activation
+running concurrently. Each Scout uses canonical feature fields and free text to recall
+a small shallow candidate set, reads only metadata and the stem, and reports the feature
+slice it matched and inspected. The parent chooses a primary, fully reads it, and owns
+every mathematical, route-level, teaching-fit, and persistence decision. A one-problem
+Lesson may need one card; a multi-problem Lesson may need several. Scouts use only
+`read`, `grep`, `find`, and `ls`; they cannot write teaching facts. Roadmap and Lesson
+Sessions do not receive `subagent`. Node activation
 and completion are student UI actions handled by Runtime code. Do not replace these
 actions with prompt conventions or model tool calls.
 
 ## Teaching behavior owners
 
-- Roadmap introduction and long-term diagnosis:
-  `apps/pi-teaching-web/resources/skills/roadmap-study/SKILL.md`
-- Plan inquiry, direct child reading, and Lesson preparation:
-  `apps/pi-teaching-web/resources/skills/coach-study/SKILL.md`
-- Cross-cycle direct-document review:
-  `apps/pi-teaching-web/resources/skills/plan-next-cycle/SKILL.md`
+- Roadmap introduction, long-horizon diagnosis, and student-approved Plan design:
+  `apps/pi-teaching-web/resources/skills/roadmap-dialogue/SKILL.md`
+- Materializing a student-approved Plan:
+  `apps/pi-teaching-web/resources/skills/prepare-approved-plan/SKILL.md`
+- Plan-stage interpretation, direct child reading, post-Lesson review, and
+  student-approved next-Lesson design:
+  `apps/pi-teaching-web/resources/skills/plan-dialogue/SKILL.md`
+- Materializing a student-approved Lesson:
+  `apps/pi-teaching-web/resources/skills/prepare-approved-lesson/SKILL.md`
+- Shared Plan-cycle archetype references:
+  `apps/pi-teaching-web/resources/skills/references/plan-cycles/`
 - Live Block teaching and logging:
   `apps/pi-teaching-web/resources/skills/tutor-lesson/SKILL.md`
 - Shared mathematics judgment:
@@ -115,9 +127,9 @@ The only primary views are Course and Knowledge.
 - Course routes: `/course`, `/course/plan/:id`,
   `/course/plan/:id/lesson/:id`.
 - Knowledge route: `/knowledge`.
-- API: health, course snapshot, static knowledge snapshot, node history/message, and
-  four student lifecycle actions.
-- WebSocket `/events` transports raw conversation items, native tool activity, run
+- API: health, course snapshot, static knowledge snapshot, node history/message,
+  Plan lifecycle actions, and Plan-scoped Lesson lifecycle actions.
+- WebSocket `/events` transports raw conversation items, tool activity, run
   state, errors, and invalidations.
 
 Assistant text is rendered unchanged. Tool calls are separate collapsed activity

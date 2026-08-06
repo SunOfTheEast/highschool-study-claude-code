@@ -13,7 +13,7 @@ import { createLessonTools } from '../../src/runtime/lesson-tools';
 import { readLesson } from '../../src/study/markdown';
 
 const fixture = join(import.meta.dir, '../fixtures/m0-learning-set');
-const lessonPath = 'lessons/lesson-001.md';
+const lessonPath = 'plans/plan-001/lessons/lesson-001.md';
 const roots: string[] = [];
 
 function copyFixture(): string {

@@ -23,7 +23,7 @@ session_id: null
 
 ## Lesson Tree
 
-- [lesson-001 | 真实停点问诊](lessons/lesson-001.md)
+- [lesson-001 | 真实停点问诊](plans/plan-001/lessons/lesson-001.md)
   - After:
   - Depends on:
 

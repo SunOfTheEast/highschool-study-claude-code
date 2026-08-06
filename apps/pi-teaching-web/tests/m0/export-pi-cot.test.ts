@@ -19,7 +19,7 @@ const jsonl = [
       usage: { reasoning: 12 },
       content: [
         { type: 'thinking', thinking: '第一段思考' },
-        { type: 'toolCall', name: 'read', arguments: { path: 'plans/plan-001.md' } },
+        { type: 'toolCall', name: 'read', arguments: { path: 'plans/plan-001/PLAN.md' } },
       ],
     },
   },
@@ -193,7 +193,7 @@ describe('Pi CoT turn export', () => {
     expect(output).toContain('第一回合问题');
     expect(output).toContain('第一段思考');
     expect(output).toContain('read');
-    expect(output).toContain('plans/plan-001.md');
+    expect(output).toContain('plans/plan-001/PLAN.md');
     expect(output).toContain('第一回合公开回复');
     expect(output).toContain('Reasoning tokens: 46');
     expect(output).not.toContain('很长的工具结果');

@@ -1,10 +1,12 @@
 import type {
   ConversationItem,
+  LessonReviewConversationItem,
   MaterialSearchConversationItem,
   SessionKey,
   StudyEvent,
 } from '../shared/contracts';
 import { mergeMaterialSearchItem } from '../projection/material-search';
+import { mergeLessonReviewItem } from '../projection/lesson-review';
 
 export type ClientState = {
   conversations: Partial<Record<SessionKey, ConversationItem[]>>;
@@ -25,6 +27,8 @@ function upsert(items: ConversationItem[], incoming: ConversationItem): Conversa
   const existing = items[index]!;
   if (existing.kind === 'material-search' && incoming.kind === 'material-search') {
     next[index] = mergeMaterialSearchItem(existing, incoming);
+  } else if (existing.kind === 'lesson-review' && incoming.kind === 'lesson-review') {
+    next[index] = mergeLessonReviewItem(existing, incoming);
   } else if (
     existing.kind === 'material-search'
     && incoming.kind === 'tool'
@@ -40,6 +44,19 @@ function upsert(items: ConversationItem[], incoming: ConversationItem): Conversa
       updatedAt: incoming.at,
     };
     next[index] = mergeMaterialSearchItem(existing, terminal);
+  } else if (
+    existing.kind === 'lesson-review'
+    && incoming.kind === 'tool'
+    && incoming.name === 'subagent'
+    && incoming.status !== 'running'
+  ) {
+    const terminal: LessonReviewConversationItem = {
+      ...existing,
+      status: incoming.status,
+      at: incoming.at,
+      updatedAt: incoming.at,
+    };
+    next[index] = mergeLessonReviewItem(existing, terminal);
   } else {
     next[index] = incoming;
   }

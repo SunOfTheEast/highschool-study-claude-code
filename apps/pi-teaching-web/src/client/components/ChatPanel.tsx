@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from 'react';
 import type { ConversationItem, SessionKey } from '../../shared/contracts';
 import { MarkdownView } from './MarkdownView';
+import { LessonReviewActivity } from './LessonReviewActivity';
+import { LessonHandoutActivity } from './LessonHandoutActivity';
 import { MaterialSearchActivity } from './MaterialSearchActivity';
 
 const toolStatus = {
@@ -25,8 +27,13 @@ export function ChatPanel({
   onSend(text: string): Promise<void>;
 }) {
   const [text, setText] = useState('');
-  const materialSearchRunning = items.some((item) => (
-    item.kind === 'material-search' && item.status === 'running'
+  const backgroundTaskRunning = items.some((item) => (
+    (
+      item.kind === 'material-search'
+      || item.kind === 'lesson-review'
+      || item.kind === 'lesson-handout'
+    )
+    && item.status === 'running'
   ));
 
   const submit = (event: FormEvent) => {
@@ -47,6 +54,12 @@ export function ChatPanel({
         {items.map((item) => {
           if (item.kind === 'material-search') {
             return <MaterialSearchActivity item={item} key={item.id} />;
+          }
+          if (item.kind === 'lesson-review') {
+            return <LessonReviewActivity item={item} key={item.id} />;
+          }
+          if (item.kind === 'lesson-handout') {
+            return <LessonHandoutActivity item={item} key={item.id} />;
           }
           if (item.kind === 'tool' && item.name === 'subagent') {
             return (
@@ -82,7 +95,7 @@ export function ChatPanel({
         )}
       </div>
       <div className="chat-feedback">
-        {running && !materialSearchRunning && (
+        {running && !backgroundTaskRunning && (
           <p className="work-status"><span />老师正在思考…</p>
         )}
         {error && <p className="session-error" role="alert">{error}</p>}

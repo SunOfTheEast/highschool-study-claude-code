@@ -18,6 +18,7 @@ import {
   type PlanStatus,
   type RoadmapDocument,
 } from '../shared/contracts';
+import { lessonNodePath, lessonSessionKey, planNodePath } from './node-paths';
 
 type Frontmatter = Record<string, unknown>;
 
@@ -451,6 +452,9 @@ export function readCourseTree(root: string): CourseSnapshot {
     if (plan.id !== reference.id) {
       throw new StudyDocumentError(reference.path, `tree id ${reference.id} does not match child id ${plan.id}`);
     }
+    if (reference.path !== planNodePath(plan.id)) {
+      throw new StudyDocumentError(reference.path, `Plan path must be ${planNodePath(plan.id)}`);
+    }
     if (plan.parentId !== roadmap.id || plan.parentPath !== roadmap.path) {
       throw new StudyDocumentError(reference.path, 'Plan parent does not match ROADMAP.md');
     }
@@ -464,20 +468,22 @@ export function readCourseTree(root: string): CourseSnapshot {
           `tree id ${lessonReference.id} does not match child id ${lesson.id}`,
         );
       }
+      if (lessonReference.path !== lessonNodePath(plan.id, lesson.id)) {
+        throw new StudyDocumentError(
+          lessonReference.path,
+          `Lesson path must be ${lessonNodePath(plan.id, lesson.id)}`,
+        );
+      }
       if (lesson.parentId !== plan.id || lesson.parentPath !== plan.path) {
         throw new StudyDocumentError(lessonReference.path, `Lesson parent does not match ${plan.path}`);
       }
-      if (seenNodeIds.has(lesson.id)) {
-        throw new StudyDocumentError(lessonReference.path, `duplicate node id ${lesson.id}`);
-      }
-      seenNodeIds.add(lesson.id);
       return {
         kind: 'lesson',
         id: lesson.id,
         path: lesson.path,
         title: lessonReference.title,
         status: lesson.status,
-        sessionKey: `lesson:${lesson.id}`,
+        sessionKey: lessonSessionKey(plan.id, lesson.id),
         after: lessonReference.after,
         dependsOn: lessonReference.dependsOn,
         children: [],

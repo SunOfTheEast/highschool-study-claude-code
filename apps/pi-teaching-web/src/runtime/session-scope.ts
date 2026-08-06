@@ -1,4 +1,5 @@
 import type { NodeKind, SessionKey } from '../shared/contracts';
+import { lessonSessionKey } from '../study/node-paths';
 
 export type SessionRole = 'roadmap' | 'planner' | 'tutor';
 
@@ -19,7 +20,11 @@ export const M0_MODEL_TOOLS = [
   'write',
 ] as const;
 
-export const PLAN_MODEL_TOOLS = [...M0_MODEL_TOOLS, 'subagent'] as const;
+export const PLAN_MODEL_TOOLS = [
+  ...M0_MODEL_TOOLS,
+  'subagent',
+  'artifact_export',
+] as const;
 
 export const LESSON_MODEL_TOOLS = [
   'read',
@@ -49,6 +54,10 @@ export function roleForNode(kind: NodeKind): SessionRole {
 }
 
 export function sessionKeyForNode(scope: NodeSessionScope): SessionKey {
+  if (scope.nodeKind === 'lesson') {
+    if (scope.parentId === null) throw new Error('LESSON_PARENT_ID_REQUIRED');
+    return lessonSessionKey(scope.parentId, scope.nodeId);
+  }
   return `${scope.nodeKind}:${scope.nodeId}`;
 }
 

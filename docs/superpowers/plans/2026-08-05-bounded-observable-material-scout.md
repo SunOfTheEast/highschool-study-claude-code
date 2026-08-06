@@ -43,7 +43,7 @@
 - Consumes: one temporary material slot, optional canonical `goal`/`method`/`structure` terms, optional free-text terms, optional relaxation order, and the existing seven-field foreground `subagent` call.
 - Produces: one unfenced JSON object with `slot`, shallow `candidates`, and structured `search_boundary: { query, matched, inspected }`.
 
-- [ ] **Step 1: Preserve the behavioral RED**
+- [x] **Step 1: Preserve the behavioral RED**
 
 Record the existing evidence without adding a prose snapshot test:
 
@@ -530,7 +530,7 @@ Update the Scout bright line:
 read graph/vocabulary.yaml (and aliases only when needed)
 → choose the most selective required field and literal grep each of its OR terms in graph/card-recall-index.tsv
 → evaluate every remaining requested field, stem term, avoid item, and visible workload on returned complete rows
-→ stop at the first no-risk candidate, or one genuinely distinct reserve only for a visible risk
+→ collect qualifying candidates in index order and stop when the Coach-requested count is met; report visible risk without ranking the accepted candidates
 → return unfenced JSON with honest matched / inspected
 ```
 
@@ -555,6 +555,128 @@ Stage only those five paths and commit `feat: add safe card recall index`.
 - [ ] **Step 6: Re-run the current-format diagnostic before the five-brief B**
 
 Copy the generated sidecar into the existing temporary A/B learning-set snapshots. Re-run the same current-format absolute-value slot brief and export the child transcript. Require structural GREEN before continuing: no `ls`/`find`, no card/answer/rubric read, no stale vocabulary, unfenced JSON, and a scoped empty result or a real metadata/stem match. Record wall time, usage, and tool distribution without inventing a fixed speed threshold.
+
+### Task 4B: Replace candidate optimization with satisficing recall
+
+**Files:**
+- Modify: `apps/pi-teaching-web/resources/subagents/study-material-scout.md`
+- Modify: `apps/pi-teaching-web/resources/skills/prepare-approved-lesson/references/material-preparation.md`
+- Modify: `docs/superpowers/specs/2026-08-04-session-specific-teaching-skill-tree-design.md`
+- Modify: `docs/superpowers/plans/2026-08-05-bounded-observable-material-scout.md`
+
+**Interfaces:**
+- Consumes: the existing ordered sidecar rows, Coach brief query, direct exclusions, and visible-risk field.
+- Produces: exactly one first-fit shallow candidate, or an empty candidate array for the current query slice; Coach remains responsible for deep verification and any later retry.
+
+- [x] **Step 1: Preserve the behavioral RED**
+
+Use the archived teaching-action counterfactual run as the failing baseline. It found qualifying
+`mst_p0123_power_construct_ex01`, `ex02`, and `ex03` near one another, but still inspected all 31
+full-query matches and spent 127.7 seconds before returning two candidates. The failure is continued
+optimization after a usable candidate, not failed recall.
+
+- [x] **Step 2: Write the minimal satisficing rule**
+
+State why the Scout stops: selecting material is repeatable, and later calls can exclude material already
+used. For the current slot it only needs one adequate candidate, not the best candidate in the inventory.
+Screen returned rows in order; the first row that satisfies the brief and misses every direct exclusion is
+returned immediately. A visible soft risk is reported in `risk` and does not trigger comparison, backup
+search, or inspection of later rows.
+
+- [x] **Step 3: Remove contradictory backup semantics**
+
+Delete the old “visible risk permits one distinct reserve” rule from the Scout, Coach material reference,
+and authoritative design. If Coach deep verification rejects the returned item, a later bounded query may
+exclude that exact path and continue; Scout does not precompute alternatives.
+
+- [x] **Step 4: Verify text consistency and focused packaging**
+
+```bash
+cd apps/pi-teaching-web
+bun test tests/m0/native-session.test.ts
+! rg -n '只有.*风险.*继续找|才读取 Scout 已返回的备用|stop at the first no-risk|one genuinely distinct reserve' \
+  resources/subagents/study-material-scout.md \
+  resources/skills/prepare-approved-lesson/references/material-preparation.md \
+  ../../docs/superpowers/specs/2026-08-04-session-specific-teaching-skill-tree-design.md
+```
+
+Expected: the focused packaging test passes, and the search finds no Scout/Coach instruction to optimize
+or prefetch a backup candidate.
+
+- [x] **Step 5: Re-run one preserved pressure scenario**
+
+Run the same model, learning set, query, and `high` thinking level as the archived counterfactual. Require
+the Scout to return one first-fit candidate without inspecting later full-query matches. Record the raw
+Session, elapsed time, tool count, reasoning tokens, candidate path, `matched`, and `inspected`. Do not
+change the wording again during this verification run.
+
+**Observed result (2026-08-05):** with the same learning set, brief, model, and `high` thinking level,
+the Scout returned only `mst_p0123_power_construct_ex01` with `matched: 1` and `inspected: 1`. It did
+not mention the adjacent `ex02` or `ex03`. Wall time fell from 127.7 seconds to 49.5 seconds and reasoning
+from 14,087 to 4,096 tokens; both runs used four tool calls. This verifies the satisficing stop behavior,
+not the whole query-discipline contract: the GREEN run still used two field greps plus one exact-path grep.
+The wording also overconstrained every slot to one candidate and is superseded by Task 4C; the performance
+observation remains evidence for stopping once the requested quantity has been satisfied.
+
+### Task 4C: Return the quantity requested by the Coach without ranking
+
+**Files:**
+- Modify: `apps/pi-teaching-web/resources/subagents/study-material-scout.md`
+- Modify: `apps/pi-teaching-web/resources/skills/prepare-approved-lesson/references/material-preparation.md`
+- Modify: `docs/superpowers/specs/2026-08-04-session-specific-teaching-skill-tree-design.md`
+- Modify: `docs/superpowers/plans/2026-08-05-bounded-observable-material-scout.md`
+
+**Interfaces:**
+- Consumes: one natural-language candidate-count request in the Coach brief, plus the existing ordered sidecar rows, query, direct exclusions, and visible-risk field.
+- Produces: candidates in index order until the quantity target is reached; an omitted count defaults to one, an exact count uses that number, and a range uses its lower bound.
+
+- [x] **Step 1: Preserve the quantity-ownership RED**
+
+Record that the current Scout says candidate quantity is owned by its own contract, the Coach material
+reference forbids briefs from requesting a count, and the stopping rationale says every slot needs one card.
+This contradicts Lessons that legitimately need two or three distinct materials in one slot.
+
+- [x] **Step 2: Put the quantity request in the Coach brief**
+
+Allow one natural-language quantity request such as `需要 1 个` or `需要 2–3 个`. If it is omitted,
+the target is one. An exact number is the target; a range uses its lower bound, so `2–3 个` stops at two.
+Do not add a schema, Runtime field, or structured retrieval tool.
+
+- [x] **Step 3: Generalize satisficing from one candidate to N candidates**
+
+Resolve the brief's quantity request: omitted means one, an exact count uses that count, and a range uses
+its lower bound. Screen rows in index order and collect each candidate that satisfies the brief and misses
+every direct exclusion. Once the target is met, return without starting extra retrieval, deep reading, or
+comparison merely to find a better candidate. Report each visible soft risk without ranking or replacing
+accepted candidates. If the current query slice ends early, return however many qualifying candidates were
+found; only zero findings produce an empty array.
+
+- [x] **Step 4: Verify text consistency and focused packaging**
+
+```bash
+cd apps/pi-teaching-web
+bun test tests/m0/native-session.test.ts
+! rg -n '候选数量、读取深度.*本契约决定|brief 不要求候选数量|一张足够合适|首个合格即停止' \
+  resources/subagents/study-material-scout.md \
+  resources/skills/prepare-approved-lesson/references/material-preparation.md \
+  ../../docs/superpowers/specs/2026-08-04-session-specific-teaching-skill-tree-design.md
+```
+
+Expected: the focused packaging test passes, and no active instruction fixes every slot to one candidate or
+removes quantity ownership from the Coach.
+
+- [x] **Step 5: Run the default-one and range-two pressure pair**
+
+Use the same learning set, model, `high` thinking level, and teaching-action brief in both arms. Arm A omits
+the quantity request and must return one candidate. Arm B adds `所需候选数量：2–3 个` and must return
+the first two qualifying candidates, then stop without continuing an optimization or search cycle for a
+better third candidate.
+Record raw Sessions, wall time, tools, reasoning tokens, returned paths, `matched`, and `inspected`.
+
+**Observed result (2026-08-05):** the omitted-count arm returned one candidate; the `2–3` arm returned the
+first two candidates. The range arm shallowly noticed the adjacent third row already present in its result,
+but did not return it or enter another optimization/search cycle. This is accepted as harmless model jitter:
+the behavioral requirement is bounded satisficing, not perfect ignorance of adjacent tool output.
 
 ### Task 5: Run deterministic verification and a live UI smoke
 
@@ -713,3 +835,73 @@ Confirm no `/tmp` artifact, Session JSONL, provider config, credential file, cop
 - [ ] **Step 3: Report the outcome**
 
 Lead with whether the implementation is complete and which verification layers passed. Report student-visible behavior, exact deterministic test results, A/B load changes when available, the natural long-cycle verdict when available, commits created, and remaining risks. Do not claim sidecar, thinking-level, or structured-retrieval conclusions without the A/B evidence defined above.
+
+### Task 8: Route unbound learning-set assets before candidate discovery
+
+**Files:**
+- Modify: `docs/superpowers/specs/2026-08-04-session-specific-teaching-skill-tree-design.md`
+- Modify: `apps/pi-teaching-web/resources/skills/prepare-approved-lesson/SKILL.md`
+- Modify: `apps/pi-teaching-web/resources/skills/prepare-approved-lesson/references/material-preparation.md`
+- Verify only: `apps/pi-teaching-web/tests/m0/native-session.test.ts`
+
+**Interfaces:**
+- Consumes: an approved Block design and its chosen material provenance.
+- Produces: one deterministic routing decision: student-held material, Coach-authored inline material, bound learning-set asset, or unbound learning-set asset.
+
+- [x] **Step 1: Preserve the real-model RED**
+
+Use the saved C1–C4 parent Session traces under
+`/tmp/studyforge-real-coach-pressure-enngsv` as the baseline. Record that C1 called no Scout but listed
+the card inventory, searched the method graph, and opened a card; C2 and C3 accepted reconstructed
+materials but still performed parent-side discovery operations; C4 created an unbound learning-set
+asset slot for its short check and did call Scout. Do not reinterpret the absence of original-card recall
+as failure when the student selected a reconstruction or retained the original personally.
+
+- [x] **Step 2: Put the observable routing predicate in the always-read Prepare Skill**
+
+Replace “known path versus exploratory comparison” with material provenance plus asset binding. Define
+candidate discovery as any collection-, index-, pattern-, or candidate-file operation whose purpose is
+to obtain asset paths. Require unbound learning-set assets to enter `material-preparation.md` before any
+parent `ls`, `find`, `grep`, or candidate read. Preserve direct verification of one already-bound path and
+preserve non-library student-held and independently authored materials.
+
+- [x] **Step 3: Make the on-demand reference consume only the unbound-asset state**
+
+Change the reference entry condition to “the approved Block uses a learning-set asset and has no exact
+bound path.” Keep slot briefs, fresh Scout execution, shallow output, parent deep verification, empty-result
+handling, free-text non-card support, and the existing seven-field `subagent` call unchanged.
+
+- [x] **Step 4: Run deterministic verification**
+
+```bash
+cd apps/pi-teaching-web
+bun test tests/m0/native-session.test.ts
+bun run check
+cd ../..
+git diff --check -- \
+  docs/superpowers/specs/2026-08-04-session-specific-teaching-skill-tree-design.md \
+  docs/superpowers/plans/2026-08-05-bounded-observable-material-scout.md \
+  apps/pi-teaching-web/resources/skills/prepare-approved-lesson/SKILL.md \
+  apps/pi-teaching-web/resources/skills/prepare-approved-lesson/references/material-preparation.md
+```
+
+Expected: all commands pass; no schema, Runtime state, tool, Scout output shape, or student approval rule
+changes.
+
+- [x] **Step 5: Run the routing GREEN pressure pair**
+
+Use the same real Plan Coach configuration for two approved Lessons. In A, the original is student-held
+and the short check is explicitly Coach-authored: require zero Scout calls and zero parent-side learning-set
+candidate discovery. In B, the short check must be an existing learning-set asset but no path is supplied:
+require one Scout route before any parent candidate discovery, followed by a full read of only the returned
+primary. Judge the routing and final teaching quality separately from exact hidden-card recovery.
+
+**Observed result (2026-08-05):** the routing predicate passed in both arms. Arm A used the student-held
+original plus a Coach-authored inline check, made no Scout call, and performed no learning-set candidate
+discovery. Arm B routed the unbound learning-set check to a fresh Scout before any parent candidate
+discovery; the parent then fully read only the returned primary and correctly rejected it on mathematical
+and teaching-fit grounds. The end-to-end B arm is not a performance GREEN: the first Scout spent 436.8 s
+on a broad 69-line anchor result, and the one permitted refined recall spent 241.3 s while violating the
+single-anchor boundary and scanning the full index. Coach did not substitute the bad card or create a
+Lesson. Treat caller routing as verified and Scout query discipline/latency as a separate unresolved
+failure; do not fold that failure into another provenance rule.

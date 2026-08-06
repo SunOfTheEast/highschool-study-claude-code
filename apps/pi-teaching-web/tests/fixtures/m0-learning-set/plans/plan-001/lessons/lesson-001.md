@@ -3,7 +3,7 @@ id: lesson-001
 kind: lesson
 status: active
 parent_id: plan-001
-parent_path: plans/plan-001.md
+parent_path: plans/plan-001/PLAN.md
 session_id: null
 ---
 

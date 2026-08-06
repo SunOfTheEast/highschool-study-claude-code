@@ -158,32 +158,40 @@
 .tool-activity pre { max-height: 14rem; margin: 0 0 .8rem; padding: .75rem; overflow: auto; color: var(--ink-soft); background: var(--paper-deep); font-size: .62rem; line-height: 1.55; }
 
 .material-search-activity,
+.lesson-review-activity,
 .subagent-activity {
   margin: .2rem 0 .45rem 4rem;
   border-top: 1px dotted var(--rule);
   color: var(--ink-faint);
 }
-.material-search-activity {
+.material-search-activity,
+.lesson-review-activity {
   display: grid;
   grid-template-columns: .48rem minmax(0, 1fr);
   gap: .62rem;
   align-items: start;
   padding: .7rem 0 .75rem;
 }
-.material-search-pulse {
+.material-search-pulse,
+.lesson-review-pulse {
   width: .42rem;
   height: .42rem;
   margin-top: .17rem;
   border-radius: 50%;
   background: var(--accent);
 }
-.material-search-activity[data-status="running"] .material-search-pulse {
+.material-search-activity[data-status="running"] .material-search-pulse,
+.lesson-review-activity[data-status="running"] .lesson-review-pulse {
   animation: pulse-dot 1s ease-in-out infinite;
 }
 .material-search-activity[data-status="error"] .material-search-pulse { background: var(--danger); }
-.material-search-copy { display: grid; gap: .28rem; min-width: 0; }
-.material-search-copy strong { color: var(--ink-soft); font: 600 .68rem/1.35 var(--font-reading); }
-.material-search-copy small { font: .56rem/1.45 ui-monospace, monospace; }
+.lesson-review-activity[data-status="error"] .lesson-review-pulse { background: var(--danger); }
+.material-search-copy,
+.lesson-review-copy { display: grid; gap: .28rem; min-width: 0; }
+.material-search-copy strong,
+.lesson-review-copy strong { color: var(--ink-soft); font: 600 .68rem/1.35 var(--font-reading); }
+.material-search-copy small,
+.lesson-review-copy small { font: .56rem/1.45 ui-monospace, monospace; }
 .subagent-activity {
   display: flex;
   justify-content: space-between;
@@ -192,6 +200,48 @@
   font: .58rem/1.3 ui-monospace, monospace;
 }
 .subagent-activity small[data-status="error"] { color: var(--danger); }
+
+.lesson-handout-activity {
+  margin: .65rem 0 .8rem 4rem;
+  padding: .8rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink-soft);
+}
+.lesson-handout-mark {
+  width: .42rem;
+  height: .42rem;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.lesson-handout-activity[data-status="running"] {
+  justify-content: flex-start;
+  font: .66rem/1.4 var(--font-reading);
+}
+.lesson-handout-activity[data-status="running"] .lesson-handout-mark {
+  animation: pulse-dot 1s ease-in-out infinite;
+}
+.lesson-handout-activity[data-status="error"] {
+  justify-content: flex-start;
+  color: var(--ink-faint);
+  font: .66rem/1.4 var(--font-reading);
+}
+.lesson-handout-activity[data-status="error"] .lesson-handout-mark { background: var(--danger); }
+.lesson-handout-copy { display: grid; gap: .22rem; min-width: 0; }
+.lesson-handout-copy small { color: var(--accent); font-size: .54rem; letter-spacing: .08em; }
+.lesson-handout-copy strong { font: 600 .76rem/1.4 var(--font-reading); }
+.lesson-handout-activity a {
+  flex: 0 0 auto;
+  color: var(--accent-deep);
+  font: 650 .64rem/1.3 var(--font-reading);
+  text-underline-offset: .18em;
+}
+.lesson-handout-activity a:hover { color: var(--cinnabar); }
 
 .empty-conversation { display: grid; place-content: center; min-height: 15rem; color: var(--ink-faint); text-align: center; }
 .empty-conversation span { color: var(--accent); font: 550 1.1rem/1.2 var(--font-display); }

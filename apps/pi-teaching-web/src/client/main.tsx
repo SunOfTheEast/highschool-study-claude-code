@@ -5,6 +5,7 @@ import './theme-liubai.css';
 import './styles.css';
 import './styles/workspace-shell.css';
 import './styles/course.css';
+import './styles/handout.css';
 import './styles/classroom.css';
 import './styles/knowledge.css';
 import './styles/responsive.css';

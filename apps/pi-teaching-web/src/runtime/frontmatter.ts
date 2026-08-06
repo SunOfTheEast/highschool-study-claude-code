@@ -1,5 +1,6 @@
 import { stringify as stringifyYaml } from 'yaml';
 import { parseLessonSource, StudyDocumentError } from '../study/markdown';
+import { isLessonNodePath } from '../study/node-paths';
 import { mutateDocumentAtomically } from './atomic-document';
 
 export function replaceFrontmatterField(
@@ -34,7 +35,7 @@ export function setFrontmatterField(
   value: unknown,
   expected?: unknown,
 ): void {
-  const validate = path.startsWith('lessons/')
+  const validate = isLessonNodePath(path)
     ? (source: string) => parseLessonSource(path, source)
     : () => undefined;
   mutateDocumentAtomically(

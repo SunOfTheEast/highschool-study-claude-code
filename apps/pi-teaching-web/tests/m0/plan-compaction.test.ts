@@ -10,7 +10,7 @@ import type { NodeSessionScope } from '../../src/runtime/session-scope';
 const PLAN_SCOPE = {
   nodeKind: 'plan',
   nodeId: 'plan-001',
-  nodePath: 'plans/plan-001.md',
+  nodePath: 'plans/plan-001/PLAN.md',
   parentId: 'roadmap',
   parentPath: 'ROADMAP.md',
 } as const satisfies NodeSessionScope;
@@ -18,9 +18,9 @@ const PLAN_SCOPE = {
 const LESSON_SCOPE = {
   nodeKind: 'lesson',
   nodeId: 'lesson-001',
-  nodePath: 'lessons/lesson-001.md',
+  nodePath: 'plans/plan-001/lessons/lesson-001.md',
   parentId: 'plan-001',
-  parentPath: 'plans/plan-001.md',
+  parentPath: 'plans/plan-001/PLAN.md',
 } as const satisfies NodeSessionScope;
 
 type Listener = (event: AgentSessionEvent) => void;
@@ -70,7 +70,7 @@ function fakeNativeSession(options: FakeSessionOptions) {
 
 function successfulMutation(
   emit: Listener,
-  path = 'lessons/lesson-002.md',
+  path = 'plans/plan-001/lessons/lesson-002.md',
   toolName = 'write',
 ) {
   emit({
@@ -137,7 +137,7 @@ test('does not compact a Lesson-owned Session', async () => {
 test('does not compact after a Plan-file mutation', async () => {
   const { session, compactCalls } = fakeNativeSession({
     tokens: PLAN_COMPACTION_THRESHOLD_TOKENS,
-    onPrompt: (emit) => successfulMutation(emit, 'plans/plan-001.md', 'edit'),
+    onPrompt: (emit) => successfulMutation(emit, 'plans/plan-001/PLAN.md', 'edit'),
   });
   const wrapped = createPlanCompactionPrompt(session, PLAN_SCOPE, () => {});
 
@@ -154,7 +154,7 @@ test('does not compact after a failed Lesson mutation', async () => {
         type: 'tool_execution_start',
         toolCallId: 'failed-write',
         toolName: 'write',
-        args: { path: 'lessons/lesson-002.md' },
+        args: { path: 'plans/plan-001/lessons/lesson-002.md' },
       });
       emit({
         type: 'tool_execution_end',

@@ -297,14 +297,308 @@ describe('safe material-search projection', () => {
         type: 'tool_execution_start',
         toolCallId: 'read-1',
         toolName: 'read',
-        args: { path: 'plans/plan-001.md' },
+        args: { path: 'plans/plan-001/PLAN.md' },
       } as AgentSessionEvent,
       '2026-08-05T10:00:00.000Z',
     ));
     expect(read).toMatchObject({
       kind: 'tool',
       name: 'read',
-      detail: { path: 'plans/plan-001.md' },
+      detail: { path: 'plans/plan-001/PLAN.md' },
     });
+  });
+});
+
+describe('safe Lesson risk-review projection', () => {
+  const reviewerArgs = {
+    agent: 'lesson-risk-reviewer',
+    task: '题目全文：私有风险题。只检查 cards/private.card.yaml。',
+    context: 'fresh',
+  };
+  const reviewerResult = {
+    details: {
+      mode: 'single',
+      results: [{
+        agent: 'lesson-risk-reviewer',
+        task: reviewerArgs.task,
+        exitCode: 0,
+        sessionFile: '/tmp/private-reviewer.jsonl',
+        finalOutput: '结论：修改后可用。完整私有核验。',
+        usage: { input: 9000, output: 1200, reasoning: 4000 },
+        progressSummary: { toolCount: 1, tokens: 14_200, durationMs: 42_000 },
+      }],
+    },
+  };
+
+  function expectReviewerSafe(item: ConversationItem) {
+    const serialized = JSON.stringify(item);
+    expect(serialized).not.toContain('私有风险题');
+    expect(serialized).not.toContain('private.card.yaml');
+    expect(serialized).not.toContain('private-reviewer.jsonl');
+    expect(serialized).not.toContain('完整私有核验');
+    expect(serialized).not.toContain('reasoning');
+  }
+
+  test('projects live Reviewer start and completion as a dedicated safe activity', () => {
+    const start = conversationItem(projectLiveSessionEvent(
+      'plan:plan-001',
+      {
+        type: 'tool_execution_start',
+        toolCallId: 'review-1',
+        toolName: 'subagent',
+        args: reviewerArgs,
+      } as AgentSessionEvent,
+      '2026-08-06T10:00:00.000Z',
+    ));
+    expect(start).toEqual({
+      id: 'review-1',
+      kind: 'lesson-review',
+      status: 'running',
+      elapsedMs: 0,
+      at: '2026-08-06T10:00:00.000Z',
+      updatedAt: '2026-08-06T10:00:00.000Z',
+    });
+    expectReviewerSafe(start);
+
+    const end = conversationItem(projectLiveSessionEvent(
+      'plan:plan-001',
+      {
+        type: 'tool_execution_end',
+        toolCallId: 'review-1',
+        toolName: 'subagent',
+        result: reviewerResult,
+        isError: false,
+      } as AgentSessionEvent,
+      '2026-08-06T10:00:42.000Z',
+    ));
+    expect(end).toMatchObject({
+      id: 'review-1',
+      kind: 'lesson-review',
+      status: 'done',
+      elapsedMs: 42_000,
+    });
+    expectReviewerSafe(end);
+  });
+
+  test('reconstructs Reviewer wall time from persisted parent history', () => {
+    const entries = [
+      {
+        type: 'message',
+        id: 'assistant-review',
+        parentId: null,
+        timestamp: '2026-08-06T10:00:05.000Z',
+        message: {
+          role: 'assistant',
+          content: [{
+            type: 'toolCall',
+            id: 'review-1',
+            name: 'subagent',
+            arguments: reviewerArgs,
+          }],
+        },
+      },
+      {
+        type: 'message',
+        id: 'result-review',
+        parentId: 'assistant-review',
+        timestamp: '2026-08-06T10:00:47.000Z',
+        message: {
+          role: 'toolResult',
+          toolCallId: 'review-1',
+          toolName: 'subagent',
+          content: [{ type: 'text', text: '完整私有核验' }],
+          details: reviewerResult.details,
+          isError: false,
+        },
+      },
+    ] as unknown as SessionEntry[];
+
+    const items = projectConversationEntries('plan:plan-001', entries);
+    expect(items).toHaveLength(1);
+    expect(items[0]).toMatchObject({
+      kind: 'lesson-review',
+      status: 'done',
+      elapsedMs: 42_000,
+      at: '2026-08-06T10:00:05.000Z',
+      updatedAt: '2026-08-06T10:00:47.000Z',
+    });
+    expectReviewerSafe(items[0]!);
+  });
+
+  test('merges Reviewer completion without losing the original start time', () => {
+    const start = {
+      id: 'review-1',
+      kind: 'lesson-review',
+      status: 'running',
+      elapsedMs: 0,
+      at: '2026-08-06T10:00:00.000Z',
+      updatedAt: '2026-08-06T10:00:00.000Z',
+    } as ConversationItem;
+    const done = {
+      ...start,
+      status: 'done',
+      elapsedMs: 42_000,
+      at: '2026-08-06T10:00:42.000Z',
+      updatedAt: '2026-08-06T10:00:42.000Z',
+    } as ConversationItem;
+    let state = reduceClientState(initialClientState, {
+      type: 'conversation-item',
+      sessionKey: 'plan:plan-001',
+      item: start,
+    });
+    state = reduceClientState(state, {
+      type: 'conversation-item',
+      sessionKey: 'plan:plan-001',
+      item: done,
+    });
+
+    expect(state.conversations['plan:plan-001']).toEqual([{
+      ...done,
+      at: '2026-08-06T10:00:00.000Z',
+    }]);
+  });
+});
+
+describe('safe printable-handout projection', () => {
+  const exportArgs = {
+    kind: 'lesson-handout',
+    lessonId: 'lesson-001',
+    blockIds: ['block-002', 'private-block'],
+    teacherControl: '不应出现的教师控制',
+  };
+  const exportResult = {
+    details: {
+      kind: 'lesson-handout',
+      planId: 'plan-001',
+      lessonId: 'lesson-001',
+      blockIds: ['block-002', 'block-001'],
+      title: '参数选路练习讲义',
+      url: '/course/plan/plan-001/lesson/lesson-001/handout/block-002,block-001',
+      studentView: '不应复制到工具结果的正文',
+    },
+  };
+
+  function expectHandoutSafe(item: ConversationItem) {
+    const serialized = JSON.stringify(item);
+    expect(serialized).not.toContain('private-block');
+    expect(serialized).not.toContain('教师控制');
+    expect(serialized).not.toContain('不应复制到工具结果的正文');
+    expect(serialized).not.toContain('blockIds');
+  }
+
+  test('projects live publication without exposing tool input or body', () => {
+    const start = conversationItem(projectLiveSessionEvent(
+      'plan:plan-001',
+      {
+        type: 'tool_execution_start',
+        toolCallId: 'handout-1',
+        toolName: 'artifact_export',
+        args: exportArgs,
+      } as AgentSessionEvent,
+      '2026-08-06T11:00:00.000Z',
+    ));
+    expect(start).toEqual({
+      id: 'handout-1',
+      kind: 'lesson-handout',
+      status: 'running',
+      title: null,
+      url: null,
+      at: '2026-08-06T11:00:00.000Z',
+    });
+    expectHandoutSafe(start);
+
+    const end = conversationItem(projectLiveSessionEvent(
+      'plan:plan-001',
+      {
+        type: 'tool_execution_end',
+        toolCallId: 'handout-1',
+        toolName: 'artifact_export',
+        result: exportResult,
+        isError: false,
+      } as AgentSessionEvent,
+      '2026-08-06T11:00:01.000Z',
+    ));
+    expect(end).toEqual({
+      id: 'handout-1',
+      kind: 'lesson-handout',
+      status: 'done',
+      title: '参数选路练习讲义',
+      url: '/course/plan/plan-001/lesson/lesson-001/handout/block-002,block-001',
+      at: '2026-08-06T11:00:01.000Z',
+    });
+    expectHandoutSafe(end);
+  });
+
+  test('restores a handout card from persisted native tool history', () => {
+    const entries = [
+      {
+        type: 'message',
+        id: 'assistant-export',
+        parentId: null,
+        timestamp: '2026-08-06T11:00:00.000Z',
+        message: {
+          role: 'assistant',
+          content: [{
+            type: 'toolCall',
+            id: 'handout-1',
+            name: 'artifact_export',
+            arguments: exportArgs,
+          }],
+        },
+      },
+      {
+        type: 'message',
+        id: 'result-export',
+        parentId: 'assistant-export',
+        timestamp: '2026-08-06T11:00:01.000Z',
+        message: {
+          role: 'toolResult',
+          toolCallId: 'handout-1',
+          toolName: 'artifact_export',
+          content: [{ type: 'text', text: '不应复制到工具结果的正文' }],
+          details: exportResult.details,
+          isError: false,
+        },
+      },
+    ] as unknown as SessionEntry[];
+
+    const items = projectConversationEntries('plan:plan-001', entries);
+    expect(items).toEqual([{
+      id: 'handout-1',
+      kind: 'lesson-handout',
+      status: 'done',
+      title: '参数选路练习讲义',
+      url: '/course/plan/plan-001/lesson/lesson-001/handout/block-002,block-001',
+      at: '2026-08-06T11:00:01.000Z',
+    }]);
+    expectHandoutSafe(items[0]!);
+  });
+
+  test('fails closed when a successful export result has an unsafe URL', () => {
+    const item = conversationItem(projectLiveSessionEvent(
+      'plan:plan-001',
+      {
+        type: 'tool_execution_end',
+        toolCallId: 'handout-bad',
+        toolName: 'artifact_export',
+        result: {
+          details: {
+            ...exportResult.details,
+            url: 'https://example.com/private',
+          },
+        },
+        isError: false,
+      } as AgentSessionEvent,
+      '2026-08-06T11:00:01.000Z',
+    ));
+    expect(item).toEqual({
+      id: 'handout-bad',
+      kind: 'lesson-handout',
+      status: 'error',
+      title: null,
+      url: null,
+      at: '2026-08-06T11:00:01.000Z',
+    });
+    expectHandoutSafe(item);
   });
 });

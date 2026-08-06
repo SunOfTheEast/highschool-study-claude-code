@@ -9,7 +9,7 @@ import {
 } from '../../src/study/lesson-mutations';
 
 const root = join(import.meta.dir, '../fixtures/m0-learning-set');
-const lessonPath = 'lessons/lesson-001.md';
+const lessonPath = 'plans/plan-001/lessons/lesson-001.md';
 
 function fixtureSource(): string {
   return readFileSync(join(root, lessonPath), 'utf8');

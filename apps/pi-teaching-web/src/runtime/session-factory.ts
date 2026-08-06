@@ -9,6 +9,7 @@ import {
 } from '@earendil-works/pi-coding-agent';
 import { createPlanCompactionPrompt } from './plan-compaction';
 import { createLessonTools } from './lesson-tools';
+import { createPlanTools } from './plan-tools';
 import { createRoleResourceLoader } from './resource-loader';
 import { appendSessionOwner } from './session-owner';
 import { modelToolsForNode, type NodeSessionScope } from './session-scope';
@@ -40,9 +41,9 @@ export function sessionFactoryInput(
 }
 
 export function customToolsForNode(root: string, scope: NodeSessionScope) {
-  return scope.nodeKind === 'lesson'
-    ? createLessonTools(root, scope.nodePath)
-    : [];
+  if (scope.nodeKind === 'lesson') return createLessonTools(root, scope.nodePath);
+  if (scope.nodeKind === 'plan') return createPlanTools(root, scope);
+  return [];
 }
 
 type PiAgentSession = Awaited<ReturnType<typeof createAgentSession>>['session'];
