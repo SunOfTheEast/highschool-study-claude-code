@@ -1,0 +1,15 @@
+schema: highschool-study.problem-card.v1
+content_item_id: public-sample
+storage_uri: cards/public-sample.card.yaml
+stem: 已知函数 $f(x)=x^2-2ax+1$，求其最小值并说明参数的作用。
+graph:
+  goal:
+    primary: 求最值
+    part_level:
+      - { part: 1, goal: 求最值 }
+  method:
+    primary: 配方法
+    secondary: []
+  structure:
+    primary: 二次函数结构
+    secondary: []

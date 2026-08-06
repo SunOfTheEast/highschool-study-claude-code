@@ -114,10 +114,17 @@ test('completes the M0 Roadmap, Plan, Lesson and Knowledge browser cycle', async
 
   await page.getByRole('button', { name: '完成这一阶段' }).click();
   await expect(page).toHaveURL(/\/course$/);
-  await page.getByRole('link', { name: '知识山河' }).click();
+  await expect(page.getByRole('link', { name: '知识山河' })).toHaveCount(0);
+  await page.goto('/knowledge');
   await expect(page.getByRole('heading', { name: '知识山河' })).toBeVisible();
-  await page.getByPlaceholder('方法、题卡编号或材料名').fill('参变量分离');
-  await expect(page.getByRole('region', { name: '题卡资产' })).not.toContainText('没有匹配的题卡');
+  await expect(page.getByRole('heading', { name: '当前学习集没有预置静态资产' })).toBeVisible();
+  await expect(page.getByText(
+    '课程仍可使用你提供的材料，以及老师为当前目标准备的任务。',
+    { exact: true },
+  )).toBeVisible();
+  await expect(page.getByPlaceholder('方法、题卡编号或材料名')).toHaveCount(0);
+  await expect(page.locator('.knowledge-workspace b')).toHaveCount(0);
+  await expect(page.getByRole('region', { name: '题卡资产' })).toHaveCount(0);
 
   expect((await page.request.get('/api/views/memory')).status()).toBe(404);
   await page.goto('/memory');

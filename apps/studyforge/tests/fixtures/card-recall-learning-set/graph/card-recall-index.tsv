@@ -1,0 +1,2 @@
+path	goal	method	structure	choice_count	part_count	stem
+cards/public-sample.card.yaml	["求最值"]	["配方法"]	["二次函数结构"]	0	1	已知函数 $f(x)=x^2-2ax+1$，求其最小值并说明参数的作用。

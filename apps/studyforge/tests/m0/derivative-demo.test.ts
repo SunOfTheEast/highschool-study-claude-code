@@ -6,7 +6,8 @@ import { readCourseTree, readRoadmap } from '../../src/study/markdown';
 
 const root = join(import.meta.dir, '../../../../examples/derivative-m0/learning-set');
 
-test('ships a clean M0 derivative learning set with reusable static assets', () => {
+// Exclude this test together with examples/derivative-m0 during a clean public export.
+test('validates the private beta derivative corpus in the private repository', () => {
   const roadmap = readRoadmap(root);
   const course = readCourseTree(root);
   const knowledge = readKnowledge(root);

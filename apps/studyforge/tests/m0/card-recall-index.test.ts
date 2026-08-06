@@ -5,7 +5,7 @@ import { buildCardRecallIndex } from '../../scripts/build-card-recall-index';
 
 const learningSetRoot = join(
   import.meta.dir,
-  '../../../../examples/derivative-m0/learning-set',
+  '../fixtures/card-recall-learning-set',
 );
 const committedIndexPath = join(
   learningSetRoot,
@@ -61,7 +61,15 @@ describe('safe problem-card recall index', () => {
 
     const lines = generated.trimEnd().split('\n').slice(1);
     const rows = parseRows(generated);
-    expect(rows).toHaveLength(519);
+    expect(rows).toEqual([{
+      path: 'cards/public-sample.card.yaml',
+      goal: ['求最值'],
+      method: ['配方法'],
+      structure: ['二次函数结构'],
+      choice_count: 0,
+      part_count: 1,
+      stem: '已知函数 $f(x)=x^2-2ax+1$，求其最小值并说明参数的作用。',
+    }]);
     expect(rows.map((row) => row.path)).toEqual(
       rows.map((row) => row.path).toSorted(),
     );
@@ -82,29 +90,7 @@ describe('safe problem-card recall index', () => {
       expect(row.part_count).toBeGreaterThanOrEqual(0);
     }
 
-    const metadataPrefixLengths = lines.map((line) => (
-      `${line.split('\t').slice(0, 6).join('\t')}\t`.length
-    ));
-    expect(Math.max(...metadataPrefixLengths)).toBeLessThanOrEqual(232);
-    expect(lines.filter((line) => line.length <= 500).length).toBeGreaterThanOrEqual(496);
-
-    const multi = rows.find((row) => row.path.includes(
-      'mst_p0178_product_max_candidates_ex34_multi.card.yaml',
-    ));
-    expect(multi).toEqual(expect.objectContaining({
-      choice_count: 4,
-      part_count: 1,
-    }));
-    expect(multi?.stem).toContain('多选 T11');
-
-    const multipart = rows.find((row) => row.path.includes(
-      'mst_p0239_ae2x_plus_a_minus2_ex_minus_x_two_zeros_param_ch6_main_object_ex13.card.yaml',
-    ));
-    expect(multipart).toEqual(expect.objectContaining({
-      choice_count: 0,
-      part_count: 2,
-    }));
-    expect(multipart?.stem).toContain('讨论 $f(x)$ 的单调性');
-    expect(JSON.stringify(multipart)).not.toContain('0<a<1');
+    expect(lines).toHaveLength(1);
+    expect(generated).not.toMatch(/\b(?:answer|solution)\b|答案|解答|1-a\^?2|1-a²/i);
   });
 });

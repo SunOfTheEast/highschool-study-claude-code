@@ -13,7 +13,7 @@ import { EventHub } from '../../src/server/event-hub';
 import { createLoopbackOriginPolicy } from '../../src/server/origin-policy';
 import type { SessionKey } from '../../src/shared/contracts';
 
-const source = join(import.meta.dir, '../fixtures/m0-learning-set');
+const source = join(import.meta.dir, '../fixtures/m0-cardless-learning-set');
 const root = mkdtempSync(join(tmpdir(), 'studyforge-m0-e2e-'));
 cpSync(source, root, { recursive: true });
 for (const path of ['plans/plan-001/PLAN.md', 'plans/plan-001/lessons/lesson-001.md']) {
