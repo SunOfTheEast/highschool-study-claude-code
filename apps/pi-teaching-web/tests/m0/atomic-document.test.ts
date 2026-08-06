@@ -8,7 +8,7 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { mutateDocumentAtomically } from '../../src/runtime/atomic-document';
 import { parseLessonSource } from '../../src/study/markdown';
 
@@ -61,7 +61,7 @@ test('does not overwrite a source changed during the mutation', () => {
     (candidate) => parseLessonSource(lessonPath, candidate),
   )).toThrow('SOURCE_STALE');
   expect(readFileSync(absolute, 'utf8')).toContain('外部新版本');
-  expect(readdirSync(join(root, 'lessons')).filter((name) => name.endsWith('.tmp')))
+  expect(readdirSync(dirname(absolute)).filter((name) => name.endsWith('.tmp')))
     .toEqual([]);
 });
 
