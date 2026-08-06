@@ -4,7 +4,8 @@
 
 结论：**PASS**。公开默认 Learning Set 只含两个必需 Markdown 文件时，完整确定性门、真实构建
 服务烟测与 `Roadmap → Plan → 两节 Lesson → Plan completed` 真实模型闭环均通过。私有资产丰富
-语料继续通过回归且目录树未改动；本轮没有修改产品行为。
+的 `examples/derivative-m0/learning-set` 语料继续通过回归且该 learning-set 目录树未改动；本轮没有
+修改产品行为。
 
 ## 设计、计划与范围
 
@@ -27,6 +28,9 @@
 
 本报告由后续独立提交 `docs: report cardless M0 acceptance` 添加；不把提交自身 SHA 写回报告，
 避免自引用改写。
+
+验收后的最终 review-fix 仅修正私有语料的明确选择说明、对应文档契约测试，以及本报告对 harness、
+确认门和不可变语料范围的表述；产品架构与 `examples/derivative-m0/learning-set` 均未改动。
 
 ## 文件清单
 
@@ -120,9 +124,10 @@ provider，默认端口 65000 可用。Vite 的 chunk-size 提示与 Playwright 
 ## 真实模型两节无题卡闭环
 
 第二份公开启动集副本位于 `.superpowers/sdd/task-6-runtime/model/learning-set/`。为满足会话、日志
-均留在任务隔离根的要求，忽略目录中的运行时 harness 只替换 `SessionManager` 的存储目录；HTTP
-handler、Lifecycle、WorkspaceRegistry、资源组装、角色 Skill、工具面、默认 ModelRuntime 与构建
-前端均直接导入当前生产实现。它不是产品改动，也没有替换模型或提示词。
+均留在任务隔离根的要求，忽略目录中的运行时 harness 复制了 session factory/bootstrap 接线以改用
+隔离存储目录，提供了自定义 lookup/read adapters，并在响应中追加验收审计元数据；未改动的生产
+资源组装、角色 Skill、工具面、默认 ModelRuntime、Lifecycle 与 HTTP handler 均直接导入当前实现。
+它不是产品改动，也没有替换模型或提示词。
 
 - provider/model：`openai-codex/gpt-5.6-sol`
 - 服务：`127.0.0.1:65213`，PID `4426`
@@ -149,6 +154,9 @@ Lesson 1、start/close Lesson 2、complete Plan。最终 Course Tree 为一个 `
 | 生命周期所有权 | PASS | Lesson Session 只使用 read/classroom 工具；状态只由学生 HTTP actions 推进 |
 | 讲义边界 | PASS | Lesson 1 prepared 后才询问；学生请求前无导出，请求后仅一次 `artifact_export`；API 只含 5 个 Student View Blocks，无 Teacher Control |
 
+其中 `explicitConfirmationGates` 验收项把固定 turn 文件中的结构化 mutation-order 断言，与对保留的
+脱敏明确批准 turn 的人工检查结合起来；自动验收器本身不判断批准文本的语义。
+
 每个 Lesson 的 Classroom Log 与最终状态均从原始文档复查。Lesson 1 记录一次关系方向初始错误、
 一次语义追问后的自行修正，以及其余独立完成；Lesson 2 直接针对该证据改变任务形式，并在新的
 价格、人数、速度和路线情境中得到独立迁移证据。
@@ -166,15 +174,15 @@ Lesson 1、start/close Lesson 2、complete Plan。最终 Course Tree 为一个 `
 - 已完整阅读所有变更的生产 TypeScript/React/CSS 与 Doctor 文件，并复查公开 starter、公开
   card/index fixture、cardless fixture、README 与许可证；计划文件仅按 Task 6 范围抽查。
 - 变更范围没有 `.jsonl`、凭证值、私钥或邮件地址模式，没有公开内容符号链接。
-- `examples/derivative-m0` 在 `5488329` 与 `32d4de6` 的 tree hash 均为
-  `7c79d64578c0b914ae4a77468a275bb2be6310f4`；私有语料无修改。
+- `examples/derivative-m0/learning-set` 在 `5488329` 与当前 HEAD 的 tree hash 均为
+  `257a8ed5052b75ef95698777fd5d60ffd78de462`；私有 learning-set 语料无修改。
 - 未创建、修改或推送 remote、tag、仓库可见性，也未导出私有 corpus。
 
 ## 未变区域、首次失败与残余风险
 
 Roadmap/Plan/Lesson 文档格式、Session owner、角色工具权限、Scout 协议、题卡 schema、课堂
-写入工具、生命周期状态机、私有 beta corpus 与 M1 边界均未改变。确定性基础设施、真实服务、
-provider 与真实模型行为没有 first-hit failure。
+写入工具、生命周期状态机、私有 beta learning-set corpus 与 M1 边界均未改变。确定性基础设施、
+真实服务、provider 与真实模型行为没有 first-hit failure。
 
 残余风险：
 

@@ -16,6 +16,8 @@ const activePublicDocs = [
 
 const privateLearningSetCommand =
   'STUDY_LEARNING_SET=examples/derivative-m0/learning-set bun run start:demo';
+const privateLearningSetDoctorCommand =
+  'STUDY_LEARNING_SET=examples/derivative-m0/learning-set bun run doctor';
 
 const semanticUnits = (content: string) =>
   content
@@ -105,6 +107,19 @@ test('ships a public cardless math starter under CC BY 4.0', () => {
   const starterReadme = read('examples/math-starter-m0/README.md');
   expect(starterReadme).toContain('CC BY 4.0');
   expect(starterReadme).toContain('no preloaded graph, cards, or materials');
+});
+
+test('private derivative docs require explicit opt-in and preserve the license boundary', () => {
+  const derivativeReadme = read('examples/derivative-m0/README.md');
+
+  expectPublicDefaultStarter(derivativeReadme);
+  expect(derivativeReadme).toContain(privateLearningSetDoctorCommand);
+  expect(derivativeReadme).toContain(privateLearningSetCommand);
+  expect(derivativeReadme).not.toMatch(
+    /(?:默认学习集是|derivative-m0[^.\n]{0,80}(?:is|as) the default|default learning set[^.\n]{0,80}derivative-m0)/i,
+  );
+  expect(derivativeReadme).toContain('not licensed under Apache-2.0');
+  expect(derivativeReadme).toContain('not approved for public redistribution');
 });
 
 test('every active public doc identifies the public default and complete opt-in contract', () => {

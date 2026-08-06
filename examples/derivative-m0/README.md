@@ -16,11 +16,13 @@ The private beta evaluation corpus under examples/derivative-m0 is not licensed 
 
 ```bash
 bun install --frozen-lockfile
-bun run doctor
-bun run start:demo
+STUDY_LEARNING_SET=examples/derivative-m0/learning-set bun run doctor
+STUDY_LEARNING_SET=examples/derivative-m0/learning-set bun run start:demo
 ```
 
-默认学习集是 `examples/derivative-m0/learning-set`，服务只监听 `127.0.0.1:65000`。也可以通过 `STUDY_LEARNING_SET` 指向另一个已授权的 Learning Set。
+公开无题卡启动集 `examples/math-starter-m0` 是默认选项；以上两个命令仅在私有仓库内明确选择
+`examples/derivative-m0/learning-set`。服务只监听 `127.0.0.1:65000`。也可以通过
+`STUDY_LEARNING_SET` 指向另一个已授权的 Learning Set。
 
 ## 结构
 
