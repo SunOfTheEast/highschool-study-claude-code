@@ -1,6 +1,6 @@
 # StudyForge M1 记忆系统设计：教师备课本（唯一事实原位 + 可重建投影 + 可撤回判断）
 
-**状态：** 草案（已经两轮用户审阅并修订：投影化、去注入、快照化、判断字段重构、词表条件化、验收门修正）
+**状态：** 草案（已经三轮用户审阅并修订：投影化、去注入、快照化、判断所有权收紧为 Roadmap 独占、retrieval 双端引用、判断字段重构、词表条件化、验收门修正）
 
 **日期：** 2026-08-06
 
@@ -51,8 +51,8 @@ M1 阶段包含两个独立子项目：学习集生产与记忆系统。本设�
 2. 建立学习集级 `memory/` 投影目录，修复三个已实证缺口：学生侧身事实零持久化、
    函数级覆盖史静默丢失、收口文本单点承重——投影可重建，不成为第二套事实。
 3. 判断层以结构化记录承载"教师对学生的当前看法"，每条引用 Log 条目、带日期、
-   可撤回；写入走所有权层级（Tutor 事实 → Coach Plan 级判断 → Roadmap 跨 Plan
-   判断）。
+   可撤回；**仅 Roadmap 在回流时写入**（Coach 只读），Plan 级阶段判断自包含地
+   留在 PLAN.md。
 4. 消费契约：记忆内容零常驻注入；Coach 出题前必查覆盖投影；判断继续经 lesson
    文档烘焙服务 Tutor 冷启动。
 5. 机械事实（时间戳、条目 ID、间隔天数）由 Runtime 负责，不让模型猜。
@@ -157,10 +157,11 @@ MemPalace、GBrain、Hindsight、supermemory、cognee、OpenViking、Memori 等�
   memory/student-facts.md   学生事实快照：负担、情绪、偏好 → 指回 Log 条目
        │ Coach 复盘提取，Runtime 原子替换；上游更正时陈旧段先重建再读
        ▼
-判断层（profile 模式，可撤回）
+判断层（profile 模式，可撤回；**仅 Roadmap 写入**）
   memory/judgments.md       当前判断区（快照式更新）+ supersedes 历史区（append-only）
-       │ 引用 Log 条目（投影帮助定位，永远不作为引用对象）
-       ▲ Coach 收口写 Plan 级判断；Roadmap 回流写跨 Plan 判断
+       │ 引用 Log 条目（快照帮助定位，永远不作为引用对象）
+       ▲ Roadmap 回流时写跨 Plan 判断（引用什么读到什么）
+  PLAN.md Current Position  Coach 的阶段判断，自包含（不经 memory/）
 消费层（零常驻注入）
   memory/INDEX.md           ≤50 行指针地图（当前快照），决策点主动读取
   Coach 备课读投影 → 烘入 lesson 文档 → Tutor 冷启动执行
@@ -234,11 +235,14 @@ covers:
 ### 6.3 `memory/retrieval.md`（提取事件快照）
 
 ~~~text
-- [2026-08-05] log:plan-001/lesson-003#block-001:e1 | 内容: 条件检查族 | 计划间隔: 3d | 实际间隔: 3d | 结果: 独立
+- [2026-08-05] 本次检验: log:plan-001/lesson-003#block-001:e1 | 提取自: log:plan-001/lesson-001#block-005:e2 | 内容: 条件检查族 | 计划间隔: 3d | 实际间隔: 3d | 结果: 独立
 ~~~
 
+- **双端引用是硬规则**：每条提取事件必须同时引用**本次检验**与**提取自**（被回忆的
+  原表现）两个 Log 条目——间隔是两点之间的距离，单端引用在逻辑上无法确定
+  "3d 从哪一次表现算起"；
+- 实际间隔由 Runtime 根据两端 Log 条目的机械时间戳计算，lint 可重算校验；
 - 结果枚举：独立 / 轻提示 / 实质提示 / 失败；
-- 实际间隔由 lesson frontmatter 的时间戳算出（见 6.5），lint 可重算校验；
 - 非间隔检验的普通课次不产生本文件条目。
 
 ### 6.4 `memory/student-facts.md`（学生事实快照）
@@ -274,7 +278,29 @@ covers:
 - 判断层引用的 Log 条目被更正时，相关判断进入"待复核"（卫生检查报告），由 Coach
   或 Roadmap 在下一个决策点处理——撤回或确认。
 
-## 7. 判断层
+## 7. 判断层：`memory/judgments.md`（Roadmap 独占的跨 Plan 判断层）
+
+判断所有权沿课程层级收紧，每类判断只有一个家（与 M0 信息所有权同构）：
+
+| 判断类型 | 唯一位置 | 所有者 |
+| --- | --- | --- |
+| 课堂原始事实 | Lesson Block · Classroom Log | Tutor |
+| 本 Plan 阶段判断 | PLAN.md Current Position（自包含） | Coach |
+| 跨 Plan 长期认知假设 | memory/judgments.md | **仅 Roadmap** |
+| 快照（非判断） | memory/coverage / retrieval / student-facts | Coach 维护 |
+
+- **PLAN.md Current Position 保持自包含**：Coach 收口的阶段判断不拆分、不引用
+  judgments.md——memory/ 缺失时系统结构性地就是 M0（终验已验证该形态够用）；
+- **Roadmap 写入时机**：Plan 完成回流时。先读 Plan 总结，总结不足时沿 Tree 下钻
+  Lesson；**"引用什么读到什么"**——判断引用哪条 Log 条目，Roadmap 就必须下钻
+  实际读到哪条，不允许凭 PLAN.md 散文引用未读条目；
+- **Coach 只读**：新 Plan 的 Coach 在决策点协议下读取 judgments.md（备课时把相关
+  判断烘入 lesson 文档），但**不能修改**；
+- 角色名不是写入权限：本设计靠"一文件一角色 + Skill 写入契约 + 生命周期序列化"
+  使纪律可核查（与 M0 单写者规则同级，是协作纪律不是权限系统）；
+- 长期判断的更新节奏受 Plan 边界限制（低频高利害下这是特性不是缺陷）；Plan 内
+  的新证据由快照与 PLAN.md 承载，卫生检查可把矛盾判断列为待复核，Roadmap 在下个
+  边界处理。
 
 ### 7.1 `memory/judgments.md` 结构
 
@@ -309,9 +335,8 @@ memory/ 中唯一的 append-only 区**——判断不可重建（它们是教师
 2. **更新 = 新判断 + 历史区追加撤回记录**，禁止就地编辑；
 3. **双时态**：每条判断记"何时为真（观察期）"与"何时记录"两个日期；
 4. **判断不复制事实**：只引用，不转述（杀重复语义）；
-5. **写者序列化**：Coach 写 Plan 级判断（收口时，把现有 Current Position 散文负担
-   重构为结构化记录），Roadmap 写跨 Plan 判断（回流时）；卫生检查只做 supersedes
-   链维护与去重，不新写判断。
+5. **写者唯一**：judgments.md 只由 Roadmap 在回流时写入（当前区快照式更新 + 历史区
+   追加撤回记录）；Coach 只读；卫生检查只做 supersedes 链维护与去重，不新写判断。
 
 ### 7.3 问题契约
 
@@ -319,13 +344,14 @@ memory/ 中唯一的 append-only 区**——判断不可重建（它们是教师
 
 | 教师的问题 | 回答来源 |
 | --- | --- |
-| 学生会什么、不会什么 | judgments.md（证据量/趋势/模式/反模式） |
+| 本阶段学生会什么、不会什么 | PLAN.md Current Position（Coach，自包含） |
+| 跨 Plan 会什么、不会什么 | judgments.md（Roadmap：证据量/趋势/模式/反模式） |
 | 掌握哪些方法、知道哪些知识点 | judgments.md 按主题组织 |
 | 哪个忘了几次、记住了几次 | retrieval.md 统计 |
 | 做过哪些题目 | coverage.md |
 | 学生有什么负担/偏好/边界 | student-facts.md |
 
-投影负责把这些问题**指回** Log 原文；回答的引用对象永远是 Log 条目。
+快照负责把这些问题**指回** Log 原文；回答的引用对象永远是 Log 条目。
 
 ## 8. 读取与消费契约
 
@@ -365,9 +391,11 @@ Coach 把相关判断与事实烘入 lesson 文档（Student View / Teacher Cont
 ### 8.5 与现有文档的边界（每类信息只有一个家）
 
 - **Classroom Log**：课堂事实唯一原位（含扩展后的非任务事实；承重条目有稳定 ID）；
-- **memory/**：跨课定位投影与可撤回判断的唯一位置（不是第二套事实）；
-- **PLAN.md Current Position**：保留阶段总结（本阶段证明了什么——Plan 作用域
-  总结），瘦身：学生状态判断不再展开，引用 judgments.md；
+- **PLAN.md Current Position**：本 Plan 阶段判断的唯一位置（Coach 所有，自包含，
+  不经 memory/）；
+- **memory/judgments.md**：跨 Plan 长期认知假设的唯一位置（Roadmap 独占写入，
+  Coach 只读）；
+- **memory/ 快照**：跨课定位的唯一位置（不是第二套事实）；
 - **ROADMAP.md**：长期编排不变；学生状态引用 judgments.md。
 
 ### 8.6 提取调度
@@ -406,7 +434,8 @@ M0 因不存在独立长期记忆而隐藏 Memory 页；本设计分阶段恢复
    快照头部 `covers` 新鲜度检查；
 4. tutor-lesson Skill 契约：Classroom Log 写入纪律扩展（非任务事实必须记录）；
 5. Coach / Roadmap Skill 契约：决策点读取纪律（备课/收口/排期/回流先读 INDEX）、
-   出题前必查 coverage、判断写入规则、Reviewer 规则；
+   出题前必查 coverage、Roadmap 独占 judgments.md 写入（Coach 只读）、"引用什么
+   读到什么"下钻规则、Reviewer 规则；
 6. 学生指正暂存与读出（Memory 页配套）；
 7. 测试夹具扩展 memory/ 样例；
 8. Memory 页只读视图与指正入口。
@@ -491,11 +520,19 @@ M0 因不存在独立长期记忆而隐藏 Memory 页；本设计分阶段恢复
   本身就是证据）；
 - **承重 Classroom Log 条目由 Runtime 机械绑定稳定 ID 与时间**，模型不填写机械
   字段；消融文档"不建立事件 ID"一条据此修订；
+- **判断所有权沿课程层级收紧（第三轮审阅的根本修正）**：课堂事实 Tutor 所有
+  （Lesson Block）；本 Plan 阶段判断 Coach 所有（PLAN.md Current Position，
+  自包含，不经 memory/）；**跨 Plan 判断 Roadmap 独占**（judgments.md），Coach
+  只读；快照由 Coach 逐课维护。每类判断只有一个家，消灭 PLAN.md 与 judgments.md
+  之间的重复语义与双写者问题；memory/ 缺失时系统结构性地就是 M0；
+- **Roadmap"引用什么读到什么"**：回流时先读 Plan 总结，引用哪条 Log 就必须下钻
+  读到哪条，不允许凭 PLAN.md 散文引用未读条目；
+- **retrieval 双端引用**：每条提取事件必须同时引用"本次检验"与"提取自"两个
+  Log 条目，实际间隔由 Runtime 按两端机械时间戳计算；
 - **判断必须最终指回具体 Log 条目**；快照只负责帮助定位，永远不作为引用对象；
 - **记忆内容零常驻注入**：INDEX.md 不注入（静态注入随长缓存 Session 过期），
   读取纪律由 Skill 契约承载，决策点主动读取；
-- **所有权层级写入**：Tutor 事实（经 Classroom Log）、Coach Plan 级判断、Roadmap
-  跨 Plan 判断，卫生检查只维护不新写；
+- **卫生检查只维护不新写**（supersedes 链、去重、新鲜度复算、INDEX 刷新）；
 - **提取调度 = 机械事实 + Coach 判断**；不做算法调度器；
 - **Tutor 完全不碰 memory/**，快照生成全走 Coach 课后复盘；
 - **五条硬规则落在校验脚本**，不是提示词；
