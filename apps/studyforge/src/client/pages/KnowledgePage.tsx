@@ -86,6 +86,31 @@ export function KnowledgePage({ value }: { value: KnowledgeSnapshot }) {
     ))
     : [];
   const cards = query ? filtered.cards : relatedCards.length > 0 ? relatedCards : value.cards;
+  const empty = value.methods.length === 0
+    && value.cards.length === 0
+    && value.materials.length === 0;
+
+  if (empty) {
+    return (
+      <main
+        className="knowledge-workspace knowledge-workspace-empty"
+        aria-label="知识山河"
+      >
+        <header className="knowledge-heading">
+          <div>
+            <small>Static learning assets</small>
+            <h1>知识山河</h1>
+            <p>这里展示学习集本身的方法骨架、题卡与材料，不叠加个人能力判断。</p>
+          </div>
+        </header>
+        <section className="knowledge-empty-state">
+          <small>Course remains available</small>
+          <h2>当前学习集没有预置静态资产</h2>
+          <p>课程仍可使用你提供的材料，以及老师为当前目标准备的任务。</p>
+        </section>
+      </main>
+    );
+  }
 
   return (
     <main className="knowledge-workspace" aria-label="知识山河">

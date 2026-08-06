@@ -5,6 +5,7 @@ import type { PrimaryView } from '../view-state';
 export type AppShellProps = {
   title: string;
   activeView: PrimaryView;
+  knowledgeAvailable: boolean;
   connection: 'open' | 'connecting' | 'closed';
   notice?: string | null;
   onNavigate(view: PrimaryView): void;
@@ -14,6 +15,7 @@ export type AppShellProps = {
 export function AppShell({
   title,
   activeView,
+  knowledgeAvailable,
   connection,
   notice = null,
   onNavigate,
@@ -38,6 +40,7 @@ export function AppShell({
         </a>
         <PrimaryViewNav
           active={activeView}
+          knowledgeAvailable={knowledgeAvailable}
           hrefs={{ course: '/course', knowledge: '/knowledge' }}
           onNavigate={onNavigate}
         />

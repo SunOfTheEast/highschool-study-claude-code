@@ -30,3 +30,19 @@ test('filters static assets only by their own metadata', () => {
   expect(result.cards.map((item) => item.id)).toEqual(['sample-card']);
   expect(result.materials).toEqual([]);
 });
+
+test('renders an honest full-page state when no static assets are installed', () => {
+  const markup = renderToStaticMarkup(<KnowledgePage value={{
+    methods: [],
+    cards: [],
+    materials: [],
+  }} />);
+
+  expect(markup).toContain('当前学习集没有预置静态资产');
+  expect(markup).toContain('你提供的材料');
+  expect(markup).toContain('老师为当前目标准备的任务');
+  expect(markup).not.toContain('placeholder="方法、题卡编号或材料名"');
+  expect(markup).not.toContain('aria-label="方法图谱"');
+  expect(markup).not.toContain('aria-label="题卡资产"');
+  expect(markup).not.toContain('aria-label="学习材料"');
+});

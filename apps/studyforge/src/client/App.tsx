@@ -221,6 +221,12 @@ export function App() {
 
   const title = course?.guide.title ?? '本地学习工作台';
   const activeView: PrimaryView = route.kind === 'knowledge' ? 'knowledge' : 'course';
+  const knowledgeAvailable = course?.knowledgeAvailable
+    ?? Boolean(knowledge && (
+      knowledge.methods.length > 0
+      || knowledge.cards.length > 0
+      || knowledge.materials.length > 0
+    ));
 
   const nodeRoute = (node: CourseTreeNode): BrowserRoute => {
     if (node.kind === 'roadmap') return { kind: 'course-roadmap' };
@@ -313,6 +319,7 @@ export function App() {
     <AppShell
       title={title}
       activeView={activeView}
+      knowledgeAvailable={knowledgeAvailable}
       connection={connection}
       notice={notice}
       onNavigate={(view) => navigate(view === 'course' ? { kind: 'course' } : { kind: 'knowledge' })}

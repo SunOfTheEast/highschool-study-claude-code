@@ -367,16 +367,28 @@ test('reconciles streaming text, final messages and tool status by id', () => {
 });
 
 test('offers only Course and Knowledge in the primary navigation', () => {
-  const markup = renderToStaticMarkup(
+  const richMarkup = renderToStaticMarkup(
     <PrimaryViewNav
       active="course"
+      knowledgeAvailable
       hrefs={{ course: '/course', knowledge: '/knowledge' }}
       onNavigate={() => {}}
     />,
   );
-  expect(markup).toContain('课程脉络');
-  expect(markup).toContain('知识山河');
-  expect(markup).not.toContain('研习留痕');
+  expect(richMarkup).toContain('课程脉络');
+  expect(richMarkup).toContain('知识山河');
+  expect(richMarkup).not.toContain('研习留痕');
+
+  const cardlessMarkup = renderToStaticMarkup(
+    <PrimaryViewNav
+      active="course"
+      knowledgeAvailable={false}
+      hrefs={{ course: '/course', knowledge: '/knowledge' }}
+      onNavigate={() => {}}
+    />,
+  );
+  expect(cardlessMarkup).toContain('课程脉络');
+  expect(cardlessMarkup).not.toContain('知识山河');
 });
 
 test('renders a standalone public A4 Lesson handout without application chrome', () => {
