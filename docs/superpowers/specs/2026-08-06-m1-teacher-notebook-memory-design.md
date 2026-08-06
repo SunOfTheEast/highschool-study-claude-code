@@ -1,4 +1,4 @@
-# StudyForge M1 记忆系统设计：认知建模网络（知识点痕迹与状态 + 认知特征 + 偏好）
+# StudyForge M1 记忆系统设计：认知建模网络（知识点痕迹与对象记忆 + 能力假设 + 偏好）
 
 **状态：** 草案（第四版。前三版的完备性机器——Log 条目 ID、covers 新鲜度体系、双端
 引用、INDEX、待复核队列、Memory 页——已按"系统必须比它解决的问题小"原则拆除；
@@ -114,7 +114,7 @@
 - Coach：每节课关闭后的复盘（它本来就重读该课）中，把本课相关知识点节点的痕迹
   **整体重写**进 traces.md（快照式重写本身就是新鲜度机制，无需检测）；PLAN.md
   Current Position 照 M0 现状自包含书写；
-- Roadmap：Plan 完成回流时更新 knowledge/traits/preferences——先读 Plan 总结，
+- Roadmap：Plan 完成回流时更新 knowledge/hypotheses/preferences——先读 Plan 总结，
   **引用什么读到什么**（引用哪条 Log 就必须实际下钻读到哪条）；更新 = 新判断 +
   撤回记录（撤回历史保留在各文件内，旧判断永不删除）；
 - Coach 对 Roadmap 的三个文件**只读**；
