@@ -1,3 +1,25 @@
+export type MathToken = {
+  marker: string;
+  value: string;
+  display: boolean;
+};
+
+export type PreparedMathMarkdown = {
+  markdown: string;
+  tokens: readonly MathToken[];
+};
+
+type MarkdownNode = {
+  type: string;
+  value?: string;
+  children?: MarkdownNode[];
+  data?: Record<string, unknown>;
+  [key: string]: unknown;
+};
+
+const displayTokenType = 'studyforgeDisplayMath';
+const phrasingContainerTypes = new Set(['heading', 'tableCell']);
+
 function isEscaped(source: string, index: number): boolean {
   let slashes = 0;
   for (let cursor = index - 1; cursor >= 0 && source[cursor] === '\\'; cursor -= 1) {
@@ -85,29 +107,36 @@ function texMathEnd(source: string, index: number, closing: '\\)' | '\\]'): numb
   return null;
 }
 
-function displayPrefix(output: string): string {
-  if (output.length === 0 || output.endsWith('\n\n')) return '';
-  return output.endsWith('\n') ? '\n' : '\n\n';
+function displayContent(content: string): string {
+  return content.replace(/^\r?\n/, '').replace(/\r?\n$/, '');
 }
 
-function displaySuffix(source: string, index: number): string {
-  if (index >= source.length || source.startsWith('\n\n', index)) return '';
-  return source[index] === '\n' ? '\n' : '\n\n';
+function tokenMarker(source: string, index: number): string {
+  let marker = `STUDYFORGEMATHTOKEN${index}X`;
+  while (source.includes(marker)) marker += 'X';
+  return marker;
 }
 
-function displayMath(
-  output: string,
+function appendToken(
   source: string,
-  content: string,
-  nextIndex: number,
+  tokens: MathToken[],
+  value: string,
+  display: boolean,
 ): string {
-  const normalized = content.replace(/^\r?\n/, '').replace(/\r?\n$/, '');
-  return `${output}${displayPrefix(output)}$$\n${normalized}\n$$${displaySuffix(source, nextIndex)}`;
+  const marker = tokenMarker(source, tokens.length);
+  tokens.push({ marker, value, display });
+  return marker;
 }
 
-export function normalizeMathDelimiters(markdown: string): string {
+/**
+ * Protect TeX delimiters from the Markdown parser without deciding their block
+ * ownership in the raw string. A remark transform restores the tokens after
+ * Markdown has already established list and blockquote boundaries.
+ */
+export function prepareMathMarkdown(markdown: string): PreparedMathMarkdown {
   let result = '';
   let cursor = 0;
+  const tokens: MathToken[] = [];
 
   while (cursor < markdown.length) {
     const fenceEnd = fencedCodeEnd(markdown, cursor);
@@ -130,11 +159,11 @@ export function normalizeMathDelimiters(markdown: string): string {
       const end = dollarMathEnd(markdown, cursor, delimiter);
       if (end !== null) {
         if (delimiter === '$$') {
-          result = displayMath(
-            result,
+          result += appendToken(
             markdown,
-            markdown.slice(cursor + 2, end - 2),
-            end,
+            tokens,
+            displayContent(markdown.slice(cursor + 2, end - 2)),
+            true,
           );
         } else {
           result += markdown.slice(cursor, end);
@@ -149,18 +178,15 @@ export function normalizeMathDelimiters(markdown: string): string {
       const closing = opener === '\\(' ? '\\)' : '\\]';
       const end = texMathEnd(markdown, cursor, closing);
       if (end !== null) {
-        const nextIndex = end + 2;
-        if (opener === '\\[') {
-          result = displayMath(
-            result,
-            markdown,
-            markdown.slice(cursor + 2, end),
-            nextIndex,
-          );
-        } else {
-          result += `$${markdown.slice(cursor + 2, end)}$`;
-        }
-        cursor = nextIndex;
+        const display = opener === '\\[';
+        const value = markdown.slice(cursor + 2, end);
+        result += appendToken(
+          markdown,
+          tokens,
+          display ? displayContent(value) : value,
+          display,
+        );
+        cursor = end + 2;
         continue;
       }
     }
@@ -169,5 +195,155 @@ export function normalizeMathDelimiters(markdown: string): string {
     cursor += 1;
   }
 
+  return { markdown: result, tokens };
+}
+
+function inlineMathNode(value: string): MarkdownNode {
+  return {
+    type: 'inlineMath',
+    value,
+    data: {
+      hName: 'code',
+      hProperties: { className: ['language-math', 'math-inline'] },
+      hChildren: [{ type: 'text', value }],
+    },
+  };
+}
+
+function displayMathNode(value: string): MarkdownNode {
+  return {
+    type: 'math',
+    meta: null,
+    value,
+    data: {
+      hName: 'pre',
+      hChildren: [{
+        type: 'element',
+        tagName: 'code',
+        properties: { className: ['language-math', 'math-display'] },
+        children: [{ type: 'text', value }],
+      }],
+    },
+  };
+}
+
+function regexEscape(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function splitTextNode(
+  node: MarkdownNode,
+  tokens: ReadonlyMap<string, MathToken>,
+  markerPattern: RegExp,
+  allowDisplay: boolean,
+): MarkdownNode[] {
+  const value = node.value ?? '';
+  const result: MarkdownNode[] = [];
+  let cursor = 0;
+
+  markerPattern.lastIndex = 0;
+  for (const match of value.matchAll(markerPattern)) {
+    const marker = match[0];
+    const index = match.index;
+    const token = tokens.get(marker);
+    if (!token) continue;
+    if (index > cursor) result.push({ type: 'text', value: value.slice(cursor, index) });
+    if (token.display && allowDisplay) {
+      result.push({ type: displayTokenType, value: token.value });
+    } else {
+      const formula = token.display ? `\\displaystyle ${token.value}` : token.value;
+      result.push(inlineMathNode(formula));
+    }
+    cursor = index + marker.length;
+  }
+
+  if (cursor === 0) return [node];
+  if (cursor < value.length) result.push({ type: 'text', value: value.slice(cursor) });
   return result;
+}
+
+function expandPhrasingNode(
+  node: MarkdownNode,
+  tokens: ReadonlyMap<string, MathToken>,
+  markerPattern: RegExp,
+  allowDisplay: boolean,
+): MarkdownNode[] {
+  if (node.type === 'text') {
+    return splitTextNode(node, tokens, markerPattern, allowDisplay);
+  }
+  if (node.children) {
+    node.children = node.children.flatMap((child) => (
+      expandPhrasingNode(child, tokens, markerPattern, false)
+    ));
+  }
+  return [node];
+}
+
+function hasParagraphContent(children: readonly MarkdownNode[]): boolean {
+  return children.some((child) => child.type !== 'text' || child.value?.trim());
+}
+
+function splitParagraph(
+  paragraph: MarkdownNode,
+  tokens: ReadonlyMap<string, MathToken>,
+  markerPattern: RegExp,
+): MarkdownNode[] {
+  const expanded = (paragraph.children ?? []).flatMap((child) => (
+    expandPhrasingNode(child, tokens, markerPattern, true)
+  ));
+  const result: MarkdownNode[] = [];
+  let phrasing: MarkdownNode[] = [];
+
+  const flush = () => {
+    if (hasParagraphContent(phrasing)) {
+      result.push({ ...paragraph, children: phrasing });
+    }
+    phrasing = [];
+  };
+
+  for (const child of expanded) {
+    if (child.type !== displayTokenType) {
+      phrasing.push(child);
+      continue;
+    }
+    flush();
+    result.push(displayMathNode(child.value ?? ''));
+  }
+  flush();
+  return result;
+}
+
+function transformMathTokens(
+  node: MarkdownNode,
+  tokens: ReadonlyMap<string, MathToken>,
+  markerPattern: RegExp,
+): void {
+  if (!node.children) return;
+  if (phrasingContainerTypes.has(node.type)) {
+    node.children = node.children.flatMap((child) => (
+      expandPhrasingNode(child, tokens, markerPattern, false)
+    ));
+    return;
+  }
+  const children: MarkdownNode[] = [];
+
+  for (const child of node.children) {
+    if (child.type === 'paragraph') {
+      children.push(...splitParagraph(child, tokens, markerPattern));
+      continue;
+    }
+    transformMathTokens(child, tokens, markerPattern);
+    children.push(child);
+  }
+  node.children = children;
+}
+
+/** Restore protected formulas after Markdown has formed its block containers. */
+export function remarkPreparedMath(tokens: readonly MathToken[]) {
+  return () => (tree: MarkdownNode) => {
+    if (tokens.length === 0) return;
+    const byMarker = new Map(tokens.map((token) => [token.marker, token]));
+    const markerPattern = new RegExp(tokens.map((token) => regexEscape(token.marker)).join('|'), 'g');
+    transformMathTokens(tree, byMarker, markerPattern);
+  };
 }

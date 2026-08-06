@@ -2,7 +2,7 @@ import 'katex/dist/katex.min.css';
 import ReactMarkdown from 'react-markdown';
 import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
-import { normalizeMathDelimiters } from '../math-markdown';
+import { prepareMathMarkdown, remarkPreparedMath } from '../math-markdown';
 
 const katexOptions = {
   throwOnError: false,
@@ -10,12 +10,14 @@ const katexOptions = {
 } as const;
 
 export function MarkdownView({ children }: { children: string }) {
+  const prepared = prepareMathMarkdown(children);
+
   return (
     <ReactMarkdown
-      remarkPlugins={[remarkMath]}
+      remarkPlugins={[remarkMath, remarkPreparedMath(prepared.tokens)]}
       rehypePlugins={[[rehypeKatex, katexOptions]]}
     >
-      {normalizeMathDelimiters(children)}
+      {prepared.markdown}
     </ReactMarkdown>
   );
 }
