@@ -1,12 +1,12 @@
 import { expect, test } from 'bun:test';
-import { existsSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { readKnowledge } from '../../src/study/knowledge';
 import { readCourseTree, readRoadmap } from '../../src/study/markdown';
 
 const root = join(import.meta.dir, '../../../../examples/derivative-m0/learning-set');
 
-test('ships a clean M0 derivative learning set with reusable static assets', () => {
+test('ships a clean M1-ready derivative learning set with reusable static assets', () => {
   const roadmap = readRoadmap(root);
   const course = readCourseTree(root);
   const knowledge = readKnowledge(root);
@@ -19,6 +19,8 @@ test('ships a clean M0 derivative learning set with reusable static assets', () 
   expect(knowledge.methods.length).toBeGreaterThan(10);
   expect(knowledge.materials.length).toBeGreaterThan(0);
 
-  expect(existsSync(join(root, 'memory'))).toBe(false);
+  expect(readdirSync(join(root, 'memory'))).toEqual(['INDEX.md']);
+  expect(readFileSync(join(root, 'memory/INDEX.md'), 'utf8'))
+    .toContain('尚无已固化课堂记忆');
   expect(existsSync(join(root, 'traces'))).toBe(false);
 });

@@ -1,4 +1,4 @@
-# StudyForge M0 文档契约
+# StudyForge Roadmap / Plan / Lesson 文档契约
 
 这份文件是 Roadmap、Plan 与 Lesson 持久化骨架的唯一语法说明。严格照抄字段名、
 章节名和 Tree 形状；章节正文根据真实教学需要自由书写，不要把教学内容压成表单。
@@ -134,3 +134,30 @@ Lesson 状态只允许 `prepared`、`active`、`closed`。Block 的 `Kind` 只�
 同一 Lesson 可以有多个 Block。复制完整 Block 骨架并使用新的 Block ID；课堂目标、
 活动数量、学生话术、教师判断与真实课堂记录都属于自由正文，应服务于本节课，而不是
 为了迎合模板添加无意义内容。
+
+## Lesson 课末学习痕迹
+
+一次正式课末反思结束后，可以在 Lesson 的所有 Block 之后追加唯一的末尾区段：
+
+```markdown
+## Consolidated Learning Traces
+
+### trace-plan-001-lesson-001-01
+
+- 时间：2026-08-07 20:15
+- 情境：发生本次表现的具体任务
+- 首次表现：学生在帮助前实际做了什么
+- 实际帮助：本次真正提供了什么帮助
+- 后续表现：帮助后的表现以及仍未证明的边界
+- 关联对象：obj-001
+- 当时的能力信号：仅记录本对象内观察到的候选模式；没有则不写
+- 来源证据：本课 Classroom Log 中的对应记录
+```
+
+该区段可不存在，但存在时必须非空、只能出现一次，并且必须是 Lesson 的最后一个二级
+章节。Trace 标题使用学习集内稳定的 ASCII ID。既有 Trace 与 Classroom Log 都不能为了
+更新当前判断而回写；纠正与后续表现使用新的追加事实或 Trace 表达。
+
+跨 Session 使用的当前判断位于学习集根目录的 `memory/`：`INDEX.md` 是紧凑路由，
+`indexes/` 是多对多对象分桶，`objects/`、`capabilities/`、`preferences/` 分别保存对象
+记忆、跨对象能力假设和明确偏好。这里不建立独立 Trace 池。

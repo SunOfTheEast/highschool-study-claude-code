@@ -379,10 +379,35 @@ function parseLesson(source: MarkdownSource): LessonDocument {
   const status = requiredEnum<LessonStatus>(source.frontmatter, 'status', LESSON_STATUSES, source.path);
   const sections = splitSections(source.body, 2);
   for (const section of sections) {
-    if (section.heading !== 'Lesson Goal' && !section.heading.startsWith('Block ')) {
+    if (
+      section.heading !== 'Lesson Goal'
+      && section.heading !== 'Consolidated Learning Traces'
+      && !section.heading.startsWith('Block ')
+    ) {
       throw new StudyDocumentError(source.path, `unsupported Lesson section "${section.heading}"`);
     }
   }
+  const traceSections = sections.filter(
+    (section) => section.heading === 'Consolidated Learning Traces',
+  );
+  if (traceSections.length > 1) {
+    throw new StudyDocumentError(
+      source.path,
+      'expected at most one "Consolidated Learning Traces" section',
+    );
+  }
+  if (
+    traceSections.length === 1
+    && sections.at(-1)?.heading !== 'Consolidated Learning Traces'
+  ) {
+    throw new StudyDocumentError(
+      source.path,
+      'section "Consolidated Learning Traces" must be the final Lesson section',
+    );
+  }
+  const consolidatedLearningTraces = traceSections.length === 0
+    ? null
+    : oneSection(sections, 'Consolidated Learning Traces', source.path);
   const blockSections = sections.filter((section) => section.heading.startsWith('Block '));
   if (blockSections.length === 0) throw new StudyDocumentError(source.path, 'Lesson requires at least one Block');
   const blocks = blockSections.map((section) => parseBlock(section, source.path));
@@ -423,6 +448,7 @@ function parseLesson(source: MarkdownSource): LessonDocument {
     title: readTitle(source.body, source.path),
     lessonGoal: oneSection(sections, 'Lesson Goal', source.path),
     blocks,
+    consolidatedLearningTraces,
     raw: source.raw,
   };
 }
