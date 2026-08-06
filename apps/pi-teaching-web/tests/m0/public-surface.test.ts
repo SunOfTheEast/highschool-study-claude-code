@@ -29,6 +29,8 @@ test('exposes only the M0 node lifecycle and role-scoped model tools', () => {
     'grep',
     'find',
     'ls',
+    'edit',
+    'write',
     'classroom_log_append',
     'classroom_update',
   ]);

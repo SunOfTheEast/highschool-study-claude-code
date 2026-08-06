@@ -31,6 +31,8 @@ export const LESSON_MODEL_TOOLS = [
   'grep',
   'find',
   'ls',
+  'edit',
+  'write',
   'classroom_log_append',
   'classroom_update',
 ] as const;

@@ -12,6 +12,7 @@ import {
   type NodeSessionScope,
 } from './session-scope';
 import { studySubagentGuard } from './study-subagent-guard';
+import { lessonMemoryGuard } from './lesson-memory-guard';
 
 const resourceRoot = join(dirname(fileURLToPath(import.meta.url)), '../../resources');
 
@@ -51,6 +52,11 @@ function loadPersonaResource(personaId: string | undefined) {
   }];
 }
 
+function loadMemoryIndexResource(root: string) {
+  const path = join(root, 'memory', 'INDEX.md');
+  return existsSync(path) ? [{ path, content: file(path) }] : [];
+}
+
 export function loadStaticNodeResources(
   root: string,
   scope: NodeSessionScope,
@@ -71,9 +77,14 @@ export function loadStaticNodeResources(
         content: file(join(resourceRoot, 'contracts', 'm0-document-contract.md')),
       },
       {
+        path: '/virtual/studyforge-m1-memory-contract.md',
+        content: file(join(resourceRoot, 'contracts', 'm1-memory-contract.md')),
+      },
+      {
         path: join(root, 'LEARNING_GUIDE.md'),
         content: file(join(root, 'LEARNING_GUIDE.md')),
       },
+      ...loadMemoryIndexResource(root),
       {
         path: '/virtual/studyforge-m0-teaching-core.md',
         content: file(join(resourceRoot, 'teaching', 'math-teaching-core.md')),
@@ -101,6 +112,19 @@ export async function createRoleResourceLoader(
   personaId: string | undefined = process.env.STUDY_PERSONA,
 ) {
   const resources = loadStaticNodeResources(root, scope, personaId);
+  const extensionFactories = scope.nodeKind === 'plan'
+    ? [{
+      name: 'study-subagent-guard',
+      factory: studySubagentGuard,
+      hidden: true,
+    }]
+    : scope.nodeKind === 'lesson'
+      ? [{
+        name: 'lesson-memory-guard',
+        factory: lessonMemoryGuard(root, scope),
+        hidden: true,
+      }]
+      : [];
   const loader = new DefaultResourceLoader({
     cwd: root,
     agentDir: getAgentDir(),
@@ -108,13 +132,7 @@ export async function createRoleResourceLoader(
     additionalExtensionPaths: scope.nodeKind === 'plan'
       ? [fileURLToPath(import.meta.resolve('pi-subagents'))]
       : [],
-    extensionFactories: scope.nodeKind === 'plan'
-      ? [{
-        name: 'study-subagent-guard',
-        factory: studySubagentGuard,
-        hidden: true,
-      }]
-      : [],
+    extensionFactories,
     additionalSkillPaths: resources.skillPaths,
     noExtensions: true,
     noSkills: true,

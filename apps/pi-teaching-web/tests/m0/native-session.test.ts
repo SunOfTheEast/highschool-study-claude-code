@@ -80,6 +80,8 @@ test('assembles static teaching resources and node-scoped model tools', () => {
   expect(assembled).toContain('导数结构学习集');
   expect(assembled).toContain('Current node file: plans/plan-001/PLAN.md');
   expect(assembled).toContain('plan-node.md');
+  expect(assembled).toContain('# Teacher Memory Index');
+  expect(assembled).toContain('五个语义边界');
   expect(assembled).not.toContain('第一节课正在进行');
   expect(assembled).not.toContain('10:03 学生');
   expect(assembled).not.toContain('cards/sample.card.yaml');
@@ -102,6 +104,8 @@ test('assembles static teaching resources and node-scoped model tools', () => {
     'grep',
     'find',
     'ls',
+    'edit',
+    'write',
     'classroom_log_append',
     'classroom_update',
   ]);
@@ -243,6 +247,12 @@ test('injects one canonical document contract into every node session', () => {
     );
 
     expect(contracts).toHaveLength(1);
+    expect(resources.agentsFiles.filter(
+      (resource) => resource.path === '/virtual/studyforge-m1-memory-contract.md',
+    )).toHaveLength(1);
+    expect(resources.agentsFiles.filter(
+      (resource) => resource.path === join(root, 'memory/INDEX.md'),
+    )).toHaveLength(1);
     expect(contracts[0]?.content).toContain('## Stage Goal');
     expect(contracts[0]?.content).toContain('## Lesson Tree');
     expect(contracts[0]?.content).toContain('## Block block-001：活动名称');
@@ -252,9 +262,31 @@ test('injects one canonical document contract into every node session', () => {
     expect(resources.tools).toEqual(scope.nodeKind === 'plan'
       ? ['read', 'grep', 'find', 'ls', 'edit', 'write', 'subagent', 'artifact_export']
       : scope.nodeKind === 'lesson'
-        ? ['read', 'grep', 'find', 'ls', 'classroom_log_append', 'classroom_update']
+        ? [
+          'read', 'grep', 'find', 'ls', 'edit', 'write',
+          'classroom_log_append', 'classroom_update',
+        ]
         : ['read', 'grep', 'find', 'ls', 'edit', 'write']);
   }
+});
+
+test('does not invent a memory index for an older learning set', () => {
+  const root = copyFixture();
+  rmSync(join(root, 'memory/INDEX.md'));
+  const resources = loadStaticNodeResources(root, {
+    nodeKind: 'roadmap',
+    nodeId: 'roadmap',
+    nodePath: 'ROADMAP.md',
+    parentId: null,
+    parentPath: null,
+  });
+
+  expect(resources.agentsFiles.some(
+    (resource) => resource.path === join(root, 'memory/INDEX.md'),
+  )).toBe(false);
+  expect(resources.agentsFiles.some(
+    (resource) => resource.path === '/virtual/studyforge-m1-memory-contract.md',
+  )).toBe(true);
 });
 
 test('registers only node-bound custom tools for Plan and Lesson scopes', () => {
@@ -291,7 +323,7 @@ test('registers only node-bound custom tools for Plan and Lesson scopes', () => 
   expect(customToolsForNode(root, roadmapScope)).toEqual([]);
 });
 
-test('keeps the Lesson write boundary tool-driven and minimal in resources', () => {
+test('keeps classroom mutation tool-driven and memory writes native but guarded', () => {
   const root = copyFixture();
   const resources = loadStaticNodeResources(root, {
     nodeKind: 'lesson',
@@ -317,7 +349,7 @@ test('keeps the Lesson write boundary tool-driven and minimal in resources', () 
   }
 });
 
-test('loads the explicit subagent extension only for Plan nodes', async () => {
+test('loads the Plan subagent guard and the Lesson memory guard only in their scopes', async () => {
   const root = copyFixture();
   const planLoader = await createRoleResourceLoader(root, {
     nodeKind: 'plan',
@@ -346,7 +378,7 @@ test('loads the explicit subagent extension only for Plan nodes', async () => {
   )).toHaveLength(1);
   expect(lessonLoader.getExtensions().extensions.filter(
     (extension) => extension.handlers.has('tool_call'),
-  )).toHaveLength(0);
+  )).toHaveLength(1);
 });
 
 test('packages a read-only material Scout', () => {
