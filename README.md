@@ -4,7 +4,7 @@ StudyForge M0 是一次从头收缩后的本地单人教学内核。它只保留
 骨架：`Roadmap → Plan → Lesson → Block`、节点独立 Pi Session、真实题卡与方法图谱，
 以及可以直接打开审查的 Markdown 课堂记录。
 
-当前 M0 实现在 [`apps/pi-teaching-web`](apps/pi-teaching-web/README.md)。仓库里的旧
+当前 M0 实现在 [`apps/studyforge`](apps/studyforge/README.md)。仓库里的旧
 Claude Code 插件与历史设计仍可用于回看演进过程，但不属于 M0 的运行时契约，也不
 被当前 App 调用。
 
@@ -41,7 +41,7 @@ M0 没有独立课堂事实池、长期画像、能力分数、后台索引、�
 
 ```bash
 git clone https://github.com/SunOfTheEast/highschool-study-claude-code.git
-cd highschool-study-claude-code/apps/pi-teaching-web
+cd highschool-study-claude-code/apps/studyforge
 bun install
 bun run build
 STUDY_LEARNING_SET="$PWD/../../examples/derivative-m0/learning-set" bun run start
@@ -52,7 +52,7 @@ STUDY_LEARNING_SET="$PWD/../../examples/derivative-m0/learning-set" bun run star
 也可以安装为本地 Pi Package：
 
 ```bash
-cd apps/pi-teaching-web
+cd apps/studyforge
 pi install "$PWD"
 ```
 
@@ -99,7 +99,7 @@ App 只有两个主页面：
 ## 开发与验证
 
 ```bash
-cd apps/pi-teaching-web
+cd apps/studyforge
 bun install --frozen-lockfile
 bun run check
 bun run test:e2e -- tests/e2e/m0-cycle.spec.ts

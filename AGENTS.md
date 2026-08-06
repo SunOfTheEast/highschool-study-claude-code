@@ -1,6 +1,6 @@
 # StudyForge M0 repository guide
 
-`apps/pi-teaching-web/` is the current StudyForge M0 runtime and local student App.
+`apps/studyforge/` is the current StudyForge M0 runtime and local student App.
 `examples/derivative-m0/` is its public smoke learning set. The old Claude Code plugin
 and historical documents remain for comparison; they are not M0 dependencies or
 current runtime contracts.
@@ -70,9 +70,9 @@ The model receives only:
 7. the role's Skills.
 
 Shared teacher agency has one semantic owner:
-`apps/pi-teaching-web/resources/teaching/math-teaching-core.md`. Role prompts apply it
+`apps/studyforge/resources/teaching/math-teaching-core.md`. Role prompts apply it
 only at decisions specific to Roadmap, Plan, or Lesson. Optional files under
-`apps/pi-teaching-web/resources/personas/` change expression, rhythm, humour, and
+`apps/studyforge/resources/personas/` change expression, rhythm, humour, and
 metaphor only; they never override mathematics, role authority, learning-set principles,
 or student agency. `STUDY_PERSONA=<id>` selects one overlay for all three student-facing
 node Sessions. The internal material Scout receives no persona or user-facing role-play.
@@ -96,20 +96,20 @@ actions with prompt conventions or model tool calls.
 ## Teaching behavior owners
 
 - Roadmap introduction, long-horizon diagnosis, and student-approved Plan design:
-  `apps/pi-teaching-web/resources/skills/roadmap-dialogue/SKILL.md`
+  `apps/studyforge/resources/skills/roadmap-dialogue/SKILL.md`
 - Materializing a student-approved Plan:
-  `apps/pi-teaching-web/resources/skills/prepare-approved-plan/SKILL.md`
+  `apps/studyforge/resources/skills/prepare-approved-plan/SKILL.md`
 - Plan-stage interpretation, direct child reading, post-Lesson review, and
   student-approved next-Lesson design:
-  `apps/pi-teaching-web/resources/skills/plan-dialogue/SKILL.md`
+  `apps/studyforge/resources/skills/plan-dialogue/SKILL.md`
 - Materializing a student-approved Lesson:
-  `apps/pi-teaching-web/resources/skills/prepare-approved-lesson/SKILL.md`
+  `apps/studyforge/resources/skills/prepare-approved-lesson/SKILL.md`
 - Shared Plan-cycle archetype references:
-  `apps/pi-teaching-web/resources/skills/references/plan-cycles/`
+  `apps/studyforge/resources/skills/references/plan-cycles/`
 - Live Block teaching and logging:
-  `apps/pi-teaching-web/resources/skills/tutor-lesson/SKILL.md`
+  `apps/studyforge/resources/skills/tutor-lesson/SKILL.md`
 - Shared mathematics judgment:
-  `apps/pi-teaching-web/resources/teaching/math-teaching-core.md`
+  `apps/studyforge/resources/teaching/math-teaching-core.md`
 
 Skills own teaching judgment and natural language. Runtime owns document parsing,
 Session identity, lifecycle transitions, transport, and persistence. Do not add exact-
@@ -138,17 +138,17 @@ items. The normal Lesson view shows `Student View` and Block progress, not
 
 ## Repository map
 
-- `apps/pi-teaching-web/src/study/`: strict M0 Markdown and static knowledge readers.
-- `apps/pi-teaching-web/src/runtime/`: node ownership, resource assembly, Session
+- `apps/studyforge/src/study/`: strict M0 Markdown and static knowledge readers.
+- `apps/studyforge/src/runtime/`: node ownership, resource assembly, Session
   registry, frontmatter edits, and lifecycle.
-- `apps/pi-teaching-web/resources/subagents/`: packaged read-only asset Scout used only
+- `apps/studyforge/resources/subagents/`: packaged read-only asset Scout used only
   by Plan Sessions.
-- `apps/pi-teaching-web/resources/personas/`: optional expression overlays shared by
+- `apps/studyforge/resources/personas/`: optional expression overlays shared by
   Roadmap, Plan, and Lesson Sessions.
-- `apps/pi-teaching-web/src/server/`: minimal HTTP/WebSocket transport.
-- `apps/pi-teaching-web/src/client/`: Course/Knowledge App.
-- `apps/pi-teaching-web/tests/m0/`: current executable contract.
-- `apps/pi-teaching-web/tests/e2e/m0-cycle.spec.ts`: deterministic browser closure.
+- `apps/studyforge/src/server/`: minimal HTTP/WebSocket transport.
+- `apps/studyforge/src/client/`: Course/Knowledge App.
+- `apps/studyforge/tests/m0/`: current executable contract.
+- `apps/studyforge/tests/e2e/m0-cycle.spec.ts`: deterministic browser closure.
 - `examples/derivative-m0/`: clean public learning set.
 
 ## Change discipline
@@ -163,7 +163,7 @@ items. The normal Lesson view shows `Student View` and Block progress, not
 ## Verification
 
 ```bash
-cd apps/pi-teaching-web
+cd apps/studyforge
 bun install --frozen-lockfile
 bun run check
 bun run test:e2e -- tests/e2e/m0-cycle.spec.ts

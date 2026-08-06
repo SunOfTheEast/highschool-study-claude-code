@@ -2,7 +2,12 @@
 node_modules/
 dist/
 .claude/settings.local.json
+.claude/
+.superpowers/
 *.log
+coverage/
+*.tsbuildinfo
+.studyforge-release/
 playwright-report/
 test-results/
 .worktrees/

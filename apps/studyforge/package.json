@@ -1,9 +1,8 @@
 {
-  "name": "studyforge-pi-teaching-web",
+  "name": "@studyforge/app",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "packageManager": "bun@1.3.14",
   "pi": {
     "extensions": ["./src/pi-extension.ts"],
     "skills": ["./resources/skills"]
@@ -41,9 +40,5 @@
     "@vitejs/plugin-react": "6.0.3",
     "typescript": "7.0.2",
     "vite": "8.1.5"
-  },
-  "overrides": {
-    "@earendil-works/pi-agent-core": "0.81.0",
-    "@earendil-works/pi-ai": "0.81.0"
   }
 }

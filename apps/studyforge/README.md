@@ -46,7 +46,7 @@ npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 安装 App 依赖并验证：
 
 ```bash
-cd apps/pi-teaching-web
+cd apps/studyforge
 bun install
 bun run check
 bun run test:e2e -- tests/e2e/m0-cycle.spec.ts
@@ -57,7 +57,7 @@ bun run test:e2e -- tests/e2e/m0-cycle.spec.ts
 先构建前端，再指定 learning set：
 
 ```bash
-cd apps/pi-teaching-web
+cd apps/studyforge
 bun run build
 STUDY_LEARNING_SET="$PWD/../../examples/derivative-m0/learning-set" bun run start
 ```
@@ -91,7 +91,7 @@ bun run dev:client
 ## 作为 Pi Package 使用
 
 ```bash
-cd /path/to/highschool-study-claude-code/apps/pi-teaching-web
+cd /path/to/highschool-study-claude-code/apps/studyforge
 bun install
 bun run build
 pi install "$PWD"
