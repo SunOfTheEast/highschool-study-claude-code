@@ -1,23 +1,27 @@
-# StudyForge M0
+# StudyForge M1
 
-StudyForge M0 是一次从头收缩后的本地单人教学内核。它只保留已经反复证明有价值的
-骨架：`Roadmap → Plan → Lesson → Block`、节点独立 Pi Session、真实题卡与方法图谱，
-以及可以直接打开审查的 Markdown 课堂记录。
-
-当前 M0 实现在 [`apps/pi-teaching-web`](apps/pi-teaching-web/README.md)。仓库里的旧
-Claude Code 插件与历史设计仍可用于回看演进过程，但不属于 M0 的运行时契约，也不
-被当前 App 调用。
+StudyForge M1 是一个本地、单人、Markdown-first 的长期教学工作台。它保留已经在真实
+长周期中验证过的 `Roadmap → Plan → Lesson → Block`、节点独立 Pi Session、真实题卡与
+方法图谱，并加入一套可以直接打开审查的教师笔记记忆。当前产品实现只位于
+[`apps/pi-teaching-web`](apps/pi-teaching-web/README.md)。
 
 ## 核心模型
 
 ```text
 LEARNING_GUIDE.md
-ROADMAP.md                    Roadmap Session
-└── plans/plan-001.md         Plan Session
-    └── lessons/lesson-001.md Lesson Session
+ROADMAP.md                         Roadmap Session
+└── plans/plan-001/PLAN.md         Plan Session
+    └── lessons/lesson-001.md      Lesson Session
         ├── Block
         ├── Block
-        └── Classroom Log
+        ├── Classroom Log
+        └── Consolidated Learning Traces
+
+memory/INDEX.md                    常驻 L0 路由
+├── indexes/                       对象分桶
+├── objects/                       对象记忆与完整 Trace 时间线
+├── capabilities/                  跨对象能力假设
+└── preferences/                   明确偏好与作用范围
 
 cards/ + graph/ + materials/  静态学习资产
 Pi JSONL                      各节点的原始对话与工具历史
@@ -25,15 +29,16 @@ Pi JSONL                      各节点的原始对话与工具历史
 
 - **Roadmap** 负责长期目标和未来 Plan 的安排。
 - **Plan** 负责一个阶段目标、已结束 Lesson 的复盘和下一课备课。
-- **Lesson** 负责一次真实课堂；每个 Block 同时保存教学安排和实际课堂日志。
-- **父节点需要历史时直接读取子文档**，不再维护另一套摘要交接链。
+- **Lesson** 负责一次真实课堂；每个 Block 保存实际课堂日志，课末只固化一次记忆。
+- **记忆按需披露**：`memory/INDEX.md → L1 当前判断 → 来源 Trace → 必要时 Classroom Log`。
 - **每个节点一个原生 Pi Session**，节点之间不复制聊天记录。
-- **模型只使用 Pi 原生文件工具**：`read`、`grep`、`find`、`ls`、`edit`、`write`。
+- **模型使用 Pi 原生文件工具**；M1 没有通用记忆工具或第二套事实服务。
 - **学生控制节点启停**；浏览、刷新和模型回复都不会暗中开始或结束课程。
 
-M0 没有独立课堂事实池、长期画像、能力分数、后台索引、子任务工作流或消息安全
-改写。需要了解旧版本为何被消融，请看
-[`M0 设计稿`](docs/superpowers/specs/2026-08-02-m0-document-native-memory-ablation-design.md)。
+记忆不是聊天摘要或静态学生画像：可复述表现是学习痕迹，单个知识对象学到哪里是对象
+记忆，模式跨不同对象后才可能成为能力假设，明确表达的互动需求才是偏好；教师以后要做
+什么仍留在 Plan / Roadmap。完整设计见
+[`M1 教师笔记记忆设计`](docs/superpowers/specs/2026-08-06-m1-teacher-notebook-memory-design.md)。
 
 ## 快速开始
 
@@ -65,8 +70,8 @@ pi install "$PWD"
 - 519 张高阶导数题卡；
 - 17 个方法图谱节点；
 - 一份导数学习指南；
-- 一个准备好的起点 Plan 和一节问诊 Lesson；
-- 不带任何旧学生结论的干净学习状态。
+- 一份等待真实学生问诊的空 Roadmap 起点；
+- 只有空 `memory/INDEX.md`、不带任何旧学生结论的干净学习状态。
 
 ## Learning set 最小目录
 
@@ -75,7 +80,12 @@ learning-set/
 ├── LEARNING_GUIDE.md
 ├── ROADMAP.md
 ├── plans/
-├── lessons/
+├── memory/
+│   ├── INDEX.md
+│   ├── indexes/
+│   ├── objects/
+│   ├── capabilities/
+│   └── preferences/
 ├── cards/
 ├── graph/
 └── materials/
@@ -84,6 +94,8 @@ learning-set/
 Plan 状态只有 `prepared → active → completed`；Lesson 状态只有
 `prepared → active → closed`。课堂对话、提示、纠正与决定按发生位置追加到当前
 Lesson Block 的 `Classroom Log`，不会被后来总结改写成更漂亮的版本。
+课末 Trace 也只追加在来源 Lesson；对象、能力和偏好的当前判断可以更新，但必须保留
+流变概述和来源链接。
 
 ## 界面
 
@@ -105,5 +117,5 @@ bun run check
 bun run test:e2e -- tests/e2e/m0-cycle.spec.ts
 ```
 
-实现计划见
-[`2026-08-02-studyforge-m0-clean-kernel.md`](docs/superpowers/plans/2026-08-02-studyforge-m0-clean-kernel.md)。
+M1 实施计划见
+[`2026-08-07-m1-teacher-notebook-memory.md`](docs/superpowers/plans/2026-08-07-m1-teacher-notebook-memory.md)。

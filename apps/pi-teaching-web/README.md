@@ -1,8 +1,9 @@
-# StudyForge M0 本地教学 App
+# StudyForge M1 本地教学 App
 
-这是 StudyForge 的干净 M0：一个 Markdown-first、单人、本地运行的 Pi 教学工作台。
-它保留 Roadmap、Plan、Lesson 三级课程治理和 Block 课堂流程，删除了旧版独立记忆、
-对象化课堂事实、派生能力层、专用教学工具与子任务工作流。
+这是 StudyForge 当前唯一受支持的本地教学 App：一个 Markdown-first、单人运行的 Pi
+教学工作台。它保留 Roadmap、Plan、Lesson 三级课程治理和 Block 课堂流程，并加入
+学习集内、可追溯、渐进式披露的教师笔记记忆。记忆不是聊天摘要或静态学生画像；它服务
+下一次真实教学判断。
 
 ## 运行结构
 
@@ -12,14 +13,16 @@ Roadmap Session
       └── Lesson Session
 
 父节点需要历史
-  → read 对应子文档
-  → 必要时继续读具体 Lesson Block
+  → 从 memory/INDEX.md 找相关路线
+  → read 对象 / 能力 / 偏好当前判断
+  → 必要时继续读来源 Lesson Trace 与 Block
   → 作出下一步教学决定
 ```
 
 每个节点拥有独立原生 Pi Session。不同 Session 不复制聊天历史；Lesson 中真实发生的
-对话、提示、纠正和决定直接追加到对应 Block 的 `Classroom Log`，下一次备课时由
-Plan Session 重新读取。
+对话、提示、纠正和决定直接追加到对应 Block 的 `Classroom Log`。每节课在唯一一次
+正式课末反思后，把学习 Trace 追加在来源 Lesson，并局部更新相关对象、明确偏好和 L0
+路由；Plan 不再默认重读整课或重复采访学生。
 
 长 Plan Session 不等待百万 token 窗口接近耗尽才整理上下文。当一次回复已经完整结束、
 本轮成功写入 `plans/*/lessons/*.md`，且当前上下文达到 20 万 token 时，运行时调用 Pi 原生
@@ -27,9 +30,12 @@ compaction。压缩摘要只负责帮助同一个 Plan Session 接着工作，�
 Handoff；需要细节时仍重新读取原始 Markdown，Pi JSONL 中的原始历史也不会被删除。
 Roadmap、Lesson、失败写入以及仅修改 Plan 的回合都不触发这条规则。
 
-模型只看到共享教学原则、当前角色、学习指南和节点身份，并且只调用六个 Pi 原生
-文件工具：`read`、`grep`、`find`、`ls`、`edit`、`write`。启动时还可以给三个面向
-学生的节点统一装载一个人格表现层；人格只改变表达，不改变教学职责和文档事实。
+模型只看到共享教学原则、当前角色、学习指南、紧凑的 `memory/INDEX.md` 和节点身份。
+记忆召回只使用原生 `Read` / `Grep`，不增加 `recall_memory` 一类专用工具。Roadmap 与
+Plan 使用原生文件工具；Lesson 的 Classroom Log / Block 仍由两个原子工具修改，原生
+edit/write 只允许向当前 Lesson 末尾追加 Trace 和维护 Tutor 自己负责的 memory 路径。
+启动时还可以给三个面向学生的节点统一装载一个人格表现层；人格只改变表达，不改变教学
+职责和文档事实。
 
 ## 环境
 
@@ -113,10 +119,10 @@ pi install "$PWD"
 
 1. Roadmap Session 先介绍学习集的目的、范围与价值，再逐步问诊。
 2. 学生打开一个 `prepared` Plan 并点击“开始这一阶段”。
-3. Plan Session 读取当前 Plan 和已关闭 Lesson，讨论并准备下一课。
+3. Plan Session 读取当前 Plan、刚关闭 Lesson 的固化 Trace 和相关记忆，讨论并准备下一课。
 4. 学生打开一个 `prepared` Lesson 并点击“开始本课”。
 5. Tutor 按 Block 教学，把真实过程追加到当前 Block 日志。
-6. 学生决定结束本课，页面回到父 Plan 复盘。
+6. 学生决定结束本课，Tutor 完成一次自然反思和最小记忆固化，页面再回到父 Plan。
 7. 达到阶段标准后，由学生完成 Plan 并回到 Roadmap 商议下一周期。
 
 浏览或刷新不会改变生命周期。Plan 状态只有
@@ -151,6 +157,12 @@ learning-set/
 │   └── <plan-id>/
 │       ├── PLAN.md
 │       └── lessons/<lesson-id>.md
+├── memory/
+│   ├── INDEX.md
+│   ├── indexes/
+│   ├── objects/
+│   ├── capabilities/
+│   └── preferences/
 ├── cards/
 ├── graph/
 └── materials/
@@ -184,6 +196,24 @@ Roadmap 必须包含 `Overview`、`Long-term Goal`、可观察能力标准、`Te
 - 课堂中真实发生的一条记录。
 ```
 
+课末可以在所有 Block 之后追加唯一、非空的：
+
+```markdown
+## Consolidated Learning Traces
+
+### trace-plan-001-lesson-001-01
+
+- 情境：本次表现发生在什么任务
+- 首次表现：帮助前实际发生了什么
+- 实际帮助：真正给过什么帮助
+- 后续表现：帮助后的结果与尚未证明的边界
+- 关联对象：obj-001
+- 来源证据：本课 Classroom Log 中的对应记录
+```
+
+`memory/INDEX.md` 只保存当前前沿和稳定路径；L1 文件保存对象流变、跨对象能力假设和
+明确偏好。旧 Log、旧 Trace 和学生原话不回写，教学待办仍留在 Plan / Roadmap。
+
 Plan ID 在 Roadmap 内唯一，Lesson ID 在所属 Plan 内唯一；Lesson Session key 使用
 `lesson:<plan-id>:<lesson-id>`。严格解析器拒绝路径逃逸、父子身份不一致、同级重复 ID、
 非法状态和旧版 Lesson 区块；
@@ -193,17 +223,17 @@ Plan ID 在 Roadmap 内唯一，Lesson ID 在所属 Plan 内唯一；Lesson Sess
 
 - **Roadmap**：首次先介绍学习集，再一问一答地找到有价值的长期方向；只安排未来
   `prepared` Plan。
-- **Plan**：每次备课前读取本 Plan 与所有已关闭 Lesson，把宽泛问题追问到具体
-  结构、题型和停点；私下检索题卡，不提前泄露决定性解法，也不静默缩减商定内容。
+- **Plan**：先消费刚关闭 Lesson 的 Trace 和相关 L1；只有缺失、冲突或高影响判断才
+  下钻课堂。跨不同对象后才形成工作能力假设；私下检索题卡，不静默缩减商定内容。
 - **Lesson**：按学生实际回答逐级提示，先验证不同路线；对方法名称没把握时询问
-  学生；不在正确另解后自动倾倒标准解。
+  学生；预案外表现确有需要时按需召回，课末只固化一次。
 
 教学文本位于 `resources/agents/`、`resources/skills/` 和
 `resources/teaching/math-teaching-core.md`。
 
 ## API 与事件
 
-M0 HTTP API 只提供：
+当前 HTTP API 只提供：
 
 - `GET /api/health`
 - `GET /api/course`
@@ -225,6 +255,5 @@ Knowledge 和旧入口 404：
 bun run test:e2e -- tests/e2e/m0-cycle.spec.ts
 ```
 
-自动化通过后，仍应在复制出的学习集上跑真实模型课程。M0 的下一阶段不是立即添加
-复杂记忆，而是完成一个 6 Lesson Plan 和第二个 2–3 Lesson Plan；只有直接读取子文档
-在多节真实课中反复失败，才设计 M1。
+自动化通过后，仍应在复制出的学习集上跑真实模型长周期，重点观察课末是否只反思一次、
+Plan 是否真正消费固化结果、能力假设是否跨对象成立，以及 L0 是否始终保持紧凑。
