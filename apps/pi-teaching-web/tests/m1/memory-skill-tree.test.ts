@@ -128,3 +128,48 @@ test('keeps the Lesson approval gate unchanged after Plan memory review', () => 
   ]);
   expect(skill).toContain('确认之前不得调用 `prepare-approved-lesson`');
 });
+
+test('makes Roadmap review one completed Plan through summaries and routed memory', () => {
+  const skill = read('skills/roadmap-dialogue/SKILL.md');
+  const nextPlan = read('skills/roadmap-dialogue/references/next-plan.md');
+  const role = read('agents/roadmap-node.md');
+
+  expect(skill).toContain('memory/INDEX.md');
+  expect(skill).toContain('不得枚举 `memory/`');
+  expect(role).toContain('memory/INDEX.md');
+  expectInOrder(nextPlan, [
+    'Plan 的阶段总结',
+    'memory/INDEX.md',
+    '对象记忆',
+    '能力假设',
+    '偏好',
+    'Trace',
+    'Classroom Log',
+  ]);
+  expect(nextPlan).toContain('高影响');
+  expect(nextPlan).toContain('证据冲突');
+  expect(nextPlan).toContain('不重做逐课提取');
+});
+
+test('calibrates one capability chain across Plans without erasing history', () => {
+  const nextPlan = read('skills/roadmap-dialogue/references/next-plan.md');
+
+  expect(nextPlan).toContain('同一个能力文件');
+  expect(nextPlan).toContain('跨 Plan');
+  expect(nextPlan).toContain('强化、改写、削弱或撤回');
+  expect(nextPlan).toContain('Calibration History');
+  expect(nextPlan).toContain('不改写旧 Trace');
+  expect(nextPlan).toContain('教学待办');
+  expect(nextPlan).toContain('不进入 memory');
+});
+
+test('keeps the Plan approval gate unchanged after Roadmap memory calibration', () => {
+  const skill = read('skills/roadmap-dialogue/SKILL.md');
+  expectInOrder(skill, [
+    '公开设计',
+    '明确确认',
+    'ROADMAP.md',
+    'prepare-approved-plan',
+  ]);
+  expect(skill).toContain('确认之前不得调用 `prepare-approved-plan`');
+});

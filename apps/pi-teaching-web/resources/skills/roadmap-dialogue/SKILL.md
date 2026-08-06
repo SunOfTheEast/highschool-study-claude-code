@@ -12,12 +12,13 @@ description: Use when a Roadmap Session introduces a learning set, diagnoses lon
 
 Roadmap 只从 `LEARNING_GUIDE.md` 了解学习集声明的范围与教学姿态，不查看或枚举
 `cards/`、`materials/`、`graph/`；具体材料属于后续备课，不是 Roadmap 课程证据。
-课程证据只能从 `ROADMAP.md` 的 Plan Tree 取得：先按 Tree 中的精确路径读取 Plan，
-必要时再按该 Plan 的 Lesson Tree 精确读取 Lesson，并停在相关 Block 与 Classroom Log，
-不得沿 Block `Uses` 继续读取材料。整个 Roadmap Session 不使用目录列举或文件搜索发现
-学习集内容、历史、子节点或 reference；未链接文件不是该学生的历史。Roadmap 级判断
-可以更新，但不改写子节点持有的事实。所有 Tree 路径都从学习集根目录解析，不相对于
-持有该 Tree 的父文件目录拼接。
+课程进展只能从 `ROADMAP.md` 的 Plan Tree 取得：先按 Tree 中的精确路径读取 Plan。
+跨 Session 判断从常驻 `memory/INDEX.md` 开始，只沿精确链接读取对象、能力、偏好与来源
+Trace；只有高影响或冲突时才沿已链接 Plan / Lesson 下钻 Classroom Log。不得枚举
+Plan 或 Lesson 目录发现历史；不得枚举 `memory/`。不得沿 Block `Uses` 读取材料。若根索引没有
+直接线索，只能用一个稳定对象名、别名或短关键词在 memory 内定向 `Grep`，不能全局
+搜索。未链接文件和孤立文件不是学生证据。Roadmap 可以更新长期判断，但不改写子节点
+事实与旧 Trace。所有链接都从学习集根目录解析。
 
 ## 阶段路由
 
@@ -37,6 +38,9 @@ frontmatter。按以下互斥顺序路由，并且只读取命中的一个阶段
 暂定方向，不预先创建文件。
 
 ## 统一批准门
+
+亮线只有一次：**公开设计 → 学生明确确认 → 写入 `ROADMAP.md` → 才调用
+`prepare-approved-plan`。**
 
 先通过自然对话形成教师方案，再把长期能力判断、总体学法和下一个 Plan 的公开设计
 完整说给学生。每轮最多问一个会改变长期路线的问题。
@@ -61,5 +65,7 @@ frontmatter。按以下互斥顺序路由，并且只读取命中的一个阶段
 ## 权限边界
 
 Roadmap Session 可以修改 `ROADMAP.md`，并在学生批准后交给准备 Skill 创建一个
-`prepared` Plan。不要备 Lesson、教授当前课堂、修改 active/completed Plan，或根据
-题库结构制造学生能力结论。
+`prepared` Plan。在已完成 Plan 的回流中，可以校准同一个跨 Plan 能力文件、Roadmap
+中明确表达的偏好与受影响的 INDEX 路由；不重做逐课对象提取，不把后续安排写进 memory。
+不要备 Lesson、教授当前课堂、修改 active/completed Plan，或根据题库结构制造学生能力
+结论。
