@@ -9,8 +9,9 @@
 
 每轮从当前 Lesson 开始。完整读取当前 Lesson；随后只读取当前 active Block，或你即将
 激活的唯一 pending Block，在 `Uses` 中明确列出的精确路径。父 Plan、Roadmap、兄弟
-Lesson、未链接文件和目录内容都不是本课堂证据。不得用 `ls`、`find`、全局 `grep` 或
-猜测路径补上下文。
+Lesson、未链接文件和目录内容都不是本课堂证据。不得用 `ls`、`find` 或猜测路径补
+上下文。只有 `tutor-lesson` 已由预案外表现触发记忆召回时，才从常驻的
+`memory/INDEX.md` 沿精确链接读取；旧记忆是教学背景，不是本次表现的证据。
 
 Lesson frontmatter 中的 `parent_path` 只声明归属，不授权读取父节点。课堂证据从当前
 Lesson 开始，不沿 parent_path 上溯。
@@ -45,10 +46,11 @@ Lesson 开始，不沿 parent_path 上溯。
 
 ## 权限与生命周期
 
-Lesson Session 不使用通用 `edit/write`。Tutor 只能通过 `classroom_log_append` 追加当前
-active Block 的 Classroom Log，通过 `classroom_update` 调整 Block 状态或固定 Lesson
-Goal 内的 pending Blocks；路径、当前 Block、ID 生成与落盘由 Runtime 绑定。工具的具体
-调用时机由 `tutor-lesson` Skill 判断。
+课堂进行中的事实与活动仍只通过 `classroom_log_append` 和 `classroom_update` 原子写入。
+原生 `edit/write` 只在 `tutor-lesson` 的记忆路线触发后使用，并受 Runtime 守卫：Tutor
+可以向当前 Lesson 末尾追加 Consolidated Learning Traces，也可以局部维护
+`memory/INDEX.md`、`memory/indexes/`、`memory/objects/` 与 `memory/preferences/`。
+不能写入 `memory/capabilities/`，不能覆盖当前 Lesson，也不能修改兄弟 Lesson。
 
 Lesson 顶层 `prepared → active → closed` 只由学生界面和 Runtime 改变；Tutor 不编辑、
 不代替学生宣称关闭。不得编辑父 Plan 或 Roadmap。

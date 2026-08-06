@@ -9,10 +9,11 @@ description: Use when a Lesson Session teaches, adapts, records, or finishes the
 
 ## 四条课堂边界
 
-1. **只沿显式证据读取。** 先读完整当前 Lesson，再只读当前 active Block，或即将激活的
+1. **当前课堂证据优先。** 先读完整当前 Lesson，再只读当前 active Block，或即将激活的
    唯一 pending Block，在 `Uses` 中明确列出的资源。不要读取父 Plan、Roadmap、兄弟
-   Lesson 或未链接文件；不要用 `ls`、`find`、全局 `grep` 或猜测路径寻找课堂证据。
-   信息不足时询问学生；目标需要改变时记录事实并把问题交回 Plan。
+   Lesson 或未链接文件；不要用 `ls`、`find` 或猜测路径寻找课堂证据。只有预案外表现
+   已触发下面的记忆召回路线时，才沿 `memory/INDEX.md` 的精确线索按需读取；旧记忆不是
+   本次课堂事实。信息不足时询问学生；目标需要改变时记录事实并把问题交回 Plan。
 2. **一轮只公开回应一次。** 先完成必要读取和工具写入；含工具调用的
    assistant 段只放工具调用；之后输出一段学生可见回应并等待下一条消息。不要公开
    Teacher Control、内部路由、日志动作或工具过程。
@@ -31,6 +32,8 @@ description: Use when a Lesson Session teaches, adapts, records, or finishes the
 - 发生会影响后续判断的事实 → `classroom_log_append`；
 - 当前活动真正开始、结束或切换 → `classroom_update`；
 - 现有 pending 路线明显不再适合 → `classroom_update`；
+- 学生已经选择结束并完成唯一一次正式课末反思 →
+  `references/memory-consolidation.md` 规定的原生记忆写入；
 - 其余教学轮次 → 不调用写入工具。
 
 ## 进入课堂
@@ -52,6 +55,13 @@ Block，先读取其每个 `Uses` 精确路径，再通过 `classroom_update` �
 
 Teacher Control 是本课首要准备指导。学生反应超出预案时，仍只做一个服务固定 Lesson
 Goal 的小幅、可逆调整。若没有负责的动作能留在该目标内，保留课堂证据并把问题交回 Plan。
+
+## 预案外表现触发记忆召回
+
+学生出现预案外的典型错误或停点，而且当前课堂证据不足以决定眼前动作时，读取
+`references/memory-recall.md`。只有旧对象经历、能力假设或明确偏好可能改变这一个教学
+动作，才沿其中的亮线展开；当前证据已经足够时不读。记忆帮助选择动作，不替当前表现
+定性，也不向学生宣读内部画像。
 
 ## 按需读取一个技巧
 
@@ -103,5 +113,6 @@ reference 能决定眼前这一个动作时，才直接读取列出的文件；�
 ## 结束由学生决定
 
 书面 Blocks 走完不等于课堂自动结束。根据已有证据做自然短回顾，让学生选择停止、提问
-或继续。学生选择停止后不再引入任务，只完成当前 Classroom Log 并把关闭操作交还界面；
-不要把结束写成能力达标，也不要把它变成正式报告。
+或继续。学生选择停止后不再引入任务，读取 `references/memory-consolidation.md`，完成本课
+唯一一次正式课末反思与最小充分固化，再把关闭操作交还界面。不要把结束写成能力达标，
+也不要把内部记忆字段变成面向学生的正式报告。
