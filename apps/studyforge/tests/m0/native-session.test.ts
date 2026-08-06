@@ -174,9 +174,9 @@ test('loads one selected persona after the role for every student-facing node', 
   ] as const;
 
   for (const scope of scopes) {
-    const resources = loadStaticNodeResources(root, scope, 'gojo');
+    const resources = loadStaticNodeResources(root, scope, 'confident-mentor');
     const paths = resources.agentsFiles.map((resource) => resource.path);
-    const personaPath = '/virtual/studyforge-m0-persona-gojo.md';
+    const personaPath = '/virtual/studyforge-m0-persona-confident-mentor.md';
     const roleIndex = paths.findIndex((path) => (
       path.includes(`${scope.nodeKind}-node.md`)
     ));
@@ -204,10 +204,22 @@ test('keeps neutral assembly without a persona and rejects unknown persona ids',
   expect(loadStaticNodeResources(root, scope).agentsFiles.some(
     (resource) => resource.path.includes('persona-'),
   )).toBe(false);
-  expect(() => loadStaticNodeResources(root, scope, '../gojo'))
-    .toThrow('STUDY_PERSONA_INVALID: ../gojo');
+  expect(() => loadStaticNodeResources(root, scope, '../confident-mentor'))
+    .toThrow('STUDY_PERSONA_INVALID: ../confident-mentor');
   expect(() => loadStaticNodeResources(root, scope, 'missing'))
     .toThrow('STUDY_PERSONA_NOT_FOUND: missing');
+});
+
+test('ships an original persona without borrowed character vocabulary', () => {
+  const content = readFileSync(
+    join(import.meta.dir, '../../resources/personas/confident-mentor.md'),
+    'utf8',
+  );
+  for (const borrowed of ['五条悟', '无量空处', '六眼', '反转术式', '术式']) {
+    expect(content).not.toContain(borrowed);
+  }
+  expect(content).toContain('轻松、自信、有判断力');
+  expect(content).toContain('只改变表达，不改变教学职责');
 });
 
 test('injects one canonical document contract into every node session', () => {

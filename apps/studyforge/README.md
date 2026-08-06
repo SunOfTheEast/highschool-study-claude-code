@@ -66,11 +66,11 @@ STUDY_LEARNING_SET="$PWD/../../examples/derivative-m0/learning-set" bun run star
 
 ### 可选教师人格
 
-第一份可选人格是五条悟式导师。它让 Roadmap、Plan 和 Lesson 保持同一种轻松、
-自信而有判断力的表达气质：
+可选的 `confident-mentor` 人格让 Roadmap、Plan 和 Lesson 保持同一种轻松、自信而
+有判断力的表达气质：
 
 ```bash
-STUDY_PERSONA=gojo \
+STUDY_PERSONA=confident-mentor \
 STUDY_LEARNING_SET="$PWD/../../examples/derivative-m0/learning-set" \
 bun run start
 ```
