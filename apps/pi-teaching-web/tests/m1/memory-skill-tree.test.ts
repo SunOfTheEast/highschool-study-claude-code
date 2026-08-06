@@ -79,3 +79,52 @@ test('keeps Lesson native writes inside the runtime-guarded memory boundary', ()
   expect(role).toContain('不得编辑父 Plan 或 Roadmap');
   expect(role).not.toContain('Lesson Session 不使用通用 `edit/write`');
 });
+
+test('makes Plan consume consolidated memory before drilling into classroom evidence', () => {
+  const skill = read('skills/plan-dialogue/SKILL.md');
+  const review = read('skills/plan-dialogue/references/post-lesson-review.md');
+  const role = read('agents/plan-node.md');
+
+  expect(skill).toContain('memory/INDEX.md');
+  expect(skill).toContain('Lesson Tree');
+  expect(role).toContain('跨 Session 记忆');
+  expect(role).toContain('精确链接');
+  expectInOrder(review, [
+    'Consolidated Learning Traces',
+    '对象记忆',
+    '能力假设',
+    '偏好',
+    'Classroom Log',
+  ]);
+  expect(review).toContain('缺失、冲突');
+  expect(review).toContain('高影响判断');
+  expect(review).not.toContain('哪里真的顺了、\n哪里还不踏实');
+  expect(review).toContain('不重复进行整课反思');
+});
+
+test('lets Plan form a working capability hypothesis only across different objects', () => {
+  const review = read('skills/plan-dialogue/references/post-lesson-review.md');
+  const closure = read('skills/plan-dialogue/references/plan-closure.md');
+
+  expect(review).toContain('跨不同对象');
+  expect(review).toContain('memory/capabilities/');
+  expect(review).toContain('Current Hypothesis');
+  expect(review).toContain('Calibration History');
+  expect(review).toContain('单一对象');
+  expect(review).toContain('不升级');
+  expect(closure).toContain('Current Position');
+  expect(closure).toContain('自包含');
+  expect(closure).toContain('教学待办');
+  expect(closure).toContain('不进入 memory');
+});
+
+test('keeps the Lesson approval gate unchanged after Plan memory review', () => {
+  const skill = read('skills/plan-dialogue/SKILL.md');
+  expectInOrder(skill, [
+    '公开讨论',
+    '明确确认',
+    'Next Lesson Arrangement',
+    'prepare-approved-lesson',
+  ]);
+  expect(skill).toContain('确认之前不得调用 `prepare-approved-lesson`');
+});
