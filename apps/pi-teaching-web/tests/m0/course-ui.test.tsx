@@ -253,6 +253,7 @@ test('makes dialogue the central workspace and hides Teacher Control from class 
   expect(markup).toContain('aria-label="课堂节点"');
   expect(markup).toContain('lesson:plan-001:lesson-001');
   expect(markup).toContain('先观察这道题的参数位置');
+  expect(markup).toContain('katex-display');
   expect(markup).not.toContain('先听选路理由');
   expect(markup).not.toContain('Teacher Control');
   expect(markup).toContain('结束本课');
@@ -345,7 +346,7 @@ test('renders a standalone public A4 Lesson handout without application chrome',
             id: 'block-002',
             title: '独立练习',
             kind: 'problem',
-            studentView: '完成 $f(x)=x^2+a$ 的选路说明。',
+            studentView: '完成 $f(x)=x^2+a$ 的选路说明。\n\n\\[x^2+a=0\\]',
           },
           {
             id: 'block-001',
@@ -367,6 +368,7 @@ test('renders a standalone public A4 Lesson handout without application chrome',
   expect(markup).toContain('日期');
   expect(markup.indexOf('独立练习')).toBeLessThan(markup.indexOf('方法复述'));
   expect(markup).toContain('katex');
+  expect(markup).toContain('katex-display');
   expect(markup).toContain('打印 / 另存为 PDF');
   expect(markup).not.toContain('课程组织');
   expect(markup).not.toContain('课堂对话');

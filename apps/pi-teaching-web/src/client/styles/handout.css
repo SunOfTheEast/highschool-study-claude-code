@@ -172,6 +172,7 @@
 
 @media print {
   html, body { background: #fff; }
+  .katex-display { overflow: visible; font-size: .92em; }
   .lesson-handout-page { min-height: 0; padding: 0; background: #fff; }
   .handout-actions { display: none; }
   .handout-paper {
