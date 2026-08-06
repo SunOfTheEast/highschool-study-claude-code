@@ -30,8 +30,11 @@ export function AppShell({
             onNavigate('course');
           }}
         >
-          <span>StudyForge</span>
-          <strong>{title}</strong>
+          <span className="brand-seal" aria-hidden="true">学</span>
+          <span className="brand-copy">
+            <strong>StudyForge</strong>
+            <small>{title}</small>
+          </span>
         </a>
         <PrimaryViewNav
           active={activeView}

@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
+import 'lxgw-wenkai-screen-webfont/lxgwwenkaiscreen.css';
 import './theme-liubai.css';
 import './styles.css';
 import './styles/workspace-shell.css';

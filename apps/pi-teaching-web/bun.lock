@@ -9,6 +9,7 @@
         "@earendil-works/pi-ai": "0.81.0",
         "@earendil-works/pi-coding-agent": "0.81.0",
         "katex": "0.18.1",
+        "lxgw-wenkai-screen-webfont": "^1.7.0",
         "pi-subagents": "0.35.1",
         "react": "19.2.8",
         "react-dom": "19.2.8",
@@ -542,6 +543,8 @@
     "longest-streak": ["longest-streak@3.1.0", "", {}, "sha512-9Ri+o0JYgehTaVBBDoMqIl8GXtbWg711O3srftcHhZ0dqnETqLaoIK0x17fUw9rFSlK/0NlsKe0Ahhyl5pXE2g=="],
 
     "lru-cache": ["lru-cache@11.5.2", "", {}, "sha512-4pfM1Ff0x50o0tQwb5ucw/RzNyD0/YJME6IVcStalZuMWxdt3sR3huStTtxz4PUmvZfRguvDejasvQ2kifR11g=="],
+
+    "lxgw-wenkai-screen-webfont": ["lxgw-wenkai-screen-webfont@1.7.0", "", {}, "sha512-xvfF4V26Mb335xKg3uxljz+V2nq4F5ek0ku9pmyKgT0Dzo/d2rHi7WpnqgvM9mlXAcAKOrxrcDmUZiIs/ZQ9bQ=="],
 
     "marked": ["marked@18.0.5", "", { "bin": { "marked": "bin/marked.js" } }, "sha512-S6GcvALHg6K4ohtu4E7x0a1AqhAjp6cV8KhLSyN9qVapnzJkusVBxZRcIU9AeYsbe6P1hKDusSbEOzGyyuce6w=="],
 
