@@ -1,10 +1,15 @@
 # 有界 Lesson Reviewer 与可打印讲义设计
 
-**状态：** 已逐段确认，待用户审阅书面规格
+**状态：** 已批准；实施计划已拆分完成
 
 **日期：** 2026-08-06
 
 **目标分支：** `codex/gentle-judgment-isomorphic-acceptance`
+
+**实施计划：**
+
+- [有界 Lesson Risk Reviewer](../plans/2026-08-06-bounded-lesson-risk-reviewer.md)
+- [可打印 Lesson 讲义](../plans/2026-08-06-printable-lesson-handout.md)
 
 ## 一、背景
 
