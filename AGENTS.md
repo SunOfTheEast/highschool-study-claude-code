@@ -1,13 +1,40 @@
 # StudyForge M0 repository guide
 
 `apps/studyforge/` is the current StudyForge M0 runtime and local student App.
-`examples/derivative-m0/` is its public smoke learning set. The old Claude Code plugin
-and historical documents remain for comparison; they are not M0 dependencies or
-current runtime contracts.
+`examples/derivative-m0/` is the private beta evaluation corpus. It is not licensed for
+public redistribution and must be removed or replaced before a clean public export.
+The old Claude Code plugin and historical documents remain for comparison; they are
+not M0 dependencies or current runtime contracts.
+
+## Agent-assisted setup contract
+
+Work from the repository root. Install only dependencies declared by the repository;
+do not install unrelated global packages or alter global Pi configuration without the
+user's approval.
+
+```bash
+bun install --frozen-lockfile
+bun run doctor
+bun run start:demo
+```
+
+Interpret the seven Doctor checks literally:
+
+- `platform`: macOS and Linux are validated; another platform is a warning.
+- `bun`: Bun 1.3.0 or newer is required.
+- `app`: `apps/studyforge/package.json` must exist.
+- `learning-set`: strict Roadmap, Plan-local Lesson, and static-asset parsing succeeded.
+- `write`: the selected Learning Set can persist local course state.
+- `model`: Pi reports at least one already configured model provider.
+- `port`: the selected loopback port is valid and free.
+
+If `model` fails, guide the user through Pi's own OAuth or API-key setup. Never read,
+print, copy, or infer credential values or authentication-file paths. After starting,
+verify `http://127.0.0.1:65000/api/health`; do not expose the service beyond loopback.
 
 ## Durable domain
 
-M0 has one Markdown control tree:
+M0 has one Plan-local Markdown control tree:
 
 ```text
 ROADMAP.md
@@ -75,7 +102,8 @@ only at decisions specific to Roadmap, Plan, or Lesson. Optional files under
 `apps/studyforge/resources/personas/` change expression, rhythm, humour, and
 metaphor only; they never override mathematics, role authority, learning-set principles,
 or student agency. `STUDY_PERSONA=<id>` selects one overlay for all three student-facing
-node Sessions. The internal material Scout receives no persona or user-facing role-play.
+node Sessions. The internal Material Scout and Lesson Reviewer receive no persona or
+user-facing role-play.
 
 Roadmap keeps the native `read`, `grep`, `find`, `ls`, `edit`, and `write` tools. Plan
 keeps those tools and additionally has `subagent` for fresh-context copies of one
@@ -118,7 +146,8 @@ The Material Scout is disposable working memory for asset search, not a Handoff,
 teaching-fact store, planner, or post-Lesson reviewer. The parent Plan Coach keeps final
 selection and every persistent write. StudyForge sets no wall-clock deadline for a
 Scout fan-out, does not retry a failed fan-out automatically, and does not fall back to
-parent-side bulk asset search.
+parent-side bulk asset search. The Lesson Reviewer is a separate bounded risk check for
+prepared material; it does not choose the lesson or write teaching facts.
 
 ## App surface
 
@@ -149,7 +178,7 @@ items. The normal Lesson view shows `Student View` and Block progress, not
 - `apps/studyforge/src/client/`: Course/Knowledge App.
 - `apps/studyforge/tests/m0/`: current executable contract.
 - `apps/studyforge/tests/e2e/m0-cycle.spec.ts`: deterministic browser closure.
-- `examples/derivative-m0/`: clean public learning set.
+- `examples/derivative-m0/`: private beta evaluation corpus; not a public example.
 
 ## Change discipline
 
@@ -163,8 +192,7 @@ items. The normal Lesson view shows `Student View` and Block progress, not
 ## Verification
 
 ```bash
-cd apps/studyforge
 bun install --frozen-lockfile
 bun run check
-bun run test:e2e -- tests/e2e/m0-cycle.spec.ts
+bun run test:e2e
 ```

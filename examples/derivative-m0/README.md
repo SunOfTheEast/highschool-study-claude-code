@@ -1,36 +1,41 @@
-# StudyForge M0 导数学习集
+# StudyForge M0 私有导数评估集
 
-这是 M0 干净内核的公开示例，包含 500 余张导数题卡、静态方法图谱、一份学习指南、
-以及一份尚未替陌生学生安排课程的 Roadmap。它不包含预设 Plan、长期画像、独立课堂
-事实池、派生能力分数或旧会话快照。
+这个目录保存当前私有 beta 验收使用的导数学习集：519 张题卡、静态方法图谱、学习指南，以及用于真实长周期测试的课程状态。它用于受控内测，不是已经完成来源清洗的公开示例包。
 
-## 本地启动
+## 许可证边界
 
-在仓库中运行：
+这里的内容是 private beta evaluation corpus。它不属于根目录 Apache-2.0 代码许可证，也未获准公开再分发。公开仓库切出前，必须由单独的数据清洗计划移除或替换本目录，并逐项记录新学习资产的来源与许可证。
+
+The private beta evaluation corpus under examples/derivative-m0 is not licensed under Apache-2.0 and is not approved for public redistribution.
+
+请勿把真实学生记录、私有课堂对话、Pi Session 文件或派生画像提交到这个目录。
+
+## 私有仓库内运行
+
+从仓库根目录执行：
 
 ```bash
-cd apps/pi-teaching-web
-bun install
-STUDY_LEARNING_SET="$PWD/../../examples/derivative-m0/learning-set" bun run dev
+bun install --frozen-lockfile
+bun run doctor
+bun run start:demo
 ```
 
-浏览器打开 Vite 输出的本地地址。Roadmap 是入口；先介绍学习集并完成起点问诊，再由
-Roadmap Session 创建学生确认过的第一个 Plan。Plan Session 负责准备真实 Lesson。
-Roadmap、Plan、Lesson 各自使用独立的原生 Pi Session。
+默认学习集是 `examples/derivative-m0/learning-set`，服务只监听 `127.0.0.1:65000`。也可以通过 `STUDY_LEARNING_SET` 指向另一个已授权的 Learning Set。
 
-## 目录
+## 结构
+
+课程树严格采用 Plan-local Lesson 结构：
 
 ```text
 learning-set/
 ├── LEARNING_GUIDE.md
 ├── ROADMAP.md
-├── plans/
-├── lessons/
+├── plans/<plan-id>/
+│   ├── PLAN.md
+│   └── lessons/<lesson-id>.md
 ├── cards/
 ├── graph/
 └── materials/
 ```
 
-课堂发生的对话、提示、纠正和决定直接追加到当前 Lesson 的 Block `Classroom Log`。
-下一节课备课时，Plan Session 重新读取本 Plan 已关闭的 Lesson，不依赖另一套摘要或
-记忆对象。题卡和方法图谱保持为可复用的静态学习资产。
+Roadmap、Plan 与 Lesson 分别拥有独立 Pi Session。父节点只沿文档中已链接的树读取证据；未链接文件不能被当作学生历史。

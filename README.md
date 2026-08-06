@@ -1,109 +1,101 @@
-# StudyForge M0
+# StudyForge
 
-StudyForge M0 是一次从头收缩后的本地单人教学内核。它只保留已经反复证明有价值的
-骨架：`Roadmap → Plan → Lesson → Block`、节点独立 Pi Session、真实题卡与方法图谱，
-以及可以直接打开审查的 Markdown 课堂记录。
+StudyForge 是一个本地运行、Markdown-first 的一对一教学 Agent：它不只回答一道题，而是和学生共同确认长期方向、阶段计划与每节课，在真实课堂中留下可复查的过程证据，再据此调整下一步。M0 已实现从 Roadmap 到 Plan-local Lesson 的完整课程闭环、节点独立 Pi Session、受控材料检索、确定性课堂写入与学生掌握启停权的 Web 工作台。
 
-当前 M0 实现在 [`apps/studyforge`](apps/studyforge/README.md)。仓库里的旧
-Claude Code 插件与历史设计仍可用于回看演进过程，但不属于 M0 的运行时契约，也不
-被当前 App 调用。
+> **截图 / Demo 位**：公开仓库切出时补充不含私有题卡、学生记录与模型凭证的演示图。当前私有 beta 仓库不提交真实课程截图。
 
-## 核心模型
+## 一个课程，不是一串聊天
 
 ```text
-LEARNING_GUIDE.md
-ROADMAP.md                    Roadmap Session
-└── plans/plan-001.md         Plan Session
-    └── lessons/lesson-001.md Lesson Session
-        ├── Block
-        ├── Block
+ROADMAP.md                         长周期能力方向 · Roadmap Session
+└── plans/<plan-id>/PLAN.md        一个可调整的学习周期 · Plan Session
+    └── lessons/<lesson-id>.md     Plan-local 一对一课堂 · Lesson Session
+        ├── Student View
+        ├── Teacher Control
         └── Classroom Log
 
-cards/ + graph/ + materials/  静态学习资产
-Pi JSONL                      各节点的原始对话与工具历史
+cards/ + graph/ + materials/       静态学习资产
+Pi Session JSONL                   每个节点自己的原始对话与工具历史
 ```
 
-- **Roadmap** 负责长期目标和未来 Plan 的安排。
-- **Plan** 负责一个阶段目标、已结束 Lesson 的复盘和下一课备课。
-- **Lesson** 负责一次真实课堂；每个 Block 同时保存教学安排和实际课堂日志。
-- **父节点需要历史时直接读取子文档**，不再维护另一套摘要交接链。
-- **每个节点一个原生 Pi Session**，节点之间不复制聊天记录。
-- **模型只使用 Pi 原生文件工具**：`read`、`grep`、`find`、`ls`、`edit`、`write`。
-- **学生控制节点启停**；浏览、刷新和模型回复都不会暗中开始或结束课程。
-
-M0 没有独立课堂事实池、长期画像、能力分数、后台索引、子任务工作流或消息安全
-改写。需要了解旧版本为何被消融，请看
-[`M0 设计稿`](docs/superpowers/specs/2026-08-02-m0-document-native-memory-ablation-design.md)。
+Roadmap、Plan、Lesson 是三种不同的会话尺度。学生必须明确确认课程方向和将被物化的子节点；浏览页面、继续做题或模型回复都不会被解释成批准。父节点需要历史时只沿已链接的课程树读取原始 Markdown，不扫描目录猜测“学生以前说过什么”。
 
 ## 快速开始
 
-需要 Git、Bun 1.3+ 和已经配置模型的 Pi：
+当前验收平台是 macOS 与 Linux，需要 Git、Bun 1.3+，以及已通过 OAuth 或 API Key 配置可用模型的 Pi。克隆仓库后从根目录运行：
 
 ```bash
-git clone https://github.com/SunOfTheEast/highschool-study-claude-code.git
-cd highschool-study-claude-code/apps/studyforge
-bun install
-bun run build
-STUDY_LEARNING_SET="$PWD/../../examples/derivative-m0/learning-set" bun run start
+bun install --frozen-lockfile
+bun run doctor
+bun run start:demo
 ```
 
-打开 <http://127.0.0.1:65000>。
+打开 <http://127.0.0.1:65000>。`doctor` 只读检查平台、Bun、App、Learning Set、写权限、Pi 可用模型和端口；不会打印凭证内容或认证文件路径。默认 `start:demo` 使用私有 beta 评估集，公开源码导出前会由独立的数据清洗计划替换它。
 
-也可以安装为本地 Pi Package：
+需要指定自己的学习集时：
 
 ```bash
-cd apps/studyforge
-pi install "$PWD"
+STUDY_LEARNING_SET=/absolute/path/to/learning-set bun run doctor
+STUDY_LEARNING_SET=/absolute/path/to/learning-set bun run start:demo
 ```
 
-随后在包含 `learning-set/` 的目录启动 Pi，运行 `/study-web`。
+详细说明见[学习集契约](docs/guides/learning-set.zh-CN.md)和[手动设置指南](docs/guides/agent-assisted-setup.zh-CN.md)。
 
-## 示例学习集
+## 让 Work Agent 帮你配置
 
-[`examples/derivative-m0`](examples/derivative-m0/README.md) 包含：
-
-- 519 张高阶导数题卡；
-- 17 个方法图谱节点；
-- 一份导数学习指南；
-- 一个准备好的起点 Plan 和一节问诊 Lesson；
-- 不带任何旧学生结论的干净学习状态。
-
-## Learning set 最小目录
+把下面这段原样交给仓库内的 Coding Agent / Work Agent。它可以检查、安装仓库依赖并启动，但不能替你读取凭证或改全局 Pi 配置：
 
 ```text
-learning-set/
-├── LEARNING_GUIDE.md
-├── ROADMAP.md
-├── plans/
-├── lessons/
-├── cards/
-├── graph/
-└── materials/
+请在这个 StudyForge 仓库里协助我完成本地启动：
+1. 只安装仓库 package.json 与 bun.lock 声明的依赖；
+2. 运行 bun run doctor，逐项解释 platform、bun、app、learning-set、write、model、port；
+3. 如果 model 失败，只指导我在 Pi 中自行完成 OAuth 或 API Key 配置，不要读取、打印或改写任何凭证；
+4. 未经我确认，不修改全局 Pi 配置，不暴露服务到 127.0.0.1 之外；
+5. Doctor 全部可运行后执行 bun run start:demo，并用 /api/health 验证服务。
 ```
 
-Plan 状态只有 `prepared → active → completed`；Lesson 状态只有
-`prepared → active → closed`。课堂对话、提示、纠正与决定按发生位置追加到当前
-Lesson Block 的 `Classroom Log`，不会被后来总结改写成更漂亮的版本。
+## 当前产品闭环
 
-## 界面
+主界面只有课程脉络与知识山河。课程 URL 是当前节点选择的来源：
 
-App 只有两个主页面：
+```text
+/course
+/course/plan/:planId
+/course/plan/:planId/lesson/:lessonId
+/knowledge
+```
 
-- **课程脉络**：以对话为视觉中心，左右栏按需展开；从 Roadmap 下钻到 Plan 和
-  Lesson，并查看当前 Block 与原生工具活动。
-- **知识山河**：只浏览学习集自身的方法图谱、题卡和材料，不叠加个人能力判断。
+Plan 只经历 `prepared → active → completed`；Lesson 只经历 `prepared → active → closed`。开始、结束和完成均由学生在 UI 中操作，终态节点不会偷偷重开。每个节点恢复自己的 Pi Session，兄弟节点和父子节点之间不复制转录。
 
-路由为 `/course`、`/course/plan/:id`、`/course/plan/:id/lesson/:id` 和
-`/knowledge`。刷新后由 URL 和节点 frontmatter 恢复原节点与 Session。
+一次真实备课和上课包含这些已实现能力：
 
-## 开发与验证
+- **Material Scout** 在独立子上下文中按题卡特征做小批浅召回，Coach 负责最终深读、数学核验与选材；
+- **Lesson Reviewer** 只在材料可能剧透、矛盾或不适合学生时做有界风险复核，不接管教学决策；
+- Lesson 没有原生 `edit/write`，只能用节点绑定的 `classroom_log_append` 与 `classroom_update` 做确定性、原子化课堂写入；
+- Markdown 支持行内与块级 TeX，并通过 KaTeX 渲染；畸形公式保持可见而不会打崩页面；
+- Plan 可以在备课完成、学生需要时导出只含 `Student View` 的可打印讲义；私有 `Teacher Control` 和 `Classroom Log` 不进入讲义。
+
+运行时与责任边界详见 [M0 架构](docs/architecture/m0-runtime.zh-CN.md)。
+
+## 本地数据与隐私
+
+StudyForge M0 只监听 `127.0.0.1`，并校验浏览器写请求与 WebSocket 的本地 Origin。Learning Set Markdown 保存课程状态；Pi 管理模型凭证与节点 Session JSONL。StudyForge 不把凭证写进仓库，也不提供云同步、多用户隔离或远程部署承诺。
+
+学习集可能包含未成年学生的敏感记录。真实学生数据不得提交到公开 Git、Issue、测试 fixture 或示例包。当前 `examples/derivative-m0` 是保留在私有 beta 仓库中的评估语料，不受 Apache-2.0 许可，也未获准公开再分发；见[第三方与数据边界](THIRD_PARTY_NOTICES.md)。
+
+## M0 的边界，M1 的方向
+
+M0 故意没有长期学生画像、能力分数、跨 Plan 派生记忆、向量库、后台索引或学习效果声明。事实以 Roadmap、Plan-local Lesson、Block Classroom Log 和原始 Session 为准。M1 才会研究可追溯的认知流变、跨周期个性化与真实学习效果评估；在重复课堂证据出现之前，不提前发明第二套事实系统。
+
+研究愿景见[认知结果型 Agent](docs/vision/cognitive-outcome-agent.zh-CN.md)。
+
+## 开发与参与
 
 ```bash
-cd apps/studyforge
-bun install --frozen-lockfile
 bun run check
-bun run test:e2e -- tests/e2e/m0-cycle.spec.ts
+bun run test:e2e
 ```
 
-实现计划见
-[`2026-08-02-studyforge-m0-clean-kernel.md`](docs/superpowers/plans/2026-08-02-studyforge-m0-clean-kernel.md)。
+贡献前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md) 与 [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)；安全问题按 [SECURITY.md](SECURITY.md) 私下报告。项目代码和项目原创文档采用 [Apache License 2.0](LICENSE)，依赖与私有评估语料边界见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+
+English: [README.en.md](README.en.md)。App 开发细节见 [apps/studyforge](apps/studyforge/README.md)。
