@@ -43,7 +43,7 @@ export function resolveDemoPaths(
     appRoot: join(repoRoot, 'apps/studyforge'),
     learningSet: resolve(env.STUDY_LEARNING_SET ?? join(
       repoRoot,
-      'examples/derivative-m0/learning-set',
+      'examples/math-starter-m0/learning-set',
     )),
     port: Number.parseInt(env.STUDY_WEB_PORT ?? '65000', 10),
   };

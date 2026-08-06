@@ -39,6 +39,21 @@ test('describes the current runtime and protects the beta-card license boundary'
   );
 });
 
+test('ships a public cardless math starter under CC BY 4.0', () => {
+  for (const path of [
+    'examples/math-starter-m0/README.md',
+    'examples/math-starter-m0/LICENSE',
+    'examples/math-starter-m0/learning-set/LEARNING_GUIDE.md',
+    'examples/math-starter-m0/learning-set/ROADMAP.md',
+  ]) {
+    expect(existsSync(join(root, path))).toBe(true);
+  }
+
+  const starterReadme = read('examples/math-starter-m0/README.md');
+  expect(starterReadme).toContain('CC BY 4.0');
+  expect(starterReadme).toContain('no preloaded graph, cards, or materials');
+});
+
 const markdownFiles = [
   'README.md',
   'README.en.md',

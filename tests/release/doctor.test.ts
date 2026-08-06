@@ -1,4 +1,7 @@
 import { expect, test } from 'bun:test';
+import { join } from 'node:path';
+import { readKnowledge } from '../../apps/studyforge/src/study/knowledge';
+import { readCourseTree } from '../../apps/studyforge/src/study/markdown';
 import {
   inspectStudyForge,
   resolveDemoPaths,
@@ -43,11 +46,22 @@ test('fails without an available authenticated model', async () => {
   }));
 });
 
-test('uses an explicit learning set before the private demo default', () => {
+test('uses an explicit learning set before the public starter default', () => {
   expect(resolveDemoPaths('/repo', { STUDY_LEARNING_SET: '/custom/set' }).learningSet)
     .toBe('/custom/set');
   expect(resolveDemoPaths('/repo', {}).learningSet)
-    .toBe('/repo/examples/derivative-m0/learning-set');
+    .toBe('/repo/examples/math-starter-m0/learning-set');
+});
+
+test('validates the cardless public starter', () => {
+  const learningSet = join(import.meta.dir, '../../examples/math-starter-m0/learning-set');
+  const course = readCourseTree(learningSet);
+  const knowledge = readKnowledge(learningSet);
+
+  expect(course.tree.children).toEqual([]);
+  expect(knowledge.methods).toEqual([]);
+  expect(knowledge.cards).toEqual([]);
+  expect(knowledge.materials).toEqual([]);
 });
 
 test('fails when Bun is older than 1.3.0', async () => {
