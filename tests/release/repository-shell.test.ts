@@ -18,6 +18,8 @@ test('exposes one StudyForge workspace from the repository root', () => {
   });
   expect(workspace.scripts).toMatchObject({
     check: 'bun run typecheck:release && bun run test:release && bun run --cwd apps/studyforge check',
+    doctor: 'bun run scripts/doctor.ts',
+    'start:demo': 'bun run scripts/start-demo.ts',
     'test:e2e': 'bun run --cwd apps/studyforge test:e2e',
   });
   expect(app.name).toBe('@studyforge/app');

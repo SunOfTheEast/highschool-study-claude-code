@@ -11,6 +11,8 @@
   "scripts": {
     "dev": "bun run --cwd apps/studyforge dev",
     "build": "bun run --cwd apps/studyforge build",
+    "doctor": "bun run scripts/doctor.ts",
+    "start:demo": "bun run scripts/start-demo.ts",
     "typecheck:release": "tsc --noEmit -p tsconfig.json",
     "typecheck": "bun run typecheck:release && bun run --cwd apps/studyforge typecheck",
     "test:release": "bun test tests/release",
