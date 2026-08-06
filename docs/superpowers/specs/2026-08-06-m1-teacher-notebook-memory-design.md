@@ -1,6 +1,6 @@
 # StudyForge M1 记忆系统设计：教师备课本（唯一事实原位 + 可重建投影 + 可撤回判断）
 
-**状态：** 草案（已经一轮用户审阅并修订：投影化、去注入、判断字段重构、词表条件化、验收门修正）
+**状态：** 草案（已经两轮用户审阅并修订：投影化、去注入、快照化、判断字段重构、词表条件化、验收门修正）
 
 **日期：** 2026-08-06
 
@@ -26,18 +26,20 @@ M1 阶段包含两个独立子项目：学习集生产与记忆系统。本设�
 一旦保存构造、帮助等级、结果，上游 Classroom Log 被更正后，登记与判断层的旧结论
 就会继续上浮——与被诊断的污染同构。因此本设计的根本所有权规则是：
 
-> **Lesson Block 是唯一原始事实。`memory/` 不保存第二套事实——它是可重建的登记
-> 投影（帮模型找到事实）与可撤回的 judgment（教师对学生的当前看法）。判断必须
-> 最终指回具体 Classroom Log 条目。**
+> **Lesson Block 是唯一原始事实。`memory/` 不保存第二套事实——它是可重建的当前
+> 快照投影（帮模型找到事实）与可撤回的 judgment（教师对学生的当前看法）。判断
+> 必须最终指回具体 Classroom Log 条目。**
 
 系统的外部形态是**教师备课本**：一个教了几十节课的老师脑子里对学生的那幅活画像——
 会什么、不会什么、掌握哪些方法、知道哪些知识点、哪个忘了几次、哪个记住了几次、
 做过哪些题。备课本分两层（都建立在唯一事实原位之上）：
 
-- **投影层**：可重建的登记投影（做过什么题、提取检验结果、学生说过什么），
-  每条指回 Log 条目，负责**找**，不负责**是**；
+- **投影层**：可重建的当前快照（做过什么题、提取检验结果、学生说过什么），
+  每条指回 Log 条目，负责**找**，不负责**是**；投影不保存自己的历史——全部历史
+  已经在 append-only Classroom Log 中；
 - **判断层**：教师当前对学生的看法（会/不会、方法掌握、知识点状态），每条带证据
-  引用、注明日期、**可撤回**——撤回不删除历史。
+  引用、注明日期、**可撤回**——撤回不删除历史，判断的撤回历史是备课本中唯一的
+  append-only 区。
 
 这两层守住愿景文档的铁律：课堂 Event 是不可改写的原始事实；知识点状态、趋势、
 误区与掌握只能是可撤回的聚合判断，不能反过来覆盖原始事件。
@@ -149,18 +151,18 @@ MemPalace、GBrain、Hindsight、supermemory、cognee、OpenViking、Memori 等�
   Lesson Block · Classroom Log
        │ 引用（log entry ID）
        ▼
-投影层（可重建，负责"找"不负责"是"）
-  memory/coverage.md        覆盖投影：题目、构造、方法、帮助等级 → 指回 Log 条目
-  memory/retrieval.md       提取事件投影：计划/实际间隔、结果 → 指回 Log 条目
-  memory/student-facts.md   学生事实投影：负担、情绪、偏好 → 指回 Log 条目
-       │ Coach 复盘提取生成；上游更正时标记陈旧或重建
+投影层（可重建的当前快照，负责"找"不负责"是"）
+  memory/coverage.md        覆盖快照：题目、构造、方法、帮助等级 → 指回 Log 条目
+  memory/retrieval.md       提取事件快照：计划/实际间隔、结果 → 指回 Log 条目
+  memory/student-facts.md   学生事实快照：负担、情绪、偏好 → 指回 Log 条目
+       │ Coach 复盘提取，Runtime 原子替换；上游更正时陈旧段先重建再读
        ▼
 判断层（profile 模式，可撤回）
-  memory/judgments.md       当前判断区 + supersedes 历史区
+  memory/judgments.md       当前判断区（快照式更新）+ supersedes 历史区（append-only）
        │ 引用 Log 条目（投影帮助定位，永远不作为引用对象）
        ▲ Coach 收口写 Plan 级判断；Roadmap 回流写跨 Plan 判断
 消费层（零常驻注入）
-  memory/INDEX.md           ≤50 行指针地图，决策点主动读取
+  memory/INDEX.md           ≤50 行指针地图（当前快照），决策点主动读取
   Coach 备课读投影 → 烘入 lesson 文档 → Tutor 冷启动执行
   Roadmap 排期读 INDEX + judgments + PLAN.md 阶段总结
   学生经 Memory 页只读查看、可提出指正
@@ -182,19 +184,41 @@ MemPalace、GBrain、Hindsight、supermemory、cognee、OpenViking、Memori 等�
 时机械绑定稳定 ID 与时间（模型不填），因为投影与判断现在需要耐久的引用坐标——
 这不是恢复事件级官僚化，机械字段不经模型。
 
-## 6. 投影层（可重建登记投影）
+## 6. 投影层（可重建的当前快照）
 
-### 6.1 事实捕获与投影生成
+三个投影文件都是**当前可重建快照**：不保存自己的历史（全部历史已在 append-only
+Classroom Log 中），每次逐课提取或卫生检查由 Runtime **原子替换**（复用
+`mutateDocumentAtomically` 原语）。这消除一个致命组合——若投影 append-only 又允许
+陈旧，grep 会永远新旧同召回，旧结论沿读取结果再次上浮。
+
+**快照头部契约**（每个投影文件）：
+
+~~~text
+---
+generated_at: 2026-08-05T19:30:00Z
+covers:
+  plan-001/lesson-001: e7
+  plan-001/lesson-002: e5
+  plan-001/lesson-003: e4
+---
+~~~
+
+`covers` 按课记录本快照覆盖到的最后 Log 条目 ID。lint 对比头部与 Log 现状即可
+**机械判定**哪些课的段落已陈旧（该课出现了头部之后的新条目或更正条目）——不需要
+模型判断。一条 lesson-002 的更正只让源于该课的投影段陈旧，不错杀全文件。
+
+### 6.1 事实捕获与快照生成
 
 - **Tutor 永远不碰 `memory/`**：非任务事实的捕获靠扩展 Classroom Log 写入纪律——
   负担、情绪、暂停请求、偏好**必须**记录进 lesson.md 的 Classroom Log（B1 的修复
   点，tutor-lesson Skill 契约改动）。Log 是唯一事实原位。
-- **投影生成发生在 Coach 课后复盘**：Coach 本来就会重读每节关闭的 lesson（终验
-  实证），复盘时把承重事实提取进投影文件——逐课提取，不等收口。
+- **快照更新发生在 Coach 课后复盘**：Coach 本来就会重读每节关闭的 lesson（终验
+  实证），复盘时把承重事实提取进投影——逐课提取，由 Runtime 原子替换文件并刷新
+  头部 `covers`。
 - 每条投影条目必须引用来源 Log 条目 ID；lint 校验引用可解析。
 - 写者按生命周期序列化（单用户、单激活节点），无并发写入。
 
-### 6.2 `memory/coverage.md`（覆盖投影，append-only）
+### 6.2 `memory/coverage.md`（覆盖快照）
 
 ~~~text
 - [2026-08-05] log:plan-001/lesson-002#block-004:e3 | 任务: 内联·ln(1+x)≤ax 商函数 | 构造: s(x)=1/x−x+2ln x | 方法: 参数分离、二次求导 | 帮助: 轻提示 | 结果: 完成
@@ -207,7 +231,7 @@ MemPalace、GBrain、Hindsight、supermemory、cognee、OpenViking、Memori 等�
 - 帮助等级枚举：独立 / 轻提示 / 实质提示；结果枚举：完成 / 未完成；
 - 任务为题卡时记录题卡 ID；内联题记录短签名。
 
-### 6.3 `memory/retrieval.md`（提取事件投影，append-only）
+### 6.3 `memory/retrieval.md`（提取事件快照）
 
 ~~~text
 - [2026-08-05] log:plan-001/lesson-003#block-001:e1 | 内容: 条件检查族 | 计划间隔: 3d | 实际间隔: 3d | 结果: 独立
@@ -217,7 +241,7 @@ MemPalace、GBrain、Hindsight、supermemory、cognee、OpenViking、Memori 等�
 - 实际间隔由 lesson frontmatter 的时间戳算出（见 6.5），lint 可重算校验；
 - 非间隔检验的普通课次不产生本文件条目。
 
-### 6.4 `memory/student-facts.md`（学生事实投影，append-only）
+### 6.4 `memory/student-facts.md`（学生事实快照）
 
 ~~~text
 - [2026-08-05] log:plan-001/lesson-002#block-006:e2 | 晚间最多再做一道题、不接受成套作业 | 学生陈述
@@ -226,8 +250,8 @@ MemPalace、GBrain、Hindsight、supermemory、cognee、OpenViking、Memori 等�
 - 每条必须引用来源 Log 条目 ID，并标注性质：学生陈述 / 教师观察 / 学生确认；
 - 只投影侧身事实（负担、情绪、偏好、生活约束），不做能力判断——那是 judgments.md
   的职责；
-- 投影条目自身**不建 supersedes 链**：更正发生在上游 Log（append-only 更正条目），
-  投影经陈旧标记或重建反映更正（见 6.6）。
+- 快照条目**不建 supersedes 链**：更正发生在上游 Log（append-only 更正条目），
+  快照经陈旧判定与重建反映更正（见 6.6）。
 
 ### 6.5 机械字段：条目 ID 与时间戳
 
@@ -238,12 +262,15 @@ MemPalace、GBrain、Hindsight、supermemory、cognee、OpenViking、Memori 等�
 - lesson frontmatter 增加 `started_at` / `closed_at`，生命周期切换时自动盖写；
 - Log 更正条目必须引用被更正条目 ID（`corrects:` 约定，模型声明，lint 校验存在性）。
 
-### 6.6 上游更正 → 投影陈旧与重建
+### 6.6 上游更正 → 快照陈旧判定与重建
 
-- Log 条目被更正条目取代时，引用它的投影条目由 lint/卫生检查**标记陈旧**（不是
-  静默失效，也不是自动改写）；
-- 投影可由**重建工作流**从 Log 全量或按范围重新生成：Coach 重读 Log、重新提取，
-  生成新投影；重建不触碰 Log；
+- lint 对每个投影文件做新鲜度检查：某课在 Log 中出现了快照头部 `covers` 之后的
+  新条目或更正条目 → 源于该课的投影段**判定陈旧**；
+- **陈旧段不得进入普通读取结果**。决策点读取协议为机械三步（写在 Coach/Roadmap
+  Skill 契约里，由 lint 强制执行，不靠 Agent 自觉跳过）：lint 新鲜度检查 →
+  陈旧段先重建 → 再读；
+- 重建 = Coach 重读相关课的 Log、重新提取，Runtime 原子替换快照并刷新头部；重建
+  不触碰 Log；
 - 判断层引用的 Log 条目被更正时，相关判断进入"待复核"（卫生检查报告），由 Coach
   或 Roadmap 在下一个决策点处理——撤回或确认。
 
@@ -271,7 +298,9 @@ MemPalace、GBrain、Hindsight、supermemory、cognee、OpenViking、Memori 等�
 字段，不埋在散文里。
 
 **历史区**（supersedes 日志，append-only）：被撤回的旧判断移入此处，每条以"主题
-标题 + 记录日期"指向被撤回对象，附撤回理由与新证据。旧判断永不删除。
+标题 + 记录日期"指向被撤回对象，附撤回理由与新证据。旧判断永不删除。**这是
+memory/ 中唯一的 append-only 区**——判断不可重建（它们是教师的判断而非事实的
+视图），其撤回史本身就是证据；三个投影快照与 INDEX.md 都是当前快照，不保存历史。
 
 ### 7.2 五条硬规则（全部落在校验脚本，不是提示词）
 
@@ -314,8 +343,8 @@ MemPalace、GBrain、Hindsight、supermemory、cognee、OpenViking、Memori 等�
 
 ### 8.2 各角色读取规则
 
-- **Coach 备课**：读 INDEX → 按需读投影与判断；**出题前必查 coverage.md**（契约级
-  规则）；
+- **Coach 备课**：读 INDEX → lint 新鲜度检查 → 陈旧段先重建 → 按需读快照与判断；
+  **出题前必查 coverage.md**（契约级规则）；
 - **Roadmap 排期**：INDEX + judgments + 各 PLAN.md 阶段总结（现状已验证有效）；
 - **Tutor**：不读 memory/；
 - **学生**：本地直接读 Markdown，或经 Memory 页（第 9 节）。
@@ -352,8 +381,8 @@ Coach 把相关判断与事实烘入 lesson 文档（Student View / Teacher Cont
 ### 8.7 卫生检查
 
 - 触发：用户手动或 Plan 完成时；
-- 职责：supersedes 链完整性、投影引用与判断引用的存活检查、上游更正后的陈旧
-  标记、去重、INDEX 刷新；
+- 职责：supersedes 链完整性、快照与判断引用的存活检查、新鲜度复算（上游更正后
+  的陈旧判定与待复核清单）、去重、INDEX 刷新；
 - 只维护不新写判断；v1 即 memory-lint 手动执行，自动化为后续候选。
 
 ## 9. 前端：Memory 页（学生可见）
@@ -372,9 +401,9 @@ M0 因不存在独立长期记忆而隐藏 Memory 页；本设计分阶段恢复
 1. `classroom_log_append` 写入时为 Log 条目机械绑定稳定 ID 与时间戳；lint 校验
    `corrects:` 引用存在性；
 2. lesson frontmatter 增加 `started_at` / `closed_at`，生命周期切换时自动盖写；
-3. 新增 `memory-lint` 校验脚本：投影/判断引用可解析、无裸判断、supersedes 链
-   完整性、INDEX 行数上限、日期格式、词表有效性（词表存在时）、间隔重算、陈旧
-   标记；
+3. 新增 `memory-lint` 校验脚本：快照/判断引用可解析、无裸判断、supersedes 链
+   完整性、INDEX 行数上限、日期格式、词表有效性（词表存在时）、间隔重算、
+   快照头部 `covers` 新鲜度检查；
 4. tutor-lesson Skill 契约：Classroom Log 写入纪律扩展（非任务事实必须记录）；
 5. Coach / Roadmap Skill 契约：决策点读取纪律（备课/收口/排期/回流先读 INDEX）、
    出题前必查 coverage、判断写入规则、Reviewer 规则；
@@ -390,23 +419,24 @@ M0 因不存在独立长期记忆而隐藏 Memory 页；本设计分阶段恢复
 保持 M0 直接风格：
 
 - memory-lint 校验失败：报告文件、行、原因，不自动修复；
-- 投影或判断引用失效：卫生检查报告并标记陈旧，不静默；
+- 快照或判断引用失效：卫生检查报告并列入待复核，不静默；
 - `memory/` 缺失或损坏：**教学路径不受影响**（Tutor 本来就没有它），Coach/Roadmap
   明示降级回 M0 纯文档模式；既有学习集（如 derivative-m0）无需迁移即可继续运行；
-- 投影损坏时可由重建工作流从 Log 重新生成——**可重建性是错误恢复手段**，这是
-  投影化相对"第二套事实"的额外收益；
+- 快照损坏时可从 Log 重建——**可重建性是错误恢复手段**，这是快照化相对"第二套
+  事实"的额外收益；
 - 不静默降级、不提供兼容适配器。
 
 ## 12. 测试
 
-- 夹具：`tests/fixtures/` 学习集增加 memory/ 样例（三个投影文件 + judgments +
+- 夹具：`tests/fixtures/` 学习集增加 memory/ 样例（三个快照文件 + judgments +
   INDEX）与带条目 ID 的 lesson 样例；
 - Log 条目 ID/时间戳机械绑定测试（模型输入无法伪造）；
-- memory-lint 全规则单元测试（引用可解析、无裸判断、投影不得作为判断引用对象、
-  supersedes 链、INDEX 行数、日期格式、词表有效性与无词表降级、间隔重算、陈旧
-  标记）；
+- memory-lint 全规则单元测试（引用可解析、无裸判断、快照不得作为判断引用对象、
+  supersedes 链、INDEX 行数、日期格式、词表有效性与无词表降级、间隔重算、
+  头部 `covers` 新鲜度判定）；
+- 快照原子替换测试（复用 `mutateDocumentAtomically`，替换后无旧条目残留）；
 - 写入纪律契约测试：Tutor 资源装配不含 memory/ 任何东西；
-- 决策点读取纪律的契约测试（Skill 文本与装配）；
+- 决策点读取纪律的契约测试（Skill 文本与装配：lint 新鲜度检查 → 重建 → 再读）；
 - Memory 页只读渲染与指正暂存测试；
 - `bun run check` 保持全绿。
 
@@ -421,16 +451,17 @@ M0 因不存在独立长期记忆而隐藏 Memory 页；本设计分阶段恢复
 3. 间隔检验按 retrieval 历史调度，实际间隔有机械记录；
 4. 判断层被真实决策引用（备课提案、排期讨论中出现 judgments 引用）；
 5. 至少一次撤回真实发生且 supersedes 链完整；
-6. **上游更正链路真实运转**：一次 Log 更正 → 投影陈旧标记 → 重建或判断复核，
-   无旧结论继续上浮；
+6. **上游更正链路真实运转**：一次 Log 更正 → lint 判定陈旧 → 快照重建与判断
+   复核 → 读取结果中无陈旧内容；
 7. 污染检查：Session 转录中无任何记忆内容常驻注入；
-8. "摘要代替原文"受控：Coach 读投影而非重读全部原文时，备课决策质量不降。
+8. "摘要代替原文"受控：Coach 读快照而非重读全部原文时，备课决策质量不降。
 
 ## 14. 实施阶段
 
 1. **阶段 1：事实原位加固**——Log 条目 ID/时间戳机械绑定、frontmatter 时间戳、
    Classroom Log 纪律扩展、memory-lint 骨架；
-2. **阶段 2：投影层**——三个投影文件、Coach 复盘提取工作流、引用解析校验；
+2. **阶段 2：投影层**——三个快照文件、Coach 复盘提取工作流、原子替换与头部
+   `covers` 新鲜度校验；
 3. **阶段 3：判断层与消费契约**——judgments.md、五条硬规则校验、INDEX 决策点
    读取纪律、coverage 必查、烘焙升级、提取调度 + Memory 页只读视图与指正入口；
 4. **阶段 4：模拟长周期验收**——按第 13 节执行并出报告。
@@ -449,18 +480,24 @@ M0 因不存在独立长期记忆而隐藏 Memory 页；本设计分阶段恢复
 ## 16. 已确认决策
 
 - M1 的记忆系统与学习集生产为两个独立子项目，各自走 spec → plan → 实施循环；
-- **Lesson Block 是唯一原始事实**；`memory/` 是可重建登记投影 + 可撤回判断，
-  不是第二套事实（第一轮审阅的根本修正）；
+- **Lesson Block 是唯一原始事实**；`memory/` 不保存第二套事实（第一轮审阅的
+  根本修正）；
+- **三个投影文件是当前可重建快照，不保存历史**（全部历史已在 append-only
+  Classroom Log 中）；每次逐课提取或卫生检查由 Runtime 原子替换；快照头部按课
+  记录覆盖到的 Log revision，陈旧由 lint 机械判定；**陈旧段不得进入普通读取
+  结果**——决策点协议为"lint 新鲜度检查 → 陈旧段先重建 → 再读"（第二轮审阅的
+  根本修正，消灭 grep 新旧同召回的旧结论上浮）；
+- **判断的撤回历史是 memory/ 中唯一的 append-only 区**（判断不可重建，其撤回史
+  本身就是证据）；
 - **承重 Classroom Log 条目由 Runtime 机械绑定稳定 ID 与时间**，模型不填写机械
   字段；消融文档"不建立事件 ID"一条据此修订；
-- **判断必须最终指回具体 Log 条目**；投影只负责帮助定位，永远不作为引用对象；
-- **上游更正时投影标记陈旧或重建**，判断进入待复核——错误不再上浮；
+- **判断必须最终指回具体 Log 条目**；快照只负责帮助定位，永远不作为引用对象；
 - **记忆内容零常驻注入**：INDEX.md 不注入（静态注入随长缓存 Session 过期），
   读取纪律由 Skill 契约承载，决策点主动读取；
 - **所有权层级写入**：Tutor 事实（经 Classroom Log）、Coach Plan 级判断、Roadmap
   跨 Plan 判断，卫生检查只维护不新写；
 - **提取调度 = 机械事实 + Coach 判断**；不做算法调度器；
-- **Tutor 完全不碰 memory/**，投影生成全走 Coach 课后复盘；
+- **Tutor 完全不碰 memory/**，快照生成全走 Coach 课后复盘；
 - **五条硬规则落在校验脚本**，不是提示词；
 - **判断字段分轴**：证据量与趋势分开，模式/反模式/触发条件/反证显式成字段；
 - **词表校验条件化**：词表存在时强制，无图谱学习集自由术语降级；
