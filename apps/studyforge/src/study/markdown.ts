@@ -19,6 +19,7 @@ import {
   type RoadmapDocument,
 } from '../shared/contracts';
 import { lessonNodePath, lessonSessionKey, planNodePath } from './node-paths';
+import { hasKnowledgeAssets } from './static-assets';
 
 type Frontmatter = Record<string, unknown>;
 
@@ -513,5 +514,11 @@ export function readCourseTree(root: string): CourseSnapshot {
     dependsOn: [],
     children: planNodes,
   };
-  return { guide: readGuide(root), roadmap, tree, selected: null };
+  return {
+    guide: readGuide(root),
+    roadmap,
+    tree,
+    selected: null,
+    knowledgeAvailable: hasKnowledgeAssets(root),
+  };
 }

@@ -164,6 +164,72 @@ test('reads static method, card and material assets without personal evidence', 
   expect(JSON.stringify(knowledge)).not.toMatch(/trace|evidence|mastery|bkt/i);
 });
 
+test('accepts a minimum Learning Set with no static asset directories', () => {
+  const root = copyFixture();
+  for (const directory of ['graph', 'cards', 'materials']) {
+    rmSync(join(root, directory), { recursive: true, force: true });
+  }
+
+  expect(readKnowledge(root)).toEqual({ methods: [], cards: [], materials: [] });
+  expect(readCourseTree(root).knowledgeAvailable).toBe(false);
+
+  for (const directory of ['graph', 'cards', 'materials']) {
+    mkdirSync(join(root, directory));
+  }
+  expect(readKnowledge(root)).toEqual({ methods: [], cards: [], materials: [] });
+  expect(readCourseTree(root).knowledgeAvailable).toBe(false);
+});
+
+test('loads method, card and material slices independently', () => {
+  const root = copyFixture();
+  for (const directory of ['graph', 'cards', 'materials']) {
+    rmSync(join(root, directory), { recursive: true, force: true });
+  }
+
+  mkdirSync(join(root, 'materials'));
+  writeFileSync(join(root, 'materials/note.md'), '# 独立材料\n');
+  expect(readKnowledge(root)).toMatchObject({ methods: [], cards: [], materials: [{
+    path: 'materials/note.md',
+  }] });
+  expect(readCourseTree(root).knowledgeAvailable).toBe(true);
+
+  rmSync(join(root, 'materials'), { recursive: true });
+  mkdirSync(join(root, 'cards'));
+  cpSync(
+    join(fixture, 'cards/sample.card.yaml'),
+    join(root, 'cards/sample.card.yaml'),
+  );
+  expect(readKnowledge(root)).toMatchObject({ methods: [], cards: [{
+    id: 'sample-card',
+  }], materials: [] });
+  expect(readCourseTree(root).knowledgeAvailable).toBe(true);
+
+  rmSync(join(root, 'cards'), { recursive: true });
+  mkdirSync(join(root, 'graph'));
+  cpSync(
+    join(fixture, 'graph/method_tree.yaml'),
+    join(root, 'graph/method_tree.yaml'),
+  );
+  const methodOnly = readKnowledge(root);
+  expect(methodOnly.methods[0]).toMatchObject({ id: 'derivative-methods' });
+  expect(methodOnly.cards).toEqual([]);
+  expect(methodOnly.materials).toEqual([]);
+  expect(readCourseTree(root).knowledgeAvailable).toBe(true);
+});
+
+test('reports the exact path of a present malformed optional asset', () => {
+  const malformedMethodRoot = copyFixture();
+  writeFileSync(join(malformedMethodRoot, 'graph/method_tree.yaml'), 'nodes: [');
+  expect(() => readKnowledge(malformedMethodRoot)).toThrow('graph/method_tree.yaml');
+
+  const malformedCardRoot = copyFixture();
+  writeFileSync(
+    join(malformedCardRoot, 'cards/broken.card.yaml'),
+    'schema: highschool-study.problem-card.v1\nstem: 缺少 ID\n',
+  );
+  expect(() => readKnowledge(malformedCardRoot)).toThrow('cards/broken.card.yaml');
+});
+
 test('reads child status only from child frontmatter', () => {
   const root = copyFixture();
   const lessonPath = join(root, 'plans/plan-001/lessons/lesson-001.md');

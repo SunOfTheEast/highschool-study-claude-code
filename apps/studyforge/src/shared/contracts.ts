@@ -113,6 +113,7 @@ export type CourseSnapshot = {
   roadmap: RoadmapDocument;
   tree: CourseTreeNode;
   selected: RoadmapDocument | PlanDocument | LessonDocument | null;
+  knowledgeAvailable: boolean;
 };
 
 export type KnowledgeMethodNode = {

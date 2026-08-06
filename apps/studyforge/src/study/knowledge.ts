@@ -1,5 +1,5 @@
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { basename, extname, join, relative } from 'node:path';
+import { existsSync, readFileSync } from 'node:fs';
+import { basename, extname, join } from 'node:path';
 import { parse as parseYaml } from 'yaml';
 import type {
   KnowledgeCard,
@@ -8,26 +8,12 @@ import type {
   KnowledgeSnapshot,
 } from '../shared/contracts';
 import { StudyDocumentError } from './markdown';
+import { filesBelow } from './static-assets';
 
 function record(value: unknown): Record<string, unknown> | null {
   return value !== null && typeof value === 'object' && !Array.isArray(value)
     ? value as Record<string, unknown>
     : null;
-}
-
-function filesBelow(root: string, directory: string): string[] {
-  const absolute = join(root, directory);
-  if (!existsSync(absolute)) return [];
-  const files: string[] = [];
-  const visit = (current: string) => {
-    for (const entry of readdirSync(current, { withFileTypes: true })) {
-      const path = join(current, entry.name);
-      if (entry.isDirectory()) visit(path);
-      else if (entry.isFile()) files.push(relative(root, path).replaceAll('\\', '/'));
-    }
-  };
-  visit(absolute);
-  return files.sort();
 }
 
 function yamlFile(root: string, path: string): Record<string, unknown> {
@@ -44,6 +30,7 @@ function yamlFile(root: string, path: string): Record<string, unknown> {
 
 function readMethods(root: string): KnowledgeMethodNode[] {
   const path = 'graph/method_tree.yaml';
+  if (!existsSync(join(root, path))) return [];
   const value = yamlFile(root, path);
   if (value.schema !== 'studyforge.method_tree.v1' || !Array.isArray(value.nodes)) {
     throw new StudyDocumentError(path, 'expected studyforge.method_tree.v1 nodes');

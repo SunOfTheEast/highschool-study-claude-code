@@ -134,6 +134,27 @@ test('serves only the M0 course and static knowledge snapshots', async () => {
   }
 });
 
+test('serves a minimum Learning Set without static Knowledge assets', async () => {
+  const root = copyFixture();
+  for (const directory of ['graph', 'cards', 'materials']) {
+    rmSync(join(root, directory), { recursive: true, force: true });
+  }
+  const handler = createRequestHandler({
+    root,
+    originPolicy,
+    hub: new EventHub(),
+    registry: fakeRegistry() as never,
+  });
+
+  const course = await handler(new Request('http://local/api/course'));
+  expect(course?.status).toBe(200);
+  expect(await course?.json()).toMatchObject({ knowledgeAvailable: false });
+
+  const knowledge = await handler(new Request('http://local/api/knowledge'));
+  expect(knowledge?.status).toBe(200);
+  expect(await knowledge?.json()).toEqual({ methods: [], cards: [], materials: [] });
+});
+
 test('serves a reread-on-open handout with only selected public Lesson content', async () => {
   const root = copyFixture();
   const handler = createRequestHandler({
