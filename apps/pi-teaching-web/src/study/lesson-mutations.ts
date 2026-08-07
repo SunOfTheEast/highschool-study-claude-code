@@ -112,6 +112,26 @@ function renderLogItem(note: string, path: string): string {
   return [`- ${lines[0]!}`, ...lines.slice(1).map((line) => `  ${line}`)].join('\n');
 }
 
+function appendLogItemToBlock(
+  path: string,
+  source: string,
+  blockId: string,
+  note: string,
+): string {
+  const span = classroomLogContentSpan(path, source, blockId);
+  const content = source.slice(span.start, span.end);
+  const rendered = renderLogItem(note, path);
+  const candidate = !content.trim()
+    ? `${source.slice(0, span.start)}\n\n${rendered}${source.slice(span.start)}`
+    : (() => {
+        const trailing = /\s*$/.exec(content)?.[0].length ?? 0;
+        const insertion = span.end - trailing;
+        return `${source.slice(0, insertion)}\n${rendered}${source.slice(insertion)}`;
+      })();
+  parseLessonSource(path, candidate);
+  return candidate;
+}
+
 export function appendClassroomLogSource(
   path: string,
   source: string,
@@ -126,18 +146,30 @@ export function appendClassroomLogSource(
     throw new StudyDocumentError(path, `expected exactly one active Block, found ${active.length}`);
   }
 
-  const span = classroomLogContentSpan(path, source, active[0]!.id);
-  const content = source.slice(span.start, span.end);
-  const rendered = renderLogItem(note, path);
-  const candidate = !content.trim()
-    ? `${source.slice(0, span.start)}\n\n${rendered}${source.slice(span.start)}`
-    : (() => {
-        const trailing = /\s*$/.exec(content)?.[0].length ?? 0;
-        const insertion = span.end - trailing;
-        return `${source.slice(0, insertion)}\n${rendered}${source.slice(insertion)}`;
-      })();
-  parseLessonSource(path, candidate);
-  return candidate;
+  return appendLogItemToBlock(path, source, active[0]!.id, note);
+}
+
+export function appendClosingClassroomLogSource(
+  path: string,
+  source: string,
+  blockId: string,
+  note: string,
+): string {
+  const lesson = parseLessonSource(path, source);
+  if (lesson.status !== 'active') {
+    throw new StudyDocumentError(path, `Lesson must be active, found ${lesson.status}`);
+  }
+  const block = blockById(lesson, blockId, path);
+  if (
+    block.status !== 'active'
+    && !(block.kind === 'reflection' && block.status === 'completed')
+  ) {
+    throw new StudyDocumentError(
+      path,
+      `closing fact requires an active Block or completed Reflection: ${blockId}`,
+    );
+  }
+  return appendLogItemToBlock(path, source, blockId, note);
 }
 
 function requireActiveLesson(path: string, source: string): LessonDocument {
