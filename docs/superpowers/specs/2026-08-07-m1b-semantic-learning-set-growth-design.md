@@ -513,6 +513,10 @@ Session 中既以完整对话存在，又被展开为一份重复的详细记忆
 学生直接离开时，Runtime 不用超时猜测“已经学完”。Light Lesson 保持未收口并可恢复；
 它不阻塞学生另开问题，但在真正收口前不进入长期对象记忆。
 
+课末固化成功、公开 Summary 与关闭仍是三个独立步骤。正式 Lesson 与 Light Lesson 都按
+`2026-08-08-teaching-session-close-recovery-design.md` 使用持久 receipt：同一 Pi 学生证据
+轮次只成功固化一次，真实纠正进入新轮次后可以追加新 Trace，关闭请求可以安全重试。
+
 ## 十五、对象记忆的读者边界
 
 对象记忆的首要读者是未来的 Tutor、Coach 和 Roadmap。它不是为学生界面编写的学习报告。

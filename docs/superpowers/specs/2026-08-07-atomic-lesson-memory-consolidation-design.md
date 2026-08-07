@@ -373,9 +373,14 @@ History，并生成指向当前 Lesson Block 的来源链接。根索引 cue 只
 - schema、ID、Block、链接、章节或 stale 校验失败：写入零个正式文件；回执给出一个精确
   错误和需重新读取的目标。
 - Runtime 内部写入失败：先恢复，再返回失败；Tutor 不自行猜测哪些文件可能成功。
-- 同一个原生 tool call 被传输层重放：Runtime 使用 tool-call ID 返回同一提交回执，不重复
-  Classroom Log 或 Trace。
-- 模型修正语义后重新调用：这是新的提交、新的 Trace，不覆盖旧提交。
+- 同一进程内，同一个原生 tool call 被传输层重放：Runtime 使用 tool-call ID 返回同一提交
+  回执，不重复 Classroom Log 或 Trace。
+- 跨进程重启、Pi tool result 丢失和关闭回执丢失的持久幂等由后续
+  `2026-08-08-teaching-session-close-recovery-design.md` 补齐：成功提交的 receipt 与本节
+  canonical 候选进入同一事务，并绑定真实 Pi 学生证据轮次。
+- 提交前校验失败时，模型可以在同一学生轮次修正语义或格式后重试；第一次成功提交后，
+  同轮重放不得形成第二条 Trace。
+- 学生在公开总结后给出真实纠正：新的 Pi 学生轮次产生新的提交和新 Trace，不覆盖旧提交。
 - `defer` 不是失败，不能因为没有 bucket 而触发模型继续搜索“最优分类”。
 - 提交成功后不得为了确认而回读 INDEX 或对象；回执已经是机械成功证据。
 
@@ -437,6 +442,9 @@ History，并生成指向当前 Lesson Block 的来源链接。根索引 cue 只
 16. 成功回执包含完整 key 映射、路径列表和耗时；
 17. 新工具落地后，Lesson 工具列表没有原生 `edit/write`，守卫测试也证明无法绕回旧记忆
     写入面。
+
+跨进程 receipt、孤立 Pi tool result、关闭重试和 WebSocket 重连的故障注入不重复列在这里，
+统一按 `2026-08-08-teaching-session-close-recovery-design.md` §十五验收。
 
 ### 13.2 Skill 首击验收
 

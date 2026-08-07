@@ -544,12 +544,19 @@ Trace；Trace 足够时不回读课堂流水。
 - 不需要 `Lesson delta`、披露 epoch 或自动去重账本作为设计前提；
 - `plugins/highschool-study` 的旧记忆架构作废，不做兼容、迁移或双写。
 
-### 留待实施设计
+### 后续设计已经解决
+
+- 原生 Markdown 多文件写入的原子固化由
+  `2026-08-07-atomic-lesson-memory-consolidation-design.md` 解决；
+- 记忆已写入但 tool result、Summary 或关闭回执丢失的恢复，以及正式 Lesson / Light Lesson
+  的关闭幂等，由 `2026-08-08-teaching-session-close-recovery-design.md` 解决；
+- 异常退出不触发后台模型猜测式补写，学生仍可立即结束；已经成功的固化通过持久 receipt
+  恢复，尚未形成的语义判断不由 Runtime 代做。
+
+### 仍留待实施设计
 
 - Lesson 关闭后的结构化生命周期事件、「继续讨论下一课」入口与「记忆已整理」确认；
   v1 使用现有纯文本回流，Coach 沿 Lesson Tree 状态定位刚关闭的 Lesson；
-- 异常关闭时如何补偿未完成的课末固化，并保持学生可立即结束课堂；
-- 原生 Markdown 多文件写入部分失败时怎样恢复，而不制造重复 Trace；
 - `INDEX.md` 的常驻长度预算与不同角色的注入范围；
 - compaction 后重新注入根索引的具体 Runtime 接点；
 - 召回文件、耗时、token 与教学动作的可观测性；
