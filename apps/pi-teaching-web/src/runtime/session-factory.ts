@@ -14,6 +14,7 @@ import { createRoleResourceLoader } from './resource-loader';
 import { appendSessionOwner } from './session-owner';
 import { modelToolsForNode, type NodeSessionScope } from './session-scope';
 import { configureStudySubagentDirectory } from './subagent-path';
+import { memoryEnabled } from './memory-tools';
 
 export interface StudySession {
   readonly sessionId: string;
@@ -74,7 +75,7 @@ export async function createPiSessionFactory(root: string): Promise<StudySession
       resourceLoader,
       sessionManager: manager,
       customTools,
-      tools: [...modelToolsForNode(scope.nodeKind)],
+      tools: [...modelToolsForNode(scope.nodeKind, memoryEnabled(root))],
     });
     await bindStudyExtensions(session);
     const compaction = createPlanCompactionPrompt(session, scope);

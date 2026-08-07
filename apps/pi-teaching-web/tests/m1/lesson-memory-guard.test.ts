@@ -39,7 +39,7 @@ afterEach(() => {
   while (roots.length > 0) rmSync(roots.pop()!, { recursive: true, force: true });
 });
 
-test('allows one valid trace append to the current Lesson', () => {
+test('redirects a native trace append to the bound memory tool', () => {
   const root = copyFixture();
   const source = readFileSync(join(root, scope.nodePath), 'utf8');
   const trace = [
@@ -66,10 +66,10 @@ test('allows one valid trace append to the current Lesson', () => {
       path: scope.nodePath,
       edits: [{ oldText, newText: oldText + trace }],
     },
-  })).toBeNull();
+  })).toContain('lesson_memory_commit');
 });
 
-test('allows a correction trace to append after the first consolidation', () => {
+test('redirects a native correction trace to the bound memory tool', () => {
   const root = copyFixture();
   const path = join(root, scope.nodePath);
   const first = `${readFileSync(path, 'utf8')}\n## Consolidated Learning Traces\n\n`
@@ -84,10 +84,10 @@ test('allows a correction trace to append after the first consolidation', () => 
       path: scope.nodePath,
       edits: [{ oldText, newText: oldText + correction }],
     },
-  })).toBeNull();
+  })).toContain('lesson_memory_commit');
 });
 
-test('allows only Tutor-owned Markdown memory paths', () => {
+test('rejects every native Lesson memory path', () => {
   const root = copyFixture();
   const allowed = [
     'memory/objects/obj-001-isomorphic-recognition.md',
@@ -98,7 +98,7 @@ test('allows only Tutor-owned Markdown memory paths', () => {
     expect(validateLessonMemoryWrite(root, scope, {
       toolName: 'write',
       input: { path, content: '# Memory\n' },
-    })).toBeNull();
+    })).toContain('lesson_memory_commit');
   }
   expect(validateLessonMemoryWrite(root, scope, {
     toolName: 'edit',
@@ -109,7 +109,7 @@ test('allows only Tutor-owned Markdown memory paths', () => {
         newText: '- 当前前沿：同构识别。',
       }],
     },
-  })).toBeNull();
+  })).toContain('lesson_memory_commit');
 });
 
 test('blocks lifecycle, evidence, capability, sibling, and escaped writes', () => {
@@ -172,14 +172,14 @@ test('blocks nested memory layouts and symbolic-link write targets', () => {
       path: 'memory/objects/obj-link.md',
       edits: [{ oldText: '# Outside', newText: '# Changed' }],
     },
-  })).toContain('symbolic link');
+  })).toContain('lesson_memory_commit');
   expect(validateLessonMemoryWrite(root, scope, {
     toolName: 'write',
     input: {
       path: 'memory/objects/nested/obj-001.md',
       content: '# Nested',
     },
-  })).toContain('LESSON_MEMORY_WRITE_BLOCKED');
+  })).toContain('lesson_memory_commit');
 });
 
 test('blocks rejected native writes before execution', async () => {

@@ -31,15 +31,18 @@ export const LESSON_MODEL_TOOLS = [
   'grep',
   'find',
   'ls',
-  'edit',
-  'write',
   'classroom_log_append',
   'classroom_update',
 ] as const;
 
-export function modelToolsForNode(kind: NodeKind): readonly string[] {
-  if (kind === 'lesson') return LESSON_MODEL_TOOLS;
-  return kind === 'plan' ? PLAN_MODEL_TOOLS : M0_MODEL_TOOLS;
+export function modelToolsForNode(kind: NodeKind, hasMemory = false): readonly string[] {
+  if (kind === 'lesson') {
+    return hasMemory ? [...LESSON_MODEL_TOOLS, 'lesson_memory_commit'] : LESSON_MODEL_TOOLS;
+  }
+  if (kind === 'plan') {
+    return hasMemory ? [...PLAN_MODEL_TOOLS, 'memory_route_resolve'] : PLAN_MODEL_TOOLS;
+  }
+  return M0_MODEL_TOOLS;
 }
 
 export const ROADMAP_SCOPE = {

@@ -73,6 +73,7 @@ test('assembles static teaching resources and node-scoped model tools', () => {
 
   expect(resources.tools).toEqual([
     'read', 'grep', 'find', 'ls', 'edit', 'write', 'subagent', 'artifact_export',
+    'memory_route_resolve',
   ]);
   expect(resources.agentsFiles).toContainEqual(expect.objectContaining({
     path: join(root, 'LEARNING_GUIDE.md'),
@@ -104,10 +105,9 @@ test('assembles static teaching resources and node-scoped model tools', () => {
     'grep',
     'find',
     'ls',
-    'edit',
-    'write',
     'classroom_log_append',
     'classroom_update',
+    'lesson_memory_commit',
   ]);
 });
 
@@ -260,11 +260,14 @@ test('injects one canonical document contract into every node session', () => {
     expect(contracts[0]?.content).toContain('- [plan-001 | 阶段标题](plans/plan-001/PLAN.md)');
     expect(contracts[0]?.content).toContain('write 完整子文件');
     expect(resources.tools).toEqual(scope.nodeKind === 'plan'
-      ? ['read', 'grep', 'find', 'ls', 'edit', 'write', 'subagent', 'artifact_export']
+      ? [
+        'read', 'grep', 'find', 'ls', 'edit', 'write', 'subagent', 'artifact_export',
+        'memory_route_resolve',
+      ]
       : scope.nodeKind === 'lesson'
         ? [
-          'read', 'grep', 'find', 'ls', 'edit', 'write',
-          'classroom_log_append', 'classroom_update',
+          'read', 'grep', 'find', 'ls',
+          'classroom_log_append', 'classroom_update', 'lesson_memory_commit',
         ]
         : ['read', 'grep', 'find', 'ls', 'edit', 'write']);
   }
@@ -286,7 +289,7 @@ test('does not invent a memory index for an older learning set', () => {
   )).toBe(false);
   expect(resources.agentsFiles.some(
     (resource) => resource.path === '/virtual/studyforge-m1-memory-contract.md',
-  )).toBe(true);
+  )).toBe(false);
 });
 
 test('registers only node-bound custom tools for Plan and Lesson scopes', () => {
@@ -316,9 +319,11 @@ test('registers only node-bound custom tools for Plan and Lesson scopes', () => 
   expect(customToolsForNode(root, lessonScope).map((tool) => tool.name)).toEqual([
     'classroom_log_append',
     'classroom_update',
+    'lesson_memory_commit',
   ]);
   expect(customToolsForNode(root, planScope).map((tool) => tool.name)).toEqual([
     'artifact_export',
+    'memory_route_resolve',
   ]);
   expect(customToolsForNode(root, roadmapScope)).toEqual([]);
 });

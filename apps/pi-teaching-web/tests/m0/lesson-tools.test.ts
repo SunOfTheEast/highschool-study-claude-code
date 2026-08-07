@@ -69,14 +69,16 @@ async function invoke(
   return JSON.parse((result.content[0] as { text: string }).text) as Record<string, unknown>;
 }
 
-test('exposes exactly two path-bound object schemas with branch-specific fields', () => {
+test('exposes two classroom tools plus the conditional M1 memory tool', () => {
   const root = copyFixture();
   const tools = createLessonTools(root, lessonPath);
   expect(tools.map((tool) => tool.name)).toEqual([
     'classroom_log_append',
     'classroom_update',
+    'lesson_memory_commit',
   ]);
   expect(tools.map((tool) => tool.executionMode)).toEqual([
+    'sequential',
     'sequential',
     'sequential',
   ]);
@@ -116,6 +118,13 @@ test('exposes exactly two path-bound object schemas with branch-specific fields'
   expect(Check(tools[1]!.parameters, {
     change: { command: 'start', blockId: 'block-002', path: lessonPath },
   })).toBeFalse();
+
+  const m0 = copyFixture();
+  rmSync(join(m0, 'memory/INDEX.md'));
+  expect(createLessonTools(m0, lessonPath).map((tool) => tool.name)).toEqual([
+    'classroom_log_append',
+    'classroom_update',
+  ]);
 });
 
 test('appends one fact to the runtime-bound active Block and returns only a cursor', async () => {
