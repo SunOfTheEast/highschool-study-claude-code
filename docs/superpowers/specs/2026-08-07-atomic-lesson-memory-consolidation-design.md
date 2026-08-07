@@ -1,6 +1,6 @@
 # Lesson 课末记忆原子固化设计
 
-状态：讨论方向已确认，书面设计待用户复核
+状态：已确认并实施
 
 日期：2026-08-07
 
@@ -323,6 +323,9 @@ Runtime 不从 `currentJudgment` 自动提取边界，也不把 `meaning` 自动
 Runtime 更新模型提供的 Current Judgment 与 Scope，追加本次明确表达和一条 Evolution
 History，并生成指向当前 Lesson Block 的来源链接。根索引 cue 只按 Tutor 显式给出的
 `keep`、`upsert` 或 `remove` 改变；教学效果观察不能由 Runtime 自动变成偏好。
+
+新建偏好必须同时用 `upsert` 建立当前 cue；否则新文件在现有索引结构中不可达。`keep` 与
+`remove` 只用于已经存在的偏好，不让 Runtime 猜一条缺失的 cue 摘要。
 
 ### 9.4 bucket 与根 INDEX
 

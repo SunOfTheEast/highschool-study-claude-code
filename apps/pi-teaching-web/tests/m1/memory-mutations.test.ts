@@ -255,6 +255,19 @@ test('rejects incomplete semantic topology before returning candidates', () => {
     }],
     preferences: [],
   }, recordedAt)).toThrow('new object cannot keep routing');
+
+  expect(() => planLessonMemoryCommit(root, lessonPath, {
+    traces: [],
+    objects: [],
+    preferences: [{
+      target: { kind: 'new', key: 'orphan-preference', title: '孤立偏好' },
+      currentJudgment: '学生刚刚提出一个明确要求。',
+      scope: ['本 Plan'],
+      explicitStatements: [{ text: '这周先不要留作业。', evidenceBlockId: 'block-001' }],
+      evolutionEntry: '首次明确表达。',
+      cue: { kind: 'keep' },
+    }],
+  }, recordedAt)).toThrow('new preference requires an upsert cue');
 });
 
 test('resolves existing IDs only through bounded canonical memory paths', () => {

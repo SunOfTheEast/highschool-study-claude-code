@@ -71,6 +71,8 @@ test('gives Tutor one bright-line reflection and minimal sufficient consolidatio
   expect(consolidation).toContain('Consolidated Learning Traces');
   expect(consolidation).toContain('明确偏好');
   expect(consolidation).toContain('能力信号只留在 Trace');
+  expect(consolidation).toContain('新建偏好');
+  expect(consolidation).toContain('`upsert`');
   expect(consolidation).toContain('教学待办');
   expect(consolidation).toContain('不回读');
   expect(consolidation).toContain('没有类别配额');

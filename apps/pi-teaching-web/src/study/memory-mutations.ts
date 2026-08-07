@@ -726,6 +726,9 @@ export function planLessonMemoryCommit(
     } else {
       const key = requireLocalKey(mutation.target.key, 'preference key');
       if (preferenceKeys.has(key)) throw new Error(`duplicate preference key: ${key}`);
+      if (mutation.cue.kind !== 'upsert') {
+        throw new Error('new preference requires an upsert cue');
+      }
       preferenceKeys.add(key);
       id = nextNumericId(root, 'memory/preferences', 'pref', preferenceReserved);
       preferenceIds[key] = id;
