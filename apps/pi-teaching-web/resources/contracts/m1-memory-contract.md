@@ -24,6 +24,21 @@
 原始 Classroom Log、既有 Trace 和学生原话只追加、不回写。对象、能力、偏好的当前判断
 可以随新证据修订，但必须保留流变和来源链接。纠正是新事实，不是擦除旧事实。
 
+## 原子固化与路由所有权
+
+Tutor 在唯一课末反思后用一次 `lesson_memory_commit` 提交本课新增事实、Trace、对象判断、
+明确偏好和对象路由。已有对象通常声明 `keep`；新对象由 Tutor 明确选择 `assign`，或在
+归属确实不清楚时选择 `defer`。Runtime 不判断学习对象是什么，也不根据标题、关键词、
+题卡字段或目录结构选择 bucket；它只绑定当前 Lesson、时间、稳定 ID、路径、链接并原子
+写入模型已经声明的关系。
+
+`defer` 的对象必须出现在根索引的 `Deferred Object Routing`，因此后续 Session 无需枚举
+目录。Plan Coach 形成明确分类判断后，使用 `memory_route_resolve` 把该对象连接到点名的
+既有或新 bucket；仍不清楚时保持原样。这个工具不承担对象合并、普通重分桶或能力判断。
+
+成功回执后不回读刚写入的文件。学生纠正通过新的 `lesson_memory_commit` 追加纠正事实与
+Trace，并修订当前判断；旧 Classroom Log、旧 Trace 和旧偏好原话永不重写。
+
 ## 渐进式披露
 
 需要记忆时按亮线读取：

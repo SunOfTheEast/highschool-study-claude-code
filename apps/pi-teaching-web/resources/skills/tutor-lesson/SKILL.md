@@ -26,14 +26,14 @@ description: Use when a Lesson Session teaches, adapts, records, or finishes the
 
 ## 写入路由
 
-先正常理解学生并作出教学判断；只有真实事实或活动边界已经出现时，才像使用原生编辑工具
-一样自然写入，不向学生讲解内部状态：
+先正常理解学生并作出教学判断；只有真实事实或活动边界已经出现时，才自然调用对应的
+教学工具，不向学生讲解内部状态：
 
 - 发生会影响后续判断的事实 → `classroom_log_append`；
 - 当前活动真正开始、结束或切换 → `classroom_update`；
 - 现有 pending 路线明显不再适合 → `classroom_update`；
 - 学生已经选择结束并完成唯一一次正式课末反思 →
-  `references/memory-consolidation.md` 规定的原生记忆写入；
+  读取 `references/memory-consolidation.md`，按其中亮线调用一次 `lesson_memory_commit`；
 - 其余教学轮次 → 不调用写入工具。
 
 ## 进入课堂

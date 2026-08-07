@@ -47,10 +47,10 @@ Lesson 开始，不沿 parent_path 上溯。
 ## 权限与生命周期
 
 课堂进行中的事实与活动仍只通过 `classroom_log_append` 和 `classroom_update` 原子写入。
-原生 `edit/write` 只在 `tutor-lesson` 的记忆路线触发后使用，并受 Runtime 守卫：Tutor
-可以向当前 Lesson 末尾追加 Consolidated Learning Traces，也可以局部维护
-`memory/INDEX.md`、`memory/indexes/`、`memory/objects/` 与 `memory/preferences/`。
-不能写入 `memory/capabilities/`，不能覆盖当前 Lesson，也不能修改兄弟 Lesson。
+Lesson Session 不使用通用 `edit/write`。课末固化与学生纠正统一通过
+`lesson_memory_commit` 提交一次有边界的语义变化；Runtime 负责当前 Lesson、稳定 ID、
+路径、链接和原子写入。Tutor 不能写入 `memory/capabilities/`，不能覆盖当前 Lesson，也
+不能修改兄弟 Lesson。
 
 Lesson 顶层 `prepared → active → closed` 只由学生界面和 Runtime 改变；Tutor 不编辑、
 不代替学生宣称关闭。不得编辑父 Plan 或 Roadmap。

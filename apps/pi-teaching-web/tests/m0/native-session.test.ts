@@ -361,7 +361,7 @@ test('recovers an interrupted memory transaction at the session-factory boundary
   expect(existsSync(join(root, objectPath))).toBeFalse();
 });
 
-test('keeps classroom mutation tool-driven and memory writes native but guarded', () => {
+test('keeps classroom and memory writes on bound teaching tools', () => {
   const root = copyFixture();
   const resources = loadStaticNodeResources(root, {
     nodeKind: 'lesson',
@@ -377,6 +377,8 @@ test('keeps classroom mutation tool-driven and memory writes native but guarded'
 
   expect(agent).toContain('classroom_log_append');
   expect(agent).toContain('classroom_update');
+  expect(agent).toContain('lesson_memory_commit');
+  expect(agent).toContain('Lesson Session 不使用通用 `edit/write`');
   expect(skill).toContain('影响后续判断的事实');
   expect(skill).toContain('其余教学轮次');
   expect(combined).not.toContain('窄 edit');

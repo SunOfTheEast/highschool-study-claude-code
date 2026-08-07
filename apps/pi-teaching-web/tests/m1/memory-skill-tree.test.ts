@@ -24,6 +24,8 @@ test('routes Tutor memory work only from observable classroom triggers', () => {
   expect(skill).toContain('references/memory-consolidation.md');
   expect(skill).toContain('预案外');
   expect(skill).toContain('唯一一次正式课末反思');
+  expect(skill).toContain('lesson_memory_commit');
+  expect(skill).not.toContain('原生记忆写入');
   expect(skill).not.toContain('每轮读取 memory');
 });
 
@@ -45,6 +47,9 @@ test('keeps Tutor recall progressive and subordinate to current evidence', () =>
 test('gives Tutor one bright-line reflection and minimal sufficient consolidation', () => {
   const consolidation = read('skills/tutor-lesson/references/memory-consolidation.md');
 
+  // Observed no-guidance control: all five M1a closes first tried an absolute native edit;
+  // each close used 9–14 tools, and one created a temporary Reflection Block to finish writing.
+
   expectInOrder(consolidation, [
     '自然短回顾',
     '先听学生',
@@ -53,31 +58,33 @@ test('gives Tutor one bright-line reflection and minimal sufficient consolidatio
     '自然总结',
     '学生纠正',
   ]);
-  for (const required of [
-    'Consolidated Learning Traces',
-    'Current Judgment',
-    'Evolution Overview',
-    'Trace Timeline',
-    'Boundaries / Not Yet Demonstrated',
-    'memory/preferences/',
-    'memory/INDEX.md',
-  ]) expect(consolidation).toContain(required);
+  expectInOrder(consolidation, [
+    '读取本次判断需要的记忆',
+    '形成一次语义提交',
+    'lesson_memory_commit',
+    '不回读',
+    '自然总结',
+  ]);
+  for (const required of ['keep', 'assign', 'defer']) {
+    expect(consolidation).toContain(required);
+  }
+  expect(consolidation).toContain('Consolidated Learning Traces');
+  expect(consolidation).toContain('明确偏好');
   expect(consolidation).toContain('能力信号只留在 Trace');
   expect(consolidation).toContain('教学待办');
   expect(consolidation).toContain('不回读');
   expect(consolidation).toContain('没有类别配额');
+  expect(consolidation).not.toContain('用原生 `edit`');
 });
 
-test('keeps Lesson native writes inside the runtime-guarded memory boundary', () => {
+test('routes every Lesson write through bound teaching tools', () => {
   const role = read('agents/lesson-node.md');
 
-  expect(role).toContain('原生 `edit/write`');
-  expect(role).toContain('Runtime 守卫');
-  expect(role).toContain('memory/objects/');
-  expect(role).toContain('memory/preferences/');
+  expect(role).toContain('Lesson Session 不使用通用 `edit/write`');
+  expect(role).toContain('lesson_memory_commit');
   expect(role).toContain('不能写入 `memory/capabilities/`');
   expect(role).toContain('不得编辑父 Plan 或 Roadmap');
-  expect(role).not.toContain('Lesson Session 不使用通用 `edit/write`');
+  expect(role).not.toContain('原生 `edit/write` 只在');
 });
 
 test('makes Plan consume consolidated memory before drilling into classroom evidence', () => {
@@ -101,6 +108,23 @@ test('makes Plan consume consolidated memory before drilling into classroom evid
   expect(review).not.toContain('哪里真的顺了、\n哪里还不踏实');
   expect(review).toContain('不重复进行整课反思');
   expect(review).toContain('重新读取 `memory/INDEX.md`');
+  expect(review).toContain('Deferred Object Routing');
+  expect(review).toContain('memory_route_resolve');
+  expect(review).toContain('仍无法判断');
+  expect(role).toContain('memory_route_resolve');
+});
+
+test('documents the atomic commit and deferred-route ownership boundary', () => {
+  const contract = read('contracts/m1-memory-contract.md');
+
+  expect(contract).toContain('lesson_memory_commit');
+  expect(contract).toContain('keep');
+  expect(contract).toContain('assign');
+  expect(contract).toContain('defer');
+  expect(contract).toContain('Deferred Object Routing');
+  expect(contract).toContain('memory_route_resolve');
+  expect(contract).toContain('Runtime 不判断');
+  expect(contract).toContain('旧 Trace');
 });
 
 test('lets Plan form a working capability hypothesis only across different objects', () => {
