@@ -1,30 +1,39 @@
-# StudyForge M0 repository guide
+# StudyForge M1 repository guide
 
-`apps/pi-teaching-web/` is the current StudyForge M0 runtime and local student App.
-`examples/derivative-m0/` is its public smoke learning set. The old Claude Code plugin
-and historical documents remain for comparison; they are not M0 dependencies or
-current runtime contracts.
+`apps/pi-teaching-web/` is the only current StudyForge runtime and local student App.
+`examples/derivative-m0/` is its public smoke learning set. Dated specifications and
+audits may describe earlier designs, but they are history rather than supported runtime
+surfaces.
 
 ## Durable domain
 
-M0 has one Markdown control tree:
+M1 has one Markdown control tree plus one Markdown teacher-memory network:
 
 ```text
 ROADMAP.md
 └── plans/<plan-id>/
     ├── PLAN.md
     └── lessons/<lesson-id>.md
-        └── Block Classroom Logs
+        ├── Block Classroom Logs
+        └── Consolidated Learning Traces
+
+memory/
+├── INDEX.md
+├── indexes/
+├── objects/
+├── capabilities/
+└── preferences/
 ```
 
 `LEARNING_GUIDE.md` supplies learning-set-specific teaching principles. `cards/`,
 `graph/`, and `materials/` are static source assets. Pi Session JSONL stores each
 node's raw conversation and native tool history.
 
-There is no second teaching-fact store. Do not add a memory pool, classroom-event
-objects, derived mastery state, handoff documents, background index, vector store, or
-unified context service without new repeated real-course evidence and explicit user
-approval.
+Markdown is the only durable truth. M1 memory is a routed teacher notebook: L0
+`memory/INDEX.md`, L1 object/capability/preference judgments, and L2 source Lesson
+evidence. Do not add a global Trace pool, derived mastery state, handoff documents,
+database, vector store, background consolidation service, or unified context compiler
+without new repeated real-course evidence and explicit user approval.
 
 ## Document contracts
 
@@ -36,13 +45,18 @@ approval.
   more Blocks.
 - A Block owns `Node State`, public `Student View`, private `Teacher Control`, and an
   append-only-in-spirit `Classroom Log`.
+- A Lesson may end with one non-empty `Consolidated Learning Traces` section. Existing
+  Classroom Logs and Trace entries are append-only facts.
+- Object, capability, and preference current judgments may change, but their evolution
+  overview, timeline, and source links must preserve how the judgment changed.
 - Child status comes only from child frontmatter. Parent prose is not a status cache.
 - Legacy Lesson sections are rejected by the parser rather than adapted.
 
-Parents read child Markdown directly when history matters. Roadmap may arrange future
-prepared Plans. Plan may create or edit only prepared Lessons. Lesson writes its own
-Block state and classroom log. Earlier active or terminal child documents remain
-historical facts.
+Parents start from consolidated Markdown memory and drill into child evidence only for
+missing, conflicting, or high-impact details. Roadmap may arrange future prepared Plans.
+Plan may create or edit only prepared Lessons. Lesson writes its own Block state,
+classroom log, final Trace, Tutor-owned object/preference memory, and affected routes.
+Earlier active or terminal child documents remain historical facts.
 
 ## Sessions and lifecycle
 
@@ -61,13 +75,14 @@ Roadmap and Lesson Sessions do not use this StudyForge threshold.
 
 The model receives only:
 
-1. the canonical document contract;
+1. the canonical document and M1 memory contracts;
 2. `LEARNING_GUIDE.md`;
-3. shared mathematics teaching principles;
-4. the node-role prompt;
-5. an optional selected persona overlay;
-6. current node identity/path instructions;
-7. the role's Skills.
+3. the compact `memory/INDEX.md` L0 route when it exists;
+4. shared mathematics teaching principles;
+5. the node-role prompt;
+6. an optional selected persona overlay;
+7. current node identity/path instructions;
+8. the role's Skills.
 
 Shared teacher agency has one semantic owner:
 `apps/pi-teaching-web/resources/teaching/math-teaching-core.md`. Role prompts apply it
@@ -79,19 +94,22 @@ node Sessions. The internal material Scout receives no persona or user-facing ro
 
 Roadmap keeps the native `read`, `grep`, `find`, `ls`, `edit`, and `write` tools. Plan
 keeps those tools and additionally has `subagent` for fresh-context copies of one
-packaged read-only `study-material-scout`. Lesson has native `read`, `grep`, `find`,
-and `ls`, plus the node-bound `classroom_log_append` and `classroom_update`; it does
-not receive native `edit/write`. The Coach derives temporary material slots from the
-agreed Lesson activities and normally launches one Scout per slot, with at most three
-running concurrently. Each Scout uses canonical feature fields and free text to recall
-a small shallow candidate set, reads only metadata and the stem, and reports the feature
-slice it matched and inspected. The parent chooses a primary, fully reads it, and owns
-every mathematical, route-level, teaching-fit, and persistence decision. A one-problem
-Lesson may need one card; a multi-problem Lesson may need several. Scouts use only
-`read`, `grep`, `find`, and `ls`; they cannot write teaching facts. Roadmap and Lesson
-Sessions do not receive `subagent`. Node activation
-and completion are student UI actions handled by Runtime code. Do not replace these
-actions with prompt conventions or model tool calls.
+packaged read-only `study-material-scout`. Lesson has the native file tools plus the
+node-bound `classroom_log_append` and `classroom_update`. Its native `edit/write` calls
+are Runtime-guarded: only a pure Trace append to the current active Lesson and Tutor-owned
+`memory/INDEX.md`, `indexes/`, `objects/`, and `preferences/` paths are allowed; Tutor
+cannot write `capabilities/`, parent nodes, or sibling Lessons. This is a mechanical
+boundary, not a memory-specific tool.
+
+The Coach derives temporary material slots from the agreed Lesson activities and normally
+launches one Scout per slot, with at most three running concurrently. Each Scout uses
+canonical feature fields and free text to recall a small shallow candidate set, reads
+only metadata and the stem, and reports the feature slice it matched and inspected. The
+parent chooses a primary, fully reads it, and owns every mathematical, route-level,
+teaching-fit, and persistence decision. Scouts cannot write teaching facts. Roadmap and
+Lesson Sessions do not receive `subagent`. Node activation and completion are student UI
+actions handled by Runtime code. Do not replace these actions with prompt conventions or
+model tool calls.
 
 ## Teaching behavior owners
 
@@ -99,21 +117,22 @@ actions with prompt conventions or model tool calls.
   `apps/pi-teaching-web/resources/skills/roadmap-dialogue/SKILL.md`
 - Materializing a student-approved Plan:
   `apps/pi-teaching-web/resources/skills/prepare-approved-plan/SKILL.md`
-- Plan-stage interpretation, direct child reading, post-Lesson review, and
+- Plan-stage interpretation, memory-first post-Lesson review, and
   student-approved next-Lesson design:
   `apps/pi-teaching-web/resources/skills/plan-dialogue/SKILL.md`
 - Materializing a student-approved Lesson:
   `apps/pi-teaching-web/resources/skills/prepare-approved-lesson/SKILL.md`
 - Shared Plan-cycle archetype references:
   `apps/pi-teaching-web/resources/skills/references/plan-cycles/`
-- Live Block teaching and logging:
+- Live Block teaching, logging, on-demand recall, and end-of-Lesson consolidation:
   `apps/pi-teaching-web/resources/skills/tutor-lesson/SKILL.md`
 - Shared mathematics judgment:
   `apps/pi-teaching-web/resources/teaching/math-teaching-core.md`
 
 Skills own teaching judgment and natural language. Runtime owns document parsing,
-Session identity, lifecycle transitions, transport, and persistence. Do not add exact-
-wording tests for Skill prose; validate assembled resources plus real class behavior.
+Session identity, lifecycle transitions, transport, persistence, L0 injection, and
+Lesson write boundaries. Skill tests should assert observable structure and ownership,
+not full-prose snapshots; real classes remain the behavioral gate.
 The Material Scout is disposable working memory for asset search, not a Handoff,
 teaching-fact store, planner, or post-Lesson reviewer. The parent Plan Coach keeps final
 selection and every persistent write. StudyForge sets no wall-clock deadline for a
@@ -138,7 +157,7 @@ items. The normal Lesson view shows `Student View` and Block progress, not
 
 ## Repository map
 
-- `apps/pi-teaching-web/src/study/`: strict M0 Markdown and static knowledge readers.
+- `apps/pi-teaching-web/src/study/`: strict Markdown and static knowledge readers.
 - `apps/pi-teaching-web/src/runtime/`: node ownership, resource assembly, Session
   registry, frontmatter edits, and lifecycle.
 - `apps/pi-teaching-web/resources/subagents/`: packaged read-only asset Scout used only
@@ -147,13 +166,16 @@ items. The normal Lesson view shows `Student View` and Block progress, not
   Roadmap, Plan, and Lesson Sessions.
 - `apps/pi-teaching-web/src/server/`: minimal HTTP/WebSocket transport.
 - `apps/pi-teaching-web/src/client/`: Course/Knowledge App.
-- `apps/pi-teaching-web/tests/m0/`: current executable contract.
+- `apps/pi-teaching-web/tests/m0/`: preserved M0 kernel regressions.
+- `apps/pi-teaching-web/tests/m1/`: memory, routing, and retired-surface contracts.
 - `apps/pi-teaching-web/tests/e2e/m0-cycle.spec.ts`: deterministic browser closure.
 - `examples/derivative-m0/`: clean public learning set.
 
 ## Change discipline
 
-- Prefer deletion to compatibility shims when an old surface has no M0 consumer.
+- Prefer deletion to compatibility shims when an old surface has no current consumer.
+- The retired plugin has no migration, compatibility, or double-write path. Do not
+  recreate it as an adapter around the Pi App.
 - Preserve unrelated user changes and never commit credentials or local Session files.
 - Test mutations on copied learning sets.
 - Add a new persistent mechanism only after the direct-document design fails repeatedly

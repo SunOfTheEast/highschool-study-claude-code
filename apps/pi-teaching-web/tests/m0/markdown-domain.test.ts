@@ -96,8 +96,56 @@ test('reads canonical Roadmap, Plan, Lesson and block-local classroom facts', ()
     uses: ['cards/sample.card.yaml'],
     classroomLog: [],
   });
+  expect(lesson.consolidatedLearningTraces).toBeNull();
   expect(course.tree.children[0]?.status).toBe('active');
   expect(course.tree.children[0]?.children[0]?.status).toBe('active');
+});
+
+test('accepts one final consolidated learning trace section without structuring its teaching meaning', () => {
+  const root = copyFixture();
+  const relative = 'plans/plan-001/lessons/lesson-001.md';
+  const path = join(root, relative);
+  const trace = [
+    '### trace-plan-001-lesson-001-01',
+    '',
+    '- 时间：2026-08-07 20:15',
+    '- 情境：同构变形的独立识别检验',
+    '- 首次表现：没有主动比较共同结构',
+    '- 实际帮助：提醒比较结构后继续',
+    '- 后续表现：完成变形，但尚未证明能自主识别',
+  ].join('\n');
+  writeFileSync(
+    path,
+    `${readFileSync(path, 'utf8').trimEnd()}\n\n## Consolidated Learning Traces\n\n${trace}\n`,
+  );
+
+  const lesson = readLesson(root, relative);
+
+  expect(lesson.consolidatedLearningTraces).toBe(trace);
+  expect(lesson.blocks).toHaveLength(2);
+  expect(lesson.blocks[1]?.classroomLog).toEqual([]);
+});
+
+test('requires the consolidated learning trace section to be unique, non-empty, and final', () => {
+  const mutations = [
+    (source: string) => source.replace(
+      '## Block block-001',
+      '## Consolidated Learning Traces\n\n### trace-too-early\n\n- 情境：过早。\n\n## Block block-001',
+    ),
+    (source: string) => `${source.trimEnd()}\n\n## Consolidated Learning Traces\n\n`,
+    (source: string) => `${source.trimEnd()}\n\n## Consolidated Learning Traces\n\n### trace-one\n\n- 情境：一。\n\n## Consolidated Learning Traces\n\n### trace-two\n\n- 情境：二。\n`,
+    (source: string) => `${source.trimEnd()}\n\n## Consolidated Learning Traces\n\n只有散文，没有稳定 Trace 标题。\n`,
+    (source: string) => `${source.trimEnd()}\n\n## Consolidated Learning Traces\n\n### 非稳定标题\n\n- 情境：一。\n`,
+    (source: string) => `${source.trimEnd()}\n\n## Consolidated Learning Traces\n\n### trace-duplicate\n\n- 情境：一。\n\n### trace-duplicate\n\n- 情境：二。\n`,
+  ];
+
+  for (const mutate of mutations) {
+    const root = copyFixture();
+    const relative = 'plans/plan-001/lessons/lesson-001.md';
+    const path = join(root, relative);
+    writeFileSync(path, mutate(readFileSync(path, 'utf8')));
+    expect(() => readLesson(root, relative)).toThrow(StudyDocumentError);
+  }
 });
 
 test('scopes repeated Lesson IDs and Session keys to their parent Plan directory', () => {

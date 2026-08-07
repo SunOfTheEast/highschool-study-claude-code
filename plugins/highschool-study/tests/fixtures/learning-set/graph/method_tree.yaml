@@ -1,7 +1,0 @@
-schema: studyforge.method_tree.v1
-nodes:
-  - { id: methods, root_label: 圆锥曲线方法体系, parent_id: null }
-  - { id: parameterize, method: 参数化与消元, parent_id: methods }
-  - { id: freeze-variable, method: 冻结变量法, parent_id: methods }
-  - { id: main-variable, method: 主元选择与视角转换, parent_id: freeze-variable }
-  - { id: domain-check, method: 定义域与可行域检查, parent_id: freeze-variable }

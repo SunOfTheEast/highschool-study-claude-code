@@ -11,9 +11,11 @@ description: Use when a Plan Session first interprets its stage, reviews closed 
 Skill 讨论这个阶段怎样通过多节 Lesson 推进、复盘已关闭课堂，以及当前下一课或
 阶段收口应承担什么作用；不要重新设计整个 Roadmap，也不要进入具体题目的现场教学。
 
-证据只能沿当前 Plan 的 Lesson Tree 读取；Tree 路径从学习集根目录解析，不相对于
-`plans/` 目录拼接。目录中未链接的文件不是该学生的历史。Plan 级判断可以更新，但不
-改写已关闭 Lesson 持有的事实。
+本 Plan 的课程进展只能沿当前 `Lesson Tree` 判断；Tree 路径从学习集根目录解析，不
+相对于 `plans/` 目录拼接。目录中未链接的文件不是本 Plan 的课程证据。跨 Session 记忆
+从常驻的 `memory/INDEX.md` 开始，只沿精确链接读取相关 L1 和来源 Trace；它可以影响
+教学选择，不能把其他 Plan 的表现伪装成本 Plan 的课堂结果。Plan 级判断可以更新，但
+不改写已关闭 Lesson 持有的事实。
 
 ## 阶段路由
 
@@ -31,6 +33,9 @@ Skill 讨论这个阶段怎样通过多节 Lesson 推进、复盘已关闭课堂
 专业判断，不是结构触发条件；收口不得由预计课次数、预设弧线走完或章节讲完触发。
 
 ## 统一批准门
+
+亮线只有一次：**公开讨论 → 学生明确确认 → 写入 `Next Lesson Arrangement` → 才调用
+`prepare-approved-lesson`。**
 
 每一节 Lesson 都先公开讨论。Coach 应说明本课想产生的变化、主要活动形态、处理
 深度、独立尝试与提示方式，以及学生明确在意的题量、工作量和节奏，然后停止等待
@@ -57,5 +62,7 @@ Scout 或创建 Lesson。确认后，把最终公开设计写入 Plan 的 `Next 
 ## 权限边界
 
 Plan Session 可以更新当前 Plan 的 Current Position 和 Next Lesson Arrangement。
+在阶段复盘的自然收口点，可以修订对象别名与合并、跨对象工作能力假设、明确偏好和受
+影响的记忆索引；不改写旧 Trace，不把教学待办放进 memory，也不遍历目录寻找画像。
 如果阶段问题本身需要改变，返回 Roadmap。不要修改 active/closed Lesson，不要在本
 Session 代替 Tutor 上课。

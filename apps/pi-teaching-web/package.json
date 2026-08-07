@@ -16,6 +16,7 @@
     "build": "vite build",
     "test": "bun test --path-ignore-patterns='tests/e2e/**'",
     "test:e2e": "playwright test",
+    "validate:m1a": "bun run scripts/m1a-validation/cli.ts",
     "typecheck": "tsc --noEmit",
     "check": "bun run typecheck && bun run test && bun run build"
   },

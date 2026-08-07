@@ -99,6 +99,12 @@ function fakeRegistry(overrides: Record<string, unknown> = {}) {
   };
 }
 
+test('reports the supported M1 runtime from health', async () => {
+  const response = await createRequestHandler()(new Request('http://local/api/health'));
+  expect(response?.status).toBe(200);
+  expect(await response?.json()).toEqual({ ok: true, runtime: 'pi-m1' });
+});
+
 test('serves only the M0 course and static knowledge snapshots', async () => {
   const root = copyFixture();
   const handler = createRequestHandler({
@@ -336,6 +342,58 @@ test('invalidates only Course after a successful Lesson custom write', async () 
   await idle;
   expect(events.filter((event) => event.type === 'course-invalidated')).toHaveLength(1);
   expect(events.filter((event) => event.type === 'knowledge-invalidated')).toHaveLength(0);
+});
+
+test('invalidates Course and Knowledge after each successful memory transaction only', async () => {
+  const root = copyFixture();
+  const hub = new EventHub();
+  const events: StudyEvent[] = [];
+  hub.subscribe((event) => events.push(event));
+  let listener: ((event: AgentSessionEvent) => void) | null = null;
+  let resolveIdle!: () => void;
+  const idle = new Promise<void>((resolve) => { resolveIdle = resolve; });
+  hub.subscribe((event) => {
+    if (event.type === 'session-run' && event.status === 'idle') resolveIdle();
+  });
+  const handler = createRequestHandler({
+    root,
+    hub,
+    registry: fakeRegistry({
+      subscribe: async (_key: SessionKey, value: (event: AgentSessionEvent) => void) => {
+        listener = value;
+        return () => {};
+      },
+      send: async () => {
+        for (const [toolCallId, toolName, isError] of [
+          ['memory-1', 'lesson_memory_commit', false],
+          ['route-1', 'memory_route_resolve', false],
+          ['memory-failed', 'lesson_memory_commit', true],
+        ] as const) {
+          listener?.({
+            type: 'tool_execution_end',
+            toolCallId,
+            toolName,
+            result: { details: { kind: 'memory-write' } },
+            isError,
+          });
+        }
+        listener?.({ type: 'agent_end', messages: [], willRetry: false });
+      },
+    }) as never,
+  });
+
+  const response = await handler(new Request(
+    'http://local/api/sessions/lesson%3Aplan-001%3Alesson-001/messages',
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ text: '结束本课。' }),
+    },
+  ));
+  expect(response?.status).toBe(202);
+  await idle;
+  expect(events.filter((event) => event.type === 'course-invalidated')).toHaveLength(2);
+  expect(events.filter((event) => event.type === 'knowledge-invalidated')).toHaveLength(2);
 });
 
 test('routes student lifecycle actions without generating teaching messages', async () => {

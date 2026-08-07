@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { parseLessonSource } from '../../src/study/markdown';
 import {
+  appendClosingClassroomLogSource,
   appendClassroomLogSource,
   applyClassroomChange,
   type LessonBlockDraft,
@@ -23,6 +24,18 @@ function setBlockStatus(source: string, blockId: string, status: string): string
   const block = source.slice(start, boundary).replace(
     /^- Status:.*$/m,
     `- Status: ${status}`,
+  );
+  return source.slice(0, start) + block + source.slice(boundary);
+}
+
+function setBlockKind(source: string, blockId: string, kind: string): string {
+  const start = source.indexOf(`## Block ${blockId}：`);
+  if (start < 0) throw new Error(`missing ${blockId}`);
+  const end = source.indexOf('\n## Block ', start + 1);
+  const boundary = end < 0 ? source.length : end;
+  const block = source.slice(start, boundary).replace(
+    /^- Kind:.*$/m,
+    `- Kind: ${kind}`,
   );
   return source.slice(0, start) + block + source.slice(boundary);
 }
@@ -68,6 +81,76 @@ test('appends multiline evidence inside one log item without swallowing the next
   ]);
   expect(next).toContain('  ## Block injected');
   expect(next).toContain('  - Status: completed');
+});
+
+test('appends a student correction without disturbing already consolidated traces', () => {
+  const trace = [
+    '',
+    '## Consolidated Learning Traces',
+    '',
+    '### trace-plan-001-lesson-001-01',
+    '',
+    '- 情境：课末首次总结',
+    '- 首次表现：需要提示',
+    '- 实际帮助：比较共同结构',
+    '- 后续表现：提示后完成',
+    '- 关联对象：obj-001',
+    '- 来源证据：本课 Classroom Log',
+    '',
+  ].join('\n');
+  const source = fixtureSource() + trace;
+
+  const next = appendClassroomLogSource(
+    lessonPath,
+    source,
+    '学生纠正：刚才第一步其实是在提示前独立完成。',
+  );
+  const lesson = parseLessonSource(lessonPath, next);
+
+  expect(lesson.blocks[1]?.classroomLog).toEqual([
+    '学生纠正：刚才第一步其实是在提示前独立完成。',
+  ]);
+  expect(lesson.consolidatedLearningTraces)
+    .toBe(parseLessonSource(lessonPath, source).consolidatedLearningTraces);
+});
+
+test('appends one closing fact to a completed Reflection without reopening it', () => {
+  const reflected = setBlockKind(fixtureSource(), 'block-002', 'reflection');
+  const source = setBlockStatus(reflected, 'block-002', 'completed');
+  const next = appendClosingClassroomLogSource(
+    lessonPath,
+    source,
+    'block-002',
+    '学生补充：没有提示时还会继续硬算。',
+  );
+  const block = parseLessonSource(lessonPath, next).blocks[1]!;
+
+  expect(block.status).toBe('completed');
+  expect(block.kind).toBe('reflection');
+  expect(block.classroomLog.at(-1)).toBe('学生补充：没有提示时还会继续硬算。');
+});
+
+test('appends one closing fact to the selected active Block', () => {
+  const next = appendClosingClassroomLogSource(
+    lessonPath,
+    fixtureSource(),
+    'block-002',
+    '学生确认本课仍未证明稳定性。',
+  );
+
+  expect(parseLessonSource(lessonPath, next).blocks[1]?.classroomLog.at(-1))
+    .toBe('学生确认本课仍未证明稳定性。');
+});
+
+test('rejects a closing fact on an ordinary completed Block', () => {
+  const source = setBlockStatus(fixtureSource(), 'block-002', 'completed');
+
+  expect(() => appendClosingClassroomLogSource(
+    lessonPath,
+    source,
+    'block-002',
+    '不应写入。',
+  )).toThrow('active Block or completed Reflection');
 });
 
 test('rejects log writes outside one active Lesson Block', () => {

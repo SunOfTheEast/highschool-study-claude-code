@@ -37,6 +37,21 @@ test('exposes only the M0 node lifecycle and role-scoped model tools', () => {
     'subagent',
     'artifact_export',
   ]);
+  expect(modelToolsForNode('lesson', true)).toEqual([
+    'read',
+    'grep',
+    'find',
+    'ls',
+    'classroom_log_append',
+    'classroom_update',
+    'lesson_memory_commit',
+  ]);
+  expect(modelToolsForNode('plan', true)).toEqual([
+    ...M0_MODEL_TOOLS,
+    'subagent',
+    'artifact_export',
+    'memory_route_resolve',
+  ]);
 
   expect(sessionKeyForNode({
     nodeKind: 'roadmap',

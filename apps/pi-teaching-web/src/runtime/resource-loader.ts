@@ -12,6 +12,8 @@ import {
   type NodeSessionScope,
 } from './session-scope';
 import { studySubagentGuard } from './study-subagent-guard';
+import { lessonMemoryGuard } from './lesson-memory-guard';
+import { memoryEnabled } from './memory-tools';
 
 const resourceRoot = join(dirname(fileURLToPath(import.meta.url)), '../../resources');
 
@@ -51,12 +53,18 @@ function loadPersonaResource(personaId: string | undefined) {
   }];
 }
 
+function loadMemoryIndexResource(root: string) {
+  const path = join(root, 'memory', 'INDEX.md');
+  return existsSync(path) ? [{ path, content: file(path) }] : [];
+}
+
 export function loadStaticNodeResources(
   root: string,
   scope: NodeSessionScope,
   personaId?: string,
 ): StaticNodeResources {
   const roleFile = roleFiles[scope.nodeKind];
+  const hasMemory = memoryEnabled(root);
   const owner = [
     formatSessionOwnerContext(root, scope),
     '',
@@ -70,10 +78,15 @@ export function loadStaticNodeResources(
         path: '/virtual/studyforge-m0-document-contract.md',
         content: file(join(resourceRoot, 'contracts', 'm0-document-contract.md')),
       },
+      ...(hasMemory ? [{
+        path: '/virtual/studyforge-m1-memory-contract.md',
+        content: file(join(resourceRoot, 'contracts', 'm1-memory-contract.md')),
+      }] : []),
       {
         path: join(root, 'LEARNING_GUIDE.md'),
         content: file(join(root, 'LEARNING_GUIDE.md')),
       },
+      ...(hasMemory ? loadMemoryIndexResource(root) : []),
       {
         path: '/virtual/studyforge-m0-teaching-core.md',
         content: file(join(resourceRoot, 'teaching', 'math-teaching-core.md')),
@@ -90,7 +103,7 @@ export function loadStaticNodeResources(
     ],
     skillPaths: roleSkills[scope.nodeKind]
       .map((name) => join(resourceRoot, 'skills', name, 'SKILL.md')),
-    tools: modelToolsForNode(scope.nodeKind),
+    tools: modelToolsForNode(scope.nodeKind, hasMemory),
   };
 }
 
@@ -101,6 +114,19 @@ export async function createRoleResourceLoader(
   personaId: string | undefined = process.env.STUDY_PERSONA,
 ) {
   const resources = loadStaticNodeResources(root, scope, personaId);
+  const extensionFactories = scope.nodeKind === 'plan'
+    ? [{
+      name: 'study-subagent-guard',
+      factory: studySubagentGuard,
+      hidden: true,
+    }]
+    : scope.nodeKind === 'lesson'
+      ? [{
+        name: 'lesson-memory-guard',
+        factory: lessonMemoryGuard(root, scope),
+        hidden: true,
+      }]
+      : [];
   const loader = new DefaultResourceLoader({
     cwd: root,
     agentDir: getAgentDir(),
@@ -108,13 +134,7 @@ export async function createRoleResourceLoader(
     additionalExtensionPaths: scope.nodeKind === 'plan'
       ? [fileURLToPath(import.meta.resolve('pi-subagents'))]
       : [],
-    extensionFactories: scope.nodeKind === 'plan'
-      ? [{
-        name: 'study-subagent-guard',
-        factory: studySubagentGuard,
-        hidden: true,
-      }]
-      : [],
+    extensionFactories,
     additionalSkillPaths: resources.skillPaths,
     noExtensions: true,
     noSkills: true,

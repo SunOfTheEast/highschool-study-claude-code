@@ -7,6 +7,7 @@ import {
 } from '../study/lesson-mutations';
 import { parseLessonSource } from '../study/markdown';
 import { mutateDocumentAtomically } from './atomic-document';
+import { createLessonMemoryTool } from './memory-tools';
 
 const blockId = Type.String({
   pattern: '^[A-Za-z0-9][A-Za-z0-9._-]*$',
@@ -141,5 +142,6 @@ export function createLessonTools(root: string, lessonPath: string) {
     },
   });
 
-  return [logTool, updateTool];
+  const memoryTool = createLessonMemoryTool(root, lessonPath);
+  return memoryTool ? [logTool, updateTool, memoryTool] : [logTool, updateTool];
 }

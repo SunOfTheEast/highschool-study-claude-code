@@ -3,6 +3,7 @@ import { defineTool } from '@earendil-works/pi-coding-agent';
 import { formatLessonHandoutPath } from '../shared/handout-route';
 import { readLessonHandout } from '../study/lesson-handout';
 import type { NodeSessionScope } from './session-scope';
+import { createPlanMemoryTools } from './memory-tools';
 
 const nodeId = Type.String({
   pattern: '^[A-Za-z0-9][A-Za-z0-9._-]*$',
@@ -48,5 +49,5 @@ export function createPlanTools(root: string, scope: NodeSessionScope) {
     },
   });
 
-  return [exportTool];
+  return [exportTool, ...createPlanMemoryTools(root)];
 }
