@@ -99,6 +99,17 @@ export function createRequestHandler(deps?: AppDependencies) {
         if (
           event.type === 'tool_execution_end'
           && !event.isError
+          && (
+            event.toolName === 'lesson_memory_commit'
+            || event.toolName === 'memory_route_resolve'
+          )
+        ) {
+          deps.hub.publish({ type: 'course-invalidated' });
+          deps.hub.publish({ type: 'knowledge-invalidated' });
+        }
+        if (
+          event.type === 'tool_execution_end'
+          && !event.isError
           && (event.toolName === 'edit' || event.toolName === 'write')
         ) {
           deps.hub.publish({ type: 'course-invalidated' });

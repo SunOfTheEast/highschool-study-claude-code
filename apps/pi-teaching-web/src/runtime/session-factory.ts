@@ -15,6 +15,7 @@ import { appendSessionOwner } from './session-owner';
 import { modelToolsForNode, type NodeSessionScope } from './session-scope';
 import { configureStudySubagentDirectory } from './subagent-path';
 import { memoryEnabled } from './memory-tools';
+import { recoverDocumentTransactions } from './multi-document-transaction';
 
 export interface StudySession {
   readonly sessionId: string;
@@ -55,7 +56,12 @@ export async function bindStudyExtensions(
   await session.bindExtensions({});
 }
 
+export function recoverSessionFactoryState(root: string): string[] {
+  return recoverDocumentTransactions(root);
+}
+
 export async function createPiSessionFactory(root: string): Promise<StudySessionFactory> {
+  recoverSessionFactoryState(root);
   configureStudySubagentDirectory();
   const modelRuntime = await ModelRuntime.create();
   return async ({ sessionFile, ...scope }) => {

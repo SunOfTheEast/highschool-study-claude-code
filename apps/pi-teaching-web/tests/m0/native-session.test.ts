@@ -22,10 +22,12 @@ import {
 } from '../../src/runtime/resource-loader';
 import {
   customToolsForNode,
+  recoverSessionFactoryState,
   sessionFactoryInput,
   type StudySession,
   type StudySessionFactory,
 } from '../../src/runtime/session-factory';
+import { commitDocumentCandidates } from '../../src/runtime/multi-document-transaction';
 import { WorkspaceRegistry } from '../../src/runtime/workspace-registry';
 
 const fixture = join(import.meta.dir, '../fixtures/m0-learning-set');
@@ -326,6 +328,37 @@ test('registers only node-bound custom tools for Plan and Lesson scopes', () => 
     'memory_route_resolve',
   ]);
   expect(customToolsForNode(root, roadmapScope)).toEqual([]);
+});
+
+test('recovers an interrupted memory transaction at the session-factory boundary', () => {
+  const root = copyFixture();
+  const indexPath = 'memory/INDEX.md';
+  const indexBefore = readFileSync(join(root, indexPath), 'utf8');
+  const objectPath = 'memory/objects/obj-001.md';
+  mkdirSync(dirname(join(root, objectPath)), { recursive: true });
+
+  expect(() => commitDocumentCandidates(root, [
+    {
+      path: indexPath,
+      before: indexBefore,
+      after: indexBefore.replace('尚无已固化课堂记忆', '中断中的候选'),
+    },
+    {
+      path: objectPath,
+      before: null,
+      after: '# obj-001：中断候选\n',
+    },
+  ], {
+    afterReplace: (_path, index) => {
+      if (index === 0) throw new Error('SIMULATED_SESSION_FACTORY_CRASH');
+    },
+    leavePreparedOnError: true,
+  })).toThrow('SIMULATED_SESSION_FACTORY_CRASH');
+  expect(readFileSync(join(root, indexPath), 'utf8')).toContain('中断中的候选');
+
+  expect(recoverSessionFactoryState(root)).toHaveLength(1);
+  expect(readFileSync(join(root, indexPath), 'utf8')).toBe(indexBefore);
+  expect(existsSync(join(root, objectPath))).toBeFalse();
 });
 
 test('keeps classroom mutation tool-driven and memory writes native but guarded', () => {
