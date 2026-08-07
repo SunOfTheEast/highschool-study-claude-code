@@ -30,6 +30,7 @@
 - Create: `apps/pi-teaching-web/scripts/m1a-validation/turn-client.ts`
 - Create: `apps/pi-teaching-web/scripts/m1a-validation/cli.ts`
 - Modify: `apps/pi-teaching-web/package.json`
+- Modify: `apps/pi-teaching-web/tsconfig.json`
 - Test: `apps/pi-teaching-web/tests/m1/m1a-validation-harness.test.ts`
 
 **Interfaces:**
