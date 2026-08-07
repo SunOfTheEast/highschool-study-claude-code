@@ -81,6 +81,14 @@ type ResolvedBucket = {
   before: string | null;
 };
 
+type ResolvedPreference = {
+  mutation: PreferenceMutation;
+  id: string;
+  title: string;
+  path: string;
+  before: string | null;
+};
+
 const stableIdPattern = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
 const localKeyPattern = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
 
@@ -181,6 +189,19 @@ function appendOptionalSection(source: string, heading: string, content: string)
   return `${source.trimEnd()}\n\n## ${heading}\n\n${content.trim()}\n`;
 }
 
+function removeOptionalSection(source: string, heading: string): string {
+  const matcher = new RegExp(`^## ${escapeRegExp(heading)}[ \\t]*$`, 'gm');
+  const matches = [...source.matchAll(matcher)];
+  if (matches.length !== 1) throw new Error(`expected exactly one section: ${heading}`);
+  const start = matches[0]!.index!;
+  const contentStart = start + matches[0]![0].length;
+  const next = /^##\s+/m.exec(source.slice(contentStart));
+  const end = next ? contentStart + next.index : source.length;
+  const prefix = source.slice(0, start).trimEnd();
+  const suffix = source.slice(end).trimStart();
+  return suffix ? `${prefix}\n\n${suffix}` : `${prefix}\n`;
+}
+
 function mutateListEntry(
   content: string,
   target: string,
@@ -215,6 +236,14 @@ function upsertRootLink(
     source,
     heading,
     mutateListEntry(content, target, rendered, removeEmptyState),
+  );
+}
+
+function removeRootLink(source: string, heading: string, target: string): string {
+  return replaceRequiredSection(
+    source,
+    heading,
+    mutateListEntry(sectionContent(source, heading), target, null),
   );
 }
 
@@ -369,11 +398,141 @@ function validateObjectSource(source: string, id: string): void {
   }
 }
 
+function renderPreferenceStatements(
+  mutation: PreferenceMutation,
+  recordedAt: string,
+): string {
+  if (mutation.explicitStatements.length === 0) {
+    throw new Error('preference mutation requires at least one explicit statement');
+  }
+  return mutation.explicitStatements.map((statement, index) => {
+    const [first, ...rest] = requireText(
+      statement.text,
+      `explicitStatements[${index}].text`,
+    ).split(/\r?\n/);
+    return `- ${displayTime(recordedAt)} — ${first}`
+      + rest.map((line) => `\n  ${line}`).join('');
+  }).join('\n');
+}
+
+function renderPreferenceSources(args: {
+  mutation: PreferenceMutation;
+  recordedAt: string;
+  lessonPath: string;
+  lessonId: string;
+}): string {
+  return args.mutation.explicitStatements.map((statement) => (
+    `- ${displayTime(args.recordedAt)} `
+    + `[${args.lessonId}](../../${args.lessonPath}) — Block \`${statement.evidenceBlockId}\``
+  )).join('\n');
+}
+
+function renderEvolutionEntry(recordedAt: string, value: string): string {
+  const [first, ...rest] = requireText(value, 'evolutionEntry').split(/\r?\n/);
+  return `- ${traceDate(recordedAt)} — ${first}`
+    + rest.map((line) => `\n  ${line}`).join('');
+}
+
+function renderNewPreference(args: {
+  preference: ResolvedPreference;
+  recordedAt: string;
+  lessonPath: string;
+  lessonId: string;
+}): string {
+  const { mutation } = args.preference;
+  return [
+    `# ${args.preference.id}：${args.preference.title}`,
+    '',
+    '## Current Judgment',
+    '',
+    requireText(mutation.currentJudgment, 'preference currentJudgment'),
+    '',
+    '## Scope',
+    '',
+    renderList(mutation.scope, 'preference scope'),
+    '',
+    '## Explicit Statements',
+    '',
+    renderPreferenceStatements(mutation, args.recordedAt),
+    '',
+    '## Evolution History',
+    '',
+    renderEvolutionEntry(args.recordedAt, mutation.evolutionEntry),
+    '',
+    '## Source',
+    '',
+    renderPreferenceSources({
+      mutation,
+      recordedAt: args.recordedAt,
+      lessonPath: args.lessonPath,
+      lessonId: args.lessonId,
+    }),
+    '',
+  ].join('\n');
+}
+
+function updateExistingPreference(args: {
+  source: string;
+  mutation: PreferenceMutation;
+  recordedAt: string;
+  lessonPath: string;
+  lessonId: string;
+}): string {
+  let candidate = replaceRequiredSection(
+    args.source,
+    'Current Judgment',
+    requireText(args.mutation.currentJudgment, 'preference currentJudgment'),
+  );
+  candidate = replaceRequiredSection(
+    candidate,
+    'Scope',
+    renderList(args.mutation.scope, 'preference scope'),
+  );
+  candidate = appendRequiredSection(
+    candidate,
+    'Explicit Statements',
+    renderPreferenceStatements(args.mutation, args.recordedAt),
+  );
+  candidate = appendRequiredSection(
+    candidate,
+    'Evolution History',
+    renderEvolutionEntry(args.recordedAt, args.mutation.evolutionEntry),
+  );
+  return appendRequiredSection(
+    candidate,
+    'Source',
+    renderPreferenceSources(args),
+  );
+}
+
+function validatePreferenceSource(source: string, id: string): void {
+  documentTitle(source, id, 'preference');
+  for (const heading of [
+    'Current Judgment',
+    'Scope',
+    'Explicit Statements',
+    'Evolution History',
+    'Source',
+  ]) {
+    if (!sectionContent(source, heading)) throw new Error(`preference ${id} has empty ${heading}`);
+  }
+}
+
+function validateRootIndex(source: string): void {
+  sectionSpan(source, 'Current Learning Frontier');
+  sectionSpan(source, 'Object Buckets');
+  sectionSpan(source, 'Active Capability Cues');
+  sectionSpan(source, 'Active Preference Cues');
+}
+
 function renderNewBucket(bucket: ResolvedBucket): string {
   return `# ${bucket.id}：${bucket.title}\n\n## Objects\n`;
 }
 
-function addObjectToBucket(source: string, object: ResolvedObject): string {
+function addObjectToBucket(
+  source: string,
+  object: Pick<ResolvedObject, 'id' | 'title'>,
+): string {
   const target = `../objects/${object.id}.md`;
   const rendered = `- [${object.id}：${object.title}](${target})`;
   return replaceRequiredSection(
@@ -438,9 +597,6 @@ export function planLessonMemoryCommit(
   bucketIds: Record<string, string>;
 } {
   displayTime(recordedAt);
-  if (draft.preferences.length > 0) {
-    throw new Error('preference mutations are not implemented yet');
-  }
   const lessonBefore = readRequired(root, lessonPath);
   const initialLesson = parseLessonSource(lessonPath, lessonBefore);
   if (initialLesson.status !== 'active') {
@@ -479,8 +635,10 @@ export function planLessonMemoryCommit(
   }
 
   const objectIds: Record<string, string> = {};
+  const preferenceIds: Record<string, string> = {};
   const bucketIds: Record<string, string> = {};
   const objectReserved = new Set<string>();
+  const preferenceReserved = new Set<string>();
   const bucketReserved = new Set<string>();
   const objectTargets = new Set<string>();
   const newObjectKeys = new Set<string>();
@@ -538,6 +696,47 @@ export function planLessonMemoryCommit(
   }
   for (const trace of draft.traces) {
     if (!traceObjects.has(trace.key)) throw new Error(`Trace ${trace.key} must be referenced by an object`);
+  }
+
+  const preferenceTargets = new Set<string>();
+  const preferenceKeys = new Set<string>();
+  const resolvedPreferences: ResolvedPreference[] = [];
+  for (const mutation of draft.preferences) {
+    requireText(mutation.currentJudgment, 'preference currentJudgment');
+    renderList(mutation.scope, 'preference scope');
+    requireText(mutation.evolutionEntry, 'evolutionEntry');
+    if (mutation.explicitStatements.length === 0) {
+      throw new Error('preference mutation requires at least one explicit statement');
+    }
+    for (const [index, statement] of mutation.explicitStatements.entries()) {
+      requireText(statement.text, `explicitStatements[${index}].text`);
+      if (!blockIds.has(statement.evidenceBlockId)) {
+        throw new Error(`preference statement references missing Block ${statement.evidenceBlockId}`);
+      }
+    }
+    let id: string;
+    let title: string;
+    let path: string;
+    let before: string | null;
+    if (mutation.target.kind === 'existing') {
+      id = requireStableId(mutation.target.id, 'preference');
+      path = `memory/preferences/${id}.md`;
+      before = readRequired(root, path);
+      title = documentTitle(before, id, 'preference');
+    } else {
+      const key = requireLocalKey(mutation.target.key, 'preference key');
+      if (preferenceKeys.has(key)) throw new Error(`duplicate preference key: ${key}`);
+      preferenceKeys.add(key);
+      id = nextNumericId(root, 'memory/preferences', 'pref', preferenceReserved);
+      preferenceIds[key] = id;
+      title = requireOneLine(mutation.target.title, 'preference title');
+      path = `memory/preferences/${id}.md`;
+      ensureNewPath(root, path);
+      before = null;
+    }
+    if (preferenceTargets.has(id)) throw new Error(`duplicate preference target: ${id}`);
+    preferenceTargets.add(id);
+    resolvedPreferences.push({ mutation, id, title, path, before });
   }
 
   const resolvedNewBuckets = new Map<string, ResolvedBucket>();
@@ -641,6 +840,34 @@ export function planLessonMemoryCommit(
     }
   }
 
+  const preferenceSources = new Map<string, string>();
+  for (const preference of resolvedPreferences) {
+    const source = preference.before === null
+      ? renderNewPreference({ preference, recordedAt, lessonPath, lessonId: lesson.id })
+      : updateExistingPreference({
+          source: preference.before,
+          mutation: preference.mutation,
+          recordedAt,
+          lessonPath,
+          lessonId: lesson.id,
+        });
+    validatePreferenceSource(source, preference.id);
+    preferenceSources.set(preference.path, source);
+
+    const target = `preferences/${preference.id}.md`;
+    if (preference.mutation.cue.kind === 'upsert') {
+      const summary = requireText(preference.mutation.cue.summary, 'preference cue summary');
+      rootAfter = upsertRootLink(
+        rootAfter,
+        'Active Preference Cues',
+        target,
+        `- [${preference.id}：${preference.title}](${target}) — ${summary}`,
+      );
+    } else if (preference.mutation.cue.kind === 'remove') {
+      rootAfter = removeRootLink(rootAfter, 'Active Preference Cues', target);
+    }
+  }
+
   const renderedTraces = draft.traces.map((trace) => renderTrace({
     id: traceIds[trace.key]!,
     draft: trace,
@@ -667,6 +894,15 @@ export function planLessonMemoryCommit(
     );
     if (candidate) candidates.push(candidate);
   }
+  for (const preference of [...resolvedPreferences].sort((a, b) => a.path.localeCompare(b.path))) {
+    const candidate = changedCandidate(
+      preference.path,
+      preference.before,
+      preferenceSources.get(preference.path)!,
+      (source) => { validatePreferenceSource(source, preference.id); },
+    );
+    if (candidate) candidates.push(candidate);
+  }
   for (const { bucket, source } of [...bucketAfter.values()]
     .sort((a, b) => a.bucket.path.localeCompare(b.bucket.path))) {
     const candidate = changedCandidate(
@@ -684,12 +920,7 @@ export function planLessonMemoryCommit(
     rootPath,
     rootBefore,
     rootAfter,
-    (source) => {
-      sectionSpan(source, 'Current Learning Frontier');
-      sectionSpan(source, 'Object Buckets');
-      sectionSpan(source, 'Active Capability Cues');
-      sectionSpan(source, 'Active Preference Cues');
-    },
+    validateRootIndex,
   );
   if (rootCandidate) candidates.push(rootCandidate);
   if (candidates.length === 0) throw new Error('lesson memory commit must change at least one document');
@@ -698,7 +929,106 @@ export function planLessonMemoryCommit(
     candidates,
     traceIds,
     objectIds,
-    preferenceIds: {},
+    preferenceIds,
     bucketIds,
   };
+}
+
+export function planDeferredRouteResolution(
+  root: string,
+  objectId: string,
+  buckets: BucketRef[],
+): {
+  candidates: DocumentCandidate[];
+  bucketIds: Record<string, string>;
+} {
+  const id = requireStableId(objectId, 'object');
+  if (buckets.length === 0) throw new Error('deferred route resolution requires at least one bucket');
+  const objectPath = `memory/objects/${id}.md`;
+  const objectSource = readRequired(root, objectPath);
+  const object = { id, title: documentTitle(objectSource, id, 'object') };
+
+  const rootPath = 'memory/INDEX.md';
+  const rootBefore = readRequired(root, rootPath);
+  validateRootIndex(rootBefore);
+  if (!/^## Deferred Object Routing[ \\t]*$/m.test(rootBefore)) {
+    throw new Error(`object ${id} is not deferred`);
+  }
+  const deferredTarget = `objects/${id}.md`;
+  const deferred = sectionContent(rootBefore, 'Deferred Object Routing');
+  if (!deferred.includes(`](${deferredTarget})`)) {
+    throw new Error(`object ${id} is not deferred`);
+  }
+  const remainingDeferred = mutateListEntry(deferred, deferredTarget, null);
+  let rootAfter = remainingDeferred
+    ? replaceRequiredSection(rootBefore, 'Deferred Object Routing', remainingDeferred)
+    : removeOptionalSection(rootBefore, 'Deferred Object Routing');
+
+  const bucketIds: Record<string, string> = {};
+  const bucketReserved = new Set<string>();
+  const newBuckets = new Map<string, ResolvedBucket>();
+  const existingBuckets = new Map<string, ResolvedBucket>();
+  const resolvedBuckets: ResolvedBucket[] = [];
+  const seenBucketIds = new Set<string>();
+
+  for (const ref of buckets) {
+    let bucket: ResolvedBucket;
+    if (ref.kind === 'existing') {
+      const bucketId = requireStableId(ref.id, 'bucket');
+      const cached = existingBuckets.get(bucketId);
+      if (cached) bucket = cached;
+      else {
+        const path = `memory/indexes/${bucketId}.md`;
+        const before = readRequired(root, path);
+        bucket = {
+          id: bucketId,
+          title: documentTitle(before, bucketId, 'bucket'),
+          path,
+          before,
+        };
+        existingBuckets.set(bucketId, bucket);
+      }
+    } else {
+      const key = requireLocalKey(ref.key, 'bucket key');
+      const title = requireOneLine(ref.title, 'bucket title');
+      const cached = newBuckets.get(key);
+      if (cached) {
+        if (cached.title !== title) throw new Error(`bucket key ${key} has conflicting titles`);
+        bucket = cached;
+      } else {
+        const bucketId = nextNumericId(root, 'memory/indexes', 'bucket', bucketReserved);
+        const path = `memory/indexes/${bucketId}.md`;
+        ensureNewPath(root, path);
+        bucket = { id: bucketId, title, path, before: null };
+        newBuckets.set(key, bucket);
+        bucketIds[key] = bucketId;
+      }
+    }
+    if (seenBucketIds.has(bucket.id)) throw new Error(`duplicate bucket target: ${bucket.id}`);
+    seenBucketIds.add(bucket.id);
+    resolvedBuckets.push(bucket);
+  }
+
+  const candidates: DocumentCandidate[] = [];
+  for (const bucket of resolvedBuckets.sort((a, b) => a.path.localeCompare(b.path))) {
+    const before = bucket.before;
+    const initial = before === null ? renderNewBucket(bucket) : before;
+    const after = addObjectToBucket(initial, object);
+    const candidate = changedCandidate(bucket.path, before, after, (source) => {
+      documentTitle(source, bucket.id, 'bucket');
+      sectionSpan(source, 'Objects');
+    });
+    if (candidate) candidates.push(candidate);
+    const target = `indexes/${bucket.id}.md`;
+    rootAfter = upsertRootLink(
+      rootAfter,
+      'Object Buckets',
+      target,
+      `- [${bucket.id}：${bucket.title}](${target})`,
+    );
+  }
+  const rootCandidate = changedCandidate(rootPath, rootBefore, rootAfter, validateRootIndex);
+  if (rootCandidate) candidates.push(rootCandidate);
+  if (candidates.length === 0) throw new Error('deferred route resolution changed no documents');
+  return { candidates, bucketIds };
 }

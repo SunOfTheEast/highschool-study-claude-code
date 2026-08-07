@@ -5,15 +5,18 @@ import {
   mkdtempSync,
   readFileSync,
   rmSync,
+  symlinkSync,
   writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
+  planDeferredRouteResolution,
   planLessonMemoryCommit,
   type DocumentCandidate,
   type TraceDraft,
 } from '../../src/study/memory-mutations';
+import { commitDocumentCandidates } from '../../src/runtime/multi-document-transaction';
 
 const fixture = join(import.meta.dir, '../fixtures/m0-learning-set');
 const lessonPath = 'plans/plan-001/lessons/lesson-001.md';
@@ -269,4 +272,159 @@ test('resolves existing IDs only through bounded canonical memory paths', () => 
     }],
     preferences: [],
   }, recordedAt)).toThrow('invalid object id');
+});
+
+test('creates and updates a preference while preserving earlier statements byte-for-byte', () => {
+  const root = copyFixture();
+  const first = planLessonMemoryCommit(root, lessonPath, {
+    traces: [],
+    objects: [],
+    preferences: [{
+      target: { kind: 'new', key: 'workload', title: '近期练习量' },
+      currentJudgment: '近期只接受很短的课后练习。',
+      scope: ['本 Plan 的晚间练习'],
+      explicitStatements: [{
+        text: '这周晚上最多给我一道题。',
+        evidenceBlockId: 'block-001',
+      }],
+      evolutionEntry: '学生首次明确限制晚间练习量。',
+      cue: { kind: 'upsert', summary: '本周晚间最多一道题。' },
+    }],
+  }, recordedAt);
+
+  expect(first.preferenceIds).toEqual({ workload: 'pref-001' });
+  const preferencePath = 'memory/preferences/pref-001.md';
+  const firstPreference = candidate(first, preferencePath).after;
+  for (const heading of [
+    '## Current Judgment',
+    '## Scope',
+    '## Explicit Statements',
+    '## Evolution History',
+    '## Source',
+  ]) expect(firstPreference).toContain(heading);
+  expect(firstPreference).toContain('这周晚上最多给我一道题。');
+  expect(firstPreference).toContain('Block `block-001`');
+  expect(candidate(first, 'memory/INDEX.md').after)
+    .toContain('[pref-001：近期练习量](preferences/pref-001.md) — 本周晚间最多一道题。');
+  commitDocumentCandidates(root, first.candidates);
+
+  const preservedStatement = firstPreference.split('## Evolution History')[0]!
+    .split('## Explicit Statements')[1]!.trim();
+  const second = planLessonMemoryCommit(root, lessonPath, {
+    traces: [],
+    objects: [],
+    preferences: [{
+      target: { kind: 'existing', id: 'pref-001' },
+      currentJudgment: '本周末前仍希望每晚最多一道题。',
+      scope: ['本周晚间练习', '不限制课堂中的即时练习'],
+      explicitStatements: [{
+        text: '课堂上可以多做，晚上还是一道。',
+        evidenceBlockId: 'block-002',
+      }],
+      evolutionEntry: '学生把限制范围澄清为课后晚间练习。',
+      cue: { kind: 'keep' },
+    }],
+  }, '2026-08-08T20:15:00.000Z');
+  const secondPreference = candidate(second, preferencePath).after;
+
+  expect(secondPreference).toContain(preservedStatement);
+  expect(secondPreference).toContain('课堂上可以多做，晚上还是一道。');
+  expect(secondPreference).toContain('不限制课堂中的即时练习');
+  expect(secondPreference.match(/## Explicit Statements/g)).toHaveLength(1);
+  expect(second.candidates.some((item) => item.path === 'memory/INDEX.md')).toBeFalse();
+});
+
+test('removes only the active preference cue when the model explicitly retires it', () => {
+  const root = copyFixture();
+  const first = planLessonMemoryCommit(root, lessonPath, {
+    traces: [],
+    objects: [],
+    preferences: [{
+      target: { kind: 'new', key: 'workload', title: '近期练习量' },
+      currentJudgment: '近期每晚最多一道题。',
+      scope: ['本周晚间练习'],
+      explicitStatements: [{ text: '最多一道。', evidenceBlockId: 'block-001' }],
+      evolutionEntry: '建立近期限制。',
+      cue: { kind: 'upsert', summary: '每晚最多一道题。' },
+    }],
+  }, recordedAt);
+  commitDocumentCandidates(root, first.candidates);
+
+  const retired = planLessonMemoryCommit(root, lessonPath, {
+    traces: [],
+    objects: [],
+    preferences: [{
+      target: { kind: 'existing', id: 'pref-001' },
+      currentJudgment: '学生明确表示该临时限制已经结束。',
+      scope: ['原本周晚间练习，现已结束'],
+      explicitStatements: [{ text: '现在不用限制一道了。', evidenceBlockId: 'block-001' }],
+      evolutionEntry: '学生明确撤销临时限制。',
+      cue: { kind: 'remove' },
+    }],
+  }, '2026-08-09T20:15:00.000Z');
+
+  expect(candidate(retired, 'memory/preferences/pref-001.md').after)
+    .toContain('现在不用限制一道了。');
+  expect(candidate(retired, 'memory/INDEX.md').after)
+    .not.toContain('(preferences/pref-001.md)');
+});
+
+function materializeDeferredObject(root: string): void {
+  const deferred = planLessonMemoryCommit(root, lessonPath, {
+    traces: [trace()],
+    objects: [{
+      target: { kind: 'new', key: 'target-distance', title: '函数表示与目标之间的距离' },
+      currentJudgment: '开始比较目标与原式的形式差异。',
+      evolutionOverview: '由直接计算转向观察目标形式。',
+      boundaries: ['对象归属仍不明确。'],
+      traceEntries: [{ traceKey: 'event', meaning: '开始比较目标形式。' }],
+      routing: { kind: 'defer', reason: '需要阶段视角判断属于哪种选路对象。' },
+    }],
+    preferences: [],
+  }, recordedAt);
+  commitDocumentCandidates(root, deferred.candidates);
+}
+
+test('resolves a deferred object only into Coach-declared buckets', () => {
+  const root = copyFixture();
+  writeExistingBucket(root);
+  materializeDeferredObject(root);
+
+  const planned = planDeferredRouteResolution(root, 'obj-001', [
+    { kind: 'existing', id: 'algebraic-structure' },
+    { kind: 'new', key: 'route-choice', title: '函数表示与目标选路' },
+  ]);
+
+  expect(candidate(planned, 'memory/INDEX.md').after)
+    .not.toContain('(objects/obj-001.md)');
+  expect(candidate(planned, 'memory/indexes/algebraic-structure.md').after)
+    .toContain('../objects/obj-001.md');
+  expect(planned.bucketIds).toEqual({ 'route-choice': 'bucket-001' });
+  expect(candidate(planned, 'memory/indexes/bucket-001.md').after)
+    .toContain('../objects/obj-001.md');
+});
+
+test('rejects invalid deferred-route requests without producing candidates', () => {
+  const root = copyFixture();
+  writeExistingObject(root);
+  writeExistingBucket(root);
+
+  expect(() => planDeferredRouteResolution(root, 'obj-001', [
+    { kind: 'existing', id: 'algebraic-structure' },
+  ])).toThrow('is not deferred');
+  expect(() => planDeferredRouteResolution(root, 'obj-404', [
+    { kind: 'existing', id: 'algebraic-structure' },
+  ])).toThrow('document does not exist');
+
+  materializeDeferredObject(root);
+  expect(() => planDeferredRouteResolution(root, 'obj-002', []))
+    .toThrow('requires at least one bucket');
+
+  const outside = mkdtempSync(join(tmpdir(), 'studyforge-memory-bucket-outside-'));
+  roots.push(outside);
+  writeFileSync(join(outside, 'linked.md'), '# linked：外部\n\n## Objects\n');
+  symlinkSync(join(outside, 'linked.md'), join(root, 'memory/indexes/linked.md'));
+  expect(() => planDeferredRouteResolution(root, 'obj-002', [
+    { kind: 'existing', id: 'linked' },
+  ])).toThrow('symbolic link');
 });
