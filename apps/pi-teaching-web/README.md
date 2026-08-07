@@ -228,8 +228,9 @@ Plan ID 在 Roadmap 内唯一，Lesson ID 在所属 Plan 内唯一；Lesson Sess
 - **Lesson**：按学生实际回答逐级提示，先验证不同路线；对方法名称没把握时询问
   学生；预案外表现确有需要时按需召回，课末只固化一次。
 
-教学文本位于 `resources/agents/`、`resources/skills/` 和
-`resources/teaching/math-teaching-core.md`。
+教学文本位于 `resources/agents/`、`resources/skills/`、
+`resources/teaching/math-teaching-core.md` 和
+`resources/teaching/teacher-presence.md`。
 
 ## API 与事件
 

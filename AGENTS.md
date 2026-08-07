@@ -80,9 +80,10 @@ The model receives only:
 3. the compact `memory/INDEX.md` L0 route when it exists;
 4. shared mathematics teaching principles;
 5. the node-role prompt;
-6. an optional selected persona overlay;
-7. current node identity/path instructions;
-8. the role's Skills.
+6. shared default teacher presence and public-expression translation;
+7. an optional selected persona overlay;
+8. current node identity/path instructions;
+9. the role's Skills.
 
 Shared teacher agency has one semantic owner:
 `apps/pi-teaching-web/resources/teaching/math-teaching-core.md`. Role prompts apply it
@@ -91,6 +92,12 @@ only at decisions specific to Roadmap, Plan, or Lesson. Optional files under
 metaphor only; they never override mathematics, role authority, learning-set principles,
 or student agency. `STUDY_PERSONA=<id>` selects one overlay for all three student-facing
 node Sessions. The internal material Scout receives no persona or user-facing role-play.
+
+Default student-facing expression has one separate semantic owner:
+`apps/pi-teaching-web/resources/teaching/teacher-presence.md`. It is loaded after the
+node-role prompt for Roadmap, Plan, and Lesson, including when no persona is selected.
+It translates internal teaching judgments into concrete classroom language without
+changing the judgment or adding another model pass.
 
 Roadmap keeps the native `read`, `grep`, `find`, `ls`, `edit`, and `write` tools. Plan
 keeps those tools and additionally has `subagent` for fresh-context copies of one

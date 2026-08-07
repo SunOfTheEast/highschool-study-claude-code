@@ -197,6 +197,51 @@ test('loads one selected persona after the role for every student-facing node', 
   }
 });
 
+test('loads one default teacher presence after the role and before persona', () => {
+  const root = copyFixture();
+  const scopes = [
+    {
+      nodeKind: 'roadmap',
+      nodeId: 'roadmap',
+      nodePath: 'ROADMAP.md',
+      parentId: null,
+      parentPath: null,
+    },
+    {
+      nodeKind: 'plan',
+      nodeId: 'plan-001',
+      nodePath: 'plans/plan-001/PLAN.md',
+      parentId: 'roadmap',
+      parentPath: 'ROADMAP.md',
+    },
+    {
+      nodeKind: 'lesson',
+      nodeId: 'lesson-001',
+      nodePath: 'plans/plan-001/lessons/lesson-001.md',
+      parentId: 'plan-001',
+      parentPath: 'plans/plan-001/PLAN.md',
+    },
+  ] as const;
+  const presencePath = '/virtual/studyforge-teacher-presence.md';
+
+  for (const scope of scopes) {
+    const neutral = loadStaticNodeResources(root, scope);
+    const neutralPaths = neutral.agentsFiles.map((resource) => resource.path);
+    const roleIndex = neutralPaths.findIndex((path) => path.includes(`${scope.nodeKind}-node.md`));
+    const presenceIndex = neutralPaths.indexOf(presencePath);
+    const ownerIndex = neutralPaths.indexOf('/virtual/studyforge-m0-current-node.md');
+
+    expect(neutralPaths.filter((path) => path === presencePath)).toHaveLength(1);
+    expect(presenceIndex).toBeGreaterThan(roleIndex);
+    expect(ownerIndex).toBeGreaterThan(presenceIndex);
+
+    const personalizedPaths = loadStaticNodeResources(root, scope, 'gojo')
+      .agentsFiles.map((resource) => resource.path);
+    expect(personalizedPaths.indexOf('/virtual/studyforge-m0-persona-gojo.md'))
+      .toBeGreaterThan(personalizedPaths.indexOf(presencePath));
+  }
+});
+
 test('keeps neutral assembly without a persona and rejects unknown persona ids', () => {
   const root = copyFixture();
   const scope = {

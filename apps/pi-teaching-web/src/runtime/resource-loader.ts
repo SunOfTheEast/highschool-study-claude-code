@@ -95,6 +95,10 @@ export function loadStaticNodeResources(
         path: `/virtual/studyforge-m0-${roleFile}`,
         content: `Role resource: ${roleFile}\n\n${file(join(resourceRoot, 'agents', roleFile))}`,
       },
+      {
+        path: '/virtual/studyforge-teacher-presence.md',
+        content: file(join(resourceRoot, 'teaching', 'teacher-presence.md')),
+      },
       ...loadPersonaResource(personaId),
       {
         path: '/virtual/studyforge-m0-current-node.md',
