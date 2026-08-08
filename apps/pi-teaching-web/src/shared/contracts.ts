@@ -20,6 +20,40 @@ export type LearningAssetReference = {
   id: string;
 };
 
+export type ProblemAttemptResponse =
+  | { kind: 'answer'; text: string }
+  | { kind: 'cannot' };
+
+export type ProblemAttemptEvent = {
+  kind: 'attempt';
+  id: string;
+  requestId: string;
+  at: string;
+  cardId: string;
+  cardRevision: number;
+  answerViewedBefore: boolean;
+  response: ProblemAttemptResponse;
+};
+
+export type ProblemAnswerRevealEvent = {
+  kind: 'answer-reveal';
+  id: string;
+  requestId: string;
+  at: string;
+  cardId: string;
+  cardRevision: number;
+  attemptId: string;
+};
+
+export type ProblemActivityEvent = ProblemAttemptEvent | ProblemAnswerRevealEvent;
+
+export type ProblemActivitySnapshot = {
+  cardId: string;
+  events: ProblemActivityEvent[];
+  latestAttempt: ProblemAttemptEvent | null;
+  answerRevealedForLatestAttempt: boolean;
+};
+
 export type LearningSetGuide = {
   title: string;
   body: string;
