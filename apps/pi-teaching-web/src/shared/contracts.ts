@@ -54,6 +54,47 @@ export type ProblemActivitySnapshot = {
   answerRevealedForLatestAttempt: boolean;
 };
 
+export type LearningNoteBlock =
+  | { kind: 'markdown'; body: string }
+  | { kind: 'recall'; prompt: string; answer: string };
+
+export type LearningNote = {
+  kind: 'note';
+  id: string;
+  path: string;
+  revision: number;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  createdSessionId: string;
+  sources: LearningAssetReference[];
+  blocks: LearningNoteBlock[];
+};
+
+export type StudentProblemCard = {
+  kind: 'problem-card';
+  id: string;
+  revision: number;
+  title: string;
+  stem: string;
+  studentNote: string;
+  standardAnswer: string | null;
+  sources: LearningAssetReference[];
+};
+
+export type LearningAssetSummary = {
+  kind: LearningAssetKind;
+  id: string;
+  title: string;
+  revision: number;
+  updatedAt: string | null;
+};
+
+export type LearningAssetLibrarySnapshot = {
+  notes: LearningAssetSummary[];
+  problemCards: LearningAssetSummary[];
+};
+
 export type LearningSetGuide = {
   title: string;
   body: string;
@@ -287,5 +328,7 @@ export type StudyEvent =
   }
   | { type: 'session-run'; sessionKey: SessionKey; status: 'idle' | 'running' }
   | { type: 'session-error'; sessionKey: SessionKey; message: string }
+  | { type: 'home-invalidated' }
+  | { type: 'assets-invalidated' }
   | { type: 'course-invalidated' }
   | { type: 'knowledge-invalidated' };

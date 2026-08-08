@@ -20,6 +20,7 @@ import { studySubagentGuard } from './study-subagent-guard';
 import { lessonMemoryGuard } from './lesson-memory-guard';
 import { memoryEnabled } from './memory-tools';
 import { renderSelectedAssetContext } from '../study/learning-assets';
+import { renderSelectedProblemActivityContext } from '../study/problem-attempts';
 
 const resourceRoot = join(dirname(fileURLToPath(import.meta.url)), '../../resources');
 
@@ -126,6 +127,7 @@ export function loadStaticFreeLearningResources(
 ): StaticSessionResources {
   const hasMemory = memoryEnabled(root);
   const selectedAssets = renderSelectedAssetContext(root, scope.selectedAssets);
+  const selectedActivity = renderSelectedProblemActivityContext(root, scope.selectedAssets);
   return {
     agentsFiles: [
       ...(hasMemory ? [{
@@ -140,6 +142,10 @@ export function loadStaticFreeLearningResources(
       ...(selectedAssets ? [{
         path: '/virtual/studyforge-m1b-selected-assets.md',
         content: selectedAssets,
+      }] : []),
+      ...(selectedActivity ? [{
+        path: '/virtual/studyforge-m1b-selected-problem-activity.md',
+        content: selectedActivity,
       }] : []),
       {
         path: '/virtual/studyforge-m0-teaching-core.md',

@@ -7,27 +7,18 @@ import {
 } from 'node:fs';
 import { extname, join, relative, resolve, sep } from 'node:path';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
-import type { LearningAssetReference } from '../shared/contracts';
+import type {
+  LearningAssetLibrarySnapshot,
+  LearningAssetReference,
+  LearningNote,
+  LearningNoteBlock,
+  StudentProblemCard,
+} from '../shared/contracts';
 import { resolveDocumentPath } from '../runtime/atomic-document';
 import type { DocumentCandidate } from '../runtime/multi-document-transaction';
 import { StudyDocumentError } from './markdown';
 
-export type LearningNoteBlock =
-  | { kind: 'markdown'; body: string }
-  | { kind: 'recall'; prompt: string; answer: string };
-
-export type LearningNote = {
-  kind: 'note';
-  id: string;
-  path: string;
-  revision: number;
-  title: string;
-  createdAt: string;
-  updatedAt: string;
-  createdSessionId: string;
-  sources: LearningAssetReference[];
-  blocks: LearningNoteBlock[];
-};
+export type { LearningNote, LearningNoteBlock, StudentProblemCard } from '../shared/contracts';
 
 export type ProblemCard = {
   kind: 'problem-card';
@@ -44,11 +35,6 @@ export type ProblemCard = {
   createdSessionId: string | null;
   sources: LearningAssetReference[];
 };
-
-export type StudentProblemCard = Pick<
-  ProblemCard,
-  'kind' | 'id' | 'revision' | 'title' | 'stem' | 'studentNote' | 'sources'
-> & { standardAnswer: string | null };
 
 export type AssetSaveTarget = { id: string; expectedRevision: number };
 
@@ -346,6 +332,25 @@ export function listProblemCards(root: string): ProblemCard[] {
     ids.add(card.id);
   }
   return cards.sort((a, b) => (b.updatedAt ?? '').localeCompare(a.updatedAt ?? ''));
+}
+
+export function readLearningAssetLibrary(root: string): LearningAssetLibrarySnapshot {
+  return {
+    notes: listLearningNotes(root).map((note) => ({
+      kind: 'note',
+      id: note.id,
+      title: note.title,
+      revision: note.revision,
+      updatedAt: note.updatedAt,
+    })),
+    problemCards: listProblemCards(root).map((card) => ({
+      kind: 'problem-card',
+      id: card.id,
+      title: card.title,
+      revision: card.revision,
+      updatedAt: card.updatedAt,
+    })),
+  };
 }
 
 export function readStudentProblemCard(

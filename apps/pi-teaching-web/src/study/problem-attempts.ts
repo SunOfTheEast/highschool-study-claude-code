@@ -1,6 +1,7 @@
 import { existsSync, lstatSync, readFileSync } from 'node:fs';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import type {
+  LearningAssetReference,
   ProblemActivityEvent,
   ProblemActivitySnapshot,
   ProblemAnswerRevealEvent,
@@ -304,4 +305,29 @@ export function revealProblemAnswer(
   };
   appendEvent(root, event);
   return { event, standardAnswer: card.standardAnswer };
+}
+
+export function renderSelectedProblemActivityContext(
+  root: string,
+  references: readonly LearningAssetReference[],
+): string {
+  const sections = references.flatMap((reference, index) => {
+    if (reference.kind !== 'problem-card') return [];
+    const activity = readProblemActivity(root, reference.id);
+    if (!activity.latestAttempt) return [];
+    return [[
+      `## source-${index + 1} · recent problem activity`,
+      '',
+      stringifyYaml({
+        card_id: reference.id,
+        card_revision: activity.latestAttempt.cardRevision,
+        latest_attempt: activity.latestAttempt.response,
+        attempted_at: activity.latestAttempt.at,
+        answer_revealed_for_latest_attempt: activity.answerRevealedForLatestAttempt,
+      }, { lineWidth: 0 }).trim(),
+    ].join('\n')];
+  });
+  return sections.length === 0
+    ? ''
+    : ['# Selected Problem Activity', '', ...sections].join('\n\n');
 }
