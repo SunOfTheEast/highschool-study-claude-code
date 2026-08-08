@@ -5,6 +5,7 @@ import type {
   FreeLearningSessionSummary,
   LearningAssetReference,
   LessonDocument,
+  MetaSessionSummary,
   PlanDocument,
   RoadmapDocument,
   SessionKey,
@@ -18,17 +19,23 @@ import {
 } from './session-factory';
 import {
   findFreeLearningPiSession,
+  findMetaPiSession,
   findOwnedPiSessionFile,
   FREE_LEARNING_ENDED_TYPE,
   isFreeLearningEnded,
   listFreeLearningPiSessions,
+  listMetaPiSessions,
   readPiSessionBranch,
 } from './session-owner';
 import {
   freeLearningSessionId,
   freeLearningSessionKey,
+  metaSessionId,
+  metaSessionKey,
   type FreeLearningSessionRecord,
   type FreeLearningSessionScope,
+  type MetaSessionRecord,
+  type MetaSessionScope,
   type NodeSessionScope,
 } from './session-scope';
 
@@ -51,6 +58,13 @@ export type FreeLearningSessionLookup = (
 export type FreeLearningSessionList = (
   root: string,
 ) => Promise<FreeLearningSessionRecord[]>;
+
+export type MetaSessionLookup = (
+  root: string,
+  sessionId: string,
+) => Promise<MetaSessionRecord | null>;
+
+export type MetaSessionList = (root: string) => Promise<MetaSessionRecord[]>;
 
 type OwnedNode = {
   tree: CourseTreeNode;
@@ -96,11 +110,17 @@ function publicSummary(record: FreeLearningSessionRecord): FreeLearningSessionSu
   return summary;
 }
 
+function publicMetaSummary(record: MetaSessionRecord): MetaSessionSummary {
+  const { sessionFile: _sessionFile, scope: _scope, ...summary } = record;
+  return summary;
+}
+
 export class WorkspaceRegistry {
   private readonly sessions = new Map<SessionKey, StudySession>();
   private readonly opening = new Map<SessionKey, Promise<StudySession>>();
   private readonly turnTails = new Map<SessionKey, Promise<void>>();
   private readonly freeRecords = new Map<string, FreeLearningSessionRecord>();
+  private readonly metaRecords = new Map<string, MetaSessionRecord>();
 
   constructor(
     private readonly root: string,
@@ -109,6 +129,8 @@ export class WorkspaceRegistry {
     private readonly readBranch: SessionBranchReader = readPiSessionBranch,
     private readonly lookupFree: FreeLearningSessionLookup = findFreeLearningPiSession,
     private readonly listFree: FreeLearningSessionList = listFreeLearningPiSessions,
+    private readonly lookupMeta: MetaSessionLookup = findMetaPiSession,
+    private readonly listMetaSessions: MetaSessionList = listMetaPiSessions,
   ) {}
 
   private nodeOwner(key: SessionKey): OwnedNode {
@@ -175,6 +197,45 @@ export class WorkspaceRegistry {
       .map(publicSummary);
   }
 
+  async createMeta(
+    selectedAssets: readonly LearningAssetReference[],
+  ): Promise<MetaSessionSummary> {
+    const createdAt = new Date().toISOString();
+    const scope: MetaSessionScope = {
+      sessionKind: 'meta',
+      title: '长期学习规划',
+      createdAt,
+      selectedAssets: checkedSelectedAssets(selectedAssets),
+    };
+    const session = await this.factory(sessionFactoryInput(scope, null));
+    if (!session.sessionFile) {
+      session.dispose();
+      throw new Error('META_SESSION_NOT_PERSISTED');
+    }
+    const sessionKey = metaSessionKey(session.sessionId);
+    const record: MetaSessionRecord = {
+      id: session.sessionId,
+      sessionKey,
+      title: scope.title,
+      createdAt,
+      updatedAt: createdAt,
+      sessionFile: session.sessionFile,
+      scope,
+    };
+    this.sessions.set(sessionKey, session);
+    this.metaRecords.set(session.sessionId, record);
+    return publicMetaSummary(record);
+  }
+
+  async listMeta(): Promise<MetaSessionSummary[]> {
+    const records = new Map<string, MetaSessionRecord>();
+    for (const record of await this.listMetaSessions(this.root)) records.set(record.id, record);
+    for (const record of this.metaRecords.values()) records.set(record.id, record);
+    return [...records.values()]
+      .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+      .map(publicMetaSummary);
+  }
+
   async open(key: SessionKey): Promise<StudySession> {
     const cached = this.sessions.get(key);
     if (cached) return cached;
@@ -198,7 +259,27 @@ export class WorkspaceRegistry {
     return persisted;
   }
 
+  private async metaRecord(sessionId: string): Promise<MetaSessionRecord> {
+    const local = this.metaRecords.get(sessionId);
+    if (local) return local;
+    const persisted = await this.lookupMeta(this.root, sessionId);
+    if (!persisted) throw new Error(`META_SESSION_NOT_FOUND: ${sessionId}`);
+    this.metaRecords.set(sessionId, persisted);
+    return persisted;
+  }
+
   private async openNew(key: SessionKey): Promise<StudySession> {
+    const metaId = metaSessionId(key);
+    if (metaId !== null) {
+      const record = await this.metaRecord(metaId);
+      const session = await this.factory(sessionFactoryInput(record.scope, record.sessionFile));
+      if (session.sessionId !== record.id) {
+        session.dispose();
+        throw new Error(`META_SESSION_OWNER_MISMATCH: ${record.id}`);
+      }
+      this.sessions.set(key, session);
+      return session;
+    }
     const freeId = freeLearningSessionId(key);
     if (freeId !== null) {
       const record = await this.freeRecord(freeId);
@@ -242,6 +323,11 @@ export class WorkspaceRegistry {
         const record = await this.freeRecord(freeId);
         this.freeRecords.set(freeId, { ...record, updatedAt: new Date().toISOString() });
       }
+      const metaId = metaSessionId(key);
+      if (metaId !== null) {
+        const record = await this.metaRecord(metaId);
+        this.metaRecords.set(metaId, { ...record, updatedAt: new Date().toISOString() });
+      }
     });
     this.turnTails.set(key, next);
     try {
@@ -254,6 +340,11 @@ export class WorkspaceRegistry {
   async readHistory(key: SessionKey): Promise<readonly SessionEntry[]> {
     const cached = this.sessions.get(key);
     if (cached) return cached.entries;
+    const metaId = metaSessionId(key);
+    if (metaId !== null) {
+      const record = await this.metaRecord(metaId);
+      return this.readBranch(this.root, record.sessionFile);
+    }
     const freeId = freeLearningSessionId(key);
     if (freeId !== null) {
       const record = await this.freeRecord(freeId);
@@ -314,6 +405,6 @@ export class WorkspaceRegistry {
     this.opening.clear();
     this.turnTails.clear();
     this.freeRecords.clear();
+    this.metaRecords.clear();
   }
 }
-

@@ -10,10 +10,14 @@ import {
 import { createPlanCompactionPrompt } from './plan-compaction';
 import { createLessonTools } from './lesson-tools';
 import { createPlanTools } from './plan-tools';
+import { createMetaTools } from './meta-tools';
 import { createRoleResourceLoader } from './resource-loader';
 import { appendSessionOwner } from './session-owner';
 import {
   isFreeLearningScope,
+  isMetaScope,
+  isNodeSessionScope,
+  META_MODEL_TOOLS,
   modelToolsForFreeLearning,
   modelToolsForNode,
   type NodeSessionScope,
@@ -65,7 +69,11 @@ export function customToolsForSession(
   scope: StudySessionScope,
   manager?: Pick<SessionManager, 'getSessionId' | 'getBranch'>,
 ) {
-  if (!isFreeLearningScope(scope)) return customToolsForNode(root, scope, manager);
+  if (isMetaScope(scope)) {
+    if (!manager) throw new Error('META_SESSION_MANAGER_REQUIRED');
+    return createMetaTools(root, manager);
+  }
+  if (isNodeSessionScope(scope)) return customToolsForNode(root, scope, manager);
   if (!manager) throw new Error('FREE_LEARNING_SESSION_MANAGER_REQUIRED');
   return createFreeLearningTools(root, scope, manager);
 }
@@ -92,7 +100,7 @@ export async function createPiSessionFactory(root: string): Promise<StudySession
       ? SessionManager.open(sessionFile, undefined, root)
       : SessionManager.create(root);
     if (!sessionFile) {
-      manager.appendSessionInfo(isFreeLearningScope(scope)
+      manager.appendSessionInfo(isFreeLearningScope(scope) || isMetaScope(scope)
         ? scope.title
         : `${scope.nodeKind} · ${scope.nodeId}`);
       appendSessionOwner(manager, scope);
@@ -105,12 +113,14 @@ export async function createPiSessionFactory(root: string): Promise<StudySession
       resourceLoader,
       sessionManager: manager,
       customTools,
-      tools: [...(isFreeLearningScope(scope)
-        ? modelToolsForFreeLearning(memoryEnabled(root))
-        : modelToolsForNode(scope.nodeKind, memoryEnabled(root)))],
+      tools: [...(isMetaScope(scope)
+        ? META_MODEL_TOOLS
+        : isFreeLearningScope(scope)
+          ? modelToolsForFreeLearning(memoryEnabled(root))
+          : modelToolsForNode(scope.nodeKind, memoryEnabled(root)))],
     });
     await bindStudyExtensions(session);
-    const compaction = isFreeLearningScope(scope)
+    const compaction = !isNodeSessionScope(scope)
       ? {
         prompt: (text: string, images: ImageContent[] = []) => session.prompt(text, { images }),
         dispose: () => {},

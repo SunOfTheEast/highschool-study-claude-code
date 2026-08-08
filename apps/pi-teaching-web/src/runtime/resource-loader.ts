@@ -8,11 +8,16 @@ import {
 } from '@earendil-works/pi-coding-agent';
 import {
   formatFreeLearningOwnerContext,
+  formatMetaOwnerContext,
   formatSessionOwnerContext,
   isFreeLearningScope,
+  isMetaScope,
+  isNodeSessionScope,
+  META_MODEL_TOOLS,
   modelToolsForFreeLearning,
   modelToolsForNode,
   type FreeLearningSessionScope,
+  type MetaSessionScope,
   type NodeSessionScope,
   type StudySessionScope,
 } from './session-scope';
@@ -66,6 +71,49 @@ function loadPersonaResource(personaId: string | undefined) {
 function loadMemoryIndexResource(root: string) {
   const path = join(root, 'memory', 'INDEX.md');
   return existsSync(path) ? [{ path, content: file(path) }] : [];
+}
+
+function semanticAssetOverview(root: string): string {
+  const path = join(root, 'semantics', 'indexes', 'asset-recall.tsv');
+  if (!existsSync(path)) {
+    return '# Semantic asset overview\n\n- Indexed assets: 0\n- Frequent tags: none';
+  }
+  const rows = file(path).split(/\r?\n/).slice(1).filter(Boolean);
+  const counts = new Map<string, number>();
+  let notes = 0;
+  let cards = 0;
+  for (const row of rows) {
+    const fields = row.split('\t');
+    if (fields[1] === 'note') notes += 1;
+    if (fields[1] === 'problem-card') cards += 1;
+    for (const field of [fields[3], fields[4]]) {
+      if (!field) continue;
+      let tags: unknown;
+      try {
+        tags = JSON.parse(field);
+      } catch {
+        continue;
+      }
+      if (!Array.isArray(tags)) continue;
+      for (const tag of tags) {
+        if (typeof tag === 'string' && tag.trim()) {
+          counts.set(tag, (counts.get(tag) ?? 0) + 1);
+        }
+      }
+    }
+  }
+  const frequent = [...counts.entries()]
+    .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
+    .slice(0, 12)
+    .map(([tag, count]) => `${tag} (${count})`);
+  return [
+    '# Semantic asset overview',
+    '',
+    `- Indexed assets: ${rows.length} (${notes} Notes, ${cards} problem cards)`,
+    `- Frequent tags: ${frequent.join('、') || 'none'}`,
+    '',
+    'This is a compact content inventory, not evidence of student mastery.',
+  ].join('\n');
 }
 
 export function loadStaticNodeResources(
@@ -178,22 +226,64 @@ export function loadStaticFreeLearningResources(
   };
 }
 
+export function loadStaticMetaResources(
+  root: string,
+  scope: MetaSessionScope,
+  personaId?: string,
+): StaticSessionResources {
+  const selectedAssets = renderSelectedAssetContext(root, scope.selectedAssets);
+  return {
+    agentsFiles: [
+      {
+        path: join(root, 'LEARNING_GUIDE.md'),
+        content: file(join(root, 'LEARNING_GUIDE.md')),
+      },
+      ...loadMemoryIndexResource(root),
+      {
+        path: '/virtual/studyforge-m1c-semantic-overview.md',
+        content: semanticAssetOverview(root),
+      },
+      ...(selectedAssets ? [{
+        path: '/virtual/studyforge-m1c-meta-selected-assets.md',
+        content: selectedAssets,
+      }] : []),
+      {
+        path: '/virtual/studyforge-m1c-meta-session.md',
+        content: file(join(resourceRoot, 'agents', 'meta-session.md')),
+      },
+      {
+        path: '/virtual/studyforge-teacher-presence.md',
+        content: file(join(resourceRoot, 'teaching', 'teacher-presence.md')),
+      },
+      ...loadPersonaResource(personaId),
+      {
+        path: '/virtual/studyforge-m1c-current-meta-session.md',
+        content: formatMetaOwnerContext(root, scope),
+      },
+    ],
+    skillPaths: [join(resourceRoot, 'skills', 'meta-dialogue', 'SKILL.md')],
+    tools: META_MODEL_TOOLS,
+  };
+}
+
 export async function createRoleResourceLoader(
   root: string,
   scope: StudySessionScope,
   eventBus: EventBus,
   personaId: string | undefined = process.env.STUDY_PERSONA,
 ) {
-  const resources = isFreeLearningScope(scope)
-    ? loadStaticFreeLearningResources(root, scope, personaId)
-    : loadStaticNodeResources(root, scope, personaId);
-  const extensionFactories = !isFreeLearningScope(scope) && scope.nodeKind === 'plan'
+  const resources = isMetaScope(scope)
+    ? loadStaticMetaResources(root, scope, personaId)
+    : isFreeLearningScope(scope)
+      ? loadStaticFreeLearningResources(root, scope, personaId)
+      : loadStaticNodeResources(root, scope, personaId);
+  const extensionFactories = isNodeSessionScope(scope) && scope.nodeKind === 'plan'
     ? [{
       name: 'study-subagent-guard',
       factory: studySubagentGuard,
       hidden: true,
     }]
-    : !isFreeLearningScope(scope) && scope.nodeKind === 'lesson'
+    : isNodeSessionScope(scope) && scope.nodeKind === 'lesson'
       ? [{
         name: 'lesson-memory-guard',
         factory: lessonMemoryGuard(root, scope),
@@ -204,7 +294,7 @@ export async function createRoleResourceLoader(
     cwd: root,
     agentDir: getAgentDir(),
     eventBus,
-    additionalExtensionPaths: !isFreeLearningScope(scope) && scope.nodeKind === 'plan'
+    additionalExtensionPaths: isNodeSessionScope(scope) && scope.nodeKind === 'plan'
       ? [fileURLToPath(import.meta.resolve('pi-subagents'))]
       : [],
     extensionFactories,

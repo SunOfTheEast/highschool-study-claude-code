@@ -243,3 +243,21 @@ test('keeps the Plan approval gate unchanged after Roadmap memory calibration', 
   ]);
   expect(skill).toContain('确认之前不得调用 `prepare-approved-plan`');
 });
+
+test('keeps Meta at Roadmap creation without swallowing the first Plan', () => {
+  const skill = read('skills/meta-dialogue/SKILL.md');
+  const role = read('agents/meta-session.md');
+
+  expectInOrder(skill, [
+    '确认是否需要长期路径',
+    '按需读取真实证据',
+    '公开完整 Roadmap 级方案',
+    '明确确认',
+    'create_roadmap',
+    'Roadmap Session',
+  ]);
+  expect(skill).toContain('不等于学生掌握');
+  expect(skill).toContain('不在本 Session 继续制定第一个 Plan');
+  expect(role).toContain('不得创建、设计或预演第一个 Plan');
+  expect(role).toContain('学生拒绝长期路径时不劝服');
+});

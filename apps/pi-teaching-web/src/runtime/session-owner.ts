@@ -2,8 +2,11 @@ import type { SessionEntry } from '@earendil-works/pi-coding-agent';
 import {
   freeLearningSessionKey,
   isFreeLearningScope,
+  isMetaScope,
+  metaSessionKey,
   type FreeLearningSessionRecord,
   type FreeLearningSessionScope,
+  type MetaSessionRecord,
   type NodeSessionScope,
   type StudySessionScope,
 } from './session-scope';
@@ -35,6 +38,13 @@ function isSessionOwner(value: unknown): value is StudySessionScope {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
   const owner = value as Record<string, unknown>;
   if (owner.sessionKind === 'free-learning') {
+    return nonempty(owner.title)
+      && nonempty(owner.createdAt)
+      && !Number.isNaN(Date.parse(owner.createdAt))
+      && Array.isArray(owner.selectedAssets)
+      && owner.selectedAssets.every(validAssetReference);
+  }
+  if (owner.sessionKind === 'meta') {
     return nonempty(owner.title)
       && nonempty(owner.createdAt)
       && !Number.isNaN(Date.parse(owner.createdAt))
@@ -78,6 +88,12 @@ export function sessionOwnerMatches(
       && JSON.stringify(actual.selectedAssets) === JSON.stringify(expected.selectedAssets);
   }
   if (isFreeLearningScope(actual) || isFreeLearningScope(expected)) return false;
+  if (isMetaScope(actual) || isMetaScope(expected)) {
+    return isMetaScope(actual) && isMetaScope(expected)
+      && actual.title === expected.title
+      && actual.createdAt === expected.createdAt
+      && JSON.stringify(actual.selectedAssets) === JSON.stringify(expected.selectedAssets);
+  }
   return actual.nodeKind === expected.nodeKind
     && actual.nodeId === expected.nodeId
     && actual.nodePath === expected.nodePath
@@ -167,6 +183,51 @@ export async function listFreeLearningPiSessions(
   for (const info of await SessionManager.list(root)) {
     const manager = SessionManager.open(info.path, undefined, root);
     const record = freeRecord(info, manager);
+    if (record) records.push(record);
+  }
+  return records.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+}
+
+function metaRecord(
+  info: {
+    path: string;
+    id: string;
+    created: Date;
+    modified: Date;
+    name?: string;
+  },
+  manager: SessionOwnerReader,
+): MetaSessionRecord | null {
+  const scope = readSessionOwner(manager);
+  if (!scope || !isMetaScope(scope)) return null;
+  return {
+    id: info.id,
+    sessionKey: metaSessionKey(info.id),
+    title: info.name?.trim() || scope.title,
+    createdAt: scope.createdAt || info.created.toISOString(),
+    updatedAt: info.modified.toISOString(),
+    sessionFile: info.path,
+    scope,
+  };
+}
+
+export async function findMetaPiSession(
+  root: string,
+  sessionId: string,
+): Promise<MetaSessionRecord | null> {
+  const { SessionManager } = await import('@earendil-works/pi-coding-agent');
+  const info = (await SessionManager.list(root)).find((item) => item.id === sessionId);
+  if (!info) return null;
+  const manager = SessionManager.open(info.path, undefined, root);
+  return metaRecord(info, manager);
+}
+
+export async function listMetaPiSessions(root: string): Promise<MetaSessionRecord[]> {
+  const { SessionManager } = await import('@earendil-works/pi-coding-agent');
+  const records: MetaSessionRecord[] = [];
+  for (const info of await SessionManager.list(root)) {
+    const manager = SessionManager.open(info.path, undefined, root);
+    const record = metaRecord(info, manager);
     if (record) records.push(record);
   }
   return records.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));

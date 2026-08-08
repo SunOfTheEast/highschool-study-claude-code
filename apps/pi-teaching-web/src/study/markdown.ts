@@ -327,8 +327,7 @@ function parseBlock(section: MarkdownSection, path: string): ActivityBlock {
   };
 }
 
-export function readRoadmap(root: string): RoadmapDocument {
-  const source = readSource(root, 'ROADMAP.md');
+function parseRoadmap(source: MarkdownSource): RoadmapDocument {
   requireLiteral(source.frontmatter, 'id', 'roadmap', source.path);
   requireLiteral(source.frontmatter, 'kind', 'roadmap', source.path);
   requireLiteral(source.frontmatter, 'status', 'active', source.path);
@@ -348,6 +347,14 @@ export function readRoadmap(root: string): RoadmapDocument {
     currentPosition: oneSection(sections, 'Current Position', source.path),
     raw: source.raw,
   };
+}
+
+export function parseRoadmapSource(path: string, raw: string): RoadmapDocument {
+  return parseRoadmap(parseSource(path, raw));
+}
+
+export function readRoadmap(root: string): RoadmapDocument {
+  return parseRoadmap(readSource(root, 'ROADMAP.md'));
 }
 
 export function readPlan(root: string, requestedPath: string): PlanDocument {

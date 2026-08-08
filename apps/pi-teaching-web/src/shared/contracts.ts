@@ -11,7 +11,8 @@ export type NodeKind = 'roadmap' | 'plan' | 'lesson';
 export type NodeStatus = 'active' | PlanStatus | LessonStatus;
 export type NodeSessionKey = `${NodeKind}:${string}`;
 export type FreeLearningSessionKey = `free:${string}`;
-export type SessionKey = NodeSessionKey | FreeLearningSessionKey;
+export type MetaSessionKey = `meta:${string}`;
+export type SessionKey = NodeSessionKey | FreeLearningSessionKey | MetaSessionKey;
 
 export type LearningAssetKind = 'note' | 'problem-card';
 
@@ -173,6 +174,14 @@ export type FreeLearningSessionSummary = {
   createdAt: string;
   updatedAt: string;
   status: 'active' | 'ended';
+};
+
+export type MetaSessionSummary = {
+  id: string;
+  sessionKey: MetaSessionKey;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type LearningSetHomeSnapshot = {

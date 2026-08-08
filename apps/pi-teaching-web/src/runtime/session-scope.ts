@@ -2,6 +2,8 @@ import type {
   FreeLearningSessionKey,
   FreeLearningSessionSummary,
   LearningAssetReference,
+  MetaSessionKey,
+  MetaSessionSummary,
   NodeKind,
   SessionKey,
 } from '../shared/contracts';
@@ -24,11 +26,23 @@ export type FreeLearningSessionScope = {
   selectedAssets: readonly LearningAssetReference[];
 };
 
-export type StudySessionScope = NodeSessionScope | FreeLearningSessionScope;
+export type MetaSessionScope = {
+  sessionKind: 'meta';
+  title: string;
+  createdAt: string;
+  selectedAssets: readonly LearningAssetReference[];
+};
+
+export type StudySessionScope = NodeSessionScope | FreeLearningSessionScope | MetaSessionScope;
 
 export type FreeLearningSessionRecord = FreeLearningSessionSummary & {
   sessionFile: string;
   scope: FreeLearningSessionScope;
+};
+
+export type MetaSessionRecord = MetaSessionSummary & {
+  sessionFile: string;
+  scope: MetaSessionScope;
 };
 
 export const M0_MODEL_TOOLS = [
@@ -67,6 +81,12 @@ export const FREE_LEARNING_MODEL_TOOLS = [
   'save_problem_card',
 ] as const;
 
+export const META_MODEL_TOOLS = [
+  'read',
+  'grep',
+  'create_roadmap',
+] as const;
+
 export function modelToolsForFreeLearning(hasMemory: boolean): readonly string[] {
   return hasMemory
     ? [...FREE_LEARNING_MODEL_TOOLS, 'free_learning_memory_commit']
@@ -79,8 +99,12 @@ export function isFreeLearningScope(
   return 'sessionKind' in scope && scope.sessionKind === 'free-learning';
 }
 
+export function isMetaScope(scope: StudySessionScope): scope is MetaSessionScope {
+  return 'sessionKind' in scope && scope.sessionKind === 'meta';
+}
+
 export function isNodeSessionScope(scope: StudySessionScope): scope is NodeSessionScope {
-  return !isFreeLearningScope(scope);
+  return !isFreeLearningScope(scope) && !isMetaScope(scope);
 }
 
 export function modelToolsForNode(kind: NodeKind, hasMemory = false): readonly string[] {
@@ -129,6 +153,19 @@ export function freeLearningSessionId(key: SessionKey): string | null {
   return sessionIdPattern.test(id) ? id : null;
 }
 
+export function metaSessionKey(sessionId: string): MetaSessionKey {
+  if (!sessionIdPattern.test(sessionId)) {
+    throw new Error(`META_SESSION_ID_INVALID: ${sessionId}`);
+  }
+  return `meta:${sessionId}`;
+}
+
+export function metaSessionId(key: SessionKey): string | null {
+  if (!key.startsWith('meta:')) return null;
+  const id = key.slice('meta:'.length);
+  return sessionIdPattern.test(id) ? id : null;
+}
+
 export function formatSessionOwnerContext(
   root: string,
   scope: NodeSessionScope,
@@ -160,5 +197,21 @@ export function formatFreeLearningOwnerContext(
     '',
     'This Session is not a Roadmap, Plan, Lesson, Light Lesson, or course-tree node.',
     'Its native Pi Session is the only conversation record.',
+  ].join('\n');
+}
+
+export function formatMetaOwnerContext(root: string, scope: MetaSessionScope): string {
+  const assets = scope.selectedAssets.length === 0
+    ? '- none'
+    : scope.selectedAssets.map((asset) => `- ${asset.kind}:${asset.id}`).join('\n');
+  return [
+    `Learning set root: ${root}`,
+    'Current session kind: meta',
+    `Session title: ${scope.title}`,
+    'Selected asset handles:',
+    assets,
+    '',
+    'This root Session may create only ROADMAP.md after explicit student approval.',
+    'It never creates a Plan, Lesson, Light Lesson, Classroom Log, Trace, or Summary.',
   ].join('\n');
 }
