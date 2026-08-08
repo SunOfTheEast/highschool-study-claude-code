@@ -40,6 +40,7 @@ test('round-trips one mixed Note with runtime-owned identity and revision', () =
       },
     ],
     sources: [],
+    tags: { core: ['沉淀溶解平衡'], related: ['固体活度'] },
   }, '2026-08-08T10:00:00.000Z');
   commitDocumentCandidates(root, planned.candidates);
 
@@ -76,6 +77,7 @@ test('keeps one canonical problem card while projecting different readers', () =
     teacherRationale: '先区分 Ksp 不变与离子积变化，再讨论固体的地位。',
     studentNote: '不能说成 Ksp 变小。',
     sources: [],
+    tags: { core: ['沉淀溶解平衡'], related: ['离子浓度'] },
   }, '2026-08-08T10:10:00.000Z');
   commitDocumentCandidates(root, planned.candidates);
 
@@ -115,22 +117,27 @@ test('supports old complete cards and rejects stale asset revisions', () => {
     title: '初稿',
     blocks: [{ kind: 'markdown', body: '第一版。' }],
     sources: [],
+    tags: { core: ['初稿'], related: [] },
   }, '2026-08-08T10:00:00.000Z');
   commitDocumentCandidates(root, first.candidates);
   const update = planLearningNoteSave(root, 'session-002', {
     target: { id: 'note-001', expectedRevision: 1 },
+    expectedTagRevision: 1,
     title: '修订稿',
     blocks: [{ kind: 'markdown', body: '第二版。' }],
     sources: [],
+    tags: { core: ['修订稿'], related: [] },
   }, '2026-08-08T11:00:00.000Z');
   commitDocumentCandidates(root, update.candidates);
 
   expect(readLearningNote(root, 'note-001')).toMatchObject({ revision: 2, title: '修订稿' });
   expect(() => planLearningNoteSave(root, 'session-003', {
     target: { id: 'note-001', expectedRevision: 1 },
+    expectedTagRevision: 1,
     title: '过期覆盖',
     blocks: [{ kind: 'markdown', body: '不应写入。' }],
     sources: [],
+    tags: { core: ['过期覆盖'], related: [] },
   }, '2026-08-08T12:00:00.000Z')).toThrow('ASSET_REVISION_STALE');
 });
 
@@ -142,6 +149,7 @@ test('injects only explicitly selected full Tutor projections with stable aliase
     teacherRationale: '教师依据。',
     studentNote: '',
     sources: [],
+    tags: { core: ['被选中的题'], related: [] },
   }, '2026-08-08T10:00:00.000Z').candidates);
   const context = renderSelectedAssetContext(root, [
     { kind: 'problem-card', id: 'problem-001' },
@@ -152,4 +160,3 @@ test('injects only explicitly selected full Tutor projections with stable aliase
   expect(context).toContain('教师依据。');
   expect(context).not.toContain('sample-card');
 });
-

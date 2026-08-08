@@ -65,6 +65,7 @@ test('keeps runtime authority fields and confirmation flags out of both schemas'
     title: '一个笔记',
     blocks: [{ kind: 'markdown', body: '正文。' }],
     sourceAliases: [],
+    tags: { core: ['笔记'], related: [] },
   };
   const cardInput = {
     stem: '一道题。',
@@ -72,6 +73,7 @@ test('keeps runtime authority fields and confirmation flags out of both schemas'
     teacherRationale: '教师依据。',
     studentNote: '',
     sourceAliases: [],
+    tags: { core: ['题卡'], related: [] },
   };
   expect(Check(note!.parameters, noteInput)).toBeTrue();
   expect(Check(card!.parameters, cardInput)).toBeTrue();
@@ -105,6 +107,7 @@ test('rejects a save before the latest student message explicitly approves it', 
     title: '不应保存',
     blocks: [{ kind: 'markdown', body: '没有得到批准。' }],
     sourceAliases: [],
+    tags: { core: ['不应保存'], related: [] },
   })).rejects.toThrow('ASSET_SAVE_NOT_CONFIRMED');
   expect(() => readLearningNote(root, 'note-001')).toThrow();
 });
@@ -117,7 +120,18 @@ test('saves after explicit approval, resolves selected aliases, and replays one 
     teacherRationale: '来源教师依据。',
     studentNote: '',
     sources: [],
+    tags: { core: ['来源题'], related: [] },
   }, '2026-08-08T09:00:00.000Z').candidates);
+  commitDocumentCandidates(root, planProblemCardSave(root, 'seed-session', {
+    target: { id: 'problem-001', expectedRevision: 1 },
+    expectedTagRevision: 1,
+    stem: '来源题第二版。',
+    standardAnswer: '来源答案第二版。',
+    teacherRationale: '来源教师依据第二版。',
+    studentNote: '',
+    sources: [],
+    tags: { core: ['来源题'], related: ['第二版'] },
+  }, '2026-08-08T09:30:00.000Z').candidates);
   const directApproval = [message('u1', 'user', '可以，保存为笔记。')];
   const scope = {
     sessionKind: 'free-learning' as const,
@@ -130,6 +144,7 @@ test('saves after explicit approval, resolves selected aliases, and replays one 
     title: '参数不改变平衡常数',
     blocks: [{ kind: 'markdown', body: '温度不变时，加入反应物不改变平衡常数。' }],
     sourceAliases: ['source-1'],
+    tags: { core: ['平衡常数'], related: [] },
   };
   const first = await execute(note!, 'save-note-1', input);
   const replay = await execute(note!, 'save-note-1', input);
@@ -140,7 +155,7 @@ test('saves after explicit approval, resolves selected aliases, and replays one 
     asset: { kind: 'note', id: 'note-001', revision: 1 },
   });
   expect(readLearningNote(root, 'note-001').sources).toEqual([
-    { kind: 'problem-card', id: 'problem-001' },
+    { kind: 'problem-card', id: 'problem-001', revision: 2 },
   ]);
 });
 
@@ -163,6 +178,7 @@ test('accepts a short acknowledgement only when it follows a visible card propos
     teacherRationale: '区分反应进度与平衡常数。',
     studentNote: '',
     sourceAliases: [],
+    tags: { core: ['平衡常数'], related: [] },
   });
   expect(readProblemCard(root, 'problem-001').teacherRationale)
     .toBe('区分反应进度与平衡常数。');

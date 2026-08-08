@@ -144,6 +144,7 @@ test('round-trips Note and gated problem-card activity without private leakage',
     title: '平衡常数',
     blocks: [{ kind: 'markdown', body: '温度不变时，平衡常数不随加料改变。' }],
     sources: [],
+    tags: { core: ['种子笔记'], related: [] },
   }, '2026-08-08T09:00:00.000Z').candidates);
   commitDocumentCandidates(root, planProblemCardSave(root, 'seed-session', {
     stem: '加入 NaCl 后，AgCl 的 Ksp 是否改变？',
@@ -151,6 +152,7 @@ test('round-trips Note and gated problem-card activity without private leakage',
     teacherRationale: '先区分常数和即时状态。',
     studentNote: '别把平衡移动说成常数改变。',
     sources: [],
+    tags: { core: ['种子题卡'], related: [] },
   }, '2026-08-08T09:00:00.000Z').candidates);
   const selected: LearningAssetReference[][] = [];
   const handler = createRequestHandler({
@@ -217,6 +219,7 @@ test('edits student-owned asset fields with stale revision protection', async ()
     title: '初稿',
     blocks: [{ kind: 'markdown', body: '第一版。' }],
     sources: [],
+    tags: { core: ['来源笔记'], related: [] },
   }, '2026-08-08T09:00:00.000Z').candidates);
   const handler = createRequestHandler({
     root,
@@ -293,4 +296,3 @@ test('publishes asset invalidation only after successful free-learning writes', 
   expect(events.filter((event) => event.type === 'knowledge-invalidated')).toHaveLength(1);
   expect(events.filter((event) => event.type === 'home-invalidated')).toHaveLength(1);
 });
-

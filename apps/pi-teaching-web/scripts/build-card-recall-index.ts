@@ -109,7 +109,8 @@ export async function buildCardRecallIndex(learningSetRoot: string): Promise<str
   const paths: string[] = [];
 
   for await (const path of glob.scan({ cwd: root, onlyFiles: true })) {
-    paths.push(path.replaceAll('\\', '/'));
+    const normalized = path.replaceAll('\\', '/');
+    if (!normalized.split('/').includes('.revisions')) paths.push(normalized);
   }
   paths.sort();
 

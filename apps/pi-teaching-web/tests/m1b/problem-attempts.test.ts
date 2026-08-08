@@ -22,6 +22,7 @@ function learningSet(): string {
     teacherRationale: '区分离子积的瞬时变化与 Ksp 不变。',
     studentNote: '',
     sources: [],
+    tags: { core: ['测试题'], related: [] },
   }, '2026-08-08T09:00:00.000Z').candidates);
   roots.push(root);
   return root;
@@ -124,4 +125,3 @@ test('does not reveal an answer before an attempt exists', () => {
   )).toThrow('ANSWER_REVEAL_REQUIRES_ATTEMPT');
   expect(readProblemActivity(root, 'problem-001').events).toEqual([]);
 });
-

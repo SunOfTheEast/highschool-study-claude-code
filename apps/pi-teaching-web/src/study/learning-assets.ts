@@ -9,14 +9,22 @@ import { extname, join, relative, resolve, sep } from 'node:path';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import type {
   LearningAssetLibrarySnapshot,
+  LearningAssetHandle,
   LearningAssetReference,
+  LearningSourceReference,
   LearningNote,
   LearningNoteBlock,
+  ReadableLearningSourceReference,
+  SemanticTagDraft,
   StudentProblemCard,
 } from '../shared/contracts';
 import { resolveDocumentPath } from '../runtime/atomic-document';
 import type { DocumentCandidate } from '../runtime/multi-document-transaction';
 import { StudyDocumentError } from './markdown';
+import {
+  planSemanticTagsSave,
+  type SemanticTags,
+} from './semantic-tags';
 
 export type { LearningNote, LearningNoteBlock, StudentProblemCard } from '../shared/contracts';
 
@@ -33,26 +41,36 @@ export type ProblemCard = {
   createdAt: string | null;
   updatedAt: string | null;
   createdSessionId: string | null;
-  sources: LearningAssetReference[];
+  sources: ReadableLearningSourceReference[];
 };
 
 export type AssetSaveTarget = { id: string; expectedRevision: number };
 
-export type LearningNoteSaveDraft = {
+export type LearningAssetSaveDraft = {
   target?: AssetSaveTarget;
-  title: string;
-  blocks: LearningNoteBlock[];
-  sources: LearningAssetReference[];
+  expectedTagRevision?: number;
+  tags: SemanticTagDraft;
+  sources: LearningSourceReference[];
 };
 
+type ContentOnlyAssetEditDraft = {
+  target: AssetSaveTarget;
+  expectedTagRevision?: never;
+  tags?: never;
+  sources: ReadableLearningSourceReference[];
+};
+
+export type LearningNoteSaveDraft = {
+  title: string;
+  blocks: LearningNoteBlock[];
+} & (LearningAssetSaveDraft | ContentOnlyAssetEditDraft);
+
 export type ProblemCardSaveDraft = {
-  target?: AssetSaveTarget;
   stem: string;
   standardAnswer: string;
   teacherRationale: string;
   studentNote: string;
-  sources: LearningAssetReference[];
-};
+} & (LearningAssetSaveDraft | ContentOnlyAssetEditDraft);
 
 export type AssetSaveReceipt = {
   kind: 'note' | 'problem-card';
@@ -100,22 +118,47 @@ function checkedTime(value: unknown, label: string): string {
   return text;
 }
 
-function checkedSources(value: unknown): LearningAssetReference[] {
+function checkedSources(value: unknown): ReadableLearningSourceReference[] {
   if (!Array.isArray(value)) throw new Error('sources must be an array');
   const seen = new Set<string>();
   return value.map((item, index) => {
     const source = record(item);
+    if (!source) throw new Error(`sources[${index}] is invalid`);
     const kind = source?.kind;
     const id = source?.id;
+    if (kind === 'material') {
+      if (typeof id !== 'string') throw new Error(`sources[${index}] is invalid`);
+      checkedId(id, 'source id');
+      const revision = checkedRevision(source.revision, `sources[${index}].revision`);
+      const locator = requiredText(source.locator, `sources[${index}].locator`);
+      const key = `material:${id}@${revision}#${locator}`;
+      if (seen.has(key)) throw new Error(`DUPLICATE_ASSET_SOURCE: ${key}`);
+      seen.add(key);
+      return { kind, id, revision, locator };
+    }
     if ((kind !== 'note' && kind !== 'problem-card') || typeof id !== 'string') {
       throw new Error(`sources[${index}] is invalid`);
     }
     checkedId(id, 'source id');
-    const key = `${kind}:${id}`;
-    if (seen.has(key)) throw new Error(`duplicate source: ${key}`);
+    if (source.revision === undefined) {
+      const key = `legacy-unpinned:${kind}:${id}`;
+      if (seen.has(key)) throw new Error(`DUPLICATE_ASSET_SOURCE: ${key}`);
+      seen.add(key);
+      return { kind: 'legacy-unpinned', assetKind: kind, id };
+    }
+    const revision = checkedRevision(source.revision, `sources[${index}].revision`);
+    const key = `${kind}:${id}@${revision}`;
+    if (seen.has(key)) throw new Error(`DUPLICATE_ASSET_SOURCE: ${key}`);
     seen.add(key);
-    return { kind, id };
+    return { kind, id, revision };
   });
+}
+
+function sourceValue(source: ReadableLearningSourceReference): RecordValue {
+  if (source.kind === 'legacy-unpinned') {
+    return { kind: source.assetKind, id: source.id };
+  }
+  return source;
 }
 
 function checkedBlocks(value: unknown): LearningNoteBlock[] {
@@ -151,7 +194,7 @@ function filesBelow(root: string, directory: string): string[] {
       if (entry.isSymbolicLink()) {
         throw new StudyDocumentError(relative(root, path), 'asset path cannot be a symbolic link');
       }
-      if (entry.isDirectory()) visit(path);
+      if (entry.isDirectory() && entry.name !== '.revisions') visit(path);
       else if (entry.isFile()) files.push(relative(root, path).split(sep).join('/'));
     }
   };
@@ -183,18 +226,24 @@ function canonicalYaml(value: RecordValue): string {
   return stringifyYaml(value, { lineWidth: 0 });
 }
 
-function noteFromValue(path: string, value: RecordValue): LearningNote {
+function noteRevisionPath(id: string, revision: number): string {
+  return `notes/.revisions/${checkedId(id, 'note id')}/${checkedRevision(revision, 'note revision')}.note.yaml`;
+}
+
+function noteFromValue(path: string, value: RecordValue, archived = false): LearningNote {
   if (value.schema !== 'studyforge.note.v1') {
     throw new StudyDocumentError(path, 'expected studyforge.note.v1');
   }
   const id = checkedId(requiredText(value.id, 'note id'), 'note id');
+  const revision = checkedRevision(value.revision, 'note revision');
   const expectedPath = `notes/${id}.note.yaml`;
-  if (path !== expectedPath) throw new StudyDocumentError(path, `Note path must be ${expectedPath}`);
+  const validPath = archived ? noteRevisionPath(id, revision) : expectedPath;
+  if (path !== validPath) throw new StudyDocumentError(path, `Note path must be ${validPath}`);
   return {
     kind: 'note',
     id,
     path,
-    revision: checkedRevision(value.revision, 'note revision'),
+    revision,
     title: requiredText(value.title, 'note title'),
     createdAt: checkedTime(value.created_at, 'created_at'),
     updatedAt: checkedTime(value.updated_at, 'updated_at'),
@@ -216,7 +265,7 @@ function noteValue(note: LearningNote): RecordValue {
     created_at: note.createdAt,
     updated_at: note.updatedAt,
     created_session_id: note.createdSessionId,
-    sources: note.sources,
+    sources: note.sources.map(sourceValue),
     blocks: note.blocks,
   };
 }
@@ -273,8 +322,24 @@ function checkedSessionId(value: string): string {
   return checkedId(value, 'session id');
 }
 
-function checkedDraftSources(value: LearningAssetReference[]): LearningAssetReference[] {
-  return checkedSources(value);
+function sameSources(
+  left: readonly ReadableLearningSourceReference[],
+  right: readonly ReadableLearningSourceReference[],
+): boolean {
+  return JSON.stringify(left.map(sourceValue)) === JSON.stringify(right.map(sourceValue));
+}
+
+function checkedDraftSources(
+  value: unknown,
+  current: readonly ReadableLearningSourceReference[] | null,
+): ReadableLearningSourceReference[] {
+  const sources = checkedSources(value);
+  if (sources.some((source) => source.kind === 'legacy-unpinned')) {
+    if (current === null || !sameSources(sources, current)) {
+      throw new Error('LEGACY_UNPINNED_SOURCE');
+    }
+  }
+  return sources;
 }
 
 function notePath(id: string): string {
@@ -284,6 +349,27 @@ function notePath(id: string): string {
 export function readLearningNote(root: string, id: string): LearningNote {
   const path = notePath(id);
   return noteFromValue(path, yamlAt(root, path));
+}
+
+export function readLearningNoteRevision(root: string, id: string, revision: number): LearningNote {
+  const checked = checkedRevision(revision, 'note revision');
+  try {
+    const current = readLearningNote(root, id);
+    if (current.revision === checked) return current;
+  } catch (error) {
+    if (!(error instanceof StudyDocumentError) || !error.message.includes('asset does not exist')) {
+      throw error;
+    }
+  }
+  const path = noteRevisionPath(id, checked);
+  try {
+    return noteFromValue(path, yamlAt(root, path), true);
+  } catch (error) {
+    if (error instanceof StudyDocumentError && error.message.includes('asset does not exist')) {
+      throw new Error(`ASSET_REVISION_UNRESOLVED: note:${id}@${checked}`);
+    }
+    throw error;
+  }
 }
 
 export function listLearningNotes(root: string): LearningNote[] {
@@ -315,6 +401,87 @@ export function readProblemCard(root: string, id: string): ProblemCard {
     );
   }
   return problemCardFromValue(root, matches[0]!.path, matches[0]!.value);
+}
+
+function problemRevisionPath(id: string, revision: number): string {
+  return `cards/m1b/.revisions/${checkedId(id, 'problem card id')}/${checkedRevision(revision, 'problem card revision')}.card.yaml`;
+}
+
+export function readProblemCardRevision(root: string, id: string, revision: number): ProblemCard {
+  const checked = checkedRevision(revision, 'problem card revision');
+  try {
+    const current = readProblemCard(root, id);
+    if (current.revision === checked) return current;
+  } catch (error) {
+    if (!(error instanceof StudyDocumentError) || !error.message.includes('problem card does not exist')) {
+      throw error;
+    }
+  }
+  const path = problemRevisionPath(id, checked);
+  try {
+    const card = problemCardFromValue(root, path, yamlAt(root, path));
+    if (card.id !== id || card.revision !== checked) {
+      throw new StudyDocumentError(path, 'problem card archive identity changed');
+    }
+    return card;
+  } catch (error) {
+    if (error instanceof StudyDocumentError && error.message.includes('asset does not exist')) {
+      throw new Error(`ASSET_REVISION_UNRESOLVED: problem-card:${id}@${checked}`);
+    }
+    throw error;
+  }
+}
+
+type AssetRevisionIdentity = {
+  kind: 'note' | 'problem-card';
+  id: string;
+  revision: number;
+};
+
+function assetRevisionKey(identity: AssetRevisionIdentity): string {
+  return `${identity.kind}:${identity.id}@${identity.revision}`;
+}
+
+function readAssetRevisionSources(
+  root: string,
+  identity: AssetRevisionIdentity,
+): ReadableLearningSourceReference[] {
+  return identity.kind === 'note'
+    ? readLearningNoteRevision(root, identity.id, identity.revision).sources
+    : readProblemCardRevision(root, identity.id, identity.revision).sources;
+}
+
+function validateSourceGraph(
+  root: string,
+  target: AssetRevisionIdentity,
+  sources: readonly ReadableLearningSourceReference[],
+): void {
+  const complete = new Set<string>();
+  const active = new Set<string>();
+
+  const visit = (identity: AssetRevisionIdentity) => {
+    const key = assetRevisionKey(identity);
+    if (active.has(key)) throw new Error(`ASSET_SOURCE_CYCLE: ${key}`);
+    if (complete.has(key)) return;
+    active.add(key);
+    for (const source of readAssetRevisionSources(root, identity)) {
+      if (source.kind === 'material' || source.kind === 'legacy-unpinned') continue;
+      visit(source);
+    }
+    active.delete(key);
+    complete.add(key);
+  };
+
+  for (const source of sources) {
+    if (source.kind === 'legacy-unpinned') continue;
+    if (source.kind === 'material') {
+      throw new Error(`ASSET_REVISION_UNRESOLVED: material:${source.id}@${source.revision}#${source.locator}`);
+    }
+    if (source.kind === target.kind && source.id === target.id) {
+      throw new Error(`ASSET_SOURCE_SELF_REFERENCE: ${source.kind}:${source.id}`);
+    }
+    visit(source);
+  }
 }
 
 export function listProblemCards(root: string): ProblemCard[] {
@@ -385,25 +552,74 @@ function noteCandidate(note: LearningNote, before: string | null): DocumentCandi
   };
 }
 
+function noteArchiveCandidate(note: LearningNote, bytes: string): DocumentCandidate {
+  const path = noteRevisionPath(note.id, note.revision);
+  return {
+    path,
+    before: null,
+    after: bytes,
+    validate: (source) => {
+      const value = record(parseYaml(source));
+      if (!value) throw new StudyDocumentError(path, 'YAML root must be a mapping');
+      const archived = noteFromValue(path, value, true);
+      if (archived.id !== note.id || archived.revision !== note.revision) {
+        throw new StudyDocumentError(path, 'note archive identity changed');
+      }
+    },
+  };
+}
+
+function plannedTagCandidate(
+  root: string,
+  subject: LearningAssetHandle,
+  draft: { expectedTagRevision?: number; tags?: SemanticTagDraft },
+  recordedAt: string,
+  creating: boolean,
+): { candidate: DocumentCandidate; tags: SemanticTags } | null {
+  if (draft.tags === undefined) {
+    if (creating) throw new Error('SEMANTIC_TAG_CORE_REQUIRED');
+    if (draft.expectedTagRevision !== undefined) {
+      throw new Error(`SEMANTIC_TAG_DRAFT_REQUIRED: ${subject.kind}:${subject.id}`);
+    }
+    return null;
+  }
+  return planSemanticTagsSave(root, subject, {
+    ...(draft.expectedTagRevision === undefined
+      ? {}
+      : { expectedRevision: draft.expectedTagRevision }),
+    tags: draft.tags,
+  }, recordedAt);
+}
+
 export function planLearningNoteSave(
   root: string,
   sessionId: string,
   draft: LearningNoteSaveDraft,
   recordedAt: string,
-): { candidates: DocumentCandidate[]; receipt: AssetSaveReceipt; note: LearningNote } {
+): {
+  candidates: DocumentCandidate[];
+  receipt: AssetSaveReceipt;
+  note: LearningNote;
+  semanticTags: SemanticTags | null;
+} {
   checkedTime(recordedAt, 'recordedAt');
   checkedSessionId(sessionId);
   const title = requiredText(draft.title, 'note title');
   const blocks = checkedBlocks(draft.blocks);
-  const sources = checkedDraftSources(draft.sources);
   let before: string | null = null;
+  let archive: DocumentCandidate | null = null;
   let note: LearningNote;
   if (draft.target) {
     const current = readLearningNote(root, draft.target.id);
     if (current.revision !== draft.target.expectedRevision) {
       throw new Error(`ASSET_REVISION_STALE: ${current.id}`);
     }
+    const sources = checkedDraftSources(draft.sources, current.sources);
+    validateSourceGraph(root, {
+      kind: 'note', id: current.id, revision: current.revision + 1,
+    }, sources);
     before = readFileSync(resolveDocumentPath(root, current.path), 'utf8');
+    archive = noteArchiveCandidate(current, before);
     note = {
       ...current,
       title,
@@ -413,6 +629,7 @@ export function planLearningNoteSave(
       updatedAt: recordedAt,
     };
   } else {
+    const sources = checkedDraftSources(draft.sources, null);
     const id = nextNumericId(root, 'note');
     note = {
       kind: 'note',
@@ -426,11 +643,24 @@ export function planLearningNoteSave(
       sources,
       blocks,
     };
+    validateSourceGraph(root, { kind: 'note', id, revision: 1 }, sources);
   }
+  const tagPlan = plannedTagCandidate(
+    root,
+    { kind: 'note', id: note.id },
+    draft,
+    recordedAt,
+    draft.target === undefined,
+  );
   return {
-    candidates: [noteCandidate(note, before)],
+    candidates: [
+      ...(archive ? [archive] : []),
+      noteCandidate(note, before),
+      ...(tagPlan ? [tagPlan.candidate] : []),
+    ],
     receipt: { kind: 'note', id: note.id, revision: note.revision, path: note.path },
     note,
+    semanticTags: tagPlan?.tags ?? null,
   };
 }
 
@@ -449,7 +679,7 @@ function problemCardValue(card: ProblemCard): RecordValue {
       created_at: card.createdAt,
       updated_at: card.updatedAt,
       created_session_id: card.createdSessionId,
-      sources: card.sources,
+      sources: card.sources.map(sourceValue),
     },
   };
 }
@@ -471,20 +701,42 @@ function problemCandidate(root: string, card: ProblemCard, before: string | null
   };
 }
 
+function problemArchiveCandidate(root: string, card: ProblemCard, bytes: string): DocumentCandidate {
+  const path = problemRevisionPath(card.id, card.revision);
+  return {
+    path,
+    before: null,
+    after: bytes,
+    validate: (source) => {
+      const value = record(parseYaml(source));
+      if (!value) throw new StudyDocumentError(path, 'YAML root must be a mapping');
+      const archived = problemCardFromValue(root, path, value);
+      if (archived.id !== card.id || archived.revision !== card.revision) {
+        throw new StudyDocumentError(path, 'problem card archive identity changed');
+      }
+    },
+  };
+}
+
 export function planProblemCardSave(
   root: string,
   sessionId: string,
   draft: ProblemCardSaveDraft,
   recordedAt: string,
-): { candidates: DocumentCandidate[]; receipt: AssetSaveReceipt; card: ProblemCard } {
+): {
+  candidates: DocumentCandidate[];
+  receipt: AssetSaveReceipt;
+  card: ProblemCard;
+  semanticTags: SemanticTags | null;
+} {
   checkedTime(recordedAt, 'recordedAt');
   checkedSessionId(sessionId);
   const stem = requiredText(draft.stem, 'stem');
   const standardAnswer = requiredText(draft.standardAnswer, 'standardAnswer');
   const teacherRationale = requiredText(draft.teacherRationale, 'teacherRationale');
   const studentNote = optionalText(draft.studentNote);
-  const sources = checkedDraftSources(draft.sources);
   let before: string | null = null;
+  let archive: DocumentCandidate | null = null;
   let card: ProblemCard;
   if (draft.target) {
     const current = readProblemCard(root, draft.target.id);
@@ -494,7 +746,12 @@ export function planProblemCardSave(
     if (current.createdSessionId === null) {
       throw new Error(`LEGACY_PROBLEM_CARD_READ_ONLY: ${current.id}`);
     }
+    const sources = checkedDraftSources(draft.sources, current.sources);
+    validateSourceGraph(root, {
+      kind: 'problem-card', id: current.id, revision: current.revision + 1,
+    }, sources);
     before = readFileSync(resolveDocumentPath(root, current.path), 'utf8');
+    archive = problemArchiveCandidate(root, current, before);
     card = {
       ...current,
       title: firstLine(stem),
@@ -507,6 +764,7 @@ export function planProblemCardSave(
       updatedAt: recordedAt,
     };
   } else {
+    const sources = checkedDraftSources(draft.sources, null);
     const id = nextNumericId(root, 'problem');
     const path = `cards/m1b/${id}.card.yaml`;
     card = {
@@ -524,11 +782,24 @@ export function planProblemCardSave(
       createdSessionId: sessionId,
       sources,
     };
+    validateSourceGraph(root, { kind: 'problem-card', id, revision: 1 }, sources);
   }
+  const tagPlan = plannedTagCandidate(
+    root,
+    { kind: 'problem-card', id: card.id },
+    draft,
+    recordedAt,
+    draft.target === undefined,
+  );
   return {
-    candidates: [problemCandidate(root, card, before)],
+    candidates: [
+      ...(archive ? [archive] : []),
+      problemCandidate(root, card, before),
+      ...(tagPlan ? [tagPlan.candidate] : []),
+    ],
     receipt: { kind: 'problem-card', id: card.id, revision: card.revision, path: card.path },
     card,
+    semanticTags: tagPlan?.tags ?? null,
   };
 }
 
@@ -570,9 +841,10 @@ export function renderSelectedAssetContext(
 }
 
 export function resolveSelectedAssetAliases(
+  root: string,
   references: readonly LearningAssetReference[],
   aliases: readonly string[],
-): LearningAssetReference[] {
+): LearningSourceReference[] {
   const seen = new Set<string>();
   return aliases.map((alias) => {
     if (!/^source-[1-9][0-9]*$/.test(alias)) throw new Error(`ASSET_SOURCE_ALIAS_INVALID: ${alias}`);
@@ -581,6 +853,9 @@ export function resolveSelectedAssetAliases(
     if (!reference) throw new Error(`ASSET_SOURCE_ALIAS_UNKNOWN: ${alias}`);
     if (seen.has(alias)) throw new Error(`ASSET_SOURCE_ALIAS_DUPLICATE: ${alias}`);
     seen.add(alias);
-    return { kind: reference.kind, id: reference.id };
+    const revision = reference.kind === 'note'
+      ? readLearningNote(root, reference.id).revision
+      : readProblemCard(root, reference.id).revision;
+    return { kind: reference.kind, id: reference.id, revision };
   });
 }

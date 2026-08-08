@@ -22,7 +22,7 @@ function filesBelow(root: string, directory: string): string[] {
   const visit = (current: string) => {
     for (const entry of readdirSync(current, { withFileTypes: true })) {
       const path = join(current, entry.name);
-      if (entry.isDirectory()) visit(path);
+      if (entry.isDirectory() && entry.name !== '.revisions') visit(path);
       else if (entry.isFile()) files.push(relative(root, path).replaceAll('\\', '/'));
     }
   };

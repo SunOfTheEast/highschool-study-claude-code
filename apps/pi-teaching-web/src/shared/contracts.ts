@@ -15,9 +15,31 @@ export type SessionKey = NodeSessionKey | FreeLearningSessionKey;
 
 export type LearningAssetKind = 'note' | 'problem-card';
 
-export type LearningAssetReference = {
+export type LearningAssetHandle = {
   kind: LearningAssetKind;
   id: string;
+};
+
+/** @deprecated Use LearningAssetHandle for selected-context identity. */
+export type LearningAssetReference = LearningAssetHandle;
+
+export type LearningSourceReference =
+  | { kind: LearningAssetKind; id: string; revision: number }
+  | { kind: 'material'; id: string; revision: number; locator: string };
+
+export type LegacyUnpinnedLearningSourceReference = {
+  kind: 'legacy-unpinned';
+  assetKind: LearningAssetKind;
+  id: string;
+};
+
+export type ReadableLearningSourceReference =
+  | LearningSourceReference
+  | LegacyUnpinnedLearningSourceReference;
+
+export type SemanticTagDraft = {
+  core: string[];
+  related: string[];
 };
 
 export type ProblemAttemptResponse =
@@ -67,7 +89,7 @@ export type LearningNote = {
   createdAt: string;
   updatedAt: string;
   createdSessionId: string;
-  sources: LearningAssetReference[];
+  sources: ReadableLearningSourceReference[];
   blocks: LearningNoteBlock[];
 };
 
@@ -79,7 +101,7 @@ export type StudentProblemCard = {
   stem: string;
   studentNote: string;
   standardAnswer: string | null;
-  sources: LearningAssetReference[];
+  sources: ReadableLearningSourceReference[];
 };
 
 export type LearningAssetSummary = {

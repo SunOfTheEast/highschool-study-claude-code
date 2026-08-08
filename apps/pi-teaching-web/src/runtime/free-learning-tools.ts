@@ -6,6 +6,7 @@ import {
   resolveSelectedAssetAliases,
   type LearningNoteBlock,
 } from '../study/learning-assets';
+import type { SemanticTagDraft } from '../shared/contracts';
 import type { FreeLearningSessionScope } from './session-scope';
 import { commitDocumentCandidates } from './multi-document-transaction';
 import { createFreeLearningMemoryTool } from './memory-tools';
@@ -17,6 +18,11 @@ type FreeLearningToolSession = {
 
 const stableId = Type.String({ pattern: '^[A-Za-z0-9][A-Za-z0-9._-]*$' });
 const sourceAlias = Type.String({ pattern: '^source-[1-9][0-9]*$' });
+const semanticTag = Type.String({ minLength: 1, maxLength: 40, pattern: '^[^\\r\\n\\t]+$' });
+const semanticTags = Type.Object({
+  core: Type.Array(semanticTag, { minItems: 1, uniqueItems: true }),
+  related: Type.Array(semanticTag, { uniqueItems: true }),
+}, { additionalProperties: false });
 const target = Type.Object({
   id: stableId,
   expectedRevision: Type.Integer({ minimum: 1 }),
@@ -35,18 +41,22 @@ const recallBlock = Type.Object({
 
 const noteParameters = Type.Object({
   target: Type.Optional(target),
+  expectedTagRevision: Type.Optional(Type.Integer({ minimum: 1 })),
   title: Type.String({ minLength: 1 }),
   blocks: Type.Array(Type.Union([markdownBlock, recallBlock]), { minItems: 1 }),
   sourceAliases: Type.Array(sourceAlias, { uniqueItems: true }),
+  tags: semanticTags,
 }, { additionalProperties: false });
 
 const cardParameters = Type.Object({
   target: Type.Optional(target),
+  expectedTagRevision: Type.Optional(Type.Integer({ minimum: 1 })),
   stem: Type.String({ minLength: 1 }),
   standardAnswer: Type.String({ minLength: 1 }),
   teacherRationale: Type.String({ minLength: 1 }),
   studentNote: Type.String(),
   sourceAliases: Type.Array(sourceAlias, { uniqueItems: true }),
+  tags: semanticTags,
 }, { additionalProperties: false });
 
 function contentText(content: unknown): string {
@@ -120,7 +130,7 @@ export function createFreeLearningTools(
 ) {
   const successful = new Map<string, ReturnType<typeof toolResult>>();
   const sources = (aliases: readonly string[]) => (
-    resolveSelectedAssetAliases(scope.selectedAssets, aliases)
+    resolveSelectedAssetAliases(root, scope.selectedAssets, aliases)
   );
   const tools = [
     defineTool({
@@ -137,9 +147,13 @@ export function createFreeLearningTools(
         }
         const planned = planLearningNoteSave(root, session.getSessionId(), {
           ...(input.target ? { target: input.target } : {}),
+          ...(input.expectedTagRevision === undefined
+            ? {}
+            : { expectedTagRevision: input.expectedTagRevision }),
           title: input.title,
           blocks: input.blocks as LearningNoteBlock[],
           sources: sources(input.sourceAliases),
+          tags: input.tags as SemanticTagDraft,
         }, new Date().toISOString());
         const committed = commitDocumentCandidates(root, planned.candidates);
         const result = toolResult({
@@ -166,11 +180,15 @@ export function createFreeLearningTools(
         }
         const planned = planProblemCardSave(root, session.getSessionId(), {
           ...(input.target ? { target: input.target } : {}),
+          ...(input.expectedTagRevision === undefined
+            ? {}
+            : { expectedTagRevision: input.expectedTagRevision }),
           stem: input.stem,
           standardAnswer: input.standardAnswer,
           teacherRationale: input.teacherRationale,
           studentNote: input.studentNote,
           sources: sources(input.sourceAliases),
+          tags: input.tags as SemanticTagDraft,
         }, new Date().toISOString());
         const committed = commitDocumentCandidates(root, planned.candidates);
         const result = toolResult({
