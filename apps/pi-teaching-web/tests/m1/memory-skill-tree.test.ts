@@ -131,6 +131,19 @@ test('documents the atomic commit and deferred-route ownership boundary', () => 
   expect(contract).toContain('旧历史条目');
 });
 
+test('uses incremental object snapshots in both formal Lessons and free learning', () => {
+  const contract = read('contracts/m1-memory-contract.md');
+  const consolidation = read('skills/tutor-lesson/references/memory-consolidation.md');
+
+  expect(contract).toContain('正式 Lesson 中，已有对象只提交实际变化的');
+  expect(consolidation).toContain('已有对象只提交实际变化的');
+  for (const source of [contract, consolidation]) {
+    expect(source).toContain('省略的字段保持原样');
+    expect(source).toContain('新对象仍需完整快照');
+    expect(source).toContain('只有新证据改变了认知流变的解释时');
+  }
+});
+
 test('lets Plan form a working capability hypothesis only across different objects', () => {
   const review = read('skills/plan-dialogue/references/post-lesson-review.md');
   const closure = read('skills/plan-dialogue/references/plan-closure.md');

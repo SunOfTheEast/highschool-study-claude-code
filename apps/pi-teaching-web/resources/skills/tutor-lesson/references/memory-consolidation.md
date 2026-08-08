@@ -28,10 +28,12 @@
 
 - `closingFact`：学生在 active Block 或已完成 Reflection 后补充的决定性课堂事实；没有就
   省略。Block 由 Tutor 根据本课证据明确选择。
-- `objects`：先复用已经读到的稳定对象。完整写出 Current Judgment、Evolution Overview、
-  边界，以及一条 `learningHistoryEntry`；其中 `change` 只说明本次对这个对象的认识如何
-  变化，`evidenceBlockIds` 只列当前 Lesson 中真正支持它的 Block。Runtime 把它追加到
-  Learning History。Tutor 不创建或修改 `memory/capabilities/`。
+- `objects`：先复用已经读到的稳定对象，每个对象追加一条 `learningHistoryEntry`；其中
+  `change` 只说明本次认识如何变化，`evidenceBlockIds` 只列当前 Lesson 中真正支持它的
+  Block。已有对象只提交实际变化的 Current Judgment、Evolution Overview 或边界；
+  省略的字段保持原样。
+  只有新证据改变了认知流变的解释时才更新 Evolution Overview，不因普通新证据重写整段历史。
+  新对象仍需完整快照。Runtime 负责追加 Learning History；Tutor 不创建或修改 `memory/capabilities/`。
 - `preferences`：只有学生明确表达或多次确认的互动需求才提交；保留原话、来源 Block、
   作用范围与流变。“用了对照后学得更快”只是效果观察，不自动变成明确偏好。新建偏好用
   `upsert` 把当前 cue 放进根索引；`keep` 或 `remove` 只用于已经存在的偏好。

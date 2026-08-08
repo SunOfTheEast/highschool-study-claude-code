@@ -33,6 +33,11 @@ Tutor 在唯一课末反思后用一次 `lesson_memory_commit` 提交可选的�
 的学习历史与当前判断、明确偏好和对象路由。对象的 `learningHistoryEntry` 只压缩这次变化，
 `evidenceBlockIds` 指向当前 Lesson 中真实存在的来源 Block。
 
+正式 Lesson 中，已有对象只提交实际变化的 Current Judgment、Evolution Overview 或
+Boundaries 字段；省略的字段保持原样，同时追加本课的 Learning History。
+只有新证据改变了认知流变的解释时才更新 Evolution Overview，普通新证据不要求重写它。
+新对象仍需完整快照，并用首条 Learning History 指回当前 Lesson 的真实 Block。
+
 已有对象通常声明 `keep`；新对象由 Tutor 明确选择 `assign`，或在归属确实不清楚时选择
 `defer`。Runtime 不判断学习对象是什么，也不根据标题、关键词、题卡字段或目录结构选择
 bucket；它只绑定当前 Lesson、时间、稳定 ID、路径、链接并原子写入模型已经声明的关系。
@@ -47,9 +52,10 @@ bucket；它只绑定当前 Lesson、时间、稳定 ID、路径、链接并原�
 自由学习不建立 Log 或 Trace，也不等待 Session 结束。只有当本次真实对话会改变未来教师对
 “学生怎样理解这个对象、学到哪里、边界在哪里”的判断时，Tutor 才用
 `free_learning_memory_commit` 追加一条对象 Learning History。Runtime 绑定完整原生 Session
-与时间；Tutor 不提交 Session ID、消息 ID、轮次、路径或时间。已有对象只提交实际变化的
-Current Judgment、Evolution Overview 或 Boundaries 字段；省略的字段保持原样。新对象仍需
-给出完整快照和明确的 `assign` / `defer` 路由。
+与时间；Tutor 不提交 Session ID、消息 ID、轮次、路径或时间。已有对象同样只提交实际变化
+的字段；省略的字段保持原样。
+只有新证据改变了认知流变的解释时才更新 Evolution Overview。
+新对象仍需完整快照和明确的 `assign` / `defer` 路由。
 
 保存资产、查看答案、教师讲解或学生只说“懂了”都不能自动触发这次写入。关键结论至少出现
 在学生的重新表达、推导、比较或使用中。自由学习结束不强制写记忆，也不把资产保存和记忆
