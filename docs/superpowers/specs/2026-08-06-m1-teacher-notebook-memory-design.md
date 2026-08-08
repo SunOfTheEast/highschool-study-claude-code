@@ -387,6 +387,14 @@ learning-set/
 Runtime 绑定时间、Lesson 路径和真实存在的 Block ID。Tutor 只填写这次课堂证据对当前
 对象意味着什么，不重复输出一份跨对象的事件正文。
 
+正式 Lesson 与自由学习采用同一条对象更新语义。若对象已经存在，本次有意义的变化只需
+追加一条 `Learning History`；`Current Judgment`、`Evolution Overview` 和边界只提交真实
+改变的字段，省略的字段原样保留。普通的新证据不要求重写整份流变概述；只有新证据改变了
+对认知发展过程的解释时，才更新 `Evolution Overview`，并用自然的“最初—随后—最近”
+压缩时间关系，而不引入阶段枚举。若本课首次建立一个对象，则必须同时给出完整当前判断、
+流变概述、边界和首条历史。两类 Session 的差异只在证据来源：正式 Lesson 精确引用当前
+Lesson 的 Block，自由学习引用完整原生 Session。
+
 原始事件只在 Block 的 Classroom Log 中出现一次。同一个 Block 可以被多个对象历史引用，
 因为每条历史保存的是该事件对特定对象的不同意义；这不是复制原始事实。系统不再维护
 Lesson 末尾的中间摘要区段、事件 ID 或中央注册表。
