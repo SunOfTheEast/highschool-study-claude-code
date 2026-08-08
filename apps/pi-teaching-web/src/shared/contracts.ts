@@ -13,6 +13,13 @@ export type NodeSessionKey = `${NodeKind}:${string}`;
 export type FreeLearningSessionKey = `free:${string}`;
 export type SessionKey = NodeSessionKey | FreeLearningSessionKey;
 
+export type LearningAssetKind = 'note' | 'problem-card';
+
+export type LearningAssetReference = {
+  kind: LearningAssetKind;
+  id: string;
+};
+
 export type LearningSetGuide = {
   title: string;
   body: string;

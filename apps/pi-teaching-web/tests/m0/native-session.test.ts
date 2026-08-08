@@ -665,6 +665,7 @@ test('reuses one session per node and never shares sessions across nodes', async
   const inputs: Parameters<StudySessionFactory>[0][] = [];
   const factory: StudySessionFactory = async (input) => {
     inputs.push(input);
+    if (!('nodeKind' in input)) throw new Error('NODE_SCOPE_EXPECTED');
     return fakeSession(`session-${input.nodeKind}-${input.nodeId}`);
   };
   const registry = new WorkspaceRegistry(root, factory, async () => null);
@@ -675,7 +676,7 @@ test('reuses one session per node and never shares sessions across nodes', async
 
   expect(samePlan).toBe(firstPlan);
   expect(lesson).not.toBe(firstPlan);
-  expect(inputs.map((input) => input.nodePath)).toEqual([
+  expect(inputs.map((input) => 'nodePath' in input ? input.nodePath : null)).toEqual([
     'plans/plan-001/PLAN.md',
     'plans/plan-001/lessons/lesson-001.md',
   ]);
@@ -689,7 +690,10 @@ test('restores the persisted owner session without copying another branch', asyn
   const root = copyFixture();
   const first = new WorkspaceRegistry(
     root,
-    async (input) => fakeSession(`saved-${input.nodeId}`, `/sessions/saved-${input.nodeId}.jsonl`),
+    async (input) => {
+      if (!('nodeId' in input)) throw new Error('NODE_SCOPE_EXPECTED');
+      return fakeSession(`saved-${input.nodeId}`, `/sessions/saved-${input.nodeId}.jsonl`);
+    },
     async () => null,
   );
   await first.open('plan:plan-001');

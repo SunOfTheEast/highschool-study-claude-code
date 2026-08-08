@@ -12,7 +12,13 @@ import { createLessonTools } from './lesson-tools';
 import { createPlanTools } from './plan-tools';
 import { createRoleResourceLoader } from './resource-loader';
 import { appendSessionOwner } from './session-owner';
-import { modelToolsForNode, type NodeSessionScope } from './session-scope';
+import {
+  FREE_LEARNING_MODEL_TOOLS,
+  isFreeLearningScope,
+  modelToolsForNode,
+  type NodeSessionScope,
+  type StudySessionScope,
+} from './session-scope';
 import { configureStudySubagentDirectory } from './subagent-path';
 import { memoryEnabled } from './memory-tools';
 import { recoverDocumentTransactions } from './multi-document-transaction';
@@ -26,17 +32,18 @@ export interface StudySession {
   prompt(text: string, images?: ImageContent[]): Promise<void>;
   abort(): Promise<void>;
   subscribe(listener: (event: AgentSessionEvent) => void): () => void;
+  appendCustomEntry?(customType: string, data?: unknown): void;
   dispose(): void;
 }
 
-export type SessionFactoryInput = NodeSessionScope & {
+export type SessionFactoryInput = StudySessionScope & {
   sessionFile: string | null;
 };
 
 export type StudySessionFactory = (input: SessionFactoryInput) => Promise<StudySession>;
 
 export function sessionFactoryInput(
-  scope: NodeSessionScope,
+  scope: StudySessionScope,
   sessionFile: string | null,
 ): SessionFactoryInput {
   return { ...scope, sessionFile };
@@ -46,6 +53,10 @@ export function customToolsForNode(root: string, scope: NodeSessionScope) {
   if (scope.nodeKind === 'lesson') return createLessonTools(root, scope.nodePath);
   if (scope.nodeKind === 'plan') return createPlanTools(root, scope);
   return [];
+}
+
+export function customToolsForSession(root: string, scope: StudySessionScope) {
+  return isFreeLearningScope(scope) ? [] : customToolsForNode(root, scope);
 }
 
 type PiAgentSession = Awaited<ReturnType<typeof createAgentSession>>['session'];
@@ -70,21 +81,30 @@ export async function createPiSessionFactory(root: string): Promise<StudySession
       ? SessionManager.open(sessionFile, undefined, root)
       : SessionManager.create(root);
     if (!sessionFile) {
-      manager.appendSessionInfo(`${scope.nodeKind} · ${scope.nodeId}`);
+      manager.appendSessionInfo(isFreeLearningScope(scope)
+        ? scope.title
+        : `${scope.nodeKind} · ${scope.nodeId}`);
       appendSessionOwner(manager, scope);
     }
     const resourceLoader = await createRoleResourceLoader(root, scope, eventBus);
-    const customTools = customToolsForNode(root, scope);
+    const customTools = customToolsForSession(root, scope);
     const { session } = await createAgentSession({
       cwd: root,
       modelRuntime,
       resourceLoader,
       sessionManager: manager,
       customTools,
-      tools: [...modelToolsForNode(scope.nodeKind, memoryEnabled(root))],
+      tools: [...(isFreeLearningScope(scope)
+        ? FREE_LEARNING_MODEL_TOOLS
+        : modelToolsForNode(scope.nodeKind, memoryEnabled(root)))],
     });
     await bindStudyExtensions(session);
-    const compaction = createPlanCompactionPrompt(session, scope);
+    const compaction = isFreeLearningScope(scope)
+      ? {
+        prompt: (text: string, images: ImageContent[] = []) => session.prompt(text, { images }),
+        dispose: () => {},
+      }
+      : createPlanCompactionPrompt(session, scope);
     return {
       get sessionId() {
         return session.sessionId;
@@ -104,6 +124,9 @@ export async function createPiSessionFactory(root: string): Promise<StudySession
       prompt: compaction.prompt,
       abort: () => session.abort(),
       subscribe: (listener) => session.subscribe(listener),
+      appendCustomEntry: (customType, data) => {
+        manager.appendCustomEntry(customType, data);
+      },
       dispose: () => {
         compaction.dispose();
         session.dispose();

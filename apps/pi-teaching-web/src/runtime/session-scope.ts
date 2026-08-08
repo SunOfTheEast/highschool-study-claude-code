@@ -1,4 +1,10 @@
-import type { NodeKind, SessionKey } from '../shared/contracts';
+import type {
+  FreeLearningSessionKey,
+  FreeLearningSessionSummary,
+  LearningAssetReference,
+  NodeKind,
+  SessionKey,
+} from '../shared/contracts';
 import { lessonSessionKey } from '../study/node-paths';
 
 export type SessionRole = 'roadmap' | 'planner' | 'tutor';
@@ -9,6 +15,20 @@ export type NodeSessionScope = {
   nodePath: string;
   parentId: string | null;
   parentPath: string | null;
+};
+
+export type FreeLearningSessionScope = {
+  sessionKind: 'free-learning';
+  title: string;
+  createdAt: string;
+  selectedAssets: readonly LearningAssetReference[];
+};
+
+export type StudySessionScope = NodeSessionScope | FreeLearningSessionScope;
+
+export type FreeLearningSessionRecord = FreeLearningSessionSummary & {
+  sessionFile: string;
+  scope: FreeLearningSessionScope;
 };
 
 export const M0_MODEL_TOOLS = [
@@ -34,6 +54,23 @@ export const LESSON_MODEL_TOOLS = [
   'classroom_log_append',
   'classroom_update',
 ] as const;
+
+export const FREE_LEARNING_MODEL_TOOLS = [
+  'read',
+  'grep',
+  'find',
+  'ls',
+] as const;
+
+export function isFreeLearningScope(
+  scope: StudySessionScope,
+): scope is FreeLearningSessionScope {
+  return 'sessionKind' in scope && scope.sessionKind === 'free-learning';
+}
+
+export function isNodeSessionScope(scope: StudySessionScope): scope is NodeSessionScope {
+  return !isFreeLearningScope(scope);
+}
 
 export function modelToolsForNode(kind: NodeKind, hasMemory = false): readonly string[] {
   if (kind === 'lesson') {
@@ -66,6 +103,21 @@ export function sessionKeyForNode(scope: NodeSessionScope): SessionKey {
   return `${scope.nodeKind}:${scope.nodeId}`;
 }
 
+const sessionIdPattern = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
+
+export function freeLearningSessionKey(sessionId: string): FreeLearningSessionKey {
+  if (!sessionIdPattern.test(sessionId)) {
+    throw new Error(`FREE_LEARNING_SESSION_ID_INVALID: ${sessionId}`);
+  }
+  return `free:${sessionId}`;
+}
+
+export function freeLearningSessionId(key: SessionKey): string | null {
+  if (!key.startsWith('free:')) return null;
+  const id = key.slice('free:'.length);
+  return sessionIdPattern.test(id) ? id : null;
+}
+
 export function formatSessionOwnerContext(
   root: string,
   scope: NodeSessionScope,
@@ -78,5 +130,24 @@ export function formatSessionOwnerContext(
     `Current node kind: ${scope.nodeKind}`,
     `Current node ID: ${scope.nodeId}`,
     `Current node file: ${scope.nodePath}${parent}`,
+  ].join('\n');
+}
+
+export function formatFreeLearningOwnerContext(
+  root: string,
+  scope: FreeLearningSessionScope,
+): string {
+  const assets = scope.selectedAssets.length === 0
+    ? '- none'
+    : scope.selectedAssets.map((asset) => `- ${asset.kind}:${asset.id}`).join('\n');
+  return [
+    `Learning set root: ${root}`,
+    'Current session kind: free-learning',
+    `Session title: ${scope.title}`,
+    'Selected asset handles:',
+    assets,
+    '',
+    'This Session is not a Roadmap, Plan, Lesson, Light Lesson, or course-tree node.',
+    'Its native Pi Session is the only conversation record.',
   ].join('\n');
 }

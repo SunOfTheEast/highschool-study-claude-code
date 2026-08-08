@@ -1,7 +1,15 @@
 import type { SessionEntry } from '@earendil-works/pi-coding-agent';
-import type { NodeSessionScope } from './session-scope';
+import {
+  freeLearningSessionKey,
+  isFreeLearningScope,
+  type FreeLearningSessionRecord,
+  type FreeLearningSessionScope,
+  type NodeSessionScope,
+  type StudySessionScope,
+} from './session-scope';
 
 export const SESSION_OWNER_TYPE = 'studyforge.m0.session-owner.v1';
+export const FREE_LEARNING_ENDED_TYPE = 'studyforge.m1b.free-learning-ended.v1';
 
 type SessionOwnerWriter = {
   appendCustomEntry(customType: string, data?: unknown): unknown;
@@ -15,9 +23,24 @@ function nonempty(value: unknown): value is string {
   return typeof value === 'string' && value.trim().length > 0;
 }
 
-function isSessionOwner(value: unknown): value is NodeSessionScope {
+function validAssetReference(value: unknown): boolean {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const reference = value as Record<string, unknown>;
+  return (reference.kind === 'note' || reference.kind === 'problem-card')
+    && nonempty(reference.id)
+    && /^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(reference.id);
+}
+
+function isSessionOwner(value: unknown): value is StudySessionScope {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
   const owner = value as Record<string, unknown>;
+  if (owner.sessionKind === 'free-learning') {
+    return nonempty(owner.title)
+      && nonempty(owner.createdAt)
+      && !Number.isNaN(Date.parse(owner.createdAt))
+      && Array.isArray(owner.selectedAssets)
+      && owner.selectedAssets.every(validAssetReference);
+  }
   if (!['roadmap', 'plan', 'lesson'].includes(String(owner.nodeKind))) return false;
   if (!nonempty(owner.nodeId) || !nonempty(owner.nodePath)) return false;
   return owner.nodeKind === 'roadmap'
@@ -27,12 +50,12 @@ function isSessionOwner(value: unknown): value is NodeSessionScope {
 
 export function appendSessionOwner(
   manager: SessionOwnerWriter,
-  owner: NodeSessionScope,
+  owner: StudySessionScope,
 ): void {
   manager.appendCustomEntry(SESSION_OWNER_TYPE, owner);
 }
 
-export function readSessionOwner(manager: SessionOwnerReader): NodeSessionScope | null {
+export function readSessionOwner(manager: SessionOwnerReader): StudySessionScope | null {
   const matching = manager.getEntries().flatMap((entry) => {
     if (!entry || typeof entry !== 'object' || Array.isArray(entry)) return [];
     const candidate = entry as Record<string, unknown>;
@@ -43,15 +66,41 @@ export function readSessionOwner(manager: SessionOwnerReader): NodeSessionScope 
 }
 
 export function sessionOwnerMatches(
-  actual: NodeSessionScope | null,
-  expected: NodeSessionScope,
+  actual: StudySessionScope | null,
+  expected: StudySessionScope,
 ): boolean {
-  return actual !== null
-    && actual.nodeKind === expected.nodeKind
+  if (actual === null || isFreeLearningScope(actual) !== isFreeLearningScope(expected)) {
+    return false;
+  }
+  if (isFreeLearningScope(actual) && isFreeLearningScope(expected)) {
+    return actual.title === expected.title
+      && actual.createdAt === expected.createdAt
+      && JSON.stringify(actual.selectedAssets) === JSON.stringify(expected.selectedAssets);
+  }
+  if (isFreeLearningScope(actual) || isFreeLearningScope(expected)) return false;
+  return actual.nodeKind === expected.nodeKind
     && actual.nodeId === expected.nodeId
     && actual.nodePath === expected.nodePath
     && actual.parentId === expected.parentId
     && actual.parentPath === expected.parentPath;
+}
+
+export function readFreeLearningEndedAt(entries: readonly unknown[]): string | null {
+  let endedAt: string | null = null;
+  for (const entry of entries) {
+    if (!entry || typeof entry !== 'object' || Array.isArray(entry)) continue;
+    const candidate = entry as Record<string, unknown>;
+    if (candidate.type !== 'custom' || candidate.customType !== FREE_LEARNING_ENDED_TYPE) continue;
+    const data = candidate.data;
+    if (!data || typeof data !== 'object' || Array.isArray(data)) continue;
+    const value = (data as Record<string, unknown>).endedAt;
+    if (typeof value === 'string' && !Number.isNaN(Date.parse(value))) endedAt = value;
+  }
+  return endedAt;
+}
+
+export function isFreeLearningEnded(entries: readonly unknown[]): boolean {
+  return readFreeLearningEndedAt(entries) !== null;
 }
 
 export async function findOwnedPiSessionFile(
@@ -72,4 +121,53 @@ export async function readPiSessionBranch(
 ): Promise<readonly SessionEntry[]> {
   const { SessionManager } = await import('@earendil-works/pi-coding-agent');
   return SessionManager.open(sessionFile, undefined, root).getBranch();
+}
+
+function freeRecord(
+  info: {
+    path: string;
+    id: string;
+    created: Date;
+    modified: Date;
+    name?: string;
+  },
+  manager: SessionOwnerReader,
+): FreeLearningSessionRecord | null {
+  const scope = readSessionOwner(manager);
+  if (!scope || !isFreeLearningScope(scope)) return null;
+  const endedAt = readFreeLearningEndedAt(manager.getEntries());
+  return {
+    id: info.id,
+    sessionKey: freeLearningSessionKey(info.id),
+    title: info.name?.trim() || scope.title,
+    createdAt: scope.createdAt || info.created.toISOString(),
+    updatedAt: endedAt ?? info.modified.toISOString(),
+    status: endedAt === null ? 'active' : 'ended',
+    sessionFile: info.path,
+    scope,
+  };
+}
+
+export async function findFreeLearningPiSession(
+  root: string,
+  sessionId: string,
+): Promise<FreeLearningSessionRecord | null> {
+  const { SessionManager } = await import('@earendil-works/pi-coding-agent');
+  const info = (await SessionManager.list(root)).find((item) => item.id === sessionId);
+  if (!info) return null;
+  const manager = SessionManager.open(info.path, undefined, root);
+  return freeRecord(info, manager);
+}
+
+export async function listFreeLearningPiSessions(
+  root: string,
+): Promise<FreeLearningSessionRecord[]> {
+  const { SessionManager } = await import('@earendil-works/pi-coding-agent');
+  const records: FreeLearningSessionRecord[] = [];
+  for (const info of await SessionManager.list(root)) {
+    const manager = SessionManager.open(info.path, undefined, root);
+    const record = freeRecord(info, manager);
+    if (record) records.push(record);
+  }
+  return records.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 }
