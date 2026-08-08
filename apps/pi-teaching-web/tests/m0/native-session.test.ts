@@ -109,6 +109,8 @@ test('assembles static teaching resources and node-scoped model tools', () => {
     'ls',
     'classroom_log_append',
     'classroom_update',
+    'save_note',
+    'save_problem_card',
     'lesson_memory_commit',
   ]);
 });
@@ -314,7 +316,8 @@ test('injects one canonical document contract into every node session', () => {
       : scope.nodeKind === 'lesson'
         ? [
           'read', 'grep', 'find', 'ls',
-          'classroom_log_append', 'classroom_update', 'lesson_memory_commit',
+          'classroom_log_append', 'classroom_update', 'save_note', 'save_problem_card',
+          'lesson_memory_commit',
         ]
         : ['read', 'grep', 'find', 'ls', 'edit', 'write']);
   }
@@ -363,9 +366,12 @@ test('registers only node-bound custom tools for Plan and Lesson scopes', () => 
     parentPath: 'ROADMAP.md',
   } as const;
 
-  expect(customToolsForNode(root, lessonScope).map((tool) => tool.name)).toEqual([
+  const manager = { getSessionId: () => 'lesson-session-001', getBranch: () => [] };
+  expect(customToolsForNode(root, lessonScope, manager).map((tool) => tool.name)).toEqual([
     'classroom_log_append',
     'classroom_update',
+    'save_note',
+    'save_problem_card',
     'lesson_memory_commit',
   ]);
   expect(customToolsForNode(root, planScope).map((tool) => tool.name)).toEqual([

@@ -406,6 +406,10 @@ export function readProblemCard(root: string, id: string): ProblemCard {
   return problemCardFromValue(root, matches[0]!.path, matches[0]!.value);
 }
 
+export function readProblemCardAtPath(root: string, path: string): ProblemCard {
+  return problemCardFromValue(root, path, yamlAt(root, path));
+}
+
 function problemRevisionPath(id: string, revision: number): string {
   return `cards/m1b/.revisions/${checkedId(id, 'problem card id')}/${checkedRevision(revision, 'problem card revision')}.card.yaml`;
 }

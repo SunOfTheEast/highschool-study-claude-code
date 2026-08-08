@@ -90,6 +90,20 @@ test('routes every Lesson write through bound teaching tools', () => {
   expect(role).not.toContain('原生 `edit/write` 只在');
 });
 
+test('keeps live asset saving behind one student-visible approval gate', () => {
+  const free = read('skills/free-learning/SKILL.md');
+  const lesson = read('skills/tutor-lesson/SKILL.md');
+
+  expectInOrder(free, ['展示', '明确确认', 'save_note']);
+  expect(free).toContain('不为补标签');
+  expect(free).toContain('不要把保存说成掌握');
+  expectInOrder(lesson, ['展示', '明确确认', 'save_note']);
+  expect(lesson).toContain('不为标签');
+  expect(lesson).toContain('不等于已经掌握');
+  expect(lesson).toContain('source-N');
+  expect(lesson).toContain('保存资产也不自动写记忆');
+});
+
 test('makes Plan consume consolidated memory before drilling into classroom evidence', () => {
   const skill = read('skills/plan-dialogue/SKILL.md');
   const review = read('skills/plan-dialogue/references/post-lesson-review.md');

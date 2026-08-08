@@ -5,8 +5,18 @@ import {
   applyClassroomChange,
   type ClassroomChange,
 } from '../study/lesson-mutations';
-import { parseLessonSource } from '../study/markdown';
+import {
+  readLearningNote,
+  readProblemCardAtPath,
+} from '../study/learning-assets';
+import { readMaterial, readMaterialLocator, readMaterialRevision } from '../study/materials';
+import { parseLessonSource, readLesson } from '../study/markdown';
+import type { LearningSourceReference } from '../shared/contracts';
 import { mutateDocumentAtomically } from './atomic-document';
+import {
+  createLearningAssetTools,
+  type LearningAssetToolSession,
+} from './learning-asset-tools';
 import { createLessonMemoryTool } from './memory-tools';
 
 const blockId = Type.String({
@@ -77,7 +87,91 @@ function toolResult(value: Record<string, unknown>, command: string) {
   };
 }
 
-export function createLessonTools(root: string, lessonPath: string) {
+type LessonSourceAlias = {
+  alias: string;
+  path: string;
+  source: LearningSourceReference;
+};
+
+function sourceForLessonUse(root: string, path: string): LearningSourceReference | null {
+  if (/^cards\/.+\.ya?ml$/i.test(path) && !path.includes('/.revisions/')) {
+    const card = readProblemCardAtPath(root, path);
+    return { kind: 'problem-card', id: card.id, revision: card.revision };
+  }
+  const note = /^notes\/([A-Za-z0-9][A-Za-z0-9._-]*)\.note\.yaml$/.exec(path);
+  if (note) {
+    const asset = readLearningNote(root, note[1]!);
+    if (asset.path !== path) throw new Error(`LESSON_ASSET_PATH_MISMATCH: ${path}`);
+    return { kind: 'note', id: asset.id, revision: asset.revision };
+  }
+  const manifest = /^materials\/([A-Za-z0-9][A-Za-z0-9._-]*)\/manifest\.yaml$/.exec(path);
+  if (manifest) {
+    const material = readMaterial(root, manifest[1]!);
+    return { kind: 'material', id: material.id, revision: material.currentRevision, locator: null };
+  }
+  const original = /^materials\/([A-Za-z0-9][A-Za-z0-9._-]*)\/revisions\/([1-9][0-9]*)\/original(?:\..+)?$/.exec(path);
+  if (original) {
+    const revision = Number.parseInt(original[2]!, 10);
+    const material = readMaterialRevision(root, original[1]!, revision);
+    if (material.originalPath !== path) throw new Error(`LESSON_ASSET_PATH_MISMATCH: ${path}`);
+    return { kind: 'material', id: original[1]!, revision, locator: null };
+  }
+  const page = /^materials\/([A-Za-z0-9][A-Za-z0-9._-]*)\/projections\/([1-9][0-9]*)\/pages\/(page-[0-9]{4})\.txt$/.exec(path);
+  if (page) {
+    const source = {
+      kind: 'material' as const,
+      id: page[1]!,
+      revision: Number.parseInt(page[2]!, 10),
+      locator: page[3]!,
+    };
+    readMaterialLocator(root, source);
+    return source;
+  }
+  return null;
+}
+
+export function lessonSourceAliases(root: string, lessonPath: string): LessonSourceAlias[] {
+  const uses = readLesson(root, lessonPath).blocks.flatMap((block) => block.uses);
+  const unique = [...new Set(uses)];
+  return unique.flatMap((path) => {
+    const source = sourceForLessonUse(root, path);
+    return source ? [{ path, source }] : [];
+  }).map((item, index) => ({ ...item, alias: `source-${index + 1}` }));
+}
+
+export function renderLessonSourceAliases(root: string, lessonPath: string): string {
+  const aliases = lessonSourceAliases(root, lessonPath);
+  if (aliases.length === 0) return '';
+  return [
+    '# Current Lesson Source Aliases',
+    '',
+    ...aliases.map((item) => `- ${item.alias}: ${item.path}`),
+    '',
+    'These aliases are the only sources an asset saved in this Lesson may cite.',
+  ].join('\n');
+}
+
+function resolveLessonSourceAliases(
+  bound: readonly LessonSourceAlias[],
+  requested: readonly string[],
+): LearningSourceReference[] {
+  const aliases = new Map(bound.map((item) => [item.alias, item.source]));
+  const seen = new Set<string>();
+  return requested.map((alias) => {
+    if (seen.has(alias)) throw new Error(`ASSET_SOURCE_ALIAS_DUPLICATE: ${alias}`);
+    seen.add(alias);
+    const source = aliases.get(alias);
+    if (!source) throw new Error(`ASSET_SOURCE_ALIAS_UNKNOWN: ${alias}`);
+    return source;
+  });
+}
+
+export function createLessonTools(
+  root: string,
+  lessonPath: string,
+  session?: LearningAssetToolSession,
+) {
+  const boundSources = session ? lessonSourceAliases(root, lessonPath) : [];
   const validate = (source: string) => parseLessonSource(lessonPath, source);
   const logTool = defineTool({
     name: 'classroom_log_append',
@@ -142,6 +236,13 @@ export function createLessonTools(root: string, lessonPath: string) {
     },
   });
 
+  const assetTools = session
+    ? createLearningAssetTools(root, {
+      resolve: (aliases) => resolveLessonSourceAliases(boundSources, aliases),
+    }, session)
+    : [];
   const memoryTool = createLessonMemoryTool(root, lessonPath);
-  return memoryTool ? [logTool, updateTool, memoryTool] : [logTool, updateTool];
+  return memoryTool
+    ? [logTool, updateTool, ...assetTools, memoryTool]
+    : [logTool, updateTool, ...assetTools];
 }

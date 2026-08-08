@@ -32,9 +32,19 @@ description: Use when a Lesson Session teaches, adapts, records, or finishes the
 - 发生会影响后续判断的事实 → `classroom_log_append`；
 - 当前活动真正开始、结束或切换 → `classroom_update`；
 - 现有 pending 路线明显不再适合 → `classroom_update`；
+- 眼前教学动作已完成、自然形成了可保存内容，且学生确认了公开候选 →
+  按“保存学习资产”调用 `save_note` 或 `save_problem_card`；
 - 学生已经选择结束并完成唯一一次正式课末反思 →
   读取 `references/memory-consolidation.md`，按其中亮线调用一次 `lesson_memory_commit`；
 - 其余教学轮次 → 不调用写入工具。
+
+## 保存学习资产
+
+先完成眼前教学动作。自然形成可保存内容时，先用普通语言完整展示学生以后会看到的候选；
+只有学生明确确认后才调用 `save_note` 或 `save_problem_card`。沉默、继续做题和“我懂了”都
+不是确认。来源只能使用当前 Lesson 已提供的 `source-N` 别名；不得为补来源搜索目录。
+标签由已有内容生成，是内部索引，不为标签打断课堂或追问学生。保存成功或解释得不错都
+不等于已经掌握；保存资产也不自动写记忆。
 
 ## 进入课堂
 

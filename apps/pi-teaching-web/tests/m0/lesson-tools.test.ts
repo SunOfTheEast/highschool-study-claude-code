@@ -71,13 +71,18 @@ async function invoke(
 
 test('exposes two classroom tools plus the conditional M1 memory tool', () => {
   const root = copyFixture();
-  const tools = createLessonTools(root, lessonPath);
+  const session = { getSessionId: () => 'lesson-session-001', getBranch: () => [] };
+  const tools = createLessonTools(root, lessonPath, session);
   expect(tools.map((tool) => tool.name)).toEqual([
     'classroom_log_append',
     'classroom_update',
+    'save_note',
+    'save_problem_card',
     'lesson_memory_commit',
   ]);
   expect(tools.map((tool) => tool.executionMode)).toEqual([
+    'sequential',
+    'sequential',
     'sequential',
     'sequential',
     'sequential',
@@ -121,9 +126,11 @@ test('exposes two classroom tools plus the conditional M1 memory tool', () => {
 
   const m0 = copyFixture();
   rmSync(join(m0, 'memory/INDEX.md'));
-  expect(createLessonTools(m0, lessonPath).map((tool) => tool.name)).toEqual([
+  expect(createLessonTools(m0, lessonPath, session).map((tool) => tool.name)).toEqual([
     'classroom_log_append',
     'classroom_update',
+    'save_note',
+    'save_problem_card',
   ]);
 });
 

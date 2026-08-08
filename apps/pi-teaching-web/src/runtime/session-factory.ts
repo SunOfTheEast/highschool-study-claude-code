@@ -50,8 +50,12 @@ export function sessionFactoryInput(
   return { ...scope, sessionFile };
 }
 
-export function customToolsForNode(root: string, scope: NodeSessionScope) {
-  if (scope.nodeKind === 'lesson') return createLessonTools(root, scope.nodePath);
+export function customToolsForNode(
+  root: string,
+  scope: NodeSessionScope,
+  manager?: Pick<SessionManager, 'getSessionId' | 'getBranch'>,
+) {
+  if (scope.nodeKind === 'lesson') return createLessonTools(root, scope.nodePath, manager);
   if (scope.nodeKind === 'plan') return createPlanTools(root, scope);
   return [];
 }
@@ -61,7 +65,7 @@ export function customToolsForSession(
   scope: StudySessionScope,
   manager?: Pick<SessionManager, 'getSessionId' | 'getBranch'>,
 ) {
-  if (!isFreeLearningScope(scope)) return customToolsForNode(root, scope);
+  if (!isFreeLearningScope(scope)) return customToolsForNode(root, scope, manager);
   if (!manager) throw new Error('FREE_LEARNING_SESSION_MANAGER_REQUIRED');
   return createFreeLearningTools(root, scope, manager);
 }

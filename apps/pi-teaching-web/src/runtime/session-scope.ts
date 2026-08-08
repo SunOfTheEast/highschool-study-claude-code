@@ -53,6 +53,8 @@ export const LESSON_MODEL_TOOLS = [
   'ls',
   'classroom_log_append',
   'classroom_update',
+  'save_note',
+  'save_problem_card',
 ] as const;
 
 export const FREE_LEARNING_MODEL_TOOLS = [

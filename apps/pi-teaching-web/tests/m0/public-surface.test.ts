@@ -34,6 +34,8 @@ test('exposes only the M0 node lifecycle and role-scoped model tools', () => {
     'ls',
     'classroom_log_append',
     'classroom_update',
+    'save_note',
+    'save_problem_card',
   ]);
   expect(modelToolsForNode('plan')).toEqual([
     ...M0_MODEL_TOOLS,
@@ -47,6 +49,8 @@ test('exposes only the M0 node lifecycle and role-scoped model tools', () => {
     'ls',
     'classroom_log_append',
     'classroom_update',
+    'save_note',
+    'save_problem_card',
     'lesson_memory_commit',
   ]);
   expect(modelToolsForNode('plan', true)).toEqual([

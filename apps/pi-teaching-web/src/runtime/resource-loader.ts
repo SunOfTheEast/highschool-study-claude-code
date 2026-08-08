@@ -18,6 +18,7 @@ import {
 } from './session-scope';
 import { studySubagentGuard } from './study-subagent-guard';
 import { lessonMemoryGuard } from './lesson-memory-guard';
+import { renderLessonSourceAliases } from './lesson-tools';
 import { memoryEnabled } from './memory-tools';
 import { renderSelectedAssetContext } from '../study/learning-assets';
 import { renderSelectedProblemActivityContext } from '../study/problem-attempts';
@@ -81,6 +82,9 @@ export function loadStaticNodeResources(
     'Read child documents and learning assets directly when they are needed.',
     'Do not assume another node transcript has been copied into this Session.',
   ].join('\n');
+  const lessonSources = scope.nodeKind === 'lesson'
+    ? renderLessonSourceAliases(root, scope.nodePath)
+    : '';
   return {
     agentsFiles: [
       {
@@ -96,6 +100,10 @@ export function loadStaticNodeResources(
         content: file(join(root, 'LEARNING_GUIDE.md')),
       },
       ...(hasMemory ? loadMemoryIndexResource(root) : []),
+      ...(lessonSources ? [{
+        path: '/virtual/studyforge-m1c-lesson-source-aliases.md',
+        content: lessonSources,
+      }] : []),
       {
         path: '/virtual/studyforge-m0-teaching-core.md',
         content: file(join(resourceRoot, 'teaching', 'math-teaching-core.md')),
