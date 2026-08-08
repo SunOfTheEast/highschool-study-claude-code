@@ -39,25 +39,41 @@ const recallBlock = Type.Object({
   answer: Type.String({ minLength: 1 }),
 }, { additionalProperties: false });
 
-const noteParameters = Type.Object({
-  target: Type.Optional(target),
-  expectedTagRevision: Type.Optional(Type.Integer({ minimum: 1 })),
+const noteContentParameters = {
   title: Type.String({ minLength: 1 }),
   blocks: Type.Array(Type.Union([markdownBlock, recallBlock]), { minItems: 1 }),
   sourceAliases: Type.Array(sourceAlias, { uniqueItems: true }),
-  tags: semanticTags,
-}, { additionalProperties: false });
+};
 
-const cardParameters = Type.Object({
-  target: Type.Optional(target),
-  expectedTagRevision: Type.Optional(Type.Integer({ minimum: 1 })),
+const noteParameters = Type.Union([
+  Type.Object({ ...noteContentParameters, tags: semanticTags }, { additionalProperties: false }),
+  Type.Object({
+    ...noteContentParameters,
+    target,
+    expectedTagRevision: Type.Optional(Type.Integer({ minimum: 1 })),
+    tags: semanticTags,
+  }, { additionalProperties: false }),
+  Type.Object({ ...noteContentParameters, target }, { additionalProperties: false }),
+]);
+
+const cardContentParameters = {
   stem: Type.String({ minLength: 1 }),
   standardAnswer: Type.String({ minLength: 1 }),
   teacherRationale: Type.String({ minLength: 1 }),
   studentNote: Type.String(),
   sourceAliases: Type.Array(sourceAlias, { uniqueItems: true }),
-  tags: semanticTags,
-}, { additionalProperties: false });
+};
+
+const cardParameters = Type.Union([
+  Type.Object({ ...cardContentParameters, tags: semanticTags }, { additionalProperties: false }),
+  Type.Object({
+    ...cardContentParameters,
+    target,
+    expectedTagRevision: Type.Optional(Type.Integer({ minimum: 1 })),
+    tags: semanticTags,
+  }, { additionalProperties: false }),
+  Type.Object({ ...cardContentParameters, target }, { additionalProperties: false }),
+]);
 
 function contentText(content: unknown): string {
   if (typeof content === 'string') return content;
@@ -145,15 +161,19 @@ export function createFreeLearningTools(
         if (!latestStudentApprovedAssetSave(session.getBranch(), 'note')) {
           throw new Error('ASSET_SAVE_NOT_CONFIRMED: note');
         }
+        const inputTarget = 'target' in input ? input.target : undefined;
+        const inputExpectedTagRevision = 'expectedTagRevision' in input
+          ? input.expectedTagRevision
+          : undefined;
         const planned = planLearningNoteSave(root, session.getSessionId(), {
-          ...(input.target ? { target: input.target } : {}),
-          ...(input.expectedTagRevision === undefined
+          ...(inputTarget ? { target: inputTarget } : {}),
+          ...(inputExpectedTagRevision === undefined
             ? {}
-            : { expectedTagRevision: input.expectedTagRevision }),
+            : { expectedTagRevision: inputExpectedTagRevision }),
           title: input.title,
           blocks: input.blocks as LearningNoteBlock[],
           sources: sources(input.sourceAliases),
-          tags: input.tags as SemanticTagDraft,
+          ...('tags' in input ? { tags: input.tags as SemanticTagDraft } : {}),
         }, new Date().toISOString());
         const committed = commitDocumentCandidates(root, planned.candidates);
         const result = toolResult({
@@ -178,17 +198,21 @@ export function createFreeLearningTools(
         if (!latestStudentApprovedAssetSave(session.getBranch(), 'problem-card')) {
           throw new Error('ASSET_SAVE_NOT_CONFIRMED: problem-card');
         }
+        const inputTarget = 'target' in input ? input.target : undefined;
+        const inputExpectedTagRevision = 'expectedTagRevision' in input
+          ? input.expectedTagRevision
+          : undefined;
         const planned = planProblemCardSave(root, session.getSessionId(), {
-          ...(input.target ? { target: input.target } : {}),
-          ...(input.expectedTagRevision === undefined
+          ...(inputTarget ? { target: inputTarget } : {}),
+          ...(inputExpectedTagRevision === undefined
             ? {}
-            : { expectedTagRevision: input.expectedTagRevision }),
+            : { expectedTagRevision: inputExpectedTagRevision }),
           stem: input.stem,
           standardAnswer: input.standardAnswer,
           teacherRationale: input.teacherRationale,
           studentNote: input.studentNote,
           sources: sources(input.sourceAliases),
-          tags: input.tags as SemanticTagDraft,
+          ...('tags' in input ? { tags: input.tags as SemanticTagDraft } : {}),
         }, new Date().toISOString());
         const committed = commitDocumentCandidates(root, planned.candidates);
         const result = toolResult({

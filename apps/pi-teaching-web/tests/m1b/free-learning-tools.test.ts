@@ -1,9 +1,10 @@
 import { afterEach, expect, test } from 'bun:test';
-import { cpSync, mkdtempSync, rmSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { SessionEntry } from '@earendil-works/pi-coding-agent';
 import { Check } from 'typebox/value';
+import { stringify as stringifyYaml } from 'yaml';
 import { createFreeLearningTools } from '../../src/runtime/free-learning-tools';
 import {
   planProblemCardSave,
@@ -11,6 +12,7 @@ import {
   readProblemCard,
 } from '../../src/study/learning-assets';
 import { commitDocumentCandidates } from '../../src/runtime/multi-document-transaction';
+import { readSemanticTags } from '../../src/study/semantic-tags';
 
 const fixture = join(import.meta.dir, '../fixtures/m1b-blank-learning-set');
 const roots: string[] = [];
@@ -157,6 +159,41 @@ test('saves after explicit approval, resolves selected aliases, and replays one 
   expect(readLearningNote(root, 'note-001').sources).toEqual([
     { kind: 'problem-card', id: 'problem-001', revision: 2 },
   ]);
+});
+
+test('content-only tool update keeps a legacy Note without a semantic sidecar', async () => {
+  const root = copyFixture();
+  mkdirSync(join(root, 'notes'), { recursive: true });
+  writeFileSync(join(root, 'notes/legacy.note.yaml'), stringifyYaml({
+    schema: 'studyforge.note.v1',
+    id: 'legacy',
+    revision: 1,
+    title: '旧标题',
+    created_at: '2026-08-08T09:00:00.000Z',
+    updated_at: '2026-08-08T09:00:00.000Z',
+    created_session_id: 'legacy-session',
+    sources: [],
+    blocks: [{ kind: 'markdown', body: '旧正文。' }],
+  }));
+  const [note] = createFreeLearningTools(root, {
+    sessionKind: 'free-learning',
+    title: '自由学习',
+    createdAt: '2026-08-08T10:00:00.000Z',
+    selectedAssets: [],
+  }, manager([message('u1', 'user', '可以，保存为笔记。')]));
+  const input = {
+    target: { id: 'legacy', expectedRevision: 1 },
+    title: '新标题',
+    blocks: [{ kind: 'markdown', body: '新正文。' }],
+    sourceAliases: [],
+  };
+
+  expect(Check(note!.parameters, input)).toBeTrue();
+  await execute(note!, 'content-only-legacy-note', input);
+
+  expect(readLearningNote(root, 'legacy')).toMatchObject({ revision: 2, title: '新标题' });
+  expect(() => readSemanticTags(root, { kind: 'note', id: 'legacy' }))
+    .toThrow('semantic tags do not exist');
 });
 
 test('accepts a short acknowledgement only when it follows a visible card proposal', async () => {
