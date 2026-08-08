@@ -13,8 +13,8 @@ import { createPlanTools } from './plan-tools';
 import { createRoleResourceLoader } from './resource-loader';
 import { appendSessionOwner } from './session-owner';
 import {
-  FREE_LEARNING_MODEL_TOOLS,
   isFreeLearningScope,
+  modelToolsForFreeLearning,
   modelToolsForNode,
   type NodeSessionScope,
   type StudySessionScope,
@@ -102,7 +102,7 @@ export async function createPiSessionFactory(root: string): Promise<StudySession
       sessionManager: manager,
       customTools,
       tools: [...(isFreeLearningScope(scope)
-        ? FREE_LEARNING_MODEL_TOOLS
+        ? modelToolsForFreeLearning(memoryEnabled(root))
         : modelToolsForNode(scope.nodeKind, memoryEnabled(root)))],
     });
     await bindStudyExtensions(session);

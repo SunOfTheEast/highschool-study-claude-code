@@ -7,10 +7,10 @@ import {
   type EventBus,
 } from '@earendil-works/pi-coding-agent';
 import {
-  FREE_LEARNING_MODEL_TOOLS,
   formatFreeLearningOwnerContext,
   formatSessionOwnerContext,
   isFreeLearningScope,
+  modelToolsForFreeLearning,
   modelToolsForNode,
   type FreeLearningSessionScope,
   type NodeSessionScope,
@@ -160,7 +160,7 @@ export function loadStaticFreeLearningResources(
       },
     ],
     skillPaths: [join(resourceRoot, 'skills', 'free-learning', 'SKILL.md')],
-    tools: FREE_LEARNING_MODEL_TOOLS,
+    tools: modelToolsForFreeLearning(hasMemory),
   };
 }
 

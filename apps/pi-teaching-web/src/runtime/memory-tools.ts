@@ -4,8 +4,10 @@ import { Type } from '@earendil-works/pi-ai';
 import { defineTool } from '@earendil-works/pi-coding-agent';
 import {
   planDeferredRouteResolution,
+  planFreeLearningMemoryCommit,
   planLessonMemoryCommit,
   type BucketRef,
+  type FreeLearningMemoryCommitDraft,
   type LessonMemoryCommitDraft,
 } from '../study/memory-mutations';
 import { commitDocumentCandidates } from './multi-document-transaction';
@@ -117,14 +119,60 @@ const routeResolveParameters = Type.Object({
   buckets: Type.Array(bucketRef, { minItems: 1 }),
 }, { additionalProperties: false });
 
+const freeLearningMemoryCommitParameters = Type.Object({
+  objects: Type.Array(Type.Object({
+    target: objectTarget,
+    learningHistoryChange: Type.String({ minLength: 1 }),
+    currentJudgment: Type.Optional(Type.String({ minLength: 1 })),
+    evolutionOverview: Type.Optional(Type.String({ minLength: 1 })),
+    boundaries: Type.Optional(Type.Array(Type.String({ minLength: 1 }), { minItems: 1 })),
+    routing,
+    frontierSummary: Type.Optional(Type.String({ minLength: 1 })),
+  }, { additionalProperties: false }), { minItems: 1 }),
+}, { additionalProperties: false });
+
 function toolResult(
   value: Record<string, unknown>,
-  kind: 'lesson-memory-commit' | 'memory-route-resolve',
+  kind: 'lesson-memory-commit' | 'memory-route-resolve' | 'free-learning-memory-commit',
 ) {
   return {
     content: [{ type: 'text' as const, text: JSON.stringify(value) }],
     details: { kind },
   };
+}
+
+export function createFreeLearningMemoryTool(root: string, sessionId: string) {
+  if (!memoryEnabled(root)) return null;
+  const successful = new Map<string, ReturnType<typeof toolResult>>();
+  return defineTool({
+    name: 'free_learning_memory_commit',
+    label: '更新教师对象记忆',
+    description: 'Append one meaningful cognitive change from the current native free-learning Session and patch only the object snapshot fields that actually changed.',
+    executionMode: 'sequential',
+    parameters: freeLearningMemoryCommitParameters,
+    execute: async (toolCallId, input) => {
+      const replay = successful.get(toolCallId);
+      if (replay) return replay;
+      const started = performance.now();
+      const planned = planFreeLearningMemoryCommit(
+        root,
+        sessionId,
+        input as FreeLearningMemoryCommitDraft,
+        new Date().toISOString(),
+      );
+      const committed = commitDocumentCandidates(root, planned.candidates);
+      const result = toolResult({
+        ok: true,
+        commitId: committed.commitId,
+        objectIds: planned.objectIds,
+        bucketIds: planned.bucketIds,
+        changedPaths: committed.changedPaths,
+        durationMs: performance.now() - started,
+      }, 'free-learning-memory-commit');
+      successful.set(toolCallId, result);
+      return result;
+    },
+  });
 }
 
 export function memoryEnabled(root: string): boolean {

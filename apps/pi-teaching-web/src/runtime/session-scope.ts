@@ -64,6 +64,12 @@ export const FREE_LEARNING_MODEL_TOOLS = [
   'save_problem_card',
 ] as const;
 
+export function modelToolsForFreeLearning(hasMemory: boolean): readonly string[] {
+  return hasMemory
+    ? [...FREE_LEARNING_MODEL_TOOLS, 'free_learning_memory_commit']
+    : FREE_LEARNING_MODEL_TOOLS;
+}
+
 export function isFreeLearningScope(
   scope: StudySessionScope,
 ): scope is FreeLearningSessionScope {

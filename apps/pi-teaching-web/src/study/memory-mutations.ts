@@ -55,6 +55,20 @@ export type LessonMemoryCommitDraft = {
   preferences: PreferenceMutation[];
 };
 
+export type FreeLearningObjectMutation = {
+  target: ExistingOrNew;
+  learningHistoryChange: string;
+  currentJudgment?: string;
+  evolutionOverview?: string;
+  boundaries?: string[];
+  routing: RoutingDecision;
+  frontierSummary?: string;
+};
+
+export type FreeLearningMemoryCommitDraft = {
+  objects: FreeLearningObjectMutation[];
+};
+
 type SectionSpan = {
   contentStart: number;
   contentEnd: number;
@@ -844,6 +858,269 @@ export function planLessonMemoryCommit(
     preferenceIds,
     bucketIds,
   };
+}
+
+type ResolvedFreeObject = {
+  mutation: FreeLearningObjectMutation;
+  id: string;
+  title: string;
+  path: string;
+  before: string | null;
+};
+
+function renderFreeLearningHistoryEntry(args: {
+  recordedAt: string;
+  sessionId: string;
+  change: string;
+}): string {
+  const [first, ...rest] = requireText(args.change, 'learning history change')
+    .split(/\r?\n/);
+  return [
+    `- ${displayTime(args.recordedAt)} — ${first}`
+      + rest.map((line) => `\n  ${line}`).join(''),
+    `  - 来源：原生自由学习 Session \`${args.sessionId}\``,
+  ].join('\n');
+}
+
+function updateExistingObjectFromFreeLearning(
+  source: string,
+  mutation: FreeLearningObjectMutation,
+  history: string,
+): string {
+  let candidate = source;
+  if (mutation.currentJudgment !== undefined) {
+    candidate = replaceRequiredSection(
+      candidate,
+      'Current Judgment',
+      requireText(mutation.currentJudgment, 'currentJudgment'),
+    );
+  }
+  if (mutation.evolutionOverview !== undefined) {
+    candidate = replaceRequiredSection(
+      candidate,
+      'Evolution Overview',
+      requireText(mutation.evolutionOverview, 'evolutionOverview'),
+    );
+  }
+  candidate = appendRequiredSection(candidate, 'Learning History', history);
+  if (mutation.boundaries !== undefined) {
+    candidate = replaceRequiredSection(
+      candidate,
+      'Boundaries / Not Yet Demonstrated',
+      renderList(mutation.boundaries, 'boundaries'),
+    );
+  }
+  return candidate;
+}
+
+export function planFreeLearningMemoryCommit(
+  root: string,
+  sessionId: string,
+  draft: FreeLearningMemoryCommitDraft,
+  recordedAt: string,
+): {
+  candidates: DocumentCandidate[];
+  objectIds: Record<string, string>;
+  bucketIds: Record<string, string>;
+} {
+  displayTime(recordedAt);
+  requireLocalKey(sessionId, 'session id');
+  if (draft.objects.length === 0) throw new Error('FREE_LEARNING_MEMORY_CHANGE_REQUIRED');
+
+  const objectIds: Record<string, string> = {};
+  const bucketIds: Record<string, string> = {};
+  const objectReserved = new Set<string>();
+  const bucketReserved = new Set<string>();
+  const objectTargets = new Set<string>();
+  const newObjectKeys = new Set<string>();
+  const resolvedObjects: ResolvedFreeObject[] = [];
+
+  for (const mutation of draft.objects) {
+    requireText(mutation.learningHistoryChange, 'learning history change');
+    let id: string;
+    let title: string;
+    let path: string;
+    let before: string | null;
+    if (mutation.target.kind === 'existing') {
+      id = requireStableId(mutation.target.id, 'object');
+      path = `memory/objects/${id}.md`;
+      before = readRequired(root, path);
+      title = documentTitle(before, id, 'object');
+      if (mutation.routing.kind === 'defer') {
+        throw new Error('existing object cannot defer routing');
+      }
+      if (mutation.currentJudgment !== undefined) {
+        requireText(mutation.currentJudgment, 'currentJudgment');
+      }
+      if (mutation.evolutionOverview !== undefined) {
+        requireText(mutation.evolutionOverview, 'evolutionOverview');
+      }
+      if (mutation.boundaries !== undefined) renderList(mutation.boundaries, 'boundaries');
+    } else {
+      const key = requireLocalKey(mutation.target.key, 'object key');
+      if (newObjectKeys.has(key)) throw new Error(`duplicate object key: ${key}`);
+      newObjectKeys.add(key);
+      if (
+        mutation.currentJudgment === undefined
+        || mutation.evolutionOverview === undefined
+        || mutation.boundaries === undefined
+      ) {
+        throw new Error('NEW_OBJECT_SNAPSHOT_REQUIRED');
+      }
+      requireText(mutation.currentJudgment, 'currentJudgment');
+      requireText(mutation.evolutionOverview, 'evolutionOverview');
+      renderList(mutation.boundaries, 'boundaries');
+      id = nextNumericId(root, 'memory/objects', 'obj', objectReserved);
+      objectIds[key] = id;
+      title = requireOneLine(mutation.target.title, 'object title');
+      path = `memory/objects/${id}.md`;
+      ensureNewPath(root, path);
+      before = null;
+      if (mutation.routing.kind === 'keep') throw new Error('new object cannot keep routing');
+    }
+    if (objectTargets.has(id)) throw new Error(`duplicate object target: ${id}`);
+    objectTargets.add(id);
+    resolvedObjects.push({ mutation, id, title, path, before });
+  }
+
+  const resolvedNewBuckets = new Map<string, ResolvedBucket>();
+  const resolvedExistingBuckets = new Map<string, ResolvedBucket>();
+  const resolveBucket = (ref: BucketRef): ResolvedBucket => {
+    if (ref.kind === 'existing') {
+      const id = requireStableId(ref.id, 'bucket');
+      const cached = resolvedExistingBuckets.get(id);
+      if (cached) return cached;
+      const path = `memory/indexes/${id}.md`;
+      const before = readRequired(root, path);
+      const bucket = { id, title: documentTitle(before, id, 'bucket'), path, before };
+      resolvedExistingBuckets.set(id, bucket);
+      return bucket;
+    }
+    const key = requireLocalKey(ref.key, 'bucket key');
+    const title = requireOneLine(ref.title, 'bucket title');
+    const cached = resolvedNewBuckets.get(key);
+    if (cached) {
+      if (cached.title !== title) throw new Error(`bucket key ${key} has conflicting titles`);
+      return cached;
+    }
+    const id = nextNumericId(root, 'memory/indexes', 'bucket', bucketReserved);
+    const path = `memory/indexes/${id}.md`;
+    ensureNewPath(root, path);
+    const bucket = { id, title, path, before: null };
+    resolvedNewBuckets.set(key, bucket);
+    bucketIds[key] = id;
+    return bucket;
+  };
+
+  const rootPath = 'memory/INDEX.md';
+  const rootBefore = readRequired(root, rootPath);
+  let rootAfter = rootBefore;
+  const bucketAfter = new Map<string, { bucket: ResolvedBucket; source: string }>();
+  const ensureBucketRootLink = (bucket: ResolvedBucket): void => {
+    const target = `indexes/${bucket.id}.md`;
+    rootAfter = upsertRootLink(
+      rootAfter,
+      'Object Buckets',
+      target,
+      `- [${bucket.id}：${bucket.title}](${target})`,
+    );
+  };
+
+  const objectSources = new Map<string, string>();
+  for (const object of resolvedObjects) {
+    const history = renderFreeLearningHistoryEntry({
+      recordedAt,
+      sessionId,
+      change: object.mutation.learningHistoryChange,
+    });
+    const source = object.before === null
+      ? renderNewObject({
+          id: object.id,
+          title: object.title,
+          mutation: {
+            target: object.mutation.target,
+            currentJudgment: object.mutation.currentJudgment!,
+            evolutionOverview: object.mutation.evolutionOverview!,
+            boundaries: object.mutation.boundaries!,
+            learningHistoryEntry: { change: object.mutation.learningHistoryChange, evidenceBlockIds: [] },
+            routing: object.mutation.routing,
+            ...(object.mutation.frontierSummary
+              ? { frontierSummary: object.mutation.frontierSummary }
+              : {}),
+          },
+          history,
+        })
+      : updateExistingObjectFromFreeLearning(object.before, object.mutation, history);
+    validateObjectSource(source, object.id);
+    objectSources.set(object.path, source);
+
+    if (object.mutation.frontierSummary?.trim()) {
+      const target = `objects/${object.id}.md`;
+      const summary = requireText(object.mutation.frontierSummary, 'frontierSummary');
+      rootAfter = upsertRootLink(
+        rootAfter,
+        'Current Learning Frontier',
+        target,
+        `- [${object.id}：${object.title}](${target}) — ${summary}`,
+        true,
+      );
+    }
+
+    if (object.mutation.routing.kind === 'assign') {
+      if (object.mutation.routing.buckets.length === 0) {
+        throw new Error('assign requires at least one bucket');
+      }
+      const seenBuckets = new Set<string>();
+      for (const ref of object.mutation.routing.buckets) {
+        const bucket = resolveBucket(ref);
+        if (seenBuckets.has(bucket.id)) {
+          throw new Error(`object ${object.id} repeats bucket ${bucket.id}`);
+        }
+        seenBuckets.add(bucket.id);
+        const current = bucketAfter.get(bucket.path)?.source
+          ?? (bucket.before === null ? renderNewBucket(bucket) : bucket.before);
+        bucketAfter.set(bucket.path, { bucket, source: addObjectToBucket(current, object) });
+        ensureBucketRootLink(bucket);
+      }
+    } else if (object.mutation.routing.kind === 'defer') {
+      const reason = requireText(object.mutation.routing.reason, 'defer reason');
+      const target = `objects/${object.id}.md`;
+      const rendered = `- [${object.id}：${object.title}](${target})\n  — ${reason}`;
+      if (/^## Deferred Object Routing[ \t]*$/m.test(rootAfter)) {
+        rootAfter = upsertRootLink(rootAfter, 'Deferred Object Routing', target, rendered);
+      } else {
+        rootAfter = appendOptionalSection(rootAfter, 'Deferred Object Routing', rendered);
+      }
+    }
+  }
+
+  const candidates: DocumentCandidate[] = [];
+  for (const object of [...resolvedObjects].sort((a, b) => a.path.localeCompare(b.path))) {
+    const candidate = changedCandidate(
+      object.path,
+      object.before,
+      objectSources.get(object.path)!,
+      (source) => { validateObjectSource(source, object.id); },
+    );
+    if (candidate) candidates.push(candidate);
+  }
+  for (const { bucket, source } of [...bucketAfter.values()]
+    .sort((a, b) => a.bucket.path.localeCompare(b.bucket.path))) {
+    const candidate = changedCandidate(
+      bucket.path,
+      bucket.before,
+      source,
+      (value) => {
+        documentTitle(value, bucket.id, 'bucket');
+        sectionSpan(value, 'Objects');
+      },
+    );
+    if (candidate) candidates.push(candidate);
+  }
+  const rootCandidate = changedCandidate(rootPath, rootBefore, rootAfter, validateRootIndex);
+  if (rootCandidate) candidates.push(rootCandidate);
+  if (candidates.length === 0) throw new Error('FREE_LEARNING_MEMORY_CHANGE_REQUIRED');
+  return { candidates, objectIds, bucketIds };
 }
 
 export function planDeferredRouteResolution(

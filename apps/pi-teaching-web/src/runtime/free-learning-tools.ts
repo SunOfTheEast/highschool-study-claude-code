@@ -8,6 +8,7 @@ import {
 } from '../study/learning-assets';
 import type { FreeLearningSessionScope } from './session-scope';
 import { commitDocumentCandidates } from './multi-document-transaction';
+import { createFreeLearningMemoryTool } from './memory-tools';
 
 type FreeLearningToolSession = {
   getSessionId(): string;
@@ -121,7 +122,7 @@ export function createFreeLearningTools(
   const sources = (aliases: readonly string[]) => (
     resolveSelectedAssetAliases(scope.selectedAssets, aliases)
   );
-  return [
+  const tools = [
     defineTool({
       name: 'save_note',
       label: '保存学习笔记',
@@ -183,4 +184,6 @@ export function createFreeLearningTools(
       },
     }),
   ];
+  const memory = createFreeLearningMemoryTool(root, session.getSessionId());
+  return memory ? [...tools, memory] : tools;
 }

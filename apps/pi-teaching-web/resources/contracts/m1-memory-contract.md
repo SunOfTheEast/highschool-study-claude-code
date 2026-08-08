@@ -14,9 +14,10 @@
 
 ## 文件与所有权
 
-- Lesson 的 Block `Classroom Log` 保存原始课堂事实。
+- Lesson 的 Block `Classroom Log` 保存正式课堂事实；自由学习的原生 Pi Session 保存自由
+  对话事实，两者都只由自己的 Session 产生。
 - `memory/objects/` 保存对象的 Current Judgment、Evolution Overview、Learning History、
-  未证明边界，以及 Learning History 到来源 Lesson 和 Block ID 的直接链接。
+  未证明边界，以及 Learning History 到来源 Lesson / Block 或完整自由学习 Session 的引用。
 - `memory/capabilities/` 保存跨对象能力假设；Tutor 不写能力文件，Coach 在跨对象证据成立后
   写工作假设，Roadmap 跨 Plan 校准同一文件。
 - `memory/preferences/` 保存明确偏好的原话、时间、范围、当前判断和变化历史。
@@ -43,12 +44,23 @@ bucket；它只绑定当前 Lesson、时间、稳定 ID、路径、链接并原�
 成功回执后不回读刚写入的文件。学生纠正通过新的 `lesson_memory_commit` 向 Classroom Log
 和受影响对象的 Learning History 追加纠正事实，并修订当前判断；旧记录永不重写。
 
+自由学习不建立 Log 或 Trace，也不等待 Session 结束。只有当本次真实对话会改变未来教师对
+“学生怎样理解这个对象、学到哪里、边界在哪里”的判断时，Tutor 才用
+`free_learning_memory_commit` 追加一条对象 Learning History。Runtime 绑定完整原生 Session
+与时间；Tutor 不提交 Session ID、消息 ID、轮次、路径或时间。已有对象只提交实际变化的
+Current Judgment、Evolution Overview 或 Boundaries 字段；省略的字段保持原样。新对象仍需
+给出完整快照和明确的 `assign` / `defer` 路由。
+
+保存资产、查看答案、教师讲解或学生只说“懂了”都不能自动触发这次写入。关键结论至少出现
+在学生的重新表达、推导、比较或使用中。自由学习结束不强制写记忆，也不把资产保存和记忆
+更新拼成一个事务。
+
 ## 渐进式披露
 
 需要记忆时按亮线读取：
 
 ```text
-memory/INDEX.md → 相关对象、能力或偏好文件 → 必要时精确定位来源 Block 的 Classroom Log
+memory/INDEX.md → 相关对象、能力或偏好文件 → 必要时定位来源 Block 的 Classroom Log 或完整原生 Session
 ```
 
 索引足够时不搜索，L1 判断足够时不读课堂原文。确需核验时，先用对象历史给出的 Lesson
