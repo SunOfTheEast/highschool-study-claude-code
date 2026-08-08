@@ -4,8 +4,11 @@ import {
   PLAN_STATUSES,
 } from '../../src/shared/contracts';
 import {
+  FREE_LEARNING_MODEL_TOOLS,
   LESSON_MODEL_TOOLS,
   M0_MODEL_TOOLS,
+  freeLearningSessionKey,
+  modelToolsForFreeLearning,
   modelToolsForNode,
   sessionKeyForNode,
 } from '../../src/runtime/session-scope';
@@ -74,6 +77,23 @@ test('exposes only the M0 node lifecycle and role-scoped model tools', () => {
     parentId: 'plan-001',
     parentPath: 'plans/plan-001/PLAN.md',
   })).toBe('lesson:plan-001:lesson-001');
+});
+
+test('keeps free learning outside the course tree with its own narrow tool surface', () => {
+  expect(freeLearningSessionKey('free-session-001')).toBe('free:free-session-001');
+  expect(FREE_LEARNING_MODEL_TOOLS).toEqual([
+    'read',
+    'grep',
+    'find',
+    'ls',
+    'save_note',
+    'save_problem_card',
+  ]);
+  expect(modelToolsForFreeLearning(true)).toEqual([
+    ...FREE_LEARNING_MODEL_TOOLS,
+    'free_learning_memory_commit',
+  ]);
+  expect(modelToolsForFreeLearning(false)).toEqual(FREE_LEARNING_MODEL_TOOLS);
 });
 
 test('keeps M0 Course and Knowledge projections behind the M1b primary navigation', () => {

@@ -114,15 +114,15 @@ test('completes the M0 Roadmap, Plan, Lesson and Knowledge browser cycle', async
 
   await page.getByRole('button', { name: '完成这一阶段' }).click();
   await expect(page).toHaveURL(/\/course$/);
-  await page.getByRole('link', { name: '知识山河' }).click();
+  await page.goto('/knowledge');
   await expect(page.getByRole('heading', { name: '知识山河' })).toBeVisible();
   await page.getByPlaceholder('方法、题卡编号或材料名').fill('参变量分离');
   await expect(page.getByRole('region', { name: '题卡资产' })).not.toContainText('没有匹配的题卡');
 
   expect((await page.request.get('/api/views/memory')).status()).toBe(404);
   await page.goto('/memory');
-  await expect(page).toHaveURL(/\/course$/);
-  await expect(page.getByRole('heading', { name: '导数结构学习路线' })).toBeVisible();
+  await expect(page).toHaveURL(/\/home$/);
+  await expect(page.getByRole('heading', { name: '导数结构学习集' })).toBeVisible();
   await expect(page.getByRole('link', { name: '记忆' })).toHaveCount(0);
 });
 

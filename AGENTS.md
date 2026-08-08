@@ -7,7 +7,8 @@ surfaces.
 
 ## Durable domain
 
-M1 has one Markdown control tree plus one Markdown teacher-memory network:
+M1b has an optional Markdown course tree, one Markdown teacher-memory network, and two
+student-owned asset families:
 
 ```text
 ROADMAP.md
@@ -22,15 +23,22 @@ memory/
 ├── objects/
 ├── capabilities/
 └── preferences/
+
+notes/*.note.yaml
+cards/m1b/*.card.yaml
+activity/problem-attempts/*.md
 ```
 
-`LEARNING_GUIDE.md` supplies learning-set-specific teaching principles. `cards/`,
-`graph/`, and `materials/` are static source assets. Pi Session JSONL stores each
-node's raw conversation and native tool history.
+`ROADMAP.md` and the course tree are optional. A genuinely blank learning set may contain
+only `LEARNING_GUIDE.md` and `memory/INDEX.md`. `LEARNING_GUIDE.md` supplies
+learning-set-specific teaching principles. Existing `cards/`, `graph/`, and `materials/`
+remain supported source assets. Native Pi Session JSONL stores both node conversations and
+independent free-learning conversations.
 
-Markdown is the only durable truth. M1 memory is a routed teacher notebook: L0
+Canonical learning facts and assets remain Markdown/YAML; native Pi JSONL is the sole raw
+conversation record. M1 memory is a routed teacher notebook: L0
 `memory/INDEX.md`, L1 object/capability/preference judgments, and L2 source Lesson
-evidence. Do not add a global event-summary pool, derived mastery state, handoff documents,
+evidence or source free-learning Session. Do not add a global event-summary pool, derived mastery state, handoff documents,
 database, vector store, background consolidation service, or unified context compiler
 without new repeated real-course evidence and explicit user approval.
 
@@ -50,6 +58,10 @@ without new repeated real-course evidence and explicit user approval.
   overview, timeline, and source links must preserve how the judgment changed.
 - Child status comes only from child frontmatter. Parent prose is not a status cache.
 - Legacy Lesson sections are rejected by the parser rather than adapted.
+- A Note owns ordered Markdown/recall blocks and revisioned student-editable content.
+- A problem card owns one canonical stem, answer, private teaching rationale, and student
+  note. Attempts and answer reveals append to a separate activity file; they never imply
+  correctness or mastery.
 
 Parents start from consolidated Markdown memory and drill into child evidence only for
 missing, conflicting, or high-impact details. Roadmap may arrange future prepared Plans.
@@ -64,6 +76,12 @@ Roadmap-global; Lesson IDs are local to their parent Plan, so a Lesson Session k
 `lesson:<plan-id>:<lesson-id>`. Ownership is
 `nodeKind + nodeId + nodePath + parentId + parentPath`; display labels do not identify
 a Session. Parent and sibling transcripts are never copied into a new node Session.
+
+Free learning uses independent `free:<session-id>` Pi Sessions. It may start with no
+context or with explicitly selected Note/problem-card handles, allows multiple live
+threads, and ends only on the student's explicit action. It creates no Light Lesson,
+Classroom Log, Trace, or mandatory Summary. Ending a thread is lifecycle only and does
+not force memory consolidation.
 
 A long Plan Session uses Pi's native compaction only at a semantic boundary: the
 settled turn successfully edited or wrote `plans/*/lessons/*.md`, and active context usage is
@@ -106,6 +124,12 @@ node-bound `classroom_log_append`, `classroom_update`, and conditional
 write `capabilities/`, parent nodes, sibling Lessons, or memory Markdown directly. This
 is a mechanical boundary, not a prompt convention.
 
+Free learning keeps native read-only file discovery plus `save_note`,
+`save_problem_card`, and conditional `free_learning_memory_commit`. Asset tools require
+the student's visible, explicit approval. The memory tool appends a meaningful cognitive
+change directly from the whole native Session; asset existence, answer reveal, and teacher
+explanation are never learning evidence by themselves.
+
 The Coach derives temporary material slots from the agreed Lesson activities and normally
 launches one Scout per slot, with at most three running concurrently. Each Scout uses
 canonical feature fields and free text to recall a small shallow candidate set, reads
@@ -131,6 +155,8 @@ model tool calls.
   `apps/pi-teaching-web/resources/skills/references/plan-cycles/`
 - Live Block teaching, logging, on-demand recall, and end-of-Lesson consolidation:
   `apps/pi-teaching-web/resources/skills/tutor-lesson/SKILL.md`
+- Open-ended free learning, student-approved asset saving, and direct object-memory
+  updates: `apps/pi-teaching-web/resources/skills/free-learning/SKILL.md`
 - Shared mathematics judgment:
   `apps/pi-teaching-web/resources/teaching/math-teaching-core.md`
 
@@ -146,13 +172,17 @@ parent-side bulk asset search.
 
 ## App surface
 
-The only primary views are Course and Knowledge.
+Primary views are Home, Learning Assets, and Course only when a Roadmap exists.
 
-- Course routes: `/course`, `/course/plan/:id`,
+- Home and free-learning routes: `/home`, `/learn/:sessionId`.
+- Asset routes: `/assets`, `/assets/notes/:id`,
+  `/assets/problem-cards/:id`.
+- Optional Course routes: `/course`, `/course/plan/:id`,
   `/course/plan/:id/lesson/:id`.
-- Knowledge route: `/knowledge`.
-- API: health, course snapshot, static knowledge snapshot, node history/message,
-  Plan lifecycle actions, and Plan-scoped Lesson lifecycle actions.
+- `/knowledge` remains a supported legacy static projection, not a primary navigation
+  destination.
+- API additionally exposes home, free-learning lifecycle, asset editing, problem attempts,
+  answer reveal, and problem-card-to-teacher handoff.
 - WebSocket `/events` transports raw conversation items, tool activity, run
   state, errors, and invalidations.
 
@@ -170,10 +200,12 @@ items. The normal Lesson view shows `Student View` and Block progress, not
 - `apps/pi-teaching-web/resources/personas/`: optional expression overlays shared by
   Roadmap, Plan, and Lesson Sessions.
 - `apps/pi-teaching-web/src/server/`: minimal HTTP/WebSocket transport.
-- `apps/pi-teaching-web/src/client/`: Course/Knowledge App.
+- `apps/pi-teaching-web/src/client/`: Home/Assets/Free Learning/optional Course App.
 - `apps/pi-teaching-web/tests/m0/`: preserved M0 kernel regressions.
 - `apps/pi-teaching-web/tests/m1/`: memory, routing, and retired-surface contracts.
 - `apps/pi-teaching-web/tests/e2e/m0-cycle.spec.ts`: deterministic browser closure.
+- `apps/pi-teaching-web/tests/e2e/m1b-cycle.spec.ts`: deterministic blank-set growth and
+  reuse closure.
 - `examples/derivative-m0/`: clean public learning set.
 
 ## Change discipline
@@ -193,5 +225,5 @@ items. The normal Lesson view shows `Student View` and Block progress, not
 cd apps/pi-teaching-web
 bun install --frozen-lockfile
 bun run check
-bun run test:e2e -- tests/e2e/m0-cycle.spec.ts
+bun run test:e2e -- tests/e2e/m0-cycle.spec.ts tests/e2e/m1b-cycle.spec.ts
 ```

@@ -35,7 +35,7 @@ test('documents only the Pi App and Markdown teacher memory as the supported pro
   expect(rootReadme).toContain('memory/INDEX.md');
   expect(guide).toContain('M1 memory');
   expect(guide).toContain('Learning History');
-  expect(appReadme).toContain('教师笔记记忆');
+  expect(appReadme).toContain('教师对象记忆');
   expect(appReadme).toContain('原生 `Read` / `Grep`');
   expect(combined).not.toContain('plugins/highschool-study');
   expect(combined).not.toContain('旧 Claude Code 插件');

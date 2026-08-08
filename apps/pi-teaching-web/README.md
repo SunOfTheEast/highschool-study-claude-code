@@ -1,13 +1,17 @@
 # StudyForge M1 本地教学 App
 
 这是 StudyForge 当前唯一受支持的本地教学 App：一个 Markdown-first、单人运行的 Pi
-教学工作台。它保留 Roadmap、Plan、Lesson 三级课程治理和 Block 课堂流程，并加入
-学习集内、可追溯、渐进式披露的教师笔记记忆。记忆不是聊天摘要或静态学生画像；它服务
-下一次真实教学判断。
+教学工作台。学生即使没有 Roadmap、课程或预置资产，也能从自由学习直接开始；讨论中
+经学生确认形成 Note、题卡和有证据边界的教师对象记忆。已有学习集仍保留 Roadmap、Plan、
+Lesson 三级课程治理和 Block 课堂流程。
 
 ## 运行结构
 
 ```text
+Free Learning Session ──→ Note / 题卡
+          │
+          └─────────────→ 对象记忆
+
 Roadmap Session
   └── Plan Session
       └── Lesson Session
@@ -18,6 +22,10 @@ Roadmap Session
   → 必要时按对象历史中的 Block ID 核对 Classroom Log
   → 作出下一步教学决定
 ```
+
+自由学习是独立原生 Pi Session：允许多线程、可带学生明确选择的资产进入，并且只在学生
+显式操作时结束。它不创建 Light Lesson、Classroom Log、Trace 或强制 Summary；对象记忆
+可以在对话中发生真实认知变化时直接形成。
 
 每个节点拥有独立原生 Pi Session。不同 Session 不复制聊天历史；Lesson 中真实发生的
 对话、提示、纠正和决定直接追加到对应 Block 的 `Classroom Log`。每节课在唯一一次
@@ -55,7 +63,7 @@ npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 cd apps/pi-teaching-web
 bun install
 bun run check
-bun run test:e2e -- tests/e2e/m0-cycle.spec.ts
+bun run test:e2e -- tests/e2e/m0-cycle.spec.ts tests/e2e/m1b-cycle.spec.ts
 ```
 
 ## 直接启动
@@ -117,13 +125,16 @@ pi install "$PWD"
 
 ## 学生流程
 
-1. Roadmap Session 先介绍学习集的目的、范围与价值，再逐步问诊。
-2. 学生打开一个 `prepared` Plan 并点击“开始这一阶段”。
-3. Plan Session 读取当前 Plan 和相关对象记忆，讨论并准备下一课；必要时才核对来源 Block。
-4. 学生打开一个 `prepared` Lesson 并点击“开始本课”。
-5. Tutor 按 Block 教学，把真实过程追加到当前 Block 日志。
-6. 学生决定结束本课，Tutor 完成一次自然反思和最小记忆固化，页面再回到父 Plan。
-7. 达到阶段标准后，由学生完成 Plan 并回到 Roadmap 商议下一周期。
+自由学习最小闭环：
+
+1. 从首页直接“问老师”，或在学习资料页选择 Note / 题卡后进入讨论。
+2. 真实认知变化出现时，Tutor 可直接更新对象记忆；普通闲聊不强制总结。
+3. Tutor 公开拟保存内容，学生明确确认后才保存 Note 或题卡。
+4. 学生显式结束线程；之后可重新打开题卡，先作答或选择“不会”，再看标准答案。
+5. 学生可带着题卡和最近作答开启新线程，Tutor 按需使用相关对象记忆。
+
+正式课程闭环保持不变：Roadmap 问诊与长期方向 → 学生启动 Plan → Coach 讨论并准备 Lesson
+→ 学生启动 Lesson → Tutor 按 Block 教学与记录 → 学生结课 → Plan/Roadmap 回流。
 
 浏览或刷新不会改变生命周期。Plan 状态只有
 `prepared → active → completed`，Lesson 状态只有
@@ -131,44 +142,54 @@ pi install "$PWD"
 
 ## 页面与路由
 
-只有两个主页面：
+主导航是“学习首页 / 学习资料 / 课程脉络（仅 Roadmap 存在时）”。
 
-- **课程脉络**：课程树、中央对话、节点原文或课堂 Block。左右栏默认收起，让对话
-  成为主要工作区。
-- **知识山河**：浏览静态方法图谱、题卡和材料，不显示个人掌握或学习建议。
+- **学习首页**：开始或恢复多个自由学习线程；不会为空白学习集伪造课程。
+- **学习资料**：浏览、编辑和再次使用 Note 与题卡。
+- **课程脉络**：课程树、中央对话、节点原文或课堂 Block。
 
 ```text
+/home
+/learn/:sessionId
+/assets
+/assets/notes/:noteId
+/assets/problem-cards/:problemCardId
 /course
 /course/plan/:planId
 /course/plan/:planId/lesson/:lessonId
-/knowledge
 ```
 
-URL 是当前节点选择的来源。刷新、前进后退和深链会恢复同一节点，并从 frontmatter
-中的 `session_id` 恢复 owner 匹配的 Pi Session。
+`/knowledge` 仍保留为旧静态投影，但不再占用主导航。URL、刷新、前进后退和深链会恢复
+同一页面；课程 Session 从 frontmatter 恢复，自由学习从原生 Pi owner 恢复。
 
 ## Learning set 契约
 
 ```text
 learning-set/
 ├── LEARNING_GUIDE.md
-├── ROADMAP.md
-├── plans/
+├── memory/INDEX.md
+├── ROADMAP.md                         # 可选
+├── plans/                             # 有正式课程时存在
 │   └── <plan-id>/
 │       ├── PLAN.md
 │       └── lessons/<lesson-id>.md
 ├── memory/
-│   ├── INDEX.md
 │   ├── indexes/
 │   ├── objects/
 │   ├── capabilities/
 │   └── preferences/
-├── cards/
-├── graph/
-└── materials/
+├── notes/*.note.yaml                  # 首次保存时创建
+├── cards/m1b/*.card.yaml              # 薄题卡；旧完整题卡仍受支持
+├── activity/problem-attempts/*.md     # 作答与答案查看只追加
+├── graph/                             # 可选旧静态资产
+└── materials/                         # 可选旧静态资产
 ```
 
-Roadmap 必须包含 `Overview`、`Long-term Goal`、可观察能力标准、`Test`、Plan Tree 和
+真正空白的学习集只要求 `LEARNING_GUIDE.md` 与 `memory/INDEX.md`。资产 ID、路径、revision、
+时间和来源由 Runtime 绑定；模型只提交教学内容。Flashcard 不是第三种对象，而是 Note 中
+默认隐藏答案的 recall block。
+
+Roadmap 存在时必须包含 `Overview`、`Long-term Goal`、可观察能力标准、`Test`、Plan Tree 和
 当前位置。Plan 必须包含阶段目标、可观察能力标准、`Test`、Lesson Tree、当前位置和
 下一课安排。Lesson 至少包含一个 Block：
 
@@ -205,6 +226,13 @@ Roadmap 必须包含 `Overview`、`Long-term Goal`、可观察能力标准、`Te
   - 来源：[lesson-001](../../plans/plan-001/lessons/lesson-001.md) — Block `block-003`
 ```
 
+自由学习中的对象记忆直接引用整个原生 Session，不伪造 Block 或消息级证据：
+
+```markdown
+- 2026-08-08T20:15:00.000Z — 学生独立区分了恒温下的 Ksp 与即时离子积。
+  - 来源：原生自由学习 Session `free-session-001`
+```
+
 `memory/INDEX.md` 只保存当前前沿和稳定路径；L1 文件保存对象流变、跨对象能力假设和
 明确偏好。旧 Log、旧 Learning History 和学生原话不回写，教学待办仍留在 Plan / Roadmap。
 
@@ -221,6 +249,8 @@ Plan ID 在 Roadmap 内唯一，Lesson ID 在所属 Plan 内唯一；Lesson Sess
   下钻课堂。跨不同对象后才形成工作能力假设；私下检索题卡，不静默缩减商定内容。
 - **Lesson**：按学生实际回答逐级提示，先验证不同路线；对方法名称没把握时询问
   学生；预案外表现确有需要时按需召回，课末只固化一次。
+- **Free Learning Tutor**：保持发散讨论；只有学生看过拟保存内容并明确确认后才保存
+  Note/题卡；只有本次表现真正改变未来教学判断时才写对象记忆。
 
 教学文本位于 `resources/agents/`、`resources/skills/`、
 `resources/teaching/math-teaching-core.md` 和
@@ -231,6 +261,14 @@ Plan ID 在 Roadmap 内唯一，Lesson ID 在所属 Plan 内唯一；Lesson Sess
 当前 HTTP API 只提供：
 
 - `GET /api/health`
+- `GET /api/home`
+- `GET|POST /api/free-learning`
+- `POST /api/free-learning/:id/end`
+- `GET /api/assets`
+- `GET|PUT /api/assets/notes/:id`
+- `GET /api/assets/problem-cards/:id`
+- `PUT /api/assets/problem-cards/:id/note`
+- `POST /api/problem-cards/:id/attempts|reveal|ask-teacher`
 - `GET /api/course`
 - `GET /api/knowledge`
 - `GET /api/sessions/:key/history`
@@ -243,11 +281,11 @@ Plan ID 在 Roadmap 内唯一，Lesson ID 在所属 Plan 内唯一；Lesson Sess
 
 ## 验收
 
-确定性 E2E 覆盖 Roadmap 对话、Plan/Lesson 启停、Block 面板、工具活动、刷新恢复、
-Knowledge 和旧入口 404：
+确定性 E2E 分别覆盖正式课程闭环，以及空白学习集 → 自由学习 → 经确认保存资产 →
+对象记忆 → 重启恢复 → 题卡作答/答案门 → 带作答再次问老师：
 
 ```bash
-bun run test:e2e -- tests/e2e/m0-cycle.spec.ts
+bun run test:e2e -- tests/e2e/m0-cycle.spec.ts tests/e2e/m1b-cycle.spec.ts
 ```
 
 自动化通过后，仍应在复制出的学习集上跑真实模型长周期，重点观察课末是否只反思一次、
