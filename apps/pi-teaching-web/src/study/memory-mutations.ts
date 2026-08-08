@@ -4,7 +4,7 @@ import {
   readFileSync,
   readdirSync,
 } from 'node:fs';
-import { join, relative, resolve, sep } from 'node:path';
+import { dirname, join, relative, resolve, sep } from 'node:path';
 import { resolveDocumentPath } from '../runtime/atomic-document';
 import type { DocumentCandidate } from '../runtime/multi-document-transaction';
 import { appendClosingClassroomLogSource } from './lesson-mutations';
@@ -19,6 +19,20 @@ export type ExistingOrNew = ExistingTarget | NewTarget;
 export type ObjectLearningHistoryEntry = {
   change: string;
   evidenceBlockIds: string[];
+};
+
+export type ObjectLearningHistoryEvidence =
+  | { kind: 'lesson'; lessonId: string; lessonPath: string; blockId: string }
+  | { kind: 'free-learning'; sessionId: string };
+
+export type ObjectLearningHistoryFact = {
+  objectId: string;
+  objectTitle: string;
+  objectPath: string;
+  index: number;
+  at: string;
+  change: string;
+  evidence: ObjectLearningHistoryEvidence[];
 };
 
 export type BucketRef =
@@ -413,6 +427,85 @@ function validateObjectSource(source: string, id: string): void {
   ]) {
     if (!sectionContent(source, heading)) throw new Error(`object ${id} has empty ${heading}`);
   }
+}
+
+function linkedLearningSetPath(root: string, from: string, href: string): string | null {
+  const linked = relative(resolve(root), resolve(root, dirname(from), href)).split(sep).join('/');
+  return linked === '..' || linked.startsWith('../') ? null : linked;
+}
+
+function learningHistoryFacts(
+  root: string,
+  objectPath: string,
+  objectId: string,
+  objectTitle: string,
+  content: string,
+): ObjectLearningHistoryFact[] {
+  const facts: ObjectLearningHistoryFact[] = [];
+  let current: ObjectLearningHistoryFact | null = null;
+  for (const line of content.split(/\r?\n/)) {
+    const start = /^- (.+?) — (.*)$/.exec(line);
+    if (start && !Number.isNaN(Date.parse(start[1]!))) {
+      current = {
+        objectId,
+        objectTitle,
+        objectPath,
+        index: facts.length + 1,
+        at: start[1]!,
+        change: start[2]!.trim(),
+        evidence: [],
+      };
+      facts.push(current);
+      continue;
+    }
+    if (!current) continue;
+    const lesson = /^  - 来源：\[([^\]]+)\]\(([^)]+)\) — Block `([^`]+)`$/.exec(line);
+    if (lesson) {
+      const lessonPath = linkedLearningSetPath(root, objectPath, lesson[2]!);
+      if (lessonPath !== null) {
+        current.evidence.push({
+          kind: 'lesson',
+          lessonId: lesson[1]!,
+          lessonPath,
+          blockId: lesson[3]!,
+        });
+      }
+      continue;
+    }
+    const free = /^  - 来源：原生自由学习 Session `([^`]+)`$/.exec(line);
+    if (free) {
+      current.evidence.push({ kind: 'free-learning', sessionId: free[1]! });
+      continue;
+    }
+    if (/^  \S/.test(line) && !line.startsWith('  - ')) {
+      current.change += `\n${line.trim()}`;
+    }
+  }
+  return facts;
+}
+
+export function readObjectLearningHistoryFacts(root: string): ObjectLearningHistoryFact[] {
+  const directory = canonicalPath(root, 'memory/objects', false);
+  if (!existsSync(directory)) return [];
+  if (!lstatSync(directory).isDirectory()) {
+    throw new StudyDocumentError('memory/objects', 'expected a directory');
+  }
+  const facts: ObjectLearningHistoryFact[] = [];
+  for (const name of readdirSync(directory).sort()) {
+    if (!/^obj-[A-Za-z0-9._-]+\.md$/.test(name)) continue;
+    const path = `memory/objects/${name}`;
+    const source = readRequired(root, path);
+    const id = name.slice(0, -'.md'.length);
+    const title = documentTitle(source, id, 'object');
+    facts.push(...learningHistoryFacts(
+      root,
+      path,
+      id,
+      title,
+      sectionContent(source, 'Learning History'),
+    ));
+  }
+  return facts;
 }
 
 function renderPreferenceStatements(

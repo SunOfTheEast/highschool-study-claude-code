@@ -1,4 +1,4 @@
-import { existsSync, lstatSync, readFileSync } from 'node:fs';
+import { existsSync, lstatSync, readFileSync, readdirSync } from 'node:fs';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import type {
   LearningAssetReference,
@@ -206,6 +206,25 @@ function snapshot(cardId: string, events: ProblemActivityEvent[]): ProblemActivi
 export function readProblemActivity(root: string, cardId: string): ProblemActivitySnapshot {
   const card = readProblemCard(root, cardId);
   return snapshot(card.id, readActivity(root, card.id).events);
+}
+
+export function listProblemActivities(root: string): ProblemActivitySnapshot[] {
+  const directoryPath = 'activity/problem-attempts';
+  const directory = resolveDocumentPath(root, directoryPath);
+  if (!existsSync(directory)) return [];
+  if (lstatSync(directory).isSymbolicLink() || !lstatSync(directory).isDirectory()) {
+    throw new StudyDocumentError(directoryPath, 'activity directory must be a real directory');
+  }
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    if (entry.isSymbolicLink()) {
+      throw new StudyDocumentError(`${directoryPath}/${entry.name}`, 'activity path cannot be a symbolic link');
+    }
+    const match = entry.isFile() ? /^([A-Za-z0-9][A-Za-z0-9._-]*)\.md$/.exec(entry.name) : null;
+    if (!match) return [];
+    const cardId = match[1]!;
+    const source = readFileSync(resolveDocumentPath(root, `${directoryPath}/${entry.name}`), 'utf8');
+    return [snapshot(cardId, parseActivitySource(activityPath(cardId), source, cardId))];
+  }).sort((left, right) => left.cardId.localeCompare(right.cardId));
 }
 
 function appendEvent(root: string, event: ProblemActivityEvent): void {

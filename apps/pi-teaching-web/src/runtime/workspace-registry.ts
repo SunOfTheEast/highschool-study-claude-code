@@ -25,11 +25,16 @@ import {
   isFreeLearningEnded,
   listFreeLearningPiSessions,
   listMetaPiSessions,
+  listPiSessionFacts,
   readPiSessionBranch,
+  sessionOwnerMatches,
+  type PiSessionFact,
 } from './session-owner';
 import {
   freeLearningSessionId,
   freeLearningSessionKey,
+  isFreeLearningScope,
+  isMetaScope,
   metaSessionId,
   metaSessionKey,
   type FreeLearningSessionRecord,
@@ -38,6 +43,7 @@ import {
   type MetaSessionScope,
   type NodeSessionScope,
 } from './session-scope';
+import type { OwnedLearningSessionFact } from '../study/learning-footprint';
 
 export type SessionFileLookup = (
   root: string,
@@ -65,6 +71,8 @@ export type MetaSessionLookup = (
 ) => Promise<MetaSessionRecord | null>;
 
 export type MetaSessionList = (root: string) => Promise<MetaSessionRecord[]>;
+
+export type PiSessionFactList = (root: string) => Promise<PiSessionFact[]>;
 
 type OwnedNode = {
   tree: CourseTreeNode;
@@ -131,6 +139,7 @@ export class WorkspaceRegistry {
     private readonly listFree: FreeLearningSessionList = listFreeLearningPiSessions,
     private readonly lookupMeta: MetaSessionLookup = findMetaPiSession,
     private readonly listMetaSessions: MetaSessionList = listMetaPiSessions,
+    private readonly listSessionFacts: PiSessionFactList = listPiSessionFacts,
   ) {}
 
   private nodeOwner(key: SessionKey): OwnedNode {
@@ -234,6 +243,54 @@ export class WorkspaceRegistry {
     return [...records.values()]
       .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
       .map(publicMetaSummary);
+  }
+
+  async listOwnedSessionFacts(): Promise<OwnedLearningSessionFact[]> {
+    const verified: OwnedLearningSessionFact[] = [];
+    for (const fact of await this.listSessionFacts(this.root)) {
+      if (isFreeLearningScope(fact.owner)) {
+        verified.push({
+          id: fact.id,
+          createdAt: fact.createdAt,
+          entryTimes: fact.entryTimes,
+          owner: fact.owner,
+          title: fact.owner.title,
+          status: fact.endedAt === null ? 'active' : 'ended',
+        });
+        continue;
+      }
+      if (isMetaScope(fact.owner)) {
+        verified.push({
+          id: fact.id,
+          createdAt: fact.createdAt,
+          entryTimes: fact.entryTimes,
+          owner: fact.owner,
+          title: fact.owner.title,
+          status: 'active',
+        });
+        continue;
+      }
+      let current: OwnedNode;
+      try {
+        current = this.nodeOwner(`${fact.owner.nodeKind}:${fact.owner.nodeId}`);
+      } catch (error) {
+        if (error instanceof Error && error.message.startsWith('SESSION_NODE_NOT_FOUND:')) continue;
+        throw error;
+      }
+      if (
+        current.document.sessionId !== fact.id
+        || !sessionOwnerMatches(fact.owner, current.scope)
+      ) continue;
+      verified.push({
+        id: fact.id,
+        createdAt: fact.createdAt,
+        entryTimes: fact.entryTimes,
+        title: current.document.title,
+        owner: current.scope,
+        status: current.document.status,
+      });
+    }
+    return verified;
   }
 
   async open(key: SessionKey): Promise<StudySession> {

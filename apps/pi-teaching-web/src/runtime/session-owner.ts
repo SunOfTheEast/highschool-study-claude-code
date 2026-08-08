@@ -22,6 +22,15 @@ type SessionOwnerReader = {
   getEntries(): readonly unknown[];
 };
 
+export type PiSessionFact = {
+  id: string;
+  title: string;
+  createdAt: string;
+  entryTimes: string[];
+  owner: StudySessionScope;
+  endedAt: string | null;
+};
+
 function nonempty(value: unknown): value is string {
   return typeof value === 'string' && value.trim().length > 0;
 }
@@ -231,4 +240,36 @@ export async function listMetaPiSessions(root: string): Promise<MetaSessionRecor
     if (record) records.push(record);
   }
   return records.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+}
+
+export async function listPiSessionFacts(root: string): Promise<PiSessionFact[]> {
+  const { SessionManager } = await import('@earendil-works/pi-coding-agent');
+  const facts: PiSessionFact[] = [];
+  for (const info of await SessionManager.list(root)) {
+    const manager = SessionManager.open(info.path, undefined, root);
+    const owner = readSessionOwner(manager);
+    if (!owner) continue;
+    const entryTimes = [...new Set(manager.getBranch().flatMap((entry) => (
+      entry.type === 'message'
+      && typeof entry.timestamp === 'string'
+      && !Number.isNaN(Date.parse(entry.timestamp))
+        ? [entry.timestamp]
+        : []
+    )))].sort();
+    const createdAt = isFreeLearningScope(owner) || isMetaScope(owner)
+      ? owner.createdAt
+      : info.created.toISOString();
+    const fallbackTitle = isFreeLearningScope(owner) || isMetaScope(owner)
+      ? owner.title
+      : `${owner.nodeKind} · ${owner.nodeId}`;
+    facts.push({
+      id: info.id,
+      title: info.name?.trim() || fallbackTitle,
+      createdAt,
+      entryTimes,
+      owner,
+      endedAt: isFreeLearningScope(owner) ? readFreeLearningEndedAt(manager.getEntries()) : null,
+    });
+  }
+  return facts.sort((left, right) => left.createdAt.localeCompare(right.createdAt));
 }

@@ -184,6 +184,55 @@ export type MetaSessionSummary = {
   updatedAt: string;
 };
 
+export type LearningFootprintActivity =
+  | 'session-start'
+  | 'session-continue'
+  | 'asset-created'
+  | 'asset-revised'
+  | 'material-imported'
+  | 'problem-attempt'
+  | 'answer-reveal'
+  | 'learning-history';
+
+export type LearningFootprintSource =
+  | {
+      kind: 'session';
+      sessionKey: SessionKey;
+      phase: 'start' | 'continue';
+      status: NodeStatus | 'ended';
+    }
+  | { kind: 'asset'; asset: LearningAssetHandle; revision: number }
+  | { kind: 'material'; id: string; revision: number }
+  | {
+      kind: 'problem-activity';
+      cardId: string;
+      cardRevision: number;
+      eventId: string;
+    }
+  | {
+      kind: 'object-memory';
+      objectId: string;
+      path: string;
+      evidence: Array<
+        | { kind: 'lesson'; lessonId: string; lessonPath: string; blockId: string }
+        | { kind: 'free-learning'; sessionId: string }
+      >;
+    };
+
+export type LearningFootprintEntry = {
+  id: string;
+  at: string | null;
+  activity: LearningFootprintActivity;
+  title: string;
+  summary: string;
+  route: string | null;
+  source: LearningFootprintSource;
+};
+
+export type LearningFootprintSnapshot = {
+  entries: LearningFootprintEntry[];
+};
+
 export type LearningSetHomeSnapshot = {
   guide: LearningSetGuide;
   hasCourse: boolean;
