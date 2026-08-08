@@ -14,7 +14,6 @@ import {
   planDeferredRouteResolution,
   planLessonMemoryCommit,
   type DocumentCandidate,
-  type TraceDraft,
 } from '../../src/study/memory-mutations';
 import { commitDocumentCandidates } from '../../src/runtime/multi-document-transaction';
 
@@ -45,10 +44,10 @@ function writeExistingObject(root: string, id = 'obj-001', title = '同构结构
     '',
     '首次接触时没有形成稳定入口。',
     '',
-    '## Trace Timeline',
+    '## Learning History',
     '',
-    '- 2026-08-01 [trace-old](../../plans/plan-001/lessons/lesson-000.md#trace-old)',
-    '  — 首次接触。',
+    '- 2026-08-01 20:00 — 首次接触。',
+    '  - 来源：[lesson-000](../../plans/plan-001/lessons/lesson-000.md) — Block `block-001`',
     '',
     '## Boundaries / Not Yet Demonstrated',
     '',
@@ -79,14 +78,9 @@ function candidate(
   return found;
 }
 
-function trace(key = 'event'): TraceDraft {
+function history(change = '提示比较共同结构后完成；自主识别仍待检验。') {
   return {
-    key,
-    situation: '同构变形的独立识别检验',
-    firstPerformance: '没有主动比较两个式子的共同结构',
-    actualHelp: '提醒比较结构后继续',
-    laterPerformance: '完成变形，但尚未证明能自主识别',
-    capabilitySignal: '外观变化后未主动寻找不变量',
+    change,
     evidenceBlockIds: ['block-001'],
   };
 }
@@ -101,27 +95,25 @@ test('updates an existing object without reconsidering its buckets', () => {
   writeExistingBucket(root);
 
   const planned = planLessonMemoryCommit(root, lessonPath, {
-    traces: [trace()],
     objects: [{
       target: { kind: 'existing', id: 'obj-001' },
       currentJudgment: '能在明确提示后完成；自主识别尚未证明。',
       evolutionOverview: '从首次停顿到提示后完成。',
       boundaries: ['外观改变后的独立识别尚未证明。'],
-      traceEntries: [{ traceKey: 'event', meaning: '提示后完成。' }],
+      learningHistoryEntry: history(),
       routing: { kind: 'keep' },
       frontierSummary: '提示后可完成，自主识别待检验。',
     }],
     preferences: [],
   }, recordedAt);
 
-  expect(candidate(planned, lessonPath).after)
-    .toContain('### trace-plan-001-lesson-001-01');
-  expect(candidate(planned, 'memory/objects/obj-001.md').after)
-    .toContain('## Trace Timeline');
-  expect(candidate(planned, 'memory/objects/obj-001.md').after)
-    .toContain('trace-plan-001-lesson-001-01');
-  expect(candidate(planned, 'memory/objects/obj-001.md').after)
-    .toContain('- 2026-08-01 [trace-old]');
+  const object = candidate(planned, 'memory/objects/obj-001.md').after;
+  expect(planned.candidates.some((item) => item.path === lessonPath)).toBeFalse();
+  expect(object).toContain('## Learning History');
+  expect(object).toContain(recordedAt);
+  expect(object).toContain('[lesson-001](../../plans/plan-001/lessons/lesson-001.md)');
+  expect(object).toContain('Block `block-001`');
+  expect(object).toContain('- 2026-08-01 20:00 — 首次接触。');
   expect(planned.objectIds).toEqual({});
   expect(planned.candidates.some((item) => item.path.includes('/indexes/'))).toBeFalse();
 });
@@ -131,13 +123,12 @@ test('assigns stable IDs and only the explicitly named buckets to a new object',
   writeExistingBucket(root);
 
   const planned = planLessonMemoryCommit(root, lessonPath, {
-    traces: [trace()],
     objects: [{
       target: { kind: 'new', key: 'isomorphic-entry', title: '同构结构识别' },
       currentJudgment: '能在提示后完成同构变形。',
       evolutionOverview: '由无法选路到提示后完成。',
       boundaries: ['自主识别尚未证明。'],
-      traceEntries: [{ traceKey: 'event', meaning: '提示后完成。' }],
+      learningHistoryEntry: history(),
       routing: {
         kind: 'assign',
         buckets: [
@@ -150,7 +141,7 @@ test('assigns stable IDs and only the explicitly named buckets to a new object',
     preferences: [],
   }, recordedAt);
 
-  expect(planned.traceIds).toEqual({ event: 'trace-plan-001-lesson-001-01' });
+  expect(planned).not.toHaveProperty('traceIds');
   expect(planned.objectIds).toEqual({ 'isomorphic-entry': 'obj-001' });
   expect(planned.bucketIds).toEqual({ 'route-choice': 'bucket-001' });
   expect(candidate(planned, 'memory/objects/obj-001.md').after)
@@ -169,13 +160,12 @@ test('keeps a genuinely ambiguous new object reachable without inventing a bucke
   const root = copyFixture();
 
   const planned = planLessonMemoryCommit(root, lessonPath, {
-    traces: [trace()],
     objects: [{
       target: { kind: 'new', key: 'target-distance', title: '函数表示与目标之间的距离' },
       currentJudgment: '能看出目标与原式不完全同形。',
       evolutionOverview: '开始注意表示形式与目标之间的距离。',
       boundaries: ['尚不能判断这是参数方程选路还是一般的目标构造。'],
-      traceEntries: [{ traceKey: 'event', meaning: '开始比较目标形式。' }],
+      learningHistoryEntry: history('开始比较目标形式，但对象归属仍不明确。'),
       routing: {
         kind: 'defer',
         reason: '暂难判断应归入参数方程选路还是更一般的目标同构构造。',
@@ -192,7 +182,7 @@ test('keeps a genuinely ambiguous new object reachable without inventing a bucke
   expect(planned.bucketIds).toEqual({});
 });
 
-test('stores one Trace body while linking it from two object timelines', () => {
+test('writes different object meanings from one Block without changing the Lesson', () => {
   const root = copyFixture();
   writeExistingObject(root, 'obj-001', '同构结构识别');
   writeExistingObject(root, 'obj-002', '参数主元选择');
@@ -202,21 +192,20 @@ test('stores one Trace body while linking it from two object timelines', () => {
     currentJudgment: '本次都出现了新的可复述表现。',
     evolutionOverview: '本次事件同时更新两个对象。',
     boundaries: ['独立迁移仍待检验。'],
-    traceEntries: [{ traceKey: 'event', meaning: `本事件更新 ${id}。` }],
+    learningHistoryEntry: history(`同一课堂事实对 ${id} 的对象意义。`),
     routing: { kind: 'keep' as const },
   }));
   const planned = planLessonMemoryCommit(root, lessonPath, {
-    traces: [trace()],
     objects,
     preferences: [],
   }, recordedAt);
 
-  const lesson = candidate(planned, lessonPath).after;
-  expect(lesson.match(/^### trace-plan-001-lesson-001-01$/gm)).toHaveLength(1);
-  expect(lesson).toContain('- 关联对象：obj-001、obj-002');
+  expect(planned.candidates.some((item) => item.path === lessonPath)).toBeFalse();
   for (const id of ['obj-001', 'obj-002']) {
-    expect(candidate(planned, `memory/objects/${id}.md`).after)
-      .toContain('lesson-001.md#trace-plan-001-lesson-001-01');
+    const object = candidate(planned, `memory/objects/${id}.md`).after;
+    expect(object).toContain(`同一课堂事实对 ${id} 的对象意义。`);
+    expect(object).toContain('[lesson-001](../../plans/plan-001/lessons/lesson-001.md)');
+    expect(object).toContain('Block `block-001`');
   }
 });
 
@@ -225,39 +214,69 @@ test('rejects incomplete semantic topology before returning candidates', () => {
   writeExistingObject(root);
 
   expect(() => planLessonMemoryCommit(root, lessonPath, {
-    traces: [trace('orphan')],
-    objects: [],
-    preferences: [],
-  }, recordedAt)).toThrow('Trace orphan must be referenced');
-
-  expect(() => planLessonMemoryCommit(root, lessonPath, {
-    traces: [trace()],
     objects: [{
       target: { kind: 'new', key: 'new-object', title: '新对象' },
       currentJudgment: '当前判断。',
       evolutionOverview: '流变概述。',
       boundaries: ['边界。'],
-      traceEntries: [{ traceKey: 'event', meaning: '意义。' }],
+      learningHistoryEntry: { change: '意义。', evidenceBlockIds: [] },
+      routing: { kind: 'assign', buckets: [{ kind: 'new', key: 'new-bucket', title: '新分桶' }] },
+    }],
+    preferences: [],
+  }, recordedAt)).toThrow('requires at least one evidence Block');
+
+  expect(() => planLessonMemoryCommit(root, lessonPath, {
+    objects: [{
+      target: { kind: 'new', key: 'new-object', title: '新对象' },
+      currentJudgment: '当前判断。',
+      evolutionOverview: '流变概述。',
+      boundaries: ['边界。'],
+      learningHistoryEntry: { change: '意义。', evidenceBlockIds: ['block-404'] },
+      routing: { kind: 'assign', buckets: [{ kind: 'new', key: 'new-bucket', title: '新分桶' }] },
+    }],
+    preferences: [],
+  }, recordedAt)).toThrow('references missing Block block-404');
+
+  expect(() => planLessonMemoryCommit(root, lessonPath, {
+    objects: [{
+      target: { kind: 'new', key: 'new-object', title: '新对象' },
+      currentJudgment: '当前判断。',
+      evolutionOverview: '流变概述。',
+      boundaries: ['边界。'],
+      learningHistoryEntry: {
+        change: '意义。',
+        evidenceBlockIds: ['block-001', 'block-001'],
+      },
+      routing: { kind: 'assign', buckets: [{ kind: 'new', key: 'new-bucket', title: '新分桶' }] },
+    }],
+    preferences: [],
+  }, recordedAt)).toThrow('repeats Block block-001');
+
+  expect(() => planLessonMemoryCommit(root, lessonPath, {
+    objects: [{
+      target: { kind: 'new', key: 'new-object', title: '新对象' },
+      currentJudgment: '当前判断。',
+      evolutionOverview: '流变概述。',
+      boundaries: ['边界。'],
+      learningHistoryEntry: history('意义。'),
       routing: { kind: 'assign', buckets: [] },
     }],
     preferences: [],
   }, recordedAt)).toThrow('assign requires at least one bucket');
 
   expect(() => planLessonMemoryCommit(root, lessonPath, {
-    traces: [trace()],
     objects: [{
       target: { kind: 'new', key: 'new-object', title: '新对象' },
       currentJudgment: '当前判断。',
       evolutionOverview: '流变概述。',
       boundaries: ['边界。'],
-      traceEntries: [{ traceKey: 'event', meaning: '意义。' }],
+      learningHistoryEntry: history('意义。'),
       routing: { kind: 'keep' },
     }],
     preferences: [],
   }, recordedAt)).toThrow('new object cannot keep routing');
 
   expect(() => planLessonMemoryCommit(root, lessonPath, {
-    traces: [],
     objects: [],
     preferences: [{
       target: { kind: 'new', key: 'orphan-preference', title: '孤立偏好' },
@@ -274,13 +293,12 @@ test('resolves existing IDs only through bounded canonical memory paths', () => 
   const root = copyFixture();
 
   expect(() => planLessonMemoryCommit(root, lessonPath, {
-    traces: [trace()],
     objects: [{
       target: { kind: 'existing', id: '../outside' },
       currentJudgment: '当前判断。',
       evolutionOverview: '流变概述。',
       boundaries: ['边界。'],
-      traceEntries: [{ traceKey: 'event', meaning: '意义。' }],
+      learningHistoryEntry: history('意义。'),
       routing: { kind: 'keep' },
     }],
     preferences: [],
@@ -290,7 +308,6 @@ test('resolves existing IDs only through bounded canonical memory paths', () => 
 test('creates and updates a preference while preserving earlier statements byte-for-byte', () => {
   const root = copyFixture();
   const first = planLessonMemoryCommit(root, lessonPath, {
-    traces: [],
     objects: [],
     preferences: [{
       target: { kind: 'new', key: 'workload', title: '近期练习量' },
@@ -324,7 +341,6 @@ test('creates and updates a preference while preserving earlier statements byte-
   const preservedStatement = firstPreference.split('## Evolution History')[0]!
     .split('## Explicit Statements')[1]!.trim();
   const second = planLessonMemoryCommit(root, lessonPath, {
-    traces: [],
     objects: [],
     preferences: [{
       target: { kind: 'existing', id: 'pref-001' },
@@ -350,7 +366,6 @@ test('creates and updates a preference while preserving earlier statements byte-
 test('removes only the active preference cue when the model explicitly retires it', () => {
   const root = copyFixture();
   const first = planLessonMemoryCommit(root, lessonPath, {
-    traces: [],
     objects: [],
     preferences: [{
       target: { kind: 'new', key: 'workload', title: '近期练习量' },
@@ -364,7 +379,6 @@ test('removes only the active preference cue when the model explicitly retires i
   commitDocumentCandidates(root, first.candidates);
 
   const retired = planLessonMemoryCommit(root, lessonPath, {
-    traces: [],
     objects: [],
     preferences: [{
       target: { kind: 'existing', id: 'pref-001' },
@@ -384,13 +398,12 @@ test('removes only the active preference cue when the model explicitly retires i
 
 function materializeDeferredObject(root: string): void {
   const deferred = planLessonMemoryCommit(root, lessonPath, {
-    traces: [trace()],
     objects: [{
       target: { kind: 'new', key: 'target-distance', title: '函数表示与目标之间的距离' },
       currentJudgment: '开始比较目标与原式的形式差异。',
       evolutionOverview: '由直接计算转向观察目标形式。',
       boundaries: ['对象归属仍不明确。'],
-      traceEntries: [{ traceKey: 'event', meaning: '开始比较目标形式。' }],
+      learningHistoryEntry: history('开始比较目标形式。'),
       routing: { kind: 'defer', reason: '需要阶段视角判断属于哪种选路对象。' },
     }],
     preferences: [],

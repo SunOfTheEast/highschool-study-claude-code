@@ -16,13 +16,8 @@ export type ExistingOrNew =
   | { kind: 'existing'; id: string }
   | { kind: 'new'; key: string; title: string };
 
-export type TraceDraft = {
-  key: string;
-  situation: string;
-  firstPerformance: string;
-  actualHelp: string;
-  laterPerformance: string;
-  capabilitySignal?: string;
+export type ObjectLearningHistoryEntry = {
+  change: string;
   evidenceBlockIds: string[];
 };
 
@@ -40,7 +35,7 @@ export type ObjectMutation = {
   currentJudgment: string;
   evolutionOverview: string;
   boundaries: string[];
-  traceEntries: Array<{ traceKey: string; meaning: string }>;
+  learningHistoryEntry: ObjectLearningHistoryEntry;
   routing: RoutingDecision;
   frontierSummary?: string;
 };
@@ -56,7 +51,6 @@ export type PreferenceMutation = {
 
 export type LessonMemoryCommitDraft = {
   closingFact?: { blockId: string; note: string };
-  traces: TraceDraft[];
   objects: ObjectMutation[];
   preferences: PreferenceMutation[];
 };
@@ -300,50 +294,32 @@ function displayTime(recordedAt: string): string {
   return recordedAt;
 }
 
-function traceDate(recordedAt: string): string {
+function recordDate(recordedAt: string): string {
   displayTime(recordedAt);
   return recordedAt.slice(0, 10);
 }
 
-function renderTrace(args: {
-  id: string;
-  draft: TraceDraft;
-  objectIds: string[];
+function renderLearningHistoryEntry(args: {
   recordedAt: string;
-}): string {
-  const evidence = args.draft.evidenceBlockIds.join('、');
-  const fields = [
-    renderBullet('时间', displayTime(args.recordedAt)),
-    renderBullet('情境', args.draft.situation),
-    renderBullet('首次表现', args.draft.firstPerformance),
-    renderBullet('实际帮助', args.draft.actualHelp),
-    renderBullet('后续表现', args.draft.laterPerformance),
-    renderBullet('关联对象', args.objectIds.join('、')),
-  ];
-  if (args.draft.capabilitySignal?.trim()) {
-    fields.push(renderBullet('当时的能力信号', args.draft.capabilitySignal));
-  }
-  fields.push(renderBullet('来源证据', `本课 Classroom Log：${evidence}`));
-  return `### ${args.id}\n\n${fields.join('\n')}`;
-}
-
-function renderTimelineEntry(args: {
-  recordedAt: string;
-  traceId: string;
   lessonPath: string;
-  meaning: string;
+  lessonId: string;
+  entry: ObjectLearningHistoryEntry;
 }): string {
-  const [first, ...rest] = requireText(args.meaning, 'trace meaning').split(/\r?\n/);
-  const target = `../../${args.lessonPath}#${args.traceId}`;
-  return `- ${traceDate(args.recordedAt)} [${args.traceId}](${target})\n`
-    + `  — ${first}${rest.map((line) => `\n    ${line}`).join('')}`;
+  const [first, ...rest] = requireText(args.entry.change, 'learning history change')
+    .split(/\r?\n/);
+  const change = `- ${displayTime(args.recordedAt)} — ${first}`
+    + rest.map((line) => `\n  ${line}`).join('');
+  const sources = args.entry.evidenceBlockIds.map((blockId) => (
+    `  - 来源：[${args.lessonId}](../../${args.lessonPath}) — Block \`${blockId}\``
+  ));
+  return [change, ...sources].join('\n');
 }
 
 function renderNewObject(args: {
   id: string;
   title: string;
   mutation: ObjectMutation;
-  timeline: string;
+  history: string;
 }): string {
   return [
     `# ${args.id}：${args.title}`,
@@ -356,9 +332,9 @@ function renderNewObject(args: {
     '',
     requireText(args.mutation.evolutionOverview, 'evolutionOverview'),
     '',
-    '## Trace Timeline',
+    '## Learning History',
     '',
-    args.timeline,
+    args.history,
     '',
     '## Boundaries / Not Yet Demonstrated',
     '',
@@ -367,7 +343,7 @@ function renderNewObject(args: {
   ].join('\n');
 }
 
-function updateExistingObject(source: string, mutation: ObjectMutation, timeline: string): string {
+function updateExistingObject(source: string, mutation: ObjectMutation, history: string): string {
   let candidate = replaceRequiredSection(
     source,
     'Current Judgment',
@@ -378,7 +354,7 @@ function updateExistingObject(source: string, mutation: ObjectMutation, timeline
     'Evolution Overview',
     requireText(mutation.evolutionOverview, 'evolutionOverview'),
   );
-  candidate = appendRequiredSection(candidate, 'Trace Timeline', timeline);
+  candidate = appendRequiredSection(candidate, 'Learning History', history);
   return replaceRequiredSection(
     candidate,
     'Boundaries / Not Yet Demonstrated',
@@ -391,7 +367,7 @@ function validateObjectSource(source: string, id: string): void {
   for (const heading of [
     'Current Judgment',
     'Evolution Overview',
-    'Trace Timeline',
+    'Learning History',
     'Boundaries / Not Yet Demonstrated',
   ]) {
     if (!sectionContent(source, heading)) throw new Error(`object ${id} has empty ${heading}`);
@@ -429,7 +405,7 @@ function renderPreferenceSources(args: {
 
 function renderEvolutionEntry(recordedAt: string, value: string): string {
   const [first, ...rest] = requireText(value, 'evolutionEntry').split(/\r?\n/);
-  return `- ${traceDate(recordedAt)} — ${first}`
+  return `- ${recordDate(recordedAt)} — ${first}`
     + rest.map((line) => `\n  ${line}`).join('');
 }
 
@@ -542,38 +518,6 @@ function addObjectToBucket(
   );
 }
 
-function appendLessonTraces(source: string, traces: string[]): string {
-  if (traces.length === 0) return source;
-  const rendered = traces.join('\n\n');
-  if (/^## Consolidated Learning Traces[ \\t]*$/m.test(source)) {
-    return appendRequiredSection(source, 'Consolidated Learning Traces', rendered);
-  }
-  return `${source.trimEnd()}\n\n## Consolidated Learning Traces\n\n${rendered}\n`;
-}
-
-function nextTraceIds(
-  lessonSource: string,
-  planId: string,
-  lessonId: string,
-  drafts: TraceDraft[],
-): Record<string, string> {
-  const keys = new Set<string>();
-  const base = `trace-${planId}-${lessonId}-`;
-  const matcher = new RegExp(`^### ${escapeRegExp(base)}(\\d+)[ \\t]*$`, 'gm');
-  let maximum = 0;
-  for (const match of lessonSource.matchAll(matcher)) {
-    maximum = Math.max(maximum, Number.parseInt(match[1]!, 10));
-  }
-  const result: Record<string, string> = {};
-  drafts.forEach((draft, index) => {
-    const key = requireLocalKey(draft.key, 'Trace key');
-    if (keys.has(key)) throw new Error(`duplicate Trace key: ${key}`);
-    keys.add(key);
-    result[key] = `${base}${String(maximum + index + 1).padStart(2, '0')}`;
-  });
-  return result;
-}
-
 function changedCandidate(
   path: string,
   before: string | null,
@@ -591,7 +535,6 @@ export function planLessonMemoryCommit(
   recordedAt: string,
 ): {
   candidates: DocumentCandidate[];
-  traceIds: Record<string, string>;
   objectIds: Record<string, string>;
   preferenceIds: Record<string, string>;
   bucketIds: Record<string, string>;
@@ -617,23 +560,6 @@ export function planLessonMemoryCommit(
   const lesson = parseLessonSource(lessonPath, lessonAfter);
   const blockIds = new Set(lesson.blocks.map((block) => block.id));
 
-  const traceIds = nextTraceIds(lessonAfter, lesson.parentId, lesson.id, draft.traces);
-  for (const trace of draft.traces) {
-    requireText(trace.situation, `Trace ${trace.key} situation`);
-    requireText(trace.firstPerformance, `Trace ${trace.key} firstPerformance`);
-    requireText(trace.actualHelp, `Trace ${trace.key} actualHelp`);
-    requireText(trace.laterPerformance, `Trace ${trace.key} laterPerformance`);
-    if (trace.evidenceBlockIds.length === 0) {
-      throw new Error(`Trace ${trace.key} requires at least one evidence Block`);
-    }
-    const seen = new Set<string>();
-    for (const blockId of trace.evidenceBlockIds) {
-      if (!blockIds.has(blockId)) throw new Error(`Trace ${trace.key} references missing Block ${blockId}`);
-      if (seen.has(blockId)) throw new Error(`Trace ${trace.key} repeats Block ${blockId}`);
-      seen.add(blockId);
-    }
-  }
-
   const objectIds: Record<string, string> = {};
   const preferenceIds: Record<string, string> = {};
   const bucketIds: Record<string, string> = {};
@@ -648,6 +574,20 @@ export function planLessonMemoryCommit(
     requireText(mutation.currentJudgment, 'currentJudgment');
     requireText(mutation.evolutionOverview, 'evolutionOverview');
     renderList(mutation.boundaries, 'boundaries');
+    requireText(mutation.learningHistoryEntry.change, 'learning history change');
+    if (mutation.learningHistoryEntry.evidenceBlockIds.length === 0) {
+      throw new Error('object learning history requires at least one evidence Block');
+    }
+    const seenEvidence = new Set<string>();
+    for (const blockId of mutation.learningHistoryEntry.evidenceBlockIds) {
+      if (!blockIds.has(blockId)) {
+        throw new Error(`object learning history references missing Block ${blockId}`);
+      }
+      if (seenEvidence.has(blockId)) {
+        throw new Error(`object learning history repeats Block ${blockId}`);
+      }
+      seenEvidence.add(blockId);
+    }
     let id: string;
     let title: string;
     let path: string;
@@ -674,28 +614,7 @@ export function planLessonMemoryCommit(
     }
     if (objectTargets.has(id)) throw new Error(`duplicate object target: ${id}`);
     objectTargets.add(id);
-    if (mutation.traceEntries.length === 0) {
-      throw new Error(`object ${id} requires at least one Trace entry`);
-    }
     resolvedObjects.push({ mutation, id, title, path, before });
-  }
-
-  const traceObjects = new Map<string, string[]>();
-  for (const object of resolvedObjects) {
-    const seenTraceKeys = new Set<string>();
-    for (const entry of object.mutation.traceEntries) {
-      const key = requireLocalKey(entry.traceKey, 'Trace reference');
-      if (!(key in traceIds)) throw new Error(`object ${object.id} references missing Trace ${key}`);
-      if (seenTraceKeys.has(key)) throw new Error(`object ${object.id} repeats Trace ${key}`);
-      seenTraceKeys.add(key);
-      requireText(entry.meaning, `object ${object.id} Trace meaning`);
-      const ids = traceObjects.get(key) ?? [];
-      ids.push(object.id);
-      traceObjects.set(key, ids);
-    }
-  }
-  for (const trace of draft.traces) {
-    if (!traceObjects.has(trace.key)) throw new Error(`Trace ${trace.key} must be referenced by an object`);
   }
 
   const preferenceTargets = new Set<string>();
@@ -788,20 +707,20 @@ export function planLessonMemoryCommit(
 
   const objectSources = new Map<string, string>();
   for (const object of resolvedObjects) {
-    const timeline = object.mutation.traceEntries.map((entry) => renderTimelineEntry({
+    const history = renderLearningHistoryEntry({
       recordedAt,
-      traceId: traceIds[entry.traceKey]!,
       lessonPath,
-      meaning: entry.meaning,
-    })).join('\n');
+      lessonId: lesson.id,
+      entry: object.mutation.learningHistoryEntry,
+    });
     const source = object.before === null
       ? renderNewObject({
           id: object.id,
           title: object.title,
           mutation: object.mutation,
-          timeline,
+          history,
         })
-      : updateExistingObject(object.before, object.mutation, timeline);
+      : updateExistingObject(object.before, object.mutation, history);
     validateObjectSource(source, object.id);
     objectSources.set(object.path, source);
 
@@ -871,15 +790,6 @@ export function planLessonMemoryCommit(
     }
   }
 
-  const renderedTraces = draft.traces.map((trace) => renderTrace({
-    id: traceIds[trace.key]!,
-    draft: trace,
-    objectIds: traceObjects.get(trace.key)!,
-    recordedAt,
-  }));
-  lessonAfter = appendLessonTraces(lessonAfter, renderedTraces);
-  parseLessonSource(lessonPath, lessonAfter);
-
   const candidates: DocumentCandidate[] = [];
   const lessonCandidate = changedCandidate(
     lessonPath,
@@ -930,7 +840,6 @@ export function planLessonMemoryCommit(
 
   return {
     candidates,
-    traceIds,
     objectIds,
     preferenceIds,
     bucketIds,

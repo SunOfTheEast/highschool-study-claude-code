@@ -36,20 +36,15 @@ function copyFixture(hasMemory = true): string {
 
 function commitInput() {
   return {
-    traces: [{
-      key: 'event',
-      situation: '目标形式识别',
-      firstPerformance: '直接开始计算',
-      actualHelp: '请学生先比较目标形式',
-      laterPerformance: '开始比较形式，但对象归属仍不明确',
-      evidenceBlockIds: ['block-001'],
-    }],
     objects: [{
       target: { kind: 'new' as const, key: 'target-distance', title: '函数表示与目标之间的距离' },
       currentJudgment: '开始注意目标与原式的形式差异。',
       evolutionOverview: '由直接计算转向比较目标形式。',
       boundaries: ['尚未证明能独立选路。'],
-      traceEntries: [{ traceKey: 'event', meaning: '开始比较目标形式。' }],
+      learningHistoryEntry: {
+        change: '开始比较目标形式，但对象归属仍不明确。',
+        evidenceBlockIds: ['block-001'],
+      },
       routing: { kind: 'defer' as const, reason: '需要阶段视角判断应归入哪种选路对象。' },
     }],
     preferences: [],
@@ -93,7 +88,7 @@ test('keeps paths, stable output IDs, time, and approval state out of both schem
     { lessonPath },
     { lessonId: 'lesson-001' },
     { timestamp: '2026-08-07' },
-    { traceId: 'trace-forged' },
+    { historyTimestamp: '2026-08-07' },
     { confirmed: true },
   ]) {
     expect(Check(lesson.parameters, { ...commitInput(), ...extra })).toBeFalse();
@@ -121,18 +116,18 @@ test('commits one bound semantic bundle and replays a successful native call ID 
   expect(first).toMatchObject({
     ok: true,
     commitId: expect.stringMatching(/^[0-9a-f-]{36}$/),
-    traceIds: { event: 'trace-plan-001-lesson-001-01' },
     objectIds: { 'target-distance': 'obj-001' },
     preferenceIds: {},
     bucketIds: {},
     changedPaths: [
-      lessonPath,
       'memory/objects/obj-001.md',
       'memory/INDEX.md',
     ],
   });
-  expect(readFileSync(join(root, lessonPath), 'utf8')
-    .match(/^### trace-plan-001-lesson-001-01$/gm)).toHaveLength(1);
+  const object = readFileSync(join(root, 'memory/objects/obj-001.md'), 'utf8');
+  expect(object).toContain('## Learning History');
+  expect(object).toContain('[lesson-001](../../plans/plan-001/lessons/lesson-001.md)');
+  expect(object).toContain('Block `block-001`');
 });
 
 test('resolves only the declared deferred edge and replays its receipt once', async () => {

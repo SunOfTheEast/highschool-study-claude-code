@@ -80,24 +80,15 @@ const lessonMemoryCommitParameters = Type.Object({
     blockId: stableId,
     note: Type.String({ minLength: 1 }),
   }, { additionalProperties: false })),
-  traces: Type.Array(Type.Object({
-    key: localKey,
-    situation: Type.String({ minLength: 1 }),
-    firstPerformance: Type.String({ minLength: 1 }),
-    actualHelp: Type.String({ minLength: 1 }),
-    laterPerformance: Type.String({ minLength: 1 }),
-    capabilitySignal: Type.Optional(Type.String({ minLength: 1 })),
-    evidenceBlockIds: Type.Array(stableId, { minItems: 1, uniqueItems: true }),
-  }, { additionalProperties: false })),
   objects: Type.Array(Type.Object({
     target: objectTarget,
     currentJudgment: Type.String({ minLength: 1 }),
     evolutionOverview: Type.String({ minLength: 1 }),
     boundaries: Type.Array(Type.String({ minLength: 1 })),
-    traceEntries: Type.Array(Type.Object({
-      traceKey: localKey,
-      meaning: Type.String({ minLength: 1 }),
-    }, { additionalProperties: false })),
+    learningHistoryEntry: Type.Object({
+      change: Type.String({ minLength: 1 }),
+      evidenceBlockIds: Type.Array(stableId, { minItems: 1, uniqueItems: true }),
+    }, { additionalProperties: false }),
     routing,
     frontierSummary: Type.Optional(Type.String({ minLength: 1 })),
   }, { additionalProperties: false })),
@@ -147,7 +138,7 @@ export function createLessonMemoryTool(root: string, lessonPath: string) {
   return defineTool({
     name: 'lesson_memory_commit',
     label: '固化本课教师记忆',
-    description: 'Atomically commit the current Lesson closing fact, traces, object judgments, explicit preferences, and model-declared routing.',
+    description: 'Atomically commit the current Lesson closing fact, object learning history and judgments, explicit preferences, and model-declared routing.',
     executionMode: 'sequential',
     parameters: lessonMemoryCommitParameters,
     execute: async (toolCallId, input) => {
@@ -164,7 +155,6 @@ export function createLessonMemoryTool(root: string, lessonPath: string) {
       const result = toolResult({
         ok: true,
         commitId: committed.commitId,
-        traceIds: planned.traceIds,
         objectIds: planned.objectIds,
         preferenceIds: planned.preferenceIds,
         bucketIds: planned.bucketIds,
