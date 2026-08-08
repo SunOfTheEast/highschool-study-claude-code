@@ -7,8 +7,8 @@ surfaces.
 
 ## Durable domain
 
-M1b has an optional Markdown course tree, one Markdown teacher-memory network, and two
-student-owned asset families:
+M1c has an optional Markdown course tree, one Markdown teacher-memory network, two
+student-owned asset families, revisioned source material, and independent semantic tags:
 
 ```text
 ROADMAP.md
@@ -27,13 +27,20 @@ memory/
 notes/*.note.yaml
 cards/m1b/*.card.yaml
 activity/problem-attempts/*.md
+
+materials/<material-id>/
+├── manifest.yaml
+└── revisions/<revision>/original.*
+
+semantics/assets/<kind>/<asset-id>.tags.yaml
 ```
 
 `ROADMAP.md` and the course tree are optional. A genuinely blank learning set may contain
 only `LEARNING_GUIDE.md` and `memory/INDEX.md`. `LEARNING_GUIDE.md` supplies
-learning-set-specific teaching principles. Existing `cards/`, `graph/`, and `materials/`
-remain supported source assets. Native Pi Session JSONL stores both node conversations and
-independent free-learning conversations.
+learning-set-specific teaching principles. Existing `cards/` and `graph/` remain
+supported source assets; legacy loose files under `materials/` remain readable but are not
+silently treated as fixed sources. Native Pi Session JSONL stores node, free-learning, and
+Meta conversations.
 
 Canonical learning facts and assets remain Markdown/YAML; native Pi JSONL is the sole raw
 conversation record. M1 memory is a routed teacher notebook: L0
@@ -41,6 +48,12 @@ conversation record. M1 memory is a routed teacher notebook: L0
 evidence or source free-learning Session. Do not add a global event-summary pool, derived mastery state, handoff documents,
 database, vector store, background consolidation service, or unified context compiler
 without new repeated real-course evidence and explicit user approval.
+
+`studyforge.semantic-tags.v1` and `studyforge.material.v1` are the only M1c durable
+schemas. Asset content revisions and Material revisions are immutable sources once
+superseded. `semantics/indexes/`, tag-neighbor relations, reverse-source links, and the
+student learning footprint are disposable projections of canonical files and native
+Session facts; they are never independent logs or graphs.
 
 ## Document contracts
 
@@ -62,6 +75,10 @@ without new repeated real-course evidence and explicit user approval.
 - A problem card owns one canonical stem, answer, private teaching rationale, and student
   note. Attempts and answer reveals append to a separate activity file; they never imply
   correctness or mastery.
+- Note and problem-card semantic tags live in an independently revisioned sidecar. Flat
+  `core` and `related` terms aid recall and derived relations but never state mastery.
+- An asset source pins an exact asset revision or an exact Material revision and locator.
+  Old unpinned M1b sources remain visible as legacy facts and are never guessed forward.
 
 Parents start from consolidated Markdown memory and drill into child evidence only for
 missing, conflicting, or high-impact details. Roadmap may arrange future prepared Plans.
@@ -78,10 +95,16 @@ Roadmap-global; Lesson IDs are local to their parent Plan, so a Lesson Session k
 a Session. Parent and sibling transcripts are never copied into a new node Session.
 
 Free learning uses independent `free:<session-id>` Pi Sessions. It may start with no
-context or with explicitly selected Note/problem-card handles, allows multiple live
+context or with explicitly selected Note/problem-card handles or Material locators, allows multiple live
 threads, and ends only on the student's explicit action. It creates no Light Lesson,
 Classroom Log, Trace, or mandatory Summary. Ending a thread is lifecycle only and does
 not force memory consolidation.
+
+Long-term planning starts in an independent root `meta:<session-id>` Pi Session. Meta may
+read compact memory and explicitly selected context, but its sole write is
+`create_roadmap` after the student sees and explicitly accepts a complete Roadmap-level
+proposal. It creates only `ROADMAP.md`; the Roadmap Session owns diagnosis and the first
+Plan. Refusing a long-term path creates nothing and does not affect free learning.
 
 A long Plan Session uses Pi's native compaction only at a semantic boundary: the
 settled turn successfully edited or wrote `plans/*/lessons/*.md`, and active context usage is
@@ -120,7 +143,8 @@ Roadmap keeps the native `read`, `grep`, `find`, `ls`, `edit`, and `write` tools
 keeps those tools and additionally has `subagent` for fresh-context copies of one
 packaged read-only `study-material-scout`. Lesson has the native file tools plus the
 node-bound `classroom_log_append`, `classroom_update`, and conditional
-`lesson_memory_commit`. Its native `edit/write` calls are Runtime-blocked; Tutor cannot
+`lesson_memory_commit`, plus student-approved `save_note` and `save_problem_card` tools.
+Its native `edit/write` calls are Runtime-blocked; Tutor cannot
 write `capabilities/`, parent nodes, sibling Lessons, or memory Markdown directly. This
 is a mechanical boundary, not a prompt convention.
 
@@ -129,6 +153,10 @@ Free learning keeps native read-only file discovery plus `save_note`,
 the student's visible, explicit approval. The memory tool appends a meaningful cognitive
 change directly from the whole native Session; asset existence, answer reveal, and teacher
 explanation are never learning evidence by themselves.
+
+Plan can use `save_prepared_problem_card` only after a prepared Lesson is already
+deliverable and the student separately approves the fully shown card. Saving a card is
+not implied by approving a Lesson. Meta has read/grep plus only `create_roadmap`.
 
 The Coach derives temporary material slots from the agreed Lesson activities and normally
 launches one Scout per slot, with at most three running concurrently. Each Scout uses
@@ -157,6 +185,8 @@ model tool calls.
   `apps/pi-teaching-web/resources/skills/tutor-lesson/SKILL.md`
 - Open-ended free learning, student-approved asset saving, and direct object-memory
   updates: `apps/pi-teaching-web/resources/skills/free-learning/SKILL.md`
+- Root long-term-path discussion and student-approved Roadmap creation:
+  `apps/pi-teaching-web/resources/skills/meta-dialogue/SKILL.md`
 - Shared mathematics judgment:
   `apps/pi-teaching-web/resources/teaching/math-teaching-core.md`
 
@@ -174,15 +204,17 @@ parent-side bulk asset search.
 
 Primary views are Home, Learning Assets, and Course only when a Roadmap exists.
 
-- Home and free-learning routes: `/home`, `/learn/:sessionId`.
+- Home, free-learning, Meta, and footprint routes: `/home`, `/learn/:sessionId`,
+  `/meta/:sessionId`, `/footprint`.
 - Asset routes: `/assets`, `/assets/notes/:id`,
-  `/assets/problem-cards/:id`.
+  `/assets/problem-cards/:id`, `/assets/materials/:id`.
 - Optional Course routes: `/course`, `/course/plan/:id`,
   `/course/plan/:id/lesson/:id`.
 - `/knowledge` remains a supported legacy static projection, not a primary navigation
   destination.
-- API additionally exposes home, free-learning lifecycle, asset editing, problem attempts,
-  answer reveal, and problem-card-to-teacher handoff.
+- API additionally exposes home, free-learning and Meta creation, Material import/read,
+  fixed locators, semantic tag/query/relations, the derived footprint, asset editing,
+  problem attempts, answer reveal, and problem-card-to-teacher handoff.
 - WebSocket `/events` transports raw conversation items, tool activity, run
   state, errors, and invalidations.
 
@@ -206,6 +238,8 @@ items. The normal Lesson view shows `Student View` and Block progress, not
 - `apps/pi-teaching-web/tests/e2e/m0-cycle.spec.ts`: deterministic browser closure.
 - `apps/pi-teaching-web/tests/e2e/m1b-cycle.spec.ts`: deterministic blank-set growth and
   reuse closure.
+- `apps/pi-teaching-web/tests/e2e/m1c-cycle.spec.ts`: deterministic Material → free
+  learning → asset → Meta → Roadmap → footprint closure.
 - `examples/derivative-m0/`: clean public learning set.
 
 ## Change discipline
@@ -225,5 +259,5 @@ items. The normal Lesson view shows `Student View` and Block progress, not
 cd apps/pi-teaching-web
 bun install --frozen-lockfile
 bun run check
-bun run test:e2e -- tests/e2e/m0-cycle.spec.ts tests/e2e/m1b-cycle.spec.ts
+bun run test:e2e -- tests/e2e/m0-cycle.spec.ts tests/e2e/m1b-cycle.spec.ts tests/e2e/m1c-cycle.spec.ts
 ```

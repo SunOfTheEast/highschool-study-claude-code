@@ -10,7 +10,7 @@ import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import type {
   LearningAssetLibrarySnapshot,
   LearningAssetHandle,
-  LearningAssetReference,
+  LearningContextReference,
   LearningSourceReference,
   LearningNote,
   LearningNoteBlock,
@@ -21,9 +21,11 @@ import type {
 import { resolveDocumentPath } from '../runtime/atomic-document';
 import type { DocumentCandidate } from '../runtime/multi-document-transaction';
 import { StudyDocumentError } from './markdown';
-import { readMaterialLocator } from './materials';
+import { readMaterialLocator, readMaterialRevision } from './materials';
 import {
   planSemanticTagsSave,
+  readSemanticTags,
+  semanticTagsPath,
   type SemanticTags,
 } from './semantic-tags';
 
@@ -518,6 +520,11 @@ export function listProblemCards(root: string): ProblemCard[] {
 }
 
 export function readLearningAssetLibrary(root: string): LearningAssetLibrarySnapshot {
+  const tags = (asset: LearningAssetHandle) => {
+    if (!existsSync(join(root, semanticTagsPath(asset)))) return null;
+    const value = readSemanticTags(root, asset);
+    return { core: value.core, related: value.related };
+  };
   return {
     notes: listLearningNotes(root).map((note) => ({
       kind: 'note',
@@ -525,6 +532,8 @@ export function readLearningAssetLibrary(root: string): LearningAssetLibrarySnap
       title: note.title,
       revision: note.revision,
       updatedAt: note.updatedAt,
+      tags: tags({ kind: 'note', id: note.id }),
+      sources: note.sources,
     })),
     problemCards: listProblemCards(root).map((card) => ({
       kind: 'problem-card',
@@ -532,6 +541,8 @@ export function readLearningAssetLibrary(root: string): LearningAssetLibrarySnap
       title: card.title,
       revision: card.revision,
       updatedAt: card.updatedAt,
+      tags: tags({ kind: 'problem-card', id: card.id }),
+      sources: card.sources,
     })),
   };
 }
@@ -821,11 +832,26 @@ export function planProblemCardSave(
 
 export function renderSelectedAssetContext(
   root: string,
-  references: readonly LearningAssetReference[],
+  references: readonly LearningContextReference[],
 ): string {
   if (references.length === 0) return '';
   const sections = references.map((reference, index) => {
     const alias = `source-${index + 1}`;
+    if (reference.kind === 'material') {
+      const revision = readMaterialRevision(root, reference.id, reference.revision);
+      const locator = readMaterialLocator(root, reference);
+      return [
+        `## ${alias} · material:${reference.id}@${reference.revision}`,
+        '',
+        canonicalYaml({
+          title: revision.title,
+          revision: reference.revision,
+          locator: reference.locator,
+          path: locator.path,
+          text: locator.text,
+        }).trim(),
+      ].join('\n');
+    }
     if (reference.kind === 'note') {
       const note = readLearningNote(root, reference.id);
       return [
@@ -858,7 +884,7 @@ export function renderSelectedAssetContext(
 
 export function resolveSelectedAssetAliases(
   root: string,
-  references: readonly LearningAssetReference[],
+  references: readonly LearningContextReference[],
   aliases: readonly string[],
 ): LearningSourceReference[] {
   const seen = new Set<string>();
@@ -869,6 +895,7 @@ export function resolveSelectedAssetAliases(
     if (!reference) throw new Error(`ASSET_SOURCE_ALIAS_UNKNOWN: ${alias}`);
     if (seen.has(alias)) throw new Error(`ASSET_SOURCE_ALIAS_DUPLICATE: ${alias}`);
     seen.add(alias);
+    if (reference.kind === 'material') return { ...reference };
     const revision = reference.kind === 'note'
       ? readLearningNote(root, reference.id).revision
       : readProblemCard(root, reference.id).revision;

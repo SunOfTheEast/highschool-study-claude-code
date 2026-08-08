@@ -6,9 +6,10 @@ import { projectConversationEntries, projectLiveSessionEvent } from '../projecti
 import { NodeLifecycleService } from '../runtime/node-lifecycle';
 import type { WorkspaceRegistry } from '../runtime/workspace-registry';
 import type {
-  LearningAssetReference,
+  LearningContextReference,
   LearningNoteBlock,
   ProblemAttemptResponse,
+  SemanticTagDraft,
   SessionKey,
 } from '../shared/contracts';
 import { parseHandoutBlockSegment } from '../shared/handout-route';
@@ -31,6 +32,24 @@ import {
   revealProblemAnswer,
 } from '../study/problem-attempts';
 import { commitDocumentCandidates } from '../runtime/multi-document-transaction';
+import {
+  importMaterial,
+  listMaterials,
+  readMaterialLocator,
+  readMaterialView,
+} from '../study/materials';
+import {
+  projectSemanticRelations,
+  querySemanticRecall,
+  refreshSemanticRecallIndex,
+} from '../study/semantic-index';
+import {
+  planSemanticTagsSave,
+  readSemanticTags,
+  semanticTagsPath,
+  type SemanticTags,
+} from '../study/semantic-tags';
+import { readLearningFootprint } from '../study/learning-footprint';
 import type { EventHub } from './event-hub';
 
 type Lifecycle = Pick<
@@ -49,6 +68,9 @@ type Registry = Pick<
   | 'createFreeLearning'
   | 'listFreeLearning'
   | 'endFreeLearning'
+  | 'createMeta'
+  | 'listMeta'
+  | 'listOwnedSessionFacts'
 >;
 
 export type AppDependencies = {
@@ -62,6 +84,20 @@ export type AppDependencies = {
 };
 
 const json = (value: unknown, status = 200) => Response.json(value, { status });
+const MAX_MATERIAL_BYTES = 32 * 1024 * 1024;
+const materialMediaTypes = new Set([
+  'text/plain',
+  'text/markdown',
+  'text/html',
+  'text/csv',
+  'application/json',
+  'application/xml',
+  'application/pdf',
+  'image/png',
+  'image/jpeg',
+  'image/webp',
+  'image/gif',
+]);
 
 function errorResponse(error: unknown): Response {
   if (error instanceof StudyDocumentError) {
@@ -82,7 +118,7 @@ function sessionKey(value: string): SessionKey | null {
   try {
     const decoded = decodeURIComponent(value);
     const id = '[A-Za-z0-9][A-Za-z0-9._-]*';
-    return new RegExp(`^(?:(?:roadmap|plan):${id}|lesson:${id}:${id}|free:${id})$`).test(decoded)
+    return new RegExp(`^(?:(?:roadmap|plan):${id}|lesson:${id}:${id}|(?:free|meta):${id})$`).test(decoded)
       ? decoded as SessionKey
       : null;
   } catch {
@@ -111,19 +147,84 @@ function positiveRevision(value: unknown): number {
   return Number(value);
 }
 
-function learningAssetReferences(value: unknown): LearningAssetReference[] {
+function learningContextReferences(value: unknown): LearningContextReference[] {
   if (value === undefined) return [];
   if (!Array.isArray(value)) throw new Error('SELECTED_ASSETS_INVALID');
+  if (value.length > 12) throw new Error('SELECTED_CONTEXT_LIMIT_EXCEEDED');
+  const seen = new Set<string>();
   return value.map((item) => {
     const reference = objectBody(item);
     const kind = reference.kind;
     const id = reference.id;
-    if ((kind !== 'note' && kind !== 'problem-card') || typeof id !== 'string') {
+    if (typeof id !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(id)) {
       throw new Error('SELECTED_ASSET_INVALID');
     }
-    if (!/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(id)) throw new Error('SELECTED_ASSET_INVALID');
+    if (kind === 'material') {
+      const revision = positiveRevision(reference.revision);
+      const locator = reference.locator;
+      if (locator !== null && (typeof locator !== 'string' || !locator.trim() || /[\r\n\t]/.test(locator))) {
+        throw new Error('SELECTED_MATERIAL_LOCATOR_INVALID');
+      }
+      const selected = { kind: 'material' as const, id, revision, locator: locator as string | null };
+      const key = `${kind}:${id}@${revision}#${locator ?? ''}`;
+      if (seen.has(key)) throw new Error(`SELECTED_CONTEXT_DUPLICATE: ${key}`);
+      seen.add(key);
+      return selected;
+    }
+    if (kind !== 'note' && kind !== 'problem-card') throw new Error('SELECTED_ASSET_INVALID');
+    const key = `${kind}:${id}`;
+    if (seen.has(key)) throw new Error(`SELECTED_CONTEXT_DUPLICATE: ${key}`);
+    seen.add(key);
     return { kind, id };
   });
+}
+
+function stringList(value: unknown, label: string): string[] {
+  if (!Array.isArray(value)) throw new Error(`${label.toUpperCase()}_INVALID`);
+  return value.map((item) => {
+    if (typeof item !== 'string') throw new Error(`${label.toUpperCase()}_INVALID`);
+    return item;
+  });
+}
+
+function semanticDraft(value: Record<string, unknown>): SemanticTagDraft {
+  return {
+    core: stringList(value.core, 'semantic tag core'),
+    related: stringList(value.related, 'semantic tag related'),
+  };
+}
+
+function publicSemanticTags(tags: SemanticTags) {
+  return {
+    subject: tags.subject,
+    revision: tags.revision,
+    core: tags.core,
+    related: tags.related,
+    updatedAt: tags.updatedAt,
+  };
+}
+
+function assetSemanticTags(root: string, kind: 'note' | 'problem-card', id: string) {
+  const subject = { kind, id } as const;
+  return existsSync(join(root, semanticTagsPath(subject)))
+    ? publicSemanticTags(readSemanticTags(root, subject))
+    : null;
+}
+
+function refreshSemanticProjection(root: string): string | undefined {
+  try {
+    refreshSemanticRecallIndex(root);
+    return undefined;
+  } catch (error) {
+    return `SEMANTIC_INDEX_REFRESH_FAILED: ${error instanceof Error ? error.message : String(error)}`;
+  }
+}
+
+function formText(form: FormData, name: string, required = true): string | null {
+  const value = form.get(name);
+  if (value === null && !required) return null;
+  if (typeof value !== 'string' || !value.trim()) throw new Error(`${name.toUpperCase()}_REQUIRED`);
+  return value.trim();
 }
 
 function noteBlocks(value: unknown): LearningNoteBlock[] {
@@ -214,6 +315,14 @@ export function createRequestHandler(deps?: AppDependencies) {
         if (
           event.type === 'tool_execution_end'
           && !event.isError
+          && event.toolName === 'create_roadmap'
+        ) {
+          deps.hub.publish({ type: 'home-invalidated' });
+          deps.hub.publish({ type: 'course-invalidated' });
+        }
+        if (
+          event.type === 'tool_execution_end'
+          && !event.isError
           && (event.toolName === 'edit' || event.toolName === 'write')
         ) {
           deps.hub.publish({ type: 'course-invalidated' });
@@ -244,7 +353,11 @@ export function createRequestHandler(deps?: AppDependencies) {
 
     try {
       if (request.method === 'GET' && url.pathname === '/api/home') {
-        return json(readLearningSetHome(deps.root, await deps.registry.listFreeLearning()));
+        return json(readLearningSetHome(
+          deps.root,
+          await deps.registry.listFreeLearning(),
+          await deps.registry.listMeta(),
+        ));
       }
       if (url.pathname === '/api/free-learning' && request.method === 'GET') {
         return json(await deps.registry.listFreeLearning());
@@ -252,7 +365,7 @@ export function createRequestHandler(deps?: AppDependencies) {
       if (url.pathname === '/api/free-learning' && request.method === 'POST') {
         const requestBody = objectBody(await request.json());
         const session = await deps.registry.createFreeLearning(
-          learningAssetReferences(requestBody.selectedAssets),
+          learningContextReferences(requestBody.selectedAssets),
         );
         deps.hub.publish({ type: 'home-invalidated' });
         return json({ session, route: `/learn/${encodeURIComponent(session.id)}` }, 201);
@@ -267,15 +380,153 @@ export function createRequestHandler(deps?: AppDependencies) {
         return json({ session });
       }
 
+      if (url.pathname === '/api/meta' && request.method === 'GET') {
+        return json(await deps.registry.listMeta());
+      }
+      if (url.pathname === '/api/meta' && request.method === 'POST') {
+        const requestBody = objectBody(await request.json());
+        const session = await deps.registry.createMeta(
+          learningContextReferences(requestBody.selectedAssets),
+        );
+        deps.hub.publish({ type: 'home-invalidated' });
+        return json({ session, route: `/meta/${encodeURIComponent(session.id)}` }, 201);
+      }
+
+      if (url.pathname === '/api/materials' && request.method === 'GET') {
+        return json(listMaterials(deps.root));
+      }
+      if (url.pathname === '/api/materials' && request.method === 'POST') {
+        if (!(request.headers.get('content-type') ?? '').startsWith('multipart/form-data;')) {
+          throw new Error('MATERIAL_FORM_INVALID');
+        }
+        const form = await request.formData();
+        const file = form.get('file');
+        if (!(file instanceof File) || file.size === 0) throw new Error('MATERIAL_FILE_REQUIRED');
+        if (file.size > MAX_MATERIAL_BYTES) throw new Error('MATERIAL_FILE_LIMIT_EXCEEDED');
+        if (!materialMediaTypes.has(file.type.toLowerCase())) throw new Error('MATERIAL_MIME_INVALID');
+        const targetId = formText(form, 'targetId', false);
+        const expected = formText(form, 'expectedRevision', false);
+        if ((targetId === null) !== (expected === null)) throw new Error('MATERIAL_TARGET_INCOMPLETE');
+        if (targetId !== null && !nodeId(targetId)) throw new Error('MATERIAL_ID_INVALID');
+        const receipt = await importMaterial(deps.root, {
+          requestId: formText(form, 'requestId')!,
+          title: formText(form, 'title')!,
+          filename: file.name,
+          mediaType: file.type.toLowerCase(),
+          bytes: new Uint8Array(await file.arrayBuffer()),
+          ...(targetId === null ? {} : {
+            target: { id: targetId, expectedRevision: positiveRevision(Number(expected)) },
+          }),
+        }, new Date().toISOString());
+        deps.hub.publish({ type: 'home-invalidated' });
+        deps.hub.publish({ type: 'assets-invalidated' });
+        deps.hub.publish({ type: 'knowledge-invalidated' });
+        return json(receipt, 201);
+      }
+
+      const materialLocator = /^\/api\/materials\/([^/]+)\/revisions\/([^/]+)\/locators\/([^/]+)$/.exec(
+        url.pathname,
+      );
+      if (request.method === 'GET' && materialLocator) {
+        const id = nodeId(materialLocator[1]!);
+        let revision: number;
+        let locator: string;
+        try {
+          revision = Number(decodeURIComponent(materialLocator[2]!));
+          locator = decodeURIComponent(materialLocator[3]!);
+        } catch {
+          throw new Error('MATERIAL_LOCATOR_INVALID');
+        }
+        if (!id) throw new Error('MATERIAL_ID_INVALID');
+        if (!Number.isSafeInteger(revision) || revision < 1) {
+          throw new Error('MATERIAL_REVISION_INVALID');
+        }
+        if (locator !== 'whole' && !/^lines-[1-9][0-9]*-[1-9][0-9]*$|^page-[0-9]{4}$/.test(locator)) {
+          throw new Error('MATERIAL_LOCATOR_INVALID');
+        }
+        return json(readMaterialLocator(deps.root, {
+          id,
+          revision,
+          locator: locator === 'whole' ? null : locator,
+        }));
+      }
+
+      const material = /^\/api\/materials\/([^/]+)$/.exec(url.pathname);
+      if (request.method === 'GET' && material) {
+        const id = nodeId(material[1]!);
+        if (!id) throw new Error('MATERIAL_ID_INVALID');
+        return json(readMaterialView(deps.root, id));
+      }
+
       if (request.method === 'GET' && url.pathname === '/api/assets') {
         return json(readLearningAssetLibrary(deps.root));
+      }
+
+      const semanticAsset = /^\/api\/semantics\/assets\/(note|problem-card)\/([^/]+)$/.exec(
+        url.pathname,
+      );
+      if (semanticAsset) {
+        const kind = semanticAsset[1] as 'note' | 'problem-card';
+        const id = nodeId(semanticAsset[2]!);
+        if (!id) throw new Error('SEMANTIC_TAG_SUBJECT_INVALID');
+        if (kind === 'note') readLearningNote(deps.root, id);
+        else readProblemCard(deps.root, id);
+        if (request.method === 'GET') {
+          const tags = assetSemanticTags(deps.root, kind, id);
+          return tags === null ? json({ error: 'SEMANTIC_TAGS_NOT_FOUND' }, 404) : json(tags);
+        }
+        if (request.method === 'PUT') {
+          const requestBody = objectBody(await request.json());
+          const expectedRevision = requestBody.expectedRevision === undefined
+            ? undefined
+            : positiveRevision(requestBody.expectedRevision);
+          const planned = planSemanticTagsSave(deps.root, { kind, id }, {
+            ...(expectedRevision === undefined ? {} : { expectedRevision }),
+            tags: semanticDraft(requestBody),
+          }, new Date().toISOString());
+          commitDocumentCandidates(deps.root, [planned.candidate]);
+          const warning = refreshSemanticProjection(deps.root);
+          deps.hub.publish({ type: 'assets-invalidated' });
+          deps.hub.publish({ type: 'knowledge-invalidated' });
+          return json({
+            ...publicSemanticTags(planned.tags),
+            ...(warning ? { warning } : {}),
+          });
+        }
+      }
+
+      if (request.method === 'POST' && url.pathname === '/api/semantics/query') {
+        const requestBody = objectBody(await request.json());
+        const terms = stringList(requestBody.terms, 'semantic recall terms');
+        if (
+          terms.length === 0
+          || terms.length > 12
+          || terms.some((term) => !term.trim() || term !== term.trim() || /[\r\n\t]/.test(term) || [...term].length > 40)
+        ) throw new Error('SEMANTIC_RECALL_TERMS_INVALID');
+        const limit = positiveRevision(requestBody.limit);
+        if (limit > 50) throw new Error('SEMANTIC_RECALL_LIMIT_INVALID');
+        if (typeof requestBody.allowRelatedExpansion !== 'boolean') {
+          throw new Error('SEMANTIC_RECALL_EXPANSION_INVALID');
+        }
+        return json(querySemanticRecall(deps.root, {
+          terms,
+          limit,
+          allowRelatedExpansion: requestBody.allowRelatedExpansion,
+        }));
+      }
+
+      if (request.method === 'GET' && url.pathname === '/api/semantics/relations') {
+        return json(projectSemanticRelations(deps.root));
       }
 
       const noteAsset = /^\/api\/assets\/notes\/([^/]+)$/.exec(url.pathname);
       if (noteAsset) {
         const id = nodeId(noteAsset[1]!);
         if (!id) return json({ error: 'NOTE_ID_INVALID' }, 400);
-        if (request.method === 'GET') return json(readLearningNote(deps.root, id));
+        if (request.method === 'GET') return json({
+          ...readLearningNote(deps.root, id),
+          semanticTags: assetSemanticTags(deps.root, 'note', id),
+        });
         if (request.method === 'PUT') {
           const requestBody = objectBody(await request.json());
           const current = readLearningNote(deps.root, id);
@@ -286,9 +537,14 @@ export function createRequestHandler(deps?: AppDependencies) {
             sources: current.sources,
           }, new Date().toISOString());
           commitDocumentCandidates(deps.root, planned.candidates);
+          const warning = refreshSemanticProjection(deps.root);
           deps.hub.publish({ type: 'home-invalidated' });
           deps.hub.publish({ type: 'assets-invalidated' });
-          return json(planned.note);
+          return json({
+            ...planned.note,
+            semanticTags: assetSemanticTags(deps.root, 'note', id),
+            ...(warning ? { warning } : {}),
+          });
         }
       }
 
@@ -303,6 +559,7 @@ export function createRequestHandler(deps?: AppDependencies) {
         return json({
           ...readStudentProblemCard(deps.root, id, revealed),
           activity,
+          semanticTags: assetSemanticTags(deps.root, 'problem-card', id),
         });
       }
 
@@ -374,6 +631,12 @@ export function createRequestHandler(deps?: AppDependencies) {
 
       if (request.method === 'GET' && url.pathname === '/api/course') {
         return json(courseReader(deps.root, url.searchParams.get('selected')));
+      }
+      if (request.method === 'GET' && url.pathname === '/api/footprint') {
+        return json(readLearningFootprint(
+          deps.root,
+          await deps.registry.listOwnedSessionFacts(),
+        ));
       }
       if (request.method === 'GET' && url.pathname === '/api/knowledge') {
         return json(knowledgeReader(deps.root));

@@ -1,12 +1,17 @@
 import { useEffect, useState } from 'react';
-import type { LearningNote, LearningNoteBlock } from '../../shared/contracts';
+import type {
+  LearningAssetSemanticTags,
+  LearningNote,
+  LearningNoteBlock,
+} from '../../shared/contracts';
+import { AssetSources, AssetTags } from '../components/AssetSources';
 import { MarkdownView } from '../components/MarkdownView';
 
 export function NotePage({
   value,
   onSave,
 }: {
-  value: LearningNote;
+  value: LearningNote & { semanticTags?: LearningAssetSemanticTags | null };
   onSave(input: { expectedRevision: number; title: string; blocks: LearningNoteBlock[] }): Promise<void>;
 }) {
   const [editing, setEditing] = useState(false);
@@ -24,11 +29,13 @@ export function NotePage({
   return (
     <main className="m1b-note-page">
       <header>
-        <div><small>Note · revision {value.revision}</small><h1>{value.title}</h1></div>
+        <div><small>Note · 第 {value.revision} 版</small><h1>{value.title}</h1></div>
         <button type="button" onClick={() => setEditing((current) => !current)}>
           {editing ? '取消编辑' : '编辑笔记'}
         </button>
       </header>
+      <AssetTags value={value.semanticTags} />
+      <AssetSources value={value.sources} />
       {editing ? (
         <form onSubmit={(event) => {
           event.preventDefault();
@@ -72,4 +79,3 @@ export function NotePage({
 }
 
 export default NotePage;
-

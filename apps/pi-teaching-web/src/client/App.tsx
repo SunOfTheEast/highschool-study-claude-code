@@ -4,15 +4,17 @@ import type {
   CourseTreeNode,
   KnowledgeSnapshot,
   LearningAssetLibrarySnapshot,
-  LearningAssetReference,
-  LearningNote,
+  LearningContextReference,
+  LearningFootprintSnapshot,
+  LearningMaterial,
+  LearningMaterialView,
   LearningSetHomeSnapshot,
   LessonHandout,
   ProblemAttemptResponse,
   SessionKey,
   StudyEvent,
 } from '../shared/contracts';
-import { api, ApiError, type ProblemCardView } from './api';
+import { api, ApiError, type LearningNoteView, type ProblemCardView } from './api';
 import { AppShell } from './components/AppShell';
 import { formatBrowserRoute, parseBrowserRoute, type BrowserRoute } from './routes';
 import { initialClientState, reduceClientState } from './state';
@@ -25,6 +27,9 @@ import { FreeLearningPage } from './pages/FreeLearningPage';
 import { AssetsPage } from './pages/AssetsPage';
 import { NotePage } from './pages/NotePage';
 import { ProblemCardPage } from './pages/ProblemCardPage';
+import { FootprintPage } from './pages/FootprintPage';
+import { MaterialPage } from './pages/MaterialPage';
+import { MetaPage } from './pages/MetaPage';
 import type { PrimaryView } from './view-state';
 
 type ConnectionState = 'open' | 'connecting' | 'closed';
@@ -97,7 +102,10 @@ export function App() {
   ));
   const [home, setHome] = useState<LearningSetHomeSnapshot | null>(null);
   const [assets, setAssets] = useState<LearningAssetLibrarySnapshot | null>(null);
-  const [note, setNote] = useState<LearningNote | null>(null);
+  const [materials, setMaterials] = useState<LearningMaterial[]>([]);
+  const [material, setMaterial] = useState<LearningMaterialView | null>(null);
+  const [footprint, setFootprint] = useState<LearningFootprintSnapshot | null>(null);
+  const [note, setNote] = useState<LearningNoteView | null>(null);
   const [problem, setProblem] = useState<ProblemCardView | null>(null);
   const [course, setCourse] = useState<CourseSnapshot | null>(null);
   const [knowledge, setKnowledge] = useState<KnowledgeSnapshot | null>(null);
@@ -145,9 +153,26 @@ export function App() {
         return;
       }
       if (next.kind === 'assets') {
-        const value = await api.assets();
+        const [value, materialValues] = await Promise.all([api.assets(), api.materials()]);
         if (revision !== routeLoadRevision.current) return;
         setAssets(value);
+        setMaterials(materialValues);
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
+      if (next.kind === 'material') {
+        const value = await api.material(next.id);
+        if (revision !== routeLoadRevision.current) return;
+        setMaterial(value);
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
+      if (next.kind === 'footprint') {
+        const value = await api.footprint();
+        if (revision !== routeLoadRevision.current) return;
+        setFootprint(value);
         setRoute(next);
         setNotice(null);
         return;
@@ -170,6 +195,15 @@ export function App() {
       }
       if (next.kind === 'free-learning') {
         const key = `free:${next.sessionId}` as const;
+        const history = await api.history(key);
+        if (revision !== routeLoadRevision.current) return;
+        dispatch({ type: 'conversation-snapshot', sessionKey: key, items: history });
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
+      if (next.kind === 'meta') {
+        const key = `meta:${next.sessionId}` as const;
         const history = await api.history(key);
         if (revision !== routeLoadRevision.current) return;
         dispatch({ type: 'conversation-snapshot', sessionKey: key, items: history });
@@ -256,7 +290,12 @@ export function App() {
           return;
         }
         if (event.type === 'assets-invalidated') {
-          if (current.kind === 'assets' || current.kind === 'note' || current.kind === 'problem-card') {
+          if (
+            current.kind === 'assets'
+            || current.kind === 'note'
+            || current.kind === 'problem-card'
+            || current.kind === 'material'
+          ) {
             void loadRoute(current);
           }
           return;
@@ -280,7 +319,9 @@ export function App() {
 
   const selectedKey: SessionKey | null = route.kind === 'free-learning'
     ? `free:${route.sessionId}`
-    : routeIsCourse(route) && course ? keyForCourse(course) : null;
+    : route.kind === 'meta'
+      ? `meta:${route.sessionId}`
+      : routeIsCourse(route) && course ? keyForCourse(course) : null;
   const conversation = selectedKey ? client.conversations[selectedKey] ?? [] : [];
   const running = selectedKey ? client.running[selectedKey] ?? false : false;
   const sessionError = selectedKey ? client.errors[selectedKey] ?? null : null;
@@ -313,7 +354,7 @@ export function App() {
     }
   };
 
-  const startFree = async (selectedAssets: LearningAssetReference[] = []) => {
+  const startFree = async (selectedAssets: LearningContextReference[] = []) => {
     try {
       const created = await api.createFreeLearning(selectedAssets);
       const next = parseBrowserRoute(new URL(created.route, window.location.origin).pathname);
@@ -324,21 +365,71 @@ export function App() {
     }
   };
 
+  const startMeta = async (selectedAssets: LearningContextReference[] = []) => {
+    try {
+      const existing = home?.recentMeta[0];
+      if (existing) {
+        navigate({ kind: 'meta', sessionId: existing.id });
+        return;
+      }
+      const created = await api.createMeta(selectedAssets);
+      const next = parseBrowserRoute(new URL(created.route, window.location.origin).pathname);
+      if (!next) throw new Error('META_ROUTE_INVALID');
+      navigate(next);
+    } catch (error) {
+      setNotice(errorText(error));
+    }
+  };
+
   let content: React.ReactNode;
   if (route.kind === 'home') {
     content = home
-      ? <HomePage value={home} onNavigate={navigate} onStartFree={() => void startFree()} />
+      ? (
+        <HomePage
+          value={home}
+          onNavigate={navigate}
+          onStartFree={() => void startFree()}
+          onPlan={() => void startMeta()}
+          onOpenFootprint={() => navigate({ kind: 'footprint' })}
+        />
+      )
       : <div className="loading-screen"><b>正在打开学习集</b></div>;
   } else if (route.kind === 'assets') {
     content = assets ? (
       <AssetsPage
         value={assets}
+        materials={materials}
         onOpen={(reference) => navigate(reference.kind === 'note'
           ? { kind: 'note', id: reference.id }
           : { kind: 'problem-card', id: reference.id })}
+        onOpenMaterial={(id) => navigate({ kind: 'material', id })}
         onAsk={(references) => void startFree(references)}
+        onImport={async (input) => {
+          await api.importMaterial(input);
+          await loadRoute({ kind: 'assets' });
+        }}
+        onOpenFootprint={() => navigate({ kind: 'footprint' })}
       />
     ) : <div className="loading-screen"><b>正在读取学习资料</b></div>;
+  } else if (route.kind === 'material') {
+    content = material ? (
+      <MaterialPage
+        value={material}
+        onRead={(locator) => api.materialLocator(
+          material.material.id,
+          material.current.revision,
+          locator,
+        )}
+        onAsk={(reference) => void startFree([reference])}
+      />
+    ) : <div className="loading-screen"><b>正在读取原始资料</b></div>;
+  } else if (route.kind === 'footprint') {
+    content = footprint ? (
+      <FootprintPage value={footprint} onOpen={(path) => {
+        const next = parseBrowserRoute(new URL(path, window.location.origin).pathname);
+        if (next) navigate(next);
+      }} />
+    ) : <div className="loading-screen"><b>正在读取学习足迹</b></div>;
   } else if (route.kind === 'note') {
     content = note ? (
       <NotePage value={note} onSave={async (input) => {
@@ -381,6 +472,19 @@ export function App() {
           await api.endFreeLearning(route.sessionId);
           navigate({ kind: 'home' });
         }}
+      />
+    );
+  } else if (route.kind === 'meta' && selectedKey?.startsWith('meta:')) {
+    const metaKey = `meta:${route.sessionId}` as const;
+    content = (
+      <MetaPage
+        sessionKey={metaKey}
+        items={conversation}
+        running={running}
+        error={sessionError}
+        hasCourse={home?.hasCourse ?? false}
+        onSend={(text) => api.send(metaKey, text).then(() => undefined)}
+        onEnterCourse={() => navigate({ kind: 'course' })}
       />
     );
   } else if (route.kind === 'knowledge') {
@@ -428,6 +532,7 @@ export function App() {
   const activeView: PrimaryView = routeIsCourse(route)
     ? 'course'
     : route.kind === 'assets' || route.kind === 'note' || route.kind === 'problem-card'
+      || route.kind === 'material'
       || route.kind === 'knowledge'
       ? 'assets'
       : 'home';

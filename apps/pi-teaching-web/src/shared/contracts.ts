@@ -28,6 +28,10 @@ export type LearningSourceReference =
   | { kind: LearningAssetKind; id: string; revision: number }
   | { kind: 'material'; id: string; revision: number; locator: string | null };
 
+export type LearningContextReference =
+  | LearningAssetHandle
+  | { kind: 'material'; id: string; revision: number; locator: string | null };
+
 export type LegacyUnpinnedLearningSourceReference = {
   kind: 'legacy-unpinned';
   assetKind: LearningAssetKind;
@@ -41,6 +45,12 @@ export type ReadableLearningSourceReference =
 export type SemanticTagDraft = {
   core: string[];
   related: string[];
+};
+
+export type LearningAssetSemanticTags = SemanticTagDraft & {
+  subject: LearningAssetHandle;
+  revision: number;
+  updatedAt: string;
 };
 
 export type ProblemAttemptResponse =
@@ -111,6 +121,8 @@ export type LearningAssetSummary = {
   title: string;
   revision: number;
   updatedAt: string | null;
+  tags: SemanticTagDraft | null;
+  sources: ReadableLearningSourceReference[];
 };
 
 export type LearningAssetLibrarySnapshot = {
@@ -143,6 +155,12 @@ export type LearningMaterial = {
   path: string;
   currentRevision: number;
   revisions: MaterialRevision[];
+};
+
+export type LearningMaterialView = {
+  material: LearningMaterial;
+  current: MaterialRevision;
+  suggestedLocator: string | null;
 };
 
 export type MaterialImportReceipt = {
@@ -247,6 +265,7 @@ export type LearningSetHomeSnapshot = {
     materials: number;
   };
   recentFreeLearning: FreeLearningSessionSummary[];
+  recentMeta: MetaSessionSummary[];
 };
 
 export type NodeReference = {

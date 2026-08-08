@@ -11,6 +11,7 @@ import { basename, dirname, extname, join } from 'node:path';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import type {
   LearningMaterial,
+  LearningMaterialView,
   MaterialImportReceipt,
   MaterialLocatorSnapshot,
   MaterialRevision,
@@ -383,6 +384,21 @@ export function readMaterialRevision(
   const found = material.revisions.find((item) => item.revision === checkedRevision(revision));
   if (!found) throw new Error(`MATERIAL_REVISION_NOT_FOUND: ${id}@${revision}`);
   return found;
+}
+
+export function readMaterialView(root: string, id: string): LearningMaterialView {
+  const material = readMaterial(root, id);
+  const current = readMaterialRevision(root, id, material.currentRevision);
+  let suggestedLocator: string | null = null;
+  if (current.locatorKind === 'lines') {
+    const lines = readFileSync(resolveDocumentPath(root, current.originalPath), 'utf8')
+      .split(/\r?\n/);
+    suggestedLocator = `lines-1-${Math.min(lines.length, 80)}`;
+  } else if (current.locatorKind === 'page') {
+    const firstPage = `materials/${id}/projections/${current.revision}/pages/page-0001.txt`;
+    if (existsSync(resolveDocumentPath(root, firstPage))) suggestedLocator = 'page-0001';
+  }
+  return { material, current, suggestedLocator };
 }
 
 export function readMaterialLocator(

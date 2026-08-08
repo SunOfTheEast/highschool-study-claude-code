@@ -3,7 +3,7 @@ import type { AgentSessionEvent, SessionEntry } from '@earendil-works/pi-coding-
 import type {
   CourseTreeNode,
   FreeLearningSessionSummary,
-  LearningAssetReference,
+  LearningContextReference,
   LessonDocument,
   MetaSessionSummary,
   PlanDocument,
@@ -11,6 +11,7 @@ import type {
   SessionKey,
 } from '../shared/contracts';
 import { readCourseTree, readLesson, readPlan, readRoadmap } from '../study/markdown';
+import { readMaterialLocator } from '../study/materials';
 import { setFrontmatterField } from './frontmatter';
 import {
   sessionFactoryInput,
@@ -95,19 +96,33 @@ function findNode(
 }
 
 function checkedSelectedAssets(
-  selectedAssets: readonly LearningAssetReference[],
-): LearningAssetReference[] {
-  if (selectedAssets.length > 12) throw new Error('FREE_LEARNING_ASSET_LIMIT_EXCEEDED');
+  root: string,
+  selectedAssets: readonly LearningContextReference[],
+): LearningContextReference[] {
+  if (selectedAssets.length > 12) throw new Error('SELECTED_CONTEXT_LIMIT_EXCEEDED');
   const seen = new Set<string>();
   return selectedAssets.map((asset) => {
+    if (asset.kind === 'material') {
+      if (
+        !/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(asset.id)
+        || !Number.isSafeInteger(asset.revision)
+        || asset.revision < 1
+        || (asset.locator !== null && (!asset.locator.trim() || /[\r\n\t]/.test(asset.locator)))
+      ) throw new Error('SELECTED_CONTEXT_INVALID');
+      readMaterialLocator(root, asset);
+      const key = `material:${asset.id}@${asset.revision}#${asset.locator ?? ''}`;
+      if (seen.has(key)) throw new Error(`SELECTED_CONTEXT_DUPLICATE: ${key}`);
+      seen.add(key);
+      return { ...asset };
+    }
     if (
       (asset.kind !== 'note' && asset.kind !== 'problem-card')
       || !/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(asset.id)
     ) {
-      throw new Error('FREE_LEARNING_ASSET_INVALID');
+      throw new Error('SELECTED_CONTEXT_INVALID');
     }
     const key = `${asset.kind}:${asset.id}`;
-    if (seen.has(key)) throw new Error(`FREE_LEARNING_ASSET_DUPLICATE: ${key}`);
+    if (seen.has(key)) throw new Error(`SELECTED_CONTEXT_DUPLICATE: ${key}`);
     seen.add(key);
     return { kind: asset.kind, id: asset.id };
   });
@@ -167,14 +182,14 @@ export class WorkspaceRegistry {
   }
 
   async createFreeLearning(
-    selectedAssets: readonly LearningAssetReference[],
+    selectedAssets: readonly LearningContextReference[],
   ): Promise<FreeLearningSessionSummary> {
     const createdAt = new Date().toISOString();
     const scope: FreeLearningSessionScope = {
       sessionKind: 'free-learning',
       title: '自由学习',
       createdAt,
-      selectedAssets: checkedSelectedAssets(selectedAssets),
+      selectedAssets: checkedSelectedAssets(this.root, selectedAssets),
     };
     const session = await this.factory(sessionFactoryInput(scope, null));
     if (!session.sessionFile) {
@@ -207,14 +222,14 @@ export class WorkspaceRegistry {
   }
 
   async createMeta(
-    selectedAssets: readonly LearningAssetReference[],
+    selectedAssets: readonly LearningContextReference[],
   ): Promise<MetaSessionSummary> {
     const createdAt = new Date().toISOString();
     const scope: MetaSessionScope = {
       sessionKind: 'meta',
       title: '长期学习规划',
       createdAt,
-      selectedAssets: checkedSelectedAssets(selectedAssets),
+      selectedAssets: checkedSelectedAssets(this.root, selectedAssets),
     };
     const session = await this.factory(sessionFactoryInput(scope, null));
     if (!session.sessionFile) {

@@ -6,10 +6,14 @@ export function HomePage({
   value,
   onNavigate,
   onStartFree,
+  onPlan,
+  onOpenFootprint,
 }: {
   value: LearningSetHomeSnapshot;
   onNavigate(route: BrowserRoute): void;
   onStartFree(): void;
+  onPlan?(): void;
+  onOpenFootprint?(): void;
 }) {
   const link = (route: BrowserRoute) => (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
@@ -44,6 +48,20 @@ export function HomePage({
             <i aria-hidden="true">课</i>
           </a>
         )}
+        {!value.course && (
+          <button type="button" onClick={onPlan}>
+            <span>03</span>
+            <strong>{value.recentMeta.length > 0 ? '继续长期规划' : '规划长期学习'}</strong>
+            <p>先把长期方向想清楚；具体阶段会留到长期路线中再讨论。</p>
+            <i aria-hidden="true">路</i>
+          </button>
+        )}
+        <button type="button" onClick={onOpenFootprint}>
+          <span>04</span>
+          <strong>学习足迹</strong>
+          <p>回看真实发生过的对话、作答、资料与认知变化。</p>
+          <i aria-hidden="true">迹</i>
+        </button>
       </section>
 
       <section className="m1b-recent">

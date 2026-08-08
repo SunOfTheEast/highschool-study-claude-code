@@ -9,8 +9,11 @@ import {
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { SessionEntry } from '@earendil-works/pi-coding-agent';
+import { createFreeLearningTools } from '../../src/runtime/free-learning-tools';
 import { createLessonTools } from '../../src/runtime/lesson-tools';
+import { loadStaticFreeLearningResources } from '../../src/runtime/resource-loader';
 import { readLearningNote } from '../../src/study/learning-assets';
+import { importMaterial } from '../../src/study/materials';
 
 const fixture = join(import.meta.dir, '../fixtures/m0-learning-set');
 const lessonPath = 'plans/plan-001/lessons/lesson-001.md';
@@ -54,7 +57,7 @@ function noteInput(sourceAliases: string[]) {
 }
 
 async function execute(
-  tool: ReturnType<typeof createLessonTools>[number],
+  tool: { execute(...args: any[]): Promise<any> },
   id: string,
   input: unknown,
 ) {
@@ -114,4 +117,46 @@ test('Lesson saves only from its exact Uses after confirmation and never discove
   ])).find((tool) => tool.name === 'save_note')!;
   await expect(execute(unknown, 'unknown-source', noteInput(['source-2'])))
     .rejects.toThrow('ASSET_SOURCE_ALIAS_UNKNOWN');
+});
+
+test('Free Learning binds one selected Material locator to the same source alias', async () => {
+  const root = copyFixture();
+  const material = await importMaterial(root, {
+    requestId: 'selected-material',
+    title: 'Ksp 原文',
+    filename: 'ksp.md',
+    mediaType: 'text/markdown',
+    bytes: new TextEncoder().encode('纯固体活度并入平衡常数。\n第二行。'),
+  }, '2026-08-09T09:00:00.000Z');
+  const scope = {
+    sessionKind: 'free-learning' as const,
+    title: '自由学习',
+    createdAt: '2026-08-09T10:00:00.000Z',
+    selectedAssets: [{
+      kind: 'material' as const,
+      id: material.id,
+      revision: material.revision,
+      locator: 'lines-1-1',
+    }],
+  };
+  const context = loadStaticFreeLearningResources(root, scope)
+    .agentsFiles.map((entry) => entry.content).join('\n');
+  expect(context).toContain('source-1 · material:material-001@1');
+  expect(context).toContain('纯固体活度并入平衡常数');
+
+  const save = createFreeLearningTools(root, scope, {
+    getSessionId: () => 'free-session-001',
+    getBranch: () => [
+      message('a1', 'assistant', '要把刚才形成的解释保存为笔记吗？'),
+      message('u1', 'user', '保存吧'),
+    ],
+  }).find((tool) => tool.name === 'save_note')!;
+  await execute(save, 'save-material-note', noteInput(['source-1']));
+
+  expect(readLearningNote(root, 'note-001').sources).toEqual([{
+    kind: 'material',
+    id: 'material-001',
+    revision: 1,
+    locator: 'lines-1-1',
+  }]);
 });

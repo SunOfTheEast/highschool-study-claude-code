@@ -1,7 +1,7 @@
 import type {
   FreeLearningSessionKey,
   FreeLearningSessionSummary,
-  LearningAssetReference,
+  LearningContextReference,
   MetaSessionKey,
   MetaSessionSummary,
   NodeKind,
@@ -23,14 +23,14 @@ export type FreeLearningSessionScope = {
   sessionKind: 'free-learning';
   title: string;
   createdAt: string;
-  selectedAssets: readonly LearningAssetReference[];
+  selectedAssets: readonly LearningContextReference[];
 };
 
 export type MetaSessionScope = {
   sessionKind: 'meta';
   title: string;
   createdAt: string;
-  selectedAssets: readonly LearningAssetReference[];
+  selectedAssets: readonly LearningContextReference[];
 };
 
 export type StudySessionScope = NodeSessionScope | FreeLearningSessionScope | MetaSessionScope;

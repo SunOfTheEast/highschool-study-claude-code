@@ -1,7 +1,7 @@
 import { existsSync, lstatSync, readFileSync, readdirSync } from 'node:fs';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import type {
-  LearningAssetReference,
+  LearningContextReference,
   ProblemActivityEvent,
   ProblemActivitySnapshot,
   ProblemAnswerRevealEvent,
@@ -328,7 +328,7 @@ export function revealProblemAnswer(
 
 export function renderSelectedProblemActivityContext(
   root: string,
-  references: readonly LearningAssetReference[],
+  references: readonly LearningContextReference[],
 ): string {
   const sections = references.flatMap((reference, index) => {
     if (reference.kind !== 'problem-card') return [];

@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import type {
   FreeLearningSessionSummary,
   LearningSetHomeSnapshot,
+  MetaSessionSummary,
 } from '../shared/contracts';
 import { readKnowledge } from './knowledge';
 import { listLearningNotes } from './learning-assets';
@@ -11,6 +12,7 @@ import { readCourseTree, readLearningSetGuide } from './markdown';
 export function readLearningSetHome(
   root: string,
   recentFreeLearning: FreeLearningSessionSummary[] = [],
+  recentMeta: MetaSessionSummary[] = [],
 ): LearningSetHomeSnapshot {
   const guide = readLearningSetGuide(root);
   const knowledge = readKnowledge(root);
@@ -31,5 +33,6 @@ export function readLearningSetHome(
       materials: knowledge.materials.length,
     },
     recentFreeLearning,
+    recentMeta,
   };
 }

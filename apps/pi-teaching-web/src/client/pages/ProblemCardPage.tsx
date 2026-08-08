@@ -1,12 +1,17 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import type {
+  LearningAssetSemanticTags,
   ProblemActivitySnapshot,
   ProblemAttemptResponse,
   StudentProblemCard,
 } from '../../shared/contracts';
+import { AssetSources, AssetTags } from '../components/AssetSources';
 import { MarkdownView } from '../components/MarkdownView';
 
-export type ProblemCardView = StudentProblemCard & { activity: ProblemActivitySnapshot };
+export type ProblemCardView = StudentProblemCard & {
+  activity: ProblemActivitySnapshot;
+  semanticTags?: LearningAssetSemanticTags | null;
+};
 
 export function ProblemCardPage({
   value,
@@ -30,7 +35,9 @@ export function ProblemCardPage({
   };
   return (
     <main className="m1b-problem-page">
-      <header><small>Problem card · revision {value.revision}</small><h1>{value.title}</h1></header>
+      <header><small>Problem card · 第 {value.revision} 版</small><h1>{value.title}</h1></header>
+      <AssetTags value={value.semanticTags} />
+      <AssetSources value={value.sources} />
       <section className="m1b-problem-stem"><MarkdownView>{value.stem}</MarkdownView></section>
 
       {value.standardAnswer === null ? (
@@ -72,4 +79,3 @@ export function ProblemCardPage({
 }
 
 export default ProblemCardPage;
-

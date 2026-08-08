@@ -20,6 +20,7 @@ const blankHome: LearningSetHomeSnapshot = {
   course: null,
   assets: { notes: 0, problemCards: 0, materials: 0 },
   recentFreeLearning: [],
+  recentMeta: [],
 };
 
 test('round-trips every M1b browser route', () => {
@@ -94,10 +95,12 @@ test('renders one asset library with Notes and problem cards but no graph contro
     notes: [{
       kind: 'note', id: 'note-001', title: 'Ksp 边界', revision: 1,
       updatedAt: '2026-08-08T10:00:00.000Z',
+      tags: { core: ['沉淀溶解平衡'], related: [] }, sources: [],
     }],
     problemCards: [{
       kind: 'problem-card', id: 'problem-001', title: '加入同离子', revision: 1,
       updatedAt: '2026-08-08T10:00:00.000Z',
+      tags: { core: ['同离子效应'], related: [] }, sources: [],
     }],
   };
   const markup = renderToStaticMarkup(
@@ -158,4 +161,3 @@ test('keeps a problem answer gated and never renders teacher rationale', () => {
   expect(markup).not.toContain('teacherRationale');
   expect(markup).not.toContain('教师依据');
 });
-

@@ -38,6 +38,16 @@ function nonempty(value: unknown): value is string {
 function validAssetReference(value: unknown): boolean {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
   const reference = value as Record<string, unknown>;
+  if (reference.kind === 'material') {
+    return nonempty(reference.id)
+      && /^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(reference.id)
+      && Number.isSafeInteger(reference.revision)
+      && Number(reference.revision) >= 1
+      && (
+        reference.locator === null
+        || (nonempty(reference.locator) && !/[\r\n\t]/.test(reference.locator))
+      );
+  }
   return (reference.kind === 'note' || reference.kind === 'problem-card')
     && nonempty(reference.id)
     && /^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(reference.id);

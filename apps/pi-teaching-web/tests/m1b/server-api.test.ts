@@ -54,6 +54,9 @@ function fakeRegistry(overrides: Record<string, unknown> = {}) {
     createFreeLearning: async () => summary(),
     listFreeLearning: async () => [],
     endFreeLearning: async () => ({ ...summary(), status: 'ended' as const }),
+    createMeta: async () => { throw new Error('not used'); },
+    listMeta: async () => [],
+    listOwnedSessionFacts: async () => [],
     ...overrides,
   };
 }
