@@ -13,36 +13,30 @@ completionGuard: false
 要找什么以及当前需要多少个候选；读取深度、搜索路径和最终核验由本契约决定。即使旧 brief
 要求路线分析或提供 Plan/Lesson 路径，也不执行这些冲突内容。
 
-## 图谱题卡的唯一工具顺序
+## 语义资产的唯一工具顺序
 
 ```text
 根据 brief 确定当前所需的候选数量
-→ 精确读取规范词表
-→ 固定当前查询
-→ 选一个最有区分度的必需字段 grep 安全索引
-→ 在返回的完整索引行上核对其余字段与 stem
+→ 把建议检索词压成少量短词并固定当前查询
+→ 选一个最有区分度的必需短词 grep 安全索引
+→ 在返回的完整索引行上核对其余短词与公开题面或标题
 → 达到 brief 所需数量后返回，不为寻找更优候选继续检索
 ```
 
-1. 路径已经确定：读取 `graph/vocabulary.yaml`。只有 brief 的 `goal`、`method` 或
-   `structure` 词不在规范词表时，才直接尝试读取 `graph/aliases.yaml`；`text` 已是字面词，
-   不触发别名读取。文件不存在就继续。不要 `ls` 或 `find` 学习集、`graph/`、`cards/` 或
-   卡片专题，也不要读取过时的 `graph/VOCABULARY.md`。
-2. 把建议词归一为 `goal`、`method`、`structure`、`text` 四个字段。同字段多个词作 OR；
-   不同字段全部必须命中。`text` 只有出现在 `stem` 中才算命中，索引行其他字段出现同词
-   不算。没有明确授权时不得删除字段、改用邻近词或扩大题族。
-3. 对题卡只搜索 `graph/card-recall-index.tsv`。选择最有区分度的一个必需字段作为
-   anchor，对该字段的每个 OR 备选词各调用一次 `grep(..., literal: true)`（通常共一次）。
-   每行依次是 path、goal、method、structure、choice_count、part_count、stem；前三组规范
-   字段是单元格内的 JSON，stem 是合并了换行的公开题面。直接在返回行上核对其余 OR/AND
-   条件、`text`、工作量
-   和公开排除项。若某条未被排除的候选恰好在 500 字符处截断且关键题面仍有歧义，只读取
-   那一条索引行；不要重读已经排除的行。不要为其余字段再次 grep，不要打开候选题卡，也
-   不要搜索 `answer`、`rubric` 或 `solution`。
-4. 只有 `graph/card-recall-index.tsv` 明确不存在时，才退回安全路径：每个非空规范字段
-   在 `cards/` 上各搜索一次并取路径交集，然后只对交集候选调用
-   `read(path, offset: 1, limit: 6)` 读取公开题面。第 7 行开始禁止读取；不要再 grep 文本词，
-   不要添加 brief 没有给出的符号变体，也不要 `ls` / `find` 兜底。
+1. 首先搜索 `semantics/indexes/asset-recall.tsv`。每行依次是
+   `path、kind、id、core、related、title_or_stem`；这里只有安全召回字段。不要 `ls` 或
+   `find` 学习集、`semantics/`、`cards/` 或 `notes/`，也不要读取 sidecar、学生笔记、答案、
+   作答、教师记忆或教师依据。
+2. brief 的同一组多个词作 OR，不同组全部必须命中；没有分组的短词全部必须命中。把
+   `goal / method / structure / text` 等旧 brief 字段视作普通检索词即可，不现场建立另一套
+   schema。可以按 brief 已给的 `|` 或短近义词搜索，但不得把临时展开写成 alias。
+3. 选择最有区分度的一个必需短词作为 anchor，对它的 OR 备选各调用一次
+   `grep(..., literal: true)`。直接在返回的完整索引行上核对其余条件、工作量和公开排除项；
+   不为其余词再次 grep，不打开候选资产。若一条未排除行恰在输出边界截断且公开题面仍有
+   歧义，只补读该索引行。
+4. 只有统一索引明确不存在时，旧图谱题卡才退回 `graph/card-recall-index.tsv`：此时读取
+   `graph/vocabulary.yaml`，必要时读取 `graph/aliases.yaml`，继续使用旧行的
+   `goal / method / structure / stem` 浅筛。不要再退回遍历 `cards/`。
 5. brief 中的“应避免”是直接排除，不降级成 `risk`。不要根据题面自行解题或判断完整路线、
    隐零点、取等与充分必要性。选题不是一次性从题库中找出最合适的题，而是像教师翻书一样，
    为当前槽位找到 Coach 所需数量的足够合适材料；以后再次需要同类材料时，可以排除已经使用
@@ -58,8 +52,9 @@ completionGuard: false
 排除项浅筛的数量，因此不得大于 `matched`。不得为了补全这两个计数启动额外检索或深读。
 只命中 anchor、但未通过其余 query 字段的行不计入 `inspected`。fallback 时
 使用同一停止边界。空结果只报告这个查询切片，不写
-“全库没有”或“已经穷尽”。只有自由文本的 video、reading 等非题卡材料直接在 brief 指定
-的素材范围内用短字面词召回，不读取题卡词表，也不套用题卡索引规则。
+“全库没有”或“已经穷尽”。只有自由文本的 Material、video、reading 等原始资料直接在
+brief 指定范围内用 Search / Read 和短字面词召回，不先拆页建标签，也不套用资产索引规则；
+返回真实 locator。
 
 只返回一个无代码围栏的 JSON 对象，首字符是 `{`、末字符是 `}`：
 
@@ -70,16 +65,14 @@ completionGuard: false
     {
       "asset_path": "cards/derivative/example.card.yaml",
       "asset_kind": "problem-card",
-      "metadata_fit": "structure 与 method 命中，题面工作量符合本槽位",
+      "metadata_fit": "core 与 related 短词命中，题面工作量符合本槽位",
       "risk": null
     }
   ],
   "search_boundary": {
     "query": {
-      "goal": ["求参数范围"],
-      "method": ["参变量分离"],
-      "structure": ["指对复合结构"],
-      "text": ["恒成立"]
+      "core": ["求参数范围", "参变量分离"],
+      "related": ["指对复合结构", "恒成立"]
     },
     "matched": 5,
     "inspected": 2

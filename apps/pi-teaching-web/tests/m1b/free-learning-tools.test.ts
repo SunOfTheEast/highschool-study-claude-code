@@ -1,5 +1,12 @@
 import { afterEach, expect, test } from 'bun:test';
-import { cpSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  cpSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { SessionEntry } from '@earendil-works/pi-coding-agent';
@@ -159,6 +166,8 @@ test('saves after explicit approval, resolves selected aliases, and replays one 
   expect(readLearningNote(root, 'note-001').sources).toEqual([
     { kind: 'problem-card', id: 'problem-001', revision: 2 },
   ]);
+  expect(readFileSync(join(root, 'semantics/indexes/asset-recall.tsv'), 'utf8'))
+    .toContain('notes/note-001.note.yaml\tnote\tnote-001');
 });
 
 test('content-only tool update keeps a legacy Note without a semantic sidecar', async () => {

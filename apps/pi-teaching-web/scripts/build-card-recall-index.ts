@@ -52,7 +52,14 @@ function countArray(value: unknown): number {
   return Array.isArray(value) ? value.length : 0;
 }
 
-function cardToRecallRow(card: unknown, path: string): CardRecallIndexRow {
+export type LegacyCardSemanticProjection = {
+  id: string;
+  stem: string;
+  core: string[];
+  related: string[];
+};
+
+export function cardToRecallRow(card: unknown, path: string): CardRecallIndexRow {
   const root = asRecord(card, 'card', path);
   const graph = asRecord(root.graph, 'graph', path);
   const goal = asRecord(graph.goal, 'graph.goal', path);
@@ -88,6 +95,40 @@ function cardToRecallRow(card: unknown, path: string): CardRecallIndexRow {
     choice_count: countArray(originalProblem.choices) || countArray(root.choices),
     part_count: partLevel.length || explicitPartCount || 1,
     stem: requiredString(root.stem, 'stem', path),
+  };
+}
+
+export function legacyCardSemanticProjection(
+  card: unknown,
+  path: string,
+): LegacyCardSemanticProjection {
+  const root = asRecord(card, 'card', path);
+  const graph = asRecord(root.graph, 'graph', path);
+  const goal = asRecord(graph.goal, 'graph.goal', path);
+  const method = asRecord(graph.method, 'graph.method', path);
+  const structure = asRecord(graph.structure, 'graph.structure', path);
+  const core = unique([
+    requiredString(goal.primary, 'graph.goal.primary', path),
+    requiredString(method.primary, 'graph.method.primary', path),
+    requiredString(structure.primary, 'graph.structure.primary', path),
+  ]);
+  const coreSet = new Set(core);
+  const related = unique([
+    ...optionalRecordArray(goal.part_level, 'graph.goal.part_level', path)
+      .map((part, index) => requiredString(
+        part.goal,
+        `graph.goal.part_level[${index}].goal`,
+        path,
+      )),
+    ...optionalStringArray(method.secondary, 'graph.method.secondary', path),
+    ...optionalStringArray(method.subroute, 'graph.method.subroute', path),
+    ...optionalStringArray(structure.secondary, 'graph.structure.secondary', path),
+  ]).filter((tag) => !coreSet.has(tag));
+  return {
+    id: requiredString(root.content_item_id, 'content_item_id', path),
+    stem: requiredString(root.stem, 'stem', path),
+    core,
+    related,
   };
 }
 

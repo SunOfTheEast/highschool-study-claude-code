@@ -7,6 +7,7 @@ import {
   type LearningNoteBlock,
 } from '../study/learning-assets';
 import type { SemanticTagDraft } from '../shared/contracts';
+import { refreshSemanticRecallIndex } from '../study/semantic-index';
 import type { FreeLearningSessionScope } from './session-scope';
 import { commitDocumentCandidates } from './multi-document-transaction';
 import { createFreeLearningMemoryTool } from './memory-tools';
@@ -139,6 +140,15 @@ function toolResult(value: Record<string, unknown>) {
   };
 }
 
+function refreshWarning(root: string): string | undefined {
+  try {
+    refreshSemanticRecallIndex(root);
+    return undefined;
+  } catch (error) {
+    return `RECALL_INDEX_REFRESH_FAILED: ${error instanceof Error ? error.message : String(error)}`;
+  }
+}
+
 export function createFreeLearningTools(
   root: string,
   scope: FreeLearningSessionScope,
@@ -176,11 +186,13 @@ export function createFreeLearningTools(
           ...('tags' in input ? { tags: input.tags as SemanticTagDraft } : {}),
         }, new Date().toISOString());
         const committed = commitDocumentCandidates(root, planned.candidates);
+        const warning = refreshWarning(root);
         const result = toolResult({
           ok: true,
           asset: planned.receipt,
           commitId: committed.commitId,
           changedPaths: committed.changedPaths,
+          ...(warning ? { warning } : {}),
         });
         successful.set(toolCallId, result);
         return result;
@@ -215,11 +227,13 @@ export function createFreeLearningTools(
           ...('tags' in input ? { tags: input.tags as SemanticTagDraft } : {}),
         }, new Date().toISOString());
         const committed = commitDocumentCandidates(root, planned.candidates);
+        const warning = refreshWarning(root);
         const result = toolResult({
           ok: true,
           asset: planned.receipt,
           commitId: committed.commitId,
           changedPaths: committed.changedPaths,
+          ...(warning ? { warning } : {}),
         });
         successful.set(toolCallId, result);
         return result;
