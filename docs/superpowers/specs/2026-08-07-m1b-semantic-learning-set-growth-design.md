@@ -86,7 +86,6 @@ Session 类型。学生以后想建立长期课程时，由 M1c 的 Meta Session
 
 - Light Lesson Markdown 文档；
 - Classroom Log；
-- Consolidated Trace；
 - 强制 Session Summary。
 
 Runtime 只负责绑定和恢复原生 Session 的身份、当前选择的资产上下文与生命周期。学生界面
@@ -338,8 +337,8 @@ canonical 资产保持成功，并能从源文件重建投影；Tutor 不扫描�
 
 1. 只有 `LEARNING_GUIDE.md` 与空 `memory/INDEX.md` 的学习集可以启动，无需 ROADMAP.md。
 2. 多个自由学习 Session 可以创建、恢复、显式结束，且不出现在课程树。
-3. 自由学习只使用原生 Pi Session，不生成 Light Lesson 文档、Classroom Log、Trace 或强制
-   Summary。
+3. 自由学习只使用原生 Pi Session，不生成 Light Lesson 文档、Classroom Log、额外教学
+   中间文档或强制 Summary。
 4. 无上下文与选中一个或多个资产两种启动方式都能恢复正确上下文。
 5. `save_note` 与 `save_problem_card` 在学生确认前拒绝写入；成功后返回稳定资产入口。
 6. Note 正文块、回忆块和混合形态均可读取；不存在独立 Flashcard 对象。

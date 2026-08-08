@@ -4,7 +4,7 @@
 
 日期：2026-08-08
 
-适用范围：当前正式 Lesson，以及 M1b 将引入的 Light Lesson
+适用范围：当前正式 Lesson 的课末恢复，以及正式 Lesson / 自由学习都可复用的记忆提交恢复核心
 
 关联设计：
 
@@ -34,17 +34,18 @@
 → 进程退出、网络断开或浏览器错过后续事件
 → tool result、公开总结或关闭回执没有被可靠看见
 → 重开后模型再次调用固化工具
-→ 同一课堂事实可能生成第二条 Trace
+→ 同一课堂变化可能被第二次写入对象历史
 ```
 
-这不是“旧 Log 能否修改”的问题。旧 Log 和旧 Trace 仍然只追加、永不回写。问题是 Runtime
-如何知道一次已经成功的提交只是没有被看见，而不是一份尚未发生的新证据。
+这不是“旧 Log 能否修改”的问题。旧 Log 和对象 `Learning History` 的旧条目仍然只追加、
+永不回写。问题是 Runtime 如何知道一次已经成功的提交只是没有被看见，而不是一份尚未
+发生的新证据。
 
 ## 二、当前系统已经保护了什么
 
 现有实现不是整体不可靠；它已经覆盖了大部分失败位置：
 
-| 失败位置 | 当前结果 | 是否会重复 Trace |
+| 失败位置 | 当前结果 | 是否会重复记忆变化 |
 | --- | --- | --- |
 | 候选生成或校验失败 | 正式文件未写入 | 否 |
 | 多文件替换中途崩溃，manifest 仍为 `prepared` | 下次打开时按精确 manifest 回滚 | 否 |
@@ -64,8 +65,8 @@
 1. 同一 Teaching Session、同一学生证据轮次至多成功固化一次。
 2. 进程重启后，原工具结果即使丢失也能从成功凭据恢复；模型不需要重新猜测这次提交是否
    发生过。
-3. 学生后来真的纠正教师时，允许形成新的 Log、新的 Trace 和新的对象判断修订。
-4. 正式 Lesson 与 Light Lesson 使用同一个恢复核心，不各自发明状态机。
+3. 学生后来真的纠正教师时，允许形成新的 Log、新的对象历史条目和新的当前判断修订。
+4. 正式 Lesson 与自由学习的记忆提交复用同一个恢复核心，但各自保留不同生命周期。
 5. 记忆提交、自然语言总结和 Session 关闭仍是三个独立步骤。
 6. 关闭请求可以安全重试；学生不因为回执丢失而看到“结束失败”。
 7. WebSocket 重连后补读 canonical 状态与 Pi 历史，不重新运行模型。
@@ -120,10 +121,9 @@ active → consolidating → summarized → closed
 
 canonical 教学事实仍然只有这些位置：
 
-- Classroom Log 或 Light Lesson Log 保存真实发生；
-- 来源 Teaching Session 保存完整 Trace；
-- `memory/` 保存对象当前判断、流变概述、能力假设与明确偏好；
-- Pi Session 保存真实对话与工具调用历史。
+- Classroom Log 保存正式课堂中真实发生的事实；
+- 原生 Pi Session 保存自由学习中真实发生的对话；
+- `memory/` 保存对象当前判断、流变概述、直接引用来源的学习历史、能力假设与明确偏好；
 
 Receipt 只保存 Runtime 已经完成哪一次机械提交的最小凭据：稳定 ID、摘要、版本和改动路径。
 它不保存学生原话、教师判断正文或资产内容，不能参与召回，也不能成为教师证据。
@@ -133,7 +133,8 @@ Receipt 只保存 Runtime 已经完成哪一次机械提交的最小凭据：稳
 Pi Session 的每个条目已经拥有稳定 `id`、`parentId` 和时间。Runtime 不使用“当前最新消息”
 进行猜测，而是：
 
-1. 找到包含当前 `lesson_memory_commit` 工具调用的 assistant entry；
+1. 找到包含当前记忆提交工具调用（`lesson_memory_commit` 或
+   `free_learning_memory_commit`）的 assistant entry；
 2. 沿当前选中分支向前找到最近的 user entry；
 3. 把该 entry 的稳定 ID 记为 `sourceTurnId`。
 
@@ -151,14 +152,13 @@ Pi Session 的每个条目已经拥有稳定 `id`、`parentId` 和时间。Runti
 
 Runtime 为 Teaching Session 生成确定性的 `evidenceRevision`：
 
-- 正式 Lesson：Lesson 身份、按顺序排列的 Block 身份与 Classroom Log 条目；
-- Light Lesson：Light Lesson 身份、按顺序排列的 Log 条目，以及本 Session 实际绑定的不可改写
-  作答事件或来源 revision；
-- 课末工具要追加的 `closingFact` 先进入内存候选，再参与提交后版本计算。
+- 正式 Lesson：Lesson 身份、按顺序排列的 Block 身份与 Classroom Log 条目；课末工具要追加
+  的 `closingFact` 先进入内存候选，再参与提交后版本计算；
+- 自由学习：原生 Pi Session 身份、当前分支上截至本次提交的真实 entry，以及本 Session
+  实际绑定的不可改写作答事件或资产 revision。
 
 明确排除：
 
-- Trace；
 - 对象记忆、能力假设和偏好文件；
 - Session Summary；
 - 节点状态；
@@ -176,9 +176,9 @@ Runtime 为 Teaching Session 生成确定性的 `evidenceRevision`：
 ```text
 新学生轮次
 → 追加纠正 Log
-→ 追加纠正 Trace
+→ 追加对象 `Learning History` 的纠正条目
 → 修订对象当前判断与流变概述
-→ 旧 Log、旧 Trace、旧时间线入口不变
+→ 旧 Log 和旧历史条目不变
 ```
 
 所以这里没有“每个 Session 永远只能提交一次”的限制。真正的边界是：**同一学生证据轮次
@@ -226,7 +226,6 @@ Receipt 与本次 canonical 记忆候选放进**同一个现有多文件事务**
   "commitId": "...",
   "createdAt": "2026-08-08T00:00:00.000Z",
   "result": {
-    "traceIds": {},
     "objectIds": {},
     "preferenceIds": {},
     "bucketIds": {},
@@ -243,7 +242,7 @@ Receipt 与本次 canonical 记忆候选放进**同一个现有多文件事务**
 
 ## 七、固化算法
 
-一次正式 Lesson 或 Light Lesson 的记忆固化按以下顺序执行：
+一次正式 Lesson 或自由学习的记忆固化按以下顺序执行：
 
 1. 恢复学习集内遗留的 `prepared` 多文件事务。
 2. 从绑定的 Pi Session 当前分支解析当前 assistant tool call、`sourceTurnId` 与 Session 身份。
@@ -256,10 +255,10 @@ Receipt 与本次 canonical 记忆候选放进**同一个现有多文件事务**
    `evidenceRevisionAfter`，且 `requestDigest` 也相同，说明只是跨学生轮次的精确重放；返回
    原结果，但不占用当前 `sourceTurnId`。学生若在本轮给出了真实纠正，Tutor 仍可用变化后的
    提交内容再次调用。
-6. 按现有语义提交单生成 Log、Trace、对象、偏好、bucket 和 INDEX 候选；若有
+6. 按现有语义提交单生成 Log、对象、偏好、bucket 和 INDEX 候选；若有
    `closingFact`，只在内存候选中追加一次。
 7. 从候选中的来源 Log 计算 `evidenceRevisionAfter`。
-8. 分配稳定 `commitId`、Trace ID、对象 ID 等机械身份，生成 receipt 候选。
+8. 分配稳定 `commitId`、对象 ID 等机械身份，生成 receipt 候选。
 9. 用现有多文件事务一次提交 canonical 候选与 receipt。
 10. 返回紧凑结果；正常首次提交为 `replayed: false`。
 
@@ -271,7 +270,6 @@ Receipt 与本次 canonical 记忆候选放进**同一个现有多文件事务**
   commitId: string,
   replayed: boolean,
   recovered?: boolean,
-  traceIds: Record<string, string>,
   objectIds: Record<string, string>,
   preferenceIds: Record<string, string>,
   bucketIds: Record<string, string>,
@@ -296,7 +294,7 @@ assistant tool call 已在 Pi Session
 Teaching Session 每次打开时执行一次机械对账：
 
 1. 读取当前 Pi 分支；
-2. 找到没有真实 tool result 的 `lesson_memory_commit` 调用；
+2. 找到没有真实 tool result 的记忆提交工具调用；
 3. 沿该调用定位 `sourceTurnId`；
 4. 优先匹配该 `sourceTurnId` 的 receipt；若本次调用原本是一次跨轮精确重放，也可以用调用
    参数摘要、当前证据版本和最近 receipt 按 §七第 5 步重新证明它指向旧成功；
@@ -312,13 +310,13 @@ tool result 后再次退出，下次打开会看到结果已经存在，不再�
 
 恢复只补机械结果，不自动生成教师总结，也不自动关闭课堂。这样不会在学生不知情时启动
 一次新的模型推理。若总结尚未产生，Lesson 仍是 active，学生可以继续原 Session；模型会从
-已恢复的成功 tool result 之后完成自然收尾，而不会重新生成 Trace。
+已恢复的成功 tool result 之后完成自然收尾，而不会重新提交同一对象变化。
 
 ## 九、关闭接口的幂等语义
 
 记忆固化成功不等于课堂关闭。学生始终可以结束课堂，关闭也不以 receipt 存在为硬门。
 
-正式 Lesson 的 `close` 采用以下语义；Light Lesson 使用同一规则和自己的稳定返回路由：
+正式 Lesson 的 `close` 采用以下语义：
 
 | 当前状态 | 行为 |
 | --- | --- |
@@ -337,7 +335,7 @@ Runtime 不会让关闭写入与记忆多文件事务同时改同一 Lesson 文�
 
 当前 WebSocket `onopen` 只把连接标为 open。实施后，**仅在发生过断线的重新连接**时：
 
-1. 重新读取当前路由对应的 course / Light Lesson snapshot；
+1. 重新读取当前路由对应的 course / free-learning snapshot；
 2. 重新读取当前 Pi Session history；
 3. 用 snapshot 替换客户端暂存对话，而不是把旧事件再次 append；
 4. 若 canonical Session 已关闭，把页面协调到确定的返回路由；
@@ -350,28 +348,27 @@ Runtime 不会让关闭写入与记忆多文件事务同时改同一 Lesson 文�
 提示，例如“刚才的课堂记录已经保存，可以继续完成收尾”。这只是从 receipt 与 Pi 分支派生
 的 UI 状态，不写入 Lesson schema，也不冒充教师总结。
 
-## 十一、正式 Lesson 与 Light Lesson 的统一接口
+## 十一、正式 Lesson 与自由学习的统一提交接口
 
 持久幂等核心只依赖一个窄适配器：
 
 ```ts
-type TeachingSessionEvidenceAdapter = {
-  kind: 'lesson' | 'light-lesson';
+type TeachingMemoryCommitEvidenceAdapter = {
+  kind: 'lesson' | 'free-learning';
   teachingSessionId: string;
   piSessionId: string;
-  sourceDocumentPath: string;
   projectEvidenceRevision(): EvidenceProjection;
   projectCandidateEvidenceRevision(candidate: string): EvidenceProjection;
-  successRoute(): string;
 };
 ```
 
-正式 Lesson 适配器知道 Block 与 Classroom Log 的结构；Light Lesson 适配器知道自己的 Log、
-绑定资产和作答事件。幂等 receipt、工具结果恢复和关闭算法不理解“同构、沉淀平衡、掌握”
-等教学语义，也不要求两类 Session 拥有相同 Markdown schema。
+正式 Lesson 适配器知道 Block 与 Classroom Log 的结构；自由学习适配器知道当前 Pi 分支、
+绑定资产和作答事件。幂等 receipt 与工具结果恢复不理解“同构、沉淀平衡、掌握”等教学
+语义，也不要求两类 Session 拥有相同证据结构。
 
-当前实现先落正式 Lesson 适配器。M1b 引入 Light Lesson 时实现第二个适配器并复用同一套
-故障测试，不复制一份 `light_lesson_memory_commit` 的重试逻辑。
+两类记忆提交可以复用同一套故障恢复，不复制一份重试逻辑；但关闭算法不进入该适配器。
+正式 Lesson 仍按节点状态返回父 Plan，自由学习由学生显式结束并返回自由学习入口，两者
+不能为了代码复用而伪装成同一种 Session。
 
 ## 十二、失败复演
 
@@ -380,13 +377,13 @@ type TeachingSessionEvidenceAdapter = {
 | 候选校验失败 | 无 receipt、无 canonical 改动；同轮可以修正后重试 |
 | 替换第 N 个 canonical 文件时退出 | `prepared` manifest 回滚全部候选与 receipt；随后只成功一次 |
 | canonical 文件与 receipt 已替换，但 manifest 未标 `committed` | 一并回滚；不会留下“假成功” |
-| manifest 已 `committed`，tool result 写入前退出 | receipt 保留；打开 Session 时补回同一成功结果；Trace 只有一条 |
+| manifest 已 `committed`，tool result 写入前退出 | receipt 保留；打开 Session 时补回同一成功结果；对象历史只追加一次 |
 | tool result 已写入，公开总结前退出 | 历史保留成功结果；继续后只做自然总结 |
 | 公开总结已写入，关闭请求前断线 | 重连补读总结；Session 仍 active，学生可正常关闭 |
 | `active → closed` 已完成，HTTP 回执丢失 | 第二次 close 返回同一路由成功 |
 | WebSocket 断开但服务端继续运行 | 服务端照常完成；重连后 snapshot 补齐历史与状态 |
-| 学生在公开总结后纠正 | 新 user entry、新 receipt、新纠正 Trace；旧证据逐字不变 |
-| 同一 user turn 中模型换一个 `toolCallId` 重写提交 | Runtime 返回原成功或精确冲突，不生成第二条 Trace |
+| 学生在公开总结后纠正 | 新 user entry、新 receipt、新纠正历史条目；旧证据逐字不变 |
+| 同一 user turn 中模型换一个 `toolCallId` 重写提交 | Runtime 返回原成功或精确冲突，不生成第二份对象变化 |
 | 下一 user turn 精确重放同一请求，且来源证据未变化 | 返回上一回执且不占用新轮次；之后仍可提交真实纠正 |
 
 ## 十三、模型负担与学生体验
@@ -400,7 +397,7 @@ type TeachingSessionEvidenceAdapter = {
 - 节点当前状态；
 - WebSocket 是否属于重连。
 
-模型仍然只做原来的事情：听学生、判断什么值得记录、形成有边界的 Trace 和对象更新、自然
+模型仍然只做原来的事情：听学生、判断什么值得记录、形成有边界的对象历史与当前判断、自然
 总结。工具参数不变，Skill 不增加一串异常分支，学生也不会看到“正在同步 revision”之类的
 系统措辞。
 
@@ -420,7 +417,7 @@ type TeachingSessionEvidenceAdapter = {
 - 将 receipt 与 canonical 记忆候选放入同一事务；
 - Session 打开时补回有 receipt 支持的孤立 tool result；
 - 将 Lesson close 改为可重试成功，并在状态转换前等待 turn idle；
-- 为未来 Light Lesson 暴露共同的窄恢复核心。
+- 为自由学习记忆提交暴露共同的窄恢复核心，但不共享关闭状态机。
 
 ### Frontend
 
@@ -431,9 +428,9 @@ type TeachingSessionEvidenceAdapter = {
 
 ### Skill 与 Agent 提示
 
-正常课末亮线顺序不变。最多补一条异常回执解释：`replayed: true` 代表之前的固化已经成功，
-继续自然总结，不得再创建一份“更完整”的 Trace。不得把 receipt、revision 或关闭重试流程
-写成长篇模型工作流。
+正式 Lesson 的正常课末亮线顺序不变；自由学习仍可在对话中途写记忆，不增加课末结算。
+最多补一条异常回执解释：`replayed: true` 代表之前的固化已经成功，继续当前教学动作，不得
+再创建一份“更完整”的记忆更新。不得把 receipt、revision 或关闭重试流程写成长篇模型工作流。
 
 ## 十五、验收用例
 
@@ -447,19 +444,20 @@ type TeachingSessionEvidenceAdapter = {
 6. 逐个替换位置注入崩溃，验证 receipt 与 canonical 文件一起回滚；
 7. 在 manifest committed 后、tool result 持久化前退出，重开后只补一个成功 result；
 8. 恢复 result 时再次退出，第三次打开仍只有一个 tool result；
-9. 学生新纠正轮次成功生成第二个 receipt 和第二条 Trace，旧内容逐字不变；
+9. 学生新纠正轮次成功生成第二个 receipt 和第二条纠正历史，旧内容逐字不变；
 10. `active` close 成功；`closed` close 再次成功；`prepared` close 拒绝；
 11. 两个并发 close 最终都得到同一成功路由，canonical 只转换一次；
 12. Agent turn 中调用 close，验证先等待 idle，再转换状态；
 13. WebSocket 重连后 history snapshot 与磁盘 Pi 分支一致，不产生新消息；
 14. 服务端已关闭、关闭响应丢失时，前端重连后进入稳定父路由。
 
-### 15.2 Light Lesson 契约测试
+### 15.2 自由学习提交契约测试
 
-Light Lesson 实施时复用第 1—14 项，只替换证据适配器与成功返回路由，并额外验证：
+自由学习复用第 1—9 项记忆提交与恢复测试，不复用第 10—14 项正式 Lesson 关闭契约，并
+额外验证：
 
 - 绑定题卡、Note 或作答事件只以稳定身份与 revision 进入证据投影；
-- 未自然收口时保持可恢复，不因浏览器离开自动关闭；
+- 记忆可以在对话中途写入，浏览器离开不自动结束 Session；
 - 不存在 Plan、Block 或 Uses 时，恢复核心也不会去课程树猜父级。
 
 ### 15.3 真实行为验收
@@ -477,10 +475,10 @@ Light Lesson 实施时复用第 1—14 项，只替换证据适配器与成功�
 - 采用“记忆固化、自然总结、关闭各自持久幂等”，不采用大事务或课末状态机；
 - Receipt 是 Runtime 恢复材料，不是教师记忆与召回来源；
 - 主幂等边界是 Teaching Session + Pi `sourceTurnId`，`toolCallId` 是精确重放辅助键；
-- 同时记录提交前后 evidence revision，避免把派生 Trace 混入证据版本；
+- 同时记录提交前后 evidence revision，避免把派生记忆混入证据版本；
 - `closingFact` 可以继续与记忆候选同事务追加，不要求模型先做一次额外 Log 工具调用；
-- 学生纠正通过新的 user entry 形成新提交，旧 Log 与旧 Trace 永不修改；
+- 学生纠正通过新的 user entry 形成新提交，旧 Log 与旧 `Learning History` 条目永不修改；
 - Session 打开时由 receipt 补回缺失 tool result，不自动运行模型；
 - 已关闭节点的 close 重试返回成功；
 - WebSocket 重连只补读，不产生教学事件；
-- 正式 Lesson 先实施，Light Lesson 通过共同适配器继承同一语义与验收。
+- 正式 Lesson 与自由学习共享记忆提交的机械恢复核心，但生命周期、结束动作和返回路由分开。

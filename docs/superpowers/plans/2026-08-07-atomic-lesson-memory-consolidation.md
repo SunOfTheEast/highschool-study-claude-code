@@ -1,5 +1,10 @@
 # Atomic Lesson Memory Consolidation Implementation Plan
 
+> **Historical implementation plan; do not execute it against the current tree.** The standalone
+> Lesson Trace fields described below were removed. The current contract is documented in
+> `docs/superpowers/specs/2026-08-08-remove-consolidated-learning-traces-design.md` and
+> `apps/pi-teaching-web/resources/contracts/m1-memory-contract.md`.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Replace Tutor's repeated native Markdown edits with one session-bound semantic memory commit, while keeping all teaching judgments in the model and giving deferred object routing a narrow Plan-owned resolution path.

@@ -1,5 +1,10 @@
 # Lesson 课末记忆原子固化设计
 
+> **历史设计，语义契约已被取代。** 本文保留原子多文件事务形成过程，不能再作为现行
+> 记忆 schema、工具字段或召回链路的依据。当前契约见
+> [`2026-08-08-remove-consolidated-learning-traces-design.md`](./2026-08-08-remove-consolidated-learning-traces-design.md)
+> 与 `apps/pi-teaching-web/resources/contracts/m1-memory-contract.md`。
+
 状态：已确认并实施
 
 日期：2026-08-07

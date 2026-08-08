@@ -1,5 +1,9 @@
 # StudyForge M1 教师笔记记忆系统实施计划
 
+> **历史实施计划，已完成且部分语义已被取代。** 不要从本文恢复独立 Lesson Trace。
+> 现行记忆链路见 `docs/superpowers/specs/2026-08-06-m1-teacher-notebook-memory-design.md`
+> 和 `apps/pi-teaching-web/resources/contracts/m1-memory-contract.md`。
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task with review checkpoints.
 
 **Goal:** 在 `apps/pi-teaching-web` 中落地学习集内的 Markdown 教师记忆，使 Tutor、Coach、Roadmap 能在各自生命周期中固化、召回和校准记忆，同时保持 M0 的层级证据边界与可回归性。
