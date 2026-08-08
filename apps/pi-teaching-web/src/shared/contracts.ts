@@ -77,7 +77,6 @@ export type LessonDocument = {
   title: string;
   lessonGoal: string;
   blocks: ActivityBlock[];
-  consolidatedLearningTraces: string | null;
   raw: string;
 };
 
