@@ -9,7 +9,40 @@ export type BlockStatus = typeof BLOCK_STATUSES[number];
 export type ActivityKind = typeof ACTIVITY_KINDS[number];
 export type NodeKind = 'roadmap' | 'plan' | 'lesson';
 export type NodeStatus = 'active' | PlanStatus | LessonStatus;
-export type SessionKey = `${NodeKind}:${string}`;
+export type NodeSessionKey = `${NodeKind}:${string}`;
+export type FreeLearningSessionKey = `free:${string}`;
+export type SessionKey = NodeSessionKey | FreeLearningSessionKey;
+
+export type LearningSetGuide = {
+  title: string;
+  body: string;
+  raw: string;
+};
+
+export type FreeLearningSessionSummary = {
+  id: string;
+  sessionKey: FreeLearningSessionKey;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  status: 'active' | 'ended';
+};
+
+export type LearningSetHomeSnapshot = {
+  guide: LearningSetGuide;
+  hasCourse: boolean;
+  course: null | {
+    title: string;
+    currentPosition: string;
+    route: '/course';
+  };
+  assets: {
+    notes: number;
+    problemCards: number;
+    materials: number;
+  };
+  recentFreeLearning: FreeLearningSessionSummary[];
+};
 
 export type NodeReference = {
   id: string;
@@ -109,7 +142,7 @@ export type CourseTreeNode = {
 };
 
 export type CourseSnapshot = {
-  guide: { title: string; body: string; raw: string };
+  guide: LearningSetGuide;
   roadmap: RoadmapDocument;
   tree: CourseTreeNode;
   selected: RoadmapDocument | PlanDocument | LessonDocument | null;

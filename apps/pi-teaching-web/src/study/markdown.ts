@@ -438,7 +438,7 @@ export function readLesson(root: string, requestedPath: string): LessonDocument 
   return parseLesson(readSource(root, requestedPath));
 }
 
-function readGuide(root: string): CourseSnapshot['guide'] {
+export function readLearningSetGuide(root: string): CourseSnapshot['guide'] {
   const source = readSource(root, 'LEARNING_GUIDE.md');
   const title = typeof source.frontmatter.title === 'string'
     ? source.frontmatter.title.trim()
@@ -516,5 +516,5 @@ export function readCourseTree(root: string): CourseSnapshot {
     dependsOn: [],
     children: planNodes,
   };
-  return { guide: readGuide(root), roadmap, tree, selected: null };
+  return { guide: readLearningSetGuide(root), roadmap, tree, selected: null };
 }

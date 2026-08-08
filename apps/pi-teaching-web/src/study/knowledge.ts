@@ -44,6 +44,7 @@ function yamlFile(root: string, path: string): Record<string, unknown> {
 
 function readMethods(root: string): KnowledgeMethodNode[] {
   const path = 'graph/method_tree.yaml';
+  if (!existsSync(join(root, path))) return [];
   const value = yamlFile(root, path);
   if (value.schema !== 'studyforge.method_tree.v1' || !Array.isArray(value.nodes)) {
     throw new StudyDocumentError(path, 'expected studyforge.method_tree.v1 nodes');
