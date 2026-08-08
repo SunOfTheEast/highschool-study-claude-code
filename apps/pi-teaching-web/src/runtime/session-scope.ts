@@ -44,6 +44,7 @@ export const PLAN_MODEL_TOOLS = [
   ...M0_MODEL_TOOLS,
   'subagent',
   'artifact_export',
+  'save_prepared_problem_card',
 ] as const;
 
 export const LESSON_MODEL_TOOLS = [

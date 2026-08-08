@@ -75,6 +75,7 @@ test('assembles static teaching resources and node-scoped model tools', () => {
 
   expect(resources.tools).toEqual([
     'read', 'grep', 'find', 'ls', 'edit', 'write', 'subagent', 'artifact_export',
+    'save_prepared_problem_card',
     'memory_route_resolve',
   ]);
   expect(resources.agentsFiles).toContainEqual(expect.objectContaining({
@@ -311,6 +312,7 @@ test('injects one canonical document contract into every node session', () => {
     expect(resources.tools).toEqual(scope.nodeKind === 'plan'
       ? [
         'read', 'grep', 'find', 'ls', 'edit', 'write', 'subagent', 'artifact_export',
+        'save_prepared_problem_card',
         'memory_route_resolve',
       ]
       : scope.nodeKind === 'lesson'
@@ -374,8 +376,9 @@ test('registers only node-bound custom tools for Plan and Lesson scopes', () => 
     'save_problem_card',
     'lesson_memory_commit',
   ]);
-  expect(customToolsForNode(root, planScope).map((tool) => tool.name)).toEqual([
+  expect(customToolsForNode(root, planScope, manager).map((tool) => tool.name)).toEqual([
     'artifact_export',
+    'save_prepared_problem_card',
     'memory_route_resolve',
   ]);
   expect(customToolsForNode(root, roadmapScope)).toEqual([]);

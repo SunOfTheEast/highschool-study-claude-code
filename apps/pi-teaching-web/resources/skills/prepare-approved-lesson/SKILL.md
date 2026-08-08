@@ -36,7 +36,11 @@ description: Use when a Plan Session has a student-approved Lesson design record
 9. 完整回读 Lesson，核验合法后才链接进当前 Plan 的 Lesson Tree，更新下一步并
    再次回读父子文件；
 10. 只向学生报告已批准的公开目的、活动形态、工作量和可以从界面开始。
-11. 以上写入、链接、重读和公开报告全部成功后，才读取
+11. 若本次备课采用教师自主命题，先完成、链接并交付可开始的 Lesson；随后展示拟保存
+    题卡的完整题干、答案和学生可见笔记，并单独询问是否保存。课程方案的批准不构成题卡
+    保存批准。只有学生针对该题卡明确确认后才调用 `save_prepared_problem_card`；拒绝、
+    未确认或保存失败都不创建题卡，也不改变 Lesson 已可开始的事实。
+12. 以上写入、链接、重读和公开报告全部成功后，才读取
     `references/printable-handout.md`，简短询问学生是否需要讲义；只有明确同意才执行其中的
     出版动作，任何结果都不改变 Lesson 已可开始的事实。
 

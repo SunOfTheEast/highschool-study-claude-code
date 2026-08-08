@@ -41,6 +41,7 @@ test('exposes only the M0 node lifecycle and role-scoped model tools', () => {
     ...M0_MODEL_TOOLS,
     'subagent',
     'artifact_export',
+    'save_prepared_problem_card',
   ]);
   expect(modelToolsForNode('lesson', true)).toEqual([
     'read',
@@ -57,6 +58,7 @@ test('exposes only the M0 node lifecycle and role-scoped model tools', () => {
     ...M0_MODEL_TOOLS,
     'subagent',
     'artifact_export',
+    'save_prepared_problem_card',
     'memory_route_resolve',
   ]);
 

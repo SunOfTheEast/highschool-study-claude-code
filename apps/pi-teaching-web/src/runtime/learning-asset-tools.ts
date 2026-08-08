@@ -115,6 +115,11 @@ function proposesSave(text: string, kind: 'note' | 'problem-card'): boolean {
   return /(保存|存下|存一?下|记下|做成|整理成|留作)/i.test(text) && saveWords(kind).test(text);
 }
 
+function refusesSave(text: string, kind: 'note' | 'problem-card'): boolean {
+  return /(不保存|不要保存|先别保存|暂不保存|不用保存|别存|不做成|不要做成)/i.test(text)
+    && saveWords(kind).test(text);
+}
+
 export function latestStudentApprovedAssetSave(
   entries: readonly SessionEntry[],
   kind: 'note' | 'problem-card',
@@ -123,6 +128,7 @@ export function latestStudentApprovedAssetSave(
   const latestUserIndex = messages.findLastIndex((message) => message.role === 'user');
   if (latestUserIndex < 0) return false;
   const latest = messages[latestUserIndex]!.text.trim();
+  if (refusesSave(latest, kind)) return false;
   if (proposesSave(latest, kind)) return true;
 
   const acknowledgement = latest.replace(/[，。！？!?、,.\s]/g, '').toLowerCase();

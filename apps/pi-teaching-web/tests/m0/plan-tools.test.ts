@@ -74,9 +74,11 @@ test('formats and parses one canonical handout route with ordered Block IDs', ()
 });
 
 test('exposes one Plan-bound export schema without a model-supplied Plan ID', () => {
-  const tools = createPlanTools(copyFixture(), scope);
+  const session = { getSessionId: () => 'plan-session-001', getBranch: () => [] };
+  const tools = createPlanTools(copyFixture(), scope, session);
   expect(tools.map((tool) => tool.name)).toEqual([
     'artifact_export',
+    'save_prepared_problem_card',
     'memory_route_resolve',
   ]);
   const tool = tools.find((candidate) => candidate.name === 'artifact_export')!;
@@ -100,8 +102,8 @@ test('exposes one Plan-bound export schema without a model-supplied Plan ID', ()
 
   const m0 = copyFixture();
   rmSync(join(m0, 'memory/INDEX.md'));
-  expect(createPlanTools(m0, scope).map((candidate) => candidate.name))
-    .toEqual(['artifact_export']);
+  expect(createPlanTools(m0, scope, session).map((candidate) => candidate.name))
+    .toEqual(['artifact_export', 'save_prepared_problem_card']);
 });
 
 test('returns only a safe URL receipt for a linked prepared Lesson', async () => {

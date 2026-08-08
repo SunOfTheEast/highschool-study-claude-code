@@ -185,6 +185,19 @@ test('keeps the Lesson approval gate unchanged after Plan memory review', () => 
   expect(skill).toContain('确认之前不得调用 `prepare-approved-lesson`');
 });
 
+test('keeps custom-card approval separate from the prepared Lesson delivery', () => {
+  const skill = read('skills/prepare-approved-lesson/SKILL.md');
+  expectInOrder(skill, [
+    '交付可开始的 Lesson',
+    '展示拟保存',
+    '单独询问',
+    '明确确认',
+    'save_prepared_problem_card',
+  ]);
+  expect(skill).toContain('课程方案的批准不构成题卡');
+  expect(skill).toContain('不改变 Lesson 已可开始的事实');
+});
+
 test('makes Roadmap review one completed Plan through summaries and routed memory', () => {
   const skill = read('skills/roadmap-dialogue/SKILL.md');
   const nextPlan = read('skills/roadmap-dialogue/references/next-plan.md');

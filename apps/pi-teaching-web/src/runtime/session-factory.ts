@@ -56,7 +56,7 @@ export function customToolsForNode(
   manager?: Pick<SessionManager, 'getSessionId' | 'getBranch'>,
 ) {
   if (scope.nodeKind === 'lesson') return createLessonTools(root, scope.nodePath, manager);
-  if (scope.nodeKind === 'plan') return createPlanTools(root, scope);
+  if (scope.nodeKind === 'plan') return createPlanTools(root, scope, manager);
   return [];
 }
 
