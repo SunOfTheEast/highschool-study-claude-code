@@ -19,6 +19,7 @@ import {
 import { studySubagentGuard } from './study-subagent-guard';
 import { lessonMemoryGuard } from './lesson-memory-guard';
 import { memoryEnabled } from './memory-tools';
+import { renderSelectedAssetContext } from '../study/learning-assets';
 
 const resourceRoot = join(dirname(fileURLToPath(import.meta.url)), '../../resources');
 
@@ -124,6 +125,7 @@ export function loadStaticFreeLearningResources(
   personaId?: string,
 ): StaticSessionResources {
   const hasMemory = memoryEnabled(root);
+  const selectedAssets = renderSelectedAssetContext(root, scope.selectedAssets);
   return {
     agentsFiles: [
       ...(hasMemory ? [{
@@ -135,6 +137,10 @@ export function loadStaticFreeLearningResources(
         content: file(join(root, 'LEARNING_GUIDE.md')),
       },
       ...(hasMemory ? loadMemoryIndexResource(root) : []),
+      ...(selectedAssets ? [{
+        path: '/virtual/studyforge-m1b-selected-assets.md',
+        content: selectedAssets,
+      }] : []),
       {
         path: '/virtual/studyforge-m0-teaching-core.md',
         content: file(join(resourceRoot, 'teaching', 'math-teaching-core.md')),

@@ -60,6 +60,8 @@ export const FREE_LEARNING_MODEL_TOOLS = [
   'grep',
   'find',
   'ls',
+  'save_note',
+  'save_problem_card',
 ] as const;
 
 export function isFreeLearningScope(

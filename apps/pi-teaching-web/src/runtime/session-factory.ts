@@ -22,6 +22,7 @@ import {
 import { configureStudySubagentDirectory } from './subagent-path';
 import { memoryEnabled } from './memory-tools';
 import { recoverDocumentTransactions } from './multi-document-transaction';
+import { createFreeLearningTools } from './free-learning-tools';
 
 export interface StudySession {
   readonly sessionId: string;
@@ -55,8 +56,14 @@ export function customToolsForNode(root: string, scope: NodeSessionScope) {
   return [];
 }
 
-export function customToolsForSession(root: string, scope: StudySessionScope) {
-  return isFreeLearningScope(scope) ? [] : customToolsForNode(root, scope);
+export function customToolsForSession(
+  root: string,
+  scope: StudySessionScope,
+  manager?: Pick<SessionManager, 'getSessionId' | 'getBranch'>,
+) {
+  if (!isFreeLearningScope(scope)) return customToolsForNode(root, scope);
+  if (!manager) throw new Error('FREE_LEARNING_SESSION_MANAGER_REQUIRED');
+  return createFreeLearningTools(root, scope, manager);
 }
 
 type PiAgentSession = Awaited<ReturnType<typeof createAgentSession>>['session'];
@@ -87,7 +94,7 @@ export async function createPiSessionFactory(root: string): Promise<StudySession
       appendSessionOwner(manager, scope);
     }
     const resourceLoader = await createRoleResourceLoader(root, scope, eventBus);
-    const customTools = customToolsForSession(root, scope);
+    const customTools = customToolsForSession(root, scope, manager);
     const { session } = await createAgentSession({
       cwd: root,
       modelRuntime,

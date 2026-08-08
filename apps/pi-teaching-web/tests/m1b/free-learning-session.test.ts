@@ -111,7 +111,7 @@ test('restores one owned Pi session and makes explicit end idempotent', async ()
     sessionKind: 'free-learning',
     title: '自由学习',
     createdAt: '2026-08-08T09:00:00.000Z',
-    selectedAssets: [{ kind: 'problem-card', id: 'card-001' }],
+    selectedAssets: [],
   } as const;
   const persistedEntries: SessionEntry[] = [];
   const prompted: string[] = [];
@@ -160,14 +160,16 @@ test('loads only the free-learning root contract, memory index and selected asse
     sessionKind: 'free-learning',
     title: '自由学习',
     createdAt: '2026-08-08T09:00:00.000Z',
-    selectedAssets: [{ kind: 'problem-card', id: 'card-001' }],
+    selectedAssets: [],
   });
   const assembled = resources.agentsFiles.map((entry) => entry.content).join('\n');
 
   expect(resources.skillPaths.map((path) => basename(dirname(path)))).toEqual(['free-learning']);
-  expect(resources.tools).toEqual(['read', 'grep', 'find', 'ls']);
+  expect(resources.tools).toEqual([
+    'read', 'grep', 'find', 'ls', 'save_note', 'save_problem_card',
+  ]);
   expect(assembled).toContain('自由学习');
-  expect(assembled).toContain('problem-card:card-001');
+  expect(assembled).toContain('Selected asset handles:\n- none');
   expect(assembled).toContain('# Teacher Memory Index');
   expect(assembled).not.toContain('## Stage Goal');
   expect(assembled).not.toContain('ROADMAP.md');

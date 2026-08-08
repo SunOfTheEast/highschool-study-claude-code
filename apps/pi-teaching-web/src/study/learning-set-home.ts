@@ -5,6 +5,7 @@ import type {
   LearningSetHomeSnapshot,
 } from '../shared/contracts';
 import { readKnowledge } from './knowledge';
+import { listLearningNotes } from './learning-assets';
 import { readCourseTree, readLearningSetGuide } from './markdown';
 
 export function readLearningSetHome(
@@ -25,11 +26,10 @@ export function readLearningSetHome(
       route: '/course',
     },
     assets: {
-      notes: 0,
+      notes: listLearningNotes(root).length,
       problemCards: knowledge.cards.length,
       materials: knowledge.materials.length,
     },
     recentFreeLearning,
   };
 }
-
