@@ -1,7 +1,8 @@
 import type { CourseSnapshot, KnowledgeSnapshot } from '../shared/contracts';
 
-export const PRIMARY_VIEWS = ['course', 'knowledge'] as const;
+export const PRIMARY_VIEWS = ['home', 'assets', 'course'] as const;
 export type PrimaryView = typeof PRIMARY_VIEWS[number];
+export type ProjectionView = 'course' | 'knowledge';
 
 export type ViewSlot<T> = {
   value: T | null;
@@ -16,11 +17,11 @@ export type ViewProjectionState = {
 };
 
 export type ViewAction =
-  | { type: 'loading'; view: PrimaryView }
+  | { type: 'loading'; view: ProjectionView }
   | { type: 'loaded'; view: 'course'; value: CourseSnapshot }
   | { type: 'loaded'; view: 'knowledge'; value: KnowledgeSnapshot }
-  | { type: 'failed'; view: PrimaryView; error: string }
-  | { type: 'invalidated'; views: PrimaryView[] };
+  | { type: 'failed'; view: ProjectionView; error: string }
+  | { type: 'invalidated'; views: ProjectionView[] };
 
 const emptySlot = {
   value: null,

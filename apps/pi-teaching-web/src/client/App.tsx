@@ -1,27 +1,30 @@
-import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import type {
   CourseSnapshot,
   CourseTreeNode,
   KnowledgeSnapshot,
+  LearningAssetLibrarySnapshot,
+  LearningAssetReference,
+  LearningNote,
+  LearningSetHomeSnapshot,
   LessonHandout,
+  ProblemAttemptResponse,
   SessionKey,
   StudyEvent,
 } from '../shared/contracts';
-import { api, ApiError } from './api';
+import { api, ApiError, type ProblemCardView } from './api';
 import { AppShell } from './components/AppShell';
-import {
-  formatBrowserRoute,
-  parseBrowserRoute,
-  type BrowserRoute,
-} from './routes';
-import {
-  initialClientState,
-  reduceClientState,
-} from './state';
+import { formatBrowserRoute, parseBrowserRoute, type BrowserRoute } from './routes';
+import { initialClientState, reduceClientState } from './state';
 import { CoursePage, type NodeLifecycleAction } from './pages/CoursePage';
 import { CourseOverviewPage } from './pages/CourseOverviewPage';
 import { KnowledgePage } from './pages/KnowledgePage';
 import { LessonHandoutPage } from './pages/LessonHandoutPage';
+import { HomePage } from './pages/HomePage';
+import { FreeLearningPage } from './pages/FreeLearningPage';
+import { AssetsPage } from './pages/AssetsPage';
+import { NotePage } from './pages/NotePage';
+import { ProblemCardPage } from './pages/ProblemCardPage';
 import type { PrimaryView } from './view-state';
 
 type ConnectionState = 'open' | 'connecting' | 'closed';
@@ -50,16 +53,17 @@ function parentPlan(root: CourseTreeNode, lessonPath: string): CourseTreeNode | 
 
 function routePath(route: BrowserRoute, base: CourseSnapshot): string {
   if (route.kind === 'course' || route.kind === 'course-roadmap') return 'ROADMAP.md';
-  if (route.kind === 'knowledge') return 'ROADMAP.md';
   const node = route.kind === 'course-plan'
     ? base.tree.children.find((candidate) => (
       candidate.kind === 'plan' && candidate.id === route.planId
     )) ?? null
-    : base.tree.children
-      .find((candidate) => candidate.kind === 'plan' && candidate.id === route.planId)
-      ?.children.find((candidate) => (
-        candidate.kind === 'lesson' && candidate.id === route.lessonId
-      )) ?? null;
+    : route.kind === 'course-lesson'
+      ? base.tree.children
+        .find((candidate) => candidate.kind === 'plan' && candidate.id === route.planId)
+        ?.children.find((candidate) => (
+          candidate.kind === 'lesson' && candidate.id === route.lessonId
+        )) ?? null
+      : null;
   if (!node) throw new Error('ROUTE_NODE_NOT_FOUND');
   return node.path;
 }
@@ -80,10 +84,21 @@ function errorText(error: unknown): string {
   return error instanceof Error ? error.message : '本地学习工作区暂时无法读取。';
 }
 
+function routeIsCourse(route: BrowserRoute): boolean {
+  return route.kind === 'course'
+    || route.kind === 'course-roadmap'
+    || route.kind === 'course-plan'
+    || route.kind === 'course-lesson';
+}
+
 export function App() {
   const [route, setRoute] = useState<BrowserRoute>(() => (
-    parseBrowserRoute(window.location.pathname) ?? { kind: 'course' }
+    parseBrowserRoute(window.location.pathname) ?? { kind: 'home' }
   ));
+  const [home, setHome] = useState<LearningSetHomeSnapshot | null>(null);
+  const [assets, setAssets] = useState<LearningAssetLibrarySnapshot | null>(null);
+  const [note, setNote] = useState<LearningNote | null>(null);
+  const [problem, setProblem] = useState<ProblemCardView | null>(null);
   const [course, setCourse] = useState<CourseSnapshot | null>(null);
   const [knowledge, setKnowledge] = useState<KnowledgeSnapshot | null>(null);
   const [handout, setHandout] = useState<LessonHandout | null>(null);
@@ -118,8 +133,50 @@ export function App() {
     setHandout(null);
     setHandoutError(null);
     setHandoutLoading(false);
-    setNotice('正在读取当前节点…');
+    setNotice('正在读取学习集…');
     try {
+      const homeValue = await api.home();
+      if (revision !== routeLoadRevision.current) return;
+      setHome(homeValue);
+
+      if (next.kind === 'home') {
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
+      if (next.kind === 'assets') {
+        const value = await api.assets();
+        if (revision !== routeLoadRevision.current) return;
+        setAssets(value);
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
+      if (next.kind === 'note') {
+        const value = await api.note(next.id);
+        if (revision !== routeLoadRevision.current) return;
+        setNote(value);
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
+      if (next.kind === 'problem-card') {
+        const value = await api.problemCard(next.id);
+        if (revision !== routeLoadRevision.current) return;
+        setProblem(value);
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
+      if (next.kind === 'free-learning') {
+        const key = `free:${next.sessionId}` as const;
+        const history = await api.history(key);
+        if (revision !== routeLoadRevision.current) return;
+        dispatch({ type: 'conversation-snapshot', sessionKey: key, items: history });
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
       if (next.kind === 'knowledge') {
         const value = await api.knowledge();
         if (revision !== routeLoadRevision.current) return;
@@ -137,9 +194,7 @@ export function App() {
         return;
       }
       const selectedPath = routePath(next, base);
-      const value = selectedPath === 'ROADMAP.md'
-        ? base
-        : await api.course(selectedPath);
+      const value = selectedPath === 'ROADMAP.md' ? base : await api.course(selectedPath);
       const key = keyForCourse(value);
       const history = await api.history(key);
       if (revision !== routeLoadRevision.current) return;
@@ -160,14 +215,14 @@ export function App() {
 
   useEffect(() => {
     const parsed = parseBrowserRoute(window.location.pathname);
-    const initial = parsed ?? { kind: 'course' as const };
-    if (!parsed) window.history.replaceState(null, '', '/course');
+    const initial = parsed ?? { kind: 'home' as const };
+    if (!parsed || window.location.pathname === '/') window.history.replaceState(null, '', '/home');
     void loadRoute(initial);
   }, []);
 
   useEffect(() => {
     const pop = () => void loadRoute(
-      parseBrowserRoute(window.location.pathname) ?? { kind: 'course' },
+      parseBrowserRoute(window.location.pathname) ?? { kind: 'home' },
     );
     window.addEventListener('popstate', pop);
     return () => window.removeEventListener('popstate', pop);
@@ -186,15 +241,24 @@ export function App() {
       socket.onopen = () => setConnection('open');
       socket.onmessage = (message) => {
         const event = JSON.parse(String(message.data)) as StudyEvent;
-        const currentRoute = parseBrowserRoute(window.location.pathname) ?? { kind: 'course' };
+        const current = parseBrowserRoute(window.location.pathname) ?? { kind: 'home' as const };
         if (event.type === 'course-invalidated') {
-          if (currentRoute.kind !== 'knowledge' && currentRoute.kind !== 'lesson-handout') {
-            void loadRoute(currentRoute);
-          }
+          if (routeIsCourse(current)) void loadRoute(current);
           return;
         }
         if (event.type === 'knowledge-invalidated') {
-          if (currentRoute.kind === 'knowledge') void loadRoute(currentRoute);
+          if (current.kind === 'knowledge') void loadRoute(current);
+          return;
+        }
+        if (event.type === 'home-invalidated') {
+          if (current.kind === 'home') void loadRoute(current);
+          else void api.home().then(setHome);
+          return;
+        }
+        if (event.type === 'assets-invalidated') {
+          if (current.kind === 'assets' || current.kind === 'note' || current.kind === 'problem-card') {
+            void loadRoute(current);
+          }
           return;
         }
         dispatch(event);
@@ -214,13 +278,15 @@ export function App() {
     };
   }, [route]);
 
-  const selectedKey = course ? keyForCourse(course) : null;
+  const selectedKey: SessionKey | null = route.kind === 'free-learning'
+    ? `free:${route.sessionId}`
+    : routeIsCourse(route) && course ? keyForCourse(course) : null;
   const conversation = selectedKey ? client.conversations[selectedKey] ?? [] : [];
   const running = selectedKey ? client.running[selectedKey] ?? false : false;
   const sessionError = selectedKey ? client.errors[selectedKey] ?? null : null;
-
-  const title = course?.guide.title ?? '本地学习工作台';
-  const activeView: PrimaryView = route.kind === 'knowledge' ? 'knowledge' : 'course';
+  const freeStatus = route.kind === 'free-learning'
+    ? home?.recentFreeLearning.find((session) => session.id === route.sessionId)?.status ?? 'active'
+    : 'active';
 
   const nodeRoute = (node: CourseTreeNode): BrowserRoute => {
     if (node.kind === 'roadmap') return { kind: 'course-roadmap' };
@@ -238,34 +304,95 @@ export function App() {
         : action === 'complete-plan'
           ? await api.completePlan(node.id)
           : action === 'start-lesson'
-            ? await api.startLesson(
-              parentPlan(course!.tree, node.path)!.id,
-              node.id,
-            )
-            : await api.closeLesson(
-              parentPlan(course!.tree, node.path)!.id,
-              node.id,
-            );
+            ? await api.startLesson(parentPlan(course!.tree, node.path)!.id, node.id)
+            : await api.closeLesson(parentPlan(course!.tree, node.path)!.id, node.id);
       const url = new URL(result.route, window.location.origin);
-      navigate(parseBrowserRoute(url.pathname) ?? { kind: 'course' });
+      navigate(parseBrowserRoute(url.pathname) ?? { kind: 'home' });
     } catch (error) {
       setNotice(errorText(error));
     }
   };
 
-  const content = useMemo(() => {
-    if (activeView === 'knowledge') {
-      return knowledge
-        ? <KnowledgePage value={knowledge} />
-        : <div className="loading-screen"><b>正在读取知识图谱</b></div>;
+  const startFree = async (selectedAssets: LearningAssetReference[] = []) => {
+    try {
+      const created = await api.createFreeLearning(selectedAssets);
+      const next = parseBrowserRoute(new URL(created.route, window.location.origin).pathname);
+      if (!next) throw new Error('FREE_LEARNING_ROUTE_INVALID');
+      navigate(next);
+    } catch (error) {
+      setNotice(errorText(error));
     }
-    if (!course || !selectedKey) {
-      return <div className="loading-screen"><b>正在读取课程节点</b></div>;
-    }
-    if (route.kind === 'course') {
-      return <CourseOverviewPage value={course} onNavigate={navigate} />;
-    }
-    return (
+  };
+
+  let content: React.ReactNode;
+  if (route.kind === 'home') {
+    content = home
+      ? <HomePage value={home} onNavigate={navigate} onStartFree={() => void startFree()} />
+      : <div className="loading-screen"><b>正在打开学习集</b></div>;
+  } else if (route.kind === 'assets') {
+    content = assets ? (
+      <AssetsPage
+        value={assets}
+        onOpen={(reference) => navigate(reference.kind === 'note'
+          ? { kind: 'note', id: reference.id }
+          : { kind: 'problem-card', id: reference.id })}
+        onAsk={(references) => void startFree(references)}
+      />
+    ) : <div className="loading-screen"><b>正在读取学习资料</b></div>;
+  } else if (route.kind === 'note') {
+    content = note ? (
+      <NotePage value={note} onSave={async (input) => {
+        setNote(await api.updateNote(note.id, input));
+      }} />
+    ) : <div className="loading-screen"><b>正在读取 Note</b></div>;
+  } else if (route.kind === 'problem-card') {
+    content = problem ? (
+      <ProblemCardPage
+        value={problem}
+        onAttempt={async (response: ProblemAttemptResponse) => {
+          await api.attemptProblem(problem.id, response);
+          setProblem(await api.problemCard(problem.id));
+        }}
+        onReveal={async () => {
+          await api.revealProblem(problem.id);
+          setProblem(await api.problemCard(problem.id));
+        }}
+        onSaveNote={async (input) => {
+          await api.updateProblemNote(problem.id, input);
+          setProblem(await api.problemCard(problem.id));
+        }}
+        onAskTeacher={async () => {
+          const created = await api.askProblemTeacher(problem.id);
+          const next = parseBrowserRoute(new URL(created.route, window.location.origin).pathname);
+          if (next) navigate(next);
+        }}
+      />
+    ) : <div className="loading-screen"><b>正在读取题卡</b></div>;
+  } else if (route.kind === 'free-learning' && selectedKey) {
+    content = (
+      <FreeLearningPage
+        sessionKey={selectedKey}
+        status={freeStatus}
+        items={conversation}
+        running={running}
+        error={sessionError}
+        onSend={(text) => api.send(selectedKey, text).then(() => undefined)}
+        onEnd={async () => {
+          await api.endFreeLearning(route.sessionId);
+          navigate({ kind: 'home' });
+        }}
+      />
+    );
+  } else if (route.kind === 'knowledge') {
+    content = knowledge
+      ? <KnowledgePage value={knowledge} />
+      : <div className="loading-screen"><b>正在读取旧知识视图</b></div>;
+  } else if (!course || !selectedKey) {
+    content = <div className="loading-screen"><b>正在读取课程节点</b></div>;
+  } else if (route.kind === 'course') {
+    content = <CourseOverviewPage value={course} onNavigate={navigate} />;
+  } else {
+    content = (
       <CoursePage
         value={course}
         items={conversation}
@@ -280,18 +407,7 @@ export function App() {
         onToggleRight={() => setRightOpen((value) => !value)}
       />
     );
-  }, [
-    activeView,
-    route,
-    knowledge,
-    course,
-    selectedKey,
-    conversation,
-    running,
-    sessionError,
-    leftOpen,
-    rightOpen,
-  ]);
+  }
 
   if (route.kind === 'lesson-handout') {
     return (
@@ -309,13 +425,22 @@ export function App() {
     );
   }
 
+  const activeView: PrimaryView = routeIsCourse(route)
+    ? 'course'
+    : route.kind === 'assets' || route.kind === 'note' || route.kind === 'problem-card'
+      || route.kind === 'knowledge'
+      ? 'assets'
+      : 'home';
   return (
     <AppShell
-      title={title}
+      title={home?.guide.title ?? course?.guide.title ?? '本地学习工作台'}
       activeView={activeView}
+      hasCourse={home?.hasCourse ?? course !== null}
       connection={connection}
       notice={notice}
-      onNavigate={(view) => navigate(view === 'course' ? { kind: 'course' } : { kind: 'knowledge' })}
+      onNavigate={(view) => navigate(
+        view === 'home' ? { kind: 'home' } : view === 'assets' ? { kind: 'assets' } : { kind: 'course' },
+      )}
     >
       {content}
     </AppShell>

@@ -6,6 +6,7 @@ export type AppShellProps = {
   title: string;
   activeView: PrimaryView;
   connection: 'open' | 'connecting' | 'closed';
+  hasCourse: boolean;
   notice?: string | null;
   onNavigate(view: PrimaryView): void;
   children: ReactNode;
@@ -15,6 +16,7 @@ export function AppShell({
   title,
   activeView,
   connection,
+  hasCourse,
   notice = null,
   onNavigate,
   children,
@@ -24,10 +26,10 @@ export function AppShell({
       <header className="workspace-header">
         <a
           className="workspace-brand"
-          href="/course"
+          href="/home"
           onClick={(event) => {
             event.preventDefault();
-            onNavigate('course');
+            onNavigate('home');
           }}
         >
           <span className="brand-seal" aria-hidden="true">学</span>
@@ -38,7 +40,8 @@ export function AppShell({
         </a>
         <PrimaryViewNav
           active={activeView}
-          hrefs={{ course: '/course', knowledge: '/knowledge' }}
+          hrefs={{ home: '/home', assets: '/assets', course: '/course' }}
+          hasCourse={hasCourse}
           onNavigate={onNavigate}
         />
         <span className="connection-state" data-state={connection}>

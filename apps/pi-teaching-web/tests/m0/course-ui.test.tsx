@@ -366,17 +366,19 @@ test('reconciles streaming text, final messages and tool status by id', () => {
   ]);
 });
 
-test('offers only Course and Knowledge in the primary navigation', () => {
+test('offers Home and Assets with Course as an optional primary destination', () => {
   const markup = renderToStaticMarkup(
     <PrimaryViewNav
-      active="course"
-      hrefs={{ course: '/course', knowledge: '/knowledge' }}
+      active="home"
+      hrefs={{ home: '/home', assets: '/assets', course: '/course' }}
+      hasCourse={false}
       onNavigate={() => {}}
     />,
   );
-  expect(markup).toContain('课程脉络');
-  expect(markup).toContain('知识山河');
-  expect(markup).not.toContain('研习留痕');
+  expect(markup).toContain('学习首页');
+  expect(markup).toContain('学习资料');
+  expect(markup).not.toContain('课程脉络');
+  expect(markup).not.toContain('知识山河');
 });
 
 test('renders a standalone public A4 Lesson handout without application chrome', () => {

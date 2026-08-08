@@ -27,6 +27,7 @@ export function ChatPanel({
   onSend(text: string): Promise<void>;
 }) {
   const [text, setText] = useState('');
+  const freeLearning = sessionKey.startsWith('free:');
   const backgroundTaskRunning = items.some((item) => (
     (
       item.kind === 'material-search'
@@ -47,8 +48,8 @@ export function ChatPanel({
   return (
     <section className="chat" aria-label="课堂对话">
       <header className="chat-header">
-        <span>{sessionKey.startsWith('lesson:') ? '课堂对话' : '学习讨论'}</span>
-        <code>{sessionKey}</code>
+        <span>{freeLearning ? '自由学习' : sessionKey.startsWith('lesson:') ? '课堂对话' : '学习讨论'}</span>
+        {!freeLearning && <code>{sessionKey}</code>}
       </header>
       <div className="timeline" aria-live="polite">
         {items.map((item) => {
@@ -90,7 +91,9 @@ export function ChatPanel({
         {items.length === 0 && (
           <div className="empty-conversation">
             <span>从这里继续</span>
-            <p>可以说说目标、具体卡点，或请老师先介绍这个学习集。</p>
+            <p>{freeLearning
+              ? '问题可以很小，也可以发散。说出你此刻真正好奇或卡住的地方。'
+              : '可以说说目标、具体卡点，或请老师先介绍这个学习集。'}</p>
           </div>
         )}
       </div>
@@ -104,7 +107,9 @@ export function ChatPanel({
         <textarea
           value={text}
           onChange={(event) => setText(event.target.value)}
-          placeholder={enabled ? '写下你的想法或解题过程…' : '开始这个节点后即可对话'}
+          placeholder={enabled
+            ? freeLearning ? '从一个问题、联想或不确定的想法开始…' : '写下你的想法或解题过程…'
+            : freeLearning ? '这个线程已经结束' : '开始这个节点后即可对话'}
           disabled={!enabled}
           rows={3}
         />

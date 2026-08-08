@@ -5,6 +5,11 @@ import {
 } from '../shared/handout-route';
 
 export type BrowserRoute =
+  | { kind: 'home' }
+  | { kind: 'assets' }
+  | { kind: 'free-learning'; sessionId: string }
+  | { kind: 'note'; id: string }
+  | { kind: 'problem-card'; id: string }
   | { kind: 'course' }
   | { kind: 'course-roadmap' }
   | { kind: 'course-plan'; planId: string }
@@ -27,12 +32,26 @@ function decodeId(value: string): string | null {
 }
 
 export function parseBrowserRoute(pathname: string): BrowserRoute | null {
+  if (pathname === '/' || pathname === '/home') return { kind: 'home' };
+  if (pathname === '/assets') return { kind: 'assets' };
   if (pathname === '/course') return { kind: 'course' };
   if (pathname === '/course/roadmap') return { kind: 'course-roadmap' };
   if (pathname === '/knowledge') return { kind: 'knowledge' };
   if (!pathname.startsWith('/') || pathname.endsWith('/')) return null;
 
   const parts = pathname.slice(1).split('/');
+  if (parts.length === 2 && parts[0] === 'learn') {
+    const sessionId = decodeId(parts[1]!);
+    return sessionId ? { kind: 'free-learning', sessionId } : null;
+  }
+  if (parts.length === 3 && parts[0] === 'assets' && parts[1] === 'notes') {
+    const id = decodeId(parts[2]!);
+    return id ? { kind: 'note', id } : null;
+  }
+  if (parts.length === 3 && parts[0] === 'assets' && parts[1] === 'problem-cards') {
+    const id = decodeId(parts[2]!);
+    return id ? { kind: 'problem-card', id } : null;
+  }
   if (parts.length === 3 && parts[0] === 'course' && parts[1] === 'plan') {
     const planId = decodeId(parts[2]!);
     return planId ? { kind: 'course-plan', planId } : null;
@@ -67,6 +86,13 @@ export function parseBrowserRoute(pathname: string): BrowserRoute | null {
 }
 
 export function formatBrowserRoute(route: BrowserRoute): string {
+  if (route.kind === 'home') return '/home';
+  if (route.kind === 'assets') return '/assets';
+  if (route.kind === 'free-learning') return `/learn/${encodeURIComponent(route.sessionId)}`;
+  if (route.kind === 'note') return `/assets/notes/${encodeURIComponent(route.id)}`;
+  if (route.kind === 'problem-card') {
+    return `/assets/problem-cards/${encodeURIComponent(route.id)}`;
+  }
   if (route.kind === 'course') return '/course';
   if (route.kind === 'course-roadmap') return '/course/roadmap';
   if (route.kind === 'knowledge') return '/knowledge';

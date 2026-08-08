@@ -76,8 +76,8 @@ test('exposes only the M0 node lifecycle and role-scoped model tools', () => {
   })).toBe('lesson:plan-001:lesson-001');
 });
 
-test('keeps only Course and Knowledge as primary M0 views', () => {
-  expect(PRIMARY_VIEWS).toEqual(['course', 'knowledge']);
+test('keeps M0 Course and Knowledge projections behind the M1b primary navigation', () => {
+  expect(PRIMARY_VIEWS).toEqual(['home', 'assets', 'course']);
   expect(Object.keys(initialViewState)).toEqual(['course', 'knowledge']);
 
   const routes = [
@@ -116,5 +116,5 @@ test('round-trips a utility handout route without making it a primary view', () 
   ]) {
     expect(parseBrowserRoute(invalid)).toBeNull();
   }
-  expect(PRIMARY_VIEWS).toEqual(['course', 'knowledge']);
+  expect(PRIMARY_VIEWS).toEqual(['home', 'assets', 'course']);
 });
