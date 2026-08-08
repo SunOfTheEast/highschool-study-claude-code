@@ -92,6 +92,9 @@ test('prepares three isolated scenario roots with frozen model and commit identi
   const manifest = readFileSync(layout.manifestPath, 'utf8');
   expect(manifest).toContain('0123456789abcdef');
   expect(manifest).not.toContain('never-log-this');
+  const parsed = JSON.parse(manifest) as { hashes: Record<string, string> };
+  expect(Object.values(parsed.hashes)).toHaveLength(3);
+  expect(Object.values(parsed.hashes).every((hash) => /^[a-f0-9]{64}$/.test(hash))).toBe(true);
 
   writeFileSync(join(layout.scenarios.material.learningSet, 'student-output.md'), 'changed\n');
   const snapshot = captureM1cSnapshot(layout, 'material', 'after-note');

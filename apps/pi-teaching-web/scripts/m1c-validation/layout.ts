@@ -164,6 +164,10 @@ function hashTree(root: string): string {
   return hash.digest('hex');
 }
 
+function hashFile(path: string): string {
+  return createHash('sha256').update(readFileSync(plainFile(path, 'hash source'))).digest('hex');
+}
+
 function pinScout(sourcePath: string, provider: string, model: string, thinking: 'high'): string {
   const lines = readFileSync(plainFile(sourcePath, 'Scout source'), 'utf8').split('\n');
   if (lines[0] !== '---') throw new Error('Scout source must begin with frontmatter');
@@ -259,6 +263,11 @@ export function prepareM1cValidationRun(input: PrepareM1cValidationInput): M1cVa
       blankSeed: realpathSync(input.blankSeed),
       courseSeed: realpathSync(input.courseSeed),
       scout: realpathSync(input.scoutSource),
+    },
+    hashes: {
+      blankSeed: hashTree(input.blankSeed),
+      courseSeed: hashTree(input.courseSeed),
+      scout: hashFile(input.scoutSource),
     },
     layout,
   }, null, 2)}\n`, { mode: 0o600 });
