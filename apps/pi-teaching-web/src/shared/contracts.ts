@@ -25,7 +25,7 @@ export type LearningAssetReference = LearningAssetHandle;
 
 export type LearningSourceReference =
   | { kind: LearningAssetKind; id: string; revision: number }
-  | { kind: 'material'; id: string; revision: number; locator: string };
+  | { kind: 'material'; id: string; revision: number; locator: string | null };
 
 export type LegacyUnpinnedLearningSourceReference = {
   kind: 'legacy-unpinned';
@@ -115,6 +115,49 @@ export type LearningAssetSummary = {
 export type LearningAssetLibrarySnapshot = {
   notes: LearningAssetSummary[];
   problemCards: LearningAssetSummary[];
+};
+
+export type MaterialSearchStatus =
+  | 'native-text'
+  | 'pdf-text'
+  | 'image-readable'
+  | 'unavailable';
+
+export type MaterialRevision = {
+  revision: number;
+  title: string;
+  originalFilename: string;
+  mediaType: string;
+  sha256: string;
+  importedAt: string;
+  originalPath: string;
+  searchStatus: MaterialSearchStatus;
+  searchablePath: string | null;
+  locatorKind: 'lines' | 'page' | null;
+  requestId: string;
+};
+
+export type LearningMaterial = {
+  id: string;
+  path: string;
+  currentRevision: number;
+  revisions: MaterialRevision[];
+};
+
+export type MaterialImportReceipt = {
+  id: string;
+  revision: number;
+  path: string;
+  originalPath: string;
+  searchStatus: MaterialSearchStatus;
+};
+
+export type MaterialLocatorSnapshot = {
+  id: string;
+  revision: number;
+  locator: string | null;
+  path: string;
+  text: string | null;
 };
 
 export type LearningSetGuide = {
@@ -272,6 +315,9 @@ export type KnowledgeMaterial = {
   path: string;
   title: string;
   kind: 'text' | 'image' | 'media' | 'other';
+  id?: string;
+  revision?: number;
+  searchStatus?: MaterialSearchStatus;
 };
 
 export type KnowledgeSnapshot = {

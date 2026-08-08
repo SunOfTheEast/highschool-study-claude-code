@@ -26,6 +26,7 @@
     "@earendil-works/pi-coding-agent": "0.81.0",
     "katex": "0.18.1",
     "lxgw-wenkai-screen-webfont": "^1.7.0",
+    "pdfjs-dist": "5.4.624",
     "pi-subagents": "0.35.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",

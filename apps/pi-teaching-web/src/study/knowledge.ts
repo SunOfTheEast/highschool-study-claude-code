@@ -8,6 +8,7 @@ import type {
   KnowledgeSnapshot,
 } from '../shared/contracts';
 import { StudyDocumentError } from './markdown';
+import { listMaterials } from './materials';
 
 function record(value: unknown): Record<string, unknown> | null {
   return value !== null && typeof value === 'object' && !Array.isArray(value)
@@ -119,7 +120,11 @@ function materialKind(path: string): KnowledgeMaterial['kind'] {
 }
 
 function readMaterials(root: string): KnowledgeMaterial[] {
-  return filesBelow(root, 'materials').map((path) => {
+  const managed = listMaterials(root);
+  const managedPrefixes = managed.map((material) => `materials/${material.id}/`);
+  const legacy = filesBelow(root, 'materials')
+    .filter((path) => !managedPrefixes.some((prefix) => path.startsWith(prefix)))
+    .map((path) => {
     let title = basename(path);
     if (extname(path).toLowerCase() === '.md') {
       const match = /^#\s+(.+?)\s*$/m.exec(readFileSync(join(root, path), 'utf8'));
@@ -127,6 +132,29 @@ function readMaterials(root: string): KnowledgeMaterial[] {
     }
     return { path, title, kind: materialKind(path) };
   });
+  return [
+    ...managed.map((material): KnowledgeMaterial => {
+      const revision = material.revisions.find(
+        (item) => item.revision === material.currentRevision,
+      )!;
+      const kind: KnowledgeMaterial['kind'] = revision.mediaType.startsWith('image/')
+        ? 'image'
+        : revision.mediaType.startsWith('audio/') || revision.mediaType.startsWith('video/')
+          ? 'media'
+          : revision.searchStatus === 'native-text' || revision.searchStatus === 'pdf-text'
+            ? 'text'
+            : 'other';
+      return {
+        path: `materials/${material.id}`,
+        title: revision.title,
+        kind,
+        id: material.id,
+        revision: revision.revision,
+        searchStatus: revision.searchStatus,
+      };
+    }),
+    ...legacy,
+  ].sort((left, right) => left.path.localeCompare(right.path));
 }
 
 export function readKnowledge(root: string): KnowledgeSnapshot {

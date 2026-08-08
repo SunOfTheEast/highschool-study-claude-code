@@ -21,6 +21,7 @@ import type {
 import { resolveDocumentPath } from '../runtime/atomic-document';
 import type { DocumentCandidate } from '../runtime/multi-document-transaction';
 import { StudyDocumentError } from './markdown';
+import { readMaterialLocator } from './materials';
 import {
   planSemanticTagsSave,
   type SemanticTags,
@@ -130,8 +131,10 @@ function checkedSources(value: unknown): ReadableLearningSourceReference[] {
       if (typeof id !== 'string') throw new Error(`sources[${index}] is invalid`);
       checkedId(id, 'source id');
       const revision = checkedRevision(source.revision, `sources[${index}].revision`);
-      const locator = requiredText(source.locator, `sources[${index}].locator`);
-      const key = `material:${id}@${revision}#${locator}`;
+      const locator = source.locator === null
+        ? null
+        : requiredText(source.locator, `sources[${index}].locator`);
+      const key = `material:${id}@${revision}#${locator ?? ''}`;
       if (seen.has(key)) throw new Error(`DUPLICATE_ASSET_SOURCE: ${key}`);
       seen.add(key);
       return { kind, id, revision, locator };
@@ -475,7 +478,16 @@ function validateSourceGraph(
   for (const source of sources) {
     if (source.kind === 'legacy-unpinned') continue;
     if (source.kind === 'material') {
-      throw new Error(`ASSET_REVISION_UNRESOLVED: material:${source.id}@${source.revision}#${source.locator}`);
+      try {
+        readMaterialLocator(root, source);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        if (message.startsWith('MATERIAL_LOCATOR_')) throw error;
+        throw new Error(
+          `ASSET_REVISION_UNRESOLVED: material:${source.id}@${source.revision}#${source.locator ?? ''}`,
+        );
+      }
+      continue;
     }
     if (source.kind === target.kind && source.id === target.id) {
       throw new Error(`ASSET_SOURCE_SELF_REFERENCE: ${source.kind}:${source.id}`);
