@@ -12,9 +12,9 @@ import { parseLessonSource, StudyDocumentError } from './markdown';
 
 export type { DocumentCandidate } from '../runtime/multi-document-transaction';
 
-export type ExistingOrNew =
-  | { kind: 'existing'; id: string }
-  | { kind: 'new'; key: string; title: string };
+export type ExistingTarget = { kind: 'existing'; id: string };
+export type NewTarget = { kind: 'new'; key: string; title: string };
+export type ExistingOrNew = ExistingTarget | NewTarget;
 
 export type ObjectLearningHistoryEntry = {
   change: string;
@@ -30,15 +30,30 @@ export type RoutingDecision =
   | { kind: 'assign'; buckets: BucketRef[] }
   | { kind: 'defer'; reason: string };
 
-export type ObjectMutation = {
-  target: ExistingOrNew;
+type CompleteObjectSnapshot = {
   currentJudgment: string;
   evolutionOverview: string;
   boundaries: string[];
+};
+
+type ObjectMutationBase = {
   learningHistoryEntry: ObjectLearningHistoryEntry;
   routing: RoutingDecision;
   frontierSummary?: string;
 };
+
+export type ExistingLessonObjectMutation = ObjectMutationBase & {
+  target: ExistingTarget;
+  currentJudgment?: string;
+  evolutionOverview?: string;
+  boundaries?: string[];
+};
+
+export type NewLessonObjectMutation = ObjectMutationBase & CompleteObjectSnapshot & {
+  target: NewTarget;
+};
+
+export type ObjectMutation = ExistingLessonObjectMutation | NewLessonObjectMutation;
 
 export type PreferenceMutation = {
   target: ExistingOrNew;
@@ -332,7 +347,7 @@ function renderLearningHistoryEntry(args: {
 function renderNewObject(args: {
   id: string;
   title: string;
-  mutation: ObjectMutation;
+  mutation: CompleteObjectSnapshot;
   history: string;
 }): string {
   return [
@@ -357,23 +372,35 @@ function renderNewObject(args: {
   ].join('\n');
 }
 
-function updateExistingObject(source: string, mutation: ObjectMutation, history: string): string {
-  let candidate = replaceRequiredSection(
-    source,
-    'Current Judgment',
-    requireText(mutation.currentJudgment, 'currentJudgment'),
-  );
-  candidate = replaceRequiredSection(
-    candidate,
-    'Evolution Overview',
-    requireText(mutation.evolutionOverview, 'evolutionOverview'),
-  );
+function updateExistingObject(
+  source: string,
+  mutation: Partial<CompleteObjectSnapshot>,
+  history: string,
+): string {
+  let candidate = source;
+  if (mutation.currentJudgment !== undefined) {
+    candidate = replaceRequiredSection(
+      candidate,
+      'Current Judgment',
+      requireText(mutation.currentJudgment, 'currentJudgment'),
+    );
+  }
+  if (mutation.evolutionOverview !== undefined) {
+    candidate = replaceRequiredSection(
+      candidate,
+      'Evolution Overview',
+      requireText(mutation.evolutionOverview, 'evolutionOverview'),
+    );
+  }
   candidate = appendRequiredSection(candidate, 'Learning History', history);
-  return replaceRequiredSection(
-    candidate,
-    'Boundaries / Not Yet Demonstrated',
-    renderList(mutation.boundaries, 'boundaries'),
-  );
+  if (mutation.boundaries !== undefined) {
+    candidate = replaceRequiredSection(
+      candidate,
+      'Boundaries / Not Yet Demonstrated',
+      renderList(mutation.boundaries, 'boundaries'),
+    );
+  }
+  return candidate;
 }
 
 function validateObjectSource(source: string, id: string): void {
@@ -585,9 +612,6 @@ export function planLessonMemoryCommit(
   const resolvedObjects: ResolvedObject[] = [];
 
   for (const mutation of draft.objects) {
-    requireText(mutation.currentJudgment, 'currentJudgment');
-    requireText(mutation.evolutionOverview, 'evolutionOverview');
-    renderList(mutation.boundaries, 'boundaries');
     requireText(mutation.learningHistoryEntry.change, 'learning history change');
     if (mutation.learningHistoryEntry.evidenceBlockIds.length === 0) {
       throw new Error('object learning history requires at least one evidence Block');
@@ -607,6 +631,13 @@ export function planLessonMemoryCommit(
     let path: string;
     let before: string | null;
     if (mutation.target.kind === 'existing') {
+      if (mutation.currentJudgment !== undefined) {
+        requireText(mutation.currentJudgment, 'currentJudgment');
+      }
+      if (mutation.evolutionOverview !== undefined) {
+        requireText(mutation.evolutionOverview, 'evolutionOverview');
+      }
+      if (mutation.boundaries !== undefined) renderList(mutation.boundaries, 'boundaries');
       id = requireStableId(mutation.target.id, 'object');
       path = `memory/objects/${id}.md`;
       before = readRequired(root, path);
@@ -615,6 +646,16 @@ export function planLessonMemoryCommit(
         throw new Error('existing object cannot defer routing');
       }
     } else {
+      if (
+        mutation.currentJudgment === undefined
+        || mutation.evolutionOverview === undefined
+        || mutation.boundaries === undefined
+      ) {
+        throw new Error('NEW_OBJECT_SNAPSHOT_REQUIRED');
+      }
+      requireText(mutation.currentJudgment, 'currentJudgment');
+      requireText(mutation.evolutionOverview, 'evolutionOverview');
+      renderList(mutation.boundaries, 'boundaries');
       const key = requireLocalKey(mutation.target.key, 'object key');
       if (newObjectKeys.has(key)) throw new Error(`duplicate object key: ${key}`);
       newObjectKeys.add(key);
@@ -727,14 +768,18 @@ export function planLessonMemoryCommit(
       lessonId: lesson.id,
       entry: object.mutation.learningHistoryEntry,
     });
-    const source = object.before === null
+    const source = object.mutation.target.kind === 'new'
       ? renderNewObject({
           id: object.id,
           title: object.title,
-          mutation: object.mutation,
+          mutation: {
+            currentJudgment: object.mutation.currentJudgment!,
+            evolutionOverview: object.mutation.evolutionOverview!,
+            boundaries: object.mutation.boundaries!,
+          },
           history,
         })
-      : updateExistingObject(object.before, object.mutation, history);
+      : updateExistingObject(object.before!, object.mutation, history);
     validateObjectSource(source, object.id);
     objectSources.set(object.path, source);
 
@@ -882,37 +927,6 @@ function renderFreeLearningHistoryEntry(args: {
   ].join('\n');
 }
 
-function updateExistingObjectFromFreeLearning(
-  source: string,
-  mutation: FreeLearningObjectMutation,
-  history: string,
-): string {
-  let candidate = source;
-  if (mutation.currentJudgment !== undefined) {
-    candidate = replaceRequiredSection(
-      candidate,
-      'Current Judgment',
-      requireText(mutation.currentJudgment, 'currentJudgment'),
-    );
-  }
-  if (mutation.evolutionOverview !== undefined) {
-    candidate = replaceRequiredSection(
-      candidate,
-      'Evolution Overview',
-      requireText(mutation.evolutionOverview, 'evolutionOverview'),
-    );
-  }
-  candidate = appendRequiredSection(candidate, 'Learning History', history);
-  if (mutation.boundaries !== undefined) {
-    candidate = replaceRequiredSection(
-      candidate,
-      'Boundaries / Not Yet Demonstrated',
-      renderList(mutation.boundaries, 'boundaries'),
-    );
-  }
-  return candidate;
-}
-
 export function planFreeLearningMemoryCommit(
   root: string,
   sessionId: string,
@@ -1038,19 +1052,13 @@ export function planFreeLearningMemoryCommit(
           id: object.id,
           title: object.title,
           mutation: {
-            target: object.mutation.target,
             currentJudgment: object.mutation.currentJudgment!,
             evolutionOverview: object.mutation.evolutionOverview!,
             boundaries: object.mutation.boundaries!,
-            learningHistoryEntry: { change: object.mutation.learningHistoryChange, evidenceBlockIds: [] },
-            routing: object.mutation.routing,
-            ...(object.mutation.frontierSummary
-              ? { frontierSummary: object.mutation.frontierSummary }
-              : {}),
           },
           history,
         })
-      : updateExistingObjectFromFreeLearning(object.before, object.mutation, history);
+      : updateExistingObject(object.before, object.mutation, history);
     validateObjectSource(source, object.id);
     objectSources.set(object.path, source);
 

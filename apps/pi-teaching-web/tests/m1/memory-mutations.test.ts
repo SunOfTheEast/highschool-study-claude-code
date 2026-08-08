@@ -14,6 +14,7 @@ import {
   planDeferredRouteResolution,
   planLessonMemoryCommit,
   type DocumentCandidate,
+  type LessonMemoryCommitDraft,
 } from '../../src/study/memory-mutations';
 import { commitDocumentCandidates } from '../../src/runtime/multi-document-transaction';
 
@@ -85,6 +86,15 @@ function history(change = '提示比较共同结构后完成；自主识别仍�
   };
 }
 
+function memorySection(source: string, heading: string): string {
+  const marker = `## ${heading}\n\n`;
+  const start = source.indexOf(marker);
+  if (start < 0) throw new Error(`missing section: ${heading}`);
+  const contentStart = start + marker.length;
+  const next = source.indexOf('\n\n## ', contentStart);
+  return source.slice(contentStart, next < 0 ? source.length : next);
+}
+
 afterEach(() => {
   while (roots.length > 0) rmSync(roots.pop()!, { recursive: true, force: true });
 });
@@ -116,6 +126,53 @@ test('updates an existing object without reconsidering its buckets', () => {
   expect(object).toContain('- 2026-08-01 20:00 — 首次接触。');
   expect(planned.objectIds).toEqual({});
   expect(planned.candidates.some((item) => item.path.includes('/indexes/'))).toBeFalse();
+});
+
+test('appends Lesson history while patching only changed existing object snapshots', () => {
+  const root = copyFixture();
+  writeExistingObject(root);
+  const before = readFileSync(join(root, 'memory/objects/obj-001.md'), 'utf8');
+  const evolutionBefore = memorySection(before, 'Evolution Overview');
+  const boundariesBefore = memorySection(before, 'Boundaries / Not Yet Demonstrated');
+  const draft = {
+    objects: [{
+      target: { kind: 'existing', id: 'obj-001' },
+      currentJudgment: '能在明确提示后完成；自主识别尚未证明。',
+      learningHistoryEntry: history(),
+      routing: { kind: 'keep' },
+    }],
+    preferences: [],
+  } as unknown as LessonMemoryCommitDraft;
+
+  const planned = planLessonMemoryCommit(root, lessonPath, draft, recordedAt);
+  const after = candidate(planned, 'memory/objects/obj-001.md').after;
+
+  expect(memorySection(after, 'Current Judgment'))
+    .toBe('能在明确提示后完成；自主识别尚未证明。');
+  expect(memorySection(after, 'Evolution Overview')).toBe(evolutionBefore);
+  expect(memorySection(after, 'Boundaries / Not Yet Demonstrated')).toBe(boundariesBefore);
+  expect(after).toContain('- 2026-08-01 20:00 — 首次接触。');
+  expect(after).toContain(recordedAt);
+  expect(after).toContain('Block `block-001`');
+});
+
+test('requires a complete snapshot for a new Lesson object', () => {
+  const root = copyFixture();
+  const incomplete = {
+    objects: [{
+      target: { kind: 'new', key: 'incomplete', title: '不完整对象' },
+      currentJudgment: '只有当前判断。',
+      learningHistoryEntry: history(),
+      routing: {
+        kind: 'assign',
+        buckets: [{ kind: 'new', key: 'new-bucket', title: '新分桶' }],
+      },
+    }],
+    preferences: [],
+  } as unknown as LessonMemoryCommitDraft;
+
+  expect(() => planLessonMemoryCommit(root, lessonPath, incomplete, recordedAt))
+    .toThrow('NEW_OBJECT_SNAPSHOT_REQUIRED');
 });
 
 test('assigns stable IDs and only the explicitly named buckets to a new object', () => {

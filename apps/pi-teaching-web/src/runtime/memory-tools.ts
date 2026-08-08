@@ -37,11 +37,13 @@ const newTarget = Type.Object({
   title: Type.String({ minLength: 1 }),
 }, { additionalProperties: false });
 
+const existingObjectTarget = Type.Object({
+  kind: Type.Literal('existing'),
+  id: objectId,
+}, { additionalProperties: false });
+
 const objectTarget = Type.Union([
-  Type.Object({
-    kind: Type.Literal('existing'),
-    id: objectId,
-  }, { additionalProperties: false }),
+  existingObjectTarget,
   newTarget,
 ]);
 
@@ -77,23 +79,38 @@ const routing = Type.Union([
   }, { additionalProperties: false }),
 ]);
 
+const lessonLearningHistoryEntry = Type.Object({
+  change: Type.String({ minLength: 1 }),
+  evidenceBlockIds: Type.Array(stableId, { minItems: 1, uniqueItems: true }),
+}, { additionalProperties: false });
+
+const lessonObjectMutation = Type.Union([
+  Type.Object({
+    target: existingObjectTarget,
+    currentJudgment: Type.Optional(Type.String({ minLength: 1 })),
+    evolutionOverview: Type.Optional(Type.String({ minLength: 1 })),
+    boundaries: Type.Optional(Type.Array(Type.String({ minLength: 1 }))),
+    learningHistoryEntry: lessonLearningHistoryEntry,
+    routing,
+    frontierSummary: Type.Optional(Type.String({ minLength: 1 })),
+  }, { additionalProperties: false }),
+  Type.Object({
+    target: newTarget,
+    currentJudgment: Type.String({ minLength: 1 }),
+    evolutionOverview: Type.String({ minLength: 1 }),
+    boundaries: Type.Array(Type.String({ minLength: 1 })),
+    learningHistoryEntry: lessonLearningHistoryEntry,
+    routing,
+    frontierSummary: Type.Optional(Type.String({ minLength: 1 })),
+  }, { additionalProperties: false }),
+]);
+
 const lessonMemoryCommitParameters = Type.Object({
   closingFact: Type.Optional(Type.Object({
     blockId: stableId,
     note: Type.String({ minLength: 1 }),
   }, { additionalProperties: false })),
-  objects: Type.Array(Type.Object({
-    target: objectTarget,
-    currentJudgment: Type.String({ minLength: 1 }),
-    evolutionOverview: Type.String({ minLength: 1 }),
-    boundaries: Type.Array(Type.String({ minLength: 1 })),
-    learningHistoryEntry: Type.Object({
-      change: Type.String({ minLength: 1 }),
-      evidenceBlockIds: Type.Array(stableId, { minItems: 1, uniqueItems: true }),
-    }, { additionalProperties: false }),
-    routing,
-    frontierSummary: Type.Optional(Type.String({ minLength: 1 })),
-  }, { additionalProperties: false })),
+  objects: Type.Array(lessonObjectMutation),
   preferences: Type.Array(Type.Object({
     target: preferenceTarget,
     currentJudgment: Type.String({ minLength: 1 }),
@@ -186,7 +203,7 @@ export function createLessonMemoryTool(root: string, lessonPath: string) {
   return defineTool({
     name: 'lesson_memory_commit',
     label: '固化本课教师记忆',
-    description: 'Atomically commit the current Lesson closing fact, object learning history and judgments, explicit preferences, and model-declared routing.',
+    description: 'Append current-Lesson object history, patch only changed existing snapshots, create complete new snapshots, and atomically commit explicit preferences and routing.',
     executionMode: 'sequential',
     parameters: lessonMemoryCommitParameters,
     execute: async (toolCallId, input) => {

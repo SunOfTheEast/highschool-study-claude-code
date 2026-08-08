@@ -51,6 +51,20 @@ function commitInput() {
   };
 }
 
+function existingObjectPatchInput() {
+  return {
+    objects: [{
+      target: { kind: 'existing' as const, id: 'obj-001' },
+      learningHistoryEntry: {
+        change: '本课增加了一条新的对象证据。',
+        evidenceBlockIds: ['block-001'],
+      },
+      routing: { kind: 'keep' as const },
+    }],
+    preferences: [],
+  };
+}
+
 async function execute(tool: NonNullable<ReturnType<typeof createLessonMemoryTool>>, id: string, input: unknown) {
   const result = await tool.execute(id, input as never, undefined, undefined, {} as never);
   return JSON.parse((result.content[0] as { text: string }).text) as Record<string, unknown>;
@@ -100,6 +114,30 @@ test('keeps paths, stable output IDs, time, and approval state out of both schem
   expect(Check(route.parameters, routeInput)).toBeTrue();
   expect(Check(route.parameters, { ...routeInput, path: 'memory/INDEX.md' })).toBeFalse();
   expect(Check(route.parameters, { objectId: 'obj-001', buckets: [] })).toBeFalse();
+});
+
+test('accepts existing-object patches but keeps new Lesson object snapshots complete', () => {
+  const root = copyFixture();
+  const lesson = createLessonMemoryTool(root, lessonPath)!;
+  const incompleteNewObject = {
+    objects: [{
+      target: { kind: 'new', key: 'incomplete', title: '不完整对象' },
+      currentJudgment: '只有当前判断。',
+      learningHistoryEntry: {
+        change: '首次出现对象证据。',
+        evidenceBlockIds: ['block-001'],
+      },
+      routing: {
+        kind: 'assign',
+        buckets: [{ kind: 'new', key: 'new-bucket', title: '新分桶' }],
+      },
+    }],
+    preferences: [],
+  };
+
+  expect(Check(lesson.parameters, existingObjectPatchInput())).toBeTrue();
+  expect(Check(lesson.parameters, commitInput())).toBeTrue();
+  expect(Check(lesson.parameters, incompleteNewObject)).toBeFalse();
 });
 
 test('commits one bound semantic bundle and replays a successful native call ID once', async () => {
