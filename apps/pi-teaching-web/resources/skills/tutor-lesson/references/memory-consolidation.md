@@ -16,7 +16,7 @@
    成功不自动变成掌握，“尚未证明”保留。
 4. 静默固化真正得到新证据的部分。没有类别配额，不为完整外观创建空对象、能力或偏好。
 5. 用普通教师语言给出自然总结，不向学生展示内部分类或文件动作。
-6. 学生纠正时追加新事实与新 Trace，再修订当前判断；不改写旧 Log、旧 Trace 或旧原话。
+6. 学生纠正时追加新的课堂事实和对象历史，再修订当前判断；不改写旧 Log、旧历史或旧原话。
 
 ## 一次语义提交
 
@@ -28,11 +28,10 @@
 
 - `closingFact`：学生在 active Block 或已完成 Reflection 后补充的决定性课堂事实；没有就
   省略。Block 由 Tutor 根据本课证据明确选择。
-- `traces`：按真实教学事件划分。每条保留情境、首次表现、实际帮助、后续表现、来源 Block；
-  同一事件即使关联多个对象也只在 Consolidated Learning Traces 中保存一条。
-- `objects`：先复用已经读到的稳定对象。完整写出本次 Current Judgment、Evolution
-  Overview、边界，以及本次 Trace 对该对象的意义。能力信号只留在 Trace；Tutor 不创建或
-  修改 `memory/capabilities/`。
+- `objects`：先复用已经读到的稳定对象。完整写出 Current Judgment、Evolution Overview、
+  边界，以及一条 `learningHistoryEntry`；其中 `change` 只说明本次对这个对象的认识如何
+  变化，`evidenceBlockIds` 只列当前 Lesson 中真正支持它的 Block。Runtime 把它追加到
+  Learning History。Tutor 不创建或修改 `memory/capabilities/`。
 - `preferences`：只有学生明确表达或多次确认的互动需求才提交；保留原话、来源 Block、
   作用范围与流变。“用了对照后学得更快”只是效果观察，不自动变成明确偏好。新建偏好用
   `upsert` 把当前 cue 放进根索引；`keep` 或 `remove` 只用于已经存在的偏好。
@@ -46,13 +45,13 @@
 
 调用一次 `lesson_memory_commit`。Runtime 绑定当前 Lesson、记录时间、稳定 ID、路径、链接
 和原子写入；Tutor 不提交路径、时间或输出 ID，也不自己排版 Markdown。工具成功回执已经
-证明本次提交落地，不回读刚写入的 INDEX、对象、偏好或 Trace，也不再用文件工具补写。
+证明本次提交落地，不回读刚写入的 INDEX、对象或偏好，也不再用文件工具补写。
 
 调用成功后给学生自然总结，依据本课对话和课堂事实说明已经发生的变化与仍未证明的边界。
 教学待办、下一课安排和跨对象能力定论都不进入本次 Lesson 记忆。
 
 ## 学生纠正
 
-学生纠正公开总结时，重新形成一份最小语义提交：用 `closingFact` 追加纠正事实，创建一条
-纠正 Trace，并修订受影响对象或偏好的当前判断。仍然只调用一次 `lesson_memory_commit`；
-历史条目保留，纠正不是擦除第一次记录。
+学生纠正公开总结时，重新形成一份最小语义提交：用 `closingFact` 追加纠正事实，为受影响
+对象追加一条纠正后的 Learning History，并修订受影响对象或偏好的当前判断。仍然只调用
+一次 `lesson_memory_commit`；历史条目保留，纠正不是擦除第一次记录。

@@ -14,12 +14,11 @@ ROADMAP.md                         Roadmap Session
     └── lessons/lesson-001.md      Lesson Session
         ├── Block
         ├── Block
-        ├── Classroom Log
-        └── Consolidated Learning Traces
+        └── Classroom Log
 
 memory/INDEX.md                    常驻 L0 路由
 ├── indexes/                       对象分桶
-├── objects/                       对象记忆与完整 Trace 时间线
+├── objects/                       对象记忆与 Learning History
 ├── capabilities/                  跨对象能力假设
 └── preferences/                   明确偏好与作用范围
 
@@ -30,15 +29,15 @@ Pi JSONL                      各节点的原始对话与工具历史
 - **Roadmap** 负责长期目标和未来 Plan 的安排。
 - **Plan** 负责一个阶段目标、已结束 Lesson 的复盘和下一课备课。
 - **Lesson** 负责一次真实课堂；每个 Block 保存实际课堂日志，课末只固化一次记忆。
-- **记忆按需披露**：`memory/INDEX.md → L1 当前判断 → 来源 Trace → 必要时 Classroom Log`。
+- **记忆按需披露**：`memory/INDEX.md → L1 当前判断 → 必要时按 Block ID 核对 Classroom Log`。
 - **每个节点一个原生 Pi Session**，节点之间不复制聊天记录。
 - **模型使用 Pi 原生文件工具**；M1 没有通用记忆工具或第二套事实服务。
 - **学生控制节点启停**；浏览、刷新和模型回复都不会暗中开始或结束课程。
 
 记忆不是聊天摘要或静态学生画像：可复述表现是学习痕迹，单个知识对象学到哪里是对象
 记忆，模式跨不同对象后才可能成为能力假设，明确表达的互动需求才是偏好；教师以后要做
-什么仍留在 Plan / Roadmap。完整设计见
-[`M1 教师笔记记忆设计`](docs/superpowers/specs/2026-08-06-m1-teacher-notebook-memory-design.md)。
+什么仍留在 Plan / Roadmap。当前持久结构见
+[`删除中间课堂摘要层设计`](docs/superpowers/specs/2026-08-08-remove-consolidated-learning-traces-design.md)。
 
 ## 快速开始
 
@@ -94,8 +93,8 @@ learning-set/
 Plan 状态只有 `prepared → active → completed`；Lesson 状态只有
 `prepared → active → closed`。课堂对话、提示、纠正与决定按发生位置追加到当前
 Lesson Block 的 `Classroom Log`，不会被后来总结改写成更漂亮的版本。
-课末 Trace 也只追加在来源 Lesson；对象、能力和偏好的当前判断可以更新，但必须保留
-流变概述和来源链接。
+课末把对象相关的压缩变化直接追加到对象 Learning History；对象、能力和偏好的当前判断
+可以更新，但必须保留流变概述和来源链接。
 
 ## 界面
 

@@ -4,7 +4,6 @@ import {
   cpSync,
   mkdirSync,
   mkdtempSync,
-  readFileSync,
   rmSync,
   symlinkSync,
   writeFileSync,
@@ -39,52 +38,19 @@ afterEach(() => {
   while (roots.length > 0) rmSync(roots.pop()!, { recursive: true, force: true });
 });
 
-test('redirects a native trace append to the bound memory tool', () => {
+test('redirects every native Lesson body edit to the bound teaching tools', () => {
   const root = copyFixture();
-  const source = readFileSync(join(root, scope.nodePath), 'utf8');
-  const trace = [
-    '',
-    '',
-    '## Consolidated Learning Traces',
-    '',
-    '### trace-plan-001-lesson-001-01',
-    '',
-    '- 时间：2026-08-07 20:15',
-    '- 情境：同构变形的独立识别检验',
-    '- 首次表现：没有主动比较共同结构',
-    '- 实际帮助：提醒比较结构后继续',
-    '- 后续表现：完成变形，但尚未证明能自主识别',
-    '- 关联对象：obj-001',
-    '- 来源证据：本课 Classroom Log 中的对应记录',
-    '',
-  ].join('\n');
-  const oldText = '### Classroom Log\n';
-
-  expect(validateLessonMemoryWrite(root, scope, {
+  const result = validateLessonMemoryWrite(root, scope, {
     toolName: 'edit',
     input: {
       path: scope.nodePath,
-      edits: [{ oldText, newText: oldText + trace }],
+      edits: [{ oldText: '### Classroom Log\n', newText: '### Classroom Log\n- 新事实\n' }],
     },
-  })).toContain('lesson_memory_commit');
-});
+  });
 
-test('redirects a native correction trace to the bound memory tool', () => {
-  const root = copyFixture();
-  const path = join(root, scope.nodePath);
-  const first = `${readFileSync(path, 'utf8')}\n## Consolidated Learning Traces\n\n`
-    + '### trace-plan-001-lesson-001-01\n\n- 情境：首次总结\n';
-  writeFileSync(path, first);
-  const oldText = '- 情境：首次总结\n';
-  const correction = '\n### trace-plan-001-lesson-001-02\n\n- 情境：学生纠正首次总结\n';
-
-  expect(validateLessonMemoryWrite(root, scope, {
-    toolName: 'edit',
-    input: {
-      path: scope.nodePath,
-      edits: [{ oldText, newText: oldText + correction }],
-    },
-  })).toContain('lesson_memory_commit');
+  expect(result).toContain('classroom_log_append');
+  expect(result).toContain('classroom_update');
+  expect(result).toContain('lesson_memory_commit');
 });
 
 test('rejects every native Lesson memory path', () => {

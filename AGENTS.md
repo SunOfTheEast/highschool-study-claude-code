@@ -14,8 +14,7 @@ ROADMAP.md
 └── plans/<plan-id>/
     ├── PLAN.md
     └── lessons/<lesson-id>.md
-        ├── Block Classroom Logs
-        └── Consolidated Learning Traces
+        └── Block Classroom Logs
 
 memory/
 ├── INDEX.md
@@ -31,7 +30,7 @@ node's raw conversation and native tool history.
 
 Markdown is the only durable truth. M1 memory is a routed teacher notebook: L0
 `memory/INDEX.md`, L1 object/capability/preference judgments, and L2 source Lesson
-evidence. Do not add a global Trace pool, derived mastery state, handoff documents,
+evidence. Do not add a global event-summary pool, derived mastery state, handoff documents,
 database, vector store, background consolidation service, or unified context compiler
 without new repeated real-course evidence and explicit user approval.
 
@@ -45,8 +44,8 @@ without new repeated real-course evidence and explicit user approval.
   more Blocks.
 - A Block owns `Node State`, public `Student View`, private `Teacher Control`, and an
   append-only-in-spirit `Classroom Log`.
-- A Lesson may end with one non-empty `Consolidated Learning Traces` section. Existing
-  Classroom Logs and Trace entries are append-only facts.
+- A Lesson contains only its goal and Blocks. Classroom Logs and object Learning History
+  entries are append-only facts.
 - Object, capability, and preference current judgments may change, but their evolution
   overview, timeline, and source links must preserve how the judgment changed.
 - Child status comes only from child frontmatter. Parent prose is not a status cache.
@@ -55,7 +54,7 @@ without new repeated real-course evidence and explicit user approval.
 Parents start from consolidated Markdown memory and drill into child evidence only for
 missing, conflicting, or high-impact details. Roadmap may arrange future prepared Plans.
 Plan may create or edit only prepared Lessons. Lesson writes its own Block state,
-classroom log, final Trace, Tutor-owned object/preference memory, and affected routes.
+classroom log, Tutor-owned object/preference memory, and affected routes.
 Earlier active or terminal child documents remain historical facts.
 
 ## Sessions and lifecycle
@@ -102,11 +101,10 @@ changing the judgment or adding another model pass.
 Roadmap keeps the native `read`, `grep`, `find`, `ls`, `edit`, and `write` tools. Plan
 keeps those tools and additionally has `subagent` for fresh-context copies of one
 packaged read-only `study-material-scout`. Lesson has the native file tools plus the
-node-bound `classroom_log_append` and `classroom_update`. Its native `edit/write` calls
-are Runtime-guarded: only a pure Trace append to the current active Lesson and Tutor-owned
-`memory/INDEX.md`, `indexes/`, `objects/`, and `preferences/` paths are allowed; Tutor
-cannot write `capabilities/`, parent nodes, or sibling Lessons. This is a mechanical
-boundary, not a memory-specific tool.
+node-bound `classroom_log_append`, `classroom_update`, and conditional
+`lesson_memory_commit`. Its native `edit/write` calls are Runtime-blocked; Tutor cannot
+write `capabilities/`, parent nodes, sibling Lessons, or memory Markdown directly. This
+is a mechanical boundary, not a prompt convention.
 
 The Coach derives temporary material slots from the agreed Lesson activities and normally
 launches one Scout per slot, with at most three running concurrently. Each Scout uses

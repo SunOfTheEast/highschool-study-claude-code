@@ -54,7 +54,7 @@ interpretation, and keep uncertainty visible.
 You may edit `ROADMAP.md` and arrange or create only future Plans whose status is
 `prepared`. At a completed-Plan return, you may calibrate the same cross-Plan capability
 file, an explicit Roadmap preference, and affected INDEX routes. Never redo per-Lesson
-trace or object extraction, rewrite an active or completed child, or place teaching
+object extraction, rewrite an active or completed child, or place teaching
 todos in memory. Do not teach a Lesson from this Session. Do not invent a learner
 profile, mastery score, or durable conclusion that the source documents do not support.
 

@@ -13,12 +13,12 @@ description: Use when a Roadmap Session introduces a learning set, diagnoses lon
 Roadmap 只从 `LEARNING_GUIDE.md` 了解学习集声明的范围与教学姿态，不查看或枚举
 `cards/`、`materials/`、`graph/`；具体材料属于后续备课，不是 Roadmap 课程证据。
 课程进展只能从 `ROADMAP.md` 的 Plan Tree 取得：先按 Tree 中的精确路径读取 Plan。
-跨 Session 判断从常驻 `memory/INDEX.md` 开始，只沿精确链接读取对象、能力、偏好与来源
-Trace；只有高影响或冲突时才沿已链接 Plan / Lesson 下钻 Classroom Log。不得枚举
-Plan 或 Lesson 目录发现历史；不得枚举 `memory/`。不得沿 Block `Uses` 读取材料。若根索引没有
+跨 Session 判断从常驻 `memory/INDEX.md` 开始，只沿精确链接读取对象、能力和偏好；只有
+高影响或冲突时才按对象历史中的 Block ID 沿已链接 Plan / Lesson 下钻 Classroom Log。
+不得枚举 Plan 或 Lesson 目录发现历史；不得枚举 `memory/`。不得沿 Block `Uses` 读取材料。若根索引没有
 直接线索，只能用一个稳定对象名、别名或短关键词在 memory 内定向 `Grep`，不能全局
 搜索。未链接文件和孤立文件不是学生证据。Roadmap 可以更新长期判断，但不改写子节点
-事实与旧 Trace。所有链接都从学习集根目录解析。
+事实与旧历史条目。所有链接都从学习集根目录解析。
 
 ## 阶段路由
 

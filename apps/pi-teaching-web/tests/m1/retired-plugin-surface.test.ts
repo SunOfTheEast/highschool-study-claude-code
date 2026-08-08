@@ -1,8 +1,15 @@
 import { expect, test } from 'bun:test';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const repo = join(import.meta.dir, '../../../..');
+
+function filesUnder(path: string): string[] {
+  return readdirSync(path).flatMap((name) => {
+    const target = join(path, name);
+    return statSync(target).isDirectory() ? filesUnder(target) : [target];
+  });
+}
 
 test('removes the obsolete Claude Code plugin and its current-looking design surface', () => {
   for (const path of [
@@ -27,11 +34,26 @@ test('documents only the Pi App and Markdown teacher memory as the supported pro
   expect(rootReadme).toContain('# StudyForge M1');
   expect(rootReadme).toContain('memory/INDEX.md');
   expect(guide).toContain('M1 memory');
-  expect(guide).toContain('Consolidated Learning Traces');
+  expect(guide).toContain('Learning History');
   expect(appReadme).toContain('教师笔记记忆');
   expect(appReadme).toContain('原生 `Read` / `Grep`');
   expect(combined).not.toContain('plugins/highschool-study');
   expect(combined).not.toContain('旧 Claude Code 插件');
   expect(combined).not.toContain('recall-study-memory');
   expect(combined).not.toContain('student-profile.md');
+});
+
+test('removes the retired Lesson Trace layer from every active surface', () => {
+  const files = [
+    join(repo, 'AGENTS.md'),
+    join(repo, 'README.md'),
+    join(repo, 'apps/pi-teaching-web/README.md'),
+    ...filesUnder(join(repo, 'apps/pi-teaching-web/src')),
+    ...filesUnder(join(repo, 'apps/pi-teaching-web/resources')),
+  ];
+  const retired = /Consolidated Learning Traces|TraceDraft|traceEntries|traceIds|Trace Timeline|Lesson Trace/;
+
+  for (const path of files) {
+    expect(readFileSync(path, 'utf8'), path).not.toMatch(retired);
+  }
 });

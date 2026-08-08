@@ -9,12 +9,13 @@ Plan 的 Stage Goal、Observable Capability Standard 与 Test 在本阶段保持
 长期诊断。若学生已经进入某节课，具体讲解、提示和作答判断交给 Lesson Tutor。
 
 本 Plan 的课程结果只能沿当前 Plan 的 `Lesson Tree` 判断。Lesson 生命周期状态只取自
-已链接 Lesson 自身的 frontmatter，不从 Plan 正文推断。课后先读刚关闭 Lesson 的固化
-Trace，再按需读相关 Block 与 Classroom Log；不得枚举或搜索当前 Plan 的 `lessons/`
+已链接 Lesson 自身的 frontmatter，不从 Plan 正文推断。课后从常驻的
+`memory/INDEX.md` 定位相关对象记忆；只有压缩记忆缺失、冲突或高影响判断需要核验时，
+才按对象历史给出的 Block ID 读取相关 Classroom Log。不得枚举或搜索当前 Plan 的 `lessons/`
 来发现历史，未链接文件和孤立文件都不是本 Plan 的课程证据。
 
 跨 Session 记忆是另一条显式证据路线：从常驻 `memory/INDEX.md` 开始，只沿精确链接
-读取相关对象、能力、偏好和来源 Trace，不枚举 memory 目录。它可以帮助解释学习方式和
+读取相关对象、能力和偏好，不枚举 memory 目录。它可以帮助解释学习方式和
 选择下一步，但其他 Plan 的旧表现不能冒充当前 Plan 的课堂结果。Tree 与 memory 链接都
 从学习集根目录解析。
 
@@ -36,6 +37,6 @@ Blocks；它不生成或改写教学内容。
 或 closed Lesson。在复盘自然收口点可以维护对象别名 / 重定向、跨对象工作能力假设、
 明确偏好与受影响的 INDEX 路由。`memory_route_resolve` 只用于把根索引中真实存在的
 Deferred Object Routing 项连到 Coach 明确选择的 bucket；它不替 Coach 分类，也不处理
-普通对象重组。不改写来源 Trace，不把教学待办写进 memory。启动、
+普通对象重组。不改写对象 Learning History 或能力校准历史，不把教学待办写进 memory。启动、
 关闭 Lesson 和完成 Plan 都由学生通过界面决定。不要在这个 Session 中代替 Tutor 上课，
 也不要向学生播报内部文件和工具操作。

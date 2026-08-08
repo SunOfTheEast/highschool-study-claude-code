@@ -14,8 +14,8 @@
 3. 读取受影响的对象记忆，了解对象当前状态与流变边界；
 4. 读取需要跨 Plan 校准的既有能力假设；
 5. 读取会改变下阶段负担、节奏或互动的当前偏好；
-6. 只有高影响判断或证据冲突无法由压缩记忆负责解决时，才沿精确链接读来源 Trace；
-   Trace 仍不足时，才读同一已链接 Lesson 的相关 Classroom Log。
+6. 只有高影响判断或证据冲突无法由压缩记忆负责解决时，才按对象 Learning History 中的
+   Lesson 路径和 Block ID，读取同一已链接 Lesson 的相关 Classroom Log。
 
 不得枚举目录发现“可能有关”的记录，不依赖复制摘要或 Handoff，不沿 Block `Uses` 读取
 卡片或材料。Roadmap 消费逐课已经固化的结果，不重做逐课提取，也不把每节 Lesson 再
@@ -31,7 +31,7 @@
 当新完成的 Plan 为已有跨对象模式提供了新的时间尺度证据时，继续维护同一个能力文件，
 不要为 Coach 判断和 Roadmap 判断拆成两份。根据新证据强化、改写、削弱或撤回
 `Current Hypothesis`，同时保留适用边界、反向证据与 Evolution Overview；在
-`Calibration History` 追加这次跨 Plan 校准及其来源。不改写旧 Trace 或旧校准记录。
+`Calibration History` 追加这次跨 Plan 校准及其来源。不改写旧历史条目或旧校准记录。
 
 只有证据支持时才改变长期能力判断；Plan 完成、课次增加或模型想让画像更完整都不是
 强化理由。学生在 Roadmap 中明确表达、改变或撤回需求时，按真实时间范围更新同一偏好

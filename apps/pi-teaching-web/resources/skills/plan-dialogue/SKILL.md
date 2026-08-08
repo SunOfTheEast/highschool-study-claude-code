@@ -13,8 +13,9 @@ Skill 讨论这个阶段怎样通过多节 Lesson 推进、复盘已关闭课堂
 
 本 Plan 的课程进展只能沿当前 `Lesson Tree` 判断；Tree 路径从学习集根目录解析，不
 相对于 `plans/` 目录拼接。目录中未链接的文件不是本 Plan 的课程证据。跨 Session 记忆
-从常驻的 `memory/INDEX.md` 开始，只沿精确链接读取相关 L1 和来源 Trace；它可以影响
-教学选择，不能把其他 Plan 的表现伪装成本 Plan 的课堂结果。Plan 级判断可以更新，但
+从常驻的 `memory/INDEX.md` 开始，只沿精确链接读取相关 L1；需要核验时按对象历史给出的
+Lesson 路径和 Block ID 定位原始课堂事实。它可以影响教学选择，不能把其他 Plan 的表现
+伪装成本 Plan 的课堂结果。Plan 级判断可以更新，但
 不改写已关闭 Lesson 持有的事实。
 
 ## 阶段路由
@@ -63,6 +64,6 @@ Scout 或创建 Lesson。确认后，把最终公开设计写入 Plan 的 `Next 
 
 Plan Session 可以更新当前 Plan 的 Current Position 和 Next Lesson Arrangement。
 在阶段复盘的自然收口点，可以修订对象别名与合并、跨对象工作能力假设、明确偏好和受
-影响的记忆索引；不改写旧 Trace，不把教学待办放进 memory，也不遍历目录寻找画像。
+影响的记忆索引；不改写旧历史条目，不把教学待办放进 memory，也不遍历目录寻找画像。
 如果阶段问题本身需要改变，返回 Roadmap。不要修改 active/closed Lesson，不要在本
 Session 代替 Tutor 上课。

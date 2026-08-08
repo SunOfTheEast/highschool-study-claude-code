@@ -36,7 +36,7 @@ test('keeps Tutor recall progressive and subordinate to current evidence', () =>
   expectInOrder(recall, [
     'memory/INDEX.md',
     '对象记忆',
-    'Lesson Trace',
+    'Block ID',
     'Classroom Log',
   ]);
   expect(recall).toContain('不会改变眼前动作');
@@ -68,9 +68,10 @@ test('gives Tutor one bright-line reflection and minimal sufficient consolidatio
   for (const required of ['keep', 'assign', 'defer']) {
     expect(consolidation).toContain(required);
   }
-  expect(consolidation).toContain('Consolidated Learning Traces');
+  expect(consolidation).toContain('Learning History');
+  expect(consolidation).toContain('evidenceBlockIds');
   expect(consolidation).toContain('明确偏好');
-  expect(consolidation).toContain('能力信号只留在 Trace');
+  expect(consolidation).toContain('不创建或修改 `memory/capabilities/`');
   expect(consolidation).toContain('新建偏好');
   expect(consolidation).toContain('`upsert`');
   expect(consolidation).toContain('教学待办');
@@ -99,10 +100,11 @@ test('makes Plan consume consolidated memory before drilling into classroom evid
   expect(role).toContain('跨 Session 记忆');
   expect(role).toContain('精确链接');
   expectInOrder(review, [
-    'Consolidated Learning Traces',
+    'memory/INDEX.md',
     '对象记忆',
     '能力假设',
     '偏好',
+    'Block ID',
     'Classroom Log',
   ]);
   expect(review).toContain('缺失、冲突');
@@ -126,7 +128,7 @@ test('documents the atomic commit and deferred-route ownership boundary', () => 
   expect(contract).toContain('Deferred Object Routing');
   expect(contract).toContain('memory_route_resolve');
   expect(contract).toContain('Runtime 不判断');
-  expect(contract).toContain('旧 Trace');
+  expect(contract).toContain('旧历史条目');
 });
 
 test('lets Plan form a working capability hypothesis only across different objects', () => {
@@ -170,7 +172,7 @@ test('makes Roadmap review one completed Plan through summaries and routed memor
     '对象记忆',
     '能力假设',
     '偏好',
-    'Trace',
+    'Block ID',
     'Classroom Log',
   ]);
   expect(nextPlan).toContain('高影响');
@@ -186,7 +188,7 @@ test('calibrates one capability chain across Plans without erasing history', () 
   expect(nextPlan).toContain('跨 Plan');
   expect(nextPlan).toContain('强化、改写、削弱或撤回');
   expect(nextPlan).toContain('Calibration History');
-  expect(nextPlan).toContain('不改写旧 Trace');
+  expect(nextPlan).toContain('不改写旧历史条目');
   expect(nextPlan).toContain('教学待办');
   expect(nextPlan).toContain('不进入 memory');
 });
