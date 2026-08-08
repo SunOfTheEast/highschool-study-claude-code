@@ -1,6 +1,6 @@
 # StudyForge 删除 Consolidated Learning Traces 设计
 
-**状态：** 已确认，待实施  
+**状态：** 已实施并通过确定性验收
 **日期：** 2026-08-08
 
 ## 1. 决策
@@ -78,7 +78,7 @@ Runtime 校验 Block 确实属于当前 Lesson、生成时间戳，并渲染为�
 ```markdown
 ## Learning History
 
-- 2026-08-08 21:30 — 提示比较目标形式后完成；尚未证明能自主识别。
+- 2026-08-08T21:30:00.000Z — 提示比较目标形式后完成；尚未证明能自主识别。
   - 来源：[lesson-001](../../plans/plan-001/lessons/lesson-001.md) — Block `block-003`
 ```
 
@@ -130,3 +130,12 @@ memory/INDEX.md
 - **把 Trace 原样搬进对象文件：** 仍要求模型填写同一组中间字段，只是换了位置。
 - **保留只读兼容 Trace：** 继续扩大 parser、提示词和测试表面，也会诱导模型沿旧路径读取。
 - **删掉全部对象历史：** 会丢失认知流变，只留下易漂移的当前结论，不符合教师备课需求。
+
+## 8. 实施结果
+
+- Lesson parser 已删除该区段及对应领域字段，旧格式会以 unsupported section 失败。
+- `lesson_memory_commit` 已删除所有中间事件输入、ID 与回执；对象历史直接引用当前 Lesson
+  的真实 Block。
+- Tutor、Plan 与 Roadmap 已统一为 `INDEX → L1 → 必要时按 Block ID 核对 Classroom Log`。
+- `bun run check` 通过：189 tests、0 failures，类型检查与生产构建通过。
+- `bun run test:e2e -- tests/e2e/m0-cycle.spec.ts` 通过：3 tests、0 failures。
