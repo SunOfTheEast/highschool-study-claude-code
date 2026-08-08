@@ -97,7 +97,7 @@ test('Lesson saves only from its exact Uses after confirmation and never discove
 
   const approved = createLessonTools(root, lessonPath, manager([
     message('a1', 'assistant', '我把刚才形成的结论整理如下：先辨认参数落在哪个结构里，再决定入口。要保存为笔记吗？'),
-    message('u1', 'user', '嗯'),
+    message('u1', 'user', '可以，就按这个版本保存。'),
   ])).find((tool) => tool.name === 'save_note')!;
   const receipt = await execute(approved, 'save-note', noteInput(['source-1']));
 

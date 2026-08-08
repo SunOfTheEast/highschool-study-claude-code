@@ -43,6 +43,11 @@ function isRoadmapProposal(text: string): boolean {
     && /(方案|建议|创建|建立|按这份|按这个|制定)/i.test(text);
 }
 
+function startsWithAffirmation(text: string): boolean {
+  return /^(?:嗯+|可以|好(?:的)?|行|确认|同意|就这样)(?=$|[，。！？!?、,.\s]|建立|创建|按|这)/i
+    .test(text.trim());
+}
+
 function approvedRoadmap(entries: readonly SessionEntry[]): boolean {
   const messages = dialogue(entries);
   const latestIndex = messages.findLastIndex((item) => item.role === 'user');
@@ -54,8 +59,7 @@ function approvedRoadmap(entries: readonly SessionEntry[]): boolean {
   if (isRoadmapProposal(latest) && /(确认|同意|可以|就按|创建|建立|开始)/i.test(latest)) {
     return true;
   }
-  const acknowledgement = latest.replace(/[，。！？!?、,.\s]/g, '').toLowerCase();
-  if (!/^(嗯+|可以|好|好的|行|确认|同意|就这样)$/.test(acknowledgement)) return false;
+  if (!startsWithAffirmation(latest)) return false;
   const previousAssistant = [...messages.slice(0, latestIndex)]
     .reverse()
     .find((item) => item.role === 'assistant');

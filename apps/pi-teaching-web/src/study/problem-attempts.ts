@@ -12,6 +12,7 @@ import { resolveDocumentPath } from '../runtime/atomic-document';
 import { commitDocumentCandidates } from '../runtime/multi-document-transaction';
 import { readProblemCard } from './learning-assets';
 import { StudyDocumentError } from './markdown';
+import { isProblemCardId } from './problem-card-id';
 
 const stableIdPattern = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
 const eventIdPattern = /^event-([0-9]+)$/;
@@ -32,6 +33,12 @@ function requiredText(value: unknown, label: string): string {
 function checkedStableId(value: unknown, label: string): string {
   const text = requiredText(value, label);
   if (!stableIdPattern.test(text)) throw new Error(`${label} is invalid`);
+  return text;
+}
+
+function checkedProblemCardId(value: unknown): string {
+  const text = requiredText(value, 'card id');
+  if (!isProblemCardId(text)) throw new Error('card id is invalid');
   return text;
 }
 
@@ -70,7 +77,7 @@ function eventFromValue(
   if (id !== headingId || !eventIdPattern.test(id)) {
     throw new Error(`activity event heading mismatch: ${headingId}`);
   }
-  const cardId = checkedStableId(event.card_id, 'card id');
+  const cardId = checkedProblemCardId(event.card_id);
   if (cardId !== expectedCardId) throw new Error(`activity card mismatch: ${cardId}`);
   const common = {
     id,
@@ -99,7 +106,7 @@ function eventFromValue(
 }
 
 function activityPath(cardId: string): string {
-  if (!stableIdPattern.test(cardId)) throw new Error(`PROBLEM_CARD_ID_INVALID: ${cardId}`);
+  if (!isProblemCardId(cardId)) throw new Error(`PROBLEM_CARD_ID_INVALID: ${cardId}`);
   return `activity/problem-attempts/${cardId}.md`;
 }
 
@@ -219,9 +226,9 @@ export function listProblemActivities(root: string): ProblemActivitySnapshot[] {
     if (entry.isSymbolicLink()) {
       throw new StudyDocumentError(`${directoryPath}/${entry.name}`, 'activity path cannot be a symbolic link');
     }
-    const match = entry.isFile() ? /^([A-Za-z0-9][A-Za-z0-9._-]*)\.md$/.exec(entry.name) : null;
-    if (!match) return [];
-    const cardId = match[1]!;
+    if (!entry.isFile() || !entry.name.endsWith('.md')) return [];
+    const cardId = entry.name.slice(0, -3);
+    if (!isProblemCardId(cardId)) return [];
     const source = readFileSync(resolveDocumentPath(root, `${directoryPath}/${entry.name}`), 'utf8');
     return [snapshot(cardId, parseActivitySource(activityPath(cardId), source, cardId))];
   }).sort((left, right) => left.cardId.localeCompare(right.cardId));

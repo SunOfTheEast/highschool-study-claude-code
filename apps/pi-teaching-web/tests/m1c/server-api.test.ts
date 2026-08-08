@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from 'bun:test';
-import { cpSync, mkdtempSync, rmSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { commitDocumentCandidates } from '../../src/runtime/multi-document-transaction';
@@ -268,4 +268,40 @@ test('creates and addresses Meta sessions and projects the current learning foot
       expect.objectContaining({ activity: 'session-continue', route: '/meta/meta-session-001' }),
       expect.objectContaining({ activity: 'session-start', route: '/meta/meta-session-001' }),
     ] });
+});
+
+test('keeps legacy problem cards with CJK identifiers usable in assets and footprint', async () => {
+  const root = copyFixture();
+  const id = 'legacy-card恒成立';
+  mkdirSync(join(root, 'cards/legacy'), { recursive: true });
+  writeFileSync(join(root, 'cards/legacy/example.card.yaml'), [
+    'schema: highschool-study.problem-card.v1',
+    `content_item_id: ${id}`,
+    'content_revision_id: legacy-r1',
+    'storage_uri: cards/legacy/example.card.yaml',
+    'stem: 一道旧题。',
+    'answer: 旧答案。',
+    '',
+  ].join('\n'));
+  const handler = createRequestHandler({
+    root,
+    hub: new EventHub(),
+    registry: fakeRegistry() as never,
+  });
+  const encoded = encodeURIComponent(id);
+
+  expect(await responseBody(await handler(new Request('http://local/api/assets'))))
+    .toMatchObject({ problemCards: [expect.objectContaining({ id })] });
+  expect((await handler(new Request(`http://local/api/assets/problem-cards/${encoded}`)))?.status)
+    .toBe(200);
+  expect((await handler(new Request(`http://local/api/problem-cards/${encoded}/attempts`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ requestId: 'attempt-001', response: { kind: 'cannot' } }),
+  })))?.status).toBe(201);
+  const footprint = await responseBody(await handler(new Request('http://local/api/footprint')));
+  expect(footprint.entries).toContainEqual(expect.objectContaining({
+    activity: 'problem-attempt',
+    source: expect.objectContaining({ cardId: id }),
+  }));
 });

@@ -7,6 +7,7 @@ import type {
 import { resolveDocumentPath } from '../runtime/atomic-document';
 import type { DocumentCandidate } from '../runtime/multi-document-transaction';
 import { StudyDocumentError } from './markdown';
+import { isProblemCardId } from './problem-card-id';
 
 export type SemanticTags = {
   schema: 'studyforge.semantic-tags.v1';
@@ -36,7 +37,11 @@ function checkedSubject(value: unknown): LearningAssetHandle {
   const subject = record(value);
   const kind = subject?.kind;
   const id = subject?.id;
-  if ((kind !== 'note' && kind !== 'problem-card') || typeof id !== 'string' || !idPattern.test(id)) {
+  if (
+    (kind !== 'note' && kind !== 'problem-card')
+    || typeof id !== 'string'
+    || (kind === 'note' ? !idPattern.test(id) : !isProblemCardId(id))
+  ) {
     throw new Error('SEMANTIC_TAG_SUBJECT_INVALID');
   }
   return { kind, id };

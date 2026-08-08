@@ -12,6 +12,7 @@ import type {
 } from '../shared/contracts';
 import { readCourseTree, readLesson, readPlan, readRoadmap } from '../study/markdown';
 import { readMaterialLocator } from '../study/materials';
+import { isProblemCardId } from '../study/problem-card-id';
 import { setFrontmatterField } from './frontmatter';
 import {
   sessionFactoryInput,
@@ -117,7 +118,9 @@ function checkedSelectedAssets(
     }
     if (
       (asset.kind !== 'note' && asset.kind !== 'problem-card')
-      || !/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(asset.id)
+      || (asset.kind === 'note'
+        ? !/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(asset.id)
+        : !isProblemCardId(asset.id))
     ) {
       throw new Error('SELECTED_CONTEXT_INVALID');
     }

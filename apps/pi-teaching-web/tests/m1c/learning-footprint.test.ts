@@ -95,8 +95,8 @@ test('projects existing sessions, assets, activity, materials, and learning hist
   mkdirSync(join(root, 'cards/legacy'), { recursive: true });
   writeFileSync(join(root, 'cards/legacy/legacy.card.yaml'), stringifyYaml({
     schema: 'highschool-study.problem-card.v1',
-    content_item_id: 'legacy-card',
-    content_revision_id: 'legacy-card-r1',
+    content_item_id: 'legacy-card恒成立',
+    content_revision_id: 'legacy-card恒成立-r1',
     storage_uri: 'cards/legacy/legacy.card.yaml',
     stem: '一道没有可信创建时间的旧题。',
     answer: '旧答案。',
@@ -187,6 +187,7 @@ test('projects existing sessions, assets, activity, materials, and learning hist
     activity: 'asset-created',
     at: null,
     title: '一道没有可信创建时间的旧题。',
+    route: '/assets/problem-cards/legacy-card%E6%81%92%E6%88%90%E7%AB%8B',
   });
   expect(serialized).not.toContain('教师私有的当前判断');
   expect(serialized).not.toContain('尚未检验复杂离子共存情境');

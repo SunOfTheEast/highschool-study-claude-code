@@ -21,6 +21,7 @@ import type {
 import { resolveDocumentPath } from '../runtime/atomic-document';
 import type { DocumentCandidate } from '../runtime/multi-document-transaction';
 import { StudyDocumentError } from './markdown';
+import { isProblemCardId } from './problem-card-id';
 import { readMaterialLocator, readMaterialRevision } from './materials';
 import {
   planSemanticTagsSave,
@@ -108,6 +109,11 @@ function checkedId(value: string, label: string): string {
   return value;
 }
 
+function checkedProblemCardId(value: string, label: string): string {
+  if (!isProblemCardId(value)) throw new Error(`${label.toUpperCase()}_INVALID: ${value}`);
+  return value;
+}
+
 function checkedRevision(value: unknown, label: string): number {
   if (!Number.isSafeInteger(value) || Number(value) < 1) {
     throw new Error(`${label} must be a positive integer`);
@@ -144,7 +150,9 @@ function checkedSources(value: unknown): ReadableLearningSourceReference[] {
     if ((kind !== 'note' && kind !== 'problem-card') || typeof id !== 'string') {
       throw new Error(`sources[${index}] is invalid`);
     }
-    checkedId(id, 'source id');
+    kind === 'problem-card'
+      ? checkedProblemCardId(id, 'source id')
+      : checkedId(id, 'source id');
     if (source.revision === undefined) {
       const key = `legacy-unpinned:${kind}:${id}`;
       if (seen.has(key)) throw new Error(`DUPLICATE_ASSET_SOURCE: ${key}`);
@@ -283,7 +291,10 @@ function problemCardFromValue(root: string, path: string, value: RecordValue): P
   if (value.schema !== 'highschool-study.problem-card.v1') {
     throw new StudyDocumentError(path, 'expected highschool-study.problem-card.v1');
   }
-  const id = checkedId(requiredText(value.content_item_id, 'content_item_id'), 'problem card id');
+  const id = checkedProblemCardId(
+    requiredText(value.content_item_id, 'content_item_id'),
+    'problem card id',
+  );
   const stem = requiredText(value.stem, 'stem');
   const m1b = record(value.m1b);
   const absolute = resolveDocumentPath(root, path);
@@ -385,7 +396,7 @@ export function listLearningNotes(root: string): LearningNote[] {
 }
 
 function problemCardMatches(root: string, id: string): Array<{ path: string; value: RecordValue }> {
-  const target = checkedId(id, 'problem card id');
+  const target = checkedProblemCardId(id, 'problem card id');
   return filesBelow(root, 'cards')
     .filter((path) => ['.yaml', '.yml'].includes(extname(path).toLowerCase()))
     .flatMap((path) => {
@@ -413,7 +424,7 @@ export function readProblemCardAtPath(root: string, path: string): ProblemCard {
 }
 
 function problemRevisionPath(id: string, revision: number): string {
-  return `cards/m1b/.revisions/${checkedId(id, 'problem card id')}/${checkedRevision(revision, 'problem card revision')}.card.yaml`;
+  return `cards/m1b/.revisions/${checkedProblemCardId(id, 'problem card id')}/${checkedRevision(revision, 'problem card revision')}.card.yaml`;
 }
 
 export function readProblemCardRevision(root: string, id: string, revision: number): ProblemCard {

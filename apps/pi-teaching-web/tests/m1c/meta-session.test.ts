@@ -159,7 +159,7 @@ test('creates only ROADMAP.md after a visible proposal and explicit confirmation
   const root = copyFixture();
   const entries = [
     message('a1', 'assistant', '我建议建立一条长期学习路线：先厘清模型边界，再通过比较和迁移练习检验。要按这份 Roadmap 方案创建吗？'),
-    message('u1', 'user', '可以'),
+    message('u1', 'user', '确认建立这条路线。'),
   ];
   const tool = createMetaTools(root, {
     getSessionId: () => 'meta-session-001',

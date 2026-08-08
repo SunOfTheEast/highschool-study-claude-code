@@ -1,4 +1,5 @@
 import type { SessionEntry } from '@earendil-works/pi-coding-agent';
+import { isProblemCardId } from '../study/problem-card-id';
 import {
   freeLearningSessionKey,
   isFreeLearningScope,
@@ -50,7 +51,9 @@ function validAssetReference(value: unknown): boolean {
   }
   return (reference.kind === 'note' || reference.kind === 'problem-card')
     && nonempty(reference.id)
-    && /^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(reference.id);
+    && (reference.kind === 'note'
+      ? /^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(reference.id)
+      : isProblemCardId(reference.id));
 }
 
 function isSessionOwner(value: unknown): value is StudySessionScope {

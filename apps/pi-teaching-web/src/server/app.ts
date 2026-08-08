@@ -50,6 +50,7 @@ import {
   type SemanticTags,
 } from '../study/semantic-tags';
 import { readLearningFootprint } from '../study/learning-footprint';
+import { isProblemCardId } from '../study/problem-card-id';
 import type { EventHub } from './event-hub';
 
 type Lifecycle = Pick<
@@ -156,10 +157,9 @@ function learningContextReferences(value: unknown): LearningContextReference[] {
     const reference = objectBody(item);
     const kind = reference.kind;
     const id = reference.id;
-    if (typeof id !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(id)) {
-      throw new Error('SELECTED_ASSET_INVALID');
-    }
+    if (typeof id !== 'string') throw new Error('SELECTED_ASSET_INVALID');
     if (kind === 'material') {
+      if (!nodeId(id)) throw new Error('SELECTED_ASSET_INVALID');
       const revision = positiveRevision(reference.revision);
       const locator = reference.locator;
       if (locator !== null && (typeof locator !== 'string' || !locator.trim() || /[\r\n\t]/.test(locator))) {
@@ -171,7 +171,10 @@ function learningContextReferences(value: unknown): LearningContextReference[] {
       seen.add(key);
       return selected;
     }
-    if (kind !== 'note' && kind !== 'problem-card') throw new Error('SELECTED_ASSET_INVALID');
+    if (
+      (kind !== 'note' && kind !== 'problem-card')
+      || (kind === 'note' ? !nodeId(id) : !isProblemCardId(id))
+    ) throw new Error('SELECTED_ASSET_INVALID');
     const key = `${kind}:${id}`;
     if (seen.has(key)) throw new Error(`SELECTED_CONTEXT_DUPLICATE: ${key}`);
     seen.add(key);
@@ -249,6 +252,15 @@ function nodeId(value: string): string | null {
   try {
     const decoded = decodeURIComponent(value);
     return /^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(decoded) ? decoded : null;
+  } catch {
+    return null;
+  }
+}
+
+function problemCardId(value: string): string | null {
+  try {
+    const decoded = decodeURIComponent(value);
+    return isProblemCardId(decoded) ? decoded : null;
   } catch {
     return null;
   }
@@ -550,7 +562,7 @@ export function createRequestHandler(deps?: AppDependencies) {
 
       const problemAsset = /^\/api\/assets\/problem-cards\/([^/]+)$/.exec(url.pathname);
       if (request.method === 'GET' && problemAsset) {
-        const id = nodeId(problemAsset[1]!);
+        const id = problemCardId(problemAsset[1]!);
         if (!id) return json({ error: 'PROBLEM_CARD_ID_INVALID' }, 400);
         const card = readProblemCard(deps.root, id);
         const activity = readProblemActivity(deps.root, id);
@@ -565,7 +577,7 @@ export function createRequestHandler(deps?: AppDependencies) {
 
       const problemNote = /^\/api\/assets\/problem-cards\/([^/]+)\/note$/.exec(url.pathname);
       if (request.method === 'PUT' && problemNote) {
-        const id = nodeId(problemNote[1]!);
+        const id = problemCardId(problemNote[1]!);
         if (!id) return json({ error: 'PROBLEM_CARD_ID_INVALID' }, 400);
         const requestBody = objectBody(await request.json());
         const current = readProblemCard(deps.root, id);
@@ -586,7 +598,7 @@ export function createRequestHandler(deps?: AppDependencies) {
 
       const attempt = /^\/api\/problem-cards\/([^/]+)\/attempts$/.exec(url.pathname);
       if (request.method === 'POST' && attempt) {
-        const id = nodeId(attempt[1]!);
+        const id = problemCardId(attempt[1]!);
         if (!id) return json({ error: 'PROBLEM_CARD_ID_INVALID' }, 400);
         const requestBody = objectBody(await request.json());
         const response = objectBody(requestBody.response);
@@ -607,7 +619,7 @@ export function createRequestHandler(deps?: AppDependencies) {
 
       const reveal = /^\/api\/problem-cards\/([^/]+)\/reveal$/.exec(url.pathname);
       if (request.method === 'POST' && reveal) {
-        const id = nodeId(reveal[1]!);
+        const id = problemCardId(reveal[1]!);
         if (!id) return json({ error: 'PROBLEM_CARD_ID_INVALID' }, 400);
         const requestBody = objectBody(await request.json());
         const result = revealProblemAnswer(
@@ -621,7 +633,7 @@ export function createRequestHandler(deps?: AppDependencies) {
 
       const askTeacher = /^\/api\/problem-cards\/([^/]+)\/ask-teacher$/.exec(url.pathname);
       if (request.method === 'POST' && askTeacher) {
-        const id = nodeId(askTeacher[1]!);
+        const id = problemCardId(askTeacher[1]!);
         if (!id) return json({ error: 'PROBLEM_CARD_ID_INVALID' }, 400);
         readProblemCard(deps.root, id);
         const session = await deps.registry.createFreeLearning([{ kind: 'problem-card', id }]);

@@ -115,9 +115,13 @@ function proposesSave(text: string, kind: 'note' | 'problem-card'): boolean {
   return /(保存|存下|存一?下|记下|做成|整理成|留作)/i.test(text) && saveWords(kind).test(text);
 }
 
-function refusesSave(text: string, kind: 'note' | 'problem-card'): boolean {
-  return /(不保存|不要保存|先别保存|暂不保存|不用保存|别存|不做成|不要做成)/i.test(text)
-    && saveWords(kind).test(text);
+function refusesSave(text: string): boolean {
+  return /(不保存|不要保存|先别保存|暂不保存|不用保存|别存|不做成|不要做成)/i.test(text);
+}
+
+function startsWithAffirmation(text: string): boolean {
+  return /^(?:嗯+|可以|好(?:的)?|行|确认|同意|存吧|保存吧|就这样)(?=$|[，。！？!?、,.\s]|建立|创建|保存|存下|按|这)/i
+    .test(text.trim());
 }
 
 export function latestStudentApprovedAssetSave(
@@ -128,13 +132,10 @@ export function latestStudentApprovedAssetSave(
   const latestUserIndex = messages.findLastIndex((message) => message.role === 'user');
   if (latestUserIndex < 0) return false;
   const latest = messages[latestUserIndex]!.text.trim();
-  if (refusesSave(latest, kind)) return false;
+  if (refusesSave(latest)) return false;
   if (proposesSave(latest, kind)) return true;
 
-  const acknowledgement = latest.replace(/[，。！？!?、,.\s]/g, '').toLowerCase();
-  if (!/^(嗯+|可以|好|好的|行|确认|存吧|保存吧|就这样)$/.test(acknowledgement)) {
-    return false;
-  }
+  if (!startsWithAffirmation(latest)) return false;
   const previousAssistant = [...messages.slice(0, latestUserIndex)]
     .reverse()
     .find((message) => message.role === 'assistant');
