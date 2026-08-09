@@ -28,7 +28,12 @@ import { memoryEnabled } from './memory-tools';
 import { renderSelectedAssetContext } from '../study/learning-assets';
 import { renderSelectedProblemActivityContext } from '../study/problem-attempts';
 
-const resourceRoot = join(dirname(fileURLToPath(import.meta.url)), '../../resources');
+export function resolveStudyForgeResourceRoot(): string {
+  return process.env.STUDYFORGE_RESOURCE_ROOT?.trim()
+    || join(dirname(fileURLToPath(import.meta.url)), '../../resources');
+}
+
+const resourcePath = (...segments: string[]) => join(resolveStudyForgeResourceRoot(), ...segments);
 
 const roleFiles = {
   roadmap: 'roadmap-node.md',
@@ -60,7 +65,7 @@ function loadPersonaResource(personaId: string | undefined) {
   if (!/^[a-z0-9-]+$/.test(id)) {
     throw new Error(`STUDY_PERSONA_INVALID: ${id}`);
   }
-  const path = join(resourceRoot, 'personas', `${id}.md`);
+  const path = resourcePath('personas', `${id}.md`);
   if (!existsSync(path)) throw new Error(`STUDY_PERSONA_NOT_FOUND: ${id}`);
   return [{
     path: `/virtual/studyforge-m0-persona-${id}.md`,
@@ -137,11 +142,11 @@ export function loadStaticNodeResources(
     agentsFiles: [
       {
         path: '/virtual/studyforge-m0-document-contract.md',
-        content: file(join(resourceRoot, 'contracts', 'm0-document-contract.md')),
+        content: file(resourcePath('contracts', 'm0-document-contract.md')),
       },
       ...(hasMemory ? [{
         path: '/virtual/studyforge-m1-memory-contract.md',
-        content: file(join(resourceRoot, 'contracts', 'm1-memory-contract.md')),
+        content: file(resourcePath('contracts', 'm1-memory-contract.md')),
       }] : []),
       {
         path: join(root, 'LEARNING_GUIDE.md'),
@@ -154,15 +159,15 @@ export function loadStaticNodeResources(
       }] : []),
       {
         path: '/virtual/studyforge-m0-teaching-core.md',
-        content: file(join(resourceRoot, 'teaching', 'math-teaching-core.md')),
+        content: file(resourcePath('teaching', 'math-teaching-core.md')),
       },
       {
         path: `/virtual/studyforge-m0-${roleFile}`,
-        content: `Role resource: ${roleFile}\n\n${file(join(resourceRoot, 'agents', roleFile))}`,
+        content: `Role resource: ${roleFile}\n\n${file(resourcePath('agents', roleFile))}`,
       },
       {
         path: '/virtual/studyforge-teacher-presence.md',
-        content: file(join(resourceRoot, 'teaching', 'teacher-presence.md')),
+        content: file(resourcePath('teaching', 'teacher-presence.md')),
       },
       ...loadPersonaResource(personaId),
       {
@@ -171,7 +176,7 @@ export function loadStaticNodeResources(
       },
     ],
     skillPaths: roleSkills[scope.nodeKind]
-      .map((name) => join(resourceRoot, 'skills', name, 'SKILL.md')),
+      .map((name) => resourcePath('skills', name, 'SKILL.md')),
     tools: modelToolsForNode(scope.nodeKind, hasMemory),
   };
 }
@@ -188,7 +193,7 @@ export function loadStaticFreeLearningResources(
     agentsFiles: [
       ...(hasMemory ? [{
         path: '/virtual/studyforge-m1-memory-contract.md',
-        content: file(join(resourceRoot, 'contracts', 'm1-memory-contract.md')),
+        content: file(resourcePath('contracts', 'm1-memory-contract.md')),
       }] : []),
       {
         path: join(root, 'LEARNING_GUIDE.md'),
@@ -205,15 +210,15 @@ export function loadStaticFreeLearningResources(
       }] : []),
       {
         path: '/virtual/studyforge-m0-teaching-core.md',
-        content: file(join(resourceRoot, 'teaching', 'math-teaching-core.md')),
+        content: file(resourcePath('teaching', 'math-teaching-core.md')),
       },
       {
         path: '/virtual/studyforge-m1b-free-learning.md',
-        content: file(join(resourceRoot, 'agents', 'free-learning.md')),
+        content: file(resourcePath('agents', 'free-learning.md')),
       },
       {
         path: '/virtual/studyforge-teacher-presence.md',
-        content: file(join(resourceRoot, 'teaching', 'teacher-presence.md')),
+        content: file(resourcePath('teaching', 'teacher-presence.md')),
       },
       ...loadPersonaResource(personaId),
       {
@@ -221,7 +226,7 @@ export function loadStaticFreeLearningResources(
         content: formatFreeLearningOwnerContext(root, scope),
       },
     ],
-    skillPaths: [join(resourceRoot, 'skills', 'free-learning', 'SKILL.md')],
+    skillPaths: [resourcePath('skills', 'free-learning', 'SKILL.md')],
     tools: modelToolsForFreeLearning(hasMemory),
   };
 }
@@ -249,11 +254,11 @@ export function loadStaticMetaResources(
       }] : []),
       {
         path: '/virtual/studyforge-m1c-meta-session.md',
-        content: file(join(resourceRoot, 'agents', 'meta-session.md')),
+        content: file(resourcePath('agents', 'meta-session.md')),
       },
       {
         path: '/virtual/studyforge-teacher-presence.md',
-        content: file(join(resourceRoot, 'teaching', 'teacher-presence.md')),
+        content: file(resourcePath('teaching', 'teacher-presence.md')),
       },
       ...loadPersonaResource(personaId),
       {
@@ -261,7 +266,7 @@ export function loadStaticMetaResources(
         content: formatMetaOwnerContext(root, scope),
       },
     ],
-    skillPaths: [join(resourceRoot, 'skills', 'meta-dialogue', 'SKILL.md')],
+    skillPaths: [resourcePath('skills', 'meta-dialogue', 'SKILL.md')],
     tools: META_MODEL_TOOLS,
   };
 }

@@ -1,0 +1,8 @@
+---
+id: blank-studyforge-learning-set
+title: 空白学习集
+---
+
+# 空白学习集
+
+先从一个真实问题开始，不要求学生预先拥有课程结构。

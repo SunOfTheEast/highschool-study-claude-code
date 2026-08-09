@@ -6,10 +6,15 @@ export const studySubagentDirectory = join(
   '../../resources/subagents',
 );
 
+export function resolveStudySubagentDirectory(): string {
+  const resourceRoot = process.env.STUDYFORGE_RESOURCE_ROOT?.trim();
+  return resourceRoot ? join(resourceRoot, 'subagents') : studySubagentDirectory;
+}
+
 export function configureStudySubagentDirectory(): void {
   const paths = [
     ...(process.env.PI_SUBAGENT_EXTRA_AGENT_DIRS?.split(delimiter) ?? []),
-    studySubagentDirectory,
+    resolveStudySubagentDirectory(),
   ].map((path) => path.trim()).filter(Boolean);
   process.env.PI_SUBAGENT_EXTRA_AGENT_DIRS = [...new Set(paths)].join(delimiter);
 }
