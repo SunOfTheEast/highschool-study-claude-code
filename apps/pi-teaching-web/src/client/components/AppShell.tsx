@@ -32,7 +32,7 @@ export function AppShell({
             onNavigate('home');
           }}
         >
-          <span className="brand-seal" aria-hidden="true">学</span>
+          <span className="brand-seal seal-mark" aria-hidden="true">学</span>
           <span className="brand-copy">
             <strong>StudyForge</strong>
             <small>{title}</small>

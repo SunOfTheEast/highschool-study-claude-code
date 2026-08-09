@@ -1,4 +1,5 @@
 import type {
+  AssetFormation,
   ReadableLearningSourceReference,
   SemanticTagDraft,
 } from '../../shared/contracts';
@@ -15,22 +16,35 @@ function sourceLocation(locator: string | null): string {
 function sourceLabel(source: ReadableLearningSourceReference): string {
   if (source.kind === 'legacy-unpinned') {
     const kind = source.assetKind === 'note' ? '笔记' : '题卡';
-    return `来源：旧${kind} ${source.id} · 版本尚未固定`;
+    return `旧${kind} ${source.id} · 版本尚未固定`;
   }
   if (source.kind === 'material') {
-    return `来源：资料 ${source.id} · 第 ${source.revision} 版${sourceLocation(source.locator)}`;
+    return `资料 ${source.id} · 第 ${source.revision} 版${sourceLocation(source.locator)}`;
   }
   const kind = source.kind === 'note' ? '笔记' : '题卡';
-  return `来源：${kind} ${source.id} · 第 ${source.revision} 版`;
+  return `${kind} ${source.id} · 第 ${source.revision} 版`;
 }
 
-export function AssetTags({ value }: { value: SemanticTagDraft | null | undefined }) {
+export function AssetTags({
+  value,
+  onTag,
+}: {
+  value: SemanticTagDraft | null | undefined;
+  onTag?(tag: string): void;
+}) {
   if (!value) return null;
   return (
     <p className="m1c-asset-tags">
-      {[...value.core, ...value.related].map((tag, index) => (
-        <span key={`${tag}-${index}`}>{tag}</span>
-      ))}
+      {value.core.map((tag) => onTag ? (
+        <button type="button" data-tag-role="core" key={`core:${tag}`} onClick={() => onTag(tag)}>
+          核心 · {tag}
+        </button>
+      ) : <span data-tag-role="core" key={`core:${tag}`}>核心 · {tag}</span>)}
+      {value.related.map((tag) => onTag ? (
+        <button type="button" data-tag-role="related" key={`related:${tag}`} onClick={() => onTag(tag)}>
+          相关 · {tag}
+        </button>
+      ) : <span data-tag-role="related" key={`related:${tag}`}>相关 · {tag}</span>)}
     </p>
   );
 }
@@ -38,8 +52,32 @@ export function AssetTags({ value }: { value: SemanticTagDraft | null | undefine
 export function AssetSources({ value }: { value: readonly ReadableLearningSourceReference[] }) {
   if (value.length === 0) return null;
   return (
-    <ul className="m1c-asset-sources">
-      {value.map((source, index) => <li key={index}>{sourceLabel(source)}</li>)}
-    </ul>
+    <div className="asset-source-group">
+      <span className="asset-provenance-label">内容来源</span>
+      <ul className="m1c-asset-sources">
+        {value.map((source, index) => <li key={index}>{sourceLabel(source)}</li>)}
+      </ul>
+    </div>
+  );
+}
+
+export function AssetProvenance({
+  formation,
+  sources,
+}: {
+  formation: AssetFormation | null;
+  sources: readonly ReadableLearningSourceReference[];
+}) {
+  if (formation === null && sources.length === 0) return null;
+  return (
+    <section className="asset-provenance" aria-label="资产来历">
+      {formation && (
+        <p className="asset-formation">
+          <span className="asset-provenance-label">形成于</span>
+          <a href={formation.route}>{formation.title}</a>
+        </p>
+      )}
+      <AssetSources value={sources} />
+    </section>
   );
 }

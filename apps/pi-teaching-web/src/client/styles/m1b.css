@@ -229,9 +229,54 @@
   color: var(--ink-soft);
 }
 
+.m1c-asset-tags button {
+  border-radius: 999px;
+  padding: .18rem .48rem;
+  font-size: var(--text-label);
+  cursor: pointer;
+}
+
+.m1c-asset-tags [data-tag-role="core"] {
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--rule));
+  color: var(--accent-deep);
+  background: var(--accent-wash);
+}
+
+.m1c-asset-tags [data-tag-role="related"] {
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  background: #fffefb;
+}
+
+.asset-provenance {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+  padding: var(--space-3) 0;
+  border-block: 1px solid var(--rule-soft);
+}
+
+.asset-formation,
+.asset-source-group {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.asset-formation a {
+  color: var(--accent-deep);
+  text-decoration-color: var(--rule);
+  text-underline-offset: .2em;
+}
+
+.asset-provenance-label {
+  color: var(--ink-faint);
+  font-size: var(--text-label);
+}
+
 .m1c-asset-sources {
-  grid-column: 2 / -1;
-  margin: var(--space-2) 0 0;
+  margin: 0;
   padding: 0;
   color: var(--ink-faint);
   font-size: var(--text-label);

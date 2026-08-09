@@ -114,7 +114,8 @@ test('shows Materials, plain-language tags and pinned sources without internal s
   expect(markup).toContain('Ksp 原文');
   expect(markup).toContain('正文可搜索');
   expect(markup).toContain('沉淀溶解平衡');
-  expect(markup).toContain('来源：资料 material-001 · 第 1 版 · 第 1–2 行');
+  expect(markup).toContain('内容来源');
+  expect(markup).toContain('资料 material-001 · 第 1 版 · 第 1–2 行');
   expect(markup).not.toMatch(/sidecar|metadata|projection|revision/i);
 });
 
