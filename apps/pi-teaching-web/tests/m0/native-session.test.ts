@@ -13,6 +13,7 @@ import { tmpdir } from 'node:os';
 import { basename, dirname, join } from 'node:path';
 import {
   createEventBus,
+  SessionManager,
   type AgentSessionEvent,
   type SessionEntry,
 } from '@earendil-works/pi-coding-agent';
@@ -22,6 +23,7 @@ import {
 } from '../../src/runtime/resource-loader';
 import {
   customToolsForNode,
+  recoverOpenedSessionState,
   recoverSessionFactoryState,
   sessionFactoryInput,
   type StudySession,
@@ -413,6 +415,49 @@ test('recovers an interrupted memory transaction at the session-factory boundary
   expect(recoverSessionFactoryState(root)).toHaveLength(1);
   expect(readFileSync(join(root, indexPath), 'utf8')).toBe(indexBefore);
   expect(existsSync(join(root, objectPath))).toBeFalse();
+});
+
+test('settles a persisted memory call that stopped before its transaction began', () => {
+  const root = copyFixture();
+  const manager = SessionManager.create(root, join(root, '.pi-sessions'));
+  manager.appendMessage({
+    role: 'assistant',
+    content: [{
+      type: 'toolCall',
+      id: 'interrupted-memory-call',
+      name: 'lesson_memory_commit',
+      arguments: { objects: [], preferences: [] },
+    }],
+    api: 'openai-responses',
+    provider: 'openai',
+    model: 'test-model',
+    usage: {
+      input: 0,
+      output: 0,
+      cacheRead: 0,
+      cacheWrite: 0,
+      totalTokens: 0,
+      cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, total: 0 },
+    },
+    stopReason: 'toolUse',
+    timestamp: Date.now(),
+  });
+  const reopened = SessionManager.open(manager.getSessionFile()!, undefined, root);
+
+  recoverOpenedSessionState(root, reopened);
+
+  const result = reopened.getBranch().find((entry) => (
+    entry.type === 'message' && entry.message.role === 'toolResult'
+  ));
+  expect(result).toMatchObject({
+    message: {
+      role: 'toolResult',
+      toolCallId: 'interrupted-memory-call',
+      toolName: 'lesson_memory_commit',
+      isError: true,
+      content: [{ type: 'text', text: 'INTERRUPTED_BEFORE_COMMIT' }],
+    },
+  });
 });
 
 test('keeps classroom and memory writes on bound teaching tools', () => {

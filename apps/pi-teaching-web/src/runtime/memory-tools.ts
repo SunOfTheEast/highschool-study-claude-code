@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { existsSync, lstatSync } from 'node:fs';
 import { join } from 'node:path';
 import { Type } from '@earendil-works/pi-ai';
@@ -11,6 +12,15 @@ import {
   type LessonMemoryCommitDraft,
 } from '../study/memory-mutations';
 import { commitDocumentCandidates } from './multi-document-transaction';
+import {
+  inspectPersistedMemoryToolCall,
+  pendingToolResultCandidate,
+  readPendingToolResult,
+  renderStableMemoryToolResult,
+  type MemoryToolName,
+  type RecoverableToolSession,
+  type StableMemoryToolResult,
+} from './pending-tool-results';
 
 const stableId = Type.String({
   pattern: '^[A-Za-z0-9][A-Za-z0-9._-]*$',
@@ -154,9 +164,50 @@ function toolResult(
   };
 }
 
-export function createFreeLearningMemoryTool(root: string, sessionId: string) {
+function recoverableCall(
+  root: string,
+  session: RecoverableToolSession,
+  toolName: MemoryToolName,
+  toolCallId: string,
+  input: unknown,
+): { requestDigest: string; replay: ReturnType<typeof renderStableMemoryToolResult> | null } {
+  const inspected = inspectPersistedMemoryToolCall(
+    session,
+    toolName,
+    toolCallId,
+    input,
+  );
+  if (inspected.persistedResult) {
+    if (inspected.persistedResult.isError) throw new Error('MEMORY_TOOL_CALL_ALREADY_FAILED');
+    const content = inspected.persistedResult.content;
+    if (content.length !== 1 || content[0]?.type !== 'text') {
+      throw new Error('MEMORY_TOOL_RESULT_INVALID');
+    }
+    return {
+      requestDigest: inspected.requestDigest,
+      replay: {
+        content: [{ type: 'text', text: content[0].text }],
+        details: inspected.persistedResult.details as Record<string, string>,
+      },
+    };
+  }
+  const pending = readPendingToolResult(root, session.getSessionId(), toolCallId);
+  if (!pending) return { requestDigest: inspected.requestDigest, replay: null };
+  if (
+    pending.toolName !== toolName
+    || pending.toolCallId !== toolCallId
+    || pending.requestDigest !== inspected.requestDigest
+  ) {
+    throw new Error('PENDING_TOOL_RESULT_MISMATCH');
+  }
+  return {
+    requestDigest: inspected.requestDigest,
+    replay: renderStableMemoryToolResult(toolName, pending.result),
+  };
+}
+
+export function createFreeLearningMemoryTool(root: string, session: RecoverableToolSession) {
   if (!memoryEnabled(root)) return null;
-  const successful = new Map<string, ReturnType<typeof toolResult>>();
   return defineTool({
     name: 'free_learning_memory_commit',
     label: '更新教师对象记忆',
@@ -164,26 +215,39 @@ export function createFreeLearningMemoryTool(root: string, sessionId: string) {
     executionMode: 'sequential',
     parameters: freeLearningMemoryCommitParameters,
     execute: async (toolCallId, input) => {
-      const replay = successful.get(toolCallId);
-      if (replay) return replay;
-      const started = performance.now();
+      const call = recoverableCall(
+        root,
+        session,
+        'free_learning_memory_commit',
+        toolCallId,
+        input,
+      );
+      if (call.replay) return call.replay;
+      const commitId = randomUUID();
       const planned = planFreeLearningMemoryCommit(
         root,
-        sessionId,
+        session.getSessionId(),
         input as FreeLearningMemoryCommitDraft,
         new Date().toISOString(),
       );
-      const committed = commitDocumentCandidates(root, planned.candidates);
-      const result = toolResult({
+      const stable: StableMemoryToolResult = {
         ok: true,
-        commitId: committed.commitId,
+        commitId,
         objectIds: planned.objectIds,
         bucketIds: planned.bucketIds,
-        changedPaths: committed.changedPaths,
-        durationMs: performance.now() - started,
-      }, 'free-learning-memory-commit');
-      successful.set(toolCallId, result);
-      return result;
+        changedPaths: planned.candidates.map((candidate) => candidate.path),
+      };
+      const pending = pendingToolResultCandidate(
+        root,
+        session.getSessionId(),
+        'free_learning_memory_commit',
+        toolCallId,
+        call.requestDigest,
+        commitId,
+        stable,
+      );
+      commitDocumentCandidates(root, [...planned.candidates, pending], { commitId });
+      return renderStableMemoryToolResult('free_learning_memory_commit', stable);
     },
   });
 }
@@ -193,9 +257,12 @@ export function memoryEnabled(root: string): boolean {
   return existsSync(path) && lstatSync(path).isFile() && !lstatSync(path).isSymbolicLink();
 }
 
-export function createLessonMemoryTool(root: string, lessonPath: string) {
+export function createLessonMemoryTool(
+  root: string,
+  lessonPath: string,
+  session: RecoverableToolSession,
+) {
   if (!memoryEnabled(root)) return null;
-  const successful = new Map<string, ReturnType<typeof toolResult>>();
   return defineTool({
     name: 'lesson_memory_commit',
     label: '固化本课教师记忆',
@@ -203,27 +270,40 @@ export function createLessonMemoryTool(root: string, lessonPath: string) {
     executionMode: 'sequential',
     parameters: lessonMemoryCommitParameters,
     execute: async (toolCallId, input) => {
-      const replay = successful.get(toolCallId);
-      if (replay) return replay;
-      const started = performance.now();
+      const call = recoverableCall(
+        root,
+        session,
+        'lesson_memory_commit',
+        toolCallId,
+        input,
+      );
+      if (call.replay) return call.replay;
+      const commitId = randomUUID();
       const planned = planLessonMemoryCommit(
         root,
         lessonPath,
         input as LessonMemoryCommitDraft,
         new Date().toISOString(),
       );
-      const committed = commitDocumentCandidates(root, planned.candidates);
-      const result = toolResult({
+      const stable: StableMemoryToolResult = {
         ok: true,
-        commitId: committed.commitId,
+        commitId,
         objectIds: planned.objectIds,
         preferenceIds: planned.preferenceIds,
         bucketIds: planned.bucketIds,
-        changedPaths: committed.changedPaths,
-        durationMs: performance.now() - started,
-      }, 'lesson-memory-commit');
-      successful.set(toolCallId, result);
-      return result;
+        changedPaths: planned.candidates.map((candidate) => candidate.path),
+      };
+      const pending = pendingToolResultCandidate(
+        root,
+        session.getSessionId(),
+        'lesson_memory_commit',
+        toolCallId,
+        call.requestDigest,
+        commitId,
+        stable,
+      );
+      commitDocumentCandidates(root, [...planned.candidates, pending], { commitId });
+      return renderStableMemoryToolResult('lesson_memory_commit', stable);
     },
   });
 }

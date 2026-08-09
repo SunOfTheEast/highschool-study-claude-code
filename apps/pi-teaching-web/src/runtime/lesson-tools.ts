@@ -241,7 +241,7 @@ export function createLessonTools(
       resolve: (aliases) => resolveLessonSourceAliases(boundSources, aliases),
     }, session)
     : [];
-  const memoryTool = createLessonMemoryTool(root, lessonPath);
+  const memoryTool = session ? createLessonMemoryTool(root, lessonPath, session) : null;
   return memoryTool
     ? [logTool, updateTool, ...assetTools, memoryTool]
     : [logTool, updateTool, ...assetTools];

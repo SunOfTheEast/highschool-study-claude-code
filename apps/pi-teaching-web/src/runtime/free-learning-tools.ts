@@ -16,6 +16,6 @@ export function createFreeLearningTools(
   const assets = createLearningAssetTools(root, {
     resolve: (aliases) => resolveSelectedAssetAliases(root, scope.selectedAssets, aliases),
   }, session);
-  const memory = createFreeLearningMemoryTool(root, session.getSessionId());
+  const memory = createFreeLearningMemoryTool(root, session);
   return memory ? [...assets, memory] : assets;
 }

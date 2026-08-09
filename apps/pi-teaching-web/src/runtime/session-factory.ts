@@ -27,6 +27,10 @@ import { configureStudySubagentDirectory } from './subagent-path';
 import { memoryEnabled } from './memory-tools';
 import { recoverDocumentTransactions } from './multi-document-transaction';
 import { createFreeLearningTools } from './free-learning-tools';
+import {
+  clearSettledPendingMemoryToolResults,
+  reconcilePendingMemoryToolResults,
+} from './pending-tool-results';
 
 export interface StudySession {
   readonly sessionId: string;
@@ -90,6 +94,13 @@ export function recoverSessionFactoryState(root: string): string[] {
   return recoverDocumentTransactions(root);
 }
 
+export function recoverOpenedSessionState(
+  root: string,
+  manager: Pick<SessionManager, 'getSessionId' | 'getBranch' | 'appendMessage'>,
+): void {
+  reconcilePendingMemoryToolResults(root, manager);
+}
+
 export async function createPiSessionFactory(root: string): Promise<StudySessionFactory> {
   recoverSessionFactoryState(root);
   configureStudySubagentDirectory();
@@ -104,6 +115,8 @@ export async function createPiSessionFactory(root: string): Promise<StudySession
         ? scope.title
         : `${scope.nodeKind} · ${scope.nodeId}`);
       appendSessionOwner(manager, scope);
+    } else {
+      recoverOpenedSessionState(root, manager);
     }
     const resourceLoader = await createRoleResourceLoader(root, scope, eventBus);
     const customTools = customToolsForSession(root, scope, manager);
@@ -120,6 +133,10 @@ export async function createPiSessionFactory(root: string): Promise<StudySession
           : modelToolsForNode(scope.nodeKind, memoryEnabled(root)))],
     });
     await bindStudyExtensions(session);
+    const disposePendingCleanup = session.subscribe((event) => {
+      if (event.type !== 'message_end' || event.message.role !== 'toolResult') return;
+      clearSettledPendingMemoryToolResults(root, manager);
+    });
     const compaction = !isNodeSessionScope(scope)
       ? {
         prompt: (text: string, images: ImageContent[] = []) => session.prompt(text, { images }),
@@ -149,6 +166,7 @@ export async function createPiSessionFactory(root: string): Promise<StudySession
         manager.appendCustomEntry(customType, data);
       },
       dispose: () => {
+        disposePendingCleanup();
         compaction.dispose();
         session.dispose();
       },

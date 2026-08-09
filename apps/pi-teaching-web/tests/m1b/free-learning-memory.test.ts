@@ -41,6 +41,24 @@ function newObject(): FreeLearningMemoryCommitDraft {
   };
 }
 
+function boundFreeLearningSession(toolCallId: string, input: unknown) {
+  return {
+    getSessionId: () => 'free-session-001',
+    getBranch: () => [{
+      type: 'message',
+      message: {
+        role: 'assistant',
+        content: [{
+          type: 'toolCall',
+          id: toolCallId,
+          name: 'free_learning_memory_commit',
+          arguments: input,
+        }],
+      },
+    }] as never,
+  };
+}
+
 async function execute(
   tool: NonNullable<ReturnType<typeof createFreeLearningMemoryTool>>,
   id: string,
@@ -130,7 +148,10 @@ test('requires a complete snapshot only for a genuinely new object', () => {
 
 test('keeps runtime provenance and authorization fields out of the tool schema', () => {
   const root = copyFixture();
-  const tool = createFreeLearningMemoryTool(root, 'free-session-001')!;
+  const tool = createFreeLearningMemoryTool(
+    root,
+    boundFreeLearningSession('schema', newObject()),
+  )!;
 
   expect(Check(tool.parameters, newObject())).toBeTrue();
   for (const extra of [
@@ -147,11 +168,16 @@ test('keeps runtime provenance and authorization fields out of the tool schema',
 
 test('commits mid-session and replays one successful native tool call', async () => {
   const root = copyFixture();
-  const tool = createFreeLearningMemoryTool(root, 'free-session-001')!;
-  const first = await execute(tool, 'memory-call-1', newObject());
-  const replay = await execute(tool, 'memory-call-1', newObject());
+  const input = newObject();
+  const tool = createFreeLearningMemoryTool(
+    root,
+    boundFreeLearningSession('memory-call-1', input),
+  )!;
+  const first = await execute(tool, 'memory-call-1', input);
+  const replay = await execute(tool, 'memory-call-1', input);
 
   expect(first).toEqual(replay);
+  expect(first).not.toHaveProperty('durationMs');
   expect(first).toMatchObject({
     ok: true,
     objectIds: { 'ksp-boundary': 'obj-001' },
@@ -160,4 +186,3 @@ test('commits mid-session and replays one successful native tool call', async ()
   expect(readFileSync(join(root, 'memory/objects/obj-001.md'), 'utf8'))
     .toContain('free-session-001');
 });
-

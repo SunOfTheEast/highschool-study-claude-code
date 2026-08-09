@@ -65,6 +65,24 @@ function existingObjectPatchInput() {
   };
 }
 
+function boundLessonSession(toolCallId: string, input: unknown) {
+  return {
+    getSessionId: () => 'lesson-session-001',
+    getBranch: () => [{
+      type: 'message',
+      message: {
+        role: 'assistant',
+        content: [{
+          type: 'toolCall',
+          id: toolCallId,
+          name: 'lesson_memory_commit',
+          arguments: input,
+        }],
+      },
+    }] as never,
+  };
+}
+
 async function execute(tool: NonNullable<ReturnType<typeof createLessonMemoryTool>>, id: string, input: unknown) {
   const result = await tool.execute(id, input as never, undefined, undefined, {} as never);
   return JSON.parse((result.content[0] as { text: string }).text) as Record<string, unknown>;
@@ -85,15 +103,20 @@ test('registers memory tools only when the learning set opts into M1', () => {
 
   expect(memoryEnabled(m1)).toBeTrue();
   expect(memoryEnabled(m0)).toBeFalse();
-  expect(createLessonMemoryTool(m1, lessonPath)?.name).toBe('lesson_memory_commit');
-  expect(createLessonMemoryTool(m0, lessonPath)).toBeNull();
+  const session = boundLessonSession('registration', commitInput());
+  expect(createLessonMemoryTool(m1, lessonPath, session)?.name).toBe('lesson_memory_commit');
+  expect(createLessonMemoryTool(m0, lessonPath, session)).toBeNull();
   expect(createPlanMemoryTools(m1).map((tool) => tool.name)).toEqual(['memory_route_resolve']);
   expect(createPlanMemoryTools(m0)).toEqual([]);
 });
 
 test('keeps paths, stable output IDs, time, and approval state out of both schemas', () => {
   const root = copyFixture();
-  const lesson = createLessonMemoryTool(root, lessonPath)!;
+  const lesson = createLessonMemoryTool(
+    root,
+    lessonPath,
+    boundLessonSession('schema', commitInput()),
+  )!;
   const route = createPlanMemoryTools(root)[0]!;
 
   expect(Check(lesson.parameters, commitInput())).toBeTrue();
@@ -125,7 +148,11 @@ test('keeps paths, stable output IDs, time, and approval state out of both schem
 
 test('accepts existing-object patches but keeps new Lesson object snapshots complete', () => {
   const root = copyFixture();
-  const lesson = createLessonMemoryTool(root, lessonPath)!;
+  const lesson = createLessonMemoryTool(
+    root,
+    lessonPath,
+    boundLessonSession('patch-schema', commitInput()),
+  )!;
   const incompleteNewObject = {
     objects: [{
       target: { kind: 'new', key: 'incomplete', title: '不完整对象' },
@@ -149,15 +176,18 @@ test('accepts existing-object patches but keeps new Lesson object snapshots comp
 
 test('commits one bound semantic bundle and replays a successful native call ID once', async () => {
   const root = copyFixture();
-  const tool = createLessonMemoryTool(root, lessonPath)!;
+  const input = commitInput();
+  const tool = createLessonMemoryTool(
+    root,
+    lessonPath,
+    boundLessonSession('memory-call-1', input),
+  )!;
 
-  const first = await execute(tool, 'memory-call-1', commitInput());
-  const replay = await execute(tool, 'memory-call-1', commitInput());
+  const first = await execute(tool, 'memory-call-1', input);
+  const replay = await execute(tool, 'memory-call-1', input);
 
   expect(first).toEqual(replay);
-  expect(typeof first.durationMs).toBe('number');
-  expect(Number.isFinite(first.durationMs as number)).toBeTrue();
-  expect((first.durationMs as number) >= 0).toBeTrue();
+  expect(first).not.toHaveProperty('durationMs');
   expect(first).toMatchObject({
     ok: true,
     commitId: expect.stringMatching(/^[0-9a-f-]{36}$/),
@@ -177,7 +207,12 @@ test('commits one bound semantic bundle and replays a successful native call ID 
 
 test('resolves only the declared deferred edge and replays its receipt once', async () => {
   const root = copyFixture();
-  await execute(createLessonMemoryTool(root, lessonPath)!, 'seed-deferred', commitInput());
+  const seed = commitInput();
+  await execute(createLessonMemoryTool(
+    root,
+    lessonPath,
+    boundLessonSession('seed-deferred', seed),
+  )!, 'seed-deferred', seed);
   writeFileSync(join(root, 'memory/indexes/algebraic-structure.md'), [
     '# algebraic-structure：代数结构',
     '',
@@ -217,7 +252,12 @@ test('does not cache failed native call IDs', async () => {
     buckets: [{ kind: 'new', key: 'route-choice', title: '目标选路' }],
   };
   await expect(executePlan(tool, 'retryable-route', input)).rejects.toThrow();
-  await execute(createLessonMemoryTool(root, lessonPath)!, 'seed-after-failure', commitInput());
+  const seed = commitInput();
+  await execute(createLessonMemoryTool(
+    root,
+    lessonPath,
+    boundLessonSession('seed-after-failure', seed),
+  )!, 'seed-after-failure', seed);
 
   expect(await executePlan(tool, 'retryable-route', input)).toMatchObject({
     ok: true,
