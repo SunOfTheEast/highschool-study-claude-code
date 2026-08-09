@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>预览目录 · 留白新中式预览草稿</title>
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='8' fill='%239e4f3d'/><rect x='7' y='7' width='50' height='50' rx='4' fill='none' stroke='%23faf7f1' stroke-opacity='.55' stroke-width='2'/><text x='32' y='45' font-size='34' text-anchor='middle' fill='%23faf7f1' font-family='Kaiti SC,STKaiti,KaiTi,serif'>学</text></svg>">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.1.0/lxgwwenkaiscreen.css">
+<link rel="stylesheet" href="./styles/liubai-preview.css">
+</head>
+<body>
+<div class="doc">
+  <header class="home-brand">
+    <a class="who" href="./index.html">
+      <span class="seal seal--zhu">学</span>
+      <span class="wordmark">StudyForge<small>前端原型页 · 留白新中式 v2</small></span>
+    </a>
+    <span class="label">PROTOTYPE · 定案</span>
+  </header>
+
+  <div class="doc-hero">
+    <h1>前端预览草稿</h1>
+    <p>这是一组<b>可以直接点开看</b>的静态视觉稿，回应三个感受：视觉质感、学习动线、进度可见性。六个页面，全部锚定真实学习集内容（导数 · 定义域完整性 Plan），零构建、无应用代码改动。已定案两项：品牌章 B · 限量朱砂（2026-08-04）；全站字体统一霞鹜文楷（2026-08-04，对照记录见字体页）。建议顺序：先看设计系统立基调，再按「首页 → Coach → 课堂 → 回放」走一遍学习动线。</p>
+    <p class="faint" style="font-size:var(--text-meta)">字体与公式渲染走 CDN，需要网络；无网络时回退系统楷体/黑体、公式显示 LaTeX 源码，布局仍然成立。</p>
+  </div>
+
+  <section class="doc-section">
+    <h2>六个页面</h2>
+    <div class="gallery" style="margin-top:var(--space-5)">
+      <a class="gallery-card" href="./tokens.html">
+        <div class="gc-k">设计系统</div>
+        <div class="gc-t">Tokens · 色板字体间距</div>
+        <div class="gc-d">质感的地基：真实加载的楷体/宋体、11 级字号阶梯（消灭 8.8px 小字）、三层纸、品牌章（已选定 B · 限量朱砂）。</div>
+      </a>
+      <a class="gallery-card" href="./screen-home.html">
+        <div class="gc-k">屏 1 · 痛点 1+2+3</div>
+        <div class="gc-t">学习集首页</div>
+        <div class="gc-d">楷体 Hero、印章品牌、「继续学习」唯一强 CTA（含朱砂章）、Plan 行内进度 2/3、能力星图摘要。</div>
+      </a>
+      <a class="gallery-card" href="./screen-plan.html">
+        <div class="gc-k">屏 2 · 痛点 2+3</div>
+        <div class="gc-t">Coach 工作区</div>
+        <div class="gc-d">面包屑条（路线图 › Plan › Coach）、右端 Plan 进度、会话树字号修正、复盘对话、深度会诊工作流。</div>
+      </a>
+      <a class="gallery-card" href="./screen-lesson.html">
+        <div class="gc-k">屏 3 · 痛点 2+3</div>
+        <div class="gc-t">Tutor 课堂</div>
+        <div class="gc-d">面包屑到 Lesson 级、课堂本「必做 1/4」进度、进行中 Block 黛青左脊、KaTeX 题卡、可选修复块。</div>
+      </a>
+      <a class="gallery-card" href="./screen-replay.html">
+        <div class="gc-k">屏 4 · 痛点 1</div>
+        <div class="gc-t">课后回放</div>
+        <div class="gc-d">发丝线时间轴（对话/证据/路线/图片四类节点）、初始与实际路线对比、本课证据变化。</div>
+      </a>
+      <a class="gallery-card" href="./fonts.html">
+        <div class="gc-k">已定案</div>
+        <div class="gc-t">正文字体对比</div>
+        <div class="gc-d">全部霞鹜文楷：标题、长文、题面、对话同体（2026-08-04）。朱雀仿宋、MiSans、HarmonyOS Sans 等候选保留对照。</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2>m1b/c 新屏 · v3 草稿（2026-08-09 · 待评审）</h2>
+    <p class="doc-note">自由学习闭环与语义收敛带来的八个页面。<b>同材异形</b>：材料严格共享，构图各屏签名 —— 玄关 / 信纸 / 架 / 笺 / 卷 / 文献 / 账簿。新屏带生产 chrome（墨线 + 品牌章 + 主导航），它晚于 v2 四屏，故旧屏没有。内容锚定北极星文档的化学 Ksp 叙事（空白学习集，无正式课程）。</p>
+    <div class="gallery" style="margin-top:var(--space-5)">
+      <a class="gallery-card" href="./screen-portal.html">
+        <div class="gc-k">玄关 · 首页</div>
+        <div class="gc-t">学习集首页</div>
+        <div class="gc-d">「问老师」全页唯一强行动（左脊墨线底 + 朱砂「问」章 · 第三处）；三个次入口降为发丝线行；最近自由学习列表。</div>
+      </a>
+      <a class="gallery-card" href="./screen-talk.html">
+        <div class="gc-k">信纸 · 一屏双态</div>
+        <div class="gc-t">自由学习 / Meta</div>
+        <div class="gc-d">拆掉白盒子：聊天直接落在纸面，输入区 2px 墨线顶与课程同款；居中 760px 阅读宽；结束态与携带行见页内声明。</div>
+      </a>
+      <a class="gallery-card" href="./screen-assets.html">
+        <div class="gc-k">架 · 资产库</div>
+        <div class="gc-t">我的学习资料</div>
+        <div class="gc-d">三架层（资料/笔记/题卡），选中态洗色行 + 页头实心「带着所选问老师」计数；上传收成安静的一行。</div>
+      </a>
+      <a class="gallery-card" href="./screen-note.html">
+        <div class="gc-k">笺 · Note</div>
+        <div class="gc-t">Ksp 与固体活度</div>
+        <div class="gc-d">760px 长文阅读；回忆块 = 黛青左脊 wash +「显示答案」门；编辑态走统一五金件表单（见页内声明）。</div>
+      </a>
+      <a class="gallery-card" href="./screen-problem.html">
+        <div class="gc-k">卷 · 题卡</div>
+        <div class="gc-t">AgCl 饱和溶液的离子浓度</div>
+        <div class="gc-d">白底题卡纸 + 等宽别名行；作答门（提交主档 /「不会，直接看答案」文字链）；页脚实心「带着这次作答问老师」。</div>
+      </a>
+      <a class="gallery-card" href="./screen-material.html">
+        <div class="gc-k">文献 · 原始资料</div>
+        <div class="gc-t">教材节选 · 沉淀溶解平衡</div>
+        <div class="gc-d">等宽 locator 输入（§章节 / 页码）+「读取来源」描边；摘录为黛青左脊 reading 块；「带着这一段问老师」实心。</div>
+      </a>
+      <a class="gallery-card" href="./screen-footprint.html">
+        <div class="gc-k">账簿 · 足迹</div>
+        <div class="gc-t">学习足迹</div>
+        <div class="gc-d">复用母版回放时间轴：对话灰 / 资产空心 / 作答暗金 / 认知变化黛青；「回到发生处」文字链；底部一行反膨胀声明。</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2>痛点 → 在哪里看</h2>
+    <table class="pain-map" style="margin-top:var(--space-4)">
+      <tr><th style="width:10em">痛点</th><th>修复点</th><th style="width:16em">位置</th></tr>
+      <tr><td>视觉质感</td><td>字体真实加载（楷体标题 / 宋体长文）、字号阶梯、三层纸、印章品牌与 favicon</td><td><a href="./tokens.html">tokens</a> · 全部页面</td></tr>
+      <tr><td>学习动线</td><td>「继续学习」入口、面包屑条（路线图 › Plan › Lesson）、待商定的下一 Plan 占位</td><td><a href="./screen-home.html">home</a> · <a href="./screen-plan.html">plan</a> · <a href="./screen-lesson.html">lesson</a></td></tr>
+      <tr><td>进度可见性</td><td>Plan 进度 2/3（首页 + 面包屑 + 会话树三处一致）、课堂本 Block 进度、能力星图摘要、回放证据变化</td><td><a href="./screen-home.html">home</a> · <a href="./screen-lesson.html">lesson</a> · <a href="./screen-replay.html">replay</a></td></tr>
+    </table>
+  </section>
+
+  <section class="doc-section">
+    <h2>目标态标注（当前契约没有的数据）</h2>
+    <div style="display:flex;flex-direction:column;gap:var(--space-3);margin-top:var(--space-4)">
+      <div class="target-note"><b>「继续学习」入口</b> —— 数据是上次学习位置。落地不需要改契约：前端 localStorage 记住最近 planId/lessonId 即可。</div>
+      <div class="target-note"><b>首页 Plan 行内进度</b> —— 需要每 Plan 的 Lesson 状态计数。可先只对「最近打开的 Plan」用缓存的工作区快照推算；契约扩展 <span class="mono">PlanSummary.progress</span> 列为后续。</div>
+      <div class="target-note"><b>首页能力星图摘要</b> —— 首页快照不含证据投影，需契约扩展或复用工作区快照，列为后续。</div>
+      <div class="target-note"><b>其余所有元素</b>（面包屑、Plan 页进度、课堂本 Block 进度、树状态、能力节点）—— 现有契约数据已足够，可直接落地。</div>
+    </div>
+  </section>
+
+  <footer class="home-foot">
+    <span>锚定内容：examples/derivative-demo（导数学习集 · 519 张题卡）</span>
+    <span>静态视觉稿 · 无应用代码改动 · 详见 README.md</span>
+  </footer>
+</div>
+</body>
+</html>

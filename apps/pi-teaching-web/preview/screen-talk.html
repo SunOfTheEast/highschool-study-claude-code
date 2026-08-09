@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>自由学习 · 信纸 · 留白新中式预览 v3</title>
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='8' fill='%239e4f3d'/><rect x='7' y='7' width='50' height='50' rx='4' fill='none' stroke='%23faf7f1' stroke-opacity='.55' stroke-width='2'/><text x='32' y='45' font-size='34' text-anchor='middle' fill='%23faf7f1' font-family='Kaiti SC,STKaiti,KaiTi,serif'>学</text></svg>">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.1.0/lxgwwenkaiscreen.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css">
+<link rel="stylesheet" href="./styles/liubai-preview.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}]});"></script>
+</head>
+<body>
+<header class="chrome">
+  <div class="chrome-in">
+    <a class="who" href="./screen-portal.html">
+      <span class="seal seal--zhu">学</span>
+      <span class="wordmark">StudyForge<small>高中化学 · 本地学习集</small></span>
+    </a>
+    <nav class="chrome-nav" aria-label="主视图">
+      <a href="./screen-portal.html">学习首页</a>
+      <a href="./screen-assets.html">学习资料</a>
+    </nav>
+    <span class="chrome-conn"><span class="dot dot--steady"></span> 本地已连接</span>
+  </div>
+</header>
+
+<div class="page page--read">
+  <header class="page-head">
+    <div>
+      <span class="label">自由学习 · OPEN CONVERSATION</span>
+      <h1>Ksp 与固体活度</h1>
+    </div>
+    <div class="page-actions">
+      <button class="btn" type="button">结束这次自由学习</button>
+    </div>
+  </header>
+
+  <div class="talk-flow">
+    <div class="msg msg--student">
+      <span class="msg-role">学生</span>
+      <div class="msg-body">
+        <p>\(K_{sp}\) 为什么看起来就只是几个离子浓度相乘？固体去哪了？</p>
+      </div>
+    </div>
+
+    <div class="msg">
+      <span class="msg-role">老师</span>
+      <div class="msg-body">
+        <p>先看更熟的一般平衡常数。对 \(aA + bB \rightleftharpoons cC + dD\)，\(K\) 里每一项都是<strong>活度</strong>，不是浓度本身。</p>
+        <p>那么 \(\mathrm{AgCl(s)} \rightleftharpoons \mathrm{Ag}^+ + \mathrm{Cl}^-\) 里，固体的活度是多少？</p>
+      </div>
+    </div>
+
+    <div class="msg msg--student">
+      <span class="msg-role">学生</span>
+      <div class="msg-body">
+        <p>固体……不变？它的「浓度」永远是它自己，所以活度恒为 1？</p>
+      </div>
+    </div>
+
+    <div class="msg">
+      <span class="msg-role">老师</span>
+      <div class="msg-body">
+        <p>对。纯固体活度取 1，所以</p>
+        <p>$$K_{sp} = [\mathrm{Ag}^+][\mathrm{Cl}^-]$$</p>
+        <p>\(K_{sp}\) 不是一条孤立规定，是一般平衡常数在多相体系中的样子。那么追问一句：<strong>「沉淀量变多」会让 \(K_{sp}\) 变大吗？</strong></p>
+      </div>
+    </div>
+
+    <div class="msg msg--student">
+      <span class="msg-role">学生</span>
+      <div class="msg-body">
+        <p>不会。\(K_{sp}\) 只跟温度走，沉淀多少不影响。</p>
+      </div>
+    </div>
+
+    <div class="msg">
+      <span class="msg-role">老师</span>
+      <div class="msg-body">
+        <p>这个结论是你自己推出来的，我记下了。目前它是在提示后形成的，还没检验能不能用到别的多相平衡上 —— 下次遇到 \(\mathrm{Mg(OH)_2}\) 时我们会知道。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="composer">
+    <div class="composer-box">继续说……</div>
+    <div class="composer-bar">
+      <div class="left"><span>Enter 发送 · Shift+Enter 换行</span></div>
+      <button class="btn btn--primary" type="button">发送</button>
+    </div>
+  </div>
+
+  <div class="target-note" style="margin-top:var(--space-6)">
+    <b>变体声明</b>：携带资产进入时，页头下方出现一行 faint「携带：题卡 ××× · 最近作答状态」；Meta「长期学习规划」同骨架（eyebrow 为「长期方向 · DIRECTION」，已有课程时页头右侧为描边「进入 Roadmap」）；线程已结束态 = 页头右侧换 faint 状态行、输入区禁用。
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Note · 笺 · 留白新中式预览 v3</title>
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='8' fill='%239e4f3d'/><rect x='7' y='7' width='50' height='50' rx='4' fill='none' stroke='%23faf7f1' stroke-opacity='.55' stroke-width='2'/><text x='32' y='45' font-size='34' text-anchor='middle' fill='%23faf7f1' font-family='Kaiti SC,STKaiti,KaiTi,serif'>学</text></svg>">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.1.0/lxgwwenkaiscreen.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css">
+<link rel="stylesheet" href="./styles/liubai-preview.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}]});"></script>
+</head>
+<body>
+<header class="chrome">
+  <div class="chrome-in">
+    <a class="who" href="./screen-portal.html">
+      <span class="seal seal--zhu">学</span>
+      <span class="wordmark">StudyForge<small>高中化学 · 本地学习集</small></span>
+    </a>
+    <nav class="chrome-nav" aria-label="主视图">
+      <a href="./screen-portal.html">学习首页</a>
+      <a href="./screen-assets.html" aria-current="page">学习资料</a>
+    </nav>
+    <span class="chrome-conn"><span class="dot dot--steady"></span> 本地已连接</span>
+  </div>
+</header>
+
+<div class="page page--read">
+  <header class="page-head">
+    <div>
+      <span class="label">NOTE · 第 1 版</span>
+      <h1>Ksp 与固体活度</h1>
+    </div>
+    <div class="page-actions">
+      <button class="btn" type="button">编辑笔记</button>
+    </div>
+  </header>
+
+  <div style="display:grid;gap:var(--space-2);margin-bottom:var(--space-6)">
+    <span class="pill-row"><span class="pill">沉淀溶解平衡</span><span class="pill">活度</span></span>
+    <span class="src-line">来源：自由学习「Ksp 与固体活度」 · 2026-08-08</span>
+  </div>
+
+  <div class="doc-body">
+    <p>一般平衡常数 \(K\) 里每一项都是<strong>活度</strong>，而不是浓度本身。对沉淀溶解平衡 \(\mathrm{AgCl(s)} \rightleftharpoons \mathrm{Ag}^+ + \mathrm{Cl}^-\)，AgCl 是纯固体，活度恒为 1，所以表达式里只剩下离子浓度：</p>
+    <p>$$K_{sp} = [\mathrm{Ag}^+][\mathrm{Cl}^-]$$</p>
+    <p>所以「固体去哪了」的答案是：它没有消失，而是作为常数 1 被约掉了。\(K_{sp}\) 不是一条孤立规定，是一般平衡常数在多相平衡中的特定表达。</p>
+  </div>
+
+  <div class="spine">
+    <span class="spine-label">回忆一下</span>
+    <p style="margin:0;font-family:var(--font-reading);font-size:var(--text-body)">为什么纯固体不出现在 \(K_{sp}\) 表达式里？</p>
+    <div style="margin-top:var(--space-3)"><button class="btn btn--sm" type="button">显示答案</button></div>
+  </div>
+
+  <div class="target-note">
+    <b>变体声明</b>：「显示答案」后，答案在块内以发丝线分隔展开（.spine-answer）；编辑态为统一五金件表单 —— 标题 input + 正文块 textarea + 回忆块 fieldset（提示/答案）+ wash 主档「保存修改」。
+  </div>
+</div>
+</body>
+</html>
