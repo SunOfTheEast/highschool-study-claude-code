@@ -97,6 +97,13 @@ test('keeps paths, stable output IDs, time, and approval state out of both schem
   const route = createPlanMemoryTools(root)[0]!;
 
   expect(Check(lesson.parameters, commitInput())).toBeTrue();
+  expect(Check(lesson.parameters, {
+    ...commitInput(),
+    closingFact: {
+      blockId: 'block-001',
+      note: '不再允许的旁路事实。',
+    },
+  })).toBeFalse();
   for (const extra of [
     { root },
     { lessonPath },

@@ -77,6 +77,11 @@ test('gives Tutor one bright-line reflection and minimal sufficient consolidatio
   expect(consolidation).toContain('教学待办');
   expect(consolidation).toContain('不回读');
   expect(consolidation).toContain('没有类别配额');
+  expect(consolidation).toContain('课末交流真的产生了新的决定性表现');
+  expect(consolidation).toContain('classroom_update');
+  expect(consolidation).toContain('classroom_log_append');
+  expect(consolidation).toContain('Reflection Block');
+  expect(consolidation).not.toContain('closingFact');
   expect(consolidation).not.toContain('用原生 `edit`');
 });
 

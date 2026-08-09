@@ -7,7 +7,6 @@ import {
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { resolveDocumentPath } from '../runtime/atomic-document';
 import type { DocumentCandidate } from '../runtime/multi-document-transaction';
-import { appendClosingClassroomLogSource } from './lesson-mutations';
 import { parseLessonSource, StudyDocumentError } from './markdown';
 
 export type { DocumentCandidate } from '../runtime/multi-document-transaction';
@@ -79,7 +78,6 @@ export type PreferenceMutation = {
 };
 
 export type LessonMemoryCommitDraft = {
-  closingFact?: { blockId: string; note: string };
   objects: ObjectMutation[];
   preferences: PreferenceMutation[];
 };
@@ -683,15 +681,7 @@ export function planLessonMemoryCommit(
   if (lessonPath !== expectedPath) {
     throw new StudyDocumentError(lessonPath, `Lesson path must be ${expectedPath}`);
   }
-  let lessonAfter = draft.closingFact
-    ? appendClosingClassroomLogSource(
-        lessonPath,
-        lessonBefore,
-        draft.closingFact.blockId,
-        draft.closingFact.note,
-      )
-    : lessonBefore;
-  const lesson = parseLessonSource(lessonPath, lessonAfter);
+  const lesson = parseLessonSource(lessonPath, lessonBefore);
   const blockIds = new Set(lesson.blocks.map((block) => block.id));
 
   const objectIds: Record<string, string> = {};
@@ -943,13 +933,6 @@ export function planLessonMemoryCommit(
   }
 
   const candidates: DocumentCandidate[] = [];
-  const lessonCandidate = changedCandidate(
-    lessonPath,
-    lessonBefore,
-    lessonAfter,
-    (source) => { parseLessonSource(lessonPath, source); },
-  );
-  if (lessonCandidate) candidates.push(lessonCandidate);
   for (const object of [...resolvedObjects].sort((a, b) => a.path.localeCompare(b.path))) {
     const candidate = changedCandidate(
       object.path,

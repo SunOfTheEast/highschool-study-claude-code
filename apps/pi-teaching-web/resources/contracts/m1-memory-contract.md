@@ -29,8 +29,10 @@
 
 ## 原子固化与路由所有权
 
-Tutor 在唯一课末反思后用一次 `lesson_memory_commit` 提交可选的补充课堂事实、受影响对象
-的学习历史与当前判断、明确偏好和对象路由。对象的 `learningHistoryEntry` 只压缩这次变化，
+Tutor 在唯一课末反思后用一次 `lesson_memory_commit` 提交受影响对象的学习历史与当前判断、
+明确偏好和对象路由。课末交流新增的决定性课堂事实必须先经 `classroom_update` 与
+`classroom_log_append` 进入真实 Reflection Block；记忆提交只引用它。对象的
+`learningHistoryEntry` 只压缩这次变化，
 `evidenceBlockIds` 指向当前 Lesson 中真实存在的来源 Block。
 
 正式 Lesson 中，已有对象只提交实际变化的 Current Judgment、Evolution Overview 或
@@ -46,8 +48,9 @@ bucket；它只绑定当前 Lesson、时间、稳定 ID、路径、链接并原�
 目录。Plan Coach 形成明确分类判断后，使用 `memory_route_resolve` 把该对象连接到点名的
 既有或新 bucket；仍不清楚时保持原样。这个工具不承担对象合并、普通重分桶或能力判断。
 
-成功回执后不回读刚写入的文件。学生纠正通过新的 `lesson_memory_commit` 向 Classroom Log
-和受影响对象的 Learning History 追加纠正事实，并修订当前判断；旧记录永不重写。
+成功回执后不回读刚写入的文件。学生纠正先写入新的 Reflection Block，再通过新的
+`lesson_memory_commit` 向受影响对象的 Learning History 追加纠正事实并修订当前判断；
+旧记录永不重写。
 
 自由学习不建立 Log 或 Trace，也不等待 Session 结束。只有当本次真实对话会改变未来教师对
 “学生怎样理解这个对象、学到哪里、边界在哪里”的判断时，Tutor 才用

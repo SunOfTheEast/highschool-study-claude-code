@@ -149,29 +149,6 @@ export function appendClassroomLogSource(
   return appendLogItemToBlock(path, source, active[0]!.id, note);
 }
 
-export function appendClosingClassroomLogSource(
-  path: string,
-  source: string,
-  blockId: string,
-  note: string,
-): string {
-  const lesson = parseLessonSource(path, source);
-  if (lesson.status !== 'active') {
-    throw new StudyDocumentError(path, `Lesson must be active, found ${lesson.status}`);
-  }
-  const block = blockById(lesson, blockId, path);
-  if (
-    block.status !== 'active'
-    && !(block.kind === 'reflection' && block.status === 'completed')
-  ) {
-    throw new StudyDocumentError(
-      path,
-      `closing fact requires an active Block or completed Reflection: ${blockId}`,
-    );
-  }
-  return appendLogItemToBlock(path, source, blockId, note);
-}
-
 function requireActiveLesson(path: string, source: string): LessonDocument {
   const lesson = parseLessonSource(path, source);
   if (lesson.status !== 'active') {

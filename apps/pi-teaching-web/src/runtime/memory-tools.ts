@@ -106,10 +106,6 @@ const lessonObjectMutation = Type.Union([
 ]);
 
 const lessonMemoryCommitParameters = Type.Object({
-  closingFact: Type.Optional(Type.Object({
-    blockId: stableId,
-    note: Type.String({ minLength: 1 }),
-  }, { additionalProperties: false })),
   objects: Type.Array(lessonObjectMutation),
   preferences: Type.Array(Type.Object({
     target: preferenceTarget,

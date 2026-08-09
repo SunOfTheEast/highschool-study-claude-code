@@ -26,8 +26,9 @@
 
 随后形成一次语义提交，只写本课真实新增的部分：
 
-- `closingFact`：学生在 active Block 或已完成 Reflection 后补充的决定性课堂事实；没有就
-  省略。Block 由 Tutor 根据本课证据明确选择。
+- 若课末交流真的产生了新的决定性表现，先把它留在 Lesson，而不是夹进记忆提交：通过
+  `classroom_update` 插入并开始一个最小的 Reflection Block，用 `classroom_log_append`
+  记录事实，交流结束后再通过 `classroom_update` 完成它。随后记忆只引用这个真实 Block。
 - `objects`：先复用已经读到的稳定对象，每个对象追加一条 `learningHistoryEntry`；其中
   `change` 只说明本次认识如何变化，`evidenceBlockIds` 只列当前 Lesson 中真正支持它的
   Block。已有对象只提交实际变化的 Current Judgment、Evolution Overview 或边界；
@@ -54,6 +55,6 @@
 
 ## 学生纠正
 
-学生纠正公开总结时，重新形成一份最小语义提交：用 `closingFact` 追加纠正事实，为受影响
-对象追加一条纠正后的 Learning History，并修订受影响对象或偏好的当前判断。仍然只调用
-一次 `lesson_memory_commit`；历史条目保留，纠正不是擦除第一次记录。
+学生纠正公开总结时，先按同一路径建立一个最小 Reflection Block 并追加纠正事实，再为受
+影响对象追加一条引用该 Block 的 Learning History，修订受影响对象或偏好的当前判断，最后
+调用一次 `lesson_memory_commit`。历史条目保留，纠正不是擦除第一次记录。
