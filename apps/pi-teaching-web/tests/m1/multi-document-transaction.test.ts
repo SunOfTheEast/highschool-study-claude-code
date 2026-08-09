@@ -67,6 +67,25 @@ test('commits an exact existing and new file set', () => {
   expect(transactionDirectories(root)).toEqual([]);
 });
 
+test('uses one valid preallocated commit ID for the atomic transaction', () => {
+  const root = createRoot();
+  const commitId = '123e4567-e89b-42d3-a456-426614174000';
+
+  expect(commitDocumentCandidates(root, candidates(root), { commitId }).commitId)
+    .toBe(commitId);
+});
+
+test('rejects an invalid preallocated commit ID before changing documents', () => {
+  const root = createRoot();
+  const before = readFileSync(join(root, 'memory', 'INDEX.md'), 'utf8');
+
+  expect(() => commitDocumentCandidates(root, candidates(root), {
+    commitId: '../escape',
+  })).toThrow('COMMIT_ID_INVALID');
+  expect(readFileSync(join(root, 'memory', 'INDEX.md'), 'utf8')).toBe(before);
+  expect(existsSync(join(root, 'memory', 'objects', 'obj-001.md'))).toBeFalse();
+});
+
 test('validates every candidate before replacing any target', () => {
   const root = createRoot();
   const before = readFileSync(join(root, 'memory', 'INDEX.md'), 'utf8');

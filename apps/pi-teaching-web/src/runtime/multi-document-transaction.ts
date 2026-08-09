@@ -23,6 +23,7 @@ export type DocumentCandidate = {
 };
 
 export type TransactionTestHooks = {
+  commitId?: string;
   afterReplace?: (path: string, index: number) => void;
   leavePreparedOnError?: boolean;
 };
@@ -205,6 +206,8 @@ export function commitDocumentCandidates(
   hooks: TransactionTestHooks = {},
 ): { commitId: string; changedPaths: string[] } {
   if (candidates.length === 0) throw new Error('CANDIDATES_REQUIRED');
+  const commitId = hooks.commitId ?? randomUUID();
+  if (!transactionIdPattern.test(commitId)) throw new Error('COMMIT_ID_INVALID');
   const key = normalizedRoot(root);
   if (activeRoots.has(key)) throw new Error('DOCUMENT_TRANSACTION_BUSY');
   activeRoots.add(key);
@@ -233,7 +236,6 @@ export function commitDocumentCandidates(
       }
     }
 
-    const commitId = randomUUID();
     const base = transactionRoot(root);
     mkdirSync(base, { recursive: true });
     directory = join(base, commitId);
