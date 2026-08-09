@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" rx="224" fill="#F4ECDD"/>
+  <rect x="172" y="172" width="680" height="680" rx="116" fill="#A23A2A"/>
+  <rect x="207" y="207" width="610" height="610" rx="92" fill="none" stroke="#F4ECDD" stroke-width="22" opacity="0.9"/>
+  <text x="512" y="660" text-anchor="middle" font-family="Songti SC, STSong, serif" font-size="430" font-weight="700" fill="#F4ECDD">学</text>
+</svg>
