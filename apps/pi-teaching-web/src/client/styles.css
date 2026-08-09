@@ -75,6 +75,7 @@ button { color: inherit; }
 .katex-display {
   max-width: 100%;
   margin: var(--space-3, .75rem) 0;
+  padding-block: .25em;
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior-inline: contain;

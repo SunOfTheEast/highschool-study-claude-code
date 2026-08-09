@@ -1,4 +1,6 @@
 import { expect, test } from 'bun:test';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { MarkdownView } from '../../src/client/components/MarkdownView';
 import { prepareMathMarkdown } from '../../src/client/math-markdown';
@@ -75,4 +77,27 @@ test('keeps malformed formulas visible without throwing', () => {
   expect(render).not.toThrow();
   expect(render()).toContain('前文');
   expect(render()).toContain('后文');
+});
+
+test('renders a GFM table with math inside its cells', () => {
+  const source = [
+    '| 操作 | 反应气体的分压 | 平衡 |',
+    '|---|---|---|',
+    '| 恒温恒容加入惰性气体 | $p_i=n_iRT/V$ 不变 | 不移动 |',
+  ].join('\n');
+
+  const markup = renderToStaticMarkup(<MarkdownView>{source}</MarkdownView>);
+
+  expect(markup).toContain('<table>');
+  expect(markup).toContain('<th>操作</th>');
+  expect(markup).toContain('class="katex"');
+});
+
+test('gives horizontally scrollable display math vertical breathing room', () => {
+  const styles = readFileSync(join(import.meta.dir, '../../src/client/styles.css'), 'utf8');
+  const rule = /\.katex-display\s*\{([^}]*)\}/.exec(styles)?.[1] ?? '';
+  const paddingBlock = /padding-block\s*:\s*([^;]+)/.exec(rule)?.[1] ?? '0';
+
+  expect(rule).toContain('overflow-x: auto');
+  expect(Number.parseFloat(paddingBlock)).toBeGreaterThan(0);
 });
