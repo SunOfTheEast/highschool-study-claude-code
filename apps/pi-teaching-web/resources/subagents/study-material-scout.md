@@ -2,7 +2,6 @@
 name: study-material-scout
 description: Read-only learning-asset recall for one Plan Coach
 tools: read, grep, find, ls
-thinking: medium
 systemPromptMode: replace
 inheritProjectContext: false
 inheritSkills: false

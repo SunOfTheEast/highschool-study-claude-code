@@ -5,6 +5,7 @@ export const desktopThinkingLevels = [
   'medium',
   'high',
   'xhigh',
+  'max',
 ] as const;
 
 export type DesktopThinkingLevel = typeof desktopThinkingLevels[number];

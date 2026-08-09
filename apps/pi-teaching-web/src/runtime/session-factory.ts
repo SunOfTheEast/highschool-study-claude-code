@@ -4,6 +4,7 @@ import {
   createEventBus,
   ModelRuntime,
   SessionManager,
+  SettingsManager,
   type AgentSessionEvent,
   type SessionEntry,
 } from '@earendil-works/pi-coding-agent';
@@ -31,6 +32,8 @@ import {
   clearSettledPendingMemoryToolResults,
   reconcilePendingMemoryToolResults,
 } from './pending-tool-results';
+import type { DesktopModelSelection } from '../desktop/contracts';
+import { DesktopModelService } from '../desktop/model-service';
 
 export interface StudySession {
   readonly sessionId: string;
@@ -50,6 +53,14 @@ export type SessionFactoryInput = StudySessionScope & {
 };
 
 export type StudySessionFactory = (input: SessionFactoryInput) => Promise<StudySession>;
+
+export type PiRuntimeOptions = {
+  agentDir: string;
+  authPath: string;
+  modelsPath: string;
+  sessionsDir: string;
+  teacher: DesktopModelSelection;
+};
 
 export function sessionFactoryInput(
   scope: StudySessionScope,
@@ -101,15 +112,36 @@ export function recoverOpenedSessionState(
   reconcilePendingMemoryToolResults(root, manager);
 }
 
-export async function createPiSessionFactory(root: string): Promise<StudySessionFactory> {
+export function createStudySessionManager(
+  root: string,
+  sessionFile: string | null,
+  sessionsDir?: string,
+): SessionManager {
+  return sessionFile
+    ? SessionManager.open(sessionFile, sessionsDir, root)
+    : SessionManager.create(root, sessionsDir);
+}
+
+export async function createPiSessionFactory(
+  root: string,
+  options?: PiRuntimeOptions,
+): Promise<StudySessionFactory> {
   recoverSessionFactoryState(root);
   configureStudySubagentDirectory();
-  const modelRuntime = await ModelRuntime.create();
+  if (options) {
+    process.env.PI_CODING_AGENT_DIR = options.agentDir;
+    process.env.PI_CODING_AGENT_SESSION_DIR = options.sessionsDir;
+  }
+  const modelRuntime = await ModelRuntime.create(options
+    ? { authPath: options.authPath, modelsPath: options.modelsPath }
+    : undefined);
+  const model = options
+    ? await new DesktopModelService(modelRuntime).resolve(options.teacher)
+    : undefined;
+  const settingsManager = options ? SettingsManager.create(root, options.agentDir) : undefined;
   return async ({ sessionFile, ...scope }) => {
     const eventBus = createEventBus();
-    const manager = sessionFile
-      ? SessionManager.open(sessionFile, undefined, root)
-      : SessionManager.create(root);
+    const manager = createStudySessionManager(root, sessionFile, options?.sessionsDir);
     if (!sessionFile) {
       manager.appendSessionInfo(isFreeLearningScope(scope) || isMetaScope(scope)
         ? scope.title
@@ -123,6 +155,12 @@ export async function createPiSessionFactory(root: string): Promise<StudySession
     const { session } = await createAgentSession({
       cwd: root,
       modelRuntime,
+      ...(options ? {
+        agentDir: options.agentDir,
+        model: model!,
+        thinkingLevel: options.teacher.thinking,
+        settingsManager: settingsManager!,
+      } : {}),
       resourceLoader,
       sessionManager: manager,
       customTools,

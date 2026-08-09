@@ -71,6 +71,8 @@ git commit -m "feat: add isolated desktop workspace configuration"
 - Create: `apps/pi-teaching-web/src/desktop/model-service.ts`
 - Create: `apps/pi-teaching-web/src/desktop/pi-settings.ts`
 - Modify: `apps/pi-teaching-web/src/runtime/session-factory.ts`
+- Modify: `apps/pi-teaching-web/resources/subagents/study-material-scout.md`
+- Modify: `apps/pi-teaching-web/resources/subagents/lesson-risk-reviewer.md`
 - Test: `apps/pi-teaching-web/tests/desktop/model-service.test.ts`
 - Test: `apps/pi-teaching-web/tests/desktop/pi-settings.test.ts`
 - Test: `apps/pi-teaching-web/tests/m0/native-session.test.ts`
@@ -86,7 +88,7 @@ bun test tests/desktop/model-service.test.ts tests/desktop/pi-settings.test.ts t
 
 Expected: FAIL on the missing options and services.
 
-**Step 2 — GREEN:** Create one `ModelRuntime` against the explicit credential/model files; expose provider, auth-status, model and thinking metadata without re-implementing provider-specific rules. Persist only model choices in `app.json` and write Pi subagent overrides to the isolated agent `settings.json`. Do not silently fall back when a configured model is unavailable.
+**Step 2 — GREEN:** Create one `ModelRuntime` against the explicit credential/model files; expose provider, auth-status, model and thinking metadata without re-implementing provider-specific rules. Persist only model choices in `app.json` and write Pi subagent overrides to the isolated agent `settings.json`. Remove model/thinking pins from the two packaged subagent frontmatters so those explicit overrides can actually take effect. Do not silently fall back when a configured model is unavailable.
 
 **Step 3 — verify:** Re-run focused tests and typecheck.
 

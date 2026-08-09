@@ -1,8 +1,6 @@
 ---
 name: lesson-risk-reviewer
 description: 核验一项已点名课堂内容中的决定性数学或教学风险，不搜索、不重写整课。
-model: openai-codex/gpt-5.6-sol
-thinking: high
 tools: read
 systemPromptMode: replace
 inheritProjectContext: false

@@ -23,6 +23,7 @@ import {
 } from '../../src/runtime/resource-loader';
 import {
   customToolsForNode,
+  createStudySessionManager,
   recoverOpenedSessionState,
   recoverSessionFactoryState,
   sessionFactoryInput,
@@ -116,6 +117,15 @@ test('assembles static teaching resources and node-scoped model tools', () => {
     'save_problem_card',
     'lesson_memory_commit',
   ]);
+});
+
+test('persists desktop sessions only in the explicit StudyForge session directory', () => {
+  const root = copyFixture();
+  const sessionsDir = join(root, 'private-agent', 'sessions');
+  const manager = createStudySessionManager(root, null, sessionsDir);
+
+  expect(manager.getSessionDir()).toBe(sessionsDir);
+  expect(manager.getSessionFile()?.startsWith(sessionsDir)).toBe(true);
 });
 
 test('assembles the node-specific teaching Skill tree', () => {
@@ -552,9 +562,10 @@ test('packages one bounded Lesson risk Reviewer and routes it only for material 
 
   const reviewer = readFileSync(reviewerPath, 'utf8');
   const toolsLine = reviewer.match(/^tools:.*$/m)?.[0] ?? '';
+  const frontmatter = reviewer.split('---')[1] ?? '';
   expect(reviewer).toContain('name: lesson-risk-reviewer');
-  expect(reviewer).toContain('model: openai-codex/gpt-5.6-sol');
-  expect(reviewer).toContain('thinking: high');
+  expect(frontmatter).not.toMatch(/^model:/m);
+  expect(frontmatter).not.toMatch(/^thinking:/m);
   expect(reviewer).toContain('defaultContext: fresh');
   expect(reviewer).toContain('systemPromptMode: replace');
   expect(reviewer).toContain('inheritProjectContext: false');
