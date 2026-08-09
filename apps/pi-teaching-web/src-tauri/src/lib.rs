@@ -1,6 +1,7 @@
 pub mod sidecar;
 
 use std::{
+    ffi::OsString,
     path::PathBuf,
     sync::{Arc, Mutex},
 };
@@ -79,17 +80,36 @@ fn pi_binary() -> Result<PathBuf, String> {
         .join("binaries/studyforge-pi-aarch64-apple-darwin"))
 }
 
+fn desktop_directory(
+    override_value: Option<OsString>,
+    fallback: impl FnOnce() -> Result<PathBuf, String>,
+) -> Result<PathBuf, String> {
+    let path = match override_value {
+        Some(value) => PathBuf::from(value),
+        None => fallback()?,
+    };
+    if !path.is_absolute() {
+        return Err("STUDYFORGE_DESKTOP_PATH_INVALID".into());
+    }
+    Ok(path)
+}
+
 fn desktop_paths(app: &AppHandle) -> Result<DesktopPaths, String> {
-    let app_home = app
-        .path()
-        .data_dir()
-        .map_err(|error| error.to_string())?
-        .join("StudyForge");
-    let documents_home = app
-        .path()
-        .document_dir()
-        .map_err(|error| error.to_string())?
-        .join("StudyForge");
+    let app_home = desktop_directory(std::env::var_os("STUDYFORGE_DESKTOP_APP_HOME"), || {
+        app.path()
+            .data_dir()
+            .map(|path| path.join("StudyForge"))
+            .map_err(|error| error.to_string())
+    })?;
+    let documents_home = desktop_directory(
+        std::env::var_os("STUDYFORGE_DESKTOP_DOCUMENTS_HOME"),
+        || {
+            app.path()
+                .document_dir()
+                .map(|path| path.join("StudyForge"))
+                .map_err(|error| error.to_string())
+        },
+    )?;
     Ok(DesktopPaths {
         app_home,
         documents_home,
@@ -108,15 +128,18 @@ fn mark_spawn_failure(manager: &RuntimeManager, message: String) {
 
 fn start_runtime(app: &AppHandle, manager: &RuntimeManager) -> Result<(), String> {
     let token = Uuid::new_v4().simple().to_string();
-    let launch = build_launch(desktop_paths(app)?, token.clone());
+    let launch = build_launch(
+        desktop_paths(app).map_err(|error| format!("STUDYFORGE_DESKTOP_PATHS: {error}"))?,
+        token.clone(),
+    );
     let (mut receiver, child) = app
         .shell()
         .sidecar("studyforge-runtime")
-        .map_err(|error| error.to_string())?
+        .map_err(|error| format!("STUDYFORGE_RUNTIME_COMMAND: {error}"))?
         .args(launch.arguments)
         .envs(launch.environment)
         .spawn()
-        .map_err(|error| error.to_string())?;
+        .map_err(|error| format!("STUDYFORGE_RUNTIME_SPAWN: {error}"))?;
 
     let generation = {
         let mut inner = lock_runtime(manager)?;
@@ -268,11 +291,41 @@ pub fn run() {
 
 #[cfg(test)]
 mod tests {
-    use std::path::PathBuf;
+    use std::{ffi::OsString, path::PathBuf};
+
+    use super::desktop_directory;
 
     use crate::sidecar::{
         DesktopPaths, LaunchEvent, RuntimeState, apply_event, build_launch, parse_ready_line,
     };
+
+    #[test]
+    fn accepts_only_absolute_explicit_desktop_roots() {
+        assert_eq!(
+            desktop_directory(Some(OsString::from("/private/tmp/studyforge-app")), || Ok(
+                PathBuf::from("/fallback")
+            ),)
+            .unwrap(),
+            PathBuf::from("/private/tmp/studyforge-app"),
+        );
+        assert!(
+            desktop_directory(Some(OsString::from("relative")), || Ok(PathBuf::from(
+                "/fallback"
+            )),)
+            .is_err()
+        );
+    }
+
+    #[test]
+    fn explicit_desktop_roots_do_not_resolve_unavailable_system_fallbacks() {
+        let selected =
+            desktop_directory(Some(OsString::from("/private/tmp/studyforge-app")), || {
+                Err("unknown path".into())
+            })
+            .unwrap();
+
+        assert_eq!(selected, PathBuf::from("/private/tmp/studyforge-app"));
+    }
 
     #[test]
     fn parses_the_one_ready_line_without_accepting_extra_output() {

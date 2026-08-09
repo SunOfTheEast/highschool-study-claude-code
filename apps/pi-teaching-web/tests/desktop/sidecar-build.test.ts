@@ -13,6 +13,7 @@ test('uses the two target-suffixed Apple Silicon sidecars expected by Tauri', ()
     pi: join(appRoot, 'src-tauri/binaries/studyforge-pi-aarch64-apple-darwin'),
   });
   const config = JSON.parse(readFileSync(join(appRoot, 'src-tauri/tauri.conf.json'), 'utf8'));
+  expect(config.mainBinaryName).toBe('studyforge-desktop');
   expect(config.bundle.externalBin).toEqual([
     'binaries/studyforge-runtime',
     'binaries/studyforge-pi',

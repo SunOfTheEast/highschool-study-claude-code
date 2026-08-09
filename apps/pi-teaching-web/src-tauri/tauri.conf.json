@@ -3,6 +3,7 @@
   "productName": "StudyForge",
   "version": "0.1.0",
   "identifier": "dev.studyforge.desktop",
+  "mainBinaryName": "studyforge-desktop",
   "build": {
     "beforeDevCommand": "bun run dev:client",
     "devUrl": "http://127.0.0.1:65001",

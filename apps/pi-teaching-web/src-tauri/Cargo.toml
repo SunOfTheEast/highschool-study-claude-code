@@ -4,6 +4,11 @@ version = "0.1.0"
 description = "StudyForge desktop shell"
 authors = ["StudyForge contributors"]
 edition = "2024"
+autobins = false
+
+[[bin]]
+name = "studyforge-desktop"
+path = "src/main.rs"
 
 [lib]
 name = "studyforge_lib"
