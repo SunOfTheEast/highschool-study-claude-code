@@ -77,6 +77,9 @@ test('gives Tutor one bright-line reflection and minimal sufficient consolidatio
   expect(consolidation).toContain('教学待办');
   expect(consolidation).toContain('不回读');
   expect(consolidation).toContain('没有类别配额');
+  expect(consolidation).toContain('课末交流没有产生新的决定性表现');
+  expect(consolidation).toContain('只确认已有描述');
+  expect(consolidation).toContain('不插入 Reflection Block');
   expect(consolidation).toContain('课末交流真的产生了新的决定性表现');
   expect(consolidation).toContain('classroom_update');
   expect(consolidation).toContain('classroom_log_append');

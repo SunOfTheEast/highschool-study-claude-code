@@ -134,7 +134,7 @@ export async function createPiSessionFactory(root: string): Promise<StudySession
     });
     await bindStudyExtensions(session);
     const disposePendingCleanup = session.subscribe((event) => {
-      if (event.type !== 'message_end' || event.message.role !== 'toolResult') return;
+      if (event.type !== 'turn_end' || event.toolResults.length === 0) return;
       clearSettledPendingMemoryToolResults(root, manager);
     });
     const compaction = !isNodeSessionScope(scope)

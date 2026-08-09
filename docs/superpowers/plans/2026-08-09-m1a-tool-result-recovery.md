@@ -334,7 +334,9 @@ For an existing Pi session, call `reconcilePendingMemoryToolResults(root, manage
 - existing success result plus pending record: remove only the exact pending file;
 - mismatch: leave the pending file and append no success.
 
-Subscribe to finalized `message_end` tool-result events. Re-read `manager.getBranch()` and clean only after the matching result is present. Dispose this listener with the session.
+Subscribe to `turn_end`, after Pi has persisted the preceding tool-result `message_end`. Re-read
+`manager.getBranch()` and clean only after the matching result is present. Dispose this listener with the
+session. (`AgentSession` notifies user listeners before persisting `message_end`, so that event is too early.)
 
 - [ ] **Step 6: Run GREEN and integration tests**
 

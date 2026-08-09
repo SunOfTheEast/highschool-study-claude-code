@@ -30,7 +30,8 @@
 ## 原子固化与路由所有权
 
 Tutor 在唯一课末反思后用一次 `lesson_memory_commit` 提交受影响对象的学习历史与当前判断、
-明确偏好和对象路由。课末交流新增的决定性课堂事实必须先经 `classroom_update` 与
+明确偏好和对象路由。学生只确认已有描述或明确说没有补充时，直接引用已有 Block，不新建
+Reflection。课末交流新增的决定性课堂事实必须先经 `classroom_update` 与
 `classroom_log_append` 进入真实 Reflection Block；记忆提交只引用它。对象的
 `learningHistoryEntry` 只压缩这次变化，
 `evidenceBlockIds` 指向当前 Lesson 中真实存在的来源 Block。

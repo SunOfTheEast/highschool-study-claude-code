@@ -26,7 +26,10 @@
 
 随后形成一次语义提交，只写本课真实新增的部分：
 
-- 若课末交流真的产生了新的决定性表现，先把它留在 Lesson，而不是夹进记忆提交：通过
+- 课末交流没有产生新的决定性表现，例如学生只确认已有描述或明确说没有补充：直接引用
+  已有的真实 Block，不插入 Reflection Block；确认本身不另造一条认知变化。
+- 课末交流真的产生了新的决定性表现，足以改变对象判断或边界时，先把它留在 Lesson，
+  而不是夹进记忆提交：通过
   `classroom_update` 插入并开始一个最小的 Reflection Block，用 `classroom_log_append`
   记录事实，交流结束后再通过 `classroom_update` 完成它。随后记忆只引用这个真实 Block。
 - `objects`：先复用已经读到的稳定对象，每个对象追加一条 `learningHistoryEntry`；其中
