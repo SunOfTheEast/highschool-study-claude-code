@@ -344,6 +344,10 @@ mod tests {
             launch.environment.get("PI_SUBAGENT_PI_BINARY").unwrap(),
             "/Applications/StudyForge.app/Contents/MacOS/studyforge-pi"
         );
+        assert_eq!(
+            launch.environment.get("PI_PACKAGE_DIR").unwrap(),
+            "/Applications/StudyForge.app/Contents/Resources/studyforge/pi-runtime"
+        );
         assert!(
             !launch
                 .environment

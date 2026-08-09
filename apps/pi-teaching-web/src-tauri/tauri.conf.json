@@ -6,7 +6,7 @@
   "build": {
     "beforeDevCommand": "bun run dev:client",
     "devUrl": "http://127.0.0.1:65001",
-    "beforeBuildCommand": "bun run build",
+    "beforeBuildCommand": "bun run desktop:prepare",
     "frontendDist": "../dist"
   },
   "app": {
@@ -31,6 +31,13 @@
     "category": "Education",
     "shortDescription": "一位会陪学生长期学习的本地教师",
     "longDescription": "StudyForge 将自由学习、学习资产与 Roadmap—Plan—Lesson 正式课程保存在学生自己的 Markdown 学习集中。",
+    "externalBin": [
+      "binaries/studyforge-runtime",
+      "binaries/studyforge-pi"
+    ],
+    "resources": {
+      "resources/studyforge/": "studyforge/"
+    },
     "macOS": {
       "minimumSystemVersion": "13.0",
       "signingIdentity": "-"

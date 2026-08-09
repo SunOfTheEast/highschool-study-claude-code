@@ -381,7 +381,7 @@ export function createDesktopRequestHandler(deps: DesktopRequestDependencies) {
           authFlows.cancel(authFlow[1]!);
           response = new Response(null, { status: 204 });
         } else if (request.method === 'POST' && url.pathname === '/api/desktop/shutdown') {
-          queueMicrotask(deps.shutdown);
+          setTimeout(deps.shutdown, 0);
           response = new Response(null, { status: 202 });
         } else {
           response = json({ error: 'NOT_FOUND' }, 404);

@@ -68,3 +68,26 @@ test('serves authenticated setup health with the exact Tauri origin', async () =
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test('flushes the accepted shutdown response before stopping the listener', async () => {
+  const root = mkdtempSync(join(tmpdir(), 'studyforge-runtime-shutdown-'));
+  const started = await startStudyForgeServer({
+    port: 0,
+    appHome: join(root, 'Application Support', 'StudyForge'),
+    documentsHome: join(root, 'Documents', 'StudyForge'),
+    resourceRoot: resolve(import.meta.dir, '../../resources'),
+    token: 'launch-token',
+    learningSet: null,
+    desktop: true,
+  });
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:${started.receipt.port}/api/desktop/shutdown`,
+      { method: 'POST', headers: { authorization: 'Bearer launch-token' } },
+    );
+    expect(response.status).toBe(202);
+  } finally {
+    started.stop();
+    rmSync(root, { recursive: true, force: true });
+  }
+});
