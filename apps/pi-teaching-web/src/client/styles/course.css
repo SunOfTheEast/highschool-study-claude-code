@@ -247,10 +247,20 @@
 .message.user > div { color: var(--ink-soft); }
 
 .tool-activity,
+.tool-receipt,
 .material-search-activity,
 .lesson-review-activity,
 .subagent-activity { margin: var(--space-1) 0 var(--space-2) 4.25rem; color: var(--ink-faint); }
 .tool-activity { border-top: 1px dotted var(--rule); }
+.tool-receipt {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-top: 1px dotted var(--rule);
+  font-size: var(--text-label);
+}
+.tool-receipt small[data-status="error"] { color: var(--danger); }
 .tool-activity summary,
 .subagent-activity {
   display: flex;

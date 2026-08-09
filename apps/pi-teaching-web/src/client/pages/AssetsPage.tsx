@@ -21,7 +21,7 @@ function AssetRow({
   onOpen(): void;
 }) {
   return (
-    <article className="m1b-asset-row">
+    <article className="m1b-asset-row" data-selected={selected ? 'true' : 'false'}>
       <label>
         <input type="checkbox" checked={selected} onChange={onToggle} />
         <span className="sr-only">选择 {asset.title}</span>
@@ -45,6 +45,7 @@ export function AssetsPage({
   onAsk,
   onImport,
   onOpenFootprint,
+  onOpenKnowledge,
 }: {
   value: LearningAssetLibrarySnapshot;
   materials?: LearningMaterial[];
@@ -53,6 +54,7 @@ export function AssetsPage({
   onAsk(references: LearningAssetReference[]): void;
   onImport?(input: MaterialUploadInput): Promise<void>;
   onOpenFootprint?(): void;
+  onOpenKnowledge?(): void;
 }) {
   const [selected, setSelected] = useState<string[]>([]);
   const [title, setTitle] = useState('');
@@ -82,13 +84,17 @@ export function AssetsPage({
       <header>
         <div><small>My learning assets</small><h1>我的学习资料</h1></div>
         <button
+          className="action-solid"
           type="button"
           disabled={selectedReferences.length === 0}
           onClick={() => onAsk(selectedReferences)}
         >
-          带着所选内容问老师
+          带着所选问老师 · {selectedReferences.length}
         </button>
-        <button type="button" onClick={onOpenFootprint}>学习足迹</button>
+        <nav className="asset-header-links">
+          <button type="button" className="action-text" onClick={onOpenKnowledge}>知识关系</button>
+          <button type="button" className="action-text" onClick={onOpenFootprint}>学习足迹</button>
+        </nav>
       </header>
       <section>
         <header><span>Materials</span><h2>原始资料</h2><b>{materials.length}</b></header>

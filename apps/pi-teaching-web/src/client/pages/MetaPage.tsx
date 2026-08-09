@@ -7,6 +7,7 @@ export function MetaPage({
   running,
   error,
   hasCourse,
+  connected = true,
   onSend,
   onEnterCourse,
 }: {
@@ -15,14 +16,17 @@ export function MetaPage({
   running: boolean;
   error: string | null;
   hasCourse: boolean;
+  connected?: boolean;
   onSend(text: string): Promise<void>;
   onEnterCourse(): void;
 }) {
   return (
-    <main className="free-learning-workspace">
+    <main className="free-learning-workspace letter-workspace">
       <header className="free-learning-heading">
         <div><small>Long-term direction</small><h1>长期学习规划</h1></div>
-        {hasCourse && <button type="button" onClick={onEnterCourse}>进入 Roadmap</button>}
+        {hasCourse && (
+          <button type="button" className="action-wash" onClick={onEnterCourse}>进入正式课程</button>
+        )}
       </header>
       <ChatPanel
         sessionKey={sessionKey}
@@ -30,6 +34,7 @@ export function MetaPage({
         running={running}
         error={error}
         enabled={!hasCourse}
+        connected={connected}
         onSend={onSend}
       />
     </main>

@@ -90,6 +90,7 @@ export function CoursePage({
   error,
   leftOpen,
   rightOpen,
+  connected = true,
   onNodeSelect,
   onSend,
   onLifecycle,
@@ -102,6 +103,7 @@ export function CoursePage({
   error: string | null;
   leftOpen: boolean;
   rightOpen: boolean;
+  connected?: boolean;
   onNodeSelect(node: CourseTreeNode): void;
   onSend(text: string): Promise<void>;
   onLifecycle(action: NodeLifecycleAction, node: CourseTreeNode): Promise<void>;
@@ -169,6 +171,7 @@ export function CoursePage({
           running={running}
           error={error}
           enabled={document.status === 'active'}
+          connected={connected}
           onSend={onSend}
         />
       </section>

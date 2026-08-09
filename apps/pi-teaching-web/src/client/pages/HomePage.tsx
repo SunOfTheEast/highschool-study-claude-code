@@ -19,49 +19,62 @@ export function HomePage({
     event.preventDefault();
     onNavigate(route);
   };
+  const activeLesson = value.course?.activeLesson ?? null;
   return (
-    <main className="m1b-home">
+    <main className="m1b-home home-portal">
       <header className="m1b-home-heading">
-        <small>Study begins here</small>
+        <small>StudyForge · 本地学习集</small>
         <h1>{value.guide.title}</h1>
         <p>{value.guide.body.replace(/^#\s+.+$/m, '').trim()}</p>
       </header>
 
-      <section className="m1b-entry-grid" aria-label="学习入口">
-        <button type="button" className="m1b-entry-primary" onClick={onStartFree}>
-          <span>01</span>
-          <strong>问老师</strong>
-          <p>不用先想好目标。把眼前的问题、猜想或困惑直接说出来。</p>
-          <i aria-hidden="true">问</i>
-        </button>
-        <a href="/assets" onClick={link({ kind: 'assets' })}>
-          <span>02</span>
-          <strong>我的学习资料</strong>
-          <p>{value.assets.notes} 份 Note · {value.assets.problemCards} 张题卡</p>
-          <i aria-hidden="true">阅</i>
-        </a>
-        {value.course && (
-          <a href="/course" onClick={link({ kind: 'course' })}>
-            <span>03</span>
-            <strong>进入正式课程</strong>
-            <p>{value.course.title} · {value.course.currentPosition}</p>
-            <i aria-hidden="true">课</i>
+      <section className="home-action-stage" aria-label="现在开始">
+        {activeLesson ? (
+          <a
+            className="home-primary home-continue"
+            href={activeLesson.route}
+            onClick={link({
+              kind: 'course-lesson',
+              planId: activeLesson.planId,
+              lessonId: activeLesson.id,
+            })}
+          >
+            <span className="home-action-copy">
+              <small>正在进行 · {activeLesson.planTitle}</small>
+              <strong>继续上课 · {activeLesson.title}</strong>
+              <em>{value.course?.currentPosition}</em>
+            </span>
+            <i className="seal-mark" aria-hidden="true">继</i>
           </a>
-        )}
-        {!value.course && (
-          <button type="button" onClick={onPlan}>
-            <span>03</span>
-            <strong>{value.recentMeta.length > 0 ? '继续长期规划' : '规划长期学习'}</strong>
-            <p>先把长期方向想清楚；具体阶段会留到长期路线中再讨论。</p>
-            <i aria-hidden="true">路</i>
+        ) : (
+          <button type="button" className="home-primary home-ask" onClick={onStartFree}>
+            <span className="home-action-copy">
+              <small>自由学习</small>
+              <strong>问老师</strong>
+              <em>把眼前的问题、猜想或困惑直接说出来。</em>
+            </span>
+            <i className="seal-mark" aria-hidden="true">问</i>
           </button>
         )}
-        <button type="button" onClick={onOpenFootprint}>
-          <span>04</span>
-          <strong>学习足迹</strong>
-          <p>回看真实发生过的对话、作答、资料与认知变化。</p>
-          <i aria-hidden="true">迹</i>
-        </button>
+
+        <nav className="home-quiet-actions" aria-label="其他学习入口">
+          {activeLesson && (
+            <button type="button" className="action-text" onClick={onStartFree}>安静地问老师</button>
+          )}
+          {value.course ? (
+            <a href="/course" onClick={link({ kind: 'course' })}>
+              进入正式课程 · {value.course.title} · {value.course.currentPosition}
+            </a>
+          ) : (
+            <button type="button" className="action-text" onClick={onPlan}>
+              {value.recentMeta.length > 0 ? '继续长期规划' : '规划长期学习'}
+            </button>
+          )}
+          <a href="/assets" onClick={link({ kind: 'assets' })}>
+            我的学习资料 · {value.assets.notes} 份笔记 · {value.assets.problemCards} 张题卡
+          </a>
+          <button type="button" className="action-text" onClick={onOpenFootprint}>学习足迹</button>
+        </nav>
       </section>
 
       <section className="m1b-recent">

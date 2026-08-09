@@ -17,6 +17,7 @@ export function ChatPanel({
   running,
   error,
   enabled,
+  connected = true,
   onSend,
 }: {
   sessionKey: SessionKey;
@@ -24,6 +25,7 @@ export function ChatPanel({
   running: boolean;
   error: string | null;
   enabled: boolean;
+  connected?: boolean;
   onSend(text: string): Promise<void>;
 }) {
   const [text, setText] = useState('');
@@ -40,7 +42,7 @@ export function ChatPanel({
   const submit = (event: FormEvent) => {
     event.preventDefault();
     const value = text.trim();
-    if (!value || running || !enabled) return;
+    if (!value || running || !enabled || !connected) return;
     setText('');
     void onSend(value).catch(() => setText(value));
   };
@@ -71,14 +73,22 @@ export function ChatPanel({
             );
           }
           if (item.kind === 'tool') {
+            const copy = item.status === 'error'
+              ? '这一步没有完成'
+              : item.name === 'read'
+                ? '老师查看了相关内容'
+                : ['grep', 'find', 'ls'].includes(item.name)
+                  ? '老师查找了相关内容'
+                  : item.name === 'save_note'
+                    ? '笔记已保存'
+                    : item.name === 'save_problem_card'
+                      ? '题卡已保存'
+                      : item.status === 'running' ? '老师正在处理' : '处理完成';
             return (
-              <details className="tool-activity" key={item.id}>
-                <summary>
-                  <span>{item.name}</span>
-                  <small data-status={item.status}>{toolStatus[item.status]}</small>
-                </summary>
-                <pre>{JSON.stringify(item.detail, null, 2)}</pre>
-              </details>
+              <div className="tool-receipt" key={item.id}>
+                <span>{copy}</span>
+                <small data-status={item.status}>{toolStatus[item.status]}</small>
+              </div>
             );
           }
           return (
@@ -115,7 +125,7 @@ export function ChatPanel({
         />
         <footer>
           <small>Markdown · LaTeX</small>
-          <button type="submit" disabled={!enabled || running || !text.trim()}>
+          <button type="submit" disabled={!enabled || !connected || running || !text.trim()}>
             发送 <span aria-hidden="true">↗</span>
           </button>
         </footer>

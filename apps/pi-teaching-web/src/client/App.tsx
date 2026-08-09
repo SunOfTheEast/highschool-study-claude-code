@@ -25,6 +25,7 @@ import { KnowledgePage } from './pages/KnowledgePage';
 import { LessonHandoutPage } from './pages/LessonHandoutPage';
 import { HomePage } from './pages/HomePage';
 import { FreeLearningPage } from './pages/FreeLearningPage';
+import type { CarriedContextItem } from './pages/FreeLearningPage';
 import { AssetsPage } from './pages/AssetsPage';
 import { NotePage } from './pages/NotePage';
 import { ProblemCardPage } from './pages/ProblemCardPage';
@@ -32,6 +33,7 @@ import { FootprintPage } from './pages/FootprintPage';
 import { MaterialPage } from './pages/MaterialPage';
 import { MetaPage } from './pages/MetaPage';
 import type { PrimaryView } from './view-state';
+import { deriveFreeLearningTitle } from '../study/display-projections';
 
 type ConnectionState = 'open' | 'connecting' | 'closed';
 
@@ -110,6 +112,7 @@ export function App() {
   const [problem, setProblem] = useState<ProblemCardView | null>(null);
   const [course, setCourse] = useState<CourseSnapshot | null>(null);
   const [knowledge, setKnowledge] = useState<KnowledgeSnapshot | null>(null);
+  const [freeContexts, setFreeContexts] = useState<CarriedContextItem[]>([]);
   const [handout, setHandout] = useState<LessonHandout | null>(null);
   const [handoutError, setHandoutError] = useState<string | null>(null);
   const [handoutLoading, setHandoutLoading] = useState(route.kind === 'lesson-handout');
@@ -196,8 +199,57 @@ export function App() {
       }
       if (next.kind === 'free-learning') {
         const key = `free:${next.sessionId}` as const;
-        const history = await api.history(key);
+        const session = homeValue.recentFreeLearning.find((candidate) => (
+          candidate.id === next.sessionId
+        ));
+        const [history, assetLibrary, materialValues] = await Promise.all([
+          api.history(key),
+          api.assets(),
+          api.materials(),
+        ]);
+        const selectedProblems = session?.selectedAssets.filter((reference) => (
+          reference.kind === 'problem-card'
+        )) ?? [];
+        const problemStates = new Map(await Promise.all(selectedProblems.map(async (reference) => {
+          const value = await api.problemCard(reference.id);
+          return [reference.id, value] as const;
+        })));
         if (revision !== routeLoadRevision.current) return;
+        setAssets(assetLibrary);
+        setMaterials(materialValues);
+        setFreeContexts((session?.selectedAssets ?? []).map((reference) => {
+          if (reference.kind === 'material') {
+            const materialValue = materialValues.find((candidate) => candidate.id === reference.id);
+            const materialRevision = materialValue?.revisions.find((candidate) => (
+              candidate.revision === reference.revision
+            ));
+            return {
+              key: `material:${reference.id}@${reference.revision}#${reference.locator ?? ''}`,
+              kind: '资料',
+              title: materialRevision?.title ?? reference.id,
+              detail: `第 ${reference.revision} 版${reference.locator ? ` · ${reference.locator}` : ''}`,
+            };
+          }
+          if (reference.kind === 'note') {
+            const value = assetLibrary.notes.find((asset) => asset.id === reference.id);
+            return {
+              key: `note:${reference.id}`,
+              kind: '笔记',
+              title: value?.title ?? reference.id,
+              detail: value ? `第 ${value.revision} 版` : reference.id,
+            };
+          }
+          const value = assetLibrary.problemCards.find((asset) => asset.id === reference.id);
+          const state = problemStates.get(reference.id);
+          return {
+            key: `problem-card:${reference.id}`,
+            kind: '题卡',
+            title: value?.title ?? reference.id,
+            detail: `${value ? `第 ${value.revision} 版 · ` : ''}${
+              state?.activity.latestAttempt ? '已有作答' : '尚未作答'
+            }`,
+          };
+        }));
         dispatch({ type: 'conversation-snapshot', sessionKey: key, items: history });
         setRoute(next);
         setNotice(null);
@@ -332,9 +384,14 @@ export function App() {
   const conversation = selectedKey ? client.conversations[selectedKey] ?? [] : [];
   const running = selectedKey ? client.running[selectedKey] ?? false : false;
   const sessionError = selectedKey ? client.errors[selectedKey] ?? null : null;
-  const freeStatus = route.kind === 'free-learning'
-    ? home?.recentFreeLearning.find((session) => session.id === route.sessionId)?.status ?? 'active'
-    : 'active';
+  const freeSummary = route.kind === 'free-learning'
+    ? home?.recentFreeLearning.find((session) => session.id === route.sessionId) ?? null
+    : null;
+  const freeStatus = freeSummary?.status ?? 'active';
+  const conversationTitle = deriveFreeLearningTitle(conversation);
+  const freeTitle = conversationTitle === '自由学习'
+    ? freeSummary?.title ?? conversationTitle
+    : conversationTitle;
 
   const nodeRoute = (node: CourseTreeNode): BrowserRoute => {
     if (node.kind === 'roadmap') return { kind: 'course-roadmap' };
@@ -416,6 +473,7 @@ export function App() {
           await loadRoute({ kind: 'assets' });
         }}
         onOpenFootprint={() => navigate({ kind: 'footprint' })}
+        onOpenKnowledge={() => navigate({ kind: 'knowledge' })}
       />
     ) : <div className="loading-screen"><b>正在读取学习资料</b></div>;
   } else if (route.kind === 'material') {
@@ -470,6 +528,9 @@ export function App() {
     content = (
       <FreeLearningPage
         sessionKey={selectedKey}
+        title={freeTitle}
+        contexts={freeContexts}
+        connected={connection === 'open'}
         status={freeStatus}
         items={conversation}
         running={running}
@@ -477,7 +538,7 @@ export function App() {
         onSend={(text) => api.send(selectedKey, text).then(() => undefined)}
         onEnd={async () => {
           await api.endFreeLearning(route.sessionId);
-          navigate({ kind: 'home' });
+          await loadRoute(route);
         }}
       />
     );
@@ -490,6 +551,7 @@ export function App() {
         running={running}
         error={sessionError}
         hasCourse={home?.hasCourse ?? false}
+        connected={connection === 'open'}
         onSend={(text) => api.send(metaKey, text).then(() => undefined)}
         onEnterCourse={() => navigate({ kind: 'course' })}
       />
@@ -511,6 +573,7 @@ export function App() {
         error={sessionError}
         leftOpen={leftOpen}
         rightOpen={rightOpen}
+        connected={connection === 'open'}
         onNodeSelect={(node) => navigate(nodeRoute(node))}
         onSend={(text) => api.send(selectedKey, text).then(() => undefined)}
         onLifecycle={lifecycle}
@@ -541,6 +604,7 @@ export function App() {
     : route.kind === 'assets' || route.kind === 'note' || route.kind === 'problem-card'
       || route.kind === 'material'
       || route.kind === 'knowledge'
+      || route.kind === 'footprint'
       ? 'assets'
       : 'home';
   return (

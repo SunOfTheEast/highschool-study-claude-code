@@ -40,7 +40,7 @@ const items: ConversationItem[] = [
   },
 ];
 
-test('renders the raw teacher reply once and keeps native tools collapsed', () => {
+test('renders the raw teacher reply once and summarizes native tools without raw detail', () => {
   const markup = renderToStaticMarkup(
     <ChatPanel
       sessionKey="lesson:plan-001:lesson-001"
@@ -54,9 +54,9 @@ test('renders the raw teacher reply once and keeps native tools collapsed', () =
 
   expect(markup.match(/具体是哪一种结构让你最犹豫？/g)).toHaveLength(1);
   expect(markup).toContain('我觉得恒成立问题比较棘手。');
-  expect(markup).toContain('<details class="tool-activity"');
-  expect(markup).not.toContain('<details class="tool-activity" open=""');
-  expect(markup).toContain('plans/plan-001/lessons/lesson-001.md');
+  expect(markup).toContain('老师查看了相关内容');
+  expect(markup).not.toContain('<pre>');
+  expect(markup).not.toContain('plans/plan-001/lessons/lesson-001.md');
 });
 
 test('shows safe live material progress instead of the generic thinking indicator', () => {
