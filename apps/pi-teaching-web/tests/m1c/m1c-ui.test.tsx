@@ -138,9 +138,10 @@ test('opens one exact source range and can carry it into free learning', () => {
       onAsk={() => {}}
     />,
   );
-  expect(markup).toContain('来源位置');
+  expect(markup).toContain('资料位置');
   expect(markup).toContain('lines-1-2');
-  expect(markup).toContain('带着这一段问老师');
+  expect(markup).toContain('高级定位');
+  expect(markup).toContain('读取后可问老师');
   expect(markup).toContain('第 1 版');
   expect(markup).not.toMatch(/projection|manifest|revision/i);
 });

@@ -34,6 +34,7 @@ import { MaterialPage } from './pages/MaterialPage';
 import { MetaPage } from './pages/MetaPage';
 import type { PrimaryView } from './view-state';
 import { deriveFreeLearningTitle } from '../study/display-projections';
+import { formatMaterialLocator } from './material-locator';
 
 type ConnectionState = 'open' | 'connecting' | 'closed';
 
@@ -227,7 +228,7 @@ export function App() {
               key: `material:${reference.id}@${reference.revision}#${reference.locator ?? ''}`,
               kind: '资料',
               title: materialRevision?.title ?? reference.id,
-              detail: `第 ${reference.revision} 版${reference.locator ? ` · ${reference.locator}` : ''}`,
+              detail: `第 ${reference.revision} 版 · ${formatMaterialLocator(reference.locator).human}`,
             };
           }
           if (reference.kind === 'note') {
@@ -499,6 +500,8 @@ export function App() {
     content = note ? (
       <NotePage value={note} onSave={async (input) => {
         setNote(await api.updateNote(note.id, input));
+      }} onAskTeacher={() => void startFree([{ kind: 'note', id: note.id }])} onReload={() => {
+        void loadRoute(route);
       }} />
     ) : <div className="loading-screen"><b>正在读取 Note</b></div>;
   } else if (route.kind === 'problem-card') {

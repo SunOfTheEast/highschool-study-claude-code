@@ -131,6 +131,7 @@
 
 .m1b-assets > header,
 .m1b-note-page > header,
+.m1b-problem-page > header,
 .free-learning-heading {
   display: flex;
   gap: var(--space-5);
@@ -142,6 +143,7 @@
 }
 
 .asset-header-links { display: flex; gap: var(--space-4); margin-left: auto; }
+.asset-detail-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); justify-content: flex-end; }
 
 .m1b-assets button,
 .m1b-note-page button,
@@ -400,6 +402,52 @@
 .m1b-answer-gate > button { justify-self: start; }
 .m1b-problem-page > footer { margin-top: var(--space-7); padding-top: var(--space-4); border-top: 1px solid var(--ink); }
 .m1b-problem-page .m1b-ask-teacher { border-color: var(--accent); color: #fff; background: var(--accent); }
+
+.m1b-assets .action-solid,
+.m1b-note-page .action-solid,
+.m1b-problem-page .action-solid,
+.m1c-material-page .action-solid {
+  border-color: var(--accent-deep);
+  color: var(--paper);
+  background: var(--accent-deep);
+}
+
+.m1b-note-page .action-wash,
+.m1b-problem-page .action-wash,
+.m1c-material-page .action-wash {
+  border-color: color-mix(in srgb, var(--accent) 42%, var(--rule));
+  color: var(--accent-deep);
+  background: var(--accent-wash);
+}
+
+.revision-conflict,
+.inline-error,
+.inline-progress,
+.inline-success {
+  margin: var(--space-3) 0;
+  padding: var(--space-3) var(--space-4);
+  border-left: 2px solid var(--attention);
+  color: var(--ink-soft);
+  background: color-mix(in srgb, var(--attention) 8%, var(--paper));
+  font-size: var(--text-body-sm);
+}
+
+.inline-error { border-left-color: var(--danger); }
+.inline-success { border-left-color: var(--accent); background: var(--accent-wash); }
+
+.material-reading-location {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: var(--space-4);
+  align-items: center;
+  padding: var(--space-4) 0;
+  border-block: 1px solid var(--rule);
+}
+
+.material-reading-location > div { display: grid; gap: var(--space-1); }
+.material-reading-location small { color: var(--ink-soft); font-size: var(--text-body-sm); }
+.material-reading-location code { color: var(--ink-faint); font: var(--text-micro)/1.5 var(--font-mono); }
+.m1c-material-locator { margin-top: var(--space-4); }
 
 .free-learning-workspace { width: min(920px, 100%); }
 .free-learning-heading > span { color: var(--ink-faint); font-size: var(--text-body-sm); }
