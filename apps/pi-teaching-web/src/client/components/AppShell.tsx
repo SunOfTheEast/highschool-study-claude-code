@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { PrimaryViewNav } from './PrimaryViewNav';
 import type { PrimaryView } from '../view-state';
+import { useDesktopTools } from '../desktop/DesktopContext';
 
 export type AppShellProps = {
   title: string;
@@ -21,6 +22,7 @@ export function AppShell({
   onNavigate,
   children,
 }: AppShellProps) {
+  const desktopTools = useDesktopTools();
   return (
     <div className="workspace-shell" data-primary-view={activeView}>
       <header className="workspace-header">
@@ -44,9 +46,17 @@ export function AppShell({
           hasCourse={hasCourse}
           onNavigate={onNavigate}
         />
-        <span className="connection-state" data-state={connection}>
-          {connection === 'open' ? '本地已连接' : connection === 'connecting' ? '连接中' : '正在重连'}
-        </span>
+        <div className="workspace-utilities">
+          {desktopTools && (
+            <>
+              <button type="button" onClick={desktopTools.openSettings}>设置</button>
+              <button type="button" onClick={desktopTools.openHelp}>帮助</button>
+            </>
+          )}
+          <span className="connection-state" data-state={connection}>
+            {connection === 'open' ? '本地已连接' : connection === 'connecting' ? '连接中' : '正在重连'}
+          </span>
+        </div>
       </header>
       {notice && <p className="workspace-notice" role="status">{notice}</p>}
       {children}

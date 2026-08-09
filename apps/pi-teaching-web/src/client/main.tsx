@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { App } from './App';
+import { DesktopRoot } from './desktop/DesktopRoot';
 import 'lxgw-wenkai-screen-webfont/lxgwwenkaiscreen.css';
 import './theme-liubai.css';
 import './styles.css';
@@ -11,9 +11,10 @@ import './styles/classroom.css';
 import './styles/knowledge.css';
 import './styles/m1b.css';
 import './styles/responsive.css';
+import './styles/desktop.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <DesktopRoot />
   </StrictMode>,
 );
