@@ -347,6 +347,45 @@
 .m1c-footprint-page li time { grid-column: 2; color: var(--ink-faint); font-size: var(--text-label); }
 .m1c-footprint-page li button { grid-column: 3; grid-row: 1 / span 3; align-self: center; }
 
+.footprint-ledger > header p { max-width: 42rem; color: var(--ink-soft); }
+.footprint-ledger ol { position: relative; margin-left: var(--space-2); }
+.footprint-ledger ol::before {
+  content: "";
+  position: absolute;
+  top: var(--space-5);
+  bottom: var(--space-5);
+  left: 4px;
+  width: 1px;
+  background: var(--rule);
+}
+.footprint-ledger li {
+  position: relative;
+  grid-template-columns: 1rem 7rem minmax(0, 1fr) auto;
+  padding-left: 0;
+}
+.footprint-ledger .footprint-dot {
+  z-index: 1;
+  grid-column: 1;
+  grid-row: 1;
+  width: 9px;
+  height: 9px;
+  margin-top: .28rem;
+  border: 1px solid var(--ink-faint);
+  border-radius: 50%;
+  background: var(--paper);
+}
+.footprint-ledger li > small { grid-column: 2; }
+.footprint-ledger li > strong,
+.footprint-ledger li > p,
+.footprint-ledger li > time,
+.footprint-ledger .footprint-time { grid-column: 3; }
+.footprint-ledger li > button { grid-column: 4; grid-row: 1 / span 3; }
+.footprint-ledger .footprint-time { color: var(--ink-faint); font-size: var(--text-label); }
+.footprint-ledger li[data-category="session"] .footprint-dot { border-color: var(--ink-faint); background: var(--ink-faint); }
+.footprint-ledger li[data-category="asset"] .footprint-dot { border-color: var(--ink-soft); background: var(--paper); }
+.footprint-ledger li[data-category="attempt"] .footprint-dot { border-color: var(--attention); background: var(--attention); }
+.footprint-ledger li[data-category="cognition"] .footprint-dot { border-color: var(--accent); background: var(--accent); }
+
 .m1b-note-page,
 .m1b-problem-page { width: min(820px, 100%); }
 .m1b-note-page > header h1,
