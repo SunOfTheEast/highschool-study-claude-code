@@ -740,6 +740,34 @@ test('reuses one session per node and never shares sessions across nodes', async
     .toContain('session_id: session-lesson-lesson-001');
 });
 
+test('waits for the queued turn to settle before abort resolves', async () => {
+  const root = copyFixture();
+  let markStarted!: () => void;
+  let finishPrompt!: () => void;
+  const started = new Promise<void>((resolve) => { markStarted = resolve; });
+  const pending = new Promise<void>((resolve) => { finishPrompt = resolve; });
+  const session = {
+    ...fakeSession('session-plan-plan-001'),
+    prompt: async () => {
+      markStarted();
+      await pending;
+    },
+  };
+  const registry = new WorkspaceRegistry(root, async () => session, async () => null);
+  const turn = registry.send('plan:plan-001', '继续讨论。');
+  await started;
+  let settled = false;
+  const aborted = registry.abort('plan:plan-001').then(() => { settled = true; });
+
+  await Promise.resolve();
+  expect(settled).toBeFalse();
+  finishPrompt();
+  await turn;
+  await aborted;
+  expect(settled).toBeTrue();
+  registry.dispose();
+});
+
 test('restores the persisted owner session without copying another branch', async () => {
   const root = copyFixture();
   const first = new WorkspaceRegistry(

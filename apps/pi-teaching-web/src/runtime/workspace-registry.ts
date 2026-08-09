@@ -462,8 +462,10 @@ export class WorkspaceRegistry {
   }
 
   async abort(key: SessionKey): Promise<void> {
+    const tail = this.turnTails.get(key);
     const session = this.sessions.get(key);
     if (session?.isStreaming) await session.abort();
+    await tail?.catch(() => {});
   }
 
   async release(key: SessionKey): Promise<void> {

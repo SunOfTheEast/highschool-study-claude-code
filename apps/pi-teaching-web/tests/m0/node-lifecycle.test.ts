@@ -138,3 +138,27 @@ test('a closed Lesson cannot be reopened; a new Lesson node is required', async 
   await expect(lifecycle.startLesson('plan-001', 'lesson-001'))
     .rejects.toThrow(StudyDocumentError);
 });
+
+test('retries Lesson close without repeating the lifecycle transition', async () => {
+  const root = copyFixture();
+  const aborted: string[] = [];
+  const released: string[] = [];
+  const lifecycle = new NodeLifecycleService(root, {
+    open: async () => ({}),
+    abort: async (key) => { aborted.push(key); },
+    release: async (key) => { released.push(key); },
+  });
+
+  expect(await lifecycle.closeLesson('plan-001', 'lesson-001')).toEqual({
+    route: '/course/plan/plan-001',
+  });
+  expect(await lifecycle.closeLesson('plan-001', 'lesson-001')).toEqual({
+    route: '/course/plan/plan-001',
+  });
+  expect(readLesson(root, 'plans/plan-001/lessons/lesson-001.md').status).toBe('closed');
+  expect(aborted).toEqual(['lesson:plan-001:lesson-001']);
+  expect(released).toEqual([
+    'lesson:plan-001:lesson-001',
+    'lesson:plan-001:lesson-001',
+  ]);
+});

@@ -18,6 +18,7 @@ import { api, ApiError, type LearningNoteView, type ProblemCardView } from './ap
 import { AppShell } from './components/AppShell';
 import { formatBrowserRoute, parseBrowserRoute, type BrowserRoute } from './routes';
 import { initialClientState, reduceClientState } from './state';
+import { createReconnectGate } from './reconnect-gate';
 import { CoursePage, type NodeLifecycleAction } from './pages/CoursePage';
 import { CourseOverviewPage } from './pages/CourseOverviewPage';
 import { KnowledgePage } from './pages/KnowledgePage';
@@ -267,12 +268,18 @@ export function App() {
     let disposed = false;
     let socket: WebSocket | null = null;
     let retry: number | null = null;
+    const reconnect = createReconnectGate();
     const connect = () => {
       if (disposed) return;
       setConnection('connecting');
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
       socket = new WebSocket(`${protocol}//${window.location.host}/events`);
-      socket.onopen = () => setConnection('open');
+      socket.onopen = () => {
+        setConnection('open');
+        if (!reconnect.opened()) return;
+        const current = parseBrowserRoute(window.location.pathname) ?? { kind: 'home' as const };
+        void loadRoute(current);
+      };
       socket.onmessage = (message) => {
         const event = JSON.parse(String(message.data)) as StudyEvent;
         const current = parseBrowserRoute(window.location.pathname) ?? { kind: 'home' as const };
