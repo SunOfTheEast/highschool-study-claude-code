@@ -5,4 +5,5 @@ dist/
 *.log
 playwright-report/
 test-results/
+apps/pi-teaching-web/output/playwright/
 .worktrees/

@@ -66,6 +66,19 @@ const m0Histories = new Map<SessionKey, SessionEntry[]>();
 const m0Listeners = new Map<SessionKey, Set<(event: AgentSessionEvent) => void>>();
 let m0Sequence = 0;
 
+function resetM0(): void {
+  const expectedPrefix = join(tmpdir(), 'studyforge-m0-e2e-');
+  if (!m0Root.startsWith(expectedPrefix)) throw new Error('M0_FIXTURE_ROOT_INVALID');
+  rmSync(m0Root, { recursive: true, force: true });
+  cpSync(m0Source, m0Root, { recursive: true });
+  for (const path of ['plans/plan-001/PLAN.md', 'plans/plan-001/lessons/lesson-001.md']) {
+    const absolute = join(m0Root, path);
+    writeFileSync(absolute, readFileSync(absolute, 'utf8').replace(/^status: active$/m, 'status: prepared'));
+  }
+  m0Histories.clear();
+  m0Sequence = 0;
+}
+
 function publishM0(key: SessionKey, event: AgentSessionEvent): void {
   for (const listener of m0Listeners.get(key) ?? []) listener(event);
 }
@@ -328,7 +341,6 @@ class M1bFixtureRegistry {
     cpSync(m1bSource, this.root, { recursive: true });
     this.records.clear();
     this.metaRecords.clear();
-    this.listeners.clear();
     this.sequence = 0;
     this.clock = Date.parse('2026-08-08T10:00:00.000Z');
     this.persistAll();
@@ -776,6 +788,10 @@ const server = Bun.serve({
     )?.[1];
     const m1b = fixture === 'm1b';
     const m1c = fixture === 'm1c';
+    if (!fixture && url.pathname === '/api/__e2e/m0/reset' && request.method === 'POST') {
+      resetM0();
+      return Response.json({ ok: true });
+    }
     if (m1b && url.pathname === '/api/__e2e/m1b/reset' && request.method === 'POST') {
       m1bRegistry.reset();
       return Response.json({ ok: true });

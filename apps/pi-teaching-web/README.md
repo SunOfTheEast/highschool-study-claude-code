@@ -151,16 +151,22 @@ pi install "$PWD"
 ```text
 /home
 /learn/:sessionId
+/meta/:sessionId
 /assets
 /assets/notes/:noteId
 /assets/problem-cards/:problemCardId
+/assets/materials/:materialId
+/footprint
+/knowledge?focus=:semanticTag
 /course
 /course/plan/:planId
 /course/plan/:planId/lesson/:lessonId
 ```
 
-`/knowledge` 仍保留为旧静态投影，但不再占用主导航。URL、刷新、前进后退和深链会恢复
-同一页面；课程 Session 从 frontmatter 恢复，自由学习从原生 Pi owner 恢复。
+`/knowledge` 是从学习资料进入的局部语义关系视图：只从既有扁平标签和来源关系派生
+确定性的邻域，不保存图坐标、边或第二份图谱事实。URL 只保留当前 `focus`；刷新、前进
+后退和深链会恢复同一页面。课程 Session 从 frontmatter 恢复，自由学习从原生 Pi owner
+恢复。
 
 ## Learning set 契约
 
@@ -258,7 +264,7 @@ Plan ID 在 Roadmap 内唯一，Lesson ID 在所属 Plan 内唯一；Lesson Sess
 
 ## API 与事件
 
-当前 HTTP API 只提供：
+当前主要 HTTP API 包括：
 
 - `GET /api/health`
 - `GET /api/home`
@@ -269,6 +275,12 @@ Plan ID 在 Roadmap 内唯一，Lesson ID 在所属 Plan 内唯一；Lesson Sess
 - `GET /api/assets/problem-cards/:id`
 - `PUT /api/assets/problem-cards/:id/note`
 - `POST /api/problem-cards/:id/attempts|reveal|ask-teacher`
+- `GET|POST /api/materials`
+- `GET /api/materials/:id`
+- `GET /api/materials/:id/revisions/:revision/locators/:locator`
+- `GET /api/semantics/relations`
+- `POST /api/semantics/query`
+- `GET /api/footprint`
 - `GET /api/course`
 - `GET /api/knowledge`
 - `GET /api/sessions/:key/history`
@@ -277,7 +289,8 @@ Plan ID 在 Roadmap 内唯一，Lesson ID 在所属 Plan 内唯一；Lesson Sess
 - `POST /api/plans/:planId/lessons/:lessonId/start|close`
 
 `/events` 通过 WebSocket 传输原始教师文本、原生工具活动、运行状态、错误和文档
-失效通知。教师最终文本不经改写；工具调用作为默认折叠的独立活动项显示。
+失效通知。教师文本不经改写并统一走 Markdown/KaTeX；普通工具只显示不含参数与结果的
+安全回执，Material Scout、Lesson Reviewer 与可打印讲义使用专门的进展投影。
 
 ## 验收
 
@@ -285,7 +298,7 @@ Plan ID 在 Roadmap 内唯一，Lesson ID 在所属 Plan 内唯一；Lesson Sess
 对象记忆 → 重启恢复 → 题卡作答/答案门 → 带作答再次问老师：
 
 ```bash
-bun run test:e2e -- tests/e2e/m0-cycle.spec.ts tests/e2e/m1b-cycle.spec.ts
+bun run test:e2e -- tests/e2e/m0-cycle.spec.ts tests/e2e/m1b-cycle.spec.ts tests/e2e/m1c-cycle.spec.ts tests/e2e/m1d-ui.spec.ts
 ```
 
 自动化通过后，仍应在复制出的学习集上跑真实模型长周期，重点观察课末是否只反思一次、

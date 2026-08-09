@@ -210,21 +210,23 @@ Primary views are Home, Learning Assets, and Course only when a Roadmap exists.
   `/assets/problem-cards/:id`, `/assets/materials/:id`.
 - Optional Course routes: `/course`, `/course/plan/:id`,
   `/course/plan/:id/lesson/:id`.
-- `/knowledge` remains a supported legacy static projection, not a primary navigation
-  destination.
+- `/knowledge` is a supported local semantic-relation view, reached from Learning Assets
+  rather than primary navigation. It derives a deterministic capped neighborhood from
+  existing asset tags and source relations; it is not a canonical graph or write surface.
 - API additionally exposes home, free-learning and Meta creation, Material import/read,
   fixed locators, semantic tag/query/relations, the derived footprint, asset editing,
   problem attempts, answer reveal, and problem-card-to-teacher handoff.
 - WebSocket `/events` transports raw conversation items, tool activity, run
   state, errors, and invalidations.
 
-Assistant text is rendered unchanged. Tool calls are separate collapsed activity
-items. The normal Lesson view shows `Student View` and Block progress, not
-`Teacher Control`.
+Assistant text is rendered unchanged through the shared Markdown/KaTeX path. Generic
+tool calls become safe human receipts without raw arguments or results; Material Scout,
+Lesson Reviewer, and printable-handout work retain dedicated progress projections. The
+normal Lesson view shows `Student View` and Block progress, not `Teacher Control`.
 
 ## Repository map
 
-- `apps/pi-teaching-web/src/study/`: strict Markdown and static knowledge readers.
+- `apps/pi-teaching-web/src/study/`: strict Markdown, asset, memory, and semantic readers.
 - `apps/pi-teaching-web/src/runtime/`: node ownership, resource assembly, Session
   registry, frontmatter edits, and lifecycle.
 - `apps/pi-teaching-web/resources/subagents/`: packaged read-only asset Scout used only
@@ -240,6 +242,8 @@ items. The normal Lesson view shows `Student View` and Block progress, not
   reuse closure.
 - `apps/pi-teaching-web/tests/e2e/m1c-cycle.spec.ts`: deterministic Material → free
   learning → asset → Meta → Roadmap → footprint closure.
+- `apps/pi-teaching-web/tests/e2e/m1d-ui.spec.ts`: desktop student-interface, asset,
+  local-relation, and three-paper course-workspace acceptance.
 - `examples/derivative-m0/`: clean public learning set.
 
 ## Change discipline
@@ -259,5 +263,5 @@ items. The normal Lesson view shows `Student View` and Block progress, not
 cd apps/pi-teaching-web
 bun install --frozen-lockfile
 bun run check
-bun run test:e2e -- tests/e2e/m0-cycle.spec.ts tests/e2e/m1b-cycle.spec.ts tests/e2e/m1c-cycle.spec.ts
+bun run test:e2e -- tests/e2e/m0-cycle.spec.ts tests/e2e/m1b-cycle.spec.ts tests/e2e/m1c-cycle.spec.ts tests/e2e/m1d-ui.spec.ts
 ```

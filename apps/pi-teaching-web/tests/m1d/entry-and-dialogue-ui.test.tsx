@@ -57,6 +57,28 @@ test('chooses exactly one strongest home action from the real active Lesson', ()
   expect(blank).toContain('规划长期学习');
 });
 
+test('renders the learning guide body through the shared Markdown and math path', () => {
+  const markup = renderToStaticMarkup(
+    <HomePage
+      value={{
+        ...baseHome,
+        guide: {
+          title: '化学学习集',
+          body: '# 化学学习集\n\n## 学习原则\n\n- 从真实问题开始。\n\n$K_{sp}$',
+          raw: '',
+        },
+      }}
+      onNavigate={() => {}}
+      onStartFree={() => {}}
+    />,
+  );
+
+  expect(markup).toContain('<h2>学习原则</h2>');
+  expect(markup).toContain('<li>从真实问题开始。</li>');
+  expect(markup).toContain('class="katex"');
+  expect(markup).not.toContain('## 学习原则');
+});
+
 test('renders free learning as a titled letter with immutable carried context', () => {
   const markup = renderToStaticMarkup(
     <FreeLearningPage

@@ -1,6 +1,6 @@
 # StudyForge M1d：学生界面与知识关系设计
 
-**状态：** 已逐项讨论确认，作为 M1d 实施与验收的唯一设计基准
+**状态：** 已实现并通过 M1d 发布门；真实备课时延作为独立性能风险保留
 
 **日期：** 2026-08-09
 
@@ -409,6 +409,16 @@ M1d 只允许以下非 canonical 读投影：
 3. 一次真实模型冒烟：流式回复、长等待进展、公式与安全回执；
 4. 完整 `bun run check`；
 5. 现有 M0、M1b、M1c 生命周期与防剧透测试全部保持通过。
+
+### 16.4 实际验收结果（2026-08-09）
+
+- `bun run check`：TypeScript、307 个非 E2E 测试和 Vite production build 全部通过；
+- M0、M1b、M1c、M1d Playwright：7 / 7 通过；关键页面已在 1440×900 走查，课程工作区另在 1280×800 走查，无横向溢出；
+- 真实模型：`openai-codex/gpt-5.6-sol:high`，Scout 为 `gpt-5.6-terra:high`；254 个 assistant delta、三批真实材料检索进展、生产 KaTeX 与安全回执均在真实页面成立；
+- 真实课程树最终新增一个 `prepared` Lesson，最终回复与 `/api/course` 投影一致；普通工具没有向学生暴露路径、参数、原始 JSON、教师 rationale 或 memory 内部文件；
+- 完整脱敏记录见 `apps/pi-teaching-web/tests/validation/m1d-real-model-smoke.md`。截图只保存在被忽略的 `apps/pi-teaching-web/output/playwright/`，不提交运行时证据与私有转录。
+
+非阻塞限制：确认后的真实备课用了三批检索和约 12 分 22 秒，并有一个可恢复的后台分支失败。M1d 证明了等待过程可见且安全，但不宣称解决了 Coach 选材、深核验和整体 token 成本；这属于后续检索/备课性能工作，而不是前端状态或投影缺陷。
 
 ## 十七、最终判断
 

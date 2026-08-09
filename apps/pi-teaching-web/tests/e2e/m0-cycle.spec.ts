@@ -60,7 +60,7 @@ test('completes the M0 Roadmap, Plan, Lesson and Knowledge browser cycle', async
     '我听见你说恒成立问题比较棘手。具体是哪一种结构最容易让你停下来？',
     { exact: true },
   )).toBeVisible();
-  await expect(page.locator('details.tool-activity')).toContainText('read');
+  await expect(page.locator('.tool-receipt')).toContainText('老师查看了相关内容');
 
   await page.getByRole('button', { name: '展开课程树' }).click();
   await page.getByRole('button', { name: /恒成立问题选路/ }).click();
@@ -94,9 +94,9 @@ test('completes the M0 Roadmap, Plan, Lesson and Knowledge browser cycle', async
   expect(overflow.documentWidth).toBe(overflow.viewportWidth);
   expect(overflow.formulaWidth).toBeGreaterThan(overflow.formulaViewport);
   await page.setViewportSize({ width: 1280, height: 800 });
-  await page.getByRole('button', { name: '展开节点原文' }).click();
-  await expect(page.getByRole('complementary', { name: '课堂节点' })).toContainText('具体问诊');
-  await expect(page.getByRole('complementary', { name: '课堂节点' })).toContainText('入口练习');
+  await page.getByRole('button', { name: '展开本课提纲' }).click();
+  await expect(page.getByRole('complementary', { name: '本课提纲' })).toContainText('具体问诊');
+  await expect(page.getByRole('complementary', { name: '本课提纲' })).toContainText('入口练习');
 
   delayClosedLessonReload = true;
   await page.getByRole('button', { name: '结束本课' }).click();
@@ -115,9 +115,10 @@ test('completes the M0 Roadmap, Plan, Lesson and Knowledge browser cycle', async
   await page.getByRole('button', { name: '完成这一阶段' }).click();
   await expect(page).toHaveURL(/\/course$/);
   await page.goto('/knowledge');
-  await expect(page.getByRole('heading', { name: '知识山河' })).toBeVisible();
-  await page.getByPlaceholder('方法、题卡编号或材料名').fill('参变量分离');
-  await expect(page.getByRole('region', { name: '题卡资产' })).not.toContainText('没有匹配的题卡');
+  await expect(page.getByRole('heading', { name: '知识关系' })).toBeVisible();
+  await page.getByPlaceholder('例如：沉淀溶解平衡').fill('参变量分离');
+  await page.getByRole('button', { name: '参变量分离', exact: true }).click();
+  await expect(page.getByLabel('关系检查器')).toContainText('设函数');
 
   expect((await page.request.get('/api/views/memory')).status()).toBe(404);
   await page.goto('/memory');

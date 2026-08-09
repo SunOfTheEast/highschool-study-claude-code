@@ -44,6 +44,10 @@ function optionalRecordArray(value: unknown, field: string, path: string): Unkno
   return value.map((item, index) => asRecord(item, `${field}[${index}]`, path));
 }
 
+function optionalRecord(value: unknown, field: string, path: string): UnknownRecord | null {
+  return value === undefined ? null : asRecord(value, field, path);
+}
+
 function unique(values: string[]): string[] {
   return [...new Set(values)];
 }
@@ -104,25 +108,25 @@ export function legacyCardSemanticProjection(
 ): LegacyCardSemanticProjection {
   const root = asRecord(card, 'card', path);
   const graph = asRecord(root.graph, 'graph', path);
-  const goal = asRecord(graph.goal, 'graph.goal', path);
-  const method = asRecord(graph.method, 'graph.method', path);
-  const structure = asRecord(graph.structure, 'graph.structure', path);
+  const goal = optionalRecord(graph.goal, 'graph.goal', path);
+  const method = optionalRecord(graph.method, 'graph.method', path);
+  const structure = optionalRecord(graph.structure, 'graph.structure', path);
   const core = unique([
-    requiredString(goal.primary, 'graph.goal.primary', path),
-    requiredString(method.primary, 'graph.method.primary', path),
-    requiredString(structure.primary, 'graph.structure.primary', path),
+    ...(goal ? [requiredString(goal.primary, 'graph.goal.primary', path)] : []),
+    ...(method ? [requiredString(method.primary, 'graph.method.primary', path)] : []),
+    ...(structure ? [requiredString(structure.primary, 'graph.structure.primary', path)] : []),
   ]);
   const coreSet = new Set(core);
   const related = unique([
-    ...optionalRecordArray(goal.part_level, 'graph.goal.part_level', path)
+    ...optionalRecordArray(goal?.part_level, 'graph.goal.part_level', path)
       .map((part, index) => requiredString(
         part.goal,
         `graph.goal.part_level[${index}].goal`,
         path,
       )),
-    ...optionalStringArray(method.secondary, 'graph.method.secondary', path),
-    ...optionalStringArray(method.subroute, 'graph.method.subroute', path),
-    ...optionalStringArray(structure.secondary, 'graph.structure.secondary', path),
+    ...optionalStringArray(method?.secondary, 'graph.method.secondary', path),
+    ...optionalStringArray(method?.subroute, 'graph.method.subroute', path),
+    ...optionalStringArray(structure?.secondary, 'graph.structure.secondary', path),
   ]).filter((tag) => !coreSet.has(tag));
   return {
     id: requiredString(root.content_item_id, 'content_item_id', path),

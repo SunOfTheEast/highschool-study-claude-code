@@ -1,5 +1,6 @@
 import type { MouseEvent } from 'react';
 import type { LearningSetHomeSnapshot } from '../../shared/contracts';
+import { MarkdownView } from '../components/MarkdownView';
 import type { BrowserRoute } from '../routes';
 
 export function HomePage({
@@ -20,12 +21,15 @@ export function HomePage({
     onNavigate(route);
   };
   const activeLesson = value.course?.activeLesson ?? null;
+  const guideBody = value.guide.body.replace(/^#\s+.+$/m, '').trim();
   return (
     <main className="m1b-home home-portal">
       <header className="m1b-home-heading">
         <small>StudyForge · 本地学习集</small>
         <h1>{value.guide.title}</h1>
-        <p>{value.guide.body.replace(/^#\s+.+$/m, '').trim()}</p>
+        <div className="home-guide-copy">
+          <MarkdownView>{guideBody}</MarkdownView>
+        </div>
       </header>
 
       <section className="home-action-stage" aria-label="现在开始">

@@ -106,6 +106,34 @@ test('projects new flat tags and legacy graph metadata into one safe recall surf
   expect(buildSemanticRecallIndex(root)).toBe(tsv);
 });
 
+test('keeps method-only legacy cards readable by the student relation projection', () => {
+  const root = learningSet();
+  writeFileSync(join(root, 'cards/legacy/method-only.card.yaml'), stringifyYaml({
+    schema: 'highschool-study.problem-card.v1',
+    content_item_id: 'method-only',
+    storage_uri: 'cards/legacy/method-only.card.yaml',
+    stem: '设函数 f(x)=e^x-ax，讨论其最小值。',
+    graph: {
+      method: {
+        primary: '参变量分离',
+        secondary: ['同构变形与换元法'],
+      },
+    },
+  }, { lineWidth: 0 }));
+
+  expect(readSemanticRecallRows(root)).toEqual([expect.objectContaining({
+    id: 'method-only',
+    core: ['参变量分离'],
+    related: ['同构变形与换元法'],
+  })]);
+  expect(projectSemanticRelations(root)).toContainEqual({
+    kind: 'asset-tag',
+    asset: { kind: 'problem-card', id: 'method-only' },
+    tag: '参变量分离',
+    role: 'core',
+  });
+});
+
 test('returns only the requested quantity and derives relations from canonical facts', () => {
   const root = learningSet();
   const first = planProblemCardSave(root, 'session-001', {

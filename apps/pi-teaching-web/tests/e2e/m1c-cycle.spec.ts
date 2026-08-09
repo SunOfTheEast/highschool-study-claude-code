@@ -29,10 +29,10 @@ test('joins source-grounded free learning, assets, Meta, Roadmap, and the footpr
 
   await page.getByRole('button', { name: /化学反应原理摘录/ }).click();
   await expect(page.getByRole('heading', { name: '化学反应原理摘录' })).toBeVisible();
-  await expect(page.getByLabel('来源位置')).toHaveValue('lines-1-3');
-  await page.getByRole('button', { name: '读取来源' }).click();
+  await expect(page.getByLabel('资料位置')).toContainText('第 1–3 行');
+  await expect(page.getByLabel('资料位置')).toContainText('lines-1-3');
   await expect(page.getByText(/纯固体的活度在给定状态下视为常量/)).toBeVisible();
-  await page.getByRole('button', { name: '带着这一段问老师' }).click();
+  await page.getByRole('button', { name: '带着当前内容问老师' }).click();
 
   await expect(page).toHaveURL(/\/learn\/free-session-001$/);
   const freeComposer = page.getByPlaceholder('从一个问题、联想或不确定的想法开始…');
@@ -43,13 +43,14 @@ test('joins source-grounded free learning, assets, Meta, Roadmap, and the footpr
   await freeComposer.fill('保存吧');
   await page.getByRole('button', { name: /发送/ }).click();
   await expect(page.getByText('这份有原文出处的笔记已经保存。')).toBeVisible();
-  await expect(page.locator('details.tool-activity').filter({ hasText: 'save_note' })).toBeVisible();
+  await expect(page.locator('.tool-receipt').filter({ hasText: '笔记已保存' })).toBeVisible();
 
   await page.getByRole('link', { name: '学习资料', exact: true }).click();
   await expect(page.getByText('Ksp 中为什么不写纯固体', { exact: true })).toBeVisible();
-  await expect(page.getByText('沉淀溶解平衡', { exact: true })).toBeVisible();
+  await expect(page.getByText('核心 · 沉淀溶解平衡', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: /Ksp 中为什么不写纯固体/ }).click();
-  await expect(page.getByText(/来源：资料 material-001 · 第 1 版/)).toBeVisible();
+  await expect(page.getByText('内容来源', { exact: true })).toBeVisible();
+  await expect(page.getByText(/资料 material-001 · 第 1 版 · 第 1–3 行/)).toBeVisible();
 
   await page.goto('/home');
   await page.getByRole('button', { name: /规划长期学习/ }).click();
@@ -60,9 +61,8 @@ test('joins source-grounded free learning, assets, Meta, Roadmap, and the footpr
   await expect(page.getByText(/长期学习路线.*能力标准/)).toBeVisible();
   await metaComposer.fill('可以');
   await page.getByRole('button', { name: /发送/ }).click();
-  await expect(page.locator('details.tool-activity').filter({ hasText: 'create_roadmap' }))
-    .toBeVisible();
-  await expect(page.getByRole('button', { name: '进入 Roadmap' })).toBeVisible();
+  await expect(page.locator('.tool-receipt').filter({ hasText: '处理完成' })).toBeVisible();
+  await expect(page.getByRole('button', { name: '进入正式课程' })).toBeVisible();
 
   const courseResponse = await page.request.get('/api/course');
   expect(courseResponse.status()).toBe(200);
@@ -77,7 +77,7 @@ test('joins source-grounded free learning, assets, Meta, Roadmap, and the footpr
   await expect(page.locator('body')).not.toContainText('metadata revision');
 
   await page.goto('/meta/meta-session-001');
-  await page.getByRole('button', { name: '进入 Roadmap' }).click();
+  await page.getByRole('button', { name: '进入正式课程' }).click();
   await expect(page).toHaveURL(/\/course$/);
   await expect(page.getByRole('heading', { name: '化学反应原理长期学习路线' })).toBeVisible();
   await expect(page.getByRole('heading', { name: '尚未形成学习阶段' })).toBeVisible();
