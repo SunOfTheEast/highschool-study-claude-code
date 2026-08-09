@@ -126,6 +126,19 @@ fn mark_spawn_failure(manager: &RuntimeManager, message: String) {
     }
 }
 
+fn stop_runtime(manager: &RuntimeManager) {
+    let child = {
+        let Ok(mut inner) = manager.inner.lock() else {
+            return;
+        };
+        inner.generation += 1;
+        inner.child.take()
+    };
+    if let Some(child) = child {
+        let _ = child.kill();
+    }
+}
+
 fn start_runtime(app: &AppHandle, manager: &RuntimeManager) -> Result<(), String> {
     let token = Uuid::new_v4().simple().to_string();
     let launch = build_launch(
@@ -267,7 +280,8 @@ fn open_external_url(app: AppHandle, url: String) -> Result<(), String> {
 
 pub fn run() {
     let manager = RuntimeManager::default();
-    tauri::Builder::default()
+    let setup_manager = manager.clone();
+    let app = tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_shell::init())
@@ -280,13 +294,18 @@ pub fn run() {
             open_external_url,
         ])
         .setup(move |app| {
-            if let Err(error) = start_runtime(app.handle(), &manager) {
-                mark_spawn_failure(&manager, error);
+            if let Err(error) = start_runtime(app.handle(), &setup_manager) {
+                mark_spawn_failure(&setup_manager, error);
             }
             Ok(())
         })
-        .run(tauri::generate_context!())
-        .expect("error while running StudyForge");
+        .build(tauri::generate_context!())
+        .expect("error while building StudyForge");
+    app.run(move |_app, event| {
+        if matches!(event, tauri::RunEvent::Exit) {
+            stop_runtime(&manager);
+        }
+    });
 }
 
 #[cfg(test)]

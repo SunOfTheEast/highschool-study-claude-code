@@ -157,7 +157,7 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
       const next = await desktopApi.auth(flowId);
       if (authRevision.current !== revision) return;
       setAuthFlow(next);
-      if (next.status !== 'running') {
+      if (next.status === 'completed' || next.status === 'failed' || next.status === 'cancelled') {
         if (next.status === 'completed') setCatalog(await desktopApi.models());
         return;
       }

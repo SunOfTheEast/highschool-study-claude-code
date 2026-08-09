@@ -18,6 +18,22 @@ async function firstLine(stream: ReadableStream<Uint8Array>): Promise<string> {
   }
 }
 
+async function waitForAuthPrompt(baseUrl: string, token: string, flowId: string) {
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    const response = await fetch(`${baseUrl}/api/desktop/auth/${flowId}`, {
+      headers: { authorization: `Bearer ${token}` },
+    });
+    const flow = await response.json() as {
+      status?: string;
+      prompt?: { type?: string; options?: Array<{ id?: string }> } | null;
+      error?: string | null;
+    };
+    if (flow.status === 'waiting' || flow.status === 'failed') return flow;
+    await Bun.sleep(20);
+  }
+  throw new Error('STUDYFORGE_OAUTH_SMOKE_TIMEOUT');
+}
+
 export async function smokeSidecars(appRoot = resolve(import.meta.dir, '../..')): Promise<void> {
   const output = sidecarOutputs(appRoot);
   const resources = resourceLayout(appRoot);
@@ -60,6 +76,32 @@ export async function smokeSidecars(appRoot = resolve(import.meta.dir, '../..'))
     runtime.kill();
     throw new Error('STUDYFORGE_RUNTIME_SMOKE_FAILED');
   }
+
+  const baseUrl = `http://127.0.0.1:${receipt.port}`;
+  const authStart = await fetch(`${baseUrl}/api/desktop/auth`, {
+    method: 'POST',
+    headers: {
+      authorization: `Bearer ${token}`,
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({ provider: 'openai-codex', type: 'oauth' }),
+  });
+  const startedAuth = await authStart.json() as { flowId?: string };
+  if (!authStart.ok || !startedAuth.flowId) {
+    runtime.kill();
+    throw new Error('STUDYFORGE_OAUTH_SMOKE_START_FAILED');
+  }
+  const authFlow = await waitForAuthPrompt(baseUrl, token, startedAuth.flowId);
+  const methods = authFlow.prompt?.options?.map((option) => option.id);
+  if (
+    authFlow.status !== 'waiting'
+    || authFlow.prompt?.type !== 'select'
+    || !methods?.includes('browser')
+    || !methods.includes('device_code')
+  ) {
+    runtime.kill();
+    throw new Error(`STUDYFORGE_OAUTH_SMOKE_FAILED: ${authFlow.error ?? authFlow.status}`);
+  }
   await fetch(`http://127.0.0.1:${receipt.port}/api/desktop/shutdown`, {
     method: 'POST',
     headers: { authorization: `Bearer ${token}` },
@@ -69,6 +111,7 @@ export async function smokeSidecars(appRoot = resolve(import.meta.dir, '../..'))
   console.log(JSON.stringify({
     runtime: 'passed',
     pi: 'passed',
+    oauthBootstrap: 'passed',
     path: 'empty',
     realModelScout: 'blocked-until-desktop-provider-login',
   }));
