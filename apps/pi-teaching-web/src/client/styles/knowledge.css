@@ -1,32 +1,46 @@
 .knowledge-workspace {
   min-height: calc(100dvh - var(--workspace-header-height));
   display: grid;
-  grid-template-columns: 264px minmax(0, 1fr) 308px;
-  grid-template-rows: auto 1fr;
+  grid-template-columns: 248px minmax(520px, 1fr) 326px;
+  overflow: hidden;
   background: var(--paper);
   animation: page-in .24s ease-out both;
 }
 
-.knowledge-heading {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(16rem, 24rem);
-  gap: var(--space-7);
-  align-items: end;
-  padding: var(--space-6) clamp(var(--space-4), 3vw, var(--space-7));
-  border-bottom: 1px solid var(--ink);
+.knowledge-entry,
+.semantic-inspector {
+  min-width: 0;
+  padding: var(--space-5) var(--space-4);
+  overflow: auto;
 }
-.knowledge-heading small,
-.method-column header span,
-.material-column header span,
-.asset-column header > span {
+.knowledge-entry {
+  border-right: 1px solid var(--rule);
+  background: var(--paper-deep);
+}
+.semantic-inspector {
+  border-left: 1px solid var(--rule);
+  background: var(--paper-mid);
+}
+.knowledge-entry header small,
+.semantic-stage header small,
+.semantic-inspector header > small {
   color: var(--accent);
   font-size: var(--text-label);
   letter-spacing: .14em;
   text-transform: uppercase;
 }
-.knowledge-heading h1 { margin: var(--space-1) 0 0; font: 500 var(--text-h1)/1.15 var(--font-display); }
-.knowledge-heading p { max-width: 45rem; margin: var(--space-2) 0 0; color: var(--ink-soft); font: var(--text-body-sm)/1.7 var(--font-reading); }
+.knowledge-entry h1,
+.semantic-stage h2,
+.semantic-inspector h2 {
+  margin: var(--space-1) 0 0;
+  color: var(--ink);
+  font: 500 var(--text-lead)/1.28 var(--font-display);
+}
+.knowledge-entry header p {
+  margin: var(--space-3) 0 var(--space-5);
+  color: var(--ink-soft);
+  font: var(--text-body-sm)/1.7 var(--font-reading);
+}
 .knowledge-search { display: grid; gap: var(--space-2); }
 .knowledge-search span { color: var(--ink-faint); font-size: var(--text-label); }
 .knowledge-search input {
@@ -34,31 +48,18 @@
   padding: var(--space-2) 0;
   border: 0;
   border-bottom: 1px solid var(--ink);
+  border-radius: 0;
   color: var(--ink);
   background: transparent;
   font: var(--text-body-sm)/1.5 var(--font-reading);
 }
-
-.method-column,
-.material-column { min-width: 0; padding: var(--space-5) var(--space-4); }
-.method-column { border-right: 1px solid var(--rule); background: var(--paper-deep); }
-.material-column { border-left: 1px solid var(--rule); background: var(--paper-mid); }
-.method-column header,
-.material-column header,
-.asset-column header { padding-bottom: var(--space-3); border-bottom: 1px solid var(--ink); }
-.method-column h2,
-.material-column h2,
-.asset-column h2 { margin: var(--space-1) 0 0; font: 500 var(--text-lead)/1.3 var(--font-display); }
-
-.method-tree,
-.method-tree ol { margin: 0; padding: 0; list-style: none; }
-.method-tree ol { margin-left: var(--space-3); padding-left: var(--space-3); border-left: 1px solid var(--rule); }
-.method-tree li { padding-top: var(--space-1); }
-.method-tree button {
+.knowledge-entry nav {
+  display: grid;
+  gap: 1px;
+  margin: var(--space-5) 0;
+}
+.knowledge-entry nav button {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  gap: var(--space-3);
   padding: var(--space-2) var(--space-3);
   border: 0;
   border-left: 2px solid transparent;
@@ -67,40 +68,129 @@
   text-align: left;
   cursor: pointer;
 }
-.method-tree button:hover { background: var(--paper); }
-.method-tree button[aria-current="true"] { border-left-color: var(--seal); color: var(--ink); background: var(--paper); }
-.method-tree button span { font: var(--text-body-sm)/1.5 var(--font-reading); }
-.method-tree button small { color: var(--ink-faint); font: var(--text-micro)/1.4 var(--font-mono); }
+.knowledge-entry nav button:hover { color: var(--ink); background: var(--paper); }
+.knowledge-entry nav button[aria-current="true"] {
+  border-left-color: var(--accent);
+  color: var(--ink);
+  background: var(--paper);
+}
+.knowledge-entry nav p { color: var(--ink-faint); font-size: var(--text-meta); }
+.knowledge-back { margin-top: auto; }
 
-.asset-column { min-width: 0; padding: var(--space-5) clamp(var(--space-4), 3vw, var(--space-7)); background: var(--paper); }
-.asset-column header { position: relative; }
-.asset-column header b {
-  position: absolute;
-  right: 0;
-  bottom: var(--space-3);
+.semantic-stage {
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto minmax(430px, 1fr) auto;
+  padding: var(--space-5) clamp(var(--space-4), 2.4vw, var(--space-6));
+  background:
+    linear-gradient(to right, transparent 49.9%, color-mix(in srgb, var(--rule) 30%, transparent) 50%, transparent 50.1%),
+    linear-gradient(to bottom, transparent 49.9%, color-mix(in srgb, var(--rule) 30%, transparent) 50%, transparent 50.1%),
+    var(--paper);
+}
+.semantic-stage > header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--ink);
+}
+.semantic-stage > header > span {
   color: var(--ink-faint);
-  font: var(--text-micro)/1 var(--font-mono);
+  font: var(--text-label)/1.4 var(--font-mono);
+  white-space: nowrap;
 }
-.asset-list article { padding: var(--space-5) 0; border-bottom: 1px solid var(--rule); }
-.asset-list article > small { color: var(--seal); font: var(--text-micro)/1.3 var(--font-mono); }
-.asset-list h3 { margin: var(--space-2) 0 var(--space-3); font: 500 var(--text-body)/1.6 var(--font-reading); }
-.asset-list p { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin: 0 0 var(--space-3); color: var(--ink-soft); font-size: var(--text-meta); }
-.asset-list code,
-.material-list code { display: block; color: var(--ink-faint); font: var(--text-micro)/1.5 var(--font-mono); overflow-wrap: anywhere; }
-.material-list article { display: grid; gap: var(--space-2); padding: var(--space-4) 0; border-bottom: 1px solid var(--rule); }
-.material-list small { color: var(--accent); font-size: var(--text-label); text-transform: uppercase; }
-.material-list strong { font: 500 var(--text-body-sm)/1.5 var(--font-reading); }
-.asset-empty { color: var(--ink-faint); font: var(--text-body-sm)/1.65 var(--font-reading); }
-
-@media (max-width: 1100px) {
-  .knowledge-workspace { grid-template-columns: 232px minmax(0, 1fr); }
-  .material-column { grid-column: 1 / -1; border-top: 1px solid var(--rule); border-left: 0; }
-  .material-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 var(--space-5); }
+.semantic-canvas { position: relative; min-height: 430px; }
+.semantic-canvas svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.semantic-canvas line { stroke: var(--rule-strong); stroke-width: .25; }
+.semantic-canvas line[data-edge-role="core"] { stroke: var(--accent); stroke-width: .55; }
+.semantic-canvas line[data-edge-role="related"] { stroke-dasharray: 1.2 1; }
+.semantic-canvas line[data-edge-role="co-occurrence"] { stroke: var(--ink-faint); stroke-width: .2; }
+.semantic-canvas line[data-edge-role="source"] { stroke: var(--ink-soft); stroke-dasharray: 2 1; }
+.semantic-node {
+  position: absolute;
+  left: var(--node-x);
+  top: var(--node-y);
+  z-index: 1;
+  width: clamp(7rem, 10vw, 10rem);
+  min-height: 3.5rem;
+  display: grid;
+  align-content: center;
+  gap: .15rem;
+  padding: .55rem .7rem;
+  transform: translate(-50%, -50%);
+  border: 1px solid var(--rule-strong);
+  color: var(--ink);
+  background: color-mix(in srgb, var(--paper) 94%, transparent);
+  box-shadow: 0 7px 18px rgba(52, 46, 37, .06);
+  text-align: left;
 }
+button.semantic-node { cursor: pointer; }
+button.semantic-node:hover { border-color: var(--ink); }
+.semantic-node small { color: var(--ink-faint); font: var(--text-micro)/1.3 var(--font-reading); }
+.semantic-node strong { font: 500 var(--text-meta)/1.35 var(--font-reading); }
+.semantic-node[data-node-kind="tag"] { border-radius: 999px; text-align: center; }
+.semantic-node[data-node-kind="asset"] { border-left: 3px solid var(--accent); }
+.semantic-node[data-node-kind="material"] { border-style: dashed; }
+.semantic-node[data-focus="true"] {
+  z-index: 2;
+  width: clamp(9rem, 13vw, 12rem);
+  min-height: 4.5rem;
+  border-color: var(--ink);
+  background: var(--paper);
+  box-shadow: 0 12px 30px rgba(52, 46, 37, .11);
+}
+.semantic-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  align-items: center;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--rule);
+  color: var(--ink-faint);
+  font-size: var(--text-label);
+}
+.semantic-legend span::before {
+  content: "";
+  display: inline-block;
+  width: 1.4rem;
+  margin-right: .4rem;
+  border-top: 1px solid var(--rule-strong);
+  vertical-align: middle;
+}
+.semantic-legend span[data-edge-role="core"]::before { border-color: var(--accent); border-width: 2px; }
+.semantic-legend span[data-edge-role="related"]::before { border-style: dashed; }
+.semantic-legend p { flex-basis: 100%; margin: 0; line-height: 1.5; }
 
-@media (max-width: 720px) {
-  .knowledge-workspace { display: block; }
-  .knowledge-heading { grid-template-columns: 1fr; gap: var(--space-4); padding: var(--space-5) var(--space-4); }
-  .method-column { border-right: 0; border-bottom: 1px solid var(--rule); }
-  .material-list { display: block; }
+.semantic-inspector header { padding-bottom: var(--space-4); border-bottom: 1px solid var(--ink); }
+.semantic-actions { display: grid; gap: var(--space-2); margin-top: var(--space-4); }
+.semantic-inspector > h3 {
+  margin: var(--space-5) 0 var(--space-2);
+  color: var(--ink-soft);
+  font: 500 var(--text-meta)/1.4 var(--font-reading);
+}
+.semantic-inspector ol { margin: 0; padding: 0; list-style: none; }
+.semantic-inspector li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--rule);
+}
+.semantic-inspector li > div { min-width: 0; display: grid; gap: .2rem; }
+.semantic-inspector li small { color: var(--ink-faint); font-size: var(--text-micro); }
+.semantic-inspector li strong { font: 500 var(--text-meta)/1.45 var(--font-reading); overflow-wrap: anywhere; }
+.semantic-inspector li[data-association-role="core"] { border-left: 2px solid var(--accent); padding-left: var(--space-2); }
+.semantic-inspector li[data-association-role="related"] { border-left: 1px dashed var(--ink-faint); padding-left: var(--space-2); }
+
+.knowledge-empty { display: grid; place-items: center; padding: var(--space-8); }
+.knowledge-empty section { width: min(34rem, 100%); text-align: center; }
+.knowledge-empty small { color: var(--accent); letter-spacing: .14em; text-transform: uppercase; }
+.knowledge-empty h1 { font: 500 var(--text-h1)/1.2 var(--font-display); }
+.knowledge-empty p { color: var(--ink-soft); font: var(--text-body)/1.8 var(--font-reading); }
+
+@media (max-width: 1180px) {
+  .knowledge-workspace { grid-template-columns: 220px minmax(470px, 1fr) 286px; }
+  .semantic-stage { padding-inline: var(--space-3); }
 }

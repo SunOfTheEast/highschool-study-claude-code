@@ -2,7 +2,6 @@ import { useEffect, useReducer, useRef, useState } from 'react';
 import type {
   CourseSnapshot,
   CourseTreeNode,
-  KnowledgeSnapshot,
   LearningAssetLibrarySnapshot,
   LearningContextReference,
   LearningFootprintSnapshot,
@@ -11,6 +10,7 @@ import type {
   LearningSetHomeSnapshot,
   LessonHandout,
   ProblemAttemptResponse,
+  SemanticRelation,
   SessionKey,
   StudyEvent,
 } from '../shared/contracts';
@@ -112,7 +112,7 @@ export function App() {
   const [note, setNote] = useState<LearningNoteView | null>(null);
   const [problem, setProblem] = useState<ProblemCardView | null>(null);
   const [course, setCourse] = useState<CourseSnapshot | null>(null);
-  const [knowledge, setKnowledge] = useState<KnowledgeSnapshot | null>(null);
+  const [semanticRelations, setSemanticRelations] = useState<SemanticRelation[] | null>(null);
   const [freeContexts, setFreeContexts] = useState<CarriedContextItem[]>([]);
   const [handout, setHandout] = useState<LessonHandout | null>(null);
   const [handoutError, setHandoutError] = useState<string | null>(null);
@@ -266,9 +266,15 @@ export function App() {
         return;
       }
       if (next.kind === 'knowledge') {
-        const value = await api.knowledge();
+        const [relations, assetLibrary, materialValues] = await Promise.all([
+          api.semanticRelations(),
+          api.assets(),
+          api.materials(),
+        ]);
         if (revision !== routeLoadRevision.current) return;
-        setKnowledge(value);
+        setSemanticRelations(relations);
+        setAssets(assetLibrary);
+        setMaterials(materialValues);
         setRoute(next);
         setNotice(null);
         return;
@@ -560,9 +566,28 @@ export function App() {
       />
     );
   } else if (route.kind === 'knowledge') {
-    content = knowledge
-      ? <KnowledgePage value={knowledge} />
-      : <div className="loading-screen"><b>正在读取旧知识视图</b></div>;
+    content = semanticRelations && assets
+      ? (
+        <KnowledgePage
+          relations={semanticRelations}
+          assets={assets}
+          materials={materials}
+          initialFocus={new URLSearchParams(window.location.search).get('focus')}
+          onFocus={(focus) => {
+            const url = new URL(window.location.href);
+            url.search = '';
+            url.searchParams.set('focus', focus);
+            window.history.replaceState(null, '', `${url.pathname}${url.search}`);
+          }}
+          onOpenAsset={(reference) => navigate(reference.kind === 'note'
+            ? { kind: 'note', id: reference.id }
+            : { kind: 'problem-card', id: reference.id })}
+          onAskAsset={(reference) => void startFree([reference])}
+          onOpenMaterial={(id) => navigate({ kind: 'material', id })}
+          onOpenAssets={() => navigate({ kind: 'assets' })}
+        />
+      )
+      : <div className="loading-screen"><b>正在读取知识关系</b></div>;
   } else if (!course || !selectedKey) {
     content = <div className="loading-screen"><b>正在读取课程节点</b></div>;
   } else if (route.kind === 'course') {

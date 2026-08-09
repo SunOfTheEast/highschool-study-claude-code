@@ -1,162 +1,197 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type CSSProperties } from 'react';
 import type {
-  KnowledgeMethodNode,
-  KnowledgeSnapshot,
+  LearningAssetHandle,
+  LearningAssetLibrarySnapshot,
+  LearningMaterial,
+  SemanticRelation,
 } from '../../shared/contracts';
+import {
+  buildLocalSemanticGraph,
+  listSemanticGraphTags,
+  type SemanticGraphAssociation,
+} from '../semantic-graph';
 
-export function filterKnowledge(
-  value: KnowledgeSnapshot,
-  query: string,
-): KnowledgeSnapshot {
-  const term = query.trim().toLowerCase();
-  if (!term) return value;
-  return {
-    methods: value.methods.filter((method) => (
-      `${method.id}\n${method.name}`.toLowerCase().includes(term)
-    )),
-    cards: value.cards.filter((card) => (
-      [
-        card.id,
-        card.path,
-        card.title,
-        card.primaryMethod ?? '',
-        ...card.supportingMethods,
-      ].join('\n').toLowerCase().includes(term)
-    )),
-    materials: value.materials.filter((material) => (
-      `${material.path}\n${material.title}\n${material.kind}`.toLowerCase().includes(term)
-    )),
-  };
-}
+type KnowledgePageProps = {
+  relations: SemanticRelation[];
+  assets: LearningAssetLibrarySnapshot;
+  materials: LearningMaterial[];
+  initialFocus?: string | null;
+  onFocus(key: string): void;
+  onOpenAsset(asset: LearningAssetHandle): void;
+  onAskAsset(asset: LearningAssetHandle): void;
+  onOpenAssets(): void;
+  onOpenMaterial?(id: string): void;
+};
 
-function MethodBranch({
-  node,
-  byId,
-  selected,
-  onSelect,
-}: {
-  node: KnowledgeMethodNode;
-  byId: Map<string, KnowledgeMethodNode>;
-  selected: string;
-  onSelect(id: string): void;
-}) {
+function associationAction(
+  item: SemanticGraphAssociation,
+  selectFocus: (key: string) => void,
+  onOpenMaterial?: (id: string) => void,
+) {
+  if (item.kind === 'material') {
+    return item.materialId && onOpenMaterial
+      ? <button type="button" className="action-text" onClick={() => onOpenMaterial(item.materialId!)}>打开资料</button>
+      : null;
+  }
   return (
-    <li>
-      <button
-        type="button"
-        aria-current={node.id === selected ? 'true' : undefined}
-        onClick={() => onSelect(node.id)}
-      >
-        <span>{node.name}</span>
-        <small>{node.children.length}</small>
-      </button>
-      {node.children.length > 0 && (
-        <ol>
-          {node.children.flatMap((id) => {
-            const child = byId.get(id);
-            return child ? [
-              <MethodBranch
-                key={child.id}
-                node={child}
-                byId={byId}
-                selected={selected}
-                onSelect={onSelect}
-              />,
-            ] : [];
-          })}
-        </ol>
-      )}
-    </li>
+    <button type="button" className="action-text" onClick={() => selectFocus(item.key)}>
+      {item.kind === 'tag' ? '以此为中心' : '查看关系'}
+    </button>
   );
 }
 
-export function KnowledgePage({ value }: { value: KnowledgeSnapshot }) {
+export function KnowledgePage({
+  relations,
+  assets,
+  materials,
+  initialFocus = null,
+  onFocus,
+  onOpenAsset,
+  onAskAsset,
+  onOpenAssets,
+  onOpenMaterial,
+}: KnowledgePageProps) {
   const [query, setQuery] = useState('');
-  const root = value.methods.find((method) => method.parentId === null) ?? value.methods[0];
-  const [selectedId, setSelectedId] = useState(root?.id ?? '');
-  const byId = useMemo(
-    () => new Map(value.methods.map((method) => [method.id, method])),
-    [value.methods],
+  const [focus, setFocus] = useState(initialFocus);
+  const graph = useMemo(
+    () => buildLocalSemanticGraph({ relations, assets, materials, focus }),
+    [relations, assets, materials, focus],
   );
-  const filtered = filterKnowledge(value, query);
-  const selected = byId.get(selectedId) ?? root ?? null;
-  const relatedCards = selected
-    ? value.cards.filter((card) => (
-      card.primaryMethod === selected.name || card.supportingMethods.includes(selected.name)
-    ))
-    : [];
-  const cards = query ? filtered.cards : relatedCards.length > 0 ? relatedCards : value.cards;
+  const tags = useMemo(() => listSemanticGraphTags(relations), [relations]);
+  const visibleTags = tags.filter((tag) => (
+    !query.trim() || tag.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())
+  ));
+  const nodeByKey = new Map(graph.nodes.map((node) => [node.key, node]));
+  const selectedAsset = graph.focus?.asset ?? null;
+  const selectFocus = (key: string) => {
+    setFocus(key);
+    onFocus(key);
+  };
+
+  if (!graph.focus) {
+    return (
+      <main className="knowledge-workspace knowledge-empty" aria-label="知识关系">
+        <section>
+          <small>Knowledge relations</small>
+          <h1>知识关系</h1>
+          <p>这里还没有形成带标签的笔记或题卡。先回到资料架继续学习，关系会随资产自然出现。</p>
+          <button type="button" className="action-outline" onClick={onOpenAssets}>回到学习资料</button>
+        </section>
+      </main>
+    );
+  }
 
   return (
-    <main className="knowledge-workspace" aria-label="知识山河">
-      <header className="knowledge-heading">
-        <div>
-          <small>Static learning assets</small>
-          <h1>知识山河</h1>
-          <p>这里展示学习集本身的方法骨架、题卡与材料，不叠加个人能力判断。</p>
-        </div>
+    <main className="knowledge-workspace" aria-label="知识关系">
+      <aside className="knowledge-entry" aria-label="标签入口">
+        <header>
+          <small>Knowledge relations</small>
+          <h1>知识关系</h1>
+          <p>从一个词出发，只看它附近的学习内容。</p>
+        </header>
         <label className="knowledge-search">
-          <span>查找资产</span>
+          <span>查找标签</span>
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="方法、题卡编号或材料名"
+            placeholder="例如：沉淀溶解平衡"
           />
         </label>
-      </header>
+        <nav aria-label="入口词">
+          {visibleTags.map((tag) => (
+            <button
+              type="button"
+              key={tag}
+              aria-current={graph.focus?.key === `tag:${tag}` ? 'true' : undefined}
+              onClick={() => selectFocus(`tag:${tag}`)}
+            >
+              {tag}
+            </button>
+          ))}
+          {visibleTags.length === 0 && <p>没有匹配的标签。</p>}
+        </nav>
+        <button type="button" className="action-text knowledge-back" onClick={onOpenAssets}>回到学习资料</button>
+      </aside>
 
-      <section className="method-column" aria-label="方法图谱">
-        <header><span>Method graph</span><h2>方法骨架</h2></header>
-        {root ? (
-          <ol className="method-tree">
-            <MethodBranch
-              node={root}
-              byId={byId}
-              selected={selectedId}
-              onSelect={setSelectedId}
-            />
-          </ol>
-        ) : <p>当前学习集还没有方法图谱。</p>}
-      </section>
-
-      <section className="asset-column" aria-label="题卡资产">
+      <section className="semantic-stage" aria-label="局部关系图">
         <header>
-          <span>{query ? `搜索 · ${query}` : selected?.name ?? '全部题卡'}</span>
-          <h2>题卡</h2>
-          <b>{cards.length}</b>
+          <div><small>Local view</small><h2>{graph.focus.label}</h2></div>
+          <span>显示 {graph.nodes.length} / 共 {graph.totalNodes}</span>
         </header>
-        <div className="asset-list">
-          {cards.map((card) => (
-            <article key={card.path}>
-              <small>{card.id}</small>
-              <h3>{card.title}</h3>
-              <p>
-                {card.primaryMethod && <span>主方法 · {card.primaryMethod}</span>}
-                {card.supportingMethods.length > 0 && (
-                  <span>辅助 · {card.supportingMethods.join('、')}</span>
-                )}
-              </p>
-              <code>{card.path}</code>
-            </article>
-          ))}
-          {cards.length === 0 && <p className="asset-empty">没有匹配的题卡。</p>}
+        <div className="semantic-canvas">
+          <svg viewBox="0 0 100 100" role="img" aria-label={`${graph.focus.label}的局部关系`}>
+            {graph.edges.map((edge) => {
+              const from = nodeByKey.get(edge.from);
+              const to = nodeByKey.get(edge.to);
+              if (!from || !to) return null;
+              return (
+                <line
+                  key={edge.key}
+                  x1={from.x}
+                  y1={from.y}
+                  x2={to.x}
+                  y2={to.y}
+                  data-edge-role={edge.role}
+                >
+                  <title>{edge.label}</title>
+                </line>
+              );
+            })}
+          </svg>
+          {graph.nodes.map((node, index) => {
+            const style = {
+              '--node-x': `${node.x}%`,
+              '--node-y': `${node.y}%`,
+            } as CSSProperties;
+            const contents = <><small>{node.detail}</small><strong>{node.label}</strong></>;
+            if (node.kind === 'material') {
+              return <span key={node.key} className="semantic-node" data-node-kind="material" style={style}>{contents}</span>;
+            }
+            return (
+              <button
+                type="button"
+                key={node.key}
+                className="semantic-node"
+                data-node-kind={node.kind}
+                data-focus={index === 0 ? 'true' : undefined}
+                style={style}
+                onClick={() => selectFocus(node.key)}
+              >
+                {contents}
+              </button>
+            );
+          })}
         </div>
+        <footer className="semantic-legend">
+          <span data-edge-role="core">核心标签</span>
+          <span data-edge-role="related">关联标签</span>
+          <span data-edge-role="co-occurrence">共同出现</span>
+          <p>共同出现只表示两个标签出现在同一资产中，不表示先修、相似或因果。</p>
+        </footer>
       </section>
 
-      <aside className="material-column" aria-label="学习材料">
-        <header><span>Materials</span><h2>材料</h2></header>
-        <div className="material-list">
-          {(query ? filtered.materials : value.materials).map((material) => (
-            <article key={material.path}>
-              <small>{material.kind}</small>
-              <strong>{material.title}</strong>
-              <code>{material.path}</code>
-            </article>
-          ))}
-          {(query ? filtered.materials : value.materials).length === 0 && (
-            <p className="asset-empty">没有匹配的材料。</p>
+      <aside className="semantic-inspector" aria-label="关系检查器">
+        <header>
+          <small>{graph.focus.detail}</small>
+          <h2>{graph.focus.label}</h2>
+          {selectedAsset && (
+            <div className="semantic-actions">
+              <button type="button" className="action-outline" onClick={() => onOpenAsset(selectedAsset)}>打开内容</button>
+              <button type="button" className="action-solid" onClick={() => onAskAsset(selectedAsset)}>
+                {selectedAsset.kind === 'note' ? '带着这份笔记问老师' : '带着这道题问老师'}
+              </button>
+            </div>
           )}
-        </div>
+        </header>
+        <h3>全部关联 · {graph.associations.length}</h3>
+        <ol>
+          {graph.associations.map((item) => (
+            <li key={item.key} data-association-role={item.role}>
+              <div><small>{item.detail}</small><strong>{item.label}</strong></div>
+              {associationAction(item, selectFocus, onOpenMaterial)}
+            </li>
+          ))}
+        </ol>
       </aside>
     </main>
   );

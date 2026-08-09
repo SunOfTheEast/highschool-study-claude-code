@@ -1,32 +1,64 @@
 import { expect, test } from 'bun:test';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { readKnowledge } from '../../src/study/knowledge';
-import {
-  filterKnowledge,
-  KnowledgePage,
-} from '../../src/client/pages/KnowledgePage';
-import { join } from 'node:path';
+import type {
+  LearningAssetLibrarySnapshot,
+  SemanticRelation,
+} from '../../src/shared/contracts';
+import { KnowledgePage } from '../../src/client/pages/KnowledgePage';
 
-const fixture = join(import.meta.dir, '../fixtures/m0-learning-set');
+const assets: LearningAssetLibrarySnapshot = {
+  notes: [{
+    kind: 'note',
+    id: 'note-001',
+    title: '同构与共同结构',
+    revision: 1,
+    updatedAt: null,
+    tags: { core: ['同构'], related: ['代数结构'] },
+    sources: [],
+  }],
+  problemCards: [],
+};
+const relations: SemanticRelation[] = [
+  { kind: 'asset-tag', asset: { kind: 'note', id: 'note-001' }, tag: '同构', role: 'core' },
+  { kind: 'asset-tag', asset: { kind: 'note', id: 'note-001' }, tag: '代数结构', role: 'related' },
+  { kind: 'tag-neighbor', left: '同构', right: '代数结构', weight: 1 },
+  { kind: 'object-anchor', objectId: 'obj-001', title: '教师内部判断', tag: '同构' },
+];
 
-test('renders the static method graph, cards and materials without personal overlays', () => {
-  const value = readKnowledge(fixture);
-  const markup = renderToStaticMarkup(<KnowledgePage value={value} />);
+test('renders the student local relation view instead of the legacy method tree', () => {
+  const markup = renderToStaticMarkup(
+    <KnowledgePage
+      relations={relations}
+      assets={assets}
+      materials={[]}
+      initialFocus="tag:同构"
+      onFocus={() => {}}
+      onOpenAsset={() => {}}
+      onAskAsset={() => {}}
+      onOpenAssets={() => {}}
+    />,
+  );
 
-  expect(markup).toContain('导数方法体系');
-  expect(markup).toContain('参变量分离');
-  expect(markup).toContain('sample-card');
-  expect(markup).toContain('materials/note.md');
-  expect(markup).toContain('class="knowledge-workspace"');
-  expect(markup).toContain('aria-label="题卡资产"');
-  expect(markup).not.toMatch(/个人掌握|能力评分|作答次数|稳定能力|学习建议/i);
+  expect(markup).toContain('知识关系');
+  expect(markup).toContain('同构与共同结构');
+  expect(markup).toContain('局部关系图');
+  expect(markup).not.toMatch(/方法骨架|Method graph|教师内部判断|个人掌握|能力评分/i);
 });
 
-test('filters static assets only by their own metadata', () => {
-  const value = readKnowledge(fixture);
-  const result = filterKnowledge(value, '同构');
+test('renders a truthful empty relation state without inventing tags', () => {
+  const markup = renderToStaticMarkup(
+    <KnowledgePage
+      relations={[]}
+      assets={{ notes: [], problemCards: [] }}
+      materials={[]}
+      onFocus={() => {}}
+      onOpenAsset={() => {}}
+      onAskAsset={() => {}}
+      onOpenAssets={() => {}}
+    />,
+  );
 
-  expect(result.methods.map((item) => item.id)).toEqual(['isomorphic']);
-  expect(result.cards.map((item) => item.id)).toEqual(['sample-card']);
-  expect(result.materials).toEqual([]);
+  expect(markup).toContain('还没有形成带标签的笔记或题卡');
+  expect(markup).toContain('回到学习资料');
+  expect(markup).not.toContain('自动打标签');
 });
