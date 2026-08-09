@@ -1,0 +1,55 @@
+@media (max-width: 1100px) {
+  .course-workspace,
+  .course-workspace[data-left="closed"],
+  .course-workspace[data-right="closed"],
+  .course-workspace[data-left="closed"][data-right="closed"] {
+    grid-template-columns: 3.15rem minmax(28rem, 1fr) 3.15rem;
+  }
+
+  .course-rail[data-open="true"],
+  .context-rail[data-open="true"] {
+    position: fixed;
+    z-index: 30;
+    top: var(--workspace-header-height);
+    bottom: 0;
+    width: min(20rem, 84vw);
+    overflow-y: auto;
+    box-shadow: 0 1rem 3rem var(--overlay);
+  }
+  .course-rail[data-open="true"] { left: 0; }
+  .context-rail[data-open="true"] { right: 0; }
+}
+
+@media (max-width: 720px) {
+  :root { --workspace-header-height: 6.8rem; }
+  .workspace-header { grid-template-columns: 1fr auto; gap: .55rem; padding: .72rem 1rem; }
+  .workspace-brand strong { max-width: 12rem; }
+  .primary-view-nav { grid-column: 1 / -1; justify-content: stretch; }
+  .primary-view-nav a { flex: 1; text-align: center; }
+  .connection-state { grid-row: 1; grid-column: 2; }
+
+  .course-workspace,
+  .course-workspace[data-left="closed"],
+  .course-workspace[data-right="closed"],
+  .course-workspace[data-left="closed"][data-right="closed"] {
+    grid-template-columns: 2.8rem minmax(0, 1fr) 2.8rem;
+  }
+  .dialogue-workspace { padding: 1rem .85rem 1.5rem; }
+  .node-heading { grid-template-columns: 1fr; }
+  .node-primary-action { justify-self: start; }
+  .node-summary { grid-column: 1; }
+  .message { grid-template-columns: 2.25rem minmax(0, 1fr); gap: .65rem; }
+  .tool-activity,
+  .material-search-activity,
+  .subagent-activity { margin-left: 2.9rem; }
+  .rail-toggle { margin: .45rem .38rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

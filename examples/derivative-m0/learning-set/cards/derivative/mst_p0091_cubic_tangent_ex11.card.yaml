@@ -1,0 +1,282 @@
+schema: highschool-study.problem-card.v1
+content_item_id: mst_p0091_cubic_tangent_ex11
+content_revision_id: mst_p0091_cubic_tangent_ex11-studyforge-2026-05-28
+taxonomy_revision_id: studyforge-derivative-2026-05-28
+storage_uri: cards/derivative/mst_p0091_cubic_tangent_ex11.card.yaml
+stem: |-
+  （2023 枣庄二模·多选 T12）已知函数 $f(x)=(x-1)^3-ax-b+1$，则下列结论正确的是（ ）
+  A. 当 $a=3$ 时，若 $f(x)$ 有三个零点，则 $b$ 的取值范围为 $(-4,0)$
+  B. 若 $f(x)$ 满足 $f(2-x)=3-f(x)$，则 $a+b=-1$
+  C. 若过点 $(2,m)$ 可作出曲线 $g(x)=f(x)-3x+ax+b$ 的三条切线，则 $-5<m<-4$
+  D. 若 $f(x)$ 存在极值点 $x_0$，且 $f(x_0)=f(x_1)$， 其中 $x_0\ne x_1$，则 $x_1+2x_0=3$
+answer: |-
+  ACD
+
+  $f'(x)=3(x-1)^2-a$，$f''(x)=6(x-1)$，所以三次函数的对称中心横坐标为 $1$。A 中令 $a=3$，则 $f'(x)=3x(x-2)$， 极大值 $f(0)=-b$、极小值 $f(2)=-4-b$，有三个零点需 $-b>0$ 且 $-4-b<0$，得 $-4<b<0$，A 正确。B 中 $f(2-x)=3-f(x)$ 表示图象关于 $(1,\frac32)$ 对称， 而 $f(1)=1-a-b$，故 $1-a-b=\frac32$，即 $a+b=-\frac12$， 不是 $-1$，B 错。C 中 $g(x)=f(x)-3x+ax+b=x^3-3x^2$，拐点为 $(1,-2)$， 拐点切线为 $y=-3x+1$；在 $x=2$ 处切线高为 $-5$， 曲线高为 $-4$，点 $(2,m)$ 要在外弧区域，故 $-5<m<-4$， C 正确。D 中设 $u=x-1$，极值点满足 $a=3u_0^2$， 由 $f(x_1)=f(x_0)$ 得 $u_1=-2u_0$，即 $x_1+2x_0=3$， D 正确。故选 ACD。
+rubric:
+  max_score: 9
+  criteria:
+    - step_id: step_1
+      description: 建立本题三次函数的导数与对称中心。
+      max_score: 1
+    - step_id: step_2
+      description: 判断 A：用极大极小值夹出三个零点。
+      max_score: 1
+    - step_id: step_3
+      description: 整理 A 的参数范围。
+      max_score: 1
+    - step_id: step_4
+      description: 判断 B：函数方程给出对称中心的纵坐标。
+      max_score: 1
+    - step_id: step_5
+      description: 判断 C：先化简 $g(x)$，再找拐点切线边界。
+      max_score: 1
+    - step_id: step_6
+      description: 判断 C：在 $x=2$ 处夹出三切线区域。
+      max_score: 1
+    - step_id: step_7
+      description: 判断 D：用极值点条件推出同值点的横坐标关系。
+      max_score: 1
+    - step_id: step_8
+      description: 完成 D 的因式分解。
+      max_score: 1
+    - step_id: step_9
+      description: 把 D 的平移变量还原为原横坐标。
+      max_score: 1
+graph:
+  goal:
+    primary: 抽象函数性质
+    part_level:
+      - part_id: A
+        goal: 零点/极值点分析
+        target: 第 A 问
+        result: 见 source_solution_summary
+      - part_id: B
+        goal: 抽象函数性质
+        target: 第 B 问
+        result: 见 source_solution_summary
+      - part_id: C
+        goal: 求参数范围
+        target: 第 C 问
+        result: 见 source_solution_summary
+      - part_id: D
+        goal: 抽象函数性质
+        target: 第 D 问
+        result: 见 source_solution_summary
+  method:
+    primary: 数形结合
+    secondary:
+      - 含参数分类讨论
+      - 切线放缩与凹凸性
+      - 对称性配凑
+    subroute:
+      - 高阶因式分解
+      - 三次函数四段论
+      - 中心平移 $u=x-1$
+      - 拐点切线三切线区域
+      - 极值同值点因式分解
+  structure:
+    primary: 三次/高次函数结构
+    secondary:
+      - 对称结构
+      - 切线/公切线/切点量结构
+    evidence:
+      - $f'(x)=3(x-1)^2-a$ 统一描述极值点存在与位置。
+      - $g(x)=x^3-3x^2$ 的拐点切线 $y=-3x+1$ 给出 C 项边界。
+      - 平移 $u=x-1$ 后，$u_1^3-3u_0^2u_1+2u_0^3=0$ 因式分解出 $u_1=-2u_0$。
+    normalization_moves_used:
+      - 把 $(x-1)^3-ax-b+1$ 平移成 $u^3-au+\text{常数}$。
+      - 用极大/极小值异号判断三个零点。
+      - 把函数方程 $f(2-x)=3-f(x)$ 读成中心对称。
+      - 化简 $g(x)$ 后用拐点切线分区判断三条切线。
+      - 用极值条件 $a=3u_0^2$ 化简同值点方程。
+  fallback:
+    only_if_trace_shows:
+      - 若学生不会从 $f'(x)$ 找极值点，回补导数单调极值基础。
+      - 若学生不能用极值点函数值判断三个零点，回补方程根分布与韦达。
+      - 若学生看不懂 $f(2-x)=3-f(x)$ 的中心对称含义，回补函数性质与图像。
+      - 若学生化简 $g(x)$ 时丢项，回补代数恒等变形。
+      - 若学生不会写拐点切线和判三切线区域，回补导数运算与几何意义。
+      - 若学生不能因式分解 $(u_1-u_0)^2(u_1+2u_0)$，回补代数恒等变形。
+  detail_terms:
+    - $f(x)=(x-1)^3-ax-b+1$
+    - $f(2-x)=3-f(x)$
+    - $g(x)=x^3-3x^2$
+    - 拐点切线 $y=-3x+1$
+    - $-5<m<-4$
+    - $x_1+2x_0=3$
+parts: &a1 []
+legacy_schema: studyforge.problem_card.v2_1_source_first
+legacy_status: draft
+problem_id: mst_p0091_cubic_tangent_ex11
+source_evidence:
+  source_refs:
+    - ref_id: page_0091
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0091/page_0091.md
+      role: problem_start
+      evidence: page_0091 底部给出例 11 题头、题干、A-D 四个选项， 并开始解析：写出 $f'(x)$、$f''(x)$，以及 A 项的导数零点。
+    - ref_id: page_0092
+      path: materials/math/derivative/source/mst26-full-marked-c20/pages/page_0092/page_0092.md
+      role: continuation
+      evidence: page_0092 顶部续完例 11 的 A、B、C、D 四项解析，给出两幅辅助图， 并明确答案 ACD；随后开始例 12，未纳入本卡。
+  source_images:
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0091.png
+      inspected: true
+      notes: 已核对 page_0091 底部：例 11 题头、四个选项和解析开头清楚可见。
+    - path: materials/math/derivative/source/mst26-full-marked-c20/images/page_0092.png
+      inspected: true
+      notes: 已核对 page_0092 顶部：例 11 续解、两幅图和答案 ACD 完整； 例 12 从本页中部另起，未纳入本卡。
+  source_context: 例 11 把三次函数的极值零点、中心对称、过点三切线和“三次函数四段论” 放在同一道多选题中。关键统一变量是 $u=x-1$，函数主体为 $u^3-au$ 加常数，对称中心横坐标固定为 $1$。
+  source_influence:
+    - 题目为多选题，choices 完整保留 A-D。
+    - A 项和解析起于 page_0091，完整判断及答案来自 page_0092。
+    - C 项图像显示 $g(x)=x^3-3x^2$ 与拐点切线 $y=-3x+1$ 的外弧区域。
+    - D 项源解用“三次函数四段论”给出 $2(1-x_0)=x_1-1$，本卡补写等值方程因式分解。
+  source_discrepancies: []
+original_problem:
+  stem: （2023 枣庄二模·多选 T12）已知函数 $f(x)=(x-1)^3-ax-b+1$，则下列结论正确的是（ ）
+  parts: *a1
+  choices:
+    - label: A
+      text_raw: 当 $a=3$ 时，若 $f(x)$ 有三个零点，则 $b$ 的取值范围为 $(-4,0)$
+      text_latex: 当 $a=3$ 时，若 $f(x)$ 有三个零点，则 $b$ 的取值范围为 $(-4,0)$
+    - label: B
+      text_raw: 若 $f(x)$ 满足 $f(2-x)=3-f(x)$，则 $a+b=-1$
+      text_latex: 若 $f(x)$ 满足 $f(2-x)=3-f(x)$，则 $a+b=-1$
+    - label: C
+      text_raw: 若过点 $(2,m)$ 可作出曲线 $g(x)=f(x)-3x+ax+b$ 的三条切线，则 $-5<m<-4$
+      text_latex: 若过点 $(2,m)$ 可作出曲线 $g(x)=f(x)-3x+ax+b$ 的三条切线，则 $-5<m<-4$
+    - label: D
+      text_raw: 若 $f(x)$ 存在极值点 $x_0$，且 $f(x_0)=f(x_1)$， 其中 $x_0\ne x_1$，则 $x_1+2x_0=3$
+      text_latex: 若 $f(x)$ 存在极值点 $x_0$，且 $f(x_0)=f(x_1)$， 其中 $x_0\ne x_1$，则 $x_1+2x_0=3$
+  answer: ACD
+  fidelity_notes:
+    - 例 11 题干起于 page_0091，解析跨到 page_0092 顶部。
+    - page_0092 两幅图分别服务于 C 项三切线区域和 D 项四段论关系。
+solution:
+  source_solution_summary: $f'(x)=3(x-1)^2-a$，$f''(x)=6(x-1)$，所以三次函数的对称中心横坐标为 $1$。A 中令 $a=3$，则 $f'(x)=3x(x-2)$， 极大值 $f(0)=-b$、极小值 $f(2)=-4-b$，有三个零点需 $-b>0$ 且 $-4-b<0$，得 $-4<b<0$，A 正确。B 中 $f(2-x)=3-f(x)$ 表示图象关于 $(1,\frac32)$ 对称， 而 $f(1)=1-a-b$，故 $1-a-b=\frac32$，即 $a+b=-\frac12$， 不是 $-1$，B 错。C 中 $g(x)=f(x)-3x+ax+b=x^3-3x^2$，拐点为 $(1,-2)$， 拐点切线为 $y=-3x+1$；在 $x=2$ 处切线高为 $-5$， 曲线高为 $-4$，点 $(2,m)$ 要在外弧区域，故 $-5<m<-4$， C 正确。D 中设 $u=x-1$，极值点满足 $a=3u_0^2$， 由 $f(x_1)=f(x_0)$ 得 $u_1=-2u_0$，即 $x_1+2x_0=3$， D 正确。故选 ACD。
+  key_steps:
+    - step_id: step_1
+      statement: 建立本题三次函数的导数与对称中心。
+      formula_trace:
+        from: |
+          $f(x)=(x-1)^3-ax-b+1$
+        to: |
+          $f'(x)=3(x-1)^2-a,\quad f''(x)=6(x-1)$，
+          对称中心横坐标为 $x=1$
+        operation: 求一阶、二阶导，定位三次函数拐点横坐标。
+        why: 四个选项都围绕极值点、对称中心或拐点切线展开。
+      source_ref: page_0091
+    - step_id: step_2
+      statement: 判断 A：用极大极小值夹出三个零点。
+      formula_trace:
+        from: |
+          $a=3,\quad f'(x)=3(x-1)^2-3=3x(x-2)$
+        to: |
+          极大点 $0$，极小点 $2$；
+          $f(0)=-b>0,\quad f(2)=-4-b<0$
+        operation: 由导数符号确定极值点，再令极大值在上、极小值在下。
+        why: 首项系数为正的三次函数有三个零点，需图像穿过 $x$ 轴三次。
+      source_ref: page_0092
+    - step_id: step_3
+      statement: 整理 A 的参数范围。
+      formula_trace:
+        from: |
+          $-b>0,\quad -4-b<0$
+        to: |
+          $b<0,\quad b>-4\Rightarrow -4<b<0$
+        operation: 解两个一次不等式并取交集。
+        why: 边界等号会产生重根，不是三个不同零点。
+      source_ref: page_0092
+    - step_id: step_4
+      statement: 判断 B：函数方程给出对称中心的纵坐标。
+      formula_trace:
+        from: |
+          $f(2-x)=3-f(x)$
+        to: |
+          图象关于 $\left(1,\frac32\right)$ 对称；
+          $f(1)=1-a-b=\frac32\Rightarrow a+b=-\frac12$
+        operation: 把 $x$ 与 $2-x$ 的配对关系识别为中心对称。
+        why: 若中心纵坐标为 $\frac32$，两对称点函数值之和为 3。
+      source_ref: page_0092
+    - step_id: step_5
+      statement: 判断 C：先化简 $g(x)$，再找拐点切线边界。
+      formula_trace:
+        from: |
+          $g(x)=f(x)-3x+ax+b$
+        to: |
+          $g(x)=x^3-3x^2,\quad g'(x)=3x^2-6x,\quad g''(x)=6x-6$
+        operation: 代入 $f(x)$ 并合并同类项，再求导。
+        why: C 项的切线条数只由化简后的标准三次函数 $g$ 决定。
+      source_ref: page_0092
+    - step_id: step_6
+      statement: 判断 C：在 $x=2$ 处夹出三切线区域。
+      formula_trace:
+        from: |
+          拐点 $(1,-2)$，拐点切线 $y=-3x+1$；
+          $l_{\text{拐点}}(2)=-5,\quad g(2)=-4$
+        to: |
+          点 $(2,m)$ 可作 3 条切线 $\Longleftrightarrow -5<m<-4$
+        operation: 比较点的纵坐标与拐点切线、曲线两条边界。
+        why: 右侧外弧区域夹在拐点切线和三次曲线之间。
+      source_ref: page_0092
+    - step_id: step_7
+      statement: 判断 D：用极值点条件推出同值点的横坐标关系。
+      formula_trace:
+        from: |
+          令 $u=x-1$，则 $f(x)=u^3-a u+\text{常数}$；
+          极值点 $u_0=x_0-1$ 满足 $a=3u_0^2$
+        to: |
+          $u_1^3-3u_0^2u_1=u_0^3-3u_0^3=-2u_0^3$，
+          即 $u_1^3-3u_0^2u_1+2u_0^3=0$
+        operation: 把 $f(x_1)=f(x_0)$ 改写为关于 $u_1,u_0$ 的方程。
+        why: 平移到对称中心后，三次函数的同值关系更容易因式分解。
+      source_ref: page_0092
+    - step_id: step_8
+      statement: 完成 D 的因式分解。
+      formula_trace:
+        from: |
+          $u_1^3-3u_0^2u_1+2u_0^3=0$
+        to: |
+          $(u_1-u_0)^2(u_1+2u_0)=0$；
+          因 $x_1\ne x_0$，得 $u_1=-2u_0$
+        operation: 因式分解并排除 $u_1=u_0$ 的重根情形。
+        why: 同一极值高度对应的另一个交点横坐标与极值点关于中心呈 2:1 关系。
+      source_ref: page_0092
+    - step_id: step_9
+      statement: 把 D 的平移变量还原为原横坐标。
+      formula_trace:
+        from: |
+          $u_1=-2u_0,\quad u_1=x_1-1,\quad u_0=x_0-1$
+        to: |
+          $x_1-1=-2(x_0-1)\Rightarrow x_1+2x_0=3$
+        operation: 代回 $u=x-1$ 并整理。
+        why: 这就是源图“三次函数四段论”中的横向比例关系。
+      source_ref: page_0092
+teaching_card:
+  student_title: 把三次函数平移到中心后看四段关系
+  what_it_trains: 训练在三次函数多选题中，把 $(x-1)$ 看成中心变量， 同时处理极值零点、中心对称、过点三切线和极值同值点关系。
+  recognition_cues:
+    - 函数已经写成 $(x-1)^3$，说明对称中心横坐标应围绕 $1$。
+    - A 项问三个零点，先找极大点和极小点的函数值。
+    - B 项出现 $2-x$ 与 $3-f(x)$，这是关于 $(1,\frac32)$ 的中心对称。
+    - C 项中的 $g(x)$ 参数会全部抵消，化成标准三次函数。
+    - D 项出现极值点和另一个同值点，适合平移后因式分解。
+  normalization_moves:
+    - 先求 $f'(x)$、$f''(x)$，抓住极值和中心。
+    - A 项用 $f(0)>0,\ f(2)<0$。
+    - B 项把函数方程转成中心纵坐标。
+    - C 项先化简 $g$，再用拐点切线夹出 $m$。
+    - D 项令 $u=x-1$，用极值条件替掉 $a$。
+  common_failures:
+    - A 项把边界 $b=0$ 或 $b=-4$ 也当作三个零点。
+    - B 项误把对称中心纵坐标算成 $1-a-b$ 后直接对应选项，漏掉应等于 $\frac32$。
+    - C 项没有先化简 $g(x)$，被 $a,b$ 干扰。
+    - D 项只背 $x_1+2x_0=3$，不会从 $u^3-au$ 的同值方程推出。
+  similar_practice_query: 三次函数 中心平移 四段论 极值同值点 拐点切线 三条切线
+quality:
+  confidence: high
+  needs_review: false
+  review_notes:
+    - 已核对 page_0091 与 page_0092 页图；例 11 从 page_0091 起题，在 page_0092 顶部完结，答案 ACD。
+    - page_0092 中部例 12 是下一批 D 的新题头，本卡只把 page_0092 顶部作为例 11 续页读取。

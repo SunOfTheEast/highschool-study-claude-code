@@ -7,8 +7,9 @@ export const studySubagentDirectory = join(
 );
 
 export function configureStudySubagentDirectory(): void {
-  process.env.PI_SUBAGENT_EXTRA_AGENT_DIRS = [
-    process.env.PI_SUBAGENT_EXTRA_AGENT_DIRS,
+  const paths = [
+    ...(process.env.PI_SUBAGENT_EXTRA_AGENT_DIRS?.split(delimiter) ?? []),
     studySubagentDirectory,
-  ].filter(Boolean).join(delimiter);
+  ].map((path) => path.trim()).filter(Boolean);
+  process.env.PI_SUBAGENT_EXTRA_AGENT_DIRS = [...new Set(paths)].join(delimiter);
 }

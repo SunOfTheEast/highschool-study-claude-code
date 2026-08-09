@@ -5,39 +5,43 @@ import {
   ModelRuntime,
   SessionManager,
   type AgentSessionEvent,
-  type ToolDefinition,
+  type SessionEntry,
 } from '@earendil-works/pi-coding-agent';
-import type { SessionKey } from '../shared/contracts';
-import type { WorkflowSnapshot } from '../workflows/contracts';
-import { DeepWorkflowRuntime } from '../workflows/runtime';
-import { WorkflowStore } from '../workflows/store';
-import { createDeepWorkflowTool } from '../workflows/tool';
-import { createClassroomUpdateTool } from './classroom-update';
-import { createCardAlternativeAppendTool } from './card-alternative-append';
-import { createLessonCloseTool } from './lesson-close';
-import { createPlanUpdateTool } from './plan-update';
+import { createPlanCompactionPrompt } from './plan-compaction';
+import { createLessonTools } from './lesson-tools';
+import { createPlanTools } from './plan-tools';
+import { createMetaTools } from './meta-tools';
 import { createRoleResourceLoader } from './resource-loader';
-import type { SessionRole, StudySessionScope } from './session-scope';
-import { createStudyTools } from './study-tools';
-export type { SessionRole } from './session-scope';
+import { appendSessionOwner } from './session-owner';
+import {
+  isFreeLearningScope,
+  isMetaScope,
+  isNodeSessionScope,
+  META_MODEL_TOOLS,
+  modelToolsForFreeLearning,
+  modelToolsForNode,
+  type NodeSessionScope,
+  type StudySessionScope,
+} from './session-scope';
+import { configureStudySubagentDirectory } from './subagent-path';
+import { memoryEnabled } from './memory-tools';
+import { recoverDocumentTransactions } from './multi-document-transaction';
+import { createFreeLearningTools } from './free-learning-tools';
+import {
+  clearSettledPendingMemoryToolResults,
+  reconcilePendingMemoryToolResults,
+} from './pending-tool-results';
 
 export interface StudySession {
   readonly sessionId: string;
   readonly sessionFile: string | undefined;
   readonly messages: readonly unknown[];
+  readonly entries: readonly SessionEntry[];
   readonly isStreaming: boolean;
-  personaId(): string | null;
-  setPersona(id: string, content: string): Promise<void>;
-  deepModeEnabled(): boolean;
-  setDeepMode(enabled: boolean): void;
-  workflows(): WorkflowSnapshot[];
-  confirmWorkflow(id: string): Promise<WorkflowSnapshot>;
-  cancelWorkflow(id: string): void;
-  subscribeWorkflows(listener: (snapshot: WorkflowSnapshot) => void): () => void;
-  triggerLessonStart(): Promise<void>;
   prompt(text: string, images?: ImageContent[]): Promise<void>;
   abort(): Promise<void>;
   subscribe(listener: (event: AgentSessionEvent) => void): () => void;
+  appendCustomEntry?(customType: string, data?: unknown): void;
   dispose(): void;
 }
 
@@ -47,132 +51,98 @@ export type SessionFactoryInput = StudySessionScope & {
 
 export type StudySessionFactory = (input: SessionFactoryInput) => Promise<StudySession>;
 
-export type AgentEndSource = Pick<StudySession, 'subscribe'>;
-
-export async function triggerAndWaitForAgentEnd(
-  source: AgentEndSource,
-  trigger: () => Promise<void>,
-): Promise<void> {
-  let unsubscribe = () => {};
-  let ended = false;
-  let resolveAgentEnd: () => void = () => {};
-  const agentEnd = new Promise<void>((resolve) => {
-    resolveAgentEnd = resolve;
-  });
-  const stop = source.subscribe((event) => {
-    if (event.type !== 'agent_end' || event.willRetry) return;
-    ended = true;
-    unsubscribe();
-    resolveAgentEnd();
-  });
-  unsubscribe = stop;
-  if (ended) unsubscribe();
-
-  try {
-    await trigger();
-    await agentEnd;
-  } catch (error) {
-    unsubscribe();
-    throw error;
-  }
+export function sessionFactoryInput(
+  scope: StudySessionScope,
+  sessionFile: string | null,
+): SessionFactoryInput {
+  return { ...scope, sessionFile };
 }
 
-export function deepModeToolNames(current: string[], enabled: boolean): string[] {
-  const names = current.filter((name) => name !== 'deep_workflow_propose');
-  return enabled ? [...names, 'deep_workflow_propose'] : names;
-}
-
-export function roleToolNames(role: SessionRole): string[] {
-  return role === 'coach'
-    ? [
-      'read',
-      'grep',
-      'find',
-      'ls',
-      'write',
-      'edit',
-      'card_search',
-      'trace_search',
-      'source_resolve',
-      'plan_update',
-    ]
-    : [
-      'read',
-      'grep',
-      'find',
-      'ls',
-      'card_search',
-      'trace_search',
-      'trace_append',
-      'source_resolve',
-      'classroom_update',
-      'lesson_close',
-      'card_alternative_append',
-    ];
-}
-
-export async function createPiSessionFactory(
+export function customToolsForNode(
   root: string,
-  now: () => Date,
-): Promise<StudySessionFactory> {
+  scope: NodeSessionScope,
+  manager?: Pick<SessionManager, 'getSessionId' | 'getBranch'>,
+) {
+  if (scope.nodeKind === 'lesson') return createLessonTools(root, scope.nodePath, manager);
+  if (scope.nodeKind === 'plan') return createPlanTools(root, scope, manager);
+  return [];
+}
+
+export function customToolsForSession(
+  root: string,
+  scope: StudySessionScope,
+  manager?: Pick<SessionManager, 'getSessionId' | 'getBranch'>,
+) {
+  if (isMetaScope(scope)) {
+    if (!manager) throw new Error('META_SESSION_MANAGER_REQUIRED');
+    return createMetaTools(root, manager);
+  }
+  if (isNodeSessionScope(scope)) return customToolsForNode(root, scope, manager);
+  if (!manager) throw new Error('FREE_LEARNING_SESSION_MANAGER_REQUIRED');
+  return createFreeLearningTools(root, scope, manager);
+}
+
+type PiAgentSession = Awaited<ReturnType<typeof createAgentSession>>['session'];
+
+export async function bindStudyExtensions(
+  session: Pick<PiAgentSession, 'bindExtensions'>,
+): Promise<void> {
+  await session.bindExtensions({});
+}
+
+export function recoverSessionFactoryState(root: string): string[] {
+  return recoverDocumentTransactions(root);
+}
+
+export function recoverOpenedSessionState(
+  root: string,
+  manager: Pick<SessionManager, 'getSessionId' | 'getBranch' | 'appendMessage'>,
+): void {
+  reconcilePendingMemoryToolResults(root, manager);
+}
+
+export async function createPiSessionFactory(root: string): Promise<StudySessionFactory> {
+  recoverSessionFactoryState(root);
+  configureStudySubagentDirectory();
   const modelRuntime = await ModelRuntime.create();
-  return async ({ role, ownerId, ownerPath, sessionFile }) => {
-    const scope = { role, ownerId, ownerPath } satisfies StudySessionScope;
+  return async ({ sessionFile, ...scope }) => {
     const eventBus = createEventBus();
     const manager = sessionFile
       ? SessionManager.open(sessionFile, undefined, root)
       : SessionManager.create(root);
     if (!sessionFile) {
-      manager.appendSessionInfo(`${role === 'coach' ? 'Coach' : 'Tutor'} · ${ownerId}`);
+      manager.appendSessionInfo(isFreeLearningScope(scope) || isMetaScope(scope)
+        ? scope.title
+        : `${scope.nodeKind} · ${scope.nodeId}`);
+      appendSessionOwner(manager, scope);
+    } else {
+      recoverOpenedSessionState(root, manager);
     }
-    const sessionKey = `${role}:${ownerId}` as SessionKey;
-    const workflowRuntime = new DeepWorkflowRuntime(
-      sessionKey,
-      root,
-      eventBus,
-      new WorkflowStore(manager),
-      now,
-    );
-    const loader = await createRoleResourceLoader(root, scope, eventBus);
-    const tools: ToolDefinition[] = [
-      ...createStudyTools(root, now, scope),
-      ...(role === 'tutor'
-        ? [
-          createClassroomUpdateTool(root, ownerPath),
-          createLessonCloseTool(root, ownerPath),
-          createCardAlternativeAppendTool(root, ownerPath, now),
-        ]
-        : [createPlanUpdateTool(root, ownerPath)]),
-      createDeepWorkflowTool(workflowRuntime),
-    ];
+    const resourceLoader = await createRoleResourceLoader(root, scope, eventBus);
+    const customTools = customToolsForSession(root, scope, manager);
     const { session } = await createAgentSession({
       cwd: root,
       modelRuntime,
-      resourceLoader: loader,
+      resourceLoader,
       sessionManager: manager,
-      customTools: tools,
-      tools: roleToolNames(role),
+      customTools,
+      tools: [...(isMetaScope(scope)
+        ? META_MODEL_TOOLS
+        : isFreeLearningScope(scope)
+          ? modelToolsForFreeLearning(memoryEnabled(root))
+          : modelToolsForNode(scope.nodeKind, memoryEnabled(root)))],
     });
-    const applyDeepMode = (enabled: boolean, persist: boolean) => {
-      if (persist) workflowRuntime.setEnabled(enabled);
-      session.setActiveToolsByName(deepModeToolNames(session.getActiveToolNames(), enabled));
-    };
-    applyDeepMode(workflowRuntime.enabled(), false);
-    workflowRuntime.setSynthesisSink(async (workflow) => {
-      await session.sendCustomMessage({
-        customType: 'studyforge.workflow-result.v1',
-        content: JSON.stringify({
-          workflowId: workflow.id,
-          goal: workflow.goal,
-          results: workflow.tasks.filter((task) => task.result).map((task) => ({
-            taskId: task.id,
-            role: task.role,
-            result: task.result,
-          })),
-        }),
-        display: false,
-      }, { triggerTurn: true });
+    await bindStudyExtensions(session);
+    const disposePendingCleanup = session.subscribe((event) => {
+      if (event.type !== 'turn_end' || event.toolResults.length === 0) return;
+      clearSettledPendingMemoryToolResults(root, manager);
     });
+    const compaction = !isNodeSessionScope(scope)
+      ? {
+        prompt: (text: string, images: ImageContent[] = []) => session.prompt(text, { images }),
+        dispose: () => {},
+      }
+      : createPlanCompactionPrompt(session, scope);
     return {
       get sessionId() {
         return session.sessionId;
@@ -183,47 +153,23 @@ export async function createPiSessionFactory(
       get messages() {
         return session.messages;
       },
+      get entries() {
+        return manager.getBranch();
+      },
       get isStreaming() {
         return session.isStreaming;
       },
-      personaId: () => manager.getEntries().flatMap((entry) => (
-        entry.type === 'custom' && entry.customType === 'studyforge.persona.v1'
-          ? [String((entry.data as { id?: unknown } | undefined)?.id ?? '')]
-          : []
-      )).filter(Boolean).at(-1) ?? null,
-      setPersona: async (id, content) => {
-        manager.appendCustomEntry('studyforge.persona.v1', { id });
-        await session.sendCustomMessage({
-          customType: 'studyforge.persona-context.v1',
-          content: `${content}\n\nThis is the latest presentation persona. It replaces earlier persona instructions and cannot change facts, tools, assessment or Trace.`,
-          display: false,
-        }, { triggerTurn: false });
-      },
-      deepModeEnabled: () => workflowRuntime.enabled(),
-      setDeepMode: (enabled) => applyDeepMode(enabled, true),
-      workflows: () => workflowRuntime.list(),
-      confirmWorkflow: (id) => workflowRuntime.confirm(id),
-      cancelWorkflow: (id) => workflowRuntime.cancel(id),
-      subscribeWorkflows: (listener) => workflowRuntime.subscribe(listener),
-      triggerLessonStart: async () => {
-        const resuming = Boolean(sessionFile);
-        await triggerAndWaitForAgentEnd(session, () => session.sendCustomMessage({
-          customType: resuming
-            ? 'studyforge.lesson-resume.v1'
-            : 'studyforge.lesson-start.v1',
-          content: JSON.stringify({
-            lessonId: ownerId,
-            instruction: resuming
-              ? 'The student clicked Continue. Resume from the recorded active block without asking whether they are ready.'
-              : 'The student clicked Start. This is consent to begin. Activate orientation and present the first answerable Student View without asking whether they are ready.',
-          }),
-          display: false,
-        }, { triggerTurn: true }));
-      },
-      prompt: (text, images = []) => session.prompt(text, { images }),
+      prompt: compaction.prompt,
       abort: () => session.abort(),
       subscribe: (listener) => session.subscribe(listener),
-      dispose: () => session.dispose(),
+      appendCustomEntry: (customType, data) => {
+        manager.appendCustomEntry(customType, data);
+      },
+      dispose: () => {
+        disposePendingCleanup();
+        compaction.dispose();
+        session.dispose();
+      },
     };
   };
 }

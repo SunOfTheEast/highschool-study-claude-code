@@ -2,18 +2,22 @@
   color: #1b1916;
   background: #faf7f1;
   color-scheme: light;
-  font-family: Inter, "Noto Sans SC", "PingFang SC", sans-serif;
+  font-family: "LXGW WenKai Screen", "LXGW WenKai", "PingFang SC", sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 
   --paper: #faf7f1;
   --paper-deep: #f1ece1;
+  --paper-mid: #f6f1e7;
   --ink: #1b1916;
   --ink-soft: #4a463d;
   --ink-faint: #9a917f;
   --accent: #3f5b54;
   --accent-deep: #314a44;
   --accent-wash: rgba(63, 91, 84, .07);
+  --cinnabar: #9c493f;
+  --seal: #9e4f3d;
+  --seal-deep: #8a4132;
   --attention: #b6a06a;
   --danger: #a8674f;
   --success: #3f5b54;
@@ -21,9 +25,34 @@
   --rule-soft: rgba(27, 25, 22, .06);
   --overlay: rgba(27, 25, 22, .28);
 
-  --font-ui: Inter, "Noto Sans SC", "PingFang SC", sans-serif;
-  --font-display: "LXGW WenKai", "Kaiti SC", "STKaiti", "KaiTi", ui-serif, serif;
-  --font-reading: "Noto Serif SC", "Songti SC", ui-serif, serif;
+  --font-ui: "LXGW WenKai Screen", "LXGW WenKai", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-display: "LXGW WenKai Screen", "LXGW WenKai", "Kaiti SC", "STKaiti", "KaiTi", ui-serif, serif;
+  --font-reading: "LXGW WenKai Screen", "LXGW WenKai", "Kaiti SC", "STKaiti", "KaiTi", ui-serif, serif;
+  --font-mono: "SF Mono", "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  --text-micro: 11px;
+  --text-label: 12px;
+  --text-meta: 13px;
+  --text-body-sm: 14px;
+  --text-body: 16px;
+  --text-lead: 18px;
+  --text-h3: 20px;
+  --text-h2: 24px;
+  --text-h1: 32px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+
+  --st-closed: var(--ink-faint);
+  --st-active: var(--accent);
+  --st-prepared: var(--ink-soft);
   --persona-accent: #3f5b54;
   --persona-wash: rgba(63, 91, 84, .07);
 }

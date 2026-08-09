@@ -1,0 +1,5 @@
+schema: studyforge.method_tree.v1
+nodes:
+  - { id: derivative-methods, root_label: 导数方法体系, parent_id: null }
+  - { id: parameter, method: 参变量分离, parent_id: derivative-methods }
+  - { id: isomorphic, method: 同构变形与换元法, parent_id: derivative-methods }

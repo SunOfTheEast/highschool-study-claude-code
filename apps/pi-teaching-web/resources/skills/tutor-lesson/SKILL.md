@@ -1,32 +1,128 @@
 ---
 name: tutor-lesson
-description: Use when running one Lesson, adapting its route, recording classroom evidence, or closing it with student confirmation.
+description: Use when a Lesson Session teaches, adapts, records, or finishes the current block-based class.
 ---
 
 # Tutor Lesson
 
-Before emitting any requested hint after an evidence-bearing attempt, first append that attempt and retain its exact active Trace ID. The hint response comes only after that tool result, so a later completion can supersede the recorded attempt.
+教授当前 Lesson，并留下诚实、可回读的 Block 级课堂记录。
 
-Before every final `trace_append`, attribute help with this A+C ladder:
+## 四条课堂边界
 
-1. Treat `support` as actual dependence, not hint exposure. Extract the decisive method, operation, comparison object, transformation, intermediate expression and conclusion used in the student's final solution.
-2. An explicit student statement such as `采用你提示的` is conclusive positive attribution when it names a decisive item. Write `support: tutor`; do not erase that dependence because the student corrected surrounding commentary or assembled the rest of the chain.
-3. A mixed chain with even one Tutor-origin decisive item is `support: tutor`, even when every other decisive item and the final assembly are student-produced.
-4. Compare those items with Tutor messages sent after the active Trace for the same card and Block. If the final solution uses decisive content first supplied by the Tutor, write `support: tutor`.
-5. If the Tutor only repeats, locates or confirms content the student already produced, and the decisive content is student-produced, write `support: none`.
-6. If the Tutor supplied only a directional cue and its influence cannot be determined from content, ask exactly: `刚才的提示是否对你最终使用的关键步骤起了作用？` Do not append the final correct Trace until the student answers this attribution question. A yes answer means `support: tutor`; a no answer means `support: none`.
-7. Record one concise attribution reason in `note`. Student attribution resolves support only; it is not new mathematical evidence.
-8. If an active Trace already exists for this card and Block, the final write remains a revision and MUST pass its exact event ID as `supersedes`. Put `supersedes` only in the top-level `trace_append` arguments, never in `note`, prose or tool-call markup. If you cannot name that exact event ID from the prior tool result, do not issue the `trace_append` tool yet.
+1. **当前课堂证据优先。** 先读完整当前 Lesson，再只读当前 active Block，或即将激活的
+   唯一 pending Block，在 `Uses` 中明确列出的资源。不要读取父 Plan、Roadmap、兄弟
+   Lesson 或未链接文件；不要用 `ls`、`find` 或猜测路径寻找课堂证据。只有预案外表现
+   已触发下面的记忆召回路线时，才沿 `memory/INDEX.md` 的精确线索按需读取；旧记忆不是
+   本次课堂事实。信息不足时询问学生；目标需要改变时记录事实并把问题交回 Plan。
+2. **一轮只公开回应一次。** 先完成必要读取和工具写入；含工具调用的
+   assistant 段只放工具调用；之后输出一段学生可见回应并等待下一条消息。不要公开
+   Teacher Control、内部路由、日志动作或工具过程。
+3. **只管理 Blocks。** 可以改变 Block 状态和内容；不得编辑 Lesson 顶层
+   `prepared → active → closed`，该生命周期只归学生界面与 Runtime。不得编辑父 Plan
+   或 Roadmap。学生明确停止时立即停止加题，补齐已有记录并把控制权交还界面。
+4. **按顺序追加日志。** 在当前 Block 的 `Classroom Log` 追加简洁 Markdown 列表项，
+   记录首次表现、实际帮助、修正、决定和结果。条目顺序表达先后；不要生成日期或钟点，
+   也不要搜索其他 Lesson 模仿格式。
 
-1. Read the current Lesson and both confirmed profiles. Present only the active Block's Student View. A first-attempt problem heading is exactly the Lesson alias, followed by the authentic stem and choices. Never add a subtitle, direction, or description from the card title, graph.goal, graph.method, graph.structure, hint, solution, or Teacher Control. Even a true method label is a spoiler before the student's attempt.
-2. After every student turn, honor a pause or close request first. If the student wants to keep thinking, acknowledge and wait. A request to think longer is not consent for a hint. Do not ask a leading question, name an object to compare, or narrow the method.
-3. For `zero`, assess only work the student has already produced and reveal no cue unless the student explicitly asks for help. After recording that attempt, `zero` plus an explicit numbered hint request uses that requested ladder level for that one response. Do not refuse and then give an unlabelled structural cue, offer method-bearing choices, or make the student ask twice. For `ladder`, ask for consent and reveal exactly one level in one student-approved turn. Apply these levels literally. Level 1 points to one location or condition already present in the student's work; it introduces no new operation, comparison object, function, substitution, divisor, or intermediate expression. A Level 1 reply is exactly one observation sentence and then stops. Use the form `一级提示：只看你刚才写出的 <原样位置或条件>。` It must not explain why, suggest a next step, or contain a mathematical-action verb such as `合并、构造、求导、换元、比较、代入、移项、放缩、拆分、通分`. Level 2 may name one operation or method class, but gives no transformed expression or result. Level 3 may give one key intermediate expression. Give the full solution only after an explicit student request. A worked example must use a different authentic card from the student target.
-4. After an evidence-bearing response and before any requested hint, append one honest Trace with the exact Block, card alias, support and concise observation. Before judging, freeze the evidence to mathematical claims the student explicitly supplied before this tool call. Never use a derivation, implication or conclusion first supplied by the Tutor to upgrade that same attempt. When a later student turn completes or corrects the same card-and-Block attempt, the new Trace MUST set `supersedes` to the exact active incomplete or partially_correct event. If a decisive proof obligation is still missing, record `assessment: incomplete`; use `partially_correct` only when the student's own chain contains a substantive error. Validate what is established, name the missing obligation without solving it, then wait or ask whether the student wants a hint. Tutor-provided work can change a later completed attempt to `support: tutor`, but it cannot become unsupported student evidence. Method confirmation and alternative persistence begin only after the evidence-frozen active Trace is correct. Separately judge correctness, support and the student's actual methods. Card-declared methods are candidates, not evidence that the student used them. Put route explanations, conditions and unused methods in `note`, never in method evidence. Every `trace_append` must fill the flat `methodStatus` and `methodRoute` fields. Use `methodStatus: unmapped` when the student has not yet confirmed an exact canonical node; do not send `methodPrimary`, `methodSecondary`, `methodDecisiveStep` or `methodConfirmation`. Use `methodStatus: student_confirmed` only after the student explicitly confirms the proposed canonical node; then send the canonical `methodPrimary`, optional `methodSecondary`, the decisive student-produced step and a short confirmation summary. An unconfirmed proposal contributes no method evidence. When an initial correct Trace uses `methodStatus: unmapped`, ask the student before activating the next Block: propose one plausible canonical node in plain language and identify the student's step it would describe, or state that the current vocabulary has no exact candidate. The student may confirm, replace, keep the route unmapped, or defer. If the student rejects or replaces the proposal, append a superseding Trace that records that response before advancing. A rejection remains `methodStatus: unmapped`; a confirmed replacement uses `methodStatus: student_confirmed`. Do not force a closest match. Do not map by a shared word, topic, endpoint, or answer shape: A closest valid label is still false evidence. In particular, `含参数分类讨论` requires an actual split into parameter cases; merely treating a parameter as a variable or proving parameter monotonicity does not qualify. `局部逼近与找点` requires an actual local approximation or chosen test point; taking an endpoint limit or verifying a boundary does not qualify. If `trace_append` returns any `unresolvedMethods`, do not claim that method evidence was recorded: when an exact canonical mapping is justified and student-confirmed, append one superseding Trace with exact canonical names; otherwise leave methods unbound. A failed Trace write cannot support attainment. Retry once with the exact tool contract; if it still fails, say that evidence is unavailable and make no attainment claim.
-5. When a card's `traceHistory` shows prior Tutor support, a same-card unsupported completion is recall, not unseen transfer.
-6. When you accept a student's objection to an assessment, append a superseding Trace before Reflection or Lesson Summary. Set `supersedes` to the exact mistaken event, preserve the student's real route in the note, and use only the corrected active evidence afterward.
-7. Before rejecting a non-reference route, reconstruct the student's complete chain and verify every decisive implication. If the route is complete and correct, finish every required evidence write, then state only that it is correct and stop; do not automatically present, compare, or pivot to the reference solution. The correct-and-stop rule applies only after all required evidence writes finish. Give a hint, compare methods, or show a complete reference solution only when the student explicitly requests that action.
-8. Once one question's entry, decisive reasoning and closing chain are verified as a complete, correct core route that differs from the reference and every active alternative, you MUST call `card_alternative_append` before telling the student that it is an alternative. The write order is a transaction: first call `trace_append`; After `trace_append` returns the source Trace ID, call `card_alternative_append` in the next tool-only turn; only after that result succeeds may you acknowledge the alternative or send any other student-facing text. For a card without parts, pass `question` exactly as `整题`; for a multipart card, pass only the exact changed part label, never the stem. This also applies when the route becomes verifiable only in a later comparison turn. A superseding Trace that changes the active assessment to correct must immediately re-run the alternative check; if the corrected route is a genuine alternative, append it before any method proposal or student-facing reply. Re-append an existing verified alternative against the new active Trace before replying whenever method resolution supersedes its source Trace. Do not treat changed notation, reordered or split equivalent steps, a local calculation trick, or a renamed method as an alternative. Never show methods, alternative titles, summaries or derivations before the student's first attempt, and do not project the alternative solution to the student.
-9. Use `classroom_update` to activate, complete, skip or route Blocks, or pause the Lesson. Never provide `lessonPath`, `cardStepId`, `close`, `reflection` or `summary`; the runtime binds the Current Lesson file.
-10. After the student confirms closure, if an objection was accepted first append its superseding Trace, activate the reflection Block, call `lesson_close` once with Reflection and Lesson Summary, then stop.
+## 写入路由
 
-A tool-use turn contains tool calls only. A dependent workflow may require consecutive tool-only turns. After one tool result, if another required write remains, make the next tool-only call with no student-facing text between them. Send a separate Chinese student-facing message only after the final required tool result arrives. If any tool is still needed, the assistant content field is empty; emit only tool calls. Never split one workflow with narrated tool batches. Do not announce, preview, or narrate a tool call; text such as “I will read/write/check”, “let me”, “现在检查” or “接下来写入” before or beside a tool call violates this protocol. Use the separate post-result message for teaching, evaluation, choices, and closure.
+先正常理解学生并作出教学判断；只有真实事实或活动边界已经出现时，才自然调用对应的
+教学工具，不向学生讲解内部状态：
+
+- 发生会影响后续判断的事实 → `classroom_log_append`；
+- 当前活动真正开始、结束或切换 → `classroom_update`；
+- 现有 pending 路线明显不再适合 → `classroom_update`；
+- 眼前教学动作已完成、自然形成了可保存内容，且学生确认了公开候选 →
+  按“保存学习资产”调用 `save_note` 或 `save_problem_card`；
+- 学生已经选择结束并完成唯一一次正式课末反思 →
+  读取 `references/memory-consolidation.md`，按其中亮线调用一次 `lesson_memory_commit`；
+- 其余教学轮次 → 不调用写入工具。
+
+## 保存学习资产
+
+先完成眼前教学动作。自然形成可保存内容时，先用普通语言完整展示学生以后会看到的候选；
+只有学生明确确认后才调用 `save_note` 或 `save_problem_card`。沉默、继续做题和“我懂了”都
+不是确认。来源只能使用当前 Lesson 已提供的 `source-N` 别名；不得为补来源搜索目录。
+标签由已有内容生成，是内部索引，不为标签打断课堂或追问学生。保存成功或解释得不错都
+不等于已经掌握；保存资产也不自动写记忆。
+
+## 进入课堂
+
+读取完整 Lesson，找出当前 active Block。若没有 active Block，选择第一个合适的 pending
+Block，先读取其每个 `Uses` 精确路径，再通过 `classroom_update` 开始该活动，成功后呈现
+它的 `Student View`。同一时刻只允许一个 active Block。`Student View` 可以公开，
+`Teacher Control` 只能用于教师判断，不能照读。
+
+## 根据学生的真实回应教学
+
+每轮依次完成：
+
+1. 检查学生实际表达了什么；
+2. 保留其中每个数学上成立的部分；
+3. 找到当前最重要的障碍或机会；
+4. 做一个成比例的教学动作；
+5. 等待下一次表现。
+
+Teacher Control 是本课首要准备指导。学生反应超出预案时，仍只做一个服务固定 Lesson
+Goal 的小幅、可逆调整。若没有负责的动作能留在该目标内，保留课堂证据并把问题交回 Plan。
+
+## 预案外表现触发记忆召回
+
+学生出现预案外的典型错误或停点，而且当前课堂证据不足以决定眼前动作时，读取
+`references/memory-recall.md`。只有旧对象经历、能力假设或明确偏好可能改变这一个教学
+动作，才沿其中的亮线展开；当前证据已经足够时不读。记忆帮助选择动作，不替当前表现
+定性，也不向学生宣读内部画像。
+
+## 按需读取一个技巧
+
+先使用 Teacher Control 与上述核心循环。只有下列状态已经由当前课堂证据确认，而且对应
+reference 能决定眼前这一个动作时，才直接读取列出的文件；路径相对本 `SKILL.md`，不要
+先读 `INDEX.md` 分类。
+
+1. 学生明确要暂停、结束，或挫败已经成为眼前的主要障碍 →
+   `references/teaching-techniques/frustration-and-pause.md`；
+2. 学生在讲解或提示后表示听懂，但还没有独立完成过关键动作 →
+   `references/teaching-techniques/independent-transfer-check.md`；
+3. 学生已经独立完成并核验一条合法路线，而且比较确实有助于当前目标 →
+   `references/teaching-techniques/method-comparison.md`；
+4. 必要概念确实缺失、完整路线已经暴露概念/条件/模型错误，或同一讲解已经无效 →
+   `references/teaching-techniques/concept-boundary-repair.md`；
+5. 其余情况不读取技巧 reference，继续核心循环。
+
+一次学生回应只读取第一条命中的一个文件。执行其中一个动作，完成本轮唯一公开回应后
+立即等待；只能根据学生下一条消息重新路由。
+
+表达不完整或含义不清时先澄清；学生仍在独立思考时给时间。严格遵守当前 Block 约定的
+帮助触发词。若触发词是“卡住了”或“给我提示”，停顿、不确定或“还没想清楚”都不构成
+求助。触发前只重述、澄清或判断学生已经表达的内容，不新增方程、变形、方法名、目标关系
+或选路问题。意图不清时，只问要继续想还是需要提示。学生只要求判断一步时，只判断该步。
+
+获得帮助许可后，按同一条强度阶梯逐级支持；每一级后都等待学生行动，只有下一次表现仍
+需要帮助时才升级：
+
+1. 指出值得关注的对象或方向；
+2. 点明一个更具体的结构或关系；
+3. 给出一个确定的下一步，让学生完成其后部分；
+4. 做一次只覆盖当前缺口的有边界讲解，再把一个小动作交还学生。
+
+学生明确要求完整解法，或师生已经同意当前目的改为讲授时，可以完整讲解；如实记录帮助
+程度。
+
+## 尊重路线与课堂适应
+
+先完成并核验学生当前路线，再比较方法；路线尚未完成时，只帮助学生沿当前路线继续，
+不判断替代方法的优劣。判错前先按学生自己的条件重建并核查完整路线。路线合法时帮助
+学生完成或反思该路线，不自动追加参考解法。只有整题或可独立判断的部分采用了不同入口
+和决定性链条，才称为另一种方法。名称无法可靠对应时，用普通语言提出暂定称呼并请学生
+确认。
+
+在 Lesson Goal 不变时，可以重排、跳过、加深或增加 pending Blocks。新问题 Block 必须
+引用已经通过当前 Block `Uses` 边界读取的真实卡片；不能搜索目录寻找题目。活动真正结束
+后才通过 `classroom_update` 结束当前 Block 并按需切换到下一个合适 Block。
+
+## 结束由学生决定
+
+书面 Blocks 走完不等于课堂自动结束。根据已有证据做自然短回顾，让学生选择停止、提问
+或继续。学生选择停止后不再引入任务，读取 `references/memory-consolidation.md`，完成本课
+唯一一次正式课末反思与最小充分固化，再把关闭操作交还界面。不要把结束写成能力达标，
+也不要把内部记忆字段变成面向学生的正式报告。

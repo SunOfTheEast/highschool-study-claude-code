@@ -1,212 +1,487 @@
 import type { ImageContent } from '@earendil-works/pi-ai';
-import type { ChatMessage, PlanWorkspaceSnapshot, SessionKey } from '../shared/contracts';
+import type { AgentSessionEvent, SessionEntry } from '@earendil-works/pi-coding-agent';
+import type {
+  CourseTreeNode,
+  FreeLearningSessionSummary,
+  LearningContextReference,
+  LessonDocument,
+  MetaSessionSummary,
+  PlanDocument,
+  RoadmapDocument,
+  SessionKey,
+} from '../shared/contracts';
+import { readCourseTree, readLesson, readPlan, readRoadmap } from '../study/markdown';
+import { readMaterialLocator } from '../study/materials';
+import { isProblemCardId } from '../study/problem-card-id';
+import { setFrontmatterField } from './frontmatter';
 import {
-  projectStoredMessage,
-  type MessageProjectionMode,
-} from '../projection/message-policy';
-import type { WorkflowSnapshot } from '../workflows/contracts';
-import { readLearningSet, readPlanWorkspace } from '../study/read-workspace';
-import { setFrontmatterField } from '../study/write-workspace';
-import { resolvePersona } from '../study/persona';
-import type { StudySession, StudySessionFactory } from './session-factory';
+  sessionFactoryInput,
+  type StudySession,
+  type StudySessionFactory,
+} from './session-factory';
+import {
+  findFreeLearningPiSession,
+  findMetaPiSession,
+  findOwnedPiSessionFile,
+  FREE_LEARNING_ENDED_TYPE,
+  isFreeLearningEnded,
+  listFreeLearningPiSessions,
+  listMetaPiSessions,
+  listPiSessionFacts,
+  readPiSessionBranch,
+  sessionOwnerMatches,
+  type PiSessionFact,
+} from './session-owner';
+import {
+  freeLearningSessionId,
+  freeLearningSessionKey,
+  isFreeLearningScope,
+  isMetaScope,
+  metaSessionId,
+  metaSessionKey,
+  type FreeLearningSessionRecord,
+  type FreeLearningSessionScope,
+  type MetaSessionRecord,
+  type MetaSessionScope,
+  type NodeSessionScope,
+} from './session-scope';
+import type { OwnedLearningSessionFact } from '../study/learning-footprint';
 
-export type SessionFileLookup = (root: string, sessionId: string) => Promise<string | null>;
+export type SessionFileLookup = (
+  root: string,
+  sessionId: string,
+  scope: NodeSessionScope,
+) => Promise<string | null>;
 
-export const findPiSessionFile: SessionFileLookup = async (root, sessionId) => {
-  const { SessionManager } = await import('@earendil-works/pi-coding-agent');
-  return (await SessionManager.list(root)).find((item) => item.id === sessionId)?.path ?? null;
+export type SessionBranchReader = (
+  root: string,
+  sessionFile: string,
+) => Promise<readonly SessionEntry[]>;
+
+export type FreeLearningSessionLookup = (
+  root: string,
+  sessionId: string,
+) => Promise<FreeLearningSessionRecord | null>;
+
+export type FreeLearningSessionList = (
+  root: string,
+) => Promise<FreeLearningSessionRecord[]>;
+
+export type MetaSessionLookup = (
+  root: string,
+  sessionId: string,
+) => Promise<MetaSessionRecord | null>;
+
+export type MetaSessionList = (root: string) => Promise<MetaSessionRecord[]>;
+
+export type PiSessionFactList = (root: string) => Promise<PiSessionFact[]>;
+
+type OwnedNode = {
+  tree: CourseTreeNode;
+  parent: CourseTreeNode | null;
+  document: RoadmapDocument | PlanDocument | LessonDocument;
+  scope: NodeSessionScope;
 };
 
+function findNode(
+  node: CourseTreeNode,
+  key: SessionKey,
+  parent: CourseTreeNode | null = null,
+): { tree: CourseTreeNode; parent: CourseTreeNode | null } | null {
+  if (node.sessionKey === key) return { tree: node, parent };
+  for (const child of node.children) {
+    const found = findNode(child, key, node);
+    if (found) return found;
+  }
+  return null;
+}
+
+function checkedSelectedAssets(
+  root: string,
+  selectedAssets: readonly LearningContextReference[],
+): LearningContextReference[] {
+  if (selectedAssets.length > 12) throw new Error('SELECTED_CONTEXT_LIMIT_EXCEEDED');
+  const seen = new Set<string>();
+  return selectedAssets.map((asset) => {
+    if (asset.kind === 'material') {
+      if (
+        !/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(asset.id)
+        || !Number.isSafeInteger(asset.revision)
+        || asset.revision < 1
+        || (asset.locator !== null && (!asset.locator.trim() || /[\r\n\t]/.test(asset.locator)))
+      ) throw new Error('SELECTED_CONTEXT_INVALID');
+      readMaterialLocator(root, asset);
+      const key = `material:${asset.id}@${asset.revision}#${asset.locator ?? ''}`;
+      if (seen.has(key)) throw new Error(`SELECTED_CONTEXT_DUPLICATE: ${key}`);
+      seen.add(key);
+      return { ...asset };
+    }
+    if (
+      (asset.kind !== 'note' && asset.kind !== 'problem-card')
+      || (asset.kind === 'note'
+        ? !/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(asset.id)
+        : !isProblemCardId(asset.id))
+    ) {
+      throw new Error('SELECTED_CONTEXT_INVALID');
+    }
+    const key = `${asset.kind}:${asset.id}`;
+    if (seen.has(key)) throw new Error(`SELECTED_CONTEXT_DUPLICATE: ${key}`);
+    seen.add(key);
+    return { kind: asset.kind, id: asset.id };
+  });
+}
+
+function publicSummary(record: FreeLearningSessionRecord): FreeLearningSessionSummary {
+  const { sessionFile: _sessionFile, scope: _scope, ...summary } = record;
+  return summary;
+}
+
+function publicMetaSummary(record: MetaSessionRecord): MetaSessionSummary {
+  const { sessionFile: _sessionFile, scope: _scope, ...summary } = record;
+  return summary;
+}
+
 export class WorkspaceRegistry {
-  private readonly sessions = new Map<string, StudySession>();
-  private planId: string | null = null;
+  private readonly sessions = new Map<SessionKey, StudySession>();
+  private readonly opening = new Map<SessionKey, Promise<StudySession>>();
+  private readonly turnTails = new Map<SessionKey, Promise<void>>();
+  private readonly freeRecords = new Map<string, FreeLearningSessionRecord>();
+  private readonly metaRecords = new Map<string, MetaSessionRecord>();
 
   constructor(
     private readonly root: string,
     private readonly factory: StudySessionFactory,
-    private readonly lookup: SessionFileLookup = findPiSessionFile,
+    private readonly lookup: SessionFileLookup = findOwnedPiSessionFile,
+    private readonly readBranch: SessionBranchReader = readPiSessionBranch,
+    private readonly lookupFree: FreeLearningSessionLookup = findFreeLearningPiSession,
+    private readonly listFree: FreeLearningSessionList = listFreeLearningPiSessions,
+    private readonly lookupMeta: MetaSessionLookup = findMetaPiSession,
+    private readonly listMetaSessions: MetaSessionList = listMetaPiSessions,
+    private readonly listSessionFacts: PiSessionFactList = listPiSessionFacts,
   ) {}
 
-  snapshot(planId: string | null = this.planId): PlanWorkspaceSnapshot {
-    if (!planId) throw new Error('PLAN_NOT_SELECTED');
-    this.planId = planId;
-    return readPlanWorkspace(this.root, planId);
+  private nodeOwner(key: SessionKey): OwnedNode {
+    const course = readCourseTree(this.root);
+    const located = findNode(course.tree, key);
+    if (!located) throw new Error(`SESSION_NODE_NOT_FOUND: ${key}`);
+    const kind = located.tree.kind;
+    const id = located.tree.id;
+    const document = kind === 'roadmap'
+      ? readRoadmap(this.root)
+      : kind === 'plan'
+        ? readPlan(this.root, located.tree.path)
+        : readLesson(this.root, located.tree.path);
+    return {
+      ...located,
+      document,
+      scope: {
+        nodeKind: kind,
+        nodeId: id,
+        nodePath: located.tree.path,
+        parentId: located.parent?.id ?? null,
+        parentPath: located.parent?.path ?? null,
+      },
+    };
   }
 
-  private workspaceForLesson(lessonId: string): PlanWorkspaceSnapshot {
-    for (const plan of readLearningSet(this.root).plans) {
-      const workspace = readPlanWorkspace(this.root, plan.id);
-      if (workspace.lessons.some((lesson) => lesson.id === lessonId)) {
-        this.planId = plan.id;
-        return workspace;
+  async createFreeLearning(
+    selectedAssets: readonly LearningContextReference[],
+  ): Promise<FreeLearningSessionSummary> {
+    const createdAt = new Date().toISOString();
+    const scope: FreeLearningSessionScope = {
+      sessionKind: 'free-learning',
+      title: '自由学习',
+      createdAt,
+      selectedAssets: checkedSelectedAssets(this.root, selectedAssets),
+    };
+    const session = await this.factory(sessionFactoryInput(scope, null));
+    if (!session.sessionFile) {
+      session.dispose();
+      throw new Error('FREE_LEARNING_SESSION_NOT_PERSISTED');
+    }
+    const sessionKey = freeLearningSessionKey(session.sessionId);
+    const record: FreeLearningSessionRecord = {
+      id: session.sessionId,
+      sessionKey,
+      title: scope.title,
+      createdAt,
+      updatedAt: createdAt,
+      status: 'active',
+      sessionFile: session.sessionFile,
+      scope,
+    };
+    this.sessions.set(sessionKey, session);
+    this.freeRecords.set(session.sessionId, record);
+    return publicSummary(record);
+  }
+
+  async listFreeLearning(): Promise<FreeLearningSessionSummary[]> {
+    const records = new Map<string, FreeLearningSessionRecord>();
+    for (const record of await this.listFree(this.root)) records.set(record.id, record);
+    for (const record of this.freeRecords.values()) records.set(record.id, record);
+    return [...records.values()]
+      .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+      .map(publicSummary);
+  }
+
+  async createMeta(
+    selectedAssets: readonly LearningContextReference[],
+  ): Promise<MetaSessionSummary> {
+    const createdAt = new Date().toISOString();
+    const scope: MetaSessionScope = {
+      sessionKind: 'meta',
+      title: '长期学习规划',
+      createdAt,
+      selectedAssets: checkedSelectedAssets(this.root, selectedAssets),
+    };
+    const session = await this.factory(sessionFactoryInput(scope, null));
+    if (!session.sessionFile) {
+      session.dispose();
+      throw new Error('META_SESSION_NOT_PERSISTED');
+    }
+    const sessionKey = metaSessionKey(session.sessionId);
+    const record: MetaSessionRecord = {
+      id: session.sessionId,
+      sessionKey,
+      title: scope.title,
+      createdAt,
+      updatedAt: createdAt,
+      sessionFile: session.sessionFile,
+      scope,
+    };
+    this.sessions.set(sessionKey, session);
+    this.metaRecords.set(session.sessionId, record);
+    return publicMetaSummary(record);
+  }
+
+  async listMeta(): Promise<MetaSessionSummary[]> {
+    const records = new Map<string, MetaSessionRecord>();
+    for (const record of await this.listMetaSessions(this.root)) records.set(record.id, record);
+    for (const record of this.metaRecords.values()) records.set(record.id, record);
+    return [...records.values()]
+      .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+      .map(publicMetaSummary);
+  }
+
+  async listOwnedSessionFacts(): Promise<OwnedLearningSessionFact[]> {
+    const verified: OwnedLearningSessionFact[] = [];
+    for (const fact of await this.listSessionFacts(this.root)) {
+      if (isFreeLearningScope(fact.owner)) {
+        verified.push({
+          id: fact.id,
+          createdAt: fact.createdAt,
+          entryTimes: fact.entryTimes,
+          owner: fact.owner,
+          title: fact.owner.title,
+          status: fact.endedAt === null ? 'active' : 'ended',
+        });
+        continue;
       }
+      if (isMetaScope(fact.owner)) {
+        verified.push({
+          id: fact.id,
+          createdAt: fact.createdAt,
+          entryTimes: fact.entryTimes,
+          owner: fact.owner,
+          title: fact.owner.title,
+          status: 'active',
+        });
+        continue;
+      }
+      let current: OwnedNode;
+      try {
+        current = this.nodeOwner(`${fact.owner.nodeKind}:${fact.owner.nodeId}`);
+      } catch (error) {
+        if (error instanceof Error && error.message.startsWith('SESSION_NODE_NOT_FOUND:')) continue;
+        throw error;
+      }
+      if (
+        current.document.sessionId !== fact.id
+        || !sessionOwnerMatches(fact.owner, current.scope)
+      ) continue;
+      verified.push({
+        id: fact.id,
+        createdAt: fact.createdAt,
+        entryTimes: fact.entryTimes,
+        title: current.document.title,
+        owner: current.scope,
+        status: current.document.status,
+      });
     }
-    throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
+    return verified;
   }
 
-  async openCoach(planId: string): Promise<StudySession> {
-    this.planId = planId;
-    const key = `coach:${planId}`;
+  async open(key: SessionKey): Promise<StudySession> {
     const cached = this.sessions.get(key);
     if (cached) return cached;
-    const snapshot = readPlanWorkspace(this.root, planId);
-    const sessionFile = snapshot.coach.sessionId
-      ? await this.lookup(this.root, snapshot.coach.sessionId)
-      : null;
-    const session = await this.factory({
-      role: 'coach',
-      ownerId: planId,
-      ownerPath: snapshot.plan.path,
-      sessionFile,
-    });
-    this.sessions.set(key, session);
-    setFrontmatterField(this.root, snapshot.plan.path, 'coach_session', session.sessionId);
-    return session;
-  }
-
-  async startLesson(lessonId: string): Promise<StudySession> {
-    const workspace = this.workspaceForLesson(lessonId);
-    const lesson = workspace.lessons.find((item) => item.id === lessonId);
-    if (!lesson) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
-    if (lesson.status === 'prepared' || lesson.status === 'paused') {
-      setFrontmatterField(this.root, lesson.path, 'status', 'active');
+    const underway = this.opening.get(key);
+    if (underway) return underway;
+    const opening = this.openNew(key);
+    this.opening.set(key, opening);
+    try {
+      return await opening;
+    } finally {
+      this.opening.delete(key);
     }
-    return this.openTutor(lessonId);
   }
 
-  async triggerLessonStart(lessonId: string): Promise<void> {
-    const session = this.sessions.get(`tutor:${lessonId}`) ?? await this.openTutor(lessonId);
-    await session.triggerLessonStart();
+  private async freeRecord(sessionId: string): Promise<FreeLearningSessionRecord> {
+    const local = this.freeRecords.get(sessionId);
+    if (local) return local;
+    const persisted = await this.lookupFree(this.root, sessionId);
+    if (!persisted) throw new Error(`FREE_LEARNING_SESSION_NOT_FOUND: ${sessionId}`);
+    this.freeRecords.set(sessionId, persisted);
+    return persisted;
   }
 
-  async openTutor(lessonId: string): Promise<StudySession> {
-    const key = `tutor:${lessonId}`;
-    const lesson = this.workspaceForLesson(lessonId).lessons.find((item) => item.id === lessonId);
-    if (!lesson || !['active', 'paused'].includes(lesson.status)) {
-      throw new Error(`LESSON_NOT_OPEN: ${lessonId}`);
+  private async metaRecord(sessionId: string): Promise<MetaSessionRecord> {
+    const local = this.metaRecords.get(sessionId);
+    if (local) return local;
+    const persisted = await this.lookupMeta(this.root, sessionId);
+    if (!persisted) throw new Error(`META_SESSION_NOT_FOUND: ${sessionId}`);
+    this.metaRecords.set(sessionId, persisted);
+    return persisted;
+  }
+
+  private async openNew(key: SessionKey): Promise<StudySession> {
+    const metaId = metaSessionId(key);
+    if (metaId !== null) {
+      const record = await this.metaRecord(metaId);
+      const session = await this.factory(sessionFactoryInput(record.scope, record.sessionFile));
+      if (session.sessionId !== record.id) {
+        session.dispose();
+        throw new Error(`META_SESSION_OWNER_MISMATCH: ${record.id}`);
+      }
+      this.sessions.set(key, session);
+      return session;
     }
-    const cached = this.sessions.get(key);
-    if (cached) return cached;
-    const sessionFile = lesson.tutorSessionId
-      ? await this.lookup(this.root, lesson.tutorSessionId)
-      : null;
-    const session = await this.factory({
-      role: 'tutor',
-      ownerId: lessonId,
-      ownerPath: lesson.path,
-      sessionFile,
-    });
+    const freeId = freeLearningSessionId(key);
+    if (freeId !== null) {
+      const record = await this.freeRecord(freeId);
+      const session = await this.factory(sessionFactoryInput(record.scope, record.sessionFile));
+      if (session.sessionId !== record.id) {
+        session.dispose();
+        throw new Error(`FREE_LEARNING_SESSION_OWNER_MISMATCH: ${record.id}`);
+      }
+      this.sessions.set(key, session);
+      return session;
+    }
+
+    const owner = this.nodeOwner(key);
+    if (owner.document.status !== 'active') {
+      throw new Error(`SESSION_NODE_NOT_ACTIVE: ${key}:${owner.document.status}`);
+    }
+    const sessionFile = owner.document.sessionId === null
+      ? null
+      : await this.lookup(this.root, owner.document.sessionId, owner.scope);
+    if (owner.document.sessionId !== null && sessionFile === null) {
+      throw new Error(`SESSION_FILE_NOT_FOUND: ${owner.document.sessionId}`);
+    }
+    const session = await this.factory(sessionFactoryInput(owner.scope, sessionFile));
+    if (owner.document.sessionId === null) {
+      setFrontmatterField(this.root, owner.document.path, 'session_id', session.sessionId, null);
+    }
     this.sessions.set(key, session);
-    setFrontmatterField(this.root, lesson.path, 'tutor_session', session.sessionId);
     return session;
   }
 
   async send(key: SessionKey, text: string, images: ImageContent[] = []): Promise<void> {
-    const session = await this.openSession(key);
-    await session.prompt(text, images);
-  }
-
-  async setDeepMode(key: SessionKey, enabled: boolean): Promise<void> {
-    (await this.openSession(key)).setDeepMode(enabled);
-  }
-
-  async deepMode(key: SessionKey): Promise<boolean> {
-    return (await this.openSession(key)).deepModeEnabled();
-  }
-
-  async workflows(key: SessionKey): Promise<WorkflowSnapshot[]> {
-    return (await this.openSession(key)).workflows();
-  }
-
-  async confirmWorkflow(key: SessionKey, id: string): Promise<WorkflowSnapshot> {
-    return (await this.openSession(key)).confirmWorkflow(id);
-  }
-
-  async cancelWorkflow(key: SessionKey, id: string): Promise<void> {
-    (await this.openSession(key)).cancelWorkflow(id);
-  }
-
-  async pauseLesson(lessonId: string): Promise<void> {
-    const lesson = this.workspaceForLesson(lessonId).lessons.find((item) => item.id === lessonId);
-    if (!lesson) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
-    const tutor = this.sessions.get(`tutor:${lessonId}`);
-    if (tutor?.isStreaming) await tutor.abort();
-    setFrontmatterField(this.root, lesson.path, 'status', 'paused');
-  }
-
-  async abandonForReprepare(lessonId: string): Promise<void> {
-    const lesson = this.workspaceForLesson(lessonId).lessons.find((item) => item.id === lessonId);
-    if (!lesson) throw new Error(`LESSON_NOT_FOUND: ${lessonId}`);
-    const coach = await this.openCoach(lesson.planId);
-    if (lesson.status === 'prepared') {
-      await coach.prompt(
-        `学生要求重新备课。Tutor 尚未开始；请在学生确认方向后原地修改 ${lesson.path}，保持 Lesson ID 不变。`,
-      );
-      return;
-    }
-    setFrontmatterField(this.root, lesson.path, 'status', 'abandoned');
-    const tutor = this.sessions.get(`tutor:${lessonId}`);
-    if (tutor) {
-      await tutor.abort();
-      tutor.dispose();
-      this.sessions.delete(`tutor:${lessonId}`);
-    }
-    await coach.prompt(
-      `学生要求重新备课。保留 ${lesson.path}，使用新的 Lesson ID 准备替代课程，并追加到 Plan Lesson Index。`,
-    );
-  }
-
-  history(key: SessionKey, mode: MessageProjectionMode = 'safe'): ChatMessage[] {
-    const session = this.sessions.get(key);
-    if (!session) return [];
-    return session.messages.flatMap((raw, index) => {
-      const message = projectStoredMessage(key, raw, index, mode);
-      return message ? [message] : [];
+    const previous = this.turnTails.get(key) ?? Promise.resolve();
+    const next = previous.catch(() => {}).then(async () => {
+      const session = await this.open(key);
+      if (freeLearningSessionId(key) !== null && isFreeLearningEnded(session.entries)) {
+        throw new Error(`FREE_LEARNING_SESSION_ENDED: ${key}`);
+      }
+      await session.prompt(text, images);
+      const freeId = freeLearningSessionId(key);
+      if (freeId !== null) {
+        const record = await this.freeRecord(freeId);
+        this.freeRecords.set(freeId, { ...record, updatedAt: new Date().toISOString() });
+      }
+      const metaId = metaSessionId(key);
+      if (metaId !== null) {
+        const record = await this.metaRecord(metaId);
+        this.metaRecords.set(metaId, { ...record, updatedAt: new Date().toISOString() });
+      }
     });
+    this.turnTails.set(key, next);
+    try {
+      await next;
+    } finally {
+      if (this.turnTails.get(key) === next) this.turnTails.delete(key);
+    }
   }
 
-  personaId(key: SessionKey): string {
-    return this.sessions.get(key)?.personaId() ?? resolvePersona(this.root).id;
+  async readHistory(key: SessionKey): Promise<readonly SessionEntry[]> {
+    const cached = this.sessions.get(key);
+    if (cached) return cached.entries;
+    const metaId = metaSessionId(key);
+    if (metaId !== null) {
+      const record = await this.metaRecord(metaId);
+      return this.readBranch(this.root, record.sessionFile);
+    }
+    const freeId = freeLearningSessionId(key);
+    if (freeId !== null) {
+      const record = await this.freeRecord(freeId);
+      return this.readBranch(this.root, record.sessionFile);
+    }
+    const owner = this.nodeOwner(key);
+    if (owner.document.sessionId === null) return [];
+    const sessionFile = await this.lookup(this.root, owner.document.sessionId, owner.scope);
+    if (!sessionFile) throw new Error(`SESSION_FILE_NOT_FOUND: ${owner.document.sessionId}`);
+    return this.readBranch(this.root, sessionFile);
   }
 
-  async setPersona(key: SessionKey, id: string): Promise<void> {
-    const persona = resolvePersona(this.root, id);
-    const session = key.startsWith('coach:')
-      ? await this.openCoach(key.slice(6))
-      : await this.openTutor(key.slice(6));
-    await session.setPersona(persona.id, persona.content);
+  async endFreeLearning(key: SessionKey): Promise<FreeLearningSessionSummary> {
+    const id = freeLearningSessionId(key);
+    if (id === null) throw new Error(`FREE_LEARNING_SESSION_KEY_INVALID: ${key}`);
+    const session = await this.open(key);
+    if (isFreeLearningEnded(session.entries)) {
+      return publicSummary({ ...await this.freeRecord(id), status: 'ended' });
+    }
+    if (session.isStreaming || this.turnTails.has(key)) {
+      throw new Error(`FREE_LEARNING_SESSION_RUNNING: ${key}`);
+    }
+    if (!session.appendCustomEntry) throw new Error('FREE_LEARNING_LIFECYCLE_UNAVAILABLE');
+    const endedAt = new Date().toISOString();
+    session.appendCustomEntry(FREE_LEARNING_ENDED_TYPE, { endedAt });
+    const next: FreeLearningSessionRecord = {
+      ...await this.freeRecord(id),
+      status: 'ended',
+      updatedAt: endedAt,
+    };
+    this.freeRecords.set(id, next);
+    return publicSummary(next);
   }
 
-  subscribe(
+  async subscribe(
     key: SessionKey,
-    listener: Parameters<StudySession['subscribe']>[0],
-  ): () => void {
-    const session = this.sessions.get(key);
-    if (!session) throw new Error(`SESSION_NOT_OPEN: ${key}`);
-    return session.subscribe(listener);
+    listener: (event: AgentSessionEvent) => void,
+  ): Promise<() => void> {
+    return (await this.open(key)).subscribe(listener);
   }
 
-  subscribeWorkflows(
-    key: SessionKey,
-    listener: Parameters<StudySession['subscribeWorkflows']>[0],
-  ): () => void {
+  async abort(key: SessionKey): Promise<void> {
+    const tail = this.turnTails.get(key);
     const session = this.sessions.get(key);
-    if (!session) throw new Error(`SESSION_NOT_OPEN: ${key}`);
-    return session.subscribeWorkflows(listener);
+    if (session?.isStreaming) await session.abort();
+    await tail?.catch(() => {});
   }
 
-  get(key: SessionKey): StudySession | undefined {
-    return this.sessions.get(key);
+  async release(key: SessionKey): Promise<void> {
+    await this.abort(key);
+    this.sessions.get(key)?.dispose();
+    this.sessions.delete(key);
+    this.opening.delete(key);
+    this.turnTails.delete(key);
   }
 
   dispose(): void {
     for (const session of this.sessions.values()) session.dispose();
     this.sessions.clear();
-  }
-
-  private openSession(key: SessionKey): Promise<StudySession> {
-    return key.startsWith('coach:')
-      ? this.openCoach(key.slice(6))
-      : this.openTutor(key.slice(6));
+    this.opening.clear();
+    this.turnTails.clear();
+    this.freeRecords.clear();
+    this.metaRecords.clear();
   }
 }

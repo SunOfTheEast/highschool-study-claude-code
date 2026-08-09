@@ -1,7 +1,314 @@
-export type LessonStatus = 'prepared' | 'active' | 'paused' | 'closed' | 'abandoned';
-export type BlockStatus = 'pending' | 'active' | 'completed' | 'skipped';
-export type ActivityKind = 'dialogue' | 'problem' | 'material' | 'reflection';
-export type SessionKey = `coach:${string}` | `tutor:${string}`;
+export const PLAN_STATUSES = ['prepared', 'active', 'completed'] as const;
+export const LESSON_STATUSES = ['prepared', 'active', 'closed'] as const;
+export const BLOCK_STATUSES = ['pending', 'active', 'completed', 'skipped'] as const;
+export const ACTIVITY_KINDS = ['dialogue', 'problem', 'material', 'reflection'] as const;
+
+export type PlanStatus = typeof PLAN_STATUSES[number];
+export type LessonStatus = typeof LESSON_STATUSES[number];
+export type BlockStatus = typeof BLOCK_STATUSES[number];
+export type ActivityKind = typeof ACTIVITY_KINDS[number];
+export type NodeKind = 'roadmap' | 'plan' | 'lesson';
+export type NodeStatus = 'active' | PlanStatus | LessonStatus;
+export type NodeSessionKey = `${NodeKind}:${string}`;
+export type FreeLearningSessionKey = `free:${string}`;
+export type MetaSessionKey = `meta:${string}`;
+export type SessionKey = NodeSessionKey | FreeLearningSessionKey | MetaSessionKey;
+
+export type LearningAssetKind = 'note' | 'problem-card';
+
+export type LearningAssetHandle = {
+  kind: LearningAssetKind;
+  id: string;
+};
+
+/** @deprecated Use LearningAssetHandle for selected-context identity. */
+export type LearningAssetReference = LearningAssetHandle;
+
+export type LearningSourceReference =
+  | { kind: LearningAssetKind; id: string; revision: number }
+  | { kind: 'material'; id: string; revision: number; locator: string | null };
+
+export type LearningContextReference =
+  | LearningAssetHandle
+  | { kind: 'material'; id: string; revision: number; locator: string | null };
+
+export type LegacyUnpinnedLearningSourceReference = {
+  kind: 'legacy-unpinned';
+  assetKind: LearningAssetKind;
+  id: string;
+};
+
+export type ReadableLearningSourceReference =
+  | LearningSourceReference
+  | LegacyUnpinnedLearningSourceReference;
+
+export type SemanticTagDraft = {
+  core: string[];
+  related: string[];
+};
+
+export type LearningAssetSemanticTags = SemanticTagDraft & {
+  subject: LearningAssetHandle;
+  revision: number;
+  updatedAt: string;
+};
+
+export type ProblemAttemptResponse =
+  | { kind: 'answer'; text: string }
+  | { kind: 'cannot' };
+
+export type ProblemAttemptEvent = {
+  kind: 'attempt';
+  id: string;
+  requestId: string;
+  at: string;
+  cardId: string;
+  cardRevision: number;
+  answerViewedBefore: boolean;
+  response: ProblemAttemptResponse;
+};
+
+export type ProblemAnswerRevealEvent = {
+  kind: 'answer-reveal';
+  id: string;
+  requestId: string;
+  at: string;
+  cardId: string;
+  cardRevision: number;
+  attemptId: string;
+};
+
+export type ProblemActivityEvent = ProblemAttemptEvent | ProblemAnswerRevealEvent;
+
+export type ProblemActivitySnapshot = {
+  cardId: string;
+  events: ProblemActivityEvent[];
+  latestAttempt: ProblemAttemptEvent | null;
+  answerRevealedForLatestAttempt: boolean;
+};
+
+export type LearningNoteBlock =
+  | { kind: 'markdown'; body: string }
+  | { kind: 'recall'; prompt: string; answer: string };
+
+export type LearningNote = {
+  kind: 'note';
+  id: string;
+  path: string;
+  revision: number;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  createdSessionId: string;
+  sources: ReadableLearningSourceReference[];
+  blocks: LearningNoteBlock[];
+};
+
+export type StudentProblemCard = {
+  kind: 'problem-card';
+  id: string;
+  revision: number;
+  title: string;
+  stem: string;
+  studentNote: string;
+  standardAnswer: string | null;
+  sources: ReadableLearningSourceReference[];
+};
+
+export type LearningAssetSummary = {
+  kind: LearningAssetKind;
+  id: string;
+  title: string;
+  revision: number;
+  updatedAt: string | null;
+  tags: SemanticTagDraft | null;
+  sources: ReadableLearningSourceReference[];
+};
+
+export type LearningAssetLibrarySnapshot = {
+  notes: LearningAssetSummary[];
+  problemCards: LearningAssetSummary[];
+};
+
+export type MaterialSearchStatus =
+  | 'native-text'
+  | 'pdf-text'
+  | 'image-readable'
+  | 'unavailable';
+
+export type MaterialRevision = {
+  revision: number;
+  title: string;
+  originalFilename: string;
+  mediaType: string;
+  sha256: string;
+  importedAt: string;
+  originalPath: string;
+  searchStatus: MaterialSearchStatus;
+  searchablePath: string | null;
+  locatorKind: 'lines' | 'page' | null;
+  requestId: string;
+};
+
+export type LearningMaterial = {
+  id: string;
+  path: string;
+  currentRevision: number;
+  revisions: MaterialRevision[];
+};
+
+export type LearningMaterialView = {
+  material: LearningMaterial;
+  current: MaterialRevision;
+  suggestedLocator: string | null;
+};
+
+export type MaterialImportReceipt = {
+  id: string;
+  revision: number;
+  path: string;
+  originalPath: string;
+  searchStatus: MaterialSearchStatus;
+};
+
+export type MaterialLocatorSnapshot = {
+  id: string;
+  revision: number;
+  locator: string | null;
+  path: string;
+  text: string | null;
+};
+
+export type LearningSetGuide = {
+  title: string;
+  body: string;
+  raw: string;
+};
+
+export type FreeLearningSessionSummary = {
+  id: string;
+  sessionKey: FreeLearningSessionKey;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  status: 'active' | 'ended';
+};
+
+export type MetaSessionSummary = {
+  id: string;
+  sessionKey: MetaSessionKey;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type LearningFootprintActivity =
+  | 'session-start'
+  | 'session-continue'
+  | 'asset-created'
+  | 'asset-revised'
+  | 'material-imported'
+  | 'problem-attempt'
+  | 'answer-reveal'
+  | 'learning-history';
+
+export type LearningFootprintSource =
+  | {
+      kind: 'session';
+      sessionKey: SessionKey;
+      phase: 'start' | 'continue';
+      status: NodeStatus | 'ended';
+    }
+  | { kind: 'asset'; asset: LearningAssetHandle; revision: number }
+  | { kind: 'material'; id: string; revision: number }
+  | {
+      kind: 'problem-activity';
+      cardId: string;
+      cardRevision: number;
+      eventId: string;
+    }
+  | {
+      kind: 'object-memory';
+      objectId: string;
+      path: string;
+      evidence: Array<
+        | { kind: 'lesson'; lessonId: string; lessonPath: string; blockId: string }
+        | { kind: 'free-learning'; sessionId: string }
+      >;
+    };
+
+export type LearningFootprintEntry = {
+  id: string;
+  at: string | null;
+  activity: LearningFootprintActivity;
+  title: string;
+  summary: string;
+  route: string | null;
+  source: LearningFootprintSource;
+};
+
+export type LearningFootprintSnapshot = {
+  entries: LearningFootprintEntry[];
+};
+
+export type LearningSetHomeSnapshot = {
+  guide: LearningSetGuide;
+  hasCourse: boolean;
+  course: null | {
+    title: string;
+    currentPosition: string;
+    route: '/course';
+  };
+  assets: {
+    notes: number;
+    problemCards: number;
+    materials: number;
+  };
+  recentFreeLearning: FreeLearningSessionSummary[];
+  recentMeta: MetaSessionSummary[];
+};
+
+export type NodeReference = {
+  id: string;
+  path: string;
+  title: string;
+  after: string | null;
+  dependsOn: string[];
+};
+
+export type RoadmapDocument = {
+  id: string;
+  kind: 'roadmap';
+  status: 'active';
+  sessionId: string | null;
+  path: 'ROADMAP.md';
+  title: string;
+  overview: string;
+  longTermGoal: string;
+  capabilityStandard: string;
+  test: string;
+  currentPosition: string;
+  plans: NodeReference[];
+  raw: string;
+};
+
+export type PlanDocument = {
+  id: string;
+  kind: 'plan';
+  status: PlanStatus;
+  sessionId: string | null;
+  path: string;
+  parentId: string;
+  parentPath: 'ROADMAP.md';
+  title: string;
+  stageGoal: string;
+  capabilityStandard: string;
+  test: string;
+  currentPosition: string;
+  nextLessonArrangement: string;
+  lessons: NodeReference[];
+  raw: string;
+};
 
 export type ActivityBlock = {
   id: string;
@@ -12,166 +319,161 @@ export type ActivityBlock = {
   dependsOn: string[];
   uses: string[];
   studentView: string;
-  evidence: string[];
+  teacherControl: string;
+  classroomLog: string[];
 };
 
-export type LessonNode = {
+export type LessonDocument = {
   id: string;
-  title: string;
-  path: string;
-  planId: string;
+  kind: 'lesson';
   status: LessonStatus;
-  sessionKey: SessionKey;
-  tutorSessionId: string | null;
+  sessionId: string | null;
+  path: string;
+  parentId: string;
+  parentPath: string;
+  title: string;
+  lessonGoal: string;
   blocks: ActivityBlock[];
+  raw: string;
 };
 
-export type PlanSummary = {
+export type LessonHandoutBlock = {
   id: string;
   title: string;
-  path: string;
-  status: string;
-  goal: string;
-  capabilityStandard: string;
+  kind: ActivityKind;
+  studentView: string;
 };
 
-export type LearningSetSnapshot = {
+export type LessonHandout = {
+  kind: 'lesson-handout';
+  planId: string;
+  lessonId: string;
   title: string;
-  overview: string;
-  goal: string;
-  plans: PlanSummary[];
+  lessonGoal: string;
+  blocks: LessonHandoutBlock[];
 };
 
-export type PlanWorkspaceSnapshot = {
-  learningSet: LearningSetSnapshot;
-  plan: PlanSummary;
-  coach: { sessionKey: SessionKey; sessionId: string | null };
-  lessons: LessonNode[];
-};
-
-export type StudentProblemCard = {
-  path: string;
-  stem: string;
-  choices: Array<{ label: string; text: string }>;
-};
-
-export type StudentNotebook = {
-  lesson: Omit<LessonNode, 'blocks'> & { blocks: ActivityBlock[] };
-  cards: Record<string, StudentProblemCard>;
-  authoring?: { source: string };
-};
-
-export type AbilityNode = {
-  method: string;
-  state: 'unobserved' | 'unstable' | 'steady';
-  score: number;
-  evidenceCount: number;
-  sources: string[];
-};
-
-export type AbilityProjection = { nodes: AbilityNode[] };
-
-export type EvidenceView = {
-  source: string;
-  trace: {
-    lessonId: string;
-    blockId: string;
-    assessment: string;
-    support: string;
-    note: string;
-  };
-  card: null | {
-    path: string;
-    title: string;
-    goal: string;
-    methods: Array<{ name: string; role: 'primary' | 'secondary' }>;
-  };
-};
-
-export type RouteChange = {
+export type CourseTreeNode = {
+  kind: NodeKind;
   id: string;
-  action: 'insert' | 'skip' | 'move' | 'repeat';
-  blockId: string;
-  before: string | null;
+  path: string;
+  title: string;
+  status: NodeStatus;
+  sessionKey: SessionKey;
   after: string | null;
-  reason: string;
-  source: string;
-};
-
-export type ReplayItem = {
-  id: string;
-  kind: 'message' | 'trace' | 'route' | 'image';
-  label: string;
-  detail: string;
-  source: string | null;
-};
-
-export type LessonReplay = {
-  mode: 'full' | 'evidence-only';
-  items: ReplayItem[];
-  route: { initial: string[]; effective: string[] };
-};
-
-export type PersonaPresentation = {
-  id: string;
-  choices: Array<{ id: string; name: string }>;
-};
-
-export type ChatMessage = {
-  id: string;
-  role: 'student' | 'coach' | 'tutor';
-  text: string;
-  complete: boolean;
-};
-
-export type WorkflowTaskView = {
-  id: string;
-  label: string;
-  role: string;
   dependsOn: string[];
-  status: 'queued' | 'running' | 'completed' | 'failed' | 'blocked' | 'cancelled';
-  sourceCount: number;
-  progress: string;
+  children: CourseTreeNode[];
 };
 
-export type WorkflowView = {
+export type CourseSnapshot = {
+  guide: LearningSetGuide;
+  roadmap: RoadmapDocument;
+  tree: CourseTreeNode;
+  selected: RoadmapDocument | PlanDocument | LessonDocument | null;
+};
+
+export type KnowledgeMethodNode = {
   id: string;
-  goal: string;
-  mode: 'quick' | 'deep';
-  status: 'proposed' | 'running' | 'completed' | 'partial' | 'failed' | 'cancelled';
-  maxConcurrency: number;
-  tokenLimit: number;
-  timeoutMs: number;
-  tasks: WorkflowTaskView[];
+  name: string;
+  parentId: string | null;
+  children: string[];
 };
 
-export type StudyViewEvent =
-  | { type: 'snapshot'; workspace: PlanWorkspaceSnapshot }
-  | { type: 'message'; sessionKey: SessionKey; message: ChatMessage }
-  | { type: 'message-delta'; sessionKey: SessionKey; messageId: string; delta: string }
+export type KnowledgeCard = {
+  path: string;
+  id: string;
+  title: string;
+  sourceNumber: string | null;
+  primaryMethod: string | null;
+  supportingMethods: string[];
+};
+
+export type KnowledgeMaterial = {
+  path: string;
+  title: string;
+  kind: 'text' | 'image' | 'media' | 'other';
+  id?: string;
+  revision?: number;
+  searchStatus?: MaterialSearchStatus;
+};
+
+export type KnowledgeSnapshot = {
+  methods: KnowledgeMethodNode[];
+  cards: KnowledgeCard[];
+  materials: KnowledgeMaterial[];
+};
+
+export type MaterialSearchPhase =
+  | 'starting'
+  | 'filtering'
+  | 'inspecting'
+  | 'comparing'
+  | 'done'
+  | 'adjusting';
+
+export type MaterialSearchConversationItem = {
+  id: string;
+  kind: 'material-search';
+  status: 'running' | 'done' | 'error';
+  phase: MaterialSearchPhase;
+  completed: number;
+  total: number;
+  toolCount: number;
+  elapsedMs: number;
+  at: string;
+  updatedAt: string;
+};
+
+export type LessonReviewConversationItem = {
+  id: string;
+  kind: 'lesson-review';
+  status: 'running' | 'done' | 'error';
+  elapsedMs: number;
+  at: string;
+  updatedAt: string;
+};
+
+export type LessonHandoutConversationItem = {
+  id: string;
+  kind: 'lesson-handout';
+  status: 'running' | 'done' | 'error';
+  title: string | null;
+  url: string | null;
+  at: string;
+};
+
+export type ConversationItem =
+  | { id: string; kind: 'user'; text: string; at: string }
+  | { id: string; kind: 'assistant'; text: string; at: string }
+  | MaterialSearchConversationItem
+  | LessonReviewConversationItem
+  | LessonHandoutConversationItem
   | {
-    type: 'phase';
+    id: string;
+    kind: 'tool';
+    name: string;
+    status: 'running' | 'done' | 'error';
+    detail: unknown;
+    at: string;
+  };
+
+export type SessionRunState = {
+  sessionKey: SessionKey;
+  status: 'idle' | 'running';
+};
+
+export type StudyEvent =
+  | { type: 'conversation-item'; sessionKey: SessionKey; item: ConversationItem }
+  | { type: 'conversation-snapshot'; sessionKey: SessionKey; items: ConversationItem[] }
+  | {
+    type: 'assistant-delta';
     sessionKey: SessionKey;
-    phase: 'planning' | 'preparing' | 'waiting' | 'teaching' | 'paused' | 'reviewing';
+    messageId: string;
+    delta: string;
   }
-  | {
-    type: 'work-status';
-    sessionKey: SessionKey;
-    tool: string;
-    status: 'running' | 'done' | 'failed';
-    label: string;
-  }
-  | { type: 'activity'; lessonId: string; block: ActivityBlock }
-  | {
-    type: 'route-change';
-    lessonId: string;
-    action: 'insert' | 'skip' | 'move' | 'repeat';
-    blockId: string;
-    reason: string;
-  }
-  | {
-    type: 'ability-update';
-    projection: AbilityProjection;
-  }
-  | { type: 'workflow'; sessionKey: SessionKey; workflow: WorkflowView }
-  | { type: 'session-error'; sessionKey: SessionKey; message: string };
+  | { type: 'session-run'; sessionKey: SessionKey; status: 'idle' | 'running' }
+  | { type: 'session-error'; sessionKey: SessionKey; message: string }
+  | { type: 'home-invalidated' }
+  | { type: 'assets-invalidated' }
+  | { type: 'course-invalidated' }
+  | { type: 'knowledge-invalidated' };

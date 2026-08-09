@@ -1,435 +1,562 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import type {
-  AbilityProjection,
-  EvidenceView,
-  LearningSetSnapshot,
-  LessonReplay,
-  PersonaPresentation,
-  LessonNode,
+  CourseSnapshot,
+  CourseTreeNode,
+  KnowledgeSnapshot,
+  LearningAssetLibrarySnapshot,
+  LearningContextReference,
+  LearningFootprintSnapshot,
+  LearningMaterial,
+  LearningMaterialView,
+  LearningSetHomeSnapshot,
+  LessonHandout,
+  ProblemAttemptResponse,
   SessionKey,
-  StudentNotebook,
-  StudyViewEvent,
+  StudyEvent,
 } from '../shared/contracts';
-import { api } from './api';
-import { AbilityMap } from './components/AbilityMap';
-import { ChatPanel } from './components/ChatPanel';
-import { EvidenceLens } from './components/EvidenceLens';
-import { LearningSetHome } from './components/LearningSetHome';
-import { LessonNotebook } from './components/LessonNotebook';
-import { SessionTree } from './components/SessionTree';
-import {
-  formatBrowserRoute,
-  parseBrowserRoute,
-  type BrowserRoute,
-} from './routes';
-import { initialClientState, preferLiveMessages, reduceClientState } from './state';
+import { api, ApiError, type LearningNoteView, type ProblemCardView } from './api';
+import { AppShell } from './components/AppShell';
+import { formatBrowserRoute, parseBrowserRoute, type BrowserRoute } from './routes';
+import { initialClientState, reduceClientState } from './state';
+import { createReconnectGate } from './reconnect-gate';
+import { CoursePage, type NodeLifecycleAction } from './pages/CoursePage';
+import { CourseOverviewPage } from './pages/CourseOverviewPage';
+import { KnowledgePage } from './pages/KnowledgePage';
+import { LessonHandoutPage } from './pages/LessonHandoutPage';
+import { HomePage } from './pages/HomePage';
+import { FreeLearningPage } from './pages/FreeLearningPage';
+import { AssetsPage } from './pages/AssetsPage';
+import { NotePage } from './pages/NotePage';
+import { ProblemCardPage } from './pages/ProblemCardPage';
+import { FootprintPage } from './pages/FootprintPage';
+import { MaterialPage } from './pages/MaterialPage';
+import { MetaPage } from './pages/MetaPage';
+import type { PrimaryView } from './view-state';
 
-type ConnectionState = 'connecting' | 'open' | 'closed';
+type ConnectionState = 'open' | 'connecting' | 'closed';
+
+function findNode(
+  node: CourseTreeNode,
+  predicate: (node: CourseTreeNode) => boolean,
+): CourseTreeNode | null {
+  if (predicate(node)) return node;
+  for (const child of node.children) {
+    const found = findNode(child, predicate);
+    if (found) return found;
+  }
+  return null;
+}
+
+function parentPlan(root: CourseTreeNode, lessonPath: string): CourseTreeNode | null {
+  for (const plan of root.children) {
+    if (plan.kind !== 'plan') continue;
+    if (plan.children.some((lesson) => lesson.kind === 'lesson' && lesson.path === lessonPath)) {
+      return plan;
+    }
+  }
+  return null;
+}
+
+function routePath(route: BrowserRoute, base: CourseSnapshot): string {
+  if (route.kind === 'course' || route.kind === 'course-roadmap') return 'ROADMAP.md';
+  const node = route.kind === 'course-plan'
+    ? base.tree.children.find((candidate) => (
+      candidate.kind === 'plan' && candidate.id === route.planId
+    )) ?? null
+    : route.kind === 'course-lesson'
+      ? base.tree.children
+        .find((candidate) => candidate.kind === 'plan' && candidate.id === route.planId)
+        ?.children.find((candidate) => (
+          candidate.kind === 'lesson' && candidate.id === route.lessonId
+        )) ?? null
+      : null;
+  if (!node) throw new Error('ROUTE_NODE_NOT_FOUND');
+  return node.path;
+}
+
+function keyForCourse(course: CourseSnapshot): SessionKey {
+  const document = course.selected ?? course.roadmap;
+  const node = findNode(course.tree, (candidate) => candidate.path === document.path);
+  if (!node) throw new Error('COURSE_SESSION_NODE_NOT_FOUND');
+  return node.sessionKey;
+}
+
+function errorText(error: unknown): string {
+  if (error instanceof ApiError && error.body && typeof error.body === 'object') {
+    const body = error.body as { reason?: unknown; error?: unknown };
+    if (typeof body.reason === 'string') return body.reason;
+    if (typeof body.error === 'string') return body.error;
+  }
+  return error instanceof Error ? error.message : '本地学习工作区暂时无法读取。';
+}
+
+function routeIsCourse(route: BrowserRoute): boolean {
+  return route.kind === 'course'
+    || route.kind === 'course-roadmap'
+    || route.kind === 'course-plan'
+    || route.kind === 'course-lesson';
+}
 
 export function App() {
-  const [learningSet, setLearningSet] = useState<LearningSetSnapshot | null>(null);
-  const [client, setClient] = useState(initialClientState);
+  const [route, setRoute] = useState<BrowserRoute>(() => (
+    parseBrowserRoute(window.location.pathname) ?? { kind: 'home' }
+  ));
+  const [home, setHome] = useState<LearningSetHomeSnapshot | null>(null);
+  const [assets, setAssets] = useState<LearningAssetLibrarySnapshot | null>(null);
+  const [materials, setMaterials] = useState<LearningMaterial[]>([]);
+  const [material, setMaterial] = useState<LearningMaterialView | null>(null);
+  const [footprint, setFootprint] = useState<LearningFootprintSnapshot | null>(null);
+  const [note, setNote] = useState<LearningNoteView | null>(null);
+  const [problem, setProblem] = useState<ProblemCardView | null>(null);
+  const [course, setCourse] = useState<CourseSnapshot | null>(null);
+  const [knowledge, setKnowledge] = useState<KnowledgeSnapshot | null>(null);
+  const [handout, setHandout] = useState<LessonHandout | null>(null);
+  const [handoutError, setHandoutError] = useState<string | null>(null);
+  const [handoutLoading, setHandoutLoading] = useState(route.kind === 'lesson-handout');
+  const [client, dispatch] = useReducer(reduceClientState, initialClientState);
   const [connection, setConnection] = useState<ConnectionState>('connecting');
-  const [loading, setLoading] = useState(true);
-  const [pageError, setPageError] = useState<string | null>(null);
-  const [notebook, setNotebook] = useState<StudentNotebook | null>(null);
-  const [replay, setReplay] = useState<LessonReplay | null>(null);
-  const [abilities, setAbilities] = useState<AbilityProjection | null>(null);
-  const [evidence, setEvidence] = useState<EvidenceView | null>(null);
-  const [persona, setPersona] = useState<PersonaPresentation | null>(null);
+  const [notice, setNotice] = useState<string | null>('正在打开学习集…');
+  const [leftOpen, setLeftOpen] = useState(false);
+  const [rightOpen, setRightOpen] = useState(false);
+  const routeLoadRevision = useRef(0);
+
+  const loadRoute = async (next: BrowserRoute) => {
+    const revision = ++routeLoadRevision.current;
+    if (next.kind === 'lesson-handout') {
+      setRoute(next);
+      setHandout(null);
+      setHandoutError(null);
+      setHandoutLoading(true);
+      setNotice(null);
+      try {
+        const value = await api.lessonHandout(next.planId, next.lessonId, next.blockIds);
+        if (revision !== routeLoadRevision.current) return;
+        setHandout(value);
+      } catch (error) {
+        if (revision === routeLoadRevision.current) setHandoutError(errorText(error));
+      } finally {
+        if (revision === routeLoadRevision.current) setHandoutLoading(false);
+      }
+      return;
+    }
+    setHandout(null);
+    setHandoutError(null);
+    setHandoutLoading(false);
+    setNotice('正在读取学习集…');
+    try {
+      const homeValue = await api.home();
+      if (revision !== routeLoadRevision.current) return;
+      setHome(homeValue);
+
+      if (next.kind === 'home') {
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
+      if (next.kind === 'assets') {
+        const [value, materialValues] = await Promise.all([api.assets(), api.materials()]);
+        if (revision !== routeLoadRevision.current) return;
+        setAssets(value);
+        setMaterials(materialValues);
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
+      if (next.kind === 'material') {
+        const value = await api.material(next.id);
+        if (revision !== routeLoadRevision.current) return;
+        setMaterial(value);
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
+      if (next.kind === 'footprint') {
+        const value = await api.footprint();
+        if (revision !== routeLoadRevision.current) return;
+        setFootprint(value);
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
+      if (next.kind === 'note') {
+        const value = await api.note(next.id);
+        if (revision !== routeLoadRevision.current) return;
+        setNote(value);
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
+      if (next.kind === 'problem-card') {
+        const value = await api.problemCard(next.id);
+        if (revision !== routeLoadRevision.current) return;
+        setProblem(value);
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
+      if (next.kind === 'free-learning') {
+        const key = `free:${next.sessionId}` as const;
+        const history = await api.history(key);
+        if (revision !== routeLoadRevision.current) return;
+        dispatch({ type: 'conversation-snapshot', sessionKey: key, items: history });
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
+      if (next.kind === 'meta') {
+        const key = `meta:${next.sessionId}` as const;
+        const history = await api.history(key);
+        if (revision !== routeLoadRevision.current) return;
+        dispatch({ type: 'conversation-snapshot', sessionKey: key, items: history });
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
+      if (next.kind === 'knowledge') {
+        const value = await api.knowledge();
+        if (revision !== routeLoadRevision.current) return;
+        setKnowledge(value);
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
+      const base = await api.course();
+      if (next.kind === 'course') {
+        if (revision !== routeLoadRevision.current) return;
+        setCourse(base);
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
+      const selectedPath = routePath(next, base);
+      const value = selectedPath === 'ROADMAP.md' ? base : await api.course(selectedPath);
+      const key = keyForCourse(value);
+      const history = await api.history(key);
+      if (revision !== routeLoadRevision.current) return;
+      setCourse(value);
+      setRoute(next);
+      dispatch({ type: 'conversation-snapshot', sessionKey: key, items: history });
+      setNotice(null);
+    } catch (error) {
+      if (revision === routeLoadRevision.current) setNotice(errorText(error));
+    }
+  };
+
+  const navigate = (next: BrowserRoute, replace = false) => {
+    const path = formatBrowserRoute(next);
+    window.history[replace ? 'replaceState' : 'pushState'](null, '', path);
+    void loadRoute(next);
+  };
 
   useEffect(() => {
+    const parsed = parseBrowserRoute(window.location.pathname);
+    const initial = parsed ?? { kind: 'home' as const };
+    if (!parsed || window.location.pathname === '/') window.history.replaceState(null, '', '/home');
+    void loadRoute(initial);
+  }, []);
+
+  useEffect(() => {
+    const pop = () => void loadRoute(
+      parseBrowserRoute(window.location.pathname) ?? { kind: 'home' },
+    );
+    window.addEventListener('popstate', pop);
+    return () => window.removeEventListener('popstate', pop);
+  }, []);
+
+  useEffect(() => {
+    if (route.kind === 'lesson-handout') return undefined;
     let disposed = false;
     let socket: WebSocket | null = null;
-    let retry: number | undefined;
-
+    let retry: number | null = null;
+    const reconnect = createReconnectGate();
     const connect = () => {
       if (disposed) return;
       setConnection('connecting');
-      const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-      socket = new WebSocket(`${protocol}//${location.host}/events`);
-      socket.onopen = () => setConnection('open');
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      socket = new WebSocket(`${protocol}//${window.location.host}/events`);
+      socket.onopen = () => {
+        setConnection('open');
+        if (!reconnect.opened()) return;
+        const current = parseBrowserRoute(window.location.pathname) ?? { kind: 'home' as const };
+        void loadRoute(current);
+      };
       socket.onmessage = (message) => {
-        const event = JSON.parse(String(message.data)) as StudyViewEvent;
-        if (event.type === 'ability-update') setAbilities(event.projection);
-        setClient((current) => reduceClientState(current, event));
+        const event = JSON.parse(String(message.data)) as StudyEvent;
+        const current = parseBrowserRoute(window.location.pathname) ?? { kind: 'home' as const };
+        if (event.type === 'course-invalidated') {
+          if (routeIsCourse(current)) void loadRoute(current);
+          return;
+        }
+        if (event.type === 'knowledge-invalidated') {
+          if (current.kind === 'knowledge') void loadRoute(current);
+          return;
+        }
+        if (event.type === 'home-invalidated') {
+          if (current.kind === 'home') void loadRoute(current);
+          else void api.home().then(setHome);
+          return;
+        }
+        if (event.type === 'assets-invalidated') {
+          if (
+            current.kind === 'assets'
+            || current.kind === 'note'
+            || current.kind === 'problem-card'
+            || current.kind === 'material'
+          ) {
+            void loadRoute(current);
+          }
+          return;
+        }
+        dispatch(event);
       };
       socket.onerror = () => socket?.close();
       socket.onclose = () => {
         if (disposed) return;
         setConnection('closed');
-        retry = window.setTimeout(connect, 1500);
+        retry = window.setTimeout(connect, 1200);
       };
     };
-
     connect();
     return () => {
       disposed = true;
-      if (retry !== undefined) window.clearTimeout(retry);
+      if (retry !== null) window.clearTimeout(retry);
       socket?.close();
     };
-  }, []);
+  }, [route]);
 
-  type Navigation = 'push' | 'replace' | 'none';
+  const selectedKey: SessionKey | null = route.kind === 'free-learning'
+    ? `free:${route.sessionId}`
+    : route.kind === 'meta'
+      ? `meta:${route.sessionId}`
+      : routeIsCourse(route) && course ? keyForCourse(course) : null;
+  const conversation = selectedKey ? client.conversations[selectedKey] ?? [] : [];
+  const running = selectedKey ? client.running[selectedKey] ?? false : false;
+  const sessionError = selectedKey ? client.errors[selectedKey] ?? null : null;
+  const freeStatus = route.kind === 'free-learning'
+    ? home?.recentFreeLearning.find((session) => session.id === route.sessionId)?.status ?? 'active'
+    : 'active';
 
-  const openRoute = async (route: BrowserRoute | null, navigation: Navigation = 'none') => {
-    setLoading(true);
-    setPageError(null);
+  const nodeRoute = (node: CourseTreeNode): BrowserRoute => {
+    if (node.kind === 'roadmap') return { kind: 'course-roadmap' };
+    if (node.kind === 'plan') return { kind: 'course-plan', planId: node.id };
+    const plan = course ? parentPlan(course.tree, node.path) : null;
+    if (!plan) throw new Error('LESSON_PARENT_NOT_FOUND');
+    return { kind: 'course-lesson', planId: plan.id, lessonId: node.id };
+  };
+
+  const lifecycle = async (action: NodeLifecycleAction, node: CourseTreeNode) => {
+    setNotice('正在更新学习位置…');
     try {
-      if (!route) throw new Error('INVALID_ROUTE');
-      if (route.kind === 'home') {
-        setClient(initialClientState);
-        setEvidence(null);
-        if (navigation === 'push') window.history.pushState(null, '', formatBrowserRoute(route));
-        if (navigation === 'replace') window.history.replaceState(null, '', formatBrowserRoute(route));
+      const result = action === 'start-plan'
+        ? await api.startPlan(node.id)
+        : action === 'complete-plan'
+          ? await api.completePlan(node.id)
+          : action === 'start-lesson'
+            ? await api.startLesson(parentPlan(course!.tree, node.path)!.id, node.id)
+            : await api.closeLesson(parentPlan(course!.tree, node.path)!.id, node.id);
+      const url = new URL(result.route, window.location.origin);
+      navigate(parseBrowserRoute(url.pathname) ?? { kind: 'home' });
+    } catch (error) {
+      setNotice(errorText(error));
+    }
+  };
+
+  const startFree = async (selectedAssets: LearningContextReference[] = []) => {
+    try {
+      const created = await api.createFreeLearning(selectedAssets);
+      const next = parseBrowserRoute(new URL(created.route, window.location.origin).pathname);
+      if (!next) throw new Error('FREE_LEARNING_ROUTE_INVALID');
+      navigate(next);
+    } catch (error) {
+      setNotice(errorText(error));
+    }
+  };
+
+  const startMeta = async (selectedAssets: LearningContextReference[] = []) => {
+    try {
+      const existing = home?.recentMeta[0];
+      if (existing) {
+        navigate({ kind: 'meta', sessionId: existing.id });
         return;
       }
-
-      const workspace = await api.workspace(route.planId);
-      let selected: SessionKey;
-      let history: Awaited<ReturnType<typeof api.history>> | null = null;
-      if (route.kind === 'coach') {
-        selected = workspace.coach.sessionKey;
-        history = await api.history(selected);
-      } else {
-        const lesson = workspace.lessons.find((item) => item.id === route.lessonId);
-        if (!lesson || lesson.planId !== workspace.plan.id) throw new Error('LESSON_NOT_FOUND');
-        selected = lesson.sessionKey;
-        if (lesson.status === 'active' || lesson.status === 'paused') {
-          history = await api.history(selected);
-        }
-      }
-
-      setClient((current) => ({
-        ...current,
-        workspace,
-        selected,
-        messages: history === null
-          ? { ...current.messages, [selected]: [] }
-          : { ...current.messages, [selected]: history },
-      }));
-      if (navigation === 'push') window.history.pushState(null, '', formatBrowserRoute(route));
-      if (navigation === 'replace') window.history.replaceState(null, '', formatBrowserRoute(route));
-    } catch {
-      setClient(initialClientState);
-      setEvidence(null);
-      setPageError(route ? '无法恢复这个学习位置，已返回学习集首页。' : '无效的学习路径，已返回学习集首页。');
-      window.history.replaceState(null, '', '/');
-    } finally {
-      setLoading(false);
+      const created = await api.createMeta(selectedAssets);
+      const next = parseBrowserRoute(new URL(created.route, window.location.origin).pathname);
+      if (!next) throw new Error('META_ROUTE_INVALID');
+      navigate(next);
+    } catch (error) {
+      setNotice(errorText(error));
     }
   };
 
-  useEffect(() => {
-    let current = true;
-    void api.learningSet()
-      .then((value) => {
-        if (!current) return;
-        setLearningSet(value);
-        return openRoute(parseBrowserRoute(window.location.pathname));
-      })
-      .catch(() => setPageError('无法读取学习集，请确认本地服务与学习集目录。'))
-      .finally(() => {
-        if (current) setLoading(false);
-      });
-    return () => { current = false; };
-  }, []);
-
-  useEffect(() => {
-    const onPopState = () => {
-      void openRoute(parseBrowserRoute(window.location.pathname));
-    };
-    window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
-  }, []);
-
-  const selectedLesson = useMemo(() => {
-    if (!client.workspace || !client.selected?.startsWith('tutor:')) return null;
-    return client.workspace.lessons.find((lesson) => lesson.sessionKey === client.selected) ?? null;
-  }, [client.selected, client.workspace]);
-
-  useEffect(() => {
-    if (!client.workspace || !client.selected?.startsWith('coach:')) return;
-    const route = parseBrowserRoute(window.location.pathname);
-    if (route?.kind !== 'lesson' || route.planId !== client.workspace.plan.id) return;
-    window.history.replaceState(
-      null,
-      '',
-      formatBrowserRoute({ kind: 'coach', planId: client.workspace.plan.id }),
+  let content: React.ReactNode;
+  if (route.kind === 'home') {
+    content = home
+      ? (
+        <HomePage
+          value={home}
+          onNavigate={navigate}
+          onStartFree={() => void startFree()}
+          onPlan={() => void startMeta()}
+          onOpenFootprint={() => navigate({ kind: 'footprint' })}
+        />
+      )
+      : <div className="loading-screen"><b>正在打开学习集</b></div>;
+  } else if (route.kind === 'assets') {
+    content = assets ? (
+      <AssetsPage
+        value={assets}
+        materials={materials}
+        onOpen={(reference) => navigate(reference.kind === 'note'
+          ? { kind: 'note', id: reference.id }
+          : { kind: 'problem-card', id: reference.id })}
+        onOpenMaterial={(id) => navigate({ kind: 'material', id })}
+        onAsk={(references) => void startFree(references)}
+        onImport={async (input) => {
+          await api.importMaterial(input);
+          await loadRoute({ kind: 'assets' });
+        }}
+        onOpenFootprint={() => navigate({ kind: 'footprint' })}
+      />
+    ) : <div className="loading-screen"><b>正在读取学习资料</b></div>;
+  } else if (route.kind === 'material') {
+    content = material ? (
+      <MaterialPage
+        value={material}
+        onRead={(locator) => api.materialLocator(
+          material.material.id,
+          material.current.revision,
+          locator,
+        )}
+        onAsk={(reference) => void startFree([reference])}
+      />
+    ) : <div className="loading-screen"><b>正在读取原始资料</b></div>;
+  } else if (route.kind === 'footprint') {
+    content = footprint ? (
+      <FootprintPage value={footprint} onOpen={(path) => {
+        const next = parseBrowserRoute(new URL(path, window.location.origin).pathname);
+        if (next) navigate(next);
+      }} />
+    ) : <div className="loading-screen"><b>正在读取学习足迹</b></div>;
+  } else if (route.kind === 'note') {
+    content = note ? (
+      <NotePage value={note} onSave={async (input) => {
+        setNote(await api.updateNote(note.id, input));
+      }} />
+    ) : <div className="loading-screen"><b>正在读取 Note</b></div>;
+  } else if (route.kind === 'problem-card') {
+    content = problem ? (
+      <ProblemCardPage
+        value={problem}
+        onAttempt={async (response: ProblemAttemptResponse) => {
+          await api.attemptProblem(problem.id, response);
+          setProblem(await api.problemCard(problem.id));
+        }}
+        onReveal={async () => {
+          await api.revealProblem(problem.id);
+          setProblem(await api.problemCard(problem.id));
+        }}
+        onSaveNote={async (input) => {
+          await api.updateProblemNote(problem.id, input);
+          setProblem(await api.problemCard(problem.id));
+        }}
+        onAskTeacher={async () => {
+          const created = await api.askProblemTeacher(problem.id);
+          const next = parseBrowserRoute(new URL(created.route, window.location.origin).pathname);
+          if (next) navigate(next);
+        }}
+      />
+    ) : <div className="loading-screen"><b>正在读取题卡</b></div>;
+  } else if (route.kind === 'free-learning' && selectedKey) {
+    content = (
+      <FreeLearningPage
+        sessionKey={selectedKey}
+        status={freeStatus}
+        items={conversation}
+        running={running}
+        error={sessionError}
+        onSend={(text) => api.send(selectedKey, text).then(() => undefined)}
+        onEnd={async () => {
+          await api.endFreeLearning(route.sessionId);
+          navigate({ kind: 'home' });
+        }}
+      />
     );
-  }, [client.selected, client.workspace?.plan.id]);
-
-  const workflowSessionOpen = Boolean(
-    client.selected?.startsWith('coach:')
-    || selectedLesson?.status === 'active'
-    || selectedLesson?.status === 'paused',
-  );
-
-  useEffect(() => {
-    let current = true;
-    const selected = client.selected;
-    if (!selected || !workflowSessionOpen) return () => { current = false; };
-    void api.deep(selected)
-      .then((value) => {
-        if (!current) return;
-        setClient((state) => ({
-          ...state,
-          deepMode: { ...state.deepMode, [selected]: value.enabled },
-          workflows: { ...state.workflows, [selected]: value.workflows },
-        }));
-      })
-      .catch(() => {
-        if (current) setPageError('无法读取当前 Session 的深度模式。');
-      });
-    return () => { current = false; };
-  }, [client.selected, workflowSessionOpen]);
-
-  useEffect(() => {
-    let current = true;
-    setNotebook(null);
-    setReplay(null);
-    if (selectedLesson) {
-      void api.notebook(selectedLesson.id)
-        .then((value) => { if (current) setNotebook(value); })
-        .catch(() => { if (current) setPageError('无法读取学生课堂本。'); });
-      if (selectedLesson.status === 'closed' || selectedLesson.status === 'abandoned') {
-        void api.replay(selectedLesson.id)
-          .then((value) => { if (current) setReplay(value); })
-          .catch(() => { if (current) setPageError('无法读取 Lesson 回放。'); });
-      }
-    }
-    return () => { current = false; };
-  }, [selectedLesson]);
-
-  useEffect(() => {
-    if (!client.workspace) {
-      setAbilities(null);
-      return;
-    }
-    void api.abilities()
-      .then(setAbilities)
-      .catch(() => setPageError('无法读取方法证据投影。'));
-  }, [client.workspace?.plan.id]);
-
-  useEffect(() => {
-    let current = true;
-    setPersona(null);
-    if (client.selected) {
-      void api.persona(client.selected)
-        .then((value) => { if (current) setPersona(value); })
-        .catch(() => { if (current) setPageError('无法读取当前 Session 人设。'); });
-    }
-    return () => { current = false; };
-  }, [client.selected]);
-
-  const openEvidence = async (source: string) => {
-    setPageError(null);
-    try {
-      setEvidence(await api.evidence(source));
-    } catch {
-      setPageError('这条证据的原始 Trace 已不可用。');
-    }
-  };
-
-  const selectSession = async (nextKey: SessionKey) => {
-    if (!client.workspace || nextKey === client.selected) return;
-    try {
-      let workspace = client.workspace;
-      const currentLesson = workspace.lessons.find(
-        (lesson) => lesson.sessionKey === client.selected,
-      );
-      if (currentLesson?.status === 'active') {
-        workspace = await api.lessonAction(currentLesson.id, 'pause');
-      }
-      const nextLesson = workspace.lessons.find((lesson) => lesson.sessionKey === nextKey);
-      const route: BrowserRoute | null = nextKey.startsWith('coach:')
-        ? { kind: 'coach', planId: workspace.plan.id }
-        : nextLesson
-          ? { kind: 'lesson', planId: workspace.plan.id, lessonId: nextLesson.id }
-          : null;
-      if (!route) throw new Error('SESSION_NOT_FOUND');
-      await openRoute(route, 'push');
-    } catch {
-      setPageError('切换 Session 失败，请稍后再试。');
-    }
-  };
-
-  const startLesson = async (lesson: LessonNode) => {
-    setPageError(null);
-    try {
-      const workspace = await api.lessonAction(lesson.id, 'start');
-      const history = await api.history(lesson.sessionKey);
-      setClient((current) => ({
-        ...current,
-        workspace,
-        selected: lesson.sessionKey,
-        messages: {
-          ...current.messages,
-          [lesson.sessionKey]: preferLiveMessages(
-            current.messages[lesson.sessionKey],
-            history,
-          ),
-        },
-      }));
-    } catch {
-      setPageError('无法启动 Tutor Session，请检查 Pi 配置。');
-    }
-  };
-
-  const send = async (text: string, imagePaths: string[]) => {
-    if (!client.selected) return;
-    setClient((current) => ({
-      ...current,
-      errors: { ...current.errors, [client.selected!]: '' },
-    }));
-    await api.message(client.selected, text, imagePaths);
-  };
-
-  const changePersona = async (id: string) => {
-    if (!client.selected) return;
-    setPageError(null);
-    try {
-      setPersona(await api.setPersona(client.selected, id));
-    } catch {
-      setPageError('切换课堂人设失败。');
-    }
-  };
-
-  const changeDeepMode = async (enabled: boolean) => {
-    if (!client.selected) return;
-    const selected = client.selected;
-    setPageError(null);
-    try {
-      const value = await api.setDeep(selected, enabled);
-      setClient((current) => ({
-        ...current,
-        deepMode: { ...current.deepMode, [selected]: value.enabled },
-        workflows: { ...current.workflows, [selected]: value.workflows },
-      }));
-    } catch {
-      setPageError('切换深度模式失败。');
-    }
-  };
-
-  const actOnWorkflow = async (id: string, action: 'confirm' | 'cancel') => {
-    if (!client.selected) return;
-    const selected = client.selected;
-    setPageError(null);
-    try {
-      const workflow = await api.workflowAction(selected, id, action);
-      setClient((current) => reduceClientState(current, {
-        type: 'workflow',
-        sessionKey: selected,
-        workflow,
-      }));
-    } catch {
-      setPageError(action === 'confirm' ? '无法启动这个工作流。' : '无法取消这个工作流。');
-    }
-  };
-
-  const goHome = () => {
-    void openRoute({ kind: 'home' }, 'push');
-  };
-
-  if (loading && !learningSet) {
-    return <main className="loading-screen"><span>SF</span><p>正在展开学习集…</p></main>;
+  } else if (route.kind === 'meta' && selectedKey?.startsWith('meta:')) {
+    const metaKey = `meta:${route.sessionId}` as const;
+    content = (
+      <MetaPage
+        sessionKey={metaKey}
+        items={conversation}
+        running={running}
+        error={sessionError}
+        hasCourse={home?.hasCourse ?? false}
+        onSend={(text) => api.send(metaKey, text).then(() => undefined)}
+        onEnterCourse={() => navigate({ kind: 'course' })}
+      />
+    );
+  } else if (route.kind === 'knowledge') {
+    content = knowledge
+      ? <KnowledgePage value={knowledge} />
+      : <div className="loading-screen"><b>正在读取旧知识视图</b></div>;
+  } else if (!course || !selectedKey) {
+    content = <div className="loading-screen"><b>正在读取课程节点</b></div>;
+  } else if (route.kind === 'course') {
+    content = <CourseOverviewPage value={course} onNavigate={navigate} />;
+  } else {
+    content = (
+      <CoursePage
+        value={course}
+        items={conversation}
+        running={running}
+        error={sessionError}
+        leftOpen={leftOpen}
+        rightOpen={rightOpen}
+        onNodeSelect={(node) => navigate(nodeRoute(node))}
+        onSend={(text) => api.send(selectedKey, text).then(() => undefined)}
+        onLifecycle={lifecycle}
+        onToggleLeft={() => setLeftOpen((value) => !value)}
+        onToggleRight={() => setRightOpen((value) => !value)}
+      />
+    );
   }
-  if (!learningSet) {
-    return <main className="fatal-screen"><b>StudyForge</b><p>{pageError}</p></main>;
-  }
-  if (!client.workspace || !client.selected) {
+
+  if (route.kind === 'lesson-handout') {
     return (
-      <>
-        {pageError && <div className="page-alert" role="alert">{pageError}</div>}
-        <LearningSetHome
-          value={learningSet}
-          onOpen={(id) => void openRoute({ kind: 'coach', planId: id }, 'push')}
-        />
-      </>
+      <LessonHandoutPage
+        value={handout}
+        error={handoutError}
+        loading={handoutLoading}
+        backHref={formatBrowserRoute({
+          kind: 'course-lesson',
+          planId: route.planId,
+          lessonId: route.lessonId,
+        })}
+        onPrint={() => window.print()}
+      />
     );
   }
 
-  const selected = client.selected;
-  const isCoach = selected.startsWith('coach:');
-  const isReplay = selectedLesson?.status === 'closed'
-    || selectedLesson?.status === 'abandoned';
-  const view = isCoach ? 'coach' : isReplay ? 'replay' : 'tutor';
-  const composerEnabled = isCoach || selectedLesson?.status === 'active';
-  let gate: ReactNode = null;
-
-  if (selectedLesson?.status === 'prepared') {
-    gate = (
-      <div className="lesson-gate prepared-gate">
-        <span>Lesson 已备好</span>
-        <h2>{selectedLesson.title}</h2>
-        <p>先查看课堂积木。开始后 Tutor 才会创建独立 Session，并且只展开当前节点。</p>
-        <button type="button" onClick={() => void startLesson(selectedLesson)}>开始上课 <i>↗</i></button>
-      </div>
-    );
-  } else if (selectedLesson?.status === 'paused') {
-    gate = (
-      <div className="lesson-gate paused-gate">
-        <span>Lesson 已暂停</span>
-        <h2>上下文仍保留在这个 Tutor Session</h2>
-        <p>继续后再恢复输入，Coach 的对话不会被复制进来。</p>
-        <button type="button" onClick={() => void startLesson(selectedLesson)}>继续上课 <i>↗</i></button>
-      </div>
-    );
-  } else if (selectedLesson?.status === 'closed' || selectedLesson?.status === 'abandoned') {
-    gate = (
-      <div className="lesson-gate archive-gate">
-        <span>{selectedLesson.status === 'closed' ? 'Lesson 已完成' : 'Lesson 已归档'}</span>
-        <h2>{selectedLesson.title}</h2>
-        <p>这份课堂记录保持只读。返回 Coach 可以复盘，并决定下一节课或重新备课。</p>
-        <button type="button" onClick={() => void selectSession(client.workspace!.coach.sessionKey)}>
-          返回 Coach <i>↗</i>
-        </button>
-      </div>
-    );
-  }
-
+  const activeView: PrimaryView = routeIsCourse(route)
+    ? 'course'
+    : route.kind === 'assets' || route.kind === 'note' || route.kind === 'problem-card'
+      || route.kind === 'material'
+      || route.kind === 'knowledge'
+      ? 'assets'
+      : 'home';
   return (
-    <div
-      className="app-root"
-      data-theme="liubai-xinzhongshi"
-      data-view={view}
-      data-persona={persona?.id ?? 'neutral-tutor'}
-    >
-      {connection !== 'open' && (
-        <div className="connection-banner" role="status">
-          <span />{connection === 'connecting' ? '正在连接课堂事件流…' : '事件流已断开，正在重连…'}
-        </div>
+    <AppShell
+      title={home?.guide.title ?? course?.guide.title ?? '本地学习工作台'}
+      activeView={activeView}
+      hasCourse={home?.hasCourse ?? course !== null}
+      connection={connection}
+      notice={notice}
+      onNavigate={(view) => navigate(
+        view === 'home' ? { kind: 'home' } : view === 'assets' ? { kind: 'assets' } : { kind: 'course' },
       )}
-      {pageError && <div className="page-alert" role="alert">{pageError}</div>}
-      <div className="workspace-shell">
-        <SessionTree
-          workspace={client.workspace}
-          selected={selected}
-          onSelect={(key) => void selectSession(key)}
-          onHome={goHome}
-        />
-        <ChatPanel
-          sessionKey={selected}
-          messages={client.messages[selected] ?? []}
-          work={client.work[selected] ?? ''}
-          error={client.errors[selected]}
-          composerEnabled={composerEnabled}
-          {...(selectedLesson ? { lessonId: selectedLesson.id } : {})}
-          persona={persona}
-          deepMode={client.deepMode[selected] ?? false}
-          workflows={client.workflows[selected] ?? []}
-          workflowControlsEnabled={workflowSessionOpen}
-          gate={gate}
-          onSend={send}
-          onPersona={changePersona}
-          onDeepMode={changeDeepMode}
-          onWorkflowAction={actOnWorkflow}
-        />
-        {isCoach
-          ? <AbilityMap value={abilities} onOpen={(source) => void openEvidence(source)} />
-          : <LessonNotebook lesson={selectedLesson} notebook={notebook} replay={replay} />}
-      </div>
-      {evidence && <EvidenceLens value={evidence} onClose={() => setEvidence(null)} />}
-    </div>
+    >
+      {content}
+    </AppShell>
   );
 }
+
+export default App;

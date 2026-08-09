@@ -1,111 +1,111 @@
 import type {
-  ChatMessage,
-  PlanWorkspaceSnapshot,
+  ConversationItem,
+  LessonReviewConversationItem,
+  MaterialSearchConversationItem,
   SessionKey,
-  StudyViewEvent,
-  WorkflowView,
+  StudyEvent,
 } from '../shared/contracts';
+import { mergeMaterialSearchItem } from '../projection/material-search';
+import { mergeLessonReviewItem } from '../projection/lesson-review';
 
 export type ClientState = {
-  workspace: PlanWorkspaceSnapshot | null;
-  selected: SessionKey | null;
-  messages: Partial<Record<SessionKey, ChatMessage[]>>;
-  work: Partial<Record<SessionKey, string>>;
+  conversations: Partial<Record<SessionKey, ConversationItem[]>>;
+  running: Partial<Record<SessionKey, boolean>>;
   errors: Partial<Record<SessionKey, string>>;
-  deepMode: Partial<Record<SessionKey, boolean>>;
-  workflows: Partial<Record<SessionKey, WorkflowView[]>>;
 };
 
 export const initialClientState: ClientState = {
-  workspace: null,
-  selected: null,
-  messages: {},
-  work: {},
+  conversations: {},
+  running: {},
   errors: {},
-  deepMode: {},
-  workflows: {},
 };
 
-export function preferLiveMessages(
-  live: ChatMessage[] | undefined,
-  fetched: ChatMessage[],
-): ChatMessage[] {
-  return live?.length ? live : fetched;
+function upsert(items: ConversationItem[], incoming: ConversationItem): ConversationItem[] {
+  const index = items.findIndex((item) => item.id === incoming.id);
+  if (index < 0) return [...items, incoming];
+  const next = [...items];
+  const existing = items[index]!;
+  if (existing.kind === 'material-search' && incoming.kind === 'material-search') {
+    next[index] = mergeMaterialSearchItem(existing, incoming);
+  } else if (existing.kind === 'lesson-review' && incoming.kind === 'lesson-review') {
+    next[index] = mergeLessonReviewItem(existing, incoming);
+  } else if (
+    existing.kind === 'material-search'
+    && incoming.kind === 'tool'
+    && incoming.name === 'subagent'
+    && incoming.status !== 'running'
+  ) {
+    const terminal: MaterialSearchConversationItem = {
+      ...existing,
+      status: incoming.status,
+      phase: incoming.status === 'error' ? 'adjusting' : 'done',
+      completed: incoming.status === 'done' ? existing.total : existing.completed,
+      at: incoming.at,
+      updatedAt: incoming.at,
+    };
+    next[index] = mergeMaterialSearchItem(existing, terminal);
+  } else if (
+    existing.kind === 'lesson-review'
+    && incoming.kind === 'tool'
+    && incoming.name === 'subagent'
+    && incoming.status !== 'running'
+  ) {
+    const terminal: LessonReviewConversationItem = {
+      ...existing,
+      status: incoming.status,
+      at: incoming.at,
+      updatedAt: incoming.at,
+    };
+    next[index] = mergeLessonReviewItem(existing, terminal);
+  } else {
+    next[index] = incoming;
+  }
+  return next;
 }
 
-export function reduceClientState(state: ClientState, event: StudyViewEvent): ClientState {
-  if (event.type === 'snapshot') {
-    const previousLesson = state.selected?.startsWith('tutor:')
-      ? state.workspace?.lessons.find((lesson) => lesson.sessionKey === state.selected)
-      : null;
-    const selectedLesson = state.selected?.startsWith('tutor:')
-      ? event.workspace.lessons.find((lesson) => lesson.sessionKey === state.selected)
-      : null;
-    const selectedJustClosed = (
-      previousLesson?.status === 'active'
-      || previousLesson?.status === 'paused'
-    ) && selectedLesson?.status === 'closed';
-    return {
-      ...state,
-      workspace: event.workspace,
-      selected: selectedJustClosed ? event.workspace.coach.sessionKey : state.selected,
+export function reduceClientState(state: ClientState, event: StudyEvent): ClientState {
+  if (event.type === 'assistant-delta') {
+    const current = state.conversations[event.sessionKey] ?? [];
+    const existing = current.find((item) => item.id === event.messageId);
+    const item: ConversationItem = {
+      id: event.messageId,
+      kind: 'assistant',
+      text: existing?.kind === 'assistant' ? existing.text + event.delta : event.delta,
+      at: existing?.at ?? '',
     };
-  }
-  if (event.type === 'message-delta') {
-    const messages = [...(state.messages[event.sessionKey] ?? [])];
-    const index = messages.findIndex((message) => message.id === event.messageId);
-    if (index < 0) {
-      messages.push({
-        id: event.messageId,
-        role: event.sessionKey.startsWith('coach:') ? 'coach' : 'tutor',
-        text: event.delta,
-        complete: false,
-      });
-    } else {
-      messages[index] = {
-        ...messages[index]!,
-        text: messages[index]!.text + event.delta,
-      };
-    }
     return {
       ...state,
-      messages: { ...state.messages, [event.sessionKey]: messages },
-    };
-  }
-  if (event.type === 'message') {
-    const current = state.messages[event.sessionKey] ?? [];
-    return {
-      ...state,
-      messages: {
-        ...state.messages,
-        [event.sessionKey]: current.some((message) => message.id === event.message.id)
-          ? current.map((message) => (
-            message.id === event.message.id ? event.message : message
-          ))
-          : [...current, event.message],
+      conversations: {
+        ...state.conversations,
+        [event.sessionKey]: upsert(current, item),
       },
     };
   }
-  if (event.type === 'work-status') {
+  if (event.type === 'conversation-item') {
+    const current = state.conversations[event.sessionKey] ?? [];
     return {
       ...state,
-      work: {
-        ...state.work,
-        [event.sessionKey]: event.status === 'running' ? event.label : '',
+      conversations: {
+        ...state.conversations,
+        [event.sessionKey]: upsert(current, event.item),
       },
     };
   }
-  if (event.type === 'workflow') {
-    const current = state.workflows[event.sessionKey] ?? [];
+  if (event.type === 'conversation-snapshot') {
     return {
       ...state,
-      workflows: {
-        ...state.workflows,
-        [event.sessionKey]: current.some((workflow) => workflow.id === event.workflow.id)
-          ? current.map((workflow) => (
-            workflow.id === event.workflow.id ? event.workflow : workflow
-          ))
-          : [...current, event.workflow],
+      conversations: {
+        ...state.conversations,
+        [event.sessionKey]: event.items,
+      },
+    };
+  }
+  if (event.type === 'session-run') {
+    return {
+      ...state,
+      running: {
+        ...state.running,
+        [event.sessionKey]: event.status === 'running',
       },
     };
   }
