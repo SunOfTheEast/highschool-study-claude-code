@@ -24,6 +24,7 @@ import type {
   SessionKey,
 } from '../shared/contracts';
 import { formatLessonHandoutApiPath } from '../shared/handout-route';
+import { transportFetch } from './transport';
 
 export class ApiError extends Error {
   constructor(readonly status: number, readonly body: unknown) {
@@ -33,7 +34,7 @@ export class ApiError extends Error {
 }
 
 async function json<T>(input: RequestInfo | URL, init?: RequestInit): Promise<T> {
-  const response = await fetch(input, init);
+  const response = await transportFetch(input, init);
   if (!response.ok) {
     const text = await response.text();
     let body: unknown = text;

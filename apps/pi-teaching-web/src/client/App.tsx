@@ -35,6 +35,7 @@ import { MetaPage } from './pages/MetaPage';
 import type { PrimaryView } from './view-state';
 import { deriveFreeLearningTitle } from '../study/display-projections';
 import { formatMaterialLocator } from './material-locator';
+import { eventTransport } from './transport';
 
 type ConnectionState = 'open' | 'connecting' | 'closed';
 
@@ -331,8 +332,10 @@ export function App() {
     const connect = () => {
       if (disposed) return;
       setConnection('connecting');
-      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      socket = new WebSocket(`${protocol}//${window.location.host}/events`);
+      const connection = eventTransport(window.location);
+      socket = connection.protocols.length > 0
+        ? new WebSocket(connection.url, connection.protocols)
+        : new WebSocket(connection.url);
       socket.onopen = () => {
         setConnection('open');
         if (!reconnect.opened()) return;
