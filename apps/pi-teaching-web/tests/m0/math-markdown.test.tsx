@@ -93,11 +93,12 @@ test('renders a GFM table with math inside its cells', () => {
   expect(markup).toContain('class="katex"');
 });
 
-test('gives horizontally scrollable display math vertical breathing room', () => {
+test('gives display math a readable textbook scale and vertical breathing room', () => {
   const styles = readFileSync(join(import.meta.dir, '../../src/client/styles.css'), 'utf8');
   const rule = /\.katex-display\s*\{([^}]*)\}/.exec(styles)?.[1] ?? '';
-  const paddingBlock = /padding-block\s*:\s*([^;]+)/.exec(rule)?.[1] ?? '0';
 
   expect(rule).toContain('overflow-x: auto');
-  expect(Number.parseFloat(paddingBlock)).toBeGreaterThan(0);
+  expect(rule).toContain('font-size: 1.08em');
+  expect(rule).toContain('margin: var(--space-4, 1rem) 0');
+  expect(rule).toContain('padding-block: .5em');
 });

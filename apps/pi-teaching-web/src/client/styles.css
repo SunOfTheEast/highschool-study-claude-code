@@ -74,11 +74,12 @@ button { color: inherit; }
 
 .katex-display {
   max-width: 100%;
-  margin: var(--space-3, .75rem) 0;
-  padding-block: .25em;
+  margin: var(--space-4, 1rem) 0;
+  padding-block: .5em;
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior-inline: contain;
+  font-size: 1.08em;
 }
 
 button:focus-visible,
