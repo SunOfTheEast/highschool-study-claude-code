@@ -31,6 +31,10 @@ import {
   type StudySessionFactory,
 } from '../../src/runtime/session-factory';
 import { commitDocumentCandidates } from '../../src/runtime/multi-document-transaction';
+import {
+  appendSessionOwner,
+  findFreeLearningPiSession,
+} from '../../src/runtime/session-owner';
 import { WorkspaceRegistry } from '../../src/runtime/workspace-registry';
 
 const fixture = join(import.meta.dir, '../fixtures/m0-learning-set');
@@ -126,6 +130,51 @@ test('persists desktop sessions only in the explicit StudyForge session director
 
   expect(manager.getSessionDir()).toBe(sessionsDir);
   expect(manager.getSessionFile()?.startsWith(sessionsDir)).toBe(true);
+});
+
+test('restores a desktop session from the configured StudyForge session directory', async () => {
+  const root = copyFixture();
+  const sessionsDir = join(root, 'private-agent', 'sessions');
+  const previousSessionsDir = process.env.PI_CODING_AGENT_SESSION_DIR;
+  process.env.PI_CODING_AGENT_SESSION_DIR = sessionsDir;
+
+  try {
+    const manager = createStudySessionManager(root, null, sessionsDir);
+    manager.appendSessionInfo('自由学习');
+    appendSessionOwner(manager, {
+      sessionKind: 'free-learning',
+      title: '自由学习',
+      createdAt: '2026-08-10T00:00:00.000Z',
+      selectedAssets: [],
+    });
+    manager.appendMessage({
+      role: 'assistant',
+      content: [{ type: 'text', text: '已建立会话。' }],
+      api: 'openai-responses',
+      provider: 'openai',
+      model: 'test-model',
+      usage: {
+        input: 0,
+        output: 0,
+        cacheRead: 0,
+        cacheWrite: 0,
+        totalTokens: 0,
+        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, total: 0 },
+      },
+      stopReason: 'stop',
+      timestamp: Date.now(),
+    });
+
+    const restored = await findFreeLearningPiSession(root, manager.getSessionId());
+
+    expect(restored?.sessionFile).toBe(manager.getSessionFile());
+  } finally {
+    if (previousSessionsDir === undefined) {
+      delete process.env.PI_CODING_AGENT_SESSION_DIR;
+    } else {
+      process.env.PI_CODING_AGENT_SESSION_DIR = previousSessionsDir;
+    }
+  }
 });
 
 test('assembles the node-specific teaching Skill tree', () => {

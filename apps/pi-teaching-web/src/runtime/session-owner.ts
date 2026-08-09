@@ -141,13 +141,18 @@ export function isFreeLearningEnded(entries: readonly unknown[]): boolean {
   return readFreeLearningEndedAt(entries) !== null;
 }
 
+async function listPiSessions(root: string) {
+  const { SessionManager } = await import('@earendil-works/pi-coding-agent');
+  return SessionManager.list(root, process.env.PI_CODING_AGENT_SESSION_DIR);
+}
+
 export async function findOwnedPiSessionFile(
   root: string,
   sessionId: string,
   expected: NodeSessionScope,
 ): Promise<string | null> {
   const { SessionManager } = await import('@earendil-works/pi-coding-agent');
-  const path = (await SessionManager.list(root)).find((item) => item.id === sessionId)?.path;
+  const path = (await listPiSessions(root)).find((item) => item.id === sessionId)?.path;
   if (!path) return null;
   const manager = SessionManager.open(path, undefined, root);
   return sessionOwnerMatches(readSessionOwner(manager), expected) ? path : null;
@@ -192,7 +197,7 @@ export async function findFreeLearningPiSession(
   sessionId: string,
 ): Promise<FreeLearningSessionRecord | null> {
   const { SessionManager } = await import('@earendil-works/pi-coding-agent');
-  const info = (await SessionManager.list(root)).find((item) => item.id === sessionId);
+  const info = (await listPiSessions(root)).find((item) => item.id === sessionId);
   if (!info) return null;
   const manager = SessionManager.open(info.path, undefined, root);
   return freeRecord(info, manager);
@@ -203,7 +208,7 @@ export async function listFreeLearningPiSessions(
 ): Promise<FreeLearningSessionRecord[]> {
   const { SessionManager } = await import('@earendil-works/pi-coding-agent');
   const records: FreeLearningSessionRecord[] = [];
-  for (const info of await SessionManager.list(root)) {
+  for (const info of await listPiSessions(root)) {
     const manager = SessionManager.open(info.path, undefined, root);
     const record = freeRecord(info, manager);
     if (record) records.push(record);
@@ -239,7 +244,7 @@ export async function findMetaPiSession(
   sessionId: string,
 ): Promise<MetaSessionRecord | null> {
   const { SessionManager } = await import('@earendil-works/pi-coding-agent');
-  const info = (await SessionManager.list(root)).find((item) => item.id === sessionId);
+  const info = (await listPiSessions(root)).find((item) => item.id === sessionId);
   if (!info) return null;
   const manager = SessionManager.open(info.path, undefined, root);
   return metaRecord(info, manager);
@@ -248,7 +253,7 @@ export async function findMetaPiSession(
 export async function listMetaPiSessions(root: string): Promise<MetaSessionRecord[]> {
   const { SessionManager } = await import('@earendil-works/pi-coding-agent');
   const records: MetaSessionRecord[] = [];
-  for (const info of await SessionManager.list(root)) {
+  for (const info of await listPiSessions(root)) {
     const manager = SessionManager.open(info.path, undefined, root);
     const record = metaRecord(info, manager);
     if (record) records.push(record);
@@ -259,7 +264,7 @@ export async function listMetaPiSessions(root: string): Promise<MetaSessionRecor
 export async function listPiSessionFacts(root: string): Promise<PiSessionFact[]> {
   const { SessionManager } = await import('@earendil-works/pi-coding-agent');
   const facts: PiSessionFact[] = [];
-  for (const info of await SessionManager.list(root)) {
+  for (const info of await listPiSessions(root)) {
     const manager = SessionManager.open(info.path, undefined, root);
     const owner = readSessionOwner(manager);
     if (!owner) continue;
