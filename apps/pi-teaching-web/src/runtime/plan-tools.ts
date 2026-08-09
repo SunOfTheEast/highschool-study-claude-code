@@ -64,7 +64,7 @@ function appendPreparedUse(
   const next = /^##\s+/m.exec(source.slice(tailStart));
   const end = next ? tailStart + next.index : source.length;
   const blockSource = source.slice(heading.index, end);
-  const uses = /^- Uses:\s*(.*?)\s*$/m.exec(blockSource);
+  const uses = /^- Uses:[ \t]*(.*?)[ \t]*$/m.exec(blockSource);
   if (!uses || uses.index === undefined) throw new Error(`PREPARED_CARD_USES_INVALID: ${blockId}`);
   const values = block.uses.length === 0 ? cardPath : `${block.uses.join(', ')}, ${cardPath}`;
   const start = heading.index + uses.index;

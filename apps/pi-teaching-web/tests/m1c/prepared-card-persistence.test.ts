@@ -105,6 +105,28 @@ test('persists one approved custom card and attaches it atomically to the prepar
   ]);
 });
 
+test('attaches an approved card to an optional prepared Block with an empty Uses list', async () => {
+  const root = copyFixture();
+  const path = join(root, lessonPath);
+  writeFileSync(
+    path,
+    readFileSync(path, 'utf8').replace(
+      '- Required: true\n- Status: active\n- Depends on: block-001\n- Uses: cards/sample.card.yaml',
+      '- Required: false\n- Status: active\n- Depends on: block-001\n- Uses:',
+    ),
+  );
+
+  await execute(root, [
+    message('a1', 'assistant', '要把这道完全选做的自编题保存成题卡吗？'),
+    message('u1', 'user', '题卡可以保存。'),
+  ], 'save-empty-uses');
+
+  expect(readLesson(root, lessonPath).blocks[1]).toMatchObject({
+    required: false,
+    uses: ['cards/m1b/problem-001.card.yaml'],
+  });
+});
+
 test('keeps course approval separate and leaves no card when approval or Lesson status is invalid', async () => {
   const unapproved = copyFixture();
   await expect(execute(unapproved, [
