@@ -46,6 +46,8 @@ import {
   type NodeSessionScope,
 } from './session-scope';
 import type { OwnedLearningSessionFact } from '../study/learning-footprint';
+import { projectConversationEntries } from '../projection/conversation';
+import { deriveFreeLearningTitle } from '../study/display-projections';
 
 export type SessionFileLookup = (
   root: string,
@@ -133,7 +135,10 @@ function checkedSelectedAssets(
 
 function publicSummary(record: FreeLearningSessionRecord): FreeLearningSessionSummary {
   const { sessionFile: _sessionFile, scope: _scope, ...summary } = record;
-  return summary;
+  return {
+    ...summary,
+    selectedAssets: record.scope.selectedAssets.map((asset) => ({ ...asset })),
+  };
 }
 
 function publicMetaSummary(record: MetaSessionRecord): MetaSessionSummary {
@@ -159,6 +164,17 @@ export class WorkspaceRegistry {
     private readonly listMetaSessions: MetaSessionList = listMetaPiSessions,
     private readonly listSessionFacts: PiSessionFactList = listPiSessionFacts,
   ) {}
+
+  private async displayFreeSummary(
+    record: FreeLearningSessionRecord,
+  ): Promise<FreeLearningSessionSummary> {
+    const entries = this.sessions.get(record.sessionKey)?.entries
+      ?? await this.readBranch(this.root, record.sessionFile);
+    return {
+      ...publicSummary(record),
+      title: deriveFreeLearningTitle(projectConversationEntries(record.sessionKey, entries)),
+    };
+  }
 
   private nodeOwner(key: SessionKey): OwnedNode {
     const course = readCourseTree(this.root);
@@ -207,6 +223,7 @@ export class WorkspaceRegistry {
       createdAt,
       updatedAt: createdAt,
       status: 'active',
+      selectedAssets: scope.selectedAssets.map((asset) => ({ ...asset })),
       sessionFile: session.sessionFile,
       scope,
     };
@@ -219,9 +236,9 @@ export class WorkspaceRegistry {
     const records = new Map<string, FreeLearningSessionRecord>();
     for (const record of await this.listFree(this.root)) records.set(record.id, record);
     for (const record of this.freeRecords.values()) records.set(record.id, record);
-    return [...records.values()]
-      .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
-      .map(publicSummary);
+    const ordered = [...records.values()]
+      .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+    return Promise.all(ordered.map((record) => this.displayFreeSummary(record)));
   }
 
   async createMeta(
@@ -437,7 +454,7 @@ export class WorkspaceRegistry {
     if (id === null) throw new Error(`FREE_LEARNING_SESSION_KEY_INVALID: ${key}`);
     const session = await this.open(key);
     if (isFreeLearningEnded(session.entries)) {
-      return publicSummary({ ...await this.freeRecord(id), status: 'ended' });
+      return this.displayFreeSummary({ ...await this.freeRecord(id), status: 'ended' });
     }
     if (session.isStreaming || this.turnTails.has(key)) {
       throw new Error(`FREE_LEARNING_SESSION_RUNNING: ${key}`);
@@ -451,7 +468,7 @@ export class WorkspaceRegistry {
       updatedAt: endedAt,
     };
     this.freeRecords.set(id, next);
-    return publicSummary(next);
+    return this.displayFreeSummary(next);
   }
 
   async subscribe(

@@ -123,6 +123,7 @@ test('restores one owned Pi session and makes explicit end idempotent', async ()
     createdAt: scope.createdAt,
     updatedAt: '2026-08-08T09:10:00.000Z',
     status: 'active',
+    selectedAssets: [],
     sessionFile: '/sessions/persisted-1.jsonl',
     scope,
   };

@@ -53,6 +53,29 @@ export type LearningAssetSemanticTags = SemanticTagDraft & {
   updatedAt: string;
 };
 
+export type SemanticRelation =
+  | {
+    kind: 'asset-tag';
+    asset: LearningAssetHandle;
+    tag: string;
+    role: 'core' | 'related';
+  }
+  | {
+    kind: 'asset-source';
+    asset: LearningAssetHandle;
+    source: ReadableLearningSourceReference;
+  }
+  | { kind: 'tag-neighbor'; left: string; right: string; weight: number }
+  | { kind: 'object-anchor'; objectId: string; title: string; tag: string }
+  | { kind: 'object-bucket'; objectId: string; bucketId: string; title: string };
+
+export type AssetFormation = {
+  sessionId: string;
+  kind: 'free-learning' | 'meta' | NodeKind;
+  title: string;
+  route: string;
+};
+
 export type ProblemAttemptResponse =
   | { kind: 'answer'; text: string }
   | { kind: 'cannot' };
@@ -192,6 +215,7 @@ export type FreeLearningSessionSummary = {
   createdAt: string;
   updatedAt: string;
   status: 'active' | 'ended';
+  selectedAssets: LearningContextReference[];
 };
 
 export type MetaSessionSummary = {
@@ -258,6 +282,7 @@ export type LearningSetHomeSnapshot = {
     title: string;
     currentPosition: string;
     route: '/course';
+    activeLesson: ActiveLessonSummary | null;
   };
   assets: {
     notes: number;
@@ -266,6 +291,14 @@ export type LearningSetHomeSnapshot = {
   };
   recentFreeLearning: FreeLearningSessionSummary[];
   recentMeta: MetaSessionSummary[];
+};
+
+export type ActiveLessonSummary = {
+  id: string;
+  title: string;
+  planId: string;
+  planTitle: string;
+  route: string;
 };
 
 export type NodeReference = {

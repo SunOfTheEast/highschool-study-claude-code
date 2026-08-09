@@ -181,6 +181,7 @@ function freeRecord(
     createdAt: scope.createdAt || info.created.toISOString(),
     updatedAt: endedAt ?? info.modified.toISOString(),
     status: endedAt === null ? 'active' : 'ended',
+    selectedAssets: scope.selectedAssets.map((asset) => ({ ...asset })),
     sessionFile: info.path,
     scope,
   };

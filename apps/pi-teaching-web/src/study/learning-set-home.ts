@@ -8,6 +8,7 @@ import type {
 import { readKnowledge } from './knowledge';
 import { listLearningNotes } from './learning-assets';
 import { readCourseTree, readLearningSetGuide } from './markdown';
+import { projectActiveLesson } from './display-projections';
 
 export function readLearningSetHome(
   root: string,
@@ -26,6 +27,7 @@ export function readLearningSetHome(
       title: course.roadmap.title,
       currentPosition: course.roadmap.currentPosition,
       route: '/course',
+      activeLesson: projectActiveLesson(course.tree),
     },
     assets: {
       notes: listLearningNotes(root).length,

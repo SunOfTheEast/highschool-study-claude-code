@@ -59,6 +59,7 @@ test('adds a course destination only when a Roadmap really exists', () => {
           title: '导数结构学习路线',
           currentPosition: '第一阶段进行中。',
           route: '/course',
+          activeLesson: null,
         },
       }}
       onNavigate={() => {}}

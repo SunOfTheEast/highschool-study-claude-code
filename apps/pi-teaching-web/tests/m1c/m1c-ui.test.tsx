@@ -69,7 +69,12 @@ test('offers Meta before a Roadmap and replaces it with the real course entrance
       value={{
         ...home,
         hasCourse: true,
-        course: { title: '化学反应原理路线', currentPosition: '准备第一个 Plan。', route: '/course' },
+        course: {
+          title: '化学反应原理路线',
+          currentPosition: '准备第一个 Plan。',
+          route: '/course',
+          activeLesson: null,
+        },
       }}
       onNavigate={() => {}}
       onStartFree={() => {}}

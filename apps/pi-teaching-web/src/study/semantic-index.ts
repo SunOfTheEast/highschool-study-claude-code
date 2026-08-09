@@ -13,6 +13,7 @@ import {
 import type {
   LearningAssetHandle,
   ReadableLearningSourceReference,
+  SemanticRelation,
 } from '../shared/contracts';
 import {
   listLearningNotes,
@@ -31,22 +32,6 @@ export type SemanticRecallRow = {
   related: string[];
   titleOrStem: string;
 };
-
-export type SemanticRelation =
-  | {
-    kind: 'asset-tag';
-    asset: LearningAssetHandle;
-    tag: string;
-    role: 'core' | 'related';
-  }
-  | {
-    kind: 'asset-source';
-    asset: LearningAssetHandle;
-    source: ReadableLearningSourceReference;
-  }
-  | { kind: 'tag-neighbor'; left: string; right: string; weight: number }
-  | { kind: 'object-anchor'; objectId: string; title: string; tag: string }
-  | { kind: 'object-bucket'; objectId: string; bucketId: string; title: string };
 
 export type SemanticRecallQuery = {
   terms: string[];

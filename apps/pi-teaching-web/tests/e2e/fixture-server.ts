@@ -347,6 +347,7 @@ class M1bFixtureRegistry {
       createdAt: record.createdAt,
       updatedAt: record.updatedAt,
       status: record.status,
+      selectedAssets: record.selectedAssets.map((asset) => ({ ...asset })),
     };
   }
 

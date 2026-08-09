@@ -43,6 +43,7 @@ import {
   querySemanticRecall,
   refreshSemanticRecallIndex,
 } from '../study/semantic-index';
+import { projectAssetFormation } from '../study/display-projections';
 import {
   planSemanticTagsSave,
   readSemanticTags,
@@ -535,10 +536,17 @@ export function createRequestHandler(deps?: AppDependencies) {
       if (noteAsset) {
         const id = nodeId(noteAsset[1]!);
         if (!id) return json({ error: 'NOTE_ID_INVALID' }, 400);
-        if (request.method === 'GET') return json({
-          ...readLearningNote(deps.root, id),
-          semanticTags: assetSemanticTags(deps.root, 'note', id),
-        });
+        if (request.method === 'GET') {
+          const note = readLearningNote(deps.root, id);
+          return json({
+            ...note,
+            semanticTags: assetSemanticTags(deps.root, 'note', id),
+            formation: projectAssetFormation(
+              await deps.registry.listOwnedSessionFacts(),
+              note.createdSessionId,
+            ),
+          });
+        }
         if (request.method === 'PUT') {
           const requestBody = objectBody(await request.json());
           const current = readLearningNote(deps.root, id);
@@ -555,6 +563,10 @@ export function createRequestHandler(deps?: AppDependencies) {
           return json({
             ...planned.note,
             semanticTags: assetSemanticTags(deps.root, 'note', id),
+            formation: projectAssetFormation(
+              await deps.registry.listOwnedSessionFacts(),
+              planned.note.createdSessionId,
+            ),
             ...(warning ? { warning } : {}),
           });
         }
@@ -572,6 +584,10 @@ export function createRequestHandler(deps?: AppDependencies) {
           ...readStudentProblemCard(deps.root, id, revealed),
           activity,
           semanticTags: assetSemanticTags(deps.root, 'problem-card', id),
+          formation: projectAssetFormation(
+            await deps.registry.listOwnedSessionFacts(),
+            card.createdSessionId,
+          ),
         });
       }
 

@@ -18,6 +18,8 @@ import type {
   MetaSessionSummary,
   ProblemActivitySnapshot,
   ProblemAttemptResponse,
+  AssetFormation,
+  SemanticRelation,
   StudentProblemCard,
   SessionKey,
 } from '../shared/contracts';
@@ -64,11 +66,13 @@ const put = <T>(path: string, body: unknown) => json<T>(path, {
 
 export type LearningNoteView = LearningNote & {
   semanticTags: LearningAssetSemanticTags | null;
+  formation: AssetFormation | null;
 };
 
 export type ProblemCardView = StudentProblemCard & {
   activity: ProblemActivitySnapshot;
   semanticTags: LearningAssetSemanticTags | null;
+  formation: AssetFormation | null;
 };
 
 export const api = {
@@ -143,7 +147,7 @@ export const api = {
     matched: number;
     relatedTerms: string[];
   }>('/api/semantics/query', input),
-  semanticRelations: () => json<unknown[]>('/api/semantics/relations'),
+  semanticRelations: () => json<SemanticRelation[]>('/api/semantics/relations'),
   createFreeLearning: (selectedAssets: LearningContextReference[]) => post<{
     session: FreeLearningSessionSummary;
     route: string;
