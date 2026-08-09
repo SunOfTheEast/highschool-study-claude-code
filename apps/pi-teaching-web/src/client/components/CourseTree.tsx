@@ -20,7 +20,11 @@ function Branch({
 }) {
   const progress = node.kind === 'plan' ? planProgress(node) : null;
   return (
-    <li data-kind={node.kind} data-status={node.status}>
+    <li
+      data-kind={node.kind}
+      data-status={node.status}
+      data-plan-id={node.kind === 'plan' ? node.id : undefined}
+    >
       <button
         type="button"
         aria-current={node.path === selectedPath ? 'page' : undefined}
@@ -66,6 +70,7 @@ export function CourseTree({
 }) {
   return (
     <nav className="course-tree" aria-label="课程组织">
+      <header><small>Course tree</small><h2>课程脉络</h2></header>
       <ol><Branch node={root} selectedPath={selectedPath} onSelect={onSelect} /></ol>
     </nav>
   );

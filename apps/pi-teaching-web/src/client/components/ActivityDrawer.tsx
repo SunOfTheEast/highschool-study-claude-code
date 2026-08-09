@@ -15,11 +15,11 @@ export function ActivityDrawer({ lesson }: { lesson: LessonDocument }) {
   )).length;
 
   return (
-    <aside className="activities" aria-label="课堂节点">
+    <aside className="activities" aria-label="本课提纲">
       <header>
         <div>
-          <span>Lesson blocks</span>
-          <h2>课堂节点</h2>
+          <span>Lesson outline</span>
+          <h2>本课提纲</h2>
         </div>
         <ProgressLine value={settled} max={required.length} label="必做进度" />
       </header>

@@ -39,6 +39,8 @@ function DocumentContext({
   document: RoadmapDocument | PlanDocument | LessonDocument;
 }) {
   if (document.kind === 'lesson') return <ActivityDrawer lesson={document} />;
+  const title = document.kind === 'roadmap' ? '长期路线' : '阶段安排';
+  const eyebrow = document.kind === 'roadmap' ? 'Roadmap' : 'Plan';
   const rows: Array<[string, string]> = document.kind === 'roadmap'
     ? [
       ['长期目标', document.longTermGoal],
@@ -54,8 +56,8 @@ function DocumentContext({
       ['下一课安排', document.nextLessonArrangement],
     ];
   return (
-    <aside className="document-context" aria-label="节点原文摘要">
-      <header><span>Node document</span><h2>节点原文</h2></header>
+    <aside className="document-context" aria-label={title}>
+      <header><span>{eyebrow}</span><h2>{title}</h2></header>
       <dl>
         {rows.map(([label, value]) => (
           <div key={label}>
@@ -117,6 +119,12 @@ export function CoursePage({
   const activeBlock = document.kind === 'lesson'
     ? document.blocks.find((block) => block.status === 'active') ?? null
     : null;
+  const contextTitle = document.kind === 'roadmap'
+    ? '长期路线'
+    : document.kind === 'plan' ? '阶段安排' : '本课提纲';
+  const kindLabel = document.kind === 'roadmap'
+    ? '学习路线'
+    : document.kind === 'plan' ? '学习阶段' : '一对一课堂';
 
   return (
     <main
@@ -143,13 +151,13 @@ export function CoursePage({
       <section className="dialogue-workspace">
         <header className="node-heading">
           <div>
-            <small>{document.kind}</small>
+            <small>{kindLabel}</small>
             <h1>{document.title}</h1>
           </div>
           {action && (
             <button
               type="button"
-              className="node-primary-action"
+              className="node-primary-action action-wash"
               onClick={() => void onLifecycle(action.action, selectedNode)}
             >
               {action.label}
@@ -159,7 +167,7 @@ export function CoursePage({
         </header>
 
         {activeBlock && (
-          <section className="classroom-focus" aria-label="当前课堂节点">
+          <section className="classroom-focus" aria-label="当前课堂重点">
             <span>当前 · {activeBlock.title}</span>
             <MarkdownView>{activeBlock.studentView}</MarkdownView>
           </section>
@@ -179,7 +187,7 @@ export function CoursePage({
       <aside className="context-rail" data-open={rightOpen}>
         <button type="button" className="rail-toggle" onClick={onToggleRight}>
           <span aria-hidden="true">{rightOpen ? '›' : '‹'}</span>
-          <span className="sr-only">{rightOpen ? '收起节点原文' : '展开节点原文'}</span>
+          <span className="sr-only">{rightOpen ? `收起${contextTitle}` : `展开${contextTitle}`}</span>
         </button>
         {rightOpen && <DocumentContext document={document} />}
       </aside>
