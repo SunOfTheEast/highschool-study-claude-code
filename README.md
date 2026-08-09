@@ -41,6 +41,19 @@ Pi JSONL                      各节点的原始对话与工具历史
 
 ## 快速开始
 
+### macOS 内测 App
+
+Apple Silicon 用户可以直接安装自包含的 `StudyForge.dmg`，无需预装 Bun、Node 或 Pi。
+当前内测包采用 ad-hoc 签名且尚未经过 Apple 公证；安装、Gatekeeper、独立模型登录和第一次
+学习的说明以 App 内同一份离线教程为准：
+
+- [`macOS 安装与模型设置`](apps/pi-teaching-web/resources/help/macos-installation.md)
+- [`第一次学习`](apps/pi-teaching-web/resources/help/first-learning.md)
+
+学习集保存在 `Documents/StudyForge`，替换 App 不会删除这些 Markdown 文件。
+
+### 从源码运行
+
 需要 Git、Bun 1.3+ 和已经配置模型的 Pi：
 
 ```bash

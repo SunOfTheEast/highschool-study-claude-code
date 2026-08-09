@@ -4,6 +4,8 @@ import type {
   AuthPrompt,
   AuthType,
 } from '@earendil-works/pi-ai';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import {
   loadAppConfig,
   parseAppConfig,
@@ -56,6 +58,14 @@ const allowedOrigins = new Set(['tauri://localhost', 'http://tauri.localhost']);
 
 function json(value: unknown, status = 200): Response {
   return Response.json(value, { status });
+}
+
+function offlineHelp(resourceRoot: string, id: 'macos-installation' | 'first-learning'): string {
+  const markdown = readFileSync(join(resourceRoot, 'help', `${id}.md`), 'utf8');
+  return markdown.replace(/\]\(images\/([a-z0-9-]+\.png)\)/g, (_match, name: string) => {
+    const image = readFileSync(join(resourceRoot, 'help', 'images', name)).toString('base64');
+    return `](data:image/png;base64,${image})`;
+  });
 }
 
 function publicPrompt(prompt: AuthPrompt): PublicPrompt {
@@ -318,6 +328,15 @@ export function createDesktopRequestHandler(deps: DesktopRequestDependencies) {
         response = json(status(deps));
       } else if (request.method === 'GET' && url.pathname === '/api/desktop/models') {
         response = json(await deps.modelService.catalog());
+      } else if (request.method === 'GET' && url.pathname.startsWith('/api/desktop/help/')) {
+        const id = url.pathname.slice('/api/desktop/help/'.length);
+        if (id !== 'macos-installation' && id !== 'first-learning') {
+          response = json({ error: 'NOT_FOUND' }, 404);
+        } else {
+          response = new Response(offlineHelp(deps.resourceRoot, id), {
+            headers: { 'content-type': 'text/markdown; charset=utf-8' },
+          });
+        }
       } else if (request.method === 'POST' && url.pathname === '/api/desktop/learning-sets/blank') {
         const body = bodyObject(await request.json());
         const root = createBlankLearningSet({

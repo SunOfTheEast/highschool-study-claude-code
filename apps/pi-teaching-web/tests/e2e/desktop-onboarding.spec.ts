@@ -1,4 +1,19 @@
 import { expect, test } from '@playwright/test';
+import { mkdirSync } from 'node:fs';
+import { join } from 'node:path';
+
+const shots = join(process.cwd(), 'output/playwright');
+mkdirSync(shots, { recursive: true });
+
+async function capture(page: import('@playwright/test').Page, name: string) {
+  await page.locator('main, .desktop-ready-shift').first().evaluate(async (element) => {
+    const animations = element.getAnimations({ subtree: true }).filter((animation) => (
+      animation.effect?.getTiming().iterations !== Infinity
+    ));
+    await Promise.all(animations.map((animation) => animation.finished));
+  });
+  await page.screenshot({ path: join(shots, name), fullPage: true });
+}
 
 test('moves from a blank desktop set through explicit model choice into learning', async ({ page }) => {
   let state: 'needs-learning-set' | 'needs-models' | 'ready' = 'needs-learning-set';
@@ -78,11 +93,14 @@ test('moves from a blank desktop set through explicit model choice into learning
 
   await page.goto('/');
   await expect(page.getByRole('heading', { name: '先从哪里开始？' })).toBeVisible();
+  await capture(page, 'desktop-first-run-1280.png');
   await page.getByLabel('学习集名称').fill('化学反应原理');
   await page.getByRole('button', { name: '从空白开始' }).click();
   await expect(page.getByRole('heading', { name: '安排两位老师' })).toBeVisible();
+  await capture(page, 'desktop-model-settings-1280.png');
   await expect(page.getByLabel('主教师模型')).toHaveValue('openai-codex/gpt-5.6-sol');
   await expect(page.getByLabel('检索 Scout 模型')).toHaveValue('openai-codex/gpt-5.6-terra');
   await page.getByRole('button', { name: '完成设置并开始学习' }).click();
   await expect(page.getByRole('heading', { name: '化学反应原理' })).toBeVisible();
+  await capture(page, 'desktop-learning-home-1280.png');
 });
