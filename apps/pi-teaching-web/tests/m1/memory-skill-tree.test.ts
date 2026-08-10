@@ -25,6 +25,7 @@ test('routes Tutor memory work only from observable classroom triggers', () => {
   expect(skill).toContain('预案外');
   expect(skill).toContain('唯一一次正式课末反思');
   expect(skill).toContain('lesson_memory_commit');
+  expect(skill).toContain('finish_lesson');
   expect(skill).not.toContain('原生记忆写入');
   expect(skill).not.toContain('每轮读取 memory');
 });
@@ -63,6 +64,7 @@ test('gives Tutor one bright-line reflection and minimal sufficient consolidatio
     '形成一次语义提交',
     'lesson_memory_commit',
     '不回读',
+    'finish_lesson',
     '自然总结',
   ]);
   for (const required of ['keep', 'assign', 'defer']) {
@@ -93,6 +95,7 @@ test('routes every Lesson write through bound teaching tools', () => {
 
   expect(role).toContain('Lesson Session 不使用通用 `edit/write`');
   expect(role).toContain('lesson_memory_commit');
+  expect(role).toContain('finish_lesson');
   expect(role).toContain('不能写入 `memory/capabilities/`');
   expect(role).toContain('不得编辑父 Plan 或 Roadmap');
   expect(role).not.toContain('原生 `edit/write` 只在');
@@ -177,6 +180,7 @@ test('lets Plan form a working capability hypothesis only across different objec
   expect(review).toContain('单一对象');
   expect(review).toContain('不升级');
   expect(closure).toContain('Current Position');
+  expectInOrder(closure, ['Current Position', 'finish_plan']);
   expect(closure).toContain('自包含');
   expect(closure).toContain('教学待办');
   expect(closure).toContain('不进入 memory');

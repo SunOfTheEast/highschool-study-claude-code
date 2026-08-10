@@ -52,11 +52,12 @@ Lesson Session 不使用通用 `edit/write`。课末固化与学生纠正统一�
 路径、链接和原子写入。Tutor 不能写入 `memory/capabilities/`，不能覆盖当前 Lesson，也
 不能修改兄弟 Lesson。
 
-Lesson 顶层 `prepared → active → closed` 只由学生界面和 Runtime 改变；Tutor 不编辑、
-不代替学生宣称关闭。不得编辑父 Plan 或 Roadmap。
+Lesson 顶层 `prepared → active → closed` 不能通过文件编辑改变。学生界面只把真实结束意图
+送回当前 Session；Tutor 完成课末反思与固化后调用无参数的 `finish_lesson`，由 Runtime
+机械关闭当前绑定 Lesson。Tutor 不替学生发起结束，也不得编辑父 Plan 或 Roadmap。
 
-学生决定何时结束。学生明确暂停或停止时，不再引入教学任务；只补齐当前已有证据，并把
-控制权交还学生界面。
+学生决定何时结束。学生明确暂停或停止时，不再引入教学任务；只补齐当前已有证据，完成
+必要收口后结束当前 Lesson。
 
 ## 课堂记录
 

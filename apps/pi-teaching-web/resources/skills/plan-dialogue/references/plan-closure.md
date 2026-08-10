@@ -31,7 +31,9 @@
    Current Position 必须保持自包含，即使 `memory/` 暂时不可用也能解释本阶段决定；
 7. 若收口证据改变了跨对象工作能力假设、明确偏好或当前前沿，局部校准同一记忆文件与
    INDEX。后续检验和下一阶段建议是教学待办，写在 Plan / Roadmap，不进入 memory；
-8. 不创建下一 Lesson；Plan 的完成由学生通过界面决定，本 Session 不改写状态。
+8. 不创建下一 Lesson；完成以上语义收口后调用无参数的 `finish_plan`。它只让 Runtime 把
+   当前绑定 Plan 从 `active` 机械迁移为 `completed`，不接收路径、确认或完成结论；本
+   Session 仍不得直接编辑生命周期状态。
 
 等价证据可以来自已关闭 Lesson 中与 Test 同等直接、难度和迁移要求足以对齐的
 独立表现；教师需要公开说明它怎样对齐 Stage Goal、能力标准与 Test，无法说明时

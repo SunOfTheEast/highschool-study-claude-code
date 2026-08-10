@@ -10,7 +10,9 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { AgentSessionEvent, SessionEntry } from '@earendil-works/pi-coding-agent';
 import { createFreeLearningTools } from '../../src/runtime/free-learning-tools';
+import { createLessonTools } from '../../src/runtime/lesson-tools';
 import { createMetaTools } from '../../src/runtime/meta-tools';
+import { createPlanTools } from '../../src/runtime/plan-tools';
 import { FREE_LEARNING_ENDED_TYPE } from '../../src/runtime/session-owner';
 import type { FreeLearningSessionScope, MetaSessionScope } from '../../src/runtime/session-scope';
 import { createRequestHandler } from '../../src/server/app';
@@ -101,6 +103,72 @@ function m0MessageEntry(
   } as MessageEntry;
 }
 
+async function finishM0Node(
+  key: SessionKey,
+  entries: SessionEntry[],
+  parentId: string,
+): Promise<void> {
+  const lesson = key === 'lesson:plan-001:lesson-001';
+  const tool = lesson
+    ? createLessonTools(m0Root, 'plans/plan-001/lessons/lesson-001.md')
+      .find((candidate) => candidate.name === 'finish_lesson')!
+    : createPlanTools(m0Root, {
+      nodeKind: 'plan',
+      nodeId: 'plan-001',
+      nodePath: 'plans/plan-001/PLAN.md',
+      parentId: 'roadmap',
+      parentPath: 'ROADMAP.md',
+    }).find((candidate) => candidate.name === 'finish_plan')!;
+  const toolCallId = `${tool.name}-${m0Sequence}`;
+  m0Sequence += 1;
+  const toolCall = {
+    type: 'message',
+    id: `assistant-tool-${m0Sequence}`,
+    parentId,
+    timestamp: new Date(Date.now() + m0Sequence).toISOString(),
+    message: {
+      ...assistantMessage('', Date.now() + m0Sequence),
+      content: [{ type: 'toolCall', id: toolCallId, name: tool.name, arguments: {} }],
+      stopReason: 'toolUse',
+    },
+  } as MessageEntry;
+  entries.push(toolCall);
+  publishM0(key, {
+    type: 'tool_execution_start', toolCallId, toolName: tool.name, args: {},
+  } as AgentSessionEvent);
+  const result = await tool.execute(toolCallId, {}, undefined, undefined, {} as never);
+  m0Sequence += 1;
+  const toolResult = {
+    type: 'message',
+    id: `tool-result-${m0Sequence}`,
+    parentId: toolCall.id,
+    timestamp: new Date(Date.now() + m0Sequence).toISOString(),
+    message: {
+      role: 'toolResult',
+      toolCallId,
+      toolName: tool.name,
+      content: result.content,
+      details: result.details,
+      isError: false,
+      timestamp: Date.now() + m0Sequence,
+    },
+  } as MessageEntry;
+  entries.push(toolResult);
+  publishM0(key, {
+    type: 'tool_execution_end', toolCallId, toolName: tool.name, result, isError: false,
+  } as AgentSessionEvent);
+  const assistant = m0MessageEntry(
+    'assistant',
+    lesson
+      ? '这节课已经按刚才的学习情况收好尾了。'
+      : '这个阶段已经按刚才确认的结论完成收口。',
+    toolResult.id,
+  );
+  entries.push(assistant);
+  publishM0(key, { type: 'message_end', message: assistant.message } as AgentSessionEvent);
+  publishM0(key, { type: 'agent_end', messages: [], willRetry: false } as AgentSessionEvent);
+}
+
 const m0Registry = {
   async readHistory(key: SessionKey) {
     return m0Histories.get(key) ?? [];
@@ -138,6 +206,14 @@ const m0Registry = {
     entries.push(user);
     m0Histories.set(key, entries);
     publishM0(key, { type: 'message_end', message: user.message } as AgentSessionEvent);
+
+    if (
+      (key === 'lesson:plan-001:lesson-001' && text.trim() === '我想结束本课。')
+      || (key === 'plan:plan-001' && text.trim() === '我想完成这一阶段。')
+    ) {
+      await finishM0Node(key, entries, user.id);
+      return;
+    }
 
     if (key === 'plan:plan-001' && text.trim() === '要讲义') {
       const toolCallId = `handout-${m0Sequence}`;

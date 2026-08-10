@@ -100,11 +100,12 @@ test('completes the M0 Roadmap, Plan, Lesson and Knowledge browser cycle', async
 
   delayClosedLessonReload = true;
   await page.getByRole('button', { name: '结束本课' }).click();
-  await expect(page).toHaveURL(/\/course\/plan\/plan-001$/);
+  await expect(page).toHaveURL(/\/course\/plan\/plan-001\/lesson\/lesson-001$/);
+  await expect(page.getByText('我想结束本课。', { exact: true })).toBeVisible();
   await page.waitForTimeout(400);
-  await expect(page.getByRole('heading', { name: 'Plan 001：恒成立问题选路' })).toBeVisible();
-  await page.goto('/course/plan/plan-001/lesson/lesson-001');
   await expect(page.getByText('已结束 · 只读')).toBeVisible();
+  await expect(page.getByText('这节课已经按刚才的学习情况收好尾了。', { exact: true }))
+    .toBeVisible();
   await expect(page.getByPlaceholder('开始这个节点后即可对话')).toBeDisabled();
   await expect(page.getByText('我先观察参数出现的位置。', { exact: true })).toBeVisible();
   await page.goto('/course/plan/plan-001');
@@ -113,7 +114,13 @@ test('completes the M0 Roadmap, Plan, Lesson and Knowledge browser cycle', async
   await expect(page.getByRole('heading', { name: 'Plan 001：恒成立问题选路' })).toBeVisible();
 
   await page.getByRole('button', { name: '完成这一阶段' }).click();
-  await expect(page).toHaveURL(/\/course$/);
+  await expect(page).toHaveURL(/\/course\/plan\/plan-001$/);
+  await expect(page.getByText('我想完成这一阶段。', { exact: true })).toBeVisible();
+  await expect(page.getByText('这个阶段已经按刚才确认的结论完成收口。', { exact: true }))
+    .toBeVisible();
+  await expect(page.getByRole('button', { name: '完成这一阶段' })).toHaveCount(0);
+  await page.goto('/course');
+  await expect(page.getByRole('heading', { name: '导数结构学习路线' })).toBeVisible();
   await page.goto('/knowledge');
   await expect(page.getByRole('heading', { name: '知识关系' })).toBeVisible();
   await page.getByPlaceholder('例如：沉淀溶解平衡').fill('参变量分离');

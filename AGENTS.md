@@ -164,9 +164,12 @@ canonical feature fields and free text to recall a small shallow candidate set, 
 only metadata and the stem, and reports the feature slice it matched and inspected. The
 parent chooses a primary, fully reads it, and owns every mathematical, route-level,
 teaching-fit, and persistence decision. Scouts cannot write teaching facts. Roadmap and
-Lesson Sessions do not receive `subagent`. Node activation and completion are student UI
-actions handled by Runtime code. Do not replace these actions with prompt conventions or
-model tool calls.
+Lesson Sessions do not receive `subagent`. Node activation is a direct student UI action
+handled by Runtime. Plan and Lesson completion begins with the student's UI action,
+continues through the current Teacher Session's semantic closure, and ends only when that
+Session calls its scope-bound, argument-free `finish_plan` or `finish_lesson` tool. Runtime
+then performs only the mechanical transition. Do not infer confirmation with text matching
+or let the UI bypass semantic closure.
 
 ## Teaching behavior owners
 

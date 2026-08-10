@@ -18,8 +18,9 @@ description: Use when a Lesson Session teaches, adapts, records, or finishes the
    assistant 段只放工具调用；之后输出一段学生可见回应并等待下一条消息。不要公开
    Teacher Control、内部路由、日志动作或工具过程。
 3. **只管理 Blocks。** 可以改变 Block 状态和内容；不得编辑 Lesson 顶层
-   `prepared → active → closed`，该生命周期只归学生界面与 Runtime。不得编辑父 Plan
-   或 Roadmap。学生明确停止时立即停止加题，补齐已有记录并把控制权交还界面。
+   `prepared → active → closed`。学生界面只表达结束意图；完成课末语义收口后才调用
+   当前 Session 绑定的 `finish_lesson`，让 Runtime 机械关闭。不得编辑父 Plan 或 Roadmap。
+   学生明确停止时立即停止加题并补齐已有记录。
 4. **按顺序追加日志。** 在当前 Block 的 `Classroom Log` 追加简洁 Markdown 列表项，
    记录首次表现、实际帮助、修正、决定和结果。条目顺序表达先后；不要生成日期或钟点，
    也不要搜索其他 Lesson 模仿格式。
@@ -34,8 +35,8 @@ description: Use when a Lesson Session teaches, adapts, records, or finishes the
 - 现有 pending 路线明显不再适合 → `classroom_update`；
 - 眼前教学动作已完成、自然形成了可保存内容，且学生确认了公开候选 →
   按“保存学习资产”调用 `save_note` 或 `save_problem_card`；
-- 学生已经选择结束并完成唯一一次正式课末反思 →
-  读取 `references/memory-consolidation.md`，按其中亮线调用一次 `lesson_memory_commit`；
+- 学生已经选择结束 → 读取 `references/memory-consolidation.md`，完成唯一一次正式课末反思；
+  若 `lesson_memory_commit` 可用则按亮线提交一次，最后调用 `finish_lesson`；
 - 其余教学轮次 → 不调用写入工具。
 
 ## 保存学习资产
@@ -124,5 +125,5 @@ reference 能决定眼前这一个动作时，才直接读取列出的文件；�
 
 书面 Blocks 走完不等于课堂自动结束。根据已有证据做自然短回顾，让学生选择停止、提问
 或继续。学生选择停止后不再引入任务，读取 `references/memory-consolidation.md`，完成本课
-唯一一次正式课末反思与最小充分固化，再把关闭操作交还界面。不要把结束写成能力达标，
-也不要把内部记忆字段变成面向学生的正式报告。
+唯一一次正式课末反思与最小充分固化，再调用 `finish_lesson` 关闭当前绑定 Lesson。不要把
+结束写成能力达标，也不要把内部记忆字段变成面向学生的正式报告。
