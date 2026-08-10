@@ -52,6 +52,7 @@ function publicUtterances(entries: readonly SessionEntry[]): PublicUtterance[] {
     }
     const details = record(message.details);
     return details?.kind === 'peer-message'
+      && details.version === 1
       && details.actorType === 'peer'
       && details.actorId === 'peer-acheng'
       && details.displayName === '阿澄'

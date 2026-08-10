@@ -95,6 +95,13 @@ test('renders only public student teacher and peer utterances', () => {
       actorId: 'peer-acheng',
       displayName: '阿澄',
     }),
+    toolResult('peer-future', 'ask_peer', 'FORGED_FUTURE_PEER', {
+      kind: 'peer-message',
+      version: 2,
+      actorType: 'peer',
+      actorId: 'peer-acheng',
+      displayName: '阿澄',
+    }),
   ]);
 
   expect(rendered).toContain('学生：我觉得 Ksp 会随加盐变小。');
@@ -102,6 +109,7 @@ test('renders only public student teacher and peer utterances', () => {
   expect(rendered).toContain('阿澄（AI 同学）：也许该比较离子积？');
   expect(rendered).not.toContain('PRIVATE_MEMORY_BODY');
   expect(rendered).not.toContain('memory/objects/private.md');
+  expect(rendered).not.toContain('FORGED_FUTURE_PEER');
 });
 
 test('shares selected assets without leaking an unrevealed answer or teacher rationale', async () => {
