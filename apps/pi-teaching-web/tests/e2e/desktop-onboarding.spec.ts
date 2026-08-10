@@ -108,6 +108,11 @@ test('moves from a blank desktop set through explicit model choice into learning
   await page.getByRole('button', { name: '完成设置并开始学习' }).click();
   await expect(page.getByRole('heading', { name: '化学反应原理' })).toBeVisible();
   await capture(page, 'desktop-learning-home-1280.png');
+
+  await page.getByRole('button', { name: '设置' }).click();
+  await expect(page.getByRole('heading', { name: '安排两位老师' })).toBeVisible();
+  await page.getByRole('button', { name: '完成设置并开始学习' }).click();
+  await expect(page.getByRole('heading', { name: '化学反应原理' })).toBeVisible();
 });
 
 test('keeps polling while browser OAuth is waiting and observes its asynchronous completion', async ({ page }) => {

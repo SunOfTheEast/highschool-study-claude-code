@@ -141,8 +141,10 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
       await action();
       if (restart) await restartAndWait();
       else if (connection?.state.status === 'ready') await loadSetup(connection);
+      return true;
     } catch (nextError) {
       setError(errorMessage(nextError));
+      return false;
     } finally {
       setBusy(false);
     }
@@ -228,9 +230,10 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
         onLogin={startAuth}
         onRespond={respondAuth}
         onOpenUrl={(url) => bridge.openExternalUrl(url)}
-        onSave={(teacher: DesktopModelSelection, scout: DesktopModelSelection) => (
-          mutate(() => desktopApi.saveModels(teacher, scout), true)
-        )}
+        onSave={async (teacher: DesktopModelSelection, scout: DesktopModelSelection) => {
+          const saved = await mutate(() => desktopApi.saveModels(teacher, scout), true);
+          if (saved) setPage('learning');
+        }}
         onBack={status.state === 'ready' ? () => setPage('learning') : null}
       />
     );
@@ -240,9 +243,9 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
       <FirstRun
         busy={busy}
         error={error}
-        onBlank={(name) => mutate(() => desktopApi.createBlank(name), true)}
+        onBlank={async (name) => { await mutate(() => desktopApi.createBlank(name), true); }}
         onExisting={selectExisting}
-        onExample={(name) => mutate(() => desktopApi.createExample(name), true)}
+        onExample={async (name) => { await mutate(() => desktopApi.createExample(name), true); }}
       />
     );
   }
