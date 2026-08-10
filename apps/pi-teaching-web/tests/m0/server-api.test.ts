@@ -344,7 +344,7 @@ test('invalidates only Course after a successful Lesson custom write', async () 
   expect(events.filter((event) => event.type === 'knowledge-invalidated')).toHaveLength(0);
 });
 
-test('invalidates Course and Knowledge after each successful memory transaction only', async () => {
+test('invalidates Course and Knowledge after successful memory and closing transactions', async () => {
   const root = copyFixture();
   const hub = new EventHub();
   const events: StudyEvent[] = [];
@@ -394,8 +394,59 @@ test('invalidates Course and Knowledge after each successful memory transaction 
   ));
   expect(response?.status).toBe(202);
   await idle;
-  expect(events.filter((event) => event.type === 'course-invalidated')).toHaveLength(4);
+  expect(events.filter((event) => event.type === 'course-invalidated')).toHaveLength(3);
   expect(events.filter((event) => event.type === 'knowledge-invalidated')).toHaveLength(2);
+});
+
+test('waits for a finishing teacher turn to settle before refreshing Course', async () => {
+  const root = copyFixture();
+  const hub = new EventHub();
+  const events: StudyEvent[] = [];
+  hub.subscribe((event) => events.push(event));
+  let listener: ((event: AgentSessionEvent) => void) | null = null;
+  let finishObserved!: () => void;
+  const observed = new Promise<void>((resolve) => { finishObserved = resolve; });
+  let releaseTurn!: () => void;
+  const held = new Promise<void>((resolve) => { releaseTurn = resolve; });
+  let resolveIdle!: () => void;
+  const idle = new Promise<void>((resolve) => { resolveIdle = resolve; });
+  hub.subscribe((event) => {
+    if (event.type === 'session-run' && event.status === 'idle') resolveIdle();
+  });
+  const handler = createRequestHandler({
+    root,
+    hub,
+    registry: fakeRegistry({
+      subscribe: async (_key: SessionKey, value: (event: AgentSessionEvent) => void) => {
+        listener = value;
+        return () => {};
+      },
+      send: async () => {
+        listener?.({
+          type: 'tool_execution_end',
+          toolCallId: 'finish-lesson-1',
+          toolName: 'finish_lesson',
+          result: { details: { status: 'closed' } },
+          isError: false,
+        });
+        finishObserved();
+        await held;
+        listener?.({ type: 'agent_end', messages: [], willRetry: false });
+      },
+    }) as never,
+  });
+
+  const response = await handler(new Request(
+    'http://local/api/plans/plan-001/lessons/lesson-001/close',
+    { method: 'POST' },
+  ));
+  expect(response?.status).toBe(202);
+  await observed;
+  expect(events.filter((event) => event.type === 'course-invalidated')).toHaveLength(0);
+
+  releaseTurn();
+  await idle;
+  expect(events.filter((event) => event.type === 'course-invalidated')).toHaveLength(1);
 });
 
 test('starts nodes directly but routes terminal actions into their teacher sessions', async () => {

@@ -280,6 +280,7 @@ function safeStaticPath(root: string, pathname: string): string | null {
 export function createRequestHandler(deps?: AppDependencies) {
   const bound = new Map<SessionKey, () => void>();
   const pendingTerminalIntents = new Set<SessionKey>();
+  const settledCourseInvalidations = new Set<SessionKey>();
 
   return async (
     request: Request,
@@ -305,7 +306,7 @@ export function createRequestHandler(deps?: AppDependencies) {
           && !event.isError
           && (event.toolName === 'finish_plan' || event.toolName === 'finish_lesson')
         ) {
-          deps.hub.publish({ type: 'course-invalidated' });
+          settledCourseInvalidations.add(key);
         }
         if (
           event.type === 'tool_execution_end'
@@ -385,6 +386,9 @@ export function createRequestHandler(deps?: AppDependencies) {
         .finally(() => {
           onSettled?.();
           deps.hub.publish({ type: 'session-run', sessionKey: key, status: 'idle' });
+          if (settledCourseInvalidations.delete(key)) {
+            deps.hub.publish({ type: 'course-invalidated' });
+          }
         });
       return json({ accepted: true }, 202);
     };
