@@ -283,4 +283,3 @@ Expected: no whitespace errors; only specified client, test, design, and plan fi
 git add apps/pi-teaching-web/src/client/styles/knowledge.css apps/pi-teaching-web/tests/e2e/m1d-ui.spec.ts
 git commit -m "fix: finish knowledge atlas visual acceptance"
 ```
-

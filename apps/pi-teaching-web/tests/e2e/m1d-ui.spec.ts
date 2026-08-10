@@ -147,6 +147,18 @@ test('walks the M1d asset, source, footprint, and local-relation surfaces', asyn
   await expect(page.locator('body')).not.toContainText('能力假设');
   await capture(page, 'm1d-knowledge-tag-1440.png');
 
+  await page.setViewportSize({ width: 1024, height: 768 });
+  const atlasColumns = await page.locator('.knowledge-atlas-layout').evaluate((layout) => {
+    const [stage, folio] = Array.from(layout.children) as [HTMLElement, HTMLElement];
+    const stageBox = stage.getBoundingClientRect();
+    const folioBox = folio.getBoundingClientRect();
+    return { stageRight: stageBox.right, folioLeft: folioBox.left };
+  });
+  expect(atlasColumns.folioLeft).toBeGreaterThan(atlasColumns.stageRight);
+  await expectNoHorizontalOverflow(page);
+  await capture(page, 'm1d-knowledge-tag-1024.png');
+  await page.setViewportSize({ width: 1440, height: 900 });
+
   const noteRelation = page.locator('.knowledge-folio li')
     .filter({ hasText: 'Ksp 与离子积的边界（我的版本）' });
   await noteRelation.getByRole('button', { name: '查看联系' }).click();
