@@ -11,6 +11,7 @@ import { join, resolve } from 'node:path';
 import type { AuthInteraction, AuthType } from '@earendil-works/pi-ai';
 import { resolveStudyForgePaths } from '../../src/desktop/app-config';
 import type { DesktopModelSelection } from '../../src/desktop/contracts';
+import { createPeerMediaService } from '../../src/desktop/peer-media';
 import { createDesktopRequestHandler } from '../../src/server/desktop-app';
 
 const roots: string[] = [];
@@ -82,6 +83,12 @@ function setup() {
     resourceRoot: resolve(import.meta.dir, '../../resources'),
     derivativeExampleRoot: resolve(import.meta.dir, '../../../../examples/derivative-m0/learning-set'),
     modelService: fakeModelService() as never,
+    peerMedia: createPeerMediaService({
+      actorsDir: paths.actorsDir,
+      fetch: async () => new Response(new Uint8Array([82, 73, 70, 70]), {
+        headers: { 'content-type': 'audio/wav' },
+      }),
+    }),
     shutdown: () => {},
   });
   const request = (pathname: string, init: RequestInit = {}) => handler(new Request(
@@ -223,4 +230,43 @@ test('serves only the two canonical offline help documents', async () => {
 
   const unknown = await request('/api/desktop/help/anything-else');
   expect(unknown?.status).toBe(404);
+});
+
+test('serves only whitelisted actor media and validates speech input', async () => {
+  const { paths, request } = setup();
+  mkdirSync(join(paths.actorsDir, 'peer-axia'), { recursive: true });
+  writeFileSync(join(paths.actorsDir, 'peer-axia', 'neutral.png'), new Uint8Array([1, 2, 3]));
+
+  const portrait = await request('/api/desktop/actors/peer-axia/neutral');
+  expect(portrait?.status).toBe(200);
+  expect(portrait?.headers.get('content-type')).toBe('image/png');
+  expect(new Uint8Array(await portrait!.arrayBuffer())).toEqual(new Uint8Array([1, 2, 3]));
+
+  for (const path of [
+    '/api/desktop/actors/peer-other/neutral',
+    '/api/desktop/actors/peer-axia/neutral.png',
+    '/api/desktop/actors/peer-axia/%2e%2e%2fneutral',
+  ]) {
+    expect((await request(path))?.status).toBe(404);
+  }
+
+  const speech = await request('/api/desktop/peer-speech', {
+    method: 'POST',
+    body: JSON.stringify({ actorId: 'peer-axia', text: '先比较反应商。' }),
+  });
+  expect(speech?.status).toBe(200);
+  expect(speech?.headers.get('content-type')).toBe('audio/wav');
+
+  for (const body of [
+    { actorId: 'peer-other', text: '你好' },
+    { actorId: 'peer-axia', text: '' },
+    { actorId: 'peer-axia', text: '你好', model: 'other' },
+    { actorId: 'peer-axia', text: 'x'.repeat(12_001) },
+  ]) {
+    const invalid = await request('/api/desktop/peer-speech', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+    expect(invalid?.status).toBe(400);
+  }
 });

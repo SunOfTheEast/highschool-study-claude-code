@@ -22,6 +22,7 @@ import type {
   SemanticRelation,
   StudentProblemCard,
   SessionKey,
+  PeerExpression,
 } from '../shared/contracts';
 import { formatLessonHandoutApiPath } from '../shared/handout-route';
 import { transportFetch } from './transport';
@@ -186,6 +187,21 @@ export const api = {
   history: (key: SessionKey) => json<ConversationItem[]>(
     `/api/sessions/${encodeURIComponent(key)}/history`,
   ),
+  peerPortrait: async (actorId: 'peer-axia', expression: PeerExpression) => {
+    const response = await transportFetch(
+      `/api/desktop/actors/${encodeURIComponent(actorId)}/${encodeURIComponent(expression)}`,
+    );
+    return response.ok ? response.blob() : null;
+  },
+  peerSpeech: async (actorId: 'peer-axia', text: string, signal?: AbortSignal) => {
+    const response = await transportFetch('/api/desktop/peer-speech', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ actorId, text }),
+      ...(signal ? { signal } : {}),
+    });
+    return response.ok ? response.blob() : null;
+  },
   send: (key: SessionKey, text: string) => post<{ accepted: true }>(
     `/api/sessions/${encodeURIComponent(key)}/messages`,
     { text },

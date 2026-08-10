@@ -34,5 +34,7 @@ export type StudyForgePaths = {
   settingsPath: string;
   sessionsDir: string;
   logsDir: string;
+  actorsDir: string;
+  voiceDir: string;
   documentsHome: string;
 };

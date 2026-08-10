@@ -4,6 +4,7 @@ import type { Server } from 'bun';
 import { loadAppConfig, resolveStudyForgePaths } from '../desktop/app-config';
 import { validateLearningSet } from '../desktop/learning-sets';
 import { createDesktopModelService } from '../desktop/model-service';
+import { createPeerMediaService } from '../desktop/peer-media';
 import { writeDesktopPiSettings } from '../desktop/pi-settings';
 import { createPiSessionFactory } from '../runtime/session-factory';
 import { WorkspaceRegistry } from '../runtime/workspace-registry';
@@ -145,6 +146,7 @@ export async function startStudyForgeServer(arguments_: RuntimeArguments) {
       resourceRoot: arguments_.resourceRoot!,
       derivativeExampleRoot: join(arguments_.resourceRoot!, 'examples', 'derivative-m0', 'learning-set'),
       modelService: models,
+      peerMedia: createPeerMediaService({ actorsDir: paths.actorsDir }),
       runtimeIssue: issue,
       shutdown: () => {
         registry?.dispose();

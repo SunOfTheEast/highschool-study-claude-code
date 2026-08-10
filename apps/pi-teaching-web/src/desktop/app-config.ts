@@ -44,6 +44,8 @@ export function resolveStudyForgePaths(input: {
     settingsPath: join(agentDir, 'settings.json'),
     sessionsDir: join(agentDir, 'sessions'),
     logsDir: join(input.appHome, 'logs'),
+    actorsDir: join(input.appHome, 'actors'),
+    voiceDir: join(input.appHome, 'voice'),
     documentsHome: input.documentsHome,
   };
 }

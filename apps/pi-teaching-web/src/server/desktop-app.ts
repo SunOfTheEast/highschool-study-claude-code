@@ -21,6 +21,7 @@ import {
   validateLearningSet,
 } from '../desktop/learning-sets';
 import type { DesktopModelService } from '../desktop/model-service';
+import type { PeerMediaService } from '../desktop/peer-media';
 import { writeDesktopPiSettings } from '../desktop/pi-settings';
 
 type ModelService = Pick<DesktopModelService, 'catalog' | 'resolve' | 'login' | 'logout'>;
@@ -36,6 +37,7 @@ export type DesktopRequestDependencies = {
   resourceRoot: string;
   derivativeExampleRoot: string;
   modelService: ModelService;
+  peerMedia?: PeerMediaService;
   shutdown(): void;
   runtimeIssue?: DesktopRuntimeIssue | null;
 };
@@ -203,6 +205,19 @@ function bodyString(value: unknown): string {
   return value;
 }
 
+function peerSpeechBody(value: unknown): { actorId: 'peer-axia'; text: string } {
+  const body = bodyObject(value);
+  if (
+    Object.keys(body).length !== 2
+    || body.actorId !== 'peer-axia'
+    || typeof body.text !== 'string'
+    || body.text.trim().length === 0
+    || body.text.length > 12_000
+    || body.text.includes('\0')
+  ) throw new Error('DESKTOP_REQUEST_INVALID');
+  return { actorId: 'peer-axia', text: body.text };
+}
+
 function selection(value: unknown): DesktopModelSelection {
   const parsed = parseAppConfig({
     version: 1,
@@ -337,6 +352,16 @@ export function createDesktopRequestHandler(deps: DesktopRequestDependencies) {
             headers: { 'content-type': 'text/markdown; charset=utf-8' },
           });
         }
+      } else if (request.method === 'GET' && url.pathname.startsWith('/api/desktop/actors/')) {
+        const match = /^\/api\/desktop\/actors\/([^/]+)\/([^/]+)$/.exec(url.pathname);
+        response = match && deps.peerMedia
+          ? deps.peerMedia.portrait(match[1]!, match[2]!)
+          : json({ error: 'NOT_FOUND' }, 404);
+      } else if (request.method === 'POST' && url.pathname === '/api/desktop/peer-speech') {
+        const body = peerSpeechBody(await request.json());
+        response = deps.peerMedia
+          ? await deps.peerMedia.speech(body.actorId, body.text, request.signal)
+          : json({ error: 'PEER_SPEECH_UNAVAILABLE' }, 503);
       } else if (request.method === 'POST' && url.pathname === '/api/desktop/learning-sets/blank') {
         const body = bodyObject(await request.json());
         const root = createBlankLearningSet({

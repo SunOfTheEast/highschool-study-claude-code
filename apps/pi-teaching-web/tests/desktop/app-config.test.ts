@@ -41,6 +41,8 @@ test('resolves every private Pi path below the explicit StudyForge app home', ()
     settingsPath: join(appHome, 'agent', 'settings.json'),
     sessionsDir: join(appHome, 'agent', 'sessions'),
     logsDir: join(appHome, 'logs'),
+    actorsDir: join(appHome, 'actors'),
+    voiceDir: join(appHome, 'voice'),
     documentsHome,
   });
   for (const value of Object.values(paths)) {

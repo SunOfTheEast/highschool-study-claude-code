@@ -131,19 +131,19 @@ export type PeerMediaService = {
 };
 ```
 
-- [ ] **Step 1: Write RED speech-conversion tests**
+- [x] **Step 1: Write RED speech-conversion tests**
 
 Cover plain Chinese, Markdown emphasis/list/table cleanup, a simple inline formula, skipped display math after its natural-language explanation, common Greek/subscript/superscript/fraction/operator structures for detailed reading, and malformed TeX. Assert no raw `\\frac`, `$`, `\\[` or Markdown marker reaches automatic speech.
 
-- [ ] **Step 2: Write RED media-boundary tests**
+- [x] **Step 2: Write RED media-boundary tests**
 
 Seed a temporary `appHome/actors/peer-axia/neutral.png`. Assert the service returns only the exact actor and exact `neutral | curious | skeptical` slots, returns 404 for a missing slot, and rejects traversal, unknown actors, arbitrary extensions, and newline/path injection. Inject `fetch` for speech and assert the service calls only the configured localhost MLX endpoint with the pinned model/voice and returns audio bytes; network or non-audio failure becomes a stable unavailable response without exposing provider text.
 
-- [ ] **Step 3: Write RED desktop API tests**
+- [x] **Step 3: Write RED desktop API tests**
 
 Assert authenticated `GET /api/desktop/actors/peer-axia/neutral` serves the image, `POST /api/desktop/peer-speech` accepts only `{ actorId: 'peer-axia', text }`, and both routes preserve existing bearer/origin rules. Unknown actors, extra fields, blank/oversized text, and invalid slots fail closed.
 
-- [ ] **Step 4: Run RED**
+- [x] **Step 4: Run RED**
 
 ```bash
 bun test tests/m2/peer-speech.test.ts tests/m2/peer-media.test.ts \
@@ -152,15 +152,15 @@ bun test tests/m2/peer-speech.test.ts tests/m2/peer-media.test.ts \
 
 Expected: FAIL because the converter and desktop media adapter do not exist.
 
-- [ ] **Step 5: Implement the compact deterministic converter**
+- [x] **Step 5: Implement the compact deterministic converter**
 
 Use a small delimiter-aware scanner, not an LLM call. Automatic speech keeps prose, speaks only safe simple inline structures, removes display formulas/code/URLs/Markdown furniture, and collapses whitespace. Detailed reading tokenizes the bounded high-school subset and returns `null` when it cannot parse safely instead of reading raw TeX.
 
-- [ ] **Step 6: Implement the restricted local adapter**
+- [x] **Step 6: Implement the restricted local adapter**
 
 Resolve the private actor directory under `appHome/actors`. Read only the three exact PNG slots. Proxy speech to `STUDYFORGE_MLX_AUDIO_URL` or `http://127.0.0.1:8000/v1/audio/speech` using `mlx-community/Qwen3-TTS-12Hz-0.6B-CustomVoice-8bit`, the locally configured/default Mandarin voice, and WAV output. Do not accept a URL, model, voice, path, or filename from the browser.
 
-- [ ] **Step 7: Wire client blob helpers and run GREEN**
+- [x] **Step 7: Wire client blob helpers and run GREEN**
 
 Add authenticated client helpers that return portrait/audio blobs without exposing bearer tokens in image URLs. Run:
 
