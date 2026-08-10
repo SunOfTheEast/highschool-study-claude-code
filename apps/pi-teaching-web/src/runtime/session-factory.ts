@@ -84,10 +84,7 @@ export function customToolsForSession(
   scope: StudySessionScope,
   manager?: Pick<SessionManager, 'getSessionId' | 'getBranch'>,
 ) {
-  if (isMetaScope(scope)) {
-    if (!manager) throw new Error('META_SESSION_MANAGER_REQUIRED');
-    return createMetaTools(root, manager);
-  }
+  if (isMetaScope(scope)) return createMetaTools(root);
   if (isNodeSessionScope(scope)) return customToolsForNode(root, scope, manager);
   if (!manager) throw new Error('FREE_LEARNING_SESSION_MANAGER_REQUIRED');
   return createFreeLearningTools(root, scope, manager);

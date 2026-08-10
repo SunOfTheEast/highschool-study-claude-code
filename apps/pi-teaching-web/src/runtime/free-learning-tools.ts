@@ -6,8 +6,6 @@ import {
 } from './learning-asset-tools';
 import { createFreeLearningMemoryTool } from './memory-tools';
 
-export { latestStudentApprovedAssetSave } from './learning-asset-tools';
-
 export function createFreeLearningTools(
   root: string,
   scope: FreeLearningSessionScope,

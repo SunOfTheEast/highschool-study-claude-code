@@ -80,68 +80,6 @@ const cardParameters = Type.Union([
   Type.Object({ ...cardContentParameters, target }, { additionalProperties: false }),
 ]);
 
-function contentText(content: unknown): string {
-  if (typeof content === 'string') return content;
-  if (!Array.isArray(content)) return '';
-  return content.flatMap((item) => {
-    if (!item || typeof item !== 'object' || Array.isArray(item)) return [];
-    const value = item as Record<string, unknown>;
-    return value.type === 'text' && typeof value.text === 'string' ? [value.text] : [];
-  }).join('');
-}
-
-function dialogueMessages(entries: readonly SessionEntry[]): Array<{
-  role: 'user' | 'assistant';
-  text: string;
-}> {
-  return entries.flatMap((entry) => {
-    if (entry.type !== 'message') return [];
-    const message = entry.message as unknown as Record<string, unknown>;
-    if (message.role !== 'user' && message.role !== 'assistant') return [];
-    return [{
-      role: message.role as 'user' | 'assistant',
-      text: contentText(message.content).trim(),
-    }];
-  }).filter((message) => message.text.length > 0);
-}
-
-function saveWords(kind: 'note' | 'problem-card'): RegExp {
-  return kind === 'note'
-    ? /(笔记|闪卡|记忆卡|note|flashcard)/i
-    : /(题卡|卡片|这道题|problem\s*card)/i;
-}
-
-function proposesSave(text: string, kind: 'note' | 'problem-card'): boolean {
-  return /(保存|存下|存一?下|记下|做成|整理成|留作)/i.test(text) && saveWords(kind).test(text);
-}
-
-function refusesSave(text: string): boolean {
-  return /(不保存|不要保存|先别保存|暂不保存|不用保存|别存|不做成|不要做成)/i.test(text);
-}
-
-function startsWithAffirmation(text: string): boolean {
-  return /^(?:嗯+|可以|好(?:的)?|行|确认|同意|存吧|保存吧|就这样)(?=$|[，。！？!?、,.\s]|建立|创建|保存|存下|按|这)/i
-    .test(text.trim());
-}
-
-export function latestStudentApprovedAssetSave(
-  entries: readonly SessionEntry[],
-  kind: 'note' | 'problem-card',
-): boolean {
-  const messages = dialogueMessages(entries);
-  const latestUserIndex = messages.findLastIndex((message) => message.role === 'user');
-  if (latestUserIndex < 0) return false;
-  const latest = messages[latestUserIndex]!.text.trim();
-  if (refusesSave(latest)) return false;
-  if (proposesSave(latest, kind)) return true;
-
-  if (!startsWithAffirmation(latest)) return false;
-  const previousAssistant = [...messages.slice(0, latestUserIndex)]
-    .reverse()
-    .find((message) => message.role === 'assistant');
-  return previousAssistant ? proposesSave(previousAssistant.text, kind) : false;
-}
-
 function toolResult(value: Record<string, unknown>) {
   return {
     content: [{ type: 'text' as const, text: JSON.stringify(value) }],
@@ -174,9 +112,6 @@ export function createLearningAssetTools(
       execute: async (toolCallId, input) => {
         const replay = successful.get(toolCallId);
         if (replay) return replay;
-        if (!latestStudentApprovedAssetSave(session.getBranch(), 'note')) {
-          throw new Error('ASSET_SAVE_NOT_CONFIRMED: note');
-        }
         const inputTarget = 'target' in input ? input.target : undefined;
         const inputExpectedTagRevision = 'expectedTagRevision' in input
           ? input.expectedTagRevision
@@ -213,9 +148,6 @@ export function createLearningAssetTools(
       execute: async (toolCallId, input) => {
         const replay = successful.get(toolCallId);
         if (replay) return replay;
-        if (!latestStudentApprovedAssetSave(session.getBranch(), 'problem-card')) {
-          throw new Error('ASSET_SAVE_NOT_CONFIRMED: problem-card');
-        }
         const inputTarget = 'target' in input ? input.target : undefined;
         const inputExpectedTagRevision = 'expectedTagRevision' in input
           ? input.expectedTagRevision

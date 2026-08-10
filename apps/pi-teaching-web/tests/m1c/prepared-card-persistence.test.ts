@@ -127,20 +127,13 @@ test('attaches an approved card to an optional prepared Block with an empty Uses
   });
 });
 
-test('keeps course approval separate and leaves no card when approval or Lesson status is invalid', async () => {
-  const unapproved = copyFixture();
-  await expect(execute(unapproved, [
-    message('a1', 'assistant', '课程已经按方案备好。'),
-    message('u1', 'user', '就按这个方案上课。'),
-  ], 'course-only')).rejects.toThrow('ASSET_SAVE_NOT_CONFIRMED');
-  expect(() => readProblemCard(unapproved, 'problem-001')).toThrow();
-
+test('leaves card approval to Plan while retaining the prepared-Lesson gate', async () => {
   const refused = copyFixture();
-  await expect(execute(refused, [
+  await execute(refused, [
     message('a1', 'assistant', '要把完整自编题保存成题卡吗？'),
     message('u1', 'user', '先不要保存为题卡。'),
-  ], 'refused')).rejects.toThrow('ASSET_SAVE_NOT_CONFIRMED');
-  expect(() => readProblemCard(refused, 'problem-001')).toThrow();
+  ], 'refused-dialogue');
+  expect(readProblemCard(refused, 'problem-001').stem).toContain('设函数');
 
   const active = copyFixture(false);
   await expect(execute(active, [

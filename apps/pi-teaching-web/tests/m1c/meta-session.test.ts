@@ -155,16 +155,9 @@ test('loads one compact Meta context without course-tree or full-library permiss
   expect(assembled).not.toContain('## Plan Tree');
 });
 
-test('creates only ROADMAP.md after a visible proposal and explicit confirmation', async () => {
+test('creates only ROADMAP.md without asking Runtime to interpret the dialogue', async () => {
   const root = copyFixture();
-  const entries = [
-    message('a1', 'assistant', '我建议建立一条长期学习路线：先厘清模型边界，再通过比较和迁移练习检验。要按这份 Roadmap 方案创建吗？'),
-    message('u1', 'user', '确认建立这条路线。'),
-  ];
-  const tool = createMetaTools(root, {
-    getSessionId: () => 'meta-session-001',
-    getBranch: () => entries,
-  })[0]!;
+  const tool = createMetaTools(root)[0]!;
   const first = await tool.execute('create-roadmap-1', roadmapInput(), undefined, undefined, {} as never);
   const replay = await tool.execute('create-roadmap-1', roadmapInput(), undefined, undefined, {} as never);
 
@@ -179,40 +172,11 @@ test('creates only ROADMAP.md after a visible proposal and explicit confirmation
   expect(existsSync(join(root, 'plans'))).toBe(false);
 });
 
-test('does not create a Roadmap from silence, rejection, or a learning set that already has one', async () => {
+test('rejects a second Roadmap as a mechanical uniqueness violation', async () => {
   const root = copyFixture();
-  const unconfirmed = createMetaTools(root, {
-    getSessionId: () => 'meta-session-001',
-    getBranch: () => [
-      message('a1', 'assistant', '我先提出一份 Roadmap 方案。'),
-      message('u1', 'user', '我还想再聊聊。'),
-    ],
-  })[0]!;
-  await expect(unconfirmed.execute('no', roadmapInput(), undefined, undefined, {} as never))
-    .rejects.toThrow('ROADMAP_CREATE_NOT_CONFIRMED');
-  expect(existsSync(join(root, 'ROADMAP.md'))).toBe(false);
-
-  const refused = createMetaTools(root, {
-    getSessionId: () => 'meta-session-001',
-    getBranch: () => [
-      message('a2', 'assistant', '要按这份长期学习路线创建 Roadmap 吗？'),
-      message('u2', 'user', '不要创建，我先自由学习。'),
-    ],
-  })[0]!;
-  await expect(refused.execute('refused', roadmapInput(), undefined, undefined, {} as never))
-    .rejects.toThrow('ROADMAP_CREATE_NOT_CONFIRMED');
-
-  const acceptedEntries = [
-    message('a3', 'assistant', '要按这份长期学习路线创建 Roadmap 吗？'),
-    message('u3', 'user', '确认'),
-  ];
-  await createMetaTools(root, {
-    getSessionId: () => 'meta-session-001',
-    getBranch: () => acceptedEntries,
-  })[0]!.execute('yes', roadmapInput(), undefined, undefined, {} as never);
-  await expect(createMetaTools(root, {
-    getSessionId: () => 'meta-session-002',
-    getBranch: () => acceptedEntries,
-  })[0]!.execute('second', roadmapInput(), undefined, undefined, {} as never))
+  await createMetaTools(root)[0]!
+    .execute('first', roadmapInput(), undefined, undefined, {} as never);
+  await expect(createMetaTools(root)[0]!
+    .execute('second', roadmapInput(), undefined, undefined, {} as never))
     .rejects.toThrow('ROADMAP_ALREADY_EXISTS');
 });

@@ -98,7 +98,7 @@ test('keeps runtime authority fields and confirmation flags out of both schemas'
   }
 });
 
-test('rejects a save before the latest student message explicitly approves it', async () => {
+test('leaves Note approval semantics to the teacher and enforces the structured tool input', async () => {
   const root = copyFixture();
   const entries = [
     message('u1', 'user', '继续讲讲这个区别。'),
@@ -112,13 +112,13 @@ test('rejects a save before the latest student message explicitly approves it', 
     selectedAssets: [],
   }, manager(entries));
 
-  expect(execute(tool!, 'save-without-approval', {
-    title: '不应保存',
-    blocks: [{ kind: 'markdown', body: '没有得到批准。' }],
+  await execute(tool!, 'save-without-runtime-dialogue-check', {
+    title: '由工具调用表达保存决定',
+    blocks: [{ kind: 'markdown', body: 'Runtime 不再猜测自然语言确认。' }],
     sourceAliases: [],
-    tags: { core: ['不应保存'], related: [] },
-  })).rejects.toThrow('ASSET_SAVE_NOT_CONFIRMED');
-  expect(() => readLearningNote(root, 'note-001')).toThrow();
+    tags: { core: ['工具边界'], related: [] },
+  });
+  expect(readLearningNote(root, 'note-001').title).toBe('由工具调用表达保存决定');
 });
 
 test('saves after explicit approval, resolves selected aliases, and replays one call', async () => {
@@ -205,11 +205,11 @@ test('content-only tool update keeps a legacy Note without a semantic sidecar', 
     .toThrow('semantic tags do not exist');
 });
 
-test('accepts a short acknowledgement only when it follows a visible card proposal', async () => {
+test('leaves problem-card approval semantics to the teacher', async () => {
   const root = copyFixture();
   const entries = [
-    message('a1', 'assistant', '要不要把刚才这道自编题保存成题卡？题干和答案如下……'),
-    message('u1', 'user', '嗯'),
+    message('a1', 'assistant', '继续讨论，不在 Runtime 中解释是否批准。'),
+    message('u1', 'user', '先不要保存。'),
   ];
   const [, card] = createFreeLearningTools(root, {
     sessionKind: 'free-learning',

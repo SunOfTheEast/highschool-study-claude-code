@@ -7,10 +7,7 @@ import { readLessonHandout } from '../study/lesson-handout';
 import { parseLessonSource, readLesson, readPlan } from '../study/markdown';
 import { lessonNodePath } from '../study/node-paths';
 import { refreshSemanticRecallIndex } from '../study/semantic-index';
-import {
-  latestStudentApprovedAssetSave,
-  type LearningAssetToolSession,
-} from './learning-asset-tools';
+import type { LearningAssetToolSession } from './learning-asset-tools';
 import {
   commitDocumentCandidates,
   type DocumentCandidate,
@@ -173,9 +170,6 @@ export function createPlanTools(
     execute: async (toolCallId, input) => {
       const replay = successful.get(toolCallId);
       if (replay) return replay;
-      if (!latestStudentApprovedAssetSave(session.getBranch(), 'problem-card')) {
-        throw new Error('ASSET_SAVE_NOT_CONFIRMED: problem-card');
-      }
       const planned = planProblemCardSave(root, session.getSessionId(), {
         stem: input.stem,
         standardAnswer: input.standardAnswer,

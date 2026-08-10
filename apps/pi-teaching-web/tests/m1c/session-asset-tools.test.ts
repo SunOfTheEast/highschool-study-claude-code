@@ -78,7 +78,7 @@ test('Lesson exposes the same narrow asset tools without restoring native writes
   ]);
 });
 
-test('Lesson saves only from its exact Uses after confirmation and never discovers an unlinked card', async () => {
+test('Lesson leaves approval semantics to Tutor but still binds only its exact Uses', async () => {
   const root = copyFixture();
   writeFileSync(join(root, 'cards/unlinked.card.yaml'), [
     'schema: highschool-study.problem-card.v1',
@@ -88,18 +88,11 @@ test('Lesson saves only from its exact Uses after confirmation and never discove
     '',
   ].join('\n'));
 
-  const notApproved = createLessonTools(root, lessonPath, manager([
+  const save = createLessonTools(root, lessonPath, manager([
     message('a1', 'assistant', '你已经抓住参数位置了。'),
     message('u1', 'user', '我懂了，继续吧。'),
   ])).find((tool) => tool.name === 'save_note')!;
-  await expect(execute(notApproved, 'not-approved', noteInput(['source-1'])))
-    .rejects.toThrow('ASSET_SAVE_NOT_CONFIRMED');
-
-  const approved = createLessonTools(root, lessonPath, manager([
-    message('a1', 'assistant', '我把刚才形成的结论整理如下：先辨认参数落在哪个结构里，再决定入口。要保存为笔记吗？'),
-    message('u1', 'user', '可以，就按这个版本保存。'),
-  ])).find((tool) => tool.name === 'save_note')!;
-  const receipt = await execute(approved, 'save-note', noteInput(['source-1']));
+  const receipt = await execute(save, 'save-note', noteInput(['source-1']));
 
   expect(receipt).toMatchObject({
     ok: true,

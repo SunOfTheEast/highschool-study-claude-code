@@ -512,10 +512,7 @@ class M1bFixtureRegistry {
     record: StoredMetaSession,
     input: Record<string, unknown>,
   ): Promise<void> {
-    const tools = createMetaTools(this.root, {
-      getSessionId: () => record.id,
-      getBranch: () => record.entries,
-    });
+    const tools = createMetaTools(this.root);
     await this.executeTool(
       record,
       'create_roadmap',
