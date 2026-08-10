@@ -37,6 +37,7 @@ import { deriveFreeLearningTitle } from '../study/display-projections';
 import { formatMaterialLocator } from './material-locator';
 import { eventTransport } from './transport';
 import { publicErrorText } from './public-errors';
+import { resetRouteScroll } from './route-scroll';
 
 type ConnectionState = 'open' | 'connecting' | 'closed';
 
@@ -301,6 +302,7 @@ export function App() {
   const navigate = (next: BrowserRoute, replace = false) => {
     const path = formatBrowserRoute(next);
     window.history[replace ? 'replaceState' : 'pushState'](null, '', path);
+    resetRouteScroll();
     void loadRoute(next);
   };
 
@@ -312,9 +314,10 @@ export function App() {
   }, []);
 
   useEffect(() => {
-    const pop = () => void loadRoute(
-      parseBrowserRoute(window.location.pathname) ?? { kind: 'home' },
-    );
+    const pop = () => {
+      resetRouteScroll();
+      void loadRoute(parseBrowserRoute(window.location.pathname) ?? { kind: 'home' });
+    };
     window.addEventListener('popstate', pop);
     return () => window.removeEventListener('popstate', pop);
   }, []);

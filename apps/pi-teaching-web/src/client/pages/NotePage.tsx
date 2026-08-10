@@ -65,7 +65,10 @@ export function NotePage({
   return (
     <main className="m1b-note-page asset-reading-page">
       <header>
-        <div><small>Note · 第 {value.revision} 版</small><h1>{value.title}</h1></div>
+        <div>
+          <small>Note · 第 {value.revision} 版</small>
+          <h1><MarkdownView inline>{value.title}</MarkdownView></h1>
+        </div>
         <div className="asset-detail-actions">
           {onAskTeacher && (
             <button type="button" className="action-solid" onClick={onAskTeacher}>

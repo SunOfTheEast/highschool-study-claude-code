@@ -162,3 +162,36 @@ test('keeps a problem answer gated and never renders teacher rationale', () => {
   expect(markup).not.toContain('teacherRationale');
   expect(markup).not.toContain('教师依据');
 });
+
+test('renders Markdown emphasis in asset and problem-card titles', () => {
+  const assets: LearningAssetLibrarySnapshot = {
+    notes: [],
+    problemCards: [{
+      kind: 'problem-card', id: 'problem-001', title: '**参数主元**', revision: 1,
+      updatedAt: '2026-08-10T00:00:00.000Z', tags: null, sources: [],
+    }],
+  };
+  const shelf = renderToStaticMarkup(
+    <AssetsPage value={assets} onOpen={() => {}} onAsk={() => {}} />,
+  );
+  const card = renderToStaticMarkup(
+    <ProblemCardPage
+      value={{
+        kind: 'problem-card', id: 'problem-001', revision: 1, title: '**参数主元**',
+        stem: '题干', studentNote: '', standardAnswer: null, sources: [],
+        activity: {
+          cardId: 'problem-001', events: [], latestAttempt: null,
+          answerRevealedForLatestAttempt: false,
+        },
+      }}
+      onAttempt={async () => {}}
+      onReveal={async () => {}}
+      onSaveNote={async () => {}}
+      onAskTeacher={async () => {}}
+    />,
+  );
+
+  expect(shelf).toContain('<strong>参数主元</strong>');
+  expect(card).toContain('<h1><strong>参数主元</strong></h1>');
+  expect(`${shelf}${card}`).not.toContain('**参数主元**');
+});

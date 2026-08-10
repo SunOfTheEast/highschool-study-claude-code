@@ -31,7 +31,7 @@ export function HelpPage({ documents, onBack }: { documents: HelpDocument[]; onB
         </nav>
         <article className="desktop-help-paper">
           {document
-            ? <MarkdownView>{document.markdown}</MarkdownView>
+            ? <MarkdownView allowDataImages>{document.markdown}</MarkdownView>
             : <p>离线教程暂时无法读取。</p>}
         </article>
       </section>

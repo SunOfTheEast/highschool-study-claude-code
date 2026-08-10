@@ -6,6 +6,7 @@ import type {
   LearningMaterial,
 } from '../../shared/contracts';
 import { AssetSources, AssetTags } from '../components/AssetSources';
+import { MarkdownView } from '../components/MarkdownView';
 
 export type MaterialUploadInput = { title: string; file: File };
 
@@ -24,11 +25,11 @@ function AssetRow({
     <article className="m1b-asset-row" data-selected={selected ? 'true' : 'false'}>
       <label>
         <input type="checkbox" checked={selected} onChange={onToggle} />
-        <span className="sr-only">选择 {asset.title}</span>
+        <span className="sr-only">选择 <MarkdownView inline>{asset.title}</MarkdownView></span>
       </label>
       <button type="button" onClick={onOpen}>
         <small>{asset.kind === 'note' ? 'NOTE' : 'PROBLEM'}</small>
-        <strong>{asset.title}</strong>
+        <b><MarkdownView inline>{asset.title}</MarkdownView></b>
         <span>第 {asset.revision} 版</span>
         <AssetTags value={asset.tags} />
         <AssetSources value={asset.sources} />

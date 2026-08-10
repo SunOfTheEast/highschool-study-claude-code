@@ -93,6 +93,21 @@ test('renders a GFM table with math inside its cells', () => {
   expect(markup).toContain('class="katex"');
 });
 
+test('allows packaged help images without widening ordinary teaching Markdown', () => {
+  const source = '![帮助图](data:image/png;base64,AAAA)';
+  const help = renderToStaticMarkup(<MarkdownView allowDataImages>{source}</MarkdownView>);
+  const teaching = renderToStaticMarkup(<MarkdownView>{source}</MarkdownView>);
+
+  expect(help).toContain('src="data:image/png;base64,AAAA"');
+  expect(teaching).not.toContain('src="data:image/png;base64,AAAA"');
+});
+
+test('renders one-line asset titles without a paragraph wrapper', () => {
+  const markup = renderToStaticMarkup(<MarkdownView inline>{'**参数主元**'}</MarkdownView>);
+
+  expect(markup).toBe('<strong>参数主元</strong>');
+});
+
 test('gives display math a readable textbook scale and vertical breathing room', () => {
   const styles = readFileSync(join(import.meta.dir, '../../src/client/styles.css'), 'utf8');
   const rule = /\.katex-display\s*\{([^}]*)\}/.exec(styles)?.[1] ?? '';

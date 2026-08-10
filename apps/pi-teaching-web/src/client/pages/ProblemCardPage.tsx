@@ -71,7 +71,10 @@ export function ProblemCardPage({
   return (
     <main className="m1b-problem-page asset-reading-page">
       <header>
-        <div><small>Problem card · 第 {value.revision} 版</small><h1>{value.title}</h1></div>
+        <div>
+          <small>Problem card · 第 {value.revision} 版</small>
+          <h1><MarkdownView inline>{value.title}</MarkdownView></h1>
+        </div>
         <button
           type="button"
           className="action-solid"

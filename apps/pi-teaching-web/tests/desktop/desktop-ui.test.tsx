@@ -2,6 +2,7 @@ import { expect, test } from 'bun:test';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DiagnosticPage } from '../../src/client/desktop/DiagnosticPage';
 import { FirstRun } from '../../src/client/desktop/FirstRun';
+import { HelpPage } from '../../src/client/desktop/HelpPage';
 import {
   defaultModelDraft,
   ModelSettings,
@@ -98,4 +99,19 @@ test('keeps diagnosis typed and offers recovery rather than a blank classroom', 
   expect(markup).not.toContain('启动失败</h1>');
   expect(markup).not.toContain('MODEL_UNAVAILABLE');
   expect(markup).not.toContain('openai-codex/gpt-5.6-sol');
+});
+
+test('renders packaged help images from the offline document payload', () => {
+  const markup = renderToStaticMarkup(
+    <HelpPage
+      documents={[{
+        id: 'first-learning',
+        title: '第一次学习',
+        markdown: '![开始学习](data:image/png;base64,AAAA)',
+      }]}
+      onBack={() => {}}
+    />,
+  );
+
+  expect(markup).toContain('src="data:image/png;base64,AAAA"');
 });
