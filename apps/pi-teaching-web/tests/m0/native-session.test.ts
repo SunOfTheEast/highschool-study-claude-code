@@ -34,6 +34,7 @@ import { commitDocumentCandidates } from '../../src/runtime/multi-document-trans
 import {
   appendSessionOwner,
   findFreeLearningPiSession,
+  listPiSessionFacts,
 } from '../../src/runtime/session-owner';
 import { WorkspaceRegistry } from '../../src/runtime/workspace-registry';
 
@@ -168,6 +169,60 @@ test('restores a desktop session from the configured StudyForge session director
     const restored = await findFreeLearningPiSession(root, manager.getSessionId());
 
     expect(restored?.sessionFile).toBe(manager.getSessionFile());
+  } finally {
+    if (previousSessionsDir === undefined) {
+      delete process.env.PI_CODING_AGENT_SESSION_DIR;
+    } else {
+      process.env.PI_CODING_AGENT_SESSION_DIR = previousSessionsDir;
+    }
+  }
+});
+
+test('counts student turns rather than teacher replies as learning-session entry times', async () => {
+  const root = copyFixture();
+  const sessionsDir = join(root, 'private-agent', 'sessions');
+  const previousSessionsDir = process.env.PI_CODING_AGENT_SESSION_DIR;
+  process.env.PI_CODING_AGENT_SESSION_DIR = sessionsDir;
+
+  try {
+    const manager = createStudySessionManager(root, null, sessionsDir);
+    appendSessionOwner(manager, {
+      sessionKind: 'free-learning',
+      title: '自由学习',
+      createdAt: '2026-08-10T00:00:00.000Z',
+      selectedAssets: [],
+    });
+    manager.appendMessage({
+      role: 'user',
+      content: '你好',
+      timestamp: Date.parse('2026-08-10T00:01:00.000Z'),
+    });
+    await new Promise((resolve) => setTimeout(resolve, 5));
+    manager.appendMessage({
+      role: 'assistant',
+      content: [{ type: 'text', text: '你好！今天想聊点什么？' }],
+      api: 'openai-responses',
+      provider: 'openai',
+      model: 'test-model',
+      usage: {
+        input: 0,
+        output: 0,
+        cacheRead: 0,
+        cacheWrite: 0,
+        totalTokens: 0,
+        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, total: 0 },
+      },
+      stopReason: 'stop',
+      timestamp: Date.parse('2026-08-10T00:01:01.000Z'),
+    });
+
+    const fact = (await listPiSessionFacts(root)).find((item) => item.id === manager.getSessionId());
+    const userEntry = manager.getBranch().find((entry) => (
+      entry.type === 'message' && entry.message.role === 'user'
+    ));
+
+    expect(userEntry).toBeDefined();
+    expect(fact?.entryTimes).toEqual([userEntry!.timestamp]);
   } finally {
     if (previousSessionsDir === undefined) {
       delete process.env.PI_CODING_AGENT_SESSION_DIR;

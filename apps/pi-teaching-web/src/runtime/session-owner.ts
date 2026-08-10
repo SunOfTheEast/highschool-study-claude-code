@@ -270,6 +270,7 @@ export async function listPiSessionFacts(root: string): Promise<PiSessionFact[]>
     if (!owner) continue;
     const entryTimes = [...new Set(manager.getBranch().flatMap((entry) => (
       entry.type === 'message'
+      && entry.message.role === 'user'
       && typeof entry.timestamp === 'string'
       && !Number.isNaN(Date.parse(entry.timestamp))
         ? [entry.timestamp]

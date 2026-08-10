@@ -581,7 +581,11 @@ class M1bFixtureRegistry {
         id: record.id,
         title: record.title,
         createdAt: record.createdAt,
-        entryTimes: record.entries.map((entry) => entry.timestamp),
+        entryTimes: record.entries.flatMap((entry) => (
+          entry.type === 'message' && entry.message.role === 'user'
+            ? [entry.timestamp]
+            : []
+        )),
         owner,
         status: 'status' in record ? record.status : 'active',
       };
