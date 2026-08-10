@@ -1,4 +1,6 @@
 import type { ImageContent } from '@earendil-works/pi-ai';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import {
   createAgentSession,
   createEventBus,
@@ -12,7 +14,10 @@ import { createPlanCompactionPrompt } from './plan-compaction';
 import { createLessonTools } from './lesson-tools';
 import { createPlanTools } from './plan-tools';
 import { createMetaTools } from './meta-tools';
-import { createRoleResourceLoader } from './resource-loader';
+import {
+  createRoleResourceLoader,
+  resolveStudyForgeResourceRoot,
+} from './resource-loader';
 import { appendSessionOwner } from './session-owner';
 import {
   isFreeLearningScope,
@@ -34,6 +39,7 @@ import {
 } from './pending-tool-results';
 import type { DesktopModelSelection } from '../desktop/contracts';
 import { DesktopModelService } from '../desktop/model-service';
+import { createPeerResponder, type PeerResponder } from './peer-runner';
 
 export interface StudySession {
   readonly sessionId: string;
@@ -60,6 +66,7 @@ export type PiRuntimeOptions = {
   modelsPath: string;
   sessionsDir: string;
   teacher: DesktopModelSelection;
+  scout: DesktopModelSelection;
 };
 
 export function sessionFactoryInput(
@@ -83,11 +90,12 @@ export function customToolsForSession(
   root: string,
   scope: StudySessionScope,
   manager?: Pick<SessionManager, 'getSessionId' | 'getBranch'>,
+  peerResponder?: PeerResponder,
 ) {
   if (isMetaScope(scope)) return createMetaTools(root);
   if (isNodeSessionScope(scope)) return customToolsForNode(root, scope, manager);
   if (!manager) throw new Error('FREE_LEARNING_SESSION_MANAGER_REQUIRED');
-  return createFreeLearningTools(root, scope, manager);
+  return createFreeLearningTools(root, scope, manager, peerResponder);
 }
 
 type PiAgentSession = Awaited<ReturnType<typeof createAgentSession>>['session'];
@@ -132,8 +140,19 @@ export async function createPiSessionFactory(
   const modelRuntime = await ModelRuntime.create(options
     ? { authPath: options.authPath, modelsPath: options.modelsPath }
     : undefined);
-  const model = options
-    ? await new DesktopModelService(modelRuntime).resolve(options.teacher)
+  const modelService = options ? new DesktopModelService(modelRuntime) : undefined;
+  const model = options ? await modelService!.resolve(options.teacher) : undefined;
+  const peerModel = options ? await modelService!.resolve(options.scout) : undefined;
+  const peerResponder = options
+    ? createPeerResponder(
+      (context, requestOptions) => modelRuntime.completeSimple(
+        peerModel!,
+        context,
+        requestOptions,
+      ),
+      options.scout.thinking,
+      readFileSync(join(resolveStudyForgeResourceRoot(), 'peers', 'acheng.md'), 'utf8'),
+    )
     : undefined;
   const settingsManager = options ? SettingsManager.create(root, options.agentDir) : undefined;
   return async ({ sessionFile, ...scope }) => {
@@ -148,7 +167,7 @@ export async function createPiSessionFactory(
       recoverOpenedSessionState(root, manager);
     }
     const resourceLoader = await createRoleResourceLoader(root, scope, eventBus);
-    const customTools = customToolsForSession(root, scope, manager);
+    const customTools = customToolsForSession(root, scope, manager, peerResponder);
     const { session } = await createAgentSession({
       cwd: root,
       modelRuntime,
@@ -164,7 +183,7 @@ export async function createPiSessionFactory(
       tools: [...(isMetaScope(scope)
         ? META_MODEL_TOOLS
         : isFreeLearningScope(scope)
-          ? modelToolsForFreeLearning(memoryEnabled(root))
+          ? modelToolsForFreeLearning(memoryEnabled(root), Boolean(peerResponder))
           : modelToolsForNode(scope.nodeKind, memoryEnabled(root)))],
     });
     await bindStudyExtensions(session);

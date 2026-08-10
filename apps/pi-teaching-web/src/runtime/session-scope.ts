@@ -88,10 +88,15 @@ export const META_MODEL_TOOLS = [
   'create_roadmap',
 ] as const;
 
-export function modelToolsForFreeLearning(hasMemory: boolean): readonly string[] {
-  return hasMemory
-    ? [...FREE_LEARNING_MODEL_TOOLS, 'free_learning_memory_commit']
-    : FREE_LEARNING_MODEL_TOOLS;
+export function modelToolsForFreeLearning(
+  hasMemory: boolean,
+  peerEnabled = false,
+): readonly string[] {
+  return [
+    ...FREE_LEARNING_MODEL_TOOLS,
+    ...(hasMemory ? ['free_learning_memory_commit'] : []),
+    ...(peerEnabled ? ['ask_peer'] : []),
+  ];
 }
 
 export function isFreeLearningScope(

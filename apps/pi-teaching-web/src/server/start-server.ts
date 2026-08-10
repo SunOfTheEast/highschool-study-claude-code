@@ -126,6 +126,7 @@ export async function startStudyForgeServer(arguments_: RuntimeArguments) {
           modelsPath: paths.modelsPath,
           sessionsDir: paths.sessionsDir,
           teacher: config.teacher,
+          scout: config.scout,
         });
         registry = new WorkspaceRegistry(validation.root, factory);
         teachingHandler = createRequestHandler({
