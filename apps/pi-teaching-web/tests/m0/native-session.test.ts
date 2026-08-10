@@ -609,7 +609,7 @@ test('keeps classroom and memory writes on bound teaching tools', () => {
   }
 });
 
-test('loads the Plan subagent guard and the Lesson memory guard only in their scopes', async () => {
+test('loads both Plan guards and the Lesson memory guard only in their scopes', async () => {
   const root = copyFixture();
   const previousCwd = process.cwd();
   process.chdir(root);
@@ -639,7 +639,7 @@ test('loads the Plan subagent guard and the Lesson memory guard only in their sc
   expect(extensionToolNames(lessonLoader)).not.toContain('subagent');
   expect(planLoader.getExtensions().extensions.filter(
     (extension) => extension.handlers.has('tool_call'),
-  )).toHaveLength(1);
+  )).toHaveLength(2);
   expect(lessonLoader.getExtensions().extensions.filter(
     (extension) => extension.handlers.has('tool_call'),
   )).toHaveLength(1);

@@ -33,9 +33,9 @@ frontmatter。按以下互斥顺序路由，并且只读取命中的一个阶段
 4. 链接、身份或状态无法可靠读取 → 停止并说明文档问题，不从目录寻找替代文件。
 
 学生在当前 Plan 仍为 `prepared` 或 `active` 时主动转向，或证据表明阶段目标可能选错，
-先请学生回到当前 Plan Session 讨论“选择结束”与收口；Plan 经界面完成后，Roadmap 才
-进入下一个 Plan 的复诊。路由不新增 phase 字段。未来 Plan 只保留为 Roadmap 正文中的
-暂定方向，不预先创建文件。
+先请学生回到当前 Plan Session 讨论“选择结束”与收口；该 Session 调用 `finish_plan`
+完成后，Roadmap 才进入下一个 Plan 的复诊。路由不新增 phase 字段。未来 Plan 只保留为
+Roadmap 正文中的暂定方向，不预先创建文件。
 
 ## 统一批准门
 

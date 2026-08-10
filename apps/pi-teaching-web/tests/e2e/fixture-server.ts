@@ -67,6 +67,19 @@ function assistantMessage(text: string, timestamp: number) {
 const m0Histories = new Map<SessionKey, SessionEntry[]>();
 const m0Listeners = new Map<SessionKey, Set<(event: AgentSessionEvent) => void>>();
 let m0Sequence = 0;
+let m0FinishBarrier: Promise<void> | null = null;
+let releaseM0Finish: (() => void) | null = null;
+
+function holdM0Finish(): void {
+  if (m0FinishBarrier) return;
+  m0FinishBarrier = new Promise<void>((resolve) => { releaseM0Finish = resolve; });
+}
+
+function releaseHeldM0Finish(): void {
+  releaseM0Finish?.();
+  releaseM0Finish = null;
+  m0FinishBarrier = null;
+}
 
 function resetM0(): void {
   const expectedPrefix = join(tmpdir(), 'studyforge-m0-e2e-');
@@ -79,6 +92,7 @@ function resetM0(): void {
   }
   m0Histories.clear();
   m0Sequence = 0;
+  releaseHeldM0Finish();
 }
 
 function publishM0(key: SessionKey, event: AgentSessionEvent): void {
@@ -211,6 +225,8 @@ const m0Registry = {
       (key === 'lesson:plan-001:lesson-001' && text.trim() === '我想结束本课。')
       || (key === 'plan:plan-001' && text.trim() === '我想完成这一阶段。')
     ) {
+      const barrier = m0FinishBarrier;
+      if (barrier) await barrier;
       await finishM0Node(key, entries, user.id);
       return;
     }
@@ -867,6 +883,14 @@ const server = Bun.serve({
     const m1c = fixture === 'm1c';
     if (!fixture && url.pathname === '/api/__e2e/m0/reset' && request.method === 'POST') {
       resetM0();
+      return Response.json({ ok: true });
+    }
+    if (!fixture && url.pathname === '/api/__e2e/m0/finish/hold' && request.method === 'POST') {
+      holdM0Finish();
+      return Response.json({ ok: true });
+    }
+    if (!fixture && url.pathname === '/api/__e2e/m0/finish/release' && request.method === 'POST') {
+      releaseHeldM0Finish();
       return Response.json({ ok: true });
     }
     if (m1b && url.pathname === '/api/__e2e/m1b/reset' && request.method === 'POST') {

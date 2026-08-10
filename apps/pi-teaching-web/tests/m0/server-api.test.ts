@@ -449,3 +449,32 @@ test('starts nodes directly but routes terminal actions into their teacher sessi
     ['plan:plan-001', '我想完成这一阶段。'],
   ]);
 });
+
+test('coalesces duplicate in-flight terminal intents for the same Session', async () => {
+  const root = copyFixture();
+  const sent: Array<[SessionKey, string]> = [];
+  let release!: () => void;
+  const held = new Promise<void>((resolve) => { release = resolve; });
+  const handler = createRequestHandler({
+    root,
+    hub: new EventHub(),
+    registry: fakeRegistry({
+      send: async (key: SessionKey, text: string) => {
+        sent.push([key, text]);
+        await held;
+      },
+    }) as never,
+  });
+  const request = () => handler(new Request(
+    'http://local/api/plans/plan-001/lessons/lesson-001/close',
+    { method: 'POST' },
+  ));
+
+  const [first, second] = await Promise.all([request(), request()]);
+  expect(first?.status).toBe(202);
+  expect(second?.status).toBe(202);
+  await Promise.resolve();
+  expect(sent).toEqual([['lesson:plan-001:lesson-001', '我想结束本课。']]);
+
+  release();
+});

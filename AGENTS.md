@@ -141,7 +141,9 @@ changing the judgment or adding another model pass.
 
 Roadmap keeps the native `read`, `grep`, `find`, `ls`, `edit`, and `write` tools. Plan
 keeps those tools and additionally has `subagent` for fresh-context copies of one
-packaged read-only `study-material-scout`. Lesson has the native file tools plus the
+packaged read-only `study-material-scout`. Runtime allows Plan content edits but blocks
+native `edit/write` from changing the bound `PLAN.md` lifecycle status; only the
+scope-bound `finish_plan` tool can complete it. Lesson has the native file tools plus the
 node-bound `classroom_log_append`, `classroom_update`, and conditional
 `lesson_memory_commit`, plus student-approved `save_note` and `save_problem_card` tools.
 Its native `edit/write` calls are Runtime-blocked; Tutor cannot

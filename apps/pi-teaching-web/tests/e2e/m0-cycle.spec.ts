@@ -99,10 +99,18 @@ test('completes the M0 Roadmap, Plan, Lesson and Knowledge browser cycle', async
   await expect(page.getByRole('complementary', { name: '本课提纲' })).toContainText('入口练习');
 
   delayClosedLessonReload = true;
+  expect((await page.request.post('/api/__e2e/m0/finish/hold')).status()).toBe(200);
   await page.getByRole('button', { name: '结束本课' }).click();
   await expect(page).toHaveURL(/\/course\/plan\/plan-001\/lesson\/lesson-001$/);
   await expect(page.getByText('我想结束本课。', { exact: true })).toBeVisible();
-  await page.waitForTimeout(400);
+  await page.waitForTimeout(250);
+  await expect(page.getByRole('button', { name: '结束本课' })).toBeDisabled();
+  await expect(page.getByText('已结束 · 只读')).toHaveCount(0);
+  const activeCourse = await page.request.get(
+    '/api/course?selected=plans%2Fplan-001%2Flessons%2Flesson-001.md',
+  );
+  expect((await activeCourse.json()).selected.status).toBe('active');
+  expect((await page.request.post('/api/__e2e/m0/finish/release')).status()).toBe(200);
   await expect(page.getByText('已结束 · 只读')).toBeVisible();
   await expect(page.getByText('这节课已经按刚才的学习情况收好尾了。', { exact: true }))
     .toBeVisible();

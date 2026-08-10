@@ -204,4 +204,3 @@ Expected: unit/type/build pass and all four browser suites pass. Update the dete
 git add AGENTS.md apps/pi-teaching-web/resources apps/pi-teaching-web/tests
 git commit -m "docs: teach agents the course close handshake"
 ```
-

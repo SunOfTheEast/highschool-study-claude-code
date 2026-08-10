@@ -116,6 +116,7 @@ export function CoursePage({
   const selectedNode = findNode(value.tree, document.path) ?? value.tree;
   const sessionKey = selectedNode.sessionKey as SessionKey;
   const action = actionFor(document);
+  const terminalAction = action?.action === 'complete-plan' || action?.action === 'close-lesson';
   const activeBlock = document.kind === 'lesson'
     ? document.blocks.find((block) => block.status === 'active') ?? null
     : null;
@@ -158,7 +159,7 @@ export function CoursePage({
             <button
               type="button"
               className="node-primary-action action-wash"
-              disabled={running || !connected}
+              disabled={terminalAction && (running || !connected)}
               onClick={() => void onLifecycle(action.action, selectedNode)}
             >
               {action.label}

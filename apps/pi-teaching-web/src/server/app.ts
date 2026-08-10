@@ -279,6 +279,7 @@ function safeStaticPath(root: string, pathname: string): string | null {
 
 export function createRequestHandler(deps?: AppDependencies) {
   const bound = new Map<SessionKey, () => void>();
+  const pendingTerminalIntents = new Set<SessionKey>();
 
   return async (
     request: Request,
@@ -372,7 +373,7 @@ export function createRequestHandler(deps?: AppDependencies) {
       bound.set(key, unsubscribe);
     };
 
-    const queueTurn = async (key: SessionKey, text: string) => {
+    const queueTurn = async (key: SessionKey, text: string, onSettled?: () => void) => {
       await bind(key);
       deps.hub.publish({ type: 'session-run', sessionKey: key, status: 'running' });
       void deps.registry.send(key, text)
@@ -381,12 +382,22 @@ export function createRequestHandler(deps?: AppDependencies) {
           sessionKey: key,
           message: publicSessionErrorText(),
         }))
-        .finally(() => deps.hub.publish({
-          type: 'session-run',
-          sessionKey: key,
-          status: 'idle',
-        }));
+        .finally(() => {
+          onSettled?.();
+          deps.hub.publish({ type: 'session-run', sessionKey: key, status: 'idle' });
+        });
       return json({ accepted: true }, 202);
+    };
+
+    const queueTerminalIntent = async (key: SessionKey, text: string) => {
+      if (pendingTerminalIntents.has(key)) return json({ accepted: true }, 202);
+      pendingTerminalIntents.add(key);
+      try {
+        return await queueTurn(key, text, () => pendingTerminalIntents.delete(key));
+      } catch (error) {
+        pendingTerminalIntents.delete(key);
+        throw error;
+      }
     };
 
     try {
@@ -738,7 +749,10 @@ export function createRequestHandler(deps?: AppDependencies) {
         const lessonId = nodeId(lessonAction[2]!);
         if (!planId || !lessonId) return json({ error: 'NODE_ID_INVALID' }, 400);
         if (lessonAction[3] === 'close') {
-          return queueTurn(`lesson:${planId}:${lessonId}` as SessionKey, '我想结束本课。');
+          return queueTerminalIntent(
+            `lesson:${planId}:${lessonId}` as SessionKey,
+            '我想结束本课。',
+          );
         }
         const result = await lifecycle.startLesson(planId, lessonId);
         deps.hub.publish({ type: 'course-invalidated' });
@@ -750,7 +764,7 @@ export function createRequestHandler(deps?: AppDependencies) {
         const id = nodeId(planAction[1]!);
         if (!id) return json({ error: 'NODE_ID_INVALID' }, 400);
         if (planAction[2] === 'complete') {
-          return queueTurn(`plan:${id}` as SessionKey, '我想完成这一阶段。');
+          return queueTerminalIntent(`plan:${id}` as SessionKey, '我想完成这一阶段。');
         }
         const result = await lifecycle.startPlan(id);
         deps.hub.publish({ type: 'course-invalidated' });

@@ -24,6 +24,7 @@ import {
 } from './session-scope';
 import { studySubagentGuard } from './study-subagent-guard';
 import { lessonMemoryGuard } from './lesson-memory-guard';
+import { planLifecycleGuard } from './plan-lifecycle-guard';
 import { renderLessonSourceAliases } from './lesson-tools';
 import { memoryEnabled } from './memory-tools';
 import { renderSelectedAssetContext } from '../study/learning-assets';
@@ -292,6 +293,11 @@ export async function createRoleResourceLoader(
       {
         name: 'study-subagent-guard',
         factory: studySubagentGuard,
+        hidden: true,
+      },
+      {
+        name: 'plan-lifecycle-guard',
+        factory: planLifecycleGuard(root, scope),
         hidden: true,
       },
     ]

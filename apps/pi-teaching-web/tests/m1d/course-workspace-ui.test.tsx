@@ -85,6 +85,21 @@ test('keeps lifecycle ownership and the closed-Lesson read-only gate unchanged',
   );
   expect(runningPlan).toMatch(/class="node-primary-action action-wash"[^>]*disabled/);
 
+  const preparedValue = readWorkspace(fixture, 'plans/plan-001/PLAN.md');
+  const activePlanNode = preparedValue.tree.children[0]!;
+  const preparedPlan = renderCourse({
+    ...preparedValue,
+    selected: preparedValue.selected?.kind === 'plan'
+      ? { ...preparedValue.selected, status: 'prepared' }
+      : preparedValue.selected,
+    tree: {
+      ...preparedValue.tree,
+      children: [{ ...activePlanNode, status: 'prepared' }],
+    },
+  }, { running: true, connected: false });
+  expect(preparedPlan).toContain('开始这一阶段');
+  expect(preparedPlan).not.toMatch(/class="node-primary-action action-wash"[^>]*disabled/);
+
   const activeValue = readWorkspace(fixture, 'plans/plan-001/lessons/lesson-001.md');
   const plan = activeValue.tree.children[0]!;
   const lesson = plan.children[0]!;
