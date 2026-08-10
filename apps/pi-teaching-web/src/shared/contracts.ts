@@ -208,6 +208,12 @@ export type LearningSetGuide = {
   raw: string;
 };
 
+export type StudentLearningSetGuide = {
+  title: string;
+  introduction: string;
+  principles: string;
+};
+
 export type FreeLearningSessionSummary = {
   id: string;
   sessionKey: FreeLearningSessionKey;
@@ -276,11 +282,10 @@ export type LearningFootprintSnapshot = {
 };
 
 export type LearningSetHomeSnapshot = {
-  guide: LearningSetGuide;
+  guide: StudentLearningSetGuide;
   hasCourse: boolean;
   course: null | {
     title: string;
-    currentPosition: string;
     route: '/course';
     activeLesson: ActiveLessonSummary | null;
   };

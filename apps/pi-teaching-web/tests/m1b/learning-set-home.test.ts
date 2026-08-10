@@ -27,7 +27,18 @@ test('keeps an existing Roadmap available as an optional home destination', () =
   expect(home.assets.problemCards).toBe(1);
 });
 
+test('projects only student-facing guide content and structural course facts', () => {
+  const home = readLearningSetHome(course);
+
+  expect(home.guide).toEqual({
+    title: '导数结构学习集',
+    introduction: '这个学习集帮助你识别导数综合题的结构，并逐步学会选择路线。',
+    principles: '- 碰到新题时，先说清自己在哪一步犹豫。',
+  });
+  expect(JSON.stringify(home)).not.toContain('这句教师诊断绝不能出现在首页');
+  expect(home.course).not.toHaveProperty('currentPosition');
+});
+
 test('treats absent legacy graph, cards and materials as an empty asset library', () => {
   expect(readKnowledge(blank)).toEqual({ methods: [], cards: [], materials: [] });
 });
-

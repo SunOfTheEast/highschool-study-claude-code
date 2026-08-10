@@ -95,6 +95,11 @@
 .home-quiet-actions a:hover,
 .home-quiet-actions button:hover { color: var(--accent-deep); }
 
+.home-learning-principles {
+  margin-bottom: var(--space-9);
+}
+
+.home-learning-principles > header,
 .m1b-recent > header {
   display: flex;
   gap: var(--space-4);
@@ -103,6 +108,7 @@
   border-bottom: 1px solid var(--ink);
 }
 
+.home-learning-principles h2,
 .m1b-recent h2,
 .m1b-assets h1,
 .m1b-assets h2,

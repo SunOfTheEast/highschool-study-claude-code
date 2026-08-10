@@ -14,7 +14,7 @@ import { MaterialPage } from '../../src/client/pages/MaterialPage';
 import { formatBrowserRoute, parseBrowserRoute } from '../../src/client/routes';
 
 const home: LearningSetHomeSnapshot = {
-  guide: { title: '化学学习集', body: '从问题开始。', raw: '' },
+  guide: { title: '化学学习集', introduction: '从问题开始。', principles: '' },
   hasCourse: false,
   course: null,
   assets: { notes: 1, problemCards: 0, materials: 1 },
@@ -71,7 +71,6 @@ test('offers Meta before a Roadmap and replaces it with the real course entrance
         hasCourse: true,
         course: {
           title: '化学反应原理路线',
-          currentPosition: '准备第一个 Plan。',
           route: '/course',
           activeLesson: null,
         },

@@ -21,15 +21,16 @@ export function HomePage({
     onNavigate(route);
   };
   const activeLesson = value.course?.activeLesson ?? null;
-  const guideBody = value.guide.body.replace(/^#\s+.+$/m, '').trim();
   return (
     <main className="m1b-home home-portal">
       <header className="m1b-home-heading">
         <small>StudyForge · 本地学习集</small>
         <h1>{value.guide.title}</h1>
-        <div className="home-guide-copy">
-          <MarkdownView>{guideBody}</MarkdownView>
-        </div>
+        {value.guide.introduction && (
+          <div className="home-guide-copy">
+            <MarkdownView>{value.guide.introduction}</MarkdownView>
+          </div>
+        )}
       </header>
 
       <section className="home-action-stage" aria-label="现在开始">
@@ -46,7 +47,6 @@ export function HomePage({
             <span className="home-action-copy">
               <small>正在进行 · {activeLesson.planTitle}</small>
               <strong>继续上课 · {activeLesson.title}</strong>
-              <em>{value.course?.currentPosition}</em>
             </span>
             <i className="seal-mark" aria-hidden="true">继</i>
           </a>
@@ -67,7 +67,7 @@ export function HomePage({
           )}
           {value.course ? (
             <a href="/course" onClick={link({ kind: 'course' })}>
-              进入正式课程 · {value.course.title} · {value.course.currentPosition}
+              进入正式课程 · {value.course.title}
             </a>
           ) : (
             <button type="button" className="action-text" onClick={onPlan}>
@@ -80,6 +80,15 @@ export function HomePage({
           <button type="button" className="action-text" onClick={onOpenFootprint}>学习足迹</button>
         </nav>
       </section>
+
+      {value.guide.principles && (
+        <section className="home-learning-principles">
+          <header><small>How to learn</small><h2>这个学习集怎么学</h2></header>
+          <div className="home-guide-copy">
+            <MarkdownView>{value.guide.principles}</MarkdownView>
+          </div>
+        </section>
+      )}
 
       <section className="m1b-recent">
         <header><small>Recent conversations</small><h2>最近的自由学习</h2></header>

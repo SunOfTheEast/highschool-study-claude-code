@@ -12,13 +12,33 @@ import { HomePage } from '../../src/client/pages/HomePage';
 import { MetaPage } from '../../src/client/pages/MetaPage';
 
 const baseHome: LearningSetHomeSnapshot = {
-  guide: { title: '化学学习集', body: '从真实问题开始。', raw: '' },
+  guide: { title: '化学学习集', introduction: '从真实问题开始。', principles: '' },
   hasCourse: false,
   course: null,
   assets: { notes: 1, problemCards: 1, materials: 0 },
   recentFreeLearning: [],
   recentMeta: [],
 };
+
+test('renders only the projected student guide on Home', () => {
+  const value = {
+    ...baseHome,
+    guide: {
+      title: '化学学习集',
+      introduction: '从一个真实问题开始。',
+      principles: '- 先说清楚自己卡在哪里。',
+    },
+  } satisfies LearningSetHomeSnapshot;
+
+  const markup = renderToStaticMarkup(
+    <HomePage value={value} onNavigate={() => {}} onStartFree={() => {}} />,
+  );
+
+  expect(markup).toContain('从一个真实问题开始。');
+  expect(markup).toContain('这个学习集怎么学');
+  expect(markup).toContain('先说清楚自己卡在哪里。');
+  expect(markup).not.toContain('教师诊断');
+});
 
 test('chooses exactly one strongest home action from the real active Lesson', () => {
   const active = renderToStaticMarkup(
@@ -28,7 +48,6 @@ test('chooses exactly one strongest home action from the real active Lesson', ()
         hasCourse: true,
         course: {
           title: '化学反应原理',
-          currentPosition: '正在学习沉淀溶解平衡。',
           route: '/course',
           activeLesson: {
             id: 'lesson-002',
@@ -57,15 +76,15 @@ test('chooses exactly one strongest home action from the real active Lesson', ()
   expect(blank).toContain('规划长期学习');
 });
 
-test('renders the learning guide body through the shared Markdown and math path', () => {
+test('renders the student guide projection through the shared Markdown and math path', () => {
   const markup = renderToStaticMarkup(
     <HomePage
       value={{
         ...baseHome,
         guide: {
           title: '化学学习集',
-          body: '# 化学学习集\n\n## 学习原则\n\n- 从真实问题开始。\n\n$K_{sp}$',
-          raw: '',
+          introduction: '从真实问题开始。',
+          principles: '- 先说明自己卡在哪里。\n\n$K_{sp}$',
         },
       }}
       onNavigate={() => {}}
@@ -73,10 +92,10 @@ test('renders the learning guide body through the shared Markdown and math path'
     />,
   );
 
-  expect(markup).toContain('<h2>学习原则</h2>');
-  expect(markup).toContain('<li>从真实问题开始。</li>');
+  expect(markup).toContain('<h2>这个学习集怎么学</h2>');
+  expect(markup).toContain('<li>先说明自己卡在哪里。</li>');
   expect(markup).toContain('class="katex"');
-  expect(markup).not.toContain('## 学习原则');
+  expect(markup).not.toContain('Internal Teaching Notes');
 });
 
 test('renders free learning as a titled letter with immutable carried context', () => {

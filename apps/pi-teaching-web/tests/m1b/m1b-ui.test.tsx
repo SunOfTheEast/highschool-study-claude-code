@@ -15,7 +15,7 @@ import { ProblemCardPage } from '../../src/client/pages/ProblemCardPage';
 import { formatBrowserRoute, parseBrowserRoute } from '../../src/client/routes';
 
 const blankHome: LearningSetHomeSnapshot = {
-  guide: { title: '空白学习集', body: '从真实问题开始。', raw: '' },
+  guide: { title: '空白学习集', introduction: '从真实问题开始。', principles: '' },
   hasCourse: false,
   course: null,
   assets: { notes: 0, problemCards: 0, materials: 0 },
@@ -57,7 +57,6 @@ test('adds a course destination only when a Roadmap really exists', () => {
         hasCourse: true,
         course: {
           title: '导数结构学习路线',
-          currentPosition: '第一阶段进行中。',
           route: '/course',
           activeLesson: null,
         },
