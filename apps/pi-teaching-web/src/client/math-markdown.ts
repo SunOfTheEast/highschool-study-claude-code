@@ -111,6 +111,36 @@ function displayContent(content: string): string {
   return content.replace(/^\r?\n/, '').replace(/\r?\n$/, '');
 }
 
+function blockquoteDepthBefore(source: string, index: number): number {
+  const lineStart = source.lastIndexOf('\n', index - 1) + 1;
+  const prefix = source.slice(lineStart, index);
+  if (!/^(?: {0,3}>[ \t]?)+$/.test(prefix)) return 0;
+  return [...prefix].filter((character) => character === '>').length;
+}
+
+function stripBlockquoteDepth(line: string, depth: number): string | null {
+  let value = line;
+  for (let level = 0; level < depth; level += 1) {
+    const match = /^ {0,3}>[ \t]?/.exec(value);
+    if (!match) return null;
+    value = value.slice(match[0].length);
+  }
+  return value;
+}
+
+function displayContentAt(source: string, opener: number, content: string): string {
+  const depth = blockquoteDepthBefore(source, opener);
+  if (depth === 0 || !content.includes('\n')) return displayContent(content);
+
+  const normalized: string[] = [];
+  for (const [index, line] of content.split(/\r?\n/).entries()) {
+    const stripped = index === 0 ? line : stripBlockquoteDepth(line, depth);
+    if (stripped === null) return displayContent(content);
+    normalized.push(stripped);
+  }
+  return displayContent(normalized.join('\n'));
+}
+
 function tokenMarker(source: string, index: number): string {
   let marker = `STUDYFORGEMATHTOKEN${index}X`;
   while (source.includes(marker)) marker += 'X';
@@ -183,7 +213,7 @@ export function prepareMathMarkdown(markdown: string): PreparedMathMarkdown {
         result += appendToken(
           markdown,
           tokens,
-          display ? displayContent(value) : value,
+          display ? displayContentAt(markdown, cursor, value) : value,
           display,
         );
         cursor = end + 2;

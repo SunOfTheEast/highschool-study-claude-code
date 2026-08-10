@@ -59,6 +59,30 @@ test('keeps display math inside its list item and blockquote containers', () => 
   expect(quoteMarkup.indexOf('解释后')).toBeLessThan(quoteClose);
 });
 
+test('removes only multiline blockquote prefixes captured inside display math', () => {
+  const source = [
+    '> 题干：',
+    '>',
+    '> \\[',
+    '> \\ln x \\le ax^2,\\qquad x>0',
+    '> \\]',
+    '> 后文。',
+  ].join('\n');
+  const prepared = prepareMathMarkdown(source);
+  expect(prepared.tokens).toHaveLength(1);
+  expect(prepared.tokens[0]!.value).toBe('\\ln x \\le ax^2,\\qquad x>0');
+
+  const markup = renderToStaticMarkup(<MarkdownView>{source}</MarkdownView>);
+  expect(markup).toContain('<blockquote>');
+  expect(markup.indexOf('katex-display')).toBeLessThan(markup.indexOf('</blockquote>'));
+  expect(markup.match(/class="mrel">&gt;<\/span>/g)).toHaveLength(1);
+});
+
+test('preserves a real leading greater-than relation inside a quoted display', () => {
+  const prepared = prepareMathMarkdown(['> \\[', '> >0', '> \\]'].join('\n'));
+  expect(prepared.tokens[0]!.value).toBe('>0');
+});
+
 test('restores inline TeX inside Markdown headings', () => {
   const markup = renderToStaticMarkup(
     <MarkdownView>{'## 当 \\(x>0\\) 时'}</MarkdownView>,
