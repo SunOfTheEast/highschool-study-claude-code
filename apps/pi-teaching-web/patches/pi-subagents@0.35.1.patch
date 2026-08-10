@@ -6,3 +6,11 @@ index 0e8584d72934ab51b528f15075cdb4ea7845d851..6e087ff48a2edc697838f1cf02301630
 -const PROMPT_RUNTIME_EXTENSION_PATH = path.join(path.dirname(fileURLToPath(import.meta.url)), "subagent-prompt-runtime.ts");
 +const PROMPT_RUNTIME_EXTENSION_PATH = process.env.PI_SUBAGENT_PROMPT_RUNTIME_EXTENSION_PATH?.trim()
 +	|| path.join(path.dirname(fileURLToPath(import.meta.url)), "subagent-prompt-runtime.ts");
+diff --git a/src/watchdog/runtime.ts b/src/watchdog/runtime.ts
+index 659ffad7fad3497088a5e93f71bdc3376b766480..fd73ed70344caafe6aca3a04d05341633697ea1a 100644
+--- a/src/watchdog/runtime.ts
++++ b/src/watchdog/runtime.ts
+@@ -535 +535,2 @@
+-		return this.reviewChangesOnly ? computeWatchdogRepoChangeSignature(cwd) : undefined;
++		if (!this.isEnabled() || !this.reviewChangesOnly) return undefined;
++		return computeWatchdogRepoChangeSignature(cwd);
