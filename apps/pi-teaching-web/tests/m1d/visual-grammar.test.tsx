@@ -40,6 +40,19 @@ test('uses one dominant atlas and one contextual folio instead of three debugger
   expect(styles).not.toContain('.knowledge-entry');
 });
 
+test('separates the atlas canvas from its contextual folio with explicit paper boundaries', () => {
+  const theme = readFileSync(join(import.meta.dir, '../../src/client/theme-liubai.css'), 'utf8');
+  const styles = readFileSync(join(import.meta.dir, '../../src/client/styles/knowledge.css'), 'utf8');
+
+  expect(theme).toContain('--rule-strong: rgba(27, 25, 22, .20)');
+  expect(styles).toMatch(
+    /\.semantic-canvas\s*\{[^}]*border:\s*1px solid var\(--rule-strong\)/s,
+  );
+  expect(styles).toMatch(
+    /\.knowledge-folio\s*\{[^}]*border:\s*1px solid var\(--rule-strong\)[^}]*border-top:\s*3px solid var\(--cinnabar\)[^}]*background:\s*var\(--paper-deep\)/s,
+  );
+});
+
 test('uses the 学 seal as brand language rather than a status badge', () => {
   const markup = renderToStaticMarkup(
     <AppShell

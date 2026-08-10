@@ -261,8 +261,9 @@ button.semantic-node:hover strong { text-decoration: underline; text-underline-o
   max-height: calc(100dvh - var(--workspace-header-height) - 8rem);
   padding: var(--space-5) var(--space-4) var(--space-5) calc(var(--space-4) + .45rem);
   overflow-y: auto;
+  border: 1px solid var(--rule-strong);
   border-top: 3px solid var(--cinnabar);
-  background: var(--paper-mid);
+  background: var(--paper-deep);
   box-shadow: -10px 14px 30px color-mix(in srgb, var(--ink) 9%, transparent);
 }
 .knowledge-folio::before {

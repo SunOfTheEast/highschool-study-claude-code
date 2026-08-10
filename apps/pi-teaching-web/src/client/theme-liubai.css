@@ -22,6 +22,7 @@
   --danger: #a8674f;
   --success: #3f5b54;
   --rule: rgba(27, 25, 22, .09);
+  --rule-strong: rgba(27, 25, 22, .20);
   --rule-soft: rgba(27, 25, 22, .06);
   --overlay: rgba(27, 25, 22, .28);
 
