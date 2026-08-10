@@ -15,8 +15,9 @@ const details = {
   kind: 'peer-message',
   version: 1,
   actorType: 'peer',
-  actorId: 'peer-acheng',
-  displayName: '阿澄',
+  actorId: 'peer-axia',
+  displayName: '阿夏',
+  move: 'challenge',
 };
 
 function conversationItem(events: StudyEvent[]): ConversationItem {
@@ -38,7 +39,11 @@ function history(resultDetails: unknown = details, isError = false): SessionEntr
         type: 'toolCall',
         id: 'peer-call-1',
         name: 'ask_peer',
-        arguments: { peerId: 'peer-acheng', intent: '质疑一下这个判断。' },
+        arguments: {
+          peerId: 'peer-axia',
+          intent: '质疑一下这个判断。',
+          move: 'challenge',
+        },
       }],
     },
   }, {
@@ -63,10 +68,13 @@ test('restores one first-class Peer utterance from native history', () => {
   expect(items).toEqual([{
     id: 'peer-call-1',
     kind: 'peer',
-    actorId: 'peer-acheng',
-    displayName: '阿澄',
+    actorId: 'peer-axia',
+    displayName: '阿夏',
     status: 'done',
     text: '也许可以先找一个 **反例**。',
+    move: 'challenge',
+    expression: 'skeptical',
+    delivery: 'history',
     at: startedAt,
   }]);
   expect(JSON.stringify(items).match(/也许可以先找一个/g)).toHaveLength(1);
@@ -79,7 +87,7 @@ test('reconciles live Peer start and success by native tool call id', () => {
       type: 'tool_execution_start',
       toolCallId: 'peer-call-1',
       toolName: 'ask_peer',
-      args: { peerId: 'peer-acheng', intent: '回应学生。' },
+      args: { peerId: 'peer-axia', intent: '回应学生。', move: 'challenge' },
     } as AgentSessionEvent,
     startedAt,
   ));
@@ -98,9 +106,22 @@ test('reconciles live Peer start and success by native tool call id', () => {
     endedAt,
   ));
 
-  expect(start).toMatchObject({ id: 'peer-call-1', kind: 'peer', status: 'running' });
+  expect(start).toMatchObject({
+    id: 'peer-call-1',
+    kind: 'peer',
+    status: 'running',
+    move: 'challenge',
+    expression: 'skeptical',
+    delivery: 'live',
+  });
   expect(done).toMatchObject({
-    id: 'peer-call-1', kind: 'peer', status: 'done', text: '我想到另一种解释。',
+    id: 'peer-call-1',
+    kind: 'peer',
+    status: 'done',
+    text: '我想到另一种解释。',
+    move: 'challenge',
+    expression: 'skeptical',
+    delivery: 'live',
   });
 
   let state = reduceClientState(initialClientState, {
@@ -130,10 +151,13 @@ test('shows a quiet Peer failure and fails closed on forged success metadata', (
   expect(failed).toEqual({
     id: 'peer-call-failed',
     kind: 'peer',
-    actorId: 'peer-acheng',
-    displayName: '阿澄',
+    actorId: 'peer-axia',
+    displayName: '阿夏',
     status: 'error',
     text: null,
+    move: null,
+    expression: 'neutral',
+    delivery: 'live',
     at: endedAt,
   });
   expect(JSON.stringify(failed)).not.toContain('PRIVATE_PROVIDER_ERROR');
@@ -153,26 +177,35 @@ test('renders Peer as a quiet AI classmate voice rather than a teacher tool rece
   const items: ConversationItem[] = [{
     id: 'peer-running',
     kind: 'peer',
-    actorId: 'peer-acheng',
-    displayName: '阿澄',
+    actorId: 'peer-axia',
+    displayName: '阿夏',
     status: 'running',
     text: null,
+    move: 'question',
+    expression: 'curious',
+    delivery: 'live',
     at: startedAt,
   }, {
     id: 'peer-done',
     kind: 'peer',
-    actorId: 'peer-acheng',
-    displayName: '阿澄',
+    actorId: 'peer-axia',
+    displayName: '阿夏',
     status: 'done',
     text: '也许先找一个 **反例**。',
+    move: 'association',
+    expression: 'neutral',
+    delivery: 'live',
     at: endedAt,
   }, {
     id: 'peer-error',
     kind: 'peer',
-    actorId: 'peer-acheng',
-    displayName: '阿澄',
+    actorId: 'peer-axia',
+    displayName: '阿夏',
     status: 'error',
     text: null,
+    move: null,
+    expression: 'neutral',
+    delivery: 'live',
     at: endedAt,
   }];
   const markup = renderToStaticMarkup(
@@ -186,11 +219,11 @@ test('renders Peer as a quiet AI classmate voice rather than a teacher tool rece
     />,
   );
 
-  expect(markup.match(/阿澄/g)?.length).toBeGreaterThanOrEqual(3);
+  expect(markup.match(/阿夏/g)?.length).toBeGreaterThanOrEqual(3);
   expect(markup).toContain('AI 同学');
-  expect(markup).toContain('阿澄正在想……');
+  expect(markup).toContain('阿夏正在想……');
   expect(markup).toContain('<strong>反例</strong>');
-  expect(markup).toContain('阿澄暂时没接上');
+  expect(markup).toContain('阿夏暂时没接上');
   expect(markup).not.toContain('老师查看了相关内容');
   expect(markup).not.toContain('peer-message');
   expect(markup).not.toContain('>老师<');

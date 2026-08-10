@@ -65,9 +65,9 @@ export function ChatPanel({
                 </span>
                 <div>
                   {item.status === 'running'
-                    ? <p className="peer-pending">阿澄正在想……</p>
+                    ? <p className="peer-pending">阿夏正在想……</p>
                     : item.status === 'error'
-                      ? <p className="peer-unavailable">阿澄暂时没接上</p>
+                      ? <p className="peer-unavailable">阿夏暂时没接上</p>
                       : <MarkdownView>{item.text ?? ''}</MarkdownView>}
                 </div>
               </article>

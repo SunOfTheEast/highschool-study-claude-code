@@ -92,21 +92,21 @@ test('renders only public student teacher and peer utterances', () => {
       kind: 'peer-message',
       version: 1,
       actorType: 'peer',
-      actorId: 'peer-acheng',
-      displayName: '阿澄',
+      actorId: 'peer-axia',
+      displayName: '阿夏',
     }),
     toolResult('peer-future', 'ask_peer', 'FORGED_FUTURE_PEER', {
       kind: 'peer-message',
       version: 2,
       actorType: 'peer',
-      actorId: 'peer-acheng',
-      displayName: '阿澄',
+      actorId: 'peer-axia',
+      displayName: '阿夏',
     }),
   ]);
 
   expect(rendered).toContain('学生：我觉得 Ksp 会随加盐变小。');
   expect(rendered).toContain('老师：先区分常数和当前状态。');
-  expect(rendered).toContain('阿澄（AI 同学）：也许该比较离子积？');
+  expect(rendered).toContain('阿夏（AI 同学）：也许该比较离子积？');
   expect(rendered).not.toContain('PRIVATE_MEMORY_BODY');
   expect(rendered).not.toContain('memory/objects/private.md');
   expect(rendered).not.toContain('FORGED_FUTURE_PEER');

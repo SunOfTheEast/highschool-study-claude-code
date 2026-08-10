@@ -54,15 +54,15 @@ export type PeerConversationItem = {
 };
 ```
 
-- [ ] **Step 1: Write RED identity and schema expectations**
+- [x] **Step 1: Write RED identity and schema expectations**
 
 Change the focused M2 tests first so the tool accepts only `peer-axia`, permits only the optional `move` enum, returns 阿夏 metadata, and rejects unknown moves or actor-controlled fields. Update public-context expectations to `阿夏（AI 同学）` and assert the new persona includes the one voice-ready formula rule.
 
-- [ ] **Step 2: Write RED projection provenance expectations**
+- [x] **Step 2: Write RED projection provenance expectations**
 
 Assert that native history projects `delivery: 'history'`, live start/end project `delivery: 'live'`, each valid move maps to the stable expression, and a missing move maps to `neutral`. Assert the reducer reconciles a live start/end without replacing its first timestamp or provenance.
 
-- [ ] **Step 3: Run RED**
+- [x] **Step 3: Run RED**
 
 ```bash
 cd apps/pi-teaching-web
@@ -72,7 +72,7 @@ bun test tests/m2/peer-tools.test.ts tests/m2/peer-context.test.ts \
 
 Expected: FAIL because the runtime still exposes 阿澄 and Peer items have no move/expression/delivery fields.
 
-- [ ] **Step 4: Implement the single actor contract**
+- [x] **Step 4: Implement the single actor contract**
 
 Create `axia.md` with the existing evidence boundary plus:
 
@@ -82,11 +82,11 @@ Create `axia.md` with the existing evidence boundary plus:
 
 Replace all runtime actor constants with `peer-axia` / 阿夏, load `peers/axia.md`, add the optional TypeBox move field, and include the normalized move in the successful tool-result details. Do not add old-name fallbacks.
 
-- [ ] **Step 5: Implement projection-only expression and delivery**
+- [x] **Step 5: Implement projection-only expression and delivery**
 
 Make `peerMessageStart` and `peerMessageEnd` accept an explicit delivery source. History callers pass `history`; live event callers pass `live`. The projection derives expression with one exhaustive mapping and defaults unknown/missing values to `neutral`. These fields remain UI projection data rather than Session facts beyond the optional move already present in the native call/result.
 
-- [ ] **Step 6: Run GREEN and commit**
+- [x] **Step 6: Run GREEN and commit**
 
 ```bash
 bun test tests/m2/peer-tools.test.ts tests/m2/peer-context.test.ts \

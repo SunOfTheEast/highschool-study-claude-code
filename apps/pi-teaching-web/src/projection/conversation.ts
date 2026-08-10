@@ -66,7 +66,7 @@ export function projectConversationEntries(
       for (const call of toolCalls(message.content)) {
         toolPositions.set(call.id, items.length);
         if (call.name === 'ask_peer') {
-          items.push(peerMessageStart(call.id, call.arguments, entry.timestamp) ?? {
+          items.push(peerMessageStart(call.id, call.arguments, entry.timestamp, 'history') ?? {
             id: call.id,
             kind: 'tool',
             name: call.name,
@@ -113,6 +113,7 @@ export function projectConversationEntries(
           { content: message.content, details: message.details },
           message.isError === true,
           entry.timestamp,
+          'history',
           started,
         );
         const item: ConversationItem = peer ?? {
@@ -230,7 +231,7 @@ export function projectLiveSessionEvent(
   }
   if (event.type === 'tool_execution_start') {
     if (event.toolName === 'ask_peer') {
-      const peer = peerMessageStart(event.toolCallId, event.args, at);
+      const peer = peerMessageStart(event.toolCallId, event.args, at, 'live');
       return [{
         type: 'conversation-item',
         sessionKey,
@@ -291,6 +292,7 @@ export function projectLiveSessionEvent(
         event.result,
         event.isError,
         at,
+        'live',
       );
       return [{
         type: 'conversation-item',

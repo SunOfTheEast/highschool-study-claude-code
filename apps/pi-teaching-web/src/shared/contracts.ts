@@ -480,6 +480,10 @@ export type LessonHandoutConversationItem = {
   at: string;
 };
 
+export type PeerMove = 'question' | 'association' | 'challenge';
+export type PeerExpression = 'neutral' | 'curious' | 'skeptical';
+export type PeerDelivery = 'history' | 'live';
+
 export type PeerConversationItem = {
   id: string;
   kind: 'peer';
@@ -487,6 +491,9 @@ export type PeerConversationItem = {
   displayName: string;
   status: 'running' | 'done' | 'error';
   text: string | null;
+  move: PeerMove | null;
+  expression: PeerExpression;
+  delivery: PeerDelivery;
   at: string;
 };
 

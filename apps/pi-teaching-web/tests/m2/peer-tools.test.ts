@@ -89,7 +89,7 @@ test('adds ask_peer only to a configured free-learning tool surface', () => {
   const root = learningSet();
   const session = {
     getSessionId: () => 'free-session-001',
-    getBranch: () => [userEntry('阿澄你怎么看？')],
+    getBranch: () => [userEntry('阿夏你怎么看？')],
   };
   const responder = async () => '我想先找一个反例。';
 
@@ -105,9 +105,13 @@ test('keeps actor and runtime authority out of the ask_peer schema', () => {
   const root = learningSet();
   const tool = createPeerTool(root, scope(), {
     getSessionId: () => 'free-session-001',
-    getBranch: () => [userEntry('阿澄你怎么看？')],
+    getBranch: () => [userEntry('阿夏你怎么看？')],
   }, async () => '我想先找一个反例。');
-  const input = { peerId: 'peer-acheng', intent: '从同学视角回应这个想法。' };
+  const input = {
+    peerId: 'peer-axia',
+    intent: '从同学视角回应这个想法。',
+    move: 'challenge',
+  };
 
   expect(Check(tool.parameters, input)).toBeTrue();
   for (const extra of [
@@ -119,6 +123,11 @@ test('keeps actor and runtime authority out of the ask_peer schema', () => {
     expect(Check(tool.parameters, { ...input, ...extra })).toBeFalse();
   }
   expect(Check(tool.parameters, { ...input, peerId: 'peer-unknown' })).toBeFalse();
+  expect(Check(tool.parameters, { ...input, move: 'encourage' })).toBeFalse();
+  expect(Check(tool.parameters, {
+    peerId: 'peer-axia',
+    intent: '不指定动作也应合法。',
+  })).toBeTrue();
 });
 
 test('returns one native peer tool result from the student-visible context', async () => {
@@ -126,27 +135,28 @@ test('returns one native peer tool result from the student-visible context', asy
   const received: PeerResponderInput[] = [];
   const tool = createPeerTool(root, scope(), {
     getSessionId: () => 'free-session-001',
-    getBranch: () => [userEntry('阿澄你怎么看这个判断？')],
+    getBranch: () => [userEntry('阿夏你怎么看这个判断？')],
   }, async (input) => {
     received.push(input);
     return '我会先问：有没有反例？';
   });
   const signal = new AbortController().signal;
   const result = await tool.execute('peer-call-1', {
-    peerId: 'peer-acheng',
+    peerId: 'peer-axia',
     intent: '质疑当前判断。',
+    move: 'challenge',
   }, signal, undefined, {} as never);
 
   const peerInput = received.at(0);
   expect(peerInput).toMatchObject({
-    peerId: 'peer-acheng',
+    peerId: 'peer-axia',
     intent: '质疑当前判断。',
     signal,
   });
-  expect(peerInput?.publicContext).toContain('学生：阿澄你怎么看这个判断？');
+  expect(peerInput?.publicContext).toContain('学生：阿夏你怎么看这个判断？');
   expect(result).toEqual({
     content: [{ type: 'text', text: '我会先问：有没有反例？' }],
-    details: PEER_MESSAGE_DETAILS,
+    details: { ...PEER_MESSAGE_DETAILS, move: 'challenge' },
   });
 });
 
@@ -154,13 +164,13 @@ test('does not fabricate a peer message when generation fails', async () => {
   const root = learningSet();
   const tool = createPeerTool(root, scope(), {
     getSessionId: () => 'free-session-001',
-    getBranch: () => [userEntry('阿澄你怎么看？')],
+    getBranch: () => [userEntry('阿夏你怎么看？')],
   }, async () => {
     throw new Error('PEER_RESPONSE_UNAVAILABLE');
   });
 
   expect(tool.execute('peer-call-1', {
-    peerId: 'peer-acheng',
+    peerId: 'peer-axia',
     intent: '回应学生。',
   }, undefined, undefined, {} as never)).rejects.toThrow('PEER_RESPONSE_UNAVAILABLE');
 });
@@ -176,10 +186,10 @@ test('runs the Scout once and persists only its final text', async () => {
       { type: 'text', text: '  先别急着下结论，我们找个反例？  ' },
     ]);
   };
-  const responder = createPeerResponder(complete, 'high', 'ACHENG_PERSONA');
+  const responder = createPeerResponder(complete, 'high', 'AXIA_PERSONA');
   const signal = new AbortController().signal;
   const text = await responder({
-    peerId: 'peer-acheng',
+    peerId: 'peer-axia',
     intent: '提出一个质疑。',
     publicContext: '学生：我觉得总压强变大就一定移动。',
     signal,
@@ -188,7 +198,7 @@ test('runs the Scout once and persists only its final text', async () => {
   expect(text).toBe('先别急着下结论，我们找个反例？');
   const context = receivedContexts.at(0);
   if (!context) throw new Error('PEER_CONTEXT_NOT_CAPTURED');
-  expect(context.systemPrompt).toBe('ACHENG_PERSONA');
+  expect(context.systemPrompt).toBe('AXIA_PERSONA');
   expect(context.tools).toBeUndefined();
   expect(context.messages).toHaveLength(1);
   expect(context.messages[0]?.role).toBe('user');
@@ -204,9 +214,9 @@ test('rejects empty, errored, and aborted Peer completions', async () => {
     assistantMessage([{ type: 'text', text: 'provider error' }], 'error'),
     assistantMessage([{ type: 'text', text: 'cancelled' }], 'aborted'),
   ]) {
-    const responder = createPeerResponder(async () => response, 'off', 'ACHENG_PERSONA');
+    const responder = createPeerResponder(async () => response, 'off', 'AXIA_PERSONA');
     expect(responder({
-      peerId: 'peer-acheng',
+      peerId: 'peer-axia',
       intent: '回应。',
       publicContext: '学生：你好。',
     })).rejects.toThrow('PEER_RESPONSE_UNAVAILABLE');

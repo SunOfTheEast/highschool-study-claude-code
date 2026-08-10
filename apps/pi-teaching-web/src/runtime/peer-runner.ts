@@ -6,7 +6,7 @@ import type {
 import type { DesktopThinkingLevel } from '../desktop/contracts';
 
 export type PeerResponderInput = {
-  peerId: 'peer-acheng';
+  peerId: 'peer-axia';
   intent: string;
   publicContext: string;
   signal?: AbortSignal;

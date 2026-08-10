@@ -54,9 +54,9 @@ function publicUtterances(entries: readonly SessionEntry[]): PublicUtterance[] {
     return details?.kind === 'peer-message'
       && details.version === 1
       && details.actorType === 'peer'
-      && details.actorId === 'peer-acheng'
-      && details.displayName === '阿澄'
-      ? [{ speaker: '阿澄（AI 同学）', text }]
+      && details.actorId === 'peer-axia'
+      && details.displayName === '阿夏'
+      ? [{ speaker: '阿夏（AI 同学）', text }]
       : [];
   });
 }

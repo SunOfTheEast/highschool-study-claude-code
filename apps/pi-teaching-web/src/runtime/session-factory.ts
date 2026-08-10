@@ -151,7 +151,7 @@ export async function createPiSessionFactory(
         requestOptions,
       ),
       options.scout.thinking,
-      readFileSync(join(resolveStudyForgeResourceRoot(), 'peers', 'acheng.md'), 'utf8'),
+      readFileSync(join(resolveStudyForgeResourceRoot(), 'peers', 'axia.md'), 'utf8'),
     )
     : undefined;
   const settingsManager = options ? SettingsManager.create(root, options.agentDir) : undefined;

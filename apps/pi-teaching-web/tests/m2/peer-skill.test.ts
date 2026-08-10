@@ -31,4 +31,12 @@ test('keeps Peer routing and evidence ownership at the tool boundary', () => {
   ), 'utf8');
   expect(skill).not.toContain('ask_peer');
   expect(skill).not.toContain('## AI 同学');
+
+  const persona = readFileSync(join(
+    import.meta.dir,
+    '../../resources/peers/axia.md',
+  ), 'utf8');
+  expect(persona).toContain('阿夏');
+  expect(persona).toContain('先用自然语言说明这一步做了什么、得到什么，再展示公式');
+  expect(persona).not.toContain('阿澄');
 });
