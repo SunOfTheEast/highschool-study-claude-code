@@ -8,6 +8,7 @@ import type {
 } from '../../shared/contracts';
 import { AssetProvenance, AssetTags } from '../components/AssetSources';
 import { MarkdownView } from '../components/MarkdownView';
+import { publicErrorText } from '../public-errors';
 
 export type ProblemCardView = StudentProblemCard & {
   activity: ProblemActivitySnapshot;
@@ -16,7 +17,7 @@ export type ProblemCardView = StudentProblemCard & {
 };
 
 function failureText(error: unknown): string {
-  return error instanceof Error ? error.message : '这一步暂时没有完成。';
+  return publicErrorText(error, '这一步暂时没有完成，请稍后再试。');
 }
 
 export function ProblemCardPage({

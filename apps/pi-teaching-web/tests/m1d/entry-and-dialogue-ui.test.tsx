@@ -156,6 +156,33 @@ test('keeps drafts editable while reconnecting and never shows generic tool JSON
   expect(markup).toMatch(/<button type="submit" disabled/);
 });
 
+test('hides transient tool failures and internal Session identifiers from students', () => {
+  const markup = renderToStaticMarkup(
+    <ChatPanel
+      sessionKey="plan:plan-001"
+      items={[{
+        id: 'read-missing-plan',
+        kind: 'tool',
+        name: 'read',
+        status: 'error',
+        detail: { error: 'ENOENT', path: 'plans/plan-001/PLAN.md' },
+        at: '2026-08-10T00:00:00.000Z',
+      }]}
+      running
+      error="ResolveMessage: meta:019fe747-private"
+      enabled
+      onSend={async () => {}}
+    />,
+  );
+
+  expect(markup).toContain('老师正在准备这一阶段的课堂');
+  expect(markup).not.toContain('这一步没有完成');
+  expect(markup).not.toContain('plan:plan-001');
+  expect(markup).not.toContain('ResolveMessage');
+  expect(markup).not.toContain('019fe747');
+  expect(markup).not.toContain('ENOENT');
+});
+
 test('keeps Meta at Roadmap scope and exposes the course handoff only after creation', () => {
   const markup = renderToStaticMarkup(
     <MetaPage

@@ -96,4 +96,6 @@ test('keeps diagnosis typed and offers recovery rather than a blank classroom', 
   expect(markup).toContain('模型暂时不可用');
   expect(markup).toContain('重新选择模型');
   expect(markup).not.toContain('启动失败</h1>');
+  expect(markup).not.toContain('MODEL_UNAVAILABLE');
+  expect(markup).not.toContain('openai-codex/gpt-5.6-sol');
 });

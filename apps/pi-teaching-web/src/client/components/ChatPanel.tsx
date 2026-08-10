@@ -4,6 +4,12 @@ import { MarkdownView } from './MarkdownView';
 import { LessonReviewActivity } from './LessonReviewActivity';
 import { LessonHandoutActivity } from './LessonHandoutActivity';
 import { MaterialSearchActivity } from './MaterialSearchActivity';
+import {
+  presentConversation,
+  toolActivityCopy,
+  waitingForTeacherCopy,
+} from '../conversation-presentation';
+import { publicErrorText, publicSessionErrorText } from '../public-errors';
 
 const toolStatus = {
   running: '进行中',
@@ -30,13 +36,9 @@ export function ChatPanel({
 }) {
   const [text, setText] = useState('');
   const freeLearning = sessionKey.startsWith('free:');
-  const backgroundTaskRunning = items.some((item) => (
-    (
-      item.kind === 'material-search'
-      || item.kind === 'lesson-review'
-      || item.kind === 'lesson-handout'
-    )
-    && item.status === 'running'
+  const visibleItems = presentConversation(items);
+  const activityRunning = visibleItems.some((item) => (
+    item.kind !== 'user' && item.kind !== 'assistant' && item.status === 'running'
   ));
 
   const submit = (event: FormEvent) => {
@@ -51,10 +53,9 @@ export function ChatPanel({
     <section className="chat" aria-label="课堂对话">
       <header className="chat-header">
         <span>{freeLearning ? '自由学习' : sessionKey.startsWith('lesson:') ? '课堂对话' : '学习讨论'}</span>
-        {!freeLearning && <code>{sessionKey}</code>}
       </header>
       <div className="timeline" aria-live="polite">
-        {items.map((item) => {
+        {visibleItems.map((item) => {
           if (item.kind === 'material-search') {
             return <MaterialSearchActivity item={item} key={item.id} />;
           }
@@ -73,20 +74,9 @@ export function ChatPanel({
             );
           }
           if (item.kind === 'tool') {
-            const copy = item.status === 'error'
-              ? '这一步没有完成'
-              : item.name === 'read'
-                ? '老师查看了相关内容'
-                : ['grep', 'find', 'ls'].includes(item.name)
-                  ? '老师查找了相关内容'
-                  : item.name === 'save_note'
-                    ? '笔记已保存'
-                    : item.name === 'save_problem_card'
-                      ? '题卡已保存'
-                      : item.status === 'running' ? '老师正在处理' : '处理完成';
             return (
               <div className="tool-receipt" key={item.id}>
-                <span>{copy}</span>
+                <span>{toolActivityCopy(item)}</span>
                 <small data-status={item.status}>{toolStatus[item.status]}</small>
               </div>
             );
@@ -98,7 +88,7 @@ export function ChatPanel({
             </article>
           );
         })}
-        {items.length === 0 && (
+        {visibleItems.length === 0 && !running && (
           <div className="empty-conversation">
             <span>从这里继续</span>
             <p>{freeLearning
@@ -108,10 +98,14 @@ export function ChatPanel({
         )}
       </div>
       <div className="chat-feedback">
-        {running && !backgroundTaskRunning && (
-          <p className="work-status"><span />老师正在思考…</p>
+        {running && !activityRunning && (
+          <p className="work-status"><span />{waitingForTeacherCopy(sessionKey)}</p>
         )}
-        {error && <p className="session-error" role="alert">{error}</p>}
+        {error && (
+          <p className="session-error" role="alert">
+            {publicErrorText(error, publicSessionErrorText())}
+          </p>
+        )}
       </div>
       <form className="composer" onSubmit={submit}>
         <textarea

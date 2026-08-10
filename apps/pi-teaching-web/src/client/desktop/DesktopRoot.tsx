@@ -18,11 +18,12 @@ import {
   type DesktopModelCatalog,
   type ModelAuthFlow,
 } from './ModelSettings';
+import { publicErrorText } from '../public-errors';
 
 type DesktopPage = 'learning' | 'models' | 'help';
 
 function errorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : '本地工作台暂时无法继续。';
+  return publicErrorText(error, '本地工作台暂时无法继续，请稍后重试。');
 }
 
 function publicAuthFlow(flow: DesktopAuthFlow): ModelAuthFlow {
@@ -30,7 +31,7 @@ function publicAuthFlow(flow: DesktopAuthFlow): ModelAuthFlow {
     status: flow.status,
     events: flow.events,
     prompt: flow.prompt,
-    error: flow.error,
+    error: flow.error ? publicErrorText(flow.error, '连接模型服务时没有完成，请重试。') : null,
   };
 }
 
@@ -39,7 +40,7 @@ function runtimeIssue(connection: RuntimeConnection | null): DesktopIssue {
   const code = state?.status === 'crashed' ? state.code : null;
   return {
     code: 'RUNTIME_FAILURE',
-    detail: connection?.error ?? (code === null ? '本地服务尚未就绪' : `本地服务退出码：${code}`),
+    detail: code === null ? '本地服务尚未就绪' : '本地服务意外停止',
   };
 }
 

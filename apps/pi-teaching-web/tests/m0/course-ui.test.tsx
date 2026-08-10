@@ -257,7 +257,7 @@ test('makes dialogue the central workspace and hides Teacher Control from class 
   expect(markup).toContain('aria-label="课程组织"');
   expect(markup).toContain('aria-label="课堂对话"');
   expect(markup).toContain('aria-label="本课提纲"');
-  expect(markup).toContain('lesson:plan-001:lesson-001');
+  expect(markup).not.toContain('lesson:plan-001:lesson-001');
   expect(markup).toContain('先观察这道题的参数位置');
   expect(markup).toContain('katex-display');
   expect(markup).not.toContain('先听选路理由');

@@ -77,7 +77,7 @@ export function projectConversationEntries(
           kind: 'tool',
           name: call.name,
           status: 'running',
-          detail: call.name === 'subagent' ? null : call.arguments,
+          detail: null,
           at: entry.timestamp,
         });
       }
@@ -134,9 +134,7 @@ export function projectConversationEntries(
         kind: 'tool',
         name: message.toolName,
         status: message.isError === true ? 'error' : 'done',
-        detail: message.toolName === 'subagent'
-          ? null
-          : (message.details ?? contentText(message.content)),
+        detail: null,
         at: entry.timestamp,
       };
       if (position === undefined) {
@@ -204,7 +202,7 @@ export function projectLiveSessionEvent(
         kind: 'tool',
         name: event.toolName,
         status: 'running',
-        detail: event.toolName === 'subagent' ? null : event.args,
+        detail: null,
         at,
       },
     }];
@@ -236,7 +234,6 @@ export function projectLiveSessionEvent(
         ),
       }];
     }
-    const result = event.result as { details?: unknown } | null | undefined;
     const material = event.toolName === 'subagent'
       ? materialSearchEnd(event.toolCallId, event.result, event.isError, at)
       : null;
@@ -251,7 +248,7 @@ export function projectLiveSessionEvent(
         kind: 'tool',
         name: event.toolName,
         status: event.isError ? 'error' : 'done',
-        detail: event.toolName === 'subagent' ? null : (result?.details ?? result),
+        detail: null,
         at,
       },
     }];

@@ -8,6 +8,7 @@ import type {
 import { ApiError } from '../api';
 import { AssetProvenance, AssetTags } from '../components/AssetSources';
 import { MarkdownView } from '../components/MarkdownView';
+import { publicErrorText } from '../public-errors';
 
 type NoteView = LearningNote & {
   semanticTags?: LearningAssetSemanticTags | null;
@@ -96,7 +97,7 @@ export function NotePage({
             .catch((error: unknown) => {
               setSaveError(error instanceof ApiError && error.status === 409
                 ? '内容已被更新。你的草稿仍在，可以重载最新版本后再修改。'
-                : error instanceof Error ? error.message : '笔记暂时没有保存。');
+                : publicErrorText(error, '笔记暂时没有保存，请稍后再试。'));
             })
             .finally(() => setSaving(false));
         }}>

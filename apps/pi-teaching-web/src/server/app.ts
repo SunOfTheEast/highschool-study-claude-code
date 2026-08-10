@@ -53,6 +53,7 @@ import {
 import { readLearningFootprint } from '../study/learning-footprint';
 import { isProblemCardId } from '../study/problem-card-id';
 import type { EventHub } from './event-hub';
+import { publicSessionErrorText } from '../client/public-errors';
 
 type Lifecycle = Pick<
   NodeLifecycleService,
@@ -692,10 +693,10 @@ export function createRequestHandler(deps?: AppDependencies) {
         await bind(key);
         deps.hub.publish({ type: 'session-run', sessionKey: key, status: 'running' });
         void deps.registry.send(key, body.text.trim())
-          .catch((error) => deps.hub.publish({
+          .catch(() => deps.hub.publish({
             type: 'session-error',
             sessionKey: key,
-            message: error instanceof Error ? error.message : String(error),
+            message: publicSessionErrorText(),
           }))
           .finally(() => deps.hub.publish({
             type: 'session-run',

@@ -273,7 +273,7 @@ describe('safe material-search projection', () => {
     }]);
   });
 
-  test('sanitizes non-execution subagent activity but preserves native tool details', () => {
+  test('sanitizes both subagent activity and generic native tool details', () => {
     const management = conversationItem(projectLiveSessionEvent(
       'plan:plan-001',
       {
@@ -304,7 +304,7 @@ describe('safe material-search projection', () => {
     expect(read).toMatchObject({
       kind: 'tool',
       name: 'read',
-      detail: { path: 'plans/plan-001/PLAN.md' },
+      detail: null,
     });
   });
 });

@@ -14,7 +14,7 @@ import type {
   SessionKey,
   StudyEvent,
 } from '../shared/contracts';
-import { api, ApiError, type LearningNoteView, type ProblemCardView } from './api';
+import { api, type LearningNoteView, type ProblemCardView } from './api';
 import { AppShell } from './components/AppShell';
 import { formatBrowserRoute, parseBrowserRoute, type BrowserRoute } from './routes';
 import { initialClientState, reduceClientState } from './state';
@@ -36,6 +36,7 @@ import type { PrimaryView } from './view-state';
 import { deriveFreeLearningTitle } from '../study/display-projections';
 import { formatMaterialLocator } from './material-locator';
 import { eventTransport } from './transport';
+import { publicErrorText } from './public-errors';
 
 type ConnectionState = 'open' | 'connecting' | 'closed';
 
@@ -86,12 +87,7 @@ function keyForCourse(course: CourseSnapshot): SessionKey {
 }
 
 function errorText(error: unknown): string {
-  if (error instanceof ApiError && error.body && typeof error.body === 'object') {
-    const body = error.body as { reason?: unknown; error?: unknown };
-    if (typeof body.reason === 'string') return body.reason;
-    if (typeof body.error === 'string') return body.error;
-  }
-  return error instanceof Error ? error.message : '本地学习工作区暂时无法读取。';
+  return publicErrorText(error, '本地学习工作区暂时无法读取，请稍后重试。');
 }
 
 function routeIsCourse(route: BrowserRoute): boolean {

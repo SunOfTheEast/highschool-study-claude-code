@@ -7,6 +7,7 @@ import type {
 } from '../shared/contracts';
 import { mergeMaterialSearchItem } from '../projection/material-search';
 import { mergeLessonReviewItem } from '../projection/lesson-review';
+import { publicErrorText, publicSessionErrorText } from './public-errors';
 
 export type ClientState = {
   conversations: Partial<Record<SessionKey, ConversationItem[]>>;
@@ -107,12 +108,18 @@ export function reduceClientState(state: ClientState, event: StudyEvent): Client
         ...state.running,
         [event.sessionKey]: event.status === 'running',
       },
+      errors: event.status === 'running'
+        ? { ...state.errors, [event.sessionKey]: undefined }
+        : state.errors,
     };
   }
   if (event.type === 'session-error') {
     return {
       ...state,
-      errors: { ...state.errors, [event.sessionKey]: event.message },
+      errors: {
+        ...state.errors,
+        [event.sessionKey]: publicErrorText(event.message, publicSessionErrorText()),
+      },
     };
   }
   return state;

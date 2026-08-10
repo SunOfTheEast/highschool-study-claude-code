@@ -6,6 +6,7 @@ import type {
 } from '../../shared/contracts';
 import { MarkdownView } from '../components/MarkdownView';
 import { formatMaterialLocator } from '../material-locator';
+import { publicErrorText } from '../public-errors';
 
 type MaterialContext = Extract<LearningContextReference, { kind: 'material' }>;
 
@@ -47,7 +48,7 @@ export function MaterialPage({
     void readRef.current(suggested)
       .then(setSource)
       .catch((reason: unknown) => {
-        setError(reason instanceof Error ? reason.message : String(reason));
+        setError(publicErrorText(reason, '资料暂时无法读取，请稍后再试。'));
       })
       .finally(() => setReading(false));
   }, [value.material.id, value.current.revision, suggested]);
@@ -59,7 +60,7 @@ export function MaterialPage({
     void onRead(selected)
       .then(setSource)
       .catch((reason: unknown) => {
-        setError(reason instanceof Error ? reason.message : String(reason));
+        setError(publicErrorText(reason, '资料暂时无法读取，请稍后再试。'));
       })
       .finally(() => setReading(false));
   };

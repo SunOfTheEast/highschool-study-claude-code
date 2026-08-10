@@ -37,12 +37,6 @@ export function DiagnosticPage({
         <p className="desktop-eyebrow">本地状态单</p>
         <h1>{copy.title}</h1>
         <p className="desktop-lead">{copy.body}</p>
-        <dl>
-          <dt>诊断</dt>
-          <dd>{issue.code}</dd>
-          <dt>细节</dt>
-          <dd>{issue.detail}</dd>
-        </dl>
         <div className="desktop-diagnostic-actions">
           <button className="desktop-primary action-solid" type="button" onClick={onRetry}>重新启动本地教师</button>
           <button className="action-outline" type="button" onClick={onOpenModels}>重新选择模型</button>

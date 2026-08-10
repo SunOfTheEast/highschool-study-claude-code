@@ -200,7 +200,7 @@ test('rejects malformed or out-of-tree handout API targets', async () => {
   }
 });
 
-test('returns unmodified assistant text and inspectable native tool activity', async () => {
+test('returns unmodified assistant text and private generic tool activity', async () => {
   const root = copyFixture();
   const handler = createRequestHandler({
     root,
@@ -225,7 +225,7 @@ test('returns unmodified assistant text and inspectable native tool activity', a
     kind: 'tool',
     name: 'read',
     status: 'done',
-    detail: { path: 'plans/plan-001/PLAN.md' },
+    detail: null,
   }));
 });
 
