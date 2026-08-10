@@ -10,6 +10,11 @@ import {
   waitingForTeacherCopy,
 } from '../conversation-presentation';
 import { publicErrorText, publicSessionErrorText } from '../public-errors';
+import {
+  usePeerPlayback,
+  visibleConversationDuringPeer,
+} from '../peer-playback';
+import { PeerEmbodiment } from './PeerEmbodiment';
 
 const toolStatus = {
   running: '进行中',
@@ -36,7 +41,12 @@ export function ChatPanel({
 }) {
   const [text, setText] = useState('');
   const freeLearning = sessionKey.startsWith('free:');
-  const visibleItems = presentConversation(items);
+  const playback = usePeerPlayback(items, freeLearning);
+  const presentedItems = presentConversation(items);
+  const visibleItems = visibleConversationDuringPeer(
+    presentedItems,
+    playback.phase === 'idle' ? null : playback.item?.id ?? null,
+  );
   const activityRunning = visibleItems.some((item) => (
     item.kind !== 'user' && item.kind !== 'assistant' && item.status === 'running'
   ));
@@ -45,6 +55,7 @@ export function ChatPanel({
     event.preventDefault();
     const value = text.trim();
     if (!value || running || !enabled || !connected) return;
+    playback.stop();
     setText('');
     void onSend(value).catch(() => setText(value));
   };
@@ -53,7 +64,28 @@ export function ChatPanel({
     <section className="chat" aria-label="课堂对话">
       <header className="chat-header">
         <span>{freeLearning ? '自由学习' : sessionKey.startsWith('lesson:') ? '课堂对话' : '学习讨论'}</span>
+        {freeLearning && (
+          <button
+            className="peer-sound-toggle"
+            type="button"
+            aria-label={playback.muted ? '开启阿夏语音' : '静音阿夏'}
+            onClick={playback.toggleMute}
+          >
+            {playback.muted ? '阿夏 · 已静音' : '阿夏 · 自动朗读'}
+          </button>
+        )}
       </header>
+      {freeLearning && (
+        <PeerEmbodiment
+          item={playback.item}
+          phase={playback.phase}
+          mouth={playback.mouth}
+          portraitUrl={playback.portraitUrl}
+          muted={playback.muted}
+          onStop={playback.stop}
+          onToggleMute={playback.toggleMute}
+        />
+      )}
       <div className="timeline" aria-live="polite">
         {visibleItems.map((item) => {
           if (item.kind === 'peer') {
@@ -68,7 +100,11 @@ export function ChatPanel({
                     ? <p className="peer-pending">阿夏正在想……</p>
                     : item.status === 'error'
                       ? <p className="peer-unavailable">阿夏暂时没接上</p>
-                      : <MarkdownView>{item.text ?? ''}</MarkdownView>}
+                      : (
+                        <MarkdownView onFormulaSpeak={playback.readFormula}>
+                          {item.text ?? ''}
+                        </MarkdownView>
+                      )}
                 </div>
               </article>
             );
@@ -115,7 +151,7 @@ export function ChatPanel({
         )}
       </div>
       <div className="chat-feedback">
-        {running && !activityRunning && (
+        {running && !activityRunning && playback.phase === 'idle' && (
           <p className="work-status"><span />{waitingForTeacherCopy(sessionKey)}</p>
         )}
         {error && (

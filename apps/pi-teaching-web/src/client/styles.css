@@ -134,3 +134,17 @@ summary:focus-visible {
 @keyframes pulse-dot {
   50% { opacity: .32; transform: scale(.72); }
 }
+
+@keyframes peer-enter {
+  from { opacity: 0; transform: translateX(12px) translateY(4px); }
+  to { opacity: 1; transform: translateX(0) translateY(0); }
+}
+
+@keyframes peer-breathe {
+  50% { transform: scale(1.008) translateY(-1px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .peer-embodiment,
+  .peer-portrait { animation: none; }
+}

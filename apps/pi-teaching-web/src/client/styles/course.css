@@ -229,7 +229,7 @@
 .classroom-focus > :not(span) { margin-top: var(--space-2); color: var(--ink-soft); font: var(--text-body)/1.75 var(--font-reading); }
 .classroom-focus p { margin-bottom: 0; }
 
-.chat { min-height: 33rem; display: grid; grid-template-rows: auto minmax(14rem, 1fr) auto auto; }
+.chat { position: relative; min-height: 33rem; display: grid; grid-template-rows: auto minmax(14rem, 1fr) auto auto; }
 .chat-header {
   display: flex;
   justify-content: space-between;
@@ -241,6 +241,15 @@
 }
 .chat-header span { color: var(--accent); letter-spacing: .1em; }
 .chat-header code { overflow: hidden; font-family: var(--font-mono); text-overflow: ellipsis; }
+.peer-sound-toggle {
+  border: 0;
+  padding: .2rem 0;
+  color: var(--ink-faint);
+  background: transparent;
+  font-size: var(--text-micro);
+  cursor: pointer;
+}
+.peer-sound-toggle:hover { color: var(--accent-deep); }
 .timeline { min-height: 15rem; padding: var(--space-2) 0 var(--space-5); }
 .message {
   display: grid;
@@ -287,6 +296,106 @@
   background: var(--accent);
   animation: pulse-dot 1s ease-in-out infinite;
   content: '';
+}
+.formula-speech-surface .katex { cursor: pointer; }
+.peer-embodiment {
+  position: fixed;
+  right: clamp(.8rem, 3.4vw, 3rem);
+  bottom: clamp(.7rem, 2.3vw, 1.8rem);
+  z-index: 12;
+  width: clamp(9.5rem, 15vw, 13rem);
+  display: grid;
+  justify-items: center;
+  pointer-events: none;
+  filter: drop-shadow(0 14px 20px rgba(50, 43, 34, .14));
+  animation: peer-enter .24s ease-out both;
+}
+.peer-portrait {
+  position: relative;
+  width: 100%;
+  min-height: 10rem;
+  display: grid;
+  align-items: end;
+  animation: peer-breathe 3.8s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+.peer-portrait img {
+  width: 100%;
+  max-height: 19rem;
+  display: block;
+  object-fit: contain;
+  object-position: center bottom;
+}
+.peer-portrait-placeholder {
+  width: 8.4rem;
+  aspect-ratio: 4 / 5;
+  display: grid;
+  place-items: center;
+  justify-self: center;
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--rule));
+  border-radius: 52% 48% 18% 18%;
+  color: var(--paper);
+  background:
+    radial-gradient(circle at 50% 35%, var(--paper) 0 20%, transparent 21%),
+    radial-gradient(ellipse at 50% 88%, var(--accent-wash) 0 48%, transparent 49%),
+    color-mix(in srgb, var(--accent) 64%, var(--paper));
+  box-shadow: inset 0 0 0 5px color-mix(in srgb, var(--paper) 72%, transparent);
+}
+.peer-portrait-placeholder i {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  margin-top: 4.4rem;
+  border-radius: 4px;
+  background: var(--seal);
+  font-family: var(--font-display);
+  font-style: normal;
+}
+.peer-mouth {
+  position: absolute;
+  top: 40.45%;
+  left: 55.2%;
+  width: 6.5%;
+  height: .45%;
+  border-radius: 50%;
+  background: #713b3b;
+  box-shadow: 0 0 0 1px rgba(151, 76, 73, .34);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: height 55ms linear, opacity 55ms linear;
+}
+.peer-embodiment[data-mouth="half"] .peer-mouth { height: 1.05%; opacity: .76; }
+.peer-embodiment[data-mouth="open"] .peer-mouth { height: 1.8%; opacity: .88; }
+.peer-embodiment-caption {
+  width: min(100%, 11rem);
+  margin-top: -.15rem;
+  padding: .45rem .55rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+  border-top: 1px solid color-mix(in srgb, var(--seal) 55%, var(--rule));
+  color: var(--ink-soft);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(8px);
+  font-size: var(--text-micro);
+  pointer-events: auto;
+}
+.peer-embodiment-caption div { display: flex; gap: .45rem; }
+.peer-embodiment-caption button {
+  border: 0;
+  padding: .15rem;
+  color: var(--accent-deep);
+  background: transparent;
+  font-size: inherit;
+  cursor: pointer;
+}
+.peer-embodiment-caption button:hover { color: var(--seal); }
+
+@media (max-width: 800px) {
+  .peer-embodiment { right: .55rem; width: 8.5rem; }
+  .peer-portrait { min-height: 8rem; }
 }
 .message > div { min-width: 0; font: var(--text-body)/1.8 var(--font-reading); overflow-wrap: anywhere; }
 .message p { margin: 0 0 var(--space-3); }

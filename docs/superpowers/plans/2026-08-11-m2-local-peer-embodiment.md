@@ -205,15 +205,15 @@ export type PeerPlaybackState = {
 };
 ```
 
-- [ ] **Step 1: Write RED selection and reveal tests**
+- [x] **Step 1: Write RED selection and reveal tests**
 
 Test pure helpers that select only the newest completed unplayed `delivery: 'live'` Peer item, never select history, and return conversation items only through the active Peer while playback is speaking. Muted, stopped, failed, or completed playback must reveal later teacher items exactly once.
 
-- [ ] **Step 2: Write RED component expectations**
+- [x] **Step 2: Write RED component expectations**
 
 Server-render the Free Learning chat with an active 阿夏 item and assert one unobtrusive actor stage, expression/mouth data attributes, accessible stop/mute controls, no broken `<img>` URL before a blob is available, and unchanged Markdown text. Assert non-Free-Learning chats never render the stage.
 
-- [ ] **Step 3: Run RED**
+- [x] **Step 3: Run RED**
 
 ```bash
 bun test tests/m2/peer-playback.test.tsx tests/m2/peer-projection.test.tsx
@@ -221,19 +221,19 @@ bun test tests/m2/peer-playback.test.tsx tests/m2/peer-projection.test.tsx
 
 Expected: FAIL because the playback coordinator and actor stage do not exist.
 
-- [ ] **Step 4: Implement one browser-owned playback coordinator**
+- [x] **Step 4: Implement one browser-owned playback coordinator**
 
 For each newly completed live item, mark its ID attempted before async work. Fetch portrait and MLX audio in parallel. If MLX audio plays, connect the media element to an `AnalyserNode`, smooth RMS amplitude, and choose closed/half/open thresholds. If MLX is unavailable, use `speechSynthesis`; if that is unavailable, finish immediately with text only. Stop, new student send, component unmount, and mute must cancel audio/speech and release object URLs and Web Audio nodes.
 
-- [ ] **Step 5: Implement the restrained edge stage and teacher reveal gate**
+- [x] **Step 5: Implement the restrained edge stage and teacher reveal gate**
 
 Render the private portrait blob when available; otherwise show an anonymous paper-and-seal silhouette rather than a broken image. Use the current expression, a low-frequency CSS blink/breath, and a tiny code-native mouth overlay. While phase is `speaking`, keep later items in state but render only through the Peer; when speech ends or is interrupted, render the full list. Do not delay Session events, tool completion, or persistence.
 
-- [ ] **Step 6: Add formula click-to-read**
+- [x] **Step 6: Add formula click-to-read**
 
 Let `MarkdownView` delegate clicks from KaTeX output to its embedded TeX annotation. Call `detailedFormulaSpeech`; speak only a successful deterministic result through system speech. This is an explicit student action and does not replay the full Peer response.
 
-- [ ] **Step 7: Run GREEN and commit**
+- [x] **Step 7: Run GREEN and commit**
 
 ```bash
 bun test tests/m2/peer-playback.test.tsx tests/m2/peer-projection.test.tsx \
