@@ -61,7 +61,7 @@ test('joins source-grounded free learning, assets, Meta, Roadmap, and the footpr
   await expect(page.getByText(/长期学习路线.*能力标准/)).toBeVisible();
   await metaComposer.fill('可以');
   await page.getByRole('button', { name: /发送/ }).click();
-  await expect(page.locator('.tool-receipt').filter({ hasText: '处理完成' })).toBeVisible();
+  await expect(page.locator('.tool-receipt').filter({ hasText: '长期学习路线已建立' })).toBeVisible();
   await expect(page.getByRole('button', { name: '进入正式课程' })).toBeVisible();
 
   const courseResponse = await page.request.get('/api/course');
