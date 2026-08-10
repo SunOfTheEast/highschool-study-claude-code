@@ -480,9 +480,20 @@ export type LessonHandoutConversationItem = {
   at: string;
 };
 
+export type PeerConversationItem = {
+  id: string;
+  kind: 'peer';
+  actorId: string;
+  displayName: string;
+  status: 'running' | 'done' | 'error';
+  text: string | null;
+  at: string;
+};
+
 export type ConversationItem =
   | { id: string; kind: 'user'; text: string; at: string }
   | { id: string; kind: 'assistant'; text: string; at: string }
+  | PeerConversationItem
   | MaterialSearchConversationItem
   | LessonReviewConversationItem
   | LessonHandoutConversationItem

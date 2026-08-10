@@ -58,6 +58,8 @@ function upsert(items: ConversationItem[], incoming: ConversationItem): Conversa
       updatedAt: incoming.at,
     };
     next[index] = mergeLessonReviewItem(existing, terminal);
+  } else if (existing.kind === 'peer' && incoming.kind === 'peer') {
+    next[index] = { ...incoming, at: existing.at };
   } else {
     next[index] = incoming;
   }

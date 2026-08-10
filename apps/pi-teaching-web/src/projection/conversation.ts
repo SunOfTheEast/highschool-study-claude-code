@@ -3,6 +3,7 @@ import type {
   ConversationItem,
   LessonReviewConversationItem,
   MaterialSearchConversationItem,
+  PeerConversationItem,
   SessionKey,
   StudyEvent,
 } from '../shared/contracts';
@@ -14,6 +15,7 @@ import {
 import { lessonReviewEnd, lessonReviewStart } from './lesson-review';
 import { lessonHandoutEnd, lessonHandoutStart } from './lesson-handout';
 import { publicSessionErrorText } from '../client/public-errors';
+import { peerMessageEnd, peerMessageStart } from './peer-message';
 
 function contentText(content: unknown): string {
   if (typeof content === 'string') return content;
@@ -63,6 +65,17 @@ export function projectConversationEntries(
       if (text) items.push({ id: entry.id, kind: 'assistant', text, at: entry.timestamp });
       for (const call of toolCalls(message.content)) {
         toolPositions.set(call.id, items.length);
+        if (call.name === 'ask_peer') {
+          items.push(peerMessageStart(call.id, call.arguments, entry.timestamp) ?? {
+            id: call.id,
+            kind: 'tool',
+            name: call.name,
+            status: 'running',
+            detail: null,
+            at: entry.timestamp,
+          });
+          continue;
+        }
         if (call.name === 'artifact_export') {
           items.push(lessonHandoutStart(call.id, entry.timestamp));
           continue;
@@ -91,6 +104,33 @@ export function projectConversationEntries(
     ) {
       const position = toolPositions.get(message.toolCallId);
       const previous = position === undefined ? undefined : items[position];
+      if (message.toolName === 'ask_peer') {
+        const started = previous?.kind === 'peer'
+          ? previous as PeerConversationItem
+          : undefined;
+        const peer = peerMessageEnd(
+          message.toolCallId,
+          { content: message.content, details: message.details },
+          message.isError === true,
+          entry.timestamp,
+          started,
+        );
+        const item: ConversationItem = peer ?? {
+          id: message.toolCallId,
+          kind: 'tool',
+          name: message.toolName,
+          status: message.isError === true ? 'error' : 'done',
+          detail: null,
+          at: entry.timestamp,
+        };
+        if (position === undefined) {
+          toolPositions.set(message.toolCallId, items.length);
+          items.push(item);
+        } else {
+          items[position] = item;
+        }
+        continue;
+      }
       if (message.toolName === 'artifact_export') {
         const item = lessonHandoutEnd(
           message.toolCallId,
@@ -189,6 +229,21 @@ export function projectLiveSessionEvent(
     }];
   }
   if (event.type === 'tool_execution_start') {
+    if (event.toolName === 'ask_peer') {
+      const peer = peerMessageStart(event.toolCallId, event.args, at);
+      return [{
+        type: 'conversation-item',
+        sessionKey,
+        item: peer ?? {
+          id: event.toolCallId,
+          kind: 'tool',
+          name: event.toolName,
+          status: 'running',
+          detail: null,
+          at,
+        },
+      }];
+    }
     if (event.toolName === 'artifact_export') {
       return [{
         type: 'conversation-item',
@@ -230,6 +285,26 @@ export function projectLiveSessionEvent(
     }] : [];
   }
   if (event.type === 'tool_execution_end') {
+    if (event.toolName === 'ask_peer') {
+      const peer = peerMessageEnd(
+        event.toolCallId,
+        event.result,
+        event.isError,
+        at,
+      );
+      return [{
+        type: 'conversation-item',
+        sessionKey,
+        item: peer ?? {
+          id: event.toolCallId,
+          kind: 'tool',
+          name: event.toolName,
+          status: event.isError ? 'error' : 'done',
+          detail: null,
+          at,
+        },
+      }];
+    }
     if (event.toolName === 'artifact_export') {
       return [{
         type: 'conversation-item',

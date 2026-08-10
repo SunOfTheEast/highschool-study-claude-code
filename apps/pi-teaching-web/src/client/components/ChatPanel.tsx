@@ -56,6 +56,23 @@ export function ChatPanel({
       </header>
       <div className="timeline" aria-live="polite">
         {visibleItems.map((item) => {
+          if (item.kind === 'peer') {
+            return (
+              <article className={`message peer ${item.status}`} key={item.id}>
+                <span className="message-role">
+                  {item.displayName}
+                  <small>AI 同学</small>
+                </span>
+                <div>
+                  {item.status === 'running'
+                    ? <p className="peer-pending">阿澄正在想……</p>
+                    : item.status === 'error'
+                      ? <p className="peer-unavailable">阿澄暂时没接上</p>
+                      : <MarkdownView>{item.text ?? ''}</MarkdownView>}
+                </div>
+              </article>
+            );
+          }
           if (item.kind === 'material-search') {
             return <MaterialSearchActivity item={item} key={item.id} />;
           }

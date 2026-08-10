@@ -258,6 +258,36 @@
 }
 .message-role { padding-top: 3px; color: var(--ink-faint); font-size: var(--text-meta); }
 .message.assistant .message-role { color: var(--accent); }
+.message.peer {
+  margin: var(--space-1) 0;
+  padding-right: var(--space-3);
+  padding-left: var(--space-3);
+  border-left: 2px solid color-mix(in srgb, var(--accent) 72%, transparent);
+  background: linear-gradient(90deg, var(--accent-wash), transparent 78%);
+}
+.message.peer .message-role {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  color: var(--accent-deep);
+}
+.message.peer .message-role small {
+  color: var(--ink-faint);
+  font-size: var(--text-micro);
+  font-weight: 400;
+}
+.peer-pending,
+.peer-unavailable { color: var(--ink-faint); }
+.peer-pending::before {
+  width: 6px;
+  height: 6px;
+  display: inline-block;
+  margin-right: var(--space-2);
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse-dot 1s ease-in-out infinite;
+  content: '';
+}
 .message > div { min-width: 0; font: var(--text-body)/1.8 var(--font-reading); overflow-wrap: anywhere; }
 .message p { margin: 0 0 var(--space-3); }
 .message p:last-child { margin-bottom: 0; }
