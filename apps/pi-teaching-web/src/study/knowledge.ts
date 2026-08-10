@@ -157,6 +157,10 @@ function readMaterials(root: string): KnowledgeMaterial[] {
   ].sort((left, right) => left.path.localeCompare(right.path));
 }
 
+export function countKnowledgeMaterials(root: string): number {
+  return readMaterials(root).length;
+}
+
 export function readKnowledge(root: string): KnowledgeSnapshot {
   return {
     methods: readMethods(root),

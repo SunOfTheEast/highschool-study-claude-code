@@ -22,6 +22,34 @@ async function capture(page: import('@playwright/test').Page, name: string) {
   await page.screenshot({ path: join(shots, name), fullPage: true });
 }
 
+test('opens a target route without waiting for the Home projection', async ({ page }) => {
+  await page.context().addCookies([{
+    name: 'studyforge-fixture',
+    value: 'm1c',
+    domain: '127.0.0.1',
+    path: '/',
+  }]);
+  expect((await page.request.post('/api/__e2e/m1c/reset')).status()).toBe(200);
+
+  let releaseHome!: () => void;
+  const homeGate = new Promise<void>((resolve) => { releaseHome = resolve; });
+  let finishHome!: () => void;
+  const homeFinished = new Promise<void>((resolve) => { finishHome = resolve; });
+  await page.route('**/api/home', async (route) => {
+    await homeGate;
+    await route.continue();
+    finishHome();
+  });
+  try {
+    await page.goto('/assets');
+    await expect(page.getByRole('heading', { name: '我的学习资料' })).toBeVisible();
+  } finally {
+    releaseHome();
+    await homeFinished;
+    await page.unroute('**/api/home');
+  }
+});
+
 test('walks the M1d asset, source, footprint, and local-relation surfaces', async ({ page }) => {
   await page.context().addCookies([{
     name: 'studyforge-fixture',

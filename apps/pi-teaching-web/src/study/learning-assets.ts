@@ -215,6 +215,10 @@ function filesBelow(root: string, directory: string): string[] {
   return files.sort();
 }
 
+export function countCurrentProblemCardFiles(root: string): number {
+  return filesBelow(root, 'cards').filter((path) => /\.card\.ya?ml$/i.test(path)).length;
+}
+
 function yamlAt(root: string, path: string): RecordValue {
   const absolute = resolveDocumentPath(root, path);
   if (!existsSync(absolute)) throw new StudyDocumentError(path, 'asset does not exist');

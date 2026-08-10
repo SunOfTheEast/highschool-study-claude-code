@@ -7,8 +7,8 @@ import type {
   MetaSessionSummary,
   StudentLearningSetGuide,
 } from '../shared/contracts';
-import { readKnowledge } from './knowledge';
-import { listLearningNotes } from './learning-assets';
+import { countKnowledgeMaterials } from './knowledge';
+import { countCurrentProblemCardFiles, listLearningNotes } from './learning-assets';
 import { readCourseTree, readLearningSetGuide } from './markdown';
 import { projectActiveLesson } from './display-projections';
 
@@ -44,7 +44,6 @@ export function readLearningSetHome(
   recentMeta: MetaSessionSummary[] = [],
 ): LearningSetHomeSnapshot {
   const guide = readLearningSetGuide(root);
-  const knowledge = readKnowledge(root);
   const hasCourse = existsSync(join(root, 'ROADMAP.md'));
   const course = hasCourse ? readCourseTree(root) : null;
 
@@ -58,8 +57,8 @@ export function readLearningSetHome(
     },
     assets: {
       notes: listLearningNotes(root).length,
-      problemCards: knowledge.cards.length,
-      materials: knowledge.materials.length,
+      problemCards: countCurrentProblemCardFiles(root),
+      materials: countKnowledgeMaterials(root),
     },
     recentFreeLearning,
     recentMeta,

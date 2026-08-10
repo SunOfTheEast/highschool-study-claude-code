@@ -146,14 +146,20 @@ export function App() {
     setHandoutLoading(false);
     setNotice('正在读取学习集…');
     try {
-      const homeValue = await api.home();
-      if (revision !== routeLoadRevision.current) return;
-      setHome(homeValue);
+      const homeRequest = api.home();
 
       if (next.kind === 'home') {
+        const homeValue = await homeRequest;
+        if (revision !== routeLoadRevision.current) return;
+        setHome(homeValue);
         setRoute(next);
         setNotice(null);
         return;
+      }
+      if (next.kind !== 'free-learning') {
+        void homeRequest.then((homeValue) => {
+          if (revision === routeLoadRevision.current) setHome(homeValue);
+        }, () => {});
       }
       if (next.kind === 'assets') {
         const [value, materialValues] = await Promise.all([api.assets(), api.materials()]);
@@ -198,14 +204,15 @@ export function App() {
       }
       if (next.kind === 'free-learning') {
         const key = `free:${next.sessionId}` as const;
-        const session = homeValue.recentFreeLearning.find((candidate) => (
-          candidate.id === next.sessionId
-        ));
-        const [history, assetLibrary, materialValues] = await Promise.all([
+        const [homeValue, history, assetLibrary, materialValues] = await Promise.all([
+          homeRequest,
           api.history(key),
           api.assets(),
           api.materials(),
         ]);
+        const session = homeValue.recentFreeLearning.find((candidate) => (
+          candidate.id === next.sessionId
+        ));
         const selectedProblems = session?.selectedAssets.filter((reference) => (
           reference.kind === 'problem-card'
         )) ?? [];
@@ -214,6 +221,7 @@ export function App() {
           return [reference.id, value] as const;
         })));
         if (revision !== routeLoadRevision.current) return;
+        setHome(homeValue);
         setAssets(assetLibrary);
         setMaterials(materialValues);
         setFreeContexts((session?.selectedAssets ?? []).map((reference) => {
