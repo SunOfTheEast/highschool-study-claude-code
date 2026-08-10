@@ -85,6 +85,56 @@ test('renders model choice as a ledger with independent teacher and Scout rows',
   expect(markup).not.toContain('模型卡片');
 });
 
+test('puts the current teaching pair first and folds away unconfigured Providers', () => {
+  const expanded: DesktopModelCatalog = {
+    providers: [
+      ...catalog.providers,
+      {
+        id: 'anthropic', name: 'Anthropic', configured: true, authLabel: 'API Key',
+        loginMethods: [{ type: 'api_key', label: '配置 API Key' }],
+      },
+      {
+        id: 'google', name: 'Google', configured: false, authLabel: null,
+        loginMethods: [{ type: 'api_key', label: '配置 API Key' }],
+      },
+      {
+        id: 'openrouter', name: 'OpenRouter', configured: false, authLabel: null,
+        loginMethods: [{ type: 'api_key', label: '配置 API Key' }],
+      },
+    ],
+    models: [
+      ...catalog.models,
+      { provider: 'anthropic', id: 'claude-sonnet', name: 'Claude Sonnet', thinkingLevels: ['high'] },
+      { provider: 'google', id: 'gemini-pro', name: 'Gemini Pro', thinkingLevels: ['high'] },
+      { provider: 'openrouter', id: 'route-model', name: 'Route Model', thinkingLevels: ['high'] },
+    ],
+  };
+  const markup = renderToStaticMarkup(
+    <ModelSettings
+      catalog={expanded}
+      teacher={{ provider: 'openai-codex', model: 'gpt-5.6-sol', thinking: 'high' }}
+      scout={{ provider: 'openai-codex', model: 'gpt-5.6-terra', thinking: 'high' }}
+      authFlow={null}
+      busy={false}
+      error={null}
+      onLogin={async () => {}}
+      onRespond={async () => {}}
+      onOpenUrl={async () => {}}
+      onSave={async () => {}}
+      onBack={() => {}}
+    />,
+  );
+
+  expect(markup).toContain('当前安排');
+  expect(markup).toContain('GPT-5.6 Sol · high');
+  expect(markup).toContain('GPT-5.6 Terra · high');
+  expect(markup).toContain('<details class="desktop-provider-more">');
+  expect(markup).toContain('连接其他 Provider · 2');
+  expect(markup.indexOf('Anthropic')).toBeLessThan(markup.indexOf('连接其他 Provider · 2'));
+  expect(markup.indexOf('连接其他 Provider · 2')).toBeLessThan(markup.indexOf('Google'));
+  expect(markup).toContain('OpenRouter');
+});
+
 test('keeps diagnosis typed and offers recovery rather than a blank classroom', () => {
   const markup = renderToStaticMarkup(
     <DiagnosticPage
