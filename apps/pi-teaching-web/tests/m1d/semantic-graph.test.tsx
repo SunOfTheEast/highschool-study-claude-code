@@ -6,8 +6,10 @@ import type {
   LearningMaterial,
   SemanticRelation,
 } from '../../src/shared/contracts';
-import { buildLocalSemanticGraph } from '../../src/client/semantic-graph';
+import * as semanticGraph from '../../src/client/semantic-graph';
 import { KnowledgePage } from '../../src/client/pages/KnowledgePage';
+
+const { buildLocalSemanticGraph } = semanticGraph;
 
 function asset(id: string, title = `题目 ${id}`): LearningAssetSummary {
   return {
@@ -68,15 +70,17 @@ const relations: SemanticRelation[] = [
   { kind: 'object-bucket', objectId: 'obj-ksp', bucketId: 'equilibrium', title: '能力假设' },
 ];
 
-test('builds a deterministic capped local neighborhood and excludes teacher-memory relations', () => {
+test('uses tag neighbors for a tag atlas while retaining every direct asset association', () => {
   const input = { relations, assets, materials, focus: 'tag:沉淀溶解平衡' };
   const first = buildLocalSemanticGraph(input);
   const second = buildLocalSemanticGraph(input);
 
   expect(first).toEqual(second);
-  expect(first.nodes).toHaveLength(12);
+  expect(first.nodes).toHaveLength(3);
   expect(first.totalNodes).toBe(18);
-  expect(first.nodes[0]).toMatchObject({ key: 'tag:沉淀溶解平衡', x: 50, y: 50 });
+  expect(first.nodes[0]).toMatchObject({ key: 'tag:沉淀溶解平衡', x: 50, y: 52 });
+  expect(first.nodes.slice(1).every((node) => node.kind === 'tag')).toBe(true);
+  expect(first.associations.filter((item) => item.kind === 'asset')).toHaveLength(15);
   expect(first.associations).toHaveLength(17);
   expect(JSON.stringify(first)).not.toMatch(/obj-ksp|能力假设|教师判断/);
   expect(first.nodes.some((node) => node.kind === 'material')).toBe(false);
@@ -101,6 +105,42 @@ test('keeps complete inspector associations and only reveals a Material through 
   expect(graph.edges).toContainEqual(expect.objectContaining({ role: 'source' }));
 });
 
+test('derives at most six asset neighbors from shared tags without claiming similarity', () => {
+  const graph = buildLocalSemanticGraph({
+    relations,
+    assets,
+    materials,
+    focus: 'note:note-ksp',
+  });
+
+  expect(graph.neighborAssets).toHaveLength(6);
+  expect(graph.neighborAssets[0]).toMatchObject({
+    sharedCoreTags: ['沉淀溶解平衡'],
+    sharedTags: ['沉淀溶解平衡'],
+    relationLabel: '核心标签相同',
+  });
+  expect(JSON.stringify(graph.neighborAssets)).not.toMatch(/相似|最佳|路线对照/);
+});
+
+test('searches tags and student asset titles from summaries', () => {
+  const search = (semanticGraph as typeof semanticGraph & {
+    searchSemanticGraphEntries?: (
+      relationValues: SemanticRelation[],
+      assetValues: LearningAssetLibrarySnapshot,
+      query: string,
+    ) => Array<{ key: string; kind: 'tag' | 'asset' }>;
+  }).searchSemanticGraphEntries;
+  expect(typeof search).toBe('function');
+  if (!search) return;
+
+  expect(search(relations, assets, 'Ksp').map((item) => item.key))
+    .toContain('note:note-ksp');
+  expect(search(relations, assets, '平衡').some((item) => item.kind === 'tag'))
+    .toBe(true);
+  expect(JSON.stringify(search(relations, assets, '教师')))
+    .not.toMatch(/教师判断|能力假设/);
+});
+
 test('renders full tag inspector, explains co-occurrence, and offers actions only for assets', () => {
   const tagMarkup = renderToStaticMarkup(
     <KnowledgePage
@@ -114,7 +154,7 @@ test('renders full tag inspector, explains co-occurrence, and offers actions onl
       onOpenAssets={() => {}}
     />,
   );
-  expect(tagMarkup).toContain('显示 12 / 共 18');
+  expect(tagMarkup).toContain('显示 3 / 共 18');
   expect(tagMarkup).toContain('题目 problem-14');
   expect(tagMarkup).toContain('共同出现在 14 个资产中');
   expect(tagMarkup).toContain('data-edge-role="core"');

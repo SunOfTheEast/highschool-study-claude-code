@@ -25,6 +25,23 @@ export type SemanticGraphAssociation = Omit<SemanticGraphNode, 'x' | 'y'> & {
   role: SemanticGraphEdgeRole;
 };
 
+export type SemanticAssetNeighbor = {
+  key: string;
+  asset: LearningAssetHandle;
+  label: string;
+  detail: string;
+  sharedCoreTags: string[];
+  sharedTags: string[];
+  relationLabel: '核心标签相同' | '核心标签不同';
+};
+
+export type SemanticSearchEntry = {
+  key: string;
+  kind: 'tag' | 'asset';
+  label: string;
+  detail: string;
+};
+
 export type SemanticGraphEdge = {
   key: string;
   from: string;
@@ -38,6 +55,7 @@ export type LocalSemanticGraph = {
   nodes: SemanticGraphNode[];
   edges: SemanticGraphEdge[];
   associations: SemanticGraphAssociation[];
+  neighborAssets: SemanticAssetNeighbor[];
   totalNodes: number;
 };
 
@@ -63,20 +81,23 @@ function roleOrder(role: SemanticGraphEdgeRole): number {
   return 3;
 }
 
-function positioned(
-  nodes: Array<Omit<SemanticGraphNode, 'x' | 'y'>>,
-): SemanticGraphNode[] {
-  return nodes.map((node, index) => {
-    if (index === 0) return { ...node, x: 50, y: 50 };
-    const count = Math.max(1, nodes.length - 1);
-    const angle = -Math.PI / 2 + ((index - 1) * 2 * Math.PI) / count;
-    const rounded = (value: number) => Math.round(value * 100) / 100;
-    return {
-      ...node,
-      x: rounded(50 + Math.cos(angle) * 37),
-      y: rounded(50 + Math.sin(angle) * 37),
-    };
-  });
+const ATLAS_SLOTS = [
+  { x: 50, y: 52 },
+  { x: 25, y: 28 },
+  { x: 72, y: 25 },
+  { x: 82, y: 52 },
+  { x: 72, y: 79 },
+  { x: 26, y: 79 },
+  { x: 14, y: 54 },
+  { x: 14, y: 18 },
+  { x: 86, y: 18 },
+] as const;
+
+function positioned(nodes: Array<Omit<SemanticGraphNode, 'x' | 'y'>>): SemanticGraphNode[] {
+  return nodes.slice(0, ATLAS_SLOTS.length).map((node, index) => ({
+    ...node,
+    ...ATLAS_SLOTS[index]!,
+  }));
 }
 
 function materialNode(
@@ -120,6 +141,77 @@ export function listSemanticGraphTags(relations: SemanticRelation[]): string[] {
   return [...tags].sort((left, right) => left.localeCompare(right, 'zh-CN'));
 }
 
+export function searchSemanticGraphEntries(
+  relations: SemanticRelation[],
+  assets: LearningAssetLibrarySnapshot,
+  query: string,
+): SemanticSearchEntry[] {
+  const needle = query.trim().toLocaleLowerCase();
+  if (!needle) return [];
+  const availableAssets = new Set(relations.flatMap((relation) => (
+    relation.kind === 'asset-tag' ? [assetKey(relation.asset)] : []
+  )));
+  const tagEntries = listSemanticGraphTags(relations)
+    .filter((tag) => tag.toLocaleLowerCase().includes(needle))
+    .map((tag) => ({ key: `tag:${tag}`, kind: 'tag' as const, label: tag, detail: '知识点' }));
+  const assetEntries = [...assets.notes, ...assets.problemCards]
+    .filter((asset) => availableAssets.has(assetKey(asset)))
+    .filter((asset) => asset.title.toLocaleLowerCase().includes(needle))
+    .map((asset) => ({
+      key: assetKey(asset),
+      kind: 'asset' as const,
+      label: asset.title,
+      detail: asset.kind === 'note' ? '笔记' : '题卡',
+    }));
+  return [...tagEntries, ...assetEntries].sort((left, right) => (
+    (left.kind === right.kind ? 0 : left.kind === 'tag' ? -1 : 1)
+      || left.label.localeCompare(right.label, 'zh-CN')
+      || left.key.localeCompare(right.key)
+  ));
+}
+
+function sharedValues(left: string[], right: string[]): string[] {
+  const candidates = new Set(right);
+  return [...new Set(left)].filter((value) => candidates.has(value))
+    .sort((a, b) => a.localeCompare(b, 'zh-CN'));
+}
+
+function deriveAssetNeighbors(
+  focus: LearningAssetSummary | null,
+  summaries: Map<string, LearningAssetSummary>,
+): SemanticAssetNeighbor[] {
+  if (!focus) return [];
+  const focusCore = focus.tags?.core ?? [];
+  const focusRelated = focus.tags?.related ?? [];
+  const focusTags = [...new Set([...focusCore, ...focusRelated])];
+  return [...summaries.values()]
+    .filter((candidate) => assetKey(candidate) !== assetKey(focus))
+    .map((candidate) => {
+      const candidateCore = candidate.tags?.core ?? [];
+      const candidateRelated = candidate.tags?.related ?? [];
+      const candidateTags = [...new Set([...candidateCore, ...candidateRelated])];
+      const sharedCoreTags = sharedValues(focusCore, candidateCore);
+      const sharedTags = sharedValues(focusTags, candidateTags);
+      return {
+        key: assetKey(candidate),
+        asset: { kind: candidate.kind, id: candidate.id },
+        label: candidate.title,
+        detail: `共享 ${sharedTags.join('、')}`,
+        sharedCoreTags,
+        sharedTags,
+        relationLabel: sharedCoreTags.length > 0 ? '核心标签相同' as const : '核心标签不同' as const,
+      };
+    })
+    .filter((candidate) => candidate.sharedTags.length > 0)
+    .sort((left, right) => (
+      right.sharedCoreTags.length - left.sharedCoreTags.length
+        || right.sharedTags.length - left.sharedTags.length
+        || left.label.localeCompare(right.label, 'zh-CN')
+        || left.key.localeCompare(right.key)
+    ))
+    .slice(0, 6);
+}
+
 export function buildLocalSemanticGraph({
   relations,
   assets,
@@ -138,12 +230,16 @@ export function buildLocalSemanticGraph({
     : requested && availableAssets.has(requested)
       ? requested
       : fallback;
-  if (!focusKey) return { focus: null, nodes: [], edges: [], associations: [], totalNodes: 0 };
+  if (!focusKey) {
+    return { focus: null, nodes: [], edges: [], associations: [], neighborAssets: [], totalNodes: 0 };
+  }
 
   const isTag = focusKey.startsWith('tag:');
   const focusTag = isTag ? focusKey.slice(4) : null;
   const focusAsset = !isTag ? summaries.get(focusKey) ?? null : null;
-  if (!isTag && !focusAsset) return { focus: null, nodes: [], edges: [], associations: [], totalNodes: 0 };
+  if (!isTag && !focusAsset) {
+    return { focus: null, nodes: [], edges: [], associations: [], neighborAssets: [], totalNodes: 0 };
+  }
 
   const focusNode: Omit<SemanticGraphNode, 'x' | 'y'> = isTag
     ? { key: focusKey, kind: 'tag', label: focusTag!, detail: '语义标签' }
@@ -212,7 +308,21 @@ export function buildLocalSemanticGraph({
   }
 
   const complete = uniqueAssociations(associations);
-  const visibleAssociations = complete.slice(0, 11);
+  const tagNeighborKeys = isTag ? relations.flatMap((relation) => {
+    if (relation.kind !== 'tag-neighbor') return [];
+    const neighbor = relation.left === focusTag
+      ? relation.right
+      : relation.right === focusTag ? relation.left : null;
+    return neighbor ? [{ key: `tag:${neighbor}`, weight: relation.weight }] : [];
+  }).sort((left, right) => (
+    right.weight - left.weight || left.key.localeCompare(right.key, 'zh-CN')
+  )).map((value) => value.key) : [];
+  const associationByKey = new Map(complete.map((association) => [association.key, association]));
+  const visibleAssociations = isTag
+    ? (tagNeighborKeys.length > 0
+      ? tagNeighborKeys.flatMap((key) => associationByKey.get(key) ?? []).slice(0, 8)
+      : complete.filter((association) => association.kind === 'asset').slice(0, 8))
+    : complete.slice(0, 8);
   const nodes = positioned([focusNode, ...visibleAssociations.map(({ role: _role, ...node }) => node)]);
   const visibleKeys = new Set(nodes.map((node) => node.key));
   const edges = visibleAssociations.flatMap((association) => (
@@ -231,6 +341,7 @@ export function buildLocalSemanticGraph({
     nodes,
     edges,
     associations: complete,
+    neighborAssets: deriveAssetNeighbors(focusAsset, summaries),
     totalNodes: complete.length + 1,
   };
 }
