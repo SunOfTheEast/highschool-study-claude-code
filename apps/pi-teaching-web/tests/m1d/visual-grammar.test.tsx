@@ -19,6 +19,13 @@ test('keeps the Liubai palette readable and exposes four restrained action level
   expect(styles).toContain('.seal-mark');
 });
 
+test('keeps desktop conversations as a readable letter with an inner writing gutter', () => {
+  const styles = readFileSync(join(import.meta.dir, '../../src/client/styles/m1b.css'), 'utf8');
+
+  expect(styles).toContain('.letter-workspace { width: min(860px, 100%); }');
+  expect(styles).toMatch(/\.free-learning-workspace \.chat\s*\{[^}]*padding-inline:\s*var\(--space-5\)/s);
+});
+
 test('uses the 学 seal as brand language rather than a status badge', () => {
   const markup = renderToStaticMarkup(
     <AppShell

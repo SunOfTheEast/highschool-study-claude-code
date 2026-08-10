@@ -498,6 +498,7 @@
 .free-learning-heading > span { color: var(--ink-faint); font-size: var(--text-body-sm); }
 .free-learning-workspace .chat {
   min-height: calc(100dvh - var(--workspace-header-height) - 13rem);
+  padding-inline: var(--space-5);
   border: 0;
   border-top: 1px solid var(--rule);
   border-radius: 0;
