@@ -1,4 +1,5 @@
 import { expect, test } from 'bun:test';
+import type { AgentSessionEvent } from '@earendil-works/pi-coding-agent';
 import type { ConversationItem } from '../../src/shared/contracts';
 import {
   presentConversation,
@@ -9,6 +10,7 @@ import {
   publicSessionErrorText,
 } from '../../src/client/public-errors';
 import { initialClientState, reduceClientState } from '../../src/client/state';
+import { projectLiveSessionEvent } from '../../src/projection/conversation';
 
 function tool(
   id: string,
@@ -71,4 +73,24 @@ test('sanitizes Session failures and clears them when the student retries', () =
     status: 'running',
   });
   expect(retried.errors['free:free-session-001']).toBeUndefined();
+});
+
+test('projects an assistant provider failure as a safe Session error', () => {
+  const events = projectLiveSessionEvent('meta:meta-session-001', {
+    type: 'message_end',
+    message: {
+      role: 'assistant',
+      content: [],
+      stopReason: 'error',
+      errorMessage: 'OpenAI API error: invalid key /private/tmp/session.jsonl',
+      timestamp: Date.now(),
+    },
+  } as unknown as AgentSessionEvent);
+
+  expect(events).toEqual([{
+    type: 'session-error',
+    sessionKey: 'meta:meta-session-001',
+    message: publicSessionErrorText(),
+  }]);
+  expect(JSON.stringify(events)).not.toMatch(/OpenAI|invalid key|private\/tmp|jsonl/);
 });

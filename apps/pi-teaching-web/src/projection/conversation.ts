@@ -13,6 +13,7 @@ import {
 } from './material-search';
 import { lessonReviewEnd, lessonReviewStart } from './lesson-review';
 import { lessonHandoutEnd, lessonHandoutStart } from './lesson-handout';
+import { publicSessionErrorText } from '../client/public-errors';
 
 function contentText(content: unknown): string {
   if (typeof content === 'string') return content;
@@ -167,6 +168,13 @@ export function projectLiveSessionEvent(
   if (event.type === 'message_end') {
     const message = event.message as unknown as Record<string, unknown>;
     if (message.role !== 'user' && message.role !== 'assistant') return [];
+    if (message.role === 'assistant' && message.stopReason === 'error') {
+      return [{
+        type: 'session-error',
+        sessionKey,
+        message: publicSessionErrorText(),
+      }];
+    }
     const text = contentText(message.content);
     if (!text) return [];
     return [{
