@@ -93,7 +93,7 @@ export function AssetsPage({
           带着所选问老师 · {selectedReferences.length}
         </button>
         <nav className="asset-header-links">
-          <button type="button" className="action-text" onClick={onOpenKnowledge}>知识关系</button>
+          <button type="button" className="action-text" onClick={onOpenKnowledge}>知识图谱</button>
           <button type="button" className="action-text" onClick={onOpenFootprint}>学习足迹</button>
         </nav>
       </header>

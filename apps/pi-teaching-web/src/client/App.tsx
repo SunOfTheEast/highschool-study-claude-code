@@ -603,7 +603,7 @@ export function App() {
           onOpenAssets={() => navigate({ kind: 'assets' })}
         />
       )
-      : <div className="loading-screen"><b>正在读取知识关系</b></div>;
+      : <div className="loading-screen"><b>正在读取知识图谱</b></div>;
   } else if (!course || !selectedKey) {
     content = <div className="loading-screen"><b>正在读取课程节点</b></div>;
   } else if (route.kind === 'course') {

@@ -110,7 +110,7 @@ test('renders one asset library with Notes and problem cards but no graph contro
   expect(markup).toContain('Ksp 边界');
   expect(markup).toContain('加入同离子');
   expect(markup).toContain('带着所选问老师 · 0');
-  expect(markup).toContain('知识关系');
+  expect(markup).toContain('知识图谱');
   expect(markup).not.toContain('方法图谱');
 });
 

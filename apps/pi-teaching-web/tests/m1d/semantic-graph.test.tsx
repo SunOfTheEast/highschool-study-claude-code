@@ -141,7 +141,7 @@ test('searches tags and student asset titles from summaries', () => {
     .not.toMatch(/教师判断|能力假设/);
 });
 
-test('renders full tag inspector, explains co-occurrence, and offers actions only for assets', () => {
+test('renders a complete tag folio and offers teacher actions only for focused assets', () => {
   const tagMarkup = renderToStaticMarkup(
     <KnowledgePage
       relations={relations}
@@ -154,11 +154,14 @@ test('renders full tag inspector, explains co-occurrence, and offers actions onl
       onOpenAssets={() => {}}
     />,
   );
+  expect(tagMarkup).toContain('知识之间，怎么连起来');
   expect(tagMarkup).toContain('显示 3 / 共 18');
   expect(tagMarkup).toContain('题目 problem-14');
   expect(tagMarkup).toContain('共同出现在 14 个资产中');
-  expect(tagMarkup).toContain('data-edge-role="core"');
-  expect(tagMarkup).toContain('data-edge-role="related"');
+  expect(tagMarkup).toContain('class="knowledge-folio"');
+  expect(tagMarkup).not.toContain('knowledge-entry');
+  expect(tagMarkup).not.toContain('关系检查器');
+  expect(tagMarkup).toContain('data-association-role="core"');
   expect(tagMarkup).not.toContain('问老师');
   expect(tagMarkup).not.toMatch(/能力假设|对象记忆|教师判断/);
 
@@ -178,4 +181,7 @@ test('renders full tag inspector, explains co-occurrence, and offers actions onl
   expect(assetMarkup).toContain('带着这份笔记问老师');
   expect(assetMarkup).toContain('化学反应原理教材');
   expect(assetMarkup).toContain('第 62 页');
+  expect(assetMarkup).toContain('核心标签相同');
+  expect(assetMarkup).toContain('共享 沉淀溶解平衡');
+  expect(assetMarkup).not.toMatch(/最佳下一题|相似题|路线对照/);
 });

@@ -236,7 +236,7 @@ test('shows relation navigation and an honest selected count on the asset shelf'
       onOpenKnowledge={() => {}}
     />,
   );
-  expect(markup).toContain('知识关系');
+  expect(markup).toContain('知识图谱');
   expect(markup).toContain('带着所选问老师 · 0');
   expect(markup).toContain('data-selected="false"');
 });

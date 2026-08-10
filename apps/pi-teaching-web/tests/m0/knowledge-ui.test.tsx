@@ -25,7 +25,7 @@ const relations: SemanticRelation[] = [
   { kind: 'object-anchor', objectId: 'obj-001', title: '教师内部判断', tag: '同构' },
 ];
 
-test('renders the student local relation view instead of the legacy method tree', () => {
+test('renders one student atlas and contextual folio instead of a relation debugger', () => {
   const markup = renderToStaticMarkup(
     <KnowledgePage
       relations={relations}
@@ -39,9 +39,13 @@ test('renders the student local relation view instead of the legacy method tree'
     />,
   );
 
-  expect(markup).toContain('知识关系');
+  expect(markup).toContain('知识之间，怎么连起来');
+  expect(markup).toContain('搜索知识点、题卡或笔记');
   expect(markup).toContain('同构与共同结构');
-  expect(markup).toContain('局部关系图');
+  expect(markup).toContain('class="knowledge-atlas-layout"');
+  expect(markup).toContain('class="knowledge-folio"');
+  expect(markup).not.toContain('knowledge-entry');
+  expect(markup).not.toContain('关系检查器');
   expect(markup).not.toMatch(/方法骨架|Method graph|教师内部判断|个人掌握|能力评分/i);
 });
 
@@ -58,6 +62,7 @@ test('renders a truthful empty relation state without inventing tags', () => {
     />,
   );
 
+  expect(markup).toContain('知识图谱');
   expect(markup).toContain('还没有形成带标签的笔记或题卡');
   expect(markup).toContain('回到学习资料');
   expect(markup).not.toContain('自动打标签');
