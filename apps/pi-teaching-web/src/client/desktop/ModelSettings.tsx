@@ -304,11 +304,16 @@ export function ModelSettings({
     ...(draft.teacher ? [draft.teacher.provider] : []),
     ...(draft.scout ? [draft.scout.provider] : []),
   ]);
-  const primaryProviders = catalog.providers.filter((provider) => (
+  const currentProviders = catalog.providers.filter((provider) => (
     provider.configured || activeProviders.has(provider.id)
   ));
+  const fallbackProvider = currentProviders.length === 0
+    ? catalog.providers.find((provider) => provider.id === 'openai-codex') ?? catalog.providers[0]
+    : null;
+  const primaryProviders = fallbackProvider ? [fallbackProvider] : currentProviders;
+  const primaryProviderIds = new Set(primaryProviders.map((provider) => provider.id));
   const otherProviders = catalog.providers.filter((provider) => (
-    !provider.configured && !activeProviders.has(provider.id)
+    !primaryProviderIds.has(provider.id)
   ));
   return (
     <main className="desktop-canvas desktop-page-reveal">
