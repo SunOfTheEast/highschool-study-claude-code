@@ -27,7 +27,7 @@ export function createPeerTool(
   return defineTool({
     name: 'ask_peer',
     label: '邀请阿澄回应',
-    description: 'Ask the AI classmate 阿澄 to respond in the current free-learning conversation. Use only when the student explicitly invites 阿澄, or explicitly accepts the teacher\'s immediately preceding suggestion to invite 阿澄. Do not use for an ordinary mention, an ordinary teaching question, or before the student accepts a suggestion.',
+    description: 'Ask the AI classmate 阿澄 to respond in the current free-learning conversation. Use only when the student explicitly invites 阿澄, or explicitly accepts the teacher\'s immediately preceding suggestion to invite 阿澄. Do not use for an ordinary mention, an ordinary teaching question, or before the student accepts a suggestion. Treat the reply as teaching help, not student evidence. Any learning-memory update must rely on actual student evidence; if it relies on a later response after Peer help, preserve that help boundary.',
     executionMode: 'sequential',
     parameters: peerParameters,
     execute: async (_toolCallId, input, signal) => {

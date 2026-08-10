@@ -392,7 +392,7 @@ Freeze three cases:
 2. Ordinary question with no invitation → no `ask_peer` call.
 3. Teacher suggests asking 阿澄 → no call until the student explicitly accepts.
 
-The memory boundary case is: after Peer reply but before a new student response, no `free_learning_memory_commit`; after a student responds, any memory language must preserve “在阿澄提示/质疑后”。
+The memory boundary case is: Peer output itself never supports `free_learning_memory_commit`, while real student evidence already present before the invitation may still be recorded. If a later student response supports an update, its memory language must preserve “在阿澄提示/质疑后”。
 
 - [ ] **Step 2: Run a no-guidance control**
 
