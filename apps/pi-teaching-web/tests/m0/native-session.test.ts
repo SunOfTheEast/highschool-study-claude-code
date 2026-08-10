@@ -37,6 +37,7 @@ import {
   listPiSessionFacts,
 } from '../../src/runtime/session-owner';
 import { WorkspaceRegistry } from '../../src/runtime/workspace-registry';
+import { transitionNode } from '../../src/runtime/node-lifecycle';
 
 const fixture = join(import.meta.dir, '../fixtures/m0-learning-set');
 const roots: string[] = [];
@@ -85,6 +86,7 @@ test('assembles static teaching resources and node-scoped model tools', () => {
     'read', 'grep', 'find', 'ls', 'edit', 'write', 'subagent', 'artifact_export',
     'save_prepared_problem_card',
     'memory_route_resolve',
+    'finish_plan',
   ]);
   expect(resources.agentsFiles).toContainEqual(expect.objectContaining({
     path: join(root, 'LEARNING_GUIDE.md'),
@@ -121,6 +123,7 @@ test('assembles static teaching resources and node-scoped model tools', () => {
     'save_note',
     'save_problem_card',
     'lesson_memory_commit',
+    'finish_lesson',
   ]);
 });
 
@@ -430,12 +433,14 @@ test('injects one canonical document contract into every node session', () => {
         'read', 'grep', 'find', 'ls', 'edit', 'write', 'subagent', 'artifact_export',
         'save_prepared_problem_card',
         'memory_route_resolve',
+        'finish_plan',
       ]
       : scope.nodeKind === 'lesson'
         ? [
           'read', 'grep', 'find', 'ls',
           'classroom_log_append', 'classroom_update', 'save_note', 'save_problem_card',
           'lesson_memory_commit',
+          'finish_lesson',
         ]
         : ['read', 'grep', 'find', 'ls', 'edit', 'write']);
   }
@@ -491,11 +496,13 @@ test('registers only node-bound custom tools for Plan and Lesson scopes', () => 
     'save_note',
     'save_problem_card',
     'lesson_memory_commit',
+    'finish_lesson',
   ]);
   expect(customToolsForNode(root, planScope, manager).map((tool) => tool.name)).toEqual([
     'artifact_export',
     'save_prepared_problem_card',
     'memory_route_resolve',
+    'finish_plan',
   ]);
   expect(customToolsForNode(root, roadmapScope)).toEqual([]);
 });
@@ -857,6 +864,23 @@ test('reuses one session per node and never shares sessions across nodes', async
     .toContain('session_id: session-plan-plan-001');
   expect(readFileSync(join(root, 'plans/plan-001/lessons/lesson-001.md'), 'utf8'))
     .toContain('session_id: session-lesson-lesson-001');
+});
+
+test('rejects a new turn after a cached node becomes terminal', async () => {
+  const root = copyFixture();
+  let prompts = 0;
+  const registry = new WorkspaceRegistry(root, async () => ({
+    ...fakeSession('session-plan-plan-001'),
+    prompt: async () => { prompts += 1; },
+  }), async () => null);
+
+  await registry.open('plan:plan-001');
+  transitionNode(root, 'plans/plan-001/PLAN.md', 'active', 'completed');
+
+  await expect(registry.send('plan:plan-001', '不应继续。'))
+    .rejects.toThrow('SESSION_NODE_NOT_ACTIVE: plan:plan-001:completed');
+  expect(prompts).toBe(0);
+  registry.dispose();
 });
 
 test('waits for the queued turn to settle before abort resolves', async () => {

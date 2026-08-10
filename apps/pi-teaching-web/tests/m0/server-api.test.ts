@@ -367,6 +367,8 @@ test('invalidates Course and Knowledge after each successful memory transaction 
         for (const [toolCallId, toolName, isError] of [
           ['memory-1', 'lesson_memory_commit', false],
           ['route-1', 'memory_route_resolve', false],
+          ['finish-lesson-1', 'finish_lesson', false],
+          ['finish-plan-1', 'finish_plan', false],
           ['memory-failed', 'lesson_memory_commit', true],
         ] as const) {
           listener?.({
@@ -392,25 +394,24 @@ test('invalidates Course and Knowledge after each successful memory transaction 
   ));
   expect(response?.status).toBe(202);
   await idle;
-  expect(events.filter((event) => event.type === 'course-invalidated')).toHaveLength(2);
+  expect(events.filter((event) => event.type === 'course-invalidated')).toHaveLength(4);
   expect(events.filter((event) => event.type === 'knowledge-invalidated')).toHaveLength(2);
 });
 
-test('routes student lifecycle actions without generating teaching messages', async () => {
+test('starts nodes directly but routes terminal actions into their teacher sessions', async () => {
   const root = copyFixture();
   const calls: string[] = [];
+  const sent: Array<[SessionKey, string]> = [];
   const handler = createRequestHandler({
     root,
     hub: new EventHub(),
-    registry: fakeRegistry() as never,
+    registry: fakeRegistry({
+      send: async (key: SessionKey, text: string) => { sent.push([key, text]); },
+    }) as never,
     lifecycle: {
       startPlan: async (id: string) => {
         calls.push(`start-plan:${id}`);
         return { route: `/course/plan/${id}`, sessionKey: `plan:${id}` as SessionKey };
-      },
-      completePlan: async (id: string) => {
-        calls.push(`complete-plan:${id}`);
-        return { route: '/course' as const };
       },
       startLesson: async (planId: string, id: string) => {
         calls.push(`start-lesson:${planId}:${id}`);
@@ -419,26 +420,32 @@ test('routes student lifecycle actions without generating teaching messages', as
           sessionKey: `lesson:${planId}:${id}` as SessionKey,
         };
       },
-      closeLesson: async (planId: string, id: string) => {
-        calls.push(`close-lesson:${planId}:${id}`);
-        return { route: `/course/plan/${planId}` };
-      },
     },
   });
 
   for (const path of [
     '/api/plans/plan-001/start',
     '/api/plans/plan-001/lessons/lesson-001/start',
-    '/api/plans/plan-001/lessons/lesson-001/close',
-    '/api/plans/plan-001/complete',
   ]) {
     expect((await handler(new Request(`http://local${path}`, { method: 'POST' })))?.status)
       .toBe(200);
   }
+
+  for (const path of [
+    '/api/plans/plan-001/lessons/lesson-001/close',
+    '/api/plans/plan-001/complete',
+  ]) {
+    expect((await handler(new Request(`http://local${path}`, { method: 'POST' })))?.status)
+      .toBe(202);
+  }
+  await Promise.resolve();
+
   expect(calls).toEqual([
     'start-plan:plan-001',
     'start-lesson:plan-001:lesson-001',
-    'close-lesson:plan-001:lesson-001',
-    'complete-plan:plan-001',
+  ]);
+  expect(sent).toEqual([
+    ['lesson:plan-001:lesson-001', '我想结束本课。'],
+    ['plan:plan-001', '我想完成这一阶段。'],
   ]);
 });

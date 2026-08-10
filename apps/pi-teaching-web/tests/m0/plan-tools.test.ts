@@ -10,6 +10,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { Check } from 'typebox/value';
 import { createPlanTools } from '../../src/runtime/plan-tools';
+import { readPlan } from '../../src/study/markdown';
 import {
   formatLessonHandoutApiPath,
   formatLessonHandoutPath,
@@ -80,6 +81,7 @@ test('exposes one Plan-bound export schema without a model-supplied Plan ID', ()
     'artifact_export',
     'save_prepared_problem_card',
     'memory_route_resolve',
+    'finish_plan',
   ]);
   const tool = tools.find((candidate) => candidate.name === 'artifact_export')!;
   expect(tool.executionMode).toBe('sequential');
@@ -103,7 +105,41 @@ test('exposes one Plan-bound export schema without a model-supplied Plan ID', ()
   const m0 = copyFixture();
   rmSync(join(m0, 'memory/INDEX.md'));
   expect(createPlanTools(m0, scope, session).map((candidate) => candidate.name))
-    .toEqual(['artifact_export', 'save_prepared_problem_card']);
+    .toEqual(['artifact_export', 'save_prepared_problem_card', 'finish_plan']);
+});
+
+test('finishes only the runtime-bound active Plan with no model authority fields', async () => {
+  const root = copyFixture();
+  const finish = createPlanTools(root, scope)
+    .find((tool) => tool.name === 'finish_plan')!;
+
+  expect(finish).toBeDefined();
+  expect(Check(finish.parameters, {})).toBeTrue();
+  expect(Check(finish.parameters, { planId: 'plan-001' })).toBeFalse();
+
+  const first = await finish.execute('finish-plan-1', {}, undefined, undefined, {} as never);
+  expect(JSON.parse((first.content[0] as { text: string }).text)).toEqual({
+    ok: true,
+    status: 'completed',
+  });
+  expect(readPlan(root, scope.nodePath).status).toBe('completed');
+
+  await finish.execute('finish-plan-1', {}, undefined, undefined, {} as never);
+  expect(readPlan(root, scope.nodePath).status).toBe('completed');
+
+  const prepared = copyFixture();
+  const absolute = join(prepared, scope.nodePath);
+  writeFileSync(absolute, readFileSync(absolute, 'utf8').replace('status: active', 'status: prepared'));
+  const preparedFinish = createPlanTools(prepared, scope)
+    .find((tool) => tool.name === 'finish_plan')!;
+  await expect(preparedFinish.execute(
+    'finish-plan-prepared',
+    {},
+    undefined,
+    undefined,
+    {} as never,
+  )).rejects.toThrow('expected active or completed');
+  expect(readPlan(prepared, scope.nodePath).status).toBe('prepared');
 });
 
 test('returns only a safe URL receipt for a linked prepared Lesson', async () => {

@@ -36,8 +36,6 @@ export function transitionNode(
 
 type SessionLifecyclePort = {
   open(key: SessionKey): Promise<unknown>;
-  abort(key: SessionKey): Promise<void>;
-  release(key: SessionKey): Promise<void> | void;
 };
 
 function findNode(
@@ -94,15 +92,6 @@ export class NodeLifecycleService {
     return { route: `/course/plan/${encodeURIComponent(planId)}`, sessionKey };
   }
 
-  async completePlan(planId: string): Promise<{ route: '/course' }> {
-    const { node } = this.node('plan', planId);
-    const sessionKey = `plan:${planId}` as const;
-    await this.sessions.abort(sessionKey);
-    transitionNode(this.root, node.path, 'active', 'completed');
-    await this.sessions.release(sessionKey);
-    return { route: '/course' };
-  }
-
   async startLesson(
     planId: string,
     lessonId: string,
@@ -117,21 +106,4 @@ export class NodeLifecycleService {
     };
   }
 
-  async closeLesson(planId: string, lessonId: string): Promise<{ route: string }> {
-    const { node } = this.lesson(planId, lessonId);
-    const sessionKey = node.sessionKey;
-    const route = `/course/plan/${encodeURIComponent(planId)}`;
-    const document = readLesson(this.root, node.path);
-    if (document.status === 'closed') {
-      await this.sessions.release(sessionKey);
-      return { route };
-    }
-    if (document.status !== 'active') {
-      throw new StudyDocumentError(node.path, `Lesson cannot close from ${document.status}`);
-    }
-    await this.sessions.abort(sessionKey);
-    transitionNode(this.root, node.path, 'active', 'closed');
-    await this.sessions.release(sessionKey);
-    return { route };
-  }
 }

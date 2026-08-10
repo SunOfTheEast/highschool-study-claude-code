@@ -57,7 +57,7 @@ import { publicSessionErrorText } from '../client/public-errors';
 
 type Lifecycle = Pick<
   NodeLifecycleService,
-  'startPlan' | 'completePlan' | 'startLesson' | 'closeLesson'
+  'startPlan' | 'startLesson'
 >;
 
 type Registry = Pick<
@@ -302,6 +302,13 @@ export function createRequestHandler(deps?: AppDependencies) {
         if (
           event.type === 'tool_execution_end'
           && !event.isError
+          && (event.toolName === 'finish_plan' || event.toolName === 'finish_lesson')
+        ) {
+          deps.hub.publish({ type: 'course-invalidated' });
+        }
+        if (
+          event.type === 'tool_execution_end'
+          && !event.isError
           && (
             event.toolName === 'lesson_memory_commit'
             || event.toolName === 'memory_route_resolve'
@@ -363,6 +370,23 @@ export function createRequestHandler(deps?: AppDependencies) {
         }
       });
       bound.set(key, unsubscribe);
+    };
+
+    const queueTurn = async (key: SessionKey, text: string) => {
+      await bind(key);
+      deps.hub.publish({ type: 'session-run', sessionKey: key, status: 'running' });
+      void deps.registry.send(key, text)
+        .catch(() => deps.hub.publish({
+          type: 'session-error',
+          sessionKey: key,
+          message: publicSessionErrorText(),
+        }))
+        .finally(() => deps.hub.publish({
+          type: 'session-run',
+          sessionKey: key,
+          status: 'idle',
+        }));
+      return json({ accepted: true }, 202);
     };
 
     try {
@@ -690,20 +714,7 @@ export function createRequestHandler(deps?: AppDependencies) {
         if (typeof body.text !== 'string' || body.text.trim().length === 0) {
           return json({ error: 'MESSAGE_TEXT_REQUIRED' }, 400);
         }
-        await bind(key);
-        deps.hub.publish({ type: 'session-run', sessionKey: key, status: 'running' });
-        void deps.registry.send(key, body.text.trim())
-          .catch(() => deps.hub.publish({
-            type: 'session-error',
-            sessionKey: key,
-            message: publicSessionErrorText(),
-          }))
-          .finally(() => deps.hub.publish({
-            type: 'session-run',
-            sessionKey: key,
-            status: 'idle',
-          }));
-        return json({ accepted: true }, 202);
+        return queueTurn(key, body.text.trim());
       }
 
       const handout = /^\/api\/plans\/([^/]+)\/lessons\/([^/]+)\/handout\/([^/]+)$/.exec(
@@ -726,9 +737,10 @@ export function createRequestHandler(deps?: AppDependencies) {
         const planId = nodeId(lessonAction[1]!);
         const lessonId = nodeId(lessonAction[2]!);
         if (!planId || !lessonId) return json({ error: 'NODE_ID_INVALID' }, 400);
-        const result = lessonAction[3] === 'start'
-          ? await lifecycle.startLesson(planId, lessonId)
-          : await lifecycle.closeLesson(planId, lessonId);
+        if (lessonAction[3] === 'close') {
+          return queueTurn(`lesson:${planId}:${lessonId}` as SessionKey, '我想结束本课。');
+        }
+        const result = await lifecycle.startLesson(planId, lessonId);
         deps.hub.publish({ type: 'course-invalidated' });
         return json(result);
       }
@@ -737,9 +749,10 @@ export function createRequestHandler(deps?: AppDependencies) {
       if (request.method === 'POST' && planAction) {
         const id = nodeId(planAction[1]!);
         if (!id) return json({ error: 'NODE_ID_INVALID' }, 400);
-        const result = planAction[2] === 'start'
-          ? await lifecycle.startPlan(id)
-          : await lifecycle.completePlan(id);
+        if (planAction[2] === 'complete') {
+          return queueTurn(`plan:${id}` as SessionKey, '我想完成这一阶段。');
+        }
+        const result = await lifecycle.startPlan(id);
         deps.hub.publish({ type: 'course-invalidated' });
         return json(result);
       }

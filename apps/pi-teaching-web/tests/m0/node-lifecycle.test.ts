@@ -88,23 +88,15 @@ test('changes Lesson frontmatter without changing any Block source', () => {
   expect(readLesson(root, lessonPath).sessionId).toBe('session-new');
 });
 
-test('student lifecycle opens sessions without synthesized turns and returns to the parent', async () => {
+test('student lifecycle starts nodes but has no direct terminal transition', async () => {
   const root = copyFixture();
   setFrontmatterField(root, 'plans/plan-001/PLAN.md', 'status', 'prepared', 'active');
   setFrontmatterField(root, 'plans/plan-001/lessons/lesson-001.md', 'status', 'prepared', 'active');
   const opened: string[] = [];
-  const aborted: string[] = [];
-  const released: string[] = [];
   const lifecycle = new NodeLifecycleService(root, {
     open: async (key) => {
       opened.push(key);
       return {};
-    },
-    abort: async (key) => {
-      aborted.push(key);
-    },
-    release: async (key) => {
-      released.push(key);
     },
   });
 
@@ -117,13 +109,8 @@ test('student lifecycle opens sessions without synthesized turns and returns to 
     sessionKey: 'lesson:plan-001:lesson-001',
   });
   expect(opened).toEqual(['plan:plan-001', 'lesson:plan-001:lesson-001']);
-
-  expect(await lifecycle.closeLesson('plan-001', 'lesson-001')).toEqual({
-    route: '/course/plan/plan-001',
-  });
-  expect(await lifecycle.completePlan('plan-001')).toEqual({ route: '/course' });
-  expect(aborted).toEqual(['lesson:plan-001:lesson-001', 'plan:plan-001']);
-  expect(released).toEqual(['lesson:plan-001:lesson-001', 'plan:plan-001']);
+  expect('closeLesson' in lifecycle).toBeFalse();
+  expect('completePlan' in lifecycle).toBeFalse();
 });
 
 test('a closed Lesson cannot be reopened; a new Lesson node is required', async () => {
@@ -131,34 +118,8 @@ test('a closed Lesson cannot be reopened; a new Lesson node is required', async 
   transitionNode(root, 'plans/plan-001/lessons/lesson-001.md', 'active', 'closed');
   const lifecycle = new NodeLifecycleService(root, {
     open: async () => ({}),
-    abort: async () => {},
-    release: async () => {},
   });
 
   await expect(lifecycle.startLesson('plan-001', 'lesson-001'))
     .rejects.toThrow(StudyDocumentError);
-});
-
-test('retries Lesson close without repeating the lifecycle transition', async () => {
-  const root = copyFixture();
-  const aborted: string[] = [];
-  const released: string[] = [];
-  const lifecycle = new NodeLifecycleService(root, {
-    open: async () => ({}),
-    abort: async (key) => { aborted.push(key); },
-    release: async (key) => { released.push(key); },
-  });
-
-  expect(await lifecycle.closeLesson('plan-001', 'lesson-001')).toEqual({
-    route: '/course/plan/plan-001',
-  });
-  expect(await lifecycle.closeLesson('plan-001', 'lesson-001')).toEqual({
-    route: '/course/plan/plan-001',
-  });
-  expect(readLesson(root, 'plans/plan-001/lessons/lesson-001.md').status).toBe('closed');
-  expect(aborted).toEqual(['lesson:plan-001:lesson-001']);
-  expect(released).toEqual([
-    'lesson:plan-001:lesson-001',
-    'lesson:plan-001:lesson-001',
-  ]);
 });

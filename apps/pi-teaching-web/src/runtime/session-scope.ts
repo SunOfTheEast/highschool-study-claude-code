@@ -70,6 +70,7 @@ export const LESSON_MODEL_TOOLS = [
   'classroom_update',
   'save_note',
   'save_problem_card',
+  'finish_lesson',
 ] as const;
 
 export const FREE_LEARNING_MODEL_TOOLS = [
@@ -109,10 +110,20 @@ export function isNodeSessionScope(scope: StudySessionScope): scope is NodeSessi
 
 export function modelToolsForNode(kind: NodeKind, hasMemory = false): readonly string[] {
   if (kind === 'lesson') {
-    return hasMemory ? [...LESSON_MODEL_TOOLS, 'lesson_memory_commit'] : LESSON_MODEL_TOOLS;
+    if (!hasMemory) return LESSON_MODEL_TOOLS;
+    return [
+      ...LESSON_MODEL_TOOLS.slice(0, -1),
+      'lesson_memory_commit',
+      'finish_lesson',
+    ];
   }
   if (kind === 'plan') {
-    return hasMemory ? [...PLAN_MODEL_TOOLS, 'memory_route_resolve'] : PLAN_MODEL_TOOLS;
+    const tools = [
+      ...PLAN_MODEL_TOOLS,
+      ...(hasMemory ? ['memory_route_resolve'] as const : []),
+      'finish_plan',
+    ] as const;
+    return tools;
   }
   return M0_MODEL_TOOLS;
 }

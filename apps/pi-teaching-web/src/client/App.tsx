@@ -411,15 +411,21 @@ export function App() {
   };
 
   const lifecycle = async (action: NodeLifecycleAction, node: CourseTreeNode) => {
-    setNotice('正在更新学习位置…');
     try {
+      if (action === 'complete-plan') {
+        await api.completePlan(node.id);
+        return;
+      }
+      const plan = node.kind === 'lesson' ? parentPlan(course!.tree, node.path) : null;
+      if (action === 'close-lesson') {
+        if (!plan) throw new Error('LESSON_PARENT_NOT_FOUND');
+        await api.closeLesson(plan.id, node.id);
+        return;
+      }
+      setNotice('正在更新学习位置…');
       const result = action === 'start-plan'
         ? await api.startPlan(node.id)
-        : action === 'complete-plan'
-          ? await api.completePlan(node.id)
-          : action === 'start-lesson'
-            ? await api.startLesson(parentPlan(course!.tree, node.path)!.id, node.id)
-            : await api.closeLesson(parentPlan(course!.tree, node.path)!.id, node.id);
+        : await api.startLesson(plan!.id, node.id);
       const url = new URL(result.route, window.location.origin);
       navigate(parseBrowserRoute(url.pathname) ?? { kind: 'home' });
     } catch (error) {

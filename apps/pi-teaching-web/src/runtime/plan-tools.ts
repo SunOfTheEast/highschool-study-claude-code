@@ -14,6 +14,7 @@ import {
 } from './multi-document-transaction';
 import type { NodeSessionScope } from './session-scope';
 import { createPlanMemoryTools } from './memory-tools';
+import { createNodeFinishTool } from './node-finish-tools';
 
 const nodeId = Type.String({
   pattern: '^[A-Za-z0-9][A-Za-z0-9._-]*$',
@@ -205,5 +206,10 @@ export function createPlanTools(
     },
   }) : null;
 
-  return [exportTool, ...(savePreparedCard ? [savePreparedCard] : []), ...createPlanMemoryTools(root)];
+  return [
+    exportTool,
+    ...(savePreparedCard ? [savePreparedCard] : []),
+    ...createPlanMemoryTools(root),
+    createNodeFinishTool(root, 'plan', scope.nodePath),
+  ];
 }

@@ -330,7 +330,15 @@ export class WorkspaceRegistry {
 
   async open(key: SessionKey): Promise<StudySession> {
     const cached = this.sessions.get(key);
-    if (cached) return cached;
+    if (cached) {
+      if (freeLearningSessionId(key) === null && metaSessionId(key) === null) {
+        const owner = this.nodeOwner(key);
+        if (owner.document.status !== 'active') {
+          throw new Error(`SESSION_NODE_NOT_ACTIVE: ${key}:${owner.document.status}`);
+        }
+      }
+      return cached;
+    }
     const underway = this.opening.get(key);
     if (underway) return underway;
     const opening = this.openNew(key);

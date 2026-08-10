@@ -158,6 +158,7 @@ export function CoursePage({
             <button
               type="button"
               className="node-primary-action action-wash"
+              disabled={running || !connected}
               onClick={() => void onLifecycle(action.action, selectedNode)}
             >
               {action.label}

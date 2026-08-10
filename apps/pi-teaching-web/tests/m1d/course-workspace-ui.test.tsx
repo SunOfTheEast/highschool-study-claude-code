@@ -8,15 +8,19 @@ import { CourseTree } from '../../src/client/components/CourseTree';
 
 const fixture = join(import.meta.dir, '../fixtures/m0-learning-set');
 
-function renderCourse(value: CourseSnapshot): string {
+function renderCourse(
+  value: CourseSnapshot,
+  options: { running?: boolean; connected?: boolean } = {},
+): string {
   return renderToStaticMarkup(
     <CoursePage
       value={value}
       items={[]}
-      running={false}
+      running={options.running ?? false}
       error={null}
       leftOpen
       rightOpen
+      connected={options.connected ?? true}
       onNodeSelect={() => {}}
       onSend={async () => {}}
       onLifecycle={async () => {}}
@@ -73,6 +77,13 @@ test('keeps lifecycle ownership and the closed-Lesson read-only gate unchanged',
   const activePlan = renderCourse(readWorkspace(fixture, 'plans/plan-001/PLAN.md'));
   expect(activePlan).toContain('完成这一阶段');
   expect(activePlan).toContain('action-wash');
+  expect(activePlan).not.toMatch(/class="node-primary-action action-wash"[^>]*disabled/);
+
+  const runningPlan = renderCourse(
+    readWorkspace(fixture, 'plans/plan-001/PLAN.md'),
+    { running: true },
+  );
+  expect(runningPlan).toMatch(/class="node-primary-action action-wash"[^>]*disabled/);
 
   const activeValue = readWorkspace(fixture, 'plans/plan-001/lessons/lesson-001.md');
   const plan = activeValue.tree.children[0]!;

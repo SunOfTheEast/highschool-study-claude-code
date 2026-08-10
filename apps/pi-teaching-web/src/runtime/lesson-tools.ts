@@ -18,6 +18,7 @@ import {
   type LearningAssetToolSession,
 } from './learning-asset-tools';
 import { createLessonMemoryTool } from './memory-tools';
+import { createNodeFinishTool } from './node-finish-tools';
 
 const blockId = Type.String({
   pattern: '^[A-Za-z0-9][A-Za-z0-9._-]*$',
@@ -242,7 +243,8 @@ export function createLessonTools(
     }, session)
     : [];
   const memoryTool = session ? createLessonMemoryTool(root, lessonPath, session) : null;
+  const finishTool = createNodeFinishTool(root, 'lesson', lessonPath);
   return memoryTool
-    ? [logTool, updateTool, ...assetTools, memoryTool]
-    : [logTool, updateTool, ...assetTools];
+    ? [logTool, updateTool, ...assetTools, memoryTool, finishTool]
+    : [logTool, updateTool, ...assetTools, finishTool];
 }

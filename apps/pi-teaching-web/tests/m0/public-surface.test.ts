@@ -36,12 +36,14 @@ test('exposes only the M0 node lifecycle and role-scoped model tools', () => {
     'classroom_update',
     'save_note',
     'save_problem_card',
+    'finish_lesson',
   ]);
   expect(modelToolsForNode('plan')).toEqual([
     ...M0_MODEL_TOOLS,
     'subagent',
     'artifact_export',
     'save_prepared_problem_card',
+    'finish_plan',
   ]);
   expect(modelToolsForNode('lesson', true)).toEqual([
     'read',
@@ -53,6 +55,7 @@ test('exposes only the M0 node lifecycle and role-scoped model tools', () => {
     'save_note',
     'save_problem_card',
     'lesson_memory_commit',
+    'finish_lesson',
   ]);
   expect(modelToolsForNode('plan', true)).toEqual([
     ...M0_MODEL_TOOLS,
@@ -60,6 +63,7 @@ test('exposes only the M0 node lifecycle and role-scoped model tools', () => {
     'artifact_export',
     'save_prepared_problem_card',
     'memory_route_resolve',
+    'finish_plan',
   ]);
 
   expect(sessionKeyForNode({

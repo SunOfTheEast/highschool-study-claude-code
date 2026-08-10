@@ -193,13 +193,13 @@ export const api = {
   startPlan: (id: string) => post<{ route: string; sessionKey: SessionKey }>(
     `/api/plans/${encodeURIComponent(id)}/start`,
   ),
-  completePlan: (id: string) => post<{ route: string }>(
+  completePlan: (id: string) => post<{ accepted: true }>(
     `/api/plans/${encodeURIComponent(id)}/complete`,
   ),
   startLesson: (planId: string, id: string) => post<{ route: string; sessionKey: SessionKey }>(
     `/api/plans/${encodeURIComponent(planId)}/lessons/${encodeURIComponent(id)}/start`,
   ),
-  closeLesson: (planId: string, id: string) => post<{ route: string }>(
+  closeLesson: (planId: string, id: string) => post<{ accepted: true }>(
     `/api/plans/${encodeURIComponent(planId)}/lessons/${encodeURIComponent(id)}/close`,
   ),
 };

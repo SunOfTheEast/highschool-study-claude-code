@@ -79,8 +79,10 @@ test('exposes two classroom tools plus the conditional M1 memory tool', () => {
     'save_note',
     'save_problem_card',
     'lesson_memory_commit',
+    'finish_lesson',
   ]);
   expect(tools.map((tool) => tool.executionMode)).toEqual([
+    'sequential',
     'sequential',
     'sequential',
     'sequential',
@@ -131,7 +133,42 @@ test('exposes two classroom tools plus the conditional M1 memory tool', () => {
     'classroom_update',
     'save_note',
     'save_problem_card',
+    'finish_lesson',
   ]);
+});
+
+test('finishes only the runtime-bound active Lesson with no model authority fields', async () => {
+  const root = copyFixture();
+  const finish = createLessonTools(root, lessonPath)
+    .find((tool) => tool.name === 'finish_lesson')!;
+
+  expect(finish).toBeDefined();
+  expect(Check(finish.parameters, {})).toBeTrue();
+  expect(Check(finish.parameters, { lessonId: 'lesson-001' })).toBeFalse();
+
+  const first = await finish.execute('finish-lesson-1', {}, undefined, undefined, {} as never);
+  expect(JSON.parse((first.content[0] as { text: string }).text)).toEqual({
+    ok: true,
+    status: 'closed',
+  });
+  expect(readLesson(root, lessonPath).status).toBe('closed');
+
+  await finish.execute('finish-lesson-1', {}, undefined, undefined, {} as never);
+  expect(readLesson(root, lessonPath).status).toBe('closed');
+
+  const prepared = copyFixture();
+  const absolute = join(prepared, lessonPath);
+  writeFileSync(absolute, readFileSync(absolute, 'utf8').replace('status: active', 'status: prepared'));
+  const preparedFinish = createLessonTools(prepared, lessonPath)
+    .find((tool) => tool.name === 'finish_lesson')!;
+  await expect(preparedFinish.execute(
+    'finish-lesson-prepared',
+    {},
+    undefined,
+    undefined,
+    {} as never,
+  )).rejects.toThrow('expected active or closed');
+  expect(readLesson(prepared, lessonPath).status).toBe('prepared');
 });
 
 test('appends one fact to the runtime-bound active Block and returns only a cursor', async () => {
