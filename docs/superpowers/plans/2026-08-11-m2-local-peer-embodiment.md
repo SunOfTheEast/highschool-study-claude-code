@@ -4,9 +4,9 @@
 
 **Goal:** Turn the existing text-only Free Learning Peer into 阿夏: one durable Peer utterance gains a local portrait, restrained speaking animation, automatic Chinese speech, and teacher-message reveal timing without adding another Agent, Session, or learning fact.
 
-**Architecture:** The native `ask_peer` tool result remains the only durable utterance. Runtime adds one optional semantic move and projects whether a Peer item arrived from history or the live stream. A desktop-only media adapter reads a whitelisted portrait slot and proxies voice-ready text to a separately installed MLX-Audio Qwen3-TTS server. The React client derives expression, audio, mouth motion, mute/stop state, and temporary teacher-message withholding from that one projected item; every media failure falls back first to macOS speech and finally to plain text.
+**Architecture:** The native `ask_peer` tool result remains the only durable utterance. Runtime adds one optional semantic move and projects whether a Peer item arrived from history or the live stream. A desktop-only media adapter reads a whitelisted portrait slot and sends voice-ready text through the existing StudyForge Xiaomi credential to the fixed MiMo V2.5 TTS endpoint. The React client derives expression, audio, mouth motion, mute/stop state, and temporary teacher-message withholding from that one projected item; every media failure falls back first to macOS speech and finally to plain text.
 
-**Tech Stack:** Bun, TypeScript 7, React 19, native Pi Session JSONL, TypeBox, Tauri desktop bearer transport, MLX-Audio OpenAI-compatible speech API, Web Audio API, Web Speech API, existing StudyForge Markdown/KaTeX and paper-theme CSS.
+**Tech Stack:** Bun, TypeScript 7, React 19, native Pi Session JSONL, TypeBox, Tauri desktop bearer transport, Xiaomi MiMo V2.5 TTS API, Pi `ModelRuntime` credentials, Web Audio API, Web Speech API, existing StudyForge Markdown/KaTeX and paper-theme CSS.
 
 ## Global Constraints
 
@@ -16,9 +16,9 @@
 - `PeerMove` is only `question | association | challenge`; missing or invalid values map to `neutral` at projection time.
 - History restoration never autoplays. Only a newly completed live Peer item may trigger one automatic playback.
 - Teacher generation may finish in the background, but later public items remain visually withheld only while that live Peer audio is actually playing.
-- Qwen3-TTS weights, voice samples, and identifiable portrait assets stay out of Git and the public DMG.
+- API credentials and identifiable portrait assets stay out of Git and the public DMG; no local model weights are bundled.
 - No neural lip sync, generated per-message video, Live2D, VRM, generic actor plugin framework, model downloader, voice-cloning UI, or new database.
-- Keep the existing text conversation fully usable when the portrait, local voice server, Web Audio, or Web Speech API is unavailable.
+- Keep the existing text conversation fully usable when the portrait, MiMo API, Web Audio, or Web Speech API is unavailable.
 
 ---
 
@@ -137,7 +137,7 @@ Cover plain Chinese, Markdown emphasis/list/table cleanup, a simple inline formu
 
 - [x] **Step 2: Write RED media-boundary tests**
 
-Seed a temporary `appHome/actors/peer-axia/neutral.png`. Assert the service returns only the exact actor and exact `neutral | curious | skeptical` slots, returns 404 for a missing slot, and rejects traversal, unknown actors, arbitrary extensions, and newline/path injection. Inject `fetch` for speech and assert the service calls only the configured localhost MLX endpoint with the pinned model/voice and returns audio bytes; network or non-audio failure becomes a stable unavailable response without exposing provider text.
+Seed a temporary `appHome/actors/peer-axia/neutral.png`. Assert the service returns only the exact actor and exact `neutral | curious | skeptical` slots, returns 404 for a missing slot, and rejects traversal, unknown actors, arbitrary extensions, and newline/path injection. Inject `fetch` and a credential resolver for speech; assert the service calls only the fixed MiMo endpoint with the pinned model, voice, style and stored Key, then decodes the returned WAV. Missing credentials, network failures and malformed Provider responses become one stable unavailable response without exposing Provider text.
 
 - [x] **Step 3: Write RED desktop API tests**
 
@@ -156,9 +156,9 @@ Expected: FAIL because the converter and desktop media adapter do not exist.
 
 Use a small delimiter-aware scanner, not an LLM call. Automatic speech keeps prose, speaks only safe simple inline structures, removes display formulas/code/URLs/Markdown furniture, and collapses whitespace. Detailed reading tokenizes the bounded high-school subset and returns `null` when it cannot parse safely instead of reading raw TeX.
 
-- [x] **Step 6: Implement the restricted local adapter**
+- [x] **Step 6: Implement the restricted desktop adapter**
 
-Resolve the private actor directory under `appHome/actors`. Read only the three exact PNG slots. Proxy speech to `STUDYFORGE_MLX_AUDIO_URL` or `http://127.0.0.1:8000/v1/audio/speech` using `mlx-community/Qwen3-TTS-12Hz-0.6B-CustomVoice-8bit`, the locally configured/default Mandarin voice, and WAV output. Do not accept a URL, model, voice, path, or filename from the browser.
+Resolve the private actor directory under `appHome/actors`. Read only the three exact PNG slots and the optional fixed `voice.mp3 | voice.wav` slot. Resolve `xiaomi` through the existing Pi credential store, then POST to the fixed `https://api.xiaomimimo.com/v1/chat/completions` endpoint. Use `mimo-v2.5-tts` with `冰糖` and the restrained generic peer style when the private slot is absent. When the authorized sample is present, use `mimo-v2.5-tts-voiceclone` with its separately auditioned instruction that preserves the speaker's non-native Mandarin accent and adds a sweet, bright, intimate tone without childish or exaggerated delivery. Both paths return WAV. Do not accept a URL, model, voice, path, filename, or API Key from the browser speech request.
 
 - [x] **Step 7: Wire client blob helpers and run GREEN**
 
@@ -223,7 +223,7 @@ Expected: FAIL because the playback coordinator and actor stage do not exist.
 
 - [x] **Step 4: Implement one browser-owned playback coordinator**
 
-For each newly completed live item, mark its ID attempted before async work. Fetch portrait and MLX audio in parallel. If MLX audio plays, connect the media element to an `AnalyserNode`, smooth RMS amplitude, and choose closed/half/open thresholds. If MLX is unavailable, use `speechSynthesis`; if that is unavailable, finish immediately with text only. Stop, new student send, component unmount, and mute must cancel audio/speech and release object URLs and Web Audio nodes.
+For each newly completed live item, mark its ID attempted before async work. Fetch portrait and MiMo audio in parallel. If cloud audio plays, connect the media element to an `AnalyserNode`, smooth RMS amplitude, and choose closed/half/open thresholds. If MiMo is unavailable, use `speechSynthesis`; if that is unavailable, finish immediately with text only. Stop, new student send, component unmount, and mute must cancel audio/speech and release object URLs and Web Audio nodes.
 
 - [x] **Step 5: Implement the restrained edge stage and teacher reveal gate**
 
@@ -252,22 +252,27 @@ git commit -m "feat: embody live Axia replies"
 
 ---
 
-### Task 4: Add the Private MLX Helper and Verify the Release Boundary
+### Task 4: Replace Local Voice with MiMo Credentials and Verify the Release Boundary
 
 **Files:**
-- Create: `apps/pi-teaching-web/scripts/m2/install-local-peer-voice.sh`
-- Create: `apps/pi-teaching-web/scripts/m2/run-local-peer-voice.sh`
-- Modify: `apps/pi-teaching-web/package.json`
+- Modify: `apps/pi-teaching-web/src/desktop/model-service.ts`
+- Modify: `apps/pi-teaching-web/src/desktop/peer-media.ts`
+- Modify: `apps/pi-teaching-web/src/server/start-server.ts`
+- Modify: `apps/pi-teaching-web/src/client/desktop/ModelSettings.tsx`
+- Modify: `apps/pi-teaching-web/src/client/styles/desktop.css`
 - Modify: `apps/pi-teaching-web/scripts/desktop/package-resources.ts`
 - Modify: `apps/pi-teaching-web/scripts/desktop/verify-bundle.ts`
 - Create: `apps/pi-teaching-web/tests/m2/peer-package.test.ts`
+- Modify: `apps/pi-teaching-web/tests/m2/peer-media.test.ts`
+- Modify: `apps/pi-teaching-web/tests/desktop/model-service.test.ts`
+- Modify: `apps/pi-teaching-web/tests/desktop/desktop-ui.test.tsx`
 - Modify: `docs/superpowers/specs/2026-08-11-m2-local-peer-embodiment-design.md`
 
-- [ ] **Step 1: Write RED packaging/privacy checks**
+- [x] **Step 1: Write RED API, settings, packaging and privacy checks**
 
-Assert the packaged resource manifest contains `peers/axia.md` and no `acheng`, model weights, voice samples, or identifiable private actor PNG. Assert Git-tracked application files do not contain the private reference-video path or private actor source path.
+Assert the MiMo request has the fixed endpoint/model/voice/style and decodes audio without exposing Provider bodies. Assert the Xiaomi credential resolves through `ModelRuntime`, settings presents a dedicated “阿夏的声音” connection, the packaged resource manifest contains `peers/axia.md`, and no old identity, model weights, voice samples, identifiable private actor PNG, or local MLX helper enters the release.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 ```bash
 cd apps/pi-teaching-web
@@ -276,15 +281,17 @@ bun test tests/m2/peer-package.test.ts
 
 Expected: FAIL until the peer resource rename and package verification are complete.
 
-- [ ] **Step 3: Add a developer-assisted local install/run path**
+- [x] **Step 3: Wire the existing Xiaomi credential path**
 
-The install helper uses `uv` to create an isolated environment below `~/Library/Application Support/StudyForge/voice`, installs MLX-Audio with the TTS/server extras, and downloads the pinned 8-bit 0.6B model into the same private cache. The run helper sets the private Hugging Face cache and starts one localhost-only server. It must never write into the repository or bundle weights into the DMG.
+Reuse Pi's built-in `xiaomi` Provider and StudyForge-owned `auth.json`. Add a dedicated voice row to settings, exclude voice-only Xiaomi from the folded model-provider ledger unless it is actually selected as a teacher model, and resolve the Key afresh for each speech request so connecting or replacing it does not require a second credential store.
 
-- [ ] **Step 4: Exercise the actual local stack when available**
+- [x] **Step 4: Exercise the actual MiMo stack when configured**
 
-On this Apple Silicon machine, run the helper, start the server, synthesize one short 阿夏 sentence through the StudyForge desktop endpoint, inspect the returned audio type/size, and stop the helper process cleanly. If external package/model download fails, record the exact environmental blocker while retaining system-speech/plain-text fallback verification.
+With a real MiMo API Key configured through the desktop UI, synthesize one short 阿夏 sentence through the StudyForge desktop endpoint, listen to the returned audio, and inspect its type/size and first-audio latency. If no valid Key is available, record that external credential blocker while retaining mocked API, system-speech and plain-text fallback verification.
 
-- [ ] **Step 5: Run full deterministic verification**
+Verified with the real Provider on 2026-08-11: both preset and voice-clone requests returned 24 kHz mono WAV; the Provider reported `mimo-v2.5-tts-voiceclone` for the private sample. A same-text audition isolated the clone instruction, and the accepted variant preserved the speaker's non-native Mandarin accent while making the delivery sweeter and softer.
+
+- [x] **Step 5: Run full deterministic verification**
 
 ```bash
 cd apps/pi-teaching-web
@@ -311,13 +318,19 @@ Launch the desktop build/runtime with the private `peer-axia` portraits. In a re
 Record only verified results and any explicit deferred real-model comparison in the design document. Then:
 
 ```bash
-git add apps/pi-teaching-web/scripts/m2 \
-  apps/pi-teaching-web/package.json \
+git add apps/pi-teaching-web/src/desktop/model-service.ts \
+  apps/pi-teaching-web/src/desktop/peer-media.ts \
+  apps/pi-teaching-web/src/server/start-server.ts \
+  apps/pi-teaching-web/src/client/desktop/ModelSettings.tsx \
+  apps/pi-teaching-web/src/client/styles/desktop.css \
   apps/pi-teaching-web/scripts/desktop/package-resources.ts \
   apps/pi-teaching-web/scripts/desktop/verify-bundle.ts \
   apps/pi-teaching-web/tests/m2/peer-package.test.ts \
+  apps/pi-teaching-web/tests/m2/peer-media.test.ts \
+  apps/pi-teaching-web/tests/desktop/model-service.test.ts \
+  apps/pi-teaching-web/tests/desktop/desktop-ui.test.tsx \
   docs/superpowers/specs/2026-08-11-m2-local-peer-embodiment-design.md
-git commit -m "test: verify local peer embodiment"
+git commit -m "feat: connect Axia speech to MiMo"
 ```
 
 ## Completion Evidence
@@ -327,5 +340,5 @@ The feature is complete only when all of the following are evidenced together:
 1. A native Session contains one `ask_peer` result and no mirrored avatar/audio fact.
 2. History restores the same text without autoplay; a new live result autoplays at most once.
 3. Media failure preserves readable three-party text and does not block teacher continuation.
-4. Private portraits and model weights remain outside Git and the public bundle.
+4. Private portraits and API credentials remain outside Git and the public bundle; local model helpers and weights are absent.
 5. Focused M2 tests, full `bun run check`, selected lifecycle E2E tests, desktop bundle verification, and one real desktop UI smoke all pass or have a clearly isolated external-only blocker.

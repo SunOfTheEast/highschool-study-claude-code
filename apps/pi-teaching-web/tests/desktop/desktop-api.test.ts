@@ -85,8 +85,9 @@ function setup() {
     modelService: fakeModelService() as never,
     peerMedia: createPeerMediaService({
       actorsDir: paths.actorsDir,
-      fetch: async () => new Response(new Uint8Array([82, 73, 70, 70]), {
-        headers: { 'content-type': 'audio/wav' },
+      resolveSpeechApiKey: async () => 'mimo-secret',
+      fetch: async () => Response.json({
+        choices: [{ message: { audio: { data: 'UklGRg==' } } }],
       }),
     }),
     shutdown: () => {},

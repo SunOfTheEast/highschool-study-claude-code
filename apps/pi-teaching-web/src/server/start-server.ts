@@ -146,7 +146,10 @@ export async function startStudyForgeServer(arguments_: RuntimeArguments) {
       resourceRoot: arguments_.resourceRoot!,
       derivativeExampleRoot: join(arguments_.resourceRoot!, 'examples', 'derivative-m0', 'learning-set'),
       modelService: models,
-      peerMedia: createPeerMediaService({ actorsDir: paths.actorsDir }),
+      peerMedia: createPeerMediaService({
+        actorsDir: paths.actorsDir,
+        resolveSpeechApiKey: () => models.apiKey('xiaomi'),
+      }),
       runtimeIssue: issue,
       shutdown: () => {
         registry?.dispose();

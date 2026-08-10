@@ -3,8 +3,9 @@ import { join } from 'node:path';
 
 const ACTOR_ID = 'peer-axia';
 const EXPRESSIONS = new Set(['neutral', 'curious', 'skeptical']);
-const DEFAULT_ENDPOINT = 'http://127.0.0.1:8000/v1/audio/speech';
-const DEFAULT_MODEL = 'mlx-community/Qwen3-TTS-12Hz-0.6B-CustomVoice-8bit';
+const SPEECH_ENDPOINT = 'https://api.xiaomimimo.com/v1/chat/completions';
+const SPEECH_STYLE = '年轻自然的中国女声，像熟悉的同班同学在认真交流；清晰、松弛，不过度表演。';
+const CLONED_SPEECH_STYLE = '保持参考音频中说话人的真实发音习惯。她的中文不是母语：保留自然、轻微的外国语音、声调偏差、重音和停顿，不要纠正成标准普通话。声音甜软、明亮而亲近，像熟悉的同龄女生轻声聊天，句尾可以轻微上扬；不要幼态，不要嗲声，不要耳语，不要播音腔，也不要夸张模仿。';
 
 export type PeerMediaService = {
   portrait(actorId: string, expression: string): Response;
@@ -13,9 +14,7 @@ export type PeerMediaService = {
 
 export type PeerMediaOptions = {
   actorsDir: string;
-  speechEndpoint?: string;
-  model?: string;
-  voice?: string;
+  resolveSpeechApiKey?: () => Promise<string | null | undefined>;
   fetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 };
 
@@ -23,29 +22,36 @@ function unavailable(): Response {
   return Response.json({ error: 'PEER_SPEECH_UNAVAILABLE' }, { status: 503 });
 }
 
-function endpoint(value: string): string {
-  let parsed: URL;
-  try {
-    parsed = new URL(value);
-  } catch {
-    throw new Error('PEER_SPEECH_ENDPOINT_INVALID');
+function audioData(value: unknown): string | null {
+  if (!value || typeof value !== 'object') return null;
+  const choices = (value as { choices?: unknown }).choices;
+  if (!Array.isArray(choices) || !choices[0] || typeof choices[0] !== 'object') return null;
+  const message = (choices[0] as { message?: unknown }).message;
+  if (!message || typeof message !== 'object') return null;
+  const audio = (message as { audio?: unknown }).audio;
+  if (!audio || typeof audio !== 'object') return null;
+  const data = (audio as { data?: unknown }).data;
+  return typeof data === 'string' && data.length > 0 ? data : null;
+}
+
+function privateVoice(actorsDir: string): { model: string; voice: string } | null {
+  for (const [name, mime] of [['voice.mp3', 'audio/mpeg'], ['voice.wav', 'audio/wav']] as const) {
+    const path = join(actorsDir, ACTOR_ID, name);
+    if (existsSync(path)) {
+      return {
+        model: 'mimo-v2.5-tts-voiceclone',
+        voice: `data:${mime};base64,${readFileSync(path).toString('base64')}`,
+      };
+    }
   }
-  if (
-    parsed.protocol !== 'http:'
-    || !['127.0.0.1', 'localhost', '[::1]', '::1'].includes(parsed.hostname)
-    || parsed.username
-    || parsed.password
-  ) throw new Error('PEER_SPEECH_ENDPOINT_INVALID');
-  return parsed.toString();
+  return null;
 }
 
 export function createPeerMediaService(options: PeerMediaOptions): PeerMediaService {
-  const speechEndpoint = endpoint(
-    options.speechEndpoint ?? process.env.STUDYFORGE_MLX_AUDIO_URL ?? DEFAULT_ENDPOINT,
-  );
   const request = options.fetch ?? fetch;
-  const model = options.model ?? DEFAULT_MODEL;
-  const voice = options.voice ?? process.env.STUDYFORGE_QWEN_VOICE ?? 'vivian';
+  const resolveSpeechApiKey = options.resolveSpeechApiKey ?? (async () => (
+    process.env.MIMO_API_KEY ?? process.env.XIAOMI_API_KEY
+  ));
 
   return {
     portrait(actorId, expression) {
@@ -67,22 +73,33 @@ export function createPeerMediaService(options: PeerMediaOptions): PeerMediaServ
         return Response.json({ error: 'DESKTOP_REQUEST_INVALID' }, { status: 400 });
       }
       try {
-        const response = await request(speechEndpoint, {
+        const apiKey = await resolveSpeechApiKey();
+        if (!apiKey) return unavailable();
+        const cloned = privateVoice(options.actorsDir);
+        const response = await request(SPEECH_ENDPOINT, {
           method: 'POST',
-          headers: { 'content-type': 'application/json' },
+          headers: {
+            'api-key': apiKey,
+            'content-type': 'application/json',
+          },
           body: JSON.stringify({
-            model,
-            input: text,
-            voice,
-            response_format: 'wav',
+            model: cloned?.model ?? 'mimo-v2.5-tts',
+            messages: [
+              { role: 'user', content: cloned ? CLONED_SPEECH_STYLE : SPEECH_STYLE },
+              { role: 'assistant', content: text },
+            ],
+            audio: { format: 'wav', voice: cloned?.voice ?? '冰糖' },
           }),
           ...(signal ? { signal } : {}),
         });
-        const contentType = response.headers.get('content-type') ?? '';
-        if (!response.ok || !contentType.toLowerCase().startsWith('audio/')) return unavailable();
-        return new Response(await response.arrayBuffer(), {
+        if (!response.ok) return unavailable();
+        const data = audioData(await response.json());
+        if (!data) return unavailable();
+        const bytes = Buffer.from(data, 'base64');
+        if (bytes.length === 0) return unavailable();
+        return new Response(bytes, {
           headers: {
-            'content-type': contentType,
+            'content-type': 'audio/wav',
             'cache-control': 'no-store',
           },
         });

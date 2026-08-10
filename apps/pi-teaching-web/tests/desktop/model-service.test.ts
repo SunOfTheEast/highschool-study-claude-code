@@ -30,6 +30,9 @@ function fakeRuntime() {
       },
     }],
     getProviderAuthStatus: () => ({ configured: true, source: 'stored', label: 'OAuth' }),
+    getAuth: async (provider: string) => (
+      provider === 'xiaomi' ? { auth: { apiKey: 'mimo-secret' } } : undefined
+    ),
     getAvailable: async () => models,
     getModel: (provider: string, model: string) => (
       models.find((candidate) => candidate.provider === provider && candidate.id === model)
@@ -104,4 +107,6 @@ test('resolves only an available configured model and delegates the native auth 
   await service.logout('openai-codex');
   expect(runtime.notifications).toEqual(['openai-codex:oauth', 'logout:openai-codex']);
   expect(events).toEqual(['progress']);
+  expect(await service.apiKey('xiaomi')).toBe('mimo-secret');
+  expect(await service.apiKey('missing')).toBeNull();
 });

@@ -207,6 +207,39 @@ function CurrentPair({
   );
 }
 
+function PeerVoiceSettings({
+  provider,
+  busy,
+  onLogin,
+}: {
+  provider: Provider;
+  busy: boolean;
+  onLogin(provider: string, type: AuthType): Promise<void>;
+}) {
+  const apiKey = provider.loginMethods.find((method) => method.type === 'api_key');
+  return (
+    <section className="desktop-peer-voice" aria-label="阿夏的声音">
+      <div>
+        <h2>阿夏的声音</h2>
+        <p>连接 Xiaomi MiMo 后使用云端语音；私有槽位中的本人授权录音会随每次合成发送给 MiMo，用于克隆声线。</p>
+      </div>
+      <div>
+        <em>{provider.configured ? 'MiMo 已连接' : '尚未连接'}</em>
+        {apiKey && (
+          <button
+            className="action-outline"
+            type="button"
+            disabled={busy}
+            onClick={() => void onLogin(provider.id, 'api_key')}
+          >
+            {provider.configured ? '更换 API Key' : '连接 MiMo API'}
+          </button>
+        )}
+      </div>
+    </section>
+  );
+}
+
 function AuthFlowPanel({
   flow,
   onRespond,
@@ -304,15 +337,19 @@ export function ModelSettings({
     ...(draft.teacher ? [draft.teacher.provider] : []),
     ...(draft.scout ? [draft.scout.provider] : []),
   ]);
-  const currentProviders = catalog.providers.filter((provider) => (
+  const voiceProvider = catalog.providers.find((provider) => provider.id === 'xiaomi') ?? null;
+  const modelProviders = catalog.providers.filter((provider) => (
+    provider.id !== 'xiaomi' || activeProviders.has(provider.id)
+  ));
+  const currentProviders = modelProviders.filter((provider) => (
     provider.configured || activeProviders.has(provider.id)
   ));
   const fallbackProvider = currentProviders.length === 0
-    ? catalog.providers.find((provider) => provider.id === 'openai-codex') ?? catalog.providers[0]
+    ? modelProviders.find((provider) => provider.id === 'openai-codex') ?? modelProviders[0]
     : null;
   const primaryProviders = fallbackProvider ? [fallbackProvider] : currentProviders;
   const primaryProviderIds = new Set(primaryProviders.map((provider) => provider.id));
-  const otherProviders = catalog.providers.filter((provider) => (
+  const otherProviders = modelProviders.filter((provider) => (
     !primaryProviderIds.has(provider.id)
   ));
   return (
@@ -326,6 +363,9 @@ export function ModelSettings({
         <h1>安排两位老师</h1>
         <p className="desktop-lead">主教师负责方向与课堂；Scout 只在需要材料时检索。两者可以使用不同 Provider。</p>
         <CurrentPair catalog={catalog} draft={draft} />
+        {voiceProvider && (
+          <PeerVoiceSettings provider={voiceProvider} busy={busy} onLogin={onLogin} />
+        )}
         <div className="desktop-model-ledger">
           <ModelRow
             id="teacher"

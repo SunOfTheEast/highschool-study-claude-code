@@ -101,6 +101,10 @@ test('puts the current teaching pair first and folds away unconfigured Providers
         id: 'openrouter', name: 'OpenRouter', configured: false, authLabel: null,
         loginMethods: [{ type: 'api_key', label: '配置 API Key' }],
       },
+      {
+        id: 'xiaomi', name: 'Xiaomi', configured: false, authLabel: null,
+        loginMethods: [{ type: 'api_key', label: '配置 API Key' }],
+      },
     ],
     models: [
       ...catalog.models,
@@ -133,6 +137,11 @@ test('puts the current teaching pair first and folds away unconfigured Providers
   expect(markup.indexOf('Anthropic')).toBeLessThan(markup.indexOf('连接其他 Provider · 2'));
   expect(markup.indexOf('连接其他 Provider · 2')).toBeLessThan(markup.indexOf('Google'));
   expect(markup).toContain('OpenRouter');
+  expect(markup).toContain('阿夏的声音');
+  expect(markup).toContain('连接 MiMo API');
+  expect(markup).toContain('本人授权录音');
+  expect(markup).toContain('随每次合成发送给 MiMo');
+  expect(markup).not.toContain('连接其他 Provider · 3');
 });
 
 test('keeps diagnosis typed and offers recovery rather than a blank classroom', () => {

@@ -63,6 +63,7 @@ export async function verifyBundle(appRoot = resolve(import.meta.dir, '../..')):
       'Contents/MacOS/studyforge-pi',
       'Contents/Resources/studyforge/agents/roadmap-node.md',
       'Contents/Resources/studyforge/subagents/study-material-scout.md',
+      'Contents/Resources/studyforge/peers/axia.md',
       'Contents/Resources/studyforge/help/macos-installation.md',
       'Contents/Resources/studyforge/help/images/first-run.png',
       'Contents/Resources/studyforge/templates/blank-learning-set/LEARNING_GUIDE.md',

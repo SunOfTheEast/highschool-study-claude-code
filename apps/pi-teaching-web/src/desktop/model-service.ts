@@ -84,6 +84,10 @@ export class DesktopModelService {
     return model;
   }
 
+  async apiKey(provider: string): Promise<string | null> {
+    return (await this.runtime.getAuth(provider))?.auth.apiKey ?? null;
+  }
+
   login(provider: string, type: AuthType, interaction: AuthInteraction) {
     return this.runtime.login(provider, type, interaction);
   }
