@@ -34,10 +34,6 @@ export function transitionNode(
   setFrontmatterField(root, path, 'status', next, expected);
 }
 
-type SessionLifecyclePort = {
-  open(key: SessionKey): Promise<unknown>;
-};
-
 function findNode(
   node: CourseTreeNode,
   kind: 'plan' | 'lesson',
@@ -53,10 +49,7 @@ function findNode(
 }
 
 export class NodeLifecycleService {
-  constructor(
-    private readonly root: string,
-    private readonly sessions: SessionLifecyclePort,
-  ) {}
+  constructor(private readonly root: string) {}
 
   private node(
     kind: 'plan' | 'lesson',
@@ -88,7 +81,6 @@ export class NodeLifecycleService {
     const { node } = this.node('plan', planId);
     transitionNode(this.root, node.path, 'prepared', 'active');
     const sessionKey = `plan:${planId}` as const;
-    await this.sessions.open(sessionKey);
     return { route: `/course/plan/${encodeURIComponent(planId)}`, sessionKey };
   }
 
@@ -99,7 +91,6 @@ export class NodeLifecycleService {
     const { node } = this.lesson(planId, lessonId);
     transitionNode(this.root, node.path, 'prepared', 'active');
     const sessionKey = node.sessionKey;
-    await this.sessions.open(sessionKey);
     return {
       route: `/course/plan/${encodeURIComponent(planId)}/lesson/${encodeURIComponent(lessonId)}`,
       sessionKey,

@@ -396,15 +396,19 @@ export class WorkspaceRegistry {
     if (owner.document.status !== 'active') {
       throw new Error(`SESSION_NODE_NOT_ACTIVE: ${key}:${owner.document.status}`);
     }
-    const sessionFile = owner.document.sessionId === null
+    const previousSessionId = owner.document.sessionId;
+    const sessionFile = previousSessionId === null
       ? null
-      : await this.lookup(this.root, owner.document.sessionId, owner.scope);
-    if (owner.document.sessionId !== null && sessionFile === null) {
-      throw new Error(`SESSION_FILE_NOT_FOUND: ${owner.document.sessionId}`);
-    }
+      : await this.lookup(this.root, previousSessionId, owner.scope);
     const session = await this.factory(sessionFactoryInput(owner.scope, sessionFile));
-    if (owner.document.sessionId === null) {
-      setFrontmatterField(this.root, owner.document.path, 'session_id', session.sessionId, null);
+    if (previousSessionId === null || sessionFile === null) {
+      setFrontmatterField(
+        this.root,
+        owner.document.path,
+        'session_id',
+        session.sessionId,
+        previousSessionId,
+      );
     }
     this.sessions.set(key, session);
     return session;
@@ -453,7 +457,7 @@ export class WorkspaceRegistry {
     const owner = this.nodeOwner(key);
     if (owner.document.sessionId === null) return [];
     const sessionFile = await this.lookup(this.root, owner.document.sessionId, owner.scope);
-    if (!sessionFile) throw new Error(`SESSION_FILE_NOT_FOUND: ${owner.document.sessionId}`);
+    if (!sessionFile) return [];
     return this.readBranch(this.root, sessionFile);
   }
 

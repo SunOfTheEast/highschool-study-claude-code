@@ -866,6 +866,26 @@ test('reuses one session per node and never shares sessions across nodes', async
     .toContain('session_id: session-lesson-lesson-001');
 });
 
+test('recovers an active node whose empty session never reached disk', async () => {
+  const root = copyFixture();
+  const planPath = join(root, 'plans/plan-001/PLAN.md');
+  writeFileSync(
+    planPath,
+    readFileSync(planPath, 'utf8').replace('session_id: null', 'session_id: dangling-session'),
+  );
+  const prompts: string[] = [];
+  const registry = new WorkspaceRegistry(root, async () => ({
+    ...fakeSession('replacement-session'),
+    prompt: async (text) => { prompts.push(text); },
+  }), async () => null);
+
+  expect(await registry.readHistory('plan:plan-001')).toEqual([]);
+  await registry.send('plan:plan-001', '继续学习。');
+
+  expect(prompts).toEqual(['继续学习。']);
+  expect(readFileSync(planPath, 'utf8')).toContain('session_id: replacement-session');
+});
+
 test('rejects a new turn after a cached node becomes terminal', async () => {
   const root = copyFixture();
   let prompts = 0;

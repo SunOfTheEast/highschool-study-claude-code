@@ -88,17 +88,11 @@ test('changes Lesson frontmatter without changing any Block source', () => {
   expect(readLesson(root, lessonPath).sessionId).toBe('session-new');
 });
 
-test('student lifecycle starts nodes but has no direct terminal transition', async () => {
+test('student lifecycle starts nodes without allocating an empty session', async () => {
   const root = copyFixture();
   setFrontmatterField(root, 'plans/plan-001/PLAN.md', 'status', 'prepared', 'active');
   setFrontmatterField(root, 'plans/plan-001/lessons/lesson-001.md', 'status', 'prepared', 'active');
-  const opened: string[] = [];
-  const lifecycle = new NodeLifecycleService(root, {
-    open: async (key) => {
-      opened.push(key);
-      return {};
-    },
-  });
+  const lifecycle = new NodeLifecycleService(root);
 
   expect(await lifecycle.startPlan('plan-001')).toEqual({
     route: '/course/plan/plan-001',
@@ -108,7 +102,8 @@ test('student lifecycle starts nodes but has no direct terminal transition', asy
     route: '/course/plan/plan-001/lesson/lesson-001',
     sessionKey: 'lesson:plan-001:lesson-001',
   });
-  expect(opened).toEqual(['plan:plan-001', 'lesson:plan-001:lesson-001']);
+  expect(readPlan(root, 'plans/plan-001/PLAN.md').sessionId).toBeNull();
+  expect(readLesson(root, 'plans/plan-001/lessons/lesson-001.md').sessionId).toBeNull();
   expect('closeLesson' in lifecycle).toBeFalse();
   expect('completePlan' in lifecycle).toBeFalse();
 });
@@ -116,9 +111,7 @@ test('student lifecycle starts nodes but has no direct terminal transition', asy
 test('a closed Lesson cannot be reopened; a new Lesson node is required', async () => {
   const root = copyFixture();
   transitionNode(root, 'plans/plan-001/lessons/lesson-001.md', 'active', 'closed');
-  const lifecycle = new NodeLifecycleService(root, {
-    open: async () => ({}),
-  });
+  const lifecycle = new NodeLifecycleService(root);
 
   await expect(lifecycle.startLesson('plan-001', 'lesson-001'))
     .rejects.toThrow(StudyDocumentError);

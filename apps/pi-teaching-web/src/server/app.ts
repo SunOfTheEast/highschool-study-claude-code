@@ -290,7 +290,7 @@ export function createRequestHandler(deps?: AppDependencies) {
       return json({ ok: true, runtime: 'pi-m1' });
     }
     if (!deps) return new Response('Not found', { status: 404 });
-    const lifecycle = deps.lifecycle ?? new NodeLifecycleService(deps.root, deps.registry);
+    const lifecycle = deps.lifecycle ?? new NodeLifecycleService(deps.root);
     const courseReader = deps.readCourse ?? readWorkspace;
     const knowledgeReader = deps.readKnowledge ?? readKnowledge;
 
