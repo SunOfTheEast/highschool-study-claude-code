@@ -130,10 +130,10 @@ test('completes the M0 Roadmap, Plan, Lesson and Knowledge browser cycle', async
   await page.goto('/course');
   await expect(page.getByRole('heading', { name: '导数结构学习路线' })).toBeVisible();
   await page.goto('/knowledge');
-  await expect(page.getByRole('heading', { name: '知识关系' })).toBeVisible();
-  await page.getByPlaceholder('例如：沉淀溶解平衡').fill('参变量分离');
-  await page.getByRole('button', { name: '参变量分离', exact: true }).click();
-  await expect(page.getByLabel('关系检查器')).toContainText('设函数');
+  await expect(page.getByRole('heading', { name: '知识之间，怎么连起来' })).toBeVisible();
+  await page.getByPlaceholder('搜索知识点、题卡或笔记').fill('参变量分离');
+  await page.getByLabel('搜索结果').getByRole('button', { name: /^参变量分离/ }).click();
+  await expect(page.getByLabel('相关学习内容')).toContainText('设函数');
 
   expect((await page.request.get('/api/views/memory')).status()).toBe(404);
   await page.goto('/memory');

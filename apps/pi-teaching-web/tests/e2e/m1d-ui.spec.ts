@@ -136,14 +136,22 @@ test('walks the M1d asset, source, footprint, and local-relation surfaces', asyn
   await expect(page.getByText(/纯固体的活度在给定状态下视为常量/)).toBeVisible();
 
   await page.goto('/assets');
-  await page.getByRole('button', { name: '知识关系' }).click();
-  await expect(page.getByRole('heading', { name: '知识关系' })).toBeVisible();
-  await page.getByPlaceholder('例如：沉淀溶解平衡').fill('沉淀溶解平衡');
-  await page.getByRole('button', { name: '沉淀溶解平衡', exact: true }).click();
-  await expect(page.getByLabel('局部关系图')).toContainText(/显示 \d+ \/ 共 \d+/);
+  await page.getByRole('button', { name: '知识图谱' }).click();
+  await expect(page.getByRole('heading', { name: '知识之间，怎么连起来' })).toBeVisible();
+  await page.getByPlaceholder('搜索知识点、题卡或笔记').fill('沉淀溶解平衡');
+  await page.getByLabel('搜索结果').getByRole('button', { name: /^沉淀溶解平衡/ }).click();
+  await expect(page.getByLabel('知识地图')).toContainText(/显示 \d+ \/ 共 \d+/);
+  await expect(page.locator('.knowledge-atlas-layout > .semantic-stage')).toBeVisible();
+  await expect(page.locator('.knowledge-atlas-layout > .knowledge-folio')).toBeVisible();
   await expect(page.locator('body')).not.toContainText('对象记忆');
   await expect(page.locator('body')).not.toContainText('能力假设');
-  await capture(page, 'm1d-knowledge-local-1440.png');
+  await capture(page, 'm1d-knowledge-tag-1440.png');
+
+  const noteRelation = page.locator('.knowledge-folio li')
+    .filter({ hasText: 'Ksp 与离子积的边界（我的版本）' });
+  await noteRelation.getByRole('button', { name: '查看联系' }).click();
+  await expect(page.getByLabel('相关学习内容')).toContainText('核心标签相同');
+  await capture(page, 'm1d-knowledge-asset-1440.png');
   await expectNoHorizontalOverflow(page);
 
   await page.goto('/footprint');

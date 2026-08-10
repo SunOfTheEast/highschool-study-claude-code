@@ -26,6 +26,20 @@ test('keeps desktop conversations as a readable letter with an inner writing gut
   expect(styles).toMatch(/\.free-learning-workspace \.chat\s*\{[^}]*padding-inline:\s*var\(--space-5\)/s);
 });
 
+test('uses one dominant atlas and one contextual folio instead of three debugger columns', () => {
+  const styles = readFileSync(join(import.meta.dir, '../../src/client/styles/knowledge.css'), 'utf8');
+
+  expect(styles).toContain('.knowledge-atlas-layout');
+  expect(styles).toMatch(
+    /grid-template-columns:\s*minmax\(0,\s*7fr\)\s+minmax\(18rem,\s*3fr\)/,
+  );
+  expect(styles).toContain('.knowledge-folio');
+  expect(styles).toContain('.semantic-focus-slip');
+  expect(styles).toMatch(/\.knowledge-folio\s*\{[^}]*border-top:\s*3px solid var\(--cinnabar\)/s);
+  expect(styles).toMatch(/\.semantic-focus-slip\s*\{[^}]*border:\s*1px solid var\(--cinnabar\)/s);
+  expect(styles).not.toContain('.knowledge-entry');
+});
+
 test('uses the 学 seal as brand language rather than a status badge', () => {
   const markup = renderToStaticMarkup(
     <AppShell
