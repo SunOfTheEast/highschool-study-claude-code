@@ -549,20 +549,24 @@ test('keeps classroom and memory writes on bound teaching tools', () => {
 
 test('loads the Plan subagent guard and the Lesson memory guard only in their scopes', async () => {
   const root = copyFixture();
-  const planLoader = await createRoleResourceLoader(root, {
-    nodeKind: 'plan',
-    nodeId: 'plan-001',
-    nodePath: 'plans/plan-001/PLAN.md',
-    parentId: 'roadmap',
-    parentPath: 'ROADMAP.md',
-  }, createEventBus());
-  const lessonLoader = await createRoleResourceLoader(root, {
-    nodeKind: 'lesson',
-    nodeId: 'lesson-001',
-    nodePath: 'plans/plan-001/lessons/lesson-001.md',
-    parentId: 'plan-001',
-    parentPath: 'plans/plan-001/PLAN.md',
-  }, createEventBus());
+  const previousCwd = process.cwd();
+  process.chdir(root);
+  const [planLoader, lessonLoader] = await Promise.all([
+    createRoleResourceLoader(root, {
+      nodeKind: 'plan',
+      nodeId: 'plan-001',
+      nodePath: 'plans/plan-001/PLAN.md',
+      parentId: 'roadmap',
+      parentPath: 'ROADMAP.md',
+    }, createEventBus()),
+    createRoleResourceLoader(root, {
+      nodeKind: 'lesson',
+      nodeId: 'lesson-001',
+      nodePath: 'plans/plan-001/lessons/lesson-001.md',
+      parentId: 'plan-001',
+      parentPath: 'plans/plan-001/PLAN.md',
+    }, createEventBus()),
+  ]).finally(() => process.chdir(previousCwd));
   const extensionToolNames = (loader: typeof planLoader) => (
     loader.getExtensions().extensions.flatMap((extension) => (
       Array.from(extension.tools.keys())

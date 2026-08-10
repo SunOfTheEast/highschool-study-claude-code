@@ -3,6 +3,7 @@ import { join, resolve } from 'node:path';
 
 export function resourceLayout(appRoot: string) {
   const stagingRoot = join(appRoot, 'src-tauri/resources/studyforge');
+  const subagentRuntimeRoot = join(stagingRoot, 'pi-subagents');
   return {
     appRoot,
     stagingRoot,
@@ -10,6 +11,8 @@ export function resourceLayout(appRoot: string) {
     exampleSource: join(appRoot, '../../examples/derivative-m0'),
     piSource: join(appRoot, 'node_modules/@earendil-works/pi-coding-agent'),
     piRuntimeRoot: join(stagingRoot, 'pi-runtime'),
+    subagentRuntimeRoot,
+    subagentPromptRuntime: join(subagentRuntimeRoot, 'subagent-prompt-runtime.js'),
   };
 }
 

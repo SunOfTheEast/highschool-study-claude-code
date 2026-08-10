@@ -8,7 +8,7 @@
 - `bun run test:e2e`：M0–M1d 与桌面首启浏览器闭环。
 - `bun run desktop:build`：生成自包含 DMG。
 - `bun run desktop:verify`：挂载 DMG，检查 arm64 App、双 sidecar、离线教程、教学资源与严格签名。
-- `bun run desktop:smoke`：在空 `PATH` 下启动编译后的 Pi 和 Runtime。
+- `bun run desktop:smoke`：以 hardened runtime 自签名副本在空 `PATH` 下验证编译后的 Plan Scout、子 Pi 扩展、PDF 文本提取、Bedrock 实现、Pi、Runtime 与 OAuth 引导。
 
 ## 新用户手动闭环
 

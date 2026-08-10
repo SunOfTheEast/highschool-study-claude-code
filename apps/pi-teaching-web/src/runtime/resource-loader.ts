@@ -6,6 +6,7 @@ import {
   getAgentDir,
   type EventBus,
 } from '@earendil-works/pi-coding-agent';
+import registerSubagentExtension from './pi-subagents-bundled.js';
 import {
   formatFreeLearningOwnerContext,
   formatMetaOwnerContext,
@@ -283,11 +284,17 @@ export async function createRoleResourceLoader(
       ? loadStaticFreeLearningResources(root, scope, personaId)
       : loadStaticNodeResources(root, scope, personaId);
   const extensionFactories = isNodeSessionScope(scope) && scope.nodeKind === 'plan'
-    ? [{
-      name: 'study-subagent-guard',
-      factory: studySubagentGuard,
-      hidden: true,
-    }]
+    ? [
+      {
+        name: 'pi-subagents',
+        factory: registerSubagentExtension,
+      },
+      {
+        name: 'study-subagent-guard',
+        factory: studySubagentGuard,
+        hidden: true,
+      },
+    ]
     : isNodeSessionScope(scope) && scope.nodeKind === 'lesson'
       ? [{
         name: 'lesson-memory-guard',
@@ -299,9 +306,6 @@ export async function createRoleResourceLoader(
     cwd: root,
     agentDir: getAgentDir(),
     eventBus,
-    additionalExtensionPaths: isNodeSessionScope(scope) && scope.nodeKind === 'plan'
-      ? [fileURLToPath(import.meta.resolve('pi-subagents'))]
-      : [],
     extensionFactories,
     additionalSkillPaths: resources.skillPaths,
     noExtensions: true,

@@ -69,6 +69,7 @@ export async function verifyBundle(appRoot = resolve(import.meta.dir, '../..')):
       'Contents/Resources/studyforge/examples/derivative-m0/learning-set/LEARNING_GUIDE.md',
       'Contents/Resources/studyforge/pi-runtime/package.json',
       'Contents/Resources/studyforge/pi-runtime/theme/dark.json',
+      'Contents/Resources/studyforge/pi-subagents/subagent-prompt-runtime.js',
     ]);
 
     const executables = [

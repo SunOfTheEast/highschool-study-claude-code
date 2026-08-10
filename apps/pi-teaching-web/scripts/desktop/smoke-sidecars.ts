@@ -1,4 +1,9 @@
-import { mkdtempSync } from 'node:fs';
+import {
+  chmodSync,
+  copyFileSync,
+  mkdirSync,
+  mkdtempSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { parseReadyReceipt } from '../../src/server/start-server';
@@ -38,15 +43,49 @@ export async function smokeSidecars(appRoot = resolve(import.meta.dir, '../..'))
   const output = sidecarOutputs(appRoot);
   const resources = resourceLayout(appRoot);
   const root = mkdtempSync(join(tmpdir(), 'studyforge-sidecar-smoke-'));
+  const executable = process.platform === 'darwin'
+    ? adHocSignedCopies(root, output)
+    : output;
   const emptyEnvironment = {
     HOME: join(root, 'home'),
     PATH: '',
     TMPDIR: tmpdir(),
     PI_CODING_AGENT_DIR: join(root, 'app/agent'),
     PI_PACKAGE_DIR: resources.piRuntimeRoot,
+    PI_SUBAGENT_PROMPT_RUNTIME_EXTENSION_PATH: resources.subagentPromptRuntime,
   };
 
-  const pi = Bun.spawn([output.pi, '--version'], {
+  const dependencyProbe = Bun.spawn([
+    executable.runtime,
+    '--runtime-self-test',
+    '--resource-root', resources.stagingRoot,
+  ], {
+    cwd: root,
+    env: emptyEnvironment,
+    stdout: 'pipe',
+    stderr: 'pipe',
+  });
+  const dependencyOutput = (await new Response(dependencyProbe.stdout).text()).trim();
+  const dependencyError = (await new Response(dependencyProbe.stderr).text()).trim();
+  if (await dependencyProbe.exited !== 0) {
+    throw new Error(`STUDYFORGE_RUNTIME_DEPENDENCY_SMOKE_FAILED: ${dependencyError || dependencyOutput}`);
+  }
+  const dependencyReceipt = JSON.parse(dependencyOutput) as {
+    planSubagent?: string;
+    subagentChildRuntime?: string;
+    pdfText?: string;
+    bedrock?: string;
+  };
+  if (
+    dependencyReceipt.planSubagent !== 'passed'
+    || dependencyReceipt.subagentChildRuntime !== 'passed'
+    || dependencyReceipt.pdfText !== 'passed'
+    || dependencyReceipt.bedrock !== 'passed'
+  ) {
+    throw new Error(`STUDYFORGE_RUNTIME_DEPENDENCY_SMOKE_FAILED: ${dependencyOutput}`);
+  }
+
+  const pi = Bun.spawn([executable.pi, '--version'], {
     cwd: root,
     env: emptyEnvironment,
     stdout: 'pipe',
@@ -58,9 +97,52 @@ export async function smokeSidecars(appRoot = resolve(import.meta.dir, '../..'))
     throw new Error(`STUDYFORGE_PI_SMOKE_FAILED: ${piVersion || piError}`);
   }
 
+  const childRuntime = Bun.spawn([
+    executable.pi,
+    '--offline',
+    '--mode', 'rpc',
+    '--no-session',
+    '--no-extensions',
+    '--extension', resources.subagentPromptRuntime,
+  ], {
+    cwd: root,
+    env: {
+      ...emptyEnvironment,
+      PI_SUBAGENT_CHILD: '1',
+      PI_SUBAGENT_FANOUT_CHILD: '0',
+      PI_SUBAGENT_INHERIT_PROJECT_CONTEXT: '0',
+      PI_SUBAGENT_INHERIT_SKILLS: '0',
+    },
+    stdin: 'pipe',
+    stdout: 'pipe',
+    stderr: 'pipe',
+  });
+  childRuntime.stdin.write(`${JSON.stringify({ type: 'get_state', id: 'extension-smoke' })}\n`);
+  childRuntime.stdin.end();
+  const childRuntimeOutput = (await new Response(childRuntime.stdout).text()).trim();
+  const childRuntimeError = (await new Response(childRuntime.stderr).text()).trim();
+  const childRuntimeReceipt = childRuntimeOutput
+    .split('\n')
+    .map((line) => {
+      try {
+        return JSON.parse(line) as { id?: string; success?: boolean };
+      } catch {
+        return undefined;
+      }
+    })
+    .find((line) => line?.id === 'extension-smoke');
+  if (await childRuntime.exited !== 0 || childRuntimeReceipt?.success !== true) {
+    const error = childRuntimeError
+      .replace(/base64,[A-Za-z0-9+/=]+/g, 'base64,<omitted>')
+      .slice(-4_000);
+    throw new Error(
+      `STUDYFORGE_SUBAGENT_CHILD_RUNTIME_SMOKE_FAILED: ${error || childRuntimeOutput}`,
+    );
+  }
+
   const token = 'sidecar-smoke-token';
   const runtime = Bun.spawn([
-    output.runtime,
+    executable.runtime,
     '--port', '0',
     '--app-home', join(root, 'app'),
     '--documents-home', join(root, 'documents'),
@@ -112,9 +194,36 @@ export async function smokeSidecars(appRoot = resolve(import.meta.dir, '../..'))
     runtime: 'passed',
     pi: 'passed',
     oauthBootstrap: 'passed',
+    planSubagent: dependencyReceipt.planSubagent,
+    subagentChildRuntime: dependencyReceipt.subagentChildRuntime,
+    pdfText: dependencyReceipt.pdfText,
+    bedrock: dependencyReceipt.bedrock,
     path: 'empty',
     realModelScout: 'blocked-until-desktop-provider-login',
   }));
+}
+
+function adHocSignedCopies(
+  root: string,
+  output: ReturnType<typeof sidecarOutputs>,
+): ReturnType<typeof sidecarOutputs> {
+  const directory = join(root, 'signed');
+  mkdirSync(directory, { recursive: true });
+  const copies = {
+    runtime: join(directory, 'studyforge-runtime'),
+    pi: join(directory, 'studyforge-pi'),
+  };
+  for (const key of ['runtime', 'pi'] as const) {
+    copyFileSync(output[key], copies[key]);
+    chmodSync(copies[key], 0o755);
+    const signing = Bun.spawnSync([
+      'codesign', '--force', '--options', 'runtime', '--sign', '-', copies[key],
+    ], { stdout: 'pipe', stderr: 'pipe' });
+    if (signing.exitCode !== 0) {
+      throw new Error(`STUDYFORGE_SIDECAR_SIGNING_FAILED: ${signing.stderr.toString().trim()}`);
+    }
+  }
+  return copies;
 }
 
 if (import.meta.main) await smokeSidecars();

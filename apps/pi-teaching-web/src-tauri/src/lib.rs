@@ -420,6 +420,13 @@ mod tests {
             launch.environment.get("PI_PACKAGE_DIR").unwrap(),
             "/Applications/StudyForge.app/Contents/Resources/studyforge/pi-runtime"
         );
+        assert_eq!(
+            launch
+                .environment
+                .get("PI_SUBAGENT_PROMPT_RUNTIME_EXTENSION_PATH")
+                .unwrap(),
+            "/Applications/StudyForge.app/Contents/Resources/studyforge/pi-subagents/subagent-prompt-runtime.js"
+        );
         assert!(
             !launch
                 .environment

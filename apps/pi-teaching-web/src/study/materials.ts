@@ -23,6 +23,7 @@ import {
   type DocumentCandidate,
 } from '../runtime/multi-document-transaction';
 import { StudyDocumentError } from './markdown';
+import { loadPdfJs } from './pdf-runtime';
 
 export type MaterialImportInput = {
   requestId: string;
@@ -221,7 +222,7 @@ async function pdfProjection(
   bytes: Uint8Array,
 ): Promise<ProjectionDraft> {
   try {
-    const { getDocument, VerbosityLevel } = await import('pdfjs-dist/legacy/build/pdf.mjs');
+    const { getDocument, VerbosityLevel } = await loadPdfJs();
     const document = await getDocument({
       data: Uint8Array.from(bytes),
       verbosity: VerbosityLevel.ERRORS,

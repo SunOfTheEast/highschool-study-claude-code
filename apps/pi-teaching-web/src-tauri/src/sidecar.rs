@@ -86,6 +86,14 @@ pub fn build_launch(paths: DesktopPaths, token: String) -> SidecarLaunch {
         ("PI_CODING_AGENT_SESSION_DIR".into(), display(&sessions_dir)),
         ("PI_SUBAGENT_PI_BINARY".into(), display(&paths.pi_binary)),
         (
+            "PI_SUBAGENT_PROMPT_RUNTIME_EXTENSION_PATH".into(),
+            display(
+                &paths
+                    .resource_root
+                    .join("pi-subagents/subagent-prompt-runtime.js"),
+            ),
+        ),
+        (
             "PI_PACKAGE_DIR".into(),
             display(&paths.resource_root.join("pi-runtime")),
         ),

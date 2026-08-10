@@ -13,7 +13,7 @@
 - Preserve unrelated dirty-worktree changes.
 - Use one focused regression per missing runtime seam.
 - Do not add a generic dependency crawler or copy all of `node_modules`.
-- Keep PDF native setup lazy and Plan subagent access Plan-only.
+- Keep PDF text setup lazy, avoid native canvas bindings, and keep Plan subagent access Plan-only.
 
 ---
 
@@ -32,24 +32,25 @@
 
 **Interfaces:**
 - Produces: `registerStudyForgeBunRuntime(): { bedrock: 'registered' }`
-- Produces: `loadPdfJs(): Promise<typeof import('pdfjs-dist/legacy/build/pdf.mjs')>`
+- Produces: `loadPdfJs(): Promise<typeof import('pdfjs-dist')>`
 - Changes: Plan ResourceLoader receives `pi-subagents` as an inline extension factory.
+- Packages: the child Pi prompt-runtime as one standalone JS resource and points the patched extension to it.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
-  Assert that the shared Bun registration reports Bedrock, PDF setup supplies the required globals and worker, and `resource-loader.ts` no longer depends on `import.meta.resolve('pi-subagents')` while a Plan loader still exposes `subagent`.
+  Assert that the shared Bun registration reports Bedrock, PDF setup supplies the pure-JavaScript matrix and worker, and `resource-loader.ts` no longer depends on `import.meta.resolve('pi-subagents')` while a Plan loader still exposes `subagent`.
 
-- [ ] **Step 2: Verify RED**
+- [x] **Step 2: Verify RED**
 
   Run: `bun test tests/desktop/runtime-dependencies.test.ts`
 
   Expected: FAIL because the two runtime modules do not exist and Plan still uses runtime package resolution.
 
-- [ ] **Step 3: Implement the minimal static edges**
+- [x] **Step 3: Implement the minimal static edges**
 
-  Use Pi AI's public Bedrock provider/compat exports, statically import the `pi-subagents` factory, and make PDF.js initialization lazy behind `loadPdfJs()`.
+  Use Pi AI's public Bedrock provider/compat exports, statically import the `pi-subagents` factory, and make PDF.js initialization lazy behind `loadPdfJs()` with a pure-JavaScript DOMMatrix.
 
-- [ ] **Step 4: Verify GREEN**
+- [x] **Step 4: Verify GREEN**
 
   Run: `bun test tests/desktop/runtime-dependencies.test.ts tests/m0/native-session.test.ts tests/m1c/materials.test.ts`
 
@@ -68,21 +69,21 @@
 - Produces: `runRuntimeSelfTest(resourceRoot: string): Promise<RuntimeSelfTestReceipt>`.
 - Adds internal CLI: `studyforge-runtime --runtime-self-test --resource-root <absolute-path>`.
 
-- [ ] **Step 1: Add a failing compiled-runtime smoke expectation**
+- [x] **Step 1: Add a failing compiled-runtime smoke expectation**
 
-  Extend `desktop:smoke` to invoke the internal self-test and require receipts for `planSubagent`, `pdfText`, and `bedrock`.
+  Extend `desktop:smoke` to ad-hoc sign hardened-runtime copies, invoke the internal self-test, load the standalone child prompt-runtime through the real Pi sidecar, and require receipts for `planSubagent`, `subagentChildRuntime`, `pdfText`, and `bedrock`.
 
-- [ ] **Step 2: Verify RED against the current compiled Runtime**
+- [x] **Step 2: Verify RED against the current compiled Runtime**
 
   Run: `bun run desktop:prepare && bun run desktop:smoke`
 
   Expected: FAIL before the self-test path/static seams exist.
 
-- [ ] **Step 3: Implement the self-test with a temporary learning set and one-page PDF**
+- [x] **Step 3: Implement the self-test with a temporary learning set and one-page PDF**
 
   The self-test must load a real Plan ResourceLoader, call real `importMaterial`, and check the shared provider registration without a network request.
 
-- [ ] **Step 4: Verify compiled sidecars**
+- [x] **Step 4: Verify compiled sidecars**
 
   Run: `bun run desktop:prepare && bun run desktop:smoke`
 
@@ -93,18 +94,23 @@
 **Files:**
 - Modify only if a release check reveals a packaging-specific defect.
 
-- [ ] **Step 1: Run repository checks**
+- [x] **Step 1: Run repository checks**
 
   Run: `bun run check`
 
   Expected: typecheck, non-E2E tests, and Vite build pass.
 
-- [ ] **Step 2: Build and inspect the DMG**
+- [x] **Step 2: Build and inspect the DMG**
 
   Run: `bun run desktop:prepare && bun run desktop:build && bun run desktop:verify`
 
   Expected: arm64 DMG, both sidecars, resources, and ad-hoc signature verify.
 
-- [ ] **Step 3: Run the original black-box paths from the mounted DMG**
+- [x] **Step 3: Run the original black-box paths from the mounted DMG**
 
   Confirm a Plan opens with Scout available, a PDF imports as searchable text, and provider configuration can load Bedrock without `ResolveMessage`.
+
+  Verified on the mounted DMG: the compiled self-test returned `planSubagent`,
+  `subagentChildRuntime`, `pdfText`, and `bedrock` as `passed`; a real Sol Plan Coach
+  then called `openai-codex/gpt-5.6-terra:high`, whose Scout found
+  `cards/m1b/problem-001.card.yaml` in two read-only tool calls and returned it to the Coach.

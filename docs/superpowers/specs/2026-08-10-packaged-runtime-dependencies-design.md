@@ -14,9 +14,11 @@ Bun 编译产物只会收进静态可追踪的依赖。当前三条路径分别�
 
 直接静态导入 `pi-subagents` 的扩展工厂，并作为 Plan 专属内联扩展交给 `DefaultResourceLoader`。保留现有 `study-subagent-guard` 和 Plan-only 权限，不再让编译后的 Runtime 现场解析 npm 包路径。
 
+Scout 真正启动后，`pi-subagents` 还会给子 Pi 加载自己的 prompt-runtime 扩展。该扩展不能继续使用包源码中的 `import.meta.url` 路径，因为父 Runtime 编译后那是 Bun 虚拟路径。构建时只把这一项扩展打成独立 JS 放入 `Resources/studyforge/pi-subagents/`；Pi 本身已提供的 `pi-ai`、`pi-agent-core`、`pi-coding-agent` 与 TypeBox 模块保持 external，由 Pi 扩展加载器的 virtual modules 提供。这样资源约 239 KB，而不是把整套 Pi SDK 内联成约 12 MB 后再被 Jiti 转成超长 Base64 data URL。对 `pi-subagents` 的最小版本补丁允许用环境变量覆盖该路径，Tauri 启动 sidecar 时传入精确资源路径。这里不复制整包或整棵 `node_modules`。
+
 ### PDF
 
-新增一个只在 PDF 导入时加载的运行时模块。该模块静态引用 `@napi-rs/canvas` 和 `pdf.worker.mjs`，先补齐 PDF.js 在 Bun/Node 下需要的 `DOMMatrix`、`ImageData`、`Path2D`，再加载 PDF.js 主模块。`@napi-rs/canvas` 变为 StudyForge 的显式直接依赖；普通对话和文本资料导入不加载它。
+新增一个只在 PDF 导入时加载的运行时模块。该模块静态引用纯 JavaScript 的 `@thednp/dommatrix` 与 `pdf.worker.mjs`，补齐文本提取所需的 `DOMMatrix` 后加载 PDF.js 主模块。这里刻意不把 `@napi-rs/canvas` 编进 sidecar：Bun 会把它的原生 `.node` 库释放到临时目录，而采用 hardened runtime 的 ad-hoc 签名进程会因 Team ID 不一致拒绝加载。StudyForge 当前只做 PDF 文本提取，不支付或携带渲染用的原生画布依赖；普通对话和文本资料导入也不会加载 PDF 模块。
 
 ### Bedrock
 
@@ -24,9 +26,9 @@ Bun 编译产物只会收进静态可追踪的依赖。当前三条路径分别�
 
 ## 发布验收
 
-`desktop:smoke` 在空 `PATH`、临时 HOME 下直接运行编译后的 Runtime 自检：
+`desktop:smoke` 先复制 sidecar 并使用与 Tauri 相同的 hardened runtime ad-hoc 签名，再在空 `PATH`、临时 HOME 下运行编译后的 Runtime 自检：
 
-1. Plan ResourceLoader 实际注册 `subagent`；
+1. Plan ResourceLoader 实际注册 `subagent`；子 Pi 以离线 RPC 模式真正初始化 prompt-runtime 并返回状态回执，不能再用不会初始化扩展的 `--list-models` 代替；
 2. 一页 PDF 被提取为 `pdf-text`；
 3. Bedrock 官方实现已静态加载并注册。
 

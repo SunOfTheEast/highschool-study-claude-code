@@ -1,0 +1,8 @@
+diff --git a/src/runs/shared/pi-args.ts b/src/runs/shared/pi-args.ts
+index 0e8584d72934ab51b528f15075cdb4ea7845d851..6e087ff48a2edc697838f1cf0230163083668aeb 100644
+--- a/src/runs/shared/pi-args.ts
++++ b/src/runs/shared/pi-args.ts
+@@ -16 +16,2 @@
+-const PROMPT_RUNTIME_EXTENSION_PATH = path.join(path.dirname(fileURLToPath(import.meta.url)), "subagent-prompt-runtime.ts");
++const PROMPT_RUNTIME_EXTENSION_PATH = process.env.PI_SUBAGENT_PROMPT_RUNTIME_EXTENSION_PATH?.trim()
++	|| path.join(path.dirname(fileURLToPath(import.meta.url)), "subagent-prompt-runtime.ts");
