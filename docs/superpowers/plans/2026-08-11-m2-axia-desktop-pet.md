@@ -37,7 +37,7 @@
 - Produces Tauri events `studyforge:companion-presentation`, `studyforge:companion-playback`, and `studyforge:companion-control`.
 - Produces one `companion` window at `/?window=companion`, 340×560, transparent, undecorated, always on top, non-resizable, shadowless, and absent from the task switcher.
 
-- [ ] **Step 1: Write the failing shell/config test**
+- [x] **Step 1: Write the failing shell/config test**
 
 Add assertions that parse `tauri.conf.json` and `capabilities/default.json`:
 
@@ -55,13 +55,13 @@ test('declares one app-scoped companion beside the existing main window', () => 
 
 Also assert the companion capability includes only the window operations actually used: cursor position, inner position, scale factor, set-ignore-cursor-events, set-position, start-dragging, show, hide, and focus.
 
-- [ ] **Step 2: Run the focused test and observe RED**
+- [x] **Step 2: Run the focused test and observe RED**
 
 Run: `bun test tests/m2/companion-shell.test.ts`
 
 Expected: FAIL because only the implicit main window exists and the companion capability is absent.
 
-- [ ] **Step 3: Add the pure native state transition test**
+- [x] **Step 3: Add the pure native state transition test**
 
 In `companion.rs`, test a small state object before wiring Tauri commands:
 
@@ -77,13 +77,13 @@ fn finished_playback_clears_only_the_matching_live_presentation() {
 }
 ```
 
-- [ ] **Step 4: Run the Rust test and observe RED**
+- [x] **Step 4: Run the Rust test and observe RED**
 
 Run: `cargo test --manifest-path src-tauri/Cargo.toml companion`
 
 Expected: FAIL because `companion.rs` and its state do not exist.
 
-- [ ] **Step 5: Implement the minimal native bridge and window lifecycle**
+- [x] **Step 5: Implement the minimal native bridge and window lifecycle**
 
 Use serializable public projection types:
 
@@ -115,7 +115,7 @@ companion window does not exist so the main UI never waits for a missing project
 In `run()`, manage the state, register the commands, and use `on_window_event` so a close request for
 `main` calls `prevent_close()` and hides the window. Keep the existing runtime stop behavior on app exit.
 
-- [ ] **Step 6: Run focused native and Bun tests to GREEN**
+- [x] **Step 6: Run focused native and Bun tests to GREEN**
 
 Run:
 
@@ -126,7 +126,7 @@ bun test tests/m2/companion-shell.test.ts
 
 Expected: both commands exit 0.
 
-- [ ] **Step 7: Commit only Task 1 hunks**
+- [x] **Step 7: Commit only Task 1 hunks**
 
 Stage the companion window/config hunks without staging the pre-existing CSP line:
 
@@ -164,7 +164,7 @@ git commit -m "feat: add app-scoped companion window"
 - Produces `CompanionRoot`, rendered only when `window=companion`.
 - Keeps browser/non-Tauri development on the existing in-page playback path.
 
-- [ ] **Step 1: Write failing projection and markup tests**
+- [x] **Step 1: Write failing projection and markup tests**
 
 Cover three behaviors with real pure functions and server rendering:
 
@@ -187,13 +187,13 @@ test('desktop chat keeps Peer text but does not mount a second model', () => {
 });
 ```
 
-- [ ] **Step 2: Run the focused test and observe RED**
+- [x] **Step 2: Run the focused test and observe RED**
 
 Run: `bun test tests/m2/companion-projection.test.tsx`
 
 Expected: FAIL because the companion contracts, bridge, root, and remote playback path do not exist.
 
-- [ ] **Step 3: Implement typed bridge and remote playback projection**
+- [x] **Step 3: Implement typed bridge and remote playback projection**
 
 Define the narrow browser contract:
 
@@ -217,7 +217,7 @@ The main hook marks a live Peer ID once, immediately enters `loading`, publishes
 and derives timeline withholding only from the companion playback receipt. `stop`, `toggleMute`, and
 formula reading send control events to the same owner. A failed `present()` returns to `idle` immediately.
 
-- [ ] **Step 4: Move TTS and Live2D ownership into `CompanionRoot`**
+- [x] **Step 4: Move TTS and Live2D ownership into `CompanionRoot`**
 
 Select the root in `main.tsx`:
 
@@ -235,13 +235,13 @@ into the existing `usePeerPlayback`. It publishes `loading/speaking/idle` receip
 the matching presentation after finish or mute. Reuse `PeerEmbodiment`/`PeerLive2D`; do not create a second
 renderer.
 
-- [ ] **Step 5: Split ChatPanel into local and companion-backed owners**
+- [x] **Step 5: Split ChatPanel into local and companion-backed owners**
 
 Keep one shared markup component. In desktop context render it with `useCompanionPeerPlayback`; in browser
 tests/development render it with the existing `usePeerPlayback` and in-page `PeerEmbodiment`. This avoids
 conditional hooks and preserves browser fallback while guaranteeing one model in the packaged app.
 
-- [ ] **Step 6: Run the focused M2 suite to GREEN**
+- [x] **Step 6: Run the focused M2 suite to GREEN**
 
 Run:
 
@@ -254,7 +254,7 @@ bun run typecheck
 
 Expected: all focused tests and typecheck exit 0.
 
-- [ ] **Step 7: Commit Task 2**
+- [x] **Step 7: Commit Task 2**
 
 ```bash
 git add apps/pi-teaching-web/src/client/companion \
@@ -288,7 +288,7 @@ git commit -m "feat: project peer playback into desktop pet"
 - Uses only Tauri's current-window cursor/position/drag operations granted in Task 1.
 - Adds a settings action that can re-show a hidden companion.
 
-- [ ] **Step 1: Write failing geometry and settings tests**
+- [x] **Step 1: Write failing geometry and settings tests**
 
 ```ts
 test('restores a saved position only when it intersects a current monitor', () => {
@@ -301,7 +301,7 @@ test('settings always offers a quiet way to show the desktop companion', () => {
 });
 ```
 
-- [ ] **Step 2: Run the focused tests and observe RED**
+- [x] **Step 2: Run the focused tests and observe RED**
 
 Run:
 
@@ -311,7 +311,7 @@ bun test tests/m2/companion-window-controls.test.ts tests/desktop/desktop-ui.tes
 
 Expected: FAIL because position helpers and the settings action do not exist.
 
-- [ ] **Step 3: Implement restrained window controls**
+- [x] **Step 3: Implement restrained window controls**
 
 Use a 120 ms cursor hit-test against the model hit target and the open context menu. Call
 `setIgnoreCursorEvents(true)` only when the cursor is outside both. Start native dragging after a four-pixel
@@ -322,13 +322,13 @@ Double-click calls `showMain()`. The custom right-click menu contains exactly `�
 `退出 StudyForge`. A speaking bubble uses `companionBubbleText` and disappears with playback. It does not
 render Markdown, tables, or KaTeX.
 
-- [ ] **Step 4: Add the settings recovery action**
+- [x] **Step 4: Add the settings recovery action**
 
 Pass `onShowCompanion` into `ModelSettings` and render one quiet `显示阿夏桌宠` button beside the existing
 voice section. It invokes Task 1's `show_companion_window`; it does not add avatar configuration or model
 selection UI.
 
-- [ ] **Step 5: Run focused tests and typecheck to GREEN**
+- [x] **Step 5: Run focused tests and typecheck to GREEN**
 
 Run:
 
@@ -341,7 +341,7 @@ bun run typecheck
 
 Expected: all commands exit 0.
 
-- [ ] **Step 6: Commit Task 3**
+- [x] **Step 6: Commit Task 3**
 
 ```bash
 git add apps/pi-teaching-web/src/client/companion \
@@ -370,7 +370,7 @@ git commit -m "feat: add restrained desktop pet controls"
 - Produces `bun run desktop:peer-live2d -- --source "$STUDYFORGE_SKIN_SOURCE"` for macOS local preparation.
 - Installs only into the existing private `actors/peer-axia/live2d` slot, preserving the old slot as a recoverable sibling backup.
 
-- [ ] **Step 1: Write the failing normalizer tests**
+- [x] **Step 1: Write the failing normalizer tests**
 
 Use a small public JSON fixture created inside the test, not the downloaded package:
 
@@ -389,21 +389,22 @@ test('rejects a package without the exact model, moc, textures, physics, and mou
 });
 ```
 
-- [ ] **Step 2: Run the focused test and observe RED**
+- [x] **Step 2: Run the focused test and observe RED**
 
 Run: `bun test tests/m2/peer-live2d-import.test.ts`
 
 Expected: FAIL because no normalizer exists.
 
-- [ ] **Step 3: Implement the pure normalizer**
+- [x] **Step 3: Implement the pure normalizer**
 
-Map base → `neutral` using a generated empty expression, `lianhong.exp3.json` → `curious`, and
-`shengqi.exp3.json` → `skeptical`. Register the existing idle motion. Rewrite all paths to ASCII runtime
+Map the VTube Studio `X` visibility expression → `neutral`, `lianhong.exp3.json` → `curious`, and
+`shengqi.exp3.json` → `skeptical`; merge the visibility parameters into the latter two so changing mood
+cannot hide the model. Register the existing idle motion. Rewrite all paths to ASCII runtime
 names and emit the exact strict manifest consumed by `readPeerLive2DManifest`. Validate
 `ParamMouthOpenY` through the source `cdi3.json`; do not infer arbitrary expression semantics from every
 VTube Studio hotkey.
 
-- [ ] **Step 4: Implement the macOS preparation command**
+- [x] **Step 4: Implement the macOS preparation command**
 
 Parse only `--source` and optional `--app-home`. Resolve exact source/destination paths, build into a fresh
 sibling staging directory, copy the existing private Cubism Core, copy model data, and call
@@ -418,7 +419,7 @@ Add the package script:
 "desktop:peer-live2d": "bun run scripts/desktop/import-peer-live2d.ts"
 ```
 
-- [ ] **Step 5: Run importer and privacy tests to GREEN**
+- [x] **Step 5: Run importer and privacy tests to GREEN**
 
 Run:
 
@@ -429,7 +430,7 @@ bun run typecheck
 
 Expected: tests confirm the strict package and confirm no private path or model artifact is tracked.
 
-- [ ] **Step 6: Commit Task 4 before touching private assets**
+- [x] **Step 6: Commit Task 4 before touching private assets**
 
 ```bash
 git add apps/pi-teaching-web/src/desktop/peer-live2d-import.ts \
@@ -440,7 +441,7 @@ git add apps/pi-teaching-web/src/desktop/peer-live2d-import.ts \
 git commit -m "feat: normalize local Live2D skins"
 ```
 
-- [ ] **Step 7: Install the user's private skin with an inspected source path**
+- [x] **Step 7: Install the user's private skin with an inspected source path**
 
 Set and validate a task-specific source variable in one foreground shell, then run the importer:
 
@@ -466,7 +467,7 @@ private local mutation; report the backup path and never stage it.
 - Consumes all prior tasks.
 - Produces a packaged DMG with no private skin and a local installed app that can use the private actor slot.
 
-- [ ] **Step 1: Run the complete source verification**
+- [x] **Step 1: Run the complete source verification**
 
 Run:
 
@@ -478,7 +479,7 @@ git diff --check
 
 Expected: 0 test failures, successful typecheck/build, and no whitespace errors.
 
-- [ ] **Step 2: Build and verify the public DMG**
+- [x] **Step 2: Build and verify the public DMG**
 
 Run:
 
@@ -502,7 +503,7 @@ Verify on macOS:
 6. right-click mute/hide/quit works, and settings can show a hidden companion;
 7. `⌘Q` stops both windows and the sidecar.
 
-- [ ] **Step 4: Exercise one real Free Learning Peer turn**
+- [x] **Step 4: Exercise one real Free Learning Peer turn**
 
 Ask a natural question, explicitly invite 阿夏 once, and verify:
 
@@ -518,7 +519,15 @@ Confirm generated textures are at most 2048, no second Live2D canvas exists in m
 not continually increase across repeated calm → speaking → calm cycles. Re-run `git status --short` and
 ensure only the pre-existing CSP/test changes and `.superpowers/` scratch remain outside the feature commits.
 
-- [ ] **Step 6: Commit each reproduced acceptance fix**
+- [x] **Step 6: Commit each reproduced acceptance fix**
 
 For each real defect, reproduce it with a focused failing test before changing production code. Commit only
 after the focused test and the full verification are green.
+
+**2026-08-11 acceptance note:** The fresh packaged DMG loaded the private water-blue Live2D skin after two
+release-only CSP fixes: the Pixi strict-CSP compatibility module and `blob:` access for private Cubism
+binary reads. Real UI acceptance confirmed expression switching, double-click restore, main-window close
+survival, the native right-click menu, one Peer timeline item, teacher continuation, and return to calm.
+Step 3 remains open only for drag persistence, settings recovery, and the final `Cmd+Q` lifecycle pass.
+Step 5 remains open for repeated-cycle GPU/memory observation; private-file and single-canvas boundaries are
+already covered by source tests and the packaged-app inspection.
