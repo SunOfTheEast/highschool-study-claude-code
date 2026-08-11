@@ -11,6 +11,7 @@ import {
 } from '../conversation-presentation';
 import { publicErrorText, publicSessionErrorText } from '../public-errors';
 import {
+  peerPresence,
   usePeerPlayback,
   visibleConversationDuringPeer,
 } from '../peer-playback';
@@ -41,7 +42,8 @@ export function ChatPanel({
 }) {
   const [text, setText] = useState('');
   const freeLearning = sessionKey.startsWith('free:');
-  const playback = usePeerPlayback(items, freeLearning);
+  const playback = usePeerPlayback(items, freeLearning && enabled);
+  const presence = peerPresence(items, playback);
   const presentedItems = presentConversation(items);
   const visibleItems = visibleConversationDuringPeer(
     presentedItems,
@@ -75,12 +77,10 @@ export function ChatPanel({
           </button>
         )}
       </header>
-      {freeLearning && (
+      {freeLearning && enabled && (
         <PeerEmbodiment
-          item={playback.item}
-          phase={playback.phase}
-          mouth={playback.mouth}
-          portraitUrl={playback.portraitUrl}
+          state={presence}
+          playbackActive={playback.phase !== 'idle'}
           muted={playback.muted}
           onStop={playback.stop}
           onToggleMute={playback.toggleMute}

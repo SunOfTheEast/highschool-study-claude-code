@@ -314,10 +314,27 @@
   position: relative;
   width: 100%;
   min-height: 10rem;
+  aspect-ratio: 4 / 5;
+}
+.peer-static,
+.peer-live2d {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.peer-static {
   display: grid;
   align-items: end;
   animation: peer-breathe 3.8s ease-in-out infinite;
   transform-origin: 50% 100%;
+}
+.peer-static[hidden] { display: none; }
+.peer-live2d { overflow: hidden; }
+.peer-live2d canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 .peer-portrait img {
   width: 100%;

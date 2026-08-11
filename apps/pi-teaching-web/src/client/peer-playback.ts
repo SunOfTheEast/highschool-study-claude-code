@@ -8,6 +8,7 @@ import {
   detailedFormulaSpeech,
 } from '../shared/peer-speech';
 import { api } from './api';
+import type { PeerVisualState } from './live2d/contracts';
 
 export type PeerMouth = 'closed' | 'half' | 'open';
 export type PeerPlaybackPhase = 'idle' | 'loading' | 'speaking';
@@ -16,7 +17,6 @@ export type PeerPlaybackView = {
   item: PeerConversationItem | null;
   phase: PeerPlaybackPhase;
   mouth: PeerMouth;
-  portraitUrl: string | null;
   muted: boolean;
   stop(): void;
   toggleMute(): void;
@@ -25,7 +25,7 @@ export type PeerPlaybackView = {
 
 type PlaybackState = Pick<
   PeerPlaybackView,
-  'item' | 'phase' | 'mouth' | 'portraitUrl'
+  'item' | 'phase' | 'mouth'
 >;
 
 const muteKey = 'studyforge.peer-voice-muted';
@@ -52,6 +52,32 @@ export function visibleConversationDuringPeer(
   if (!peerId) return [...items];
   const index = items.findIndex((item) => item.id === peerId);
   return index < 0 ? [...items] : items.slice(0, index + 1);
+}
+
+export function peerPresence(
+  items: readonly ConversationItem[],
+  playback: Pick<PeerPlaybackView, 'item' | 'phase' | 'mouth'>,
+): PeerVisualState {
+  if (playback.item && playback.phase === 'speaking') {
+    return {
+      phase: 'speaking',
+      expression: playback.item.expression,
+      mouth: playback.mouth,
+    };
+  }
+
+  const running = items.findLast((item): item is PeerConversationItem => (
+    item.kind === 'peer'
+    && item.actorId === 'peer-axia'
+    && item.status === 'running'
+  ));
+  if (running) {
+    return { phase: 'thinking', expression: running.expression, mouth: 'closed' };
+  }
+  if (playback.item && playback.phase === 'loading') {
+    return { phase: 'thinking', expression: playback.item.expression, mouth: 'closed' };
+  }
+  return { phase: 'calm', expression: 'neutral', mouth: 'closed' };
 }
 
 export function mouthForAmplitude(amplitude: number): PeerMouth {
@@ -101,19 +127,18 @@ export function usePeerPlayback(
     item: null,
     phase: 'idle',
     mouth: 'closed',
-    portraitUrl: null,
   });
   const stopRef = useRef<() => void>(() => {});
 
   const begin = useCallback((item: PeerConversationItem) => {
     const controller = new AbortController();
     let settled = false;
-    let portraitUrl: string | null = null;
     let audioUrl: string | null = null;
     let audio: HTMLAudioElement | null = null;
     let audioContext: AudioContext | null = null;
     let frame = 0;
     let stopSystemSpeech: (() => void) | null = null;
+    let stopVisibility: (() => void) | null = null;
 
     const releaseAudio = () => {
       if (frame && typeof cancelAnimationFrame === 'function') cancelAnimationFrame(frame);
@@ -138,10 +163,10 @@ export function usePeerPlayback(
       releaseAudio();
       stopSystemSpeech?.();
       stopSystemSpeech = null;
-      if (portraitUrl) URL.revokeObjectURL(portraitUrl);
-      portraitUrl = null;
+      stopVisibility?.();
+      stopVisibility = null;
       stopRef.current = () => {};
-      setState({ item: null, phase: 'idle', mouth: 'closed', portraitUrl: null });
+      setState({ item: null, phase: 'idle', mouth: 'closed' });
     };
 
     const playSystemFallback = (spokenText: string) => {
@@ -210,18 +235,19 @@ export function usePeerPlayback(
     };
 
     stopRef.current = finish;
-    setState({ item, phase: 'loading', mouth: 'closed', portraitUrl: null });
+    setState({ item, phase: 'loading', mouth: 'closed' });
+    if (typeof document !== 'undefined') {
+      const onVisibility = () => {
+        if (document.hidden) finish();
+      };
+      document.addEventListener('visibilitychange', onVisibility);
+      stopVisibility = () => document.removeEventListener('visibilitychange', onVisibility);
+    }
     const spokenText = automaticPeerSpeech(item.text ?? '');
     if (!spokenText) {
       finish();
       return;
     }
-
-    void api.peerPortrait('peer-axia', item.expression).then((blob) => {
-      if (!blob || settled) return;
-      portraitUrl = URL.createObjectURL(blob);
-      setState((current) => ({ ...current, portraitUrl }));
-    }).catch(() => undefined);
 
     void api.peerSpeech('peer-axia', spokenText, controller.signal)
       .then((blob) => blob ? playAudio(blob, spokenText) : playSystemFallback(spokenText))

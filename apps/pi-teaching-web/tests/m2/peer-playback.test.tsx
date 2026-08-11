@@ -1,9 +1,11 @@
 import { expect, test } from 'bun:test';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { ChatPanel } from '../../src/client/components/ChatPanel';
 import { PeerEmbodiment } from '../../src/client/components/PeerEmbodiment';
 import {
   mouthForAmplitude,
   nextLivePeer,
+  peerPresence,
   visibleConversationDuringPeer,
 } from '../../src/client/peer-playback';
 import type { ConversationItem, PeerConversationItem } from '../../src/shared/contracts';
@@ -57,25 +59,88 @@ test('maps a smoothed audio level to only three mouth states', () => {
   expect(mouthForAmplitude(0.09)).toBe('open');
 });
 
-test('renders a restrained accessible stage without a broken image URL', () => {
-  const markup = renderToStaticMarkup(
+test('projects one calm, thinking, or speaking presence from existing Peer facts', () => {
+  const idle = { item: null, phase: 'idle' as const, mouth: 'closed' as const };
+  const running = peer({ status: 'running', text: null, expression: 'curious' });
+
+  expect(peerPresence([], idle)).toEqual({
+    phase: 'calm', expression: 'neutral', mouth: 'closed',
+  });
+  expect(peerPresence([running], idle)).toEqual({
+    phase: 'thinking', expression: 'curious', mouth: 'closed',
+  });
+  expect(peerPresence([peer()], {
+    item: peer(), phase: 'speaking', mouth: 'half',
+  })).toEqual({
+    phase: 'speaking', expression: 'skeptical', mouth: 'half',
+  });
+});
+
+test('keeps a restrained stage present in calm and adds controls only for active audio', () => {
+  const calm = renderToStaticMarkup(
     <PeerEmbodiment
-      item={peer()}
-      phase="speaking"
-      mouth="half"
-      portraitUrl={null}
+      state={{ phase: 'calm', expression: 'neutral', mouth: 'closed' }}
+      playbackActive={false}
+      muted={false}
+      onStop={() => {}}
+      onToggleMute={() => {}}
+    />,
+  );
+  const thinking = renderToStaticMarkup(
+    <PeerEmbodiment
+      state={{ phase: 'thinking', expression: 'curious', mouth: 'closed' }}
+      playbackActive={false}
+      muted={false}
+      onStop={() => {}}
+      onToggleMute={() => {}}
+    />,
+  );
+  const speaking = renderToStaticMarkup(
+    <PeerEmbodiment
+      state={{ phase: 'speaking', expression: 'skeptical', mouth: 'half' }}
+      playbackActive
       muted={false}
       onStop={() => {}}
       onToggleMute={() => {}}
     />,
   );
 
-  expect(markup).toContain('class="peer-embodiment"');
-  expect(markup).toContain('data-expression="skeptical"');
-  expect(markup).toContain('data-mouth="half"');
-  expect(markup).toContain('阿夏正在说');
-  expect(markup).toContain('aria-label="停止阿夏语音"');
-  expect(markup).toContain('aria-label="静音阿夏"');
-  expect(markup).not.toContain('<img');
-  expect(markup).not.toContain('undefined');
+  expect(calm).toContain('class="peer-embodiment"');
+  expect(calm).not.toContain('peer-embodiment-caption');
+  expect(calm).not.toContain('停止阿夏语音');
+  expect(thinking).toContain('阿夏在想');
+  expect(thinking).not.toContain('停止阿夏语音');
+  expect(speaking).toContain('data-expression="skeptical"');
+  expect(speaking).toContain('data-mouth="half"');
+  expect(speaking).toContain('阿夏正在说');
+  expect(speaking).toContain('aria-label="停止阿夏语音"');
+  expect(speaking).toContain('aria-label="静音阿夏"');
+  expect(speaking).not.toContain('<img');
+  expect(speaking).not.toContain('undefined');
+});
+
+test('never mounts the Peer stage outside Free Learning', () => {
+  const course = renderToStaticMarkup(
+    <ChatPanel
+      sessionKey="plan:plan-001"
+      items={[]}
+      running={false}
+      error={null}
+      enabled
+      onSend={async () => {}}
+    />,
+  );
+  const ended = renderToStaticMarkup(
+    <ChatPanel
+      sessionKey="free:free-session-001"
+      items={[]}
+      running={false}
+      error={null}
+      enabled={false}
+      onSend={async () => {}}
+    />,
+  );
+
+  expect(course).not.toContain('peer-embodiment');
+  expect(ended).not.toContain('peer-embodiment');
 });
