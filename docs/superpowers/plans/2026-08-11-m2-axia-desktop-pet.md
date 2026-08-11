@@ -528,6 +528,7 @@ after the focused test and the full verification are green.
 release-only CSP fixes: the Pixi strict-CSP compatibility module and `blob:` access for private Cubism
 binary reads. Real UI acceptance confirmed expression switching, double-click restore, main-window close
 survival, the native right-click menu, one Peer timeline item, teacher continuation, and return to calm.
-Step 3 remains open only for drag persistence, settings recovery, and the final `Cmd+Q` lifecycle pass.
+The final `Cmd+Q` pass also stopped both the desktop process and its runtime sidecar. Step 3 remains open
+only for drag persistence and the settings recovery path.
 Step 5 remains open for repeated-cycle GPU/memory observation; private-file and single-canvas boundaries are
 already covered by source tests and the packaged-app inspection.
