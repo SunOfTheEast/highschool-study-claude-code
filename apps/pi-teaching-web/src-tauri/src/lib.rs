@@ -1,3 +1,4 @@
+pub mod companion;
 pub mod sidecar;
 
 use std::{
@@ -6,6 +7,11 @@ use std::{
     sync::{Arc, Mutex},
 };
 
+use companion::{
+    CompanionManager, companion_control, companion_present, companion_set_playback,
+    companion_snapshot, hide_companion_window, quit_studyforge, show_companion_window,
+    show_main_window,
+};
 use serde::Serialize;
 use sidecar::{DesktopPaths, RuntimeState, build_launch, parse_ready_line};
 use tauri::{AppHandle, Manager, State};
@@ -280,19 +286,37 @@ fn open_external_url(app: AppHandle, url: String) -> Result<(), String> {
 
 pub fn run() {
     let manager = RuntimeManager::default();
+    let companion = CompanionManager::default();
     let setup_manager = manager.clone();
     let app = tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_shell::init())
         .manage(manager.clone())
+        .manage(companion)
         .invoke_handler(tauri::generate_handler![
             runtime_connection,
             restart_runtime,
             choose_learning_set_folder,
             reveal_in_finder,
             open_external_url,
+            companion_snapshot,
+            companion_present,
+            companion_set_playback,
+            companion_control,
+            show_main_window,
+            show_companion_window,
+            hide_companion_window,
+            quit_studyforge,
         ])
+        .on_window_event(|window, event| {
+            if window.label() == "main"
+                && let tauri::WindowEvent::CloseRequested { api, .. } = event
+            {
+                api.prevent_close();
+                let _ = window.hide();
+            }
+        })
         .setup(move |app| {
             if let Err(error) = start_runtime(app.handle(), &setup_manager) {
                 mark_spawn_failure(&setup_manager, error);
