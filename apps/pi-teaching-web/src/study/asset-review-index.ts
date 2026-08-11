@@ -23,7 +23,7 @@ export function parseAssetReviewIndex(source: string): AssetReviewProjection[] {
     if (kind !== 'note' && kind !== 'problem-card') {
       throw new StudyDocumentError(ASSET_REVIEW_INDEX_PATH, 'invalid asset kind');
     }
-    if (!id || !/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(id)) {
+    if (!id || !/^[\p{L}\p{N}][\p{L}\p{N}._-]*$/u.test(id)) {
       throw new StudyDocumentError(ASSET_REVIEW_INDEX_PATH, 'invalid asset id');
     }
     if (activeText !== 'true' && activeText !== 'false') {

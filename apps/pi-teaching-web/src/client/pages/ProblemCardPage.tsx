@@ -1,19 +1,24 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import type {
   AssetFormation,
+  AssetReviewProjection,
   LearningAssetSemanticTags,
   ProblemActivitySnapshot,
   ProblemAttemptResponse,
+  ProblemAttemptEvent,
+  ReviewResult,
   StudentProblemCard,
 } from '../../shared/contracts';
 import { AssetProvenance, AssetTags } from '../components/AssetSources';
 import { MarkdownView } from '../components/MarkdownView';
 import { publicErrorText } from '../public-errors';
+import { AssetReviewControls } from '../components/AssetReviewControls';
 
 export type ProblemCardView = StudentProblemCard & {
   activity: ProblemActivitySnapshot;
   semanticTags?: LearningAssetSemanticTags | null;
   formation?: AssetFormation | null;
+  review?: AssetReviewProjection | null;
 };
 
 function failureText(error: unknown): string {
@@ -26,12 +31,16 @@ export function ProblemCardPage({
   onReveal,
   onSaveNote,
   onAskTeacher,
+  onReview,
+  onReviewAction,
 }: {
   value: ProblemCardView;
-  onAttempt(response: ProblemAttemptResponse): Promise<void>;
+  onAttempt(response: ProblemAttemptResponse): Promise<void | ProblemAttemptEvent>;
   onReveal(): Promise<void>;
   onSaveNote(input: { expectedRevision: number; studentNote: string }): Promise<void>;
   onAskTeacher(): Promise<void>;
+  onReview?(result: ReviewResult, problemAttemptId: string): Promise<void>;
+  onReviewAction?(action: 'enroll' | 'remove' | 'restart'): Promise<void>;
 }) {
   const [answer, setAnswer] = useState('');
   const [studentNote, setStudentNote] = useState(value.studentNote);
@@ -41,7 +50,17 @@ export function ProblemCardPage({
   const [asking, setAsking] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [receipt, setReceipt] = useState<string | null>(null);
+  const [reviewing, setReviewing] = useState(false);
+  const [reviewRevision, setReviewRevision] = useState(value.revision);
+  const [reviewAttemptId, setReviewAttemptId] = useState<string | null>(null);
+  const [reviewRevealed, setReviewRevealed] = useState(false);
+  const [reviewBusy, setReviewBusy] = useState(false);
   useEffect(() => setStudentNote(value.studentNote), [value.id, value.revision]);
+  useEffect(() => {
+    if (!reviewing || reviewRevision === value.revision) return;
+    setReviewing(false);
+    setError('题卡刚刚更新了，请从最新版重新开始复习。');
+  }, [reviewing, reviewRevision, value.revision]);
 
   const run = async (
     setBusy: (value: boolean) => void,
@@ -64,9 +83,81 @@ export function ProblemCardPage({
     event.preventDefault();
     const text = answer.trim();
     if (!text) return;
-    void run(setAttempting, () => onAttempt({ kind: 'answer', text }), '作答已记录。');
+    if (!reviewing) {
+      void run(setAttempting, () => onAttempt({ kind: 'answer', text }).then(() => {}), '作答已记录。');
+      return;
+    }
+    void (async () => {
+      setAttempting(true);
+      setError(null);
+      try {
+        const result = await onAttempt({ kind: 'answer', text });
+        if (!result) throw new Error('本次作答没有返回可核验记录');
+        setReviewAttemptId(result.id);
+        setReceipt('本次作答已记录，现在可以查看答案。');
+      } catch (reason) {
+        setError(failureText(reason));
+      } finally {
+        setAttempting(false);
+      }
+    })();
   };
-  const hasAttempt = value.activity.latestAttempt !== null;
+  const hasAttempt = reviewing ? reviewAttemptId !== null : value.activity.latestAttempt !== null;
+
+  const startReview = () => {
+    setReviewing(true);
+    setReviewRevision(value.revision);
+    setReviewAttemptId(null);
+    setReviewRevealed(false);
+    setAnswer('');
+    setError(null);
+    setReceipt(null);
+  };
+
+  const revealReviewAnswer = async () => {
+    if (!reviewAttemptId) return;
+    setRevealing(true);
+    setError(null);
+    try {
+      await onReveal();
+      setReviewRevealed(true);
+    } catch (reason) {
+      setError(failureText(reason));
+    } finally {
+      setRevealing(false);
+    }
+  };
+
+  const cannotReview = async () => {
+    setRevealing(true);
+    setError(null);
+    try {
+      const attempt = await onAttempt({ kind: 'cannot' });
+      if (!attempt) throw new Error('本次作答没有返回可核验记录');
+      setReviewAttemptId(attempt.id);
+      await onReveal();
+      setReviewRevealed(true);
+    } catch (reason) {
+      setError(failureText(reason));
+    } finally {
+      setRevealing(false);
+    }
+  };
+
+  const rateReview = async (result: ReviewResult) => {
+    if (!onReview || !reviewAttemptId || !reviewRevealed || reviewRevision !== value.revision) return;
+    setReviewBusy(true);
+    setError(null);
+    try {
+      await onReview(result, reviewAttemptId);
+      setReviewing(false);
+      setReceipt('复习结果已保存。');
+    } catch (reason) {
+      setError(failureText(reason));
+    } finally {
+      setReviewBusy(false);
+    }
+  };
 
   return (
     <main className="m1b-problem-page asset-reading-page">
@@ -86,9 +177,15 @@ export function ProblemCardPage({
       </header>
       <AssetTags value={value.semanticTags} />
       <AssetProvenance formation={value.formation ?? null} sources={value.sources} />
+      <AssetReviewControls
+        review={value.review ?? null}
+        direct
+        {...(onReview ? { onStart: startReview } : {})}
+        {...(onReviewAction ? { onManage: onReviewAction } : {})}
+      />
       <section className="m1b-problem-stem"><MarkdownView>{value.stem}</MarkdownView></section>
 
-      {value.standardAnswer === null ? (
+      {(reviewing ? !reviewRevealed : value.standardAnswer === null) ? (
         <section className="m1b-answer-gate">
           <form onSubmit={submit}>
             <label>你的作答<textarea value={answer} onChange={(event) => setAnswer(event.target.value)} /></label>
@@ -101,7 +198,9 @@ export function ProblemCardPage({
               type="button"
               className="action-outline"
               disabled={revealing}
-              onClick={() => void run(setRevealing, onReveal)}
+              onClick={() => reviewing
+                ? void revealReviewAnswer()
+                : void run(setRevealing, onReveal)}
             >
               {revealing ? '正在打开…' : '查看标准答案'}
             </button>
@@ -110,10 +209,12 @@ export function ProblemCardPage({
               type="button"
               className="action-outline"
               disabled={attempting || revealing}
-              onClick={() => void run(setRevealing, async () => {
-                await onAttempt({ kind: 'cannot' });
-                await onReveal();
-              })}
+              onClick={() => reviewing
+                ? void cannotReview()
+                : void run(setRevealing, async () => {
+                  await onAttempt({ kind: 'cannot' });
+                  await onReveal();
+                })}
             >
               {revealing ? '正在打开…' : '不会，直接看答案'}
             </button>
@@ -122,7 +223,14 @@ export function ProblemCardPage({
       ) : (
         <section className="m1b-standard-answer">
           <small>标准答案</small>
-          <MarkdownView>{value.standardAnswer}</MarkdownView>
+          <MarkdownView>{value.standardAnswer ?? '答案已打开，正在刷新…'}</MarkdownView>
+          {reviewing && reviewRevealed && (
+            <div className="asset-review-rating" aria-label="本次回忆结果">
+              <button type="button" disabled={reviewBusy} className="action-outline" onClick={() => void rateReview('forgot')}>没想起来</button>
+              <button type="button" disabled={reviewBusy} className="action-outline" onClick={() => void rateReview('effortful')}>想起来了，但比较吃力</button>
+              <button type="button" disabled={reviewBusy} className="action-solid" onClick={() => void rateReview('fluent')}>顺利想起来</button>
+            </div>
+          )}
         </section>
       )}
 

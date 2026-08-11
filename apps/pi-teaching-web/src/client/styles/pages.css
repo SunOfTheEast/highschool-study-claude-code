@@ -78,3 +78,17 @@
   .calendar-layout { grid-template-columns: 1fr; }
   .calendar-day-panel { box-shadow: none; }
 }
+
+.asset-review-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  margin: var(--space-5) 0;
+  padding: var(--space-4) 0;
+  border-block: 1px solid var(--rule);
+}
+.asset-review-controls small { color: var(--ink-faint); letter-spacing: .1em; }
+.asset-review-controls p { margin: .25rem 0 0; color: var(--ink-soft); }
+.asset-review-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: var(--space-3); }
+.asset-review-rating { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }

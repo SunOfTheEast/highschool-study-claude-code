@@ -673,6 +673,16 @@ export function App() {
     content = note ? (
       <NotePage value={note} onSave={async (input) => {
         setNote(await api.updateNote(note.id, input));
+      }} onReview={async (result) => {
+        await api.assetReview('note', note.id, {
+          action: 'review', expectedRevision: note.revision, result,
+        });
+        setNote(await api.note(note.id));
+      }} onReviewAction={async (action) => {
+        await api.assetReview('note', note.id, {
+          action, expectedRevision: note.revision,
+        });
+        setNote(await api.note(note.id));
       }} onAskTeacher={() => void startFree([{ kind: 'note', id: note.id }])} onReload={() => {
         void loadRoute(route);
       }} />
@@ -682,8 +692,9 @@ export function App() {
       <ProblemCardPage
         value={problem}
         onAttempt={async (response: ProblemAttemptResponse) => {
-          await api.attemptProblem(problem.id, response);
+          const result = await api.attemptProblem(problem.id, response);
           setProblem(await api.problemCard(problem.id));
+          return result.event;
         }}
         onReveal={async () => {
           await api.revealProblem(problem.id);
@@ -691,6 +702,18 @@ export function App() {
         }}
         onSaveNote={async (input) => {
           await api.updateProblemNote(problem.id, input);
+          setProblem(await api.problemCard(problem.id));
+        }}
+        onReview={async (result, problemAttemptId) => {
+          await api.assetReview('problem-card', problem.id, {
+            action: 'review', expectedRevision: problem.revision, result, problemAttemptId,
+          });
+          setProblem(await api.problemCard(problem.id));
+        }}
+        onReviewAction={async (action) => {
+          await api.assetReview('problem-card', problem.id, {
+            action, expectedRevision: problem.revision,
+          });
           setProblem(await api.problemCard(problem.id));
         }}
         onAskTeacher={async () => {

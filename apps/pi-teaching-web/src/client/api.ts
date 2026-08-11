@@ -20,7 +20,12 @@ import type {
   MaterialLocatorSnapshot,
   MetaSessionSummary,
   ProblemActivitySnapshot,
+  ProblemAnswerRevealEvent,
+  ProblemAttemptEvent,
   ProblemAttemptResponse,
+  AssetReviewProjection,
+  ReviewEvent,
+  ReviewResult,
   AssetFormation,
   SemanticRelation,
   StudentProblemCard,
@@ -80,13 +85,22 @@ const remove = <T>(path: string, body: unknown) => json<T>(path, {
 export type LearningNoteView = LearningNote & {
   semanticTags: LearningAssetSemanticTags | null;
   formation: AssetFormation | null;
+  review: AssetReviewProjection | null;
 };
 
 export type ProblemCardView = StudentProblemCard & {
   activity: ProblemActivitySnapshot;
   semanticTags: LearningAssetSemanticTags | null;
   formation: AssetFormation | null;
+  review: AssetReviewProjection | null;
 };
+
+export type AssetReviewAction =
+  | { action: 'enroll' | 'remove' | 'restart'; expectedRevision: number }
+  | {
+    action: 'review'; expectedRevision: number; result: ReviewResult;
+    problemAttemptId?: string;
+  };
 
 export const api = {
   calendar: () => json<CalendarSnapshot>('/api/calendar'),
@@ -131,6 +145,15 @@ export const api = {
   ) => put<LearningNoteView>(`/api/assets/notes/${encodeURIComponent(id)}`, input),
   problemCard: (id: string) => json<ProblemCardView>(
     `/api/assets/problem-cards/${encodeURIComponent(id)}`,
+  ),
+  assetReview: (
+    kind: 'note' | 'problem-card',
+    id: string,
+    input: AssetReviewAction,
+    requestId = crypto.randomUUID(),
+  ) => post<{ event: ReviewEvent; review: AssetReviewProjection }>(
+    `/api/assets/${kind === 'note' ? 'notes' : 'problem-cards'}/${encodeURIComponent(id)}/review`,
+    { ...input, requestId },
   ),
   updateProblemNote: (
     id: string,
@@ -211,8 +234,12 @@ export const api = {
     id: string,
     response: ProblemAttemptResponse,
     requestId = crypto.randomUUID(),
-  ) => post(`/api/problem-cards/${encodeURIComponent(id)}/attempts`, { requestId, response }),
+  ) => post<{ event: ProblemAttemptEvent }>(
+    `/api/problem-cards/${encodeURIComponent(id)}/attempts`,
+    { requestId, response },
+  ),
   revealProblem: (id: string, requestId = crypto.randomUUID()) => post<{
+    event: ProblemAnswerRevealEvent;
     standardAnswer: string;
   }>(`/api/problem-cards/${encodeURIComponent(id)}/reveal`, { requestId }),
   askProblemTeacher: (id: string) => post<{

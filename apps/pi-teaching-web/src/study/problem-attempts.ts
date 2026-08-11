@@ -13,6 +13,12 @@ import { commitDocumentCandidates } from '../runtime/multi-document-transaction'
 import { readProblemCard } from './learning-assets';
 import { StudyDocumentError } from './markdown';
 import { isProblemCardId } from './problem-card-id';
+import {
+  localDateAt,
+  planAssetReviewEvent,
+  readAssetReviewHistory,
+  recordAssetReviewEvent,
+} from './asset-reviews';
 
 const stableIdPattern = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
 const eventIdPattern = /^event-([0-9]+)$/;
@@ -234,16 +240,29 @@ export function listProblemActivities(root: string): ProblemActivitySnapshot[] {
   }).sort((left, right) => left.cardId.localeCompare(right.cardId));
 }
 
-function appendEvent(root: string, event: ProblemActivityEvent): void {
+function eventCandidate(root: string, event: ProblemActivityEvent): ReturnType<
+  typeof activityEventCandidate
+> {
   const current = readActivity(root, event.cardId);
+  return activityEventCandidate(current, event);
+}
+
+function activityEventCandidate(
+  current: ReturnType<typeof readActivity>,
+  event: ProblemActivityEvent,
+) {
   const events = [...current.events, event];
   const after = renderSource(event.cardId, events);
-  commitDocumentCandidates(root, [{
+  return {
     path: current.path,
     before: current.before,
     after,
-    validate: (source) => { parseActivitySource(current.path, source, event.cardId); },
-  }]);
+    validate: (source: string) => { parseActivitySource(current.path, source, event.cardId); },
+  };
+}
+
+function appendEvent(root: string, event: ProblemActivityEvent): void {
+  commitDocumentCandidates(root, [eventCandidate(root, event)]);
 }
 
 function existingRequest(
@@ -292,8 +311,51 @@ export function recordProblemAttempt(
     answerViewedBefore,
     response: checked,
   };
-  appendEvent(root, event);
+  const activityCandidate = activityEventCandidate(current, event);
+  const asset = { kind: 'problem-card' as const, id: card.id };
+  const review = readAssetReviewHistory(root, asset);
+  const enrollment = review.projection === null
+    ? planAssetReviewEvent(root, asset, {
+      requestId: `first-attempt-${event.requestId}`,
+      at: checkedRecordedAt,
+      localDate: localDateAt(checkedRecordedAt),
+      event: {
+        kind: 'enrolled', assetRevision: card.revision,
+        trigger: { kind: 'first-attempt', problemAttemptId: event.id },
+      },
+    })
+    : null;
+  commitDocumentCandidates(root, [
+    activityCandidate,
+    ...(enrollment ? enrollment.candidates : []),
+  ]);
   return event;
+}
+
+export function migrateHistoricalProblemReviews(root: string, limit = 100): string[] {
+  if (!Number.isSafeInteger(limit) || limit < 1 || limit > 100) {
+    throw new Error('ASSET_REVIEW_MIGRATION_LIMIT_INVALID');
+  }
+  const migrated: string[] = [];
+  for (const activity of listProblemActivities(root)) {
+    if (migrated.length >= limit) break;
+    const attempt = activity.latestAttempt;
+    if (!attempt) continue;
+    const asset = { kind: 'problem-card' as const, id: activity.cardId };
+    if (readAssetReviewHistory(root, asset).projection !== null) continue;
+    const card = readProblemCard(root, activity.cardId);
+    recordAssetReviewEvent(root, asset, {
+      requestId: `historical-attempt-${attempt.requestId}`,
+      at: attempt.at,
+      localDate: localDateAt(attempt.at),
+      event: {
+        kind: 'enrolled', assetRevision: card.revision,
+        trigger: { kind: 'historical-attempt', problemAttemptId: attempt.id },
+      },
+    });
+    migrated.push(card.id);
+  }
+  return migrated;
 }
 
 export function revealProblemAnswer(

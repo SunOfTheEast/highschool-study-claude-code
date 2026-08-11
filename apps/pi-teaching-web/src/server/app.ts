@@ -11,6 +11,7 @@ import type {
   LearningContextReference,
   LearningNoteBlock,
   ProblemAttemptResponse,
+  ReviewResult,
   SemanticTagDraft,
   SessionKey,
 } from '../shared/contracts';
@@ -59,6 +60,12 @@ import { publicSessionErrorText } from '../client/public-errors';
 import type { FocusCycleSnapshot, FocusEnded, FocusTargetSeconds } from '../time/focus-cycle';
 import type { CalendarRepository } from '../runtime/calendar-tools';
 import type { CalendarAppointmentDraft, CalendarAppointmentPatch } from '../calendar/appointments';
+import {
+  localDateAt,
+  readAssetReviewHistory,
+  recordAssetReviewEvent,
+  type AssetReviewEventDraft,
+} from '../study/asset-reviews';
 
 type Lifecycle = Pick<
   NodeLifecycleService,
@@ -355,6 +362,11 @@ function noteBlocks(value: unknown): LearningNoteBlock[] {
     }
     throw new Error('NOTE_BLOCK_KIND_INVALID');
   });
+}
+
+function reviewResult(value: unknown): ReviewResult {
+  if (value === 'forgot' || value === 'effortful' || value === 'fluent') return value;
+  throw new Error('ASSET_REVIEW_RESULT_INVALID');
 }
 
 function nodeId(value: string): string | null {
@@ -816,6 +828,7 @@ export function createRequestHandler(deps?: AppDependencies) {
           const note = readLearningNote(deps.root, id);
           return json({
             ...note,
+            review: readAssetReviewHistory(deps.root, { kind: 'note', id }).projection,
             semanticTags: assetSemanticTags(deps.root, 'note', id),
             formation: projectAssetFormation(
               await deps.registry.listOwnedSessionFacts(),
@@ -838,6 +851,7 @@ export function createRequestHandler(deps?: AppDependencies) {
           deps.hub.publish({ type: 'assets-invalidated' });
           return json({
             ...planned.note,
+            review: readAssetReviewHistory(deps.root, { kind: 'note', id }).projection,
             semanticTags: assetSemanticTags(deps.root, 'note', id),
             formation: projectAssetFormation(
               await deps.registry.listOwnedSessionFacts(),
@@ -846,6 +860,69 @@ export function createRequestHandler(deps?: AppDependencies) {
             ...(warning ? { warning } : {}),
           });
         }
+      }
+
+      const assetReview = /^\/api\/assets\/(notes|problem-cards)\/([^/]+)\/review$/.exec(
+        url.pathname,
+      );
+      if (request.method === 'POST' && assetReview) {
+        const kind = assetReview[1] === 'notes' ? 'note' as const : 'problem-card' as const;
+        const id = kind === 'note' ? nodeId(assetReview[2]!) : problemCardId(assetReview[2]!);
+        if (!id) return json({ error: 'ASSET_ID_INVALID' }, 400);
+        const requestBody = objectBody(await request.json());
+        const expectedRevision = positiveRevision(requestBody.expectedRevision);
+        const requestId = requiredBodyString(requestBody.requestId, 'request id');
+        const asset = { kind, id } as const;
+        const current = kind === 'note'
+          ? readLearningNote(deps.root, id)
+          : readProblemCard(deps.root, id);
+        if (current.revision !== expectedRevision) throw new Error(`ASSET_REVISION_STALE: ${id}`);
+        const history = readAssetReviewHistory(deps.root, asset);
+        let event: AssetReviewEventDraft;
+        if (requestBody.action === 'enroll') {
+          if (history.projection?.active) throw new Error(`ASSET_REVIEW_ALREADY_ACTIVE: ${id}`);
+          event = {
+            kind: 'enrolled', assetRevision: current.revision, trigger: { kind: 'manual' },
+          };
+        } else if (requestBody.action === 'remove') {
+          event = { kind: 'removed' };
+        } else if (requestBody.action === 'restart') {
+          event = { kind: 'restarted', assetRevision: current.revision };
+        } else if (requestBody.action === 'review') {
+          const result = reviewResult(requestBody.result);
+          if (kind === 'note') {
+            const note = readLearningNote(deps.root, id);
+            if (!note.blocks.some((block) => block.kind === 'recall')) {
+              throw new Error(`NOTE_DIRECT_REVIEW_INELIGIBLE: ${id}`);
+            }
+            event = {
+              kind: 'reviewed', assetRevision: current.revision, result,
+              evidence: { kind: 'self-report', problemAttemptId: null },
+            };
+          } else {
+            const attemptId = requiredBodyString(requestBody.problemAttemptId, 'problem attempt id');
+            const activity = readProblemActivity(deps.root, id);
+            if (
+              activity.latestAttempt?.id !== attemptId
+              || activity.latestAttempt.cardRevision !== current.revision
+              || !activity.events.some((item) => (
+                item.kind === 'answer-reveal' && item.attemptId === attemptId
+              ))
+            ) throw new Error(`PROBLEM_REVIEW_INELIGIBLE: ${id}`);
+            event = {
+              kind: 'reviewed', assetRevision: current.revision, result,
+              evidence: { kind: 'self-report', problemAttemptId: attemptId },
+            };
+          }
+        } else {
+          throw new Error('ASSET_REVIEW_ACTION_INVALID');
+        }
+        const at = new Date().toISOString();
+        const recorded = recordAssetReviewEvent(deps.root, asset, {
+          requestId, at, localDate: localDateAt(at), event,
+        });
+        deps.hub.publish({ type: 'assets-invalidated' });
+        return json({ event: recorded.event, review: recorded.projection }, 201);
       }
 
       const problemAsset = /^\/api\/assets\/problem-cards\/([^/]+)$/.exec(url.pathname);
@@ -859,6 +936,7 @@ export function createRequestHandler(deps?: AppDependencies) {
         return json({
           ...readStudentProblemCard(deps.root, id, revealed),
           activity,
+          review: readAssetReviewHistory(deps.root, { kind: 'problem-card', id }).projection,
           semanticTags: assetSemanticTags(deps.root, 'problem-card', id),
           formation: projectAssetFormation(
             await deps.registry.listOwnedSessionFacts(),

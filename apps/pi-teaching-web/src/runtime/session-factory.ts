@@ -47,6 +47,7 @@ import {
 import { sessionCustomMessageContent } from './session-custom-messages';
 import { createCalendarRepository } from '../calendar/appointments';
 import type { CalendarRepository } from './calendar-tools';
+import { migrateHistoricalProblemReviews } from '../study/problem-attempts';
 
 export interface StudySession {
   readonly sessionId: string;
@@ -168,6 +169,7 @@ export async function createPiSessionFactory(
   options?: PiRuntimeOptions,
 ): Promise<StudySessionFactory> {
   recoverSessionFactoryState(root);
+  migrateHistoricalProblemReviews(root);
   configureStudySubagentDirectory();
   if (options) {
     process.env.PI_CODING_AGENT_DIR = options.agentDir;

@@ -14,6 +14,7 @@ import {
   type DocumentCandidate,
 } from '../runtime/multi-document-transaction';
 import { StudyDocumentError } from './markdown';
+import { isProblemCardId } from './problem-card-id';
 
 export const ASSET_REVIEW_POLICY = 'fixed-ladder-v1' as const;
 export const ASSET_REVIEW_INTERVAL_DAYS = [1, 3, 7, 14, 30, 60, 120] as const;
@@ -22,6 +23,16 @@ export const ASSET_REVIEW_INDEX_PATH = 'activity/asset-reviews/index.tsv';
 const stableIdPattern = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
 const eventIdPattern = /^event-([0-9]+)$/;
 const localDatePattern = /^\d{4}-\d{2}-\d{2}$/;
+
+export function localDateAt(value: string | Date): string {
+  const date = typeof value === 'string' ? new Date(value) : value;
+  if (Number.isNaN(date.getTime())) throw new Error('event time is invalid');
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, '0'),
+    String(date.getDate()).padStart(2, '0'),
+  ].join('-');
+}
 
 export type AssetReviewEventDraft =
   | {
@@ -115,7 +126,10 @@ function checkedAsset(asset: LearningAssetHandle): LearningAssetHandle {
   if (asset.kind !== 'note' && asset.kind !== 'problem-card') {
     throw new Error('asset kind is invalid');
   }
-  return { kind: asset.kind, id: checkedId(asset.id, 'asset id') };
+  const id = requiredText(asset.id, 'asset id');
+  const valid = asset.kind === 'problem-card' ? isProblemCardId(id) : stableIdPattern.test(id);
+  if (!valid) throw new Error('asset id is invalid');
+  return { kind: asset.kind, id };
 }
 
 function checkedTrigger(value: unknown, asset: LearningAssetHandle): ReviewEnrollmentTrigger {

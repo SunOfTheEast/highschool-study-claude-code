@@ -611,26 +611,26 @@ git commit -m "feat: add append-only asset review history"
 - A legacy Problem Card first real attempt enrolls with `first-attempt`; one bounded startup migration enrolls only cards with actual historical attempt logs.
 - Direct endpoints support enroll/remove/restart/review; Runtime binds revision, current attempt, reveal, date, and event IDs.
 
-- [ ] **Step 1: Write RED tests for enrollment boundaries**
+- [x] **Step 1: Write RED tests for enrollment boundaries**
 
 Assert new asset save is atomic with enrollment; failed enrollment fails the asset transaction; 519 untouched legacy cards remain absent; historical migration reads only attempt logs; plain open/reveal/search/lesson use does not enroll.
 
-- [ ] **Step 2: Write direct-review UI/API RED tests**
+- [x] **Step 2: Write direct-review UI/API RED tests**
 
 For Note: only recall-block Notes offer direct review; all current blocks must reveal before rating; revision change aborts. For Problem Card: review mode re-hides prior answers, requires a new attempt/cannot plus reveal, and binds that attempt before accepting one rating.
 
-- [ ] **Step 3: Run RED**
+- [x] **Step 3: Run RED**
 
 ```bash
 cd apps/pi-teaching-web
 bun test tests/m2/asset-review-enrollment.test.ts tests/m2/direct-asset-review.test.tsx
 ```
 
-- [ ] **Step 4: Implement atomic hooks and direct controls**
+- [x] **Step 4: Implement atomic hooks and direct controls**
 
 Add review candidates to `planLearningNoteSave`/`planProblemCardSave` rather than performing a second write after commit. Extend the existing Problem attempt transaction for first enrollment. Asset pages show only next date, interval, and `现在复习 / 移出复习 / 重新开始` or `加入复习`; no strength, score, or streak.
 
-- [ ] **Step 5: Verify and commit**
+- [x] **Step 5: Verify and commit**
 
 ```bash
 cd apps/pi-teaching-web

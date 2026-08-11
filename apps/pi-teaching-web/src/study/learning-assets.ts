@@ -29,6 +29,7 @@ import {
   semanticTagsPath,
   type SemanticTags,
 } from './semantic-tags';
+import { localDateAt, planAssetReviewEvent } from './asset-reviews';
 
 export type { LearningNote, LearningNoteBlock, StudentProblemCard } from '../shared/contracts';
 
@@ -694,11 +695,22 @@ export function planLearningNoteSave(
     recordedAt,
     draft.target === undefined,
   );
+  const enrollment = draft.target === undefined
+    ? planAssetReviewEvent(root, { kind: 'note', id: note.id }, {
+      requestId: `asset-saved-note-${note.id}-r${note.revision}`,
+      at: recordedAt,
+      localDate: localDateAt(recordedAt),
+      event: {
+        kind: 'enrolled', assetRevision: note.revision, trigger: { kind: 'asset-saved' },
+      },
+    })
+    : null;
   return {
     candidates: [
       ...(archive ? [archive] : []),
       noteCandidate(note, before),
       ...(tagPlan ? [tagPlan.candidate] : []),
+      ...(enrollment ? enrollment.candidates : []),
     ],
     receipt: { kind: 'note', id: note.id, revision: note.revision, path: note.path },
     note,
@@ -833,11 +845,22 @@ export function planProblemCardSave(
     recordedAt,
     draft.target === undefined,
   );
+  const enrollment = draft.target === undefined
+    ? planAssetReviewEvent(root, { kind: 'problem-card', id: card.id }, {
+      requestId: `asset-saved-problem-card-${card.id}-r${card.revision}`,
+      at: recordedAt,
+      localDate: localDateAt(recordedAt),
+      event: {
+        kind: 'enrolled', assetRevision: card.revision, trigger: { kind: 'asset-saved' },
+      },
+    })
+    : null;
   return {
     candidates: [
       ...(archive ? [archive] : []),
       problemCandidate(root, card, before),
       ...(tagPlan ? [tagPlan.candidate] : []),
+      ...(enrollment ? enrollment.candidates : []),
     ],
     receipt: { kind: 'problem-card', id: card.id, revision: card.revision, path: card.path },
     card,

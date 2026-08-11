@@ -1,18 +1,22 @@
 import { useEffect, useState } from 'react';
 import type {
   AssetFormation,
+  AssetReviewProjection,
   LearningAssetSemanticTags,
   LearningNote,
   LearningNoteBlock,
+  ReviewResult,
 } from '../../shared/contracts';
 import { ApiError } from '../api';
 import { AssetProvenance, AssetTags } from '../components/AssetSources';
 import { MarkdownView } from '../components/MarkdownView';
 import { publicErrorText } from '../public-errors';
+import { AssetReviewControls } from '../components/AssetReviewControls';
 
 type NoteView = LearningNote & {
   semanticTags?: LearningAssetSemanticTags | null;
   formation?: AssetFormation | null;
+  review?: AssetReviewProjection | null;
 };
 
 export function NotePage({
@@ -20,11 +24,15 @@ export function NotePage({
   onSave,
   onAskTeacher,
   onReload,
+  onReview,
+  onReviewAction,
 }: {
   value: NoteView;
   onSave(input: { expectedRevision: number; title: string; blocks: LearningNoteBlock[] }): Promise<void>;
   onAskTeacher?(): void;
   onReload?(): void;
+  onReview?(result: ReviewResult): Promise<void>;
+  onReviewAction?(action: 'enroll' | 'remove' | 'restart'): Promise<void>;
 }) {
   const [editing, setEditing] = useState(false);
   const [title, setTitle] = useState(value.title);
@@ -34,6 +42,10 @@ export function NotePage({
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
+  const [reviewing, setReviewing] = useState(false);
+  const [reviewRevision, setReviewRevision] = useState(value.revision);
+  const [reviewBusy, setReviewBusy] = useState(false);
+  const [reviewError, setReviewError] = useState<string | null>(null);
 
   useEffect(() => {
     if (editing) return;
@@ -41,6 +53,12 @@ export function NotePage({
     setBlocks(value.blocks);
     setBaseRevision(value.revision);
   }, [value.id, value.revision, editing]);
+
+  useEffect(() => {
+    if (!reviewing || value.revision === reviewRevision) return;
+    setReviewing(false);
+    setReviewError('笔记刚刚更新了，请从最新版重新开始复习。');
+  }, [reviewing, reviewRevision, value.revision]);
 
   const beginEdit = () => {
     setTitle(value.title);
@@ -61,6 +79,32 @@ export function NotePage({
     setBlocks((current) => current.map((item, position) => position === index ? block : item));
   };
   const stale = editing && baseRevision !== value.revision;
+  const recallBlocks = value.blocks.flatMap((block, index) => (
+    block.kind === 'recall' ? [{ block, index }] : []
+  ));
+  const allReviewAnswersShown = recallBlocks.length > 0
+    && recallBlocks.every(({ index }) => revealed.includes(index));
+
+  const startReview = () => {
+    setRevealed([]);
+    setReviewRevision(value.revision);
+    setReviewError(null);
+    setReviewing(true);
+  };
+
+  const rateReview = async (result: ReviewResult) => {
+    if (!onReview || !allReviewAnswersShown || reviewRevision !== value.revision) return;
+    setReviewBusy(true);
+    setReviewError(null);
+    try {
+      await onReview(result);
+      setReviewing(false);
+    } catch (error) {
+      setReviewError(publicErrorText(error, '这次复习结果暂时没有保存，请稍后再试。'));
+    } finally {
+      setReviewBusy(false);
+    }
+  };
 
   return (
     <main className="m1b-note-page asset-reading-page">
@@ -86,6 +130,14 @@ export function NotePage({
       </header>
       <AssetTags value={value.semanticTags} />
       <AssetProvenance formation={value.formation ?? null} sources={value.sources} />
+      <AssetReviewControls
+        review={value.review ?? null}
+        direct={recallBlocks.length > 0}
+        {...(onReview && recallBlocks.length > 0 ? { onStart: startReview } : {})}
+        {...(onAskTeacher ? { onTeacher: onAskTeacher } : {})}
+        {...(onReviewAction ? { onManage: onReviewAction } : {})}
+      />
+      {reviewError && <p className="inline-error" role="alert">{reviewError}</p>}
       {editing ? (
         <form onSubmit={(event) => {
           event.preventDefault();
@@ -131,6 +183,25 @@ export function NotePage({
             {saving ? '正在保存…' : '保存修改'}
           </button>
         </form>
+      ) : reviewing ? (
+        <section className="m1b-note-blocks" aria-label="直接复习">
+          {recallBlocks.map(({ block, index }) => (
+            <article className="m1b-recall" key={index}>
+              <small>先在心里回答</small>
+              <MarkdownView>{block.prompt}</MarkdownView>
+              {revealed.includes(index)
+                ? <div className="m1b-recall-answer"><MarkdownView>{block.answer}</MarkdownView></div>
+                : <button type="button" className="action-outline" onClick={() => setRevealed((current) => [...current, index])}>显示答案</button>}
+            </article>
+          ))}
+          {allReviewAnswersShown && (
+            <div className="asset-review-rating" aria-label="本次回忆结果">
+              <button type="button" disabled={reviewBusy} className="action-outline" onClick={() => void rateReview('forgot')}>没想起来</button>
+              <button type="button" disabled={reviewBusy} className="action-outline" onClick={() => void rateReview('effortful')}>想起来了，但比较吃力</button>
+              <button type="button" disabled={reviewBusy} className="action-solid" onClick={() => void rateReview('fluent')}>顺利想起来</button>
+            </div>
+          )}
+        </section>
       ) : (
         <section className="m1b-note-blocks">
           {saved && <p className="inline-success" role="status">笔记已保存。</p>}

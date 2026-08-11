@@ -59,6 +59,8 @@ test('creates canonical content and an independently revisioned semantic sidecar
   expect(planned.candidates.map((candidate) => candidate.path)).toEqual([
     'notes/note-001.note.yaml',
     'semantics/assets/note/note-001.tags.yaml',
+    'activity/asset-reviews/notes/note-001.md',
+    'activity/asset-reviews/index.tsv',
   ]);
   commitDocumentCandidates(root, planned.candidates);
 
