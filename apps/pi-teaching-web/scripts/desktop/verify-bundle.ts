@@ -34,6 +34,28 @@ function requireFiles(root: string, paths: string[]): void {
   }
 }
 
+export function isPrivateLive2DArtifactPath(path: string): boolean {
+  const normalized = `/${path.replaceAll('\\', '/').toLowerCase()}`;
+  return normalized.includes('/peer-axia/live2d/')
+    || normalized.endsWith('/peer-axia/live2d')
+    || /\.(?:moc3|cmo3|psd)$/.test(normalized)
+    || /\.(?:physics3|exp3)\.json$/.test(normalized)
+    || normalized.endsWith('/live2dcubismcore.min.js');
+}
+
+function findPrivateLive2DArtifact(root: string, relative = ''): string | null {
+  const directory = join(root, relative);
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    const child = relative ? `${relative}/${entry.name}` : entry.name;
+    if (isPrivateLive2DArtifactPath(child)) return child;
+    if (entry.isDirectory()) {
+      const nested = findPrivateLive2DArtifact(root, child);
+      if (nested) return nested;
+    }
+  }
+  return null;
+}
+
 async function requireArm64(path: string): Promise<void> {
   const description = await command('/usr/bin/file', [path]);
   if (!description.includes('arm64')) throw new Error(`STUDYFORGE_NOT_ARM64: ${description}`);
@@ -57,6 +79,10 @@ export async function verifyBundle(appRoot = resolve(import.meta.dir, '../..')):
   try {
     await command('/usr/bin/hdiutil', ['attach', '-nobrowse', '-readonly', '-mountpoint', mount, dmg]);
     const app = join(mount, 'StudyForge.app');
+    const privateLive2DArtifact = findPrivateLive2DArtifact(app);
+    if (privateLive2DArtifact) {
+      throw new Error(`STUDYFORGE_PRIVATE_LIVE2D_ARTIFACT: ${privateLive2DArtifact}`);
+    }
     requireFiles(app, [
       'Contents/MacOS/studyforge-desktop',
       'Contents/MacOS/studyforge-runtime',

@@ -1,6 +1,7 @@
 import { expect, test } from 'bun:test';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { isPrivateLive2DArtifactPath } from '../../scripts/desktop/verify-bundle';
 
 const appRoot = join(import.meta.dir, '../..');
 
@@ -51,4 +52,25 @@ test('keeps private source paths out of the tracked application surface', () => 
   const privateActorPath = ['/StudyForge/actors/', 'peer-axia/neutral.png'].join('');
   expect(trackedText).not.toContain(privateWechatPath);
   expect(trackedText).not.toContain(privateActorPath);
+});
+
+test('permits only the local Core blob and rejects private Live2D files from a release', () => {
+  const config = JSON.parse(
+    readFileSync(join(appRoot, 'src-tauri/tauri.conf.json'), 'utf8'),
+  ) as { app: { security: { csp: string } } };
+  expect(config.app.security.csp).toContain("script-src 'self' blob:");
+  expect(config.app.security.csp).not.toContain('unsafe-eval');
+
+  for (const path of [
+    'Contents/Resources/axia.moc3',
+    'Contents/Resources/source/axia.cmo3',
+    'Contents/Resources/source/axia-master.psd',
+    'Contents/Resources/runtime/axia.physics3.json',
+    'Contents/Resources/runtime/curious.exp3.json',
+    'Contents/Resources/runtime/live2dcubismcore.min.js',
+    'Contents/Resources/actors/peer-axia/live2d/manifest.json',
+  ]) {
+    expect(isPrivateLive2DArtifactPath(path), path).toBe(true);
+  }
+  expect(isPrivateLive2DArtifactPath('Contents/Resources/studyforge/peers/axia.md')).toBe(false);
 });
