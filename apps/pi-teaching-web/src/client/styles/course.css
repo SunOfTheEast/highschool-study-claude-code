@@ -434,6 +434,29 @@
   font-size: var(--text-label);
 }
 .tool-receipt small[data-status="error"] { color: var(--danger); }
+.learning-asset-saved-receipt { align-items: baseline; }
+.learning-asset-saved-receipt a { color: var(--accent-deep); text-underline-offset: .18em; }
+.learning-asset-proposal {
+  margin: var(--space-4) 0 var(--space-5) 4.25rem;
+  padding: var(--space-4) var(--space-5);
+  border-top: 2px solid var(--accent);
+  border-bottom: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--paper-deep) 58%, transparent);
+}
+.learning-asset-proposal > small {
+  color: var(--accent-deep);
+  font: var(--text-micro)/1.4 var(--font-mono);
+  letter-spacing: .08em;
+}
+.learning-asset-proposal h3 { margin: var(--space-2) 0 var(--space-3); }
+.proposal-student-note,
+.proposal-answer-boundary { margin-top: var(--space-4); }
+.proposal-student-note {
+  padding-top: var(--space-3);
+  border-top: 1px dotted var(--rule);
+}
+.proposal-student-note strong { display: block; margin-bottom: var(--space-2); }
+.proposal-answer-boundary { color: var(--ink-faint); font-size: var(--text-label); }
 .tool-activity summary,
 .subagent-activity {
   display: flex;

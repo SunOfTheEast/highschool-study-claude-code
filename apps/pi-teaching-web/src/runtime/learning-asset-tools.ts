@@ -80,10 +80,30 @@ const cardParameters = Type.Union([
   Type.Object({ ...cardContentParameters, target }, { additionalProperties: false }),
 ]);
 
-function toolResult(value: Record<string, unknown>) {
+function assetRoute(kind: 'note' | 'problem-card', id: string): string {
+  const collection = kind === 'note' ? 'notes' : 'problem-cards';
+  return `/assets/${collection}/${encodeURIComponent(id)}`;
+}
+
+function toolResult(
+  value: Record<string, unknown>,
+  asset: {
+    kind: 'note' | 'problem-card';
+    id: string;
+    revision: number;
+    title: string;
+  },
+) {
   return {
     content: [{ type: 'text' as const, text: JSON.stringify(value) }],
-    details: { kind: 'learning-asset-save' },
+    details: {
+      kind: 'learning-asset-save' as const,
+      version: 1 as const,
+      asset: {
+        ...asset,
+        route: assetRoute(asset.kind, asset.id),
+      },
+    },
   };
 }
 
@@ -134,6 +154,11 @@ export function createLearningAssetTools(
           commitId: committed.commitId,
           changedPaths: committed.changedPaths,
           ...(warning ? { warning } : {}),
+        }, {
+          kind: 'note',
+          id: planned.note.id,
+          revision: planned.note.revision,
+          title: planned.note.title,
         });
         successful.set(toolCallId, result);
         return result;
@@ -142,7 +167,7 @@ export function createLearningAssetTools(
     defineTool({
       name: 'save_problem_card',
       label: '保存题卡',
-      description: 'Create or revise one canonical problem card only after the student has seen the proposed stem and answer and explicitly approved saving it.',
+      description: 'Create or revise one canonical problem card only after the student has seen its public stem and note proposal and explicitly approved saving that proposal.',
       executionMode: 'sequential',
       parameters: cardParameters,
       execute: async (toolCallId, input) => {
@@ -172,6 +197,11 @@ export function createLearningAssetTools(
           commitId: committed.commitId,
           changedPaths: committed.changedPaths,
           ...(warning ? { warning } : {}),
+        }, {
+          kind: 'problem-card',
+          id: planned.card.id,
+          revision: planned.card.revision,
+          title: planned.card.title,
         });
         successful.set(toolCallId, result);
         return result;

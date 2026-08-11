@@ -486,6 +486,45 @@ export type PaperResearchConversationItem = {
   updatedAt: string;
 };
 
+export type LearningAssetProposalConversationItem =
+  | {
+    id: string;
+    kind: 'learning-asset-proposal';
+    assetKind: 'note';
+    mode: 'create' | 'revise';
+    targetRevision: number | null;
+    title: string;
+    blocks: LearningNoteBlock[];
+    status: 'shown';
+    at: string;
+  }
+  | {
+    id: string;
+    kind: 'learning-asset-proposal';
+    assetKind: 'problem-card';
+    mode: 'create' | 'revise';
+    targetRevision: number | null;
+    stem: string;
+    studentNote: string;
+    status: 'shown';
+    at: string;
+  };
+
+export type LearningAssetSavedConversationItem = {
+  id: string;
+  kind: 'learning-asset-saved';
+  assetKind: LearningAssetKind;
+  status: 'running' | 'done' | 'error';
+  asset: {
+    kind: LearningAssetKind;
+    id: string;
+    revision: number;
+    title: string;
+    route: string;
+  } | null;
+  at: string;
+};
+
 export type LessonHandoutConversationItem = {
   id: string;
   kind: 'lesson-handout';
@@ -525,6 +564,8 @@ export type ConversationItem =
   | PeerConversationItem
   | MaterialSearchConversationItem
   | PaperResearchConversationItem
+  | LearningAssetProposalConversationItem
+  | LearningAssetSavedConversationItem
   | LessonReviewConversationItem
   | LessonHandoutConversationItem
   | {

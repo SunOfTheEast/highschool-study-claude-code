@@ -322,7 +322,11 @@ export function createRequestHandler(deps?: AppDependencies) {
         if (
           event.type === 'tool_execution_end'
           && !event.isError
-          && (event.toolName === 'save_note' || event.toolName === 'save_problem_card')
+          && (
+            event.toolName === 'save_note'
+            || event.toolName === 'save_problem_card'
+            || event.toolName === 'save_prepared_problem_card'
+          )
         ) {
           deps.hub.publish({ type: 'home-invalidated' });
           deps.hub.publish({ type: 'assets-invalidated' });

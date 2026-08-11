@@ -58,6 +58,7 @@ export const PLAN_MODEL_TOOLS = [
   ...M0_MODEL_TOOLS,
   'subagent',
   'artifact_export',
+  'propose_problem_card',
   'save_prepared_problem_card',
 ] as const;
 
@@ -68,6 +69,8 @@ export const LESSON_MODEL_TOOLS = [
   'ls',
   'classroom_log_append',
   'classroom_update',
+  'propose_note',
+  'propose_problem_card',
   'save_note',
   'save_problem_card',
   'finish_lesson',
@@ -78,6 +81,8 @@ export const FREE_LEARNING_MODEL_TOOLS = [
   'grep',
   'find',
   'ls',
+  'propose_note',
+  'propose_problem_card',
   'save_note',
   'save_problem_card',
 ] as const;

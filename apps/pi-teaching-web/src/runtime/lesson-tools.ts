@@ -21,6 +21,7 @@ import { createLessonMemoryTool } from './memory-tools';
 import { createNodeFinishTool } from './node-finish-tools';
 import type { PaperResearchResponder } from './paper-research-runner';
 import { createPaperResearchTool } from './paper-research-tools';
+import { createLearningAssetProposalTools } from './learning-asset-proposal-tools';
 
 const blockId = Type.String({
   pattern: '^[A-Za-z0-9][A-Za-z0-9._-]*$',
@@ -245,6 +246,7 @@ export function createLessonTools(
       resolve: (aliases) => resolveLessonSourceAliases(boundSources, aliases),
     }, session)
     : [];
+  const proposalTools = session ? createLearningAssetProposalTools() : [];
   const memoryTool = session ? createLessonMemoryTool(root, lessonPath, session) : null;
   const paperResearch = paperResearchResponder
     ? createPaperResearchTool(paperResearchResponder)
@@ -254,10 +256,18 @@ export function createLessonTools(
     ? [
       logTool,
       updateTool,
+      ...proposalTools,
       ...assetTools,
       memoryTool,
       ...(paperResearch ? [paperResearch] : []),
       finishTool,
     ]
-    : [logTool, updateTool, ...assetTools, ...(paperResearch ? [paperResearch] : []), finishTool];
+    : [
+      logTool,
+      updateTool,
+      ...proposalTools,
+      ...assetTools,
+      ...(paperResearch ? [paperResearch] : []),
+      finishTool,
+    ];
 }

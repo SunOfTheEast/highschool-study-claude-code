@@ -15,6 +15,7 @@ import {
 import type { NodeSessionScope } from './session-scope';
 import { createPlanMemoryTools } from './memory-tools';
 import { createNodeFinishTool } from './node-finish-tools';
+import { createPlanProblemCardProposalTool } from './learning-asset-proposal-tools';
 
 const nodeId = Type.String({
   pattern: '^[A-Za-z0-9][A-Za-z0-9._-]*$',
@@ -193,14 +194,30 @@ export function createPlanTools(
       } catch (error) {
         warning = `RECALL_INDEX_REFRESH_FAILED: ${error instanceof Error ? error.message : String(error)}`;
       }
-      const receipt = result({
-        ok: true,
-        asset: planned.receipt,
-        lesson: { id: input.lessonId, blockId: input.blockId, path: attached.path },
-        commitId: committed.commitId,
-        changedPaths: committed.changedPaths,
-        ...(warning ? { warning } : {}),
-      }, 'learning-asset-save');
+      const receipt = {
+        content: [{
+          type: 'text' as const,
+          text: JSON.stringify({
+          ok: true,
+          asset: planned.receipt,
+          lesson: { id: input.lessonId, blockId: input.blockId, path: attached.path },
+          commitId: committed.commitId,
+          changedPaths: committed.changedPaths,
+          ...(warning ? { warning } : {}),
+          }),
+        }],
+        details: {
+          kind: 'learning-asset-save' as const,
+          version: 1 as const,
+          asset: {
+            kind: 'problem-card' as const,
+            id: planned.card.id,
+            revision: planned.card.revision,
+            title: planned.card.title,
+            route: `/assets/problem-cards/${encodeURIComponent(planned.card.id)}`,
+          },
+        },
+      };
       successful.set(toolCallId, receipt);
       return receipt;
     },
@@ -208,6 +225,7 @@ export function createPlanTools(
 
   return [
     exportTool,
+    createPlanProblemCardProposalTool(),
     ...(savePreparedCard ? [savePreparedCard] : []),
     ...createPlanMemoryTools(root),
     createNodeFinishTool(root, 'plan', scope.nodePath),

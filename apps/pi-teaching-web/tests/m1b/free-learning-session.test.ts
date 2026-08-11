@@ -167,7 +167,8 @@ test('loads only the free-learning root contract, memory index and selected asse
 
   expect(resources.skillPaths.map((path) => basename(dirname(path)))).toEqual(['free-learning']);
   expect(resources.tools).toEqual([
-    'read', 'grep', 'find', 'ls', 'save_note', 'save_problem_card',
+    'read', 'grep', 'find', 'ls', 'propose_note', 'propose_problem_card',
+    'save_note', 'save_problem_card',
     'free_learning_memory_commit',
   ]);
   expect(assembled).toContain('自由学习');

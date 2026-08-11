@@ -32,6 +32,11 @@ function upsert(items: ConversationItem[], incoming: ConversationItem): Conversa
     next[index] = mergeMaterialSearchItem(existing, incoming);
   } else if (existing.kind === 'paper-research' && incoming.kind === 'paper-research') {
     next[index] = mergePaperResearchItem(existing, incoming);
+  } else if (
+    existing.kind === 'learning-asset-saved'
+    && incoming.kind === 'learning-asset-saved'
+  ) {
+    next[index] = { ...incoming, at: existing.at };
   } else if (existing.kind === 'lesson-review' && incoming.kind === 'lesson-review') {
     next[index] = mergeLessonReviewItem(existing, incoming);
   } else if (

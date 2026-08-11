@@ -76,12 +76,16 @@ test('exposes two classroom tools plus the conditional M1 memory tool', () => {
   expect(tools.map((tool) => tool.name)).toEqual([
     'classroom_log_append',
     'classroom_update',
+    'propose_note',
+    'propose_problem_card',
     'save_note',
     'save_problem_card',
     'lesson_memory_commit',
     'finish_lesson',
   ]);
   expect(tools.map((tool) => tool.executionMode)).toEqual([
+    'sequential',
+    'sequential',
     'sequential',
     'sequential',
     'sequential',
@@ -131,6 +135,8 @@ test('exposes two classroom tools plus the conditional M1 memory tool', () => {
   expect(createLessonTools(m0, lessonPath, session).map((tool) => tool.name)).toEqual([
     'classroom_log_append',
     'classroom_update',
+    'propose_note',
+    'propose_problem_card',
     'save_note',
     'save_problem_card',
     'finish_lesson',

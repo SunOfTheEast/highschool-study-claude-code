@@ -2,6 +2,7 @@ import type { AgentSessionEvent, SessionEntry } from '@earendil-works/pi-coding-
 import type {
   ConversationItem,
   LessonReviewConversationItem,
+  LearningAssetSavedConversationItem,
   MaterialSearchConversationItem,
   PaperResearchConversationItem,
   PeerConversationItem,
@@ -22,6 +23,14 @@ import {
   paperResearchStart,
   paperResearchUpdate,
 } from './paper-research';
+import {
+  fallbackTool,
+  isLearningAssetProposalTool,
+  isLearningAssetSaveTool,
+  learningAssetProposalStart,
+  learningAssetSaveEnd,
+  learningAssetSaveStart,
+} from './learning-asset-proposal';
 
 function contentText(content: unknown): string {
   if (typeof content === 'string') return content;
@@ -71,6 +80,20 @@ export function projectConversationEntries(
       if (text) items.push({ id: entry.id, kind: 'assistant', text, at: entry.timestamp });
       for (const call of toolCalls(message.content)) {
         toolPositions.set(call.id, items.length);
+        if (isLearningAssetProposalTool(call.name)) {
+          items.push(learningAssetProposalStart(
+            call.id,
+            call.name,
+            call.arguments,
+            entry.timestamp,
+          ) ?? fallbackTool(call.id, call.name, 'running', entry.timestamp));
+          continue;
+        }
+        if (isLearningAssetSaveTool(call.name)) {
+          items.push(learningAssetSaveStart(call.id, call.name, entry.timestamp)
+            ?? fallbackTool(call.id, call.name, 'running', entry.timestamp));
+          continue;
+        }
         if (call.name === 'ask_peer') {
           items.push(peerMessageStart(call.id, call.arguments, entry.timestamp, 'history') ?? {
             id: call.id,
@@ -114,6 +137,35 @@ export function projectConversationEntries(
     ) {
       const position = toolPositions.get(message.toolCallId);
       const previous = position === undefined ? undefined : items[position];
+      if (isLearningAssetProposalTool(message.toolName)) {
+        continue;
+      }
+      if (isLearningAssetSaveTool(message.toolName)) {
+        const started = previous?.kind === 'learning-asset-saved'
+          ? previous as LearningAssetSavedConversationItem
+          : undefined;
+        const saved = learningAssetSaveEnd(
+          message.toolCallId,
+          message.toolName,
+          { details: message.details },
+          message.isError === true,
+          entry.timestamp,
+          started,
+        );
+        const item = saved ?? fallbackTool(
+          message.toolCallId,
+          message.toolName,
+          message.isError === true ? 'error' : 'done',
+          entry.timestamp,
+        );
+        if (position === undefined) {
+          toolPositions.set(message.toolCallId, items.length);
+          items.push(item);
+        } else {
+          items[position] = item;
+        }
+        continue;
+      }
       if (message.toolName === 'ask_peer') {
         const started = previous?.kind === 'peer'
           ? previous as PeerConversationItem
@@ -267,6 +319,26 @@ export function projectLiveSessionEvent(
     }];
   }
   if (event.type === 'tool_execution_start') {
+    if (isLearningAssetProposalTool(event.toolName)) {
+      return [{
+        type: 'conversation-item',
+        sessionKey,
+        item: learningAssetProposalStart(
+          event.toolCallId,
+          event.toolName,
+          event.args,
+          at,
+        ) ?? fallbackTool(event.toolCallId, event.toolName, 'running', at),
+      }];
+    }
+    if (isLearningAssetSaveTool(event.toolName)) {
+      return [{
+        type: 'conversation-item',
+        sessionKey,
+        item: learningAssetSaveStart(event.toolCallId, event.toolName, at)
+          ?? fallbackTool(event.toolCallId, event.toolName, 'running', at),
+      }];
+    }
     if (event.toolName === 'ask_peer') {
       const peer = peerMessageStart(event.toolCallId, event.args, at, 'live');
       return [{
@@ -338,6 +410,25 @@ export function projectLiveSessionEvent(
     }] : [];
   }
   if (event.type === 'tool_execution_end') {
+    if (isLearningAssetProposalTool(event.toolName)) return [];
+    if (isLearningAssetSaveTool(event.toolName)) {
+      return [{
+        type: 'conversation-item',
+        sessionKey,
+        item: learningAssetSaveEnd(
+          event.toolCallId,
+          event.toolName,
+          event.result,
+          event.isError,
+          at,
+        ) ?? fallbackTool(
+          event.toolCallId,
+          event.toolName,
+          event.isError ? 'error' : 'done',
+          at,
+        ),
+      }];
+    }
     if (event.toolName === 'ask_peer') {
       const peer = peerMessageEnd(
         event.toolCallId,

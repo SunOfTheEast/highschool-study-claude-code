@@ -202,26 +202,26 @@ propose_problem_card({ stem, studentNote, standardAnswer, teacherRationale, targ
 - Student projection for Problem Card omits `standardAnswer` and `teacherRationale` at the TypeScript boundary.
 - Save receipts include kind/id/revision/title/route and render as links; proposals have no save/edit buttons or mutable status.
 
-- [ ] **Step 1: Write RED tests for scope, side effects, privacy, and receipt links**
+- [x] **Step 1: Write RED tests for scope, side effects, privacy, and receipt links**
 
 Use a temporary learning set and assert proposal execution leaves its file tree byte-for-byte unchanged. Reconstruct history from native tool calls and assert Note recall answers are locally collapsible, Problem Card answer/rationale strings are absent from rendered markup, Plan accepts only the narrow shape, and saved receipts link to `/assets/notes/:id` or `/assets/problem-cards/:id`.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 ```bash
 cd apps/pi-teaching-web
 bun test tests/m2/learning-asset-proposals.test.tsx
 ```
 
-- [ ] **Step 3: Implement stateless proposal tools and projections**
+- [x] **Step 3: Implement stateless proposal tools and projections**
 
 Return `details.kind = 'learning-asset-proposal'` with a discriminated public payload. Do not generate an ID, revision, confirmation token, draft file, or session state. Keep the full native tool arguments in Pi history for the teacher, but construct the public Problem Card item from stem/studentNote only.
 
-- [ ] **Step 4: Upgrade existing save receipts and Skill sequence**
+- [x] **Step 4: Upgrade existing save receipts and Skill sequence**
 
 Include the non-durable display title and route in successful tool details. Projection adds a separate `LearningAssetSavedConversationItem`; server invalidates home/assets/knowledge for all three save tools. Update Skills to follow proposal → natural correction/confirmation → existing save tool, with the latest visible draft as semantic owner.
 
-- [ ] **Step 5: Verify and commit**
+- [x] **Step 5: Verify and commit**
 
 ```bash
 cd apps/pi-teaching-web

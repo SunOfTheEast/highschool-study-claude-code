@@ -6,6 +6,10 @@ import { LessonHandoutActivity } from './LessonHandoutActivity';
 import { MaterialSearchActivity } from './MaterialSearchActivity';
 import { PaperResearchActivity } from './PaperResearchActivity';
 import {
+  LearningAssetProposal,
+  LearningAssetSavedReceipt,
+} from './LearningAssetProposal';
+import {
   presentConversation,
   toolActivityCopy,
   waitingForTeacherCopy,
@@ -127,6 +131,12 @@ function ChatPanelContent({
           }
           if (item.kind === 'paper-research') {
             return <PaperResearchActivity item={item} key={item.id} />;
+          }
+          if (item.kind === 'learning-asset-proposal') {
+            return <LearningAssetProposal item={item} key={item.id} />;
+          }
+          if (item.kind === 'learning-asset-saved') {
+            return <LearningAssetSavedReceipt item={item} key={item.id} />;
           }
           if (item.kind === 'lesson-review') {
             return <LessonReviewActivity item={item} key={item.id} />;

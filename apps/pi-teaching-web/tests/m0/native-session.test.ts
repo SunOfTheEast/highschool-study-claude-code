@@ -84,6 +84,7 @@ test('assembles static teaching resources and node-scoped model tools', () => {
 
   expect(resources.tools).toEqual([
     'read', 'grep', 'find', 'ls', 'edit', 'write', 'subagent', 'artifact_export',
+    'propose_problem_card',
     'save_prepared_problem_card',
     'memory_route_resolve',
     'finish_plan',
@@ -120,6 +121,8 @@ test('assembles static teaching resources and node-scoped model tools', () => {
     'ls',
     'classroom_log_append',
     'classroom_update',
+    'propose_note',
+    'propose_problem_card',
     'save_note',
     'save_problem_card',
     'lesson_memory_commit',
@@ -431,6 +434,7 @@ test('injects one canonical document contract into every node session', () => {
     expect(resources.tools).toEqual(scope.nodeKind === 'plan'
       ? [
         'read', 'grep', 'find', 'ls', 'edit', 'write', 'subagent', 'artifact_export',
+        'propose_problem_card',
         'save_prepared_problem_card',
         'memory_route_resolve',
         'finish_plan',
@@ -438,7 +442,8 @@ test('injects one canonical document contract into every node session', () => {
       : scope.nodeKind === 'lesson'
         ? [
           'read', 'grep', 'find', 'ls',
-          'classroom_log_append', 'classroom_update', 'save_note', 'save_problem_card',
+          'classroom_log_append', 'classroom_update', 'propose_note',
+          'propose_problem_card', 'save_note', 'save_problem_card',
           'lesson_memory_commit',
           'finish_lesson',
         ]
@@ -493,6 +498,8 @@ test('registers only node-bound custom tools for Plan and Lesson scopes', () => 
   expect(customToolsForNode(root, lessonScope, manager).map((tool) => tool.name)).toEqual([
     'classroom_log_append',
     'classroom_update',
+    'propose_note',
+    'propose_problem_card',
     'save_note',
     'save_problem_card',
     'lesson_memory_commit',
@@ -500,6 +507,7 @@ test('registers only node-bound custom tools for Plan and Lesson scopes', () => 
   ]);
   expect(customToolsForNode(root, planScope, manager).map((tool) => tool.name)).toEqual([
     'artifact_export',
+    'propose_problem_card',
     'save_prepared_problem_card',
     'memory_route_resolve',
     'finish_plan',
