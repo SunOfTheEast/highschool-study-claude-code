@@ -13,9 +13,9 @@ index 59f0ad2da1457e9dc461140b0ed36b68a4d20aa4..b819921b7f60cbda4422bbaf1bee24be
 @@ -14357,7 +14358,7 @@ class CubismModel {
     */
    getDrawableRenderOrders() {
-     const renderOrders = this._model.drawables.renderOrders;
--    return renderOrders;
-+    return renderOrders ?? this._model.drawables.drawOrders;
+-    const renderOrders = this._model.drawables.renderOrders;
++    const renderOrders = this._model.getRenderOrders?.() ?? this._model.drawables.renderOrders;
+     return renderOrders;
    }
    /**
     * @deprecated
@@ -34,9 +34,9 @@ index f67db9bd1230f23cf84b5e2885720f32e2217d3f..a8902f2b8ceb45dda488980ae512e73a
 @@ -14360,7 +14361,7 @@ var __async = (__this, __arguments, generator) => {
       */
      getDrawableRenderOrders() {
-       const renderOrders = this._model.drawables.renderOrders;
--      return renderOrders;
-+      return renderOrders ?? this._model.drawables.drawOrders;
+-      const renderOrders = this._model.drawables.renderOrders;
++      const renderOrders = this._model.getRenderOrders?.() ?? this._model.drawables.renderOrders;
+       return renderOrders;
      }
      /**
       * @deprecated

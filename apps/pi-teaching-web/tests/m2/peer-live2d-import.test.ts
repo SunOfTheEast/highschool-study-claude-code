@@ -1,5 +1,8 @@
 import { expect, test } from 'bun:test';
-import { normalizeVTubeStudioModel } from '../../src/desktop/peer-live2d-import';
+import {
+  mergeVTubeExpression,
+  normalizeVTubeStudioModel,
+} from '../../src/desktop/peer-live2d-import';
 
 const model = {
   Version: 3,
@@ -15,6 +18,7 @@ const model = {
 const vtube = {
   FileReferences: { Model: 'source.model3.json', IdleAnimation: 'idle.motion3.json' },
   Hotkeys: [
+    { Name: '', Action: 'ToggleExpression', File: 'X.exp3.json', Triggers: { Trigger1: 'X' } },
     { Name: 'lianhong', Action: 'ToggleExpression', File: 'lianhong.exp3.json' },
     { Name: 'shengqi', Action: 'ToggleExpression', File: 'shengqi.exp3.json' },
   ],
@@ -33,6 +37,7 @@ const files = [
   'source.physics3.json',
   'source.cdi3.json',
   'idle.motion3.json',
+  'X.exp3.json',
   'lianhong.exp3.json',
   'shengqi.exp3.json',
 ];
@@ -56,11 +61,31 @@ test('turns one VTube Studio package into the strict StudyForge actor slot', () 
   ]);
   expect(result.manifest.modelFiles).toContain('runtime/textures/texture_00.png');
   expect(result.expressionCopies).toEqual({
+    'X.exp3.json': 'runtime/expressions/neutral.exp3.json',
     'lianhong.exp3.json': 'runtime/expressions/curious.exp3.json',
     'shengqi.exp3.json': 'runtime/expressions/skeptical.exp3.json',
   });
   expect(result.motionCopies).toEqual({
     'idle.motion3.json': 'runtime/motions/idle.motion3.json',
+  });
+});
+
+test('keeps the package visibility toggle active across peer expressions', () => {
+  expect(mergeVTubeExpression(
+    {
+      Type: 'Live2D Expression',
+      Parameters: [{ Id: 'ParamVisibility', Value: 30, Blend: 'Add' }],
+    },
+    {
+      Type: 'Live2D Expression',
+      Parameters: [{ Id: 'ParamEmotion', Value: 1 }],
+    },
+  )).toEqual({
+    Type: 'Live2D Expression',
+    Parameters: [
+      { Id: 'ParamVisibility', Value: 30, Blend: 'Add' },
+      { Id: 'ParamEmotion', Value: 1 },
+    ],
   });
 });
 

@@ -13,7 +13,10 @@ import {
 } from 'node:fs';
 import { homedir } from 'node:os';
 import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
-import { normalizeVTubeStudioModel } from '../../src/desktop/peer-live2d-import';
+import {
+  mergeVTubeExpression,
+  normalizeVTubeStudioModel,
+} from '../../src/desktop/peer-live2d-import';
 import { readPeerLive2DManifest } from '../../src/desktop/peer-live2d-package';
 
 export function parseImportPeerLive2DArguments(argv: readonly string[]): {
@@ -124,6 +127,15 @@ export function importPeerLive2D(input: { source: string; appHome: string }): {
     copy(source, staging, normalized.expressionCopies);
     copy(source, staging, normalized.motionCopies);
     copy(source, staging, normalized.textureCopies);
+    const neutralExpression = json(join(staging, 'runtime/expressions/neutral.exp3.json'));
+    for (const name of ['curious', 'skeptical']) {
+      const path = join(staging, `runtime/expressions/${name}.exp3.json`);
+      writeFileSync(path, `${JSON.stringify(
+        mergeVTubeExpression(neutralExpression, json(path)),
+        null,
+        2,
+      )}\n`);
+    }
     for (const target of Object.values(normalized.textureCopies)) resizeTexture(join(staging, target));
     const stagedCore = join(staging, normalized.manifest.coreFile);
     mkdirSync(dirname(stagedCore), { recursive: true });

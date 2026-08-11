@@ -77,6 +77,48 @@ function expressionFile(vtube: JsonObject, name: string, files: ReadonlySet<stri
   return sourceFile(object(hotkey).File, files);
 }
 
+function triggeredExpressionFile(
+  vtube: JsonObject,
+  trigger: string,
+  files: ReadonlySet<string>,
+): string {
+  const hotkeys = vtube.Hotkeys;
+  if (!Array.isArray(hotkeys)) incomplete();
+  const hotkey = hotkeys.find((value) => {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+    const candidate = value as JsonObject;
+    if (candidate.Action !== 'ToggleExpression') return false;
+    const triggers = candidate.Triggers;
+    return Boolean(triggers && typeof triggers === 'object' && !Array.isArray(triggers)
+      && (triggers as JsonObject).Trigger1 === trigger);
+  });
+  return sourceFile(object(hotkey).File, files);
+}
+
+export function mergeVTubeExpression(base: unknown, expression: unknown): JsonObject {
+  const baseExpression = object(base);
+  const targetExpression = object(expression);
+  const baseParameters = baseExpression.Parameters;
+  const targetParameters = targetExpression.Parameters;
+  if (!Array.isArray(baseParameters) || !Array.isArray(targetParameters)) incomplete();
+  const targetIds = new Set(targetParameters.map((parameter) => {
+    const id = object(parameter).Id;
+    if (typeof id !== 'string' || !id) incomplete();
+    return id;
+  }));
+  return {
+    ...targetExpression,
+    Parameters: [
+      ...baseParameters.filter((parameter) => {
+        const id = object(parameter).Id;
+        if (typeof id !== 'string' || !id) incomplete();
+        return !targetIds.has(id);
+      }),
+      ...targetParameters,
+    ],
+  };
+}
+
 export function normalizeVTubeStudioModel(
   input: VTubeStudioModelInput,
 ): NormalizedVTubeStudioModel {
@@ -95,6 +137,7 @@ export function normalizeVTubeStudioModel(
   const textures = stringArray(sourceReferences.Textures).map((path) => sourceFile(path, files));
   if (new Set(textures).size !== textures.length) incomplete();
   const idle = sourceFile(vtubeReferences.IdleAnimation, files);
+  const neutral = triggeredExpressionFile(vtube, 'X', files);
   const curious = expressionFile(vtube, 'lianhong', files);
   const skeptical = expressionFile(vtube, 'shengqi', files);
 
@@ -128,6 +171,7 @@ export function normalizeVTubeStudioModel(
   };
 
   const expressionCopies = {
+    [neutral]: 'runtime/expressions/neutral.exp3.json',
     [curious]: 'runtime/expressions/curious.exp3.json',
     [skeptical]: 'runtime/expressions/skeptical.exp3.json',
   };
@@ -139,10 +183,6 @@ export function normalizeVTubeStudioModel(
   };
   const generatedFiles = {
     'runtime/axia.model3.json': normalized,
-    'runtime/expressions/neutral.exp3.json': {
-      Type: 'Live2D Expression',
-      Parameters: [],
-    },
   };
   const modelFiles = [
     'runtime/axia.model3.json',

@@ -26,11 +26,12 @@ test('pins the texture parser when private textures become blob URLs', () => {
   expect(patch).toContain('parser: "texture"');
 });
 
-test('accepts the Cubism 6 draw-order name exported by Editor 5.3', () => {
+test('uses the Cubism 6 render-order API without treating draw layers as indices', () => {
   const patch = readFileSync(
     join(appRoot, 'patches/untitled-pixi-live2d-engine@1.3.5.patch'),
     'utf8',
   );
 
-  expect(patch).toContain('renderOrders ?? this._model.drawables.drawOrders');
+  expect(patch).toContain('this._model.getRenderOrders?.() ?? this._model.drawables.renderOrders');
+  expect(patch).not.toContain('this._model.drawables.drawOrders');
 });
