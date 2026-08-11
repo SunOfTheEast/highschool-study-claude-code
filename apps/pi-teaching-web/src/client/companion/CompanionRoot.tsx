@@ -2,7 +2,10 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ConversationItem, PeerExpression } from '../../shared/contracts';
 import { configureTransport } from '../transport';
 import { peerPresence, usePeerPlayback } from '../peer-playback';
-import { tauriDesktopBridge } from '../desktop/bridge';
+import {
+  tauriDesktopBridge,
+  type RuntimeConnection,
+} from '../desktop/bridge';
 import { tauriCompanionBridge } from './bridge';
 import type {
   CompanionControl,
@@ -31,29 +34,75 @@ function conversation(presentation: CompanionPresentation | null): ConversationI
   }];
 }
 
+type CompanionRuntimeDecision =
+  | {
+    ready: true;
+    delay: number;
+    transportKey: string;
+    apiBase: string;
+    token: string;
+  }
+  | {
+    ready: false;
+    delay: number;
+    transportKey: null;
+  };
+
+export function companionRuntimeDecision(
+  connection: RuntimeConnection,
+): CompanionRuntimeDecision {
+  if (connection.state.status === 'ready' && connection.apiBase && connection.token) {
+    return {
+      ready: true,
+      delay: 1000,
+      transportKey: `${connection.apiBase}\u0000${connection.token}`,
+      apiBase: connection.apiBase,
+      token: connection.token,
+    };
+  }
+  return {
+    ready: false,
+    delay: connection.state.status === 'starting' ? 180 : 500,
+    transportKey: null,
+  };
+}
+
 export function CompanionRoot() {
   const [ready, setReady] = useState(false);
   const [presentation, setPresentation] = useState<CompanionPresentation | null>(null);
   const items = useMemo(() => conversation(presentation), [presentation]);
   const playback = usePeerPlayback(items, ready && presentation !== null);
   const observedActive = useRef<string | null>(null);
+  const playbackRef = useRef(playback);
+  const presentationRef = useRef(presentation);
+  playbackRef.current = playback;
+  presentationRef.current = presentation;
 
   useEffect(() => {
     let disposed = false;
     let timer: ReturnType<typeof setTimeout> | null = null;
+    let transportKey: string | null = null;
     const poll = async () => {
+      let delay = 500;
       try {
         const connection = await tauriDesktopBridge.runtimeConnection();
         if (disposed) return;
-        if (connection.state.status === 'ready' && connection.apiBase && connection.token) {
-          configureTransport({ apiBase: connection.apiBase, token: connection.token });
+        const decision = companionRuntimeDecision(connection);
+        delay = decision.delay;
+        if (decision.ready) {
+          if (decision.transportKey !== transportKey) {
+            configureTransport({ apiBase: decision.apiBase, token: decision.token });
+            transportKey = decision.transportKey;
+          }
           setReady(true);
-          return;
+        } else {
+          transportKey = null;
+          setReady(false);
         }
-        if (connection.state.status === 'starting') timer = setTimeout(poll, 180);
       } catch {
-        if (!disposed) timer = setTimeout(poll, 500);
+        if (!disposed) setReady(false);
       }
+      if (!disposed) timer = setTimeout(poll, delay);
     };
     void poll();
     return () => {
@@ -134,15 +183,16 @@ export function CompanionRoot() {
     let disposed = false;
     let unlisten: (() => void) | null = null;
     const handle = (control: CompanionControl) => {
-      if (control.action === 'toggle-mute') playback.toggleMute();
-      else if (control.action === 'speak-formula') playback.readFormula(control.tex);
+      const currentPlayback = playbackRef.current;
+      if (control.action === 'toggle-mute') currentPlayback.toggleMute();
+      else if (control.action === 'speak-formula') currentPlayback.readFormula(control.tex);
       else {
-        playback.stop();
-        const messageId = presentation?.messageId ?? null;
+        currentPlayback.stop();
+        const messageId = presentationRef.current?.messageId ?? null;
         void tauriCompanionBridge.setPlayback({
           messageId,
           phase: 'idle',
-          muted: playback.muted,
+          muted: currentPlayback.muted,
         });
         setPresentation(null);
       }
@@ -155,7 +205,7 @@ export function CompanionRoot() {
       disposed = true;
       unlisten?.();
     };
-  }, [playback, presentation?.messageId]);
+  }, []);
 
   if (!ready) return null;
 

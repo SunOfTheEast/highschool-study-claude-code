@@ -1,16 +1,23 @@
 import { expect, test } from 'bun:test';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { ChatPanel } from '../../src/client/components/ChatPanel';
 import {
+  deliverCompanionPresentation,
   companionBubbleText,
   nextCompanionPresentation,
 } from '../../src/client/companion/main-playback';
-import { CompanionRoot } from '../../src/client/companion/CompanionRoot';
+import {
+  companionRuntimeDecision,
+  CompanionRoot,
+} from '../../src/client/companion/CompanionRoot';
 import type { CompanionBridge } from '../../src/client/companion/contracts';
 import { DesktopToolsProvider } from '../../src/client/desktop/DesktopContext';
 import type { PeerConversationItem } from '../../src/shared/contracts';
 
 const at = '2026-08-11T08:00:00.000Z';
+const appRoot = join(import.meta.dir, '../..');
 
 function peer(input: Partial<PeerConversationItem> = {}): PeerConversationItem {
   return {
@@ -111,4 +118,53 @@ test('does not mount the companion model before its runtime transport is ready',
   const markup = renderToStaticMarkup(<CompanionRoot />);
 
   expect(markup).toBe('');
+});
+
+test('keeps polling and reconfigures transport when the runtime port changes', () => {
+  const first = companionRuntimeDecision({
+    state: { status: 'ready', port: 65100, workspace: 'selected' },
+    apiBase: 'http://127.0.0.1:65100',
+    token: 'first-token',
+    error: null,
+  });
+  const restarted = companionRuntimeDecision({
+    state: { status: 'ready', port: 65101, workspace: 'selected' },
+    apiBase: 'http://127.0.0.1:65101',
+    token: 'second-token',
+    error: null,
+  });
+
+  expect(first.ready).toBe(true);
+  expect(first.delay).toBeGreaterThan(0);
+  expect(first.transportKey).not.toBe(restarted.transportKey);
+});
+
+test('treats a rejected native presentation as an ordinary delivery failure', async () => {
+  const bridge = fakeBridge();
+  bridge.present = async () => { throw new Error('event channel closed'); };
+
+  expect(await deliverCompanionPresentation(bridge, {
+    messageId: 'peer-retry',
+    actorId: 'peer-axia',
+    text: '先检查定义域。',
+    expression: 'neutral',
+    phase: 'speaking',
+  })).toBe(false);
+});
+
+test('keeps one control listener while playback state changes', () => {
+  const root = readFileSync(
+    join(appRoot, 'src/client/companion/CompanionRoot.tsx'),
+    'utf8',
+  );
+
+  expect(root).toContain('const playbackRef = useRef(playback);');
+  expect(root).not.toContain('}, [playback, presentation?.messageId]);');
+});
+
+test('makes formula speech part of the same interruptible playback owner', () => {
+  const playback = readFileSync(join(appRoot, 'src/client/peer-playback.ts'), 'utf8');
+
+  expect(playback).toContain('stopRef.current = systemSpeech(spoken) ?? (() => {});');
+  expect(playback).not.toContain('    systemSpeech(spoken);');
 });

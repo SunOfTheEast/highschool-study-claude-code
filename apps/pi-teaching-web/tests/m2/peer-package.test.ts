@@ -55,6 +55,13 @@ test('keeps private source paths out of the tracked application surface', () => 
   expect(trackedText).not.toContain(privateActorPath);
 });
 
+test('allows the packaged WebView to play the private speech blob', () => {
+  const config = JSON.parse(
+    readFileSync(join(appRoot, 'src-tauri/tauri.conf.json'), 'utf8'),
+  ) as { app: { security: { csp: string } } };
+  expect(config.app.security.csp).toContain("media-src 'self' blob:");
+});
+
 test('permits only the local Core blob and rejects private Live2D files from a release', () => {
   const config = JSON.parse(
     readFileSync(join(appRoot, 'src-tauri/tauri.conf.json'), 'utf8'),

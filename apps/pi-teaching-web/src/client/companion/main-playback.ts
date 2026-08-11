@@ -54,6 +54,17 @@ export function companionBubbleText(text: string): string {
   return plain.length > 58 ? `${plain.slice(0, 57).trimEnd()}…` : plain;
 }
 
+export async function deliverCompanionPresentation(
+  bridge: CompanionBridge,
+  presentation: CompanionPresentation,
+): Promise<boolean> {
+  try {
+    return await bridge.present(presentation);
+  } catch {
+    return false;
+  }
+}
+
 type RemoteState = Pick<PeerPlaybackView, 'item' | 'phase' | 'mouth'>;
 
 function matchingPeer(
@@ -126,10 +137,14 @@ export function useCompanionPeerPlayback(
 
     const item = matchingPeer(items, presentation.messageId);
     if (!item) return;
-    if (presentation.phase === 'speaking') publishedLivePeers.add(presentation.messageId);
     setState({ item, phase: 'loading', mouth: 'closed' });
-    void bridge.present(presentation).then((delivered) => {
-      if (!delivered && stateRef.current.item?.id === presentation.messageId) {
+    void deliverCompanionPresentation(bridge, presentation).then((delivered) => {
+      if (delivered) {
+        if (presentation.phase === 'speaking') publishedLivePeers.add(presentation.messageId);
+        return;
+      }
+      if (publishedRef.current === signature) publishedRef.current = null;
+      if (stateRef.current.item?.id === presentation.messageId) {
         setState({ item: null, phase: 'idle', mouth: 'closed' });
       }
     });

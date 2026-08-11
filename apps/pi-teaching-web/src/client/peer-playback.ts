@@ -131,6 +131,7 @@ export function usePeerPlayback(
   const stopRef = useRef<() => void>(() => {});
 
   const begin = useCallback((item: PeerConversationItem) => {
+    stopRef.current();
     const controller = new AbortController();
     let settled = false;
     let audioUrl: string | null = null;
@@ -284,7 +285,7 @@ export function usePeerPlayback(
     const spoken = detailedFormulaSpeech(tex);
     if (!spoken) return;
     stopRef.current();
-    systemSpeech(spoken);
+    stopRef.current = systemSpeech(spoken) ?? (() => {});
   }, []);
 
   return { ...state, muted, stop, toggleMute, readFormula };
