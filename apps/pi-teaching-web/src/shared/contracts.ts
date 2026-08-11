@@ -115,11 +115,22 @@ export type CalendarPlanChoice = {
   title: string;
 };
 
+export type CalendarReviewCandidate = {
+  learningSetPath: string;
+  learningSetName: string;
+  asset: LearningAssetHandle;
+  title: string;
+  dueOn: string;
+  stage: AssetReviewProjection['stage'];
+  lastResult: ReviewResult | null;
+  unavailable: boolean;
+};
+
 export type CalendarSnapshot = {
   appointments: CalendarAppointment[];
   currentLearningSetPath: string;
   plans: CalendarPlanChoice[];
-  reviewCandidates: [];
+  reviewCandidates: CalendarReviewCandidate[];
 };
 
 export type CalendarLaunchReceipt = {

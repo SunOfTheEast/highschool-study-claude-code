@@ -9,9 +9,14 @@ import { writeDesktopPiSettings } from '../desktop/pi-settings';
 import { createPiSessionFactory } from '../runtime/session-factory';
 import { WorkspaceRegistry } from '../runtime/workspace-registry';
 import { createRequestHandler } from './app';
-import { createDesktopRequestHandler, withDesktopCors } from './desktop-app';
+import {
+  createDesktopRequestHandler,
+  knownDesktopLearningSetRoots,
+  withDesktopCors,
+} from './desktop-app';
 import { EventHub } from './event-hub';
 import { createCalendarRepository } from '../calendar/appointments';
+import { readCalendarReviewCandidates } from '../calendar/review-candidates';
 
 export type RuntimeArguments = {
   port: number;
@@ -140,6 +145,11 @@ export async function startStudyForgeServer(arguments_: RuntimeArguments) {
           hub,
           staticRoot,
           calendar,
+          knownLearningSetRoots: () => knownDesktopLearningSetRoots(paths),
+          reviewCandidates: () => readCalendarReviewCandidates([
+            validation.root,
+            ...knownDesktopLearningSetRoots(paths),
+          ]),
         });
       } catch (error) {
         issue = runtimeIssue(error);

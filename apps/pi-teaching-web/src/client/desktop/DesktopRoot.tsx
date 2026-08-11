@@ -20,7 +20,10 @@ import {
   type ModelAuthFlow,
 } from './ModelSettings';
 import { publicErrorText } from '../public-errors';
-import type { CalendarAppointment } from '../../shared/contracts';
+import type {
+  CalendarAppointment,
+  LearningContextReference,
+} from '../../shared/contracts';
 import { calendarNotificationRequests } from '../calendar-navigation';
 
 type DesktopPage = 'learning' | 'models' | 'help';
@@ -160,6 +163,28 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
       setBusy(false);
     }
   }, [bridge, restartAndWait, status?.currentLearningSet]);
+
+  const openReview = useCallback(async (
+    learningSetPath: string,
+    contexts: LearningContextReference[],
+  ) => {
+    setBusy(true);
+    setError(null);
+    try {
+      if (status?.currentLearningSet !== learningSetPath) {
+        await desktopApi.selectExisting(learningSetPath);
+        await restartAndWait();
+      }
+      const created = await api.createFreeLearning(contexts, 'review');
+      window.history.pushState(null, '', created.route);
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    } catch (nextError) {
+      setError(errorMessage(nextError));
+      throw nextError;
+    } finally {
+      setBusy(false);
+    }
+  }, [restartAndWait, status?.currentLearningSet]);
 
   useEffect(() => {
     if (status?.state !== 'ready') return;
@@ -343,6 +368,7 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
         calendarNotificationRequests(appointments),
       ),
       openCalendarAppointment,
+      openReview,
       companion: bridge.companion ?? null,
     }}>
       <div className="desktop-ready-shift" key={connection.token ?? 'ready'}>

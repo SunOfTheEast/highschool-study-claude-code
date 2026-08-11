@@ -155,6 +155,7 @@
 }
 
 .asset-header-links { display: flex; gap: var(--space-4); margin-left: auto; }
+.asset-header-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
 .asset-detail-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); justify-content: flex-end; }
 
 .m1b-assets button,

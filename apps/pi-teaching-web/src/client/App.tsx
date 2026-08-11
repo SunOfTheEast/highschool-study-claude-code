@@ -44,6 +44,7 @@ import { publicErrorText } from './public-errors';
 import { resetRouteScroll } from './route-scroll';
 import { useDesktopTools } from './desktop/DesktopContext';
 import { deliverFocusAlert, playFocusChime } from './focus-alert';
+import { calendarReviewSelection } from '../calendar/review-selection';
 
 type ConnectionState = 'open' | 'connecting' | 'closed';
 
@@ -505,12 +506,33 @@ export function App() {
     }
   };
 
-  const startFree = async (selectedAssets: LearningContextReference[] = []) => {
+  const startFree = async (
+    selectedAssets: LearningContextReference[] = [],
+    intent: 'open' | 'review' = 'open',
+  ) => {
     try {
-      const created = await api.createFreeLearning(selectedAssets);
+      const created = await api.createFreeLearning(selectedAssets, intent);
       const next = parseBrowserRoute(new URL(created.route, window.location.origin).pathname);
       if (!next) throw new Error('FREE_LEARNING_ROUTE_INVALID');
       navigate(next);
+    } catch (error) {
+      setNotice(errorText(error));
+    }
+  };
+
+  const startCalendarReview = async (
+    candidates: CalendarSnapshot['reviewCandidates'],
+  ) => {
+    try {
+      const selection = calendarReviewSelection(candidates);
+      if (desktopTools?.openReview) {
+        await desktopTools.openReview(selection.learningSetPath, selection.contexts);
+        return;
+      }
+      if (selection.learningSetPath !== calendar?.currentLearningSetPath) {
+        throw new Error('CALENDAR_REVIEW_LEARNING_SET_UNAVAILABLE');
+      }
+      await startFree(selection.contexts, 'review');
     } catch (error) {
       setNotice(errorText(error));
     }
@@ -621,6 +643,7 @@ export function App() {
           await api.updateCalendarAppointment(appointment.id, {
             expectedRevision: appointment.revision,
             ...input,
+            learningSetPath: appointment.learningSetPath,
             destination: appointment.destination,
           });
           await loadRoute({ kind: 'calendar' });
@@ -630,6 +653,7 @@ export function App() {
           await loadRoute({ kind: 'calendar' });
         }}
         onOpen={openCalendarAppointment}
+        onReview={startCalendarReview}
       />
     ) : <div className="loading-screen"><b>正在读取学习日历</b></div>;
   } else if (route.kind === 'assets') {
@@ -642,6 +666,7 @@ export function App() {
           : { kind: 'problem-card', id: reference.id })}
         onOpenMaterial={(id) => navigate({ kind: 'material', id })}
         onAsk={(references) => void startFree(references)}
+        onReview={(references) => void startFree(references, 'review')}
         onImport={async (input) => {
           await api.importMaterial(input);
           await loadRoute({ kind: 'assets' });

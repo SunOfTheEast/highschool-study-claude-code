@@ -107,10 +107,13 @@ export const api = {
   createCalendarAppointment: (input: Pick<
     CalendarAppointment,
     'title' | 'startsAt' | 'plannedMinutes' | 'destination'
-  >) => post<{ appointment: CalendarAppointment }>('/api/calendar', input),
+  > & { learningSetPath?: string }) => post<{ appointment: CalendarAppointment }>('/api/calendar', input),
   updateCalendarAppointment: (
     id: string,
-    input: Pick<CalendarAppointment, 'title' | 'startsAt' | 'plannedMinutes' | 'destination'> & {
+    input: Pick<
+      CalendarAppointment,
+      'title' | 'startsAt' | 'plannedMinutes' | 'learningSetPath' | 'destination'
+    > & {
       expectedRevision: number;
     },
   ) => put<{ appointment: CalendarAppointment }>(

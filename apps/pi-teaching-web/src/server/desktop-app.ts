@@ -5,7 +5,7 @@ import type {
   AuthType,
 } from '@earendil-works/pi-ai';
 import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import {
   loadAppConfig,
   parseAppConfig,
@@ -246,6 +246,14 @@ function selectedConfig(paths: StudyForgePaths, root: string) {
   };
   saveAppConfig(paths.appConfigPath, next);
   return next;
+}
+
+export function knownDesktopLearningSetRoots(paths: StudyForgePaths): string[] {
+  const config = loadAppConfig(paths.appConfigPath);
+  return [...new Set([
+    config.currentLearningSet,
+    ...config.recentLearningSets,
+  ].flatMap((candidate) => candidate ? [resolve(candidate)] : []))];
 }
 
 function status(deps: DesktopRequestDependencies) {

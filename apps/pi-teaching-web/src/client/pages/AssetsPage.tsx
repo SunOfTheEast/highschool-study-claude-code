@@ -44,6 +44,7 @@ export function AssetsPage({
   onOpen,
   onOpenMaterial,
   onAsk,
+  onReview,
   onImport,
   onOpenFootprint,
   onOpenKnowledge,
@@ -53,6 +54,7 @@ export function AssetsPage({
   onOpen(reference: LearningAssetReference): void;
   onOpenMaterial?(id: string): void;
   onAsk(references: LearningAssetReference[]): void;
+  onReview?(references: LearningAssetReference[]): void;
   onImport?(input: MaterialUploadInput): Promise<void>;
   onOpenFootprint?(): void;
   onOpenKnowledge?(): void;
@@ -84,14 +86,26 @@ export function AssetsPage({
     <main className="m1b-assets">
       <header>
         <div><small>My learning assets</small><h1>我的学习资料</h1></div>
-        <button
-          className="action-solid"
-          type="button"
-          disabled={selectedReferences.length === 0}
-          onClick={() => onAsk(selectedReferences)}
-        >
-          带着所选问老师 · {selectedReferences.length}
-        </button>
+        <div className="asset-header-actions">
+          <button
+            className="action-solid"
+            type="button"
+            disabled={selectedReferences.length === 0}
+            onClick={() => onAsk(selectedReferences)}
+          >
+            带着所选问老师 · {selectedReferences.length}
+          </button>
+          {onReview && (
+            <button
+              className="action-text"
+              type="button"
+              disabled={selectedReferences.length === 0}
+              onClick={() => onReview(selectedReferences)}
+            >
+              复习所选
+            </button>
+          )}
+        </div>
         <nav className="asset-header-links">
           <button type="button" className="action-text" onClick={onOpenKnowledge}>知识图谱</button>
           <button type="button" className="action-text" onClick={onOpenFootprint}>学习足迹</button>

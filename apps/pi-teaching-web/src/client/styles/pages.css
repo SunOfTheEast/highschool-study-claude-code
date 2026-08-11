@@ -57,6 +57,15 @@
 .calendar-day-panel > header small { color: var(--ink-faint); font-size: var(--text-label); letter-spacing: .12em; }
 .calendar-day-panel h2 { margin: .35rem 0 0; font: 500 var(--text-h3)/1.2 var(--font-display); }
 .calendar-day-panel header p { margin: .6rem 0 0; color: var(--accent-deep); font-size: var(--text-label); }
+.calendar-review-candidates { padding: 0 var(--space-5); border-bottom: 1px solid var(--rule); }
+.calendar-review-candidates > div { padding: var(--space-4) 0; border-bottom: 1px solid var(--rule); }
+.calendar-review-candidates > div:last-child { border-bottom: 0; }
+.calendar-review-candidates > div > header { display: flex; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-2); color: var(--ink-faint); font-size: var(--text-label); }
+.calendar-review-candidates label { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .15rem var(--space-2); align-items: start; padding: .42rem 0; cursor: pointer; }
+.calendar-review-candidates label input { margin-top: .2rem; accent-color: var(--accent-deep); }
+.calendar-review-candidates label span { font-size: var(--text-body-sm); line-height: 1.45; }
+.calendar-review-candidates label small { grid-column: 2; color: var(--attention); }
+.calendar-review-candidates label[data-unavailable] { color: var(--ink-faint); cursor: default; }
 .calendar-appointment-list { margin: 0; padding: 0 var(--space-5); list-style: none; }
 .calendar-appointment-list li { padding: var(--space-4) 0; border-bottom: 1px solid var(--rule); }
 .calendar-appointment-list li[data-other-set] { border-left: 2px solid var(--attention); padding-left: var(--space-3); }

@@ -733,22 +733,22 @@ git commit -m "feat: guide spaced review through teaching sessions"
 - Candidate projection carries learning-set path/name, asset handle/title, due date/stage/last result, and unavailable status; it does not copy review history.
 - “现在开始复习” creates one existing Free Learning with selected contexts and `intent='review'`; “安排到时间” creates an ordinary review appointment.
 
-- [ ] **Step 1: Write RED tests for aggregation and ownership**
+- [x] **Step 1: Write RED tests for aggregation and ownership**
 
 Cover multiple learning sets, oldest-due ordering, future day counts, overdue inclusion today, invalid/missing asset, no implicit enumeration, batch selection, appointment persistence after early review, and candidate refresh after result.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 ```bash
 cd apps/pi-teaching-web
 bun test tests/m2/calendar-review-candidates.test.tsx
 ```
 
-- [ ] **Step 3: Implement provider and connect the empty calendar hook**
+- [x] **Step 3: Implement provider and connect the empty calendar hook**
 
 Read/rebuild each known learning set's review index and resolve only projected candidates. Calendar owns explicit appointments; it never deletes them when review state changes. Asset library adds selection entry points without turning the library into a second review queue.
 
-- [ ] **Step 4: Verify and commit**
+- [x] **Step 4: Verify and commit**
 
 ```bash
 cd apps/pi-teaching-web

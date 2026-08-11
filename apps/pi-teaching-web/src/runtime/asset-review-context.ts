@@ -32,7 +32,7 @@ export type AssetReviewCandidateSummary = {
   lastResult: ReviewResult | null;
 };
 
-type RecallRow = {
+export type ReviewAssetSummary = {
   path: string;
   title: string;
   tags: string[];
@@ -46,12 +46,12 @@ function oneLine(value: string): string {
   return value.replace(/\s*\n\s*/g, ' ').trim().slice(0, 160);
 }
 
-function recallRows(root: string): Map<string, RecallRow> {
+function recallRows(root: string): Map<string, ReviewAssetSummary> {
   const path = join(root, 'semantics/indexes/asset-recall.tsv');
   if (!existsSync(path)) return new Map();
   const lines = readFileSync(path, 'utf8').trimEnd().split('\n');
   if (lines.shift() !== 'path\tkind\tid\tcore\trelated\ttitle_or_stem') return new Map();
-  const rows = new Map<string, RecallRow>();
+  const rows = new Map<string, ReviewAssetSummary>();
   for (const line of lines) {
     if (!line) continue;
     const [assetPath, kind, id, coreText, relatedText, title] = line.split('\t');
@@ -72,6 +72,12 @@ function recallRows(root: string): Map<string, RecallRow> {
     }
   }
   return rows;
+}
+
+export function readReviewAssetSummaryIndex(
+  root: string,
+): ReadonlyMap<string, ReviewAssetSummary> {
+  return recallRows(root);
 }
 
 export function currentReviewAsset(
@@ -122,7 +128,7 @@ export function renderFreeLearningReviewBrief(
   ].join('\n');
 }
 
-function fallbackSummary(root: string, asset: LearningAssetHandle): RecallRow {
+function fallbackSummary(root: string, asset: LearningAssetHandle): ReviewAssetSummary {
   const current = currentReviewAsset(root, asset);
   const tagPath = join(root, semanticTagsPath(asset));
   const tags = existsSync(tagPath) ? readSemanticTags(root, asset) : null;
@@ -131,6 +137,13 @@ function fallbackSummary(root: string, asset: LearningAssetHandle): RecallRow {
     title: oneLine(current.title),
     tags: tags ? [...tags.core, ...tags.related] : [],
   };
+}
+
+export function reviewAssetSummary(
+  root: string,
+  asset: LearningAssetHandle,
+): ReviewAssetSummary {
+  return readReviewAssetSummaryIndex(root).get(handleKey(asset)) ?? fallbackSummary(root, asset);
 }
 
 export function listDueAssetReviewCandidates(
@@ -155,10 +168,8 @@ export function listDueAssetReviewCandidates(
       || left.asset.kind.localeCompare(right.asset.kind)
       || left.asset.id.localeCompare(right.asset.id)
     ));
-  const recall = recallRows(root);
   const candidates = due.slice(0, limit).map((projection, index) => {
-    const summary = recall.get(handleKey(projection.asset))
-      ?? fallbackSummary(root, projection.asset);
+    const summary = reviewAssetSummary(root, projection.asset);
     return {
       alias: `review-${index + 1}`,
       kind: projection.asset.kind,

@@ -8,6 +8,7 @@ import type { WorkspaceRegistry } from '../runtime/workspace-registry';
 import type {
   CalendarDestination,
   CalendarLaunchReceipt,
+  CalendarReviewCandidate,
   LearningContextReference,
   LearningNoteBlock,
   ProblemAttemptResponse,
@@ -104,6 +105,8 @@ export type AppDependencies = {
   readCourse?: typeof readWorkspace;
   readKnowledge?: typeof readKnowledge;
   calendar?: CalendarRepository;
+  knownLearningSetRoots?(): readonly string[];
+  reviewCandidates?(): CalendarReviewCandidate[];
 };
 
 const json = (value: unknown, status = 200) => Response.json(value, { status });
@@ -257,7 +260,22 @@ function calendarDestination(root: string, value: unknown): CalendarDestination 
   return { kind: 'free-learning', intent: destination.intent, contexts };
 }
 
-function calendarDraft(root: string, value: unknown): CalendarAppointmentDraft {
+function calendarRoots(
+  root: string,
+  knownLearningSetRoots?: () => readonly string[],
+): Set<string> {
+  return new Set([
+    resolve(root),
+    ...(knownLearningSetRoots?.() ?? []).map((candidate) => resolve(candidate)),
+  ]);
+}
+
+function calendarDraft(
+  root: string,
+  value: unknown,
+  allowedRoots = new Set([resolve(root)]),
+  defaultRoot = resolve(root),
+): CalendarAppointmentDraft {
   const body = objectBody(value);
   if (typeof body.title !== 'string' || typeof body.startsAt !== 'string') {
     throw new Error('CALENDAR_APPOINTMENT_INVALID');
@@ -265,22 +283,33 @@ function calendarDraft(root: string, value: unknown): CalendarAppointmentDraft {
   if (body.plannedMinutes !== null && !Number.isSafeInteger(body.plannedMinutes)) {
     throw new Error('CALENDAR_PLANNED_MINUTES_INVALID');
   }
+  const requestedRoot = body.learningSetPath ?? defaultRoot;
+  if (typeof requestedRoot !== 'string') throw new Error('CALENDAR_LEARNING_SET_PATH_INVALID');
+  const learningSetPath = resolve(requestedRoot);
+  if (!allowedRoots.has(learningSetPath)) {
+    throw new Error('CALENDAR_LEARNING_SET_OUT_OF_SCOPE');
+  }
   return {
     title: body.title,
     startsAt: body.startsAt,
     plannedMinutes: body.plannedMinutes as number | null,
-    learningSetPath: resolve(root),
-    destination: calendarDestination(root, body.destination),
+    learningSetPath,
+    destination: calendarDestination(learningSetPath, body.destination),
   };
 }
 
-function calendarPatch(root: string, value: unknown): {
+function calendarPatch(
+  root: string,
+  value: unknown,
+  allowedRoots: Set<string>,
+  defaultRoot: string,
+): {
   expectedRevision: number;
   patch: CalendarAppointmentPatch;
 } {
   const body = objectBody(value);
   const expectedRevision = positiveRevision(body.expectedRevision);
-  const draft = calendarDraft(root, body);
+  const draft = calendarDraft(root, body, allowedRoots, defaultRoot);
   return { expectedRevision, patch: draft };
 }
 
@@ -440,6 +469,7 @@ export function createRequestHandler(deps?: AppDependencies) {
             event.toolName === 'calendar_create'
             || event.toolName === 'calendar_update'
             || event.toolName === 'calendar_delete'
+            || event.toolName === 'record_asset_review'
           )
         ) {
           deps.hub.publish({ type: 'calendar-invalidated' });
@@ -566,12 +596,16 @@ export function createRequestHandler(deps?: AppDependencies) {
           appointments: deps.calendar.list(),
           currentLearningSetPath: resolve(deps.root),
           plans,
-          reviewCandidates: [],
+          reviewCandidates: deps.reviewCandidates?.() ?? [],
         });
       }
       if (request.method === 'POST' && url.pathname === '/api/calendar') {
         if (!deps.calendar) return json({ error: 'CALENDAR_UNAVAILABLE' }, 404);
-        const appointment = deps.calendar.create(calendarDraft(deps.root, await request.json()));
+        const appointment = deps.calendar.create(calendarDraft(
+          deps.root,
+          await request.json(),
+          calendarRoots(deps.root, deps.knownLearningSetRoots),
+        ));
         deps.hub.publish({ type: 'calendar-invalidated' });
         return json({ appointment }, 201);
       }
@@ -582,9 +616,16 @@ export function createRequestHandler(deps?: AppDependencies) {
         if (!id) throw new Error('CALENDAR_APPOINTMENT_ID_INVALID');
         const body = objectBody(await request.json());
         const expectedRevision = positiveRevision(body.expectedRevision);
+        const current = deps.calendar.read(id);
+        if (!current) throw new Error('CALENDAR_APPOINTMENT_NOT_FOUND');
         const appointment = request.method === 'DELETE'
           ? deps.calendar.remove(id, expectedRevision)
-          : deps.calendar.update(id, expectedRevision, calendarPatch(deps.root, body).patch);
+          : deps.calendar.update(id, expectedRevision, calendarPatch(
+            deps.root,
+            body,
+            calendarRoots(deps.root, deps.knownLearningSetRoots),
+            current.learningSetPath,
+          ).patch);
         deps.hub.publish({ type: 'calendar-invalidated' });
         return json(request.method === 'DELETE' ? { deleted: appointment } : { appointment });
       }
@@ -927,6 +968,7 @@ export function createRequestHandler(deps?: AppDependencies) {
           requestId, at, localDate: localDateAt(at), event,
         });
         deps.hub.publish({ type: 'assets-invalidated' });
+        deps.hub.publish({ type: 'calendar-invalidated' });
         return json({ event: recorded.event, review: recorded.projection }, 201);
       }
 

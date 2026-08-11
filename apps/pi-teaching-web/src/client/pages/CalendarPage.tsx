@@ -1,5 +1,8 @@
 import { useMemo, useState } from 'react';
-import type { CalendarAppointment } from '../../shared/contracts';
+import type {
+  CalendarAppointment,
+  CalendarReviewCandidate,
+} from '../../shared/contracts';
 import {
   CalendarDayPanel,
   type CalendarDraft,
@@ -40,6 +43,7 @@ export function CalendarPage({
   currentLearningSetPath,
   plans = [],
   reviewCandidates,
+  today = dateValue(new Date()),
   reminderPermission = null,
   initialMonth = monthValue(new Date()),
   initialDate = dateValue(new Date()),
@@ -47,18 +51,21 @@ export function CalendarPage({
   onUpdate,
   onDelete,
   onOpen,
+  onReview = async () => {},
 }: {
   appointments: readonly CalendarAppointment[];
   currentLearningSetPath: string;
   plans?: readonly CalendarPlanChoice[];
-  reviewCandidates: readonly unknown[];
+  reviewCandidates: readonly CalendarReviewCandidate[];
   reminderPermission?: 'granted' | 'denied' | 'unsupported' | 'unavailable' | null;
+  today?: string;
   initialMonth?: string;
   initialDate?: string;
   onCreate(input: CalendarDraft): Promise<void>;
   onUpdate(appointment: CalendarAppointment, input: Omit<CalendarDraft, 'destination'>): Promise<void>;
   onDelete(appointment: CalendarAppointment): Promise<void>;
   onOpen(appointment: CalendarAppointment): Promise<void>;
+  onReview?(candidates: CalendarReviewCandidate[]): Promise<void>;
 }) {
   const [month, setMonth] = useState(initialMonth);
   const [selectedDate, setSelectedDate] = useState(initialDate);
@@ -71,6 +78,14 @@ export function CalendarPage({
     }
     return grouped;
   }, [appointments]);
+  const reviewsByDate = useMemo(() => {
+    const grouped = new Map<string, CalendarReviewCandidate[]>();
+    for (const candidate of reviewCandidates) {
+      const key = candidate.dueOn <= today ? today : candidate.dueOn;
+      grouped.set(key, [...grouped.get(key) ?? [], candidate]);
+    }
+    return grouped;
+  }, [reviewCandidates, today]);
   const [year, monthNumber] = month.split('-').map(Number);
 
   const move = (delta: number) => {
@@ -103,6 +118,7 @@ export function CalendarPage({
           <div className="calendar-grid">
             {cells.map((cell) => {
               const dayAppointments = byDate.get(cell.date) ?? [];
+              const dayReviews = reviewsByDate.get(cell.date) ?? [];
               return (
                 <button
                   type="button"
@@ -115,6 +131,7 @@ export function CalendarPage({
                   <time dateTime={cell.date}>{Number(cell.date.slice(-2))}</time>
                   <span>{dayAppointments.slice(0, 2).map((item) => <i key={item.id}>{item.title}</i>)}</span>
                   {dayAppointments.length > 2 && <small>另有 {dayAppointments.length - 2} 项</small>}
+                  {dayReviews.length > 0 && <small>待复习 {dayReviews.length}</small>}
                 </button>
               );
             })}
@@ -125,11 +142,12 @@ export function CalendarPage({
           appointments={byDate.get(selectedDate) ?? []}
           currentLearningSetPath={currentLearningSetPath}
           plans={plans}
-          reviewCount={reviewCandidates.length}
+          reviewCandidates={reviewsByDate.get(selectedDate) ?? []}
           onCreate={onCreate}
           onUpdate={onUpdate}
           onDelete={onDelete}
           onOpen={onOpen}
+          onReview={onReview}
         />
       </div>
     </main>
