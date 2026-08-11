@@ -41,11 +41,11 @@
 - The shared references own only the learning action. Session scope, evidence, source, saving, memory, and lifecycle rules remain in the root Skills.
 - The common teaching core adds the short question-formation principle, not a new Socratic workflow.
 
-- [ ] **Step 1: Write the focused resource RED test**
+- [x] **Step 1: Write the focused resource RED test**
 
 Assert that all five files are packaged, each root names the exact direct paths, `INDEX.md` is absent from both root routes, and the question-formation paragraph exists in the shared core. Assert no method file contains save/memory/lifecycle tool names.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 ```bash
 cd apps/pi-teaching-web
@@ -54,7 +54,7 @@ bun test tests/m2/learning-method-resources.test.ts
 
 Expected: missing reference files and routes fail.
 
-- [ ] **Step 3: Write the five single-bright-line references**
+- [x] **Step 3: Write the five single-bright-line references**
 
 Use the approved sequences verbatim in substance:
 
@@ -68,7 +68,7 @@ retrieval practice: recall before source → preserve first performance → feed
 
 Keep `INDEX.md` as a human/package audit table only. Add direct observable-state routes to both Session roots and the compact question-formation rule to `math-teaching-core.md`.
 
-- [ ] **Step 4: Verify and commit**
+- [x] **Step 4: Verify and commit**
 
 ```bash
 cd apps/pi-teaching-web

@@ -16,6 +16,25 @@ description: 在学生从固定入口自由提问、带学习资产继续讨论�
 3. 根据学生眼前表现解释、追问、比较或给一个小检验，允许随时换方向。
 4. 学生明确结束时自然收住；不要强制总结、写记忆或制造结课仪式。
 
+## 按需使用一种学习方法
+
+只有当前活动已经明显进入下列形态时，才直接读取一个精确 reference；不要先读共享
+`INDEX.md`，也不要为了展示方法把普通问答拉成长流程：
+
+- 学生明确想发散、建立联系或共同想可能性 →
+  `../references/learning-methods/brainstorming.md`；
+- 学生想把零散认识重新讲清或组织起来 →
+  `../references/learning-methods/knowledge-reconstruction.md`；
+- 师生要系统研究少量对象的共同机制和类比边界 →
+  `../references/learning-methods/structural-comparison.md`；
+- 已经提出值得检验或需要明确驳斥的概括 →
+  `../references/learning-methods/claim-challenge.md`；
+- 学生明确想脱离原文回忆，或接受了一次复习建议 →
+  `../references/learning-methods/retrieval-practice.md`。
+
+一次方法可以自然持续多轮，学生下一次回应决定继续、切换或停止。Free Learning 仍可自由
+转向，不要求方法结束时形成总结、资产或结课仪式。
+
 ## 保存学习资产
 
 只在自然讨论已经形成明确内容时提出保存。先向学生展示拟保存的 Note、回忆块或题卡内容；

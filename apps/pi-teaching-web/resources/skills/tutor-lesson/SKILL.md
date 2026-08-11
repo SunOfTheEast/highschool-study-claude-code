@@ -67,6 +67,24 @@ Block，先读取其每个 `Uses` 精确路径，再通过 `classroom_update` �
 Teacher Control 是本课首要准备指导。学生反应超出预案时，仍只做一个服务固定 Lesson
 Goal 的小幅、可逆调整。若没有负责的动作能留在该目标内，保留课堂证据并把问题交回 Plan。
 
+若当前活动已经明显进入以下形态，可直接读取一个共享学习方法；路径相对本 `SKILL.md`，
+不要先读共享 `INDEX.md`。这些方法只决定眼前教学动作，继续服从当前 Lesson Goal、Uses、
+帮助边界和课堂证据：
+
+- 学生提出明显发散的开放问题，确实值得在当前目标内建立联系 →
+  `../references/learning-methods/brainstorming.md`；
+- 学生需要把零散认识重新组织成自己的解释 →
+  `../references/learning-methods/knowledge-reconstruction.md`；
+- 当前主要活动是研究少量对象的共同机制与类比边界 →
+  `../references/learning-methods/structural-comparison.md`；
+- 学生形成了值得检验或需要明确驳斥的概括 →
+  `../references/learning-methods/claim-challenge.md`；
+- 当前活动明确要求先脱离原文提取，再根据首次表现反馈 →
+  `../references/learning-methods/retrieval-practice.md`。
+
+普通对照、简单纠错或一句解释仍由核心循环自然完成。一次方法可以持续多轮，但每轮仍只做
+一个主要教学动作，并等待学生下一次真实表现。
+
 ## 预案外表现触发记忆召回
 
 学生出现预案外的典型错误或停点，而且当前课堂证据不足以决定眼前动作时，读取
