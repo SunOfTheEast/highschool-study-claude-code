@@ -1,5 +1,6 @@
 import { Application, extensions } from 'pixi.js';
 import {
+  config,
   Live2DModel,
   Live2DPlugin,
 } from 'untitled-pixi-live2d-engine/cubism';
@@ -12,6 +13,8 @@ import type {
 import { createPeerVisualController } from './state';
 
 let pluginRegistered = false;
+
+config.sound = false;
 
 type CubismCoreModel = {
   addParameterValueById(id: unknown, value: number, weight?: number): void;
