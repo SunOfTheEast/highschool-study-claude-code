@@ -32,6 +32,32 @@ export type LearningContextReference =
   | LearningAssetHandle
   | { kind: 'material'; id: string; revision: number; locator: string | null };
 
+export type CalendarDestination =
+  | { kind: 'plan'; planId: string }
+  | {
+    kind: 'free-learning';
+    intent: 'open' | 'review';
+    contexts: LearningContextReference[];
+  };
+
+export type CalendarOpenedReceipt = {
+  at: string;
+  sessionKey: SessionKey;
+};
+
+export type CalendarAppointment = {
+  id: string;
+  revision: number;
+  createdAt: string;
+  updatedAt: string;
+  title: string;
+  startsAt: string;
+  plannedMinutes: number | null;
+  learningSetPath: string;
+  destination: CalendarDestination;
+  opened: CalendarOpenedReceipt | null;
+};
+
 export type LegacyUnpinnedLearningSourceReference = {
   kind: 'legacy-unpinned';
   assetKind: LearningAssetKind;

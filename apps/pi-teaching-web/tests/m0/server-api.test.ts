@@ -95,6 +95,7 @@ function fakeRegistry(overrides: Record<string, unknown> = {}) {
     readHistory: async () => entries(),
     send: async () => {},
     subscribe: async () => () => {},
+    endFocusForSession: async () => null,
     ...overrides,
   };
 }

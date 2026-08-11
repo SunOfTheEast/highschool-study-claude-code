@@ -16,6 +16,7 @@ import type { NodeSessionScope } from './session-scope';
 import { createPlanMemoryTools } from './memory-tools';
 import { createNodeFinishTool } from './node-finish-tools';
 import { createPlanProblemCardProposalTool } from './learning-asset-proposal-tools';
+import { createCalendarTools, type CalendarRepository } from './calendar-tools';
 
 const nodeId = Type.String({
   pattern: '^[A-Za-z0-9][A-Za-z0-9._-]*$',
@@ -122,6 +123,7 @@ export function createPlanTools(
   root: string,
   scope: NodeSessionScope,
   session?: LearningAssetToolSession,
+  calendar?: CalendarRepository,
 ) {
   const exportTool = defineTool({
     name: 'artifact_export',
@@ -228,6 +230,7 @@ export function createPlanTools(
     createPlanProblemCardProposalTool(),
     ...(savePreparedCard ? [savePreparedCard] : []),
     ...createPlanMemoryTools(root),
+    ...(calendar ? createCalendarTools(calendar, root, scope) : []),
     createNodeFinishTool(root, 'plan', scope.nodePath),
   ];
 }

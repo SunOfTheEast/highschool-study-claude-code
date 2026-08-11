@@ -10,6 +10,7 @@ import type { PeerResponder } from './peer-runner';
 import type { PaperResearchResponder } from './paper-research-runner';
 import { createPaperResearchTool } from './paper-research-tools';
 import { createLearningAssetProposalTools } from './learning-asset-proposal-tools';
+import { createCalendarTools, type CalendarRepository } from './calendar-tools';
 
 export function createFreeLearningTools(
   root: string,
@@ -17,6 +18,7 @@ export function createFreeLearningTools(
   session: LearningAssetToolSession,
   peerResponder?: PeerResponder,
   paperResearchResponder?: PaperResearchResponder,
+  calendar?: CalendarRepository,
 ) {
   const assets = createLearningAssetTools(root, {
     resolve: (aliases) => resolveSelectedAssetAliases(root, scope.selectedAssets, aliases),
@@ -28,10 +30,11 @@ export function createFreeLearningTools(
     ? createPaperResearchTool(paperResearchResponder)
     : null;
   return [
-    ...proposals,
     ...assets,
+    ...proposals,
     ...(memory ? [memory] : []),
     ...(peer ? [peer] : []),
     ...(paperResearch ? [paperResearch] : []),
+    ...(calendar ? createCalendarTools(calendar, root, scope) : []),
   ];
 }

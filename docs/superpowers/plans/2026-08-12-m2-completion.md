@@ -424,26 +424,26 @@ type CalendarAppointment = {
 - Session tools are available in Plan, Lesson, and Free Learning only. Lesson formal appointments resolve to its parent Plan; Runtime never chooses a Lesson.
 - Model create/update/delete is permitted only after natural confirmation by Skill; Runtime validates the mechanical request, not transcript wording.
 
-- [ ] **Step 1: Write repository and scope RED tests**
+- [x] **Step 1: Write repository and scope RED tests**
 
 Cover atomic create/update/delete, stale revision, absolute learning-set identity, one-off time validation, nullable minutes, Plan destination verification, Lesson-to-parent-Plan binding, selected-asset validation, and Roadmap/Meta absence.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 ```bash
 cd apps/pi-teaching-web
 bun test tests/m2/calendar-repository.test.ts tests/m2/calendar-tools.test.ts
 ```
 
-- [ ] **Step 3: Thread app-home into runtime without widening learning-set services**
+- [x] **Step 3: Thread app-home into runtime without widening learning-set services**
 
 Add `appHome` to server/runtime construction options and create a dedicated calendar repository. Do not place calendar files under `root`, and do not make generic workspace services accept arbitrary absolute paths.
 
-- [ ] **Step 4: Implement CRUD and the narrow model tools**
+- [x] **Step 4: Implement CRUD and the narrow model tools**
 
 Generate IDs/timestamps/revisions mechanically. Plan and Lesson may create only formal Plan destinations. Free Learning may create open/review destinations with validated selected contexts. Update/delete require current ID and revision. Return a student-safe appointment receipt.
 
-- [ ] **Step 5: Verify and commit**
+- [x] **Step 5: Verify and commit**
 
 ```bash
 cd apps/pi-teaching-web

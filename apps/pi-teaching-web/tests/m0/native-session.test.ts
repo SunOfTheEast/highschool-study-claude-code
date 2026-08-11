@@ -499,10 +499,10 @@ test('registers only node-bound custom tools for Plan and Lesson scopes', () => 
   expect(customToolsForNode(root, lessonScope, manager).map((tool) => tool.name)).toEqual([
     'classroom_log_append',
     'classroom_update',
-    'propose_note',
-    'propose_problem_card',
     'save_note',
     'save_problem_card',
+    'propose_note',
+    'propose_problem_card',
     'lesson_memory_commit',
     'finish_lesson',
   ]);

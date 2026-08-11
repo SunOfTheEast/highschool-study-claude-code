@@ -74,6 +74,8 @@ test('Lesson exposes the same narrow asset tools without restoring native writes
     'classroom_update',
     'save_note',
     'save_problem_card',
+    'propose_note',
+    'propose_problem_card',
     'lesson_memory_commit',
     'finish_lesson',
   ]);

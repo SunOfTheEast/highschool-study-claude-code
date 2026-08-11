@@ -45,6 +45,8 @@ import {
   type PaperResearchResponder,
 } from './paper-research-runner';
 import { focusCustomMessageContent } from './session-custom-messages';
+import { createCalendarRepository } from '../calendar/appointments';
+import type { CalendarRepository } from './calendar-tools';
 
 export interface StudySession {
   readonly sessionId: string;
@@ -71,6 +73,7 @@ export type SessionFactoryInput = StudySessionScope & {
 export type StudySessionFactory = (input: SessionFactoryInput) => Promise<StudySession>;
 
 export type PiRuntimeOptions = {
+  appHome: string;
   agentDir: string;
   authPath: string;
   modelsPath: string;
@@ -91,11 +94,19 @@ export function customToolsForNode(
   scope: NodeSessionScope,
   manager?: Pick<SessionManager, 'getSessionId' | 'getBranch'>,
   paperResearchResponder?: PaperResearchResponder,
+  calendar?: CalendarRepository,
 ) {
   if (scope.nodeKind === 'lesson') {
-    return createLessonTools(root, scope.nodePath, manager, paperResearchResponder);
+    return createLessonTools(
+      root,
+      scope.nodePath,
+      manager,
+      paperResearchResponder,
+      calendar,
+      scope,
+    );
   }
-  if (scope.nodeKind === 'plan') return createPlanTools(root, scope, manager);
+  if (scope.nodeKind === 'plan') return createPlanTools(root, scope, manager, calendar);
   return [];
 }
 
@@ -105,10 +116,11 @@ export function customToolsForSession(
   manager?: Pick<SessionManager, 'getSessionId' | 'getBranch'>,
   peerResponder?: PeerResponder,
   paperResearchResponder?: PaperResearchResponder,
+  calendar?: CalendarRepository,
 ) {
   if (isMetaScope(scope)) return createMetaTools(root);
   if (isNodeSessionScope(scope)) {
-    return customToolsForNode(root, scope, manager, paperResearchResponder);
+    return customToolsForNode(root, scope, manager, paperResearchResponder, calendar);
   }
   if (!manager) throw new Error('FREE_LEARNING_SESSION_MANAGER_REQUIRED');
   return createFreeLearningTools(
@@ -117,6 +129,7 @@ export function customToolsForSession(
     manager,
     peerResponder,
     paperResearchResponder,
+    calendar,
   );
 }
 
@@ -192,6 +205,7 @@ export async function createPiSessionFactory(
     })
     : undefined;
   const settingsManager = options ? SettingsManager.create(root, options.agentDir) : undefined;
+  const calendar = options ? createCalendarRepository(options.appHome) : undefined;
   return async ({ sessionFile, ...scope }) => {
     const eventBus = createEventBus();
     const manager = createStudySessionManager(root, sessionFile, options?.sessionsDir);
@@ -203,13 +217,20 @@ export async function createPiSessionFactory(
     } else {
       recoverOpenedSessionState(root, manager);
     }
-    const resourceLoader = await createRoleResourceLoader(root, scope, eventBus);
+    const resourceLoader = await createRoleResourceLoader(
+      root,
+      scope,
+      eventBus,
+      process.env.STUDY_PERSONA,
+      Boolean(calendar),
+    );
     const customTools = customToolsForSession(
       root,
       scope,
       manager,
       peerResponder,
       paperResearchResponder,
+      calendar,
     );
     const { session } = await createAgentSession({
       cwd: root,
@@ -230,11 +251,13 @@ export async function createPiSessionFactory(
             memoryEnabled(root),
             Boolean(peerResponder),
             Boolean(paperResearchResponder),
+            Boolean(calendar),
           )
           : modelToolsForNode(
             scope.nodeKind,
             memoryEnabled(root),
             Boolean(paperResearchResponder),
+            Boolean(calendar),
           ))],
     });
     await bindStudyExtensions(session);

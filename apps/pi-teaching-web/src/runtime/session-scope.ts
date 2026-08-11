@@ -93,16 +93,25 @@ export const META_MODEL_TOOLS = [
   'create_roadmap',
 ] as const;
 
+export const CALENDAR_MODEL_TOOLS = [
+  'calendar_list',
+  'calendar_create',
+  'calendar_update',
+  'calendar_delete',
+] as const;
+
 export function modelToolsForFreeLearning(
   hasMemory: boolean,
   peerEnabled = false,
   paperResearchEnabled = false,
+  calendarEnabled = false,
 ): readonly string[] {
   return [
     ...FREE_LEARNING_MODEL_TOOLS,
     ...(hasMemory ? ['free_learning_memory_commit'] : []),
     ...(peerEnabled ? ['ask_peer'] : []),
     ...(paperResearchEnabled ? ['paper_research'] : []),
+    ...(calendarEnabled ? CALENDAR_MODEL_TOOLS : []),
   ];
 }
 
@@ -124,12 +133,14 @@ export function modelToolsForNode(
   kind: NodeKind,
   hasMemory = false,
   paperResearchEnabled = false,
+  calendarEnabled = false,
 ): readonly string[] {
   if (kind === 'lesson') {
     return [
       ...LESSON_MODEL_TOOLS.slice(0, -1),
       ...(hasMemory ? ['lesson_memory_commit'] as const : []),
       ...(paperResearchEnabled ? ['paper_research'] as const : []),
+      ...(calendarEnabled ? CALENDAR_MODEL_TOOLS : []),
       'finish_lesson',
     ];
   }
@@ -137,6 +148,7 @@ export function modelToolsForNode(
     const tools = [
       ...PLAN_MODEL_TOOLS,
       ...(hasMemory ? ['memory_route_resolve'] as const : []),
+      ...(calendarEnabled ? CALENDAR_MODEL_TOOLS : []),
       'finish_plan',
     ] as const;
     return tools;

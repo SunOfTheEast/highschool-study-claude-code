@@ -22,6 +22,7 @@ import { createNodeFinishTool } from './node-finish-tools';
 import type { PaperResearchResponder } from './paper-research-runner';
 import { createPaperResearchTool } from './paper-research-tools';
 import { createLearningAssetProposalTools } from './learning-asset-proposal-tools';
+import { createCalendarTools, type CalendarRepository } from './calendar-tools';
 
 const blockId = Type.String({
   pattern: '^[A-Za-z0-9][A-Za-z0-9._-]*$',
@@ -175,6 +176,8 @@ export function createLessonTools(
   lessonPath: string,
   session?: LearningAssetToolSession,
   paperResearchResponder?: PaperResearchResponder,
+  calendar?: CalendarRepository,
+  scope?: import('./session-scope').NodeSessionScope,
 ) {
   const boundSources = session ? lessonSourceAliases(root, lessonPath) : [];
   const validate = (source: string) => parseLessonSource(lessonPath, source);
@@ -256,18 +259,20 @@ export function createLessonTools(
     ? [
       logTool,
       updateTool,
-      ...proposalTools,
       ...assetTools,
+      ...proposalTools,
       memoryTool,
       ...(paperResearch ? [paperResearch] : []),
+      ...(calendar && scope ? createCalendarTools(calendar, root, scope) : []),
       finishTool,
     ]
     : [
       logTool,
       updateTool,
-      ...proposalTools,
       ...assetTools,
+      ...proposalTools,
       ...(paperResearch ? [paperResearch] : []),
+      ...(calendar && scope ? createCalendarTools(calendar, root, scope) : []),
       finishTool,
     ];
 }

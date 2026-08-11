@@ -127,6 +127,7 @@ export function loadStaticNodeResources(
   root: string,
   scope: NodeSessionScope,
   personaId?: string,
+  calendarEnabled = false,
 ): StaticNodeResources {
   const roleFile = roleFiles[scope.nodeKind];
   const hasMemory = memoryEnabled(root);
@@ -179,7 +180,7 @@ export function loadStaticNodeResources(
     ],
     skillPaths: roleSkills[scope.nodeKind]
       .map((name) => resourcePath('skills', name, 'SKILL.md')),
-    tools: modelToolsForNode(scope.nodeKind, hasMemory),
+    tools: modelToolsForNode(scope.nodeKind, hasMemory, false, calendarEnabled),
   };
 }
 
@@ -187,6 +188,7 @@ export function loadStaticFreeLearningResources(
   root: string,
   scope: FreeLearningSessionScope,
   personaId?: string,
+  calendarEnabled = false,
 ): StaticSessionResources {
   const hasMemory = memoryEnabled(root);
   const selectedAssets = renderSelectedAssetContext(root, scope.selectedAssets);
@@ -229,7 +231,7 @@ export function loadStaticFreeLearningResources(
       },
     ],
     skillPaths: [resourcePath('skills', 'free-learning', 'SKILL.md')],
-    tools: modelToolsForFreeLearning(hasMemory),
+    tools: modelToolsForFreeLearning(hasMemory, false, false, calendarEnabled),
   };
 }
 
@@ -278,12 +280,13 @@ export async function createRoleResourceLoader(
   scope: StudySessionScope,
   eventBus: EventBus,
   personaId: string | undefined = process.env.STUDY_PERSONA,
+  calendarEnabled = false,
 ) {
   const resources = isMetaScope(scope)
     ? loadStaticMetaResources(root, scope, personaId)
     : isFreeLearningScope(scope)
-      ? loadStaticFreeLearningResources(root, scope, personaId)
-      : loadStaticNodeResources(root, scope, personaId);
+      ? loadStaticFreeLearningResources(root, scope, personaId, calendarEnabled)
+      : loadStaticNodeResources(root, scope, personaId, calendarEnabled);
   const extensionFactories = isNodeSessionScope(scope) && scope.nodeKind === 'plan'
     ? [
       {

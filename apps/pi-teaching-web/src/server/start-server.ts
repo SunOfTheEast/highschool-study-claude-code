@@ -122,6 +122,7 @@ export async function startStudyForgeServer(arguments_: RuntimeArguments) {
           scout: config.scout,
         });
         const factory = await createPiSessionFactory(validation.root, {
+          appHome: paths.appHome,
           agentDir: paths.agentDir,
           authPath: paths.authPath,
           modelsPath: paths.modelsPath,

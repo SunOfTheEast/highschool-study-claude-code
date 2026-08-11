@@ -49,6 +49,14 @@ description: Use when a Lesson Session teaches, adapts, records, or finishes the
 索引，不为标签打断课堂或追问学生。保存成功或解释得不错都不等于已经掌握；
 保存资产也不自动写记忆。
 
+## 安排下次学习
+
+学生谈到未来时间时，先把模糊时间问到足以落成一个绝对时刻，再向学生展示本地完整日期、
+星期、时间、可选时长、主题和本 Lesson 所属 Plan。亮线是：
+**公开完整约定 → 学生自然确认 → calendar_create**。不要求固定口令；学生还没看见完整约定时的“你安排”、沉默和继续做题
+都不算确认。改期或删除先用 `calendar_list` 取得当前 revision，公开完整改动并确认后再写。
+Runtime 会绑定父 Plan；Tutor 不替日历选下一节 Lesson，也不因预约而结束当前课堂。
+
 ## 进入课堂
 
 读取完整 Lesson，找出当前 active Block。若没有 active Block，选择第一个合适的 pending
