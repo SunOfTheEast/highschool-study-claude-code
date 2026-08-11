@@ -1,0 +1,42 @@
+diff --git a/dist/cubism.es.js b/dist/cubism.es.js
+index 59f0ad2da1457e9dc461140b0ed36b68a4d20aa4..b819921b7f60cbda4422bbaf1bee24be7256c0e6 100644
+--- a/dist/cubism.es.js
++++ b/dist/cubism.es.js
+@@ -4861,6 +4861,7 @@ function createTexture(url, options = {}) {
+   }
+   return Assets.load({
+     src: url,
++    parser: "texture",
+     data: {
+       autoGenerateMipmaps: getTextureLODMode(options.lod) === "full"
+     }
+@@ -14357,7 +14358,7 @@ class CubismModel {
+    */
+   getDrawableRenderOrders() {
+     const renderOrders = this._model.drawables.renderOrders;
+-    return renderOrders;
++    return renderOrders ?? this._model.drawables.drawOrders;
+   }
+   /**
+    * @deprecated
+diff --git a/dist/cubism.js b/dist/cubism.js
+index f67db9bd1230f23cf84b5e2885720f32e2217d3f..a8902f2b8ceb45dda488980ae512e73abd7b93cf 100644
+--- a/dist/cubism.js
++++ b/dist/cubism.js
+@@ -4864,6 +4864,7 @@ var __async = (__this, __arguments, generator) => {
+     }
+     return pixi_js.Assets.load({
+       src: url,
++      parser: "texture",
+       data: {
+         autoGenerateMipmaps: getTextureLODMode(options.lod) === "full"
+       }
+@@ -14360,7 +14361,7 @@ var __async = (__this, __arguments, generator) => {
+      */
+     getDrawableRenderOrders() {
+       const renderOrders = this._model.drawables.renderOrders;
+-      return renderOrders;
++      return renderOrders ?? this._model.drawables.drawOrders;
+     }
+     /**
+      * @deprecated

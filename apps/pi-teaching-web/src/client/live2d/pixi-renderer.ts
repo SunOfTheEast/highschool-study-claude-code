@@ -33,12 +33,13 @@ export const createPeerLive2DRenderer: CreatePeerLive2DRenderer = async ({
   onFailure,
 }) => {
   let app: Application | null = null;
+  let canvas: HTMLCanvasElement | null = null;
   let failed = false;
 
   const fail = () => {
     if (failed) return;
     failed = true;
-    (app?.canvas as HTMLCanvasElement | null)?.remove();
+    canvas?.remove();
     onFailure();
   };
 
@@ -105,7 +106,7 @@ export const createPeerLive2DRenderer: CreatePeerLive2DRenderer = async ({
     };
     app.ticker.add(animate);
 
-    const canvas = app.canvas;
+    canvas = app.canvas;
     canvas.setAttribute('aria-hidden', 'true');
     canvas.style.display = 'block';
     canvas.style.width = '100%';
@@ -145,7 +146,7 @@ export const createPeerLive2DRenderer: CreatePeerLive2DRenderer = async ({
         destroyed = true;
         resizeObserver?.disconnect();
         if (!resizeObserver) window.removeEventListener('resize', place);
-        canvas.removeEventListener('webglcontextlost', fail);
+        canvas?.removeEventListener('webglcontextlost', fail);
         app!.ticker.remove(animate);
         model.internalModel.off('beforeModelUpdate', applyMouth);
         model.removeFromParent();
@@ -155,6 +156,7 @@ export const createPeerLive2DRenderer: CreatePeerLive2DRenderer = async ({
           { children: true, texture: true, textureSource: true, context: true },
         );
         app = null;
+        canvas = null;
       },
     };
 
@@ -171,6 +173,7 @@ export const createPeerLive2DRenderer: CreatePeerLive2DRenderer = async ({
       } catch {
         // Preserve the original renderer failure.
       }
+      app = null;
     }
     fail();
     throw error;
