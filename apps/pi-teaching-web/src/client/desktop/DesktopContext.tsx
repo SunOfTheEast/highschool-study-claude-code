@@ -1,8 +1,10 @@
 import { createContext, type ReactNode, useContext } from 'react';
+import type { CompanionBridge } from '../companion/contracts';
 
 export type DesktopTools = {
   openSettings(): void;
   openHelp(): void;
+  companion: CompanionBridge | null;
 };
 
 const DesktopToolsContext = createContext<DesktopTools | null>(null);

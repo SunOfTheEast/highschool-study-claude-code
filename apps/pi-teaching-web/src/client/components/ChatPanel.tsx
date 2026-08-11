@@ -14,8 +14,12 @@ import {
   peerPresence,
   usePeerPlayback,
   visibleConversationDuringPeer,
+  type PeerPlaybackView,
 } from '../peer-playback';
 import { PeerEmbodiment } from './PeerEmbodiment';
+import { useDesktopTools } from '../desktop/DesktopContext';
+import { useCompanionPeerPlayback } from '../companion/main-playback';
+import type { CompanionBridge } from '../companion/contracts';
 
 const toolStatus = {
   running: '进行中',
@@ -23,15 +27,7 @@ const toolStatus = {
   error: '失败',
 } as const;
 
-export function ChatPanel({
-  sessionKey,
-  items,
-  running,
-  error,
-  enabled,
-  connected = true,
-  onSend,
-}: {
+type ChatPanelProps = {
   sessionKey: SessionKey;
   items: ConversationItem[];
   running: boolean;
@@ -39,10 +35,26 @@ export function ChatPanel({
   enabled: boolean;
   connected?: boolean;
   onSend(text: string): Promise<void>;
-}) {
+};
+
+type ChatPanelContentProps = ChatPanelProps & {
+  playback: PeerPlaybackView;
+  showEmbodiment: boolean;
+};
+
+function ChatPanelContent({
+  sessionKey,
+  items,
+  running,
+  error,
+  enabled,
+  connected = true,
+  onSend,
+  playback,
+  showEmbodiment,
+}: ChatPanelContentProps) {
   const [text, setText] = useState('');
   const freeLearning = sessionKey.startsWith('free:');
-  const playback = usePeerPlayback(items, freeLearning && enabled);
   const presence = peerPresence(items, playback);
   const presentedItems = presentConversation(items);
   const visibleItems = visibleConversationDuringPeer(
@@ -77,7 +89,7 @@ export function ChatPanel({
           </button>
         )}
       </header>
-      {freeLearning && enabled && (
+      {freeLearning && enabled && showEmbodiment && (
         <PeerEmbodiment
           state={presence}
           playbackActive={playback.phase !== 'idle'}
@@ -179,6 +191,32 @@ export function ChatPanel({
       </form>
     </section>
   );
+}
+
+function LocalChatPanel(props: ChatPanelProps) {
+  const freeLearning = props.sessionKey.startsWith('free:');
+  const playback = usePeerPlayback(props.items, freeLearning && props.enabled);
+  return <ChatPanelContent {...props} playback={playback} showEmbodiment={freeLearning} />;
+}
+
+function CompanionChatPanel({ bridge, ...props }: ChatPanelProps & {
+  bridge: CompanionBridge;
+}) {
+  const freeLearning = props.sessionKey.startsWith('free:');
+  const playback = useCompanionPeerPlayback(
+    props.items,
+    freeLearning && props.enabled,
+    bridge,
+  );
+  return <ChatPanelContent {...props} playback={playback} showEmbodiment={false} />;
+}
+
+export function ChatPanel(props: ChatPanelProps) {
+  const desktopTools = useDesktopTools();
+  if (props.sessionKey.startsWith('free:') && desktopTools?.companion) {
+    return <CompanionChatPanel {...props} bridge={desktopTools.companion} />;
+  }
+  return <LocalChatPanel {...props} />;
 }
 
 export default ChatPanel;

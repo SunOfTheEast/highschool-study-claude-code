@@ -1,4 +1,6 @@
 import { invoke } from '@tauri-apps/api/core';
+import { tauriCompanionBridge } from '../companion/bridge';
+import type { CompanionBridge } from '../companion/contracts';
 
 export type RuntimeConnection = {
   state:
@@ -13,6 +15,7 @@ export type RuntimeConnection = {
 
 export type DesktopBridge = {
   readonly isDesktop: boolean;
+  readonly companion?: CompanionBridge | null;
   runtimeConnection(): Promise<RuntimeConnection>;
   restartRuntime(): Promise<void>;
   chooseLearningSetFolder(): Promise<string | null>;
@@ -27,6 +30,7 @@ export function isDesktopEnvironment(value: unknown = globalThis): boolean {
 
 export const tauriDesktopBridge: DesktopBridge = {
   isDesktop: typeof window !== 'undefined' && isDesktopEnvironment(window),
+  companion: tauriCompanionBridge,
   runtimeConnection: () => invoke<RuntimeConnection>('runtime_connection'),
   restartRuntime: () => invoke<void>('restart_runtime'),
   chooseLearningSetFolder: () => invoke<string | null>('choose_learning_set_folder'),

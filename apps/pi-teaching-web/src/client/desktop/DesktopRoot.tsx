@@ -264,6 +264,7 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
     <DesktopToolsProvider value={{
       openSettings: () => setPage('models'),
       openHelp: () => void openHelp(),
+      companion: bridge.companion ?? null,
     }}>
       <div className="desktop-ready-shift" key={connection.token ?? 'ready'}>
         <App />
