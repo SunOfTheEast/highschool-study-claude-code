@@ -23,6 +23,17 @@ test('installs the Pixi strict-CSP renderer before creating the application', ()
     .toBeLessThan(renderer.indexOf('new Application()'));
 });
 
+test('allows private Live2D binary blobs through the packaged WebView CSP', () => {
+  const config = JSON.parse(readFileSync(join(appRoot, 'src-tauri/tauri.conf.json'), 'utf8')) as {
+    app: { security: { csp: string } };
+  };
+  const connectSource = config.app.security.csp
+    .split(';')
+    .find((directive) => directive.trim().startsWith('connect-src')) ?? '';
+
+  expect(connectSource.split(/\s+/)).toContain('blob:');
+});
+
 test('pins the texture parser when private textures become blob URLs', () => {
   const packageJson = JSON.parse(readFileSync(join(appRoot, 'package.json'), 'utf8')) as {
     patchedDependencies?: Record<string, string>;
