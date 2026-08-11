@@ -2,6 +2,8 @@ import { expect, test } from 'bun:test';
 import type { SessionEntry } from '@earendil-works/pi-coding-agent';
 import type { StudySession } from '../../src/runtime/session-factory';
 import {
+  APPOINTMENT_OPENED_MESSAGE_TYPE,
+  ensureAppointmentOpenedMessage,
   ensureFocusEndedMessage,
   ensureFocusStartedMessage,
   FOCUS_ENDED_MESSAGE_TYPE,
@@ -91,4 +93,20 @@ test('parent-session end is recorded without asking the teacher to reply', async
     data: parentEnded,
     options: { triggerTurn: false },
   });
+});
+
+test('records one appointment opening as a quiet time fact', async () => {
+  const { session, calls } = fakeSession();
+  const event = {
+    appointmentId: 'appointment-001', appointmentRevision: 2,
+    scheduledAt: '2026-08-13T12:00:00.000Z', openedAt: '2026-08-13T11:55:00.000Z',
+    plannedMinutes: 60, title: '继续当前阶段', intent: 'course' as const,
+  };
+  expect(await ensureAppointmentOpenedMessage(session, event)).toBe(true);
+  expect(await ensureAppointmentOpenedMessage(session, event)).toBe(false);
+  expect(calls).toEqual([{
+    customType: APPOINTMENT_OPENED_MESSAGE_TYPE,
+    data: event,
+    options: { triggerTurn: false },
+  }]);
 });

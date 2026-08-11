@@ -370,13 +370,14 @@ test('offers Home and Assets with Course as an optional primary destination', ()
   const markup = renderToStaticMarkup(
     <PrimaryViewNav
       active="home"
-      hrefs={{ home: '/home', assets: '/assets', course: '/course' }}
+      hrefs={{ home: '/home', assets: '/assets', calendar: '/calendar', course: '/course' }}
       hasCourse={false}
       onNavigate={() => {}}
     />,
   );
   expect(markup).toContain('学习首页');
   expect(markup).toContain('学习资料');
+  expect(markup).toContain('学习日历');
   expect(markup).not.toContain('课程脉络');
   expect(markup).not.toContain('知识山河');
 });

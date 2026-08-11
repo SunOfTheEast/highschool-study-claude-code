@@ -115,7 +115,7 @@ test('keeps free learning outside the course tree with its own narrow tool surfa
 });
 
 test('keeps M0 Course and Knowledge projections behind the M1b primary navigation', () => {
-  expect(PRIMARY_VIEWS).toEqual(['home', 'assets', 'course']);
+  expect(PRIMARY_VIEWS).toEqual(['home', 'assets', 'calendar', 'course']);
   expect(Object.keys(initialViewState)).toEqual(['course', 'knowledge']);
 
   const routes = [
@@ -154,5 +154,5 @@ test('round-trips a utility handout route without making it a primary view', () 
   ]) {
     expect(parseBrowserRoute(invalid)).toBeNull();
   }
-  expect(PRIMARY_VIEWS).toEqual(['home', 'assets', 'course']);
+  expect(PRIMARY_VIEWS).toEqual(['home', 'assets', 'calendar', 'course']);
 });

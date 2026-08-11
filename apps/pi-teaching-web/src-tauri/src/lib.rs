@@ -1,4 +1,5 @@
 pub mod companion;
+pub mod calendar_notifications;
 pub mod sidecar;
 
 use std::{
@@ -11,6 +12,10 @@ use companion::{
     CompanionManager, companion_control, companion_present, companion_set_playback,
     companion_snapshot, hide_companion_window, quit_studyforge, show_companion_window,
     show_main_window,
+};
+use calendar_notifications::{
+    CalendarNotificationState, install as install_calendar_notifications,
+    reconcile_calendar_notifications, take_calendar_launch_intent,
 };
 use serde::Serialize;
 use sidecar::{DesktopPaths, RuntimeState, build_launch, parse_ready_line};
@@ -305,6 +310,7 @@ fn show_studyforge_notification(
 pub fn run() {
     let manager = RuntimeManager::default();
     let companion = CompanionManager::default();
+    let calendar_notifications = CalendarNotificationState::default();
     let setup_manager = manager.clone();
     let app = tauri::Builder::default()
         .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
@@ -319,6 +325,7 @@ pub fn run() {
         .plugin(tauri_plugin_shell::init())
         .manage(manager.clone())
         .manage(companion)
+        .manage(calendar_notifications)
         .invoke_handler(tauri::generate_handler![
             runtime_connection,
             restart_runtime,
@@ -326,6 +333,8 @@ pub fn run() {
             reveal_in_finder,
             open_external_url,
             show_studyforge_notification,
+            reconcile_calendar_notifications,
+            take_calendar_launch_intent,
             companion_snapshot,
             companion_present,
             companion_set_playback,
@@ -344,6 +353,10 @@ pub fn run() {
             }
         })
         .setup(move |app| {
+            install_calendar_notifications(
+                app.handle(),
+                app.state::<CalendarNotificationState>().inner(),
+            )?;
             if let Err(error) = start_runtime(app.handle(), &setup_manager) {
                 mark_spawn_failure(&setup_manager, error);
             }

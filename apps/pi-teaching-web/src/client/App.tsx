@@ -2,6 +2,8 @@ import { useEffect, useReducer, useRef, useState } from 'react';
 import type {
   CourseSnapshot,
   CourseTreeNode,
+  CalendarAppointment,
+  CalendarSnapshot,
   LearningAssetLibrarySnapshot,
   LearningContextReference,
   LearningFootprintSnapshot,
@@ -33,6 +35,7 @@ import { ProblemCardPage } from './pages/ProblemCardPage';
 import { FootprintPage } from './pages/FootprintPage';
 import { MaterialPage } from './pages/MaterialPage';
 import { MetaPage } from './pages/MetaPage';
+import { CalendarPage } from './pages/CalendarPage';
 import type { PrimaryView } from './view-state';
 import { deriveFreeLearningTitle } from '../study/display-projections';
 import { formatMaterialLocator } from './material-locator';
@@ -114,6 +117,10 @@ export function App() {
   const [note, setNote] = useState<LearningNoteView | null>(null);
   const [problem, setProblem] = useState<ProblemCardView | null>(null);
   const [course, setCourse] = useState<CourseSnapshot | null>(null);
+  const [calendar, setCalendar] = useState<CalendarSnapshot | null>(null);
+  const [calendarReminderPermission, setCalendarReminderPermission] = useState<
+    'granted' | 'denied' | 'unsupported' | 'unavailable' | null
+  >(null);
   const [semanticRelations, setSemanticRelations] = useState<SemanticRelation[] | null>(null);
   const [freeContexts, setFreeContexts] = useState<CarriedContextItem[]>([]);
   const [handout, setHandout] = useState<LessonHandout | null>(null);
@@ -126,6 +133,15 @@ export function App() {
   const [rightOpen, setRightOpen] = useState(false);
   const [focus, setFocus] = useState<PublicFocusCycle | null>(null);
   const routeLoadRevision = useRef(0);
+
+  const acceptCalendarSnapshot = (value: CalendarSnapshot) => {
+    setCalendar(value);
+    if (!desktopTools) return;
+    void desktopTools.reconcileCalendarNotifications(value.appointments).then(
+      (status) => setCalendarReminderPermission(status.permission),
+      () => setCalendarReminderPermission('unavailable'),
+    );
+  };
 
   const loadRoute = async (next: BrowserRoute) => {
     const revision = ++routeLoadRevision.current;
@@ -156,6 +172,15 @@ export function App() {
       if (next.kind === 'home') {
         const homeValue = await homeRequest;
         if (revision !== routeLoadRevision.current) return;
+        setHome(homeValue);
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
+      if (next.kind === 'calendar') {
+        const [calendarValue, homeValue] = await Promise.all([api.calendar(), homeRequest]);
+        if (revision !== routeLoadRevision.current) return;
+        acceptCalendarSnapshot(calendarValue);
         setHome(homeValue);
         setRoute(next);
         setNotice(null);
@@ -410,6 +435,11 @@ export function App() {
           void api.focus().then(setFocus, () => {});
           return;
         }
+        if (event.type === 'calendar-invalidated') {
+          if (current.kind === 'calendar') void loadRoute(current);
+          else void api.calendar().then(acceptCalendarSnapshot, () => {});
+          return;
+        }
         dispatch(event);
       };
       socket.onerror = () => socket?.close();
@@ -547,6 +577,21 @@ export function App() {
     }
   };
 
+  const openCalendarAppointment = async (appointment: CalendarAppointment) => {
+    try {
+      if (desktopTools) {
+        await desktopTools.openCalendarAppointment(appointment);
+        return;
+      }
+      const launched = await api.launchCalendarAppointment(appointment.id, appointment.revision);
+      const next = parseBrowserRoute(new URL(launched.route, window.location.origin).pathname);
+      if (!next) throw new Error('CALENDAR_LAUNCH_ROUTE_INVALID');
+      navigate(next);
+    } catch (error) {
+      setNotice(errorText(error));
+    }
+  };
+
   let content: React.ReactNode;
   if (route.kind === 'home') {
     content = home
@@ -560,6 +605,33 @@ export function App() {
         />
       )
       : <div className="loading-screen"><b>正在打开学习集</b></div>;
+  } else if (route.kind === 'calendar') {
+    content = calendar ? (
+      <CalendarPage
+        appointments={calendar.appointments}
+        currentLearningSetPath={calendar.currentLearningSetPath}
+        plans={calendar.plans}
+        reviewCandidates={calendar.reviewCandidates}
+        reminderPermission={calendarReminderPermission}
+        onCreate={async (input) => {
+          await api.createCalendarAppointment(input);
+          await loadRoute({ kind: 'calendar' });
+        }}
+        onUpdate={async (appointment, input) => {
+          await api.updateCalendarAppointment(appointment.id, {
+            expectedRevision: appointment.revision,
+            ...input,
+            destination: appointment.destination,
+          });
+          await loadRoute({ kind: 'calendar' });
+        }}
+        onDelete={async (appointment) => {
+          await api.deleteCalendarAppointment(appointment.id, appointment.revision);
+          await loadRoute({ kind: 'calendar' });
+        }}
+        onOpen={openCalendarAppointment}
+      />
+    ) : <div className="loading-screen"><b>正在读取学习日历</b></div>;
   } else if (route.kind === 'assets') {
     content = assets ? (
       <AssetsPage
@@ -727,6 +799,8 @@ export function App() {
 
   const activeView: PrimaryView = routeIsCourse(route)
     ? 'course'
+    : route.kind === 'calendar'
+      ? 'calendar'
     : route.kind === 'assets' || route.kind === 'note' || route.kind === 'problem-card'
       || route.kind === 'material'
       || route.kind === 'knowledge'
@@ -745,7 +819,13 @@ export function App() {
       onResumeFocus={resumeFocus}
       onEndFocus={endFocus}
       onNavigate={(view) => navigate(
-        view === 'home' ? { kind: 'home' } : view === 'assets' ? { kind: 'assets' } : { kind: 'course' },
+        view === 'home'
+          ? { kind: 'home' }
+          : view === 'assets'
+            ? { kind: 'assets' }
+            : view === 'calendar'
+              ? { kind: 'calendar' }
+              : { kind: 'course' },
       )}
     >
       {content}

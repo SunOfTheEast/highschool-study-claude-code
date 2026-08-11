@@ -490,26 +490,26 @@ git commit -m "feat: add one app-global learning calendar"
 - Native reconciliation schedules deterministic `appointment:<id>:advance` and `appointment:<id>:due` notifications.
 - Opening an appointment switches the desktop learning set if needed, then routes to Plan or creates/opens the intended Free Learning. The opened receipt prevents duplicate Session creation on a repeated notification click; it is not a completion state.
 
-- [ ] **Step 1: Write RED tests for month/day interaction and notification reconciliation**
+- [x] **Step 1: Write RED tests for month/day interaction and notification reconciliation**
 
 Cover month navigation, day side panel, direct CRUD, cross-set label, Plan-only course route, Free open/review launch, deterministic 10-minute/due IDs, update/delete reconciliation, cold click, and no `completed/missed` fields.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 ```bash
 cd apps/pi-teaching-web
 bun test tests/m2/calendar-ui.test.tsx tests/m2/calendar-notifications.test.ts
 ```
 
-- [ ] **Step 3: Build the restrained calendar page**
+- [x] **Step 3: Build the restrained calendar page**
 
 Add a single top-level “日历” destination. The month grid shows appointment marks and review-count hooks; clicking a date opens one side panel. Direct form actions do not invoke the model. Opening a formal appointment always returns to `/course/plan/:id`; it never resolves Lesson children.
 
-- [ ] **Step 4: Implement native reminder reconciliation**
+- [x] **Step 4: Implement native reminder reconciliation**
 
 Desktop shell receives the public appointment list and reconciles local notifications. Use deterministic IDs and no stored delivery receipt. Notification click opens/focuses the app and passes one launch intent; the main client resolves it after runtime readiness. Failure to obtain permission does not affect appointments.
 
-- [ ] **Step 5: Verify and commit**
+- [x] **Step 5: Verify and commit**
 
 ```bash
 cd apps/pi-teaching-web

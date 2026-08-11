@@ -1,6 +1,6 @@
 import type { CourseSnapshot, KnowledgeSnapshot } from '../shared/contracts';
 
-export const PRIMARY_VIEWS = ['home', 'assets', 'course'] as const;
+export const PRIMARY_VIEWS = ['home', 'assets', 'calendar', 'course'] as const;
 export type PrimaryView = typeof PRIMARY_VIEWS[number];
 export type ProjectionView = 'course' | 'knowledge';
 

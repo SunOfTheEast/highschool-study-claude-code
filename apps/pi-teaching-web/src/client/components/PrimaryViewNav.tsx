@@ -10,6 +10,7 @@ export type PrimaryViewNavProps = {
 const labels: Record<PrimaryView, string> = {
   home: '学习首页',
   assets: '学习资料',
+  calendar: '学习日历',
   course: '课程脉络',
 };
 

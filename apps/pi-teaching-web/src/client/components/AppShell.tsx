@@ -52,7 +52,7 @@ export function AppShell({
         </a>
         <PrimaryViewNav
           active={activeView}
-          hrefs={{ home: '/home', assets: '/assets', course: '/course' }}
+          hrefs={{ home: '/home', assets: '/assets', calendar: '/calendar', course: '/course' }}
           hasCourse={hasCourse}
           onNavigate={onNavigate}
         />

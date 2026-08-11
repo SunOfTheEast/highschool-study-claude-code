@@ -11,6 +11,7 @@ import { dirname, isAbsolute, join, resolve } from 'node:path';
 import type {
   CalendarAppointment,
   CalendarDestination,
+  CalendarOpenedReceipt,
   LearningContextReference,
   SessionKey,
 } from '../shared/contracts';
@@ -269,6 +270,29 @@ export function createCalendarRepository(appHome: string, clock: CalendarClock =
         revision: before.revision + 1,
         updatedAt: clock.now().toISOString(),
         opened: null,
+      };
+      const appointments = [...current.appointments];
+      appointments[index] = appointment;
+      persist(appointments);
+      return appointment;
+    },
+    markOpened(
+      id: string,
+      expectedRevision: number,
+      receipt: CalendarOpenedReceipt,
+    ): CalendarAppointment {
+      const current = store();
+      const index = current.appointments.findIndex((appointment) => appointment.id === id);
+      if (index < 0) throw new Error('CALENDAR_APPOINTMENT_NOT_FOUND');
+      const before = current.appointments[index]!;
+      if (before.revision !== expectedRevision) throw new Error('CALENDAR_APPOINTMENT_STALE');
+      if (before.opened) return before;
+      const appointment: CalendarAppointment = {
+        ...before,
+        opened: {
+          at: checkedCreatedTime(receipt.at, 'CALENDAR_OPENED_RECEIPT_INVALID'),
+          sessionKey: checkedSessionKey(receipt.sessionKey),
+        },
       };
       const appointments = [...current.appointments];
       appointments[index] = appointment;

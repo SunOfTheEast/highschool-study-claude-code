@@ -1,5 +1,8 @@
 import type {
   ConversationItem,
+  CalendarAppointment,
+  CalendarLaunchReceipt,
+  CalendarSnapshot,
   CourseSnapshot,
   FreeLearningSessionSummary,
   KnowledgeSnapshot,
@@ -68,6 +71,12 @@ const put = <T>(path: string, body: unknown) => json<T>(path, {
   body: JSON.stringify(body),
 });
 
+const remove = <T>(path: string, body: unknown) => json<T>(path, {
+  method: 'DELETE',
+  headers: { 'content-type': 'application/json' },
+  body: JSON.stringify(body),
+});
+
 export type LearningNoteView = LearningNote & {
   semanticTags: LearningAssetSemanticTags | null;
   formation: AssetFormation | null;
@@ -80,6 +89,27 @@ export type ProblemCardView = StudentProblemCard & {
 };
 
 export const api = {
+  calendar: () => json<CalendarSnapshot>('/api/calendar'),
+  createCalendarAppointment: (input: Pick<
+    CalendarAppointment,
+    'title' | 'startsAt' | 'plannedMinutes' | 'destination'
+  >) => post<{ appointment: CalendarAppointment }>('/api/calendar', input),
+  updateCalendarAppointment: (
+    id: string,
+    input: Pick<CalendarAppointment, 'title' | 'startsAt' | 'plannedMinutes' | 'destination'> & {
+      expectedRevision: number;
+    },
+  ) => put<{ appointment: CalendarAppointment }>(
+    `/api/calendar/${encodeURIComponent(id)}`,
+    input,
+  ),
+  deleteCalendarAppointment: (id: string, expectedRevision: number) => remove<{
+    deleted: CalendarAppointment;
+  }>(`/api/calendar/${encodeURIComponent(id)}`, { expectedRevision }),
+  launchCalendarAppointment: (id: string, expectedRevision: number) => post<CalendarLaunchReceipt>(
+    `/api/calendar/${encodeURIComponent(id)}/launch`,
+    { expectedRevision },
+  ),
   focus: () => json<PublicFocusCycle | null>('/api/focus'),
   startFocus: (sessionKey: SessionKey, targetSeconds: 900 | 1500 | 2700) => (
     post<PublicFocusCycle>('/api/focus/start', { sessionKey, targetSeconds })

@@ -58,6 +58,24 @@ export type CalendarAppointment = {
   opened: CalendarOpenedReceipt | null;
 };
 
+export type CalendarPlanChoice = {
+  id: string;
+  title: string;
+};
+
+export type CalendarSnapshot = {
+  appointments: CalendarAppointment[];
+  currentLearningSetPath: string;
+  plans: CalendarPlanChoice[];
+  reviewCandidates: [];
+};
+
+export type CalendarLaunchReceipt = {
+  appointment: CalendarAppointment;
+  sessionKey: SessionKey;
+  route: string;
+};
+
 export type LegacyUnpinnedLearningSourceReference = {
   kind: 'legacy-unpinned';
   assetKind: LearningAssetKind;
@@ -642,4 +660,5 @@ export type StudyEvent =
   | { type: 'assets-invalidated' }
   | { type: 'course-invalidated' }
   | { type: 'knowledge-invalidated' }
-  | { type: 'focus-invalidated' };
+  | { type: 'focus-invalidated' }
+  | { type: 'calendar-invalidated' };

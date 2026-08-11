@@ -67,6 +67,20 @@ test('atomically creates, revises, and deletes one app-global appointment', () =
     .toThrow('CALENDAR_APPOINTMENT_STALE');
   expect(repository.read(created.id)?.title).toBe('改到晚上继续');
 
+  const opened = repository.markOpened(created.id, 2, {
+    at: '2026-08-12T09:05:00.000Z',
+    sessionKey: 'plan:plan-001',
+  });
+  expect(opened.opened).toEqual({
+    at: '2026-08-12T09:05:00.000Z',
+    sessionKey: 'plan:plan-001',
+  });
+  expect(opened.revision).toBe(2);
+  expect(repository.markOpened(created.id, 2, {
+    at: '2026-08-12T09:06:00.000Z',
+    sessionKey: 'plan:plan-001',
+  })).toEqual(opened);
+
   expect(() => repository.remove(created.id, 1)).toThrow('CALENDAR_APPOINTMENT_STALE');
   repository.remove(created.id, 2);
   expect(repository.read(created.id)).toBeNull();

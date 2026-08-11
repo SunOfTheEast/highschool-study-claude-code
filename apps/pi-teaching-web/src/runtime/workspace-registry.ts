@@ -1,7 +1,9 @@
 import type { ImageContent } from '@earendil-works/pi-ai';
+import { resolve } from 'node:path';
 import type { AgentSessionEvent, SessionEntry } from '@earendil-works/pi-coding-agent';
 import type {
   CourseTreeNode,
+  CalendarAppointment,
   FreeLearningSessionSummary,
   LearningContextReference,
   LessonDocument,
@@ -56,6 +58,7 @@ import {
   type FocusTargetSeconds,
 } from '../time/focus-cycle';
 import {
+  ensureAppointmentOpenedMessage,
   ensureFocusEndedMessage,
   ensureFocusStartedMessage,
   hasFocusEndedMessage,
@@ -247,6 +250,31 @@ export class WorkspaceRegistry {
     this.sessions.set(sessionKey, session);
     this.freeRecords.set(session.sessionId, record);
     return publicSummary(record);
+  }
+
+  async openCalendarAppointment(
+    appointment: CalendarAppointment,
+    openedAt: string,
+  ): Promise<SessionKey> {
+    if (appointment.learningSetPath !== resolve(this.root)) {
+      throw new Error('CALENDAR_APPOINTMENT_OUT_OF_SCOPE');
+    }
+    const sessionKey: SessionKey = appointment.destination.kind === 'plan'
+      ? `plan:${appointment.destination.planId}`
+      : (await this.createFreeLearning(appointment.destination.contexts)).sessionKey;
+    const session = await this.open(sessionKey);
+    await ensureAppointmentOpenedMessage(session, {
+      appointmentId: appointment.id,
+      appointmentRevision: appointment.revision,
+      scheduledAt: appointment.startsAt,
+      openedAt,
+      plannedMinutes: appointment.plannedMinutes,
+      title: appointment.title,
+      intent: appointment.destination.kind === 'plan'
+        ? 'course'
+        : appointment.destination.intent,
+    });
+    return sessionKey;
   }
 
   async listFreeLearning(): Promise<FreeLearningSessionSummary[]> {

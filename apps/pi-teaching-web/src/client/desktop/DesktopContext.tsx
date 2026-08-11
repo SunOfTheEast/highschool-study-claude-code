@@ -1,10 +1,16 @@
 import { createContext, type ReactNode, useContext } from 'react';
 import type { CompanionBridge } from '../companion/contracts';
+import type { CalendarAppointment } from '../../shared/contracts';
+import type { CalendarNotificationStatus } from './bridge';
 
 export type DesktopTools = {
   openSettings(): void;
   openHelp(): void;
   showNotification(title: string, body: string): Promise<void>;
+  reconcileCalendarNotifications(
+    appointments: readonly CalendarAppointment[],
+  ): Promise<CalendarNotificationStatus>;
+  openCalendarAppointment(appointment: CalendarAppointment): Promise<void>;
   companion: CompanionBridge | null;
 };
 

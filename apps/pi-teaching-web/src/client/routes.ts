@@ -6,6 +6,7 @@ import {
 
 export type BrowserRoute =
   | { kind: 'home' }
+  | { kind: 'calendar' }
   | { kind: 'assets' }
   | { kind: 'free-learning'; sessionId: string }
   | { kind: 'meta'; sessionId: string }
@@ -36,6 +37,7 @@ function decodeId(value: string): string | null {
 
 export function parseBrowserRoute(pathname: string): BrowserRoute | null {
   if (pathname === '/' || pathname === '/home') return { kind: 'home' };
+  if (pathname === '/calendar') return { kind: 'calendar' };
   if (pathname === '/assets') return { kind: 'assets' };
   if (pathname === '/footprint') return { kind: 'footprint' };
   if (pathname === '/course') return { kind: 'course' };
@@ -99,6 +101,7 @@ export function parseBrowserRoute(pathname: string): BrowserRoute | null {
 
 export function formatBrowserRoute(route: BrowserRoute): string {
   if (route.kind === 'home') return '/home';
+  if (route.kind === 'calendar') return '/calendar';
   if (route.kind === 'assets') return '/assets';
   if (route.kind === 'free-learning') return `/learn/${encodeURIComponent(route.sessionId)}`;
   if (route.kind === 'meta') return `/meta/${encodeURIComponent(route.sessionId)}`;

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { AuthType } from '@earendil-works/pi-ai';
 import type { DesktopModelSelection } from '../../desktop/contracts';
 import { App } from '../App';
+import { api } from '../api';
 import { configureTransport, resetTransport } from '../transport';
 import { desktopApi, type DesktopAuthFlow, type DesktopStatus } from './api';
 import {
@@ -19,6 +20,8 @@ import {
   type ModelAuthFlow,
 } from './ModelSettings';
 import { publicErrorText } from '../public-errors';
+import type { CalendarAppointment } from '../../shared/contracts';
+import { calendarNotificationRequests } from '../calendar-navigation';
 
 type DesktopPage = 'learning' | 'models' | 'help';
 
@@ -68,6 +71,7 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
   const [authFlow, setAuthFlow] = useState<DesktopAuthFlow | null>(null);
   const [help, setHelp] = useState<HelpDocument[]>([]);
   const authRevision = useRef(0);
+  const launchBusy = useRef(false);
 
   const loadSetup = useCallback(async (next: RuntimeConnection) => {
     if (!next.apiBase || !next.token) return;
@@ -133,6 +137,73 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
       await new Promise((resolve) => setTimeout(resolve, 180));
     }
   }, [bridge, loadSetup]);
+
+  const openCalendarAppointment = useCallback(async (appointment: CalendarAppointment) => {
+    setBusy(true);
+    setError(null);
+    try {
+      if (status?.currentLearningSet !== appointment.learningSetPath) {
+        await desktopApi.selectExisting(appointment.learningSetPath);
+        await restartAndWait();
+      }
+      const launched = await api.launchCalendarAppointment(appointment.id, appointment.revision);
+      window.history.pushState(null, '', launched.route);
+      window.dispatchEvent(new PopStateEvent('popstate'));
+      const snapshot = await api.calendar();
+      await bridge.reconcileCalendarNotifications(
+        calendarNotificationRequests(snapshot.appointments),
+      );
+    } catch (nextError) {
+      setError(errorMessage(nextError));
+      throw nextError;
+    } finally {
+      setBusy(false);
+    }
+  }, [bridge, restartAndWait, status?.currentLearningSet]);
+
+  useEffect(() => {
+    if (status?.state !== 'ready') return;
+    let disposed = false;
+
+    const resolveLaunchIntent = async () => {
+      if (launchBusy.current) return;
+      const intent = await bridge.takeCalendarLaunchIntent();
+      if (!intent || disposed) return;
+      launchBusy.current = true;
+      try {
+        const snapshot = await api.calendar();
+        const appointment = snapshot.appointments.find((candidate) => (
+          candidate.id === intent.appointmentId && candidate.revision === intent.revision
+        ));
+        if (appointment) {
+          await openCalendarAppointment(appointment);
+          return;
+        }
+        const latest = snapshot.appointments.find((candidate) => (
+          candidate.id === intent.appointmentId
+        ));
+        const query = latest ? `?appointment=${encodeURIComponent(latest.id)}` : '';
+        window.history.pushState(null, '', `/calendar${query}`);
+        window.dispatchEvent(new PopStateEvent('popstate'));
+        await bridge.reconcileCalendarNotifications(
+          calendarNotificationRequests(snapshot.appointments),
+        );
+      } catch (nextError) {
+        setError(errorMessage(nextError));
+      } finally {
+        launchBusy.current = false;
+      }
+    };
+
+    void api.calendar().then((snapshot) => bridge.reconcileCalendarNotifications(
+      calendarNotificationRequests(snapshot.appointments),
+    )).then(() => resolveLaunchIntent(), () => {});
+    const timer = window.setInterval(() => void resolveLaunchIntent(), 1000);
+    return () => {
+      disposed = true;
+      window.clearInterval(timer);
+    };
+  }, [bridge, openCalendarAppointment, status?.state]);
 
   const mutate = async (action: () => Promise<unknown>, restart = false) => {
     setBusy(true);
@@ -268,6 +339,10 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
       openSettings: () => setPage('models'),
       openHelp: () => void openHelp(),
       showNotification: (title, body) => bridge.showNotification(title, body),
+      reconcileCalendarNotifications: (appointments) => bridge.reconcileCalendarNotifications(
+        calendarNotificationRequests(appointments),
+      ),
+      openCalendarAppointment,
       companion: bridge.companion ?? null,
     }}>
       <div className="desktop-ready-shift" key={connection.token ?? 'ready'}>

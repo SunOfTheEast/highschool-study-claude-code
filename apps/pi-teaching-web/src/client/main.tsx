@@ -14,6 +14,7 @@ import './styles/m1b.css';
 import './styles/responsive.css';
 import './styles/desktop.css';
 import './styles/companion.css';
+import './styles/pages.css';
 
 const companion = new URLSearchParams(window.location.search).get('window') === 'companion';
 document.documentElement.dataset.studyforgeWindow = companion ? 'companion' : 'main';

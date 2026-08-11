@@ -4,6 +4,17 @@ import type { FocusCycleState, FocusEnded } from '../time/focus-cycle';
 
 export const FOCUS_STARTED_MESSAGE_TYPE = 'studyforge.m2.focus-started.v1';
 export const FOCUS_ENDED_MESSAGE_TYPE = 'studyforge.m2.focus-ended.v1';
+export const APPOINTMENT_OPENED_MESSAGE_TYPE = 'studyforge.m2.appointment-opened.v1';
+
+export type AppointmentOpened = {
+  appointmentId: string;
+  appointmentRevision: number;
+  scheduledAt: string;
+  openedAt: string;
+  plannedMinutes: number | null;
+  title: string;
+  intent: 'course' | 'open' | 'review';
+};
 
 function hasCycleMessage(
   entries: readonly SessionEntry[],
@@ -19,7 +30,7 @@ function hasCycleMessage(
   });
 }
 
-export function focusCustomMessageContent(customType: string, data: unknown): string {
+export function sessionCustomMessageContent(customType: string, data: unknown): string {
   if (!data || typeof data !== 'object' || Array.isArray(data)) {
     throw new Error('FOCUS_MESSAGE_DATA_INVALID');
   }
@@ -36,7 +47,39 @@ export function focusCustomMessageContent(customType: string, data: unknown): st
       '请先简短询问学生实际完成了什么、哪里卡住，等待回答后再讨论休息、继续或另开一轮；不要自动写记忆或结束课程。',
     ].join('\n');
   }
+  if (customType === APPOINTMENT_OPENED_MESSAGE_TYPE) {
+    const scheduled = new Date(String(event.scheduledAt));
+    const opened = new Date(String(event.openedAt));
+    if (Number.isNaN(scheduled.getTime()) || Number.isNaN(opened.getTime())) {
+      throw new Error('APPOINTMENT_OPENED_MESSAGE_DATA_INVALID');
+    }
+    const duration = event.plannedMinutes === null
+      ? '没有预先限定时长'
+      : `原计划约 ${Number(event.plannedMinutes)} 分钟`;
+    return [
+      `学生从“${String(event.title)}”这条学习约定进入；原定时间为 ${scheduled.toLocaleString('zh-CN')}，实际打开时间为 ${opened.toLocaleString('zh-CN')}，${duration}。`,
+      '这只表示学生打开了入口，不证明学习已经开始。本事件不要求回复。',
+    ].join('\n');
+  }
   throw new Error(`CUSTOM_MESSAGE_TYPE_UNSUPPORTED: ${customType}`);
+}
+
+export async function ensureAppointmentOpenedMessage(
+  session: StudySession,
+  event: AppointmentOpened,
+): Promise<boolean> {
+  const present = session.entries.some((entry) => {
+    if (entry.type !== 'custom_message' || entry.customType !== APPOINTMENT_OPENED_MESSAGE_TYPE) {
+      return false;
+    }
+    const details = entry.details;
+    return Boolean(details && typeof details === 'object' && !Array.isArray(details)
+      && (details as { appointmentId?: unknown }).appointmentId === event.appointmentId
+      && (details as { appointmentRevision?: unknown }).appointmentRevision === event.appointmentRevision);
+  });
+  if (present) return false;
+  await session.sendCustomMessage(APPOINTMENT_OPENED_MESSAGE_TYPE, event, { triggerTurn: false });
+  return true;
 }
 
 export async function ensureFocusStartedMessage(

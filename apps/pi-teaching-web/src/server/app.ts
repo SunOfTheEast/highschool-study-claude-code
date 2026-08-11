@@ -1,11 +1,13 @@
 import { existsSync } from 'node:fs';
-import { extname, join, normalize } from 'node:path';
+import { extname, join, normalize, resolve } from 'node:path';
 import type { Server } from 'bun';
 import type { AgentSessionEvent } from '@earendil-works/pi-coding-agent';
 import { projectConversationEntries, projectLiveSessionEvent } from '../projection/conversation';
 import { NodeLifecycleService } from '../runtime/node-lifecycle';
 import type { WorkspaceRegistry } from '../runtime/workspace-registry';
 import type {
+  CalendarDestination,
+  CalendarLaunchReceipt,
   LearningContextReference,
   LearningNoteBlock,
   ProblemAttemptResponse,
@@ -15,7 +17,7 @@ import type {
 import { parseHandoutBlockSegment } from '../shared/handout-route';
 import { readKnowledge } from '../study/knowledge';
 import { readLessonHandout } from '../study/lesson-handout';
-import { StudyDocumentError } from '../study/markdown';
+import { readCourseTree, StudyDocumentError } from '../study/markdown';
 import { readWorkspace } from '../study/workspace';
 import { readLearningSetHome } from '../study/learning-set-home';
 import {
@@ -55,6 +57,8 @@ import { isProblemCardId } from '../study/problem-card-id';
 import type { EventHub } from './event-hub';
 import { publicSessionErrorText } from '../client/public-errors';
 import type { FocusCycleSnapshot, FocusEnded, FocusTargetSeconds } from '../time/focus-cycle';
+import type { CalendarRepository } from '../runtime/calendar-tools';
+import type { CalendarAppointmentDraft, CalendarAppointmentPatch } from '../calendar/appointments';
 
 type Lifecycle = Pick<
   NodeLifecycleService,
@@ -81,6 +85,7 @@ type Registry = Pick<
   | 'resumeFocus'
   | 'endFocus'
   | 'endFocusForSession'
+  | 'openCalendarAppointment'
 >;
 
 export type AppDependencies = {
@@ -91,6 +96,7 @@ export type AppDependencies = {
   staticRoot?: string;
   readCourse?: typeof readWorkspace;
   readKnowledge?: typeof readKnowledge;
+  calendar?: CalendarRepository;
 };
 
 const json = (value: unknown, status = 200) => Response.json(value, { status });
@@ -213,6 +219,78 @@ function learningContextReferences(value: unknown): LearningContextReference[] {
   });
 }
 
+function calendarDestination(root: string, value: unknown): CalendarDestination {
+  const destination = objectBody(value);
+  if (destination.kind === 'plan') {
+    if (Object.keys(destination).length !== 2 || typeof destination.planId !== 'string') {
+      throw new Error('CALENDAR_DESTINATION_INVALID');
+    }
+    const id = nodeId(destination.planId);
+    const plan = id
+      ? readCourseTree(root).tree.children.find((candidate) => (
+        candidate.kind === 'plan' && candidate.id === id && candidate.status === 'active'
+      ))
+      : null;
+    if (!id || !plan) throw new Error('CALENDAR_PLAN_DESTINATION_INVALID');
+    return { kind: 'plan', planId: id };
+  }
+  if (
+    destination.kind !== 'free-learning'
+    || (destination.intent !== 'open' && destination.intent !== 'review')
+    || !Array.isArray(destination.contexts)
+    || Object.keys(destination).length !== 3
+  ) throw new Error('CALENDAR_DESTINATION_INVALID');
+  const contexts = learningContextReferences(destination.contexts);
+  for (const context of contexts) {
+    if (context.kind === 'note') readLearningNote(root, context.id);
+    else if (context.kind === 'problem-card') readProblemCard(root, context.id);
+    else if (context.kind === 'material') readMaterialLocator(root, context);
+    else throw new Error('CALENDAR_CONTEXT_INVALID');
+  }
+  return { kind: 'free-learning', intent: destination.intent, contexts };
+}
+
+function calendarDraft(root: string, value: unknown): CalendarAppointmentDraft {
+  const body = objectBody(value);
+  if (typeof body.title !== 'string' || typeof body.startsAt !== 'string') {
+    throw new Error('CALENDAR_APPOINTMENT_INVALID');
+  }
+  if (body.plannedMinutes !== null && !Number.isSafeInteger(body.plannedMinutes)) {
+    throw new Error('CALENDAR_PLANNED_MINUTES_INVALID');
+  }
+  return {
+    title: body.title,
+    startsAt: body.startsAt,
+    plannedMinutes: body.plannedMinutes as number | null,
+    learningSetPath: resolve(root),
+    destination: calendarDestination(root, body.destination),
+  };
+}
+
+function calendarPatch(root: string, value: unknown): {
+  expectedRevision: number;
+  patch: CalendarAppointmentPatch;
+} {
+  const body = objectBody(value);
+  const expectedRevision = positiveRevision(body.expectedRevision);
+  const draft = calendarDraft(root, body);
+  return { expectedRevision, patch: draft };
+}
+
+function calendarRoute(
+  appointment: { destination: CalendarDestination },
+  sessionKey: SessionKey,
+): string {
+  if (appointment.destination.kind === 'plan') {
+    if (sessionKey !== `plan:${appointment.destination.planId}`) {
+      throw new Error('CALENDAR_LAUNCH_SESSION_MISMATCH');
+    }
+    return `/course/plan/${encodeURIComponent(appointment.destination.planId)}`;
+  }
+  if (!sessionKey.startsWith('free:')) throw new Error('CALENDAR_LAUNCH_SESSION_MISMATCH');
+  return `/learn/${encodeURIComponent(sessionKey.slice('free:'.length))}`;
+}
+
 function stringList(value: unknown, label: string): string[] {
   if (!Array.isArray(value)) throw new Error(`${label.toUpperCase()}_INVALID`);
   return value.map((item) => {
@@ -310,6 +388,7 @@ export function createRequestHandler(deps?: AppDependencies) {
   const bound = new Map<SessionKey, () => void>();
   const pendingTerminalIntents = new Set<SessionKey>();
   const settledCourseInvalidations = new Set<SessionKey>();
+  const calendarLaunches = new Map<string, Promise<CalendarLaunchReceipt>>();
 
   return async (
     request: Request,
@@ -341,6 +420,17 @@ export function createRequestHandler(deps?: AppDependencies) {
               if (ended) deps.hub.publish({ type: 'focus-invalidated' });
             }, () => {});
           }
+        }
+        if (
+          event.type === 'tool_execution_end'
+          && !event.isError
+          && (
+            event.toolName === 'calendar_create'
+            || event.toolName === 'calendar_update'
+            || event.toolName === 'calendar_delete'
+          )
+        ) {
+          deps.hub.publish({ type: 'calendar-invalidated' });
         }
         if (
           event.type === 'tool_execution_end'
@@ -449,6 +539,80 @@ export function createRequestHandler(deps?: AppDependencies) {
           await deps.registry.listFreeLearning(),
           await deps.registry.listMeta(),
         ));
+      }
+      if (request.method === 'GET' && url.pathname === '/api/calendar') {
+        if (!deps.calendar) return json({ error: 'CALENDAR_UNAVAILABLE' }, 404);
+        let plans: Array<{ id: string; title: string }> = [];
+        try {
+          plans = readCourseTree(deps.root).tree.children
+            .filter((node) => node.kind === 'plan' && node.status === 'active')
+            .map((node) => ({ id: node.id, title: node.title }));
+        } catch {
+          plans = [];
+        }
+        return json({
+          appointments: deps.calendar.list(),
+          currentLearningSetPath: resolve(deps.root),
+          plans,
+          reviewCandidates: [],
+        });
+      }
+      if (request.method === 'POST' && url.pathname === '/api/calendar') {
+        if (!deps.calendar) return json({ error: 'CALENDAR_UNAVAILABLE' }, 404);
+        const appointment = deps.calendar.create(calendarDraft(deps.root, await request.json()));
+        deps.hub.publish({ type: 'calendar-invalidated' });
+        return json({ appointment }, 201);
+      }
+      const calendarItem = /^\/api\/calendar\/([^/]+)$/.exec(url.pathname);
+      if (calendarItem && (request.method === 'PUT' || request.method === 'DELETE')) {
+        if (!deps.calendar) return json({ error: 'CALENDAR_UNAVAILABLE' }, 404);
+        const id = nodeId(calendarItem[1]!);
+        if (!id) throw new Error('CALENDAR_APPOINTMENT_ID_INVALID');
+        const body = objectBody(await request.json());
+        const expectedRevision = positiveRevision(body.expectedRevision);
+        const appointment = request.method === 'DELETE'
+          ? deps.calendar.remove(id, expectedRevision)
+          : deps.calendar.update(id, expectedRevision, calendarPatch(deps.root, body).patch);
+        deps.hub.publish({ type: 'calendar-invalidated' });
+        return json(request.method === 'DELETE' ? { deleted: appointment } : { appointment });
+      }
+      const calendarLaunch = /^\/api\/calendar\/([^/]+)\/launch$/.exec(url.pathname);
+      if (calendarLaunch && request.method === 'POST') {
+        if (!deps.calendar) return json({ error: 'CALENDAR_UNAVAILABLE' }, 404);
+        const id = nodeId(calendarLaunch[1]!);
+        if (!id) throw new Error('CALENDAR_APPOINTMENT_ID_INVALID');
+        const body = objectBody(await request.json());
+        const revision = positiveRevision(body.expectedRevision);
+        const key = `${id}@${revision}`;
+        let launch = calendarLaunches.get(key);
+        if (!launch) {
+          launch = (async () => {
+            const appointment = deps.calendar!.read(id);
+            if (!appointment) throw new Error('CALENDAR_APPOINTMENT_NOT_FOUND');
+            if (appointment.revision !== revision) throw new Error('CALENDAR_APPOINTMENT_STALE');
+            if (appointment.learningSetPath !== resolve(deps.root)) {
+              throw new Error('CALENDAR_APPOINTMENT_OUT_OF_SCOPE');
+            }
+            const openedAt = deps.calendar!.now();
+            const sessionKey = appointment.opened?.sessionKey
+              ?? await deps.registry.openCalendarAppointment(appointment, openedAt);
+            const opened = appointment.opened
+              ? appointment
+              : deps.calendar!.markOpened(id, revision, { at: openedAt, sessionKey });
+            if (opened.destination.kind === 'free-learning') {
+              deps.hub.publish({ type: 'home-invalidated' });
+            }
+            deps.hub.publish({ type: 'calendar-invalidated' });
+            return {
+              appointment: opened,
+              sessionKey,
+              route: calendarRoute(opened, sessionKey),
+            };
+          })();
+          calendarLaunches.set(key, launch);
+          void launch.finally(() => calendarLaunches.delete(key));
+        }
+        return json(await launch);
       }
       if (request.method === 'GET' && url.pathname === '/api/focus') {
         return json(publicFocus(await deps.registry.readFocus()));

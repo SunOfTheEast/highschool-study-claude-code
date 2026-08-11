@@ -44,7 +44,7 @@ import {
   createPaperResearchResponder,
   type PaperResearchResponder,
 } from './paper-research-runner';
-import { focusCustomMessageContent } from './session-custom-messages';
+import { sessionCustomMessageContent } from './session-custom-messages';
 import { createCalendarRepository } from '../calendar/appointments';
 import type { CalendarRepository } from './calendar-tools';
 
@@ -74,6 +74,7 @@ export type StudySessionFactory = (input: SessionFactoryInput) => Promise<StudyS
 
 export type PiRuntimeOptions = {
   appHome: string;
+  calendar?: CalendarRepository;
   agentDir: string;
   authPath: string;
   modelsPath: string;
@@ -205,7 +206,7 @@ export async function createPiSessionFactory(
     })
     : undefined;
   const settingsManager = options ? SettingsManager.create(root, options.agentDir) : undefined;
-  const calendar = options ? createCalendarRepository(options.appHome) : undefined;
+  const calendar = options ? options.calendar ?? createCalendarRepository(options.appHome) : undefined;
   return async ({ sessionFile, ...scope }) => {
     const eventBus = createEventBus();
     const manager = createStudySessionManager(root, sessionFile, options?.sessionsDir);
@@ -291,7 +292,7 @@ export async function createPiSessionFactory(
       abort: () => session.abort(),
       subscribe: (listener) => session.subscribe(listener),
       sendCustomMessage: async (customType, data, messageOptions) => {
-        const content = focusCustomMessageContent(customType, data);
+        const content = sessionCustomMessageContent(customType, data);
         if (!messageOptions.triggerTurn && session.isStreaming) {
           manager.appendCustomMessageEntry(customType, content, true, data);
           return;

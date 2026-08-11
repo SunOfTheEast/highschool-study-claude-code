@@ -1,6 +1,15 @@
 import { invoke } from '@tauri-apps/api/core';
 import { tauriCompanionBridge } from '../companion/bridge';
 import type { CompanionBridge } from '../companion/contracts';
+import type {
+  CalendarLaunchIntent,
+  CalendarNotificationRequest,
+} from '../calendar-navigation';
+
+export type CalendarNotificationStatus = {
+  permission: 'granted' | 'denied' | 'unsupported';
+  scheduled: number;
+};
 
 export type RuntimeConnection = {
   state:
@@ -22,6 +31,10 @@ export type DesktopBridge = {
   revealInFinder(path: string): Promise<void>;
   openExternalUrl(url: string): Promise<void>;
   showNotification(title: string, body: string): Promise<void>;
+  reconcileCalendarNotifications(
+    requests: CalendarNotificationRequest[],
+  ): Promise<CalendarNotificationStatus>;
+  takeCalendarLaunchIntent(): Promise<CalendarLaunchIntent | null>;
 };
 
 export function isDesktopEnvironment(value: unknown = globalThis): boolean {
@@ -38,4 +51,11 @@ export const tauriDesktopBridge: DesktopBridge = {
   revealInFinder: (path) => invoke<void>('reveal_in_finder', { path }),
   openExternalUrl: (url) => invoke<void>('open_external_url', { url }),
   showNotification: (title, body) => invoke<void>('show_studyforge_notification', { title, body }),
+  reconcileCalendarNotifications: (requests) => invoke<CalendarNotificationStatus>(
+    'reconcile_calendar_notifications',
+    { requests },
+  ),
+  takeCalendarLaunchIntent: () => invoke<CalendarLaunchIntent | null>(
+    'take_calendar_launch_intent',
+  ),
 };

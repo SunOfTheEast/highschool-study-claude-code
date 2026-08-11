@@ -97,6 +97,8 @@ test('desktop chat keeps Peer text but does not mount a second model', () => {
       openSettings: () => {},
       openHelp: () => {},
       showNotification: async () => {},
+      reconcileCalendarNotifications: async () => ({ permission: 'granted', scheduled: 0 }),
+      openCalendarAppointment: async () => {},
       companion: fakeBridge(),
     }}>
       <ChatPanel

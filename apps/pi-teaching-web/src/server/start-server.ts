@@ -11,6 +11,7 @@ import { WorkspaceRegistry } from '../runtime/workspace-registry';
 import { createRequestHandler } from './app';
 import { createDesktopRequestHandler, withDesktopCors } from './desktop-app';
 import { EventHub } from './event-hub';
+import { createCalendarRepository } from '../calendar/appointments';
 
 export type RuntimeArguments = {
   port: number;
@@ -121,8 +122,10 @@ export async function startStudyForgeServer(arguments_: RuntimeArguments) {
           teacher: config.teacher,
           scout: config.scout,
         });
+        const calendar = createCalendarRepository(paths.appHome);
         const factory = await createPiSessionFactory(validation.root, {
           appHome: paths.appHome,
+          calendar,
           agentDir: paths.agentDir,
           authPath: paths.authPath,
           modelsPath: paths.modelsPath,
@@ -136,6 +139,7 @@ export async function startStudyForgeServer(arguments_: RuntimeArguments) {
           registry,
           hub,
           staticRoot,
+          calendar,
         });
       } catch (error) {
         issue = runtimeIssue(error);
