@@ -67,6 +67,7 @@ function fakeSession(id: string, file = `/sessions/${id}.jsonl`): StudySession {
       listeners.add(listener);
       return () => listeners.delete(listener);
     },
+    sendCustomMessage: async () => {},
     dispose: () => listeners.clear(),
   };
 }

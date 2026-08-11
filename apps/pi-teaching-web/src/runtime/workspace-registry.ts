@@ -48,6 +48,18 @@ import {
 import type { OwnedLearningSessionFact } from '../study/learning-footprint';
 import { projectConversationEntries } from '../projection/conversation';
 import { deriveFreeLearningTitle } from '../study/display-projections';
+import {
+  createFocusCycleRepository,
+  type FocusCycleRepository,
+  type FocusCycleSnapshot,
+  type FocusEnded,
+  type FocusTargetSeconds,
+} from '../time/focus-cycle';
+import {
+  ensureFocusEndedMessage,
+  ensureFocusStartedMessage,
+  hasFocusEndedMessage,
+} from './session-custom-messages';
 
 export type SessionFileLookup = (
   root: string,
@@ -152,6 +164,7 @@ export class WorkspaceRegistry {
   private readonly turnTails = new Map<SessionKey, Promise<void>>();
   private readonly freeRecords = new Map<string, FreeLearningSessionRecord>();
   private readonly metaRecords = new Map<string, MetaSessionRecord>();
+  private readonly focusCycles: FocusCycleRepository;
 
   constructor(
     private readonly root: string,
@@ -163,7 +176,10 @@ export class WorkspaceRegistry {
     private readonly lookupMeta: MetaSessionLookup = findMetaPiSession,
     private readonly listMetaSessions: MetaSessionList = listMetaPiSessions,
     private readonly listSessionFacts: PiSessionFactList = listPiSessionFacts,
-  ) {}
+    focusCycles?: FocusCycleRepository,
+  ) {
+    this.focusCycles = focusCycles ?? createFocusCycleRepository(root);
+  }
 
   private async displayFreeSummary(
     record: FreeLearningSessionRecord,
@@ -461,6 +477,103 @@ export class WorkspaceRegistry {
     return this.readBranch(this.root, sessionFile);
   }
 
+  private async activeFocusSession(key: SessionKey): Promise<StudySession> {
+    const freeId = freeLearningSessionId(key);
+    if (freeId !== null) {
+      const record = await this.freeRecord(freeId);
+      if (record.status !== 'active') throw new Error('FOCUS_SESSION_INELIGIBLE');
+      const session = await this.open(key);
+      if (isFreeLearningEnded(session.entries)) throw new Error('FOCUS_SESSION_INELIGIBLE');
+      return session;
+    }
+    if (!key.startsWith('lesson:')) throw new Error('FOCUS_SESSION_INELIGIBLE');
+    let owner: OwnedNode;
+    try {
+      owner = this.nodeOwner(key);
+    } catch {
+      throw new Error('FOCUS_SESSION_INELIGIBLE');
+    }
+    if (owner.scope.nodeKind !== 'lesson' || owner.document.status !== 'active') {
+      throw new Error('FOCUS_SESSION_INELIGIBLE');
+    }
+    return this.open(key);
+  }
+
+  async startFocus(
+    key: SessionKey,
+    targetSeconds: FocusTargetSeconds,
+  ): Promise<FocusCycleSnapshot> {
+    if (this.focusCycles.read()) throw new Error('FOCUS_CYCLE_ALREADY_ACTIVE');
+    const session = await this.activeFocusSession(key);
+    const state = this.focusCycles.start(key, session.sessionId, targetSeconds);
+    try {
+      await ensureFocusStartedMessage(session, state);
+    } catch (error) {
+      this.focusCycles.remove(state.cycleId);
+      throw error;
+    }
+    return this.focusCycles.snapshot()!;
+  }
+
+  async readFocus(): Promise<FocusCycleSnapshot | null> {
+    const state = this.focusCycles.read();
+    if (!state) return null;
+    const session = await this.activeFocusSession(state.sessionKey);
+    if (session.sessionId !== state.sessionId) throw new Error('FOCUS_SESSION_OWNER_MISMATCH');
+    if (hasFocusEndedMessage(session.entries, state.cycleId)) {
+      this.focusCycles.remove(state.cycleId);
+      return null;
+    }
+    await ensureFocusStartedMessage(session, state);
+    const snapshot = this.focusCycles.snapshot();
+    if (snapshot?.expired) {
+      await this.endFocus('elapsed');
+      return this.focusCycles.snapshot();
+    }
+    return snapshot;
+  }
+
+  pauseFocus(): FocusCycleSnapshot {
+    this.focusCycles.pause();
+    return this.focusCycles.snapshot()!;
+  }
+
+  resumeFocus(): FocusCycleSnapshot {
+    this.focusCycles.resume();
+    return this.focusCycles.snapshot()!;
+  }
+
+  async endFocus(
+    reason: 'elapsed' | 'manual' = 'manual',
+    triggerTurn = true,
+  ): Promise<FocusEnded> {
+    const state = this.focusCycles.read();
+    if (!state) throw new Error('FOCUS_CYCLE_NOT_ACTIVE');
+    const session = await this.activeFocusSession(state.sessionKey);
+    if (session.sessionId !== state.sessionId) throw new Error('FOCUS_SESSION_OWNER_MISMATCH');
+    await ensureFocusStartedMessage(session, state);
+    const event = this.focusCycles.terminal(reason);
+    await ensureFocusEndedMessage(session, event, triggerTurn);
+    if (hasFocusEndedMessage(session.entries, state.cycleId)) {
+      this.focusCycles.remove(state.cycleId);
+    }
+    return event;
+  }
+
+  async endFocusForSession(key: SessionKey): Promise<FocusEnded | null> {
+    const state = this.focusCycles.read();
+    if (!state || state.sessionKey !== key) return null;
+    const session = await this.activeFocusSession(key);
+    if (session.sessionId !== state.sessionId) throw new Error('FOCUS_SESSION_OWNER_MISMATCH');
+    await ensureFocusStartedMessage(session, state);
+    const event = this.focusCycles.terminal('session-ended');
+    await ensureFocusEndedMessage(session, event, false);
+    if (hasFocusEndedMessage(session.entries, event.cycleId)) {
+      this.focusCycles.remove(event.cycleId);
+    }
+    return event;
+  }
+
   async endFreeLearning(key: SessionKey): Promise<FreeLearningSessionSummary> {
     const id = freeLearningSessionId(key);
     if (id === null) throw new Error(`FREE_LEARNING_SESSION_KEY_INVALID: ${key}`);
@@ -470,6 +583,14 @@ export class WorkspaceRegistry {
     }
     if (session.isStreaming || this.turnTails.has(key)) {
       throw new Error(`FREE_LEARNING_SESSION_RUNNING: ${key}`);
+    }
+    const focus = this.focusCycles.read();
+    if (focus?.sessionKey === key) {
+      const event = this.focusCycles.terminal('session-ended');
+      await ensureFocusEndedMessage(session, event, false);
+      if (hasFocusEndedMessage(session.entries, event.cycleId)) {
+        this.focusCycles.remove(event.cycleId);
+      }
     }
     if (!session.appendCustomEntry) throw new Error('FREE_LEARNING_LIFECYCLE_UNAVAILABLE');
     const endedAt = new Date().toISOString();

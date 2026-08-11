@@ -281,26 +281,26 @@ StudySession.sendCustomMessage(
 ): Promise<void>;
 ```
 
-- [ ] **Step 1: Write deterministic RED tests with an injected clock**
+- [x] **Step 1: Write deterministic RED tests with an injected clock**
 
 Cover the three durations, pause/resume arithmetic, atomic file write, duplicate start, running/paused restart, elapsed restart, started/ended idempotency, active Free/Lesson qualification, and parent-session end. Do not wait in real time.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 ```bash
 cd apps/pi-teaching-web
 bun test tests/m2/focus-cycle.test.ts tests/m2/session-custom-messages.test.ts
 ```
 
-- [ ] **Step 3: Expose the narrow Pi native custom-message operation**
+- [x] **Step 3: Expose the narrow Pi native custom-message operation**
 
 Wrap Pi's native custom-message API instead of calling `prompt`. `WorkspaceRegistry` owns serialization with existing turns: focus start never triggers a turn; ordinary focus end triggers immediately or as follow-up; parent-session end records without triggering. Add exact custom types `studyforge.m2.focus-started.v1` and `studyforge.m2.focus-ended.v1`.
 
-- [ ] **Step 4: Implement the one-file focus state machine**
+- [x] **Step 4: Implement the one-file focus state machine**
 
 Persist only `.studyforge/time/focus.json`; derive remaining/expiry values. Start writes state then started message and rolls back on clear failure. End publishes the mechanical terminal snapshot, writes/checks ended message, then removes state. Recovery reconciles by `cycleId` without duplicate messages.
 
-- [ ] **Step 5: Verify and commit**
+- [x] **Step 5: Verify and commit**
 
 ```bash
 cd apps/pi-teaching-web

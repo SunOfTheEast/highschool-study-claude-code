@@ -64,6 +64,7 @@ function fakeSession(id: string, entries: SessionEntry[] = [], prompted: string[
       listeners.add(listener);
       return () => listeners.delete(listener);
     },
+    sendCustomMessage: async () => {},
     dispose: () => listeners.clear(),
   };
 }

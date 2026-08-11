@@ -55,6 +55,7 @@ function fakeSession(
       listeners.add(listener);
       return () => listeners.delete(listener);
     },
+    sendCustomMessage: async () => {},
     appendCustomEntry: (customType, data) => {
       entries.push({
         type: 'custom',

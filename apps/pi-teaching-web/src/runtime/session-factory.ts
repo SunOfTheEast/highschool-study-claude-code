@@ -44,6 +44,7 @@ import {
   createPaperResearchResponder,
   type PaperResearchResponder,
 } from './paper-research-runner';
+import { focusCustomMessageContent } from './session-custom-messages';
 
 export interface StudySession {
   readonly sessionId: string;
@@ -54,6 +55,11 @@ export interface StudySession {
   prompt(text: string, images?: ImageContent[]): Promise<void>;
   abort(): Promise<void>;
   subscribe(listener: (event: AgentSessionEvent) => void): () => void;
+  sendCustomMessage(
+    customType: string,
+    data: unknown,
+    options: { triggerTurn: boolean; deliverAs?: 'followUp' },
+  ): Promise<void>;
   appendCustomEntry?(customType: string, data?: unknown): void;
   dispose(): void;
 }
@@ -261,6 +267,19 @@ export async function createPiSessionFactory(
       prompt: compaction.prompt,
       abort: () => session.abort(),
       subscribe: (listener) => session.subscribe(listener),
+      sendCustomMessage: async (customType, data, messageOptions) => {
+        const content = focusCustomMessageContent(customType, data);
+        if (!messageOptions.triggerTurn && session.isStreaming) {
+          manager.appendCustomMessageEntry(customType, content, true, data);
+          return;
+        }
+        await session.sendCustomMessage({
+          customType,
+          content,
+          display: true,
+          details: data,
+        }, messageOptions);
+      },
       appendCustomEntry: (customType, data) => {
         manager.appendCustomEntry(customType, data);
       },
