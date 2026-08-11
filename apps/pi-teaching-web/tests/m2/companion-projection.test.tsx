@@ -96,6 +96,7 @@ test('desktop chat keeps Peer text but does not mount a second model', () => {
     <DesktopToolsProvider value={{
       openSettings: () => {},
       openHelp: () => {},
+      showNotification: async () => {},
       companion: fakeBridge(),
     }}>
       <ChatPanel

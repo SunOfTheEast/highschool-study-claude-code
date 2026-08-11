@@ -21,6 +21,7 @@ export type DesktopBridge = {
   chooseLearningSetFolder(): Promise<string | null>;
   revealInFinder(path: string): Promise<void>;
   openExternalUrl(url: string): Promise<void>;
+  showNotification(title: string, body: string): Promise<void>;
 };
 
 export function isDesktopEnvironment(value: unknown = globalThis): boolean {
@@ -36,4 +37,5 @@ export const tauriDesktopBridge: DesktopBridge = {
   chooseLearningSetFolder: () => invoke<string | null>('choose_learning_set_folder'),
   revealInFinder: (path) => invoke<void>('reveal_in_finder', { path }),
   openExternalUrl: (url) => invoke<void>('open_external_url', { url }),
+  showNotification: (title, body) => invoke<void>('show_studyforge_notification', { title, body }),
 };

@@ -24,6 +24,7 @@ import type {
   SessionKey,
   PeerExpression,
   PeerLive2DManifest,
+  PublicFocusCycle,
 } from '../shared/contracts';
 import { formatLessonHandoutApiPath } from '../shared/handout-route';
 import { transportFetch } from './transport';
@@ -79,6 +80,18 @@ export type ProblemCardView = StudentProblemCard & {
 };
 
 export const api = {
+  focus: () => json<PublicFocusCycle | null>('/api/focus'),
+  startFocus: (sessionKey: SessionKey, targetSeconds: 900 | 1500 | 2700) => (
+    post<PublicFocusCycle>('/api/focus/start', { sessionKey, targetSeconds })
+  ),
+  pauseFocus: () => post<PublicFocusCycle>('/api/focus/pause'),
+  resumeFocus: () => post<PublicFocusCycle>('/api/focus/resume'),
+  endFocus: () => post<{
+    targetSeconds: 900 | 1500 | 2700;
+    elapsedSeconds: number;
+    endedAt: string;
+    reason: 'elapsed' | 'manual' | 'session-ended';
+  }>('/api/focus/end'),
   home: () => json<LearningSetHomeSnapshot>('/api/home'),
   assets: () => json<LearningAssetLibrarySnapshot>('/api/assets'),
   note: (id: string) => json<LearningNoteView>(`/api/assets/notes/${encodeURIComponent(id)}`),

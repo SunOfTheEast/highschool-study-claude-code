@@ -54,6 +54,7 @@ import { readLearningFootprint } from '../study/learning-footprint';
 import { isProblemCardId } from '../study/problem-card-id';
 import type { EventHub } from './event-hub';
 import { publicSessionErrorText } from '../client/public-errors';
+import type { FocusCycleSnapshot, FocusEnded, FocusTargetSeconds } from '../time/focus-cycle';
 
 type Lifecycle = Pick<
   NodeLifecycleService,
@@ -74,6 +75,12 @@ type Registry = Pick<
   | 'createMeta'
   | 'listMeta'
   | 'listOwnedSessionFacts'
+  | 'readFocus'
+  | 'startFocus'
+  | 'pauseFocus'
+  | 'resumeFocus'
+  | 'endFocus'
+  | 'endFocusForSession'
 >;
 
 export type AppDependencies = {
@@ -102,6 +109,28 @@ const materialMediaTypes = new Set([
   'image/gif',
 ]);
 
+function publicFocus(value: FocusCycleSnapshot | null) {
+  if (!value) return null;
+  return {
+    sessionKey: value.sessionKey,
+    targetSeconds: value.targetSeconds,
+    startedAt: value.startedAt,
+    status: value.status,
+    elapsedSeconds: value.elapsedSeconds,
+    remainingSeconds: value.remainingSeconds,
+    expiresAt: value.expiresAt,
+  };
+}
+
+function publicFocusEnd(value: FocusEnded) {
+  return {
+    targetSeconds: value.targetSeconds,
+    elapsedSeconds: value.elapsedSeconds,
+    endedAt: value.endedAt,
+    reason: value.reason,
+  };
+}
+
 function errorResponse(error: unknown): Response {
   if (error instanceof StudyDocumentError) {
     return json({ error: 'STUDY_DOCUMENT_INVALID', path: error.path, reason: error.reason }, 422);
@@ -109,7 +138,7 @@ function errorResponse(error: unknown): Response {
   const message = error instanceof Error ? error.message : String(error);
   const status = /NOT_FOUND|does not exist/.test(message)
     ? 404
-    : /STALE|CONFLICT|ENDED|RUNNING|NOT_ACTIVE|NOT_ALLOWED|READ_ONLY/.test(message)
+    : /STALE|CONFLICT|ENDED|RUNNING|NOT_ACTIVE|NOT_ALLOWED|READ_ONLY|INELIGIBLE|ALREADY_ACTIVE/.test(message)
       ? 409
       : /INVALID|REQUIRED|LIMIT|DUPLICATE|must be|cannot/.test(message)
         ? 400
@@ -307,6 +336,11 @@ export function createRequestHandler(deps?: AppDependencies) {
           && (event.toolName === 'finish_plan' || event.toolName === 'finish_lesson')
         ) {
           settledCourseInvalidations.add(key);
+          if (event.toolName === 'finish_lesson') {
+            void deps.registry.endFocusForSession(key).then((ended) => {
+              if (ended) deps.hub.publish({ type: 'focus-invalidated' });
+            }, () => {});
+          }
         }
         if (
           event.type === 'tool_execution_end'
@@ -416,6 +450,39 @@ export function createRequestHandler(deps?: AppDependencies) {
           await deps.registry.listMeta(),
         ));
       }
+      if (request.method === 'GET' && url.pathname === '/api/focus') {
+        return json(publicFocus(await deps.registry.readFocus()));
+      }
+      if (request.method === 'POST' && url.pathname === '/api/focus/start') {
+        const body = objectBody(await request.json());
+        if (typeof body.sessionKey !== 'string') throw new Error('FOCUS_SESSION_KEY_REQUIRED');
+        const key = sessionKey(encodeURIComponent(body.sessionKey));
+        if (!key) throw new Error('FOCUS_SESSION_KEY_INVALID');
+        if (body.targetSeconds !== 900 && body.targetSeconds !== 1500 && body.targetSeconds !== 2700) {
+          throw new Error('FOCUS_TARGET_INVALID');
+        }
+        const value = await deps.registry.startFocus(
+          key,
+          body.targetSeconds as FocusTargetSeconds,
+        );
+        deps.hub.publish({ type: 'focus-invalidated' });
+        return json(publicFocus(value));
+      }
+      if (request.method === 'POST' && url.pathname === '/api/focus/pause') {
+        const value = deps.registry.pauseFocus();
+        deps.hub.publish({ type: 'focus-invalidated' });
+        return json(publicFocus(value));
+      }
+      if (request.method === 'POST' && url.pathname === '/api/focus/resume') {
+        const value = deps.registry.resumeFocus();
+        deps.hub.publish({ type: 'focus-invalidated' });
+        return json(publicFocus(value));
+      }
+      if (request.method === 'POST' && url.pathname === '/api/focus/end') {
+        const value = await deps.registry.endFocus('manual');
+        deps.hub.publish({ type: 'focus-invalidated' });
+        return json(publicFocusEnd(value));
+      }
       if (url.pathname === '/api/free-learning' && request.method === 'GET') {
         return json(await deps.registry.listFreeLearning());
       }
@@ -434,6 +501,7 @@ export function createRequestHandler(deps?: AppDependencies) {
         if (!id) return json({ error: 'FREE_LEARNING_SESSION_ID_INVALID' }, 400);
         const session = await deps.registry.endFreeLearning(`free:${id}`);
         deps.hub.publish({ type: 'home-invalidated' });
+        deps.hub.publish({ type: 'focus-invalidated' });
         return json({ session });
       }
 

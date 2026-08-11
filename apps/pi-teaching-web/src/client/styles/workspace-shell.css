@@ -12,7 +12,7 @@
   top: 0;
   min-height: var(--workspace-header-height);
   display: grid;
-  grid-template-columns: minmax(13rem, 1fr) auto auto;
+  grid-template-columns: minmax(13rem, 1fr) auto auto auto;
   gap: var(--space-5);
   align-items: center;
   padding: var(--space-2) clamp(var(--space-4), 2.4vw, var(--space-6));
@@ -116,6 +116,33 @@
 }
 
 .connection-state[data-state="open"]::before { background: var(--accent); }
+
+.focus-cycle-controls,
+.focus-duration-choices {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.focus-cycle-controls {
+  padding: .35rem .55rem;
+  border-left: 2px solid var(--accent);
+  color: var(--ink-soft);
+  background: var(--paper-deep);
+  font-size: var(--text-label);
+  white-space: nowrap;
+}
+.focus-cycle-controls b { color: var(--ink); font: 500 var(--text-label)/1 var(--font-mono); }
+.focus-cycle-controls button,
+.focus-start-control button {
+  border: 0;
+  border-bottom: 1px solid transparent;
+  padding: .25rem .15rem;
+  color: var(--accent-deep);
+  background: transparent;
+  cursor: pointer;
+}
+.focus-cycle-controls button:hover,
+.focus-start-control button:hover { border-bottom-color: currentColor; }
 
 .workspace-notice {
   margin: 0;

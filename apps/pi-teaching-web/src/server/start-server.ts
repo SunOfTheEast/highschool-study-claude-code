@@ -151,6 +151,7 @@ export async function startStudyForgeServer(arguments_: RuntimeArguments) {
         resolveSpeechApiKey: () => models.apiKey('xiaomi'),
       }),
       runtimeIssue: issue,
+      canChangeLearningSet: async () => !registry || await registry.readFocus() === null,
       shutdown: () => {
         registry?.dispose();
         server.stop(true);

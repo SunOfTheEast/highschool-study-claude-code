@@ -31,6 +31,7 @@ import {
   learningAssetSaveEnd,
   learningAssetSaveStart,
 } from './learning-asset-proposal';
+import { focusConversationItem } from './focus-cycle';
 
 function contentText(content: unknown): string {
   if (typeof content === 'string') return content;
@@ -68,6 +69,17 @@ export function projectConversationEntries(
   const items: ConversationItem[] = [];
   const toolPositions = new Map<string, number>();
   for (const entry of entries) {
+    if (entry.type === 'custom_message') {
+      const focus = focusConversationItem(
+        entry.id,
+        entry.customType,
+        entry.details,
+        entry.timestamp,
+        _key,
+      );
+      if (focus) items.push(focus);
+      continue;
+    }
     if (entry.type !== 'message') continue;
     const message = entry.message as unknown as Record<string, unknown>;
     if (message.role === 'user') {
@@ -297,6 +309,16 @@ export function projectLiveSessionEvent(
   }
   if (event.type === 'message_end') {
     const message = event.message as unknown as Record<string, unknown>;
+    if (message.role === 'custom') {
+      const focus = focusConversationItem(
+        `${sessionKey}:${message.timestamp}`,
+        message.customType,
+        message.details,
+        new Date(Number(message.timestamp)).toISOString(),
+        sessionKey,
+      );
+      return focus ? [{ type: 'conversation-item', sessionKey, item: focus }] : [];
+    }
     if (message.role !== 'user' && message.role !== 'assistant') return [];
     if (message.role === 'assistant' && message.stopReason === 'error') {
       return [{

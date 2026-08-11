@@ -347,11 +347,11 @@ git commit -m "feat: add authoritative focus cycle runtime"
 - `StudyEvent` adds `focus-invalidated`; HTTP snapshots remain authoritative.
 - Desktop bridge adds one local notification operation; local audio has a bundled/offline fallback.
 
-- [ ] **Step 1: Write RED tests for endpoint qualification and UI projection**
+- [x] **Step 1: Write RED tests for endpoint qualification and UI projection**
 
 Assert only active Free Learning/Lesson pages offer start; the topbar remains across home/assets/course navigation while active; ended Session hides controls; internal IDs never render; switching learning sets is refused while active; notification rejection does not fail end.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 ```bash
 cd apps/pi-teaching-web
@@ -359,15 +359,15 @@ bun test tests/m2/focus-cycle-http.test.ts tests/m2/focus-cycle-ui.test.tsx \
   tests/m2/focus-cycle-shell.test.ts
 ```
 
-- [ ] **Step 3: Add mechanical API and student-safe time markers**
+- [x] **Step 3: Add mechanical API and student-safe time markers**
 
 Project started/ended native messages as thin neutral timeline items. Render “开始专注” with 15/25/45 only in eligible chat headers, and render running/paused remaining time plus pause/resume/end in `AppShell`. Browser intervals refresh display only; every refresh derives from Runtime snapshot timestamps.
 
-- [ ] **Step 4: Add single-instance and notification shell support**
+- [x] **Step 4: Add single-instance and notification shell support**
 
 Use the Tauri single-instance plugin so a second launch reveals/focuses `main`. Provide a narrow command/plugin call for a StudyForge local notification. Play the local alert immediately on client-observed terminal state; system notification is additive and fallible.
 
-- [ ] **Step 5: Verify and commit**
+- [x] **Step 5: Verify and commit**
 
 ```bash
 cd apps/pi-teaching-web

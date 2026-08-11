@@ -17,6 +17,7 @@ use sidecar::{DesktopPaths, RuntimeState, build_launch, parse_ready_line};
 use tauri::{AppHandle, Manager, State};
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_opener::OpenerExt;
+use tauri_plugin_notification::NotificationExt;
 use tauri_plugin_shell::{
     ShellExt,
     process::{CommandChild, CommandEvent},
@@ -284,12 +285,36 @@ fn open_external_url(app: AppHandle, url: String) -> Result<(), String> {
         .map_err(|error| error.to_string())
 }
 
+#[tauri::command]
+fn show_studyforge_notification(
+    app: AppHandle,
+    title: String,
+    body: String,
+) -> Result<(), String> {
+    if title.trim().is_empty() || body.trim().is_empty() {
+        return Err("STUDYFORGE_NOTIFICATION_TEXT_REQUIRED".into());
+    }
+    app.notification()
+        .builder()
+        .title(title)
+        .body(body)
+        .show()
+        .map_err(|error| error.to_string())
+}
+
 pub fn run() {
     let manager = RuntimeManager::default();
     let companion = CompanionManager::default();
     let setup_manager = manager.clone();
     let app = tauri::Builder::default()
+        .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+            if let Some(window) = app.get_webview_window("main") {
+                let _ = window.show();
+                let _ = window.set_focus();
+            }
+        }))
         .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_shell::init())
         .manage(manager.clone())
@@ -300,6 +325,7 @@ pub fn run() {
             choose_learning_set_folder,
             reveal_in_finder,
             open_external_url,
+            show_studyforge_notification,
             companion_snapshot,
             companion_present,
             companion_set_playback,

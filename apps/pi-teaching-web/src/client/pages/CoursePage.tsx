@@ -98,6 +98,7 @@ export function CoursePage({
   onLifecycle,
   onToggleLeft,
   onToggleRight,
+  onStartFocus = null,
 }: {
   value: CourseSnapshot;
   items: ConversationItem[];
@@ -111,6 +112,7 @@ export function CoursePage({
   onLifecycle(action: NodeLifecycleAction, node: CourseTreeNode): Promise<void>;
   onToggleLeft(): void;
   onToggleRight(): void;
+  onStartFocus?: ((targetSeconds: 900 | 1500 | 2700) => Promise<void>) | null;
 }) {
   const document = value.selected ?? value.roadmap;
   const selectedNode = findNode(value.tree, document.path) ?? value.tree;
@@ -182,6 +184,9 @@ export function CoursePage({
           error={error}
           enabled={document.status === 'active'}
           connected={connected}
+          focusStart={document.kind === 'lesson' && document.status === 'active'
+            ? onStartFocus
+            : null}
           onSend={onSend}
         />
       </section>

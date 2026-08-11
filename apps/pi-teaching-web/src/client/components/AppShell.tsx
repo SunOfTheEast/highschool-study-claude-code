@@ -2,6 +2,8 @@ import type { ReactNode } from 'react';
 import { PrimaryViewNav } from './PrimaryViewNav';
 import type { PrimaryView } from '../view-state';
 import { useDesktopTools } from '../desktop/DesktopContext';
+import type { PublicFocusCycle } from '../../shared/contracts';
+import { FocusCycleControls } from './FocusCycleControls';
 
 export type AppShellProps = {
   title: string;
@@ -9,6 +11,10 @@ export type AppShellProps = {
   connection: 'open' | 'connecting' | 'closed';
   hasCourse: boolean;
   notice?: string | null;
+  focus?: PublicFocusCycle | null;
+  onPauseFocus?(): Promise<void>;
+  onResumeFocus?(): Promise<void>;
+  onEndFocus?(): Promise<void>;
   onNavigate(view: PrimaryView): void;
   children: ReactNode;
 };
@@ -19,6 +25,10 @@ export function AppShell({
   connection,
   hasCourse,
   notice = null,
+  focus = null,
+  onPauseFocus = async () => {},
+  onResumeFocus = async () => {},
+  onEndFocus = async () => {},
   onNavigate,
   children,
 }: AppShellProps) {
@@ -46,6 +56,14 @@ export function AppShell({
           hasCourse={hasCourse}
           onNavigate={onNavigate}
         />
+        {focus && (
+          <FocusCycleControls
+            focus={focus}
+            onPause={onPauseFocus}
+            onResume={onResumeFocus}
+            onEnd={onEndFocus}
+          />
+        )}
         <div className="workspace-utilities">
           {desktopTools && (
             <>

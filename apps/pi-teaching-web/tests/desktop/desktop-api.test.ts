@@ -71,7 +71,7 @@ function fakeModelService() {
   };
 }
 
-function setup() {
+function setup(options: { canChangeLearningSet?: () => boolean | Promise<boolean> } = {}) {
   const root = temporaryRoot('studyforge-desktop-api-');
   const paths = resolveStudyForgePaths({
     appHome: join(root, 'Application Support', 'StudyForge'),
@@ -91,6 +91,9 @@ function setup() {
       }),
     }),
     shutdown: () => {},
+    ...(options.canChangeLearningSet
+      ? { canChangeLearningSet: options.canChangeLearningSet }
+      : {}),
   });
   const request = (pathname: string, init: RequestInit = {}) => handler(new Request(
     `http://127.0.0.1${pathname}`,
@@ -204,6 +207,17 @@ test('keeps invalid learning sets and unavailable models as distinct failures', 
     error: 'STUDYFORGE_MODEL_UNAVAILABLE',
     detail: 'openai-codex/missing',
   });
+});
+
+test('refuses to replace the learning set while a focus cycle is active', async () => {
+  const { request } = setup({ canChangeLearningSet: () => false });
+  const response = await request('/api/desktop/learning-sets/blank', {
+    method: 'POST',
+    body: JSON.stringify({ name: '不能切换' }),
+  });
+
+  expect(response?.status).toBe(409);
+  expect(await response?.json()).toEqual({ error: 'FOCUS_CYCLE_ACTIVE' });
 });
 
 test('bridges Pi auth prompts without retaining the submitted secret or code', async () => {

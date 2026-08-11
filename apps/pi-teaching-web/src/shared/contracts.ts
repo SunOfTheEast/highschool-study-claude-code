@@ -525,6 +525,24 @@ export type LearningAssetSavedConversationItem = {
   at: string;
 };
 
+export type PublicFocusCycle = {
+  sessionKey: SessionKey;
+  targetSeconds: 900 | 1500 | 2700;
+  startedAt: string;
+  status: 'running' | 'paused';
+  elapsedSeconds: number;
+  remainingSeconds: number;
+  expiresAt: string | null;
+};
+
+export type FocusConversationItem = {
+  id: string;
+  kind: 'focus-marker';
+  phase: 'started' | 'ended';
+  text: string;
+  at: string;
+};
+
 export type LessonHandoutConversationItem = {
   id: string;
   kind: 'lesson-handout';
@@ -566,6 +584,7 @@ export type ConversationItem =
   | PaperResearchConversationItem
   | LearningAssetProposalConversationItem
   | LearningAssetSavedConversationItem
+  | FocusConversationItem
   | LessonReviewConversationItem
   | LessonHandoutConversationItem
   | {
@@ -596,4 +615,5 @@ export type StudyEvent =
   | { type: 'home-invalidated' }
   | { type: 'assets-invalidated' }
   | { type: 'course-invalidated' }
-  | { type: 'knowledge-invalidated' };
+  | { type: 'knowledge-invalidated' }
+  | { type: 'focus-invalidated' };

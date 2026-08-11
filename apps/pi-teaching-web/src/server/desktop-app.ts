@@ -38,6 +38,7 @@ export type DesktopRequestDependencies = {
   derivativeExampleRoot: string;
   modelService: ModelService;
   peerMedia?: PeerMediaService;
+  canChangeLearningSet?(): boolean | Promise<boolean>;
   shutdown(): void;
   runtimeIssue?: DesktopRuntimeIssue | null;
 };
@@ -301,6 +302,7 @@ function errorResponse(error: unknown): Response {
     const statusCode = message === 'LEARNING_SET_DESTINATION_EXISTS' ? 409 : 422;
     return json({ error: message }, statusCode);
   }
+  if (message === 'FOCUS_CYCLE_ACTIVE') return json({ error: message }, 409);
   if (message === 'AUTH_FLOW_NOT_FOUND') return json({ error: message }, 404);
   if (message.startsWith('AUTH_FLOW_') || message === 'DESKTOP_REQUEST_INVALID') {
     return json({ error: message }, 400);
@@ -319,6 +321,11 @@ export function withDesktopCors(request: Request, response: Response): Response 
 
 export function createDesktopRequestHandler(deps: DesktopRequestDependencies) {
   const authFlows = new DesktopAuthFlows(deps.modelService);
+  const requireLearningSetChangeAllowed = async () => {
+    if (deps.canChangeLearningSet && !await deps.canChangeLearningSet()) {
+      throw new Error('FOCUS_CYCLE_ACTIVE');
+    }
+  };
   return async (request: Request): Promise<Response | null> => {
     const origin = request.headers.get('origin');
     if (request.method === 'OPTIONS') {
@@ -379,6 +386,7 @@ export function createDesktopRequestHandler(deps: DesktopRequestDependencies) {
           ? await deps.peerMedia.speech(body.actorId, body.text, request.signal)
           : json({ error: 'PEER_SPEECH_UNAVAILABLE' }, 503);
       } else if (request.method === 'POST' && url.pathname === '/api/desktop/learning-sets/blank') {
+        await requireLearningSetChangeAllowed();
         const body = bodyObject(await request.json());
         const root = createBlankLearningSet({
           documentsHome: deps.paths.documentsHome,
@@ -388,6 +396,7 @@ export function createDesktopRequestHandler(deps: DesktopRequestDependencies) {
         selectedConfig(deps.paths, root);
         response = json({ learningSet: root, restartRequired: true }, 201);
       } else if (request.method === 'POST' && url.pathname === '/api/desktop/learning-sets/example') {
+        await requireLearningSetChangeAllowed();
         const body = bodyObject(await request.json());
         const root = copyLearningSet({
           sourceRoot: deps.derivativeExampleRoot,
@@ -397,6 +406,7 @@ export function createDesktopRequestHandler(deps: DesktopRequestDependencies) {
         selectedConfig(deps.paths, root);
         response = json({ learningSet: root, restartRequired: true }, 201);
       } else if (request.method === 'POST' && url.pathname === '/api/desktop/learning-sets/select') {
+        await requireLearningSetChangeAllowed();
         const body = bodyObject(await request.json());
         const validation = validateLearningSet(bodyString(body.path));
         if (!validation.ok) throw new Error(validation.code);

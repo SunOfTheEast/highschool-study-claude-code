@@ -25,6 +25,7 @@ import { PeerEmbodiment } from './PeerEmbodiment';
 import { useDesktopTools } from '../desktop/DesktopContext';
 import { useCompanionPeerPlayback } from '../companion/main-playback';
 import type { CompanionBridge } from '../companion/contracts';
+import { FocusStartControl } from './FocusCycleControls';
 
 const toolStatus = {
   running: '进行中',
@@ -39,6 +40,7 @@ type ChatPanelProps = {
   error: string | null;
   enabled: boolean;
   connected?: boolean;
+  focusStart?: ((targetSeconds: 900 | 1500 | 2700) => Promise<void>) | null;
   onSend(text: string): Promise<void>;
 };
 
@@ -54,6 +56,7 @@ function ChatPanelContent({
   error,
   enabled,
   connected = true,
+  focusStart = null,
   onSend,
   playback,
   showEmbodiment,
@@ -67,7 +70,10 @@ function ChatPanelContent({
     playback.phase === 'idle' ? null : playback.item?.id ?? null,
   );
   const activityRunning = visibleItems.some((item) => (
-    item.kind !== 'user' && item.kind !== 'assistant' && item.status === 'running'
+    item.kind !== 'user'
+    && item.kind !== 'assistant'
+    && 'status' in item
+    && item.status === 'running'
   ));
 
   const submit = (event: FormEvent) => {
@@ -83,6 +89,7 @@ function ChatPanelContent({
     <section className="chat" aria-label="课堂对话">
       <header className="chat-header">
         <span>{freeLearning ? '自由学习' : sessionKey.startsWith('lesson:') ? '课堂对话' : '学习讨论'}</span>
+        {enabled && focusStart && <FocusStartControl onStart={focusStart} />}
         {freeLearning && (
           <button
             className="peer-sound-toggle"
@@ -137,6 +144,9 @@ function ChatPanelContent({
           }
           if (item.kind === 'learning-asset-saved') {
             return <LearningAssetSavedReceipt item={item} key={item.id} />;
+          }
+          if (item.kind === 'focus-marker') {
+            return <div className="focus-time-marker" key={item.id}><span>{item.text}</span></div>;
           }
           if (item.kind === 'lesson-review') {
             return <LessonReviewActivity item={item} key={item.id} />;

@@ -250,6 +250,20 @@
   cursor: pointer;
 }
 .peer-sound-toggle:hover { color: var(--accent-deep); }
+.focus-start-control { margin-left: auto; }
+.focus-duration-choices button { font-size: var(--text-micro); }
+.focus-time-marker {
+  margin: var(--space-2) 0 var(--space-3) 4.25rem;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--ink-faint);
+  font: var(--text-micro)/1.4 var(--font-mono);
+}
+.focus-time-marker::before,
+.focus-time-marker::after { content: ""; height: 1px; background: var(--rule-soft); }
+.focus-time-marker::before { width: 1.8rem; }
+.focus-time-marker::after { flex: 1; }
 .timeline { min-height: 15rem; padding: var(--space-2) 0 var(--space-5); }
 .message {
   display: grid;

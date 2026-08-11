@@ -165,6 +165,7 @@ export class WorkspaceRegistry {
   private readonly freeRecords = new Map<string, FreeLearningSessionRecord>();
   private readonly metaRecords = new Map<string, MetaSessionRecord>();
   private readonly focusCycles: FocusCycleRepository;
+  private endingFocus: FocusEnded | null = null;
 
   constructor(
     private readonly root: string,
@@ -516,6 +517,7 @@ export class WorkspaceRegistry {
   }
 
   async readFocus(): Promise<FocusCycleSnapshot | null> {
+    if (this.endingFocus) return null;
     const state = this.focusCycles.read();
     if (!state) return null;
     const session = await this.activeFocusSession(state.sessionKey);
@@ -528,7 +530,7 @@ export class WorkspaceRegistry {
     const snapshot = this.focusCycles.snapshot();
     if (snapshot?.expired) {
       await this.endFocus('elapsed');
-      return this.focusCycles.snapshot();
+      return null;
     }
     return snapshot;
   }
@@ -547,23 +549,29 @@ export class WorkspaceRegistry {
     reason: 'elapsed' | 'manual' = 'manual',
     triggerTurn = true,
   ): Promise<FocusEnded> {
+    if (this.endingFocus) return this.endingFocus;
     const state = this.focusCycles.read();
     if (!state) throw new Error('FOCUS_CYCLE_NOT_ACTIVE');
     const session = await this.activeFocusSession(state.sessionKey);
     if (session.sessionId !== state.sessionId) throw new Error('FOCUS_SESSION_OWNER_MISMATCH');
     await ensureFocusStartedMessage(session, state);
     const event = this.focusCycles.terminal(reason);
-    await ensureFocusEndedMessage(session, event, triggerTurn);
-    if (hasFocusEndedMessage(session.entries, state.cycleId)) {
-      this.focusCycles.remove(state.cycleId);
-    }
+    this.endingFocus = event;
+    void ensureFocusEndedMessage(session, event, triggerTurn).then(() => {
+      if (hasFocusEndedMessage(session.entries, state.cycleId)) {
+        this.focusCycles.remove(state.cycleId);
+      }
+      this.endingFocus = null;
+    }, () => {
+      this.endingFocus = null;
+    });
     return event;
   }
 
   async endFocusForSession(key: SessionKey): Promise<FocusEnded | null> {
     const state = this.focusCycles.read();
     if (!state || state.sessionKey !== key) return null;
-    const session = await this.activeFocusSession(key);
+    const session = this.sessions.get(key) ?? await this.activeFocusSession(key);
     if (session.sessionId !== state.sessionId) throw new Error('FOCUS_SESSION_OWNER_MISMATCH');
     await ensureFocusStartedMessage(session, state);
     const event = this.focusCycles.terminal('session-ended');
@@ -631,6 +639,7 @@ export class WorkspaceRegistry {
     this.sessions.clear();
     this.opening.clear();
     this.turnTails.clear();
+    this.endingFocus = null;
     this.freeRecords.clear();
     this.metaRecords.clear();
   }

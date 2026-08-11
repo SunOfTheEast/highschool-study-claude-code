@@ -10,6 +10,7 @@ import type {
   LearningSetHomeSnapshot,
   LessonHandout,
   ProblemAttemptResponse,
+  PublicFocusCycle,
   SemanticRelation,
   SessionKey,
   StudyEvent,
@@ -38,6 +39,8 @@ import { formatMaterialLocator } from './material-locator';
 import { eventTransport } from './transport';
 import { publicErrorText } from './public-errors';
 import { resetRouteScroll } from './route-scroll';
+import { useDesktopTools } from './desktop/DesktopContext';
+import { deliverFocusAlert, playFocusChime } from './focus-alert';
 
 type ConnectionState = 'open' | 'connecting' | 'closed';
 
@@ -99,6 +102,7 @@ function routeIsCourse(route: BrowserRoute): boolean {
 }
 
 export function App() {
+  const desktopTools = useDesktopTools();
   const [route, setRoute] = useState<BrowserRoute>(() => (
     parseBrowserRoute(window.location.pathname) ?? { kind: 'home' }
   ));
@@ -120,6 +124,7 @@ export function App() {
   const [notice, setNotice] = useState<string | null>('正在打开学习集…');
   const [leftOpen, setLeftOpen] = useState(false);
   const [rightOpen, setRightOpen] = useState(false);
+  const [focus, setFocus] = useState<PublicFocusCycle | null>(null);
   const routeLoadRevision = useRef(0);
 
   const loadRoute = async (next: BrowserRoute) => {
@@ -322,6 +327,31 @@ export function App() {
   }, []);
 
   useEffect(() => {
+    void api.focus().then(setFocus, () => {});
+  }, []);
+
+  useEffect(() => {
+    if (focus?.status !== 'running' || !focus.expiresAt) return undefined;
+    const delay = Math.max(0, Date.parse(focus.expiresAt) - Date.now()) + 80;
+    const timer = window.setTimeout(() => {
+      const targetMinutes = focus.targetSeconds / 60;
+      void api.focus().then(async (next) => {
+        setFocus(next);
+        if (next) return;
+        const copy = { title: 'StudyForge', body: `${targetMinutes} 分钟计时已到` };
+        setNotice(copy.body);
+        await deliverFocusAlert({
+          play: playFocusChime,
+          notify: desktopTools
+            ? () => desktopTools.showNotification(copy.title, copy.body)
+            : async () => {},
+        }, copy);
+      }, () => {});
+    }, Math.min(delay, 2_147_000_000));
+    return () => window.clearTimeout(timer);
+  }, [focus?.status, focus?.expiresAt, focus?.targetSeconds, desktopTools]);
+
+  useEffect(() => {
     const pop = () => {
       resetRouteScroll();
       void loadRoute(parseBrowserRoute(window.location.pathname) ?? { kind: 'home' });
@@ -374,6 +404,10 @@ export function App() {
           ) {
             void loadRoute(current);
           }
+          return;
+        }
+        if (event.type === 'focus-invalidated') {
+          void api.focus().then(setFocus, () => {});
           return;
         }
         dispatch(event);
@@ -463,6 +497,51 @@ export function App() {
       const next = parseBrowserRoute(new URL(created.route, window.location.origin).pathname);
       if (!next) throw new Error('META_ROUTE_INVALID');
       navigate(next);
+    } catch (error) {
+      setNotice(errorText(error));
+    }
+  };
+
+  const startFocus = async (
+    key: SessionKey,
+    targetSeconds: 900 | 1500 | 2700,
+  ) => {
+    try {
+      setFocus(await api.startFocus(key, targetSeconds));
+    } catch (error) {
+      setNotice(errorText(error));
+    }
+  };
+
+  const pauseFocus = async () => {
+    try {
+      setFocus(await api.pauseFocus());
+    } catch (error) {
+      setNotice(errorText(error));
+    }
+  };
+
+  const resumeFocus = async () => {
+    try {
+      setFocus(await api.resumeFocus());
+    } catch (error) {
+      setNotice(errorText(error));
+    }
+  };
+
+  const endFocus = async () => {
+    try {
+      const ended = await api.endFocus();
+      setFocus(null);
+      const copy = { title: 'StudyForge', body: '本次专注已结束' };
+      setNotice(copy.body);
+      await deliverFocusAlert({
+        play: playFocusChime,
+        notify: desktopTools
+          ? () => desktopTools.showNotification(copy.title, copy.body)
+          : async () => {},
+      }, copy);
+      if (ended.reason === 'elapsed') setNotice(`${ended.targetSeconds / 60} 分钟计时已到`);
     } catch (error) {
       setNotice(errorText(error));
     }
@@ -563,8 +642,10 @@ export function App() {
         onSend={(text) => api.send(selectedKey, text).then(() => undefined)}
         onEnd={async () => {
           await api.endFreeLearning(route.sessionId);
+          setFocus(null);
           await loadRoute(route);
         }}
+        onStartFocus={focus ? null : (seconds) => startFocus(selectedKey, seconds)}
       />
     );
   } else if (route.kind === 'meta' && selectedKey?.startsWith('meta:')) {
@@ -623,6 +704,7 @@ export function App() {
         onLifecycle={lifecycle}
         onToggleLeft={() => setLeftOpen((value) => !value)}
         onToggleRight={() => setRightOpen((value) => !value)}
+        onStartFocus={focus ? null : (seconds) => startFocus(selectedKey, seconds)}
       />
     );
   }
@@ -658,6 +740,10 @@ export function App() {
       hasCourse={home?.hasCourse ?? course !== null}
       connection={connection}
       notice={notice}
+      focus={focus}
+      onPauseFocus={pauseFocus}
+      onResumeFocus={resumeFocus}
+      onEndFocus={endFocus}
       onNavigate={(view) => navigate(
         view === 'home' ? { kind: 'home' } : view === 'assets' ? { kind: 'assets' } : { kind: 'course' },
       )}

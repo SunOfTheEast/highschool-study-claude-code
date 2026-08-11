@@ -19,6 +19,7 @@ export function FreeLearningPage({
   error,
   onSend,
   onEnd,
+  onStartFocus = null,
 }: {
   sessionKey: SessionKey;
   title?: string;
@@ -30,6 +31,7 @@ export function FreeLearningPage({
   error: string | null;
   onSend(text: string): Promise<void>;
   onEnd(): Promise<void>;
+  onStartFocus?: ((targetSeconds: 900 | 1500 | 2700) => Promise<void>) | null;
 }) {
   return (
     <main className="free-learning-workspace letter-workspace">
@@ -56,6 +58,7 @@ export function FreeLearningPage({
         error={error}
         enabled={status === 'active'}
         connected={connected}
+        focusStart={status === 'active' ? onStartFocus : null}
         onSend={onSend}
       />
     </main>

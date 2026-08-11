@@ -4,6 +4,7 @@ import type { CompanionBridge } from '../companion/contracts';
 export type DesktopTools = {
   openSettings(): void;
   openHelp(): void;
+  showNotification(title: string, body: string): Promise<void>;
   companion: CompanionBridge | null;
 };
 
