@@ -23,6 +23,8 @@ import type { PaperResearchResponder } from './paper-research-runner';
 import { createPaperResearchTool } from './paper-research-tools';
 import { createLearningAssetProposalTools } from './learning-asset-proposal-tools';
 import { createCalendarTools, type CalendarRepository } from './calendar-tools';
+import { createAssetReviewRecordTool } from './asset-review-tools';
+import { lessonSessionKey } from '../study/node-paths';
 
 const blockId = Type.String({
   pattern: '^[A-Za-z0-9][A-Za-z0-9._-]*$',
@@ -254,6 +256,19 @@ export function createLessonTools(
   const paperResearch = paperResearchResponder
     ? createPaperResearchTool(paperResearchResponder)
     : null;
+  const lesson = readLesson(root, lessonPath);
+  const reviewTool = session ? createAssetReviewRecordTool(
+    root,
+    lessonSessionKey(lesson.parentId, lesson.id) as `lesson:${string}`,
+    boundSources.flatMap((item) => (
+      item.source.kind === 'material'
+        ? []
+        : [{
+          alias: item.alias,
+          asset: { kind: item.source.kind, id: item.source.id },
+        }]
+    )),
+  ) : null;
   const finishTool = createNodeFinishTool(root, 'lesson', lessonPath);
   return memoryTool
     ? [
@@ -264,6 +279,7 @@ export function createLessonTools(
       memoryTool,
       ...(paperResearch ? [paperResearch] : []),
       ...(calendar && scope ? createCalendarTools(calendar, root, scope) : []),
+      ...(reviewTool ? [reviewTool] : []),
       finishTool,
     ]
     : [
@@ -273,6 +289,7 @@ export function createLessonTools(
       ...proposalTools,
       ...(paperResearch ? [paperResearch] : []),
       ...(calendar && scope ? createCalendarTools(calendar, root, scope) : []),
+      ...(reviewTool ? [reviewTool] : []),
       finishTool,
     ];
 }

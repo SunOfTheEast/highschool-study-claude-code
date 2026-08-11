@@ -38,11 +38,13 @@ test('exposes only the M0 node lifecycle and role-scoped model tools', () => {
     'propose_problem_card',
     'save_note',
     'save_problem_card',
+    'record_asset_review',
     'finish_lesson',
   ]);
   expect(modelToolsForNode('plan')).toEqual([
     ...M0_MODEL_TOOLS,
     'subagent',
+    'list_due_asset_reviews',
     'artifact_export',
     'propose_problem_card',
     'save_prepared_problem_card',
@@ -59,12 +61,14 @@ test('exposes only the M0 node lifecycle and role-scoped model tools', () => {
     'propose_problem_card',
     'save_note',
     'save_problem_card',
+    'record_asset_review',
     'lesson_memory_commit',
     'finish_lesson',
   ]);
   expect(modelToolsForNode('plan', true)).toEqual([
     ...M0_MODEL_TOOLS,
     'subagent',
+    'list_due_asset_reviews',
     'artifact_export',
     'propose_problem_card',
     'save_prepared_problem_card',

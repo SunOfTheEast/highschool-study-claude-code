@@ -84,7 +84,8 @@ test('assembles static teaching resources and node-scoped model tools', () => {
   const assembled = resources.agentsFiles.map((file) => file.content).join('\n');
 
   expect(resources.tools).toEqual([
-    'read', 'grep', 'find', 'ls', 'edit', 'write', 'subagent', 'artifact_export',
+    'read', 'grep', 'find', 'ls', 'edit', 'write', 'subagent',
+    'list_due_asset_reviews', 'artifact_export',
     'propose_problem_card',
     'save_prepared_problem_card',
     'memory_route_resolve',
@@ -126,6 +127,7 @@ test('assembles static teaching resources and node-scoped model tools', () => {
     'propose_problem_card',
     'save_note',
     'save_problem_card',
+    'record_asset_review',
     'lesson_memory_commit',
     'finish_lesson',
   ]);
@@ -434,7 +436,8 @@ test('injects one canonical document contract into every node session', () => {
     expect(contracts[0]?.content).toContain('write 完整子文件');
     expect(resources.tools).toEqual(scope.nodeKind === 'plan'
       ? [
-        'read', 'grep', 'find', 'ls', 'edit', 'write', 'subagent', 'artifact_export',
+        'read', 'grep', 'find', 'ls', 'edit', 'write', 'subagent',
+        'list_due_asset_reviews', 'artifact_export',
         'propose_problem_card',
         'save_prepared_problem_card',
         'memory_route_resolve',
@@ -445,6 +448,7 @@ test('injects one canonical document contract into every node session', () => {
           'read', 'grep', 'find', 'ls',
           'classroom_log_append', 'classroom_update', 'propose_note',
           'propose_problem_card', 'save_note', 'save_problem_card',
+          'record_asset_review',
           'lesson_memory_commit',
           'finish_lesson',
         ]
@@ -504,10 +508,12 @@ test('registers only node-bound custom tools for Plan and Lesson scopes', () => 
     'propose_note',
     'propose_problem_card',
     'lesson_memory_commit',
+    'record_asset_review',
     'finish_lesson',
   ]);
   expect(customToolsForNode(root, planScope, manager).map((tool) => tool.name)).toEqual([
     'artifact_export',
+    'list_due_asset_reviews',
     'propose_problem_card',
     'save_prepared_problem_card',
     'memory_route_resolve',

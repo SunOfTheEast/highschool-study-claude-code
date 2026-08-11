@@ -17,6 +17,7 @@ import { createPlanMemoryTools } from './memory-tools';
 import { createNodeFinishTool } from './node-finish-tools';
 import { createPlanProblemCardProposalTool } from './learning-asset-proposal-tools';
 import { createCalendarTools, type CalendarRepository } from './calendar-tools';
+import { createAssetReviewCandidateQueryTool } from './asset-review-tools';
 
 const nodeId = Type.String({
   pattern: '^[A-Za-z0-9][A-Za-z0-9._-]*$',
@@ -227,6 +228,7 @@ export function createPlanTools(
 
   return [
     exportTool,
+    createAssetReviewCandidateQueryTool(root),
     createPlanProblemCardProposalTool(),
     ...(savePreparedCard ? [savePreparedCard] : []),
     ...createPlanMemoryTools(root),

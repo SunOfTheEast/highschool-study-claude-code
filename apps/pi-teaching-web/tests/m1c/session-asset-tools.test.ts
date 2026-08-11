@@ -77,6 +77,7 @@ test('Lesson exposes the same narrow asset tools without restoring native writes
     'propose_note',
     'propose_problem_card',
     'lesson_memory_commit',
+    'record_asset_review',
     'finish_lesson',
   ]);
 });

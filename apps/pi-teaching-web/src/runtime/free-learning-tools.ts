@@ -11,6 +11,9 @@ import type { PaperResearchResponder } from './paper-research-runner';
 import { createPaperResearchTool } from './paper-research-tools';
 import { createLearningAssetProposalTools } from './learning-asset-proposal-tools';
 import { createCalendarTools, type CalendarRepository } from './calendar-tools';
+import { createAssetReviewRecordTool } from './asset-review-tools';
+import { selectedAssetReviewBindings } from './asset-review-context';
+import { freeLearningSessionKey } from './session-scope';
 
 export function createFreeLearningTools(
   root: string,
@@ -29,6 +32,13 @@ export function createFreeLearningTools(
   const paperResearch = paperResearchResponder
     ? createPaperResearchTool(paperResearchResponder)
     : null;
+  const review = (scope.intent ?? 'open') === 'review'
+    ? createAssetReviewRecordTool(
+      root,
+      freeLearningSessionKey(session.getSessionId()),
+      selectedAssetReviewBindings(scope.selectedAssets),
+    )
+    : null;
   return [
     ...assets,
     ...proposals,
@@ -36,5 +46,6 @@ export function createFreeLearningTools(
     ...(peer ? [peer] : []),
     ...(paperResearch ? [paperResearch] : []),
     ...(calendar ? createCalendarTools(calendar, root, scope) : []),
+    ...(review ? [review] : []),
   ];
 }

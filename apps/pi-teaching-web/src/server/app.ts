@@ -664,8 +664,13 @@ export function createRequestHandler(deps?: AppDependencies) {
       }
       if (url.pathname === '/api/free-learning' && request.method === 'POST') {
         const requestBody = objectBody(await request.json());
+        const intent = requestBody.intent === undefined ? 'open' : requestBody.intent;
+        if (intent !== 'open' && intent !== 'review') {
+          throw new Error('FREE_LEARNING_INTENT_INVALID');
+        }
         const session = await deps.registry.createFreeLearning(
           learningContextReferences(requestBody.selectedAssets),
+          intent,
         );
         deps.hub.publish({ type: 'home-invalidated' });
         return json({ session, route: `/learn/${encodeURIComponent(session.id)}` }, 201);

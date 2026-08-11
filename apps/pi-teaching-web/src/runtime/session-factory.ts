@@ -255,6 +255,7 @@ export async function createPiSessionFactory(
             Boolean(peerResponder),
             Boolean(paperResearchResponder),
             Boolean(calendar),
+            (scope.intent ?? 'open') === 'review',
           )
           : modelToolsForNode(
             scope.nodeKind,

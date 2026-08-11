@@ -217,10 +217,13 @@ export const api = {
     relatedTerms: string[];
   }>('/api/semantics/query', input),
   semanticRelations: () => json<SemanticRelation[]>('/api/semantics/relations'),
-  createFreeLearning: (selectedAssets: LearningContextReference[]) => post<{
+  createFreeLearning: (
+    selectedAssets: LearningContextReference[],
+    intent: 'open' | 'review' = 'open',
+  ) => post<{
     session: FreeLearningSessionSummary;
     route: string;
-  }>('/api/free-learning', { selectedAssets }),
+  }>('/api/free-learning', { selectedAssets, intent }),
   meta: () => json<MetaSessionSummary[]>('/api/meta'),
   createMeta: (selectedAssets: LearningContextReference[]) => post<{
     session: MetaSessionSummary;

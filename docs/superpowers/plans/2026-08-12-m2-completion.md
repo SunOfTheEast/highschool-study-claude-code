@@ -673,26 +673,26 @@ git commit -m "feat: enroll and directly review learning assets"
 - `record_asset_review({ alias, result })` binds Free selected context or current Lesson Uses and writes Session evidence.
 - Preparation receives one read-only bounded due-candidate query; selecting/reading a candidate never records a review.
 
-- [ ] **Step 1: Write RED tests for context and write authority**
+- [x] **Step 1: Write RED tests for context and write authority**
 
 Cover persistent review intent, compact brief recovery, selected alias binding, Lesson Uses-only binding, Plan/Meta/Roadmap write-tool absence, untouched batch candidates remaining due, same-day rule, and preparation query limit/no writes.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 ```bash
 cd apps/pi-teaching-web
 bun test tests/m2/guided-asset-review.test.ts
 ```
 
-- [ ] **Step 3: Implement review context and narrow write tools**
+- [x] **Step 3: Implement review context and narrow write tools**
 
 Extend only Free scope ownership metadata with `intent`; preserve old sessions as `open`. Runtime supplies aliases and binds Session key/revision/date. The tool accepts only alias/result. It does not judge correctness or infer cold retrieval. Lesson can write only assets already in current `Uses`.
 
-- [ ] **Step 4: Add the teaching bright line and bounded prepare route**
+- [x] **Step 4: Add the teaching bright line and bounded prepare route**
 
 Free/Lesson follow: cold retrieval first → preserve first result → then teach/compare → record only touched assets → state the next appearance. Pure Markdown Notes receive one or a few questions derived from content without first revealing it. Preparation reads candidate summaries with a hard small limit and opens the asset only after choosing it.
 
-- [ ] **Step 5: Verify and commit**
+- [x] **Step 5: Verify and commit**
 
 ```bash
 cd apps/pi-teaching-web

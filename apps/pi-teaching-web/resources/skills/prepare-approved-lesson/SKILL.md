@@ -26,6 +26,9 @@ description: Use when a Plan Session has a student-approved Lesson design record
 4. 将批准的活动具体化为必要和可选 Blocks，并确定处理深度；
 5. 按下方“素材来源与资产绑定”路由每份具体材料；只有未绑定的学习集资产进入
    `references/material-preparation.md` 并使用材料 Scout；
+   如果已批准课堂适合顺带复习旧资产，可调用一次 `list_due_asset_reviews` 查看小批到期摘要，
+   只在选中与本课目标直接相关的候选后读取其精确路径；读取候选不构成复习，也不自动改变
+   本课目标、题量或 Lesson Tree；
 6. 核验来源、数学、教学作用、工作量与首次作答的信息边界；只有已点名内容存在会改变
    结论或课堂可用性的实质风险时，才读取 `references/risk-review.md` 并调用
    `lesson-risk-reviewer`，其余情况由 Coach 正常完成核验；

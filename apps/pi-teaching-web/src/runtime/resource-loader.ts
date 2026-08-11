@@ -29,6 +29,7 @@ import { renderLessonSourceAliases } from './lesson-tools';
 import { memoryEnabled } from './memory-tools';
 import { renderSelectedAssetContext } from '../study/learning-assets';
 import { renderSelectedProblemActivityContext } from '../study/problem-attempts';
+import { renderFreeLearningReviewBrief } from './asset-review-context';
 
 export function resolveStudyForgeResourceRoot(): string {
   return process.env.STUDYFORGE_RESOURCE_ROOT?.trim()
@@ -193,6 +194,7 @@ export function loadStaticFreeLearningResources(
   const hasMemory = memoryEnabled(root);
   const selectedAssets = renderSelectedAssetContext(root, scope.selectedAssets);
   const selectedActivity = renderSelectedProblemActivityContext(root, scope.selectedAssets);
+  const reviewBrief = renderFreeLearningReviewBrief(root, scope);
   return {
     agentsFiles: [
       ...(hasMemory ? [{
@@ -211,6 +213,10 @@ export function loadStaticFreeLearningResources(
       ...(selectedActivity ? [{
         path: '/virtual/studyforge-m1b-selected-problem-activity.md',
         content: selectedActivity,
+      }] : []),
+      ...(reviewBrief ? [{
+        path: '/virtual/studyforge-m2-asset-review-brief.md',
+        content: reviewBrief,
       }] : []),
       {
         path: '/virtual/studyforge-m0-teaching-core.md',
@@ -231,7 +237,13 @@ export function loadStaticFreeLearningResources(
       },
     ],
     skillPaths: [resourcePath('skills', 'free-learning', 'SKILL.md')],
-    tools: modelToolsForFreeLearning(hasMemory, false, false, calendarEnabled),
+    tools: modelToolsForFreeLearning(
+      hasMemory,
+      false,
+      false,
+      calendarEnabled,
+      (scope.intent ?? 'open') === 'review',
+    ),
   };
 }
 

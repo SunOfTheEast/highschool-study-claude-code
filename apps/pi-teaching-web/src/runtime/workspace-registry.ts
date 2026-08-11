@@ -222,6 +222,7 @@ export class WorkspaceRegistry {
 
   async createFreeLearning(
     selectedAssets: readonly LearningContextReference[],
+    intent: 'open' | 'review' = 'open',
   ): Promise<FreeLearningSessionSummary> {
     const createdAt = new Date().toISOString();
     const scope: FreeLearningSessionScope = {
@@ -229,6 +230,7 @@ export class WorkspaceRegistry {
       title: '自由学习',
       createdAt,
       selectedAssets: checkedSelectedAssets(this.root, selectedAssets),
+      intent,
     };
     const session = await this.factory(sessionFactoryInput(scope, null));
     if (!session.sessionFile) {
@@ -261,7 +263,10 @@ export class WorkspaceRegistry {
     }
     const sessionKey: SessionKey = appointment.destination.kind === 'plan'
       ? `plan:${appointment.destination.planId}`
-      : (await this.createFreeLearning(appointment.destination.contexts)).sessionKey;
+      : (await this.createFreeLearning(
+        appointment.destination.contexts,
+        appointment.destination.intent,
+      )).sessionKey;
     const session = await this.open(sessionKey);
     await ensureAppointmentOpenedMessage(session, {
       appointmentId: appointment.id,

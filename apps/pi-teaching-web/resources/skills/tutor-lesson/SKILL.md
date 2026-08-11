@@ -91,9 +91,14 @@ Goal 的小幅、可逆调整。若没有负责的动作能留在该目标内，
   `../references/learning-methods/claim-challenge.md`；
 - 当前活动明确要求先脱离原文提取，再根据首次表现反馈 →
   `../references/learning-methods/retrieval-practice.md`。
+- 当前活动明确要复习 `Uses` 中一份或多份旧 Note / Problem Card，并记录其首次提取结果 →
+  `../references/learning-methods/batch-asset-review.md`。
 
 普通对照、简单纠错或一句解释仍由核心循环自然完成。一次方法可以持续多轮，但每轮仍只做
 一个主要教学动作，并等待学生下一次真实表现。
+
+只有实际完成了未受提示污染的首次提取，才用当前 Lesson 的 `source-N` 调用
+`record_asset_review`；读取、讲解、放进 `Uses` 或已经先看到答案都不构成复习结果。
 
 ## 预案外表现触发记忆召回
 

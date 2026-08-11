@@ -63,6 +63,7 @@ function isSessionOwner(value: unknown): value is StudySessionScope {
     return nonempty(owner.title)
       && nonempty(owner.createdAt)
       && !Number.isNaN(Date.parse(owner.createdAt))
+      && (owner.intent === undefined || owner.intent === 'open' || owner.intent === 'review')
       && Array.isArray(owner.selectedAssets)
       && owner.selectedAssets.every(validAssetReference);
   }
@@ -92,7 +93,10 @@ export function readSessionOwner(manager: SessionOwnerReader): StudySessionScope
     if (!entry || typeof entry !== 'object' || Array.isArray(entry)) return [];
     const candidate = entry as Record<string, unknown>;
     if (candidate.type !== 'custom' || candidate.customType !== SESSION_OWNER_TYPE) return [];
-    return isSessionOwner(candidate.data) ? [candidate.data] : [null];
+    if (!isSessionOwner(candidate.data)) return [null];
+    return [isFreeLearningScope(candidate.data)
+      ? { ...candidate.data, intent: candidate.data.intent ?? 'open' }
+      : candidate.data];
   });
   return matching.length === 1 ? matching[0] ?? null : null;
 }
@@ -107,6 +111,7 @@ export function sessionOwnerMatches(
   if (isFreeLearningScope(actual) && isFreeLearningScope(expected)) {
     return actual.title === expected.title
       && actual.createdAt === expected.createdAt
+      && (actual.intent ?? 'open') === (expected.intent ?? 'open')
       && JSON.stringify(actual.selectedAssets) === JSON.stringify(expected.selectedAssets);
   }
   if (isFreeLearningScope(actual) || isFreeLearningScope(expected)) return false;

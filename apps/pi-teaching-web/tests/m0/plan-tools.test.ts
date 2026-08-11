@@ -79,6 +79,7 @@ test('exposes one Plan-bound export schema without a model-supplied Plan ID', ()
   const tools = createPlanTools(copyFixture(), scope, session);
   expect(tools.map((tool) => tool.name)).toEqual([
     'artifact_export',
+    'list_due_asset_reviews',
     'propose_problem_card',
     'save_prepared_problem_card',
     'memory_route_resolve',
@@ -106,7 +107,10 @@ test('exposes one Plan-bound export schema without a model-supplied Plan ID', ()
   const m0 = copyFixture();
   rmSync(join(m0, 'memory/INDEX.md'));
   expect(createPlanTools(m0, scope, session).map((candidate) => candidate.name))
-    .toEqual(['artifact_export', 'propose_problem_card', 'save_prepared_problem_card', 'finish_plan']);
+    .toEqual([
+      'artifact_export', 'list_due_asset_reviews',
+      'propose_problem_card', 'save_prepared_problem_card', 'finish_plan',
+    ]);
 });
 
 test('finishes only the runtime-bound active Plan with no model authority fields', async () => {

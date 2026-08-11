@@ -24,6 +24,7 @@ export type FreeLearningSessionScope = {
   title: string;
   createdAt: string;
   selectedAssets: readonly LearningContextReference[];
+  intent?: 'open' | 'review';
 };
 
 export type MetaSessionScope = {
@@ -57,6 +58,7 @@ export const M0_MODEL_TOOLS = [
 export const PLAN_MODEL_TOOLS = [
   ...M0_MODEL_TOOLS,
   'subagent',
+  'list_due_asset_reviews',
   'artifact_export',
   'propose_problem_card',
   'save_prepared_problem_card',
@@ -73,6 +75,7 @@ export const LESSON_MODEL_TOOLS = [
   'propose_problem_card',
   'save_note',
   'save_problem_card',
+  'record_asset_review',
   'finish_lesson',
 ] as const;
 
@@ -105,6 +108,7 @@ export function modelToolsForFreeLearning(
   peerEnabled = false,
   paperResearchEnabled = false,
   calendarEnabled = false,
+  reviewEnabled = false,
 ): readonly string[] {
   return [
     ...FREE_LEARNING_MODEL_TOOLS,
@@ -112,6 +116,7 @@ export function modelToolsForFreeLearning(
     ...(peerEnabled ? ['ask_peer'] : []),
     ...(paperResearchEnabled ? ['paper_research'] : []),
     ...(calendarEnabled ? CALENDAR_MODEL_TOOLS : []),
+    ...(reviewEnabled ? ['record_asset_review'] : []),
   ];
 }
 
@@ -231,6 +236,7 @@ export function formatFreeLearningOwnerContext(
     `Learning set root: ${root}`,
     'Current session kind: free-learning',
     `Session title: ${scope.title}`,
+    `Session intent: ${scope.intent ?? 'open'}`,
     'Selected asset handles:',
     assets,
     '',

@@ -35,6 +35,10 @@ description: 在学生从固定入口自由提问、带学习资产继续讨论�
 一次方法可以自然持续多轮，学生下一次回应决定继续、切换或停止。Free Learning 仍可自由
 转向，不要求方法结束时形成总结、资产或结课仪式。
 
+如果当前 Session intent 是 `review`，先读取
+`../references/learning-methods/batch-asset-review.md`，按其中的一条亮线主持本次所选资产的
+复习。只为真正完成首次提取的别名调用 `record_asset_review`；未触及条目保持原样。
+
 ## 保存学习资产
 
 只在自然讨论已经形成明确内容、学生提出保存，或教师询问后学生愿意保存时进入这条亮线：
