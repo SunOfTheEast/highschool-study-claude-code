@@ -471,6 +471,21 @@ export type LessonReviewConversationItem = {
   updatedAt: string;
 };
 
+export type PaperResearchPhase =
+  | 'searching'
+  | 'checking'
+  | 'done'
+  | 'unavailable';
+
+export type PaperResearchConversationItem = {
+  id: string;
+  kind: 'paper-research';
+  status: 'running' | 'done' | 'error';
+  phase: PaperResearchPhase;
+  at: string;
+  updatedAt: string;
+};
+
 export type LessonHandoutConversationItem = {
   id: string;
   kind: 'lesson-handout';
@@ -509,6 +524,7 @@ export type ConversationItem =
   | { id: string; kind: 'assistant'; text: string; at: string }
   | PeerConversationItem
   | MaterialSearchConversationItem
+  | PaperResearchConversationItem
   | LessonReviewConversationItem
   | LessonHandoutConversationItem
   | {

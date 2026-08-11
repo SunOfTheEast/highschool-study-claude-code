@@ -127,26 +127,26 @@ type PaperBridge = {
 - Runtime gives a fixed fresh Paper Research Scout only the three request fields and bounded Semantic Scholar results; it has no file/write/memory tools.
 - The client sees `searching → checking → done|unavailable`, never the provider query or internal IDs.
 
-- [ ] **Step 1: Write client/parser/scope RED tests**
+- [x] **Step 1: Write client/parser/scope RED tests**
 
 Cover: bounded field parsing and candidate count; timeout, 429, empty results, missing abstracts; Free/Lesson tool availability and Roadmap/Plan/Meta absence; safe live/history projection; no asset or memory mutation.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 ```bash
 cd apps/pi-teaching-web
 bun test tests/m2/paper-research.test.ts tests/m2/paper-research-projection.test.tsx
 ```
 
-- [ ] **Step 3: Implement one replaceable Semantic Scholar adapter**
+- [x] **Step 3: Implement one replaceable Semantic Scholar adapter**
 
 Use injected `fetch`, `AbortSignal.timeout`, the official relevance endpoint, explicit fields, a small fixed result limit, and no retries. Parse only title/year/authors/abstract/url/open-access metadata. Treat rate limits, offline errors, malformed responses, and empty results as an ordinary unavailable result.
 
-- [ ] **Step 4: Implement fixed Scout and scoped tool**
+- [x] **Step 4: Implement fixed Scout and scoped tool**
 
 The tool description states the semantic permission boundary for the model but Runtime does not inspect transcript wording. The runner asks the fixed Scout to select and summarize at most three bridges from returned metadata; it cannot read workspace files or write anything. Return structured bridges to the parent teacher.
 
-- [ ] **Step 5: Project student-safe progress and verify**
+- [x] **Step 5: Project student-safe progress and verify**
 
 ```bash
 cd apps/pi-teaching-web

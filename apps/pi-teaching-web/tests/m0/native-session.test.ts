@@ -659,12 +659,20 @@ test('packages a read-only material Scout', () => {
   }
 });
 
-test('packages only the two StudyForge product subagents', () => {
+test('packages only the three bounded StudyForge product scouts', () => {
   const directory = join(import.meta.dir, '../../resources/subagents');
   expect(readdirSync(directory).filter((name) => name.endsWith('.md')).sort()).toEqual([
     'lesson-risk-reviewer.md',
+    'paper-research-scout.md',
     'study-material-scout.md',
   ]);
+
+  const paper = readFileSync(join(directory, 'paper-research-scout.md'), 'utf8');
+  expect(paper).toContain('name: paper-research-scout');
+  expect(paper).toContain('defaultContext: fresh');
+  expect(paper.match(/^tools:.*$/m)?.[0]).toBe('tools:');
+  expect(paper).toContain('inheritProjectContext: false');
+  expect(paper).toContain('inheritSkills: false');
 });
 
 test('packages one bounded Lesson risk Reviewer and routes it only for material risk', () => {

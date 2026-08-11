@@ -2,11 +2,13 @@ import type {
   ConversationItem,
   LessonReviewConversationItem,
   MaterialSearchConversationItem,
+  PaperResearchConversationItem,
   SessionKey,
   StudyEvent,
 } from '../shared/contracts';
 import { mergeMaterialSearchItem } from '../projection/material-search';
 import { mergeLessonReviewItem } from '../projection/lesson-review';
+import { mergePaperResearchItem } from '../projection/paper-research';
 import { publicErrorText, publicSessionErrorText } from './public-errors';
 
 export type ClientState = {
@@ -28,6 +30,8 @@ function upsert(items: ConversationItem[], incoming: ConversationItem): Conversa
   const existing = items[index]!;
   if (existing.kind === 'material-search' && incoming.kind === 'material-search') {
     next[index] = mergeMaterialSearchItem(existing, incoming);
+  } else if (existing.kind === 'paper-research' && incoming.kind === 'paper-research') {
+    next[index] = mergePaperResearchItem(existing, incoming);
   } else if (existing.kind === 'lesson-review' && incoming.kind === 'lesson-review') {
     next[index] = mergeLessonReviewItem(existing, incoming);
   } else if (

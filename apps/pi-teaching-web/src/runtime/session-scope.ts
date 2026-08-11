@@ -91,11 +91,13 @@ export const META_MODEL_TOOLS = [
 export function modelToolsForFreeLearning(
   hasMemory: boolean,
   peerEnabled = false,
+  paperResearchEnabled = false,
 ): readonly string[] {
   return [
     ...FREE_LEARNING_MODEL_TOOLS,
     ...(hasMemory ? ['free_learning_memory_commit'] : []),
     ...(peerEnabled ? ['ask_peer'] : []),
+    ...(paperResearchEnabled ? ['paper_research'] : []),
   ];
 }
 
@@ -113,12 +115,16 @@ export function isNodeSessionScope(scope: StudySessionScope): scope is NodeSessi
   return !isFreeLearningScope(scope) && !isMetaScope(scope);
 }
 
-export function modelToolsForNode(kind: NodeKind, hasMemory = false): readonly string[] {
+export function modelToolsForNode(
+  kind: NodeKind,
+  hasMemory = false,
+  paperResearchEnabled = false,
+): readonly string[] {
   if (kind === 'lesson') {
-    if (!hasMemory) return LESSON_MODEL_TOOLS;
     return [
       ...LESSON_MODEL_TOOLS.slice(0, -1),
-      'lesson_memory_commit',
+      ...(hasMemory ? ['lesson_memory_commit'] as const : []),
+      ...(paperResearchEnabled ? ['paper_research'] as const : []),
       'finish_lesson',
     ];
   }

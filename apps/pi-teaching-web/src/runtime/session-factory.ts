@@ -40,6 +40,10 @@ import {
 import type { DesktopModelSelection } from '../desktop/contracts';
 import { DesktopModelService } from '../desktop/model-service';
 import { createPeerResponder, type PeerResponder } from './peer-runner';
+import {
+  createPaperResearchResponder,
+  type PaperResearchResponder,
+} from './paper-research-runner';
 
 export interface StudySession {
   readonly sessionId: string;
@@ -80,8 +84,11 @@ export function customToolsForNode(
   root: string,
   scope: NodeSessionScope,
   manager?: Pick<SessionManager, 'getSessionId' | 'getBranch'>,
+  paperResearchResponder?: PaperResearchResponder,
 ) {
-  if (scope.nodeKind === 'lesson') return createLessonTools(root, scope.nodePath, manager);
+  if (scope.nodeKind === 'lesson') {
+    return createLessonTools(root, scope.nodePath, manager, paperResearchResponder);
+  }
   if (scope.nodeKind === 'plan') return createPlanTools(root, scope, manager);
   return [];
 }
@@ -91,11 +98,20 @@ export function customToolsForSession(
   scope: StudySessionScope,
   manager?: Pick<SessionManager, 'getSessionId' | 'getBranch'>,
   peerResponder?: PeerResponder,
+  paperResearchResponder?: PaperResearchResponder,
 ) {
   if (isMetaScope(scope)) return createMetaTools(root);
-  if (isNodeSessionScope(scope)) return customToolsForNode(root, scope, manager);
+  if (isNodeSessionScope(scope)) {
+    return customToolsForNode(root, scope, manager, paperResearchResponder);
+  }
   if (!manager) throw new Error('FREE_LEARNING_SESSION_MANAGER_REQUIRED');
-  return createFreeLearningTools(root, scope, manager, peerResponder);
+  return createFreeLearningTools(
+    root,
+    scope,
+    manager,
+    peerResponder,
+    paperResearchResponder,
+  );
 }
 
 type PiAgentSession = Awaited<ReturnType<typeof createAgentSession>>['session'];
@@ -154,6 +170,21 @@ export async function createPiSessionFactory(
       readFileSync(join(resolveStudyForgeResourceRoot(), 'peers', 'axia.md'), 'utf8'),
     )
     : undefined;
+  const paperResearchResponder = options
+    ? createPaperResearchResponder({
+      complete: (context, requestOptions) => modelRuntime.completeSimple(
+        peerModel!,
+        context,
+        requestOptions,
+      ),
+      thinking: options.scout.thinking,
+      systemPrompt: readFileSync(join(
+        resolveStudyForgeResourceRoot(),
+        'subagents',
+        'paper-research-scout.md',
+      ), 'utf8'),
+    })
+    : undefined;
   const settingsManager = options ? SettingsManager.create(root, options.agentDir) : undefined;
   return async ({ sessionFile, ...scope }) => {
     const eventBus = createEventBus();
@@ -167,7 +198,13 @@ export async function createPiSessionFactory(
       recoverOpenedSessionState(root, manager);
     }
     const resourceLoader = await createRoleResourceLoader(root, scope, eventBus);
-    const customTools = customToolsForSession(root, scope, manager, peerResponder);
+    const customTools = customToolsForSession(
+      root,
+      scope,
+      manager,
+      peerResponder,
+      paperResearchResponder,
+    );
     const { session } = await createAgentSession({
       cwd: root,
       modelRuntime,
@@ -183,8 +220,16 @@ export async function createPiSessionFactory(
       tools: [...(isMetaScope(scope)
         ? META_MODEL_TOOLS
         : isFreeLearningScope(scope)
-          ? modelToolsForFreeLearning(memoryEnabled(root), Boolean(peerResponder))
-          : modelToolsForNode(scope.nodeKind, memoryEnabled(root)))],
+          ? modelToolsForFreeLearning(
+            memoryEnabled(root),
+            Boolean(peerResponder),
+            Boolean(paperResearchResponder),
+          )
+          : modelToolsForNode(
+            scope.nodeKind,
+            memoryEnabled(root),
+            Boolean(paperResearchResponder),
+          ))],
     });
     await bindStudyExtensions(session);
     const disposePendingCleanup = session.subscribe((event) => {

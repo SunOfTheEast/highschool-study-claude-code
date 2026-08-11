@@ -3,6 +3,7 @@ import type {
   ConversationItem,
   LessonReviewConversationItem,
   MaterialSearchConversationItem,
+  PaperResearchConversationItem,
   PeerConversationItem,
   SessionKey,
   StudyEvent,
@@ -16,6 +17,11 @@ import { lessonReviewEnd, lessonReviewStart } from './lesson-review';
 import { lessonHandoutEnd, lessonHandoutStart } from './lesson-handout';
 import { publicSessionErrorText } from '../client/public-errors';
 import { peerMessageEnd, peerMessageStart } from './peer-message';
+import {
+  paperResearchEnd,
+  paperResearchStart,
+  paperResearchUpdate,
+} from './paper-research';
 
 function contentText(content: unknown): string {
   if (typeof content === 'string') return content;
@@ -80,6 +86,10 @@ export function projectConversationEntries(
           items.push(lessonHandoutStart(call.id, entry.timestamp));
           continue;
         }
+        if (call.name === 'paper_research') {
+          items.push(paperResearchStart(call.id, entry.timestamp));
+          continue;
+        }
         const material = call.name === 'subagent'
           ? materialSearchStart(call.id, call.arguments, entry.timestamp)
           : null;
@@ -139,6 +149,33 @@ export function projectConversationEntries(
           message.isError === true,
           entry.timestamp,
         );
+        if (position === undefined) {
+          toolPositions.set(message.toolCallId, items.length);
+          items.push(item);
+        } else {
+          items[position] = item;
+        }
+        continue;
+      }
+      if (message.toolName === 'paper_research') {
+        const started = previous?.kind === 'paper-research'
+          ? previous as PaperResearchConversationItem
+          : undefined;
+        const projected = paperResearchEnd(
+          message.toolCallId,
+          { details: message.details },
+          message.isError === true,
+          entry.timestamp,
+          started,
+        );
+        const item: ConversationItem = projected ?? {
+          id: message.toolCallId,
+          kind: 'tool',
+          name: message.toolName,
+          status: message.isError === true ? 'error' : 'done',
+          detail: null,
+          at: entry.timestamp,
+        };
         if (position === undefined) {
           toolPositions.set(message.toolCallId, items.length);
           items.push(item);
@@ -252,6 +289,13 @@ export function projectLiveSessionEvent(
         item: lessonHandoutStart(event.toolCallId, at),
       }];
     }
+    if (event.toolName === 'paper_research') {
+      return [{
+        type: 'conversation-item',
+        sessionKey,
+        item: paperResearchStart(event.toolCallId, at),
+      }];
+    }
     const material = event.toolName === 'subagent'
       ? materialSearchStart(event.toolCallId, event.args, at)
       : null;
@@ -272,6 +316,14 @@ export function projectLiveSessionEvent(
     }];
   }
   if (event.type === 'tool_execution_update') {
+    if (event.toolName === 'paper_research') {
+      const paper = paperResearchUpdate(
+        event.toolCallId,
+        event.partialResult,
+        at,
+      );
+      return paper ? [{ type: 'conversation-item', sessionKey, item: paper }] : [];
+    }
     if (event.toolName !== 'subagent') return [];
     const material = materialSearchUpdate(
       event.toolCallId,
@@ -317,6 +369,26 @@ export function projectLiveSessionEvent(
           event.isError,
           at,
         ),
+      }];
+    }
+    if (event.toolName === 'paper_research') {
+      const paper = paperResearchEnd(
+        event.toolCallId,
+        event.result,
+        event.isError,
+        at,
+      );
+      return [{
+        type: 'conversation-item',
+        sessionKey,
+        item: paper ?? {
+          id: event.toolCallId,
+          kind: 'tool',
+          name: event.toolName,
+          status: event.isError ? 'error' : 'done',
+          detail: null,
+          at,
+        },
       }];
     }
     const material = event.toolName === 'subagent'

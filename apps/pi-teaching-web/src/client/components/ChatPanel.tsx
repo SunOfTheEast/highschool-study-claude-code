@@ -4,6 +4,7 @@ import { MarkdownView } from './MarkdownView';
 import { LessonReviewActivity } from './LessonReviewActivity';
 import { LessonHandoutActivity } from './LessonHandoutActivity';
 import { MaterialSearchActivity } from './MaterialSearchActivity';
+import { PaperResearchActivity } from './PaperResearchActivity';
 import {
   presentConversation,
   toolActivityCopy,
@@ -123,6 +124,9 @@ function ChatPanelContent({
           }
           if (item.kind === 'material-search') {
             return <MaterialSearchActivity item={item} key={item.id} />;
+          }
+          if (item.kind === 'paper-research') {
+            return <PaperResearchActivity item={item} key={item.id} />;
           }
           if (item.kind === 'lesson-review') {
             return <LessonReviewActivity item={item} key={item.id} />;
