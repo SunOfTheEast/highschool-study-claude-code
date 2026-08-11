@@ -484,6 +484,13 @@ export type PeerMove = 'question' | 'association' | 'challenge';
 export type PeerExpression = 'neutral' | 'curious' | 'skeptical';
 export type PeerDelivery = 'history' | 'live';
 
+export type PeerLive2DManifest = {
+  version: 1;
+  modelFile: string;
+  coreFile: string;
+  modelFiles: string[];
+};
+
 export type PeerConversationItem = {
   id: string;
   kind: 'peer';

@@ -6,6 +6,26 @@ import { createPeerMediaService } from '../../src/desktop/peer-media';
 
 const roots: string[] = [];
 
+const live2dManifest = {
+  version: 1,
+  modelFile: 'runtime/axia.model3.json',
+  coreFile: 'runtime/live2dcubismcore.min.js',
+  modelFiles: [
+    'runtime/axia.model3.json',
+    'runtime/axia.moc3',
+    'runtime/axia.physics3.json',
+    'runtime/expressions/neutral.exp3.json',
+    'runtime/expressions/curious.exp3.json',
+    'runtime/expressions/skeptical.exp3.json',
+    'runtime/textures/texture_00.png',
+  ],
+} as const;
+
+type Live2DMedia = {
+  live2dManifest(actorId: string): Response;
+  live2dFile(actorId: string, relativePath: string): Response;
+};
+
 function actorsDir(): string {
   const root = mkdtempSync(join(tmpdir(), 'studyforge-peer-media-'));
   roots.push(root);
@@ -13,6 +33,32 @@ function actorsDir(): string {
   mkdirSync(join(actors, 'peer-axia'), { recursive: true });
   writeFileSync(join(actors, 'peer-axia', 'neutral.png'), new Uint8Array([1, 2, 3]));
   return actors;
+}
+
+function writeLive2DPackage(
+  actors: string,
+  manifest: Record<string, unknown> = live2dManifest,
+  omit: string[] = [],
+): void {
+  const root = join(actors, 'peer-axia', 'live2d');
+  mkdirSync(root, { recursive: true });
+  writeFileSync(join(root, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
+  const files = new Map<string, Uint8Array | string>([
+    ['runtime/live2dcubismcore.min.js', 'window.Live2DCubismCore = {};'],
+    ['runtime/axia.model3.json', '{"Version":3}'],
+    ['runtime/axia.moc3', new Uint8Array([77, 79, 67, 51])],
+    ['runtime/axia.physics3.json', '{}'],
+    ['runtime/expressions/neutral.exp3.json', '{}'],
+    ['runtime/expressions/curious.exp3.json', '{}'],
+    ['runtime/expressions/skeptical.exp3.json', '{}'],
+    ['runtime/textures/texture_00.png', new Uint8Array([137, 80, 78, 71])],
+  ]);
+  for (const [relativePath, content] of files) {
+    if (omit.includes(relativePath)) continue;
+    const path = join(root, relativePath);
+    mkdirSync(join(path, '..'), { recursive: true });
+    writeFileSync(path, content);
+  }
 }
 
 afterEach(() => {
@@ -35,6 +81,93 @@ test('serves only exact private actor slots', async () => {
     ['peer-axia\n', 'neutral'],
   ]) {
     expect(service.portrait(actorId!, expression!).status).toBe(404);
+  }
+});
+
+test('serves one complete Live2D package only through its manifest allowlist', async () => {
+  const actors = actorsDir();
+  writeLive2DPackage(actors);
+  const service = createPeerMediaService({ actorsDir: actors }) as ReturnType<
+    typeof createPeerMediaService
+  > & Live2DMedia;
+
+  const manifest = service.live2dManifest('peer-axia');
+  expect(manifest.status).toBe(200);
+  expect(manifest.headers.get('cache-control')).toBe('no-store');
+  expect(await manifest.json()).toEqual(live2dManifest);
+
+  const core = service.live2dFile('peer-axia', live2dManifest.coreFile);
+  expect(core.status).toBe(200);
+  expect(core.headers.get('content-type')).toContain('text/javascript');
+  expect(await core.text()).toContain('Live2DCubismCore');
+
+  const moc = service.live2dFile('peer-axia', 'runtime/axia.moc3');
+  expect(moc.status).toBe(200);
+  expect(moc.headers.get('content-type')).toBe('application/octet-stream');
+  expect(new Uint8Array(await moc.arrayBuffer())).toEqual(new Uint8Array([77, 79, 67, 51]));
+
+  for (const [actorId, path] of [
+    ['peer-other', 'runtime/axia.moc3'],
+    ['peer-axia', '../voice.mp3'],
+    ['peer-axia', 'source/axia.cmo3'],
+    ['peer-axia', 'runtime/not-declared.png'],
+  ]) {
+    expect(service.live2dFile(actorId!, path!).status).toBe(404);
+  }
+});
+
+test('makes the whole Live2D package unavailable when its manifest is not exact', () => {
+  const cases: Array<{
+    name: string;
+    manifest: Record<string, unknown>;
+    omit?: string[];
+  }> = [
+    {
+      name: 'missing declared model file',
+      manifest: live2dManifest,
+      omit: ['runtime/axia.moc3'],
+    },
+    {
+      name: 'missing core',
+      manifest: live2dManifest,
+      omit: ['runtime/live2dcubismcore.min.js'],
+    },
+    {
+      name: 'duplicate model file',
+      manifest: {
+        ...live2dManifest,
+        modelFiles: [...live2dManifest.modelFiles, 'runtime/axia.moc3'],
+      },
+    },
+    {
+      name: 'absolute path',
+      manifest: { ...live2dManifest, coreFile: '/tmp/live2dcubismcore.min.js' },
+    },
+    {
+      name: 'parent traversal',
+      manifest: { ...live2dManifest, coreFile: '../live2dcubismcore.min.js' },
+    },
+    {
+      name: 'wrong version',
+      manifest: { ...live2dManifest, version: 2 },
+    },
+    {
+      name: 'model absent from package list',
+      manifest: {
+        ...live2dManifest,
+        modelFiles: live2dManifest.modelFiles.filter((path) => path !== live2dManifest.modelFile),
+      },
+    },
+  ];
+
+  for (const fixture of cases) {
+    const actors = actorsDir();
+    writeLive2DPackage(actors, fixture.manifest, fixture.omit);
+    const service = createPeerMediaService({ actorsDir: actors }) as ReturnType<
+      typeof createPeerMediaService
+    > & Live2DMedia;
+    expect(service.live2dManifest('peer-axia').status, fixture.name).toBe(404);
+    expect(service.live2dFile('peer-axia', 'runtime/axia.moc3').status, fixture.name).toBe(404);
   }
 });
 

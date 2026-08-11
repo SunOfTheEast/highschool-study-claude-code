@@ -106,6 +106,21 @@ function setup() {
   return { root, paths, handler, request };
 }
 
+function writeLive2DPackage(actorsDir: string): void {
+  const root = join(actorsDir, 'peer-axia', 'live2d');
+  const manifest = {
+    version: 1,
+    modelFile: 'runtime/axia.model3.json',
+    coreFile: 'runtime/live2dcubismcore.min.js',
+    modelFiles: ['runtime/axia.model3.json', 'runtime/axia.moc3'],
+  };
+  mkdirSync(join(root, 'runtime'), { recursive: true });
+  writeFileSync(join(root, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
+  writeFileSync(join(root, 'runtime/live2dcubismcore.min.js'), 'window.Live2DCubismCore = {};');
+  writeFileSync(join(root, 'runtime/axia.model3.json'), '{"Version":3}');
+  writeFileSync(join(root, 'runtime/axia.moc3'), new Uint8Array([77, 79, 67, 51]));
+}
+
 test('protects every desktop and teaching route with the launch token', async () => {
   const { handler } = setup();
   const unauthorized = await handler(new Request('http://127.0.0.1/api/desktop/status'));
@@ -238,6 +253,8 @@ test('serves only whitelisted actor media and validates speech input', async () 
   mkdirSync(join(paths.actorsDir, 'peer-axia'), { recursive: true });
   writeFileSync(join(paths.actorsDir, 'peer-axia', 'neutral.png'), new Uint8Array([1, 2, 3]));
 
+  expect((await request('/api/desktop/actors/peer-axia/live2d/manifest'))?.status).toBe(404);
+
   const portrait = await request('/api/desktop/actors/peer-axia/neutral');
   expect(portrait?.status).toBe(200);
   expect(portrait?.headers.get('content-type')).toBe('image/png');
@@ -247,6 +264,31 @@ test('serves only whitelisted actor media and validates speech input', async () 
     '/api/desktop/actors/peer-other/neutral',
     '/api/desktop/actors/peer-axia/neutral.png',
     '/api/desktop/actors/peer-axia/%2e%2e%2fneutral',
+  ]) {
+    expect((await request(path))?.status).toBe(404);
+  }
+
+  writeLive2DPackage(paths.actorsDir);
+  const manifest = await request('/api/desktop/actors/peer-axia/live2d/manifest');
+  expect(manifest?.status).toBe(200);
+  expect(await manifest?.json()).toEqual({
+    version: 1,
+    modelFile: 'runtime/axia.model3.json',
+    coreFile: 'runtime/live2dcubismcore.min.js',
+    modelFiles: ['runtime/axia.model3.json', 'runtime/axia.moc3'],
+  });
+
+  const model = await request(
+    '/api/desktop/actors/peer-axia/live2d/file?path=runtime%2Faxia.moc3',
+  );
+  expect(model?.status).toBe(200);
+  expect(new Uint8Array(await model!.arrayBuffer())).toEqual(new Uint8Array([77, 79, 67, 51]));
+
+  for (const path of [
+    '/api/desktop/actors/peer-other/live2d/manifest',
+    '/api/desktop/actors/peer-axia/live2d/file?path=..%2Fvoice.mp3',
+    '/api/desktop/actors/peer-axia/live2d/file?path=source%2Faxia.cmo3',
+    '/api/desktop/actors/peer-axia/live2d/file?path=runtime%2Fmissing.png',
   ]) {
     expect((await request(path))?.status).toBe(404);
   }

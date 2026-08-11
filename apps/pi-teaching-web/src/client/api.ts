@@ -23,6 +23,7 @@ import type {
   StudentProblemCard,
   SessionKey,
   PeerExpression,
+  PeerLive2DManifest,
 } from '../shared/contracts';
 import { formatLessonHandoutApiPath } from '../shared/handout-route';
 import { transportFetch } from './transport';
@@ -190,6 +191,25 @@ export const api = {
   peerPortrait: async (actorId: 'peer-axia', expression: PeerExpression) => {
     const response = await transportFetch(
       `/api/desktop/actors/${encodeURIComponent(actorId)}/${encodeURIComponent(expression)}`,
+    );
+    return response.ok ? response.blob() : null;
+  },
+  peerLive2DManifest: async (actorId: 'peer-axia') => {
+    const response = await transportFetch(
+      `/api/desktop/actors/${encodeURIComponent(actorId)}/live2d/manifest`,
+    );
+    return response.ok ? response.json() as Promise<PeerLive2DManifest> : null;
+  },
+  peerLive2DFile: async (
+    actorId: 'peer-axia',
+    relativePath: string,
+    signal?: AbortSignal,
+  ) => {
+    const response = await transportFetch(
+      `/api/desktop/actors/${encodeURIComponent(actorId)}/live2d/file?path=${
+        encodeURIComponent(relativePath)
+      }`,
+      signal ? { signal } : undefined,
     );
     return response.ok ? response.blob() : null;
   },

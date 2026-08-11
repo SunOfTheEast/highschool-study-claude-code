@@ -352,6 +352,22 @@ export function createDesktopRequestHandler(deps: DesktopRequestDependencies) {
             headers: { 'content-type': 'text/markdown; charset=utf-8' },
           });
         }
+      } else if (
+        request.method === 'GET'
+        && /^\/api\/desktop\/actors\/[^/]+\/live2d\/manifest$/.test(url.pathname)
+      ) {
+        const match = /^\/api\/desktop\/actors\/([^/]+)\/live2d\/manifest$/.exec(url.pathname);
+        response = match && deps.peerMedia
+          ? deps.peerMedia.live2dManifest(match[1]!)
+          : json({ error: 'NOT_FOUND' }, 404);
+      } else if (
+        request.method === 'GET'
+        && /^\/api\/desktop\/actors\/[^/]+\/live2d\/file$/.test(url.pathname)
+      ) {
+        const match = /^\/api\/desktop\/actors\/([^/]+)\/live2d\/file$/.exec(url.pathname);
+        response = match && deps.peerMedia
+          ? deps.peerMedia.live2dFile(match[1]!, url.searchParams.get('path') ?? '')
+          : json({ error: 'NOT_FOUND' }, 404);
       } else if (request.method === 'GET' && url.pathname.startsWith('/api/desktop/actors/')) {
         const match = /^\/api\/desktop\/actors\/([^/]+)\/([^/]+)$/.exec(url.pathname);
         response = match && deps.peerMedia

@@ -1,5 +1,9 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import {
+  live2dContentType,
+  readPeerLive2DManifest,
+} from './peer-live2d-package';
 
 const ACTOR_ID = 'peer-axia';
 const EXPRESSIONS = new Set(['neutral', 'curious', 'skeptical']);
@@ -9,6 +13,8 @@ const CLONED_SPEECH_STYLE = '保持参考音频中说话人的真实发音习惯
 
 export type PeerMediaService = {
   portrait(actorId: string, expression: string): Response;
+  live2dManifest(actorId: string): Response;
+  live2dFile(actorId: string, relativePath: string): Response;
   speech(actorId: string, text: string, signal?: AbortSignal): Promise<Response>;
 };
 
@@ -20,6 +26,10 @@ export type PeerMediaOptions = {
 
 function unavailable(): Response {
   return Response.json({ error: 'PEER_SPEECH_UNAVAILABLE' }, { status: 503 });
+}
+
+function notFound(): Response {
+  return Response.json({ error: 'NOT_FOUND' }, { status: 404 });
 }
 
 function audioData(value: unknown): string | null {
@@ -56,16 +66,44 @@ export function createPeerMediaService(options: PeerMediaOptions): PeerMediaServ
   return {
     portrait(actorId, expression) {
       if (actorId !== ACTOR_ID || !EXPRESSIONS.has(expression)) {
-        return Response.json({ error: 'NOT_FOUND' }, { status: 404 });
+        return notFound();
       }
       const path = join(options.actorsDir, ACTOR_ID, `${expression}.png`);
-      if (!existsSync(path)) return Response.json({ error: 'NOT_FOUND' }, { status: 404 });
+      if (!existsSync(path)) return notFound();
       return new Response(new Uint8Array(readFileSync(path)), {
         headers: {
           'content-type': 'image/png',
           'cache-control': 'no-store',
         },
       });
+    },
+
+    live2dManifest(actorId) {
+      if (actorId !== ACTOR_ID) return notFound();
+      const manifest = readPeerLive2DManifest(join(options.actorsDir, ACTOR_ID, 'live2d'));
+      return manifest
+        ? Response.json(manifest, { headers: { 'cache-control': 'no-store' } })
+        : notFound();
+    },
+
+    live2dFile(actorId, relativePath) {
+      if (actorId !== ACTOR_ID) return notFound();
+      const root = join(options.actorsDir, ACTOR_ID, 'live2d');
+      const manifest = readPeerLive2DManifest(root);
+      if (!manifest) return notFound();
+      const allowed = relativePath === manifest.coreFile || manifest.modelFiles.includes(relativePath);
+      const contentType = allowed ? live2dContentType(relativePath) : null;
+      if (!contentType) return notFound();
+      try {
+        return new Response(new Uint8Array(readFileSync(join(root, relativePath))), {
+          headers: {
+            'content-type': contentType,
+            'cache-control': 'no-store',
+          },
+        });
+      } catch {
+        return notFound();
+      }
     },
 
     async speech(actorId, text, signal) {
