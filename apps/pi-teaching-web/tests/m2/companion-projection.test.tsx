@@ -5,6 +5,7 @@ import {
   companionBubbleText,
   nextCompanionPresentation,
 } from '../../src/client/companion/main-playback';
+import { CompanionRoot } from '../../src/client/companion/CompanionRoot';
 import type { CompanionBridge } from '../../src/client/companion/contracts';
 import { DesktopToolsProvider } from '../../src/client/desktop/DesktopContext';
 import type { PeerConversationItem } from '../../src/shared/contracts';
@@ -104,4 +105,10 @@ test('desktop chat keeps Peer text but does not mount a second model', () => {
   expect(markup).toContain('阿夏');
   expect(markup).toContain('也许先比较一个反例。');
   expect(markup).not.toContain('peer-embodiment');
+});
+
+test('does not mount the companion model before its runtime transport is ready', () => {
+  const markup = renderToStaticMarkup(<CompanionRoot />);
+
+  expect(markup).toBe('');
 });

@@ -157,6 +157,8 @@ export function CompanionRoot() {
     };
   }, [playback, presentation?.messageId]);
 
+  if (!ready) return null;
+
   const presence = peerPresence(items, playback);
   return (
     <CompanionStage
