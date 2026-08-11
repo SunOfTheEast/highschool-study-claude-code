@@ -318,6 +318,7 @@ export function ModelSettings({
   onOpenUrl,
   onSave,
   onBack,
+  onShowCompanion = null,
 }: {
   catalog: DesktopModelCatalog;
   teacher: DesktopModelSelection | null;
@@ -330,6 +331,7 @@ export function ModelSettings({
   onOpenUrl(url: string): Promise<void>;
   onSave(teacher: DesktopModelSelection, scout: DesktopModelSelection): Promise<void>;
   onBack: (() => void) | null;
+  onShowCompanion?: (() => void) | null;
 }) {
   const initial = useMemo(() => defaultModelDraft(catalog, teacher, scout), [catalog, teacher, scout]);
   const [draft, setDraft] = useState(initial);
@@ -363,6 +365,17 @@ export function ModelSettings({
         <h1>安排两位老师</h1>
         <p className="desktop-lead">主教师负责方向与课堂；Scout 只在需要材料时检索。两者可以使用不同 Provider。</p>
         <CurrentPair catalog={catalog} draft={draft} />
+        {onShowCompanion && (
+          <section className="desktop-peer-companion" aria-label="阿夏桌宠">
+            <div>
+              <h2>阿夏桌宠</h2>
+              <p>如果刚才隐藏了她，可以从这里重新叫回来。</p>
+            </div>
+            <button className="action-outline" type="button" onClick={onShowCompanion}>
+              显示阿夏桌宠
+            </button>
+          </section>
+        )}
         {voiceProvider && (
           <PeerVoiceSettings provider={voiceProvider} busy={busy} onLogin={onLogin} />
         )}

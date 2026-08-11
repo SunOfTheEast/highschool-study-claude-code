@@ -235,6 +235,9 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
           if (saved) setPage('learning');
         }}
         onBack={status.state === 'ready' ? () => setPage('learning') : null}
+        onShowCompanion={bridge.companion
+          ? () => void bridge.companion?.showCompanion()
+          : null}
       />
     );
   }

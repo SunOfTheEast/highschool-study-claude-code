@@ -174,3 +174,24 @@ test('renders packaged help images from the offline document payload', () => {
 
   expect(markup).toContain('src="data:image/png;base64,AAAA"');
 });
+
+test('keeps a quiet settings action for showing a hidden Axia companion', () => {
+  const markup = renderToStaticMarkup(
+    <ModelSettings
+      catalog={catalog}
+      teacher={null}
+      scout={null}
+      authFlow={null}
+      busy={false}
+      error={null}
+      onLogin={async () => {}}
+      onRespond={async () => {}}
+      onOpenUrl={async () => {}}
+      onSave={async () => {}}
+      onBack={() => {}}
+      onShowCompanion={() => {}}
+    />,
+  );
+
+  expect(markup).toContain('显示阿夏桌宠');
+});
