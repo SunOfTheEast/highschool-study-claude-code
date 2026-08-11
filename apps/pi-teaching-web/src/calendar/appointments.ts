@@ -299,6 +299,32 @@ export function createCalendarRepository(appHome: string, clock: CalendarClock =
       persist(appointments);
       return appointment;
     },
+    repairOpened(
+      id: string,
+      expectedRevision: number,
+      expectedSessionKey: SessionKey,
+      receipt: CalendarOpenedReceipt,
+    ): CalendarAppointment {
+      const current = store();
+      const index = current.appointments.findIndex((appointment) => appointment.id === id);
+      if (index < 0) throw new Error('CALENDAR_APPOINTMENT_NOT_FOUND');
+      const before = current.appointments[index]!;
+      if (before.revision !== expectedRevision) throw new Error('CALENDAR_APPOINTMENT_STALE');
+      if (before.opened?.sessionKey !== expectedSessionKey) {
+        throw new Error('CALENDAR_OPENED_RECEIPT_STALE');
+      }
+      const appointment: CalendarAppointment = {
+        ...before,
+        opened: {
+          at: checkedCreatedTime(receipt.at, 'CALENDAR_OPENED_RECEIPT_INVALID'),
+          sessionKey: checkedSessionKey(receipt.sessionKey),
+        },
+      };
+      const appointments = [...current.appointments];
+      appointments[index] = appointment;
+      persist(appointments);
+      return appointment;
+    },
     remove(id: string, expectedRevision: number): CalendarAppointment {
       const current = store();
       const appointment = current.appointments.find((item) => item.id === id);

@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { CalendarPage } from '../../src/client/pages/CalendarPage';
 import { formatBrowserRoute, parseBrowserRoute } from '../../src/client/routes';
-import type { CalendarAppointment } from '../../src/shared/contracts';
+import type { CalendarAppointment, SessionKey } from '../../src/shared/contracts';
 import { createCalendarRepository } from '../../src/calendar/appointments';
 import { createRequestHandler } from '../../src/server/app';
 import { EventHub } from '../../src/server/event-hub';
@@ -166,4 +166,86 @@ test('serves direct calendar CRUD and launches one appointment idempotently', as
   ));
   expect(deleted?.status).toBe(200);
   expect(calendar.list()).toEqual([]);
+});
+
+test('repairs a calendar receipt whose untouched Free session never reached disk', async () => {
+  const { root, calendar } = calendarFixture();
+  const appointment = calendar.create({
+    title: '复习旧笔记',
+    startsAt: '2026-08-13T12:00:00.000Z',
+    plannedMinutes: 25,
+    learningSetPath: root,
+    destination: { kind: 'free-learning', intent: 'review', contexts: [] },
+  });
+  calendar.markOpened(appointment.id, 1, {
+    at: '2026-08-12T08:05:00.000Z',
+    sessionKey: 'free:missing-session',
+  });
+  const opened: CalendarAppointment[] = [];
+  const registry = {
+    ...fakeRegistry(opened),
+    readHistory: async (key: SessionKey) => {
+      if (key === 'free:missing-session') {
+        throw new Error('FREE_LEARNING_SESSION_NOT_FOUND: missing-session');
+      }
+      return [];
+    },
+    openCalendarAppointment: async (value: CalendarAppointment) => {
+      opened.push(value);
+      return 'free:replacement-session' as const;
+    },
+  };
+  const handler = createRequestHandler({
+    root,
+    calendar,
+    registry: registry as never,
+    hub: new EventHub(),
+  });
+
+  const response = await handler(new Request(
+    `http://local/api/calendar/${appointment.id}/launch`,
+    {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ expectedRevision: 1 }),
+    },
+  ));
+
+  expect(response?.status).toBe(200);
+  expect(await response!.json()).toMatchObject({
+    route: '/learn/replacement-session',
+    sessionKey: 'free:replacement-session',
+    appointment: { opened: { sessionKey: 'free:replacement-session' } },
+  });
+  expect(opened).toHaveLength(1);
+  expect(calendar.read(appointment.id)?.opened?.sessionKey).toBe('free:replacement-session');
+});
+
+test('returns a stale calendar launch as a recoverable conflict', async () => {
+  const { root, calendar } = calendarFixture();
+  const handler = createRequestHandler({
+    root,
+    calendar,
+    registry: fakeRegistry([]) as never,
+    hub: new EventHub(),
+  });
+  const createdResponse = await handler(new Request('http://local/api/calendar', {
+    method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({
+      title: '复习旧笔记', startsAt: '2026-08-13T12:00:00.000Z', plannedMinutes: 25,
+      destination: { kind: 'free-learning', intent: 'review', contexts: [] },
+    }),
+  }));
+  const created = await createdResponse!.json() as { appointment: CalendarAppointment };
+
+  const response = await handler(new Request(
+    `http://local/api/calendar/${created.appointment.id}/launch`,
+    {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ expectedRevision: 2 }),
+    },
+  ));
+
+  expect(response?.status).toBe(409);
+  expect(await response!.json()).toEqual({ error: 'CALENDAR_APPOINTMENT_STALE' });
+  await Bun.sleep(0);
 });

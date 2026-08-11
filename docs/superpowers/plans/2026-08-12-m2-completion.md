@@ -781,7 +781,7 @@ git commit -m "feat: connect review candidates to the calendar"
 - `bun run validate:m2 -- --root <fixture-or-real-learning-set> --api-base <url>` records actual model first-hit behavior, tool calls, durable diffs, and elapsed time without exposing hidden reasoning.
 - Validation never uses production students' private learning sets or credentials in committed fixtures.
 
-- [ ] **Step 1: Add a deterministic validation harness and dry-run tests**
+- [x] **Step 1: Add a deterministic validation harness and dry-run tests**
 
 Scenarios:
 
@@ -795,14 +795,14 @@ Scenarios:
 8. batch Free review with one untouched item;
 9. Lesson absorbs one relevant due asset and records only after cold retrieval.
 
-- [ ] **Step 2: Run all focused M2 tests**
+- [x] **Step 2: Run all focused M2 tests**
 
 ```bash
 cd apps/pi-teaching-web
 bun test tests/m2
 ```
 
-- [ ] **Step 3: Run the complete repository verification**
+- [x] **Step 3: Run the complete repository verification**
 
 ```bash
 cd apps/pi-teaching-web
@@ -814,7 +814,7 @@ bun run desktop:smoke
 
 Expected: typecheck, all Bun tests, Vite build, Rust tests, packaged resources, and sidecar smoke all exit 0.
 
-- [ ] **Step 4: Run real-model acceptance using release model configuration**
+- [x] **Step 4: Run real-model acceptance using release model configuration**
 
 Record first-hit behavior, student-visible wait states, tool use, durable diffs, and wall time in the report. Required gates:
 
@@ -826,7 +826,7 @@ Record first-hit behavior, student-visible wait states, tool use, durable diffs,
 - direct and guided review preserve cold-attempt, revision, same-day, and untouched-item boundaries;
 - no automatic object-memory, course-state, or mastery write occurs.
 
-- [ ] **Step 5: Build and smoke the real macOS DMG**
+- [x] **Step 5: Build and smoke the real macOS DMG**
 
 ```bash
 cd apps/pi-teaching-web
@@ -836,7 +836,7 @@ bun run desktop:verify
 
 Install/open the generated DMG, verify one-instance behavior, local timer sound/notification, notification click, calendar persistence across restart, review persistence/index rebuild, and the existing Peer/Live2D path. Record any environment-only blocker honestly; do not mark the plan complete if an in-scope product defect remains.
 
-- [ ] **Step 6: Final diff audit and commit**
+- [x] **Step 6: Final diff audit and commit**
 
 ```bash
 git status --short

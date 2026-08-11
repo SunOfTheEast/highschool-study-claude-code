@@ -38,7 +38,7 @@ import { MetaPage } from './pages/MetaPage';
 import { CalendarPage } from './pages/CalendarPage';
 import type { PrimaryView } from './view-state';
 import { deriveFreeLearningTitle } from '../study/display-projections';
-import { formatMaterialLocator } from './material-locator';
+import { loadFreeLearningContexts } from './free-learning-contexts';
 import { eventTransport } from './transport';
 import { publicErrorText } from './public-errors';
 import { resetRouteScroll } from './route-scroll';
@@ -235,59 +235,17 @@ export function App() {
       }
       if (next.kind === 'free-learning') {
         const key = `free:${next.sessionId}` as const;
-        const [homeValue, history, assetLibrary, materialValues] = await Promise.all([
+        const [homeValue, history] = await Promise.all([
           homeRequest,
           api.history(key),
-          api.assets(),
-          api.materials(),
         ]);
         const session = homeValue.recentFreeLearning.find((candidate) => (
           candidate.id === next.sessionId
         ));
-        const selectedProblems = session?.selectedAssets.filter((reference) => (
-          reference.kind === 'problem-card'
-        )) ?? [];
-        const problemStates = new Map(await Promise.all(selectedProblems.map(async (reference) => {
-          const value = await api.problemCard(reference.id);
-          return [reference.id, value] as const;
-        })));
+        const contexts = await loadFreeLearningContexts(session?.selectedAssets ?? [], api);
         if (revision !== routeLoadRevision.current) return;
         setHome(homeValue);
-        setAssets(assetLibrary);
-        setMaterials(materialValues);
-        setFreeContexts((session?.selectedAssets ?? []).map((reference) => {
-          if (reference.kind === 'material') {
-            const materialValue = materialValues.find((candidate) => candidate.id === reference.id);
-            const materialRevision = materialValue?.revisions.find((candidate) => (
-              candidate.revision === reference.revision
-            ));
-            return {
-              key: `material:${reference.id}@${reference.revision}#${reference.locator ?? ''}`,
-              kind: '资料',
-              title: materialRevision?.title ?? reference.id,
-              detail: `第 ${reference.revision} 版 · ${formatMaterialLocator(reference.locator).human}`,
-            };
-          }
-          if (reference.kind === 'note') {
-            const value = assetLibrary.notes.find((asset) => asset.id === reference.id);
-            return {
-              key: `note:${reference.id}`,
-              kind: '笔记',
-              title: value?.title ?? reference.id,
-              detail: value ? `第 ${value.revision} 版` : reference.id,
-            };
-          }
-          const value = assetLibrary.problemCards.find((asset) => asset.id === reference.id);
-          const state = problemStates.get(reference.id);
-          return {
-            key: `problem-card:${reference.id}`,
-            kind: '题卡',
-            title: value?.title ?? reference.id,
-            detail: `${value ? `第 ${value.revision} 版 · ` : ''}${
-              state?.activity.latestAttempt ? '已有作答' : '尚未作答'
-            }`,
-          };
-        }));
+        setFreeContexts(contexts);
         dispatch({ type: 'conversation-snapshot', sessionKey: key, items: history });
         setRoute(next);
         setNotice(null);

@@ -128,7 +128,21 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
     resetTransport();
     setStatus(null);
     setConnection({ state: { status: 'starting' }, apiBase: null, token: null, error: null });
-    await bridge.restartRuntime();
+    try {
+      await bridge.restartRuntime();
+    } catch (restartError) {
+      try {
+        setConnection(await bridge.runtimeConnection());
+      } catch {
+        setConnection({
+          state: { status: 'crashed', code: null },
+          apiBase: null,
+          token: null,
+          error: errorMessage(restartError),
+        });
+      }
+      return;
+    }
     for (;;) {
       const next = await bridge.runtimeConnection();
       setConnection(next);

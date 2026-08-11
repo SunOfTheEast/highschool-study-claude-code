@@ -131,6 +131,7 @@ fn desktop_paths(app: &AppHandle) -> Result<DesktopPaths, String> {
 }
 
 fn mark_spawn_failure(manager: &RuntimeManager, message: String) {
+    eprintln!("[studyforge] runtime launch failed: {message}");
     if let Ok(mut inner) = manager.inner.lock() {
         inner.state = Some(RuntimeState::Crashed { code: None });
         inner.error = Some(message);
@@ -203,11 +204,18 @@ fn start_runtime(app: &AppHandle, manager: &RuntimeManager) -> Result<(), String
                     }
                 }
                 CommandEvent::Error(error) => {
+                    eprintln!("[studyforge] runtime process error: {error}");
                     inner.error = Some(error);
                     inner.state = Some(RuntimeState::Crashed { code: None });
                     inner.child = None;
                 }
                 CommandEvent::Terminated(payload) => {
+                    if payload.code != Some(0) {
+                        eprintln!(
+                            "[studyforge] runtime exited before shutdown: {:?}",
+                            payload.code
+                        );
+                    }
                     inner.state = match payload.code {
                         Some(0) => RuntimeState::Stopped,
                         code => RuntimeState::Crashed { code },

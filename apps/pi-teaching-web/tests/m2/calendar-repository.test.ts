@@ -81,6 +81,23 @@ test('atomically creates, revises, and deletes one app-global appointment', () =
     sessionKey: 'plan:plan-001',
   })).toEqual(opened);
 
+  const repaired = repository.repairOpened(
+    created.id,
+    2,
+    'plan:plan-001',
+    { at: '2026-08-12T09:07:00.000Z', sessionKey: 'plan:plan-002' },
+  );
+  expect(repaired.opened).toEqual({
+    at: '2026-08-12T09:07:00.000Z',
+    sessionKey: 'plan:plan-002',
+  });
+  expect(() => repository.repairOpened(
+    created.id,
+    2,
+    'plan:plan-001',
+    { at: '2026-08-12T09:08:00.000Z', sessionKey: 'plan:plan-003' },
+  )).toThrow('CALENDAR_OPENED_RECEIPT_STALE');
+
   expect(() => repository.remove(created.id, 1)).toThrow('CALENDAR_APPOINTMENT_STALE');
   repository.remove(created.id, 2);
   expect(repository.read(created.id)).toBeNull();

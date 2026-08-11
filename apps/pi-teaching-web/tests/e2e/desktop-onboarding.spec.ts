@@ -186,3 +186,27 @@ test('keeps polling while browser OAuth is waiting and observes its asynchronous
   await expect(page.getByText('已经连接，可以选择模型了。')).toBeVisible({ timeout: 3_000 });
   await expect(page.getByText('OAuth', { exact: true })).toBeVisible();
 });
+
+test('returns to the runtime diagnosis when a packaged restart is rejected', async ({ page }) => {
+  await page.addInitScript(() => {
+    (window as unknown as { __TAURI_INTERNALS__: unknown }).__TAURI_INTERNALS__ = {
+      invoke: async (command: string) => {
+        if (command === 'runtime_connection') {
+          return {
+            state: { status: 'crashed', code: null },
+            apiBase: null,
+            token: null,
+            error: 'packaged runtime did not start',
+          };
+        }
+        if (command === 'restart_runtime') throw new Error('restart rejected');
+        throw new Error(`Unexpected desktop command: ${command}`);
+      },
+    };
+  });
+
+  await page.goto('/');
+  await expect(page.getByRole('heading', { name: '本地教师没有正常醒来' })).toBeVisible();
+  await page.getByRole('button', { name: '重新启动本地教师' }).click();
+  await expect(page.getByRole('heading', { name: '本地教师没有正常醒来' })).toBeVisible();
+});

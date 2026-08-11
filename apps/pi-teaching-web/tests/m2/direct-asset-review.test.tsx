@@ -74,6 +74,10 @@ test('accepts a Note rating only for the current revision with recall content', 
     action: 'review', expectedRevision: 2, result: 'fluent', requestId: 'stale-review-1',
   });
   expect(stale?.status).toBe(409);
+  const repeated = await post(handler, '/api/assets/notes/note-001/review', {
+    action: 'review', expectedRevision: 1, result: 'fluent', requestId: 'note-review-2',
+  });
+  expect(repeated?.status).toBe(409);
 });
 
 test('requires a new bound Problem Card attempt and reveal before rating', async () => {

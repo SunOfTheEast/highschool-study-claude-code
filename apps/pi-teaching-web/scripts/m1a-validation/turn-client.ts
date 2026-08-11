@@ -20,6 +20,7 @@ type SendObservedTurnOptions = {
   sessionKey: string;
   message: string;
   eventLogPath: string;
+  token?: string;
 };
 
 type ProjectedEvent = {
@@ -113,7 +114,9 @@ export async function sendObservedTurn(options: SendObservedTurnOptions): Promis
 
   const socketUrl = new URL('events', base);
   socketUrl.protocol = 'ws:';
-  const socket = new WebSocket(socketUrl);
+  const socket = options.token
+    ? new WebSocket(socketUrl, `studyforge-token.${options.token}`)
+    : new WebSocket(socketUrl);
   const events: unknown[] = [];
   const startedAt = Date.now();
   let firstVisibleAt: number | null = null;
@@ -172,7 +175,10 @@ export async function sendObservedTurn(options: SendObservedTurnOptions): Promis
     );
     const response = await fetch(messageUrl, {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: {
+        'content-type': 'application/json',
+        ...(options.token ? { authorization: `Bearer ${options.token}` } : {}),
+      },
       body: JSON.stringify({ text: options.message.trim() }),
     });
     if (!response.ok) {
@@ -192,7 +198,10 @@ export async function sendObservedTurn(options: SendObservedTurnOptions): Promis
       `api/sessions/${encodeURIComponent(options.sessionKey)}/history`,
       base,
     );
-    const history = await responseJsonArray(await fetch(historyUrl), 'history request');
+    const history = await responseJsonArray(await fetch(
+      historyUrl,
+      options.token ? { headers: { authorization: `Bearer ${options.token}` } } : undefined,
+    ), 'history request');
     aborted = true;
     socket.close();
     return {

@@ -400,8 +400,42 @@ export function listLearningNotes(root: string): LearningNote[] {
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 }
 
+function indexedProblemCardMatches(
+  root: string,
+  id: string,
+): Array<{ path: string; value: RecordValue }> | null {
+  const absolute = join(root, 'semantics/indexes/asset-recall.tsv');
+  if (!existsSync(absolute)) return null;
+  const metadata = lstatSync(absolute);
+  if (metadata.isSymbolicLink() || !metadata.isFile()) return null;
+  const [header = '', ...lines] = readFileSync(absolute, 'utf8').trimEnd().split('\n');
+  const columns = header.split('\t');
+  const pathColumn = columns.indexOf('path');
+  const kindColumn = columns.indexOf('kind');
+  const idColumn = columns.indexOf('id');
+  if (pathColumn < 0 || kindColumn < 0 || idColumn < 0) return null;
+  const paths = lines.flatMap((line) => {
+    const cells = line.split('\t');
+    if (cells[kindColumn] !== 'problem-card' || cells[idColumn] !== id) return [];
+    const path = cells[pathColumn];
+    return path?.startsWith('cards/') && /\.ya?ml$/i.test(path) ? [path] : [];
+  });
+  if (paths.length === 0) return null;
+  try {
+    const matches = paths.map((path) => ({ path, value: yamlAt(root, path) }));
+    return matches.every((match) => (
+      match.value.schema === 'highschool-study.problem-card.v1'
+      && match.value.content_item_id === id
+    )) ? matches : null;
+  } catch {
+    return null;
+  }
+}
+
 function problemCardMatches(root: string, id: string): Array<{ path: string; value: RecordValue }> {
   const target = checkedProblemCardId(id, 'problem card id');
+  const indexed = indexedProblemCardMatches(root, target);
+  if (indexed) return indexed;
   return filesBelow(root, 'cards')
     .filter((path) => ['.yaml', '.yml'].includes(extname(path).toLowerCase()))
     .flatMap((path) => {

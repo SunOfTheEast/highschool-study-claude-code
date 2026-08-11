@@ -26,6 +26,7 @@
     "desktop:peer-live2d": "bun run scripts/desktop/import-peer-live2d.ts",
     "validate:m1a": "bun run scripts/m1a-validation/cli.ts",
     "validate:m1c": "bun run scripts/m1c-validation/cli.ts",
+    "validate:m2": "bun run scripts/m2-validation/cli.ts",
     "typecheck": "tsc --noEmit",
     "check": "bun run typecheck && bun run test && bun run build"
   },

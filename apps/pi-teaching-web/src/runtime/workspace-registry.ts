@@ -568,6 +568,10 @@ export class WorkspaceRegistry {
     return snapshot;
   }
 
+  focusSessionKey(): SessionKey | null {
+    return this.focusCycles.read()?.sessionKey ?? null;
+  }
+
   pauseFocus(): FocusCycleSnapshot {
     this.focusCycles.pause();
     return this.focusCycles.snapshot()!;

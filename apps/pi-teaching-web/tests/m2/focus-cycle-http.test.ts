@@ -33,6 +33,7 @@ function registry(overrides: Record<string, unknown> = {}) {
     createMeta: async () => { throw new Error('not used'); },
     listMeta: async () => [],
     listOwnedSessionFacts: async () => [],
+    focusSessionKey: () => snapshot.sessionKey,
     readFocus: async () => snapshot,
     startFocus: async () => snapshot,
     pauseFocus: () => ({ ...snapshot, status: 'paused' as const, expiresAt: null }),
@@ -112,6 +113,37 @@ test('routes mechanical focus actions and publishes one invalidation', async () 
     ['end', 'manual'],
   ]);
   expect(events.filter((event) => event.type === 'focus-invalidated')).toHaveLength(4);
+});
+
+test('binds the focus owner before an ending cycle starts its teacher turn', async () => {
+  const order: string[] = [];
+  const handler = createRequestHandler({
+    root: '/tmp/unused-focus-http',
+    registry: registry({
+      subscribe: async (key: string) => {
+        order.push(`bind:${key}`);
+        return () => {};
+      },
+      endFocus: async () => {
+        order.push('end');
+        return {
+          cycleId: snapshot.cycleId,
+          sessionKey: snapshot.sessionKey,
+          sessionId: snapshot.sessionId,
+          targetSeconds: snapshot.targetSeconds,
+          elapsedSeconds: 300,
+          endedAt: '2026-08-12T08:05:00.000Z',
+          reason: 'manual' as const,
+        };
+      },
+    }) as never,
+    hub: new EventHub(),
+  });
+
+  const response = await handler(new Request('http://local/api/focus/end', { method: 'POST' }));
+
+  expect(response?.status).toBe(200);
+  expect(order).toEqual(['bind:free:free-001', 'end']);
 });
 
 test('rejects arbitrary durations before the runtime is called', async () => {

@@ -89,6 +89,18 @@ test('appends a student correction without disturbing earlier classroom facts', 
   ]);
 });
 
+test('does not duplicate a list marker supplied by the model', () => {
+  const next = appendClassroomLogSource(
+    lessonPath,
+    fixtureSource(),
+    '- 学生主动要求先做冷检索。',
+  );
+
+  expect(parseLessonSource(lessonPath, next).blocks[1]?.classroomLog)
+    .toEqual(['学生主动要求先做冷检索。']);
+  expect(next).not.toContain('- - 学生主动要求');
+});
+
 test('rejects log writes outside one active Lesson Block', () => {
   const source = fixtureSource();
   expect(() => appendClassroomLogSource(

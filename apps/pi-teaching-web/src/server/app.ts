@@ -87,6 +87,7 @@ type Registry = Pick<
   | 'createMeta'
   | 'listMeta'
   | 'listOwnedSessionFacts'
+  | 'focusSessionKey'
   | 'readFocus'
   | 'startFocus'
   | 'pauseFocus'
@@ -154,7 +155,7 @@ function errorResponse(error: unknown): Response {
   const message = error instanceof Error ? error.message : String(error);
   const status = /NOT_FOUND|does not exist/.test(message)
     ? 404
-    : /STALE|CONFLICT|ENDED|RUNNING|NOT_ACTIVE|NOT_ALLOWED|READ_ONLY|INELIGIBLE|ALREADY_ACTIVE/.test(message)
+    : /STALE|CONFLICT|ENDED|RUNNING|NOT_ACTIVE|NOT_ALLOWED|READ_ONLY|INELIGIBLE|ALREADY_/.test(message)
       ? 409
       : /INVALID|REQUIRED|LIMIT|DUPLICATE|must be|cannot/.test(message)
         ? 400
@@ -325,6 +326,11 @@ function calendarRoute(
   }
   if (!sessionKey.startsWith('free:')) throw new Error('CALENDAR_LAUNCH_SESSION_MISMATCH');
   return `/learn/${encodeURIComponent(sessionKey.slice('free:'.length))}`;
+}
+
+function isMissingFreeSession(error: unknown): boolean {
+  return error instanceof Error
+    && error.message.startsWith('FREE_LEARNING_SESSION_NOT_FOUND:');
 }
 
 function stringList(value: unknown, label: string): string[] {
@@ -647,11 +653,28 @@ export function createRequestHandler(deps?: AppDependencies) {
               throw new Error('CALENDAR_APPOINTMENT_OUT_OF_SCOPE');
             }
             const openedAt = deps.calendar!.now();
-            const sessionKey = appointment.opened?.sessionKey
-              ?? await deps.registry.openCalendarAppointment(appointment, openedAt);
-            const opened = appointment.opened
-              ? appointment
-              : deps.calendar!.markOpened(id, revision, { at: openedAt, sessionKey });
+            let sessionKey = appointment.opened?.sessionKey ?? null;
+            let missingSessionKey: SessionKey | null = null;
+            if (sessionKey?.startsWith('free:')) {
+              try {
+                await deps.registry.readHistory(sessionKey);
+              } catch (error) {
+                if (!isMissingFreeSession(error)) throw error;
+                missingSessionKey = sessionKey;
+                sessionKey = null;
+              }
+            }
+            sessionKey ??= await deps.registry.openCalendarAppointment(appointment, openedAt);
+            const opened = missingSessionKey
+              ? deps.calendar!.repairOpened(
+                id,
+                revision,
+                missingSessionKey,
+                { at: openedAt, sessionKey },
+              )
+              : appointment.opened
+                ? appointment
+                : deps.calendar!.markOpened(id, revision, { at: openedAt, sessionKey });
             if (opened.destination.kind === 'free-learning') {
               deps.hub.publish({ type: 'home-invalidated' });
             }
@@ -663,11 +686,16 @@ export function createRequestHandler(deps?: AppDependencies) {
             };
           })();
           calendarLaunches.set(key, launch);
-          void launch.finally(() => calendarLaunches.delete(key));
+          void launch.then(
+            () => calendarLaunches.delete(key),
+            () => calendarLaunches.delete(key),
+          );
         }
         return json(await launch);
       }
       if (request.method === 'GET' && url.pathname === '/api/focus') {
+        const key = deps.registry.focusSessionKey();
+        if (key) await bind(key);
         return json(publicFocus(await deps.registry.readFocus()));
       }
       if (request.method === 'POST' && url.pathname === '/api/focus/start') {
@@ -678,6 +706,7 @@ export function createRequestHandler(deps?: AppDependencies) {
         if (body.targetSeconds !== 900 && body.targetSeconds !== 1500 && body.targetSeconds !== 2700) {
           throw new Error('FOCUS_TARGET_INVALID');
         }
+        await bind(key);
         const value = await deps.registry.startFocus(
           key,
           body.targetSeconds as FocusTargetSeconds,
@@ -696,6 +725,8 @@ export function createRequestHandler(deps?: AppDependencies) {
         return json(publicFocus(value));
       }
       if (request.method === 'POST' && url.pathname === '/api/focus/end') {
+        const key = deps.registry.focusSessionKey();
+        if (key) await bind(key);
         const value = await deps.registry.endFocus('manual');
         deps.hub.publish({ type: 'focus-invalidated' });
         return json(publicFocusEnd(value));

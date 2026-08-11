@@ -106,7 +106,7 @@ function classroomLogContentSpan(
 }
 
 function renderLogItem(note: string, path: string): string {
-  const normalized = note.trim();
+  const normalized = note.trim().replace(/^[-*+]\s+/, '');
   if (!normalized) throw new StudyDocumentError(path, 'classroom note cannot be empty');
   const lines = normalized.split(/\r?\n/).map((line) => line.trimEnd());
   return [`- ${lines[0]!}`, ...lines.slice(1).map((line) => `  ${line}`)].join('\n');
