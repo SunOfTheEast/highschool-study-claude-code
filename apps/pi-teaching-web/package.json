@@ -23,6 +23,7 @@
     "desktop:smoke": "bun run scripts/desktop/smoke-sidecars.ts",
     "desktop:build": "CI=true tauri build",
     "desktop:verify": "bun run scripts/desktop/verify-bundle.ts",
+    "desktop:peer-live2d": "bun run scripts/desktop/import-peer-live2d.ts",
     "validate:m1a": "bun run scripts/m1a-validation/cli.ts",
     "validate:m1c": "bun run scripts/m1c-validation/cli.ts",
     "typecheck": "tsc --noEmit",

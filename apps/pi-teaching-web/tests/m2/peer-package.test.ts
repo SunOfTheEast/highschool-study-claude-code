@@ -38,6 +38,7 @@ test('packages only the public Axia persona, never private embodiment assets', (
   const packageJson = readFileSync(join(appRoot, 'package.json'), 'utf8');
   expect(packageJson).not.toContain('peer:voice:install');
   expect(packageJson).not.toContain('peer:voice:run');
+  expect(packageJson).toContain('"desktop:peer-live2d"');
 });
 
 test('keeps private source paths out of the tracked application surface', () => {
