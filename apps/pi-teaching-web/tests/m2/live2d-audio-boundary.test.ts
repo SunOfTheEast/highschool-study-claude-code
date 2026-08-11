@@ -15,6 +15,14 @@ test('keeps the existing TTS player as the only Live2D audio path', () => {
   expect(noSound).toContain('export const sound = null');
 });
 
+test('installs the Pixi strict-CSP renderer before creating the application', () => {
+  const renderer = readFileSync(join(appRoot, 'src/client/live2d/pixi-renderer.ts'), 'utf8');
+
+  expect(renderer.startsWith("import 'pixi.js/unsafe-eval';\n")).toBe(true);
+  expect(renderer.indexOf("import 'pixi.js/unsafe-eval';"))
+    .toBeLessThan(renderer.indexOf('new Application()'));
+});
+
 test('pins the texture parser when private textures become blob URLs', () => {
   const packageJson = JSON.parse(readFileSync(join(appRoot, 'package.json'), 'utf8')) as {
     patchedDependencies?: Record<string, string>;

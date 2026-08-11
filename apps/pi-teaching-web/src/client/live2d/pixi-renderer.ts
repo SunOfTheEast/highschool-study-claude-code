@@ -1,3 +1,4 @@
+import 'pixi.js/unsafe-eval';
 import { Application, extensions } from 'pixi.js';
 import {
   config,
