@@ -561,22 +561,22 @@ type AssetReviewProjection = {
 - `activity/asset-reviews/index.tsv` is a deterministic rebuildable projection with `kind id active stage due_on last_result`.
 - Fixed intervals are exactly `1/3/7/14/30/60/120` days; corrections replay history rather than editing it.
 
-- [ ] **Step 1: Write event-parser and replay RED tests**
+- [x] **Step 1: Write event-parser and replay RED tests**
 
 Cover every event variant, request-id replay/conflict, local-date calculation, ladder transitions, overdue behavior, same-local-day first effective review, corrected-null reopening, remove/re-enroll/restart, unknown policy failure, and index rebuild after deletion/corruption.
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 ```bash
 cd apps/pi-teaching-web
 bun test tests/m2/asset-review-repository.test.ts
 ```
 
-- [ ] **Step 3: Implement strict append-only events and deterministic projection**
+- [x] **Step 3: Implement strict append-only events and deterministic projection**
 
 Use existing atomic document primitives. Bind asset kind/id by the managed file path; callers never submit paths or timestamps. Validate referenced corrections and preserve unknown/invalid state as unavailable instead of guessing.
 
-- [ ] **Step 4: Verify and commit**
+- [x] **Step 4: Verify and commit**
 
 ```bash
 cd apps/pi-teaching-web

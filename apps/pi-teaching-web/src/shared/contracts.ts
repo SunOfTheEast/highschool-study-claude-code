@@ -21,6 +21,58 @@ export type LearningAssetHandle = {
   id: string;
 };
 
+export type ReviewResult = 'forgot' | 'effortful' | 'fluent';
+
+export type ReviewEventBase = {
+  eventId: string;
+  requestId: string;
+  at: string;
+  localDate: string;
+};
+
+export type ReviewEnrollmentTrigger =
+  | { kind: 'asset-saved' }
+  | { kind: 'first-attempt'; problemAttemptId: string }
+  | { kind: 'historical-attempt'; problemAttemptId: string }
+  | { kind: 'manual' };
+
+export type ReviewEvidence =
+  | { kind: 'self-report'; problemAttemptId: string | null }
+  | { kind: 'session'; sessionKey: FreeLearningSessionKey | `lesson:${string}` };
+
+export type ReviewEvent =
+  | ReviewEventBase & {
+    kind: 'enrolled';
+    assetRevision: number;
+    trigger: ReviewEnrollmentTrigger;
+    policy: 'fixed-ladder-v1';
+  }
+  | ReviewEventBase & {
+    kind: 'reviewed';
+    assetRevision: number;
+    result: ReviewResult;
+    evidence: ReviewEvidence;
+  }
+  | ReviewEventBase & {
+    kind: 'corrected';
+    targetEventId: string;
+    replacementResult: ReviewResult | null;
+  }
+  | ReviewEventBase & { kind: 'removed' }
+  | ReviewEventBase & {
+    kind: 'restarted';
+    assetRevision: number;
+    policy: 'fixed-ladder-v1';
+  };
+
+export type AssetReviewProjection = {
+  asset: LearningAssetHandle;
+  active: boolean;
+  stage: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  dueOn: string | null;
+  lastResult: ReviewResult | null;
+};
+
 /** @deprecated Use LearningAssetHandle for selected-context identity. */
 export type LearningAssetReference = LearningAssetHandle;
 
