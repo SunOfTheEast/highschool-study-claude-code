@@ -8,6 +8,10 @@ import {
   ModelSettings,
   type DesktopModelCatalog,
 } from '../../src/client/desktop/ModelSettings';
+import {
+  applyReadingSize,
+  readStoredReadingSize,
+} from '../../src/client/readability';
 
 const catalog: DesktopModelCatalog = {
   providers: [{
@@ -86,6 +90,23 @@ test('renders model choice as a ledger with independent teacher and Scout rows',
   expect(markup).toContain('GPT-5.6 Sol');
   expect(markup).toContain('GPT-5.6 Terra');
   expect(markup).not.toContain('模型卡片');
+  expect(markup).toContain('阅读字号');
+  expect(markup).toContain('标准');
+  expect(markup).toContain('大字');
+});
+
+test('stores reading size locally and applies it through one root data attribute', () => {
+  const values = new Map<string, string>();
+  const storage = {
+    getItem: (key: string) => values.get(key) ?? null,
+    setItem: (key: string, value: string) => { values.set(key, value); },
+  };
+  const root = { dataset: {} as Record<string, string> };
+
+  expect(readStoredReadingSize(storage)).toBe('standard');
+  applyReadingSize('large', storage, root);
+  expect(readStoredReadingSize(storage)).toBe('large');
+  expect(root.dataset.readingSize).toBe('large');
 });
 
 test('puts the current teaching pair first and folds away unconfigured Providers', () => {

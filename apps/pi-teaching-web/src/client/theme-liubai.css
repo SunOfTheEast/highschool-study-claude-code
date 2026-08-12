@@ -32,7 +32,7 @@
   --font-mono: "SF Mono", "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
 
   --text-micro: 11px;
-  --text-label: 12px;
+  --text-label: 14px;
   --text-meta: 13px;
   --text-body-sm: 14px;
   --text-body: 16px;
@@ -56,6 +56,18 @@
   --st-prepared: var(--ink-soft);
   --persona-accent: #3f5b54;
   --persona-wash: rgba(63, 91, 84, .07);
+}
+
+:root[data-reading-size="large"] {
+  --text-micro: 12px;
+  --text-label: 15px;
+  --text-meta: 15px;
+  --text-body-sm: 16px;
+  --text-body: 18px;
+  --text-lead: 21px;
+  --text-h3: 23px;
+  --text-h2: 28px;
+  --text-h1: 36px;
 }
 
 .app-root[data-persona="neutral-tutor"] {

@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { CompanionRoot } from './companion/CompanionRoot';
 import { DesktopRoot } from './desktop/DesktopRoot';
+import { initializeReadingSize } from './readability';
 import 'lxgw-wenkai-screen-webfont/lxgwwenkaiscreen.css';
 import './theme-liubai.css';
 import './styles.css';
@@ -18,6 +19,7 @@ import './styles/pages.css';
 
 const companion = new URLSearchParams(window.location.search).get('window') === 'companion';
 document.documentElement.dataset.studyforgeWindow = companion ? 'companion' : 'main';
+initializeReadingSize(window.localStorage, document.documentElement);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

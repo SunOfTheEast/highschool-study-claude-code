@@ -32,6 +32,13 @@ test('lets human Material position controls wrap as one compact row', () => {
   expect(styles).toMatch(/\.m1c-material-locator\s*\{[^}]*display:\s*flex[^}]*flex-wrap:\s*wrap/s);
 });
 
+test('uses root typography tokens for standard and large reading instead of page transforms', () => {
+  const theme = readFileSync(join(import.meta.dir, '../../src/client/theme-liubai.css'), 'utf8');
+  expect(theme).toMatch(/--text-label:\s*14px/);
+  expect(theme).toMatch(/:root\[data-reading-size="large"\]\s*\{[^}]*--text-body:\s*18px/s);
+  expect(theme).not.toMatch(/data-reading-size[^}]*transform\s*:/s);
+});
+
 test('uses one dominant atlas and one contextual folio instead of three debugger columns', () => {
   const styles = readFileSync(join(import.meta.dir, '../../src/client/styles/knowledge.css'), 'utf8');
 

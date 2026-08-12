@@ -5,6 +5,11 @@ import type {
   DesktopThinkingLevel,
 } from '../../desktop/contracts';
 import type { PeerSkinStatus } from './api';
+import {
+  applyReadingSize,
+  readStoredReadingSize,
+  type ReadingSize,
+} from '../readability';
 
 export type DesktopModelCatalog = {
   providers: Array<{
@@ -446,6 +451,9 @@ export function ModelSettings({
 }) {
   const initial = useMemo(() => defaultModelDraft(catalog, teacher, scout), [catalog, teacher, scout]);
   const [draft, setDraft] = useState(initial);
+  const [readingSize, setReadingSize] = useState<ReadingSize>(() => (
+    typeof window === 'undefined' ? 'standard' : readStoredReadingSize(window.localStorage)
+  ));
   const teacherTouched = useRef(false);
   const scoutTouched = useRef(false);
   useEffect(() => {
@@ -484,6 +492,30 @@ export function ModelSettings({
         <h1>安排两位老师</h1>
         <p className="desktop-lead">主教师负责方向与课堂；Scout 只在需要材料时检索。两者可以使用不同 Provider。</p>
         <CurrentPair catalog={catalog} draft={draft} />
+        <section className="desktop-reading-size" aria-label="阅读字号">
+          <div>
+            <h2>阅读字号</h2>
+            <p>只改变文字大小，不改变学习内容和页面结构。</p>
+          </div>
+          <div>
+            {(['standard', 'large'] as const).map((value) => (
+              <button
+                type="button"
+                className={readingSize === value ? 'action-wash' : 'action-outline'}
+                aria-pressed={readingSize === value}
+                key={value}
+                onClick={() => {
+                  setReadingSize(value);
+                  if (typeof window !== 'undefined') {
+                    applyReadingSize(value, window.localStorage, document.documentElement);
+                  }
+                }}
+              >
+                {value === 'standard' ? '标准' : '大字'}
+              </button>
+            ))}
+          </div>
+        </section>
         {peerSkin && onChoosePeerSkin && onChooseLive2DCore && onImportPeerSkin && (
           <PeerSkinSettings
             status={peerSkin}

@@ -33,6 +33,14 @@ const toolStatus = {
   error: '失败',
 } as const;
 
+export const FREE_LEARNING_STARTERS = [
+  '帮我看看，我真正卡在哪一步',
+  '把这个和我学过的东西联系起来',
+  '反驳一下我的想法，看看哪里站不住',
+  '帮我比较这两个概念到底差在哪',
+  '找找有没有相关的研究或更深的解释',
+] as const;
+
 type ChatPanelProps = {
   sessionKey: SessionKey;
   items: ConversationItem[];
@@ -183,6 +191,20 @@ function ChatPanelContent({
             <p>{freeLearning
               ? '问题可以很小，也可以发散。说出你此刻真正好奇或卡住的地方。'
               : '可以说说目标、具体卡点，或请老师先介绍这个学习集。'}</p>
+            {freeLearning && enabled && (
+              <div className="learning-starters" aria-label="可以这样开始">
+                {FREE_LEARNING_STARTERS.map((starter) => (
+                  <button
+                    className="learning-starter"
+                    type="button"
+                    key={starter}
+                    onClick={() => setText(starter)}
+                  >
+                    {starter}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

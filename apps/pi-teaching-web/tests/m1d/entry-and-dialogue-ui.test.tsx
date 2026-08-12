@@ -121,6 +121,29 @@ test('renders free learning as a titled letter with immutable carried context', 
   expect(markup).toContain('Ksp 边界 · 第 2 版');
   expect(markup).toContain('同离子效应 · 已有作答');
   expect(markup).toContain('结束这次自由学习');
+  expect(markup).toContain('帮我看看，我真正卡在哪一步');
+  expect(markup).toContain('把这个和我学过的东西联系起来');
+  expect(markup).toContain('反驳一下我的想法');
+  expect(markup).toContain('帮我比较这两个概念');
+  expect(markup).toContain('找找有没有相关的研究');
+  expect(markup.match(/class="learning-starter" type="button"/g)).toHaveLength(5);
+});
+
+test('hides free-learning starters after the conversation has begun', () => {
+  const markup = renderToStaticMarkup(
+    <ChatPanel
+      sessionKey="free:free-session-001"
+      items={[{
+        id: 'user-1', kind: 'user', text: '我先说一个真实问题。',
+        at: '2026-08-09T10:00:00.000Z',
+      }]}
+      running={false}
+      error={null}
+      enabled
+      onSend={async () => {}}
+    />,
+  );
+  expect(markup).not.toContain('帮我看看，我真正卡在哪一步');
 });
 
 test('keeps an ended letter readable and closes only its composer', () => {
