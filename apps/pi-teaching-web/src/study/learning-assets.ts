@@ -14,6 +14,8 @@ import type {
   LearningSourceReference,
   LearningNote,
   LearningNoteBlock,
+  LearningNoteContentHistoryEntry,
+  ProblemCardContentHistoryEntry,
   ReadableLearningSourceReference,
   SemanticTagDraft,
   StudentProblemCard,
@@ -393,6 +395,22 @@ export function readLearningNoteRevision(root: string, id: string, revision: num
   }
 }
 
+export function readLearningNoteContentHistory(
+  root: string,
+  id: string,
+): LearningNoteContentHistoryEntry[] {
+  const current = readLearningNote(root, id);
+  return Array.from({ length: current.revision - 1 }, (_, index) => {
+    const note = readLearningNoteRevision(root, current.id, index + 1);
+    return {
+      revision: note.revision,
+      title: note.title,
+      updatedAt: note.updatedAt,
+      blocks: note.blocks,
+    };
+  });
+}
+
 export function listLearningNotes(root: string): LearningNote[] {
   return filesBelow(root, 'notes')
     .filter((path) => path.endsWith('.note.yaml'))
@@ -489,6 +507,23 @@ export function readProblemCardRevision(root: string, id: string, revision: numb
     }
     throw error;
   }
+}
+
+export function readProblemCardContentHistory(
+  root: string,
+  id: string,
+): ProblemCardContentHistoryEntry[] {
+  const current = readProblemCard(root, id);
+  return Array.from({ length: current.revision - 1 }, (_, index) => {
+    const card = readProblemCardRevision(root, current.id, index + 1);
+    return {
+      revision: card.revision,
+      title: card.title,
+      updatedAt: card.updatedAt,
+      stem: card.stem,
+      studentNote: card.studentNote,
+    };
+  });
 }
 
 type AssetRevisionIdentity = {

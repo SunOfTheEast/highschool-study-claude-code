@@ -178,6 +178,7 @@ test('round-trips Note and gated problem-card activity without private leakage',
     'http://local/api/assets/problem-cards/problem-001',
   )));
   expect(hidden.standardAnswer).toBeNull();
+  expect(hidden.contentHistory).toEqual([]);
   expect(JSON.stringify(hidden)).not.toContain('teacherRationale');
   expect(JSON.stringify(hidden)).not.toContain('先区分常数');
 
@@ -215,6 +216,26 @@ test('round-trips Note and gated problem-card activity without private leakage',
   ));
   expect(await body(ask)).toMatchObject({ route: '/learn/free-session-ask' });
   expect(selected).toEqual([[{ kind: 'problem-card', id: 'problem-001' }]]);
+
+  const savedNote = await handler(new Request(
+    'http://local/api/assets/problem-cards/problem-001/note',
+    {
+      method: 'PUT',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ expectedRevision: 1, studentNote: '第二版学生笔记。' }),
+    },
+  ));
+  expect(savedNote?.status).toBe(200);
+  const revisedCard = await body(await handler(new Request(
+    'http://local/api/assets/problem-cards/problem-001',
+  )));
+  expect(revisedCard.contentHistory).toEqual([expect.objectContaining({
+    revision: 1,
+    stem: '加入 NaCl 后，AgCl 的 Ksp 是否改变？',
+    studentNote: '别把平衡移动说成常数改变。',
+  })]);
+  expect(JSON.stringify(revisedCard.contentHistory)).not.toContain('恒温下 Ksp 不变');
+  expect(JSON.stringify(revisedCard.contentHistory)).not.toContain('先区分常数');
 });
 
 test('edits student-owned asset fields with stale revision protection', async () => {
@@ -240,6 +261,9 @@ test('edits student-owned asset fields with stale revision protection', async ()
     }),
   }));
   expect(edit?.status).toBe(200);
+  expect(await body(edit)).toMatchObject({
+    contentHistory: [{ revision: 1, title: '初稿', blocks: [{ body: '第一版。' }] }],
+  });
   expect(readLearningNote(root, 'note-001')).toMatchObject({ revision: 2, title: '修订稿' });
 
   const stale = await handler(new Request('http://local/api/assets/notes/note-001', {

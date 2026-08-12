@@ -17,7 +17,9 @@ import {
   planLearningNoteSave,
   planProblemCardSave,
   readLearningNote,
+  readLearningNoteContentHistory,
   readLearningNoteRevision,
+  readProblemCardContentHistory,
   readProblemCardRevision,
 } from '../../src/study/learning-assets';
 import {
@@ -162,6 +164,14 @@ test('archives exact canonical bytes on revision and reads current or historical
   });
   expect(() => readLearningNoteRevision(root, 'note-001', 3))
     .toThrow('ASSET_REVISION_UNRESOLVED');
+  mkdirSync(join(root, 'notes/.revisions/unrelated'), { recursive: true });
+  writeFileSync(join(root, 'notes/.revisions/unrelated/broken.note.yaml'), 'not: [valid');
+  expect(readLearningNoteContentHistory(root, 'note-001')).toEqual([{
+    revision: 1,
+    title: '第一版',
+    updatedAt: '2026-08-09T10:00:00.000Z',
+    blocks: [{ kind: 'markdown', body: '旧正文。' }],
+  }]);
   expect(listLearningNotes(root).map((note) => note.id)).toEqual(['note-001']);
 });
 
@@ -190,6 +200,13 @@ test('archives problem cards without making historical revisions ordinary cards'
 
   expect(readProblemCardRevision(root, 'problem-001', 1).stem).toBe('第一版题干。');
   expect(readProblemCardRevision(root, 'problem-001', 2).stem).toBe('第二版题干。');
+  expect(readProblemCardContentHistory(root, 'problem-001')).toEqual([{
+    revision: 1,
+    title: '第一版题干。',
+    updatedAt: '2026-08-09T10:00:00.000Z',
+    stem: '第一版题干。',
+    studentNote: '',
+  }]);
   expect(listProblemCards(root).map((card) => card.id)).toEqual(['problem-001']);
 });
 

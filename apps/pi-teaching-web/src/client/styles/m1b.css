@@ -460,6 +460,43 @@
 .m1b-problem-page > footer { margin-top: var(--space-7); padding-top: var(--space-4); border-top: 1px solid var(--ink); }
 .m1b-problem-page .m1b-ask-teacher { border-color: var(--accent); color: #fff; background: var(--accent); }
 
+.note-editor-mode {
+  display: flex;
+  gap: var(--space-2);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: var(--space-3);
+}
+
+.note-draft-preview {
+  padding: var(--space-5);
+  border: 1px solid var(--rule);
+  background: #fffefb;
+  font: var(--text-lead)/1.9 var(--font-reading);
+}
+
+.note-draft-preview > small,
+.asset-content-history article > small { color: var(--ink-faint); font-size: var(--text-label); }
+.note-draft-preview h2,
+.asset-content-history h2 { font: 500 var(--text-h2)/1.35 var(--font-display); }
+
+.asset-content-history {
+  margin-top: var(--space-8);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--ink);
+}
+
+.asset-content-history summary {
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.asset-content-history > article {
+  margin-top: var(--space-5);
+  padding: var(--space-5);
+  border-left: 2px solid var(--rule);
+  background: color-mix(in srgb, var(--paper) 75%, #fff);
+}
+
 .m1b-assets .action-solid,
 .m1b-note-page .action-solid,
 .m1b-problem-page .action-solid,

@@ -14,12 +14,14 @@ import type {
   LearningMaterialView,
   LearningNote,
   LearningNoteBlock,
+  LearningNoteContentHistoryEntry,
   LearningSetHomeSnapshot,
   LessonHandout,
   MaterialImportReceipt,
   MaterialLocatorSnapshot,
   MetaSessionSummary,
   ProblemActivitySnapshot,
+  ProblemCardContentHistoryEntry,
   ProblemAnswerRevealEvent,
   ProblemAttemptEvent,
   ProblemAttemptResponse,
@@ -83,12 +85,14 @@ const remove = <T>(path: string, body: unknown) => json<T>(path, {
 });
 
 export type LearningNoteView = LearningNote & {
+  contentHistory: LearningNoteContentHistoryEntry[];
   semanticTags: LearningAssetSemanticTags | null;
   formation: AssetFormation | null;
   review: AssetReviewProjection | null;
 };
 
 export type ProblemCardView = StudentProblemCard & {
+  contentHistory: ProblemCardContentHistoryEntry[];
   activity: ProblemActivitySnapshot;
   semanticTags: LearningAssetSemanticTags | null;
   formation: AssetFormation | null;

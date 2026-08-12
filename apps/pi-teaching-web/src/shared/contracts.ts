@@ -234,6 +234,13 @@ export type LearningNote = {
   blocks: LearningNoteBlock[];
 };
 
+export type LearningNoteContentHistoryEntry = {
+  revision: number;
+  title: string;
+  updatedAt: string;
+  blocks: LearningNoteBlock[];
+};
+
 export type StudentProblemCard = {
   kind: 'problem-card';
   id: string;
@@ -243,6 +250,14 @@ export type StudentProblemCard = {
   studentNote: string;
   standardAnswer: string | null;
   sources: ReadableLearningSourceReference[];
+};
+
+export type ProblemCardContentHistoryEntry = {
+  revision: number;
+  title: string;
+  updatedAt: string | null;
+  stem: string;
+  studentNote: string;
 };
 
 export type LearningAssetSummary = {

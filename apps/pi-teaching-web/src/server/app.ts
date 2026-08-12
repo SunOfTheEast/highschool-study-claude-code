@@ -27,7 +27,9 @@ import {
   planProblemCardSave,
   readLearningAssetLibrary,
   readLearningNote,
+  readLearningNoteContentHistory,
   readProblemCard,
+  readProblemCardContentHistory,
   readStudentProblemCard,
 } from '../study/learning-assets';
 import {
@@ -905,6 +907,7 @@ export function createRequestHandler(deps?: AppDependencies) {
           const note = readLearningNote(deps.root, id);
           return json({
             ...note,
+            contentHistory: readLearningNoteContentHistory(deps.root, id),
             review: readAssetReviewHistory(deps.root, { kind: 'note', id }).projection,
             semanticTags: assetSemanticTags(deps.root, 'note', id),
             formation: projectAssetFormation(
@@ -928,6 +931,7 @@ export function createRequestHandler(deps?: AppDependencies) {
           deps.hub.publish({ type: 'assets-invalidated' });
           return json({
             ...planned.note,
+            contentHistory: readLearningNoteContentHistory(deps.root, id),
             review: readAssetReviewHistory(deps.root, { kind: 'note', id }).projection,
             semanticTags: assetSemanticTags(deps.root, 'note', id),
             formation: projectAssetFormation(
@@ -1013,6 +1017,7 @@ export function createRequestHandler(deps?: AppDependencies) {
           && activity.latestAttempt?.cardRevision === card.revision;
         return json({
           ...readStudentProblemCard(deps.root, id, revealed),
+          contentHistory: readProblemCardContentHistory(deps.root, id),
           activity,
           review: readAssetReviewHistory(deps.root, { kind: 'problem-card', id }).projection,
           semanticTags: assetSemanticTags(deps.root, 'problem-card', id),

@@ -13,7 +13,7 @@ import {
   MaterialPage,
   parseMaterialLocatorInput,
 } from '../../src/client/pages/MaterialPage';
-import { NotePage } from '../../src/client/pages/NotePage';
+import { NoteDraftPreview, NotePage } from '../../src/client/pages/NotePage';
 import { ProblemCardPage } from '../../src/client/pages/ProblemCardPage';
 
 const formation = {
@@ -33,7 +33,16 @@ test('shows a Note formation separately from its pinned source and offers one as
   };
   const markup = renderToStaticMarkup(
     <NotePage
-      value={{ ...note, formation }}
+      value={{
+        ...note,
+        formation,
+        contentHistory: [{
+          revision: 1,
+          title: 'Ksp 的第一版解释',
+          updatedAt: '2026-08-09T10:00:00.000Z',
+          blocks: [{ kind: 'markdown', body: '旧正文。' }],
+        }],
+      }}
       onSave={async () => {}}
       onAskTeacher={() => {}}
       onReload={() => {}}
@@ -44,16 +53,46 @@ test('shows a Note formation separately from its pinned source and offers one as
   expect(markup).toContain('内容来源');
   expect(markup).toContain('资料 material-001 · 第 1 版 · 第 62 页');
   expect(markup).toContain('带着这份笔记问老师');
+  expect(markup).toContain('内容历史 · 1');
+  expect(markup).toContain('Ksp 的第一版解释');
+});
+
+test('previews the current unsaved Note draft without creating a version', () => {
+  const markup = renderToStaticMarkup(<NoteDraftPreview
+    title="未保存的新标题"
+    blocks={[
+      { kind: 'markdown', body: '**草稿正文**' },
+      { kind: 'recall', prompt: '为什么？', answer: '因为平衡常数只由温度决定。' },
+    ]}
+  />);
+  expect(markup).toContain('未保存的新标题');
+  expect(markup).toContain('<strong>草稿正文</strong>');
+  expect(markup).toContain('为什么？');
+  expect(markup).not.toMatch(/第\s*\d+\s*版/);
 });
 
 function problem(latestAttempt: boolean): StudentProblemCard & {
   activity: ProblemActivitySnapshot;
   formation: typeof formation;
+  contentHistory: Array<{
+    revision: number;
+    title: string;
+    updatedAt: string | null;
+    stem: string;
+    studentNote: string;
+  }>;
 } {
   return {
     kind: 'problem-card', id: 'problem-001', revision: 1, title: '同离子效应',
     stem: '加入 NaCl 后 Ksp 是否改变？', studentNote: '', standardAnswer: null,
     sources: [], formation,
+    contentHistory: [{
+      revision: 1,
+      title: '旧题干',
+      updatedAt: '2026-08-09T09:00:00.000Z',
+      stem: '旧题干正文。',
+      studentNote: '旧的学生笔记。',
+    }],
     activity: {
       cardId: 'problem-001', events: [], answerRevealedForLatestAttempt: false,
       latestAttempt: latestAttempt ? {
@@ -77,6 +116,8 @@ test('changes only the problem ask copy after an attempt and keeps the answer ga
   expect(before).toContain('提交作答');
   expect(before).toContain('不会，直接看答案');
   expect(before).not.toContain('标准答案');
+  expect(before).toContain('内容历史 · 1');
+  expect(before).toContain('旧的学生笔记');
 
   const after = renderToStaticMarkup(<ProblemCardPage value={problem(true)} {...props} />);
   expect(after).toContain('带着这次作答问老师');

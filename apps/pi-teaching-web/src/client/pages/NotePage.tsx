@@ -5,6 +5,7 @@ import type {
   LearningAssetSemanticTags,
   LearningNote,
   LearningNoteBlock,
+  LearningNoteContentHistoryEntry,
   ReviewResult,
 } from '../../shared/contracts';
 import { ApiError } from '../api';
@@ -14,10 +15,35 @@ import { publicErrorText } from '../public-errors';
 import { AssetReviewControls } from '../components/AssetReviewControls';
 
 type NoteView = LearningNote & {
+  contentHistory?: LearningNoteContentHistoryEntry[];
   semanticTags?: LearningAssetSemanticTags | null;
   formation?: AssetFormation | null;
   review?: AssetReviewProjection | null;
 };
+
+export function NoteDraftPreview({
+  title,
+  blocks,
+}: {
+  title: string;
+  blocks: LearningNoteBlock[];
+}) {
+  return (
+    <section className="note-draft-preview" aria-label="未保存草稿预览">
+      <small>未保存草稿预览</small>
+      <h2><MarkdownView inline>{title || '未命名笔记'}</MarkdownView></h2>
+      {blocks.map((block, index) => block.kind === 'markdown' ? (
+        <article key={index}><MarkdownView>{block.body}</MarkdownView></article>
+      ) : (
+        <article className="m1b-recall" key={index}>
+          <small>回忆提示</small>
+          <MarkdownView>{block.prompt}</MarkdownView>
+          <div className="m1b-recall-answer"><MarkdownView>{block.answer}</MarkdownView></div>
+        </article>
+      ))}
+    </section>
+  );
+}
 
 export function NotePage({
   value,
@@ -35,6 +61,7 @@ export function NotePage({
   onReviewAction?(action: 'enroll' | 'remove' | 'restart'): Promise<void>;
 }) {
   const [editing, setEditing] = useState(false);
+  const [editorMode, setEditorMode] = useState<'edit' | 'preview'>('edit');
   const [title, setTitle] = useState(value.title);
   const [blocks, setBlocks] = useState(value.blocks);
   const [baseRevision, setBaseRevision] = useState(value.revision);
@@ -66,6 +93,7 @@ export function NotePage({
     setBaseRevision(value.revision);
     setSaveError(null);
     setSaved(false);
+    setEditorMode('edit');
     setEditing(true);
   };
   const reloadDraft = () => {
@@ -163,22 +191,28 @@ export function NotePage({
             </p>
           )}
           {saveError && !saveError.startsWith('内容已被更新') && <p role="alert">{saveError}</p>}
-          <label>标题<input value={title} onChange={(event) => setTitle(event.target.value)} /></label>
-          {blocks.map((block, index) => block.kind === 'markdown' ? (
-            <label key={index}>正文<textarea value={block.body} onChange={(event) => update(index, {
-              kind: 'markdown', body: event.target.value,
-            })} /></label>
-          ) : (
-            <fieldset key={index}>
-              <legend>回忆块</legend>
-              <label>提示<textarea value={block.prompt} onChange={(event) => update(index, {
-                ...block, prompt: event.target.value,
+          <div className="note-editor-mode" aria-label="笔记编辑视图">
+            <button type="button" className={editorMode === 'edit' ? 'action-wash' : 'action-text'} onClick={() => setEditorMode('edit')}>编辑</button>
+            <button type="button" className={editorMode === 'preview' ? 'action-wash' : 'action-text'} onClick={() => setEditorMode('preview')}>预览</button>
+          </div>
+          {editorMode === 'preview' ? <NoteDraftPreview title={title} blocks={blocks} /> : <>
+            <label>标题<input value={title} onChange={(event) => setTitle(event.target.value)} /></label>
+            {blocks.map((block, index) => block.kind === 'markdown' ? (
+              <label key={index}>正文<textarea value={block.body} onChange={(event) => update(index, {
+                kind: 'markdown', body: event.target.value,
               })} /></label>
-              <label>答案<textarea value={block.answer} onChange={(event) => update(index, {
-                ...block, answer: event.target.value,
-              })} /></label>
-            </fieldset>
-          ))}
+            ) : (
+              <fieldset key={index}>
+                <legend>回忆块</legend>
+                <label>提示<textarea value={block.prompt} onChange={(event) => update(index, {
+                  ...block, prompt: event.target.value,
+                })} /></label>
+                <label>答案<textarea value={block.answer} onChange={(event) => update(index, {
+                  ...block, answer: event.target.value,
+                })} /></label>
+              </fieldset>
+            ))}
+          </>}
           <button type="submit" className="action-wash" disabled={saving || stale}>
             {saving ? '正在保存…' : '保存修改'}
           </button>
@@ -217,6 +251,26 @@ export function NotePage({
             </article>
           ))}
         </section>
+      )}
+      {(value.contentHistory?.length ?? 0) > 0 && (
+        <details className="asset-content-history">
+          <summary>内容历史 · {value.contentHistory!.length}</summary>
+          {[...value.contentHistory!].reverse().map((entry) => (
+            <article key={entry.revision}>
+              <small>第 {entry.revision} 版 · {new Date(entry.updatedAt).toLocaleString('zh-CN')}</small>
+              <h2><MarkdownView inline>{entry.title}</MarkdownView></h2>
+              {entry.blocks.map((block, index) => block.kind === 'markdown' ? (
+                <MarkdownView key={index}>{block.body}</MarkdownView>
+              ) : (
+                <div className="m1b-recall" key={index}>
+                  <small>回忆提示</small>
+                  <MarkdownView>{block.prompt}</MarkdownView>
+                  <div className="m1b-recall-answer"><MarkdownView>{block.answer}</MarkdownView></div>
+                </div>
+              ))}
+            </article>
+          ))}
+        </details>
       )}
     </main>
   );

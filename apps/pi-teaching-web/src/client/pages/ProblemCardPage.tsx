@@ -4,6 +4,7 @@ import type {
   AssetReviewProjection,
   LearningAssetSemanticTags,
   ProblemActivitySnapshot,
+  ProblemCardContentHistoryEntry,
   ProblemAttemptResponse,
   ProblemAttemptEvent,
   ReviewResult,
@@ -15,6 +16,7 @@ import { publicErrorText } from '../public-errors';
 import { AssetReviewControls } from '../components/AssetReviewControls';
 
 export type ProblemCardView = StudentProblemCard & {
+  contentHistory?: ProblemCardContentHistoryEntry[];
   activity: ProblemActivitySnapshot;
   semanticTags?: LearningAssetSemanticTags | null;
   formation?: AssetFormation | null;
@@ -250,6 +252,22 @@ export function ProblemCardPage({
       </section>
       {receipt && <p className="inline-success" role="status">{receipt}</p>}
       {error && <p className="inline-error" role="alert">{error}</p>}
+      {(value.contentHistory?.length ?? 0) > 0 && (
+        <details className="asset-content-history">
+          <summary>内容历史 · {value.contentHistory!.length}</summary>
+          {[...value.contentHistory!].reverse().map((entry) => (
+            <article key={entry.revision}>
+              <small>
+                第 {entry.revision} 版
+                {entry.updatedAt ? ` · ${new Date(entry.updatedAt).toLocaleString('zh-CN')}` : ''}
+              </small>
+              <h2><MarkdownView inline>{entry.title}</MarkdownView></h2>
+              <MarkdownView>{entry.stem}</MarkdownView>
+              {entry.studentNote && <p><b>当时的题内笔记：</b>{entry.studentNote}</p>}
+            </article>
+          ))}
+        </details>
+      )}
     </main>
   );
 }
