@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import type { AuthEvent, AuthPrompt, AuthType } from '@earendil-works/pi-ai';
 import type {
   DesktopModelSelection,
@@ -446,6 +446,14 @@ export function ModelSettings({
 }) {
   const initial = useMemo(() => defaultModelDraft(catalog, teacher, scout), [catalog, teacher, scout]);
   const [draft, setDraft] = useState(initial);
+  const teacherTouched = useRef(false);
+  const scoutTouched = useRef(false);
+  useEffect(() => {
+    setDraft((current) => ({
+      teacher: teacherTouched.current || current.teacher ? current.teacher : initial.teacher,
+      scout: scoutTouched.current || current.scout ? current.scout : initial.scout,
+    }));
+  }, [initial]);
   const activeProviders = new Set([
     ...(draft.teacher ? [draft.teacher.provider] : []),
     ...(draft.scout ? [draft.scout.provider] : []),
@@ -496,7 +504,10 @@ export function ModelSettings({
             detail="长期方向、备课、课堂与教学判断"
             catalog={catalog}
             value={draft.teacher}
-            onChange={(value) => setDraft((current) => ({ ...current, teacher: value }))}
+            onChange={(value) => {
+              teacherTouched.current = true;
+              setDraft((current) => ({ ...current, teacher: value }));
+            }}
           />
           <ModelRow
             id="scout"
@@ -504,7 +515,10 @@ export function ModelSettings({
             detail="按教师 brief 召回足够合适的材料"
             catalog={catalog}
             value={draft.scout}
-            onChange={(value) => setDraft((current) => ({ ...current, scout: value }))}
+            onChange={(value) => {
+              scoutTouched.current = true;
+              setDraft((current) => ({ ...current, scout: value }));
+            }}
           />
         </div>
         <h2 className="desktop-provider-heading">模型连接</h2>

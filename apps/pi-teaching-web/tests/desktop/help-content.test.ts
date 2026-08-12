@@ -38,9 +38,19 @@ test('first-learning guide covers the actual student loop without teaching inter
     'Plan',
     'Lesson',
     'Documents/StudyForge',
+    '学习文件保存在本机',
+    '相关内容会交给你选择的模型服务处理',
+    '不会无条件上传整个学习集',
   ]) expect(markdown).toContain(text);
   expect(markdown).not.toContain('Session Log');
   expect(markdown).not.toContain('对象记忆');
+});
+
+test('installation guide states the same local and model-processing boundary', () => {
+  const markdown = read('macos-installation.md');
+  expect(markdown).toContain('学习文件保存在本机');
+  expect(markdown).toContain('相关内容会交给你选择的模型服务处理');
+  expect(markdown).toContain('不会无条件上传整个学习集');
 });
 
 test('every help screenshot is local and resolvable', () => {

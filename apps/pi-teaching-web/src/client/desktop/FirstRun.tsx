@@ -60,7 +60,9 @@ export function FirstRun({ busy, error, onBlank, onExisting, onExample }: FirstR
         {error && <p className="desktop-error" role="alert">{error}</p>}
         {busy && <p className="desktop-progress" role="status">正在铺开学习集…</p>}
       </section>
-      <footer className="desktop-footnote">学习资料保存在你的 Documents 文件夹，覆盖安装不会删除。</footer>
+      <footer className="desktop-footnote">
+        学习文件保存在本机。向老师发消息时，本轮消息和回答所需的相关内容会交给你选择的模型服务处理；不会无条件上传整个学习集。
+      </footer>
     </main>
   );
 }

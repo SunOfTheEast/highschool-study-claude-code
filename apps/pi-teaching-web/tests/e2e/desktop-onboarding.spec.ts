@@ -128,6 +128,7 @@ test('keeps polling while browser OAuth is waiting and observes its asynchronous
   let responded = false;
   let completed = false;
   let readsAfterResponse = 0;
+  let saved = false;
   await installDesktopBridge(page);
   await page.route('http://127.0.0.1:43121/**', async (route) => {
     const request = route.request();
@@ -144,7 +145,7 @@ test('keeps polling while browser OAuth is waiting and observes its asynchronous
       await route.fulfill({ json: { state: 'missing', coreInstalled: false } });
       return;
     }
-    if (path === '/api/desktop/models') {
+    if (path === '/api/desktop/models' && request.method() === 'GET') {
       await route.fulfill({ json: {
         providers: [{
           id: 'openai-codex', name: 'OpenAI Codex', configured: completed,
@@ -156,6 +157,16 @@ test('keeps polling while browser OAuth is waiting and observes its asynchronous
           { provider: 'openai-codex', id: 'gpt-5.6-terra', name: 'GPT-5.6 Terra', thinkingLevels: ['off', 'high'] },
         ] : [],
       } });
+      return;
+    }
+    if (path === '/api/desktop/models' && request.method() === 'PUT') {
+      const body = request.postDataJSON();
+      expect(body).toEqual({
+        teacher: { provider: 'openai-codex', model: 'gpt-5.6-sol', thinking: 'high' },
+        scout: { provider: 'openai-codex', model: 'gpt-5.6-terra', thinking: 'high' },
+      });
+      saved = true;
+      await route.fulfill({ json: { onboardingComplete: true, restartRequired: false } });
       return;
     }
     if (path === '/api/desktop/auth' && request.method() === 'POST') {
@@ -198,6 +209,12 @@ test('keeps polling while browser OAuth is waiting and observes its asynchronous
   await page.getByRole('button', { name: '继续' }).click();
   await expect(page.getByText('已经连接，可以选择模型了。')).toBeVisible({ timeout: 3_000 });
   await expect(page.getByText('OAuth', { exact: true })).toBeVisible();
+  await expect(page.getByLabel('主教师模型')).toHaveValue('openai-codex/gpt-5.6-sol');
+  await expect(page.getByLabel('检索 Scout 模型')).toHaveValue('openai-codex/gpt-5.6-terra');
+  await expect(page.locator('#teacher-thinking')).toHaveValue('high');
+  await expect(page.locator('#scout-thinking')).toHaveValue('high');
+  await page.getByRole('button', { name: '完成设置并开始学习' }).click();
+  expect(saved).toBe(true);
 });
 
 test('returns to the runtime diagnosis when a packaged restart is rejected', async ({ page }) => {

@@ -44,6 +44,9 @@ test('gives blank start one dominant action and keeps the other entrances quiet'
   expect(markup).toContain('从空白开始');
   expect(markup).toContain('打开已有学习集');
   expect(markup).toContain('使用导数示例');
+  expect(markup).toContain('学习文件保存在本机');
+  expect(markup).toContain('相关内容会交给你选择的模型服务处理');
+  expect(markup).toContain('不会无条件上传整个学习集');
   expect(markup).not.toContain('Roadmap');
 });
 
