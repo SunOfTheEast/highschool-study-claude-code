@@ -12,6 +12,7 @@ import './styles/handout.css';
 import './styles/classroom.css';
 import './styles/knowledge.css';
 import './styles/m1b.css';
+import './styles/source-first.css';
 import './styles/responsive.css';
 import './styles/desktop.css';
 import './styles/companion.css';

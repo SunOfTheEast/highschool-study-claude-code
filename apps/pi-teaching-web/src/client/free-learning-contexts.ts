@@ -1,4 +1,7 @@
-import type { LearningContextReference } from '../shared/contracts';
+import {
+  MAX_MATERIAL_CONTEXT_PAGES,
+  type LearningContextReference,
+} from '../shared/contracts';
 import { formatMaterialLocator } from './material-locator';
 import type { CarriedContextItem } from './pages/FreeLearningPage';
 
@@ -13,6 +16,17 @@ type ContextLoaders = {
     material: { revisions: Array<{ revision: number; title: string }> };
   }>;
 };
+
+export function materialPagesForContext(locator: string | null): number[] {
+  const page = /^page-([0-9]{4})$/.exec(locator ?? '');
+  if (page) return [Number(page[1])];
+  const range = /^pages-([0-9]{4})-([0-9]{4})$/.exec(locator ?? '');
+  if (!range) return [];
+  const start = Number(range[1]);
+  const end = Number(range[2]);
+  if (start < 1 || start > end || end - start + 1 > MAX_MATERIAL_CONTEXT_PAGES) return [];
+  return Array.from({ length: end - start + 1 }, (_, offset) => start + offset);
+}
 
 export async function loadFreeLearningContexts(
   references: readonly LearningContextReference[],

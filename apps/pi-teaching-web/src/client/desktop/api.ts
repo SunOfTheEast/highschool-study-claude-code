@@ -1,5 +1,9 @@
 import type { AuthEvent, AuthPrompt, AuthType } from '@earendil-works/pi-ai';
-import type { DesktopModelSelection } from '../../desktop/contracts';
+import type {
+  DesktopModelSelection,
+  DesktopVisionSelection,
+} from '../../desktop/contracts';
+import type { MaterialImportReceipt } from '../../shared/contracts';
 import type { DesktopModelCatalog } from './ModelSettings';
 import { transportFetch } from '../transport';
 
@@ -10,6 +14,7 @@ export type DesktopStatus = {
   recentLearningSets: string[];
   teacher: DesktopModelSelection | null;
   scout: DesktopModelSelection | null;
+  vision: DesktopVisionSelection;
   issue: { code: string; detail: string } | null;
 };
 
@@ -77,10 +82,22 @@ export const desktopApi = {
     '/api/desktop/learning-sets/select',
     jsonRequest('POST', { path }),
   ),
-  saveModels: (teacher: DesktopModelSelection, scout: DesktopModelSelection) => (
+  importBookPath: (input: {
+    requestId: string;
+    title: string;
+    absolutePath: string;
+  }) => responseJson<MaterialImportReceipt>(
+    '/api/desktop/materials/import-path',
+    jsonRequest('POST', input),
+  ),
+  saveModels: (
+    teacher: DesktopModelSelection,
+    scout: DesktopModelSelection,
+    vision: DesktopVisionSelection,
+  ) => (
     responseJson<{ onboardingComplete: boolean; restartRequired: true }>(
       '/api/desktop/models',
-      jsonRequest('PUT', { teacher, scout }),
+      jsonRequest('PUT', { teacher, scout, vision }),
     )
   ),
   startAuth: (provider: string, type: AuthType) => responseJson<{ flowId: string }>(

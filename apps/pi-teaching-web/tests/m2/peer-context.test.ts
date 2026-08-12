@@ -137,7 +137,7 @@ test('shares selected assets without leaking an unrevealed answer or teacher rat
     title: 'MATERIAL_PUBLIC_TITLE',
     filename: 'chapter.txt',
     mediaType: 'text/plain',
-    bytes: new TextEncoder().encode('first\nMATERIAL_PUBLIC_BODY\nlast'),
+    source: { kind: 'bytes', bytes: new TextEncoder().encode('first\nMATERIAL_PUBLIC_BODY\nlast') },
   }, at);
   const selected: LearningContextReference[] = [
     { kind: 'note', id: 'note-001' },

@@ -11,13 +11,15 @@ import type {
   LearningMaterialView,
   LearningSetHomeSnapshot,
   LessonHandout,
+  MaterialBookIndex,
   ProblemAttemptResponse,
   PublicFocusCycle,
   SemanticRelation,
   SessionKey,
+  SourceTreeSnapshot,
   StudyEvent,
 } from '../shared/contracts';
-import { api, type LearningNoteView, type ProblemCardView } from './api';
+import { ApiError, api, type LearningNoteView, type ProblemCardView } from './api';
 import { AppShell } from './components/AppShell';
 import { formatBrowserRoute, parseBrowserRoute, type BrowserRoute } from './routes';
 import { initialClientState, reduceClientState } from './state';
@@ -33,12 +35,20 @@ import { AssetsPage } from './pages/AssetsPage';
 import { NotePage } from './pages/NotePage';
 import { ProblemCardPage } from './pages/ProblemCardPage';
 import { FootprintPage } from './pages/FootprintPage';
-import { MaterialPage } from './pages/MaterialPage';
+import {
+  BookOverviewPage,
+  BookReaderPage,
+  MaterialPage,
+} from './pages/MaterialPage';
+import { SourceTreePage } from './pages/SourceTreePage';
 import { MetaPage } from './pages/MetaPage';
 import { CalendarPage } from './pages/CalendarPage';
 import type { PrimaryView } from './view-state';
 import { deriveFreeLearningTitle } from '../study/display-projections';
-import { loadFreeLearningContexts } from './free-learning-contexts';
+import {
+  loadFreeLearningContexts,
+  materialPagesForContext,
+} from './free-learning-contexts';
 import { eventTransport } from './transport';
 import { publicErrorText } from './public-errors';
 import { resetRouteScroll } from './route-scroll';
@@ -106,15 +116,35 @@ function routeIsCourse(route: BrowserRoute): boolean {
     || route.kind === 'course-lesson';
 }
 
+function firstBookPage(locator: string): number {
+  const match = /^(?:page|pages)-([0-9]{4})/.exec(locator);
+  return match ? Number(match[1]) : 1;
+}
+
+async function loadBookIndex(materialId: string, revision: number): Promise<MaterialBookIndex> {
+  try {
+    return await api.materialBookIndex(materialId, revision);
+  } catch (error) {
+    if (!(error instanceof ApiError) || error.status !== 404) throw error;
+    return api.bootstrapMaterialBook(materialId, revision);
+  }
+}
+
 export function App() {
   const desktopTools = useDesktopTools();
   const [route, setRoute] = useState<BrowserRoute>(() => (
-    parseBrowserRoute(window.location.pathname) ?? { kind: 'home' }
+    parseBrowserRoute(window.location.pathname, window.location.search) ?? { kind: 'home' }
   ));
   const [home, setHome] = useState<LearningSetHomeSnapshot | null>(null);
   const [assets, setAssets] = useState<LearningAssetLibrarySnapshot | null>(null);
   const [materials, setMaterials] = useState<LearningMaterial[]>([]);
   const [material, setMaterial] = useState<LearningMaterialView | null>(null);
+  const [bookIndex, setBookIndex] = useState<MaterialBookIndex | null>(null);
+  const [sourceTree, setSourceTree] = useState<SourceTreeSnapshot | null>(null);
+  const [bookPageImageUrl, setBookPageImageUrl] = useState<string | null>(null);
+  const [bookPageText, setBookPageText] = useState<string | null>(null);
+  const [bookPageReading, setBookPageReading] = useState(false);
+  const [bookPageError, setBookPageError] = useState<string | null>(null);
   const [footprint, setFootprint] = useState<LearningFootprintSnapshot | null>(null);
   const [note, setNote] = useState<LearningNoteView | null>(null);
   const [problem, setProblem] = useState<ProblemCardView | null>(null);
@@ -135,6 +165,17 @@ export function App() {
   const [rightOpen, setRightOpen] = useState(false);
   const [focus, setFocus] = useState<PublicFocusCycle | null>(null);
   const routeLoadRevision = useRef(0);
+  const bookPageImageRef = useRef<string | null>(null);
+
+  const replaceBookPageImage = (next: string | null) => {
+    if (bookPageImageRef.current) URL.revokeObjectURL(bookPageImageRef.current);
+    bookPageImageRef.current = next;
+    setBookPageImageUrl(next);
+  };
+
+  useEffect(() => () => {
+    if (bookPageImageRef.current) URL.revokeObjectURL(bookPageImageRef.current);
+  }, []);
 
   const acceptCalendarSnapshot = (value: CalendarSnapshot) => {
     setCalendar(value);
@@ -194,6 +235,14 @@ export function App() {
         }, () => {});
       }
       if (next.kind === 'assets') {
+        if (next.view === 'sources') {
+          const value = await api.sourceTree();
+          if (revision !== routeLoadRevision.current) return;
+          setSourceTree(value);
+          setRoute(next);
+          setNotice(null);
+          return;
+        }
         const [value, materialValues] = await Promise.all([api.assets(), api.materials()]);
         if (revision !== routeLoadRevision.current) return;
         setAssets(value);
@@ -206,6 +255,44 @@ export function App() {
         const value = await api.material(next.id);
         if (revision !== routeLoadRevision.current) return;
         setMaterial(value);
+        setRoute(next);
+        setNotice(null);
+        return;
+      }
+      if (next.kind === 'book' || next.kind === 'book-reader') {
+        const raw = await api.material(next.id);
+        const selectedRevision = next.kind === 'book-reader'
+          ? raw.material.revisions.find((candidate) => candidate.revision === next.revision)
+          : raw.current;
+        if (!selectedRevision || selectedRevision.mediaType !== 'application/pdf') {
+          throw new Error('BOOK_REVISION_NOT_FOUND');
+        }
+        const materialValue: LearningMaterialView = {
+          material: raw.material,
+          current: selectedRevision,
+          suggestedLocator: next.kind === 'book-reader' ? next.locator : raw.suggestedLocator,
+        };
+        const indexValue = await loadBookIndex(next.id, selectedRevision.revision);
+        const treeValue = await api.sourceTree();
+        let imageUrl: string | null = null;
+        if (next.kind === 'book-reader') {
+          const blob = await api.materialBookPage(
+            next.id,
+            selectedRevision.revision,
+            firstBookPage(next.locator),
+          );
+          imageUrl = URL.createObjectURL(blob);
+        }
+        if (revision !== routeLoadRevision.current) {
+          if (imageUrl) URL.revokeObjectURL(imageUrl);
+          return;
+        }
+        setMaterial(materialValue);
+        setBookIndex(indexValue);
+        setSourceTree(treeValue);
+        replaceBookPageImage(imageUrl);
+        setBookPageText(null);
+        setBookPageError(null);
         setRoute(next);
         setNotice(null);
         return;
@@ -324,7 +411,7 @@ export function App() {
   };
 
   useEffect(() => {
-    const parsed = parseBrowserRoute(window.location.pathname);
+    const parsed = parseBrowserRoute(window.location.pathname, window.location.search);
     const initial = parsed ?? { kind: 'home' as const };
     if (!parsed || window.location.pathname === '/') window.history.replaceState(null, '', '/home');
     void loadRoute(initial);
@@ -358,7 +445,7 @@ export function App() {
   useEffect(() => {
     const pop = () => {
       resetRouteScroll();
-      void loadRoute(parseBrowserRoute(window.location.pathname) ?? { kind: 'home' });
+      void loadRoute(parseBrowserRoute(window.location.pathname, window.location.search) ?? { kind: 'home' });
     };
     window.addEventListener('popstate', pop);
     return () => window.removeEventListener('popstate', pop);
@@ -380,12 +467,12 @@ export function App() {
       socket.onopen = () => {
         setConnection('open');
         if (!reconnect.opened()) return;
-        const current = parseBrowserRoute(window.location.pathname) ?? { kind: 'home' as const };
+        const current = parseBrowserRoute(window.location.pathname, window.location.search) ?? { kind: 'home' as const };
         void loadRoute(current);
       };
       socket.onmessage = (message) => {
         const event = JSON.parse(String(message.data)) as StudyEvent;
-        const current = parseBrowserRoute(window.location.pathname) ?? { kind: 'home' as const };
+        const current = parseBrowserRoute(window.location.pathname, window.location.search) ?? { kind: 'home' as const };
         if (event.type === 'course-invalidated') {
           if (routeIsCourse(current)) void loadRoute(current);
           return;
@@ -405,6 +492,8 @@ export function App() {
             || current.kind === 'note'
             || current.kind === 'problem-card'
             || current.kind === 'material'
+            || current.kind === 'book'
+            || current.kind === 'book-reader'
           ) {
             void loadRoute(current);
           }
@@ -592,6 +681,76 @@ export function App() {
     }
   };
 
+  const readCurrentBookPage = async (mode: 'auto' | 'visual') => {
+    if (route.kind !== 'book-reader' || !material) return;
+    const page = firstBookPage(route.locator);
+    setBookPageReading(true);
+    setBookPageError(null);
+    try {
+      const receipt = await api.readMaterialPage(
+        route.id,
+        material.current.revision,
+        page,
+        mode,
+      );
+      setBookPageText(receipt.text);
+      setBookIndex(await api.materialBookIndex(route.id, material.current.revision));
+      return receipt;
+    } catch (error) {
+      setBookPageError(publicErrorText(error, '当前页暂时没有读出来，请稍后再试。'));
+    } finally {
+      setBookPageReading(false);
+    }
+  };
+
+  const prepareBookSelectionAndStart = async (
+    reference: Extract<LearningContextReference, { kind: 'material' }>,
+  ) => {
+    setBookPageReading(true);
+    setBookPageError(null);
+    try {
+      let index = bookIndex?.materialId === reference.id
+        && bookIndex.revision === reference.revision
+        ? bookIndex
+        : await loadBookIndex(reference.id, reference.revision);
+      const pages = materialPagesForContext(reference.locator);
+      if (pages.length === 0) throw new Error('MATERIAL_LOCATOR_INVALID');
+      for (const page of pages) {
+        const state = index.pages[page - 1];
+        if (!state) throw new Error('MATERIAL_LOCATOR_NOT_FOUND');
+        if (state.state === 'native-text' || state.state === 'visual-text') continue;
+        const receipt = await api.readMaterialPage(reference.id, reference.revision, page, 'auto');
+        if (page === pages[0]) setBookPageText(receipt.text);
+        index = await api.materialBookIndex(reference.id, reference.revision);
+      }
+      setBookIndex(index);
+      await startFree([reference]);
+    } catch (error) {
+      setBookPageError(publicErrorText(error, '选中的原书页暂时没有读出来，请稍后再试。'));
+    } finally {
+      setBookPageReading(false);
+    }
+  };
+
+  const currentSourceBook = material && sourceTree
+    ? sourceTree.books.find((book) => (
+      book.materialId === material.material.id
+      && book.revision === material.current.revision
+    )) ?? null
+    : null;
+
+  const importBookAndOpen = async (title = '') => {
+    if (!desktopTools?.importBook) return;
+    try {
+      const receipt = await desktopTools.importBook(title);
+      if (!receipt) return;
+      await api.bootstrapMaterialBook(receipt.id, receipt.revision);
+      navigate({ kind: 'book', id: receipt.id });
+    } catch (error) {
+      setNotice(publicErrorText(error, '这本书暂时没有放进来，请稍后再试。'));
+    }
+  };
+
   let content: React.ReactNode;
   if (route.kind === 'home') {
     content = home
@@ -602,6 +761,9 @@ export function App() {
           onStartFree={() => void startFree()}
           onPlan={() => void startMeta()}
           onOpenFootprint={() => navigate({ kind: 'footprint' })}
+          {...(desktopTools?.importBook ? {
+            onImportBook: () => importBookAndOpen(),
+          } : {})}
         />
       )
       : <div className="loading-screen"><b>正在打开学习集</b></div>;
@@ -635,22 +797,51 @@ export function App() {
       />
     ) : <div className="loading-screen"><b>正在读取学习日历</b></div>;
   } else if (route.kind === 'assets') {
-    content = assets ? (
+    content = route.view === 'sources' ? (sourceTree ? (
+      <SourceTreePage
+        value={sourceTree}
+        onOpenBook={(id, mediaType) => navigate(mediaType === 'application/pdf'
+          ? { kind: 'book', id }
+          : { kind: 'material', id })}
+        onOpenAsset={(reference) => navigate(reference.kind === 'note'
+          ? { kind: 'note', id: reference.id }
+          : { kind: 'problem-card', id: reference.id })}
+        onOpenSemantic={() => navigate({ kind: 'knowledge' })}
+        onShowTypes={() => navigate({ kind: 'assets' })}
+        {...(desktopTools?.importBook ? {
+          onImportBook: () => importBookAndOpen(),
+        } : {})}
+      />
+    ) : <div className="loading-screen"><b>正在整理原书脉络</b></div>) : assets ? (
       <AssetsPage
         value={assets}
         materials={materials}
         onOpen={(reference) => navigate(reference.kind === 'note'
           ? { kind: 'note', id: reference.id }
           : { kind: 'problem-card', id: reference.id })}
-        onOpenMaterial={(id) => navigate({ kind: 'material', id })}
+        onOpenMaterial={(id) => {
+          const selected = materials.find((candidate) => candidate.id === id);
+          const current = selected?.revisions.find((candidate) => (
+            candidate.revision === selected.currentRevision
+          ));
+          navigate(current?.mediaType === 'application/pdf'
+            ? { kind: 'book', id }
+            : { kind: 'material', id });
+        }}
         onAsk={(references) => void startFree(references)}
         onReview={(references) => void startFree(references, 'review')}
         onImport={async (input) => {
           await api.importMaterial(input);
           await loadRoute({ kind: 'assets' });
         }}
+        {...(desktopTools?.importBook ? {
+          onImportBook: async (title: string) => {
+            await importBookAndOpen(title);
+          },
+        } : {})}
         onOpenFootprint={() => navigate({ kind: 'footprint' })}
         onOpenKnowledge={() => navigate({ kind: 'knowledge' })}
+        onShowSources={() => navigate({ kind: 'assets', view: 'sources' })}
       />
     ) : <div className="loading-screen"><b>正在读取学习资料</b></div>;
   } else if (route.kind === 'material') {
@@ -665,6 +856,65 @@ export function App() {
         onAsk={(reference) => void startFree([reference])}
       />
     ) : <div className="loading-screen"><b>正在读取原始资料</b></div>;
+  } else if (route.kind === 'book') {
+    content = material && bookIndex ? (
+      <BookOverviewPage
+        value={material}
+        index={bookIndex}
+        sourceBook={currentSourceBook}
+        onOpenPage={(locator) => navigate({
+          kind: 'book-reader', id: material.material.id,
+          revision: material.current.revision, locator,
+        })}
+        onLocateOutline={async (outlineId) => {
+          try {
+            const receipt = await api.locateMaterialOutline(
+              material.material.id,
+              material.current.revision,
+              outlineId,
+            );
+            setBookIndex(receipt.index);
+          } catch (error) {
+            setNotice(publicErrorText(error, '这个目录位置暂时没有核验出来。'));
+          }
+        }}
+        onScanOutline={async (startPage, endPage) => {
+          try {
+            setBookIndex(await api.scanMaterialOutline(
+              material.material.id,
+              material.current.revision,
+              startPage,
+              endPage,
+            ));
+          } catch (error) {
+            setNotice(publicErrorText(error, '这段目录暂时没有整理出来。'));
+          }
+        }}
+        onOpenAsset={(reference) => navigate(reference.kind === 'note'
+          ? { kind: 'note', id: reference.id }
+          : { kind: 'problem-card', id: reference.id })}
+      />
+    ) : <div className="loading-screen"><b>正在打开这本书</b></div>;
+  } else if (route.kind === 'book-reader') {
+    content = material && bookIndex ? (
+      <BookReaderPage
+        value={material}
+        index={bookIndex}
+        sourceBook={currentSourceBook}
+        locator={route.locator}
+        pageImageUrl={bookPageImageUrl}
+        pageText={bookPageText}
+        reading={bookPageReading}
+        error={bookPageError}
+        onOpenLocator={(locator) => navigate({ ...route, locator })}
+        onReadPage={() => readCurrentBookPage('auto')}
+        onReadVisually={() => readCurrentBookPage('visual')}
+        onAsk={(reference) => void prepareBookSelectionAndStart(reference)}
+        onOpenAsset={(reference) => navigate(reference.kind === 'note'
+          ? { kind: 'note', id: reference.id }
+          : { kind: 'problem-card', id: reference.id })}
+      />
+    ) : <div className="loading-screen"><b>正在打开原书页面</b></div>;
   } else if (route.kind === 'footprint') {
     content = footprint ? (
       <FootprintPage value={footprint} onOpen={(path) => {
@@ -840,6 +1090,8 @@ export function App() {
       ? 'calendar'
     : route.kind === 'assets' || route.kind === 'note' || route.kind === 'problem-card'
       || route.kind === 'material'
+      || route.kind === 'book'
+      || route.kind === 'book-reader'
       || route.kind === 'knowledge'
       || route.kind === 'footprint'
       ? 'assets'

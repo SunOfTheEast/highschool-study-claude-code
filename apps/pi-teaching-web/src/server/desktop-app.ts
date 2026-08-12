@@ -5,7 +5,7 @@ import type {
   AuthType,
 } from '@earendil-works/pi-ai';
 import { readFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { basename, extname, join, resolve } from 'node:path';
 import {
   loadAppConfig,
   parseAppConfig,
@@ -13,6 +13,7 @@ import {
 } from '../desktop/app-config';
 import type {
   DesktopModelSelection,
+  DesktopVisionSelection,
   StudyForgePaths,
 } from '../desktop/contracts';
 import {
@@ -27,6 +28,7 @@ import {
   peerSkinStatus,
 } from '../desktop/peer-live2d-installer';
 import { writeDesktopPiSettings } from '../desktop/pi-settings';
+import { importMaterial } from '../study/materials';
 
 type ModelService = Pick<DesktopModelService, 'catalog' | 'resolve' | 'login' | 'logout'>;
 
@@ -42,6 +44,7 @@ export type DesktopRequestDependencies = {
   derivativeExampleRoot: string;
   modelService: ModelService;
   peerMedia?: PeerMediaService;
+  onMaterialsChanged?(): void;
   canChangeLearningSet?(): boolean | Promise<boolean>;
   shutdown(): void;
   runtimeIssue?: DesktopRuntimeIssue | null;
@@ -247,6 +250,18 @@ function selection(value: unknown): DesktopModelSelection {
   return parsed;
 }
 
+function visionSelection(value: unknown): DesktopVisionSelection {
+  return parseAppConfig({
+    version: 1,
+    onboardingComplete: false,
+    currentLearningSet: null,
+    recentLearningSets: [],
+    teacher: null,
+    scout: null,
+    vision: value,
+  }).vision;
+}
+
 function selectedConfig(paths: StudyForgePaths, root: string) {
   const current = loadAppConfig(paths.appConfigPath);
   const recentLearningSets = [
@@ -292,6 +307,7 @@ function status(deps: DesktopRequestDependencies) {
     recentLearningSets: config.recentLearningSets,
     teacher: config.teacher,
     scout: config.scout,
+    vision: config.vision,
     issue: deps.runtimeIssue ?? (validation && !validation.ok
       ? { code: 'LEARNING_SET_INVALID', detail: validation.code }
       : null),
@@ -321,6 +337,9 @@ function errorResponse(error: unknown): Response {
       detail: message.slice('STUDYFORGE_THINKING_UNAVAILABLE: '.length),
     }, 409);
   }
+  if (message === 'STUDYFORGE_VISION_MODEL_UNAVAILABLE') {
+    return json({ error: message }, 409);
+  }
   if (message.startsWith('LEARNING_SET_')) {
     const statusCode = message === 'LEARNING_SET_DESTINATION_EXISTS' ? 409 : 422;
     return json({ error: message }, statusCode);
@@ -339,6 +358,10 @@ function errorResponse(error: unknown): Response {
     return json({ error: 'PEER_SKIN_INSTALL_FAILED' }, 422);
   }
   if (message === 'AUTH_FLOW_NOT_FOUND') return json({ error: message }, 404);
+  if (message.startsWith('MATERIAL_REVISION_STALE') || message === 'MATERIAL_REQUEST_CONFLICT') {
+    return json({ error: message }, 409);
+  }
+  if (message.startsWith('MATERIAL_')) return json({ error: message }, 400);
   if (message.startsWith('AUTH_FLOW_') || message === 'DESKTOP_REQUEST_INVALID') {
     return json({ error: message }, 400);
   }
@@ -456,11 +479,45 @@ export function createDesktopRequestHandler(deps: DesktopRequestDependencies) {
         if (!validation.ok) throw new Error(validation.code);
         selectedConfig(deps.paths, validation.root);
         response = json({ learningSet: validation.root, restartRequired: true });
+      } else if (request.method === 'POST' && url.pathname === '/api/desktop/materials/import-path') {
+        const body = bodyObject(await request.json());
+        const config = loadAppConfig(deps.paths.appConfigPath);
+        if (!config.currentLearningSet) throw new Error('LEARNING_SET_NOT_SELECTED');
+        const validation = validateLearningSet(config.currentLearningSet);
+        if (!validation.ok) throw new Error(validation.code);
+        const absolutePath = bodyString(body.absolutePath);
+        if (extname(absolutePath).toLowerCase() !== '.pdf') throw new Error('MATERIAL_MIME_INVALID');
+        const target = body.target === undefined ? undefined : bodyObject(body.target);
+        const receipt = await importMaterial(validation.root, {
+          requestId: bodyString(body.requestId),
+          title: bodyString(body.title),
+          filename: basename(absolutePath),
+          mediaType: 'application/pdf',
+          source: { kind: 'path', absolutePath },
+          ...(target ? {
+            target: {
+              id: bodyString(target.id),
+              expectedRevision: Number(target.expectedRevision),
+            },
+          } : {}),
+        }, new Date().toISOString());
+        deps.onMaterialsChanged?.();
+        response = json(receipt, 201);
       } else if (request.method === 'PUT' && url.pathname === '/api/desktop/models') {
         const body = bodyObject(await request.json());
         const teacher = selection(body.teacher);
         const scout = selection(body.scout);
-        await Promise.all([deps.modelService.resolve(teacher), deps.modelService.resolve(scout)]);
+        const vision = visionSelection(body.vision);
+        const [teacherModel] = await Promise.all([
+          deps.modelService.resolve(teacher),
+          deps.modelService.resolve(scout),
+        ]);
+        const visualModel = vision.mode === 'model'
+          ? await deps.modelService.resolve(vision.selection)
+          : teacherModel;
+        if (vision.mode === 'model' && !visualModel.input.includes('image')) {
+          throw new Error('STUDYFORGE_VISION_MODEL_UNAVAILABLE');
+        }
         const current = loadAppConfig(deps.paths.appConfigPath);
         writeDesktopPiSettings(deps.paths.settingsPath, {
           sessionsDir: deps.paths.sessionsDir,
@@ -472,6 +529,7 @@ export function createDesktopRequestHandler(deps: DesktopRequestDependencies) {
           ...current,
           teacher,
           scout,
+          vision,
           onboardingComplete,
         });
         response = json({ onboardingComplete, restartRequired: true });

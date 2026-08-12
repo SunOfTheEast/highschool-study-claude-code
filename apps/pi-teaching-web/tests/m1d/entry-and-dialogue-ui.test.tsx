@@ -16,6 +16,7 @@ const baseHome: LearningSetHomeSnapshot = {
   hasCourse: false,
   course: null,
   assets: { notes: 1, problemCards: 1, materials: 0 },
+  books: [],
   recentFreeLearning: [],
   recentMeta: [],
 };

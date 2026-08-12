@@ -1,6 +1,7 @@
 import type {
   AssetFormation,
   ReadableLearningSourceReference,
+  MaterialSourceLabel,
   SemanticTagDraft,
 } from '../../shared/contracts';
 import type { SemanticAssetNeighbor } from '../semantic-graph';
@@ -50,13 +51,30 @@ export function AssetTags({
   );
 }
 
-export function AssetSources({ value }: { value: readonly ReadableLearningSourceReference[] }) {
+export function AssetSources({
+  value,
+  labels = [],
+}: {
+  value: readonly ReadableLearningSourceReference[];
+  labels?: readonly MaterialSourceLabel[];
+}) {
   if (value.length === 0) return null;
   return (
     <div className="asset-source-group">
       <span className="asset-provenance-label">内容来源</span>
       <ul className="m1c-asset-sources">
-        {value.map((source, index) => <li key={index}>{sourceLabel(source)}</li>)}
+        {value.map((source, index) => {
+          const label = source.kind === 'material' ? labels.find((candidate) => (
+            candidate.source.id === source.id
+            && candidate.source.revision === source.revision
+            && candidate.source.locator === source.locator
+          )) : null;
+          return (
+            <li key={index}>
+              {label ? <a href={label.route}>{label.label}</a> : sourceLabel(source)}
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
@@ -65,9 +83,11 @@ export function AssetSources({ value }: { value: readonly ReadableLearningSource
 export function AssetProvenance({
   formation,
   sources,
+  sourceLabels = [],
 }: {
   formation: AssetFormation | null;
   sources: readonly ReadableLearningSourceReference[];
+  sourceLabels?: readonly MaterialSourceLabel[];
 }) {
   if (formation === null && sources.length === 0) return null;
   return (
@@ -78,7 +98,7 @@ export function AssetProvenance({
           <a href={formation.route}>{formation.title}</a>
         </p>
       )}
-      <AssetSources value={sources} />
+      <AssetSources value={sources} labels={sourceLabels} />
     </section>
   );
 }

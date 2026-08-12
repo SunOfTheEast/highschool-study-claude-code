@@ -672,6 +672,10 @@ test('packages a read-only material Scout', () => {
   for (const forbidden of ['write', 'edit', 'bash', 'subagent']) {
     expect(toolsLine).not.toContain(forbidden);
   }
+
+  expect(scout).toContain('精确分页来源');
+  expect(scout).toContain('page-0025.txt');
+  expect(scout).toContain('不要先搜索 `semantics/indexes/asset-recall.tsv`');
 });
 
 test('packages only the three bounded StudyForge product scouts', () => {

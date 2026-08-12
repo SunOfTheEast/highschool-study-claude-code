@@ -6,4 +6,5 @@ dist/
 playwright-report/
 test-results/
 apps/pi-teaching-web/output/playwright/
+apps/pi-teaching-web/output/source-first-real-*/
 .worktrees/

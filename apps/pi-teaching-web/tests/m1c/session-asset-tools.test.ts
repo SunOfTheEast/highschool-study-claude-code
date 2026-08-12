@@ -123,7 +123,7 @@ test('Free Learning binds one selected Material locator to the same source alias
     title: 'Ksp 原文',
     filename: 'ksp.md',
     mediaType: 'text/markdown',
-    bytes: new TextEncoder().encode('纯固体活度并入平衡常数。\n第二行。'),
+    source: { kind: 'bytes', bytes: new TextEncoder().encode('纯固体活度并入平衡常数。\n第二行。') },
   }, '2026-08-09T09:00:00.000Z');
   const scope = {
     sessionKind: 'free-learning' as const,

@@ -1,6 +1,7 @@
 import type { ImageContent } from '@earendil-works/pi-ai';
 import { resolve } from 'node:path';
 import type { AgentSessionEvent, SessionEntry } from '@earendil-works/pi-coding-agent';
+import { MAX_MATERIAL_CONTEXT_PAGES } from '../shared/contracts';
 import type {
   CourseTreeNode,
   CalendarAppointment,
@@ -13,7 +14,9 @@ import type {
   SessionKey,
 } from '../shared/contracts';
 import { readCourseTree, readLesson, readPlan, readRoadmap } from '../study/markdown';
-import { readMaterialLocator } from '../study/materials';
+import { parseMaterialLocator } from '../study/material-locators';
+import { readMaterialBookIndex } from '../study/material-book-index';
+import { readMaterialLocator, readMaterialRevision } from '../study/materials';
 import { isProblemCardId } from '../study/problem-card-id';
 import { readLearningNote, readProblemCard } from '../study/learning-assets';
 import { setFrontmatterField } from './frontmatter';
@@ -131,7 +134,23 @@ function checkedSelectedAssets(
         || asset.revision < 1
         || (asset.locator !== null && (!asset.locator.trim() || /[\r\n\t]/.test(asset.locator)))
       ) throw new Error('SELECTED_CONTEXT_INVALID');
-      readMaterialLocator(root, asset);
+      const revision = readMaterialRevision(root, asset.id, asset.revision);
+      const index = revision.locatorKind === 'page'
+        ? readMaterialBookIndex(root, asset.id, asset.revision)
+        : null;
+      if (revision.locatorKind === 'page') {
+        if (asset.locator === null) throw new Error('SELECTED_CONTEXT_INVALID');
+        const locator = parseMaterialLocator(asset.locator, {
+          ...(index ? { pageCount: index.pageCount } : {}),
+        });
+        if (locator.kind !== 'pages') throw new Error('SELECTED_CONTEXT_INVALID');
+        if (locator.end - locator.start + 1 > MAX_MATERIAL_CONTEXT_PAGES) {
+          throw new Error('SELECTED_MATERIAL_RANGE_LIMIT_EXCEEDED');
+        }
+        if (!index) readMaterialLocator(root, asset);
+      } else {
+        readMaterialLocator(root, asset);
+      }
       const key = `material:${asset.id}@${asset.revision}#${asset.locator ?? ''}`;
       if (seen.has(key)) throw new Error(`SELECTED_CONTEXT_DUPLICATE: ${key}`);
       seen.add(key);

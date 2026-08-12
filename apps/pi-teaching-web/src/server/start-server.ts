@@ -4,6 +4,7 @@ import type { Server } from 'bun';
 import { loadAppConfig, resolveStudyForgePaths } from '../desktop/app-config';
 import { validateLearningSet } from '../desktop/learning-sets';
 import { createDesktopModelService } from '../desktop/model-service';
+import { MaterialVisionService } from '../desktop/material-vision';
 import { createPeerMediaService } from '../desktop/peer-media';
 import { writeDesktopPiSettings } from '../desktop/pi-settings';
 import { createPiSessionFactory } from '../runtime/session-factory';
@@ -117,6 +118,7 @@ export async function startStudyForgeServer(arguments_: RuntimeArguments) {
       modelsPath: paths.modelsPath,
     });
     const config = loadAppConfig(paths.appConfigPath);
+    const visionService = new MaterialVisionService(models.runtime);
     const root = arguments_.learningSet ?? config.currentLearningSet;
     if (root && config.teacher && config.scout) {
       try {
@@ -150,6 +152,13 @@ export async function startStudyForgeServer(arguments_: RuntimeArguments) {
             validation.root,
             ...knownDesktopLearningSetRoots(paths),
           ]),
+          materialVision: {
+            read: (input) => visionService.read({
+              teacher: config.teacher!,
+              vision: config.vision,
+              ...input,
+            }),
+          },
         });
       } catch (error) {
         issue = runtimeIssue(error);
@@ -165,6 +174,11 @@ export async function startStudyForgeServer(arguments_: RuntimeArguments) {
         actorsDir: paths.actorsDir,
         resolveSpeechApiKey: () => models.apiKey('xiaomi'),
       }),
+      onMaterialsChanged: () => {
+        hub.publish({ type: 'home-invalidated' });
+        hub.publish({ type: 'assets-invalidated' });
+        hub.publish({ type: 'knowledge-invalidated' });
+      },
       runtimeIssue: issue,
       canChangeLearningSet: async () => !registry || await registry.readFocus() === null,
       shutdown: () => {

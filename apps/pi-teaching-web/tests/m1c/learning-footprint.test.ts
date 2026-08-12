@@ -117,7 +117,7 @@ test('projects existing sessions, assets, activity, materials, and learning hist
     title: '化学反应原理摘录',
     filename: 'chapter.md',
     mediaType: 'text/markdown',
-    bytes: new TextEncoder().encode('Ksp 与纯固体活度。'),
+    source: { kind: 'bytes', bytes: new TextEncoder().encode('Ksp 与纯固体活度。') },
   }, '2026-08-09T09:30:00.000Z');
   await importMaterial(root, {
     requestId: 'material-request-002',
@@ -125,7 +125,7 @@ test('projects existing sessions, assets, activity, materials, and learning hist
     title: '化学反应原理摘录（修订）',
     filename: 'chapter.md',
     mediaType: 'text/markdown',
-    bytes: new TextEncoder().encode('补充平衡移动的边界。'),
+    source: { kind: 'bytes', bytes: new TextEncoder().encode('补充平衡移动的边界。') },
   }, '2026-08-09T12:30:00.000Z');
 
   mkdirSync(join(root, 'cards/legacy'), { recursive: true });

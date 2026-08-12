@@ -7,6 +7,7 @@ import type {
   LearningNoteBlock,
   LearningNoteContentHistoryEntry,
   ReviewResult,
+  MaterialSourceLabel,
 } from '../../shared/contracts';
 import { ApiError } from '../api';
 import { AssetNeighbors, AssetProvenance, AssetTags } from '../components/AssetSources';
@@ -20,6 +21,7 @@ type NoteView = LearningNote & {
   semanticTags?: LearningAssetSemanticTags | null;
   formation?: AssetFormation | null;
   review?: AssetReviewProjection | null;
+  sourceLabels?: MaterialSourceLabel[];
 };
 
 export function NoteDraftPreview({
@@ -164,7 +166,11 @@ export function NotePage({
         </div>
       </header>
       <AssetTags value={value.semanticTags} {...(onTag ? { onTag } : {})} />
-      <AssetProvenance formation={value.formation ?? null} sources={value.sources} />
+      <AssetProvenance
+        formation={value.formation ?? null}
+        sources={value.sources}
+        sourceLabels={value.sourceLabels ?? []}
+      />
       <AssetNeighbors value={neighbors} {...(onOpenNeighbor ? { onOpen: onOpenNeighbor } : {})} />
       <AssetReviewControls
         review={value.review ?? null}

@@ -2,6 +2,7 @@ export const PLAN_STATUSES = ['prepared', 'active', 'completed'] as const;
 export const LESSON_STATUSES = ['prepared', 'active', 'closed'] as const;
 export const BLOCK_STATUSES = ['pending', 'active', 'completed', 'skipped'] as const;
 export const ACTIVITY_KINDS = ['dialogue', 'problem', 'material', 'reflection'] as const;
+export const MAX_MATERIAL_CONTEXT_PAGES = 8;
 
 export type PlanStatus = typeof PLAN_STATUSES[number];
 export type LessonStatus = typeof LESSON_STATUSES[number];
@@ -283,6 +284,94 @@ export type MaterialSearchStatus =
   | 'image-readable'
   | 'unavailable';
 
+export type MaterialLocator =
+  | { kind: 'whole' }
+  | { kind: 'lines'; start: number; end: number }
+  | { kind: 'pages'; start: number; end: number };
+
+export type MaterialBookPage = {
+  physicalPage: number;
+  pdfLabel: string | null;
+  state: 'pending' | 'native-text' | 'visual-text' | 'failed';
+  textPath: string | null;
+  method: 'native' | 'vision' | null;
+  model: string | null;
+  updatedAt: string | null;
+  error: string | null;
+};
+
+export type MaterialBookOutlineNode = {
+  id: string;
+  title: string;
+  level: number;
+  source: 'pdf-bookmark' | 'visual-toc' | 'curated';
+  printedPage: string | null;
+  startPage: number | null;
+  endPage: number | null;
+  provenancePages: number[];
+};
+
+export type MaterialBookIndex = {
+  schema: 'studyforge.material-book-index.v1';
+  materialId: string;
+  revision: number;
+  pageCount: number;
+  state: 'ready' | 'partial';
+  printedPageOffsetHint: number | null;
+  pages: MaterialBookPage[];
+  outline: MaterialBookOutlineNode[];
+  updatedAt: string;
+};
+
+export type MaterialPageReadReceipt = MaterialBookPage & {
+  text: string;
+  cached: boolean;
+};
+
+export type MaterialOutlineLocateReceipt = {
+  index: MaterialBookIndex;
+  node: MaterialBookOutlineNode;
+  candidatePages: number[];
+};
+
+export type MaterialSourceLabel = {
+  source: Extract<LearningSourceReference, { kind: 'material' }>;
+  label: string;
+  route: string;
+};
+
+export type SourceTreeAsset = LearningAssetSummary & {
+  sourceRevision: number | null;
+  locator: string | null;
+  sourceLabel: string | null;
+  sourceRoute: string | null;
+};
+
+export type SourceTreeChapter = {
+  id: string;
+  title: string;
+  level: number;
+  startPage: number;
+  endPage: number;
+  assets: SourceTreeAsset[];
+};
+
+export type SourceTreeBook = {
+  materialId: string;
+  revision: number;
+  title: string;
+  mediaType: string;
+  current: boolean;
+  pageCount: number | null;
+  chapters: SourceTreeChapter[];
+  unresolved: { title: string; assets: SourceTreeAsset[] };
+};
+
+export type SourceTreeSnapshot = {
+  books: SourceTreeBook[];
+  outside: SourceTreeAsset[];
+};
+
 export type MaterialRevision = {
   revision: number;
   title: string;
@@ -425,6 +514,15 @@ export type LearningSetHomeSnapshot = {
     problemCards: number;
     materials: number;
   };
+  books: Array<{
+    id: string;
+    revision: number;
+    title: string;
+    pageCount: number | null;
+    outlineCount: number;
+    processedPages: number;
+    route: string;
+  }>;
   recentFreeLearning: FreeLearningSessionSummary[];
   recentMeta: MetaSessionSummary[];
 };

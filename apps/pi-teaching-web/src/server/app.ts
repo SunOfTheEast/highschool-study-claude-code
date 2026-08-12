@@ -16,6 +16,7 @@ import type {
   SemanticTagDraft,
   SessionKey,
 } from '../shared/contracts';
+import { MAX_MATERIAL_CONTEXT_PAGES } from '../shared/contracts';
 import { parseHandoutBlockSegment } from '../shared/handout-route';
 import { readKnowledge } from '../study/knowledge';
 import { readLessonHandout } from '../study/lesson-handout';
@@ -44,6 +45,15 @@ import {
   readMaterialLocator,
   readMaterialView,
 } from '../study/materials';
+import { readMaterialBookIndex } from '../study/material-book-index';
+import { bootstrapPdfBookIndex, renderPdfBookPage } from '../study/pdf-book';
+import { parseMaterialLocator } from '../study/material-locators';
+import {
+  locateMaterialOutlineNode,
+  readMaterialPage,
+  scanMaterialVisualOutline,
+  type MaterialVisionReader,
+} from '../study/material-page-reader';
 import {
   projectSemanticRelations,
   querySemanticRecall,
@@ -69,6 +79,8 @@ import {
   recordAssetReviewEvent,
   type AssetReviewEventDraft,
 } from '../study/asset-reviews';
+import { readSourceTree } from '../study/source-tree';
+import { resolveMaterialSourceLabels } from '../study/source-labels';
 
 type Lifecycle = Pick<
   NodeLifecycleService,
@@ -110,6 +122,7 @@ export type AppDependencies = {
   calendar?: CalendarRepository;
   knownLearningSetRoots?(): readonly string[];
   reviewCandidates?(): CalendarReviewCandidate[];
+  materialVision?: MaterialVisionReader;
 };
 
 const json = (value: unknown, status = 200) => Response.json(value, { status });
@@ -157,7 +170,7 @@ function errorResponse(error: unknown): Response {
   const message = error instanceof Error ? error.message : String(error);
   const status = /NOT_FOUND|does not exist/.test(message)
     ? 404
-    : /STALE|CONFLICT|ENDED|RUNNING|NOT_ACTIVE|NOT_ALLOWED|READ_ONLY|INELIGIBLE|ALREADY_/.test(message)
+    : /STALE|CONFLICT|ENDED|RUNNING|NOT_ACTIVE|NOT_ALLOWED|READ_ONLY|INELIGIBLE|ALREADY_|UNAVAILABLE/.test(message)
       ? 409
       : /INVALID|REQUIRED|LIMIT|DUPLICATE|must be|cannot/.test(message)
         ? 400
@@ -199,6 +212,7 @@ function positiveRevision(value: unknown): number {
 }
 
 function learningContextReferences(
+  root: string,
   value: unknown,
   allowReviewBatch = false,
 ): LearningContextReference[] {
@@ -220,6 +234,14 @@ function learningContextReferences(
       if (locator !== null && (typeof locator !== 'string' || !locator.trim() || /[\r\n\t]/.test(locator))) {
         throw new Error('SELECTED_MATERIAL_LOCATOR_INVALID');
       }
+      const index = readMaterialBookIndex(root, id, revision);
+      const parsed = parseMaterialLocator(locator as string | null, {
+        ...(index ? { pageCount: index.pageCount } : {}),
+      });
+      if (
+        parsed.kind === 'pages'
+        && parsed.end - parsed.start + 1 > MAX_MATERIAL_CONTEXT_PAGES
+      ) throw new Error('SELECTED_MATERIAL_RANGE_LIMIT_EXCEEDED');
       const selected = { kind: 'material' as const, id, revision, locator: locator as string | null };
       const key = `${kind}:${id}@${revision}#${locator ?? ''}`;
       if (seen.has(key)) throw new Error(`SELECTED_CONTEXT_DUPLICATE: ${key}`);
@@ -259,6 +281,7 @@ function calendarDestination(root: string, value: unknown): CalendarDestination 
     || Object.keys(destination).length !== 3
   ) throw new Error('CALENDAR_DESTINATION_INVALID');
   const contexts = learningContextReferences(
+    root,
     destination.contexts,
     destination.intent === 'review',
   );
@@ -751,7 +774,7 @@ export function createRequestHandler(deps?: AppDependencies) {
           throw new Error('FREE_LEARNING_INTENT_INVALID');
         }
         const session = await deps.registry.createFreeLearning(
-          learningContextReferences(requestBody.selectedAssets, intent === 'review'),
+          learningContextReferences(deps.root, requestBody.selectedAssets, intent === 'review'),
           intent,
         );
         deps.hub.publish({ type: 'home-invalidated' });
@@ -774,7 +797,7 @@ export function createRequestHandler(deps?: AppDependencies) {
       if (url.pathname === '/api/meta' && request.method === 'POST') {
         const requestBody = objectBody(await request.json());
         const session = await deps.registry.createMeta(
-          learningContextReferences(requestBody.selectedAssets),
+          learningContextReferences(deps.root, requestBody.selectedAssets),
         );
         deps.hub.publish({ type: 'home-invalidated' });
         return json({ session, route: `/meta/${encodeURIComponent(session.id)}` }, 201);
@@ -801,7 +824,7 @@ export function createRequestHandler(deps?: AppDependencies) {
           title: formText(form, 'title')!,
           filename: file.name,
           mediaType: file.type.toLowerCase(),
-          bytes: new Uint8Array(await file.arrayBuffer()),
+          source: { kind: 'bytes', bytes: new Uint8Array(await file.arrayBuffer()) },
           ...(targetId === null ? {} : {
             target: { id: targetId, expectedRevision: positiveRevision(Number(expected)) },
           }),
@@ -829,14 +852,143 @@ export function createRequestHandler(deps?: AppDependencies) {
         if (!Number.isSafeInteger(revision) || revision < 1) {
           throw new Error('MATERIAL_REVISION_INVALID');
         }
-        if (locator !== 'whole' && !/^lines-[1-9][0-9]*-[1-9][0-9]*$|^page-[0-9]{4}$/.test(locator)) {
-          throw new Error('MATERIAL_LOCATOR_INVALID');
-        }
+        parseMaterialLocator(locator);
         return json(readMaterialLocator(deps.root, {
           id,
           revision,
           locator: locator === 'whole' ? null : locator,
         }));
+      }
+
+      const materialBookIndex = /^\/api\/materials\/([^/]+)\/revisions\/([^/]+)\/book-index$/.exec(
+        url.pathname,
+      );
+      if (materialBookIndex && (request.method === 'GET' || request.method === 'POST')) {
+        const id = nodeId(materialBookIndex[1]!);
+        const revision = Number(materialBookIndex[2]);
+        if (!id) throw new Error('MATERIAL_ID_INVALID');
+        if (!Number.isSafeInteger(revision) || revision < 1) {
+          throw new Error('MATERIAL_REVISION_INVALID');
+        }
+        if (request.method === 'GET') {
+          const index = readMaterialBookIndex(deps.root, id, revision);
+          if (!index) throw new Error('MATERIAL_BOOK_INDEX_NOT_FOUND');
+          return json(index);
+        }
+        const index = await bootstrapPdfBookIndex(
+          deps.root,
+          id,
+          revision,
+          new Date().toISOString(),
+        );
+        deps.hub.publish({ type: 'assets-invalidated' });
+        return json(index, 201);
+      }
+
+      const materialBookPage = /^\/api\/materials\/([^/]+)\/revisions\/([^/]+)\/page\/([^/]+)\.png$/.exec(
+        url.pathname,
+      );
+      if (request.method === 'GET' && materialBookPage) {
+        const id = nodeId(materialBookPage[1]!);
+        const revision = Number(materialBookPage[2]);
+        const physicalPage = Number(materialBookPage[3]);
+        if (!id) throw new Error('MATERIAL_ID_INVALID');
+        if (!Number.isSafeInteger(revision) || revision < 1) {
+          throw new Error('MATERIAL_REVISION_INVALID');
+        }
+        const rendered = await renderPdfBookPage(deps.root, id, revision, physicalPage);
+        const body = rendered.bytes.buffer.slice(
+          rendered.bytes.byteOffset,
+          rendered.bytes.byteOffset + rendered.bytes.byteLength,
+        ) as ArrayBuffer;
+        return new Response(body, {
+          headers: {
+            'content-type': 'image/png',
+            'cache-control': 'private, max-age=86400',
+          },
+        });
+      }
+
+      const materialPageRead = /^\/api\/materials\/([^/]+)\/revisions\/([^/]+)\/pages\/([^/]+)\/read$/.exec(
+        url.pathname,
+      );
+      if (request.method === 'POST' && materialPageRead) {
+        const id = nodeId(materialPageRead[1]!);
+        const revision = Number(materialPageRead[2]);
+        const physicalPage = Number(materialPageRead[3]);
+        if (!id) throw new Error('MATERIAL_ID_INVALID');
+        if (!Number.isSafeInteger(revision) || revision < 1) {
+          throw new Error('MATERIAL_REVISION_INVALID');
+        }
+        const body = objectBody(await request.json());
+        if (
+          (body.mode !== 'auto' && body.mode !== 'visual')
+          || Object.keys(body).some((key) => key !== 'mode')
+        ) throw new Error('MATERIAL_PAGE_READ_REQUEST_INVALID');
+        const page = await readMaterialPage(deps.root, id, revision, physicalPage, {
+          mode: body.mode,
+          ...(deps.materialVision ? { vision: deps.materialVision } : {}),
+          updatedAt: new Date().toISOString(),
+        });
+        deps.hub.publish({ type: 'assets-invalidated' });
+        return json(page);
+      }
+
+      const materialOutlineScan = /^\/api\/materials\/([^/]+)\/revisions\/([^/]+)\/outline\/scan$/.exec(
+        url.pathname,
+      );
+      if (request.method === 'POST' && materialOutlineScan) {
+        if (!deps.materialVision) throw new Error('MATERIAL_VISION_UNAVAILABLE');
+        const id = nodeId(materialOutlineScan[1]!);
+        const revision = Number(materialOutlineScan[2]);
+        if (!id) throw new Error('MATERIAL_ID_INVALID');
+        if (!Number.isSafeInteger(revision) || revision < 1) {
+          throw new Error('MATERIAL_REVISION_INVALID');
+        }
+        const body = objectBody(await request.json());
+        const index = await scanMaterialVisualOutline(
+          deps.root,
+          id,
+          revision,
+          { startPage: Number(body.startPage), endPage: Number(body.endPage) },
+          deps.materialVision,
+          new Date().toISOString(),
+        );
+        deps.hub.publish({ type: 'assets-invalidated' });
+        return json(index);
+      }
+
+      const materialOutlineLocate = /^\/api\/materials\/([^/]+)\/revisions\/([^/]+)\/outline\/([^/]+)\/locate$/.exec(
+        url.pathname,
+      );
+      if (request.method === 'POST' && materialOutlineLocate) {
+        const id = nodeId(materialOutlineLocate[1]!);
+        const revision = Number(materialOutlineLocate[2]);
+        const outlineId = nodeId(materialOutlineLocate[3]!);
+        if (!id || !outlineId) throw new Error('MATERIAL_OUTLINE_NODE_INVALID');
+        if (!Number.isSafeInteger(revision) || revision < 1) {
+          throw new Error('MATERIAL_REVISION_INVALID');
+        }
+        const result = await locateMaterialOutlineNode(
+          deps.root,
+          id,
+          revision,
+          outlineId,
+          async (physicalPage) => (await readMaterialPage(
+            deps.root,
+            id,
+            revision,
+            physicalPage,
+            {
+              mode: 'auto',
+              ...(deps.materialVision ? { vision: deps.materialVision } : {}),
+              updatedAt: new Date().toISOString(),
+            },
+          )).text,
+          new Date().toISOString(),
+        );
+        deps.hub.publish({ type: 'assets-invalidated' });
+        return json(result);
       }
 
       const material = /^\/api\/materials\/([^/]+)$/.exec(url.pathname);
@@ -848,6 +1000,10 @@ export function createRequestHandler(deps?: AppDependencies) {
 
       if (request.method === 'GET' && url.pathname === '/api/assets') {
         return json(readLearningAssetLibrary(deps.root));
+      }
+
+      if (request.method === 'GET' && url.pathname === '/api/source-tree') {
+        return json(readSourceTree(deps.root));
       }
 
       const semanticAsset = /^\/api\/semantics\/assets\/(note|problem-card)\/([^/]+)$/.exec(
@@ -922,6 +1078,10 @@ export function createRequestHandler(deps?: AppDependencies) {
               await deps.registry.listOwnedSessionFacts(),
               note.createdSessionId,
             ),
+            sourceLabels: resolveMaterialSourceLabels(
+              deps.root,
+              note.sources.filter((source) => source.kind !== 'legacy-unpinned'),
+            ),
           });
         }
         if (request.method === 'PUT') {
@@ -945,6 +1105,10 @@ export function createRequestHandler(deps?: AppDependencies) {
             formation: projectAssetFormation(
               await deps.registry.listOwnedSessionFacts(),
               planned.note.createdSessionId,
+            ),
+            sourceLabels: resolveMaterialSourceLabels(
+              deps.root,
+              planned.note.sources.filter((source) => source.kind !== 'legacy-unpinned'),
             ),
             ...(warning ? { warning } : {}),
           });
@@ -1032,6 +1196,10 @@ export function createRequestHandler(deps?: AppDependencies) {
           formation: projectAssetFormation(
             await deps.registry.listOwnedSessionFacts(),
             card.createdSessionId,
+          ),
+          sourceLabels: resolveMaterialSourceLabels(
+            deps.root,
+            card.sources.filter((source) => source.kind !== 'legacy-unpinned'),
           ),
         });
       }

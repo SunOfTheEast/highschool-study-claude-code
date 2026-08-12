@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { AuthType } from '@earendil-works/pi-ai';
-import type { DesktopModelSelection } from '../../desktop/contracts';
+import type {
+  DesktopModelSelection,
+  DesktopVisionSelection,
+} from '../../desktop/contracts';
 import { App } from '../App';
 import { api } from '../api';
 import { configureTransport, resetTransport } from '../transport';
@@ -285,6 +288,34 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
     if (path) await mutate(() => desktopApi.selectExisting(path), true);
   };
 
+  const beginWithBook = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      await desktopApi.createBlank('我的学习集');
+      await restartAndWait();
+      const selected = await bridge.chooseBookFile();
+      if (!selected) return;
+      try {
+        const receipt = await desktopApi.importBookPath({
+          requestId: crypto.randomUUID(),
+          title: selected.originalFilename.replace(/\.pdf$/i, ''),
+          absolutePath: selected.absolutePath,
+        });
+        await api.bootstrapMaterialBook(receipt.id, receipt.revision);
+        const route = `/assets/books/${encodeURIComponent(receipt.id)}`;
+        window.history.replaceState(null, '', route);
+        window.dispatchEvent(new PopStateEvent('popstate'));
+      } finally {
+        await bridge.discardBookFile(selected.absolutePath).catch(() => {});
+      }
+    } catch (nextError) {
+      setError(errorMessage(nextError));
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const pollAuth = async (flowId: string, revision: number) => {
     for (;;) {
       const next = await desktopApi.auth(flowId);
@@ -354,14 +385,19 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
         catalog={catalog}
         teacher={status.teacher}
         scout={status.scout}
+        vision={status.vision}
         authFlow={authFlow ? publicAuthFlow(authFlow) : null}
         busy={busy}
         error={error}
         onLogin={startAuth}
         onRespond={respondAuth}
         onOpenUrl={(url) => bridge.openExternalUrl(url)}
-        onSave={async (teacher: DesktopModelSelection, scout: DesktopModelSelection) => {
-          const saved = await mutate(() => desktopApi.saveModels(teacher, scout), true);
+        onSave={async (
+          teacher: DesktopModelSelection,
+          scout: DesktopModelSelection,
+          vision: DesktopVisionSelection,
+        ) => {
+          const saved = await mutate(() => desktopApi.saveModels(teacher, scout, vision), true);
           if (saved) setPage('learning');
         }}
         onBack={status.state === 'ready' ? () => setPage('learning') : null}
@@ -390,6 +426,7 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
       <FirstRun
         busy={busy}
         error={error}
+        onBook={beginWithBook}
         onBlank={async (name) => { await mutate(() => desktopApi.createBlank(name), true); }}
         onExisting={selectExisting}
         onExample={async (name) => { await mutate(() => desktopApi.createExample(name), true); }}
@@ -417,6 +454,19 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
       ),
       openCalendarAppointment,
       openReview,
+      importBook: async (title) => {
+        const selected = await bridge.chooseBookFile();
+        if (!selected) return null;
+        try {
+          return await desktopApi.importBookPath({
+            requestId: crypto.randomUUID(),
+            title: title.trim() || selected.originalFilename.replace(/\.pdf$/i, ''),
+            absolutePath: selected.absolutePath,
+          });
+        } finally {
+          await bridge.discardBookFile(selected.absolutePath).catch(() => {});
+        }
+      },
       companion: bridge.companion ?? null,
     }}>
       <div className="desktop-ready-shift" key={connection.token ?? 'ready'}>

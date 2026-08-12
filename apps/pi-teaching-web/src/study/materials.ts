@@ -1,13 +1,19 @@
 import { createHash } from 'node:crypto';
 import {
+  createReadStream,
+  createWriteStream,
   existsSync,
+  lstatSync,
   mkdirSync,
   readFileSync,
   readdirSync,
+  renameSync,
   rmSync,
   writeFileSync,
 } from 'node:fs';
-import { basename, dirname, extname, join } from 'node:path';
+import { basename, dirname, extname, isAbsolute, join } from 'node:path';
+import { Transform } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import type {
   LearningMaterial,
@@ -23,7 +29,11 @@ import {
   type DocumentCandidate,
 } from '../runtime/multi-document-transaction';
 import { StudyDocumentError } from './markdown';
-import { loadPdfJs } from './pdf-runtime';
+import { parseMaterialLocator } from './material-locators';
+
+export type MaterialImportSource =
+  | { kind: 'bytes'; bytes: Uint8Array }
+  | { kind: 'path'; absolutePath: string };
 
 export type MaterialImportInput = {
   requestId: string;
@@ -31,7 +41,7 @@ export type MaterialImportInput = {
   title: string;
   filename: string;
   mediaType: string;
-  bytes: Uint8Array;
+  source: MaterialImportSource;
 };
 
 type MaterialManifest = LearningMaterial & {
@@ -213,69 +223,79 @@ type ProjectionDraft = {
   status: MaterialSearchStatus;
   searchablePath: string | null;
   locatorKind: 'lines' | 'page' | null;
-  files: Array<{ path: string; text: string }>;
 };
 
-async function pdfProjection(
-  id: string,
-  revision: number,
-  bytes: Uint8Array,
-): Promise<ProjectionDraft> {
-  try {
-    const { getDocument, VerbosityLevel } = await loadPdfJs();
-    const document = await getDocument({
-      data: Uint8Array.from(bytes),
-      verbosity: VerbosityLevel.ERRORS,
-    }).promise;
-    const files: Array<{ path: string; text: string }> = [];
-    for (let pageNumber = 1; pageNumber <= document.numPages; pageNumber += 1) {
-      const page = await document.getPage(pageNumber);
-      const content = await page.getTextContent();
-      const text = content.items.flatMap((item) => (
-        'str' in item && typeof item.str === 'string' ? [item.str] : []
-      )).join(' ');
-      files.push({
-        path: `materials/${id}/projections/${revision}/pages/page-${String(pageNumber).padStart(4, '0')}.txt`,
-        text: `${text}\n`,
-      });
-    }
-    await document.destroy();
-    return {
-      status: 'pdf-text',
-      searchablePath: `materials/${id}/projections/${revision}/pages`,
-      locatorKind: 'page',
-      files,
-    };
-  } catch {
-    return { status: 'unavailable', searchablePath: null, locatorKind: null, files: [] };
-  }
-}
-
-async function projectionFor(
-  id: string,
-  revision: number,
+function projectionFor(
   mediaType: string,
   originalPath: string,
-  bytes: Uint8Array,
-): Promise<ProjectionDraft> {
+): ProjectionDraft {
   if (textMediaTypes.has(mediaType) || mediaType.startsWith('text/')) {
     return {
       status: 'native-text',
       searchablePath: originalPath,
       locatorKind: 'lines',
-      files: [],
     };
   }
-  if (mediaType === 'application/pdf') return pdfProjection(id, revision, bytes);
+  if (mediaType === 'application/pdf') {
+    return { status: 'unavailable', searchablePath: null, locatorKind: 'page' };
+  }
   if (mediaType.startsWith('image/')) {
     return {
       status: 'image-readable',
       searchablePath: originalPath,
       locatorKind: null,
-      files: [],
     };
   }
-  return { status: 'unavailable', searchablePath: null, locatorKind: null, files: [] };
+  return { status: 'unavailable', searchablePath: null, locatorKind: null };
+}
+
+function checkedPathSource(source: Extract<MaterialImportSource, { kind: 'path' }>): string {
+  const path = source.absolutePath;
+  if (!isAbsolute(path) || !existsSync(path)) throw new Error('MATERIAL_SOURCE_INVALID');
+  const metadata = lstatSync(path);
+  if (metadata.isSymbolicLink() || !metadata.isFile()) throw new Error('MATERIAL_SOURCE_INVALID');
+  return path;
+}
+
+async function digestPath(path: string): Promise<string> {
+  const hash = createHash('sha256');
+  for await (const chunk of createReadStream(path)) hash.update(chunk as Buffer);
+  return hash.digest('hex');
+}
+
+async function digestSource(source: MaterialImportSource): Promise<string> {
+  return source.kind === 'bytes'
+    ? sha256(source.bytes)
+    : digestPath(checkedPathSource(source));
+}
+
+async function writeOriginal(path: string, source: MaterialImportSource): Promise<string> {
+  if (source.kind === 'bytes') {
+    mkdirSync(dirname(path), { recursive: true });
+    writeFileSync(path, source.bytes, { flag: 'wx' });
+    return sha256(source.bytes);
+  }
+  const sourcePath = checkedPathSource(source);
+  mkdirSync(dirname(path), { recursive: true });
+  const temporary = `${path}.${crypto.randomUUID()}.tmp`;
+  const hash = createHash('sha256');
+  const hashing = new Transform({
+    transform(chunk, _encoding, callback) {
+      hash.update(chunk as Buffer);
+      callback(null, chunk);
+    },
+  });
+  try {
+    await pipeline(
+      createReadStream(sourcePath),
+      hashing,
+      createWriteStream(temporary, { flags: 'wx' }),
+    );
+    renameSync(temporary, path);
+    return hash.digest('hex');
+  } finally {
+    if (existsSync(temporary)) rmSync(temporary);
+  }
 }
 
 function receipt(material: LearningMaterial, revision: MaterialRevision): MaterialImportReceipt {
@@ -316,10 +336,10 @@ export async function importMaterial(
   const filename = basename(requiredText(input.filename, 'material filename'));
   const mediaType = requiredText(input.mediaType, 'material media type').toLowerCase();
   const at = checkedTime(importedAt);
-  const digest = sha256(input.bytes);
   for (const material of listMaterials(root)) {
     const existing = material.revisions.find((revision) => revision.requestId === requestId);
     if (!existing) continue;
+    const digest = await digestSource(input.source);
     if (existing.sha256 !== digest) throw new Error('MATERIAL_REQUEST_CONFLICT');
     return receipt(material, existing);
   }
@@ -331,41 +351,34 @@ export async function importMaterial(
   const id = current?.id ?? nextMaterialId(root);
   const revisionNumber = (current?.currentRevision ?? 0) + 1;
   const originalPath = `materials/${id}/revisions/${revisionNumber}/original${safeExtension(filename)}`;
-  const projection = await projectionFor(id, revisionNumber, mediaType, originalPath, input.bytes);
-  const revision: MaterialRevision = {
-    revision: revisionNumber,
-    title,
-    originalFilename: filename,
-    mediaType,
-    sha256: digest,
-    importedAt: at,
-    originalPath,
-    searchStatus: projection.status,
-    searchablePath: projection.searchablePath,
-    locatorKind: projection.locatorKind,
-    requestId,
-  };
   const path = manifestPath(id);
   const before = current ? readFileSync(resolveDocumentPath(root, path), 'utf8') : null;
-  const material: MaterialManifest = {
-    schema: 'studyforge.material.v1',
-    id,
-    path,
-    currentRevision: revisionNumber,
-    revisions: [...(current?.revisions ?? []), revision],
-  };
   const writtenRoots = new Set<string>();
   try {
     const original = resolveDocumentPath(root, originalPath);
-    mkdirSync(dirname(original), { recursive: true });
-    writeFileSync(original, input.bytes, { flag: 'wx' });
     writtenRoots.add(join(root, `materials/${id}/revisions/${revisionNumber}`));
-    for (const file of projection.files) {
-      const absolute = resolveDocumentPath(root, file.path);
-      mkdirSync(dirname(absolute), { recursive: true });
-      writeFileSync(absolute, file.text, { flag: 'wx' });
-      writtenRoots.add(join(root, `materials/${id}/projections/${revisionNumber}`));
-    }
+    const digest = await writeOriginal(original, input.source);
+    const projection = projectionFor(mediaType, originalPath);
+    const revision: MaterialRevision = {
+      revision: revisionNumber,
+      title,
+      originalFilename: filename,
+      mediaType,
+      sha256: digest,
+      importedAt: at,
+      originalPath,
+      searchStatus: projection.status,
+      searchablePath: projection.searchablePath,
+      locatorKind: projection.locatorKind,
+      requestId,
+    };
+    const material: MaterialManifest = {
+      schema: 'studyforge.material.v1',
+      id,
+      path,
+      currentRevision: revisionNumber,
+      revisions: [...(current?.revisions ?? []), revision],
+    };
     commitDocumentCandidates(root, [manifestCandidate(material, before)]);
     return receipt(material, revision);
   } catch (error) {
@@ -416,13 +429,20 @@ export function readMaterialLocator(
       text: null,
     };
   }
+  let locator;
+  try {
+    locator = parseMaterialLocator(source.locator);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (message === 'MATERIAL_LOCATOR_INVALID') {
+      throw new Error(`MATERIAL_LOCATOR_NOT_FOUND: ${source.locator}`);
+    }
+    throw error;
+  }
   if (revision.locatorKind === 'lines') {
-    const match = /^lines-([1-9][0-9]*)-([1-9][0-9]*)$/.exec(source.locator);
     const lines = readFileSync(resolveDocumentPath(root, revision.originalPath), 'utf8')
       .split(/\r?\n/);
-    const start = match ? Number.parseInt(match[1]!, 10) : 0;
-    const end = match ? Number.parseInt(match[2]!, 10) : 0;
-    if (!match || start > end || end > lines.length) {
+    if (locator.kind !== 'lines' || locator.end > lines.length) {
       throw new Error(`MATERIAL_LOCATOR_NOT_FOUND: ${source.locator}`);
     }
     return {
@@ -430,19 +450,33 @@ export function readMaterialLocator(
       revision: revision.revision,
       locator: source.locator,
       path: revision.originalPath,
-      text: lines.slice(start - 1, end).join('\n'),
+      text: lines.slice(locator.start - 1, locator.end).join('\n'),
     };
   }
-  if (revision.locatorKind === 'page' && /^page-[0-9]{4}$/.test(source.locator)) {
-    const path = `materials/${source.id}/projections/${revision.revision}/pages/${source.locator}.txt`;
-    const absolute = resolveDocumentPath(root, path);
-    if (existsSync(absolute)) {
+  if (revision.locatorKind === 'page' && locator.kind === 'pages') {
+    const directory = `materials/${source.id}/projections/${revision.revision}/pages`;
+    const texts: string[] = [];
+    for (let page = locator.start; page <= locator.end; page += 1) {
+      const name = `page-${String(page).padStart(4, '0')}.txt`;
+      const path = `${directory}/${name}`;
+      const absolute = resolveDocumentPath(root, path);
+      if (!existsSync(absolute)) {
+        if (revision.searchStatus === 'unavailable' || revision.searchStatus === 'image-readable') {
+          throw new Error(`MATERIAL_LOCATOR_UNAVAILABLE: ${source.locator}`);
+        }
+        throw new Error(`MATERIAL_LOCATOR_NOT_FOUND: ${source.locator}`);
+      }
+      texts.push(readFileSync(absolute, 'utf8').trimEnd());
+    }
+    if (texts.length > 0) {
       return {
         id: source.id,
         revision: revision.revision,
         locator: source.locator,
-        path,
-        text: readFileSync(absolute, 'utf8').trimEnd(),
+        path: locator.start === locator.end
+          ? `${directory}/page-${String(locator.start).padStart(4, '0')}.txt`
+          : directory,
+        text: texts.join('\n\n'),
       };
     }
   }

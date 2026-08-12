@@ -22,6 +22,11 @@ test('uses the two target-suffixed Apple Silicon sidecars expected by Tauri', ()
     'binaries/studyforge-runtime',
     'binaries/studyforge-pi',
   ]);
+  expect(config.bundle.macOS.entitlements).toBe('entitlements.plist');
+  expect(readFileSync(
+    join(appRoot, 'src-tauri/entitlements.plist'),
+    'utf8',
+  )).toContain('com.apple.security.cs.disable-library-validation');
 });
 
 test('stages canonical teaching resources, example, and Pi runtime assets only', () => {
@@ -38,6 +43,10 @@ test('stages canonical teaching resources, example, and Pi runtime assets only',
     'resources/studyforge/': 'studyforge/',
   });
   expect(existsSync(join(appRoot, 'resources/templates/blank-learning-set/LEARNING_GUIDE.md'))).toBe(true);
+  expect(existsSync(join(
+    appRoot,
+    'resources/workers/study-material-vision-reader.md',
+  ))).toBe(true);
 });
 
 test('keeps host-provided Pi modules external to the child prompt runtime bundle', () => {

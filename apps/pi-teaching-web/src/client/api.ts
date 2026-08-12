@@ -18,6 +18,9 @@ import type {
   LearningSetHomeSnapshot,
   LessonHandout,
   MaterialImportReceipt,
+  MaterialBookIndex,
+  MaterialOutlineLocateReceipt,
+  MaterialPageReadReceipt,
   MaterialLocatorSnapshot,
   MetaSessionSummary,
   ProblemActivitySnapshot,
@@ -35,6 +38,8 @@ import type {
   PeerExpression,
   PeerLive2DManifest,
   PublicFocusCycle,
+  MaterialSourceLabel,
+  SourceTreeSnapshot,
 } from '../shared/contracts';
 import { formatLessonHandoutApiPath } from '../shared/handout-route';
 import { transportFetch } from './transport';
@@ -89,6 +94,7 @@ export type LearningNoteView = LearningNote & {
   semanticTags: LearningAssetSemanticTags | null;
   formation: AssetFormation | null;
   review: AssetReviewProjection | null;
+  sourceLabels: MaterialSourceLabel[];
 };
 
 export type ProblemCardView = StudentProblemCard & {
@@ -97,6 +103,7 @@ export type ProblemCardView = StudentProblemCard & {
   semanticTags: LearningAssetSemanticTags | null;
   formation: AssetFormation | null;
   review: AssetReviewProjection | null;
+  sourceLabels: MaterialSourceLabel[];
 };
 
 export type AssetReviewAction =
@@ -145,6 +152,7 @@ export const api = {
   }>('/api/focus/end'),
   home: () => json<LearningSetHomeSnapshot>('/api/home'),
   assets: () => json<LearningAssetLibrarySnapshot>('/api/assets'),
+  sourceTree: () => json<SourceTreeSnapshot>('/api/source-tree'),
   note: (id: string) => json<LearningNoteView>(`/api/assets/notes/${encodeURIComponent(id)}`),
   updateNote: (
     id: string,
@@ -178,6 +186,47 @@ export const api = {
       `/api/materials/${encodeURIComponent(id)}/revisions/${revision}/locators/${
         encodeURIComponent(locator ?? 'whole')
       }`,
+    )
+  ),
+  materialBookIndex: (id: string, revision: number) => json<MaterialBookIndex>(
+    `/api/materials/${encodeURIComponent(id)}/revisions/${revision}/book-index`,
+  ),
+  bootstrapMaterialBook: (id: string, revision: number) => post<MaterialBookIndex>(
+    `/api/materials/${encodeURIComponent(id)}/revisions/${revision}/book-index`,
+  ),
+  materialBookPageUrl: (id: string, revision: number, physicalPage: number) => (
+    `/api/materials/${encodeURIComponent(id)}/revisions/${revision}/page/${physicalPage}.png`
+  ),
+  materialBookPage: async (id: string, revision: number, physicalPage: number) => {
+    const response = await transportFetch(
+      `/api/materials/${encodeURIComponent(id)}/revisions/${revision}/page/${physicalPage}.png`,
+    );
+    if (!response.ok) throw new ApiError(response.status, await response.text());
+    return response.blob();
+  },
+  readMaterialPage: (
+    id: string,
+    revision: number,
+    physicalPage: number,
+    mode: 'auto' | 'visual' = 'auto',
+  ) => post<MaterialPageReadReceipt>(
+    `/api/materials/${encodeURIComponent(id)}/revisions/${revision}/pages/${physicalPage}/read`,
+    { mode },
+  ),
+  scanMaterialOutline: (
+    id: string,
+    revision: number,
+    startPage: number,
+    endPage: number,
+  ) => post<MaterialBookIndex>(
+    `/api/materials/${encodeURIComponent(id)}/revisions/${revision}/outline/scan`,
+    { startPage, endPage },
+  ),
+  locateMaterialOutline: (id: string, revision: number, outlineId: string) => (
+    post<MaterialOutlineLocateReceipt>(
+      `/api/materials/${encodeURIComponent(id)}/revisions/${revision}/outline/${
+        encodeURIComponent(outlineId)
+      }/locate`,
     )
   ),
   importMaterial: (input: {

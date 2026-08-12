@@ -50,8 +50,10 @@ export function AssetsPage({
   onAsk,
   onReview,
   onImport,
+  onImportBook,
   onOpenFootprint,
   onOpenKnowledge,
+  onShowSources,
 }: {
   value: LearningAssetLibrarySnapshot;
   materials?: LearningMaterial[];
@@ -60,8 +62,10 @@ export function AssetsPage({
   onAsk(references: LearningAssetReference[]): void;
   onReview?(references: LearningAssetReference[]): void;
   onImport?(input: MaterialUploadInput): Promise<void>;
+  onImportBook?(title: string): Promise<void>;
   onOpenFootprint?(): void;
   onOpenKnowledge?(): void;
+  onShowSources?(): void;
 }) {
   const [selected, setSelected] = useState<string[]>([]);
   const [title, setTitle] = useState('');
@@ -90,6 +94,12 @@ export function AssetsPage({
       setTitle('');
       setFile(null);
     }).catch((error: unknown) => setImportError(materialImportErrorText(error)));
+  };
+  const chooseBook = () => {
+    if (!onImportBook) return;
+    setImportError(null);
+    void onImportBook(title.trim()).then(() => setTitle(''))
+      .catch((error: unknown) => setImportError(materialImportErrorText(error)));
   };
   return (
     <main className="m1b-assets">
@@ -120,6 +130,13 @@ export function AssetsPage({
           <button type="button" className="action-text" onClick={onOpenFootprint}>学习足迹</button>
         </nav>
       </header>
+      {onShowSources && (
+        <nav className="library-view-tabs" aria-label="学习资料视图">
+          <button type="button" onClick={onShowSources}>沿书学习</button>
+          <button type="button" aria-current="page">按类型查看</button>
+          <button type="button" onClick={onOpenKnowledge}>知识之间</button>
+        </nav>
+      )}
       <section className="asset-library-filter" aria-label="查找学习资料">
         <label>
           <span className="sr-only">查找学习资料</span>
@@ -140,8 +157,14 @@ export function AssetsPage({
         <header><span>Materials</span><h2>原始资料</h2><b>{filtered.materials.length}</b></header>
         <form className="m1c-material-upload" onSubmit={submitMaterial}>
           <label>资料标题<input value={title} onChange={(event) => setTitle(event.target.value)} /></label>
-          <label>选择文件<input type="file" onChange={(event) => setFile(event.target.files?.[0] ?? null)} /></label>
-          <button type="submit" disabled={!file || !onImport}>上传资料</button>
+          {onImportBook ? (
+            <button type="button" onClick={chooseBook}>选择 PDF</button>
+          ) : (
+            <>
+              <label>选择文件<input type="file" onChange={(event) => setFile(event.target.files?.[0] ?? null)} /></label>
+              <button type="submit" disabled={!file || !onImport}>上传资料</button>
+            </>
+          )}
         </form>
         {importError && <p className="inline-error" role="alert">{importError}</p>}
         {filtered.materials.map((material) => {

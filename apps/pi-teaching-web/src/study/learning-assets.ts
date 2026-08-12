@@ -33,6 +33,7 @@ import {
   type SemanticTags,
 } from './semantic-tags';
 import { localDateAt, planAssetReviewEvent } from './asset-reviews';
+import { resolveMaterialSourceLabel } from './source-labels';
 
 export type { LearningNote, LearningNoteBlock, StudentProblemCard } from '../shared/contracts';
 
@@ -1013,16 +1014,25 @@ export function renderSelectedAssetContext(
     const alias = `source-${index + 1}`;
     if (reference.kind === 'material') {
       const revision = readMaterialRevision(root, reference.id, reference.revision);
-      const locator = readMaterialLocator(root, reference);
+      const sourceLabel = resolveMaterialSourceLabel(root, reference);
+      let text: string | null;
+      try {
+        text = readMaterialLocator(root, reference).text;
+      } catch (error) {
+        if (!(error instanceof Error) || !error.message.startsWith('MATERIAL_LOCATOR_UNAVAILABLE:')) {
+          throw error;
+        }
+        text = null;
+      }
       return [
         `## ${alias} · material:${reference.id}@${reference.revision}`,
         '',
         canonicalYaml({
           title: revision.title,
+          source: sourceLabel.label,
           revision: reference.revision,
           locator: reference.locator,
-          path: locator.path,
-          text: locator.text,
+          text,
         }).trim(),
       ].join('\n');
     }

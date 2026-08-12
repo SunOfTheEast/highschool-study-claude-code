@@ -1,6 +1,14 @@
 import { expect, test } from 'bun:test';
 import type { LearningContextReference } from '../../src/shared/contracts';
-import { loadFreeLearningContexts } from '../../src/client/free-learning-contexts';
+import {
+  loadFreeLearningContexts,
+  materialPagesForContext,
+} from '../../src/client/free-learning-contexts';
+
+test('expands only the exact selected book page range before opening a session', () => {
+  expect(materialPagesForContext('page-0042')).toEqual([42]);
+  expect(materialPagesForContext('pages-0042-0044')).toEqual([42, 43, 44]);
+});
 
 test('loads only the assets carried into a Free Learning session', async () => {
   const calls: string[] = [];
