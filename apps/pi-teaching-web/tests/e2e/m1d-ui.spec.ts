@@ -129,8 +129,8 @@ test('walks the M1d asset, source, footprint, and local-relation surfaces', asyn
   await page.getByRole('button', { name: /化学反应原理摘录/ }).click();
   await expect(page.getByText(/纯固体的活度在给定状态下视为常量/)).toBeVisible();
   await expect(page.getByLabel('资料位置')).toContainText('第 1–3 行');
-  await page.getByRole('button', { name: '高级定位' }).click();
-  await page.getByLabel('Canonical locator').fill('lines-99-120');
+  await page.getByLabel('起始行').fill('99');
+  await page.getByLabel('结束行').fill('120');
   await page.getByRole('button', { name: '读取这个位置' }).click();
   await expect(page.getByRole('alert')).toContainText('仍保留上一次成功显示的内容');
   await expect(page.getByText(/纯固体的活度在给定状态下视为常量/)).toBeVisible();

@@ -26,6 +26,12 @@ test('keeps desktop conversations as a readable letter with an inner writing gut
   expect(styles).toMatch(/\.free-learning-workspace \.chat\s*\{[^}]*padding-inline:\s*var\(--space-5\)/s);
 });
 
+test('lets human Material position controls wrap as one compact row', () => {
+  const styles = readFileSync(join(import.meta.dir, '../../src/client/styles/m1b.css'), 'utf8');
+
+  expect(styles).toMatch(/\.m1c-material-locator\s*\{[^}]*display:\s*flex[^}]*flex-wrap:\s*wrap/s);
+});
+
 test('uses one dominant atlas and one contextual folio instead of three debugger columns', () => {
   const styles = readFileSync(join(import.meta.dir, '../../src/client/styles/knowledge.css'), 'utf8');
 

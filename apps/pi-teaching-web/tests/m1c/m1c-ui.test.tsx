@@ -146,11 +146,12 @@ test('opens one exact source range and can carry it into free learning', () => {
     />,
   );
   expect(markup).toContain('资料位置');
-  expect(markup).toContain('lines-1-2');
-  expect(markup).toContain('高级定位');
+  expect(markup).toContain('第 1–2 行');
+  expect(markup).toContain('起始行');
+  expect(markup).toContain('结束行');
   expect(markup).toContain('读取后可问老师');
   expect(markup).toContain('第 1 版');
-  expect(markup).not.toMatch(/projection|manifest|revision/i);
+  expect(markup).not.toMatch(/lines-1-2|canonical|projection|manifest|revision/i);
 });
 
 test('renders only student-facing learning-history entries in the footprint', () => {

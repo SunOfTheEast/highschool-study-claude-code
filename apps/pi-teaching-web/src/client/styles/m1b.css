@@ -324,10 +324,15 @@
 }
 
 .m1c-material-locator {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--space-3);
   align-items: end;
+}
+
+.m1c-material-locator label {
+  min-width: 8rem;
+  flex: 0 1 10rem;
 }
 
 .m1c-material-locator button,
@@ -536,8 +541,7 @@
   .m1b-asset-row > button { grid-template-columns: 5rem minmax(0, 1fr); }
   .m1b-assets > section > header b,
   .m1b-asset-row > button > span { grid-column: 2; }
-  .m1c-material-upload,
-  .m1c-material-locator { grid-template-columns: 1fr; }
+  .m1c-material-upload { grid-template-columns: 1fr; }
   .m1c-footprint-page li { grid-template-columns: 1fr; }
   .m1c-footprint-page li p,
   .m1c-footprint-page li time,
