@@ -288,6 +288,31 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
     if (path) await mutate(() => desktopApi.selectExisting(path), true);
   };
 
+  const beginWithBook = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      await desktopApi.createBlank('我的学习集');
+      await restartAndWait();
+      const absolutePath = await bridge.chooseBookFile();
+      if (!absolutePath) return;
+      const filename = absolutePath.split(/[\\/]/).pop() ?? '学习资料.pdf';
+      const receipt = await desktopApi.importBookPath({
+        requestId: crypto.randomUUID(),
+        title: filename.replace(/\.pdf$/i, ''),
+        absolutePath,
+      });
+      await api.bootstrapMaterialBook(receipt.id, receipt.revision);
+      const route = `/assets/books/${encodeURIComponent(receipt.id)}`;
+      window.history.replaceState(null, '', route);
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    } catch (nextError) {
+      setError(errorMessage(nextError));
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const pollAuth = async (flowId: string, revision: number) => {
     for (;;) {
       const next = await desktopApi.auth(flowId);
@@ -398,6 +423,7 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
       <FirstRun
         busy={busy}
         error={error}
+        onBook={beginWithBook}
         onBlank={async (name) => { await mutate(() => desktopApi.createBlank(name), true); }}
         onExisting={selectExisting}
         onExample={async (name) => { await mutate(() => desktopApi.createExample(name), true); }}

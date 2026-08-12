@@ -9,6 +9,11 @@ export function formatMaterialLocator(locator: string | null): MaterialLocatorLa
   }
   const page = /^page-([0-9]{4})$/.exec(locator);
   if (page) return { human: `第 ${Number(page[1])} 页`, canonical: locator };
+  const pages = /^pages-([0-9]{4})-([0-9]{4})$/.exec(locator);
+  if (pages) return {
+    human: `第 ${Number(pages[1])}–${Number(pages[2])} 页`,
+    canonical: locator,
+  };
   const lines = /^lines-([1-9][0-9]*)-([1-9][0-9]*)$/.exec(locator);
   if (lines) return { human: `第 ${lines[1]}–${lines[2]} 行`, canonical: locator };
   return { human: locator, canonical: locator };

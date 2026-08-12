@@ -53,6 +53,7 @@ export function AssetsPage({
   onImportBook,
   onOpenFootprint,
   onOpenKnowledge,
+  onShowSources,
 }: {
   value: LearningAssetLibrarySnapshot;
   materials?: LearningMaterial[];
@@ -64,6 +65,7 @@ export function AssetsPage({
   onImportBook?(title: string): Promise<void>;
   onOpenFootprint?(): void;
   onOpenKnowledge?(): void;
+  onShowSources?(): void;
 }) {
   const [selected, setSelected] = useState<string[]>([]);
   const [title, setTitle] = useState('');
@@ -128,6 +130,13 @@ export function AssetsPage({
           <button type="button" className="action-text" onClick={onOpenFootprint}>学习足迹</button>
         </nav>
       </header>
+      {onShowSources && (
+        <nav className="library-view-tabs" aria-label="学习资料视图">
+          <button type="button" onClick={onShowSources}>沿书学习</button>
+          <button type="button" aria-current="page">按类型查看</button>
+          <button type="button" onClick={onOpenKnowledge}>知识之间</button>
+        </nav>
+      )}
       <section className="asset-library-filter" aria-label="查找学习资料">
         <label>
           <span className="sr-only">查找学习资料</span>

@@ -9,18 +9,21 @@ export function HomePage({
   onStartFree,
   onPlan,
   onOpenFootprint,
+  onImportBook,
 }: {
   value: LearningSetHomeSnapshot;
   onNavigate(route: BrowserRoute): void;
   onStartFree(): void;
   onPlan?(): void;
   onOpenFootprint?(): void;
+  onImportBook?(): Promise<void>;
 }) {
   const link = (route: BrowserRoute) => (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     onNavigate(route);
   };
   const activeLesson = value.course?.activeLesson ?? null;
+  const book = value.books[0] ?? null;
   return (
     <main className="m1b-home home-portal">
       <header className="m1b-home-heading">
@@ -50,6 +53,24 @@ export function HomePage({
             </span>
             <i className="seal-mark" aria-hidden="true">继</i>
           </a>
+        ) : book ? (
+          <a
+            className="home-primary home-book-entry"
+            href={book.route}
+            onClick={link({ kind: 'book', id: book.id })}
+          >
+            <span className="home-book-mark" aria-hidden="true">书</span>
+            <span className="home-action-copy">
+              <small>从真实章节开始</small>
+              <strong>打开这本书 · {book.title}</strong>
+              <em>
+                {book.pageCount === null ? '目录等待整理' : `${book.pageCount} 个物理页`}
+                {' · '}{book.outlineCount > 0 ? '目录已整理' : '目录可按需整理'}
+                {' · '}正文按需读取
+              </em>
+            </span>
+            <span className="home-book-open">打开 <b aria-hidden="true">→</b></span>
+          </a>
         ) : (
           <button type="button" className="home-primary home-ask" onClick={onStartFree}>
             <span className="home-action-copy">
@@ -62,8 +83,15 @@ export function HomePage({
         )}
 
         <nav className="home-quiet-actions" aria-label="其他学习入口">
-          {activeLesson && (
-            <button type="button" className="action-text" onClick={onStartFree}>安静地问老师</button>
+          {(activeLesson || book) && (
+            <button type="button" className="action-text" onClick={onStartFree}>
+              {book && !activeLesson ? '也可以直接问老师' : '安静地问老师'}
+            </button>
+          )}
+          {!book && onImportBook && (
+            <button type="button" className="action-text" onClick={() => void onImportBook()}>
+              放入一本 PDF 开始学习
+            </button>
           )}
           {value.course ? (
             <a href="/course" onClick={link({ kind: 'course' })}>
@@ -77,6 +105,11 @@ export function HomePage({
           <a href="/assets" onClick={link({ kind: 'assets' })}>
             我的学习资料 · {value.assets.notes} 份笔记 · {value.assets.problemCards} 张题卡
           </a>
+          {book && (
+            <a href="/assets?view=sources" onClick={link({ kind: 'assets', view: 'sources' })}>
+              沿书查看学习资料
+            </a>
+          )}
           <button type="button" className="action-text" onClick={onOpenFootprint}>学习足迹</button>
         </nav>
       </section>

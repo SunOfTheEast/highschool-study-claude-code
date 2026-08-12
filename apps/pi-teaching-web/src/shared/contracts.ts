@@ -358,6 +358,7 @@ export type SourceTreeBook = {
   materialId: string;
   revision: number;
   title: string;
+  mediaType: string;
   current: boolean;
   pageCount: number | null;
   chapters: SourceTreeChapter[];
@@ -511,6 +512,15 @@ export type LearningSetHomeSnapshot = {
     problemCards: number;
     materials: number;
   };
+  books: Array<{
+    id: string;
+    revision: number;
+    title: string;
+    pageCount: number | null;
+    outlineCount: number;
+    processedPages: number;
+    route: string;
+  }>;
   recentFreeLearning: FreeLearningSessionSummary[];
   recentMeta: MetaSessionSummary[];
 };

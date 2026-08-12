@@ -85,6 +85,7 @@ export function readSourceTree(root: string): SourceTreeSnapshot {
         materialId: material.id,
         revision: revision.revision,
         title: revision.title,
+        mediaType: revision.mediaType,
         current: revision.revision === material.currentRevision,
         pageCount: index?.pageCount ?? null,
         chapters,

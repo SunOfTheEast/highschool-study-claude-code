@@ -9,6 +9,8 @@ import type {
 } from '../shared/contracts';
 import { countKnowledgeMaterials } from './knowledge';
 import { countCurrentProblemCardFiles, listLearningNotes } from './learning-assets';
+import { readMaterialBookIndex } from './material-book-index';
+import { listMaterials } from './materials';
 import { readCourseTree, readLearningSetGuide } from './markdown';
 import { projectActiveLesson } from './display-projections';
 
@@ -46,6 +48,26 @@ export function readLearningSetHome(
   const guide = readLearningSetGuide(root);
   const hasCourse = existsSync(join(root, 'ROADMAP.md'));
   const course = hasCourse ? readCourseTree(root) : null;
+  const books = listMaterials(root).flatMap((material) => {
+    const revision = material.revisions.find((candidate) => (
+      candidate.revision === material.currentRevision
+    ));
+    if (!revision || revision.mediaType !== 'application/pdf') return [];
+    const index = readMaterialBookIndex(root, material.id, revision.revision);
+    return [{
+      id: material.id,
+      revision: revision.revision,
+      title: revision.title,
+      pageCount: index?.pageCount ?? null,
+      outlineCount: index?.outline.length ?? 0,
+      processedPages: index?.pages.filter((page) => (
+        page.state === 'native-text' || page.state === 'visual-text'
+      )).length ?? 0,
+      route: `/assets/books/${encodeURIComponent(material.id)}`,
+      importedAt: revision.importedAt,
+    }];
+  }).sort((left, right) => right.importedAt.localeCompare(left.importedAt))
+    .map(({ importedAt: _importedAt, ...book }) => book);
 
   return {
     guide: studentGuide(guide),
@@ -60,6 +82,7 @@ export function readLearningSetHome(
       problemCards: countCurrentProblemCardFiles(root),
       materials: countKnowledgeMaterials(root),
     },
+    books,
     recentFreeLearning,
     recentMeta,
   };

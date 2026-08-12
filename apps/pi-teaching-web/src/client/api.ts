@@ -197,6 +197,13 @@ export const api = {
   materialBookPageUrl: (id: string, revision: number, physicalPage: number) => (
     `/api/materials/${encodeURIComponent(id)}/revisions/${revision}/page/${physicalPage}.png`
   ),
+  materialBookPage: async (id: string, revision: number, physicalPage: number) => {
+    const response = await transportFetch(
+      `/api/materials/${encodeURIComponent(id)}/revisions/${revision}/page/${physicalPage}.png`,
+    );
+    if (!response.ok) throw new ApiError(response.status, await response.text());
+    return response.blob();
+  },
   readMaterialPage: (
     id: string,
     revision: number,

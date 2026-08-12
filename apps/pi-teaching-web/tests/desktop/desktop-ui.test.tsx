@@ -35,11 +35,12 @@ const catalog: DesktopModelCatalog = {
   ],
 };
 
-test('gives blank start one dominant action and keeps the other entrances quiet', () => {
+test('gives book import one dominant action and keeps the other entrances quiet', () => {
   const markup = renderToStaticMarkup(
     <FirstRun
       busy={false}
       error={null}
+      onBook={async () => {}}
       onBlank={async () => {}}
       onExisting={async () => {}}
       onExample={async () => {}}
@@ -47,6 +48,7 @@ test('gives blank start one dominant action and keeps the other entrances quiet'
   );
 
   expect(markup.match(/desktop-primary/g)).toHaveLength(1);
+  expect(markup).toContain('选择 PDF');
   expect(markup).toContain('从空白开始');
   expect(markup).toContain('打开已有学习集');
   expect(markup).toContain('使用导数示例');
