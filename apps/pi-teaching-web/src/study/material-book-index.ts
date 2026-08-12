@@ -132,6 +132,13 @@ function indexFromValue(path: string, value: unknown): MaterialBookIndex {
     throw new Error('MATERIAL_BOOK_INDEX_IDENTITY_INVALID');
   }
   const pageCount = positive(root.page_count);
+  const printedPageOffsetHint = root.printed_page_offset_hint === null
+    || root.printed_page_offset_hint === undefined
+    ? null
+    : Number(root.printed_page_offset_hint);
+  if (printedPageOffsetHint !== null && !Number.isSafeInteger(printedPageOffsetHint)) {
+    throw new Error('MATERIAL_BOOK_INDEX_INVALID');
+  }
   if (root.state !== 'ready' && root.state !== 'partial') {
     throw new Error('MATERIAL_BOOK_INDEX_INVALID');
   }
@@ -148,6 +155,7 @@ function indexFromValue(path: string, value: unknown): MaterialBookIndex {
     revision,
     pageCount,
     state: root.state,
+    printedPageOffsetHint,
     pages,
     outline: root.outline.map((node) => outlineFromValue(node, pageCount)),
     updatedAt: timestamp(root.updated_at),
@@ -161,6 +169,7 @@ function indexValue(index: MaterialBookIndex): RecordValue {
     revision: index.revision,
     page_count: index.pageCount,
     state: index.state,
+    printed_page_offset_hint: index.printedPageOffsetHint,
     pages: index.pages.map((page) => ({
       physical_page: page.physicalPage,
       pdf_label: page.pdfLabel,
@@ -206,6 +215,7 @@ export function createMaterialBookIndex(input: {
     revision,
     pageCount,
     state: 'ready',
+    printedPageOffsetHint: null,
     pages: Array.from({ length: pageCount }, (_, index) => ({
       physicalPage: index + 1,
       pdfLabel: input.pageLabels?.[index] ?? null,

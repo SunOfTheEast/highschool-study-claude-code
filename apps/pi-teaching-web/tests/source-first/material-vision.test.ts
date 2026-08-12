@@ -96,3 +96,38 @@ test('rejects a non-JSON response instead of treating it as extracted text', asy
     vision: { mode: 'auto' }, prompt: '读取', images: [image],
   })).rejects.toThrow('MATERIAL_VISION_RESPONSE_INVALID');
 });
+
+test('normalizes an empty printed page from visual reading to unknown', async () => {
+  const fake = runtime([model('teacher', ['text', 'image'])]);
+  fake.completeSimple = async () => ({
+    content: [{
+      type: 'text',
+      text: JSON.stringify({
+        text: '目录',
+        outline: [{ title: '第一章', level: 1, printedPage: '   ' }],
+      }),
+    }],
+  }) as never;
+  const service = new MaterialVisionService(fake as never);
+  expect(await service.read({
+    teacher: { provider: 'test', model: 'teacher', thinking: 'high' },
+    vision: { mode: 'auto' }, prompt: '读取', images: [image],
+  })).toMatchObject({
+    outline: [{ title: '第一章', level: 1, printedPage: null }],
+  });
+});
+
+test('accepts a model-proposed printed-to-physical page offset as a hint', async () => {
+  const fake = runtime([model('teacher', ['text', 'image'])]);
+  fake.completeSimple = async () => ({
+    content: [{
+      type: 'text',
+      text: JSON.stringify({ text: '目录', outline: [], printedPageOffset: 15 }),
+    }],
+  }) as never;
+  const service = new MaterialVisionService(fake as never);
+  expect(await service.read({
+    teacher: { provider: 'test', model: 'teacher', thinking: 'high' },
+    vision: { mode: 'auto' }, prompt: '读取完整目录', images: [image],
+  })).toMatchObject({ printedPageOffset: 15 });
+});

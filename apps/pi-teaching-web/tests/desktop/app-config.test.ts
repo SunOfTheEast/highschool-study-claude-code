@@ -101,6 +101,7 @@ test('migrates an existing version-one config to automatic vision and rejects ma
     scout: { provider: 'openai-codex', model: 'gpt-5.6-terra', thinking: 'high' },
   };
   expect(parseAppConfig(existing)).toMatchObject({ vision: { mode: 'auto' } });
+  expect(parseAppConfig({ ...existing, vision: null })).toMatchObject({ vision: { mode: 'auto' } });
   expect(() => parseAppConfig({ ...existing, vision: { mode: 'sometimes' } }))
     .toThrow('STUDYFORGE_APP_CONFIG_INVALID');
 });

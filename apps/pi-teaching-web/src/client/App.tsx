@@ -853,7 +853,7 @@ export function App() {
           material.current.revision,
           locator,
         )}
-        onAsk={(reference) => void prepareBookSelectionAndStart(reference)}
+        onAsk={(reference) => void startFree([reference])}
       />
     ) : <div className="loading-screen"><b>正在读取原始资料</b></div>;
   } else if (route.kind === 'book') {
@@ -909,7 +909,7 @@ export function App() {
         onOpenLocator={(locator) => navigate({ ...route, locator })}
         onReadPage={() => readCurrentBookPage('auto')}
         onReadVisually={() => readCurrentBookPage('visual')}
-        onAsk={(reference) => void startFree([reference])}
+        onAsk={(reference) => void prepareBookSelectionAndStart(reference)}
         onOpenAsset={(reference) => navigate(reference.kind === 'note'
           ? { kind: 'note', id: reference.id }
           : { kind: 'problem-card', id: reference.id })}

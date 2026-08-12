@@ -4,6 +4,10 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { bootstrapPdfBookIndex } from '../../src/study/pdf-book';
 import {
+  readMaterialBookIndex,
+  writeMaterialBookIndex,
+} from '../../src/study/material-book-index';
+import {
   locateMaterialOutlineNode,
   scanMaterialVisualOutline,
 } from '../../src/study/material-page-reader';
@@ -31,16 +35,20 @@ afterEach(() => {
 
 test('adds bounded visual outline candidates without replacing PDF bookmarks', async () => {
   const { root, material } = await book();
+  let requestPrompt = '';
   const index = await scanMaterialVisualOutline(
     root,
     material.id,
     material.revision,
     { startPage: 1, endPage: 2 },
     {
-      read: async () => ({
+      read: async (input) => {
+        requestPrompt = input.prompt;
+        return {
         text: '', model: 'test/vision',
         outline: [{ title: '视觉目录章', level: 1, printedPage: '2' }],
-      }),
+        };
+      },
     },
     '2026-08-13T00:02:00.000Z',
   );
@@ -49,6 +57,8 @@ test('adds bounded visual outline candidates without replacing PDF bookmarks', a
     title: '视觉目录章', source: 'visual-toc', startPage: null, endPage: null,
     provenancePages: [1, 2],
   }));
+  expect(requestPrompt).toContain('编/章/节');
+  expect(requestPrompt).toContain('printedPageOffset');
 
   await expect(scanMaterialVisualOutline(
     root, material.id, material.revision, { startPage: 1, endPage: 13 },
@@ -64,12 +74,18 @@ test('locates a visual node only after its title appears in a bounded candidate 
     {
       read: async () => ({
         text: '', model: 'test/vision',
-        outline: [{ title: '视觉目录章', level: 1, printedPage: '2' }],
+        outline: [{ title: '视觉目录章', level: 1, printedPage: '1' }],
+        printedPageOffset: 2,
       }),
     },
     '2026-08-13T00:02:00.000Z',
   );
   const node = scanned.outline.find((candidate) => candidate.source === 'visual-toc')!;
+  const withoutPdfLabels = readMaterialBookIndex(root, material.id, material.revision)!;
+  writeMaterialBookIndex(root, {
+    ...withoutPdfLabels,
+    pages: withoutPdfLabels.pages.map((page) => ({ ...page, pdfLabel: null })),
+  });
   const checked: number[] = [];
   const located = await locateMaterialOutlineNode(
     root,
@@ -83,6 +99,7 @@ test('locates a visual node only after its title appears in a bounded candidate 
     '2026-08-13T00:03:00.000Z',
   );
   expect(located.node).toMatchObject({ startPage: 3, endPage: 3 });
-  expect(located.candidatePages).toEqual([3]);
+  expect(located.index.printedPageOffsetHint).toBe(2);
+  expect(located.candidatePages[0]).toBe(3);
   expect(checked).toEqual([3]);
 });

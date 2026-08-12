@@ -11,12 +11,16 @@ import type { AgentSessionEvent, SessionEntry } from '@earendil-works/pi-coding-
 import { loadStaticFreeLearningResources } from '../../src/runtime/resource-loader';
 import type { StudySession, StudySessionFactory } from '../../src/runtime/session-factory';
 import { WorkspaceRegistry } from '../../src/runtime/workspace-registry';
+import { commitDocumentCandidates } from '../../src/runtime/multi-document-transaction';
 import {
   createMaterialBookIndex,
   writeMaterialBookIndex,
   writeMaterialBookPageProjection,
 } from '../../src/study/material-book-index';
-import { renderSelectedAssetContext } from '../../src/study/learning-assets';
+import {
+  planLearningNoteSave,
+  renderSelectedAssetContext,
+} from '../../src/study/learning-assets';
 import { importMaterial } from '../../src/study/materials';
 
 const fixture = join(import.meta.dir, '../fixtures/m1b-blank-learning-set');
@@ -177,4 +181,24 @@ test('accepts an indexed pending page range without pretending it was read', asy
     sessionKind: 'free-learning',
     selectedAssets: selected,
   }));
+});
+
+test('saves one Note against the exact processed PDF page range', async () => {
+  const root = copyFixture();
+  const { imported } = await seedBook(root, [42, 43, 44]);
+  const source = {
+    kind: 'material' as const,
+    id: imported.id,
+    revision: imported.revision,
+    locator: 'pages-0042-0044',
+  };
+  const planned = planLearningNoteSave(root, 'source-session', {
+    title: '从原书形成的笔记',
+    blocks: [{ kind: 'markdown', body: '只固定到本次选中的连续页段。' }],
+    sources: [source],
+    tags: { core: ['原书学习'], related: ['来源回溯'] },
+  }, '2026-08-12T10:04:00.000Z');
+
+  commitDocumentCandidates(root, planned.candidates);
+  expect(planned.note.sources).toEqual([source]);
 });

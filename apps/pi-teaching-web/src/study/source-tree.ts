@@ -8,7 +8,7 @@ import { parseMaterialLocator } from './material-locators';
 import { readMaterialBookIndex } from './material-book-index';
 import { readLearningAssetLibrary } from './learning-assets';
 import { listMaterials } from './materials';
-import { resolveMaterialSourceLabel } from './source-labels';
+import { materialSourceOutline, resolveMaterialSourceLabel } from './source-labels';
 
 function sourceAsset(
   root: string,
@@ -65,9 +65,7 @@ export function readSourceTree(root: string): SourceTreeSnapshot {
           endPage: node.endPage,
           assets: attached.flatMap(({ asset, source }) => {
             const locator = parseMaterialLocator(source.locator);
-            return locator.kind === 'pages'
-              && locator.start <= node.endPage!
-              && locator.end >= node.startPage!
+            return materialSourceOutline(index!, locator)?.id === node.id
               ? [sourceAsset(root, asset, source)]
               : [];
           }),

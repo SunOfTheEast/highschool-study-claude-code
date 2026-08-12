@@ -8,6 +8,8 @@
 
 **Tech Stack:** Bun 1.3, TypeScript 7, React 19, Vite 8, Tauri 2, `pdfjs-dist` 5, `@napi-rs/canvas`, Pi `ModelRuntime`, YAML projections, Bun test, Playwright.
 
+**Execution status (2026-08-13):** Tasks 1–9 are implemented. Deterministic E2E and the real scanned-book/model loop pass; final full-suite verification is recorded in the Task 9 validation report.
+
 ## Global Constraints
 
 - Work in an isolated worktree. Preserve the user's unrelated dirty files on `main`.

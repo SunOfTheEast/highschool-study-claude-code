@@ -115,6 +115,7 @@ export async function bootstrapPdfBookIndex(
             physicalPage: page.physicalPage,
             pdfLabel: page.pdfLabel,
           })),
+          printedPageOffsetHint: current.printedPageOffsetHint,
           outline: [
             ...fresh.outline,
             ...current.outline.filter((node) => node.source !== 'pdf-bookmark'),

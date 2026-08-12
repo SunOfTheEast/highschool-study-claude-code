@@ -1,5 +1,8 @@
 import type {
   LearningSourceReference,
+  MaterialBookIndex,
+  MaterialBookOutlineNode,
+  MaterialLocator,
   MaterialSourceLabel,
 } from '../shared/contracts';
 import { parseMaterialLocator } from './material-locators';
@@ -10,6 +13,24 @@ type MaterialSource = Extract<LearningSourceReference, { kind: 'material' }>;
 
 function pageLabel(start: number, end: number): string {
   return start === end ? `第 ${start} 页` : `第 ${start}–${end} 页`;
+}
+
+export function materialSourceOutline(
+  index: MaterialBookIndex,
+  locator: MaterialLocator,
+): MaterialBookOutlineNode | null {
+  if (locator.kind !== 'pages') return null;
+  return index.outline
+    .filter((node) => (
+      node.startPage !== null
+      && node.endPage !== null
+      && node.startPage <= locator.start
+      && node.endPage >= locator.end
+    ))
+    .sort((left, right) => (
+      right.level - left.level
+      || (left.endPage! - left.startPage!) - (right.endPage! - right.startPage!)
+    ))[0] ?? null;
 }
 
 export function materialSourceRoute(source: MaterialSource): string {
@@ -24,14 +45,7 @@ export function resolveMaterialSourceLabel(root: string, source: MaterialSource)
   const index = readMaterialBookIndex(root, source.id, source.revision);
   const locator = parseMaterialLocator(source.locator);
   const page = locator.kind === 'pages' ? pageLabel(locator.start, locator.end) : null;
-  const chapter = locator.kind === 'pages'
-    ? index?.outline.find((node) => (
-      node.startPage !== null
-      && node.endPage !== null
-      && node.startPage <= locator.start
-      && node.endPage >= locator.end
-    )) ?? null
-    : null;
+  const chapter = index ? materialSourceOutline(index, locator) : null;
   const position = chapter?.title ?? page;
   const label = [`《${revision.title}》`, position, chapter && page ? page : null]
     .filter((value): value is string => Boolean(value))

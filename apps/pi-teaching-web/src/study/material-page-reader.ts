@@ -21,6 +21,7 @@ export type MaterialVisionReader = {
   read(input: { prompt: string; images: ImageContent[] }): Promise<{
     text: string;
     outline?: Array<{ title: string; level: number; printedPage: string | null }>;
+    printedPageOffset?: number;
     model: string;
   }>;
 };
@@ -168,7 +169,12 @@ export async function scanMaterialVisualOutline(
     images.push({ type: 'image', data: rendered.bytes.toString('base64'), mimeType: 'image/png' });
   }
   const result = await vision.read({
-    prompt: `这些图片依次是物理页 ${range.startPage}–${range.endPage}。只提取目录层级和印刷页码。`,
+    prompt: [
+      `这些图片依次是物理页 ${range.startPage}–${range.endPage}。只提取目录层级和印刷页码。`,
+      'outline 只保留相当于“编/章/节”的导航骨架，最多三级；跳过考点、例题、编号小项和节内条目。',
+      '扫描书常因封面与前言产生稳定页码偏移。只有这些图片同时包含目录末页和带可见印刷页码的首张正文时，',
+      '才按“物理页 = 印刷页 + printedPageOffset”计算候选；这不是已核验位置，不确定就省略。',
+    ].join(''),
     images,
   });
   const visual = (result.outline ?? []).map((node, offset): MaterialBookOutlineNode => ({
@@ -186,6 +192,7 @@ export async function scanMaterialVisualOutline(
   }-`;
   const next = {
     ...index,
+    printedPageOffsetHint: result.printedPageOffset ?? index.printedPageOffsetHint,
     outline: [...index.outline.filter((node) => !node.id.startsWith(rangePrefix)), ...visual],
     updatedAt,
   };
@@ -203,9 +210,12 @@ function candidatePages(index: MaterialBookIndex, node: MaterialBookOutlineNode)
     if (exact) return [exact];
     const guessed = Number(node.printedPage);
     if (Number.isSafeInteger(guessed) && guessed > 0) {
-      const start = Math.max(1, guessed - 2);
-      const end = Math.min(index.pageCount, guessed + 2);
-      return Array.from({ length: end - start + 1 }, (_, offset) => start + offset);
+      const center = guessed + (node.source === 'visual-toc'
+        ? index.printedPageOffsetHint ?? 0
+        : 0);
+      return [0, -1, 1, -2, 2]
+        .map((offset) => center + offset)
+        .filter((page) => page >= 1 && page <= index.pageCount);
     }
   }
   return [];

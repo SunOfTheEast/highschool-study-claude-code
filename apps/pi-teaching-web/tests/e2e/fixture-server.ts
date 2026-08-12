@@ -26,6 +26,8 @@ import type {
 import { readProblemCard } from '../../src/study/learning-assets';
 import type { OwnedLearningSessionFact } from '../../src/study/learning-footprint';
 import { readProblemActivity } from '../../src/study/problem-attempts';
+import { importMaterial } from '../../src/study/materials';
+import { writeThreePageBook } from '../source-first/pdf-fixture';
 
 type MessageEntry = Extract<SessionEntry, { type: 'message' }>;
 
@@ -34,9 +36,18 @@ const m1bSource = join(import.meta.dir, '../fixtures/m1b-blank-learning-set');
 const m0Root = mkdtempSync(join(tmpdir(), 'studyforge-m0-e2e-'));
 const m1bRoot = mkdtempSync(join(tmpdir(), 'studyforge-m1b-e2e-'));
 const m1cRoot = mkdtempSync(join(tmpdir(), 'studyforge-m1c-e2e-'));
+const sourceRoot = mkdtempSync(join(tmpdir(), 'studyforge-source-e2e-'));
+const sourcePdfRoot = mkdtempSync(join(tmpdir(), 'studyforge-source-pdfs-'));
+const sourcePdf = join(sourcePdfRoot, 'chemistry.pdf');
+const sourceSecondPdf = join(sourcePdfRoot, 'companion.pdf');
+const sourceUpdatedPdf = join(sourcePdfRoot, 'chemistry-updated.pdf');
 cpSync(m0Source, m0Root, { recursive: true });
 cpSync(m1bSource, m1bRoot, { recursive: true });
 cpSync(m1bSource, m1cRoot, { recursive: true });
+cpSync(m1bSource, sourceRoot, { recursive: true });
+writeThreePageBook(sourcePdf);
+writeThreePageBook(sourceSecondPdf, { emptyPages: [2] });
+writeThreePageBook(sourceUpdatedPdf, { emptyPages: [3] });
 for (const path of ['plans/plan-001/PLAN.md', 'plans/plan-001/lessons/lesson-001.md']) {
   const absolute = join(m0Root, path);
   writeFileSync(absolute, readFileSync(absolute, 'utf8').replace(/^status: active$/m, 'status: prepared'));
@@ -381,7 +392,7 @@ class M1bFixtureRegistry {
 
   constructor(
     private readonly root: string,
-    private readonly fixture: 'm1b' | 'm1c' = 'm1b',
+    private readonly fixture: 'm1b' | 'm1c' | 'source' = 'm1b',
   ) {
     this.storePath = join(root, '.studyforge-e2e-free-sessions.json');
     this.metaStorePath = join(root, '.studyforge-e2e-meta-sessions.json');
@@ -775,22 +786,40 @@ class M1bFixtureRegistry {
 
     const selectedMaterial = record.selectedAssets.find((asset) => asset.kind === 'material');
     if (selectedMaterial) {
+      const sourceAliases = record.selectedAssets.flatMap((asset, index) => (
+        asset.kind === 'material' ? [`source-${index + 1}`] : []
+      ));
+      const crossBook = this.fixture === 'source' && sourceAliases.length > 1;
       if (/^(保存吧|可以|确认)[。！!]?$/u.test(text.trim())) {
         await this.runFreeTool(record, 'save_note', {
-          title: 'Ksp 中为什么不写纯固体',
+          title: this.fixture === 'source'
+            ? crossBook ? '两本书里的共同线索' : '从原书形成的笔记'
+            : 'Ksp 中为什么不写纯固体',
           blocks: [{
             kind: 'markdown',
-            body: '纯固体的活度在给定状态下视为常量，已经并入平衡常数；因此 Ksp 只显式写溶液中会变化的离子活度（高中近似为浓度）。',
+            body: this.fixture === 'source'
+              ? crossBook
+                ? '两处原文从不同编排说明了同一个结构；这条联系由本次讨论形成，并分别保留两处来源。'
+                : '这份笔记只根据选中的原书页段形成，并保留准确页段以便以后返回核对。'
+              : '纯固体的活度在给定状态下视为常量，已经并入平衡常数；因此 Ksp 只显式写溶液中会变化的离子活度（高中近似为浓度）。',
           }],
-          sourceAliases: ['source-1'],
-          tags: { core: ['沉淀溶解平衡', '纯固体'], related: ['平衡常数', '活度'] },
+          sourceAliases: this.fixture === 'source' ? sourceAliases : ['source-1'],
+          tags: this.fixture === 'source'
+            ? { core: [crossBook ? '跨书联系' : '原书学习'], related: ['来源回溯'] }
+            : { core: ['沉淀溶解平衡', '纯固体'], related: ['平衡常数', '活度'] },
         });
-        this.appendText(record, 'assistant', '这份有原文出处的笔记已经保存。');
+        this.appendText(record, 'assistant', this.fixture === 'source'
+          ? crossBook ? '跨书笔记已经保存。' : '这份有原文出处的笔记已经保存。'
+          : '这份有原文出处的笔记已经保存。');
       } else {
         this.appendText(
           record,
           'assistant',
-          '关键不是“固体不存在”，而是纯固体的活度在给定状态下视为常量，已经并入平衡常数，所以 Ksp 只显式写会随状态变化的离子项。我建议把这段解释保存为笔记《Ksp 中为什么不写纯固体》，并保留你刚才选中的原文位置；你确认后我再保存。',
+          this.fixture === 'source'
+            ? crossBook
+              ? '两处原文从不同编排说明了同一个结构。我建议保存为笔记《两本书里的共同线索》，分别保留两处原文位置；你确认后我再保存。'
+              : '这两页可以整理成笔记《从原书形成的笔记》，并保留刚才选中的原文位置；你确认后我再保存。'
+            : '关键不是“固体不存在”，而是纯固体的活度在给定状态下视为常量，已经并入平衡常数，所以 Ksp 只显式写会随状态变化的离子项。我建议把这段解释保存为笔记《Ksp 中为什么不写纯固体》，并保留你刚才选中的原文位置；你确认后我再保存。',
         );
       }
       this.publish(key, { type: 'agent_end', messages: [], willRetry: false } as AgentSessionEvent);
@@ -859,11 +888,13 @@ class M1bFixtureRegistry {
 
 const m1bRegistry = new M1bFixtureRegistry(m1bRoot);
 const m1cRegistry = new M1bFixtureRegistry(m1cRoot, 'm1c');
+const sourceRegistry = new M1bFixtureRegistry(sourceRoot, 'source');
 const m0Hub = new EventHub();
 const m1bHub = new EventHub();
 const m1cHub = new EventHub();
+const sourceHub = new EventHub();
 const clients = new Set<{ send(data: string): void }>();
-for (const hub of [m0Hub, m1bHub, m1cHub]) {
+for (const hub of [m0Hub, m1bHub, m1cHub, sourceHub]) {
   hub.subscribe((event) => {
     const data = JSON.stringify(event);
     for (const client of clients) client.send(data);
@@ -873,17 +904,19 @@ for (const hub of [m0Hub, m1bHub, m1cHub]) {
 const m0Handler = createRequestHandler({ root: m0Root, registry: m0Registry as never, hub: m0Hub });
 const m1bHandler = createRequestHandler({ root: m1bRoot, registry: m1bRegistry as never, hub: m1bHub });
 const m1cHandler = createRequestHandler({ root: m1cRoot, registry: m1cRegistry as never, hub: m1cHub });
+const sourceHandler = createRequestHandler({ root: sourceRoot, registry: sourceRegistry as never, hub: sourceHub });
 const port = Number(process.env.STUDYFORGE_E2E_API_PORT ?? 65000);
 const server = Bun.serve({
   hostname: '127.0.0.1',
   port,
   async fetch(request, bunServer) {
     const url = new URL(request.url);
-    const fixture = /(?:^|;\s*)studyforge-fixture=(m1b|m1c)(?:;|$)/.exec(
+    const fixture = /(?:^|;\s*)studyforge-fixture=(m1b|m1c|source)(?:;|$)/.exec(
       request.headers.get('cookie') ?? '',
     )?.[1];
     const m1b = fixture === 'm1b';
     const m1c = fixture === 'm1c';
+    const source = fixture === 'source';
     if (!fixture && url.pathname === '/api/__e2e/m0/reset' && request.method === 'POST') {
       resetM0();
       return Response.json({ ok: true });
@@ -908,7 +941,51 @@ const server = Bun.serve({
       m1cRegistry.reset();
       return Response.json({ ok: true });
     }
-    return (m1c ? m1cHandler : m1b ? m1bHandler : m0Handler)(request, bunServer);
+    if (source && url.pathname === '/api/__e2e/source/reset' && request.method === 'POST') {
+      sourceRegistry.reset();
+      return Response.json({ ok: true });
+    }
+    if (source && url.pathname === '/api/__e2e/source/import' && request.method === 'POST') {
+      const receipt = await importMaterial(sourceRoot, {
+        requestId: 'source-first-book',
+        title: 'E2E Chemistry Book',
+        filename: 'chemistry.pdf',
+        mediaType: 'application/pdf',
+        source: { kind: 'path', absolutePath: sourcePdf },
+      }, '2026-08-12T10:00:00.000Z');
+      return Response.json(receipt, { status: 201 });
+    }
+    if (source && url.pathname === '/api/__e2e/source/import-second' && request.method === 'POST') {
+      const receipt = await importMaterial(sourceRoot, {
+        requestId: 'source-second-book',
+        title: 'E2E Companion Book',
+        filename: 'companion.pdf',
+        mediaType: 'application/pdf',
+        source: { kind: 'path', absolutePath: sourceSecondPdf },
+      }, '2026-08-12T11:00:00.000Z');
+      return Response.json(receipt, { status: 201 });
+    }
+    if (source && url.pathname === '/api/__e2e/source/import-revision' && request.method === 'POST') {
+      const body = await request.json() as { id: string; expectedRevision: number };
+      const receipt = await importMaterial(sourceRoot, {
+        requestId: 'source-first-book-revision-2',
+        title: 'E2E Chemistry Book',
+        filename: 'chemistry-updated.pdf',
+        mediaType: 'application/pdf',
+        source: { kind: 'path', absolutePath: sourceUpdatedPdf },
+        target: { id: body.id, expectedRevision: body.expectedRevision },
+      }, '2026-08-12T12:00:00.000Z');
+      return Response.json(receipt, { status: 201 });
+    }
+    if (source && url.pathname === '/api/__e2e/source/state' && request.method === 'GET') {
+      const files = Array.from(new Bun.Glob('**/*').scanSync(sourceRoot));
+      return Response.json({
+        courseFiles: files.filter((path) => path === 'ROADMAP.md' || path.startsWith('plans/')),
+        memoryFiles: files.filter((path) => path.startsWith('memory/objects/')),
+        reviewFiles: files.filter((path) => path.startsWith('activity/asset-reviews/')),
+      });
+    }
+    return (source ? sourceHandler : m1c ? m1cHandler : m1b ? m1bHandler : m0Handler)(request, bunServer);
   },
   websocket: {
     open(socket) {
@@ -926,6 +1003,8 @@ const cleanup = () => {
   rmSync(m0Root, { recursive: true, force: true });
   rmSync(m1bRoot, { recursive: true, force: true });
   rmSync(m1cRoot, { recursive: true, force: true });
+  rmSync(sourceRoot, { recursive: true, force: true });
+  rmSync(sourcePdfRoot, { recursive: true, force: true });
 };
 process.once('SIGINT', cleanup);
 process.once('SIGTERM', cleanup);

@@ -50,6 +50,7 @@ const index: MaterialBookIndex = {
   revision: 1,
   pageCount: 12,
   state: 'ready',
+  printedPageOffsetHint: null,
   pages: Array.from({ length: 12 }, (_, offset) => ({
     physicalPage: offset + 1,
     pdfLabel: String(offset + 1),

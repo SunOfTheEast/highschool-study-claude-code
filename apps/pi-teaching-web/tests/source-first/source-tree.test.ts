@@ -109,3 +109,33 @@ test('keeps old revisions pinned and degrades unresolved chapter mapping without
   });
   expect(oldBook.chapters.flatMap((chapter) => chapter.assets)).toHaveLength(0);
 });
+
+test('places one source under the most specific containing outline node only once', async () => {
+  const learningSet = root();
+  const book = await addBook(learningSet, '嵌套目录教材', 'book-nested');
+  writeMaterialBookIndex(learningSet, createMaterialBookIndex({
+    materialId: book.id,
+    revision: book.revision,
+    pageCount: 10,
+    pageLabels: null,
+    outline: [{
+      id: 'chapter-1', title: '第一章', level: 1, source: 'curated', printedPage: '1',
+      startPage: 1, endPage: 5, provenancePages: [],
+    }, {
+      id: 'section-1', title: '第一节', level: 2, source: 'curated', printedPage: '2',
+      startPage: 2, endPage: 3, provenancePages: [],
+    }],
+    updatedAt: '2026-08-13T00:02:00.000Z',
+  }));
+  const note = planLearningNoteSave(learningSet, 'free-source', {
+    title: '只出现一次的笔记', blocks: [{ kind: 'markdown', body: '属于最具体的小节。' }],
+    sources: [{ kind: 'material', id: book.id, revision: 1, locator: 'pages-0002-0003' }],
+    tags: { core: ['目录投影'], related: [] },
+  }, '2026-08-13T00:03:00.000Z');
+  commitDocumentCandidates(learningSet, note.candidates);
+
+  const chapters = readSourceTree(learningSet).books[0]!.chapters;
+  expect(chapters.find((chapter) => chapter.id === 'chapter-1')?.assets).toEqual([]);
+  expect(chapters.find((chapter) => chapter.id === 'section-1')?.assets.map((asset) => asset.title))
+    .toEqual(['只出现一次的笔记']);
+});

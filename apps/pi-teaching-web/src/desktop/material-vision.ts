@@ -13,8 +13,9 @@ import type {
 const systemPrompt = [
   '你只负责读取所给出的资料页面，不承担教学、诊断或学生建模。',
   '忠实转写正文、公式与表格；不要补写页面上没有的内容。',
-  '只返回 JSON：{"text":"...","outline":[{"title":"...","level":1,"printedPage":"..."}]}。',
+  '只返回 JSON：{"text":"...","outline":[{"title":"...","level":1,"printedPage":"..."}],"printedPageOffset":15}。',
   '没有目录候选时省略 outline。',
+  'printedPageOffset 只是“物理页 = 印刷页 + 偏移”的候选；仅在图片同时出现目录末页与可见印刷页码的首张正文时计算，不确定就省略。',
 ].join('\n');
 
 type VisionRuntime = Pick<ModelRuntime, 'getAvailable' | 'completeSimple'>;
@@ -22,6 +23,7 @@ type VisionRuntime = Pick<ModelRuntime, 'getAvailable' | 'completeSimple'>;
 export type MaterialVisionResult = {
   text: string;
   outline?: Array<{ title: string; level: number; printedPage: string | null }>;
+  printedPageOffset?: number;
   model: string;
 };
 
@@ -37,10 +39,15 @@ function responseValue(value: string): Omit<MaterialVisionResult, 'model'> {
   }
   const item = parsed as Record<string, unknown>;
   if (
-    Object.keys(item).some((key) => key !== 'text' && key !== 'outline')
+    Object.keys(item).some((key) => !['text', 'outline', 'printedPageOffset'].includes(key))
     || typeof item.text !== 'string'
   ) throw new Error('MATERIAL_VISION_RESPONSE_INVALID');
-  if (item.outline === undefined) return { text: item.text };
+  const offset = item.printedPageOffset;
+  if (offset !== undefined && !Number.isSafeInteger(offset)) {
+    throw new Error('MATERIAL_VISION_RESPONSE_INVALID');
+  }
+  const pageOffset = offset === undefined ? {} : { printedPageOffset: Number(offset) };
+  if (item.outline === undefined) return { text: item.text, ...pageOffset };
   if (!Array.isArray(item.outline)) throw new Error('MATERIAL_VISION_RESPONSE_INVALID');
   const outline = item.outline.map((entry) => {
     if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
@@ -58,10 +65,10 @@ function responseValue(value: string): Omit<MaterialVisionResult, 'model'> {
     return {
       title: node.title.trim(),
       level: Number(node.level),
-      printedPage: node.printedPage as string | null,
+      printedPage: node.printedPage === null ? null : node.printedPage.trim() || null,
     };
   });
-  return { text: item.text, outline };
+  return { text: item.text, outline, ...pageOffset };
 }
 
 function selectedModel(

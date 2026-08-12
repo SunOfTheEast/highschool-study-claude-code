@@ -85,7 +85,7 @@ function absolutePath(value: unknown, nullable = false): string | null {
 }
 
 function visionSelection(value: unknown): DesktopVisionSelection {
-  if (value === undefined) return { mode: 'auto' };
+  if (value === undefined || value === null) return { mode: 'auto' };
   if (!value || typeof value !== 'object' || Array.isArray(value)) invalid();
   const candidate = value as Record<string, unknown>;
   if (candidate.mode === 'auto' && Object.keys(candidate).length === 1) return { mode: 'auto' };

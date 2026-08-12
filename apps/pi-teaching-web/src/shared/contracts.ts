@@ -316,6 +316,7 @@ export type MaterialBookIndex = {
   revision: number;
   pageCount: number;
   state: 'ready' | 'partial';
+  printedPageOffsetHint: number | null;
   pages: MaterialBookPage[];
   outline: MaterialBookOutlineNode[];
   updatedAt: string;
