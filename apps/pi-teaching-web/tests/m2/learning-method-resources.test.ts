@@ -4,6 +4,7 @@ import { join } from 'node:path';
 
 const resources = join(import.meta.dir, '../../resources');
 const methodsRoot = join(resources, 'skills/references/learning-methods');
+const mathematicsRoute = '../references/subject-methods/mathematics.md';
 
 function read(path: string): string {
   return readFileSync(join(resources, path), 'utf8');
@@ -39,6 +40,35 @@ test('routes Free Learning and Tutor directly without loading the audit index', 
   expect(tutor).not.toContain('../references/learning-methods/INDEX.md');
 });
 
+test('keeps the constant teaching core subject-neutral and routes mathematics on demand', () => {
+  const core = read('teaching/teaching-core.md');
+  const mathematics = read('skills/references/subject-methods/mathematics.md');
+  const free = read('skills/free-learning/SKILL.md');
+  const tutor = read('skills/tutor-lesson/SKILL.md');
+  const presence = read('teaching/teacher-presence.md');
+  const persona = read('personas/gojo.md');
+  const loader = readFileSync(join(resources, '../src/runtime/resource-loader.ts'), 'utf8');
+
+  expect(core).toContain('# Teaching Core');
+  expect(core).not.toMatch(/mathematics|mathematical truth/i);
+  expect(core).not.toContain('Lesson Block');
+  expect(core).not.toContain('Classroom Log');
+  expect(presence).not.toMatch(/数学|mathemat/i);
+  expect(persona).not.toMatch(/数学|mathemat/i);
+
+  expect(mathematics).toContain('定义域与边界');
+  expect(mathematics).toContain('反例');
+  expect(mathematics).toContain('陌生外壳');
+  expect(free).toContain(mathematicsRoute);
+  expect(tutor).toContain(mathematicsRoute);
+  expect(free).not.toContain('../references/subject-methods/INDEX.md');
+  expect(tutor).not.toContain('../references/subject-methods/INDEX.md');
+  expect(tutor).toContain('Classroom Log');
+
+  expect(loader.match(/resourcePath\('teaching', 'teaching-core\.md'\)/g)).toHaveLength(2);
+  expect(loader).not.toContain("resourcePath('teaching', 'math-teaching-core.md')");
+});
+
 test('keeps learning methods free of persistence and lifecycle authority', () => {
   for (const method of methods) {
     const source = readFileSync(join(methodsRoot, `${method}.md`), 'utf8');
@@ -56,7 +86,7 @@ test('keeps learning methods free of persistence and lifecycle authority', () =>
 });
 
 test('keeps question formation compact in the common teaching core', () => {
-  const core = read('teaching/math-teaching-core.md');
+  const core = read('teaching/teaching-core.md');
 
   expect(core).toContain('## Helping a student form a question');
   expect(core).toContain('对象、矛盾、前提或边界');

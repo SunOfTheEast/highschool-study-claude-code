@@ -193,6 +193,11 @@ test('loads only the free-learning root contract, memory index and selected asse
     'free_learning_memory_commit',
   ]);
   expect(assembled).toContain('自由学习');
+  expect(resources.agentsFiles).toContainEqual(expect.objectContaining({
+    path: '/virtual/studyforge-teaching-core.md',
+  }));
+  expect(assembled).toContain('# Teaching Core');
+  expect(assembled).not.toContain('# High-School Mathematics Teaching Core');
   expect(assembled).toContain('Selected asset handles:\n- none');
   expect(assembled).toContain('# Teacher Memory Index');
   expect(assembled).not.toContain('## Stage Goal');

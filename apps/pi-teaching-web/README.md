@@ -259,7 +259,7 @@ Plan ID 在 Roadmap 内唯一，Lesson ID 在所属 Plan 内唯一；Lesson Sess
   Note/题卡；只有本次表现真正改变未来教学判断时才写对象记忆。
 
 教学文本位于 `resources/agents/`、`resources/skills/`、
-`resources/teaching/math-teaching-core.md` 和
+`resources/teaching/teaching-core.md` 和
 `resources/teaching/teacher-presence.md`。
 
 ## API 与事件

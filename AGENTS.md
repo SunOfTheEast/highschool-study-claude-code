@@ -118,7 +118,7 @@ The model receives only:
 1. the canonical document and M1 memory contracts;
 2. `LEARNING_GUIDE.md`;
 3. the compact `memory/INDEX.md` L0 route when it exists;
-4. shared mathematics teaching principles;
+4. shared subject-neutral teaching principles;
 5. the node-role prompt;
 6. shared default teacher presence and public-expression translation;
 7. an optional selected persona overlay;
@@ -126,10 +126,10 @@ The model receives only:
 9. the role's Skills.
 
 Shared teacher agency has one semantic owner:
-`apps/pi-teaching-web/resources/teaching/math-teaching-core.md`. Role prompts apply it
+`apps/pi-teaching-web/resources/teaching/teaching-core.md`. Role prompts apply it
 only at decisions specific to Roadmap, Plan, or Lesson. Optional files under
 `apps/pi-teaching-web/resources/personas/` change expression, rhythm, humour, and
-metaphor only; they never override mathematics, role authority, learning-set principles,
+metaphor only; they never override subject truth, role authority, learning-set principles,
 or student agency. `STUDY_PERSONA=<id>` selects one overlay for all three student-facing
 node Sessions. The internal material Scout receives no persona or user-facing role-play.
 
@@ -192,8 +192,10 @@ or let the UI bypass semantic closure.
   updates: `apps/pi-teaching-web/resources/skills/free-learning/SKILL.md`
 - Root long-term-path discussion and student-approved Roadmap creation:
   `apps/pi-teaching-web/resources/skills/meta-dialogue/SKILL.md`
-- Shared mathematics judgment:
-  `apps/pi-teaching-web/resources/teaching/math-teaching-core.md`
+- Shared subject-neutral teaching judgment:
+  `apps/pi-teaching-web/resources/teaching/teaching-core.md`
+- On-demand mathematics judgment for Free Learning and live Lessons:
+  `apps/pi-teaching-web/resources/skills/references/subject-methods/mathematics.md`
 
 Skills own teaching judgment and natural language. Runtime owns document parsing,
 Session identity, lifecycle transitions, transport, persistence, L0 injection, and

@@ -35,6 +35,12 @@ description: 在学生从固定入口自由提问、带学习资产继续讨论�
 一次方法可以自然持续多轮，学生下一次回应决定继续、切换或停止。Free Learning 仍可自由
 转向，不要求方法结束时形成总结、资产或结课仪式。
 
+## 数学问题的按需判断
+
+眼前动作确实要核验数学命题、解题路线、定义域与边界、反例或陌生外壳中的迁移时，直接读取
+`../references/subject-methods/mathematics.md`。普通事实回答、寒暄和非数学讨论不读取它；
+`LEARNING_GUIDE.md` 继续决定本学习集的学科气质。
+
 如果当前 Session intent 是 `review`，先读取
 `../references/learning-methods/batch-asset-review.md`，按其中的一条亮线主持本次所选资产的
 复习。只为真正完成首次提取的别名调用 `record_asset_review`；未触及条目保持原样。

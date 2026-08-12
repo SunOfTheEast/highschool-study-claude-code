@@ -162,8 +162,8 @@ export function loadStaticNodeResources(
         content: lessonSources,
       }] : []),
       {
-        path: '/virtual/studyforge-m0-teaching-core.md',
-        content: file(resourcePath('teaching', 'math-teaching-core.md')),
+        path: '/virtual/studyforge-teaching-core.md',
+        content: file(resourcePath('teaching', 'teaching-core.md')),
       },
       {
         path: `/virtual/studyforge-m0-${roleFile}`,
@@ -220,8 +220,8 @@ export function loadStaticFreeLearningResources(
         content: reviewBrief,
       }] : []),
       {
-        path: '/virtual/studyforge-m0-teaching-core.md',
-        content: file(resourcePath('teaching', 'math-teaching-core.md')),
+        path: '/virtual/studyforge-teaching-core.md',
+        content: file(resourcePath('teaching', 'teaching-core.md')),
       },
       {
         path: '/virtual/studyforge-m1b-free-learning.md',
