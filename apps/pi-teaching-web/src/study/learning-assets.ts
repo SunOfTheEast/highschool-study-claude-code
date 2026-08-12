@@ -10,6 +10,7 @@ import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import type {
   LearningAssetLibrarySnapshot,
   LearningAssetHandle,
+  LearningAssetSummary,
   LearningContextReference,
   LearningSourceReference,
   LearningNote,
@@ -604,12 +605,83 @@ export function listProblemCards(root: string): ProblemCard[] {
   return cards.sort((a, b) => (b.updatedAt ?? '').localeCompare(a.updatedAt ?? ''));
 }
 
+function indexedLegacyProblemCardSummaries(root: string): Map<string, LearningAssetSummary> {
+  const path = join(root, 'semantics/indexes/asset-recall.tsv');
+  if (!existsSync(path)) return new Map();
+  const lines = readFileSync(path, 'utf8').trimEnd().split('\n');
+  if (lines.shift() !== 'path\tkind\tid\tcore\trelated\ttitle_or_stem') return new Map();
+  const summaries = new Map<string, LearningAssetSummary>();
+  for (const line of lines) {
+    const [assetPath, kind, id, coreText, relatedText, stem] = line.split('\t');
+    if (
+      kind !== 'problem-card'
+      || !assetPath?.startsWith('cards/')
+      || assetPath.startsWith('cards/m1b/')
+      || !/\.card\.ya?ml$/i.test(assetPath)
+      || !id
+      || !stem
+    ) continue;
+    try {
+      const core: unknown = JSON.parse(coreText ?? '[]');
+      const related: unknown = JSON.parse(relatedText ?? '[]');
+      if (
+        !Array.isArray(core)
+        || !core.every((tag) => typeof tag === 'string')
+        || !Array.isArray(related)
+        || !related.every((tag) => typeof tag === 'string')
+      ) continue;
+      summaries.set(assetPath, {
+        kind: 'problem-card',
+        id: checkedProblemCardId(id, 'problem card id'),
+        title: firstLine(stem),
+        revision: 1,
+        updatedAt: null,
+        tags: { core, related },
+        sources: [],
+        searchText: stem,
+      });
+    } catch {
+      // An optional projection row never overrides the source card when it is malformed.
+    }
+  }
+  return summaries;
+}
+
 export function readLearningAssetLibrary(root: string): LearningAssetLibrarySnapshot {
   const tags = (asset: LearningAssetHandle) => {
     if (!existsSync(join(root, semanticTagsPath(asset)))) return null;
     const value = readSemanticTags(root, asset);
     return { core: value.core, related: value.related };
   };
+  const cardPaths = filesBelow(root, 'cards')
+    .filter((path) => ['.yaml', '.yml'].includes(extname(path).toLowerCase()));
+  const indexedCards = indexedLegacyProblemCardSummaries(root);
+  const problemCards = cardPaths.flatMap((path) => {
+    const indexed = indexedCards.get(path);
+    if (indexed) return [indexed];
+    const value = yamlAt(root, path);
+    if (value.schema !== 'highschool-study.problem-card.v1') return [];
+    const card = problemCardFromValue(root, path, value);
+    return [{
+      kind: 'problem-card' as const,
+      id: card.id,
+      title: card.title,
+      revision: card.revision,
+      updatedAt: card.updatedAt,
+      tags: tags({ kind: 'problem-card', id: card.id }),
+      sources: card.sources,
+      searchText: [card.stem, card.studentNote].filter(Boolean).join('\n'),
+    }];
+  }).sort((a, b) => (
+    (b.updatedAt ?? '').localeCompare(a.updatedAt ?? '') || a.id.localeCompare(b.id)
+  ));
+  const ids = new Set<string>();
+  for (const card of problemCards) {
+    if (ids.has(card.id)) {
+      throw new StudyDocumentError(`cards/${card.id}`, `duplicate problem card id ${card.id}`);
+    }
+    ids.add(card.id);
+  }
   return {
     notes: listLearningNotes(root).map((note) => ({
       kind: 'note',
@@ -623,16 +695,7 @@ export function readLearningAssetLibrary(root: string): LearningAssetLibrarySnap
         block.kind === 'markdown' ? block.body : block.prompt
       )).join('\n'),
     })),
-    problemCards: listProblemCards(root).map((card) => ({
-      kind: 'problem-card',
-      id: card.id,
-      title: card.title,
-      revision: card.revision,
-      updatedAt: card.updatedAt,
-      tags: tags({ kind: 'problem-card', id: card.id }),
-      sources: card.sources,
-      searchText: [card.stem, card.studentNote].filter(Boolean).join('\n'),
-    })),
+    problemCards,
   };
 }
 

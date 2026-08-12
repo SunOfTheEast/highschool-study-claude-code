@@ -1,5 +1,11 @@
 import { afterEach, expect, test } from 'bun:test';
-import { cpSync, mkdtempSync, rmSync } from 'node:fs';
+import {
+  cpSync,
+  mkdirSync,
+  mkdtempSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
@@ -190,4 +196,39 @@ test('projects only student-visible text into the asset-library search surface',
   expect(JSON.stringify(library)).not.toMatch(
     /SECRET_RECALL_ANSWER|SECRET_STANDARD_ANSWER|SECRET_TEACHER_RATIONALE/,
   );
+});
+
+test('uses the public recall index for legacy shelf summaries without hiding managed cards', () => {
+  const root = copyFixture(oldFixture);
+  commitDocumentCandidates(root, planProblemCardSave(root, 'session-001', {
+    stem: '学生刚保存的题卡仍由当前文件投影。',
+    standardAnswer: 'MANAGED_SECRET_ANSWER',
+    teacherRationale: 'MANAGED_SECRET_RATIONALE',
+    studentNote: '这段学生笔记应当可搜索。',
+    sources: [],
+    tags: { core: ['当前资产'], related: [] },
+  }, '2026-08-08T10:00:00.000Z').candidates);
+  mkdirSync(join(root, 'semantics/indexes'), { recursive: true });
+  writeFileSync(join(root, 'semantics/indexes/asset-recall.tsv'), [
+    'path\tkind\tid\tcore\trelated\ttitle_or_stem',
+    'cards/sample.card.yaml\tproblem-card\tsample-card\t["索引核心"]\t["索引关联"]\t索引里的公开题面',
+    '',
+  ].join('\n'));
+
+  const library = readLearningAssetLibrary(root);
+  expect(library.problemCards).toEqual(expect.arrayContaining([
+    expect.objectContaining({
+      id: 'sample-card',
+      title: '索引里的公开题面',
+      searchText: '索引里的公开题面',
+      tags: { core: ['索引核心'], related: ['索引关联'] },
+    }),
+    expect.objectContaining({
+      id: 'problem-001',
+      title: '学生刚保存的题卡仍由当前文件投影。',
+      searchText: '学生刚保存的题卡仍由当前文件投影。\n这段学生笔记应当可搜索。',
+      tags: { core: ['当前资产'], related: [] },
+    }),
+  ]));
+  expect(JSON.stringify(library)).not.toMatch(/MANAGED_SECRET_ANSWER|MANAGED_SECRET_RATIONALE/);
 });
