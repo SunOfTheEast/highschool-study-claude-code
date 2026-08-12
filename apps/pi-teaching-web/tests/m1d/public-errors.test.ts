@@ -3,6 +3,7 @@ import type { AgentSessionEvent } from '@earendil-works/pi-coding-agent';
 import type { ConversationItem } from '../../src/shared/contracts';
 import {
   presentConversation,
+  toolActivityCopy,
   waitingForTeacherCopy,
 } from '../../src/client/conversation-presentation';
 import {
@@ -16,7 +17,7 @@ function tool(
   id: string,
   name: string,
   status: 'running' | 'done' | 'error',
-): ConversationItem {
+): Extract<ConversationItem, { kind: 'tool' }> {
   return {
     id,
     kind: 'tool',
@@ -49,6 +50,19 @@ test('uses the real Session scope for waiting copy without exposing its identifi
   expect(waitingForTeacherCopy('plan:plan-001')).toContain('准备这一阶段');
   expect(waitingForTeacherCopy('lesson:plan-001:lesson-001')).toContain('学习表现');
   expect(waitingForTeacherCopy('free:free-session-001')).toContain('刚才的问题');
+});
+
+test('describes real tool phases using the Session scope instead of one generic receipt', () => {
+  expect(toolActivityCopy(tool('plan-read', 'discovery', 'running'), 'plan:plan-001'))
+    .toBe('老师正在查找合适材料');
+  expect(toolActivityCopy(tool('roadmap-read', 'discovery', 'done'), 'roadmap:roadmap'))
+    .toBe('老师回看了相关学习记录');
+  expect(toolActivityCopy(tool('memory', 'free_learning_memory_commit', 'running'), 'free:free-001'))
+    .toBe('老师正在整理这次学习记录');
+  expect(toolActivityCopy(tool('calendar', 'calendar_create', 'done'), 'free:free-001'))
+    .toBe('学习约定已更新');
+  expect(toolActivityCopy(tool('edit', 'edit', 'running'), 'plan:plan-001'))
+    .toBe('老师正在整理课程安排');
 });
 
 test('maps private failures to stable student-facing copy', () => {

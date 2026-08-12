@@ -165,7 +165,7 @@ function ChatPanelContent({
           if (item.kind === 'tool') {
             return (
               <div className="tool-receipt" key={item.id}>
-                <span>{toolActivityCopy(item)}</span>
+                <span>{toolActivityCopy(item, sessionKey)}</span>
                 <small data-status={item.status}>{toolStatus[item.status]}</small>
               </div>
             );

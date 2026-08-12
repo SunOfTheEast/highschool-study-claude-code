@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { CalendarPage } from '../../src/client/pages/CalendarPage';
+import { calendarActionErrorText } from '../../src/client/components/CalendarDayPanel';
 import { formatBrowserRoute, parseBrowserRoute } from '../../src/client/routes';
 import type { CalendarAppointment, SessionKey } from '../../src/shared/contracts';
 import { createCalendarRepository } from '../../src/calendar/appointments';
@@ -78,6 +79,14 @@ test('adds one calendar route without changing course routes', () => {
   expect(formatBrowserRoute({ kind: 'calendar' })).toBe('/calendar');
   expect(formatBrowserRoute({ kind: 'course-plan', planId: 'plan-001' }))
     .toBe('/course/plan/plan-001');
+});
+
+test('turns calendar action failures into student-facing recovery copy', () => {
+  const message = calendarActionErrorText(
+    new Error('API_ERROR: ResolveMessage /private/tmp/calendar.jsonl'),
+  );
+  expect(message).toContain('暂时没有完成');
+  expect(message).not.toMatch(/API_ERROR|ResolveMessage|private|jsonl/);
 });
 
 test('renders a month grid and one day panel with quiet cross-learning-set labels', () => {

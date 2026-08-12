@@ -5,6 +5,7 @@ import type {
   CalendarReviewCandidate,
 } from '../../shared/contracts';
 import { learningSetLabel } from '../calendar-navigation';
+import { publicErrorText } from '../public-errors';
 
 export type CalendarDraft = {
   title: string;
@@ -28,6 +29,10 @@ function localInput(date: string, time = '19:00'): string {
 
 function reviewKey(candidate: CalendarReviewCandidate): string {
   return `${candidate.learningSetPath}\u0000${candidate.asset.kind}:${candidate.asset.id}`;
+}
+
+export function calendarActionErrorText(error: unknown): string {
+  return publicErrorText(error, '这项日历操作暂时没有完成，请稍后再试。');
 }
 
 export function CalendarDayPanel({
@@ -70,6 +75,7 @@ export function CalendarDayPanel({
     candidates: CalendarReviewCandidate[];
   } | null>(null);
   const [createOpen, setCreateOpen] = useState(appointments.length === 0);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   useEffect(() => {
     setStartsAt(localInput(date));
@@ -113,47 +119,50 @@ export function CalendarDayPanel({
     setEditMinutes(appointment.plannedMinutes ? String(appointment.plannedMinutes) : '');
   };
 
-  const saveEdit = async (appointment: CalendarAppointment) => {
-    if (!editTitle.trim() || !editStartsAt) return;
+  const runAction = async (action: () => Promise<void>, onSuccess?: () => void) => {
     setBusy(true);
+    setActionError(null);
     try {
-      await onUpdate(appointment, {
-        title: editTitle.trim(),
-        startsAt: new Date(editStartsAt).toISOString(),
-        plannedMinutes: editMinutes ? Number(editMinutes) : null,
-      });
-      setEditing(null);
+      await action();
+      onSuccess?.();
+    } catch (error) {
+      setActionError(calendarActionErrorText(error));
     } finally {
       setBusy(false);
     }
   };
 
+  const saveEdit = async (appointment: CalendarAppointment) => {
+    if (!editTitle.trim() || !editStartsAt) return;
+    await runAction(() => onUpdate(appointment, {
+        title: editTitle.trim(),
+        startsAt: new Date(editStartsAt).toISOString(),
+        plannedMinutes: editMinutes ? Number(editMinutes) : null,
+      }), () => setEditing(null));
+  };
+
   const create = async () => {
     if (!title.trim() || !startsAt) return;
-    setBusy(true);
-    try {
-      const selected = destination === 'review' && reviewDraft
-        ? {
-          kind: 'free-learning' as const,
-          intent: 'review' as const,
-          contexts: reviewDraft.candidates.map((candidate) => ({ ...candidate.asset })),
-        }
-        : destination.startsWith('plan:')
-          ? { kind: 'plan' as const, planId: destination.slice('plan:'.length) }
-          : { kind: 'free-learning' as const, intent: 'open' as const, contexts: [] };
-      await onCreate({
+    const selected = destination === 'review' && reviewDraft
+      ? {
+        kind: 'free-learning' as const,
+        intent: 'review' as const,
+        contexts: reviewDraft.candidates.map((candidate) => ({ ...candidate.asset })),
+      }
+      : destination.startsWith('plan:')
+        ? { kind: 'plan' as const, planId: destination.slice('plan:'.length) }
+        : { kind: 'free-learning' as const, intent: 'open' as const, contexts: [] };
+    await runAction(() => onCreate({
         title: title.trim(),
         startsAt: new Date(startsAt).toISOString(),
         plannedMinutes: minutes ? Number(minutes) : null,
         ...(reviewDraft ? { learningSetPath: reviewDraft.learningSetPath } : {}),
         destination: selected,
-      });
+      }), () => {
       setTitle('');
       setReviewDraft(null);
       setDestination(plans.length > 0 ? `plan:${plans[0]!.id}` : 'free');
-    } finally {
-      setBusy(false);
-    }
+      });
   };
 
   return (
@@ -194,7 +203,7 @@ export function CalendarDayPanel({
                     type="button"
                     className="action-solid"
                     disabled={busy || selected.length === 0}
-                    onClick={() => void onReview(selected)}
+                    onClick={() => void runAction(() => onReview(selected))}
                   >
                     现在开始复习
                   </button>
@@ -235,11 +244,11 @@ export function CalendarDayPanel({
                 </div>
               ) : (
                 <div className="calendar-row-actions">
-                  <button type="button" className="action-solid" onClick={() => void onOpen(appointment)}>
+                  <button type="button" className="action-solid" disabled={busy} onClick={() => void runAction(() => onOpen(appointment))}>
                     现在开始
                   </button>
                   <button type="button" className="action-text" onClick={() => beginEdit(appointment)}>修改</button>
-                  <button type="button" className="action-text" onClick={() => void onDelete(appointment)}>
+                  <button type="button" className="action-text" disabled={busy} onClick={() => void runAction(() => onDelete(appointment))}>
                     删除
                   </button>
                 </div>
@@ -249,6 +258,7 @@ export function CalendarDayPanel({
         })}
         {appointments.length === 0 && <li className="calendar-empty">这一天还没有学习约定。</li>}
       </ol>
+      {actionError && <p className="inline-error" role="alert">{actionError}</p>}
       <details
         className="calendar-create"
         open={createOpen}
