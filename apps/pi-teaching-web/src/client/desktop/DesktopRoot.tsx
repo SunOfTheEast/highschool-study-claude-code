@@ -417,6 +417,16 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
       ),
       openCalendarAppointment,
       openReview,
+      importBook: async (title) => {
+        const absolutePath = await bridge.chooseBookFile();
+        if (!absolutePath) return null;
+        const filename = absolutePath.split(/[\\/]/).pop() ?? '学习资料.pdf';
+        return desktopApi.importBookPath({
+          requestId: crypto.randomUUID(),
+          title: title.trim() || filename.replace(/\.pdf$/i, ''),
+          absolutePath,
+        });
+      },
       companion: bridge.companion ?? null,
     }}>
       <div className="desktop-ready-shift" key={connection.token ?? 'ready'}>

@@ -67,7 +67,7 @@ test('imports immutable text revisions without manufacturing learning facts', as
     title: '化学反应原理摘录',
     filename: 'chapter.txt',
     mediaType: 'text/plain',
-    bytes: new TextEncoder().encode('第一行\nKsp 只写离子浓度。\n第三行'),
+    source: { kind: 'bytes', bytes: new TextEncoder().encode('第一行\nKsp 只写离子浓度。\n第三行') },
   }, '2026-08-09T09:00:00.000Z');
 
   expect(first).toMatchObject({ id: 'material-001', revision: 1, searchStatus: 'native-text' });
@@ -81,7 +81,7 @@ test('imports immutable text revisions without manufacturing learning facts', as
     title: '重复请求不新建',
     filename: 'chapter.txt',
     mediaType: 'text/plain',
-    bytes: new TextEncoder().encode('第一行\nKsp 只写离子浓度。\n第三行'),
+    source: { kind: 'bytes', bytes: new TextEncoder().encode('第一行\nKsp 只写离子浓度。\n第三行') },
   }, '2026-08-09T09:10:00.000Z')).toEqual(first);
 
   const second = await importMaterial(root, {
@@ -90,7 +90,7 @@ test('imports immutable text revisions without manufacturing learning facts', as
     title: '化学反应原理摘录（修订）',
     filename: 'chapter.txt',
     mediaType: 'text/plain',
-    bytes: new TextEncoder().encode('新版正文'),
+    source: { kind: 'bytes', bytes: new TextEncoder().encode('新版正文') },
   }, '2026-08-09T10:00:00.000Z');
   expect(second.revision).toBe(2);
   expect(readMaterial(root, first.id).revisions.map((item) => item.revision)).toEqual([1, 2]);
@@ -104,21 +104,22 @@ test('imports immutable text revisions without manufacturing learning facts', as
   expect(readdirSync(join(root, 'memory'))).toEqual(['INDEX.md']);
 });
 
-test('extracts PDF pages mechanically and keeps an unreadable original recoverable', async () => {
+test('keeps PDF import cheap while reading only page projections created later', async () => {
   const root = blankRoot();
   const pdf = await importMaterial(root, {
     requestId: 'request-pdf',
     title: 'Ksp PDF',
     filename: 'ksp.pdf',
     mediaType: 'application/pdf',
-    bytes: pdfWithText('Ksp solid activity'),
+    source: { kind: 'bytes', bytes: pdfWithText('Ksp solid activity') },
   }, '2026-08-09T09:00:00.000Z');
-  expect(pdf.searchStatus).toBe('pdf-text');
-  expect(readMaterialLocator(root, {
-    id: pdf.id,
-    revision: 1,
-    locator: 'page-0001',
-  }).text).toContain('Ksp solid activity');
+  expect(pdf.searchStatus).toBe('unavailable');
+  expect(existsSync(join(root, 'materials/material-001/projections/1'))).toBeFalse();
+  mkdirSync(join(root, 'materials/material-001/projections/1/pages'), { recursive: true });
+  writeFileSync(
+    join(root, 'materials/material-001/projections/1/pages/page-0001.txt'),
+    'Ksp solid activity\n',
+  );
   writeFileSync(
     join(root, 'materials/material-001/projections/1/pages/page-0002.txt'),
     'Second page\n',
@@ -137,7 +138,7 @@ test('extracts PDF pages mechanically and keeps an unreadable original recoverab
     title: '暂不可搜索的 PDF',
     filename: 'broken.pdf',
     mediaType: 'application/pdf',
-    bytes: new TextEncoder().encode('not a pdf'),
+    source: { kind: 'bytes', bytes: new TextEncoder().encode('not a pdf') },
   }, '2026-08-09T09:10:00.000Z');
   expect(broken.searchStatus).toBe('unavailable');
   expect(existsSync(join(root, 'materials/material-002/revisions/1/original.pdf'))).toBeTrue();
@@ -155,7 +156,7 @@ test('validates pinned Material sources and projects each managed or legacy item
     title: '平衡常数材料',
     filename: 'equilibrium.md',
     mediaType: 'text/markdown',
-    bytes: new TextEncoder().encode('# 平衡常数\n\n纯固体活度进入常数。'),
+    source: { kind: 'bytes', bytes: new TextEncoder().encode('# 平衡常数\n\n纯固体活度进入常数。') },
   }, '2026-08-09T09:00:00.000Z');
   mkdirSync(join(root, 'materials/legacy'), { recursive: true });
   writeFileSync(join(root, 'materials/legacy/old.txt'), '旧散装资料');

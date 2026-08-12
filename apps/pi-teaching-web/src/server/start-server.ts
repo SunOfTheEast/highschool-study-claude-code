@@ -165,6 +165,11 @@ export async function startStudyForgeServer(arguments_: RuntimeArguments) {
         actorsDir: paths.actorsDir,
         resolveSpeechApiKey: () => models.apiKey('xiaomi'),
       }),
+      onMaterialsChanged: () => {
+        hub.publish({ type: 'home-invalidated' });
+        hub.publish({ type: 'assets-invalidated' });
+        hub.publish({ type: 'knowledge-invalidated' });
+      },
       runtimeIssue: issue,
       canChangeLearningSet: async () => !registry || await registry.readFocus() === null,
       shutdown: () => {

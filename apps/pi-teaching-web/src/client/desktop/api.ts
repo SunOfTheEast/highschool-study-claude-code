@@ -1,5 +1,6 @@
 import type { AuthEvent, AuthPrompt, AuthType } from '@earendil-works/pi-ai';
 import type { DesktopModelSelection } from '../../desktop/contracts';
+import type { MaterialImportReceipt } from '../../shared/contracts';
 import type { DesktopModelCatalog } from './ModelSettings';
 import { transportFetch } from '../transport';
 
@@ -76,6 +77,14 @@ export const desktopApi = {
   selectExisting: (path: string) => responseJson<{ learningSet: string; restartRequired: true }>(
     '/api/desktop/learning-sets/select',
     jsonRequest('POST', { path }),
+  ),
+  importBookPath: (input: {
+    requestId: string;
+    title: string;
+    absolutePath: string;
+  }) => responseJson<MaterialImportReceipt>(
+    '/api/desktop/materials/import-path',
+    jsonRequest('POST', input),
   ),
   saveModels: (teacher: DesktopModelSelection, scout: DesktopModelSelection) => (
     responseJson<{ onboardingComplete: boolean; restartRequired: true }>(

@@ -1,5 +1,6 @@
 import { afterEach, expect, test } from 'bun:test';
 import {
+  existsSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
@@ -220,6 +221,35 @@ test('creates a blank set, persists explicit models and reports restart readines
     defaultProvider: 'openai-codex',
     defaultModel: 'gpt-5.6-sol',
   });
+});
+
+test('imports a selected desktop PDF path into only the configured learning set', async () => {
+  const { root, paths, request } = setup();
+  const created = await request('/api/desktop/learning-sets/blank', {
+    method: 'POST',
+    body: JSON.stringify({ name: '跟书学习' }),
+  });
+  const { learningSet } = await created?.json() as { learningSet: string };
+  const source = join(root, 'outside-learning-set.pdf');
+  writeFileSync(source, '%PDF-1.7\n');
+
+  const response = await request('/api/desktop/materials/import-path', {
+    method: 'POST',
+    body: JSON.stringify({
+      requestId: 'desktop-book-import-001',
+      title: '化学反应原理',
+      absolutePath: source,
+    }),
+  });
+
+  expect(response?.status).toBe(201);
+  expect(await response?.json()).toMatchObject({
+    id: 'material-001', revision: 1, searchStatus: 'unavailable',
+  });
+  expect(readFileSync(join(learningSet, 'materials/material-001/revisions/1/original.pdf'), 'utf8'))
+    .toBe('%PDF-1.7\n');
+  expect(paths.documentsHome.startsWith(root)).toBeTrue();
+  expect(existsSync(join(root, 'materials/material-001/manifest.yaml'))).toBeFalse();
 });
 
 test('keeps invalid learning sets and unavailable models as distinct failures', async () => {

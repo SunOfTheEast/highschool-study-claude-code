@@ -15,7 +15,7 @@ import { importMaterial } from '../study/materials';
 export type RuntimeSelfTestReceipt = {
   planSubagent: 'passed';
   subagentChildRuntime: 'passed';
-  pdfText: 'passed';
+  pdfImport: 'passed';
   bedrock: 'passed';
 };
 
@@ -77,9 +77,11 @@ export async function runRuntimeSelfTest(resourceRoot: string): Promise<RuntimeS
       title: 'Runtime self-test PDF',
       filename: 'runtime-self-test.pdf',
       mediaType: 'application/pdf',
-      bytes: onePagePdf('StudyForge PDF text'),
+      source: { kind: 'bytes', bytes: onePagePdf('StudyForge PDF text') },
     }, '2026-08-10T00:00:00.000Z');
-    if (pdf.searchStatus !== 'pdf-text') throw new Error('STUDYFORGE_SELF_TEST_PDF_UNAVAILABLE');
+    if (pdf.searchStatus !== 'unavailable' || !existsSync(join(root, pdf.originalPath))) {
+      throw new Error('STUDYFORGE_SELF_TEST_PDF_IMPORT_FAILED');
+    }
 
     if (registerStudyForgeBunRuntime().bedrock !== 'registered') {
       throw new Error('STUDYFORGE_SELF_TEST_BEDROCK_MISSING');
@@ -87,7 +89,7 @@ export async function runRuntimeSelfTest(resourceRoot: string): Promise<RuntimeS
     return {
       planSubagent: 'passed',
       subagentChildRuntime: 'passed',
-      pdfText: 'passed',
+      pdfImport: 'passed',
       bedrock: 'passed',
     };
   } finally {

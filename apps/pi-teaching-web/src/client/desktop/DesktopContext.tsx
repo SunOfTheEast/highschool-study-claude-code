@@ -3,6 +3,7 @@ import type { CompanionBridge } from '../companion/contracts';
 import type {
   CalendarAppointment,
   LearningContextReference,
+  MaterialImportReceipt,
 } from '../../shared/contracts';
 import type { CalendarNotificationStatus } from './bridge';
 
@@ -15,6 +16,7 @@ export type DesktopTools = {
   ): Promise<CalendarNotificationStatus>;
   openCalendarAppointment(appointment: CalendarAppointment): Promise<void>;
   openReview?(learningSetPath: string, contexts: LearningContextReference[]): Promise<void>;
+  importBook?(title: string): Promise<MaterialImportReceipt | null>;
   companion: CompanionBridge | null;
 };
 

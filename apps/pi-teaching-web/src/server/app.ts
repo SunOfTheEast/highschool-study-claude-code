@@ -801,7 +801,7 @@ export function createRequestHandler(deps?: AppDependencies) {
           title: formText(form, 'title')!,
           filename: file.name,
           mediaType: file.type.toLowerCase(),
-          bytes: new Uint8Array(await file.arrayBuffer()),
+          source: { kind: 'bytes', bytes: new Uint8Array(await file.arrayBuffer()) },
           ...(targetId === null ? {} : {
             target: { id: targetId, expectedRevision: positiveRevision(Number(expected)) },
           }),

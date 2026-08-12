@@ -649,6 +649,12 @@ export function App() {
           await api.importMaterial(input);
           await loadRoute({ kind: 'assets' });
         }}
+        {...(desktopTools?.importBook ? {
+          onImportBook: async (title: string) => {
+            const receipt = await desktopTools.importBook!(title);
+            if (receipt) await loadRoute({ kind: 'assets' });
+          },
+        } : {})}
         onOpenFootprint={() => navigate({ kind: 'footprint' })}
         onOpenKnowledge={() => navigate({ kind: 'knowledge' })}
       />

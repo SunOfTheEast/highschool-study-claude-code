@@ -283,6 +283,20 @@ fn choose_learning_set_folder(app: AppHandle) -> Result<Option<String>, String> 
 }
 
 #[tauri::command]
+fn choose_book_file(app: AppHandle) -> Result<Option<String>, String> {
+    app.dialog()
+        .file()
+        .add_filter("PDF book", &["pdf"])
+        .blocking_pick_file()
+        .map(|path| {
+            path.into_path()
+                .map(|value| value.to_string_lossy().into_owned())
+                .map_err(|error| error.to_string())
+        })
+        .transpose()
+}
+
+#[tauri::command]
 fn choose_peer_skin_folder(app: AppHandle) -> Result<Option<String>, String> {
     choose_learning_set_folder(app)
 }
@@ -358,6 +372,7 @@ pub fn run() {
             runtime_connection,
             restart_runtime,
             choose_learning_set_folder,
+            choose_book_file,
             choose_peer_skin_folder,
             choose_live2d_core_file,
             reveal_in_finder,
