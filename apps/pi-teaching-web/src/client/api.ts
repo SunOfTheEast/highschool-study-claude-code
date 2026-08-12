@@ -38,6 +38,8 @@ import type {
   PeerExpression,
   PeerLive2DManifest,
   PublicFocusCycle,
+  MaterialSourceLabel,
+  SourceTreeSnapshot,
 } from '../shared/contracts';
 import { formatLessonHandoutApiPath } from '../shared/handout-route';
 import { transportFetch } from './transport';
@@ -92,6 +94,7 @@ export type LearningNoteView = LearningNote & {
   semanticTags: LearningAssetSemanticTags | null;
   formation: AssetFormation | null;
   review: AssetReviewProjection | null;
+  sourceLabels: MaterialSourceLabel[];
 };
 
 export type ProblemCardView = StudentProblemCard & {
@@ -100,6 +103,7 @@ export type ProblemCardView = StudentProblemCard & {
   semanticTags: LearningAssetSemanticTags | null;
   formation: AssetFormation | null;
   review: AssetReviewProjection | null;
+  sourceLabels: MaterialSourceLabel[];
 };
 
 export type AssetReviewAction =
@@ -148,6 +152,7 @@ export const api = {
   }>('/api/focus/end'),
   home: () => json<LearningSetHomeSnapshot>('/api/home'),
   assets: () => json<LearningAssetLibrarySnapshot>('/api/assets'),
+  sourceTree: () => json<SourceTreeSnapshot>('/api/source-tree'),
   note: (id: string) => json<LearningNoteView>(`/api/assets/notes/${encodeURIComponent(id)}`),
   updateNote: (
     id: string,

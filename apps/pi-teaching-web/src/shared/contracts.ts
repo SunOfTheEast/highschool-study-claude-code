@@ -332,6 +332,43 @@ export type MaterialOutlineLocateReceipt = {
   candidatePages: number[];
 };
 
+export type MaterialSourceLabel = {
+  source: Extract<LearningSourceReference, { kind: 'material' }>;
+  label: string;
+  route: string;
+};
+
+export type SourceTreeAsset = LearningAssetSummary & {
+  sourceRevision: number | null;
+  locator: string | null;
+  sourceLabel: string | null;
+  sourceRoute: string | null;
+};
+
+export type SourceTreeChapter = {
+  id: string;
+  title: string;
+  level: number;
+  startPage: number;
+  endPage: number;
+  assets: SourceTreeAsset[];
+};
+
+export type SourceTreeBook = {
+  materialId: string;
+  revision: number;
+  title: string;
+  current: boolean;
+  pageCount: number | null;
+  chapters: SourceTreeChapter[];
+  unresolved: { title: string; assets: SourceTreeAsset[] };
+};
+
+export type SourceTreeSnapshot = {
+  books: SourceTreeBook[];
+  outside: SourceTreeAsset[];
+};
+
 export type MaterialRevision = {
   revision: number;
   title: string;

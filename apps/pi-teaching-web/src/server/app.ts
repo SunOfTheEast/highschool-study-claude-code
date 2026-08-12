@@ -78,6 +78,8 @@ import {
   recordAssetReviewEvent,
   type AssetReviewEventDraft,
 } from '../study/asset-reviews';
+import { readSourceTree } from '../study/source-tree';
+import { resolveMaterialSourceLabels } from '../study/source-labels';
 
 type Lifecycle = Pick<
   NodeLifecycleService,
@@ -989,6 +991,10 @@ export function createRequestHandler(deps?: AppDependencies) {
         return json(readLearningAssetLibrary(deps.root));
       }
 
+      if (request.method === 'GET' && url.pathname === '/api/source-tree') {
+        return json(readSourceTree(deps.root));
+      }
+
       const semanticAsset = /^\/api\/semantics\/assets\/(note|problem-card)\/([^/]+)$/.exec(
         url.pathname,
       );
@@ -1061,6 +1067,10 @@ export function createRequestHandler(deps?: AppDependencies) {
               await deps.registry.listOwnedSessionFacts(),
               note.createdSessionId,
             ),
+            sourceLabels: resolveMaterialSourceLabels(
+              deps.root,
+              note.sources.filter((source) => source.kind !== 'legacy-unpinned'),
+            ),
           });
         }
         if (request.method === 'PUT') {
@@ -1084,6 +1094,10 @@ export function createRequestHandler(deps?: AppDependencies) {
             formation: projectAssetFormation(
               await deps.registry.listOwnedSessionFacts(),
               planned.note.createdSessionId,
+            ),
+            sourceLabels: resolveMaterialSourceLabels(
+              deps.root,
+              planned.note.sources.filter((source) => source.kind !== 'legacy-unpinned'),
             ),
             ...(warning ? { warning } : {}),
           });
@@ -1171,6 +1185,10 @@ export function createRequestHandler(deps?: AppDependencies) {
           formation: projectAssetFormation(
             await deps.registry.listOwnedSessionFacts(),
             card.createdSessionId,
+          ),
+          sourceLabels: resolveMaterialSourceLabels(
+            deps.root,
+            card.sources.filter((source) => source.kind !== 'legacy-unpinned'),
           ),
         });
       }
