@@ -169,6 +169,19 @@ test('renders only student-facing learning-history entries in the footprint', ()
         path: 'memory/objects/obj-001.md',
         evidence: [{ kind: 'free-learning', sessionId: 'free-session-001' }],
       },
+    }, {
+      id: 'asset-review:note:note-001:event-002',
+      at: '2026-08-10T08:00:00.000Z',
+      activity: 'asset-review',
+      title: 'Ksp 中的纯固体',
+      summary: '复习结果：顺利想起',
+      route: '/assets/notes/note-001',
+      source: {
+        kind: 'asset-review',
+        asset: { kind: 'note', id: 'note-001' },
+        eventId: 'event-002',
+        result: 'fluent',
+      },
     }],
   };
   const markup = renderToStaticMarkup(<FootprintPage value={value} onOpen={() => {}} />);
@@ -176,4 +189,7 @@ test('renders only student-facing learning-history entries in the footprint', ()
   expect(markup).toContain('在陌生情境中重新解释了纯固体的地位');
   expect(markup).not.toContain('Current Judgment');
   expect(markup).not.toContain('object-memory');
+  expect(markup).toContain('完成复习');
+  expect(markup).toContain('复习结果：顺利想起');
+  expect(markup).toContain('打开笔记');
 });

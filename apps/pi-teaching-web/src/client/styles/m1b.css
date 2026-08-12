@@ -423,6 +423,7 @@
 .footprint-ledger li[data-category="session"] .footprint-dot { border-color: var(--ink-faint); background: var(--ink-faint); }
 .footprint-ledger li[data-category="asset"] .footprint-dot { border-color: var(--ink-soft); background: var(--paper); }
 .footprint-ledger li[data-category="attempt"] .footprint-dot { border-color: var(--attention); background: var(--attention); }
+.footprint-ledger li[data-category="review"] .footprint-dot { border-color: var(--attention); background: var(--paper); }
 .footprint-ledger li[data-category="cognition"] .footprint-dot { border-color: var(--accent); background: var(--accent); }
 
 .m1b-note-page,

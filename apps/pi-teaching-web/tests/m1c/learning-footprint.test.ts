@@ -27,6 +27,7 @@ import {
 } from '../../src/study/learning-footprint';
 import { importMaterial } from '../../src/study/materials';
 import { recordProblemAttempt, revealProblemAnswer } from '../../src/study/problem-attempts';
+import { recordAssetReviewEvent } from '../../src/study/asset-reviews';
 
 const blankFixture = join(import.meta.dir, '../fixtures/m1b-blank-learning-set');
 const courseFixture = join(import.meta.dir, '../fixtures/m0-learning-set');
@@ -75,6 +76,41 @@ test('projects existing sessions, assets, activity, materials, and learning hist
     '2026-08-09T12:09:00.000Z',
   );
   revealProblemAnswer(root, 'problem-001', 'reveal-001', '2026-08-09T12:10:00.000Z');
+
+  const noteReview = recordAssetReviewEvent(root, { kind: 'note', id: 'note-001' }, {
+    requestId: 'note-review-001',
+    at: '2026-08-10T08:00:00.000Z',
+    localDate: '2026-08-10',
+    event: {
+      kind: 'reviewed', assetRevision: 2, result: 'forgot',
+      evidence: { kind: 'self-report', problemAttemptId: null },
+    },
+  });
+  recordAssetReviewEvent(root, { kind: 'note', id: 'note-001' }, {
+    requestId: 'note-review-correction',
+    at: '2026-08-10T08:05:00.000Z',
+    localDate: '2026-08-10',
+    event: {
+      kind: 'corrected', targetEventId: noteReview.event.eventId, replacementResult: 'fluent',
+    },
+  });
+  const cardReview = recordAssetReviewEvent(root, { kind: 'problem-card', id: 'problem-001' }, {
+    requestId: 'card-review-001',
+    at: '2026-08-10T09:00:00.000Z',
+    localDate: '2026-08-10',
+    event: {
+      kind: 'reviewed', assetRevision: 1, result: 'effortful',
+      evidence: { kind: 'self-report', problemAttemptId: 'attempt-001' },
+    },
+  });
+  recordAssetReviewEvent(root, { kind: 'problem-card', id: 'problem-001' }, {
+    requestId: 'card-review-correction',
+    at: '2026-08-10T09:05:00.000Z',
+    localDate: '2026-08-10',
+    event: {
+      kind: 'corrected', targetEventId: cardReview.event.eventId, replacementResult: null,
+    },
+  });
 
   const material = await importMaterial(root, {
     requestId: 'material-request-001',
@@ -146,7 +182,21 @@ test('projects existing sessions, assets, activity, materials, and learning hist
   const footprint = readLearningFootprint(root, sessions);
   const serialized = JSON.stringify(footprint);
 
-  expect(footprint.entries[0]).toMatchObject({
+  expect(footprint.entries.filter((entry) => entry.activity === 'asset-review')).toEqual([
+    expect.objectContaining({
+      id: `asset-review:note:note-001:${noteReview.event.eventId}`,
+      at: '2026-08-10T08:00:00.000Z',
+      title: 'Ksp 中的纯固体与活度',
+      summary: '复习结果：顺利想起',
+      route: '/assets/notes/note-001',
+      source: expect.objectContaining({
+        kind: 'asset-review', result: 'fluent', eventId: noteReview.event.eventId,
+      }),
+    }),
+  ]);
+  expect(serialized).not.toMatch(/enrolled|removed|restarted|corrected/);
+
+  expect(footprint.entries.find((entry) => entry.activity === 'learning-history')).toMatchObject({
     activity: 'learning-history',
     at: '2026-08-09T13:00:00.000Z',
     title: '沉淀溶解平衡',

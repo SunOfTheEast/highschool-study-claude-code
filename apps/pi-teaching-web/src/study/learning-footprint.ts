@@ -19,6 +19,7 @@ import {
 import { listMaterials } from './materials';
 import { readObjectLearningHistoryFacts } from './memory-mutations';
 import { listProblemActivities } from './problem-attempts';
+import { listAssetReviewHistories } from './asset-reviews';
 
 export type OwnedLearningSessionFact = {
   id: string;
@@ -170,6 +171,55 @@ function problemActivityEntries(
   })));
 }
 
+const reviewResultLabels = {
+  forgot: '没想起',
+  effortful: '吃力',
+  fluent: '顺利想起',
+} as const;
+
+function assetReviewEntries(
+  root: string,
+  notes: ReturnType<typeof listLearningNotes>,
+  cards: ReturnType<typeof listProblemCards>,
+): LearningFootprintEntry[] {
+  const titles = new Map<string, string>([
+    ...notes.map((note) => [`note:${note.id}`, note.title] as const),
+    ...cards.map((card) => [`problem-card:${card.id}`, card.title] as const),
+  ]);
+  return listAssetReviewHistories(root).flatMap((history) => {
+    const corrections = new Map<string, 'forgot' | 'effortful' | 'fluent' | null>();
+    for (const event of history.events) {
+      if (event.kind === 'corrected') {
+        corrections.set(event.targetEventId, event.replacementResult);
+      }
+    }
+    return history.events.flatMap((event) => {
+      if (event.kind !== 'reviewed') return [];
+      const result = corrections.has(event.eventId)
+        ? corrections.get(event.eventId)!
+        : event.result;
+      if (result === null) return [];
+      const key = `${history.asset.kind}:${history.asset.id}`;
+      return [{
+        id: `asset-review:${key}:${event.eventId}`,
+        at: event.at,
+        activity: 'asset-review' as const,
+        title: titles.get(key) ?? `${history.asset.kind === 'note' ? '笔记' : '题卡'} ${history.asset.id}`,
+        summary: `复习结果：${reviewResultLabels[result]}`,
+        route: history.asset.kind === 'note'
+          ? `/assets/notes/${encodeURIComponent(history.asset.id)}`
+          : `/assets/problem-cards/${encodeURIComponent(history.asset.id)}`,
+        source: {
+          kind: 'asset-review' as const,
+          asset: history.asset,
+          eventId: event.eventId,
+          result,
+        },
+      }];
+    });
+  });
+}
+
 function evidenceRoute(
   evidence: ReturnType<typeof readObjectLearningHistoryFacts>[number]['evidence'],
 ): string | null {
@@ -218,6 +268,7 @@ export function readLearningFootprint(
     ...assetEntries(root, notes, cards),
     ...materialEntries(root),
     ...problemActivityEntries(root, cards),
+    ...assetReviewEntries(root, notes, cards),
     ...historyEntries(root),
   ];
   return { entries: [...new Map(entries.map((entry) => [entry.id, entry])).values()].sort(newestFirst) };

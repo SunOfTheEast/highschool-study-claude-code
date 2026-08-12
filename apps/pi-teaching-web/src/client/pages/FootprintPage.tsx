@@ -12,14 +12,16 @@ const labels: Record<LearningFootprintActivity, string> = {
   'material-imported': '加入资料',
   'problem-attempt': '完成作答',
   'answer-reveal': '查看答案',
+  'asset-review': '完成复习',
   'learning-history': '认知变化',
 };
 
-type FootprintCategory = 'session' | 'asset' | 'attempt' | 'cognition';
+type FootprintCategory = 'session' | 'asset' | 'attempt' | 'review' | 'cognition';
 
 function category(entry: LearningFootprintEntry): FootprintCategory {
   if (entry.source.kind === 'session') return 'session';
   if (entry.source.kind === 'problem-activity') return 'attempt';
+  if (entry.source.kind === 'asset-review') return 'review';
   if (entry.source.kind === 'object-memory') return 'cognition';
   return 'asset';
 }
@@ -32,6 +34,9 @@ function actionLabel(entry: LearningFootprintEntry): string {
   }
   if (entry.source.kind === 'material') return '打开资料';
   if (entry.source.kind === 'problem-activity') return '打开题卡';
+  if (entry.source.kind === 'asset-review') {
+    return entry.source.asset.kind === 'note' ? '打开笔记' : '打开题卡';
+  }
   if (entry.source.kind === 'object-memory') return '回到这段学习';
   return entry.source.asset.kind === 'note' ? '打开笔记' : '打开题卡';
 }

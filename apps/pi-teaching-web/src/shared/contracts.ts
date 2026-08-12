@@ -364,6 +364,7 @@ export type LearningFootprintActivity =
   | 'material-imported'
   | 'problem-attempt'
   | 'answer-reveal'
+  | 'asset-review'
   | 'learning-history';
 
 export type LearningFootprintSource =
@@ -380,6 +381,12 @@ export type LearningFootprintSource =
       cardId: string;
       cardRevision: number;
       eventId: string;
+    }
+  | {
+      kind: 'asset-review';
+      asset: LearningAssetHandle;
+      eventId: string;
+      result: ReviewResult;
     }
   | {
       kind: 'object-memory';
