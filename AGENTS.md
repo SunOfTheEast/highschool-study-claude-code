@@ -207,6 +207,16 @@ selection and every persistent write. StudyForge sets no wall-clock deadline for
 Scout fan-out, does not retry a failed fan-out automatically, and does not fall back to
 parent-side bulk asset search.
 
+Visual Material fallback is a separate one-shot worker, not a Pi Session or a
+Plan-callable subagent. Its sole prompt owner is
+`apps/pi-teaching-web/resources/workers/study-material-vision-reader.md`; it receives
+only the current task and selected page images, has no tools or student memory, and
+returns structured page evidence. Native PDF text remains first. In automatic mode an
+authenticated `openai-codex` teacher may route this bounded read to an available
+image-capable `gpt-5.6-luna` at low reasoning, otherwise the image-capable teacher is
+used; explicit visual-model selection always wins. Do not scan unrelated Providers or
+turn this worker into another classroom Agent.
+
 ## App surface
 
 Primary views are Home, Learning Assets, and Course only when a Roadmap exists.
@@ -238,6 +248,8 @@ normal Lesson view shows `Student View` and Block progress, not `Teacher Control
   registry, frontmatter edits, and lifecycle.
 - `apps/pi-teaching-web/resources/subagents/`: packaged read-only asset Scout used only
   by Plan Sessions.
+- `apps/pi-teaching-web/resources/workers/`: packaged one-shot non-Session workers such
+  as visual page reading.
 - `apps/pi-teaching-web/resources/personas/`: optional expression overlays shared by
   Roadmap, Plan, and Lesson Sessions.
 - `apps/pi-teaching-web/src/server/`: minimal HTTP/WebSocket transport.
