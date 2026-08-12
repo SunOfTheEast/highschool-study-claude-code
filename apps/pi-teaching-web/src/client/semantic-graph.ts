@@ -179,6 +179,7 @@ function sharedValues(left: string[], right: string[]): string[] {
 function deriveAssetNeighbors(
   focus: LearningAssetSummary | null,
   summaries: Map<string, LearningAssetSummary>,
+  limit = 6,
 ): SemanticAssetNeighbor[] {
   if (!focus) return [];
   const focusCore = focus.tags?.core ?? [];
@@ -196,7 +197,7 @@ function deriveAssetNeighbors(
         key: assetKey(candidate),
         asset: { kind: candidate.kind, id: candidate.id },
         label: candidate.title,
-        detail: `共享 ${sharedTags.join('、')}`,
+        detail: `共享 ${sharedTags.join('、')} 标签`,
         sharedCoreTags,
         sharedTags,
         relationLabel: sharedCoreTags.length > 0 ? '核心标签相同' as const : '核心标签不同' as const,
@@ -209,7 +210,16 @@ function deriveAssetNeighbors(
         || left.label.localeCompare(right.label, 'zh-CN')
         || left.key.localeCompare(right.key)
     ))
-    .slice(0, 6);
+    .slice(0, Math.max(0, limit));
+}
+
+export function semanticAssetNeighbors(
+  assets: LearningAssetLibrarySnapshot,
+  focus: LearningAssetHandle,
+  limit = 3,
+): SemanticAssetNeighbor[] {
+  const summaries = assetSummaryMap(assets);
+  return deriveAssetNeighbors(summaries.get(assetKey(focus)) ?? null, summaries, limit);
 }
 
 export function buildLocalSemanticGraph({

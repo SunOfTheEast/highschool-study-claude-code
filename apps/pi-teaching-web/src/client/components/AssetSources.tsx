@@ -3,6 +3,7 @@ import type {
   ReadableLearningSourceReference,
   SemanticTagDraft,
 } from '../../shared/contracts';
+import type { SemanticAssetNeighbor } from '../semantic-graph';
 
 function sourceLocation(locator: string | null): string {
   if (locator === null) return '';
@@ -78,6 +79,31 @@ export function AssetProvenance({
         </p>
       )}
       <AssetSources value={sources} />
+    </section>
+  );
+}
+
+export function AssetNeighbors({
+  value,
+  onOpen,
+}: {
+  value: SemanticAssetNeighbor[];
+  onOpen?(asset: SemanticAssetNeighbor['asset']): void;
+}) {
+  if (value.length === 0) return null;
+  return (
+    <section className="asset-neighbors" aria-label="共同标签内容">
+      <small>和这份内容有共同标签</small>
+      <ul>
+        {value.map((neighbor) => (
+          <li key={neighbor.key}>
+            <button type="button" onClick={() => onOpen?.(neighbor.asset)}>
+              <span>{neighbor.label}</span>
+              <small>{neighbor.detail}</small>
+            </button>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

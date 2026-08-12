@@ -45,6 +45,7 @@ import { resetRouteScroll } from './route-scroll';
 import { useDesktopTools } from './desktop/DesktopContext';
 import { deliverFocusAlert, playFocusChime } from './focus-alert';
 import { calendarReviewSelection } from '../calendar/review-selection';
+import { semanticAssetNeighbors } from './semantic-graph';
 
 type ConnectionState = 'open' | 'connecting' | 'closed';
 
@@ -218,17 +219,29 @@ export function App() {
         return;
       }
       if (next.kind === 'note') {
-        const value = await api.note(next.id);
+        const [value, assetLibrary, relations] = await Promise.all([
+          api.note(next.id),
+          assets ? Promise.resolve(assets) : api.assets(),
+          semanticRelations ? Promise.resolve(semanticRelations) : api.semanticRelations(),
+        ]);
         if (revision !== routeLoadRevision.current) return;
         setNote(value);
+        setAssets(assetLibrary);
+        setSemanticRelations(relations);
         setRoute(next);
         setNotice(null);
         return;
       }
       if (next.kind === 'problem-card') {
-        const value = await api.problemCard(next.id);
+        const [value, assetLibrary, relations] = await Promise.all([
+          api.problemCard(next.id),
+          assets ? Promise.resolve(assets) : api.assets(),
+          semanticRelations ? Promise.resolve(semanticRelations) : api.semanticRelations(),
+        ]);
         if (revision !== routeLoadRevision.current) return;
         setProblem(value);
+        setAssets(assetLibrary);
+        setSemanticRelations(relations);
         setRoute(next);
         setNotice(null);
         return;
@@ -301,6 +314,13 @@ export function App() {
     window.history[replace ? 'replaceState' : 'pushState'](null, '', path);
     resetRouteScroll();
     void loadRoute(next);
+  };
+
+  const openKnowledgeTag = (tag: string) => {
+    const path = `/knowledge?focus=${encodeURIComponent(`tag:${tag}`)}`;
+    window.history.pushState(null, '', path);
+    resetRouteScroll();
+    void loadRoute({ kind: 'knowledge' });
   };
 
   useEffect(() => {
@@ -668,7 +688,11 @@ export function App() {
         setNote(await api.note(note.id));
       }} onAskTeacher={() => void startFree([{ kind: 'note', id: note.id }])} onReload={() => {
         void loadRoute(route);
-      }} />
+      }} onTag={openKnowledgeTag} neighbors={assets
+        ? semanticAssetNeighbors(assets, { kind: 'note', id: note.id })
+        : []} onOpenNeighbor={(reference) => navigate(reference.kind === 'note'
+        ? { kind: 'note', id: reference.id }
+        : { kind: 'problem-card', id: reference.id })} />
     ) : <div className="loading-screen"><b>正在读取 Note</b></div>;
   } else if (route.kind === 'problem-card') {
     content = problem ? (
@@ -704,6 +728,13 @@ export function App() {
           const next = parseBrowserRoute(new URL(created.route, window.location.origin).pathname);
           if (next) navigate(next);
         }}
+        onTag={openKnowledgeTag}
+        neighbors={assets
+          ? semanticAssetNeighbors(assets, { kind: 'problem-card', id: problem.id })
+          : []}
+        onOpenNeighbor={(reference) => navigate(reference.kind === 'note'
+          ? { kind: 'note', id: reference.id }
+          : { kind: 'problem-card', id: reference.id })}
       />
     ) : <div className="loading-screen"><b>正在读取题卡</b></div>;
   } else if (route.kind === 'free-learning' && selectedKey) {

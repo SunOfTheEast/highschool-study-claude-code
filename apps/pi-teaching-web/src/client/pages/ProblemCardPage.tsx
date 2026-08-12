@@ -10,7 +10,8 @@ import type {
   ReviewResult,
   StudentProblemCard,
 } from '../../shared/contracts';
-import { AssetProvenance, AssetTags } from '../components/AssetSources';
+import { AssetNeighbors, AssetProvenance, AssetTags } from '../components/AssetSources';
+import type { SemanticAssetNeighbor } from '../semantic-graph';
 import { MarkdownView } from '../components/MarkdownView';
 import { publicErrorText } from '../public-errors';
 import { AssetReviewControls } from '../components/AssetReviewControls';
@@ -35,6 +36,9 @@ export function ProblemCardPage({
   onAskTeacher,
   onReview,
   onReviewAction,
+  onTag,
+  neighbors = [],
+  onOpenNeighbor,
 }: {
   value: ProblemCardView;
   onAttempt(response: ProblemAttemptResponse): Promise<void | ProblemAttemptEvent>;
@@ -43,6 +47,9 @@ export function ProblemCardPage({
   onAskTeacher(): Promise<void>;
   onReview?(result: ReviewResult, problemAttemptId: string): Promise<void>;
   onReviewAction?(action: 'enroll' | 'remove' | 'restart'): Promise<void>;
+  onTag?(tag: string): void;
+  neighbors?: SemanticAssetNeighbor[];
+  onOpenNeighbor?(asset: SemanticAssetNeighbor['asset']): void;
 }) {
   const [answer, setAnswer] = useState('');
   const [studentNote, setStudentNote] = useState(value.studentNote);
@@ -177,8 +184,9 @@ export function ProblemCardPage({
           {asking ? '正在打开对话…' : hasAttempt ? '带着这次作答问老师' : '带着这道题问老师'}
         </button>
       </header>
-      <AssetTags value={value.semanticTags} />
+      <AssetTags value={value.semanticTags} {...(onTag ? { onTag } : {})} />
       <AssetProvenance formation={value.formation ?? null} sources={value.sources} />
+      <AssetNeighbors value={neighbors} {...(onOpenNeighbor ? { onOpen: onOpenNeighbor } : {})} />
       <AssetReviewControls
         review={value.review ?? null}
         direct

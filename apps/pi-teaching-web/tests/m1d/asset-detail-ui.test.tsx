@@ -36,6 +36,13 @@ test('shows a Note formation separately from its pinned source and offers one as
       value={{
         ...note,
         formation,
+        semanticTags: {
+          subject: { kind: 'note', id: 'note-001' },
+          revision: 1,
+          core: ['沉淀溶解平衡'],
+          related: ['纯固体'],
+          updatedAt: '2026-08-09T11:00:00.000Z',
+        },
         contentHistory: [{
           revision: 1,
           title: 'Ksp 的第一版解释',
@@ -46,6 +53,17 @@ test('shows a Note formation separately from its pinned source and offers one as
       onSave={async () => {}}
       onAskTeacher={() => {}}
       onReload={() => {}}
+      onTag={() => {}}
+      neighbors={[{
+        key: 'problem-card:problem-002',
+        asset: { kind: 'problem-card', id: 'problem-002' },
+        label: '另一道 Ksp 题',
+        detail: '共享 沉淀溶解平衡 标签',
+        sharedCoreTags: ['沉淀溶解平衡'],
+        sharedTags: ['沉淀溶解平衡'],
+        relationLabel: '核心标签相同',
+      }]}
+      onOpenNeighbor={() => {}}
     />,
   );
   expect(markup).toContain('形成于');
@@ -55,6 +73,12 @@ test('shows a Note formation separately from its pinned source and offers one as
   expect(markup).toContain('带着这份笔记问老师');
   expect(markup).toContain('内容历史 · 1');
   expect(markup).toContain('Ksp 的第一版解释');
+  expect(markup).toContain('和这份内容有共同标签');
+  expect(markup).toContain('另一道 Ksp 题');
+  expect(markup).toContain('共享 沉淀溶解平衡 标签');
+  expect(markup).toContain('核心 · 沉淀溶解平衡');
+  expect(markup).toContain('data-tag-role="core"');
+  expect(markup).not.toMatch(/相似|推荐|先修|因果|掌握/);
 });
 
 test('previews the current unsaved Note draft without creating a version', () => {

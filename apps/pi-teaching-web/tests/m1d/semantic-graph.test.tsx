@@ -2,6 +2,7 @@ import { expect, test } from 'bun:test';
 import { renderToStaticMarkup } from 'react-dom/server';
 import type {
   LearningAssetLibrarySnapshot,
+  LearningAssetHandle,
   LearningAssetSummary,
   LearningMaterial,
   SemanticRelation,
@@ -120,6 +121,28 @@ test('derives at most six asset neighbors from shared tags without claiming simi
     relationLabel: '核心标签相同',
   });
   expect(JSON.stringify(graph.neighborAssets)).not.toMatch(/相似|最佳|路线对照/);
+});
+
+test('returns a stable three-item detail-page relation from existing flat tags', () => {
+  const detailNeighbors = (semanticGraph as typeof semanticGraph & {
+    semanticAssetNeighbors?: (
+      assetValues: LearningAssetLibrarySnapshot,
+      focus: LearningAssetHandle,
+      limit?: number,
+    ) => Array<{ asset: LearningAssetHandle; detail: string }>;
+  }).semanticAssetNeighbors;
+  expect(typeof detailNeighbors).toBe('function');
+  if (typeof detailNeighbors !== 'function') return;
+
+  const first = detailNeighbors(assets, { kind: 'note', id: 'note-ksp' }, 3);
+  const second = detailNeighbors(assets, { kind: 'note', id: 'note-ksp' }, 3);
+  expect(first).toEqual(second);
+  expect(first).toHaveLength(3);
+  expect(first[0]).toMatchObject({
+    asset: { kind: 'problem-card', id: 'problem-1' },
+    detail: '共享 沉淀溶解平衡 标签',
+  });
+  expect(JSON.stringify(first)).not.toMatch(/相似|推荐|先修|因果|掌握/);
 });
 
 test('searches tags and student asset titles from summaries', () => {

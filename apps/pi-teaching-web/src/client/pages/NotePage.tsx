@@ -9,7 +9,8 @@ import type {
   ReviewResult,
 } from '../../shared/contracts';
 import { ApiError } from '../api';
-import { AssetProvenance, AssetTags } from '../components/AssetSources';
+import { AssetNeighbors, AssetProvenance, AssetTags } from '../components/AssetSources';
+import type { SemanticAssetNeighbor } from '../semantic-graph';
 import { MarkdownView } from '../components/MarkdownView';
 import { publicErrorText } from '../public-errors';
 import { AssetReviewControls } from '../components/AssetReviewControls';
@@ -52,6 +53,9 @@ export function NotePage({
   onReload,
   onReview,
   onReviewAction,
+  onTag,
+  neighbors = [],
+  onOpenNeighbor,
 }: {
   value: NoteView;
   onSave(input: { expectedRevision: number; title: string; blocks: LearningNoteBlock[] }): Promise<void>;
@@ -59,6 +63,9 @@ export function NotePage({
   onReload?(): void;
   onReview?(result: ReviewResult): Promise<void>;
   onReviewAction?(action: 'enroll' | 'remove' | 'restart'): Promise<void>;
+  onTag?(tag: string): void;
+  neighbors?: SemanticAssetNeighbor[];
+  onOpenNeighbor?(asset: SemanticAssetNeighbor['asset']): void;
 }) {
   const [editing, setEditing] = useState(false);
   const [editorMode, setEditorMode] = useState<'edit' | 'preview'>('edit');
@@ -156,8 +163,9 @@ export function NotePage({
           </button>
         </div>
       </header>
-      <AssetTags value={value.semanticTags} />
+      <AssetTags value={value.semanticTags} {...(onTag ? { onTag } : {})} />
       <AssetProvenance formation={value.formation ?? null} sources={value.sources} />
+      <AssetNeighbors value={neighbors} {...(onOpenNeighbor ? { onOpen: onOpenNeighbor } : {})} />
       <AssetReviewControls
         review={value.review ?? null}
         direct={recallBlocks.length > 0}
