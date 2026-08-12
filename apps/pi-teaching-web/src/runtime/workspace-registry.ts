@@ -1,6 +1,7 @@
 import type { ImageContent } from '@earendil-works/pi-ai';
 import { resolve } from 'node:path';
 import type { AgentSessionEvent, SessionEntry } from '@earendil-works/pi-coding-agent';
+import { MAX_MATERIAL_CONTEXT_PAGES } from '../shared/contracts';
 import type {
   CourseTreeNode,
   CalendarAppointment,
@@ -137,9 +138,16 @@ function checkedSelectedAssets(
       const index = revision.locatorKind === 'page'
         ? readMaterialBookIndex(root, asset.id, asset.revision)
         : null;
-      if (asset.locator !== null && index) {
-        const locator = parseMaterialLocator(asset.locator, { pageCount: index.pageCount });
+      if (revision.locatorKind === 'page') {
+        if (asset.locator === null) throw new Error('SELECTED_CONTEXT_INVALID');
+        const locator = parseMaterialLocator(asset.locator, {
+          ...(index ? { pageCount: index.pageCount } : {}),
+        });
         if (locator.kind !== 'pages') throw new Error('SELECTED_CONTEXT_INVALID');
+        if (locator.end - locator.start + 1 > MAX_MATERIAL_CONTEXT_PAGES) {
+          throw new Error('SELECTED_MATERIAL_RANGE_LIMIT_EXCEEDED');
+        }
+        if (!index) readMaterialLocator(root, asset);
       } else {
         readMaterialLocator(root, asset);
       }

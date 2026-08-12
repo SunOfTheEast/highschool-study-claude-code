@@ -51,11 +51,49 @@ function receipt(
   };
 }
 
+function persistPage(
+  root: string,
+  materialId: string,
+  revision: number,
+  physicalPage: number,
+  update: Omit<MaterialBookIndex['pages'][number], 'physicalPage' | 'pdfLabel'>,
+  text: string | null,
+): MaterialBookIndex['pages'][number] {
+  const latest = currentIndex(root, materialId, revision);
+  const previous = pageAt(latest, physicalPage);
+  const page = { ...previous, ...update };
+  const next = {
+    ...latest,
+    state: page.state === 'failed' ? 'partial' as const : latest.state,
+    pages: latest.pages.with(physicalPage - 1, page),
+    updatedAt: update.updatedAt ?? latest.updatedAt,
+  };
+  writeMaterialBookPageProjection(
+    root,
+    next,
+    text === null ? null : { physicalPage, text },
+  );
+  return page;
+}
+
 function publicFailure(error: unknown): string {
   const code = error instanceof Error ? error.message : '';
   return code === 'MATERIAL_VISION_UNAVAILABLE'
     ? code
     : 'MATERIAL_PAGE_READ_FAILED';
+}
+
+export function nativePageTextIsSane(value: string): boolean {
+  const text = value.trim();
+  const meaningful = text.match(/[\p{L}\p{N}]/gu)?.length ?? 0;
+  if (meaningful < 12) return false;
+  const corrupt = text.match(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uFFFD]/gu)?.length ?? 0;
+  if (corrupt / Math.max(1, [...text].length) > 0.1) return false;
+  if (/^[\p{Script=Latin}\p{N}\s\p{P}\p{S}]+$/u.test(text)) {
+    const words = text.match(/\p{Script=Latin}+/gu)?.length ?? 0;
+    if (words < 3 || meaningful < 15) return false;
+  }
+  return true;
 }
 
 export async function readMaterialPage(
@@ -77,19 +115,16 @@ export async function readMaterialPage(
   try {
     if (options.mode === 'auto') {
       const nativeText = await extractPdfBookPageText(root, materialId, revision, physicalPage);
-      if (nativeText.trim()) {
+      if (nativePageTextIsSane(nativeText)) {
         const textPath = materialBookPageTextPath(materialId, revision, physicalPage);
-        const page = {
-          ...current,
+        const page = persistPage(root, materialId, revision, physicalPage, {
           state: 'native-text' as const,
           textPath,
           method: 'native' as const,
           model: null,
           updatedAt: options.updatedAt,
           error: null,
-        };
-        const next = { ...index, pages: index.pages.with(physicalPage - 1, page), updatedAt: options.updatedAt };
-        writeMaterialBookPageProjection(root, next, { physicalPage, text: nativeText });
+        }, nativeText);
         return { ...page, text: nativeText, cached: false };
       }
     }
@@ -100,35 +135,27 @@ export async function readMaterialPage(
       images: [{ type: 'image', data: rendered.bytes.toString('base64'), mimeType: 'image/png' }],
     });
     const textPath = materialBookPageTextPath(materialId, revision, physicalPage);
-    const page = {
-      ...current,
+    const page = persistPage(root, materialId, revision, physicalPage, {
       state: 'visual-text' as const,
       textPath,
       method: 'vision' as const,
       model: result.model,
       updatedAt: options.updatedAt,
       error: null,
-    };
-    const next = { ...index, pages: index.pages.with(physicalPage - 1, page), updatedAt: options.updatedAt };
-    writeMaterialBookPageProjection(root, next, { physicalPage, text: result.text });
+    }, result.text);
     return { ...page, text: result.text, cached: false };
   } catch (error) {
     const code = publicFailure(error);
-    if (current.state === 'pending' || current.state === 'failed') {
-      const failed = {
-        ...current,
+    const latest = currentIndex(root, materialId, revision);
+    const latestPage = pageAt(latest, physicalPage);
+    if (latestPage.state === 'pending' || latestPage.state === 'failed') {
+      persistPage(root, materialId, revision, physicalPage, {
         state: 'failed' as const,
         textPath: null,
         method: null,
         model: null,
         updatedAt: options.updatedAt,
         error: code,
-      };
-      writeMaterialBookPageProjection(root, {
-        ...index,
-        state: 'partial',
-        pages: index.pages.with(physicalPage - 1, failed),
-        updatedAt: options.updatedAt,
       }, null);
     }
     throw new Error(code, { cause: error });
@@ -187,13 +214,11 @@ export async function scanMaterialVisualOutline(
     endPage: null,
     provenancePages: pages,
   }));
-  const rangePrefix = `visual-${String(range.startPage).padStart(4, '0')}-${
-    String(range.endPage).padStart(4, '0')
-  }-`;
+  const latest = currentIndex(root, materialId, revision);
   const next = {
-    ...index,
-    printedPageOffsetHint: result.printedPageOffset ?? index.printedPageOffsetHint,
-    outline: [...index.outline.filter((node) => !node.id.startsWith(rangePrefix)), ...visual],
+    ...latest,
+    printedPageOffsetHint: result.printedPageOffset ?? null,
+    outline: [...latest.outline.filter((node) => node.source !== 'visual-toc'), ...visual],
     updatedAt,
   };
   writeMaterialBookIndex(root, next);
@@ -249,11 +274,11 @@ export async function locateMaterialOutlineNode(
   readPage: (physicalPage: number) => Promise<string>,
   updatedAt: string,
 ): Promise<{ index: MaterialBookIndex; node: MaterialBookOutlineNode; candidatePages: number[] }> {
-  const index = currentIndex(root, materialId, revision);
-  const position = index.outline.findIndex((candidate) => candidate.id === nodeId);
+  const initial = currentIndex(root, materialId, revision);
+  const position = initial.outline.findIndex((candidate) => candidate.id === nodeId);
   if (position < 0) throw new Error('MATERIAL_OUTLINE_NODE_NOT_FOUND');
-  const current = index.outline[position]!;
-  const candidates = candidatePages(index, current).slice(0, 5);
+  const current = initial.outline[position]!;
+  const candidates = candidatePages(initial, current).slice(0, 5);
   let matched: number | null = null;
   const title = comparable(current.title);
   for (const page of candidates) {
@@ -262,13 +287,16 @@ export async function locateMaterialOutlineNode(
       break;
     }
   }
-  if (matched === null) return { index, node: current, candidatePages: candidates };
-  const resolved = { ...current, startPage: matched, endPage: matched };
+  if (matched === null) return { index: initial, node: current, candidatePages: candidates };
+  const latest = currentIndex(root, materialId, revision);
+  const latestPosition = latest.outline.findIndex((candidate) => candidate.id === nodeId);
+  if (latestPosition < 0) throw new Error('MATERIAL_OUTLINE_NODE_NOT_FOUND');
+  const resolved = { ...latest.outline[latestPosition]!, startPage: matched, endPage: matched };
   const outline = withResolvedVisualRanges(
-    index.outline.with(position, resolved),
-    index.pageCount,
+    latest.outline.with(latestPosition, resolved),
+    latest.pageCount,
   );
-  const next = { ...index, outline, updatedAt };
+  const next = { ...latest, outline, updatedAt };
   writeMaterialBookIndex(root, next);
-  return { index: next, node: next.outline[position]!, candidatePages: candidates };
+  return { index: next, node: next.outline[latestPosition]!, candidatePages: candidates };
 }

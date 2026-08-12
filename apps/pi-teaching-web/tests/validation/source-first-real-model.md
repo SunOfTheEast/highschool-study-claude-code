@@ -66,9 +66,15 @@
 
 最终自动回归证据：
 
-- `bun test tests/source-first`：38/38 通过；
+- `bun test tests/source-first`：45/45 通过；
 - `bunx playwright test tests/e2e/source-first-book.spec.ts`：1/1 通过；
-- `bun run check`：TypeScript 类型检查通过，584/584 非 E2E 测试通过，Vite 生产构建通过。
+- `bun run check`：TypeScript 类型检查通过，591/591 非 E2E 测试通过，Vite 生产构建通过。
+
+发布复核另补了四条确定性边界，未重新支付真实模型调用：并行完成的两页不会用旧索引快照
+互相覆盖；低信息或明显损坏的隐藏 PDF 文本会退回视觉读取；目录页由学生填写真实起止页、
+可重新整理，而非硬猜前八页；单次教师 Session 最多带入 8 个连续物理页，客户端与 Runtime
+双端拒绝超限 locator。来源树恢复为设计稿约定的“投影到每个相交目录节点”，书籍资产总数
+仍按 canonical kind/id 去重。
 
 ## 已知代价与延期
 

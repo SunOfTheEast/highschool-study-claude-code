@@ -2,6 +2,7 @@ export const PLAN_STATUSES = ['prepared', 'active', 'completed'] as const;
 export const LESSON_STATUSES = ['prepared', 'active', 'closed'] as const;
 export const BLOCK_STATUSES = ['pending', 'active', 'completed', 'skipped'] as const;
 export const ACTIVITY_KINDS = ['dialogue', 'problem', 'material', 'reflection'] as const;
+export const MAX_MATERIAL_CONTEXT_PAGES = 8;
 
 export type PlanStatus = typeof PLAN_STATUSES[number];
 export type LessonStatus = typeof LESSON_STATUSES[number];

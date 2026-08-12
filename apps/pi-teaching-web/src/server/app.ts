@@ -16,6 +16,7 @@ import type {
   SemanticTagDraft,
   SessionKey,
 } from '../shared/contracts';
+import { MAX_MATERIAL_CONTEXT_PAGES } from '../shared/contracts';
 import { parseHandoutBlockSegment } from '../shared/handout-route';
 import { readKnowledge } from '../study/knowledge';
 import { readLessonHandout } from '../study/lesson-handout';
@@ -211,6 +212,7 @@ function positiveRevision(value: unknown): number {
 }
 
 function learningContextReferences(
+  root: string,
   value: unknown,
   allowReviewBatch = false,
 ): LearningContextReference[] {
@@ -232,6 +234,14 @@ function learningContextReferences(
       if (locator !== null && (typeof locator !== 'string' || !locator.trim() || /[\r\n\t]/.test(locator))) {
         throw new Error('SELECTED_MATERIAL_LOCATOR_INVALID');
       }
+      const index = readMaterialBookIndex(root, id, revision);
+      const parsed = parseMaterialLocator(locator as string | null, {
+        ...(index ? { pageCount: index.pageCount } : {}),
+      });
+      if (
+        parsed.kind === 'pages'
+        && parsed.end - parsed.start + 1 > MAX_MATERIAL_CONTEXT_PAGES
+      ) throw new Error('SELECTED_MATERIAL_RANGE_LIMIT_EXCEEDED');
       const selected = { kind: 'material' as const, id, revision, locator: locator as string | null };
       const key = `${kind}:${id}@${revision}#${locator ?? ''}`;
       if (seen.has(key)) throw new Error(`SELECTED_CONTEXT_DUPLICATE: ${key}`);
@@ -271,6 +281,7 @@ function calendarDestination(root: string, value: unknown): CalendarDestination 
     || Object.keys(destination).length !== 3
   ) throw new Error('CALENDAR_DESTINATION_INVALID');
   const contexts = learningContextReferences(
+    root,
     destination.contexts,
     destination.intent === 'review',
   );
@@ -763,7 +774,7 @@ export function createRequestHandler(deps?: AppDependencies) {
           throw new Error('FREE_LEARNING_INTENT_INVALID');
         }
         const session = await deps.registry.createFreeLearning(
-          learningContextReferences(requestBody.selectedAssets, intent === 'review'),
+          learningContextReferences(deps.root, requestBody.selectedAssets, intent === 'review'),
           intent,
         );
         deps.hub.publish({ type: 'home-invalidated' });
@@ -786,7 +797,7 @@ export function createRequestHandler(deps?: AppDependencies) {
       if (url.pathname === '/api/meta' && request.method === 'POST') {
         const requestBody = objectBody(await request.json());
         const session = await deps.registry.createMeta(
-          learningContextReferences(requestBody.selectedAssets),
+          learningContextReferences(deps.root, requestBody.selectedAssets),
         );
         deps.hub.publish({ type: 'home-invalidated' });
         return json({ session, route: `/meta/${encodeURIComponent(session.id)}` }, 201);

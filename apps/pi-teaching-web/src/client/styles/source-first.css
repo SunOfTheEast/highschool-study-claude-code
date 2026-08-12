@@ -170,6 +170,32 @@
 .book-section-head h2 { margin: 0; font: 500 var(--text-h2)/1.35 var(--font-display); }
 .book-section-head span { color: var(--ink-faint); font-size: var(--text-label); }
 .book-outline-empty { padding: var(--space-6) 0; color: var(--ink-soft); }
+.book-outline-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(120px, 160px)) max-content;
+  gap: var(--space-3);
+  align-items: end;
+  margin-top: var(--space-4);
+}
+.book-outline-controls label { display: grid; gap: var(--space-1); }
+.book-outline-controls label span { color: var(--ink-soft); font-size: var(--text-label); }
+.book-outline-controls input {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--rule-strong);
+  border-radius: 2px;
+  color: var(--ink);
+  background: var(--paper);
+  font: var(--text-body)/1 var(--font-mono);
+}
+.book-outline-controls > small {
+  grid-column: 1 / -1;
+  color: var(--ink-faint);
+  font-size: var(--text-label);
+}
+.book-outline-rescan { margin-top: var(--space-4); color: var(--ink-soft); }
+.book-outline-rescan summary { cursor: pointer; font-size: var(--text-label); }
 
 .book-toc { border-top: 1px solid var(--rule); }
 .book-toc-row {
@@ -307,4 +333,6 @@
   .reader-center { min-height: calc(100dvh - var(--workspace-header-height)); }
   .page-stage { padding: var(--space-4) var(--space-2) var(--space-7); }
   .source-library-head { align-items: flex-start; flex-direction: column; }
+  .book-outline-controls { grid-template-columns: 1fr 1fr; }
+  .book-outline-controls .action-wash { grid-column: 1 / -1; }
 }

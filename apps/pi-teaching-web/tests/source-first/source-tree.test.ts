@@ -110,7 +110,7 @@ test('keeps old revisions pinned and degrades unresolved chapter mapping without
   expect(oldBook.chapters.flatMap((chapter) => chapter.assets)).toHaveLength(0);
 });
 
-test('places one source under the most specific containing outline node only once', async () => {
+test('projects one source under every parent, child, or sibling outline span it intersects', async () => {
   const learningSet = root();
   const book = await addBook(learningSet, '嵌套目录教材', 'book-nested');
   writeMaterialBookIndex(learningSet, createMaterialBookIndex({
@@ -124,18 +124,24 @@ test('places one source under the most specific containing outline node only onc
     }, {
       id: 'section-1', title: '第一节', level: 2, source: 'curated', printedPage: '2',
       startPage: 2, endPage: 3, provenancePages: [],
+    }, {
+      id: 'section-2', title: '第二节', level: 2, source: 'curated', printedPage: '4',
+      startPage: 4, endPage: 5, provenancePages: [],
     }],
     updatedAt: '2026-08-13T00:02:00.000Z',
   }));
   const note = planLearningNoteSave(learningSet, 'free-source', {
-    title: '只出现一次的笔记', blocks: [{ kind: 'markdown', body: '属于最具体的小节。' }],
-    sources: [{ kind: 'material', id: book.id, revision: 1, locator: 'pages-0002-0003' }],
+    title: '跨节笔记', blocks: [{ kind: 'markdown', body: '来源页段跨过两个相邻小节。' }],
+    sources: [{ kind: 'material', id: book.id, revision: 1, locator: 'pages-0003-0004' }],
     tags: { core: ['目录投影'], related: [] },
   }, '2026-08-13T00:03:00.000Z');
   commitDocumentCandidates(learningSet, note.candidates);
 
   const chapters = readSourceTree(learningSet).books[0]!.chapters;
-  expect(chapters.find((chapter) => chapter.id === 'chapter-1')?.assets).toEqual([]);
+  expect(chapters.find((chapter) => chapter.id === 'chapter-1')?.assets.map((asset) => asset.title))
+    .toEqual(['跨节笔记']);
   expect(chapters.find((chapter) => chapter.id === 'section-1')?.assets.map((asset) => asset.title))
-    .toEqual(['只出现一次的笔记']);
+    .toEqual(['跨节笔记']);
+  expect(chapters.find((chapter) => chapter.id === 'section-2')?.assets.map((asset) => asset.title))
+    .toEqual(['跨节笔记']);
 });

@@ -16,6 +16,7 @@ import {
 } from '../../src/client/pages/MaterialPage';
 import { SourceTreePage } from '../../src/client/pages/SourceTreePage';
 import { formatBrowserRoute, parseBrowserRoute } from '../../src/client/routes';
+import { materialPagesForContext } from '../../src/client/free-learning-contexts';
 
 const revision = {
   revision: 1,
@@ -154,6 +155,10 @@ test('round-trips book overview, exact reader, and source-tree routes', () => {
     const url = new URL(path, 'http://localhost');
     expect(parseBrowserRoute(url.pathname, url.search)).toEqual(route);
   }
+  expect(parseBrowserRoute(
+    '/assets/books/material-001/read/1/pages-0001-0009',
+  )).toBeNull();
+  expect(materialPagesForContext('pages-0001-0009')).toEqual([]);
 });
 
 test('renders book identity, honest indexing state, outline, and grown assets', () => {
@@ -174,6 +179,25 @@ test('renders book identity, honest indexing state, outline, and grown assets', 
   expect(markup).toContain('第三章 水溶液中的离子反应与平衡');
   expect(markup).toContain('Ksp 与固体活度');
   expect(markup).not.toContain('学习进度');
+});
+
+test('lets a student select a bounded table-of-contents range beyond the first eight pages', () => {
+  const emptyIndex = { ...index, outline: [] };
+  const markup = renderToStaticMarkup(
+    <BookOverviewPage
+      value={view}
+      index={emptyIndex}
+      sourceBook={sourceTree.books[0]!}
+      onOpenPage={() => {}}
+      onLocateOutline={async () => {}}
+      onScanOutline={async () => {}}
+    />,
+  );
+
+  expect(markup).toContain('目录起始页');
+  expect(markup).toContain('目录结束页');
+  expect(markup).toContain('整理所选目录页');
+  expect(markup).not.toContain('整理前 8 页目录');
 });
 
 test('keeps the original page central and pins the exact current range for learning', () => {

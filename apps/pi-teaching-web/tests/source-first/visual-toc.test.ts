@@ -9,6 +9,7 @@ import {
 } from '../../src/study/material-book-index';
 import {
   locateMaterialOutlineNode,
+  readMaterialPage,
   scanMaterialVisualOutline,
 } from '../../src/study/material-page-reader';
 import { importMaterial } from '../../src/study/materials';
@@ -45,8 +46,9 @@ test('adds bounded visual outline candidates without replacing PDF bookmarks', a
       read: async (input) => {
         requestPrompt = input.prompt;
         return {
-        text: '', model: 'test/vision',
-        outline: [{ title: '视觉目录章', level: 1, printedPage: '2' }],
+          text: '', model: 'test/vision',
+          outline: [{ title: '视觉目录章', level: 1, printedPage: '2' }],
+          printedPageOffset: 4,
         };
       },
     },
@@ -59,6 +61,24 @@ test('adds bounded visual outline candidates without replacing PDF bookmarks', a
   }));
   expect(requestPrompt).toContain('编/章/节');
   expect(requestPrompt).toContain('printedPageOffset');
+
+  const rebuilt = await scanMaterialVisualOutline(
+    root,
+    material.id,
+    material.revision,
+    { startPage: 2, endPage: 3 },
+    {
+      read: async () => ({
+        text: '', model: 'test/vision',
+        outline: [{ title: '重建后的目录章', level: 1, printedPage: '2' }],
+      }),
+    },
+    '2026-08-13T00:02:30.000Z',
+  );
+  expect(rebuilt.outline.some((node) => node.source === 'pdf-bookmark')).toBeTrue();
+  expect(rebuilt.outline.filter((node) => node.source === 'visual-toc').map((node) => node.title))
+    .toEqual(['重建后的目录章']);
+  expect(rebuilt.printedPageOffsetHint).toBeNull();
 
   await expect(scanMaterialVisualOutline(
     root, material.id, material.revision, { startPage: 1, endPage: 13 },
@@ -74,7 +94,7 @@ test('locates a visual node only after its title appears in a bounded candidate 
     {
       read: async () => ({
         text: '', model: 'test/vision',
-        outline: [{ title: '视觉目录章', level: 1, printedPage: '1' }],
+        outline: [{ title: 'PAGE THREE', level: 1, printedPage: '1' }],
         printedPageOffset: 2,
       }),
     },
@@ -94,7 +114,9 @@ test('locates a visual node only after its title appears in a bounded candidate 
     node.id,
     async (page) => {
       checked.push(page);
-      return page === 3 ? '视觉目录章\n正文' : '别的内容';
+      return (await readMaterialPage(root, material.id, material.revision, page, {
+        mode: 'auto', updatedAt: '2026-08-13T00:02:30.000Z',
+      })).text;
     },
     '2026-08-13T00:03:00.000Z',
   );
@@ -102,4 +124,36 @@ test('locates a visual node only after its title appears in a bounded candidate 
   expect(located.index.printedPageOffsetHint).toBe(2);
   expect(located.candidatePages[0]).toBe(3);
   expect(checked).toEqual([3]);
+  expect(readMaterialBookIndex(root, material.id, material.revision)?.pages[2]).toMatchObject({
+    state: 'native-text', method: 'native',
+  });
+});
+
+test('merges an outline scan with a page completed while the visual model is running', async () => {
+  const { root, material } = await book();
+  const started = Promise.withResolvers<void>();
+  const finish = Promise.withResolvers<void>();
+  const scanning = scanMaterialVisualOutline(
+    root, material.id, material.revision, { startPage: 1, endPage: 2 },
+    {
+      read: async () => {
+        started.resolve();
+        await finish.promise;
+        return {
+          text: '', model: 'test/vision',
+          outline: [{ title: '视觉目录章', level: 1, printedPage: '2' }],
+        };
+      },
+    },
+    '2026-08-13T00:02:00.000Z',
+  );
+  await started.promise;
+  await readMaterialPage(root, material.id, material.revision, 3, {
+    mode: 'auto', updatedAt: '2026-08-13T00:02:30.000Z',
+  });
+  finish.resolve();
+  const scanned = await scanning;
+
+  expect(scanned.outline).toContainEqual(expect.objectContaining({ title: '视觉目录章' }));
+  expect(scanned.pages[2]).toMatchObject({ state: 'native-text', method: 'native' });
 });

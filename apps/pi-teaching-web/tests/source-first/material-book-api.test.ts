@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { createCanvas, loadImage } from '@napi-rs/canvas';
 import { createRequestHandler } from '../../src/server/app';
 import { EventHub } from '../../src/server/event-hub';
+import { createMaterialBookIndex, writeMaterialBookIndex } from '../../src/study/material-book-index';
 import { importMaterial } from '../../src/study/materials';
 import { writeThreePageBook } from './pdf-fixture';
 
@@ -162,4 +163,44 @@ test('processes only an explicitly requested page and keeps the result addressab
   expect(await body(await handler(new Request(
     `${endpoint}/locators/page-0002`,
   )))).toMatchObject({ text: '视觉识别出的第二页' });
+});
+
+test('rejects an oversized material range before creating a learning session', async () => {
+  const learningSet = root();
+  const imported = await importMaterial(learningSet, {
+    requestId: 'book-api-range', title: '十二页教材', filename: 'book.pdf',
+    mediaType: 'application/pdf', source: {
+      kind: 'bytes', bytes: new TextEncoder().encode('%PDF range boundary'),
+    },
+  }, '2026-08-13T00:00:00.000Z');
+  writeMaterialBookIndex(learningSet, createMaterialBookIndex({
+    materialId: imported.id, revision: imported.revision, pageCount: 12,
+    pageLabels: null, outline: [], updatedAt: '2026-08-13T00:01:00.000Z',
+  }));
+  let created = false;
+  const handler = createRequestHandler({
+    root: learningSet,
+    hub: new EventHub(),
+    registry: {
+      ...fakeRegistry(),
+      createFreeLearning: async () => {
+        created = true;
+        throw new Error('must not create');
+      },
+    } as never,
+  });
+
+  const response = await handler(new Request('http://local/api/free-learning', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({
+      selectedAssets: [{
+        kind: 'material', id: imported.id, revision: imported.revision,
+        locator: 'pages-0001-0009',
+      }],
+    }),
+  }));
+  expect(response?.status).toBe(400);
+  expect(await body(response)).toEqual({ error: 'SELECTED_MATERIAL_RANGE_LIMIT_EXCEEDED' });
+  expect(created).toBeFalse();
 });

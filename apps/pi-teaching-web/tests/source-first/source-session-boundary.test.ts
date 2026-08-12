@@ -183,6 +183,45 @@ test('accepts an indexed pending page range without pretending it was read', asy
   }));
 });
 
+test('rejects an oversized page range at the core session boundary', async () => {
+  const root = copyFixture();
+  const { imported } = await seedBook(root);
+  let created = false;
+  const registry = new WorkspaceRegistry(root, async () => {
+    created = true;
+    return fakeSession('source-session-oversized');
+  }, undefined, undefined, async () => null, async () => []);
+
+  await expect(registry.createFreeLearning([{
+    kind: 'material', id: imported.id, revision: imported.revision,
+    locator: 'pages-0042-0050',
+  }])).rejects.toThrow('SELECTED_MATERIAL_RANGE_LIMIT_EXCEEDED');
+  expect(created).toBeFalse();
+});
+
+test('keeps the page-range boundary when the rebuildable book index is missing', async () => {
+  const root = copyFixture();
+  const { imported } = await seedBook(root, [42]);
+  rmSync(join(
+    root,
+    `materials/${imported.id}/projections/${imported.revision}/book-index.yaml`,
+  ));
+  let created = false;
+  const registry = new WorkspaceRegistry(root, async () => {
+    created = true;
+    return fakeSession('source-session-no-index');
+  }, undefined, undefined, async () => null, async () => []);
+
+  await expect(registry.createFreeLearning([{
+    kind: 'material', id: imported.id, revision: imported.revision,
+    locator: 'pages-0042-0050',
+  }])).rejects.toThrow('SELECTED_MATERIAL_RANGE_LIMIT_EXCEEDED');
+  await expect(registry.createFreeLearning([{
+    kind: 'material', id: imported.id, revision: imported.revision, locator: null,
+  }])).rejects.toThrow('SELECTED_CONTEXT_INVALID');
+  expect(created).toBeFalse();
+});
+
 test('saves one Note against the exact processed PDF page range', async () => {
   const root = copyFixture();
   const { imported } = await seedBook(root, [42, 43, 44]);

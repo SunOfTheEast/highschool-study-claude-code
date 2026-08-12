@@ -10,8 +10,10 @@ function referenceFor(asset: SourceTreeAsset): LearningAssetReference {
 }
 
 function assetCount(value: SourceTreeSnapshot['books'][number]): number {
-  return value.chapters.reduce((sum, chapter) => sum + chapter.assets.length, 0)
-    + value.unresolved.assets.length;
+  return new Set(
+    [...value.chapters.flatMap((chapter) => chapter.assets), ...value.unresolved.assets]
+      .map((asset) => `${asset.kind}:${asset.id}`),
+  ).size;
 }
 
 function TreeAsset({

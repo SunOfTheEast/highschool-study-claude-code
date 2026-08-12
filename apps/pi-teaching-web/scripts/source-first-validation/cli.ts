@@ -228,7 +228,7 @@ export async function runSourceFirstValidation(
   if (existsSync(arguments_.output)) {
     throw new Error('SOURCE_FIRST_VALIDATION_OUTPUT_EXISTS');
   }
-  mkdirSync(arguments_.output, { recursive: true });
+  mkdirSync(arguments_.output, { recursive: true, mode: 0o700 });
   const learningSet = join(arguments_.output, 'learning-set');
   const resources = resolve(import.meta.dir, '../../resources');
   cpSync(join(resources, 'templates', 'blank-learning-set'), learningSet, { recursive: true });

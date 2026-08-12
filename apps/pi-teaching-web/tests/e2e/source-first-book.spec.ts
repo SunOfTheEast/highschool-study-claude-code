@@ -82,7 +82,9 @@ test('walks the source-first book, teaching, asset, and cross-book loop', async 
   await page.goto('/assets?view=sources');
   await expect(page.getByText('E2E Chemistry Book', { exact: true })).toBeVisible();
   await expect(page.getByText('Chapter One', { exact: true })).toBeVisible();
-  await page.getByRole('button', { name: /从原书形成的笔记/ }).click();
+  const sourceEntrances = page.getByRole('button', { name: /从原书形成的笔记/ });
+  await expect(sourceEntrances).toHaveCount(2);
+  await sourceEntrances.first().click();
   const originalSource = page.getByRole('link', {
     name: '《E2E Chemistry Book》 · Chapter One · 第 1–2 页',
   });
@@ -133,7 +135,7 @@ test('walks the source-first book, teaching, asset, and cross-book loop', async 
   await bootstrap(page, secondRevision);
 
   await page.goto('/assets?view=sources');
-  await page.getByRole('button', { name: /从原书形成的笔记/ }).click();
+  await page.getByRole('button', { name: /从原书形成的笔记/ }).first().click();
   await page.getByRole('link', {
     name: '《E2E Chemistry Book》 · Chapter One · 第 1–2 页',
   }).click();

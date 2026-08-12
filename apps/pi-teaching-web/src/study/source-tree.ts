@@ -8,7 +8,18 @@ import { parseMaterialLocator } from './material-locators';
 import { readMaterialBookIndex } from './material-book-index';
 import { readLearningAssetLibrary } from './learning-assets';
 import { listMaterials } from './materials';
-import { materialSourceOutline, resolveMaterialSourceLabel } from './source-labels';
+import { resolveMaterialSourceLabel } from './source-labels';
+
+function outlineIntersects(
+  node: { startPage: number | null; endPage: number | null },
+  locator: ReturnType<typeof parseMaterialLocator>,
+): boolean {
+  if (node.startPage === null || node.endPage === null) return false;
+  if (locator.kind === 'whole') return true;
+  return locator.kind === 'pages'
+    && node.startPage <= locator.end
+    && node.endPage >= locator.start;
+}
 
 function sourceAsset(
   root: string,
@@ -65,7 +76,7 @@ export function readSourceTree(root: string): SourceTreeSnapshot {
           endPage: node.endPage,
           assets: attached.flatMap(({ asset, source }) => {
             const locator = parseMaterialLocator(source.locator);
-            return materialSourceOutline(index!, locator)?.id === node.id
+            return outlineIntersects(node, locator)
               ? [sourceAsset(root, asset, source)]
               : [];
           }),

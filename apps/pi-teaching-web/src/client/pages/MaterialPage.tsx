@@ -244,11 +244,56 @@ export function BookOverviewPage({
   onScanOutline(startPage: number, endPage: number): Promise<void>;
   onOpenAsset?(reference: LearningAssetReference): void;
 }) {
+  const [tocStartPage, setTocStartPage] = useState(1);
+  const [tocEndPage, setTocEndPage] = useState(Math.min(index.pageCount, 12));
+  useEffect(() => {
+    setTocStartPage(1);
+    setTocEndPage(Math.min(index.pageCount, 12));
+  }, [value.material.id, value.current.revision, index.pageCount]);
   const grown = sourceAssets(sourceBook);
   const processed = index.pages.filter((page) => (
     page.state === 'native-text' || page.state === 'visual-text'
   )).length;
   const firstResolved = index.outline.find((node) => node.startPage !== null);
+  const tocRangeValid = Number.isSafeInteger(tocStartPage)
+    && Number.isSafeInteger(tocEndPage)
+    && tocStartPage >= 1
+    && tocStartPage <= tocEndPage
+    && tocEndPage <= index.pageCount
+    && tocEndPage - tocStartPage + 1 <= 12;
+  const tocRangeControls = (
+    <div className="book-outline-controls">
+      <label>
+        <span>目录起始页</span>
+        <input
+          type="number"
+          min={1}
+          max={index.pageCount}
+          value={tocStartPage}
+          onChange={(event) => setTocStartPage(event.currentTarget.valueAsNumber)}
+        />
+      </label>
+      <label>
+        <span>目录结束页</span>
+        <input
+          type="number"
+          min={1}
+          max={index.pageCount}
+          value={tocEndPage}
+          onChange={(event) => setTocEndPage(event.currentTarget.valueAsNumber)}
+        />
+      </label>
+      <button
+        type="button"
+        className="action-wash"
+        disabled={!tocRangeValid}
+        onClick={() => void onScanOutline(tocStartPage, tocEndPage)}
+      >
+        整理所选目录页
+      </button>
+      <small>一次最多整理 12 页；这里只读取目录，不会处理整本书。</small>
+    </div>
+  );
 
   return (
     <main className="book-overview">
@@ -289,34 +334,34 @@ export function BookOverviewPage({
           </header>
           {index.outline.length === 0 ? (
             <div className="book-outline-empty">
-              <p>这份 PDF 没有可直接读取的书签。可以先扫描一小段目录页，不会处理整本书。</p>
-              <button
-                type="button"
-                className="action-wash"
-                onClick={() => void onScanOutline(1, Math.min(index.pageCount, 8))}
-              >
-                整理前 {Math.min(index.pageCount, 8)} 页目录
-              </button>
+              <p>这份 PDF 没有可直接读取的书签。请填写纸面目录实际位于 PDF 的哪几页。</p>
+              {tocRangeControls}
             </div>
           ) : (
-            <div className="book-toc">
-              {index.outline.map((node, position) => (
-                <article className="book-toc-row" key={node.id} style={{ '--outline-level': node.level } as CSSProperties}>
-                  <span className="chapter-no">{String(position + 1).padStart(2, '0')}</span>
-                  <button
-                    type="button"
-                    onClick={() => node.startPage === null
-                      ? void onLocateOutline(node.id)
-                      : onOpenPage(pageLocator(node.startPage))}
-                  >
-                    <b>{node.title}</b>
-                    <small>{node.startPage === null
-                      ? `印刷页 ${node.printedPage ?? '待核验'} · 核验位置`
-                      : `PDF 第 ${node.startPage}${node.endPage && node.endPage !== node.startPage ? `–${node.endPage}` : ''} 页`}</small>
-                  </button>
-                </article>
-              ))}
-            </div>
+            <>
+              <div className="book-toc">
+                {index.outline.map((node, position) => (
+                  <article className="book-toc-row" key={node.id} style={{ '--outline-level': node.level } as CSSProperties}>
+                    <span className="chapter-no">{String(position + 1).padStart(2, '0')}</span>
+                    <button
+                      type="button"
+                      onClick={() => node.startPage === null
+                        ? void onLocateOutline(node.id)
+                        : onOpenPage(pageLocator(node.startPage))}
+                    >
+                      <b>{node.title}</b>
+                      <small>{node.startPage === null
+                        ? `印刷页 ${node.printedPage ?? '待核验'} · 核验位置`
+                        : `PDF 第 ${node.startPage}${node.endPage && node.endPage !== node.startPage ? `–${node.endPage}` : ''} 页`}</small>
+                    </button>
+                  </article>
+                ))}
+              </div>
+              <details className="book-outline-rescan">
+                <summary>目录页选错了？重新整理</summary>
+                {tocRangeControls}
+              </details>
+            </>
           )}
         </section>
         <aside className="book-side">

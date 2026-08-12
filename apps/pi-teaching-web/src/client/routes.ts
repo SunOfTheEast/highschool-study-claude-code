@@ -1,4 +1,7 @@
-import type { CourseTreeNode } from '../shared/contracts';
+import {
+  MAX_MATERIAL_CONTEXT_PAGES,
+  type CourseTreeNode,
+} from '../shared/contracts';
 import {
   formatLessonHandoutPath,
   parseHandoutBlockSegment,
@@ -44,7 +47,9 @@ function bookLocator(value: string): string | null {
   if (!range) return null;
   const start = Number(range[1]);
   const end = Number(range[2]);
-  return start > 0 && end >= start ? value : null;
+  return start > 0 && end >= start && end - start + 1 <= MAX_MATERIAL_CONTEXT_PAGES
+    ? value
+    : null;
 }
 
 export function parseBrowserRoute(pathname: string, search = ''): BrowserRoute | null {
