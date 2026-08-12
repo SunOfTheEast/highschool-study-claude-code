@@ -64,17 +64,40 @@ function responseValue(value: string): Omit<MaterialVisionResult, 'model'> {
   return { text: item.text, outline, ...pageOffset };
 }
 
+function exactImageModel(
+  models: readonly Model<Api>[],
+  selection: DesktopModelSelection,
+): Model<Api> | null {
+  const model = models.find((candidate) => (
+    candidate.provider === selection.provider && candidate.id === selection.model
+  ));
+  return model?.input.includes('image') ? model : null;
+}
+
 function selectedModel(
   models: readonly Model<Api>[],
   teacher: DesktopModelSelection,
   vision: DesktopVisionSelection,
 ): { model: Model<Api>; selection: DesktopModelSelection } {
-  const selection = vision.mode === 'model' ? vision.selection : teacher;
-  const model = models.find((candidate) => (
-    candidate.provider === selection.provider && candidate.id === selection.model
-  ));
-  if (!model || !model.input.includes('image')) throw new Error('MATERIAL_VISION_UNAVAILABLE');
-  return { model, selection };
+  if (vision.mode === 'model') {
+    const model = exactImageModel(models, vision.selection);
+    if (!model) throw new Error('MATERIAL_VISION_UNAVAILABLE');
+    return { model, selection: vision.selection };
+  }
+
+  if (teacher.provider === 'openai-codex') {
+    const lunaSelection: DesktopModelSelection = {
+      provider: 'openai-codex',
+      model: 'gpt-5.6-luna',
+      thinking: 'low',
+    };
+    const luna = exactImageModel(models, lunaSelection);
+    if (luna) return { model: luna, selection: lunaSelection };
+  }
+
+  const model = exactImageModel(models, teacher);
+  if (!model) throw new Error('MATERIAL_VISION_UNAVAILABLE');
+  return { model, selection: teacher };
 }
 
 export class MaterialVisionService {

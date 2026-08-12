@@ -94,7 +94,9 @@ test('renders model choice as a ledger with independent teacher and Scout rows',
   expect(markup).toContain('主教师');
   expect(markup).toContain('检索 Scout');
   expect(markup).toContain('资料视觉读取');
-  expect(markup).toContain('自动使用支持图片的主教师');
+  expect(markup).toContain('自动选择低成本视觉模型');
+  expect(markup).toContain('GPT OAuth 自动优先 Luna');
+  expect(markup).not.toContain('自动使用支持图片的主教师');
   expect(markup).toContain('GPT-5.6 Sol');
   expect(markup).toContain('GPT-5.6 Terra');
   expect(markup).not.toContain('模型卡片');

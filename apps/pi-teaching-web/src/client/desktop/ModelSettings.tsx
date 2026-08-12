@@ -186,7 +186,7 @@ function VisionModelRow({
   return (
     <fieldset className="desktop-model-row">
       <legend>资料视觉读取</legend>
-      <p>只在打开扫描页或图表时读取所选页面，不进入课堂上下文</p>
+      <p>独立读取扫描页、公式和图表，不进入课堂上下文；GPT OAuth 自动优先 Luna</p>
       <label htmlFor="vision-model">视觉读取模型</label>
       <select
         id="vision-model"
@@ -211,7 +211,7 @@ function VisionModelRow({
           }
         }}
       >
-        <option value="auto">自动使用支持图片的主教师</option>
+        <option value="auto">自动选择低成本视觉模型</option>
         {imageModels.map((model) => (
           <option key={`${model.provider}/${model.id}`} value={`${model.provider}/${model.id}`}>
             {model.name} · {model.provider}

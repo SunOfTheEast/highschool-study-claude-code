@@ -4,9 +4,13 @@ import { resolve } from 'node:path';
 import { MaterialVisionService } from '../../src/desktop/material-vision';
 import { loadMaterialVisionPrompt } from '../../src/desktop/material-vision-prompt';
 
-function model(id: string, input: Array<'text' | 'image'>): Model<any> {
+function model(
+  id: string,
+  input: Array<'text' | 'image'>,
+  provider = 'test',
+): Model<any> {
   return {
-    provider: 'test', id, name: id, api: 'openai-responses', baseUrl: 'https://example.test',
+    provider, id, name: id, api: 'openai-responses', baseUrl: 'https://example.test',
     reasoning: true, input, cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
     contextWindow: 100_000, maxTokens: 4_000,
   };
@@ -79,6 +83,48 @@ test('auto uses the teacher only when it accepts images and sends isolated conte
     loadMaterialVisionPrompt(resolve(import.meta.dir, '../../resources')),
   );
   expect(JSON.stringify(fake.calls[0]?.context)).not.toContain('学生记忆');
+});
+
+test('GPT OAuth auto routes visual reading to Luna with low reasoning', async () => {
+  const fake = runtime([
+    model('gpt-5.6-sol', ['text', 'image'], 'openai-codex'),
+    model('gpt-5.6-luna', ['text', 'image'], 'openai-codex'),
+  ]);
+  const service = new MaterialVisionService(fake as never);
+  const result = await service.read({
+    teacher: { provider: 'openai-codex', model: 'gpt-5.6-sol', thinking: 'high' },
+    vision: { mode: 'auto' }, prompt: '读取目录', images: [image],
+  });
+
+  expect(result.model).toBe('openai-codex/gpt-5.6-luna');
+  expect(fake.calls[0]?.options).toMatchObject({ reasoning: 'low' });
+});
+
+test('auto never steals a non-OpenAI teacher route just because Luna exists', async () => {
+  const fake = runtime([
+    model('qwen-vl', ['text', 'image'], 'qwen'),
+    model('gpt-5.6-luna', ['text', 'image'], 'openai-codex'),
+  ]);
+  const service = new MaterialVisionService(fake as never);
+  const result = await service.read({
+    teacher: { provider: 'qwen', model: 'qwen-vl', thinking: 'medium' },
+    vision: { mode: 'auto' }, prompt: '读取目录', images: [image],
+  });
+
+  expect(result.model).toBe('qwen/qwen-vl');
+  expect(fake.calls[0]?.options).toMatchObject({ reasoning: 'medium' });
+});
+
+test('GPT OAuth auto falls back to the image-capable teacher when Luna is unavailable', async () => {
+  const fake = runtime([model('gpt-5.6-sol', ['text', 'image'], 'openai-codex')]);
+  const service = new MaterialVisionService(fake as never);
+  const result = await service.read({
+    teacher: { provider: 'openai-codex', model: 'gpt-5.6-sol', thinking: 'high' },
+    vision: { mode: 'auto' }, prompt: '读取目录', images: [image],
+  });
+
+  expect(result.model).toBe('openai-codex/gpt-5.6-sol');
+  expect(fake.calls[0]?.options).toMatchObject({ reasoning: 'high' });
 });
 
 test('an explicit image model overrides the teacher and text-only auto fails closed', async () => {
