@@ -44,7 +44,7 @@ export async function smokeSidecars(appRoot = resolve(import.meta.dir, '../..'))
   const resources = resourceLayout(appRoot);
   const root = mkdtempSync(join(tmpdir(), 'studyforge-sidecar-smoke-'));
   const executable = process.platform === 'darwin'
-    ? adHocSignedCopies(root, output)
+    ? adHocSignedCopies(root, output, join(appRoot, 'src-tauri/entitlements.plist'))
     : output;
   const emptyEnvironment = {
     HOME: join(root, 'home'),
@@ -73,13 +73,13 @@ export async function smokeSidecars(appRoot = resolve(import.meta.dir, '../..'))
   const dependencyReceipt = JSON.parse(dependencyOutput) as {
     planSubagent?: string;
     subagentChildRuntime?: string;
-    pdfText?: string;
+    pdfImport?: string;
     bedrock?: string;
   };
   if (
     dependencyReceipt.planSubagent !== 'passed'
     || dependencyReceipt.subagentChildRuntime !== 'passed'
-    || dependencyReceipt.pdfText !== 'passed'
+    || dependencyReceipt.pdfImport !== 'passed'
     || dependencyReceipt.bedrock !== 'passed'
   ) {
     throw new Error(`STUDYFORGE_RUNTIME_DEPENDENCY_SMOKE_FAILED: ${dependencyOutput}`);
@@ -196,7 +196,7 @@ export async function smokeSidecars(appRoot = resolve(import.meta.dir, '../..'))
     oauthBootstrap: 'passed',
     planSubagent: dependencyReceipt.planSubagent,
     subagentChildRuntime: dependencyReceipt.subagentChildRuntime,
-    pdfText: dependencyReceipt.pdfText,
+    pdfImport: dependencyReceipt.pdfImport,
     bedrock: dependencyReceipt.bedrock,
     path: 'empty',
     realModelScout: 'blocked-until-desktop-provider-login',
@@ -206,6 +206,7 @@ export async function smokeSidecars(appRoot = resolve(import.meta.dir, '../..'))
 function adHocSignedCopies(
   root: string,
   output: ReturnType<typeof sidecarOutputs>,
+  entitlements: string,
 ): ReturnType<typeof sidecarOutputs> {
   const directory = join(root, 'signed');
   mkdirSync(directory, { recursive: true });
@@ -217,7 +218,8 @@ function adHocSignedCopies(
     copyFileSync(output[key], copies[key]);
     chmodSync(copies[key], 0o755);
     const signing = Bun.spawnSync([
-      'codesign', '--force', '--options', 'runtime', '--sign', '-', copies[key],
+      'codesign', '--force', '--options', 'runtime', '--entitlements', entitlements,
+      '--sign', '-', copies[key],
     ], { stdout: 'pipe', stderr: 'pipe' });
     if (signing.exitCode !== 0) {
       throw new Error(`STUDYFORGE_SIDECAR_SIGNING_FAILED: ${signing.stderr.toString().trim()}`);

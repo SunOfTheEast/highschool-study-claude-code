@@ -22,6 +22,11 @@ test('uses the two target-suffixed Apple Silicon sidecars expected by Tauri', ()
     'binaries/studyforge-runtime',
     'binaries/studyforge-pi',
   ]);
+  expect(config.bundle.macOS.entitlements).toBe('entitlements.plist');
+  expect(readFileSync(
+    join(appRoot, 'src-tauri/entitlements.plist'),
+    'utf8',
+  )).toContain('com.apple.security.cs.disable-library-validation');
 });
 
 test('stages canonical teaching resources, example, and Pi runtime assets only', () => {
