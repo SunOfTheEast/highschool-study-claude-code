@@ -13,6 +13,10 @@ export type DesktopStatus = {
   issue: { code: string; detail: string } | null;
 };
 
+export type PeerSkinStatus =
+  | { state: 'missing'; coreInstalled: boolean }
+  | { state: 'installed'; coreInstalled: true };
+
 type WithoutSignal<T> = T extends unknown ? Omit<T, 'signal'> : never;
 
 export type DesktopAuthFlow = {
@@ -56,6 +60,11 @@ function jsonRequest(method: string, value: unknown): RequestInit {
 export const desktopApi = {
   status: () => responseJson<DesktopStatus>('/api/desktop/status'),
   models: () => responseJson<DesktopModelCatalog>('/api/desktop/models'),
+  peerSkinStatus: () => responseJson<PeerSkinStatus>('/api/desktop/peer-skin'),
+  importPeerSkin: (source: string, core?: string) => responseJson<PeerSkinStatus>(
+    '/api/desktop/peer-skin/import',
+    jsonRequest('POST', { source, ...(core ? { core } : {}) }),
+  ),
   createBlank: (name: string) => responseJson<{ learningSet: string; restartRequired: true }>(
     '/api/desktop/learning-sets/blank',
     jsonRequest('POST', { name }),

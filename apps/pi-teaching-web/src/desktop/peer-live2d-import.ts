@@ -187,7 +187,6 @@ export function normalizeVTubeStudioModel(
   const modelFiles = [
     'runtime/axia.model3.json',
     ...Object.values(staticCopies),
-    'runtime/expressions/neutral.exp3.json',
     ...Object.values(expressionCopies),
     ...Object.values(motionCopies),
     ...Object.values(textureCopies),

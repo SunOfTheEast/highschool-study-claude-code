@@ -33,6 +33,7 @@ export type CompanionBridge = {
   onPlayback(listener: (value: CompanionPlayback) => void): Promise<() => void>;
   onControl(listener: (value: CompanionControl) => void): Promise<() => void>;
   showMain(): Promise<void>;
+  reloadCompanion(): Promise<void>;
   showCompanion(): Promise<void>;
   hideCompanion(): Promise<void>;
   quit(): Promise<void>;

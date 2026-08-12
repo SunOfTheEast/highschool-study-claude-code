@@ -10,7 +10,8 @@ use std::{
 
 use companion::{
     CompanionManager, companion_control, companion_present, companion_set_playback,
-    companion_snapshot, hide_companion_window, quit_studyforge, show_companion_window,
+    companion_snapshot, hide_companion_window, quit_studyforge, reload_companion_window,
+    show_companion_window,
     show_main_window,
 };
 use calendar_notifications::{
@@ -282,6 +283,25 @@ fn choose_learning_set_folder(app: AppHandle) -> Result<Option<String>, String> 
 }
 
 #[tauri::command]
+fn choose_peer_skin_folder(app: AppHandle) -> Result<Option<String>, String> {
+    choose_learning_set_folder(app)
+}
+
+#[tauri::command]
+fn choose_live2d_core_file(app: AppHandle) -> Result<Option<String>, String> {
+    app.dialog()
+        .file()
+        .add_filter("Live2D Cubism Core", &["js"])
+        .blocking_pick_file()
+        .map(|path| {
+            path.into_path()
+                .map(|value| value.to_string_lossy().into_owned())
+                .map_err(|error| error.to_string())
+        })
+        .transpose()
+}
+
+#[tauri::command]
 fn reveal_in_finder(app: AppHandle, path: String) -> Result<(), String> {
     app.opener()
         .reveal_item_in_dir(path)
@@ -338,6 +358,8 @@ pub fn run() {
             runtime_connection,
             restart_runtime,
             choose_learning_set_folder,
+            choose_peer_skin_folder,
+            choose_live2d_core_file,
             reveal_in_finder,
             open_external_url,
             show_studyforge_notification,
@@ -348,6 +370,7 @@ pub fn run() {
             companion_set_playback,
             companion_control,
             show_main_window,
+            reload_companion_window,
             show_companion_window,
             hide_companion_window,
             quit_studyforge,

@@ -29,7 +29,12 @@ async function installDesktopBridge(page: import('@playwright/test').Page) {
         }
         if (command === 'restart_runtime') return null;
         if (command === 'choose_learning_set_folder') return null;
+        if (command === 'choose_peer_skin_folder') return null;
+        if (command === 'choose_live2d_core_file') return null;
         if (command === 'open_external_url') return null;
+        if (command === 'show_companion_window') return null;
+        if (command === 'hide_companion_window') return null;
+        if (command === 'reload_companion_window') return null;
         throw new Error(`Unexpected desktop command: ${command}`);
       },
     };
@@ -55,6 +60,10 @@ test('moves from a blank desktop set through explicit model choice into learning
           issue: null,
         },
       });
+      return;
+    }
+    if (path === '/api/desktop/peer-skin') {
+      await route.fulfill({ json: { state: 'missing', coreInstalled: false } });
       return;
     }
     if (path === '/api/desktop/learning-sets/blank') {
@@ -129,6 +138,10 @@ test('keeps polling while browser OAuth is waiting and observes its asynchronous
         currentLearningSet: '/tmp/chemistry/learning-set', recentLearningSets: [],
         teacher: null, scout: null, issue: null,
       } });
+      return;
+    }
+    if (path === '/api/desktop/peer-skin') {
+      await route.fulfill({ json: { state: 'missing', coreInstalled: false } });
       return;
     }
     if (path === '/api/desktop/models') {

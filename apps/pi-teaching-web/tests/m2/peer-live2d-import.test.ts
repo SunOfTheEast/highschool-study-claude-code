@@ -60,6 +60,7 @@ test('turns one VTube Studio package into the strict StudyForge actor slot', () 
     'textures/texture_01.png',
   ]);
   expect(result.manifest.modelFiles).toContain('runtime/textures/texture_00.png');
+  expect(new Set(result.manifest.modelFiles).size).toBe(result.manifest.modelFiles.length);
   expect(result.expressionCopies).toEqual({
     'X.exp3.json': 'runtime/expressions/neutral.exp3.json',
     'lianhong.exp3.json': 'runtime/expressions/curious.exp3.json',

@@ -48,6 +48,7 @@ function fakeBridge(): CompanionBridge {
     onPlayback: async () => () => {},
     onControl: async () => () => {},
     showMain: async () => {},
+    reloadCompanion: async () => {},
     showCompanion: async () => {},
     hideCompanion: async () => {},
     quit: async () => {},

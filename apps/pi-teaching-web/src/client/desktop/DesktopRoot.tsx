@@ -4,7 +4,12 @@ import type { DesktopModelSelection } from '../../desktop/contracts';
 import { App } from '../App';
 import { api } from '../api';
 import { configureTransport, resetTransport } from '../transport';
-import { desktopApi, type DesktopAuthFlow, type DesktopStatus } from './api';
+import {
+  desktopApi,
+  type DesktopAuthFlow,
+  type DesktopStatus,
+  type PeerSkinStatus,
+} from './api';
 import {
   tauriDesktopBridge,
   type DesktopBridge,
@@ -68,6 +73,7 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
   const [connection, setConnection] = useState<RuntimeConnection | null>(null);
   const [status, setStatus] = useState<DesktopStatus | null>(null);
   const [catalog, setCatalog] = useState<DesktopModelCatalog | null>(null);
+  const [peerSkin, setPeerSkin] = useState<PeerSkinStatus | null>(null);
   const [page, setPage] = useState<DesktopPage>('learning');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -75,17 +81,31 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
   const [help, setHelp] = useState<HelpDocument[]>([]);
   const authRevision = useRef(0);
   const launchBusy = useRef(false);
+  const previousPeerSkin = useRef<PeerSkinStatus['state'] | null>(null);
 
   const loadSetup = useCallback(async (next: RuntimeConnection) => {
     if (!next.apiBase || !next.token) return;
     configureTransport({ apiBase: next.apiBase, token: next.token });
-    const [nextStatus, nextCatalog] = await Promise.all([
+    const [nextStatus, nextCatalog, nextPeerSkin] = await Promise.all([
       desktopApi.status(),
       desktopApi.models(),
+      desktopApi.peerSkinStatus(),
     ]);
     setStatus(nextStatus);
     setCatalog(nextCatalog);
+    setPeerSkin(nextPeerSkin);
   }, []);
+
+  useEffect(() => {
+    if (!peerSkin || !bridge.companion) return;
+    const previous = previousPeerSkin.current;
+    previousPeerSkin.current = peerSkin.state;
+    if (peerSkin.state === 'missing') {
+      void bridge.companion.hideCompanion();
+    } else if (previous !== 'installed') {
+      void bridge.companion.showCompanion();
+    }
+  }, [bridge.companion, peerSkin]);
 
   const refreshConnection = useCallback(async () => {
     const next = await bridge.runtimeConnection();
@@ -345,6 +365,20 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
           if (saved) setPage('learning');
         }}
         onBack={status.state === 'ready' ? () => setPage('learning') : null}
+        peerSkin={peerSkin}
+        onChoosePeerSkin={() => bridge.choosePeerSkinFolder()}
+        onChooseLive2DCore={() => bridge.chooseLive2DCoreFile()}
+        onImportPeerSkin={async (source, core) => {
+          const next = await desktopApi.importPeerSkin(source, core);
+          previousPeerSkin.current = next.state;
+          setPeerSkin(next);
+          if (next.state === 'installed' && bridge.companion) {
+            await bridge.companion.reloadCompanion();
+            await new Promise((resolve) => setTimeout(resolve, 180));
+            await bridge.companion.showCompanion();
+          }
+          return next;
+        }}
         onShowCompanion={bridge.companion
           ? () => void bridge.companion?.showCompanion()
           : null}

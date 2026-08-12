@@ -175,8 +175,8 @@ test('renders packaged help images from the offline document payload', () => {
   expect(markup).toContain('src="data:image/png;base64,AAAA"');
 });
 
-test('keeps a quiet settings action for showing a hidden Axia companion', () => {
-  const markup = renderToStaticMarkup(
+test('explains a missing skin and only offers showing the companion after installation', () => {
+  const missing = renderToStaticMarkup(
     <ModelSettings
       catalog={catalog}
       teacher={null}
@@ -189,9 +189,38 @@ test('keeps a quiet settings action for showing a hidden Axia companion', () => 
       onOpenUrl={async () => {}}
       onSave={async () => {}}
       onBack={() => {}}
+      peerSkin={{ state: 'missing', coreInstalled: false }}
+      onChoosePeerSkin={async () => null}
+      onChooseLive2DCore={async () => null}
+      onImportPeerSkin={async () => ({ state: 'installed', coreInstalled: true })}
+      onShowCompanion={() => {}}
+    />,
+  );
+  const installed = renderToStaticMarkup(
+    <ModelSettings
+      catalog={catalog}
+      teacher={null}
+      scout={null}
+      authFlow={null}
+      busy={false}
+      error={null}
+      onLogin={async () => {}}
+      onRespond={async () => {}}
+      onOpenUrl={async () => {}}
+      onSave={async () => {}}
+      onBack={() => {}}
+      peerSkin={{ state: 'installed', coreInstalled: true }}
+      onChoosePeerSkin={async () => null}
+      onChooseLive2DCore={async () => null}
+      onImportPeerSkin={async () => ({ state: 'installed', coreInstalled: true })}
       onShowCompanion={() => {}}
     />,
   );
 
-  expect(markup).toContain('显示阿夏桌宠');
+  expect(missing).toContain('阿夏还没有皮套');
+  expect(missing).toContain('导入皮套');
+  expect(missing).not.toContain('显示桌宠');
+  expect(installed).toContain('皮套已经装好');
+  expect(installed).toContain('显示桌宠');
+  expect(installed).toContain('更换皮套');
 });

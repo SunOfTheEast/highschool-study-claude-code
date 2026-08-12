@@ -4,6 +4,7 @@ import type {
   DesktopModelSelection,
   DesktopThinkingLevel,
 } from '../../desktop/contracts';
+import type { PeerSkinStatus } from './api';
 
 export type DesktopModelCatalog = {
   providers: Array<{
@@ -306,6 +307,108 @@ function AuthFlowPanel({
   );
 }
 
+function peerSkinFailureText(error: unknown): string {
+  const code = error instanceof Error ? error.message : '';
+  if (code === 'PEER_SKIN_SOURCE_INVALID') {
+    return '这个文件夹不像完整的 VTube Studio 皮套。';
+  }
+  if (code === 'PEER_SKIN_CORE_INVALID') {
+    return '选择的文件不是 Live2D 渲染组件。';
+  }
+  if (code === 'PEER_SKIN_CORE_REQUIRED') {
+    return '还需要先选择一次 Live2D 渲染组件。';
+  }
+  return '皮套没有安装成功，原来的皮套没有变化。';
+}
+
+export function PeerSkinSettings({
+  status,
+  disabled,
+  onChoosePeerSkin,
+  onChooseLive2DCore,
+  onImportPeerSkin,
+  onShowCompanion,
+}: {
+  status: PeerSkinStatus;
+  disabled: boolean;
+  onChoosePeerSkin(): Promise<string | null>;
+  onChooseLive2DCore(): Promise<string | null>;
+  onImportPeerSkin(source: string, core?: string): Promise<PeerSkinStatus>;
+  onShowCompanion: (() => void) | null;
+}) {
+  const [pendingSource, setPendingSource] = useState<string | null>(null);
+  const [working, setWorking] = useState(false);
+  const [failure, setFailure] = useState<string | null>(null);
+
+  const install = async (source: string, core?: string) => {
+    setWorking(true);
+    setFailure(null);
+    try {
+      await onImportPeerSkin(source, core);
+      setPendingSource(null);
+    } catch (error) {
+      if (error instanceof Error && error.message === 'PEER_SKIN_SOURCE_INVALID') {
+        setPendingSource(null);
+      }
+      setFailure(peerSkinFailureText(error));
+    } finally {
+      setWorking(false);
+    }
+  };
+
+  const chooseSkin = async () => {
+    setFailure(null);
+    const source = await onChoosePeerSkin();
+    if (!source) return;
+    if (!status.coreInstalled) {
+      setPendingSource(source);
+      return;
+    }
+    await install(source);
+  };
+
+  const chooseCore = async () => {
+    if (!pendingSource) return;
+    setFailure(null);
+    const core = await onChooseLive2DCore();
+    if (core) await install(pendingSource, core);
+    else setPendingSource(null);
+  };
+
+  const unavailable = disabled || working;
+  return (
+    <section className="desktop-peer-companion" aria-label="阿夏桌宠">
+      <div>
+        <h2>阿夏桌宠</h2>
+        {status.state === 'installed' ? (
+          <p>皮套已经装好。隐藏后也可以从这里重新叫她出来。</p>
+        ) : pendingSource ? (
+          <p>还需要安装一次 Live2D 渲染组件。它只保存在这台电脑上。</p>
+        ) : (
+          <p>阿夏还没有皮套，所以现在不会出现在桌面上。</p>
+        )}
+        {failure && <p className="desktop-error" role="alert">{failure}</p>}
+      </div>
+      <div className="desktop-peer-companion-actions">
+        {status.state === 'installed' && onShowCompanion && (
+          <button className="action-outline" type="button" disabled={unavailable} onClick={onShowCompanion}>
+            显示桌宠
+          </button>
+        )}
+        {pendingSource ? (
+          <button className="action-outline" type="button" disabled={unavailable} onClick={() => void chooseCore()}>
+            {working ? '正在安装…' : '选择渲染组件'}
+          </button>
+        ) : (
+          <button className="action-outline" type="button" disabled={unavailable} onClick={() => void chooseSkin()}>
+            {working ? '正在安装…' : status.state === 'installed' ? '更换皮套' : '导入皮套'}
+          </button>
+        )}
+      </div>
+    </section>
+  );
+}
+
 export function ModelSettings({
   catalog,
   teacher,
@@ -318,6 +421,10 @@ export function ModelSettings({
   onOpenUrl,
   onSave,
   onBack,
+  peerSkin = null,
+  onChoosePeerSkin = null,
+  onChooseLive2DCore = null,
+  onImportPeerSkin = null,
   onShowCompanion = null,
 }: {
   catalog: DesktopModelCatalog;
@@ -331,6 +438,10 @@ export function ModelSettings({
   onOpenUrl(url: string): Promise<void>;
   onSave(teacher: DesktopModelSelection, scout: DesktopModelSelection): Promise<void>;
   onBack: (() => void) | null;
+  peerSkin?: PeerSkinStatus | null;
+  onChoosePeerSkin?: (() => Promise<string | null>) | null;
+  onChooseLive2DCore?: (() => Promise<string | null>) | null;
+  onImportPeerSkin?: ((source: string, core?: string) => Promise<PeerSkinStatus>) | null;
   onShowCompanion?: (() => void) | null;
 }) {
   const initial = useMemo(() => defaultModelDraft(catalog, teacher, scout), [catalog, teacher, scout]);
@@ -365,16 +476,15 @@ export function ModelSettings({
         <h1>安排两位老师</h1>
         <p className="desktop-lead">主教师负责方向与课堂；Scout 只在需要材料时检索。两者可以使用不同 Provider。</p>
         <CurrentPair catalog={catalog} draft={draft} />
-        {onShowCompanion && (
-          <section className="desktop-peer-companion" aria-label="阿夏桌宠">
-            <div>
-              <h2>阿夏桌宠</h2>
-              <p>如果刚才隐藏了她，可以从这里重新叫回来。</p>
-            </div>
-            <button className="action-outline" type="button" onClick={onShowCompanion}>
-              显示阿夏桌宠
-            </button>
-          </section>
+        {peerSkin && onChoosePeerSkin && onChooseLive2DCore && onImportPeerSkin && (
+          <PeerSkinSettings
+            status={peerSkin}
+            disabled={busy}
+            onChoosePeerSkin={onChoosePeerSkin}
+            onChooseLive2DCore={onChooseLive2DCore}
+            onImportPeerSkin={onImportPeerSkin}
+            onShowCompanion={onShowCompanion}
+          />
         )}
         {voiceProvider && (
           <PeerVoiceSettings provider={voiceProvider} busy={busy} onLogin={onLogin} />

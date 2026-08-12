@@ -116,6 +116,8 @@ test('keeps a restrained stage present in calm and adds controls only for active
   expect(speaking).toContain('aria-label="停止阿夏语音"');
   expect(speaking).toContain('aria-label="静音阿夏"');
   expect(speaking).not.toContain('<img');
+  expect(speaking).not.toContain('peer-portrait-placeholder');
+  expect(speaking).not.toContain('>夏<');
   expect(speaking).not.toContain('undefined');
 });
 

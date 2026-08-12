@@ -189,8 +189,10 @@
 .desktop-peer-voice p,
 .desktop-peer-companion p { margin: 0; color: var(--desktop-muted); }
 .desktop-peer-voice > div:last-child,
-.desktop-peer-companion > button { flex: none; }
+.desktop-peer-companion-actions { flex: none; }
 .desktop-peer-voice > div:last-child { display: flex; align-items: center; gap: 14px; }
+.desktop-peer-companion-actions { display: flex; align-items: center; gap: 10px; }
+.desktop-peer-companion .desktop-error { margin-top: 8px; }
 .desktop-peer-voice em { color: #4e7355; font-style: normal; }
 .desktop-provider-heading { margin-top: 30px; }
 .desktop-provider-ledger { margin: 0 0 20px; border-top: 1px solid var(--desktop-rule); }

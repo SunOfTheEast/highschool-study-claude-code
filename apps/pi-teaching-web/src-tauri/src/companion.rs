@@ -170,6 +170,14 @@ pub fn show_companion_window(app: AppHandle) -> Result<(), String> {
 }
 
 #[tauri::command]
+pub fn reload_companion_window(app: AppHandle) -> Result<(), String> {
+    app.get_webview_window("companion")
+        .ok_or_else(|| "STUDYFORGE_COMPANION_WINDOW_MISSING".to_string())?
+        .eval("window.location.reload()")
+        .map_err(|error| error.to_string())
+}
+
+#[tauri::command]
 pub fn hide_companion_window(app: AppHandle) -> Result<(), String> {
     app.get_webview_window("companion")
         .ok_or_else(|| "STUDYFORGE_COMPANION_WINDOW_MISSING".to_string())?

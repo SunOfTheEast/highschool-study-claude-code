@@ -30,6 +30,7 @@ test('declares one app-scoped companion beside the existing main window', () => 
     skipTaskbar: true,
     shadow: false,
     resizable: false,
+    visible: false,
   });
   expect(capability.windows).toEqual(['main', 'companion']);
 

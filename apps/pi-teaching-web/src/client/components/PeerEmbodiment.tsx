@@ -45,12 +45,12 @@ export function PeerEmbodiment({
       aria-label="阿夏"
     >
       <div className="peer-portrait" aria-hidden="true">
-        <div className="peer-static" hidden={live2DReady}>
-          {portraitUrl
-            ? <img src={portraitUrl} alt="" />
-            : <span className="peer-portrait-placeholder"><i>夏</i></span>}
-          {portraitUrl && state.phase === 'speaking' && <span className="peer-mouth" />}
-        </div>
+        {portraitUrl && (
+          <div className="peer-static" hidden={live2DReady}>
+            <img src={portraitUrl} alt="" />
+            {state.phase === 'speaking' && <span className="peer-mouth" />}
+          </div>
+        )}
         {!live2DFailed && (
           <PeerLive2D
             state={state}

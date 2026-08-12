@@ -25,6 +25,7 @@ export const tauriCompanionBridge: CompanionBridge = {
   onPlayback: (listener) => onEvent<CompanionPlayback>(playbackEvent, listener),
   onControl: (listener) => onEvent<CompanionControl>(controlEvent, listener),
   showMain: () => invoke<void>('show_main_window'),
+  reloadCompanion: () => invoke<void>('reload_companion_window'),
   showCompanion: () => invoke<void>('show_companion_window'),
   hideCompanion: () => invoke<void>('hide_companion_window'),
   quit: () => invoke<void>('quit_studyforge'),

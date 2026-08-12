@@ -124,6 +124,46 @@ function writeLive2DPackage(actorsDir: string): void {
   writeFileSync(join(root, 'runtime/axia.moc3'), new Uint8Array([77, 79, 67, 51]));
 }
 
+function writeImportableLive2DSource(root: string): { source: string; core: string } {
+  const source = join(root, 'importable-live2d');
+  mkdirSync(join(source, 'textures'), { recursive: true });
+  const write = (name: string, value: unknown) => writeFileSync(
+    join(source, name), `${JSON.stringify(value)}\n`,
+  );
+  write('skin.vtube.json', {
+    FileReferences: { Model: 'skin.model3.json', IdleAnimation: 'idle.motion3.json' },
+    Hotkeys: [
+      { Name: '', Action: 'ToggleExpression', File: 'neutral.exp3.json', Triggers: { Trigger1: 'X' } },
+      { Name: 'lianhong', Action: 'ToggleExpression', File: 'curious.exp3.json' },
+      { Name: 'shengqi', Action: 'ToggleExpression', File: 'skeptical.exp3.json' },
+    ],
+  });
+  write('skin.model3.json', {
+    Version: 3,
+    FileReferences: {
+      Moc: 'skin.moc3', Textures: ['textures/texture.png'],
+      Physics: 'skin.physics3.json', DisplayInfo: 'skin.cdi3.json',
+    },
+    Groups: [],
+  });
+  writeFileSync(join(source, 'skin.moc3'), 'moc');
+  writeFileSync(join(source, 'textures/texture.png'), Buffer.from(
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M/wHwAF/gL+X8ioWQAAAABJRU5ErkJggg==',
+    'base64',
+  ));
+  write('skin.physics3.json', { Version: 3, Meta: {}, PhysicsSettings: [] });
+  write('skin.cdi3.json', {
+    Version: 3, Parameters: [{ Id: 'ParamMouthOpenY', GroupId: '', Name: '嘴巴开合' }],
+  });
+  write('idle.motion3.json', { Version: 3, Meta: {}, Curves: [] });
+  write('neutral.exp3.json', { Type: 'Live2D Expression', Parameters: [] });
+  write('curious.exp3.json', { Type: 'Live2D Expression', Parameters: [] });
+  write('skeptical.exp3.json', { Type: 'Live2D Expression', Parameters: [] });
+  const core = join(root, 'live2dcubismcore.min.js');
+  writeFileSync(core, 'globalThis.Live2DCubismCore = {};\n');
+  return { source, core };
+}
+
 test('protects every desktop and teaching route with the launch token', async () => {
   const { handler } = setup();
   const unauthorized = await handler(new Request('http://127.0.0.1/api/desktop/status'));
@@ -326,4 +366,32 @@ test('serves only whitelisted actor media and validates speech input', async () 
     });
     expect(invalid?.status).toBe(400);
   }
+});
+
+test('reports and installs the private desktop peer skin without exposing local paths', async () => {
+  const { root, request } = setup();
+  const initial = await request('/api/desktop/peer-skin');
+  expect(initial?.status).toBe(200);
+  expect(await initial?.json()).toEqual({ state: 'missing', coreInstalled: false });
+
+  const fixture = writeImportableLive2DSource(root);
+  const installed = await request('/api/desktop/peer-skin/import', {
+    method: 'POST',
+    body: JSON.stringify(fixture),
+  });
+  expect(installed?.status).toBe(200);
+  const installedBody = await installed?.json();
+  expect(installedBody).toEqual({ state: 'installed', coreInstalled: true });
+  expect(JSON.stringify(installedBody)).not.toContain(root);
+
+  const invalid = join(root, 'not-a-skin');
+  mkdirSync(invalid);
+  const failed = await request('/api/desktop/peer-skin/import', {
+    method: 'POST',
+    body: JSON.stringify({ source: invalid }),
+  });
+  expect(failed?.status).toBe(422);
+  expect(await failed?.json()).toEqual({ error: 'PEER_SKIN_SOURCE_INVALID' });
+  expect(await (await request('/api/desktop/peer-skin'))?.json())
+    .toEqual({ state: 'installed', coreInstalled: true });
 });

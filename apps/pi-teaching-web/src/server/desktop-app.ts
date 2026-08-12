@@ -22,6 +22,10 @@ import {
 } from '../desktop/learning-sets';
 import type { DesktopModelService } from '../desktop/model-service';
 import type { PeerMediaService } from '../desktop/peer-media';
+import {
+  installPeerLive2D,
+  peerSkinStatus,
+} from '../desktop/peer-live2d-installer';
 import { writeDesktopPiSettings } from '../desktop/pi-settings';
 
 type ModelService = Pick<DesktopModelService, 'catalog' | 'resolve' | 'login' | 'logout'>;
@@ -219,6 +223,17 @@ function peerSpeechBody(value: unknown): { actorId: 'peer-axia'; text: string } 
   return { actorId: 'peer-axia', text: body.text };
 }
 
+function peerSkinImportBody(value: unknown): { source: string; core?: string } {
+  const body = bodyObject(value);
+  if (Object.keys(body).some((key) => key !== 'source' && key !== 'core')) {
+    throw new Error('DESKTOP_REQUEST_INVALID');
+  }
+  return {
+    source: bodyString(body.source),
+    ...(body.core === undefined ? {} : { core: bodyString(body.core) }),
+  };
+}
+
 function selection(value: unknown): DesktopModelSelection {
   const parsed = parseAppConfig({
     version: 1,
@@ -311,6 +326,18 @@ function errorResponse(error: unknown): Response {
     return json({ error: message }, statusCode);
   }
   if (message === 'FOCUS_CYCLE_ACTIVE') return json({ error: message }, 409);
+  if (message === 'LIVE2D_SOURCE_INCOMPLETE') {
+    return json({ error: 'PEER_SKIN_SOURCE_INVALID' }, 422);
+  }
+  if (message === 'STUDYFORGE_LIVE2D_CORE_MISSING') {
+    return json({ error: 'PEER_SKIN_CORE_REQUIRED' }, 422);
+  }
+  if (message === 'STUDYFORGE_LIVE2D_CORE_INVALID') {
+    return json({ error: 'PEER_SKIN_CORE_INVALID' }, 422);
+  }
+  if (message.startsWith('STUDYFORGE_LIVE2D_')) {
+    return json({ error: 'PEER_SKIN_INSTALL_FAILED' }, 422);
+  }
   if (message === 'AUTH_FLOW_NOT_FOUND') return json({ error: message }, 404);
   if (message.startsWith('AUTH_FLOW_') || message === 'DESKTOP_REQUEST_INVALID') {
     return json({ error: message }, 400);
@@ -358,6 +385,15 @@ export function createDesktopRequestHandler(deps: DesktopRequestDependencies) {
         response = json(status(deps));
       } else if (request.method === 'GET' && url.pathname === '/api/desktop/models') {
         response = json(await deps.modelService.catalog());
+      } else if (request.method === 'GET' && url.pathname === '/api/desktop/peer-skin') {
+        response = json(peerSkinStatus(deps.paths.appHome));
+      } else if (request.method === 'POST' && url.pathname === '/api/desktop/peer-skin/import') {
+        const body = peerSkinImportBody(await request.json());
+        response = json(installPeerLive2D({
+          appHome: deps.paths.appHome,
+          source: body.source,
+          ...(body.core ? { core: body.core } : {}),
+        }).status);
       } else if (request.method === 'GET' && url.pathname.startsWith('/api/desktop/help/')) {
         const id = url.pathname.slice('/api/desktop/help/'.length);
         if (id !== 'macos-installation' && id !== 'first-learning') {
