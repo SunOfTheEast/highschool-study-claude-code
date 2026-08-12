@@ -38,6 +38,10 @@ test('stages canonical teaching resources, example, and Pi runtime assets only',
     'resources/studyforge/': 'studyforge/',
   });
   expect(existsSync(join(appRoot, 'resources/templates/blank-learning-set/LEARNING_GUIDE.md'))).toBe(true);
+  expect(existsSync(join(
+    appRoot,
+    'resources/workers/study-material-vision-reader.md',
+  ))).toBe(true);
 });
 
 test('keeps host-provided Pi modules external to the child prompt runtime bundle', () => {

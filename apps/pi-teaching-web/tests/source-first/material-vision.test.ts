@@ -1,6 +1,8 @@
 import { expect, test } from 'bun:test';
 import type { Context, ImageContent, Model } from '@earendil-works/pi-ai';
+import { resolve } from 'node:path';
 import { MaterialVisionService } from '../../src/desktop/material-vision';
+import { loadMaterialVisionPrompt } from '../../src/desktop/material-vision-prompt';
 
 function model(id: string, input: Array<'text' | 'image'>): Model<any> {
   return {
@@ -42,6 +44,15 @@ function runtime(models: Model<any>[]) {
 
 const image: ImageContent = { type: 'image', data: 'aGVsbG8=', mimeType: 'image/png' };
 
+test('loads the packaged visual reader role instead of embedding a teacher prompt', () => {
+  const prompt = loadMaterialVisionPrompt(resolve(import.meta.dir, '../../resources'));
+
+  expect(prompt).toContain('只负责读取');
+  expect(prompt).toContain('不承担教学');
+  expect(prompt).toContain('不确定就保留未知');
+  expect(prompt).toContain('只返回 JSON');
+});
+
 test('auto uses the teacher only when it accepts images and sends isolated context', async () => {
   const fake = runtime([model('teacher', ['text', 'image']), model('other', ['text', 'image'])]);
   const service = new MaterialVisionService(fake as never);
@@ -64,7 +75,9 @@ test('auto uses the teacher only when it accepts images and sends isolated conte
     timestamp: expect.any(Number),
   }]);
   expect(fake.calls[0]?.context.tools).toBeUndefined();
-  expect(fake.calls[0]?.context.systemPrompt).toContain('资料页面');
+  expect(fake.calls[0]?.context.systemPrompt).toBe(
+    loadMaterialVisionPrompt(resolve(import.meta.dir, '../../resources')),
+  );
   expect(JSON.stringify(fake.calls[0]?.context)).not.toContain('学生记忆');
 });
 

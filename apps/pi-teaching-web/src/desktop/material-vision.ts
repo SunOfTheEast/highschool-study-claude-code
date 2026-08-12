@@ -9,14 +9,7 @@ import type {
   DesktopModelSelection,
   DesktopVisionSelection,
 } from './contracts';
-
-const systemPrompt = [
-  '你只负责读取所给出的资料页面，不承担教学、诊断或学生建模。',
-  '忠实转写正文、公式与表格；不要补写页面上没有的内容。',
-  '只返回 JSON：{"text":"...","outline":[{"title":"...","level":1,"printedPage":"..."}],"printedPageOffset":15}。',
-  '没有目录候选时省略 outline。',
-  'printedPageOffset 只是“物理页 = 印刷页 + 偏移”的候选；仅在图片同时出现目录末页与可见印刷页码的首张正文时计算，不确定就省略。',
-].join('\n');
+import { loadMaterialVisionPrompt } from './material-vision-prompt';
 
 type VisionRuntime = Pick<ModelRuntime, 'getAvailable' | 'completeSimple'>;
 
@@ -85,7 +78,10 @@ function selectedModel(
 }
 
 export class MaterialVisionService {
-  constructor(private readonly runtime: VisionRuntime) {}
+  constructor(
+    private readonly runtime: VisionRuntime,
+    private readonly systemPrompt = loadMaterialVisionPrompt(),
+  ) {}
 
   async read(input: {
     teacher: DesktopModelSelection;
@@ -98,7 +94,7 @@ export class MaterialVisionService {
     }
     const selected = selectedModel(await this.runtime.getAvailable(), input.teacher, input.vision);
     const context: Context = {
-      systemPrompt,
+      systemPrompt: this.systemPrompt,
       messages: [{
         role: 'user',
         content: [{ type: 'text', text: input.prompt }, ...input.images],
