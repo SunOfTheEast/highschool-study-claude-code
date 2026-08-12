@@ -1,5 +1,7 @@
 # Low-Cost Vision Reader and First Student Journey Implementation Plan
 
+> **Status (2026-08-13):** Implemented and validated through a real packaged Desktop journey. The unchecked steps below remain the reproducible execution recipe; the sanitized result is in `apps/pi-teaching-web/tests/validation/source-first-first-student-journey.md`.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Make source-first book reading use a bounded low-cost visual worker by default, then prove that one new Desktop learning set can carry a real student from book import through free learning into a Plan-driven Lesson with sourced cards and evidence-backed memory.
