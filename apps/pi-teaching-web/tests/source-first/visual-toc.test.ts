@@ -1,0 +1,88 @@
+import { afterEach, expect, test } from 'bun:test';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { bootstrapPdfBookIndex } from '../../src/study/pdf-book';
+import {
+  locateMaterialOutlineNode,
+  scanMaterialVisualOutline,
+} from '../../src/study/material-page-reader';
+import { importMaterial } from '../../src/study/materials';
+import { writeThreePageBook } from './pdf-fixture';
+
+const roots: string[] = [];
+
+async function book() {
+  const root = mkdtempSync(join(tmpdir(), 'studyforge-visual-toc-'));
+  roots.push(root);
+  const path = join(root, 'source.pdf');
+  writeThreePageBook(path);
+  const material = await importMaterial(root, {
+    requestId: crypto.randomUUID(), title: '三页教材', filename: 'source.pdf',
+    mediaType: 'application/pdf', source: { kind: 'path', absolutePath: path },
+  }, '2026-08-13T00:00:00.000Z');
+  await bootstrapPdfBookIndex(root, material.id, material.revision, '2026-08-13T00:01:00.000Z');
+  return { root, material };
+}
+
+afterEach(() => {
+  while (roots.length > 0) rmSync(roots.pop()!, { recursive: true, force: true });
+});
+
+test('adds bounded visual outline candidates without replacing PDF bookmarks', async () => {
+  const { root, material } = await book();
+  const index = await scanMaterialVisualOutline(
+    root,
+    material.id,
+    material.revision,
+    { startPage: 1, endPage: 2 },
+    {
+      read: async () => ({
+        text: '', model: 'test/vision',
+        outline: [{ title: '视觉目录章', level: 1, printedPage: '2' }],
+      }),
+    },
+    '2026-08-13T00:02:00.000Z',
+  );
+  expect(index.outline.some((node) => node.source === 'pdf-bookmark')).toBeTrue();
+  expect(index.outline).toContainEqual(expect.objectContaining({
+    title: '视觉目录章', source: 'visual-toc', startPage: null, endPage: null,
+    provenancePages: [1, 2],
+  }));
+
+  await expect(scanMaterialVisualOutline(
+    root, material.id, material.revision, { startPage: 1, endPage: 13 },
+    { read: async () => ({ text: '', model: 'test/vision', outline: [] }) },
+    '2026-08-13T00:03:00.000Z',
+  )).rejects.toThrow('MATERIAL_OUTLINE_RANGE_INVALID');
+});
+
+test('locates a visual node only after its title appears in a bounded candidate page', async () => {
+  const { root, material } = await book();
+  const scanned = await scanMaterialVisualOutline(
+    root, material.id, material.revision, { startPage: 1, endPage: 2 },
+    {
+      read: async () => ({
+        text: '', model: 'test/vision',
+        outline: [{ title: '视觉目录章', level: 1, printedPage: '2' }],
+      }),
+    },
+    '2026-08-13T00:02:00.000Z',
+  );
+  const node = scanned.outline.find((candidate) => candidate.source === 'visual-toc')!;
+  const checked: number[] = [];
+  const located = await locateMaterialOutlineNode(
+    root,
+    material.id,
+    material.revision,
+    node.id,
+    async (page) => {
+      checked.push(page);
+      return page === 3 ? '视觉目录章\n正文' : '别的内容';
+    },
+    '2026-08-13T00:03:00.000Z',
+  );
+  expect(located.node).toMatchObject({ startPage: 3, endPage: 3 });
+  expect(located.candidatePages).toEqual([3]);
+  expect(checked).toEqual([3]);
+});

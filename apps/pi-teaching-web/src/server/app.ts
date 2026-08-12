@@ -48,6 +48,12 @@ import { readMaterialBookIndex } from '../study/material-book-index';
 import { bootstrapPdfBookIndex, renderPdfBookPage } from '../study/pdf-book';
 import { parseMaterialLocator } from '../study/material-locators';
 import {
+  locateMaterialOutlineNode,
+  readMaterialPage,
+  scanMaterialVisualOutline,
+  type MaterialVisionReader,
+} from '../study/material-page-reader';
+import {
   projectSemanticRelations,
   querySemanticRecall,
   refreshSemanticRecallIndex,
@@ -113,6 +119,7 @@ export type AppDependencies = {
   calendar?: CalendarRepository;
   knownLearningSetRoots?(): readonly string[];
   reviewCandidates?(): CalendarReviewCandidate[];
+  materialVision?: MaterialVisionReader;
 };
 
 const json = (value: unknown, status = 200) => Response.json(value, { status });
@@ -160,7 +167,7 @@ function errorResponse(error: unknown): Response {
   const message = error instanceof Error ? error.message : String(error);
   const status = /NOT_FOUND|does not exist/.test(message)
     ? 404
-    : /STALE|CONFLICT|ENDED|RUNNING|NOT_ACTIVE|NOT_ALLOWED|READ_ONLY|INELIGIBLE|ALREADY_/.test(message)
+    : /STALE|CONFLICT|ENDED|RUNNING|NOT_ACTIVE|NOT_ALLOWED|READ_ONLY|INELIGIBLE|ALREADY_|UNAVAILABLE/.test(message)
       ? 409
       : /INVALID|REQUIRED|LIMIT|DUPLICATE|must be|cannot/.test(message)
         ? 400
@@ -887,6 +894,88 @@ export function createRequestHandler(deps?: AppDependencies) {
             'cache-control': 'private, max-age=86400',
           },
         });
+      }
+
+      const materialPageRead = /^\/api\/materials\/([^/]+)\/revisions\/([^/]+)\/pages\/([^/]+)\/read$/.exec(
+        url.pathname,
+      );
+      if (request.method === 'POST' && materialPageRead) {
+        const id = nodeId(materialPageRead[1]!);
+        const revision = Number(materialPageRead[2]);
+        const physicalPage = Number(materialPageRead[3]);
+        if (!id) throw new Error('MATERIAL_ID_INVALID');
+        if (!Number.isSafeInteger(revision) || revision < 1) {
+          throw new Error('MATERIAL_REVISION_INVALID');
+        }
+        const body = objectBody(await request.json());
+        if (
+          (body.mode !== 'auto' && body.mode !== 'visual')
+          || Object.keys(body).some((key) => key !== 'mode')
+        ) throw new Error('MATERIAL_PAGE_READ_REQUEST_INVALID');
+        const page = await readMaterialPage(deps.root, id, revision, physicalPage, {
+          mode: body.mode,
+          ...(deps.materialVision ? { vision: deps.materialVision } : {}),
+          updatedAt: new Date().toISOString(),
+        });
+        deps.hub.publish({ type: 'assets-invalidated' });
+        return json(page);
+      }
+
+      const materialOutlineScan = /^\/api\/materials\/([^/]+)\/revisions\/([^/]+)\/outline\/scan$/.exec(
+        url.pathname,
+      );
+      if (request.method === 'POST' && materialOutlineScan) {
+        if (!deps.materialVision) throw new Error('MATERIAL_VISION_UNAVAILABLE');
+        const id = nodeId(materialOutlineScan[1]!);
+        const revision = Number(materialOutlineScan[2]);
+        if (!id) throw new Error('MATERIAL_ID_INVALID');
+        if (!Number.isSafeInteger(revision) || revision < 1) {
+          throw new Error('MATERIAL_REVISION_INVALID');
+        }
+        const body = objectBody(await request.json());
+        const index = await scanMaterialVisualOutline(
+          deps.root,
+          id,
+          revision,
+          { startPage: Number(body.startPage), endPage: Number(body.endPage) },
+          deps.materialVision,
+          new Date().toISOString(),
+        );
+        deps.hub.publish({ type: 'assets-invalidated' });
+        return json(index);
+      }
+
+      const materialOutlineLocate = /^\/api\/materials\/([^/]+)\/revisions\/([^/]+)\/outline\/([^/]+)\/locate$/.exec(
+        url.pathname,
+      );
+      if (request.method === 'POST' && materialOutlineLocate) {
+        const id = nodeId(materialOutlineLocate[1]!);
+        const revision = Number(materialOutlineLocate[2]);
+        const outlineId = nodeId(materialOutlineLocate[3]!);
+        if (!id || !outlineId) throw new Error('MATERIAL_OUTLINE_NODE_INVALID');
+        if (!Number.isSafeInteger(revision) || revision < 1) {
+          throw new Error('MATERIAL_REVISION_INVALID');
+        }
+        const result = await locateMaterialOutlineNode(
+          deps.root,
+          id,
+          revision,
+          outlineId,
+          async (physicalPage) => (await readMaterialPage(
+            deps.root,
+            id,
+            revision,
+            physicalPage,
+            {
+              mode: 'auto',
+              ...(deps.materialVision ? { vision: deps.materialVision } : {}),
+              updatedAt: new Date().toISOString(),
+            },
+          )).text,
+          new Date().toISOString(),
+        );
+        deps.hub.publish({ type: 'assets-invalidated' });
+        return json(result);
       }
 
       const material = /^\/api\/materials\/([^/]+)$/.exec(url.pathname);

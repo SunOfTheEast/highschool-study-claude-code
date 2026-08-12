@@ -137,11 +137,42 @@ export type RenderedPdfPage = {
   height: number;
 };
 
+export async function extractPdfBookPageText(
+  root: string,
+  materialId: string,
+  revision: number,
+  physicalPage: number,
+): Promise<string> {
+  const index = readMaterialBookIndex(root, materialId, revision);
+  if (!index) throw new Error('MATERIAL_BOOK_INDEX_NOT_FOUND');
+  if (!Number.isSafeInteger(physicalPage) || physicalPage < 1 || physicalPage > index.pageCount) {
+    throw new Error('MATERIAL_BOOK_PAGE_INVALID');
+  }
+  const selected = pdfRevision(root, materialId, revision);
+  let document: Awaited<ReturnType<typeof openPdfPath>> | null = null;
+  try {
+    document = await openPdfPath(resolveDocumentPath(root, selected.originalPath));
+    const page = await document.getPage(physicalPage);
+    const content = await page.getTextContent();
+    return content.items.flatMap((item) => (
+      'str' in item && typeof item.str === 'string'
+        ? [`${item.str}${'hasEOL' in item && item.hasEOL ? '\n' : ' '}`]
+        : []
+    )).join('').replace(/[ \t]+\n/g, '\n').trim();
+  } catch (error) {
+    if (error instanceof Error && error.message.startsWith('MATERIAL_')) throw error;
+    throw new Error('MATERIAL_BOOK_PAGE_READ_FAILED', { cause: error });
+  } finally {
+    await document?.destroy();
+  }
+}
+
 export async function renderPdfBookPage(
   root: string,
   materialId: string,
   revision: number,
   physicalPage: number,
+  limits: { maxDimension?: number; maxPixels?: number; maxScale?: number } = {},
 ): Promise<RenderedPdfPage> {
   const index = readMaterialBookIndex(root, materialId, revision);
   if (!index) throw new Error('MATERIAL_BOOK_INDEX_NOT_FOUND');
@@ -156,10 +187,10 @@ export async function renderPdfBookPage(
     const page = await document.getPage(physicalPage);
     const natural = page.getViewport({ scale: 1 });
     const scale = Math.min(
-      2,
-      2_400 / natural.width,
-      2_400 / natural.height,
-      Math.sqrt(4_000_000 / (natural.width * natural.height)),
+      limits.maxScale ?? 2,
+      (limits.maxDimension ?? 2_400) / natural.width,
+      (limits.maxDimension ?? 2_400) / natural.height,
+      Math.sqrt((limits.maxPixels ?? 4_000_000) / (natural.width * natural.height)),
     );
     const viewport = page.getViewport({ scale });
     const width = Math.max(1, Math.ceil(viewport.width));

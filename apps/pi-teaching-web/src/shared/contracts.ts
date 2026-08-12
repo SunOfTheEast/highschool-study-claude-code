@@ -321,6 +321,17 @@ export type MaterialBookIndex = {
   updatedAt: string;
 };
 
+export type MaterialPageReadReceipt = MaterialBookPage & {
+  text: string;
+  cached: boolean;
+};
+
+export type MaterialOutlineLocateReceipt = {
+  index: MaterialBookIndex;
+  node: MaterialBookOutlineNode;
+  candidatePages: number[];
+};
+
 export type MaterialRevision = {
   revision: number;
   title: string;

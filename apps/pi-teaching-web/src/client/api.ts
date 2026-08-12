@@ -19,6 +19,8 @@ import type {
   LessonHandout,
   MaterialImportReceipt,
   MaterialBookIndex,
+  MaterialOutlineLocateReceipt,
+  MaterialPageReadReceipt,
   MaterialLocatorSnapshot,
   MetaSessionSummary,
   ProblemActivitySnapshot,
@@ -189,6 +191,31 @@ export const api = {
   ),
   materialBookPageUrl: (id: string, revision: number, physicalPage: number) => (
     `/api/materials/${encodeURIComponent(id)}/revisions/${revision}/page/${physicalPage}.png`
+  ),
+  readMaterialPage: (
+    id: string,
+    revision: number,
+    physicalPage: number,
+    mode: 'auto' | 'visual' = 'auto',
+  ) => post<MaterialPageReadReceipt>(
+    `/api/materials/${encodeURIComponent(id)}/revisions/${revision}/pages/${physicalPage}/read`,
+    { mode },
+  ),
+  scanMaterialOutline: (
+    id: string,
+    revision: number,
+    startPage: number,
+    endPage: number,
+  ) => post<MaterialBookIndex>(
+    `/api/materials/${encodeURIComponent(id)}/revisions/${revision}/outline/scan`,
+    { startPage, endPage },
+  ),
+  locateMaterialOutline: (id: string, revision: number, outlineId: string) => (
+    post<MaterialOutlineLocateReceipt>(
+      `/api/materials/${encodeURIComponent(id)}/revisions/${revision}/outline/${
+        encodeURIComponent(outlineId)
+      }/locate`,
+    )
   ),
   importMaterial: (input: {
     title: string;

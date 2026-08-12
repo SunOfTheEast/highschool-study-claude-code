@@ -111,6 +111,16 @@ export function materialBookIndexPath(materialId: string, revision: number): str
   return `materials/${checkedId(materialId)}/projections/${positive(revision)}/book-index.yaml`;
 }
 
+export function materialBookPageTextPath(
+  materialId: string,
+  revision: number,
+  physicalPage: number,
+): string {
+  return `materials/${checkedId(materialId)}/projections/${positive(revision)}/pages/page-${
+    String(positive(physicalPage)).padStart(4, '0')
+  }.txt`;
+}
+
 function indexFromValue(path: string, value: unknown): MaterialBookIndex {
   const root = record(value);
   if (!root || root.schema !== 'studyforge.material-book-index.v1') {
@@ -227,13 +237,13 @@ export function readMaterialBookIndex(
   return parsed;
 }
 
-export function writeMaterialBookIndex(root: string, index: MaterialBookIndex): void {
+function indexCandidate(root: string, index: MaterialBookIndex): DocumentCandidate {
   const path = materialBookIndexPath(index.materialId, index.revision);
   const normalized = indexFromValue(path, indexValue(index));
   const absolute = resolveDocumentPath(root, path);
   const before = existsSync(absolute) ? readFileSync(absolute, 'utf8') : null;
   const after = stringifyYaml(indexValue(normalized), { lineWidth: 0 });
-  const candidate: DocumentCandidate = {
+  return {
     path,
     before,
     after,
@@ -244,5 +254,31 @@ export function writeMaterialBookIndex(root: string, index: MaterialBookIndex): 
       }
     },
   };
-  commitDocumentCandidates(root, [candidate]);
+}
+
+export function writeMaterialBookIndex(root: string, index: MaterialBookIndex): void {
+  commitDocumentCandidates(root, [indexCandidate(root, index)]);
+}
+
+export function writeMaterialBookPageProjection(
+  root: string,
+  index: MaterialBookIndex,
+  pageText: { physicalPage: number; text: string } | null,
+): void {
+  const candidates = [indexCandidate(root, index)];
+  if (pageText) {
+    const path = materialBookPageTextPath(
+      index.materialId,
+      index.revision,
+      pageText.physicalPage,
+    );
+    const absolute = resolveDocumentPath(root, path);
+    candidates.unshift({
+      path,
+      before: existsSync(absolute) ? readFileSync(absolute, 'utf8') : null,
+      after: pageText.text,
+      validate: () => {},
+    });
+  }
+  commitDocumentCandidates(root, candidates);
 }

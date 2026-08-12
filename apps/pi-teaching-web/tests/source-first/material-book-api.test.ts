@@ -124,3 +124,42 @@ test('rejects a corrupt PDF without exposing parser details', async () => {
   expect(response?.status).toBe(400);
   expect(await body(response)).toEqual({ error: 'MATERIAL_BOOK_PDF_INVALID' });
 });
+
+test('processes only an explicitly requested page and keeps the result addressable', async () => {
+  const learningSet = root();
+  const source = join(learningSet, 'scanned.pdf');
+  writeThreePageBook(source, { emptyPages: [2] });
+  const imported = await importMaterial(learningSet, {
+    requestId: 'book-api-read', title: '扫描教材', filename: 'scanned.pdf',
+    mediaType: 'application/pdf', source: { kind: 'path', absolutePath: source },
+  }, '2026-08-13T00:00:00.000Z');
+  const seen: number[] = [];
+  const handler = createRequestHandler({
+    root: learningSet,
+    hub: new EventHub(),
+    registry: fakeRegistry() as never,
+    materialVision: {
+      read: async ({ prompt }) => {
+        const page = Number(/第 (\d+) 页/.exec(prompt)?.[1]);
+        seen.push(page);
+        return { text: '视觉识别出的第二页', model: 'test/vision' };
+      },
+    },
+  });
+  const endpoint = `http://local/api/materials/${imported.id}/revisions/${imported.revision}`;
+  await handler(new Request(`${endpoint}/book-index`, { method: 'POST' }));
+
+  const read = await handler(new Request(`${endpoint}/pages/2/read`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ mode: 'auto' }),
+  }));
+  expect(read?.status).toBe(200);
+  expect(await body(read)).toMatchObject({
+    physicalPage: 2, state: 'visual-text', text: '视觉识别出的第二页', cached: false,
+  });
+  expect(seen).toEqual([2]);
+  expect(await body(await handler(new Request(
+    `${endpoint}/locators/page-0002`,
+  )))).toMatchObject({ text: '视觉识别出的第二页' });
+});
