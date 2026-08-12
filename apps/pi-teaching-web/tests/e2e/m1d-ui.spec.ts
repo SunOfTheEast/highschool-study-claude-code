@@ -77,8 +77,8 @@ test('walks the M1d asset, source, footprint, and local-relation surfaces', asyn
   await expect(page.getByText(/这次你已经自己把边界说清了/)).toBeVisible();
   await composer.fill('可以，就按你刚才展示的内容保存成笔记和题卡。');
   await page.getByRole('button', { name: /发送/ }).click();
-  await expect(page.locator('.tool-receipt').filter({ hasText: '笔记已保存' })).toBeVisible();
-  await expect(page.locator('.tool-receipt').filter({ hasText: '题卡已保存' })).toBeVisible();
+  await expect(page.locator('.tool-receipt').filter({ hasText: '已保存为笔记' })).toBeVisible();
+  await expect(page.locator('.tool-receipt').filter({ hasText: '已保存为题卡' })).toBeVisible();
 
   await page.getByRole('link', { name: '学习资料', exact: true }).click();
   await expect(page.getByRole('heading', { name: '我的学习资料' })).toBeVisible();

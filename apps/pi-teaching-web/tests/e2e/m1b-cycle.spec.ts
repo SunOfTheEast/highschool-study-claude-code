@@ -25,13 +25,13 @@ test('grows a blank learning set into reusable assets and teacher memory', async
   await composer.fill('温度不变时 Ksp 不变；加入 NaCl 改变的是离子积和各离子浓度。');
   await page.getByRole('button', { name: /发送/ }).click();
   await expect(page.getByText(/这次你已经自己把边界说清了/)).toBeVisible();
-  await expect(page.locator('.tool-receipt')).toContainText('处理完成');
+  await expect(page.locator('.tool-receipt')).toContainText('学习记录已整理');
 
   await composer.fill('可以，就按你刚才展示的内容保存成笔记和题卡。');
   await page.getByRole('button', { name: /发送/ }).click();
   await expect(page.getByText('Note 和题卡都已经保存。', { exact: true })).toBeVisible();
-  await expect(page.locator('.tool-receipt').filter({ hasText: '笔记已保存' })).toBeVisible();
-  await expect(page.locator('.tool-receipt').filter({ hasText: '题卡已保存' })).toBeVisible();
+  await expect(page.locator('.tool-receipt').filter({ hasText: '已保存为笔记' })).toBeVisible();
+  await expect(page.locator('.tool-receipt').filter({ hasText: '已保存为题卡' })).toBeVisible();
 
   await page.getByRole('button', { name: '结束这次自由学习' }).click();
   await expect(page).toHaveURL(/\/learn\/free-session-001$/);

@@ -30,7 +30,7 @@ test('joins source-grounded free learning, assets, Meta, Roadmap, and the footpr
   await page.getByRole('button', { name: /化学反应原理摘录/ }).click();
   await expect(page.getByRole('heading', { name: '化学反应原理摘录' })).toBeVisible();
   await expect(page.getByLabel('资料位置')).toContainText('第 1–3 行');
-  await expect(page.getByLabel('资料位置')).toContainText('lines-1-3');
+  await expect(page.getByLabel('资料位置')).not.toContainText('lines-1-3');
   await expect(page.getByText(/纯固体的活度在给定状态下视为常量/)).toBeVisible();
   await page.getByRole('button', { name: '带着当前内容问老师' }).click();
 
@@ -43,7 +43,7 @@ test('joins source-grounded free learning, assets, Meta, Roadmap, and the footpr
   await freeComposer.fill('保存吧');
   await page.getByRole('button', { name: /发送/ }).click();
   await expect(page.getByText('这份有原文出处的笔记已经保存。')).toBeVisible();
-  await expect(page.locator('.tool-receipt').filter({ hasText: '笔记已保存' })).toBeVisible();
+  await expect(page.locator('.tool-receipt').filter({ hasText: '已保存为笔记' })).toBeVisible();
 
   await page.getByRole('link', { name: '学习资料', exact: true }).click();
   await expect(page.getByText('Ksp 中为什么不写纯固体', { exact: true })).toBeVisible();

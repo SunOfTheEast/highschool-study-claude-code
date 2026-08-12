@@ -60,7 +60,7 @@ test('completes the M0 Roadmap, Plan, Lesson and Knowledge browser cycle', async
     '我听见你说恒成立问题比较棘手。具体是哪一种结构最容易让你停下来？',
     { exact: true },
   )).toBeVisible();
-  await expect(page.locator('.tool-receipt')).toContainText('老师查看了相关内容');
+  await expect(page.locator('.tool-receipt')).toContainText('老师回看了相关学习记录');
 
   await page.getByRole('button', { name: '展开课程树' }).click();
   await page.getByRole('button', { name: /恒成立问题选路/ }).click();

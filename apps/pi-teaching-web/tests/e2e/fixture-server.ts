@@ -190,6 +190,9 @@ const m0Registry = {
   async open() {},
   async abort() {},
   async release() {},
+  async endFocusForSession() {
+    return null;
+  },
   async createFreeLearning() {
     throw new Error('M0_FIXTURE_FREE_LEARNING_DISABLED');
   },
