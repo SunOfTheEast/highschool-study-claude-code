@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { AuthType } from '@earendil-works/pi-ai';
-import type { DesktopModelSelection } from '../../desktop/contracts';
+import type {
+  DesktopModelSelection,
+  DesktopVisionSelection,
+} from '../../desktop/contracts';
 import { App } from '../App';
 import { api } from '../api';
 import { configureTransport, resetTransport } from '../transport';
@@ -354,14 +357,19 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
         catalog={catalog}
         teacher={status.teacher}
         scout={status.scout}
+        vision={status.vision}
         authFlow={authFlow ? publicAuthFlow(authFlow) : null}
         busy={busy}
         error={error}
         onLogin={startAuth}
         onRespond={respondAuth}
         onOpenUrl={(url) => bridge.openExternalUrl(url)}
-        onSave={async (teacher: DesktopModelSelection, scout: DesktopModelSelection) => {
-          const saved = await mutate(() => desktopApi.saveModels(teacher, scout), true);
+        onSave={async (
+          teacher: DesktopModelSelection,
+          scout: DesktopModelSelection,
+          vision: DesktopVisionSelection,
+        ) => {
+          const saved = await mutate(() => desktopApi.saveModels(teacher, scout, vision), true);
           if (saved) setPage('learning');
         }}
         onBack={status.state === 'ready' ? () => setPage('learning') : null}

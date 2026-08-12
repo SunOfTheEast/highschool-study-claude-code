@@ -13,6 +13,7 @@ import {
 } from '../desktop/app-config';
 import type {
   DesktopModelSelection,
+  DesktopVisionSelection,
   StudyForgePaths,
 } from '../desktop/contracts';
 import {
@@ -249,6 +250,18 @@ function selection(value: unknown): DesktopModelSelection {
   return parsed;
 }
 
+function visionSelection(value: unknown): DesktopVisionSelection {
+  return parseAppConfig({
+    version: 1,
+    onboardingComplete: false,
+    currentLearningSet: null,
+    recentLearningSets: [],
+    teacher: null,
+    scout: null,
+    vision: value,
+  }).vision;
+}
+
 function selectedConfig(paths: StudyForgePaths, root: string) {
   const current = loadAppConfig(paths.appConfigPath);
   const recentLearningSets = [
@@ -294,6 +307,7 @@ function status(deps: DesktopRequestDependencies) {
     recentLearningSets: config.recentLearningSets,
     teacher: config.teacher,
     scout: config.scout,
+    vision: config.vision,
     issue: deps.runtimeIssue ?? (validation && !validation.ok
       ? { code: 'LEARNING_SET_INVALID', detail: validation.code }
       : null),
@@ -322,6 +336,9 @@ function errorResponse(error: unknown): Response {
       error: 'STUDYFORGE_THINKING_UNAVAILABLE',
       detail: message.slice('STUDYFORGE_THINKING_UNAVAILABLE: '.length),
     }, 409);
+  }
+  if (message === 'STUDYFORGE_VISION_MODEL_UNAVAILABLE') {
+    return json({ error: message }, 409);
   }
   if (message.startsWith('LEARNING_SET_')) {
     const statusCode = message === 'LEARNING_SET_DESTINATION_EXISTS' ? 409 : 422;
@@ -490,7 +507,17 @@ export function createDesktopRequestHandler(deps: DesktopRequestDependencies) {
         const body = bodyObject(await request.json());
         const teacher = selection(body.teacher);
         const scout = selection(body.scout);
-        await Promise.all([deps.modelService.resolve(teacher), deps.modelService.resolve(scout)]);
+        const vision = visionSelection(body.vision);
+        const [teacherModel] = await Promise.all([
+          deps.modelService.resolve(teacher),
+          deps.modelService.resolve(scout),
+        ]);
+        const visualModel = vision.mode === 'model'
+          ? await deps.modelService.resolve(vision.selection)
+          : teacherModel;
+        if (vision.mode === 'model' && !visualModel.input.includes('image')) {
+          throw new Error('STUDYFORGE_VISION_MODEL_UNAVAILABLE');
+        }
         const current = loadAppConfig(deps.paths.appConfigPath);
         writeDesktopPiSettings(deps.paths.settingsPath, {
           sessionsDir: deps.paths.sessionsDir,
@@ -502,6 +529,7 @@ export function createDesktopRequestHandler(deps: DesktopRequestDependencies) {
           ...current,
           teacher,
           scout,
+          vision,
           onboardingComplete,
         });
         response = json({ onboardingComplete, restartRequired: true });

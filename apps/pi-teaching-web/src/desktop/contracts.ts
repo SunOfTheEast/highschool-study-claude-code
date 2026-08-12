@@ -16,6 +16,10 @@ export type DesktopModelSelection = {
   thinking: DesktopThinkingLevel;
 };
 
+export type DesktopVisionSelection =
+  | { mode: 'auto' }
+  | { mode: 'model'; selection: DesktopModelSelection };
+
 export type StudyForgeAppConfig = {
   version: 1;
   onboardingComplete: boolean;
@@ -23,6 +27,7 @@ export type StudyForgeAppConfig = {
   recentLearningSets: string[];
   teacher: DesktopModelSelection | null;
   scout: DesktopModelSelection | null;
+  vision: DesktopVisionSelection;
 };
 
 export type StudyForgePaths = {

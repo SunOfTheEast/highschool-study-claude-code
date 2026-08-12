@@ -31,6 +31,7 @@ function fakeModelService() {
   const available = new Set([
     'openai-codex/gpt-5.6-sol',
     'openai-codex/gpt-5.6-terra',
+    'openai-codex/text-only',
   ]);
   return {
     catalog: async () => ({
@@ -47,12 +48,21 @@ function fakeModelService() {
           id: 'gpt-5.6-sol',
           name: 'GPT-5.6 Sol',
           thinkingLevels: ['off', 'high'] as const,
+          input: ['text', 'image'] as const,
         },
         {
           provider: 'openai-codex',
           id: 'gpt-5.6-terra',
           name: 'GPT-5.6 Terra',
           thinkingLevels: ['off', 'high'] as const,
+          input: ['text'] as const,
+        },
+        {
+          provider: 'openai-codex',
+          id: 'text-only',
+          name: 'Text only',
+          thinkingLevels: ['off', 'high'] as const,
+          input: ['text'] as const,
         },
       ],
     }),
@@ -60,7 +70,10 @@ function fakeModelService() {
       if (!available.has(`${selection.provider}/${selection.model}`)) {
         throw new Error(`STUDYFORGE_MODEL_UNAVAILABLE: ${selection.provider}/${selection.model}`);
       }
-      return { id: selection.model };
+      return {
+        id: selection.model,
+        input: selection.model === 'text-only' ? ['text'] : ['text', 'image'],
+      };
     },
     login: async (_provider: string, _type: AuthType, interaction: AuthInteraction) => {
       interaction.notify({ type: 'auth_url', url: 'https://example.test/oauth' });
@@ -277,6 +290,23 @@ test('keeps invalid learning sets and unavailable models as distinct failures', 
     error: 'STUDYFORGE_MODEL_UNAVAILABLE',
     detail: 'openai-codex/missing',
   });
+});
+
+test('rejects an explicit text-only visual reader even when the model exists', async () => {
+  const { request } = setup();
+  const response = await request('/api/desktop/models', {
+    method: 'PUT',
+    body: JSON.stringify({
+      teacher: { provider: 'openai-codex', model: 'gpt-5.6-sol', thinking: 'high' },
+      scout: { provider: 'openai-codex', model: 'gpt-5.6-terra', thinking: 'high' },
+      vision: {
+        mode: 'model',
+        selection: { provider: 'openai-codex', model: 'text-only', thinking: 'high' },
+      },
+    }),
+  });
+  expect(response?.status).toBe(409);
+  expect(await response?.json()).toEqual({ error: 'STUDYFORGE_VISION_MODEL_UNAVAILABLE' });
 });
 
 test('refuses to replace the learning set while a focus cycle is active', async () => {

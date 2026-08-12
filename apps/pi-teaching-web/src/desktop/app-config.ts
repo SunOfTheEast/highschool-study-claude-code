@@ -10,6 +10,7 @@ import { dirname, isAbsolute, join } from 'node:path';
 import {
   desktopThinkingLevels,
   type DesktopModelSelection,
+  type DesktopVisionSelection,
   type StudyForgeAppConfig,
   type StudyForgePaths,
 } from './contracts';
@@ -26,6 +27,7 @@ export function defaultAppConfig(): StudyForgeAppConfig {
     recentLearningSets: [],
     teacher: null,
     scout: null,
+    vision: { mode: 'auto' },
   };
 }
 
@@ -82,6 +84,19 @@ function absolutePath(value: unknown, nullable = false): string | null {
   return value as string;
 }
 
+function visionSelection(value: unknown): DesktopVisionSelection {
+  if (value === undefined) return { mode: 'auto' };
+  if (!value || typeof value !== 'object' || Array.isArray(value)) invalid();
+  const candidate = value as Record<string, unknown>;
+  if (candidate.mode === 'auto' && Object.keys(candidate).length === 1) return { mode: 'auto' };
+  if (candidate.mode === 'model' && Object.keys(candidate).length === 2) {
+    const selection = modelSelection(candidate.selection);
+    if (selection === null) return invalid();
+    return { mode: 'model', selection };
+  }
+  return invalid();
+}
+
 export function parseAppConfig(value: unknown): StudyForgeAppConfig {
   if (!value || typeof value !== 'object' || Array.isArray(value)) invalid();
   const candidate = value as Record<string, unknown>;
@@ -97,6 +112,7 @@ export function parseAppConfig(value: unknown): StudyForgeAppConfig {
     recentLearningSets,
     teacher: modelSelection(candidate.teacher),
     scout: modelSelection(candidate.scout),
+    vision: visionSelection(candidate.vision),
   };
 }
 

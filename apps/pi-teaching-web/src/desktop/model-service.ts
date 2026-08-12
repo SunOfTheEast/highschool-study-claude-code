@@ -24,6 +24,7 @@ export type DesktopModelDescriptor = {
   id: string;
   name: string;
   thinkingLevels: DesktopThinkingLevel[];
+  input: Array<'text' | 'image'>;
 };
 
 type RuntimeFactory = (options: {
@@ -67,6 +68,7 @@ export class DesktopModelService {
       id: model.id,
       name: model.name,
       thinkingLevels: thinkingLevels(model),
+      input: [...model.input],
     }));
     return { providers, models };
   }

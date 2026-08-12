@@ -3,6 +3,7 @@ import type { AuthEvent, AuthPrompt, AuthType } from '@earendil-works/pi-ai';
 import type {
   DesktopModelSelection,
   DesktopThinkingLevel,
+  DesktopVisionSelection,
 } from '../../desktop/contracts';
 import type { PeerSkinStatus } from './api';
 import {
@@ -24,6 +25,7 @@ export type DesktopModelCatalog = {
     id: string;
     name: string;
     thinkingLevels: readonly DesktopThinkingLevel[];
+    input: readonly ('text' | 'image')[];
   }>;
 };
 
@@ -39,6 +41,7 @@ export type ModelAuthFlow = {
 type ModelDraft = {
   teacher: DesktopModelSelection | null;
   scout: DesktopModelSelection | null;
+  vision: DesktopVisionSelection;
 };
 
 type Provider = DesktopModelCatalog['providers'][number];
@@ -70,10 +73,21 @@ export function defaultModelDraft(
   catalog: DesktopModelCatalog,
   teacher: DesktopModelSelection | null,
   scout: DesktopModelSelection | null,
+  vision: DesktopVisionSelection = { mode: 'auto' },
 ): ModelDraft {
+  const visual = vision.mode === 'model'
+    && catalog.models.some((candidate) => (
+      candidate.provider === vision.selection.provider
+      && candidate.id === vision.selection.model
+      && candidate.input.includes('image')
+      && candidate.thinkingLevels.includes(vision.selection.thinking)
+    ))
+    ? vision
+    : { mode: 'auto' as const };
   return {
     teacher: availableSelection(catalog, teacher) ?? exactDefault(catalog, 'gpt-5.6-sol'),
     scout: availableSelection(catalog, scout) ?? exactDefault(catalog, 'gpt-5.6-terra'),
+    vision: visual,
   };
 }
 
@@ -155,6 +169,79 @@ function ModelRow({
   );
 }
 
+function VisionModelRow({
+  catalog,
+  value,
+  onChange,
+}: {
+  catalog: DesktopModelCatalog;
+  value: DesktopVisionSelection;
+  onChange(value: DesktopVisionSelection): void;
+}) {
+  const imageModels = catalog.models.filter((model) => model.input.includes('image'));
+  const selection = value.mode === 'model' ? value.selection : null;
+  const selected = selection ? imageModels.find((model) => (
+    model.provider === selection.provider && model.id === selection.model
+  )) : null;
+  return (
+    <fieldset className="desktop-model-row">
+      <legend>资料视觉读取</legend>
+      <p>只在打开扫描页或图表时读取所选页面，不进入课堂上下文</p>
+      <label htmlFor="vision-model">视觉读取模型</label>
+      <select
+        id="vision-model"
+        aria-label="资料视觉读取模型"
+        value={selection ? `${selection.provider}/${selection.model}` : 'auto'}
+        onChange={(event) => {
+          if (event.target.value === 'auto') {
+            onChange({ mode: 'auto' });
+            return;
+          }
+          const model = imageModels.find((candidate) => (
+            `${candidate.provider}/${candidate.id}` === event.target.value
+          ));
+          const thinking = model?.thinkingLevels.includes('high')
+            ? 'high'
+            : model?.thinkingLevels[0];
+          if (model && thinking) {
+            onChange({
+              mode: 'model',
+              selection: { provider: model.provider, model: model.id, thinking },
+            });
+          }
+        }}
+      >
+        <option value="auto">自动使用支持图片的主教师</option>
+        {imageModels.map((model) => (
+          <option key={`${model.provider}/${model.id}`} value={`${model.provider}/${model.id}`}>
+            {model.name} · {model.provider}
+          </option>
+        ))}
+      </select>
+      {selection && (
+        <>
+          <label htmlFor="vision-thinking">思考强度</label>
+          <select
+            id="vision-thinking"
+            value={selection.thinking}
+            onChange={(event) => onChange({
+              mode: 'model',
+              selection: {
+                ...selection,
+                thinking: event.target.value as DesktopThinkingLevel,
+              },
+            })}
+          >
+            {selected?.thinkingLevels.map((level) => (
+              <option key={level} value={level}>{level}</option>
+            ))}
+          </select>
+        </>
+      )}
+    </fieldset>
+  );
+}
+
 function ProviderLedger({
   providers,
   onLogin,
@@ -208,7 +295,11 @@ function CurrentPair({
   return (
     <section className="desktop-current-models" aria-label="当前安排">
       <h2>当前安排</h2>
-      <div>{row('主教师', draft.teacher)}{row('检索 Scout', draft.scout)}</div>
+      <div>
+        {row('主教师', draft.teacher)}
+        {row('检索 Scout', draft.scout)}
+        {row('资料视觉', draft.vision.mode === 'model' ? draft.vision.selection : null)}
+      </div>
     </section>
   );
 }
@@ -418,6 +509,7 @@ export function ModelSettings({
   catalog,
   teacher,
   scout,
+  vision = { mode: 'auto' },
   authFlow,
   busy,
   error,
@@ -435,13 +527,18 @@ export function ModelSettings({
   catalog: DesktopModelCatalog;
   teacher: DesktopModelSelection | null;
   scout: DesktopModelSelection | null;
+  vision?: DesktopVisionSelection;
   authFlow: ModelAuthFlow | null;
   busy: boolean;
   error: string | null;
   onLogin(provider: string, type: AuthType): Promise<void>;
   onRespond(value: string): Promise<void>;
   onOpenUrl(url: string): Promise<void>;
-  onSave(teacher: DesktopModelSelection, scout: DesktopModelSelection): Promise<void>;
+  onSave(
+    teacher: DesktopModelSelection,
+    scout: DesktopModelSelection,
+    vision: DesktopVisionSelection,
+  ): Promise<void>;
   onBack: (() => void) | null;
   peerSkin?: PeerSkinStatus | null;
   onChoosePeerSkin?: (() => Promise<string | null>) | null;
@@ -449,22 +546,28 @@ export function ModelSettings({
   onImportPeerSkin?: ((source: string, core?: string) => Promise<PeerSkinStatus>) | null;
   onShowCompanion?: (() => void) | null;
 }) {
-  const initial = useMemo(() => defaultModelDraft(catalog, teacher, scout), [catalog, teacher, scout]);
+  const initial = useMemo(
+    () => defaultModelDraft(catalog, teacher, scout, vision),
+    [catalog, teacher, scout, vision],
+  );
   const [draft, setDraft] = useState(initial);
   const [readingSize, setReadingSize] = useState<ReadingSize>(() => (
     typeof window === 'undefined' ? 'standard' : readStoredReadingSize(window.localStorage)
   ));
   const teacherTouched = useRef(false);
   const scoutTouched = useRef(false);
+  const visionTouched = useRef(false);
   useEffect(() => {
     setDraft((current) => ({
       teacher: teacherTouched.current || current.teacher ? current.teacher : initial.teacher,
       scout: scoutTouched.current || current.scout ? current.scout : initial.scout,
+      vision: visionTouched.current ? current.vision : initial.vision,
     }));
   }, [initial]);
   const activeProviders = new Set([
     ...(draft.teacher ? [draft.teacher.provider] : []),
     ...(draft.scout ? [draft.scout.provider] : []),
+    ...(draft.vision.mode === 'model' ? [draft.vision.selection.provider] : []),
   ]);
   const voiceProvider = catalog.providers.find((provider) => provider.id === 'xiaomi') ?? null;
   const modelProviders = catalog.providers.filter((provider) => (
@@ -541,6 +644,14 @@ export function ModelSettings({
               setDraft((current) => ({ ...current, teacher: value }));
             }}
           />
+          <VisionModelRow
+            catalog={catalog}
+            value={draft.vision}
+            onChange={(value) => {
+              visionTouched.current = true;
+              setDraft((current) => ({ ...current, vision: value }));
+            }}
+          />
           <ModelRow
             id="scout"
             title="检索 Scout"
@@ -568,7 +679,9 @@ export function ModelSettings({
           type="button"
           disabled={busy || !draft.teacher || !draft.scout}
           onClick={() => {
-            if (draft.teacher && draft.scout) void onSave(draft.teacher, draft.scout);
+            if (draft.teacher && draft.scout) {
+              void onSave(draft.teacher, draft.scout, draft.vision);
+            }
           }}
         >
           完成设置并开始学习

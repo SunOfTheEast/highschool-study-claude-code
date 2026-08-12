@@ -9,6 +9,7 @@ function fakeRuntime() {
       provider: 'openai-codex',
       id: 'gpt-5.6-sol',
       name: 'GPT-5.6 Sol',
+      input: ['text', 'image'],
       reasoning: true,
       thinkingLevelMap: { minimal: 'minimal', high: 'high', max: null },
     },
@@ -16,6 +17,7 @@ function fakeRuntime() {
       provider: 'openai-codex',
       id: 'gpt-5.6-terra',
       name: 'GPT-5.6 Terra',
+      input: ['text'],
       reasoning: true,
     },
   ];
@@ -77,6 +79,7 @@ test('creates the Pi runtime against StudyForge-owned credential files', async (
     provider: 'openai-codex',
     id: 'gpt-5.6-sol',
     thinkingLevels: ['off', 'minimal', 'low', 'medium', 'high'],
+    input: ['text', 'image'],
   });
 });
 

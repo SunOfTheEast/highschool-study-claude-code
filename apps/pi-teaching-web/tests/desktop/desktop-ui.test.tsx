@@ -25,10 +25,12 @@ const catalog: DesktopModelCatalog = {
     {
       provider: 'openai-codex', id: 'gpt-5.6-sol', name: 'GPT-5.6 Sol',
       thinkingLevels: ['off', 'medium', 'high'],
+      input: ['text', 'image'],
     },
     {
       provider: 'openai-codex', id: 'gpt-5.6-terra', name: 'GPT-5.6 Terra',
       thinkingLevels: ['off', 'medium', 'high'],
+      input: ['text'],
     },
   ],
 };
@@ -58,14 +60,16 @@ test('uses exact StudyForge defaults but never substitutes an unavailable model'
   expect(defaultModelDraft(catalog, null, null)).toEqual({
     teacher: { provider: 'openai-codex', model: 'gpt-5.6-sol', thinking: 'high' },
     scout: { provider: 'openai-codex', model: 'gpt-5.6-terra', thinking: 'high' },
+    vision: { mode: 'auto' },
   });
   expect(defaultModelDraft({
     providers: catalog.providers,
     models: [{
       provider: 'anthropic', id: 'claude-sonnet', name: 'Claude Sonnet',
       thinkingLevels: ['off', 'high'],
+      input: ['text'],
     }],
-  }, null, null)).toEqual({ teacher: null, scout: null });
+  }, null, null)).toEqual({ teacher: null, scout: null, vision: { mode: 'auto' } });
 });
 
 test('renders model choice as a ledger with independent teacher and Scout rows', () => {
@@ -87,6 +91,8 @@ test('renders model choice as a ledger with independent teacher and Scout rows',
 
   expect(markup).toContain('主教师');
   expect(markup).toContain('检索 Scout');
+  expect(markup).toContain('资料视觉读取');
+  expect(markup).toContain('自动使用支持图片的主教师');
   expect(markup).toContain('GPT-5.6 Sol');
   expect(markup).toContain('GPT-5.6 Terra');
   expect(markup).not.toContain('模型卡片');
@@ -132,9 +138,9 @@ test('puts the current teaching pair first and folds away unconfigured Providers
     ],
     models: [
       ...catalog.models,
-      { provider: 'anthropic', id: 'claude-sonnet', name: 'Claude Sonnet', thinkingLevels: ['high'] },
-      { provider: 'google', id: 'gemini-pro', name: 'Gemini Pro', thinkingLevels: ['high'] },
-      { provider: 'openrouter', id: 'route-model', name: 'Route Model', thinkingLevels: ['high'] },
+      { provider: 'anthropic', id: 'claude-sonnet', name: 'Claude Sonnet', thinkingLevels: ['high'], input: ['text'] },
+      { provider: 'google', id: 'gemini-pro', name: 'Gemini Pro', thinkingLevels: ['high'], input: ['text', 'image'] },
+      { provider: 'openrouter', id: 'route-model', name: 'Route Model', thinkingLevels: ['high'], input: ['text'] },
     ],
   };
   const markup = renderToStaticMarkup(

@@ -10,6 +10,7 @@ import { join } from 'node:path';
 import {
   defaultAppConfig,
   loadAppConfig,
+  parseAppConfig,
   resolveStudyForgePaths,
   saveAppConfig,
 } from '../../src/desktop/app-config';
@@ -61,6 +62,10 @@ test('round-trips only the versioned desktop settings', () => {
     recentLearningSets: ['/Users/student/Documents/StudyForge/化学/learning-set'],
     teacher: { provider: 'openai-codex', model: 'gpt-5.6-sol', thinking: 'high' as const },
     scout: { provider: 'openai-codex', model: 'gpt-5.6-terra', thinking: 'high' as const },
+    vision: {
+      mode: 'model' as const,
+      selection: { provider: 'openai-codex', model: 'gpt-5.6-sol', thinking: 'medium' as const },
+    },
   };
 
   saveAppConfig(path, config);
@@ -84,4 +89,18 @@ test('returns defaults for a missing config and rejects malformed persisted choi
   }));
 
   expect(() => loadAppConfig(path)).toThrow('STUDYFORGE_APP_CONFIG_INVALID');
+});
+
+test('migrates an existing version-one config to automatic vision and rejects malformed modes', () => {
+  const existing = {
+    version: 1,
+    onboardingComplete: true,
+    currentLearningSet: '/Users/student/Documents/StudyForge/化学/learning-set',
+    recentLearningSets: [],
+    teacher: { provider: 'openai-codex', model: 'gpt-5.6-sol', thinking: 'high' },
+    scout: { provider: 'openai-codex', model: 'gpt-5.6-terra', thinking: 'high' },
+  };
+  expect(parseAppConfig(existing)).toMatchObject({ vision: { mode: 'auto' } });
+  expect(() => parseAppConfig({ ...existing, vision: { mode: 'sometimes' } }))
+    .toThrow('STUDYFORGE_APP_CONFIG_INVALID');
 });
