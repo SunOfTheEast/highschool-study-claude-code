@@ -231,6 +231,16 @@ test('serves refreshed candidates, starts review intent, and never consumes a sa
     .toHaveLength(2);
 });
 
+test('passes every selected review candidate through instead of truncating to a fixed batch', async () => {
+  const created: Array<{ assets: unknown[]; intent: string }> = [];
+  const selectedAssets = Array.from({ length: 13 }, (_, index) => ({
+    kind: 'note' as const,
+    id: `note-${String(index + 1).padStart(3, '0')}`,
+  }));
+  await registry(created).createFreeLearning(selectedAssets, 'review');
+  expect(created).toEqual([{ assets: selectedAssets, intent: 'review' }]);
+});
+
 test('adds a separate review action to the asset library without turning it into a due queue', () => {
   const root = learningSet('化学反应原理');
   saveNote(root, '一份笔记', '2026-08-01T08:00:00.000Z');

@@ -107,11 +107,16 @@ export function renderFreeLearningReviewBrief(
   scope: FreeLearningSessionScope,
 ): string {
   if ((scope.intent ?? 'open') !== 'review') return '';
+  const summaries = readReviewAssetSummaryIndex(root);
   const rows = selectedAssetReviewBindings(scope.selectedAssets).map(({ alias, asset }) => {
     const projection = readAssetReviewHistory(root, asset).projection;
+    const summary = summaries.get(handleKey(asset)) ?? fallbackSummary(root, asset);
     return [
       `- alias: ${alias}`,
       `  kind: ${asset.kind}`,
+      `  title: ${JSON.stringify(summary.title)}`,
+      `  tags: ${JSON.stringify(summary.tags)}`,
+      `  path: ${summary.path}`,
       `  due_on: ${projection?.dueOn ?? 'unavailable'}`,
       `  stage: ${projection?.stage ?? 'unavailable'}`,
       `  last_result: ${projection?.lastResult ?? 'none'}`,
@@ -121,6 +126,8 @@ export function renderFreeLearningReviewBrief(
     '# Asset Review Brief',
     '',
     'Intent: review',
+    '',
+    'The list is complete for this Session. Read one exact path only when that item is reached.',
     '',
     ...(rows.length > 0 ? rows : ['- no reviewable selected assets']),
     '',

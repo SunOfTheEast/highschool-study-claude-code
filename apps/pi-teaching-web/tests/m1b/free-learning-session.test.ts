@@ -20,6 +20,8 @@ import {
 } from '../../src/runtime/session-owner';
 import type { FreeLearningSessionRecord } from '../../src/runtime/session-scope';
 import { WorkspaceRegistry } from '../../src/runtime/workspace-registry';
+import { commitDocumentCandidates } from '../../src/runtime/multi-document-transaction';
+import { planLearningNoteSave, planProblemCardSave } from '../../src/study/learning-assets';
 
 const fixture = join(import.meta.dir, '../fixtures/m1b-blank-learning-set');
 const roots: string[] = [];
@@ -81,11 +83,29 @@ test('creates independent root sessions without creating teaching documents', as
   };
   const registry = new WorkspaceRegistry(root, factory, undefined, undefined, async () => null, async () => []);
 
+  const note = planLearningNoteSave(root, 'seed-session', {
+    title: '真实笔记', blocks: [{ kind: 'markdown', body: '正文。' }], sources: [],
+    tags: { core: ['笔记'], related: [] },
+  }, '2026-08-08T08:00:00.000Z');
+  commitDocumentCandidates(root, note.candidates);
+  const card = planProblemCardSave(root, 'seed-session', {
+    stem: '真实题卡', standardAnswer: '答案', teacherRationale: '依据', studentNote: '',
+    sources: [], tags: { core: ['题卡'], related: [] },
+  }, '2026-08-08T08:10:00.000Z');
+  commitDocumentCandidates(root, card.candidates);
+
   const first = await registry.createFreeLearning([]);
   const second = await registry.createFreeLearning([
-    { kind: 'problem-card', id: 'card-001' },
-    { kind: 'note', id: 'note-001' },
+    { kind: 'problem-card', id: card.card.id },
+    { kind: 'note', id: note.note.id },
   ]);
+
+  const tooMany = Array.from({ length: 13 }, (_, index) => ({
+    kind: 'note' as const,
+    id: index === 0 ? 'note-001' : `note-${String(index + 1).padStart(3, '0')}`,
+  }));
+  await expect(registry.createFreeLearning(tooMany, 'open'))
+    .rejects.toThrow('SELECTED_CONTEXT_LIMIT_EXCEEDED');
 
   expect(first.sessionKey).toBe('free:free-session-1');
   expect(second.sessionKey).toBe('free:free-session-2');
@@ -94,8 +114,8 @@ test('creates independent root sessions without creating teaching documents', as
     expect.objectContaining({
       sessionKind: 'free-learning',
       selectedAssets: [
-        { kind: 'problem-card', id: 'card-001' },
-        { kind: 'note', id: 'note-001' },
+        { kind: 'problem-card', id: card.card.id },
+        { kind: 'note', id: note.note.id },
       ],
       sessionFile: null,
     }),

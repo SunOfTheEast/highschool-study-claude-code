@@ -15,6 +15,7 @@ import type {
 import { readCourseTree, readLesson, readPlan, readRoadmap } from '../study/markdown';
 import { readMaterialLocator } from '../study/materials';
 import { isProblemCardId } from '../study/problem-card-id';
+import { readLearningNote, readProblemCard } from '../study/learning-assets';
 import { setFrontmatterField } from './frontmatter';
 import {
   sessionFactoryInput,
@@ -116,8 +117,11 @@ function findNode(
 function checkedSelectedAssets(
   root: string,
   selectedAssets: readonly LearningContextReference[],
+  intent: 'open' | 'review' = 'open',
 ): LearningContextReference[] {
-  if (selectedAssets.length > 12) throw new Error('SELECTED_CONTEXT_LIMIT_EXCEEDED');
+  if (intent === 'open' && selectedAssets.length > 12) {
+    throw new Error('SELECTED_CONTEXT_LIMIT_EXCEEDED');
+  }
   const seen = new Set<string>();
   return selectedAssets.map((asset) => {
     if (asset.kind === 'material') {
@@ -144,6 +148,8 @@ function checkedSelectedAssets(
     const key = `${asset.kind}:${asset.id}`;
     if (seen.has(key)) throw new Error(`SELECTED_CONTEXT_DUPLICATE: ${key}`);
     seen.add(key);
+    if (asset.kind === 'note') readLearningNote(root, asset.id);
+    else readProblemCard(root, asset.id);
     return { kind: asset.kind, id: asset.id };
   });
 }
@@ -229,7 +235,7 @@ export class WorkspaceRegistry {
       sessionKind: 'free-learning',
       title: '自由学习',
       createdAt,
-      selectedAssets: checkedSelectedAssets(this.root, selectedAssets),
+      selectedAssets: checkedSelectedAssets(this.root, selectedAssets, intent),
       intent,
     };
     const session = await this.factory(sessionFactoryInput(scope, null));

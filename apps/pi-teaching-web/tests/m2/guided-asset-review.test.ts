@@ -147,6 +147,49 @@ test('persists review intent, upgrades legacy owners to open, and restores one c
   expect(brief?.content).not.toContain('event-001');
 });
 
+test('opens a 13-item review from one complete lightweight index while ordinary context stays bounded', async () => {
+  const root = copy();
+  const selected = [] as Array<{ kind: 'note'; id: string }>;
+  for (let index = 1; index <= 13; index += 1) {
+    const planned = planLearningNoteSave(root, 'seed-session', {
+      title: `复习候选 ${index}`,
+      blocks: [{ kind: 'markdown', body: `不应批量注入的秘密正文 ${index}` }],
+      sources: [],
+      tags: { core: [`标签 ${index}`], related: [] },
+    }, `2026-08-${String(index).padStart(2, '0')}T08:00:00.000Z`);
+    commitDocumentCandidates(root, planned.candidates);
+    selected.push({ kind: 'note', id: planned.note.id });
+  }
+  refreshSemanticRecallIndex(root);
+
+  const factory: StudySessionFactory = async () => fakeSession('review-session-many');
+  const registry = new WorkspaceRegistry(root, factory);
+  const created = await registry.createFreeLearning(selected, 'review');
+  expect(created.selectedAssets).toHaveLength(13);
+  await expect(registry.createFreeLearning(selected, 'open'))
+    .rejects.toThrow('SELECTED_CONTEXT_LIMIT_EXCEEDED');
+
+  const reviewScope: FreeLearningSessionScope = {
+    sessionKind: 'free-learning', title: '自由学习', intent: 'review',
+    createdAt: '2026-08-12T10:00:00.000Z', selectedAssets: selected,
+  };
+  const resources = loadStaticFreeLearningResources(root, reviewScope);
+  const brief = resources.agentsFiles.find((item) => item.path.includes('asset-review-brief'));
+  const serialized = resources.agentsFiles.map((item) => item.content).join('\n');
+  expect(brief?.content).toContain('source-13');
+  expect(brief?.content).toContain('title: "复习候选 13"');
+  expect(brief?.content).toContain('tags: ["标签 13"]');
+  expect(brief?.content).toContain('path: notes/note-013.note.yaml');
+  expect(resources.agentsFiles.some((item) => item.path.includes('selected-assets'))).toBeFalse();
+  expect(resources.agentsFiles.some((item) => item.path.includes('problem-activity'))).toBeFalse();
+  expect(serialized).not.toContain('不应批量注入的秘密正文');
+
+  const openScope: FreeLearningSessionScope = { ...reviewScope, intent: 'open', selectedAssets: selected.slice(0, 12) };
+  const ordinary = loadStaticFreeLearningResources(root, openScope);
+  expect(ordinary.agentsFiles.find((item) => item.path.includes('selected-assets'))?.content)
+    .toContain('不应批量注入的秘密正文 12');
+});
+
 test('records only selected Free Learning aliases and leaves untouched batch assets due', async () => {
   const root = copy();
   const note = planLearningNoteSave(root, 'seed-session', {

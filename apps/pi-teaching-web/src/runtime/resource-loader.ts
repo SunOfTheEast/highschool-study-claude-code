@@ -192,8 +192,9 @@ export function loadStaticFreeLearningResources(
   calendarEnabled = false,
 ): StaticSessionResources {
   const hasMemory = memoryEnabled(root);
-  const selectedAssets = renderSelectedAssetContext(root, scope.selectedAssets);
-  const selectedActivity = renderSelectedProblemActivityContext(root, scope.selectedAssets);
+  const reviewing = (scope.intent ?? 'open') === 'review';
+  const selectedAssets = reviewing ? '' : renderSelectedAssetContext(root, scope.selectedAssets);
+  const selectedActivity = reviewing ? '' : renderSelectedProblemActivityContext(root, scope.selectedAssets);
   const reviewBrief = renderFreeLearningReviewBrief(root, scope);
   return {
     agentsFiles: [
@@ -242,7 +243,7 @@ export function loadStaticFreeLearningResources(
       false,
       false,
       calendarEnabled,
-      (scope.intent ?? 'open') === 'review',
+      reviewing,
     ),
   };
 }
