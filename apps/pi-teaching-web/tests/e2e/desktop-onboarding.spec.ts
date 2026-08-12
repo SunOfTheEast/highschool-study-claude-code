@@ -29,6 +29,8 @@ async function installDesktopBridge(page: import('@playwright/test').Page) {
         }
         if (command === 'restart_runtime') return null;
         if (command === 'choose_learning_set_folder') return null;
+        if (command === 'choose_book_file') return null;
+        if (command === 'discard_book_file') return null;
         if (command === 'choose_peer_skin_folder') return null;
         if (command === 'choose_live2d_core_file') return null;
         if (command === 'open_external_url') return null;
@@ -57,6 +59,7 @@ test('moves from a blank desktop set through explicit model choice into learning
           recentLearningSets: [],
           teacher: null,
           scout: null,
+          vision: { mode: 'auto' },
           issue: null,
         },
       });
@@ -80,8 +83,8 @@ test('moves from a blank desktop set through explicit model choice into learning
           authLabel: 'OAuth', loginMethods: [{ type: 'oauth', label: '使用 ChatGPT 登录' }],
         }],
         models: [
-          { provider: 'openai-codex', id: 'gpt-5.6-sol', name: 'GPT-5.6 Sol', thinkingLevels: ['off', 'high'] },
-          { provider: 'openai-codex', id: 'gpt-5.6-terra', name: 'GPT-5.6 Terra', thinkingLevels: ['off', 'high'] },
+          { provider: 'openai-codex', id: 'gpt-5.6-sol', name: 'GPT-5.6 Sol', input: ['text'], thinkingLevels: ['off', 'high'] },
+          { provider: 'openai-codex', id: 'gpt-5.6-terra', name: 'GPT-5.6 Terra', input: ['text'], thinkingLevels: ['off', 'high'] },
         ],
       } });
       return;
@@ -97,6 +100,7 @@ test('moves from a blank desktop set through explicit model choice into learning
         hasCourse: false,
         course: null,
         assets: { notes: 0, problemCards: 0, materials: 0 },
+        books: [],
         recentFreeLearning: [],
         recentMeta: [],
       } });
@@ -106,9 +110,8 @@ test('moves from a blank desktop set through explicit model choice into learning
   });
 
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: '先从哪里开始？' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '先把你正在学的书放进来。' })).toBeVisible();
   await capture(page, 'desktop-first-run-1280.png');
-  await page.getByLabel('学习集名称').fill('化学反应原理');
   await page.getByRole('button', { name: '从空白开始' }).click();
   await expect(page.getByRole('heading', { name: '安排两位老师' })).toBeVisible();
   await capture(page, 'desktop-model-settings-1280.png');
@@ -137,7 +140,7 @@ test('keeps polling while browser OAuth is waiting and observes its asynchronous
       await route.fulfill({ json: {
         state: 'needs-models', onboardingComplete: false,
         currentLearningSet: '/tmp/chemistry/learning-set', recentLearningSets: [],
-        teacher: null, scout: null, issue: null,
+        teacher: null, scout: null, vision: { mode: 'auto' }, issue: null,
       } });
       return;
     }
@@ -153,8 +156,8 @@ test('keeps polling while browser OAuth is waiting and observes its asynchronous
           loginMethods: [{ type: 'oauth', label: 'OpenAI (ChatGPT Plus/Pro)' }],
         }],
         models: completed ? [
-          { provider: 'openai-codex', id: 'gpt-5.6-sol', name: 'GPT-5.6 Sol', thinkingLevels: ['off', 'high'] },
-          { provider: 'openai-codex', id: 'gpt-5.6-terra', name: 'GPT-5.6 Terra', thinkingLevels: ['off', 'high'] },
+          { provider: 'openai-codex', id: 'gpt-5.6-sol', name: 'GPT-5.6 Sol', input: ['text'], thinkingLevels: ['off', 'high'] },
+          { provider: 'openai-codex', id: 'gpt-5.6-terra', name: 'GPT-5.6 Terra', input: ['text'], thinkingLevels: ['off', 'high'] },
         ] : [],
       } });
       return;
@@ -164,6 +167,7 @@ test('keeps polling while browser OAuth is waiting and observes its asynchronous
       expect(body).toEqual({
         teacher: { provider: 'openai-codex', model: 'gpt-5.6-sol', thinking: 'high' },
         scout: { provider: 'openai-codex', model: 'gpt-5.6-terra', thinking: 'high' },
+        vision: { mode: 'auto' },
       });
       saved = true;
       await route.fulfill({ json: { onboardingComplete: true, restartRequired: false } });

@@ -22,13 +22,19 @@ export type RuntimeConnection = {
   error: string | null;
 };
 
+export type StagedBookFile = {
+  absolutePath: string;
+  originalFilename: string;
+};
+
 export type DesktopBridge = {
   readonly isDesktop: boolean;
   readonly companion?: CompanionBridge | null;
   runtimeConnection(): Promise<RuntimeConnection>;
   restartRuntime(): Promise<void>;
   chooseLearningSetFolder(): Promise<string | null>;
-  chooseBookFile(): Promise<string | null>;
+  chooseBookFile(): Promise<StagedBookFile | null>;
+  discardBookFile(absolutePath: string): Promise<void>;
   choosePeerSkinFolder(): Promise<string | null>;
   chooseLive2DCoreFile(): Promise<string | null>;
   revealInFinder(path: string): Promise<void>;
@@ -51,7 +57,8 @@ export const tauriDesktopBridge: DesktopBridge = {
   runtimeConnection: () => invoke<RuntimeConnection>('runtime_connection'),
   restartRuntime: () => invoke<void>('restart_runtime'),
   chooseLearningSetFolder: () => invoke<string | null>('choose_learning_set_folder'),
-  chooseBookFile: () => invoke<string | null>('choose_book_file'),
+  chooseBookFile: () => invoke<StagedBookFile | null>('choose_book_file'),
+  discardBookFile: (absolutePath) => invoke<void>('discard_book_file', { absolutePath }),
   choosePeerSkinFolder: () => invoke<string | null>('choose_peer_skin_folder'),
   chooseLive2DCoreFile: () => invoke<string | null>('choose_live2d_core_file'),
   revealInFinder: (path) => invoke<void>('reveal_in_finder', { path }),

@@ -4,7 +4,8 @@ pub mod sidecar;
 
 use std::{
     ffi::OsString,
-    path::PathBuf,
+    fs,
+    path::{Path, PathBuf},
     sync::{Arc, Mutex},
 };
 
@@ -51,6 +52,13 @@ struct RuntimeConnection {
     api_base: Option<String>,
     token: Option<String>,
     error: Option<String>,
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+struct StagedBookFile {
+    absolute_path: String,
+    original_filename: String,
 }
 
 fn lock_runtime(
@@ -129,6 +137,50 @@ fn desktop_paths(app: &AppHandle) -> Result<DesktopPaths, String> {
         resource_root: resource_root(app)?,
         pi_binary: pi_binary()?,
     })
+}
+
+fn book_import_staging_root(app: &AppHandle) -> Result<PathBuf, String> {
+    Ok(desktop_paths(app)?.app_home.join("import-staging"))
+}
+
+fn stage_book_file(source: &Path, staging_root: &Path) -> Result<StagedBookFile, String> {
+    let metadata = fs::symlink_metadata(source).map_err(|error| error.to_string())?;
+    if !metadata.is_file() || metadata.file_type().is_symlink() {
+        return Err("BOOK_SOURCE_INVALID".into());
+    }
+    if source
+        .extension()
+        .and_then(|value| value.to_str())
+        .map(str::to_lowercase)
+        != Some("pdf".into())
+    {
+        return Err("BOOK_SOURCE_INVALID".into());
+    }
+    let original_filename = source
+        .file_name()
+        .and_then(|value| value.to_str())
+        .ok_or_else(|| "BOOK_SOURCE_INVALID".to_string())?
+        .to_string();
+    fs::create_dir_all(staging_root).map_err(|error| error.to_string())?;
+    let staged_path = staging_root.join(format!("{}.pdf", Uuid::new_v4()));
+    fs::copy(source, &staged_path).map_err(|error| error.to_string())?;
+    Ok(StagedBookFile {
+        absolute_path: staged_path.to_string_lossy().into_owned(),
+        original_filename,
+    })
+}
+
+fn discard_staged_book_file(path: &Path, staging_root: &Path) -> Result<(), String> {
+    if path.parent() != Some(staging_root)
+        || path.extension().and_then(|value| value.to_str()) != Some("pdf")
+    {
+        return Err("BOOK_STAGING_PATH_INVALID".into());
+    }
+    let metadata = fs::symlink_metadata(path).map_err(|error| error.to_string())?;
+    if !metadata.is_file() || metadata.file_type().is_symlink() {
+        return Err("BOOK_STAGING_PATH_INVALID".into());
+    }
+    fs::remove_file(path).map_err(|error| error.to_string())
 }
 
 fn mark_spawn_failure(manager: &RuntimeManager, message: String) {
@@ -283,17 +335,22 @@ fn choose_learning_set_folder(app: AppHandle) -> Result<Option<String>, String> 
 }
 
 #[tauri::command]
-fn choose_book_file(app: AppHandle) -> Result<Option<String>, String> {
-    app.dialog()
+fn choose_book_file(app: AppHandle) -> Result<Option<StagedBookFile>, String> {
+    let selected = app
+        .dialog()
         .file()
         .add_filter("PDF book", &["pdf"])
         .blocking_pick_file()
-        .map(|path| {
-            path.into_path()
-                .map(|value| value.to_string_lossy().into_owned())
-                .map_err(|error| error.to_string())
-        })
+        .map(|path| path.into_path().map_err(|error| error.to_string()))
+        .transpose()?;
+    selected
+        .map(|source| stage_book_file(&source, &book_import_staging_root(&app)?))
         .transpose()
+}
+
+#[tauri::command]
+fn discard_book_file(app: AppHandle, absolute_path: String) -> Result<(), String> {
+    discard_staged_book_file(Path::new(&absolute_path), &book_import_staging_root(&app)?)
 }
 
 #[tauri::command]
@@ -373,6 +430,7 @@ pub fn run() {
             restart_runtime,
             choose_learning_set_folder,
             choose_book_file,
+            discard_book_file,
             choose_peer_skin_folder,
             choose_live2d_core_file,
             reveal_in_finder,
@@ -419,9 +477,9 @@ pub fn run() {
 
 #[cfg(test)]
 mod tests {
-    use std::{ffi::OsString, path::PathBuf};
+    use std::{ffi::OsString, fs, path::PathBuf};
 
-    use super::desktop_directory;
+    use super::{desktop_directory, discard_staged_book_file, stage_book_file};
 
     use crate::sidecar::{
         DesktopPaths, LaunchEvent, RuntimeState, apply_event, build_launch, parse_ready_line,
@@ -453,6 +511,53 @@ mod tests {
             .unwrap();
 
         assert_eq!(selected, PathBuf::from("/private/tmp/studyforge-app"));
+    }
+
+    #[test]
+    fn stages_a_selected_pdf_inside_the_managed_import_inbox() {
+        let root = std::env::temp_dir().join(format!(
+            "studyforge-book-stage-test-{}",
+            uuid::Uuid::new_v4()
+        ));
+        let source = root.join("outside").join("一本书.pdf");
+        let inbox = root.join("app-home").join("import-staging");
+        fs::create_dir_all(source.parent().unwrap()).unwrap();
+        fs::write(&source, b"%PDF-1.7\nreal book").unwrap();
+
+        let staged = stage_book_file(&source, &inbox).unwrap();
+
+        assert_eq!(staged.original_filename, "一本书.pdf");
+        assert_eq!(
+            PathBuf::from(&staged.absolute_path).parent(),
+            Some(inbox.as_path())
+        );
+        assert_eq!(
+            fs::read(&staged.absolute_path).unwrap(),
+            b"%PDF-1.7\nreal book"
+        );
+
+        fs::remove_dir_all(root).unwrap();
+    }
+
+    #[test]
+    fn discards_only_a_managed_staged_pdf_and_never_the_source_book() {
+        let root = std::env::temp_dir().join(format!(
+            "studyforge-book-discard-test-{}",
+            uuid::Uuid::new_v4()
+        ));
+        let source = root.join("outside").join("book.pdf");
+        let inbox = root.join("app-home").join("import-staging");
+        fs::create_dir_all(source.parent().unwrap()).unwrap();
+        fs::write(&source, b"%PDF-1.7\nsource").unwrap();
+        let staged = stage_book_file(&source, &inbox).unwrap();
+
+        discard_staged_book_file(PathBuf::from(&staged.absolute_path).as_path(), &inbox).unwrap();
+
+        assert!(!PathBuf::from(staged.absolute_path).exists());
+        assert!(source.exists());
+        assert!(discard_staged_book_file(&source, &inbox).is_err());
+
+        fs::remove_dir_all(root).unwrap();
     }
 
     #[test]

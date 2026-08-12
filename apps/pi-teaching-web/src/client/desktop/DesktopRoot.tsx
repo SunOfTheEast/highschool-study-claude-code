@@ -294,18 +294,21 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
     try {
       await desktopApi.createBlank('我的学习集');
       await restartAndWait();
-      const absolutePath = await bridge.chooseBookFile();
-      if (!absolutePath) return;
-      const filename = absolutePath.split(/[\\/]/).pop() ?? '学习资料.pdf';
-      const receipt = await desktopApi.importBookPath({
-        requestId: crypto.randomUUID(),
-        title: filename.replace(/\.pdf$/i, ''),
-        absolutePath,
-      });
-      await api.bootstrapMaterialBook(receipt.id, receipt.revision);
-      const route = `/assets/books/${encodeURIComponent(receipt.id)}`;
-      window.history.replaceState(null, '', route);
-      window.dispatchEvent(new PopStateEvent('popstate'));
+      const selected = await bridge.chooseBookFile();
+      if (!selected) return;
+      try {
+        const receipt = await desktopApi.importBookPath({
+          requestId: crypto.randomUUID(),
+          title: selected.originalFilename.replace(/\.pdf$/i, ''),
+          absolutePath: selected.absolutePath,
+        });
+        await api.bootstrapMaterialBook(receipt.id, receipt.revision);
+        const route = `/assets/books/${encodeURIComponent(receipt.id)}`;
+        window.history.replaceState(null, '', route);
+        window.dispatchEvent(new PopStateEvent('popstate'));
+      } finally {
+        await bridge.discardBookFile(selected.absolutePath).catch(() => {});
+      }
     } catch (nextError) {
       setError(errorMessage(nextError));
     } finally {
@@ -452,14 +455,17 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
       openCalendarAppointment,
       openReview,
       importBook: async (title) => {
-        const absolutePath = await bridge.chooseBookFile();
-        if (!absolutePath) return null;
-        const filename = absolutePath.split(/[\\/]/).pop() ?? '学习资料.pdf';
-        return desktopApi.importBookPath({
-          requestId: crypto.randomUUID(),
-          title: title.trim() || filename.replace(/\.pdf$/i, ''),
-          absolutePath,
-        });
+        const selected = await bridge.chooseBookFile();
+        if (!selected) return null;
+        try {
+          return await desktopApi.importBookPath({
+            requestId: crypto.randomUUID(),
+            title: title.trim() || selected.originalFilename.replace(/\.pdf$/i, ''),
+            absolutePath: selected.absolutePath,
+          });
+        } finally {
+          await bridge.discardBookFile(selected.absolutePath).catch(() => {});
+        }
       },
       companion: bridge.companion ?? null,
     }}>

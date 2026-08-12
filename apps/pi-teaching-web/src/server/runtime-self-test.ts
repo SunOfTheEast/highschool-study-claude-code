@@ -11,6 +11,7 @@ import { createEventBus } from '@earendil-works/pi-coding-agent';
 import { registerStudyForgeBunRuntime } from '../runtime/bun-runtime';
 import { createRoleResourceLoader } from '../runtime/resource-loader';
 import { importMaterial } from '../study/materials';
+import { bootstrapPdfBookIndex, renderPdfBookPage } from '../study/pdf-book';
 
 export type RuntimeSelfTestReceipt = {
   planSubagent: 'passed';
@@ -20,13 +21,14 @@ export type RuntimeSelfTestReceipt = {
 };
 
 function onePagePdf(text: string): Uint8Array {
-  const stream = `BT /F1 12 Tf 72 720 Td (${text}) Tj ET`;
+  const stream = `q 24 0 0 24 72 680 cm /Im0 Do Q BT /F1 12 Tf 72 720 Td (${text}) Tj ET`;
   const objects = [
     '<< /Type /Catalog /Pages 2 0 R >>',
     '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
-    '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>',
+    '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> /XObject << /Im0 6 0 R >> >> /Contents 5 0 R >>',
     '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
     `<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`,
+    '<< /Type /XObject /Subtype /Image /Width 1 /Height 1 /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /ASCIIHexDecode /Length 7 >>\nstream\nFF0000>\nendstream',
   ];
   let source = '%PDF-1.4\n';
   const offsets = [0];
@@ -81,6 +83,17 @@ export async function runRuntimeSelfTest(resourceRoot: string): Promise<RuntimeS
     }, '2026-08-10T00:00:00.000Z');
     if (pdf.searchStatus !== 'unavailable' || !existsSync(join(root, pdf.originalPath))) {
       throw new Error('STUDYFORGE_SELF_TEST_PDF_IMPORT_FAILED');
+    }
+    const book = await bootstrapPdfBookIndex(
+      root,
+      pdf.id,
+      pdf.revision,
+      '2026-08-10T00:00:01.000Z',
+    );
+    if (book.pageCount !== 1) throw new Error('STUDYFORGE_SELF_TEST_PDF_READ_FAILED');
+    const rendered = await renderPdfBookPage(root, pdf.id, pdf.revision, 1);
+    if (rendered.bytes.length === 0 || rendered.width < 1 || rendered.height < 1) {
+      throw new Error('STUDYFORGE_SELF_TEST_PDF_RENDER_FAILED');
     }
 
     if (registerStudyForgeBunRuntime().bedrock !== 'registered') {

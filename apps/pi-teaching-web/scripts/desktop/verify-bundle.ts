@@ -11,7 +11,10 @@ import { basename, join, resolve } from 'node:path';
 async function command(
   program: string,
   args: string[],
-  options: { env?: Record<string, string | undefined> } = {},
+  options: {
+    env?: Record<string, string | undefined>;
+    output?: 'combined' | 'stdout';
+  } = {},
 ): Promise<string> {
   const child = Bun.spawn([program, ...args], {
     stdout: 'pipe',
@@ -24,7 +27,7 @@ async function command(
     child.exited,
   ]);
   if (code !== 0) throw new Error(`${program} ${args.join(' ')}\n${stderr || stdout}`);
-  return `${stdout}${stderr}`.trim();
+  return (options.output === 'stdout' ? stdout : `${stdout}${stderr}`).trim();
 }
 
 function newestDmg(directory: string): string {
@@ -109,6 +112,7 @@ async function requireRuntimeSelfTest(app: string): Promise<void> {
         ),
         STUDYFORGE_RESOURCE_ROOT: resourceRoot,
       },
+      output: 'stdout',
     });
     const receipt = JSON.parse(output) as { pdfImport?: string };
     if (receipt.pdfImport !== 'passed') throw new Error('STUDYFORGE_RUNTIME_SELF_TEST_FAILED');
