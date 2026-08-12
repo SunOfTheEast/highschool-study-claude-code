@@ -134,6 +134,24 @@ test('keeps method-only legacy cards readable by the student relation projection
   });
 });
 
+test('projects legacy card relations from the recall index without reopening the card shelf', () => {
+  const root = learningSet();
+  writeLegacyCard(root);
+  mkdirSync(join(root, 'semantics/indexes'), { recursive: true });
+  writeFileSync(
+    join(root, 'semantics/indexes/asset-recall.tsv'),
+    buildSemanticRecallIndex(root),
+  );
+  writeFileSync(join(root, 'cards/legacy/legacy-001.card.yaml'), 'not: [valid');
+
+  expect(projectSemanticRelations(root)).toContainEqual({
+    kind: 'asset-tag',
+    asset: { kind: 'problem-card', id: 'legacy-恒成立' },
+    tag: '自由度与主元',
+    role: 'core',
+  });
+});
+
 test('returns only the requested quantity and derives relations from canonical facts', () => {
   const root = learningSet();
   const first = planProblemCardSave(root, 'session-001', {

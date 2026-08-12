@@ -198,10 +198,15 @@ function positiveRevision(value: unknown): number {
   return Number(value);
 }
 
-function learningContextReferences(value: unknown): LearningContextReference[] {
+function learningContextReferences(
+  value: unknown,
+  allowReviewBatch = false,
+): LearningContextReference[] {
   if (value === undefined) return [];
   if (!Array.isArray(value)) throw new Error('SELECTED_ASSETS_INVALID');
-  if (value.length > 12) throw new Error('SELECTED_CONTEXT_LIMIT_EXCEEDED');
+  if (!allowReviewBatch && value.length > 12) {
+    throw new Error('SELECTED_CONTEXT_LIMIT_EXCEEDED');
+  }
   const seen = new Set<string>();
   return value.map((item) => {
     const reference = objectBody(item);
@@ -253,7 +258,10 @@ function calendarDestination(root: string, value: unknown): CalendarDestination 
     || !Array.isArray(destination.contexts)
     || Object.keys(destination).length !== 3
   ) throw new Error('CALENDAR_DESTINATION_INVALID');
-  const contexts = learningContextReferences(destination.contexts);
+  const contexts = learningContextReferences(
+    destination.contexts,
+    destination.intent === 'review',
+  );
   for (const context of contexts) {
     if (context.kind === 'note') readLearningNote(root, context.id);
     else if (context.kind === 'problem-card') readProblemCard(root, context.id);
@@ -743,7 +751,7 @@ export function createRequestHandler(deps?: AppDependencies) {
           throw new Error('FREE_LEARNING_INTENT_INVALID');
         }
         const session = await deps.registry.createFreeLearning(
-          learningContextReferences(requestBody.selectedAssets),
+          learningContextReferences(requestBody.selectedAssets, intent === 'review'),
           intent,
         );
         deps.hub.publish({ type: 'home-invalidated' });

@@ -1,5 +1,6 @@
 import {
   existsSync,
+  lstatSync,
   mkdirSync,
   readFileSync,
   readdirSync,
@@ -50,8 +51,8 @@ type CardDocument = {
 
 const stableIdPattern = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
 
-function cardDocuments(root: string): CardDocument[] {
-  const base = join(root, 'cards');
+function cardDocumentsBelow(root: string, relativeDirectory: string): CardDocument[] {
+  const base = join(root, relativeDirectory);
   if (!existsSync(base)) return [];
   const paths: string[] = [];
   const visit = (directory: string, prefix: string) => {
@@ -59,7 +60,9 @@ function cardDocuments(root: string): CardDocument[] {
       if (entry.name === '.revisions') continue;
       const relative = prefix ? `${prefix}/${entry.name}` : entry.name;
       if (entry.isDirectory()) visit(join(directory, entry.name), relative);
-      else if (entry.isFile() && /\.ya?ml$/i.test(entry.name)) paths.push(`cards/${relative}`);
+      else if (entry.isFile() && /\.ya?ml$/i.test(entry.name)) {
+        paths.push(`${relativeDirectory}/${relative}`);
+      }
     }
   };
   visit(base, '');
@@ -70,6 +73,14 @@ function cardDocuments(root: string): CardDocument[] {
       ? [{ path, value: parsed as Record<string, unknown> }]
       : [];
   });
+}
+
+function cardDocuments(root: string): CardDocument[] {
+  return cardDocumentsBelow(root, 'cards');
+}
+
+function managedCardDocuments(root: string): CardDocument[] {
+  return cardDocumentsBelow(root, 'cards/m1b');
 }
 
 export function readSemanticRecallRows(root: string): SemanticRecallRow[] {
@@ -115,6 +126,39 @@ export function readSemanticRecallRows(root: string): SemanticRecallRow[] {
     });
   }
   return rows.sort((left, right) => left.path.localeCompare(right.path));
+}
+
+function indexedSemanticRecallRows(root: string): SemanticRecallRow[] | null {
+  const path = join(root, 'semantics/indexes/asset-recall.tsv');
+  if (!existsSync(path)) return null;
+  const metadata = lstatSync(path);
+  if (metadata.isSymbolicLink() || !metadata.isFile()) return null;
+  const [header = '', ...lines] = readFileSync(path, 'utf8').trimEnd().split('\n');
+  if (header !== 'path\tkind\tid\tcore\trelated\ttitle_or_stem') return null;
+  try {
+    return lines.filter(Boolean).map((line) => {
+      const [assetPath, kind, id, coreText, relatedText, titleOrStem] = line.split('\t');
+      const core: unknown = JSON.parse(coreText ?? '');
+      const related: unknown = JSON.parse(relatedText ?? '');
+      if (
+        !assetPath
+        || (kind !== 'note' && kind !== 'problem-card')
+        || !id
+        || !titleOrStem
+        || !Array.isArray(core)
+        || !core.every((tag) => typeof tag === 'string')
+        || !Array.isArray(related)
+        || !related.every((tag) => typeof tag === 'string')
+      ) throw new Error('invalid semantic recall row');
+      return { path: assetPath, kind, id, core, related, titleOrStem };
+    });
+  } catch {
+    return null;
+  }
+}
+
+function semanticRecallRowsForRead(root: string): SemanticRecallRow[] {
+  return indexedSemanticRecallRows(root) ?? readSemanticRecallRows(root);
 }
 
 function oneLine(value: string): string {
@@ -164,7 +208,7 @@ export function querySemanticRecall(root: string, query: SemanticRecallQuery): {
   }
   const terms = normalizedTerms(query.terms);
   if (terms.length === 0) throw new Error('SEMANTIC_RECALL_TERMS_REQUIRED');
-  const matches = readSemanticRecallRows(root).filter((row) => rowMatches(row, terms));
+  const matches = semanticRecallRowsForRead(root).filter((row) => rowMatches(row, terms));
   const relatedTerms = query.allowRelatedExpansion
     ? [...new Set(matches.flatMap((row) => [...row.core, ...row.related]))]
       .filter((tag) => !terms.includes(tag))
@@ -192,7 +236,7 @@ function heading(source: string): { id: string; title: string } | null {
 }
 
 export function projectSemanticRelations(root: string): SemanticRelation[] {
-  const rows = readSemanticRecallRows(root);
+  const rows = semanticRecallRowsForRead(root);
   const relations: SemanticRelation[] = [];
   const neighborWeights = new Map<string, number>();
   for (const row of rows) {
@@ -216,7 +260,7 @@ export function projectSemanticRelations(root: string): SemanticRelation[] {
       });
     }
   }
-  for (const document of cardDocuments(root)) {
+  for (const document of managedCardDocuments(root)) {
     const id = document.value.content_item_id;
     if (typeof id !== 'string' || !stableIdPattern.test(id) || !document.value.m1b) continue;
     const card = readProblemCard(root, id);

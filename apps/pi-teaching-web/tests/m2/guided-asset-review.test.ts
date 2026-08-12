@@ -4,6 +4,8 @@ import { cpSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { SessionEntry } from '@earendil-works/pi-coding-agent';
+import { EventHub } from '../../src/server/event-hub';
+import { createRequestHandler } from '../../src/server/app';
 import {
   createAssetReviewCandidateQueryTool,
 } from '../../src/runtime/asset-review-tools';
@@ -188,6 +190,22 @@ test('opens a 13-item review from one complete lightweight index while ordinary 
   const ordinary = loadStaticFreeLearningResources(root, openScope);
   expect(ordinary.agentsFiles.find((item) => item.path.includes('selected-assets'))?.content)
     .toContain('不应批量注入的秘密正文 12');
+
+  const httpRegistry = new WorkspaceRegistry(
+    root,
+    async () => fakeSession('review-session-http-many'),
+  );
+  const handler = createRequestHandler({
+    root,
+    registry: httpRegistry,
+    hub: new EventHub(),
+  });
+  const response = await handler(new Request('http://local/api/free-learning', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ selectedAssets: selected, intent: 'review' }),
+  }));
+  expect(response?.status).toBe(201);
 });
 
 test('records only selected Free Learning aliases and leaves untouched batch assets due', async () => {
