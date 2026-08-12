@@ -253,6 +253,8 @@ export type LearningAssetSummary = {
   updatedAt: string | null;
   tags: SemanticTagDraft | null;
   sources: ReadableLearningSourceReference[];
+  /** Student-visible text only; excludes hidden answers and teacher rationale. */
+  searchText?: string;
 };
 
 export type LearningAssetLibrarySnapshot = {
@@ -629,6 +631,7 @@ export type LearningAssetSavedConversationItem = {
     title: string;
     route: string;
   } | null;
+  reviewEnrolled?: boolean | null;
   at: string;
 };
 

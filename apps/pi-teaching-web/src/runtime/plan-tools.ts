@@ -212,6 +212,7 @@ export function createPlanTools(
         details: {
           kind: 'learning-asset-save' as const,
           version: 1 as const,
+          reviewEnrolled: true,
           asset: {
             kind: 'problem-card' as const,
             id: planned.card.id,

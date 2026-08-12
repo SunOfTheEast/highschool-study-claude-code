@@ -584,6 +584,9 @@ export function readLearningAssetLibrary(root: string): LearningAssetLibrarySnap
       updatedAt: note.updatedAt,
       tags: tags({ kind: 'note', id: note.id }),
       sources: note.sources,
+      searchText: note.blocks.map((block) => (
+        block.kind === 'markdown' ? block.body : block.prompt
+      )).join('\n'),
     })),
     problemCards: listProblemCards(root).map((card) => ({
       kind: 'problem-card',
@@ -593,6 +596,7 @@ export function readLearningAssetLibrary(root: string): LearningAssetLibrarySnap
       updatedAt: card.updatedAt,
       tags: tags({ kind: 'problem-card', id: card.id }),
       sources: card.sources,
+      searchText: [card.stem, card.studentNote].filter(Boolean).join('\n'),
     })),
   };
 }

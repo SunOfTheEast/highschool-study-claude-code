@@ -93,12 +93,14 @@ function toolResult(
     revision: number;
     title: string;
   },
+  reviewEnrolled: boolean,
 ) {
   return {
     content: [{ type: 'text' as const, text: JSON.stringify(value) }],
     details: {
       kind: 'learning-asset-save' as const,
       version: 1 as const,
+      reviewEnrolled,
       asset: {
         ...asset,
         route: assetRoute(asset.kind, asset.id),
@@ -159,7 +161,7 @@ export function createLearningAssetTools(
           id: planned.note.id,
           revision: planned.note.revision,
           title: planned.note.title,
-        });
+        }, inputTarget === undefined);
         successful.set(toolCallId, result);
         return result;
       },
@@ -202,7 +204,7 @@ export function createLearningAssetTools(
           id: planned.card.id,
           revision: planned.card.revision,
           title: planned.card.title,
-        });
+        }, inputTarget === undefined);
         successful.set(toolCallId, result);
         return result;
       },

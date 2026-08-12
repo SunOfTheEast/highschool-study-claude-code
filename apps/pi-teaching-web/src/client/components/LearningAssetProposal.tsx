@@ -71,6 +71,7 @@ export function LearningAssetSavedReceipt({
     <div className="tool-receipt learning-asset-saved-receipt">
       <span>已保存为{item.asset.kind === 'note' ? '笔记' : '题卡'}</span>
       <a href={item.asset.route}>{item.asset.title}</a>
+      {item.reviewEnrolled && <small>已加入复习，明天首次出现</small>}
     </div>
   );
 }

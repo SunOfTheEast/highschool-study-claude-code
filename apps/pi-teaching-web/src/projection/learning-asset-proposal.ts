@@ -109,6 +109,7 @@ export function learningAssetSaveStart(
     assetKind,
     status: 'running',
     asset: null,
+    reviewEnrolled: null,
     at,
   } : null;
 }
@@ -130,6 +131,7 @@ export function learningAssetSaveEnd(
       assetKind,
       status: 'error',
       asset: null,
+      reviewEnrolled: null,
       at: started?.at ?? at,
     };
   }
@@ -165,6 +167,9 @@ export function learningAssetSaveEnd(
       title,
       route,
     },
+    reviewEnrolled: typeof details.reviewEnrolled === 'boolean'
+      ? details.reviewEnrolled
+      : null,
     at: started?.at ?? at,
   };
 }

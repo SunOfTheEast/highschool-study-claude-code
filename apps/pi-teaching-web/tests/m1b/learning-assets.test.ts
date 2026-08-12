@@ -6,6 +6,7 @@ import {
   planLearningNoteSave,
   planProblemCardSave,
   readLearningNote,
+  readLearningAssetLibrary,
   readProblemCard,
   readStudentProblemCard,
   renderSelectedAssetContext,
@@ -159,4 +160,34 @@ test('injects only explicitly selected full Tutor projections with stable aliase
   expect(context).toContain('一张被选中的题。');
   expect(context).toContain('教师依据。');
   expect(context).not.toContain('sample-card');
+});
+
+test('projects only student-visible text into the asset-library search surface', () => {
+  const root = copyFixture();
+  commitDocumentCandidates(root, planLearningNoteSave(root, 'session-001', {
+    title: '固体活度',
+    blocks: [
+      { kind: 'markdown', body: '纯固体的活度并入平衡常数。' },
+      { kind: 'recall', prompt: '为什么表达式里不写固体？', answer: 'SECRET_RECALL_ANSWER' },
+    ],
+    sources: [],
+    tags: { core: ['沉淀溶解平衡'], related: [] },
+  }, '2026-08-08T10:00:00.000Z').candidates);
+  commitDocumentCandidates(root, planProblemCardSave(root, 'session-002', {
+    stem: '加入 NaCl 后判断平衡移动。',
+    standardAnswer: 'SECRET_STANDARD_ANSWER',
+    teacherRationale: 'SECRET_TEACHER_RATIONALE',
+    studentNote: '先区分离子积与 Ksp。',
+    sources: [],
+    tags: { core: ['同离子效应'], related: [] },
+  }, '2026-08-08T11:00:00.000Z').candidates);
+
+  const library = readLearningAssetLibrary(root);
+  expect(library.notes[0]?.searchText).toContain('纯固体的活度');
+  expect(library.notes[0]?.searchText).toContain('为什么表达式里不写固体');
+  expect(library.problemCards[0]?.searchText).toContain('加入 NaCl');
+  expect(library.problemCards[0]?.searchText).toContain('先区分离子积');
+  expect(JSON.stringify(library)).not.toMatch(
+    /SECRET_RECALL_ANSWER|SECRET_STANDARD_ANSWER|SECRET_TEACHER_RATIONALE/,
+  );
 });

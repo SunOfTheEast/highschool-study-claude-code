@@ -7,7 +7,7 @@ import type {
   LearningMaterialView,
   LearningSetHomeSnapshot,
 } from '../../src/shared/contracts';
-import { AssetsPage } from '../../src/client/pages/AssetsPage';
+import { AssetsPage, materialImportErrorText } from '../../src/client/pages/AssetsPage';
 import { FootprintPage } from '../../src/client/pages/FootprintPage';
 import { HomePage } from '../../src/client/pages/HomePage';
 import { MaterialPage } from '../../src/client/pages/MaterialPage';
@@ -116,6 +116,14 @@ test('shows Materials, plain-language tags and pinned sources without internal s
   expect(markup).toContain('内容来源');
   expect(markup).toContain('资料 material-001 · 第 1 版 · 第 1–2 行');
   expect(markup).not.toMatch(/sidecar|metadata|projection|revision/i);
+});
+
+test('sanitizes a failed material import instead of exposing runtime details', () => {
+  const message = materialImportErrorText(
+    new Error('API_ERROR: /private/tmp/material-import.jsonl'),
+  );
+  expect(message).toContain('资料暂时没有导入');
+  expect(message).not.toMatch(/API_ERROR|private|jsonl/);
 });
 
 test('opens one exact source range and can carry it into free learning', () => {

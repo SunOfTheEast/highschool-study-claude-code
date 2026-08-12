@@ -111,6 +111,8 @@ test('renders one asset library with Notes and problem cards but no graph contro
   expect(markup).toContain('加入同离子');
   expect(markup).toContain('带着所选问老师 · 0');
   expect(markup).toContain('知识图谱');
+  expect(markup).toContain('搜索标题、正文、来源或标签');
+  expect(markup).toContain('<button type="button" data-tag-role="core">核心 · 沉淀溶解平衡</button>');
   expect(markup).not.toContain('方法图谱');
 });
 

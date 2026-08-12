@@ -188,6 +188,7 @@ test('projects a successful save as a clickable asset receipt', async () => {
 
   expect(receipt).toMatchObject({
     kind: 'learning-asset-saved',
+    reviewEnrolled: true,
     asset: {
       kind: 'note',
       id: 'note-001',
@@ -198,6 +199,7 @@ test('projects a successful save as a clickable asset receipt', async () => {
   });
   expect(markup).toContain('href="/assets/notes/note-001"');
   expect(markup).toContain('可以打开的笔记');
+  expect(markup).toContain('已加入复习，明天首次出现');
 });
 
 test('keeps proposal correction and natural confirmation in the teaching Skills', () => {
