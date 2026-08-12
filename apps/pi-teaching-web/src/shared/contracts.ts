@@ -283,6 +283,44 @@ export type MaterialSearchStatus =
   | 'image-readable'
   | 'unavailable';
 
+export type MaterialLocator =
+  | { kind: 'whole' }
+  | { kind: 'lines'; start: number; end: number }
+  | { kind: 'pages'; start: number; end: number };
+
+export type MaterialBookPage = {
+  physicalPage: number;
+  pdfLabel: string | null;
+  state: 'pending' | 'native-text' | 'visual-text' | 'failed';
+  textPath: string | null;
+  method: 'native' | 'vision' | null;
+  model: string | null;
+  updatedAt: string | null;
+  error: string | null;
+};
+
+export type MaterialBookOutlineNode = {
+  id: string;
+  title: string;
+  level: number;
+  source: 'pdf-bookmark' | 'visual-toc' | 'curated';
+  printedPage: string | null;
+  startPage: number | null;
+  endPage: number | null;
+  provenancePages: number[];
+};
+
+export type MaterialBookIndex = {
+  schema: 'studyforge.material-book-index.v1';
+  materialId: string;
+  revision: number;
+  pageCount: number;
+  state: 'ready' | 'partial';
+  pages: MaterialBookPage[];
+  outline: MaterialBookOutlineNode[];
+  updatedAt: string;
+};
+
 export type MaterialRevision = {
   revision: number;
   title: string;

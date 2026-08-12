@@ -24,6 +24,7 @@ import {
 } from '../runtime/multi-document-transaction';
 import { StudyDocumentError } from './markdown';
 import { loadPdfJs } from './pdf-runtime';
+import { parseMaterialLocator } from './material-locators';
 
 export type MaterialImportInput = {
   requestId: string;
@@ -416,13 +417,20 @@ export function readMaterialLocator(
       text: null,
     };
   }
+  let locator;
+  try {
+    locator = parseMaterialLocator(source.locator);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (message === 'MATERIAL_LOCATOR_INVALID') {
+      throw new Error(`MATERIAL_LOCATOR_NOT_FOUND: ${source.locator}`);
+    }
+    throw error;
+  }
   if (revision.locatorKind === 'lines') {
-    const match = /^lines-([1-9][0-9]*)-([1-9][0-9]*)$/.exec(source.locator);
     const lines = readFileSync(resolveDocumentPath(root, revision.originalPath), 'utf8')
       .split(/\r?\n/);
-    const start = match ? Number.parseInt(match[1]!, 10) : 0;
-    const end = match ? Number.parseInt(match[2]!, 10) : 0;
-    if (!match || start > end || end > lines.length) {
+    if (locator.kind !== 'lines' || locator.end > lines.length) {
       throw new Error(`MATERIAL_LOCATOR_NOT_FOUND: ${source.locator}`);
     }
     return {
@@ -430,19 +438,33 @@ export function readMaterialLocator(
       revision: revision.revision,
       locator: source.locator,
       path: revision.originalPath,
-      text: lines.slice(start - 1, end).join('\n'),
+      text: lines.slice(locator.start - 1, locator.end).join('\n'),
     };
   }
-  if (revision.locatorKind === 'page' && /^page-[0-9]{4}$/.test(source.locator)) {
-    const path = `materials/${source.id}/projections/${revision.revision}/pages/${source.locator}.txt`;
-    const absolute = resolveDocumentPath(root, path);
-    if (existsSync(absolute)) {
+  if (revision.locatorKind === 'page' && locator.kind === 'pages') {
+    const directory = `materials/${source.id}/projections/${revision.revision}/pages`;
+    const texts: string[] = [];
+    for (let page = locator.start; page <= locator.end; page += 1) {
+      const name = `page-${String(page).padStart(4, '0')}.txt`;
+      const path = `${directory}/${name}`;
+      const absolute = resolveDocumentPath(root, path);
+      if (!existsSync(absolute)) {
+        if (revision.searchStatus === 'unavailable' || revision.searchStatus === 'image-readable') {
+          throw new Error(`MATERIAL_LOCATOR_UNAVAILABLE: ${source.locator}`);
+        }
+        throw new Error(`MATERIAL_LOCATOR_NOT_FOUND: ${source.locator}`);
+      }
+      texts.push(readFileSync(absolute, 'utf8').trimEnd());
+    }
+    if (texts.length > 0) {
       return {
         id: source.id,
         revision: revision.revision,
         locator: source.locator,
-        path,
-        text: readFileSync(absolute, 'utf8').trimEnd(),
+        path: locator.start === locator.end
+          ? `${directory}/page-${String(locator.start).padStart(4, '0')}.txt`
+          : directory,
+        text: texts.join('\n\n'),
       };
     }
   }

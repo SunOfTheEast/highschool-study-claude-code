@@ -119,6 +119,18 @@ test('extracts PDF pages mechanically and keeps an unreadable original recoverab
     revision: 1,
     locator: 'page-0001',
   }).text).toContain('Ksp solid activity');
+  writeFileSync(
+    join(root, 'materials/material-001/projections/1/pages/page-0002.txt'),
+    'Second page\n',
+  );
+  expect(readMaterialLocator(root, {
+    id: pdf.id,
+    revision: 1,
+    locator: 'pages-0001-0002',
+  })).toMatchObject({
+    locator: 'pages-0001-0002',
+    text: expect.stringContaining('Ksp solid activity\n\nSecond page'),
+  });
 
   const broken = await importMaterial(root, {
     requestId: 'request-broken-pdf',
