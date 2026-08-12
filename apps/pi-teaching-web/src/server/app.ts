@@ -44,6 +44,9 @@ import {
   readMaterialLocator,
   readMaterialView,
 } from '../study/materials';
+import { readMaterialBookIndex } from '../study/material-book-index';
+import { bootstrapPdfBookIndex, renderPdfBookPage } from '../study/pdf-book';
+import { parseMaterialLocator } from '../study/material-locators';
 import {
   projectSemanticRelations,
   querySemanticRecall,
@@ -829,14 +832,61 @@ export function createRequestHandler(deps?: AppDependencies) {
         if (!Number.isSafeInteger(revision) || revision < 1) {
           throw new Error('MATERIAL_REVISION_INVALID');
         }
-        if (locator !== 'whole' && !/^lines-[1-9][0-9]*-[1-9][0-9]*$|^page-[0-9]{4}$/.test(locator)) {
-          throw new Error('MATERIAL_LOCATOR_INVALID');
-        }
+        parseMaterialLocator(locator);
         return json(readMaterialLocator(deps.root, {
           id,
           revision,
           locator: locator === 'whole' ? null : locator,
         }));
+      }
+
+      const materialBookIndex = /^\/api\/materials\/([^/]+)\/revisions\/([^/]+)\/book-index$/.exec(
+        url.pathname,
+      );
+      if (materialBookIndex && (request.method === 'GET' || request.method === 'POST')) {
+        const id = nodeId(materialBookIndex[1]!);
+        const revision = Number(materialBookIndex[2]);
+        if (!id) throw new Error('MATERIAL_ID_INVALID');
+        if (!Number.isSafeInteger(revision) || revision < 1) {
+          throw new Error('MATERIAL_REVISION_INVALID');
+        }
+        if (request.method === 'GET') {
+          const index = readMaterialBookIndex(deps.root, id, revision);
+          if (!index) throw new Error('MATERIAL_BOOK_INDEX_NOT_FOUND');
+          return json(index);
+        }
+        const index = await bootstrapPdfBookIndex(
+          deps.root,
+          id,
+          revision,
+          new Date().toISOString(),
+        );
+        deps.hub.publish({ type: 'assets-invalidated' });
+        return json(index, 201);
+      }
+
+      const materialBookPage = /^\/api\/materials\/([^/]+)\/revisions\/([^/]+)\/page\/([^/]+)\.png$/.exec(
+        url.pathname,
+      );
+      if (request.method === 'GET' && materialBookPage) {
+        const id = nodeId(materialBookPage[1]!);
+        const revision = Number(materialBookPage[2]);
+        const physicalPage = Number(materialBookPage[3]);
+        if (!id) throw new Error('MATERIAL_ID_INVALID');
+        if (!Number.isSafeInteger(revision) || revision < 1) {
+          throw new Error('MATERIAL_REVISION_INVALID');
+        }
+        const rendered = await renderPdfBookPage(deps.root, id, revision, physicalPage);
+        const body = rendered.bytes.buffer.slice(
+          rendered.bytes.byteOffset,
+          rendered.bytes.byteOffset + rendered.bytes.byteLength,
+        ) as ArrayBuffer;
+        return new Response(body, {
+          headers: {
+            'content-type': 'image/png',
+            'cache-control': 'private, max-age=86400',
+          },
+        });
       }
 
       const material = /^\/api\/materials\/([^/]+)$/.exec(url.pathname);

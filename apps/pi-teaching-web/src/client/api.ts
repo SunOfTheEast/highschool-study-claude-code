@@ -18,6 +18,7 @@ import type {
   LearningSetHomeSnapshot,
   LessonHandout,
   MaterialImportReceipt,
+  MaterialBookIndex,
   MaterialLocatorSnapshot,
   MetaSessionSummary,
   ProblemActivitySnapshot,
@@ -179,6 +180,15 @@ export const api = {
         encodeURIComponent(locator ?? 'whole')
       }`,
     )
+  ),
+  materialBookIndex: (id: string, revision: number) => json<MaterialBookIndex>(
+    `/api/materials/${encodeURIComponent(id)}/revisions/${revision}/book-index`,
+  ),
+  bootstrapMaterialBook: (id: string, revision: number) => post<MaterialBookIndex>(
+    `/api/materials/${encodeURIComponent(id)}/revisions/${revision}/book-index`,
+  ),
+  materialBookPageUrl: (id: string, revision: number, physicalPage: number) => (
+    `/api/materials/${encodeURIComponent(id)}/revisions/${revision}/page/${physicalPage}.png`
   ),
   importMaterial: (input: {
     title: string;
