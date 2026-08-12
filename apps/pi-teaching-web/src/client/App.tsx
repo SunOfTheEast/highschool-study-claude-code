@@ -45,7 +45,10 @@ import { MetaPage } from './pages/MetaPage';
 import { CalendarPage } from './pages/CalendarPage';
 import type { PrimaryView } from './view-state';
 import { deriveFreeLearningTitle } from '../study/display-projections';
-import { loadFreeLearningContexts } from './free-learning-contexts';
+import {
+  loadFreeLearningContexts,
+  materialPagesForContext,
+} from './free-learning-contexts';
 import { eventTransport } from './transport';
 import { publicErrorText } from './public-errors';
 import { resetRouteScroll } from './route-scroll';
@@ -700,6 +703,35 @@ export function App() {
     }
   };
 
+  const prepareBookSelectionAndStart = async (
+    reference: Extract<LearningContextReference, { kind: 'material' }>,
+  ) => {
+    setBookPageReading(true);
+    setBookPageError(null);
+    try {
+      let index = bookIndex?.materialId === reference.id
+        && bookIndex.revision === reference.revision
+        ? bookIndex
+        : await loadBookIndex(reference.id, reference.revision);
+      const pages = materialPagesForContext(reference.locator);
+      if (pages.length === 0) throw new Error('MATERIAL_LOCATOR_INVALID');
+      for (const page of pages) {
+        const state = index.pages[page - 1];
+        if (!state) throw new Error('MATERIAL_LOCATOR_NOT_FOUND');
+        if (state.state === 'native-text' || state.state === 'visual-text') continue;
+        const receipt = await api.readMaterialPage(reference.id, reference.revision, page, 'auto');
+        if (page === pages[0]) setBookPageText(receipt.text);
+        index = await api.materialBookIndex(reference.id, reference.revision);
+      }
+      setBookIndex(index);
+      await startFree([reference]);
+    } catch (error) {
+      setBookPageError(publicErrorText(error, '选中的原书页暂时没有读出来，请稍后再试。'));
+    } finally {
+      setBookPageReading(false);
+    }
+  };
+
   const currentSourceBook = material && sourceTree
     ? sourceTree.books.find((book) => (
       book.materialId === material.material.id
@@ -821,7 +853,7 @@ export function App() {
           material.current.revision,
           locator,
         )}
-        onAsk={(reference) => void startFree([reference])}
+        onAsk={(reference) => void prepareBookSelectionAndStart(reference)}
       />
     ) : <div className="loading-screen"><b>正在读取原始资料</b></div>;
   } else if (route.kind === 'book') {

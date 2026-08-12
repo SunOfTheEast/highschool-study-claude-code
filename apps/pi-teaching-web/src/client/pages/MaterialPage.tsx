@@ -448,12 +448,13 @@ export function BookReaderPage({
         <button
           type="button"
           className="action-solid reader-ask"
+          disabled={reading}
           onClick={() => onAsk({
             kind: 'material', id: value.material.id, revision: value.current.revision, locator,
           })}
         >
           <span className="seal-mark" aria-hidden="true">问</span>
-          和老师学这里 · {label}
+          {reading ? '老师正在读选中的页段…' : `和老师学这里 · ${label}`}
         </button>
         <div className="reader-read-actions">
           <button type="button" disabled={reading} onClick={() => void onReadPage(currentPage)}>

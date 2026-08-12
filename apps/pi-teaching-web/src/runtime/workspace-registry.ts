@@ -13,7 +13,9 @@ import type {
   SessionKey,
 } from '../shared/contracts';
 import { readCourseTree, readLesson, readPlan, readRoadmap } from '../study/markdown';
-import { readMaterialLocator } from '../study/materials';
+import { parseMaterialLocator } from '../study/material-locators';
+import { readMaterialBookIndex } from '../study/material-book-index';
+import { readMaterialLocator, readMaterialRevision } from '../study/materials';
 import { isProblemCardId } from '../study/problem-card-id';
 import { readLearningNote, readProblemCard } from '../study/learning-assets';
 import { setFrontmatterField } from './frontmatter';
@@ -131,7 +133,16 @@ function checkedSelectedAssets(
         || asset.revision < 1
         || (asset.locator !== null && (!asset.locator.trim() || /[\r\n\t]/.test(asset.locator)))
       ) throw new Error('SELECTED_CONTEXT_INVALID');
-      readMaterialLocator(root, asset);
+      const revision = readMaterialRevision(root, asset.id, asset.revision);
+      const index = revision.locatorKind === 'page'
+        ? readMaterialBookIndex(root, asset.id, asset.revision)
+        : null;
+      if (asset.locator !== null && index) {
+        const locator = parseMaterialLocator(asset.locator, { pageCount: index.pageCount });
+        if (locator.kind !== 'pages') throw new Error('SELECTED_CONTEXT_INVALID');
+      } else {
+        readMaterialLocator(root, asset);
+      }
       const key = `material:${asset.id}@${asset.revision}#${asset.locator ?? ''}`;
       if (seen.has(key)) throw new Error(`SELECTED_CONTEXT_DUPLICATE: ${key}`);
       seen.add(key);
