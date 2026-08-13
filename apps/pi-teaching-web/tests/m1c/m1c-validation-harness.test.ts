@@ -9,6 +9,7 @@ import {
   rmSync,
   writeFileSync,
 } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { ServerWebSocket } from 'bun';
 import {
@@ -19,7 +20,7 @@ import {
 import { sendRecordedTurn } from '../../scripts/m1c-validation/turn-client';
 
 const roots: string[] = [];
-const canonicalTmp = realpathSync('/tmp');
+const canonicalTmp = realpathSync(tmpdir());
 
 function temporaryDirectory(prefix: string): string {
   const path = mkdtempSync(join(canonicalTmp, prefix));

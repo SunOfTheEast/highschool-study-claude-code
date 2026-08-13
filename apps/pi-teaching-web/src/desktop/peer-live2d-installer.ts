@@ -13,6 +13,7 @@ import {
 } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 import { basename, dirname, isAbsolute, join, relative } from 'node:path';
+import { createCanvas, Image } from '@napi-rs/canvas';
 import {
   mergeVTubeExpression,
   normalizeVTubeStudioModel,
@@ -89,17 +90,29 @@ function copy(sourceRoot: string, staging: string, copies: Record<string, string
 }
 
 function resizeTexture(path: string): void {
-  const result = Bun.spawnSync(['/usr/bin/sips', '--resampleHeightWidthMax', '2048', path], {
-    stdout: 'pipe',
-    stderr: 'pipe',
-  });
-  if (result.exitCode !== 0) throw new Error('STUDYFORGE_LIVE2D_TEXTURE_RESIZE_FAILED');
+  try {
+    const image = new Image();
+    image.src = readFileSync(path);
+    const width = image.naturalWidth || image.width;
+    const height = image.naturalHeight || image.height;
+    if (!image.complete || width < 1 || height < 1) {
+      throw new Error('invalid texture');
+    }
+    const scale = Math.min(1, 2048 / Math.max(width, height));
+    const outputWidth = Math.max(1, Math.round(width * scale));
+    const outputHeight = Math.max(1, Math.round(height * scale));
+    const canvas = createCanvas(outputWidth, outputHeight);
+    canvas.getContext('2d').drawImage(image, 0, 0, outputWidth, outputHeight);
+    writeFileSync(path, canvas.toBuffer('image/png'));
+  } catch {
+    throw new Error('STUDYFORGE_LIVE2D_TEXTURE_RESIZE_FAILED');
+  }
 }
 
 function removeTransactionDirectory(actorRoot: string, path: string, prefix: string): void {
   if (!existsSync(path)) return;
   const fromRoot = relative(realpathSync(actorRoot), realpathSync(path));
-  if (!fromRoot.startsWith(prefix) || fromRoot.includes('/')) {
+  if (dirname(fromRoot) !== '.' || !basename(fromRoot).startsWith(prefix)) {
     throw new Error('STUDYFORGE_LIVE2D_TRANSACTION_INVALID');
   }
   rmSync(path, { recursive: true });
@@ -124,7 +137,6 @@ export function installPeerLive2D(input: PeerLive2DInstallInput): {
   textures: number;
   status: PeerSkinStatus;
 } {
-  if (process.platform !== 'darwin') throw new Error('STUDYFORGE_LIVE2D_MACOS_ONLY');
   if (!isAbsolute(input.source) || !isAbsolute(input.appHome)) {
     throw new Error('STUDYFORGE_LIVE2D_PATH_INVALID');
   }

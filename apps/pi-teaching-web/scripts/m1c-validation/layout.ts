@@ -10,6 +10,7 @@ import {
   realpathSync,
   writeFileSync,
 } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 
 export const M1C_VALIDATION_SCENARIOS = ['material', 'blank', 'course'] as const;
@@ -96,8 +97,8 @@ function validationRoot(path: string, empty: boolean): string {
   if (!basename(resolved).startsWith(RUN_PREFIX)) {
     throw new Error(`M1c validation output basename must begin ${RUN_PREFIX}`);
   }
-  if (dirname(resolved) !== realpathSync('/tmp')) {
-    throw new Error('M1c validation output must be a direct child of /tmp');
+  if (dirname(resolved) !== realpathSync(tmpdir())) {
+    throw new Error('M1c validation output must be a direct child of the system temporary directory');
   }
   if (existsSync(resolved)) {
     const canonical = plainDirectory(resolved, 'M1c validation output');

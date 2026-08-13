@@ -10,7 +10,8 @@ import {
   statSync,
   writeFileSync,
 } from 'node:fs';
-import { join } from 'node:path';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
 import type { ServerWebSocket } from 'bun';
 import {
   assertDedicatedRunRoot,
@@ -20,7 +21,7 @@ import {
 import { sendObservedTurn } from '../../scripts/m1a-validation/turn-client';
 
 const temporaryRoots: string[] = [];
-const canonicalTmp = realpathSync('/tmp');
+const canonicalTmp = realpathSync(tmpdir());
 
 function temporaryDirectory(prefix: string): string {
   const path = mkdtempSync(join(canonicalTmp, prefix));
@@ -48,7 +49,7 @@ function writeScout(path: string, thinking = 'medium'): void {
 afterEach(() => {
   while (temporaryRoots.length > 0) {
     const target = temporaryRoots.pop()!;
-    if (!target.startsWith(`${canonicalTmp}/`)) throw new Error(`unsafe cleanup target: ${target}`);
+    if (dirname(target) !== canonicalTmp) throw new Error(`unsafe cleanup target: ${target}`);
     rmSync(target, { recursive: true, force: true });
   }
 });
@@ -72,7 +73,9 @@ test('prepares isolated M0 and M1a roots without exposing credentials', () => {
   writeScout(m1aScoutSource, 'low');
 
   expect(() => assertDedicatedRunRoot(join(canonicalTmp, 'not-owned'))).toThrow();
-  expect(() => assertDedicatedRunRoot('/Users/yangrundong')).toThrow();
+  expect(() => assertDedicatedRunRoot(
+    join(dirname(canonicalTmp), 'studyforge-m1a-validation-outside'),
+  )).toThrow();
 
   const layout = prepareValidationRun({
     runRoot,

@@ -11,6 +11,7 @@ import {
   statSync,
   writeFileSync,
 } from 'node:fs';
+import { tmpdir } from 'node:os';
 import {
   basename,
   dirname,
@@ -82,7 +83,7 @@ const RUN_PREFIX = 'studyforge-m1a-validation-';
 const SNAPSHOT_LABEL = /^[a-z0-9](?:[a-z0-9-]{0,78}[a-z0-9])?$/;
 
 function canonicalTmp(): string {
-  return realpathSync('/tmp');
+  return realpathSync(tmpdir());
 }
 
 function assertPlainDirectory(path: string, description: string): string {
@@ -113,7 +114,7 @@ export function assertDedicatedRunRoot(path: string): string {
 
   const parent = assertPlainDirectory(dirname(resolved), 'validation run parent');
   if (parent !== canonicalTmp()) {
-    throw new Error('validation run root must be a direct child of the canonical /tmp directory');
+    throw new Error('validation run root must be a direct child of the system temporary directory');
   }
 
   if (existsSync(resolved)) {
@@ -142,7 +143,7 @@ function assertPreparedRunRoot(path: string): string {
   }
   const canonical = realpathSync(resolved);
   if (dirname(canonical) !== canonicalTmp()) {
-    throw new Error('prepared validation run root must be a direct child of canonical /tmp');
+    throw new Error('prepared validation run root must be a direct child of the system temporary directory');
   }
   return canonical;
 }

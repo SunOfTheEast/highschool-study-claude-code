@@ -1,5 +1,6 @@
 import { afterEach, expect, test } from 'bun:test';
-import { delimiter } from 'node:path';
+import { tmpdir } from 'node:os';
+import { delimiter, join } from 'node:path';
 import {
   configureStudySubagentDirectory,
   resolveStudySubagentDirectory,
@@ -15,10 +16,11 @@ afterEach(() => {
 });
 
 test('appends the packaged Scout directory without replacing existing directories', () => {
-  process.env.PI_SUBAGENT_EXTRA_AGENT_DIRS = '/tmp/existing-subagents';
+  const existing = join(tmpdir(), 'existing-subagents');
+  process.env.PI_SUBAGENT_EXTRA_AGENT_DIRS = existing;
   configureStudySubagentDirectory();
   expect(process.env.PI_SUBAGENT_EXTRA_AGENT_DIRS?.split(delimiter)).toEqual([
-    '/tmp/existing-subagents',
+    existing,
     studySubagentDirectory,
   ]);
 });
@@ -30,14 +32,14 @@ test('does not duplicate the packaged Scout directory', () => {
 });
 
 test('resolves the Scout directory from the packaged resource root', () => {
-  process.env.STUDYFORGE_RESOURCE_ROOT = '/Applications/StudyForge.app/Contents/Resources/studyforge';
-  expect(resolveStudySubagentDirectory()).toBe(
-    '/Applications/StudyForge.app/Contents/Resources/studyforge/subagents',
-  );
-  process.env.PI_SUBAGENT_EXTRA_AGENT_DIRS = '/tmp/existing-subagents';
+  const resourceRoot = join(tmpdir(), 'StudyForge Resources', 'studyforge');
+  const existing = join(tmpdir(), 'existing-subagents');
+  process.env.STUDYFORGE_RESOURCE_ROOT = resourceRoot;
+  expect(resolveStudySubagentDirectory()).toBe(join(resourceRoot, 'subagents'));
+  process.env.PI_SUBAGENT_EXTRA_AGENT_DIRS = existing;
   configureStudySubagentDirectory();
   expect(process.env.PI_SUBAGENT_EXTRA_AGENT_DIRS?.split(delimiter)).toEqual([
-    '/tmp/existing-subagents',
-    '/Applications/StudyForge.app/Contents/Resources/studyforge/subagents',
+    existing,
+    join(resourceRoot, 'subagents'),
   ]);
 });
