@@ -1,6 +1,7 @@
 import {
   existsSync,
   mkdtempSync,
+  mkdirSync,
   readFileSync,
   readdirSync,
   rmSync,
@@ -123,6 +124,12 @@ function privateRuntimeEnvironment(
   };
 }
 
+export function prepareWindowsVerificationRoot(root: string): string {
+  const temporary = join(root, 'tmp');
+  mkdirSync(temporary, { recursive: true });
+  return temporary;
+}
+
 async function firstLine(stream: ReadableStream<Uint8Array>): Promise<string> {
   const reader = stream.getReader();
   const decoder = new TextDecoder();
@@ -190,6 +197,7 @@ export async function verifyWindowsInstall(root: string): Promise<void> {
 
   const temporaryRoot = mkdtempSync(join(tmpdir(), 'studyforge-windows-installed-'));
   try {
+    prepareWindowsVerificationRoot(temporaryRoot);
     const environment = privateRuntimeEnvironment(temporaryRoot, layout);
     const selfTest = JSON.parse(await command(layout.runtime, [
       '--runtime-self-test',

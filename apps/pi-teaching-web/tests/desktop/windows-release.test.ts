@@ -1,13 +1,26 @@
 import { expect, test } from 'bun:test';
-import { readFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
+  prepareWindowsVerificationRoot,
   requiredWindowsInstallFiles,
   windowsInstallLayout,
 } from '../../scripts/desktop/verify-windows-install';
 
 const appRoot = join(import.meta.dir, '../..');
 const repositoryRoot = join(appRoot, '../..');
+
+test('creates the private Windows TEMP parent before starting the installed runtime', () => {
+  const root = mkdtempSync(join(tmpdir(), 'studyforge-windows-verification-test-'));
+  try {
+    const prepared = prepareWindowsVerificationRoot(root);
+    expect(prepared).toBe(join(root, 'tmp'));
+    expect(existsSync(prepared)).toBe(true);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
 
 test('verifies the installed Windows app rather than build-tree stand-ins', () => {
   const layout = windowsInstallLayout('C:\\Users\\Student Name\\StudyForge 学生版');
