@@ -24,7 +24,7 @@ StudyForge 的学习文件保存在学生自己的目录里。模型服务只会
 
 ## 下载与安装
 
-当前桌面包支持 **Apple Silicon Mac、macOS 13 及以上**：
+当前公开 Release 提供 **Apple Silicon Mac、macOS 13 及以上**安装包：
 
 - [下载 StudyForge 0.1.0 预览版](https://github.com/SunOfTheEast/highschool-study-claude-code/releases/tag/studyforge-desktop-v0.1.0)
 - 安装包：`StudyForge_0.1.0_aarch64.dmg`
@@ -32,7 +32,9 @@ StudyForge 的学习文件保存在学生自己的目录里。模型服务只会
 
 这个版本采用 ad-hoc 签名，尚未经过 Apple 公证。请只从上面的项目 Release 下载；第一次
 打开时，macOS 可能要求你在“系统设置 → 隐私与安全性”中确认“仍要打开”。完整步骤见
-[macOS 安装与模型设置](apps/pi-teaching-web/resources/help/macos-installation.md)。
+[macOS 安装与模型设置](apps/pi-teaching-web/resources/help/macos-installation.md)；
+[Windows 10/11 x64 无签名内测包的安装方法](apps/pi-teaching-web/resources/help/windows-installation.md)
+单独列在 Windows 指南中，正式上传前仍以实际内测分发说明为准。
 
 ## 第一次使用
 
@@ -48,7 +50,8 @@ StudyForge 的学习文件保存在学生自己的目录里。模型服务只会
 
 - [快速开始](apps/pi-teaching-web/resources/help/first-learning.md)：从一本书或一个真实问题完成第一次学习闭环。
 - [功能手册](apps/pi-teaching-web/resources/help/feature-guide.md)：按学习任务查询书籍、对话、资产、复习、课程和时间功能。
-- [安装与模型](apps/pi-teaching-web/resources/help/macos-installation.md)：安装 App、连接模型、处理 PDF 与常见故障。
+- [macOS 安装与模型](apps/pi-teaching-web/resources/help/macos-installation.md)：安装 App、连接模型、处理 PDF 与常见故障。
+- [Windows 安装与模型](apps/pi-teaching-web/resources/help/windows-installation.md)：安装 Windows x64 内测版，无需另装开发工具。
 
 ## 三条学习路径
 
@@ -75,7 +78,7 @@ StudyForge 的学习文件保存在学生自己的目录里。模型服务只会
 
 ## 当前限制
 
-- 只发布了 Apple Silicon macOS 包；尚无 Windows、Linux、iOS 或 Android 版本。
+- Apple Silicon macOS 已公开发布；Windows 10/11 x64 仍是无签名内测包；尚无 Linux、iOS 或 Android 版本。
 - 安装包尚未公证，也没有自动更新。
 - 教学质量、延迟与费用仍明显依赖所选模型和服务商。
 - PDF 目录、扫描页、公式和复杂图表可能需要人工指定页段或视觉读取后核对原页。

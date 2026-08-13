@@ -70,7 +70,11 @@ function json(value: unknown, status = 200): Response {
   return Response.json(value, { status });
 }
 
-type OfflineHelpId = 'macos-installation' | 'first-learning' | 'feature-guide';
+type OfflineHelpId =
+  | 'macos-installation'
+  | 'windows-installation'
+  | 'first-learning'
+  | 'feature-guide';
 
 function offlineHelp(resourceRoot: string, id: OfflineHelpId): string {
   const markdown = readFileSync(join(resourceRoot, 'help', `${id}.md`), 'utf8');
@@ -421,7 +425,12 @@ export function createDesktopRequestHandler(deps: DesktopRequestDependencies) {
         }).status);
       } else if (request.method === 'GET' && url.pathname.startsWith('/api/desktop/help/')) {
         const id = url.pathname.slice('/api/desktop/help/'.length);
-        if (id !== 'macos-installation' && id !== 'first-learning' && id !== 'feature-guide') {
+        if (
+          id !== 'macos-installation'
+          && id !== 'windows-installation'
+          && id !== 'first-learning'
+          && id !== 'feature-guide'
+        ) {
           response = json({ error: 'NOT_FOUND' }, 404);
         } else {
           response = new Response(offlineHelp(deps.resourceRoot, id), {

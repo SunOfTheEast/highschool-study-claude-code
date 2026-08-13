@@ -349,7 +349,7 @@ test('bridges Pi auth prompts without retaining the submitted secret or code', a
   expect(JSON.stringify(completedBody)).not.toContain('one-time-code');
 });
 
-test('serves only the three canonical offline help documents', async () => {
+test('serves only the four canonical offline help documents', async () => {
   const { request } = setup();
   const guide = await request('/api/desktop/help/first-learning');
   expect(guide?.status).toBe(200);
@@ -360,6 +360,10 @@ test('serves only the three canonical offline help documents', async () => {
   const features = await request('/api/desktop/help/feature-guide');
   expect(features?.status).toBe(200);
   expect(await features?.text()).toContain('# 功能手册');
+
+  const windows = await request('/api/desktop/help/windows-installation');
+  expect(windows?.status).toBe(200);
+  expect(await windows?.text()).toContain('# Windows 安装与模型设置');
 
   const unknown = await request('/api/desktop/help/anything-else');
   expect(unknown?.status).toBe(404);

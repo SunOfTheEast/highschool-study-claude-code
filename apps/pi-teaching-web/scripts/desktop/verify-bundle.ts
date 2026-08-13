@@ -142,6 +142,7 @@ export async function verifyBundle(appRoot = resolve(import.meta.dir, '../..')):
       'Contents/Resources/studyforge/help/first-learning.md',
       'Contents/Resources/studyforge/help/feature-guide.md',
       'Contents/Resources/studyforge/help/macos-installation.md',
+      'Contents/Resources/studyforge/help/windows-installation.md',
       'Contents/Resources/studyforge/templates/blank-learning-set/LEARNING_GUIDE.md',
       'Contents/Resources/studyforge/examples/derivative-m0/learning-set/LEARNING_GUIDE.md',
       'Contents/Resources/studyforge/pi-runtime/package.json',

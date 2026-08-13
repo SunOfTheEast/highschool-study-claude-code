@@ -113,7 +113,9 @@ export const desktopApi = {
   ).then((response) => {
     if (!response.ok) throw new DesktopApiError(response.status, null);
   }),
-  help: async (id: 'macos-installation' | 'first-learning' | 'feature-guide') => {
+  help: async (
+    id: 'macos-installation' | 'windows-installation' | 'first-learning' | 'feature-guide',
+  ) => {
     const response = await transportFetch(`/api/desktop/help/${id}`);
     if (!response.ok) throw new DesktopApiError(response.status, null);
     return response.text();

@@ -76,8 +76,30 @@ test('installation guide states the same local and model-processing boundary', (
   expect(markdown).toContain('不会无条件上传整个学习集');
 });
 
+test('Windows installation guide is click-first and requires no developer tools', () => {
+  const markdown = read('windows-installation.md');
+  for (const text of [
+    'Windows 10 或 Windows 11',
+    '64 位',
+    'Windows 已保护你的电脑',
+    '仍要运行',
+    '无需安装 Git、Bash、Node.js 或 Bun',
+    'WebView2',
+    '主教师',
+    '检索 Scout',
+    '资料视觉',
+    '常见故障',
+  ]) expect(markdown).toContain(text);
+  expect(markdown).not.toMatch(/```|(?:^|\n)\s*(?:bun|npm|node|chmod|powershell|cmd|cd)\b/i);
+});
+
 test('every help image, when present, is local and resolvable', () => {
-  for (const name of ['macos-installation.md', 'first-learning.md', 'feature-guide.md']) {
+  for (const name of [
+    'macos-installation.md',
+    'windows-installation.md',
+    'first-learning.md',
+    'feature-guide.md',
+  ]) {
     const path = join(helpRoot, name);
     const images = localImages(readFileSync(path, 'utf8'));
     for (const image of images) {
