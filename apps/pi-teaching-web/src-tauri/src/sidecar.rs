@@ -1,4 +1,7 @@
-use std::{collections::BTreeMap, path::PathBuf};
+use std::{
+    collections::BTreeMap,
+    path::{Path, PathBuf},
+};
 
 use serde::{Deserialize, Serialize};
 
@@ -66,6 +69,27 @@ fn display(path: &std::path::Path) -> String {
     path.to_string_lossy().into_owned()
 }
 
+pub fn platform_tool_environment(resource_root: &Path, windows: bool) -> BTreeMap<String, String> {
+    if !windows {
+        return BTreeMap::new();
+    }
+    let root = resource_root.join("platform/windows");
+    BTreeMap::from([
+        (
+            "STUDYFORGE_PACKAGED_BASH".into(),
+            display(&root.join("portable-git/bin/bash.exe")),
+        ),
+        (
+            "STUDYFORGE_PACKAGED_RG".into(),
+            display(&root.join("tools/rg.exe")),
+        ),
+        (
+            "STUDYFORGE_PACKAGED_FD".into(),
+            display(&root.join("tools/fd.exe")),
+        ),
+    ])
+}
+
 pub fn build_launch(paths: DesktopPaths, token: String) -> SidecarLaunch {
     let agent_dir = paths.app_home.join("agent");
     let sessions_dir = agent_dir.join("sessions");
@@ -81,7 +105,7 @@ pub fn build_launch(paths: DesktopPaths, token: String) -> SidecarLaunch {
         "--token".into(),
         token,
     ];
-    let environment = BTreeMap::from([
+    let mut environment = BTreeMap::from([
         ("PI_CODING_AGENT_DIR".into(), display(&agent_dir)),
         ("PI_CODING_AGENT_SESSION_DIR".into(), display(&sessions_dir)),
         ("PI_SUBAGENT_PI_BINARY".into(), display(&paths.pi_binary)),
@@ -102,6 +126,10 @@ pub fn build_launch(paths: DesktopPaths, token: String) -> SidecarLaunch {
             display(&paths.resource_root),
         ),
     ]);
+    environment.extend(platform_tool_environment(
+        &paths.resource_root,
+        cfg!(target_os = "windows"),
+    ));
     SidecarLaunch {
         arguments,
         environment,

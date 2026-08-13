@@ -483,6 +483,7 @@ mod tests {
 
     use crate::sidecar::{
         DesktopPaths, LaunchEvent, RuntimeState, apply_event, build_launch, parse_ready_line,
+        platform_tool_environment,
     };
 
     #[test]
@@ -646,6 +647,26 @@ mod tests {
                 .environment
                 .values()
                 .any(|value| value.contains("/.pi"))
+        );
+    }
+
+    #[test]
+    fn derives_private_windows_tool_paths_only_for_windows_launches() {
+        let root = PathBuf::from("/resources/studyforge");
+        assert!(platform_tool_environment(&root, false).is_empty());
+
+        let windows = platform_tool_environment(&root, true);
+        assert_eq!(
+            windows.get("STUDYFORGE_PACKAGED_BASH").unwrap(),
+            "/resources/studyforge/platform/windows/portable-git/bin/bash.exe"
+        );
+        assert_eq!(
+            windows.get("STUDYFORGE_PACKAGED_RG").unwrap(),
+            "/resources/studyforge/platform/windows/tools/rg.exe"
+        );
+        assert_eq!(
+            windows.get("STUDYFORGE_PACKAGED_FD").unwrap(),
+            "/resources/studyforge/platform/windows/tools/fd.exe"
         );
     }
 }

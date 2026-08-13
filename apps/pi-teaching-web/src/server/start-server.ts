@@ -18,6 +18,7 @@ import {
 import { EventHub } from './event-hub';
 import { createCalendarRepository } from '../calendar/appointments';
 import { readCalendarReviewCandidates } from '../calendar/review-candidates';
+import { prepareDesktopManagedTools } from '../runtime/desktop-tools';
 
 export type RuntimeArguments = {
   port: number;
@@ -112,6 +113,7 @@ export async function startStudyForgeServer(arguments_: RuntimeArguments) {
       appHome: arguments_.appHome!,
       documentsHome: arguments_.documentsHome!,
     });
+    prepareDesktopManagedTools(paths.agentDir);
     process.env.STUDYFORGE_RESOURCE_ROOT = arguments_.resourceRoot!;
     const models = await createDesktopModelService({
       authPath: paths.authPath,

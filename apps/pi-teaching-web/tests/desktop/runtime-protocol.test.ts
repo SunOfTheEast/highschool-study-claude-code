@@ -1,5 +1,11 @@
 import { expect, test } from 'bun:test';
-import { mkdtempSync, rmSync } from 'node:fs';
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import {
@@ -88,6 +94,47 @@ test('flushes the accepted shutdown response before stopping the listener', asyn
     expect(response.status).toBe(202);
   } finally {
     started.stop();
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('prepares declared packaged tools before publishing desktop readiness', async () => {
+  const root = mkdtempSync(join(tmpdir(), 'studyforge-runtime-tools-'));
+  const packaged = join(root, '应用 资源', 'platform', 'windows');
+  mkdirSync(packaged, { recursive: true });
+  const declared = {
+    STUDYFORGE_PACKAGED_BASH: join(packaged, 'bash.exe'),
+    STUDYFORGE_PACKAGED_RG: join(packaged, 'rg.exe'),
+    STUDYFORGE_PACKAGED_FD: join(packaged, 'fd.exe'),
+  };
+  for (const [name, path] of Object.entries(declared)) writeFileSync(path, name);
+  const previous = Object.fromEntries(
+    Object.keys(declared).map((name) => [name, process.env[name]]),
+  );
+  Object.assign(process.env, declared);
+  const appHome = join(root, '学生 AppData', 'StudyForge');
+  let started: Awaited<ReturnType<typeof startStudyForgeServer>> | undefined;
+
+  try {
+    started = await startStudyForgeServer({
+      port: 0,
+      appHome,
+      documentsHome: join(root, '学生 文档', 'StudyForge'),
+      resourceRoot: resolve(import.meta.dir, '../../resources'),
+      token: 'launch-token',
+      learningSet: null,
+      desktop: true,
+    });
+    expect(readFileSync(join(appHome, 'agent/bin/rg.exe'), 'utf8'))
+      .toBe('STUDYFORGE_PACKAGED_RG');
+    expect(readFileSync(join(appHome, 'agent/bin/fd.exe'), 'utf8'))
+      .toBe('STUDYFORGE_PACKAGED_FD');
+  } finally {
+    started?.stop();
+    for (const [name, value] of Object.entries(previous)) {
+      if (value === undefined) delete process.env[name];
+      else process.env[name] = value;
+    }
     rmSync(root, { recursive: true, force: true });
   }
 });

@@ -48,6 +48,7 @@ import { sessionCustomMessageContent } from './session-custom-messages';
 import { createCalendarRepository } from '../calendar/appointments';
 import type { CalendarRepository } from './calendar-tools';
 import { migrateHistoricalProblemReviews } from '../study/problem-attempts';
+import { applyPackagedShellPath } from './desktop-tools';
 
 export interface StudySession {
   readonly sessionId: string;
@@ -208,6 +209,7 @@ export async function createPiSessionFactory(
     })
     : undefined;
   const settingsManager = options ? SettingsManager.create(root, options.agentDir) : undefined;
+  if (settingsManager) applyPackagedShellPath(settingsManager);
   const calendar = options ? options.calendar ?? createCalendarRepository(options.appHome) : undefined;
   return async ({ sessionFile, ...scope }) => {
     const eventBus = createEventBus();
