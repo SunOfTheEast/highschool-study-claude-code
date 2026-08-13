@@ -85,6 +85,19 @@ fn resource_root(app: &AppHandle) -> Result<PathBuf, String> {
     Ok(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../resources"))
 }
 
+fn development_pi_binary(
+    manifest_dir: &Path,
+    target_os: &str,
+    target_arch: &str,
+) -> Result<PathBuf, String> {
+    let filename = match (target_os, target_arch) {
+        ("macos", "aarch64") => "studyforge-pi-aarch64-apple-darwin",
+        ("windows", "x86_64") => "studyforge-pi-x86_64-pc-windows-msvc.exe",
+        _ => return Err("STUDYFORGE_DESKTOP_TARGET_UNSUPPORTED".into()),
+    };
+    Ok(manifest_dir.join("binaries").join(filename))
+}
+
 fn pi_binary() -> Result<PathBuf, String> {
     if let Some(value) = std::env::var_os("STUDYFORGE_DEV_PI_BINARY") {
         return Ok(PathBuf::from(value));
@@ -93,12 +106,18 @@ fn pi_binary() -> Result<PathBuf, String> {
         .map_err(|error| error.to_string())?
         .parent()
         .ok_or_else(|| "STUDYFORGE_EXECUTABLE_DIRECTORY_MISSING".to_string())?
-        .join("studyforge-pi");
+        .join(format!(
+            "studyforge-pi{}",
+            std::env::consts::EXE_SUFFIX
+        ));
     if adjacent.exists() {
         return Ok(adjacent);
     }
-    Ok(PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("binaries/studyforge-pi-aarch64-apple-darwin"))
+    development_pi_binary(
+        Path::new(env!("CARGO_MANIFEST_DIR")),
+        std::env::consts::OS,
+        std::env::consts::ARCH,
+    )
 }
 
 fn desktop_directory(
@@ -479,7 +498,9 @@ pub fn run() {
 mod tests {
     use std::{ffi::OsString, fs, path::PathBuf};
 
-    use super::{desktop_directory, discard_staged_book_file, stage_book_file};
+    use super::{
+        desktop_directory, development_pi_binary, discard_staged_book_file, stage_book_file,
+    };
 
     use crate::sidecar::{
         DesktopPaths, LaunchEvent, RuntimeState, apply_event, build_launch, parse_ready_line,
@@ -668,5 +689,19 @@ mod tests {
             windows.get("STUDYFORGE_PACKAGED_FD").unwrap(),
             "/resources/studyforge/platform/windows/tools/fd.exe"
         );
+    }
+
+    #[test]
+    fn resolves_the_development_pi_sidecar_for_each_supported_release_target() {
+        let manifest = PathBuf::from("/workspace/src-tauri");
+        assert_eq!(
+            development_pi_binary(&manifest, "macos", "aarch64").unwrap(),
+            manifest.join("binaries/studyforge-pi-aarch64-apple-darwin")
+        );
+        assert_eq!(
+            development_pi_binary(&manifest, "windows", "x86_64").unwrap(),
+            manifest.join("binaries/studyforge-pi-x86_64-pc-windows-msvc.exe")
+        );
+        assert!(development_pi_binary(&manifest, "windows", "aarch64").is_err());
     }
 }

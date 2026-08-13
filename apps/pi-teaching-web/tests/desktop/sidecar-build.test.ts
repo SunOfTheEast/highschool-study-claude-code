@@ -63,12 +63,48 @@ test('uses the target-suffixed sidecars expected by Tauri on both release platfo
     pi: join(appRoot, 'src-tauri/binaries/studyforge-pi-x86_64-pc-windows-msvc.exe'),
   });
   const config = JSON.parse(readFileSync(join(appRoot, 'src-tauri/tauri.conf.json'), 'utf8'));
+  const macConfig = JSON.parse(readFileSync(
+    join(appRoot, 'src-tauri/tauri.macos.conf.json'),
+    'utf8',
+  ));
+  const windowsConfig = JSON.parse(readFileSync(
+    join(appRoot, 'src-tauri/tauri.windows.conf.json'),
+    'utf8',
+  ));
   expect(config.mainBinaryName).toBe('studyforge-desktop');
+  expect(config.bundle.targets).toBeUndefined();
   expect(config.bundle.externalBin).toEqual([
     'binaries/studyforge-runtime',
     'binaries/studyforge-pi',
   ]);
-  expect(config.bundle.macOS.entitlements).toBe('entitlements.plist');
+  expect(config.bundle.macOS).toBeUndefined();
+  expect(macConfig).toMatchObject({
+    app: { macOSPrivateApi: true },
+    bundle: {
+      targets: ['dmg'],
+      macOS: {
+        minimumSystemVersion: '13.0',
+        signingIdentity: '-',
+        entitlements: 'entitlements.plist',
+      },
+    },
+  });
+  expect(windowsConfig).toMatchObject({
+    bundle: {
+      targets: ['nsis'],
+      icon: ['icons/icon.ico'],
+      windows: {
+        webviewInstallMode: { type: 'downloadBootstrapper', silent: true },
+        nsis: {
+          installMode: 'currentUser',
+          languages: ['English', 'SimpChinese'],
+          displayLanguageSelector: false,
+          installerIcon: 'icons/icon.ico',
+        },
+      },
+    },
+  });
+  expect(existsSync(join(appRoot, 'src-tauri/icons/icon.ico'))).toBe(true);
   expect(readFileSync(
     join(appRoot, 'src-tauri/entitlements.plist'),
     'utf8',

@@ -9,15 +9,17 @@ test('declares one app-scoped companion beside the existing main window', () => 
     readFileSync(join(appRoot, 'src-tauri/tauri.conf.json'), 'utf8'),
   ) as {
     app: {
-      macOSPrivateApi?: boolean;
       windows: Array<Record<string, unknown>>;
     };
   };
+  const macConfig = JSON.parse(
+    readFileSync(join(appRoot, 'src-tauri/tauri.macos.conf.json'), 'utf8'),
+  ) as { app: { macOSPrivateApi?: boolean } };
   const capability = JSON.parse(
     readFileSync(join(appRoot, 'src-tauri/capabilities/default.json'), 'utf8'),
   ) as { windows: string[]; permissions: string[] };
 
-  expect(config.app.macOSPrivateApi).toBe(true);
+  expect(macConfig.app.macOSPrivateApi).toBe(true);
   expect(config.app.windows.map((window) => window.label)).toEqual(['main', 'companion']);
   expect(config.app.windows[1]).toMatchObject({
     label: 'companion',
