@@ -1,0 +1,34 @@
+{
+  "schema": "studyforge.windows-artifacts.v1",
+  "artifacts": [
+    {
+      "id": "portable-git",
+      "version": "2.55.0.4",
+      "archive": "PortableGit-2.55.0.4-64-bit.7z.exe",
+      "url": "https://github.com/git-for-windows/git/releases/download/v2.55.0.windows.4/PortableGit-2.55.0.4-64-bit.7z.exe",
+      "sha256": "016e84230a3767f0c6b3788e79ba0c58a17377086801719d46700fca4f7b36b5",
+      "license": "GPL-2.0-only and bundled component licenses",
+      "kind": "portable-git-sfx"
+    },
+    {
+      "id": "ripgrep",
+      "version": "15.2.0",
+      "archive": "ripgrep-15.2.0-x86_64-pc-windows-msvc.zip",
+      "url": "https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-x86_64-pc-windows-msvc.zip",
+      "sha256": "71b2fef860abe467217a538ff31de02f5258807c0129f771846f87bd029aafc5",
+      "license": "MIT OR Unlicense",
+      "kind": "zip-binary",
+      "binary": "rg.exe"
+    },
+    {
+      "id": "fd",
+      "version": "10.4.2",
+      "archive": "fd-v10.4.2-x86_64-pc-windows-msvc.zip",
+      "url": "https://github.com/sharkdp/fd/releases/download/v10.4.2/fd-v10.4.2-x86_64-pc-windows-msvc.zip",
+      "sha256": "b2816e506390a89941c63c9187d58a3cc10e9a55f2ef0685f9ea0eccaf7c98c8",
+      "license": "Apache-2.0 OR MIT",
+      "kind": "zip-binary",
+      "binary": "fd.exe"
+    }
+  ]
+}

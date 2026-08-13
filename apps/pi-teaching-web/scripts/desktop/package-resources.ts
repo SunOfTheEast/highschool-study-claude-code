@@ -1,5 +1,6 @@
 import { cpSync, mkdirSync, rmSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { type DesktopTarget, resolveDesktopTarget } from './platform';
 
 export function resourceLayout(appRoot: string) {
   const stagingRoot = join(appRoot, 'src-tauri/resources/studyforge');
@@ -13,14 +14,39 @@ export function resourceLayout(appRoot: string) {
     piRuntimeRoot: join(stagingRoot, 'pi-runtime'),
     subagentRuntimeRoot,
     subagentPromptRuntime: join(subagentRuntimeRoot, 'subagent-prompt-runtime.js'),
+    windowsPlatformSource: join(appRoot, 'src-tauri/generated/platform/windows'),
+    windowsPlatformRuntime: join(stagingRoot, 'platform/windows'),
   };
 }
 
-export function packageResources(appRoot = resolve(import.meta.dir, '../..')): void {
+export function packagePlatformResources(
+  appRoot: string,
+  target: DesktopTarget,
+): boolean {
+  if (target.triple !== 'x86_64-pc-windows-msvc') return false;
+  const layout = resourceLayout(appRoot);
+  mkdirSync(layout.windowsPlatformRuntime, { recursive: true });
+  cpSync(
+    join(appRoot, 'resources/platform/windows'),
+    layout.windowsPlatformRuntime,
+    { recursive: true, force: true },
+  );
+  cpSync(layout.windowsPlatformSource, layout.windowsPlatformRuntime, {
+    recursive: true,
+    force: true,
+  });
+  return true;
+}
+
+export function packageResources(
+  appRoot = resolve(import.meta.dir, '../..'),
+  target = resolveDesktopTarget(),
+): void {
   const layout = resourceLayout(appRoot);
   rmSync(layout.stagingRoot, { recursive: true, force: true });
   mkdirSync(layout.stagingRoot, { recursive: true });
   cpSync(layout.teachingSource, layout.stagingRoot, { recursive: true });
+  rmSync(layout.windowsPlatformRuntime, { recursive: true, force: true });
   cpSync(layout.exampleSource, join(layout.stagingRoot, 'examples/derivative-m0'), { recursive: true });
 
   mkdirSync(layout.piRuntimeRoot, { recursive: true });
@@ -46,6 +72,7 @@ export function packageResources(appRoot = resolve(import.meta.dir, '../..')): v
     join(appRoot, 'node_modules/@silvia-odwyer/photon-node/photon_rs_bg.wasm'),
     join(layout.piRuntimeRoot, 'photon_rs_bg.wasm'),
   );
+  packagePlatformResources(appRoot, target);
 }
 
 if (import.meta.main) packageResources();

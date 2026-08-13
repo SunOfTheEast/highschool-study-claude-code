@@ -7,6 +7,7 @@ playwright-report/
 test-results/
 apps/pi-teaching-web/output/playwright/
 apps/pi-teaching-web/output/source-first-real-*/
+apps/pi-teaching-web/src-tauri/generated/
 .worktrees/
 
 # Local engineering notes and generated review artifacts are not public docs.

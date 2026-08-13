@@ -1,11 +1,22 @@
 import { expect, test } from 'bun:test';
-import { existsSync, readFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
   sidecarOutputs,
   subagentRuntimeExternalModules,
 } from '../../scripts/desktop/build-sidecars';
-import { resourceLayout } from '../../scripts/desktop/package-resources';
+import {
+  packagePlatformResources,
+  resourceLayout,
+} from '../../scripts/desktop/package-resources';
 import { sidecarSmokeEnvironment } from '../../scripts/desktop/smoke-sidecars';
 import {
   desktopTargets,
@@ -69,6 +80,14 @@ test('stages canonical teaching resources, example, and Pi runtime assets only',
   expect(layout.stagingRoot).toBe(join(appRoot, 'src-tauri/resources/studyforge'));
   expect(layout.exampleSource).toBe(join(appRoot, '../../examples/derivative-m0'));
   expect(layout.piRuntimeRoot).toBe(join(layout.stagingRoot, 'pi-runtime'));
+  expect(layout.windowsPlatformSource).toBe(join(
+    appRoot,
+    'src-tauri/generated/platform/windows',
+  ));
+  expect(layout.windowsPlatformRuntime).toBe(join(
+    layout.stagingRoot,
+    'platform/windows',
+  ));
   expect(layout.subagentPromptRuntime).toBe(join(
     layout.stagingRoot,
     'pi-subagents/subagent-prompt-runtime.js',
@@ -82,6 +101,50 @@ test('stages canonical teaching resources, example, and Pi runtime assets only',
     appRoot,
     'resources/workers/study-material-vision-reader.md',
   ))).toBe(true);
+});
+
+test('adds the private command payload only to Windows resource bundles', () => {
+  const root = mkdtempSync(join(tmpdir(), 'studyforge-platform-resources-'));
+  const generated = join(root, 'src-tauri/generated/platform/windows');
+  try {
+    mkdirSync(join(root, 'resources/platform/windows'), { recursive: true });
+    writeFileSync(join(
+      root,
+      'resources/platform/windows/THIRD_PARTY_NOTICES.md',
+    ), 'notices');
+    mkdirSync(join(generated, 'portable-git/bin'), { recursive: true });
+    mkdirSync(join(generated, 'tools'), { recursive: true });
+    writeFileSync(join(generated, 'portable-git/bin/bash.exe'), 'bash');
+    writeFileSync(join(generated, 'tools/rg.exe'), 'rg');
+
+    expect(packagePlatformResources(
+      root,
+      desktopTargets['aarch64-apple-darwin'],
+    )).toBe(false);
+    expect(existsSync(join(
+      root,
+      'src-tauri/resources/studyforge/platform/windows/portable-git/bin/bash.exe',
+    ))).toBe(false);
+
+    expect(packagePlatformResources(
+      root,
+      desktopTargets['x86_64-pc-windows-msvc'],
+    )).toBe(true);
+    expect(readFileSync(join(
+      root,
+      'src-tauri/resources/studyforge/platform/windows/portable-git/bin/bash.exe',
+    ), 'utf8')).toBe('bash');
+    expect(readFileSync(join(
+      root,
+      'src-tauri/resources/studyforge/platform/windows/tools/rg.exe',
+    ), 'utf8')).toBe('rg');
+    expect(readFileSync(join(
+      root,
+      'src-tauri/resources/studyforge/platform/windows/THIRD_PARTY_NOTICES.md',
+    ), 'utf8')).toBe('notices');
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });
 
 test('keeps host-provided Pi modules external to the child prompt runtime bundle', () => {
