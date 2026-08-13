@@ -349,13 +349,17 @@ test('bridges Pi auth prompts without retaining the submitted secret or code', a
   expect(JSON.stringify(completedBody)).not.toContain('one-time-code');
 });
 
-test('serves only the two canonical offline help documents', async () => {
+test('serves only the three canonical offline help documents', async () => {
   const { request } = setup();
   const guide = await request('/api/desktop/help/first-learning');
   expect(guide?.status).toBe(200);
   const guideBody = await guide?.text();
-  expect(guideBody).toContain('# 第一次学习');
+  expect(guideBody).toContain('# 快速开始');
   expect(guideBody).not.toContain('](images/');
+
+  const features = await request('/api/desktop/help/feature-guide');
+  expect(features?.status).toBe(200);
+  expect(await features?.text()).toContain('# 功能手册');
 
   const unknown = await request('/api/desktop/help/anything-else');
   expect(unknown?.status).toBe(404);

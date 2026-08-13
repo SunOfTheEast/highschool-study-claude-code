@@ -139,6 +139,8 @@ export async function verifyBundle(appRoot = resolve(import.meta.dir, '../..')):
       'Contents/Resources/studyforge/subagents/study-material-scout.md',
       'Contents/Resources/studyforge/workers/study-material-vision-reader.md',
       'Contents/Resources/studyforge/peers/axia.md',
+      'Contents/Resources/studyforge/help/first-learning.md',
+      'Contents/Resources/studyforge/help/feature-guide.md',
       'Contents/Resources/studyforge/help/macos-installation.md',
       'Contents/Resources/studyforge/templates/blank-learning-set/LEARNING_GUIDE.md',
       'Contents/Resources/studyforge/examples/derivative-m0/learning-set/LEARNING_GUIDE.md',

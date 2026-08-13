@@ -351,12 +351,14 @@ function DesktopApp({ bridge }: { bridge: DesktopBridge }) {
     setPage('help');
     if (help.length > 0) return;
     try {
-      const [firstLearning, installation] = await Promise.all([
+      const [firstLearning, featureGuide, installation] = await Promise.all([
         desktopApi.help('first-learning'),
+        desktopApi.help('feature-guide'),
         desktopApi.help('macos-installation'),
       ]);
       setHelp([
-        { id: 'first-learning', title: '第一次学习', markdown: firstLearning },
+        { id: 'first-learning', title: '快速开始', markdown: firstLearning },
+        { id: 'feature-guide', title: '功能手册', markdown: featureGuide },
         { id: 'macos-installation', title: '安装与模型', markdown: installation },
       ]);
     } catch {

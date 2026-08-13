@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { MarkdownView } from '../components/MarkdownView';
 
 export type HelpDocument = {
-  id: 'macos-installation' | 'first-learning';
+  id: 'macos-installation' | 'first-learning' | 'feature-guide';
   title: string;
   markdown: string;
 };

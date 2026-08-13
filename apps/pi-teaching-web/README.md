@@ -6,8 +6,9 @@
 
 面向学生的安装和操作说明请看：
 
-- [在 macOS 上安装 StudyForge](resources/help/macos-installation.md)
-- [第一次学习](resources/help/first-learning.md)
+- [快速开始](resources/help/first-learning.md)
+- [功能手册](resources/help/feature-guide.md)
+- [安装与模型](resources/help/macos-installation.md)
 
 本文只说明开发、架构和验证。
 

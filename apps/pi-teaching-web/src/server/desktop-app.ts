@@ -70,7 +70,9 @@ function json(value: unknown, status = 200): Response {
   return Response.json(value, { status });
 }
 
-function offlineHelp(resourceRoot: string, id: 'macos-installation' | 'first-learning'): string {
+type OfflineHelpId = 'macos-installation' | 'first-learning' | 'feature-guide';
+
+function offlineHelp(resourceRoot: string, id: OfflineHelpId): string {
   const markdown = readFileSync(join(resourceRoot, 'help', `${id}.md`), 'utf8');
   return markdown.replace(/\]\(images\/([a-z0-9-]+\.png)\)/g, (_match, name: string) => {
     const image = readFileSync(join(resourceRoot, 'help', 'images', name)).toString('base64');
@@ -419,7 +421,7 @@ export function createDesktopRequestHandler(deps: DesktopRequestDependencies) {
         }).status);
       } else if (request.method === 'GET' && url.pathname.startsWith('/api/desktop/help/')) {
         const id = url.pathname.slice('/api/desktop/help/'.length);
-        if (id !== 'macos-installation' && id !== 'first-learning') {
+        if (id !== 'macos-installation' && id !== 'first-learning' && id !== 'feature-guide') {
           response = json({ error: 'NOT_FOUND' }, 404);
         } else {
           response = new Response(offlineHelp(deps.resourceRoot, id), {

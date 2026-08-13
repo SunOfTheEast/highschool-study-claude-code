@@ -42,7 +42,13 @@ StudyForge 的学习文件保存在学生自己的目录里。模型服务只会
 4. 在对话中指出真正的困惑；老师需要更多上下文时再读取相邻页面。
 5. 当一段理解或一道题值得留下时，先检查草稿，再用自然语言确认是否保存。
 
-更完整的学生流程见[第一次学习](apps/pi-teaching-web/resources/help/first-learning.md)。
+更完整的学生流程见[快速开始](apps/pi-teaching-web/resources/help/first-learning.md)。
+
+## 学生帮助
+
+- [快速开始](apps/pi-teaching-web/resources/help/first-learning.md)：从一本书或一个真实问题完成第一次学习闭环。
+- [功能手册](apps/pi-teaching-web/resources/help/feature-guide.md)：按学习任务查询书籍、对话、资产、复习、课程和时间功能。
+- [安装与模型](apps/pi-teaching-web/resources/help/macos-installation.md)：安装 App、连接模型、处理 PDF 与常见故障。
 
 ## 三条学习路径
 

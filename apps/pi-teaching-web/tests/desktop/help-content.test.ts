@@ -12,7 +12,7 @@ function localImages(markdown: string): string[] {
   return [...markdown.matchAll(/!\[[^\]]*\]\(([^)]+)\)/g)].map((match) => match[1]!);
 }
 
-test('installation guide is click-first and honest about the ad-hoc beta', () => {
+test('installation guide is click-first, model-complete, and honest about the ad-hoc beta', () => {
   const markdown = read('macos-installation.md');
   for (const text of [
     '拖到“应用程序”',
@@ -22,6 +22,8 @@ test('installation guide is click-first and honest about the ad-hoc beta', () =>
     '打开已有学习集',
     '主教师',
     '检索 Scout',
+    '资料视觉',
+    '常见故障',
   ]) expect(markdown).toContain(text);
   expect(markdown).not.toMatch(/```|(?:^|\n)\s*(?:bun|npm|node|chmod|xattr|cd)\b/i);
 });
@@ -29,22 +31,41 @@ test('installation guide is click-first and honest about the ad-hoc beta', () =>
 test('first-learning guide covers the actual student loop without teaching internals', () => {
   const markdown = read('first-learning.md');
   for (const text of [
+    '选择 PDF',
     '从空白开始',
     '问老师',
-    '自由学习',
+    '从这一页开始学',
     '笔记与闪卡',
     '题卡',
-    '长期规划',
-    '学习阶段',
-    '课堂',
+    '规划长期学习',
     'Documents/StudyForge',
     '学习文件保存在本机',
     '当前任务所需',
     '不会无条件上传整个学习集',
   ]) expect(markdown).toContain(text);
   expect(markdown).toMatch(/交给你选择的\s*模型服务处理/);
-  expect(markdown).not.toContain('Session Log');
-  expect(markdown).not.toContain('对象记忆');
+  expect(markdown).not.toMatch(/Session Log|对象记忆|Material revision|Roadmap|Plan|Lesson/);
+});
+
+test('feature guide is organized by student tasks and separates optional capabilities', () => {
+  const markdown = read('feature-guide.md');
+  for (const text of [
+    '我想……',
+    '沿着一本书学习',
+    '自由学习：直接问老师',
+    '笔记与闪卡',
+    '题卡',
+    '三种方式整理学习资料',
+    '复习',
+    '正式课程',
+    '学习日历与专注',
+    '学习足迹与教师记忆',
+    '可选与实验功能',
+    '页面速查',
+  ]) expect(markdown).toContain(text);
+  expect(markdown).toContain('什么时候用');
+  expect(markdown).toContain('不会自动发生什么');
+  expect(markdown).not.toMatch(/Material revision|Session key|tool call|schema|frontmatter/);
 });
 
 test('installation guide states the same local and model-processing boundary', () => {
@@ -56,7 +77,7 @@ test('installation guide states the same local and model-processing boundary', (
 });
 
 test('every help image, when present, is local and resolvable', () => {
-  for (const name of ['macos-installation.md', 'first-learning.md']) {
+  for (const name of ['macos-installation.md', 'first-learning.md', 'feature-guide.md']) {
     const path = join(helpRoot, name);
     const images = localImages(readFileSync(path, 'utf8'));
     for (const image of images) {
