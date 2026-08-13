@@ -8,3 +8,14 @@ test-results/
 apps/pi-teaching-web/output/playwright/
 apps/pi-teaching-web/output/source-first-real-*/
 .worktrees/
+
+# Local engineering notes and generated review artifacts are not public docs.
+docs/superpowers/
+docs/audits/
+apps/pi-teaching-web/preview/
+apps/pi-teaching-web/docs/validation/
+apps/pi-teaching-web/tests/validation/
+apps/pi-teaching-web/validation/
+.claude/worktrees/
+.superpowers/
+apps/pi-teaching-web/.playwright-cli/

@@ -3,6 +3,7 @@ name = "studyforge"
 version = "0.1.0"
 description = "StudyForge desktop shell"
 authors = ["StudyForge contributors"]
+license = "AGPL-3.0-only"
 edition = "2024"
 autobins = false
 

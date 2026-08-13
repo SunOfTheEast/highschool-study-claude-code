@@ -1,13 +1,13 @@
-# StudyForge M1 repository guide
+# StudyForge repository guide
 
 `apps/pi-teaching-web/` is the only current StudyForge runtime and local student App.
-`examples/derivative-m0/` is its public smoke learning set. Dated specifications and
-audits may describe earlier designs, but they are history rather than supported runtime
-surfaces.
+`examples/derivative-m0/` is its public smoke learning set. The current source, tests,
+student help, and this guide are authoritative; removed historical design notes remain
+available only through Git history.
 
 ## Durable domain
 
-M1c has an optional Markdown course tree, one Markdown teacher-memory network, two
+The current learning set has an optional Markdown course tree, one Markdown teacher-memory network, two
 student-owned asset families, revisioned source material, and independent semantic tags:
 
 ```text
@@ -263,6 +263,12 @@ normal Lesson view shows `Student View` and Block progress, not `Teacher Control
   learning → asset → Meta → Roadmap → footprint closure.
 - `apps/pi-teaching-web/tests/e2e/m1d-ui.spec.ts`: desktop student-interface, asset,
   local-relation, and three-paper course-workspace acceptance.
+- `apps/pi-teaching-web/tests/source-first/`: PDF, outline, page-reading, source-tree,
+  visual-worker, context-boundary, and source-label contracts.
+- `apps/pi-teaching-web/tests/e2e/source-first-book.spec.ts`: deterministic book import,
+  outline, reading, source-bound discussion, and asset-growth closure.
+- `apps/pi-teaching-web/tests/e2e/desktop-onboarding.spec.ts`: desktop first-run and
+  model-setup closure.
 - `examples/derivative-m0/`: clean public learning set.
 
 ## Change discipline
@@ -282,5 +288,5 @@ normal Lesson view shows `Student View` and Block progress, not `Teacher Control
 cd apps/pi-teaching-web
 bun install --frozen-lockfile
 bun run check
-bun run test:e2e -- tests/e2e/m0-cycle.spec.ts tests/e2e/m1b-cycle.spec.ts tests/e2e/m1c-cycle.spec.ts tests/e2e/m1d-ui.spec.ts
+bun run test:e2e
 ```

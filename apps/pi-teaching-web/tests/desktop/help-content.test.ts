@@ -32,16 +32,17 @@ test('first-learning guide covers the actual student loop without teaching inter
     '从空白开始',
     '问老师',
     '自由学习',
-    '保存为笔记',
+    '笔记与闪卡',
     '题卡',
-    'Roadmap',
-    'Plan',
-    'Lesson',
+    '长期规划',
+    '学习阶段',
+    '课堂',
     'Documents/StudyForge',
     '学习文件保存在本机',
-    '相关内容会交给你选择的模型服务处理',
+    '当前任务所需',
     '不会无条件上传整个学习集',
   ]) expect(markdown).toContain(text);
+  expect(markdown).toMatch(/交给你选择的\s*模型服务处理/);
   expect(markdown).not.toContain('Session Log');
   expect(markdown).not.toContain('对象记忆');
 });
@@ -49,15 +50,18 @@ test('first-learning guide covers the actual student loop without teaching inter
 test('installation guide states the same local and model-processing boundary', () => {
   const markdown = read('macos-installation.md');
   expect(markdown).toContain('学习文件保存在本机');
-  expect(markdown).toContain('相关内容会交给你选择的模型服务处理');
+  expect(markdown).toContain('当前任务所需');
+  expect(markdown).toMatch(/交给你选择的\s*模型服务处理/);
   expect(markdown).toContain('不会无条件上传整个学习集');
 });
 
-test('every help screenshot is local and resolvable', () => {
+test('every help image, when present, is local and resolvable', () => {
   for (const name of ['macos-installation.md', 'first-learning.md']) {
     const path = join(helpRoot, name);
     const images = localImages(readFileSync(path, 'utf8'));
-    expect(images.length).toBeGreaterThan(0);
-    for (const image of images) expect(existsSync(join(dirname(path), image))).toBe(true);
+    for (const image of images) {
+      expect(image).not.toMatch(/^https?:/);
+      expect(existsSync(join(dirname(path), image))).toBe(true);
+    }
   }
 });

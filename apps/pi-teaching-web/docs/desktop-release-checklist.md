@@ -1,31 +1,60 @@
-# StudyForge macOS 内测发布清单
+# StudyForge macOS 预览版发布清单
 
-适用范围：Apple Silicon、macOS 13 及以上、单窗口私有内测。当前包采用 ad-hoc 签名，未做 Apple 公证、自动更新、Intel 架构或云同步。
+适用范围：Apple Silicon、macOS 13 及以上、ad-hoc 签名的早期预览版。当前不包含 Apple
+公证、自动更新、Intel 架构、移动端或云同步。
 
-## 每次构建必须通过
+## 自动验证
 
-- `bun run check`：TypeScript、全部非浏览器测试与生产前端构建。
-- `bun run test:e2e`：M0–M1d 与桌面首启浏览器闭环。
-- `bun run desktop:build`：生成自包含 DMG。
-- `bun run desktop:verify`：挂载 DMG，检查 arm64 App、双 sidecar、离线教程、教学资源与严格签名。
-- `bun run desktop:smoke`：以 hardened runtime 自签名副本在空 `PATH` 下验证编译后的 Plan Scout、子 Pi 扩展、PDF 文本提取、Bedrock 实现、Pi、Runtime 与 OAuth 引导。
+在 `apps/pi-teaching-web/` 中运行：
 
-## 新用户手动闭环
+```bash
+bun install --frozen-lockfile
+bun run check
+bun run test:e2e
+bun run desktop:build
+bun run desktop:verify
+bun run desktop:smoke
+```
 
-使用一个新的 macOS 测试账户或全新的 StudyForge Application Support/Documents 目录：
+- `check` 必须通过 TypeScript、全部非浏览器测试和生产前端构建。
+- `test:e2e` 必须覆盖桌面首启、自由学习、正式课程、资产、日历和 source-first PDF 阅读。
+- `desktop:verify` 必须挂载 DMG，核对 arm64 App、双 sidecar、离线帮助、教学资源与签名。
+- `desktop:smoke` 必须在空 `PATH` 下验证包内 Pi、Runtime、PDF 文本与图像路径和 OAuth 引导。
 
-1. 从 DMG 拖入“应用程序”，按离线教程完成 Gatekeeper 的“仍要打开”。
-2. 从空白建立学习集，确认文件落在 `Documents/StudyForge`。
-3. 在 StudyForge 自己的设置里登录 Provider；确认普通 Pi 的凭据和 Session 没有被读取或改写。
-4. 明确选择主教师与检索 Scout；不可用模型必须显示诊断，不能静默替换。
-5. 开启自由学习，保存一份 Note，退出并重新打开后仍能读取。
-6. 复制导数示例，触发一次真实 Scout；确认子进程来自包内 `studyforge-pi`。
-7. 打开设置与帮助，确认五张图片离线显示；检查公式、键盘焦点与 1280×800 布局。
-8. 在“减少动态效果”开启后重新打开，确认纸页显现动画被禁用。
+不能因为缺少真实模型凭据而把 mock 结果写成真实模型通过。
+
+## 全新用户闭环
+
+使用新的 macOS 测试账户，或暂时移开 StudyForge 的 Application Support 与
+`~/Documents/StudyForge/` 测试目录：
+
+1. 从新 DMG 拖入“应用程序”，完成 Gatekeeper 的“仍要打开”。
+2. 导入一本真实 PDF，确认原文件落在新学习集的 Material revision 中。
+3. 有书签的 PDF 应直接显示目录；无书签 PDF 应能只读取指定目录页形成目录。
+4. 打开一页，确认原页立即可见；分别验证原生正文读取与一次视觉读取。
+5. 从精确页段开启自由学习，保存一份带来源的 Note 或题卡，重启后仍可回到原页。
+6. 从空白开启另一个学习集，确认普通寒暄不会自动诊断、写记忆或保存资产。
+7. 使用导数示例完成 Roadmap → Plan → Lesson 的启动与关闭边界，并触发一次真实 Scout。
+8. 创建一个日历约定，完成一次复习和专注计时，确认学习足迹只投影真实发生的动作。
+9. 检查帮助、公式、表格、滚动恢复、键盘焦点、1280×800 布局和内部错误信息遮蔽。
+10. 如果导入了桌宠皮套，验证显示与关闭；没有皮套时桌面不应出现占位窗口。
 
 ## 发布记录
 
-- 记录 DMG 文件名、SHA-256、Git commit、构建机 macOS/Rust/Bun 版本。
-- 记录真实 Provider、主教师/Scout 模型与一次真实调用结果；没有凭据时必须写“未验收”，不能用 mock 替代。
-- 明确告知内测者：此包未公证，只能从可信私有链接获取；若不确认来源，不应点击“仍要打开”。
-- 反馈中不得收集 API Key、OAuth 一次性代码或完整私人学习集。
+每次发布记录：
+
+- Git commit、tag、DMG 文件名、字节数和 SHA-256；
+- 构建机 macOS、Rust、Bun 与 Tauri 版本；
+- 确定性验证结果；
+- 实际 Provider、主教师/Scout/视觉模型与真实调用结果，或明确写“未验收”；
+- 已知限制：未公证、平台范围、模型依赖和 PDF 读取边界。
+
+上传 Release 后重新下载一次资产，并核对字节数与 SHA-256。安装文档中的版本、链接和哈希
+必须与 Release 一致。
+
+## 数据纪律
+
+- 不把内部设计稿、验收转录、CoT、绝对本机路径或临时输出加入公开分支。
+- 不收集或发布 API Key、OAuth 一次性代码、私人学习集、学生记录或未经授权的书籍。
+- 公开截图使用虚构或专门创建的学习数据，并检查窗口标题、路径与诊断信息。
+- 第三方依赖和素材保留原许可证；用户导入资料不因打包或测试而重新许可。

@@ -25,18 +25,20 @@ test('removes the obsolete Claude Code plugin and its current-looking design sur
   ]) expect(existsSync(join(repo, path)), path).toBe(false);
 });
 
-test('documents only the Pi App and Markdown teacher memory as the supported product', () => {
+test('documents only the Pi App, source-first learning, and Markdown facts as the supported product', () => {
   const rootReadme = readFileSync(join(repo, 'README.md'), 'utf8');
   const guide = readFileSync(join(repo, 'AGENTS.md'), 'utf8');
   const appReadme = readFileSync(join(repo, 'apps/pi-teaching-web/README.md'), 'utf8');
   const combined = `${rootReadme}\n${guide}\n${appReadme}`;
 
-  expect(rootReadme).toContain('# StudyForge M1');
-  expect(rootReadme).toContain('memory/INDEX.md');
+  expect(rootReadme).toContain('# StudyForge');
+  expect(rootReadme).toContain('沿书学习');
+  expect(rootReadme).toContain('PDF');
   expect(guide).toContain('M1 memory');
+  expect(guide).toContain('memory/INDEX.md');
   expect(guide).toContain('Learning History');
-  expect(appReadme).toContain('教师对象记忆');
-  expect(appReadme).toContain('原生 `Read` / `Grep`');
+  expect(appReadme).toContain('Source-first PDF');
+  expect(appReadme).toContain('对象 Learning History');
   expect(combined).not.toContain('plugins/highschool-study');
   expect(combined).not.toContain('旧 Claude Code 插件');
   expect(combined).not.toContain('recall-study-memory');

@@ -355,7 +355,6 @@ test('serves only the two canonical offline help documents', async () => {
   expect(guide?.status).toBe(200);
   const guideBody = await guide?.text();
   expect(guideBody).toContain('# 第一次学习');
-  expect(guideBody).toContain('data:image/png;base64,');
   expect(guideBody).not.toContain('](images/');
 
   const unknown = await request('/api/desktop/help/anything-else');

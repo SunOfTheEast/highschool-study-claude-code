@@ -2,6 +2,7 @@
   "name": "studyforge-pi-teaching-web",
   "version": "0.1.0",
   "private": true,
+  "license": "AGPL-3.0-only",
   "type": "module",
   "packageManager": "bun@1.3.14",
   "pi": {

@@ -50,7 +50,9 @@ test('joins source-grounded free learning, assets, Meta, Roadmap, and the footpr
   await expect(page.getByText('核心 · 沉淀溶解平衡', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: /Ksp 中为什么不写纯固体/ }).click();
   await expect(page.getByText('内容来源', { exact: true })).toBeVisible();
-  await expect(page.getByText(/资料 material-001 · 第 1 版 · 第 1–3 行/)).toBeVisible();
+  const source = page.getByRole('link', { name: '《化学反应原理摘录》' });
+  await expect(source).toBeVisible();
+  await expect(source).toHaveAttribute('href', '/assets/books/material-001/read/1/lines-1-3');
 
   await page.goto('/home');
   await page.getByRole('button', { name: /规划长期学习/ }).click();
