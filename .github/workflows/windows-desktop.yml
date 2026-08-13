@@ -63,8 +63,12 @@ jobs:
             Select-Object -First 1
           if ($null -eq $installer) { throw 'STUDYFORGE_WINDOWS_INSTALLER_NOT_FOUND' }
 
-          & $installer.FullName /S "/D=$installRoot"
-          if ($LASTEXITCODE -ne 0) { throw "STUDYFORGE_WINDOWS_INSTALL_FAILED: $LASTEXITCODE" }
+          $installProcess = Start-Process -FilePath $installer.FullName `
+            -ArgumentList @('/S', "/D=$installRoot") `
+            -Wait -PassThru
+          if ($installProcess.ExitCode -ne 0) {
+            throw "STUDYFORGE_WINDOWS_INSTALL_FAILED: $($installProcess.ExitCode)"
+          }
 
           $receipt = & bun run desktop:verify:windows -- "$installRoot"
           if ($LASTEXITCODE -ne 0) { throw "STUDYFORGE_WINDOWS_VERIFY_FAILED: $LASTEXITCODE" }
@@ -74,8 +78,12 @@ jobs:
           if (-not (Test-Path -LiteralPath $uninstaller -PathType Leaf)) {
             throw 'STUDYFORGE_WINDOWS_UNINSTALLER_NOT_FOUND'
           }
-          & $uninstaller /S
-          if ($LASTEXITCODE -ne 0) { throw "STUDYFORGE_WINDOWS_UNINSTALL_FAILED: $LASTEXITCODE" }
+          $uninstallProcess = Start-Process -FilePath $uninstaller `
+            -ArgumentList '/S' `
+            -Wait -PassThru
+          if ($uninstallProcess.ExitCode -ne 0) {
+            throw "STUDYFORGE_WINDOWS_UNINSTALL_FAILED: $($uninstallProcess.ExitCode)"
+          }
           if (Test-Path -LiteralPath (Join-Path $installRoot 'studyforge-desktop.exe')) {
             throw 'STUDYFORGE_WINDOWS_UNINSTALL_INCOMPLETE'
           }

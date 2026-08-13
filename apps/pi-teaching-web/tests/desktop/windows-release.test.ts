@@ -52,8 +52,14 @@ test('builds, installs, verifies, and uninstalls the Windows x64 package in CI',
     'bun run desktop:build:windows',
     'StudyForge 学生 Beta',
     'bun run desktop:verify:windows',
+    'Start-Process -FilePath $installer.FullName',
+    '$installProcess.ExitCode',
+    'Start-Process -FilePath $uninstaller',
+    '$uninstallProcess.ExitCode',
     'uninstall.exe',
     'actions/upload-artifact',
   ]) expect(workflow).toContain(text);
   expect(workflow).not.toContain('subst ');
+  expect(workflow).not.toContain('& $installer.FullName /S');
+  expect(workflow).not.toContain('& $uninstaller /S');
 });
