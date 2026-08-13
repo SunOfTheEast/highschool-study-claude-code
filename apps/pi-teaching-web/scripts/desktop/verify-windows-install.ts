@@ -29,6 +29,8 @@ export const requiredWindowsInstallFiles = [
   'studyforge/platform/windows/portable-git/bin/bash.exe',
   'studyforge/platform/windows/tools/rg.exe',
   'studyforge/platform/windows/tools/fd.exe',
+  'studyforge/platform/windows/canvas/skia.win32-x64-msvc.node',
+  'studyforge/platform/windows/canvas/icudtl.dat',
   'studyforge/platform/windows/ARTIFACTS.json',
   'studyforge/platform/windows/THIRD_PARTY_NOTICES.md',
 ] as const;
@@ -44,6 +46,11 @@ export function windowsInstallLayout(root: string) {
     bash: win32.join(resourceRoot, 'platform/windows/portable-git/bin/bash.exe'),
     rg: win32.join(resourceRoot, 'platform/windows/tools/rg.exe'),
     fd: win32.join(resourceRoot, 'platform/windows/tools/fd.exe'),
+    canvasNative: win32.join(
+      resourceRoot,
+      'platform/windows/canvas/skia.win32-x64-msvc.node',
+    ),
+    canvasIcu: win32.join(resourceRoot, 'platform/windows/canvas/icudtl.dat'),
   };
 }
 
@@ -112,6 +119,7 @@ function privateRuntimeEnvironment(
     STUDYFORGE_PACKAGED_BASH: layout.bash,
     STUDYFORGE_PACKAGED_RG: layout.rg,
     STUDYFORGE_PACKAGED_FD: layout.fd,
+    NAPI_RS_NATIVE_LIBRARY_PATH: layout.canvasNative,
   };
 }
 

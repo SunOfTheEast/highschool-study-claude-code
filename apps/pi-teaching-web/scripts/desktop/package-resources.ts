@@ -16,6 +16,8 @@ export function resourceLayout(appRoot: string) {
     subagentPromptRuntime: join(subagentRuntimeRoot, 'subagent-prompt-runtime.js'),
     windowsPlatformSource: join(appRoot, 'src-tauri/generated/platform/windows'),
     windowsPlatformRuntime: join(stagingRoot, 'platform/windows'),
+    windowsCanvasSource: join(appRoot, 'node_modules/@napi-rs/canvas-win32-x64-msvc'),
+    windowsCanvasRuntime: join(stagingRoot, 'platform/windows/canvas'),
   };
 }
 
@@ -35,6 +37,14 @@ export function packagePlatformResources(
     recursive: true,
     force: true,
   });
+  mkdirSync(layout.windowsCanvasRuntime, { recursive: true });
+  for (const name of ['skia.win32-x64-msvc.node', 'icudtl.dat']) {
+    cpSync(
+      join(layout.windowsCanvasSource, name),
+      join(layout.windowsCanvasRuntime, name),
+      { force: true },
+    );
+  }
   return true;
 }
 

@@ -689,6 +689,10 @@ mod tests {
             windows.get("STUDYFORGE_PACKAGED_FD").unwrap(),
             "/resources/studyforge/platform/windows/tools/fd.exe"
         );
+        assert_eq!(
+            windows.get("NAPI_RS_NATIVE_LIBRARY_PATH").unwrap(),
+            "/resources/studyforge/platform/windows/canvas/skia.win32-x64-msvc.node"
+        );
     }
 
     #[test]

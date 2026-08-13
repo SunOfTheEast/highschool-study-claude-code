@@ -20,6 +20,8 @@ test('verifies the installed Windows app rather than build-tree stand-ins', () =
     bash: 'C:\\Users\\Student Name\\StudyForge 学生版\\studyforge\\platform\\windows\\portable-git\\bin\\bash.exe',
     rg: 'C:\\Users\\Student Name\\StudyForge 学生版\\studyforge\\platform\\windows\\tools\\rg.exe',
     fd: 'C:\\Users\\Student Name\\StudyForge 学生版\\studyforge\\platform\\windows\\tools\\fd.exe',
+    canvasNative: 'C:\\Users\\Student Name\\StudyForge 学生版\\studyforge\\platform\\windows\\canvas\\skia.win32-x64-msvc.node',
+    canvasIcu: 'C:\\Users\\Student Name\\StudyForge 学生版\\studyforge\\platform\\windows\\canvas\\icudtl.dat',
   });
   for (const path of [
     'studyforge-desktop.exe',
@@ -29,6 +31,8 @@ test('verifies the installed Windows app rather than build-tree stand-ins', () =
     'studyforge/platform/windows/portable-git/bin/bash.exe',
     'studyforge/platform/windows/tools/rg.exe',
     'studyforge/platform/windows/tools/fd.exe',
+    'studyforge/platform/windows/canvas/skia.win32-x64-msvc.node',
+    'studyforge/platform/windows/canvas/icudtl.dat',
     'studyforge/platform/windows/ARTIFACTS.json',
     'studyforge/platform/windows/THIRD_PARTY_NOTICES.md',
   ]) expect(requiredWindowsInstallFiles as readonly string[]).toContain(path);

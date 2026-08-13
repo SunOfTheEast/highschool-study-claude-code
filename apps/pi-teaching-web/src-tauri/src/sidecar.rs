@@ -87,6 +87,10 @@ pub fn platform_tool_environment(resource_root: &Path, windows: bool) -> BTreeMa
             "STUDYFORGE_PACKAGED_FD".into(),
             display(&root.join("tools/fd.exe")),
         ),
+        (
+            "NAPI_RS_NATIVE_LIBRARY_PATH".into(),
+            display(&root.join("canvas/skia.win32-x64-msvc.node")),
+        ),
     ])
 }
 

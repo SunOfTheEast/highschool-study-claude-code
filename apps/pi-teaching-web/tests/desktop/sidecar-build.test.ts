@@ -153,6 +153,14 @@ test('stages canonical teaching resources, example, and Pi runtime assets only',
     layout.stagingRoot,
     'platform/windows',
   ));
+  expect(layout.windowsCanvasSource).toBe(join(
+    appRoot,
+    'node_modules/@napi-rs/canvas-win32-x64-msvc',
+  ));
+  expect(layout.windowsCanvasRuntime).toBe(join(
+    layout.stagingRoot,
+    'platform/windows/canvas',
+  ));
   expect(layout.subagentPromptRuntime).toBe(join(
     layout.stagingRoot,
     'pi-subagents/subagent-prompt-runtime.js',
@@ -179,8 +187,19 @@ test('adds the private command payload only to Windows resource bundles', () => 
     ), 'notices');
     mkdirSync(join(generated, 'portable-git/bin'), { recursive: true });
     mkdirSync(join(generated, 'tools'), { recursive: true });
+    mkdirSync(join(root, 'node_modules/@napi-rs/canvas-win32-x64-msvc'), {
+      recursive: true,
+    });
     writeFileSync(join(generated, 'portable-git/bin/bash.exe'), 'bash');
     writeFileSync(join(generated, 'tools/rg.exe'), 'rg');
+    writeFileSync(join(
+      root,
+      'node_modules/@napi-rs/canvas-win32-x64-msvc/skia.win32-x64-msvc.node',
+    ), 'canvas');
+    writeFileSync(join(
+      root,
+      'node_modules/@napi-rs/canvas-win32-x64-msvc/icudtl.dat',
+    ), 'icu');
 
     expect(packagePlatformResources(
       root,
@@ -207,6 +226,14 @@ test('adds the private command payload only to Windows resource bundles', () => 
       root,
       'src-tauri/resources/studyforge/platform/windows/THIRD_PARTY_NOTICES.md',
     ), 'utf8')).toBe('notices');
+    expect(readFileSync(join(
+      root,
+      'src-tauri/resources/studyforge/platform/windows/canvas/skia.win32-x64-msvc.node',
+    ), 'utf8')).toBe('canvas');
+    expect(readFileSync(join(
+      root,
+      'src-tauri/resources/studyforge/platform/windows/canvas/icudtl.dat',
+    ), 'utf8')).toBe('icu');
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -242,6 +269,10 @@ test('gives sidecar smoke explicit private homes on Windows without inheriting P
     TMP: join(root, 'tmp'),
     PI_CODING_AGENT_DIR: join(root, 'app/agent'),
     PI_PACKAGE_DIR: resources.piRuntimeRoot,
+    NAPI_RS_NATIVE_LIBRARY_PATH: join(
+      resources.windowsCanvasRuntime,
+      'skia.win32-x64-msvc.node',
+    ),
   });
   expect(environment.HOME).toBeUndefined();
   expect(environment.TMPDIR).toBeUndefined();

@@ -43,6 +43,10 @@ export function sidecarSmokeEnvironment(
     APPDATA: join(root, 'home/AppData/Roaming'),
     TEMP: join(root, 'tmp'),
     TMP: join(root, 'tmp'),
+    NAPI_RS_NATIVE_LIBRARY_PATH: join(
+      resources.windowsCanvasRuntime,
+      'skia.win32-x64-msvc.node',
+    ),
   };
 }
 
