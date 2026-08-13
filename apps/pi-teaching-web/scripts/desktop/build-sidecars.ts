@@ -1,30 +1,40 @@
 import { chmodSync, mkdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { resourceLayout } from './package-resources';
+import {
+  type DesktopTarget,
+  executableName,
+  resolveDesktopTarget,
+} from './platform';
 
-export const targetTriple = 'aarch64-apple-darwin';
-const bunTarget = 'bun-darwin-arm64';
-
-export function sidecarOutputs(appRoot: string) {
+export function sidecarOutputs(
+  appRoot: string,
+  target = resolveDesktopTarget(),
+) {
   const root = join(appRoot, 'src-tauri/binaries');
   return {
-    runtime: join(root, `studyforge-runtime-${targetTriple}`),
-    pi: join(root, `studyforge-pi-${targetTriple}`),
+    runtime: join(root, executableName(`studyforge-runtime-${target.triple}`, target)),
+    pi: join(root, executableName(`studyforge-pi-${target.triple}`, target)),
   };
 }
 
-async function compile(appRoot: string, entries: string[], output: string): Promise<void> {
+async function compile(
+  appRoot: string,
+  entries: string[],
+  output: string,
+  target: DesktopTarget,
+): Promise<void> {
   const child = Bun.spawn([
     process.execPath,
     'build',
     '--compile',
-    `--target=${bunTarget}`,
+    `--target=${target.bunTarget}`,
     ...entries,
     '--outfile',
     output,
   ], { cwd: appRoot, stdout: 'inherit', stderr: 'inherit' });
   if (await child.exited !== 0) throw new Error(`SIDECAR_BUILD_FAILED: ${output}`);
-  chmodSync(output, 0o755);
+  if (target.executableSuffix === '') chmodSync(output, 0o755);
 }
 
 export const subagentRuntimeExternalModules = [
@@ -54,8 +64,11 @@ async function bundle(
   if (await child.exited !== 0) throw new Error(`SIDECAR_RESOURCE_BUILD_FAILED: ${output}`);
 }
 
-export async function buildSidecars(appRoot = resolve(import.meta.dir, '../..')): Promise<void> {
-  const output = sidecarOutputs(appRoot);
+export async function buildSidecars(
+  appRoot = resolve(import.meta.dir, '../..'),
+  target = resolveDesktopTarget(),
+): Promise<void> {
+  const output = sidecarOutputs(appRoot, target);
   const resources = resourceLayout(appRoot);
   mkdirSync(join(appRoot, 'src-tauri/binaries'), { recursive: true });
   await bundle(
@@ -64,11 +77,11 @@ export async function buildSidecars(appRoot = resolve(import.meta.dir, '../..'))
     resources.subagentPromptRuntime,
     subagentRuntimeExternalModules,
   );
-  await compile(appRoot, ['src/server/index.ts'], output.runtime);
+  await compile(appRoot, ['src/server/index.ts'], output.runtime, target);
   await compile(appRoot, [
     'src/desktop/pi-cli.ts',
     'node_modules/@earendil-works/pi-coding-agent/dist/utils/image-resize-worker.js',
-  ], output.pi);
+  ], output.pi, target);
 }
 
 if (import.meta.main) await buildSidecars();

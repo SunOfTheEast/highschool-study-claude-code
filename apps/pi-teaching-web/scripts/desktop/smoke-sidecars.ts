@@ -10,6 +10,42 @@ import { parseReadyReceipt } from '../../src/server/start-server';
 import { sidecarOutputs } from './build-sidecars';
 import { resourceLayout } from './package-resources';
 
+type SmokePlatform = 'darwin' | 'linux' | 'win32';
+
+export function sidecarSmokeEnvironment(
+  root: string,
+  resources: ReturnType<typeof resourceLayout>,
+  platform: SmokePlatform = process.platform as SmokePlatform,
+  hostEnvironment: Record<string, string | undefined> = process.env,
+): Record<string, string> {
+  const shared = {
+    PATH: '',
+    PI_CODING_AGENT_DIR: join(root, 'app/agent'),
+    PI_PACKAGE_DIR: resources.piRuntimeRoot,
+    PI_SUBAGENT_PROMPT_RUNTIME_EXTENSION_PATH: resources.subagentPromptRuntime,
+  };
+  if (platform !== 'win32') {
+    return {
+      ...shared,
+      HOME: join(root, 'home'),
+      TMPDIR: join(root, 'tmp'),
+    };
+  }
+  const windowsSystem = Object.fromEntries(
+    ['SystemRoot', 'WINDIR', 'ComSpec', 'PATHEXT']
+      .flatMap((name) => hostEnvironment[name] ? [[name, hostEnvironment[name]!]] : []),
+  );
+  return {
+    ...windowsSystem,
+    ...shared,
+    USERPROFILE: join(root, 'home'),
+    LOCALAPPDATA: join(root, 'home/AppData/Local'),
+    APPDATA: join(root, 'home/AppData/Roaming'),
+    TEMP: join(root, 'tmp'),
+    TMP: join(root, 'tmp'),
+  };
+}
+
 async function firstLine(stream: ReadableStream<Uint8Array>): Promise<string> {
   const reader = stream.getReader();
   const decoder = new TextDecoder();
@@ -43,17 +79,12 @@ export async function smokeSidecars(appRoot = resolve(import.meta.dir, '../..'))
   const output = sidecarOutputs(appRoot);
   const resources = resourceLayout(appRoot);
   const root = mkdtempSync(join(tmpdir(), 'studyforge-sidecar-smoke-'));
+  mkdirSync(join(root, 'home'), { recursive: true });
+  mkdirSync(join(root, 'tmp'), { recursive: true });
   const executable = process.platform === 'darwin'
     ? adHocSignedCopies(root, output, join(appRoot, 'src-tauri/entitlements.plist'))
     : output;
-  const emptyEnvironment = {
-    HOME: join(root, 'home'),
-    PATH: '',
-    TMPDIR: tmpdir(),
-    PI_CODING_AGENT_DIR: join(root, 'app/agent'),
-    PI_PACKAGE_DIR: resources.piRuntimeRoot,
-    PI_SUBAGENT_PROMPT_RUNTIME_EXTENSION_PATH: resources.subagentPromptRuntime,
-  };
+  const emptyEnvironment = sidecarSmokeEnvironment(root, resources);
 
   const dependencyProbe = Bun.spawn([
     executable.runtime,

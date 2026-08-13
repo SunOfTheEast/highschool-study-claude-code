@@ -4,17 +4,52 @@ import { join } from 'node:path';
 import {
   sidecarOutputs,
   subagentRuntimeExternalModules,
-  targetTriple,
 } from '../../scripts/desktop/build-sidecars';
 import { resourceLayout } from '../../scripts/desktop/package-resources';
+import { sidecarSmokeEnvironment } from '../../scripts/desktop/smoke-sidecars';
+import {
+  desktopTargets,
+  executableName,
+  resolveDesktopTarget,
+} from '../../scripts/desktop/platform';
 
 const appRoot = join(import.meta.dir, '../..');
 
-test('uses the two target-suffixed Apple Silicon sidecars expected by Tauri', () => {
-  expect(targetTriple).toBe('aarch64-apple-darwin');
-  expect(sidecarOutputs(appRoot)).toEqual({
+test('maps the supported desktop release targets without guessing', () => {
+  expect(desktopTargets['aarch64-apple-darwin']).toEqual({
+    triple: 'aarch64-apple-darwin',
+    bunTarget: 'bun-darwin-arm64',
+    executableSuffix: '',
+    bundleKind: 'dmg',
+  });
+  expect(desktopTargets['x86_64-pc-windows-msvc']).toEqual({
+    triple: 'x86_64-pc-windows-msvc',
+    bunTarget: 'bun-windows-x64-baseline',
+    executableSuffix: '.exe',
+    bundleKind: 'nsis',
+  });
+  expect(resolveDesktopTarget({}, 'darwin', 'arm64'))
+    .toBe(desktopTargets['aarch64-apple-darwin']);
+  expect(resolveDesktopTarget({}, 'win32', 'x64'))
+    .toBe(desktopTargets['x86_64-pc-windows-msvc']);
+  expect(() => resolveDesktopTarget({
+    STUDYFORGE_DESKTOP_TARGET: 'aarch64-unknown-windows-msvc',
+  }, 'win32', 'arm64')).toThrow('STUDYFORGE_DESKTOP_TARGET_UNSUPPORTED');
+  expect(executableName('studyforge-pi', desktopTargets['x86_64-pc-windows-msvc']))
+    .toBe('studyforge-pi.exe');
+});
+
+test('uses the target-suffixed sidecars expected by Tauri on both release platforms', () => {
+  expect(sidecarOutputs(appRoot, desktopTargets['aarch64-apple-darwin'])).toEqual({
     runtime: join(appRoot, 'src-tauri/binaries/studyforge-runtime-aarch64-apple-darwin'),
     pi: join(appRoot, 'src-tauri/binaries/studyforge-pi-aarch64-apple-darwin'),
+  });
+  expect(sidecarOutputs(appRoot, desktopTargets['x86_64-pc-windows-msvc'])).toEqual({
+    runtime: join(
+      appRoot,
+      'src-tauri/binaries/studyforge-runtime-x86_64-pc-windows-msvc.exe',
+    ),
+    pi: join(appRoot, 'src-tauri/binaries/studyforge-pi-x86_64-pc-windows-msvc.exe'),
   });
   const config = JSON.parse(readFileSync(join(appRoot, 'src-tauri/tauri.conf.json'), 'utf8'));
   expect(config.mainBinaryName).toBe('studyforge-desktop');
@@ -57,4 +92,29 @@ test('keeps host-provided Pi modules external to the child prompt runtime bundle
     'typebox',
     'typebox/compile',
   ]);
+});
+
+test('gives sidecar smoke explicit private homes on Windows without inheriting PATH', () => {
+  const root = join(appRoot, 'tmp/student name');
+  const resources = resourceLayout(appRoot);
+  const environment = sidecarSmokeEnvironment(root, resources, 'win32', {
+    SystemRoot: 'C:\\Windows',
+    ComSpec: 'C:\\Windows\\System32\\cmd.exe',
+    PATH: 'C:\\host-tools',
+  });
+
+  expect(environment).toMatchObject({
+    SystemRoot: 'C:\\Windows',
+    ComSpec: 'C:\\Windows\\System32\\cmd.exe',
+    PATH: '',
+    USERPROFILE: join(root, 'home'),
+    LOCALAPPDATA: join(root, 'home/AppData/Local'),
+    APPDATA: join(root, 'home/AppData/Roaming'),
+    TEMP: join(root, 'tmp'),
+    TMP: join(root, 'tmp'),
+    PI_CODING_AGENT_DIR: join(root, 'app/agent'),
+    PI_PACKAGE_DIR: resources.piRuntimeRoot,
+  });
+  expect(environment.HOME).toBeUndefined();
+  expect(environment.TMPDIR).toBeUndefined();
 });
