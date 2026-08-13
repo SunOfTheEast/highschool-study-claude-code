@@ -25,12 +25,8 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           $shortRoot = Join-Path $env:RUNNER_TEMP 'sf'
-          $sourceArchive = Join-Path $env:RUNNER_TEMP 'studyforge-source.tar'
-          New-Item -ItemType Directory -Path $shortRoot | Out-Null
-          git -C $env:GITHUB_WORKSPACE archive --format=tar --output=$sourceArchive HEAD
-          if ($LASTEXITCODE -ne 0) { throw "STUDYFORGE_WINDOWS_SOURCE_ARCHIVE_FAILED: $LASTEXITCODE" }
-          tar.exe -xf $sourceArchive -C $shortRoot
-          if ($LASTEXITCODE -ne 0) { throw "STUDYFORGE_WINDOWS_SOURCE_EXTRACT_FAILED: $LASTEXITCODE" }
+          git -C $env:GITHUB_WORKSPACE worktree add --detach $shortRoot HEAD
+          if ($LASTEXITCODE -ne 0) { throw "STUDYFORGE_WINDOWS_SHORT_WORKTREE_FAILED: $LASTEXITCODE" }
           "STUDYFORGE_BUILD_ROOT=$shortRoot" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - uses: oven-sh/setup-bun@v2

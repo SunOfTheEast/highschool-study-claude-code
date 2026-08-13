@@ -48,6 +48,7 @@ test('builds, installs, verifies, and uninstalls the Windows x64 package in CI',
   for (const text of [
     'windows-latest',
     "Join-Path $env:RUNNER_TEMP 'sf'",
+    'worktree add --detach $shortRoot HEAD',
     'bun run desktop:build:windows',
     'StudyForge 学生 Beta',
     'bun run desktop:verify:windows',
