@@ -7,7 +7,7 @@ stem: （2024 · 天津卷压轴节选）设函数 $f(x)=x\ln x$。若 $f(x)\ge 
 answer: |-
   $a=2$。
 
-  构造 $g(x)=x\ln x-a(x-\sqrt x)$。因为 $g(1)=0$， 若 $g(x)\ge0$ 对开区间全域成立，则 $x=1$ 是极小值点， 必有 $g^\prime(1)=0$，于是 $g^\prime(x)=\ln x+1-a+\frac{a}{2\sqrt x}$， 代入 $x=1$ 得 $2-\frac a2=0$，所以 $a=2$。充分性： 当 $a=2$ 时， $g(x)=x(\ln x-2+\frac2{\sqrt x}) =2x(\ln\sqrt x-1+\frac1{\sqrt x})\ge0$， 因此答案为 $a=2$。
+  构造 $g(x)=x\ln x-a(x-\sqrt x)$。因为 $g(1)=0$， 若 $g(x)\ge0$ 对开区间全域成立，则 $x=1$ 是极小值点， 必有 $g^\prime(1)=0$，于是 $g^\prime(x)=\ln x+1-a+\frac{a}{2\sqrt x}$， 代入 $x=1$ 得 $1-\frac a2=0$，所以 $a=2$。充分性： 当 $a=2$ 时， $g(x)=x(\ln x-2+\frac2{\sqrt x}) =2x(\ln\sqrt x-1+\frac1{\sqrt x})\ge0$， 因此答案为 $a=2$。
 rubric:
   max_score: 4
   criteria:
@@ -113,7 +113,7 @@ original_problem:
     - 求参范围退化为单点值。
     - source 先用极点效应锁必要性，再在 page_0264 证明充分性。
 solution:
-  source_solution_summary: 构造 $g(x)=x\ln x-a(x-\sqrt x)$。因为 $g(1)=0$， 若 $g(x)\ge0$ 对开区间全域成立，则 $x=1$ 是极小值点， 必有 $g^\prime(1)=0$，于是 $g^\prime(x)=\ln x+1-a+\frac{a}{2\sqrt x}$， 代入 $x=1$ 得 $2-\frac a2=0$，所以 $a=2$。充分性： 当 $a=2$ 时， $g(x)=x(\ln x-2+\frac2{\sqrt x}) =2x(\ln\sqrt x-1+\frac1{\sqrt x})\ge0$， 因此答案为 $a=2$。
+  source_solution_summary: 构造 $g(x)=x\ln x-a(x-\sqrt x)$。因为 $g(1)=0$， 若 $g(x)\ge0$ 对开区间全域成立，则 $x=1$ 是极小值点， 必有 $g^\prime(1)=0$，于是 $g^\prime(x)=\ln x+1-a+\frac{a}{2\sqrt x}$， 代入 $x=1$ 得 $1-\frac a2=0$，所以 $a=2$。充分性： 当 $a=2$ 时， $g(x)=x(\ln x-2+\frac2{\sqrt x}) =2x(\ln\sqrt x-1+\frac1{\sqrt x})\ge0$， 因此答案为 $a=2$。
   key_steps:
     - step_id: step_1
       statement: 构造差函数并锁定 $x=1$。
@@ -127,7 +127,7 @@ solution:
       statement: 用极小值必要条件锁参数。
       formula_trace:
         from: $g^\prime(x)=\ln x+1-a+\frac{a}{2\sqrt x}$
-        to: $g^\prime(1)=2-\frac a2=0$，$a=2$
+        to: $g^\prime(1)=1-\frac a2=0$，$a=2$
         operation: 令极小值点导数为 0。
         why: 开区间内极小值点必须满足导数为 0。
       source_ref: page_0263_ex2_solution_start
