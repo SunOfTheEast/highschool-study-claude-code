@@ -88,7 +88,9 @@ test('prepares isolated M0 and M1a roots without exposing credentials', () => {
   expect(existsSync(join(layout.m0.learningSet, 'memory'))).toBe(false);
   expect(readFileSync(join(layout.m1a.learningSet, 'memory/INDEX.md'), 'utf8'))
     .toContain('# Teacher Memory Index');
-  expect(statSync(join(layout.m0.agentDir, 'auth.json')).mode & 0o777).toBe(0o600);
+  if (process.platform !== 'win32') {
+    expect(statSync(join(layout.m0.agentDir, 'auth.json')).mode & 0o777).toBe(0o600);
+  }
   expect(readFileSync(join(layout.m0.agentDir, 'settings.json'), 'utf8')).toContain('gpt-5.6-sol');
 
   const scout = readFileSync(
