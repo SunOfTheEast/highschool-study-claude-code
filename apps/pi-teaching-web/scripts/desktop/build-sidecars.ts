@@ -18,6 +18,16 @@ export function sidecarOutputs(
   };
 }
 
+export function sidecarCompileTargetArguments(
+  target: DesktopTarget,
+  platform = process.platform,
+  architecture = process.arch,
+): string[] {
+  const host = resolveDesktopTarget({}, platform, architecture);
+  if (host.triple === target.triple) return [];
+  return [`--target=${target.bunTarget}`];
+}
+
 async function compile(
   appRoot: string,
   entries: string[],
@@ -28,7 +38,7 @@ async function compile(
     process.execPath,
     'build',
     '--compile',
-    `--target=${target.bunTarget}`,
+    ...sidecarCompileTargetArguments(target),
     ...entries,
     '--outfile',
     output,

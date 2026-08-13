@@ -11,6 +11,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
   sidecarOutputs,
+  sidecarCompileTargetArguments,
   subagentRuntimeExternalModules,
 } from '../../scripts/desktop/build-sidecars';
 import {
@@ -109,6 +110,34 @@ test('uses the target-suffixed sidecars expected by Tauri on both release platfo
     join(appRoot, 'src-tauri/entitlements.plist'),
     'utf8',
   )).toContain('com.apple.security.cs.disable-library-validation');
+});
+
+test('reuses the installed Bun executable for native sidecar compilation', () => {
+  expect(sidecarCompileTargetArguments(
+    desktopTargets['aarch64-apple-darwin'],
+    'darwin',
+    'arm64',
+  )).toEqual([]);
+  expect(sidecarCompileTargetArguments(
+    desktopTargets['x86_64-pc-windows-msvc'],
+    'win32',
+    'x64',
+  )).toEqual([]);
+  expect(sidecarCompileTargetArguments(
+    desktopTargets['x86_64-pc-windows-msvc'],
+    'darwin',
+    'arm64',
+  )).toEqual(['--target=bun-windows-x64-baseline']);
+});
+
+test('installs the pinned baseline Bun runtime on the Windows release runner', () => {
+  const workflow = readFileSync(join(
+    appRoot,
+    '../../.github/workflows/windows-desktop.yml',
+  ), 'utf8');
+  expect(workflow).toContain(
+    'https://github.com/oven-sh/bun/releases/download/bun-v1.3.14/bun-windows-x64-baseline.zip',
+  );
 });
 
 test('stages canonical teaching resources, example, and Pi runtime assets only', () => {
