@@ -4,7 +4,12 @@ import type { SemanticTagDraft } from '../shared/contracts';
 import { formatLessonHandoutPath } from '../shared/handout-route';
 import { planProblemCardSave } from '../study/learning-assets';
 import { readLessonHandout } from '../study/lesson-handout';
-import { parseLessonSource, readLesson, readPlan } from '../study/markdown';
+import {
+  normalizeMarkdownLineEndings,
+  parseLessonSource,
+  readLesson,
+  readPlan,
+} from '../study/markdown';
 import { lessonNodePath } from '../study/node-paths';
 import { refreshSemanticRecallIndex } from '../study/semantic-index';
 import type { LearningAssetToolSession } from './learning-asset-tools';
@@ -47,6 +52,7 @@ function appendPreparedUse(
   blockId: string,
   cardPath: string,
 ): string {
+  source = normalizeMarkdownLineEndings(source);
   const before = parseLessonSource(path, source);
   if (before.status !== 'prepared') {
     throw new Error(`Lesson must be prepared, found ${before.status}`);

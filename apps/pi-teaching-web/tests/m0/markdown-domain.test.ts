@@ -100,6 +100,29 @@ test('reads canonical Roadmap, Plan, Lesson and block-local classroom facts', ()
   expect(course.tree.children[0]?.children[0]?.status).toBe('active');
 });
 
+test('reads Windows CRLF course documents while preserving atomic source bytes', () => {
+  const root = copyFixture();
+  const paths = [
+    'ROADMAP.md',
+    'plans/plan-001/PLAN.md',
+    'plans/plan-001/lessons/lesson-001.md',
+    'LEARNING_GUIDE.md',
+  ];
+  for (const relative of paths) {
+    const path = join(root, relative);
+    writeFileSync(path, readFileSync(path, 'utf8').replace(/\r?\n/g, '\r\n'));
+  }
+
+  const course = readCourseTree(root);
+
+  expect(course.tree.children[0]?.children[0]?.status).toBe('active');
+  expect(course.roadmap.raw).toContain('\r\n');
+  expect(readPlan(root, 'plans/plan-001/PLAN.md').raw).toContain('\r\n');
+  expect(readLesson(root, 'plans/plan-001/lessons/lesson-001.md').raw)
+    .toContain('\r\n');
+  expect(course.guide.raw).toContain('\r\n');
+});
+
 test('rejects the retired consolidated learning trace section', () => {
   const root = copyFixture();
   const relative = 'plans/plan-001/lessons/lesson-001.md';

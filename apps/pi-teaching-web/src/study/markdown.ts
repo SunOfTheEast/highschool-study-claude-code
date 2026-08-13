@@ -56,8 +56,13 @@ type MarkdownSource = {
   body: string;
 };
 
+export function normalizeMarkdownLineEndings(source: string): string {
+  return source.replace(/\r\n?/g, '\n');
+}
+
 function parseSource(path: string, raw: string): MarkdownSource {
-  const match = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(raw);
+  const normalized = normalizeMarkdownLineEndings(raw);
+  const match = /^---\n([\s\S]*?)\n---(?:\n|$)/.exec(normalized);
   if (!match) throw new StudyDocumentError(path, 'missing YAML frontmatter');
   let frontmatter: unknown;
   try {
@@ -73,7 +78,7 @@ function parseSource(path: string, raw: string): MarkdownSource {
     path,
     raw,
     frontmatter: frontmatter as Frontmatter,
-    body: raw.slice(match[0].length),
+    body: normalized.slice(match[0].length),
   };
 }
 

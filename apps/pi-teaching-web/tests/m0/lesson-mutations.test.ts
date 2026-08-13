@@ -89,6 +89,27 @@ test('appends a student correction without disturbing earlier classroom facts', 
   ]);
 });
 
+test('updates Windows CRLF Lesson sources through the canonical classroom path', () => {
+  const activeSource = fixtureSource().replace(/\r?\n/g, '\r\n');
+  const logged = appendClassroomLogSource(
+    lessonPath,
+    activeSource,
+    '学生在 Windows 课堂中独立说出了选路依据。',
+  );
+  expect(logged).not.toContain('\r');
+  expect(parseLessonSource(lessonPath, logged).blocks[1]?.classroomLog)
+    .toEqual(['学生在 Windows 课堂中独立说出了选路依据。']);
+
+  const pendingSource = setBlockStatus(fixtureSource(), 'block-002', 'pending')
+    .replace(/\r?\n/g, '\r\n');
+  const started = applyClassroomChange(root, lessonPath, pendingSource, {
+    command: 'start',
+    blockId: 'block-002',
+  });
+  expect(started.source).not.toContain('\r');
+  expect(started.activeBlockId).toBe('block-002');
+});
+
 test('does not duplicate a list marker supplied by the model', () => {
   const next = appendClassroomLogSource(
     lessonPath,

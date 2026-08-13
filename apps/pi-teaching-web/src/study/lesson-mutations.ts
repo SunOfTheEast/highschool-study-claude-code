@@ -6,7 +6,11 @@ import {
   type ActivityKind,
   type LessonDocument,
 } from '../shared/contracts';
-import { StudyDocumentError, parseLessonSource } from './markdown';
+import {
+  normalizeMarkdownLineEndings,
+  StudyDocumentError,
+  parseLessonSource,
+} from './markdown';
 
 export type BlockPlacement = {
   position: 'before' | 'after';
@@ -137,6 +141,7 @@ export function appendClassroomLogSource(
   source: string,
   note: string,
 ): string {
+  source = normalizeMarkdownLineEndings(source);
   const lesson = parseLessonSource(path, source);
   if (lesson.status !== 'active') {
     throw new StudyDocumentError(path, `Lesson must be active, found ${lesson.status}`);
@@ -435,6 +440,7 @@ export function applyClassroomChange(
   source: string,
   change: ClassroomChange,
 ): ClassroomMutationReceipt {
+  source = normalizeMarkdownLineEndings(source);
   const before = requireActiveLesson(path, source);
   const active = currentActive(before);
   let candidate: string;
