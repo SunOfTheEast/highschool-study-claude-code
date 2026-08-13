@@ -47,10 +47,12 @@ test('builds, installs, verifies, and uninstalls the Windows x64 package in CI',
   );
   for (const text of [
     'windows-latest',
+    "Join-Path $env:RUNNER_TEMP 'sf'",
     'bun run desktop:build:windows',
     'StudyForge 学生 Beta',
     'bun run desktop:verify:windows',
     'uninstall.exe',
     'actions/upload-artifact',
   ]) expect(workflow).toContain(text);
+  expect(workflow).not.toContain('subst ');
 });
